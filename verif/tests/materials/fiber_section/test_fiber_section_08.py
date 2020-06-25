@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 ''' Reinforced concrete section verification test.
    results are compared with those of the prontuario.
    informático del hormigón estructural (Cátedra de hormigón de la ETSICCP-IECA
@@ -49,7 +50,7 @@ import os
 pth= os.path.dirname(__file__)
 if(not pth):
   pth= "."
-#print "pth= ", pth
+#print("pth= ", pth)
 execfile(pth+"/concrete_section_01.py")
 secHA= preprocessor.getMaterialHandler.newMaterial("fiber_section_3d","secHA")
 fiberSectionRepr= secHA.getFiberSectionRepr()
@@ -156,49 +157,49 @@ ratio5= (Resul[1]-MzDato)/MzDato
 ratio6= (epsSMax-10e-3)/10e-3
 
 '''
-print "sumAreas= ",(sumAreas)
-print "Iz= ",(Iz)
-print "IEIz= ",IEIz
-print "TEIz= ",TEIz
-print "E1= ",(IEIz/Iz)
-print "Iy= ",(Iy)
-print "IEIy= ",IEIy
-print "TEIy= ",TEIy
-print "E2= ",(IEIy/Iy)
-print "Profundidad de la fibra neutra= ",x," m"
-print "Resul= ",Resul*1e-3," kN"
-print "Deform= ",Deform*1e3,"E-3"
+print("sumAreas= ",(sumAreas))
+print("Iz= ",(Iz))
+print("IEIz= ",IEIz)
+print("TEIz= ",TEIz)
+print("E1= ",(IEIz/Iz))
+print("Iy= ",(Iy))
+print("IEIy= ",IEIy)
+print("TEIy= ",TEIy)
+print("E2= ",(IEIy/Iy))
+print("Profundidad de la fibra neutra= ",x," m")
+print("Resul= ",Resul*1e-3," kN")
+print("Deform= ",Deform*1e3,"E-3")
 
-print "\nMinimum strain in concrete: ",(epsCMin*1E3),"E-3"
-print "Minimum stress in concrete: ",(sgCMin/1e6),"E6"
-print "y coordinate for minimum concrete strain: ",(YepsCMin)
-print "z coordinate for minimum concrete strain: ",(ZepsCMin)
+print("\nMinimum strain in concrete: ",(epsCMin*1E3),"E-3")
+print("Minimum stress in concrete: ",(sgCMin/1e6),"E6")
+print("y coordinate for minimum concrete strain: ",(YepsCMin))
+print("z coordinate for minimum concrete strain: ",(ZepsCMin))
 
-print "\nMinimum strain en la reinforcement: ",(epsSMin*1E3),"E-3"
-print "Minimum stress in steel: ",(sgSMin/1e6),"E6"
-print "y coordinate for minimum rebar strain: ",(YepsSMin)
-print "z coordinate for minimum rebar strain: ",(ZepsSMin)
+print("\nMinimum strain en la reinforcement: ",(epsSMin*1E3),"E-3")
+print("Minimum stress in steel: ",(sgSMin/1e6),"E6")
+print("y coordinate for minimum rebar strain: ",(YepsSMin))
+print("z coordinate for minimum rebar strain: ",(ZepsSMin))
 
-print "\nMaximum strain en la reinforcement: ",(epsSMax*1E3),"E-3"
-print "Maximum stress in steel: ",(sgSMax/1e6),"E6"
-print "y coordinate for maximum rebar strain: ",(YepsSMax)
-print "z coordinate for maximum rebar strain: ",(ZepsSMax)
-print "\nSolicitation type: ",solicitationTypeString," (",(solicitationType),") "
-print "Cumple a ",solicitationTypeString,": ",(cumpleFT)
-print "Aprovechamiento a ",solicitationTypeString,": ",(aprovSecc)
-print "RN= ",(RN/1e3)
-print "RN2= ",(RN2/1e3)
-print "N= ",(esfN/1e3)
-print "My= ",(esfMy/1e3)
-print "Mz= ",(esfMz/1e3)
-print "defMz= ",(defMz)
-print "defN= ",(defN)
-print "ratio1= ",(ratio1)
-print "ratio2= ",(ratio2)
-print "ratio3= ",(ratio3)
-print "ratio4= ",(ratio4)
-print "ratio5= ",(ratio5)
-print "ratio6= ",(ratio6)
+print("\nMaximum strain en la reinforcement: ",(epsSMax*1E3),"E-3")
+print("Maximum stress in steel: ",(sgSMax/1e6),"E6")
+print("y coordinate for maximum rebar strain: ",(YepsSMax))
+print("z coordinate for maximum rebar strain: ",(ZepsSMax))
+print("\nSolicitation type: ",solicitationTypeString," (",(solicitationType),") ")
+print("Cumple a ",solicitationTypeString,": ",(cumpleFT))
+print("Aprovechamiento a ",solicitationTypeString,": ",(aprovSecc))
+print("RN= ",(RN/1e3))
+print("RN2= ",(RN2/1e3))
+print("N= ",(esfN/1e3))
+print("My= ",(esfMy/1e3))
+print("Mz= ",(esfMz/1e3))
+print("defMz= ",(defMz))
+print("defN= ",(defN))
+print("ratio1= ",(ratio1))
+print("ratio2= ",(ratio2))
+print("ratio3= ",(ratio3))
+print("ratio4= ",(ratio4))
+print("ratio5= ",(ratio5))
+print("ratio6= ",(ratio6))
  '''
 
 
@@ -206,6 +207,6 @@ import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if((abs(ratio1)<1e-10) & (abs(ratio2)<1e-10) & (abs(ratio3)<1e-9) & (abs(RN)<1e-9) & (abs(RN2)<1e-9) & (abs(esfMy)<1e-9) & (solicitationType == 2) & (abs(ratio4)<0.06) & (abs(ratio5)<1e-6) & (abs(ratio6)<1e-6)):
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')

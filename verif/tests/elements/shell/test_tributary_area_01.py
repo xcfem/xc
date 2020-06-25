@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 '''Verification test taken from example 2-005 of 
    the SAP 2000 verification manual.'''
 
@@ -109,9 +110,9 @@ analOk= analysis.analyze(1)
 f1= preprocessor.getSets.getSet("f1")
 
 node= f1.getNodeIJK(1,NumDivI/2+1,NumDivJ/2+1)
-# print "Central node: ", node.tag
-# print "Central node coordinates: ", node.getCoo
-# print "Central node displacements: ", node.getDisp
+# print("Central node: ", node.tag)
+# print("Central node coordinates: ", node.getCoo)
+# print("Central node displacements: ", node.getDisp)
 UZ= node.getDisp[2]
 
 
@@ -120,16 +121,16 @@ ratio1= (abs((UZ-UZTeor)/UZTeor))
 ratio2= (abs((nElems-1024)/1024))
 
 ''' 
-print "UZ= ",UZ
-print "Number of nodes: ",nNodes
-print "Number of elements: ",nElems
-print "ratio1: ",ratio1
+print("UZ= ",UZ)
+print("Number of nodes: ",nNodes)
+print("Number of elements: ",nElems)
+print("ratio1: ",ratio1)
    '''
 
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (abs(ratio1)<2e-3) & (abs(ratio2)<1e-9):
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')

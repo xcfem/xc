@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 # Verification test according to EOTA TR 029.
 # results compared with those of the document
 # "Hilti HIT-HY 150 with rebar".
@@ -43,7 +44,7 @@ C= baseMaterialContour.getRecubrimiento(anchorPosition)
 Cmin= 5*barDiameter+10e-3
 
 if (C<Cmin):
-  print "Too little concrete cover for the anchor."
+  print("Too little concrete cover for the anchor.")
 
 f1N= eota.getFactor1N(C,CcrN)
 
@@ -102,39 +103,39 @@ ratio6= abs(f2cN-f2cNTeor)/f2cNTeor
 ratio7= abs(NRd-34.8621e3)/34.8621e3
 
 '''
-print "A_s= ",barArea*1e6," mm2\n"
-print "C_{cr,N}= ",CcrN," m\n"
-print "C= ",C," m\n"
-print "C/C_{cr,N}= ",C/CcrN
-print "Extraction gross area A0pN= ",A0pN," m\n"
-print "Extraction effective area ApN= ",ApN," m\n"
-print "Extraction gross area cono A0cN= ",A0cN," m\n"
-print "Extraction effective area cono AcN= ",AcN," m\n"
-print "Splitting gross area A0spN= ",A0spN," m\n"
-print "Splitting effective area AcN= ",AspN," m\n"
-print "f1N= ",f1N
-print "f2pNTeor= ",f2pNTeor
-print "f2pN= ",f2pN
-print "f2cN= ",f2cN
-print "C_{cr,sp}= ",CcrSp," m\n"
-print "N_{Rd,s}= ",NRds/1e3," kN\n"
-print "N_{Rd,p}= ",NRdp/1e3," kN\n"
-print "N_{Rd,c}= ",NRdc/1e3," kN\n"
-print "N_{Rd,sp}= ",NRdSp/1e3," kN\n"
-print "N_{Rd}= ",NRd/1e3," kN\n"
-print "ratio1= ",(ratio1)
-print "ratio2= ",(ratio2)
-print "ratio3= ",(ratio3)
-print "ratio4= ",(ratio4)
-print "ratio5= ",(ratio5)
-print "ratio6= ",(ratio6)
-print "ratio7= ",(ratio7)
+print("A_s= ",barArea*1e6," mm2\n")
+print("C_{cr,N}= ",CcrN," m\n")
+print("C= ",C," m\n")
+print("C/C_{cr,N}= ",C/CcrN)
+print("Extraction gross area A0pN= ",A0pN," m\n")
+print("Extraction effective area ApN= ",ApN," m\n")
+print("Extraction gross area cono A0cN= ",A0cN," m\n")
+print("Extraction effective area cono AcN= ",AcN," m\n")
+print("Splitting gross area A0spN= ",A0spN," m\n")
+print("Splitting effective area AcN= ",AspN," m\n")
+print("f1N= ",f1N)
+print("f2pNTeor= ",f2pNTeor)
+print("f2pN= ",f2pN)
+print("f2cN= ",f2cN)
+print("C_{cr,sp}= ",CcrSp," m\n")
+print("N_{Rd,s}= ",NRds/1e3," kN\n")
+print("N_{Rd,p}= ",NRdp/1e3," kN\n")
+print("N_{Rd,c}= ",NRdc/1e3," kN\n")
+print("N_{Rd,sp}= ",NRdSp/1e3," kN\n")
+print("N_{Rd}= ",NRd/1e3," kN\n")
+print("ratio1= ",(ratio1))
+print("ratio2= ",(ratio2))
+print("ratio3= ",(ratio3))
+print("ratio4= ",(ratio4))
+print("ratio5= ",(ratio5))
+print("ratio6= ",(ratio6))
+print("ratio7= ",(ratio7))
 '''
 
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (ratio1<5e-4) & (ratio2<5e-4) & (ratio3<5e-4) & (ratio4<5e-5) & (ratio5<0.03) & (ratio6<0.03) & (ratio6<1e-5):
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')

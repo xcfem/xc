@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 CooMax= 10
 import xc_base
 import geom
@@ -31,14 +32,14 @@ sUtils.append_sets(s3,[s1,s2])
 sz= s3.getPoints.size
 
 #for p in pnts:
-#  print code
+#  print(code)
 
-#print "sz= ", sz
+#print("sz= ", sz)
 
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (sz==3):
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')

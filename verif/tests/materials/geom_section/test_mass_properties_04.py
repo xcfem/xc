@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 '''Example from the page 258 of the book "Hormiǵon Armado. Jiménez Montoya (14a. edición) (url={https://books.google.ch/books?id=JWggPwAACAAJ}).
 '''
 import xc_base
@@ -63,21 +64,21 @@ ratio2= ((Iz-izTeor)/izTeor)
 ratio3= ((Iy-iyTeor)/iyTeor)
 
 ''' 
-print "area= ",area
-print "areaTeor= ",areaTeor
-print "Iy= ",Iy
-print "iyTeor= ",iyTeor
-print "Iz= ",Iz
-print "izTeor= ",izTeor
-print "ratio1= ",ratio1
-print "ratio2= ",ratio2
-print "ratio3= ",ratio3
+print("area= ",area)
+print("areaTeor= ",areaTeor)
+print("Iy= ",Iy)
+print("iyTeor= ",iyTeor)
+print("Iz= ",Iz)
+print("izTeor= ",izTeor)
+print("ratio1= ",ratio1)
+print("ratio2= ",ratio2)
+print("ratio3= ",ratio3)
  '''
 
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (abs(ratio1)<1e-15) & (abs(ratio2)<1e-4) & (abs(ratio3)<1e-2) :
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')

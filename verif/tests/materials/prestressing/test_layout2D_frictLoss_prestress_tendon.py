@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 
 '''Home made test to check the accuracy of the 2D spline interpolation to 
 be used in the layout of prestressing tendons and to check the calculation
@@ -88,6 +89,6 @@ import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (abs(ratio1)<1e-6) & (abs(ratio2)<1e-8) & (abs(ratio3)<0.113):
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')

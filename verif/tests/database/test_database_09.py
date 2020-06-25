@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 # home made test
 '''Save and restore methods verification.'''
 
@@ -76,10 +77,10 @@ os.system("rm -r -f /tmp/test09.db")
 db= feProblem.newDatabase("BerkeleyDB","/tmp/test09.db")
 db.save(100)
 feProblem.clearAll()
-feProblem.setVerbosityLevel(0) #Dont print warning messages
+feProblem.setVerbosityLevel(0) #Dont print(warning messages)
                             #about pointers to material.
 db.restore(100)
-feProblem.setVerbosityLevel(1) #Print warnings again 
+feProblem.setVerbosityLevel(1) #print(warnings again )
 
 # Solution
 analysis= predefined_solutions.simple_static_linear(feProblem)
@@ -102,17 +103,17 @@ ratio1= (delta/deltateor)
 ratio2= (N1/F)
 
 ''' 
-print "delta= ",delta
-print "deltateor= ",deltateor
-print "ratio1= ",ratio1
-print "N1= ",N1
-print "ratio2= ",ratio2
+print("delta= ",delta)
+print("deltateor= ",deltateor)
+print("ratio1= ",ratio1)
+print("N1= ",N1)
+print("ratio2= ",ratio2)
    '''
 
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (abs(ratio1-1.0)<1e-5) & (abs(ratio2-1.0)<1e-5):
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')
 

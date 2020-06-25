@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 
 ''' Verification test of a fiber section with shear and torsion
 stiffnesses. Home made test.
@@ -31,7 +32,7 @@ import os
 pth= os.path.dirname(__file__)
 if(not pth):
   pth= "."
-#print "pth= ", pth
+#print("pth= ", pth)
 execfile(pth+"/fiber_section_test_macros.py")
 
 fy= 2600 # yield strength [kp/cm2].
@@ -91,7 +92,7 @@ lPatterns.addToDomain(lp0.name)
 analysis= predefined_solutions.simple_newton_raphson(feProblem)
 analOk= analysis.analyze(1)
 if(analOk!=0):
-  print "Error!; failed to converge."
+  print("Error!; failed to converge.")
   exit()
 
 nodes= preprocessor.getNodeHandler
@@ -143,14 +144,14 @@ ratio2= (reacN1+sectionInternalForces).Norm()
 ratio3= (defElem-sectionDef).Norm()
 
 '''
-print "reacN1= ",reacN1
-print "esfElem= ",esfElem
-print "sectionInternalForces= ",sectionInternalForces
-print "defElem= ",defElem
-print "sectionDef= ",sectionDef
-print "ratio1= ",ratio1
-print "ratio2= ",ratio2
-print "ratio3= ",ratio3
+print("reacN1= ",reacN1)
+print("esfElem= ",esfElem)
+print("sectionInternalForces= ",sectionInternalForces)
+print("defElem= ",defElem)
+print("sectionDef= ",sectionDef)
+print("ratio1= ",ratio1)
+print("ratio2= ",ratio2)
+print("ratio3= ",ratio3)
 ''' 
 
 
@@ -158,6 +159,6 @@ import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if((abs(ratio1)<1e-15) & (abs(ratio2)<1e-15) & (abs(ratio3)<1e-12)):
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')

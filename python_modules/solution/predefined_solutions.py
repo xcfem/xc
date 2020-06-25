@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
+
 
 __author__= "Luis C. Pérez Tato (LCPT) Ana Ortega (AO_O)"
 __copyright__= "Copyright 2016, LCPT, AO_O"
@@ -360,10 +362,10 @@ def resuelveComb(preprocessor,nmbComb,analysis,numSteps):
     preprocessor.getLoadHandler.addToDomain(nmbComb)
     analOk= analysis.analyze(numSteps)
     preprocessor.getLoadHandler.removeFromDomain(nmbComb)
-    # print "Resuelta combinación: ",nmbComb,"\n"
+    # print("Resuelta combinación: ",nmbComb,"\n")
 
 def resuelveCombEstatLin(preprocessor,nmbComb,analysis,numSteps):
-    print "DEPRECATED; use resuelveComb"
+    print("DEPRECATED; use resuelveComb")
     resuelveComb(preprocessor,nmbComb,analysis,numSteps)
 
 def resuelveCombEstat2ndOrderLin(preprocessor,nmbComb,analysis,numSteps):
@@ -372,10 +374,10 @@ def resuelveCombEstat2ndOrderLin(preprocessor,nmbComb,analysis,numSteps):
     analOk= analysis.analyze(numSteps)
     analOk= analysis.analyze(numSteps)
     preprocessor.getLoadHandler.removeFromDomain(nmbComb)
-    # print "Resuelta combinación: ",nmbComb,"\n"
+    # print("Resuelta combinación: ",nmbComb,"\n")
 
 def resuelveCasoEstatNoLin(nmbComb):
-    print "DEPRECATED; use use resuelveComb"
+    print("DEPRECATED; use use resuelveComb")
     resuelveComb(preprocessor,nmbComb,analysis,numSteps)
 
 # def resuelveCasoEstatNoLinNR(nmbComb):
@@ -394,5 +396,5 @@ def resuelveCasoEstatNoLin(nmbComb):
 #         \static_analysis["analysisAggregation"]  \analyze{1} analOk= result 
 #       }
 #     cargas.removeFromDomain(nmbComb)
-#     # print "Resuelto caso: ",nmbComb,"\n"
+#     # print("Resuelto caso: ",nmbComb,"\n")
 #   }

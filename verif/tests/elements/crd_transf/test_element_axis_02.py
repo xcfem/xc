@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 
 from __future__ import division
 import xc_base
@@ -71,17 +72,17 @@ ratio2= ((debil[0])**2+(debil[1])**2)
 
 
 ''' 
-print "fuerte: ",fuerte
-print "debil: ",debil
-print "ratio1= ",ratio1
-print "ratio2= ",ratio2
+print("fuerte: ",fuerte)
+print("debil: ",debil)
+print("ratio1= ",ratio1)
+print("ratio2= ",ratio2)
    '''
 
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (ratio1 < 1e-12) & (ratio2 < 1e-12):
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')
 

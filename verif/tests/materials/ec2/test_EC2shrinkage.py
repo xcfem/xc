@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 #Shrinkage verification test. 
 #Data for comparison from the JRC technical report: 
 #"Bridge design to Eurocodes. Worked examples"
@@ -68,8 +69,8 @@ vCalc.append(round(Epscs*(-1),5))
 vComp.append(7.0e-5)
 
 '''
-print vCalc
-print vComp
+print(vCalc)
+print(vComp)
 '''
 sqrErr= 0.0
 for i in range(0,len(vCalc)):
@@ -78,6 +79,6 @@ import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)+'-Epscu3'
 if sqrErr<1e-8:
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')

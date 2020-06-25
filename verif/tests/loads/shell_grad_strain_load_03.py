@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 ''' home made test
     Thermal gradient strain in a shell element
 
@@ -102,16 +103,16 @@ ratio1=uz_n2-deltaz_theor
 ratio2=uz_n3-deltaz_theor
 
 '''
-print "uz_n2= ",uz_n2
-print "uz_n3= ",uz_n3
-print "ratio1= ",ratio1
-print "ratio2= ",ratio2
+print("uz_n2= ",uz_n2)
+print("uz_n3= ",uz_n3)
+print("ratio1= ",ratio1)
+print("ratio2= ",ratio2)
 '''
 
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (abs(ratio1)<2e-7) & (abs(ratio2)<2e-7):
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')

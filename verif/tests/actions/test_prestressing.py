@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 
 import xc_base
 import geom
@@ -38,12 +39,12 @@ for i in range(1,nPts+2):
 
 err= math.sqrt(err)
 
-#print "err= ", err
+#print("err= ", err)
   
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (err<0.01):
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')

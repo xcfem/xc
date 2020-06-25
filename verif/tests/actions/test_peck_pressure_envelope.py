@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 ''' Exemple 10.2 of the book "Principles of Foundation Engineering" 
     from Braja M. Das. Seventh Edition.
 '''
@@ -23,15 +24,15 @@ pressureTeor= 0.65*17e3*9*0.27099005412
 ratio1= abs(pressure-pressureTeor)/pressureTeor
 
 '''
-print 'Ka= ', peckPressureEnvelope.K
-print 'pressure= ', pressure/1e3, ' kN/m2'
-print 'ratio1= ', ratio1
+print('Ka= ', peckPressureEnvelope.K)
+print('pressure= ', pressure/1e3, ' kN/m2')
+print('ratio1= ', ratio1)
 '''
 
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (ratio1<1e-12):
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')

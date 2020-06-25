@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 
 import xc_base
 import geom
@@ -38,11 +39,11 @@ testMatrix= xc.Matrix([[1,0,0],[0,1,0],[0,0,1]])
 ratio+= (localAxes-testMatrix).OneNorm()
 
 '''
-print 'iVector= ', iVector
-print 'jVector= ', jVector
-print 'kVector= ', kVector
-print 'localAxes= ', localAxes
-print ratio
+print('iVector= ', iVector)
+print('jVector= ', jVector)
+print('kVector= ', kVector)
+print('localAxes= ', localAxes)
+print(ratio)
 '''
 
 feProblem.errFileName= "cerr" # Display errors if any.
@@ -50,6 +51,6 @@ import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (ratio<=1e-15) :
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')

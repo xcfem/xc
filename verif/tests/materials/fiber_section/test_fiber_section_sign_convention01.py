@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 # home made test
 # Sign convention for fiber sections.
 
@@ -32,7 +33,7 @@ epsilon4= epsilon
 #Read section definition from file.
 import os
 pth= os.path.dirname(__file__)
-#print "pth= ", pth
+#print("pth= ", pth)
 if(not pth):
   pth= "."
 execfile(pth+"/../../aux/four_fiber_section.py")
@@ -184,32 +185,32 @@ ratioD3= (D3Teor-D3).Norm()
 import math
 error= math.sqrt(ratioN0**2+ratioMy0**2+ratioMz0**2+ratioN0S**2+ratioMy0S**2+ratioMz0S**2+ratioR0**2+ratioD0**2+ratioN1**2+ratioMy1**2+ratioMz1**2+ratioN1S**2+ratioMy1S**2+ratioMz1S**2+ratioR1**2+ratioD1**2+ratioN2**2+ratioMy2**2+ratioMz2**2+ratioN2S**2+ratioMy2S**2+ratioMz2S**2+ratioR2**2+ratioD2**2+ratioN3**2+ratioMy3**2+ratioMz3**2+ratioN3S**2+ratioMy3S**2+ratioMz3S**2+ratioR3**2+ratioD3**2)
 
-print 'N0= ', N0, ' N0S= ', N0S, ' N0Teor= ', N0Teor, ' ratioN0= ', ratioN0, ' ratioN0S= ', ratioN0S
-print 'My0= ', My0, ' My0S= ', My0S, ' My0Teor= ', My0Teor, ' ratioMy0= ', ratioMy0, ' ratioMy0S= ', ratioMy0S
-print 'Mz0= ', Mz0, ' Mz0S= ', Mz0S, ' Mz0Teor= ', Mz0Teor, ' ratioMz0= ', ratioMz0, ' ratioMz0S= ', ratioMz0S
-print 'R0= ', R0, ' R0Teor= ', R0Teor, ' ratioR0= ', ratioR0
-print 'D0= ', D0, ' D0Teor= ', D0Teor, ' ratioD0= ', ratioD0
-print 'N1= ', N1, ' N1S= ', N1S, ' N1Teor= ', N1Teor, ' ratioN1= ', ratioN1, ' ratioN1S= ', ratioN1S
-print 'My1= ', My1, ' My1S= ', My1S, ' My1Teor= ', My1Teor, ' ratioMy1= ', ratioMy1, ' ratioMy1S= ', ratioMy1S
-print 'Mz1= ', Mz1, ' Mz1S= ', Mz1S, ' Mz1Teor= ', Mz1Teor, ' ratioMz1= ', ratioMz1, ' ratioMz1S= ', ratioMz1S
-print 'R1= ', R1, ' R1Teor= ', R1Teor, ' ratioR1= ', ratioR1
-print 'D1= ', D1, ' D1Teor= ', D1Teor, ' ratioD1= ', ratioD1
-print 'N2= ', N2, ' N2S= ', N2S, ' N2Teor= ', N2Teor, ' ratioN2= ', ratioN2, ' ratioN2S= ', ratioN2S
-print 'My2= ', My2, ' My2S= ', My2S, ' My2Teor= ', My2Teor, ' ratioMy2= ', ratioMy2, ' ratioMy2S= ', ratioMy2S
-print 'Mz2= ', Mz2, ' Mz2S= ', Mz2S, ' Mz2Teor= ', Mz2Teor, ' ratioMz2= ', ratioMz2, ' ratioMz2S= ', ratioMz2S
-print 'R2= ', R2, ' R2Teor= ', R2Teor, ' ratioR2= ', ratioR2
-print 'D2= ', D2, ' D2Teor= ', D2Teor, ' ratioD2= ', ratioD2
-print 'N3= ', N3, ' N3S= ', N3S, ' N3Teor= ', N3Teor, ' ratioN3= ', ratioN3, ' ratioN3S= ', ratioN3S
-print 'My3= ', My3, ' My3S= ', My3S, ' My3Teor= ', My3Teor, ' ratioMy3= ', ratioMy3, ' ratioMy3S= ', ratioMy3S
-print 'Mz3= ', Mz3, ' Mz3S= ', Mz3S, ' Mz3Teor= ', Mz3Teor, ' ratioMz3= ', ratioMz3, ' ratioMz3S= ', ratioMz3S
-print 'R3= ', R3, ' R3Teor= ', R3Teor, ' ratioR3= ', ratioR3
-print 'D3= ', D3, ' D3Teor= ', D3Teor, ' ratioD3= ', ratioD3
-print 'error= ', error
+print('N0= ', N0, ' N0S= ', N0S, ' N0Teor= ', N0Teor, ' ratioN0= ', ratioN0, ' ratioN0S= ', ratioN0S)
+print('My0= ', My0, ' My0S= ', My0S, ' My0Teor= ', My0Teor, ' ratioMy0= ', ratioMy0, ' ratioMy0S= ', ratioMy0S)
+print('Mz0= ', Mz0, ' Mz0S= ', Mz0S, ' Mz0Teor= ', Mz0Teor, ' ratioMz0= ', ratioMz0, ' ratioMz0S= ', ratioMz0S)
+print('R0= ', R0, ' R0Teor= ', R0Teor, ' ratioR0= ', ratioR0)
+print('D0= ', D0, ' D0Teor= ', D0Teor, ' ratioD0= ', ratioD0)
+print('N1= ', N1, ' N1S= ', N1S, ' N1Teor= ', N1Teor, ' ratioN1= ', ratioN1, ' ratioN1S= ', ratioN1S)
+print('My1= ', My1, ' My1S= ', My1S, ' My1Teor= ', My1Teor, ' ratioMy1= ', ratioMy1, ' ratioMy1S= ', ratioMy1S)
+print('Mz1= ', Mz1, ' Mz1S= ', Mz1S, ' Mz1Teor= ', Mz1Teor, ' ratioMz1= ', ratioMz1, ' ratioMz1S= ', ratioMz1S)
+print('R1= ', R1, ' R1Teor= ', R1Teor, ' ratioR1= ', ratioR1)
+print('D1= ', D1, ' D1Teor= ', D1Teor, ' ratioD1= ', ratioD1)
+print('N2= ', N2, ' N2S= ', N2S, ' N2Teor= ', N2Teor, ' ratioN2= ', ratioN2, ' ratioN2S= ', ratioN2S)
+print('My2= ', My2, ' My2S= ', My2S, ' My2Teor= ', My2Teor, ' ratioMy2= ', ratioMy2, ' ratioMy2S= ', ratioMy2S)
+print('Mz2= ', Mz2, ' Mz2S= ', Mz2S, ' Mz2Teor= ', Mz2Teor, ' ratioMz2= ', ratioMz2, ' ratioMz2S= ', ratioMz2S)
+print('R2= ', R2, ' R2Teor= ', R2Teor, ' ratioR2= ', ratioR2)
+print('D2= ', D2, ' D2Teor= ', D2Teor, ' ratioD2= ', ratioD2)
+print('N3= ', N3, ' N3S= ', N3S, ' N3Teor= ', N3Teor, ' ratioN3= ', ratioN3, ' ratioN3S= ', ratioN3S)
+print('My3= ', My3, ' My3S= ', My3S, ' My3Teor= ', My3Teor, ' ratioMy3= ', ratioMy3, ' ratioMy3S= ', ratioMy3S)
+print('Mz3= ', Mz3, ' Mz3S= ', Mz3S, ' Mz3Teor= ', Mz3Teor, ' ratioMz3= ', ratioMz3, ' ratioMz3S= ', ratioMz3S)
+print('R3= ', R3, ' R3Teor= ', R3Teor, ' ratioR3= ', ratioR3)
+print('D3= ', D3, ' D3Teor= ', D3Teor, ' ratioD3= ', ratioD3)
+print('error= ', error)
 
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (error < 1e-3):
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')
 

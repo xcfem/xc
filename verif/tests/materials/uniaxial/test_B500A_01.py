@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 # Home made test
 import xc_base
 import geom
@@ -21,11 +22,11 @@ preprocessor=  feProblem.getPreprocessor
 errMax= concrete_base.testReinfSteelCharacteristicDiagram(preprocessor, SIA262_materials.B500A)
 
 
-# print "errMax= ",(errMax)
+# print("errMax= ",(errMax))
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if errMax<1e-10:
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')

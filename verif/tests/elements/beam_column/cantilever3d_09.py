@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 # home made test
 '''Cantilever under uniform horizontal load in local z direction.'''
 
@@ -106,27 +107,27 @@ ratio4= abs((Vz1-Vz1teor)/Vz1teor)
 ratio5= (abs(Vz2)<1e-3)
 
 '''
-print "delta= ",delta
-print "deltateor= ",deltateor
-print "ratio1= ",ratio1
-print "My1= ",My1
-print "My1teor= ",My1teor
-print "ratio2= ",ratio2
-print "My2= ",My2
-print "My2teor= ",0
-print "ratio3= ",ratio3
-print "Vz1= ",Vz1
-print "Vz1teor= ",Vz1teor
-print "ratio4= ",ratio4
-print "Vz2= ",Vz2
-print "Vz2teor= ",0
-print "ratio5= ",ratio5}
+print("delta= ",delta)
+print("deltateor= ",deltateor)
+print("ratio1= ",ratio1)
+print("My1= ",My1)
+print("My1teor= ",My1teor)
+print("ratio2= ",ratio2)
+print("My2= ",My2)
+print("My2teor= ",0)
+print("ratio3= ",ratio3)
+print("Vz1= ",Vz1)
+print("Vz1teor= ",Vz1teor)
+print("ratio4= ",ratio4)
+print("Vz2= ",Vz2)
+print("Vz2teor= ",0)
+print("ratio5= ",ratio5})
 '''
 
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (abs(ratio1-1.0)<1e-5) & (ratio2<1e-5) & ratio3 & (ratio4<1e-5) & (abs(ratio5-1.0)<1e-5):
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')

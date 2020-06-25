@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 # feProblem.setVerbosityLevel(0)
 dx= 1
 dy= 2
@@ -43,7 +44,7 @@ setTotal.transforms(transl)
 pnts
 
 for_each
-  { print code,",",pos.x,",",pos.y,",",pos.z } 
+  { print(code,",",pos.x,",",pos.y,",",pos.z } )
 '''
 
 
@@ -78,6 +79,6 @@ import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if cumple:
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')

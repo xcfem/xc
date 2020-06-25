@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
+
 # Simple beam formulas
 
 from __future__ import division
@@ -22,13 +24,13 @@ def macaulay(x,a,n=0):
 class PinnedFixedBeam(bm.Beam):
 
   def getShearUnderUniformLoad(self,q,x):
-    print 'not implemented'
+    print('not implemented')
     return None
   def getReactionUnderUniformLoad(self,q):
-    print 'not implemented'
+    print('not implemented')
     return None
   def getBendingMomentUnderUniformLoad(self,q,x):
-    print 'not implemented'
+    print('not implemented')
     return None
   def getDeflectionUnderUniformLoad(self,q,x):
     return -q*x/(48.0*self.E*self.I)*(self.l**3-3*self.l*x**2+2*x**3)
@@ -41,19 +43,19 @@ class PinnedFixedBeam(bm.Beam):
 #  ___________________|
 # ^                   |
   def getReaction1UnderUniformLoadPartiallyDistributed(self,q,a,b):
-    print 'not implemented'
+    print('not implemented')
     return None
 
   def getReaction2UnderUniformLoadPartiallyDistributed(self,q,a,b):
-    print 'not implemented'
+    print('not implemented')
     return None
 
   def getShearUnderUniformLoadPartiallyDistributed(self,q,a,b,x):
-    print 'not implemented'
+    print('not implemented')
     return None
 
   def getBendingMomentUnderUniformLoadPartiallyDistributed(self,q,a,b,x):
-    print 'not implemented'
+    print('not implemented')
     return None
 
 #          l
@@ -64,11 +66,11 @@ class PinnedFixedBeam(bm.Beam):
 #  _____|_____________|
 # ^                   |
   def getReaction1UnderConcentratedLoad(self,P,a):
-    print 'not implemented'
+    print('not implemented')
     return None
 
   def getReaction2UnderConcentratedLoad(self,P,a):
-    print 'not implemented'
+    print('not implemented')
     return None
 
   def getShearUnderConcentratedLoad(self,P,a,x):

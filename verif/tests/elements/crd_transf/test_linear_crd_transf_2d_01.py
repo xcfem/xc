@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 # home made test
 
 from __future__ import division
@@ -40,25 +41,25 @@ setTotal= preprocessor.getSets.getSet("total")
 elems= setTotal.getElements
 for e in elems:
   crdTransf= e.getCoordTransf
-  #print "vector I:",crdTransf.getIVector
+  #print("vector I:",crdTransf.getIVector)
   vILocal= crdTransf.getVectorLocalCoordFromGlobal(crdTransf.getIVector)
-  #print "vector I en locales:",vILocal
-  #print "vector J:",crdTransf.getJVector
+  #print("vector I en locales:",vILocal)
+  #print("vector J:",crdTransf.getJVector)
   vJLocal= crdTransf.getVectorLocalCoordFromGlobal(crdTransf.getJVector)
-  #print "vector J en locales:",vJLocal
+  #print("vector J en locales:",vJLocal)
   dif1= vILocal-xc.Vector([1,0])
   ratio1= dif1.Norm()
   ratio2= (vJLocal-xc.Vector([0,1])).Norm()
 
-# print "vILocal= ", vILocal
-# print "vJLocal= ", vJLocal
-# print "ratio1= ", ratio1
-# print "ratio2= ", ratio2
+# print("vILocal= ", vILocal)
+# print("vJLocal= ", vJLocal)
+# print("ratio1= ", ratio1)
+# print("ratio2= ", ratio2)
 
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (abs(ratio1)<1e-12) & (abs(ratio2)<1e-12):
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')

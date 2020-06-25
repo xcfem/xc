@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 '''Verification of the quasi-Winkler model.'''
 # Verification of the quasi-Winkler model according to
 #    the article of Gabriel E. Barrientos
@@ -130,8 +131,8 @@ yAdimMaxima= -1e6
 for n in l2.nodes:
   yAdimMaxima= max(yAdimMaxima,n.getDisp[1]/EIbeta3)
   ''' 
-  print "  node: ",n.tag," x= ",(n.get3dCoo[0]-Lmedios)/L
-  print " dy= ",n.getDisp[1]/EIbeta3
+  print("  node: ",n.tag," x= ",(n.get3dCoo[0]-Lmedios)/L)
+  print(" dy= ",n.getDisp[1]/EIbeta3)
   '''
 
 
@@ -147,22 +148,22 @@ ratio3= abs((yAdimCentroVano-yAdimCentroVanoTeor)/yAdimCentroVanoTeor)
 ratio4= abs(yAdimMaxima-yAdimMaximaTeor)/yAdimMaximaTeor
 
 ''' 
-print "yAdimCentroVanoTeor= ",yAdimCentroVanoTeor
-print "yAdimCentroVano= ",yAdimCentroVano
-print "yAdimMaximaTeor= ",yAdimMaximaTeor
-print "yAdimMaxima= ",yAdimMaxima
-print "beta= ",beta*1000,"e-3n"
-print "k= ",k*100,"e-2n"
-print "ratio1= ",ratio1
-print "ratio2= ",ratio2
-print "ratio3= ",ratio3
-print "ratio4= ",ratio4
+print("yAdimCentroVanoTeor= ",yAdimCentroVanoTeor)
+print("yAdimCentroVano= ",yAdimCentroVano)
+print("yAdimMaximaTeor= ",yAdimMaximaTeor)
+print("yAdimMaxima= ",yAdimMaxima)
+print("beta= ",beta*1000,"e-3n")
+print("k= ",k*100,"e-2n")
+print("ratio1= ",ratio1)
+print("ratio2= ",ratio2)
+print("ratio3= ",ratio3)
+print("ratio4= ",ratio4)
 '''
 
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if((ratio1<1e-15) & (ratio2<1e-15) & (ratio3<0.03) & (ratio4<0.09)):
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')

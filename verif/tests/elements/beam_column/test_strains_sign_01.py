@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 # home made test
 
 # ForceBeamColum3d element sign criteria.
@@ -146,25 +147,25 @@ import math
 error= math.sqrt((vTeor-v0).Norm2()+(vTeor-v1).Norm2()+(vTeor-R0).Norm2()+(vTeor-R1).Norm2())
 
 '''
-print "I= ", zl.getIVector
-print "K= ", zl.getKVector
-print "EA= ",E*A
-print "EIz= ",E*Iz
-print "EIy= ",E*Iy
-print fourFibersSection.getInitialTangentStiffness()
+print("I= ", zl.getIVector)
+print("K= ", zl.getKVector)
+print("EA= ",E*A)
+print("EIz= ",E*Iz)
+print("EIy= ",E*Iy)
+print(fourFibersSection.getInitialTangentStiffness())
 
-print "v0= ",v0
-print "v1= ",v1
-print "R0= ",R0
-print "R1= ",R1
-print "vTeor= ", vTeor
-print "error= ", error
+print("v0= ",v0)
+print("v1= ",v1)
+print("R0= ",R0)
+print("R1= ",R1)
+print("vTeor= ", vTeor)
+print("error= ", error)
 '''
 
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (error < 1e-3):
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')

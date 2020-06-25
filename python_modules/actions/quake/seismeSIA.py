@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
+
 from __future__ import division
 # Earthquake loads according to SIA-261 (2003).
 
@@ -141,7 +143,7 @@ def designSpectrum(soilClass,accelTerrain,CO,T,q):
   else:
     factor= max(2.5*tc*td/(T**2)/q,0.1/s)
   retval*= factor
-  print 'S= ', s, ' gf= ', gf, ' factor= ', factor, 'retval= ', retval
+  print('S= ', s, ' gf= ', gf, ' factor= ', factor, 'retval= ', retval)
   return retval
 
 

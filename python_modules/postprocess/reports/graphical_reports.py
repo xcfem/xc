@@ -433,8 +433,8 @@ def insertGrInTex(texFile,grFileNm,grWdt,capText,labl=''):
     texFile.write('\\begin{center}\n')
     texFile.write('\\includegraphics[width='+grWdt+']{'+grFileNm+'}\n')
     texFile.write('\\caption{'+capText+'}\n')
-    if labl<>'':
-      texFile.write('\\label{'+labl+'}\n')
+    if(labl!=''):
+        texFile.write('\\label{'+labl+'}\n')
     texFile.write('\\end{center}\n')
     texFile.write('\\end{figure}\n')
     return

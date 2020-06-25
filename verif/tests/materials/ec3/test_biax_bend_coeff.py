@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 from __future__ import division
 
 #Coefficients alpha, beta for biaxial bending  (clause 6.2.9 of EC3.1.1)
@@ -62,7 +63,7 @@ import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (abs(sum(ratioLst)/len(ratioLst))<1e-5):
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')
 

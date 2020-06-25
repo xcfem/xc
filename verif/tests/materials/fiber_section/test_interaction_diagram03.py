@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 ''' Iteractio diagram computation. Home made test. Reads the interaction diagram obtained in test_interaction_diagram01. '''
 from __future__ import division
 
@@ -29,10 +30,10 @@ ratio4= diagInteg.getCapacityFactor(geom.Pos3d(-978599,-10679.4,62804.3))-1.0
 import os
 os.system("rm -f /tmp/interaction_diagram_test_01.dat")
 ''' 
-print "ratio1= ",(ratio1)
-print "ratio2= ",(ratio2)
-print "ratio3= ",(ratio3)
-print "ratio4= ",(ratio4)
+print("ratio1= ",(ratio1))
+print("ratio2= ",(ratio2))
+print("ratio3= ",(ratio3))
+print("ratio4= ",(ratio4))
  '''
 
 ''' Como el método con el que se graba el interaction diagram no es exacto
@@ -42,6 +43,6 @@ print "ratio4= ",(ratio4)
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if((abs(ratio1)<1e-5) & (abs(ratio2)<1e-5) & (abs(ratio3)<2e-2) & (abs(ratio4)<1e-5)):
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')

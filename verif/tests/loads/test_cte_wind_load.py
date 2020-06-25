@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 
 
 from actions.wind import CTE_wind
@@ -82,67 +83,67 @@ ratioE7= (cpPruebaEPV3+0.6)
 ratioE8= (cpPruebaEPV4+0.6)
 
 '''
-print "cpPruebaF= ",cpPruebaF
-print "ratio1= ",ratio1
-print "cpPruebaG= ",cpPruebaG
-print "ratio2= ",ratio2
-print "cpPruebaGL= ",cpPruebaGL
-print "ratio3= ",ratio3
+print("cpPruebaF= ",cpPruebaF)
+print("ratio1= ",ratio1)
+print("cpPruebaG= ",cpPruebaG)
+print("ratio2= ",ratio2)
+print("cpPruebaGL= ",cpPruebaGL)
+print("ratio3= ",ratio3)
 
-print "cpPruebaAPV0= ",cpPruebaAPV0
-print "ratioA4= ",ratioA4
-print "cpPruebaAPV1= ",cpPruebaAPV1
-print "ratioA5= ",ratioA5
-print "cpPruebaAPV2= ",cpPruebaAPV2
-print "ratioA6= ",ratioA6
-print "cpPruebaAPV3= ",cpPruebaAPV3
-print "ratioA7= ",ratioA7
-print "cpPruebaAPV4= ",cpPruebaAPV4
-print "ratioA8= ",ratioA8
+print("cpPruebaAPV0= ",cpPruebaAPV0)
+print("ratioA4= ",ratioA4)
+print("cpPruebaAPV1= ",cpPruebaAPV1)
+print("ratioA5= ",ratioA5)
+print("cpPruebaAPV2= ",cpPruebaAPV2)
+print("ratioA6= ",ratioA6)
+print("cpPruebaAPV3= ",cpPruebaAPV3)
+print("ratioA7= ",ratioA7)
+print("cpPruebaAPV4= ",cpPruebaAPV4)
+print("ratioA8= ",ratioA8)
 
-print "cpPruebaBPV0= ",cpPruebaBPV0
-print "ratioB4= ",ratioB4
-print "cpPruebaBPV1= ",cpPruebaBPV1
-print "ratioB5= ",ratioB5
-print "cpPruebaBPV2= ",cpPruebaBPV2
-print "ratioB6= ",ratioB6
-print "cpPruebaBPV3= ",cpPruebaBPV3
-print "ratioB7= ",ratioB7
-print "cpPruebaBPV4= ",cpPruebaBPV4
-print "ratioB8= ",ratioB8
+print("cpPruebaBPV0= ",cpPruebaBPV0)
+print("ratioB4= ",ratioB4)
+print("cpPruebaBPV1= ",cpPruebaBPV1)
+print("ratioB5= ",ratioB5)
+print("cpPruebaBPV2= ",cpPruebaBPV2)
+print("ratioB6= ",ratioB6)
+print("cpPruebaBPV3= ",cpPruebaBPV3)
+print("ratioB7= ",ratioB7)
+print("cpPruebaBPV4= ",cpPruebaBPV4)
+print("ratioB8= ",ratioB8)
 
-print "cpPruebaCPV0= ",cpPruebaCPV0
-print "ratioC4= ",ratioC4
-print "cpPruebaCPV1= ",cpPruebaCPV1
-print "ratioC5= ",ratioC5
-print "cpPruebaCPV2= ",cpPruebaCPV2
-print "ratioC6= ",ratioC6
-print "cpPruebaCPV3= ",cpPruebaCPV3
-print "ratioC7= ",ratioC7
-print "cpPruebaCPV4= ",cpPruebaCPV4
-print "ratioC8= ",ratioC8
+print("cpPruebaCPV0= ",cpPruebaCPV0)
+print("ratioC4= ",ratioC4)
+print("cpPruebaCPV1= ",cpPruebaCPV1)
+print("ratioC5= ",ratioC5)
+print("cpPruebaCPV2= ",cpPruebaCPV2)
+print("ratioC6= ",ratioC6)
+print("cpPruebaCPV3= ",cpPruebaCPV3)
+print("ratioC7= ",ratioC7)
+print("cpPruebaCPV4= ",cpPruebaCPV4)
+print("ratioC8= ",ratioC8)
 
-print "cpPruebaDPV0= ",cpPruebaDPV0
-print "ratioD4= ",ratioD4
-print "cpPruebaDPV1= ",cpPruebaDPV1
-print "ratioD5= ",ratioD5
-print "cpPruebaDPV2= ",cpPruebaDPV2
-print "ratioD6= ",ratioD6
-print "cpPruebaDPV3= ",cpPruebaDPV3
-print "ratioD7= ",ratioD7
-print "cpPruebaDPV4= ",cpPruebaDPV4
-print "ratioD8= ",ratioD8
+print("cpPruebaDPV0= ",cpPruebaDPV0)
+print("ratioD4= ",ratioD4)
+print("cpPruebaDPV1= ",cpPruebaDPV1)
+print("ratioD5= ",ratioD5)
+print("cpPruebaDPV2= ",cpPruebaDPV2)
+print("ratioD6= ",ratioD6)
+print("cpPruebaDPV3= ",cpPruebaDPV3)
+print("ratioD7= ",ratioD7)
+print("cpPruebaDPV4= ",cpPruebaDPV4)
+print("ratioD8= ",ratioD8)
 
-print "cpPruebaEPV0= ",cpPruebaEPV0
-print "ratioE4= ",ratioE4
-print "cpPruebaEPV1= ",cpPruebaEPV1
-print "ratioE5= ",ratioE5
-print "cpPruebaEPV2= ",cpPruebaEPV2
-print "ratioE6= ",ratioE6
-print "cpPruebaEPV3= ",cpPruebaEPV3
-print "ratioE7= ",ratioE7
-print "cpPruebaEPV4= ",cpPruebaEPV4
-print "ratioE8= ",ratioE8
+print("cpPruebaEPV0= ",cpPruebaEPV0)
+print("ratioE4= ",ratioE4)
+print("cpPruebaEPV1= ",cpPruebaEPV1)
+print("ratioE5= ",ratioE5)
+print("cpPruebaEPV2= ",cpPruebaEPV2)
+print("ratioE6= ",ratioE6)
+print("cpPruebaEPV3= ",cpPruebaEPV3)
+print("ratioE7= ",ratioE7)
+print("cpPruebaEPV4= ",cpPruebaEPV4)
+print("ratioE8= ",ratioE8)
 ''' 
 
 
@@ -150,6 +151,6 @@ import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (abs(ratio1)<1e-12) & (abs(ratio2)<1e-12) & (abs(ratio3)<1e-12) & (abs(ratioA4)<1e-12) & (abs(ratioA5)<1e-12) & (abs(ratioA6)<1e-12) & (abs(ratioA7)<1e-12) & (abs(ratioA8)<1e-12) & (abs(ratioB4)<1e-12) & (abs(ratioB5)<1e-12) & (abs(ratioB6)<1e-12) & (abs(ratioB7)<1e-12) & (abs(ratioB8)<1e-12) & (abs(ratioC4)<1e-12) & (abs(ratioC5)<1e-12) & (abs(ratioC6)<1e-12) & (abs(ratioC7)<1e-12) & (abs(ratioC8)<1e-12) & (abs(ratioD4)<1e-12) & (abs(ratioD5)<1e-12) & (abs(ratioD6)<1e-12) & (abs(ratioD7)<1e-12) & (abs(ratioD8)<1e-12) & (abs(ratioE4)<1e-12) & (abs(ratioE5)<1e-12) & (abs(ratioE6)<1e-12) & (abs(ratioE7)<1e-12) & (abs(ratioE8)<1e-12):
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')

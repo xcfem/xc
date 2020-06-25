@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 '''Verification test of a rectangular fiber section with an
  elasto plastic material model.'''
 #    written from "Nociones de cálculo plástico." Carlos Benito Hernández.
@@ -39,7 +40,7 @@ import os
 pth= os.path.dirname(__file__)
 if(not pth):
   pth= "."
-#print "pth= ", pth
+#print("pth= ", pth)
 execfile(pth+"/fiber_section_test_macros.py")
 
 
@@ -120,17 +121,17 @@ ratio13= (esfMz-loadMz)/loadMz
 
 '''
 printRatios(scc10x20)
-print "analOk= ",analOk
-print "numFibers= ", nFibers
-print "numFibersTeor= ", scc10x20.nDivIJ*scc10x20.nDivJK
-print "RM= ",(RM)
-print "esfMz= ",(esfMz)
-print "loadMz= ",(loadMz)
+print("analOk= ",analOk)
+print("numFibers= ", nFibers)
+print("numFibersTeor= ", scc10x20.nDivIJ*scc10x20.nDivJK)
+print("RM= ",(RM))
+print("esfMz= ",(esfMz))
+print("loadMz= ",(loadMz))
 '''
 
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (abs(ratio1)<1e-5) & (abs(ratio2)<1e-5) & (abs(ratio3)<1e-5) & (abs(ratio4)<1e-3) & (abs(ratio5)<1e-2)  & (abs(ratio6)<1e-3) & (abs(ratio7)<1e-2) & (abs(ratio8)<1e-3) & (abs(ratio9)<1e-3) & (abs(ratio10)<1e-5) & (abs(ratio11)<1e-5)  & (abs(ratio12)<1e-5) & (abs(ratio13)<1e-5) & (analOk==0):
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')

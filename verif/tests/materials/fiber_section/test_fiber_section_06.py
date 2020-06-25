@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 ''' Reinforced concrete section verification test.
    results are compared with those of the prontuario.
    informático del hormigón estructural (Cátedra de hormigón de la ETSICCP-IECA
@@ -37,7 +38,7 @@ import os
 pth= os.path.dirname(__file__)
 if(not pth):
   pth= "."
-#print "pth= ", pth
+#print("pth= ", pth)
 execfile(pth+"/concrete_section_01.py")
 
 secHA= preprocessor.getMaterialHandler.newMaterial("fiber_section_3d","secHA")
@@ -67,22 +68,22 @@ ratio2= (Mz2-Mz2Dato)/Mz2Dato
 
 
 ''' 
-print "computed Axil; N1= ",(N1/1e3)," kN \n"
-print "computed moment about z axis; Mz1= ",(Mz1/1e3)," kN m\n"
-print "moment about z axis dato; Mz1Dato= ",(Mz1Dato/1e3)," kN \n"
-print "ratio1= ",(ratio1)
+print("computed Axil; N1= ",(N1/1e3)," kN \n")
+print("computed moment about z axis; Mz1= ",(Mz1/1e3)," kN m\n")
+print("moment about z axis dato; Mz1Dato= ",(Mz1Dato/1e3)," kN \n")
+print("ratio1= ",(ratio1))
 
-print "computed Axil; N2= ",(N2/1e3)," kN \n"
-print "computed moment about z axis; Mz2= ",(Mz2/1e3)," kN m\n"
-print "moment about z axis dato; Mz2Dato= ",(Mz2Dato/1e3)," kN \n"
-print "ratio2= ",(ratio2)
+print("computed Axil; N2= ",(N2/1e3)," kN \n")
+print("computed moment about z axis; Mz2= ",(Mz2/1e3)," kN m\n")
+print("moment about z axis dato; Mz2Dato= ",(Mz2Dato/1e3)," kN \n")
+print("ratio2= ",(ratio2))
  '''
 
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (abs(ratio1)<1e-4) & (abs(ratio2)<1e-4) :
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')
 

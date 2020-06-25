@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
+
 
 def UniformLoadList(preprocessor,loadPattern, archivo, carga, fmt):
   elemTags= loadPattern.getElementTags()
@@ -19,8 +21,8 @@ def ElementLoadList(loadPattern, archivo, fmt):
   idsCampos= "Id & Acc. & Type & x & Fx & Fy &Fz \\\\\n - & - & - &  & kN/m & kN/m & kN/m "
   cabeceraSupertabular(archivo,7,defCampos,idsCampos,caption)
   loads= preprocessor.getLoadPatterns
-  print "Número de patrones de carga: ",numLoadPatterns
-  print "Número de cargas en elementos: ", loadPattern.getNumEleLoads()
+  print("Número de patrones de carga: ",numLoadPatterns)
+  print("Número de cargas en elementos: ", loadPattern.getNumEleLoads())
   eleLoads= loadPattern.getEleLoads()
   for l in eleLoads:
     if(l.category=="nodef"):
@@ -36,7 +38,7 @@ def listNodalLoads(loadPattern, archivo, fmt):
   defCampos= "|r|c|c|r|r|r|r|"
   idsCampos= "Id & Acc. & Type & x & Fx & Fy &Fz \\\\\n - & - & - &  & kN & kN & kN "
   cabeceraSupertabular(archivo,7,defCampos,idsCampos,caption) 
-  print "Number of nodal loads: ", loadPattern.getNumNodalLoads()
+  print("Number of nodal loads: ", loadPattern.getNumNodalLoads())
   nodalLoads= loadPattern.getNodalLoads()
   for l in nodalLoads:
     carga= l.load

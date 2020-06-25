@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 from __future__ import division
 
 __author__= "Luis C. Pérez Tato (LCPT)"
@@ -30,17 +31,17 @@ ratio2= (NCableA-396.016378635)/396.016378635
 ratio3= (NCableB-922.818617429)/922.818617429
 
 '''
-print 'NCable= ', NCable
-print 'NCableA= ', NCableA
-print 'NCableB= ', NCableB
-print 'ratioAreas= ', ratioAreas
-print 'ratioDiameters= ', ratioDiameters
+print('NCable= ', NCable)
+print('NCableA= ', NCableA)
+print('NCableB= ', NCableB)
+print('ratioAreas= ', ratioAreas)
+print('ratioDiameters= ', ratioDiameters)
 '''
 
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if(abs(ratio1)<1e-10 and abs(ratio2)<1e-10 and abs(ratio3)<1e-10):
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')

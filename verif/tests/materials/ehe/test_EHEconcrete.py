@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 
 from __future__ import division
 from materials.ehe import EHE_materials
@@ -51,7 +52,7 @@ import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)+'-fcm'
 if sqrErr<1e-8:
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')
 
@@ -64,7 +65,7 @@ import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)+'-fctm'
 if sqrErr<1e-8:
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')
 
@@ -78,7 +79,7 @@ import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)+'-fctk005'
 if sqrErr<1e-8:
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')
 #Test Fctk095
@@ -90,7 +91,7 @@ import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)+'-fctk095'
 if sqrErr<1e-8:
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')
 
@@ -103,7 +104,7 @@ import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)+'-Ecm'
 if sqrErr<1e-8:
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')
 
@@ -117,7 +118,7 @@ import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)+'-Epsc2'
 if sqrErr<1e-8:
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')
 
@@ -130,7 +131,7 @@ import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)+'-Epscu2'
 if sqrErr<1e-8:
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')
 
@@ -143,7 +144,7 @@ import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)+'-ExpN'
 if sqrErr<1e-8:
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')
 

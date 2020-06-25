@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 ''' Response spectrum modal analysis test
 taken from the publication from Andrés Sáez Pérez: «Estructuras III»
  E.T.S. de Arquitectura de Sevilla (España). Eigenvalue problem is solved
@@ -152,27 +153,27 @@ diff_fdib= distributionFactors-exampleDistribFactors
 ratio4= diff_fdib.Norm()
 
 ''' 
-print "kPlBaja= ",kPlBaja
-print "kPl1a= ",kPl1a
-print "kPl3a= ",kPl3a
-print "periods: ",periods
-print "ratio1= ",ratio1
-print "modos: ",modos
-print "subtract_modes: ",subtract_modes
-print "ratio2= ",ratio2
-print "modalParticipationFactors: ",modalParticipationFactors
-print "effectiveModalMasses: ",effectiveModalMasses
-print "totalMass: ",totalMass
-print "ratio3= ",ratio3
-print "distributionFactors: ",distributionFactors
-print "ratio4= ",ratio4
+print("kPlBaja= ",kPlBaja)
+print("kPl1a= ",kPl1a)
+print("kPl3a= ",kPl3a)
+print("periods: ",periods)
+print("ratio1= ",ratio1)
+print("modos: ",modos)
+print("subtract_modes: ",subtract_modes)
+print("ratio2= ",ratio2)
+print("modalParticipationFactors: ",modalParticipationFactors)
+print("effectiveModalMasses: ",effectiveModalMasses)
+print("totalMass: ",totalMass)
+print("ratio3= ",ratio3)
+print("distributionFactors: ",distributionFactors)
+print("ratio4= ",ratio4)
  '''
 
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if((ratio1<1e-3) & (ratio2<5e-2) & (ratio3<1e-12) & (ratio4<5e-2)):
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')
 

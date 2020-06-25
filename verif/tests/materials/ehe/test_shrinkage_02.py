@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 # home made test
 #    Shrinking load pattern test.
 
@@ -194,11 +195,11 @@ def resuelveCombEstatLin(tagComb,comb,tagSaveFase0):
   #execfile("solution/database_helper_solve.xci")
 
   ''' 
-  print "previousName= ",previousName
-  print "tag= ",tagComb
-  print "tagPrevia= ",tagPrevia
-  print "descomp previa= ",getDescompCombPrevia
-  print "resto sobre previa= ",getDescompRestoSobrePrevia
+  print("previousName= ",previousName)
+  print("tag= ",tagComb)
+  print("tagPrevia= ",tagPrevia)
+  print("descomp previa= ",getDescompCombPrevia)
+  print("resto sobre previa= ",getDescompRestoSobrePrevia)
   '''
 
   comb.addToDomain()
@@ -217,11 +218,11 @@ def procesResultVerif(tagComb, nmbComb):
   global dXMin; dXMin= min(dXMin,deltaX)
   global dXMax; dXMax= max(dXMax,deltaX)
   ''' 
-  print "nmbComb= ",nmbComb
-  print "tagComb= ",tagComb
-  print "descomp= ",getDescomp("%3.1f")
-  print "dXMin= ",(dXMin*1e3)," mm\n"
-  print "dXMax= ",(dXMax*1e3)," mm\n"
+  print("nmbComb= ",nmbComb)
+  print("tagComb= ",tagComb)
+  print("descomp= ",getDescomp("%3.1f"))
+  print("dXMin= ",(dXMin*1e3)," mm\n")
+  print("dXMax= ",(dXMax*1e3)," mm\n")
    '''
 import os
 os.system("rm -r -f /tmp/test_shrinkage_02.db")
@@ -297,19 +298,19 @@ dXMinTeor= -0.955324e-3
 ratio2= abs(((dXMin-dXMinTeor)/dXMinTeor))
 
 #''' 
-print "dXMax= ",(dXMax*1e3)," mm"
-print "dXMaxTeor= ",(dXMaxTeor*1e3)," mm"
-print "ratio1= ",ratio1
-print "dXMin= ",(dXMin*1e3)," mm"
-print "dXMinTeor= ",(dXMinTeor*1e3)," mm"
-print "ratio2= ",ratio2
+print("dXMax= ",(dXMax*1e3)," mm")
+print("dXMaxTeor= ",(dXMaxTeor*1e3)," mm")
+print("ratio1= ",ratio1)
+print("dXMin= ",(dXMin*1e3)," mm")
+print("dXMinTeor= ",(dXMinTeor*1e3)," mm")
+print("ratio2= ",ratio2)
 #   '''
 
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (ratio1<1e-5) & (ratio2<1e-5) :
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')
 

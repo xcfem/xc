@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 
 '''Design of concrete corbel according to EHE. Home made test.'''
 
@@ -41,23 +42,23 @@ AplacaTeor= Fvd/0.7/fck*1.5
 ratio5= abs(Aplaca-AplacaTeor)/AplacaTeor
 
 '''
-print "dmin= ",dmin," m"
-print "ratio1= ",ratio1
-print "T1d= ",T1d/1e3," kN"
-print "ratio2= ",ratio2
-print "As1= ",As1*1e4," cm2"
-print "ratio3= ",ratio3
-print "Ase= ",Ase*1e4," cm2"
-print "ratio4= ",ratio4
-print "Aplaca= ",Aplaca," m2"
-print "ratio5= ",ratio5
+print("dmin= ",dmin," m")
+print("ratio1= ",ratio1)
+print("T1d= ",T1d/1e3," kN")
+print("ratio2= ",ratio2)
+print("As1= ",As1*1e4," cm2")
+print("ratio3= ",ratio3)
+print("Ase= ",Ase*1e4," cm2")
+print("ratio4= ",ratio4)
+print("Aplaca= ",Aplaca," m2")
+print("ratio5= ",ratio5)
 '''
 
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (ratio1<1e-12) and (ratio2<1e-7) and (ratio3<1e-7) and (ratio4<1e-15) and (ratio5<1e-15):
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')
 

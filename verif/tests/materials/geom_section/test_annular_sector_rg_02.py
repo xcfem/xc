@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 # Home made test
 
 from __future__ import division
@@ -55,8 +56,8 @@ for                          \inicio{i=1} \continua{i<=numFilas} \incremento{i=(
   for j in range(1,j+1):
                                  \bucle
 
-                                      print "x(",i,",",j,")= ",x(i,j
-                                      print " y(",i,",",j,")= ",y(i,j
+                                      print("x(",i,",",j,")= ",x(i,j)
+                                      print(" y(",i,",",j,")= ",y(i,j)
 
 
 
@@ -101,47 +102,47 @@ ratio10= ((deltaX-deltaXTeor)/deltaXTeor)
 ratio11= ((deltaY-deltaYTeor)/deltaYTeor)
 
 '''
-print "numQuads= ",numQuads
-print "numPoints= ",numPoints
-print "numFilas= ",numFilas
-print "numCols= ",numCols
-print "area= ",area
-print "areaTeor= ",areaTeor
-print "areaAcad= ",areaAcad
-print "G= ",G
-print "yGAcad= ",yGAcad
-print "yGTeor= ",yGTeor
-print "zGAcad= ",zGAcad
-print "zGTeor= ",zGTeor
-print "izAcad= ",izAcad
-print "izTeor= ",izTeor
-print "Iz= ",Iz
-print "iyAcad= ",iyAcad
-print "iyTeor= ",iyTeor
-print "Iy= ",Iy
-print "Pyz= ",Pyz
-print "deltaX= ",deltaX
-print "deltaXTeor= ",deltaXTeor
-print "deltaY= ",deltaY
-print "deltaYTeor= ",deltaYTeor
-print "deltaY/deltaYTeor= ",(deltaY/deltaYTeor)
-print "ratio1= ", ratio1
-print "ratio2= ", ratio2
-print "ratio3= ", ratio3
-print "ratio4= ", ratio4
-print "ratio5= ", ratio5
-print "ratio6= ", ratio6
-print "ratio7= ", ratio7
-print "ratio8= ", ratio8
-print "ratio9= ", ratio9
-print "ratio10= ", ratio10
-print "ratio11= ", ratio11
+print("numQuads= ",numQuads)
+print("numPoints= ",numPoints)
+print("numFilas= ",numFilas)
+print("numCols= ",numCols)
+print("area= ",area)
+print("areaTeor= ",areaTeor)
+print("areaAcad= ",areaAcad)
+print("G= ",G)
+print("yGAcad= ",yGAcad)
+print("yGTeor= ",yGTeor)
+print("zGAcad= ",zGAcad)
+print("zGTeor= ",zGTeor)
+print("izAcad= ",izAcad)
+print("izTeor= ",izTeor)
+print("Iz= ",Iz)
+print("iyAcad= ",iyAcad)
+print("iyTeor= ",iyTeor)
+print("Iy= ",Iy)
+print("Pyz= ",Pyz)
+print("deltaX= ",deltaX)
+print("deltaXTeor= ",deltaXTeor)
+print("deltaY= ",deltaY)
+print("deltaYTeor= ",deltaYTeor)
+print("deltaY/deltaYTeor= ",(deltaY/deltaYTeor))
+print("ratio1= ", ratio1)
+print("ratio2= ", ratio2)
+print("ratio3= ", ratio3)
+print("ratio4= ", ratio4)
+print("ratio5= ", ratio5)
+print("ratio6= ", ratio6)
+print("ratio7= ", ratio7)
+print("ratio8= ", ratio8)
+print("ratio9= ", ratio9)
+print("ratio10= ", ratio10)
+print("ratio11= ", ratio11)
  '''
 
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (abs(ratio1)<1e-15) & (abs(ratio2)<1e-15) & (abs(ratio3)<1e-15) & (abs(ratio4)<1e-15) & (abs(ratio5)<1e-4) & (abs(ratio6)<1e-4) & (abs(ratio7)<1e-13) & (abs(ratio8)<1e-4) & (abs(ratio9)<1e-4) & (abs(ratio10)<1e-15)  & (abs(ratio11)<1e-2) & (abs(Pyz)<1e-13):
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')

@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 # home made test
 # Sign convention for 2D elastic sections.
 
@@ -33,7 +34,7 @@ epsilon4= epsilon
 #Read section definition from file.
 import os
 pth= os.path.dirname(__file__)
-#print "pth= ", pth
+#print("pth= ", pth)
 if(not pth):
   pth= "."
 execfile(pth+"/../../aux/elastic_section_2d.py")
@@ -133,37 +134,37 @@ import math
 error= math.sqrt(ratioN0**2+ratioMz0**2+ratioN0S**2+ratioMz0S**2+ratioR0**2+ratioD0**2+ratioN1**2+ratioMz1**2+ratioN1S**2+ratioMz1S**2+ratioR1**2+ratioD1**2+ratioN2**2+ratioMz2**2+ratioN2S**2+ratioMz2S**2+ratioR2**2+ratioD2**2)
 
 '''
-print "Elongation in 1, 2, 3 and 4"
-print "STATIC SIGN CONVENTION: N and epsilon positive."
-print "XC SIGN CONVENTION: N and epsilon positive."
-print '  N0= ', N0, ' N0S= ', N0S, ' N0Teor= ', N0Teor, ' ratioN0= ', ratioN0, ' ratioN0S= ', ratioN0S
-print '  Mz0= ', Mz0, ' Mz0S= ', Mz0S, ' Mz0Teor= ', Mz0Teor, ' ratioMz0= ', ratioMz0, ' ratioMz0S= ', ratioMz0S
-print '  R0= ', R0, ' R0Teor= ', R0Teor, ' ratioR0= ', ratioR0
-print '  D0= ', D0, ' D0Teor= ', D0Teor, ' ratioD0= ', ratioD0, '\n'
+print("Elongation in 1, 2, 3 and 4")
+print("STATIC SIGN CONVENTION: N and epsilon positive.")
+print("XC SIGN CONVENTION: N and epsilon positive.")
+print('  N0= ', N0, ' N0S= ', N0S, ' N0Teor= ', N0Teor, ' ratioN0= ', ratioN0, ' ratioN0S= ', ratioN0S)
+print('  Mz0= ', Mz0, ' Mz0S= ', Mz0S, ' Mz0Teor= ', Mz0Teor, ' ratioMz0= ', ratioMz0, ' ratioMz0S= ', ratioMz0S)
+print('  R0= ', R0, ' R0Teor= ', R0Teor, ' ratioR0= ', ratioR0)
+print('  D0= ', D0, ' D0Teor= ', D0Teor, ' ratioD0= ', ratioD0, '\n')
 
-print 'Shortening in 1 and 4, elongation in 2 and 3'
-print 'STATIC SIGN CONVENTION: Mz and kZ negative (Right hand rule).'
-print 'XC SIGN CONVENTION: Mz and kZ POSITIVE (it is annoying Yeah!)'
-print '  N1= ', N1, ' N1S= ', N1S, ' N1Teor= ', N1Teor, ' ratioN1= ', ratioN1, ' ratioN1S= ', ratioN1S
-print '  Mz1= ', Mz1, ' Mz1S= ', Mz1S, ' Mz1Teor= ', Mz1Teor, ' ratioMz1= ', ratioMz1, ' ratioMz1S= ', ratioMz1S
-print '  R1= ', R1, ' R1Teor= ', R1Teor, ' ratioR1= ', ratioR1
-print '  D1= ', D1, ' D1Teor= ', D1Teor, ' ratioD1= ', ratioD1 , '\n'
+print('Shortening in 1 and 4, elongation in 2 and 3')
+print('STATIC SIGN CONVENTION: Mz and kZ negative (Right hand rule).')
+print('XC SIGN CONVENTION: Mz and kZ POSITIVE (it is annoying Yeah!)')
+print('  N1= ', N1, ' N1S= ', N1S, ' N1Teor= ', N1Teor, ' ratioN1= ', ratioN1, ' ratioN1S= ', ratioN1S)
+print('  Mz1= ', Mz1, ' Mz1S= ', Mz1S, ' Mz1Teor= ', Mz1Teor, ' ratioMz1= ', ratioMz1, ' ratioMz1S= ', ratioMz1S)
+print('  R1= ', R1, ' R1Teor= ', R1Teor, ' ratioR1= ', ratioR1)
+print('  D1= ', D1, ' D1Teor= ', D1Teor, ' ratioD1= ', ratioD1 , '\n')
 
-print 'Elongations in 1 and 4, shortening in 2 and 3'
-print 'STATIC SIGN CONVENTION: Mz and kZ positive (Right hand rule).'
-print 'XC SIGN CONVENTION: Mz and kZ NEGATIVE (it is annoying Yeah!)'
-print '  N2= ', N2, ' N2S= ', N2S, ' N2Teor= ', N2Teor, ' ratioN2= ', ratioN2, ' ratioN2S= ', ratioN2S
-print '  Mz2= ', Mz2, ' Mz2S= ', Mz2S, ' Mz2Teor= ', Mz2Teor, ' ratioMz2= ', ratioMz2, ' ratioMz2S= ', ratioMz2S
-print '  R2= ', R2, ' R2Teor= ', R2Teor, ' ratioR2= ', ratioR2
-print '  D2= ', D2, ' D2Teor= ', D2Teor, ' ratioD2= ', ratioD2, '\n'
+print('Elongations in 1 and 4, shortening in 2 and 3')
+print('STATIC SIGN CONVENTION: Mz and kZ positive (Right hand rule).')
+print('XC SIGN CONVENTION: Mz and kZ NEGATIVE (it is annoying Yeah!)')
+print('  N2= ', N2, ' N2S= ', N2S, ' N2Teor= ', N2Teor, ' ratioN2= ', ratioN2, ' ratioN2S= ', ratioN2S)
+print('  Mz2= ', Mz2, ' Mz2S= ', Mz2S, ' Mz2Teor= ', Mz2Teor, ' ratioMz2= ', ratioMz2, ' ratioMz2S= ', ratioMz2S)
+print('  R2= ', R2, ' R2Teor= ', R2Teor, ' ratioR2= ', ratioR2)
+print('  D2= ', D2, ' D2Teor= ', D2Teor, ' ratioD2= ', ratioD2, '\n')
 
-print 'error= ', error
+print('error= ', error)
 '''
 
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (error < 1e-3):
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')
 

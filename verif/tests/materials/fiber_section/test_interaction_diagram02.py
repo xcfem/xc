@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 
 
 # Test for checking the interaction diagram
@@ -113,15 +114,15 @@ for f in FCs:
 ratio1= abs(sumQuad-szFCs)/szFCs
 
 ''' 
-print "FCs= ",FCs
-print "sumQuad= ",sumQuad
-print "ratio1= ",ratio1
+print("FCs= ",FCs)
+print("sumQuad= ",sumQuad)
+print("ratio1= ",ratio1)
  '''
 
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if(abs(ratio1)<0.02):
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')

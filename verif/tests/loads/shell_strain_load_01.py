@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 ''' home made test
     Reference:  Cálculo de estructuras por el método de los elemen-
     tos finitos. 1991. E. Oñate, page 165, example 5.3
@@ -101,17 +102,17 @@ ratio1= ((axil1-N)/N)
 ratio2= (axil2)
 
 ''' 
-print "N= ",N
-print "axil1= ",axil1
-print "axil2= ",axil2
-print "ratio1= ",ratio1
-print "ratio2= ",ratio2
+print("N= ",N)
+print("axil1= ",axil1)
+print("axil2= ",axil2)
+print("ratio1= ",ratio1)
+print("ratio2= ",ratio2)
    '''
 
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (abs(ratio1)<2e-7) & (abs(ratio2)<1e-10):
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')

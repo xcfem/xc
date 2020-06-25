@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
+
 
 #Based on sXML-master projet on gitHub
 
@@ -34,7 +36,7 @@ class ElementLoadComponent(lcb.LoadComponentBase):
     super(ElementLoadComponent,self).__init__(loadCaseId, loadCaseName, direction, value, globalCooSys)
     ElementLoadComponent.counter+=1
     self.elementLoadCompId= ElementLoadComponent.counter
-    #print "loadCompId= ", self.elementLoadCompId 
+    #print("loadCompId= ", self.elementLoadCompId )
     self.elementId= elementId
 
   def getElementReferenceItem(self):
@@ -69,7 +71,7 @@ def getElementLoadComponents(elementLoad):
   vDir= elementLoad.vDir
   normVDir= math.sqrt(vDir[0]**2+vDir[1]**2+vDir[2]**2)
   if(normVDir<1e-3):
-    print "getElementLoadComponents: vDir vector very small: ", vDir, " load ignored."
+    print("getElementLoadComponents: vDir vector very small: ", vDir, " load ignored.")
   else:
     loadCaseId= elementLoad.loadCaseId
     loadCaseName= elementLoad.loadCaseName

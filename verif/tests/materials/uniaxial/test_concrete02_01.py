@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 
 # home made test
 l= 1e-7 # Distance between nodes
@@ -90,18 +91,18 @@ ratio2= np.linalg.norm(residStrains)/3.5e-3
 
 
 ''' 
-print 'E0= ', concr.getInitialTangent()/1e9, 2*concr.fpc/concr.epsc0/1e9
-print 'epsc0= ', concr.epsc0
-print 'fmaxK= ', concr.fpc/1e6
-print 'epscu= ', concr.epscu
-print 'ft= ', concr.ft/1e6
-print 'Ets= ', concr.Ets/1e9, concr.getInitialTangent()/19e9
-print calculatedStresses
-print 'error in stress calculation: ', residStresses
-print calculatedStrains
-print residStrains
-print "ratio1= ",ratio1
-print "ratio2= ",ratio2
+print('E0= ', concr.getInitialTangent()/1e9, 2*concr.fpc/concr.epsc0/1e9)
+print('epsc0= ', concr.epsc0)
+print('fmaxK= ', concr.fpc/1e6)
+print('epscu= ', concr.epscu)
+print('ft= ', concr.ft/1e6)
+print('Ets= ', concr.Ets/1e9, concr.getInitialTangent()/19e9)
+print(calculatedStresses)
+print('error in stress calculation: ', residStresses)
+print(calculatedStrains)
+print(residStrains)
+print("ratio1= ",ratio1)
+print("ratio2= ",ratio2)
 retval= graph_material.UniaxialMaterialDiagramGraphic(epsMin=-0.0035,epsMax=0.0016,title=' concrete02 characteristic stress-strain diagram')
 retval.setupGraphic(plt,concr)
 plt.plot(strainData, stressData, '-')
@@ -112,6 +113,6 @@ import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if((ratio1<1e-5) and (ratio2<1e-5)) :
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')

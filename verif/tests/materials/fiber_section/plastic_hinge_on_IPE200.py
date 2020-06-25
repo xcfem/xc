@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 # home made test
 # Testing hinge development in a cantilever.
 
@@ -45,15 +46,15 @@ ratio1= (Mp1Teor-Mp1)/Mp1
 ratio2= (Mp2Teor-Mp2)/Mp2
 
 '''
-print 'WyplTeor=', WyplTeor
-print 'Mp1= ', Mp1, ' Mp1Teor= ', Mp1Teor, ' ratio1= ', ratio1
-print 'Mp2= ', Mp2, ' Mp2Teor= ', Mp2Teor, ' ratio2= ', ratio2
+print('WyplTeor=', WyplTeor)
+print('Mp1= ', Mp1, ' Mp1Teor= ', Mp1Teor, ' ratio1= ', ratio1)
+print('Mp2= ', Mp2, ' Mp2Teor= ', Mp2Teor, ' ratio2= ', ratio2)
 '''
 
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (ratio1<0.1) & (ratio2<0.1):
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')

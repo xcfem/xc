@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 
 import sqlite3 as sqlite
 from sqlite_utils import sqlite_macros
@@ -12,7 +13,7 @@ __email__= "l.pereztato@gmail.com"
 
 import os
 pth= os.path.dirname(__file__)
-#print "pth= ", pth
+#print("pth= ", pth)
 if(not pth):
   pth= "."
 fNameIn= pth+"/../aux/pilares.lst"
@@ -56,10 +57,10 @@ ratio3= abs(sumM2-32.43870)/32.43870
 ratio4= abs(sumT-0.0000115157)/0.0000115157
 
 ''' 
-print "ratio1= ",ratio1
-print "ratio2= ",ratio2
-print "ratio3= ",ratio3
-print "ratio4= ",ratio4
+print("ratio1= ",ratio1)
+print("ratio2= ",ratio2)
+print("ratio3= ",ratio3)
+print("ratio4= ",ratio4)
    '''
 
 
@@ -67,7 +68,7 @@ import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (abs(ratio1)<1e-5) & (abs(ratio2)<1e-5) & (abs(ratio3)<1e-5) & (abs(ratio4)<1e-5):
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')
 

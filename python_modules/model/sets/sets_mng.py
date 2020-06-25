@@ -1,5 +1,7 @@
 
 # -*- coding: utf-8 -*-
+from __future__ import print_function
+
 
 
 __author__= "Ana Ortega (AO_O)"
@@ -179,7 +181,7 @@ def set_not_included_in_orthoPrism(preprocessor,setInit,prismBase,prismAxis,setN
     '''
     elementsToRemove= set_included_in_orthoPrism(preprocessor,setInit,prismBase,prismAxis,setName+'toRemove')
     retval= setInit-elementsToRemove
-    print 'name: ', retval.name
+    print('name: ', retval.name)
     retval.name= setName
     return retval
 

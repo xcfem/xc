@@ -5,7 +5,7 @@ import math
 # Rough calculation of mechanical properties of profiles
 
 def Iprofile(h,b,tw,tf,r):
-    '''print mechanical properties of an I-shaped profile
+    '''print(mechanical properties of an I-shaped profile)
 
     - Z: strong axis
     - Y: weak axis
@@ -26,14 +26,14 @@ def Iprofile(h,b,tw,tf,r):
     iz=math.sqrt(Iz/A)
     iy=math.sqrt(Iy/A)
     Avz=A-2*b*tf+(tw+2*r)*tf
-    print 'hi=',hi
-    print 'd=', d
-    print 'A=', A
-    print 'Iy=',Iy
-    print 'Iz=',Iz
-    print 'Wy=',Wy
-    print 'Wz=',Wz
-    print 'iy=',iy
-    print 'iz=',iz
-    print 'Avz=',Avz 
+    print('hi=',hi)
+    print('d=', d)
+    print('A=', A)
+    print('Iy=',Iy)
+    print('Iz=',Iz)
+    print('Wy=',Wy)
+    print('Wz=',Wz)
+    print('iy=',iy)
+    print('iz=',iz)
+    print('Avz=',Avz )
     return

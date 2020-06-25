@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 
 import xc_base
 import geom
@@ -43,13 +44,13 @@ ratio1= xc_base.compare_images(fName,fNameB)
 
 # os.system("rm -f " + fName)
 
-#print "ratio1= ",(ratio1)
+#print("ratio1= ",(ratio1))
 
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if  (abs(ratio1)<1e-10) :
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')
 

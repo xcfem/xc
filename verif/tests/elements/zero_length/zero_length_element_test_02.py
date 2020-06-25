@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 # home made test
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
@@ -91,20 +92,20 @@ ratio3= -RY/FY
 ratio4= (KY*deltay)/FY
 
 ''' 
-print "RX= ",RX
-print "dx= ",deltax
-print "RY= ",RY
-print "dy= ",deltay
-print "ratio1= ",(ratio1)
-print "ratio2= ",(ratio2)
-print "ratio3= ",(ratio3)
-print "ratio4= ",(ratio4)
+print("RX= ",RX)
+print("dx= ",deltax)
+print("RY= ",RY)
+print("dy= ",deltay)
+print("ratio1= ",(ratio1))
+print("ratio2= ",(ratio2))
+print("ratio3= ",(ratio3))
+print("ratio4= ",(ratio4))
    '''
   
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (abs(ratio1-1.0)<1e-5) & (abs(ratio2-1.0)<1e-5) & (abs(ratio3-1.0)<1e-5) & (abs(ratio4-1.0)<1e-5) :
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')

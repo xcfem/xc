@@ -102,19 +102,19 @@ def calcE6p27(X,qrep,L,LR,v,l,a,b,hA,hB,hC,hD,xA):
   sum1= X*(num1/denom1*fact1-b*l*v+b*v*l**2/8/a)
   sum2= qrep*(num2/denom1*fact1+b*a*v/2-b*v*(L/2-xA))
   retval= (sum1+sum2)
-  # print "****************************"
-  # print "num1= ",num1
-  # print "denom1= ",denom1
-  # print "fact1= ", fact1
-  # print "LR= ",LR, " L= ",L," v= ",v," a= ", a, " xA= ",xA 
-  # print "num2A= ",num2A
-  # print "num2BA= ",num2BA
-  # print "num2BB= ",num2BB
-  # print "num2B= ",num2B
-  # print "num2= ", num2
-  # print "sum1= ", sum1
-  # print "sum2= ", sum2
-  # print "****************************"
+  # print("****************************")
+  # print("num1= ",num1)
+  # print("denom1= ",denom1)
+  # print("fact1= ", fact1)
+  # print("LR= ",LR, " L= ",L," v= ",v," a= ", a, " xA= ",xA )
+  # print("num2A= ",num2A)
+  # print("num2BA= ",num2BA)
+  # print("num2BB= ",num2BB)
+  # print("num2B= ",num2B)
+  # print("num2= ", num2)
+  # print("sum1= ", sum1)
+  # print("sum2= ", sum2)
+  # print("****************************")
   return retval
 
 def calcVB6p22(n,X,qrep,L,LR,v,l,a,b,hA,hB,hC,hD,xA,etaW,MA,MB,MC,RzB,phiS,eta):
@@ -160,22 +160,22 @@ def calcG6p29(X,qrep,L,LR,v,l,a,b,hA,hB,hC,hD,xA,gammaD):
   sum1= X*(num1/denom1*fact1+math.sin(gammaD)*l*v*(l/8/a-1))
   sum2= qrep*(num2/denom1*fact1+v*math.sin(gammaD)*(a/2-L/2+xA))
   retval= (sum1+sum2)
-  # print "======================="
-  # print "X= ", X
-  # print "qrep= ", qrep
-  # print "LR= ", LR
-  # print "l= ", l
-  # print "v= ", v
-  # print "xA= ", xA
-  # print "hA= ",hA, " m"
-  # print "hC= ",hC, " m"
-  # print "hD= ",hD, " m"
-  # print "hB= ",hB, " m"
-  # print "gammaD= ", gammaD
-  # print "sum1= ", sum1
-  # print "sum2= ", sum2
-  # print "retval= ", retval
-  # print "======================="
+  # print("=======================")
+  # print("X= ", X)
+  # print("qrep= ", qrep)
+  # print("LR= ", LR)
+  # print("l= ", l)
+  # print("v= ", v)
+  # print("xA= ", xA)
+  # print("hA= ",hA, " m")
+  # print("hC= ",hC, " m")
+  # print("hD= ",hD, " m")
+  # print("hB= ",hB, " m")
+  # print("gammaD= ", gammaD)
+  # print("sum1= ", sum1)
+  # print("sum2= ", sum2)
+  # print("retval= ", retval)
+  # print("=======================")
   return retval
 
 def calcH6p30(LR,a,eta,psi,phiS,etaW,MA,MB,MC,RzB,hA,hB,hC,hD,gammaD):
@@ -188,18 +188,18 @@ def calcH6p30(LR,a,eta,psi,phiS,etaW,MA,MB,MC,RzB,hA,hB,hC,hD,gammaD):
   sum1= num1/denom1*fact1
   sum2= math.sin(gammaD)*(psi-eta+(MA+MC+phiS)/a)
   retval= sum1+sum2
-  # print "****************************"
-  # print "etaW= ",etaW
-  # print "num1= ",num1
-  # print "num1A= ",num1A
-  # print "num1B= ",num1B
-  # print "denom1= ",denom1
-  # print "fact1= ", fact1
-  # print "LR= ",LR, " L= ",L," v= ",v," a= ", a, " xA= ",xA 
-  # print "sum1= ", sum1
-  # print "sum2= ", sum2
-  # print "retval= ", retval
-  # print "****************************"
+  # print("****************************")
+  # print("etaW= ",etaW)
+  # print("num1= ",num1)
+  # print("num1A= ",num1A)
+  # print("num1B= ",num1B)
+  # print("denom1= ",denom1)
+  # print("fact1= ", fact1)
+  # print("LR= ",LR, " L= ",L," v= ",v," a= ", a, " xA= ",xA )
+  # print("sum1= ", sum1)
+  # print("sum2= ", sum2)
+  # print("retval= ", retval)
+  # print("****************************")
   return retval
 
 def calcn6p32(alpha,beta,d,v,E,F,G,H):
@@ -224,18 +224,18 @@ def calcn6p32(alpha,beta,d,v,E,F,G,H):
   else:
     lmsg.error('calcn6p32 square root of negative number: '+str(radicand)+'\n')
     exit(-1)
-  # print "======================="
-  # print "alpha= ", alpha
-  # print "beta= ", beta
-  # print "dM= ", dM
-  # print "vM= ", vM
-  # print "EM= ",EM
-  # print "FM= ",FM
-  # print "G= ",G
-  # print "H= ",H
-  # print "sum= ", sum
-  # print "fact= ", fact
-  # print "n= ",fact*sum
+  # print("=======================")
+  # print("alpha= ", alpha)
+  # print("beta= ", beta)
+  # print("dM= ", dM)
+  # print("vM= ", vM)
+  # print("EM= ",EM)
+  # print("FM= ",FM)
+  # print("G= ",G)
+  # print("H= ",H)
+  # print("sum= ", sum)
+  # print("fact= ", fact)
+  # print("n= ",fact*sum)
   fact= 1.0/2.0/G/G/alpha/(6+4*root3)
   return fact*sum 
 
@@ -370,7 +370,7 @@ class archGeometry(object):
     return retval
   
   def printResults(self):
-    print str(self)
+    print(str(self))
     
 class FillingCharacteristics(object): 
   angPhi= math.radians(30)   #angle de frottement interne
@@ -409,7 +409,7 @@ class FillingCharacteristics(object):
     return retval
     
   def printResults(self):
-    print str(self)
+    print(str(self))
 
 class trafficLoad(object):
   delta= math.radians(30)
@@ -492,7 +492,7 @@ class permLoadResult(object):
   
   def printResults(self,fillChar):
     self.fillChar= fillChar
-    print str(self)
+    print(str(self))
 
 class trafficLoadResult(object):
   """Traffic load resultants"""
@@ -517,10 +517,10 @@ class trafficLoadResult(object):
     return self.getqtrans()/self.getlQt()
 
   def printResults(self):
-    #print "vQt= ",vQt," m"
-    print "Uniform trafic load after transverse difussion (see 6-15) qtrans= ",self.getqtrans()," N/m"
-    #print "lQt= ",lQt," m"
-    print "Punctual traffic load after longitudinal and transverse diffusion (see 6.18); X= ",self.getX()/1e6," MPa"
+    #print("vQt= ",vQt," m")
+    print("Uniform trafic load after transverse difussion (see 6-15) qtrans= ",self.getqtrans()," N/m")
+    #print("lQt= ",lQt," m")
+    print("Punctual traffic load after longitudinal and transverse diffusion (see 6.18); X= ",self.getX()/1e6," MPa")
 
 class resistance(object):
   def __init__(self,Nadmis,gm,fc,tl,plR,tlR):
@@ -580,7 +580,7 @@ class resistance(object):
     self.gm.XRot=x
     retval= self.getSafCoef()
     if(self.verbose):
-      print 'n= ', retval, 'x= ', x
+      print('n= ', retval, 'x= ', x)
     return retval
 
   def minimize(self):
@@ -594,23 +594,23 @@ class resistance(object):
     self.fc.printResults()
     self.plR.printResults(self.fc)
     self.tlR.printResults()
-    print "Effort normal admis; Nadmis= ",self.Nadmis/1e3," kN"
-    print "Moment de flexion admis (voir 5.17 et A 7.15); Madmis= ",self.getMadmis()/1e3," kN m"
-    print "Changement de variable:"
-    print "  (voir 6.27 et A 13.22); E= ",self.getE()
-    print "  (voir 6.28 et A 13.23); F= ",self.getF()
-    print "  (voir 6.29 et A 13.34); G= ",self.getG()
-    print "  (voir 6.30 et A 13.35); H= ",self.getH()
+    print("Effort normal admis; Nadmis= ",self.Nadmis/1e3," kN")
+    print("Moment de flexion admis (voir 5.17 et A 7.15); Madmis= ",self.getMadmis()/1e3," kN m")
+    print("Changement de variable:")
+    print("  (voir 6.27 et A 13.22); E= ",self.getE())
+    print("  (voir 6.28 et A 13.23); F= ",self.getF())
+    print("  (voir 6.29 et A 13.34); G= ",self.getG())
+    print("  (voir 6.30 et A 13.35); H= ",self.getH())
     n= self.getSafCoef()
-    print "Multiplicateur limite des charges utiles (voir 6.32); n= ", n
-    print "Réactions (ELU): "
-    print "  horizontale rotule A (voir 6.19 et A 13.9); HAult= ",self.getHA()/1e3, ' kN'
-    print "  verticale rotule A (voir 6.20 et A 13.13); VAult= ",self.getVA()/1e3, ' kN'
-    print "  horizontale rotule B (voir 6.21 et A 13.11); HBult= ",self.getHB()/1e3, ' kN'
-    print "  verticale rotule B (voir 6.22 et A 13.15); VBult= ",self.getVB()/1e3, ' kN'
-    print "Réactions (valeurs charactéristiques): "
-    print "  horizontale rotule A (voir 6.19 et A 13.9); HAk= ", self.getHA()/1e3/self.gm.arcEffL/n, ' kN/m'
-    print "  verticale rotule A (voir 6.20 et A 13.13); VAk= ", self.getVA()/1e3/self.gm.arcEffL/n, ' kN/m'
-    print "  horizontale rotule B (voir 6.21 et A 13.11); HBk= ", self.getHB()/1e3/self.gm.arcEffL/n, ' kN/m'
-    print "  verticale rotule B (voir 6.22 et A 13.15); VBk= ", self.getVB()/1e3/self.gm.arcEffL/n, ' kN/m'
+    print("Multiplicateur limite des charges utiles (voir 6.32); n= ", n)
+    print("Réactions (ELU): ")
+    print("  horizontale rotule A (voir 6.19 et A 13.9); HAult= ",self.getHA()/1e3, ' kN')
+    print("  verticale rotule A (voir 6.20 et A 13.13); VAult= ",self.getVA()/1e3, ' kN')
+    print("  horizontale rotule B (voir 6.21 et A 13.11); HBult= ",self.getHB()/1e3, ' kN')
+    print("  verticale rotule B (voir 6.22 et A 13.15); VBult= ",self.getVB()/1e3, ' kN')
+    print("Réactions (valeurs charactéristiques): ")
+    print("  horizontale rotule A (voir 6.19 et A 13.9); HAk= ", self.getHA()/1e3/self.gm.arcEffL/n, ' kN/m')
+    print("  verticale rotule A (voir 6.20 et A 13.13); VAk= ", self.getVA()/1e3/self.gm.arcEffL/n, ' kN/m')
+    print("  horizontale rotule B (voir 6.21 et A 13.11); HBk= ", self.getHB()/1e3/self.gm.arcEffL/n, ' kN/m')
+    print("  verticale rotule B (voir 6.22 et A 13.15); VBk= ", self.getVB()/1e3/self.gm.arcEffL/n, ' kN/m')
 

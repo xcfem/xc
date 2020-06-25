@@ -346,7 +346,7 @@ class DisplaySettingsFE(vtk_graphic_base.DisplaySettings):
             # i= 0
             # for capa in points:
             #   for pos in capa: 
-            #     print pos
+            #     print(pos)
             #     utils_vtk.drawArrow(self.renderer,color,pos,force,fScale*force.Norm())
             #     i+= 1
 

@@ -49,8 +49,8 @@ ratio= (vI-geom.Vector3d(0,1,0)).getModulus()
 ratio+= (vJ-geom.Vector3d(-1,0,0)).getModulus()
 ratio+= (vK-geom.Vector3d(0,0,1)).getModulus()
 
-#print 'vI= ', vI, ' vJ= ',vJ, ' vK= ',vK
-#print "ratio= ",ratio
+#print('vI= ', vI, ' vJ= ',vJ, ' vK= ',vK)
+#print("ratio= ",ratio)
 
 import os
 from misc_utils import log_messages as lmsg

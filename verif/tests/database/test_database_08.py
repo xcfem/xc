@@ -85,10 +85,10 @@ os.system("rm -r -f /tmp/test08.db")
 db= feProblem.newDatabase("BerkeleyDB","/tmp/test08.db")
 db.save(100)
 feProblem.clearAll()
-feProblem.setVerbosityLevel(0) #Dont print warning messages
+feProblem.setVerbosityLevel(0) #Dont print(warning messages)
                             #about pointers to material.
 db.restore(100)
-feProblem.setVerbosityLevel(1) #Print warnings again 
+feProblem.setVerbosityLevel(1) #print(warnings again )
 
 
 nodes= preprocessor.getNodeHandler

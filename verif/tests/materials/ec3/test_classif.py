@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 from __future__ import division
 
 #Classification of steel cross-sections (clause 5.5 of EN 1993-1-1:2005)
@@ -59,7 +60,7 @@ import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (abs(sum(ratioLst)/len(ratioLst))<1e-5):
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')
 

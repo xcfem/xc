@@ -325,7 +325,7 @@ class EarthPressLoad(BaseVectorLoad):
 
     def appendLoadToCurrentLoadPattern(self):
         ''' Append load to the current load pattern.'''
-        if self.soilData<>None:
+        if(self.soilData!=None):
             self.soilData.appendLoadToCurrentLoadPattern(self.xcSet,self.loadVector)
         for stripL in self.stripLoads:
             stripL.appendLoadToCurrentLoadPattern(self.xcSet,self.loadVector)
@@ -337,7 +337,7 @@ class EarthPressLoad(BaseVectorLoad):
     def getMaxMagnitude(self):
         '''Return the maximum magnitude of the vector loads'''
         maxValue=0
-        if self.soilData<>None:
+        if(self.soilData!=None):
             zmin=sets.get_min_coo_nod(self.xcSet,2)
             pmax=self.soilData.getPressure(zmin)
             maxValue=max(maxValue,pmax)

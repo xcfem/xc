@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 
 import xc_base
 import geom
@@ -52,7 +53,7 @@ nnod= mesh.getNumNodes()
 # nIter= mesh.getNodeIter
 # nod= nIter.next()
 # while not(nod is None):
-#   print "tag= ", nod.tag, " x= ", nod.getCoo[0], " y= ", nod.getCoo[1], " z= ", nod.getCoo[2]
+#   print("tag= ", nod.tag, " x= ", nod.getCoo[0], " y= ", nod.getCoo[1], " z= ", nod.getCoo[2])
 #   nod= nIter.next()
 
 nnodteor= NumDiv+1
@@ -63,7 +64,7 @@ import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if ratio1<1e-12:
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')
 

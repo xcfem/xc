@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 # home made test
 '''Cantilever under punctual horizontal load in local x direction.'''
 
@@ -114,26 +115,26 @@ ratioN1= abs(N1-N1teor)/N1teor
 ratioN2= (abs(N2)<1e-3)
 
 ''' 
-print "deltax= ",deltax
-print "deltaxteor= ",deltaxteor
-print "ratiodx= ",ratiodx
-print "deltay= ",deltay
-print "deltayteor= ",deltayteor
-print "ratiody= ",ratiody
-print "deltaz= ",deltaz
-print "deltazteor= ",deltazteor
-print "ratiodz= ",ratiodz
-print "N1= ",N1
-print "N1teor= ",N1teor
-print "ratioN1= ",ratioN1
-print "N2= ",N2
-print "N2teor= ",0
-print "ratioN2= ",ratioN2
+print("deltax= ",deltax)
+print("deltaxteor= ",deltaxteor)
+print("ratiodx= ",ratiodx)
+print("deltay= ",deltay)
+print("deltayteor= ",deltayteor)
+print("ratiody= ",ratiody)
+print("deltaz= ",deltaz)
+print("deltazteor= ",deltazteor)
+print("ratiodz= ",ratiodz)
+print("N1= ",N1)
+print("N1teor= ",N1teor)
+print("ratioN1= ",ratioN1)
+print("N2= ",N2)
+print("N2teor= ",0)
+print("ratioN2= ",ratioN2)
  '''
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (ratiodx<1e-5) & (ratiody<1e-5) & (ratiodz<1e-5) & (ratioN1<1e-5) & ratioN2:
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')

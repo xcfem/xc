@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 # Tomado del example A47 del SOLVIA Verification Manual
 import xc_base
 import geom
@@ -76,7 +77,7 @@ import os
 pth= os.path.dirname(__file__)
 if(not pth):
   pth= "."
-#print "pth= ", pth
+#print("pth= ", pth)
 execfile(pth+"/../../aux/sol_eigenmodes.py")
 
 
@@ -90,18 +91,18 @@ fteor= lambdaA**2/(2*math.pi*L**2)*math.sqrt(E*I/m)
 ratio1= abs(fcalc-fteor)/fteor
 
 ''' 
-print "omega= ",(omega)
-print "T= ",(T)
-print "fcalc= ",(fcalc)
-print "fteor= ",(fteor)
-print "ratio1= ",(ratio1)
+print("omega= ",(omega))
+print("T= ",(T))
+print("fcalc= ",(fcalc))
+print("fteor= ",(fteor))
+print("ratio1= ",(ratio1))
    '''
 
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (abs(ratio1)<5e-3):
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')
 

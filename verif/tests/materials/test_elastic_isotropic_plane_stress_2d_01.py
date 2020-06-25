@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 # Home made test
 E= 30e6 # Young modulus (psi)
 nu= 0.33 # Poisson's ratio
@@ -27,6 +28,6 @@ import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (abs(E-EE)<1e-15) & (abs(V-nu)<1e-15) & (abs(dens-rho)<1e-15):
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')

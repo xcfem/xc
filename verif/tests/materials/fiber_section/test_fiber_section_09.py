@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 ''' Reinforced concrete section verification test.
    results are compared with those of the prontuario.
    informático del hormigón estructural (Cátedra de hormigón de la ETSICCP-IECA
@@ -35,7 +36,7 @@ import os
 pth= os.path.dirname(__file__)
 if(not pth):
   pth= "."
-#print "pth= ", pth
+#print("pth= ", pth)
 execfile(pth+"/concrete_section_01.py")
 materialHandler= preprocessor.getMaterialHandler
 secHA= materialHandler.newMaterial("fiber_section_3d","secHA")
@@ -113,44 +114,44 @@ epsSMaxTeor= 1.2e-3
 ratio6= (epsSMax+epsSMaxTeor)/epsSMaxTeor
 
 '''
-print "ratio1= ", ratio1
-print "ratio2= ", ratio2
-print "ratio3= ", ratio3
-print "ratio4= ", ratio4
-print "ratio5= ", ratio5
+print("ratio1= ", ratio1)
+print("ratio2= ", ratio2)
+print("ratio3= ", ratio3)
+print("ratio4= ", ratio4)
+print("ratio5= ", ratio5)
 
-print "Minumum concrete strain: ",(epsCMin)
-print "Maximum concrete strain: ",(epsCMax)
-print "Maximum rebar strain: ",(epsSMax)
-print "Solicitation type: ",solicitationTypeString," (",(solicitationType),") \n"
-print "Cumple a ",solicitationTypeString,": ",(cumpleFT)
-print "Aprovechamiento a ",solicitationTypeString,": ",(aprovSecc)
-print "RN= ",(RN/1e3)
-print "RN2= ",(RN2/1e3)
-print "N= ",(esfN/1e3)
-print "My= ",(esfMy/1e3)
-print "Mz= ",(esfMz/1e3)
-print "defMz= ",(defMz)
-print "defN= ",(defN)
+print("Minumum concrete strain: ",(epsCMin))
+print("Maximum concrete strain: ",(epsCMax))
+print("Maximum rebar strain: ",(epsSMax))
+print("Solicitation type: ",solicitationTypeString," (",(solicitationType),") \n")
+print("Cumple a ",solicitationTypeString,": ",(cumpleFT))
+print("Aprovechamiento a ",solicitationTypeString,": ",(aprovSecc))
+print("RN= ",(RN/1e3))
+print("RN2= ",(RN2/1e3))
+print("N= ",(esfN/1e3))
+print("My= ",(esfMy/1e3))
+print("Mz= ",(esfMz/1e3))
+print("defMz= ",(defMz))
+print("defN= ",(defN))
 
-print "               Cumple ratio1: ",abs(ratio1)<1e-9
-print "               Cumple ratio2: ",abs(ratio2)<1e-9
-print "               Cumple ratio3: ",abs(ratio3)<1e-9
-print "               Cumple ratio4: ",abs(ratio4)<1e-6
-print "               Cumple ratio5: ",abs(ratio5)<1e-9
-print "               Cumple RN2: ",abs(RN2)<1e-9
-print "               Cumple esfMy: ",abs(esfMy)<1e-10
-print "               Cumple solicitationType: ",(solicitationType == 3)
-print "epsSMax= ",epsSMax
-print "epsSMaxTeor= ",epsSMaxTeor
-print "ratio6= ", ratio6
-print "               Cumple ratio6: ",abs(ratio6)<0.01
+print("               Cumple ratio1: ",abs(ratio1)<1e-9)
+print("               Cumple ratio2: ",abs(ratio2)<1e-9)
+print("               Cumple ratio3: ",abs(ratio3)<1e-9)
+print("               Cumple ratio4: ",abs(ratio4)<1e-6)
+print("               Cumple ratio5: ",abs(ratio5)<1e-9)
+print("               Cumple RN2: ",abs(RN2)<1e-9)
+print("               Cumple esfMy: ",abs(esfMy)<1e-10)
+print("               Cumple solicitationType: ",(solicitationType == 3))
+print("epsSMax= ",epsSMax)
+print("epsSMaxTeor= ",epsSMaxTeor)
+print("ratio6= ", ratio6)
+print("               Cumple ratio6: ",abs(ratio6)<0.01)
  '''
 
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (abs(ratio1)<1e-9) & (abs(ratio2)<1e-9) & (abs(ratio3)<1e-9) & (abs(ratio5)<1e-9) & (abs(RN2)<1e-9) & (abs(esfMy)<1e-10) & (solicitationType == 3) & (abs(ratio4)<1e-6) & (abs(ratio6)<0.01) & (analOk == 0.0) :
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')

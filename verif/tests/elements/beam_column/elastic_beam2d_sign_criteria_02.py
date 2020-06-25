@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 # Home made test
 # Sign criteria for the internal forces of an elastic beam 2d element.
 # 2D cantilever beam, start node  with all its 3DOF fixed, point loads on the 
@@ -30,12 +31,12 @@ def getInternalForcesEndNode(elemTag):
 
 def printResults(N1,V1,M1,N2,V2,M2,phaseRatios,phase):
   ratioMsg= 'ratio'+str(phase)
-  print 'N1= ', N1, ' N2= ', N2 
-  print ratioMsg+'0= ', phaseRatios[0]
-  print 'V1= ',V1, 'V2= ',V2 
-  print ratioMsg+'1= ', phaseRatios[1]
-  print 'M1= ',M1, 'M2= ', M2
-  print ratioMsg+'2= ', phaseRatios[2]
+  print('N1= ', N1, ' N2= ', N2 )
+  print(ratioMsg+'0= ', phaseRatios[0])
+  print('V1= ',V1, 'V2= ',V2 )
+  print(ratioMsg+'1= ', phaseRatios[1])
+  print('M1= ',M1, 'M2= ', M2)
+  print(ratioMsg+'2= ', phaseRatios[2])
 
                      
 # Material properties
@@ -115,7 +116,7 @@ ratio2= abs(M1)+abs(M2)
 phaseRatios= [ratio0,ratio1,ratio2]
 ratios.extend(phaseRatios)
 
-# print 'RF= ',RF
+# print('RF= ',RF)
 # printResults(N1,V1,M1,N2,V2,M2,phaseRatios,'')
 
 lp0.removeFromDomain()
@@ -143,20 +144,20 @@ ratio12= abs((M1-M1Teor)/M1)+abs(M2)
 phaseRatios= [ratio10,ratio11,ratio12]
 ratios.extend(phaseRatios)
 
-#print "RF= ",RF
+#print("RF= ",RF)
 #printResults(N1,V1,M1,N2,V2,M2,phaseRatios,'1')
 
 result= 0.0
 for r in ratios:
   result+= r*r
 result= math.sqrt(result)
-# print 'ratios= ',ratios
-# print 'result= ',result
+# print('ratios= ',ratios)
+# print('result= ',result)
 
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (result<1e-10):
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')

@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
-''' Reinforced concrete materials according to EHE-08.'''
 from __future__ import division
+from __future__ import print_function
+
+''' Reinforced concrete materials according to EHE-08.'''
 
 __author__= "Ana Ortega (AO_O) and Luis C. Pérez Tato (LCPT)"
 __copyright__= "Copyright 2015, AO_O and LCPT"
@@ -54,7 +56,7 @@ class EHEConcrete(concrete_base.Concrete):
         elif self.typeAggregate=="diabasa":
             return 1.3
         else:
-            print 'Error in type of aggregate (Possible choices: "cuarcita", "arenisca", "caliza normal", "caliza densa", "volcanica porosa", "volcanica normal", "granito", "diabasa").'
+            print('Error in type of aggregate (Possible choices: "cuarcita", "arenisca", "caliza normal", "caliza densa", "volcanica porosa", "volcanica normal", "granito", "diabasa").')
             return 0.0
 
     def getEcm(self):

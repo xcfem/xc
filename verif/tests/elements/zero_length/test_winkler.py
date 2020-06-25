@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 '''Verification of Winkler model.'''
 # Verification of Winkler model according to the
 #    article of Gabriel E. Barrientos
@@ -138,13 +139,13 @@ ratio2= pow(beta,4)-k/(4*E*I)
 ratio3= abs(yAdimCentroVano+yAdimCentroVanoTeor)/yAdimCentroVanoTeor
 
 '''
-print "beta= ",beta*1000,"e-3n"
-print "k= ",k*100,"e-2n"
-print "ratio1= ",ratio1
-print "ratio2= ",ratio2
-print "yAdimCentroVano=", yAdimCentroVano
-print "yAdimCentroVanoTeor=", yAdimCentroVanoTeor
-print "ratio3= ",ratio3
+print("beta= ",beta*1000,"e-3n")
+print("k= ",k*100,"e-2n")
+print("ratio1= ",ratio1)
+print("ratio2= ",ratio2)
+print("yAdimCentroVano=", yAdimCentroVano)
+print("yAdimCentroVanoTeor=", yAdimCentroVanoTeor)
+print("ratio3= ",ratio3)
 ''' 
 
 
@@ -152,7 +153,7 @@ import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if((ratio1<1e-15) & (ratio2<1e-15) & (ratio3<0.03)):
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')
 

@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
+
 
 #Based on sXML-master projet on gitHub
 
@@ -57,7 +59,7 @@ class SurfacePressureFreeComponent(lcb.LoadComponentBase):
     self.polygon= polygon
     SurfacePressureFreeComponent.counter+=1
     self.surfacePressureFreeCompId= SurfacePressureFreeComponent.counter
-    #print "loadCompId= ", self.surfacePressureFreeCompId 
+    #print("loadCompId= ", self.surfacePressureFreeCompId )
 
   def getPolygonRows(self,polygon):
     retval= oI.SCXMLObjectItem()
@@ -93,7 +95,7 @@ def getSurfacePressureFreeComponents(surfacePressureFree):
   vDir= surfacePressureFree.vDir
   normVDir= math.sqrt(vDir[0]**2+vDir[1]**2+vDir[2]**2)
   if(normVDir<1e-3):
-    print "getSurfacePressureFreeComponents: vDir vector very small: ", vDir, " load ignored."
+    print("getSurfacePressureFreeComponents: vDir vector very small: ", vDir, " load ignored.")
   else:
     loadCaseId= surfacePressureFree.loadCaseId
     loadCaseName= surfacePressureFree.loadCaseName

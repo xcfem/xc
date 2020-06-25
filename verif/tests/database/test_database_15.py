@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 # home made test
 
 import xc_base
@@ -111,7 +112,7 @@ R2= nod2.getReaction[0]
 
 
 
-# print "Revive.\n"
+# print("Revive.\n")
 setTotal= preprocessor.getSets.getSet("total")
 setTotal.aliveElements()
 mesh= preprocessor.getDomain.getMesh
@@ -156,40 +157,40 @@ ratio5= ((dXTeor-deltaxB3)/dXTeor)
 ratio6= ((dZTeor-deltazB3)/dZTeor)
 
 ''' 
-print "R1= ",R1
-print "R2= ",R2
-print "dx1= ",deltax1
-print "dy1= ",deltay1
-print "dz1= ",deltaz1
-print "dx2= ",deltax2
-print "dy2= ",deltay2
-print "dz2= ",deltaz2
-print "RB1= ",RB1
-print "RB2= ",RB2
-print "dXTeor= ",(dXTeor)
-print "dZTeor= ",(dZTeor)
-print "dxB1= ",deltaxB1
-print "dyB1= ",deltayB1
-print "dzB1= ",deltazB1
-print "dxB2= ",deltaxB2
-print "dyB2= ",deltayB2
-print "dzB2= ",deltazB2
-print "dxB3= ",deltaxB3
-print "dyB3= ",deltayB3
-print "dzB3= ",deltazB3
-print "ratio1= ",ratio1
-print "ratio2= ",ratio2
-print "ratio3= ",ratio3
-print "ratio4= ",ratio4
-print "ratio5= ",ratio5
-print "ratio6= ",ratio6
+print("R1= ",R1)
+print("R2= ",R2)
+print("dx1= ",deltax1)
+print("dy1= ",deltay1)
+print("dz1= ",deltaz1)
+print("dx2= ",deltax2)
+print("dy2= ",deltay2)
+print("dz2= ",deltaz2)
+print("RB1= ",RB1)
+print("RB2= ",RB2)
+print("dXTeor= ",(dXTeor))
+print("dZTeor= ",(dZTeor))
+print("dxB1= ",deltaxB1)
+print("dyB1= ",deltayB1)
+print("dzB1= ",deltazB1)
+print("dxB2= ",deltaxB2)
+print("dyB2= ",deltayB2)
+print("dzB2= ",deltazB2)
+print("dxB3= ",deltaxB3)
+print("dyB3= ",deltayB3)
+print("dzB3= ",deltazB3)
+print("ratio1= ",ratio1)
+print("ratio2= ",ratio2)
+print("ratio3= ",ratio3)
+print("ratio4= ",ratio4)
+print("ratio5= ",ratio5)
+print("ratio6= ",ratio6)
    '''
 
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (abs(ratio1)<1e-5) & (abs(ratio2)<1e-5) & (abs(ratio3)<1e-5) & (abs(ratio5)<0.1):
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')
 os.system("rm -rf /tmp/test15.db") # Your garbage you clean it

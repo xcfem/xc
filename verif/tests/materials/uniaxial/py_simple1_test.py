@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 
 __author__= "Luis C. Pérez Tato (LCPT) "
 __copyright__= "Copyright 2018, LCPT"
@@ -62,16 +63,16 @@ for s1, s2 in zip(stresses,sample_stresses):
 error= math.sqrt(error)
 
 '''
-print 'error= ', error
-print strains
-print stresses
+print('error= ', error)
+print(strains)
+print(stresses)
 '''
 
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if(error<1e-10):
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')
 

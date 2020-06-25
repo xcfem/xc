@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 ''' Frame analysis taken from example «PDelta-3» of the Ansys verification manual.'''
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
 __copyright__= "Copyright 2015, LCPT and AOO"
@@ -185,48 +186,48 @@ ratioM71= abs((M71-M71Teor)/M71Teor)
 ratioM52= abs((M52-M52Teor)/M52Teor)
 
 ''' 
-print "theta2= ",theta2
-print "theta2Teor= ",theta2Teor
-print "ratioTheta2= ",ratioTheta2
-print "M12= ",M12
-print "M12Teor= ",M12Teor
-print "ratioM12= ",ratioM12
-print "M21= ",M21
-print "M21Teor= ",M21Teor
-print "ratioM21= ",ratioM21
-print "Q= ",Q
-print "QTeor= ",QTeor
-print "ratioQ= ",ratioQ
-print "delta6= ",delta6
-print "delta6Teor= ",delta6Teor
-print "ratioDelta6= ",ratioDelta6
-print "theta6= ",theta6
-print "theta6Teor= ",theta6Teor
-print "ratioTheta6= ",ratioTheta6
-print "theta8= ",theta8
-print "theta8Teor= ",theta8Teor
-print "ratioTheta8= ",ratioTheta8
-print "M61= ",M61
-print "M61Teor= ",M61Teor
-print "ratioM61= ",ratioM61
-print "Q4= ",Q4
-print "Q4Teor= ",Q4Teor
-print "ratioQ4= ",ratioQ4
-print "M51= ",M51
-print "M51Teor= ",M51Teor
-print "ratioM51= ",ratioM51
-print "M71= ",M71
-print "M71Teor= ",M71Teor
-print "ratioM71= ",ratioM71
-print "M52= ",M52
-print "M52Teor= ",M52Teor
-print "ratioM52= ",ratioM52
+print("theta2= ",theta2)
+print("theta2Teor= ",theta2Teor)
+print("ratioTheta2= ",ratioTheta2)
+print("M12= ",M12)
+print("M12Teor= ",M12Teor)
+print("ratioM12= ",ratioM12)
+print("M21= ",M21)
+print("M21Teor= ",M21Teor)
+print("ratioM21= ",ratioM21)
+print("Q= ",Q)
+print("QTeor= ",QTeor)
+print("ratioQ= ",ratioQ)
+print("delta6= ",delta6)
+print("delta6Teor= ",delta6Teor)
+print("ratioDelta6= ",ratioDelta6)
+print("theta6= ",theta6)
+print("theta6Teor= ",theta6Teor)
+print("ratioTheta6= ",ratioTheta6)
+print("theta8= ",theta8)
+print("theta8Teor= ",theta8Teor)
+print("ratioTheta8= ",ratioTheta8)
+print("M61= ",M61)
+print("M61Teor= ",M61Teor)
+print("ratioM61= ",ratioM61)
+print("Q4= ",Q4)
+print("Q4Teor= ",Q4Teor)
+print("ratioQ4= ",ratioQ4)
+print("M51= ",M51)
+print("M51Teor= ",M51Teor)
+print("ratioM51= ",ratioM51)
+print("M71= ",M71)
+print("M71Teor= ",M71Teor)
+print("ratioM71= ",ratioM71)
+print("M52= ",M52)
+print("M52Teor= ",M52Teor)
+print("ratioM52= ",ratioM52)
  '''
 
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (ratioTheta2<1e-3) & (ratioDelta6<1e-3) & (ratioM12<1e-4) & (ratioM21<1e-4) & (ratioQ<1e-4) & (ratioTheta6<1e-3) & (ratioTheta8<5e-3) & (ratioM61<1e-4) & (ratioQ4<1e-4) & (ratioM51<1e-4) & (ratioM71<5e-4) & (ratioM52<1e-4):
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')

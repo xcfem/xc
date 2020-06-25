@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 
 import sqlite3 as sqlite
 from sqlite_utils import sqlite_macros
@@ -12,7 +13,7 @@ __email__= "l.pereztato@gmail.com"
 
 import os
 pth= os.path.dirname(__file__)
-#print "pth= ", pth
+#print("pth= ", pth)
 if(not pth):
   pth= "."
 fNameIn= pth+"/../aux/pilares.lst"
@@ -48,17 +49,17 @@ ratio1= abs(i-6)/6 # 6 actions
 ratio2= abs(j/6-144) # 144 elements
 
 ''' 
-print "i= ",i
-print "ratio1= ",ratio1
-print "j= ",j
-print "ratio2= ",ratio2
+print("i= ",i)
+print("ratio1= ",ratio1)
+print("j= ",j)
+print("ratio2= ",ratio2)
    '''
 
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (abs(ratio1)<1e-15) & (abs(ratio2)<1e-15) & e1:
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')
 

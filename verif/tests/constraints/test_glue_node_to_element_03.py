@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 # home made test
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
@@ -102,20 +103,20 @@ svdResid= svdReactionNodes+svdAction
 ratio2= svdResid.getResultant().getModulus()/actionNode10Norm
 ratio3= svdResid.getMoment().getModulus()/actionNode10Norm
 
-# print "svdAction= ", svdAction
-# print "svdReactionNodes= ", svdReactionNodes
-# print "svdResid= ", svdResid
-# print "ratio1= ", ratio1
-# print "ratio2= ", ratio2
-# print "ratio3= ", ratio3
-# print "RN2= ", RN2
-# print "RN3= ", RN3
-# print "RN4= ", RN4
+# print("svdAction= ", svdAction)
+# print("svdReactionNodes= ", svdReactionNodes)
+# print("svdResid= ", svdResid)
+# print("ratio1= ", ratio1)
+# print("ratio2= ", ratio2)
+# print("ratio3= ", ratio3)
+# print("RN2= ", RN2)
+# print("RN3= ", RN3)
+# print("RN4= ", RN4)
 
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (abs(ratio1)<1e-10) & (abs(ratio2)<1e-9) & (abs(ratio3)<1e-9) & (result==0):
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')

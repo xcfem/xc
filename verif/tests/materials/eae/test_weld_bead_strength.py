@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 '''Computation of the strength of a weld bead from the example on page 57
 of the monograph «Estudio de los diferentes métodos de dimensionamiento para uniones atornilladas y soldadas de acuerdo con la normativa vigente» de Marc 
 Masnou Malgosa.(http://hdl.handle.net/2099.1/6080)'''
@@ -38,28 +39,28 @@ ratio6= (fcCond2+sigmaN/sigmaNUlt)
 
 
 '''
-print "sigmaN= ",sigmaN
-print "tauN= ",tauN
-print "tauPll= ",tauPll
-print "sigmaCo= ",sigmaCo
-print "sigmaUlt= ",sigmaUlt
-print "fcCond1= ",fcCond1
-print "sigmaNUlt= ",sigmaNUlt
-print "fcCond2= ",fcCond2
+print("sigmaN= ",sigmaN)
+print("tauN= ",tauN)
+print("tauPll= ",tauPll)
+print("sigmaCo= ",sigmaCo)
+print("sigmaUlt= ",sigmaUlt)
+print("fcCond1= ",fcCond1)
+print("sigmaNUlt= ",sigmaNUlt)
+print("fcCond2= ",fcCond2)
 
-print "ratio1= ",ratio1
-print "ratio2= ",ratio2
-print "ratio3= ",ratio3
-print "ratio3= ",ratio4
-print "ratio5= ",ratio5
-print "ratio6= ",ratio5
+print("ratio1= ",ratio1)
+print("ratio2= ",ratio2)
+print("ratio3= ",ratio3)
+print("ratio3= ",ratio4)
+print("ratio5= ",ratio5)
+print("ratio6= ",ratio5)
 '''
 
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (abs(ratio1)<0.001) & (abs(ratio2)<0.001) & (abs(ratio3)<0.001) & (abs(ratio4)<0.001) & (abs(ratio5)<0.001) & (abs(ratio6)<0.001):
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')
 

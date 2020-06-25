@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 '''Silly test about sets.'''
 import xc_base
 import geom
@@ -15,8 +16,8 @@ testSetA= test.getPreprocessor.getSets.exists('pp')
 testSetB= test.getPreprocessor.getSets.exists('total')
 
 '''
-print testSetA
-print testSetB
+print(testSetA)
+print(testSetB)
 '''
 
 import os
@@ -24,7 +25,7 @@ from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 
 if(not(testSetA) and testSetB):
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')
 

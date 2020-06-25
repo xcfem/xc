@@ -64,29 +64,29 @@ testEqualOperator= (s==s)
 s.genMesh(xc.meshDir.I)
 
 nnodCuadr= s.getNumNodes
-# print "nnod= ",s.getNumNodes
+# print("nnod= ",s.getNumNodes)
 nelemCuadr= s.getNumElements
-# print "nelem= ",s.getNumElements
+# print("nelem= ",s.getNumElements)
 
 mesh= feProblem.getDomain.getMesh
 nnodDom= mesh.getNumNodes()
 
-# print "number of nodes: ",nnod
+# print("number of nodes: ",nnod)
 # nIter= mesh.getNodeIter
 # nod= nIter.next()
 # while not(nod is None):
-#   print "tag= ", nod.tag, " x= ", nod.getCoo[0], " y= ", nod.getCoo[1]
+#   print("tag= ", nod.tag, " x= ", nod.getCoo[0], " y= ", nod.getCoo[1])
 #   nod= nIter.next()
 
 nelemDom= mesh.getNumElements()
 
-# print "number of elements: ", mesh.getNumElem()
+# print("number of elements: ", mesh.getNumElem())
 perim= 0.0
 
 eIter= mesh.getElementIter
 elem= eIter.next()
 while not(elem is None):
-#  print elem.tag," nod. I: ",elem.getNodes[0].tag," nod. J: ",elem.getNodes[1].tag," nod. K: ",elem.getNodes[2].tag," nod. L: ",elem.getNodes[3].tag," L= ",elem.getPerimeter()
+#  print(elem.tag," nod. I: ",elem.getNodes[0].tag," nod. J: ",elem.getNodes[1].tag," nod. K: ",elem.getNodes[2].tag," nod. L: ",elem.getNodes[3].tag," L= ",elem.getPerimeter())
   perim+= elem.getPerimeter(True)
   elem= eIter.next()
 

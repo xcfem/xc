@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 # getNearestElement method test.
 import xc_base
 import geom
@@ -36,22 +37,22 @@ for i in range(1,numElements):
   truss.sectionArea= 1
 
 mesh= feProblem.getDomain.getMesh
-# print "creados ",nnod," nodes.\n"
+# print("creados ",nnod," nodes.\n")
 start_time= time.time()
 tg= mesh.getNearestElement(geom.Pos3d(50.51,0,0)).tag
 lapso= time.time()-start_time
 
 
 ''' 
-print "element tag: ",tg
-print "lapse: ",lapse
+print("element tag: ",tg)
+print("lapse: ",lapse)
    '''
 
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if((tg==50)):
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')
 

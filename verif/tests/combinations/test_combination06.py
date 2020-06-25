@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 # Home made test
 '''Obtaining «previous» combination and combination difference.'''
 
@@ -100,16 +101,16 @@ ratio1= (previousName=="")
 ratio2= (descompDiff=="1.0*G1+0.7*TC1V1")
 
 
-# print "previousName= ",previousName
-# print "descompDiff= ",descompDiff
-# print "ratio1= ",ratio1
-# print "ratio2= ",ratio2
+# print("previousName= ",previousName)
+# print("descompDiff= ",descompDiff)
+# print("ratio1= ",ratio1)
+# print("ratio2= ",ratio2)
 
 
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if ratio1 & ratio2 :
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')

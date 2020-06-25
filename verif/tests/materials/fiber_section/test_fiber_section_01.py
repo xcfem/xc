@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 ''' Verification test of a steel rectangular section modelized with fibers with
 elasto-plastic material.
    written from  «Nociones de cálculo plástico de vigas rectas y 
@@ -34,7 +35,7 @@ import os
 pth= os.path.dirname(__file__)
 if(not pth):
   pth= "."
-#print "pth= ", pth
+#print("pth= ", pth)
 execfile(pth+"/fiber_section_test_macros.py")
 
 fy= 2600 # Yield stress of the material expressed in kp/cm2.
@@ -85,21 +86,21 @@ ratio12= ((scc10x20.getPlasticMomentZ(fy)-Mp1)/scc10x20.getPlasticMomentZ(fy))
 ratio13= (scc10x20.getPlasticMomentY(fy)-Mp2)/scc10x20.getPlasticMomentY(fy)
 
 '''
-print 'ratio1= ', ratio1
-print 'ratio2= ', ratio2
-print 'ratio3= ', ratio3
-print 'ratio4= ', ratio4
-print 'ratio6= ', ratio6
-print 'ratio7= ', ratio7
-print 'ratio10= ', ratio10
-print 'ratio11= ', ratio11
-print 'ratio12= ', ratio12
-print 'ratio13= ', ratio13
+print('ratio1= ', ratio1)
+print('ratio2= ', ratio2)
+print('ratio3= ', ratio3)
+print('ratio4= ', ratio4)
+print('ratio6= ', ratio6)
+print('ratio7= ', ratio7)
+print('ratio10= ', ratio10)
+print('ratio11= ', ratio11)
+print('ratio12= ', ratio12)
+print('ratio13= ', ratio13)
 '''
 
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (abs(ratio1)<1e-5) & (abs(ratio2)<1e-5) & (abs(ratio3)<1e-5) & (abs(ratio4)<1e-3) & (abs(ratio5)<1e-2) & (abs(ratio6)<1e-3) & (abs(ratio7)<1e-2) & (abs(ratio8)<1e-3) & (abs(ratio9)<1e-3) & (abs(ratio10)<1e-5) & (abs(ratio11)<1e-5) & (abs(ratio12)<1e-5) & (abs(ratio13)<1e-5):
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')

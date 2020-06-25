@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 ''' Test made from the example 9-1 of the book: 
     Introducción Al Estudio Del Elemento Finito en Ingeniería. 
     Segunda Edició!n. Tirupathi R. Chandrupatla, Ashok D. Belegundu. 
@@ -97,15 +98,15 @@ dN1= nodes.getNode(1).getDisp
 ratio= (dN1-dN1Teor).Norm()
 
 ''' 
-print "dN1= ",dN1
-print "dN1Teor= ",dN1Teor
-print "rario= ",ratio
+print("dN1= ",dN1)
+print("dN1Teor= ",dN1Teor)
+print("rario= ",ratio)
    '''
 
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if(ratio<1e-4):
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')

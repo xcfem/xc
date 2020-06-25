@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 from rough_calculations import ng_simple_beam as sb
 
 ''' From:
@@ -22,15 +23,15 @@ M= beam.getBendingMomentUnderUniformLoad(q,beam.l/2.0)
 
 ratio1= (M-6250)/6250
 
-# print "M= ", M, " k ft"
-# print "ratio1= ", ratio1
+# print("M= ", M, " k ft")
+# print("ratio1= ", ratio1)
 
 
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if abs(ratio1)<1e-11:
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')
 

@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 # Home made test
 # Testing multi-freedom conditions with transformation constraint handler.
 
@@ -83,7 +84,7 @@ lPatterns.addToDomain(lp0.name)
 # Solution
 import os
 pth= os.path.dirname(__file__)
-#print "pth= ", pth
+#print("pth= ", pth)
 if(not pth):
   pth= "."
 execfile(pth+"/../../aux/solu_transf_handler2.py")
@@ -96,17 +97,17 @@ deltateor= (F*0.5*L/(E*A))
 ratio1= (delta-deltateor)/deltateor
 ratio2= (N1-F)/F
 
-# print delta
-# print deltateor
-# print ratio1
-# print N1
-# print ratio2
+# print(delta)
+# print(deltateor)
+# print(ratio1)
+# print(N1)
+# print(ratio2)
 
 
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if abs(ratio1)<1e-5 and abs(ratio2)<1e-5:
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')

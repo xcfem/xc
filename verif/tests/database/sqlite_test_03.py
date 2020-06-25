@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 
 import sqlite3 as sqlite
 from sqlite_utils import sqlite_macros
@@ -29,7 +30,7 @@ e2= sqlite_macros.SQLTexisteTabla(dbName,"test4")
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (not e1) & (not e2):
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')
 

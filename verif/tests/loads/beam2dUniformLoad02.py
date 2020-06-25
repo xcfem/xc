@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 # home made test
 
 import xc_base
@@ -103,23 +104,23 @@ ratio3= (abs((RN+F)/F))
 
 
 ''' 
-print "delta0= ",delta0
-print "delta0Teor= ",delta0Teor
-print "ratio0= ",ratio0
-print "delta1= ",delta1
-print "delta1Teor= ",delta1Teor
-print "ratio1= ",ratio1
-print "F= ",F
-print "N0= ",N0
-print "ratio2= ",ratio2
-print "RN= ",RN
-print "RN2= ",RN2
-print "ratio3= ",ratio3
+print("delta0= ",delta0)
+print("delta0Teor= ",delta0Teor)
+print("ratio0= ",ratio0)
+print("delta1= ",delta1)
+print("delta1Teor= ",delta1Teor)
+print("ratio1= ",ratio1)
+print("F= ",F)
+print("N0= ",N0)
+print("ratio2= ",ratio2)
+print("RN= ",RN)
+print("RN2= ",RN2)
+print("ratio3= ",ratio3)
  '''
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (abs(ratio0)<1e-4) & (abs(ratio1)<0.03) & (abs(ratio3)<1e-14):
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')

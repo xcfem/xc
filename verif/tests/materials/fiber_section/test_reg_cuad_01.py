@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 
 # Test for checking the reg_cuad command
 
@@ -50,13 +51,13 @@ steelRegion.pMin= geom.Pos2d(y0-y1,z0-z1)
 steelRegion.pMax= geom.Pos2d(y0+y1,z0+z1)
 
 '''
-print "num. of regions: ",numRegions
-print "num. of reinforcement layers: ",numReinfLayers 
-print "num. of reinforcement bars: ",getNumReinfBars
-print "num. of cells: ",numCells
+print("num. of regions: ",numRegions)
+print("num. of reinforcement layers: ",numReinfLayers )
+print("num. of reinforcement bars: ",getNumReinfBars)
+print("num. of cells: ",numCells)
 for_each_region
-  print "  REGION "
-  print "num. cells: ",numCells
+  print("  REGION ")
+  print("num. cells: ",numCells)
 '''
            
 materialHandler= preprocessor.getMaterialHandler
@@ -82,34 +83,34 @@ ratio5= (Iz-izTeor)/izTeor
 ratio6= (Iy-iyTeor)/iyTeor
 
 ''' 
-print "num. fibras: ",(nfibras)
-print "ratio1= ",(ratio1)
+print("num. fibras: ",(nfibras))
+print("ratio1= ",(ratio1))
 
-print "sum of areas: ",(sumAreas)
-print "theorethical area: ",(areaTeor)
-print "ratio2= ",(ratio2)
+print("sum of areas: ",(sumAreas))
+print("theorethical area: ",(areaTeor))
+print("ratio2= ",(ratio2))
 
-print "centerOfMassY= ",centerOfMassY
-print "y0= ",y0
-print "ratio3= ",ratio3
+print("centerOfMassY= ",centerOfMassY)
+print("y0= ",y0)
+print("ratio3= ",ratio3)
 
-print "centerOfMassZ= ",(centerOfMassZ)
-print "z0= ",z0
-print "ratio4= ",ratio4
+print("centerOfMassZ= ",(centerOfMassZ))
+print("z0= ",z0)
+print("ratio4= ",ratio4)
 
-print "Iz= ",(Iz)
-print "IzTeor= ",izTeor
-print "ratio5= ",(ratio5)
+print("Iz= ",(Iz))
+print("IzTeor= ",izTeor)
+print("ratio5= ",(ratio5))
 
-print "Iy= ",Iy
-print "IyTeor= ",iyTeor
-print "ratio6= ",(ratio6)
+print("Iy= ",Iy)
+print("IyTeor= ",iyTeor)
+print("ratio6= ",(ratio6))
  '''
 
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (abs(ratio1)<1e-5) & (abs(ratio2)<1e-5) & (abs(ratio3)<1e-5) & (abs(ratio4)<1e-5) & (abs(ratio5)<1e-3) & (abs(ratio6)<1e-3) :
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')

@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
+
 
 import xc_base
 import geom
@@ -15,7 +17,7 @@ def nuevosZeroLengthShell(nmbS, tagElem, offset):
     tagElem: Identificador del elemento.
   '''
   if(tagElem>=offset):
-    print "nuevosZeroLengthShell; excedido el número del elementos, aumente el valor de offset\n"
+    print("nuevosZeroLengthShell; excedido el número del elementos, aumente el valor de offset\n")
 
   idSecc1= tagElem*10
   idNod1= idSecc1

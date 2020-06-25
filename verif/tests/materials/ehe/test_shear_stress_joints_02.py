@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 from __future__ import division
 ''' Verification test for the concrete shrinkage computation
    according to EHE-08. '''
@@ -69,7 +70,7 @@ import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (ratio1<1e-12) and (ratio2<1e-12) and (ratio3<1e-12) and (ratio4<1e-12):
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')
 

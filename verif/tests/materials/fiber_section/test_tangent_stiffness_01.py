@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 ''' Checks the assembling of the tangent stiffness matrix of the section.
    Home made. '''
 import xc_base
@@ -54,16 +55,16 @@ ratio2= (EIy-EIyTeor)/EIyTeor
 EATeor= width*depth*E
 ratio3= (EA-EATeor)/EATeor
 
-# print "ratio1= ", ratio1
-# print "ratio2= ", ratio2
-# print "EATeor= ", EATeor
-# print "EA= ", EA
-# print "ratio3= ", ratio3
+# print("ratio1= ", ratio1)
+# print("ratio2= ", ratio2)
+# print("EATeor= ", EATeor)
+# print("EA= ", EA)
+# print("ratio3= ", ratio3)
 
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (abs(ratio1)<1e-2) & (abs(ratio2)<1e-2) & (abs(ratio3)<1e-6):
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')

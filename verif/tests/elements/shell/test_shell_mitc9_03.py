@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 '''
 Example from http://feacluster.com/CalculiX/ccx_2.13/doc/ccx/node7.html#beam5
 done with 2D shell elements
@@ -135,15 +136,15 @@ deltaYpt3 = pt3.getNode().getDisp[1]  # y displacement of node at point pt3.
 error= ((deltaYpt2+deltaYpt3)/2.0-f)/f
 
 '''
-print 'deltaYpt2= ', deltaYpt2, f
-print 'deltaYpt3= ', deltaYpt3, f
-print 'error= ', error*100, ' %'
+print('deltaYpt2= ', deltaYpt2, f)
+print('deltaYpt3= ', deltaYpt3, f)
+print('error= ', error*100, ' %')
 '''
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (error < 0.6/100.0) :
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')
 

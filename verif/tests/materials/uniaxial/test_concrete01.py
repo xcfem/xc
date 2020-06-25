@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 # home made test
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
@@ -43,22 +44,22 @@ nod= nodes.newNodeXY(l,0.0)
 horm= typical_materials.defConcrete01(preprocessor, "horm",epsc0,fc,fcu,epsU)
 
 ''' 
-print "fpc= ",fpc
-print "epsc0= ",epsc0
-print "fpcu= ",fpcu
-print "epscu= ",epscu
-print "CminStrain= ",CminStrain
-print "CendStrain= ",CendStrain
-print "Cstrain= ",Cstrain
-print "CStress= ",Cstress
-print "Ctangent= ",Ctangent
-print "CunloadSlope= ",CunloadSlope
-print "TminStrain= ",TminStrain
-print "TendStrain= ",TendStrain
-print "Tstrain= ",Tstrain
-print "TStress= ",Tstress
-print "Ttangent= ",Ttangent
-print "TunloadSlope= ",TunloadSlope
+print("fpc= ",fpc)
+print("epsc0= ",epsc0)
+print("fpcu= ",fpcu)
+print("epscu= ",epscu)
+print("CminStrain= ",CminStrain)
+print("CendStrain= ",CendStrain)
+print("Cstrain= ",Cstrain)
+print("CStress= ",Cstress)
+print("Ctangent= ",Ctangent)
+print("CunloadSlope= ",CunloadSlope)
+print("TminStrain= ",TminStrain)
+print("TendStrain= ",TendStrain)
+print("Tstrain= ",Tstrain)
+print("TStress= ",Tstress)
+print("Ttangent= ",Ttangent)
+print("TunloadSlope= ",TunloadSlope)
  '''
 
 
@@ -101,7 +102,7 @@ y= []
 recorder= feProblem.getDomain.newRecorder("element_prop_recorder",None)
 recorder.setElements(xc.ID([0]))
 recorder.callbackRecord= "x.append(self.getMaterial().getStrain()); y.append(self.getN())"
-recorder.callbackRestart= "print \"Restart method called.\""
+recorder.callbackRestart= "print(\"Restart method called.\")"
 
 '''
         \prop_recorder
@@ -111,7 +112,7 @@ nodes= preprocessor.getNodeHandler{2}
 
                 
 d= .getDisp[0]
-                print (d*1000)
+                print((d*1000))
 
             \callback_restart{print("Restart method called."}
 '''
@@ -130,8 +131,8 @@ solAlgo= analysisAggregation.newSolutionAlgorithm("newton_raphson_soln_algo")
 ctest= analysisAggregation.newConvergenceTest("energy_inc_conv_test")
 ctest.tol= 1e-9
 ctest.maxNumIter= 10 # Convergence Test: maximum number of iterations that will be performed before "failure to converge" is returned
-ctest.printFlag= 0 # Convergence Test: flag used to print information on convergence (optional)
-                   # 1: print information on each= step
+ctest.printFlag= 0 # Convergence Test: flag used to print(information on convergence (optional))
+                   # 1: print(information on each= step)
 integ= analysisAggregation.newIntegrator("displacement_control_integrator",xc.Vector([]))
 integ.nod= 2
 integ.dof= 0
@@ -166,18 +167,18 @@ for d in diff_y:
   ratio2= ratio2+d**2
 ratio4= math.sqrt(ratio2)
 
-#print "x= ",x
-#print "diff_x= ",diff_x
-#print "ratio3= ",ratio3
-#print "y= ",y
-#print "y_modelo= ",y_modelo
-#print "diff_y= ",diff_y
-#print "ratio4= ",ratio4
+#print("x= ",x)
+#print("diff_x= ",diff_x)
+#print("ratio3= ",ratio3)
+#print("y= ",y)
+#print("y_modelo= ",y_modelo)
+#print("diff_y= ",diff_y)
+#print("ratio4= ",ratio4)
 
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if((ratio1<1e-17) & (ratio2<1e-8)):
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')

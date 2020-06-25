@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 # Home made test
 fy= 2600 # Yield stress of the material.
 E= 2.1e6 # Young modulus of the material.
@@ -58,14 +59,14 @@ for d in diff_y:
 ratio2= math.sqrt(ratio2)
 
 '''
-print "ratio1= ",ratio1
-print "ratio2= ",ratio2
+print("ratio1= ",ratio1)
+print("ratio2= ",ratio2)
 '''
 
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if((ratio1<1e-13) & (ratio2<1e-7)):
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')    

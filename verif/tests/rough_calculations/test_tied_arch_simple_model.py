@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 from __future__ import division
 from rough_calculations import tied_arch_simple_model as tiedArch
 
@@ -36,11 +37,11 @@ N=tiedArchBridge.getAxialForceArch(qunif)
 fc=tiedArchBridge.getQunfCompStress(qunif,A)
 
 
-# print 'Vertical reaction at each abutment: V= ',V
-# print 'Horizontal reaction at each abutment : H= ',H
-# print 'Tension nin the deck T: ', Tdeck
-# print 'Axial compressive force in the arch N: ', N
-# print 'Mean compressive stress in the arch at the abutments fc: ',fc
+# print('Vertical reaction at each abutment: V= ',V)
+# print('Horizontal reaction at each abutment : H= ',H)
+# print('Tension nin the deck T: ', Tdeck)
+# print('Axial compressive force in the arch N: ', N)
+# print('Mean compressive stress in the arch at the abutments fc: ',fc)
 
 
 ratio1=(V-3829.45)/3829.45
@@ -54,6 +55,6 @@ import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if(abs(ratio1)<1e-10 and abs(ratio2)<1e-10 and abs(ratio3)<1e-10 and abs(ratio4)<1e-10 and abs(ratio5) ):
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')

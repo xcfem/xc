@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 ''' Tomado de la figura 6.22 de "Finite Element Procedures"
 de "Klaus Jurgen Bathe". '''
 ''' NO DA MUY BUENOS RESULTADOS
@@ -97,7 +98,7 @@ import os
 pth= os.path.dirname(__file__)
 if(not pth):
   pth= "."
-#print "pth= ", pth
+#print("pth= ", pth)
 execfile(pth+"/../../aux/solu_linear_buckling.py")
 
 
@@ -113,19 +114,19 @@ blTeor= -1*math.pi**2*E*I/(L**2)
 ratio2= (blCalc-blTeor)/blTeor
 
 ''' 
-print "deltay= ",(deltay)
-print "deltayTeor= ",(deltayTeor)
-print "eig1= ",(eig1)
-print "ratio1= ",(ratio1)
-print "blCalc= ",(blCalc/1e3)," kN \n"
-print "blTeor= ",(blTeor/1e3)," kN \n"
-print "ratio2= ",(ratio2)
+print("deltay= ",(deltay))
+print("deltayTeor= ",(deltayTeor))
+print("eig1= ",(eig1))
+print("ratio1= ",(ratio1))
+print("blCalc= ",(blCalc/1e3)," kN \n")
+print("blTeor= ",(blTeor/1e3)," kN \n")
+print("ratio2= ",(ratio2))
    '''
 
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (abs(ratio1)<1e-9) & (abs(ratio2)<0.06):
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')

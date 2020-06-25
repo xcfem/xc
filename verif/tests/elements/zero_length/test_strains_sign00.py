@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 # home made test
 
 # ZeroLengthSection elements sign criteria.
@@ -203,39 +204,39 @@ ratio3= abs((epsilonZPos-5*F/(E*Iy)))
 ratio4= abs((epsilonYPos-6*F/(E*Iz)))
 
 ''' 
-print "My= ",MyTot/1e3," kN m"
-print "epsMy= ",epsMy
-print "epsilonZPos= ",epsilonZPos
-print "Mz= ",MzTot/1e3," kN m"
-print "epsMz= ",epsMz
-print "epsYMin= ",epsYMin
-print "epsilonYPosTeor= ",epsilonYPosTeor
-print "epsilonYPos= ",epsilonYPos
-print "yEpsYMax= ",yEpsYMax 
-print "yEpsYMin= ",yEpsYMin 
-print "zEpsYMax= ",zEpsYMax 
-print "zEpsYMin= ",zEpsYMin 
+print("My= ",MyTot/1e3," kN m")
+print("epsMy= ",epsMy)
+print("epsilonZPos= ",epsilonZPos)
+print("Mz= ",MzTot/1e3," kN m")
+print("epsMz= ",epsMz)
+print("epsYMin= ",epsYMin)
+print("epsilonYPosTeor= ",epsilonYPosTeor)
+print("epsilonYPos= ",epsilonYPos)
+print("yEpsYMax= ",yEpsYMax )
+print("yEpsYMin= ",yEpsYMin )
+print("zEpsYMax= ",zEpsYMax )
+print("zEpsYMin= ",zEpsYMin )
 
-print "getStressResultantComponent= ",sR
-print "N= ",Ntot/1e3," kN"
-print "epsN= ",epsN
-print "Qy= ",QyTot/1e3," kN"
-print "epsQy= ",epsQy
-print "Qz= ",QzTot/1e3," kN"
-print "epsQz= ",epsQz
-print "Mx= ",MxTot/1e3," kN m"
-print "epsT= ",epsT
-print "ratio1= ",ratio1
-print "ratio2= ",ratio2
-print "ratio3= ",ratio3
-print "ratio4= ",ratio4
+print("getStressResultantComponent= ",sR)
+print("N= ",Ntot/1e3," kN")
+print("epsN= ",epsN)
+print("Qy= ",QyTot/1e3," kN")
+print("epsQy= ",epsQy)
+print("Qz= ",QzTot/1e3," kN")
+print("epsQz= ",epsQz)
+print("Mx= ",MxTot/1e3," kN m")
+print("epsT= ",epsT)
+print("ratio1= ",ratio1)
+print("ratio2= ",ratio2)
+print("ratio3= ",ratio3)
+print("ratio4= ",ratio4)
  '''
 
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (ratio1 < 0.003) and (ratio2 < 0.003) and (ratio3 < 1e-4) and (ratio4 < 2e-3):
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')
 

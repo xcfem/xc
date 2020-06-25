@@ -68,7 +68,7 @@ sections.append(deckSections)
 
 import os
 pth= os.path.dirname(__file__)
-#print "pth= ", pth
+#print("pth= ", pth)
 if(not pth):
   pth= "."
 fname= os.path.basename(__file__)
@@ -90,7 +90,7 @@ outCfg= lsd.VerifOutVars(listFile='N',calcMeanCF='Y')
 meanFCs= reinfConcreteSections.internalForcesVerification3D(lsd.normalStressesResistance,"d",outCfg)
 
 
-#print "mean FCs: ", meanFCs
+#print("mean FCs: ", meanFCs)
 
 meanFC0Teor= 0.64702580108264973
 ratio1= abs(meanFCs[0]-meanFC0Teor)/meanFC0Teor
@@ -98,10 +98,10 @@ meanFC1Teor= 0.84660274501497856
 ratio2= abs(meanFCs[1]-meanFC1Teor)/meanFC1Teor
 
 '''
-print "meanFCs[0]= ", meanFCs[0]
-print "ratio1= ",ratio1
-print "meanFCs[1]= ", meanFCs[1]
-print "ratio2= ",ratio2
+print("meanFCs[0]= ", meanFCs[0])
+print("ratio1= ",ratio1)
+print("meanFCs[1]= ", meanFCs[1])
+print("ratio2= ",ratio2)
 '''
 
 feProblem.errFileName= "cerr" # Display errors if any.

@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 # Taken from a document of Ivan Dario in Scribd.
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
@@ -21,13 +22,13 @@ NP= xc.Vector(internal_forces.transformInternalForces([n1,n2,n12],math.radians(4
 NPTeor= xc.Vector([-11715.8,-2284.18,3376.55])
 ratio= (NP-NPTeor).Norm()/NPTeor.Norm()
 
-# print "NP= ", NP
-# print "ratio= ", ratio
+# print("NP= ", NP)
+# print("ratio= ", ratio)
 
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (abs(ratio)<1e-5):
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')

@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
+
 
 #Based on sXML-master projet on gitHub
 
@@ -43,7 +45,7 @@ def getActionTypeCode(actionType):
   elif(actionType=='Variable'):
     return 1
   else:
-    print actionType, "Unknown action type (not permanent, not variable)."
+    print(actionType, "Unknown action type (not permanent, not variable).")
     return 0
 
 def getLoadCaseObject(loadCase):

@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 # home made test
 # Horizontal cantilever under tension load at its end.
 
@@ -55,7 +56,7 @@ respVz= typical_materials.defElasticMaterial(preprocessor, "respVz",1e9) # Shear
 # Sections
 import os
 pth= os.path.dirname(__file__)
-#print "pth= ", pth
+#print("pth= ", pth)
 if(not pth):
   pth= "."
 execfile(pth+"/../aux/testQuadRegion.py")
@@ -130,18 +131,18 @@ ratio2= (abs((N0-F)/F))
 ratio3= (abs((RN+F)/F))
 
 ''' 
-print "delta: ",delta
-print "deltaTeor: ",deltateor
-print "ratio1= ",ratio1
-print "N0= ",N0
-print "ratio2= ",ratio2
-print "RN= ",RN
-print "ratio3= ",ratio3
-print "RN2= ",RN2
+print("delta: ",delta)
+print("deltaTeor: ",deltateor)
+print("ratio1= ",ratio1)
+print("N0= ",N0)
+print("ratio2= ",ratio2)
+print("RN= ",RN)
+print("ratio3= ",ratio3)
+print("RN2= ",RN2)
    '''
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (abs(ratio1)<1e-6) & (abs(ratio2)<1e-10) & (abs(ratio3)<1e-10) & (abs(RN2)<1e-14):
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')

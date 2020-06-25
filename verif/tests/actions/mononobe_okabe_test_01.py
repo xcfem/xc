@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 
 '''Verification of Mononobe-Okabe routines.
    Home made test.
@@ -40,19 +41,19 @@ ratio3= (sigma-sigmaMax/2.0)/(sigmaMax/2.0)
 ratio4= sigmaMin
 
 '''
-print 'overPressure= ', overPressure/1e3, ' kN/m'
-print 'ratio1= ', ratio1 
-print 'sigmaMax= ', sigmaMax/1e3, ' kN/m2'
-print 'ratio2= ', ratio2 
-print 'sigma= ', sigma/1e3, ' kN/m2'
-print 'ratio3= ', ratio3 
-print 'sigmaMin= ', sigmaMin/1e3, ' kN/m2'
-print 'ratio4= ', ratio4
+print('overPressure= ', overPressure/1e3, ' kN/m')
+print('ratio1= ', ratio1 )
+print('sigmaMax= ', sigmaMax/1e3, ' kN/m2')
+print('ratio2= ', ratio2 )
+print('sigma= ', sigma/1e3, ' kN/m2')
+print('ratio3= ', ratio3 )
+print('sigmaMin= ', sigmaMin/1e3, ' kN/m2')
+print('ratio4= ', ratio4)
 '''
 
 import os
 fname= os.path.basename(__file__)
 if abs(ratio1)<1e-6 and abs(ratio2)<1e-6 and abs(ratio3)<1e-6and abs(ratio4)<1e-6:
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
-  print "test ",fname,": ERROR."
+  print("test ",fname,": ERROR.")

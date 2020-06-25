@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 
 import xc_base
 import geom
@@ -74,28 +75,28 @@ ratio1= (nnodteor/nnodes)
 ratio2= (cooCentroElem-cooCentroElemTeor).Norm()
 
 ''' 
-print "nnodes= ",(nnodes)
-print "nnodteor= ",(nnodteor)
-print "ratio1= ",(ratio1)
-print "theta1= ",(math.radians(th1))
-print "theta2= ",(math.radians(th2))
-print "xC= ",(xC)
-print "yC= ",(yC)
-print "zC= ",(zC)
-print "xi= ",(xi)
-print "yi= ",(yi)
-print "zi= ",(zi)
-print "radius= ",(r)
-print "points= ",points
-print "cooCentroElem= ",cooCentroElem
-print "cooCentroElemTeor= ",cooCentroElemTeor
-print "ratio2= ",(ratio2)
+print("nnodes= ",(nnodes))
+print("nnodteor= ",(nnodteor))
+print("ratio1= ",(ratio1))
+print("theta1= ",(math.radians(th1)))
+print("theta2= ",(math.radians(th2)))
+print("xC= ",(xC))
+print("yC= ",(yC))
+print("zC= ",(zC))
+print("xi= ",(xi))
+print("yi= ",(yi))
+print("zi= ",(zi))
+print("radius= ",(r))
+print("points= ",points)
+print("cooCentroElem= ",cooCentroElem)
+print("cooCentroElemTeor= ",cooCentroElemTeor)
+print("ratio2= ",(ratio2))
    '''
 
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (abs(ratio1-1.0)<1e-12) & (abs(ratio2)<1e-5):
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')

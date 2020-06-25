@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 
 import xc_base
 import geom
@@ -60,11 +61,11 @@ l1.genMesh(xc.meshDir.I)
 
 nnodes= l1.getNumNodes
 '''
-print "number of nodes: ", nnod
+print("number of nodes: ", nnod)
 nodes= preprocessor.getNodeHandler
 
 for_each
-  print "  node: ",tag," x= ",coord[0],", y= ",coord[1],", z= ",coord[2]
+  print("  node: ",tag," x= ",coord[0],", y= ",coord[1],", z= ",coord[2])
 
 '''
 
@@ -72,22 +73,22 @@ nnodteor= NumDiv+1
 ratio1= (nnodteor/nnodes)
 
 ''' 
-print "ratio1= ",(ratio1)
-print "theta1= ",(math.radians(th1))
-print "theta2= ",(math.radians(th2))
-print "xC= ",(xC)
-print "yC= ",(yC)
-print "zC= ",(zC)
-print "xi= ",(xi)
-print "yi= ",(yi)
-print "zi= ",(zi)
-print "radius= ",(r)
+print("ratio1= ",(ratio1))
+print("theta1= ",(math.radians(th1)))
+print("theta2= ",(math.radians(th2)))
+print("xC= ",(xC))
+print("yC= ",(yC))
+print("zC= ",(zC))
+print("xi= ",(xi))
+print("yi= ",(yi))
+print("zi= ",(zi))
+print("radius= ",(r))
    '''
 
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (abs(ratio1-1.0)<1e-12):
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')

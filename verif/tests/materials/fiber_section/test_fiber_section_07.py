@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 ''' Reinforced concrete section verification test empleando
    el material fiber_section_GJ. '''
 
@@ -34,7 +35,7 @@ import os
 pth= os.path.dirname(__file__)
 if(not pth):
   pth= "."
-#print "pth= ", pth
+#print("pth= ", pth)
 execfile(pth+"/barsSectionGeometry.py")
 barsSection= preprocessor.getMaterialHandler.newMaterial("fiber_section_GJ","barsSection")
 fiberSectionRepr= barsSection.getFiberSectionRepr()
@@ -90,21 +91,21 @@ ratio2= (esfMz-MzDato)/MzDato
 ratio3= (esfN-NDato)
 
 ''' 
-print "RN= ",(RN/1e3)," kN \n"
-print "RN2= ",(RN2/1e3)," kN \n"
-print "N= ",(esfN/1e3)," kN \n"
-print "My= ",(esfMy/1e3)," kN m\n"
-print "Mz= ",(esfMz/1e3)," kN m\n"
-print "defMz= ",(defMz)
-print "defN= ",(defN)
-print "ratio1= ",(ratio1)
-print "ratio2= ",(ratio2)
-print "ratio3= ",(ratio3)
+print("RN= ",(RN/1e3)," kN \n")
+print("RN2= ",(RN2/1e3)," kN \n")
+print("N= ",(esfN/1e3)," kN \n")
+print("My= ",(esfMy/1e3)," kN m\n")
+print("Mz= ",(esfMz/1e3)," kN m\n")
+print("defMz= ",(defMz))
+print("defN= ",(defN))
+print("ratio1= ",(ratio1))
+print("ratio2= ",(ratio2))
+print("ratio3= ",(ratio3))
   '''
 
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (abs(ratio1)<1e-10) & (abs(ratio2)<1e-10) & (abs(ratio3)<1e-10) & (abs(RN)<1e-10) & (abs(RN2)<1e-10) & (abs(esfMy)<1e-10) :
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')

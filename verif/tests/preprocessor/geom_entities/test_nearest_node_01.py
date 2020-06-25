@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 # getNearestNode method test
 import xc_base
 import geom
@@ -20,7 +21,7 @@ nodes= preprocessor.getNodeHandler
 for i in range(1,1000):
   n= nodes.newNodeXYZ(i,0,0)
 
-# print "created ",nnod," nodes.\n"
+# print("created ",nnod," nodes.\n")
 mesh= feProblem.getDomain.getMesh
 # crono= 1
 # \crono{\start{}}
@@ -32,15 +33,15 @@ tg= n.tag
 
 
 ''' 
-print "tag node: ",tg
-print "lapso: ",lapso
+print("tag node: ",tg)
+print("lapso: ",lapso)
    '''
 
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if((tg==50) & (lapso<100)):
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')
 

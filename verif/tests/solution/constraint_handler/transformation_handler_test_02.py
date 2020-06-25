@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 # Test from Ansys manual
 # Reference:  Strength of Material, Part I, Elementary Theory & Problems, pg. 98, problem 4
 
@@ -86,7 +87,7 @@ lPatterns.addToDomain(lp0.name)
 # Solution procedure
 import os
 pth= os.path.dirname(__file__)
-#print "pth= ", pth
+#print("pth= ", pth)
 if(not pth):
   pth= "."
 execfile(pth+"/../../aux/solu_transf_handler2.py")
@@ -101,15 +102,15 @@ sigma= elem2.getN2/A+elem2.getM2/I*h/2.0
 
 
 
-# print delta
-# print sigma
+# print(delta)
+# print(sigma)
 ratio1= (delta/0.182)
 ratio2= (sigma/(-11400))
 
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (abs(ratio1-1.0)<3e-3) & (abs(ratio2-1.0)<1e-3):
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')
 

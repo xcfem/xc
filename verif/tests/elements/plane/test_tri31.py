@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 ''' Test made from the example 7.2 of the book: 
     Introducción Al Estudio Del Elemento Finito en Ingeniería. 
     Segunda Edición. Tirupathi R. Chandrupatla, Ashok D. Belegundu. 
@@ -75,11 +76,11 @@ lPatterns.addToDomain(lp0.name)
 # Solution
 analOk= modelSpace.analyze(calculateNodalReactions= True)
  
-# print "reac node 1: ",reac
+# print("reac node 1: ",reac)
 R1x= n1.getReaction[0]
 R1y= n1.getReaction[1]
 
-# print "reac node 5: ",reac
+# print("reac node 5: ",reac)
 R4x= n4.getReaction[0]
 R4y= n4.getReaction[1]
 
@@ -88,19 +89,19 @@ ratio2= abs(((R4x+F)/F))
 ratio3= abs(((R1y+R4y)/F))
 
 ''' 
-print "R1x= ",R1x
-print "R1y= ",R1y
-print "ratio1= ",ratio1
-print "R4x= ",R4x
-print "R4y= ",R4y
-print "ratio2= ",ratio2
-print "ratio3= ",ratio3
+print("R1x= ",R1x)
+print("R1y= ",R1y)
+print("ratio1= ",ratio1)
+print("R4x= ",R4x)
+print("R4y= ",R4y)
+print("ratio2= ",ratio2)
+print("ratio3= ",ratio3)
  '''
 
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (abs(ratio1)<1e-10) & (abs(ratio2)<1e-10) & (abs(ratio3)<1e-10) & (analOk == 0.0):
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')

@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 '''Verification test taken from example 2-005 of 
    the SAP 2000 verification manual.'''
 
@@ -87,8 +88,8 @@ f1= preprocessor.getSets.getSet("f1")
 nNodes= f1.getNumNodes
  
 node= f1.getNodeIJK(1,NumDivI/2+1,NumDivJ/2+1)
-# print "Central node: ", node.tag
-# print "Central node coordinates: ", node.getCoo
+# print("Central node: ", node.tag)
+# print("Central node coordinates: ", node.getCoo)
 lp0.newNodalLoad(node.tag,xc.Vector([0,0,-ptLoad,0,0,0])) # Concentrated load
 
 
@@ -141,13 +142,13 @@ for i in range(0,2):
   ratio1+= (averageRef[i]-average[i]).getModulus()
 
 '''
-print "average[0]= ", average[0]
-print "averageRef[0]= ", averageRef[0]
-print "diff[0]= ", average[0]-averageRef[0]
-print "average[1]= ", average[1]
-print "averageRef[1]= ", averageRef[1]
-print "diff[1]= ", average[1]-averageRef[1]
-print "ratio1= ",ratio1
+print("average[0]= ", average[0])
+print("averageRef[0]= ", averageRef[0])
+print("diff[0]= ", average[0]-averageRef[0])
+print("average[1]= ", average[1])
+print("averageRef[1]= ", averageRef[1])
+print("diff[1]= ", average[1]-averageRef[1])
+print("ratio1= ",ratio1)
 '''
 
 import os
@@ -155,6 +156,6 @@ from misc_utils import log_messages as lmsg
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (abs(ratio1)<1e-6):
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')

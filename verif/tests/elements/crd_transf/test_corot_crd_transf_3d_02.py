@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 # home made test
 
 from __future__ import division
@@ -39,14 +40,14 @@ beam3d= elements.newElement("ElasticBeam3d",xc.ID([1,2]))
 crdTransf= beam3d.getCoordTransf
 
 # \print{"vector I:",getIVector
-#print "vector J:",getJVector
-#print "vector K:",getKVector}
+#print("vector J:",getJVector)
+#print("vector K:",getKVector})
 vIGlobal= crdTransf.getVectorGlobalCoordFromLocal(xc.Vector([1,0,0]))
 vJGlobal= crdTransf.getVectorGlobalCoordFromLocal(xc.Vector([0,1,0]))
 vKGlobal= crdTransf.getVectorGlobalCoordFromLocal(xc.Vector([0,0,1]))
 # \print{"vector I en globales:",vIGlobal
-#print "vector J en globales:",vJGlobal
-#print "vector K en globales:",vKGlobal}
+#print("vector J en globales:",vJGlobal)
+#print("vector K en globales:",vKGlobal})
 ratio1= (vIGlobal-crdTransf.getIVector).Norm()
 ratio2= (vJGlobal-crdTransf.getJVector).Norm()
 ratio3= (vKGlobal-crdTransf.getKVector).Norm()
@@ -61,6 +62,6 @@ import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (abs(ratio1)<1e-12) & (abs(ratio2)<1e-12) & (abs(ratio3)<1e-12):
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')

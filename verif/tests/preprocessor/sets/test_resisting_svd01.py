@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 # home made test
 #    Check of the function that computes the force resultant
 #    when cutting a subset of the model by a plane.
@@ -175,17 +176,17 @@ ratio1= (abs(force.x-3*F)/3/F)
 ratio2= moment.getModulus()
 
 ''' 
-print "force= ",force/1e3," kN\n"
-print "moment= ",moment/1e3," kN\n"
-print "org= ",Org," m\n"
-print "ratio1= ",ratio1
-print "ratio2= ",ratio2
+print("force= ",force/1e3," kN\n")
+print("moment= ",moment/1e3," kN\n")
+print("org= ",Org," m\n")
+print("ratio1= ",ratio1)
+print("ratio2= ",ratio2)
    '''
 
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (ratio1<1e-10) & (ratio2<1e-10) :
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')

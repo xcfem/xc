@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 ''' Computation of the interaction diagram. Home made test. '''
 from __future__ import division
 
@@ -69,16 +70,16 @@ ratio3= diagIntsecHA.getCapacityFactor(geom.Pos3d(-574457,41505.4,2.00089e-11))-
 ratio4= diagIntsecHA.getCapacityFactor(geom.Pos3d(-978599,-10679.4,62804.3))-1.0
 
 ''' 
-print "ratio1= ",(ratio1)
-print "ratio2= ",(ratio2)
-print "ratio3= ",(ratio3)
-print "ratio4= ",(ratio4)
+print("ratio1= ",(ratio1))
+print("ratio2= ",(ratio2))
+print("ratio3= ",(ratio3))
+print("ratio4= ",(ratio4))
  '''
 
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if((abs(ratio1)<1e-5) & (abs(ratio2)<1e-5) & (abs(ratio3)<1e-5) & (abs(ratio4)<1e-5)):
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')

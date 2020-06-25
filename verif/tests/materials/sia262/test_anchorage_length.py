@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 
 # Home made test.
 
@@ -29,17 +30,17 @@ fbdC= materials.sia262.SIA262_limit_state_checking.adherenceStress(fck)
 lbdC= materials.sia262.SIA262_limit_state_checking.getBasicAnchorageLength(phi,fck,fsd)
 ratioC= (lbdC/phi-40.2777777778)/40.2777777778
 
-# print "lbdA= ",lbdA, " m"
-# print "ratioA= ",ratioA
-# print "lbdB= ",lbdB, " m"
-# print "ratioB= ",ratioB
-# print "lbdC= ",lbdC, " m"
-# print "ratioC= ",ratioC
+# print("lbdA= ",lbdA, " m")
+# print("ratioA= ",ratioA)
+# print("lbdB= ",lbdB, " m")
+# print("ratioB= ",ratioB)
+# print("lbdC= ",lbdC, " m")
+# print("ratioC= ",ratioC)
 
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (abs(ratioA)<1e-12) & (abs(ratioB)<1e-12) & (abs(ratioC)<1e-12) :
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')

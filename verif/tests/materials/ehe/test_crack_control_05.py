@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 ''' Reinforced concrete section. Crack control verification test.'''
 
 import xc_base
@@ -35,9 +36,9 @@ numOfRebars= int(math.floor(width/rebarsSpacing))
 rebarsOffset= ((width-(numOfRebars-1)*rebarsSpacing)/2.0)
 
 ''' 
-print "rebarsSpacing= ",rebarsSpacing
-print "numOfRebars= ",numOfRebars
-print "rebarsOffset= ",rebarsOffset
+print("rebarsSpacing= ",rebarsSpacing)
+print("numOfRebars= ",numOfRebars)
+print("rebarsOffset= ",rebarsOffset)
    '''
 
 feProblem= xc.FEProblem()
@@ -116,9 +117,9 @@ ratio2= ((secHAParamsFis.Wk-WkTeor)/WkTeor)
 
 '''
 secHAParamsFis.printParams()
-print "ratio1= ",ratio1
-print "wk= ", secHAParamsFis.Wk
-print "ratio2= ",ratio2
+print("ratio1= ",ratio1)
+print("wk= ", secHAParamsFis.Wk)
+print("ratio2= ",ratio2)
 '''
 
 
@@ -126,6 +127,6 @@ import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (abs(ratio1)<0.05) & (abs(ratio2)<0.05):
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')

@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
+
 
 '''Eurocode 3 checks for a beam or column.'''
 __author__= "Luis C. Pérez Tato (LCPT) Ana Ortega (AO_O)"
@@ -89,6 +91,6 @@ class EC3Beam(buckling_base.MemberBase):
             recorder.callbackRecord= EC3lsc.controlULSCriterion2D()
         else:
             recorder.callbackRecord= EC3lsc.controlULSCriterion()
-#        recorder.callbackRestart= "print \"Restart method called.\"" #20181121
+#        recorder.callbackRestart= "print(\"Restart method called.\")" #20181121
         return recorder
 

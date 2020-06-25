@@ -98,9 +98,8 @@ int XC::Steel03::setup_parameters(void)
     return 0;
   }
 
-XC::Steel03::Steel03(int tag, double FY, double E, double B, double R,double R1, double R2, 
- double A1, double A2, double A3, double A4)
-  : SteelBase0103(tag,MAT_TAG_Steel03,FY,E0,B,A1,A2,A3,A4), r(R), cR1(R1), cR2(R2)
+XC::Steel03::Steel03(int tag, double FY, double E, double B, double R,double R1, double R2, double A1, double A2, double A3, double A4)
+  : SteelBase0103(tag,MAT_TAG_Steel03,FY,E,B,A1,A2,A3,A4), r(R), cR1(R1), cR2(R2)
   {
     setup_parameters();
   }

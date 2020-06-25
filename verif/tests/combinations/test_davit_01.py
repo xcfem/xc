@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 
 from __future__ import division
 
@@ -111,7 +112,7 @@ beam3.vector3dUniformLoadGlobal(xc.Vector([0.0,0.0,-10e3]))
 combs= loadHandler.getLoadCombinations
 import os
 pth= os.path.dirname(__file__)
-#print "pth= ", pth
+#print("pth= ", pth)
 if(not pth):
   pth= "."
 execfile(pth+"/../aux/def_hip_elu.py")
@@ -148,12 +149,12 @@ ratio1= ((NMin1+NMin1Teor)/NMin1Teor)
 ratio2= ((NMin2+NMin2Teor)/NMin2Teor)
 
 ''' 
-print "NMin1= ",NMin1/1e3
-print "NMin1Teor= ",NMin1Teor/1e3
-print "ratio1= ",ratio1
-print "NMin2= ",NMin2/1e3
-print "NMin2Teor= ",NMin2Teor/1e3
-print "ratio2= ",ratio2
+print("NMin1= ",NMin1/1e3)
+print("NMin1Teor= ",NMin1Teor/1e3)
+print("ratio1= ",ratio1)
+print("NMin2= ",NMin2/1e3)
+print("NMin2Teor= ",NMin2Teor/1e3)
+print("ratio2= ",ratio2)
  '''
 
 
@@ -161,6 +162,6 @@ import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (abs(ratio1)<1e-8) & (abs(ratio2)<1e-8):
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')

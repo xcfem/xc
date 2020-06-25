@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 from __future__ import division
 
 import math
@@ -93,7 +94,7 @@ springs=pileBC.springs
 springSet=preprocessor.getSets.defSet('springSet')
 for e in springs:
     springSet.getElements.append(e)
-    #print 'z:',e.getCooCentroid(True)[2], ' Kx (t/m):',round(e.getMaterials()[0].E*1e-4,2)
+    #print('z:',e.getCooCentroid(True)[2], ' Kx (t/m):',round(e.getMaterials()[0].E*1e-4,2))
 springSet.fillDownwards()
 allSets= modelSpace.setSum('allSets',[pile,springSet])
 '''
@@ -174,7 +175,7 @@ import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if abs(err_ux)<0.095 and abs(err_Kx)<5e-5 and abs(err_V)<0.13 and abs(err_M)<0.13:
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')
 

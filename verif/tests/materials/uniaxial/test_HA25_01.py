@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 
 #*    Nov. 2015   Ana Ortega    *
 
@@ -26,12 +27,12 @@ concr.alfacc=0.85 #f_maxd= 0.85*fcd
 errMax= concrete_base.concreteDesignDiagramTest(mdlr,concr)
 
 
-#print "errMax= ",(errMax)
+#print("errMax= ",(errMax))
 
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if errMax<1e-8:
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')

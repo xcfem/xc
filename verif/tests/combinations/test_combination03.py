@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 '''Obtaining «previous» combination and combination difference. Home made test.'''
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
@@ -40,14 +41,14 @@ ratio1= (previousName=="COMB3")
 ratio2= (descompDifference=="1.5*B")
 
 
-# print "ratio1= ",ratio1
-# print "ratio2= ",ratio2
+# print("ratio1= ",ratio1)
+# print("ratio2= ",ratio2)
 
 
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if ratio1 & ratio2 :
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')

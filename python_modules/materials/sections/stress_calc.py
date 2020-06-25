@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
+
 from __future__ import division
 
 __author__= "Ana Ortega (AO_O)"
@@ -167,8 +169,8 @@ class StressCalc(object):
       Nsp= self.Asp*self.sgsp
       Msp= Nsp*(self.h/2-self.rp)
     self.xx= x
-    # print "residN(x= ", x ,")= ", (self.N-Nc+Ns-Nsp)/1e3
-    # print "residM(x= ", x ,")= ", (self.M+Mc-Ms+Msp)/1e3
+    # print("residN(x= ", x ,")= ", (self.N-Nc+Ns-Nsp)/1e3)
+    # print("residM(x= ", x ,")= ", (self.M+Mc-Ms+Msp)/1e3)
     return self.M+Mc-Ms+Msp
 
   def solve(self,N, M):
@@ -259,9 +261,9 @@ class StressCalc(object):
     errN= abs(self.N-NR)
     pc= errN/max(abs(self.N),1)
     if(pc>0.05):
-      print "ERROR N= ", N, " NR= ", NR, "errN= ", errN, "(",pc*100,"%)"
+      print("ERROR N= ", N, " NR= ", NR, "errN= ", errN, "(",pc*100,"%)")
     MR= s.resistingM()
     errM= abs(self.M-MR)
     pc= errM/max(abs(self.M),1)
     if(pc>0.05):
-      print "ERROR M= ", M, " MR= ", MR, "errM= ", errM, "(",pc*100,"%)"
+      print("ERROR M= ", M, " MR= ", MR, "errM= ", errM, "(",pc*100,"%)")

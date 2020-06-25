@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 # Verification test of the addFiber function
 import xc_base
 import geom
@@ -75,32 +76,32 @@ ratio4= yG-yF
 
 
 ''' 
-print "F= ",F
-print "MomZ= ",MomZ
-print "MomZFibersDq= ",MomZFibersDq
-print "A= ",A
-print "eps= ",eps
-print "yF= ",yF
-print "yG= ",yG
-print "IEA= ",IEA  \print{" IK12= ",IK12
-print "IK21= ",IK21} \print{" IEIy= ",IEIy,"\n\n"
+print("F= ",F)
+print("MomZ= ",MomZ)
+print("MomZFibersDq= ",MomZFibersDq)
+print("A= ",A)
+print("eps= ",eps)
+print("yF= ",yF)
+print("yG= ",yG)
+print("IEA= ",IEA  \print{" IK12= ",IK12)
+print("IK21= ",IK21} \print{" IEIy= ",IEIy,"\n\n")
 
 
-print "TEA= ",TEA}   \print{" TK12= ",TK12
-print "TK21= ",TK21} \print{" TEIy= ",TEIy,"\n\n"
+print("TEA= ",TEA}   \print{" TK12= ",TK12)
+print("TK21= ",TK21} \print{" TEIy= ",TEIy,"\n\n")
 
-print "R= ",R
+print("R= ",R)
 
-print "ratio1= ",(ratio1)
-print "ratio2= ",(ratio2)
-print "ratio3= ",(ratio3)
-print "ratio4= ",(ratio4)
+print("ratio1= ",(ratio1))
+print("ratio2= ",(ratio2))
+print("ratio3= ",(ratio3))
+print("ratio4= ",(ratio4))
 '''
 
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (abs(ratio1)<1e-15) & (abs(ratio2)<1e-15) & (abs(ratio3)<1e-15) & (abs(ratio4)<1e-15) :
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')

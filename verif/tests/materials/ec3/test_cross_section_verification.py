@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 ''' Lateral torsional buckling of steel beams.
    pages 32-34 Example 2 from:
    Eurocodes ‐ Design of steel buildings with worked examples
@@ -48,23 +49,23 @@ MvRd= IPE400.getMvRdz(1,Vd)
 MvRdTeor= 464.0e3
 ratio4= abs(MvRd-MvRdTeor)/MvRdTeor
 
-# print 'McRd= ', McRd/1e3, 'kN m'
-# print 'McRdTeor= ', McRdTeor/1e3, 'kN m'
-# print 'ratio1= ', ratio1
-# print 'bendingEfficiency= ', bendingEfficiency
-# print 'bendingEfficiencyTeor= ', bendingEfficiencyTeor
-# print 'ratio2= ', ratio2
-# print 'VcRd= ', VcRd/1e3, 'kN m'
-# print 'VcRdTeor= ', VcRdTeor/1e3, 'kN m'
-# print 'ratio3= ', ratio3
-# print 'MvRd= ', MvRd/1e3, 'kN m'
-# print 'MvRdTeor= ', MvRdTeor/1e3, 'kN m'
-# print 'ratio4= ', ratio4
+# print('McRd= ', McRd/1e3, 'kN m')
+# print('McRdTeor= ', McRdTeor/1e3, 'kN m')
+# print('ratio1= ', ratio1)
+# print('bendingEfficiency= ', bendingEfficiency)
+# print('bendingEfficiencyTeor= ', bendingEfficiencyTeor)
+# print('ratio2= ', ratio2)
+# print('VcRd= ', VcRd/1e3, 'kN m')
+# print('VcRdTeor= ', VcRdTeor/1e3, 'kN m')
+# print('ratio3= ', ratio3)
+# print('MvRd= ', MvRd/1e3, 'kN m')
+# print('MvRdTeor= ', MvRdTeor/1e3, 'kN m')
+# print('ratio4= ', ratio4)
 
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if(ratio1<1e-4 and ratio2<1e-4 and ratio3<1e-4 and ratio4<1e-4):
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')

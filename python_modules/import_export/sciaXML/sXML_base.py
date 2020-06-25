@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
+
 
 #Based on sXML-master projet on gitHub
 
@@ -32,7 +34,7 @@ class SXMLBase(object):
     self.xmlns= xmlns
     self.uuid= ''
     self.defn= scxml_definition.SCXMLDefinition(mesh.name)
-    print 'XXX Write material container code.'
+    print('XXX Write material container code.')
     self.materialContainer= None
     loads= loadContainer.loads
     self.loadGroupContainer= lgc.LoadGroupContainer(loads.loadGroups)

@@ -162,7 +162,7 @@ shells=sets.get_subset_elem_of_type(elemType='shell',fromSet=overallSet,toSetNam
 numShells= len(shells.getElements)
 ratio10= numShells-278
 
-#print shells.getElementTypes()
+#print(shells.getElementTypes())
 beams=sets.get_subset_elem_of_type(elemType='ElasticBeam3d',fromSet=overallSet,toSetName='beams')
 numBeams= len(beams.getElements)
 ratio11= numBeams-16

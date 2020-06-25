@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 # home made test
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
@@ -75,16 +76,16 @@ ratio1= -R/F
 ratio2= abs(((K*deltax)-F)/F)
 
 ''' 
-print "R= ",R
-print "dx= ",deltax
-print "ratio1= ",(ratio1)
-print "ratio2= ",(ratio2)
+print("R= ",R)
+print("dx= ",deltax)
+print("ratio1= ",(ratio1))
+print("ratio2= ",(ratio2))
 '''
   
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (abs(ratio1-1.0)<1e-5) & (ratio2<1e-11) :
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')

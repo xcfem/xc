@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
+
 from __future__ import division
 ''' Classes and functions for limit state checking according to Eurocode 5. '''
 
@@ -59,11 +61,11 @@ class EC5TimberRectCrossSection(section_properties.RectangularSection):
       self.setupULSControlVars3d(elemSet)
       recorder.callbackRecord= callback_controls.controTensRecElastico3d()
 
-    recorder.callbackRestart= "print \"Restart method called.\""
+    recorder.callbackRestart= "print(\"Restart method called.\")"
     return recorder
 
 def printResultsELU(elems,crossSection):
-  '''print ULS results.'''
+  '''print(ULS results.)'''
   fmt= "{:6.1f}"
   fmt2= "{:5.2f}"
   e= ps.getItemWithMaxProp(elems,"getProp",'FCTNCP')
@@ -74,11 +76,11 @@ def printResultsELU(elems,crossSection):
   sgMin= fmt.format(e.getProp("SgMin")/1e6)
   sgAdm= fmt.format(crossSection.fyd/1e6)
   fctnCP= fmt2.format(e.getProp("FCTNCP"))
-  print "tag= ", e.tag, " N= ", N , "kN  My= ", My , "kN.m  Mz= ", Mz , "kN-m   SgMax= ", sgMax , "MPa  SgMin= ", sgMin, "MPa  sgAdm= ", sgAdm , "MPa  FCTNCP= ", fctnCP , "HIPCPTN= ",e.getProp("HIPCPTN")
+  print("tag= ", e.tag, " N= ", N , "kN  My= ", My , "kN.m  Mz= ", Mz , "kN-m   SgMax= ", sgMax , "MPa  SgMin= ", sgMin, "MPa  sgAdm= ", sgAdm , "MPa  FCTNCP= ", fctnCP , "HIPCPTN= ",e.getProp("HIPCPTN"))
   e=  ps.getItemWithMaxProp(elems,"getProp",'FCVCP')
   Vy= fmt.format(e.getProp("VyCP")/1e3)
   Vz= fmt.format(e.getProp("VzCP")/1e3)
   tauMax=  fmt.format(e.getProp("TauMax")/1e6)
   tauAdm= fmt.format(crossSection.taud/1e6)
   fcvCP= fmt2.format(e.getProp("FCVCP"))
-  print "tag= ", e.tag, " Vy= ", Vy , "kN  Vz= ", Vz , "kN  TauMax= ", tauMax , "MPa tauAdm= ", tauAdm, "MPa FCVCP= ", fcvCP , " HIPCPV= ", e.getProp("HIPCPV")
+  print("tag= ", e.tag, " Vy= ", Vy , "kN  Vz= ", Vz , "kN  TauMax= ", tauMax , "MPa tauAdm= ", tauAdm, "MPa FCVCP= ", fcvCP , " HIPCPV= ", e.getProp("HIPCPV"))

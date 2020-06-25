@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 from rough_calculations import ng_simple_beam as sb
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
@@ -27,15 +28,15 @@ RA+= beam.getReaction1UnderUniformLoadPartiallyDistributed(-20.0e3,x6,beam.l-x6)
 
 ratio1= (RA-260.469714286e3)/260.469714286e3
 
-# print "RA= ", RA/1e3, " kN"
-# print "ratio1= ", ratio1
+# print("RA= ", RA/1e3, " kN")
+# print("ratio1= ", ratio1)
 
 
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if abs(ratio1)<1e-11:
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')
 

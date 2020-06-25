@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 
 import xc_base
 import geom
@@ -58,24 +59,24 @@ scc= typical_materials.defElasticSection2d(preprocessor, "scc",A,E,I)
 
 setTotal= preprocessor.getSets.getSet("total")
 
-feProblem.setVerbosityLevel(0) #Dont print warning messages about element seed.
+feProblem.setVerbosityLevel(0) #Dont print(warning messages about element seed.)
 setL1= preprocessor.getSets.getSet("l1")
 setL1.genMesh(xc.meshDir.I)
 
 
 setL2= preprocessor.getSets.getSet("l2")
 setL2.genMesh(xc.meshDir.I)
-feProblem.setVerbosityLevel(1) #Print warnings again 
+feProblem.setVerbosityLevel(1) #print(warnings again )
 
 # totalSetNodes= setTotal.getNodes
 # for n in totalSetNodes:
-#   print "node tag: ", n.tag
+#   print("node tag: ", n.tag)
 
 elements.defaultMaterial= "scc"
 for i in range(1,NumDiv+2):
   n1= l1.getNodeI(i)
   n2= l2.getNodeI(i)
-  #print "i= ", i, "n1= ", n1.tag, "n2= ", n2.tag
+  #print("i= ", i, "n1= ", n1.tag, "n2= ", n2.tag)
   beam2d= elements.newElement("ElasticBeam2d",xc.ID([n1.tag,n2.tag]))
   beam2d.h= h
 
@@ -111,7 +112,7 @@ nCargasNod= lp0.getNumNodalLoads
 ''' 
 nodalLoads= lp0.getNodalLoads
 for nl in nodalLoads:
-  print "node: ",numNod
+  print("node: ",numNod)
 '''
 
 
@@ -120,7 +121,7 @@ analysis= predefined_solutions.simple_static_linear(feProblem)
 analOk= analysis.analyze(1)
 
 nNodes= l2.getNumNodes
-# print "size= ",size
+# print("size= ",size)
 errDisp= 0.0
 for i in range(1,nNodes+1):
   n= l2.getNodeI(i)
@@ -139,11 +140,11 @@ cumple= 1
 vteor2= (CooMax/NumDiv)**2
 lteor= math.sqrt(3*vteor2)
 for e in elements:
-  # print "  elem: ",tag," nod. I: ",nod(0).tag," nod. J: ",nod(1).tag," L= ",length
-  # print "lteor: ",(lteor)
+  # print("  elem: ",tag," nod. I: ",nod(0).tag," nod. J: ",nod(1).tag," L= ",length)
+  # print("lteor: ",(lteor))
   ratio1= (lteor/e.getCoordTransf.getInitialLength)
   cumple= (abs(ratio1-1.0)<1e-5) & (cumple) 
-  # print "cumple: ",(cumple)
+  # print("cumple: ",(cumple))
 
 nNodTeor= 2*(NumDiv+1)
 ratio1= (nNodes-nNodTeor)
@@ -155,22 +156,22 @@ ratio4= (nCargasNod-nElem)
 ratio5= (errDisp)
 
 ''' 
-print "number of nodes: ",nNodes
-print "number of boundary conditions: ",numSPs
-print "number of loads on nodes: ",nCargasNod
-print "number of elements: ",nElem
-print "ratio1= ",ratio1
-print "ratio2= ",ratio2
-print "ratio3= ",ratio3
-print "ratio4= ",ratio4
-print "ratio5= ",ratio5
-print "analOk= ",analOk
+print("number of nodes: ",nNodes)
+print("number of boundary conditions: ",numSPs)
+print("number of loads on nodes: ",nCargasNod)
+print("number of elements: ",nElem)
+print("ratio1= ",ratio1)
+print("ratio2= ",ratio2)
+print("ratio3= ",ratio3)
+print("ratio4= ",ratio4)
+print("ratio5= ",ratio5)
+print("analOk= ",analOk)
  '''
 
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (abs(ratio1) < 1e-15) & (abs(ratio2) < 1e-15) & (abs(ratio3) < 1e-15) & (abs(ratio4) < 1e-15) & (abs(ratio5) < 1e-11) & (analOk == 0.0) :
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')

@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
+
 
 #Based on sXML-master projet on gitHub
 
@@ -37,7 +39,7 @@ class SCXMLTableContainer(b.SCXMLBase):
        parent: owner of this object in the XML structure.'''
     container= ET.SubElement(parent,"container")
     super(SCXMLTableContainer,self).populateXMLElement(container)
-    print 'container id= ', self.id, ' table number: ', len(self.tables)
+    print('container id= ', self.id, ' table number: ', len(self.tables))
     for tb in self.tables:
       xmlTB= tb.getXMLElement(container)
     return container

@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 
 __author__= "Ana Ortega (AO_O) "
 __copyright__= "Copyright 2016, AO_O"
@@ -77,7 +78,7 @@ paramTS.E_ct=Ec_exp #concrete elastic modulus in the tensile linear-elastic rang
 paramTS.E_s=Es_exp 
 paramTS.eps_y=fy_exp/Es_exp
 
-#print 'alfa=', paramTS.alfa()
+#print('alfa=', paramTS.alfa())
 
 ftdiag=paramTS.pointOnsetCracking()['ft']
 ectdiag=paramTS.pointOnsetCracking()['eps_ct']
@@ -192,7 +193,7 @@ import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if((ratio1<1e-5) and (ratio2<1e-5)) :
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')
 

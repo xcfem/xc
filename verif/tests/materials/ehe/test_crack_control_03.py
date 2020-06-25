@@ -105,7 +105,7 @@ ratio1= ((secHAParamsFis.Wk- 0.55189e-3)/0.55189e-3)
 
 '''
     printParamFis("secHAParamsFis")
-    print "ratio1= ",ratio1
+    print("ratio1= ",ratio1)
 '''
 
 

@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 
 import xc_base
 import geom
@@ -47,28 +48,28 @@ setTotal= preprocessor.getSets.getSet("total")
 setTotal.genMesh(xc.meshDir.I)
 
 ''' 
-print "number of nodes: ",nnod
+print("number of nodes: ",nnod)
 nodes= preprocessor.getNodeHandler
 for_each
-  print "  node: ",tag," x= ",coord[0],", y= ",coord[1],", z= ",coord[2]
+  print("  node: ",tag," x= ",coord[0],", y= ",coord[1],", z= ",coord[2])
 
-print "number of elements: ",nelem
+print("number of elements: ",nelem)
 '''
 elements= setTotal.getElements
 cumple= 1
 vteor2= (CooMax/NumDiv)**2
 lteor= math.sqrt(3*vteor2)
 for e in elements:
-  # print "  elem: ",tag," nod. I: ",nod[0].tag," nod. J: ",nod[1].tag," L= ",length
-  # print "lteor: ",(lteor)
+  # print("  elem: ",tag," nod. I: ",nod[0].tag," nod. J: ",nod[1].tag," L= ",length)
+  # print("lteor: ",(lteor))
   ratio1= (lteor/e.getLength(True))
   cumple= (abs(ratio1-1.0)<1e-5) & (cumple) 
-  # print "cumple: ",(cumple)
+  # print("cumple: ",(cumple))
 
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if cumple:
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')

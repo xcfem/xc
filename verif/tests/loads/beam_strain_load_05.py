@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 ''' home made test
     Reference:  Cálculo de estructuras por el método de los elemen-
     tos finitos. 1991. E. Oñate, page 165, example 5.3
@@ -102,19 +103,19 @@ N= (-E*A*alpha*AT)
 ratio= ((axil-N)/N)
 
 ''' 
-print "dX= ",dX
-print "dY= ",dY
-print "N= ",N
-print "axil= ",axil
-print "ratio= ",ratio
-print "moment= ",moment
-print "shear= ",shear
+print("dX= ",dX)
+print("dY= ",dY)
+print("N= ",N)
+print("axil= ",axil)
+print("ratio= ",ratio)
+print("moment= ",moment)
+print("shear= ",shear)
    '''
 
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (abs(dX)<1e-10) & (abs(ratio)<1e-10) & (abs(moment)<1e-10) & (abs(shear)<1e-10) :
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')

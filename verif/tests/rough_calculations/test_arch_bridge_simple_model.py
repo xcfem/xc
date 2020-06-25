@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 from __future__ import division
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
@@ -38,13 +39,13 @@ Hlive=ArchBridge.getQconcHabtm(Qlive)
 fclive=ArchBridge.getQconcCompStress(Qlive,Aquart)
 Mmax=ArchBridge.getMmaxQconc(Qlive)
 
-# print 'Vertical reaction at each abutment (dead load): V= ',V
-# print 'Horizontal reaction at each abutment  (dead load): H= ',H
-# print 'Stress at the quarterpoints of the arch under dead load: fc= ',fc
-# print 'Vertical reaction at each abutment (live load): V= ',Vlive
-# print 'Horizontal reaction at each abutment  (live load): H= ',Hlive
-# print 'Mean stress at the quarterpoints of the arch under live load: fc= ',fclive
-# print 'Maximum bending moment at the quarterpoints of the arch under live load: Mmax= ',Mmax
+# print('Vertical reaction at each abutment (dead load): V= ',V)
+# print('Horizontal reaction at each abutment  (dead load): H= ',H)
+# print('Stress at the quarterpoints of the arch under dead load: fc= ',fc)
+# print('Vertical reaction at each abutment (live load): V= ',Vlive)
+# print('Horizontal reaction at each abutment  (live load): H= ',Hlive)
+# print('Mean stress at the quarterpoints of the arch under live load: fc= ',fclive)
+# print('Maximum bending moment at the quarterpoints of the arch under live load: Mmax= ',Mmax)
 ratio1=(V-840.75)/840.75
 ratio2=(H-1455.5237676)/1455.5237676
 ratio3=(fc+339.203861013)/(339.203861013)
@@ -57,6 +58,6 @@ import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if(abs(ratio1)<1e-10 and abs(ratio2)<1e-10 and abs(ratio3)<1e-10 and abs(ratio4)<1e-10 and abs(ratio5)<1e-10 and abs(ratio6)<1e-10 and abs(ratio7)<1e-10 ):
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')

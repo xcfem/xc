@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 
 import xc_base
 import geom
@@ -50,25 +51,25 @@ ratio5= (motionPathTimeIncrement-1)
 ratio6= (motionPathSize-4)/4
 
 ''' 
-print "duration= ",motionDuration
-print "ratio1= ",ratio1
-print "path= ",motionPath
-print "factor= ",motionFactor
-print "ratio2= ",ratio2
-print "peak factor= ",motionPeakFactor
-print "ratio3= ",ratio3
-print "lastSendCommitTag= ",motionLastSendCommitTag
-print "ratio4= ",ratio4
-print "path time increment= ",motionPathTimeIncrement
-print "ratio5= ",ratio4
-print "path size= ",motionPathSize
-print "ratio6= ",ratio6
+print("duration= ",motionDuration)
+print("ratio1= ",ratio1)
+print("path= ",motionPath)
+print("factor= ",motionFactor)
+print("ratio2= ",ratio2)
+print("peak factor= ",motionPeakFactor)
+print("ratio3= ",ratio3)
+print("lastSendCommitTag= ",motionLastSendCommitTag)
+print("ratio4= ",ratio4)
+print("path time increment= ",motionPathTimeIncrement)
+print("ratio5= ",ratio4)
+print("path size= ",motionPathSize)
+print("ratio6= ",ratio6)
   '''
 
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (abs(ratio1)<1e-15) & (abs(ratio2)<1e-15) & (abs(ratio3)<1e-15) & (abs(ratio4)<1e-15) & (abs(ratio5)<1e-15) & (abs(ratio6)<1e-15):
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')

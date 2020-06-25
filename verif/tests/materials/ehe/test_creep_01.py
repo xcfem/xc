@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 ''' Computing of the creep factor according to EHE-08. '''
 
 from materials.ehe import EHE_materials
@@ -102,56 +103,56 @@ err2= err2+sqr(fi7C6-0.4)
 ratio1= math.sqrt(err2)
 
 '''
-print "fi1= ",fi1
-print "fi2= ",fi2
-print "fi3= ",fi3
-print "fi4= ",fi4
-print "fi5= ",fi5
-print "fi6= ",fi6,"\n\n"
+print("fi1= ",fi1)
+print("fi2= ",fi2)
+print("fi3= ",fi3)
+print("fi4= ",fi4)
+print("fi5= ",fi5)
+print("fi6= ",fi6,"\n\n")
 
-print "fiB1= ",fiB1
-print "fiB2= ",fiB2
-print "fiB3= ",fiB3
-print "fiB4= ",fiB4
-print "fiB5= ",fiB5
-print "fiB6= ",fiB6,"\n\n"
+print("fiB1= ",fiB1)
+print("fiB2= ",fiB2)
+print("fiB3= ",fiB3)
+print("fiB4= ",fiB4)
+print("fiB5= ",fiB5)
+print("fiB6= ",fiB6,"\n\n")
 
-print "fiC1= ",fiC1
-print "fiC2= ",fiC2
-print "fiC3= ",fiC3
-print "fiC4= ",fiC4
-print "fiC5= ",fiC5
-print "fiC6= ",fiC6,"\n\n"
+print("fiC1= ",fiC1)
+print("fiC2= ",fiC2)
+print("fiC3= ",fiC3)
+print("fiC4= ",fiC4)
+print("fiC5= ",fiC5)
+print("fiC6= ",fiC6,"\n\n")
 
-print "fi71= ",fi71
-print "fi72= ",fi72
-print "fi73= ",fi73
-print "fi74= ",fi74
-print "fi75= ",fi75
-print "fi76= ",fi76,"\n\n"
+print("fi71= ",fi71)
+print("fi72= ",fi72)
+print("fi73= ",fi73)
+print("fi74= ",fi74)
+print("fi75= ",fi75)
+print("fi76= ",fi76,"\n\n")
 
-print "fi7B1= ",fi7B1
-print "fi7B2= ",fi7B2
-print "fi7B3= ",fi7B3
-print "fi7B4= ",fi7B4
-print "fi7B5= ",fi7B5
-print "fi7B6= ",fi7B6,"\n\n"
+print("fi7B1= ",fi7B1)
+print("fi7B2= ",fi7B2)
+print("fi7B3= ",fi7B3)
+print("fi7B4= ",fi7B4)
+print("fi7B5= ",fi7B5)
+print("fi7B6= ",fi7B6,"\n\n")
 
-print "fi7C1= ",fi7C1
-print "fi7C2= ",fi7C2
-print "fi7C3= ",fi7C3
-print "fi7C4= ",fi7C4
-print "fi7C5= ",fi7C5
-print "fi7C6= ",fi7C6,"\n\n"
+print("fi7C1= ",fi7C1)
+print("fi7C2= ",fi7C2)
+print("fi7C3= ",fi7C3)
+print("fi7C4= ",fi7C4)
+print("fi7C5= ",fi7C5)
+print("fi7C6= ",fi7C6,"\n\n")
 
-print "err2= ",err2
-print "ratio1= ",(ratio1)
+print("err2= ",err2)
+print("ratio1= ",(ratio1))
    '''
 
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (ratio1<0.4):
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')

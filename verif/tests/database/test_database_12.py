@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 ''' Taken from page 114 of the article Development of Membrane, Plate and
  Flat Shell Elements in Java '''
 # The obtained error is near 15% (quite high) it can be the aspect ratio
@@ -122,23 +123,23 @@ ratio3= abs(((UX3-UX3SP2K)/UX3SP2K))
 ratio4= abs(((UY3-UY3SP2K)/UY3SP2K))
 
 ''' 
-print "UX8= ",UX8
-print "UX8SP2K= ",UX8SP2K
-print "UY8= ",UY8
-print "UY8SP2K= ",UY8SP2K
-print "UX3= ",UX3
-print "UY3= ",UY3
+print("UX8= ",UX8)
+print("UX8SP2K= ",UX8SP2K)
+print("UY8= ",UY8)
+print("UY8SP2K= ",UY8SP2K)
+print("UX3= ",UX3)
+print("UY3= ",UY3)
 
-print "ratio1= ",ratio1
-print "ratio2= ",ratio2
-print "ratio3= ",ratio3
-print "ratio4= ",ratio4
+print("ratio1= ",ratio1)
+print("ratio2= ",ratio2)
+print("ratio3= ",ratio3)
+print("ratio4= ",ratio4)
    '''
 
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (abs(ratio1)<0.15) & (abs(ratio2)<0.15) & (abs(ratio3)<0.15) & (abs(ratio4)<0.15):
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')
 os.system("rm -rf /tmp/test12.db") # Your garbage you clean it
