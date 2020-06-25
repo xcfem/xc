@@ -1,5 +1,8 @@
+
 # -*- coding: utf-8 -*-
 #!/usr/bin/env python
+
+from __future__ import print_function
 
 # Copyright (C) 2009-2012  Luis C. Pérez Tato
 #
@@ -22,6 +25,7 @@
 
 from distutils.core import setup, sys
 from distutils.sysconfig import get_python_lib
+import site
 
 myPrefix = sys.prefix
 if len (sys.argv) > 2:
@@ -41,8 +45,11 @@ if not myPrefix and "PREFIX" in os.environ:
 if not myPrefix or not len (myPrefix):
     myPrefix = "/usr/local"
 
-pth_to_libs= get_python_lib(1,0,myPrefix)
-print pth_to_libs
+site_packages= site.getsitepackages()
+for pth in site_packages:
+    if(pth.startswith(myPrefix)):
+        pth_to_libs= pth
+print('path to libs: '+pth_to_libs)
 
 setup(name='XCModules',
       version='0.12.0',
