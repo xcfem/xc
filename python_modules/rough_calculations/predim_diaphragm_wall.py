@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
+
 # Pre-design of diaphragm walls according to Geojuanjo's recomendations 
 # (see document predisenio_muros_pantalla_Geojuanjo.pdf)
 # http://estructurando.net/2015/11/23/prediseno-de-muros-pantalla-un-primer-paso-imprescindible/
@@ -114,10 +116,10 @@ class DiaphragmWallRoughModel(object):
         return embdt
 
     def printResult(self):
-        print 'Maximum effective digging height = ', self.getEffectDigHeight(), ' m '
-        print 'Maximum effective interdistance anchoring = ', self.getFffectDistAnch(), ' m '
-        print 'Embedment depth of diaphragm wall = ',self.getWallEmbedmentDepth() , ' m '
-        print 'Diaphragm wall thickness= ', self.getWallThickness(),  ' m '
+        print('Maximum effective digging height = ', self.getEffectDigHeight(), ' m ')
+        print('Maximum effective interdistance anchoring = ', self.getFffectDistAnch(), ' m ')
+        print('Embedment depth of diaphragm wall = ',self.getWallEmbedmentDepth() , ' m ')
+        print('Diaphragm wall thickness= ', self.getWallThickness(),  ' m ')
         
 
 

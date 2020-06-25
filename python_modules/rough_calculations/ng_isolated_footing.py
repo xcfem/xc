@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
+
 # Predimensionamiento de zapata aislada. Números gordos, 2ª ed., pag.16
 
 __author__= "Luis C. Pérez Tato (LCPT)"
@@ -91,11 +93,11 @@ class IsolatedFooting(object):
 #  \flush           # volcado de todo
 #  \close           # cierra el fichero
 # }
-# print "\\begin{figure}[h] \n"
-# print "\\centering \n"
-# print "\\includegraphics[width=60mm]{zapais.ps} \n"
-# print "\\caption{Predimensionamiento zapata aislada}\\label{zapais} \n"
-# print "\\end{figure} \n"
+# print("\\begin{figure}[h] \n")
+# print("\\centering \n")
+# print("\\includegraphics[width=60mm]{zapais.ps} \n")
+# print("\\caption{Predimensionamiento zapata aislada}\\label{zapais} \n")
+# print("\\end{figure} \n")
   def getReport(self):
     retval= self.getLaTeXHeader()
     retval+= self.getLaTeXResults()

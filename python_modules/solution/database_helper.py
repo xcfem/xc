@@ -26,11 +26,11 @@ class DatabaseHelperSolve:
     preprocessor.resetLoadCase()
     self.helpSolve(comb)
     ''' 
-    print "previousName= ",previousName
-    print "tag= ",comb.tag
-    print "tagPrevia= ",tagPrevia
-    print "descomp previa= ",getDescompCombPrevia
-    print "resto sobre previa= ",getDescompRestoSobrePrevia
+    print("previousName= ",previousName)
+    print("tag= ",comb.tag)
+    print("tagPrevia= ",tagPrevia)
+    print("descomp previa= ",getDescompCombPrevia)
+    print("resto sobre previa= ",getDescompRestoSobrePrevia)
     '''
     comb.addToDomain()
     analOk= analysis.analyze(1)
