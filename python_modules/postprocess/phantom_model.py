@@ -137,7 +137,7 @@ class PhantomModel(object):
                     diagInt= None
                     if(mapInteractionDiagrams != None):
                         diagInt= mapInteractionDiagrams[sectionName]
-          #         print 'tagElem =',tagElem,' sectionName=',sectionName,' elSecDef=',elementSectionDefinitions[i],' sectIndex=', i+1,' diagInt=', diagInt
+          #         print('tagElem =',tagElem,' sectionName=',sectionName,' elSecDef=',elementSectionDefinitions[i],' sectIndex=', i+1,' diagInt=', diagInt)
                     phantomElem= self.createPhantomElement(tagElem,sectionName,elementSectionDefinitions[i],i+1,diagInt,controller.fakeSection)
                     retval.append(phantomElem)
                     self.tagsNodesToLoad[tagElem].append(phantomElem.getNodes[1].tag) #Node to load
@@ -202,7 +202,7 @@ class PhantomModel(object):
         elements= self.preprocessor.getSets.getSet("total").elements
         for key in combs.getKeys():
             comb= combs[key]
-            #print "Resolving load combination: ",key
+            #print("Resolving load combination: ",key)
             predefined_solutions.resuelveComb(self.preprocessor,key,controller.analysis,1)
             controller.preprocessor=self.preprocessor
             controller.check(elements,key)

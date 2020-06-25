@@ -193,7 +193,7 @@ def getRebarAnnotationLines(defStrings):
   # Rebar annotation.
   retval= []
   retval.append('            \\node[align=center,color=red] at (52.5117340804,17.0) {\\scriptsize ' + defStrings[1][0] + '};\n')
-  retval.append('            \\node[align=center,color=red] at (52.5117340804,13.0) {\\scriptsize ' + defStrings[01][1] + '};\n')
+  retval.append('            \\node[align=center,color=red] at (52.5117340804,13.0) {\\scriptsize ' + defStrings[1][1] + '};\n')
   retval.append('            \\node[align=center,color=red] at (140,166) {\\scriptsize ' + defStrings[2][0] + '};\n')
   retval.append('            \\node[align=center,color=red] at (140,162) {\\scriptsize ' + defStrings[2][1] + '};\n')
   retval.append('            \\node[align=center,color=red] at (158,124) {\\scriptsize ' + defStrings[3][0] + '};\n')

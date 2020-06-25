@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
+
 from __future__ import division
 '''Classes to store limit state control variables (internal forces, 
    strains, stresses,...) calculated in the analysis.
@@ -397,7 +399,7 @@ class BiaxialBendingControlVars(UniaxialBendingControlVars):
         ''' Returns a string with the intermediate fields of the LaTeX string.
 
         :param factor: factor for units (default 1e-3 -> kN)'''
-    #    print 'super(BiaxialBendingControlVars,self).getLaTeXFields(factor) =', super(BiaxialBendingControlVars,self).getLaTeXFields(factor)
+    #    print('super(BiaxialBendingControlVars,self).getLaTeXFields(factor) =', super(BiaxialBendingControlVars,self).getLaTeXFields(factor))
         retval= super(BiaxialBendingControlVars,self).getLaTeXFields(factor)+" & "+fmt.Esf.format(self.Mz*factor)
         return retval
 
@@ -925,7 +927,7 @@ def writeControlVarsFromElements(controlVarName,preprocessor,outputFileName,outp
     return retval
 
 
-# Print normal stresses verification results.
+# print(normal stresses verification results.)
 def writeControlVarsFromElementsForAnsys(controlVarName,preprocessor,outputFileName, sectionName1, sectionName2):
     '''
     :param   preprocessor:    preprocessor name
@@ -983,8 +985,8 @@ def extrapolate_control_var(elemSet,propName,argument,initialValue= 0.0):
      :param argument: name of the control variable to extrapolate.
      :param initialValue: initial value for the prop defined at the nodes.
     '''
-    print 'propName: ', propName
-    print 'argument: ', argument
+    print('propName: ', propName)
+    print('argument: ', argument)
     nodePropName= propName+'_'+argument
     nodeTags= ext.create_attribute_at_nodes(elemSet,nodePropName,initialValue)
     #Calculate totals.

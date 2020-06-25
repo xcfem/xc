@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
+
 
 __author__= "Luis C. Pérez Tato (LCPT) , Ana Ortega (AO_O) "
 __copyright__= "Copyright 2016, LCPT, AO_O"
@@ -131,10 +133,10 @@ class FigureDefinition(SlideDefinition):
         self.argument= argument
 
     def defField(self, xcSet):
-        print '********** Enters FigureDefinition::defField; limit state: ', self.limitStateLabel, ' attributeName= ', self.attributeName, ' xcSet.name= ', xcSet.name
+        print('********** Enters FigureDefinition::defField; limit state: ', self.limitStateLabel, ' attributeName= ', self.attributeName, ' xcSet.name= ', xcSet.name)
         #self.field= fields.ExtrapolatedScalarField(self.attributeName,"getProp",None,1.0,xcSet)
         self.field= fields.getScalarFieldFromControlVar(attributeName=self.attributeName,argument=self.argument,xcSet=xcSet,component=None,fUnitConv=1.0,rgMinMax=None)
-        print '********** Exits FigureDefinition::defField; limit state: ', self.limitStateLabel, ' attributeName= ', self.attributeName, ' xcSet.name= ', xcSet.name
+        print('********** Exits FigureDefinition::defField; limit state: ', self.limitStateLabel, ' attributeName= ', self.attributeName, ' xcSet.name= ', xcSet.name)
 
     def genGraphicFile(self,displaySettings, xcSet, nmbFichGraf):
         jpegName= nmbFichGraf+".jpeg"
@@ -251,7 +253,7 @@ class PartToDisplayContainer(dict):
         '''
         #Load properties to display:
         fName= resultsToDisplay.limitStateData.getOutputDataFileName()
-        print '******* calling: ', fName
+        print('******* calling: ', fName)
         execfile(fName) #Load data to display.
         for k in self.keys():
             part= self[k]
@@ -302,7 +304,7 @@ def plotStressStrainFibSet(fiberSet,title,fileName=None,nContours=100,pointSize=
     divider2 = make_axes_locatable(ax2)
     cax2 = divider2.append_axes("right", size="20%", pad=0.05)
     cbar2 = plt.colorbar(im2,cax=cax2)
-    if fileName<>None:
+    if(fileName!=None):
         plt.savefig(fileName)
     plt.show()
     return

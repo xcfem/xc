@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
+
 import vtk
 import xc_base
 import xc
@@ -95,7 +97,7 @@ def VtkDibujaIdsKPts(uGrid, setToDraw, renderer):
 
     renderer.AddActor2D(pointLabels)
   else:
-    print "El conjunto: '",setToDraw,"' no tiene KPts."
+    print("El conjunto: '",setToDraw,"' no tiene KPts.")
 
 # ****** Creamos las etiquetas para las celdas *******
 def VtkDibujaIdsCells(uGrid, setToDraw, entTypeName, renderer):
