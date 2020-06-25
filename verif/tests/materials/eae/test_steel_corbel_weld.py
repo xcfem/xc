@@ -59,7 +59,8 @@ print("ratio1= ",ratio1)
 print("ratio2= ",ratio2)
 print("ratio3= ",ratio3)
 print("ratio4= ",ratio4)
-print("ratio5= ",ratio5''')
+print("ratio5= ",ratio5)
+'''
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)

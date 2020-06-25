@@ -85,7 +85,7 @@ y= []
 recorder= feProblem.getDomain.newRecorder("element_prop_recorder",None)
 recorder.setElements(xc.ID([1]))
 recorder.callbackRecord= "x.append(self.getMaterial().getStrain()); y.append(self.getN())"
-recorder.callbackRestart= "print(\"Restart method called.\"")
+recorder.callbackRestart= "print(\"Restart method called.\")"
 
 ''' 
 \prop_recorder
