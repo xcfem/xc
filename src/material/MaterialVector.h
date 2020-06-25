@@ -332,7 +332,7 @@ double MaterialVector<MAT>::getMeanGeneralizedStrain(const int &defID) const
     const Vector &e= getMeanGeneralizedStrain(); //generalized strains vector.
     const ResponseId &code= (*this)[0]->getType();
     const int order= code.Size();
-    for(register int i= 0;i<order;i++)
+    for(int i= 0;i<order;i++)
       if(code(i) == defID)
         retval+= e(i);
     return retval;
@@ -350,7 +350,7 @@ XC::Vector MaterialVector<MAT>::getGeneralizedStrainAtGaussPoints(const int &def
     for(size_t i= 0;i<nMat;i++)
       {
         const Vector &e= (*this)[i]->getGeneralizedStrain(); //Strain at i-th Gauss point.
-        for(register int j= 0;j<order;j++) // Searching for the component.
+        for(int j= 0;j<order;j++) // Searching for the component.
 	  if(code(j) == defID)
 	    retval(i)= e(j);
       }
@@ -367,7 +367,7 @@ double MaterialVector<MAT>::getMeanGeneralizedStress(const int &defID) const
     const Vector &f= getMeanGeneralizedStress(); //Vector de esfuerzos.
     const ResponseId &code= (*this)[0]->getType();
     const int order= code.Size();
-    for(register int i= 0;i<order;i++)
+    for(int i= 0;i<order;i++)
       if(code(i) == defID)
         retval+= f(i);
     return retval;
@@ -385,7 +385,7 @@ XC::Vector MaterialVector<MAT>::getGeneralizedStressAtGaussPoints(const int &def
     for(size_t i= 0;i<nMat;i++)
       {
         const Vector &e= (*this)[i]->getGeneralizedStress(); //Stress at i-th Gauss point.
-        for(register int j= 0;j<order;j++) // Searching for the component.
+        for(int j= 0;j<order;j++) // Searching for the component.
 	  if(code(j) == defID)
 	    retval(i)= e(j);
       }
@@ -404,7 +404,7 @@ Matrix MaterialVector<MAT>::getGeneralizedStress(const int &defID) const
     for(size_t i= 0;i<nMat;i++)
       {
         const Vector &s= (*this)[i]->getGeneralizedStress();
-        for(register int j= 0;j<order;j++)
+        for(int j= 0;j<order;j++)
           if(code(j) == defID)
             retval(i,1)+= s(i);
       }
@@ -423,7 +423,7 @@ Matrix MaterialVector<MAT>::getGeneralizedStrain(const int &defID) const
     for(size_t i= 0;i<nMat;i++)
       {
         const Vector &s= (*this)[i]->getGeneralizedStrain();
-        for(register int j= 0;j<order;j++)
+        for(int j= 0;j<order;j++)
           if(code(j) == defID)
             retval(i,1)+= s(i);
       }

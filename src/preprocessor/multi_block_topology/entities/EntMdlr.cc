@@ -324,9 +324,9 @@ void XC::EntMdlr::create_nodes(const Pos3dArray3d &positions)
 
 	    if(getPreprocessor())
 	      {
-		for(register size_t i= 1;i<=n_layers;i++)
-		  for(register size_t j= 1;j<=n_rows;j++)
-		    for(register size_t k= 1;k<=n_cols;k++)
+		for( size_t i= 1;i<=n_layers;i++)
+		  for( size_t j= 1;j<=n_rows;j++)
+		    for( size_t k= 1;k<=n_cols;k++)
 		      create_node(positions(i,j,k),i,j,k);
 		if(verbosity>5)
 		  std::cerr << getClassName() << "::" << __FUNCTION__

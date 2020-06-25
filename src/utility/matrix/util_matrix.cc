@@ -36,7 +36,7 @@ m_double XC::Vector_to_m_double(const XC::Vector &v)
   {
     const size_t sz= v.Size();
     m_double retval(sz,1);
-    for(register size_t i=0;i<sz;i++)
+    for( size_t i=0;i<sz;i++)
       retval(i+1,1)= v(i);
     return retval;
   }

@@ -36,7 +36,7 @@ XC::ResponseId::ResponseId(const std::deque<std::string> &indices)
   : ID(indices.size())
   {
     const size_t sz= indices.size();
-    for(register size_t i= 0;i<sz;i++)
+    for( size_t i= 0;i<sz;i++)
       (*this)[i]= StringToRespId(indices[i]);
   }
 
@@ -44,7 +44,7 @@ XC::ResponseId::ResponseId(const std::vector<std::string> &indices)
   : ID(indices.size())
   {
     const size_t sz= indices.size();
-    for(register size_t i= 0;i<sz;i++)
+    for( size_t i= 0;i<sz;i++)
       (*this)[i]= StringToRespId(indices[i]);
   }
 

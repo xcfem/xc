@@ -42,7 +42,7 @@ void XC::DqUniaxialMaterial::copy_list(const DqUniaxialMaterial &other,SectionFo
     if(numMats>0)
       {
         resize(numMats);
-        for(register size_t i= 0;i<numMats;i++)
+        for( size_t i= 0;i<numMats;i++)
           {
             if(!other[i])
               {
@@ -155,7 +155,7 @@ void XC::DqUniaxialMaterial::clearAll(void)
 int XC::DqUniaxialMaterial::commitState(void)
   {
     int err = 0;
-    for(register iterator i= begin();i!=end(); i++)
+    for( iterator i= begin();i!=end(); i++)
       {
         int tmp= (*i)->commitState();
         if(tmp!=0)
@@ -173,7 +173,7 @@ int XC::DqUniaxialMaterial::commitState(void)
 int XC::DqUniaxialMaterial::revertToLastCommit(void)
   {
     int err = 0;
-    for(register iterator i= begin();i!=end(); i++)
+    for( iterator i= begin();i!=end(); i++)
       {
         int tmp= (*i)->revertToLastCommit();
         if(tmp!=0)
@@ -191,7 +191,7 @@ int XC::DqUniaxialMaterial::revertToLastCommit(void)
 int XC::DqUniaxialMaterial::revertToStart(void)
   {
     int err = 0;
-    for(register iterator i= begin();i!=end(); i++)
+    for( iterator i= begin();i!=end(); i++)
       {
         int tmp= (*i)->revertToStart();
         if(tmp!=0)
@@ -209,7 +209,7 @@ int XC::DqUniaxialMaterial::revertToStart(void)
 int XC::DqUniaxialMaterial::zeroInitialStrain(void)
   {
     int err= 0;
-    for(register iterator i= begin();i!=end(); i++)
+    for( iterator i= begin();i!=end(); i++)
       err+= (*i)->setInitialStrain(0.0);
     return err;
   }
@@ -220,7 +220,7 @@ int XC::DqUniaxialMaterial::setInitialStrain(const Vector &def,const size_t &off
     int err= 0;
     size_t j= offset;
     assert(static_cast<size_t>(def.Size()) >= (size()+offset));
-    for(register iterator i= begin();i!=end(); i++,j++)
+    for( iterator i= begin();i!=end(); i++,j++)
       err+= (*i)->setInitialStrain(def(j));
     return err;
   }
@@ -231,7 +231,7 @@ int XC::DqUniaxialMaterial::setTrialStrain(const Vector &def,const size_t &offse
     int err= 0;
     size_t j= offset;
     assert(static_cast<size_t>(def.Size()) >= (size()+offset));
-    for(register iterator i= begin();i!=end(); i++,j++)
+    for( iterator i= begin();i!=end(); i++,j++)
       err += (*i)->setTrialStrain(def(j));
     return err;
   }
@@ -240,7 +240,7 @@ int XC::DqUniaxialMaterial::setTrialStrain(const Vector &def,const size_t &offse
 int XC::DqUniaxialMaterial::setTrialStrain(const double &strain,const double &strainRate)
   {
     int err= 0;
-    for(register iterator i= begin();i!=end(); i++)
+    for( iterator i= begin();i!=end(); i++)
       err += (*i)->setTrialStrain(strain,strainRate);
     return err;
   }
@@ -251,7 +251,7 @@ void XC::DqUniaxialMaterial::getInitialStrain(Vector &def,const size_t &offset) 
   {
     size_t j= offset;
     assert(static_cast<size_t>(def.Size()) >= (size()+offset));
-    for(register const_iterator i= begin();i!=end(); i++,j++)
+    for( const_iterator i= begin();i!=end(); i++,j++)
       def(j)= (*i)->getInitialStrain();
   }
 
@@ -260,7 +260,7 @@ void XC::DqUniaxialMaterial::getStrain(Vector &def,const size_t &offset) const
   {
     size_t j= offset;
     assert(static_cast<size_t>(def.Size()) >= (size()+offset));
-    for(register const_iterator i= begin();i!=end(); i++,j++)
+    for( const_iterator i= begin();i!=end(); i++,j++)
       def(j)= (*i)->getStrain();
   }
 
@@ -269,7 +269,7 @@ void XC::DqUniaxialMaterial::getTangent(Matrix &k,const size_t &offset) const
   {
     size_t j= offset;
     assert(static_cast<size_t>(k.noRows()) >= (size()+offset));
-    for(register const_iterator i= begin();i!=end(); i++,j++)
+    for( const_iterator i= begin();i!=end(); i++,j++)
       k(j,j)= (*i)->getTangent();
   }
 
@@ -278,7 +278,7 @@ void XC::DqUniaxialMaterial::getInitialTangent(Matrix &k,const size_t &offset) c
   {
     size_t j= offset;
     assert(static_cast<size_t>(k.noRows()) >= (size()+offset));
-    for(register const_iterator i= begin();i!=end(); i++,j++)
+    for( const_iterator i= begin();i!=end(); i++,j++)
       k(j,j)= (*i)->getInitialTangent();
   }
 
@@ -287,7 +287,7 @@ void XC::DqUniaxialMaterial::getFlexibility(Matrix &f,const size_t &offset) cons
   {
     size_t j= offset;
     assert(static_cast<size_t>(f.noRows()) >= (size()+offset));
-    for(register const_iterator i= begin();i!=end(); i++,j++)
+    for( const_iterator i= begin();i!=end(); i++,j++)
       f(j,j)= (*i)->getFlexibility();
   }
 
@@ -296,7 +296,7 @@ void XC::DqUniaxialMaterial::getInitialFlexibility(Matrix &f,const size_t &offse
   {
     size_t j= offset;
     assert(static_cast<size_t>(f.noRows()) >= (size()+offset));
-    for(register const_iterator i= begin();i!=end(); i++,j++)
+    for( const_iterator i= begin();i!=end(); i++,j++)
       f(j,j)= (*i)->getInitialFlexibility();
   }
 
@@ -305,7 +305,7 @@ void XC::DqUniaxialMaterial::getStress(Vector &s,const size_t &offset) const
   {
     size_t j= offset;
     assert(static_cast<size_t>(s.Size()) >= (size()+offset));
-    for(register const_iterator i= begin();i!=end(); i++,j++)
+    for( const_iterator i= begin();i!=end(); i++,j++)
       s(j)= (*i)->getStress();
   }
 

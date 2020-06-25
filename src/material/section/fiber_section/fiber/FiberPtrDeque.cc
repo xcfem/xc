@@ -160,7 +160,7 @@ double XC::FiberPtrDeque::GetYMin(void) const
     double retval= 0.0;
     if(!empty())
       {
-        register std::deque<Fiber *>::const_iterator i= begin();
+        std::deque<Fiber *>::const_iterator i= begin();
         retval= (*i)->getLocY(); i++;
         for(;i!= end();i++)
           if(*i)
@@ -181,7 +181,7 @@ double XC::FiberPtrDeque::GetZMin(void) const
     double retval= 0.0;
     if(!empty())
       {
-        register std::deque<Fiber *>::const_iterator i= begin();
+        std::deque<Fiber *>::const_iterator i= begin();
         retval= (*i)->getLocZ(); i++;
         for(;i!= end();i++)
           if(*i)
@@ -202,7 +202,7 @@ double XC::FiberPtrDeque::GetYMax(void) const
     double retval= 0.0;
     if(!empty())
       {
-        register std::deque<Fiber *>::const_iterator i= begin();
+        std::deque<Fiber *>::const_iterator i= begin();
         retval= (*i)->getLocY(); i++;
         for(;i!= end();i++)
           if(*i)
@@ -223,7 +223,7 @@ double XC::FiberPtrDeque::GetZMax(void) const
     double retval= 0.0;
     if(!empty())
       {
-        register std::deque<Fiber *>::const_iterator i= begin();
+        std::deque<Fiber *>::const_iterator i= begin();
         retval= (*i)->getLocZ(); i++;
         for(;i!= end();i++)
           if(*i)
@@ -271,7 +271,7 @@ double XC::FiberPtrDeque::getArea(const double &factor) const
   {
     double retval= 0.0;
     const size_t numFibers= getNumFibers();
-    for(register size_t i=0;i<numFibers;i++)
+    for( size_t i=0;i<numFibers;i++)
       retval+= (*this)[i]->getArea();
     return factor*retval;
   }
@@ -281,7 +281,7 @@ double XC::FiberPtrDeque::getArea(const double &factor) const
 double XC::FiberPtrDeque::getIz(const double &factor,const double &y0) const
   {
     double retval= 0.0;
-    register std::deque<Fiber *>::const_iterator i= begin();
+    std::deque<Fiber *>::const_iterator i= begin();
     for(;i!= end();i++)
       if(*i)
         retval+= (*i)->getArea()*sqr((*i)->getLocY()-y0);
@@ -297,7 +297,7 @@ double XC::FiberPtrDeque::getIz(const double &factor,const double &y0) const
 double XC::FiberPtrDeque::getIy(const double &factor,const double &z0) const
   {
     double retval= 0.0;
-    register std::deque<Fiber *>::const_iterator i= begin();
+    std::deque<Fiber *>::const_iterator i= begin();
     for(;i!= end();i++)
       if(*i)
         retval+= (*i)->getArea()*sqr((*i)->getLocZ()-z0);
@@ -313,7 +313,7 @@ double XC::FiberPtrDeque::getIy(const double &factor,const double &z0) const
 double XC::FiberPtrDeque::getPyz(const double &factor,const double &y0,const double &z0) const
   {
     double retval= 0.0;
-    register std::deque<Fiber *>::const_iterator i= begin();
+    std::deque<Fiber *>::const_iterator i= begin();
     for(;i!= end();i++)
       if(*i)
         retval+= (*i)->getArea()*((*i)->getLocZ()-z0)*((*i)->getLocY()-y0);
@@ -389,7 +389,7 @@ double XC::FiberPtrDeque::getIyHomogenizedSection(const double &E0) const
 		<< E0 << std::endl; 
     double retval= 0.0;
     const Vector &center_of_mass= getCenterOfMassHomogenizedSection(E0);
-    register std::deque<Fiber *>::const_iterator i= begin();
+    std::deque<Fiber *>::const_iterator i= begin();
     for(;i!= end();i++)
       if(*i)
         {
@@ -416,7 +416,7 @@ double XC::FiberPtrDeque::getIzHomogenizedSection(const double &E0) const
 		<< E0 << std::endl; 
     double retval= 0.0;
     const Vector &center_of_mass= getCenterOfMassHomogenizedSection(E0);
-    register std::deque<Fiber *>::const_iterator i= begin();
+    std::deque<Fiber *>::const_iterator i= begin();
     for(;i!= end();i++)
       if(*i)
         {
@@ -441,7 +441,7 @@ double XC::FiberPtrDeque::getPyzHomogenizedSection(const double &E0) const
       std::clog << "homogenization reference modulus too small; E0= " << E0 << std::endl; 
     double retval= 0.0;
     const Vector &center_of_mass= getCenterOfMassHomogenizedSection(E0);
-    register std::deque<Fiber *>::const_iterator i= begin();
+    std::deque<Fiber *>::const_iterator i= begin();
     for(;i!= end();i++)
       if(*i)
         {
@@ -522,7 +522,7 @@ double XC::FiberPtrDeque::getIHomogenizedSection(const double &E0,const Line2d &
 double XC::FiberPtrDeque::getSzPos(const double &yf,const double &y0,const double &factor) const
   {
     double retval= 0.0;
-    register std::deque<Fiber *>::const_iterator i= begin();
+    std::deque<Fiber *>::const_iterator i= begin();
     for(;i!= end();i++)
       if(*i)
         {
@@ -546,7 +546,7 @@ double XC::FiberPtrDeque::getSzPos(const double &yf,const double &y0,const doubl
 double XC::FiberPtrDeque::getSzNeg(const double &yf,const double &y0,const double &factor) const
   {
     double retval= 0.0;
-    register std::deque<Fiber *>::const_iterator i= begin();
+    std::deque<Fiber *>::const_iterator i= begin();
     for(;i!= end();i++)
       if(*i)
         {
@@ -570,7 +570,7 @@ double XC::FiberPtrDeque::getSzNeg(const double &yf,const double &y0,const doubl
 double XC::FiberPtrDeque::getSyPos(const double &zf,const double &z0,const double &factor) const
   {
     double retval= 0.0;
-    register std::deque<Fiber *>::const_iterator i= begin();
+    std::deque<Fiber *>::const_iterator i= begin();
     for(;i!= end();i++)
       if(*i)
         {
@@ -591,7 +591,7 @@ double XC::FiberPtrDeque::getSyPos(const double &zf,const double &z0,const doubl
 double XC::FiberPtrDeque::getSyNeg(const double &zf,const double &z0,const double &factor) const
   {
     double retval= 0.0;
-    register std::deque<Fiber *>::const_iterator i= begin();
+    std::deque<Fiber *>::const_iterator i= begin();
     for(;i!= end();i++)
       if(*i)
         {
@@ -734,8 +734,8 @@ XC::Vector XC::FiberPtrDeque::getAxis2(const double &y0,const double &z0) const
 //! @brief Return the resultant of stresses.
 double XC::FiberPtrDeque::getResultant(void) const
   {
-    register double retval= 0;
-    register std::deque<Fiber *>::const_iterator i= begin();
+    double retval= 0;
+    std::deque<Fiber *>::const_iterator i= begin();
     for(;i!= end();i++)
       retval+= (*i)->getForce();
     return retval;
@@ -746,7 +746,7 @@ double XC::FiberPtrDeque::getResultant(void) const
 double XC::FiberPtrDeque::getMz(const double &y0) const
   {
     double retval= 0.0;
-    register std::deque<Fiber *>::const_iterator i= begin();
+    std::deque<Fiber *>::const_iterator i= begin();
     for(;i!= end();i++)
       retval+= (*i)->getMz(y0); 
     return retval;
@@ -757,7 +757,7 @@ double XC::FiberPtrDeque::getMz(const double &y0) const
 double XC::FiberPtrDeque::getMy(const double &z0) const
   {
     double retval= 0.0;
-    register std::deque<Fiber *>::const_iterator i= begin();
+    std::deque<Fiber *>::const_iterator i= begin();
     for(;i!= end();i++)
       retval+= (*i)->getMy(z0); 
     return retval;
@@ -811,9 +811,9 @@ bool XC::FiberPtrDeque::isSubjectedToBending(const double &tol) const
 //! @brief Return the resultant of the compressions in the fibers.
 double XC::FiberPtrDeque::getCompressionResultant(void) const
   {
-    register double retval= 0;
-    register double f= 0;
-    register std::deque<Fiber *>::const_iterator i= begin();
+    double retval= 0;
+    double f= 0;
+    std::deque<Fiber *>::const_iterator i= begin();
     for(;i!= end();i++)
       if(*i)
         {
@@ -831,7 +831,7 @@ double XC::FiberPtrDeque::getCompressionResultant(void) const
 double XC::FiberPtrDeque::getCompressedFibersMz(const double &y0) const
   {
     double retval= 0.0;
-    register std::deque<Fiber *>::const_iterator i= begin();
+    std::deque<Fiber *>::const_iterator i= begin();
     for(;i!= end();i++)
       if((*i)->getForce()<0.0) retval+= (*i)->getMz(y0);
     return retval;
@@ -845,7 +845,7 @@ const XC::Vector &XC::FiberPtrDeque::getCompressedFibersCentroid(void) const
     static Vector retval(2);
     static double f,r;
     retval[0]= 0.0; retval[1]= 0.0; f= 0.0; r= 0.0;
-    register std::deque<Fiber *>::const_iterator i= begin();
+    std::deque<Fiber *>::const_iterator i= begin();
     for(;i!= end();i++)
       {
         f= (*i)->getForce();
@@ -870,7 +870,7 @@ const XC::Vector &XC::FiberPtrDeque::getCentroidFibersWithStrainSmallerThan(cons
     static Vector retval(2);
     static double def,r;
     retval[0]= 0.0; retval[1]= 0.0; def= 0.0; r= 0.0;
-    register std::deque<Fiber *>::const_iterator i= begin();
+    std::deque<Fiber *>::const_iterator i= begin();
     for(;i!= end();i++)
       {
         def=  (*i)->getStrain();
@@ -893,7 +893,7 @@ const XC::Vector &XC::FiberPtrDeque::getCentroidFibersWithStrainSmallerThan(cons
 double XC::FiberPtrDeque::getCompressedFibersMy(const double &z0) const
   {
     double retval= 0.0;
-    register std::deque<Fiber *>::const_iterator i= begin();
+    std::deque<Fiber *>::const_iterator i= begin();
     for(;i!= end();i++)
       if((*i)->getForce()<0.0) retval+= (*i)->getMy(z0);
     return retval;
@@ -902,9 +902,9 @@ double XC::FiberPtrDeque::getCompressedFibersMy(const double &z0) const
 //! @brief Return the resultant of the tensions in the fibers.
 double XC::FiberPtrDeque::getTensionResultant(void) const
   {
-    register double retval= 0;
-    register double f= 0;
-    register std::deque<Fiber *>::const_iterator i= begin();
+    double retval= 0;
+    double f= 0;
+    std::deque<Fiber *>::const_iterator i= begin();
     for(;i!= end();i++)
       if(*i)
         {
@@ -922,7 +922,7 @@ double XC::FiberPtrDeque::getTensionResultant(void) const
 double XC::FiberPtrDeque::getTensionedFibersMz(const double &y0) const
   {
     double retval= 0.0;
-    register std::deque<Fiber *>::const_iterator i= begin();
+    std::deque<Fiber *>::const_iterator i= begin();
     for(;i!= end();i++)
       if((*i)->getForce()>0.0) retval+= (*i)->getMz(y0);
     return retval;
@@ -933,7 +933,7 @@ double XC::FiberPtrDeque::getTensionedFibersMz(const double &y0) const
 double XC::FiberPtrDeque::getTensionedFibersMy(const double &z0) const
   {
     double retval= 0.0;
-    register std::deque<Fiber *>::const_iterator i= begin();
+    std::deque<Fiber *>::const_iterator i= begin();
     for(;i!= end();i++)
       if((*i)->getForce()>0.0) retval+= (*i)->getMy(z0);
     return retval;
@@ -946,7 +946,7 @@ const XC::Vector &XC::FiberPtrDeque::getTensionedFibersCentroid(void) const
     static Vector retval(2);
     static double f,r;
     retval[0]= 0.0; retval[1]= 0.0; f= 0.0; r= 0.0;
-    register std::deque<Fiber *>::const_iterator i= begin();
+    std::deque<Fiber *>::const_iterator i= begin();
     for(;i!= end();i++)
       {
         f= (*i)->getForce();
@@ -971,7 +971,7 @@ const XC::Vector &XC::FiberPtrDeque::getCentroidFibersWithStrainGreaterThan(cons
     static Vector retval(2);
     static double def,r;
     retval[0]= 0.0; retval[1]= 0.0; def= 0.0; r= 0.0;
-    register std::deque<Fiber *>::const_iterator i= begin();
+    std::deque<Fiber *>::const_iterator i= begin();
     for(;i!= end();i++)
       {
         def=  (*i)->getStrain();
@@ -1000,7 +1000,7 @@ size_t XC::FiberPtrDeque::nearest_fiber(const double &y,const double &z) const
 		  << "; fiber container empty." << std::endl;
         return retval;
       }
-    register size_t i= 0;
+    size_t i= 0;
     Fiber *f= (*this)[i];
     double yf= 0.0;
     double zf= 0.0;
@@ -2162,7 +2162,7 @@ XC::Response *XC::FiberPtrDeque::setResponse(const std::vector<std::string> &arg
 //                   << "; no fibers." << std::endl;
 //         return retval;
 //       }
-//     register size_t i= 0;
+//     size_t i= 0;
 //     (*this)[i]->interpreta(prop_name);
 //     boost::any propertyValue= InterpreteRPN::Pila().Pop();
 //     if(boost_any_is_number(propertyValue))
@@ -2206,7 +2206,7 @@ XC::Response *XC::FiberPtrDeque::setResponse(const std::vector<std::string> &arg
 //                   << "; no fibers." << std::endl;
 //         return retval;
 //       }
-//     register size_t i= 0;
+//     size_t i= 0;
 //     (*this)[i]->interpreta(prop_name);
 //     boost::any propertyValue= InterpreteRPN::Pila().Pop();
 //     if(boost_any_is_number(propertyValue))
@@ -2249,7 +2249,7 @@ size_t XC::FiberPtrDeque::getFiberWithMaxCoord(const Ref3d3d &r,const size_t &iC
 	          << "; there is no fibers." << std::endl;
         return retval;
       }
-    register size_t i= 0;
+    size_t i= 0;
     retval= i;
     Pos3d p(0.0,(*this)[i]->getLocY(),(*this)[i]->getLocZ());
     double v_max= r.GetPosLocal(p)(iCoo);
@@ -2280,7 +2280,7 @@ size_t XC::FiberPtrDeque::getFiberWithMinCoord(const Ref3d3d &r,const size_t &iC
 	          << "; container is empty." << std::endl;
         return retval;
       }
-    register size_t i= 0;
+    size_t i= 0;
     retval= i;
     Pos3d p(0.0,(*this)[i]->getLocY(),(*this)[i]->getLocZ());
     double v_min= r.GetPosLocal(p)(iCoo);

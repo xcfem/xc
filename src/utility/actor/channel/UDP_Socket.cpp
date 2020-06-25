@@ -721,7 +721,7 @@ char *XC::UDP_Socket::addToProgram(void)
 
 static int GetHostAddr(const std::string &host, char *IntAddr)
   {
-    register struct hostent *hostptr;
+    struct hostent *hostptr;
 
     if ( (hostptr = gethostbyname(host.c_str())) == nullptr) 
 	return (-1);

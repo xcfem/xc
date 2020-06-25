@@ -256,7 +256,7 @@ int XC::InterpolatedGroundMotion::setParameter(const std::vector<std::string> &a
   {
     int retval= 0;
     const int numMotions = factors->Size();
-    for(register int i=0; i<numMotions; i++)
+    for(int i=0; i<numMotions; i++)
       retval= theMotions[i].setParameter(argv,param);
     return retval;
   }
@@ -265,7 +265,7 @@ int XC::InterpolatedGroundMotion::updateParameter(int parameterID, Information &
   {
     int retval= 0;
     const int numMotions = factors->Size();
-    for(register int i=0; i<numMotions; i++)
+    for(int i=0; i<numMotions; i++)
       retval= theMotions[i].updateParameter(parameterID,info);
     return retval;
   }
@@ -274,7 +274,7 @@ int XC::InterpolatedGroundMotion::activateParameter(int pparameterID)
   {
     int retval= 0;
     const int numMotions = factors->Size();
-    for(register int i=0; i<numMotions; i++)
+    for(int i=0; i<numMotions; i++)
       retval= theMotions[i].activateParameter(pparameterID);
     return retval;
   }

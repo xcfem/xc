@@ -1297,9 +1297,9 @@ const XC::Matrix &XC::EnhancedQuad::transpose(const XC::Matrix &M )
     static int dim2 = 3 ;
     static Matrix Mtran(dim1,dim2) ;
 
-    for(register int i = 0; i < dim1; i++)
+    for(int i = 0; i < dim1; i++)
       {
-         for(register int j = 0; j < dim2; j++ )
+         for(int j = 0; j < dim2; j++ )
            Mtran(i,j) = M(j,i) ;
       } // end for i
     return Mtran ;

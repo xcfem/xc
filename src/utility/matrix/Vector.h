@@ -256,7 +256,7 @@ inline bool Vector::isEmpty(void) const
 //! \f$0\f$.
 inline void Vector::Zero(void)
   {
-    for(register int i=0; i<sz; i++)
+    for(int i=0; i<sz; i++)
       theData[i] = 0.0;
   }
 
@@ -264,7 +264,7 @@ inline void Vector::Zero(void)
 inline bool Vector::isnan(void) const
   {
     bool retval= false;
-    for(register int i=0; i<sz; i++)
+    for(int i=0; i<sz; i++)
       if(std::isnan(theData[i]))
         {
           retval= true;

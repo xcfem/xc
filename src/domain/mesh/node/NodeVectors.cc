@@ -55,7 +55,7 @@ void XC::NodeVectors::copy(const NodeVectors &other)
             std::cerr << " FATAL NodeVectors::Node(node *) - ran out of memory for data\n";
             exit(-1);
           }
-        for(register size_t i=0;i<sz;i++)
+        for( size_t i=0;i<sz;i++)
           values[i] = other.values[i];
       }
   }
@@ -212,7 +212,7 @@ int XC::NodeVectors::commitState(const size_t &nDOF)
     // check data exists, if does set commit = trial, incr = 0.0
     if(trialData)
       {
-        for(register size_t i=0; i<nDOF; i++)
+        for( size_t i=0; i<nDOF; i++)
           values[i+nDOF] = values[i];
       }
     return 0;

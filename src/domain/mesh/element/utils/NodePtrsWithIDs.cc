@@ -71,7 +71,7 @@ void XC::NodePtrsWithIDs::set_id_nodes(const std::vector<int> &inodes)
       std::cerr << getClassName() << "::" << __FUNCTION__
 	        << "; " 
                 << numNodes << " node indexes were expected." << std::endl;
-    for(register size_t i= 0;i<numNodes;i++)
+    for( size_t i= 0;i<numNodes;i++)
       connectedExternalNodes(i)= inodes[i];
   }
 
@@ -83,7 +83,7 @@ void XC::NodePtrsWithIDs::set_id_nodes(const ID &inodes)
       std::cerr << getClassName() << "::" << __FUNCTION__
 	        << "; " 
                 << numNodes << " node indexes were expected." << std::endl;
-    for(register int i= 0;i<numNodes;i++)
+    for(int i= 0;i<numNodes;i++)
       connectedExternalNodes(i) = inodes(i);
   }
 
@@ -206,7 +206,7 @@ bool XC::NodePtrsWithIDs::equalNumDOF(void)
     if(numNodes>0)
       {
         const int nDOF= (*this)[0]->getNumberDOF();
-        for(register size_t i= 1;i<numNodes;i++)
+        for( size_t i= 1;i<numNodes;i++)
 	  {
 	    const int nDOFi=  (*this)[i]->getNumberDOF();
             if(nDOFi!=nDOF)
@@ -244,7 +244,7 @@ void XC::NodePtrsWithIDs::Print(std::ostream &os) const
   { 
     os << "Connected Nodes: " << connectedExternalNodes;
     const size_t numNodes= NodePtrs::size();
-    for(register size_t i= 0;i<numNodes;i++)
+    for( size_t i= 0;i<numNodes;i++)
       os << " tag: " << (*this)[i]->getTag()
          << " num dofs: " << (*this)[i]->getNumberDOF() << std::endl;
   }

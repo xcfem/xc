@@ -65,7 +65,7 @@ void XC::AggregatorAdditions::putMatCodes(const ResponseId &codes)
 void XC::AggregatorAdditions::getType(ResponseId &retval,const size_t &offset) const
   {
     const size_t n= size();
-    for(register size_t i=0;i<n;i++)
+    for( size_t i=0;i<n;i++)
       retval(offset+i)= matCodes(i);
   }
 

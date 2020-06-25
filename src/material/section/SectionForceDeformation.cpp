@@ -270,7 +270,7 @@ double XC::SectionForceDeformation::getSectionDeformation(const int &defID) cons
     const int order= getOrder();
     const Vector &e= getSectionDeformation(); //Generalized strain vector.
     const ResponseId &code= getType();
-    for(register int i= 0;i<order;i++)
+    for(int i= 0;i<order;i++)
       if(code(i) == defID)
         retval+= e(i);
     return retval;
@@ -283,7 +283,7 @@ double XC::SectionForceDeformation::getStressResultant(const int &defID) const
     const int order= getOrder();
     const Vector &f= getStressResultant(); //Vector de esfuerzos.
     const ResponseId &code= getType();
-    for(register int i= 0;i<order;i++)
+    for(int i= 0;i<order;i++)
       if(code(i) == defID)
         retval+= f(i);
     return retval;

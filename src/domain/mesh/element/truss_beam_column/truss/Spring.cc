@@ -289,9 +289,9 @@ const XC::Matrix &XC::Spring::getTangentStiff(void) const
 
     const int numDOF2= numDOF/2;
     double temp;
-    for(register int i= 0;i<getNumDIM();i++)
+    for(int i= 0;i<getNumDIM();i++)
       {
-        for(register int j= 0;j<getNumDIM();j++)
+        for(int j= 0;j<getNumDIM();j++)
           {
             temp= cosX[i]*cosX[j]*K;
             stiff(i,j)= temp;
@@ -315,9 +315,9 @@ const XC::Matrix &XC::Spring::getInitialStiff(void) const
 
     const int numDOF2= numDOF/2;
     double temp;
-    for(register int i=0;i<getNumDIM();i++)
+    for(int i=0;i<getNumDIM();i++)
       {
-        for(register int j=0;j<getNumDIM();j++)
+        for(int j=0;j<getNumDIM();j++)
           {
             temp= cosX[i]*cosX[j]*K;
             stiff(i,j)= temp;
@@ -342,9 +342,9 @@ const XC::Matrix &XC::Spring::getDamp(void) const
     const int numDOF2= numDOF/2;
     double temp;
     const int nd= getNumDIM();
-    for(register int i= 0;i<nd;i++)
+    for(int i= 0;i<nd;i++)
       {
-        for(register int j= 0;j<nd;j++)
+        for(int j= 0;j<nd;j++)
           {
             temp= cosX[i]*cosX[j]*eta;
             damp(i,j)= temp;
@@ -378,7 +378,7 @@ const XC::Matrix &XC::Spring::getMass(void) const
     if(M == 0.0) return mass;
 
     int numDOF2= numDOF/2;
-    for(register int i= 0;i< getNumDIM();i++)
+    for(int i= 0;i< getNumDIM();i++)
       {
         mass(i,i)= M;
         mass(i+numDOF2,i+numDOF2)= M;
