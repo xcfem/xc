@@ -222,9 +222,9 @@ class RecordDisp(OuputUnits):
         '''
         outputHandler= self.getOutputHandler(self.setsToDispDspRot)
         for st in self.setsToDispLoads:
-          outputHandler.displayLoads(setToDisplay= st,caption= caption,fileName= fileName,defFScale= defFScale)
+            outputHandler.displayLoads(setToDisplay= st,caption= caption,fileName= fileName,defFScale= defFScale)
         for st in self.setsToDispBeamLoads:
-          outputHandler.displayLoads(setToDisplay=st, fileName= fileName, defFScale= defFScale)
+            outputHandler.displayLoads(setToDisplay=st, fileName= fileName, defFScale= defFScale)
 
     def displayReactionsOnSets(self, fileName=None,defFScale=0.0):
         '''displays the reactions as vector on affected nodes
@@ -301,16 +301,14 @@ class RecordLoadCaseDisp(RecordDisp):
 #          lcs.displayLoads(setToDisplay=st,caption= capt,fileName= jpegFileName)  # changed 22/06/2020
           lcs.displayLoadVectors(setToDisplay=st,caption= capt,fileName=jpegFileName)
           insertGrInTex(texFile=texFile,grFileNm=rltvgrfname,grWdt=cfg.grWidth,capText=capt,labl=labl)
+      for st in self.setsToDispBeamLoads:
+          fullgrfname=fullPath+self.loadCaseName+st.name
+          rltvgrfname=rltvPath+self.loadCaseName+st.name
+          capt= self.getDescription() +  st.description + ', '  + self.unitsLoads
+          jpegFileName= fullgrfname+'.jpg'
+          lcs.displayLoads(setToDisplay=st,caption= capt,fileName= jpegFileName)  # changed 22/06/2020
+          insertGrInTex(texFile=texFile,grFileNm=rltvgrfname,grWdt=cfg.grWidth,capText=capt,labl=labl)
 
-    # for st in self.setsToDispBeamLoads:
-    #       grfname=pathGr+self.loadCaseName+st.name
-    #       capt=self.getDescription() + ', ' + st.description + ', '  + self.unitsLoads
-    #       jpegFileName= grfname+'.jpg'
-    #       lcs.displayLoads(elLoadComp=self.compElLoad,setToDisplay=st,caption= capt,fileName=jpegFileName)
-    #       epsFileName= grfname+'.eps'
-    #       im= Image.open(jpegFileName)
-    #       im.save(epsFileName)
-    #       insertGrInTex(texFile=texFile,grFileNm=grfname,grWdt=cfg.grWidth,capText=capt,labl=labl) 
 
 
   def simplLCReports(self,FEproblem,texFile,cfg):
@@ -345,19 +343,20 @@ class RecordLoadCaseDisp(RecordDisp):
       #Internal forces displays on sets of «shell» elements
       for st in self.setsToDispIntForc:
           for arg in self.listIntForc:
-              grfname=pathGr+self.loadCaseName+st.name+arg
-              jpegFileName= grfname+'.jpg'
+              fullgrfname=fullPath+self.loadCaseName+st.name+arg
+              rltvgrfname=fullPath+self.loadCaseName+st.name+arg
+              jpegFileName= fullgrfname+'.jpg'
               lcs.displayIntForc(itemToDisp=arg,setToDisplay=st,fileName= jpegFileName)
               capt= self.getDescription() + '. ' + st.description.capitalize() + ', ' + cfg.capTexts[arg] + ', ' + cfg.getForceUnitsDescription()
-              insertGrInTex(texFile=texFile,grFileNm=grfname,grWdt=cfg.grWidth,capText=capt)
+              insertGrInTex(texFile=texFile,grFileNm=rltvgrfname,grWdt=cfg.grWidth,capText=capt)
       #Internal forces displays on sets of «beam» elements
       for st in self.setsToDispBeamIntForc:
           for arg in self.listBeamIntForc:
-              grfname=pathGr+self.loadCaseName+st.name+arg
-              jpegFileName= grfname+'.jpg'
+              fullgrfname=fullPath+self.loadCaseName+st.name+arg
+              jpegFileName= fullgrfname+'.jpg'
               lcs.displayIntForcDiag(itemToDisp=arg,setToDisplay=st,fileName= jpegFileName)
               capt=self.getDescription() + '. ' + st.description.capitalize() + ', ' + cfg.capTexts[arg] + ', ' + cfg.getForceUnitsDescription()
-              insertGrInTex(texFile=texFile,grFileNm=grfname,grWdt=cfg.grWidth,capText=capt)
+              insertGrInTex(texFile=texFile,grFileNm=rltvgrfname,grWdt=cfg.grWidth,capText=capt)
       texFile.write('\\clearpage\n')
 
 
