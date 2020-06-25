@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 from __future__ import division
 
 '''Testing the database as combination results storage to accelerate computation. Home made test.'''
@@ -190,11 +191,11 @@ def resuelveCombEstatLin(preprocessor, comb,tagSaveFase0,dbHelp):
   dbHelp.helpSolve(comb)
 
   ''' 
-    print "previousName= ",previousName
-    print "tag= ",tagComb
-    print "tagPrevia= ",tagPrevia
-    print "descomp previa= ",getDescompCombPrevia
-    print "resto sobre previa= ",getDescompRestoSobrePrevia
+    print("previousName= ",previousName)
+    print("tag= ",tagComb)
+    print("tagPrevia= ",tagPrevia)
+    print("descomp previa= ",getDescompCombPrevia)
+    print("resto sobre previa= ",getDescompRestoSobrePrevia)
   '''
 
   comb.addToDomain()
@@ -227,11 +228,11 @@ def procesResultVerif(preprocessor,  comb):
   dYMax= max(dYMax,deltaY)
 
   ''' 
-  print "nmbComb=  ",nmbComb
-  print "tagComb=  ",tagComb
-  print "descomp=  ",getDescomp("%3.1f")
-  print "dXMin=  ",(dXMin*1e3)," mm\n"
-  print "dXMax=  ",(dXMax*1e3)," mm\n"
+  print("nmbComb=  ",nmbComb)
+  print("tagComb=  ",tagComb)
+  print("descomp=  ",getDescomp("%3.1f"))
+  print("dXMin=  ",(dXMin*1e3)," mm\n")
+  print("dXMax=  ",(dXMax*1e3)," mm\n")
   '''
 
 import os
@@ -353,25 +354,25 @@ ratio3= abs(((dYMax-dYMaxTeor)))
 ratio4= abs(((dYMin-dYMinTeor)))
 
 ''' 
-print "dXMax= ",dXMax*1e3," mm"
-print "dXMaxTeor= ",dXMaxTeor*1e3," mm"
-print "ratio1= ",ratio1
-print "dXMin= ",dXMin*1e3," mm"
-print "dXMinTeor= ",dXMinTeor*1e3," mm"
-print "ratio2= ",ratio2
-print "dYMin= ",(dYMin*1e3)," mm"
-print "dYMinTeor= ",(dYMin*1e3)," mm"
-print "ratio3= ",ratio3
-print "dYMax= ",(dYMax*1e3)," mm"
-print "dYMaxTeor= ",(dYMaxTeor*1e3)," mm"
-print "ratio4= ",ratio4
+print("dXMax= ",dXMax*1e3," mm")
+print("dXMaxTeor= ",dXMaxTeor*1e3," mm")
+print("ratio1= ",ratio1)
+print("dXMin= ",dXMin*1e3," mm")
+print("dXMinTeor= ",dXMinTeor*1e3," mm")
+print("ratio2= ",ratio2)
+print("dYMin= ",(dYMin*1e3)," mm")
+print("dYMinTeor= ",(dYMin*1e3)," mm")
+print("ratio3= ",ratio3)
+print("dYMax= ",(dYMax*1e3)," mm")
+print("dYMaxTeor= ",(dYMaxTeor*1e3)," mm")
+print("ratio4= ",ratio4)
    '''
 
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (ratio1<1e-5) & (ratio2<1e-5) & (ratio3<1e-5) & (ratio4<1e-5)  :
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')
 

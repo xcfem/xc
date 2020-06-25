@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 ''' Lateral torsional buckling of steel beams.
    pages 32-34 Example 2 from:
    Eurocodes ‐ Design of steel buildings with worked examples
@@ -57,18 +58,18 @@ Mcr2Teor= 1778e3
 
 ratio2= abs(Mcr2-Mcr2Teor)/Mcr2Teor
 
-# print 'Mcr1= ', Mcr1/1e3, 'kN m'
-# print 'Mcr1Teor= ', Mcr1Teor/1e3, 'kN m'
-# print 'ratio1= ', ratio1
-# print 'Mcr2= ', Mcr2/1e3, 'kN m'
-# print 'Mcr2Teor= ', Mcr2Teor/1e3, 'kN m'
-# print 'ratio2= ', ratio2
+# print('Mcr1= ', Mcr1/1e3, 'kN m')
+# print('Mcr1Teor= ', Mcr1Teor/1e3, 'kN m')
+# print('ratio1= ', ratio1)
+# print('Mcr2= ', Mcr2/1e3, 'kN m')
+# print('Mcr2Teor= ', Mcr2Teor/1e3, 'kN m')
+# print('ratio2= ', ratio2)
 
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 #Don't make a check over ratio1 SEE NOTE above.
 if(ratio2<0.05):
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')

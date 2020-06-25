@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 
 ''' Computation of Vsu value. The results are compared with those obtained
 from the exercise ER-CA-02 from www.areadecalculo.com. According to EHE-08.
@@ -53,23 +54,23 @@ ratio3= abs(Vu1-1320e3)/1320e3
 ratio4= abs(Vsu-111.966e3)/111.966e3
 
 '''
-print "Fcv= ",Fcv/1e6," MPa"
-print "thetaE= ",math.degrees(thetaE)," grados"
-print "beta= ",beta
-print "Vcu= ",Vcu/1e3," kN"
-print "Vsu= ",Vsu/1e3," kN"
-print "Vu1= ",Vu1/1e3," kN"
-print "ratio1= ",ratio1
-print "ratio2= ",ratio2
-print "ratio3= ",ratio3
-print "ratio4= ",ratio4
+print("Fcv= ",Fcv/1e6," MPa")
+print("thetaE= ",math.degrees(thetaE)," grados")
+print("beta= ",beta)
+print("Vcu= ",Vcu/1e3," kN")
+print("Vsu= ",Vsu/1e3," kN")
+print("Vu1= ",Vu1/1e3," kN")
+print("ratio1= ",ratio1)
+print("ratio2= ",ratio2)
+print("ratio3= ",ratio3)
+print("ratio4= ",ratio4)
 '''
 
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (ratio1<0.002) and (ratio2<0.0002) and (ratio3<1e-15) and (ratio4<1e-5):
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')
 

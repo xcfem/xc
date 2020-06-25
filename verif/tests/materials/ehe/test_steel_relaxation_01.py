@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 ''' Computation of the creep factor according to EHE-08. '''
 from __future__ import division
 
@@ -37,24 +38,24 @@ ratio2= abs(incSigma2/sigmaInic+0.058)/0.058
 ratio3= abs(incSigma3/sigmaInic+0.058)/0.058
 
 ''' 
-print "cociente1= ",incSigma1/sigmaInic
-print "incSigma1= ",incSigma1/1e6," MPa\n"
-print "sigmaRemanente1= ",sigmaRemanente1/1e6," MPa\n"
-print "cociente2= ",incSigma2/sigmaInic
-print "incSigma2= ",incSigma2/1e6," MPa\n"
-print "sigmaRemanente2= ",sigmaRemanente2/1e6," MPa\n"
-print "cociente3= ",incSigma3/sigmaInic
-print "incSigma3= ",incSigma3/1e6," MPa\n"
-print "sigmaRemanente3= ",sigmaRemanente3/1e6," MPa\n"
-print "ratio1= ",(ratio1)
-print "ratio2= ",(ratio2)
-print "ratio3= ",(ratio3)
+print("cociente1= ",incSigma1/sigmaInic)
+print("incSigma1= ",incSigma1/1e6," MPa\n")
+print("sigmaRemanente1= ",sigmaRemanente1/1e6," MPa\n")
+print("cociente2= ",incSigma2/sigmaInic)
+print("incSigma2= ",incSigma2/1e6," MPa\n")
+print("sigmaRemanente2= ",sigmaRemanente2/1e6," MPa\n")
+print("cociente3= ",incSigma3/sigmaInic)
+print("incSigma3= ",incSigma3/1e6," MPa\n")
+print("sigmaRemanente3= ",sigmaRemanente3/1e6," MPa\n")
+print("ratio1= ",(ratio1))
+print("ratio2= ",(ratio2))
+print("ratio3= ",(ratio3))
 '''
 
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (ratio1<1e-5) & (ratio2<6e-3) & (ratio3<6e-3):
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')

@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 '''Selection of entities inside a geometric object. Home made test.'''
 
 import xc_base
@@ -55,16 +56,16 @@ nLinesMeshComponents= len(setMeshComponents.lines)
 ratio= (nNodesEntities)**2+(nElementsEntities)**2+(nPointsEntities-4)**2+(nLinesEntities-2)**2 + (nNodesMeshComponents-4)**2+(nElementsMeshComponents-2)**2+(nPointsMeshComponents)**2+(nLinesMeshComponents)**2
 
 '''
-print nNodesEntities, ' nodes.'
-print nElementsEntities, ' element(s).'
-print nPointsEntities, ' points.'
-print nLinesEntities, ' lines.'
+print(nNodesEntities, ' nodes.')
+print(nElementsEntities, ' element(s).')
+print(nPointsEntities, ' points.')
+print(nLinesEntities, ' lines.')
 '''
 
 import os
 fname= os.path.basename(__file__)
 if (abs(ratio)<1e-15):
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')
 

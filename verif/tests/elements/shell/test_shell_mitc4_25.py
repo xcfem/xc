@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 # home made test
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
@@ -77,7 +78,7 @@ n2Medio= 0.0
 n12Max= 0.0
 n12Min= 0.0
 
-# print "G1= ",vectorG1
+# print("G1= ",vectorG1)
 elem.getResistingForce()
 mats= elem.getPhysicalProperties.getVectorMaterials #Materials at gauss points.
 #Gauss points iterator
@@ -98,21 +99,21 @@ ratio2= abs((n2Medio-n2MedioTeor))
 ratio3= abs((n12Max+n12Min))
 
 ''' 
-print "n1Medio= ",n1Medio
-print "n1MedioTeor= ",n1MedioTeor
-print "ratio1= ",ratio1
-print "n2Medio= ",n2Medio
-print "n2MedioTeor= ",n2MedioTeor
-print "ratio2= ",ratio2
-print "n12Max= ",n12Max
-print "n12Min= ",n12Min
-print "ratio3= ",ratio3
+print("n1Medio= ",n1Medio)
+print("n1MedioTeor= ",n1MedioTeor)
+print("ratio1= ",ratio1)
+print("n2Medio= ",n2Medio)
+print("n2MedioTeor= ",n2MedioTeor)
+print("ratio2= ",ratio2)
+print("n12Max= ",n12Max)
+print("n12Min= ",n12Min)
+print("ratio3= ",ratio3)
    '''
 
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (abs(ratio1)<1e-14) & (abs(ratio2)<1e-14) & (abs(ratio3)<1e-13) :
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')

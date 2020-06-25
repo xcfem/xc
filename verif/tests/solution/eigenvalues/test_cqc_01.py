@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 ''' Test to verify the mode combinations
 taken from example A87 of Solvia Verification Manual.
 This exercise is based on example E26.8 of the 
@@ -177,41 +178,41 @@ ratioDispCQC= (maxDispCQC-maxDispCQCTeor).Norm()
 
 
 ''' 
-print "angular frequencies: ",angularFrequencies
-print "angular frequencies (teor.): ",angularFrequenciesTeor
-print "ratio0= ",ratio0
-print "periods: ",periods
-print "theorPeriods: ",theorPeriods
-print "ratio1= ",ratio1
-print "modos: ",modos
-print "modosTeor: ",modosTeor
-print "diff: ",diff
-print "ratio2= ",ratio2
-print "coefficients CQC: ",crossCQCCoefficients
-print "coefficients CQC example: ",crossCQCCoefficientsTeor
-print "ratio3= ",ratio3
-print "factoresParticipacionModalX: ",factoresParticipacionModalX
-print "factoresParticipacionModalXTeor: ",factoresParticipacionModalXTeor
-print "ratio4= ",ratio4
-print "********** maximum displacement mode 1: ",maxDispMod1*1000
-print "********** maximum displacement mode 1 (example): ",maxDispMod1Teor*1000
-print "ratioM1= ",ratioM1
-print "********** maximum displacement mode 2: ",maxDispMod2*1000
-print "********** maximum displacement mode 2 (example): ",maxDispMod2Teor*1000
-print "ratioM2= ",ratioM2
-print "********** maximum displacement mode 3: ",maxDispMod3*1000
-print "********** maximum displacement mode 3 (example): ",maxDispMod3Teor*1000
-print "ratioM3= ",ratioM3
-#print "maxDispCQC= ",maxDispCQC*1e3
-#print "maxDispCQCTeor= ",maxDispCQCTeor*1e3
-print "ratioDispCQC= ",ratioDispCQC
+print("angular frequencies: ",angularFrequencies)
+print("angular frequencies (teor.): ",angularFrequenciesTeor)
+print("ratio0= ",ratio0)
+print("periods: ",periods)
+print("theorPeriods: ",theorPeriods)
+print("ratio1= ",ratio1)
+print("modos: ",modos)
+print("modosTeor: ",modosTeor)
+print("diff: ",diff)
+print("ratio2= ",ratio2)
+print("coefficients CQC: ",crossCQCCoefficients)
+print("coefficients CQC example: ",crossCQCCoefficientsTeor)
+print("ratio3= ",ratio3)
+print("factoresParticipacionModalX: ",factoresParticipacionModalX)
+print("factoresParticipacionModalXTeor: ",factoresParticipacionModalXTeor)
+print("ratio4= ",ratio4)
+print("********** maximum displacement mode 1: ",maxDispMod1*1000)
+print("********** maximum displacement mode 1 (example): ",maxDispMod1Teor*1000)
+print("ratioM1= ",ratioM1)
+print("********** maximum displacement mode 2: ",maxDispMod2*1000)
+print("********** maximum displacement mode 2 (example): ",maxDispMod2Teor*1000)
+print("ratioM2= ",ratioM2)
+print("********** maximum displacement mode 3: ",maxDispMod3*1000)
+print("********** maximum displacement mode 3 (example): ",maxDispMod3Teor*1000)
+print("ratioM3= ",ratioM3)
+#print("maxDispCQC= ",maxDispCQC*1e3)
+#print("maxDispCQCTeor= ",maxDispCQCTeor*1e3)
+print("ratioDispCQC= ",ratioDispCQC)
    '''
 
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if( (ratio1<1e-3) & (ratio2<1e-2) & (ratio3<1e-5) & (ratio4<1e-3) & (ratioM1<1e-6) & (ratioM2<1e-6) & (ratioM3<1e-6) & (ratioDispCQC<1e-5) ): 
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')
 

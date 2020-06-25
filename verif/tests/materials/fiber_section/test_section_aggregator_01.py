@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 ''' Verification test of a rectangular fiber section with an
     elasto plastic material model.'''
 
@@ -34,7 +35,7 @@ import os
 pth= os.path.dirname(__file__)
 if(not pth):
   pth= "."
-#print "pth= ", pth
+#print("pth= ", pth)
 execfile(pth+"/fiber_section_test_macros.py")
 
 
@@ -156,27 +157,27 @@ ratio18= (RVz+loadVz)/loadVz
 ratio19= (esfVz-loadVz)/loadVz
 
 ''' 
-print "RVy= ",(RVy)
-print "esfVy= ",(esfVy)
-print "loadVy= ",(loadVy)
+print("RVy= ",(RVy))
+print("esfVy= ",(esfVy))
+print("loadVy= ",(loadVy))
 
-print "RVz= ",(RVz)
-print "esfVz= ",(esfVz)
-print "loadVz= ",(loadVz)
+print("RVz= ",(RVz))
+print("esfVz= ",(esfVz))
+print("loadVz= ",(loadVz))
 
-print "RMx= ",(RMx)
-print "esfMx= ",(esfMx)
-print "loadMx= ",(loadMx)
+print("RMx= ",(RMx))
+print("esfMx= ",(esfMx))
+print("loadMx= ",(loadMx))
 
-print "RMz= ",(RMz)
-print "esfMz= ",(esfMz)
-print "loadMz= ",(loadMz)
+print("RMz= ",(RMz))
+print("esfMz= ",(esfMz))
+print("loadMz= ",(loadMz))
 '''
 
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (abs(ratio1)<1e-5) & (abs(ratio2)<1e-5) & (abs(ratio3)<1e-5) & (abs(ratio4)<1e-3) & (abs(ratio5)<1e-2) & (abs(ratio6)<1e-3) & (abs(ratio7)<1e-2) & (abs(ratio8)<1e-3) & (abs(ratio9)<1e-3) & (abs(ratio10)<1e-5) & (abs(ratio11)<1e-5) & (abs(ratio12)<1e-5) &  (abs(ratio13)<1e-5) & (abs(ratio14)<1e-5) & (abs(ratio15)<1e-5) & (abs(ratio16)<1e-5) & (abs(ratio17)<1e-5) & (abs(ratio18)<1e-5) & (abs(ratio19)<1e-5) & (analOk==0):
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')

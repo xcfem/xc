@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 # home made test
 
 __author__= "Luis C. Pérez Tato (LCPT) , Ana Ortega (AO_O)"
@@ -50,20 +51,20 @@ ratio1= (elem.getCoordTransf.getG2Vector-v1).Norm()
 ratio2= (elem.getCoordTransf.getG3Vector-v2).Norm()
 
 ''' 
-print "area= ",elem.getArea(True)
-print "v1= ",v1
-print "elem.v1= ", elem.getCoordTransf.getG2Vector
-print "ratio1= ",ratio1
-print "v2= ",v2
-print "elem.v2= ", elem.getCoordTransf.getG3Vector
-print "ratio2= ",ratio2
+print("area= ",elem.getArea(True))
+print("v1= ",v1)
+print("elem.v1= ", elem.getCoordTransf.getG2Vector)
+print("ratio1= ",ratio1)
+print("v2= ",v2)
+print("elem.v2= ", elem.getCoordTransf.getG3Vector)
+print("ratio2= ",ratio2)
  '''
 
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (ratio0 < 1e-12) & (ratio1 < 1e-12) & (ratio2 < 1e-12):
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')
 

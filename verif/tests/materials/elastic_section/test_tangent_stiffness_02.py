@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 ''' Verifies the assembly of cross-section tangent stiffness matrix.
    Home made test.'''
 
@@ -38,21 +39,21 @@ EATeor= (b*h*E)
 ratio2= ((EA-EATeor)/EATeor)
 
 ''' 
-print "EI= ",EI
-print "E= ", sectionTestMaterial.E
-print "I= ", sectionTest.Iz()
-print "EITeor= ",EITeor
-print "EITeor2= ",EITeor2
-print "ratio1= ",ratio1
-print "EA= ",EA
-print "EATeor= ",EATeor
-print "ratio2= ",ratio2
+print("EI= ",EI)
+print("E= ", sectionTestMaterial.E)
+print("I= ", sectionTest.Iz())
+print("EITeor= ",EITeor)
+print("EITeor2= ",EITeor2)
+print("ratio1= ",ratio1)
+print("EA= ",EA)
+print("EATeor= ",EATeor)
+print("ratio2= ",ratio2)
    '''
 
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (abs(ratio1)<1e-2) & (abs(ratio2)<1e-2):
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')

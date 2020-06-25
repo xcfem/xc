@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 ''' Home made test.
     Obtaining the contour of an element set. '''
 
@@ -68,15 +69,15 @@ ratio+= math.sqrt(pmin1.x**2+pmin1.y**2+pmin1.z**2)
 ratio+= math.sqrt((pmax1.x-2)**2+(pmax1.y-2)**2+pmax1.z**2)
 
 '''
-print 'bnd0:', bnd0
-print 'bnd1:', bnd1
-print 'ratio= ', ratio
+print('bnd0:', bnd0)
+print('bnd1:', bnd1)
+print('ratio= ', ratio)
 '''
 
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (abs(ratio)<1e-12):
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')

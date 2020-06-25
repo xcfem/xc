@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 '''Computation of the ultimate shear force failure due to diagonal 
    compression in the web (Vu1) according to the clause 44.2.3.1 of EHE-08.'''
 import sys
@@ -26,15 +27,15 @@ Vu1= EHE_limit_state_checking.getVu1EHE08(fck,fcd,Ncd,Ac,b0,d,math.radians(90),m
 ratio1= abs((Vu1-1.3839e6)/1.3839e6)
 
 '''
-print "Vu1= ",Vu1/1e3," kN"
-print "ratio1= ",ratio1
+print("Vu1= ",Vu1/1e3," kN")
+print("ratio1= ",ratio1)
 '''
 
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if ratio1<1e-12:
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')
   

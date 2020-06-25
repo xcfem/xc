@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 
 '''Verification test of the computation of strain in the web
 according to clause 44.2.3.2.2 of EHE. The point is to verify that
@@ -59,25 +60,25 @@ epsilonX06= EHE_limit_state_checking.getEpsilonXEHE08(Nd,Md,Vd,Td,z,AsPas,AsAct,
 ratio6= abs(epsilonX06-1e-3)/1e-3
 
 '''
-print "epsilonX01= ",epsilonX01*1000," por mil"
-print "ratio1= ",ratio1
-print "epsilonX02= ",epsilonX02*1000," por mil"
-print "ratio2= ",ratio2
-print "epsilonX03= ",epsilonX03*1000," por mil"
-print "ratio3= ",ratio3
-print "epsilonX04= ",epsilonX04*1000," por mil"
-print "ratio4= ",ratio4
-print "epsilonX05= ",epsilonX05*1000," por mil"
-print "ratio5= ",ratio5
-print "epsilonX06= ",epsilonX06*1000," por mil"
-print "ratio6= ",ratio6
+print("epsilonX01= ",epsilonX01*1000," por mil")
+print("ratio1= ",ratio1)
+print("epsilonX02= ",epsilonX02*1000," por mil")
+print("ratio2= ",ratio2)
+print("epsilonX03= ",epsilonX03*1000," por mil")
+print("ratio3= ",ratio3)
+print("epsilonX04= ",epsilonX04*1000," por mil")
+print("ratio4= ",ratio4)
+print("epsilonX05= ",epsilonX05*1000," por mil")
+print("ratio5= ",ratio5)
+print("epsilonX06= ",epsilonX06*1000," por mil")
+print("ratio6= ",ratio6)
 '''
 
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (ratio1<1e-5) and (ratio2<1e-5) and (ratio3<1e-5) and (ratio4<1e-5) and (ratio5<1e-5) and (ratio6<1e-5):
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')
 

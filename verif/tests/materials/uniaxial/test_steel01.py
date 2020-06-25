@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 # home made test
 
 fy= 2600 # Yield stress of the steel.
@@ -84,7 +85,7 @@ y= []
 recorder= feProblem.getDomain.newRecorder("element_prop_recorder",None)
 recorder.setElements(xc.ID([1]))
 recorder.callbackRecord= "x.append(self.getMaterial().getStrain()); y.append(self.getN())"
-recorder.callbackRestart= "print \"Restart method called.\""
+recorder.callbackRestart= "print(\"Restart method called.\"")
 
 ''' 
 \prop_recorder
@@ -94,7 +95,7 @@ nodes= preprocessor.getNodeHandler{2}
 
                 
 d= .getDisp[0]
-print (d*1000)
+print((d*1000))
 
 \callback_restart{print("Restart method called."}
 
@@ -165,25 +166,25 @@ for d in diff_y:
 ratio4= math.sqrt(ratio4)
 
 ''' 
-print "R= ",R
-print "dx= ",deltax
-print "dy= ",deltay
-print "Ax= ",Ax
-print "ratio1= ",(ratio1)
-print "ratio2= ",(ratio2)
-print "x= ",x
-print "diff_x= ",diff_x
-print "ratio3= ",ratio3
-print "y= ",y
-print "y_modelo= ",y_modelo
-print "diff_y= ",diff_y
-print "ratio4= ",ratio4
+print("R= ",R)
+print("dx= ",deltax)
+print("dy= ",deltay)
+print("Ax= ",Ax)
+print("ratio1= ",(ratio1))
+print("ratio2= ",(ratio2))
+print("x= ",x)
+print("diff_x= ",diff_x)
+print("ratio3= ",ratio3)
+print("y= ",y)
+print("y_modelo= ",y_modelo)
+print("diff_y= ",diff_y)
+print("ratio4= ",ratio4)
 '''
 
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if((ratio3<1e-12) & (ratio4<1e-11)):
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')

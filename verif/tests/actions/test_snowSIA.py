@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 # Home made test.
 
 from __future__ import division
@@ -21,18 +22,18 @@ ratio1= abs(sk-skTeor)/skTeor
 ratio2= abs(qk-qkTeor)/qkTeor
 
 '''
-print "sk=", sk
-print "skTeor=", skTeor
-print "ratio1= ", ratio1
-print "qk=", qk
-print "qkTeor=", qkTeor
-print "ratio2= ", ratio2
+print("sk=", sk)
+print("skTeor=", skTeor)
+print("ratio1= ", ratio1)
+print("qk=", qk)
+print("qkTeor=", qkTeor)
+print("ratio2= ", ratio2)
 '''
 
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if ((ratio1<1e-15) and (ratio2<1e-15)):
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')

@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 ''' Response spectrum modal analysis test
 taken from the publication from Andrés Sáez Pérez: «Estructuras III»
  E.T.S. de Arquitectura de Sevilla (España).'''
@@ -199,25 +200,25 @@ ratio4= diff.Norm()
 ratio5= math.sqrt((cargaModo1[0]-273523)**2+(cargaModo2[0]-31341)**2+(cargaModo3[0]-6214)**2)/273523.0
 
 '''
-print "kPlBaja= ",kPlBaja
-print "kPl1a= ",kPl1a
-print "kPl3a= ",kPl3a
-print "periods: ",periods
-print "accelerations= ",accelerations          
-print "ratio1= ",ratio1
-print "modos: ",modos
-print "diff: ",diff
-print "ratio2= ",ratio2
-print "modalParticipationFactors: ",modalParticipationFactors
-print "effectiveModalMasses: ",effectiveModalMasses
-print "totalMass: ",totalMass
-print "ratio3= ",ratio3
-print "distributionFactors: ",distributionFactors
-print "ratio4= ",ratio4
-print "\n  equivalent static load mode 1: ",cargaModo1
-print "  equivalent static load mode 2: ",cargaModo2
-print "  equivalent static load mode 3: ",cargaModo3
-print "ratio5= ",ratio5
+print("kPlBaja= ",kPlBaja)
+print("kPl1a= ",kPl1a)
+print("kPl3a= ",kPl3a)
+print("periods: ",periods)
+print("accelerations= ",accelerations          )
+print("ratio1= ",ratio1)
+print("modos: ",modos)
+print("diff: ",diff)
+print("ratio2= ",ratio2)
+print("modalParticipationFactors: ",modalParticipationFactors)
+print("effectiveModalMasses: ",effectiveModalMasses)
+print("totalMass: ",totalMass)
+print("ratio3= ",ratio3)
+print("distributionFactors: ",distributionFactors)
+print("ratio4= ",ratio4)
+print("\n  equivalent static load mode 1: ",cargaModo1)
+print("  equivalent static load mode 2: ",cargaModo2)
+print("  equivalent static load mode 3: ",cargaModo3)
+print("ratio5= ",ratio5)
 '''
 
 '''
@@ -230,7 +231,7 @@ import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if((ratio1<1e-3) & (ratio2<5e-2) & (ratio3<1e-12) & (ratio4<5e-2) & (ratio5<5e-2)):
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')
 

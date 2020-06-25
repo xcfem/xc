@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 # home made test
 # Horizontal cantilever under tension load at its end.
 
@@ -56,7 +57,7 @@ respVz= typical_materials.defElasticMaterial(preprocessor, "respVz",1e9) # Shear
 # Sections
 import os
 pth= os.path.dirname(__file__)
-#print "pth= ", pth
+#print("pth= ", pth)
 if(not pth):
   pth= "."
 execfile(pth+"/../aux/testQuadRegion.py")
@@ -109,28 +110,28 @@ loadHandler= preprocessor.getLoadHandler
 lPatterns.addToDomain(lp0.name)
 # Solution procedure
 analysis= predefined_solutions.simple_static_modified_newton(feProblem)
-feProblem.setVerbosityLevel(0) #Dont print warning messages
+feProblem.setVerbosityLevel(0) #Dont print(warning messages)
                             #about loads over
                             #elements with corotational formulation.
 result= analysis.analyze(10)
 
 execfile(pth+"/test_vector3d_uniform_load_global.py")
-feProblem.setVerbosityLevel(1) #Print warnings again 
+feProblem.setVerbosityLevel(1) #print(warnings again )
 
 
 ''' 
-print "delta: ",delta
-print "deltaTeor: ",deltateor
-print "ratio1= ",ratio1
-print "N0= ",N0
-print "ratio2= ",ratio2
-print "RN= ",RN
-print "ratio3= ",ratio3
+print("delta: ",delta)
+print("deltaTeor: ",deltateor)
+print("ratio1= ",ratio1)
+print("N0= ",N0)
+print("ratio2= ",ratio2)
+print("RN= ",RN)
+print("ratio3= ",ratio3)
    '''
 
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (abs(ratio1)<1e-6) & (abs(ratio2)<1e-10) &  (abs(ratio3)<1e-10):
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')

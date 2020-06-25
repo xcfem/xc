@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 ''' Verification test for the concrete shrinkage computation
    according to EHE-08. '''
 
@@ -45,21 +46,21 @@ err2= err2+(epsR4d+211e-6)**2
 ratio1= math.sqrt(err2)
 
 ''' 
-print "epsR1= ",epsR1*1e6,"x10^(-6)\n"
-print "epsR2= ",epsR2*1e6,"x10^(-6)\n"
-print "epsR3= ",epsR3*1e6,"x10^(-6)\n"
-print "epsR4= ",epsR4*1e6,"x10^(-6)\n"
-print "epsR1d= ",epsR1d*1e6,"x10^(-6)\n"
-print "epsR2d= ",epsR2d*1e6,"x10^(-6)\n"
-print "epsR3d= ",epsR3d*1e6,"x10^(-6)\n"
-print "epsR4d= ",epsR4d*1e6,"x10^(-6)\n"
-print "ratio1= ",(ratio1)
+print("epsR1= ",epsR1*1e6,"x10^(-6)\n")
+print("epsR2= ",epsR2*1e6,"x10^(-6)\n")
+print("epsR3= ",epsR3*1e6,"x10^(-6)\n")
+print("epsR4= ",epsR4*1e6,"x10^(-6)\n")
+print("epsR1d= ",epsR1d*1e6,"x10^(-6)\n")
+print("epsR2d= ",epsR2d*1e6,"x10^(-6)\n")
+print("epsR3d= ",epsR3d*1e6,"x10^(-6)\n")
+print("epsR4d= ",epsR4d*1e6,"x10^(-6)\n")
+print("ratio1= ",(ratio1))
 '''
 
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (ratio1<8e-7):
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')

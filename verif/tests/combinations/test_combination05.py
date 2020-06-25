@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 '''Using the database as combination results storage to accelerate computation. Home made test.'''
 
 __author__= "Luis C. Pérez Tato (LCPT)"
@@ -189,11 +190,11 @@ def resuelveCombEstatLin(comb,db,dbHelp):
   dbHelp.helpSolve(comb,db)
   execfile("solution/database_helper_solve.xci")
   ''' 
-    print "previousName= ",previousName
-    print "tag= ",comb.tag
-    print "tagPrevia= ",tagPrevia
-    print "descomp previa= ",getDescompCombPrevia
-    print "resto sobre previa= ",getDescompRestoSobrePrevia
+    print("previousName= ",previousName)
+    print("tag= ",comb.tag)
+    print("tagPrevia= ",tagPrevia)
+    print("descomp previa= ",getDescompCombPrevia)
+    print("resto sobre previa= ",getDescompRestoSobrePrevia)
   '''
   comb.addToDomain()
   analOk= analysis.analize(1)
@@ -214,10 +215,10 @@ def procesResultVerif(comb):
   global dXMax
   dXMax=max(dXMax,deltaX)
   ''' 
-    print "tagComb= ",comb.tagComb
-    print "nmbComb= ",nmbComb
-    print "dXMin= ",(dXMin*1e3)," mm\n"
-    print "dXMax= ",(dXMax*1e3)," mm\n"
+    print("tagComb= ",comb.tagComb)
+    print("nmbComb= ",nmbComb)
+    print("dXMin= ",(dXMin*1e3)," mm\n")
+    print("dXMax= ",(dXMax*1e3)," mm\n")
    '''
 
 import os
@@ -243,17 +244,17 @@ ratio1= abs(dXMax-0.143641332276e-3)/0.143641332276e-3
 ratio2= abs(dXMin+0.162147274048e-3)/0.162147274048e-3
 
 '''
-print "dXMax= ",(dXMax*1e3)," mm\n"
-print "dXMin= ",(dXMin*1e3)," mm\n"
-print "ratio1= ",ratio1
-print "ratio2= ",ratio2
+print("dXMax= ",(dXMax*1e3)," mm\n")
+print("dXMin= ",(dXMin*1e3)," mm\n")
+print("ratio1= ",ratio1)
+print("ratio2= ",ratio2)
 ''' 
 
 
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (ratio1<1e-2) & (ratio2<1e-2) :
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')
 

@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 # home made test
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
@@ -84,7 +85,7 @@ for m in mats:
   n12MedioElem= n12MedioElem+m.getStressResultantComponent("n12")
 
 
-# print "G1= ",vectorG1
+# print("G1= ",vectorG1)
 elem.getResistingForce()
 n1MedioElem= n1MedioElem/4
 n2MedioElem= n2MedioElem/4
@@ -98,21 +99,21 @@ ratio2= abs((n2MedioElem-n2MedioElemTeor)/n2MedioElemTeor)
 ratio3= abs((n12MedioElem-n12MedioElemTeor))
 
 ''' 
-print "n1MedioElem= ",n1MedioElem
-print "n1MedioElemTeor= ",n1MedioElemTeor
-print "ratio1= ",ratio1
-print "n2MedioElem= ",n2MedioElem
-print "n2MedioElemTeor= ",n2MedioElemTeor
-print "ratio2= ",ratio2
-print "n12MedioElem= ",n12MedioElem
-print "n12MedioElemTeor= ",n12MedioElemTeor
-print "ratio3= ",ratio3
+print("n1MedioElem= ",n1MedioElem)
+print("n1MedioElemTeor= ",n1MedioElemTeor)
+print("ratio1= ",ratio1)
+print("n2MedioElem= ",n2MedioElem)
+print("n2MedioElemTeor= ",n2MedioElemTeor)
+print("ratio2= ",ratio2)
+print("n12MedioElem= ",n12MedioElem)
+print("n12MedioElemTeor= ",n12MedioElemTeor)
+print("ratio3= ",ratio3)
    '''
 
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (abs(ratio1)<1e-14) & (abs(ratio2)<1e-14) & (abs(ratio3)<1e-14) :
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')

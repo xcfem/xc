@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 # home made test
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
@@ -81,22 +82,22 @@ ratio4= abs((RN4+RTeor)/RTeor)
 
 
 '''
-print "RTeor= ", RTeor
-print "RN1= ", RN1
-print "ratio1= ",ratio1
-print "RN2= ", RN2
-print "ratio2= ",ratio2
-print "RN3= ", RN3
-print "ratio3= ",ratio3
-print "RN4= ", RN4
-print "ratio4= ",ratio4
+print("RTeor= ", RTeor)
+print("RN1= ", RN1)
+print("ratio1= ",ratio1)
+print("RN2= ", RN2)
+print("ratio2= ",ratio2)
+print("RN3= ", RN3)
+print("ratio3= ",ratio3)
+print("RN4= ", RN4)
+print("ratio4= ",ratio4)
 '''
 
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (ratio1 < 1e-12) & (ratio2 < 1e-12) & (ratio3 < 1e-12) & (ratio4 < 1e-12):
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')
 

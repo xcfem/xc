@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 # home made test
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
@@ -80,35 +81,35 @@ ratio10= abs(p4n.s-1.0)
 ratio= max(ratio,ratio10)
 
 
-# print O
-# print "Centroid natural coordinates: ", On
-# print "ratio1= ",ratio1
-# print "ratio2= ",ratio2
-# print p1
-# print p1n
-# print "ratio3= ", ratio3
-# print "ratio4= ", ratio4
-# print p2
-# print p2n
-# print "ratio5= ", ratio5
-# print "ratio6= ", ratio6
-# print p3
-# print p3n
-# print "ratio7= ",ratio7
-# print "ratio8= ",ratio8
-# print p4
-# print p4n
-# print "ratio9= ",ratio9
-# print "ratio10= ",ratio10
-# print "p=", p
-# print "pp=", pp
-# print "ppn=", ppn
+# print(O)
+# print("Centroid natural coordinates: ", On)
+# print("ratio1= ",ratio1)
+# print("ratio2= ",ratio2)
+# print(p1)
+# print(p1n)
+# print("ratio3= ", ratio3)
+# print("ratio4= ", ratio4)
+# print(p2)
+# print(p2n)
+# print("ratio5= ", ratio5)
+# print("ratio6= ", ratio6)
+# print(p3)
+# print(p3n)
+# print("ratio7= ",ratio7)
+# print("ratio8= ",ratio8)
+# print(p4)
+# print(p4n)
+# print("ratio9= ",ratio9)
+# print("ratio10= ",ratio10)
+# print("p=", p)
+# print("pp=", pp)
+# print("ppn=", ppn)
 
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (ratio < 1e-14):
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')
 

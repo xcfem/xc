@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 # Test from Ansys manual
 # Reference:  Strength of Material, Part I, Elementary Theory and Problems, pg. 26, problem 10
 
@@ -103,25 +104,25 @@ ratio3= ((R1Y-F/2.0)/(F/2))
 ratio4= ((R2Y-F/2.0)/(F/2))
     
 ''' 
-print "alpha= ",rad2deg((alpha))
-print "R1X= ",R1X
-print "R1Y= ",R1Y
-print "R2X= ",R2X
-print "R2Y= ",R2Y
-print "deltaX= ",deltaX
-print "deltaY= ",deltaY
-print "tensTeor= ",(tensTeor)
-print "tension= ",(tension)
-print "ratio1= ",(ratio1)
-print "ratio2= ",(ratio2)
-print "ratio3= ",(ratio3)
-print "ratio4= ",(ratio4)
+print("alpha= ",rad2deg((alpha)))
+print("R1X= ",R1X)
+print("R1Y= ",R1Y)
+print("R2X= ",R2X)
+print("R2Y= ",R2Y)
+print("deltaX= ",deltaX)
+print("deltaY= ",deltaY)
+print("tensTeor= ",(tensTeor))
+print("tension= ",(tension))
+print("ratio1= ",(ratio1))
+print("ratio2= ",(ratio2))
+print("ratio3= ",(ratio3))
+print("ratio4= ",(ratio4))
    '''
     
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (abs(ratio1)<1e-11) & (abs(ratio2)<1e-11) & (abs(ratio3)<1e-11) & (abs(ratio4)<1e-11):
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')

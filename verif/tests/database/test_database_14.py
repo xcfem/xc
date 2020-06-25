@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 # home made test
 
 import xc_base
@@ -88,10 +89,10 @@ os.system("rm -r -f /tmp/test14.db")
 db= feProblem.newDatabase("BerkeleyDB","/tmp/test14.db")
 db.save(100)
 feProblem.clearAll()
-feProblem.setVerbosityLevel(0) #Dont print warning messages
+feProblem.setVerbosityLevel(0) #Dont print(warning messages)
                             #about pointers to material.
 db.restore(100)
-feProblem.setVerbosityLevel(1) #Print warnings again 
+feProblem.setVerbosityLevel(1) #print(warnings again )
 
 
 # Solution
@@ -119,10 +120,10 @@ result= analysis.analyze(1)
 
 db.save(105)
 feProblem.clearAll()
-feProblem.setVerbosityLevel(0) #Dont print warning messages
+feProblem.setVerbosityLevel(0) #Dont print(warning messages)
                             #about pointers to material.
 db.restore(105)
-feProblem.setVerbosityLevel(1) #Print warnings again 
+feProblem.setVerbosityLevel(1) #print(warnings again )
 
 
 nodes.calculateNodalReactions(True,1e-7)
@@ -145,25 +146,25 @@ ratio3= ((RB1+F)/F)
 ratio4= (RB2)
 
 ''' 
-print "R1= ",R1
-print "R2= ",R2
-print "dx2= ",deltax2
-print "dy2= ",deltay2
-print "RB1= ",RB1
-print "RB2= ",RB2
-print "dxB2= ",deltaxB2
-print "dyB2= ",deltayB2
-print "ratio1= ",ratio1
-print "ratio2= ",ratio2
-print "ratio3= ",ratio3
-print "ratio4= ",ratio4
+print("R1= ",R1)
+print("R2= ",R2)
+print("dx2= ",deltax2)
+print("dy2= ",deltay2)
+print("RB1= ",RB1)
+print("RB2= ",RB2)
+print("dxB2= ",deltaxB2)
+print("dyB2= ",deltayB2)
+print("ratio1= ",ratio1)
+print("ratio2= ",ratio2)
+print("ratio3= ",ratio3)
+print("ratio4= ",ratio4)
    '''
 
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (abs(ratio1)<1e-5) & (abs(ratio2)<1e-5) & (abs(ratio3)<1e-5):
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')
 os.system("rm -rf /tmp/test14.db") # Your garbage you clean it

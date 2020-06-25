@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 '''Element selection from a node set. Home made test.'''
 import xc_base
 import geom
@@ -74,7 +75,7 @@ for n in nodes:
 nodes= trialSet1.getNodes
 for n in nodes:
   coord= n.getCoord
-  print "  node: ",n.tag," x= ",coord[0],", y= ",coord[1],", z= ",coord[2]
+  print("  node: ",n.tag," x= ",coord[0],", y= ",coord[1],", z= ",coord[2])
 '''
 elements= preprocessor.getSets.getSet("total").getElements
 for e in elements:
@@ -82,17 +83,17 @@ for e in elements:
     trialSet1.getElements.append(e)
 
 ''' 
-print 'ratioA= ', ratioA
-print 'ratioB= ', ratioB
+print('ratioA= ', ratioA)
+print('ratioB= ', ratioB)
 elements= trialSet1.getElements
 for e in elements:
-  print "tag= ",e.tag," node I:",e.nod[0].tag," node J:",e.nod[1].tag
+  print("tag= ",e.tag," node I:",e.nod[0].tag," node J:",e.nod[1].tag)
 '''
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (ratioA==0) & (ratioB==0) & (abs(trialSet1.getNumNodes-4)<1e-15) & (abs(trialSet1.getNumElements-2)<1e-15):
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')
 

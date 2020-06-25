@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 ''' Test basado en el denominado VM53 of the Ansys verification manual
    Reference: Thomson, Ref 9: Vibration Theory and Applications, pg. 264, clause 8.2.
    '''
@@ -131,27 +132,27 @@ ratio4= abs((f2-149.42)/149.42)
 ratio5= abs((f3-224.12)/224.12)
 
 ''' 
-print "stress= ",sigma
-print "ratio1= ",(ratio1)
-print "tension= ",tension
-print "ratio2= ",(ratio2)
+print("stress= ",sigma)
+print("ratio1= ",(ratio1))
+print("tension= ",tension)
+print("ratio2= ",(ratio2))
 
-print "eig1= ",eig1
-print "eig2= ",eig2
-print "eig3= ",eig3
-print "f1= ",math.sqrt(eig1)/(2*math.pi)
-print "ratio3= ",(ratio3)
-print "f2= ",math.sqrt(eig2)/(2*math.pi)
-print "ratio4= ",(ratio4)
-print "f3= ",math.sqrt(eig3)/(2*math.pi)
-print "ratio5= ",(ratio5)
+print("eig1= ",eig1)
+print("eig2= ",eig2)
+print("eig3= ",eig3)
+print("f1= ",math.sqrt(eig1)/(2*math.pi))
+print("ratio3= ",(ratio3))
+print("f2= ",math.sqrt(eig2)/(2*math.pi))
+print("ratio4= ",(ratio4))
+print("f3= ",math.sqrt(eig3)/(2*math.pi))
+print("ratio5= ",(ratio5))
    '''
  
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (abs(ratio1)<1e-4) & (abs(ratio2)<1e-4) & (abs(ratio3)<1e-2) & (abs(ratio3)<1e-2) & (abs(ratio5)<5e-2) :
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')
   

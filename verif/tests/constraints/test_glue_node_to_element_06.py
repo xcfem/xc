@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 '''Attaching two nodes to the same element. Home made test.'''
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
@@ -108,13 +109,13 @@ ratio4= reactionNode20.Norm()
 actionNode20= xc.Vector([0,0,0,0,0,0])
 actionNode20Norm= actionNode20.Norm()
 
-# print "svdAction= ", svdAction
-# print "svdReactionNodes= ", svdReactionNodes
-# print "svdResid= ", svdResid
-# print "ratio1= ", ratio1
-# print "ratio2= ", ratio2
-# print "ratio3= ", ratio3
-# print "ratio4= ", ratio4
+# print("svdAction= ", svdAction)
+# print("svdReactionNodes= ", svdReactionNodes)
+# print("svdResid= ", svdResid)
+# print("ratio1= ", ratio1)
+# print("ratio2= ", ratio2)
+# print("ratio3= ", ratio3)
+# print("ratio4= ", ratio4)
 
 
 import os
@@ -123,6 +124,6 @@ fname= os.path.basename(__file__)
 condNode10= (abs(ratio1)<1e-10) & (abs(ratio2)<1e-9) & (abs(ratio3)<1e-9)
 condNode20= (abs(ratio4)<1e-10)
 if (result==0) & condNode10 & condNode20:
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')

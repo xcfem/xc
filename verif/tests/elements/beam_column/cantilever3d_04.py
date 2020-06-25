@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 # home made test
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
@@ -95,17 +96,17 @@ thetateor= (M*L/(G*J))
 ratio1= (M1/M)
 ratio2= (theta/thetateor)
 ''' 
-print "M1= ",M1
-print ratio1
-print "theta prog.= ", theta
-print "theta teor.= ", thetateor
-print ratio2
+print("M1= ",M1)
+print(ratio1)
+print("theta prog.= ", theta)
+print("theta teor.= ", thetateor)
+print(ratio2)
  '''
 cumple= (abs(ratio1-1.0)<1e-5) & (abs(ratio2-1.0)<1e-5)
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if cumple:
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')

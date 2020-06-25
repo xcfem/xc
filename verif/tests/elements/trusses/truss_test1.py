@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 
 #Test from Ansys manual
 #Reference:  Strength of Materials, Part I, Elementary Theory and Problems, pg. 26, problem 10
@@ -83,16 +84,16 @@ R2= n1.getReaction[1]
 ratio1= (R1-900)/900
 ratio2= (R2-600)/600
 
-#print "R1= ",R1
-#print "R2= ",R2
-#print "ratio1= ",ratio1
-#print "ratio2= ",ratio2
+#print("R1= ",R1)
+#print("R2= ",R2)
+#print("ratio1= ",ratio1)
+#print("ratio2= ",ratio2)
 
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if abs(ratio1)<1e-5 and abs(ratio2)<1e-5:
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')
 

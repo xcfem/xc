@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 
 '''Verification of the computing of the ultimate load of an steel corbel
 from the exercise 24.4.5 at page XXV-40 of the book Estructuras Metálicas
@@ -48,22 +49,22 @@ VRd2Teor= (CE*MplRdTeor/d)
 ratio5= ((VRd2Teor-VRd2)/VRd2Teor)
 
 '''
-print "c= ",c
-print "lambda= ",lmbd
-print "CE= ",CE
-print "MplRd= ",MplRd/1e3,"kN m\n"
-print "VRd2= ",VRd2/1e3,"kN \n"
+print("c= ",c)
+print("lambda= ",lmbd)
+print("CE= ",CE)
+print("MplRd= ",MplRd/1e3,"kN m\n")
+print("VRd2= ",VRd2/1e3,"kN \n")
 
-print "ratio1= ",ratio1
-print "ratio2= ",ratio2
-print "ratio3= ",ratio3
-print "ratio4= ",ratio4
-print "ratio5= ",ratio5'''
+print("ratio1= ",ratio1)
+print("ratio2= ",ratio2)
+print("ratio3= ",ratio3)
+print("ratio4= ",ratio4)
+print("ratio5= ",ratio5''')
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (abs(ratio1)<0.1) & (abs(ratio2)<0.1) & (abs(ratio3)<0.1)& (abs(ratio4)<0.1) & (abs(ratio5)<0.1):
-   print "test ",fname,": ok."
+   print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')
 

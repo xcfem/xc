@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 ''' Buckling resistance of of steel columns.
    Example 1 page 12 from publication:
    Eurocodes ‐ Design of steel buildings with worked examples
@@ -38,17 +39,17 @@ NbRd= HEB340.getBucklingResistance(Leq,Leq,'c','b',1)
 NbRdTeor= 4186.2e3
 ratio2= abs(NbRd-NbRdTeor)/NbRd
 
-# print 'XY= ', XY
-# print 'XZ= ', XZ
-# print 'ratio1= ', ratio1
-# print 'NbRd= ', NbRd/1e3, ' kN'
-# print 'ratio2= ', ratio2
+# print('XY= ', XY)
+# print('XZ= ', XZ)
+# print('ratio1= ', ratio1)
+# print('NbRd= ', NbRd/1e3, ' kN')
+# print('ratio2= ', ratio2)
 
 
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if((ratio1<0.01) and (ratio2<0.01)):
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')

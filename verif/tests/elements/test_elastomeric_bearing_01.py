@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 # home made test
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
@@ -118,43 +119,43 @@ ratio11= ((MY-momY)/MY)
 ratio12= ((MZ-momZ)/MZ)
 
 ''' 
-print "KX= ",KX
-print "RX= ",RX
-print "dx= ",deltax,"\n\n"
+print("KX= ",KX)
+print("RX= ",RX)
+print("dx= ",deltax,"\n\n")
 
-print "KY= ",KY
-print "RY= ",RY
-print "dy= ",deltay,"\n\n"
+print("KY= ",KY)
+print("RY= ",RY)
+print("dy= ",deltay,"\n\n")
 
-print "KZ= ",KZ
-print "RZ= ",RZ
-print "dz= ",deltaz,"\n\n"
+print("KZ= ",KZ)
+print("RZ= ",RZ)
+print("dz= ",deltaz,"\n\n")
 
-print "VX= ",VX
-print "VY= ",VY
-print "N= ",N
-print "T= ",T
-print "momY= ",momY
-print "momZ= ",momZ,"\n\n"
+print("VX= ",VX)
+print("VY= ",VY)
+print("N= ",N)
+print("T= ",T)
+print("momY= ",momY)
+print("momZ= ",momZ,"\n\n")
 
-print "ratio1= ",(ratio1)
-print "ratio2= ",(ratio2)
-print "ratio3= ",(ratio3)
-print "ratio4= ",(ratio4)
-print "ratio5= ",(ratio5)
-print "ratio6= ",(ratio6)
-print "ratio7= ",(ratio7)
-print "ratio8= ",(ratio8)
-print "ratio9= ",(ratio9)
-print "ratio10= ",(ratio10)
-print "ratio11= ",(ratio11)
-print "ratio12= ",(ratio12)
+print("ratio1= ",(ratio1))
+print("ratio2= ",(ratio2))
+print("ratio3= ",(ratio3))
+print("ratio4= ",(ratio4))
+print("ratio5= ",(ratio5))
+print("ratio6= ",(ratio6))
+print("ratio7= ",(ratio7))
+print("ratio8= ",(ratio8))
+print("ratio9= ",(ratio9))
+print("ratio10= ",(ratio10))
+print("ratio11= ",(ratio11))
+print("ratio12= ",(ratio12))
    '''
   
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (abs(ratio1)<1e-5) & (abs(ratio2-1.0)<1e-5) & (abs(ratio3)<1e-5) & (abs(ratio4-1.0)<1e-5)  & (abs(ratio5)<1e-5) & (abs(ratio6-1.0)<1e-3) & (abs(ratio7)<1e-15) & (abs(ratio8)<1e-15) & (abs(ratio9)<1e-15) & (abs(ratio10)<1e-15) & (abs(ratio11)<1e-15) & (abs(ratio12)<1e-15) :
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')

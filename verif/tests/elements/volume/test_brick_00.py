@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 '''Test taken from example 5-001 of SAP2000 verification manual.'''
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
@@ -81,18 +82,18 @@ R= R9+R10+R11+R12
 ratio1= (R-xc.Vector([0,0,4])).Norm()
 
 ''' 
-print "R9= ",R9
-print "R10= ",R10
-print "R11= ",R11
-print "R12= ",R12
-print "R= ",R
-print "ratio1= ",ratio1
+print("R9= ",R9)
+print("R10= ",R10)
+print("R11= ",R11)
+print("R12= ",R12)
+print("R= ",R)
+print("ratio1= ",ratio1)
    '''
 
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if(ratio1<1e-12):
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')

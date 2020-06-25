@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 '''Limit state controller for shear. Home made test.'''
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AO_O)"
@@ -134,7 +135,7 @@ outCfg= lsd.VerifOutVars(listFile='N',calcMeanCF='Y')
 
 (FEcheckedModel,meanFCs)= reinfConcreteSectionDistribution.runChecking(lsd.shearResistance, matDiagType="d",threeDim= True,outputCfg=outCfg)  
 
-#print "mean FCs: ", meanFCs
+#print("mean FCs: ", meanFCs)
 
 meanFC0Teor= 0.89306075607898694
 ratio1= abs(meanFCs[0]-meanFC0Teor)/meanFC0Teor
@@ -142,10 +143,10 @@ meanFC1Teor= 0.97448959156755022
 ratio2= abs(meanFCs[1]-meanFC1Teor)/meanFC1Teor
 
 '''
-print "meanFCs[0]= ", meanFCs[0]
-print "ratio1= ",ratio1
-print "meanFCs[1]= ", meanFCs[1]
-print "ratio2= ",ratio2
+print("meanFCs[0]= ", meanFCs[0])
+print("ratio1= ",ratio1)
+print("meanFCs[1]= ", meanFCs[1])
+print("ratio2= ",ratio2)
 '''
 
 # Show logging messages.
@@ -153,6 +154,6 @@ print "ratio2= ",ratio2
 import os
 fname= os.path.basename(__file__)
 if (ratio1<0.01) & (ratio2<0.01):
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')

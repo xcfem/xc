@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 '''Beam simple joint by direct web welding: computation of the required length of a weld bead, according to the clause 61.4.1 of EAE.'''
 # Verification by means of the example in the page XXV-31 of the book
 # "Estructuras Metálicas" de Vicente Cudós Samblancat
@@ -41,20 +42,20 @@ lMax= EAE_limit_state_checking.LongMaxSoldAlma(tw)
 ratio1= abs(((VRd-Vd)/VRd))
 
 '''
-print "Weld bead length l= ",l*1000,"mm \n"
-print "Maximum length of the weld beads lMax= ",lMax*1000," mm\n"
-print "Fillet weld throat a= ",a*1000,"mm \n"
-print "Shear force la Vd= ",Vd/1000," kN\n"
-print "Shear resistance of the joint VRd= ",VRd/1000," kN\n"
-print "VRd/Vd= ",VRd/Vd
-print "ratio1= ",ratio1
+print("Weld bead length l= ",l*1000,"mm \n")
+print("Maximum length of the weld beads lMax= ",lMax*1000," mm\n")
+print("Fillet weld throat a= ",a*1000,"mm \n")
+print("Shear force la Vd= ",Vd/1000," kN\n")
+print("Shear resistance of the joint VRd= ",VRd/1000," kN\n")
+print("VRd/Vd= ",VRd/Vd)
+print("ratio1= ",ratio1)
 '''
 
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (abs(ratio1)<0.1):
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')
 

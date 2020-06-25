@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 # Tomado del example A47 del SOLVIA Verification Manual
 from __future__ import division
 import xc_base
@@ -76,7 +77,7 @@ setTotal.genMesh(xc.meshDir.I)
 # Solution procedure
 import os
 pth= os.path.dirname(__file__)
-#print "pth= ", pth
+#print("pth= ", pth)
 if(not pth):
   pth= "."
 execfile(pth+"/../../aux/arpackpp_solver.py")
@@ -92,17 +93,17 @@ fteor= lambdA**2/(2*math.pi*L**2)*math.sqrt(E*I/m)
 ratio1= (fcalc-fteor)/fteor
 
 '''
-print "fteor= ",fteor
-print "eig1= ",(omega)
-print "omega= ",(omega)
-print "T= ",(T)
-print "fcalc= ",(fcalc)
+print("fteor= ",fteor)
+print("eig1= ",(omega))
+print("omega= ",(omega))
+print("T= ",(T))
+print("fcalc= ",(fcalc))
 ''' 
 
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (abs(ratio1)<1e-2):
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')

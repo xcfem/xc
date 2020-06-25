@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 from __future__ import division
 '''Test for checking that the results of prestressing losses are independent of
 the unit system chosen.
@@ -102,27 +103,27 @@ ratio14=(np.array(tendon_mm.stressAfterLossFriction)-np.array(tendon_m.stressAft
 ratio15=Laffected_mm-Laffected_m*1000
 
 '''
-print 'ratio1= ', ratio1
-print 'ratio2= ', ratio2
-print 'ratio3= ', ratio3
-print 'ratio4= ', ratio4
-print 'ratio5= ', ratio5
-print 'ratio6= ', ratio6
-print 'ratio7= ', ratio7
-print 'ratio8= ', ratio8
-print 'ratio9= ', ratio9
-print 'ratio10= ', ratio10
-print 'ratio11= ', ratio11
-print 'ratio12= ', ratio12
-print 'ratio13= ', ratio13
-print 'ratio14= ', ratio14
-print 'ratio15= ', ratio15
+print('ratio1= ', ratio1)
+print('ratio2= ', ratio2)
+print('ratio3= ', ratio3)
+print('ratio4= ', ratio4)
+print('ratio5= ', ratio5)
+print('ratio6= ', ratio6)
+print('ratio7= ', ratio7)
+print('ratio8= ', ratio8)
+print('ratio9= ', ratio9)
+print('ratio10= ', ratio10)
+print('ratio11= ', ratio11)
+print('ratio12= ', ratio12)
+print('ratio13= ', ratio13)
+print('ratio14= ', ratio14)
+print('ratio15= ', ratio15)
 '''
 
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (abs(ratio1)<1.e-10 and abs(ratio2)<1.e-10  and abs(ratio3)<1.e-10  and abs(ratio4)<1.e-10  and abs(ratio5)<1.e-10  and abs(ratio6)<1.e-10  and abs(ratio7)<1.e-10  and abs(ratio8)<1.e-10  and abs(ratio9)<1.e-10  and abs(ratio10)<1.e-4   and abs(ratio11)<1.e-10  and abs(ratio12)<1.e-9  and abs(ratio13)<1.e-4  and abs(ratio14)<1.e-10  and abs(ratio15)<1e-3) :
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')

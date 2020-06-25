@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 # home made test
 '''«rotate» method verification for a 3D elastic section.'''
 
@@ -90,20 +91,20 @@ ratio2= abs((F*L)-M)/(F*L)
 ratio3= abs(V+F)/F
 
 ''' 
-print "delta= ",delta
-print "deltaTeor= ",deltateor
-print "ratio1= ",ratio1
-print "M= ",M
-print "MTeor= ",(F*L)
-print "ratio2= ",ratio2
-print "V1= ",V
-print "ratio3= ",ratio3
+print("delta= ",delta)
+print("deltaTeor= ",deltateor)
+print("ratio1= ",ratio1)
+print("M= ",M)
+print("MTeor= ",(F*L))
+print("ratio2= ",ratio2)
+print("V1= ",V)
+print("ratio3= ",ratio3)
  '''
 
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if((ratio1<1e-9) & (ratio2<1e-15) & (ratio3<1e-15)): 
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')

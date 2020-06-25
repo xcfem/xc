@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 # home made test
 ''' Check of the restore function.
    In the second analysis the solution is obtained
@@ -131,14 +132,14 @@ ratio= (tInic*A-elem1.getN())/(tInic*A)
 
 '''
 print{"force= ",getN
-print "prestressing force= ",(tInic*A)
-print "strain= ",getStrain
-print "ratio= ",ratio
+print("prestressing force= ",(tInic*A))
+print("strain= ",getStrain)
+print("ratio= ",ratio)
 '''
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if abs(ratio)<0.02:
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')
 

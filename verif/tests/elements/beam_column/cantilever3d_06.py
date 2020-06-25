@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 # home made test
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
@@ -101,21 +102,21 @@ ratio2= abs((M1+M)/M)
 ratio3= (theta/thetateor)
 
 ''' 
-print "delta prog.= ", delta
-print "delta teor.= ", deltateor
-print ratio1
-print "M= ",M
-print "M1= ",M1
-print ratio2
-print "theta prog.= ", theta
-print "theta teor.= ", thetateor
-print ratio3
+print("delta prog.= ", delta)
+print("delta teor.= ", deltateor)
+print(ratio1)
+print("M= ",M)
+print("M1= ",M1)
+print(ratio2)
+print("theta prog.= ", theta)
+print("theta teor.= ", thetateor)
+print(ratio3)
  '''
 cumple= (abs(ratio1-1.0)<1e-5) & (ratio2<1e-5) & (abs(ratio3-1.0)<1e-5)
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if cumple:
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')

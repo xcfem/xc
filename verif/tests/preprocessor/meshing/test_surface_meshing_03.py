@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 import xc_base
 import geom
 import xc
@@ -72,9 +73,9 @@ divsOk= surfaces.conciliaNDivs()
 
 
 setTotal= preprocessor.getSets.getSet("total")
-feProblem.setVerbosityLevel(0) #Dont print warning messages about element seed.
+feProblem.setVerbosityLevel(0) #Dont print(warning messages about element seed.)
 setTotal.genMesh(xc.meshDir.I)
-feProblem.setVerbosityLevel(1) #Print warnings again 
+feProblem.setVerbosityLevel(1) #print(warnings again )
 
 
 numNodes= setTotal.getNodes.size
@@ -98,6 +99,6 @@ import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if((ratio1<=1e-10) & (ratio2<=1e-10) & (ratio3<=1e-15)):
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')

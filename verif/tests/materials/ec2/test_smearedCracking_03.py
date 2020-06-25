@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 
 __author__= "Ana Ortega (AO_O) "
 __copyright__= "Copyright 2016, AO_O"
@@ -186,8 +187,8 @@ RMX2= nodes.getNode(2).getReaction[3]   #Bending moment Mx reaction at node 2
 RMY2= nodes.getNode(2).getReaction[4]   #Bending moment My reaction at node 2
 RMZ2= nodes.getNode(2).getReaction[5]   #Bending moment Mz reaction at node 2
 
-print 'Rnode1= (',nodes.getNode(1).getReaction[0],',',nodes.getNode(1).getReaction[1],',',nodes.getNode(1).getReaction[2],',',nodes.getNode(1).getReaction[3],',',nodes.getNode(1).getReaction[4],',',nodes.getNode(1).getReaction[5],')'
-print 'Rnode2= (',nodes.getNode(2).getReaction[0],',',nodes.getNode(2).getReaction[1],',',nodes.getNode(2).getReaction[2],',',nodes.getNode(2).getReaction[3],',',nodes.getNode(2).getReaction[4],',',nodes.getNode(2).getReaction[5],')'
+print('Rnode1= (',nodes.getNode(1).getReaction[0],',',nodes.getNode(1).getReaction[1],',',nodes.getNode(1).getReaction[2],',',nodes.getNode(1).getReaction[3],',',nodes.getNode(1).getReaction[4],',',nodes.getNode(1).getReaction[5],')')
+print('Rnode2= (',nodes.getNode(2).getReaction[0],',',nodes.getNode(2).getReaction[1],',',nodes.getNode(2).getReaction[2],',',nodes.getNode(2).getReaction[3],',',nodes.getNode(2).getReaction[4],',',nodes.getNode(2).getReaction[5],')')
 '''
 elements= preprocessor.getElementHandler
 ele1= elements.getElement(1)
@@ -244,55 +245,55 @@ YepsSMax= fReinfMax.getPos().x # y coord. of the steel fiber with maximum strain
 ZepsSMax= fReinfMax.getPos().y # z coord. of the steel fiber with maximum strain
 
 '''
-print "sumAreas= ",(sumAreas)
-print "Iz= ",(Iz)
-print "IEIz= ",IEIz
-print "TEIz= ",TEIz
-print "E1= ",(IEIz/Iz)
-print "Iy= ",(Iy)
-print "IEIy= ",IEIy
-print "TEIy= ",TEIy
-print "E2= ",(IEIy/Iy)
-print "Neutral fiber depth: ",x," m"
-print "Sum of normal stresses: ",Resul*1e-3," kN"
-print "Strain: ",Deform*1e3,"E-3"
+print("sumAreas= ",(sumAreas))
+print("Iz= ",(Iz))
+print("IEIz= ",IEIz)
+print("TEIz= ",TEIz)
+print("E1= ",(IEIz/Iz))
+print("Iy= ",(Iy))
+print("IEIy= ",IEIy)
+print("TEIy= ",TEIy)
+print("E2= ",(IEIy/Iy))
+print("Neutral fiber depth: ",x," m")
+print("Sum of normal stresses: ",Resul*1e-3," kN")
+print("Strain: ",Deform*1e3,"E-3")
 
-print "\nMinimum strain in concrete fibers:: ",(epsCMin*1E3),"E-3"
-print "Minimum stress in concrete fibers: ",(sgCMin/1e6),"E6"
+print("\nMinimum strain in concrete fibers:: ",(epsCMin*1E3),"E-3")
+print("Minimum stress in concrete fibers: ",(sgCMin/1e6),"E6")
 
-print "Y coordinate of the concrete fiber with minimum strain: ",(YepsCMin)
-print "Z coordinate of the concrete fiber with minimum strain: ",(ZepsCMin)
+print("Y coordinate of the concrete fiber with minimum strain: ",(YepsCMin))
+print("Z coordinate of the concrete fiber with minimum strain: ",(ZepsCMin))
 
-print "\nMinimum strain in steel fibers: ",(epsSMin*1E3),"E-3"
-print "Minimum stress in steel fibers: ",(sgSMin/1e6),"E6"
-print "Y coordinate of the steel fiber with minimum strain: ",(YepsSMin)
-print "Z coordinate of the steel fiber with minimum strain: ",(ZepsSMin)
+print("\nMinimum strain in steel fibers: ",(epsSMin*1E3),"E-3")
+print("Minimum stress in steel fibers: ",(sgSMin/1e6),"E6")
+print("Y coordinate of the steel fiber with minimum strain: ",(YepsSMin))
+print("Z coordinate of the steel fiber with minimum strain: ",(ZepsSMin))
 
 
-print "\nMaximum strain in steel fibers: ",(epsSMax*1E3),"E-3"
-print "Maximum stress in steel fibers: ",(sgSMax/1e6),"E6"
-print "Y coordinate of the steel fiber with maximum strain: ",(YepsSMax)
-print "Z coordinate of the steel fiber with maximum strain: ",(ZepsSMax)
+print("\nMaximum strain in steel fibers: ",(epsSMax*1E3),"E-3")
+print("Maximum stress in steel fibers: ",(sgSMax/1e6),"E6")
+print("Y coordinate of the steel fiber with maximum strain: ",(YepsSMax))
+print("Z coordinate of the steel fiber with maximum strain: ",(ZepsSMax))
 '''
 
 #              *Crack width calculation*
 
 #depth of the effective area:
 hceff=EC2_limit_state_checking.h_c_eff(depth_tot=depth,depht_eff=depth-cover-0.024/2.0,depth_neutral_axis=abs(x))
-# print 'depth of the effective area: ',hceff,' m'
+# print('depth of the effective area: ',hceff,' m')
 #effective reinforcement ratio
 roseff=EC2_limit_state_checking.ro_eff(A_s=A_s,width=width,h_c_eff=hceff)
-# print 'effective reinforcement ratio: ',roseff
+# print('effective reinforcement ratio: ',roseff)
 #maximum crack spacing
 srmax=EC2_limit_state_checking.s_r_max(k1=0.8,k2=0.5,k3=3.4,k4=0.425,cover=cover,fiReinf=0.024,ro_eff=roseff)
-# print 'maximum crack spacing: ',srmax,' m'
+# print('maximum crack spacing: ',srmax,' m')
 #mean strain in the concrete between cracks
 eps_cm=concrete.fctm()/concrete.E0()/2.0
 #mean strain in the reinforcemen takin into account the effects of tension stiffening
 eps_sm=epsSMax
 #crack withs
 w_k=srmax*(eps_sm-eps_cm)
-# print 'crack widths: ',w_k*1e3, ' mm'
+# print('crack widths: ',w_k*1e3, ' mm')
 
 xComp= -0.206563714084
 epsCMinComp= -0.000534072629205
@@ -317,43 +318,43 @@ ratio9=(eps_cmComp-eps_cm)/eps_cmComp
 ratio10=(w_kComp-w_k)/w_kComp
 
 '''
-print 'x= ', x
-print 'xComp= ', xComp
-print 'ratio1= ', ratio1
-print 'epsCMin= ', epsCMin
-print 'epsCMinComp= ', epsCMinComp
-print 'ratio2= ', ratio2
-print 'sgCMin= ', sgCMin
-print 'sgCMinComp= ', sgCMinComp
-print 'ratio3= ', ratio3
-print 'epsSMax= ', epsSMax
-print 'epsSMaxComp= ', epsSMaxComp
-print 'ratio4= ', ratio4
-print 'sgSMax= ', sgSMax
-print 'sgSMaxComp= ', sgSMaxComp
-print 'ratio5= ', ratio5
-print 'hceff= ', hceff
-print 'hceffComp= ', hceffComp
-print 'ratio6= ', ratio6
-print 'roseff= ', roseff
-print 'roseffComp= ', roseffComp
-print 'ratio7= ', ratio7
-print 'srmax= ', srmax
-print 'srmaxComp= ', srmaxComp
-print 'ratio8= ', ratio8
-print 'eps_cm= ', eps_cm
-print 'eps_cmComp= ', eps_cmComp
-print 'ratio9= ', ratio9
-print 'w_k= ', w_k
-print 'w_kComp= ', w_kComp
-print 'ratio10= ', ratio10
+print('x= ', x)
+print('xComp= ', xComp)
+print('ratio1= ', ratio1)
+print('epsCMin= ', epsCMin)
+print('epsCMinComp= ', epsCMinComp)
+print('ratio2= ', ratio2)
+print('sgCMin= ', sgCMin)
+print('sgCMinComp= ', sgCMinComp)
+print('ratio3= ', ratio3)
+print('epsSMax= ', epsSMax)
+print('epsSMaxComp= ', epsSMaxComp)
+print('ratio4= ', ratio4)
+print('sgSMax= ', sgSMax)
+print('sgSMaxComp= ', sgSMaxComp)
+print('ratio5= ', ratio5)
+print('hceff= ', hceff)
+print('hceffComp= ', hceffComp)
+print('ratio6= ', ratio6)
+print('roseff= ', roseff)
+print('roseffComp= ', roseffComp)
+print('ratio7= ', ratio7)
+print('srmax= ', srmax)
+print('srmaxComp= ', srmaxComp)
+print('ratio8= ', ratio8)
+print('eps_cm= ', eps_cm)
+print('eps_cmComp= ', eps_cmComp)
+print('ratio9= ', ratio9)
+print('w_k= ', w_k)
+print('w_kComp= ', w_kComp)
+print('ratio10= ', ratio10)
 '''
 
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (abs(ratio1)<1e-5) & (abs(ratio2)<1e-5) & (abs(ratio3)<1e-5) & (abs(ratio4)<1e-3) & (abs(ratio5)<1e-2) & (abs(ratio6)<1e-3) & (abs(ratio7)<1e-2) & (abs(ratio8)<1e-3) & (abs(ratio9)<1e-3) & (abs(ratio10)<1e-5):
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')
 

@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 from __future__ import division
 import xc_base
 import geom
@@ -73,9 +74,9 @@ s.genMesh(xc.meshDir.I)
 
 
 nnodCuadr= s.getNumNodes
-# print "nnod= ",s.getNumNodes
+# print("nnod= ",s.getNumNodes)
 nelemCuadr= s.getNumElements
-# print "nelem= ",s.getNumElements
+# print("nelem= ",s.getNumElements)
 
 
 
@@ -83,21 +84,21 @@ mesh= feProblem.getDomain.getMesh
 nnodDom= mesh.getNumNodes()
 
 ''' 
-print "number of nodes: ",nnod
+print("number of nodes: ",nnod)
 nodes= preprocessor.getNodeHandler
 
 for_each
-  print "  node: ",tag," x= ",coord[0],", y= ",coord[1]
+  print("  node: ",tag," x= ",coord[0],", y= ",coord[1])
 
 '''
 nelemDom= mesh.getNumElements()
-#print "number of elements: ",nelem
+#print("number of elements: ",nelem)
 perim= 0.0
 
 eIter= mesh.getElementIter
 elem= eIter.next()
 while not(elem is None):
-#  print elem.tag," nod. I: ",elem.getNodes[0].tag," nod. J: ",elem.getNodes[1].tag," nod. K: ",elem.getNodes[2].tag," nod. L: ",elem.getNodes[3].tag," L= ",elem.getPerimeter()
+#  print(elem.tag," nod. I: ",elem.getNodes[0].tag," nod. J: ",elem.getNodes[1].tag," nod. K: ",elem.getNodes[2].tag," nod. L: ",elem.getNodes[3].tag," L= ",elem.getPerimeter())
   perim+= elem.getPerimeter(True)
   elem= eIter.next()
 
@@ -114,18 +115,18 @@ ratio4= (abs(nelemDom-(NumDivI*NumDivJ)))
 ratio5= (abs(pMed-pMedTeor))
 
 ''' 
-print "perim medio: ",pMed
-print "theoretical perim medio: ",pMedTeor
-print "ratio1= ",ratio1
-print "ratio2= ",ratio2
-print "ratio3= ",ratio3
-print "ratio4= ",ratio4
-print "ratio5= ",ratio5
+print("perim medio: ",pMed)
+print("theoretical perim medio: ",pMedTeor)
+print("ratio1= ",ratio1)
+print("ratio2= ",ratio2)
+print("ratio3= ",ratio3)
+print("ratio4= ",ratio4)
+print("ratio5= ",ratio5)
  '''
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (ratio1<=1e-10) & (ratio2<=1e-10) & (ratio3<=1e-10) & (ratio4<=1e-10) & (ratio5<=1e-10):
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')

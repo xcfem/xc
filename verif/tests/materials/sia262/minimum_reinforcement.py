@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 # Home made test.
 
 from __future__ import division
@@ -39,33 +40,33 @@ AsFlexionC= SIA262_limit_state_checking.MinReinfAreaUnderFlexion(SIA262_material
 ratio10= abs(AsFlexionC-655.615346475e-6)/655.615346475e-6
 
 '''
-print "fctm= ", fctm, " MPa"
-print "ratio1= ",ratio1
-print "sgAdmA= ", sgAdmA, " MPa"
-print "ratio2= ",ratio2
-print "sgAdmB= ", sgAdmB, " MPa"
-print "ratio3= ",ratio3
-print "sgAdmC= ", sgAdmC, " MPa"
-print "ratio4= ",ratio4
-print "kt= ",kt
-print "AstTractionA= ",AsTractionA*1e6," mm2"
-print "ratio5= ",ratio5
-print "AstTractionB= ",AsTractionB*1e6," mm2"
-print "ratio6= ",ratio6
-print "AstTractionC= ",AsTractionC*1e6," mm2"
-print "ratio7= ",ratio7
-print "AstFlexionA= ",AsFlexionA*1e6," mm2"
-print "ratio8= ",ratio8
-print "AstFlexionB= ",AsFlexionB*1e6," mm2"
-print "ratio9= ",ratio9
-print "AstFlexionC= ",AsFlexionC*1e6," mm2"
-print "ratio10= ",ratio10
+print("fctm= ", fctm, " MPa")
+print("ratio1= ",ratio1)
+print("sgAdmA= ", sgAdmA, " MPa")
+print("ratio2= ",ratio2)
+print("sgAdmB= ", sgAdmB, " MPa")
+print("ratio3= ",ratio3)
+print("sgAdmC= ", sgAdmC, " MPa")
+print("ratio4= ",ratio4)
+print("kt= ",kt)
+print("AstTractionA= ",AsTractionA*1e6," mm2")
+print("ratio5= ",ratio5)
+print("AstTractionB= ",AsTractionB*1e6," mm2")
+print("ratio6= ",ratio6)
+print("AstTractionC= ",AsTractionC*1e6," mm2")
+print("ratio7= ",ratio7)
+print("AstFlexionA= ",AsFlexionA*1e6," mm2")
+print("ratio8= ",ratio8)
+print("AstFlexionB= ",AsFlexionB*1e6," mm2")
+print("ratio9= ",ratio9)
+print("AstFlexionC= ",AsFlexionC*1e6," mm2")
+print("ratio10= ",ratio10)
 '''
 
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (abs(ratio1)<1e-11 and abs(ratio2)<1e-11  and abs(ratio3)<1e-11 and abs(ratio4)<1e-11 and abs(ratio5)<1e-11  and abs(ratio6)<1e-11 and abs(ratio7)<1e-11 and abs(ratio8)<1e-11  and abs(ratio9)<1e-11 and abs(ratio10)<1e-11 ) :
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')

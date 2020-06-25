@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 # Home made test
 
 import xc_base
@@ -32,21 +33,21 @@ dist= sectionGeometryTest.distSpots(1,2)
 ''' 
              \for_each_spot
 
-                 print code,",",pos.x,",",pos.y
+                 print(code,",",pos.x,",",pos.y)
 '''
 ratio1= ((xA-x1)/xA)
 ratio2= ((yA-y1)/yA)
 ratio3= (dist-math.sqrt((x1)**2+(y1)**2))
 ''' 
-print "ratio1= ",ratio1
-print "ratio2= ",ratio2
-print "ratio3= ",ratio3
+print("ratio1= ",ratio1)
+print("ratio2= ",ratio2)
+print("ratio3= ",ratio3)
  '''
 
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (abs(ratio1)<1e-12) & (abs(ratio2)<1e-12) & (abs(ratio3)<1e-12):
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')

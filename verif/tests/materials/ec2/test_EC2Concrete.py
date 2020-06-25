@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 
 from __future__ import division
 from materials.ec2 import EC2_materials
@@ -64,7 +65,7 @@ for i in range(0,len(fcmDat)):
   sqrErr+= (fcmDat[i]-fcmCalc[i])**2
 fname= os.path.basename(__file__)+'-fcm'
 if sqrErr<1e-8:
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')
 
@@ -76,7 +77,7 @@ for i in range(0,len(fctmDat)):
   sqrErr+= (fctmDat[i]-fctmCalc[i])**2
 fname= os.path.basename(__file__)+'-fctm'
 if sqrErr<1e-8:
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')
 
@@ -88,7 +89,7 @@ for i in range(0,len(fctk005Dat)):
   sqrErr+= (fctk005Dat[i]-fctk005Calc[i])**2
 fname= os.path.basename(__file__)+'-fctk005'
 if sqrErr<1e-8:
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')
 #Test Fctk095
@@ -98,7 +99,7 @@ for i in range(0,len(fctk095Dat)):
   sqrErr+= (fctk095Dat[i]-fctk095Calc[i])**2
 fname= os.path.basename(__file__)+'-fctk095'
 if sqrErr<1e-8:
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')
 
@@ -109,7 +110,7 @@ for i in range(0,len(EcmDat)):
   sqrErr+= (EcmDat[i]-EcmCalc[i])**2
 fname= os.path.basename(__file__)+'-Ecm'
 if sqrErr<1e-8:
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')
 
@@ -120,7 +121,7 @@ for i in range(0,len(Epsc1Dat)):
   sqrErr+= (Epsc1Dat[i]-Epsc1Calc[i])**2
 fname= os.path.basename(__file__)+'-Epsc1'
 if sqrErr<1e-8:
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')
 
@@ -131,7 +132,7 @@ for i in range(0,len(Epscu1Dat)):
   sqrErr+= (Epscu1Dat[i]-Epscu1Calc[i])**2
 fname= os.path.basename(__file__)+'-Epscu1'
 if sqrErr<1e-8:
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')
 
@@ -142,7 +143,7 @@ for i in range(0,len(Epsc2Dat)):
   sqrErr+= (Epsc2Dat[i]-Epsc2Calc[i])**2
 fname= os.path.basename(__file__)+'-Epsc2'
 if sqrErr<1e-8:
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')
 
@@ -153,7 +154,7 @@ for i in range(0,len(Epscu2Dat)):
   sqrErr+= (Epscu2Dat[i]-Epscu2Calc[i])**2
 fname= os.path.basename(__file__)+'-Epscu2'
 if sqrErr<1e-8:
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')
 
@@ -164,7 +165,7 @@ for i in range(0,len(ExpNDat)):
   sqrErr+= (ExpNDat[i]-ExpNCalc[i])**2
 fname= os.path.basename(__file__)+'-ExpN'
 if sqrErr<1e-8:
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')
 
@@ -175,7 +176,7 @@ for i in range(0,len(Epsc3Dat)):
   sqrErr+= (Epsc3Dat[i]-Epsc3Calc[i])**2
 fname= os.path.basename(__file__)+'-Epsc3'
 if sqrErr<1e-8:
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')
 
@@ -186,6 +187,6 @@ for i in range(0,len(Epscu3Dat)):
   sqrErr+= (Epscu3Dat[i]-Epscu3Calc[i])**2
 fname= os.path.basename(__file__)+'-Epscu3'
 if sqrErr<1e-8:
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')

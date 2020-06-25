@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 '''     Test that checks the method setControlPoints() of EC3Beam, that
         sets the five equally spaced points in the beam where the moment Mz 
         will be evaluated in order to obtain the moment gradient factor 
@@ -119,6 +120,6 @@ import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if((ratio1<1e-5) and (ratio2<1e-5)  and (ratio3<1e-5) and (ratio4<1e-5) and (ratio5<1e-5) ):
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')

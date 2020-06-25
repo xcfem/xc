@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 ''' Crack control checking of a reinforced concrete section. according 
     to EHE-08. The results are compared with those of the problem 9 
     of the book "El hormigón armado en problemas según la EHE." 
@@ -40,9 +41,9 @@ rebarsSpacing= ((width-2*cover)/(numOfRebars-1))
 rebarsOffset= ((width-(numOfRebars-1)*rebarsSpacing)/2)
 
 ''' 
-print "rebarsSpacing= ",rebarsSpacing
-print "numOfRebars= ",numOfRebars
-print "rebarsOffset= ",rebarsOffset
+print("rebarsSpacing= ",rebarsSpacing)
+print("numOfRebars= ",numOfRebars)
+print("rebarsOffset= ",rebarsOffset)
    '''
 
 feProblem= xc.FEProblem()
@@ -125,8 +126,8 @@ ratio2= ((secHAParamsFis.Wk-0.3e-3)/0.3e-3)
 
 '''
 secHAParamsFis.printParams()
-print "ratio1= ",ratio1
-print "ratio2= ",ratio2
+print("ratio1= ",ratio1)
+print("ratio2= ",ratio2)
 '''
 
 
@@ -134,6 +135,6 @@ import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (abs(ratio1)<0.05) & (abs(ratio2)<0.1):
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')

@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 CooMax= 10
 import xc_base
 import geom
@@ -42,14 +43,14 @@ s5*= s2
 sz5= s5.getPoints.size
 
 #for p in pnts:
-#  print code
+#  print(code)
 
-#print "sz= ", sz
+#print("sz= ", sz)
 
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (sz3==3) and (sz4==1) and (sz5==1):
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')

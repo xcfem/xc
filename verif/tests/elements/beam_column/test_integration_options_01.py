@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 # Home made test
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
@@ -34,12 +35,12 @@ hingeEndpointBeamIntegration= prep.getBeamIntegratorHandler.newBeamIntegrator('H
 numIntegratorsB= len(prep.getBeamIntegratorHandler)
 ratio1= numIntegratorsB-14-numIntegratorsA
 
-#print 'numIntegrators= ', numIntegrators
+#print('numIntegrators= ', numIntegrators)
 
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if abs(ratio1)<1e-15:
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')

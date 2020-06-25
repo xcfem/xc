@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 '''Verification of the rotate method for an 3D elastic section.'''
 
 import xc_base
@@ -40,24 +41,24 @@ ratio2= (weakAxis-weakAxisTeor).getModulus()
 ratio3= (I2axis-weakAxisTeor).getModulus()
 
 ''' 
-print "Iz: ",Iz
-print "I1: ",I1
-print "Axis 1: ",I1axis
-print "Strong axis: ",strongAxis
-print "Iy: ",Iy
-print "I2: ",I2
-print "Axis 2: ",I2axis
-print "Weak axis: ",weakAxis
-print "ratio0= ",ratio0
-print "ratio1= ",ratio1
-print "ratio2= ",ratio2
-print "ratio3= ",ratio3
+print("Iz: ",Iz)
+print("I1: ",I1)
+print("Axis 1: ",I1axis)
+print("Strong axis: ",strongAxis)
+print("Iy: ",Iy)
+print("I2: ",I2)
+print("Axis 2: ",I2axis)
+print("Weak axis: ",weakAxis)
+print("ratio0= ",ratio0)
+print("ratio1= ",ratio1)
+print("ratio2= ",ratio2)
+print("ratio3= ",ratio3)
    '''
 
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if((ratio0<1e-15) & (ratio1<1e-15) & (ratio2<1e-15) & (ratio3<1e-15)):
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')

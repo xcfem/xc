@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 # Home made test
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
@@ -22,12 +23,12 @@ preprocessor=  feProblem.getPreprocessor
 HP45= EHE_materials.HA45
 errMax= concrete_base.concreteDesignTangentTest(preprocessor, HP45)
 
-#print "errMax= ",errMax
+#print("errMax= ",errMax)
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if(errMax<1e-15):
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')
 

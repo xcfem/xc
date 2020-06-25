@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 from __future__ import division
 '''Test for checking the deflections in a prestressed concrete beam.
 Data for the problem and approximate calculation are taken from 
@@ -199,7 +200,7 @@ import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if abs(ratio1)<1e-4 and abs(ratio2)<1e-4 and abs(ratio3)<1e-4 and abs(ratio4)<1e-4:
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')
 

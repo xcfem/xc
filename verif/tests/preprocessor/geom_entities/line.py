@@ -58,13 +58,13 @@ nnod= mesh.getNumNodes()
 nelem= mesh.getNumElements()
 
 # for n in l.nodes:
-#   print n.tag
+#   print(n.tag)
 # for e in l.elements:
-#   print e.tag
+#   print(e.tag)
 # nIter= mesh.getNodeIter
 # nod= nIter.next()
 # while not(nod is None):
-#   print "tag= ", nod.tag, " x= ", nod.getCoo[0], " y= ", nod.getCoo[1], " z= ", nod.getCoo[2]
+#   print("tag= ", nod.tag, " x= ", nod.getCoo[0], " y= ", nod.getCoo[1], " z= ", nod.getCoo[2])
 #   nod= nIter.next()
 
 vteor2= math.pow(CooMax/NumDiv,2)
@@ -74,13 +74,13 @@ testOK= True
 eIter= mesh.getElementIter
 elem= eIter.next()
 while not(elem is None):
-#  print elem.tag," nod. I: ",elem.getNodes[0].tag," nod. J: ",elem.getNodes[1].tag," L= ",elem.getLength(True)
+#  print(elem.tag," nod. I: ",elem.getNodes[0].tag," nod. J: ",elem.getNodes[1].tag," L= ",elem.getLength(True))
   ratio1= (lteor - elem.getLength(True))/lteor
   testOK= testOK and (ratio1<1e-12)
   elem= eIter.next()
 
-#print "number of nodes: ",nnod
-#print "number of elements: ",nelem
+#print("number of nodes: ",nnod)
+#print("number of elements: ",nelem)
 
 import os
 from misc_utils import log_messages as lmsg

@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 ''' Example taken from the page 258 of the book "Hormiǵon Armado. Jiménez Montoya (14a. edición) (url={https://books.google.ch/books?id=JWggPwAACAAJ}).
 '''
 import xc_base
@@ -69,27 +70,27 @@ ratio4= ((zG-zGTeor)/zGTeor)
 ratio5= ((yG-yGTeor)/yGTeor)
 
 ''' 
-print "area= ",area
-print "areaTeor= ",areaTeor
-print "yG= ",yG
-print "yGTeor= ",yGTeor
-print "zG= ",zG
-print "Iy= ",Iy
-print "iyTeor= ",iyTeor
-print "Iz= ",Iz
-print "izTeor= ",izTeor
-print "ratio1= ",ratio1
-print "ratio2= ",ratio2
-print "ratio3= ",ratio3
-print "ratio4= ",ratio4
-print "ratio5= ",ratio5
+print("area= ",area)
+print("areaTeor= ",areaTeor)
+print("yG= ",yG)
+print("yGTeor= ",yGTeor)
+print("zG= ",zG)
+print("Iy= ",Iy)
+print("iyTeor= ",iyTeor)
+print("Iz= ",Iz)
+print("izTeor= ",izTeor)
+print("ratio1= ",ratio1)
+print("ratio2= ",ratio2)
+print("ratio3= ",ratio3)
+print("ratio4= ",ratio4)
+print("ratio5= ",ratio5)
  '''
 
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (abs(ratio1)<1e-15) & (abs(ratio2)<1e-4) & (abs(ratio3)<1e-2) & (abs(ratio4)<1e-15) &  (abs(ratio5)<2e-2) :
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')
 

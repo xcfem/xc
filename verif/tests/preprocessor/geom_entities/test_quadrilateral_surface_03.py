@@ -1,5 +1,6 @@
 # Home made test
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 
 from __future__ import division
 import xc_base
@@ -52,17 +53,17 @@ seq2= s.getKPoints()
 r_seq1= seq1.getReversed()
 diff= (seq2[0]-r_seq1[0])**2+(seq2[1]-r_seq1[1])**2+(seq2[2]-r_seq1[2])**2+(seq2[3]-r_seq1[3])**2
 
-# print 'seq1= ', seq1
-# print 'seq2= ', seq2
-# print 'r_seq1= ', r_seq1
-# print 'diff= ', diff
+# print('seq1= ', seq1)
+# print('seq2= ', seq2)
+# print('r_seq1= ', r_seq1)
+# print('diff= ', diff)
 
 
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (diff<=1e-20):
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')
 

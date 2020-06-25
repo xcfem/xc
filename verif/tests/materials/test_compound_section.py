@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 ''' Home made test.'''
 
 
@@ -52,19 +53,19 @@ ratio4= (compoundSection.Iy()-0.000708496)/0.000708496
 
 
 '''
-print yCenter, zCenter
-print 'compound A= ', compoundSection.A()
-print 'ratio2= ', ratio2
-print 'compound Iz= ', compoundSection.Iz()
-print 'ratio3= ', ratio3
-print 'compound Iy= ', compoundSection.Iy()
-print 'ratio4= ', ratio4
-print compoundSection.alphaY()
+print(yCenter, zCenter)
+print('compound A= ', compoundSection.A())
+print('ratio2= ', ratio2)
+print('compound Iz= ', compoundSection.Iz())
+print('ratio3= ', ratio3)
+print('compound Iy= ', compoundSection.Iy())
+print('ratio4= ', ratio4)
+print(compoundSection.alphaY())
 '''
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if(abs(yCenter)<1e-15 and abs(zCenter)<1e-15 and abs(ratio1)<1e-15 and abs(ratio2)<1e-15and abs(ratio3)<1e-15 and abs(ratio4)<1e-15):
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')

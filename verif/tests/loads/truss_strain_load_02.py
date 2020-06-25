@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 ''' Home made test
     Reference:  Cálculo de estructuras por el método de los elemen-
     tos finitos. 1991. E. Oñate, page 165, example 5.3
@@ -85,12 +86,12 @@ truss.getResistingForce()
 N= (-E*A*alpha*AT)
 ratio= ((truss.getN()-N)/N)
 
-# print "ratio= ",ratio
+# print("ratio= ",ratio)
 
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if abs(ratio)<1e-5:
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')

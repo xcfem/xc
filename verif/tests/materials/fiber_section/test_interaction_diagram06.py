@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 ''' Interaction diagram computation. Home made test.'''
 from __future__ import division
 
@@ -50,8 +51,8 @@ sccData.positvRebarRows= def_simple_RC_section.LongReinfLayers([def_simple_RC_se
 
 
 feProblem= xc.FEProblem()
-feProblem.logFileName= "/tmp/erase.log" # Don't print warnings.
-feProblem.errFileName= "/tmp/erase.err" # Don't print errors.
+feProblem.logFileName= "/tmp/erase.log" # Don't print(warnings.)
+feProblem.errFileName= "/tmp/erase.err" # Don't print(errors.)
 
 preprocessor=  feProblem.getPreprocessor
 sccData.defRCSection(preprocessor, 'd')
@@ -70,10 +71,10 @@ ratio1= abs(fcELU13-0.777283365776)
 ratio2= abs(fcELU14-4.4411488676)
 
 '''
-print "fcELU13= ", fcELU13
-print "ratio1= ", ratio1
-print "fcELU14= ", fcELU14
-print "ratio2= ", ratio2
+print("fcELU13= ", fcELU13)
+print("ratio1= ", ratio1)
+print("fcELU14= ", fcELU14)
+print("ratio2= ", ratio2)
 '''
 
 
@@ -82,6 +83,6 @@ import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if((abs(ratio1)<1e-2) & (abs(ratio2)<1e-2)):
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')

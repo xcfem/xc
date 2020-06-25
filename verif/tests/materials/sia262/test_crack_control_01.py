@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 ''' Home-made Reinforced concrete section. Crack control verification test.
 '''
 
@@ -105,14 +106,14 @@ ratio1= (sigma_s-166.925177095e6)/166.925177095e6
 
 
 ''' 
-print "sigma_s= ",sigma_s/1e6, " MPa"
-print "ratio1= ",ratio1
+print("sigma_s= ",sigma_s/1e6, " MPa")
+print("ratio1= ",ratio1)
 '''
 
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (abs(ratio1)<1e-5):
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')

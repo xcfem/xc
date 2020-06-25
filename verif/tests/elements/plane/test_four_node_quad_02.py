@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 # Taken from page 114 of the article Development of Membrane, Plate and
 # Flat Shell Elements in Java
 
@@ -81,11 +82,11 @@ analOk= modelSpace.analyze(calculateNodalReactions= True)
 nod1= nodes.getNode(1)
 
 
-# print "reac node 1: ",reac
+# print("reac node 1: ",reac)
 Fx= nod1.getReaction[0]
 Fy= nod1.getReaction[1]
 # \print{"Fx= ",Fx
-#print "Fy= ",Fy}
+#print("Fy= ",Fy})
 
 nod3= nodes.getNode(3)
 disp= nod3.getDisp
@@ -96,15 +97,15 @@ UY3= disp[1] # Node 3 yAxis displacement
 nod5= nodes.getNode(5)
 
 
-# print "reac node 5: ",reac
+# print("reac node 5: ",reac)
 Fx= (Fx+nod5.getReaction[0])
 Fy= (Fy+nod5.getReaction[1])
 # \print{"Fx= ",Fx
-#print "Fy= ",Fy}
+#print("Fy= ",Fy})
 
 nod8= nodes.getNode(8)
 
-# print .getDisp
+# print(.getDisp)
                      
 UX8= nod8.getDisp[0] # Node 8 xAxis displacement
 UY8= nod8.getDisp[1] # Node 8 yAxis displacement
@@ -124,29 +125,29 @@ ratio4= abs(((UY3-UY3SP2K)/UY3SP2K))
 ratio5= abs(((Fy-F)/F))
 
 ''' 
-print "Fx= ",Fx
-print "Fy= ",Fy
-print "UX8= ",UX8
-print "UX8SP2K= ",UX8SP2K
-print "UY8= ",UY8
-print "UY8SP2K= ",UY8SP2K
-print "UX3= ",UX3
-print "UX3SP2K= ",UX3SP2K
-print "UY3= ",UY3
-print "UY3SP2K= ",UX3SP2K
+print("Fx= ",Fx)
+print("Fy= ",Fy)
+print("UX8= ",UX8)
+print("UX8SP2K= ",UX8SP2K)
+print("UY8= ",UY8)
+print("UY8SP2K= ",UY8SP2K)
+print("UX3= ",UX3)
+print("UX3SP2K= ",UX3SP2K)
+print("UY3= ",UY3)
+print("UY3SP2K= ",UX3SP2K)
 
-print "ratio1= ",ratio1
-print "ratio2= ",ratio2
-print "ratio3= ",ratio3
-print "ratio4= ",ratio4
-print "ratio5= ",ratio5
-print "analOk= ",analOk
+print("ratio1= ",ratio1)
+print("ratio2= ",ratio2)
+print("ratio3= ",ratio3)
+print("ratio4= ",ratio4)
+print("ratio5= ",ratio5)
+print("analOk= ",analOk)
  '''
 
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (abs(ratio1)<1e-5) & (abs(ratio2)<1e-5) & (abs(ratio3)<1e-5) & (abs(ratio4)<1e-5) & (abs(ratio5)<1e-12) & (analOk == 0.0):
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')

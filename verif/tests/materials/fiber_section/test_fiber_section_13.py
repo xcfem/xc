@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 # Prestressed concrete section verification test.
 from __future__ import division
 
@@ -34,7 +35,7 @@ import os
 pth= os.path.dirname(__file__)
 if(not pth):
   pth= "."
-#print "pth= ", pth
+#print("pth= ", pth)
 execfile(pth+"/prestressed_concrete_section_02.py")
 
 materialHandler= preprocessor.getMaterialHandler
@@ -70,11 +71,11 @@ lPatterns.addToDomain(lp0.name)
 solution= predefined_solutions.SolutionProcedure()
 analysis= solution.simpleNewtonRaphson(feProblem)
 solution.ctest.tol= 1e-8
-solution.ctest.printFlag= 0 #flag used to print information on convergence (optional)
+solution.ctest.printFlag= 0 #flag used to print(information on convergence (optional))
 analOk= analysis.analyze(10)
 
 if(analOk!=0): 
-  print "ERROR: Thist test fails when running in 32 bits machines. Solution pending (2013/03/11). It seems to be a problem with the tolerance of the convergence test. In my new machine (Dell precision M4800 with Ubuntu 64bits it fails with tol= 1e-9 and works if tol= 1e-5) (2016/01/06) LP.\n"
+  print("ERROR: Thist test fails when running in 32 bits machines. Solution pending (2013/03/11). It seems to be a problem with the tolerance of the convergence test. In my new machine (Dell precision M4800 with Ubuntu 64bits it fails with tol= 1e-9 and works if tol= 1e-5) (2016/01/06) LP.\n")
   exit()
 
 
@@ -118,36 +119,36 @@ ratio4= (cumpleFT-1)
 ratio5= (RN+NDato)
 
 ''' 
-print "ratio1= ",(ratio1)
-print "ratio2= ",(ratio2)
-print "ratio3= ",(ratio3)
-print "ratio4= ",(ratio4)
-print "ratio5= ",(ratio5)
+print("ratio1= ",(ratio1))
+print("ratio2= ",(ratio2))
+print("ratio3= ",(ratio3))
+print("ratio4= ",(ratio4))
+print("ratio5= ",(ratio5))
 
-print "Minumum concrete strain: ",(epsCMin)
-print "Maximum concrete strain: ",(epsCMax)
-print "Maximum rebar strain: ",(epsSMax)
-print "Solicitation type: ",solicitationTypeString," (",(solicitationType),") \n"
-print "Cumple a ",solicitationTypeString,": ",(cumpleFT)
-print "Aprovechamiento a ",solicitationTypeString,": ",(aprovSecc)
-print "RN= ",(RN/1e3)
-print "RN2= ",(RN2/1e3)
-print "N= ",(esfN/1e3)
-print "My= ",(esfMy/1e3)
-print "Mz= ",(esfMz/1e3)
-print "defMz= ",(defMz)
-print "defN= ",(defN)
-print "analOk= ",(analOk)
-print "epsCMin= ",epsCMin
-print "yEpsCMin= ",(yEpsCMin)
-print "epsCMax= ",epsCMax
-print "yEpsCMax= ",(yEpsCMax)
+print("Minumum concrete strain: ",(epsCMin))
+print("Maximum concrete strain: ",(epsCMax))
+print("Maximum rebar strain: ",(epsSMax))
+print("Solicitation type: ",solicitationTypeString," (",(solicitationType),") \n")
+print("Cumple a ",solicitationTypeString,": ",(cumpleFT))
+print("Aprovechamiento a ",solicitationTypeString,": ",(aprovSecc))
+print("RN= ",(RN/1e3))
+print("RN2= ",(RN2/1e3))
+print("N= ",(esfN/1e3))
+print("My= ",(esfMy/1e3))
+print("Mz= ",(esfMz/1e3))
+print("defMz= ",(defMz))
+print("defN= ",(defN))
+print("analOk= ",(analOk))
+print("epsCMin= ",epsCMin)
+print("yEpsCMin= ",(yEpsCMin))
+print("epsCMax= ",epsCMax)
+print("yEpsCMax= ",(yEpsCMax))
  '''
 
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (abs(ratio1)<1e-6) & (abs(ratio2)<1e-6) & (abs(ratio3)<1e-6) & (abs(ratio5)<1e-6) & (abs(RN2)<1e-6) & (abs(esfMy)<1e-6) & (solicitationType == 3) & (abs(ratio4)<1e-6) & (analOk == 0.0) & (yEpsCMax>0.0) & (yEpsCMin<0.0) : #(yEpsCMax<0.0) & (yEpsCMin>0.0) 2014.11.21
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')

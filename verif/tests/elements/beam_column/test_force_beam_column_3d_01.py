@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 # home made test
 # Horizontal cantilever under tension load at its end.
 
@@ -46,7 +47,7 @@ steel= typical_materials.defSteel01(preprocessor, "steel",E,fy,0.001)
 
 import os
 pth= os.path.dirname(__file__)
-#print "pth= ", pth
+#print("pth= ", pth)
 if(not pth):
   pth= "."
 execfile(pth+"/../../aux/testQuadRegion.py") #Definition of section geometry (regions and rebars)
@@ -106,18 +107,18 @@ ratio1= (abs((delta-deltateor)/deltateor))
 ratio2= (abs((N0-F)/F))
 
 ''' 
-print "delta: ",delta
-print "deltaTeor: ",deltateor
-print "ratio1= ",ratio1
-print N0
-print "ratio2= ",ratio2
+print("delta: ",delta)
+print("deltaTeor: ",deltateor)
+print("ratio1= ",ratio1)
+print(N0)
+print("ratio2= ",ratio2)
    '''
 
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if abs(ratio1)<1e-10 and abs(ratio2)<1e-10:
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')
 

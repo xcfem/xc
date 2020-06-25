@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 # home made test
 
 # ZeroLengthSection elements sign criteria.
@@ -225,38 +226,38 @@ ratio3= abs((epsilonZPos-5*F/(E*Iy)))
 ratio4= abs((epsilonYPos+6*F/(E*Iz)))
 
 ''' 
-print "vI= ",vI
-print "vJ= ",vJ
-print "vK= ",vK
-print "getStressResultant= ",sR
-print "N= ",Ntot/1e3," kN\n"
-print "epsN= ",epsN
-print "Qy= ",QyTot/1e3," kN\n"
-print "epsQy= ",epsQy
-print "Qz= ",QzTot/1e3," kN\n"
-print "epsQz= ",epsQz
-print "Mx= ",MxTot/1e3," kN m\n"
-print "epsT= ",epsT
-print "My= ",MyTot/1e3," kN m\n"
-print "epsMy= ",epsMy
-print "epsilonZPos= ",epsilonZPos
-print "Mz= ",MzTot/1e3," kN m\n"
-print "epsMz= ",epsMz
-print "epsilonYPos= ",epsilonYPos
-print "forcesInGlobalCoord= ",forcesInGlobalCoord
-print "forcesInGlobalCoord= ",forcesInGlobalCoordTeor
-print "momentsInGlobalCoord= ",momentsInGlobalCoord
-print "ratio1= ",ratio1
-print "ratio2= ",ratio2
-print "ratio3= ",ratio3
-print "ratio4= ",ratio4
+print("vI= ",vI)
+print("vJ= ",vJ)
+print("vK= ",vK)
+print("getStressResultant= ",sR)
+print("N= ",Ntot/1e3," kN\n")
+print("epsN= ",epsN)
+print("Qy= ",QyTot/1e3," kN\n")
+print("epsQy= ",epsQy)
+print("Qz= ",QzTot/1e3," kN\n")
+print("epsQz= ",epsQz)
+print("Mx= ",MxTot/1e3," kN m\n")
+print("epsT= ",epsT)
+print("My= ",MyTot/1e3," kN m\n")
+print("epsMy= ",epsMy)
+print("epsilonZPos= ",epsilonZPos)
+print("Mz= ",MzTot/1e3," kN m\n")
+print("epsMz= ",epsMz)
+print("epsilonYPos= ",epsilonYPos)
+print("forcesInGlobalCoord= ",forcesInGlobalCoord)
+print("forcesInGlobalCoord= ",forcesInGlobalCoordTeor)
+print("momentsInGlobalCoord= ",momentsInGlobalCoord)
+print("ratio1= ",ratio1)
+print("ratio2= ",ratio2)
+print("ratio3= ",ratio3)
+print("ratio4= ",ratio4)
 '''
 
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (ratio1 < 1e-12) & (ratio2 < 1e-12) & (ratio3 < 1e-4) & (ratio4 < 1e-4):
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')
 

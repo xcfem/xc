@@ -65,9 +65,9 @@ Ndd_kips=Ndd/kip2N
 ratio5=abs((Ndd_kips-13.10446)/13.10446)
 '''
 if Ndd >= Nua:
-    print ('Ndd >= Nua -> ductility OK')
+    print(('Ndd >= Nua -> ductility OK'))
 else:
-    print ('Ndd < Nua -> NO ductility') 
+    print(('Ndd < Nua -> NO ductility') )
 '''
 
 #Check design strength of stud in tension
@@ -76,9 +76,9 @@ Nnd_kips=Nnd/kip2N
 ratio6=abs((Nnd_kips-10.21018)/10.21018)
 '''
 if Nnd >= Nua:
-    print ('Nnd >= Nua -> design strength checking OK')
+    print(('Nnd >= Nua -> design strength checking OK'))
 else:
-    print ('Nnd < Nua -> change stud dimensions') 
+    print(('Nnd < Nua -> change stud dimensions') )
 '''
 
     

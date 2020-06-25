@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 '''Prestressed concrete section verification test.'''
 from __future__ import division
 
@@ -33,7 +34,7 @@ import os
 pth= os.path.dirname(__file__)
 if(not pth):
   pth= "."
-#print "pth= ", pth
+#print("pth= ", pth)
 execfile(pth+"/prestressed_concrete_section_01.py")
 materialHandler= preprocessor.getMaterialHandler
 secHP= materialHandler.newMaterial("fiber_section_3d","secHP")
@@ -107,31 +108,31 @@ ratio4= (cumpleFT-1)
 ratio5= (RN+NDato)
 
 ''' 
-print "ratio1= ",(ratio1)
-print "ratio2= ",(ratio2)
-print "ratio3= ",(ratio3)
-print "ratio4= ",(ratio4)
-print "ratio5= ",(ratio5)
+print("ratio1= ",(ratio1))
+print("ratio2= ",(ratio2))
+print("ratio3= ",(ratio3))
+print("ratio4= ",(ratio4))
+print("ratio5= ",(ratio5))
 
-print "Minimum strain in concrete: ",(epsCMin)
-print "Maximum strain in concrete: ",(epsCMax)
-print "Maximum strain in rebars: ",(epsSMax)
-print "Solicitation type: ",solicitationTypeString," (",(solicitationType),") \n"
-print "Cumple a ",solicitationTypeString,": ",(cumpleFT)
-print "Aprovechamiento a ",solicitationTypeString,": ",(aprovSecc)
-print "RN= ",(RN/1e3),"kN \n"
-print "RN2= ",(RN2/1e3)
-print "N= ",(esfN/1e3)
-print "My= ",(esfMy/1e3)
-print "Mz= ",(esfMz/1e3)
-print "defMz= ",(defMz)
-print "defN= ",(defN)
+print("Minimum strain in concrete: ",(epsCMin))
+print("Maximum strain in concrete: ",(epsCMax))
+print("Maximum strain in rebars: ",(epsSMax))
+print("Solicitation type: ",solicitationTypeString," (",(solicitationType),") \n")
+print("Cumple a ",solicitationTypeString,": ",(cumpleFT))
+print("Aprovechamiento a ",solicitationTypeString,": ",(aprovSecc))
+print("RN= ",(RN/1e3),"kN \n")
+print("RN2= ",(RN2/1e3))
+print("N= ",(esfN/1e3))
+print("My= ",(esfMy/1e3))
+print("Mz= ",(esfMz/1e3))
+print("defMz= ",(defMz))
+print("defN= ",(defN))
  '''
 
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (abs(ratio1)<1e-10) & (abs(ratio2)<1e-10) & (abs(ratio3)<1e-9) & (abs(ratio5)<1e-9) & (abs(RN2)<1e-9) & (abs(esfMy)<1e-10) & (solicitationType == 2) & (abs(ratio4)<1e-6) & (analOk == 0.0) :
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')

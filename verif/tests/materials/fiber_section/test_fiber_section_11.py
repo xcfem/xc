@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 ''' Reinforced concrete section verification test.
    results are compared with those of the prontuario.
    informático del hormigón estructural (Cátedra de hormigón de la ETSICCP-IECA
@@ -36,7 +37,7 @@ import os
 pth= os.path.dirname(__file__)
 if(not pth):
   pth= "."
-#print "pth= ", pth
+#print("pth= ", pth)
 execfile(pth+"/concrete_section_01.py")
 materialHandler= preprocessor.getMaterialHandler
 secHA= materialHandler.newMaterial("fiber_section_3d","secHA")
@@ -110,27 +111,27 @@ ratio5= (RN+NDato)
 ratio6= (epsSMax-10e-3)/10e-3
 
 ''' 
-print "ratio1= ",(ratio1)
-print "ratio2= ",(ratio2)
-print "ratio3= ",(ratio3)
-print "ratio4= ",(ratio4)
-print "ratio5= ",(ratio5)
-print "ratio6= ",(ratio6)
+print("ratio1= ",(ratio1))
+print("ratio2= ",(ratio2))
+print("ratio3= ",(ratio3))
+print("ratio4= ",(ratio4))
+print("ratio5= ",(ratio5))
+print("ratio6= ",(ratio6))
 
-print "Minumum concrete strain: ",(epsCMin)
-print "Maximum concrete strain: ",(epsCMax)
-print "Maximum rebar strain: ",(epsSMax)
-print "Solicitation type: ",solicitationTypeString," (",(solicitationType),") \n"
-print "Cumple a ",solicitationTypeString,": ",(cumpleFT)
-print "Aprovechamiento a ",solicitationTypeString,": ",(aprovSecc)
-print "RN= ",(RN/1e3)," kN\n"
-print "RN2= ",(RN2/1e3)," kN\n"
-print "N= ",(esfN/1e3)," kN\n"
-print "esfMy= ",(esfMy/1e3),"kN m\n"
-print "esfMz= ",(esfMz/1e3),"kN m\n"
-print "defMz= ",(defMz)
-print "defN= ",(defN)
-print "analOk= ",(analOk)
+print("Minumum concrete strain: ",(epsCMin))
+print("Maximum concrete strain: ",(epsCMax))
+print("Maximum rebar strain: ",(epsSMax))
+print("Solicitation type: ",solicitationTypeString," (",(solicitationType),") \n")
+print("Cumple a ",solicitationTypeString,": ",(cumpleFT))
+print("Aprovechamiento a ",solicitationTypeString,": ",(aprovSecc))
+print("RN= ",(RN/1e3)," kN\n")
+print("RN2= ",(RN2/1e3)," kN\n")
+print("N= ",(esfN/1e3)," kN\n")
+print("esfMy= ",(esfMy/1e3),"kN m\n")
+print("esfMz= ",(esfMz/1e3),"kN m\n")
+print("defMz= ",(defMz))
+print("defN= ",(defN))
+print("analOk= ",(analOk))
  '''
 
 
@@ -138,6 +139,6 @@ import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (abs(ratio1)<1e-10) & (abs(ratio2)<1e-10) & (abs(ratio3)<5e-10) & ratio4 & (abs(ratio5)<5e-10) & (abs(ratio6)<0.001) & (abs(RN2)<5e-10) & (abs(esfMy)<1e-10) & (solicitationType == 2)  & (analOk == 0.0) :
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')

@@ -85,27 +85,27 @@ VBref= 2243014.05185
 ratio5= abs(VB-VBref)/VBref
 
 '''
-print 'n= ', n
-print 'nTeor= ', nTeor
-print 'ratio1= ', ratio1
-print 'HA= ', HA
-print 'HAref= ', HAref
-print 'ratio2= ', ratio2
-print 'VA= ', VA
-print 'VAref= ', VAref
-print 'ratio3= ', ratio3
-print 'HB= ', HB
-print 'HBref= ', HBref
-print 'ratio4= ', ratio4
-print 'VB= ', VB
-print 'VBref= ', VBref
-print 'ratio5= ', ratio5
+print('n= ', n)
+print('nTeor= ', nTeor)
+print('ratio1= ', ratio1)
+print('HA= ', HA)
+print('HAref= ', HAref)
+print('ratio2= ', ratio2)
+print('VA= ', VA)
+print('VAref= ', VAref)
+print('ratio3= ', ratio3)
+print('HB= ', HB)
+print('HBref= ', HBref)
+print('ratio4= ', ratio4)
+print('VB= ', VB)
+print('VBref= ', VBref)
+print('ratio5= ', ratio5)
 '''
 
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (abs(ratio1)<0.06 and abs(ratio2)<1e-10 and abs(ratio3)<1e-10 and abs(ratio4)<1e-10 and abs(ratio5)<1e-10):
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')

@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 from __future__ import division
 
 __author__= "Ana Ortega (AO_O)"
@@ -37,6 +38,6 @@ import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if max(abs(span-641),abs(height-93),abs(area-350009),abs(Vreaction-7819),abs(Hreaction-12368),abs(Tring-3965300))<0.5:
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')

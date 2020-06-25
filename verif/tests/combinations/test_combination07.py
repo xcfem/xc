@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 '''Using the database as combination results storage to accelerate computation. Home made test.'''
 
 __author__= "Luis C. Pérez Tato (LCPT)"
@@ -209,10 +210,10 @@ def procesResultVerif(comb):
   global dXMax
   dXMax=max(dXMax,deltaX)
   ''' 
-    print "tagComb= ",comb.tag
-    print "nmbComb= ",comb.getName
-    print "dXMin= ",(dXMin*1e3)," mm\n"
-    print "dXMax= ",(dXMax*1e3)," mm\n"
+    print("tagComb= ",comb.tag)
+    print("nmbComb= ",comb.getName)
+    print("dXMin= ",(dXMin*1e3)," mm\n")
+    print("dXMax= ",(dXMax*1e3)," mm\n")
    '''
 
 import os
@@ -250,16 +251,16 @@ ratio1= abs((dXMax-0.0252486379903e-3)/0.0252486379903e-3)
 ratio2= abs((dXMin+0.293653533883e-3)/0.293653533883e-3)
 
 ''' 
-print "dXMin= ",(dXMin*1e3)," mm\n"
-print "dXMax= ",(dXMax*1e3)," mm\n"
-print "ratio1= ",ratio1
-print "ratio2= ",ratio2
+print("dXMin= ",(dXMin*1e3)," mm\n")
+print("dXMax= ",(dXMax*1e3)," mm\n")
+print("ratio1= ",ratio1)
+print("ratio2= ",ratio2)
    '''
 
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (ratio1<1e-5) & (ratio2<1e-5) :
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')
 

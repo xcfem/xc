@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 from __future__ import division
 
 __author__= "Ana Ortega (AO_O)"
@@ -53,6 +54,6 @@ import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if max(abs(Nphi16-Nphi16_comp),abs(Nphi27-Nphi27_comp),abs(Nhoop16-Nhoop16_comp),abs(Nhoop27-Nhoop27_comp),abs(sgphi16-sgphi16_comp),abs(sgphi27-sgphi27_comp),abs(sghoop16-sghoop16_comp),abs(sghoop27-sghoop27_comp))<0.01:
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')

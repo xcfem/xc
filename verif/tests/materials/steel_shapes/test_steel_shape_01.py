@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 # home made test
 # Cantilever under vertical load at his end.
 
@@ -98,15 +99,15 @@ ratio3= ((F+V)/F)
 ratio4= ((FC-0.661959)/0.661959)
 
 '''   
-print "delta= ",delta
-print "deltaTeor= ",deltateor
-print "ratio1= ",ratio1
-print "M= ",M
-print "ratio2= ",ratio2
-print "V1= ",V
-print "ratio3= ",ratio3
-print "FC= ",FC
-print "ratio4= ",ratio4
+print("delta= ",delta)
+print("deltaTeor= ",deltateor)
+print("ratio1= ",ratio1)
+print("M= ",M)
+print("ratio2= ",ratio2)
+print("V1= ",V)
+print("ratio3= ",ratio3)
+print("FC= ",FC)
+print("ratio4= ",ratio4)
    '''
 
 cumple= (abs(ratio1)<5e-2) & (abs(ratio2)<1e-5) & (abs(ratio3)<1e-5) & (abs(ratio4)<1e-6)
@@ -114,6 +115,6 @@ import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if cumple:
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')

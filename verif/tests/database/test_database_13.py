@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 # Test from Ansys manual
 # Reference:  Strength of Material, Part I, Elementary Theory and Problems, pg. 26, problem 10
 import xc_base
@@ -78,16 +79,16 @@ ratio1= ((R1-fPret)/fPret)
 ratio2= ((R2+fPret)/fPret)
     
 ''' 
-print "R1= ",R1
-print "R2= ",R2
-print "ratio1= ",(ratio1)
-print "ratio2= ",(ratio2)
+print("R1= ",R1)
+print("R2= ",R2)
+print("ratio1= ",(ratio1))
+print("ratio2= ",(ratio2))
    '''
 
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (abs(ratio1)<1e-5) & (abs(ratio2)<1e-5):
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')
 

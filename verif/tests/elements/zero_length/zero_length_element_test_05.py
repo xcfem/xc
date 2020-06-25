@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 ''' home made test. Verifica that "ZeroLength" element gives right results
  when not aligned with global axes. '''
 
@@ -90,22 +91,22 @@ ratio5= -RT/F
 ratio6= (K*deltat)/F
 
 ''' 
-print "RX= ",RX
-print "dx= ",deltax
-print "RY= ",RY
-print "dy= ",deltay
-print "ratio1= ",(ratio1)
-print "ratio2= ",(ratio2)
-print "ratio3= ",(ratio3)
-print "ratio4= ",(ratio4)
-print "ratio5= ",(ratio5)
-print "ratio6= ",(ratio6)
+print("RX= ",RX)
+print("dx= ",deltax)
+print("RY= ",RY)
+print("dy= ",deltay)
+print("ratio1= ",(ratio1))
+print("ratio2= ",(ratio2))
+print("ratio3= ",(ratio3))
+print("ratio4= ",(ratio4))
+print("ratio5= ",(ratio5))
+print("ratio6= ",(ratio6))
    '''
   
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (abs(ratio1)<1e-12) & (abs(ratio2)<1e-12) & (abs(ratio3-1.0)<1e-12) & (abs(ratio4-1.0)<1e-12)  & (abs(ratio5)<1e-12) & (abs(ratio6)<1e-12) :
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')

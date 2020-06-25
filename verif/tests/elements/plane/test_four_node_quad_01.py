@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 ''' Test made from the example 7.2 of the book: 
     Introducción Al Estudio Del Elemento Finito en Ingeniería. 
     Segunda Edición. Tirupathi R. Chandrupatla, Ashok D. Belegundu. 
@@ -58,20 +59,20 @@ ratio3= (sgMed2-23080)/23080
 ratio4= (sgMed3-40960)/40960
 
 ''' 
-print "detJ= ",(detJ)
-print "sg1= ",(sgMed1)
-print "sg2= ",(sgMed2)
-print "sg3= ",(sgMed3)
-print "ratio1= ",(ratio1)
-print "ratio2= ",(ratio2)
-print "ratio3= ",(ratio3)
-print "ratio4= ",(ratio4)
+print("detJ= ",(detJ))
+print("sg1= ",(sgMed1))
+print("sg2= ",(sgMed2))
+print("sg3= ",(sgMed3))
+print("ratio1= ",(ratio1))
+print("ratio2= ",(ratio2))
+print("ratio3= ",(ratio3))
+print("ratio4= ",(ratio4))
  '''
 
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (abs(ratio1)<1e-9) & (abs(ratio2)<1e-3) & (abs(ratio3)<1e-3) & (abs(ratio4)<1e-3):
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')

@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 # Home made test.
 
 from __future__ import division
@@ -30,17 +31,17 @@ VRd= SIA262_limit_state_checking.VuNoShearRebars(beton,acier,Nd,Md,As,b,d)
 ratio1= abs(VRd-340.143003064e3)/340.143003064e3
 
 '''
-print "rho= ", rho, " m"
-print "As= ", As*1e4, " cm2"
-print "VRd= ", VRd/1e3, " kN"
-print "ratio1= ", ratio1
+print("rho= ", rho, " m")
+print("As= ", As*1e4, " cm2")
+print("VRd= ", VRd/1e3, " kN")
+print("ratio1= ", ratio1)
 '''
 
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (abs(ratio1)<1e-11):
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')
 

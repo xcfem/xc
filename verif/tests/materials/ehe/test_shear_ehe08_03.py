@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 
 ''' Computation of Vsu value. The result is compared to that obtained
 from the exercise ER-CA-02 from www.areadecalculo.com. According to EHE-08.
@@ -29,16 +30,16 @@ Vsu= EHE_limit_state_checking.getVsuEHE08(z,alpha,theta,AsTrsv,fyd, circular= Fa
 ratio1= abs(Vsu-111.966e3)/111.966e3
 
 '''
-print "areaShReinfBranchsEstribo= ",AsTrsv*1e4," cm2"
-print "Vsu= ",Vsu/1e3," kN"
-print "ratio1= ",ratio1," kN"
+print("areaShReinfBranchsEstribo= ",AsTrsv*1e4," cm2")
+print("Vsu= ",Vsu/1e3," kN")
+print("ratio1= ",ratio1," kN")
 '''  
 
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if ratio1<0.01:
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')
   

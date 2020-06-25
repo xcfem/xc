@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 from rough_calculations import ng_simple_beam as sb
 
 ''' From:
@@ -31,15 +32,15 @@ MdTeor= -q*2.5**2/8.0-2*Q*2.5/4.0+Q*d/2
 
 ratio1= (Md-MdTeor)/MdTeor
 
-# print 'Md= ', Md/1e3, ' kN m/m'
-# print 'MdTeor= ', MdTeor/1e3, ' kN m/m'
-# print "ratio1= ", ratio1
-# print 'Qd= ', Qd/1e3, ' kN m/m'
+# print('Md= ', Md/1e3, ' kN m/m')
+# print('MdTeor= ', MdTeor/1e3, ' kN m/m')
+# print("ratio1= ", ratio1)
+# print('Qd= ', Qd/1e3, ' kN m/m')
 
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if abs(ratio1)<1e-11 and abs(Qd)<1e-11:
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')

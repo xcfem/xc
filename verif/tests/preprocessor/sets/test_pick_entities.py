@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 '''Selection of entities inside a geometric object. Home made test.'''
 
 import xc_base
@@ -55,16 +56,16 @@ nLines= len(setIn.lines)
 ratio= (nNodes-2)**2+(nElements-1)**2+(nPoints-2)**2+(nLines-1)**2
 
 '''
-print nNodes, ' nodes inside.'
-print nElements, ' element(s) inside.'
-print nPoints, ' points inside.'
-print nLines, ' lines(s) inside.'
+print(nNodes, ' nodes inside.')
+print(nElements, ' element(s) inside.')
+print(nPoints, ' points inside.')
+print(nLines, ' lines(s) inside.')
 '''
 
 import os
 fname= os.path.basename(__file__)
 if (abs(ratio)<1e-15):
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')
 

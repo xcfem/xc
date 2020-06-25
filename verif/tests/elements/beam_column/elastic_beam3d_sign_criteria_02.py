@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 # Home made test
 # Sign criteria for the internal forces in an elastic beam 3d element.
 # 3D cantilever beam, start node  with all its 6DOF fixed, point loads on the 
@@ -31,18 +32,18 @@ def getInternalForcesEndNode(elemTag):
 
 def printResults(N1,Vy1,Vz1,T1,My1,Mz1,N2,Vy2,Vz2,T2,My2,Mz2,phaseRatios,phase):
   ratioMsg= 'ratio'+str(phase)
-  print 'N1= ', N1, ' N2= ', N2 
-  print ratioMsg+'0= ', phaseRatios[0]
-  print 'Vy1= ',Vy1, 'Vy2= ',Vy2 
-  print ratioMsg+'1= ', phaseRatios[1]
-  print 'Vz1= ',Vz1, 'Vz2= ',Vz2
-  print ratioMsg+'2= ', phaseRatios[2]
-  print 'T1= ',T1, 'T2= ', T2
-  print ratioMsg+'3= ', phaseRatios[3]
-  print 'My1= ',My1, 'My2= ', My2
-  print ratioMsg+'4= ', phaseRatios[4]
-  print 'Mz1= ',Mz1, 'Mz2= ', Mz2
-  print ratioMsg+'5= ', phaseRatios[5]
+  print('N1= ', N1, ' N2= ', N2 )
+  print(ratioMsg+'0= ', phaseRatios[0])
+  print('Vy1= ',Vy1, 'Vy2= ',Vy2 )
+  print(ratioMsg+'1= ', phaseRatios[1])
+  print('Vz1= ',Vz1, 'Vz2= ',Vz2)
+  print(ratioMsg+'2= ', phaseRatios[2])
+  print('T1= ',T1, 'T2= ', T2)
+  print(ratioMsg+'3= ', phaseRatios[3])
+  print('My1= ',My1, 'My2= ', My2)
+  print(ratioMsg+'4= ', phaseRatios[4])
+  print('Mz1= ',Mz1, 'Mz2= ', Mz2)
+  print(ratioMsg+'5= ', phaseRatios[5])
                      
 # Material properties
 E= 2.1e6*9.81/1e-4 # Elastic modulus (Pa)
@@ -121,7 +122,7 @@ ratio5= abs(Mz1)+abs(Mz2)
 phaseRatios= [ratio0,ratio1,ratio2,ratio3,ratio4,ratio5]
 ratios.extend(phaseRatios)
 
-# print 'RF= ',RF
+# print('RF= ',RF)
 # printResults(N1,Vy1,Vz1,T1,My1,Mz1,N2,Vy2,Vz2,T2,My2,Mz2,phaseRatios,'')
 
 lp0.removeFromDomain()
@@ -150,7 +151,7 @@ ratio15= abs((Mz1Teor-Mz1)/Mz1)+abs(Mz2)
 phaseRatios= [ratio10,ratio11,ratio12,ratio13,ratio14,ratio15]
 ratios.extend(phaseRatios)
 
-# print "RF= ",RF
+# print("RF= ",RF)
 # printResults(N1,Vy1,Vz1,T1,My1,Mz1,N2,Vy2,Vz2,T2,My2,Mz2,phaseRatios,'1')
 
 
@@ -181,7 +182,7 @@ ratio25= abs(Mz1)+abs(Mz2)
 phaseRatios= [ratio20,ratio21,ratio22,ratio23,ratio24,ratio25]
 ratios.extend(phaseRatios)
 
-# print "RF= ",RF
+# print("RF= ",RF)
 # printResults(N1,Vy1,Vz1,T1,My1,Mz1,N2,Vy2,Vz2,T2,My2,Mz2,phaseRatios,'2')
 
 
@@ -211,20 +212,20 @@ ratio35= abs(Mz1)+abs(Mz1)
 phaseRatios= [ratio30,ratio31,ratio32,ratio33,ratio34,ratio35]
 ratios.extend(phaseRatios)
 
-# print "RF= ",RF
+# print("RF= ",RF)
 # printResults(N1,Vy1,Vz1,T1,My1,Mz1,N2,Vy2,Vz2,T2,My2,Mz2,phaseRatios,'3')
 
 result= 0.0
 for r in ratios:
   result+= r*r
 result= math.sqrt(result)
-# print 'ratios= ',ratios
-# print 'result= ',result
+# print('ratios= ',ratios)
+# print('result= ',result)
 
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (result<1e-10):
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')

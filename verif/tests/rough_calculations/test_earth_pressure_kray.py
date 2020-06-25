@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 # home made test
 # Verification of Krey expressions for earth lateral pressures.
 
@@ -33,23 +34,23 @@ r4= ep.getRatioZ(0.0,z_lim_inf)
 p= ep.getLateralPressure(0.0,z_lim_sup)
 ratio1= (p-1.0)
 
-# print "a= ", a
-# print "b= ", b
-# print "z_lim_sup= ", z_lim_sup
-# print "z_lim_inf= ", z_lim_inf
-# print "Q= ", Q
-# print "p_max= ", p_max
-# print "r1= ", r1
-# print "r2= ", r2
-# print "r3= ", r3
-# print "r4= ", r4
-# print "p= ", p
+# print("a= ", a)
+# print("b= ", b)
+# print("z_lim_sup= ", z_lim_sup)
+# print("z_lim_inf= ", z_lim_inf)
+# print("Q= ", Q)
+# print("p_max= ", p_max)
+# print("r1= ", r1)
+# print("r2= ", r2)
+# print("r3= ", r3)
+# print("r4= ", r4)
+# print("p= ", p)
 
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (abs(ratio1)<1e-5):
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')
 

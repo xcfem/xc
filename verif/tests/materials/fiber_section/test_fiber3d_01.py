@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (A_OO)"
 __copyright__= "Copyright 2015, LCPT and AO_O"
@@ -47,7 +48,7 @@ steel= typical_materials.defSteel01(preprocessor=preprocessor,name="steel",E=E,f
 # Sections
 import os
 pth= os.path.dirname(__file__)
-#print "pth= ", pth
+#print("pth= ", pth)
 if(not pth):
   pth= "."
 execfile(pth+"/../../aux/testQuadRegion.py")
@@ -65,7 +66,7 @@ centerOfMassY= fibras.getCenterOfMassY()
 '''
              \for_each_fiber
 
-print "fibra: ",tag, " mat. tag:", getMaterial.tag
+print("fibra: ",tag, " mat. tag:", getMaterial.tag)
 '''
 
 
@@ -117,7 +118,7 @@ nfib= scc.getFibers().getNumFibers()
 avgStrain= 0.0
 fibras= scc.getFibers()
 for f in fibras:
-# print "fiber tag: ",tag, " strain: ", getMaterial.strain
+# print("fiber tag: ",tag, " strain: ", getMaterial.strain)
    avgStrain+= f.getMaterial().getStrain()
 avgStrain/= nfib
 
@@ -126,16 +127,16 @@ ratio2= (E*deltax)/F
 ratio3= (avgStrain-deltax)/deltax
 
 ''' 
-print "R= ",R
-print "dx= ",deltax
-print "ratio1= ",(ratio1)
-print "ratio2= ",(ratio2)
-print "ratio3= ",(ratio3)
+print("R= ",R)
+print("dx= ",deltax)
+print("ratio1= ",(ratio1))
+print("ratio2= ",(ratio2))
+print("ratio3= ",(ratio3))
    '''
   
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (abs(ratio1-1.0)<1e-5) & (abs(ratio2-1.0)<1e-5) & (abs(ratio3)<1e-5) :
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')

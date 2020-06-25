@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 # home made test
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
@@ -89,18 +90,18 @@ ratio1= abs((q13MedioElem-q13MedioElemTeor)/q13MedioElemTeor)
 ratio2= abs((q23MedioElem-q23MedioElemTeor))
 
 ''' 
-print "q13MedioElem= ",q13MedioElem
-print "q13MedioElemTeor= ",q13MedioElemTeor
-print "ratio1= ",ratio1
-print "q23MedioElem= ",q23MedioElem
-print "q23MedioElemTeor= ",q23MedioElemTeor
-print "ratio2= ",ratio2
+print("q13MedioElem= ",q13MedioElem)
+print("q13MedioElemTeor= ",q13MedioElemTeor)
+print("ratio1= ",ratio1)
+print("q23MedioElem= ",q23MedioElem)
+print("q23MedioElemTeor= ",q23MedioElemTeor)
+print("ratio2= ",ratio2)
    '''
 
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (abs(ratio1)<1e-12) & (abs(ratio2)<1e-12) :
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')

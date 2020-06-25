@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 # Home made test.
 
 from __future__ import division
@@ -28,15 +29,15 @@ qp= SIA261_wind.qp(qp0,z,catTerrain)
 chTeor= 1.6*(math.pow(z/450,0.23)+0.375)**2
 ratio1= abs(ch-chTeor)/chTeor
 
-# print "ch= ", ch
-# print "chTeor= ", chTeor
-# print "qp= ", qp
+# print("ch= ", ch)
+# print("chTeor= ", chTeor)
+# print("qp= ", qp)
 
 
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (ratio1<1e-15):
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')

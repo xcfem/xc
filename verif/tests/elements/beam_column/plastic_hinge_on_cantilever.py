@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 # home made test
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
@@ -74,17 +75,17 @@ ratio1= (M0-M)/M
 ratio2= (M0-M0Teor)/M0Teor
 
 '''
-print 'M0Teor= ', M0Teor/1e3, ' kNm'
-print 'M0= ', M0/1e3, ' kNm'
-print 'M= ', M/1e3, ' kNm'
-print 'ratio1= ', ratio1
-print 'ratio2= ', ratio2
+print('M0Teor= ', M0Teor/1e3, ' kNm')
+print('M0= ', M0/1e3, ' kNm')
+print('M= ', M/1e3, ' kNm')
+print('ratio1= ', ratio1)
+print('ratio2= ', ratio2)
 '''
 
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (ratio1<1e-12) & (ratio2<0.2):
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')

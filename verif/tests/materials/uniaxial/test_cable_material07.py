@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 # Test from Ansys manual
 # Reference:  Strength of Material, Part I, Elementary Theory and Problems, pg. 26, problem 10
 
@@ -94,20 +95,20 @@ ratio1B= ((R1B-fPret)/fPret)
 ratio2B= ((R2B+fPret)/fPret)
 
 ''' 
-print "R1A= ",R1A
-print "R2A= ",R2A
-print "ratio1A= ",(ratio1A)
-print "ratio2A= ",(ratio2A)
-print "R1B= ",R1B
-print "R2B= ",R2B
-print "ratio1B= ",(ratio1B)
-print "ratio2B= ",(ratio2B)
+print("R1A= ",R1A)
+print("R2A= ",R2A)
+print("ratio1A= ",(ratio1A))
+print("ratio2A= ",(ratio2A))
+print("R1B= ",R1B)
+print("R2B= ",R2B)
+print("ratio1B= ",(ratio1B))
+print("ratio2B= ",(ratio2B))
    '''
     
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (abs(ratio1A)<1e-5) & (abs(ratio2A)<1e-5) & (abs(ratio1B)<1e-5) & (abs(ratio2B)<1e-5):
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')

@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 # home made test
 '''vector2d_uniform_load_global function verification.'''
 
@@ -58,7 +59,7 @@ respVz= typical_materials.defElasticMaterial(preprocessor, "respVz",1e9) # Shear
 # Sections
 import os
 pth= os.path.dirname(__file__)
-#print "pth= ", pth
+#print("pth= ", pth)
 if(not pth):
   pth= "."
 execfile(pth+"/../aux/testQuadRegion.py")
@@ -143,25 +144,25 @@ ratio3= (abs((RN+F)/F))
 RN2= vReac2.dot(vIElem)
 
 ''' 
-print "analOk: ",analOk
-print "delta0: ",delta0
-print "delta0Teor: ",delta0teor
-print "ratio0= ",ratio0
-print "delta1= ",delta1
-print "delta1Teor= ",delta1Teor
-print "ratio1= ",ratio1
-print "N0= ",N0
-print "ratio2= ",ratio2
-print "vReac1= ",vReac1
-print "RN= ",RN
-print "ratio3= ",ratio3
-print "vReac2= ",vReac2
-print "RN2= ",RN2
+print("analOk: ",analOk)
+print("delta0: ",delta0)
+print("delta0Teor: ",delta0teor)
+print("ratio0= ",ratio0)
+print("delta1= ",delta1)
+print("delta1Teor= ",delta1Teor)
+print("ratio1= ",ratio1)
+print("N0= ",N0)
+print("ratio2= ",ratio2)
+print("vReac1= ",vReac1)
+print("RN= ",RN)
+print("ratio3= ",ratio3)
+print("vReac2= ",vReac2)
+print("RN2= ",RN2)
    '''
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (abs(ratio0)<1e-6) & (abs(ratio1)<0.05) & (abs(ratio2)<1e-10) & (abs(ratio3)<1e-10):
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')

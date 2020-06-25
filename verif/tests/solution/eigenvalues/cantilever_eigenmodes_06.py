@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 # Tomado del example VM66 del Ansys Verification Manual Release 9.0
 import xc_base
 import geom
@@ -115,17 +116,17 @@ f1teor= lambdA**2/(2*math.pi*L**2)*math.sqrt(EMat*inertia2/m)
 ratio1= abs(f1calc-f1teor)/f1teor
 
 ''' 
-print "omega1= ",omega1
-print "T1= ",T1
-print "f1calc= ",f1calc
-print "f1teor= ",f1teor
-print "ratio1= ",ratio1
+print("omega1= ",omega1)
+print("T1= ",T1)
+print("f1calc= ",f1calc)
+print("f1teor= ",f1teor)
+print("ratio1= ",ratio1)
    '''
 
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (abs(ratio1)<1e-3):
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')

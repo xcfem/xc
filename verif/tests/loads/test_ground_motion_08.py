@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 '''  Checks ground_motion_record function
     by integrating the accelerations calculated as follows:
     x= 9*t**3+10*t**2
@@ -58,26 +59,26 @@ ratio7= (groundMotionPeakVel-1458)/1458
 ratio8= (groundMotionDisp-3.63)/3.63
 
 ''' 
-print "duration= ",groundMotionDuration
-print "ratio1= ",ratio1
-print "accel= ",groundMotionAccel
-print "ratio2= ",ratio2
-print "peak accel= ",groundMotionPeakAccel
-print "ratio3= ",ratio3
-print "delta= ",motionHistoryDelta
-print "ratio4= ",ratio4
-print "vel= ",groundMotionVel
-print "ratio5= ",ratio5
-print "peak vel= ",groundMotionPeakVel
-print "ratio7= ",ratio7
-print "disp= ",groundMotionDisp
-print "ratio8= ",ratio8
+print("duration= ",groundMotionDuration)
+print("ratio1= ",ratio1)
+print("accel= ",groundMotionAccel)
+print("ratio2= ",ratio2)
+print("peak accel= ",groundMotionPeakAccel)
+print("ratio3= ",ratio3)
+print("delta= ",motionHistoryDelta)
+print("ratio4= ",ratio4)
+print("vel= ",groundMotionVel)
+print("ratio5= ",ratio5)
+print("peak vel= ",groundMotionPeakVel)
+print("ratio7= ",ratio7)
+print("disp= ",groundMotionDisp)
+print("ratio8= ",ratio8)
   '''
 
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (abs(ratio1)<1e-15) & (abs(ratio2)<1e-15) & (abs(ratio3)<1e-15) & (abs(ratio4)<1e-15) & (abs(ratio5)<motionHistoryDelta) & (abs(ratio7)<motionHistoryDelta) & (abs(ratio8)<2*motionHistoryDelta) :
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')

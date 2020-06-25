@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 # home made test
 # Reference:  deflection formulas from the publication "Prontuario de
 # Estructuras Metálicas del CEDEX". Section 3.3 Punctual load on cantilever.
@@ -88,15 +89,15 @@ deltaTeor= (-P*L**3/3/E/I)
 ratio1= ((delta-deltaTeor)/deltaTeor)
 
 ''' 
-print "delta= ",delta
-print "deltaTeor= ",deltaTeor
-print "ratio1= ",ratio1
+print("delta= ",delta)
+print("deltaTeor= ",deltaTeor)
+print("ratio1= ",ratio1)
  '''
 
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if abs(ratio1)<5e-4:
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')

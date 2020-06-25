@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 #home cooked test
 
 from rough_calculations import ng_cantilever as cv
@@ -17,13 +18,13 @@ beam= cv.Cantilever(210e9,3.49e-6,4.5)
 delta= beam.getDeflectionUnderConcentratedLoad(Q,3.25,beam.l)
 ratio1= (delta-0.180221124983)/0.180221124983
 
-#print "EI= ",beam.EI()
-#print "delta= ",delta
+#print("EI= ",beam.EI())
+#print("delta= ",delta)
 
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if abs(ratio1)<1e-11:
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')

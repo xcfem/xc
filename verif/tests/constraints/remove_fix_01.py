@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 ''' Verification of removeSPConstraint method.'''
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
@@ -107,20 +108,20 @@ ratio2= abs((M-MTeor)/MTeor)
 ratio3= (V/F)
 
 ''' 
-print "delta0= ",delta0
-print "delta= ",delta
-print "deltaTeor= ",deltateor
-print "ratio1= ",ratio1
-print "M= ",M
-print "ratio2= ",ratio2
-print "V1= ",V
-print "ratio3= ",ratio3
+print("delta0= ",delta0)
+print("delta= ",delta)
+print("deltaTeor= ",deltateor)
+print("ratio1= ",ratio1)
+print("M= ",M)
+print("ratio2= ",ratio2)
+print("V1= ",V)
+print("ratio3= ",ratio3)
    '''
 
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (abs(delta0)<1e-11) & (abs(ratio1)<1e-9) & (ratio2<1e-5) & (abs(ratio3-1.0)<1e-5):
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')

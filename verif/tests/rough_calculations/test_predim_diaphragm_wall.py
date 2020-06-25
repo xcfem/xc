@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 
 __author__= "Ana Ortega (AO_O)"
 __copyright__= "Copyright 2018, AO_O"
@@ -31,16 +32,16 @@ ratio2=(((vCalcDW2[0]-vRefDW2[0])**2+(vCalcDW2[1]-vRefDW2[1])**2+(vCalcDW2[1]-vR
 ratio3=(((vCalcDW3[0]-vRefDW3[0])**2+(vCalcDW3[1]-vRefDW3[1])**2+(vCalcDW3[1]-vRefDW3[1])**2+(vCalcDW3[2]-vRefDW3[2])**2)/4.0)**0.5
 ratio4=(((vCalcDW4[0]-vRefDW4[0])**2+(vCalcDW4[1]-vRefDW4[1])**2+(vCalcDW4[1]-vRefDW4[1])**2+(vCalcDW4[2]-vRefDW4[2])**2)/4.0)**0.5
 
-# print 'ratio1= ', ratio1
-# print 'ratio2= ', ratio2
-# print 'ratio3= ', ratio3
-# print 'ratio4= ', ratio4
+# print('ratio1= ', ratio1)
+# print('ratio2= ', ratio2)
+# print('ratio3= ', ratio3)
+# print('ratio4= ', ratio4)
 
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if abs(ratio1)<1e-15 and abs(ratio2)<1e-15 and abs(ratio3)<1e-15 and abs(ratio4)<1e-5:
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')
 

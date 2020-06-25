@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 
 # home made test
 #  Horizontal cantilever under tension load at its end.
@@ -83,17 +84,17 @@ deltateor= (F*L/(E*A))
 ratio1= (delta-deltateor)/deltateor
 ratio2= (N1-F)/F
 
-# print delta
-# print deltateor
-# print ratio1
-# print N1
-# print ratio2
+# print(delta)
+# print(deltateor)
+# print(ratio1)
+# print(N1)
+# print(ratio2)
 
 
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if abs(ratio1)<1e-5 and abs(ratio2)<1e-5:
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')

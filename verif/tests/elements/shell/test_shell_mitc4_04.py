@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 '''Verification test taken from example 2-005 of 
    the SAP 2000 verification manual.'''
 
@@ -89,8 +90,8 @@ f1= preprocessor.getSets.getSet("f1")
 nNodes= s.getNumNodes
 
 node= s.getNodeIJK(1,NumDivI/2+1,NumDivJ/2+1)
-# print "Central node: ", node.tag
-# print "Central node coordinates: ", node.getCoo
+# print("Central node: ", node.tag)
+# print("Central node coordinates: ", node.getCoo)
 lp0.newNodalLoad(node.tag,xc.Vector([0,0,-ptLoad,0,0,0])) # Concentrated load
 
 
@@ -104,9 +105,9 @@ analysis= predefined_solutions.simple_static_linear(feProblem)
 analOk= analysis.analyze(1)
 
 node= s.getNodeIJK(1,NumDivI/2+1,NumDivJ/2+1)
-# print "Central node: ", node.tag
-# print "Central node coordinates: ", node.getCoo
-# print "Central node displacements: ", node.getDisp
+# print("Central node: ", node.tag)
+# print("Central node coordinates: ", node.getCoo)
+# print("Central node displacements: ", node.getDisp)
 UZ= node.getDisp[2]
 
 
@@ -115,16 +116,16 @@ ratio1= (abs((UZ-UZTeor)/UZTeor))
 ratio2= (abs((nElems-64)/64))
 
 ''' 
-print "UZ= ",UZ
-print "Number of nodes: ",nNodes
-print "Number of elements: ",nElems
-print "ratio1: ",ratio1
+print("UZ= ",UZ)
+print("Number of nodes: ",nNodes)
+print("Number of elements: ",nElems)
+print("ratio1: ",ratio1)
    '''
 
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (abs(ratio1)<6e-3) & (abs(ratio2)<1e-9):
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')

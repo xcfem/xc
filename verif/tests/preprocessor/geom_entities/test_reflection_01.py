@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 
 import xc_base
 import geom
@@ -31,12 +32,12 @@ x4= pt4.getPos.x
 y4= pt4.getPos.y
 z4= pt4.getPos.z
 
-#print "x4= ", x4
+#print("x4= ", x4)
 
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (abs(x4)<1e-12) & (abs(y4)<1e-12) & (abs(z4)<1e-12):
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')

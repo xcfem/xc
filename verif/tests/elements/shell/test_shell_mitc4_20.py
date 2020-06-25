@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 # Test taken from section 6.7 (control 1) of the book
 # «Los forjados reticulares: diseño, análisis, construcción y patología»
 # by Florentino Regalado Tesoro ISBN: 978-8493069650.
@@ -116,8 +117,8 @@ nodes= preprocessor.getNodeHandler
 node= f1.getNodeIJK(1,NumDivI/2+1,NumDivJ/2+1)
 
 # \print{"Central node: ",tag
-# print "Central node coordinates: ",coord
-# print "Central node displacements: ", node.getDisp
+# print("Central node coordinates: ",coord)
+# print("Central node displacements: ", node.getDisp)
 UZ= node.getDisp[2]
 
 
@@ -135,23 +136,23 @@ ratio3= (abs((m1Center+35.20e3)/35.20e3))
 ratio4= (abs((m2SideCenter-103.09e3)/103.09e3))
 
 ''' 
-print "centerElemTag= ",centerElemTag
-print "sideElemTag= ",sideElemTag
-print "UZ= ",UZ
-print "m1Center= ",m1Center/1e3," kN \n"
-print "m2SideCenter= ",m2SideCenter/1e3," kN \n"
-print "Number of nodes: ",nNodes
-print "Number of elements: ",nElems
-print "ratio1: ",ratio1
-print "ratio2: ",ratio2
-print "ratio3: ",ratio3
-print "ratio4: ",ratio4
+print("centerElemTag= ",centerElemTag)
+print("sideElemTag= ",sideElemTag)
+print("UZ= ",UZ)
+print("m1Center= ",m1Center/1e3," kN \n")
+print("m2SideCenter= ",m2SideCenter/1e3," kN \n")
+print("Number of nodes: ",nNodes)
+print("Number of elements: ",nElems)
+print("ratio1: ",ratio1)
+print("ratio2: ",ratio2)
+print("ratio3: ",ratio3)
+print("ratio4: ",ratio4)
    '''
 
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (abs(ratio1)<0.5e-2) & (abs(ratio2)<1e-9) & (abs(ratio3)<2e-4) & (abs(ratio4)<0.11):
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')

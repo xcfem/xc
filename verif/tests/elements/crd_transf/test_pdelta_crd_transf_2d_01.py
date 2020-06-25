@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 # home made test
 
 from __future__ import division
@@ -39,12 +40,12 @@ beam2d= elements.newElement("ElasticBeam2d",xc.ID([1,2]))
 
 crdTransf= beam2d.getCoordTransf
 
-# print "vector I:",getIVector
-# print "vector J:",getJVector
+# print("vector I:",getIVector)
+# print("vector J:",getJVector)
 vILocal= crdTransf.getVectorLocalCoordFromGlobal(crdTransf.getIVector)
 vJLocal= crdTransf.getVectorLocalCoordFromGlobal(crdTransf.getJVector)
-# print "vector I en locales:",vILocal
-# print "vector J en locales:",vJLocal
+# print("vector I en locales:",vILocal)
+# print("vector J en locales:",vJLocal)
 ratio1= (vILocal-xc.Vector([1,0])).Norm()
 ratio2= (vJLocal-xc.Vector([0,1])).Norm()
 
@@ -58,6 +59,6 @@ import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (abs(ratio1)<1e-12) & (abs(ratio2)<1e-12):
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')

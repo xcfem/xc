@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 import xc_base
 import geom
 import xc
@@ -26,15 +27,15 @@ ratio2= abs(scc.sectionProperties.Iyz)
 
 
 ''' 
-print "ratio0= ",ratio0
-print "ratio1= ",ratio1
-print "ratio2= ",ratio2
+print("ratio0= ",ratio0)
+print("ratio1= ",ratio1)
+print("ratio2= ",ratio2)
    '''
 
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if((ratio0<1e-15) & (ratio1<1e-15) & (ratio2<1e-15)): 
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')

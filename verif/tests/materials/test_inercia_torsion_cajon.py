@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 ''' Home made test from the example at page C-17 of the
 "Bridge Strudl Manual" november 1973 '''
 
@@ -21,14 +22,14 @@ J= section_properties.getInerciaTorsionCajonMonocelular(bs,bi,h,ts,ti,td)
 ratio1= abs(J-656.6)/656.6
 
 ''' 
-print "J= ",J
-print "ratio1= ",ratio1
+print("J= ",J)
+print("ratio1= ",ratio1)
    '''
 
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (abs(ratio1)<2e-4):
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')

@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 
 '''Limit state controller for shear.'''
 
@@ -135,7 +136,7 @@ outCfg= lsd.VerifOutVars(listFile='N',calcMeanCF='Y')
 
 (FEcheckedModel,meanFCs)= reinfConcreteSectionDistribution.runChecking(lsd.shearResistance, matDiagType="d",threeDim= True,outputCfg=outCfg)  
 
-#print "mean FCs: ", meanFCs
+#print("mean FCs: ", meanFCs)
 
 meanFC0Teor= 0.932218036004
 ratio1= abs(meanFCs[0]-meanFC0Teor)/meanFC0Teor
@@ -143,10 +144,10 @@ meanFC1Teor= 0.932218036004
 ratio2= abs(meanFCs[1]-meanFC1Teor)/meanFC1Teor
 
 '''
-print "meanFCs[0]= ", meanFCs[0]
-print "ratio1= ",ratio1
-print "meanFCs[1]= ", meanFCs[1]
-print "ratio2= ",ratio2
+print("meanFCs[0]= ", meanFCs[0])
+print("ratio1= ",ratio1)
+print("meanFCs[1]= ", meanFCs[1])
+print("ratio2= ",ratio2)
 '''
 
 # Show logging messages.
@@ -154,6 +155,6 @@ print "ratio2= ",ratio2
 import os
 fname= os.path.basename(__file__)
 if((ratio1<0.01) and (ratio2<0.01)):
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')

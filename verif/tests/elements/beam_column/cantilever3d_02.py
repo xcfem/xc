@@ -1,5 +1,6 @@
 # Home made test
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
 __copyright__= "Copyright 2015, LCPT and AOO"
@@ -86,18 +87,18 @@ ratio1= (delta/deltateor)
 ratio2= abs((M-MTeor)/MTeor)
 ratio3= (V/F)
 
-# print delta
-# print deltateor
-# print ratio1
-# print "M= ",M
-# print ratio2
-# print "V1= ",V
-# print ratio3
+# print(delta)
+# print(deltateor)
+# print(ratio1)
+# print("M= ",M)
+# print(ratio2)
+# print("V1= ",V)
+# print(ratio3)
 
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (abs(ratio1-1.0)<1e-5) & (ratio2<1e-5) & (abs(ratio3-1.0)<1e-5):
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')

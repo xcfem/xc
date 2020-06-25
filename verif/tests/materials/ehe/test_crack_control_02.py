@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 ''' Reinforced concrete section. Crack control verification test.
    results are compared with those of the «Prontuario informático del hormigón armado». '''
 
@@ -99,13 +100,13 @@ ratio1= secHAParamsFis.Wk
 
 
 ''' 
-    print "ratio1= ",ratio1
+    print("ratio1= ",ratio1)
 '''
 
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (abs(ratio1)<1e-5):
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')

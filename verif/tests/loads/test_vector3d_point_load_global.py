@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 from __future__ import division
 # Reference:  Deflection formulas from the publication: "Prontuario de
 # Estructuras Metálicas del CEDEX". Apartado 3.3 Punctual load on cantilever.
@@ -110,21 +111,21 @@ delta1Teor= (-P*a**2*(3*L-a)/6.0/E/Iz)
 ratio1= ((delta1-delta1Teor)/delta1Teor)
 
 ''' 
-print "vDispUVW= ",vDispUVW
-print "vIElem= ",vIElem
-print "vJElem= ",vJElem
-print "delta0= ",delta0
-print "delta0Teor= ",delta0Teor
-print "ratio0= ",ratio0
-print "delta1= ",delta1
-print "delta1Teor= ",delta1Teor
-print "ratio1= ",ratio1
+print("vDispUVW= ",vDispUVW)
+print("vIElem= ",vIElem)
+print("vJElem= ",vJElem)
+print("delta0= ",delta0)
+print("delta0Teor= ",delta0Teor)
+print("ratio0= ",ratio0)
+print("delta1= ",delta1)
+print("delta1Teor= ",delta1Teor)
+print("ratio1= ",ratio1)
  '''
 
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (abs(ratio0)<1e-10) & (abs(ratio1)<1e-11):
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')

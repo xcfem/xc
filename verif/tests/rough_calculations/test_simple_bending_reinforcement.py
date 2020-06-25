@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 from rough_calculations import ng_simple_bending_reinforcement
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
@@ -22,20 +23,20 @@ ratio1= (T-C)/T
 ratio2= (M-T*z)/M
 
 
-# print "As= ", As*1e4," cm2"
-# print "T= ", T/1e3," kN"
-# print "xpl= ", xpl," m"
-# print "z= ", z," m"
-# print "C= ", C/1e3," kN"
-# print "ratio1= ",ratio1
-# print "ratio2= ",ratio2
+# print("As= ", As*1e4," cm2")
+# print("T= ", T/1e3," kN")
+# print("xpl= ", xpl," m")
+# print("z= ", z," m")
+# print("C= ", C/1e3," kN")
+# print("ratio1= ",ratio1)
+# print("ratio2= ",ratio2)
 
 
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if(abs(ratio1)<1e-10 and abs(ratio2)<1e-10):
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')
 

@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 ''' Lateral torsional buckling of steel beams.
    Example 1 from:
    Calculating the C1 factor for lateral torsional buckling.
@@ -37,17 +38,17 @@ C12Teor= math.sqrt(35*283.5**2/(283.5**2+9*260**2+16*280**2+9*210**2))
 ratio1= abs(C11-C11Teor)/C11Teor
 ratio2= abs(C12-C12Teor)/C12Teor
 
-# print 'C1= ', C11
-# print 'C1Teor= ', C11Teor
-# print 'ratio1= ', ratio1
-# print 'C1= ', C12
-# print 'C1Teor= ', C12Teor
-# print 'ratio2= ', ratio2
+# print('C1= ', C11)
+# print('C1Teor= ', C11Teor)
+# print('ratio1= ', ratio1)
+# print('C1= ', C12)
+# print('C1Teor= ', C12Teor)
+# print('ratio2= ', ratio2)
 
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if(ratio1<0.05 and ratio2<0.05):
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')

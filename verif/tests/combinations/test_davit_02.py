@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 
 from __future__ import division
 import xc_base
@@ -109,7 +110,7 @@ beam3.vector3dUniformLoadGlobal(xc.Vector([0.0,0.0,-10e3]))
 combs= loadHandler.getLoadCombinations
 import os
 pth= os.path.dirname(__file__)
-#print "pth= ", pth
+#print("pth= ", pth)
 if(not pth):
   pth= "."
 execfile(pth+"/../aux/def_hip_elu.py")
@@ -123,11 +124,11 @@ def resuelveCombEstatLin(comb):
     previousName= previa.getName
     tagPrevia= previa.tag
     ''' 
-    print "previousName= ",previousName
-    print "tag= ",comb.tag
-    print "tagPrevia= ",tagPrevia
-    print "descomp previa= ",getDescompCombPrevia
-    print "resto sobre previa= ",getDescompRestoSobrePrevia
+    print("previousName= ",previousName)
+    print("tag= ",comb.tag)
+    print("tagPrevia= ",tagPrevia)
+    print("descomp previa= ",getDescompCombPrevia)
+    print("resto sobre previa= ",getDescompRestoSobrePrevia)
     '''
     tagSave= tagPrevia*100
     if(tagPrevia>0):
@@ -149,10 +150,10 @@ def procesResultVerif(comb):
   global NMin2
   NMin2=min(NMin2,beam1.getN2)
   ''' 
-  print "tagComb= ",comb.tag
-  print "nmbComb= ",comb.getName
-  print "N1= ",(beam1.getN1/1e3)
-  print "N2= ",(beam1.getN2/1e3)
+  print("tagComb= ",comb.tag)
+  print("nmbComb= ",comb.getName)
+  print("N1= ",(beam1.getN1/1e3))
+  print("N2= ",(beam1.getN2/1e3))
   '''
 
 
@@ -173,17 +174,17 @@ ratio1= ((NMin1+440.7e3)/440.7e3)
 ratio2= ((NMin2+397.5e3)/397.5e3)
 
 ''' 
-print "NMin1= ",NMin1
-print "ratio1= ",ratio1
-print "NMin2= ",NMin2
-print "ratio2= ",ratio2
+print("NMin1= ",NMin1)
+print("ratio1= ",ratio1)
+print("NMin2= ",NMin2)
+print("ratio2= ",ratio2)
 '''
 
 
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (abs(ratio1)<1e-8) & (abs(ratio2)<1e-8):
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')
 os.system("rm -rf /tmp/test_pescante_02.db") # Your garbage you clean it

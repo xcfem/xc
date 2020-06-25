@@ -99,7 +99,7 @@ beamRCsect.dir2NegatvRebarRows= def_simple_RC_section.LongReinfLayers([fi16s75r3
 sections.append(beamRCsect)
 
 feProblem= xc.FEProblem()
-feProblem.errFileName= "/tmp/erase.err" # Don't print errors.
+feProblem.errFileName= "/tmp/erase.err" # Don't print(errors.)
 preprocessor=  feProblem.getPreprocessor   
 nodes= preprocessor.getNodeHandler
 # Problem type

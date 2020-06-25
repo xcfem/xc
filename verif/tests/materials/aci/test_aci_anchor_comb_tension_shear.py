@@ -68,9 +68,9 @@ ratio4=abs((Ndd_kips-22.025729)/22.025729)
 
 '''
 if Ndd >= Nua:
-    print ('Ndd >= Nua -> ductility OK')
+    print(('Ndd >= Nua -> ductility OK'))
 else:
-    print ('Ndd < Nua -> NO ductility') 
+    print(('Ndd < Nua -> NO ductility') )
 '''
 #Check design strength of stud in tension
 Nnd=stud.getDesignStrengthTension(Abearing,ductility=True,loadCombAlt=True)
@@ -99,9 +99,9 @@ Vdd_kips=Vdd/kip2N
 ratio9=abs((Vdd_kips-21.42243)/21.42243)
 '''
 if Vdd >= Vua:
-    print ('Vdd >= Vua -> ductility OK')
+    print(('Vdd >= Vua -> ductility OK'))
 else:
-    print ('Vdd < Vua -> NO ductility') 
+    print(('Vdd < Vua -> NO ductility') )
 '''
 
 # Check design strength of stud in shear
@@ -110,19 +110,19 @@ Vnd_kips=Vnd/kip2N
 ratio10=abs((Vnd_kips-14.9563)/14.9563)
 '''
 if Vnd >= Vua:
-    print ('Vnd >= Vua -> design strength checking OK')
+    print(('Vnd >= Vua -> design strength checking OK'))
 else:
-    print ('Vnd < Vua -> change stud dimensions') 
+    print(('Vnd < Vua -> change stud dimensions') )
 '''
 #Art. D.7
 '''
 if Vua <= 0.2*Vnd:
-    print ('Vua <= 0.2*Vnd -> full strength in tension is permitted')
+    print(('Vua <= 0.2*Vnd -> full strength in tension is permitted'))
 if Nua <= 0.2*Nnd:
-    print ('Nua <= 0.2*Nnd -> full strength in shear is permitted')
+    print(('Nua <= 0.2*Nnd -> full strength in shear is permitted'))
 if Vua > 0.2*Vnd and Nua > 0.2*Nnd:
     if Nua/Nnd + Vua/Vnd <= 1.2:
-        print ('Nua/Nnd + Vua/Vnd = ',round(Nua/Nnd + Vua/Vnd,2), ' <= 1.2')
+        print(('Nua/Nnd + Vua/Vnd = ',round(Nua/Nnd + Vua/Vnd,2), ' <= 1.2'))
 '''
 
 import os

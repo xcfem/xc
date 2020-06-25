@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 import xc_base
 import geom
 import xc
@@ -64,10 +65,10 @@ Z2= preprocessor.getSets.defSet("Z2")
 Z2.getSurfaces.append(s2)
 Z2.fillDownwards()
 
-feProblem.setVerbosityLevel(0) #Dont print warning messages about element seed.
+feProblem.setVerbosityLevel(0) #Dont print(warning messages about element seed.)
 Z1.genMesh(xc.meshDir.I)
 Z2.genMesh(xc.meshDir.I)
-feProblem.setVerbosityLevel(1) #Print warnings again 
+feProblem.setVerbosityLevel(1) #print(warnings again )
 
 
 nNodes= preprocessor.getSets.getSet("total").getNodes.size
@@ -75,14 +76,14 @@ nNodes= preprocessor.getSets.getSet("total").getNodes.size
 ratio1= (nNodes-18)/18
 
 ''' 
-print "nNod= ",nNodes
-print "ratio1= ",ratio1
+print("nNod= ",nNodes)
+print("ratio1= ",ratio1)
    '''
 
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if(ratio1<=5e-5):
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')

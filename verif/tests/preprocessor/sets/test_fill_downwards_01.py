@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 
 '''Test sets and grid model. Generation/selection of geometric and FE 
    entities using grid model, boolean operations with the created sets.'''
@@ -50,19 +51,19 @@ floor1_rg=gm.IJKRange((2,5,2),(8,15,2))
 # Surfaces' generation
 floor1= gridGeom.genSurfOneRegion(ijkRange=floor1_rg,setName='floor1')
 # for s in floor1.getSurfaces:
-#     print s.name, s.tag, s, s.getKPoints()
+#     print(s.name, s.tag, s, s.getKPoints())
 
 floor1.fillDownwards()
 sz= floor1.getLines.size
 
-# print 'Lines in set floor1: ', sz
+# print('Lines in set floor1: ', sz)
 # for l in floor1.getLines:
-#     print l.name, l.tag, l.getKPoints(), l
+#     print(l.name, l.tag, l.getKPoints(), l)
 
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (sz==136):
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')

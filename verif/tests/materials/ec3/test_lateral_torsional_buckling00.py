@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 ''' Lateral torsional buckling of steel beams.
    Home made. '''
 from __future__ import division
@@ -59,10 +60,10 @@ for i in range(0,sz):
 
 ratio1= math.sqrt(ratio1)
 
-# print 'psi= ', psi
-# print 'C1= ', c1
-# print 'sz= ', sz
-# print 'ratio1= ', ratio1
+# print('psi= ', psi)
+# print('C1= ', c1)
+# print('sz= ', sz)
+# print('ratio1= ', ratio1)
 
 # import matplotlib.pyplot as plt
 # plt.title('Case A')
@@ -77,6 +78,6 @@ import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (abs(ratio1)<1e-4):
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')

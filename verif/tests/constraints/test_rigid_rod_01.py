@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 '''Rigid rod between two nodes. Home made test.'''
 
 import xc_base
@@ -61,16 +62,16 @@ deltaZ= nod2.getDisp[0]  # Node 2 displacement
 ratio1= math.sqrt(deltaX**2+deltaY**2+deltaZ**2)
 
 ''' 
-    print deltaX
-    print deltaY
-    print deltaZ
-    print ratio1
+    print(deltaX)
+    print(deltaY)
+    print(deltaZ)
+    print(ratio1)
    '''
 
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if ratio1<1e-11:
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')

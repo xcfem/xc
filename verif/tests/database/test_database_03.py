@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 # home made test
 '''Save and restore methods verification.'''
 
@@ -111,17 +112,17 @@ ratio1= (delta/deltateor)
 ratio2= (N1/(2*F))
 
 ''' 
-print "delta= ",delta
-print "deltateor= ",deltateor
-print "ratio1= ",ratio1
-print "N1= ",N1
-print "ratio2= ",ratio2
+print("delta= ",delta)
+print("deltateor= ",deltateor)
+print("ratio1= ",ratio1)
+print("N1= ",N1)
+print("ratio2= ",ratio2)
    '''
 
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (abs(ratio1-1.0)<1e-5) & (abs(ratio2-1.0)<1e-5):
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')
 

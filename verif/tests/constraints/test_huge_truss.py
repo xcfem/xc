@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 '''Stiff beam between two nodes. Home made test'''
 
 import xc_base
@@ -54,14 +55,14 @@ rr.getResistingForce()
 N=rr.getN()
 
 ''' 
-print deltaX
-print N
+print(deltaX)
+print(N)
   '''
 
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if deltaX<1e-10:
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')

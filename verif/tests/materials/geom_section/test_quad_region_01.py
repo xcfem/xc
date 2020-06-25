@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 # Home made test
 
 import xc_base
@@ -48,8 +49,8 @@ for  \inicio{i=1} \continua{i<=numFilas} \incremento{i=(i+1)
   for j in range(1,j+1):
                                  \bucle
 
-                                      print "x(",i,",",j,")= ",x(i,j
-                                      print " y(",i,",",j,")= ",y(i,j
+                                      print("x(",i,",",j,")= ",x(i,j)
+                                      print(" y(",i,",",j,")= ",y(i,j)
 
 
 
@@ -80,36 +81,36 @@ ratio10= ((deltaX-deltaXTeor)/deltaXTeor)
 ratio11= ((deltaY-deltaYTeor)/deltaYTeor)
 
 ''' 
-print "area= ",area
-print "numQuads= ",numQuads
-print "numPoints= ",numPoints
-print "numFilas= ",numFilas
-print "numCols= ",numCols
-print "area= ",area
-print "G= ",G.x, G.y
-print "Ix= ",Ix
-print "Iy= ",Iy
-print "iTeor= ",iTeor
-print "Pxy= ",Pxy
-print "deltaX= ",deltaX
-print "deltaY= ",deltaY
-print "ratio1= ",ratio1
-print "ratio2= ",ratio2
-print "ratio3= ",ratio3
-print "ratio4= ",ratio4
-print "ratio5= ",ratio5
-print "ratio6= ",ratio6
-print "ratio7= ",ratio7
-print "ratio8= ",ratio8
-print "ratio9= ",ratio9
-print "ratio10= ",ratio10
-print "ratio11= ",ratio11
+print("area= ",area)
+print("numQuads= ",numQuads)
+print("numPoints= ",numPoints)
+print("numFilas= ",numFilas)
+print("numCols= ",numCols)
+print("area= ",area)
+print("G= ",G.x, G.y)
+print("Ix= ",Ix)
+print("Iy= ",Iy)
+print("iTeor= ",iTeor)
+print("Pxy= ",Pxy)
+print("deltaX= ",deltaX)
+print("deltaY= ",deltaY)
+print("ratio1= ",ratio1)
+print("ratio2= ",ratio2)
+print("ratio3= ",ratio3)
+print("ratio4= ",ratio4)
+print("ratio5= ",ratio5)
+print("ratio6= ",ratio6)
+print("ratio7= ",ratio7)
+print("ratio8= ",ratio8)
+print("ratio9= ",ratio9)
+print("ratio10= ",ratio10)
+print("ratio11= ",ratio11)
  '''
 
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (abs(ratio1)<1e-15) & (abs(ratio2)<1e-15) & (abs(ratio3)<1e-15) & (abs(ratio4)<1e-15) & (abs(ratio5)<1e-15) & (abs(ratio6)<1e-15) & (abs(ratio7)<1e-15) & (abs(ratio8)<1e-15) & (abs(ratio9)<1e-14) & (abs(ratio10)<1e-15) & (abs(ratio11)<1e-15) & (abs(Pxy)<1e-15):
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')

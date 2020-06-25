@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 # home made test
 '''«getPointLocalCoordFromGlobal» function verification.'''
 
@@ -58,18 +59,18 @@ centroidBTeor= 0.5 # Basic coordinates of the centroid.
 ratio3= abs(centroidB-centroidBTeor)
 
 ''' 
-print "global coordinates of the centroid: ",centroidG
-print "ratio1: ",ratio1
-print "local coordinates of the centroid: ",centroidL
-print "ratio2: ",ratio2
-print "basic coordinates of the centroid: ",centroidB
-print "ratio3: ",ratio3
+print("global coordinates of the centroid: ",centroidG)
+print("ratio1: ",ratio1)
+print("local coordinates of the centroid: ",centroidL)
+print("ratio2: ",ratio2)
+print("basic coordinates of the centroid: ",centroidB)
+print("ratio3: ",ratio3)
    '''
 
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if((ratio1<1e-15) & (ratio2<1e-14) & (ratio3<1e-15)):
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')

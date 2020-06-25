@@ -44,7 +44,7 @@ from scipy.integrate import trapz
 pth= os.path.dirname(__file__)
 if(not pth):
   pth= "."
-#print "pth= ", pth
+#print("pth= ", pth)
 accelFilePath= pth+'/../../aux/A10000.py'
 openSeesResultsPath= pth+'/../../aux/test_time_history_01_opensees_results.py'
 
