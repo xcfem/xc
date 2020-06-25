@@ -1260,7 +1260,7 @@ class StructuralMechanics3D(StructuralMechanics):
         '''
         for n in lstNodes:
             for i in range(0,6):
-                if(constrCond[i] <> 'free'):
+                if(constrCond[i] != 'free'):
                     self.constraints.newSPConstraint(n.tag,i,constrCond[i])
                     
                     

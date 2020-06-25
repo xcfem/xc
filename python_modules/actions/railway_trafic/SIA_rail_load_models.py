@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
+
 from __future__ import division
 
 '''Railway trafic load models from SIA 261 2003.'''
@@ -195,12 +197,12 @@ class LoadModel(object):
     
     
   def writeData(self,f):
-    print "LM ", self.loadModelNumber, " QBk= ", self.brakingLoad(1.0)/1e3, " kN/m"
-    print "LM ", self.loadModelNumber, " QAk= ", self.accelerationLoad(1.0)/1e3, " kN"
-    print "LM ", self.loadModelNumber, " QSk= ", self.nosingForce()/1e3, " kN"
-    print "LM ", self.loadModelNumber, " derailment model 1 QEd= ", self.locomotiveDerailmentModel1()/1e3, " kN"
-    print "LM ", self.loadModelNumber, " derailment model 1 qEd= ", self.trainDerailmentModel1()/1e3, " kN/m"
-    print "LM ", self.loadModelNumber, " derailment model 2 qEd= ", self.trainDerailmentModel2()/1e3, " kN/m"
+    print("LM ", self.loadModelNumber, " QBk= ", self.brakingLoad(1.0)/1e3, " kN/m")
+    print("LM ", self.loadModelNumber, " QAk= ", self.accelerationLoad(1.0)/1e3, " kN")
+    print("LM ", self.loadModelNumber, " QSk= ", self.nosingForce()/1e3, " kN")
+    print("LM ", self.loadModelNumber, " derailment model 1 QEd= ", self.locomotiveDerailmentModel1()/1e3, " kN")
+    print("LM ", self.loadModelNumber, " derailment model 1 qEd= ", self.trainDerailmentModel1()/1e3, " kN/m")
+    print("LM ", self.loadModelNumber, " derailment model 2 qEd= ", self.trainDerailmentModel2()/1e3, " kN/m")
 
 def dynamicFactor(lPhi):
   retval= 1.44/(math.sqrt(lPhi)-0.2)+0.82

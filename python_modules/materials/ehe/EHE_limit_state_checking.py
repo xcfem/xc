@@ -267,7 +267,7 @@ class ShearDesignParameters(object):
       self.angAlpha= math.pi/2 # angle of the shear reinforcement with the member axis (figure 44.2.3.1.a EHE).
       self.angTheta= math.pi/6. # Angle between the concrete compressed struts and the member axis (figure 44.2.3.1.a EHE).
       self.ultimateShearStrength= 0.0
-  #    print 'transv. reinf. area=',self.areaShReinfBranchsTrsv
+  #    print('transv. reinf. area=',self.areaShReinfBranchsTrsv)
 
     def computeUltimateShearStrength(self, concreteFibersSet, rebarFibersSet, tensionedRebarsFiberSet, fck, fcd, fyd, fpd, fydTrsv):
         '''Compute section shear strength.'''
@@ -282,7 +282,7 @@ class ShearDesignParameters(object):
         self.ultimateShearStrength= getVu(fck,fcd,N,self.concreteArea,self.widthMin,self.effectiveDepth,self.mechanicLeverArm,self.angAlpha,self.angTheta,self.tensionedRebarsArea,fyd,self.tensionedStrandsArea,fpd,self.sigmaXD,self.sigmaYD,AsTrsv,self.areaShReinfBranchsTrsv,fydTrsv)
 
     def printParams(self):
-        '''Print shear checking values.'''
+        '''print(shear checking values.)'''
         print("area of tensioned rebars; As= ",self.tensionedRebarsArea*1e4," cm2")
         print("transverse reinforcement area; AsTrsv= ",self.areaShReinfBranchsTrsv*1e4," cm2")
         print("design value of normal stress; sigmaXD= ",self.sigmaXD/1e6," MPa")

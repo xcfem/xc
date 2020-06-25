@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
+
 # THIS MODULE IS OBSOLETE, IT WILL BE DEPRECATED SOON. LCPT 30/05/2020
 
 import os
@@ -114,7 +116,7 @@ def metal3DToBarInternalForces(nmbArch, nmbDBase, nmbTabla):
               lst=separaCsv(csv)
               codEsf= getCodEsf(lst[2])
               if(codEsf=="?"):
-                print "El código de esfuerzo: ",lst[2]," en la línea",str1SB," es desconocido"
+                print("El código de esfuerzo: ",lst[2]," en la línea",str1SB," es desconocido")
               else:
                 for j in range(1,numSec):
                   xSec= tonum(replaceAll(lstXSec[2+j],"m",""))

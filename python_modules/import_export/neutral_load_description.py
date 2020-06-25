@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
+
 
 __author__= "Luis C. Pérez Tato (LCPT)"
 __copyright__= "Copyright 2015 LCPT"
@@ -164,7 +166,7 @@ def getComponentsFromStr(descompStr,mapLoadCases):
     coef= float(factors[0])
     loadCaseName= factors[1]
     loadCase= mapLoadCases[loadCaseName]
-    #print "coef= ", coef, "loadCase= ", loadCaseName, " id= ", loadCase.id
+    #print("coef= ", coef, "loadCase= ", loadCaseName, " id= ", loadCase.id)
     retval.append(LoadCombComponent(counter,loadCase,coef))
     counter+= 1
   return retval

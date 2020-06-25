@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
+
 from __future__ import division
 ''' Structural steel as specified in EC3 standard.'''
 
@@ -374,7 +376,7 @@ class EC3Shape(object):
         else:
             recorder.callbackRecord= EC3lsc.controlULSCriterion()
 
-        recorder.callbackRestart= "print \"Restart method called.\""
+        recorder.callbackRestart= "print(\"Restart method called.\")"
         return recorder
 
 

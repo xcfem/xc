@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
+
 from __future__ import division
 
 '''Functions to compute wind loads according to Spanish IAPF standard.'''
@@ -21,7 +23,7 @@ def ParamKIAPF(gae):
     elif gae==4:
           return 0.23
     else:
-        print "Error en el grado de aspereza del entorno."
+        print("Error en el grado de aspereza del entorno.")
         return 0.0
 
 def ZminIAPF(gae):
@@ -40,7 +42,7 @@ def ZminIAPF(gae):
     elif gae==4:
           return 10
     else:
-         print "Error en el grado de aspereza del entorno."
+         print("Error en el grado de aspereza del entorno.")
          return 0.0
 
 def Z0IAPF(gae):
@@ -59,7 +61,7 @@ def Z0IAPF(gae):
     elif gae==4:
           return 1
     else:
-        print "Error en el grado de aspereza del entorno."
+        print("Error en el grado de aspereza del entorno.")
         return 0.0
 
 def alphaIAPF(gae):
@@ -78,7 +80,7 @@ def alphaIAPF(gae):
     elif gae==4:
           return 0.67
     else:
-        print "Error en el grado de aspereza del entorno."
+        print("Error en el grado de aspereza del entorno.")
         return 0.0
 
 def CzIAPF(gae,z):

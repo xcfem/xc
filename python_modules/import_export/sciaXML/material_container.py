@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
+
 
 #Based on sXML-master projet on gitHub
 
@@ -33,7 +35,7 @@ class MaterialTable(tb.SCXMLTableXMLNodes):
     super(MaterialTable,self).__init__(tableId,'Materials')
     self.progid= tableProgId
   def populate(self,matDict):
-    print "XXX write implementation!"
+    print("XXX write implementation!")
     
 
 class MaterialContainer(ctr.SCXMLTableContainer):

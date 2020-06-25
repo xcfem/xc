@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
+
 from __future__ import division
 '''Functions to compute wind actions according to Spanish CTE'''
 
@@ -21,7 +23,7 @@ def ParamK(gae):
     elif gae==5:
           return 0.24
     else:
-        print "Error en el grado de aspereza del entorno."
+        print("Error en el grado de aspereza del entorno.")
         return 0.0
 
 def ParamL(gae):
@@ -40,7 +42,7 @@ def ParamL(gae):
     elif gae==5:
           return 1.0
     else:
-        print "Error en el grado de aspereza del entorno."
+        print("Error en el grado de aspereza del entorno.")
         return 0.0
       
 def ParamZ(gae):
@@ -60,7 +62,7 @@ def ParamZ(gae):
           return 10
     else:
       
-        print "Error en el grado de aspereza del entorno."
+        print("Error en el grado de aspereza del entorno.")
         return 0.0
       
 def ParamF(gae,z):
@@ -85,7 +87,7 @@ def CoefExp(gae,z):
     to CTE (expression D.2).
     '''
     if z>200:
-        print "Expression no válida para cotas sobre el terreno superiores a 200 m."
+        print("Expression no válida para cotas sobre el terreno superiores a 200 m.")
     k= ParamK(gae)
     F= ParamF(gae,z)
     return F*(F+7*k)

@@ -236,7 +236,7 @@ class Member(buckling_base.MemberBase):
             recorder.callbackRecord= controlULSCriterion2D()
         else:
             recorder.callbackRecord= controlULSCriterion()
-#        recorder.callbackRestart= "print \"Restart method called.\"" #20181121
+#        recorder.callbackRestart= "print(\"Restart method called.\")" #20181121
         return recorder
 
 class BiaxialBendingNormalStressController(lsc.LimitStateControllerBase):

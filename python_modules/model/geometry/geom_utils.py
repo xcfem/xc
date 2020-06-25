@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
+
 
 ''' Utilities for geometry entities related manipulations. '''
 __author__= "Luis C. Pérez Tato (LCPT)"
@@ -189,7 +191,7 @@ def get_lin_2Pts(pnt1,pnt2,setSrchLin=None):
             broke_out= True
             break
     if not broke_out:
-#        print "Can't find the line"
+#        print("Can't find the line")
         return
     else:
         return l

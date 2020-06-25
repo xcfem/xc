@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
-''' Base classes for reinforced concrete materials.'''
 from __future__ import division
+from __future__ import print_function
+
+''' Base classes for reinforced concrete materials.'''
 
 __author__= "Ana Ortega (AO_O) and Luis C. Pérez Tato (LCPT)"
 __copyright__= "Copyright 2015, AO_O and LCPT"
@@ -1063,7 +1065,7 @@ def testReinfSteelCharacteristicDiagram(preprocessor, matRecord):
     sg= sigmaKReinfSteel(e,matRecord)
     stress= steelDiagram.getStress()
     err= abs((sg-stress)/sg)
-    #print "e= ",e," strain= ",steelDiagram.getStrain()," stress= ",stress," sg= ", sg," err= ", err,"\n"
+    #print("e= ",e," strain= ",steelDiagram.getStrain()," stress= ",stress," sg= ", sg," err= ", err,"\n")
     errMax= max(err,errMax)
     e= e+incr
   return errMax
