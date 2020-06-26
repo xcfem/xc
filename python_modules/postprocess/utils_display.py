@@ -254,7 +254,8 @@ class PartToDisplayContainer(dict):
         #Load properties to display:
         fName= resultsToDisplay.limitStateData.getOutputDataFileName()
         print('******* calling: ', fName)
-        execfile(fName) #Load data to display.
+        with open(fName) as infile:
+            exec(infile.read())
         for k in self.keys():
             part= self[k]
             part.display(preprocessor,tp,resultsToDisplay)

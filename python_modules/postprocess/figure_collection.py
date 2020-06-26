@@ -39,7 +39,8 @@ class FigsCollectionPlotter(object):
     figureList.append(utils_display.FigureDefinition(partName,"Flexion","FCCP2",txtFCnormalStresses,self.reinforcementText2))
     #Load properties to display:
     fName= self.fieldFilesPath + "verifRsl_normStrsULS.py"
-    execfile(fName)
+    with open(fName) as infile:
+        exec(infile.read())
 
     tp= utils_display.TakePhotos(elemSetName)
     tp.pthGraphOutput= self.graphicOutputPath
