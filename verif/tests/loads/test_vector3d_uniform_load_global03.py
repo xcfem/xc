@@ -60,7 +60,7 @@ pth= os.path.dirname(__file__)
 #print("pth= ", pth)
 if(not pth):
   pth= "."
-execfile(pth+"/../aux/testQuadRegion.py")
+exec(open(pth+"/../aux/testQuadRegion.py").read())
 
 materialHandler= preprocessor.getMaterialHandler
 quadFibers= materialHandler.newMaterial("fiber_section_3d","quadFibers")
@@ -110,7 +110,7 @@ analysis= predefined_solutions.simple_static_modified_newton(feProblem)
 result= analysis.analyze(10)
 
 
-execfile(pth+"/test_vector3d_uniform_load_global.py")
+exec(open(pth+"/test_vector3d_uniform_load_global.py").read())
 
 ''' 
 print("delta: ",delta)

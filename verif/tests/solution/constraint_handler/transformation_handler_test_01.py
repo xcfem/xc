@@ -85,7 +85,7 @@ pth= os.path.dirname(__file__)
 #print("pth= ", pth)
 if(not pth):
   pth= "."
-execfile(pth+"/../../aux/solu_transf_handler.py")
+exec(open(pth+"/../../aux/solu_transf_handler.py").read())
 
 
 

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import print_function
-
 from __future__ import division
+
 import xc_base
 import geom
 import xc
@@ -113,7 +113,7 @@ pth= os.path.dirname(__file__)
 #print("pth= ", pth)
 if(not pth):
   pth= "."
-execfile(pth+"/../aux/def_hip_elu.py")
+exec(open(pth+"/../aux/def_hip_elu.py").read())
 
 
 

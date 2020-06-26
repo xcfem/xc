@@ -87,7 +87,7 @@ pth= os.path.dirname(__file__)
 #print("pth= ", pth)
 if(not pth):
   pth= "."
-execfile(pth+"/../../aux/sol_sparse.py")
+exec(open(pth+"/../../aux/sol_sparse.py").read())
 
 
 nodes.calculateNodalReactions(True,1e-7)

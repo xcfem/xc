@@ -59,7 +59,7 @@ pth= os.path.dirname(__file__)
 #print("pth= ", pth)
 if(not pth):
   pth= "."
-execfile(pth+"/../../aux/testQuadRegion.py")
+exec(open(pth+"/../../aux/testQuadRegion.py").read())
 
 materialHandler= preprocessor.getMaterialHandler
 quadFibers= materialHandler.newMaterial("fiber_section_3d","quadFibers")

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-from __future__ import print_function
 # Prestressed concrete section verification test.
+from __future__ import print_function
 from __future__ import division
 
 import xc_base
@@ -36,7 +36,7 @@ pth= os.path.dirname(__file__)
 if(not pth):
   pth= "."
 #print("pth= ", pth)
-execfile(pth+"/prestressed_concrete_section_02.py")
+exec(open(pth+"/prestressed_concrete_section_02.py").read())
 
 materialHandler= preprocessor.getMaterialHandler
 secHP= materialHandler.newMaterial("fiber_section_3d","secHP")

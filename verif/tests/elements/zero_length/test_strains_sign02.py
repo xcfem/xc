@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-from __future__ import print_function
 # home made test
 # ZeroLengthSection elements sign criteria.
 
@@ -10,6 +9,7 @@ from __future__ import print_function
 #     Bending moment Mz has the same direction and its sense is the OPPOSITE to local Z axis.
 #     Section's y axis is element z axis.
 
+from __future__ import print_function
 from __future__ import division
 import xc_base
 import geom
@@ -43,7 +43,7 @@ pth= os.path.dirname(__file__)
 #print("pth= ", pth)
 if(not pth):
   pth= "."
-execfile(pth+"/../../aux/four_fiber_section.py")
+exec(open(pth+"/../../aux/four_fiber_section.py").read())
 
 sigma= E*epsilon
 F= sigma*fiberArea

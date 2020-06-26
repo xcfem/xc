@@ -39,7 +39,7 @@ pth= os.path.dirname(__file__)
 if(not pth):
   pth= "."
 #print("pth= ", pth)
-execfile(pth+"/concrete_section_01.py")
+exec(open(pth+"/concrete_section_01.py").read())
 
 secHA= preprocessor.getMaterialHandler.newMaterial("fiber_section_3d","secHA")
 fiberSectionRepr= secHA.getFiberSectionRepr()

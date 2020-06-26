@@ -39,7 +39,7 @@ pth= os.path.dirname(__file__)
 if(not pth):
   pth= "."
 #print("pth= ", pth)
-execfile(pth+"/barsSectionGeometry.py")
+exec(open(pth+"/barsSectionGeometry.py").read())
 
 barsSection= preprocessor.getMaterialHandler.newMaterial("fiber_section_3d","barsSection")
 fiberSectionRepr= barsSection.getFiberSectionRepr()

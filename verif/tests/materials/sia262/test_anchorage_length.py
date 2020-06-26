@@ -1,8 +1,7 @@
 # -*- coding: utf-8 -*-
-from __future__ import print_function
-
 # Home made test.
 
+from __future__ import print_function
 from __future__ import division
 import sys
 import materials.sia262.SIA262_limit_state_checking

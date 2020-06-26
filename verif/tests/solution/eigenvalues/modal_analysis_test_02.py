@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
-from __future__ import print_function
 ''' Response spectrum modal analysis test
 taken from the publication from Andrés Sáez Pérez: «Estructuras III»
  E.T.S. de Arquitectura de Sevilla (España).'''
+from __future__ import print_function
 from __future__ import division
 import xc_base
 import geom

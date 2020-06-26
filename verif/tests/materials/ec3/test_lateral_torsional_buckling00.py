@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
-from __future__ import print_function
 ''' Lateral torsional buckling of steel beams.
    Home made. '''
+from __future__ import print_function
 from __future__ import division
 import math
 import xc_base

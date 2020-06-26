@@ -48,7 +48,7 @@ ieData= importMultiBlockTopology(dxfFileName= dxfFilePath, outputFileName= xcBlo
 FEcase= xc.FEProblem()
 FEcase.title= 'Split lines test'
 xcBlocksPath= './'+xcBlocksFileName+'.py'
-execfile(xcBlocksPath)
+exec(open(xcBlocksPath).read())
 
 numberOfLinesBeforeSplitting= len(lines)
 numberOfPointsBeforeSplitting= len(points)

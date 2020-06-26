@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
-from __future__ import print_function
 # home made test
 # Sign convention for 2D elastic sections.
 
+from __future__ import print_function
 from __future__ import division
 import xc_base
 import geom
@@ -37,7 +37,7 @@ pth= os.path.dirname(__file__)
 #print("pth= ", pth)
 if(not pth):
   pth= "."
-execfile(pth+"/../../aux/elastic_section_2d.py")
+exec(open(pth+"/../../aux/elastic_section_2d.py").read())
 
 sigma= E*epsilon
 N0Teor= (epsilon1+epsilon2+epsilon3+epsilon4)/4.0*E*A

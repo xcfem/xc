@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
-from __future__ import print_function
 # Taken from SOLVIA Verification Manual example B46
 ''' NO SE PORQUÉ, NO DA MUY BUENOS RESULTADOS NI CON ESTA FORMULACIÓN NI CON LA COROTACIONAL
 
    The problem is probably related with the fact that the elements are unable
    to reproduce the little delta effect (see example test_pdelta_01.xc).
   '''
+from __future__ import print_function
 from __future__ import division
 import xc_base
 import geom
@@ -96,7 +96,7 @@ pth= os.path.dirname(__file__)
 if(not pth):
   pth= "."
 #print("pth= ", pth)
-execfile(pth+"/../../aux/solu_linear_buckling.py")
+exec(open(pth+"/../../aux/solu_linear_buckling.py").read())
 
 
 

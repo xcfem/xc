@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
-from __future__ import print_function
 ''' Lateral torsional buckling of steel beams.
    Example 1 from:
    Calculating the C1 factor for lateral torsional buckling.
    Modern steel construction. Nov/Dec 2013
    David Brown
 '''
+from __future__ import print_function
 from __future__ import division
 import math
 import xc_base

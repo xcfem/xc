@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
-from __future__ import print_function
 '''Creep verification test.''' 
 #Data for comparison from the JRC technical report: 
 #"Bridge design to Eurocodes. Worked examples"
+from __future__ import print_function
 from __future__ import division
 
 __author__= "Ana Ortega (AOO) and Luis C. Pérez Tato (LCPT)"

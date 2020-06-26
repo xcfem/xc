@@ -11,7 +11,7 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
-#execfile("interpolacion.lcmdm")
+#exec(open("interpolacion.lcmdm").read())
 
 cpPruebaF= CTE_wind.cpDosAguasZonaFVTrsv(5.5,math.radians(30))
 cpPruebaG= CTE_wind.cpDosAguasZonaGVTrsv(5.5,math.radians(-15))

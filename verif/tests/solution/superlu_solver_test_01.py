@@ -87,7 +87,7 @@ pth= os.path.dirname(__file__)
 #print("pth= ", pth)
 if(not pth):
   pth= "."
-execfile(pth+"/../aux/sol_superlu.py")
+exec(open(pth+"/../aux/sol_superlu.py").read())
 
 
 

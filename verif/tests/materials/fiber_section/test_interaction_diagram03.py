@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
+''' Iteraction diagram computation. Home made test. Reads the interaction diagram obtained in test_interaction_diagram01. '''
 from __future__ import print_function
-''' Iteractio diagram computation. Home made test. Reads the interaction diagram obtained in test_interaction_diagram01. '''
 from __future__ import division
 
 import xc_base

@@ -188,7 +188,7 @@ analysis= solu.newAnalysis("static_analysis","analysisAggregation","")
 def resuelveCombEstatLin(comb,db,dbHelp):
   preprocessor.resetLoadCase()
   dbHelp.helpSolve(comb,db)
-  execfile("solution/database_helper_solve.xci")
+  exec(open("solution/database_helper_solve.xci").read())
   ''' 
     print("previousName= ",previousName)
     print("tag= ",comb.tag)

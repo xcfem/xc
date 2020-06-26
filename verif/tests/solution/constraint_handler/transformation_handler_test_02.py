@@ -90,7 +90,7 @@ pth= os.path.dirname(__file__)
 #print("pth= ", pth)
 if(not pth):
   pth= "."
-execfile(pth+"/../../aux/solu_transf_handler2.py")
+exec(open(pth+"/../../aux/solu_transf_handler2.py").read())
     
 
 nod3= nodes.getNode(3)

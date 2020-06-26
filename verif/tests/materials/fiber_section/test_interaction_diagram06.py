@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-from __future__ import print_function
 ''' Interaction diagram computation. Home made test.'''
+from __future__ import print_function
 from __future__ import division
 
 import xc_base

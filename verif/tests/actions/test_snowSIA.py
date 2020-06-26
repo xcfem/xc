@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
-from __future__ import print_function
 # Home made test.
 
+from __future__ import print_function
 from __future__ import division
 from actions.snow import SIA_snow
 

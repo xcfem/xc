@@ -38,7 +38,7 @@ pth= os.path.dirname(__file__)
 if(not pth):
   pth= "."
 #print("pth= ", pth)
-execfile(pth+"/fiber_section_test_macros.py")
+exec(open(pth+"/fiber_section_test_macros.py").read())
 
 
 fy= 2600 # Yield stress of the material expressed in kp/cm2.

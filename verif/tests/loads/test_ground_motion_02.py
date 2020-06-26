@@ -28,7 +28,7 @@ pth= os.path.dirname(__file__)
 #print("pth= ", pth)
 if(not pth):
   pth= "."
-execfile(pth+"//data/BM68elc_path.py")
+exec(open(pth+"//data/BM68elc_path.py").read())
 hist.accel= accel
 
 motionDuration= mr.getDuration() 

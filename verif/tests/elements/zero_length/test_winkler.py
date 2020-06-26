@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-from __future__ import print_function
 '''Verification of Winkler model.'''
 # Verification of Winkler model according to the
 #    article of Gabriel E. Barrientos
@@ -7,7 +6,9 @@ from __future__ import print_function
 #    Departamento de Ingeniería Mecánica. Universidad del Bío-Bío.
 #    Casilla 5-C. Concepción. Chile.
 
+from __future__ import print_function
 from __future__ import division
+
 import xc_base
 import geom
 import xc

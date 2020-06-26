@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 from __future__ import print_function
-
 from __future__ import division
 
 __author__= "Luis C. Pérez Tato (LCPT)"
@@ -115,7 +114,7 @@ pth= os.path.dirname(__file__)
 #print("pth= ", pth)
 if(not pth):
   pth= "."
-execfile(pth+"/../aux/def_hip_elu.py")
+exec(open(pth+"/../aux/def_hip_elu.py").read())
 
 NMin1= 6.023e23
 NMin2= 6.023e23

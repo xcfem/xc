@@ -84,7 +84,7 @@ pth= os.path.dirname(__file__)
 if(not pth):
   pth= "."
 #print("pth= ", pth)
-execfile(pth+"/../../aux/sol_eigenmodes.py")
+exec(open(pth+"/../../aux/sol_eigenmodes.py").read())
 
 omega= eig1**0.5
 T= 2*math.pi/omega

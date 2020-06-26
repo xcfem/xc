@@ -312,7 +312,7 @@ Rsec2beamZ=matrix_utils.vectorToNumpyArray(elsec2z.getResistingForce())
 ratio2=(Rsec2beamX-Rsec2beamY).sum()+(Rsec2beamX-Rsec2beamZ).sum()+(Rsec2beamY-Rsec2beamZ).sum()
 
 #Check the internal forces written in the checking file
-execfile('/tmp/resVerif.py')
+exec(open('/tmp/resVerif.py').read())
 
 sec1MzTeor=(M+F*Lbeam) # expressed in mkN
 sec1beamXMz=preprocessor.getElementHandler.getElement(1).getProp("ULS_normalStressesResistanceSect1").Mz

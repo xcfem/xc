@@ -133,7 +133,7 @@ mr= gm.motionRecord
 hist= mr.history
 hist.accel= loadPatterns.newTimeSeries("path_ts","accel")
 hist.accel.setFactor(G)
-execfile(accelFilePath) #define acceleration vector from file
+exec(open(accelFilePath).read()) #define acceleration vector from file
 hist.accel.setTimeIncr(0.005) #define time step of the acceleration data.
 duration= mr.getDuration()
 #print('duration: ', mr.getDuration())
@@ -151,7 +151,7 @@ result= analysis.analyze(numberOfSteps,dT)
 
 ratio0= (eig1-25.02037)/25.02037
 ratio1= (freq-5.002)/5.002
-execfile(openSeesResultsPath)
+exec(open(openSeesResultsPath).read())
 
 t= list()
 Rx= list()

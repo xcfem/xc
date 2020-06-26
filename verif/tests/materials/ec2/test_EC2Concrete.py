@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 from __future__ import print_function
-
 from __future__ import division
 from materials.ec2 import EC2_materials
 import os

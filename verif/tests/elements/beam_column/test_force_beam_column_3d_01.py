@@ -50,7 +50,7 @@ pth= os.path.dirname(__file__)
 #print("pth= ", pth)
 if(not pth):
   pth= "."
-execfile(pth+"/../../aux/testQuadRegion.py") #Definition of section geometry (regions and rebars)
+exec(open(pth+"/../../aux/testQuadRegion.py") #Definition of section geometry (regions and rebars).read())
 # Definition of a new empty fiber section named 'quadFibers' and stored in a
 # Python variable of the same name (surprisingly enough).
 quadFibers= preprocessor.getMaterialHandler.newMaterial("fiber_section_3d","quadFibers")

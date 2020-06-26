@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
-from __future__ import print_function
 ''' Lateral torsional buckling of steel beams.
    pages 32-34 Example 2 from:
    Eurocodes ‐ Design of steel buildings with worked examples
    Brussels, 16 - 17 October 2014
 '''
+from __future__ import print_function
 from __future__ import division
 
 __author__= "Luis C. Pérez Tato (LCPT)"

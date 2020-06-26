@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-from __future__ import print_function
 # Tomado del example A47 del SOLVIA Verification Manual
+from __future__ import print_function
 from __future__ import division
 import xc_base
 import geom
@@ -80,7 +80,7 @@ pth= os.path.dirname(__file__)
 #print("pth= ", pth)
 if(not pth):
   pth= "."
-execfile(pth+"/../../aux/arpackpp_solver.py")
+exec(open(pth+"/../../aux/arpackpp_solver.py").read())
 
 
 omega= eig1**0.5

@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 from __future__ import print_function
+from __future__ import division
 ''' Exemple 10.2 of the book "Principles of Foundation Engineering" 
     from Braja M. Das. Seventh Edition.
 '''
 
-from __future__ import division
 import math
 from actions.earth_pressure import earth_pressure
 

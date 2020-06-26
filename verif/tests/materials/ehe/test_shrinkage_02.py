@@ -192,7 +192,7 @@ def resuelveCombEstatLin(tagComb,comb,tagSaveFase0):
   preprocessor.resetLoadCase()
   db.restore(tagSaveFase0)
 
-  #execfile("solution/database_helper_solve.xci")
+  #exec(open("solution/database_helper_solve.xci").read())
 
   ''' 
   print("previousName= ",previousName)

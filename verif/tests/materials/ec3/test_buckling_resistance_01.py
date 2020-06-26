@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
-from __future__ import print_function
 ''' Buckling resistance of of steel columns.
    Example 1 page 12 from publication:
    Eurocodes ‐ Design of steel buildings with worked examples
    Brussels, 16 - 17 October 2014
 '''
+from __future__ import print_function
 from __future__ import division
 
 __author__= "Luis C. Pérez Tato (LCPT)"

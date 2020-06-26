@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-from __future__ import print_function
 ''' Reinforced concrete section verification test.
    results are compared with those of the prontuario.
    informático del hormigón estructural (Cátedra de hormigón de la ETSICCP-IECA
@@ -14,6 +13,7 @@ The results obtained are acceptable considering that:
 
 # feProblem.logFileName= "/tmp/erase.log"  #Ignore warning messages
 
+from __future__ import print_function
 from __future__ import division
 import xc_base
 import geom
@@ -51,7 +51,7 @@ pth= os.path.dirname(__file__)
 if(not pth):
   pth= "."
 #print("pth= ", pth)
-execfile(pth+"/concrete_section_01.py")
+exec(open(pth+"/concrete_section_01.py").read())
 secHA= preprocessor.getMaterialHandler.newMaterial("fiber_section_3d","secHA")
 fiberSectionRepr= secHA.getFiberSectionRepr()
 fiberSectionRepr.setGeomNamed("concreteSectionGeom01")

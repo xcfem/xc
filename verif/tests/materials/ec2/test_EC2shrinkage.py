@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
-from __future__ import print_function
 #Shrinkage verification test. 
 #Data for comparison from the JRC technical report: 
 #"Bridge design to Eurocodes. Worked examples"
 #Sect. 4.5.3
+from __future__ import print_function
 from __future__ import division
 
 __author__= "Ana Ortega (AOO) and Luis C. Pérez Tato (LCPT)"

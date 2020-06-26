@@ -98,7 +98,7 @@ pth= os.path.dirname(__file__)
 if(not pth):
   pth= "."
 #print("pth= ", pth)
-execfile(pth+"/../../aux/solu_linear_buckling.py")
+exec(open(pth+"/../../aux/solu_linear_buckling.py").read())
 
 eig1= analysis.getEigenvalue(1)
 
