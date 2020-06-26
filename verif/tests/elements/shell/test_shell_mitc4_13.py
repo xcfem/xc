@@ -103,7 +103,7 @@ analOk= analysis.analyze(1)
 
 nodes= preprocessor.getNodeHandler
 
-node= f0.getNodeIJK(1,NumDivI/2+1,NumDivJ/2+1)
+node= f0.getNodeIJK(1, int(NumDivI/2+1), int(NumDivJ/2+1))
 # print("Central node: ", node.tag)
 # print("Central node coordinates: ", node.getCoo)
 # print("Central node displacements: ", node.getDisp)

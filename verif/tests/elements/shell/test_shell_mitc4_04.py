@@ -89,7 +89,7 @@ lp0= lPatterns.newLoadPattern("default","0")
 f1= preprocessor.getSets.getSet("f1")
 nNodes= s.getNumNodes
 
-node= s.getNodeIJK(1,NumDivI/2+1,NumDivJ/2+1)
+node= s.getNodeIJK(1, int(NumDivI/2+1), int(NumDivJ/2+1))
 # print("Central node: ", node.tag)
 # print("Central node coordinates: ", node.getCoo)
 lp0.newNodalLoad(node.tag,xc.Vector([0,0,-ptLoad,0,0,0])) # Concentrated load
@@ -104,7 +104,7 @@ lPatterns.addToDomain(lp0.name)
 analysis= predefined_solutions.simple_static_linear(feProblem)
 analOk= analysis.analyze(1)
 
-node= s.getNodeIJK(1,NumDivI/2+1,NumDivJ/2+1)
+node= s.getNodeIJK(1, int(NumDivI/2+1), int(NumDivJ/2+1))
 # print("Central node: ", node.tag)
 # print("Central node coordinates: ", node.getCoo)
 # print("Central node displacements: ", node.getDisp)
