@@ -700,7 +700,6 @@ class Concrete(matWDKD.MaterialWithDKDiagrams):
         retval.setupGraphic(plt,self.materialDiagramD)
         fileName= path+self.materialName+'_design_stress_strain_diagram'
         retval.savefig(plt,fileName+'.jpeg')
-        retval.savefig(plt,fileName+'.eps')
         return retval
     
     def getElasticMaterialData(self):

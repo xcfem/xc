@@ -206,8 +206,11 @@ class SectionInfo(object):
         fileHandler.write('\\begin{tabular}{cccccccc}\n')
         fileHandler.write('Id & N$^o$ branch & $\\phi$ & area & spac. & area/m & $\\alpha$ & $\\beta$\\\\\n')
         fileHandler.write(' &  & $(mm)$ & $(cm^2)$ & $(cm)$ & $(cm^2/m)$ & $( \\degree)$ & $( \\degree)$\\\\\n')
-        writeShearReinforcement(self.getShearReinfY(), fileHandler,self.width)
-        writeShearReinforcement(self.getShearReinfY(), fileHandler,self.depth)
+        #### 26/6/2020
+        # writeShearReinforcement(self.getShearReinfY(), fileHandler,self.width)
+        # writeShearReinforcement(self.getShearReinfY(), fileHandler,self.depth)
+        writeShearReinforcement(self.shReinfY, fileHandler,self.width)
+        writeShearReinforcement(self.shReinfY, fileHandler,self.depth)
         fileHandler.write('\\end{tabular} \\\\\n')
         fileHandler.write('\\hline\n')
         fileHandler.write('\\end{tabular}\n')
