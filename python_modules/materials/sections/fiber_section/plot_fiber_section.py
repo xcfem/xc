@@ -6,6 +6,8 @@ import xc_base
 import geom
 from geom_utils import aux_cairo_plot
 
+import matplotlib as mpl
+mpl.rc('figure', max_open_warning = 0)
 import matplotlib.pyplot as plt
 from matplotlib.path import Path
 import matplotlib.patches as patches
