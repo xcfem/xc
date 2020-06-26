@@ -71,14 +71,17 @@ int XC::QuadRule::setParameter(const std::vector<std::string> &argv, XC::Paramet
   {
     std::cerr << "QuadRule::" << __FUNCTION__
               << "; not implemented yet." << std::endl;
+    return 0;
   }
 int XC::QuadRule::updateParameter(int parameterID, XC::Information &info)
   {
     std::cerr << "QuadRule::" << __FUNCTION__
               << "; not implemented yet." << std::endl;
+    return 0;
   }
 int XC::QuadRule::activateParameter(int parameterID)
   {
     std::cerr << "QuadRule::" << __FUNCTION__
               << "; not implemented yet." << std::endl;
+    return 0;
   }
