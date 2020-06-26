@@ -69,9 +69,9 @@ Vdd_kips=Vdd/kip2N
 ratio5=abs((Vdd_kips-13.8125)/13.8125)
 '''
 if Vdd >= Vua:
-    print(('Vdd >= Vua -> ductility OK'))
+    print('Vdd >= Vua -> ductility OK')
 else:
-    print(('Vdd < Vua -> NO ductility') )
+    print('Vdd < Vua -> NO ductility')
 '''
 
 # Check design strength of stud in shear
@@ -80,9 +80,9 @@ Vnd_kips=Vnd/kip2N
 ratio6=abs((Vnd_kips-9.57204)/9.57204)
 '''
 if Vnd >= Vua:
-    print(('Vnd >= Vua -> design strength checking OK'))
+    print('Vnd >= Vua -> design strength checking OK')
 else:
-    print(('Vnd < Vua -> change stud dimensions') )
+    print('Vnd < Vua -> change stud dimensions')
 '''
 
 
