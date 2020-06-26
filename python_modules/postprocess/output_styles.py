@@ -137,7 +137,7 @@ class OutputStyle(object):
         ''' Return a dictionary with the caption texts to use 
             in graphic output.'''
         retval= sp_capTexts
-        lang_id= self.language[0][:2].lower()
+        lang_id= self.language[:2].lower()
         if lang_id=='en':
             retval= en_capTexts
         elif lang_id=='fr':
