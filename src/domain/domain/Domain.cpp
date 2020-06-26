@@ -626,10 +626,16 @@ bool XC::Domain::removeLoadPattern(LoadPattern *lp)
 bool XC::Domain::removeAllLoadPatterns(void)
   {
     bool retval= true;
-    std::map<int,XC::LoadPattern *> &activeLoadPatterns= constraints.getLoadPatterns();
-    for(std::map<int,XC::LoadPattern *>::iterator i= activeLoadPatterns.begin();
-	i!=activeLoadPatterns.end();i++)
-      retval*= removeLoadPattern(i->second);
+    std::map<int,LoadPattern *> &activeLoadPatterns= constraints.getLoadPatterns();
+    for(std::map<int,LoadPattern *>::iterator it= activeLoadPatterns.begin();
+	it!=activeLoadPatterns.end();it++)
+      {
+        retval*= removeLoadPattern(it->second);
+	//In some circumstances the iterator moves past
+	//the end of the container:
+	if(activeLoadPatterns.empty())
+	  break;
+      }
     return retval;
   }
 

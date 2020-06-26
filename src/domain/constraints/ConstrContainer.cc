@@ -231,7 +231,7 @@ bool XC::ConstrContainer::addLoadPattern(LoadPattern *lp)
                     << tag << " already exists in model\n";
         retval= false;
       }
-    else
+    else // not found.
       activeLoadPatterns[tag]= lp;// now we add the load pattern
     return retval;
   }
@@ -436,8 +436,7 @@ bool XC::ConstrContainer::removeLoadPattern(int tag,int &numSPs)
 	  std::cerr << getClassName() << "::" << __FUNCTION__
 		    << "; ERROR load pattern not found." << std::endl;
       }
-    // finally return the load pattern
-    return retval;
+    return retval; //Return true if found.
   }
 
 //! @brief Removes the node locker whose identifier is being passed as parameter.
