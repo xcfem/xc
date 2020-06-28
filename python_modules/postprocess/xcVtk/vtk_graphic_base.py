@@ -316,6 +316,7 @@ class DisplaySettings(object):
 
         :param fileName: name of the image file, in none -> screen window.
         '''
+        self.renWin.SetOffScreenRendering(True) # Don't use screen.
         self.renWin.Render()
 
         w2if = vtk.vtkWindowToImageFilter()
