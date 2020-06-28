@@ -319,16 +319,25 @@ class DisplaySettings(object):
         self.renWin.Render()
 
         w2if = vtk.vtkWindowToImageFilter()
+        oldSB = self.renWin.GetSwapBuffers()
+        # Tell render window to not swap buffers at end of render.
+        self.renWin.SwapBuffersOff()
+        # Let's grab from back buffer as that overcomes
+        # issues with overlapping windows or other UI
+        # components obfuscating the captured image on
+        # certain windowing systems/platforms.
+        w2if.ReadFrontBufferOff(); #Read from the back buffer.
         w2if.SetInput(self.renWin)
-        w2if.ReadFrontBufferOff(); #Read from the front buffer.
         if(hasattr(w2if,'SetScale')):
             w2if.SetScale(1) # image quality
         else:
             w2if.SetMagnification(1) # image quality (apparently deprecated in recent versions of VTL -LCPT 20/05/2020-)
         w2if.Update()
+        # restore swapping state
+        self.renWin.SetSwapBuffers(oldSB)
         writer= vtk.vtkJPEGWriter()
-        writer.SetFileName(fileName)
         writer.SetInputConnection(w2if.GetOutputPort())
+        writer.SetFileName(fileName)
         writer.Write()
  
  
