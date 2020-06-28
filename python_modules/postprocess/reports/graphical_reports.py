@@ -344,7 +344,7 @@ class RecordLoadCaseDisp(RecordDisp):
       for st in self.setsToDispIntForc:
           for arg in self.listIntForc:
               fullgrfname=fullPath+self.loadCaseName+st.name+arg
-              rltvgrfname=fullPath+self.loadCaseName+st.name+arg
+              rltvgrfname=rltvPath+self.loadCaseName+st.name+arg
               jpegFileName= fullgrfname+'.jpg'
               lcs.displayIntForc(itemToDisp=arg,setToDisplay=st,fileName= jpegFileName)
               capt= self.getDescription() + '. ' + st.description.capitalize() + ', ' + cfg.capTexts[arg] + ', ' + cfg.getForceUnitsDescription()
@@ -353,6 +353,7 @@ class RecordLoadCaseDisp(RecordDisp):
       for st in self.setsToDispBeamIntForc:
           for arg in self.listBeamIntForc:
               fullgrfname=fullPath+self.loadCaseName+st.name+arg
+              rltvgrfname=rltvPath+self.loadCaseName+st.name+arg
               jpegFileName= fullgrfname+'.jpg'
               lcs.displayIntForcDiag(itemToDisp=arg,setToDisplay=st,fileName= jpegFileName)
               capt=self.getDescription() + '. ' + st.description.capitalize() + ', ' + cfg.capTexts[arg] + ', ' + cfg.getForceUnitsDescription()

@@ -130,9 +130,9 @@ class SectionInfo(object):
         self.IzH=  self.geomSection.getIzHomogenizedSection(self.tangConcr)
         self.PyzH= self.geomSection.getPyzHomogenizedSection(self.tangConcr)
 
-    def writeReport(self,archTex, pathFigura):
+    def writeReport(self,archTex, pathFigure,rltvPathFigure):
         if(self.geomSection):
-            pfs.plotSectionGeometry(self.geomSection,pathFigura)
+            pfs.plotSectionGeometry(self.geomSection,pathFigure)
         else:
             sys.stderr.write('error: geometry of section: '+self.sectName+' not defined\n')
         fileHandler= open(archTex,'w')
@@ -155,7 +155,7 @@ class SectionInfo(object):
         fileHandler.write('\\vspace{2mm}\n')
         fileHandler.write('\\begin{center}\n')
         #  name without extension to allow pdfLatex process the file
-        nameWOExt= os.path.splitext(pathFigura)[0]
+        nameWOExt= os.path.splitext(rltvPathFigure)[0]
         fileHandler.write('\\includegraphics[width=80mm]{'+nameWOExt+'}\n')
         # name without extension and without path
         # nameWOExt= os.path.splitext(pathFigura)[0]
