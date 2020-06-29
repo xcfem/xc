@@ -83,7 +83,7 @@ int XC::BandArpackppSOE::addToMatrix(msp_double &MT,const Matrix &m, const ID &i
         return -1;
       }
     if(fact == 1.0)
-      { // we save the product.
+      {
         for(int i= 0;i<idSize;i++)
           {
             const int row= id(i)+1;
@@ -92,8 +92,9 @@ int XC::BandArpackppSOE::addToMatrix(msp_double &MT,const Matrix &m, const ID &i
                 for(int j= 0;j<idSize;j++)
                   {
 	            const int col= id(j)+1;
-	            if(col <= size && col > 0 && (m(i,j)!= 0.0))
-                      MT(row,col)+= m(i,j);
+		    const double value= m(i,j);
+	            if(col <= size && col > 0 && (value!=0.0))
+                      MT(row,col)+= value;
 	          }// for j
               }
           }// for i

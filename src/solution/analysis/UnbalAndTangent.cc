@@ -49,12 +49,12 @@ void XC::UnbalAndTangent::alloc(void)
     // create matrices and vectors for each object instance
     if(free_mem())
       {
-        theResidual=new Vector(nDOF);
-        theTangent=new Matrix(nDOF, nDOF);
+        theResidual= new Vector(nDOF);
+        theTangent= new Matrix(nDOF, nDOF);
         if(theResidual == 0 || theResidual->Size() ==0 ||  theTangent ==0 || theTangent->noRows() ==0)
           {       
-            std::cerr << "UnbalAndTangent::alloc() ";
-            std::cerr << " ran out of memory for vector/Matrix of size :";
+            std::cerr << "UnbalAndTangent::" << __FUNCTION__
+		      << " ran out of memory for vector/Matrix of size :";
             std::cerr << nDOF << std::endl;
             exit(-1);
           }
@@ -72,8 +72,8 @@ void XC::UnbalAndTangent::copy(const UnbalAndTangent &other)
     // create matrices and vectors for each object instance
     if(free_mem())
       {
-        if(other.theResidual) theResidual=new Vector(*other.theResidual);
-        if(other.theTangent) theTangent=new Matrix(*other.theTangent);
+        if(other.theResidual) theResidual= new Vector(*other.theResidual);
+        if(other.theTangent) theTangent= new Matrix(*other.theTangent);
         if(theResidual == 0 || theResidual->Size() ==0 ||  theTangent ==0 || theTangent->noRows() ==0)
           {       
             std::cerr << "UnbalAndTangent::" << __FUNCTION__

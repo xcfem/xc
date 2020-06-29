@@ -312,13 +312,15 @@ const XC::Matrix &XC::FE_Element::getTangent(Integrator *theNewIntegrator)
       {
         if(theNewIntegrator)
           theNewIntegrator->formEleTangent(this);
-        return unbalAndTangent.getTangent();
+	const Matrix &retval= unbalAndTangent.getTangent();
+        return retval;
       }
     else
       {
         Subdomain *theSub= dynamic_cast<Subdomain *>(myEle);
         theSub->computeTang();
-        return theSub->getTang();
+        const Matrix &retval= theSub->getTang();
+	return retval;
       }
   }
 

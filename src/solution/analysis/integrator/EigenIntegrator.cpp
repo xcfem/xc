@@ -100,7 +100,7 @@ int XC::EigenIntegrator::getLastResponse(Vector &result, const XC::ID &id)
   { return 0; }
 
 //! @brief Stiffness matrix assembly.
-int XC::EigenIntegrator::formK()
+int XC::EigenIntegrator::formK(void)
   {
     AnalysisModel *mdl= getAnalysisModelPtr();
     EigenSOE *theSOE= getEigenSOEPtr();
