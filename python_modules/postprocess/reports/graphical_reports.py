@@ -296,7 +296,7 @@ class RecordLoadCaseDisp(RecordDisp):
       for st in self.setsToDispLoads:
           fullgrfname=fullPath+self.loadCaseName+st.name
           rltvgrfname=rltvPath+self.loadCaseName+st.name
-          capt= self.getDescription() +  st.description + ', '  + self.unitsLoads
+          capt= self.getDescription() + '. '  +  st.description + ', '  + self.unitsLoads
           jpegFileName= fullgrfname+'.jpg'
 #          lcs.displayLoads(setToDisplay=st,caption= capt,fileName= jpegFileName)  # changed 22/06/2020
           lcs.displayLoadVectors(setToDisplay=st,caption= capt,fileName=jpegFileName)
@@ -304,7 +304,7 @@ class RecordLoadCaseDisp(RecordDisp):
       for st in self.setsToDispBeamLoads:
           fullgrfname=fullPath+self.loadCaseName+st.name
           rltvgrfname=rltvPath+self.loadCaseName+st.name
-          capt= self.getDescription() +  st.description + ', '  + self.unitsLoads
+          capt= self.getDescription() + '. '  +  st.description + ', '  + self.unitsLoads
           jpegFileName= fullgrfname+'.jpg'
           lcs.displayLoads(setToDisplay=st,caption= capt,fileName= jpegFileName)  # changed 22/06/2020
           insertGrInTex(texFile=texFile,grFileNm=rltvgrfname,grWdt=cfg.grWidth,capText=capt,labl=labl)
