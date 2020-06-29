@@ -44,6 +44,7 @@ const XC::Vector &XC::UnbalAndTangentStorage::getUnbalance(const size_t &i) cons
 XC::Vector &XC::UnbalAndTangentStorage::getUnbalance(const size_t &i)
   { return theVectors[i]; }
 
+//! @brief Initializes the i-th unbalance vector.
 XC::Vector *XC::UnbalAndTangentStorage::setUnbalance(const size_t &i)
   {
     if(theVectors[i].isEmpty())
@@ -51,6 +52,7 @@ XC::Vector *XC::UnbalAndTangentStorage::setUnbalance(const size_t &i)
     return &theVectors[i];
   }
 
+//! @brief Initializes the i-th unbalance matrix.
 XC::Matrix *XC::UnbalAndTangentStorage::setTangent(const size_t &i)
   {
     if(theMatrices[i].isEmpty())
