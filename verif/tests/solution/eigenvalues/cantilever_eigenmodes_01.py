@@ -21,14 +21,14 @@ h= 0.10 # Cross section depth in meters
 A= b*h # Cross section area en m2
 I= 1/12.0*b*h**3 # Moment of inertia in m4
 theta= math.radians(30)
-E=2.0E11 # Elastic modulus in N/m2
+E= 2.0E11 # Elastic modulus in N/m2
 dens= 7800 # Steel density in kg/m3
 m= A*dens
 
 NumDiv= 10
 # Problem type
 feProblem= xc.FEProblem()
-preprocessor=  feProblem.getPreprocessor
+preprocessor= feProblem.getPreprocessor
 nodes= preprocessor.getNodeHandler
 modelSpace= predefined_spaces.StructuralMechanics2D(nodes)
 

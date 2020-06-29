@@ -47,19 +47,14 @@ pt3= points.newPntIDPos3d(3, geom.Pos3d(b,L,0.0) )
 pt4= points.newPntIDPos3d(4, geom.Pos3d(0,L,0.0) )
 surfaces= preprocessor.getMultiBlockTopology.getSurfaces
 surfaces.defaultTag= 1
-s= surfaces.newQuadSurfacePts(1,2,3,4)
+s= surfaces.newQuadSurfacePts(pt1.tag,pt2.tag,pt3.tag,pt4.tag)
 s.nDivI= 1
 s.nDivJ= NumDiv
-
-
-
 
 seedElemHandler= preprocessor.getElementHandler.seedElemHandler
 seedElemHandler.defaultMaterial= "elast"
 seedElemHandler.defaultTag= 1
 elem= seedElemHandler.newElement("ShellMITC4",xc.ID([0,0,0,0]))
-
-
 
 f1= preprocessor.getSets.getSet("f1")
 f1.genMesh(xc.meshDir.I)
@@ -74,35 +69,25 @@ for n in lNodes:
 # Solution procedure
 solu= feProblem.getSoluProc
 solCtrl= solu.getSoluControl
-
-
 solModels= solCtrl.getModelWrapperContainer
 sm= solModels.newModelWrapper("sm")
-
-
 cHandler= sm.newConstraintHandler("transformation_constraint_handler")
-
 numberer= sm.newNumberer("default_numberer")
 numberer.useAlgorithm("rcm")
-
 analysisAggregations= solCtrl.getAnalysisAggregationContainer
 analysisAggregation= analysisAggregations.newAnalysisAggregation("analysisAggregation","sm")
 solAlgo= analysisAggregation.newSolutionAlgorithm("frequency_soln_algo")
 integ= analysisAggregation.newIntegrator("eigen_integrator",xc.Vector([]))
 
-#soe= analysisAggregation.newSystemOfEqn("sym_band_eigen_soe")
-#solver= soe.newSolver("sym_band_eigen_solver")
 soe= analysisAggregation.newSystemOfEqn("band_arpackpp_soe")
 soe.shift= 0.0
 solver= soe.newSolver("band_arpackpp_solver")
 
 analysis= solu.newAnalysis("eigen_analysis","analysisAggregation","")
 
-
 analOk= analysis.analyze(2)
 eig1= analysis.getEigenvalue(1)
 eig2= analysis.getEigenvalue(2)
-
 
 omega1= math.sqrt(eig1)
 T1= 2*math.pi/omega1
