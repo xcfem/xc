@@ -296,7 +296,7 @@ class RecordLoadCaseDisp(RecordDisp):
       for st in self.setsToDispLoads:
           fullgrfname=fullPath+self.loadCaseName+st.name
           rltvgrfname=rltvPath+self.loadCaseName+st.name
-          capt= self.getDescription() +  st.description + ', '  + self.unitsLoads
+          capt= self.getDescription() + '. '  +  st.description + ', '  + self.unitsLoads
           jpegFileName= fullgrfname+'.jpg'
 #          lcs.displayLoads(setToDisplay=st,caption= capt,fileName= jpegFileName)  # changed 22/06/2020
           lcs.displayLoadVectors(setToDisplay=st,caption= capt,fileName=jpegFileName)
@@ -304,7 +304,7 @@ class RecordLoadCaseDisp(RecordDisp):
       for st in self.setsToDispBeamLoads:
           fullgrfname=fullPath+self.loadCaseName+st.name
           rltvgrfname=rltvPath+self.loadCaseName+st.name
-          capt= self.getDescription() +  st.description + ', '  + self.unitsLoads
+          capt= self.getDescription() + '. '  +  st.description + ', '  + self.unitsLoads
           jpegFileName= fullgrfname+'.jpg'
           lcs.displayLoads(setToDisplay=st,caption= capt,fileName= jpegFileName)  # changed 22/06/2020
           insertGrInTex(texFile=texFile,grFileNm=rltvgrfname,grWdt=cfg.grWidth,capText=capt,labl=labl)
@@ -344,7 +344,7 @@ class RecordLoadCaseDisp(RecordDisp):
       for st in self.setsToDispIntForc:
           for arg in self.listIntForc:
               fullgrfname=fullPath+self.loadCaseName+st.name+arg
-              rltvgrfname=fullPath+self.loadCaseName+st.name+arg
+              rltvgrfname=rltvPath+self.loadCaseName+st.name+arg
               jpegFileName= fullgrfname+'.jpg'
               lcs.displayIntForc(itemToDisp=arg,setToDisplay=st,fileName= jpegFileName)
               capt= self.getDescription() + '. ' + st.description.capitalize() + ', ' + cfg.capTexts[arg] + ', ' + cfg.getForceUnitsDescription()
@@ -353,6 +353,7 @@ class RecordLoadCaseDisp(RecordDisp):
       for st in self.setsToDispBeamIntForc:
           for arg in self.listBeamIntForc:
               fullgrfname=fullPath+self.loadCaseName+st.name+arg
+              rltvgrfname=rltvPath+self.loadCaseName+st.name+arg
               jpegFileName= fullgrfname+'.jpg'
               lcs.displayIntForcDiag(itemToDisp=arg,setToDisplay=st,fileName= jpegFileName)
               capt=self.getDescription() + '. ' + st.description.capitalize() + ', ' + cfg.capTexts[arg] + ', ' + cfg.getForceUnitsDescription()
