@@ -333,6 +333,7 @@ const XC::Matrix &XC::ElasticBeam2d::getTangentStiff(void) const
 
     // determine q= kv + q0
     q(0)= EA*v(0);
+    kb.Zero();
     kb(0,0)= EAoverL;
     if(release==0)
       {
@@ -384,6 +385,7 @@ const XC::Matrix &XC::ElasticBeam2d::getInitialStiff(void) const
     const double EIoverL2= 2.0*sprop.I()*EoverL; // 2EI/L
     const double EIoverL4= 2.0*EIoverL2; // 4EI/L
 
+    kb.Zero();
     kb(0,0)= EAoverL;
     if(release==0)
       {
