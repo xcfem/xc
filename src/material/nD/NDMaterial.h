@@ -161,15 +161,15 @@ class NDMaterial: public Material
     virtual int getResponse (int responseID, Information &matInformation);
 
 // AddingSensitivity:BEGIN //////////////////////////////////////////
-    virtual int            setParameter(const std::vector<std::string> &argv, Parameter &param);
-    virtual int            updateParameter          (int parameterID, Information &info);
-    virtual int            activateParameter        (int parameterID);
-    virtual const Vector & getStressSensitivity     (int gradNumber, bool conditional);
-    virtual const Vector & getStrainSensitivity     (int gradNumber);
-    virtual const Matrix & getTangentSensitivity    (int gradNumber);
-    virtual const Matrix & getDampTangentSensitivity(int gradNumber);
-    virtual double         getRhoSensitivity        (int gradNumber);
-    virtual int            commitSensitivity        (Vector & strainGradient, int gradNumber, int numGrads);
+    virtual int setParameter(const std::vector<std::string> &argv, Parameter &param);
+    virtual int updateParameter(int parameterID, Information &info);
+    virtual int activateParameter(int parameterID);
+    virtual const Vector & getStressSensitivity(int gradIndex, bool conditional);
+    virtual const Vector & getStrainSensitivity(int gradIndex);
+    virtual const Matrix & getTangentSensitivity(int gradIndex);
+    virtual const Matrix & getDampTangentSensitivity(int gradIndex);
+    virtual double getRhoSensitivity(int gradIndex);
+    virtual int commitSensitivity(Vector & strainGradient, int gradIndex, int numGrads);
 // AddingSensitivity:END ///////////////////////////////////////////
 
   };

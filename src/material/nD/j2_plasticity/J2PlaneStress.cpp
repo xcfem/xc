@@ -134,11 +134,11 @@ const std::string &XC::J2PlaneStress::getType(void) const
 
 
 //send back order of strain in vector form
-int XC::J2PlaneStress::getOrder( ) const 
+int XC::J2PlaneStress::getOrder(void) const 
   { return 3; } 
 
 //get the strain and integrate plasticity equations
-int XC::J2PlaneStress::setTrialStrain( const Vector &strain_from_element ) 
+int XC::J2PlaneStress::setTrialStrain(const Vector &strain_from_element) 
   {
     const double tolerance= (1.0e-8)*sigma_0;
 

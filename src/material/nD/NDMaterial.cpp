@@ -263,8 +263,14 @@ XC::Response* XC::NDMaterial::setResponse(const std::vector<std::string> &argv, 
       return new MaterialResponse(this, 1, this->getStress());
     else if(argv[0] == "strain" || argv[0] == "strains")
       return new MaterialResponse(this, 2, this->getStrain());
-    else if(argv[0] == "tangent")
-      return new MaterialResponse(this, 3, this->getTangent());
+    else if((argv[0] == "tangent") || (argv[0] == "tangent"))
+      return new MaterialResponse(this, 4, this->getTangent());
+    else if((argv[0] == "damage") || (argv[0] == "Damage"))
+      {
+	static Vector vec(3);
+	vec.Zero();
+        return new MaterialResponse(this, 5, vec); // zero vector
+      }
     else
       return 0;
   }
