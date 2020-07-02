@@ -82,15 +82,18 @@ XC::RigidDiaphragm::RigidDiaphragm(Domain &theDomain, int nR, ID &nC, int perpPl
       {
         std::cerr << getClassName() << "::" << __FUNCTION__
 	          << "; the directionn of perpendicular to constrained plane"
-		  << perpPlaneConstrained <<  " not valid\n";
+		  << perpPlaneConstrained <<  " not valid."
+	          << std::endl;
         return;
       }
 
     // check constrainedNodes ID does not contain the retained node
     if(nC.getLocation(nR) >= 0)
       {
-        std::cerr << "XC::RigidDiaphragm::RigidDiaphragm - " <<
-          "retained node" << nR << "is in constrained node list\n";
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; retained node" << nR
+		  << " is in constrained node list."
+	          << std::endl;
         return;
       }
 
@@ -99,7 +102,8 @@ XC::RigidDiaphragm::RigidDiaphragm(Domain &theDomain, int nR, ID &nC, int perpPl
     if(!nodeR)
       {
         std::cerr << getClassName() << "::" << __FUNCTION__
-		  << "; retained Node" <<  nR <<  "not in domain\n";
+		  << "; retained Node" <<  nR <<  " not in domain."
+	          << std::endl;
         return;
       }
     else
@@ -109,8 +113,9 @@ XC::RigidDiaphragm::RigidDiaphragm(Domain &theDomain, int nR, ID &nC, int perpPl
     if((nodeR->getNumberDOF() != 6) || (crdR.Size() != 3))
       {
         std::cerr << getClassName() << "::" << __FUNCTION__
-		  << "; retained XC::Node" << nR
-		  << "not in 3D space with 6 dof\n";
+		  << "; retained node" << nR
+		  << " not in 3D space with 6 dof."
+	          << std::endl;
         return;
       }
 
@@ -169,8 +174,9 @@ XC::RigidDiaphragm::RigidDiaphragm(Domain &theDomain, int nR, ID &nC, int perpPl
                     }
                   else
 		    std::cerr << getClassName() << "::" << __FUNCTION__
-		              << "; ignoring constrained node " << ndC << ", not in xy plane\n";
-                      
+		              << "; ignoring constrained node "
+			      << ndC << ", not in xy plane."
+	                      << std::endl;
                 }
               else
                 if(perpPlaneConstrained == 1) // rigid diaphragm in xz plane
@@ -187,8 +193,8 @@ XC::RigidDiaphragm::RigidDiaphragm(Domain &theDomain, int nR, ID &nC, int perpPl
                     else
                       std::cerr << getClassName() << "::" << __FUNCTION__
 			        << "; ignoring constrained node "
-				<< ndC << ", not in xz plane\n";
-                                
+				<< ndC << ", not in xz plane."
+	                        << std::endl;                                
                   }
                 else // rigid diaphragm in yz plane
                   {
@@ -204,7 +210,8 @@ XC::RigidDiaphragm::RigidDiaphragm(Domain &theDomain, int nR, ID &nC, int perpPl
                     else
 		      std::cerr << getClassName() << "::" << __FUNCTION__
 				<< "; ignoring constrained node " 
-                                << ndC << ", not in yz plane\n";
+                                << ndC << ", not in yz plane."
+	                        << std::endl;
                   }
               // create the MFreedom_Constraint
               MFreedom_Constraint *newC = new MFreedom_Constraint(startMPtag+i, nR, ndC,mat, id, id);
@@ -212,7 +219,8 @@ XC::RigidDiaphragm::RigidDiaphragm(Domain &theDomain, int nR, ID &nC, int perpPl
                 {
                   std::cerr << getClassName() << "::" << __FUNCTION__
 			    << "; ignoring constrained node "
-			    << ndC << ", out of memory\n";
+			    << ndC << ", out of memory."
+	                    << std::endl;
                 }
               else
                 {
@@ -221,7 +229,8 @@ XC::RigidDiaphragm::RigidDiaphragm(Domain &theDomain, int nR, ID &nC, int perpPl
                    {
                      std::cerr << getClassName() << "::" << __FUNCTION__
 			       << ";  ignoring constrained node "
-			       << ndC << ", failed to add\n";
+			       << ndC << ", failed to add."
+	                       << std::endl;
                      delete newC;
                    }
                 }
@@ -230,12 +239,14 @@ XC::RigidDiaphragm::RigidDiaphragm(Domain &theDomain, int nR, ID &nC, int perpPl
       else  // node not in 3d space
         std::cerr << getClassName() << "::" << __FUNCTION__
 	          << "; ignoring constrained node "
-		  << ndC << ", not 3d node\n";
+		  << ndC << ", not 3d node."
+	          << std::endl;
       }
     else // node does not exist
       std::cerr << getClassName() << "::" << __FUNCTION__
 		<< "; ignoring constrained node "
-		<< ndC << " as no node in domain\n";
+		<< ndC << " as no node in domain."
+	        << std::endl;
     } // for each node in constrained nodes
   }
 
