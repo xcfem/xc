@@ -144,6 +144,16 @@ class EHEConcrete(concrete_base.Concrete):
             return 3.5*(-1e-3)
         else:
             return (2.6+14.4*((100-self.fckMPa())/100)**4)*(-1e-3)
+        
+    def taucd(self):
+        '''Design value of shear strength according to artocle 39.1.3.2.2
+        of code EHE-91 (f_cv=0.5*sqrt(f_cd)) with f_cd in kp/cm2
+        '''
+        fcd_kp_cm2=-self.fck*1e-5/self.gmmC
+        fcv=0.5*math.sqrt(fcd_kp_cm2)*1e5
+        return fcv
+
+
 
 #    def tangDConcrete(self,eps):
 #        """Characteristic concrete stress-strain diagram according to EHE."""
