@@ -3,7 +3,7 @@
 from __future__ import print_function
 from __future__ import division
 
-import element_section_map
+from postprocess import element_section_map
 import pickle
 from misc_utils import log_messages as lmsg
 import xc_base
