@@ -8,8 +8,8 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com" "ana.ortega.ort@gmail.com"
 
-import basic_entities as be
-import mesh_entities as me
+from import_export import basic_entities as be
+from import_export import mesh_entities as me
 from misc_utils import log_messages as lmsg
 from dxfwrite import DXFEngine
 

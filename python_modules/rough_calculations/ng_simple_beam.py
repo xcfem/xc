@@ -3,7 +3,7 @@
 
 from __future__ import division
 import math
-import ng_beam as bm
+from rough_calculations import ng_beam as bm
 
 #Sign convention.
 

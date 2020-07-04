@@ -8,7 +8,7 @@ __version__= "3.0"
 __email__= "ana.Ortega.Ort@gmail.com "
 
 import math
-import arch_bridge_rough_base as base
+from rough_calculations import arch_bridge_rough_base as base
 
 class ArchBridgeRoughModel(base.ArchBridgeRoughModelBase):
   ''' Arch bridge simple model'''
