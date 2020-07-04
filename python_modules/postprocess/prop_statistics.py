@@ -10,17 +10,21 @@ def rec_getattr(obj, attr, argv= ''):
     >>> rec_getattr(a, 'b.c')
     4
     """
+    retval= None
     if '.' not in attr:
-      if(attr=='getProp'):
-        return obj.getProp(argv)
-      else:
-        if(callable(obj)):
-          return getattr(obj(), attr)
+        if(attr=='getProp'):
+            retval= obj.getProp(argv)
         else:
-          return getattr(obj, attr)
+            if(callable(obj)):
+                retval= getattr(obj(), attr)
+                if(callable(retval)):
+                    retval= retval()
+            else:
+                retval= getattr(obj, attr)
     else :
-      L = attr.split('.')
-      return rec_getattr(getattr(obj, L[0]), '.'.join(L[1:]))
+        L = attr.split('.')
+        retval= rec_getattr(getattr(obj, L[0]), '.'.join(L[1:]))
+    return retval
 
 def rec_setattr(obj, attr, value):
     """Set object's attribute. May use dot notation.
@@ -40,24 +44,32 @@ def rec_setattr(obj, attr, value):
         rec_setattr(getattr(obj, L[0]), '.'.join(L[1:]), value)
 
 def getItemWithMaxProp(iterable,attrName, argv= ''):
-  ''' Return item wich maximizes property named as indicated in attrName'''
-  retval= iter(iterable).next()
-  vMax= rec_getattr(retval,attrName,argv)  
-  for e in iterable:
-    v= rec_getattr(e,attrName,argv)
-    if(v>vMax):
-      retval= e
-      vMax= v
-  return retval
+    ''' Return item wich maximizes property named as indicated in attrName'''
+    retval= None
+    if(len(iterable)>0):
+        retval= iterable[0]#iter(iterable).next()
+        vMax= rec_getattr(retval,attrName,argv)  
+        for e in iterable:
+            v= rec_getattr(e,attrName,argv)
+            if(v>vMax):
+                retval= e
+                vMax= v
+    else:
+        lmsg.error('argument container is empty.')
+    return retval
 
-def getItemWithMinProp(iterable,attrName):
-  ''' Return item wich minimizes property named as indicated in attrName'''
-  retval= iter(iterable).next()
-  vMin= rec_getattr(retval,attrName)  
-  for e in iterable:
-    v= rec_getattr(e,attrName)
-    if(v<vMin):
-      retval= e
-      vMin= v
-  return retval
+def getItemWithMinProp(iterable,attrName, argv= ''):
+    ''' Return item wich minimizes property named as indicated in attrName'''
+    retval= None
+    if(len(iterable)>0):
+        retval= iterable[0]#iter(iterable).next()
+        vMin= rec_getattr(retval,attrName, argv)  
+        for e in iterable:
+            v= rec_getattr(e,attrName, argv)
+            if(v<vMin):
+                retval= e
+                vMin= v
+    else:
+        lmsg.error('argument container is empty.')                
+    return retval
 
