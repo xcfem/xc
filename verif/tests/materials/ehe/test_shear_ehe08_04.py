@@ -1,10 +1,9 @@
 # -*- coding: utf-8 -*-
-from __future__ import print_function
-
 '''Verification test of the computation of strain in the web
 according to clause 44.2.3.2.2 of EHE. The point is to verify that
 the expression is correctly written in Python.'''
 from __future__ import division
+from __future__ import print_function
 
 import sys
 
