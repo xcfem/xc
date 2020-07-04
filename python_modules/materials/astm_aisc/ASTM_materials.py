@@ -17,7 +17,7 @@ import math
 from materials import steel_base
 from misc_utils import log_messages as lmsg
 from materials import buckling_base
-import AISC_limit_state_checking as aisc
+from materials.astm_aisc import AISC_limit_state_checking as aisc
 
 class ASTMSteel(steel_base.BasicSteel):
     '''ASTM structural steel.

@@ -80,7 +80,7 @@ sudo apt-get clean
 
 # mayavi installation. Ubuntu 'mayavi' package seems to require VTK 6,
 # so we use pip (to reconsider because we already use VTK 6 LCPT 24/09/2018)
-sudo -H pip install mayavi
-sudo -H pip install ezdxf
-sudo -H pip install dxfwrite # To replace with ezdxf
+sudo -H pip3 install mayavi
+sudo -H pip3 install ezdxf
+sudo -H pip3 install dxfwrite # To replace with ezdxf
 

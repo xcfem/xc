@@ -22,8 +22,8 @@ from __future__ import division
 # are swapped with respect to those in the catalog.
 
 import math
-import aisc_shapes_dictionaries as shapes
-import aisc_shapes_labels as labels
+from materials.sections.structural_shapes import aisc_shapes_dictionaries as shapes
+from materials.sections.structural_shapes import aisc_shapes_labels as labels
 from materials.sections import structural_steel
 from misc_utils import log_messages as lmsg
 
