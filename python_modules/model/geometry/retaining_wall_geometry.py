@@ -114,7 +114,7 @@ class CantileverRetainingWallGeometry(object):
         self.wireframeModelLines= dict()
         self.wireframeModelLines['stem']= lines.newLine(self.wireframeModelPoints['stemBottom'].tag,self.wireframeModelPoints['stemTop'].tag)
         self.wireframeModelLines['toe']= lines.newLine(self.wireframeModelPoints['stemBottom'].tag,self.wireframeModelPoints['toeEnd'].tag)
-        self.wireframeModelLines['heel']= lines.newLine(self.wireframeModelPoints['stemBottom'].tag,self.wireframeModelPoints['heelEnd'].tag)
+        self.wireframeModelLines['heel']= lines.newLine(self.wireframeModelPoints['heelEnd'].tag,self.wireframeModelPoints['stemBottom'].tag)
 
     def getToePosition(self):
         ''' Returns the position of the toe (for overturning moment computation).'''
