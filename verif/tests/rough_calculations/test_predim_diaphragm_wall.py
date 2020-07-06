@@ -20,7 +20,7 @@ vRefDW2=[20,17,5,1.0]
 
 diafWall3=pdw.DiaphragmWallRoughModel(digHeight=9,phreaticLevel=2,distAnch=3,firstExcavHeight=1,distLastAnchExc=0,unifLoad=60,distLoadWall=0)
 vCalcDW3=[diafWall3.getEffectDigHeight(),diafWall3.getFffectDistAnch(),diafWall3.getWallEmbedmentDepth(),diafWall3.getWallThickness()]
-vRefDW3=[12,3,3,0.45]
+vRefDW3=[12,3,3.5,0.45]
 
 
 diafWall4=pdw.DiaphragmWallRoughModel(digHeight=19,phreaticLevel=-2,distAnch=8,firstExcavHeight=1,distLastAnchExc=0,unifLoad=(10*5+100*(0.75*19-5))/(0.75*19),distLoadWall=0)
@@ -32,12 +32,14 @@ ratio2=(((vCalcDW2[0]-vRefDW2[0])**2+(vCalcDW2[1]-vRefDW2[1])**2+(vCalcDW2[1]-vR
 ratio3=(((vCalcDW3[0]-vRefDW3[0])**2+(vCalcDW3[1]-vRefDW3[1])**2+(vCalcDW3[1]-vRefDW3[1])**2+(vCalcDW3[2]-vRefDW3[2])**2)/4.0)**0.5
 ratio4=(((vCalcDW4[0]-vRefDW4[0])**2+(vCalcDW4[1]-vRefDW4[1])**2+(vCalcDW4[1]-vRefDW4[1])**2+(vCalcDW4[2]-vRefDW4[2])**2)/4.0)**0.5
 
+'''
 print('ratio1= ', ratio1)
 print('ratio2= ', ratio2)
 print('vCalcDW3= ',vCalcDW3)
 print('vRefDW3= ',vRefDW3)
 print('ratio3= ', ratio3)
 print('ratio4= ', ratio4)
+'''
 
 import os
 from misc_utils import log_messages as lmsg

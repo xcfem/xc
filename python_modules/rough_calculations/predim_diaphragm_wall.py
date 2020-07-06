@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import print_function
+from __future__ import division
 
 # Pre-design of diaphragm walls according to Geojuanjo's recomendations 
 # (see document predisenio_muros_pantalla_Geojuanjo.pdf)
