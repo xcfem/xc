@@ -151,7 +151,16 @@ class ReinfRow(object):
             self.reinfLayer.radius= extRad-self.cover
             return self.reinfLayer
 
-    
+def RebarRow2ReinfRow(rebarRow, width= 1.0, nominalLatCover= 0.03):
+    ''' Returns a RebarRow object from a ReinfRow object
+        as defined in the rebar_family module.
+
+    :param rebarRow: RebarRow object.
+    :param width: width of the cross-section (defautls to 1 m)
+    :param nominalLatCover: nominal lateral cover (only considered if nRebars is defined, defaults to 0.03)
+    '''
+    return RebarRow(rebarsDiam= rebarRow.diam,rebarsSpacing= rebarRows.spacing,width= widht, nominalCover= rebarRow.cover, nominalLatCover= nominalLatCover)
+
 class LongReinfLayers(object):
     ''' Layers of longitudinal reinforcement.'''
     def __init__(self, lst= None):

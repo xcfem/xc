@@ -87,12 +87,12 @@ class RebarController(object):
         '''
         Ktr= self.getKtr(n,Atr)
         return (self.concreteCover+Ktr)/phi
+    
     def getBasicAnchorageLength(self, concrete, phi, steel):
         """Returns anchorage length in tension according to ACI-318 25.4.2.3.
 
         :param concrete: concrete material.
         :param phi: nominal diameter of bar, wire, or prestressing strand.
-        :param fck: concrete characteristic compressive strength.
         :param steel: reinforcement steel.
         """
         psi_t_psi_e= min(self.psi_t*self.psi_e,1.7)
@@ -298,9 +298,11 @@ class ACIRebarFamily(rf.RebarFamily):
            according to clauses 7.6.1.1, 8.6.1.1, 9.6.1.2, 10.6.1.1, 11.6.1,
            12.6.1 
 
-        :param steel: reinforcement steel.
         :param thickness: gross thickness of concrete section (doesn't include 
                           the area of the voids).
+        :param b: width of concrete section.
+        :param type: member type; slab, wall, beam or column.
+        :param concrete: concrete material
         '''
         retval= 0.0025*thickness*b
         fy= self.steel.fyk
@@ -325,8 +327,10 @@ class ACIRebarFamily(rf.RebarFamily):
         '''Return the minimun amount of bonded reinforcement to control cracking
            for reinforced concrete sections under tension.
 
-        :param concrete: concrete material.
-        :param thickness: thickness of the tensioned member.
+        :param thickness: gross thickness of concrete section (doesn't include 
+                          the area of the voids).
+        :param type: member type; slab, wall, beam or column.
+        :param concrete: concrete material
         '''
         return 2.0*self.getMinReinfAreaUnderFlexion(thickness= thickness, type= type, concrete= concrete)
 

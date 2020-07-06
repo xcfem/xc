@@ -331,7 +331,7 @@ class StemReinforcement(ReinforcementMap):
     '''Stem reinforcement. '''
     extStemBottomIndex= 1 # exterior reinforcement at stem bottom.
     extStemIndex= 2 # exterior reinforcement at stem.
-    intStemBottomIndex= 4 # interior reinforcement at stem.
+    intStemBottomIndex= 4 # interior reinforcement at stem bottom.
     intStemIndex= 5 # interior reinforcement at stem.
     topStemIndex= 6 # reinforcement at stem top.
     longExtStemIndex= 11 # exterior longitudinal reinforcement at stem.
@@ -343,6 +343,31 @@ class StemReinforcement(ReinforcementMap):
       super(StemReinforcement,self).__init__(concreteCover, steel)
       self.wallGeom= wallGeom
 
+    def getRCSections(self,stemSets):
+        '''Create reinforced concrete sections for the stem.
+
+        :param stemSets: sets of elements along the stem.
+        '''
+        numberOfSets= len(stemSets)
+        stemDepthInc= (self.wallGeom.stemTopWidth-self.wallGeom.stemBottomWidth)/numberOfSets
+        stemRCSections= dict()
+        for i in range(0,4):
+            h= self.wallGeom.stemBottomWidth
+            sectName= 'stemRCSect'+str(h)
+            stemRCSections[h]= element_section_map.RCSlabBeamSection(name=sectName,sectionDescr='stem',concrType= self.concrete, reinfSteelType= stemReinforcement.steel,width= self.b, depth= h,elemSet= stemSets[i])
+            if(i==0):
+                positvRebarRows1= rcs.LongReinfLayers([rcs.RebarRow2ReinfRow(self[self.extStemBottomIndex])])
+                negatvRebarRows1= rcs.LongReinfLayers([rcs.RebarRow2ReinfRow(self[self.intStemBottomIndex])])
+            else:
+                positvRebarRows1= rcs.LongReinfLayers([rcs.RebarRow2ReinfRow(self[self.extStemIndex])])
+                negatvRebarRows1= rcs.LongReinfLayers([rcs.RebarRow2ReinfRow(self[self.intStemIndex])])
+            stemRCSections[h].dir1PositvRebarRows= positvRebarRows1
+            stemRCSections[h].dir1NegatvRebarRows= negatvRebarRows1
+            stemRCSections[h].dir2PositvRebarRows= positvRebarRows1
+            stemRCSections[h].dir2NegatvRebarRows= negatvRebarRows1
+            h-= stemDepthInc
+        return stemRCSections
+      
     def getSectionExtStemBottom(self):
       '''Returns RC section for exterior reinforcement at stem bottom.'''
       return ng_rc_section.RCSection(self[self.extStemBottomIndex],self.wallGeom.concrete,self.wallGeom.b,self.wallGeom.stemBottomWidth)
@@ -440,6 +465,22 @@ class FootingReinforcement(ReinforcementMap):
       super(FootingReinforcement,self).__init__(concreteCover, steel)
       self.wallGeom= wallGeom
 
+    def getRCSections(self, footingSet):
+        '''Create reinforced concrete sections for the footing.
+        
+        :param footingSet: set of the footing elements.
+        '''
+        sectName= 'footingRCSet'
+        footingRCSection= element_section_map.RCSlabBeamSection(name=sectName,sectionDescr='stem',concrType= self.concrete, reinfSteelType= stemReinforcement.steel,width= self.b, depth= h,elemSet= footingSet)
+        
+        positvRebarRows1= rcs.LongReinfLayers([rcs.RebarRow2ReinfRow(self[self.bottomFootingIndex])])
+        negatvRebarRows1= rcs.LongReinfLayers([rcs.RebarRow2ReinfRow(self[self.topFootingIndex])])
+        footingRCSection.dir1PositvRebarRows= positvRebarRows1
+        footingRCSection.dir1NegatvRebarRows= negatvRebarRows1
+        footingRCSection.dir2PositvRebarRows= positvRebarRows1
+        footingRCSection.dir2NegatvRebarRows= negatvRebarRows1
+        return footingRCSection
+      
     def getSectionTopFooting(self):
       '''Returns RC section for reinforcement on footing top.'''
       return ng_rc_section.RCSection(self[self.topFootingIndex],self.wallGeom.concrete,self.wallGeom.b,self.wallGeom.footingThickness)
@@ -493,10 +534,18 @@ class FootingReinforcement(ReinforcementMap):
 
   
 class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
-    '''Cantilever retaining wall.'''
+    '''Cantilever retaining wall.
+
+    :ivar b: wall lenght (defaults to 1.0).
+    :ivar numberOfStemSets: number of element sets along the stem height.
+    :ivar stemBottomWidth: (float) Stem width at his contact with the footing.
+    :ivar stemTopWidth: (float) Stem width at his top.
+    :ivar stemBackSlope: (float) Stem back slope expressed as H/V ratio. 
+    :ivar footingThickness: (float) Thickness of the footing.    
+    '''
     b= 1.0
-
-
+    numberOfStemSets= 4
+    
     def __init__(self,name= 'prb',concreteCover=40e-3,stemBottomWidth=0.25,stemTopWidth=0.25, stemBackSlope= 0.0,footingThickness= 0.25, concrete= None, steel= None):
         '''Constructor
 
@@ -515,7 +564,7 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
         '''Assigns the ultimate limit state infernal forces envelope for the stem.'''
         if(hasattr(self,'stemHeight')):
             if(self.getWFStemHeigth()!=wallInternalForces.stemHeight):
-                lmsg.warning('stem height (' + str(self.stemHeight) + ' m) different from length of internal forces envelope law('+ str(wallInternalForces.stemHeight)+ ' m') 
+                lmsg.warning('stem height (' + str(self.getWFStemHeigth()) + ' m) different from length of internal forces envelope law('+ str(wallInternalForces.stemHeight)+ ' m)') 
         else:
             self.stemHeight= wallInternalForces.stemHeight-self.footingThickness/2.0
         self.internalForcesULS= wallInternalForces
@@ -524,7 +573,7 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
         '''Assigns the serviceability limit state infernal forces envelope for the stem.'''
         if(hasattr(self,'stemHeight')):
             if(self.getWFStemHeigth()!=wallInternalForces.stemHeight):
-                lmsg.warning('stem height (' + str(self.stemHeight) + ' m) different from length of internal forces envelope law('+ str(wallInternalForces.stemHeight)+ ' m') 
+                lmsg.warning('stem height (' + str(self.getWFStemHeigth()) + ' m) different from length of internal forces envelope law('+ str(wallInternalForces.stemHeight)+ ' m)') 
         else:
             self.stemHeight= wallInternalForces.stemHeight
         self.internalForcesSLS= wallInternalForces
@@ -590,32 +639,40 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
         outputFile.close()
 
     def drawSchema(self,pth):
-      '''Retaining wall scheme drawing in LaTeX format.'''
-      outputFile= open(pth+'schema_'+self.name+".tex","w")
-      outputFile.write("\\begin{figure}\n")
-      outputFile.write("\\begin{center}\n")
-      outputFile.write(draw_schema.hdr)
-      for l in draw_schema.lines:
-        outputFile.write(l)
+        '''Retaining wall scheme drawing in LaTeX format.'''
+        outputFile= open(pth+'schema_'+self.name+".tex","w")
+        outputFile.write("\\begin{figure}\n")
+        outputFile.write("\\begin{center}\n")
+        outputFile.write(draw_schema.hdr)
+        for l in draw_schema.lines:
+            outputFile.write(l)
 
-      defStrings= {}
-      self.stemReinforcement.drawSchema(defStrings)
-      self.footingReinforcement.drawSchema(defStrings)
+        defStrings= {}
+        self.stemReinforcement.drawSchema(defStrings)
+        self.footingReinforcement.drawSchema(defStrings)
 
-      rebarAnno= draw_schema.getRebarAnnotationLines(defStrings)
-      for l in rebarAnno:
-        outputFile.write(l)
-      outputFile.write(draw_schema.tail)
-      outputFile.write("\\end{center}\n")
-      outputFile.write("\\caption{Wall "+ self.name +" reinforcement scheme} \\label{fg_"+self.name+"}\n")
-      outputFile.write("\\end{figure}\n")
+        rebarAnno= draw_schema.getRebarAnnotationLines(defStrings)
+        for l in rebarAnno:
+            outputFile.write(l)
+        outputFile.write(draw_schema.tail)
+        outputFile.write("\\end{center}\n")
+        outputFile.write("\\caption{Wall "+ self.name +" reinforcement scheme} \\label{fg_"+self.name+"}\n")
+        outputFile.write("\\end{figure}\n")
 
+    def createRCSections(self,stemSets):
+        '''Create reinforced concrete sections.
+
+        :param stemSets: sets of elements along the stem.
+        '''
+        stemRCSections= self.stemReinforcement.getRCSections(stemSets)
+        footingRCSection= self.footingReinforcement.getRCSections(footingSet)
+        
     def createFEProblem(self, title):
-      '''Create finite element problem.'''
-      self.feProblem= xc.FEProblem()
-      self.feProblem.title= title
-      return self.feProblem
-
+        '''Create finite element problem.'''
+        self.feProblem= xc.FEProblem()
+        self.feProblem.title= title
+        return self.feProblem
+        
     def genMesh(self,nodes,springMaterials):
         '''Generate finite element mesh.'''
         self.defineWireframeModel(nodes)
@@ -636,33 +693,34 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
         self.toeSet= preprocessor.getSets.defSet("toeSet")
         self.foundationSet= preprocessor.getSets.defSet("foundationSet")
         for lineName in ['heel','toe']:
-          l= self.wireframeModelLines[lineName]
-          l.setElemSize(elementSize)
-          l.genMesh(xc.meshDir.I)
-          for e in l.elements:
-            self.foundationSet.elements.append(e)
-            self.wallSet.elements.append(e)
-            if(lineName=='heel'):
-              self.heelSet.elements.append(e)
-            else:
-              self.toeSet.elements.append(e)
+            l= self.wireframeModelLines[lineName]
+            l.setElemSize(elementSize)
+            l.genMesh(xc.meshDir.I)
+            for e in l.elements:
+                self.foundationSet.elements.append(e)
+                self.wallSet.elements.append(e)
+                if(lineName=='heel'):
+                    self.heelSet.elements.append(e)
+                else:
+                    self.toeSet.elements.append(e)
         self.foundationSet.fillDownwards()
 
         stemSection= section_properties.RectangularSection(self.name+"StemSection",self.b,(self.stemTopWidth+self.stemBottomWidth)/2.0)
         stemMaterial= stemSection.defElasticShearSection2d(preprocessor,wallMatData) #Stem elements material.
         self.stemSet= preprocessor.getSets.defSet("stemSet")
         for lineName in ['stem']:
-          l= self.wireframeModelLines[lineName]
-          l.setElemSize(elementSize)
-          seedElemHandler.defaultMaterial= stemSection.sectionName
-          l.genMesh(xc.meshDir.I)
-          for e in l.elements:
-            y= -e.getPosCentroid(True).y
-            h= self.getDepth(y)
-            stemSection.h= h
-            e.sectionProperties= stemSection.getCrossSectionProperties2D(wallMatData)
-            self.stemSet.elements.append(e)
-            self.wallSet.elements.append(e)
+            l= self.wireframeModelLines[lineName]
+            l.setElemSize(elementSize)
+            seedElemHandler.defaultMaterial= stemSection.sectionName
+            l.genMesh(xc.meshDir.I)
+            for e in l.elements:
+                y= -e.getPosCentroid(True).y
+                h= self.getDepth(y)
+                stemSection.h= h
+                print('h= ', h)
+                e.sectionProperties= stemSection.getCrossSectionProperties2D(wallMatData)
+                self.stemSet.elements.append(e)
+                self.wallSet.elements.append(e)
         # Springs on nodes.
         self.foundationSet.computeTributaryLengths(False)
         self.fixedNodes= []
@@ -673,14 +731,14 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
         kSy= kY.E
         lngTot= 0.0
         for n in elasticBearingNodes:
-          lT= n.getTributaryLength()
-          lngTot+= lT
-          #print("tag= ", n.tag, " lT= ", lT)
-          #print("before k= ", kY.E)
-          kX.E= kSx*lT
-          kY.E= kSy*lT
-          fixedNode, newElem= self.modelSpace.setBearing(n.tag,["kX","kY"])
-          self.fixedNodes.append(fixedNode)
+            lT= n.getTributaryLength()
+            lngTot+= lT
+            #print("tag= ", n.tag, " lT= ", lT)
+            #print("before k= ", kY.E)
+            kX.E= kSx*lT
+            kY.E= kSy*lT
+            fixedNode, newElem= self.modelSpace.setBearing(n.tag,["kX","kY"])
+            self.fixedNodes.append(fixedNode)
         self.stemSet.fillDownwards()
         self.wallSet.fillDownwards()
 
@@ -689,6 +747,7 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
       for e in self.wallSet.elements:
         selfWeightLoad= xc.Vector([0.0, -grav*rho*e.sectionProperties.A])
         e.vector2dUniformLoadGlobal(selfWeightLoad)
+        
     def createDeadLoad(self,heelFillDepth,toeFillDepth,rho= 2000, grav= 9.81):
       '''Create the loads of earth self weigth.'''
       heelFillLoad= xc.Vector([0.0, -grav*rho*heelFillDepth])
@@ -806,7 +865,6 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
       b= self.getFootingWidth()
       delta= n1.getDisp[1]-n0.getDisp[1]
       return math.atan(delta/b)
-
 
     def getOverturningSafetyFactor(self,R,gammaR):
       '''Return the factor of safety against overturning.

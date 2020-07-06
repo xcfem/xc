@@ -20,7 +20,80 @@ from misc_utils import log_messages as lmsg
 import scipy.interpolate
 from solution import predefined_solutions
 from materials import concrete_base
+from scipy import interpolate
+from materials.sections import rebar_family as rf
+from postprocess.reports import common_formats as fmt
 
+
+class RebarController(object):
+    '''Control of some parameters as development length 
+       minimum reinforcement and so on.
+
+       :ivar pos: reinforcement position according to clause 66.5.1
+                  of EHE-08.
+       :ivar concreteCover: the distance from center of a bar or wire to 
+                            nearest concrete surface.
+       :ivar spacing: center-to-center spacing of bars or wires being 
+                      developed, in.
+    '''
+    # Table 66.5.2.a of EHE
+    x= [25e6,30e6,35e6,40e6,45e6,50e6]
+    y400= [12.,10.,9.,8.,7.,7.]
+    y500= [15.,13.,12.,11.,10.,10.]
+    f400= interpolate.interp1d(x, y400)
+    f500= interpolate.interp1d(x, y500)
+
+    def __init__(self, concreteCover= 35e-3, spacing= 150e-3, pos= 'II'):
+        '''Constructor.
+
+        :param concreteCover: the distance from center of a bar or wire to 
+                             nearest concrete surface.
+        :param spacing: center-to-center spacing of bars or wires being 
+                       developed, in.
+        :param pos: reinforcement position according to clause 66.5.1
+                   of EHE-08.
+        '''
+        self.pos= pos
+        self.concreteCover= concreteCover
+        self.spacing= spacing
+
+    def getM(self, concrete, steel):
+        ''' Return the "m" coefficient according to table 66.5.2.a of
+            EHE-08
+
+        :param concrete: concrete material.
+        :param steel: reinforcing steel.
+        '''
+        retval= 15.0
+        fck= -concrete.fck
+        if(steel.fyk==400e6):
+            retval= self.f400(fck)
+        elif(steel.fyk==500e6):
+            retval= self.f500(fck)
+        else:
+            m400= self.f400(fck)
+            m500= self.f500(fck)
+            retval= (m400*(500e6-steel.fyk)+m500*(steel.fyk-400e6))/100e6
+        return retval
+
+    def getBasicAnchorageLength(self, concrete, phi, steel):
+        '''Returns anchorage length in tension according to clause
+           66.5.2 of EHE.
+
+        :param concrete: concrete material.
+        :param phi: nominal diameter of bar, wire, or prestressing strand.
+        :param steel: reinforcement steel.
+        '''
+        retval= 60.0*phi
+        m= self.getM(concrete,steel)
+        f= phi*100.0
+        if(self.pos=='I'):
+            retval= max(m*f**2,steel.fyk/20e6*f)
+        elif(self.pos=='II'):
+            retval= max(1.4*m*f**2,steel.fyk/14e6*f)
+        else:
+            lmsg.error('position must be I or II')
+        return retval
 
 # Reinforced concrete section shear checking.
 
@@ -30,11 +103,9 @@ def getFcvEH91(fcd):
      according to EH-91.
 
     :param fcd: design compressive strength of concrete.
-    :param b: net width of the element according to clause 40.3.5.
-    :param d: effective depth (meters).
     '''
-    fcdKpcm2= fcd*9.81/1e6
-    return 0.5*sqrt(fcdKpcm2)/9.81*1e6
+    fcdKpcm2= -fcd*9.81/1e6
+    return 0.5*math.sqrt(fcdKpcm2)/9.81*1e6
 
 
 def getVu1(fcd, Nd, Ac, b0, d, alpha, theta):
@@ -1736,4 +1807,111 @@ class LongShearJoints(object):
         if tao_rd<=tao_ru:
             print("OK!")
 
+##################
+# Rebar families.#
+##################
+
+class EHERebarFamily(rf.RebarFamily):
+    ''' Family or reinforcement bars with checking according to EHE-08.
+
+       :ivar pos: reinforcement position according to clause 66.5.1
+                  of EHE-08.
+    '''
+    def __init__(self,steel,diam,spacing,concreteCover, pos= 'II'):
+        ''' Constructor.
+
+        :param steel: reinforcing steel material.
+        :param diam: diameter of the bars.
+        :param spacing: spacing of the bars.
+        :param concreteCover: concrete cover of the bars.
+        :param pos: reinforcement position according to clause 66.5.1
+                   of EHE-08.
+        '''
+        super(EHERebarFamily,self).__init__(steel,diam,spacing,concreteCover)
+        self.pos= pos
+
+    def getCopy(self,barController):
+        return EHERebarFamily(self.steel,self.diam,self.spacing,self.concreteCover,self.pos)
+      
+    def getRebarController(self):
+        return RebarController(concreteCover= self.concreteCover, spacing= self.spacing, pos= self.pos)
+
+    def getBasicAnchorageLength(self,concrete):
+      ''' Return the basic anchorage length of the bars.'''
+      rebarController= self.getRebarController()
+      return rebarController.getBasicAnchorageLength(concrete,self.getDiam(),self.steel)
+  
+    def getMinReinfAreaUnderFlexion(self, thickness, b= 1.0, type= 'slab', concrete= None):
+        '''Return the minimun amount of bonded reinforcement to control cracking
+           for reinforced concrete sections under flexion per unit length 
+           according to clause 42.3.5. 
+
+        :param thickness: gross thickness of concrete section (doesn't include 
+                          the area of the voids).
+        :param b: width of concrete section.
+        :param type: member type; slab, wall, beam or column.
+        :param concrete: concrete material.
+        '''
+        retval= 4e-3*thickness*b
+        fy= self.steel.fyk
+        limit= 450e6
+        if(type=='slab'):
+            retval= thickness # b= 1
+            if(fy<limit):
+                retval*= 2e-3
+            else:
+                retval*= 1.8e-3
+        elif(type=='wall'):
+            retval= thickness # b= 1
+            if(fy<limit):
+                retval*= 1.2e-3
+            else:
+                retval*= 0.98e-3
+        elif(type=='beam'):
+            retval= thickness*b
+            if(fy<limit):
+                retval*= 3.3e-3
+            else:
+                retval*= 2.8e-3
+        elif(type=='column'):
+            retval= 4e-3*thickness*b
+        return retval
+
+    def getMinReinfAreaUnderTension(self,thickness, b= 1.0, concrete= None):
+        '''Return the minimun amount of bonded reinforcement to control cracking
+           for reinforced concrete sections under tension.
+
+        :param thickness: gross thickness of concrete section.
+        :param b: width of concrete section.
+        :param concrete: concrete material.
+        '''
+        retval= min(thickness,0.5)*b # see talbe 42.3.5 remarks.
+        fy= self.steel.fyk
+        limit= 450e6
+        if(fy<limit):
+            retval*= 4e-3
+        else:
+            retval*= 3.2e-3
+        return retval
+
+    def getVR(self,concrete,Nd,Md,b,thickness):
+        '''Return the approximated shear resistance carried by the concrete 
+           on a (b x thickness) rectangular section.
+
+        :param concrete: concrete material.
+        :param Nd: design axial force (IGNORED).
+        :param Md: design bending moment (IGNORED).
+        :param b: width of the rectangular section.
+        :param thickness: height of the rectangular section.
+        '''
+        retval= getFcvEH91(concrete.fcd())*b*0.9*thickness
+        print('retval= ', retval/1e3,'kN')
+        return retval
+
+    
+    def writeRebars(self, outputFile,concrete,AsMin):
+        '''Write rebar family data.'''
+        self.writeDef(outputFile,concrete)
+        outputFile.write("  area: As= "+ fmt.Areas.format(self.getAs()*1e4) + " cm2/m areaMin: " + fmt.Areas.format(AsMin*1e4) + " cm2/m")
+        rf.writeF(outputFile,"  F(As)", self.getAs()/AsMin)
 

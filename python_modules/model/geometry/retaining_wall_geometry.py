@@ -114,7 +114,7 @@ class CantileverRetainingWallGeometry(object):
         self.wireframeModelLines= dict()
         self.wireframeModelLines['stem']= lines.newLine(self.wireframeModelPoints['stemBottom'].tag,self.wireframeModelPoints['stemTop'].tag)
         self.wireframeModelLines['toe']= lines.newLine(self.wireframeModelPoints['stemBottom'].tag,self.wireframeModelPoints['toeEnd'].tag)
-        self.wireframeModelLines['heel']= lines.newLine(self.wireframeModelPoints['stemBottom'].tag,self.wireframeModelPoints['heelEnd'].tag)
+        self.wireframeModelLines['heel']= lines.newLine(self.wireframeModelPoints['heelEnd'].tag,self.wireframeModelPoints['stemBottom'].tag)
 
     def getToePosition(self):
         ''' Returns the position of the toe (for overturning moment computation).'''
@@ -159,5 +159,9 @@ class CantileverRetainingWallGeometry(object):
         outputFile.write("Stem bottom thickness: \\\\\n")
         outputFile.write("$b_{bottom}= "+fmt.Lengths.format(self.stemBottomWidth)+"\\ m$\\\\\n")
         outputFile.write("Footing thickness: \\\\\n")
-        outputFile.write("$b_{footing}= "+fmt.Lengths.format(self.footingThickness)+"\\ m$\\\\\n")
+        outputFile.write("$h_{footing}= "+fmt.Lengths.format(self.footingThickness)+"\\ m$\\\\\n")
+        outputFile.write("Footing width: \\\\\n")
+        outputFile.write("$b_{toe}= "+fmt.Lengths.format(self.bToe)+"\\ m$\\\\\n")
+        outputFile.write("$b_{heel}= "+fmt.Lengths.format(self.bHeel)+"\\ m$\\\\\n")
+        outputFile.write("$b_{footing}= "+fmt.Lengths.format(self.getFootingWidth())+"\\ m$\\\\\n")
         outputFile.write("\\end{tabular} \\\\\n")
