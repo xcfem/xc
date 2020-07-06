@@ -32,10 +32,12 @@ ratio2=(((vCalcDW2[0]-vRefDW2[0])**2+(vCalcDW2[1]-vRefDW2[1])**2+(vCalcDW2[1]-vR
 ratio3=(((vCalcDW3[0]-vRefDW3[0])**2+(vCalcDW3[1]-vRefDW3[1])**2+(vCalcDW3[1]-vRefDW3[1])**2+(vCalcDW3[2]-vRefDW3[2])**2)/4.0)**0.5
 ratio4=(((vCalcDW4[0]-vRefDW4[0])**2+(vCalcDW4[1]-vRefDW4[1])**2+(vCalcDW4[1]-vRefDW4[1])**2+(vCalcDW4[2]-vRefDW4[2])**2)/4.0)**0.5
 
-# print('ratio1= ', ratio1)
-# print('ratio2= ', ratio2)
-# print('ratio3= ', ratio3)
-# print('ratio4= ', ratio4)
+print('ratio1= ', ratio1)
+print('ratio2= ', ratio2)
+print('vCalcDW3= ',vCalcDW3)
+print('vRefDW3= ',vRefDW3)
+print('ratio3= ', ratio3)
+print('ratio4= ', ratio4)
 
 import os
 from misc_utils import log_messages as lmsg
