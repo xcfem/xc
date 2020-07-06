@@ -11,17 +11,17 @@ def splitActionFiles(nmbArch):
     listado= open(nmbArch,"r")
     outputFile= None
     for line in listado:
-      str1= line
-      str1SB= str1.strip()
-      if(len(str1)>0):
-        if(re.match(".*Accion.*",str1)):
-          nmbAccion= re.search(' (.+?):',str1SB).group(1)
-          if(outputFile):
-            outputFile.close()
-          outputFile= tempfile.NamedTemporaryFile(delete=False)
-          actionFiles[nmbAccion]= outputFile.name 
-        elif(re.match("[0-9]+.*",str1SB)):
-          outputFile.write(line)
+        str1= line
+        str1SB= str1.strip()
+        if(len(str1)>0):
+            if(re.match(".*Accion.*",str1)):
+                nmbAccion= re.search(' (.+?):',str1SB).group(1)
+                if(outputFile):
+                    outputFile.close()
+                outputFile= tempfile.NamedTemporaryFile(delete=False)
+                actionFiles[nmbAccion]= outputFile.name 
+            elif(re.match("[0-9]+.*",str1SB)):
+                outputFile.write(line.encode())
     outputFile.close()
     listado.close()
     return actionFiles
