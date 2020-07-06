@@ -8,6 +8,7 @@ from import_export import neutral_mesh_description as nmd
 import xc_base
 import geom
 import xc
+import logging
 
 layerNamesToImport= ['xc_*']
 
@@ -18,6 +19,8 @@ pth= os.path.dirname(__file__)
 if(not pth):
   pth= "."
 dxfFilePath= pth+'/../../aux/dxf/knife_plate.dxf' 
+logger= logging.getLogger('ezdxf')
+logger.setLevel(level=logging.WARNING) #Avoid logging info messages.
 dxfImport= dxf_reader.DXFImport(dxfFilePath, layerNamesToImport,getRelativeCoo, importLines= False, polylinesAsSurfaces= True, threshold= 0.001, tolerance= .001)
 
 #Block topology

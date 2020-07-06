@@ -53,7 +53,7 @@ Epscd0=concrDeck.getShrEpscd0(RH)   #Basic drying shrinkage strain
 vCalc.append(round(Epscd0*(-1),6))
 vComp.append(2.53e-4)
 Kh=concrDeck.getShrKh(h0mm)         #coefficient  for the calculation of the drying shrinkage strain
-vCalc.append(round(Kh,2))
+vCalc.append(round(float(Kh),2))
 vComp.append(0.7)
 Betadstts=concrDeck.getShrBetadstts(t,ts,h0mm)   #coefficient  for the calculation of the drying shrinkage strain
 

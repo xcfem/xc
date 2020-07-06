@@ -10,6 +10,7 @@ import geom
 import xc
 from model import predefined_spaces
 from postprocess import output_handler
+import logging
 
 
 def getRelativeCooFunc(pt):
@@ -22,6 +23,8 @@ def importMultiBlockTopology(dxfFileName, outputFileName, layerNamesToImport, ge
        :param dxfFileName: Drawing exchange format file name.
        :param ouputFileName: 
     '''
+    logger= logging.getLogger('ezdxf')
+    logger.setLevel(level=logging.WARNING) #Avoid logging info messages.
     dxfImport= dxf_reader.DXFImport(dxfFileName, layerNamesToImport,getRelativeCoo, importLines= True, polylinesAsSurfaces= False, threshold= 0.001, tolerance= .001)
 
     #Block topology

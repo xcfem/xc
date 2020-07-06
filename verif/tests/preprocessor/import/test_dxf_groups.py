@@ -5,6 +5,7 @@ from __future__ import print_function
 import os
 from import_export import dxf_reader
 from import_export import neutral_mesh_description as nmd
+import logging
 
 layerNamesToImport= ['.*']
 
@@ -15,10 +16,17 @@ pth= os.path.dirname(__file__)
 if(not pth):
   pth= "."
 dxfFilePath= pth+'/../../aux/dxf/dxf_group_test.dxf' 
+logger= logging.getLogger('ezdxf')
+logger.setLevel(level=logging.WARNING) #Avoid logging info messages.
 dxfImport= dxf_reader.DXFImport(dxfFilePath, layerNamesToImport,getRelativeCoo, importLines= True, polylinesAsSurfaces= False, threshold= 0.001, tolerance= .001)
 
+ok= True
+referenceEntities= [u'7E', u'7D', u'7C', u'7B', u'7A', u'77', u'79', u'78']
 entitiesWithGroup= (dxfImport.entitiesGroups.keys())
-ok= (entitiesWithGroup==[u'7E', u'7D', u'7C', u'7B', u'7A', u'77', u'79', u'78'])
+for label in referenceEntities:
+    if not label in entitiesWithGroup:
+        ok= False
+        break
 
 # #Block topology
 # blocks= dxfImport.exportBlockTopology('test')
@@ -31,6 +39,7 @@ ok= (entitiesWithGroup==[u'7E', u'7D', u'7C', u'7B', u'7A', u'77', u'79', u'78']
 # ieData.writeToXCFile()
 
 '''
+print(entitiesWithGroup)
 print('ok: ', ok)
 '''
 
