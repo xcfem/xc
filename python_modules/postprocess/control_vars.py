@@ -985,12 +985,14 @@ def extrapolate_control_var(elemSet,propName,argument,initialValue= 0.0):
      :param argument: name of the control variable to extrapolate.
      :param initialValue: initial value for the prop defined at the nodes.
     '''
+    print ('setType=',elemSet.type())
     print('propName: ', propName)
     print('argument: ', argument)
+    eSet=elemSet.elements
     nodePropName= propName+'_'+argument
-    nodeTags= ext.create_attribute_at_nodes(elemSet,nodePropName,initialValue)
+    nodeTags= ext.create_attribute_at_nodes(eSet,nodePropName,initialValue)
     #Calculate totals.
-    for e in elemSet:
+    for e in eSet:
         elemNodes= e.getNodes
         sz= len(elemNodes)
         for i in range(0,sz):
@@ -1001,7 +1003,7 @@ def extrapolate_control_var(elemSet,propName,argument,initialValue= 0.0):
                 oldValue= n.getProp(nodePropName)
                 n.setProp(nodePropName,oldValue+value)
     #Divide by number of elements in the set that touch the node.
-    preprocessor= elemSet.owner.getPreprocessor
+    preprocessor= elemSet.getPreprocessor
     for tag in nodeTags:
         n= preprocessor.getNodeHandler.getNode(tag)
         denom= nodeTags[tag]

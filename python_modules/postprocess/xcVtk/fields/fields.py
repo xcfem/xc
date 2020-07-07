@@ -137,5 +137,5 @@ def getScalarFieldFromControlVar(attributeName,argument,xcSet,component,fUnitCon
      :param component: component of the control var to represent.
      :param fUnitConv: unit conversion factor (i.e N->kN => fUnitConv= 1e-3).
   '''
-  nodePropName= cv.extrapolate_control_var(xcSet.elements,attributeName,argument)
+  nodePropName= cv.extrapolate_control_var(xcSet,attributeName,argument)
   return ExtrapolatedScalarField(nodePropName,"getProp",xcSet,component,fUnitConv,rgMinMax)
