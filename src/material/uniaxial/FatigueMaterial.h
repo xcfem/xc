@@ -71,37 +71,58 @@ class FatigueMaterial: public UniaxialMaterial
   private:
     UniaxialMaterial *theMaterial;
 
-    double D;   //!< Damage index
-    double X;   //!< Range in consideration
-    double Y;   //!< Previous Adjacent Range
-    double A;   //!< Strain at first  cycle peak/valley
-    double B;   //!< Strain at second cycle peak/valley
-    int R1F;    //!< % Flag for first  cycle count
-    int R2F;    //!< % Flag for second cycle count
-    double CS;  //!< % Current Slope
-    double PS;  //!< % Previous slope
-    double EP;  //!< % Previous Strain
-    int FF;     //!< % Failure Flag
-    int SF;     //!< % Start Flag - for initializing the very first strain
-    int PF;     //!< % Peak Flag --> Did we reach a peak/valley at current strain?
-    
-    double Dmax; //!< = 1.0; % Maximum Damage index, normally 1.0
-    double Nf;   //!<  = 0.5E6; % Number of cycles to failure at strain E0
-    double E0;   //!<  = 14.5/29000;
-    double FE;   //!<  = -1/2.31; % Log log slope of fracture curve
-    double b;    //!<   =  log10(E0) - log10(Nf)*FE; %Theoretical Intercept
-    
-    bool Tfailed;
+    double energy, CStress; //SAJalali
+    double DI; //Damage index
+    double  X; //Range in consideration
+    double  Y; //Previous Adjacent Range
+    double  A; //Peak or valley 1
+    double  B; //Peak or valley 2
+    double  C; //Peak or valley 2
+    double  D; //Peak or valley 4
+    int   PCC; /*Previous Cycle counter flag if >1 then previous 'n' 
+		 cycles did not flag a complete cycle */
+    int   R1F; //Flag for first  peak count
+    int   R2F; //Flag for second peak count
+    double cSlope; //Current Slope
+    double PS; //Previous slope
+    double EP; //Previous Strain
+    int    SF; /*Start Flag = 0 if very first strain, 
+		 (i.e. when initializing)    = 1 otherwise */
+    double DL; //Damage if current strain was last peak.
+
+    double Dmax;
+    double E0;
+    double m;
+
+    double minStrain;
+    double maxStrain;
+
     bool Cfailed;
+    double trialStrain;
+
+    // added 6/9/2006
+    // For recording strain ranges (SRXX) and Number of Cycles (NCXX)
+    double SR1;  // Committed strain range at peak
+    double NC1;  // Committed number of cycles at SR1 (i.e. 1.0 or 0.5)
+    double SR2;  // Committed strain range 2 at PSEUDO peak - there are potentially two ranges
+    double NC2;  // Committed number of cycles at SR2 2 (at PSEUDO peak) - there are potentially two ranges
+    double SR3;  // Committed strain range 3 at PSEUDO peak - there are potentially two ranges
+    double NC3;  // Committed number of cycles at SR2 3 (at PSEUDO peak) - there are potentially two ranges
+
+    void alloc(const UniaxialMaterial &);
+    void free(void); 
   public:
-    FatigueMaterial(int tag, UniaxialMaterial &material, 
-		    double Dmax = 1.0,
-		    double Nf  = 0.5E6,
-		    double E0  = 14.5/29000.0,
-		    double FE  = -1.0/2.31);
-    FatigueMaterial(int tag);
-    FatigueMaterial(void);
+    FatigueMaterial(int tag, const UniaxialMaterial &material, 
+		    double Dmax    =  1.0,
+		    double E0      =  0.191,
+		    double m       = -0.458,
+		    double minStrain = -1.0e16,
+		    double maxStrain =  1.0e16 );
+    FatigueMaterial(int tag= 0);
+    FatigueMaterial(const FatigueMaterial &);
+    FatigueMaterial &operator=(const FatigueMaterial &);
     ~FatigueMaterial(void);
+    UniaxialMaterial *getCopy(void) const;
 
     int setTrialStrain(double strain, double strainRate = 0.0); 
     double getStrain(void) const;          
@@ -116,12 +137,19 @@ class FatigueMaterial: public UniaxialMaterial
     int revertToLastCommit(void);    
     int revertToStart(void);        
 
-    UniaxialMaterial *getCopy(void) const;
     
     int sendSelf(Communicator &);  
     int recvSelf(const Communicator &);
     
     void Print(std::ostream &s, int flag =0) const;
+    
+    Response *setResponse(const std::vector<std::string> &, Information &);
+    int getResponse(int responseID, Information &matInformation);
+    bool hasFailed(void);  
+
+    //by SAJalali
+    inline virtual double getEnergy(void)
+      { return energy; }
   };
 } // end of XC namespace
 
