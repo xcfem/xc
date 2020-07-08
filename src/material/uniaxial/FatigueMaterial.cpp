@@ -61,197 +61,234 @@
 #include <utility/matrix/ID.h>
 #include <cmath>
 
-XC::FatigueMaterial::FatigueMaterial(int tag, UniaxialMaterial &material,
-                                   double dmax, double nf, double e0, double fe)
-  :UniaxialMaterial(tag,MAT_TAG_Fatigue), theMaterial(0), 
-   Tfailed(false), Cfailed(false)
-{
-  D   = 0; // Damage index
-  X   = 0; // Range in consideration
-  Y   = 0; // Previous Adjacent Range
-  A   = 0; // Strain at first  cycle peak/valley
-  B   = 0; // Strain at second cycle peak/valley
-  R1F = 0; // Flag for first  cycle count
-  R2F = 0; // Flag for second cycle count
-  CS  = 0; // Current Slope
-  PS  = 0; // Previous slope
-  EP  = 0; // Previous Strain
-  FF  = 0; // Failure Flag
-  SF  = 0; // Start Flag - for initializing the very first strain
-  PF  = 0; // Peak Flag --> Did we reach a peak/valley at current strain?
-
-  Dmax = dmax;
-  Nf  = nf;
-  E0  = e0;
-  FE  = fe;
-  b   =  log10(E0) - log10(Nf)*FE; //Theoretical Intercept
-
-  theMaterial = material.getCopy();
-
-  if (theMaterial == 0) {
-    std::cerr <<  "XC::FatigueMaterial::FatigueMaterial -- failed to get copy of material\n";
-    exit(-1);
-  }
-}
-
-XC::FatigueMaterial::FatigueMaterial(int tag)
-  :UniaxialMaterial(tag,MAT_TAG_Fatigue), theMaterial(0), 
-   Tfailed(false), Cfailed(false)
-{
-  D   = 0; // Damage index
-  X   = 0; // Range in consideration
-  Y   = 0; // Previous Adjacent Range
-  A   = 0; // Strain at first  cycle peak/valley
-  B   = 0; // Strain at second cycle peak/valley
-  R1F = 0; // Flag for first  cycle count
-  R2F = 0; // Flag for second cycle count
-  CS  = 0; // Current Slope
-  PS  = 0; // Previous slope
-  EP  = 0; // Previous Strain
-  FF  = 0; // Failure Flag
-  SF  = 0; // Start Flag - for initializing the very first strain
-  PF  = 0; // Peak Flag --> Did we reach a peak/valley at current strain?
-
-  Dmax = 0;
-  Nf   = 0;
-  E0   = 0;
-  FE   = 0;
-  b    =  0;
-}
-
-XC::FatigueMaterial::FatigueMaterial()
-  :UniaxialMaterial(0,MAT_TAG_Fatigue), theMaterial(0), 
-   Tfailed(false), Cfailed(false)
-{
-  D   = 0; // Damage index
-  X   = 0; // Range in consideration
-  Y   = 0; // Previous Adjacent Range
-  A   = 0; // Strain at first  cycle peak/valley
-  B   = 0; // Strain at second cycle peak/valley
-  R1F = 0; // Flag for first  cycle count
-  R2F = 0; // Flag for second cycle count
-  CS  = 0; // Current Slope
-  PS  = 0; // Previous slope
-  EP  = 0; // Previous Strain
-  FF  = 0; // Failure Flag
-  SF  = 0; // Start Flag - for initializing the very first strain
-  PF  = 0; // Peak Flag --> Did we reach a peak/valley at current strain?
-
-  Dmax = 0;
-  Nf   = 0;
-  E0   = 0;
-  FE   = 0;
-  b    =  0;
-}
-
-XC::FatigueMaterial::~FatigueMaterial()
+void XC::FatigueMaterial::free(void)
   {
     if(theMaterial)
-      delete theMaterial;
+      {
+	delete theMaterial;
+	theMaterial= nullptr;
+      }
   }
 
-static int sign(double a) {
-  if (a < 0)
-    return -1;
-  else
-    return 1;
-}
+void XC::FatigueMaterial::alloc(const UniaxialMaterial &material)
+  {
+    free();
+    theMaterial= material.getCopy();
+    if(!theMaterial)
+      {
+	std::cerr <<  getClassName() << "::" << __FUNCTION__
+	          << "; failed to get copy of material\n";
+	exit(-1);
+      }
+  }
+
+XC::FatigueMaterial::FatigueMaterial(int tag, const UniaxialMaterial &material,
+				 double dmax, double E_0, double slope_m, 
+				 double epsmin, double epsmax)
+  :UniaxialMaterial(tag,MAT_TAG_Fatigue), theMaterial(nullptr), 
+   Cfailed(false), trialStrain(0.0)
+  {
+    DI  = 0; //Damage index
+    X   = 0; //Range in consideration
+    Y   = 0; //Previous Adjacent Range
+    A   = 0; //Peak or valley 1
+    B   = 0; //Peak or valley 2
+    C   = 0; //Peak or valley 2
+    D   = 0; //Peak or valley 4
+    PCC = 0; /*Previous Cycle counter flag if >1 then previous 'n' 
+	       cycles did not flag a complete cycle */
+    R1F = 0; //Flag for first  peak count
+    R2F = 0; //Flag for second peak count
+    cSlope  = 0; //Current Slope
+    PS  = 0; //Previous slope
+    EP  = 0; //Previous Strain
+    SF  = 0; /*Start Flag = 0 if very first strain, (i.e. when initializing)
+	       = 1 otherwise */
+    DL  = 0; //Damage if current strain was last peak.
+
+    // added 6/9/2006
+    SR1 = 0;
+    NC1= 0;
+    SR2 = 0;
+    NC2 = 0;
+    SR3 = 0;
+    NC3 = 0;
+
+
+    if ( dmax > 1.0 || dmax < 0.0 ) {
+      std::cerr << "FatigueMaterial::FatigueMaterial " <<
+	"- Dmax must be between 0 and 1, assuming Dmax = 1\n" ;
+      Dmax    = 1;
+    } else 
+      Dmax    = dmax;
+
+    E0        = E_0;
+    m         = slope_m;
+    minStrain = epsmin;
+    maxStrain = epsmax;
+    alloc(material);
+
+
+    //added by SAJalali
+    energy = 0;
+    CStress = 0;
+  }
+
+XC::FatigueMaterial::FatigueMaterial(int tag)
+  :UniaxialMaterial(tag,MAT_TAG_Fatigue), theMaterial(nullptr), 
+   Cfailed(false), trialStrain(0)
+  {
+    DI  = 0; //Damage index
+    X   = 0; //Range in consideration
+    Y   = 0; //Previous Adjacent Range
+    A   = 0; //Peak or valley 1
+    B   = 0; //Peak or valley 2
+    C   = 0; //Peak or valley 2
+    D   = 0; //Peak or valley 4
+    PCC = 0; /*Previous Cycle counter flag if >1 then previous 'n' 
+	       cycles did not flag a complete cycle */
+    R1F = 0; //Flag for first  peak count
+    R2F = 0; //Flag for second peak count
+    cSlope  = 0; //Current Slope
+    PS  = 0; //Previous slope
+    EP  = 0; //Previous Strain
+    SF  = 0; /*Start Flag = 0 if very first strain, (i.e. when initializing)
+	       = 1 otherwise */
+    DL  = 0; //Damage if current strain was last peak.
+
+    Dmax    = 0;
+    E0      = 0; 
+    m       = 0;
+    minStrain    = 0;
+    maxStrain    = 0;
+
+    // added 6/9/2006
+    SR1 = 0;
+    NC1 = 0;
+    SR2 = 0;
+    NC2 = 0;
+    SR3 = 0;
+    NC3 = 0;
+
+    //added by SAJalali
+    energy = 0;
+    CStress = 0;    
+  }
+
+//! @brief Copy constructor.
+XC::FatigueMaterial::FatigueMaterial(const FatigueMaterial &other)
+  : UniaxialMaterial(other)
+  {
+    if(other.theMaterial)
+      alloc(*theMaterial);
+    Dmax= other.Dmax;
+    E0= other.E0;
+    m= other.m;
+    minStrain= other.minStrain;
+    maxStrain= other.maxStrain;
+    Cfailed= other.Cfailed;
+    trialStrain= other.trialStrain;
+  }
+
+//! @bried Assignment operator.
+XC::FatigueMaterial &XC::FatigueMaterial::operator=(const FatigueMaterial &other)
+  {
+    UniaxialMaterial::operator=(other);
+    if(other.theMaterial)
+      alloc(*theMaterial);
+    Dmax= other.Dmax;
+    E0= other.E0;
+    m= other.m;
+    minStrain= other.minStrain;
+    maxStrain= other.maxStrain;
+    Cfailed= other.Cfailed;
+    trialStrain= other.trialStrain;
+    return *this;
+  }
+
+//! @brief Virtual constructor.
+XC::UniaxialMaterial *XC::FatigueMaterial::getCopy(void) const
+  { return new FatigueMaterial(*this); }
+
+XC::FatigueMaterial::~FatigueMaterial(void)
+  { free(); }
+
+static int sign(double a)
+  {
+    if (a < 0)
+      return -1;
+    else
+      return 1;
+  }
 
 int XC::FatigueMaterial::setTrialStrain(double strain, double strainRate)
-{
-  if (Cfailed)
-    return 0;
-
-  //Now check to see if we have reached failure although  
-  // not at a peak or valley, assume
-  // a 1/2 cycle to the current point
-  if (Tfailed == false) {
-    if (SF == 1) { //Do not check on the VERY first cycle i.e. SF=0
-      double Ytemp = fabs(strain - B);
-      double Dtemp = D +  0.5 / pow(10.0, ((log10(Ytemp)-b)/FE ) );
-      if (Dtemp > Dmax) {
-        D = Dtemp;
-        std::cerr << "Fail!\n";
-        Tfailed = true;
-        return 0;
-      }
+  {
+      if (Cfailed) {
+      trialStrain = strain;
+      // return 0;
+      return theMaterial->setTrialStrain(strain, strainRate);
+    } else {
+      Cfailed = false;
+      trialStrain = strain;
+      return theMaterial->setTrialStrain(strain, strainRate);
     }
   }
-  
-  if (Tfailed == false) {
-    if (SF == 0) {
-      PS = strain;
-      A  = strain;
-      SF = 1;
-    }
-    CS = strain - EP;         // Determine Current Slope
-    // Identify Peak or Valley (slope Change)
-    if ((sign(PS) != sign(CS)) && (FF == 0)) {
-      X =  fabs(strain - B);   // Range of current Cycle
-      if (R1F == 0) {            // After Reaching First Peak
-        Y = fabs(strain - A);
-        B = strain;
-        R1F = 1;
-      }
-      if ((R2F == 0) && (R1F == 1)) { // Mark the first cycle  
-        A = B;
-        B = strain;
-        R2F = 1;
-        D = 0.5 / pow(10.0, ((log10(Y)-b)/FE ) );
-        PF = 1; // We reached a peak
-        Y = X;
-      } else if (X < Y) {
-        // Do Nothing; keep counting, not a peak or 
-        // valley by definition
-        ;
-      }
-      else {
-        A = B;
-        B = strain;
-        D = D + 0.5 / pow(10.0, ((log10(Y)-b)/FE ));
-        PF = 1; // We reached a peak
-        Y = X;
-      }
-    }
-    PS = CS;       // Previous Slope
-    EP = strain;   // Keep track of previous strain
-    
-    if (D >= Dmax) {
-      Tfailed = true;
-      std::cerr << "Fail!\n";
-      return  0;
-    }
-  }
-
-  if(Tfailed == false) {
-    Tfailed = false;
-    return theMaterial->setTrialStrain(strain, strainRate);
-  } else {
-    return 0;
-  }
-  
-}
 
 double XC::FatigueMaterial::getStress(void) const
   {
-    if(Tfailed)
-      return 0.0;
+    // double modifier = 1.0;
+    // double damageloc = 1.0-Dmax+DL;
+    if (Cfailed)
+      // Reduce stress to 0.0 
+      return theMaterial->getStress()*1.0e-8;
+
+    /*
+    // This portion of the code was added by Kevin Mackie, Ph.D.
+    //  This is appropriate for steel material.  Uncomment to use.
+    else if ( damageloc <= 0.9 )
+    modifier = 1.0-725.0/2937.0*pow(damageloc,2);
+    else 
+    modifier = 8.0*(1.0-damageloc);
+
+    if (modifier <= 0)
+      modifier = 1.0e-8;
+
     else
-      return theMaterial->getStress();
+      return theMaterial->getStress()*modifier;
+    */
+
+    else
+      return theMaterial -> getStress();
   }
 
 double XC::FatigueMaterial::getTangent(void) const
   {
-    if(Tfailed)
-      //return 0.0;
+    double modifier = 1.0;
+    // double damageloc = 1.0-Dmax+DL;
+    if (Cfailed)
+      // Reduce tangent to 0.0 
       return 1.0e-8*theMaterial->getInitialTangent();
+
+    /* 
+    // This portion of the code was added by Kevin Mackie, Ph.D.
+    //  This is appropriate for steel material.  Uncomment to use.
+    else if ( damageloc <= 0.9 )
+    modifier = 1.0-725.0/2937.0*pow(damageloc,2);
     else
-      return theMaterial->getTangent();
+    modifier = 8.0*(1.0-damageloc);
+
+    if (modifier <= 0)
+    // modifier = 1.0e-8;
+    modifier = 1.0e-3;
+    */
+
+    else
+      return theMaterial->getTangent()*modifier;
   }
 
 double XC::FatigueMaterial::getDampTangent(void) const
   {
-    if(Tfailed)
+    if(Cfailed)
       return 0.0;
     else
       return theMaterial->getDampTangent();
@@ -264,15 +301,336 @@ double XC::FatigueMaterial::getStrainRate(void) const
   { return theMaterial->getStrainRate(); }
 
 int XC::FatigueMaterial::commitState(void)
-{        
-  Cfailed = Tfailed;
+  {        
+    // NOTE: Do not accumulate damage if peaks are too small (e.g. if X < 1e-10)
+    // may get floating point errors.  This is essentially a filter for 
+    // strain cycles smaller than 1e-10 strain.  
+    //  THIS FATIGE MATERIAL CODE WAS NOT INTENDED FOR HIGH CYCLE FATIGUE, 
+    //  THE LINEAR ACCUMULATION OF DAMAGE IS NOT AS APPROPRIATE FOR HIGH
+    //  CYCLE FATIGUE. 
 
-  // Check if failed at current step
-  if (Tfailed) 
-    return 0;
-  else 
-    return theMaterial->commitState();
-}
+    //added 6/9/2006
+    // for recorder
+    SR1 = 0;
+    NC1 = 0;
+
+
+    // No need to continue if the uniaxial material copy 
+    // has already failed.
+    if (Cfailed) {
+      return 0;
+    }
+
+    //Simple check to see if we reached max strain capacities
+    if (trialStrain >= maxStrain || trialStrain <= minStrain) { 
+	Cfailed = true;
+	std::cerr << "FatigueMaterial: material tag " << this->getTag() << " failed from excessive strain\n";
+	DI = Dmax;
+	DL = Dmax;
+	return 0;
+    }
+
+    //Initialize the fatigue parameters if they have 
+    // not been initialized yet
+    if (SF == 0) {
+
+      A   = trialStrain;
+      SF  = 1  ;
+      EP  = trialStrain;
+      // Initialize other params if not done so already
+      PCC = 0;
+      B   = 0;
+      C   = 0;
+      D   = 0;
+
+    }
+
+    /* Now we need to determine if we are at a peak or not 
+       If we are, then we need to do some calcs to determine
+       the amount of damage suffered. If we are not at a peak, we need to
+       pretend like we are at a peak, so that we can calculate the damage
+       as if it WERE a peak.   
+    */
+
+    // Determine the slope of the strain hysteresis
+    if ( EP == trialStrain ) {
+      cSlope = PS;         // No real slope here....
+    } else {
+      cSlope = trialStrain - EP;   // Determine Current Slope
+    }
+
+
+    // If we are at a peak or a valley, then check for damage
+    if (sign(PS) != sign(cSlope) && sign(PS) != 0 ) {
+
+      if ( R1F == 0 )  {    // mark second peak
+
+	B = EP; 
+	Y = fabs(B-A);
+	R1F = 1;
+
+      } else {   // start at least the third peak
+
+	// begin modified Rainflow cycle counting
+	if (PCC == 1) { 
+
+	  D = EP;
+	  X = fabs(D-C);
+
+	} else {
+
+	  C = EP;
+	  X = fabs(C-B);
+
+	}
+
+	if (X < Y) {
+
+	  PCC = PCC + 1;
+
+	  if (PCC == 1) {
+	    Y = fabs(C-B);
+	  } else if (PCC == 2 ) {
+	    // Count X = |D-C| as a 1.0 cycle
+	    DI = DI + 1.0 / fabs(pow( (X/E0) , 1/m )) ;
+	    //added 6/9/2006
+	    SR1 = X;
+	    NC1 = 1.0;
+	    // Reset parameters
+	    D = 0;
+	    C = 0;
+	    Y = fabs(B-A);
+	    PCC = 0;
+
+	  }
+
+	} else {
+
+	  if (PCC == 1 ) {
+
+	    // Count Y = |C-B| as a 1.0 cycle
+	    DI = DI + 1.0 / fabs(pow( (Y/E0) , 1/m ));
+	    //added 6/9/2006
+	    SR1 = Y;
+	    NC1 = 1.0;
+
+	    // Reset parameters
+	    B = D;
+	    C = 0;
+	    D = 0;
+	    Y = fabs(B-A);
+	    PCC = 0;
+
+
+
+	  } else {
+
+	    // Count Y = |A-B| as a 0.5 cycle
+	    DI = DI + 0.5 / fabs(pow( (Y/E0), 1/m ));
+
+	    //added 6/9/2006
+	    // For recorder
+	    SR1 = Y;
+	    NC1 = 0.5;
+
+	    // Reset parameters
+	    A = B;
+	    B = C;
+	    C = 0;
+	    D = 0;
+	    Y = X;
+	    PCC = 0;
+
+
+	  }
+
+	}
+
+      }
+
+      // Flag failure if we have reached that point
+      if (DI >= Dmax )  {
+	// Most likely will not fail at this point, more 
+	// likely at the pseudo peak. But this step is
+	// is important for accumulating damage
+	Cfailed = true;
+	std::cerr << getClassName() << ": material tag " << this->getTag() << " failed at peak\n";
+	DL=DI;
+      } else {
+	Cfailed = false;
+	DL=DI;
+      }
+
+      // Modified by Patxi 3/5/2006
+    // } else {
+    }
+    if (Cfailed == false) {
+
+      // Now check for damage, although we may not be at a peak at all.
+      // Store temporary damage only as if it were the last peak: DL
+      // Commit to DI only if failure occurs.
+      if (B == 0 && C == 0 &&  D == 0) {
+
+	// If we have not yet found the second peak
+	X = fabs(trialStrain - A);
+
+	if (fabs(X) < 1e-10) {
+	  DL = DI ;
+	  // added 6/9/2006
+	  //values for recorder
+	  SR2 = 0.0;
+	  NC2 = 0.0;
+	  SR3 = 0.0;
+	  NC3 = 0.0;
+	} else {
+	  DL = DI +  0.5 / fabs(pow( (X/E0), 1/m ));
+	  // added 6/9/2006
+	  //values for recorder
+	  SR2 = X;
+	  NC2 = 0.5;
+	  SR3 = 0.0;
+	  NC3 = 0.0;
+	}
+
+      } else if (B != 0 && C == 0 &&  D == 0) {
+
+	// On our way to find point C. Range Y defined, no X yet
+	X = fabs(trialStrain - B);
+
+	if (fabs(X) < 1e-10) {
+	  DL = DI;
+	  // added 6/9/2006
+	  //values for recorder
+	  SR2 = 0.0;
+	  NC2 = 0.0;
+	} else {
+	  DL = DI +  0.5 / fabs(pow( (X/E0) , 1/m ));
+	  // added 6/9/2006
+	  //values for recorder
+	  SR2 = X;
+	  NC2 = 0.5;
+	}	
+
+	if (fabs(Y) < 1e-10) {
+	  DL = DL;
+	  // added 6/9/2006
+	  //values for recorder
+	  SR3 = 0.0;
+	  NC3 = 0.0;
+	} else {
+	  DL = DL +  0.5 / fabs(pow( (Y/E0) , 1/m ));
+	  // added 6/9/2006
+	  //values for recorder
+	  SR3 = Y;
+	  NC3 = 0.5;
+	}
+
+      } else if (B != 0 && C != 0 &&  D == 0) {
+
+	// Two ranges stored, but no cycles for either stored
+	// There are two scenarios that can result:
+	// 1.)  |A-D| is the predominate 1/2 cycle, 
+	//      and |B-C| is a small full cycle.
+	//
+	// 2.)  One full cylce at |D-C|, 1/2 cycle at |A-B|
+
+	if (fabs(A-trialStrain)> fabs(A-B)) {
+
+	  //   count 1/2 cycle at |D-A|, and one full cycle at |B-C|.
+	  X = fabs(trialStrain-A);
+
+	  if (fabs(Y) < 1e-10) {
+	    DL = DI;
+	    // added 6/9/2006
+	    //values for recorder
+	    SR3 = 0.0;
+	    NC3 = 0.0;
+	  } else {
+	    DL = DI +  1.0 / fabs(pow( (Y/E0) , 1/m ));
+	    // added 6/9/2006
+	    //values for recorder
+	    SR3 = Y;
+	    NC3 = 1.0;
+	  } 
+
+	  if (fabs(X) < 1e-10) {
+	    DL = DL;
+	    // added 6/9/2006
+	    //values for recorder
+	    SR2 = 0.0;
+	    NC2 = 0.0;
+	  } else {
+	    DL = DL +  0.5 / fabs(pow( (X/E0) , 1/m ));
+	    // added 6/9/2006
+	    //values for recorder
+	    SR2 = X;
+	    NC2 = 0.5;
+	  }
+
+	} else {
+
+	  // One full cycle of |C-D| and 1/2 cyle of |A-B|
+
+	  if (fabs(C-trialStrain) < 1e-10) {
+	    DL = DI;
+	    // added 6/9/2006
+	    //values for recorder
+	    SR3 = 0.0;
+	    NC3 = 0.0;
+	  } else {
+	    DL = DI +  1.0 / fabs(pow( ( fabs(C-trialStrain)/E0 ) , 1/m ));
+	    // added 6/9/2006
+	    //values for recorder
+	    SR3 = fabs(C-trialStrain);
+	    NC3 = 1.0;
+	  } 
+
+	  if (fabs(A-B) < 1e-10) {
+	    DL = DL;
+	    // added 6/9/2006
+	    //values for recorder
+	    SR2 = 0.0;
+	    NC2 = 0.0;
+	  } else {
+	    DL = DL +  0.5 / fabs(pow( (fabs(A-B) /E0) , 1/m ));
+	    // added 6/9/2006
+	    //values for recorder
+	    SR2 = fabs(A-B);
+	    NC2 = 0.5;
+	  }
+	}
+      }
+
+      // Did we fail before a peak?
+      double mStress = theMaterial->getStress();
+      if (DL > Dmax && mStress > 0.0 ) {
+	DI = DL;
+	Cfailed = true;
+	std::cerr << getClassName() << ": material tag " << this->getTag() << " failed at pseudo peak\n";
+      } else {
+	Cfailed = false;
+      }
+
+    }
+
+    //added by SAJalali
+    if (!Cfailed)
+    {
+	    double TStress = getStress();
+	    energy += 0.5*(trialStrain - PS)*(TStress + CStress);
+	    CStress = TStress;
+    }
+
+    PS = cSlope;            // Previous Slope
+    EP = trialStrain;   // Keep track of previous strain
+
+    // Check if failed at current step
+    if (Cfailed) {
+      return 0;
+    }
+    else 
+      return theMaterial->commitState();
+  }
 
 int XC::FatigueMaterial::revertToLastCommit(void)
 {
@@ -283,39 +641,98 @@ int XC::FatigueMaterial::revertToLastCommit(void)
     return theMaterial->revertToLastCommit();
 }
 
+//! @brief Return element to its initial state.
 int XC::FatigueMaterial::revertToStart(void)
-{
-  Cfailed = false;
-  Tfailed = false;
-  
-  return theMaterial->revertToStart();
-}
+  {
+    Cfailed = false;
+    DI  = 0; //Damage index
+    X   = 0; //Range in consideration
+    Y   = 0; //Previous Adjacent Range
+    A   = 0; //Peak or valley 1
+    B   = 0; //Peak or valley 2
+    C   = 0; //Peak or valley 2
+    D   = 0; //Peak or valley 4
+    PCC = 0; /*Previous Cycle counter flag if >1 then previous 'n' 
+	       cycles did not flag a complete cycle */
+    R1F = 0; //Flag for first  peak count
+    R2F = 0; //Flag for second peak count
+    cSlope  = 0; //Current Slope
+    PS  = 0; //Previous slope
+    EP  = 0; //Previous Strain
+    SF  = 0; /*Start Flag = 0 if very first strain, (i.e. when initializing)
+	       = 1 otherwise */
+    DL  = 0; //Damage if current strain was last peak.
 
-XC::UniaxialMaterial *XC::FatigueMaterial::getCopy(void) const
-{
-  FatigueMaterial *theCopy = 
-    new FatigueMaterial(this->getTag(), *theMaterial, Dmax, Nf, E0, FE);
-  
-  theCopy->Cfailed = Cfailed;
-  theCopy->Tfailed = Tfailed;
-  
-  return theCopy;
-}
+    // added 6/9/2006
+    //values for recorder
+    SR1 = 0;
+    NC1 = 0;
+    SR2 = 0;
+    NC2 = 0;
+    SR3 = 0;
+    NC3 = 0;
+
+    return theMaterial->revertToStart();
+  }
+
 
 int XC::FatigueMaterial::sendSelf(Communicator &comm)
-{
-  return 0;
-}
+  {
+    std::cerr << getClassName() << "::" << __FUNCTION__
+	      << " not migrated from OpenSees yet." << std::endl;
+    return 0;
+  }
 
 int XC::FatigueMaterial::recvSelf(const Communicator &comm)
-{
-  return 0;
-}
+  {
+    std::cerr << getClassName() << "::" << __FUNCTION__
+	      << " not migrated from OpenSees yet." << std::endl;
+    return 0;
+  }
 
 void XC::FatigueMaterial::Print(std::ostream &s, int flag) const
-{
-  s << "FatigueMaterial tag: " << this->getTag() << std::endl;
-  s << "\tMaterial: " << theMaterial->getTag() << std::endl;
-  s << "\tD: " << D << " Dmax: " << Dmax << std::endl;
-  s << "Nf: " << Nf <<  " E0: " << E0 << " FE: " << FE << " b: " << b << std::endl;
-}
+  {
+    std::cerr << getClassName() << "::" << __FUNCTION__
+	      << " not migrated from OpenSees yet." << std::endl;
+    if (flag == 100)
+      {
+        s << DL << std::endl;
+      }
+
+      // if (flag == OPS_PRINT_PRINTMODEL_MATERIAL) {
+      // 	      s << "FatigueMaterial tag: " << this->getTag() << endln;
+      // 	      s << "\tMaterial: " << theMaterial->getTag() << endln;
+      // 	      s << "\tDI: " << DI << " Dmax: " << Dmax << endln;
+      // 	      s << "\tE0: " << E0 << " m: " << m << endln;
+      // 	      s << "\tDL: " << DL << endln;
+      // }
+
+      // if (flag == OPS_PRINT_PRINTMODEL_JSON) {
+      // 	      s << "\t\t\t{";
+      // 	      s << "\"name\": \"" << this->getTag() << "\", ";
+      // 	      s << "\"type\": \"FatigueMaterial\", ";
+      // 	      s << "\"material\": \"" << theMaterial->getTag() << "\", ";
+      // 	      s << "\"tDI\": " << DI << ", ";
+      // 	      s << "\"Dmax\": " << Dmax << ", ";
+      // 	      s << "\"tE0\": " << E0 << ", ";
+      // 	      s << "\"m\": " << m << ", ";
+      // 	      s << "\"tDL\": " << DL << "}";
+      // }
+  }
+
+XC::Response *XC::FatigueMaterial::setResponse(const std::vector<std::string> &, Information &)
+  {
+    std::cerr << getClassName() << "::" << __FUNCTION__
+	      << " not migrated from OpenSees yet." << std::endl;
+    return nullptr;
+  }
+
+int XC::FatigueMaterial::getResponse(int responseID, Information &matInformation)
+  {
+    std::cerr << getClassName() << "::" << __FUNCTION__
+	      << " not migrated from OpenSees yet." << std::endl;
+    return 0;
+  }
+
+bool XC::FatigueMaterial::hasFailed(void)
+  { return Cfailed; }
