@@ -20,6 +20,7 @@ from postprocess.xcVtk.diagrams import node_property_diagram as npd
 from postprocess.xcVtk.diagrams import element_property_diagram as epd
 import vtk
 from postprocess import output_styles
+from misc_utils import log_messages as lmsg
 
 class OutputHandler(object):
     ''' Object that handles the ouput (graphics, etc.)
@@ -765,17 +766,45 @@ class OutputHandler(object):
         '''
         if(setToDisplay==None):
             setToDisplay= self.modelSpace.getTotalSet()
+        self.displayField(limitStateLabel, 1,argument, component, setToDisplay, fileName, defFScale, rgMinMax)
+        self.displayField(limitStateLabel, 2,argument, component, setToDisplay, fileName, defFScale, rgMinMax)
+        
+    def displayField(self,limitStateLabel, section,argument, component, setToDisplay, fileName, defFScale=0.0, rgMinMax=None):
+        '''Display a field defined over bi-dimensional elements in its two 
+           directions.
+
+        :param limitStateLabel: label that identifies the limit state.
+        :param section: section to display (1 or 2)
+        :param argument: name of the control var to represent.
+        :param component: component of the control var to represent.
+        :param setToDisplay: represent the field over those elements.
+        :param fileName: file name to store the image. If none -> window on screen.
+        :param defFScale: factor to apply to current displacement of nodes 
+                    so that the display position of each node equals to
+                    the initial position plus its displacement multiplied
+                    by this factor. (Defaults to 0.0, i.e. display of 
+                    initial/undeformed shape)
+        :param rgMinMax: range (vmin,vmax) with the maximum and minimum values  
+                    of the scalar field (if any) to be represented. All the values 
+                    less than vmin are displayed in blue and those greater than vmax 
+                    in red (defaults to None)
+        '''
+        if section not in [1,2]:
+            lmsg.warning('section', section, "doesn't exist, section 1 is displayed instead")
+            section=1
+        sectRef='Sect'+str(section)
+ 
+        if(setToDisplay==None):
+            setToDisplay= self.modelSpace.getTotalSet()
+        
         displaySettings= vtk_FE_graphic.DisplaySettingsFE()
         displaySettings.cameraParameters= self.getCameraParameters()
-        attributeName= limitStateLabel + 'Sect1'   #Normal stresses limit state direction 1.
+        attributeName= limitStateLabel + sectRef   #Normal stresses limit state direction 1.
         fUnitConv, unitDescription= self.outputStyle.getUnitParameters(argument)
 
         field= fields.getScalarFieldFromControlVar(attributeName,argument,setToDisplay,component,fUnitConv,rgMinMax)
         captionTexts= self.outputStyle.getCaptionTextsDict()
         sectDescr= self.outputStyle.directionDescription
         captionBaseText= captionTexts[limitStateLabel] + ', ' + captionTexts[argument] + unitDescription + '. '+ setToDisplay.description.capitalize()
-        field.display(displaySettings,caption=  captionBaseText + ', ' + sectDescr[0], fileName= fileName, defFScale= defFScale)
+        field.display(displaySettings,caption=  captionBaseText + ', ' + sectDescr[section-1], fileName= fileName, defFScale= defFScale)
 
-        attributeName= limitStateLabel + 'Sect2'   #Normal stresses limit state direction 2
-        field= fields.getScalarFieldFromControlVar(attributeName,argument,setToDisplay,component,fUnitConv,rgMinMax)
-        field.display(displaySettings,caption= captionBaseText + ', ' + sectDescr[1], fileName= fileName, defFScale= defFScale)
