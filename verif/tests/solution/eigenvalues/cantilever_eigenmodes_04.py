@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Tomado del example B46 del SOLVIA Verification Manual
+''' SOLVIA Verification Manual. Example B46.''' 
 
 from __future__ import print_function
 from __future__ import division
