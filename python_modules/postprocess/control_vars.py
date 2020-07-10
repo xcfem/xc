@@ -985,9 +985,6 @@ def extrapolate_control_var(elemSet,propName,argument,initialValue= 0.0):
      :param argument: name of the control variable to extrapolate.
      :param initialValue: initial value for the prop defined at the nodes.
     '''
-    print ('setType=',elemSet.type())
-    print('propName: ', propName)
-    print('argument: ', argument)
     eSet=elemSet.elements
     nodePropName= propName+'_'+argument
     nodeTags= ext.create_attribute_at_nodes(eSet,nodePropName,initialValue)

@@ -361,64 +361,6 @@ class RecordLoadCaseDisp(RecordDisp):
       texFile.write('\\clearpage\n')
 
 
-def checksReports(limitStateLabel,setsShEl,argsShEl,cfg,setsBmElView=[],argsBmElScale=[]):
-    '''Create a LaTeX report including the desired graphical results obtained
-     in the verification of a limit state.
-
-    :param limitStateLabel: limit state
-    :param setsShEl:   Ordered list of sets of shell elements (defined in 
-                       model_data.py as instances of utils_display.setToDisplay)
-                       to be included in the report
-    :param argsShEl:   Ordered list of arguments to be included in the report   
-                       for shell elements
-    :param cfg:        instance of EnvConfig class with config parameters
-    :param setsBmView: Ordered list of lists [set of beam elements, view to 
-                       represent this set] to be included in the report. 
-                       The sets have been defined in model_data.py 
-                       as instances of utils_display.setToDisplay and the 
-                       possible views are: 'XYZPos','XNeg','XPos','YNeg','YPos',
-                       'ZNeg','ZPos'  (defaults to 'XYZPos')
-    :param argsBmElScale:   Ordered list of lists [arguments, scale to represent the 
-                            argument] to be included in the report for beam elements
-    '''
-    texReportFile= cfg.projectDirTree.getReportFile(limitStateLabel)
-    report=open(texReportFile,'w')    #report latex file
-    dfDisp= vtk_FE_graphic.DisplaySettingsFE()
-    fullPath= cfg.projectDirTree.getReportGrPath(limitStateLabel)
-    rltvPath= cfg.projectDirTree.getReportRltvGrPath(limitStateLabel)
-
-    for st in setsShEl:
-        for arg in argsShEl:
-            attributeName= limitStateLabel + 'Sect1'
-            field= fields.getScalarFieldFromControlVar(attributeName,arg,st,None,1.0,None)
-            capt=cfg.capTexts[limitStateLabel] + '. '+ st.description.capitalize() + ', ' + cfg.capTexts[arg] + ', ' + 'section 1'
-            fullgrFileNm=fullPath+st.name+arg+'Sect1'
-            rltvgrFileNm=rltvPath+st.name+arg+'Sect1'
-            field.display(displaySettings=dfDisp,caption=capt,fileName=fullgrFileNm+'.jpg')
-            insertGrInTex(texFile=report,grFileNm=rltvgrFileNm,grWdt=cfg.grWidth,capText=capt)
-
-            attributeName= limitStateLabel + 'Sect2'
-            field= fields.getScalarFieldFromControlVar(attributeName,arg,st,None,1.0,None)
-            capt=cfg.capTexts[limitStateLabel] + '. '+ st.description.capitalize() + ', ' + cfg.capTexts[arg] + ', ' + 'section 2'
-            fullgrFileNm=fullPath+st.name+arg+'Sect2'
-            rltvgrFileNm=rltvPath+st.name+arg+'Sect2'
-            field.display(displaySettings=dfDisp,caption=capt,fileName=fullgrFileNm+'.jpg')
-            insertGrInTex(texFile=report,grFileNm=rltvgrFileNm,grWdt=cfg.grWidth,capText=capt)
-    for stV in setsBmElView:
-        for argS in argsBmElScale:
-            unitConversionFactor, unDesc= cfg.getUnitParameters(argS[0])
-            diagram= cvd.ControlVarDiagram(scaleFactor=argS[1],fUnitConv=unitConversionFactor,sets=[stV[0]],attributeName= limitStateLabel,component= argS[0])
-            diagram.addDiagram()
-            dfDisp.cameraParameters= vtk_graphic_base.CameraParameters(stV[1])
-            dfDisp.setupGrid(stV[0])
-            dfDisp.defineMeshScene(None)
-            dfDisp.appendDiagram(diagram)
-            capt= cfg.capTexts[limitStateLabel]  + '. '+ stV[0].description.capitalize() + ', ' + cfg.capTexts[argS[0]] 
-            fullgrFileNm=fullPath+stV[0].name+argS[0]
-            rltvgrFileNm=rltvPath+stV[0].name+argS[0]
-            dfDisp.displayScene(caption=capt,fileName=fullgrFileNm+'.jpg')
-            insertGrInTex(texFile=report,grFileNm=rltvgrFileNm,grWdt=cfg.grWidth,capText=capt)
-    report.close()
 
 def insertGrInTex(texFile,grFileNm,grWdt,capText,labl=''):
     '''Include a graphic in a LaTeX file.
