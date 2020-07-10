@@ -1,11 +1,15 @@
 # -*- coding: utf-8 -*-
 from __future__ import print_function
-''' Tomado de la figura 6.22 de "Finite Element Procedures"
-de "Klaus Jurgen Bathe". '''
-''' NO DA MUY BUENOS RESULTADOS
+''' Taken from figure 6.22 of "Finite Element Procedures"
+     by "Klaus Jurgen Bathe".
 
-   The problem is probably related with the fact that the elements are unable
-   to reproduce the little delta effect (see example test_pdelta_01.xc).
+    We use 6 elements instead of 2 to capture the P-d (small delta) effect.
+    To capture the geometric non-linearity "inside" the element you need to 
+    use a different element formulation, e.g., nonlinear strain in the 
+    displacement-based formulation or curvature-based displacement 
+    interpolation (CBDI) in the force-based formulation.
+
+    See the article 'Meshing for Column Loads <https://portwooddigital.com/2020/05/10/meshing-for-column-loads/amp/>'
  '''
 import xc_base
 import geom
@@ -34,7 +38,7 @@ G= E/(2*(1+nu)) # Shear modulus
 J= 0.001 # Cross section torsion constant (m4) (ES IRRELEVANTE)
 P= -100 # Carga vertical sobre la columna.
 
-NumDiv= 4
+NumDiv= 6
 
 # Problem type
 feProblem= xc.FEProblem()
@@ -110,11 +114,10 @@ eig1= analysis.getEigenvalue(1)
 
 deltay= n2.getDisp[2] 
   
-
 deltayTeor= P*L/(E*A)
-ratio1= (deltay-deltayTeor)/deltayTeor
+ratio1= abs(deltay-deltayTeor)/deltayTeor
 blCalc= eig1*P
-blTeor= -1*math.pi**2*E*Iz/(L**2)
+blTeor= -1.0*math.pi**2*E*Iz/(L**2)
 ratio2= (blCalc-blTeor)/blTeor
 
 ''' 
@@ -122,15 +125,15 @@ print("deltay= ",(deltay))
 print("deltayTeor= ",(deltayTeor))
 print("eig1= ",(eig1))
 print("ratio1= ",(ratio1))
-print("blCalc= ",(blCalc/1e3)," kN \n")
-print("blTeor= ",(blTeor/1e3)," kN \n")
+print("blCalc= ",(blCalc/1e3)," kN")
+print("blTeor= ",(blTeor/1e3)," kN")
 print("ratio2= ",(ratio2))
 '''
 
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
-if (abs(ratio1)<1e-5) & (abs(ratio2)<0.06):
+if (abs(ratio1)<1e-5) & (abs(ratio2)<0.03):
   print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')
