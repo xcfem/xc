@@ -80,7 +80,7 @@ agg.setAdditions(["T","Vy","Vz"],["respT","respVy","respVz"]) # Torsion and shea
 # Elements definition
 elements= preprocessor.getElementHandler
 elements.defaultTransformation= lin.name # Coordinate transformation for the new elements
-elements.defaultMaterial= "agg"
+elements.defaultMaterial= agg.name
 elements.numSections= 3 # Number of sections along the element.
 elements.defaultTag= 1
 el= elements.newElement("ForceBeamColumn2d",xc.ID([1,2]))

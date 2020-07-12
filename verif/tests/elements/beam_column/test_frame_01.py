@@ -54,7 +54,7 @@ section= typical_materials.defElasticSectionFromMechProp2d(preprocessor, "sectio
 # Elements definition
 elements= preprocessor.getElementHandler
 elements.defaultTransformation= lin.name
-elements.defaultMaterial= "section"
+elements.defaultMaterial= section.name
 elements.defaultTag= 1 #Tag for next element.
 beam2d= elements.newElement("ElasticBeam2d",xc.ID([1,2]))
 beam2d= elements.newElement("ElasticBeam2d",xc.ID([2,4]))

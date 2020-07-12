@@ -56,7 +56,7 @@ scc= typical_materials.defElasticSection3d(preprocessor, "scc",A,E,G,Iz,Iy,J)
 # Elements definition
 elements= preprocessor.getElementHandler
 elements.defaultTransformation= lin.name
-elements.defaultMaterial= "scc"
+elements.defaultMaterial= scc.name
 #  sintaxis: ElasticBeam3d[<tag>] 
 beam1= elements.newElement("ElasticBeam3d",xc.ID([nod1.tag,nod2.tag]))
 beam1.rho= densHorm*A

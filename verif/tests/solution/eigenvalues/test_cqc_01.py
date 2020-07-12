@@ -62,11 +62,11 @@ linY= modelSpace.newLinearCrdTransf("linY",xc.Vector([0,1,0]))
 
 # Elements definition
 elements= preprocessor.getElementHandler
-elements.defaultTransformation= "linX"
-elements.defaultMaterial= "scc"
+elements.defaultTransformation= linX.name
+elements.defaultMaterial= scc.name
 beam3d= elements.newElement("ElasticBeam3d",xc.ID([0,1]))
 beam3d= elements.newElement("ElasticBeam3d",xc.ID([1,2]))
-elements.defaultTransformation= "linY"
+elements.defaultTransformation= linY.name
 beam3d= elements.newElement("ElasticBeam3d",xc.ID([2,3]))
 
 

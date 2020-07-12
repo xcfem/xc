@@ -52,7 +52,7 @@ scc.sectionProperties.rotate(math.radians(90))
 # Elements definition
 elements= preprocessor.getElementHandler
 elements.defaultTransformation= lin.name
-elements.defaultMaterial= "scc"
+elements.defaultMaterial= scc.name
 elements.defaultTag= 1 #Tag for next element.
 beam3d= elements.newElement("ElasticBeam3d",xc.ID([1,2]))
 

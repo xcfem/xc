@@ -83,20 +83,20 @@ lin= modelSpace.newLinearCrdTransf("lin")
 # Elements definition
 elements= preprocessor.getElementHandler
 elements.defaultTransformation= lin.name
-elements.defaultMaterial= "sccPlBaja"
+elements.defaultMaterial= sccPlBaja.name
 elements.defaultTag= 1 #Tag for next element.
 beam2d= elements.newElement("ElasticBeam2d",xc.ID([0,1]))
 beam2d.h= Bbaja
-elements.defaultMaterial= "sccPl1a" 
+elements.defaultMaterial= sccPl1a.name 
 beam2d= elements.newElement("ElasticBeam2d",xc.ID([1,2]))
 beam2d.h= B1a
-elements.defaultMaterial= "sccPl2a" 
+elements.defaultMaterial= sccPl2a.name 
 beam2d= elements.newElement("ElasticBeam2d",xc.ID([2,3]))
 beam2d.h= B1a
-elements.defaultMaterial= "sccPl3a" 
+elements.defaultMaterial= sccPl3a.name 
 beam2d= elements.newElement("ElasticBeam2d",xc.ID([3,4]))
 beam2d.h= B3a
-elements.defaultMaterial= "sccPl4a" 
+elements.defaultMaterial= sccPl4a.name 
 beam2d= elements.newElement("ElasticBeam2d",xc.ID([4,5]))
 beam2d.h= B3a
 

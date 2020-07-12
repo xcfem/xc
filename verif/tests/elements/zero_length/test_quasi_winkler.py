@@ -49,7 +49,7 @@ scc= typical_materials.defElasticSection2d(preprocessor, "scc",A,E,I)
 
 seedElemHandler= preprocessor.getElementHandler.seedElemHandler
 seedElemHandler.defaultTransformation= lin.name
-seedElemHandler.defaultMaterial= "scc"
+seedElemHandler.defaultMaterial= scc.name
 seedElemHandler.defaultTag= 1 #Tag for next element.
 beam2d= seedElemHandler.newElement("ElasticBeam2d",xc.ID([0,0]))
 beam2d.h= h

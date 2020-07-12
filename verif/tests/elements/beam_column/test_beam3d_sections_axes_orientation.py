@@ -156,14 +156,14 @@ scc= typical_materials.defElasticSection3d(preprocessor=preprocessor, name="scc"
 
 # Elements definition
 elements= preprocessor.getElementHandler
-elements.defaultMaterial= "scc"
+elements.defaultMaterial= scc.name
 elements.defaultTag= 1 #Tag for next element.
 
-elements.defaultTransformation= "ltXbeam"
+elements.defaultTransformation= ltXbeam.name
 beam3dX= elements.newElement("ElasticBeam3d",xc.ID([0,1]))
-elements.defaultTransformation= "ltYbeam"
+elements.defaultTransformation= ltYbeam.name
 beam3dY= elements.newElement("ElasticBeam3d",xc.ID([0,2]))
-elements.defaultTransformation= "ltZbeam"
+elements.defaultTransformation= ltZbeam.name
 beam3dZ= elements.newElement("ElasticBeam3d",xc.ID([0,3]))
 
     

@@ -69,7 +69,7 @@ A= fibras.getArea(1.0) #Get the sum of the fiber areas.
 # Elements definition
 elements= preprocessor.getElementHandler
 elements.defaultTransformation= lin.name
-elements.defaultMaterial= "quadFibers" #Material name for the element (the fiber section).
+elements.defaultMaterial= quadFibers.name #Material name for the element (the fiber section).
 beam3d= elements.newElement("ForceBeamColumn3d",xc.ID([1,2]))
 
 # Constraints

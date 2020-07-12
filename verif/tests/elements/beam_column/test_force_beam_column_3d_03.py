@@ -75,7 +75,7 @@ agg.setAdditions(["T","Vy","Vz"],["respT","respVy","respVz"])
 # Elements definition
 elements= preprocessor.getElementHandler
 elements.defaultTransformation= lin.name
-elements.defaultMaterial= "agg"
+elements.defaultMaterial= agg.name
 elements.numSections= 3 # Number of sections along the element.
 elements.defaultTag= 1
 el= elements.newElement("ForceBeamColumn3d",xc.ID([1,2]))

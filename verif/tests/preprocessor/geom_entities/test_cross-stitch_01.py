@@ -72,7 +72,7 @@ feProblem.setVerbosityLevel(1) #print(warnings again )
 # for n in totalSetNodes:
 #   print("node tag: ", n.tag)
 
-elements.defaultMaterial= "scc"
+elements.defaultMaterial= scc.name
 for i in range(1,NumDiv+2):
   n1= l1.getNodeI(i)
   n2= l2.getNodeI(i)

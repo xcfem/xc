@@ -51,7 +51,7 @@ lin= modelSpace.newLinearCrdTransf("lin")
 ## Element definition
 elements= preprocessor.getElementHandler
 elements.defaultTransformation= lin.name
-elements.defaultMaterial= "scc"
+elements.defaultMaterial= scc.name
 #  sintaxis: beam2d_02[<tag>] 
 beam2d= elements.newElement("ElasticBeam2d",xc.ID([nod1.tag,nod2.tag]))
 beam2d.sectionProperties.h= h

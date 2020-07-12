@@ -55,7 +55,7 @@ scc.sectionProperties.rotate(math.radians(90))
 # Elements definition
 elements= preprocessor.getElementHandler
 elements.defaultTransformation= lin.name
-elements.defaultMaterial= "scc"
+elements.defaultMaterial= scc.name
 elements.defaultTag= 1
 beam= elements.newElement("ForceBeamColumn3d",xc.ID([1,2]))
 

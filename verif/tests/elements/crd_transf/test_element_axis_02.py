@@ -59,7 +59,7 @@ A= fibers.getArea
 # Elements definition
 elements= preprocessor.getElementHandler
 elements.defaultTransformation= lin.name
-elements.defaultMaterial= "quadFibers"
+elements.defaultMaterial= quadFibers.name
 beam3d= elements.newElement("ForceBeamColumn3d",xc.ID([1,2]))
 
 

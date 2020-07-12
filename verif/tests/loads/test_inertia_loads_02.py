@@ -55,11 +55,11 @@ section= typical_materials.defElasticSectionFromMechProp3d(preprocessor, "sectio
 # Element definition.
 elements= preprocessor.getElementHandler
 elements.dimElem= 3 # Three-dimensional space.
-elements.defaultMaterial= "elast"
+elements.defaultMaterial= elast.name
 truss= elements.newElement("Truss",xc.ID([n1.tag,n2.tag]))
 truss.sectionArea= A
 elements.defaultTransformation= lin.name
-elements.defaultMaterial= "section"
+elements.defaultMaterial= section.name
 beam= elements.newElement("ElasticBeam3d",xc.ID([n1.tag,n2.tag]))
 constraints= preprocessor.getBoundaryCondHandler
 #Zero movement for node 1.

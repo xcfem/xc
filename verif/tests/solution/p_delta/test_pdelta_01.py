@@ -55,8 +55,8 @@ scc= typical_materials.defElasticSection2d(preprocessor, "scc",area,Es,Iz)
 pd= modelSpace.newPDeltaCrdTransf("pd")
 
 seedElemHandler= preprocessor.getElementHandler.seedElemHandler
-seedElemHandler.defaultTransformation= "pd"
-seedElemHandler.defaultMaterial= "scc"
+seedElemHandler.defaultTransformation= pd.name
+seedElemHandler.defaultMaterial= scc.name
 seedElemHandler.defaultTag= 1 #Tag for next element.
 beam2d= seedElemHandler.newElement("ElasticBeam2d",xc.ID([0,0]))
 

@@ -34,7 +34,7 @@ elements= preprocessor.getElementHandler
 
 elements.defaultTransformation= lin.name # Coordinate transformation for the new elements
 elements.defaultTag= 1 #Tag for the next element.
-elements.defaultMaterial= "section"
+elements.defaultMaterial= section.name
 beam3d= elements.newElement("ElasticBeam3d",xc.ID([1,2]))
 
 crdTransf= beam3d.getCoordTransf
