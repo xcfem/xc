@@ -34,7 +34,7 @@ nod= nodes.newNodeXY(0,0)
 nod= nodes.newNodeXY(l,0.0)
 
 # Materials definition
-mat= typical_materials.defCableMaterial(preprocessor, "cable",E,sigmaPret,0.0)
+cable= typical_materials.defCableMaterial(preprocessor, "cable",E,sigmaPret,0.0)
     
 ''' We define nodes at the points where loads will be applied.
     We will not compute stresses so we can use an arbitrary
@@ -42,7 +42,7 @@ mat= typical_materials.defCableMaterial(preprocessor, "cable",E,sigmaPret,0.0)
 
 # Elements definition
 elements= preprocessor.getElementHandler
-elements.defaultMaterial= "cable"
+elements.defaultMaterial= cable.name
 elements.dimElem= 2 # Dimension of element space
 #  sintaxis: truss[<tag>] 
 elements.defaultTag= 1 #Tag for the next element.

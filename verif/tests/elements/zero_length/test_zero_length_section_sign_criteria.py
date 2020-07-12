@@ -81,7 +81,7 @@ sa.setAdditions(["T","Vy","Vz"],["respT","respVy","respVz"])
 
 # Elements definition
 elements= preprocessor.getElementHandler
-elements.defaultMaterial= "sa"
+elements.defaultMaterial= sa.name
 elements.dimElem= 1 # Dimension of element space
 elements.defaultTag= 1
 #  sintaxis: zero_length[<tag>] 

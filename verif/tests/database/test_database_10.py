@@ -41,7 +41,7 @@ mat= typical_materials.defSteel02(preprocessor, "prestressingSteel",E,fy,0.001,t
     
 # Elements definition
 elements= preprocessor.getElementHandler
-elements.defaultMaterial= "prestressingSteel"
+elements.defaultMaterial= mat.name
 elements.dimElem= 2 # Dimension of element space
 elements.defaultTag= 1 #Tag for the next element.
 truss= elements.newElement("Truss",xc.ID([1,2]))

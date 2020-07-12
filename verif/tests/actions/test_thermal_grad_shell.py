@@ -22,10 +22,10 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "ana.ortega@ciccp.es l.pereztato@gmail.com"
 
-L= 1.0 # Size of element edge (m)
+L= 1.0#  Size of element edge (m)
 E= 2.1e6*9.81/1e-4 # Elastic modulus
 alpha= 1.2e-5 # Thermal expansion coefficient of steel 1/ºC
-b= 1 #width of the element
+b= 1 # width of the element
 #A= h*h # bar area expressed in square meters
 #I= (h)**4/12 # Cross section moment of inertia (m4)
 Ttop=10 # Temperature at top side (Celsius degrees)
@@ -50,7 +50,7 @@ memb1= typical_materials.defElasticMembranePlateSection(preprocessor=preprocesso
 
 # Elements definition
 elements= preprocessor.getElementHandler
-elements.defaultMaterial= "memb1"
+elements.defaultMaterial= memb1.name
 elements.defaultTag= 1
 elem1= elements.newElement("ShellMITC4",xc.ID([nod1.tag,nod2.tag,nod3.tag,nod4.tag]))
 

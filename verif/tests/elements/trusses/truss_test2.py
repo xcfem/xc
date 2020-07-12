@@ -46,7 +46,7 @@ elast.E= E
 # Element definition.
 elements= preprocessor.getElementHandler
 elements.dimElem= 2 #Bidimensional space.
-elements.defaultMaterial= "elast"
+elements.defaultMaterial= elast.name
 truss1= elements.newElement("Truss",xc.ID([n1.tag,n2.tag]))
 truss1.sectionArea= A
 truss2= elements.newElement("Truss",xc.ID([n2.tag,n3.tag]))

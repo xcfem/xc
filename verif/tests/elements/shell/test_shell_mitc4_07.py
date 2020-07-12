@@ -41,12 +41,12 @@ elast= typical_materials.defElasticMaterial(preprocessor, "elast",E)
 
 
 # Define materials
-nmb1= typical_materials.defElasticMembranePlateSection(preprocessor, "memb1",E,nu,0.0,thickness)
+memb1= typical_materials.defElasticMembranePlateSection(preprocessor, "memb1",E,nu,0.0,thickness)
 
 
 
 seedElemHandler= preprocessor.getElementHandler.seedElemHandler
-seedElemHandler.defaultMaterial= "memb1"
+seedElemHandler.defaultMaterial= memb1.name
 seedElemHandler.defaultTag= 1
 elem= seedElemHandler.newElement("ShellMITC4",xc.ID([0,0,0,0]))
 

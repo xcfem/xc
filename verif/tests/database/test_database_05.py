@@ -43,10 +43,10 @@ nodes.newNodeIDXYZ(8,L,h,0)
 
 
 # Materials definition
-nmb1= typical_materials.defElasticMembranePlateSection(preprocessor, "memb1",E,nu,0.0,h)
+memb1= typical_materials.defElasticMembranePlateSection(preprocessor, "memb1",E,nu,0.0,h)
 
 elements= preprocessor.getElementHandler
-elements.defaultMaterial= "memb1"
+elements.defaultMaterial= memb1.name
 elements.defaultTag= 1
 elem= elements.newElement("ShellMITC4",xc.ID([1,2,6,5]))
 

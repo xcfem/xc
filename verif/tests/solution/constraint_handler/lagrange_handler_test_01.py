@@ -47,7 +47,7 @@ elast= typical_materials.defElasticMaterial(preprocessor, "elast",E)
     
 # Elements definition
 elements= preprocessor.getElementHandler
-elements.defaultMaterial= "elast"
+elements.defaultMaterial= elast.name
 elements.dimElem= 2 # Dimension of element space
 #  sintaxis: truss[<tag>] 
 #  sintaxis: truss[tag,nmb_mat,dim] 

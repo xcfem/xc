@@ -35,7 +35,7 @@ modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
 
 
 # Define materials
-typical_materials.defCableMaterial(preprocessor, "cable",E,sigmaPret,0.0)
+cable= typical_materials.defCableMaterial(preprocessor, "cable",E,sigmaPret,0.0)
     
 ''' We define nodes at the points where loads will be applied.
     We will not compute stresses so we can use an arbitrary
@@ -43,7 +43,7 @@ typical_materials.defCableMaterial(preprocessor, "cable",E,sigmaPret,0.0)
     
 # Seed element definition
 seedElemHandler= preprocessor.getElementHandler.seedElemHandler
-seedElemHandler.defaultMaterial= "cable"
+seedElemHandler.defaultMaterial= cable.name
 seedElemHandler.dimElem= 3 # Dimension of element space
 seedElemHandler.defaultTag= 1 #Number for the next element will be 1.
 truss= seedElemHandler.newElement("CorotTruss",xc.ID([1,2]))

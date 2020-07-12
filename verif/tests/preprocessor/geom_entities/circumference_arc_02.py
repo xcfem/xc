@@ -30,7 +30,7 @@ nodes= preprocessor.getNodeHandler
 modelSpace= predefined_spaces.SolidMechanics3D(nodes)
 
 seedElemHandler= preprocessor.getElementHandler.seedElemHandler
-seedElemHandler.defaultMaterial= "elast"
+seedElemHandler.defaultMaterial= elast.name
 seedElemHandler.dimElem= 3 # Dimension of element space
 seedElemHandler.defaultTag= 1 #Tag for the next element.
 truss= seedElemHandler.newElement("Truss",xc.ID([0,0]))

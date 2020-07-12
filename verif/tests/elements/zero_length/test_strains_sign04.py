@@ -62,7 +62,7 @@ nod= nodes.newNodeXYZ(0.0,0.0,0.0)
 
 # Elements definition
 elements= preprocessor.getElementHandler
-elements.defaultMaterial= "fourFibersSection"
+elements.defaultMaterial= fourFibersSection.name
 elements.dimElem= 1 # Dimension of element space
 zl= elements.newElement("ZeroLengthSection",xc.ID([1,2]))
 

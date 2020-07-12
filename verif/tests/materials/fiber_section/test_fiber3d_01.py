@@ -73,7 +73,7 @@ print("fibra: ",tag, " mat. tag:", getMaterial.tag)
 
 # Elements definition
 elements= preprocessor.getElementHandler
-elements.defaultMaterial= "quadFibers"
+elements.defaultMaterial= quadFibers.name
 elements.dimElem= 1 # Dimension of element space
 elements.defaultTag= 1
 zl= elements.newElement("ZeroLengthSection",xc.ID([1,2]))

@@ -44,7 +44,7 @@ n4= nodes.newNodeXY(1,1)
 elast2d= typical_materials.defElasticIsotropicPlaneStress(preprocessor, "elast2d",E,nu,rho)
 # Elements definition
 elements= preprocessor.getElementHandler
-elements.defaultMaterial= "elast2d"
+elements.defaultMaterial= elast2d.name
 quad4n= elements.newElement("FourNodeQuad",xc.ID([n1.tag,n2.tag,n3.tag,n4.tag]))
 
 maxAngle= quad4n.getMaximumCornerAngle(True)

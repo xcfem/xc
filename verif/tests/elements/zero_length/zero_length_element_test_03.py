@@ -45,7 +45,7 @@ kt= typical_materials.defElasticMaterial(preprocessor, "kt",KT)
     
 # Elements definition
 elements= preprocessor.getElementHandler
-elements.defaultMaterial= "kx"
+elements.defaultMaterial= kx.name
 elements.dimElem= 3 # Dimension of element space
 zl= elements.newElement("ZeroLength",xc.ID([1,2]))
 zl.clearMaterials()

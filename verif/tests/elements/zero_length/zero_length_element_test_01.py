@@ -34,7 +34,7 @@ elast= typical_materials.defElasticMaterial(preprocessor, "elast",K)
 
 # Elements definition
 elements= preprocessor.getElementHandler
-elements.defaultMaterial= "elast"
+elements.defaultMaterial= elast.name
 elements.dimElem= 1 #Element dimension.
 elements.defaultTag= 1
 zl= elements.newElement("ZeroLength",xc.ID([n1.tag,n2.tag]))

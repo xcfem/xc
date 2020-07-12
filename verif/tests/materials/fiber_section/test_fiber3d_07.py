@@ -83,7 +83,7 @@ TEIz= fiberSectionTest.getTangentStiffness().at(3,3)
 
 # Elements definition
 elements= preprocessor.getElementHandler
-elements.defaultMaterial= "fiberSectionTest"
+elements.defaultMaterial= fiberSectionTest.name
 elements.defaultTag= 1
 zl= elements.newElement("ZeroLengthSection",xc.ID([1,2]))
 

@@ -38,7 +38,7 @@ n2= nodes.newNodeXY(l,0)
 
 elements= preprocessor.getElementHandler
 elements.dimElem= 2 #Bars defined in a two dimensional space.
-elements.defaultMaterial= "section"
+elements.defaultMaterial= section.name
 trussA= elements.newElement("TrussSection",xc.ID([n1.tag,n2.tag]))
 trussB= elements.newElement("TrussSection",xc.ID([n1.tag,n2.tag]))
 

@@ -34,7 +34,7 @@ elasticMembranePlateSectionTest= typical_materials.defElasticMembranePlateSectio
 
 
 seedElemHandler= preprocessor.getElementHandler.seedElemHandler
-seedElemHandler.defaultMaterial= "elasticMembranePlateSectionTest"
+seedElemHandler.defaultMaterial= elasticMembranePlateSectionTest.name
 elem= seedElemHandler.newElement("ShellMITC4",xc.ID([0,0,0,0]))
 
 points= preprocessor.getMultiBlockTopology.getPoints

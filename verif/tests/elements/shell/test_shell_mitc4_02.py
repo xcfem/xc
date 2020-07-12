@@ -36,7 +36,7 @@ nod4= nodes.newNodeXYZ(0,1,1)
 memb1= typical_materials.defElasticPlateSection(preprocessor, "memb1",E,nu,0,h)
 
 elements= preprocessor.getElementHandler
-elements.defaultMaterial= "memb1"
+elements.defaultMaterial= memb1.name
 elem= elements.newElement("ShellMITC4",xc.ID([nod1.tag,nod2.tag,nod3.tag,nod4.tag]))
 
 v1= xc.Vector([0,math.sqrt(2)/2,math.sqrt(2)/2])

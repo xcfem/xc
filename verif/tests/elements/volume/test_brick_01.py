@@ -26,7 +26,7 @@ from postprocess import output_handler
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
 # Materials definition
-elast= typical_materials.defElasticIsotropic3d(preprocessor, "elast3d",200000,0.3,0.0)
+elast3d= typical_materials.defElasticIsotropic3d(preprocessor, "elast3d",200000,0.3,0.0)
 
 nodes= preprocessor.getNodeHandler 
 modelSpace= predefined_spaces.SolidMechanics3D(nodes)
@@ -55,7 +55,7 @@ nod19= nodes.newNodeXYZ(0,300,0)
 nod20= nodes.newNodeXYZ(0,200,0)
 
 elements= preprocessor.getElementHandler
-elements.defaultMaterial= "elast3d"
+elements.defaultMaterial= elast3d.name
 elements.defaultTag= 1 #Tag for the next element.
 
 brick1= elements.newElement("Brick",xc.ID([1,2,3,4,5,6,7,8]))

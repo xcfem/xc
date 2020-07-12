@@ -53,7 +53,7 @@ s.nDivJ= NumDiv
 
 
 seedElemHandler= preprocessor.getElementHandler.seedElemHandler
-seedElemHandler.defaultMaterial= "elast"
+seedElemHandler.defaultMaterial= elast.name
 elem= seedElemHandler.newElement("ShellMITC4",xc.ID([0,0,0,0]))
 
 

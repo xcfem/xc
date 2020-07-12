@@ -40,7 +40,7 @@ k= typical_materials.defElasticMaterial(preprocessor, "k",K)
     
 # Elements definition
 elements= preprocessor.getElementHandler
-elements.defaultMaterial= "k"
+elements.defaultMaterial= k.name
 elements.dimElem= 3 # Dimension of element space
 elements.deraultTag= 1
 zl1= elements.newElement("ZeroLength",xc.ID([1,2]))

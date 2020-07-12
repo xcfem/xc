@@ -53,7 +53,7 @@ pmax0= bnd0.pMax
 elast2d= typical_materials.defElasticIsotropicPlaneStress(preprocessor, "elast2d",E,nu,rho)
 # Elements definition
 elements= preprocessor.getElementHandler
-elements.defaultMaterial= "elast2d"
+elements.defaultMaterial= elast2d.name
 a= elements.newElement("FourNodeQuad",xc.ID([1,2,3,4]))
 b= elements.newElement("FourNodeQuad",xc.ID([2,5,6,3]))
 c= elements.newElement("FourNodeQuad",xc.ID([3,6,7,8]))

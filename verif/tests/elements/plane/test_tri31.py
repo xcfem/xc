@@ -43,7 +43,7 @@ n4= nodes.newNodeIDXY(4,0,1)
 elast2d= typical_materials.defElasticIsotropicPlaneStress(preprocessor, "elast2d",E,nu,rho)
 # Elements definition
 elements= preprocessor.getElementHandler
-elements.defaultMaterial= "elast2d"
+elements.defaultMaterial= elast2d.name
 tri31= elements.newElement("tri31",xc.ID([1,2,3]))
 tri31.thickness= t
 tri31= elements.newElement("tri31",xc.ID([3,4,1]))

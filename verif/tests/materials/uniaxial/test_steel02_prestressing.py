@@ -35,11 +35,11 @@ nod= nodes.newNodeXY(L,0.0)
 
 
 # Materials definition
-typical_materials.defSteel02(preprocessor, "prestressingSteel",E,fy,0.001,tInic)
+prestressingSteel= typical_materials.defSteel02(preprocessor, "prestressingSteel",E,fy,0.001,tInic)
     
 # Elements definition
 elements= preprocessor.getElementHandler
-elements.defaultMaterial= "prestressingSteel"
+elements.defaultMaterial= prestressingSteel.name
 elements.dimElem= 2 # Dimension of element space
 elements.defaultTag= 1 #Tag for the next element.
 truss= elements.newElement("Truss",xc.ID([1,2]))

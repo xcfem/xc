@@ -43,7 +43,7 @@ ky= typical_materials.defElasticMaterial(preprocessor, "ky",KY)
     
 # Elements definition
 elements= preprocessor.getElementHandler
-elements.defaultMaterial= "kx"
+elements.defaultMaterial= kx.name
 elements.dimElem= 2 # Dimension of element space
 elements.defaultTag= 1
 elem= elements.newElement("ZeroLength",xc.ID([1,2]))

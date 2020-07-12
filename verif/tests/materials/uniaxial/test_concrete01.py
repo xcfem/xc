@@ -69,7 +69,7 @@ print("TunloadSlope= ",TunloadSlope)
     
 # Elements definition
 elements= preprocessor.getElementHandler
-elements.defaultMaterial= "horm"
+elements.defaultMaterial= horm.name
 elements.dimElem= 2 # Dimension of element space
 #  sintaxis: Spring[<tag>] 
 spring= elements.newElement("Spring",xc.ID([1,2]))

@@ -60,7 +60,7 @@ n2= nodeHandler.newNodeX(2)
 elementHandler= preprocessor.getElementHandler
 elementHandler.dimElem= 1 #Bars defined in a two dimensional space.
 fakeMaterial= typical_materials.defElasticMaterial(preprocessor, "fakeMaterial",10)
-elementHandler.defaultMaterial= "fakeMaterial"
+elementHandler.defaultMaterial= fakeMaterial.name
 fakeElement= elementHandler.newElement("ZeroLength",xc.ID([0,0]))
 fakeElement.setVerbosityLevel(0) # Avoid warning about set element tag
 fakeElement.tag= 3063

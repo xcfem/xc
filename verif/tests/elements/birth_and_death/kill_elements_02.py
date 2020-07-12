@@ -47,7 +47,7 @@ memb1= typical_materials.defElasticMembranePlateSection(preprocessor, "memb1",E,
 
 # Elements definition
 elements= preprocessor.getElementHandler
-elements.defaultMaterial= "memb1"
+elements.defaultMaterial= memb1.name
 elemA= elements.newElement("ShellMITC4",xc.ID([n1.tag,n2.tag,n3.tag,n4.tag]))
 elemB= elements.newElement("ShellMITC4",xc.ID([n5.tag,n6.tag,n7.tag,n8.tag]))
     

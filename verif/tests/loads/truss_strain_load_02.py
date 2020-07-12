@@ -43,7 +43,7 @@ scc= typical_materials.defElasticSection1d(preprocessor, "scc",A,E)
 
 # Elements definition
 elements= preprocessor.getElementHandler
-elements.defaultMaterial= "scc"
+elements.defaultMaterial= scc.name
 elements.dimElem= 2 # Dimension of element space
 elements.defaultTag= 1 #Tag for the next element.
 truss= elements.newElement("TrussSection",xc.ID([nod1.tag,nod2.tag]))

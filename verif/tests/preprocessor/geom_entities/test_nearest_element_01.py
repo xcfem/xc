@@ -29,7 +29,7 @@ for i in range(1,1001):
 elast= typical_materials.defElasticMaterial(preprocessor, "elast",2.1e6)
 
 elements= preprocessor.getElementHandler
-elements.defaultMaterial= "elast"
+elements.defaultMaterial= elast.name
 elements.dimElem= 2 # Dimension of element space
 elements.defaultTag= 1 #Tag for the next element.
 for i in range(1,numElements):

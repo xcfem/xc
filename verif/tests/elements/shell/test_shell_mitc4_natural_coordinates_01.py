@@ -42,7 +42,7 @@ nodes.newNodeIDXYZ(4,p4.x,p4.y,p4.z)
 memb1= typical_materials.defElasticMembranePlateSection(preprocessor, "memb1",E,nu,dens,h)
 
 elements= preprocessor.getElementHandler
-elements.defaultMaterial= "memb1"
+elements.defaultMaterial= memb1.name
 elem= elements.newElement("ShellMITC4",xc.ID([1,2,3,4]))
 
 c= elem.getCoordTransf.getVPosCentroide

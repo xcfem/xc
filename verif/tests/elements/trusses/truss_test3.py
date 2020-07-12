@@ -47,7 +47,7 @@ section= typical_materials.defElasticSectionFromMechProp1d(preprocessor, "sectio
 # Element definition.
 elements= preprocessor.getElementHandler
 elements.dimElem= 2 #Two-dimensional space.
-elements.defaultMaterial= "section"
+elements.defaultMaterial= section.name
 truss1= elements.newElement("TrussSection",xc.ID([n1.tag,n2.tag]))
 truss2= elements.newElement("TrussSection",xc.ID([n2.tag,n3.tag]))
 

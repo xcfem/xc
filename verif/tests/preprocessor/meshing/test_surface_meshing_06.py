@@ -39,7 +39,7 @@ elast= typical_materials.defElasticMaterial(preprocessor, "elast",3000)
 elast2d= typical_materials.defElasticIsotropicPlaneStress(preprocessor, "elast2d",E,nu,rho)
 
 seedElemHandler= preprocessor.getElementHandler.seedElemHandler
-seedElemHandler.defaultMaterial= "elast2d"
+seedElemHandler.defaultMaterial= elast2d.name
 elem= seedElemHandler.newElement("FourNodeQuad",xc.ID([0,0,0,0]))
 
 

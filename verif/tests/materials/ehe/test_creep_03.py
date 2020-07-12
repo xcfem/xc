@@ -69,11 +69,11 @@ nod= nodes.newNodeXYZ(3,2,0)
 
 hLosa= typical_materials.defElasticMembranePlateSection(preprocessor, "hLosa",Ec,nuC,densLosa,hLosa)
 
-typical_materials.defSteel02(preprocessor, "prestressingSteel",Ep,fy,0.001,tInic)
+prestressingSteel= typical_materials.defSteel02(preprocessor, "prestressingSteel",Ep,fy,0.001,tInic)
 
 elements= preprocessor.getElementHandler
 # Reinforced concrete deck
-elements.defaultMaterial= "hLosa"
+elements.defaultMaterial= hLosa.name
 elements.defaultTag= 1
 elem= elements.newElement("ShellMITC4",xc.ID([1,2,6,5]))
 
@@ -84,7 +84,7 @@ elem= elements.newElement("ShellMITC4",xc.ID([6,7,11,10]))
 elem= elements.newElement("ShellMITC4",xc.ID([7,8,12,11]))
 
 # active reinforcement
-elements.defaultMaterial= "prestressingSteel"
+elements.defaultMaterial= prestressingSteel.name
 elements.dimElem= 3 # Dimension of element space
 truss= elements.newElement("Truss",xc.ID([1,2]))
 truss.sectionArea= Ap

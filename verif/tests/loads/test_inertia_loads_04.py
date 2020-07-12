@@ -45,7 +45,7 @@ trussScc= typical_materials.defElasticSection1d(preprocessor, "trussScc",A,E, rh
 # Element definition.
 elements= preprocessor.getElementHandler
 elements.dimElem= 3 # Three-dimensional space.
-elements.defaultMaterial= "trussScc"
+elements.defaultMaterial= trussScc.name
 truss= elements.newElement("TrussSection",xc.ID([n1.tag,n2.tag]))
 
 constraints= preprocessor.getBoundaryCondHandler

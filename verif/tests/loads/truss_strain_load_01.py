@@ -43,7 +43,7 @@ elast= typical_materials.defElasticMaterial(preprocessor, "elast",E)
     
 # Elements definition
 elements= preprocessor.getElementHandler
-elements.defaultMaterial= "elast"
+elements.defaultMaterial= elast.name
 elements.dimElem= 2 # Dimension of element space
 truss= elements.newElement("Truss",xc.ID([nod1.tag,nod2.tag]))
 truss.sectionArea= A
