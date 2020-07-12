@@ -38,7 +38,7 @@ nodes.defaultTag= 1
 # Geometric transformation(s)
 lin= modelSpace.newLinearCrdTransf("lin")
 elements= preprocessor.getElementHandler
-elements.defaultTransformation= "lin"
+elements.defaultTransformation= lin.name
  
 
 points= preprocessor.getMultiBlockTopology.getPoints

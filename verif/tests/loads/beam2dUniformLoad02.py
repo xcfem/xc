@@ -45,7 +45,7 @@ scc= typical_materials.defElasticSection2d(preprocessor, "scc",sectionTest.A(),s
 
 # Elements definition
 elements= preprocessor.getElementHandler
-elements.defaultTransformation= "lin"
+elements.defaultTransformation= lin.name
 elements.defaultMaterial= "scc" 
 elements.defaultMaterial= sectionTest.sectionName
 elements.numSections= 3 # Number of sections along the element.

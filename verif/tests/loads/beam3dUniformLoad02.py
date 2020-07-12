@@ -46,7 +46,7 @@ nod= nodes.newNodeXYZ(L,0,0)
 lin= modelSpace.newLinearCrdTransf("lin",xc.Vector([0,0,1]))    
 # Elements definition
 elements= preprocessor.getElementHandler
-elements.defaultTransformation= "lin"
+elements.defaultTransformation= lin.name
 elements.defaultMaterial= seccTest.sectionName
 elements.numSections= 3 # Number of sections along the element.
 elements.defaultTag= 1

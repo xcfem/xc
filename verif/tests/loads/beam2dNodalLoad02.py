@@ -54,7 +54,7 @@ scc= typical_materials.defElasticSection2d(preprocessor, "scc",A,E,I)
 
 # Elements definition
 elements= preprocessor.getElementHandler
-elements.defaultTransformation= "lin"# Coordinate transformation for the new elements
+elements.defaultTransformation= lin.name# Coordinate transformation for the new elements
 elements.defaultMaterial= sectionTest.sectionName
 elements.defaultTag= 1 #Tag for next element.
 beam2d= elements.newElement("ForceBeamColumn2d",xc.ID([1,2]))

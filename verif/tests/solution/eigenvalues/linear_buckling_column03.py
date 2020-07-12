@@ -60,7 +60,7 @@ lin= modelSpace.newPDeltaCrdTransf("lin")
 # Seed element definition
 seedElemHandler= preprocessor.getElementHandler.seedElemHandler
 seedElemHandler.defaultMaterial= "scc"
-seedElemHandler.defaultTransformation= "lin"
+seedElemHandler.defaultTransformation= lin.name
 beam2d= seedElemHandler.newElement("ElasticBeam2d",xc.ID([0,0]))
 beam2d.h= h
 beam2d.rho= 0.0

@@ -32,7 +32,7 @@ section= typical_materials.defElasticSection3d(preprocessor, "section",1,1,1,1,1
 # Elements definition
 elements= preprocessor.getElementHandler
 
-elements.defaultTransformation= "lin" # Coordinate transformation for the new elements
+elements.defaultTransformation= lin.name # Coordinate transformation for the new elements
 elements.defaultTag= 1 #Tag for the next element.
 elements.defaultMaterial= "section"
 beam3d= elements.newElement("ElasticBeam3d",xc.ID([1,2]))

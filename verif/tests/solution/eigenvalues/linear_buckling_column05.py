@@ -55,7 +55,7 @@ lin= modelSpace.newPDeltaCrdTransf("lin",xc.Vector([0,1,0]))
 # Seed element definition
 seedElemHandler= preprocessor.getElementHandler.seedElemHandler
 seedElemHandler.defaultMaterial= "scc"
-seedElemHandler.defaultTransformation= "lin"
+seedElemHandler.defaultTransformation= lin.name
 beam3d= seedElemHandler.newElement("ElasticBeam3d",xc.ID([0,0]))
 beam3d.rho= 0.0
 

@@ -25,7 +25,7 @@ lin= modelSpace.newLinearCrdTransf("lin",xc.Vector([0,1,1]))
 section= typical_materials.defElasticSection3d(preprocessor, "section",1,1,1,1,1,1)
 
 elements= preprocessor.getElementHandler
-elements.defaultTransformation= "lin" # Coord. transformation.
+elements.defaultTransformation= lin.name # Coord. transformation.
 elements.defaultMaterial= "section"
 ele0= elements.newElement("ElasticBeam3d",xc.ID([nod0.tag,nod1.tag]))
 ele1= elements.newElement("ElasticBeam3d",xc.ID([nod2.tag,nod3.tag]))

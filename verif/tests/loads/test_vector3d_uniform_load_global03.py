@@ -78,7 +78,7 @@ agg.setAdditions(["T","Vy","Vz"],["respT","respVy","respVz"])
 
 # Elements definition
 elements= preprocessor.getElementHandler
-elements.defaultTransformation= "lin"
+elements.defaultTransformation= lin.name
 elements.defaultMaterial= "quadFibers"
 elements.numSections= 2 # Number of sections along the element.
 elements.defaultTag= 1

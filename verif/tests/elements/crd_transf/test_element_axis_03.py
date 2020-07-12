@@ -47,7 +47,7 @@ lin= modelSpace.newLinearCrdTransf("lin",xc.Vector([0,1,0]))
 
 # Elements definition
 elements= preprocessor.getElementHandler
-elements.defaultTransformation= "lin"
+elements.defaultTransformation= lin.name
 elements.defaultMaterial= "section"
 elements.defaultTag= 1 #Tag for the next element.
 beam3d= elements.newElement("ElasticBeam3d",xc.ID([1,2]))

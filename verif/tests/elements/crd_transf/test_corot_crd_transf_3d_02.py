@@ -32,7 +32,7 @@ lin= modelSpace.newCorotCrdTransf("lin",xc.Vector([0,1,0]))
 # Elements definition
 elements= preprocessor.getElementHandler
 
-elements.defaultTransformation= "lin" # Coordinate transformation for the new elements
+elements.defaultTransformation= lin.name # Coordinate transformation for the new elements
 elements.defaultMaterial= "section"
 elements.defaultTag= 1 #Tag for the next element.
 beam3d= elements.newElement("ElasticBeam3d",xc.ID([1,2]))

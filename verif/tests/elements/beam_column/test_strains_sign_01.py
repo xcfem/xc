@@ -100,7 +100,7 @@ lin= modelSpace.newLinearCrdTransf("lin",xc.Vector([0,1,0]))
 
 # Elements definition
 elements= preprocessor.getElementHandler
-elements.defaultTransformation= "lin"
+elements.defaultTransformation= lin.name
 elements.defaultMaterial= "fourFibersSection"
 zl= elements.newElement("ForceBeamColumn3d",xc.ID([1,2]))
 

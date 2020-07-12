@@ -49,7 +49,7 @@ section= typical_materials.defElasticShearSection2d(preprocessor, "section",A,E,
 
 # Elements definition
 elements= preprocessor.getElementHandler
-elements.defaultTransformation= "lin" # Coordinate transformation for the new elements
+elements.defaultTransformation= lin.name # Coordinate transformation for the new elements
 elements.dimElem= 2 # Dimension of element space
 elements.defaultMaterial= "section"
 elements.defaultTag= 1

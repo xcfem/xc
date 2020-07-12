@@ -78,7 +78,7 @@ beamSection= typical_materials.defElasticSection2d(prep, "beamSection",3600,1080
 # global-coordinate system
 lin= modelSpace.newLinearCrdTransf("lin")
 elements= prep.getElementHandler
-elements.defaultTransformation= "lin"
+elements.defaultTransformation= lin.name
 elements.defaultMaterial= beamSection.name
 beam2d= elements.newElement("ElasticBeam2d",xc.ID([n1.tag,n2.tag]))
 

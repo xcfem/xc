@@ -79,7 +79,7 @@ agg.setAdditions(["T","Vy","Vz"],["respT","respVy","respVz"]) # Torsion and shea
 
 # Elements definition
 elements= preprocessor.getElementHandler
-elements.defaultTransformation= "lin" # Coordinate transformation for the new elements
+elements.defaultTransformation= lin.name # Coordinate transformation for the new elements
 elements.defaultMaterial= "agg"
 elements.numSections= 3 # Number of sections along the element.
 elements.defaultTag= 1

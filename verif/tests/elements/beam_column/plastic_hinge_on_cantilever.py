@@ -39,7 +39,7 @@ nod2= nodes.newNodeXY(L,0.0)
 lin= modelSpace.newLinearCrdTransf("lin")
 # Elements definition
 elements= preprocessor.getElementHandler
-elements.defaultTransformation= "lin" # Coordinate transformation for the new elements
+elements.defaultTransformation= lin.name # Coordinate transformation for the new elements
 elements.defaultMaterial= IPE200.fiberSection3dName
 beam2d= elements.newElement("ForceBeamColumn2d",xc.ID([nod1.tag,nod2.tag]))
 

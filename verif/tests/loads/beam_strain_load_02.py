@@ -49,7 +49,7 @@ scc= typical_materials.defElasticSection3d(preprocessor, "scc",A,E,G,Iz,Iy,J)
 
 # Elements definition
 elements= preprocessor.getElementHandler
-elements.defaultTransformation= "lin"
+elements.defaultTransformation= lin.name
 elements.defaultMaterial= "scc"
 elements.dimElem= 2 # Dimension of element space
 elements.defaultTag= 1 #Tag for next element.

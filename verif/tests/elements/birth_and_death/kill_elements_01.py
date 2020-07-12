@@ -42,7 +42,7 @@ scc= typical_materials.defElasticSection2d(preprocessor, "scc",A,E,I)
 
 # Elements definition
 elements= preprocessor.getElementHandler
-elements.defaultTransformation= "lin"
+elements.defaultTransformation= lin.name
 elements.defaultMaterial= "scc"
 #  syntax: beam2d_02[<tag>] 
 beamA= elements.newElement("ElasticBeam2d",xc.ID([n1.tag,n2.tag]))
