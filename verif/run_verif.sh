@@ -220,6 +220,12 @@ echo "$BLEU" "  PDelta solution tests." "$NORMAL"
 python tests/solution/p_delta/test_pdelta_01.py
 python tests/solution/p_delta/test_pdelta_02.py
 
+echo "$BLEU" "  AISC 360-16 benchmark tests." "$NORMAL"
+python tests/solution/p_delta/aisc_360_benchmark_problem_case_01.py
+python tests/solution/p_delta/aisc_360_benchmark_problem_case_02.py
+python tests/solution/p_delta/aisc_360_benchmark_problem_case_03.py
+python tests/solution/p_delta/aisc_360_benchmark_problem_case_04.py
+
 ## Time history.
 echo "$BLEU" "  Time history solution tests." "$NORMAL"
 python tests/solution/time_history/test_time_history_01.py
