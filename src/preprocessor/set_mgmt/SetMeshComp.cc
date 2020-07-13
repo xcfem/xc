@@ -523,6 +523,22 @@ void XC::SetMeshComp::fillUpwards(void)
     if((numNodes>0) || (numElements>0))
       std::cerr << getClassName() << "::" << __FUNCTION__
                 << "; implementation pending." << std::endl;
+    Node *ptrNod= nullptr;
+    Node::ElementPtrSet connected_to_node;
+    for(DqPtrsNode::iterator i= nodes.begin();i!=nodes.end();i++)
+      {
+        ptrNod= *i;
+        if(ptrNod)
+	  {
+            connected_to_node= ptrNod->getConnectedElements();
+            if(!connected_to_node.empty())
+              {
+		
+                for(std::set<Element *>::iterator j= connected_to_node.begin(); j!=connected_to_node.end();j++)
+		  { elements.push_back(*j); }
+	      }
+	  }
+      }
   }
 
 //! @brief Select the nodes identified by the tags being passed as parameters.
