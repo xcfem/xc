@@ -579,6 +579,94 @@ int XC::Matrix::addMatrix(double factThis, const Matrix &other, double factOther
     return 0;
 }
 
+int XC::Matrix::addMatrixTranspose(double factThis, const Matrix &other, double factOther)
+  {
+    if(factThis == 1.0 && factOther == 0.0)
+      return 0;
+
+#ifdef _G3DEBUG
+    if((other.numRows != numCols) || (other.numCols != numRows)) {
+      std::cerr << "Matrix::addMatrixTranspose(): incompatable matrices\n";
+      return -1;
+    }
+#endif
+
+    if(factThis == 1.0)
+      {
+
+      // want: this += other^T * factOther
+      if(factOther == 1.0)
+	{
+          double *dataPtr = getDataPtr();
+          for(int j=0; j<numCols; j++)
+	    {
+              for(int i=0; i<numRows; i++)
+	        *dataPtr++ += (other.data)[j+i*numCols];
+	    }
+        }
+      else
+	{
+	  double *dataPtr = getDataPtr();
+          for(int j=0; j<numCols; j++)
+	    {
+              for(int i=0; i<numRows; i++)
+	        *dataPtr++ += (other.data)[j+i*numCols] * factOther;
+	    }
+	}
+      }
+    else if(factThis == 0.0)
+      {
+        // want: this = other^T * factOther
+        if(factOther == 1.0)
+	  {
+	    double *dataPtr = getDataPtr();
+            for(int j=0; j<numCols; j++)
+	      {
+                for(int i=0; i<numRows; i++)
+	          *dataPtr++ = (other.data)[j+i*numCols];
+	      }
+          }
+	else
+	  {
+	    double *dataPtr = getDataPtr();
+            for(int j=0; j<numCols; j++)
+	      {
+                for(int i=0; i<numRows; i++)
+	          *dataPtr++ = (other.data)[j+i*numCols] * factOther;
+	      }
+	  }
+      }
+    else
+      {
+        // want: this = this * thisFact + other^T * factOther
+        if(factOther == 1.0)
+	  {
+	    double *dataPtr = getDataPtr();
+            for(int j=0; j<numCols; j++)
+	      {
+                for(int i=0; i<numRows; i++)
+		  {
+                    const double value= *dataPtr * factThis + (other.data)[j+i*numCols];
+	            *dataPtr++ = value;
+		  }
+	      }
+	  }
+	else
+	  {
+	    double *dataPtr= getDataPtr();
+            for(int j=0; j<numCols; j++)
+	      {
+                for(int i=0; i<numRows; i++)
+		  {
+	            const double value = *dataPtr * factThis + (other.data)[j+i*numCols] * factOther;
+	            *dataPtr++ = value;
+		  }
+	      }
+	  }
+      }
+    // successfull
+    return 0;
+  }
 
 
 int XC::Matrix::addMatrixProduct(double thisFact, const Matrix &B, const Matrix &C, double otherFact)
@@ -660,39 +748,39 @@ int XC::Matrix::addMatrixTransposeProduct(double thisFact,
 				  const Matrix &C, 
 				  double otherFact)
   {
-  if (thisFact == 1.0 && otherFact == 0.0)
+  if(thisFact == 1.0 && otherFact == 0.0)
     return 0;
 
 #ifdef _G3DEBUG
-  if ((B.numCols != numRows) || (C.numCols != numCols) || (B.numRows != C.numRows)) {
+  if((B.numCols != numRows) || (C.numCols != numCols) || (B.numRows != C.numRows)) {
     opserr << "Matrix::addMatrixProduct(): incompatible matrices, this\n";
     return -1;
   }
 #endif
 
-  if (thisFact == 1.0) {
+  if(thisFact == 1.0) {
     int numMults = C.numRows;
     double *aijPtr = getDataPtr();
-    for (int j=0; j<numCols; j++) {
-      for (int i=0; i<numRows; i++) {
+    for(int j=0; j<numCols; j++) {
+      for(int i=0; i<numRows; i++) {
 	const double *bkiPtr  = &(B.data)[i*numMults];
 	const double *cjkPtr  = &(C.data)[j*numMults];
 	double sum = 0.0;
-	for (int k=0; k<numMults; k++) {
+	for(int k=0; k<numMults; k++) {
 	  sum += *bkiPtr++ * *cjkPtr++;
 	}
 	*aijPtr++ += sum * otherFact;
       }
     } 
-  } else if (thisFact == 0.0) {
+  } else if(thisFact == 0.0) {
     int numMults = C.numRows;
     double *aijPtr = getDataPtr();
-    for (int j=0; j<numCols; j++) {
-      for (int i=0; i<numRows; i++) {
+    for(int j=0; j<numCols; j++) {
+      for(int i=0; i<numRows; i++) {
 	const double *bkiPtr  = &(B.data)[i*numMults];
 	const double *cjkPtr  = &(C.data)[j*numMults];
 	double sum = 0.0;
-	for (int k=0; k<numMults; k++) {
+	for(int k=0; k<numMults; k++) {
 	  sum += *bkiPtr++ * *cjkPtr++;
 	}
 	*aijPtr++ = sum * otherFact;
@@ -701,12 +789,12 @@ int XC::Matrix::addMatrixTransposeProduct(double thisFact,
   } else {
     int numMults = C.numRows;
     double *aijPtr = getDataPtr();
-    for (int j=0; j<numCols; j++) {
-      for (int i=0; i<numRows; i++) {
+    for(int j=0; j<numCols; j++) {
+      for(int i=0; i<numRows; i++) {
 	const double *bkiPtr  = &(B.data)[i*numMults];
 	const double *cjkPtr  = &(C.data)[j*numMults];
 	double sum = 0.0;
-	for (int k=0; k<numMults; k++) {
+	for(int k=0; k<numMults; k++) {
 	  sum += *bkiPtr++ * *cjkPtr++;
 	}
 	*aijPtr = *aijPtr * thisFact + sum * otherFact;
@@ -832,10 +920,10 @@ int XC::Matrix::addMatrixTripleProduct(double thisFact,
 			       const Matrix &C,
 			       double otherFact)
   {
-    if (thisFact == 1.0 && otherFact == 0.0)
+    if(thisFact == 1.0 && otherFact == 0.0)
       return 0;
 #ifdef _G3DEBUG
-    if ((numRows != A.numRows) || (A.numCols != B.numRows) || (B.numCols != C.numRows) ||
+    if((numRows != A.numRows) || (A.numCols != B.numRows) || (B.numCols != C.numRows) ||
 	(C.numCols != numCols)) {
       std::cerr << "Matrix::addMatrixTripleProduct() - incompatible matrices\n";
       return -1;
@@ -845,14 +933,14 @@ int XC::Matrix::addMatrixTripleProduct(double thisFact,
     // cheack work area can hold the temporary matrix
     int sizeWork = B.numRows * numCols;
 
-    if (sizeWork > sizeDoubleWork) {
+    if(sizeWork > sizeDoubleWork) {
       this->addMatrix(thisFact, A^B*C, otherFact);
       return 0;
     }
 
     // zero out the work area
     double *matrixWorkPtr = matrixWork;
-    for (int l=0; l<sizeWork; l++)
+    for(int l=0; l<sizeWork; l++)
       *matrixWorkPtr++ = 0.0;
 
     // now form B * C * fact store in matrixWork == A area
@@ -860,13 +948,13 @@ int XC::Matrix::addMatrixTripleProduct(double thisFact,
     
     int rowsB = B.numRows;
     const double *ckjPtr  = &(C.data)[0];
-    for (int j=0; j<numCols; j++) {
+    for(int j=0; j<numCols; j++) {
       double *aijPtrA = &matrixWork[j*rowsB];
-      for (int k=0; k<rowsB; k++) {
+      for(int k=0; k<rowsB; k++) {
 	double tmp = *ckjPtr++ * otherFact;
 	double *aijPtr = aijPtrA;
 	const double *bikPtr = &(B.data)[k*rowsB];
-	for (int i=0; i<rowsB; i++) 
+	for(int i=0; i<rowsB; i++) 
 	  *aijPtr++ += *bikPtr++ * tmp;
       }
     }
@@ -874,28 +962,28 @@ int XC::Matrix::addMatrixTripleProduct(double thisFact,
     // now form A' * matrixWork
     // NOTE: looping as per blas3 dgemm_: j,i,k
     int dimB = rowsB;
-    if (thisFact == 1.0) {
+    if(thisFact == 1.0) {
       double *dataPtr = &data[0];
-      for (int j=0; j< numCols; j++) {
+      for(int j=0; j< numCols; j++) {
 	double *workkjPtrA = &matrixWork[j*dimB];
-	for (int i=0; i<numRows; i++) {
+	for(int i=0; i<numRows; i++) {
 	  const double *akiPtr = &(A.data)[i*dimB];
 	  double *workkjPtr = workkjPtrA;
 	  double aij = 0.0;
-	  for (int k=0; k< dimB; k++)
+	  for(int k=0; k< dimB; k++)
 	    aij += *akiPtr++ * *workkjPtr++;
 	  *dataPtr++ += aij;
 	}
       }
-    } else if (thisFact == 0.0) {
+    } else if(thisFact == 0.0) {
       double *dataPtr = &data[0];
-      for (int j=0; j< numCols; j++) {
+      for(int j=0; j< numCols; j++) {
 	double *workkjPtrA = &matrixWork[j*dimB];
-	for (int i=0; i<numRows; i++) {
+	for(int i=0; i<numRows; i++) {
 	  const double *akiPtr = &(A.data)[i*dimB];
 	  double *workkjPtr = workkjPtrA;
 	  double aij = 0.0;
-	  for (int k=0; k< dimB; k++)
+	  for(int k=0; k< dimB; k++)
 	    aij += *akiPtr++ * *workkjPtr++;
 	  *dataPtr++ = aij;
 	}
@@ -903,13 +991,13 @@ int XC::Matrix::addMatrixTripleProduct(double thisFact,
 
     } else {
       double *dataPtr = &data[0];
-      for (int j=0; j< numCols; j++) {
+      for(int j=0; j< numCols; j++) {
 	double *workkjPtrA = &matrixWork[j*dimB];
-	for (int i=0; i<numRows; i++) {
+	for(int i=0; i<numRows; i++) {
 	  const double *akiPtr = &(A.data)[i*dimB];
 	  double *workkjPtr = workkjPtrA;
 	  double aij = 0.0;
-	  for (int k=0; k< dimB; k++)
+	  for(int k=0; k< dimB; k++)
 	    aij += *akiPtr++ * *workkjPtr++;
 	  double value = *dataPtr * thisFact + aij;
 	  *dataPtr++ = value;
@@ -1307,12 +1395,12 @@ XC::Matrix XC::Matrix::operator*(const Matrix &M) const
     result.addMatrixProduct(0.0, *this, M, 1.0);
     
     /****************************************************
-    double *resDataPtr= result.data;	    
+    double *resDataPtr= result.getDataPtr();	    
 
     int innerDim= numCols;
     int nCols= result.numCols;
     for(int i=0; i<nCols; i++) {
-      double *aStartRowDataPtr= data;
+      double *aStartRowDataPtr= getDataPtr();
       double *bStartColDataPtr= &(M.data[i*innerDim]);
       for(int j=0; j<numRows; j++) {
 	double *bDataPtr= bStartColDataPtr;

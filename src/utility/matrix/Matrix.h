@@ -166,6 +166,7 @@ class Matrix: public CommandEntity
     double RCond(void) const;
 
     int addMatrix(double factThis, const Matrix &other, double factOther);
+    int addMatrixTranspose(double factThis, const Matrix &other, double factOther);
     int addMatrixProduct(double factThis, const Matrix &A, const Matrix &B, double factOther); // AB
     int addMatrixTransposeProduct(double factThis, const Matrix &A, const Matrix &B, double factOther); // A'B
     int addMatrixTripleProduct(double factThis, const Matrix &A, const Matrix &B, double factOther); // A'BA
