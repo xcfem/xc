@@ -97,6 +97,10 @@ class CorotCrdTransf3d: public CrdTransf3d
     static Matrix e; //!< base vectors
     static Matrix Tp; //!< transformation matrix to renumber dofs
     static Matrix T; //!< transformation matrix from basic to global system
+    static Matrix Tlg; //!< transformation matrix from global to local system
+    static Matrix TlgInv; //!< inverse of transformation matrix from global to local system
+    static Matrix Tbl; //!< transformation matrix from local to basic system
+    static Matrix kg;  //!< global stiffness matrix
     static Matrix Lr2, Lr3, A; //!< auxiliary matrices	
 
     inline int computeElemtLengthAndOrient(void) const
@@ -107,6 +111,8 @@ class CorotCrdTransf3d: public CrdTransf3d
       }
     void compTransfMatrixBasicGlobal(void);
     void compTransfMatrixBasicGlobalNew(void);
+    void compTransfMatrixLocalGlobal(Matrix &Tlg) const;
+    void compTransfMatrixBasicLocal(Matrix &Tbl) const;
     const Vector &getQuaternionFromRotMatrix(const Matrix &RotMatrix) const;
     const Vector &getQuaternionFromPseudoRotVector(const Vector &theta) const;
     const Vector &getTangScaledPseudoVectorFromQuaternion(const Vector &theta) const;
@@ -156,6 +162,9 @@ class CorotCrdTransf3d: public CrdTransf3d
     int recvSelf(const Communicator &);
     
     void Print(std::ostream &s, int flag = 0) const;
+    
+    // method used to rotate consistent mass matrix
+    const Matrix &getGlobalMatrixFromLocal(const Matrix &local);
     
     // functions used in post-processing only    
     const Vector &getPointGlobalCoordFromLocal(const Vector &) const;

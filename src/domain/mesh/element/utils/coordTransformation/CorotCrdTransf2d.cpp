@@ -510,20 +510,31 @@ const XC::Vector &XC::CorotCrdTransf2d::getGlobalResistingForce(const Vector &pb
     static Vector pl(6);
     pl.addMatrixTransposeVector(0.0, Tbl, pb, 1.0);    // pl = Tbl ^ pb;
     
-    ///std::cerr << "pl: " << pl;
-    // check distributed load is zero (not implemented yet)
-    
-    if(unifLoad.Norm() != 0.0)
-      {
-        std::cerr << getClassName() << "::" << __FUNCTION__
-		  << "; affect of Po not implemented yet."
-		  << " Using zero value.";
-      }  
+    // add end forces due to element unifLoad loads
+    // This assumes member loads are in local system
+    pl(0) += unifLoad(0);
+    pl(1) += unifLoad(1);
+    pl(4) += unifLoad(2);
+
+    /*     // This assumes member loads are in basic system
+    pl(0) += unifLoad(0)*cosAlpha - unifLoad(1)*sinAlpha;
+    pl(1) += unifLoad(0)*sinAlpha + unifLoad(1)*cosAlpha;
+    pl(3) -= unifLoad(2)*sinAlpha;
+    pl(4) += unifLoad(2)*cosAlpha;
+    */
     
     // transform resisting forces  from local to global coordinates
-    this->getTransfMatrixLocalGlobal(Tlg);     // OPTIMIZE LATER
-    pg.addMatrixTransposeVector(0.0, Tlg, pl, 1.0);   // pg = Tlg ^ pl; residual
+    //this->getTransfMatrixLocalGlobal(Tlg);     // OPTIMIZE LATER
+    //pg.addMatrixTransposeVector(0.0, Tlg, pl, 1.0);   // pg = Tlg ^ pl; residual
 
+    pg(0)= cosTheta*pl[0] - sinTheta*pl[1];
+    pg(1)= sinTheta*pl[0] + cosTheta*pl[1];
+    
+    pg(3)= cosTheta*pl[3] - sinTheta*pl[4];
+    pg(4)= sinTheta*pl[3] + cosTheta*pl[4];
+    
+    pg(2)= pl[2];
+    pg(5)= pl[5];
 
     // account for rigid offsets
     if(nodeOffsets == true)

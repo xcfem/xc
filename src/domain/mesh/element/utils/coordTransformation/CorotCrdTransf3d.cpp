@@ -79,12 +79,18 @@ XC::Matrix XC::CorotCrdTransf3d::A(3,3);
 XC::Matrix XC::CorotCrdTransf3d::Lr2(12,3);
 XC::Matrix XC::CorotCrdTransf3d::Lr3(12,3);
 XC::Matrix XC::CorotCrdTransf3d::T(7,12);
+XC::Matrix XC::CorotCrdTransf3d::Tlg(12,12);
+XC::Matrix XC::CorotCrdTransf3d::TlgInv(12, 12);
+XC::Matrix XC::CorotCrdTransf3d::Tbl(6,12);
+XC::Matrix XC::CorotCrdTransf3d::kg(12,12);
 
 
 // constructor:
 XC::CorotCrdTransf3d::CorotCrdTransf3d(int tag, const Vector &vecInLocXZPlane,const Vector &rigJntOffsetI,const Vector &rigJntOffsetJ)
-  : CrdTransf3d(tag, CRDTR_TAG_CorotCrdTransf3d), vAxis(3), xAxis(3),Ln(0), alphaIq(4), alphaJq(4), 
-    alphaIqcommit(4), alphaJqcommit(4), alphaI(3), alphaJ(3), ul(7), ulcommit(7), ulpr(7)
+  : CrdTransf3d(tag, CRDTR_TAG_CorotCrdTransf3d), vAxis(3), xAxis(3),
+    Ln(0.0),  alphaIq(4), alphaJq(4), 
+    alphaIqcommit(4), alphaJqcommit(4), alphaI(3), alphaJ(3),
+    ul(7), ulcommit(7), ulpr(7)
   {
     // check vector that defines local xz plane
     if(vecInLocXZPlane.Size() != 3 )
@@ -162,9 +168,9 @@ XC::CorotCrdTransf3d::CorotCrdTransf3d(int tag, const Vector &vecInLocXZPlane,co
 // constructor:
 // invoked by a FEM_ObjectBroker, recvSelf() needs to be invoked on this object.
 XC::CorotCrdTransf3d::CorotCrdTransf3d(int tag)
-  : CrdTransf3d(tag, CRDTR_TAG_CorotCrdTransf3d), vAxis(3), xAxis(3),Ln(0),
-    alphaIq(4), alphaJq(4),alphaIqcommit(4), alphaJqcommit(4), alphaI(3), alphaJ(3),
-    ul(7), ulcommit(7), ulpr(7)
+  : CrdTransf3d(tag, CRDTR_TAG_CorotCrdTransf3d), vAxis(3), xAxis(3),
+    Ln(0), alphaIq(4), alphaJq(4),alphaIqcommit(4), alphaJqcommit(4),
+    alphaI(3), alphaJ(3), ul(7), ulcommit(7), ulpr(7)
   {
     // Permutation matrix (to renumber basic dof's)
     
@@ -246,8 +252,8 @@ int XC::CorotCrdTransf3d::revertToLastCommit(void)
 int XC::CorotCrdTransf3d::revertToStart(void)
   {
     ul.Zero();
-    alphaIq = this->getQuaternionFromRotMatrix(R);    // pseudo-vector for node 1
-    alphaJq = this->getQuaternionFromRotMatrix(R);    // pseudo-vector for node J
+    alphaIq = this->getQuaternionFromRotMatrix(R); // pseudo-vector for node 1
+    alphaJq = this->getQuaternionFromRotMatrix(R); // pseudo-vector for node J
     
     alphaI.Zero();
     alphaJ.Zero();
@@ -311,8 +317,8 @@ int XC::CorotCrdTransf3d::initialize(Node *nodeIPointer, Node *nodeJPointer)
     //std::cerr << "L: " << L;
     //std::cerr << "R: " << R;
     
-    alphaIq = this->getQuaternionFromRotMatrix(R);    // pseudo-vector for node I
-    alphaJq = this->getQuaternionFromRotMatrix(R);    // pseudo-vector for node J
+    alphaIq = this->getQuaternionFromRotMatrix(R); // pseudo-vector for node I
+    alphaJq = this->getQuaternionFromRotMatrix(R); // pseudo-vector for node J
     
     //std::cerr << "alphaIq: " << alphaIq;
     //std::cerr << "alphaJq: " << alphaJq;
@@ -979,6 +985,40 @@ void XC::CorotCrdTransf3d::compTransfMatrixBasicGlobalNew(void)
             T(6,i) -= Lr(i)*c;
 }
 
+void XC::CorotCrdTransf3d::compTransfMatrixLocalGlobal(Matrix &Tlg) const
+  {
+    // setup transformation matrix from local to global
+    Tlg.Zero();
+    
+    Tlg(0,0)= Tlg(3,3)= Tlg(6,6)= Tlg(9,9)  = R(0,0);
+    Tlg(0,1)= Tlg(3,4)= Tlg(6,7)= Tlg(9,10) = R(1,0);
+    Tlg(0,2)= Tlg(3,5)= Tlg(6,8)= Tlg(9,11) = R(2,0);
+    Tlg(1,0)= Tlg(4,3)= Tlg(7,6)= Tlg(10,9) = R(0,1);
+    Tlg(1,1)= Tlg(4,4)= Tlg(7,7)= Tlg(10,10)= R(1,1);
+    Tlg(1,2)= Tlg(4,5)= Tlg(7,8)= Tlg(10,11)= R(2,1);
+    Tlg(2,0)= Tlg(5,3)= Tlg(8,6)= Tlg(11,9) = R(0,2);
+    Tlg(2,1)= Tlg(5,4)= Tlg(8,7)= Tlg(11,10)= R(1,2);
+    Tlg(2,2)= Tlg(5,5)= Tlg(8,8)= Tlg(11,11)= R(2,2);
+  }
+
+
+void XC::CorotCrdTransf3d::compTransfMatrixBasicLocal(Matrix &Tbl) const
+  {
+    // setup transformation matrix from basic to local
+    Tbl.Zero();
+
+    // first get transformation matrix from basic to global 
+    static Matrix Tbg(6, 12);
+    Tbg.addMatrixProduct(0.0, Tp, T, 1.0);
+
+    // get inverse of transformation matrix from local to global
+    this->compTransfMatrixLocalGlobal(Tlg);
+    // Tlg.Invert(TlgInv);
+    TlgInv.addMatrixTranspose(0.0, Tlg, 1.0);  // for square rot-matrix: Tlg^-1 = Tlg'
+
+    // finally get transformation matrix from basic to local
+    Tbl.addMatrixProduct(0.0, Tbg, TlgInv, 1.0);
+  }
 
 const XC::Vector &XC::CorotCrdTransf3d::getBasicTrialDisp(void) const
   {
@@ -1094,32 +1134,61 @@ const XC::Vector &XC::CorotCrdTransf3d::getGlobalResistingForce(const Vector &pb
     CorotCrdTransf3d *this_no_const= const_cast<CorotCrdTransf3d *>(this);
     this_no_const->update();
     
-    //   std::cerr << "basic forces: " << pb;  
-    // transform resisting forces from the basic system to local coordinates
-    static Vector pl(7);
-    pl.addMatrixTransposeVector(0.0, Tp, pb, 1.0);    // pl = Tp ^ pb;
-    
-    // transform resisting forces  from local to global coordinates
     static Vector pg(12);
-    pg.addMatrixTransposeVector(0.0, T, pl, 1.0);   // pg = T ^ pl; residual
-
-    // check distributed load is zero (not implemented yet)
-    if(p0.Norm2()>1e-6)
-      {
-        if(verbosity>0)
-          std::cerr << getClassName() << "::" << __FUNCTION__
-		    << "; loads over elements with corotational" 
-                    << " coordinate transformation is not implemented."
-                    << " We use a workaround." << std::endl;
-        const Vector &pl2= basic_to_local_element_force(p0);
-        pg+= local_to_global_element_force(pl2);
-      }
+    pg.Zero();
     
-    /*
-    this->compTransfMatrixBasicGlobalNew();
-    std::cerr << T;
-    std::cerr << "global forces( " << pg;
-    */
+    // if there are no element loads present
+    if(p0.Norm2()<1e-6)
+      {
+        // transform resisting forces from the basic system to local coordinates
+        static Vector pl(7);
+        pl.addMatrixTransposeVector(0.0, Tp, pb, 1.0);    // pl = Tp ^ pb;
+
+        // transform resisting forces from local to global coordinates
+        pg.addMatrixTransposeVector(0.0, T, pl, 1.0);   // pg = T ^ pl; residual
+      }
+      else // element loads present
+      {
+        // SLOWER!!!! THIS IS SAME APPROACH AS 2D CASE
+        // ===========================================
+        /* transform resisting forces from the basic system to local coordinates
+        this->compTransfMatrixBasicLocal(Tbl);
+        static Vector pl(12);
+        pl.addMatrixTransposeVector(0.0, Tbl, pb, 1.0);    // pl = Tbl ^ pb;
+
+        // add end forces due to element p0 loads
+        // assuming member loads are in local system
+        pl(0) += p0(0);
+        pl(1) += p0(1);
+        pl(7) += p0(2);
+        pl(2) += p0(3);
+        pl(8) += p0(4);
+
+        // transform resisting forces from local to global coordinates
+        pg.addMatrixTransposeVector(0.0, Tlg, pl, 1.0);   // pg = Tlg ^ pl;*/
+
+        // FASTER!!!! TRANSFORM REACTIONS AND ADD AT END
+        // =============================================
+        // transform resisting forces from the basic system to local coordinates
+        static Vector pl(7);
+        pl.addMatrixTransposeVector(0.0, Tp, pb, 1.0);    // pl = Tp ^ pb;
+
+        // transform resisting forces from local to global coordinates
+        pg.addMatrixTransposeVector(0.0, T, pl, 1.0);   // pg = T ^ pl; residual
+
+        // add end forces due to element p0 loads
+        // assuming member loads are in local system
+        static Vector pl0(12), pg0(12);
+        pl0.Zero();
+        pl0(0) = p0(0);
+        pl0(1) = p0(1);
+        pl0(7) = p0(2);
+        pl0(2) = p0(3);
+        pl0(8) = p0(4);
+        this->compTransfMatrixLocalGlobal(Tlg);
+        pg0.addMatrixTransposeVector(0.0, Tlg, pl0, 1.0);
+        pg.addVector(1.0, pg0, 1.0);
+      }
     return pg;
   }
 
@@ -1136,10 +1205,7 @@ const XC::Matrix &XC::CorotCrdTransf3d::getGlobalStiffMatrix(const Matrix &kb, c
     // transform resisting forces from the basic system to local coordinates
     static Vector pl(7);
     pl.addMatrixTransposeVector(0.0, Tp, pb, 1.0);    // pl = Tp ^ pb;
-    
-    // transform tangent  stiffness matrix from local to global coordinates
-    static Matrix kg(12,12);
-    
+        
     // compute the tangent stiffness matrix in global coordinates
     kg.addMatrixTripleProduct(0.0, T, kl, 1.0);
     
@@ -1402,9 +1468,6 @@ const XC::Matrix &XC::CorotCrdTransf3d::getInitialGlobalStiffMatrix(const Matrix
     // transform tangent stiffness matrix from the basic system to local coordinates
     static Matrix kl(7,7);
     kl.addMatrixTripleProduct(0.0, Tp, kb, 1.0);      // kl = Tp ^ kb * Tp;
-    
-    // transform tangent  stiffness matrix from local to global coordinates
-    static Matrix kg(12,12);
     
     // compute the tangent stiffness matrix in global coordinates
     kg.addMatrixTripleProduct(0.0, T, kl, 1.0);
@@ -2003,13 +2066,18 @@ int XC::CorotCrdTransf3d::recvSelf(const Communicator &comm)
     return res;            
   }
 
+const XC::Matrix &XC::CorotCrdTransf3d::getGlobalMatrixFromLocal(const Matrix &local)
+  {
+    this->compTransfMatrixLocalGlobal(Tlg);  // OPTIMIZE LATER
+    kg.addMatrixTripleProduct(0.0, Tlg, local, 1.0);  // OPTIMIZE LATER
+    return kg;
+  }
 
 const XC::Vector &XC::CorotCrdTransf3d::getPointGlobalCoordFromLocal(const Vector &xl) const
   {
     static Vector xg(3);
     std::cerr << getClassName() << "::" << __FUNCTION__
 	      << "; not implemented yet" ;
-    
     return xg;  
   }
 
