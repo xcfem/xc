@@ -28,11 +28,11 @@ nod= nodes.newNodeXYZ(5,5,5)
 section= typical_materials.defElasticSection3d(preprocessor, "section",1,1,1,1,1,1)
 
 # Geometric transformations
-lin= modelSpace.newCorotCrdTransf("lin",xc.Vector([0,1,0]))    
+corot= modelSpace.newCorotCrdTransf("corot",xc.Vector([0,1,0]))    
 # Elements definition
 elements= preprocessor.getElementHandler
 
-elements.defaultTransformation= lin.name # Coordinate transformation for the new elements
+elements.defaultTransformation= corot.name # Coordinate transformation for the new elements
 elements.defaultMaterial= section.name
 elements.defaultTag= 1 #Tag for the next element.
 beam3d= elements.newElement("ElasticBeam3d",xc.ID([1,2]))
