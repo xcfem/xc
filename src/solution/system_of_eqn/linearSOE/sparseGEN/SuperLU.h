@@ -100,21 +100,21 @@ class SuperLU: public SparseGenColLinSolver
     ID perm_c;
     ID etree;
     int relax, permSpec, panelSize;
-    double drop_tol;
     char symmetric;
     superlu_options_t options;
+    SuperLUStat_t stat;
     void free_matricesLU(void);
     void free_matricesABAC(void);
     void free_matrices(void);
     void free_mem(void);
-    void inic_permutation_vectors(const size_t &n);
+    void alloc_permutation_vectors(const size_t &n);
     void alloc_matrices(const size_t &n);
     void alloc(const size_t &n);
     int factorize(void);
 
     friend class LinearSOE;
     friend class FEM_ObjectBroker;
-    SuperLU(int permSpec = 0, double drop_tol = 0.0, int panelSize = 6, int relax = 6,char symmetric = 'N');
+    SuperLU(int permSpec = 0, int panelSize = 6, int relax = 6,char symmetric = 'N');
     SuperLU(const SuperLU &);
     SuperLU &operator=(const SuperLU &);
     virtual LinearSOESolver *getCopy(void) const;

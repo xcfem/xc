@@ -62,6 +62,9 @@
 #include <solution/system_of_eqn/linearSOE/sparseGEN/SparseGenColLinSOE.h>
 #include <cmath>
 
+#define RESET   "\033[0m"
+#define RED     "\033[31m"      /* Red */
+
 
 void XC::SuperLU::free_matricesLU(void)
   {
@@ -96,12 +99,12 @@ void XC::SuperLU::free_matricesABAC(void)
       }
     if(A.ncol != 0)
       {
-        SUPERLU_FREE(A.Store);
+	SUPERLU_FREE(A.Store);
         A.ncol= 0;
       }
     if(B.ncol != 0)
       {
-        SUPERLU_FREE(B.Store);
+	SUPERLU_FREE(B.Store);
         B.ncol= 0;
       }
   }
@@ -115,9 +118,16 @@ void XC::SuperLU::free_matrices(void)
 void XC::SuperLU::free_mem(void)
   {
     free_matrices();
+    perm_r.resize(0);	
+    perm_c.resize(0);
+    if(etree.Size()>0)
+      {
+         etree.resize(0);		
+         StatFree(&stat);
+      }
   }
 
-void XC::SuperLU::inic_permutation_vectors(const size_t &n)
+void XC::SuperLU::alloc_permutation_vectors(const size_t &n)
   {
     // create space for the permutation vectors 
     // and the elimination tree
@@ -127,14 +137,7 @@ void XC::SuperLU::inic_permutation_vectors(const size_t &n)
         perm_r.resize(n);		
 	perm_c.resize(n);		
 	etree.resize(n);		
-        for(size_t k= 0;k<n;k++)
-          {
-            perm_c(k)= k;
-            perm_r(k)= k;
-            etree(k)= 0;
-          }
       }
-
   }
 
 void XC::SuperLU::alloc_matrices(const size_t &n)
@@ -147,7 +150,7 @@ void XC::SuperLU::alloc_matrices(const size_t &n)
     get_perm_c(permSpec, &A, perm_c.getDataPtr());
 
     sp_preorder(&options, &A, perm_c.getDataPtr(), etree.getDataPtr(), &AC);
-
+    
     // create the rhs SuperMatrix B 
     dCreate_Dense_Matrix(&B, n, 1, theSOE->getPtrX(), n, SLU_DN, SLU_D, SLU_GE);
   }
@@ -155,7 +158,9 @@ void XC::SuperLU::alloc(const size_t &n)
   {
     if(n>0)
       {
-        inic_permutation_vectors(n);
+        alloc_permutation_vectors(n);
+        // initialisation
+        StatInit(&stat);
         alloc_matrices(n);
       }
   }
@@ -201,8 +206,8 @@ XC::LinearSOESolver *XC::SuperLU::getCopy(void) const
 //! \p panelSize defines the number of consecutive columns used as a
 //! panel in the elimination. For more information on these values see the
 //! SuperLU manual.
-XC::SuperLU::SuperLU(int perm, double drop_tolerance, int panel, int relx, char symm)
-  :SparseGenColLinSolver(SOLVER_TAGS_SuperLU), relax(relx), permSpec(perm), panelSize(panel), drop_tol(drop_tolerance), symmetric(symm)
+XC::SuperLU::SuperLU(int perm, int panel, int relx, char symm)
+  : SparseGenColLinSolver(SOLVER_TAGS_SuperLU), relax(relx), permSpec(perm), panelSize(panel), symmetric(symm)
   {
     // set_default_options(&options);
     options.Fact = DOFACT;
@@ -218,36 +223,36 @@ XC::SuperLU::SuperLU(int perm, double drop_tolerance, int panel, int relx, char 
 
     if(symmetric == 'Y')
       options.SymmetricMode = YES;
+    
     L.ncol= 0;
     U.ncol= 0;
     A.ncol= 0;
     B.ncol= 0;
-    AC.ncol= 0; //Added by LCPT.
+    AC.ncol= 0;
   }
 
 
 //! @brief Destructor.
 XC::SuperLU::~SuperLU(void)
-  { free_mem(); }
+  {
+    free_mem();
+  }
 
 //! @brief Compute the LU factorization of A.
 int XC::SuperLU::factorize(void)
   {
     int retval= 0;
+
     if(theSOE->factored == false)
       {
-        // factor the matrix
-        free_matricesLU();
         int info= 0;
-        SuperLUStat_t slu_stat;
-	GlobalLU_t global_lu_t; //Ubuntu 18 
-        StatInit(&slu_stat);
+        // factor the matrix
+        if(L.ncol != 0 && symmetric == 'N')
+	  free_matricesLU();
+	GlobalLU_t Glu; /* Not needed on return. */
 
-
-        //Prior to Ubuntu 16: dgstrf(&options, &AC, drop_tol, relax, &panelSize,etree.getDataPtr(), 0, perm_c.getDataPtr(), perm_r.getDataPtr(), &L, &U, &slu_stat, &info);
-	//it seems that argument 'drop_tol' is deprecated (or it was an error?)
-        //Prior to Ubuntu 18: dgstrf(&options, &AC, relax, panelSize,etree.getDataPtr(), nullptr, 0, perm_c.getDataPtr(), perm_r.getDataPtr(), &L, &U, &slu_stat, &info);
-        dgstrf(&options, &AC, relax, panelSize,etree.getDataPtr(), nullptr, 0, perm_c.getDataPtr(), perm_r.getDataPtr(), &L, &U, &global_lu_t, &slu_stat, &info);	
+	//dPrint_CompCol_Matrix("AC",&AC);
+        dgstrf(&options, &AC, relax, panelSize,etree.getDataPtr(), nullptr, 0, perm_c.getDataPtr(), perm_r.getDataPtr(), &L, &U, &Glu, &stat, &info);	
         if(info != 0)
           {        
              std::cerr << getClassName() << "::" << __FUNCTION__
@@ -255,12 +260,11 @@ int XC::SuperLU::factorize(void)
 		       << " returned in factorization dgstrf()\n";
              retval= -info;
           }
-        StatFree(&slu_stat);
 
         if(symmetric == 'Y')
           options.Fact= SamePattern_SameRowPerm;
         else
-          options.Fact = SamePattern;
+          options.Fact= SamePattern;
         theSOE->factored = true;
       }
     return retval;
@@ -288,8 +292,8 @@ int XC::SuperLU::solve(void)
       }
     else
       {
-        size_t n = theSOE->size;
-    
+        const size_t n= theSOE->size;
+	
         // check for quick return
         if(n>0)
           {
@@ -315,9 +319,7 @@ int XC::SuperLU::solve(void)
                     // do forward and backward substitution
                     trans_t trans= NOTRANS;
                     int info= 0;
-                    SuperLUStat_t slu_stat;
-                    StatInit(&slu_stat);
-                    dgstrs(trans, &L, &U, perm_c.getDataPtr(), perm_r.getDataPtr(), &B, &slu_stat, &info);    
+                    dgstrs(trans, &L, &U, perm_c.getDataPtr(), perm_r.getDataPtr(), &B, &stat, &info);    
                     if(info != 0)
                       {        
                         std::cerr << getClassName() << "::" << __FUNCTION__
@@ -325,8 +327,6 @@ int XC::SuperLU::solve(void)
 				  << " error " << info << " returned in substitution dgstrs()\n";
                         retval= -info;
                       }
-                    else
-                      StatFree(&slu_stat);
                   }
                 else
                   retval= ok;
@@ -353,22 +353,27 @@ int XC::SuperLU::solve(void)
 //! a \f$-1\f$ if not enough memory is available for the arrays.
 int XC::SuperLU::setSize(void)
   {
-    const size_t n = theSOE->size;
+    const size_t n= theSOE->size;
     if(n>0)
       {
         const size_t sizePerm= perm_r.Size();
         if((sizePerm>0) && (sizePerm<n))
-          std::clog << getClassName() << "::" << __FUNCTION__
-		    << "SuperLU, sometimes, fails when dimension"
+          std::cerr << getClassName() << "::" << __FUNCTION__
+		    << " SuperLU, sometimes, fails when dimension"
 	            << " of the system is changed." << std::endl;
+
+	// 13/07/2020 SuperLU solver fails sometimes trying
+	// to reuse super matrices.
         alloc(n);
         
         // set the refact variable to 'N' after first factorization with new_ size 
         // can set to 'Y'.
-        //options.Fact = DOFACT;
-        set_default_options(&options);
+        options.Fact = DOFACT;
+        //set_default_options(&options);
+	
 
-        if(symmetric == 'Y') options.SymmetricMode=YES;
+        if(symmetric == 'Y')
+	  options.SymmetricMode= YES;
       }
     else
       if(n == 0)
