@@ -75,7 +75,7 @@ XC::SparseGenColLinSOE::SparseGenColLinSOE(AnalysisAggregation *owr)
 //! @param owr: analysis aggregation that owns this object.
 //! @param classTag: class identifier.
 XC::SparseGenColLinSOE::SparseGenColLinSOE(AnalysisAggregation *owr,int classTag)
-  :SparseGenSOEBase(owr,classTag) {}
+  : SparseGenSOEBase(owr,classTag) {}
 
 //! @brief Set the solver to use.
 //!
@@ -125,10 +125,10 @@ int XC::SparseGenColLinSOE::setSize(Graph &theGraph)
     size= checkSize(theGraph);
 
     // fist iterate through the vertices of the graph to get nnz
-    Vertex *theVertex;
-    int newNNZ = 0;
+    Vertex *theVertex= nullptr;
+    int newNNZ= 0;
     VertexIter &theVertices = theGraph.getVertices();
-    while((theVertex = theVertices()) != 0)
+    while((theVertex = theVertices()) != nullptr)
       {
 	const std::set<int> &theAdjacency = theVertex->getAdjacency();
 	newNNZ += theAdjacency.size() +1; // the +1 is for the diag entry
@@ -142,7 +142,7 @@ int XC::SparseGenColLinSOE::setSize(Graph &theGraph)
       }
     A.Zero();
 	
-    factored = false;
+    factored= false;
     
     if(size > B.Size())
       { // we have to get space for the vectors
@@ -160,7 +160,7 @@ int XC::SparseGenColLinSOE::setSize(Graph &theGraph)
         for(int a=0;a<size;a++)
           {
             theVertex = theGraph.getVertexPtr(a);
-	    if(theVertex == 0)
+	    if(theVertex == nullptr)
               {
 	        std::cerr << getClassName() << "::" << __FUNCTION__
 			  << "; WARNING :"
@@ -199,7 +199,7 @@ int XC::SparseGenColLinSOE::setSize(Graph &theGraph)
       }
     // invoke setSize() on the Solver    
     LinearSOESolver *the_Solver = this->getSolver();
-    int solverOK = the_Solver->setSize();
+    int solverOK= the_Solver->setSize();
     if(solverOK < 0)
       {
 	std::cerr << getClassName() << "::" << __FUNCTION__
