@@ -25,7 +25,7 @@
 
 material_vector_NDMat &(PhysicalProperties_NDMat::*getNDMatVector)(void) = &PhysicalProperties_NDMat::getMaterialsVector;
 void (PhysicalProperties_NDMat::*setMaterialPtr)(const XC::NDMaterial *)= &PhysicalProperties_NDMat::setMaterial;
-class_<PhysicalProperties_NDMat,  bases<XC::MovableObject>, boost::noncopyable >("PhysicalProperties_NDMat", no_init)
+class_<PhysicalProperties_NDMat,  bases<CommandEntity,XC::MovableObject>, boost::noncopyable >("PhysicalProperties_NDMat", no_init)
   .add_property("getVectorMaterials",make_function(getNDMatVector,return_internal_reference<>() ),"Returns materials at Gauss points.")
   .add_property("generalizedStrains",&PhysicalProperties_NDMat::getGeneralizedStrains,"Returns a matrix with strain values for each gauss point.")
   .add_property("generalizedStresses",&PhysicalProperties_NDMat::getGeneralizedStresses,"Returns a matrix with stress values for each gauss point.")
@@ -56,7 +56,7 @@ class_<XC::SolidMech2D, bases<XC::NDMaterialPhysicalProperties>, boost::noncopya
 
 
 material_vector_SectionFDMat &(PhysicalProperties_SectionFDMat::*getSectionFDMatVector)(void) = &PhysicalProperties_SectionFDMat::getMaterialsVector;
-class_<PhysicalProperties_SectionFDMat,  bases<XC::MovableObject>, boost::noncopyable >("PhysicalProperties_SectionFDMat", no_init)
+class_<PhysicalProperties_SectionFDMat,  bases<CommandEntity,XC::MovableObject>, boost::noncopyable >("PhysicalProperties_SectionFDMat", no_init)
   .add_property("getVectorMaterials",make_function(getSectionFDMatVector,return_internal_reference<>() ),"Returns materials at Gauss points.")
    ;
 
@@ -69,7 +69,7 @@ class_<XC::SectionFDPhysicalProperties, bases<PhysicalProperties_SectionFDMat>, 
 
 
 material_vector_UMat &(PhysicalProperties_UMat::*getUMatVector)(void) = &PhysicalProperties_UMat::getMaterialsVector;
-class_<PhysicalProperties_UMat,  bases<XC::MovableObject>, boost::noncopyable >("PhysicalProperties_UMat", no_init)
+class_<PhysicalProperties_UMat,  bases<CommandEntity,XC::MovableObject>, boost::noncopyable >("PhysicalProperties_UMat", no_init)
   .add_property("getVectorMaterials",make_function(getUMatVector,return_internal_reference<>() ),"Returns materials at Gauss points.")
    ;
 
@@ -77,7 +77,34 @@ class_<XC::UniaxialMatPhysicalProperties, bases<PhysicalProperties_UMat>, boost:
   ;
 
 class_<XC::Joint2DPhysicalProperties, bases<XC::UniaxialMatPhysicalProperties>, boost::noncopyable  >("Joint2DPhysicalProperties", no_init)
-   ;
+  ;
+
+class_<PhysicalProperties_ElasticSection1d, bases<CommandEntity,XC::MovableObject>, boost::noncopyable  >("PhysicalProperties_ElasticSection1d", no_init)
+  ;
+
+class_<ElasticSectionPhysicalProperties_ElasticSection1d, bases<PhysicalProperties_ElasticSection1d>, boost::noncopyable  >("ElasticSectionPhysicalProperties_ElasticSection1d", no_init)
+  ;
+
+class_<XC::ElasticSection1dPhysicalProperties, bases<ElasticSectionPhysicalProperties_ElasticSection1d>, boost::noncopyable  >("ElasticSection1dPhysicalProperties", no_init)
+  ;
+
+class_<PhysicalProperties_ElasticSection2d, bases<CommandEntity,XC::MovableObject>, boost::noncopyable  >("PhysicalProperties_ElasticSection2d", no_init)
+  ;
+
+class_<ElasticSectionPhysicalProperties_ElasticSection2d, bases<PhysicalProperties_ElasticSection2d>, boost::noncopyable  >("ElasticSectionPhysicalProperties_ElasticSection2d", no_init)
+  ;
+
+class_<XC::ElasticSection2dPhysicalProperties, bases<ElasticSectionPhysicalProperties_ElasticSection2d>, boost::noncopyable  >("ElasticSection2dPhysicalProperties", no_init)
+  ;
+
+class_<PhysicalProperties_ElasticSection3d, bases<CommandEntity,XC::MovableObject>, boost::noncopyable  >("PhysicalProperties_ElasticSection3d", no_init)
+  ;
+
+class_<ElasticSectionPhysicalProperties_ElasticSection3d, bases<PhysicalProperties_ElasticSection3d>, boost::noncopyable  >("ElasticSectionPhysicalProperties_ElasticSection3d", no_init)
+  ;
+
+class_<XC::ElasticSection3dPhysicalProperties, bases<ElasticSectionPhysicalProperties_ElasticSection3d>, boost::noncopyable  >("ElasticSection3dPhysicalProperties", no_init)
+  ;
 
 // class_<XC::Joint3DPhysicalProperties, bases<XC::UniaxialMatPhysicalProperties>, boost::noncopyable  >("Joint3DPhysicalProperties", no_init)
 //    ;

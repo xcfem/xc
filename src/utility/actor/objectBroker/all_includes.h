@@ -153,7 +153,11 @@
 #include "domain/mesh/element/special/frictionBearing/frictionModel/VDependentFriction.h"
 #include "domain/mesh/element/special/frictionBearing/frictionModel/VPDependentFriction.h"
 
-
+// physical properties
+#include "domain/mesh/element/utils/physical_properties/UniaxialMatPhysicalProperties.h"
+#include "domain/mesh/element/utils/physical_properties/ElasticSection1dPhysicalProperties.h"
+#include "domain/mesh/element/utils/physical_properties/ElasticSection2dPhysicalProperties.h"
+#include "domain/mesh/element/utils/physical_properties/ElasticSection3dPhysicalProperties.h"
 
 // element header files
 #include "domain/mesh/element/Element.h"
