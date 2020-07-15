@@ -22,13 +22,6 @@ from actions import combinations as combs
 from solution import predefined_solutions
 from postprocess import output_handler
 
-inch2meter= 0.0254
-MPa2ksi= 0.145038
-kN2kips= 0.2248
-kip2kN= 1.0/kN2kips
-foot2meter= 0.3048
-m2Toin2= 1.0/inch2meter**2
-
 # Problem type
 steelColumn= xc.FEProblem()
 steelColumn.title= 'AISC 360-16 benchmark problem Case 1 (3D PDelta formulation)'
