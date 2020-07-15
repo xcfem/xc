@@ -87,7 +87,7 @@ delta= nod2.getDisp[2]  # Node 2 yAxis displacement
 elem0= elements.getElement(0)
 elem0.getResistingForce()
 M= elem0.getMz1
-V= elem0.getVy
+V= elem0.getVy()
 FC= elem0.getProp("FCTN")
 
 

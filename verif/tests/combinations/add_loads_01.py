@@ -86,7 +86,7 @@ delta= nodes.getNode(2).getDisp[0]
 theta= nodes.getNode(2).getDisp[3]
 elements.getElement(1).getResistingForce()
 N1= elements.getElement(1).getN1
-M1= elements.getElement(1).getT
+M1= elements.getElement(1).getT()
 
 deltateor= (GF*F*L/(E*A))
 ratio1= (delta-deltateor)/deltateor

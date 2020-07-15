@@ -88,7 +88,7 @@ theta= nod2.getDisp[3] # x rotation of the node
 elements= preprocessor.getElementHandler
 elem1= elements.getElement(1)
 elem1.getResistingForce()
-M1= elem1.getT
+M1= elem1.getT()
 
 
 

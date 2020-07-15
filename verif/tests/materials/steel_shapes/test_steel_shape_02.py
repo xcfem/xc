@@ -88,7 +88,7 @@ elements= preprocessor.getElementHandler
 elem0= elements.getElement(0)
 elem0.getResistingForce()
 M= elem0.getMy1
-V= elem0.getVz
+V= elem0.getVz()
 FC= elem0.getProp("FCTN")
 
 

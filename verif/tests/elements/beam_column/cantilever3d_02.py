@@ -80,7 +80,7 @@ delta= nodes.getNode(2).getDisp[1] #ydisplacement of node 2.
 elements.getElement(1).getResistingForce()
 M= elements.getElement(1).getMy1
 MTeor= F*L
-V= elements.getElement(1).getVz
+V= elements.getElement(1).getVz()
 
 deltateor= (-F*L**3/(3*E*Iy))
 ratio1= (delta/deltateor)

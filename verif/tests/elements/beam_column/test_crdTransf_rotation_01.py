@@ -87,7 +87,7 @@ elem1= elements.getElement(1)
 elem1.getResistingForce()
 M= elem1.getMy1
 MTeor= F*L
-V= elem1.getVz
+V= elem1.getVz()
 
 deltateor= (-F*L**3/(3*E*Iy))
 ratio1= abs(delta-deltateor)/deltateor

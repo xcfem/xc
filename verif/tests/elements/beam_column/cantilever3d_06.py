@@ -91,7 +91,7 @@ elements= preprocessor.getElementHandler
 elem1= elements.getElement(1)
 elem1.getResistingForce()
 M1= elem1.getMy1
-V= elem1.getVz
+V= elem1.getVz()
 
 
 

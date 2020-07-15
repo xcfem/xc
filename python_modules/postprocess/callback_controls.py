@@ -280,14 +280,14 @@ if(self.getProp("FCTN") > self.getProp("FCTNCP")):
    self.setProp("MzCP",self.getMz2)
    self.setProp("HIPCPTN",nmbComb)
 
-Tau= max(abs(self.getVy)/AreaQy,abs(self.getVz)/AreaQz)
+Tau= max(abs(self.getVy())/AreaQy,abs(self.getVz())/AreaQz)
 if(Tau > self.getProp("TauMax")):
    self.setProp("TauMax",Tau )
    self.setProp("FCV",self.getProp("TauMax")/fydV)
 if(self.getProp("FCV") > self.getProp("FCVCP")):
    self.setProp("FCVCP",self.getProp("FCV"))
-   self.setProp("VyCP",self.getVy)
-   self.setProp("VzCP",self.getVz)
+   self.setProp("VyCP",self.getVy())
+   self.setProp("VzCP",self.getVz())
    self.setProp("HIPCPV",nmbComb)"""
 
 
@@ -376,11 +376,11 @@ if(self.getProp("FCTN") > self.getProp("FCTNCP")):
    self.setProp("MzCP",self.getM2)
    self.setProp("HIPCPTN",nmbComb)
 
-Tau= abs(self.getV)/Area
+Tau= abs(self.getV())/Area
 if(Tau > self.getProp("TauMax")):
    self.setProp("TauMax",Tau )
    self.setProp("FCV",self.getProp("TauMax")/fydV)
 if(self.getProp("FCV") > self.getProp("FCVCP")):
    self.setProp("FCVCP",self.getProp("FCV"))
-   self.setProp("VyCP",self.getV)
+   self.setProp("VyCP",self.getV())
    self.setProp("HIPCPV",nmbComb)"""

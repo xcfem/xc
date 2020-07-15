@@ -89,7 +89,7 @@ elements= preprocessor.getElementHandler
 elem1= elements.getElement(1)
 elem1.getResistingForce()
 M= elem1.getMz1
-V= elem1.getVy
+V= elem1.getVy()
 
 
 deltateor= (-F*L**3/(3*E*Iz))

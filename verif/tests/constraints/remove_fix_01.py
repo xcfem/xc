@@ -100,7 +100,7 @@ delta= nod2.getDisp[1]  # Node 2 yAxis displacement
 beam3d.getResistingForce()
 M= beam3d.getMy1
 MTeor= F*L
-V= beam3d.getVz
+V= beam3d.getVz()
 
 deltateor= (-F*L**3/(3*E*Iy))
 ratio1= ((delta-deltateor)/deltateor)

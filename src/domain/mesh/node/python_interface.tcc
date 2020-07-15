@@ -48,6 +48,7 @@ class_<XC::Node, XC::Node *, bases<XC::MeshComponent>, boost::noncopyable >("Nod
   .add_property("getInitialPos3d", &XC::Node::getInitialPosition3d,"Returns 3D initial position of node.")
   .def("getCurrentPos2d", &XC::Node::getCurrentPosition2d,"Returns 2D current position of node scaled by a factor: initialPos+factor*currentDisplacement.")
   .def("getCurrentPos3d", &XC::Node::getCurrentPosition3d,"\n""getCurrentPos3d(factor) \n""Return 3D current position of node scaled by a factor: initialPos+factor*currentDisplacement.")
+  .def("setPos", &XC::Node::setPos,"\n""setPos(Pos3d) \n""Set node position.")
   .def("In", In3D,"\n""In(geomObject,factor,tolerance) \n""Return true if current position of node scaled by a factor: initialPos+factor*currentDisplacement lies inside the geometric object.")
   .def("Out", Out3D,"\n""Out(geomObject,factor,tolerance) \n""Return true if current position of node scaled by a factor: initialPos+factor*currentDisplacement lies outside the geometric object.")
   //Call Policies: here we don't use return_internal_reference because
