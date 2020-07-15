@@ -144,14 +144,10 @@ for c in ['c0', 'c1', 'c2', 'c3']:
     M= 0.0
     for e in midElements.elements:
         if(e.getNodes[0].tag==n1.tag):
-            M= e.getM1
-        else:
-            M= e.getM2
-        if(e.getNodes[0].tag==n1.tag):
             M+= e.getM1
         else:
             M+= e.getM2
-        M/=2.0
+    M/=2.0
     bendingMoments.append(M)
 
 ratio1= 0.0

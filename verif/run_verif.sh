@@ -225,6 +225,10 @@ python tests/solution/geom_nl/aisc_360_benchmark_problem_case_01.py
 python tests/solution/geom_nl/aisc_360_benchmark_problem_case_02.py
 python tests/solution/geom_nl/aisc_360_benchmark_problem_case_03.py
 python tests/solution/geom_nl/aisc_360_benchmark_problem_case_04.py
+python tests/solution/geom_nl/aisc_360_benchmark_problem_case_05.py
+python tests/solution/geom_nl/aisc_360_benchmark_problem_case_06.py
+python tests/solution/geom_nl/aisc_360_benchmark_problem_case_07.py
+python tests/solution/geom_nl/aisc_360_benchmark_problem_case_08.py
 
 ## Time history.
 echo "$BLEU" "  Time history solution tests." "$NORMAL"

@@ -341,8 +341,9 @@ def simple_static_modified_newton(prb):
     solution.convergenceTestTol=  0.01 #Make this configurable
     return solution.simpleStaticModifiedNewton(prb)
 
-def penalty_newton_raphson(prb):
+def penalty_newton_raphson(prb, mxNumIter= 10):
     solution= SolutionProcedure()
+    solution.maxNumIter= mxNumIter
     return solution.penaltyNewtonRaphson(prb)
 
 def frequency_analysis(prb):
