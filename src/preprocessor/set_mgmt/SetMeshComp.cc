@@ -152,16 +152,22 @@ void XC::SetMeshComp::extend_lists(const SetMeshComp &other)
 void XC::SetMeshComp::substract_lists(const SetMeshComp &other)
   {
     nodes= nodes-other.nodes;
+    nodes.set_owner(this);
     elements= elements-other.elements;
+    elements.set_owner(this);
     constraints= constraints-other.constraints;
+    constraints.set_owner(this);
   }
 
 //! @brief Remove the objects that doesn't also belong to the argument.
 void XC::SetMeshComp::intersect_lists(const SetMeshComp &other)
   {
     nodes= nodes*other.nodes;
+    nodes.set_owner(this);
     elements= elements*other.elements;
+    elements.set_owner(this);
     constraints= constraints*other.constraints;
+    constraints.set_owner(this);
   }
 	
 	
@@ -567,6 +573,7 @@ XC::SetMeshComp XC::SetMeshComp::pickNodesInside(const std::string &newSetName, 
   {
     SetMeshComp retval(newSetName);
     retval.nodes= nodes.pickNodesInside(geomObj,tol);
+    retval.nodes.set_owner(&retval);
     return retval;    
   }
 
@@ -611,6 +618,7 @@ XC::SetMeshComp XC::SetMeshComp::pickElemsInside(const std::string &newSetName, 
   {
     SetMeshComp retval(newSetName);
     retval.elements= elements.pickElemsInside(geomObj, tol);
+    retval.elements.set_owner(&retval);
     return retval;
   }
 
@@ -623,6 +631,7 @@ XC::SetMeshComp XC::SetMeshComp::pickElemsOfType(const std::string &newSetName, 
   {
     SetMeshComp retval(newSetName);
     retval.elements= elements.pickElemsOfType(typeName);
+    retval.elements.set_owner(&retval);
     return retval;
   }
 
@@ -635,6 +644,7 @@ XC::SetMeshComp XC::SetMeshComp::pickElemsOfDimension(const std::string &newSetN
   {
     SetMeshComp retval(newSetName);
     retval.elements= elements.pickElemsOfDimension(targetDim);
+    retval.elements.set_owner(&retval);
     return retval;
   }
 
@@ -647,6 +657,7 @@ XC::SetMeshComp XC::SetMeshComp::pickElemsOfMaterial(const std::string &newSetNa
   {
     SetMeshComp retval(newSetName);
     retval.elements= elements.pickElemsOfMaterial(targetName);
+    retval.elements.set_owner(&retval);
     return retval;
   }
 
