@@ -28,7 +28,7 @@ class OutputHandler(object):
        :ivar modelSpace: FE model data.
        :ivar outputStyle: style of the output.
     '''
-    def __init__(self, modelSpace= None, outputStyle= output_styles.OutputStyle()):
+    def __init__(self, modelSpace= None, outputStyle= output_styles.defaultOutputStyle):
         '''Defines the dimension of the space and the number 
          of DOFs for each node.
 

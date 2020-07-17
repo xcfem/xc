@@ -34,7 +34,7 @@ class QuickGraphics(oh.OutputHandler):
                         combination of previously defined actions
                         e.g. '1.0*GselfWeight+1.0*GearthPress'
     '''
-    def __init__(self, modelSpace= None, loadCaseName= '',loadCaseExpr= '', outputStyle= output_styles.OutputStyle()):
+    def __init__(self, modelSpace= None, loadCaseName= '',loadCaseExpr= '', outputStyle= output_styles.defaultOutputStyle):
         ''' Constructor.'''
         super(QuickGraphics,self).__init__(modelSpace, outputStyle)
         self.loadCaseName=loadCaseName
@@ -51,7 +51,7 @@ class LoadCaseResults(QuickGraphics):
                      combination of previously defined actions
                      e.g. '1.0*GselfWeight+1.0*GearthPress'
     '''
-    def __init__(self,feProblem,loadCaseName= '',loadCaseExpr= '', outputStyle= output_styles.OutputStyle()):
+    def __init__(self,feProblem,loadCaseName= '',loadCaseExpr= '', outputStyle= output_styles.defaultOutputStyle):
         modelSpace= predefined_spaces.getModelSpaceFromPreprocessor(feProblem.getPreprocessor)
         super(LoadCaseResults,self).__init__(modelSpace, loadCaseName, loadCaseExpr, outputStyle)
         self.feProblem= feProblem
