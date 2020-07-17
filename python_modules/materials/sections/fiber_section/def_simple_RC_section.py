@@ -623,7 +623,7 @@ class RCRectangularSection(BasicRectangularRCSection):
         '''returns a minimal value (normally shear strength will be greater)
            of the shear strength of the concrete section Vcu expressed
            in newtons.'''
-        return 500*self.getAc()
+        return 0.5e6*self.getAc() # 0.5 MPa
       
     def getI(self):
         '''returns the second moment of area about the middle axis parallel to 
