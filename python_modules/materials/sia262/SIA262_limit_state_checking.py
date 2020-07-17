@@ -262,7 +262,7 @@ class ShearController(lsc.ShearControllerBase):
           VuTmp= section.getRoughVcuEstimation() 
           NTmp= scc.getStressResultantComponent("N")
           MyTmp= scc.getStressResultantComponent("My")
-          momentThreshold= VuTmp/1000.0
+          momentThreshold= VuTmp/1e6
           if(abs(MyTmp)<momentThreshold): #bending moment too small.
               MyTmp= momentThreshold
           MzTmp= scc.getStressResultantComponent("Mz")
