@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
+from __future__ import division
 
 '''Graphic representation of fields over the mesh.'''
 
@@ -16,70 +18,70 @@ from postprocess import extrapolate_elem_attr
 from postprocess import control_vars as cv
 
 class ScalarField(fb.FieldBase):
-  '''Scalar field defined at nodes.
+    '''Scalar field defined at nodes.
 
-    :ivar rgMinMax: range (vmin,vmax) with the maximum and minimum values of 
-              the field to be represented. All the values less than vmin are 
-              displayed in blue and those greater than vmax iqn red
-              (defaults to None)
+      :ivar rgMinMax: range (vmin,vmax) with the maximum and minimum values of 
+                the field to be represented. All the values less than vmin are 
+                displayed in blue and those greater than vmax iqn red
+                (defaults to None)
 
-  '''
-  def __init__(self,name, functionName, component=None, fUnitConv= 1.0,rgMinMax=None):
-    super(ScalarField,self).__init__(name,fUnitConv)
-    self.attrName= functionName
-    self.attrComponent= component
-    if(rgMinMax):
-      self.rgMinMax= [1.0,1.0]
-      # Convert the range units.
-      self.rgMinMax[0]= rgMinMax[0]*fUnitConv
-      self.rgMinMax[1]= rgMinMax[1]*fUnitConv
-    else:
-      self.rgMinMax= None
-    self.arr= None
-
-  def fillArray(self, nodeSet):
-    '''Creates an vtkDoubleArray filled with the proper values.
- 
-   '''
-    # Scalar values.
-    self.arr= vtk.vtkDoubleArray()
-    self.arr.SetName(self.name)
-    self.arr.SetNumberOfTuples(len(nodeSet))
-    self.arr.SetNumberOfComponents(1)
-    for n in nodeSet:
-      attr= getattr(n,self.attrName)
-      tmp= None
-      if hasattr(attr,"__getitem__"):
-        tmp= attr[self.attrComponent]
-      elif callable(attr):
-        if(attr.__name__!='getProp'):
-          tmp= attr(self.name)
-        elif(n.hasProp(self.name)):
-          tmp= attr(self.name)
+    '''
+    def __init__(self,name, functionName, component=None, fUnitConv= 1.0,rgMinMax=None):
+        super(ScalarField,self).__init__(name,fUnitConv)
+        self.attrName= functionName
+        self.attrComponent= component
+        if(rgMinMax):
+            self.rgMinMax= [1.0,1.0]
+            # Convert the range units.
+            self.rgMinMax[0]= rgMinMax[0]*fUnitConv
+            self.rgMinMax[1]= rgMinMax[1]*fUnitConv
         else:
-          tmp= 0.0
-      else:
-        tmp= attr
-      if hasattr(tmp,"__getitem__"):
-        tmp= tmp[self.attrComponent]
-      tmp*= self.fUnitConv
-      if not(self.rgMinMax):
-        self.updateMinMax(tmp)
-      else:
-        self.updateMinMaxWithinRange(tmp,self.rgMinMax)
-      self.arr.SetTuple1(n.getIdx,tmp)
-    return self.arr
+            self.rgMinMax= None
+        self.arr= None
 
-  def setupOnGrid(self,uGrid):
-    uGrid.GetPointData().SetScalars(self.arr)
-    uGrid.GetPointData().SetActiveScalars(self.name)
-    uGrid.Modified()
+    def fillArray(self, nodeSet):
+        '''Creates an vtkDoubleArray filled with the proper values.
 
-  def setupOnMapper(self,gridMapper):
-    gridMapper.SetScalarRange(self.valMin,self.valMax)
-    gridMapper.SetLookupTable(self.lookUpTable)
-    gridMapper.SetScalarModeToUsePointData()
-    gridMapper.ScalarVisibilityOn()
+        '''
+        # Scalar values.
+        self.arr= vtk.vtkDoubleArray()
+        self.arr.SetName(self.name)
+        self.arr.SetNumberOfTuples(len(nodeSet))
+        self.arr.SetNumberOfComponents(1)
+        for n in nodeSet:
+            attr= getattr(n,self.attrName)
+            tmp= None
+            if hasattr(attr,"__getitem__"):
+                tmp= attr[self.attrComponent]
+            elif callable(attr):
+                if(attr.__name__!='getProp'):
+                    tmp= attr(self.name)
+                elif(n.hasProp(self.name)):
+                    tmp= attr(self.name)
+                else:
+                    tmp= 0.0
+            else:
+                tmp= attr
+            if(hasattr(tmp,"__getitem__")):
+                tmp= tmp[self.attrComponent]
+            tmp*= self.fUnitConv
+            if not(self.rgMinMax):
+                self.updateMinMax(tmp)
+            else:
+                self.updateMinMaxWithinRange(tmp,self.rgMinMax)
+            self.arr.SetTuple1(n.getIdx,tmp)
+        return self.arr
+
+    def setupOnGrid(self,uGrid):
+        uGrid.GetPointData().SetScalars(self.arr)
+        uGrid.GetPointData().SetActiveScalars(self.name)
+        uGrid.Modified()
+
+    def setupOnMapper(self,gridMapper):
+        gridMapper.SetScalarRange(self.valMin,self.valMax)
+        gridMapper.SetLookupTable(self.lookUpTable)
+        gridMapper.SetScalarModeToUsePointData()
+        gridMapper.ScalarVisibilityOn()
 
 
 class ExtrapolatedScalarField(ScalarField):
@@ -126,16 +128,16 @@ class ExtrapolatedProperty(ExtrapolatedScalarField):
     displaySettings.displayMesh(self.xcSet,field= self, diagrams= None, caption= caption, fileName= fileName, defFScale= defFScale)
 
 def getScalarFieldFromControlVar(attributeName,argument,xcSet,component,fUnitConv,rgMinMax):
-  '''return an scalar field that represents the control var over the 
-               elements in the set.
+    '''return an scalar field that represents the control var over the 
+                 elements in the set.
 
-     :param attributeName: name of the element's property that has the 
-                           control var in it for example as in 
-                           elem.getProp(attributeName).eval(argument).
-     :param argument: name of the control var to represent.
-     :param xcSet: represent the field over those elements.
-     :param component: component of the control var to represent.
-     :param fUnitConv: unit conversion factor (i.e N->kN => fUnitConv= 1e-3).
-  '''
-  nodePropName= cv.extrapolate_control_var(xcSet,attributeName,argument)
-  return ExtrapolatedScalarField(nodePropName,"getProp",xcSet,component,fUnitConv,rgMinMax)
+       :param attributeName: name of the element's property that has the 
+                             control var in it for example as in 
+                             elem.getProp(attributeName).eval(argument).
+       :param argument: name of the control var to represent.
+       :param xcSet: represent the field over those elements.
+       :param component: component of the control var to represent.
+       :param fUnitConv: unit conversion factor (i.e N->kN => fUnitConv= 1e-3).
+    '''
+    nodePropName= cv.extrapolate_control_var(xcSet,attributeName,argument)
+    return ExtrapolatedScalarField(nodePropName,"getProp",xcSet,component,fUnitConv,rgMinMax)
