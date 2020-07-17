@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 from __future__ import print_function
-
 from __future__ import division
 '''Classes to store limit state control variables (internal forces, 
    strains, stresses,...) calculated in the analysis.
@@ -927,7 +926,6 @@ def writeControlVarsFromElements(controlVarName,preprocessor,outputFileName,outp
     return retval
 
 
-# print(normal stresses verification results.)
 def writeControlVarsFromElementsForAnsys(controlVarName,preprocessor,outputFileName, sectionName1, sectionName2):
     '''
     :param   preprocessor:    preprocessor name
@@ -985,13 +983,14 @@ def extrapolate_control_var(elemSet,propName,argument,initialValue= 0.0):
      :param argument: name of the control variable to extrapolate.
      :param initialValue: initial value for the prop defined at the nodes.
     '''
-    eSet=elemSet.elements
+    elemSet.fillDownwards()
+    eSet= elemSet.elements
     nodePropName= propName+'_'+argument
     nodeTags= ext.create_attribute_at_nodes(eSet,nodePropName,initialValue)
     #Calculate totals.
     for e in eSet:
         elemNodes= e.getNodes
-        sz= len(elemNodes)
+        sz= len(elemNodes) 
         for i in range(0,sz):
             n= elemNodes[i]
             controlVar= e.getProp(propName)
@@ -1004,6 +1003,7 @@ def extrapolate_control_var(elemSet,propName,argument,initialValue= 0.0):
     for tag in nodeTags:
         n= preprocessor.getNodeHandler.getNode(tag)
         denom= nodeTags[tag]
-        n.setProp(nodePropName,n.getProp(nodePropName)/denom)
+        newValue= n.getProp(nodePropName)/denom
+        n.setProp(nodePropName,newValue)
     return nodePropName
 
