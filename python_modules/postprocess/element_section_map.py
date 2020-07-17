@@ -260,10 +260,11 @@ class RCSlabBeamSection(setRCSections2SetElVerif):
         self.dir2ShReinfZ= def_simple_RC_section.ShearReinforcement()
 
     def createSections(self):
-        '''create the fiber sections of type 'RCRectangularSection' that represent
-        the reinforced concrete fiber section to be used for the checking on each
-        integration point and/or each direction. These sections are also added to
-        the attribute 'lstRCSects' that contains the list of sections.
+        '''create the fiber sections of type 'RCRectangularSection' that 
+        represent the reinforced concrete fiber section to be used for the
+        checking on each integration point and/or each direction. These 
+        sections are also added to the attribute 'lstRCSects' that contains 
+        the list of sections.
         '''
         templateSection1= self.getTemplateSection(posReb=self.dir1PositvRebarRows,negReb=self.dir1NegatvRebarRows,YShReinf=self.dir1ShReinfY,ZShReinf=self.dir1ShReinfZ)
         templateSection2= self.getTemplateSection(posReb=self.dir2PositvRebarRows,negReb=self.dir2NegatvRebarRows,YShReinf=self.dir2ShReinfY,ZShReinf=self.dir2ShReinfZ)
