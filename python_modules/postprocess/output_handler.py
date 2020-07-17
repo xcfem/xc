@@ -799,7 +799,7 @@ class OutputHandler(object):
         
         displaySettings= vtk_FE_graphic.DisplaySettingsFE()
         displaySettings.cameraParameters= self.getCameraParameters()
-        attributeName= limitStateLabel + sectRef   #Normal stresses limit state direction 1.
+        attributeName= limitStateLabel + sectRef
         fUnitConv, unitDescription= self.outputStyle.getUnitParameters(argument)
 
         field= fields.getScalarFieldFromControlVar(attributeName,argument,setToDisplay,component,fUnitConv,rgMinMax)
