@@ -69,7 +69,7 @@ class OutputStyle(object):
         if(language):
             self.language= language
         else:
-            self.language= locale.getdefaultlocale()
+            self.language= locale.getdefaultlocale()[0][:2]
         self.directionDescription= ['dir. 1', 'dir. 2']
             
     def getDisplacementUnitsScaleFactor(self):
@@ -144,6 +144,8 @@ class OutputStyle(object):
             retval= fr_capTexts
         return retval
 
+defaultOutputStyle= OutputStyle()
+    
 #Spanish caption texts
 sp_capTexts={
     'uX':'desplazamiento en dirección X',
