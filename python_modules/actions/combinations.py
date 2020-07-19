@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-
 '''combinations.py: manages the container for load combinations.'''
 
 __author__= "Luis C. Pérez Tato (LCPT) Ana Ortega (A_OO) "
