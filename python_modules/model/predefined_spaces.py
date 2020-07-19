@@ -541,14 +541,14 @@ class StructuralMechanics(PredefinedSpace):
         '''
         super(StructuralMechanics,self).__init__(nodes,dimSpace,numDOFs)
             
-    def createTrusses(self, xcSet, material, area, sectionGeometry= None, corotational= False):
+    def createTrusses(self, xcSet, material, area, crossSection= None, corotational= False):
         ''' Meshes the lines of the set argument with Truss
             elements.
 
         :param xcSet: set with the lines to mesh.
         :param material: material to assign to the elements.
         :param area: area to assign to the elements.
-        :param sectionGeometry: object that defines the geometry of the element section.
+        :param crossSection: object that defines the geometry of the element section.
         :param corotational: if true, use corotational formulation.
         '''
         elementType= 'Truss'
@@ -566,12 +566,12 @@ class StructuralMechanics(PredefinedSpace):
             elem= seedElemHandler.newElement(elementType,xc.ID([0,0]))
             elem.sectionArea= area
             l.genMesh(xc.meshDir.I)
-            if(sectionGeometry):
+            if(crossSection):
                 for e in l.getElements:
-                    e.setProp('sectionGeometry',sectionGeometry)
+                    e.setProp('crossSection',crossSection)
         xcSet.fillDownwards()
 
-    def createElasticBeams(self, xcSet, xcSection, trf, xzVector= None, sectionGeometry= None):
+    def createElasticBeams(self, xcSet, xcSection, trf, xzVector= None, crossSection= None):
         ''' Meshes the lines of the set argument with ElasticBeam3d
             elements.
 
@@ -579,7 +579,7 @@ class StructuralMechanics(PredefinedSpace):
         :param xcSection: XC section to assign to the elements.
         :param trf: coordinate transformation to assign to the elements.
         :param xzVector: vector defining transformation XZ plane.
-        :param sectionGeometry: object that defines the geometry of the element section.
+        :param crossSection: object that defines the geometry of the element section.
         '''
         numDOFs= self.preprocessor.getNodeHandler.numDOFs
         if(numDOFs==3):
@@ -598,9 +598,9 @@ class StructuralMechanics(PredefinedSpace):
                 trf.xzVector= xc.Vector([v3d.x, v3d.y, v3d.z])
             elem= seedElemHandler.newElement(elementType,xc.ID([0,0]))
             l.genMesh(xc.meshDir.I)
-            if(sectionGeometry):
+            if(crossSection):
                 for e in l.getElements:
-                    e.setProp('sectionGeometry',sectionGeometry)
+                    e.setProp('crossSection',crossSection)
         xcSet.fillDownwards()
 
         

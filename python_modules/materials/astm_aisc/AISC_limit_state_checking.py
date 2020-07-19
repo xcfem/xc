@@ -311,15 +311,15 @@ class ShearController(lsc.LimitStateControllerBase):
             for lf in elIntForc:
                 CFtmp= sh.getYShearEfficiency(sc,lf.Vy)
                 if lf.idSection == 0:
-                    if (CFtmp>e.getProp(self.limitStateLabel+'Sect1').CF):
+                    if(CFtmp>e.getProp(self.limitStateLabel+'Sect1').CF):
                         e.setProp(self.limitStateLabel+'Sect1',cv.ShearYControlVars('Sects1',lf.idComb,CFtmp,lf.Vy))
                 else:
-                    if (CFtmp>e.getProp(self.limitStateLabel+'Sect2').CF):
+                    if(CFtmp>e.getProp(self.limitStateLabel+'Sect2').CF):
                         e.setProp(self.limitStateLabel+'Sect2',cv.ShearYControlVars('Sects2',lf.idComb,CFtmp,lf.Vy))
 
                         
 def controlULSCriterion():
-  return '''recorder= self.getProp('ULSControlRecorder')
+    return '''recorder= self.getProp('ULSControlRecorder')
 nmbComb= recorder.getCurrentCombinationName
 self.getResistingForce()
 crossSection= self.getProp('crossSection')
@@ -328,7 +328,7 @@ crossSection.checkYShearForElement(self,nmbComb)
 crossSection.checkZShearForElement(self,nmbComb)'''
 
 def controlULSCriterion2D():
-  return '''recorder= self.getProp('ULSControlRecorder')
+    return '''recorder= self.getProp('ULSControlRecorder')
 nmbComb= recorder.getCurrentCombinationName
 self.getResistingForce()
 crossSection= self.getProp('crossSection')

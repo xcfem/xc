@@ -58,7 +58,7 @@ class RawLineSetToMesh(SetToMesh):
     def generateMesh(self, preprocessor,sectGeom='N'):
         '''Generate the mesh for the line set. 
 
-        :param sectGeom: ='Y' if want to create the property  'sectionGeometry'
+        :param sectGeom: ='Y' if want to create the property  'crossSection'
                   for each element (defaults to 'N')
         '''
         elem= self.getSeedElement(preprocessor)
@@ -68,7 +68,7 @@ class RawLineSetToMesh(SetToMesh):
             l.genMesh(xc.meshDir.I)
             if sectGeom[0].lower()=='y':
                 for e in l.getElements:
-                    e.setProp('sectionGeometry',self.matSect)
+                    e.setProp('crossSection',self.matSect)
         self.primitiveSet.fillDownwards()
 
 def getDefaultCoordinateTransformation(preprocessor,coordTransfName,coordTransfType,vDir):
@@ -146,7 +146,7 @@ class SurfSetToMesh(SetToMesh):
     def generateMesh(self, preprocessor,sectGeom='N'):
         '''Generate the mesh for the surface set.
 
-        :param sectGeom: ='Y' if want to create the property  'sectionGeometry'
+        :param sectGeom: ='Y' if want to create the property  'crossSection'
                   for each element (defaults to 'N')
         '''
         for s in self.primitiveSet.getSurfaces:
@@ -158,7 +158,7 @@ class SurfSetToMesh(SetToMesh):
             s.genMesh(xc.meshDir.I)
             if sectGeom[0].lower()=='y':
                 for e in s.getElements:
-                    e.setProp('sectionGeometry',self.matSect)
+                    e.setProp('crossSection',self.matSect)
         self.primitiveSet.fillDownwards()
 
 
@@ -168,7 +168,7 @@ def multi_mesh(preprocessor,lstMeshSets,sectGeom='N'):
     :param preprocessor: preprocessor
     :param lstMeshSets: list of instances of classes LinSetToMesh or 
            SurfSetToMesh to be meshed
-    :param sectGeom: ='Y' if want to create the property  'sectionGeometry'
+    :param sectGeom: ='Y' if want to create the property  'crossSection'
                   for each element (defaults to 'N')
     '''
     for ms in lstMeshSets:
@@ -205,7 +205,7 @@ def createBeam2Pnts(preprocessor,startPnt,endPnt,setName,matSect,elemSize,vDirLA
     :param coordTransfType: type of coordinate transformation. Available 
                        types: 'linear', 'PDelta' and 'corot' (defaults to 
                        'linear') 
-    :param sectGeom: ='Y' if want to create the property  'sectionGeometry'
+    :param sectGeom: ='Y' if want to create the property 'crossSection'
                   for each element (defaults to 'N')
     '''
     s=preprocessor.getSets.defSet(setName)

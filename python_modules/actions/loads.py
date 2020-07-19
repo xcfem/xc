@@ -494,7 +494,7 @@ class WindLoadOnBeams(BaseVectorLoad):
         else:
             for e in self.xcSet.elements:
                 zCoo=e.getPosCentroid(True).z
-                press=self.windParams.qz(zCoo)*self.Cp*e.getProp('sectionGeometry').h()*self.Gf
+                press=self.windParams.qz(zCoo)*self.Cp*e.getProp('crossSection').h()*self.Gf
                 e.vector3dUniformLoadGlobal(self.loadVector*press)
             
     def getMaxMagnitude(self):
@@ -507,7 +507,7 @@ class WindLoadOnBeams(BaseVectorLoad):
         else:
             maxValue=-1e6
             for e in self.xcSet.elements:
-                press=abs(self.windParams.qz(zCoo)*self.Cp*e.getProp('sectionGeometry').h()*self.Gf)
+                press=abs(self.windParams.qz(zCoo)*self.Cp*e.getProp('crossSection').h()*self.Gf)
                 maxValue=max(maxValue,press)
         return maxValue
 
@@ -524,7 +524,7 @@ class WindLoadOnTrusses(BaseVectorLoad):
                          xc.Vector([Wx,Wy,Wz]).
     :ivar surfExpossed: surface expossed to wind per unit length 
             of beam. If None surfExpossed is taken as the value of method h() 
-            of property 'sectionGeometry' for each element.
+            of property 'crossSection' for each element.
     :ivar Gf: gust factor (defaults to 1.0)
     '''
     def __init__(self,name, xcSet, windParams,Cp,vDirWind,surfExpossed=None,Gf=1.0):
@@ -549,7 +549,7 @@ class WindLoadOnTrusses(BaseVectorLoad):
             for e in self.xcSet.elements:
                 L=e.getLength(True); n1=e.getNodes[0]; n2=e.getNodes[1]
                 zCoo=e.getPosCentroid(True).z
-                press=self.windParams.qz(zCoo)*self.Cp*e.getProp('sectionGeometry').h()*self.Gf
+                press=self.windParams.qz(zCoo)*self.Cp*e.getProp('crossSection').h()*self.Gf
                 F_nod=self.loadVector*(L*press/2.)
                 F_nod6comp=xc.Vector([F_nod[0],F_nod[1],F_nod[2],0.,0.,0.])
                 n1.newLoad(F_nod6comp); n2.newLoad(F_nod6comp)
@@ -566,7 +566,7 @@ class WindLoadOnTrusses(BaseVectorLoad):
         else:
             for e in self.xcSet.elements:
                 L=e.getLength(True); zCoo=e.getPosCentroid(True).z
-                f=abs(self.windParams.qz(zCoo)*self.Cp*e.getProp('sectionGeometry').h()*L/2.)*self.Gf
+                f=abs(self.windParams.qz(zCoo)*self.Cp*e.getProp('crossSection').h()*L/2.)*self.Gf
                 maxValue=max(maxValue,f)
                 
         return maxValue
