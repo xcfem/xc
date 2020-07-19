@@ -1,8 +1,13 @@
 # -*- coding: utf-8 -*-
+'''Base classes for wind load calculations '''
 from __future__ import division
 from __future__ import print_function
 
-'''Base classes for wind load calculations '''
+__author__= "Ana Ortega (A_OO) "
+__copyright__= "Copyright 2020,  LCPT A_OO "
+__license__= "GPL"
+__version__= "3.0"
+__email__= "ana.Ortega.Ort@gmail.com"
 
 import xc_base
 import geom
