@@ -570,6 +570,18 @@ class StructuralMechanics(PredefinedSpace):
                 for e in l.getElements:
                     e.setProp('crossSection',crossSection)
         xcSet.fillDownwards()
+        
+    def getSuitableXZVector(self, iNode, jNode):
+        ''' Create an elastic beam between two nodes.
+
+        :param iNode: first node.
+        :param jNode: second node.
+        '''
+        p1= iNode.getInitialPos3d
+        p2= jNode.getInitialPos3d
+        sg= geom.Line3d(p1,p2)
+        v3d= sg.getKVector
+        return xc.Vector([v3d.x, v3d.y, v3d.z])
 
     def createElasticBeams(self, xcSet, xcSection, trf, xzVector= None, crossSection= None, nDiv= 4):
         ''' Meshes the lines of the set argument with ElasticBeam3d
@@ -580,6 +592,7 @@ class StructuralMechanics(PredefinedSpace):
         :param trf: coordinate transformation to assign to the elements.
         :param xzVector: vector defining transformation XZ plane.
         :param crossSection: object that defines the geometry of the element section.
+        :param nDiv: number of divisions on each line.
         '''
         numDOFs= self.preprocessor.getNodeHandler.numDOFs
         if(numDOFs==3):

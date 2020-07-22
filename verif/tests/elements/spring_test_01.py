@@ -26,9 +26,8 @@ nodes= preprocessor.getNodeHandler
 # Problem type
 modelSpace= predefined_spaces.SolidMechanics2D(nodes)
 
-nodes.defaultTag= 1 #First node number.
-nod= nodes.newNodeXY(0,0)
-nod= nodes.newNodeXY(l,0.0)
+n1= nodes.newNodeXY(0,0)
+n2= nodes.newNodeXY(l,0.0)
 
 # Materials definition
 elast= typical_materials.defElasticMaterial(preprocessor, "elast",K)
@@ -43,14 +42,14 @@ elements.defaultMaterial= elast.name
 elements.dimElem= 2 # Dimension of element space
 elements.defaultTag= 1
 #  sintaxis: Spring[<tag>] 
-spring= elements.newElement("Spring",xc.ID([1,2]))
+spring= elements.newElement("Spring",xc.ID([n1.tag,n2.tag]))
     
 # Constraints
 constraints= preprocessor.getBoundaryCondHandler
 #
-spc= constraints.newSPConstraint(1,0,0.0) # Node 1
-spc= constraints.newSPConstraint(1,1,0.0)
-spc= constraints.newSPConstraint(2,1,0.0) # Node 2
+spc1= constraints.newSPConstraint(n1.tag,0,0.0) # Node 1
+spc2= constraints.newSPConstraint(n1.tag,1,0.0)
+spc3= constraints.newSPConstraint(n2.tag,1,0.0) # Node 2
 
 
 # Loads definition
@@ -63,22 +62,19 @@ lPattern= "0"
 lp0= lPatterns.newLoadPattern("default",lPattern)
 #lPatterns.currentLoadPattern= lPattern
 # we check that loads are cummulated by the way.
-lp0.newNodalLoad(2,xc.Vector([F/2.0,0]))
-lp0.newNodalLoad(2,xc.Vector([F/2.0,0]))
+lp0.newNodalLoad(n2.tag,xc.Vector([F/2.0,0]))
+lp0.newNodalLoad(n2.tag,xc.Vector([F/2.0,0]))
 lPatterns.addToDomain(lPattern) # Append load pattern to domain.
 # Solution
 result= modelSpace.analyze(calculateNodalReactions= True)
 
-nod2= nodes.getNode(2)
-deltax= nod2.getDisp[0] 
-deltay= nod2.getDisp[1] 
-nod1= nodes.getNode(1)
-R= nod1.getReaction[0] 
+deltax= n2.getDisp[0] 
+deltay= n2.getDisp[1] 
+R= n1.getReaction[0] 
 
 elements= preprocessor.getElementHandler
-elem1= elements.getElement(1)
-elem1.getResistingForce()
-Ax= elem1.getMaterial().getStrain() # Spring elongation
+spring.getResistingForce()
+Ax= spring.getMaterial().getStrain() # Spring elongation
 
 
 ratio1= (F+R/F)

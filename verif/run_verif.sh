@@ -666,6 +666,7 @@ python tests/database/readln_test_01.py
 echo "$BLEU" "Verifiyng misc. utilities." "$NORMAL"
 python tests/utility/rcond.py
 python tests/utility/import_combinations.py
+python tests/utility/test_suitable_xzvector.py
 
 echo "$BLEU" "Verifiying routines for rough calculations,..." "$NORMAL"
 python tests/rough_calculations/test_punzo01.py
