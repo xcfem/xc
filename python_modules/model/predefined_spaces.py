@@ -571,7 +571,7 @@ class StructuralMechanics(PredefinedSpace):
                     e.setProp('crossSection',crossSection)
         xcSet.fillDownwards()
 
-    def createElasticBeams(self, xcSet, xcSection, trf, xzVector= None, crossSection= None):
+    def createElasticBeams(self, xcSet, xcSection, trf, xzVector= None, crossSection= None, nDiv= 4):
         ''' Meshes the lines of the set argument with ElasticBeam3d
             elements.
 
@@ -591,6 +591,7 @@ class StructuralMechanics(PredefinedSpace):
         seedElemHandler= self.preprocessor.getElementHandler.seedElemHandler
         seedElemHandler.defaultMaterial= xcSection.getName()
         for l in xcSet.getLines:
+            l.nDiv= nDiv
             if(xzVector):
                 trf.xzVector= xzVector
             else:
