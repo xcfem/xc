@@ -104,6 +104,10 @@ class MaterialHandler: public PrepHandler
     InteractionDiagram2d *calcInteractionDiagramNMy(const std::string &,const InteractionDiagramData &diag_data);
     InteractionDiagram2d *calcInteractionDiagramNMz(const std::string &,const InteractionDiagramData &diag_data);
     InteractionDiagram2d &getNMzInteractionDiagram(const std::string &);
+    
+    std::set<std::string> getMaterialNames(void) const;
+    boost::python::list getMaterialNamesPy(void) const;
+    
     ~MaterialHandler(void);
     void clearAll(void);
 

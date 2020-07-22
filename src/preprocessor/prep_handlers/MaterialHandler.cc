@@ -870,3 +870,21 @@ bool XC::MaterialHandler::InteractionDiagramExists(const std::string &nmb) const
 bool XC::MaterialHandler::InteractionDiagramExists2d(const std::string &nmb) const
   { return (interaction_diagrams2D.find(nmb)!=interaction_diagrams2D.end()); }
 
+//! @brief Return the names of the materials.
+std::set<std::string> XC::MaterialHandler::getMaterialNames(void) const
+  {
+    std::set<std::string> retval;    
+    for(const_iterator i= begin();i!= end();i++)
+      retval.insert((*i).first);
+    return retval;
+  }
+  
+//! @brief Return the names of the materials in a Python list.
+boost::python::list XC::MaterialHandler::getMaterialNamesPy(void) const
+  {
+    boost::python::list retval;
+    std::set<std::string> tmp= getMaterialNames();
+    for(std::set<std::string>::const_iterator i= tmp.begin();i!=tmp.end();i++)
+        retval.append(*i);
+    return retval;
+  }

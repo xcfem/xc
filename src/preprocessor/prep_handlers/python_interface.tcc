@@ -59,6 +59,7 @@ class_<XC::MaterialHandler, bases<XC::PrepHandler>, boost::noncopyable >("Materi
   .def("new2DInteractionDiagram", &XC::MaterialHandler::new2DInteractionDiagram,return_internal_reference<>())
   .def("calcInteractionDiagramNMy", &XC::MaterialHandler::calcInteractionDiagramNMy,return_internal_reference<>())
   .def("calcInteractionDiagramNMz", &XC::MaterialHandler::calcInteractionDiagramNMz,return_internal_reference<>())
+  .def("getMaterialNames", &XC::MaterialHandler::getMaterialNamesPy, "Return the names of the defined materials.")
    ;
 
 class_<XC::BeamIntegratorHandler, bases<XC::PrepHandler>, boost::noncopyable >("BeamIntegratorHandler", no_init)

@@ -31,9 +31,11 @@ class BasicElasticMaterial(object):
         self.E= E
         self.nu= nu
         self.rho= rho
+        
     def G(self):
         '''shear modulus'''
         return self.E/(2*(1+self.nu))
+    
     def defElasticMaterial(self, preprocessor, name= None):
         ''' Return an elastic material appropiate for example for
             truss elements

@@ -54,6 +54,14 @@ class PredefinedSpace(object):
         ''' Return the preprocessor node handler.'''
         return self.preprocessor.getNodeHandler
     
+    def getMaterialHandler(self):
+        ''' Return the preprocessor material handler.'''
+        return self.preprocessor.getMaterialHandler
+    
+    def getMaterialNames(self):
+        ''' Return the names of the materials.'''
+        return self.getMaterialHandler().getMaterialNames()
+    
     def getSpaceDimension(self):
         ''' Return the dimensions of the problem space.'''
         return self.preprocessor.getNodeHandler.dimSpace

@@ -387,6 +387,7 @@ python tests/loads/test_inertia_loads_04.py
 #Materials tests
 #Uniaxial materials.
 echo "$BLEU" "Materials tests." "$NORMAL"
+python tests/materials/test_get_material_names.py
 echo "$BLEU" "  Uniaxial materials tests." "$NORMAL"
 python tests/materials/uniaxial/test_elasticpp_material_01.py
 python tests/materials/uniaxial/test_steel01.py
