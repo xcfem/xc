@@ -219,7 +219,9 @@ class SolutionProcedure(object):
         self.analysis= self.solu.newAnalysis("static_analysis","analysisAggregation","")
         return self.analysis
       
-    def penaltyNewtonRaphson(self,prb):
+    def penaltyNewtonRaphson(self, prb):
+        ''' Return a solution procedure with a Newton Raphson algorithm
+            and a penalty constraint handler.'''
         self.solu= prb.getSoluProc
         self.solCtrl= self.solu.getSoluControl
         solModels= self.solCtrl.getModelWrapperContainer
@@ -231,7 +233,7 @@ class SolutionProcedure(object):
         self.analysisAggregation= analysisAggregations.newAnalysisAggregation("analysisAggregation","sm")
         self.solAlgo= self.analysisAggregation.newSolutionAlgorithm("newton_raphson_soln_algo")
         self.ctest= self.analysisAggregation.newConvergenceTest("norm_unbalance_conv_test")
-        self.ctest.tol= 1.0e-4
+        self.ctest.tol= self.convergenceTestTol #1.0e-4
         self.ctest.maxNumIter= self.maxNumIter
         self.ctest.printFlag= self.printFlag
         self.integ= self.analysisAggregation.newIntegrator("load_control_integrator",xc.Vector([]))
@@ -252,7 +254,7 @@ class SolutionProcedure(object):
         self.analysisAggregation= analysisAggregations.newAnalysisAggregation("analysisAggregation","sm")
         self.solAlgo= self.analysisAggregation.newSolutionAlgorithm("newton_raphson_soln_algo")
         self.ctest= self.analysisAggregation.newConvergenceTest("norm_disp_incr_conv_test")
-        self.ctest.tol= 1.0e-3
+        self.ctest.tol= self.convergenceTestTol # 1.0e-3
         self.ctest.maxNumIter= self.maxNumIter
         self.ctest.printFlag= self.printFlag
         self.integ= self.analysisAggregation.newIntegrator("newmark_integrator",xc.Vector([]))
@@ -320,12 +322,13 @@ class SolutionProcedure(object):
 
 #Typical solution procedures.
 
-#Linear static analysis.
+## Linear static analysis.
 def simple_static_linear(prb):
+    ''' Return a simple static linear solution procedure.'''
     solution= SolutionProcedure()
     return solution.simpleStaticLinear(prb)
 
-#Linear static analysis.
+## Non-linear static analysis.
 def simple_newton_raphson(prb, mxNumIter= 10):
     solution= SolutionProcedure()
     solution.maxNumIter= mxNumIter
@@ -336,25 +339,43 @@ def simple_newton_raphson_band_gen(prb, mxNumIter= 10):
     solution.maxNumIter= mxNumIter
     return solution.simpleNewtonRaphsonBandGen(prb)
 
-def simple_static_modified_newton(prb):
-    solution= SolutionProcedure()
-    solution.convergenceTestTol=  0.01 #Make this configurable
-    return solution.simpleStaticModifiedNewton(prb)
+def simple_static_modified_newton(prb, mxNumIter= 10, convergenceTestTol= .01):
+    ''' Return a simple static modified Newton solution procedure.
 
-def penalty_newton_raphson(prb, mxNumIter= 10):
+    :ivar maxNumIter: maximum number of iterations (defauts to 10)
+    :ivar convergenceTestTol: convergence tolerance (defaults to 1e-9)
+    '''
     solution= SolutionProcedure()
     solution.maxNumIter= mxNumIter
+    solution.convergenceTestTol= convergenceTestTol
+    return solution.simpleStaticModifiedNewton(prb)
+
+def penalty_newton_raphson(prb, mxNumIter= 10, convergenceTestTol= 1e-4):
+    ''' Return a penalty Newton-Raphson solution procedure.
+
+    :ivar maxNumIter: maximum number of iterations (defauts to 10)
+    :ivar convergenceTestTol: convergence tolerance (defaults to 1e-9)
+    '''
+    solution= SolutionProcedure()
+    solution.maxNumIter= mxNumIter
+    solution.convergenceTestTol= convergenceTestTol
     return solution.penaltyNewtonRaphson(prb)
 
 def frequency_analysis(prb):
+    ''' Return a solution procedure that computes the natural
+        frequencies of the model.'''
     solution= SolutionProcedure()
     return solution.frequencyAnalysis(prb)
 
 def zero_energy_modes(prb):
+    ''' Return a solution procedure that computes the zero
+        energy modes of the model.'''
     solution= SolutionProcedure()
     return solution.zeroEnergyModes(prb)
 
 def ill_conditioning_analysis(prb):
+    ''' Return a solution procedure that computes the modes
+        that correspond to ill-conditioned degrees of freedom.'''
     solution= SolutionProcedure()
     return solution.illConditioningAnalysis(prb)
 
