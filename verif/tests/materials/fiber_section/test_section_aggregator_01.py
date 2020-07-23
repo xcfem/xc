@@ -109,7 +109,7 @@ numberer.useAlgorithm("simple")
 
 solution= predefined_solutions.SolutionProcedure()
 solution.convergenceTestTol= 1.0e-2
-analysis= solution.simpleNewtonRaphsonBandGen(feProblem)
+analysis= solution.plainNewtonRaphsonBandGen(feProblem)
 
 analOk= analysis.analyze(1)
 

@@ -51,7 +51,12 @@ class SolutionProcedure(object):
     :ivar solCtrl:
     :ivar sm:
     '''
-    def __init__(self):
+    def __init__(self, maxNumIter= 10, convergenceTestTol= 1e-9):
+        ''' Constructor.
+
+        :param maxNumIter: maximum number of iterations (defauts to 10)
+        :param convergenceTestTol: convergence tolerance (defaults to 1e-9)
+        '''
         self.solu= None
         self.solCtrl= None
         self.sm= None
@@ -68,6 +73,7 @@ class SolutionProcedure(object):
         self.printFlag= 0
         
     def clear(self):
+        ''' Wipe out the solution procedure.'''
         self.solu.clear()
 
     def getConstraintHandler(self, cHType= None, alphaSP= 1e15, alphaMP= 1e15):
@@ -91,6 +97,9 @@ class SolutionProcedure(object):
             
 
     def simpleStaticLinear(self,prb):
+        ''' Return a linear static solution algorithm
+            with a penalty constraint handler.
+        '''
         self.solu= prb.getSoluProc
         self.solCtrl= self.solu.getSoluControl
         solModels= self.solCtrl.getModelWrapperContainer
@@ -108,6 +117,9 @@ class SolutionProcedure(object):
         return self.analysis
       
     def plainLinearNewmark(self,prb):
+        ''' Return a linear Newmark solution algorithm
+            with a plain constraint handler.
+        '''
         self.solu= prb.getSoluProc
         self.solCtrl= self.solu.getSoluControl
         solModels= self.solCtrl.getModelWrapperContainer
@@ -125,6 +137,9 @@ class SolutionProcedure(object):
         return self.analysis
       
     def simpleLagrangeStaticLinear(self,prb):
+        ''' Return a linear static solution algorithm
+            with a Lagrange constraint handler.
+        '''
         self.solu= prb.getSoluProc
         self.solCtrl= self.solu.getSoluControl
         solModels= self.solCtrl.getModelWrapperContainer
@@ -142,7 +157,9 @@ class SolutionProcedure(object):
         return self.analysis
       
     def simpleTransformationStaticLinear(self,prb):
-        ''' Simple solution algorithm with a transformation constraint handler.'''
+        ''' Return a linear static solution algorithm with a 
+            transformation constraint handler.
+        '''
         self.solu= prb.getSoluProc
         self.solCtrl= self.solu.getSoluControl
         solModels= self.solCtrl.getModelWrapperContainer
@@ -159,7 +176,10 @@ class SolutionProcedure(object):
         self.analysis= self.solu.newAnalysis("static_analysis","analysisAggregation","")
         return self.analysis
       
-    def simpleNewtonRaphson(self,prb):
+    def plainNewtonRaphson(self,prb):
+        ''' Return a Newton-Raphson solution algorithm with a 
+            plain constraint handler.
+        '''
         self.solu= prb.getSoluProc
         self.solCtrl= self.solu.getSoluControl
         solModels= self.solCtrl.getModelWrapperContainer
@@ -179,7 +199,11 @@ class SolutionProcedure(object):
         self.analysis= self.solu.newAnalysis("static_analysis","analysisAggregation","")
         return self.analysis
       
-    def simpleNewtonRaphsonBandGen(self,prb):
+    def plainNewtonRaphsonBandGen(self,prb):
+        ''' Return a Newton-Raphson solution algorithm with a 
+            plain constraint handler and a band general
+            SOE solver.
+        '''
         self.solu= prb.getSoluProc
         self.solCtrl= self.solu.getSoluControl
         solModels= self.solCtrl.getModelWrapperContainer
@@ -199,7 +223,7 @@ class SolutionProcedure(object):
         self.analysis= self.solu.newAnalysis("static_analysis","analysisAggregation","")
         return self.analysis
       
-    def simpleStaticModifiedNewton(self,prb):
+    def plainStaticModifiedNewton(self,prb):
         self.solu= prb.getSoluProc
         self.solCtrl= self.solu.getSoluControl
         solModels= self.solCtrl.getModelWrapperContainer
@@ -332,12 +356,12 @@ def simple_static_linear(prb):
 def simple_newton_raphson(prb, mxNumIter= 10):
     solution= SolutionProcedure()
     solution.maxNumIter= mxNumIter
-    return solution.simpleNewtonRaphson(prb)
+    return solution.plainNewtonRaphson(prb)
 
 def simple_newton_raphson_band_gen(prb, mxNumIter= 10):
     solution= SolutionProcedure()
     solution.maxNumIter= mxNumIter
-    return solution.simpleNewtonRaphsonBandGen(prb)
+    return solution.plainNewtonRaphsonBandGen(prb)
 
 def simple_static_modified_newton(prb, mxNumIter= 10, convergenceTestTol= .01):
     ''' Return a simple static modified Newton solution procedure.
@@ -348,7 +372,7 @@ def simple_static_modified_newton(prb, mxNumIter= 10, convergenceTestTol= .01):
     solution= SolutionProcedure()
     solution.maxNumIter= mxNumIter
     solution.convergenceTestTol= convergenceTestTol
-    return solution.simpleStaticModifiedNewton(prb)
+    return solution.plainStaticModifiedNewton(prb)
 
 def penalty_newton_raphson(prb, mxNumIter= 10, convergenceTestTol= 1e-4):
     ''' Return a penalty Newton-Raphson solution procedure.

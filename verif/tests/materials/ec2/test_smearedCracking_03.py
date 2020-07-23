@@ -163,7 +163,7 @@ lPatterns.addToDomain(lp0.name)           #reads load pattern "0" and adds it to
 # Solve
 solution=  predefined_solutions.SolutionProcedure()
 solution.convergenceTestTol= 1e-3
-analysis= solution.simpleStaticModifiedNewton(problem)
+analysis= solution.plainStaticModifiedNewton(problem)
 analOk= analysis.analyze(1)
 
 

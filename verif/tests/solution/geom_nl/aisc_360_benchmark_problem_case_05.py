@@ -121,7 +121,7 @@ refDisp= [22.9e-3, 33.9e-3, 44.6e-3, 65.4e-3]
 # than a combination. See SuperLU.setSize()
 # solution= predefined_solutions.SolutionProcedure()
 # solution.convergenceTestTol= 1e-5
-# analysis= solution.simpleNewtonRaphson(steelColumn)
+# analysis= solution.plainNewtonRaphson(steelColumn)
 
 analysis= predefined_solutions.penalty_newton_raphson(steelColumn)
 

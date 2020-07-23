@@ -69,7 +69,7 @@ lPatterns.addToDomain(lp0.name)
 
 # Solution procedure
 solution= predefined_solutions.SolutionProcedure()
-analysis= solution.simpleNewtonRaphson(feProblem)
+analysis= solution.plainNewtonRaphson(feProblem)
 solution.ctest.tol= 1e-8
 solution.ctest.printFlag= 0 #flag used to print(information on convergence (optional))
 analOk= analysis.analyze(10)

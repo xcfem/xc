@@ -84,7 +84,7 @@ feProblem.clearAll() #Erase all the fake stuff
 def custom_newton_raphson(prb):
     solution=  predefined_solutions.SolutionProcedure()
     solution.convergenceTestTol= 1e-6
-    return solution.simpleNewtonRaphson(prb)
+    return solution.plainNewtonRaphson(prb)
 
 import os
 pth= os.path.dirname(__file__)
