@@ -409,18 +409,18 @@ def ill_conditioning_analysis(prb):
     solution= SolutionProcedure()
     return solution.illConditioningAnalysis(prb)
 
-def resuelveComb(preprocessor,nmbComb,analysis,numSteps):
+def solveComb(preprocessor,nmbComb,analysis,numSteps):
     preprocessor.resetLoadCase()
     preprocessor.getLoadHandler.addToDomain(nmbComb)
     analOk= analysis.analyze(numSteps)
     preprocessor.getLoadHandler.removeFromDomain(nmbComb)
     # print("Resuelta combinación: ",nmbComb,"\n")
 
-def resuelveCombEstatLin(preprocessor,nmbComb,analysis,numSteps):
-    print("DEPRECATED; use resuelveComb")
-    resuelveComb(preprocessor,nmbComb,analysis,numSteps)
+def solveStaticLinearComb(preprocessor,nmbComb,analysis,numSteps):
+    print("DEPRECATED; use solveComb")
+    solveComb(preprocessor,nmbComb,analysis,numSteps)
 
-def resuelveCombEstat2ndOrderLin(preprocessor,nmbComb,analysis,numSteps):
+def solveCombEstat2ndOrderLin(preprocessor,nmbComb,analysis,numSteps):
     preprocessor.resetLoadCase()
     preprocessor.getLoadHandler.addToDomain(nmbComb)
     analOk= analysis.analyze(numSteps)
@@ -428,11 +428,11 @@ def resuelveCombEstat2ndOrderLin(preprocessor,nmbComb,analysis,numSteps):
     preprocessor.getLoadHandler.removeFromDomain(nmbComb)
     # print("Resuelta combinación: ",nmbComb,"\n")
 
-def resuelveCasoEstatNoLin(nmbComb):
-    print("DEPRECATED; use use resuelveComb")
-    resuelveComb(preprocessor,nmbComb,analysis,numSteps)
+def solveStaticNoLinCase(nmbComb):
+    print("DEPRECATED; use use solveComb")
+    solveComb(preprocessor,nmbComb,analysis,numSteps)
 
-# def resuelveCasoEstatNoLinNR(nmbComb):
+# def solveStaticNoLinCaseNR(nmbComb):
 #     \preprocessor \dom{\nuevo_caso
 #     cargas.addToDomain(nmbComb)
 

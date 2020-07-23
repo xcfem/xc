@@ -120,7 +120,7 @@ lPatterns.addToDomain(lp0.name)
 solution= predefined_solutions.SolutionProcedure()
 solution.convergenceTestTol= 1.0e-2
 analysis= solution.plainNewtonRaphsonBandGen(feProblem)
-predefined_solutions.resuelveComb(preprocessor, "0",analysis,10)
+predefined_solutions.solveComb(preprocessor, "0",analysis,10)
 
 Lmedios= L/2
 EIbeta3= F/(E*I*pow(beta,3))

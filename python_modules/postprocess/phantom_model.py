@@ -203,7 +203,7 @@ class PhantomModel(object):
         for key in combs.getKeys():
             comb= combs[key]
             #print("Resolving load combination: ",key)
-            predefined_solutions.resuelveComb(self.preprocessor,key,controller.analysis,1)
+            predefined_solutions.solveComb(self.preprocessor,key,controller.analysis,1)
             controller.preprocessor=self.preprocessor
             controller.check(elements,key)
 

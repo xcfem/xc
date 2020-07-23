@@ -139,7 +139,7 @@ solver= soe.newSolver("band_gen_lin_lapack_solver")
 analysis= solu.newAnalysis("static_analysis","analysisAggregation","")
 
 
-def resuelveCombEstatLin(comb):
+def solveStaticLinearComb(comb):
   tabComb= comb.tag
   nmbComb= comb.getName
   preprocessor.resetLoadCase()
@@ -169,7 +169,7 @@ tagPrevia= 0
 tagSave= 0
 for key in combs.getKeys():
   comb= combs[key]
-  resuelveCombEstatLin(comb)
+  solveStaticLinearComb(comb)
   procesResultVerif(comb)
 
 ratio1= (abs(force.x-3*F)/3/F)

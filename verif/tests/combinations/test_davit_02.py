@@ -117,7 +117,7 @@ exec(open(pth+"/../aux/def_hip_elu.py").read())
 
 
 
-def resuelveCombEstatLin(comb):
+def solveStaticLinearComb(comb):
   preprocessor.resetLoadCase()
   previa= comb.getCombPrevia()
   if(previa!=None):
@@ -167,7 +167,7 @@ db= feProblem.newDatabase("BerkeleyDB","/tmp/test_pescante_02.db")
 previousName="" 
 tagPrevia= 0
 for c in combs.getKeys():
-  resuelveCombEstatLin(combs[c])
+  solveStaticLinearComb(combs[c])
   procesResultVerif(combs[c])
           
 ratio1= ((NMin1+440.7e3)/440.7e3)

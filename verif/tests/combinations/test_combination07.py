@@ -188,7 +188,7 @@ solver= soe.newSolver("band_gen_lin_lapack_solver")
 analysis= solu.newAnalysis("static_analysis","analysisAggregation","")
 
 
-def resuelveCombEstatLin(comb,tagSaveFase0,hlp):
+def solveStaticLinearComb(comb,tagSaveFase0,hlp):
   preprocessor.resetLoadCase()
   db.restore(tagSaveFase0)
   hlp.helpSolve(comb)
@@ -242,7 +242,7 @@ tagPrevia= 0
 tagSave= 0
 for key in combs.getKeys():
   c= combs[key]
-  resuelveCombEstatLin(c,tagSaveFase0,helper)
+  solveStaticLinearComb(c,tagSaveFase0,helper)
   procesResultVerif(comb)
 
 # 2019.12.22 Values changed when initial displacements were accounted

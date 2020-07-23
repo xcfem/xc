@@ -185,7 +185,7 @@ soe= analysisAggregation.newSystemOfEqn("band_gen_lin_soe")
 solver= soe.newSolver("band_gen_lin_lapack_solver")
 analysis= solu.newAnalysis("static_analysis","analysisAggregation","")
 
-def resuelveCombEstatLin(comb,db,dbHelp):
+def solveStaticLinearComb(comb,db,dbHelp):
   preprocessor.resetLoadCase()
   dbHelp.helpSolve(comb,db)
   exec(open("solution/database_helper_solve.xci").read())

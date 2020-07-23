@@ -184,7 +184,7 @@ analysis= predefined_solutions.penalty_newton_raphson(feProblem)
 from solution import database_helper
 
 
-def resuelveCombEstatLin(preprocessor, comb,tagSaveFase0,dbHelp):
+def solveStaticLinearComb(preprocessor, comb,tagSaveFase0,dbHelp):
   preprocessor.resetLoadCase()
   db.restore(tagSaveFase0)
 
@@ -336,7 +336,7 @@ tagPrevia= 0
 tagSave= 0
 for key in combs.getKeys():
   comb= combs[key]
-  resuelveCombEstatLin(preprocessor, comb,tagSaveFase0,helper)
+  solveStaticLinearComb(preprocessor, comb,tagSaveFase0,helper)
   procesResultVerif(preprocessor, comb)
 
 # 2015.07.06 Values changed when zeroed initial strains in revertToStart

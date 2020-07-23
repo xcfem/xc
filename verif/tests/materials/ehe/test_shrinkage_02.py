@@ -188,7 +188,7 @@ analysis= predefined_solutions.penalty_newton_raphson(feProblem)
 
 from solution import database_helper
 
-def resuelveCombEstatLin(tagComb,comb,tagSaveFase0):
+def solveStaticLinearComb(tagComb,comb,tagSaveFase0):
   preprocessor.resetLoadCase()
   db.restore(tagSaveFase0)
 
@@ -289,7 +289,7 @@ tagPrevia= 0
 tagSave= 0
 for key in combs.getKeys():
   comb= combs[key]
-  resuelveCombEstatLin(comb.tag,comb,tagSaveFase0)
+  solveStaticLinearComb(comb.tag,comb,tagSaveFase0)
   procesResultVerif(comb.tag,comb.getName)
 
 dXMaxTeor= -0.752509e-3

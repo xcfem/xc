@@ -139,7 +139,7 @@ numSteps= 1
 analysis= predefined_solutions.simple_static_linear(feProblem)
 
 for key in combs.getKeys():
-  predefined_solutions.resuelveComb(preprocessor, key,analysis,numSteps)
+  predefined_solutions.solveComb(preprocessor, key,analysis,numSteps)
   procesResultVerif(key)
 
 NMin1Teor= 440.7e3
