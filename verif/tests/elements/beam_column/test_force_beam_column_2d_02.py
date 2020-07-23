@@ -67,7 +67,7 @@ lp0.newNodalLoad(2,xc.Vector([0,-F,0]))
 #We add the load case to domain.
 lPatterns.addToDomain(lp0.name)
 # Solution procedure
-analysis= predefined_solutions.simple_static_modified_newton(feProblem)
+analysis= predefined_solutions.plain_static_modified_newton(feProblem)
 result= analysis.analyze(10)
 
 

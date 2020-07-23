@@ -63,7 +63,7 @@ lp0.newNodalLoad(nod2.tag,xc.Vector([0,F,0]))
 lPatterns.addToDomain(lp0.name)
 
 # Solution procedure
-analysis= predefined_solutions.simple_static_modified_newton(test)
+analysis= predefined_solutions.plain_static_modified_newton(test)
 result= analysis.analyze(10)
 
 elem1= elements.getElement(0)

@@ -70,7 +70,7 @@ lPatterns.addToDomain(lp0.name)
 
 
 # Solution procedure
-analysis= predefined_solutions.simple_newton_raphson(feProblem)
+analysis= predefined_solutions.plain_newton_raphson(feProblem)
 analOk= analysis.analyze(1)
 
 nodes= preprocessor.getNodeHandler

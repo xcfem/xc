@@ -97,7 +97,7 @@ lPatterns.addToDomain(lp0.name)
 
 
 # Solution procedure
-analysis= predefined_solutions.simple_newton_raphson(feProblem)
+analysis= predefined_solutions.plain_newton_raphson(feProblem)
 analOk= analysis.analyze(10)
 
 secHAParamsFis= EHE_limit_state_checking.CrackControl('SLS_crack')

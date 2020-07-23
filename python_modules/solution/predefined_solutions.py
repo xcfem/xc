@@ -224,6 +224,9 @@ class SolutionProcedure(object):
         return self.analysis
       
     def plainStaticModifiedNewton(self,prb):
+        ''' Return a static solution procedure with a modified Newton
+            solution algorithm with a plain constraint handler.
+        '''
         self.solu= prb.getSoluProc
         self.solCtrl= self.solu.getSoluControl
         solModels= self.solCtrl.getModelWrapperContainer
@@ -244,7 +247,7 @@ class SolutionProcedure(object):
         return self.analysis
       
     def penaltyNewtonRaphson(self, prb):
-        ''' Return a solution procedure with a Newton Raphson algorithm
+        ''' Return a static solution procedure with a Newton Raphson algorithm
             and a penalty constraint handler.'''
         self.solu= prb.getSoluProc
         self.solCtrl= self.solu.getSoluControl
@@ -267,6 +270,8 @@ class SolutionProcedure(object):
         return self.analysis
 
     def penaltyNewmarkNewtonRapshon(self,prb):
+        ''' Return a Newmark solution procedure with a Newton Raphson algorithm
+            and a penalty constraint handler.'''
         self.solu= prb.getSoluProc
         self.solCtrl= self.solu.getSoluControl
         solModels= self.solCtrl.getModelWrapperContainer
@@ -288,6 +293,7 @@ class SolutionProcedure(object):
         return self.analysis
 
     def frequencyAnalysis(self,prb,systemPrefix= 'sym_band'):
+        ''' Return a natural frequency computation procedure.'''
         self.solu= prb.getSoluProc
         self.solCtrl= self.solu.getSoluControl
         solModels= self.solCtrl.getModelWrapperContainer
@@ -353,17 +359,17 @@ def simple_static_linear(prb):
     return solution.simpleStaticLinear(prb)
 
 ## Non-linear static analysis.
-def simple_newton_raphson(prb, mxNumIter= 10):
+def plain_newton_raphson(prb, mxNumIter= 10):
     solution= SolutionProcedure()
     solution.maxNumIter= mxNumIter
     return solution.plainNewtonRaphson(prb)
 
-def simple_newton_raphson_band_gen(prb, mxNumIter= 10):
+def plain_newton_raphson_band_gen(prb, mxNumIter= 10):
     solution= SolutionProcedure()
     solution.maxNumIter= mxNumIter
     return solution.plainNewtonRaphsonBandGen(prb)
 
-def simple_static_modified_newton(prb, mxNumIter= 10, convergenceTestTol= .01):
+def plain_static_modified_newton(prb, mxNumIter= 10, convergenceTestTol= .01):
     ''' Return a simple static modified Newton solution procedure.
 
     :ivar maxNumIter: maximum number of iterations (defauts to 10)

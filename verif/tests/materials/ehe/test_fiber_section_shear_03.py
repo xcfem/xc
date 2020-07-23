@@ -102,7 +102,7 @@ lPatterns.addToDomain(lp0.name)
 
 
 # Solution procedure
-analysis= predefined_solutions.simple_newton_raphson(feProblem, mxNumIter= 10)
+analysis= predefined_solutions.plain_newton_raphson(feProblem, mxNumIter= 10)
 analOk= analysis.analyze(10)
 
 import os

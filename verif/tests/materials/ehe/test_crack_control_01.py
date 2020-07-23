@@ -69,7 +69,7 @@ lp0.newNodalLoad(2,xc.Vector([NDato,0,0,0,MyDato,0]))
 lPatterns.addToDomain(lp0.name)
 
 # Solution procedure
-analysis= predefined_solutions.simple_newton_raphson(feProblem)
+analysis= predefined_solutions.plain_newton_raphson(feProblem)
 analOk= analysis.analyze(10)
 
 secHAParamsFis= EHE_limit_state_checking.CrackControl('SLS_crack')

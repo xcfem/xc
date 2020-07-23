@@ -74,7 +74,7 @@ lPatterns.addToDomain(lp0.name)
 
 
 # Solution procedure
-analysis= predefined_solutions.simple_static_modified_newton(feProblem)
+analysis= predefined_solutions.plain_static_modified_newton(feProblem)
 result= analysis.analyze(1)
 
 nodes.calculateNodalReactions(True,1e-7)
