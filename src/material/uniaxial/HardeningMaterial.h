@@ -62,6 +62,11 @@
 
 #include <material/uniaxial/UniaxialMaterial.h>
 
+// XXX This material probably needs to be rebased
+// from OpenSees. There are significant changes
+// in the implementation.
+
+
 namespace XC {
 //! @ingroup MatUnx
 //

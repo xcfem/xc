@@ -214,6 +214,10 @@ int XC::HardeningMaterial::revertToLastCommit(void)
 
 int XC::HardeningMaterial::revertToStart(void)
   {
+    std::clog << getClassName() << "::" << __FUNCTION__
+              << " this material probably needs to be rebased"
+              << " from OpenSees. There are significant changes"
+              << " in the implementation." << std::endl;
     // Reset committed history variables
     CplasticStrain = 0.0;
     CbackStress = 0.0;
