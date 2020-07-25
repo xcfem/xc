@@ -208,7 +208,8 @@ class DXFImport(object):
            :param getRelativeCoo: coordinate transformation to be applied to the
                                   points.
         '''
-        self.dxfFile= ezdxf.readfile(filename= dxfFileName)
+        self.dxfFileName= dxfFileName
+        self.dxfFile= ezdxf.readfile(filename= self.dxfFileName)
         self.tolerance= tolerance
         self.impLines= importLines
         self.impSurfaces= importSurfaces
@@ -510,6 +511,7 @@ class DXFImport(object):
     def exportBlockTopology(self, name):
         retval= bte.BlockData()
         retval.name= name
+        retval.dxfFileName= self.dxfFileName
 
         counter= 0
         if(self.kPoints):
