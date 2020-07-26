@@ -2304,7 +2304,7 @@ bool XC::Node::checkReactionForce(const double &tol) const
 	      {
 		std::cerr << errHeader << "; the node: " << getTag()
 			  << " has not constraints and however"
-			  << " is has a reaction with value: " << reaction 
+			  << " it has a reaction with value: " << reaction 
 			  << " and norm: " << sqrt(norm2)
 			  << " it seems that the solution method"
 			  << " is not well suited to the problem."
