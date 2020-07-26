@@ -198,7 +198,7 @@ def get_extended_data(obj, appName= 'XC'):
             retval.extend(labels2)
     return retval
     
-
+    
 class DXFImport(object):
     '''Import DXF entities.'''
     def __init__(self,dxfFileName,layerNamesToImport, getRelativeCoo, threshold= 0.01,importLines= True, importSurfaces= True, polylinesAsSurfaces= False, tolerance= .01):
@@ -382,6 +382,26 @@ class DXFImport(object):
                     vertices[0]= self.getIndexNearestPoint(p)
                     self.points[pointName]= vertices
                     self.labelDict[pointName]= [layerName]
+                    
+    def getOrientation(self, p0, p1, length):
+        ''' Return the points in the order that makes the resulting
+            vector to point outwards the origin.'''
+        idx0= self.getIndexNearestPoint(p0)
+        idx1= self.getIndexNearestPoint(p1)
+        v0= self.kPoints[idx0]
+        v1= self.kPoints[idx1]
+        deltas= [abs(v0[0]-v1[0]), abs(v0[1]-v1[1]), abs(v0[2]-v1[2])]
+        indexes= sorted(range(len(deltas)), key=lambda k: deltas[k])
+        i0= indexes[2]; i1= indexes[1]; i2= indexes[0]
+        if(v0[i0]>v1[i0]): # r1<r2
+            idx0, idx1= idx1, idx0 # swap
+        elif(abs(v0[i0]-v1[i0])<length/1e4): # x1==x2
+            if(v0[i1]>v1[i1]):
+                idx0, idx1= idx1, idx0 # swap
+            elif(abs(v0[i1]-v1[i1])<length/1e4): # y1==y2
+                if(v0[i2]>v1[i2]):
+                    idx0, idx1= idx1, idx0 # swap
+        return idx0, idx1
 
     def importLines(self):
         ''' Import lines from DXF.'''
@@ -399,17 +419,10 @@ class DXFImport(object):
                     length= cdist([p1],[p2])[0][0]
                     # Try to have all lines with the
                     # same orientation.
-                    if(p1[0]>p2[0]): # x1<x2
-                        p1, p2= p2, p1 # swap
-                    elif(abs(p1[0]-p2[0])<length/1e4): # x1==x2
-                        if(p1[1]>p2[1]):
-                            p1, p2= p2, p1 # swap
-                        elif(abs(p1[1]-p2[1])<length/1e4): # y1==y2
-                            if(p1[2]>p2[2]):
-                                p1, p2= p2, p1 # swap
+                    idx0, idx1= self.getOrientation(p1, p2, length)
                     # end orientation.
-                    vertices[0]= self.getIndexNearestPoint(p1)
-                    vertices[1]= self.getIndexNearestPoint(p2)
+                    vertices[0]= idx0
+                    vertices[1]= idx1
                     if(vertices[0]==vertices[1]):
                         lmsg.error('Error in line '+lineName+' vertices are equal: '+str(vertices))
                     if(length>self.threshold):
