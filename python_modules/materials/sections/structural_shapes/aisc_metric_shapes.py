@@ -871,7 +871,7 @@ class CShape(structural_steel.UShape):
         :param Cb: lateral-torsional buckling modification factor.
         :param majorAxis: true if flexure about the major axis.
         '''
-        return 0.9*self.getNominalFlexuralStrength(self, lateralUnbracedLength, Cb, majorAxis)
+        return 0.9*self.getNominalFlexuralStrength(lateralUnbracedLength, Cb, majorAxis)
     
 
 # *************************************************************************
