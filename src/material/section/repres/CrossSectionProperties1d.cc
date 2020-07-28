@@ -116,6 +116,16 @@ const XC::Matrix &XC::CrossSectionProperties1d::getSectionFlexibility1x1(void) c
 const XC::Matrix &XC::CrossSectionProperties1d::getInitialFlexibility1x1(void) const
   { return getSectionFlexibility1x1(); }
 
+//! @brief Set the linear density of the element.
+void XC::CrossSectionProperties1d::setLinearRho(const double &lr)
+  {
+    if(a!=0.0)
+      rho= lr/a;
+    else if(lr!=0.0)
+      std::clog << getClassName() << "::" << __FUNCTION__
+		<< "; WARNING null section area. No changes made.\n";      
+  }
+
 int XC::CrossSectionProperties1d::setParameter(const std::vector<std::string> &argv,Parameter &param,SectionForceDeformation *scc)
   {
     if(argv.size() < 1)

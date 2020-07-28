@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import division
+from __future__ import print_function
 
 __author__= "Luis C. Pérez Tato (LCPT) , Ana Ortega (A_OO) "
 __copyright__= "Copyright 2016, LCPT, A_OO"
@@ -184,7 +185,7 @@ class SectionProperties(object):
                 lmsg.warning("Section: "+self.sectionName+" already defined.")
                 self.xc_material= materialHandler.getMaterial(self.sectionName)
             else:
-                self.xc_material= typical_materials.defElasticSection3d(preprocessor,self.sectionName,self.A(),material.E,material.G(),self.Iz(),self.Iy(),self.J(), rho= material.rho*self.A())
+                self.xc_material= typical_materials.defElasticSection3d(preprocessor,self.sectionName,self.A(),material.E,material.G(),self.Iz(),self.Iy(),self.J(), linearRho= material.rho*self.A())
         else:
             lmsg.warning('Material: '+self.sectionName+ ' already defined as:'+str(self.xc_material))
         return self.xc_material
@@ -202,7 +203,7 @@ class SectionProperties(object):
                 lmsg.warning("Section: "+self.sectionName+" already defined.")
                 self.xc_material= materialHandler.getMaterial(self.sectionName)
             else:
-                self.xc_material= typical_materials.defElasticShearSection3d(preprocessor,self.sectionName,self.A(),material.E,material.G(),self.Iz(),self.Iy(),self.J(),self.alphaY(), rho= material.rho*self.A())
+                self.xc_material= typical_materials.defElasticShearSection3d(preprocessor,self.sectionName,self.A(),material.E,material.G(),self.Iz(),self.Iy(),self.J(),self.alphaY(), linearRho= material.rho*self.A())
         else:
             lmsg.warning('Material: '+self.sectionName+ ' already defined as:'+str(self.xc_material))
         return self.xc_material
@@ -220,7 +221,7 @@ class SectionProperties(object):
                 lmsg.warning("Section: "+self.sectionName+" already defined.")
                 self.xc_material= materialHandler.getMaterial(self.sectionName)
             else:
-                self.xc_material= typical_materials.defElasticSection1d(preprocessor,self.sectionName,self.A(),material.E, rho= material.rho*self.A())
+                self.xc_material= typical_materials.defElasticSection1d(preprocessor,self.sectionName,self.A(),material.E, linearRho= material.rho*self.A())
         else:
             lmsg.warning('Material: '+self.sectionName+ ' already defined as:'+str(self.xc_material))
         return self.xc_material
@@ -241,7 +242,7 @@ class SectionProperties(object):
                 I= self.Iz();
                 if(not majorAxis):
                     I= self.Iy()
-                self.xc_material= typical_materials.defElasticSection2d(preprocessor,self.sectionName,self.A(),material.E,I, rho= material.rho*self.A())
+                self.xc_material= typical_materials.defElasticSection2d(preprocessor,self.sectionName,self.A(),material.E,I, linearRho= material.rho*self.A())
         else:
             lmsg.warning('Material: '+self.sectionName+ ' already defined as:'+str(self.xc_material))
         return self.xc_material
@@ -262,7 +263,7 @@ class SectionProperties(object):
                 I= self.Iz();
                 if(not majorAxis):
                     I= self.Iy()
-                self.xc_material= typical_materials.defElasticShearSection2d(preprocessor,self.sectionName,self.A(),material.E,material.G(),I,self.alphaY(), rho= material.rho*self.A())
+                self.xc_material= typical_materials.defElasticShearSection2d(preprocessor,self.sectionName,self.A(),material.E,material.G(),I,self.alphaY(), linearRho= material.rho*self.A())
         else:
             lmsg.warning('Material: '+self.sectionName+' already defined as:'+str(self.xc_material))
         return self.xc_material

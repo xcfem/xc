@@ -35,7 +35,7 @@ n1= nodes.newNodeXY(0,0)
 n2= nodes.newNodeXY(l,0)
 
 # Materials definition
-trussScc= typical_materials.defElasticSection1d(preprocessor, "trussScc",A,E, rho= 10.0*A)
+trussScc= typical_materials.defElasticSection1d(preprocessor, "trussScc",A,E, linearRho= 10.0*A)
 
 
 # Element definition.

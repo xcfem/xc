@@ -84,6 +84,7 @@ class CrossSectionProperties1d: public CommandEntity, public MovableObject
       { rho= r; }
     inline double getLinearRho(void) const
       { return rho*a; }
+    void setLinearRho(const double &);
     //! @brief Return axial stiffness.
     inline double EA(void) const
       { return e*a; }

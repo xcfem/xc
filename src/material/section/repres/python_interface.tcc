@@ -27,6 +27,7 @@ class_<XC::CrossSectionProperties1d, bases<CommandEntity> >("CrossSectionPropert
   .add_property("E", make_function( getE, return_value_policy<return_by_value>() ), &XC::CrossSectionProperties1d::setE,"Elastic modulus.")
   .add_property("A", make_function( getA, return_value_policy<return_by_value>() ), &XC::CrossSectionProperties1d::setA,"Area.")
   .add_property("rho", &XC::CrossSectionProperties1d::getRho, &XC::CrossSectionProperties1d::setRho,"Material density.")
+  .add_property("linearRho", &XC::CrossSectionProperties1d::getLinearRho, &XC::CrossSectionProperties1d::setLinearRho,"Material linear density.")
   .def("EA", &XC::CrossSectionProperties1d::EA, "Tensional stiffness.")
   .def(self_ns::str(self_ns::self))
   ;
