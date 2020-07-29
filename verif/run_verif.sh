@@ -692,6 +692,7 @@ python tests/rough_calculations/test_predim_diaphragm_wall.py
 python tests/rough_calculations/test_dome.py
 python tests/rough_calculations/test_dome_02.py
 python tests/rough_calculations/test_hypar.py
+python tests/rough_calculations/test_base_plate_design.py
 
 #Postprocess tests
 echo "$BLEU" "Verifiying routines for post processing." "$NORMAL"
