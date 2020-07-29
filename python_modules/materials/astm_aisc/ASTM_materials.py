@@ -14,6 +14,7 @@ __version__= "3.0"
 __email__= "l.pereztato@ciccp.es, ana.ortega@ciccp.es "
 
 import math
+import scipy.interpolate
 from materials import steel_base
 from misc_utils import log_messages as lmsg
 from materials import buckling_base
@@ -36,6 +37,92 @@ A53= ASTMSteel(240e6,414e6,1.0)
 A992= ASTMSteel(345e6,450e6,1.0)
 A500= ASTMSteel(315e6,400e6,1.0)
 A307= ASTMSteel(245e6,390e6,1.0)
+
+class AnchorBolt(object):
+    """ASTM anchor bolt accordint to table 2.2 from the document
+    Base Plate and Anchor Rod Design Second Edition
+    American Institute of Steel Construction, Inc."""
+
+    # See table 3.2 of the design guide:
+    diams= [0.015875, 0.01905, 0.022225, 0.0254, 0.028575, 0.03175, 0.0381, 0.04445, 0.0508, 0.05715, 0.0635, 0.06985, 0.0762, 0.08255, 0.0889, 0.09525, 0.1016]
+    bearingArea=[0.00044451524, 0.00058451496, 0.0007870952, 0.00096774, 0.0011677396, 0.0014451584, 0.0020193508, 0.0026903172, 0.003451606, 0.0043161204, 0.0052709572, 0.006322568, 0.007354824, 0.008580628, 0.009870948, 0.0112903, 0.012838684]
+    fBearingArea= scipy.interpolate.interp1d(diams,bearingArea)
+
+    def __init__(self, name, steel, diameter):
+       '''
+         Constructor.
+       '''
+       self.name=name
+       self.steelType= steel
+       self.diameter= diameter
+
+    def getArea(self):
+        ''' Return the area of the anchor rod.
+        '''
+        return math.pi*(self.diameter/2.0)**2
+
+    # Tension
+    def getTensileStrength(self):
+        ''' Return the tensile strength of the anchor rod.
+        '''
+        Ag= self.getArea()
+        return self.steelType.fu*Ag
+    
+    def getNominalTensileStrength(self):
+        ''' Return the tensile strength of the anchor rod.
+        '''
+        return 0.75*self.getTensileStrength()
+    
+    def getNominalShearStrength(self, type= 'N'):
+        ''' Return the shear strength of the anchor rod.
+        '''
+        factor= 0.4
+        if(type=='X'):
+            factor= 0.5
+        return factor*self.getTensileStrength()
+    
+    def getDesignTensileStrength(self, phi= 0.75):
+        ''' Return the tensile strength of the anchor rod.
+
+        :param phi: resistance factor for anchor steel  
+                in tension (defaults to 0.75).
+        '''
+        return phi*self.getNominalTensileStrength()
+
+    def getBearingArea(self):
+        ''' Return the bearing area of the anchor according
+            to the table 3.2 of the design guide.'''
+        return self.fBearingArea(self.diameter)
+    
+    def getNominalPulloutStrength(self, fc, psi4= 1.0):
+        ''' Return the nominal pullout strength of the anchor 
+        rod based on the ACI Appendix D provisions (Section D5.3)
+
+        :param fc: concrete strength.
+        :param psi4: 1.4 if the anchor is located in a region of a
+                     concrete member where analysis indicates no
+                     cracking (f t – f r ) at service levels, 
+                     otherwise 1.0
+        '''
+        Abrg= self.getBearingArea() # the bearing area of the anchor
+                                    # rod head or nut.
+        return psi4*Abrg*8*fc
+    
+    def getDesignPulloutStrength(self, fc, psi4= 1.0, phi= 0.7):
+        ''' Return the design pullout strength of the anchor 
+        rod based on the ACI Appendix D provisions (Section D5.3)
+
+        :param fc: concrete strength.
+        :param psi4: 1.4 if the anchor is located in a region of a
+                     concrete member where analysis indicates no
+                     cracking (f t – f r ) at service levels, 
+                     otherwise 1.0
+        '''
+        return phi*self.getNominalPulloutStrength(fc,psi4)
+
+    
+        
+
 
 class ASTMShape(object):
     """Steel shape with ASTM/AISC verification routines."""
