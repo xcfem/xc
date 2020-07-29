@@ -43,6 +43,16 @@ def computeBasePlateArea(Pu, fc, phi= 0.65):
     '''
     return Pu/(phi*0.85*fc)
 
+def getDelta(steelShape):
+    ''' Return the Deltadimension of the base plate according
+        to expression in section 3.1 of the guide.
+
+    :param steelShape: steel shape of the shaft.
+    '''
+    d= steelShape.get('h') # Overall depth of member.
+    bf= steelShape.get('b') # Flange width.
+    return (0.95*d-0.8*bf)/2.0
+  
 def getNDimension(steelShape, Areq):
     ''' Return the N dimension of the base plate according
         to expression in section 3.1 of the guide.
@@ -51,11 +61,23 @@ def getNDimension(steelShape, Areq):
     :param Areq: base plate required area
     '''
     d= steelShape.get('h') # Overall depth of member.
-    print('d= ',d,'m')
     bf= steelShape.get('b') # Flange width.
-    delta= (0.95*d-0.8*bf)/2.0
-    return math.sqrt(Areq)+delta
+    delta= getDelta(steelShape)
+    Nmin= max(math.sqrt(Areq),d)
+    return Nmin+delta
 
+def getBDimension(steelShape, N, Areq):
+    ''' Return the B dimension of the base plate.
+
+    :param steelShape: steel shape of the shaft.
+    :param Areq: base plate required area
+    '''
+    B=Areq/N
+    bf= steelShape.get('b') # Flange width.
+    delta= getDelta(steelShape)
+    B= max(B,bf+delta)
+    return B
+  
 def computePlateThickness(steelShape, N, B, Pu, Pp, Fy, phi= 0.9):
     ''' Return the required thickness of the base plate 
         according to expression in section 3.1 of the guide.

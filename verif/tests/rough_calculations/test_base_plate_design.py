@@ -38,6 +38,7 @@ t= bp.computePlateThickness(steelShape, N, B, Pu, Pp, Fy)
 ratio2= (t-40.1170824974e-3)/40.1170824974e-3
 
 '''
+print('Pu= ', Pu/1e3, ' kN')
 print('Areq= ', Areq, ' m2 (',Areq/in2m/in2m,' in2).')
 print('N= ', N, ' m (',N/in2m,' in).')
 print('B= ', B, ' m (',B/in2m,' in).')
