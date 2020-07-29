@@ -39,7 +39,7 @@ A500= ASTMSteel(315e6,400e6,1.0)
 A307= ASTMSteel(245e6,390e6,1.0)
 
 class AnchorBolt(object):
-    """ASTM anchor bolt accordint to table 2.2 from the document
+    """ASTM anchor bolt according to table 2.2 from the document
     Base Plate and Anchor Rod Design Second Edition
     American Institute of Steel Construction, Inc."""
 
