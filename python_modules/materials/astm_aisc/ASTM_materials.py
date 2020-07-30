@@ -15,6 +15,8 @@ __email__= "l.pereztato@ciccp.es, ana.ortega@ciccp.es "
 
 import math
 import scipy.interpolate
+import xc_base
+import geom
 from materials import steel_base
 from misc_utils import log_messages as lmsg
 from materials import buckling_base
@@ -48,13 +50,26 @@ class AnchorBolt(object):
     bearingArea=[0.00044451524, 0.00058451496, 0.0007870952, 0.00096774, 0.0011677396, 0.0014451584, 0.0020193508, 0.0026903172, 0.003451606, 0.0043161204, 0.0052709572, 0.006322568, 0.007354824, 0.008580628, 0.009870948, 0.0112903, 0.012838684]
     fBearingArea= scipy.interpolate.interp1d(diams,bearingArea)
 
-    def __init__(self, name, steel, diameter):
-       '''
-         Constructor.
+    # Hole diameters; see table 2.3 of the design guide:
+    rDiams= [0.01905, 0.022225, 0.0254, 0.03175, 0.0381, 0.04445, 0.0508, 0.0635] # rod diameters.
+    hDiams= [0.0333375, 0.0396875, 0.0460375, 0.0523875, 0.0587375, 0.06985, 0.08255, 0.08255] # hole diameters.
+    fHoleDiameter= scipy.interpolate.interp1d(rDiams,hDiams)
+    
+
+    def __init__(self, name, steel, diameter, pos3d= None):
+       ''' Constructor.
+
+       :param steel: steel material.
+       :param diameter: bolt diameter.
+       :param pos3d: bolt position.
        '''
        self.name=name
        self.steelType= steel
        self.diameter= diameter
+       if(pos3d):
+           self.pos3d= pos3d
+       else:
+           self.pos3d= None
 
     def getArea(self):
         ''' Return the area of the anchor rod.
@@ -73,11 +88,11 @@ class AnchorBolt(object):
         '''
         return 0.75*self.getTensileStrength()
     
-    def getNominalShearStrength(self, type= 'N'):
+    def getNominalShearStrength(self, typ= 'N'):
         ''' Return the shear strength of the anchor rod.
         '''
         factor= 0.4
-        if(type=='X'):
+        if(typ=='X'):
             factor= 0.5
         return factor*self.getTensileStrength()
     
@@ -89,10 +104,23 @@ class AnchorBolt(object):
         '''
         return phi*self.getNominalTensileStrength()
 
+    def getDesignShearStrength(self, typ= 'N', phi= 0.55):
+        ''' Return the shear strength of the anchor rod.
+
+        :param phi: resistance factor for anchor steel  
+                in tension (defaults to 0.55).
+        '''
+        return phi*self.getNominalShearStrength(typ)
+    
     def getBearingArea(self):
         ''' Return the bearing area of the anchor according
             to the table 3.2 of the design guide.'''
         return self.fBearingArea(self.diameter)
+    
+    def getHoleDiameter(self):
+        ''' Return the hole diameter for the anchor according
+            to the table 2.3 of the design guide.'''
+        return self.fHoleDiameter(self.diameter)
     
     def getNominalPulloutStrength(self, fc, psi4= 1.0):
         ''' Return the nominal pullout strength of the anchor 
@@ -101,8 +129,7 @@ class AnchorBolt(object):
         :param fc: concrete strength.
         :param psi4: 1.4 if the anchor is located in a region of a
                      concrete member where analysis indicates no
-                     cracking (f t – f r ) at service levels, 
-                     otherwise 1.0
+                     cracking at service levels, otherwise 1.0
         '''
         Abrg= self.getBearingArea() # the bearing area of the anchor
                                     # rod head or nut.
@@ -120,8 +147,78 @@ class AnchorBolt(object):
         '''
         return phi*self.getNominalPulloutStrength(fc,psi4)
 
+    def getConcreteBreakOutConePolygon(self, h_ef):
+        ''' Return the full breakout cone in tension as per ACI 318-02.
+
+        :param h_ef: depth of embedment.
+        '''
+        retval= geom.Polygon2d()
+        delta= 1.5*h_ef
+        if(self.pos3d):
+            origin= geom.Pos2d(self.pos3d.x, self.pos3d.y)
+            retval.appendVertex(origin+geom.Vector2d(delta,delta))
+            retval.appendVertex(origin+geom.Vector2d(-delta,delta))
+            retval.appendVertex(origin+geom.Vector2d(-delta,-delta))
+            retval.appendVertex(origin+geom.Vector2d(delta,-delta))
+        else:
+            lmsg.error('Anchor position not specified.')        
+        return retval
     
-        
+class AnchorGroup(object):
+    ''' Anchor group.'''
+    
+    def __init__(self, steel, diameter, positions):
+        ''' Creates an anchor group in the positions argument.
+
+        :param steel: steel material.
+        :param diameter: bolt diameter.
+        :param positions: bolt positions.
+        '''
+        self.anchors= list()
+        count= 0
+        for p in positions:
+            self.anchors.append(AnchorBolt(name= str(count), steel= steel, diameter= diameter, pos3d= p))
+            count+= 1
+                               
+    def getConcreteBreakOutConePolygon(self, h_ef):        
+        ''' Return breakout cone in tension for the group
+            as the union of individual cones.
+
+        :param anchorGroup: anchor group.
+        :param h_ef: depth of embedment.
+        '''
+        polygons= list()
+        for anchor in self.anchors:
+            polygons.append(anchor.getConcreteBreakOutConePolygon(h_ef))
+        retval= polygons[0]
+        for plg in polygons[1:]:
+            retval.unePolygon2d(plg)
+        return retval
+
+    def getConcreteBreakOutStrength(self, h_ef, fc, psi3= 1.25, phi= 0.7):
+        ''' Return the concrete breakout strength for the anchor
+            group as per ACI 318-02, Appendix D.
+
+        :param h_ef: depth of embedment.
+        :param fc: concrete strength.
+        :param psi3: 1.25 if the anchor is located in a region of a
+                     concrete member where analysis indicates no
+                     cracking at service levels, otherwise 1.0
+        :param phi: resistance factor for concrete breakout  
+                    (defaults to 0.70).
+        '''
+        AN= self.getConcreteBreakOutConePolygon(h_ef).getArea()
+        ANo= self.anchors[0].getConcreteBreakOutConePolygon(h_ef).getArea()
+        fc_psi= fc*145.038e-6
+        retval= phi*psi3*math.sqrt(fc_psi)*AN/ANo
+        h_ef_in= h_ef/0.0254
+        if(h_ef_in<11): 
+            retval*= 24*math.pow(h_ef_in,1.5)
+        else:
+            retval*= 16*math.pow(h_ef_in,5.0/3.0)
+        retval*=4.4482216 # pounds to Newtons
+        return retval
+
 
 
 class ASTMShape(object):
