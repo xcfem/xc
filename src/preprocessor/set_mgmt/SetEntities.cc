@@ -193,11 +193,13 @@ void XC::SetEntities::clearAll(void)
 //! of those entities that are already in the set.
 void XC::SetEntities::fillDownwards(SetMeshComp &mc)
   {
+    // Bodies
 //     for(lst_bodies::iterator i=bodies.begin();i!=bodies.end();i++)
 //       {
 //         lst_surfaces ss= (*i)->getSurfaces();
 //         surfaces.insert_unique(surfaces.end(),ss.begin(),ss.end());
 //       }
+    // Surfaces
     for(sup_iterator i=surfaces.begin();i!=surfaces.end();i++)
       {
         //Lines.
@@ -215,6 +217,7 @@ void XC::SetEntities::fillDownwards(SetMeshComp &mc)
               mc.addElement(ttz_elements(i,j,k));
 
       }
+    // Lines
     for(lin_iterator i=lines.begin();i!=lines.end();i++)
       {
         //Points.
@@ -231,6 +234,18 @@ void XC::SetEntities::fillDownwards(SetMeshComp &mc)
           for(size_t j=1;j<=numberOfRows;j++)
             for(size_t k=1;k<=numberOfColumns;k++)
               mc.addElement(ttz_elements(i,j,k));
+      }
+    // Points
+    for(pnt_iterator i= points.begin();i!=points.end();i++)
+      {
+        //Nodes.
+	Pnt &p= *(*i);
+	if(p.hasNode())
+	  {
+            Node *n= (*i)->getNode();
+	    if(n)
+	      mc.addNode(n);
+	  }
       }
   }
 
@@ -640,7 +655,7 @@ XC::SetEntities XC::SetEntities::pickBodiesInside(const GeomObj3d &geomObj, cons
 bool XC::SetEntities::In(const UniformGrid *ug) const
   { return uniform_grids.in(ug); }
 
-//! @brief Return the nodes current position boundary.
+//! @brief Return the entities current position boundary.
 BND3d XC::SetEntities::Bnd(void) const
   {
     BND3d retval= points.Bnd();
@@ -688,7 +703,7 @@ double XC::SetEntities::getAverageSize(void) const
 //! @brief Return a new set that contains the bodies that lie insiof the
 //! geometric object.
 //!
-//! @param geomObj: geometric object that must contain the nodes.
+//! @param geomObj: geometric object that must contain the entities.
 //! @param tol: tolerance for "In" function.
 XC::SetEntities XC::SetEntities::pickEntitiesInside(const GeomObj3d &geomObj, const double &tol) const
   {
