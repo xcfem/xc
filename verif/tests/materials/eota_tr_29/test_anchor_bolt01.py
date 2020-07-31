@@ -56,7 +56,7 @@ plgApN= plgA0pN
 plgApN.clipUsingPolygon(baseMaterialContour)
 ApN= plgApN.getArea()
 f2pN= eota.getFactor2pN(A0pN,ApN)
-N0Rdp= eota.axialInitialResistancePullOut(barDiameter,hef,tauRk)/gammaMc
+N0Rdp= eota.axialInitialResistancePullout(barDiameter,hef,tauRk)/gammaMc
 NRdp= N0Rdp*f1N*f2pN # Extraction
 
 # Cone extraction gross area.

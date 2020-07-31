@@ -24,7 +24,7 @@ def axialResistanceSteelFailure(As, fuk):
   '''
   return As*fuk
 
-def axialInitialResistancePullOut(d, hEf, tauRk):
+def axialInitialResistancePullout(d, hEf, tauRk):
     '''Characteristic resistance in case of combined pull -out and concrete cone failure according to expression 5.2a in clause 5.2.2.3 a) of EOTA TR029.
 
     :param d: Anchor diameter (m).

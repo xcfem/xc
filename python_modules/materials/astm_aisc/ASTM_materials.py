@@ -147,7 +147,7 @@ class AnchorBolt(object):
         '''
         return phi*self.getNominalPulloutStrength(fc,psi4)
 
-    def getConcreteBreakOutConePolygon(self, h_ef):
+    def getConcreteBreakoutConePolygon(self, h_ef):
         ''' Return the full breakout cone in tension as per ACI 318-02.
 
         :param h_ef: depth of embedment.
@@ -184,7 +184,7 @@ class AnchorGroup(object):
         ''' Return the number of anchors in the group.'''
         return len(self.anchors)
     
-    def getConcreteBreakOutConePolygon(self, h_ef):        
+    def getConcreteBreakoutConePolygon(self, h_ef):        
         ''' Return breakout cone in tension for the group
             as the union of individual cones.
 
@@ -192,13 +192,13 @@ class AnchorGroup(object):
         '''
         polygons= list()
         for anchor in self.anchors:
-            polygons.append(anchor.getConcreteBreakOutConePolygon(h_ef))
+            polygons.append(anchor.getConcreteBreakoutConePolygon(h_ef))
         retval= polygons[0]
         for plg in polygons[1:]:
             retval.unePolygon2d(plg)
         return retval
 
-    def getConcreteBreakOutStrength(self, h_ef, fc, psi3= 1.25, phi= 0.7):
+    def getConcreteBreakoutStrength(self, h_ef, fc, psi3= 1.25, phi= 0.7):
         ''' Return the concrete breakout strength for the anchor
             group as per ACI 318-02, Appendix D.
 
@@ -210,8 +210,8 @@ class AnchorGroup(object):
         :param phi: resistance factor for concrete breakout  
                     (defaults to 0.70).
         '''
-        AN= self.getConcreteBreakOutConePolygon(h_ef).getArea()
-        ANo= self.anchors[0].getConcreteBreakOutConePolygon(h_ef).getArea()
+        AN= self.getConcreteBreakoutConePolygon(h_ef).getArea()
+        ANo= self.anchors[0].getConcreteBreakoutConePolygon(h_ef).getArea()
         fc_psi= fc*145.038e-6
         retval= phi*psi3*math.sqrt(fc_psi)*AN/ANo
         h_ef_in= h_ef/0.0254

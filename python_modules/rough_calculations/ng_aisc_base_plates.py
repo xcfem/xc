@@ -212,7 +212,7 @@ class RectangularBasePlate(object):
             shearStrength+= self.computeFrictionStrength(Pu)
         return Vu/shearStrength
     
-    def getPullOutEfficiency(self, Pu):
+    def getPulloutEfficiency(self, Pu):
         ''' Return the pullout efficiency of the base
             plate.
 
@@ -220,12 +220,12 @@ class RectangularBasePlate(object):
         '''
         retval= 0.0
         if(Pu<0): # tensile load
-            anchorConcretePullOutStrength= self.anchorGroup.anchors[0].getDesignPulloutStrength(self.fc)
+            anchorConcretePulloutStrength= self.anchorGroup.anchors[0].getDesignPulloutStrength(self.fc)
             T_rod= -Pu/self.anchorGroup.getNumberOfBolts() # Tensile load per anchor
-            retval= T_rod/anchorConcretePullOutStrength
+            retval= T_rod/anchorConcretePulloutStrength
         return retval
         
-    def getBreakOutEfficiency(self, h_ef, Pu):
+    def getBreakoutEfficiency(self, h_ef, Pu):
         ''' Return the breakout efficiency of the base
             plate.
 
@@ -234,8 +234,8 @@ class RectangularBasePlate(object):
         '''
         retval= 0.0
         if(Pu<0): # tensile load
-            anchorConcreteBreakOutStrength= self.anchorGroup.getConcreteBreakOutStrength(h_ef, self.fc)
-            retval= -Pu/anchorConcreteBreakOutStrength
+            anchorConcreteBreakoutStrength= self.anchorGroup.getConcreteBreakoutStrength(h_ef, self.fc)
+            retval= -Pu/anchorConcreteBreakoutStrength
         return retval
         
     def getWebStress(self, Pu):

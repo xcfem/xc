@@ -64,7 +64,7 @@ plgApN.clipUsingPolygon(baseMaterialContour)
 ApN= plgApN.getArea()
 f2pN= eota.getFactor2pN(A0pN,ApN)
 f3N= eota.getFactor3N(d= boltDiameter, spacing= spacing, n= 2, hEf= hef, tauRk= tauRk, fck_cube= fckCube,cracked= False)
-N0Rdp= eota.axialInitialResistancePullOut(boltDiameter,hef,tauRk)/gammaMc
+N0Rdp= eota.axialInitialResistancePullout(boltDiameter,hef,tauRk)/gammaMc
 NRdp= N0Rdp*f1N*f2pN*f3N # Extraction
 
 ## Design concrete cone resistance
