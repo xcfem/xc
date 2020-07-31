@@ -60,10 +60,8 @@ s2.nDivJ= 1
 
 Z1= preprocessor.getSets.defSet("Z1")
 Z1.getSurfaces.append(s1)
-Z1.fillDownwards()
 Z2= preprocessor.getSets.defSet("Z2")
 Z2.getSurfaces.append(s2)
-Z2.fillDownwards()
 
 feProblem.setVerbosityLevel(0) #Dont print(warning messages about element seed.)
 Z1.genMesh(xc.meshDir.I)
