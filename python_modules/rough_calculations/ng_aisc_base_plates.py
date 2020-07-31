@@ -96,6 +96,8 @@ def computePlateThickness(steelShape, N, B, Pu, Pp, Fy, phi= 0.9):
     m= (N-0.95*d)/2.0
     n= (B-0.8*bf)/2.0
     X= ((4.0*d*bf)/(d+bf)**2)*Pu/Pp
+    if(X>1):
+        lmsg.error('Pu ('+str(Pu/1e3)+' kN) too big with respect to Pp ('+str(Pp/1e3)+' kN) increase base plate area\n')
     lmbd= 2.0*math.sqrt(X)/(1+math.sqrt(1-X))
     lmbd= min(lmbd,1.0)
     lmbd_np= lmbd*math.sqrt(d*bf)/4.0
@@ -108,7 +110,19 @@ def computePlateThickness(steelShape, N, B, Pu, Pp, Fy, phi= 0.9):
 
   
 class RectangularBasePlate(object):
-    ''' Rectangular base plate.'''
+    ''' Rectangular base plate.
+
+    :ivar N: dimension parallel to the web of the shaft.
+    :ivar B: dimension parallel to the flange of the shaft.
+    :ivar t: thickness.
+    :ivar steelShape: shape of the steel column supported
+                       by the plate.
+    :ivar anchorGroup: anchor group.
+    :ivar fc: minimum concrete compressive strength.
+    :ivar steel: steel material.
+    :ivar nShearBolts: number of bolts that take shear force
+                       (defaults to 2).
+    '''
     def __init__(self, N, B, t, steelShape, anchorGroup, fc, steel= ASTM_materials.A36):
         ''' Constructor.
 
@@ -117,7 +131,7 @@ class RectangularBasePlate(object):
         :param t: thickness.
         :param steelShape: shape of the steel column supported
                            by the plate.
-        :parma anchorGroup: anchor group.
+        :param anchorGroup: anchor group.
         :param fc: minimum concrete compressive strength.
         :param steel: steel material.
         '''
@@ -128,6 +142,8 @@ class RectangularBasePlate(object):
         self.anchorGroup= anchorGroup
         self.steel= steel
         self.fc= fc
+        self.nShearBolts= 2  # By default only 2 anchors work
+                             # for shear (see 3.5.3 in the guide) 
 
     def getArea(self):
         ''' Return the area of the base plate.'''
@@ -150,7 +166,7 @@ class RectangularBasePlate(object):
         retval= 0.0
         for anchor in self.anchorGroup.anchors:
             retval+= abs(anchor.pos3d.x)
-        retval/= len(self.anchorGroup.anchors)
+        retval/= self.anchorGroup.getNumberOfBolts()
         return retval
 
     def getRequiredThickness(self, Pu):
@@ -159,7 +175,7 @@ class RectangularBasePlate(object):
             Pp= self.getConcreteStrength()
             return computePlateThickness(self.steelShape, self.N, self.B, Pu, Pp, self.steel.fy)
         else: # rods in tension
-            T_rod= -Pu/4.0 # Tensile load per anchor
+            T_rod= -Pu/self.anchorGroup.getNumberOfBolts() # Tensile load per anchor
             tw= self.steelShape.get('tw') # Web thickness
             anchorLeverArm= self.getAnchorLeverArm()
             M= T_rod*anchorLeverArm-tw/2.0
@@ -183,16 +199,15 @@ class RectangularBasePlate(object):
         retval= min(retval, 0.2*self.fc*self.getArea())
         return retval
     
-    def getShearEfficiency(self, Pu, Vu, n= 2):
+    def getShearEfficiency(self, Pu, Vu):
         ''' Return the shear efficiency of the base
             plate.
 
         :param Pu: axial load (LRFD).
         :param Vu: shear load (LRFD).
-        :param n: number of anchors that work for shear.
         '''
         anchorShearStrength= self.anchorGroup.anchors[0].getDesignShearStrength()
-        shearStrength= n*anchorShearStrength
+        shearStrength= self.nShearBolts*anchorShearStrength
         if(Pu>0): # base plate compressed
             shearStrength+= self.computeFrictionStrength(Pu)
         return Vu/shearStrength
@@ -206,7 +221,7 @@ class RectangularBasePlate(object):
         retval= 0.0
         if(Pu<0): # tensile load
             anchorConcretePullOutStrength= self.anchorGroup.anchors[0].getDesignPulloutStrength(self.fc)
-            T_rod= -Pu/4.0 # Tensile load per anchor
+            T_rod= -Pu/self.anchorGroup.getNumberOfBolts() # Tensile load per anchor
             retval= T_rod/anchorConcretePullOutStrength
         return retval
         
@@ -230,7 +245,7 @@ class RectangularBasePlate(object):
         '''
         retval= 0.0
         if(Pu<0): # tensile load
-            T_rod= -Pu/4.0 # Tensile load per anchor
+            T_rod= -Pu/self.anchorGroup.getNumberOfBolts() # Tensile load per anchor
             tw= self.steelShape.get('tw') # Web thickness
             anchorLeverArm= self.getAnchorLeverArm()
             M= T_rod*anchorLeverArm-tw/2.0
@@ -260,7 +275,7 @@ class RectangularBasePlate(object):
         retval= 0.0
         if(Pu<0): # tensile load
             Rn= self.anchorGroup.anchors[0].getDesignTensileStrength()
-            T_rod= -Pu/4.0 # Tensile load per anchor
+            T_rod= -Pu/self.anchorGroup.getNumberOfBolts() # Tensile load per anchor
             retval= T_rod/Rn
         return retval
     
