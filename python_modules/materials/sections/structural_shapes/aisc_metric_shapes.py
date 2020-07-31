@@ -26,6 +26,8 @@ from materials.sections.structural_shapes import aisc_shapes_dictionaries as sha
 from materials.sections.structural_shapes import aisc_shapes_labels as labels
 from materials.sections import structural_steel
 from misc_utils import log_messages as lmsg
+import xc_base
+import geom
 
 # Shear areas.
 
@@ -331,6 +333,28 @@ class WShape(structural_steel.IShape):
         ''' Return internal web height: clear distance between flanges
         less the fillet at each flange (h in AISC tables).'''
         return self.get('d')
+
+    def getContour(self):
+        ''' Return the section countour.'''
+        retval= geom.Polygon2d()
+        halfB= self.get('b')/2.0
+        halfH= self.h()/2.0
+        tf= self.get('tf')
+        tw= self.get('tw')
+        retval.appendVertex(geom.Pos2d(-halfB,-halfH))
+        retval.appendVertex(geom.Pos2d(halfB,-halfH))
+        retval.appendVertex(geom.Pos2d(halfB,-halfH+tf))
+        retval.appendVertex(geom.Pos2d(tw/2.0,-halfH+tf))
+        retval.appendVertex(geom.Pos2d(tw/2.0,halfH-tf))
+        retval.appendVertex(geom.Pos2d(halfB,halfH-tf))
+        retval.appendVertex(geom.Pos2d(halfB,halfH))
+        retval.appendVertex(geom.Pos2d(-halfB,halfH))
+        retval.appendVertex(geom.Pos2d(-halfB,halfH-tf))
+        retval.appendVertex(geom.Pos2d(-tw/2.0,halfH-tf))
+        retval.appendVertex(geom.Pos2d(-tw/2.0,-halfH+tf))
+        retval.appendVertex(geom.Pos2d(-halfB,-halfH+tf))
+        retval.appendVertex(geom.Pos2d(-halfB,-halfH))
+        return retval       
 
     def getLambdaPFlange(self):
         '''Return he limiting slenderness for a compact flange, 
