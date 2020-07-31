@@ -179,12 +179,15 @@ class AnchorGroup(object):
         for p in positions:
             self.anchors.append(AnchorBolt(name= str(count), steel= steel, diameter= diameter, pos3d= p))
             count+= 1
-                               
+
+    def getNumberOfBolts(self):
+        ''' Return the number of anchors in the group.'''
+        return len(self.anchors)
+    
     def getConcreteBreakOutConePolygon(self, h_ef):        
         ''' Return breakout cone in tension for the group
             as the union of individual cones.
 
-        :param anchorGroup: anchor group.
         :param h_ef: depth of embedment.
         '''
         polygons= list()
