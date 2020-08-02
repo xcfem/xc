@@ -591,26 +591,31 @@ class StructuralMechanics(PredefinedSpace):
         v3d= sg.getKVector
         return xc.Vector([v3d.x, v3d.y, v3d.z])
 
-    def createElasticBeams(self, xcSet, xcSection, trf, xzVector= None, crossSection= None, nDiv= 4):
+    def createElasticBeams(self, xcSet, crossSection, trf, xzVector= None, nDiv= 4):
         ''' Meshes the lines of the set argument with ElasticBeam3d
             elements.
 
         :param xcSet: set with the lines to mesh.
-        :param xcSection: XC section to assign to the elements.
         :param trf: coordinate transformation to assign to the elements.
         :param xzVector: vector defining transformation XZ plane.
         :param crossSection: object that defines the geometry of the element section.
         :param nDiv: number of divisions on each line.
         '''
         numDOFs= self.preprocessor.getNodeHandler.numDOFs
+        xc_material= crossSection.xc_material
         if(numDOFs==3):
             elementType= 'ElasticBeam2d'
+            if(not xc_material):
+                xc_material= crossSection.defElasticShearSection2d(self.preprocessor)
         elif(numDOFs==6):
             elementType= 'ElasticBeam3d'
+            if(not xc_material):
+                xc_material= crossSection.defElasticShearSection3d(self.preprocessor)
         else:
             lmsg.error('Something went wrong; numDOFs= '+str(numDOFs))
         seedElemHandler= self.preprocessor.getElementHandler.seedElemHandler
-        seedElemHandler.defaultMaterial= xcSection.getName()
+            
+        seedElemHandler.defaultMaterial= xc_material.getName()
         for l in xcSet.getLines:
             l.nDiv= nDiv
             if(xzVector):
