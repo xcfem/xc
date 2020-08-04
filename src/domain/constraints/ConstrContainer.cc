@@ -238,7 +238,7 @@ bool XC::ConstrContainer::addLoadPattern(LoadPattern *lp)
 
 //! @brief Return true if the load pattern is already added to the domain.
 //! @param lp: pointer to the load pattern to ask for.
-bool XC::ConstrContainer::isLoadPatternActive(LoadPattern *lp)
+bool XC::ConstrContainer::isLoadPatternActive(const LoadPattern *lp) const
   { return activeLoadPatterns.in(lp); }
 
 //! @brief Appends a node locker.

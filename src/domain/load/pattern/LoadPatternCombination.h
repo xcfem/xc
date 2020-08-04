@@ -64,6 +64,7 @@ class LoadPatternCombination: public ForceReprComponent
         LoadPattern *getLoadPattern(void);
 	const std::string &getLoadPatternName(const MapLoadPatterns &lps) const;
 
+	bool set_gamma_f(void);
         summand getNeg(void) const;
         const summand &add(const summand &);
         const summand &subtract(const summand &);
@@ -81,7 +82,7 @@ class LoadPatternCombination: public ForceReprComponent
   protected:
     TDescomp descomp;
 
-    void set_gamma_f(void);
+    void set_gamma_f(TDescomp &);
     void set_domain(void);
     
     void clear(void);
@@ -102,6 +103,7 @@ class LoadPatternCombination: public ForceReprComponent
     
     inline void setNombre(const std::string &nm)
       { name= nm;}
+    bool add_to_domain(TDescomp &);
   public:
     LoadPatternCombination(int tag= 0,int classTag= LOAD_TAG_LoadPatternCombination,const std::string &nm= "", LoadHandler *ll= nullptr);
     ~LoadPatternCombination(void);
@@ -114,6 +116,9 @@ class LoadPatternCombination: public ForceReprComponent
     virtual void setDomain(Domain *theDomain);
 
     bool addToDomain(void);
+    bool addToDomain(const std::set<std::string> &filter);
+    bool addToDomain(boost::python::list &filter);
+    bool isActive(void) const;
     void removeFromDomain(void);
 
     inline void setDescomp(const std::string &descomp)

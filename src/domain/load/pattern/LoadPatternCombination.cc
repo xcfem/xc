@@ -64,6 +64,22 @@ XC::LoadPattern *XC::LoadPatternCombination::summand::getLoadPattern(void)
 const std::string &XC::LoadPatternCombination::summand::getLoadPatternName(const MapLoadPatterns &lPatterns) const
   { return lPatterns.getLoadPatternName(lpattern); }
 
+//! @brief Assigns the weightings for the load pattern.
+bool XC::LoadPatternCombination::summand::set_gamma_f(void)
+  {
+    bool retval= true;
+    LoadPattern *lp= getLoadPattern();
+    if(lp)
+      lp->GammaF()= Factor();
+    else
+      {
+        std::cerr << getClassName() << "::" << __FUNCTION__
+	  	  << "; null pointer found in expression." << std::endl;
+	retval= false;
+      }
+    return retval;
+  }
+
 //! @brief Changes the sign of the summand.
 void XC::LoadPatternCombination::summand::neg(void)
   { factor*=-1.0; }
@@ -236,17 +252,10 @@ void XC::LoadPatternCombination::limpia_ceros(void)
   }
 
 //! @brief Assigns the weightings for each load case of the combination.
-void XC::LoadPatternCombination::set_gamma_f(void)
+void XC::LoadPatternCombination::set_gamma_f(TDescomp &desc)
   {
-    for(iterator i= begin();i!=end();i++)
-      {
-        LoadPattern *lp= i->getLoadPattern();
-        if(lp)
-          lp->GammaF()= i->Factor();
-        else
-	  std::cerr << getClassName() << "::" << __FUNCTION__
-	            << "; null pointer found in expression." << std::endl;
-      }
+    for(TDescomp::iterator i= desc.begin();i!= desc.end();i++)
+      i->set_gamma_f();
   }
 
 //! @brief Assigns the domain to each domain.
@@ -272,14 +281,14 @@ void XC::LoadPatternCombination::setDomain(Domain *theDomain)
     set_domain();
   }
 
-//! @brief Adds to the domain being passed as parameter each of the load cases of the combination.
-bool XC::LoadPatternCombination::addToDomain(void)
+//! @brief Adds to the domain the load patterns in the argument deque.
+bool XC::LoadPatternCombination::add_to_domain(TDescomp &desc)
   {
-    Domain *dom= getDomain();    
+    Domain *dom= getDomain();
     assert(dom);
     bool retval= true;
-    set_gamma_f();
-    for(iterator i= begin();i!=end();i++)
+    set_gamma_f(desc);
+    for(TDescomp::iterator i= desc.begin();i!=desc.end();i++)
       {
         LoadPattern *lp= i->getLoadPattern();
         if(lp)
@@ -298,6 +307,73 @@ bool XC::LoadPatternCombination::addToDomain(void)
         else
 	  std::cerr << getClassName() << "::" << __FUNCTION__
 	            << "; null pointer found in expression." << std::endl;
+      }
+    return retval;
+  }
+
+//! @brief Adds to the domain each of the load cases of the combination.
+bool XC::LoadPatternCombination::addToDomain(void)
+  {
+    return add_to_domain(this->descomp);
+  }
+
+//! @brief Adds to the domain each the load cases whose name is
+//! included in the filter list.
+bool XC::LoadPatternCombination::addToDomain(const std::set<std::string> &filter)
+  {
+    const MapLoadPatterns &lPatterns= handler->getLoadPatterns();
+    TDescomp partial;
+    for(TDescomp::iterator i= begin();i!=end();i++)
+      {
+	const std::string lpName= i->getLoadPatternName(lPatterns);
+	if(filter.find(lpName)!=filter.end()) // name found.
+	  partial.push_back(*i);
+      }
+    return add_to_domain(partial);
+  }
+
+//! @brief Adds to the domain each the load cases whose name is
+//! included in the filter list.
+bool XC::LoadPatternCombination::addToDomain(boost::python::list &filter)
+  {
+    std::set<std::string> cpp_filter;
+    const size_t sz= len(filter);
+    for(size_t i= 0;i<sz;++i)
+      cpp_filter.insert(boost::python::extract<std::string>(filter[i]));
+    return addToDomain(cpp_filter);
+  }
+
+//! @brief Return true if the combination is fully added to
+//! the domain.
+bool XC::LoadPatternCombination::isActive(void) const
+
+  {
+    assert(dom);
+    bool retval= true;
+    for(TDescomp::const_iterator i= begin();i!=end();i++)
+      {
+        const LoadPattern *lp= i->getLoadPattern();
+        if(lp)
+          {
+            if(lp->isActive())
+	      {
+	        if(i->Factor()!=lp->GammaF())
+		  {
+		    retval= false;
+		    break;
+		  }
+	      }
+	    else
+	      {
+                retval= false;
+		break;
+	      }
+	  }
+	else
+	  {
+            retval= false;
+	    break;
+	  }
       }
     return retval;
   }

@@ -490,7 +490,7 @@ bool XC::Domain::addLoadPattern(LoadPattern *lp)
 //! @brief Return true if the load pattern is already added to the domain.
 //!
 //! @param lp: pointer to the load pattern to ask for.
-bool XC::Domain::isLoadPatternActive(LoadPattern *lp)
+bool XC::Domain::isLoadPatternActive(const LoadPattern *lp) const
   { return constraints.isLoadPatternActive(lp); }
 
 

@@ -55,18 +55,23 @@ class_<XC::LoadPattern, bases<XC::NodeLocker>, boost::noncopyable >("LoadPattern
   .def("removeNodalLoad",&XC::LoadPattern::removeNodalLoad,"removes the nodal load with the tag passed as parameter.")
   .def("removeElementalLoad",&XC::LoadPattern::removeElementalLoad,"remove the elemental load with the tag passed as parameter.")
   .def("clearLoads",&XC::LoadPattern::clearLoads,"Delete the pattern loads.")
-  .def("addToDomain", &XC::LoadPattern::addToDomain,"Add combination to the domain.")
-  .def("removeFromDomain", &XC::LoadPattern::removeFromDomain,"Removes the combination from the domain.")
+  .def("addToDomain", &XC::LoadPattern::addToDomain,"Add load pattern to the domain.")
+  .def("removeFromDomain", &XC::LoadPattern::removeFromDomain,"Removes the load pattern from the domain.")
+  .def("isActive", &XC::LoadPattern::isActive,"Return true if the load pattern is currently added to the domain.")
   .def(self *= double())
   ;
 
 #include "load_patterns/python_interface.tcc"
 
+bool (XC::LoadPatternCombination::*addToDomain)(void)= &XC::LoadPatternCombination::addToDomain;
+bool (XC::LoadPatternCombination::*addToDomainWithFilter)(boost::python::list &)= &XC::LoadPatternCombination::addToDomain;
 class_<XC::LoadPatternCombination, XC::LoadPatternCombination *, bases<XC::ForceReprComponent>, boost::noncopyable >("LoadPatternCombination", no_init)
   .add_property("getName", make_function( &XC::LoadPatternCombination::getName, return_value_policy<return_by_value>() ), "Returns combination's name.")
   .add_property("name", make_function( &XC::LoadPatternCombination::getName, return_value_policy<return_by_value>() ), "Returns combination's name.")
-  .def("addToDomain", &XC::LoadPatternCombination::addToDomain,"Add combination to the domain.")
+  .def("addToDomain", addToDomain,"Add combination to the domain.")
+  .def("addToDomain", addToDomainWithFilter,"Add only the load patterns of the combination whose name is in the list.")
   .def("removeFromDomain", &XC::LoadPatternCombination::removeFromDomain,"Remove combination from the domain.")
+  .def("isActive", &XC::LoadPatternCombination::isActive,"Return true if the combination is fully added to the domain.")
   .def("getDescomp", &XC::LoadPatternCombination::getString,"Returns combination expression.")
   ;
 

@@ -200,11 +200,12 @@ void XC::LoadPattern::removeFromDomain(void)
 	        << "; WARNING: null pointer to the domain\n";
   }
 
-//! @brief Return true if the load pattern is already added to a domain.
-bool XC::LoadPattern::isActive(void)
+//! @brief Return true if the load pattern is already added
+//! to the domain.
+bool XC::LoadPattern::isActive(void) const
   {
     bool retval= false;
-    Domain *theDomain = this->getDomain();
+    const Domain *theDomain = this->getDomain();
     if(theDomain)
       retval= theDomain->isLoadPatternActive(this);
     return retval;

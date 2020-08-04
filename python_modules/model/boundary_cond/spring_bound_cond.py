@@ -32,7 +32,7 @@ class SpringBC(object):
     '''
     def __init__(self,name,modelSpace,Kx=0,Ky=0,Kz=0):
         self.name=name
-        self.modelSpace=modelSpace
+        self.modelSpace= modelSpace
         self.Kx=Kx
         self.Ky=Ky
         self.Kz=Kz

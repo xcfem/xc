@@ -84,7 +84,7 @@ class ConstrContainer: public MeshComponentContainer
     virtual bool addMFreedom_Constraint(MFreedom_Constraint *);
     virtual bool addMRMFreedom_Constraint(MRMFreedom_Constraint *);
     virtual bool addLoadPattern(LoadPattern *);
-    virtual bool isLoadPatternActive(LoadPattern *);
+    virtual bool isLoadPatternActive(const LoadPattern *) const;
     virtual bool addNodeLocker(NodeLocker *);
 
     // methods to add components to a LoadPattern object

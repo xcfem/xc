@@ -580,7 +580,9 @@ class StructuralMechanics(PredefinedSpace):
         xcSet.fillDownwards()
         
     def getSuitableXZVector(self, iNode, jNode):
-        ''' Create an elastic beam between two nodes.
+        ''' Return a vector that can be used to define
+            a coordinate transformation for an element
+            between the node arguments.
 
         :param iNode: first node.
         :param jNode: second node.

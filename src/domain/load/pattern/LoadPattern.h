@@ -127,7 +127,7 @@ class LoadPattern: public NodeLocker
     virtual void setDomain(Domain *theDomain);
     bool addToDomain(void);
     void removeFromDomain(void);
-    virtual bool isActive(void);
+    virtual bool isActive(void) const;
 
     // methods to add loads
     virtual bool addNodalLoad(NodalLoad *);
