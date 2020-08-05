@@ -705,29 +705,33 @@ class OutputHandler(object):
 
        '''
         #auto-scale parameters
-        LrefModSize=setToDisplay.getBnd(1.0).diagonal.getModulus() #representative length of set size (to autoscale)
-        lstArgVal=[e.getProp(attributeName+'Sect1')(itemToDisp) for e in beamSetDispRes.elements]
-        unitConversionFactor, unitDescription= self.outputStyle.getUnitParameters(itemToDisp)
-        scaleFactor= 1.0
-        maxAbs=max(abs(max(lstArgVal)),abs(min(lstArgVal)))
-        if(maxAbs>0):
-            scaleFactor*=0.15*LrefModSize/(maxAbs*unitConversionFactor)
-        if not setToDisplay:
-            setToDisplay= beamSetDispRes
-        if not caption:
-            if hasattr(beamSetDispRes,'description'):
-                descrSet= beamSetDispRes.description.capitalize()
-            if(len(descrSet)==0): # No description provided.
-                descrSet= beamSetDispRes.name
-            caption= attributeName + ', ' + itemToDisp +' '+unitDescription+ '. '+ descrSet
-        diagram= cvd.ControlVarDiagram(scaleFactor= scaleFactor,fUnitConv= unitConversionFactor,sets=[beamSetDispRes],attributeName= attributeName,component= itemToDisp)
-        diagram.addDiagram()
-        displaySettings= vtk_FE_graphic.DisplaySettingsFE()
-        displaySettings.cameraParameters= self.getCameraParameters()
-        displaySettings.setupGrid(setToDisplay)
-        displaySettings.defineMeshScene(None,defFScale,color= setToDisplay.color)
-        displaySettings.appendDiagram(diagram) #Append diagram to the scene.
-        displaySettings.displayScene(caption= caption,fileName= fileName)
+        if(len(beamSetDispRes.elements)):            
+            LrefModSize=setToDisplay.getBnd(1.0).diagonal.getModulus() #representative length of set size (to autoscale)
+            lstArgVal=[e.getProp(attributeName+'Sect1')(itemToDisp) for e in beamSetDispRes.elements]
+            unitConversionFactor, unitDescription= self.outputStyle.getUnitParameters(itemToDisp)
+            scaleFactor= 1.0
+            maxAbs=max(abs(max(lstArgVal)),abs(min(lstArgVal)))
+            if(maxAbs>0):
+                scaleFactor*=0.15*LrefModSize/(maxAbs*unitConversionFactor)
+            if not setToDisplay:
+                setToDisplay= beamSetDispRes
+            if not caption:
+                if hasattr(beamSetDispRes,'description'):
+                    descrSet= beamSetDispRes.description.capitalize()
+                if(len(descrSet)==0): # No description provided.
+                    descrSet= beamSetDispRes.name
+                caption= attributeName + ', ' + itemToDisp +' '+unitDescription+ '. '+ descrSet
+            diagram= cvd.ControlVarDiagram(scaleFactor= scaleFactor,fUnitConv= unitConversionFactor,sets=[beamSetDispRes],attributeName= attributeName,component= itemToDisp)
+            diagram.addDiagram()
+            displaySettings= vtk_FE_graphic.DisplaySettingsFE()
+            displaySettings.cameraParameters= self.getCameraParameters()
+            displaySettings.setupGrid(setToDisplay)
+            displaySettings.defineMeshScene(None,defFScale,color= setToDisplay.color)
+            displaySettings.appendDiagram(diagram) #Append diagram to the scene.
+            displaySettings.displayScene(caption= caption,fileName= fileName)
+        else:
+            lmsg.warning('Element set: \''+beamSetDispRes.name+'\' is empty. There is nothing to display.')
+                    
         
     def displayEigenvectorsOnSets(self, eigenMode, setsToDisplay, fileName=None,defFScale=0.0):
         '''displays the reactions as vector on affected nodes
