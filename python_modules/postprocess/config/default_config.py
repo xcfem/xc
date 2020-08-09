@@ -49,13 +49,13 @@ class ProjectDirTree(object):
         '''
         Constructor.
 
-       :ivar intForcPath: relative path from the model path of the directory where results 
+       :param intForcPath: relative path from the model path of the directory where results 
                      of internal forces are placed.
-       :ivar verifPath: relative path from the model path of the directory where results of 
+       :param verifPath: relative path from the model path of the directory where results of 
                      limit state  verifications are placed
-       :ivar reportPath: relative path of the directory where calculation report 
+       :param reportPath: relative path of the directory where calculation report 
                      files are placed
-       :ivar resultsPath : relative path from reportPath of the directory where to place  
+       :param resultsPath : relative path from reportPath of the directory where to place  
                      graphic and text files to be included in the report
                             
         '''
