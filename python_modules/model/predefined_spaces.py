@@ -29,6 +29,11 @@ class PredefinedSpace(object):
         nodes.dimSpace= dimSpace
         nodes.numDOFs= numDOFs
         self.analysis= None
+
+    def getProblem(self):
+        ''' Return the XC finite element problem object.
+        '''
+        return self.preprocessor.getProblem
         
     def getIntForceComponentFromName(self,componentName):
         if componentName[0] in ['N','M']:
@@ -290,6 +295,10 @@ class PredefinedSpace(object):
     def removeAllLoadPatternsFromDomain(self):
         ''' Remove all load patterns from domain.'''
         self.preprocessor.getDomain.removeAllLoadPatterns()
+        
+    def revertToStart(self):
+        ''' Revert the domain to its initial state..'''
+        self.preprocessor.getDomain.revertToStart()
 
     def addLoadCaseToDomain(self, loadCaseName):
         '''Add the load case argument (load pattern or
@@ -339,7 +348,7 @@ class PredefinedSpace(object):
                                effects.
         '''
         result= 0
-        problem= self.preprocessor.getProblem
+        problem= self.getProblem()
         if(not self.analysis):
             self.analysis= predefined_solutions.simple_static_linear(problem)
         result= self.analysis.analyze(numSteps)
@@ -352,7 +361,7 @@ class PredefinedSpace(object):
 
         :param numModes: number of zero energy modes to obtain.
         '''
-        problem= self.preprocessor.getProblem
+        problem= self.getProblem()
         if(self.analysis):
             lmsg.log('Redefining analysis.')
         self.analysis= predefined_solutions.zero_energy_modes(problem)
@@ -363,7 +372,7 @@ class PredefinedSpace(object):
 
         :param numModes: number of ill-conditioned modes to obtain.
         '''
-        problem= self.preprocessor.getProblem
+        problem= self.getProblem()
         if(self.analysis):
             lmsg.log('Redefining analysis.')
         self.analysis= predefined_solutions.ill_conditioning_analysis(problem)
@@ -417,6 +426,7 @@ class PredefinedSpace(object):
         for dl in dispLabels:
             retval+= ', '+dl
         return retval
+
 
 def getModelSpace(preprocessor):
       '''Return a PredefinedSpace from the dimension of the space 

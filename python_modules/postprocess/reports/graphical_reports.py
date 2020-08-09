@@ -290,26 +290,26 @@ class LoadCaseDispParameters(RecordDisp):
           retval= self.loadCaseName
         return retval
 
-    def loadReports(self,FEcase,texFile,cfg):
+    def writeLoadReport(self, modelSpace, texFile, cfg):
         '''Creates the graphics files of loads for the load case and insert them in
         a LaTex file
 
-        :param FEcase:     finite element case 
+        :param modelSpace: model space object (see predefined_spaces.py).
         :param texFile:    laTex file where to include the graphics 
                            (e.g.:'text/report_loads.tex')
         :param cfg:        instance of EnvConfig class with config parameters
         '''
         fullPath=cfg.projectDirTree.getReportLoadsGrPath()
         rltvPath=cfg.projectDirTree.getRltvReportLoadsGrPath()
-        preprocessor=FEcase.getPreprocessor
-        labl=self.loadCaseName
-        lcs=QGrph.LoadCaseResults(FEcase)
-        modelSpace= predefined_spaces.getModelSpaceFromPreprocessor(preprocessor)
+        labl= self.loadCaseName
+        FEcase= modelSpace.getProblem()
+        lcs= QGrph.LoadCaseResults(FEcase)
         modelSpace.removeAllLoadPatternsFromDomain()
+        modelSpace.revertToStart()
         modelSpace.addNewLoadCaseToDomain(self.loadCaseName,self.loadCaseExpr)
         for st in self.setsToDispLoads:
-            fullgrfname=fullPath+self.loadCaseName+st.name
-            rltvgrfname=rltvPath+self.loadCaseName+st.name
+            fullgrfname= fullPath+self.loadCaseName+st.name
+            rltvgrfname= rltvPath+self.loadCaseName+st.name
             capt= self.getDescription() + '. '  +  st.description + ', '  + self.unitsLoads
             jpegFileName= fullgrfname+'.jpg'
   #          lcs.displayLoads(setToDisplay=st,caption= capt,fileName= jpegFileName)  # changed 22/06/2020
@@ -322,6 +322,21 @@ class LoadCaseDispParameters(RecordDisp):
             jpegFileName= fullgrfname+'.jpg'
             lcs.displayLoads(setToDisplay=st,caption= capt,fileName= jpegFileName)  # changed 22/06/2020
             insertGrInTex(texFile=texFile,grFileNm=rltvgrfname,grWdt=cfg.grWidth,capText=capt,labl=labl)
+
+    def loadReports(self,FEcase,texFile,cfg):
+        '''Creates the graphics files of loads for the load case and insert them in
+        a LaTex file
+
+        :param FEcase:     finite element problem 
+        :param texFile:    laTex file where to include the graphics 
+                           (e.g.:'text/report_loads.tex')
+        :param cfg:        instance of EnvConfig class with config parameters
+        '''
+        preprocessor= FEcase.getPreprocessor
+        labl=self.loadCaseName
+        lcs=QGrph.LoadCaseResults(FEcase)
+        modelSpace= predefined_spaces.getModelSpaceFromPreprocessor(preprocessor)
+        writeLoadsReport(modelSpace, texFile,cfg)
 
     def simplLCReports(self,FEproblem,texFile,cfg):
         '''Creates the graphics files of displacements and internal forces 
@@ -394,16 +409,18 @@ def insertGrInTex(texFile,grFileNm,grWdt,capText,labl=''):
     texFile.write('\\end{figure}\n')
     return
   
-def getLoadCaseDispParametersFromLoadPattern(loadPattern, unitsScaleLoads= 1e-3, unitsScaleDispl= 1e-3, setsToDispLoads= None, setsToDispDspRot= None, setsToDispIntForc= None):
-  domain= loadPattern.getDomain # Not always set.
-  if(domain):
-      xcTotalSet= domain.getPreprocessor.getSets.getSet("total")
-      if(not setsToDispLoads):
-        setsToDispLoads= [xcTotalSet]
-      if(not setsToDispDspRot):
-        setsToDispDspRot= [xcTotalSet]
-      if(not setsToDispIntForc):
-        setsToDispIntForc= [xcTotalSet]
-  name= loadPattern.name
-  retval= LoadCaseDispParameters(name,loadPattern.description,'1.0*'+name,setsToDispLoads,setsToDispDspRot,setsToDispIntForc)
-  return retval
+def getLoadCaseDispParametersFromLoadPattern(loadPattern, modelSpace= None, unitsScaleLoads= 1e-3, unitsScaleDispl= 1e-3, setsToDispLoads= None, setsToDispDspRot= None, setsToDispIntForc= None):
+    domain= loadPattern.getDomain # Not always set.
+    if(not domain):
+        domain= modelSpace.preprocessor.getDomain
+    if(domain):
+        xcTotalSet= domain.getPreprocessor.getSets.getSet("total")
+        if(not setsToDispLoads):
+          setsToDispLoads= [xcTotalSet]
+        if(not setsToDispDspRot):
+          setsToDispDspRot= [xcTotalSet]
+        if(not setsToDispIntForc):
+          setsToDispIntForc= [xcTotalSet]
+    name= loadPattern.name
+    retval= LoadCaseDispParameters(name,loadPattern.description,'1.0*'+name,setsToDispLoads,setsToDispDspRot,setsToDispIntForc)
+    return retval
