@@ -75,7 +75,7 @@ class OuputUnits(object):
 class RecordDisp(OuputUnits):
     '''Generation of graphic displays
 
-    :ivar setsToDispLoads: ordered list of sets of shell elements to display loads
+    :ivar setsToDispLoads: ordered list of sets of elements to display loads
     :ivar setsToDispBeamLoads: ordered list of sets of beam elements to display 
                      loads (defaults to [])
     :ivar compElLoad: component of load on beam elements to be represented
@@ -255,110 +255,122 @@ class RecordDisp(OuputUnits):
         outputHandler= self.getOutputHandler(self.setsToDispEigenvectors[0])
         outputHandler.displayEigenvectorsOnSets(eigenMode,self.setsToDispEigenvectors, fileName,defFScale)
 
-class RecordLoadCaseDisp(RecordDisp):
-  '''Generation of graphic files and adding to report-tex files for a load case
-  
-  :ivar loadCaseName:  name of the load case to be depicted
-  :ivar loadCaseDescr: description text of the load case
-  :ivar loadCaseExpr:  mathematical expression to define the load case (ex:
-                   '1.0*GselfWeight+1.0*DeadLoad')
-  '''
+class LoadCaseDispParameters(RecordDisp):
+    '''Parameters for the generation of graphic files and adding to 
+       report-tex files for a load case
 
-  def __init__(self,loadCaseName,loadCaseDescr,loadCaseExpr,setsToDispLoads,setsToDispDspRot,setsToDispIntForc):
-      super(RecordLoadCaseDisp,self).__init__(setsToDispLoads,setsToDispDspRot,setsToDispIntForc)
-      self.loadCaseName=loadCaseName
-      self.loadCaseDescr=loadCaseDescr
-      self.loadCaseExpr=loadCaseExpr
+    :ivar loadCaseName:  name of the load case to be depicted
+    :ivar loadCaseDescr: description text of the load case
+    :ivar loadCaseExpr:  mathematical expression to define the load case (ex:
+                     '1.0*GselfWeight+1.0*DeadLoad')
+    '''
 
-  def getDescription(self):
-      retval= self.loadCaseDescr
-      if(len(retval)==0):
-        retval= self.loadCaseName
-      return retval
-  
-  def loadReports(self,FEcase,texFile,cfg):
-      '''Creates the graphics files of loads for the load case and insert them in
-      a LaTex file
+    def __init__(self,loadCaseName,loadCaseDescr,loadCaseExpr, setsToDispLoads, setsToDispDspRot, setsToDispIntForc):
+        ''' Constructor.
 
-      :param FEcase:     finite element case 
-      :param texFile:    laTex file where to include the graphics 
-                         (e.g.:'text/report_loads.tex')
-      :param cfg:        instance of EnvConfig class with config parameters
-      '''
-      fullPath=cfg.projectDirTree.getReportLoadsGrPath()
-      rltvPath=cfg.projectDirTree.getRltvReportLoadsGrPath()
-      preprocessor=FEcase.getPreprocessor
-      labl=self.loadCaseName
-      lcs=QGrph.LoadCaseResults(FEcase)
-      modelSpace= predefined_spaces.getModelSpaceFromPreprocessor(preprocessor)
-      modelSpace.removeAllLoadPatternsFromDomain()
-      modelSpace.addNewLoadCaseToDomain(self.loadCaseName,self.loadCaseExpr)
-      for st in self.setsToDispLoads:
-          fullgrfname=fullPath+self.loadCaseName+st.name
-          rltvgrfname=rltvPath+self.loadCaseName+st.name
-          capt= self.getDescription() + '. '  +  st.description + ', '  + self.unitsLoads
-          jpegFileName= fullgrfname+'.jpg'
-#          lcs.displayLoads(setToDisplay=st,caption= capt,fileName= jpegFileName)  # changed 22/06/2020
-          lcs.displayLoadVectors(setToDisplay=st,caption= capt,fileName=jpegFileName)
-          insertGrInTex(texFile=texFile,grFileNm=rltvgrfname,grWdt=cfg.grWidth,capText=capt,labl=labl)
-      for st in self.setsToDispBeamLoads:
-          fullgrfname=fullPath+self.loadCaseName+st.name
-          rltvgrfname=rltvPath+self.loadCaseName+st.name
-          capt= self.getDescription() + '. '  +  st.description + ', '  + self.unitsLoads
-          jpegFileName= fullgrfname+'.jpg'
-          lcs.displayLoads(setToDisplay=st,caption= capt,fileName= jpegFileName)  # changed 22/06/2020
-          insertGrInTex(texFile=texFile,grFileNm=rltvgrfname,grWdt=cfg.grWidth,capText=capt,labl=labl)
+        :param loadCaseName:  name of the load case to be depicted
+        :param loadCaseDescr: description text of the load case
+        :param loadCaseExpr:  mathematical expression to define the load 
+                              case (ex: '1.0*GselfWeight+1.0*DeadLoad')
+        :param setsToDispLoads: ordered list of sets of elements to display
+                                loads.
+        :param setsToDispDspRot: ordered list of sets of elements to display 
+                                 displacements or rotations
+        :param setsToDispIntForc: ordered list of sets of elements to 
+                                  display internal forces.
+        '''
+        super(LoadCaseDispParameters,self).__init__(setsToDispLoads,setsToDispDspRot,setsToDispIntForc)
+        self.loadCaseName=loadCaseName
+        self.loadCaseDescr=loadCaseDescr
+        self.loadCaseExpr=loadCaseExpr
 
+    def getDescription(self):
+        retval= self.loadCaseDescr
+        if(len(retval)==0):
+          retval= self.loadCaseName
+        return retval
 
+    def loadReports(self,FEcase,texFile,cfg):
+        '''Creates the graphics files of loads for the load case and insert them in
+        a LaTex file
 
-  def simplLCReports(self,FEproblem,texFile,cfg):
-      '''Creates the graphics files of displacements and internal forces 
-       calculated for a simple load case and insert them in a LaTex file
+        :param FEcase:     finite element case 
+        :param texFile:    laTex file where to include the graphics 
+                           (e.g.:'text/report_loads.tex')
+        :param cfg:        instance of EnvConfig class with config parameters
+        '''
+        fullPath=cfg.projectDirTree.getReportLoadsGrPath()
+        rltvPath=cfg.projectDirTree.getRltvReportLoadsGrPath()
+        preprocessor=FEcase.getPreprocessor
+        labl=self.loadCaseName
+        lcs=QGrph.LoadCaseResults(FEcase)
+        modelSpace= predefined_spaces.getModelSpaceFromPreprocessor(preprocessor)
+        modelSpace.removeAllLoadPatternsFromDomain()
+        modelSpace.addNewLoadCaseToDomain(self.loadCaseName,self.loadCaseExpr)
+        for st in self.setsToDispLoads:
+            fullgrfname=fullPath+self.loadCaseName+st.name
+            rltvgrfname=rltvPath+self.loadCaseName+st.name
+            capt= self.getDescription() + '. '  +  st.description + ', '  + self.unitsLoads
+            jpegFileName= fullgrfname+'.jpg'
+  #          lcs.displayLoads(setToDisplay=st,caption= capt,fileName= jpegFileName)  # changed 22/06/2020
+            lcs.displayLoadVectors(setToDisplay=st,caption= capt,fileName=jpegFileName)
+            insertGrInTex(texFile=texFile,grFileNm=rltvgrfname,grWdt=cfg.grWidth,capText=capt,labl=labl)
+        for st in self.setsToDispBeamLoads:
+            fullgrfname=fullPath+self.loadCaseName+st.name
+            rltvgrfname=rltvPath+self.loadCaseName+st.name
+            capt= self.getDescription() + '. '  +  st.description + ', '  + self.unitsLoads
+            jpegFileName= fullgrfname+'.jpg'
+            lcs.displayLoads(setToDisplay=st,caption= capt,fileName= jpegFileName)  # changed 22/06/2020
+            insertGrInTex(texFile=texFile,grFileNm=rltvgrfname,grWdt=cfg.grWidth,capText=capt,labl=labl)
 
-      :param FEproblem:  finite element problem
-      :param texFile:    laTex file where to include the graphics 
-                         (e.g.:'text/report_loads.tex')
-      :param cfg:        instance of EnvConfig class with config parameters
-      '''
-      fullPath=cfg.projectDirTree.getReportSimplLCGrPath()
-      rltvPath=cfg.projectDirTree.getRltvReportSimplLCGrPath()
-      lcs=QGrph.LoadCaseResults(FEproblem,self.loadCaseName,self.loadCaseExpr)
-      #solve for load case
-      lcs.solve()
-      #Displacements and rotations displays
-      for st in self.setsToDispDspRot:
-          for arg in self.listDspRot:
-              fullgrfname=fullPath+self.loadCaseName+st.name+arg
-              rltvgrfname=rltvPath+self.loadCaseName+st.name+arg
-              jpegFileName= fullgrfname+'.jpg'
-              lcs.displayDispRot(itemToDisp=arg,setToDisplay=st,fileName= jpegFileName)
-#              unitConversionFactor, unDesc= cfg.outputStyle.getUnitParameters(arg)
-              unitConversionFactor, unDesc= cfg.getUnitParameters(arg)
-               # if 'u' in arg:
-              #     unDesc=cfg.getDisplacementUnitsDescription()
-              # else:
-              #     unDesc=cfg.getRotationUnitsDescription()
-              capt=self.getDescription() + '. ' + st.description.capitalize() + ', ' + cfg.capTexts[arg] + ', ' + unDesc
-              insertGrInTex(texFile=texFile,grFileNm=rltvgrfname,grWdt=cfg.grWidth,capText=capt)
-      #Internal forces displays on sets of «shell» elements
-      for st in self.setsToDispIntForc:
-          for arg in self.listIntForc:
-              fullgrfname=fullPath+self.loadCaseName+st.name+arg
-              rltvgrfname=rltvPath+self.loadCaseName+st.name+arg
-              jpegFileName= fullgrfname+'.jpg'
-              lcs.displayIntForc(itemToDisp=arg,setToDisplay=st,fileName= jpegFileName)
-              capt= self.getDescription() + '. ' + st.description.capitalize() + ', ' + cfg.capTexts[arg] + ', ' + cfg.getForceUnitsDescription()
-              insertGrInTex(texFile=texFile,grFileNm=rltvgrfname,grWdt=cfg.grWidth,capText=capt)
-      #Internal forces displays on sets of «beam» elements
-      for st in self.setsToDispBeamIntForc:
-          for arg in self.listBeamIntForc:
-              fullgrfname=fullPath+self.loadCaseName+st.name+arg
-              rltvgrfname=rltvPath+self.loadCaseName+st.name+arg
-              jpegFileName= fullgrfname+'.jpg'
-              lcs.displayIntForcDiag(itemToDisp=arg,setToDisplay=st,fileName= jpegFileName)
-              capt=self.getDescription() + '. ' + st.description.capitalize() + ', ' + cfg.capTexts[arg] + ', ' + cfg.getForceUnitsDescription()
-              insertGrInTex(texFile=texFile,grFileNm=rltvgrfname,grWdt=cfg.grWidth,capText=capt)
-      texFile.write('\\clearpage\n')
+    def simplLCReports(self,FEproblem,texFile,cfg):
+        '''Creates the graphics files of displacements and internal forces 
+         calculated for a simple load case and insert them in a LaTex file
+
+        :param FEproblem:  finite element problem
+        :param texFile:    laTex file where to include the graphics 
+                           (e.g.:'text/report_loads.tex')
+        :param cfg:        instance of EnvConfig class with config parameters
+        '''
+        fullPath=cfg.projectDirTree.getReportSimplLCGrPath()
+        rltvPath=cfg.projectDirTree.getRltvReportSimplLCGrPath()
+        lcs=QGrph.LoadCaseResults(FEproblem,self.loadCaseName,self.loadCaseExpr)
+        #solve for load case
+        lcs.solve()
+        #Displacements and rotations displays
+        for st in self.setsToDispDspRot:
+            for arg in self.listDspRot:
+                fullgrfname=fullPath+self.loadCaseName+st.name+arg
+                rltvgrfname=rltvPath+self.loadCaseName+st.name+arg
+                jpegFileName= fullgrfname+'.jpg'
+                lcs.displayDispRot(itemToDisp=arg,setToDisplay=st,fileName= jpegFileName)
+  #              unitConversionFactor, unDesc= cfg.outputStyle.getUnitParameters(arg)
+                unitConversionFactor, unDesc= cfg.getUnitParameters(arg)
+                 # if 'u' in arg:
+                #     unDesc=cfg.getDisplacementUnitsDescription()
+                # else:
+                #     unDesc=cfg.getRotationUnitsDescription()
+                capt=self.getDescription() + '. ' + st.description.capitalize() + ', ' + cfg.capTexts[arg] + ', ' + unDesc
+                insertGrInTex(texFile=texFile,grFileNm=rltvgrfname,grWdt=cfg.grWidth,capText=capt)
+        #Internal forces displays on sets of «shell» elements
+        for st in self.setsToDispIntForc:
+            for arg in self.listIntForc:
+                fullgrfname=fullPath+self.loadCaseName+st.name+arg
+                rltvgrfname=rltvPath+self.loadCaseName+st.name+arg
+                jpegFileName= fullgrfname+'.jpg'
+                lcs.displayIntForc(itemToDisp=arg,setToDisplay=st,fileName= jpegFileName)
+                capt= self.getDescription() + '. ' + st.description.capitalize() + ', ' + cfg.capTexts[arg] + ', ' + cfg.getForceUnitsDescription()
+                insertGrInTex(texFile=texFile,grFileNm=rltvgrfname,grWdt=cfg.grWidth,capText=capt)
+        #Internal forces displays on sets of «beam» elements
+        for st in self.setsToDispBeamIntForc:
+            for arg in self.listBeamIntForc:
+                fullgrfname=fullPath+self.loadCaseName+st.name+arg
+                rltvgrfname=rltvPath+self.loadCaseName+st.name+arg
+                jpegFileName= fullgrfname+'.jpg'
+                lcs.displayIntForcDiag(itemToDisp=arg,setToDisplay=st,fileName= jpegFileName)
+                capt=self.getDescription() + '. ' + st.description.capitalize() + ', ' + cfg.capTexts[arg] + ', ' + cfg.getForceUnitsDescription()
+                insertGrInTex(texFile=texFile,grFileNm=rltvgrfname,grWdt=cfg.grWidth,capText=capt)
+        texFile.write('\\clearpage\n')
 
 
 
@@ -382,7 +394,7 @@ def insertGrInTex(texFile,grFileNm,grWdt,capText,labl=''):
     texFile.write('\\end{figure}\n')
     return
   
-def getRecordLoadCaseDispFromLoadPattern(loadPattern, unitsScaleLoads= 1e-3, unitsScaleDispl= 1e-3, setsToDispLoads= None, setsToDispDspRot= None, setsToDispIntForc= None):
+def getLoadCaseDispParametersFromLoadPattern(loadPattern, unitsScaleLoads= 1e-3, unitsScaleDispl= 1e-3, setsToDispLoads= None, setsToDispDspRot= None, setsToDispIntForc= None):
   domain= loadPattern.getDomain # Not always set.
   if(domain):
       xcTotalSet= domain.getPreprocessor.getSets.getSet("total")
@@ -393,5 +405,5 @@ def getRecordLoadCaseDispFromLoadPattern(loadPattern, unitsScaleLoads= 1e-3, uni
       if(not setsToDispIntForc):
         setsToDispIntForc= [xcTotalSet]
   name= loadPattern.name
-  retval= RecordLoadCaseDisp(name,loadPattern.description,'1.0*'+name,setsToDispLoads,setsToDispDspRot,setsToDispIntForc)
+  retval= LoadCaseDispParameters(name,loadPattern.description,'1.0*'+name,setsToDispLoads,setsToDispDspRot,setsToDispIntForc)
   return retval

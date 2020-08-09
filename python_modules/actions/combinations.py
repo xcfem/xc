@@ -28,8 +28,8 @@ class CombinationRecord(object):
         outputFile.write(self.expr.replace('*',' '))
         outputFile.write('\\\\\n')
             
-   def getRecordLoadCaseDisp(self,setsToDispLoads,setsToDispDspRot,setsToDispIntForc, unitsScaleForc= 1e-3, unitsScaleMom= 1e-3, unitsScaleDisp= 1e3, unitsDispl= '[mm]'):
-       '''Return a suitable RecordLoadCaseDisp for the combination.
+   def getLoadCaseDispParameters(self,setsToDispLoads,setsToDispDspRot,setsToDispIntForc, unitsScaleForc= 1e-3, unitsScaleMom= 1e-3, unitsScaleDisp= 1e3, unitsDispl= '[mm]'):
+       '''Return a suitable LoadCaseDispParameters for the combination.
 
        :param setsToDispLoads: ordered list of sets of elements to display 
                                loads.
@@ -46,7 +46,7 @@ class CombinationRecord(object):
        :param unitsDispl: text to especify the units in which displacements are 
                           represented (defaults to '[mm]'
        '''
-       retval= graphical_reports.RecordLoadCaseDisp(self.name,self.expr,self.expr,setsToDispLoads,setsToDispDspRot,setsToDispIntForc)
+       retval= graphical_reports.LoadCaseDispParameters(self.name,self.expr,self.expr,setsToDispLoads,setsToDispDspRot,setsToDispIntForc)
        retval.unitsScaleForc= unitsScaleForc
        retval.unitsScaleMom= unitsScaleMom
        retval.unitsScaleDispl= unitsScaleDisp
@@ -106,8 +106,8 @@ class SituationCombs(dict):
             outputFile.write('\end{longtable}\n')
             outputFile.write('\end{center}\n')
 
-    def getRecordLoadCaseDisp(self,combName,setsToDispLoads,setsToDispDspRot,setsToDispIntForc):
-        '''Returns a suitable RecordLoadCaseDisp for the combination.
+    def getLoadCaseDispParameters(self,combName,setsToDispLoads,setsToDispDspRot,setsToDispIntForc):
+        '''Returns a suitable LoadCaseDispParameters for the combination.
 
         :param combName: name of the combination to create the record for.
         :param setsToDispLoads: ordered list of sets of elements to display
@@ -118,7 +118,7 @@ class SituationCombs(dict):
                                  internal forces.
         '''
         comb= self[combName]
-        return comb.getRecordLoadCaseDisp(setsToDispLoads,setsToDispDspRot,setsToDispIntForc)
+        return comb.getLoadCaseDispParameters(setsToDispLoads,setsToDispDspRot,setsToDispIntForc)
 
 class SituationsSet(object):
     '''Set of situations as used in limit states
@@ -146,8 +146,8 @@ class SituationsSet(object):
         for s in self.situations:
             s.exportToLatex(outputFile)
         
-    def getRecordLoadCaseDisp(self,combName,setsToDispLoads,setsToDispDspRot,setsToDispIntForc):
-        '''Returns a suitable RecordLoadCaseDisp for the combination.
+    def getLoadCaseDispParameters(self,combName,setsToDispLoads,setsToDispDspRot,setsToDispIntForc):
+        '''Returns a suitable LoadCaseDispParameters for the combination.
 
         :param combName: name of the combination to create the record for.
         :param setsToDispLoads: ordered list of sets of elements to display loads.
@@ -159,7 +159,7 @@ class SituationsSet(object):
         for s in self.situations:
             if combName in s:
                 comb= s[combName]
-                return comb.getRecordLoadCaseDisp(setsToDispLoads,setsToDispDspRot,setsToDispIntForc)
+                return comb.getLoadCaseDispParameters(setsToDispLoads,setsToDispDspRot,setsToDispIntForc)
   
 
 class SLSCombinations(SituationsSet):
@@ -241,8 +241,8 @@ class CombContainer(object):
             ls.exportToLatex(f)
         f.close()
 
-    def getRecordLoadCaseDisp(self,combName,setsToDispLoads,setsToDispDspRot,setsToDispIntForc):
-        '''Returns a suitable RecordLoadCaseDisp for the combination.
+    def getLoadCaseDispParameters(self,combName,setsToDispLoads,setsToDispDspRot,setsToDispIntForc):
+        '''Returns a suitable LoadCaseDispParameters for the combination.
 
         :param combName: name of the combination to create the record for.
         :param setsToDispLoads: ordered list of sets of elements to display loads.
@@ -251,7 +251,7 @@ class CombContainer(object):
         :param setsToDispIntForc: ordered list of sets of elements to display 
                                  internal forces.
         '''
-        retval= self.SLS.getRecordLoadCaseDisp(combName,setsToDispLoads,setsToDispDspRot,setsToDispIntForc)
+        retval= self.SLS.getLoadCaseDispParameters(combName,setsToDispLoads,setsToDispDspRot,setsToDispIntForc)
         if not retval:
-            retval= self.ULS.getRecordLoadCaseDisp(combName,setsToDispLoads,setsToDispDspRot,setsToDispIntForc)
+            retval= self.ULS.getLoadCaseDispParameters(combName,setsToDispLoads,setsToDispDspRot,setsToDispIntForc)
         return retval
