@@ -57,7 +57,8 @@ XC::Set::Set(const std::string &nmb,Preprocessor *prep)
 XC::Set &XC::Set::operator+=(const Set &other)
   {
     SetMeshComp::operator+=(other);
-    description+= "+" + other.description; //Concatenate descriptions.
+    if(other.description!="")
+      description+= "+" + other.description; //Concatenate descriptions.
     entities+= other.entities;
     return *this;
   }
@@ -66,7 +67,8 @@ XC::Set &XC::Set::operator+=(const Set &other)
 XC::Set &XC::Set::operator-=(const Set &other)
   {
     SetMeshComp::operator-=(other);
-    description+= "-" + other.description; //Concatenate descriptions.
+    if(other.description!="")
+      description+= "-" + other.description; //Concatenate descriptions.
     entities-= other.entities;
     return *this;
   }
@@ -75,7 +77,8 @@ XC::Set &XC::Set::operator-=(const Set &other)
 XC::Set &XC::Set::operator*=(const Set &other)
   {
     SetMeshComp::operator*=(other);
-    description+= "*" + other.description; //Concatenate descriptions.
+    if(other.description!="")
+      description+= "*" + other.description; //Concatenate descriptions.
     entities*= other.entities;
     return *this;
   }

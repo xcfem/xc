@@ -126,7 +126,7 @@ class RecordDisp(OuputUnits):
             self.setsToDispIntForc= setsToDispIntForc
         else:
             self.setsToDispIntForc= list()
-        self.setsToDispBeamLoads=[]
+        self.setsToDispBeamLoads= list()
         self.compElLoad='transComponent'
         self.multByElemAreaLoads=False
         self.listDspRot=['uX', 'uY', 'uZ']
@@ -323,18 +323,21 @@ class LoadCaseDispParameters(RecordDisp):
         modelSpace.removeAllLoadPatternsFromDomain()
         modelSpace.revertToStart()
         modelSpace.addNewLoadCaseToDomain(self.loadCaseName,self.loadCaseExpr)
+        # The disctinction between beam elements and the rest of elements
+        # is to deprecate. The idea is to specify the type of output for all
+        # the elements.
         for st in self.setsToDispLoads:
             fullgrfname= fullPath+self.loadCaseName+st.name
             rltvgrfname= rltvPath+self.loadCaseName+st.name
             capt= self.getCaptionText(setDescr= st.description, unitsDescr= self.unitsLoads)
             labl= getLabelText(capt)
             jpegFileName= fullgrfname+'.jpg'
-  #          lcs.displayLoads(setToDisplay=st,caption= capt,fileName= jpegFileName)  # changed 22/06/2020
+            #lcs.displayLoads(setToDisplay=st,caption= capt,fileName= jpegFileName)  # changed 22/06/2020
             lcs.displayLoadVectors(setToDisplay=st,caption= capt,fileName=jpegFileName)
             insertGrInTex(texFile=texFile,grFileNm=rltvgrfname,grWdt=cfg.grWidth,capText=capt,labl=labl)
         for st in self.setsToDispBeamLoads:
-            fullgrfname=fullPath+self.loadCaseName+st.name
-            rltvgrfname=rltvPath+self.loadCaseName+st.name
+            fullgrfname= fullPath+self.loadCaseName+st.name
+            rltvgrfname= rltvPath+self.loadCaseName+st.name
             capt= self.getCaptionText(setDescr= st.description, unitsDescr= self.unitsLoads)
             labl= getLabelText(capt)
             jpegFileName= fullgrfname+'.jpg'
@@ -384,6 +387,10 @@ class LoadCaseDispParameters(RecordDisp):
                 #     unDesc=cfg.getRotationUnitsDescription()
                 capt= self.getCaptionText(setDescr= st.description, captTexts= cfg.capTexts[arg], unitsDescr= unDesc)
                 insertGrInTex(texFile=texFile,grFileNm=rltvgrfname,grWdt=cfg.grWidth,capText=capt)
+                
+        # The disctinction between beam elements and the rest of elements
+        # is to deprecate. The idea is to specify the type of output for all
+        # the elements.
         #Internal forces displays on sets of «shell» elements
         for st in self.setsToDispIntForc:
             for arg in self.listIntForc:
