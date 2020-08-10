@@ -327,7 +327,7 @@ class EnvConfig(output_styles.OutputStyle):
 
        :ivar grWidth: size of the graphics to be included in the annex          
     '''
-    def __init__(self,language= 'english',intForcPath= 'results/internalForces/',verifPath= 'results/verifications/',reportPath='./',resultsPath= 'annex/', grWidth='\linewith', fNameMark= 'env_config.py'):
+    def __init__(self,language= 'english',intForcPath= 'results/internalForces/',verifPath= 'results/verifications/',reportPath='./',resultsPath= 'annex/', grWidth='\\linewidth', fNameMark= 'env_config.py'):
         '''
         Constructor.
 

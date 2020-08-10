@@ -291,11 +291,20 @@ class LoadCaseDispParameters(RecordDisp):
           retval= self.loadCaseName
         return retval
 
-    def getLabelText(self):
-        ''' Return the text to label the figures.'''
-        retval= self.getDescription()
-        retval= retval.replace('+','pos').replace('-','neg')
-        return su.slugify(retval)
+    def getCaptionText(self,setDescr, unitsDescr, captTexts= None):
+        ''' Return the caption text.
+
+        :param setDescr: set description.
+        :param unitsDescr: units description.
+        :param captTexts: text describing the internal force...
+        '''
+        capt= self.getDescription()
+        if(len(setDescr)>0):
+            capt+= '. '  +  setDescr.capitalize()
+        if(captTexts):
+            capt+= ', ' + capTexts
+        capt+= ', '  + unitsDescr
+        return capt
 
     def writeLoadReport(self, modelSpace, texFile, cfg):
         '''Creates the graphics files of loads for the load case and insert them in
@@ -309,7 +318,6 @@ class LoadCaseDispParameters(RecordDisp):
         fullPath=cfg.projectDirTree.getReportLoadsGrPath()
         rltvPath=cfg.projectDirTree.getRltvReportLoadsGrPath()
         description= self.getDescription()
-        labl= self.getLabelText()
         FEcase= modelSpace.getProblem()
         lcs= QGrph.LoadCaseResults(FEcase)
         modelSpace.removeAllLoadPatternsFromDomain()
@@ -318,10 +326,8 @@ class LoadCaseDispParameters(RecordDisp):
         for st in self.setsToDispLoads:
             fullgrfname= fullPath+self.loadCaseName+st.name
             rltvgrfname= rltvPath+self.loadCaseName+st.name
-            if(len(st.description)>0):
-                capt= description + '. '  +  st.description + ', '  + self.unitsLoads
-            else:
-                capt= description + ', '  + self.unitsLoads                
+            capt= self.getCaptionText(setDescr= st.description, unitsDescr= self.unitsLoads)
+            labl= getLabelText(capt)
             jpegFileName= fullgrfname+'.jpg'
   #          lcs.displayLoads(setToDisplay=st,caption= capt,fileName= jpegFileName)  # changed 22/06/2020
             lcs.displayLoadVectors(setToDisplay=st,caption= capt,fileName=jpegFileName)
@@ -329,10 +335,8 @@ class LoadCaseDispParameters(RecordDisp):
         for st in self.setsToDispBeamLoads:
             fullgrfname=fullPath+self.loadCaseName+st.name
             rltvgrfname=rltvPath+self.loadCaseName+st.name
-            if(len(st.description)>0):
-                capt= description + '. '  +  st.description + ', '  + self.unitsLoads
-            else:
-                capt= description + ', '  + self.unitsLoads                
+            capt= self.getCaptionText(setDescr= st.description, unitsDescr= self.unitsLoads)
+            labl= getLabelText(capt)
             jpegFileName= fullgrfname+'.jpg'
             lcs.displayLoads(setToDisplay=st,caption= capt,fileName= jpegFileName)  # changed 22/06/2020
             insertGrInTex(texFile=texFile,grFileNm=rltvgrfname,grWdt=cfg.grWidth,capText=capt,labl=labl)
@@ -347,7 +351,6 @@ class LoadCaseDispParameters(RecordDisp):
         :param cfg:        instance of EnvConfig class with config parameters
         '''
         preprocessor= FEcase.getPreprocessor
-        labl=self.loadCaseName
         lcs=QGrph.LoadCaseResults(FEcase)
         modelSpace= predefined_spaces.getModelSpaceFromPreprocessor(preprocessor)
         writeLoadsReport(modelSpace, texFile,cfg)
@@ -379,7 +382,7 @@ class LoadCaseDispParameters(RecordDisp):
                 #     unDesc=cfg.getDisplacementUnitsDescription()
                 # else:
                 #     unDesc=cfg.getRotationUnitsDescription()
-                capt= self.getDescription() + '. ' + st.description.capitalize() + ', ' + cfg.capTexts[arg] + ', ' + unDesc
+                capt= self.getCaptionText(setDescr= st.description, captTexts= cfg.capTexts[arg], unitsDescr= unDesc)
                 insertGrInTex(texFile=texFile,grFileNm=rltvgrfname,grWdt=cfg.grWidth,capText=capt)
         #Internal forces displays on sets of «shell» elements
         for st in self.setsToDispIntForc:
@@ -388,7 +391,7 @@ class LoadCaseDispParameters(RecordDisp):
                 rltvgrfname=rltvPath+self.loadCaseName+st.name+arg
                 jpegFileName= fullgrfname+'.jpg'
                 lcs.displayIntForc(itemToDisp=arg,setToDisplay=st,fileName= jpegFileName)
-                capt= self.getDescription() + '. ' + st.description.capitalize() + ', ' + cfg.capTexts[arg] + ', ' + cfg.getForceUnitsDescription()
+                capt= self.getCaptionText(setDescr= st.description, captTexts= cfg.capTexts[arg], unitsDescr= cfg.getForceUnitsDescription())
                 insertGrInTex(texFile=texFile,grFileNm=rltvgrfname,grWdt=cfg.grWidth,capText=capt)
         #Internal forces displays on sets of «beam» elements
         for st in self.setsToDispBeamIntForc:
@@ -397,9 +400,17 @@ class LoadCaseDispParameters(RecordDisp):
                 rltvgrfname=rltvPath+self.loadCaseName+st.name+arg
                 jpegFileName= fullgrfname+'.jpg'
                 lcs.displayIntForcDiag(itemToDisp=arg,setToDisplay=st,fileName= jpegFileName)
-                capt=self.getDescription() + '. ' + st.description.capitalize() + ', ' + cfg.capTexts[arg] + ', ' + cfg.getForceUnitsDescription()
+                capt= self.getCaptionText(setDescr= st.description, captTexts= cfg.capTexts[arg], unitsDescr= cfg.getForceUnitsDescription())
                 insertGrInTex(texFile=texFile,grFileNm=rltvgrfname,grWdt=cfg.grWidth,capText=capt)
         texFile.write('\\clearpage\n')
+
+def getLabelText(caption):
+    ''' Return the text to label the figures removing
+        spaces and strange chars from the input.'''
+    retval= caption
+    retval= retval.replace('+','pos').replace('-','neg')
+    retval= su.slugify(retval)
+    return retval
 
 def insertGrInTex(texFile,grFileNm,grWdt,capText,labl=''):
     '''Include a graphic in a LaTeX file.
