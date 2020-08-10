@@ -11,6 +11,7 @@ __email__= " ana.Ortega@ciccp.es "
 import xc_base
 import geom
 import xc
+from misc_utils import string_utils as su
 from postprocess.xcVtk.FE_model import vtk_FE_graphic
 from postprocess.xcVtk.fields import fields
 from postprocess import utils_display
@@ -290,6 +291,12 @@ class LoadCaseDispParameters(RecordDisp):
           retval= self.loadCaseName
         return retval
 
+    def getLabelText(self):
+        ''' Return the text to label the figures.'''
+        retval= self.getDescription()
+        retval= retval.replace('+','pos').replace('-','neg')
+        return su.slugify(retval)
+
     def writeLoadReport(self, modelSpace, texFile, cfg):
         '''Creates the graphics files of loads for the load case and insert them in
         a LaTex file
@@ -301,7 +308,8 @@ class LoadCaseDispParameters(RecordDisp):
         '''
         fullPath=cfg.projectDirTree.getReportLoadsGrPath()
         rltvPath=cfg.projectDirTree.getRltvReportLoadsGrPath()
-        labl= self.loadCaseName
+        description= self.getDescription()
+        labl= self.getLabelText()
         FEcase= modelSpace.getProblem()
         lcs= QGrph.LoadCaseResults(FEcase)
         modelSpace.removeAllLoadPatternsFromDomain()
@@ -310,7 +318,10 @@ class LoadCaseDispParameters(RecordDisp):
         for st in self.setsToDispLoads:
             fullgrfname= fullPath+self.loadCaseName+st.name
             rltvgrfname= rltvPath+self.loadCaseName+st.name
-            capt= self.getDescription() + '. '  +  st.description + ', '  + self.unitsLoads
+            if(len(st.description)>0):
+                capt= description + '. '  +  st.description + ', '  + self.unitsLoads
+            else:
+                capt= description + ', '  + self.unitsLoads                
             jpegFileName= fullgrfname+'.jpg'
   #          lcs.displayLoads(setToDisplay=st,caption= capt,fileName= jpegFileName)  # changed 22/06/2020
             lcs.displayLoadVectors(setToDisplay=st,caption= capt,fileName=jpegFileName)
@@ -318,7 +329,10 @@ class LoadCaseDispParameters(RecordDisp):
         for st in self.setsToDispBeamLoads:
             fullgrfname=fullPath+self.loadCaseName+st.name
             rltvgrfname=rltvPath+self.loadCaseName+st.name
-            capt= self.getDescription() + '. '  +  st.description + ', '  + self.unitsLoads
+            if(len(st.description)>0):
+                capt= description + '. '  +  st.description + ', '  + self.unitsLoads
+            else:
+                capt= description + ', '  + self.unitsLoads                
             jpegFileName= fullgrfname+'.jpg'
             lcs.displayLoads(setToDisplay=st,caption= capt,fileName= jpegFileName)  # changed 22/06/2020
             insertGrInTex(texFile=texFile,grFileNm=rltvgrfname,grWdt=cfg.grWidth,capText=capt,labl=labl)
@@ -365,7 +379,7 @@ class LoadCaseDispParameters(RecordDisp):
                 #     unDesc=cfg.getDisplacementUnitsDescription()
                 # else:
                 #     unDesc=cfg.getRotationUnitsDescription()
-                capt=self.getDescription() + '. ' + st.description.capitalize() + ', ' + cfg.capTexts[arg] + ', ' + unDesc
+                capt= self.getDescription() + '. ' + st.description.capitalize() + ', ' + cfg.capTexts[arg] + ', ' + unDesc
                 insertGrInTex(texFile=texFile,grFileNm=rltvgrfname,grWdt=cfg.grWidth,capText=capt)
         #Internal forces displays on sets of «shell» elements
         for st in self.setsToDispIntForc:
@@ -386,8 +400,6 @@ class LoadCaseDispParameters(RecordDisp):
                 capt=self.getDescription() + '. ' + st.description.capitalize() + ', ' + cfg.capTexts[arg] + ', ' + cfg.getForceUnitsDescription()
                 insertGrInTex(texFile=texFile,grFileNm=rltvgrfname,grWdt=cfg.grWidth,capText=capt)
         texFile.write('\\clearpage\n')
-
-
 
 def insertGrInTex(texFile,grFileNm,grWdt,capText,labl=''):
     '''Include a graphic in a LaTeX file.
