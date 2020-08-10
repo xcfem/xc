@@ -54,12 +54,12 @@ class ReportGenerator(oh.OutputHandler):
                 fullgrFileNm=fullPath+st.name+arg+'Sect1'
                 rltvgrFileNm=rltvPath+st.name+arg+'Sect1'
                 self.displayField(limitStateLabel, 1,arg, None, st, fullgrFileNm+'.jpg')
-                insertGrInTex(texFile=report,grFileNm=rltvgrFileNm,grWdt=cfg.grWidth,capText=capt)
+                oh.insertGrInTex(texFile=report,grFileNm=rltvgrFileNm,grWdt=cfg.grWidth,capText=capt)
                 capt=cfg.capTexts[limitStateLabel] + '. '+ st.description.capitalize() + ', ' + cfg.capTexts[arg] + ', ' + 'dir. 2'
                 fullgrFileNm=fullPath+st.name+arg+'Sect2'
                 rltvgrFileNm=rltvPath+st.name+arg+'Sect2'
                 self.displayField(limitStateLabel, 2,arg, None, st, fullgrFileNm+'.jpg')
-                insertGrInTex(texFile=report,grFileNm=rltvgrFileNm,grWdt=cfg.grWidth,capText=capt)
+                oh.insertGrInTex(texFile=report,grFileNm=rltvgrFileNm,grWdt=cfg.grWidth,capText=capt)
 
         for stV in setsBmEl:
             for argS in argsBmEl:
@@ -67,28 +67,9 @@ class ReportGenerator(oh.OutputHandler):
                 fullgrFileNm=fullPath+stV.name+argS
                 rltvgrFileNm=rltvPath+stV.name+argS
                 self.displayBeamResult(attributeName=limitStateLabel,itemToDisp=argS,beamSetDispRes=stV,setToDisplay=stV,caption=capt,fileName=fullgrFileNm+'.jpg')
-                insertGrInTex(texFile=report,grFileNm=rltvgrFileNm,grWdt=cfg.grWidth,capText=capt)
+                oh.insertGrInTex(texFile=report,grFileNm=rltvgrFileNm,grWdt=cfg.grWidth,capText=capt)
         report.close()
 
     
-def insertGrInTex(texFile,grFileNm,grWdt,capText,labl=''):
-    '''Include a graphic in a LaTeX file.
-
-    :param texFile:    laTex file where to include the graphics 
-                       (e.g.\:'text/report_loads.tex')
-    :param grFileNm:   name of the graphic file with path and without extension
-    :param grWdt:      width to be applied to graphics
-    :param capText:    text for the caption
-    :param labl:       label
-    '''
-    texFile.write('\\begin{figure}\n')
-    texFile.write('\\begin{center}\n')
-    texFile.write('\\includegraphics[width='+grWdt+']{'+grFileNm+'}\n')
-    texFile.write('\\caption{'+capText+'}\n')
-    if(labl!=''):
-        texFile.write('\\label{'+labl+'}\n')
-    texFile.write('\\end{center}\n')
-    texFile.write('\\end{figure}\n')
-    return
   
             

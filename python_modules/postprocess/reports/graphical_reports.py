@@ -12,6 +12,7 @@ import xc_base
 import geom
 import xc
 from misc_utils import string_utils as su
+from postprocess import output_handler
 from postprocess.xcVtk.FE_model import vtk_FE_graphic
 from postprocess.xcVtk.fields import fields
 from postprocess import utils_display
@@ -302,7 +303,7 @@ class LoadCaseDispParameters(RecordDisp):
         if(len(setDescr)>0):
             capt+= '. '  +  setDescr.capitalize()
         if(captTexts):
-            capt+= ', ' + capTexts
+            capt+= ', ' + captTexts
         capt+= ', '  + unitsDescr
         return capt
 
@@ -319,7 +320,7 @@ class LoadCaseDispParameters(RecordDisp):
         rltvPath=cfg.projectDirTree.getRltvReportLoadsGrPath()
         description= self.getDescription()
         FEcase= modelSpace.getProblem()
-        lcs= QGrph.LoadCaseResults(FEcase)
+        outputHandler= output_handler.OutputHandler(modelSpace)
         modelSpace.removeAllLoadPatternsFromDomain()
         modelSpace.revertToStart()
         modelSpace.addNewLoadCaseToDomain(self.loadCaseName,self.loadCaseExpr)
@@ -332,17 +333,17 @@ class LoadCaseDispParameters(RecordDisp):
             capt= self.getCaptionText(setDescr= st.description, unitsDescr= self.unitsLoads)
             labl= getLabelText(capt)
             jpegFileName= fullgrfname+'.jpg'
-            #lcs.displayLoads(setToDisplay=st,caption= capt,fileName= jpegFileName)  # changed 22/06/2020
-            lcs.displayLoadVectors(setToDisplay=st,caption= capt,fileName=jpegFileName)
-            insertGrInTex(texFile=texFile,grFileNm=rltvgrfname,grWdt=cfg.grWidth,capText=capt,labl=labl)
+            #outputHandler.displayLoads(setToDisplay=st,caption= capt,fileName= jpegFileName)  # changed 22/06/2020
+            outputHandler.displayLoadVectors(setToDisplay=st,caption= capt,fileName=jpegFileName)
+            oh.insertGrInTex(texFile=texFile,grFileNm=rltvgrfname,grWdt=cfg.grWidth,capText=capt,labl=labl)
         for st in self.setsToDispBeamLoads:
             fullgrfname= fullPath+self.loadCaseName+st.name
             rltvgrfname= rltvPath+self.loadCaseName+st.name
             capt= self.getCaptionText(setDescr= st.description, unitsDescr= self.unitsLoads)
             labl= getLabelText(capt)
             jpegFileName= fullgrfname+'.jpg'
-            lcs.displayLoads(setToDisplay=st,caption= capt,fileName= jpegFileName)  # changed 22/06/2020
-            insertGrInTex(texFile=texFile,grFileNm=rltvgrfname,grWdt=cfg.grWidth,capText=capt,labl=labl)
+            outputHandler.displayLoads(setToDisplay=st,caption= capt,fileName= jpegFileName)  # changed 22/06/2020
+            oh.insertGrInTex(texFile=texFile,grFileNm=rltvgrfname,grWdt=cfg.grWidth,capText=capt,labl=labl)
 
     def loadReports(self,FEcase,texFile,cfg):
         '''Creates the graphics files of loads for the load case and insert them in
@@ -354,31 +355,33 @@ class LoadCaseDispParameters(RecordDisp):
         :param cfg:        instance of EnvConfig class with config parameters
         '''
         preprocessor= FEcase.getPreprocessor
-        lcs=QGrph.LoadCaseResults(FEcase)
         modelSpace= predefined_spaces.getModelSpaceFromPreprocessor(preprocessor)
-        writeLoadsReport(modelSpace, texFile,cfg)
+        self.writeLoadsReport(modelSpace, texFile,cfg)
 
-    def simplLCReports(self,FEproblem,texFile,cfg):
+    def writeSimpleLoadCaseReport(self, modelSpace, texFile, cfg):
         '''Creates the graphics files of displacements and internal forces 
          calculated for a simple load case and insert them in a LaTex file
 
-        :param FEproblem:  finite element problem
+        :param modelSpace: model space object (see predefined_spaces.py).
         :param texFile:    laTex file where to include the graphics 
                            (e.g.:'text/report_loads.tex')
         :param cfg:        instance of EnvConfig class with config parameters
         '''
         fullPath=cfg.projectDirTree.getReportSimplLCGrPath()
         rltvPath=cfg.projectDirTree.getRltvReportSimplLCGrPath()
-        lcs=QGrph.LoadCaseResults(FEproblem,self.loadCaseName,self.loadCaseExpr)
+        outputHandler= output_handler.OutputHandler(modelSpace)
+        modelSpace.removeAllLoadPatternsFromDomain()
+        modelSpace.revertToStart()
+        modelSpace.addNewLoadCaseToDomain(self.loadCaseName,self.loadCaseExpr)
         #solve for load case
-        lcs.solve()
+        modelSpace.analyze()
         #Displacements and rotations displays
         for st in self.setsToDispDspRot:
             for arg in self.listDspRot:
                 fullgrfname=fullPath+self.loadCaseName+st.name+arg
                 rltvgrfname=rltvPath+self.loadCaseName+st.name+arg
                 jpegFileName= fullgrfname+'.jpg'
-                lcs.displayDispRot(itemToDisp=arg,setToDisplay=st,fileName= jpegFileName)
+                outputHandler.displayDispRot(itemToDisp=arg,setToDisplay=st,fileName= jpegFileName)
   #              unitConversionFactor, unDesc= cfg.outputStyle.getUnitParameters(arg)
                 unitConversionFactor, unDesc= cfg.getUnitParameters(arg)
                  # if 'u' in arg:
@@ -386,7 +389,7 @@ class LoadCaseDispParameters(RecordDisp):
                 # else:
                 #     unDesc=cfg.getRotationUnitsDescription()
                 capt= self.getCaptionText(setDescr= st.description, captTexts= cfg.capTexts[arg], unitsDescr= unDesc)
-                insertGrInTex(texFile=texFile,grFileNm=rltvgrfname,grWdt=cfg.grWidth,capText=capt)
+                oh.insertGrInTex(texFile=texFile,grFileNm=rltvgrfname,grWdt=cfg.grWidth,capText=capt)
                 
         # The disctinction between beam elements and the rest of elements
         # is to deprecate. The idea is to specify the type of output for all
@@ -397,19 +400,33 @@ class LoadCaseDispParameters(RecordDisp):
                 fullgrfname=fullPath+self.loadCaseName+st.name+arg
                 rltvgrfname=rltvPath+self.loadCaseName+st.name+arg
                 jpegFileName= fullgrfname+'.jpg'
-                lcs.displayIntForc(itemToDisp=arg,setToDisplay=st,fileName= jpegFileName)
+                outputHandler.displayIntForc(itemToDisp=arg,setToDisplay=st,fileName= jpegFileName)
                 capt= self.getCaptionText(setDescr= st.description, captTexts= cfg.capTexts[arg], unitsDescr= cfg.getForceUnitsDescription())
-                insertGrInTex(texFile=texFile,grFileNm=rltvgrfname,grWdt=cfg.grWidth,capText=capt)
+                oh.insertGrInTex(texFile=texFile,grFileNm=rltvgrfname,grWdt=cfg.grWidth,capText=capt)
         #Internal forces displays on sets of «beam» elements
         for st in self.setsToDispBeamIntForc:
             for arg in self.listBeamIntForc:
                 fullgrfname=fullPath+self.loadCaseName+st.name+arg
                 rltvgrfname=rltvPath+self.loadCaseName+st.name+arg
                 jpegFileName= fullgrfname+'.jpg'
-                lcs.displayIntForcDiag(itemToDisp=arg,setToDisplay=st,fileName= jpegFileName)
+                outputHandler.displayIntForcDiag(itemToDisp=arg,setToDisplay=st,fileName= jpegFileName)
                 capt= self.getCaptionText(setDescr= st.description, captTexts= cfg.capTexts[arg], unitsDescr= cfg.getForceUnitsDescription())
-                insertGrInTex(texFile=texFile,grFileNm=rltvgrfname,grWdt=cfg.grWidth,capText=capt)
-        texFile.write('\\clearpage\n')
+                oh.insertGrInTex(texFile=texFile,grFileNm=rltvgrfname,grWdt=cfg.grWidth,capText=capt)
+        texFile.write('\\cleardoublepage\n')
+        
+    def simplLCReports(self,FEproblem,texFile,cfg):
+        '''Creates the graphics files of displacements and internal forces 
+         calculated for a simple load case and insert them in a LaTex file
+
+        :param FEproblem:  finite element problem
+        :param texFile:    laTex file where to include the graphics 
+                           (e.g.:'text/report_loads.tex')
+        :param cfg:        instance of EnvConfig class with config parameters
+        '''
+        preprocessor= FEproblem.getPreprocessor
+        modelSpace= predefined_spaces.getModelSpaceFromPreprocessor(preprocessor)
+        self.writeSimpleLoadCaseReport(modelSpace, texFile,cfg)
+
 
 def getLabelText(caption):
     ''' Return the text to label the figures removing
@@ -419,26 +436,6 @@ def getLabelText(caption):
     retval= su.slugify(retval)
     return retval
 
-def insertGrInTex(texFile,grFileNm,grWdt,capText,labl=''):
-    '''Include a graphic in a LaTeX file.
-
-    :param texFile:    laTex file where to include the graphics 
-                       (e.g.\:'text/report_loads.tex')
-    :param grFileNm:   name of the graphic file with path and without extension
-    :param grWdt:      width to be applied to graphics
-    :param capText:    text for the caption
-    :param labl:       label
-    '''
-    texFile.write('\\begin{figure}\n')
-    texFile.write('\\begin{center}\n')
-    texFile.write('\\includegraphics[width='+grWdt+']{'+grFileNm+'}\n')
-    texFile.write('\\caption{'+capText+'}\n')
-    if(labl!=''):
-        texFile.write('\\label{'+labl+'}\n')
-    texFile.write('\\end{center}\n')
-    texFile.write('\\end{figure}\n')
-    return
-  
 def getLoadCaseDispParametersFromLoadPattern(loadPattern, modelSpace= None, unitsScaleLoads= 1e-3, unitsScaleDispl= 1e-3, setsToDispLoads= None, setsToDispDspRot= None, setsToDispIntForc= None):
     domain= loadPattern.getDomain # Not always set.
     if(not domain):

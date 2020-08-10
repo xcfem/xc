@@ -812,3 +812,22 @@ class OutputHandler(object):
         captionBaseText= captionTexts[limitStateLabel] + ', ' + captionTexts[argument] + unitDescription + '. '+ setToDisplay.description.capitalize()
         field.display(displaySettings,caption=  captionBaseText + ', ' + sectDescr[section-1], fileName= fileName, defFScale= defFScale)
 
+def insertGrInTex(texFile,grFileNm,grWdt,capText,labl=''):
+    '''Include a graphic in a LaTeX file.
+
+    :param texFile:    laTex file where to include the graphics 
+                       (e.g.\:'text/report_loads.tex')
+    :param grFileNm:   name of the graphic file with path and without extension
+    :param grWdt:      width to be applied to graphics
+    :param capText:    text for the caption
+    :param labl:       label
+    '''
+    texFile.write('\\begin{figure}\n')
+    texFile.write('\\begin{center}\n')
+    texFile.write('\\includegraphics[width='+grWdt+']{'+grFileNm+'}\n')
+    texFile.write('\\caption{'+capText+'}\n')
+    if(labl!=''):
+        texFile.write('\\label{'+labl+'}\n')
+    texFile.write('\\end{center}\n')
+    texFile.write('\\end{figure}\n')
+    return
