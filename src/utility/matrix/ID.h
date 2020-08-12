@@ -123,7 +123,8 @@ class ID: public CommandEntity, public std::vector<int>
     //! @brief Returns true if the vector is empty.
     inline bool isEmpty(void) const
       { return empty(); }
-    int resize(const int &newSize, const int &defaultValue= 0);
+    int resize(const int &newSize, const int &fill_value= 0);
+    void fill(const int &fill_value);
     const int &max(void) const;
     const int &min(void) const;
 

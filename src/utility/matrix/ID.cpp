@@ -174,13 +174,13 @@ int XC::ID::removeValue(const int &value)
 //! @brief Return the reversed sequence.
 XC::ID XC::ID::getReversed(void) const
   {
-    XC::ID retval(*this);
+    ID retval(*this);
     std::reverse(retval.begin(),retval.end());
     return retval;
   }
 
 //! @brief Changes the size of the array.
-int XC::ID::resize(const int &newSize, const int &defaultValue)
+int XC::ID::resize(const int &newSize, const int &fill_value)
   {
     int retval= 0;
     if(newSize<0) // first check that newSize is valid
@@ -192,8 +192,16 @@ int XC::ID::resize(const int &newSize, const int &defaultValue)
     else if(newSize==0)
       clear();
     else
-      std::vector<int>::resize(newSize,defaultValue);
+      std::vector<int>::resize(newSize,fill_value);
     return retval;
+  }
+
+//! @brief Fills the array with the argument.
+void XC::ID::fill(const int &fill_value)
+  {
+    const size_t sz= size();    
+    for(size_t i=0; i<sz; i++)
+      (*this)[i]= fill_value;
   }
 
 //! @brief Returns the maximum of vector components.
