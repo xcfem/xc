@@ -40,15 +40,158 @@ A992= ASTMSteel(345e6,450e6,1.0)
 A500= ASTMSteel(315e6,400e6,1.0)
 A307= ASTMSteel(245e6,390e6,1.0)
 
-class AnchorBolt(object):
+class BoltBase(object):
+    ''' Base class for bolts.'''
+    def __init__(self, diameter):
+       ''' Constructor.
+
+       :param diameter: bolt diameter.
+       '''
+       self.diameter= diameter
+    def getArea(self):
+        ''' Return the area of the anchor rod.
+        '''
+        return math.pi*(self.diameter/2.0)**2
+
+class BoltFastener(BoltBase):
+    ''' ASTM bolt according to chapter J of AISC 360-16.'''
+    # See table J3.4 M of AISC 360-16.
+    bf_diams= [16e-3, 20e-3, 22e-3, 24e-3, 27e-3, 30e-3, 36e-3]
+    tabJ3_4M= [22e-3, 26e-3, 28e-3, 30e-3, 34e-3, 38e-3, 46e-3]
+    fTabJ3_4M= scipy.interpolate.interp1d(bf_diams,tabJ3_4M)
+    # See table J3.3 M of AISC 360-16.
+    standardHoleDia= [18e-3, 22e-3, 24e-3, 27e-3, 30e-3, 33e-3]
+    oversizeHoleDia= [20e-3, 24e-3, 28e-3, 30e-3, 35e-3, 38e-3]
+    fStandardHoleDia= scipy.interpolate.interp1d(bf_diams[:-1], standardHoleDia)
+    fOversizeHoleDia= scipy.interpolate.interp1d(bf_diams[:-1], oversizeHoleDia)
+    def __init__(self, diameter, group= 'A'):
+       ''' Constructor.
+
+       :param diameter: bolt diameter.
+       :param group: bolt material strength group according to section
+                     J3.1 of AISC 360-16.
+       '''
+       super(BoltFastener,self).__init__(diameter)
+       self.group= group
+
+    def getMinDistanceBetweenCenters(self):
+        ''' Return the minimum distance between centers of standard, 
+            oversized or slotted holes according to section J3.3 of
+            AISC 360-16.'''
+        return (2+2.0/3.0)*self.diameter
+    
+    def getRecommendedDistanceBetweenCenters(self):
+        ''' Return the minimum distance between centers of standard, 
+            oversized or slotted holes according to section J3.3 of
+            AISC 360-16.'''
+        return 3.0*self.diameter
+
+    def getMinimumEdgeDistanceJ3_4M(self):
+        ''' Return the minimum edge Distance from center of standard 
+            hole to edge of connected part according to toble
+            J3.4M of AISC 360-16.'''
+        if(self.diameter<=36e-3):
+            return self.fTabJ3_4M(self.diameter)
+        else:
+            return 1.25*self.diameter
+
+    def getNominalHoleDiameter(self, oversized= False):
+        ''' Return the minimum distance between centers of standard, 
+            oversized or slotted holes according to table J3.3M of
+            AISC 360-16.
+
+        :param oversized: true if hole is oversized.
+        '''
+        if(oversized):
+            if(self.diameter>=36e-3):
+                return self.diameter+8e-3
+            else:
+                return self.fOversizeHoleDia(self.diameter)
+        else:
+            if(self.diameter>=36e-3):
+                return self.diameter+3e-3
+            else:
+                return self.fStandardHoleDia(self.diameter)
+            
+
+    def getNominalTensileStrength(self):
+        ''' Return the nominal strength of the fastener according
+            to table J3.2 of AISC 360-16.
+        '''
+        retval= self.getArea()
+        if(self.group=='A307'):
+            retval*= 310e6
+        elif(self.group=='A'):
+            retval*= 620e6
+        elif(self.group=='B'):
+            retval*= 780e6
+        elif(self.group=='C'):
+            retval*= 1040e6
+        else:
+            lmsg.error('Unknown strength group: \''+self.group+'.\n')
+        return retval
+            
+    def getDesignTensileStrength(self):
+        ''' Return the design tensile strength of the bolt according
+            to section J3.6 of of AISC 360-16.
+        '''
+        return 0.75*self.getNominalTensileStrength()
+    
+    def getNominalShearStrength(self, threadsExcluded= False):
+        ''' Return the nominal strength of the fastener according
+            to table J3.2 of AISC 360-16.
+
+        :param threadsExcluded: true if threads and transition area of 
+                                shank are excluded from the shear plane.
+        '''
+        retval= self.getArea()
+        if(self.group=='A307'):
+            retval*= 186e6
+        elif(self.group=='A'):
+            if(threadsExcluded):
+                retval*= 469e6
+            else:
+                retval*= 372e6
+        elif(self.group=='B'):
+            if(threadsExcluded):
+                retval*= 579e6
+            else:
+                retval*= 469e6
+        elif(self.group=='C'):
+            if(threadsExcluded):
+                retval*= 779e6
+            else:
+                retval*= 620e6
+        else:
+            lmsg.error('Unknown strength group: \''+self.group+'.\n')
+        return retval
+
+    def getDesignShearStrength(self, threadsExcluded= False):
+        ''' Return the design shear strength of the bolt according
+            to section J3.6 of of AISC 360-16.
+
+        :param threadsExcluded: true if threads and transition area of 
+                                shank are excluded from the shear plane.
+        '''
+        return 0.75*self.getNominalShearStrength(threadsExcluded)
+
+M16= BoltFastener(16e-3)
+M20= BoltFastener(20e-3)
+M22= BoltFastener(22e-3)
+M24= BoltFastener(24e-3)
+M27= BoltFastener(27e-3)
+M30= BoltFastener(30e-3)
+M36= BoltFastener(36e-3)
+
+class AnchorBolt(BoltBase):
     """ASTM anchor bolt according to table 2.2 from the document
     Base Plate and Anchor Rod Design Second Edition
     American Institute of Steel Construction, Inc."""
 
     # See table 3.2 of the design guide:
-    diams= [0.015875, 0.01905, 0.022225, 0.0254, 0.028575, 0.03175, 0.0381, 0.04445, 0.0508, 0.05715, 0.0635, 0.06985, 0.0762, 0.08255, 0.0889, 0.09525, 0.1016]
+    ab_diams= [0.015875, 0.01905, 0.022225, 0.0254, 0.028575, 0.03175, 0.0381, 0.04445, 0.0508, 0.05715, 0.0635, 0.06985, 0.0762, 0.08255, 0.0889, 0.09525, 0.1016]
     bearingArea=[0.00044451524, 0.00058451496, 0.0007870952, 0.00096774, 0.0011677396, 0.0014451584, 0.0020193508, 0.0026903172, 0.003451606, 0.0043161204, 0.0052709572, 0.006322568, 0.007354824, 0.008580628, 0.009870948, 0.0112903, 0.012838684]
-    fBearingArea= scipy.interpolate.interp1d(diams,bearingArea)
+    fBearingArea= scipy.interpolate.interp1d(ab_diams,bearingArea)
 
     # Hole diameters; see table 2.3 of the design guide:
     rDiams= [0.01905, 0.022225, 0.0254, 0.03175, 0.0381, 0.04445, 0.0508, 0.0635] # rod diameters.
@@ -59,22 +202,18 @@ class AnchorBolt(object):
     def __init__(self, name, steel, diameter, pos3d= None):
        ''' Constructor.
 
+       :param name: bolt identifier
        :param steel: steel material.
        :param diameter: bolt diameter.
        :param pos3d: bolt position.
        '''
-       self.name=name
+       super(AnchorBolt,self).__init__(diameter)
+       self.name= name
        self.steelType= steel
-       self.diameter= diameter
        if(pos3d):
            self.pos3d= pos3d
        else:
            self.pos3d= None
-
-    def getArea(self):
-        ''' Return the area of the anchor rod.
-        '''
-        return math.pi*(self.diameter/2.0)**2
 
     # Tension
     def getTensileStrength(self):

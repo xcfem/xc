@@ -598,6 +598,7 @@ python tests/materials/astm_aisc/shear_member_design_test_05.py
 python tests/materials/astm_aisc/shear_member_design_test_06.py
 python tests/materials/astm_aisc/combined_internal_forces_test_01.py
 python tests/materials/astm_aisc/combined_internal_forces_test_02.py
+python tests/materials/astm_aisc/bolt_fastener_design_test_01.py
 
 echo "$BLEU" "  Wood sections test." "$NORMAL"
 echo "$BLEU" "    AWC NDS tests." "$NORMAL"
