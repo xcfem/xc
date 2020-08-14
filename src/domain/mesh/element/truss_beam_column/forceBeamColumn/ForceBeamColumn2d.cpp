@@ -199,7 +199,8 @@ void XC::ForceBeamColumn2d::setDomain(Domain *theDomain)
 
     if((dofNode1 != NND) || (dofNode2 != NND))
       {
-        std::cerr << "ForceBeamColumn2d::setDomain(): Nd2 or Nd1 incorrect dof ";
+        std::cerr << getClassName() << "::" << __FUNCTION__
+	          << "; Nd2 or Nd1 incorrect dof" << std::endl;
         exit(0);
       }
 
@@ -210,7 +211,8 @@ void XC::ForceBeamColumn2d::setDomain(Domain *theDomain)
     double L = theCoordTransf->getInitialLength();
     if(L == 0.0)
       {
-        std::cerr << "ForceBeamColumn2d::setDomain(): Zero element length:" << this->getTag();
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; ERROR zero element length:" << this->getTag();
         exit(0);
       }
     if(initialFlag == 0)
@@ -223,8 +225,10 @@ int XC::ForceBeamColumn2d::commitState(void)
 
     // call element commitState to do any base class stuff
     if((err = NLForceBeamColumn2dBase::commitState()) != 0)
-      { std::cerr << "ForceBeamColumn2d::commitState () - failed in base class"; }
-
+      {
+	std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; ERROR: failed in base class";
+      }
     const size_t numSections= getNumSections();
     size_t i= 0;
     do
@@ -548,7 +552,8 @@ int XC::ForceBeamColumn2d::update(void)
     
                         if(theSections[i]->setTrialSectionDeformation(section_matrices.getVsSubdivide()[i]) < 0)
                           {
-                            std::cerr << "ForceBeamColumn2d::update(void) - section failed in setTrial\n";
+                            std::cerr << getClassName() << "::" << __FUNCTION__
+				      << "; ERROR  section failed in setTrial\n";
                             return -1;
                           }
     
@@ -661,7 +666,8 @@ int XC::ForceBeamColumn2d::update(void)
                     // calculate element stiffness matrix
                     // invert3by3Matrix(f, kv);
                     if(f.Solve(I, kvTrial) < 0)
-                      std::cerr << "ForceBeamColumn2d::update(void) -- could not invert flexibility\n";
+                      std::cerr << getClassName() << "::" << __FUNCTION__
+				<< "; ERROR: could not invert flexibility\n";
     
                     // dv = vin + dvTrial  - vr
                     dv= vin;
@@ -690,7 +696,8 @@ int XC::ForceBeamColumn2d::update(void)
                           { converged = true; }
                         else
                           { // we convreged but we have more to do
-                            std::cerr << dvToDo << dvTrial << std::endl;
+                            std::cerr << getClassName() << "::" << __FUNCTION__
+				      << dvToDo << dvTrial << std::endl;
                             // reset variables for start of next subdivision
                             dvTrial = dvToDo;
                             numSubdivide = 1;  // NOTE setting subdivide to 1 again maybe too much
@@ -733,9 +740,11 @@ int XC::ForceBeamColumn2d::update(void)
 
     if(converged == false)
       {
-        std::cerr << "WARNING - ForceBeamColumn2d::update - failed to get compatible ";
-        std::cerr << "element forces & deformations for element: ";
-        std::cerr << getTag() << "(dW: << " << dW  << ", dW0: " << dW0 << ")\n";
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; WARNING - failed to get compatible "
+		  << "element forces & deformations for element: "
+		  << getTag() << "(dW: << " << dW  << ", dW0: "
+		  << dW0 << ")\n";
         return -1;
       }
 
@@ -813,7 +822,7 @@ void XC::ForceBeamColumn2d::zeroLoad(void)
 int XC::ForceBeamColumn2d::addLoad(ElementalLoad *theLoad, double loadFactor)
   {
     if(isDead())
-      std::cerr << getClassName() 
+      std::cerr << getClassName() << "::" << __FUNCTION__ 
                 << "; load over inactive element: "
                 << getTag()  
                 << std::endl;
@@ -840,35 +849,34 @@ int XC::ForceBeamColumn2d::addLoad(ElementalLoad *theLoad, double loadFactor)
           }
         else
           {
-            std::cerr << "XC::ForceBeamColumn2d::addLoad -- load type unknown for element with tag: " <<
-            this->getTag() << std::endl;
+            std::cerr << getClassName() << "::" << __FUNCTION__
+		      << "; ERROR: load type unknown for element with tag: "
+		      << this->getTag() << std::endl;
             return -1;
           }
       }
     return 0;
   }
 
-//! @brief Add the inertial loads to the unbalanced load vector.
+//! @brief Add the inertia loads to the unbalanced load vector.
 int XC::ForceBeamColumn2d::addInertiaLoadToUnbalance(const Vector &accel)
   {
     // Check for a quick return
-    if(rho == 0.0)
-      return 0;
+    if(rho != 0.0)
+      {
+	// get R * accel from the nodes
+	const Vector &Raccel1= theNodes[0]->getRV(accel);
+	const Vector &Raccel2= theNodes[1]->getRV(accel);
 
-    // get R * accel from the nodes
-    const Vector &Raccel1= theNodes[0]->getRV(accel);
-    const Vector &Raccel2= theNodes[1]->getRV(accel);
+	const double L= theCoordTransf->getInitialLength();
+	const double m= 0.5*rho*L;
 
-    const double L= theCoordTransf->getInitialLength();
-    //const double m= 0.5*rho*L;
-
-    // Should be done through p0[0]
-    /*
-    load(0) -= m*Raccel1(0);
-    load(1) -= m*Raccel1(1);
-    load(3) -= m*Raccel2(0);
-    load(4) -= m*Raccel2(1);
-    */
+	// Should be done through p0[0]
+	load(0)-= m*Raccel1(0);
+	load(1)-= m*Raccel1(1);
+	load(3)-= m*Raccel2(0);
+	load(4)-= m*Raccel2(1);
+      }
     return 0;
   }
 
@@ -937,7 +945,8 @@ int XC::ForceBeamColumn2d::sendSelf(Communicator &comm)
     const int dataTag= getDbTag();
     res+= comm.sendIdData(getDbTagData(),dataTag);
     if(res<0)
-      std::cerr << "ForceBeamColumn2d::sendSelf() - failed to send ID data.\n";
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; ERROR: failed to send ID data.\n";
     return res;
   }
 
@@ -950,7 +959,8 @@ int XC::ForceBeamColumn2d::recvSelf(const Communicator &comm)
     const int dataTag= getDbTag();
     int res= comm.receiveIdData(getDbTagData(),dataTag);
     if(res<0)
-      std::cerr << "ForceBeamColumn3d::recvSelf -- failed to receive ID data\n";
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; ERROR: failed to receive ID data.\n";
     else
       res+= recvData(comm);
     return res;
@@ -1089,7 +1099,8 @@ void XC::ForceBeamColumn2d::compSectionDisplacements(std::vector<Vector> &sectio
             }
         if(ii == code.Size())
           {
-            std::cerr << "FATAL NLBeamColumn2d::compSectionDispls - section does not provide Mz response\n";
+            std::cerr << getClassName() << "::" << __FUNCTION__
+		      << "; FATAL: section does not provide Mz response\n";
             exit(-1);
           }
 
@@ -1271,20 +1282,20 @@ XC::Response *XC::ForceBeamColumn2d::setResponse(const std::vector<std::string> 
 
 int XC::ForceBeamColumn2d::getResponse(int responseID, Information &eleInfo)
   {
-    static XC::Vector vp(3);
-    static XC::Matrix fe(3,3);
+    static Vector vp(3);
+    static Matrix fe(3,3);
 
     if(responseID == 1)
       return eleInfo.setVector(this->getResistingForce());
     else if(responseID == 2)
       {
-        theVector(3) =  Se(0);
-        theVector(0) = -Se(0)+p0[0];
-        theVector(2) = Se(1);
-        theVector(5) = Se(2);
-        double V = (Se(1)+Se(2))/theCoordTransf->getInitialLength();
-        theVector(1) =  V+p0[1];
-        theVector(4) = -V+p0[2];
+        theVector(3)=  Se(0);
+        theVector(0)= -Se(0)+p0[0];
+        theVector(2)= Se(1);
+        theVector(5)= Se(2);
+        const double V= (Se(1)+Se(2))/theCoordTransf->getInitialLength();
+        theVector(1)=  V+p0[1];
+        theVector(4)= -V+p0[2];
         return eleInfo.setVector(theVector);
       }
     // Chord rotation
@@ -1307,8 +1318,8 @@ int XC::ForceBeamColumn2d::getResponse(int responseID, Information &eleInfo)
         double LI = 0.0;
         if(fabs(Se(1)+Se(2)) > DBL_EPSILON)
           {
-            double L = theCoordTransf->getInitialLength();
-            LI = Se(1)/(Se(1)+Se(2))*L;
+            const double L= theCoordTransf->getInitialLength();
+            LI= Se(1)/(Se(1)+Se(2))*L;
           }
         return eleInfo.setDouble(LI);
       }
@@ -1318,7 +1329,7 @@ int XC::ForceBeamColumn2d::getResponse(int responseID, Information &eleInfo)
         double d2 = 0.0;
         double d3 = 0.0;
 
-        double L = theCoordTransf->getInitialLength();
+        const double L = theCoordTransf->getInitialLength();
 
         // Location of inflection point from node I
         double LI = 0.0;
@@ -1366,9 +1377,9 @@ int XC::ForceBeamColumn2d::getResponse(int responseID, Information &eleInfo)
 
         d3+= beamIntegr->getTangentDriftJ(L, LI, Se(1), Se(2));
 
-        static XC::Vector d(2);
-        d(0) = d2;
-        d(1) = d3;
+        static Vector d(2);
+        d(0)= d2;
+        d(1)= d3;
         return eleInfo.setVector(d);
       }
     else
@@ -1378,81 +1389,79 @@ int XC::ForceBeamColumn2d::getResponse(int responseID, Information &eleInfo)
 int XC::ForceBeamColumn2d::setParameter(const std::vector<std::string> &argv, Parameter &param)
   {
     const size_t argc= argv.size();
-  if(argc < 1)
-    return 0;
-
-  int result = -1;
-
-        const size_t numSections= getNumSections();
-  if(argv[0] == "rho")
-    return param.addObject(1, this);
-  
-  // section response -
-  else if(strstr(argv[0].c_str(),"sectionX") != 0) {
-    if(argc > 2) {
-      float sectionLoc = atof(argv[1]);
-
-      std::vector<double> xi(section_matrices.getMaxNumSections());
-      double L = theCoordTransf->getInitialLength();
-      beamIntegr->getSectionLocations(numSections, L, &xi[0]);
-      
-      sectionLoc /= L;
-
-      float minDistance = fabs(xi[0]-sectionLoc);
-      int sectionNum = 0;
-      for(size_t i = 1; i < numSections; i++)
-        {
-	  if(fabs(xi[i]-sectionLoc) < minDistance)
-            {
-	      minDistance = fabs(xi[i]-sectionLoc);
-	      sectionNum = i;
-	    }
-        }
-      std::vector<std::string> argv2(argv);
-      argv2.erase(argv2.begin(),argv2.begin()+2);
-      return theSections[sectionNum]->setParameter(argv2, param);
-    }
-  }
-
-  // If the parameter belongs to a section or lower
-  else if(strstr(argv[0].c_str(),"section") != 0) {
-    
-    if(argc < 3)
-      return -1;
-
-    // Get section number: 1...Np
-    size_t sectionNum = atoi(argv[1]);
-    
-    if(sectionNum > 0 && sectionNum <= numSections)
-      return setSectionParameter(theSections[sectionNum-1],argv,2,param);
-    else
-      return -1;
-  }
-  
-  else if(strstr(argv[0].c_str(),"integration") != 0) {
-    
-    if(argc < 2)
+    if(argc < 1)
       return 0;
 
-        std::vector<std::string> argv1(argv);
-        argv1.erase(argv1.begin(),argv1.begin()+2);
-    return beamIntegr->setParameter(argv1, param);
-  }
+    int result = -1;
 
-  // Default, send to everything
-  int ok;
+	  const size_t numSections= getNumSections();
+    if(argv[0] == "rho")
+      return param.addObject(1, this);
+    // section response -
+    else if(strstr(argv[0].c_str(),"sectionX") != 0)
+      {
+	if(argc > 2)
+	  {
+	    float sectionLoc = atof(argv[1]);
 
-  for(size_t i = 0; i < numSections; i++)
-    {
-      ok = theSections[i]->setParameter(argv, param);
-      if(ok != -1)
-        result = ok;
-    }
-  
-  ok = beamIntegr->setParameter(argv, param);
-  if(ok != -1)
-    result = ok;
-  return result;
+	    std::vector<double> xi(section_matrices.getMaxNumSections());
+	    const double L= theCoordTransf->getInitialLength();
+	    beamIntegr->getSectionLocations(numSections, L, &xi[0]);
+
+	    sectionLoc/= L;
+
+	    float minDistance= fabs(xi[0]-sectionLoc);
+	    int sectionNum = 0;
+	    for(size_t i = 1; i < numSections; i++)
+	      {
+		if(fabs(xi[i]-sectionLoc) < minDistance)
+		  {
+		    minDistance = fabs(xi[i]-sectionLoc);
+		    sectionNum = i;
+		  }
+	      }
+	    std::vector<std::string> argv2(argv);
+	    argv2.erase(argv2.begin(),argv2.begin()+2);
+	    return theSections[sectionNum]->setParameter(argv2, param);
+	  }
+      }
+    // If the parameter belongs to a section or lower
+    else if(strstr(argv[0].c_str(),"section") != 0)
+      {
+	if(argc < 3)
+	  return -1;
+
+	// Get section number: 1...Np
+	size_t sectionNum = atoi(argv[1]);
+
+	if(sectionNum > 0 && sectionNum <= numSections)
+	  return setSectionParameter(theSections[sectionNum-1],argv,2,param);
+	else
+	  return -1;
+      }
+    else if(strstr(argv[0].c_str(),"integration") != 0)
+      {
+        if(argc < 2)
+	  return 0;
+
+	std::vector<std::string> argv1(argv);
+	argv1.erase(argv1.begin(),argv1.begin()+2);
+        return beamIntegr->setParameter(argv1, param);
+      }
+    // Default, send to everything
+    int ok;
+
+    for(size_t i = 0; i < numSections; i++)
+      {
+	ok = theSections[i]->setParameter(argv, param);
+	if(ok != -1)
+	  result = ok;
+      }
+
+    ok = beamIntegr->setParameter(argv, param);
+    if(ok != -1)
+      result = ok;
+    return result;
   }
 
 int XC::ForceBeamColumn2d::updateParameter (int parameterID, Information &info)
@@ -1479,7 +1488,9 @@ int XC::ForceBeamColumn2d::updateParameter (int parameterID, Information &info)
           }
         if(ok < 0)
           {
-            std::cerr << "XC::ForceBeamColumn2d::updateParameter() - could not update parameter. " << std::endl;
+            std::cerr << getClassName() << "::" << __FUNCTION__
+		      << "; ERROR: could not update parameter. "
+		      << std::endl;
             return ok;
           }
         else
@@ -1487,7 +1498,9 @@ int XC::ForceBeamColumn2d::updateParameter (int parameterID, Information &info)
       }
     else
       {
-        std::cerr << "XC::ForceBeamColumn2d::updateParameter() - could not update parameter. " << std::endl;
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; ERROR: could not update parameter. "
+		  << std::endl;
         return -1;
       }
   }
@@ -1496,6 +1509,9 @@ void XC::ForceBeamColumn2d::setSectionPointers(const std::vector<PrismaticBarCro
   {
     const size_t numSections= getNumSections();
     if(numSections > section_matrices.getMaxNumSections())
-      { std::cerr << "Error: ForceBeamColumn2d::setSectionPointers -- max number of sections exceeded"; }
+      {
+	std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; ERROR: max number of sections exceeded";
+      }
     setSections(secPtrs);
   }
