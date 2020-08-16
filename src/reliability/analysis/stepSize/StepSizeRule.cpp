@@ -57,10 +57,9 @@
 // Written by Terje Haukaas (haukaas@ce.berkeley.edu)
 //
 
-#include <reliability/analysis/stepSize/StepSizeRule.h>
+#include "StepSizeRule.h"
 
-XC::StepSizeRule::StepSizeRule()
-{
-}
+XC::StepSizeRule::StepSizeRule(void)
+  {}
 
 

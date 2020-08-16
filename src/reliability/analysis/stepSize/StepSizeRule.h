@@ -67,7 +67,8 @@ namespace XC {
 
 //! @ingroup ReliabilityAnalysis
 //!
-//! @brief ??
+//! @brief Base class for the algorithms that compute the analysis
+//! step size.
 class StepSizeRule
   {
   public:

@@ -61,25 +61,24 @@
 #ifndef FixedStepSizeRule_h
 #define FixedStepSizeRule_h
 
-#include <reliability/analysis/stepSize/StepSizeRule.h>
+#include "StepSizeRule.h"
 
 namespace XC {
 //! @ingroup ReliabilityAnalysis
 //!
-//! @brief ??
+//! @brief Uses a fixed step size.
 class FixedStepSizeRule: public StepSizeRule
-{
+  {
+  private:
+    double stepSize;
+    double gFunValue;
+  public:
+    FixedStepSizeRule(double stepSize);
 
-public:
-	FixedStepSizeRule(double stepSize);
-
-	int		computeStepSize(Vector u, Vector grad_G, double G, Vector d, int stepNumber);
-	double	getStepSize();
-	double	getInitialStepSize();
-	double getGFunValue();
-private:
-	double stepSize;
-	double gFunValue;
+    int computeStepSize(Vector u, Vector grad_G, double G, Vector d, int stepNumber);
+    double getStepSize(void);
+    double getInitialStepSize(void);
+    double getGFunValue(void);
   };
 } // end of XC namespace
 
