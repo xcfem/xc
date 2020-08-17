@@ -261,7 +261,7 @@ class BiaxialBendingNormalStressController(lsc.LimitStateControllerBase):
                force results
         :param setCalc: set of elements to check
         '''
-        intForcItems=lsd.readIntForcesFile(intForcCombFileName,setCalc)
+        intForcItems= lsd.readIntForcesFile(intForcCombFileName,setCalc)
         internalForcesValues= intForcItems[2]
         for e in setCalc.elements:
             sh= e.getProp('crossSection')
