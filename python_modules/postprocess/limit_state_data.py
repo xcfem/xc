@@ -59,6 +59,13 @@ class LimitStateData(object):
         internal forces.'''
         return self.envConfig.projectDirTree.getInternalForcesResultsPath()+'intForce_'+ self.label +'.json'
     
+    def readInternalForces(self, setCalc):
+        ''' Read the internal forces for the elements in the set argument.
+
+        :param setCalc: elements to read internal forces for.
+        '''
+        return readIntForcesFile(self.getInternalForcesFileName(), setCalc)
+    
     def getDisplacementsFileName(self):
         '''Return the file name to read: combination name, node number and 
         displacements (ux,uy,uz,rotX,rotY,rotZ).'''
