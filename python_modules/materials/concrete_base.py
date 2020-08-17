@@ -142,8 +142,6 @@ class Concrete(matWDKD.MaterialWithDKDiagrams):
     If tensionStiffparam==None and initTensStiff=='N' (default values) no 
     tensile strength is considered; the stress strain relationship corresponds 
     to a concrete01 material (zero tensile strength).
-    :ivar xc_plate_section: pointer to plate section material.
-    :ivar xc_membrane_plate_section: pointer to membrane plate section material.
 
     '''
     nuc= 0.2 #** Poisson coefficient
@@ -164,8 +162,6 @@ class Concrete(matWDKD.MaterialWithDKDiagrams):
         self.fck= fck #** characteristic (5%) cylinder strength of the concrete [Pa]
         self.gmmC= gammaC #** Partial safety factor for concrete
         self.initTensStiff='N'
-        self.xc_plate_section= None
-        self.xc_membrane_plate_section= None
 
     def density(self,reinforced= True):
         '''Return concrete density in kg/m3.'''
@@ -746,43 +742,39 @@ class Concrete(matWDKD.MaterialWithDKDiagrams):
          '''
         return sectionProperties.defElasticShearSection3d(preprocessor,self.getElasticMaterialData())
     
-    def defElasticPlateSection(self, preprocessor,name,thickness):
+    def defElasticPlateSection(self, preprocessor, name, thickness):
         '''Constructs an elastic isotropic section material appropiate 
            for elastic analysis of plate elements.
 
         :param  preprocessor: preprocessor name
-        :param  name:         name identifying the section
-        :param  thickness:    section thickness.
+        :param  name: name identifying the section
+        :param  thickness: section thickness.
         '''
-        if(not self.xc_plate_section):
-            materialHandler= preprocessor.getMaterialHandler
-            if(materialHandler.materialExists(self.sectionName)):
-                lmsg.warning("Section: "+self.sectionName+" already defined.")
-                self.xc_plate_section= materialHandler.getMaterial(self.sectionName)
-            else:
-                self.xc_plate_section= typical_materials.defElasticPlateSection(preprocessor,name,E= self.getEcm(), nu=self.nuc ,rho= self.density(),h= thickness)
+        retval= None
+        materialHandler= preprocessor.getMaterialHandler
+        if(materialHandler.materialExists(name)):
+            lmsg.warning("Section: "+name+" already defined.")
+            retval= materialHandler.getMaterial(name)
         else:
-            lmsg.warning('Material: ', self.name, ' already defined.')
-        return self.xc_plate_section
+            retval= typical_materials.defElasticPlateSection(preprocessor,name,E= self.getEcm(), nu=self.nuc ,rho= self.density(),h= thickness)
+        return retval
 
-    def defElasticMembranePlateSection(self, preprocessor,name,thickness):
+    def defElasticMembranePlateSection(self, preprocessor, name, thickness):
         '''Constructs an elastic isotropic section material appropiate 
            for elastic analysis of plate and shell elements
 
         :param  preprocessor: preprocessor name
-        :param  name:         name identifying the section
-        :param  thickness:    section thickness.
+        :param  name: name identifying the section
+        :param  thickness: section thickness.
         '''
-        if(not self.xc_membrane_plate_section):
-            materialHandler= preprocessor.getMaterialHandler
-            if(materialHandler.materialExists(self.sectionName)):
-                lmsg.warning("Section: "+self.sectionName+" already defined.")
-                self.xc_membrane_plate_section= materialHandler.getMaterial(self.sectionName)
-            else:
-                self.xc_membrane_plate_section= typical_materials.defElasticMembranePlateSection(preprocessor,name,E= self.getEcm(), nu=self.nuc ,rho= self.density(),h= thickness)
+        retval= None
+        materialHandler= preprocessor.getMaterialHandler
+        if(materialHandler.materialExists(name)):
+            lmsg.warning("Section: "+name+" already defined.")
+            retval= materialHandler.getMaterial(name)
         else:
-            lmsg.warning('Material: ', self.name, ' already defined.')
-        return self.xc_membrane_plate_section
+            retval= typical_materials.defElasticMembranePlateSection(preprocessor,name,E= self.getEcm(), nu=self.nuc ,rho= self.density(),h= thickness)
+        return retval
 
 
 class paramTensStiffness(object):
