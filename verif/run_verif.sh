@@ -255,7 +255,7 @@ python tests/preprocessor/geom_entities/circumference_arc_03.py
 python tests/preprocessor/geom_entities/circumference_arc_04.py
 python tests/preprocessor/geom_entities/circumference_arc_05.py
 python tests/preprocessor/geom_entities/create_points_line.py
-python tests/preprocessor/geom_entities/test_traslacion_01.py
+python tests/preprocessor/geom_entities/test_translation_01.py
 python tests/preprocessor/geom_entities/test_rotation_01.py
 python tests/preprocessor/geom_entities/test_rotation_02.py
 python tests/preprocessor/geom_entities/test_rotation_03.py
@@ -291,7 +291,6 @@ python tests/preprocessor/meshing/test_truss_generator_01.py
 
 echo "$BLEU" "  Sets handling tests." "$NORMAL"
 python tests/preprocessor/sets/test_exist_set.py
-python tests/preprocessor/sets/mueve_set.py
 python tests/preprocessor/sets/test_set_01.py
 python tests/preprocessor/sets/une_sets.py
 python tests/preprocessor/sets/sets_boolean_operations_01.py
@@ -307,6 +306,7 @@ python tests/preprocessor/sets/test_sets_and_grids_02.py
 python tests/preprocessor/sets/test_get_bnd_01.py
 python tests/preprocessor/sets/test_fill_downwards_01.py
 python tests/preprocessor/sets/test_get_mesh_components_01.py
+python tests/preprocessor/sets/test_set_transformation_01.py
 echo "$BLEU" "  Preprocessor grid model tests." "$NORMAL"
 python tests/preprocessor/grid_model/test_grid_model_01.py
 python tests/preprocessor/grid_model/test_grid_model_02.py
