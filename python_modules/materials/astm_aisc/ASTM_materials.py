@@ -183,6 +183,139 @@ M27= BoltFastener(27e-3)
 M30= BoltFastener(30e-3)
 M36= BoltFastener(36e-3)
 
+class BoltArray(object):
+    distances= [50e-3, 75e-3, 100e-3, 120e-3, 150e-3, 200e-3, 250e-3,.3,.4,.5,.6,.7,.8,.9]
+    ''' Bolt array.
+
+    :ivar bolt: bolt type.
+    :ivar nRows: row number.
+    :ivar nCols: column number.
+    :ivar dist: distance between rows and columns
+                 (defaults to three diameters).
+    '''
+    def __init__(self, bolt, nRows, nCols, dist= None):
+        ''' Constructor.
+
+        :param bolt: bolt type.
+        :param nRows: row number.
+        :param nCols: column number.
+        :param dist: distance between rows and columns
+                     (defaults to three diameters).
+        '''
+        self.bolt= bolt
+        self.nRows= nRows
+        self.nCols= nCols
+        if(dist):
+            self.dist= dist
+        else:
+            tmp= 3.0*self.bolt.diameter
+            for d in self.distances:
+                if(d>= tmp):
+                    self.dist= d
+                    break
+
+    def getNumBolts(self):
+        ''' Return the number of bolts of the array.'''
+        return self.nRows*self.nCols
+
+    def checkDistanceBetweenCenters(self):
+        ''' Check distance between centers return a
+            number < 1 if the distance is ok.'''
+        return self.bolt.getRecommendedDistanceBetweenCenters()/self.dist
+
+    def getMinPlateWidth(self):
+        ''' Return the minimum width of the bolted plate.'''
+        minEdgeDist= self.bolt.getMinimumEdgeDistanceJ3_4M()
+        return 2.0*minEdgeDist+self.dist
+
+    def getMinPlateLength(self):
+        ''' Return the minimum length of the bolted plate.'''
+        minEdgeDist= self.bolt.getMinimumEdgeDistanceJ3_4M()
+        return 2.0*minEdgeDist+self.dist*(self.nCols-1)
+
+    def getNetWidth(self, plateWidth):
+        ''' Return the net width due to the bolt holes.
+
+        :param plateWidth: width of the bolted plate.
+        '''
+        return plateWidth-self.nRows*self.bolt.getNominalHoleDiameter()
+
+    def getDesignShearStrength(self, doubleShear= False):
+        ''' Return the shear strength of the bolt group.
+
+        :param doubleShear: true if double shear action.
+        '''
+        retval= self.getNumBolts()*self.bolt.getDesignShearStrength()
+        if(doubleShear):
+            retval*=2.0
+        return retval
+
+    def getDesignShearEfficiency(self, P, doubleShear= False):
+        ''' Return the shear efficiency of the bolt group.
+
+        :param Pd: design value of the force to resist.
+        :param doubleShear: true if double shear action.
+        '''
+        return P/self.getDesignShearStrength(doubleShear)
+
+class BoltedPlate(object):
+    ''' Bolted plate.
+
+    :ivar boltArray: bolt array.
+    :ivar width: plate width.
+    :ivar length: plate length.
+    :ivar thickness: plate thickness.
+    :ivar steelType: steel type.
+    '''
+    def __init__(self, boltArray, thickness, steelType= A36):
+        ''' Constructor.
+
+        :param boltArray: bolt array.
+        :param thickness: plate thickness.
+        '''
+        self.boltArray= boltArray
+        self.thickness= thickness
+        self.steelType= steelType
+        minWidth= self.boltArray.getMinPlateWidth()
+        for d in self.boltArray.distances:
+            if(d>= minWidth):
+                self.width= d
+                break
+        minLength= self.boltArray.getMinPlateLength()
+        for d in self.boltArray.distances:
+            if(d>= minLength):
+                self.length= d
+                break
+            
+    def getNetWidth(self):
+        ''' Return the net width due to the bolt holes. '''
+        return self.boltArray.getNetWidth(self.width)        
+            
+    def getPlateDimensions(self):
+        ''' Return the dimensions of the plate.'''
+        return (self.width, self.length, self.thickness)
+
+    def getMinThickness(self, Pd):
+        ''' Return the minimum thickness of the plate
+            to resist the force argument.
+
+        :param Pd: design value of the force to resist.
+        '''
+        # Yielding in the gross section.
+        minThicknessA= Pd/0.9/self.steelType.fy/self.width
+        # Tension fracture in the net section.
+        minThicknessB= Pd/0.75/self.steelType.fu/self.getNetWidth()
+        return max(minThicknessA,minThicknessB)
+
+    def checkThickness(self, Pd):
+        ''' Check plate thickness; return a number < 1 if the 
+            thickness is ok.
+
+        :param Pd: design value of the force to resist.
+        '''
+        return self.getMinThickness(Pd)/self.thickness
+
+
 class AnchorBolt(BoltBase):
     """ASTM anchor bolt according to table 2.2 from the document
     Base Plate and Anchor Rod Design Second Edition
