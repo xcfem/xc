@@ -41,12 +41,10 @@ namespace XC {
 class Rotation: public TrfGeom
   {
     Rotation3d rr; //!< Rotation.
-  protected:
-
   public:
     //! @brief Constructor.
-    Rotation(Preprocessor *m)
-      : TrfGeom(m), rr() {}
+    Rotation(const Rotation3d &tr= Rotation3d())
+      : TrfGeom(), rr(tr) {}
 
     void setAxisAng(const Line3d &r,const double &angle)
       { rr= Rotation3d(r,angle); }

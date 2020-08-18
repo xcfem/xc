@@ -186,6 +186,7 @@ class Node: public MeshComponent
     size_t getNumberOfConnectedElements(void) const;
     ElementConstPtrSet getConnectedElements(void) const;
     ElementPtrSet getConnectedElements(void);
+    boost::python::list getConnectedElementsPy(void);
     const MeshEdge *next(const std::deque<MeshEdge> &, const std::set<const MeshEdge *> &) const;
 
     const bool isDead(void) const;

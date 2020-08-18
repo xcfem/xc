@@ -169,7 +169,6 @@ class Set: public SetMeshComp
     void fillDownwards(void);
 
     void Transform(const TrfGeom &trf);
-    void Transform(const size_t &indice_trf);
 
     virtual int sendSelf(Communicator &);
     virtual int recvSelf(const Communicator &);

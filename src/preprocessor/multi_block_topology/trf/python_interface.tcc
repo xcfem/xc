@@ -28,28 +28,27 @@ class_<XC::TrfGeom, bases<XC::EntMdlrBase>, boost::noncopyable >("TrfGeom", no_i
   .def("getTrfVector",getTrfVector)
   ;
 
-class_<XC::Translation, bases<XC::TrfGeom>, boost::noncopyable >("Translation", no_init)
+class_<XC::Translation, bases<XC::TrfGeom>>("Translation")
+  .def(init<Translation3d>())
   .def("setVector",&XC::Translation::setVector)
   ;
 
-class_<XC::Scaling, bases<XC::TrfGeom>, boost::noncopyable >("Scaling", no_init)
+class_<XC::Scaling, bases<XC::TrfGeom> >("Scaling")
+  .def(init<Scaling3d>())
   .def("setScaleFactor",&XC::Scaling::setScaleFactor)
   ;
 
-class_<XC::Reflection, bases<XC::TrfGeom>, boost::noncopyable >("Reflection", no_init)
+class_<XC::Reflection, bases<XC::TrfGeom>>("Reflection")
+  .def(init<Reflection3d>())
   .def("setPlane",&XC::Reflection::setPlane)
   ;
 
 class_<XC::Rotation, bases<XC::TrfGeom>, boost::noncopyable >("Rotation", no_init)
+  .def(init<Rotation3d>())
   .def("setAxisAng",&XC::Rotation::setAxisAng)
   ;
 
-typedef XC::ModelComponentContainer<XC::TrfGeom> MapMultiBlockTopologyTrfGeom;
-class_<MapMultiBlockTopologyTrfGeom, bases<XC::ModelComponentContainerBase>, boost::noncopyable >("MapMultiBlockTopologyTraGeom", no_init);
 
-class_<XC::MapTrfGeom, bases<MapMultiBlockTopologyTrfGeom>, boost::noncopyable >("MapTrfGeom", no_init)
-.def("newTransformation",&XC::MapTrfGeom::newTransformation, return_internal_reference<>(),"Defines a new transformation.")
-  ;
 
 
 

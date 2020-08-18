@@ -41,12 +41,10 @@ namespace XC {
 class Translation: public TrfGeom
   {
     Translation3d tr; //!< Traslation.
-  protected:
-
   public:
     //! @brief Constructor.
-    Translation(Preprocessor *m)
-      : TrfGeom(m), tr() {}
+    Translation(const Translation3d &v= Translation3d())
+      : TrfGeom(), tr(v) {}
     void setVector(const Vector3d &v);
     virtual Pos3d Transform(const Pos3d &p) const;
     virtual Vector3d Transform(const Vector3d &v) const;

@@ -2015,6 +2015,16 @@ std::set<XC::Element *> XC::Node::getConnectedElements(void)
     return retval;
   }
 
+//! @brief Return a Python list of pointers to the elements that are connected with this node.
+boost::python::list XC::Node::getConnectedElementsPy(void)
+  {
+    boost::python::list retval;
+    std::set<Element *> elements= getConnectedElements();
+    for(std::set<Element *>::iterator i= elements.begin(); i!= elements.end(); i++)
+      retval.append(*i);
+    return retval;     
+  }
+
 //! @brief Returns an edge that has its origin in this node (and is not in visited).
 const XC::MeshEdge *XC::Node::next(const std::deque<MeshEdge> &edges, const std::set<const MeshEdge *> &visited) const
   {

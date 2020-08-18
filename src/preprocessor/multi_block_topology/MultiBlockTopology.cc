@@ -59,7 +59,6 @@
 //! @brief Constructor.
 XC::MultiBlockTopology::MultiBlockTopology(Preprocessor *prep)
   : PreprocessorContainer(prep), MovableObject(0), reference_systems(this),
-    geometric_transformations(this),
     points(this), edges(this), faces(this), bodies(this), unif_grid(this),
     framework2d(this), framework3d(this) {}
 
@@ -175,7 +174,6 @@ XC::SetEstruct *XC::MultiBlockTopology::find_struct_set(const UniformGridMap::In
 void XC::MultiBlockTopology::clearAll(void)
   {
     reference_systems.clearAll();
-    geometric_transformations.clearAll();
 
     framework2d.clearAll();
     framework3d.clearAll();
@@ -222,15 +220,14 @@ int XC::MultiBlockTopology::sendData(Communicator &comm)
   {
     int res= 0;
     //int res= comm.sendMovable(reference_systems,getDbTagData(),CommMetaData(0));
-    //res+= comm.sendMovable(geometric_transformations,getDbTagData(),CommMetaData(1));
-    //res+= comm.sendMovable(framework2d,getDbTagData(),CommMetaData(2));
-    //res+= comm.sendMovable(framework3d,getDbTagData(),CommMetaData(3));
+    //res+= comm.sendMovable(framework2d,getDbTagData(),CommMetaData(1));
+    //res+= comm.sendMovable(framework3d,getDbTagData(),CommMetaData(2));
 
-    //res+= comm.sendMovable(unif_grid,getDbTagData(),CommMetaData(4));
-    //res+= comm.sendMovable(bodies,getDbTagData(),CommMetaData(5));
-    //res+= comm.sendMovable(faces,getDbTagData(),CommMetaData(6));
-    //res+= comm.sendMovable(edges,getDbTagData(),CommMetaData(7));
-    //res+= comm.sendMovable(points,getDbTagData(),CommMetaData(8));
+    //res+= comm.sendMovable(unif_grid,getDbTagData(),CommMetaData(3));
+    //res+= comm.sendMovable(bodies,getDbTagData(),CommMetaData(4));
+    //res+= comm.sendMovable(faces,getDbTagData(),CommMetaData(5));
+    //res+= comm.sendMovable(edges,getDbTagData(),CommMetaData(6));
+    //res+= comm.sendMovable(points,getDbTagData(),CommMetaData(7));
 
     return res;
   }
@@ -240,15 +237,14 @@ int XC::MultiBlockTopology::recvData(const Communicator &comm)
   {
     int res= 0;
     // int res= comm.receIvemovable(reference_systems,getDbTagData(),CommMetaData(0));
-    // res+= comm.receiveMovable(geometric_transformations,getDbTagData(),CommMetaData(1));
-    // res+= comm.receiveMovable(framework2d,getDbTagData(),CommMetaData(2));
-    // res+= comm.receiveMovable(framework3d,getDbTagData(),CommMetaData(3));
+    // res+= comm.receiveMovable(framework2d,getDbTagData(),CommMetaData(1));
+    // res+= comm.receiveMovable(framework3d,getDbTagData(),CommMetaData(2));
 
-    //res+= comm.receiveMovable(points,getDbTagData(),CommMetaData(8));
-    //res+= comm.receiveMovable(edges,getDbTagData(),CommMetaData(7));
-    //res+= comm.receiveMovable(faces,getDbTagData(),CommMetaData(6));
-    //res+= comm.receiveMovable(bodies,getDbTagData(),CommMetaData(5));
-    //res+= comm.receiveMovable(unif_grid,getDbTagData(),CommMetaData(4));
+    //res+= comm.receiveMovable(points,getDbTagData(),CommMetaData(7));
+    //res+= comm.receiveMovable(edges,getDbTagData(),CommMetaData(6));
+    //res+= comm.receiveMovable(faces,getDbTagData(),CommMetaData(5));
+    //res+= comm.receiveMovable(bodies,getDbTagData(),CommMetaData(4));
+    //res+= comm.receiveMovable(unif_grid,getDbTagData(),CommMetaData(3));
     return res;
   }
 

@@ -43,8 +43,8 @@ class Reflection: public TrfGeom
     Reflection3d rf; //!< Reflection.
   public:
     //! @brief Constructor.
-    Reflection(Preprocessor *m)
-      : TrfGeom(m), rf() {}
+    Reflection(const Reflection3d &tr= Reflection3d())
+      : TrfGeom(), rf(tr) {}
     void setPlane(const Plane &p)
       { rf= Reflection3d(p); }
     virtual Pos3d Transform(const Pos3d &p) const;

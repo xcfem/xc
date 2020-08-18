@@ -18,15 +18,14 @@ feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor   
 nodes= preprocessor.getNodeHandler
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
-nodes.defaultTag= 1 #First node number.
-nod= nodes.newNodeXYZ(0.0,0.0,0.0)
-nod= nodes.newNodeXYZ(1.0,0.0,0.0)
-nod= nodes.newNodeXYZ(1.0,1.0,0.0)
-nod= nodes.newNodeXYZ(0.0,1.0,0.0)
-nod= nodes.newNodeXYZ(0.0,0.0,1.0)
-nod= nodes.newNodeXYZ(1.0,0.0,1.0)
-nod= nodes.newNodeXYZ(1.0,1.0,1.0)
-nod= nodes.newNodeXYZ(0.0,1.0,1.0)
+n1= nodes.newNodeXYZ(0.0,0.0,0.0)
+n2= nodes.newNodeXYZ(1.0,0.0,0.0)
+n3= nodes.newNodeXYZ(1.0,1.0,0.0)
+n4= nodes.newNodeXYZ(0.0,1.0,0.0)
+n5= nodes.newNodeXYZ(0.0,0.0,1.0)
+n6= nodes.newNodeXYZ(1.0,0.0,1.0)
+n7= nodes.newNodeXYZ(1.0,1.0,1.0)
+n8= nodes.newNodeXYZ(0.0,1.0,1.0)
 
 # Geometric transformations
 lin= modelSpace.newLinearCrdTransf("lin",xc.Vector([0,1,1]))
@@ -38,19 +37,19 @@ elements= preprocessor.getElementHandler
 elements.defaultTransformation= lin.name # Coord. transformation.
 elements.defaultMaterial= section.name
 elements.defaultTag= 1 #Tag for next element.
-beam3d= elements.newElement("ElasticBeam3d",xc.ID([1,2]))
-beam3d= elements.newElement("ElasticBeam3d",xc.ID([2,3]))
-beam3d= elements.newElement("ElasticBeam3d",xc.ID([3,4]))
-beam3d= elements.newElement("ElasticBeam3d",xc.ID([4,1]))
-beam3d= elements.newElement("ElasticBeam3d",xc.ID([1,3]))
-beam3d= elements.newElement("ElasticBeam3d",xc.ID([2,4]))
+beam3d= elements.newElement("ElasticBeam3d",xc.ID([n1.tag,n2.tag]))
+beam3d= elements.newElement("ElasticBeam3d",xc.ID([n2.tag,n3.tag]))
+beam3d= elements.newElement("ElasticBeam3d",xc.ID([n3.tag,n4.tag]))
+beam3d= elements.newElement("ElasticBeam3d",xc.ID([n4.tag,n1.tag]))
+beam3d= elements.newElement("ElasticBeam3d",xc.ID([n1.tag,n3.tag]))
+beam3d= elements.newElement("ElasticBeam3d",xc.ID([n2.tag,n4.tag]))
 
-beam3d= elements.newElement("ElasticBeam3d",xc.ID([5,6]))
-beam3d= elements.newElement("ElasticBeam3d",xc.ID([6,7]))
-beam3d= elements.newElement("ElasticBeam3d",xc.ID([7,8]))
-beam3d= elements.newElement("ElasticBeam3d",xc.ID([8,5]))
-beam3d= elements.newElement("ElasticBeam3d",xc.ID([5,7]))
-beam3d= elements.newElement("ElasticBeam3d",xc.ID([6,8]))
+beam3d= elements.newElement("ElasticBeam3d",xc.ID([n5.tag,n6.tag]))
+beam3d= elements.newElement("ElasticBeam3d",xc.ID([n6.tag,n7.tag]))
+beam3d= elements.newElement("ElasticBeam3d",xc.ID([n7.tag,n8.tag]))
+beam3d= elements.newElement("ElasticBeam3d",xc.ID([n8.tag,n5.tag]))
+beam3d= elements.newElement("ElasticBeam3d",xc.ID([n5.tag,n7.tag]))
+beam3d= elements.newElement("ElasticBeam3d",xc.ID([n6.tag,n8.tag]))
 
 # Trial set definition
 trialSet1= preprocessor.getSets.defSet("trialSet1")

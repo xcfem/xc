@@ -30,8 +30,6 @@
 #ifndef TRFGEOM_H
 #define TRFGEOM_H
 
-#include "preprocessor/EntMdlrBase.h"
-
 class Vector3d;
 class Pos3d;
 class Pos3dArray;
@@ -47,12 +45,12 @@ namespace XC {
 //!  @ingroup MultiBlockTopologyTrf
 //! 
 //!  Geometric transformation that can be applied to the components of a set.
-class TrfGeom: public EntMdlrBase
+class TrfGeom
   {
   public:
     //! @brief Constructor.
-    TrfGeom(Preprocessor *m)
-      : EntMdlrBase("",m) {}
+    TrfGeom(void)
+      {}
     inline virtual ~TrfGeom(void)
       {}
     //! @brief Applies the transformation to the point.

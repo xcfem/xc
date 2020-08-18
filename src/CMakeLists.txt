@@ -322,7 +322,7 @@ SET(siseq_no solution/system_of_eqn/linearSOE/bandSPD/BandSPDLinThreadSolver sol
 
 SET(unittest unittest/unittest)
 
-SET(preprocessor_mbt_trf preprocessor/multi_block_topology/trf/TrfGeom preprocessor/multi_block_topology/trf/MapTrfGeom preprocessor/multi_block_topology/trf/Rotation preprocessor/multi_block_topology/trf/Scaling preprocessor/multi_block_topology/trf/Reflection preprocessor/multi_block_topology/trf/Translation)
+SET(preprocessor_mbt_trf preprocessor/multi_block_topology/trf/TrfGeom preprocessor/multi_block_topology/trf/Rotation preprocessor/multi_block_topology/trf/Scaling preprocessor/multi_block_topology/trf/Reflection preprocessor/multi_block_topology/trf/Translation)
 
 SET(preprocessor_mbt_0d_entities preprocessor/multi_block_topology/entities/0d/Pnt)
 

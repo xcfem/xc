@@ -155,15 +155,6 @@ void XC::Set::Transform(const TrfGeom &trf)
     SetMeshComp::Transform(trf);
   }
 
-//! @brief Applies the transformation which the index 
-//! being passed as parameter to the set.
-void XC::Set::Transform(const size_t &indice_trf)
-  {
-    TrfGeom *trf= getPreprocessor()->getMultiBlockTopology().getGeometricTransformations().busca(indice_trf);
-    if(trf)
-      Transform(*trf);
-  }
-
 //! @brief Tries to allocate a copy this set.
 XC::Set *XC::Set::alloc_set(void)
   {

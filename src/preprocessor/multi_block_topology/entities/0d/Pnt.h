@@ -110,12 +110,9 @@ class Pnt: public EntMdlr
     
     void Move(const Vector3d &);
     void Transform(const TrfGeom &trf);
-    void Transform(const size_t &indice_trf);
 
     std::set<SetBase *> get_sets(void) const;
     void add_to_sets(std::set<SetBase *> &);
-
-
   };
 
 Vector &operator-(const Pnt &b,const Pnt &a);

@@ -112,7 +112,6 @@ class BoltFastener(BoltBase):
                 return self.diameter+3e-3
             else:
                 return self.fStandardHoleDia(self.diameter)
-            
 
     def getNominalTensileStrength(self):
         ''' Return the nominal strength of the fastener according
@@ -174,6 +173,9 @@ class BoltFastener(BoltBase):
                                 shank are excluded from the shear plane.
         '''
         return 0.75*self.getNominalShearStrength(threadsExcluded)
+
+    def __str__(self):
+        return 'M'+str(self.diameter*1e3)[0:2]
 
 M16= BoltFastener(16e-3)
 M20= BoltFastener(20e-3)
@@ -250,13 +252,25 @@ class BoltArray(object):
             retval*=2.0
         return retval
 
-    def getDesignShearEfficiency(self, P, doubleShear= False):
+    def getDesignShearEfficiency(self, Pd, doubleShear= False):
         ''' Return the shear efficiency of the bolt group.
 
         :param Pd: design value of the force to resist.
         :param doubleShear: true if double shear action.
         '''
-        return P/self.getDesignShearStrength(doubleShear)
+        return Pd/self.getDesignShearStrength(doubleShear)
+
+    def getStrengthEfficiency(self, Pd, doubleShear= False):
+        ''' Return the value of efficiency with respect to
+            the strength.
+
+        :param Pd: design value of the force to resist.
+        :param doubleShear: true if double shear action.
+        '''
+        return self.getDesignShearEfficiency(Pd, doubleShear)
+
+    def __str__(self):
+        return ' number of rows: '+str(self.nRows)+' number of columns: '+str(self.nCols)+' distance between centers: '+str(self.dist)+ ' bolts: '+str(self.bolt) 
 
 class BoltedPlate(object):
     ''' Bolted plate.
@@ -314,7 +328,40 @@ class BoltedPlate(object):
         :param Pd: design value of the force to resist.
         '''
         return self.getMinThickness(Pd)/self.thickness
+    
+    def getStrengthEfficiency(self, Pd, doubleShear= False):
+        ''' Return the value of efficiency with respect
+            to the strength of the bolted plate.
 
+        :param Pd: design value of the force to resist.
+        :param doubleShear: true if double shear action.
+        '''
+        retval= self.boltArray.getStrengthEfficiency(Pd, doubleShear)
+        retval= max(retval, self.checkThickness(Pd))
+        return retval
+
+    def getEfficiency(self, internalForces, doubleShear= False):
+        '''Return efficiency according to section 
+
+        :param internalForces: internal forces.
+        '''
+        CF= 0.0
+        if(internalForces.N<0): # compression
+            CF= self.getStrengthEfficiency(-internalForces.N, doubleShear)
+        else:
+            CF= self.getStrengthEfficiency(internalForces.N, doubleShear)
+        if(abs(internalForces.My)>1e-3):
+            lmsg.error('bending not implemented yet.')
+        if(abs(internalForces.Mz)>1e-3):
+            lmsg.error('bending not implemented yet.')
+        if(abs(internalForces.Vy)>1e-3):
+            lmsg.error('shear not implemented yet.')
+        if(abs(internalForces.Vz)>1e-3):
+            lmsg.error('shear not implemented yet.')
+        return CF
+
+    def __str__(self):
+        return 'width: '+ str(self.width) + ' length: '+ str(self.length) + ' thickness: '+ str(self.thickness) + ' bolts: ' + str(self.boltArray)
 
 class AnchorBolt(BoltBase):
     """ASTM anchor bolt according to table 2.2 from the document

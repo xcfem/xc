@@ -22,9 +22,8 @@ pt1= points.newPntIDPos3d(1, geom.Pos3d(1.0, 0.0, 0.0) )
 pt2= points.newPntIDPos3d(2, geom.Pos3d(0.0, 1.0, 0.0) )
 pt3= points.newPntIDPos3d(3, geom.Pos3d(0.0, 0.0, 1.0) )
 plane= geom.Plane3d(pt1.getPos,pt2.getPos,pt3.getPos)
-trfs= preprocessor.getMultiBlockTopology.getGeometricTransformations
-reflex1= trfs.newTransformation("reflection")
-reflex1.setPlane(plane)
+
+reflex1= xc.Reflection(geom.Reflection3d(plane))
 
 pt4= points.newPntIDPos3d(3, reflex1.getTrfPos(geom.Pos3d(2/3.0, 2/3.0, 2/3.0)))
 

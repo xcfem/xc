@@ -236,15 +236,6 @@ void XC::SetMeshComp::move(const Vector3d &desplaz)
 void XC::SetMeshComp::Transform(const TrfGeom &trf)
   { nodes.transforma(trf); }
 
-//! @brief Applies to the set the transformation with
-//! the identifier being passed as parameter.
-void XC::SetMeshComp::Transform(const size_t &indice_trf)
-  {
-    TrfGeom *trf= getPreprocessor()->getMultiBlockTopology().getGeometricTransformations().busca(indice_trf);
-    if(trf)
-      Transform(*trf);
-  }
-
 //! @brief Applies the single freedom constraint being passed as parameter to the nodes.
 void XC::SetMeshComp::fix(const SFreedom_Constraint &spc)
   {

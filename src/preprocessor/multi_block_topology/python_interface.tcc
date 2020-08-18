@@ -48,7 +48,6 @@ class_<XC::ReferenceFrameMap, bases<MapMultiBlockTopologyReferenceFrame>, boost:
 
 
 XC::ReferenceFrameMap &(XC::MultiBlockTopology::*getReferenceSystems)(void)= &XC::MultiBlockTopology::getReferenceSystems;
-XC::MapTrfGeom &(XC::MultiBlockTopology::*getGeometricTransformations)(void)= &XC::MultiBlockTopology::getGeometricTransformations;
 XC::PntMap &(XC::MultiBlockTopology::*getPntMapRef)(void)= &XC::MultiBlockTopology::getPoints;
 XC::LineMap &(XC::MultiBlockTopology::*getLineMapRef)(void)= &XC::MultiBlockTopology::getLines;
 XC::SurfaceMap &(XC::MultiBlockTopology::*getSurfaceMapRef)(void)= &XC::MultiBlockTopology::getSurfaces;
@@ -59,7 +58,6 @@ XC::UniformGridMap &(XC::MultiBlockTopology::*getUniformGridsRef)(void)= &XC::Mu
 XC::Edge *(XC::MultiBlockTopology::*getLineWithEndPoints)(const XC::PntMap::Indice &,const XC::PntMap::Indice &) = &XC::MultiBlockTopology::find_edge_by_endpoints;
 class_<XC::MultiBlockTopology, bases<XC::PreprocessorContainer>, boost::noncopyable >("MultiBlockTopology", no_init)
   .add_property("getReferenceSystems", make_function( getReferenceSystems, return_internal_reference<>() ))
-  .add_property("getGeometricTransformations", make_function( getGeometricTransformations, return_internal_reference<>() ))
   .add_property("getPoints", make_function( getPntMapRef, return_internal_reference<>() ), "Return the point container.")
   .add_property("getLines", make_function( getLineMapRef, return_internal_reference<>() ), "Return the lines container.")
   .add_property("getSurfaces", make_function( getSurfaceMapRef, return_internal_reference<>() ),"Return the surfaces container.")

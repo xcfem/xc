@@ -43,8 +43,8 @@ class Scaling: public TrfGeom
     Scaling3d ee; //!< Scale transformation.
   public:
     //! @brief Constructor.
-    Scaling(Preprocessor *m)
-      : TrfGeom(m), ee(1) {}
+    Scaling(const Scaling3d &s= Scaling3d())
+      : TrfGeom(), ee(s) {}
     void setScaleFactor(const double &fe)
       { ee= Scaling3d(fe); }
     virtual Pos3d Transform(const Pos3d &p) const;

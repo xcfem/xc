@@ -1138,7 +1138,7 @@ boost::python::list XC::Element::getMaterialNamesPy(void) const
     boost::python::list retval;
     std::set<std::string> tmp= getMaterialNames();
     for(std::set<std::string>::const_iterator i= tmp.begin();i!=tmp.end();i++)
-        retval.append(*i);
+      retval.append(*i);
     return retval;
   }
 

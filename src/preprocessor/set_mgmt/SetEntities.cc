@@ -286,14 +286,6 @@ void XC::SetEntities::Transform(const TrfGeom &trf)
       (*i)->Transform(trf);
   }
 
-//! @brief Aplica to the set the transformation with the index being passed as parameter.
-void XC::SetEntities::Transform(const size_t &indice_trf)
-  {
-    TrfGeom *trf= getPreprocessor()->getMultiBlockTopology().getGeometricTransformations().busca(indice_trf);
-    if(trf)
-      Transform(*trf);
-  }
-
 //! @brief Creates a copy of the entities of the set and put them in another
 //! set with the name is being passed as parameter. The coordinates of the new
 //! points will be obtained by adding to the original coordinates those

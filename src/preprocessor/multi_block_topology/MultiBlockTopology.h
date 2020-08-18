@@ -38,7 +38,6 @@
 #include "preprocessor/multi_block_topology/entities/containers/SurfaceMap.h"
 #include "preprocessor/multi_block_topology/entities/containers/BodyMap.h"
 #include "preprocessor/multi_block_topology/entities/containers/UniformGridMap.h"
-#include "preprocessor/multi_block_topology/trf/MapTrfGeom.h"
 #include "preprocessor/multi_block_topology/ReferenceFrameMap.h"
 #include "preprocessor/multi_block_topology/matrices/Framework2d.h"
 #include "preprocessor/multi_block_topology/matrices/Framework3d.h"
@@ -78,7 +77,6 @@ class MultiBlockTopology: public PreprocessorContainer, public MovableObject
     static void numera_lista(L &l);
     void numera(void);
     ReferenceFrameMap reference_systems; //!< Reference systems container.
-    MapTrfGeom geometric_transformations; //!< Geometric transformations container.
 
     PntMap points; //!< Points container.
     LineMap edges; //!< Edges container.
@@ -121,10 +119,6 @@ class MultiBlockTopology: public PreprocessorContainer, public MovableObject
       { return bodies; }
     inline BodyMap &getBodies(void)
       { return bodies; }
-    inline const MapTrfGeom &getGeometricTransformations(void) const
-      { return geometric_transformations; }
-    inline MapTrfGeom &getGeometricTransformations(void)
-      { return geometric_transformations; }
     inline const ReferenceFrameMap &getReferenceSystems(void) const
       { return reference_systems; }
     inline ReferenceFrameMap &getReferenceSystems(void)
