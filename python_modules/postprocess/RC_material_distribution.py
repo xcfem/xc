@@ -23,8 +23,13 @@ __version__= "3.0"
 __email__= "l.pereztato@ciccp.es" "ana.Ortega@ciccp.es"
 
 class RCMaterialDistribution(object):
-    '''Spatial distribution of reinforced concrete material (RC sections distribution over the elements).
-    It refers to the reinforced concrete sections associated with the element (i.e. for shell elements we typically define two RC sections, one for each main direction; in the case of beam elements the most common way is to define RC sections in the front and back ends of the elements)
+    '''Spatial distribution of reinforced concrete material (RC sections 
+       distribution over the elements).
+    It refers to the reinforced concrete sections associated with the 
+    element (i.e. for shell elements we typically define two RC sections, 
+    one for each main direction; in the case of beam elements the most 
+    common way is to define RC sections in the front and back ends 
+    of the elements)
     '''
     mapSectionsFileName= './mapSectionsReinforcement.pkl'
 
