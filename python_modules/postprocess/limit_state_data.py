@@ -43,12 +43,26 @@ class VerifOutVars(object):
         self.calcMeanCF= calcMeanCF
 
 class LimitStateData(object):
+    ''' Data used when checking limit states.
+
+    :ivar label: limit state check label; Something like "Fatigue" 
+                 or "CrackControl".
+    :ivar outputDataBaseFileName: name (whithout extension) of the 
+                                       file that contains the results to
+                                       display.
+    '''
+    
     envConfig= None
+
     def __init__(self,limitStateLabel,outputDataBaseFileName):
-        '''Limit state data constructor
-        label; limit state check label; Something like "Fatigue" or "CrackControl"
-        outputDataBaseFileName: name (whithout extension) of the file that contains
-        the results to display.
+        '''Limit state data constructor.
+
+
+        :param label: limit state check label; Something like "Fatigue" 
+                      or "CrackControl".
+        :param outputDataBaseFileName: name (whithout extension) of the 
+                                       file that contains the results to
+                                       display.
         '''
         self.label= limitStateLabel
         self.outputDataBaseFileName= outputDataBaseFileName
@@ -183,10 +197,10 @@ class LimitStateData(object):
         retval=None
         if outputCfg.setCalc:
             prep=outputCfg.setCalc.getPreprocessor
-            intForcCombFileName=self.getInternalForcesFileName()
+            intForcCombFileName= self.getInternalForcesFileName()
             self.controller.initControlVars(outputCfg.setCalc)
             self.controller.checkSetFromIntForcFile(intForcCombFileName,outputCfg.setCalc)
-            retval=cv.writeControlVarsFromElements(self.controller.limitStateLabel,prep,self.getOutputDataBaseFileName(),outputCfg)
+            retval= cv.writeControlVarsFromElements(self.controller.limitStateLabel,prep,self.getOutputDataBaseFileName(),outputCfg)
         else:
             lmsg.error("Result file hasn't been created, you must specify a valid set of elements")
         return retval
