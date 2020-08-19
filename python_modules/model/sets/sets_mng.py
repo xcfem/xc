@@ -10,7 +10,10 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "ana.Ortega@ciccp.es"
 
+import xc_base
 import geom
+import xc
+import math
 from misc_utils import log_messages as lmsg
 
 def get_subset_inside(geomObj,fromSet,toSetName,tol=0.0):
@@ -380,33 +383,76 @@ def get_lstNod_on_points_fromSet(setFrom):
     return [p.getNode() for p in pts]
 
 def append_points(setTo,points):
-  '''Appends points to set of entities
+    '''Appends points to set of entities
 
-  :param setTo: set of entities
-  :param points: list of points [pt1,pt2, ...]
-  '''
-  pts= setTo.getPoints
-  for p in points:
-    pts.append(p)
+    :param setTo: set of entities
+    :param points: list of points [pt1,pt2, ...]
+    '''
+    pts= setTo.getPoints
+    for p in points:
+        pts.append(p)
 
 def append_sets(setTo,sets):
-  '''Appends other sets to set of entities
+    '''Appends other sets to set of entities
 
-  :param setTo: base set of entities
-  :param points: list of sets to be appended [set1,set2, ...]
-  '''
-  for s in sets:
-    setTo+=(s)
+    :param setTo: base set of entities
+    :param points: list of sets to be appended [set1,set2, ...]
+    '''
+    for s in sets:
+        setTo+=(s)
 
 def append_nodes_from_line(setTo,line):
-  '''Appends the nodes in the specified line to a set of entities
+    '''Appends the nodes in the specified line to a set of entities
 
-  :param setTo: set of entities
-  :param line: line that contains the nodes 
-  '''
-  nn= line.getNumNodes
-  nodes= setTo.nodes
-  for i in range(1,nn):
-    n= line.getNode(1,1,i)
-    nodes.append(n)
+    :param setTo: set of entities
+    :param line: line that contains the nodes 
+    '''
+    nn= line.getNumNodes
+    nodes= setTo.nodes
+    for i in range(1,nn):
+        n= line.getNode(1,1,i)
+        nodes.append(n)
   
+def rot_X(toSet,angle):
+    '''Apply a rotation around global X axis to
+    all the entities in the set 
+
+    :param toSet: set of entities
+    :param angle: rotation angle (degrees)
+    '''
+    xAxis= geom.Line3d(geom.Pos3d(0.0,0.0,0.0), geom.Pos3d(100.0,0.0,0.0))
+    rot= xc.Rotation(geom.Rotation3d(xAxis,math.radians(angle)))
+    toSet.transforms(rot)
+
+def rot_Y(toSet,angle):
+    '''Apply a rotation around global Y axis to
+    all the entities in the set 
+
+    :param toSet: set of entities
+    :param angle: rotation angle (degrees)
+    '''
+    yAxis= geom.Line3d(geom.Pos3d(0.0,0.0,0.0), geom.Pos3d(0.0,100.0,0.0))
+    rot= xc.Rotation(geom.Rotation3d(yAxis,math.radians(angle)))
+    toSet.transforms(rot)
+
+def rot_Z(toSet,angle):
+    '''Apply a rotation around global Z axis to
+    all the entities in the set 
+
+    :param toSet: set of entities
+    :param angle: rotation angle (degrees)
+    '''
+    zAxis= geom.Line3d(geom.Pos3d(0.0,0.0,0.0), geom.Pos3d(0.0,0.0,100.0))
+    rot= xc.Rotation(geom.Rotation3d(zAxis,math.radians(angle)))
+    toSet.transforms(rot)
+
+def translat(toSet,deltaXYZ):
+    '''Apply a translation (dx,dy,dz) to  
+    all the entities in the set 
+
+    :param toSet: set of entities
+    :param deltaXYZ: displacements in global X-Y-Z axes(dx,dy,dz)
+    '''
+    transl=xc.Translation(geom.Translation3d(geom.Vector3d(deltaXYZ[0],deltaXYZ[1],deltaXYZ[2])))
+    toSet.transforms(transl)
+    
