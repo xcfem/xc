@@ -354,7 +354,19 @@ class WShape(structural_steel.IShape):
         retval.appendVertex(geom.Pos2d(-tw/2.0,-halfH+tf))
         retval.appendVertex(geom.Pos2d(-halfB,-halfH+tf))
         retval.appendVertex(geom.Pos2d(-halfB,-halfH))
-        return retval       
+        return retval
+    
+    def getMidLines(self):
+        ''' Return the section countour.'''
+        halfB= self.get('b')/2.0
+        halfH= self.h()/2.0
+        tf= self.get('tf')
+        s0= geom.Segment2d(geom.Pos2d(-halfB,-halfH+tf/2.0), geom.Pos2d(0.0,-halfH+tf/2.0))
+        s1= geom.Segment2d(geom.Pos2d(0.0,-halfH+tf/2.0), geom.Pos2d(halfB,-halfH+tf/2.0))
+        s2= geom.Segment2d(geom.Pos2d(0.0,-halfH+tf/2.0), geom.Pos2d(0.0,halfH-tf/2.0))
+        s3= geom.Segment2d(geom.Pos2d(-halfB,halfH+tf/2.0), geom.Pos2d(0.0,halfH-tf/2.0))
+        s4= geom.Segment2d(geom.Pos2d(0.0,halfH-tf/2.0), geom.Pos2d(halfB,halfH-tf/2.0))
+        return [s0,s1,s2,s3,s4]
 
     def getLambdaPFlange(self):
         '''Return he limiting slenderness for a compact flange, 
