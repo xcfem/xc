@@ -82,7 +82,6 @@ class_<XC::ElementIter, boost::noncopyable >("ElementIter", no_init)
   .def("next", &XC::ElementIter::operator(), return_internal_reference<>(),"Return next node.")
    ;
 
-
 class_<XC::ElementBase<2>, bases<XC::Element >, boost::noncopyable >("ElementBase2N","Base class for 2 node elements.", no_init);
 
 class_<XC::ElementBase<3>, bases<XC::Element >, boost::noncopyable >("ElementBase3N","Base class for 3 node elements.", no_init);
