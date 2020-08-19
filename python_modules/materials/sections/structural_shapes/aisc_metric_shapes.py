@@ -364,7 +364,7 @@ class WShape(structural_steel.IShape):
         s0= geom.Segment2d(geom.Pos2d(-halfB,-halfH+tf/2.0), geom.Pos2d(0.0,-halfH+tf/2.0))
         s1= geom.Segment2d(geom.Pos2d(0.0,-halfH+tf/2.0), geom.Pos2d(halfB,-halfH+tf/2.0))
         s2= geom.Segment2d(geom.Pos2d(0.0,-halfH+tf/2.0), geom.Pos2d(0.0,halfH-tf/2.0))
-        s3= geom.Segment2d(geom.Pos2d(-halfB,halfH+tf/2.0), geom.Pos2d(0.0,halfH-tf/2.0))
+        s3= geom.Segment2d(geom.Pos2d(-halfB,halfH-tf/2.0), geom.Pos2d(0.0,halfH-tf/2.0))
         s4= geom.Segment2d(geom.Pos2d(0.0,halfH-tf/2.0), geom.Pos2d(halfB,halfH-tf/2.0))
         return [s0,s1,s2,s3,s4]
 

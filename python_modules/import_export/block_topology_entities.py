@@ -12,7 +12,6 @@ import datetime
 from import_export import basic_entities as be
 from import_export import mesh_entities as me
 from misc_utils import log_messages as lmsg
-from dxfwrite import DXFEngine
 
 class PointRecord(me.NodeRecord):
     '''kPoint type entity'''
@@ -61,7 +60,7 @@ class PointDict(me.NodeDict):
                 f.write(strCommand+'\n')
 
 class BlockRecord(me.CellRecord):
-    '''Block type entities: line, face, body,...'''
+    '''Block type entities: line, face, body,...'''    
     def __init__(self,id, typ, kPoints, labels= None,thk= 0.0):
         '''
         Block record constructor.
@@ -70,7 +69,7 @@ class BlockRecord(me.CellRecord):
         :param typ: block type.
         :param kPoints: key points that define block geometry and topology.
         :param labels: string list that helps to identify the role of the block in the model.
-        '''    
+        '''
         super(BlockRecord,self).__init__(id,typ,kPoints,thk)
         if(labels):
             self.labels= labels
@@ -102,7 +101,7 @@ class BlockRecord(me.CellRecord):
         return strCommand
 
 class BlockDict(dict):
-    '''Block container.'''
+    '''Block container.'''    
     def append(self,cell):
         self[cell.id]= cell
         
@@ -131,7 +130,7 @@ class BlockDict(dict):
     def writeDxf(self, name, pointDict,drawing):
         '''Write the cells in dxf file.'''
         layerName= name+'_blocks'
-        drawing.add_layer(layerName)
+        drawing.layers.new(name= layerName)
         for key in self:
             self[key].writeDxf(pointDict,drawing,layerName)
 
@@ -201,12 +200,14 @@ class BlockData(object):
         self.blocks= BlockDict()
         self.pointSupports= PointSupportDict()
 
-
     def appendPoint(self,id,x,y,z,labels= None):
-        self.points[id]= PointRecord(int(id),[x,y,z],labels)
+        pr= PointRecord(id,[x,y,z],labels)
+        self.points[pr.id]= pr 
+        return pr.id
         
     def appendBlock(self,block):
         self.blocks[block.id]= block
+        return block.id
 
     def readFromXCSet(self,xcSet):
         '''Read points and surfaces from an XC set.'''
@@ -246,7 +247,7 @@ class BlockData(object):
            :param drawing: ezdxf drawing object.
         '''
         layerName= 'points'
-        drawing.add_layer(layerName)
+        drawing.layers.new(name= layerName)
         for key in self.points:
             self.points[key].writeDxf(drawing,layerName)
         self.blocks.writeDxf(self.name, self.points,drawing)
