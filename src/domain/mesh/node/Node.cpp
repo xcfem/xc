@@ -2015,14 +2015,25 @@ std::set<XC::Element *> XC::Node::getConnectedElements(void)
     return retval;
   }
 
-//! @brief Return a Python list of pointers to the elements that are connected with this node.
-boost::python::list XC::Node::getConnectedElementsPy(void)
+//! @brief Return a python list to the tags of the elements that
+//! are connected with this node.
+//!
+//! There is no simple solution to return a list of element pointers
+//! instead of the element tags. Apparently the pointers inside the
+//! list are useless to Python. The alternative is to use a container
+//! like XC::NodePtrsWithIDs which holds the pointers inside it during
+//! its lifespan. Here we have the "connected" container but it contains
+//! all the mesh components connected to the node not only the elements.
+boost::python::list XC::Node::getConnectedElementTags(void)
   {
     boost::python::list retval;
     std::set<Element *> elements= getConnectedElements();
     for(std::set<Element *>::iterator i= elements.begin(); i!= elements.end(); i++)
-      retval.append(*i);
-    return retval;     
+      {
+        Element *ptrElem= *i;
+        retval.append(ptrElem->getTag());
+      }
+    return retval;
   }
 
 //! @brief Returns an edge that has its origin in this node (and is not in visited).

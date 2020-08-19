@@ -34,7 +34,27 @@ class PredefinedSpace(object):
         ''' Return the XC finite element problem object.
         '''
         return self.preprocessor.getProblem
-        
+
+    def getElements(self, tags):
+        ''' Return the elements that correspond to the argument
+            tags.'''
+        retval= list()
+        elementHandler= self.preprocessor.getElementHandler
+        for t in tags:
+            e= elementHandler.getElement(t)
+            retval.append(e)
+        return retval
+
+    def getNodes(self, tags):
+        ''' Return the nodes that correspond to the argument
+            tags.'''
+        retval= list()
+        nodeHandler= self.preprocessor.getNodeHandler
+        for t in tags:
+            n= nodeHandler.getNode(t)
+            retval.append(n)
+        return retval    
+    
     def getIntForceComponentFromName(self,componentName):
         if componentName[0] in ['N','M']:
             return componentName.lower()

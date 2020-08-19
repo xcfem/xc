@@ -43,7 +43,7 @@ class TrfGeom;
 
 //!  @ingroup Set
 //! 
-//!  \brief Pointer to element container.
+//!  @brief Pointer to element container.
 //! 
 class DqPtrsElem: public DqPtrsKDTree<Element,KDTreeElements>
   {

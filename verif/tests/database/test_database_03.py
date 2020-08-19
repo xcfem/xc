@@ -49,12 +49,12 @@ lin= modelSpace.newLinearCrdTransf("lin",xc.Vector([0,1,0]))
 scc= typical_materials.defElasticSection3d(preprocessor, "scc",A,E,G,Iz,Iy,J)
 
 
-elements= preprocessor.getElementHandler
-elements.defaultTransformation= lin.name
-elements.defaultMaterial= scc.name
+elementHandler= preprocessor.getElementHandler
+elementHandler.defaultTransformation= lin.name
+elementHandler.defaultMaterial= scc.name
 #  sintaxis: ElasticBeam3d[<tag>] 
-elements.defaultTag= 1 #Tag for next element.
-beam3d= elements.newElement("ElasticBeam3d",xc.ID([1,2]))
+elementHandler.defaultTag= 1 #Tag for next element.
+beam3d= elementHandler.newElement("ElasticBeam3d",xc.ID([1,2]))
 
 
 modelSpace.fixNode000_000(1)
@@ -103,7 +103,7 @@ nodes= preprocessor.getNodeHandler
 nod2= nodes.getNode(2)
 delta= nod2.getDisp[0]  # Desplazamiento x displacement of node 2
 
-elem1= elements.getElement(1)
+elem1= elementHandler.getElement(1)
 elem1.getResistingForce()
 N1= elem1.getN1
 
