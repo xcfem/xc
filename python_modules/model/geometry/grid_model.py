@@ -23,6 +23,7 @@ import xc_base
 import geom
 import xc
 import math
+from misc_utils import data_struct_utils as dsu
 
 class IJKRange(object):
     '''Range of indexes (i,j,k) in the 3D-grid that defines a region 
@@ -216,25 +217,33 @@ class GridModel(object):
     def lastZIndex(self):
         return len(self.gridCoo[2])-1
 
+    
     def getIJKfromXYZ(self,xyz):
-        '''Return (i,j,k) indexes that match with (x,y,z) coordinates
+        '''Return (i,j,k) indexes that match the closest with (x,y,z) coordinates
         '''
-        ijk=(self.gridCoo[0].index(xyz[0]),self.gridCoo[1].index(xyz[1]),self.gridCoo[2].index(xyz[2]))
+        ijk=(dsu. get_index_closest_inlist(self.gridCoo[0],xyz[0]),
+             dsu. get_index_closest_inlist(self.gridCoo[1],xyz[1]),
+             dsu. get_index_closest_inlist(self.gridCoo[2],xyz[2]))
         return ijk
 
     def getPntXYZ(self,xyz):
-        '''Return the point of the grid with coordinates (x,y,z)'''
+        '''Return the point of the grid closest to coordinates (x,y,z)'''
         ijk=self.getIJKfromXYZ(xyz)
         pnt=self.getPntGrid(ijk)
         return pnt
     
     def getIJKrangeFromXYZrange(self,xyzRange):
-        '''Return an ijkRange that matches with coordinates in xyzRange defined as:
+        '''Return an ijkRange that matches with closest coordinates in 
+        xyzRange defined as:
         xyzRange=((xmin,ymin,zmin),(xmax,ymax,zmax))
-        Coordinates must be previously defined in the grid. 
         '''
-        ijkRange=IJKRange((self.gridCoo[0].index(xyzRange[0][0]),self.gridCoo[1].index(xyzRange[0][1]),self.gridCoo[2].index(xyzRange[0][2])),
-                          (self.gridCoo[0].index(xyzRange[1][0]),self.gridCoo[1].index(xyzRange[1][1]),self.gridCoo[2].index(xyzRange[1][2])))
+        ijkRange=IJKRange(
+            (dsu. get_index_closest_inlist(self.gridCoo[0],xyzRange[0][0]),
+             dsu. get_index_closest_inlist(self.gridCoo[1],xyzRange[0][1]),
+             dsu. get_index_closest_inlist(self.gridCoo[2],xyzRange[0][2])),
+            (dsu. get_index_closest_inlist(self.gridCoo[0],xyzRange[1][0]),
+             dsu. get_index_closest_inlist(self.gridCoo[1],xyzRange[1][1]),
+             dsu. get_index_closest_inlist(self.gridCoo[2],xyzRange[1][2])))
         return ijkRange
     
     def getPntGrid(self,indPnt):
@@ -1194,3 +1203,4 @@ def getSetIntersLin(set1,set2,setNameInter):
     for s in linSet2:
         if s in linSet1: linSetInters.append(s)
     return setInters
+

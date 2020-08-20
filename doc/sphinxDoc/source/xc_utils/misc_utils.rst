@@ -26,10 +26,10 @@ Staircase function
     :undoc-members:
     :show-inheritance:
 
-String utils
+Data structures utils
 -------------------------------
 
-.. automodule:: misc_utils.string_utils
+.. automodule:: misc_utils.data_struct_utils
     :members:
     :undoc-members:
     :show-inheritance:

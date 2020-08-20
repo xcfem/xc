@@ -11,7 +11,7 @@ __email__= " ana.Ortega@ciccp.es "
 import xc_base
 import geom
 import xc
-from misc_utils import string_utils as su
+from misc_utils import data_struct_utils as su
 from postprocess import output_handler
 from postprocess.xcVtk.FE_model import vtk_FE_graphic
 from postprocess.xcVtk.fields import fields

@@ -11,7 +11,7 @@ __email__= "l.pereztato@ciccp.es, ana.ortega@ciccp.es "
 
 import os
 from misc_utils import log_messages as lmsg
-from misc_utils import string_utils as su
+from misc_utils import data_struct_utils as su
 from postprocess.xcVtk import vtk_graphic_base
 from postprocess.xcVtk.FE_model import vtk_FE_graphic
 from postprocess.xcVtk.fields import fields
