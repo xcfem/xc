@@ -4,7 +4,7 @@ import datetime
 import textwrap
 import vtk
 from misc_utils import log_messages as lmsg
-from misc_utils import string_utils as su
+from misc_utils import data_struct_utils as su
 import xc_base
 import geom
 import xc

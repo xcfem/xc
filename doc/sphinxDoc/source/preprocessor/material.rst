@@ -40,7 +40,7 @@ Steel
 .. toctree::
    :maxdepth: 1
 
-   python_modules/materials.astm
+   python_modules/materials.astm_aisc
    python_modules/materials.ec3
    python_modules/materials.eae
    python_modules/materials.eota
