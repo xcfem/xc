@@ -28,6 +28,7 @@ from materials.sections import structural_steel
 from misc_utils import log_messages as lmsg
 import xc_base
 import geom
+from import_export import block_topology_entities as bte
 
 # Shear areas.
 
@@ -335,7 +336,7 @@ class WShape(structural_steel.IShape):
         return self.get('d')
 
     def getContour(self):
-        ''' Return the section countour.'''
+        ''' Return the section contour.'''
         retval= geom.Polygon2d()
         halfB= self.get('b')/2.0
         halfH= self.h()/2.0
@@ -357,7 +358,7 @@ class WShape(structural_steel.IShape):
         return retval
     
     def getMidLines(self):
-        ''' Return the section countour.'''
+        ''' Return the section mid-lines.'''
         halfB= self.get('b')/2.0
         halfH= self.h()/2.0
         tf= self.get('tf')
@@ -367,6 +368,96 @@ class WShape(structural_steel.IShape):
         s3= geom.Segment2d(geom.Pos2d(-halfB,halfH-tf/2.0), geom.Pos2d(0.0,halfH-tf/2.0))
         s4= geom.Segment2d(geom.Pos2d(0.0,halfH-tf/2.0), geom.Pos2d(halfB,halfH-tf/2.0))
         return [s0,s1,s2,s3,s4]
+
+    def getWebMidPlane(self, org, extrusionVDir):
+        ''' Return the mid plane of the web.
+
+        :param org: origin point.
+        :param extrusionVDir: extrusion direction vector.
+        '''
+        halfH= self.h()/2.0
+        p0= geom.Pos3d(org.x,org.y-halfH, org.z)
+        p1= geom.Pos3d(org.x,org.y+halfH, org.z)
+        p2= p0+extrusionVDir
+        return geom.Plane3d(p0,p1,p2)
+
+    def getBottomFlangeMidPlane(self, org, extrusionVDir):
+        ''' Return the mid plane of the bottom flange.
+
+        :param org: origin point.
+        :param extrusionVDir: extrusion direction vector.
+        '''
+        halfB= self.get('b')/2.0
+        halfH= self.h()/2.0
+        tf= self.get('tf')
+        p0= geom.Pos3d(org.x-halfB,org.y-halfH+tf/2.0, org.z)
+        p1= geom.Pos3d(org.x+halfB,org.y-halfH+tf/2.0, org.z)
+        p2= p0+extrusionVDir
+        return geom.Plane3d(p0,p1,p2)
+
+    def getTopFlangeMidPlane(self, org, extrusionVDir):
+        ''' Return the mid plane of the bottom flange.
+
+        :param org: origin point.
+        :param extrusionVDir: extrusion direction vector.
+        '''
+        halfB= self.get('b')/2.0
+        halfH= self.h()/2.0
+        tf= self.get('tf')
+        p0= geom.Pos3d(org.x-halfB,org.y+halfH+tf/2.0, org.z)
+        p1= geom.Pos3d(org.x+halfB,org.y+halfH+tf/2.0, org.z)
+        p2= p0+extrusionVDir
+        return geom.Plane3d(p0,p1,p2)
+            
+    def getBlockData(self, org, extrusionVDir, labels):
+        ''' Return the kpoints and faces.
+
+        :param org: origin point.
+        :param extrusionVDir: extrusion direction vector.
+        :param labels: labels for the created blocks.
+        '''
+        halfB= self.get('b')/2.0
+        halfH= self.h()/2.0
+        tf= self.get('tf')
+        retval= bte.BlockData()
+        # Base points (A)
+        bottomFlangeA= [geom.Pos3d(org.x-halfB,org.y-halfH+tf/2.0, org.z), geom.Pos3d(org.x,org.y-halfH+tf/2.0, org.z), geom.Pos3d(org.x+halfB,org.y-halfH+tf/2.0, org.z)]
+        topFlangeA= [geom.Pos3d(org.x-halfB,org.y+halfH+tf/2.0, org.z), geom.Pos3d(org.x,org.y+halfH+tf/2.0, org.z), geom.Pos3d(org.x+halfB,org.y+halfH+tf/2.0, org.z)]
+        bottomFlangeAId= list()
+        for p in bottomFlangeA:
+            bottomFlangeAId.append(retval.appendPoint(-1,p.x,p.y,p.z,labels))
+        topFlangeAId= list()
+        for p in topFlangeA:
+            topFlangeAId.append(retval.appendPoint(-1,p.x,p.y,p.z,labels))
+        # Extruded points (B)
+        bottomFlangeB= list()
+        for p in bottomFlangeA:
+            bottomFlangeB.append(p+extrusionVDir)
+        topFlangeB= list()
+        for p in topFlangeA:
+            topFlangeB.append(p+extrusionVDir)
+        bottomFlangeBId= list()
+        for p in bottomFlangeB:
+            bottomFlangeBId.append(retval.appendPoint(-1,p.x,p.y,p.z,labels))
+        topFlangeBId= list()
+        for p in topFlangeB:
+            topFlangeBId.append(retval.appendPoint(-1,p.x,p.y,p.z,labels))
+        # Faces
+        bottomFlange1= bte.BlockRecord(-1, 'face', [bottomFlangeAId[0],bottomFlangeAId[1],bottomFlangeBId[1],bottomFlangeBId[0]],labels)
+        retval.appendBlock(bottomFlange1)
+        bottomFlange2= bte.BlockRecord(-1, 'face', [bottomFlangeAId[1],bottomFlangeAId[2],bottomFlangeBId[2],bottomFlangeBId[1]],labels)
+        retval.appendBlock(bottomFlange2)
+        topFlange1= bte.BlockRecord(-1, 'face', [topFlangeAId[0],topFlangeAId[1],topFlangeBId[1],topFlangeBId[0]],labels)
+        retval.appendBlock(topFlange1)
+        topFlange2= bte.BlockRecord(-1, 'face', [topFlangeAId[1],topFlangeAId[2],topFlangeBId[2],topFlangeBId[1]],labels)
+        retval.appendBlock(topFlange2)
+        web= bte.BlockRecord(-1, 'face', [bottomFlangeAId[1],topFlangeAId[1],topFlangeBId[1],bottomFlangeBId[1]],labels)
+        retval.appendBlock(web)
+
+        return retval
+        
+
+        
 
     def getLambdaPFlange(self):
         '''Return he limiting slenderness for a compact flange, 

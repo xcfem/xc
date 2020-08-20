@@ -51,6 +51,18 @@ class BasicElasticMaterial(object):
         retval.rho= self.rho
         return retval
 
+    def getDict(self):
+        ''' Returns a dictionary whith the values of the internal forces.
+            Makes easier export it to json.'''
+        return {'E':self.E,'nu':self.nu,'rho':self.rho}
+    
+    def setFromDict(self,dct):
+        '''Sets the internal forces from the dictionary argument.'''
+        self.E= dct['E']
+        self.nu= dct['nu']
+        self.rho= dct['rho']
+        
+
 def defElasticMaterial(preprocessor,name, E, rho= 0.0, nu= 0.3):
     '''Constructs an elastic uniaxial material.
 

@@ -39,7 +39,9 @@ class PointRecord(me.NodeRecord):
 class PointDict(me.NodeDict):
     ''' Node container.'''
     def append(self,id,x,y,z):
-        self[id]= PointRecord(int(id),[x,y,z])
+        pr= PointRecord(int(id),[x,y,z])
+        self[pr.id]= pr
+        return pr.id
         
     def getName(self):
         return 'points'
@@ -171,6 +173,7 @@ class PointSupportDict(dict):
         if (ps.nodeId in self):
             lmsg.warning('support for node: '+ps.nodeId+' redefined.')
         self[ps.nodeId]= ps
+        return ps.nodeId
 
     def readFromXCSet(self,xcSet,points):
         '''Read supports from an XC set.'''
@@ -201,13 +204,49 @@ class BlockData(object):
         self.pointSupports= PointSupportDict()
 
     def appendPoint(self,id,x,y,z,labels= None):
+        ''' Append a point to the block data.
+
+        :param id: point identifier (-1 == auto).
+        :param x: x coordinate of the point.
+        :param y: y coordinate of the point.
+        :param z: z coordinate of the point.
+        :param labels: labels for the point.
+        '''
         pr= PointRecord(id,[x,y,z],labels)
         self.points[pr.id]= pr 
         return pr.id
         
     def appendBlock(self,block):
+        ''' Append a block (line, surface, volume) to the 
+            block data.
+
+        :param block: block to append.
+        '''
         self.blocks[block.id]= block
         return block.id
+
+    def blockFromPoints(self, points, labels):
+        ''' Create a block with the points and append it
+            to the container.
+
+        :param points: points to build the new block.
+        :param labels: labels to assing to the new block.
+        '''
+        pointIds= list()
+        for p in points:
+            pointIds.append(self.appendPoint(-1, p.x, p.y, p.z, labels))
+        block= BlockRecord(-1, 'face', pointIds,labels)
+        self.appendBlock(block)
+    
+    def extend(self, other):
+        ''' Append a the data from the argument to this container.
+
+        :param other: container to append here.
+        '''
+        self.materials.update(other.materials)
+        self.points.update(other.points)
+        self.blocks.update(other.blocks)
+        self.pointSupports.update(other.pointSupports)
 
     def readFromXCSet(self,xcSet):
         '''Read points and surfaces from an XC set.'''

@@ -21,6 +21,7 @@ from materials import steel_base
 from misc_utils import log_messages as lmsg
 from materials import buckling_base
 from materials.astm_aisc import AISC_limit_state_checking as aisc
+from import_export import block_topology_entities as bte
 
 class ASTMSteel(steel_base.BasicSteel):
     '''ASTM structural steel.
@@ -41,7 +42,10 @@ A500= ASTMSteel(315e6,400e6,1.0)
 A307= ASTMSteel(245e6,390e6,1.0)
 
 class BoltBase(object):
-    ''' Base class for bolts.'''
+    ''' Base class for bolts.
+
+    :ivar diameter: bolt diameter
+    '''
     def __init__(self, diameter):
        ''' Constructor.
 
@@ -52,9 +56,22 @@ class BoltBase(object):
         ''' Return the area of the anchor rod.
         '''
         return math.pi*(self.diameter/2.0)**2
+    
+    def getDict(self):
+        ''' Returns a dictionary whith the values of the internal forces.
+            Makes easier export it to json.'''
+        return {'diameter':self.diameter}
+
+    def setFromDict(self,dct):
+        '''Sets the internal forces from the dictionary argument.'''
+        self.diameter= dct['diameter']
 
 class BoltFastener(BoltBase):
-    ''' ASTM bolt according to chapter J of AISC 360-16.'''
+    ''' ASTM bolt according to chapter J of AISC 360-16.
+
+    :ivar group: bolt material strength group according to section
+                 J3.1 of AISC 360-16.
+    '''
     # See table J3.4 M of AISC 360-16.
     bf_diams= [16e-3, 20e-3, 22e-3, 24e-3, 27e-3, 30e-3, 36e-3]
     tabJ3_4M= [22e-3, 26e-3, 28e-3, 30e-3, 34e-3, 38e-3, 46e-3]
@@ -74,6 +91,9 @@ class BoltFastener(BoltBase):
        super(BoltFastener,self).__init__(diameter)
        self.group= group
 
+    def getName(self):
+        return 'M'+str(self.diameter*1e3)[0:2]
+    
     def getMinDistanceBetweenCenters(self):
         ''' Return the minimum distance between centers of standard, 
             oversized or slotted holes according to section J3.3 of
@@ -175,7 +195,19 @@ class BoltFastener(BoltBase):
         return 0.75*self.getNominalShearStrength(threadsExcluded)
 
     def __str__(self):
-        return 'M'+str(self.diameter*1e3)[0:2]
+        return self.getName()
+    
+    def getDict(self):
+        ''' Returns a dictionary whith the values of the internal forces.
+            Makes easier export it to json.'''
+        retval= super(BoltFastener,self).getDict()
+        retval.update({'group':self.group})
+        return retval
+
+    def setFromDict(self,dct):
+        '''Sets the internal forces from the dictionary argument.'''
+        super(BoltFastener,self).setFromDict(dct)
+        self.group= dct['group']
 
 M16= BoltFastener(16e-3)
 M20= BoltFastener(20e-3)
@@ -195,7 +227,7 @@ class BoltArray(object):
     :ivar dist: distance between rows and columns
                  (defaults to three diameters).
     '''
-    def __init__(self, bolt, nRows, nCols, dist= None):
+    def __init__(self, bolt= M16, nRows= 1, nCols= 1, dist= None):
         ''' Constructor.
 
         :param bolt: bolt type.
@@ -271,6 +303,62 @@ class BoltArray(object):
 
     def __str__(self):
         return ' number of rows: '+str(self.nRows)+' number of columns: '+str(self.nCols)+' distance between centers: '+str(self.dist)+ ' bolts: '+str(self.bolt) 
+    def getDict(self):
+        ''' Returns a dictionary whith the values of the internal forces.
+            Makes easier export it to json.'''
+        return {'bolt':self.bolt.getDict(), 'nRows':self.nRows, 'nCols':self.nCols, 'dist':self.dist}    
+
+    def setFromDict(self,dct):
+        '''Sets the internal forces from the dictionary argument.'''
+        self.bolt.setFromDict(dct['bolt'])
+        self.nRows= dct['nRows']
+        self.nCols= dct['nCols']
+        self.dist= dct['dist']
+
+    def getLocalPositions(self):
+        ''' Return the local coordinates of the bolts.'''
+        retval= list()
+        x0= self.dist*(self.nCols-1)/2.0
+        y0= self.dist*(self.nRows-1)/2.0
+        center= geom.Pos2d(x0,y0)
+        for i in range(0,self.nRows):
+            for j in range(0,self.nCols):
+                x= i*self.dist-center.x
+                y= j*self.dist-center.y
+                retval.append(geom.Pos2d(x, y))
+        return retval
+        
+    def getHoleBlocks(self, refSys= geom.Ref3d3d(), labels= []):
+        ''' Return octagons inscribed in the holes.'''
+        localPos= self.getLocalPositions()
+        holes= list()
+        for pLocal in localPos:
+            circle= geom.Circle2d(pLocal,self.bolt.diameter/2.0)
+            octagon= circle.getInscribedPolygon(8,0.0).getVertexList();
+            octagon.append(octagon[0]) # close polygon
+            holes.append(octagon)
+        retval= bte.BlockData()
+        # Base points (A)
+        for h in holes:
+            holeVertices= list()
+            for v in h:
+                p3d= geom.Pos3d(v.x,v.y,0.0)
+                holeVertices.append(refSys.getPosGlobal(p3d))
+            retval.blockFromPoints(holeVertices,labels)
+        return retval
+                
+    
+    def getPositions(self, refSys= geom.Ref3d3d()):
+        ''' Return the global coordinates of the bolts.
+
+        :param refSys: reference system.
+        '''
+        localPos= self.getLocalPositions()
+        retval= list()
+        for pLocal in localPos:
+            p3d= geom.Pos3d(pLocal.x,pLocal.y, 0.0)
+            retval.append(refSys.getPosGlobal(p3d))
+        return retval
 
 class BoltedPlate(object):
     ''' Bolted plate.
@@ -281,7 +369,7 @@ class BoltedPlate(object):
     :ivar thickness: plate thickness.
     :ivar steelType: steel type.
     '''
-    def __init__(self, boltArray, thickness, steelType= A36):
+    def __init__(self, boltArray= BoltArray(), thickness= 10e-3, steelType= A36):
         ''' Constructor.
 
         :param boltArray: bolt array.
@@ -362,6 +450,19 @@ class BoltedPlate(object):
 
     def __str__(self):
         return 'width: '+ str(self.width) + ' length: '+ str(self.length) + ' thickness: '+ str(self.thickness) + ' bolts: ' + str(self.boltArray)
+    
+    def getDict(self):
+        ''' Returns a dictionary whith the values of the internal forces.
+            Makes easier export it to json.'''
+        return {'boltArray':self.boltArray.getDict(), 'width':self.width, 'length':self.length, 'thickness':self.thickness, 'steelType':self.steelType.getDict()}
+
+    def setFromDict(self,dct):
+        '''Sets the internal forces from the dictionary argument.'''
+        self.boltArray.setFromDict(dct['boltArray'])
+        self.width= dct['width']
+        self.length= dct['length']
+        self.thickness= dct['thickness']
+        self.steelType.setFromDict(dct['steelType'])
 
 class AnchorBolt(BoltBase):
     """ASTM anchor bolt according to table 2.2 from the document
