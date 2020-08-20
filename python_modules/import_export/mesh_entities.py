@@ -1,9 +1,8 @@
 # -*- coding: utf-8 -*-
 from collections import defaultdict
-
+from itertools import count
 from import_export import basic_entities as be
 from misc_utils import log_messages as lmsg
-from dxfwrite import DXFEngine
 
 class MaterialRecord(object):
   def __init__(self,name,typo,thermalExp,rho,E,nu,G,logDec,specHeat,thermalCond):
@@ -23,30 +22,35 @@ class MaterialDict(dict):
     self[mat.name]= mat
 
 class NodeRecord(object):
-  '''Node of a finite element mesh'''
-  def __init__(self,id, coords):
-    '''
-    Node constructor.
+    '''Node of a finite element mesh'''
+    _ids= count(0) # counter
+    def __init__(self,id, coords):
+        '''
+        Node constructor.
 
-    :param id: identifier for the node.
-    :param coords: coordinates of the node.
-    '''    
-    self.id= id
-    self.coords= [coords[0],coords[1],coords[2]]
-  def __str__(self):
-    return str(self.id)+' '+str(self.coords)
-  def getX(self):
-     return self.coords[0]
-  def getY(self):
-     return self.coords[1]
-  def getZ(self):
-     return self.coords[2]
-  def getStrXCCommand(self,nodeHandlerName):
-    strId= str(self.id)
-    strCommand= '.newNodeIDXYZ(' + strId + ',' + self.coords[0] + ',' + self.coords[1] +','+ self.coords[2]+')'
-    return 'n' + strId + '= ' + nodeHandlerName + strCommand
-  def writeDxf(self,drawing,layerName):
-    drawing.add(DXFEngine.point((self.coords[0], self.coords[1], self.coords[2]), color=0, layer=layerName))
+        :param id: identifier for the node.
+        :param coords: coordinates of the node.
+        '''    
+        intId= next(self._ids)
+        if(id!=-1):
+           intId= int(id)        
+        self.id= intId
+        self.coords= [coords[0],coords[1],coords[2]]
+    def __str__(self):
+        return str(self.id)+' '+str(self.coords)
+    def getX(self):
+         return self.coords[0]
+    def getY(self):
+         return self.coords[1]
+    def getZ(self):
+         return self.coords[2]
+    def getStrXCCommand(self,nodeHandlerName):
+        strId= str(self.id)
+        strCommand= '.newNodeIDXYZ(' + strId + ',' + self.coords[0] + ',' + self.coords[1] +','+ self.coords[2]+')'
+        return 'n' + strId + '= ' + nodeHandlerName + strCommand
+    def writeDxf(self,drawing,layerName):
+        msp= drawing.modelspace()
+        msp.add_point((self.coords[0], self.coords[1], self.coords[2]), dxfattribs={'layer': layerName})
 
 class NodeDict(dict):
   ''' Node container.'''
@@ -95,51 +99,67 @@ class NodeDict(dict):
       retval+= str(self[key]) + '\n'
 
 class CellRecord(object):
-  def __init__(self,id, typ, nodes,thk= 0.0):
-    '''
-    Cell record constructor.
+    _ids= count(0) # counter
+    def __init__(self,id, typ, nodes,thk= 0.0):
+        '''
+        Cell record constructor.
 
-    :param id: identifier for the cell.
-    :param typ: cell type.
-    :param nodes: nodes that define block geometry and topology.
-    '''    
-    self.id= id
-    self.cellType= typ
-    self.nodeIds= nodes
-    self.thickness= thk
-  def __str__(self):
-    return str(self.id)+' '+str(self.cellType)+' '+str(self.nodeIds)
-  def getStrXCNodes(self):
-    return "xc.ID("+str(self.nodeIds)+')' 
-  def getStrXCCommand(self,xcImportExportData):
-    strId= str(self.id)
-    type= xcImportExportData.convertCellType(self.cellType)
-    strType= "'"+type+"'"
-    strCommand= xcImportExportData.cellHandlerName + ".defaultTag= "+ strId +'; '
-    strCommand+= 'e' + strId + '= ' + xcImportExportData.cellHandlerName + '.newElement(' + strType + ',' + self.getStrXCNodes() +')'
-    return strCommand
-  def writeDxf(self,nodeDict,drawing,layerName):
-    numNodes= len(self.nodeIds)
-    if(numNodes==2):
-      coordsA= nodeDict[self.nodeIds[0]].coords
-      coordsB= nodeDict[self.nodeIds[1]].coords
-      drawing.add(DXFEngine.line((coordsA[0], coordsA[1], coordsA[2]),(coordsB[0], coordsB[1], coordsB[2]), color=0, layer=layerName))
-    elif(numNodes==3):
-      coordsA= nodeDict[self.nodeIds[0]].coords
-      coordsB= nodeDict[self.nodeIds[1]].coords
-      coordsC= nodeDict[self.nodeIds[2]].coords
-      drawing.add(DXFEngine.face3d([(coordsA[0], coordsA[1], coordsA[2]),(coordsB[0], coordsB[1], coordsB[2]), (coordsC[0], coordsC[1], coordsC[2])], color=0, layer=layerName))      
-    elif(numNodes==4):
-      coordsA= nodeDict[self.nodeIds[0]].coords
-      coordsB= nodeDict[self.nodeIds[1]].coords
-      coordsC= nodeDict[self.nodeIds[2]].coords
-      coordsD= nodeDict[self.nodeIds[3]].coords
-      drawing.add(DXFEngine.face3d([(coordsA[0], coordsA[1], coordsA[2]),(coordsB[0], coordsB[1], coordsB[2]), (coordsC[0], coordsC[1], coordsC[2]), (coordsD[0], coordsD[1], coordsD[2])], color=0, layer=layerName))      
-    else:
-      for i in range(0,numNodes-1):
-        coordsA= nodeDict[self.nodeIds[i]].coords
-        coordsB= nodeDict[self.nodeIds[i+1]].coords
-        drawing.add(DXFEngine.line((coordsA[0], coordsA[1], coordsA[2]),(coordsB[0], coordsB[1], coordsB[2]), color=0, layer=layerName))
+        :param id: identifier for the cell.
+        :param typ: cell type.
+        :param nodes: nodes that define block geometry and topology.
+        '''
+        intId= next(self._ids)
+        if(id!=-1):
+           intId= int(id)        
+        self.id= intId
+        self.cellType= typ
+        self.nodeIds= nodes
+        self.thickness= thk
+    def __str__(self):
+        return str(self.id)+' '+str(self.cellType)+' '+str(self.nodeIds)
+    def getStrXCNodes(self):
+        return "xc.ID("+str(self.nodeIds)+')' 
+    def getStrXCCommand(self,xcImportExportData):
+        strId= str(self.id)
+        type= xcImportExportData.convertCellType(self.cellType)
+        strType= "'"+type+"'"
+        strCommand= xcImportExportData.cellHandlerName + ".defaultTag= "+ strId +'; '
+        strCommand+= 'e' + strId + '= ' + xcImportExportData.cellHandlerName + '.newElement(' + strType + ',' + self.getStrXCNodes() +')'
+        return strCommand
+    def writeDxf(self,nodeDict,drawing,layerName):
+        numNodes= len(self.nodeIds)
+        msp= drawing.modelspace()
+        if(numNodes==2):
+            coordsA= nodeDict[self.nodeIds[0]].coords
+            coordsB= nodeDict[self.nodeIds[1]].coords
+            ptA= (coordsA[0], coordsA[1], coordsA[2])
+            ptB= (coordsB[0], coordsB[1], coordsB[2])
+            msp.add_line(ptA, ptB, dxfattribs={'layer': layerName})
+        elif(numNodes==3):
+            coordsA= nodeDict[self.nodeIds[0]].coords
+            coordsB= nodeDict[self.nodeIds[1]].coords
+            coordsC= nodeDict[self.nodeIds[2]].coords
+            ptA= (coordsA[0], coordsA[1], coordsA[2])
+            ptB= (coordsB[0], coordsB[1], coordsB[2])
+            ptC= (coordsC[0], coordsC[1], coordsC[2])
+            msp.add_3dface([ptA, ptB, ptC], dxfattribs={'layer': layerName})
+        elif(numNodes==4):
+            coordsA= nodeDict[self.nodeIds[0]].coords
+            coordsB= nodeDict[self.nodeIds[1]].coords
+            coordsC= nodeDict[self.nodeIds[2]].coords
+            coordsD= nodeDict[self.nodeIds[3]].coords
+            ptA= (coordsA[0], coordsA[1], coordsA[2])
+            ptB= (coordsB[0], coordsB[1], coordsB[2])
+            ptC= (coordsC[0], coordsC[1], coordsC[2])
+            ptD= (coordsD[0], coordsD[1], coordsD[2])
+            msp.add_3dface([ptA, ptB, ptC, ptD], dxfattribs={'layer': layerName})
+        else:
+            for i in range(0,numNodes-1):
+                coordsA= nodeDict[self.nodeIds[i]].coords
+                coordsB= nodeDict[self.nodeIds[i+1]].coords
+                ptA= (coordsA[0], coordsA[1], coordsA[2])
+                ptB= (coordsB[0], coordsB[1], coordsB[2])
+                msp.add_line(ptA, ptB, dxfattribs={'layer': layerName})
 
 class CellDict(dict):
   '''Cell container.'''
