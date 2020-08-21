@@ -91,9 +91,9 @@ def CzIAPF(gae,z):
     z0CzIAPF=Z0IAPF(gae)
     zminCzIAPF=ZminIAPF(gae)
     if z>zminCzIAPF:
-        return kzCzIAPF*log(z/z0CzIAPF)
+        return kzCzIAPF*math.log(z/z0CzIAPF)
     else:
-        return kzCzIAPF*log(zminCzIAPF/z0CzIAPF)
+        return kzCzIAPF*math.log(zminCzIAPF/z0CzIAPF)
       
   
 
@@ -109,10 +109,10 @@ def CdTableroAlmaLlenaIAPF(B,h,angAlma):
     Coeficiente de arrastre para empuje horizontal sobre tableros
     de alma llena according to clause 2.3.7.5.1 IAPF.
     '''
-    coefRedCdIAPF=max(0.7,1-(5/1000*math.degrees(angAlma)))
+    coefRedCdIAPF= max(0.7,1-(5/1000*math.degrees(angAlma)))
     tmpCdIAPF=2.5-0.3*B/h
     tmpCdIAPF= max(tmpCdIAPF,0.3)
-    tmpCdIAPF= min(tmpCdIAPF,2.4)*coefReductor
+    tmpCdIAPF= min(tmpCdIAPF,2.4)*coefRedCdIAPF
     return tmpCdIAPF
   
 
