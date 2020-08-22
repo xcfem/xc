@@ -260,7 +260,7 @@ class BoltArray(object):
     def getMinPlateWidth(self):
         ''' Return the minimum width of the bolted plate.'''
         minEdgeDist= self.bolt.getMinimumEdgeDistanceJ3_4M()
-        return 2.0*minEdgeDist+self.dist
+        return 2.0*minEdgeDist+self.dist*(self.nRows-1)
 
     def getMinPlateLength(self):
         ''' Return the minimum length of the bolted plate.'''
@@ -321,8 +321,8 @@ class BoltArray(object):
         x0= self.dist*(self.nCols-1)/2.0
         y0= self.dist*(self.nRows-1)/2.0
         center= geom.Pos2d(x0,y0)
-        for i in range(0,self.nRows):
-            for j in range(0,self.nCols):
+        for i in range(0,self.nCols):
+            for j in range(0,self.nRows):
                 x= i*self.dist-center.x
                 y= j*self.dist-center.y
                 retval.append(geom.Pos2d(x, y))
