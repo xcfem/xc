@@ -30,6 +30,7 @@ packages_lib="\
     libarpack2-dev              \
     libarpack++2-dev            \
     libcgal-dev                 \
+    libcgal-qt5-dev             \
     libdb-dev                   \
     libf2c2-dev                 \
     libglib2.0-dev              \
