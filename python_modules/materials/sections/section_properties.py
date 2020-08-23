@@ -27,6 +27,18 @@ class SectionProperties(object):
         self.sectionName= name
         self.xc_material= None
         
+    def getDict(self):
+        ''' Put member values in a dictionary.'''
+        if(self.xc_material):
+            lmsg.error('Cannot export xc materials yet.')
+        retval= {'sectionName':self.sectionName, 'xc_material':None}
+        return retval
+
+    def setFromDict(self,dct):
+        ''' Read member values from a dictionary.'''
+        self.sectionName= dct['sectionName']
+        self.xc_material= dct['xc_material']
+        
     def A(self):
         '''cross-sectional area (abstract method)'''
         raise "Abstract method, please override"

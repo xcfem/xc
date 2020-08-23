@@ -58,12 +58,11 @@ class BoltBase(object):
         return math.pi*(self.diameter/2.0)**2
     
     def getDict(self):
-        ''' Returns a dictionary whith the values of the internal forces.
-            Makes easier export it to json.'''
+        ''' Put member values in a dictionary.'''
         return {'diameter':self.diameter}
 
     def setFromDict(self,dct):
-        '''Sets the internal forces from the dictionary argument.'''
+        ''' Read member values from a dictionary.'''
         self.diameter= dct['diameter']
 
 class BoltFastener(BoltBase):
@@ -198,14 +197,13 @@ class BoltFastener(BoltBase):
         return self.getName()
     
     def getDict(self):
-        ''' Returns a dictionary whith the values of the internal forces.
-            Makes easier export it to json.'''
+        ''' Put member values in a dictionary.'''
         retval= super(BoltFastener,self).getDict()
         retval.update({'group':self.group})
         return retval
 
     def setFromDict(self,dct):
-        '''Sets the internal forces from the dictionary argument.'''
+        ''' Read member values from a dictionary.'''
         super(BoltFastener,self).setFromDict(dct)
         self.group= dct['group']
 
@@ -304,12 +302,11 @@ class BoltArray(object):
     def __str__(self):
         return ' number of rows: '+str(self.nRows)+' number of columns: '+str(self.nCols)+' distance between centers: '+str(self.dist)+ ' bolts: '+str(self.bolt) 
     def getDict(self):
-        ''' Returns a dictionary whith the values of the internal forces.
-            Makes easier export it to json.'''
+        ''' Put member values in a dictionary.'''
         return {'bolt':self.bolt.getDict(), 'nRows':self.nRows, 'nCols':self.nCols, 'dist':self.dist}    
 
     def setFromDict(self,dct):
-        '''Sets the internal forces from the dictionary argument.'''
+        ''' Read member values from a dictionary.'''
         self.bolt.setFromDict(dct['bolt'])
         self.nRows= dct['nRows']
         self.nCols= dct['nCols']
@@ -452,12 +449,11 @@ class BoltedPlate(object):
         return 'width: '+ str(self.width) + ' length: '+ str(self.length) + ' thickness: '+ str(self.thickness) + ' bolts: ' + str(self.boltArray)
     
     def getDict(self):
-        ''' Returns a dictionary whith the values of the internal forces.
-            Makes easier export it to json.'''
+        ''' Put member values in a dictionary.'''
         return {'boltArray':self.boltArray.getDict(), 'width':self.width, 'length':self.length, 'thickness':self.thickness, 'steelType':self.steelType.getDict()}
 
     def setFromDict(self,dct):
-        '''Sets the internal forces from the dictionary argument.'''
+        ''' Read member values from a dictionary.'''
         self.boltArray.setFromDict(dct['boltArray'])
         self.width= dct['width']
         self.length= dct['length']
@@ -465,9 +461,15 @@ class BoltedPlate(object):
         self.steelType.setFromDict(dct['steelType'])
 
 class AnchorBolt(BoltBase):
-    """ASTM anchor bolt according to table 2.2 from the document
+    ''' ASTM anchor bolt according to table 2.2 from the document
     Base Plate and Anchor Rod Design Second Edition
-    American Institute of Steel Construction, Inc."""
+    American Institute of Steel Construction, Inc.
+
+    :ivar name: bolt identifier
+    :ivar steel: steel material.
+    :ivar diameter: bolt diameter.
+    :ivar pos3d: bolt position.
+    '''
 
     # See table 3.2 of the design guide:
     ab_diams= [0.015875, 0.01905, 0.022225, 0.0254, 0.028575, 0.03175, 0.0381, 0.04445, 0.0508, 0.05715, 0.0635, 0.06985, 0.0762, 0.08255, 0.0889, 0.09525, 0.1016]
@@ -496,6 +498,25 @@ class AnchorBolt(BoltBase):
        else:
            self.pos3d= None
 
+    def getDict(self):
+        ''' Put member values in a dictionary.'''
+        retval= super(AnchorBolt, self).getDict()
+        retval.update({'name':self.name, 'steel':self.steelType.getDict()})
+        xyz= None
+        if(self.pos3d):
+            xyz= (self.pos3d.x, self.pos3d.y, self.pos3d.z)
+        retval.update({'pos3d': xyz})
+        return retval
+
+    def setFromDict(self,dct):
+        ''' Read member values from a dictionary.'''
+        super(AnchorBolt, self).setFromDict(dct)
+        self.name= dct['name']
+        self.steel.setFromDict(dct['steel'])
+        xyz= dct['pos3d']
+        if(xyz):
+            self.pos3d= geom.Pos3d(xyz[0], xyz[1], xyz[2])
+        
     # Tension
     def getTensileStrength(self):
         ''' Return the tensile strength of the anchor rod.
@@ -585,7 +606,10 @@ class AnchorBolt(BoltBase):
         return retval
     
 class AnchorGroup(object):
-    ''' Anchor group.'''
+    ''' Anchor group.
+
+    :ivar anchors: anchor list.
+    '''
     
     def __init__(self, steel, diameter, positions):
         ''' Creates an anchor group in the positions argument.
@@ -600,6 +624,21 @@ class AnchorGroup(object):
             self.anchors.append(AnchorBolt(name= str(count), steel= steel, diameter= diameter, pos3d= p))
             count+= 1
 
+    def getDict(self):
+        ''' Put member values in a dictionary.'''
+        retval= dict()
+        for anchor in self.anchors:
+            retval[anchor.name]= anchor.getDict()
+        return retval
+
+    def setFromDict(self,dct):
+        ''' Read member values from a dictionary.'''
+        self.anchors= list()
+        for key in dct:
+            bolt= AnchorBolt()
+            bolt.setFromDict(dct[key])
+            self.anchors.append(bolt)
+            
     def getNumberOfBolts(self):
         ''' Return the number of anchors in the group.'''
         return len(self.anchors)

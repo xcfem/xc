@@ -14,6 +14,8 @@ __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
 import math
+import xc_base
+import geom
 from postprocess.reports import common_formats as fmt
 from misc_utils import log_messages as lmsg
 from materials.astm_aisc import ASTM_materials
@@ -120,10 +122,11 @@ class RectangularBasePlate(object):
     :ivar anchorGroup: anchor group.
     :ivar fc: minimum concrete compressive strength.
     :ivar steel: steel material.
+    :ivar origin: center of the base plate.
     :ivar nShearBolts: number of bolts that take shear force
                        (defaults to 2).
     '''
-    def __init__(self, N, B, t, steelShape, anchorGroup, fc, steel= ASTM_materials.A36):
+    def __init__(self, N, B, t, steelShape, anchorGroup, fc, steel= ASTM_materials.A36, origin= geom.Pos3d()):
         ''' Constructor.
 
         :param N: dimension parallel to the web of the shaft.
@@ -134,6 +137,7 @@ class RectangularBasePlate(object):
         :param anchorGroup: anchor group.
         :param fc: minimum concrete compressive strength.
         :param steel: steel material.
+        :param origin: center of the base plate.
         '''
         self.N= N
         self.B= B
@@ -141,10 +145,31 @@ class RectangularBasePlate(object):
         self.steelShape= steelShape
         self.anchorGroup= anchorGroup
         self.steel= steel
+        self.origin= origin
         self.fc= fc
         self.nShearBolts= 2  # By default only 2 anchors work
-                             # for shear (see 3.5.3 in the guide) 
+                             # for shear (see 3.5.3 in the guide)
 
+    def getDict(self):
+        ''' Put member values in a dictionary.'''
+        retval= {'N':self.N, 'B':self.B, 't':self.t, 'steelShape':self.steelShape.getDict(), 'anchorGroup':self.anchorGroup.getDict(), 'steel':self.steel.getDict()}
+        xyz= (self.origin.x, self.origin.y, self.origin.z)
+        retval.update({'origin': xyz, 'fc':self.fc, 'nShearBolts':self.nShearBolts})
+        return retval
+
+    def setFromDict(self,dct):
+        ''' Read member values from a dictionary.'''
+        self.N= dct['N']
+        self.B= dct['B']
+        self.t= dct['t']
+        self.steelShape.setFromDict(dct['steelShape'])
+        self.anchorGroup.setFromDict(dct['anchorGroup'])
+        self.steel.setFromDict(dct['steel'])
+        xyz= dct['origin']
+        self.origin= geom.Pos3d(xyz[0],xyz[1],xyz[2])
+        self.fc= dct['fc']
+        self.nShearBolts= dct['nShearBolts']
+            
     def getArea(self):
         ''' Return the area of the base plate.'''
         return self.B*self.N

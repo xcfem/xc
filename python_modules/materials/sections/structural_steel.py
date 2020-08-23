@@ -57,6 +57,18 @@ class SteelShape(sp.SectionProperties):
         self.shape= table[name]
     #    super(SteelShape,self).__init__(name,self.shape['E'],self.shape['nu'])
         super(SteelShape,self).__init__(name)
+        
+    def getDict(self):
+        ''' Put member values in a dictionary.'''
+        retval= super(SteelShape, self).getDict()
+        retval.update({'steelType':self.steelType.getDict(), 'shape': self.shape})
+        return retval
+
+    def setFromDict(self,dct):
+        ''' Read member values from a dictionary.'''
+        super(SteelShape, self).setFromDict(dct)
+        self.steelType.setFromDict(dct['steelType'])
+        self.shape.setFromDict(dct['shape'])
 
     def getSymmetry(self):
         ''' Returns the symmetry of the shape: 
@@ -466,11 +478,27 @@ class SteelShape(sp.SectionProperties):
 class IShape(SteelShape):
     def __init__(self,steel,name,table):
         super(IShape,self).__init__(steel,name,table)
+        self.tileSize= 0.01 #Size of tiles
+        self.updateQuantities()
+
+    def updateQuantities(self):
+        ''' Update some derived values.'''
         self.bHalf= self.get('b')/2.0 #Half flange width
         self.hHalf= self.get('h')/2.0 #Half section height
         self.hiHalf= self.get('hi')/2.0 #Half section interior height.
         self.twHalf= self.get('tw')/2.0 #Half web thickness
-        self.tileSize= 0.01 #Size of tiles
+        
+    def getDict(self):
+        ''' Put member values in a dictionary.'''
+        retval= super(IShape, self).getDict()
+        retval.update({'tileSize':self.tileSize})
+        return retval
+
+    def setFromDict(self,dct):
+        ''' Read member values from a dictionary.'''
+        super(IShape, self).setFromDict(dct)
+        self.tileSize= dct['tileSize']
+        self.updateQuantities()
 
     def getSymmetry(self):
         ''' Returns the symmetry of the shape: 
