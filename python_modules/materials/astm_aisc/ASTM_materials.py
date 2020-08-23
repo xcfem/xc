@@ -501,7 +501,7 @@ class AnchorBolt(BoltBase):
     def getDict(self):
         ''' Put member values in a dictionary.'''
         retval= super(AnchorBolt, self).getDict()
-        retval.update({'name':self.name, 'steel':self.steelType.getDict()})
+        retval.update({'name':self.name, 'steelType':self.steelType.getDict()})
         xyz= None
         if(self.pos3d):
             xyz= (self.pos3d.x, self.pos3d.y, self.pos3d.z)
@@ -512,7 +512,7 @@ class AnchorBolt(BoltBase):
         ''' Read member values from a dictionary.'''
         super(AnchorBolt, self).setFromDict(dct)
         self.name= dct['name']
-        self.steel.setFromDict(dct['steel'])
+        self.steelType.setFromDict(dct['steelType'])
         xyz= dct['pos3d']
         if(xyz):
             self.pos3d= geom.Pos3d(xyz[0], xyz[1], xyz[2])
@@ -635,7 +635,7 @@ class AnchorGroup(object):
         ''' Read member values from a dictionary.'''
         self.anchors= list()
         for key in dct:
-            bolt= AnchorBolt()
+            bolt= AnchorBolt(name= '', steel= None, diameter= 0.0, pos3d= None)
             bolt.setFromDict(dct[key])
             self.anchors.append(bolt)
             
@@ -685,11 +685,19 @@ class AnchorGroup(object):
 
 class ASTMShape(object):
     """Steel shape with ASTM/AISC verification routines."""
-    def __init__(self, name):
+    def __init__(self, name= ''):
        '''
          Constructor.
        '''
-       self.name=name
+       self.name= name
+       
+    def getDict(self):
+        ''' Put member values in a dictionary.'''
+        return {'name':self.name}
+
+    def setFromDict(self,dct):
+        ''' Read member values from a dictionary.'''
+        self.name= dct['name']
 
     # Tension
     def getDesignTensileStrength(self, Ae= None):
@@ -915,13 +923,23 @@ class WShape(ASTMShape,aisc_metric_shapes.WShape):
 
     :ivar steel: steel material (i.e. A36).
     :ivar name: shape name (i.e. W40X431)
-
     """
-    def __init__(self,steel,name):
+    def __init__(self,steel= None, name= ''):
         ''' Constructor.
         '''
         ASTMShape.__init__(self,name)
         aisc_metric_shapes.WShape.__init__(self,steel,name)
+        
+    def getDict(self):
+        ''' Put member values in a dictionary.'''
+        retval= ASTMShape.getDict(self)
+        retval.update(aisc_metric_shapes.WShape.getDict(self))
+        return retval
+
+    def setFromDict(self,dct):
+        ''' Read member values from a dictionary.'''
+        ASTMShape.setFromDict(self, dct)
+        aisc_metric_shapes.WShape.setFromDict(self, dct)
 
 class CShape(ASTMShape,aisc_metric_shapes.CShape):
     """C shape with ASTM 3 verification routines.

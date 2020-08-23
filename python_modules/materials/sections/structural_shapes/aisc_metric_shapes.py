@@ -321,7 +321,7 @@ class WShape(structural_steel.IShape):
     :ivar steel: steel material.
     :ivar name: shape name (i.e. W40X431).
     '''
-    def __init__(self,steel,name):
+    def __init__(self,steel= None, name= ''):
         ''' Constructor.
         '''
         super(WShape,self).__init__(steel,name,W)

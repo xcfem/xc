@@ -19,6 +19,7 @@ import geom
 from postprocess.reports import common_formats as fmt
 from misc_utils import log_messages as lmsg
 from materials.astm_aisc import ASTM_materials
+import materials
 
 # Base plates under concentric axial compressive loads.
 
@@ -152,7 +153,8 @@ class RectangularBasePlate(object):
 
     def getDict(self):
         ''' Put member values in a dictionary.'''
-        retval= {'N':self.N, 'B':self.B, 't':self.t, 'steelShape':self.steelShape.getDict(), 'anchorGroup':self.anchorGroup.getDict(), 'steel':self.steel.getDict()}
+        steelShapeClassName= str(self.steelShape.__class__)[8:-2]
+        retval= {'N':self.N, 'B':self.B, 't':self.t, 'steelShapeClassName': steelShapeClassName, 'steelShape':self.steelShape.getDict(), 'anchorGroup':self.anchorGroup.getDict(), 'steel':self.steel.getDict()}
         xyz= (self.origin.x, self.origin.y, self.origin.z)
         retval.update({'origin': xyz, 'fc':self.fc, 'nShearBolts':self.nShearBolts})
         return retval
@@ -162,7 +164,10 @@ class RectangularBasePlate(object):
         self.N= dct['N']
         self.B= dct['B']
         self.t= dct['t']
+        steelShapeClassName= dct['steelShapeClassName']+'()'
+        self.steelShape= eval(steelShapeClassName)
         self.steelShape.setFromDict(dct['steelShape'])
+        self.anchorGroup= ASTM_materials.AnchorGroup(steel= None, diameter= 0.0, positions= [])
         self.anchorGroup.setFromDict(dct['anchorGroup'])
         self.steel.setFromDict(dct['steel'])
         xyz= dct['origin']

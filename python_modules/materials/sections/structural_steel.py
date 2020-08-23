@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
-from __future__ import division
 ''' Base classes and functions for structural steel.'''
+
+from __future__ import division
+from __future__ import print_function
 
 __author__= "Ana Ortega (AO_O) and Luis C. Pérez Tato (LCPT)"
 __copyright__= "Copyright 2015, AO_O and LCPT"
@@ -14,6 +16,7 @@ from postprocess import def_vars_control as vc
 from misc_utils import log_messages as lmsg
 import xc_base
 import geom
+import materials
 
 
 #Alpha imperfection factor.
@@ -54,21 +57,26 @@ class SteelShape(sp.SectionProperties):
     '''
     def __init__(self,steel,name,table):
         self.steelType= steel
-        self.shape= table[name]
-    #    super(SteelShape,self).__init__(name,self.shape['E'],self.shape['nu'])
+        if(name!=''):
+            self.shape= table[name]
+        else:
+            self.shape= None
         super(SteelShape,self).__init__(name)
-        
+
     def getDict(self):
         ''' Put member values in a dictionary.'''
         retval= super(SteelShape, self).getDict()
-        retval.update({'steelType':self.steelType.getDict(), 'shape': self.shape})
+        steelTypeClassName= str(self.steelType.__class__)[8:-2]
+        retval.update({'steelTypeClassName':steelTypeClassName, 'steelType':self.steelType.getDict(), 'shape': self.shape})
         return retval
 
     def setFromDict(self,dct):
         ''' Read member values from a dictionary.'''
         super(SteelShape, self).setFromDict(dct)
+        steelTypeClassName= dct['steelTypeClassName']+'()'
+        self.steelType= eval(steelTypeClassName)
         self.steelType.setFromDict(dct['steelType'])
-        self.shape.setFromDict(dct['shape'])
+        self.shape= dct['shape']
 
     def getSymmetry(self):
         ''' Returns the symmetry of the shape: 
@@ -483,10 +491,11 @@ class IShape(SteelShape):
 
     def updateQuantities(self):
         ''' Update some derived values.'''
-        self.bHalf= self.get('b')/2.0 #Half flange width
-        self.hHalf= self.get('h')/2.0 #Half section height
-        self.hiHalf= self.get('hi')/2.0 #Half section interior height.
-        self.twHalf= self.get('tw')/2.0 #Half web thickness
+        if(self.shape):
+            self.bHalf= self.get('b')/2.0 #Half flange width
+            self.hHalf= self.get('h')/2.0 #Half section height
+            self.hiHalf= self.get('hi')/2.0 #Half section interior height.
+            self.twHalf= self.get('tw')/2.0 #Half web thickness
         
     def getDict(self):
         ''' Put member values in a dictionary.'''
