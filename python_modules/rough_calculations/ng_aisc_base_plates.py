@@ -20,6 +20,7 @@ from postprocess.reports import common_formats as fmt
 from misc_utils import log_messages as lmsg
 from materials.astm_aisc import ASTM_materials
 import materials
+from import_export import block_topology_entities as bte
 
 # Base plates under concentric axial compressive loads.
 
@@ -177,10 +178,37 @@ class RectangularBasePlate(object):
         self.origin= geom.Pos3d(xyz[0],xyz[1],xyz[2])
         self.fc= dct['fc']
         self.nShearBolts= dct['nShearBolts']
-            
+
+    def getLocalRefSys(self):
+        ''' Return the local reference system.'''
+        return geom.Ref3d3d(self.origin)
+    
     def getArea(self):
         ''' Return the area of the base plate.'''
         return self.B*self.N
+
+    def getContour(self):
+        ''' Return the base plate contour. '''
+        retval= geom.Polygon2d()
+        deltaX= self.B/2.0
+        deltaY= self.N/2.0
+        origin2d= geom.Pos2d(self.origin.x, self.origin.y)
+        retval.appendVertex(origin2d+geom.Vector2d(deltaX,deltaY))
+        retval.appendVertex(origin2d+geom.Vector2d(-deltaX,deltaY))
+        retval.appendVertex(origin2d+geom.Vector2d(-deltaX,-deltaY))
+        retval.appendVertex(origin2d+geom.Vector2d(deltaX,-deltaY))
+        return retval
+
+    def getBlocks(self, labels):
+        ''' Return the block decomposition of the base plate.'''
+        retval= bte.BlockData()
+        contour= self.getContour().getVertexList()
+        points= list()
+        for p2d in contour:
+            points.append(geom.Pos3d(p2d.x, p2d.y, 0.0))
+        retval.blockFromPoints(points, labels)
+        retval.extend(self.anchorGroup.getBlocks(self.getLocalRefSys(), labels))
+        return retval
 
     def getConcreteStrength(self):
         ''' Return the strenght of the concrete surface.'''

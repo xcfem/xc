@@ -46,13 +46,20 @@ class BoltBase(object):
     ''' Base class for bolts.
 
     :ivar diameter: bolt diameter
+    :ivar pos3d: bolt position.
     '''
-    def __init__(self, diameter):
+    def __init__(self, diameter, pos3d= None):
        ''' Constructor.
 
        :param diameter: bolt diameter.
+       :param pos3d: bolt position.
        '''
        self.diameter= diameter
+       if(pos3d):
+           self.pos3d= pos3d
+       else:
+           self.pos3d= None
+           
     def getArea(self):
         ''' Return the area of the anchor rod.
         '''
@@ -60,11 +67,38 @@ class BoltBase(object):
     
     def getDict(self):
         ''' Put member values in a dictionary.'''
-        return {'diameter':self.diameter}
+        retval= {'diameter':self.diameter}
+        xyz= None
+        if(self.pos3d):
+            xyz= (self.pos3d.x, self.pos3d.y, self.pos3d.z)
+        retval.update({'pos3d': xyz})
+        return retval
 
     def setFromDict(self,dct):
         ''' Read member values from a dictionary.'''
         self.diameter= dct['diameter']
+        self.pos3d= None
+        if('pos3d' in dct):
+            xyz= dct['pos3d']
+            if(xyz):
+                self.pos3d= geom.Pos3d(xyz[0], xyz[1], xyz[2])
+
+    def getHole(self, refSys= geom.Ref3d3d()):
+        ''' Return a circle in the hole position.'''
+        pLocal= geom.Pos2d(self.pos3d.x, self.pos3d.y)
+        holeDiameter= self.getNominalHoleDiameter()
+        circle2d= geom.Circle2d(pLocal,holeDiameter/2.0)
+        return geom.Circle3d(refSys, circle2d)
+    
+    def getHoleBlock(self, refSys= geom.Ref3d3d(), labels= []):
+        ''' Return and octagon inscribed in the hole.'''
+        hole= self.getHole(refSys)
+        octagon= hole.getInscribedPolygon(8,0.0).getVertexList()
+        octagon.append(octagon[0]) # close polygon
+        retval= bte.BlockData()
+        retval.blockFromPoints(octagon,labels)
+        return retval
+
 
 class BoltFastener(BoltBase):
     ''' ASTM bolt according to chapter J of AISC 360-16.
@@ -332,7 +366,7 @@ class BoltArray(object):
         holes= list()
         for pLocal in localPos:
             circle= geom.Circle2d(pLocal,self.bolt.diameter/2.0)
-            octagon= circle.getInscribedPolygon(8,0.0).getVertexList();
+            octagon= circle.getInscribedPolygon(8,0.0).getVertexList()
             octagon.append(octagon[0]) # close polygon
             holes.append(octagon)
         retval= bte.BlockData()
@@ -469,7 +503,6 @@ class AnchorBolt(BoltBase):
     :ivar name: bolt identifier
     :ivar steel: steel material.
     :ivar diameter: bolt diameter.
-    :ivar pos3d: bolt position.
     '''
 
     # See table 3.2 of the design guide:
@@ -491,23 +524,15 @@ class AnchorBolt(BoltBase):
        :param diameter: bolt diameter.
        :param pos3d: bolt position.
        '''
-       super(AnchorBolt,self).__init__(diameter)
+       super(AnchorBolt,self).__init__(diameter, pos3d)
        self.name= name
        self.steelType= steel
-       if(pos3d):
-           self.pos3d= pos3d
-       else:
-           self.pos3d= None
 
     def getDict(self):
         ''' Put member values in a dictionary.'''
         retval= super(AnchorBolt, self).getDict()
         steelTypeClassName= str(self.steelType.__class__)[8:-2]
         retval.update({'name':self.name, 'steelTypeClassName':steelTypeClassName, 'steelType':self.steelType.getDict()})
-        xyz= None
-        if(self.pos3d):
-            xyz= (self.pos3d.x, self.pos3d.y, self.pos3d.z)
-        retval.update({'pos3d': xyz})
         return retval
 
     def setFromDict(self,dct):
@@ -517,9 +542,6 @@ class AnchorBolt(BoltBase):
         steelTypeClassName= dct['steelTypeClassName']+'()'
         self.steelType= eval(steelTypeClassName)
         self.steelType.setFromDict(dct['steelType'])
-        xyz= dct['pos3d']
-        if(xyz):
-            self.pos3d= geom.Pos3d(xyz[0], xyz[1], xyz[2])
         
     # Tension
     def getTensileStrength(self):
@@ -562,7 +584,7 @@ class AnchorBolt(BoltBase):
             to the table 3.2 of the design guide.'''
         return self.fBearingArea(self.diameter)
     
-    def getHoleDiameter(self):
+    def getNominalHoleDiameter(self):
         ''' Return the hole diameter for the anchor according
             to the table 2.3 of the design guide.'''
         return self.fHoleDiameter(self.diameter)
@@ -684,8 +706,13 @@ class AnchorGroup(object):
             retval*= 16*math.pow(h_ef_in,5.0/3.0)
         retval*=4.4482216 # pounds to Newtons
         return retval
-
-
+    
+    def getBlocks(self, refSys, labels):
+        ''' Return the block decomposition of the base plate.'''
+        retval= bte.BlockData()
+        for anchor in self.anchors:
+            retval.extend(anchor.getHoleBlock(refSys, labels))
+        return retval
 
 class ASTMShape(object):
     """Steel shape with ASTM/AISC verification routines."""
