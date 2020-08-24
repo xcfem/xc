@@ -206,7 +206,7 @@ def getFilletWeldMaximumThroatDepth(t):
 def getFilletWeldMinimumThroatDepthSheets(t1, t2):
     '''
     Return the minimum throat thickness which can be used to weld two sheets
-    according to articla 59.3.2 of EAE (page 296).
+    according to clause 59.3.2 of EAE (page 296).
 
     :param t1: Thickness of sheet 1.
     :param t2: Thickness of sheet 2.
@@ -218,7 +218,7 @@ def getFilletWeldMinimumThroatDepthSheets(t1, t2):
 def getFilletWeldMaximumThroatDepthSheets(t1, t2):
     '''
     Return the maximum throat thickness which can be used to weld two sheets
-    according to articla 59.3.2 of EAE (page 296).
+    according to clause 59.3.2 of EAE (page 296).
 
     :param t1: Thickness of sheet 1.
     :param t2: Thickness of sheet 2.

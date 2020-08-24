@@ -335,6 +335,10 @@ class WShape(structural_steel.IShape):
         less the fillet at each flange (h in AISC tables).'''
         return self.get('d')
 
+    def getMetricName(self):
+        '''Return the metric label from the US customary one.'''
+        return getMetricLabel(self.name)
+        
     def getContour(self):
         ''' Return the section contour.'''
         retval= geom.Polygon2d()
@@ -1689,11 +1693,11 @@ class CHSSShape(structural_steel.CHShape):
 # Label conversion metric->US customary | US customary -> metric.
 def getUSLabel(metricLabel):
     '''Return the US customary label from the metric one.'''
-    return labels.USLabel[metricLabel]
+    return labels.MetricLabel[metricLabel]
 
 def getMetricLabel(USLabel):
     '''Return the metric label from the US customary one.'''
-    return labels.MetricLabel[metricLabel]
+    return labels.USLabel[USLabel]
 
 
 

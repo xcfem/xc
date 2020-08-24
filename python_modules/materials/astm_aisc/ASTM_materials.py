@@ -27,20 +27,99 @@ from import_export import block_topology_entities as bte
 class ASTMSteel(steel_base.BasicSteel):
     '''ASTM structural steel.
 
+    :ivar name: steel identifier.
     :ivar fy: yield stress (defaults to 250e6 Pa)
     :ivar fu: ultimate tensile strength (defaults to 400e6 Pa)
     :ivar gammaM: partial factor (defaults to 1.0)
     '''
-    def __init__(self, fy= 250e6, fu= 400e6, gammaM= 1.0):
-        super(ASTMSteel,self).__init__(200e9,0.3,fy,fu,gammaM)
+    def __init__(self, name= None, fy= 250e6, fu= 400e6, gammaM= 1.0):
+        ''' Constructor.
 
-A36= ASTMSteel(250e6,400e6,1.0)
-A529= ASTMSteel(290e6,414e6,1.0)
-A572= ASTMSteel(345e6,450e6,1.0)
-A53= ASTMSteel(240e6,414e6,1.0)
-A992= ASTMSteel(345e6,450e6,1.0)
-A500= ASTMSteel(315e6,400e6,1.0)
-A307= ASTMSteel(245e6,390e6,1.0)
+        :param name: steel identifier.
+        :param fy: yield stress (defaults to 250e6 Pa)
+        :param fu: ultimate tensile strength (defaults to 400e6 Pa)
+        :param gammaM: partial factor (defaults to 1.0)
+        '''
+        super(ASTMSteel,self).__init__(200e9,0.3,fy,fu,gammaM)
+        if(name):
+            self.name= name
+        else:
+            self.name= None
+    def getDict(self):
+        ''' Put member values in a dictionary.'''
+        retval= super(ASTMSteel,self).getDict()
+        name= None
+        if(self.name):
+            name= self.name
+        retval.update({'name': name})
+        return retval
+
+    def setFromDict(self,dct):
+        ''' Read member values from a dictionary.'''
+        self.name= None
+        if('name' in dct):
+            name= dct['name']
+            if(name): self.name= name
+
+A36= ASTMSteel('A36', 250e6,400e6,1.0)
+A529= ASTMSteel('A529', 290e6,414e6,1.0)
+A572= ASTMSteel('A572', 345e6,450e6,1.0)
+A53= ASTMSteel('A53', 240e6,414e6,1.0)
+A992= ASTMSteel('A992', 345e6,450e6,1.0)
+A500= ASTMSteel('A500', 315e6,400e6,1.0)
+A307= ASTMSteel('A307', 245e6,390e6,1.0)
+
+def getFilletWeldMinimumLeg(t):
+    '''
+    Return the minimum leg size for a fillet bead that welds a sheet 
+    of thickness t according to table J2.4 of AISC 360.
+
+    :param t: Sheet thickness.
+    '''
+    if(t<=6e-3):
+        return 3e-3
+    elif(t<=13e-3):
+        return 5e-3
+    elif(t<=19e-3):
+        return 6e-3
+    else:
+        return 8e-3
+
+def getFilletWeldMaximumLeg(t):
+    '''
+    Return the maximum leg size for a fillet bead that welds a sheet 
+    of thickness t according to section J2.2b of AISC 360.
+
+    :param t: Sheet thickness.
+    '''
+    if(t<=6e-3):
+        return t
+    else:
+        return t-2e-3
+
+def getFilletWeldMinimumLegSheets(t1, t2):
+    '''
+    Return the minimum leg size which can be used to weld two sheets
+    according to table J2.4 of AISC 360.
+
+    :param t1: Thickness of sheet 1.
+    :param t2: Thickness of sheet 2.
+    '''
+    amin1= getFilletWeldMinimumLeg(t1)
+    amin2= getFilletWeldMinimumLeg(t2)
+    return max(amin1,amin2)
+
+def getFilletWeldMaximumLegSheets(t1, t2):
+    '''
+    Return the maximum leg size which can be used to weld two sheets
+    according to ection J2.2b of AISC 360.
+
+    :param t1: Thickness of sheet 1.
+    :param t2: Thickness of sheet 2.
+    '''
+    amax1= getFilletWeldMaximumLeg(t1)
+    amax2= getFilletWeldMaximumLeg(t2)
+    return min(amax1,amax2)
 
 class BoltBase(object):
     ''' Base class for bolts.
@@ -60,6 +139,9 @@ class BoltBase(object):
        else:
            self.pos3d= None
            
+    def getName(self):
+        return 'M'+str(self.diameter*1e3)[0:2]
+    
     def getArea(self):
         ''' Return the area of the anchor rod.
         '''
@@ -98,6 +180,10 @@ class BoltBase(object):
         retval= bte.BlockData()
         retval.blockFromPoints(octagon,labels)
         return retval
+    
+    def report(self, outputFile):
+        ''' Reports bolt design values.'''
+        outputFile.write('      diameter: '+str(self.diameter*1000)+' mm\n')
 
 
 class BoltFastener(BoltBase):
@@ -124,9 +210,6 @@ class BoltFastener(BoltBase):
        '''
        super(BoltFastener,self).__init__(diameter)
        self.group= group
-
-    def getName(self):
-        return 'M'+str(self.diameter*1e3)[0:2]
     
     def getMinDistanceBetweenCenters(self):
         ''' Return the minimum distance between centers of standard, 
@@ -241,6 +324,11 @@ class BoltFastener(BoltBase):
         ''' Read member values from a dictionary.'''
         super(BoltFastener,self).setFromDict(dct)
         self.group= dct['group']
+
+    def report(self, outputFile):
+        ''' Reports bolt design values.'''
+        super(BoltFastener,self).report(outputFile)
+        outputFile.write('      group: '+self.group+'\n')
 
 M16= BoltFastener(16e-3)
 M20= BoltFastener(20e-3)
@@ -378,8 +466,7 @@ class BoltArray(object):
                 holeVertices.append(refSys.getPosGlobal(p3d))
             retval.blockFromPoints(holeVertices,labels)
         return retval
-                
-    
+                    
     def getPositions(self, refSys= geom.Ref3d3d()):
         ''' Return the global coordinates of the bolts.
 
@@ -391,6 +478,14 @@ class BoltArray(object):
             p3d= geom.Pos3d(pLocal.x,pLocal.y, 0.0)
             retval.append(refSys.getPosGlobal(p3d))
         return retval
+    
+    def report(self, outputFile):
+        ''' Reports connection design values.'''
+        outputFile.write('    bolts:\n')
+        outputFile.write('      number of bolts: '+str(self.getNumBolts())+' x '+self.bolt.getName()+'\n')
+        outputFile.write('      spacing: '+str(self.dist*1000)+' mm\n')
+        self.bolt.report(outputFile)
+        
 
 class BoltedPlate(object):
     ''' Bolted plate.
@@ -480,6 +575,24 @@ class BoltedPlate(object):
             lmsg.error('shear not implemented yet.')
         return CF
 
+    def getFilletMinimumLeg(self, otherThickness):
+        '''
+        Return the minimum leg size for a fillet bead 
+        according to table J2.4 of AISC 360.
+
+        :param otherThickness: thickness of the other part to weld.
+        '''
+        return getFilletWeldMinimumLegSheets(self.thickness, otherThickness)
+        
+    def getFilletMaximumLeg(self, otherThickness):
+        '''
+        Return the minimum leg size for a fillet bead 
+        according to table J2.4 of AISC 360.
+
+        :param otherThickness: thickness of the other part to weld.
+        '''
+        return getFilletWeldMaximumLegSheets(self.thickness, otherThickness)
+
     def __str__(self):
         return 'width: '+ str(self.width) + ' length: '+ str(self.length) + ' thickness: '+ str(self.thickness) + ' bolts: ' + str(self.boltArray)
     
@@ -494,6 +607,15 @@ class BoltedPlate(object):
         self.length= dct['length']
         self.thickness= dct['thickness']
         self.steelType.setFromDict(dct['steelType'])
+
+    def report(self, outputFile):
+        ''' Reports connection design values.'''
+        outputFile.write('  gusset plates:\n')
+        outputFile.write('    chamfer width: '+str(self.width*1000)+' mm\n')
+        outputFile.write('    plate thickness: '+str(self.thickness*1000)+' mm\n')
+        outputFile.write('    steel type: '+str(self.steelType.name)+'\n')
+        self.boltArray.report(outputFile)
+        
 
 class AnchorBolt(BoltBase):
     ''' ASTM anchor bolt according to table 2.2 from the document
@@ -630,6 +752,11 @@ class AnchorBolt(BoltBase):
         else:
             lmsg.error('Anchor position not specified.')        
         return retval
+
+    def report(self, outputFile):
+        ''' Write the anchor specification.'''
+        super(AnchorBolt,self).report(outputFile)
+        outputFile.write('     steel type: '+self.steelType.name+'\n')
     
 class AnchorGroup(object):
     ''' Anchor group.
@@ -714,11 +841,19 @@ class AnchorGroup(object):
             retval.extend(anchor.getHoleBlock(refSys, labels))
         return retval
 
+    def report(self, outputFile):
+        ''' Writes anchor group specification.'''
+        outputFile.write('   anchors: \n')
+        outputFile.write('     number of anchors: '+ str(len(self.anchors))+ ' x '+self.anchors[0].getName()+'\n')
+        self.anchors[0].report(outputFile)
+        
+
 class ASTMShape(object):
     """Steel shape with ASTM/AISC verification routines."""
     def __init__(self, name= ''):
-       '''
-         Constructor.
+       '''Constructor.
+
+       :param name: name of the shape.
        '''
        self.name= name
        
@@ -749,7 +884,7 @@ class ASTMShape(object):
         ''' Return the flexural buckling slenderness ratio of the member.
 
         :param effectiveLengthY: effective length of member (minor axis).
-        :param effectiveLegnthZ: effective length of member (major axis).
+        :param effectiveLengthZ: effective length of member (major axis).
         '''
         sc= self.slendernessCheck()
         if(sc>1.01):
@@ -762,7 +897,7 @@ class ASTMShape(object):
             slenderness ratio of the member.
 
         :param effectiveLengthY: effective length of member (minor axis).
-        :param effectiveLegnthZ: effective length of member (major axis).
+        :param effectiveLengthZ: effective length of member (major axis).
          '''
         sr= self.getFlexuralSlendernessRatio(effectiveLengthY, effectiveLengthZ)
         E= self.get('E')
@@ -774,7 +909,7 @@ class ASTMShape(object):
             to equation E3-4 of AISC-360-16.
  
         :param effectiveLengthY: effective length of member (minor axis).
-        :parem effectiveLegnthZ: effective length of member (major axis).
+        :parem effectiveLengthZ: effective length of member (major axis).
         '''
         sr= self.getFlexuralSlendernessRatio(effectiveLengthY, effectiveLengthZ)
         E= self.get('E')
@@ -785,7 +920,7 @@ class ASTMShape(object):
             to equations E4-5 or E4-6 of AISC-360-16.
   
         :param effectiveLengthY: effective length of member (minor axis).
-        :param effectiveLegnthZ: effective length of member (major axis).
+        :param effectiveLengthZ: effective length of member (major axis).
         :param majorAxis: true if flexure about the major axis.
        '''
         if(majorAxis):
@@ -800,7 +935,7 @@ class ASTMShape(object):
             to equations E3-2 and E3-3 of AISC-360-16.
 
         :param effectiveLengthY: effective length of member (minor axis).
-        :param effectiveLegnthZ: effective length of member (major axis).
+        :param effectiveLengthZ: effective length of member (major axis).
         :param sectionClassif: section classification compact, noncompact, slender or too slender.
         :param Fe: flexural or torsional elastic buckling stress.
         '''
@@ -824,7 +959,7 @@ class ASTMShape(object):
             to equations E3-2 and E3-3 of AISC-360-16.
 
         :param effectiveLengthY: effective length of member (minor axis).
-        :param effectiveLegnthZ: effective length of member (major axis).
+        :param effectiveLengthZ: effective length of member (major axis).
         :param sectionClassif: section classification compact, noncompact, slender or too slender.
         '''
         Fe= self.getFlexuralElasticBucklingStress(effectiveLengthY, effectiveLengthZ)
@@ -845,7 +980,7 @@ class ASTMShape(object):
 
         :param effectiveLengthX: effective length of member (torsion).
         :param effectiveLengthY: effective length of member (minor axis).
-        :param effectiveLegnthZ: effective length of member (major axis).
+        :param effectiveLengthZ: effective length of member (major axis).
         :param sectionClassif: section classification compact, noncompact, slender or too slender.
         '''
         Fe= self.getTorsionalElasticBucklingStress(effectiveLengthX)
@@ -857,7 +992,7 @@ class ASTMShape(object):
 
         :param effectiveLengthX: effective length of member (torsion).
         :param effectiveLengthY: effective length of member (minor axis).
-        :param effectiveLegnthZ: effective length of member (major axis).
+        :param effectiveLengthZ: effective length of member (major axis).
         :param sectionClassif: section classification compact, noncompact, slender or too slender.
         '''
         Ag= self.shape.get('A') # Gross area of member
@@ -874,7 +1009,7 @@ class ASTMShape(object):
 
         :param effectiveLengthX: effective length of member (torsion).
         :param effectiveLengthY: effective length of member (minor axis).
-        :param effectiveLegnthZ: effective length of member (major axis).
+        :param effectiveLengthZ: effective length of member (major axis).
         :param sectionClassif: section classification compact, noncompact, slender or too slender.
         '''
         return 0.9*self.getNominalCompressiveStrength(effectiveLengthX, effectiveLengthY, effectiveLengthZ, sectionClassif)
