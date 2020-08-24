@@ -17,6 +17,7 @@ import math
 import scipy.interpolate
 import xc_base
 import geom
+import materials
 from materials import steel_base
 from misc_utils import log_messages as lmsg
 from materials import buckling_base
@@ -501,7 +502,8 @@ class AnchorBolt(BoltBase):
     def getDict(self):
         ''' Put member values in a dictionary.'''
         retval= super(AnchorBolt, self).getDict()
-        retval.update({'name':self.name, 'steelType':self.steelType.getDict()})
+        steelTypeClassName= str(self.steelType.__class__)[8:-2]
+        retval.update({'name':self.name, 'steelTypeClassName':steelTypeClassName, 'steelType':self.steelType.getDict()})
         xyz= None
         if(self.pos3d):
             xyz= (self.pos3d.x, self.pos3d.y, self.pos3d.z)
@@ -512,6 +514,8 @@ class AnchorBolt(BoltBase):
         ''' Read member values from a dictionary.'''
         super(AnchorBolt, self).setFromDict(dct)
         self.name= dct['name']
+        steelTypeClassName= dct['steelTypeClassName']+'()'
+        self.steelType= eval(steelTypeClassName)
         self.steelType.setFromDict(dct['steelType'])
         xyz= dct['pos3d']
         if(xyz):

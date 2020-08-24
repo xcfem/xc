@@ -154,7 +154,8 @@ class RectangularBasePlate(object):
     def getDict(self):
         ''' Put member values in a dictionary.'''
         steelShapeClassName= str(self.steelShape.__class__)[8:-2]
-        retval= {'N':self.N, 'B':self.B, 't':self.t, 'steelShapeClassName': steelShapeClassName, 'steelShape':self.steelShape.getDict(), 'anchorGroup':self.anchorGroup.getDict(), 'steel':self.steel.getDict()}
+        steelClassName= str(self.steel.__class__)[8:-2]
+        retval= {'N':self.N, 'B':self.B, 't':self.t, 'steelShapeClassName': steelShapeClassName, 'steelShape':self.steelShape.getDict(), 'anchorGroup':self.anchorGroup.getDict(),'steelClassName':steelClassName, 'steel':self.steel.getDict()}
         xyz= (self.origin.x, self.origin.y, self.origin.z)
         retval.update({'origin': xyz, 'fc':self.fc, 'nShearBolts':self.nShearBolts})
         return retval
@@ -169,6 +170,8 @@ class RectangularBasePlate(object):
         self.steelShape.setFromDict(dct['steelShape'])
         self.anchorGroup= ASTM_materials.AnchorGroup(steel= None, diameter= 0.0, positions= [])
         self.anchorGroup.setFromDict(dct['anchorGroup'])
+        steelClassName= dct['steelClassName']+'()'
+        self.steel= eval(steelClassName)
         self.steel.setFromDict(dct['steel'])
         xyz= dct['origin']
         self.origin= geom.Pos3d(xyz[0],xyz[1],xyz[2])
