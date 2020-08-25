@@ -45,6 +45,7 @@ class ASTMSteel(steel_base.BasicSteel):
             self.name= name
         else:
             self.name= None
+
     def getDict(self):
         ''' Put member values in a dictionary.'''
         retval= super(ASTMSteel,self).getDict()
@@ -141,7 +142,7 @@ class BoltBase(object):
            
     def getName(self):
         return 'M'+str(self.diameter*1e3)[0:2]
-    
+
     def getArea(self):
         ''' Return the area of the anchor rod.
         '''
@@ -784,7 +785,7 @@ class AnchorGroup(object):
         '''
         for anchor, pos in zip(self.anchors, positions):
             anchor.pos3d= pos
-
+            
     def getDict(self):
         ''' Put member values in a dictionary.'''
         retval= dict()
