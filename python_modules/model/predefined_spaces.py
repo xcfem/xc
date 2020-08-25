@@ -37,7 +37,10 @@ class PredefinedSpace(object):
 
     def getElements(self, tags):
         ''' Return the elements that correspond to the argument
-            tags.'''
+            tags.
+
+        :param tags: element tags.
+        '''
         retval= list()
         elementHandler= self.preprocessor.getElementHandler
         for t in tags:
@@ -47,7 +50,10 @@ class PredefinedSpace(object):
 
     def getNodes(self, tags):
         ''' Return the nodes that correspond to the argument
-            tags.'''
+            tags.
+
+        :param tags: node tags.
+        '''
         retval= list()
         nodeHandler= self.preprocessor.getNodeHandler
         for t in tags:
