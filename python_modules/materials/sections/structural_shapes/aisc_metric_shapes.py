@@ -365,12 +365,14 @@ class WShape(structural_steel.IShape):
         ''' Return the section mid-lines.'''
         halfB= self.get('b')/2.0
         halfH= self.h()/2.0
-        tf= self.get('tf')
-        s0= geom.Segment2d(geom.Pos2d(-halfB,-halfH+tf/2.0), geom.Pos2d(0.0,-halfH+tf/2.0))
-        s1= geom.Segment2d(geom.Pos2d(0.0,-halfH+tf/2.0), geom.Pos2d(halfB,-halfH+tf/2.0))
-        s2= geom.Segment2d(geom.Pos2d(0.0,-halfH+tf/2.0), geom.Pos2d(0.0,halfH-tf/2.0))
-        s3= geom.Segment2d(geom.Pos2d(-halfB,halfH-tf/2.0), geom.Pos2d(0.0,halfH-tf/2.0))
-        s4= geom.Segment2d(geom.Pos2d(0.0,halfH-tf/2.0), geom.Pos2d(halfB,halfH-tf/2.0))
+        tf2= self.get('tf')/2.0
+        bottom= -halfH+tf2
+        top= halfH-tf2
+        s0= geom.Segment2d(geom.Pos2d(-halfB,bottom), geom.Pos2d(0.0,bottom)) #Bottom flange.
+        s1= geom.Segment2d(geom.Pos2d(0.0,bottom), geom.Pos2d(halfB,bottom))
+        s2= geom.Segment2d(geom.Pos2d(0.0,bottom), geom.Pos2d(0.0,top)) # Web
+        s3= geom.Segment2d(geom.Pos2d(-halfB,top), geom.Pos2d(0.0,top)) # Top flange.
+        s4= geom.Segment2d(geom.Pos2d(0.0,top), geom.Pos2d(halfB,top))
         return [s0,s1,s2,s3,s4]
 
     def getWebMidPlane(self, org, extrusionVDir):
@@ -393,9 +395,9 @@ class WShape(structural_steel.IShape):
         '''
         halfB= self.get('b')/2.0
         halfH= self.h()/2.0
-        tf= self.get('tf')
-        p0= geom.Pos3d(org.x-halfB,org.y-halfH+tf/2.0, org.z)
-        p1= geom.Pos3d(org.x+halfB,org.y-halfH+tf/2.0, org.z)
+        bottom= -halfH+self.get('tf')/2.0
+        p0= geom.Pos3d(org.x-halfB,org.y+bottom, org.z)
+        p1= geom.Pos3d(org.x+halfB,org.y+bottom, org.z)
         p2= p0+extrusionVDir
         return geom.Plane3d(p0,p1,p2)
 
@@ -407,9 +409,9 @@ class WShape(structural_steel.IShape):
         '''
         halfB= self.get('b')/2.0
         halfH= self.h()/2.0
-        tf= self.get('tf')
-        p0= geom.Pos3d(org.x-halfB,org.y+halfH+tf/2.0, org.z)
-        p1= geom.Pos3d(org.x+halfB,org.y+halfH+tf/2.0, org.z)
+        top= halfH-self.get('tf')/2.0
+        p0= geom.Pos3d(org.x-halfB,org.y+top, org.z)
+        p1= geom.Pos3d(org.x+halfB,org.y+top, org.z)
         p2= p0+extrusionVDir
         return geom.Plane3d(p0,p1,p2)
             
@@ -422,11 +424,13 @@ class WShape(structural_steel.IShape):
         '''
         halfB= self.get('b')/2.0
         halfH= self.h()/2.0
-        tf= self.get('tf')
+        tf2= self.get('tf')/2.0
         retval= bte.BlockData()
         # Base points (A)
-        bottomFlangeA= [geom.Pos3d(org.x-halfB,org.y-halfH+tf/2.0, org.z), geom.Pos3d(org.x,org.y-halfH+tf/2.0, org.z), geom.Pos3d(org.x+halfB,org.y-halfH+tf/2.0, org.z)]
-        topFlangeA= [geom.Pos3d(org.x-halfB,org.y+halfH+tf/2.0, org.z), geom.Pos3d(org.x,org.y+halfH+tf/2.0, org.z), geom.Pos3d(org.x+halfB,org.y+halfH+tf/2.0, org.z)]
+        bottom= org.y-halfH+tf2
+        top= org.y+halfH-tf2
+        bottomFlangeA= [geom.Pos3d(org.x-halfB,bottom, org.z), geom.Pos3d(org.x,bottom, org.z), geom.Pos3d(org.x+halfB,bottom, org.z)]
+        topFlangeA= [geom.Pos3d(org.x-halfB, top, org.z), geom.Pos3d(org.x, top, org.z), geom.Pos3d(org.x+halfB, top, org.z)]
         bottomFlangeAId= list()
         for p in bottomFlangeA:
             bottomFlangeAId.append(retval.appendPoint(-1,p.x,p.y,p.z,labels))
@@ -1335,7 +1339,7 @@ class HSSShape(structural_steel.QHShape):
         if(not majorAxis):
             b= self.get('h')
         b_removed= b-self.beff # ineffective width of compression flange
-        tf= self.get('t')
+        tf= self.get('t')/2.0
         A_removed= b_removed*tf # ineffective area of compression flange
         A= self.get('A')
         self.y_eff= (A*b/2.0-A_removed*(b-tf/2.0))/(A-A_removed) # new neutral axis measured from bottom of section.
