@@ -24,12 +24,12 @@ shape= ASTM_materials.HSSShape(steel,'HSS8X8X3/16')
 
 # Effective section (AISC-360-16 section F7).
 Ieff= shape.getEffectiveInertia(majorAxis= True)
-IeffRef= 2.12077901769e-05
+IeffRef= 2.19026289469e-05
 Seff= shape.getEffectiveSectionModulus(majorAxis= True)
-SeffRef= 0.000200922945777
+SeffRef= 0.000211604241488
 ## Flange local buckling (F7.2)
 Mn= shape.getFlangeLocalBucklingLimit(majorAxis= True)
-MnRef= 63.2907279198e3
+MnRef= 66.6553360686e3
 
 ratio1= abs(Ieff-IeffRef)/IeffRef
 ratio2= abs(Seff-SeffRef)/SeffRef
