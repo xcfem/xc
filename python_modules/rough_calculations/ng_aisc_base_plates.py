@@ -117,7 +117,11 @@ class RectangularBasePlate(object):
     ''' Rectangular base plate.
 
     :ivar N: dimension parallel to the web of the shaft.
+    :ivar offsetN: displacement of the plate in the direction of the
+                   web (defaults to 0).
     :ivar B: dimension parallel to the flange of the shaft.
+    :ivar offsetB: displacement of the plate in the direction of the
+                   flange (defaults to 0).
     :ivar t: thickness.
     :ivar steelShape: shape of the steel column supported
                        by the plate.
@@ -142,7 +146,9 @@ class RectangularBasePlate(object):
         :param origin: center of the base plate.
         '''
         self.N= N
+        self.offsetN= 0.0 
         self.B= B
+        self.offsetB= 0.0
         self.t= t
         self.steelShape= steelShape
         self.anchorGroup= anchorGroup
@@ -156,7 +162,7 @@ class RectangularBasePlate(object):
         ''' Put member values in a dictionary.'''
         steelShapeClassName= str(self.steelShape.__class__)[8:-2]
         steelClassName= str(self.steel.__class__)[8:-2]
-        retval= {'N':self.N, 'B':self.B, 't':self.t, 'steelShapeClassName': steelShapeClassName, 'steelShape':self.steelShape.getDict(), 'anchorGroup':self.anchorGroup.getDict(),'steelClassName':steelClassName, 'steel':self.steel.getDict()}
+        retval= {'N':self.N, 'offsetN': self.offsetN, 'B':self.B, 'offsetB': self.offsetB, 't':self.t, 'steelShapeClassName': steelShapeClassName, 'steelShape':self.steelShape.getDict(), 'anchorGroup':self.anchorGroup.getDict(),'steelClassName':steelClassName, 'steel':self.steel.getDict()}
         xyz= (self.origin.x, self.origin.y, self.origin.z)
         retval.update({'origin': xyz, 'fc':self.fc, 'nShearBolts':self.nShearBolts})
         return retval
@@ -164,7 +170,9 @@ class RectangularBasePlate(object):
     def setFromDict(self,dct):
         ''' Read member values from a dictionary.'''
         self.N= dct['N']
+        self.offsetN= dct['offsetN']
         self.B= dct['B']
+        self.offsetB= dct['offsetB']
         self.t= dct['t']
         steelShapeClassName= dct['steelShapeClassName']+'()'
         self.steelShape= eval(steelShapeClassName)
@@ -187,16 +195,20 @@ class RectangularBasePlate(object):
         ''' Return the area of the base plate.'''
         return self.B*self.N
 
+    def getMidPlane(self):
+        ''' Return the mid-plane of the base plate.'''
+        return geom.Plane3d(self.origin, geom.Vector3d(1.0,0.0,0.0), geom.Vector3d(0.0,1.0,0.0))
+        
     def getContour(self):
         ''' Return the base plate contour. '''
         retval= geom.Polygon2d()
         deltaX= self.B/2.0
         deltaY= self.N/2.0
         origin2d= geom.Pos2d(self.origin.x, self.origin.y)
-        retval.appendVertex(origin2d+geom.Vector2d(deltaX,deltaY))
-        retval.appendVertex(origin2d+geom.Vector2d(-deltaX,deltaY))
-        retval.appendVertex(origin2d+geom.Vector2d(-deltaX,-deltaY))
-        retval.appendVertex(origin2d+geom.Vector2d(deltaX,-deltaY))
+        retval.appendVertex(origin2d+geom.Vector2d(deltaX+self.offsetB,deltaY+self.offsetN))
+        retval.appendVertex(origin2d+geom.Vector2d(-deltaX+self.offsetB,deltaY+self.offsetN))
+        retval.appendVertex(origin2d+geom.Vector2d(-deltaX+self.offsetB,-deltaY+self.offsetN))
+        retval.appendVertex(origin2d+geom.Vector2d(deltaX+self.offsetB,-deltaY+self.offsetN))
         return retval
 
     def getBlocks(self, labels):
@@ -406,7 +418,9 @@ class RectangularBasePlate(object):
         ''' Writes base plate specification.'''
         outputFile.write('  Base plate: \n')
         outputFile.write('    length: '+str(self.N*1000)+ ' mm\n')
+        outputFile.write('    length offset: '+str(self.offsetN*1000)+ ' mm\n')
         outputFile.write('    width: '+str(self.B*1000)+ ' mm\n')
+        outputFile.write('    width offset: '+str(self.offsetB*1000)+ ' mm\n')
         outputFile.write('    thickness: '+ str(self.t*1000)+ ' mm\n')
         outputFile.write('    base plate - column welds:\n')
         outputFile.write('      with the flange(s): 2 x '+str(math.floor(self.getFlangeLegSize(0.3)*1000))+' mm (fillet weld leg size)\n')
