@@ -777,6 +777,14 @@ class AnchorGroup(object):
             self.anchors.append(AnchorBolt(name= str(count), steel= steel, diameter= diameter, pos3d= p))
             count+= 1
 
+    def setPositions(self, positions):
+        ''' Set the anchors positions.
+
+        :param positions: list of positions.
+        '''
+        for anchor, pos in zip(self.anchors, positions):
+            anchor.pos3d= pos
+
     def getDict(self):
         ''' Put member values in a dictionary.'''
         retval= dict()
