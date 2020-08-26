@@ -14,6 +14,7 @@ __version__= "3.0"
 __email__= "l.pereztato@ciccp.es, ana.ortega@ciccp.es "
 
 import math
+import json
 import scipy.interpolate
 import xc_base
 import geom
@@ -609,6 +610,13 @@ class BoltedPlate(object):
         self.thickness= dct['thickness']
         self.steelType.setFromDict(dct['steelType'])
 
+    def jsonRead(self, inputFileName):
+        ''' Read object from JSON file.'''
+        with open(inputFileName) as json_file:
+            boltedPlateDict= json.load(json_file)
+        self.setFromDict(boltedPlateDict)
+        json_file.close()
+
     def report(self, outputFile):
         ''' Reports connection design values.'''
         outputFile.write('  gusset plates:\n')
@@ -617,7 +625,12 @@ class BoltedPlate(object):
         outputFile.write('    steel type: '+str(self.steelType.name)+'\n')
         self.boltArray.report(outputFile)
         
-
+def readBoltedPlateFromJSONFile(inputFileName):
+    ''' Read bolted plate object from a JSON file.'''
+    retval= BoltedPlate()
+    retval.jsonRead(inputFileName)
+    return retval
+        
 class AnchorBolt(BoltBase):
     ''' ASTM anchor bolt according to table 2.2 from the document
     Base Plate and Anchor Rod Design Second Edition
