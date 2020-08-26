@@ -85,6 +85,7 @@ class NodePtrsWithIDs: public NodePtrs, public MovableObject
 		      int nd26,int nd27);
     void set_id_nodes(const std::vector<int> &inodes);
     void set_id_nodes(const ID &inodes);
+    void set_id_node(const int &i, const int &inode);
     void Print(std::ostream &os) const;
     int sendSelf(Communicator &);
     int recvSelf(const Communicator &);

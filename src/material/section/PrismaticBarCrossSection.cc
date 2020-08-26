@@ -142,12 +142,14 @@ const double &XC::PrismaticBarCrossSection::EIz(void) const
 //! @brief Returns the bending stiffness of the cross-section en torno the y axis.
 const double &XC::PrismaticBarCrossSection::EIy(void) const
   { return getSectionTangent()(2,2); }
-//! @brief Returns the product of inertia multiplicado por el
-//! Young's modulus.
+//! @brief Returns the product of inertia multiplied by the Young modulus.
 const double &XC::PrismaticBarCrossSection::EIyz(void) const
   { return getSectionTangent()(1,2); }
+//! @brief Returns the torsional stiffness.
+const double &XC::PrismaticBarCrossSection::GJ(void) const
+  { return getSectionTangent()(3,3); }
 
-//! @brief Returns the angle that defines un principal axis of inertia.
+//! @brief Returns the angle that defines the principal axis of inertia.
 double XC::PrismaticBarCrossSection::getTheta(void) const
   { return theta_inertia(EIy(),EIz(),EIyz()); }
 

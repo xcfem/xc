@@ -208,6 +208,10 @@ void XC::Element::setIdNodes(const std::vector<int> &inodes)
 void XC::Element::setIdNodes(const ID &inodes)
   { getNodePtrs().set_id_nodes(inodes); }
 
+//! @brief Set the i-th node.
+void XC::Element::setIdNode(const int &i, const int &inode)
+  { getNodePtrs().set_id_node(i,inode); }
+
 //! @brief Sets the domain for the element.
 void XC::Element::setDomain(Domain *theDomain)
   {

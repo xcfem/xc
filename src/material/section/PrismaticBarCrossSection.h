@@ -82,6 +82,7 @@ class PrismaticBarCrossSection: public SectionForceDeformation
     const double &EIz(void) const;
     const double &EIy(void) const;
     const double &EIyz(void) const;
+    const double &GJ(void) const;
     double getTheta(void) const;
     double getEI1(void) const;
     double getEI2(void) const;

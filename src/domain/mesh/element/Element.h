@@ -168,6 +168,7 @@ class Element: public MeshComponent
     virtual double getVolume(bool initialGeometry= true) const;
     virtual void setIdNodes(const std::vector<int> &inodes);
     virtual void setIdNodes(const ID &inodes);
+    virtual void setIdNode(const int &i, const int &inode);
     void setDomain(Domain *theDomain);
 
     

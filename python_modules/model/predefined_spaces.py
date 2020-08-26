@@ -149,8 +149,8 @@ class PredefinedSpace(object):
         Creates a rigid link between the nodes.
         It's called fulcrum because it's pinned on pivotNode.
 
-        :param   nodeTagA: tag of the master node.
-        :param   nodeTagB: tag of the pivot (slave node).
+        :param   nodeTagA: tag of the primary node.
+        :param   pivotNode: tag of the pivot (secondary node).
         :param dofs: degrees of freedom to be glued 
                    (e.g.: dofs=xc.ID([0,3,6]) means to equal ux,uz,rotz)
         '''
@@ -177,7 +177,7 @@ class PredefinedSpace(object):
             x: are the vector components in global coordinates defining 
                local x-axis (optional)
             yp: vector components in global coordinates defining a  vector
-                 that lies in the local x-y plane of the element(optional).
+                 that lies in the local x-y plane of the element (optional).
           If the optional orientation vector are not specified, the local
           element axes coincide with the global axes. Otherwise, the local
           z-axis is defined by the cross product between the vectors x 
@@ -1368,6 +1368,45 @@ class StructuralMechanics3D(StructuralMechanics):
         elem= elements.newElement("Truss",xc.ID([nodeTagA,nodeTagB]))
         elem.sectionArea=A
         return elem
+
+    def releaseBeamEnd(self, beamElement, stiffnessFactors, nodesToRelease):
+        ''' Releases some degrees of fredom at the extremities of the beam element.
+
+        :param beamElement: element that will be released.
+        :stiffnessFactors: factors that multiply the element stiffnesses on 
+                           each DOF: [KX, KY, KZ, KrotX, KrotY, KrotZ]
+                           the axis correspond to the local axis of the element.
+        :param nodesToRelease: indexesof the element nodes to release.
+        '''
+        if(len(nodesToRelease)>0):
+            beamMaterial= beamElement.getPhysicalProperties.getVectorMaterials[0]
+            # Read stiffnesses from element material
+            tangent= beamMaterial.getInitialTangentStiffness()
+            if(tangent.noRows!=4):
+                lmsg.warning('release of shear stifnesses not implemented yet.')
+            if(len(stiffnessFactors)!=6):
+                lmsg.error('6 stifness factors expected.')                
+            KX= tangent(0,0)*stiffnessFactors[0]
+            KY= KX*1000.0 # Shear not implemented yet. 
+            KZ= KX*1000.0 # Shear not implemented yet.
+            KrotX= tangent(3,3)*stiffnessFactors[3]
+            KrotY= tangent(2,2)*stiffnessFactors[4]
+            KrotZ= tangent(1,1)*stiffnessFactors[5]
+            matKX= tm.defElasticMaterial(self.preprocessor,'matKX',KX)
+            matKY=tm.defElasticMaterial(self.preprocessor,'matKY',KY)
+            matKZ=tm.defElasticMaterial(self.preprocessor,'matKZ',KZ)
+            matKrotX=tm.defElasticMaterial(self.preprocessor,'matKrotX',KrotX)
+            matKrotY=tm.defElasticMaterial(self.preprocessor,'matKropY',KrotY)
+            matKrotZ=tm.defElasticMaterial(self.preprocessor,'matKrotZ',KrotZ)
+            releaseMats=  [matKX,matKY,matKZ,matKrotX,matKrotY,matKrotZ]
+            releaseMatsNames=[mat.name for mat in releaseMats]
+            orientation= [beamElement.getIVector3d, beamElement.getJVector3d]
+            for iNod in nodesToRelease:
+                nodeToRelease= beamElement.getNodes[iNod]
+                nodes= self.preprocessor.getNodeHandler
+                newNode= nodes.duplicateNode(nodeToRelease.tag) # new node.
+                beamElement.setIdNode(iNod, newNode.tag)
+                self.setBearingBetweenNodes(prep, newNode.tag, nodeToRelease.tag, releaseMatsNames,orientation)
 
 def getStructuralMechanics3DSpace(preprocessor):
     '''Return a tStructuralMechanics3DSpace from an

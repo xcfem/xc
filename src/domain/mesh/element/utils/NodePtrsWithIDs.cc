@@ -87,6 +87,18 @@ void XC::NodePtrsWithIDs::set_id_nodes(const ID &inodes)
       connectedExternalNodes(i) = inodes(i);
   }
 
+//! @brief Sets the i-th node identifier (tag).
+void XC::NodePtrsWithIDs::set_id_node(const int &i, const int &inode)
+  {
+    const int numNodes= getNumExternalNodes();
+    if(i>=numNodes)
+      std::cerr << getClassName() << "::" << __FUNCTION__
+	        << "; " 
+                << i << ">=" << numNodes
+		<< " index out of range." << std::endl;
+    connectedExternalNodes(i)= inode;
+  }
+
 //! @brief Set los pointers to the nodes.
 void XC::NodePtrsWithIDs::set_node_ptrs(Domain *domain)
   {
