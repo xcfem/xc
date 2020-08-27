@@ -98,8 +98,6 @@ lp0= lPatterns.newLoadPattern("default","0")
 lPatterns.currentLoadPattern= "0"
 el.vector3dUniformLoadGlobal(xc.Vector([f*math.sqrt(2)/2,f*math.sqrt(2)/2,0]))
 
-loadHandler= preprocessor.getLoadHandler
-
 #We add the load case to domain.
 lPatterns.addToDomain(lp0.name)
 # Solution procedure
