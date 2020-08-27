@@ -96,7 +96,20 @@ void XC::NodePtrsWithIDs::set_id_node(const int &i, const int &inode)
 	        << "; " 
                 << i << ">=" << numNodes
 		<< " index out of range." << std::endl;
-    connectedExternalNodes(i)= inode;
+    const int oldTag= connectedExternalNodes(i);
+    Node *oldNode= (*this)[i]; 
+    if(inode!= oldTag)
+      {
+        connectedExternalNodes(i)= inode;
+	//! If pointer exists update pointers
+	//! and connectivity.
+        if(oldNode)
+	  {
+	    Domain *dom= oldNode->getDomain();
+	    set_node_ptrs(dom);
+	  }
+      }
+      
   }
 
 //! @brief Set los pointers to the nodes.
