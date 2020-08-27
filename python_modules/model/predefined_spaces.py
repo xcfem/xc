@@ -748,6 +748,12 @@ class StructuralMechanics2D(StructuralMechanics):
         disp= nod.getDisp
         return xc.Vector([disp[self.Ux],disp[self.Uy]])
 
+    def getRotationVector(self,nodeTag):
+        ''' Return a vector with the rotation components of the node motion.'''
+        nod= self.preprocessor.getNodeHandler.getNode(nodeTag)
+        disp= nod.getDisp
+        return xc.Vector([disp[self.Theta]])
+
     def newLinearCrdTransf(self, trfName):
         ''' Creates a new 2D linear transformation.
 
@@ -1095,13 +1101,24 @@ class StructuralMechanics3D(StructuralMechanics):
         return [self.ThetaX,self.ThetaY,self.ThetaZ]
 
     def getDisplacementVector(self,nodeTag):
-        ''' Return a vector with the displacement components of the node motion.
+        ''' Return a vector with the displacement components of the node 
+            motion.
 
           :param nodeTag: node identifier.
         '''
         nod= self.preprocessor.getNodeHandler.getNode(nodeTag)
         disp= nod.getDisp
         return xc.Vector([disp[self.Ux],disp[self.Uy],disp[self.Uz]])
+
+    def getRotationVector(self,nodeTag):
+        ''' Return a vector with the rotational components of the node 
+            motion.
+
+          :param nodeTag: node identifier.
+        '''
+        nod= self.preprocessor.getNodeHandler.getNode(nodeTag)
+        disp= nod.getDisp
+        return xc.Vector([disp[self.ThetaX],disp[self.ThetaY],disp[self.ThetaZ]])
 
     def newLinearCrdTransf(self, trfName, xzVector):
         ''' Creates a new 3D linear transformation.
@@ -1378,6 +1395,7 @@ class StructuralMechanics3D(StructuralMechanics):
                            the axis correspond to the local axis of the element.
         :param nodesToRelease: indexesof the element nodes to release.
         '''
+        retval= list()
         if(len(nodesToRelease)>0):
             beamMaterial= beamElement.getPhysicalProperties.getVectorMaterials[0]
             # Read stiffnesses from element material
@@ -1387,11 +1405,12 @@ class StructuralMechanics3D(StructuralMechanics):
             if(len(stiffnessFactors)!=6):
                 lmsg.error('6 stifness factors expected.')                
             KX= tangent(0,0)*stiffnessFactors[0]
-            KY= KX*1000.0 # Shear not implemented yet. 
-            KZ= KX*1000.0 # Shear not implemented yet.
+            KY= 1e9*stiffnessFactors[1] # Shear not implemented yet. 
+            KZ= 1e9*stiffnessFactors[2] # Shear not implemented yet.
             KrotX= tangent(3,3)*stiffnessFactors[3]
             KrotY= tangent(2,2)*stiffnessFactors[4]
             KrotZ= tangent(1,1)*stiffnessFactors[5]
+            print(KX, KY, KZ, KrotX, KrotY, KrotZ)
             matKX= tm.defElasticMaterial(self.preprocessor,'matKX',KX)
             matKY=tm.defElasticMaterial(self.preprocessor,'matKY',KY)
             matKZ=tm.defElasticMaterial(self.preprocessor,'matKZ',KZ)
@@ -1400,13 +1419,24 @@ class StructuralMechanics3D(StructuralMechanics):
             matKrotZ=tm.defElasticMaterial(self.preprocessor,'matKrotZ',KrotZ)
             releaseMats=  [matKX,matKY,matKZ,matKrotX,matKrotY,matKrotZ]
             releaseMatsNames=[mat.name for mat in releaseMats]
-            orientation= [beamElement.getIVector3d, beamElement.getJVector3d]
+            vx= xc.Vector(beamElement.getIVector3d(False))
+            vy= xc.Vector(beamElement.getJVector3d(False))
             for iNod in nodesToRelease:
                 nodeToRelease= beamElement.getNodes[iNod]
                 nodes= self.preprocessor.getNodeHandler
                 newNode= nodes.duplicateNode(nodeToRelease.tag) # new node.
+                # Connect the beam with the new node.
                 beamElement.setIdNode(iNod, newNode.tag)
-                self.setBearingBetweenNodes(prep, newNode.tag, nodeToRelease.tag, releaseMatsNames,orientation)
+                print('beam nodes: ', beamElement.getNodes[0].tag, beamElement.getNodes[1].tag)
+                print('BEFORE new node: ', newNode.tag, ' connected elements: ', newNode.getNumberOfConnectedElements())
+                print('BEFORE node to release: ', nodeToRelease.tag, ' connected elements: ', nodeToRelease.getNumberOfConnectedElements())
+                # Put the zero length element between the nodes.
+                self.setBearingBetweenNodes( nodeToRelease.tag, newNode.tag, releaseMatsNames,orientation= [vx, vy])
+                print('AFTER new node: ', newNode.tag, ' connected elements: ', newNode.getNumberOfConnectedElements())
+                print('AFTER node to release: ', nodeToRelease.tag, ' connected elements: ', nodeToRelease.getNumberOfConnectedElements())
+                retval.append(newNode)
+        return retval
+                
 
 def getStructuralMechanics3DSpace(preprocessor):
     '''Return a tStructuralMechanics3DSpace from an
