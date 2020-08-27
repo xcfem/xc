@@ -107,8 +107,8 @@ bool XC::NodePtrsWithIDs::set_id_node(const int &i, const int &inode)
     if(inode!= oldTag)
       {
         connectedExternalNodes(i)= inode;
-	//! If pointer exists update pointers
-	//! and connectivity.
+	// If pointer exists update pointers
+	// and connectivity.
         if(oldNode)
 	  retval= true;
       }
