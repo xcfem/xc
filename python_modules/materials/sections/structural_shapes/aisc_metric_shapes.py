@@ -748,6 +748,10 @@ class CShape(structural_steel.UShape):
 
         '''
         super(CShape,self).__init__(steel,name,C)
+
+    def getMetricName(self):
+        '''Return the metric label from the US customary one.'''
+        return getMetricLabel(self.name)
         
     def getLambdaPFlange(self):
         '''Return he limiting slenderness for a compact flange, 
@@ -1039,6 +1043,10 @@ class HSSShape(structural_steel.QHShape):
         ''' Constructor.
         '''
         super(HSSShape,self).__init__(steel,name,HSS)
+
+    def getMetricName(self):
+        '''Return the metric label from the US customary one.'''
+        return getMetricLabel(self.name)
 
     def getLimitingWidthToThicknessRatio(self):
         ''' Return the Limiting Width-to-Thickness Ratio 
@@ -1548,6 +1556,10 @@ class CHSSShape(structural_steel.CHShape):
         ''' Constructor.
         '''
         super(CHSSShape,self).__init__(steel,name,CHSS)
+
+    def getMetricName(self):
+        '''Return the metric label from the US customary one.'''
+        return getMetricLabel(self.name)
 
     def getLimitingWidthToThicknessRatio(self):
         ''' Return the Limiting Width-to-Thickness Ratio 
