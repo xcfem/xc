@@ -1046,8 +1046,7 @@ int XC::Node::addInertiaLoadToUnbalance(const Vector &accelG, double fact)
     return 0;
   }
 
-
-
+//! @brief ??
 int XC::Node::addInertiaLoadSensitivityToUnbalance(const XC::Vector &accelG, double fact, bool somethingRandomInMotions)
   {
     // simply return if node has no R matrix

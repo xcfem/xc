@@ -77,10 +77,12 @@ XC::BeamColumnJoint3d::BeamColumnJoint3d(int tag,int Nd1, int Nd2, int Nd3, int 
   elemActHeight(0.0), elemActWidth(0.0),
   elemWidth(0.0), elemHeight(0.0), HgtFac(1.0), WdtFac(1.0),
   Uecommit(24), UeIntcommit(4), UeprCommit(24), UeprIntCommit(4), BCJoint(13,16), dg_df(4,13), dDef_du(13,4), K(24,24), R(24)
-{
+  {
 // ensure theNodes is of correct size & set values
     if(theNodes.size() != 4)
-         std::cerr << "ERROR : BeamColumnJoint::BeamColumnJoint - " << tag << "failed to create an XC::ID of size 4" << std::endl;
+      std::cerr << getClassName() << "::" << __FUNCTION__
+	        << "; ERROR : " << tag
+		<< "failed to create an ID of size 4" << std::endl;
 
     theNodes.set_id_nodes(Nd1,Nd2,Nd3,Nd4);
 

@@ -249,7 +249,6 @@ void XC::Element0D::setUp(int Nd1, int Nd2, const Vector &x, const Vector &yp)
         exit(-1);
       }
     
-    theNodes.set_id_nodes(Nd1,Nd2);
     theNodes.inic();
     setUpVectors(x,yp);
   }
@@ -290,7 +289,11 @@ XC::ElemPtrArray3d XC::Element0D::sew(const SetEstruct &f1,const SetEstruct &f2)
                     Element *tmp= getCopy();
                     const int Nd1= f1.getNode(i,1,1)->getTag();
                     const int Nd2= f2.getNode(i,1,1)->getTag();
-                    tmp->getNodePtrs().set_id_nodes(Nd1,Nd2);
+                    bool changed= tmp->getNodePtrs().set_id_nodes(Nd1,Nd2);
+		    if(changed)
+		      std::cerr << getClassName() << "::" << __FUNCTION__
+				<< ": element nodes were already assingned."
+				<< std::endl;
                     retval(i,1,1)= tmp;
                   }
               }
@@ -302,7 +305,11 @@ XC::ElemPtrArray3d XC::Element0D::sew(const SetEstruct &f1,const SetEstruct &f2)
                     Element *tmp= getCopy();
                     const int Nd1= f1.getNode(i,1,1)->getTag();
                     const int Nd2= f2.getNode(1,i,1)->getTag();
-                    tmp->getNodePtrs().set_id_nodes(Nd1,Nd2);
+                    bool changed= tmp->getNodePtrs().set_id_nodes(Nd1,Nd2);
+		    if(changed)
+		      std::cerr << getClassName() << "::" << __FUNCTION__
+				<< ": element nodes were already assingned."
+				<< std::endl;
                     retval(i,1,1)= tmp;
                   }
               }
@@ -314,7 +321,11 @@ XC::ElemPtrArray3d XC::Element0D::sew(const SetEstruct &f1,const SetEstruct &f2)
                     Element *tmp= getCopy();
                     const int Nd1= f1.getNode(i,1,1)->getTag();
                     const int Nd2= f2.getNode(1,1,i)->getTag();
-                    tmp->getNodePtrs().set_id_nodes(Nd1,Nd2);
+                    bool changed= tmp->getNodePtrs().set_id_nodes(Nd1,Nd2);
+		    if(changed)
+		      std::cerr << getClassName() << "::" << __FUNCTION__
+				<< ": element nodes were already assingned."
+				<< std::endl;
                     retval(i,1,1)= tmp;
                   }
               }
@@ -329,7 +340,11 @@ XC::ElemPtrArray3d XC::Element0D::sew(const SetEstruct &f1,const SetEstruct &f2)
                     Element *tmp= getCopy();
                     const int Nd1= f1.getNode(1,i,1)->getTag();
                     const int Nd2= f2.getNode(i,1,1)->getTag();
-                    tmp->getNodePtrs().set_id_nodes(Nd1,Nd2);
+                    bool changed= tmp->getNodePtrs().set_id_nodes(Nd1,Nd2);
+		    if(changed)
+		      std::cerr << getClassName() << "::" << __FUNCTION__
+				<< ": element nodes were already assingned."
+				<< std::endl;
                     retval(1,i,1)= tmp;
                   }
               }
@@ -341,7 +356,11 @@ XC::ElemPtrArray3d XC::Element0D::sew(const SetEstruct &f1,const SetEstruct &f2)
                     Element *tmp= getCopy();
                     const int Nd1= f1.getNode(1,i,1)->getTag();
                     const int Nd2= f2.getNode(1,i,1)->getTag();
-                    tmp->getNodePtrs().set_id_nodes(Nd1,Nd2);
+                    bool changed= tmp->getNodePtrs().set_id_nodes(Nd1,Nd2);
+		    if(changed)
+		      std::cerr << getClassName() << "::" << __FUNCTION__
+				<< ": element nodes were already assingned."
+				<< std::endl;
                     retval(1,i,1)= tmp;
                   }
               }
@@ -353,7 +372,11 @@ XC::ElemPtrArray3d XC::Element0D::sew(const SetEstruct &f1,const SetEstruct &f2)
                     Element *tmp= getCopy();
                     const int Nd1= f1.getNode(1,i,1)->getTag();
                     const int Nd2= f2.getNode(1,1,i)->getTag();
-                    tmp->getNodePtrs().set_id_nodes(Nd1,Nd2);
+                    bool changed= tmp->getNodePtrs().set_id_nodes(Nd1,Nd2);
+		    if(changed)
+		      std::cerr << getClassName() << "::" << __FUNCTION__
+				<< ": element nodes were already assingned."
+				<< std::endl;
                     retval(1,i,1)= tmp;
                   }
               }
@@ -368,7 +391,11 @@ XC::ElemPtrArray3d XC::Element0D::sew(const SetEstruct &f1,const SetEstruct &f2)
                     Element *tmp= getCopy();
                     const int Nd1= f1.getNode(1,1,i)->getTag();
                     const int Nd2= f2.getNode(i,1,1)->getTag();
-                    tmp->getNodePtrs().set_id_nodes(Nd1,Nd2);
+                    bool changed= tmp->getNodePtrs().set_id_nodes(Nd1,Nd2);
+		    if(changed)
+		      std::cerr << getClassName() << "::" << __FUNCTION__
+				<< ": element nodes were already assingned."
+				<< std::endl;
                     retval(1,1,i)= tmp;
                   }
               }
@@ -380,7 +407,11 @@ XC::ElemPtrArray3d XC::Element0D::sew(const SetEstruct &f1,const SetEstruct &f2)
                     Element *tmp= getCopy();
                     const int Nd1= f1.getNode(1,1,i)->getTag();
                     const int Nd2= f2.getNode(1,i,1)->getTag();
-                    tmp->getNodePtrs().set_id_nodes(Nd1,Nd2);
+                    bool changed= tmp->getNodePtrs().set_id_nodes(Nd1,Nd2);
+		    if(changed)
+		      std::cerr << getClassName() << "::" << __FUNCTION__
+				<< ": element nodes were already assingned."
+				<< std::endl;
                     retval(1,1,i)= tmp;
                   }
               }
@@ -392,7 +423,11 @@ XC::ElemPtrArray3d XC::Element0D::sew(const SetEstruct &f1,const SetEstruct &f2)
                     Element *tmp= getCopy();
                     const int Nd1= f1.getNode(1,1,i)->getTag();
                     const int Nd2= f2.getNode(1,1,i)->getTag();
-                    tmp->getNodePtrs().set_id_nodes(Nd1,Nd2);
+                    bool changed= tmp->getNodePtrs().set_id_nodes(Nd1,Nd2);
+		    if(changed)
+		      std::cerr << getClassName() << "::" << __FUNCTION__
+				<< ": element nodes were already assingned."
+				<< std::endl;
                     retval(1,1,i)= tmp;
                   }
               }

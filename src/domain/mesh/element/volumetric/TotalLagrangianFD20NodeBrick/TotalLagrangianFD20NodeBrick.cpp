@@ -91,7 +91,6 @@ int node_numb_5,  int node_numb_6,  int node_numb_7,  int node_numb_8,
 int node_numb_9,  int node_numb_10, int node_numb_11, int node_numb_12,
 int node_numb_13, int node_numb_14, int node_numb_15, int node_numb_16,
 int node_numb_17, int node_numb_18, int node_numb_19, int node_numb_20,
-
 XC::NDMaterial &m, const BodyForces3D &bForces)
   :ElemWithMaterial<20,NDMaterialPhysicalProperties>(tag, ELE_TAG_TotalLagrangianFD20NodeBrick,NDMaterialPhysicalProperties(20,&m)),
   bf(bForces), Ki(nullptr)

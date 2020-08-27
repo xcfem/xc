@@ -68,24 +68,24 @@ class NodePtrsWithIDs: public NodePtrs, public MovableObject
     int getTagNode(const int &i) const;
 
 
-    void set_id_nodes(int Nd1,int Nd2);
-    void set_id_nodes(int nd1,int nd2,int nd3);
-    void set_id_nodes(int nd1,int nd2,int nd3,int nd4);
-    void set_id_nodes(int nd1,int nd2,int nd3,int nd4,int nd5);
-    void set_id_nodes(int nd1,int nd2,int nd3,int nd4,int nd5,int nd6);
-    void set_id_nodes(int nd1,int nd2,int nd3,int nd4,int nd5,int nd6,int nd7);
-    void set_id_nodes(int nd1,int nd2,int nd3,int nd4,int nd5,int nd6,int nd7,int nd8);
-    void set_id_nodes(int nd1,int nd2,int nd3,int nd4,int nd5,int nd6,int nd7,int nd8,int nd9);
-    void set_id_nodes(int nd1,int nd2,int nd3,int nd4,int nd5,int nd6,int nd7,int nd8,int nd9,int nd10
+    bool set_id_nodes(int Nd1,int Nd2);
+    bool set_id_nodes(int nd1,int nd2,int nd3);
+    bool set_id_nodes(int nd1,int nd2,int nd3,int nd4);
+    bool set_id_nodes(int nd1,int nd2,int nd3,int nd4,int nd5);
+    bool set_id_nodes(int nd1,int nd2,int nd3,int nd4,int nd5,int nd6);
+    bool set_id_nodes(int nd1,int nd2,int nd3,int nd4,int nd5,int nd6,int nd7);
+    bool set_id_nodes(int nd1,int nd2,int nd3,int nd4,int nd5,int nd6,int nd7,int nd8);
+    bool set_id_nodes(int nd1,int nd2,int nd3,int nd4,int nd5,int nd6,int nd7,int nd8,int nd9);
+    bool set_id_nodes(int nd1,int nd2,int nd3,int nd4,int nd5,int nd6,int nd7,int nd8,int nd9,int nd10
                       ,int nd11,int nd12,int nd13,int nd14,int nd15,int nd16,int nd17,int nd18,int nd19,int nd20);
-    void set_id_nodes(int nd1,int nd2,int nd3,int nd4,int nd5,int nd6,int nd7,
+    bool set_id_nodes(int nd1,int nd2,int nd3,int nd4,int nd5,int nd6,int nd7,
                                            int nd8,int nd9,int nd10,int nd11,int nd12,int nd13,
                                            int nd14,int nd15,int nd16,int nd17,int nd18,int nd19,
                                            int nd20, int nd21, int nd22,int nd23, int nd24, int nd25,
 		      int nd26,int nd27);
-    void set_id_nodes(const std::vector<int> &inodes);
-    void set_id_nodes(const ID &inodes);
-    void set_id_node(const int &i, const int &inode);
+    bool set_id_nodes(const std::vector<int> &inodes);
+    bool set_id_nodes(const ID &inodes);
+    bool set_id_node(const int &i, const int &inode);
     void Print(std::ostream &os) const;
     int sendSelf(Communicator &);
     int recvSelf(const Communicator &);

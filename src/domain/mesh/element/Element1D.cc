@@ -446,7 +446,11 @@ void meshing_on_i(const XC::Element1D &e,const XC::NodePtrArray3d::const_ref_i_r
 	tmp= e.getCopy();
         const int Nd1= nodes(i)->getTag();
         const int Nd2= nodes(i+1)->getTag();
-        tmp->getNodePtrs().set_id_nodes(Nd1,Nd2);
+        bool changed= tmp->getNodePtrs().set_id_nodes(Nd1,Nd2);
+	if(changed)
+	  std::cerr << __FUNCTION__
+	            << "; nodes were already assigned."
+	            << std::endl;
         elements(i)= tmp;
       }
   }
@@ -460,7 +464,11 @@ void meshing_on_j(const XC::Element1D &e,const XC::NodePtrArray3d::const_ref_j_r
 	tmp= e.getCopy();
         const int Nd1= nodes(j)->getTag();
         const int Nd2= nodes(j+1)->getTag();
-        tmp->getNodePtrs().set_id_nodes(Nd1,Nd2);
+        bool changed= tmp->getNodePtrs().set_id_nodes(Nd1,Nd2);
+	if(changed)
+	  std::cerr << __FUNCTION__
+	            << "; nodes were already assigned."
+	            << std::endl;
         elements(j)= tmp;
       }
   }
@@ -474,7 +482,11 @@ void meshing_on_k(const XC::Element1D &e,const XC::NodePtrArray3d::const_ref_k_r
 	tmp= e.getCopy();
         const int Nd1= nodes(k)->getTag();
         const int Nd2= nodes(k+1)->getTag();
-        tmp->getNodePtrs().set_id_nodes(Nd1,Nd2);
+        bool changed= tmp->getNodePtrs().set_id_nodes(Nd1,Nd2);
+	if(changed)
+	  std::cerr << __FUNCTION__
+	            << "; nodes were already assigned."
+	            << std::endl;
         elements(k)= tmp;
       }
   }
@@ -601,7 +613,11 @@ XC::ElemPtrArray3d XC::Element1D::sew(const SetEstruct &f1,const SetEstruct &f2)
             Element *tmp= getCopy();
             const int Nd1= f1.getNode(i,j,k)->getTag();
             const int Nd2= f2.getNode(i,j,k)->getTag();
-            tmp->getNodePtrs().set_id_nodes(Nd1,Nd2);
+            bool changed= tmp->getNodePtrs().set_id_nodes(Nd1,Nd2);
+  	    if(changed)
+	      std::cerr << __FUNCTION__
+	                << "; nodes were already assigned."
+	                << std::endl;
             retval(i,1,1)= tmp;
           }
     return retval;

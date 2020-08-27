@@ -86,28 +86,48 @@ XC::Node *XC::NodeHandler::new_node(const int &tag,const size_t &dim,const int &
     return retval;
   }
 
+//! @brief Put the node in the domain and in the
+//! total set and sets that are currently opened.
+void XC::NodeHandler::node_setup(Node *newNode)
+  {
+    if(newNode)
+      {
+	getDomain()->addNode(newNode);
+	getPreprocessor()->updateSets(newNode);
+      }
+  }
+
 //! @brief Create a duplicate copy of the node whose tag is passed as parameter
 XC::Node *XC::NodeHandler::duplicateNode(const int &orgNodeTag)
   {
     Node *retval= nullptr;
-    Node *org_node_ptr= getDomain()->getNode(orgNodeTag);
+    Domain *dom= getDomain();
+    const Node *org_node_ptr= dom->getNode(orgNodeTag);
     if(!org_node_ptr)
       std::cerr << getClassName() << "::" << __FUNCTION__
 	        << "; node identified by:"
                 << orgNodeTag << " not found." << std::endl;
     else
       {
-        const int ndof= org_node_ptr->getNumberDOF();    
-        retval= new Node(getDefaultTag(),ndof,org_node_ptr->getCrds());
-        if(retval)
-          {
-            getDomain()->addNode(retval);
-            getPreprocessor()->updateSets(retval);
-          }
+        const int ndof= org_node_ptr->getNumberDOF();
+	const size_t dim= org_node_ptr->getDim();
+	const Vector &crds= org_node_ptr->getCrds();
+        const int tg= getDefaultTag();
+	if(dim==1)
+	  retval= new_node(tg, dim, ndof, crds[0]);
+	else if(dim==2)
+	  retval= new_node(tg, dim, ndof, crds[0], crds[1]);
+	else if(dim==3)
+	  retval= new_node(tg, dim, ndof, crds[0], crds[1], crds[2]);
+	else
+	  std::cerr << getClassName() << "::" << __FUNCTION__
+	            << "; dimension: "<< dim << " out of range." << std::endl;
+        node_setup(retval);
       }
     return retval;
   }
 
+//! @bref Creates a new node with the coordinate arguments.
 XC::Node *XC::NodeHandler::newNode(const double &x,const double &y,const double &z)
   {
     const int tg= getDefaultTag(); //Before seed node creation.
@@ -121,14 +141,11 @@ XC::Node *XC::NodeHandler::newNode(const double &x,const double &y,const double 
 	        << " will be ignored." << std::endl;
     const int ndof= seed_node->getNumberDOF();
     Node *retval= new_node(tg,dim,ndof,x,y,z);
-    if(retval)
-      {
-        getDomain()->addNode(retval);
-        getPreprocessor()->updateSets(retval);
-      }
+    node_setup(retval);
     return retval;
   }
 
+//! @bref Creates a new node with the coordinate arguments.
 XC::Node *XC::NodeHandler::newNode(const double &x,const double &y)
   {
     const int tg= getDefaultTag(); //Before seed node creation.
@@ -143,15 +160,11 @@ XC::Node *XC::NodeHandler::newNode(const double &x,const double &y)
 	        << " will be ignored." << std::endl;
     const int ndof= seed_node->getNumberDOF();
     Node *retval= new_node(tg,dim,ndof,x,y);
-    if(retval)
-      {
-        getDomain()->addNode(retval);
-        getPreprocessor()->updateSets(retval);
-      }
+    node_setup(retval);
     return retval;
   }
 
-
+//! @bref Creates a new node with the coordinate argument.
 XC::Node *XC::NodeHandler::newNode(const double &x)
   {
     const int tg= getDefaultTag(); //Before seed node creation.
@@ -166,11 +179,7 @@ XC::Node *XC::NodeHandler::newNode(const double &x)
 		<< std::endl;
     const int ndof= seed_node->getNumberDOF();
     Node *retval= new_node(tg,dim,ndof,x);
-    if(retval)
-      {
-        getDomain()->addNode(retval);
-        getPreprocessor()->updateSets(retval);
-      }
+    node_setup(retval);
     return retval;
   }
 

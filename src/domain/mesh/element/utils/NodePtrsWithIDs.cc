@@ -64,32 +64,38 @@ int XC::NodePtrsWithIDs::getTagNode(const int &i) const
   { return connectedExternalNodes(i); }
 
 //! @brief Sets the node identifiers (tags).
-void XC::NodePtrsWithIDs::set_id_nodes(const std::vector<int> &inodes)
+bool XC::NodePtrsWithIDs::set_id_nodes(const std::vector<int> &inodes)
   {
     const size_t numNodes= getNumExternalNodes();
     if(numNodes != inodes.size())
       std::cerr << getClassName() << "::" << __FUNCTION__
 	        << "; " 
                 << numNodes << " node indexes were expected." << std::endl;
+    bool retval= false;
     for( size_t i= 0;i<numNodes;i++)
-      connectedExternalNodes(i)= inodes[i];
+      retval|= set_id_node(i,inodes[i]);
+    return retval;
   }
 
 //! @brief Sets the node identifiers (tags).
-void XC::NodePtrsWithIDs::set_id_nodes(const ID &inodes)
+bool XC::NodePtrsWithIDs::set_id_nodes(const ID &inodes)
   {
     const int numNodes= getNumExternalNodes();
     if(numNodes != inodes.Size())
       std::cerr << getClassName() << "::" << __FUNCTION__
 	        << "; " 
                 << numNodes << " node indexes were expected." << std::endl;
+    bool retval= false;
     for(int i= 0;i<numNodes;i++)
-      connectedExternalNodes(i) = inodes(i);
+      retval|= set_id_node(i,inodes(i));
+    return retval;
   }
 
-//! @brief Sets the i-th node identifier (tag).
-void XC::NodePtrsWithIDs::set_id_node(const int &i, const int &inode)
+//! @brief Sets the i-th node identifier (tag). Return true if
+//! there was already a pointer in place (element must call setDomain again).
+bool XC::NodePtrsWithIDs::set_id_node(const int &i, const int &inode)
   {
+    bool retval= false;
     const int numNodes= getNumExternalNodes();
     if(i>=numNodes)
       std::cerr << getClassName() << "::" << __FUNCTION__
@@ -97,7 +103,7 @@ void XC::NodePtrsWithIDs::set_id_node(const int &i, const int &inode)
                 << i << ">=" << numNodes
 		<< " index out of range." << std::endl;
     const int oldTag= connectedExternalNodes(i);
-    Node *oldNode= (*this)[i]; 
+    Node *oldNode= (*this)[i];
     if(inode!= oldTag)
       {
         connectedExternalNodes(i)= inode;
@@ -105,11 +111,15 @@ void XC::NodePtrsWithIDs::set_id_node(const int &i, const int &inode)
 	//! and connectivity.
         if(oldNode)
 	  {
+	    retval= true;
+            std::cout << "XXXX old node: " << oldNode->getTag() << std::endl;
 	    Domain *dom= oldNode->getDomain();
 	    set_node_ptrs(dom);
 	  }
       }
-      
+    if((*this)[i])
+      std::cout << "XXXX newNode: " << (*this)[i]->getTag() << std::endl;
+    return retval;
   }
 
 //! @brief Set los pointers to the nodes.
@@ -120,107 +130,117 @@ void XC::NodePtrsWithIDs::set_node_ptrs(Domain *domain)
   }
 
 //! @brief Sets identifiers for nodes 1 and 2.
-void XC::NodePtrsWithIDs::set_id_nodes(int Nd1,int Nd2)
+bool XC::NodePtrsWithIDs::set_id_nodes(int Nd1,int Nd2)
   {
     assert(connectedExternalNodes.Size()>=2);
-    connectedExternalNodes(0)= Nd1;
-    connectedExternalNodes(1)= Nd2;
+    bool retval= set_id_node(0, Nd1);
+    retval|= set_id_node(1, Nd2);
+    return retval;
   }
 
 //! @brief Sets identifiers for nodes 1 to 3.
-void XC::NodePtrsWithIDs::set_id_nodes(int nd1, int nd2, int nd3)
+bool XC::NodePtrsWithIDs::set_id_nodes(int nd1, int nd2, int nd3)
   {
-    set_id_nodes(nd1,nd2);
+    bool retval= set_id_nodes(nd1,nd2);
     assert(connectedExternalNodes.Size()>=4);
-    connectedExternalNodes(2)= nd3;
+    retval|= set_id_node(2, nd3);
+    return retval;
   }
 
 //! @brief Sets identifiers for nodes 1 to 4.
-void XC::NodePtrsWithIDs::set_id_nodes(int nd1, int nd2, int nd3, int nd4)
+bool XC::NodePtrsWithIDs::set_id_nodes(int nd1, int nd2, int nd3, int nd4)
   {
-    set_id_nodes(nd1,nd2,nd3);
+    bool retval= set_id_nodes(nd1,nd2,nd3);
     assert(connectedExternalNodes.Size()>=4);
-    connectedExternalNodes(3)= nd4;
+    retval|= set_id_node(3, nd4);
+    return retval;
   }
 
 //! @brief Sets identifiers for nodes 1 to 5.
-void XC::NodePtrsWithIDs::set_id_nodes(int nd1, int nd2, int nd3, int nd4, int nd5)
+bool XC::NodePtrsWithIDs::set_id_nodes(int nd1, int nd2, int nd3, int nd4, int nd5)
   {
-    set_id_nodes(nd1,nd2,nd3,nd4);
+    bool retval= set_id_nodes(nd1,nd2,nd3,nd4);
     assert(connectedExternalNodes.Size()>=5);
-    connectedExternalNodes(4)= nd5;
+    retval|= set_id_node(4, nd5);
+    return retval;
   }
 
 //! @brief Sets identifiers for nodes 1 to 6.
-void XC::NodePtrsWithIDs::set_id_nodes(int nd1, int nd2, int nd3, int nd4, int nd5, int nd6)
+bool XC::NodePtrsWithIDs::set_id_nodes(int nd1, int nd2, int nd3, int nd4, int nd5, int nd6)
   {
-    set_id_nodes(nd1,nd2,nd3,nd4,nd5);
+    bool retval= set_id_nodes(nd1,nd2,nd3,nd4,nd5);
     assert(connectedExternalNodes.Size()>=6);
-    connectedExternalNodes(5)= nd6;
+    retval|= set_id_node(5, nd6);
+    return retval;
   }
 
 //! @brief Sets identifiers for nodes 1 to 7.
-void XC::NodePtrsWithIDs::set_id_nodes(int nd1, int nd2, int nd3, int nd4, int nd5, int nd6, int nd7)
+bool XC::NodePtrsWithIDs::set_id_nodes(int nd1, int nd2, int nd3, int nd4, int nd5, int nd6, int nd7)
   {
-    set_id_nodes(nd1,nd2,nd3,nd4,nd5,nd6);
+    bool retval= set_id_nodes(nd1,nd2,nd3,nd4,nd5,nd6);
     assert(connectedExternalNodes.Size()>=7);
-    connectedExternalNodes(6)= nd7;
+    retval|= set_id_node(6, nd7);
+    return retval;
   }
 
 //! @brief Sets identifiers for nodes 1 to 8.
-void XC::NodePtrsWithIDs::set_id_nodes(int nd1, int nd2, int nd3, int nd4,int nd5,int nd6,int nd7,int nd8)
+bool XC::NodePtrsWithIDs::set_id_nodes(int nd1, int nd2, int nd3, int nd4,int nd5,int nd6,int nd7,int nd8)
   {
-    set_id_nodes(nd1,nd2,nd3,nd4,nd5,nd6,nd7);
+    bool retval= set_id_nodes(nd1,nd2,nd3,nd4,nd5,nd6,nd7);
     assert(connectedExternalNodes.Size()>=8);
-    connectedExternalNodes(7)= nd8;
+    retval|= set_id_node(7, nd8);
+    return retval;
   }
 
 //! @brief Sets identifiers for nodes 1 to 9.
-void XC::NodePtrsWithIDs::set_id_nodes(int nd1, int nd2, int nd3, int nd4,int nd5,int nd6,int nd7,int nd8,int nd9)
+bool XC::NodePtrsWithIDs::set_id_nodes(int nd1, int nd2, int nd3, int nd4,int nd5,int nd6,int nd7,int nd8,int nd9)
   {
-    set_id_nodes(nd1,nd2,nd3,nd4,nd5,nd6,nd7,nd8);
+    bool retval= set_id_nodes(nd1,nd2,nd3,nd4,nd5,nd6,nd7,nd8);
     assert(connectedExternalNodes.Size()>=9);
-    connectedExternalNodes(8)= nd9;
+    retval|= set_id_node(8, nd9);
+    return retval;
   }
 
 //! @brief Sets identifiers for nodes 1 to 20.
-void XC::NodePtrsWithIDs::set_id_nodes(int nd1,  int nd2,  int nd3,  int nd4,
+bool XC::NodePtrsWithIDs::set_id_nodes(int nd1,  int nd2,  int nd3,  int nd4,
                    int nd5,  int nd6,  int nd7,  int nd8,
                    int nd9,  int nd10, int nd11, int nd12,
                    int nd13, int nd14, int nd15, int nd16,
 					   int nd17, int nd18, int nd19, int nd20)
   {
-    set_id_nodes(nd1,nd2,nd3,nd4,nd5,nd6,nd7,nd8,nd9);
+    bool retval= set_id_nodes(nd1,nd2,nd3,nd4,nd5,nd6,nd7,nd8,nd9);
     assert(connectedExternalNodes.Size()>=20);
-    connectedExternalNodes(9)= nd10;
-    connectedExternalNodes(10)= nd11;
-    connectedExternalNodes(11)= nd12;
-    connectedExternalNodes(12)= nd13;
-    connectedExternalNodes(13)= nd14;
-    connectedExternalNodes(14)= nd15;
-    connectedExternalNodes(15)= nd16;
-    connectedExternalNodes(16)= nd17;
-    connectedExternalNodes(17)= nd18;
-    connectedExternalNodes(18)= nd19;
-    connectedExternalNodes(19)= nd20;
+    retval|= set_id_node(9, nd10);
+    retval|= set_id_node(10, nd11);
+    retval|= set_id_node(11, nd12);
+    retval|= set_id_node(12, nd13);
+    retval|= set_id_node(13, nd14);
+    retval|= set_id_node(14, nd15);
+    retval|= set_id_node(15, nd16);
+    retval|= set_id_node(16, nd17);
+    retval|= set_id_node(17, nd18);
+    retval|= set_id_node(18, nd19);
+    retval|= set_id_node(19, nd20);
+    return retval;
   }
 
 //! @brief Sets identifiers for nodes 1 to 27.
-void XC::NodePtrsWithIDs::set_id_nodes(int nd1,int nd2,int nd3,int nd4,int nd5,int nd6,int nd7,
+bool XC::NodePtrsWithIDs::set_id_nodes(int nd1,int nd2,int nd3,int nd4,int nd5,int nd6,int nd7,
                                            int nd8,int nd9,int nd10,int nd11,int nd12,int nd13,
                                            int nd14,int nd15,int nd16,int nd17,int nd18,int nd19,
                                            int nd20, int nd21, int nd22,int nd23, int nd24, int nd25,
                                            int nd26,int nd27)
   {
-    set_id_nodes(nd1,nd2,nd3,nd4,nd5,nd6,nd7,nd8,nd9,nd10,nd11,nd12,nd13,nd14,nd15,nd16,nd17,nd18,nd19,nd20);
+    bool retval= set_id_nodes(nd1,nd2,nd3,nd4,nd5,nd6,nd7,nd8,nd9,nd10,nd11,nd12,nd13,nd14,nd15,nd16,nd17,nd18,nd19,nd20);
     assert(connectedExternalNodes.Size()>=27);
-    connectedExternalNodes(20)= nd21;
-    connectedExternalNodes(21)= nd22;
-    connectedExternalNodes(22)= nd23;
-    connectedExternalNodes(23)= nd24;
-    connectedExternalNodes(24)= nd25;
-    connectedExternalNodes(25)= nd26;
-    connectedExternalNodes(26)= nd27; 
+    retval|= set_id_node(20, nd21);
+    retval|= set_id_node(21, nd22);
+    retval|= set_id_node(22, nd23);
+    retval|= set_id_node(23, nd24);
+    retval|= set_id_node(24, nd25);
+    retval|= set_id_node(25, nd26);
+    retval|= set_id_node(26, nd27);
+    return retval;
   }
 
 //! @brief True if all nodes has the same DOF number.

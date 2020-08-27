@@ -202,15 +202,36 @@ double XC::Element::getVolume(bool initialGeometry) const
 
 //! @brief Set the nodes.
 void XC::Element::setIdNodes(const std::vector<int> &inodes)
-  { getNodePtrs().set_id_nodes(inodes); }
+  {
+    const bool changed= getNodePtrs().set_id_nodes(inodes);
+    if(changed)
+      {
+	Domain *dom= getDomain();
+	setDomain(dom);
+      }
+  }
 
 //! @brief Set the nodes.
 void XC::Element::setIdNodes(const ID &inodes)
-  { getNodePtrs().set_id_nodes(inodes); }
+  {
+    const bool changed= getNodePtrs().set_id_nodes(inodes);
+    if(changed)
+      {
+	Domain *dom= getDomain();
+	setDomain(dom);
+      }    
+  }
 
 //! @brief Set the i-th node.
 void XC::Element::setIdNode(const int &i, const int &inode)
-  { getNodePtrs().set_id_node(i,inode); }
+  {
+    const bool changed= getNodePtrs().set_id_node(i,inode);
+    if(changed)
+      {
+	Domain *dom= getDomain();
+	setDomain(dom);
+      }
+  }
 
 //! @brief Sets the domain for the element.
 void XC::Element::setDomain(Domain *theDomain)
@@ -676,11 +697,11 @@ int XC::Element::addResistingForceToNodalReaction(bool inclInertia)
         if(theVector.Size() != numNodalDOF)
           {
             for(size_t j=0; j<numMatrices; j++)
-            if(theVectors1[j].Size() == numNodalDOF)
-              {
-                j = numMatrices;
-                theVector= theVectors1[j];
-              }
+	      if(theVectors1[j].Size() == numNodalDOF)
+		{
+		  j = numMatrices;
+		  theVector= theVectors1[j];
+		}
           }
         for(int j=0; j<numNodalDOF; j++)
           {

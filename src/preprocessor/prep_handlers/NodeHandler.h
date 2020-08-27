@@ -45,6 +45,7 @@ class NodeHandler: public PrepHandler
   private:
     Node *seed_node; //!< Seed node for semi-automatic meshing.
     void free_mem(void);
+    void node_setup(Node *);
     Node *new_node(const int &tag,const size_t &dim,const int &ndof,const double &x,const double &y=0.0,const double &z=0.0);
   public:
     NodeHandler(Preprocessor *);

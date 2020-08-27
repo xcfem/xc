@@ -111,7 +111,9 @@ XC::ElemPtrArray3d XC::BrickBase::put_on_mesh(const XC::NodePtrArray3d &nodes,me
     const size_t mesh_dim= nodes.GetDim();
     ElemPtrArray3d retval(numberOfLayers-1,numberOfRows-1,numberOfColumns-1);
     if(mesh_dim<3)
-      std::cerr << "BrickBase::put_on_mesh; three-dimensional mesh needed, can't create elements." << std::endl;
+      std::cerr << getClassName() << "::" << __FUNCTION__
+	        << "; three-dimensional mesh needed, can't create elements."
+		<< std::endl;
     else
       {
         for(size_t i=1;i<numberOfLayers;i++)
@@ -127,7 +129,12 @@ XC::ElemPtrArray3d XC::BrickBase::put_on_mesh(const XC::NodePtrArray3d &nodes,me
                 const Node *Nd6= nodes(i+1,j+1,k);
                 const Node *Nd7= nodes(i+1,j+1,k+1);
                 const Node *Nd8= nodes(i+1,j,k+1);
-                tmp->getNodePtrs().set_id_nodes(Nd1->getTag(),Nd2->getTag(),Nd3->getTag(),Nd4->getTag(),Nd5->getTag(),Nd6->getTag(),Nd7->getTag(),Nd8->getTag());
+                bool changed= tmp->getNodePtrs().set_id_nodes(Nd1->getTag(),Nd2->getTag(),Nd3->getTag(),Nd4->getTag(),Nd5->getTag(),Nd6->getTag(),Nd7->getTag(),Nd8->getTag());
+		if(changed)
+		  std::cerr << getClassName() << "::" << __FUNCTION__
+	                    << "; nodes were already assingned.."
+		             << std::endl;
+
                 retval(i,j,k)= tmp;
               }
       }
