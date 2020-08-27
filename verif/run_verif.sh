@@ -329,6 +329,7 @@ python tests/constraints/test_rigid_rod_01.py
 python tests/constraints/test_huge_beam.py
 python tests/constraints/test_huge_truss.py
 python tests/constraints/test_fulcrum_01.py
+python tests/constraints/test_release_beam_node_01.py
 python tests/constraints/test_glue_node_to_element_01.py
 python tests/constraints/test_glue_node_to_element_02.py
 python tests/constraints/test_glue_node_to_element_03.py
