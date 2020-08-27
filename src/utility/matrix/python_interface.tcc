@@ -43,6 +43,8 @@ def("id_to_py_list",XC::xc_id_to_py_list);
 double &(XC::Vector::*getItemVector)(const size_t &)= &XC::Vector::at;
 class_<XC::Vector, bases<CommandEntity> >("Vector")
   .def(init<boost::python::list>())
+  .def(init<Vector2d>())
+  .def(init<Vector3d>())
   .def("__getitem__",getItemVector, return_value_policy<return_by_value>())
   .def("__iter__",range(&XC::Vector::begin, &XC::Vector::end))
 //  .def( "__getitem__", getItemVector, boost::python::arg( "index" ), boost::python::return_internal_reference<>() )
