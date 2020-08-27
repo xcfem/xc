@@ -1410,7 +1410,6 @@ class StructuralMechanics3D(StructuralMechanics):
             KrotX= tangent(3,3)*stiffnessFactors[3]
             KrotY= tangent(2,2)*stiffnessFactors[4]
             KrotZ= tangent(1,1)*stiffnessFactors[5]
-            print(KX, KY, KZ, KrotX, KrotY, KrotZ)
             matKX= tm.defElasticMaterial(self.preprocessor,'matKX',KX)
             matKY=tm.defElasticMaterial(self.preprocessor,'matKY',KY)
             matKZ=tm.defElasticMaterial(self.preprocessor,'matKZ',KZ)
@@ -1427,13 +1426,8 @@ class StructuralMechanics3D(StructuralMechanics):
                 newNode= nodes.duplicateNode(nodeToRelease.tag) # new node.
                 # Connect the beam with the new node.
                 beamElement.setIdNode(iNod, newNode.tag)
-                print('beam nodes: ', beamElement.getNodes[0].tag, beamElement.getNodes[1].tag)
-                print('BEFORE new node: ', newNode.tag, ' connected elements: ', newNode.getNumberOfConnectedElements())
-                print('BEFORE node to release: ', nodeToRelease.tag, ' connected elements: ', nodeToRelease.getNumberOfConnectedElements())
                 # Put the zero length element between the nodes.
                 self.setBearingBetweenNodes( nodeToRelease.tag, newNode.tag, releaseMatsNames,orientation= [vx, vy])
-                print('AFTER new node: ', newNode.tag, ' connected elements: ', newNode.getNumberOfConnectedElements())
-                print('AFTER node to release: ', nodeToRelease.tag, ' connected elements: ', nodeToRelease.getNumberOfConnectedElements())
                 retval.append(newNode)
         return retval
                 

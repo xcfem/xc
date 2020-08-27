@@ -110,15 +110,8 @@ bool XC::NodePtrsWithIDs::set_id_node(const int &i, const int &inode)
 	//! If pointer exists update pointers
 	//! and connectivity.
         if(oldNode)
-	  {
-	    retval= true;
-            std::cout << "XXXX old node: " << oldNode->getTag() << std::endl;
-	    Domain *dom= oldNode->getDomain();
-	    set_node_ptrs(dom);
-	  }
+	  retval= true;
       }
-    if((*this)[i])
-      std::cout << "XXXX newNode: " << (*this)[i]->getTag() << std::endl;
     return retval;
   }
 
