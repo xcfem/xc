@@ -1395,7 +1395,6 @@ class StructuralMechanics3D(StructuralMechanics):
                            the axis correspond to the local axis of the element.
         :param nodesToRelease: indexesof the element nodes to release.
         '''
-        retval= list()
         if(len(nodesToRelease)>0):
             beamMaterial= beamElement.getPhysicalProperties.getVectorMaterials[0]
             # Read stiffnesses from element material
@@ -1410,16 +1409,18 @@ class StructuralMechanics3D(StructuralMechanics):
             KrotX= tangent(3,3)*stiffnessFactors[3]
             KrotY= tangent(2,2)*stiffnessFactors[4]
             KrotZ= tangent(1,1)*stiffnessFactors[5]
-            matKX= tm.defElasticMaterial(self.preprocessor,'matKX',KX)
-            matKY=tm.defElasticMaterial(self.preprocessor,'matKY',KY)
-            matKZ=tm.defElasticMaterial(self.preprocessor,'matKZ',KZ)
-            matKrotX=tm.defElasticMaterial(self.preprocessor,'matKrotX',KrotX)
-            matKrotY=tm.defElasticMaterial(self.preprocessor,'matKropY',KrotY)
-            matKrotZ=tm.defElasticMaterial(self.preprocessor,'matKrotZ',KrotZ)
+            matKX= tm.defElasticMaterial(self.preprocessor,'matKX'+str(KX),KX)
+            matKY= tm.defElasticMaterial(self.preprocessor,'matKY'+str(KY),KY)
+            matKZ= tm.defElasticMaterial(self.preprocessor,'matKZ'+str(KZ),KZ)
+            matKrotX= tm.defElasticMaterial(self.preprocessor,'matKrotX'+str(KrotX),KrotX)
+            matKrotY= tm.defElasticMaterial(self.preprocessor,'matKropY'+str(KrotY),KrotY)
+            matKrotZ= tm.defElasticMaterial(self.preprocessor,'matKrotZ'+str(KrotZ),KrotZ)
             releaseMats=  [matKX,matKY,matKZ,matKrotX,matKrotY,matKrotZ]
             releaseMatsNames=[mat.name for mat in releaseMats]
             vx= xc.Vector(beamElement.getIVector3d(False))
             vy= xc.Vector(beamElement.getJVector3d(False))
+            newNodes= list()
+            newElements= list()
             for iNod in nodesToRelease:
                 nodeToRelease= beamElement.getNodes[iNod]
                 nodes= self.preprocessor.getNodeHandler
@@ -1427,9 +1428,10 @@ class StructuralMechanics3D(StructuralMechanics):
                 # Connect the beam with the new node.
                 beamElement.setIdNode(iNod, newNode.tag)
                 # Put the zero length element between the nodes.
-                self.setBearingBetweenNodes( nodeToRelease.tag, newNode.tag, releaseMatsNames,orientation= [vx, vy])
-                retval.append(newNode)
-        return retval
+                newElement= self.setBearingBetweenNodes( nodeToRelease.tag, newNode.tag, releaseMatsNames,orientation= [vx, vy])
+                newNodes.append(newNode)
+                newElements.append(newElement)
+        return (newNodes, newElements)
                 
 
 def getStructuralMechanics3DSpace(preprocessor):

@@ -57,7 +57,8 @@ mesh= xcTotalSet.genMesh(xc.meshDir.I)
 
 # Release last element.
 elemToRelease= xcTotalSet.getNearestElement(p1.getPos)
-newNodes= modelSpace.releaseBeamEnd(elemToRelease, stiffnessFactors= [0.0,1.0e9,1.0e9,1.0e9,1e9,1.0e9], nodesToRelease= [0])
+(newNodes, newElements)= modelSpace.releaseBeamEnd(elemToRelease, stiffnessFactors= [0.0,1.0e9,1.0e9,1.0e9,1e9,1.0e9], nodesToRelease= [0])
+
 
 # Constraints
 n0= p0.getNode()
@@ -65,6 +66,9 @@ n1= p1.getNode()
 modelSpace.fixNode('000_000',n0.tag)
 modelSpace.fixNode('000_000',n1.tag)
 
+# Check that n0 is no longer connected to the node
+index= elemToRelease.getNodes.getNodeIndex(n0)
+ratio0= (index+1)
 
 # Loads definition
 loadHandler= preprocessor.getLoadHandler
@@ -90,6 +94,7 @@ ratio2= abs(n1.getReaction[0]+f*l1.getLength())/(f*l1.getLength())
 ratio3= newNodes[0].getReaction[0]
 
 '''
+print(ratio0)
 print(' reaction node ', n0.tag,'= ', n0.getReaction)
 print(' reaction node ', n1.tag,'= ', n1.getReaction)
 
@@ -102,7 +107,7 @@ print(' ratio3= ', ratio3)
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
-if (ratio1<1e-15) & (ratio2<1e-15) & (ratio3<1e-15):
+if (ratio0<1e-15) & (ratio1<1e-15) & (ratio2<1e-15) & (ratio3<1e-15):
   print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')
