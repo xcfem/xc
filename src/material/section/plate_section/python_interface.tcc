@@ -21,10 +21,14 @@
 //----------------------------------------------------------------------------
 //python_interface.tcc
 
-class_<XC::ElasticPlateBase, bases<XC::SectionForceDeformation>, boost::noncopyable >("ElasticPlateBase", no_init)
+class_<XC::PlateBase, bases<XC::SectionForceDeformation>, boost::noncopyable >("ElasticPlateBase", no_init)
+  .add_property("h", &XC::PlateBase::getH, &XC::PlateBase::setH,"material thickness.")
+  .add_property("rho", &XC::PlateBase::getRho, &XC::PlateBase::setRho)
+   ;
+
+class_<XC::ElasticPlateBase, bases<XC::PlateBase>, boost::noncopyable >("ElasticPlateBase", no_init)
   .add_property("E", &XC::ElasticPlateBase::getE, &XC::ElasticPlateBase::setE, "Material's Young modulus.")
   .add_property("nu", &XC::ElasticPlateBase::getnu, &XC::ElasticPlateBase::setnu, "Material Poisson's ratio.")
-  .add_property("h", &XC::ElasticPlateBase::getH, &XC::ElasticPlateBase::setH,"material thickness.")
    ;
 
 typedef XC::ElasticPlateProto<8> ElasticPlateProto8;
@@ -32,12 +36,13 @@ class_<ElasticPlateProto8, bases<XC::ElasticPlateBase>, boost::noncopyable >("El
     ;
 
 class_<XC::ElasticMembranePlateSection, bases<ElasticPlateProto8>, boost::noncopyable  >("ElasticMembranePlateSection", no_init)
-  .add_property("rho", &XC::ElasticMembranePlateSection::getRho, &XC::ElasticMembranePlateSection::setRho)
   ;
 
 typedef XC::ElasticPlateProto<5> ElasticPlateProto5;
 class_<ElasticPlateProto5, bases<XC::ElasticPlateBase>, boost::noncopyable >("ElasticPlateProto5", no_init);
 class_<XC::ElasticPlateSection, bases<ElasticPlateProto5>, boost::noncopyable >("ElasticPlateSection", no_init);
 
-class_<XC::MembranePlateFiberSection, bases<XC::SectionForceDeformation>, boost::noncopyable >("MembranePlateFiberSection", no_init);
+class_<XC::MembranePlateFiberSection, bases<XC::PlateBase>, boost::noncopyable >("MembranePlateFiberSection", no_init)
+  .def("setMaterial", &XC::MembranePlateFiberSection::setMaterial, " assigns the material to the fibers.")
+  ;
 

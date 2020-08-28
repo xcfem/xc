@@ -66,15 +66,9 @@
 XC::ElasticPlateSection::ElasticPlateSection(int tag)
   : XC::ElasticPlateProto<5>(tag, SEC_TAG_ElasticPlateSection) {}
 
-//! @brief Default constructor
-XC::ElasticPlateSection::ElasticPlateSection(void)
-  : XC::ElasticPlateProto<5>(0,SEC_TAG_ElasticPlateSection) {}
-
-
-
 //! @brief Constructor
-XC::ElasticPlateSection::ElasticPlateSection(  int    tag, double young,double poisson, double thickness)
-  : XC::ElasticPlateProto<5>(tag, SEC_TAG_ElasticPlateSection,young,poisson,thickness) {}
+XC::ElasticPlateSection::ElasticPlateSection(int tag, double young,double poisson, double thickness, double rho)
+  : XC::ElasticPlateProto<5>(tag, SEC_TAG_ElasticPlateSection,young,poisson,thickness, rho) {}
 
 //! @brief Virtual constructor
 XC::SectionForceDeformation *XC::ElasticPlateSection::getCopy(void) const

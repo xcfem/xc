@@ -67,9 +67,8 @@ namespace XC {
 class ElasticPlateSection: public ElasticPlateProto<5>
   {
   public: 
-    ElasticPlateSection(int tag);
-    ElasticPlateSection(void);
-    ElasticPlateSection(int tag, double E, double nu,double h = 1.0 );
+    ElasticPlateSection(int tag= 0);
+    ElasticPlateSection(int tag, double E, double nu,double h = 1.0, double rho= 0.0);
     SectionForceDeformation *getCopy(void) const;
 
     const ResponseId &getType(void) const;

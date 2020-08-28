@@ -65,17 +65,12 @@ namespace XC {
 //! @brief Elastic section for membrane/plate materials.
 class ElasticMembranePlateSection: public ElasticPlateProto<8>
   {
-  private:
-    double rhoH ; //!< mass per unit 2D area
   protected:
     DbTagData &getDbTagData(void) const;
-    int sendData(Communicator &);
-    int recvData(const Communicator &);
-
   public : 
     ElasticMembranePlateSection(void);
     ElasticMembranePlateSection(int tag);
-    ElasticMembranePlateSection(int tag, double E, double nu,double h = 1.0, double rho = 0.0 );
+    ElasticMembranePlateSection(int tag, double E, double nu,double h = 1.0, double rho = 0.0);
 
     SectionForceDeformation *getCopy(void) const;
 
@@ -87,9 +82,6 @@ class ElasticMembranePlateSection: public ElasticPlateProto<8>
     const Matrix& getInitialTangent(void) const;
 
     void Print(std::ostream &s,int flag) const;
-
-    double getRho(void) const;
-    void setRho(const double &);
 
     int sendSelf(Communicator &);
     int recvSelf(const Communicator &);

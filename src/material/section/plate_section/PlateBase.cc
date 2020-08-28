@@ -30,15 +30,25 @@
 
 //! @brief Constructor.
 XC::PlateBase::PlateBase(int tag,int classTag)
-  : XC::SectionForceDeformation(tag, classTag), h(0.0) {}
+  : SectionForceDeformation(tag, classTag), h(0.0) {}
 
 //! @brief null constructor
 XC::PlateBase::PlateBase(int classTag)
-  :XC::SectionForceDeformation( 0, classTag), h(0.0) { }
+  : SectionForceDeformation( 0, classTag), h(0.0) { }
 
 //! @brief full constructor
-XC::PlateBase::PlateBase(int tag, int classTag, double thickness)
-  :XC::SectionForceDeformation(tag,classTag), h(thickness) {}
+XC::PlateBase::PlateBase(int tag, int classTag, double thickness, double rho)
+  : SectionForceDeformation(tag,classTag), h(thickness), rhoH(rho*thickness)
+  {}
+
+//! @brief Density per unit area
+double XC::PlateBase::getRho(void) const
+  { return rhoH; }
+
+//! @brief Asigns density per unit area
+void XC::PlateBase::setRho(const double &r)
+  { rhoH= r; }
+
 
 //! @brief Returns strain at position being passed as parameter.
 double XC::PlateBase::getStrain(const double &,const double &) const
@@ -46,4 +56,20 @@ double XC::PlateBase::getStrain(const double &,const double &) const
     std::cerr << getClassName() << "::" << __FUNCTION__
 	      << "; not implemented." << std::endl;
     return 0.0;
+  }
+
+//! @brief Send data through the communicator argument.
+int XC::PlateBase::sendData(Communicator &comm)
+  {
+    int res= SectionForceDeformation::sendData(comm);
+    res+= comm.sendDoubles(h, rhoH,getDbTagData(),CommMetaData(4));
+    return res;
+  }
+
+//! @brief Receive data through the communicator argument.
+int XC::PlateBase::recvData(const Communicator &comm)
+  {
+    int res= SectionForceDeformation::recvData(comm);
+    res+= comm.receiveDoubles(h, rhoH,getDbTagData(),CommMetaData(4));
+    return res;
   }

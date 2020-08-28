@@ -55,7 +55,7 @@ class ElasticPlateProto: public ElasticPlateBase
   public : 
     ElasticPlateProto(int tag,int classTag);
     ElasticPlateProto(int classTag);
-    ElasticPlateProto(int tag,int classTag, double E, double nu, double h);
+    ElasticPlateProto(int tag,int classTag, double E, double nu, double h, double rho);
 
     //send back order of strain in vector form
     int getOrder(void) const;
@@ -92,10 +92,11 @@ XC::ElasticPlateProto<SZ>::ElasticPlateProto(int classTag)
 //full constructor
 template <int SZ>
 XC::ElasticPlateProto<SZ>::ElasticPlateProto(int tag, int classTag,
-                                           double young,
-                                           double poisson,
-                                           double thickness)
-  : ElasticPlateBase(tag,classTag,young,poisson,thickness), trialStrain(SZ), initialStrain(SZ) {}
+                                             double young,
+                                             double poisson,
+					     double thickness,
+					     double rho)
+  : ElasticPlateBase(tag,classTag,young,poisson,thickness, rho), trialStrain(SZ), initialStrain(SZ) {}
 
 template <int SZ>
 int XC::ElasticPlateProto<SZ>::getOrder(void) const

@@ -72,28 +72,40 @@ class NDMaterial;
 class MembranePlateFiberSection: public PlateBase
   {
   private:
+    enum {numFibers = 5};
+    
     //quadrature data
-    static const double sg[5];
-    static const double wg[5];
-    NDMaterial *theFibers[5];  //pointers to five materials (fibers)
+    static const double sg[numFibers];
+    static const double wg[numFibers];
     static const double root56; // =sqrt(5/6) 
-    Vector strainResultant;
     static Vector stressResultant;
     static Matrix tangent;
+    
+    NDMaterial *theFibers[numFibers];  //pointers to five materials (fibers)
+    Vector strainResultant;
+
+    void init(void);
+    void alloc(const NDMaterial &);
+    void copy_fibers(const MembranePlateFiberSection &);
+    void free(void);
   protected:
     int sendData(Communicator &);
     int recvData(const Communicator &);
   public : 
-    MembranePlateFiberSection(int tag);
-    MembranePlateFiberSection(void);
+    MembranePlateFiberSection(int tag= 0);
     MembranePlateFiberSection(int tag, double thickness, NDMaterial &Afiber);
+    MembranePlateFiberSection(const MembranePlateFiberSection &);
+    MembranePlateFiberSection &operator=(const MembranePlateFiberSection &);
     virtual ~MembranePlateFiberSection(void);
+
+    inline void setMaterial(const NDMaterial &ndmat)
+      { alloc(ndmat); }
 
     SectionForceDeformation *getCopy(void) const;
     double getRho(void) const;
+    virtual void setRho(const double &);
     int getOrder(void) const;
     const ResponseId &getType(void) const;
-
     
     int commitState(void); //swap history variables
     int revertToLastCommit(void); //revert to last saved state

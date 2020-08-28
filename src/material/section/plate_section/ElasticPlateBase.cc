@@ -47,8 +47,9 @@ XC::ElasticPlateBase::ElasticPlateBase(int classTag)
 XC::ElasticPlateBase::ElasticPlateBase(int tag, int classTag,
                                            double young,
                                            double poisson,
-                                           double thickness)
-  :XC::PlateBase(tag,classTag,h), E(young), nu(poisson) {}
+				           double thickness,
+				           double rho)
+  :XC::PlateBase(tag,classTag,h,rho), E(young), nu(poisson) {}
 
 //! @brief swap history variables
 int XC::ElasticPlateBase::commitState(void) 
@@ -66,7 +67,7 @@ int XC::ElasticPlateBase::revertToStart(void)
 int XC::ElasticPlateBase::sendData(Communicator &comm)
   {
     int res= PlateBase::sendData(comm);
-    res+= comm.sendDoubles(E,nu,h,getDbTagData(),CommMetaData(5));
+    res+= comm.sendDoubles(E,nu,getDbTagData(),CommMetaData(5));
     return res;
   }
 
@@ -74,6 +75,6 @@ int XC::ElasticPlateBase::sendData(Communicator &comm)
 int XC::ElasticPlateBase::recvData(const Communicator &comm)
   {
     int res= PlateBase::recvData(comm);
-    res+= comm.receiveDoubles(E,nu,h,getDbTagData(),CommMetaData(5));
+    res+= comm.receiveDoubles(E,nu,getDbTagData(),CommMetaData(5));
     return res;
   }

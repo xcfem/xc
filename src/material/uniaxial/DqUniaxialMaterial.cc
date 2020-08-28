@@ -56,7 +56,8 @@ void XC::DqUniaxialMaterial::copy_list(const DqUniaxialMaterial &other,SectionFo
               (*this)[i]= other[i]->getCopy();
             if(!(*this)[i])
               {
-	        std::cerr << "DqUniaxialMaterial::copy_list; failed to copy uniaxial material\n";
+	        std::cerr << getClassName() << "::" << __FUNCTION__
+		          << "; failed to copy uniaxial material\n";
 	        exit(-1);
               }
           }

@@ -48,10 +48,15 @@ class PlateBase: public SectionForceDeformation
   {
   protected:
     double h; //!< plate thickness
+    
+    int sendData(Communicator &);
+    int recvData(const Communicator &);
+  private:
+    double rhoH ; //!< mass per unit 2D area
   public: 
     PlateBase(int tag,int classTag);
     PlateBase(int classTag);
-    PlateBase(int tag,int classTag, double h);
+    PlateBase(int tag,int classTag, double h, double rho);
 
     double getStrain(const double &y,const double &z) const;
 
@@ -59,6 +64,8 @@ class PlateBase: public SectionForceDeformation
       { return h; }
     inline void setH(const double &d)
       { h= d; }
+    virtual double getRho(void) const;
+    virtual void setRho(const double &);
   };
 } // end of XC namespace
 

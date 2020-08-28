@@ -67,13 +67,13 @@ XC::Vector  XC::MembranePlateFiberSection::stressResultant(8);
 XC::Matrix  XC::MembranePlateFiberSection::tangent(8,8);
 
 
-const double  XC::MembranePlateFiberSection::sg[] = { -1, 
+const double XC::MembranePlateFiberSection::sg[] = { -1, 
                                                   -0.65465367, 
                                                    0, 
                                                    0.65465367, 
                                                    1 };
  
-const double  XC::MembranePlateFiberSection::wg[] = { 0.1, 
+const double XC::MembranePlateFiberSection::wg[] = { 0.1, 
                                                   0.5444444444, 
                                                   0.7111111111, 
                                                   0.5444444444, 
@@ -95,40 +95,69 @@ const double  XC::MembranePlateFiberSection::wg[] = { 0.1,
       break;
 */
 
+//! @brief Initializes material pointers.
+void XC::MembranePlateFiberSection::init(void)
+  { 
+    for(int i= 0;i<numFibers;i++ )
+      theFibers[i]= nullptr;
+  }
 
+//! @brief Allocates material pointers.
+void XC::MembranePlateFiberSection::alloc(const NDMaterial &templ)
+  {
+    free();
+    for(int i= 0;i<numFibers;i++ )
+      theFibers[i]= templ.getCopy("PlateFiber");
+  }
+
+//! @brief Copy the material pointers.
+void XC::MembranePlateFiberSection::copy_fibers(const MembranePlateFiberSection &other)
+  
+  {
+    free();
+    for(int i= 0;i<numFibers;i++ )
+      theFibers[i]= other.theFibers[i]->getCopy();
+  }
+
+//! @brief Releases material pointers.
+void XC::MembranePlateFiberSection::free(void)
+  { 
+    for(int i= 0;i<numFibers;i++ )
+      if(theFibers[i])
+	{
+	  delete theFibers[i];
+          theFibers[i]= nullptr;
+	}
+  }
+
+//! @brief Default constructor.
 XC::MembranePlateFiberSection::MembranePlateFiberSection(int tag)
-  : XC::PlateBase( 0, SEC_TAG_MembranePlateFiberSection ), strainResultant(8) 
-  { 
-    for(int i= 0;i<5;i++ )
-      theFibers[i]= nullptr;
-  }
-
-//! @brief null constructor
-XC::MembranePlateFiberSection::MembranePlateFiberSection(void)
-  : XC::PlateBase(0, SEC_TAG_MembranePlateFiberSection ), strainResultant(8) 
-  { 
-    for(int i= 0;i<5;i++)
-      theFibers[i]= nullptr;
-  }
-
-
+  : PlateBase( tag, SEC_TAG_MembranePlateFiberSection ), strainResultant(8) 
+  { init(); }
 
 //! @brief full constructor
 XC::MembranePlateFiberSection::MembranePlateFiberSection(int tag, double thickness, XC::NDMaterial &Afiber )
-  : XC::PlateBase( tag, SEC_TAG_MembranePlateFiberSection,thickness), strainResultant(8)
+  : PlateBase( tag, SEC_TAG_MembranePlateFiberSection,thickness, Afiber.getRho()), strainResultant(8)
+  { alloc(Afiber); }
+
+//! @brief Copy constructor.
+XC::MembranePlateFiberSection::MembranePlateFiberSection(const MembranePlateFiberSection &other)
+  : PlateBase(other), strainResultant(other.strainResultant) 
+  { copy_fibers(other); }
+
+//! @brief Assignment operator.
+XC::MembranePlateFiberSection &XC::MembranePlateFiberSection::operator=(const MembranePlateFiberSection &other)
   {
-    for(int i= 0; i < 5; i++)
-      theFibers[i]= Afiber.getCopy("PlateFiber");
+    PlateBase::operator=(other);
+    strainResultant= other.strainResultant;
+    copy_fibers(other);
+    return *this;
   }
 
 
-//! @brief destructor
+//! @brief Destructor
 XC::MembranePlateFiberSection::~MembranePlateFiberSection(void) 
-  { 
-    for(int i= 0; i < 5; i++ )
-      delete theFibers[i]; 
-  } 
-
+  { free(); }
 
 
 //! @brief make a clone of this material
@@ -153,7 +182,7 @@ const XC::ResponseId &XC::MembranePlateFiberSection::getType(void) const
 int XC::MembranePlateFiberSection::commitState(void) 
   {
     int success = 0;
-    for(int i= 0; i < 5; i++ )
+    for(int i= 0; i < numFibers; i++ )
       success += theFibers[i]->commitState( );
     return success;
   }
@@ -164,8 +193,7 @@ int XC::MembranePlateFiberSection::commitState(void)
 int XC::MembranePlateFiberSection::revertToLastCommit(void)
   {
     int success = 0;
-
-    for(int i= 0; i < 5; i++ )
+    for(int i= 0; i < numFibers; i++ )
       success+= theFibers[i]->revertToLastCommit();
     return success;
   }
@@ -174,7 +202,7 @@ int XC::MembranePlateFiberSection::revertToLastCommit(void)
 int XC::MembranePlateFiberSection::revertToStart(void)
   {
     int success = 0;
-    for(int i= 0;i<5;i++ )
+    for(int i= 0;i<numFibers;i++ )
       success += theFibers[i]->revertToStart( );
     return success;
   }
@@ -183,15 +211,25 @@ int XC::MembranePlateFiberSection::revertToStart(void)
 //! @brief Return mass per unit area.
 double XC::MembranePlateFiberSection::getRho(void) const
   {
-    double weight;
     double rhoH = 0.0;
-    for(int i = 0; i < 5; i++ )
+    for(int i = 0; i < numFibers; i++ )
       {
-        weight = ( 0.5*h ) * wg[i];
+        double weight= ( 0.5*h ) * wg[i];
         rhoH+= ( theFibers[i]->getRho() ) * weight;
       }
     return rhoH;
   }
+
+//! @brief Asigns density per unit area
+void XC::MembranePlateFiberSection::setRho(const double &r)
+  {
+    for(int i = 0; i < numFibers; i++ )
+      {
+        double weight= ( 0.5*h ) * wg[i];
+        theFibers[i]->setRho(r/weight);
+      }
+  }
+
 
 //! @brief Set initial values for deformation.
 int XC::MembranePlateFiberSection::setInitialSectionDeformation(const Vector &strainResultant_from_element)
@@ -221,20 +259,19 @@ int XC::MembranePlateFiberSection::setTrialSectionDeformation(const Vector &stra
   {
     this->strainResultant = strainResultant_from_element;
 
-    static Vector strain(5);
+    static Vector strain(numFibers);
 
     int success= 0;
-    double z;
 
-    for(int i = 0; i < 5; i++ )
+    for(int i = 0; i < numFibers; i++ )
       {
-        z= ( 0.5*h ) * sg[i];
+        double z= ( 0.5*h ) * sg[i];
         strain(0)=  strainResultant(0)  - z*strainResultant(3);
         strain(1)=  strainResultant(1)  - z*strainResultant(4);
         strain(2)=  strainResultant(2)  - z*strainResultant(5);
         strain(3)=  root56*strainResultant(6);
         strain(4)=  root56*strainResultant(7);
-        success += theFibers[i]->setTrialStrain( strain );
+        success+= theFibers[i]->setTrialStrain( strain );
       } //end for i
     return success;
   }
@@ -248,14 +285,13 @@ const XC::Vector &XC::MembranePlateFiberSection::getSectionDeformation(void) con
 //! @brief Return stress resultant.
 const XC::Vector &XC::MembranePlateFiberSection::getStressResultant(void) const
   {
-    static Vector stress(5);
-    double z= 0.0, weight= 0.0;
+    static Vector stress(numFibers);
     stressResultant.Zero( );
 
-    for(int i = 0; i < 5; i++ )
+    for(int i = 0; i < numFibers; i++ )
       {
-        z= ( 0.5*h ) * sg[i];
-        weight= ( 0.5*h ) * wg[i];
+        double z= ( 0.5*h ) * sg[i];
+        double weight= ( 0.5*h ) * wg[i];
         stress= theFibers[i]->getStress( );
         //membrane
         stressResultant(0)+= stress(0)*weight;
@@ -279,14 +315,14 @@ const XC::Vector &XC::MembranePlateFiberSection::getStressResultant(void) const
 //! @brief Return the tangent stiffness matrix.
 const XC::Matrix &XC::MembranePlateFiberSection::getSectionTangent(void) const
   {
-    static Matrix dd(5,5);
-    static Matrix Aeps(5,8);
-    static Matrix Asig(8,5);
+    static Matrix dd(numFibers,numFibers);
+    static Matrix Aeps(numFibers,8);
+    static Matrix Asig(8,numFibers);
 
     double z, weight;
     tangent.Zero( );
 
-    for(int i = 0; i < 5; i++)
+    for(int i = 0; i < numFibers; i++)
       {
         z = ( 0.5*h ) * sg[i];
         weight = (0.5*h) * wg[i];
@@ -324,8 +360,8 @@ const XC::Matrix &XC::MembranePlateFiberSection::getSectionTangent(void) const
       Asig(7,4)= root56;
 */
       //compute the tangent
-      dd = theFibers[i]->getTangent( );
-      dd *= weight;
+      dd= theFibers[i]->getTangent( );
+      dd*= weight;
 
       //tangent +=  ( Asig * dd * Aeps );   
 
@@ -437,7 +473,8 @@ void  XC::MembranePlateFiberSection::Print( std::ostream &s, int flag ) const
   {
     s << "MembranePlateFiberSection: \n ";
     s <<  "  Thickness h = "        <<  h  <<  std::endl;
-    theFibers[0]->Print( s, flag );
+    for(int i = 0; i < numFibers; i++)
+      { theFibers[i]->Print( s, flag ) ; }
     return;
   }
 
@@ -445,7 +482,6 @@ void  XC::MembranePlateFiberSection::Print( std::ostream &s, int flag ) const
 int XC::MembranePlateFiberSection::sendData(Communicator &comm)
   {
     int res= PlateBase::sendData(comm);
-    res+= comm.sendDouble(h,getDbTagData(),CommMetaData(6));
     res+= comm.sendBrokedPtr(theFibers[0],getDbTagData(),BrokedPtrCommMetaData(7,8,9));
     res+= comm.sendBrokedPtr(theFibers[1],getDbTagData(),BrokedPtrCommMetaData(10,11,12));
     res+= comm.sendBrokedPtr(theFibers[2],getDbTagData(),BrokedPtrCommMetaData(13,14,15));
@@ -459,7 +495,6 @@ int XC::MembranePlateFiberSection::sendData(Communicator &comm)
 int XC::MembranePlateFiberSection::recvData(const Communicator &comm)
   {
     int res= PlateBase::recvData(comm);
-    res+= comm.receiveDouble(h,getDbTagData(),CommMetaData(6));
     theFibers[0]= comm.getBrokedMaterial(theFibers[0],getDbTagData(),BrokedPtrCommMetaData(7,8,9));
     theFibers[1]= comm.getBrokedMaterial(theFibers[1],getDbTagData(),BrokedPtrCommMetaData(10,11,12));
     theFibers[2]= comm.getBrokedMaterial(theFibers[2],getDbTagData(),BrokedPtrCommMetaData(13,14,15));
@@ -474,7 +509,7 @@ int XC::MembranePlateFiberSection::sendSelf(Communicator &comm)
   {
     setDbTag(comm);
     const int dataTag= getDbTag();
-    inicComm(3);
+    inicComm(23);
     int res= sendData(comm);
 
     res+= comm.sendIdData(getDbTagData(),dataTag);
@@ -488,7 +523,7 @@ int XC::MembranePlateFiberSection::sendSelf(Communicator &comm)
 //! @brief Receive object itself through the communicator argument.
 int XC::MembranePlateFiberSection::recvSelf(const Communicator &comm)
   {
-    inicComm(3);
+    inicComm(23);
     const int dataTag= getDbTag();
     int res= comm.receiveIdData(getDbTagData(),dataTag);
 

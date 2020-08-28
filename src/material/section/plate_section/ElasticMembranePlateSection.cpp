@@ -87,21 +87,12 @@ XC::ElasticMembranePlateSection::ElasticMembranePlateSection(void)
 
 //! @brief Constructor
 XC::ElasticMembranePlateSection::ElasticMembranePlateSection(int tag,double young,double poisson,double thickness,double r )
-  : ElasticPlateProto<8>(tag, SEC_TAG_ElasticMembranePlateSection,young,poisson,thickness), rhoH(r*thickness)
+  : ElasticPlateProto<8>(tag, SEC_TAG_ElasticMembranePlateSection,young,poisson,thickness, r)
   {}
 
 //! @brief Make a clone of this material
 XC::SectionForceDeformation*  XC::ElasticMembranePlateSection::getCopy(void) const
   { return new ElasticMembranePlateSection(*this); }
-
-//! @brief Density per unit area
-double XC::ElasticMembranePlateSection::getRho(void) const
-  { return rhoH; }
-
-//! @brief Asigns density per unit area
-void XC::ElasticMembranePlateSection::setRho(const double &r)
-  { rhoH= r; }
-
 
 //! @brief Returns the abels of the DOFs for which the elements
 //! adds stiffness.
@@ -209,7 +200,7 @@ void  XC::ElasticMembranePlateSection::Print( std::ostream &s, int flag ) const
     s <<  "  Young's Modulus E = "  <<  E  <<  std::endl;;
     s <<  "  Poisson's Ratio nu = " <<  nu <<  std::endl;;
     s <<  "  Thickness h = "        <<  h  <<  std::endl;;
-    s <<  "  Density rho = "        <<  (rhoH/h)  <<  std::endl;;
+    s <<  "  Density rho = "        <<  (getRho()/h)  <<  std::endl;;
     return;
   }
 
@@ -219,22 +210,6 @@ XC::DbTagData &XC::ElasticMembranePlateSection::getDbTagData(void) const
   {
     static DbTagData retval(9);
     return retval;
-  }
-
-//! @brief Send data through the communicator argument.
-int XC::ElasticMembranePlateSection::sendData(Communicator &comm)
-  {
-    int res= ElasticPlateProto<8>::sendData(comm);
-    res+= comm.sendDouble(rhoH,getDbTagData(),CommMetaData(8));
-    return res;
-  }
-
-//! @brief Receive data through the communicator argument.
-int XC::ElasticMembranePlateSection::recvData(const Communicator &comm)
-  {
-    int res= ElasticPlateProto<8>::recvData(comm);
-    res+= comm.receiveDouble(rhoH,getDbTagData(),CommMetaData(8));
-    return res;
   }
 
 //! @brief Send the object itself through the communicator argument.

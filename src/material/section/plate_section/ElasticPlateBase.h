@@ -53,7 +53,7 @@ class ElasticPlateBase: public PlateBase
   public : 
     ElasticPlateBase(int tag,int classTag);
     ElasticPlateBase(int classTag);
-    ElasticPlateBase(int tag,int classTag, double E, double nu, double h);
+    ElasticPlateBase(int tag,int classTag, double E, double nu, double h, double rho);
 
     int commitState(void); 
     int revertToLastCommit(void);
