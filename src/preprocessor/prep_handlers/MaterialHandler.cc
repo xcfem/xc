@@ -472,17 +472,18 @@ XC::Material *load_material(int tag_mat,const std::string &cmd,XC::MaterialHandl
   }
 
 //! @brief Defines a new material.
-XC::Material *XC::MaterialHandler::newMaterial(const std::string &cmd,const std::string &cod_mat)
+XC::Material *XC::MaterialHandler::newMaterial(const std::string &mat_type,const std::string &cod_mat)
   {
-    Material *retval= load_material(tag_mat,cmd,this);
+    Material *retval= load_material(tag_mat,mat_type,this);
     if(retval)
       {
         retval->set_owner(this);
         if(materials.find(cod_mat)!=materials.end()) //Material exists.
           {
-	    std::clog << getClassName() << "::" << __FUNCTION__
-	              << "; ¡ojo! se redefine el material: '"
-                      << cod_mat << "'." << std::endl;
+	    if(getVerbosityLevel()> 1)
+	      std::clog << getClassName() << "::" << __FUNCTION__
+	                << "; warning material: '"
+                        << cod_mat << "' redefined." << std::endl;
             delete materials[cod_mat];
           }
         materials[cod_mat]= retval;
@@ -490,7 +491,7 @@ XC::Material *XC::MaterialHandler::newMaterial(const std::string &cmd,const std:
       }
     else
       std::cerr << getClassName() << "::" << __FUNCTION__
-	        << "; material type: " << cmd << " not found."
+	        << "; material type: " << mat_type << " not found."
 	        << std::endl;
     return retval;
   }
