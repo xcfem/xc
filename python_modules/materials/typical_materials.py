@@ -451,6 +451,22 @@ def defElasticMembranePlateSection(preprocessor,name,E,nu,rho,h):
     retval.h= h
     return retval
 
+#Elastic membrane plate section.
+def defMembranePlateFiberSection(preprocessor, name, nDMaterial, h):
+    '''Constructs a membrane plate fiber section appropiate 
+       for plate and shell analysis.
+
+    :param  preprocessor: preprocessor
+    :param  name:         name identifying the section
+    :param  nDMaterial:   material to put in the section fibers.
+    :param  h:            overall depth of the section
+    '''
+    materialHandler= preprocessor.getMaterialHandler
+    retval= materialHandler.newMaterial("membrane_plate_fiber_section",name)
+    retval.setMaterial(nDMaterial);
+    retval.h= h
+    return retval
+
 class MaterialData(BasicElasticMaterial):
     '''Base class to construct some material definition classes
 

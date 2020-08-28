@@ -104,7 +104,7 @@ class ZeroLength: public Element0D
     Matrix *theMatrix; //!< pointer to objects matrix
     Vector *theVector; //!< pointer to objects vector
     // Storage for uniaxial material models
-    ZeroLengthMaterials theMaterial1d; //!< array of pointers to 1d materials y related directionss.
+    ZeroLengthMaterials theMaterial1d; //!< array of pointers to 1d materials and related directionss.
 
     Matrix t1d; //!< hold the transformation matrix.
 
