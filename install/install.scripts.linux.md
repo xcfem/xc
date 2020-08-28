@@ -14,13 +14,23 @@ sudo bash packages_install_debian_stretch.sh
 #
 ```
 
-#### Ubuntu Bionic Beaver
+#### Ubuntu Bionic Beaver (Ubuntu 18)
 
 - packages_install_ubuntu_bionic.sh
 - https://github.com/xcfem/xc/blob/master/install/packages_install_ubuntu_bionic.sh
 ```console
 wget https://raw.githubusercontent.com/xcfem/xc/master/install/packages_install_ubuntu_bionic.sh
 sudo bash packages_install_ubuntu_bionic.sh
+#
+```
+
+#### Ubuntu Focal Fossa (Ubuntu 20)
+
+- packages_install_ubuntu_focal_fossa.sh
+- https://github.com/xcfem/xc/blob/master/install/packages_install_ubuntu_focal_fossa.sh
+```console
+wget https://raw.githubusercontent.com/xcfem/xc/master/install/packages_install_ubuntu_focal_fossa.sh
+sudo bash packages_install_ubuntu_focal_fossa.sh
 #
 ```
 
