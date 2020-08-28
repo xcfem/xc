@@ -22,8 +22,8 @@ from materials.sections import section_properties as sectpr
 from model.mesh import finit_el_model as fem
 from model.sets import sets_mng as sets
 # Default configuration of environment variables.
-from postprocess import output_styles as outSty
-from postprocess import output_handler as outHndl
+# from postprocess import output_styles as outSty
+# from postprocess import output_handler as outHndl
 
 
 
@@ -36,8 +36,8 @@ elements.dimElem= 3
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes) #defines dimension of
                   #the space: nodes by three coordinates (x,y,z) and 
                   #three DOF for each node (Ux,Uy,Uz)
-sty=outSty.OutputStyle() 
-out=outHndl.OutputHandler(modelSpace,sty)
+#sty=outSty.OutputStyle() 
+#out=outHndl.OutputHandler(modelSpace,sty)
 
 # *** GEOMETRY ***
 

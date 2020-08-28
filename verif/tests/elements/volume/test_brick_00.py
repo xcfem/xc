@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-from __future__ import print_function
 '''Test taken from example 5-001 of SAP2000 verification manual.'''
+
+from __future__ import print_function
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
 __copyright__= "Copyright 2015, LCPT and AOO"
@@ -13,7 +14,7 @@ import geom
 import xc
 from model import predefined_spaces
 from materials import typical_materials
-from postprocess import output_handler
+# from postprocess import output_handler
 
 # Problem type
 feProblem= xc.FEProblem()

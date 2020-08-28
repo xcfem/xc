@@ -19,7 +19,7 @@ import geom
 import xc
 from model import predefined_spaces
 from materials import typical_materials
-from postprocess import output_handler
+# from postprocess import output_handler
 import numpy as np
 from numpy import linalg as LA
 from misc import matrix_utils

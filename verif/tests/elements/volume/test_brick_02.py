@@ -19,7 +19,7 @@ import xc
 from solution import predefined_solutions
 from model import predefined_spaces
 from materials import typical_materials
-from postprocess import output_handler
+# from postprocess import output_handler
 
 # Problem type
 feProblem= xc.FEProblem()
@@ -72,8 +72,8 @@ nod14.fix(xc.ID([0,1,2]),xc.Vector([0.0015,0.001,0.0015]) )
 nod15.fix(xc.ID([0,1,2]),xc.Vector([0.002,0.002,0.002]) )
 nod16.fix(xc.ID([0,1,2]),xc.Vector([0.001,0.0015,0.0015]) )
 
-# Graphic stuff.
-oh= output_handler.OutputHandler(modelSpace)
+# # Graphic stuff.
+# oh= output_handler.OutputHandler(modelSpace)
 
 # ## Uncomment to display the mesh
 # oh.displayFEMesh()

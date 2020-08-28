@@ -21,7 +21,7 @@ from model import predefined_spaces
 from actions import load_cases
 from actions import combinations as combs
 from solution import predefined_solutions
-from postprocess import output_handler
+# from postprocess import output_handler
 from postprocess import limit_state_data as lsd
 from postprocess.config import default_config
 
