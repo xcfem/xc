@@ -27,8 +27,8 @@
 //----------------------------------------------------------------------------
 //FEProblem.h
 
-#ifndef PROBLEMAEF_H
-#define PROBLEMAEF_H
+#ifndef FEPROBLEM_H
+#define FEPROBLEM_H
 
 #include "xc_utils/src/kernel/CommandEntity.h"
 #include "version.h"
