@@ -245,12 +245,12 @@ class BoltFastener(BoltBase):
             if(self.diameter>=36e-3):
                 return self.diameter+8e-3
             else:
-                return self.fOversizeHoleDia(self.diameter)
+                return float(self.fOversizeHoleDia(self.diameter))
         else:
             if(self.diameter>=36e-3):
                 return self.diameter+3e-3
             else:
-                return self.fStandardHoleDia(self.diameter)
+                return float(self.fStandardHoleDia(self.diameter))
 
     def getNominalTensileStrength(self):
         ''' Return the nominal strength of the fastener according
