@@ -1,0 +1,10 @@
+C Copyright(C) 1999-2020 National Technology & Engineering Solutions
+C of Sandia, LLC (NTESS).  Under the terms of Contract DE-NA0003525 with
+C NTESS, the U.S. Government retains certain rights in this software.
+C
+C See packages/seacas/LICENSE for details
+      INTEGER*4 MACHIN(3),MACLEN
+      INTEGER*4 KIDSIZ,KJOBID(4),KUSRSZ,KUSRID(4),KSZROU
+      INTEGER*4 KJROUT(4),KSECUR,KJTIME(4),KJDATE(4)
+      COMMON /VCJOB/ KIDSIZ,KJOBID,KUSRSZ,KUSRID,KSZROU,
+     1               KJROUT,KSECUR,KJTIME,KJDATE,MACHIN,MACLEN

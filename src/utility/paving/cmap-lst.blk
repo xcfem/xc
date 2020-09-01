@@ -1,0 +1,15 @@
+C    Copyright(C) 1999-2020 National Technology & Engineering Solutions
+C    of Sandia, LLC (NTESS).  Under the terms of Contract DE-NA0003525 with
+C    NTESS, the U.S. Government retains certain rights in this software.
+C
+C    See packages/seacas/LICENSE for details
+
+      PARAMETER (NCOLOR=9)
+      REAL COLMAP(NCOLOR+2)
+      COMMON /CMAP/ COLMAP
+C        -- COLMAP -- Color indexes of currently mapped colors
+
+      CHARACTER*(MXSTLN) COLLST(NCOLOR+2)
+      COMMON /CLST/ COLLST
+C        -- COLLST -- character names of currently mapped colors
+

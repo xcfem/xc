@@ -1,0 +1,19 @@
+C    Copyright(C) 1999-2020 National Technology & Engineering Solutions
+C    of Sandia, LLC (NTESS).  Under the terms of Contract DE-NA0003525 with
+C    NTESS, the U.S. Government retains certain rights in this software.
+C
+C    See packages/seacas/LICENSE for details
+
+      COMMON /DBNUMS/ NDIM, NUMNP, NUMEL, NELBLK,
+     &   NVARHI, NVARGL, NVARNP, NVAREL, NVARNS, NVARSS,
+     &   NSTEPS, NSTEPW, NSHL
+C      --NDIM - the number of coordinates per node
+C      --NUMNP - the number of nodes
+C      --NUMEL - the number of elements
+C      --NELBLK - the number of element blocks
+C      --NVARGL - the number of global variables
+C      --NVARNP - the number of nodal variables
+C      --NVAREL - the number of element variables
+C      --NSTEPS - the number of database time steps
+C      --NSTEPW - the number of whole (versus history) database time steps
+c      --nshl   - the number of shell elements
