@@ -40,6 +40,7 @@ void export_utility(void)
 #include "actor/channel/python_interface.tcc"
 #include "database/python_interface.tcc"
 #include "recorder/python_interface.tcc"
+#include "paving/python_interface.tcc"
 
   }
 

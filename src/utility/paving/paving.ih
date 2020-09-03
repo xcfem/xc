@@ -1,8 +1,9 @@
+// -*-c++-*-
 int bpinch_(integer *mxnd, integer *mln, integer *lnodes,real *xn, real *yn, integer *lxn, integer *nxl, real *angle, integer *n0, integer *n1, integer *n2, integer *nloop, real *toler1, real *toler2, logical *bok, logical *err);
 
 int pltnor_(real *ybump, real *ychrsz);
 
-int filsmo_(integer *mxnd, integer *mln, real *xn, real *yn,real *zn, integer *lxk, integer *kxl, integer *nxl, integer *lxn,integer *lll, integer *nnn, integer *nnn2, integer *lnodes, real *bnsize, integer *nloop, real *xmin, real *xmax, real *ymin, real *ymax, real *zmin, real *zmax, char *dev1, integer *kreg, ftnlendev1_len);
+int filsmo_(integer *mxnd, integer *mln, real *xn, real *yn,real *zn, integer *lxk, integer *kxl, integer *nxl, integer *lxn,integer *lll, integer *nnn, integer *nnn2, integer *lnodes, real *bnsize, integer *nloop, real *xmin, real *xmax, real *ymin, real *ymax, real *zmin, real *zmax, char *dev1, integer *kreg, ftnlen dev1_len);
 
 int pltdrw_(real *x, real *y);
 
@@ -54,11 +55,11 @@ int pltrim_(char *line, integer *l, ftnlen line_len);
 
 int extnd3_(integer *mxnd, real *xn, real *yn, real *angle,integer *n1, integer *n2, integer *n3, real *x, real *y, real *dist);
 
-int siorpt_(char *module, char *mess, integer *disp, ftnlenmodule_len, ftnlen mess_len);
+int siorpt_(char *module, char *mess, integer *disp, ftnlen module_len, ftnlen mess_len);
 
 int setlop_(integer *mxnd, integer *mln, integer *nloop,integer *lnodes, integer *node, integer *ivalue, logical *err);
 
-int lupang_(integer *mxnd, integer *mln, real *xn, real *yn,real *zn, integer *lxk, integer *kxl, integer *nxl, integer *lxn,integer *nloop, real *angle, integer *lnodes, integer *nstart,integer *lll, real *xmin, real *xmax, real *ymin, real *ymax, real *zmin, real *zmax, char *dev1, integer *kreg, logical *err, ftnlendev1_len);
+int lupang_(integer *mxnd, integer *mln, real *xn, real *yn,real *zn, integer *lxk, integer *kxl, integer *nxl, integer *lxn,integer *nloop, real *angle, integer *lnodes, integer *nstart,integer *lll, real *xmin, real *xmax, real *ymin, real *ymax, real *zmin, real *zmax, char *dev1, integer *kreg, logical *err, ftnlen dev1_len);
 
 int invert_fq__(integer *mxnd, integer *mln, real *xn, real *yn, real *zn, integer *lxk, integer *kxl, integer *nxl, integer *lxn,integer *lll, integer *lnodes, real *xmin, real *xmax, real *ymin,real *ymax, real *zmin, real *zmax, char *dev1, integer *kreg,integer *node, real *xdel, real *ydel, ftnlen dev1_len);
 
@@ -68,13 +69,13 @@ int mpmul2_(integer *n, real *x0, real *y0, real *mat, real *res1, real *res2, r
 
 int node12_(integer *mxnd, integer *mln, integer *lnodes,integer *i1, integer *i2, integer *nloop1, integer *nloop2, integer *node1, integer *node2, integer *node, logical *err);
 
-int getdum_(integer *i__, char *dummy, integer *len, ftnlendummy_len);
+int getdum_(integer *i__, char *dummy, integer *len, ftnlen dummy_len);
 
 int pltvwp_(real *pll, real *pur, integer *n, integer *mask,real *px, real *py);
 
-int chric_(integer *jin, char *ds, integer *nd, ftnlends_len);
+int chric_(integer *jin, char *ds, integer *nd, ftnlen ds_len);
 
-int pltesc_(char *text, integer *i__, char *esc, ftnlentext_len, ftnlen esc_len);
+int pltesc_(char *text, integer *i__, char *esc, ftnlen text_len, ftnlen esc_len);
 
 int pltp2d_(real *x, real *y, real *xn, real *yn);
 
@@ -114,7 +115,7 @@ int getsiz_(real *xnold, real *ynold, integer *nxkold,integer *linkeg, integer *
 
 int b4bad_(integer *mxnd, integer *mln, real *xn, real *yn,integer *lxk, integer *kxl, integer *nxl, integer *lxn, integer *lnodes, real *angle, integer *i1, integer *i2, integer *j1, integer *j2, integer *nloop, integer *kountl, logical *bok, logical *err);
 
-int chrrvc_(real *buff, char *txt, integer *l, ftnlentxt_len);
+int chrrvc_(real *buff, char *txt, integer *l, ftnlen txt_len);
 
 int mesage_(char *prompt, ftnlen prompt_len);
 
@@ -142,7 +143,7 @@ int snapit_(integer *i__);
 
 int mnorm_(integer *mxnd, real *xn, real *yn, integer *nxl,integer *lll, real *stdlen);
 
-int rplotl_(integer *mxnd, real *xn, real *yn, real *zn,integer *nxl, real *xmin, real *xmax, real *ymin, real *ymax, real *zmin, real *zmax, integer *lll, char *dev1, integer *kreg, ftnlendev1_len);
+int rplotl_(integer *mxnd, real *xn, real *yn, real *zn,integer *nxl, real *xmin, real *xmax, real *ymin, real *ymax, real *zmin, real *zmax, integer *lll, char *dev1, integer *kreg, ftnlen dev1_len);
 
 int add2nd_(integer *mxnd, integer *mln, real *xn, real *yn,integer *lxk, integer *kxl, integer *nxl, integer *lxn, real *bnsize,integer *lnodes, real *x1, real *y1, real *x2, real *y2, real *dist1,real *dist2, integer *nnn, integer *lll, integer *kkk, integer *n1,integer *n2, integer *nloop, logical *sizeit, logical *err, logical *noroom, real *xnold, real *ynold, integer *nxkold, integer *linkeg,integer *listeg, real *bmesur, integer *mlink, integer *npnold,integer *npeold, integer *nnxk, real *remesh, real *rexmin, real *rexmax, real *reymin, real *reymax, integer *idivis, real *sizmin,real *emax, real *emin);
 
@@ -391,4 +392,3 @@ int getang_(integer *mxnd, integer *mln, real *xn, real *yn,integer *lnodes, int
 int mpd2sy_(integer *n, real *x0, real *y0, char *sym,ftnlen sym_len);
 
 int bcross_(integer *mxnd, integer *mln, real *xn, real *yn,real *zn, integer *lxk, integer *kxl, integer *nxl, integer *lxn,integer *lnodes, integer *i1, integer *i2, integer *j1, integer *j2,integer *nloop, logical *bok, integer *lll, real *xmin, real *xmax,real *ymin, real *ymax, real *zmin, real *zmax, char *dev1, integer *kreg, logical *err, ftnlen dev1_len);
-

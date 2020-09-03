@@ -448,7 +448,7 @@ bool XC::NodePtrs::Corta(const Plane &plane,bool initialGeometry) const
     HalfSpace3d halfSpace(plane);
     bool in= In(halfSpace,factor,0.0);
     HalfSpace3d complementario(halfSpace);
-    complementario.Swap();
+    complementario.swap();
     bool out= In(complementario,factor,0.0);
     return (!in && !out);
   }

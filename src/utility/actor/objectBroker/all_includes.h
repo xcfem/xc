@@ -334,6 +334,9 @@
 #include "utility/matrix/nDarray/Cosseratstraint.h"
 #include "utility/matrix/nDarray/Cosseratstresst.h"
 
+// Paving algorithm
+#include "utility/paving/Paver.h"
+
 
 // subdomain header files
 #include "domain/domain/subdomain/Subdomain.h"

@@ -15,6 +15,13 @@ extern "C" {
 #endif
 #include "f2c.h"
 
+  /* Nomenclature:
+     L -> line
+     K -> element
+     N -> node
+     PR -> perimeter
+  */
+  
 /* Common Block Declarations */
 
 struct {
