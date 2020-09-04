@@ -64,10 +64,10 @@ class Paver: public CommandEntity
                                // element dimensioned as (4, mxnd)
     std::vector<integer> inxe; //!< integer array of nodes attached to each
                                // edge dimensioned as (2, mxnd)
-    integer nnn; //!< number of nodes in the final mesh
-    integer lll; //!< number of edges in the final mesh
-    integer kkk; //!< number of elements in the final mesh
-    integer mxnd; //!< maximum number of nodes expected in the mesh
+    integer nnn= 0; //!< number of nodes in the final mesh
+    integer lll= 0; //!< number of edges in the final mesh
+    integer kkk= 0; //!< number of elements in the final mesh
+    integer mxnd= 0; //!< maximum number of nodes expected in the mesh
                    // (if this is exceeded, noroom is returned as .true.)
     std::vector<real> angle; //!< real array for working space in
                               // paving - dimensioned to (mxnd) - this becomes
@@ -99,9 +99,9 @@ class Paver: public CommandEntity
     std::vector<integer> nuid; //!< integer array for working space in
                                  // paving - dimensioned to (mxnd -
                                  // this becomes the nuid array
-    integer iavail; //!< a dummy integer parameter needed by
+    integer iavail= 0; //!< a dummy integer parameter needed by
                    //! fastq - this becomes iavail.
-    integer navail; //!< a dummy integer parameter needed by fastq -  this
+    integer navail= 0; //!< a dummy integer parameter needed by fastq -  this
                    // becomes navail.
     logical graph= 0; //!< .true. if plotting at each stage is desired
     logical timer= 0; //!< .true. if a timing report is desired
@@ -144,6 +144,7 @@ class Paver: public CommandEntity
     real reymax= 0.0; //!< max y for the old mesh
     int idivis= 0; //!< number of divisions in the search grid link */
     int call_paving(const Polygon3d &, const std::deque<Polygon3d> &);
+    int extract_mesh(void);
   public:
     Paver(void);
     void report(std::ostream &);

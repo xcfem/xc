@@ -53,14 +53,17 @@ void XC::Paver::report(std::ostream &os)
   {
     os << "nbnode: " << nbnode << std::endl
        << "nprm: " << nprm << std::endl
-       << "nbnode= " << nbnode
-       << "mxnd= " << mxnd << std::endl;
-    report_ivector(os, "iptper: ", iptper);
-    report_ivector(os, "numper: ", numper);
-    report_ivector(os, "lperim: ", lperim);
-    report_fvector(os, "x: ", x);
-    report_fvector(os, "y: ", y);
-    report_fvector(os, "z: ", z);
+       << "nbnode= " << nbnode << std::endl
+       << "mxnd= " << mxnd << std::endl
+       << "lxk size: " << lxk.size() << std::endl
+       << "lnodes size: " << lnodes.size() << std::endl
+       << "linkpr size: " << linkpr.size() << std::endl;
+    report_ivector(os, "iptper", iptper);
+    report_ivector(os, "numper", numper);
+    report_ivector(os, "lperim", lperim);
+    //report_fvector(os, "x: ", x);
+    //report_fvector(os, "y: ", y);
+    //report_fvector(os, "z: ", z);
   }
 
 //! @brief Call paving function.
@@ -76,6 +79,7 @@ int XC::Paver::call_paving(const Polygon3d &extContour, const std::deque<Polygon
     if(ext.clockwise())
       ext.swap();
     nbnode= extContour.GetNumVertices();
+    nnn= nbnode;
     if(nbnode==0)
       {
 	  std::clog << getClassName() << "::" << __FUNCTION__
@@ -137,28 +141,29 @@ int XC::Paver::call_paving(const Polygon3d &extContour, const std::deque<Polygon
 		lperim[vertexCounter-1]= vertexCounter;
 	      }
 	  }
-	report(std::cout);
 	
 	// Alloc memory
-	iexk.resize(4*mxnd);
-	inxe.resize(2*mxnd);
-	angle.resize(mxnd);
-	bnsize.resize(2*mxnd);
-	lnodes.resize(mln*mxnd);
-        linkpr.resize(3*nprm);
-	nperim.resize(nprm);
-	lxk.resize(4*mxnd);
-	kxl.resize(2*3*mxnd);
-	nxl.resize(2*3*mxnd);
-	lxn.resize(4*mxnd);
-	nuid.resize(mxnd);
-	amesur.resize(npeold);
-	bmesur.resize(npeold);
-	xnold.resize(npnold); ynold.resize(npnold);
-	nxkold.resize(nnxk*npeold);
-	mmpold.resize(3*nprold);
-	linkeg.resize(2*mlink);
-	listeg.resize(2*npeold);
+	angle.resize(mxnd); // size ok
+	bnsize.resize(2*mxnd); // size ok
+	lnodes.resize(mln*mxnd); // size ok
+        linkpr.resize(3*nprm); // size ok
+	nperim.resize(nprm); // size ok
+	iexk.resize(4*mxnd); // size ok
+	inxe.resize(2*3*mxnd); // size ok
+	nuid.resize(mxnd); // size ok
+	lxk.resize(4*mxnd); // size ok
+	kxl.resize(2*3*mxnd); // size ok
+	nxl.resize(2*3*mxnd); // size ok
+	lxn.resize(4*mxnd); // size ok
+	amesur.resize(npeold); // size ok
+	bmesur.resize(npeold); // size ok
+	xnold.resize(npnold); ynold.resize(npnold); // size ok
+	nxkold.resize(nnxk*npeold); // size ok
+	mmpold.resize(3*nprold); // size ok
+	linkeg.resize(2*mlink); // size ok
+	listeg.resize(2*npeold); // size ok
+	
+	report(std::cout);
 
 	real sizmin= 0.0;
 	real emax= 0.0;
@@ -170,12 +175,56 @@ int XC::Paver::call_paving(const Polygon3d &extContour, const std::deque<Polygon
     return retval;
   }
 
-//ª @brief Get data from Python and call paving.
+//! @brief Get data from Python and call paving.
 int XC::Paver::mesh(const Polygon3d &ext, const boost::python::list &l)
   {
     std::deque<Polygon3d> intContours;
     const size_t sz= len(l);
     for(size_t i=0; i<sz; i++)
       intContours.push_back(boost::python::extract<Polygon3d>(l[i]));
-    return call_paving(ext,intContours);
+    int paving= call_paving(ext,intContours);
+    return extract_mesh();
   }
+
+//! @brief Extract mesh data  
+int XC::Paver::extract_mesh(void)
+  {
+    std::vector<Pos3d> nodePos(nnn);
+    for(int i= 0;i<nnn; i++)
+      {
+	nodePos[i]= Pos3d(x[i], y[i], z[i]);
+	std::cout << "node: " << i+1 << ' ' << nodePos[i] << std::endl;
+      }
+    std::vector<std::vector<int> > elemEdges(kkk);
+    for(int i= 0;i<kkk;i++)
+      {
+	std::vector<int> edges(4);
+	size_t ielem= i*4;
+	edges[0]= iexk[ielem];
+	edges[1]= iexk[ielem+1];
+	edges[2]= iexk[ielem+2];
+	edges[3]= iexk[ielem+3];
+	std::cout << "edges: " << edges[0] << ' ' << edges[1]  << ' ' << edges[2] << ' ' << edges[3] << std::endl;
+	elemEdges[i]= edges;
+      }
+    for(int i= 0;i<lll;i++)
+      {
+	int iNode= i*2;
+	std::cout << "Edge: " << i+1 << " "
+		  << inxe[iNode] << ' ' << inxe[iNode+1] << std::endl;
+      }
+    // for(std::vector<std::vector<int> >::const_iterator i= elemEdges.begin(); i!= elemEdges.end(); i++)
+    //   {
+    // 	std::cout << "Elemento:" << std::endl;
+    // 	int edge0= (*i)[0];
+    // 	std::cout << "  nodes: " << inxe[edge0] << ' ' << inxe[edge0+1] << std::endl;
+    // 	int edge1= (*i)[1];
+    // 	std::cout << "  nodes: " << inxe[edge1] << ' ' << inxe[edge1+1] << std::endl;
+    // 	int edge2= (*i)[2];
+    // 	std::cout << "  nodes: " << inxe[edge2] << ' ' << inxe[edge2+1] << std::endl;
+    // 	int edge3= (*i)[3];
+    // 	std::cout << "  nodes: " << inxe[edge3] << ' ' << inxe[edge3+1] << std::endl;
+    //   }
+    return kkk;
+  }
+

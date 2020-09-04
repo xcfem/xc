@@ -14,6 +14,7 @@
 extern "C" {
 #endif
 #include "f2c.h"
+#include <stdio.h>
 
   /* Nomenclature:
      L -> line
@@ -338,9 +339,9 @@ static integer c__1 = 1;
     nxkold -= nxkold_offset;
 
     /* Function Body */
-    if (*remesh) {
-	*sizeit = TRUE_;
-    }
+    if(*remesh)
+      {	*sizeit = TRUE_; }
+    printf("****** here 0\n");
     timing_1.timea = (float)0.;
     timing_1.timep = (float)0.;
     timing_1.timec = (float)0.;
@@ -350,30 +351,39 @@ static integer c__1 = 1;
     getime_(&time1);
     *err = FALSE_;
     done = FALSE_;
+    printf("****** here 0.1\n");
 /*  ZERO ALL THE LINK ARRAYS */
     i__1 = *mxnd;
-    for (i__ = 1; i__ <= i__1; ++i__) {
-	for (j = 1; j <= 4; ++j) {
-	    lxk[j + (i__ << 2)] = 0;
-	    lxn[j + (i__ << 2)] = 0;
+    for (i__ = 1; i__ <= i__1; ++i__)
+      {
+	for (j = 1; j <= 4; ++j)
+	  {
+	    integer idx= j + (i__ << 2);
+	    lxk[idx]= 0;
+	    lxn[idx]= 0;
 /* L100: */
-	}
+	  }
 /* L110: */
-    }
+      }
+    printf("\n****** here 0.2\n");
     i__1 = *mxnd;
-    for (i__ = *nnn + 1; i__ <= i__1; ++i__) {
+    for (i__ = *nnn + 1; i__ <= i__1; ++i__)
+      {
 	nuid[i__] = 0;
 /* L120: */
-    }
+      }
+    printf("****** here 0.3\n");
     i__1 = *mxnd * 3;
-    for (i__ = 1; i__ <= i__1; ++i__) {
-	for (j = 1; j <= 2; ++j) {
+    for (i__ = 1; i__ <= i__1; ++i__)
+      {
+	for (j = 1; j <= 2; ++j)
+	  {
 	    kxl[j + (i__ << 1)] = 0;
 	    nxl[j + (i__ << 1)] = 0;
 /* L130: */
-	}
+	  }
 /* L140: */
-    }
+      }
 /*  ZERO THE LOOP COUNTING AND CONNECTING ARRAYS */
     for (i__ = 1; i__ <= 20; ++i__) {
 	nloop[i__ - 1] = 0;
@@ -387,6 +397,7 @@ static integer c__1 = 1;
 	linkpr[i__ * 3 + 3] = 0;
 /* L160: */
     }
+    printf("****** here 1\n");
 /*  FIND THE EXTREMES OF THE PERIMETERS */
     xmin = xn[iptper[1]];
     xmax = xn[iptper[1]];
@@ -421,17 +432,21 @@ static integer c__1 = 1;
 	}
 /* L180: */
     }
+    printf("****** here 1.5\n");
 /*  LINK ALL THE NODES IN THE ORIGINAL PERIMETERS TOGETHER */
     i__1 = *nprm;
-    for (i__ = 1; i__ <= i__1; ++i__) {
+    for (i__ = 1; i__ <= i__1; ++i__)
+      {
+        printf("****** here AA\n");
+	printf("%d \n", i__);
+	printf("iptper %d \n", iptper[1]);
 	periml_(nbnode, mxnd, &numper[i__], &iptper[i__], mln, &xn[1], &yn[1],
 		 &zn[1], &lxk[5], &kxl[3], &nxl[3], &lxn[5], &angle[1], &
 		bnsize[3], &lnodes[lnodes_offset], &lperim[1], lll, &lllold, &
-		xmin, &xmax, &ymin, &ymax, &zmin, &zmax, dev1, kreg, err, (
-		ftnlen)3);
-	if (*err) {
-	    goto L310;
-	}
+		xmin, &xmax, &ymin, &ymax, &zmin, &zmax, dev1, kreg, err, (ftnlen)3);
+        printf("****** here BB\n");
+	if(*err)
+	  { goto L310; }
 	linkpr[i__ * 3 + 1] = lperim[iptper[i__]];
 	if (i__ > 1) {
 	    linkpr[(i__ - 1) * 3 + 2] = i__;
@@ -444,6 +459,7 @@ static integer c__1 = 1;
 /* L190: */
     }
     itnper = *nbnode;
+    printf("****** here 2\n");
 /*  LINK UP THE REST OF THE LXN ARRAY */
     nnnold = *nnn;
     lllold = *lll;
@@ -474,6 +490,7 @@ static integer c__1 = 1;
 	*err = TRUE_;
 	goto L310;
     }
+    printf("****** here 3\n");
 /*  NOW BEGIN TO LOOP THROUGH THE INTERIOR NODE LIST */
 /*  FILLING ROWS WITH ELEMENTS */
     n1 = linkpr[4];
@@ -550,6 +567,7 @@ L210:
 	}
 	goto L240;
     }
+    printf("****** here 4\n");
 /*  GENERATE A NEW ROW OF ELEMENTS */
     addrow_(mxnd, &c__10240, &c__20, mln, nprm, &nuid[1], &xn[1], &yn[1], &zn[
 	    1], &lxk[5], &kxl[3], &nxl[3], &lxn[5], &angle[1], &bnsize[3], &
@@ -737,12 +755,14 @@ L240:
     }
 /*  EXIT WITH ERROR */
 L310:
-    if (*err && ! (*batch)) {
+    if (*err && ! (*batch))
+      {
+        printf("****** here 5\n");
 	rplotl_(mxnd, &xn[1], &yn[1], &zn[1], &nxl[3], &xmin1, &xmax1, &ymin1,
 		 &ymax1, &zmin1, &zmax1, lll, dev1, kreg, (ftnlen)3);
 	ringbl_();
 	sflush_();
-    }
+      }
     if (*timer) {
 	getime_(&time2);
 	s_wsfe(&io___39);

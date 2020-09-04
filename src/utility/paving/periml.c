@@ -84,18 +84,24 @@ extern "C" {
     *lllold = *lll;
     iend = *nper + *istart - 1;
     i__1 = iend;
-    for (i__ = *istart; i__ <= i__1; ++i__) {
+    for(i__= *istart; i__<=i__1; ++i__)
+      {
 	node1 = lperim[i__];
-	if (i__ == iend) {
+	if (i__ == iend)
+	  {
 	    node0 = lperim[i__ - 1];
 	    node2 = lperim[*istart];
-	} else if (i__ == *istart) {
+	  }
+	else if (i__ == *istart)
+	  {
 	    node0 = lperim[iend];
 	    node2 = lperim[i__ + 1];
-	} else {
+	  }
+	else
+	  {
 	    node0 = lperim[i__ - 1];
 	    node2 = lperim[i__ + 1];
-	}
+	  }
 	++(*lll);
 /*  FILL UP THE NODES PER LINE ARRAY */
 	nxl[(*lll << 1) + 1] = node1;
