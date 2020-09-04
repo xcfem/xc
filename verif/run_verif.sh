@@ -288,6 +288,7 @@ python tests/preprocessor/meshing/test_surface_meshing_05.py
 python tests/preprocessor/meshing/test_surface_meshing_06.py
 python tests/preprocessor/meshing/test_imposed_meshing.py
 python tests/preprocessor/meshing/test_truss_generator_01.py
+python tests/preprocessor/meshing/test_paving_01.py
 
 echo "$BLEU" "  Sets handling tests." "$NORMAL"
 python tests/preprocessor/sets/test_exist_set.py

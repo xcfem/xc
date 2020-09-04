@@ -47,12 +47,10 @@ void report_fvector(std::ostream &os, const std::string &name, const std::vector
 
 //! @brief Default constructor.
 XC::Paver::Paver(void)
-  : nbnode(0), nprm(0)  { std::cout << "constr." << std::endl; }
+  : nbnode(0), nprm(0)  { }
 
 void XC::Paver::report(std::ostream &os)
   {
-    std::cout << "Enters : " << getClassName() << "::" << __FUNCTION__
-	      << std::endl;
     os << "nbnode: " << nbnode << std::endl
        << "nprm: " << nprm << std::endl
        << "nbnode= " << nbnode << std::endl
@@ -75,8 +73,6 @@ void XC::Paver::report(std::ostream &os)
 //! @param intContours: 3D polygons that define the internal contours.
 int XC::Paver::call_paving(const Polygon3d &extContour, const std::deque<Polygon3d> &intContours) 
   {
-    std::cout << "Enters : " << getClassName() << "::" << __FUNCTION__
-	      << std::endl;
     int retval= 0;
     Polygon3d ext= extContour;
     nprm= 1;
@@ -109,7 +105,6 @@ int XC::Paver::call_paving(const Polygon3d &extContour, const std::deque<Polygon
 	      std::clog << getClassName() << "::" << __FUNCTION__
 			<< "; error, empty internal contour ignored." << std::endl;
 	  }
-	std::cout << " here A." << std::endl;
 	iptper.resize(nprm);
 	numper.resize(nprm);
 	lperim.resize(nbnode);
@@ -131,7 +126,6 @@ int XC::Paver::call_paving(const Polygon3d &extContour, const std::deque<Polygon
 	  }
 	numper[plgCounter-1]= nv;
 	iptper[plgCounter-1]= 1; // Exterior contour starts in the first node.
-	std::cout << " here B." << std::endl;
 	for(std::deque<Polygon3d>::const_iterator i= intContours.begin(); i!= intContours.end(); i++, plgCounter++)
 	  {
 	    Polygon3d tmp= *i;
@@ -147,25 +141,17 @@ int XC::Paver::call_paving(const Polygon3d &extContour, const std::deque<Polygon
 		lperim[vertexCounter-1]= vertexCounter;
 	      }
 	  }
-	std::cout << " here C." << std::endl;
 	// Alloc memory
 	angle.resize(mxnd); // size ok
 	bnsize.resize(2*mxnd); // size ok
-	std::cout << " here C.1." << std::endl;
-	std::cout << " mln=" << mln << " mxnd= " << mxnd
-		  << " mln*mxnd= " << mln*mxnd << std::endl;
-	std::cout << " lnodes.size()= " << lnodes.size() << std::endl;
 	lnodes.resize(mln*mxnd); // size ok
-	std::cout << " here C.2." << std::endl;
         linkpr.resize(3*nprm); // size ok
 	nperim.resize(nprm); // size ok
-	std::cout << " here C.3." << std::endl;
 	iexk.resize(4*mxnd); // size ok
 	inxe.resize(2*3*mxnd); // size ok
 	nuid.resize(mxnd); // size ok
 	lxk.resize(4*mxnd); // size ok
 	kxl.resize(2*3*mxnd); // size ok
-	std::cout << " here D." << std::endl;
 	nxl.resize(2*3*mxnd); // size ok
 	lxn.resize(4*mxnd); // size ok
 	amesur.resize(npeold); // size ok
@@ -175,10 +161,7 @@ int XC::Paver::call_paving(const Polygon3d &extContour, const std::deque<Polygon
 	mmpold.resize(3*nprold); // size ok
 	linkeg.resize(2*mlink); // size ok
 	listeg.resize(2*npeold); // size ok
-	std::cout << " here E." << std::endl;
 	
-	report(std::cout);
-
 	real sizmin= 0.0;
 	real emax= 0.0;
 	real emin= 0.0;
@@ -186,15 +169,12 @@ int XC::Paver::call_paving(const Polygon3d &extContour, const std::deque<Polygon
 	
 	retval= paving_(&nbnode, &nprm, &mln,  iptper.data(), numper.data(), lperim.data(), x.data(), y.data(), z.data(), iexk.data(), inxe.data(), &nnn, &lll, &kkk, &mxnd, angle.data(), bnsize.data(), lnodes.data(), linkpr.data(), nperim.data(), lxk.data(), kxl.data(), nxl.data(), lxn.data(), nuid.data(), &iavail, &navail, &graph, &timer, &video, &defsiz, &sizeit, dev1, &kreg, &batch, &noroom, &err, amesur.data(), xnold.data(), ynold.data(), nxkold.data(), mmpold.data(), linkeg.data(), listeg.data(), bmesur.data(), &mlink, &nprold, &npnold, &npeold, &nnxk, &remesh, &rexmin, &rexmax, &reymin, &reymax, &idivis, &sizmin, &emax, &emin, dev1_len);
       }
-    std::cout << "exits paving." << std::endl;
     return retval;
   }
 
 //! @brief Get data from Python and call paving.
 int XC::Paver::mesh(const Polygon3d &ext, const boost::python::list &l)
   {
-    std::cout << "Enters : " << getClassName() << "::" << __FUNCTION__
-	      << std::endl;
     std::deque<Polygon3d> intContours;
     const size_t sz= len(l);
     for(size_t i=0; i<sz; i++)
@@ -206,8 +186,6 @@ int XC::Paver::mesh(const Polygon3d &ext, const boost::python::list &l)
 //! @brief Return the element nodes from its edges.
 std::vector<int> XC::Paver::get_elem_nodes(const std::vector<int> &edges)
   {
-    std::cout << "Enters : " << getClassName() << "::" << __FUNCTION__
-	      << std::endl;
     const int edge0= edges[0];
     const int iEdge0= edge0*2;
     const int nA= inxe[iEdge0];
@@ -221,9 +199,13 @@ std::vector<int> XC::Paver::get_elem_nodes(const std::vector<int> &edges)
       {
         retval[0]= nB; retval[1]= nA; retval[2]= nD;
       }
-    else if(nA==nD) // nA==nD or nC==nB
+    else if(nA==nD) // nA==nD or nC==nB or nB==nD
       {
         retval[0]= nB; retval[1]= nA; retval[2]= nC;
+      }
+    else if(nB==nD) // nA==nD or nC==nB
+      {
+        retval[0]= nA; retval[1]= nB; retval[2]= nC;
       }
     else // nC==nB
       {
@@ -240,15 +222,23 @@ std::vector<int> XC::Paver::get_elem_nodes(const std::vector<int> &edges)
       retval[3]= nF; // this is the new one.
     // C++ indexing:
     retval[0]--; retval[1]--; retval[2]--; retval[3]--;
-    std::cout << "nodes: " << retval[0]+1 << ' ' << retval[1]+1  << ' ' << retval[2]+1 << ' ' << retval[3]+1 << std::endl;
+    for(int i= 0; i<4; i++)
+	if(retval[i]>nnn)
+	  {
+	    std::cerr << getClassName() << "::" << __FUNCTION__
+		      << "; something went wrong, node " << i
+	              << " out of range: "
+		      << retval[i] << std::endl;
+	    std::cout << "nA= " << nA << " nB= " << nB << " nC= " << nC << " nD= " << nD << std::endl;
+	    std::cout << " edge0= " << edge0 << " edge1= " << edge1 << std::endl;
+            std::cout << "nodes: " << retval[0]+1 << ' ' << retval[1]+1  << ' ' << retval[2]+1 << ' ' << retval[3]+1 << std::endl;
+	  }
     return retval;
   }
 
 //! @brief Extract mesh data  
 int XC::Paver::extract_mesh(void)
   {
-    std::cout << "Enters : " << getClassName() << "::" << __FUNCTION__
-	      << std::endl;
     
     nodePos= std::vector<Pos3d>(nnn);
     for(int i= 0;i<nnn; i++)
@@ -263,9 +253,23 @@ int XC::Paver::extract_mesh(void)
 	edges[1]= iexk[ielem+1]-1;
 	edges[2]= iexk[ielem+2]-1;
 	edges[3]= iexk[ielem+3]-1;
-	elemEdges[i]= edges;
-        std::vector<int> quad= get_elem_nodes(edges);
-	elemNodes[i]= quad;
+	bool elemOk= true;
+	for(int j= 0; j<4; j++)
+	    if(edges[j]<0)
+	      {
+		std::cerr << getClassName() << "::" << __FUNCTION__
+			  << "; something went wrong, edge index " << j
+			  << " out of range: "
+			  << edges[j]
+			  << " for element index: " << i << std::endl;
+		elemOk= false;
+	      }
+	if(elemOk)
+	  {
+	    elemEdges[i]= edges;
+            std::vector<int> quad= get_elem_nodes(edges);
+	    elemNodes[i]= quad;
+	  }
       }
     return kkk;
   }
@@ -287,11 +291,14 @@ boost::python::list XC::Paver::getQuads(void) const
       {
 	std::vector<int> quad= (*i);
 	boost::python::list tmp;
-	tmp.append(quad[0]);
-	tmp.append(quad[1]);
-	tmp.append(quad[2]);
-	tmp.append(quad[3]);
-	retval.append(tmp);
+	if(quad.size()>0)
+	  {
+	    tmp.append(quad[0]);
+	    tmp.append(quad[1]);
+	    tmp.append(quad[2]);
+	    tmp.append(quad[3]);
+  	    retval.append(tmp);
+	  }
       }
     return retval;
   }
