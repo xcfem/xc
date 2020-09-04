@@ -23,4 +23,6 @@
 
 class_<XC::Paver, bases<CommandEntity> >("Paver")
   .def("mesh",&XC::Paver::mesh,"Launch paving routine.")
+  .def("getNodePositions",&XC::Paver::getNodePositions,"Return the position of the mesh nodes.")
+  .def("getQuads",&XC::Paver::getQuads,"Return the indexes of the element nodes.")
   ;

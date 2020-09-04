@@ -14,7 +14,6 @@
 extern "C" {
 #endif
 #include "f2c.h"
-#include <stdio.h>
 
 /*    Copyright(C) 1999-2020 National Technology & Engineering Solutions */
 /*    of Sandia, LLC (NTESS).  Under the terms of Contract DE-NA0003525 with */
@@ -70,10 +69,6 @@ extern "C" {
     kopp = 0;
     i1 = 0;
     kk1 = 0;
-    printf("nodes: i= %d, j= %d, k= %d\n", *i__, *j, *k);
-    printf("node: %d, x= %f, y= %f\n", *i__, xn[*i__], yn[*i__]);
-    printf("node: %d, x= %f, y= %f\n", *j, xn[*j], yn[*j]);
-    printf("node: %d, x= %f, y= %f\n", *k, xn[*k], yn[*k]);
 /*  CHECK FOR NODES ON TOP OF EACH OTHER */
     if (xn[*j] == xn[*k] && yn[*j] == yn[*k] || xn[*i__] == xn[*j] && yn[*i__]
 	     == yn[*j] || xn[*i__] == xn[*k] && yn[*i__] == yn[*k]) {

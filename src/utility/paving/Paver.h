@@ -145,11 +145,18 @@ class Paver: public CommandEntity
     int idivis= 0; //!< number of divisions in the search grid link */
     int call_paving(const Polygon3d &, const std::deque<Polygon3d> &);
     int extract_mesh(void);
+    std::vector<int> get_elem_nodes(const std::vector<int> &);
+
+    // Resulting mesh.
+    std::vector<Pos3d> nodePos; //Positions of the nodes.
+    std::vector<std::vector<int> > elemEdges; //Element edges.
+    std::vector<std::vector<int> > elemNodes; //Element nodes.
   public:
     Paver(void);
     void report(std::ostream &);
     int mesh(const Polygon3d &, const boost::python::list &l);
-    
+    boost::python::list getNodePositions(void) const;
+    boost::python::list getQuads(void) const;
   };
 
 } // end of XC namespace
