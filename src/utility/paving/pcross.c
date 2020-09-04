@@ -162,10 +162,12 @@ L130:
     n3test = lnodes[n2test * lnodes_dim1 + 3];
     intsct_(&xn[n1], &yn[n1], &xn[n2], &yn[n2], &xn[n1test], &yn[n1test], &xn[
 	    n2test], &yn[n2test], &u, &w, &lcross);
-    if (! lcross) {
+    if(!lcross)
+      {
 	n1test = n2test;
 	++kount2;
-	if (n1test == linkpr[iperim * 3 + 1]) {
+	if (n1test == linkpr[iperim * 3 + 1])
+	  {
 	    iperim = linkpr[iperim * 3 + 2];
 	    goto L120;
 	} else if (kount2 > linkpr[iperim * 3 + 3]) {

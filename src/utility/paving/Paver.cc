@@ -61,8 +61,8 @@ void XC::Paver::report(std::ostream &os)
     report_ivector(os, "iptper", iptper);
     report_ivector(os, "numper", numper);
     report_ivector(os, "lperim", lperim);
-    //report_fvector(os, "x: ", x);
-    //report_fvector(os, "y: ", y);
+    report_fvector(os, "x: ", x);
+    report_fvector(os, "y: ", y);
     //report_fvector(os, "z: ", z);
   }
 
@@ -79,7 +79,6 @@ int XC::Paver::call_paving(const Polygon3d &extContour, const std::deque<Polygon
     if(ext.clockwise())
       ext.swap();
     nbnode= extContour.GetNumVertices();
-    nnn= nbnode;
     if(nbnode==0)
       {
 	  std::clog << getClassName() << "::" << __FUNCTION__
@@ -88,12 +87,12 @@ int XC::Paver::call_paving(const Polygon3d &extContour, const std::deque<Polygon
       }
     else
       {
-	std::deque<Polygon3d> int_c= intContours;
+	std::deque<Polygon3d> int_c;
 	for(std::deque<Polygon3d>::const_iterator i= intContours.begin(); i!= intContours.end(); i++)
 	  {
 	    Polygon3d tmp= *i;
 	    if(tmp.counterclockwise())
-	      tmp.swap();
+	      { tmp.swap(); }
 	    const int nv= (*i).GetNumVertices();
 	    if(nv>0)
 	      {
@@ -105,6 +104,7 @@ int XC::Paver::call_paving(const Polygon3d &extContour, const std::deque<Polygon
 	      std::clog << getClassName() << "::" << __FUNCTION__
 			<< "; error, empty internal contour ignored." << std::endl;
 	  }
+        nnn= nbnode; // all the nodes in the perimeter.
 	iptper.resize(nprm);
 	numper.resize(nprm);
 	lperim.resize(nbnode);
@@ -126,15 +126,15 @@ int XC::Paver::call_paving(const Polygon3d &extContour, const std::deque<Polygon
 	  }
 	numper[plgCounter-1]= nv;
 	iptper[plgCounter-1]= 1; // Exterior contour starts in the first node.
-	for(std::deque<Polygon3d>::const_iterator i= intContours.begin(); i!= intContours.end(); i++, plgCounter++)
+	for(std::deque<Polygon3d>::const_iterator i= int_c.begin(); i!= int_c.end(); i++, plgCounter++)
 	  {
 	    Polygon3d tmp= *i;
-	    iptper[plgCounter-1]= vertexCounter;
-	    nv= ext.GetNumVertices();
-	    numper[plgCounter-1]= nv;
+	    iptper[plgCounter]= vertexCounter;
+	    nv= tmp.GetNumVertices();
+	    numper[plgCounter]= nv;
 	    for(int j= 1; j<=nv; j++, vertexCounter++)
 	      {
-		Pos3d p= ext.Vertice(j);
+		Pos3d p= tmp.Vertice(j);
 		x[vertexCounter-1]= p.x();
 		y[vertexCounter-1]= p.y();
 		z[vertexCounter-1]= p.z();
@@ -162,6 +162,8 @@ int XC::Paver::call_paving(const Polygon3d &extContour, const std::deque<Polygon
 	linkeg.resize(2*mlink); // size ok
 	listeg.resize(2*npeold); // size ok
 	
+	//report(std::cout);
+
 	real sizmin= 0.0;
 	real emax= 0.0;
 	real emin= 0.0;
@@ -175,12 +177,17 @@ int XC::Paver::call_paving(const Polygon3d &extContour, const std::deque<Polygon
 //! @brief Get data from Python and call paving.
 int XC::Paver::mesh(const Polygon3d &ext, const boost::python::list &l)
   {
+    int retval= 0;
     std::deque<Polygon3d> intContours;
     const size_t sz= len(l);
     for(size_t i=0; i<sz; i++)
       intContours.push_back(boost::python::extract<Polygon3d>(l[i]));
     int paving= call_paving(ext,intContours);
-    return extract_mesh();
+    if(!err)
+      retval= extract_mesh();
+    else
+      retval= -1;
+    return retval;
   }
 
 //! @brief Return the element nodes from its edges.
