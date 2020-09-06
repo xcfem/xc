@@ -262,15 +262,8 @@ int XC::Paver::extract_mesh(void)
 	edges[3]= iexk[ielem+3]-1;
 	bool elemOk= true;
 	for(int j= 0; j<4; j++)
-	    if(edges[j]<0)
-	      {
-		std::cerr << getClassName() << "::" << __FUNCTION__
-			  << "; something went wrong, edge index " << j
-			  << " out of range: "
-			  << edges[j]
-			  << " for element index: " << i << std::endl;
-		elemOk= false;
-	      }
+	  if(edges[j]<0) // element colapsed by the algorithm
+	    elemOk= false;
 	if(elemOk)
 	  {
 	    elemEdges[i]= edges;
