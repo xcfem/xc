@@ -173,12 +173,17 @@ class BoltBase(object):
         holeDiameter= self.getNominalHoleDiameter()
         circle2d= geom.Circle2d(pLocal,holeDiameter/2.0)
         return geom.Circle3d(refSys, circle2d)
-    
+
+    def getHoleAsPolygon(self, refSys= geom.Ref3d3d(), nSides= 8):
+        ''' Return a polygon inscribed in the hole.'''
+        hole= self.getHole(refSys)
+        retval= hole.getInscribedPolygon(8,0.0)
+        return retval
+        
     def getHoleBlock(self, refSys= geom.Ref3d3d(), labels= []):
         ''' Return and octagon inscribed in the hole.'''
-        hole= self.getHole(refSys)
-        octagon= hole.getInscribedPolygon(8,0.0).getVertexList()
-        octagon.append(octagon[0]) # close polygon
+        octagon= self.getHoleAsPolygon(refSys, nSides= 8).getVertexList()
+        octagon.append(retval[0]) # close polygon
         retval= bte.BlockData()
         retval.blockFromPoints(octagon,labels)
         return retval
@@ -203,14 +208,15 @@ class BoltFastener(BoltBase):
     oversizeHoleDia= [20e-3, 24e-3, 28e-3, 30e-3, 35e-3, 38e-3]
     fStandardHoleDia= scipy.interpolate.interp1d(bf_diams[:-1], standardHoleDia)
     fOversizeHoleDia= scipy.interpolate.interp1d(bf_diams[:-1], oversizeHoleDia)
-    def __init__(self, diameter, group= 'A'):
+    def __init__(self, diameter, group= 'A', pos3d= None):
        ''' Constructor.
 
        :param diameter: bolt diameter.
        :param group: bolt material strength group according to section
                      J3.1 of AISC 360-16.
+       :param pos3d: bolt position.
        '''
-       super(BoltFastener,self).__init__(diameter)
+       super(BoltFastener,self).__init__(diameter, pos3d)
        self.group= group
     
     def getMinDistanceBetweenCenters(self):
