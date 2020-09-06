@@ -4,7 +4,8 @@ from __future__ import print_function
 
 ''' Structural steel as specified in ASTM standard.
 
-Predefined ASTM steel types: A36, A529, A572, A53, A992, A500, A307
+Predefined ASTM steel types: A36, A529, A572, A53, A992, A500, A307,
+                             A325 (bolts M12 to M36)
 '''
 
 __author__= "Luis C. Pérez Tato (LCPT) , Ana Ortega (AO_O) "
@@ -70,6 +71,7 @@ A53= ASTMSteel('A53', 240e6,414e6,1.0)
 A992= ASTMSteel('A992', 345e6,450e6,1.0)
 A500= ASTMSteel('A500', 315e6,400e6,1.0)
 A307= ASTMSteel('A307', 245e6,390e6,1.0)
+A325= ASTMSteel('A325', 660e6,830e6,1.0)
 
 def getFilletWeldMinimumLeg(t):
     '''
