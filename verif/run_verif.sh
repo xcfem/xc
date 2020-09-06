@@ -291,6 +291,9 @@ python tests/preprocessor/meshing/test_truss_generator_01.py
 python tests/preprocessor/meshing/test_paving_01.py
 python tests/preprocessor/meshing/test_paving_02.py
 python tests/preprocessor/meshing/test_paving_03.py
+python tests/preprocessor/meshing/test_paving_04.py
+python tests/preprocessor/meshing/test_paving_05.py
+python tests/preprocessor/meshing/test_paving_06.py
 
 echo "$BLEU" "  Sets handling tests." "$NORMAL"
 python tests/preprocessor/sets/test_exist_set.py
