@@ -330,7 +330,7 @@ SET(preprocessor_mbt_0d_entities preprocessor/multi_block_topology/entities/0d/P
 
 SET(preprocessor_mbt_1d_entities preprocessor/multi_block_topology/entities/1d/Edge preprocessor/multi_block_topology/entities/1d/LineBase preprocessor/multi_block_topology/entities/1d/Line preprocessor/multi_block_topology/entities/1d/DividedLine preprocessor/multi_block_topology/entities/1d/CircularArc preprocessor/multi_block_topology/entities/1d/CmbEdge)
 
-SET(preprocessor_mbt_2d_entities preprocessor/multi_block_topology/entities/2d/Face preprocessor/multi_block_topology/entities/2d/QuadSurface)
+SET(preprocessor_mbt_2d_entities preprocessor/multi_block_topology/entities/2d/Face preprocessor/multi_block_topology/entities/2d/QuadSurface preprocessor/multi_block_topology/entities/2d/PolygonalFace)
 
 SET(preprocessor_mbt_3d_entities preprocessor/multi_block_topology/entities/3d/Body preprocessor/multi_block_topology/entities/3d/Block preprocessor/multi_block_topology/entities/3d/UniformGrid)
 
