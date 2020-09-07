@@ -185,7 +185,7 @@ class BoltBase(object):
     def getHoleBlock(self, refSys= geom.Ref3d3d(), labels= []):
         ''' Return and octagon inscribed in the hole.'''
         octagon= self.getHoleAsPolygon(refSys, nSides= 8).getVertexList()
-        octagon.append(retval[0]) # close polygon
+        octagon.append(octagon[0]) # close polygon
         retval= bte.BlockData()
         retval.blockFromPoints(octagon,labels)
         return retval
