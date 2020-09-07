@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+''' Read block topology data from DXF files.'''
 
 from __future__ import division
 from __future__ import print_function
@@ -15,6 +16,7 @@ import xc_base
 import geom
 import xc
 import re
+import datetime
 from scipy.spatial.distance import cdist
 from import_export import block_topology_entities as bte
 from misc_utils import log_messages as lmsg
@@ -525,6 +527,8 @@ class DXFImport(object):
         retval= bte.BlockData()
         retval.name= name
         retval.dxfFileName= self.dxfFileName
+        retval.logMessage= '# imported from DXF file: '+self.dxfFileName+' on '
+        retval.logMessage+= str(datetime.datetime.now())
 
         counter= 0
         if(self.kPoints):
