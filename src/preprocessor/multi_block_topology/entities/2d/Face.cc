@@ -31,6 +31,7 @@
 #include "xc_utils/src/geom/d3/BND3d.h"
 #include "xc_utils/src/geom/d1/Polyline3d.h"
 #include "xc_utils/src/geom/d2/Triangle3d.h"
+#include "xc_utils/src/geom/d2/Polygon3d.h"
 
 #include "domain/mesh/node/Node.h"
 #include "domain/mesh/element/Element.h"
@@ -166,6 +167,14 @@ const XC::Pnt *XC::Face::getVertex(const size_t &i) const
 //! @brief Returns the contour of the face as a 3D polyline.
 Polyline3d XC::Face::getContour(void) const
   { return getPolyline(); }
+
+//! @brief Return the surface contour as a polygon.
+Polygon3d XC::Face::getPolygon(void) const
+  { return Polygon3d(getContour()); }
+
+//! @brief Returns the centroid of the quad surface.
+Pos3d XC::Face::getCentroid(void) const
+  { return getPolygon().getCenterOfMass(); }
 
 //! @brief Returns the face area.
 double XC::Face::getArea(void) const

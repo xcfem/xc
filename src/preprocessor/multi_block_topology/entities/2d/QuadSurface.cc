@@ -31,7 +31,6 @@
 #include "preprocessor/multi_block_topology/MultiBlockTopology.h"
 #include "xc_utils/src/geom/pos_vec/Vector3d.h"
 #include "xc_utils/src/geom/pos_vec/Pos3dArray.h"
-#include "xc_utils/src/geom/d2/Polygon3d.h"
 #include "domain/mesh/node/Node.h"
 #include "domain/mesh/element/Element.h"
 #include "xc_utils/src/matrices/TMatrix.h"
@@ -441,36 +440,9 @@ XC::Matrix XC::QuadSurface::getLocalAxes(void) const
     return retval;
   }
 
-
-//! @brief Returns the centroid of the quad surface.
-Pos3d XC::QuadSurface::getCentroid(void) const
-  {
-    Pos3d retval;
-    Vector3d tmp= getVertex(1)->GetPos().VectorPos();
-    tmp+= getVertex(2)->GetPos().VectorPos();
-    tmp+= getVertex(3)->GetPos().VectorPos();
-    tmp+= getVertex(4)->GetPos().VectorPos();
-    tmp= tmp * 1.0/4.0;
-    retval= Pos3d()+tmp;
-    return retval;
-  }
-
-//! @brief Return the surface contour as a polygon.
-Polygon3d XC::QuadSurface::getPolygon(void) const
-  {
-    const Pos3d p1= getVertex(1)->GetPos();
-    const Pos3d p2= getVertex(2)->GetPos();
-    const Pos3d p3= getVertex(3)->GetPos();
-    const Pos3d p4= getVertex(4)->GetPos();
-    Polygon3d retval(p1,p2,p3);
-    retval.push_back(p4);
-    return retval;
-  }
-
 //! @brief Creates surface nodes.
 void XC::QuadSurface::create_nodes(void)
   {
-
     checkNDivs();
     if(ttzNodes.Null())
       {

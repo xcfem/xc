@@ -33,7 +33,6 @@
 #include "Face.h"
 #include "preprocessor/multi_block_topology/matrices/PntPtrArray.h"
 
-class Polygon3d;
 namespace XC {
 
 //! @ingroup MultiBlockTopologyEnt
@@ -53,8 +52,6 @@ class QuadSurface: public Face
     void setPoints(const m_int &);
     void defGridPoints(const boost::python::list &);
 
-    Pos3d getCentroid(void) const;
-    Polygon3d getPolygon(void) const;
     Vector3d getIVector(void) const;
     Vector3d getJVector(void) const;
     Vector3d getKVector(void) const;

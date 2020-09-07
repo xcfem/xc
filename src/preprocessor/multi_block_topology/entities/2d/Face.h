@@ -33,6 +33,7 @@
 
 #include "preprocessor/multi_block_topology/entities/1d/CmbEdge.h"
 
+class Polygon3d;
 namespace XC {
 class Body;
 
@@ -72,7 +73,9 @@ class Face: public CmbEdge
     size_t getNumberOfVertices(void) const
       { return getNumberOfEdges(); }
     virtual const Pnt *getVertex(const size_t &i) const;
+    Pos3d getCentroid(void) const;
     Polyline3d getContour(void) const;
+    Polygon3d getPolygon(void) const;
     double getArea(void) const;
     //! @brief Return the bodies that touch this surface (neighbors).
     const std::set<const Body *> &getConnectedBodies(void) const
