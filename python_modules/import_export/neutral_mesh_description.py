@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 import os
-from dxfwrite import DXFEngine
 from import_export import mesh_entities as me
 from import_export import block_topology_entities as bte
 
@@ -27,8 +26,11 @@ class GroupRecord(object):
     def empty(self):
         return not(self.nodeIds or self.cellIds or self.pointIds or self.lineIds)
 
-    def writeDxfFile(self,xcImportExportData):
-        '''groups have not representation in dxf files.'''
+    def writeDxfFile(self, dummy):
+        '''groups have not representation in dxf files.
+
+        :param dummy: dummy argument (not used).
+        '''
         return
 
     def writeToXCFile(self,xcImportExportData):
@@ -52,6 +54,23 @@ class GroupRecord(object):
 
 
 class XCImportExportData(object):
+    ''' Data used when importing and/or exporting XC
+        models.
+
+    :ivar outputFileName: name to use for the output file.
+    :ivar problemName: name for the XC problem object.
+    :ivar nodeHandlerName: name for the XC node handler.
+    :ivar cellHandlerName: name for the XC element handler.
+    :ivar setHandlerName: name for the XC group handler.
+    :ivar pointHandlerName: name for the XC point handler.
+    :ivar lineHandlerName: name for the XC line handler.
+    :ivar surfaceHandlerName: name for the XC surface handler.
+    :ivar cellConversion= dictionary for cell conversion.
+    :ivar outputFile= Python file object used for output.
+    :ivar meshDesc= string describing the mesh
+    :ivar blockData= block data (points, lines, surfaces, bodies).
+
+    '''
 
     def __init__(self):
         self.mainDATFile= ""
@@ -108,12 +127,7 @@ class XCImportExportData(object):
             self.blockData.groups.append(grp)
 
     def writeDxfFile(self,fileName):
-        drawing= dxfEngine.drawing(fileName)
-        if(self.blockData):
-            self.blockData.writeDxf(self)
-        if(self.meshDesc):
-            self.meshDesc.writeDxf(self)
-        drawing.save()
+        self.blockData.writeDxfFile(fileName)
 
     def writeToXCFile(self):
         self.outputFile= open(self.getXCFileName(),"w")
