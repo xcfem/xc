@@ -59,10 +59,9 @@ s1= surfaces.newQuadSurfacePts(pt1.tag,pt2.tag,pt5.tag,pt4.tag)
 s1.nDivI= 1
 s1.nDivJ= 1
 
-
-
-#f1= preprocessor.getSets.getSet("f1")
 s1.genMesh(xc.meshDir.I)
+total= preprocessor.getSets.getSet("total")
+
 
 
 
@@ -73,10 +72,8 @@ s2.nDivJ= 2
 
 
 
-f2= preprocessor.getSets.getSet("f2")
 s2.genMesh(xc.meshDir.I)
 
-total= preprocessor.getSets.getSet("total")
 numNodes= total.getNodes.size
 numElem= total.getElements.size
 

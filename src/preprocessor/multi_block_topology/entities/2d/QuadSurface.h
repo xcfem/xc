@@ -42,32 +42,27 @@ class QuadSurface: public Face
   {
   protected:
     Pos3dArray get_positions(void) const;
-    const Edge *get_lado_homologo(const Edge *l) const;
   public:
     QuadSurface(Preprocessor *m,const size_t &ndivI= 4, const size_t &ndivJ= 4);
     virtual SetEstruct *getCopy(void) const;
-    
+
+    // Surface geometry.
     void setPoints(const ID &);
     void setPoints(const PntPtrArray &pntPtrs);
     void setPoints(const m_int &);
     void defGridPoints(const boost::python::list &);
 
+    // Surface orientation.
     Vector3d getIVector(void) const;
     Vector3d getJVector(void) const;
     Vector3d getKVector(void) const;
     Matrix getLocalAxes(void) const;
 
-    void setNDiv(const Edge *l,const size_t &nd);
-    virtual void ConciliaNDivIJ(void);
-    virtual void setNDiv(const size_t &, const size_t &, const size_t &);
+    // Number of divisions.
     virtual void setNDivI(const size_t &ndi);
     virtual void setNDivJ(const size_t &ndi);
-    void SetElemSizeI(const double &sz);
-    void SetElemSizeJ(const double &sz);
-    void SetElemSizeIJ(const double &,const double &);
 
-    bool checkNDivs(const size_t &i,const size_t &j) const;
-    bool checkNDivs(void) const;
+    // Mesh generation.
     void create_nodes(void);
     void genMesh(meshing_dir dm);
   };

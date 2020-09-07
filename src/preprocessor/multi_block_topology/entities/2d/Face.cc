@@ -62,30 +62,266 @@ XC::Face::Face(const std::string &name,Preprocessor *m,const size_t &ndivI, cons
 //! @brief Comparison operator.
 bool XC::Face::operator==(const Face &other) const
   {
-    std::cout << getClassName() << "::" << __FUNCTION__
-              << other << std::endl;
     bool retval= false;
     if(this==&other)
       retval= true;
     else
       {
         retval= CmbEdge::operator==(other);
-	std::cout << "retval= " << retval << std::endl;
         if(retval)
           retval= (ndivj==other.ndivj);
        }
-    std::cout << getClassName() << "::" << __FUNCTION__
-              << "retval= " << retval << std::endl;
+    return retval;
+  }
+
+//! @brief Return the index of th opposite side with respect to the one
+//! being passed as parameter.
+int XC::Face::get_index_opposite_side(const int &indice) const
+  {
+    int retval= -1;
+    const size_t numSides= getNumberOfEdges();
+    if((numSides % 2) == 0) // even number of sides
+      {
+        assert(indice<numSides);
+	const size_t n_2= numSides/2;
+	retval= (indice+n_2) % numSides;
+      }
+    else
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; number of sides is odd. There is no"
+	        << " opposite side." << std::endl;
+    return retval;
+  }
+
+//! @brief Return the opposite side with respect to the one
+//! being passed as parameter.
+const XC::Edge *XC::Face::get_opposite_side(const Edge *l) const
+  {
+    Face *this_no_const= const_cast<Face *>(this);
+    return this_no_const->get_opposite_side(l);
+  }
+
+//! @brief Return the opposite side with respect to the one
+//! being passed as parameter.
+XC::Edge *XC::Face::get_opposite_side(const Edge *l)
+  {
+    Edge *retval= nullptr;
+    const size_t numSides= getNumberOfEdges();
+    if((numSides % 2) == 0) // even number of sides
+      {
+	const size_t indice= IndiceEdge(l);
+	if(indice!=0)
+	  { 
+	    const size_t indOpp= get_index_opposite_side(indice-1);
+	    assert(indOpp<numSides);
+            retval= lines[indOpp].getEdge();
+	  }
+	else //No la encuentra.
+	  std::cerr << getClassName() << "::" << __FUNCTION__
+		    << "; line :" << l->getName() 
+		    << " is not an edge of the surface: "
+		    << getName() << std::endl;
+      }
+    else
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; number of sides is odd. There is no"
+	        << " opposite side." << std::endl;
+    return retval;    
+  }
+
+//! @brief Computes a suitable number of divisions for the edge argument
+//! and its opposite side.
+size_t XC::Face::calc_ndiv_opposite_sides(const Edge *edgeA,const size_t &nd) const
+  {
+    const Edge *edgeB= get_opposite_side(edgeA);
+    size_t retval= nd;
+    const size_t ndA= edgeA->NDiv();
+    const size_t ndB= edgeB->NDiv();
+    if(edgeA->hasNodes() && edgeB->hasNodes())
+      {
+        if(ndA==ndB)
+          retval= ndA;
+        else
+	  std::cerr << __FUNCTION__ << "; sides: "
+                    << edgeA->getName() << " y " << edgeB->getName() 
+                    << " are already meshed, and they have different number of divisions ("
+                    << ndA << " y " << ndB << std::endl;
+      }
+    else if(edgeA->hasNodes()) //A edge already meshed.
+      {
+        if(ndA!=nd)
+          {
+	    std::clog << __FUNCTION__ << "; edge: "
+                      << edgeA->getName()
+                      << " is already meshed, division number can't be changed."
+                      << " to " << nd << " keeping NDiv= " << ndA << std::endl;
+            retval= ndA;
+          }
+      }
+    else if(edgeB->hasNodes()) //B edge already meshed.
+      {
+        if(ndB!=nd)
+          {
+	    std::clog << __FUNCTION__ << "; edge: "
+                      << edgeB->getName()
+                      << " is already meshed, division number can't be changed."
+                      << " to " << nd << " keeping NDiv= " << ndB << std::endl;
+            retval= ndB;
+          }
+      }
     return retval;
   }
 
 //! @brief Sets the number of divisions for direction I.
-void XC::Face::setNDivI(const size_t &ndi)
+void XC::Face::set_ndiv_i(const size_t &ndi)
   { CmbEdge::ndiv= ndi; }
 
 //! @brief Sets the number of divisions for direction J.
-void XC::Face::setNDivJ(const size_t &ndj)
+void XC::Face::set_ndiv_j(const size_t &ndj)
   { ndivj= ndj; }
+
+//! @brief Sets the number of divisions for direction I.
+void XC::Face::setNDivI(const size_t &ndi)
+  { set_ndiv_i(ndi); }
+
+//! @brief Sets the number of divisions for direction J.
+void XC::Face::setNDivJ(const size_t &ndj)
+  { set_ndiv_j(ndj); }
+
+//! @brief Set the number of divisions for the edge argument
+//! and its opposite side.
+void XC::Face::set_ndiv_opposite_sides(const size_t &A,const size_t &nd)
+  {
+    const size_t numSides= getNumberOfEdges();
+    if((numSides % 2) == 0) // even number of sides
+      {
+        Edge *edgeA= lines[A].getEdge();
+        const size_t ndc= calc_ndiv_opposite_sides(edgeA,nd);
+	if(ndc!=nd)
+	  std::cerr << getClassName() << "::" << __FUNCTION__
+		    << "; cannot set the number of divisions"
+		    << " to " << nd << " using " << ndc
+	            << " instead." << std::endl;
+        if(ndc>0)
+          {
+	    const size_t B= get_index_opposite_side(A);
+	    if((A%2)==0) // even side
+	      { set_ndiv_i(ndc); }
+	    else // odd side
+	      { set_ndiv_j(ndc); }
+            edgeA->setNDiv(ndc);
+            Edge *edgeB= lines[B].getEdge();
+            edgeB->setNDiv(ndc);
+          }
+      }
+    else
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; number of sides is odd: " 
+                << lines.size() << " there is no opposite side." << std::endl;
+  }
+
+//! @brief Verifies that the number of divisions of the lines are
+//! compatible.
+bool XC::Face::checkNDivs(const size_t &i) const
+  {
+    const size_t ndivA= lines[i].getEdge()->NDiv();
+    const size_t j= get_index_opposite_side(i);
+    const size_t ndivB= lines[j].getEdge()->NDiv();
+    if(ndivA!=ndivB)
+      {
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; lines: "
+                  << lines[i].getEdge()->getName() << " and "
+                  << lines[j].getEdge()->getName() 
+                  << " of surface: " << getName()
+                  << " have different number of divisions ("
+                  << ndivA << " y " << ndivB << ')' << std::endl;
+        return false;
+      }
+    else
+      return true;
+  }
+
+//! @brief Verifies that the number of divisions of the lines are
+//! compatible.
+bool XC::Face::checkNDivs(void) const
+  {
+    bool retval= true;
+    const size_t numSides= getNumberOfEdges();
+    if((numSides % 2) == 0) // even number of sides
+      {
+	const size_t n_2= getNumberOfEdges()/2;
+	for(size_t i= 0;i<n_2;i++)
+	  {
+	    bool tmp= checkNDivs(i);
+	    if(!tmp)
+	      {
+		retval= false;
+		break;
+	      }
+	  }
+      }
+    return retval;
+  }
+
+//! @brief Conciliate lines division numbers with
+//! those of the surface.
+void XC::Face::ConciliaNDivIJ(void)
+  {
+    if(checkNDivs())
+      {
+	set_ndiv_i(lines[0].getEdge()->NDiv());
+	set_ndiv_j(lines[1].getEdge()->NDiv());
+      }
+  }
+
+//! @brief Computes the number of divisions on the i axis
+//! for an element edge size equal or lesser than the
+//! size being passed as parameter.
+void XC::Face::SetElemSizeI(const double &sz)
+  {
+    const size_t n_2= getNumberOfEdges()/2;
+    double lmax= 0.0;
+    for(size_t i= 0;i<n_2;i+= 2)
+      {
+        const double l1= lines[i].getLength();
+	lmax= std::max(lmax, l1);
+        const size_t j= get_index_opposite_side(i);
+        const double l2= lines[j].getLength();
+	lmax= std::max(lmax, l2);
+      }	
+    const size_t n= ceil(lmax/sz);
+    setNDivI(n);
+  }
+
+//! @brief Computes the number of divisions on the j axis
+//! for an element edge size equal or lesser than the
+//! size being passed as parameter.
+void XC::Face::SetElemSizeJ(const double &sz)
+  {
+    const size_t n_2= getNumberOfEdges()/2;
+    double lmax= 0.0;
+    for(size_t i= 0;i<n_2;i+= 2)
+      {
+        const double l1= lines[i+1].getLength();
+	lmax= std::max(lmax, l1);
+        const size_t j= get_index_opposite_side(i+1);
+        const double l2= lines[j].getLength();
+	lmax= std::max(lmax, l2);
+      }	
+    const size_t n= ceil(lmax/sz);
+    setNDivJ(n);
+  }
+
+
+//! @brief Computes the number of divisions on the i and j axis
+//! for an element edges sizes equal or lesser than the
+//! sizes being passed as parameter.
+void XC::Face::SetElemSizeIJ(const double &szI,const double &szJ)
+  {
+    SetElemSizeI(szI);
+    SetElemSizeJ(szJ);
+  }
 
 //! @brief Inserts the body being passed as parameter neighbors
 //! container of this surface.

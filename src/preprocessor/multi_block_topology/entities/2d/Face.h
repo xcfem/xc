@@ -51,8 +51,13 @@ class Face: public CmbEdge
     const Node *getNode(const size_t &i) const;
   protected:
     size_t ndivj; //!< number of divisions in the j axis.
-    virtual const Edge *get_lado_homologo(const Edge *l) const= 0;
-
+    int get_index_opposite_side(const int &) const;
+    virtual const Edge *get_opposite_side(const Edge *l) const;
+    Edge *get_opposite_side(const Edge *l);
+    size_t calc_ndiv_opposite_sides(const Edge *, const size_t &) const;
+    void set_ndiv_opposite_sides(const size_t &, const size_t &);
+    void set_ndiv_i(const size_t &);
+    void set_ndiv_j(const size_t &);
   public:
     Face(void);
     Face(Preprocessor *m,const size_t &ndivI= 4, const size_t &ndivJ= 4);
@@ -62,13 +67,19 @@ class Face: public CmbEdge
     inline virtual unsigned short int GetDimension(void) const
       { return 2; }
     void update_topology(void);
+
+    // Number of divisions
     inline size_t NDivI(void) const
       { return ndiv; }
     virtual void setNDivI(const size_t &);
     inline size_t NDivJ(void) const
       { return ndivj; }
     virtual void setNDivJ(const size_t &);
-    virtual void ConciliaNDivIJ(void)= 0;
+    virtual void ConciliaNDivIJ(void);
+    void SetElemSizeI(const double &sz);
+    void SetElemSizeJ(const double &sz);
+    void SetElemSizeIJ(const double &,const double &);
+    
     //! @brief Returns the number of vertices.
     size_t getNumberOfVertices(void) const
       { return getNumberOfEdges(); }
@@ -83,7 +94,8 @@ class Face: public CmbEdge
     size_t CommonEdge(const Face &other) const;
     int SenseOfEdge(const Edge *l,const Face &other) const;
     bool isConnectedTo(const Body &b) const;
-    virtual bool checkNDivs(void) const= 0;
+    bool checkNDivs(const size_t &) const;
+    virtual bool checkNDivs(void) const;
 
     virtual Node *getNode(const size_t &i1,const size_t &j,const size_t &k);
     virtual const Node *getNode(const size_t &i,const size_t &j,const size_t &k) const;

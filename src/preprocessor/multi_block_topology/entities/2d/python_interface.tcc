@@ -26,13 +26,13 @@ class_<XC::Face, XC::Face *,bases<XC::CmbEdge>, boost::noncopyable >("Face", no_
   .add_property("nDivI", &XC::Face::NDivI, &XC::Face::setNDivI)
   .add_property("nDivJ", &XC::Face::NDivJ, &XC::Face::setNDivJ)
   .def("getContour",&XC::Face::getContour,"Return the face contour as a 3D polyline.")
+  .def("setElemSizeI",&XC::Face::SetElemSizeI)
+  .def("setElemSizeJ",&XC::Face::SetElemSizeJ)
+  .def("setElemSizeIJ",&XC::Face::SetElemSizeIJ)
    ;
 
 class_<XC::QuadSurface, XC::QuadSurface *, bases<XC::Face>, boost::noncopyable >("QuadSurface", no_init)
   .def("defGridPoints",&XC::QuadSurface::defGridPoints)
-  .def("setElemSizeI",&XC::QuadSurface::SetElemSizeI)
-  .def("setElemSizeJ",&XC::QuadSurface::SetElemSizeJ)
-  .def("setElemSizeIJ",&XC::QuadSurface::SetElemSizeIJ)
   .add_property("getIVector", &XC::QuadSurface::getIVector,"Return the local x vector.")
   .add_property("getJVector", &XC::QuadSurface::getJVector,"Return the local x vector.")
   .add_property("getKVector", &XC::QuadSurface::getKVector,"Return the local x vector.")
