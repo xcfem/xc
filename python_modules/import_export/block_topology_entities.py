@@ -8,7 +8,7 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com" "ana.ortega.ort@gmail.com"
 
-import datetime
+import ezdxf
 from import_export import basic_entities as be
 from import_export import mesh_entities as me
 from misc_utils import log_messages as lmsg
@@ -280,7 +280,7 @@ class BlockData(object):
         self.blocksInLayer= dxfReader.blocksInLayer
 
     def writeDxf(self,drawing):
-        '''Write the blocs (point, lines, surfaces, volumes,...) 
+        '''Write the blocks (point, lines, surfaces, volumes,...) 
            in a DXF file.
 
            :param drawing: ezdxf drawing object.
@@ -296,15 +296,15 @@ class BlockData(object):
 
         :param fileName: name of the DXF file to write.
         '''
-        drawing= DXFEngine.drawing(fileName)
+        drawing= ezdxf.new()
         self.writeDxf(drawing)
-        drawing.save()    
+        drawing.saveas(fileName)    
 
     def writeToXCFile(self,xcImportExportData):
         ''' Write a Python file with XC commands.'''
         f= xcImportExportData.outputFile
-        f.write('# imported from DXF file: '+self.dxfFileName+' on ')
-        f.write(str(datetime.datetime.now())+'\n')
+        if(hasattr(self,'logMessage')): # not a very elegant solution.
+            f.write(self.logMessage+'\n')
         for key in self.points:
             strCommand= self.points[key].getStrXCCommand(xcImportExportData.pointHandlerName)
             f.write(strCommand+'\n')
