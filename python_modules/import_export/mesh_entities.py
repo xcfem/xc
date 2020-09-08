@@ -154,12 +154,12 @@ class CellRecord(object):
             ptD= (coordsD[0], coordsD[1], coordsD[2])
             msp.add_3dface([ptA, ptB, ptC, ptD], dxfattribs={'layer': layerName})
         else:
-            for i in range(0,numNodes-1):
+            print('xxxx here B numNodes: ', numNodes)
+            pntList= list()
+            for i in range(0,numNodes):
                 coordsA= nodeDict[self.nodeIds[i]].coords
-                coordsB= nodeDict[self.nodeIds[i+1]].coords
-                ptA= (coordsA[0], coordsA[1], coordsA[2])
-                ptB= (coordsB[0], coordsB[1], coordsB[2])
-                msp.add_line(ptA, ptB, dxfattribs={'layer': layerName})
+                pntList.append((coordsA[0], coordsA[1], coordsA[2]))
+            msp.add_polyline3d(pntList, dxfattribs={'layer': layerName})
 
 class CellDict(dict):
     '''Cell container.'''
