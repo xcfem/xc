@@ -417,6 +417,7 @@
 #include "preprocessor/multi_block_topology/entities/1d/DividedLine.h"
 #include "preprocessor/multi_block_topology/entities/1d/CircularArc.h"
 #include "preprocessor/multi_block_topology/entities/2d/QuadSurface.h"
+#include "preprocessor/multi_block_topology/entities/2d/PolygonalFace.h"
 #include "preprocessor/multi_block_topology/entities/3d/UniformGrid.h"
 #include "preprocessor/multi_block_topology/entities/3d/Body.h"
 #include "preprocessor/multi_block_topology/entities/3d/Block.h"

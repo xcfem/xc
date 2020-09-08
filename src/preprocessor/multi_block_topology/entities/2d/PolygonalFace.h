@@ -35,11 +35,16 @@
 
 namespace XC {
 
+class Paver; // wrapper of the paving algorithm.
+  
 //! @ingroup MultiBlockTopologyEnt
 //!
 //! @brief Quadrangle defined by its four vertices.
 class PolygonalFace: public Face
   {
+  protected:
+    void create_nodes(Paver &paver);
+    bool create_elements(const Paver &paver);
   public:
     PolygonalFace(Preprocessor *m);
     virtual SetEstruct *getCopy(void) const;
@@ -48,7 +53,6 @@ class PolygonalFace: public Face
 
     void SetElemSize(const double &sz, bool mustBeEven= true);
 
-    void create_nodes(void);
     void genMesh(meshing_dir dm);
   };
 

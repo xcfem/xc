@@ -34,7 +34,8 @@
 #include "preprocessor/multi_block_topology/entities/2d/Face.h"
 
 namespace XC {
-  class QuadSurface;
+class QuadSurface;
+class PolygonalFace;
 
 //! @ingroup MultiBlockTopology
 //
@@ -98,7 +99,7 @@ class SurfaceMap: public EntityMap<Face>
   private:
     Graph edgeGraph;
     void add_graph_vertex(const Edge *e);
-    void updateGraph(const QuadSurface &);
+    void updateGraph(const Face &);
     void updateSets(Face *) const;
   public:
     SurfaceMap(MultiBlockTopology *mbt= nullptr);
@@ -114,6 +115,8 @@ class SurfaceMap: public EntityMap<Face>
     QuadSurface *newQuadSurfacePts(const size_t &, const size_t &,const size_t &,const size_t &);
     QuadSurface *newQuadSurfaceLines(const size_t &, const size_t &,const size_t &,const size_t &);
     QuadSurface *newQuadSurfaceGridPoints(const boost::python::list &);
+    PolygonalFace *newPolygonalFacePoints(const ID &);
+    PolygonalFace *newPolygonalFacePointsPy(const boost::python::list &);
     double getAverageArea(void) const;
   };
 

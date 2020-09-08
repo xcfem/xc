@@ -154,9 +154,12 @@ class Paver: public CommandEntity
   public:
     Paver(void);
     void report(std::ostream &);
-    int mesh(const Polygon3d &, const boost::python::list &l);
-    boost::python::list getNodePositions(void) const;
-    boost::python::list getQuads(void) const;
+    int mesh(const Polygon3d &, const std::deque<Polygon3d> &);
+    int meshPy(const Polygon3d &, const boost::python::list &);
+    boost::python::list getNodePositionsPy(void) const;
+    boost::python::list getQuadsPy(void) const;
+    const std::vector<Pos3d> &getNodePositions(void) const;
+    const std::vector<std::vector<int> > &getQuads(void) const;
   };
 
 } // end of XC namespace

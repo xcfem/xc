@@ -97,7 +97,8 @@ BoolArray3d XC::TriBase3N<PhysProp>::getNodePattern(void) const
 template <class PhysProp>
 XC::ElemPtrArray3d XC::TriBase3N<PhysProp>::put_on_mesh(const XC::NodePtrArray3d &nodes,meshing_dir dm) const
   {
-    std::cerr << "ElemPtrArray3d XC::TriBase3N<PhysProp>::put_on_mesh not implemented" << std::endl; 
+    std::cerr << this->getClassName() << "::" << __FUNCTION__
+              << "; not implemented." << std::endl; 
     ElemPtrArray3d retval;
     return retval;
   }

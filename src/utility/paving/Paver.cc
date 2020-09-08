@@ -175,19 +175,27 @@ int XC::Paver::call_paving(const Polygon3d &extContour, const std::deque<Polygon
   }
 
 //! @brief Get data from Python and call paving.
-int XC::Paver::mesh(const Polygon3d &ext, const boost::python::list &l)
+int XC::Paver::mesh(const Polygon3d &ext, const std::deque<Polygon3d> &holes)
+  {
+    int retval= 0;
+    int paving= call_paving(ext,holes);
+    if(!err)
+      retval= extract_mesh();
+    else
+      retval= -1;
+    return retval;
+  }
+
+
+//! @brief Get data from Python and call paving.
+int XC::Paver::meshPy(const Polygon3d &ext, const boost::python::list &l)
   {
     int retval= 0;
     std::deque<Polygon3d> intContours;
     const size_t sz= len(l);
     for(size_t i=0; i<sz; i++)
       intContours.push_back(boost::python::extract<Polygon3d>(l[i]));
-    int paving= call_paving(ext,intContours);
-    if(!err)
-      retval= extract_mesh();
-    else
-      retval= -1;
-    return retval;
+    return mesh(ext,intContours);
   }
 
 //! @brief Return the element nodes from its edges.
@@ -274,8 +282,14 @@ int XC::Paver::extract_mesh(void)
     return kkk;
   }
 
+const std::vector<Pos3d> &XC::Paver::getNodePositions(void) const
+  { return nodePos; }
+
+const std::vector<std::vector<int> > &XC::Paver::getQuads(void) const
+  { return elemNodes; }
+
 //! @brief Return a list containing the positions of the nodes.
-boost::python::list XC::Paver::getNodePositions(void) const
+boost::python::list XC::Paver::getNodePositionsPy(void) const
   {
     boost::python::list retval;
     for(std::vector<Pos3d>::const_iterator i= nodePos.begin(); i!= nodePos.end(); i++)
@@ -284,7 +298,7 @@ boost::python::list XC::Paver::getNodePositions(void) const
   }
 
 //! @brief Return the node indexes for each element.
-boost::python::list XC::Paver::getQuads(void) const
+boost::python::list XC::Paver::getQuadsPy(void) const
   {
     boost::python::list retval;
     for(std::vector<std::vector<int> >::const_iterator i= elemNodes.begin(); i!= elemNodes.end(); i++)

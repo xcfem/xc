@@ -1134,7 +1134,7 @@ BoolArray3d XC::Element::getNodePattern(void) const
 
 
 //! @brief Places the element on the mesh.
-XC::ElemPtrArray3d XC::Element::put_on_mesh(const XC::NodePtrArray3d &,meshing_dir) const
+XC::ElemPtrArray3d XC::Element::put_on_mesh(const NodePtrArray3d &, meshing_dir) const
   {
     std::cerr << getClassName() << "::" << __FUNCTION__
               << " is not implemented." << std::endl;

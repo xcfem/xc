@@ -34,6 +34,7 @@
 #include "preprocessor/multi_block_topology/entities/0d/Pnt.h"
 #include "preprocessor/multi_block_topology/entities/2d/Face.h"
 #include "preprocessor/multi_block_topology/entities/2d/QuadSurface.h"
+#include "preprocessor/multi_block_topology/entities/2d/PolygonalFace.h"
 #include "preprocessor/set_mgmt/Set.h"
 
 
@@ -46,18 +47,17 @@ void XC::SurfaceMap::Graph::add_vertex(const Edge *e)
   { edges.insert(Graph::map_pair(e,Graph::vertex_list())); }
 
 //! @brief Update the edge connectivity.
-void XC::SurfaceMap::updateGraph(const QuadSurface &qs)
+void XC::SurfaceMap::updateGraph(const Face &face)
   {
-    const Edge *e0= qs.getSide(1)->getEdge();
-    edgeGraph.add_vertex(e0);
-    const Edge *e1= qs.getSide(2)->getEdge();
-    edgeGraph.add_vertex(e1);
-    const Edge *e2= qs.getSide(3)->getEdge();
-    edgeGraph.add_vertex(e2);
-    const Edge *e3= qs.getSide(4)->getEdge();
-    edgeGraph.add_vertex(e3);
-    edgeGraph.add_edge(e0,e2);
-    edgeGraph.add_edge(e1,e3);
+    const size_t numSides= face.getNumberOfEdges();
+    for(size_t i= 0; i<numSides; i++)
+      {
+        const Edge *e= face.getSide(i+1)->getEdge();
+        edgeGraph.add_vertex(e);
+      }
+    std::deque<std::pair<const Edge *, const Edge *> > oppositeEdges= face.getOppositeEdges();
+    for(std::deque<std::pair<const Edge *, const Edge *> >::const_iterator i= oppositeEdges.begin();i!= oppositeEdges.end(); i++)
+      edgeGraph.add_edge((*i).first,(*i).second);
   }
 
 //! @brief Insert the new line in the total and the sets that are open.
@@ -170,6 +170,25 @@ XC::QuadSurface *XC::SurfaceMap::newQuadSurfaceGridPoints(const boost::python::l
     retval->defGridPoints(l);
     updateGraph(*retval);
     return retval;
+  }
+
+//! @brief New polygonalr face.
+XC::PolygonalFace *XC::SurfaceMap::newPolygonalFacePoints(const ID &pts)
+  {
+    PolygonalFace *retval= dynamic_cast<PolygonalFace *>(this->New<PolygonalFace>());
+    assert(retval);
+    retval->setPoints(pts);
+    updateGraph(*retval);
+    return retval;
+  }
+//! @brief New polygonalr face.
+XC::PolygonalFace *XC::SurfaceMap::newPolygonalFacePointsPy(const boost::python::list &l)
+  {
+    const size_t nPoints= len(l);
+    ID pts(nPoints);
+    for(size_t i= 0; i<nPoints;i++)
+      pts[i]= boost::python::extract<int>(l[i]);
+    return newPolygonalFacePoints(pts);
   }
 
 //! @brief Return the average area of the surfaces.

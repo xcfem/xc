@@ -40,5 +40,8 @@ class_<XC::QuadSurface, XC::QuadSurface *, bases<XC::Face>, boost::noncopyable >
   .def("getPolygon",&XC::QuadSurface::getPolygon,"Return the contour as a 3D polygon.")
    ;
 
+class_<XC::PolygonalFace, XC::PolygonalFace *, bases<XC::Face>, boost::noncopyable >("PolygonalFace", no_init)
+   ;
+
 
 

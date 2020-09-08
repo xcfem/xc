@@ -90,12 +90,16 @@ class BlockRecord(me.CellRecord):
         strId= str(self.id)
         handlerName= xcImportExportData.getBlockHandlerName(self.getType())
         strCommand= None
+        pointIds= self.getStrKeyPointsIds()
         if(self.cellType=='line'):
             strId= 'l'+strId
-            strCommand= strId + '= ' + handlerName + '.newLine(' + self.getStrKeyPointsIds() +')'
+            strCommand= strId + '= ' + handlerName + '.newLine(' + pointIds +')'
         elif(self.cellType=='face'):
             strId= 'f'+strId
-            strCommand= strId + '= ' + handlerName + '.newQuadSurfacePts(' + self.getStrKeyPointsIds()  +')'
+            if(len(self.nodeIds)==4): # quad surface.
+                strCommand= strId + '= ' + handlerName + '.newQuadSurfacePts(' + pointIds  +')'
+            else:
+                strCommand= strId + '= ' + handlerName + '.newPolygonalFacePts([' + pointIds  +'])'
         else:
             lmsg.error('BlockRecord::getStrXCCommand not implemented for blocks of type: '+ self.cellType)
         if(self.labels):

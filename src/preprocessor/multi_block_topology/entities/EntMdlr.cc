@@ -385,7 +385,7 @@ bool XC::EntMdlr::create_elements(meshing_dir dm)
     const size_t numElements= ttzElements.NumPtrs();
     if(numElements==0 && verbosity>0)
       std::clog << getClassName() << "::" << __FUNCTION__
-	        << "; warning 0 elements created for line: " << getName()
+	        << "; warning 0 elements created for entity: " << getName()
 	        << std::endl;
 
     return retval;

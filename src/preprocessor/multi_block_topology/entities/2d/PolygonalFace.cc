@@ -33,6 +33,7 @@
 #include "domain/mesh/node/Node.h"
 #include "domain/mesh/element/Element.h"
 #include "preprocessor/Preprocessor.h"
+#include "utility/paving/Paver.h"
 
 //! @brief Constructor.
 XC::PolygonalFace::PolygonalFace(Preprocessor *m)
@@ -90,7 +91,7 @@ void XC::PolygonalFace::setPoints(const ID &point_indexes)
   }
 
 //! @brief Creates surface nodes.
-void XC::PolygonalFace::create_nodes(void)
+void XC::PolygonalFace::create_nodes(Paver &paver)
   {
     if(ttzNodes.Null())
       {
@@ -106,14 +107,19 @@ void XC::PolygonalFace::create_nodes(void)
 	  }
         ttzNodes= NodePtrArray3d(1,n_rows,n_cols);
 
+	GeomObj::list_Pos3d contourPositions;
         //Set the pointers of the contour nodes.
 	for(size_t j= 0; j<numSides; j++)
 	  for(size_t k=1;k<=n_cols;k++)
 	    {
 	      Side &ll= lines[j];
 	      Node *nn= ll.getNode(k);
-	      ttzNodes(1,1,k)= nn;
+	      const size_t l= j*numSides+k;
+	      ttzNodes(1,1,l)= nn;
+	      contourPositions.push_back(nn->getInitialPosition3d());
 	    }
+        std::deque<Polygon3d> holes; 
+        paver.mesh(Polygon3d(contourPositions), holes);
       }
     else
       if(verbosity>2)
@@ -122,7 +128,85 @@ void XC::PolygonalFace::create_nodes(void)
 		  << "' already exist." << std::endl;      
   }
 
+//! @brief Creates elements on the nodes created
+//! in create_nodes.
+bool XC::PolygonalFace::create_elements(const Paver &paver)
+  {
+    bool retval= false;
+    if(!ttzNodes.empty())
+      {
+        if(ttzNodes.HasNull())
+          std::cerr << getClassName() << "::" << __FUNCTION__
+	            << "; there are null pointers."
+                    << " Elements were not created." << std::endl;
+        else
+          if(ttzElements.Null())
+            {
+              if(getPreprocessor())
+                {
+                  if(verbosity>4)
+                    std::clog << "Creating elements of entity: '"
+			      << getName() << "'...";   
+                  const Element *seed= getPreprocessor()->getElementHandler().get_seed_element();
+                  if(seed)
+                    {
+                      const std::vector<std::vector<int> > &quads= paver.getQuads();
+		      const size_t numElements= quads.size();
+		      ttzElements= ElemPtrArray3d(1,1,numElements);
+		      for(size_t i= 0;i<numElements;i++)
+			{
+			  Element *tmp= seed->getCopy();
+			  std::vector<int> nodeIndexes= quads[i];
+			  const size_t nNodes= nodeIndexes.size();
+			  for(size_t j= 0; j<nNodes; j++)
+			    {
+			      const Node *n= ttzNodes(1,1,nodeIndexes[j]);
+			      const int nTag= n->getTag();
+			      tmp->setIdNode(j, nTag);
+			    }
+			  ttzElements(1,1,i)= tmp;
+			}
+                      add_elements(ttzElements);
+                      retval= true;
+                    }
+                  else if(verbosity>0)
+                    std::clog << getClassName() << "::" << __FUNCTION__
+		              << "; seed element not set." << std::endl;
+                  if(verbosity>4)
+                    std::clog << "created." << std::endl;
+                }
+              else
+                std::cerr << getClassName() << "::" << __FUNCTION__
+		          << "; preprocessor undefined." << std::endl;
+            }
+      }
+    else
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; there is no nodes for the elements." << std::endl;
+    const size_t numElements= ttzElements.NumPtrs();
+    if(numElements==0 && verbosity>0)
+      std::clog << getClassName() << "::" << __FUNCTION__
+	        << "; warning 0 elements created for entity: " << getName()
+	        << std::endl;
+
+    return retval;
+  }
+
 //! @brief Triggers mesh creation.
 void XC::PolygonalFace::genMesh(meshing_dir dm)
   {
+    Paver paver;
+    if(verbosity>3)
+      std::clog << "Meshing polygonal surface...("
+		<< getName() << ")...";
+    create_nodes(paver);
+    if(ttzElements.Null())
+      create_elements(paver);
+    else
+      if(verbosity>2)
+        std::clog << getClassName() << "::" << __FUNCTION__
+	          << "; elements for surface: '" << getName()
+		  << "' already exist." << std::endl;      
+    if(verbosity>3)
+      std::clog << "done." << std::endl;
   }

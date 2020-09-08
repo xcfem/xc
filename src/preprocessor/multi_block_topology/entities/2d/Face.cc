@@ -335,6 +335,25 @@ void XC::Face::update_topology(void)
       (*i).getEdge()->insert_surf(this);
   }
 
+//! @brief Return a deque of opposite edge pairs.
+std::deque<std::pair<const XC::Edge *, const XC::Edge *> > XC::Face::getOppositeEdges(void) const
+  {
+    std::deque<std::pair<const Edge *, const Edge *> > retval;
+    const size_t numSides= getNumberOfEdges();
+    if((numSides % 2) == 0) // even number of sides
+      {
+	const size_t n_2= getNumberOfEdges()/2;
+	for(size_t i= 0;i<n_2;i++)
+	  {
+             const Edge *e0= lines[i].getEdge();
+             const size_t j= get_index_opposite_side(i);
+             const Edge *e1= lines[j].getEdge();
+	     retval.push_back({e0, e1});
+	  }
+      }
+    return retval;
+  }
+
 //! @brief Returns the index of the edge in common with the surface
 //! being passed as parameter (if it exists).
 size_t XC::Face::CommonEdge(const Face &other) const

@@ -97,7 +97,7 @@ BoolArray3d XC::QuadBase4N<PhysProp>::getNodePattern(void) const
 
 //! @brief Put the element on the mesh being passed as parameter.
 template <class PhysProp>
-XC::ElemPtrArray3d XC::QuadBase4N<PhysProp>::put_on_mesh(const XC::NodePtrArray3d &nodes,meshing_dir dm) const
+XC::ElemPtrArray3d XC::QuadBase4N<PhysProp>::put_on_mesh(const NodePtrArray3d &nodes, meshing_dir dm) const
   { return put_quad4N_on_mesh(*this,nodes,dm); }
 
 //! @brief Returns the nodes de un lado of the element.

@@ -66,7 +66,10 @@ class Face: public CmbEdge
      //! @brief Returns the dimension of the object.
     inline virtual unsigned short int GetDimension(void) const
       { return 2; }
+
+    // Topology
     void update_topology(void);
+    std::deque<std::pair<const Edge *, const Edge *> > getOppositeEdges(void) const;
 
     // Number of divisions
     inline size_t NDivI(void) const
