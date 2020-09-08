@@ -88,7 +88,19 @@ void XC::PolygonalFace::setPoints(const ID &point_indexes)
       std::cerr << getClassName() << "::" << __FUNCTION__
 		<< "; surface: " << getTag()
                 << "is inverted." << std::endl;
+    ref= getPolygon().getRef();
+    
   }
+
+//! @brief Returns a vector in the direction of the local
+//! X axis.
+Vector3d XC::PolygonalFace::getIVector(void) const
+  { return ref.GetI(); }
+
+//! @brief Returns a vector in the direction of the local
+//! Y axis.
+Vector3d XC::PolygonalFace::getJVector(void) const
+  { return ref.GetJ(); }
 
 //! @brief Creates surface nodes.
 void XC::PolygonalFace::create_nodes(Paver &paver)

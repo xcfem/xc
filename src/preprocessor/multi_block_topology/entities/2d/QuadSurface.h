@@ -55,8 +55,6 @@ class QuadSurface: public Face
     // Surface orientation.
     Vector3d getIVector(void) const;
     Vector3d getJVector(void) const;
-    Vector3d getKVector(void) const;
-    Matrix getLocalAxes(void) const;
 
     // Number of divisions.
     virtual void setNDivI(const size_t &ndi);

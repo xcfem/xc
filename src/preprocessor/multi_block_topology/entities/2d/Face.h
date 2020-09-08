@@ -71,6 +71,10 @@ class Face: public CmbEdge
     void update_topology(void);
     std::deque<std::pair<const Edge *, const Edge *> > getOppositeEdges(void) const;
 
+    // Surface orientation.
+    Vector3d getKVector(void) const;
+    Matrix getLocalAxes(void) const;
+    
     // Number of divisions
     inline size_t NDivI(void) const
       { return ndiv; }

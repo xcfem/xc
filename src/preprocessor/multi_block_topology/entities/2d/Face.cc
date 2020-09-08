@@ -427,6 +427,29 @@ Polyline3d XC::Face::getContour(void) const
 Polygon3d XC::Face::getPolygon(void) const
   { return Polygon3d(getContour()); }
 
+//! @brief Returns a vector in the direction of the local
+//! Z axis.
+Vector3d XC::Face::getKVector(void) const
+  {
+    const Vector3d vI= getIVector();
+    const Vector3d vJ= getJVector();
+    return vI.getCross(vJ);
+  }
+
+//! @brief Returns a matrix with the axes of the surface as matrix rows
+//! [[x1,y1,z1],[x2,y2,z2],...·]
+XC::Matrix XC::Face::getLocalAxes(void) const
+  {
+    Matrix retval(3,3);
+    const Vector3d vectorI= getIVector();
+    retval(0,0)= vectorI(1); retval(0,1)= vectorI(2); retval(0,2)= vectorI(3);
+    const Vector3d vectorJ= getJVector();
+    retval(1,0)= vectorJ(1); retval(1,1)= vectorJ(2); retval(1,2)= vectorJ(3);
+    const Vector3d vectorK= vectorI.getCross(vectorJ);    
+    retval(2,0)= vectorK(1); retval(2,1)= vectorK(2); retval(2,2)= vectorK(3);
+    return retval;
+  }
+
 //! @brief Returns the centroid of the quad surface.
 Pos3d XC::Face::getCentroid(void) const
   { return getPolygon().getCenterOfMass(); }

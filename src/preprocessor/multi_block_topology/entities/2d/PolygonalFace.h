@@ -32,6 +32,7 @@
 
 #include "Face.h"
 #include "preprocessor/multi_block_topology/matrices/PntPtrArray.h"
+#include "xc_utils/src/geom/sis_ref/Ref2d3d.h"
 
 namespace XC {
 
@@ -43,16 +44,22 @@ class Paver; // wrapper of the paving algorithm.
 class PolygonalFace: public Face
   {
   protected:
+    Ref2d3d ref; //!< local reference system.
     void create_nodes(Paver &paver);
     bool create_elements(const Paver &paver);
   public:
     PolygonalFace(Preprocessor *m);
     virtual SetEstruct *getCopy(void) const;
-    
+
+    // Surface geometry.
     void setPoints(const ID &);
 
-    void SetElemSize(const double &sz, bool mustBeEven= true);
+    // Surface orientation.
+    Vector3d getIVector(void) const;
+    Vector3d getJVector(void) const;
 
+    // Mesh generation.
+    void SetElemSize(const double &sz, bool mustBeEven= true);
     void genMesh(meshing_dir dm);
   };
 
