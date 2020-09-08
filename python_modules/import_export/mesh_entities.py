@@ -154,11 +154,13 @@ class CellRecord(object):
             ptD= (coordsD[0], coordsD[1], coordsD[2])
             msp.add_3dface([ptA, ptB, ptC, ptD], dxfattribs={'layer': layerName})
         else:
-            print('xxxx here B numNodes: ', numNodes)
             pntList= list()
             for i in range(0,numNodes):
-                coordsA= nodeDict[self.nodeIds[i]].coords
-                pntList.append((coordsA[0], coordsA[1], coordsA[2]))
+                coords= nodeDict[self.nodeIds[i]].coords
+                pntList.append((coords[0], coords[1], coords[2]))
+            # Close polyline:
+            coords= nodeDict[self.nodeIds[0]].coords
+            pntList.append((coords[0], coords[1], coords[2]))
             msp.add_polyline3d(pntList, dxfattribs={'layer': layerName})
 
 class CellDict(dict):
