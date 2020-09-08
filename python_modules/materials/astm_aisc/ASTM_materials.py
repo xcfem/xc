@@ -185,7 +185,6 @@ class BoltBase(object):
     def getHoleBlock(self, refSys= geom.Ref3d3d(), labels= []):
         ''' Return and octagon inscribed in the hole.'''
         octagon= self.getHoleAsPolygon(refSys, nSides= 8).getVertexList()
-        octagon.append(octagon[0]) # close polygon
         retval= bte.BlockData()
         retval.blockFromPoints(octagon,labels)
         return retval
@@ -465,7 +464,6 @@ class BoltArray(object):
         for pLocal in localPos:
             circle= geom.Circle2d(pLocal,self.bolt.diameter/2.0)
             octagon= circle.getInscribedPolygon(8,0.0).getVertexList()
-            octagon.append(octagon[0]) # close polygon
             holes.append(octagon)
         retval= bte.BlockData()
         # Base points (A)
