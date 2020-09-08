@@ -415,16 +415,20 @@ class WShape(structural_steel.IShape):
         p2= p0+extrusionVDir
         return geom.Plane3d(p0,p1,p2)
             
-    def getBlockData(self, org, extrusionVDir, labels):
+    def getBlockData(self, org, extrusionVDir, lbls= None):
         ''' Return the kpoints and faces.
 
         :param org: origin point.
         :param extrusionVDir: extrusion direction vector.
         :param labels: labels for the created blocks.
         '''
+        labels= [self.name]
+        if(lbls):
+            labels.extend(lbls)
         halfB= self.get('b')/2.0
         halfH= self.h()/2.0
-        tf2= self.get('tf')/2.0
+        tf= self.get('tf')
+        tf2= tf/2.0 # Half flange thickness.
         retval= bte.BlockData()
         # Base points (A)
         bottom= org.y-halfH+tf2
@@ -451,15 +455,15 @@ class WShape(structural_steel.IShape):
         for p in topFlangeB:
             topFlangeBId.append(retval.appendPoint(-1,p.x,p.y,p.z,labels))
         # Faces
-        bottomFlange1= bte.BlockRecord(-1, 'face', [bottomFlangeAId[0],bottomFlangeAId[1],bottomFlangeBId[1],bottomFlangeBId[0]],labels)
+        bottomFlange1= bte.BlockRecord(-1, 'face', [bottomFlangeAId[0],bottomFlangeAId[1],bottomFlangeBId[1],bottomFlangeBId[0]],labels, thk= tf, matId= self.steelType.name)
         retval.appendBlock(bottomFlange1)
-        bottomFlange2= bte.BlockRecord(-1, 'face', [bottomFlangeAId[1],bottomFlangeAId[2],bottomFlangeBId[2],bottomFlangeBId[1]],labels)
+        bottomFlange2= bte.BlockRecord(-1, 'face', [bottomFlangeAId[1],bottomFlangeAId[2],bottomFlangeBId[2],bottomFlangeBId[1]],labels, thk= tf, matId= self.steelType.name)
         retval.appendBlock(bottomFlange2)
-        topFlange1= bte.BlockRecord(-1, 'face', [topFlangeAId[0],topFlangeAId[1],topFlangeBId[1],topFlangeBId[0]],labels)
+        topFlange1= bte.BlockRecord(-1, 'face', [topFlangeAId[0],topFlangeAId[1],topFlangeBId[1],topFlangeBId[0]],labels, thk= tf, matId= self.steelType.name)
         retval.appendBlock(topFlange1)
-        topFlange2= bte.BlockRecord(-1, 'face', [topFlangeAId[1],topFlangeAId[2],topFlangeBId[2],topFlangeBId[1]],labels)
+        topFlange2= bte.BlockRecord(-1, 'face', [topFlangeAId[1],topFlangeAId[2],topFlangeBId[2],topFlangeBId[1]],labels, thk= tf, matId= self.steelType.name)
         retval.appendBlock(topFlange2)
-        web= bte.BlockRecord(-1, 'face', [bottomFlangeAId[1],topFlangeAId[1],topFlangeBId[1],bottomFlangeBId[1]],labels)
+        web= bte.BlockRecord(-1, 'face', [bottomFlangeAId[1],topFlangeAId[1],topFlangeBId[1],bottomFlangeBId[1]],labels, thk= self.get('tw'), matId= self.steelType.name)
         retval.appendBlock(web)
 
         return retval

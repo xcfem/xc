@@ -83,9 +83,10 @@ class Face: public CmbEdge
       { return ndivj; }
     virtual void setNDivJ(const size_t &);
     virtual void ConciliaNDivIJ(void);
-    void SetElemSizeI(const double &sz);
-    void SetElemSizeJ(const double &sz);
-    void SetElemSizeIJ(const double &,const double &);
+    virtual void SetElemSizeI(const double &sz);
+    virtual void SetElemSizeJ(const double &sz);
+    virtual void SetElemSizeIJ(const double &,const double &);
+    virtual void SetElemSize(const double &sz, bool mustBeEven= true);
     
     //! @brief Returns the number of vertices.
     size_t getNumberOfVertices(void) const

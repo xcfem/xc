@@ -99,6 +99,13 @@ class NodeDict(dict):
             retval+= str(self[key]) + '\n'
 
 class CellRecord(object):
+    ''' Cell object
+
+    :ivar id: identifier for the cell.
+    :ivar typ: cell type.
+    :ivar nodes: nodes that define block geometry and topology.
+    :ivar thk: cell thickness.
+    '''
     _ids= count(0) # counter
     def __init__(self,id, typ, nodes,thk= 0.0):
         '''
@@ -107,6 +114,7 @@ class CellRecord(object):
         :param id: identifier for the cell.
         :param typ: cell type.
         :param nodes: nodes that define block geometry and topology.
+        :param thk: cell thickness.
         '''
         intId= next(self._ids)
         if(id!=-1):
@@ -115,10 +123,22 @@ class CellRecord(object):
         self.cellType= typ
         self.nodeIds= nodes
         self.thickness= thk
+        
     def __str__(self):
         return str(self.id)+' '+str(self.cellType)+' '+str(self.nodeIds)
+    
     def getStrXCNodes(self):
-        return "xc.ID("+str(self.nodeIds)+')' 
+        return "xc.ID("+str(self.nodeIds)+')'
+    
+    def getStrThicknessCommand(self, strId):
+        ''' Return a string defining the thickness
+            property of the cell.
+
+        :param strId: object identifier.
+        '''
+        retval= '; '+strId+'.setProp("thickness",'+str(self.thickness)+')'
+        return retval
+        
     def getStrXCCommand(self,xcImportExportData):
         strId= str(self.id)
         type= xcImportExportData.convertCellType(self.cellType)
@@ -126,6 +146,7 @@ class CellRecord(object):
         strCommand= xcImportExportData.cellHandlerName + ".defaultTag= "+ strId +'; '
         strCommand+= 'e' + strId + '= ' + xcImportExportData.cellHandlerName + '.newElement(' + strType + ',' + self.getStrXCNodes() +')'
         return strCommand
+    
     def writeDxf(self,nodeDict,drawing,layerName):
         numNodes= len(self.nodeIds)
         msp= drawing.modelspace()

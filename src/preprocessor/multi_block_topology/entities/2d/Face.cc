@@ -278,20 +278,55 @@ void XC::Face::ConciliaNDivIJ(void)
 //! @brief Computes the number of divisions on the i axis
 //! for an element edge size equal or lesser than the
 //! size being passed as parameter.
+//!
+//! @param sz: length of the element side.
+//! @param mustBeEver: true if the number of divisions of each
+//!                    line must be even.
+void XC::Face::SetElemSize(const double &sz, bool mustBeEven)
+  {
+    const size_t numSides= getNumberOfEdges();
+    for(size_t i= 0;i<numSides; i++)
+      {
+        Edge *edge= lines[i].getEdge();
+        const double l= edge->getLength();
+        size_t n= ceil(l/sz);
+	if(mustBeEven && (n % 2 != 0))
+	  n++;
+        edge->setNDiv(n);
+      }
+  }
+
+//! @brief Computes the number of divisions on the i axis
+//! for an element edge size equal or lesser than the
+//! size being passed as parameter.
 void XC::Face::SetElemSizeI(const double &sz)
   {
-    const size_t n_2= getNumberOfEdges()/2;
-    double lmax= 0.0;
-    for(size_t i= 0;i<n_2;i+= 2)
+    const size_t numSides= getNumberOfEdges();
+    if((numSides % 2) == 0) // even number of sides
       {
-        const double l1= lines[i].getLength();
-	lmax= std::max(lmax, l1);
-        const size_t j= get_index_opposite_side(i);
-        const double l2= lines[j].getLength();
-	lmax= std::max(lmax, l2);
+	const size_t n_2= getNumberOfEdges()/2;
+	double lmax= 0.0;
+	for(size_t i= 0;i<n_2;i+= 2)
+	  {
+	    const double l1= lines[i].getLength();
+	    lmax= std::max(lmax, l1);
+	    const size_t j= get_index_opposite_side(i);
+	    const double l2= lines[j].getLength();
+	    lmax= std::max(lmax, l2);
+	  }	
+	const size_t n= ceil(lmax/sz);
+	setNDivI(n);
       }	
-    const size_t n= ceil(lmax/sz);
-    setNDivI(n);
+    else
+      {
+	std::clog << getClassName() << "::" << __FUNCTION__
+	          << "; surface: " << getName()
+	          << " has an odd number of sides: "
+	          << numSides << " cannot set sizes on I and J sides."
+	          << " Using setElemSize instead."
+	          << std::endl;
+	SetElemSize(sz);
+      }
   }
 
 //! @brief Computes the number of divisions on the j axis
@@ -299,18 +334,32 @@ void XC::Face::SetElemSizeI(const double &sz)
 //! size being passed as parameter.
 void XC::Face::SetElemSizeJ(const double &sz)
   {
-    const size_t n_2= getNumberOfEdges()/2;
-    double lmax= 0.0;
-    for(size_t i= 0;i<n_2;i+= 2)
+    const size_t numSides= getNumberOfEdges();
+    if((numSides % 2) == 0) // even number of sides
       {
-        const double l1= lines[i+1].getLength();
-	lmax= std::max(lmax, l1);
-        const size_t j= get_index_opposite_side(i+1);
-        const double l2= lines[j].getLength();
-	lmax= std::max(lmax, l2);
+	const size_t n_2= getNumberOfEdges()/2;
+	double lmax= 0.0;
+	for(size_t i= 0;i<n_2;i+= 2)
+	  {
+	    const double l1= lines[i+1].getLength();
+	    lmax= std::max(lmax, l1);
+	    const size_t j= get_index_opposite_side(i+1);
+	    const double l2= lines[j].getLength();
+	    lmax= std::max(lmax, l2);
+	  }	
+	const size_t n= ceil(lmax/sz);
+	setNDivJ(n);
       }	
-    const size_t n= ceil(lmax/sz);
-    setNDivJ(n);
+    else
+      {
+	std::clog << getClassName() << "::" << __FUNCTION__
+	          << "; surface: " << getName()
+	          << " has an odd number of sides: "
+	          << numSides << " cannot set sizes on I and J sides."
+	          << " Using setElemSize instead."
+	          << std::endl;
+	SetElemSize(sz);
+      }
   }
 
 
@@ -319,8 +368,22 @@ void XC::Face::SetElemSizeJ(const double &sz)
 //! sizes being passed as parameter.
 void XC::Face::SetElemSizeIJ(const double &szI,const double &szJ)
   {
-    SetElemSizeI(szI);
-    SetElemSizeJ(szJ);
+    const size_t numSides= getNumberOfEdges();
+    if((numSides % 2) == 0) // even number of sides
+      {
+	SetElemSizeI(szI);
+	SetElemSizeJ(szJ);
+      }
+    else
+      {
+	std::clog << getClassName() << "::" << __FUNCTION__
+	          << "; surface: " << getName()
+	          << " has an odd number of sides: "
+	          << numSides << " cannot set sizes on I and J sides."
+	          << " Using setElemSize instead."
+	          << std::endl;
+	SetElemSize(szI);
+      }
   }
 
 //! @brief Inserts the body being passed as parameter neighbors

@@ -63,30 +63,62 @@ class PointDict(me.NodeDict):
 
 class BlockRecord(me.CellRecord):
     '''Block type entities: line, face, body,...'''    
-    def __init__(self,id, typ, kPoints, labels= None,thk= 0.0):
+    def __init__(self,id, typ, kPoints, labels= None, thk= 0.0, matId= None):
         '''
         Block record constructor.
 
         :param id: identifier for the block.
         :param typ: block type.
         :param kPoints: key points that define block geometry and topology.
-        :param labels: string list that helps to identify the role of the block in the model.
+        :param labels: string list that helps to identify the role 
+                       of the block in the model.
+        :param thk: block thickness.
+        :param matId: material identifier.
         '''
         super(BlockRecord,self).__init__(id,typ,kPoints,thk)
         if(labels):
             self.labels= labels
         else:
             self.labels= list()
+        if(matId):
+            self.matId= matId
+        else:
+            self.matId= None
             
     def getType(self):
         '''Return the type of the block.'''
         return self.cellType
+
+    def hasHoles(self):
+        ''' Return true if the block has holes in it.'''
+        return hasattr(self,'holes')
+
+    def getHoles(self):
+        ''' Return the blocks defining the holes of the
+            block.'''
+        retval= None
+        if(self.hasHoles()):
+            retval= self.holes
+        return retval
       
     def getStrKeyPointsIds(self):
         tmp= str(self.nodeIds)
         return tmp[tmp.index("[") + 1:tmp.rindex("]")]
+
+    def getStrMaterialCommand(self, strId):
+        ''' Return a string defining the material
+            property of the cell.
+
+        :param strId: object identifier.
+        '''
+        retval= ''
+        if(self.matId):
+            retval+= '; '+strId+'.setProp(\'matId\',\''+str(self.matId)+'\')'
+        return retval
+
     
     def getStrXCCommand(self,xcImportExportData):
+        ''' Return the XC Python string defining the object.'''
         strId= str(self.id)
         handlerName= xcImportExportData.getBlockHandlerName(self.getType())
         strCommand= None
@@ -96,7 +128,7 @@ class BlockRecord(me.CellRecord):
             strCommand= strId + '= ' + handlerName + '.newLine(' + pointIds +')'
         elif(self.cellType=='face'):
             strId= 'f'+strId
-            if(len(self.nodeIds)==4): # quad surface.
+            if(len(self.nodeIds)==4 and (not self.hasHoles())): # quad surface.
                 strCommand= strId + '= ' + handlerName + '.newQuadSurfacePts(' + pointIds  +')'
             else:
                 strCommand= strId + '= ' + handlerName + '.newPolygonalFacePts([' + pointIds  +'])'
@@ -104,6 +136,8 @@ class BlockRecord(me.CellRecord):
             lmsg.error('BlockRecord::getStrXCCommand not implemented for blocks of type: '+ self.cellType)
         if(self.labels):
             strCommand+= '; '+strId+'.setProp("labels",'+str(self.labels)+')'
+        strCommand+= self.getStrThicknessCommand(strId)
+        strCommand+= self.getStrMaterialCommand(strId)
         return strCommand
 
 class BlockDict(dict):
@@ -229,18 +263,21 @@ class BlockData(object):
         self.blocks[block.id]= block
         return block.id
 
-    def blockFromPoints(self, points, labels):
+    def blockFromPoints(self, points, labels, thickness= 0.0, matId= None):
         ''' Create a block with the points and append it
             to the container.
 
         :param points: points to build the new block.
         :param labels: labels to assing to the new block.
+        :param thickness: thickness of the new block.
+        :param matId: material of the new block.
         '''
         pointIds= list()
         for p in points:
             pointIds.append(self.appendPoint(-1, p.x, p.y, p.z, labels))
-        block= BlockRecord(-1, 'face', pointIds,labels)
+        block= BlockRecord(-1, 'face', pointIds,labels, thk= thickness, matId= matId)
         self.appendBlock(block)
+        return block
     
     def extend(self, other):
         ''' Append a the data from the argument to this container.

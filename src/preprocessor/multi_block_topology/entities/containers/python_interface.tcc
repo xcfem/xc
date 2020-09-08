@@ -91,7 +91,7 @@ class_<XC::SurfaceMap, bases<map_faces>, boost::noncopyable >("SurfaceMap", no_i
    .def("newQuadSurfaceGridPts", &XC::SurfaceMap::newQuadSurfaceGridPoints, return_internal_reference<>(),"Create a quadrilateral surface.")
    .def("newPolygonalFacePts", &XC::SurfaceMap::newPolygonalFacePointsPy, return_internal_reference<>(),"Creates a polygonal surface from the point tag list argument.")
    .def("get", &XC::SurfaceMap::get, return_internal_reference<>(),"Return the i-th face.")
-   .def("conciliaNDivs", &XC::SurfaceMap::conciliaNDivs)
+  .def("conciliaNDivs", &XC::SurfaceMap::conciliaNDivs, "Conciliate the number of divisions of the lines.")
    .def("checkNDivs",&XC::SurfaceMap::checkNDivs,"Check the number of divisions.")
   .def("getAverageArea",&XC::SurfaceMap::getAverageArea,"Return the average area of the surfaces.")
    ;

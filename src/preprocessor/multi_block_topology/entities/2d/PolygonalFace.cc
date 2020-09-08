@@ -43,27 +43,6 @@ XC::PolygonalFace::PolygonalFace(Preprocessor *m)
 XC::SetEstruct *XC::PolygonalFace::getCopy(void) const
   { return new PolygonalFace(*this); }
 
-//! @brief Computes the number of divisions on the i axis
-//! for an element edge size equal or lesser than the
-//! size being passed as parameter.
-//!
-//! @param sz: length of the element side.
-//! @param mustBeEver: true if the number of divisions of each
-//!                    line must be even.
-void XC::PolygonalFace::SetElemSize(const double &sz, bool mustBeEven)
-  {
-    const size_t numSides= getNumberOfEdges();
-    for(size_t i= 0;i<numSides; i++)
-      {
-        Edge *edge= lines[i].getEdge();
-        const double l= edge->getLength();
-        size_t n= ceil(l/sz);
-	if(mustBeEven && (n % 2 != 0))
-	  n++;
-        edge->setNDiv(n);
-      }
-  }
-
 //! @brief Creates and inserts the lines from the points identified
 //! by the indexes being passed as parameter.
 void XC::PolygonalFace::setPoints(const ID &point_indexes)

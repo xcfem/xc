@@ -211,15 +211,20 @@ class RectangularBasePlate(object):
         retval.appendVertex(origin2d+geom.Vector2d(deltaX+self.offsetB,-deltaY+self.offsetN))
         return retval
 
-    def getBlocks(self, labels):
+    def getBlocks(self, lbls= None):
         ''' Return the block decomposition of the base plate.'''
         retval= bte.BlockData()
         contour= self.getContour().getVertexList()
+        labels= ['baseplate']
+        if(lbls):
+            labels.extend(lbls)
         points= list()
         for p2d in contour:
             points.append(geom.Pos3d(p2d.x, p2d.y, 0.0))
-        retval.blockFromPoints(points, labels)
-        retval.extend(self.anchorGroup.getBlocks(self.getLocalRefSys(), labels))
+        blk= retval.blockFromPoints(points, labels, thickness= self.t)
+        holeLabels= ['holes']+labels
+        blk.holes= self.anchorGroup.getBlocks(self.getLocalRefSys(), holeLabels)
+        retval.extend(blk.holes)
         return retval
 
     def getConcreteStrength(self):

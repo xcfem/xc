@@ -35,6 +35,14 @@ class PredefinedSpace(object):
         '''
         return self.preprocessor.getProblem
 
+    def getElementHandler(self):
+        ''' Return the element handler for this model.'''
+        return self.preprocessor.getElementHandler
+    
+    def getSeedElementHandler(self):
+        ''' Return the seed element handler for this model.'''
+        return self.getElementHandler().seedElemHandler
+
     def getElements(self, tags):
         ''' Return the elements that correspond to the argument
             tags.
@@ -42,7 +50,7 @@ class PredefinedSpace(object):
         :param tags: element tags.
         '''
         retval= list()
-        elementHandler= self.preprocessor.getElementHandler
+        elementHandler= self.getElementHandler()
         for t in tags:
             e= elementHandler.getElement(t)
             retval.append(e)
@@ -88,6 +96,10 @@ class PredefinedSpace(object):
     def getMaterialHandler(self):
         ''' Return the preprocessor material handler.'''
         return self.preprocessor.getMaterialHandler
+
+    def conciliaNDivs(self):
+        '''Conciliate the number of divisions of the lines.'''
+        return self.preprocessor.getMultiBlockTopology.getSurfaces.conciliaNDivs()
     
     def getMaterialNames(self):
         ''' Return the names of the materials.'''
@@ -186,7 +198,7 @@ class PredefinedSpace(object):
 
         '''
         # Element definition
-        elems= self.preprocessor.getElementHandler
+        elems= self.getElementHandler()
         elems.dimElem= self.preprocessor.getNodeHandler.dimSpace # space dimension.
         elems.defaultMaterial= next((item for item in bearingMaterialNames if item is not None), 'All are Nones')
         zl= elems.newElement("ZeroLength",xc.ID([iNodA,iNodB]))
@@ -265,7 +277,7 @@ class PredefinedSpace(object):
         nodes= self.preprocessor.getNodeHandler
         newNode= nodes.duplicateNode(iNod) # new node.
         # Element definition
-        elems= self.preprocessor.getElementHandler
+        elems= self.getElementHandler()
         elems.dimElem= self.preprocessor.getNodeHandler.dimSpace # space dimension.
         if(elems.dimElem>2):
             lmsg.warning("Not a bi-dimensional space.")
@@ -600,7 +612,7 @@ class StructuralMechanics(PredefinedSpace):
             elementType= 'CorotTruss'
         numDOFs= self.preprocessor.getNodeHandler.numDOFs
         dimElem= self.preprocessor.getNodeHandler.dimSpace
-        seedElemHandler= self.preprocessor.getElementHandler.seedElemHandler
+        seedElemHandler= self.getSeedElementHandler()
         seedElemHandler.defaultMaterial= material.name
         seedElemHandler.dimElem= dimElem
         for l in xcSet.getLines:
@@ -651,7 +663,7 @@ class StructuralMechanics(PredefinedSpace):
                 xc_material= crossSection.defElasticShearSection3d(self.preprocessor)
         else:
             lmsg.error('Something went wrong; numDOFs= '+str(numDOFs))
-        seedElemHandler= self.preprocessor.getElementHandler.seedElemHandler
+        seedElemHandler= self.getSeedElementHandler()
             
         seedElemHandler.defaultMaterial= xc_material.getName()
         for l in xcSet.getLines:
@@ -1357,7 +1369,7 @@ class StructuralMechanics3D(StructuralMechanics):
         :param   nodeTagB: tag of bar's to node.
         :param   nmbTransf: name of the coordinate transformation to use for the new bar.
         '''
-        elements= self.preprocessor.getElementHandler
+        elements= self.getElementHandler()
         elements.defaultTransformation= nmbTransf
         # Material definition
         matName= 'bar' + str(nodeTagA) + str(nodeTagB) + nmbTransf
@@ -1375,7 +1387,7 @@ class StructuralMechanics3D(StructuralMechanics):
         :param   nodeTagA: tag of bar's from node.
         :param   nodeTagB: tag of bar's to node.
         '''
-        elements= self.preprocessor.getElementHandler
+        elements= self.getElementHandler()
         # Material definition
         matName= 'truss' + str(nodeTagA) + str(nodeTagB)
         (A,E)=( 10 , 1e14)

@@ -59,7 +59,6 @@ class PolygonalFace: public Face
     Vector3d getJVector(void) const;
 
     // Mesh generation.
-    void SetElemSize(const double &sz, bool mustBeEven= true);
     void genMesh(meshing_dir dm);
   };
 
