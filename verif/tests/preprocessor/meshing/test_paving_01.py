@@ -122,17 +122,26 @@ elem= seedElemHandler.newElement("ShellMITC4",xc.ID([0,0,0,0]))
 polyFace.setNDiv(8)
 polyFace.genMesh(xc.meshDir.I)
 
+xcTotalSet= modelSpace.getTotalSet()
+nNodes= len(xcTotalSet.nodes)
+nElements= len(xcTotalSet.elements)
+
+ratio3= (nNodes-nNodPos)
+ratio4= (nElements-nquads)
+
 '''
 print('number of points: ', len(points))
 print('area: ', plgExt.getArea())
 print('number of positions: ', nNodPos)
 print('number of quads: ', nquads)
+print('number of nodes: ', nNodes)
+print('number of elements: ', nElements)
 '''
 
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
-if (ratio1==0) & (ratio2==0) :
+if (ratio1==0) & (ratio2==0) & (ratio3==0) & (ratio4==0) :
   print("test "+fname+": ok.")
 else:
   lmsg.error(fname+' ERROR.')
