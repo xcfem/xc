@@ -16,7 +16,7 @@ import xc
 import matplotlib.pyplot as plt
 from model import predefined_spaces
 from materials import typical_materials
-from postprocess import output_handler
+#from postprocess import output_handler
 
 # Test raw paving routine.
 def getPoints(lstPos, nDiv):
@@ -60,8 +60,6 @@ paver.mesh(plgExt,[])
 
 nodPos= paver.getNodePositions()
 quads= paver.getQuads()
-
-
 
 nNodPos= len(nodPos)
 ratio1= (nNodPos-81)

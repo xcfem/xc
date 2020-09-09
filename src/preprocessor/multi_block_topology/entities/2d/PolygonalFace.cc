@@ -43,6 +43,10 @@ XC::PolygonalFace::PolygonalFace(Preprocessor *m)
 XC::SetEstruct *XC::PolygonalFace::getCopy(void) const
   { return new PolygonalFace(*this); }
 
+
+void XC::PolygonalFace::addHole(PolygonalFace *pFace)
+  { holes.push_back(pFace); }
+
 //! @brief Creates and inserts the lines from the points identified
 //! by the indexes being passed as parameter.
 void XC::PolygonalFace::setPoints(const ID &point_indexes)
@@ -81,20 +85,31 @@ Vector3d XC::PolygonalFace::getIVector(void) const
 Vector3d XC::PolygonalFace::getJVector(void) const
   { return ref.GetJ(); }
 
+//! @brief Triggers node creation on the edges.
+void XC::PolygonalFace::create_line_nodes(void)
+  {
+    // Create nodes on face contour.
+    Face::create_line_nodes();
+    
+    // Create nodes on holes.
+    for(std::deque<PolygonalFace *>::const_iterator i= holes.begin(); i!= holes.end(); i++)
+      (*i)->create_line_nodes();
+  }
+
 //! @brief Creates surface nodes.
 void XC::PolygonalFace::create_nodes(Paver &paver)
   {
     if(ttzNodes.Null())
       {
-	// Create contour nodes.
+	// Create perimeter nodes.
         create_line_nodes();
 
-	// Prepare contour node positions.
+	// Prepare perimeters node positions.
+	std::deque<Node *> perimeterNodes;
+	GeomObj::list_Pos3d contourPositions;
 
 	//// Exterior contour.
 	const size_t numSides= getNumberOfEdges();
-	std::deque<Node *> contourNodes;
-	GeomObj::list_Pos3d contourPositions;
 	for(size_t i= 0;i<numSides; i++)
 	  {
 	    Side &side= lines[i];
@@ -103,16 +118,39 @@ void XC::PolygonalFace::create_nodes(Paver &paver)
 	    for(size_t j= 0;j<nNodesEdge-1;j++)
 	      {
 		Node *nn= side.getNode(j+1);
-	        contourNodes.push_back(nn);
+	        perimeterNodes.push_back(nn);
   	        contourPositions.push_back(nn->getInitialPosition3d());
 	      }
 	  }
 
 	//// Holes.
-        std::deque<Polygon3d> holes;
+	size_t nHolePositions= 0;
+        std::deque<Polygon3d> holePolygons;
+	for(std::deque<PolygonalFace *>::iterator i= holes.begin(); i!= holes.end(); i++)
+	  {
+	    PolygonalFace *hole= *i;
+  	    GeomObj::list_Pos3d holePositions;
+	    const size_t numSides= hole->getNumberOfEdges();
+	    for(size_t j= 0;j<numSides; j++)
+	      {
+		Side &side= hole->lines[j];
+		Edge *edge= side.getEdge();
+		const size_t nNodesEdge= edge->getNumberOfNodes();
+		for(size_t k= 0;k<nNodesEdge-1;k++)
+		  {
+		    Node *nn= side.getNode(k+1);
+		    perimeterNodes.push_back(nn);
+  	            holePositions.push_back(nn->getInitialPosition3d());
+		  }
+	      }
+	    Polygon3d holePlg= Polygon3d(holePositions);
+	    nHolePositions+= holePlg.GetNumVertices();
+	    holePolygons.push_back(holePlg);
+	  }
 
 	// Call paving routines.
-        paver.mesh(Polygon3d(contourPositions), holes);
+	const size_t nPerimeterNodes= perimeterNodes.size();
+        paver.mesh(Polygon3d(contourPositions), holePolygons);
 
 	// Populate node array.
 	const std::vector<Pos3d> &nodePositions= paver.getNodePositions();
@@ -120,10 +158,22 @@ void XC::PolygonalFace::create_nodes(Paver &paver)
 	
         ttzNodes= NodePtrArray3d(1,1,nNodes);
 
-	//// Put contour nodes (they exist already)
+	//// Put perimeter nodes (they exist already)
 	size_t count= 0;
-	for(std::deque<Node *>::const_iterator i= contourNodes.begin();i!= contourNodes.end();i++, count++)
-	  ttzNodes(1,1,count+1)= *i;
+	const size_t numPerimeterNodes= perimeterNodes.size();
+	for(size_t i= 0;i<numPerimeterNodes;i++, count++)
+	  {
+	    Node *nn= perimeterNodes[i];
+	    size_t index= i;
+	    const Pos3d nodePos= nodePositions[index];
+	    const Pos3d nP= nn->getInitialPosition3d();
+	    const double d2= dist2(nodePos, nP);
+	    if(d2>1e-8)
+	      {
+		index= paver.getIndexNearestPosition(nP,numPerimeterNodes);
+	      }
+	    ttzNodes(1,1,index+1)= nn;
+	  }
 
 	//// Create new nodes.
 	for(size_t k= count;k<nNodes;k++, count++)
@@ -131,12 +181,14 @@ void XC::PolygonalFace::create_nodes(Paver &paver)
 	    const Pos3d nodePos= nodePositions[count];
 	    create_node(nodePos,1,1,k+1);
 	  }
+	for(size_t k= 0; k<nNodes;k++)
+	  { Node *nn= ttzNodes(1,1,k+1); }
       }
     else
       if(verbosity>2)
         std::clog << getClassName() << "::" << __FUNCTION__
 	          << "; nodes of entity: '" << getName()
-		  << "' already exist." << std::endl;      
+		  << "' already exist." << std::endl; 
   }
 
 //! @brief Creates elements on the nodes created

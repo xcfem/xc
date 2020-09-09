@@ -159,6 +159,7 @@ class Paver: public CommandEntity
     boost::python::list getNodePositionsPy(void) const;
     boost::python::list getQuadsPy(void) const;
     const std::vector<Pos3d> &getNodePositions(void) const;
+    size_t getIndexNearestPosition(const Pos3d &, const size_t &limit) const;
     const std::deque<std::vector<int> > &getQuads(void) const;
   };
 

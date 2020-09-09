@@ -291,6 +291,28 @@ int XC::Paver::extract_mesh(const Ref2d3d &ref)
 const std::vector<Pos3d> &XC::Paver::getNodePositions(void) const
   { return nodePos; }
 
+//! @brief Return the nearest position in the range [0, limit)
+//!
+//! @param p: position to compute the distance from.
+//! @param limit: limit the search to the range [0, limit).
+size_t XC::Paver::getIndexNearestPosition(const Pos3d &p, const size_t &limit) const
+  {
+    Pos3d np= nodePos[0];
+    double dmin= dist2(np,p);
+    size_t retval= 0;
+    for(size_t i= 1; i<limit; i++)
+      {
+	np= nodePos[i];
+	const double d2= dist2(np,p);
+	if(d2<dmin)
+	  {
+	    retval= i;
+	    dmin= d2;
+	  }
+      }
+    return retval;
+  }
+
 const std::deque<std::vector<int> > &XC::Paver::getQuads(void) const
   { return elemNodes; }
 

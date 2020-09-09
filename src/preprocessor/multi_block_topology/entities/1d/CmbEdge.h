@@ -107,8 +107,7 @@ class CmbEdge: public Edge
     const Pnt *last_point(void) const;
 
   protected:
-
-    void create_line_nodes(void);
+    virtual void create_line_nodes(void);
     void line_meshing(meshing_dir dm);
     Pnt *P1(void);
     Pnt *P2(void);

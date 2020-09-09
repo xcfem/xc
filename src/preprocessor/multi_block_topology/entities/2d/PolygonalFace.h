@@ -45,6 +45,8 @@ class PolygonalFace: public Face
   {
   protected:
     Ref2d3d ref; //!< local reference system.
+    std::deque<PolygonalFace *> holes;
+    void create_line_nodes(void);
     void create_nodes(Paver &paver);
     bool create_elements(const Paver &paver);
   public:
@@ -53,6 +55,7 @@ class PolygonalFace: public Face
 
     // Surface geometry.
     void setPoints(const ID &);
+    void addHole(PolygonalFace *);
 
     // Surface orientation.
     Vector3d getIVector(void) const;
