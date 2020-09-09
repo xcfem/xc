@@ -86,31 +86,51 @@ void XC::PolygonalFace::create_nodes(Paver &paver)
   {
     if(ttzNodes.Null())
       {
+	// Create contour nodes.
         create_line_nodes();
 
-        const size_t n_rows= 1;
+	// Prepare contour node positions.
+
+	//// Exterior contour.
 	const size_t numSides= getNumberOfEdges();
-	size_t n_cols= 0;
+	std::deque<Node *> contourNodes;
+	GeomObj::list_Pos3d contourPositions;
 	for(size_t i= 0;i<numSides; i++)
 	  {
-	    Edge *edge= lines[i].getEdge();
-	    n_cols+= edge->NDiv();
+	    Side &side= lines[i];
+	    Edge *edge= side.getEdge();
+	    const size_t nNodesEdge= edge->getNumberOfNodes();
+	    for(size_t j= 0;j<nNodesEdge-1;j++)
+	      {
+		Node *nn= side.getNode(j+1);
+	        contourNodes.push_back(nn);
+  	        contourPositions.push_back(nn->getInitialPosition3d());
+	      }
 	  }
-        ttzNodes= NodePtrArray3d(1,n_rows,n_cols);
 
-	GeomObj::list_Pos3d contourPositions;
-        //Set the pointers of the contour nodes.
-	for(size_t j= 0; j<numSides; j++)
-	  for(size_t k=1;k<=n_cols;k++)
-	    {
-	      Side &ll= lines[j];
-	      Node *nn= ll.getNode(k);
-	      const size_t l= j*numSides+k;
-	      ttzNodes(1,1,l)= nn;
-	      contourPositions.push_back(nn->getInitialPosition3d());
-	    }
-        std::deque<Polygon3d> holes; 
+	//// Holes.
+        std::deque<Polygon3d> holes;
+
+	// Call paving routines.
         paver.mesh(Polygon3d(contourPositions), holes);
+
+	// Populate node array.
+	const std::vector<Pos3d> &nodePositions= paver.getNodePositions();
+	const size_t nNodes= nodePositions.size();
+	
+        ttzNodes= NodePtrArray3d(1,1,nNodes);
+
+	//// Put contour nodes (they exist already)
+	size_t count= 0;
+	for(std::deque<Node *>::const_iterator i= contourNodes.begin();i!= contourNodes.end();i++, count++)
+	  ttzNodes(1,1,count+1)= *i;
+
+	//// Create new nodes.
+	for(size_t k= count;k<nNodes;k++)
+	  {
+	    const Pos3d nodePos= nodePositions[count];
+	    create_node(nodePos,1,1,k+1);
+	  }
       }
     else
       if(verbosity>2)
@@ -141,21 +161,31 @@ bool XC::PolygonalFace::create_elements(const Paver &paver)
                   const Element *seed= getPreprocessor()->getElementHandler().get_seed_element();
                   if(seed)
                     {
-                      const std::vector<std::vector<int> > &quads= paver.getQuads();
+                      const std::deque<std::vector<int> > &quads= paver.getQuads();
 		      const size_t numElements= quads.size();
 		      ttzElements= ElemPtrArray3d(1,1,numElements);
 		      for(size_t i= 0;i<numElements;i++)
 			{
-			  Element *tmp= seed->getCopy();
 			  std::vector<int> nodeIndexes= quads[i];
 			  const size_t nNodes= nodeIndexes.size();
-			  for(size_t j= 0; j<nNodes; j++)
+			  if(nNodes>0)
 			    {
-			      const Node *n= ttzNodes(1,1,nodeIndexes[j]);
-			      const int nTag= n->getTag();
-			      tmp->setIdNode(j, nTag);
+			      ID nTags(nNodes);
+			      for(size_t j= 0; j<nNodes; j++)
+				{
+				  const Node *n= ttzNodes(1,1,nodeIndexes[j]+1);
+				  const int nTag= n->getTag();
+				  nTags[j]= nTag;
+				}
+			      std::cout << "nTags= " << nTags << std::endl;
+			      Element *tmp= seed->getCopy();
+			      tmp->setIdNodes(nTags);
+			      ttzElements(1,1,i)= tmp;
 			    }
-			  ttzElements(1,1,i)= tmp;
+			  else
+			    std::cerr << getClassName() << "::" << __FUNCTION__
+			              << "; empty quad at position: " << i
+			              << std::endl;
 			}
                       add_elements(ttzElements);
                       retval= true;

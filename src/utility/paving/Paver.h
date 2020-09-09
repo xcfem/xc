@@ -143,14 +143,14 @@ class Paver: public CommandEntity
     real reymin= 0.0; //!< min y for the old mesh
     real reymax= 0.0; //!< max y for the old mesh
     int idivis= 0; //!< number of divisions in the search grid link */
-    int call_paving(const Polygon3d &, const std::deque<Polygon3d> &);
-    int extract_mesh(void);
+    int call_paving(const Ref2d3d &, const Polygon3d &, const std::deque<Polygon3d> &);
+    int extract_mesh(const Ref2d3d &);
     std::vector<int> get_elem_nodes(const std::vector<int> &);
 
     // Resulting mesh.
     std::vector<Pos3d> nodePos; //Positions of the nodes.
     std::vector<std::vector<int> > elemEdges; //Element edges.
-    std::vector<std::vector<int> > elemNodes; //Element nodes.
+    std::deque<std::vector<int> > elemNodes; //Element nodes.
   public:
     Paver(void);
     void report(std::ostream &);
@@ -159,7 +159,7 @@ class Paver: public CommandEntity
     boost::python::list getNodePositionsPy(void) const;
     boost::python::list getQuadsPy(void) const;
     const std::vector<Pos3d> &getNodePositions(void) const;
-    const std::vector<std::vector<int> > &getQuads(void) const;
+    const std::deque<std::vector<int> > &getQuads(void) const;
   };
 
 } // end of XC namespace

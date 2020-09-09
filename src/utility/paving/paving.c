@@ -14,7 +14,6 @@
 extern "C" {
 #endif
 #include "f2c.h"
-#include <stdio.h>
 
   /* Nomenclature:
      L -> line

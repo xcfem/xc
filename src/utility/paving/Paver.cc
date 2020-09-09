@@ -28,6 +28,7 @@
 //Paver.cc
 
 #include "Paver.h"
+#include "xc_utils/src/geom/pos_vec/Vector3d.h"
 
 void report_ivector(std::ostream &os, const std::string &name, const std::vector<integer> &v)
   {
@@ -71,7 +72,7 @@ void XC::Paver::report(std::ostream &os)
 //! @param extContour: 3D polygon wich defines the external contour, each
 //!                    vertex must correspond to a perimeter node.
 //! @param intContours: 3D polygons that define the internal contours.
-int XC::Paver::call_paving(const Polygon3d &extContour, const std::deque<Polygon3d> &intContours) 
+int XC::Paver::call_paving(const Ref2d3d &ref,const Polygon3d &extContour, const std::deque<Polygon3d> &intContours) 
   {
     int retval= 0;
     Polygon3d ext= extContour;
@@ -118,10 +119,10 @@ int XC::Paver::call_paving(const Polygon3d &extContour, const std::deque<Polygon
 	int nv= ext.GetNumVertices();
 	for(int i= 1; i<=nv; i++, vertexCounter++)
 	  {
-	    Pos3d p= ext.Vertice(i);
+	    Pos2d p= ref.GetPosLocal(ext.Vertice(i));
 	    x[vertexCounter-1]= p.x();
 	    y[vertexCounter-1]= p.y();
-	    z[vertexCounter-1]= p.z();
+	    z[vertexCounter-1]= 0.0;
 	    lperim[vertexCounter-1]= vertexCounter;
 	  }
 	numper[plgCounter-1]= nv;
@@ -134,10 +135,10 @@ int XC::Paver::call_paving(const Polygon3d &extContour, const std::deque<Polygon
 	    numper[plgCounter]= nv;
 	    for(int j= 1; j<=nv; j++, vertexCounter++)
 	      {
-		Pos3d p= tmp.Vertice(j);
+		Pos2d p= ref.GetPosLocal(tmp.Vertice(j));
 		x[vertexCounter-1]= p.x();
 		y[vertexCounter-1]= p.y();
-		z[vertexCounter-1]= p.z();
+		z[vertexCounter-1]= 0.0;
 		lperim[vertexCounter-1]= vertexCounter;
 	      }
 	  }
@@ -178,9 +179,10 @@ int XC::Paver::call_paving(const Polygon3d &extContour, const std::deque<Polygon
 int XC::Paver::mesh(const Polygon3d &ext, const std::deque<Polygon3d> &holes)
   {
     int retval= 0;
-    int paving= call_paving(ext,holes);
+    const Ref2d3d ref= ext.getRef();
+    int paving= call_paving(ref,ext,holes);
     if(!err)
-      retval= extract_mesh();
+      retval= extract_mesh(ref);
     else
       retval= -1;
     return retval;
@@ -252,14 +254,17 @@ std::vector<int> XC::Paver::get_elem_nodes(const std::vector<int> &edges)
   }
 
 //! @brief Extract mesh data  
-int XC::Paver::extract_mesh(void)
+int XC::Paver::extract_mesh(const Ref2d3d &ref)
   {
     
     nodePos= std::vector<Pos3d>(nnn);
     for(int i= 0;i<nnn; i++)
-      nodePos[i]= Pos3d(x[i], y[i], z[i]);
+      {
+	const Pos2d pLocal(x[i], y[i]);
+        nodePos[i]= ref.GetPosGlobal(pLocal);
+      }
     elemEdges= std::vector<std::vector<int> >(kkk);
-    elemNodes= std::vector<std::vector<int> >(kkk);
+    elemNodes= std::deque<std::vector<int> >();
     for(int i= 0;i<kkk;i++)
       {
 	std::vector<int> edges(4);
@@ -276,16 +281,17 @@ int XC::Paver::extract_mesh(void)
 	  {
 	    elemEdges[i]= edges;
             std::vector<int> quad= get_elem_nodes(edges);
-	    elemNodes[i]= quad;
+	    if(quad.size()>0)
+	      elemNodes.push_back(quad);
 	  }
       }
-    return kkk;
+    return elemNodes.size();
   }
 
 const std::vector<Pos3d> &XC::Paver::getNodePositions(void) const
   { return nodePos; }
 
-const std::vector<std::vector<int> > &XC::Paver::getQuads(void) const
+const std::deque<std::vector<int> > &XC::Paver::getQuads(void) const
   { return elemNodes; }
 
 //! @brief Return a list containing the positions of the nodes.
@@ -301,7 +307,7 @@ boost::python::list XC::Paver::getNodePositionsPy(void) const
 boost::python::list XC::Paver::getQuadsPy(void) const
   {
     boost::python::list retval;
-    for(std::vector<std::vector<int> >::const_iterator i= elemNodes.begin(); i!= elemNodes.end(); i++)
+    for(std::deque<std::vector<int> >::const_iterator i= elemNodes.begin(); i!= elemNodes.end(); i++)
       {
 	std::vector<int> quad= (*i);
 	boost::python::list tmp;
