@@ -63,8 +63,8 @@ quads= paver.getQuads()
 
 
 
-nnod= len(nodPos)
-ratio1= (nnod-81)
+nNodPos= len(nodPos)
+ratio1= (nNodPos-81)
 nquads= len(quads)
 ratio2= (nquads-64)
 
@@ -125,7 +125,7 @@ polyFace.genMesh(xc.meshDir.I)
 '''
 print('number of points: ', len(points))
 print('area: ', plgExt.getArea())
-print('number of nodes: ', nnod)
+print('number of positions: ', nNodPos)
 print('number of quads: ', nquads)
 '''
 
@@ -139,10 +139,10 @@ else:
 
        
 # Graphic stuff.
-oh= output_handler.OutputHandler(modelSpace)
+#oh= output_handler.OutputHandler(modelSpace)
 
 #oh.displayBlocks()#setToDisplay= )
-oh.displayFEMesh()#setsToDisplay=[])
+#oh.displayFEMesh()#setsToDisplay=[])
 #oh.displayLocalAxes()
 #oh.displayLoads()
 #oh.displayReactions()
