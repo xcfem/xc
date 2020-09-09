@@ -44,15 +44,6 @@ XC::QuadSurface::QuadSurface(Preprocessor *m,const size_t &ndivI, const size_t &
 XC::SetEstruct *XC::QuadSurface::getCopy(void) const
   { return new QuadSurface(*this); }
 
-
-//! @brief Set the number of divisions on the i axis.
-void XC::QuadSurface::setNDivI(const size_t &ndi)
-  { set_ndiv_opposite_sides(0,ndi); }
-
-//! @brief Set the number of divisions on the j axis.
-void XC::QuadSurface::setNDivJ(const size_t &ndj)
-  { set_ndiv_opposite_sides(1,ndj); }
-
 //! @brief Creates and inserts the lines from the points identified
 //! by the indexes being passed as parameter.
 void XC::QuadSurface::setPoints(const ID &point_indexes)

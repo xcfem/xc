@@ -180,13 +180,66 @@ void XC::Face::set_ndiv_i(const size_t &ndi)
 void XC::Face::set_ndiv_j(const size_t &ndj)
   { ndivj= ndj; }
 
-//! @brief Sets the number of divisions for direction I.
-void XC::Face::setNDivI(const size_t &ndi)
-  { set_ndiv_i(ndi); }
+//! @brief Sets the number of divisions for all its sides.
+//!
+//! @param nd: number of divisions.
+void XC::Face::setNDiv(const size_t &nd)
+  {
+    const size_t nl= getNumberOfEdges();
+    if(nl>0)
+      {
+         for(std::deque<Side>::iterator i=lines.begin();i!=lines.end();i++)
+          (*i).setNDiv(nd);
+      }
+    else
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; no sides defined." << std::endl;
+  }
 
-//! @brief Sets the number of divisions for direction J.
+
+//! @brief Set the number of divisions on the i axis.
+void XC::Face::setNDivI(const size_t &ndi)
+  {
+    const size_t numSides= getNumberOfEdges();
+    if((numSides % 2) == 0) // even number of sides
+      {
+	const size_t n_2= numSides/2;
+	for(size_t i= 0;i<n_2;i+= 2)
+	  { set_ndiv_opposite_sides(i,ndi); }
+      }
+    else
+      {
+	std::clog << getClassName() << "::" << __FUNCTION__
+	          << "; surface: " << getName()
+	          << " has an odd number of sides: "
+	          << numSides << " cannot set sizes on I sides."
+	          << " Using setNDiv instead."
+	          << std::endl;
+	setNDiv(ndi);
+      }
+  }
+
+//! @brief Set the number of divisions on the j axis.
 void XC::Face::setNDivJ(const size_t &ndj)
-  { set_ndiv_j(ndj); }
+  {
+    const size_t numSides= getNumberOfEdges();
+    if((numSides % 2) == 0) // even number of sides
+      {
+	const size_t n_2= numSides/2;
+	for(size_t i= 0;i<n_2;i+= 2)
+	  { set_ndiv_opposite_sides(i+1,ndj); }
+      }
+    else
+      {
+	std::clog << getClassName() << "::" << __FUNCTION__
+	          << "; surface: " << getName()
+	          << " has an odd number of sides: "
+	          << numSides << " cannot set sizes on J sides."
+	          << " Using setNDiv instead."
+	          << std::endl;
+	setNDiv(ndj);
+      }
+  }
 
 //! @brief Set the number of divisions for the edge argument
 //! and its opposite side.
@@ -304,7 +357,7 @@ void XC::Face::SetElemSizeI(const double &sz)
     const size_t numSides= getNumberOfEdges();
     if((numSides % 2) == 0) // even number of sides
       {
-	const size_t n_2= getNumberOfEdges()/2;
+	const size_t n_2= numSides/2;
 	double lmax= 0.0;
 	for(size_t i= 0;i<n_2;i+= 2)
 	  {
@@ -337,7 +390,7 @@ void XC::Face::SetElemSizeJ(const double &sz)
     const size_t numSides= getNumberOfEdges();
     if((numSides % 2) == 0) // even number of sides
       {
-	const size_t n_2= getNumberOfEdges()/2;
+	const size_t n_2= numSides/2;
 	double lmax= 0.0;
 	for(size_t i= 0;i<n_2;i+= 2)
 	  {

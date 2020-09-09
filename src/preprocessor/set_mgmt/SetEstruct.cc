@@ -147,7 +147,9 @@ void XC::SetEstruct::add_elements(const ElemPtrArray3d &elements)
     for( size_t i= 1;i<=n_layers;i++)
       for( size_t j= 1;j<=numberOfRows;j++)
         for( size_t k= 1;k<=cols;k++)
-          getPreprocessor()->getElementHandler().Add(elements(i,j,k));
+	  {
+            getPreprocessor()->getElementHandler().Add(elements(i,j,k));
+	  }
   }
 
 //! @brief Returns the tags of the nodes.

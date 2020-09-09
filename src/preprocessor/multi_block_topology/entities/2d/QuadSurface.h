@@ -56,10 +56,6 @@ class QuadSurface: public Face
     Vector3d getIVector(void) const;
     Vector3d getJVector(void) const;
 
-    // Number of divisions.
-    virtual void setNDivI(const size_t &ndi);
-    virtual void setNDivJ(const size_t &ndi);
-
     // Mesh generation.
     void create_nodes(void);
     void genMesh(meshing_dir dm);

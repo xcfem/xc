@@ -219,7 +219,7 @@ void XC::Element::setIdNodes(const ID &inodes)
       {
 	Domain *dom= getDomain();
 	setDomain(dom);
-      }    
+      }
   }
 
 //! @brief Set the i-th node.

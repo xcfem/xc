@@ -126,7 +126,7 @@ void XC::PolygonalFace::create_nodes(Paver &paver)
 	  ttzNodes(1,1,count+1)= *i;
 
 	//// Create new nodes.
-	for(size_t k= count;k<nNodes;k++)
+	for(size_t k= count;k<nNodes;k++, count++)
 	  {
 	    const Pos3d nodePos= nodePositions[count];
 	    create_node(nodePos,1,1,k+1);
@@ -177,10 +177,9 @@ bool XC::PolygonalFace::create_elements(const Paver &paver)
 				  const int nTag= n->getTag();
 				  nTags[j]= nTag;
 				}
-			      std::cout << "nTags= " << nTags << std::endl;
 			      Element *tmp= seed->getCopy();
 			      tmp->setIdNodes(nTags);
-			      ttzElements(1,1,i)= tmp;
+			      ttzElements(1,1,i+1)= tmp;
 			    }
 			  else
 			    std::cerr << getClassName() << "::" << __FUNCTION__
@@ -209,7 +208,6 @@ bool XC::PolygonalFace::create_elements(const Paver &paver)
       std::clog << getClassName() << "::" << __FUNCTION__
 	        << "; warning 0 elements created for entity: " << getName()
 	        << std::endl;
-
     return retval;
   }
 

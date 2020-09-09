@@ -76,6 +76,7 @@ class Face: public CmbEdge
     Matrix getLocalAxes(void) const;
     
     // Number of divisions
+    void setNDiv(const size_t &);
     inline size_t NDivI(void) const
       { return ndiv; }
     virtual void setNDivI(const size_t &);

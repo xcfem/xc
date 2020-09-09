@@ -55,7 +55,7 @@ XC::ElementHandler::SeedElemHandler &XC::ElementHandler::SeedElemHandler::operat
   }
 
 //! @brief Defines seed element.
-void XC::ElementHandler::SeedElemHandler::add(XC::Element *e)
+void XC::ElementHandler::SeedElemHandler::add(Element *e)
   {
     free_mem();
     assert(e);

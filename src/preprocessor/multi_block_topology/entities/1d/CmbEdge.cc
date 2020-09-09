@@ -458,7 +458,7 @@ void XC::CmbEdge::setNDiv(const size_t &nd)
 		<< "; no segments defined." << std::endl;
   }
 
-//! @brief Return positions along the object.
+//! @brief Return positions evenly distributed along the object.
 Pos3dArray XC::CmbEdge::get_positions(void) const
   {
     const size_t npos= NDiv()+1; //Number of positions.
