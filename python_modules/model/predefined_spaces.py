@@ -35,6 +35,18 @@ class PredefinedSpace(object):
         '''
         return self.preprocessor.getProblem
 
+    def getSurfaceHandler(self):
+        ''' Return the surface handler for this model.'''
+        return self.preprocessor.getMultiBlockTopology.getSurfaces
+
+    def getLineHandler(self):
+        ''' Return the line handler for this model.'''
+        return self.preprocessor.getMultiBlockTopology.getLines
+
+    def getPointHandler(self):
+        ''' Return the point handler for this model.'''
+        return self.preprocessor.getMultiBlockTopology.getPoints
+
     def getElementHandler(self):
         ''' Return the element handler for this model.'''
         return self.preprocessor.getElementHandler
