@@ -349,10 +349,17 @@ const XC::Matrix &XC::NodePtrs::getCoordinates(void) const
 Pos3d XC::NodePtrs::getPosNode(const size_t &i,bool initialGeometry) const
   {
     Pos3d retval;
-    if(initialGeometry)
-      retval= (*this)[i]->getInitialPosition3d();
+    const Node *ptrNod= (*this)[i];
+    if(ptrNod)
+      {
+        if(initialGeometry)
+          retval= ptrNod->getInitialPosition3d();
+        else
+          retval= ptrNod->getCurrentPosition3d();
+      }
     else
-      retval= (*this)[i]->getCurrentPosition3d();
+      std::cerr << getClassName() << "::" << __FUNCTION__
+	        << "; null pointer for node: " << i << std::endl; 
     return retval;
   }
 
