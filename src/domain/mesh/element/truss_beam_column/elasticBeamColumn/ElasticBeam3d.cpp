@@ -104,36 +104,44 @@ void XC::ElasticBeam3d::set_transf(const CrdTransf *trf)
 
 //! @brief Default constructor.
 XC::ElasticBeam3d::ElasticBeam3d(int tag)
-  :ProtoBeam3d(tag,ELE_TAG_ElasticBeam3d), sectionTag(0),
+  :ProtoBeam3d(tag,ELE_TAG_ElasticBeam3d), releasez(0), releasey(0),
    q(), q0(), p0(), theCoordTransf(nullptr)
   { load.reset(12); }
 
 //! @brief Constructor.
 XC::ElasticBeam3d::ElasticBeam3d(int tag,const Material *m,const CrdTransf *trf)
-  : ProtoBeam3d(tag,ELE_TAG_ElasticBeam3d,m), sectionTag(0),
+  : ProtoBeam3d(tag,ELE_TAG_ElasticBeam3d,m), releasez(0), releasey(0),
    q(), q0(), p0(), theCoordTransf(nullptr)
   { load.reset(12); set_transf(trf); }
 
 //! @brief Constructor.
 XC::ElasticBeam3d::ElasticBeam3d(int tag, double a, double e, double g,
                              double jx, double iy, double iz, int Nd1, int Nd2,
-                             CrdTransf3d &coordTransf, double r, int sectTag)
-  :ProtoBeam3d(tag,ELE_TAG_ElasticBeam3d,a,e,g,jx,iy,iz,Nd1,Nd2), sectionTag(sectTag),
+				 CrdTransf3d &coordTransf, double r, int relz, int rely)
+  :ProtoBeam3d(tag,ELE_TAG_ElasticBeam3d,a,e,g,jx,iy,iz,Nd1,Nd2),
+   releasez(relz), releasey(rely),
    q(), q0(), p0(), theCoordTransf(nullptr)
   {
     setRho(r);
     load.reset(12);
     set_transf(&coordTransf);
+    // Make no release if input not 0, 1, 2, or 3
+    if(releasez < 0 || releasez > 3)
+      releasez = 0;
+    if(releasey < 0 || releasey > 3)
+      releasey = 0;
   }
 
 //! @brief Constructor.
-XC::ElasticBeam3d::ElasticBeam3d(int tag, int Nd1, int Nd2, SectionForceDeformation *section,CrdTransf3d &coordTransf, double r)
-  :ProtoBeam3d(tag,ELE_TAG_ElasticBeam3d,Nd1,Nd2), q(), theCoordTransf(nullptr)
+XC::ElasticBeam3d::ElasticBeam3d(int tag, int Nd1, int Nd2, SectionForceDeformation *section,CrdTransf3d &coordTransf, double r, int relz, int rely)
+  :ProtoBeam3d(tag,ELE_TAG_ElasticBeam3d,Nd1,Nd2),
+   releasez(relz), releasey(rely),
+   q(), theCoordTransf(nullptr)
   {
     load.reset(12);
     if(section)
       {
-        sectionTag= section->getTag();
+        //sectionTag= section->getTag();
 	setSectionProperties(CrossSectionProperties3d(*section));
         setRho(r);
       }
@@ -147,6 +155,12 @@ XC::ElasticBeam3d::ElasticBeam3d(int tag, int Nd1, int Nd2, SectionForceDeformat
       }
 
     set_transf(&coordTransf);
+    
+    // Make no release if input not 0, 1, 2, or 3
+    if(releasez < 0 || releasez > 3)
+      releasez = 0;
+    if(releasey < 0 || releasey > 3)
+      releasey = 0;
 
     q0.zero();
     p0.zero();
@@ -154,7 +168,7 @@ XC::ElasticBeam3d::ElasticBeam3d(int tag, int Nd1, int Nd2, SectionForceDeformat
 
 //! @brief Copy constructor.
 XC::ElasticBeam3d::ElasticBeam3d(const XC::ElasticBeam3d &other)
-  :ProtoBeam3d(other), sectionTag(other.sectionTag), q(other.q), theCoordTransf(nullptr)
+  :ProtoBeam3d(other), releasez(other.releasez), releasey(other.releasey), q(other.q), theCoordTransf(nullptr)
   {
     set_transf(other.theCoordTransf);
 
@@ -166,7 +180,9 @@ XC::ElasticBeam3d::ElasticBeam3d(const XC::ElasticBeam3d &other)
 XC::ElasticBeam3d &XC::ElasticBeam3d::operator=(const XC::ElasticBeam3d &other)
   {
     ProtoBeam3d::operator=(other);
-    sectionTag= other.sectionTag;
+    releasez= other.releasez;
+    releasey= other.releasey;
+    //sectionTag= other.sectionTag;
     q= other.q;
     set_transf(other.theCoordTransf);
 
@@ -295,11 +311,20 @@ const XC::Matrix &XC::ElasticBeam3d::getTangentStiff(void) const
 
     const double E= sprop.E();
     const double EA= sprop.A()*E; // EA
+    
     const double EIz2= 2.0*sprop.Iz()*E; // 2EIz
     const double EIz4= 2.0*EIz2; // 4EIz
     const double EIy2= 2.0*sprop.Iy()*E; // 2EIy
     const double EIy4= 2.0*EIy2; // 4EIy
+    
     const double GJ= sprop.GJ(); // GJ
+    
+    if(releasez!= 0)
+      std::cerr << getClassName() << "::" << __FUNCTION__
+                << "; release z not implemented yet." << std::endl;
+    if(releasey!= 0)
+      std::cerr << getClassName() << "::" << __FUNCTION__
+                << "; release y not implemented yet." << std::endl;
 
     //Element internal forces due to the actions of the domain on its nodes.
     q.N()= EA*v(0); //axial force in the element.
@@ -316,12 +341,15 @@ const XC::Matrix &XC::ElasticBeam3d::getTangentStiff(void) const
     q.My2()+= q0[4];
 
     const double L = theCoordTransf->getInitialLength();
-    kb(0,0) = EA/L;
+    const double EAoverL= EA/L;	// EA/L
+    const double GJoverL= GJ/L; // GJ/L
+    
+    kb(0,0) = EAoverL;
     kb(1,1) = kb(2,2)= EIz4/L;
     kb(2,1) = kb(1,2)= EIz2/L;
     kb(3,3) = kb(4,4)= EIy4/L;
     kb(4,3) = kb(3,4)= EIy2/L;
-    kb(5,5) = GJ/L;
+    kb(5,5) = GJoverL;
 
     static Matrix retval;
     retval= theCoordTransf->getGlobalStiffMatrix(kb,q);
@@ -356,6 +384,13 @@ const XC::Matrix &XC::ElasticBeam3d::getInitialStiff(void) const
     const double EIyoverL4 = 2.0*EIyoverL2; // 4EIy/L
     const double GJoverL = sprop.GJ()*oneOverL; // GJ/L
 
+    if(releasez!= 0)
+      std::cerr << getClassName() << "::" << __FUNCTION__
+                << "; release z not implemented yet." << std::endl;
+    if(releasey!= 0)
+      std::cerr << getClassName() << "::" << __FUNCTION__
+                << "; release y not implemented yet." << std::endl;
+    
     kb(0,0) = EAoverL;
     kb(1,1) = kb(2,2) = EIzoverL4;
     kb(2,1) = kb(1,2) = EIzoverL2;
@@ -419,6 +454,13 @@ int XC::ElasticBeam3d::addLoad(ElementalLoad *theLoad, double loadFactor)
                 << std::endl;
     else
       {
+	if(releasez!= 0)
+	  std::cerr << getClassName() << "::" << __FUNCTION__
+		    << "; release z not implemented yet." << std::endl;
+	if(releasey!= 0)
+	  std::cerr << getClassName() << "::" << __FUNCTION__
+		    << "; release y not implemented yet." << std::endl;
+	
         if(const BeamMecLoad *beamMecLoad= dynamic_cast<const BeamMecLoad *>(theLoad))
           {
             const double L = theCoordTransf->getInitialLength();
@@ -523,6 +565,12 @@ const XC::Vector &XC::ElasticBeam3d::getResistingForce(void) const
     const double EIy4= 2.0*EIy2; // 4EIy
     const double GJ= sprop.GJ(); // GJ
 
+    if(releasez!= 0)
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; release z not implemented yet." << std::endl;
+    if(releasey!= 0)
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; release y not implemented yet." << std::endl;
     //Element internal forces due to the actions of the structure over its nodes.
     q.N()= EA*v(0); //axial force in the element.
     q.Mz1()= EIz4*v(1) + EIz2*v(2); //z bending moment in node 1: 4EI/L*v(1)+2EI/L*v(2).
@@ -611,7 +659,7 @@ int XC::ElasticBeam3d::sendData(Communicator &comm)
     int res= ProtoBeam3d::sendData(comm);
     res+= sendCoordTransf(8,9,10,comm);
     //res+= comm.sendVector(eInic,dt,CommMetaData(11));
-    res+= comm.sendInt(sectionTag,dt,CommMetaData(12));
+    res+= comm.sendInts(releasez,releasey,dt,CommMetaData(12));
     res+= sendEsfBeamColumn3d(q,13,dt,comm);
     res+= p0.sendData(comm,dt,CommMetaData(14));
     res+= q0.sendData(comm,dt,CommMetaData(15));
@@ -625,7 +673,7 @@ int XC::ElasticBeam3d::recvData(const Communicator &comm)
     int res= ProtoBeam3d::recvData(comm);
     theCoordTransf= recvCoordTransf3d(8,9,10,comm);
     //res+= comm.receiveVector(eInic,dt,CommMetaData(11));
-    res+= comm.receiveInt(sectionTag,dt,CommMetaData(12));
+    res+= comm.receiveInts(releasez, releasey,dt,CommMetaData(12));
     res+= receiveEsfBeamColumn3d(q,13,dt,comm);
     res+= p0.receiveData(comm,dt,CommMetaData(14));
     res+= q0.receiveData(comm,dt,CommMetaData(15));
@@ -666,7 +714,7 @@ void XC::ElasticBeam3d::Print(std::ostream &s, int flag) const
      {
        int eleTag = this->getTag();
        s << "EL_BEAM\t" << eleTag << "\t";
-       s << sectionTag << "\t" << sectionTag;
+       //s << sectionTag << "\t" << sectionTag;
        s  << "\t" << theNodes.getTagNode(0) << "\t" << theNodes.getTagNode(1);
        s << "\t0\t0.0000000\n";
      }

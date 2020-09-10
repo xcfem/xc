@@ -79,7 +79,8 @@ class SectionForceDeformation;
 class ElasticBeam3d: public ProtoBeam3d
   {
   private:
-    int sectionTag;
+    int releasez; //!< moment release for bending about z-axis 0=none, 1=I, 2=J, 3=I,J
+    int releasey; //!< moment release for bending about y-axis 0=none, 1=I, 2=J, 3=I,J
     mutable EsfBeamColumn3d q;
     FVectorBeamColumn3d q0;  //!< Fixed end forces in basic system (no torsion)
     FVectorBeamColumn3d p0;  //!< Reactions in basic system (no torsion)
@@ -99,9 +100,9 @@ class ElasticBeam3d: public ProtoBeam3d
   public:
     ElasticBeam3d(int tag= 0);
     ElasticBeam3d(int tag,const Material *m,const CrdTransf *trf);
-    ElasticBeam3d(int tag, double A, double E, double G, double Jx, double Iy, double Iz, int Nd1, int Nd2, CrdTransf3d &theTransf, double rho = 0.0, int sectionTag = 0);
+    ElasticBeam3d(int tag, double A, double E, double G, double Jx, double Iy, double Iz, int Nd1, int Nd2, CrdTransf3d &theTransf, double rho = 0.0, int releasez= 0, int releasey= 0);
 
-    ElasticBeam3d(int tag, int Nd1, int Nd2, SectionForceDeformation *section, CrdTransf3d &theTransf, double rho = 0.0);
+    ElasticBeam3d(int tag, int Nd1, int Nd2, SectionForceDeformation *section, CrdTransf3d &theTransf, double rho = 0.0, int relz= 0, int rely= 0);
     ElasticBeam3d(const ElasticBeam3d &);
     ElasticBeam3d &operator=(const ElasticBeam3d &);
     Element *getCopy(void) const;
