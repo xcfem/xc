@@ -93,6 +93,7 @@ class Edge: public EntMdlr
     inline virtual size_t NDiv(void) const
       { return ndiv; }
     void SetElemSize(const double &sz);
+    double getElemSize(void) const;
     std::set<const XC::Edge *> getHomologousSides(void) const;
     void update_topology(void);
 

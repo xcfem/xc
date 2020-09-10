@@ -71,20 +71,30 @@ class CmbEdge: public Edge
           { return forward; }
         inline void reverse(void)
 	  { forward= !forward; }
+        size_t getTag(void) const;
+
+	// Number of divisions.
         void setNDivHomologousEdges(const size_t &);
         void setNDiv(const size_t &nd);
         size_t NDiv(void) const;
-        size_t getTag(void) const;
+        double getElemSize(void) const;
+	
+
+	// Node positions.
         Pos3dArray get_positions(void) const;
         std::vector<int> getTagsNodesForward(void) const;
         std::vector<int> getTagsNodesReverse(void) const;
         Pos3dArray getNodePosForward(void) const;
         Pos3dArray getNodePosReverse(void) const;
+
+	// Geometry
         double getLength(void) const;
         Pos3d getCentroid(void) const;	
         bool In(const GeomObj3d &, const double &tol= 0.0) const;
         bool Out(const GeomObj3d &, const double &tol= 0.0) const;
         const Vector &getTang(const double &) const;
+
+	// Mesh
         Node *getNodeForward(const size_t &i);
         Node *getNodeReverse(const size_t &i);
         Node *getNode(const size_t &i);
@@ -124,8 +134,13 @@ class CmbEdge: public Edge
     Edge *newLine(Pnt *,Pnt *,Pnt *);
     void addPoints(const ID &);
     void addLines(const ID &);
+
+    // Number of divisions.
     size_t NDiv(void) const;
     void setNDiv(const size_t &nd);
+    double getAvgElemSize(void) const;
+    double getMaxElemSize(void) const;
+    double getMinElemSize(void) const;
 
     //! @brief Return the number of edges.
     size_t getNumberOfEdges(void) const

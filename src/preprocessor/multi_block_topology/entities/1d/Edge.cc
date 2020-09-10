@@ -298,6 +298,11 @@ void XC::Edge::SetElemSize(const double &sz)
     setNDiv(n);
   }
 
+//! @brief Return the element size (aka L/ndiv).
+double XC::Edge::getElemSize(void) const
+  { return getLength()/ndiv; }
+
+
 //! @brief Create points along the line.
 void XC::Edge::divide(void)
   {

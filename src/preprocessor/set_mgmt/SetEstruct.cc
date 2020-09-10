@@ -169,6 +169,7 @@ std::set<int> XC::SetEstruct::getNodeTags(void) const
     return retval;
   }
 
+//! @brief Return the nodes of the set in a Python list.
 boost::python::list XC::SetEstruct::getNodes(void)
   {
     boost::python::list retval;

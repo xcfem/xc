@@ -164,8 +164,6 @@ int XC::Paver::call_paving(const Ref2d3d &ref,const Polygon3d &extContour, const
 	linkeg.resize(2*mlink); // size ok
 	listeg.resize(2*npeold); // size ok
 	
-	//report(std::cout);
-
 	real sizmin= 0.0;
 	real emax= 0.0;
 	real emin= 0.0;
@@ -247,9 +245,6 @@ std::vector<int> XC::Paver::get_elem_nodes(const std::vector<int> &edges)
 		      << "; something went wrong, node " << i
 	              << " out of range: "
 		      << retval[i] << std::endl;
-	    std::cout << "nA= " << nA << " nB= " << nB << " nC= " << nC << " nD= " << nD << std::endl;
-	    std::cout << " edge0= " << edge0 << " edge1= " << edge1 << std::endl;
-            std::cout << "nodes: " << retval[0]+1 << ' ' << retval[1]+1  << ' ' << retval[2]+1 << ' ' << retval[3]+1 << std::endl;
 	  }
     return retval;
   }

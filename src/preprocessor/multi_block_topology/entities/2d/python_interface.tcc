@@ -44,6 +44,7 @@ class_<XC::QuadSurface, XC::QuadSurface *, bases<XC::Face>, boost::noncopyable >
 
 class_<XC::PolygonalFace, XC::PolygonalFace *, bases<XC::Face>, boost::noncopyable >("PolygonalFace", no_init)
   .def("addHole", &XC::PolygonalFace::addHole, "Add a hole to the face.")
+  .def("getHoles", &XC::PolygonalFace::getHoles, "Return a list with the face holes in it.")
    ;
 
 

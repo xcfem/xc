@@ -33,6 +33,7 @@ class_<XC::Edge, XC::Edge*, bases<XC::EntMdlr>, boost::noncopyable >("Edge","Bas
   .add_property("firstNode",make_function(getFirstNodePtr, return_internal_reference<>()),"Return the first node of the edge")
   .add_property("lastNode",make_function(getLastNodePtr, return_internal_reference<>()),"Return the last node of the edge")
   .def("getLength", &XC::Edge::getLength,"Return the length of the edge.")
+  .def("getElemSize", &XC::Edge::getElemSize,"Return the element size.")
   .def("getCentroid", &XC::Edge::getCentroid,"Return the centroid of the edge.")
   .def("getTang", &XC::Edge::getTang, return_internal_reference<>(),"Return a vector tangent to the edge at parameter 0<=s<=L.")
   .def("divide",&XC::Edge::divide,"Create points along the line.")
@@ -96,6 +97,9 @@ class_<XC::CmbEdge, bases<XC::Edge>, boost::noncopyable >("CmbEdge","Compound li
   .add_property("getSides", make_function( &XC::CmbEdge::getSides, return_internal_reference<>()))
   .def("addLines",&XC::CmbEdge::addLines, return_internal_reference<>(),"Add lines to the sequence.")
   .def("addPoints",&XC::CmbEdge::addPoints, return_internal_reference<>(),"Add points to the sequence.")
+  .def("getAvgElemSize", &XC::CmbEdge::getAvgElemSize,"Return the average element size.")
+  .def("getMaxElemSize", &XC::CmbEdge::getMaxElemSize,"Return the maximum element size.")
+  .def("getMinElemSize", &XC::CmbEdge::getMinElemSize,"Return the minimum element size.")
   .def("getReversed",&XC::CmbEdge::getReversed,"Return the reversed face.")
   .def("reverse",&XC::CmbEdge::reverse,"Reverse the vertex sequence.")
    ;

@@ -14,6 +14,7 @@
 extern "C" {
 #endif
 #include "f2c.h"
+#include <math.h>
 
 /*    Copyright(C) 1999-2020 National Technology & Engineering Solutions */
 /*    of Sandia, LLC (NTESS).  Under the terms of Contract DE-NA0003525 with */
@@ -31,9 +32,9 @@ extern "C" {
     integer lnodes_dim1, lnodes_offset, i__1, i__2, i__3;
     real r__1, r__2;
 
-    /* Builtin functions */
-    double atan2(doublereal, doublereal), cos(doublereal), sin(doublereal), 
-	    sqrt(doublereal);
+    /* /\* Builtin functions *\/ */
+    /* double atan2(doublereal, doublereal), cos(doublereal), sin(doublereal),  */
+    /* 	    sqrt(doublereal); */
 
     /* Local variables */
     static integer j;
@@ -106,14 +107,15 @@ extern "C" {
     lnodes -= lnodes_offset;
 
     /* Function Body */
-    pi = atan2((float)0., (float)-1.);
+    pi = M_PI; //atan2((float)0., (float)-1.);
     nodes[0] = -1;
     nodes[1] = -1;
     nodes[2] = -1;
     nodes[3] = -1;
-    if (*ro < (float).01) {
+    if(*ro < (float).01)
+      {
 	*ro = (float)1.;
-    }
+      }
     dro = (float)1.;
     vro = (float)1.;
     eps2 = *eps * *ro;
@@ -121,10 +123,12 @@ extern "C" {
     aver = TRUE_;
 /*  ITERATION LOOP */
     i__1 = *nit;
-    for (it = 1; it <= i__1; ++it) {
-	if (it == *nit) {
+    for (it = 1; it <= i__1; ++it)
+      {
+	if(it == *nit)
+	  {
 	    mesage_("THE ROWSMO ROUTINE IS NOT CONVERGING", (ftnlen)36);
-	}
+	  }
 	big = FALSE_;
 /*  NODE LOOP */
 /* Computing MAX */
@@ -132,17 +136,18 @@ extern "C" {
 	nbegin = max(i__2,1);
 	nend = *nnn + 1;
 	i__2 = nend;
-	for (j = nbegin; j <= i__2; ++j) {
-	    if (j == nend) {
-		node = lnodes[*nnn * lnodes_dim1 + 3];
-	    } else if (j == nbegin) {
-		node = lnodes[nbegin * lnodes_dim1 + 2];
-	    } else {
-		node = j;
-	    }
+	for (j = nbegin; j <= i__2; ++j)
+	  {
+	    if(j == nend)
+	      {	node = lnodes[*nnn * lnodes_dim1 + 3]; }
+	    else if (j == nbegin)
+	      {	node = lnodes[nbegin * lnodes_dim1 + 2]; }
+	    else
+	      {	node = j; }
 /*  SKIP CONTINUATION LINES, EXTERIOR BOUNDARY LINES, AND NODES */
 /*  THAT ARE ON THE INTERIOR */
-	    if (node > 0) {
+	    if(node > 0)
+	      {
 		if (lxn[(node << 2) + 1] > 0 && lxn[(node << 2) + 2] > 0 && 
 			lnodes[node * lnodes_dim1 + 4] == -1) {
 /*  FIND ELEMENTS AND LINES ATTACHED TO NODE */
@@ -201,7 +206,8 @@ extern "C" {
 /*                  ENDIF */
 /*               ENDIF */
 		    near2l = FALSE_;
-		    if (near2l || test) {
+		    if (near2l || test)
+		      {
 			theta1 = atan2(yn[nodes[2]] - yn[nodes[0]], xn[nodes[
 				2]] - xn[nodes[0]]) + pi / (float)2.;
 			theta2 = atan2(yn[nodes[2]] - yn[nodes[1]], xn[nodes[
@@ -219,7 +225,9 @@ extern "C" {
 			xdel = xnew - xn[node];
 			ydel = ynew - yn[node];
 /*  PERFORM AN ISOPARAMETRIC SMOOTH ON OTHER NODES */
-		    } else {
+		      }
+		    else
+		      {
 			i__3 = ks;
 			for (kl = 1; kl <= i__3; ++kl) {
 			    ccw = FALSE_;

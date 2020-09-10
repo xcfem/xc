@@ -255,6 +255,10 @@ void XC::CmbEdge::Side::setNDiv(const size_t &nd)
 size_t XC::CmbEdge::Side::NDiv(void) const
   { return edge->NDiv(); }
 
+//! @brief Return the element size.
+double XC::CmbEdge::Side::getElemSize(void) const
+  { return edge->getElemSize(); }
+
 //! @brief Return the identifier of the line.
 size_t XC::CmbEdge::Side::getTag(void) const
   { return edge->getTag(); }
@@ -457,6 +461,38 @@ void XC::CmbEdge::setNDiv(const size_t &nd)
       std::cerr << getClassName() << "::" << __FUNCTION__
 		<< "; no segments defined." << std::endl;
   }
+
+//! @brief Return the average element size.
+double XC::CmbEdge::getAvgElemSize(void) const
+  {
+    double retval= 0.0;
+    for(std::deque<Side>::const_iterator i=lines.begin();i!=lines.end();i++)
+      retval+= (*i).getElemSize();
+    retval/= lines.size();
+    return retval;
+  }  
+
+//! @brief Return the maximum element size.
+double XC::CmbEdge::getMaxElemSize(void) const
+  {
+    std::deque<Side>::const_iterator i=lines.begin();
+    double retval= (*i).getElemSize();
+    i++;
+    for(;i!=lines.end();i++)
+      retval= std::max(retval,(*i).getElemSize());
+    return retval;
+  }
+
+//! @brief Return the minimum element size.
+double XC::CmbEdge::getMinElemSize(void) const
+  {
+    std::deque<Side>::const_iterator i=lines.begin();
+    double retval= (*i).getElemSize();
+    i++;
+    for(;i!=lines.end();i++)
+      retval= std::min(retval,(*i).getElemSize());
+    return retval;
+  }  
 
 //! @brief Return positions evenly distributed along the object.
 Pos3dArray XC::CmbEdge::get_positions(void) const

@@ -43,6 +43,8 @@ XC::PolygonalFace::PolygonalFace(Preprocessor *m)
 XC::SetEstruct *XC::PolygonalFace::getCopy(void) const
   { return new PolygonalFace(*this); }
 
+//! @brief Return an iterator to the hole corresponding to the argument
+//! return holes.end() if not found.
 XC::PolygonalFace::hole_iterator XC::PolygonalFace::findHole(PolygonalFace *pFace)
   {
     hole_iterator retval= holes.end();
@@ -55,12 +57,16 @@ XC::PolygonalFace::hole_iterator XC::PolygonalFace::findHole(PolygonalFace *pFac
     return retval;
   }
 
+//! @brief Return an iterator to the hole corresponding to the argument
+//! return holes.end() if not found.
 XC::PolygonalFace::hole_const_iterator XC::PolygonalFace::findHole(PolygonalFace *pFace) const
   {
     PolygonalFace *this_no_const= const_cast<PolygonalFace *>(this);
     return this_no_const->findHole(pFace);
   }
 
+//! @brief Return a pointer to the hole corresponding to the argument
+//! return nullptr if not found.
 XC::PolygonalFace *XC::PolygonalFace::findHolePtr(PolygonalFace *pFace)
   {
     PolygonalFace *retval= nullptr;
@@ -70,12 +76,17 @@ XC::PolygonalFace *XC::PolygonalFace::findHolePtr(PolygonalFace *pFace)
     return retval;
   }
 
+//! @brief Return a pointer to the hole corresponding to the argument
+//! return nullptr if not found.
 const XC::PolygonalFace *XC::PolygonalFace::findHolePtr(PolygonalFace *pFace) const
   {
     PolygonalFace *this_no_const= const_cast<PolygonalFace *>(this);
     return this_no_const->findHolePtr(pFace);
   }
 
+//! @brief Add a hole to the face.
+//!
+//! @param pFace: hole to add.
 void XC::PolygonalFace::addHole(PolygonalFace *pFace)
   {
     // Check if hole is already added
@@ -86,6 +97,19 @@ void XC::PolygonalFace::addHole(PolygonalFace *pFace)
 	        << std::endl;
     else
       holes.push_back(pFace);
+  }
+
+//! @brief Return a list of the face holes.
+boost::python::list XC::PolygonalFace::getHoles(void) const
+  {
+    boost::python::list retval;
+    for(hole_const_iterator i= holes.begin(); i!= holes.end(); i++)
+      {
+	PolygonalFace *pFace= *i;	
+        boost::python::object pyObj(boost::ref(*pFace));
+	retval.append(pyObj);
+      }
+    return retval;
   }
 
 //! @brief Creates and inserts the lines from the points identified
@@ -142,6 +166,9 @@ void XC::PolygonalFace::create_nodes(Paver &paver)
   {
     if(ttzNodes.Null())
       {
+	double maxElemSize= -1e9;
+	double minElemSize= 1e9;
+	
 	// Create perimeter nodes.
         create_line_nodes();
 
@@ -156,6 +183,9 @@ void XC::PolygonalFace::create_nodes(Paver &paver)
 	    Side &side= lines[i];
 	    Edge *edge= side.getEdge();
 	    const size_t nNodesEdge= edge->getNumberOfNodes();
+	    const double elemSize= side.getLength()/nNodesEdge;
+	    maxElemSize= std::max(elemSize, maxElemSize);
+	    minElemSize= std::min(elemSize, minElemSize);
 	    for(size_t j= 0;j<nNodesEdge-1;j++)
 	      {
 		Node *nn= side.getNode(j+1);
@@ -177,6 +207,9 @@ void XC::PolygonalFace::create_nodes(Paver &paver)
 		Side &side= hole->lines[j];
 		Edge *edge= side.getEdge();
 		const size_t nNodesEdge= edge->getNumberOfNodes();
+		const double elemSize= side.getLength()/nNodesEdge;
+		maxElemSize= std::max(elemSize, maxElemSize);
+		minElemSize= std::min(elemSize, minElemSize);
 		for(size_t k= 0;k<nNodesEdge-1;k++)
 		  {
 		    Node *nn= side.getNode(k+1);
@@ -189,8 +222,17 @@ void XC::PolygonalFace::create_nodes(Paver &paver)
 	    holePolygons.push_back(holePlg);
 	  }
 
+	const double elemSizeRatio= minElemSize/maxElemSize;
+	if(elemSizeRatio<0.15)
+	  {
+	    std::clog << getClassName() << "::" << __FUNCTION__
+		      << "; max. element size: " << maxElemSize
+	              << " and min. element size: " << minElemSize
+	              << " too different; ratio: " << minElemSize/maxElemSize
+	              << std::endl;
+	  }
+
 	// Call paving routines.
-	const size_t nPerimeterNodes= perimeterNodes.size();
         paver.mesh(Polygon3d(contourPositions), holePolygons);
 
 	// Populate node array.

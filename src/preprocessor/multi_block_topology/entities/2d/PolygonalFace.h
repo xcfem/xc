@@ -64,6 +64,7 @@ class PolygonalFace: public Face
     hole_const_iterator findHole(PolygonalFace *) const;
     const PolygonalFace *findHolePtr(PolygonalFace *) const;
     PolygonalFace *findHolePtr(PolygonalFace *);
+    boost::python::list getHoles(void) const;
 
     // Surface orientation.
     Vector3d getIVector(void) const;

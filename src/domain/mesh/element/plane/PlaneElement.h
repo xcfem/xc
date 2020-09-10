@@ -173,9 +173,10 @@ double XC::PlaneElement<NNODES, PhysProp>::getMaximumCornerAngle(bool initialGeo
 template <int NNODES,class PhysProp>
 Polygon3d XC::PlaneElement<NNODES, PhysProp>::getPolygon(bool initialGeometry) const
   {
+    const std::deque<Pos3d> positions= this->getPosNodes(initialGeometry);
+    Polygon3d retval= Polygon3d(positions.begin(),positions.end());
     const double maxAngle= getMaximumCornerAngle();
-    Polygon3d retval;
-    if(abs(maxAngle-M_PI)<1e-3)
+    if((PlaneElement<NNODES, PhysProp>::verbosity>1) && (abs(maxAngle-M_PI)<1e-3))
       {
         std::cerr << this->getClassName() << "::" << __FUNCTION__
                   << " element with tag: " << this->getTag()
@@ -184,11 +185,6 @@ Polygon3d XC::PlaneElement<NNODES, PhysProp>::getPolygon(bool initialGeometry) c
 		  << " degrees (too distorted)."
 		  << " Returning empty polygon."
 		  << std::endl;
-      }
-    else
-      {
-        const std::deque<Pos3d> positions= this->getPosNodes(initialGeometry);
-        retval= Polygon3d(positions.begin(),positions.end());
       }
     return retval;
   }
