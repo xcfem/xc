@@ -103,7 +103,8 @@ int XC::Paver::call_paving(const Ref2d3d &ref,const Polygon3d &extContour, const
 	      }
 	    else
 	      std::clog << getClassName() << "::" << __FUNCTION__
-			<< "; error, empty internal contour ignored." << std::endl;
+			<< "; error, empty internal contour ignored."
+			<< std::endl;
 	  }
         nnn= nbnode; // all the nodes in the perimeter.
 	iptper.resize(nprm);
