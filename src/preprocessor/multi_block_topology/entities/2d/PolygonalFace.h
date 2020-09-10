@@ -43,9 +43,13 @@ class Paver; // wrapper of the paving algorithm.
 //! @brief Quadrangle defined by its four vertices.
 class PolygonalFace: public Face
   {
+  public:
+    typedef std::deque<PolygonalFace *> dq_holes;
+    typedef dq_holes::iterator hole_iterator;
+    typedef dq_holes::const_iterator hole_const_iterator;
   protected:
     Ref2d3d ref; //!< local reference system.
-    std::deque<PolygonalFace *> holes;
+    dq_holes holes;
     void create_line_nodes(void);
     void create_nodes(Paver &paver);
     bool create_elements(const Paver &paver);
@@ -56,6 +60,10 @@ class PolygonalFace: public Face
     // Surface geometry.
     void setPoints(const ID &);
     void addHole(PolygonalFace *);
+    hole_iterator findHole(PolygonalFace *);
+    hole_const_iterator findHole(PolygonalFace *) const;
+    const PolygonalFace *findHolePtr(PolygonalFace *) const;
+    PolygonalFace *findHolePtr(PolygonalFace *);
 
     // Surface orientation.
     Vector3d getIVector(void) const;

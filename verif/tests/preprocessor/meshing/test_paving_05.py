@@ -16,6 +16,9 @@ import geom
 import xc
 import matplotlib.pyplot as plt
 from materials.astm_aisc import ASTM_materials
+from model import predefined_spaces
+from materials import typical_materials
+#from postprocess import output_handler
 
 def round_up_to_even(f):
     return math.ceil(f / 2.) * 2
@@ -38,6 +41,23 @@ def getIntermediatePoints(corners, elemSide):
     nDiv= int(round_up_to_even(sg.getLength()/elemSide))
     pts.extend(sg.Divide(nDiv)[:-1])
     return geom.Polygon3d(pts)
+
+def getHoleAsPolygonalSurface(hole, surfaces):
+    ''' Create the polygonal surface that represents the hole.
+
+    :param hole: hole to create the surface for.
+    :param surfaces: XC surface handler.
+    '''
+    plg= b.getHoleAsPolygon()
+    vertices= plg.getVertexList()
+    newPnts= list()
+    for v in vertices:
+        newPnts.append(points.newPntFromPos3d(v))
+    pntTags= list()
+    for p in newPnts:
+        pntTags.append(p.tag)
+    pFace= surfaces.newPolygonalFacePts(pntTags)
+    return pFace
 
 def drawPolygons(plgList):
     ''' Draws the polygons on the argument list using matplotlib.
@@ -90,7 +110,11 @@ def drawMesh(nodes, quads):
     plt.axis('equal')
     plt.show()
 
-corners= [geom.Pos3d(-1.595,-1.4046,0), geom.Pos3d(-1.4376,-0.7453,0), geom.Pos3d(-1.529,-0.7047,0), geom.Pos3d(-1.595,-0.7527,0)]
+p1= geom.Pos3d(-1.595,-1.4046,0)
+p2= geom.Pos3d(-1.4376,-0.7453,0)
+p3= geom.Pos3d(-1.529,-0.7047,0)
+p4= geom.Pos3d(-1.595,-0.7527,0)
+corners= [p1, p2, p3, p4]
 #corners= [geom.Pos3d(-1.5950,-1.333,0), geom.Pos3d(-1.5779,-1.333,0), geom.Pos3d(-1.4376,-0.7453,0), geom.Pos3d(-1.529,-0.7047,0), geom.Pos3d(-1.595,-0.7527,0)]
 
 bolts= list()
@@ -111,7 +135,7 @@ for b in bolts:
 
 # drawPolygons(contours)
 
-# Meshing with paving algorithm
+# Meshing directly with paving algorithm
 paver= xc.Paver()
 paver.mesh(plgExt, holes)
 nodPos= paver.getNodePositions()
@@ -119,21 +143,76 @@ quads= paver.getQuads()
 
 # drawMesh(nodPos, quads)
 
-nnod= len(nodPos)
-ratio1= (nnod-612)
+nNodPos= len(nodPos)
+ratio1= (nNodPos-612)
 nquads= len(quads)
 ratio2= (nquads-450)
 
+# Test paving routine inside XC modeler.
+
+## Problem type
+feProblem= xc.FEProblem()
+preprocessor= feProblem.getPreprocessor
+nodes= preprocessor.getNodeHandler
+
+modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
+
+### Define k-points.
+points= modelSpace.getPointHandler()
+
+#### Exterior contour
+pt1= points.newPntFromPos3d(p1)
+pt2= points.newPntFromPos3d(p2)
+pt3= points.newPntFromPos3d(p3)
+pt4= points.newPntFromPos3d(p4)
+
+### Define polygonal surfaces
+surfaces= modelSpace.getSurfaceHandler()
+polyFace= surfaces.newPolygonalFacePts([pt1.tag, pt2.tag, pt3.tag, pt4.tag])
+pFaceHoles= list()
+for b in bolts:
+    pFace= getHoleAsPolygonalSurface(b,surfaces)
+    holes.append(pFace)
+    pFaceHoles.append(pFace)
+    
+### Define material
+mat= typical_materials.defElasticMembranePlateSection(preprocessor, "mat",E=2.1e9,nu=0.3,rho= 7850,h= 0.015)
+
+### Define template element
+seedElemHandler= preprocessor.getElementHandler.seedElemHandler
+seedElemHandler.defaultMaterial= mat.name
+elem= seedElemHandler.newElement("ShellMITC4",xc.ID([0,0,0,0]))
+
+### Generate mesh.
+polyFace.setElemSize(0.75*boltDiameter, True)
+for h in pFaceHoles:
+    h.setNDiv(1)
+    polyFace.addHole(h)
+polyFace.genMesh(xc.meshDir.I)
+
+xcTotalSet= modelSpace.getTotalSet()
+nNodes= len(xcTotalSet.nodes)
+nElements= len(xcTotalSet.elements)
+
+ratio3= (nNodes-nNodPos)
+ratio4= (nElements-nquads)
+
 '''
-print(nnod)
+print(nNodPos)
 print(nquads)
 '''
 
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
-if (ratio1==0) & (ratio2==0) :
+if (ratio1==0) & (ratio2==0) & (ratio3==0) & (ratio4==0) :
   print("test "+fname+": ok.")
 else:
   lmsg.error(fname+' ERROR.')
 
+# Graphic stuff.
+#oh= output_handler.OutputHandler(modelSpace)
+
+#oh.displayBlocks()#setToDisplay= )
+#oh.displayFEMesh()#setsToDisplay=[])
+#oh.displayLocalAxes()

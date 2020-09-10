@@ -43,9 +43,50 @@ XC::PolygonalFace::PolygonalFace(Preprocessor *m)
 XC::SetEstruct *XC::PolygonalFace::getCopy(void) const
   { return new PolygonalFace(*this); }
 
+XC::PolygonalFace::hole_iterator XC::PolygonalFace::findHole(PolygonalFace *pFace)
+  {
+    hole_iterator retval= holes.end();
+    for(hole_iterator i= holes.begin(); i!= holes.end(); i++)
+      if(*i==pFace)
+	{
+	  retval= i;
+	  break;
+	}
+    return retval;
+  }
+
+XC::PolygonalFace::hole_const_iterator XC::PolygonalFace::findHole(PolygonalFace *pFace) const
+  {
+    PolygonalFace *this_no_const= const_cast<PolygonalFace *>(this);
+    return this_no_const->findHole(pFace);
+  }
+
+XC::PolygonalFace *XC::PolygonalFace::findHolePtr(PolygonalFace *pFace)
+  {
+    PolygonalFace *retval= nullptr;
+    hole_iterator i= findHole(pFace);    
+    if(i!=holes.end())
+      retval= *i;
+    return retval;
+  }
+
+const XC::PolygonalFace *XC::PolygonalFace::findHolePtr(PolygonalFace *pFace) const
+  {
+    PolygonalFace *this_no_const= const_cast<PolygonalFace *>(this);
+    return this_no_const->findHolePtr(pFace);
+  }
 
 void XC::PolygonalFace::addHole(PolygonalFace *pFace)
-  { holes.push_back(pFace); }
+  {
+    // Check if hole is already added
+    if(findHolePtr(pFace))
+      std::cerr << getClassName() << "::" << __FUNCTION__
+	        << "; hole: " << pFace->getName()
+		<< " is already added. Doing nothing."
+	        << std::endl;
+    else
+      holes.push_back(pFace);
+  }
 
 //! @brief Creates and inserts the lines from the points identified
 //! by the indexes being passed as parameter.
@@ -181,8 +222,6 @@ void XC::PolygonalFace::create_nodes(Paver &paver)
 	    const Pos3d nodePos= nodePositions[count];
 	    create_node(nodePos,1,1,k+1);
 	  }
-	for(size_t k= 0; k<nNodes;k++)
-	  { Node *nn= ttzNodes(1,1,k+1); }
       }
     else
       if(verbosity>2)

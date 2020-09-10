@@ -14,6 +14,9 @@ import xc_base
 import geom
 import xc
 import matplotlib.pyplot as plt
+from model import predefined_spaces
+from materials import typical_materials
+#from postprocess import output_handler
 
 def getPoints(lstPos, nDiv):
     retval= list()
@@ -26,10 +29,24 @@ def getPoints(lstPos, nDiv):
     retval.extend(sg.Divide(nDiv)[:-1])
     return retval
     
+p1= geom.Pos3d(0,0,0)
+p2= geom.Pos3d(10,0,0)
+p3= geom.Pos3d(10,10,0)
+p4= geom.Pos3d(0,10,0)
 
-corners= [geom.Pos3d(0,0,0), geom.Pos3d(10,0,0), geom.Pos3d(10,10,0), geom.Pos3d(0,10,0)]
-holeACorners= [geom.Pos3d(4,4,0), geom.Pos3d(5,4,0), geom.Pos3d(5,5,0), geom.Pos3d(4,5,0)]
-holeBCorners= [geom.Pos3d(1,3,0), geom.Pos3d(2,2,0), geom.Pos3d(3,3,0), geom.Pos3d(2,4,0)]
+pH0= geom.Pos3d(4,4,0)
+pH1= geom.Pos3d(5,4,0)
+pH2= geom.Pos3d(5,5,0)
+pH3= geom.Pos3d(4,5,0)
+
+pH4= geom.Pos3d(1,3,0)
+pH5= geom.Pos3d(2,2,0)
+pH6= geom.Pos3d(3,3,0)
+pH7= geom.Pos3d(2,4,0)
+
+corners= [p1, p2, p3, p4]
+holeACorners= [pH0, pH1, pH2, pH3]
+holeBCorners= [pH4, pH5, pH6, pH7]
 
 points= getPoints(corners, nDiv= 10)
 holeAPoints= getPoints(holeACorners, nDiv= 1)
@@ -75,31 +92,13 @@ paver.mesh(plgExt,[plgIntA, plgIntB])
 nodPos= paver.getNodePositions()
 quads= paver.getQuads()
 
-
-
-nnod= len(nodPos)
-ratio1= (nnod-136)
+nNodPos= len(nodPos)
+ratio1= (nNodPos-136)
 nquads= len(quads)
 ratio2= (nquads-88)
 
-'''
-print('ext. contour point number: ', len(points))
-print('int. contour point number: ', len(holeAPoints))
-print('area: ', plgExt.getArea())
-print(nnod)
-print(nquads)
-'''
-
-import os
-from misc_utils import log_messages as lmsg
-fname= os.path.basename(__file__)
-if (ratio1==0) & (ratio2==0) :
-  print("test "+fname+": ok.")
-else:
-  lmsg.error(fname+' ERROR.')
-
 '''    
-# Draw elements
+# Draw quads
 plg= list()
 for q in quads:
     qx= list()
@@ -119,3 +118,82 @@ for p in plg:
     plt.fill(xs,ys) 
 plt.show()
 '''
+# Test paving routine inside XC modeler.
+
+## Problem type
+feProblem= xc.FEProblem()
+preprocessor= feProblem.getPreprocessor
+nodes= preprocessor.getNodeHandler
+
+modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
+
+### Define k-points.
+points= modelSpace.getPointHandler()
+
+#### Exterior contour
+pt1= points.newPntFromPos3d(p1)
+pt2= points.newPntFromPos3d(p2)
+pt3= points.newPntFromPos3d(p3)
+pt4= points.newPntFromPos3d(p4)
+
+#### Holes
+ptH0= points.newPntFromPos3d(pH0)
+ptH1= points.newPntFromPos3d(pH1)
+ptH2= points.newPntFromPos3d(pH2)
+ptH3= points.newPntFromPos3d(pH3)
+ptH4= points.newPntFromPos3d(pH4)
+ptH5= points.newPntFromPos3d(pH5)
+ptH6= points.newPntFromPos3d(pH6)
+ptH7= points.newPntFromPos3d(pH7)
+
+### Define polygonal surfaces
+surfaces= modelSpace.getSurfaceHandler()
+polyFace= surfaces.newPolygonalFacePts([pt1.tag, pt2.tag, pt3.tag, pt4.tag])
+holeA= surfaces.newPolygonalFacePts([ptH0.tag, ptH1.tag, ptH2.tag, ptH3.tag])
+holeB= surfaces.newPolygonalFacePts([ptH4.tag, ptH5.tag, ptH6.tag, ptH7.tag])
+
+### Define material
+mat= typical_materials.defElasticMembranePlateSection(preprocessor, "mat",E=2.1e9,nu=0.3,rho= 7850,h= 0.015)
+
+### Define template element
+seedElemHandler= preprocessor.getElementHandler.seedElemHandler
+seedElemHandler.defaultMaterial= mat.name
+elem= seedElemHandler.newElement("ShellMITC4",xc.ID([0,0,0,0]))
+
+### Generate mesh.
+polyFace.setNDiv(10)
+holeA.setNDiv(1)
+holeB.setNDiv(1)
+polyFace.addHole(holeA)
+polyFace.addHole(holeB)
+polyFace.genMesh(xc.meshDir.I)
+
+xcTotalSet= modelSpace.getTotalSet()
+nNodes= len(xcTotalSet.nodes)
+nElements= len(xcTotalSet.elements)
+
+ratio3= (nNodes-nNodPos)
+ratio4= (nElements-nquads)
+
+'''
+print('ext. contour point number: ', len(points))
+print('int. contour point number: ', len(holeAPoints))
+print('area: ', plgExt.getArea())
+print(nnod)
+print(nquads)
+'''
+
+import os
+from misc_utils import log_messages as lmsg
+fname= os.path.basename(__file__)
+if (ratio1==0) & (ratio2==0) & (ratio3==0) & (ratio4==0) :
+  print("test "+fname+": ok.")
+else:
+  lmsg.error(fname+' ERROR.')
+
+# Graphic stuff.
+#oh= output_handler.OutputHandler(modelSpace)
+
+#oh.displayBlocks()#setToDisplay= )
+#oh.displayFEMesh()#setsToDisplay=[])
+#oh.displayLocalAxes()
