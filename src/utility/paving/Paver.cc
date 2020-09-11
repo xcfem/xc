@@ -170,6 +170,8 @@ int XC::Paver::call_paving(const Ref2d3d &ref,const Polygon3d &extContour, const
 	ftnlen dev1_len= 0;
 	
 	retval= paving_(&nbnode, &nprm, &mln,  iptper.data(), numper.data(), lperim.data(), x.data(), y.data(), z.data(), iexk.data(), inxe.data(), &nnn, &lll, &kkk, &mxnd, angle.data(), bnsize.data(), lnodes.data(), linkpr.data(), nperim.data(), lxk.data(), kxl.data(), nxl.data(), lxn.data(), nuid.data(), &iavail, &navail, &graph, &timer, &video, &defsiz, &sizeit, dev1, &kreg, &batch, &noroom, &err, amesur.data(), xnold.data(), ynold.data(), nxkold.data(), mmpold.data(), linkeg.data(), listeg.data(), bmesur.data(), &mlink, &nprold, &npnold, &npeold, &nnxk, &remesh, &rexmin, &rexmax, &reymin, &reymax, &idivis, &sizmin, &emax, &emin, dev1_len);
+	if(err==1)
+	  retval= -1;
       }
     return retval;
   }
@@ -180,7 +182,7 @@ int XC::Paver::mesh(const Polygon3d &ext, const std::deque<Polygon3d> &holes)
     int retval= 0;
     const Ref2d3d ref= ext.getRef();
     int paving= call_paving(ref,ext,holes);
-    if(!err)
+    if(paving==0)
       retval= extract_mesh(ref);
     else
       retval= -1;
@@ -191,7 +193,6 @@ int XC::Paver::mesh(const Polygon3d &ext, const std::deque<Polygon3d> &holes)
 //! @brief Get data from Python and call paving.
 int XC::Paver::meshPy(const Polygon3d &ext, const boost::python::list &l)
   {
-    int retval= 0;
     std::deque<Polygon3d> intContours;
     const size_t sz= len(l);
     for(size_t i=0; i<sz; i++)

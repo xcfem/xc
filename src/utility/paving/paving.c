@@ -14,6 +14,7 @@
 extern "C" {
 #endif
 #include "f2c.h"
+#include <stdio.h>
 
   /* Nomenclature:
      L -> line
@@ -615,7 +616,8 @@ L220:
 	}
     }
 /*  CHECK TO SEE IF ANY OF THE CONCURRENT PERIMETERS OVERLAP */
-    if (linkpr[kperim * 3 + 2] != 0) {
+    if (linkpr[kperim * 3 + 2] != 0)
+      {
 	linkpr[kperim * 3 + 3] = nloop[0];
 	pcross_(mxnd, &c__10240, mln, &c__20, nprm, &nuid[1], &xn[1], &yn[1], 
 		&zn[1], &lxk[5], &kxl[3], &nxl[3], &lxn[5], &angle[1], &
@@ -624,10 +626,11 @@ L220:
 		done, &xmin, &xmax, &ymin, &ymax, &zmin, &zmax, dev1, lll, 
 		kkk, nnn, icomb, &ncorn, nloop, nextn1, &kloop, graph, video, 
 		kreg, noroom, err, (ftnlen)3);
-	if (*noroom || *err) {
-	    goto L310;
-	}
-    }
+        if(*err)
+	  fprintf( stderr,"Error in PCROSS routine.\n");
+	if (*noroom || *err)
+	  { goto L310;}
+      }
 /*  TRY COLLAPSING OVERLAPPING SIDES TO FORM TWO LOOPS OUT OF THE */
 /*  CURRENT SINGLE LOOP - NOTE THAT THE ICOMB ARRAY IS SENT AS */
 /*  WHEN CALLING PINCH IN PLACE OF THE LCORN ARRAY */
@@ -741,6 +744,7 @@ L240:
     }
 /*  EXIT WITH ERROR */
 L310:
+
     if (*err && ! (*batch))
       {
 	rplotl_(mxnd, &xn[1], &yn[1], &zn[1], &nxl[3], &xmin1, &xmax1, &ymin1,
@@ -748,50 +752,6 @@ L310:
 	ringbl_();
 	sflush_();
       }
-    if (*timer) {
-	getime_(&time2);
-	s_wsfe(&io___39);
-	do_fio(&c__1, "  CPU SECONDS USED: ", (ftnlen)20);
-	r__1 = time2 - time1;
-	do_fio(&c__1, (char *)&r__1, (ftnlen)sizeof(real));
-	e_wsfe();
-	s_wsfe(&io___40);
-	do_fio(&c__1, "            ADDROW: ", (ftnlen)20);
-	do_fio(&c__1, (char *)&timing_1.timea, (ftnlen)sizeof(real));
-	e_wsfe();
-	s_wsfe(&io___41);
-	do_fio(&c__1, "             PINCH: ", (ftnlen)20);
-	do_fio(&c__1, (char *)&timing_1.timep, (ftnlen)sizeof(real));
-	e_wsfe();
-	s_wsfe(&io___42);
-	do_fio(&c__1, "            COLAPS: ", (ftnlen)20);
-	do_fio(&c__1, (char *)&timing_1.timec, (ftnlen)sizeof(real));
-	e_wsfe();
-	s_wsfe(&io___43);
-	do_fio(&c__1, "            PCROSS: ", (ftnlen)20);
-	do_fio(&c__1, (char *)&timing_1.timepc, (ftnlen)sizeof(real));
-	e_wsfe();
-	s_wsfe(&io___44);
-	do_fio(&c__1, "            ADJROW: ", (ftnlen)20);
-	do_fio(&c__1, (char *)&timing_1.timeaj, (ftnlen)sizeof(real));
-	e_wsfe();
-	s_wsfe(&io___45);
-	do_fio(&c__1, "            SMOOTH: ", (ftnlen)20);
-	do_fio(&c__1, (char *)&timing_1.times, (ftnlen)sizeof(real));
-	e_wsfe();
-	s_wsfe(&io___46);
-	do_fio(&c__1, "     MISCELLANEOUS: ", (ftnlen)20);
-	r__1 = time2 - time1 - timing_1.timea - timing_1.timep - 
-		timing_1.timec - timing_1.timepc - timing_1.timeaj - 
-		timing_1.times;
-	do_fio(&c__1, (char *)&r__1, (ftnlen)sizeof(real));
-	e_wsfe();
-	s_wsfe(&io___47);
-	do_fio(&c__1, "         %  SMOOTH: ", (ftnlen)20);
-	r__1 = timing_1.times * (float)100. / (time2 - time1);
-	do_fio(&c__1, (char *)&r__1, (ftnlen)sizeof(real));
-	e_wsfe();
-    }
     return 0;
 } /* paving_ */
 
