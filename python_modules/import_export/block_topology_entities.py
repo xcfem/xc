@@ -115,7 +115,6 @@ class BlockRecord(me.CellRecord):
         if(self.matId):
             retval+= '; '+strId+'.setProp(\'matId\',\''+str(self.matId)+'\')'
         return retval
-
     
     def getStrXCCommand(self,xcImportExportData):
         ''' Return the XC Python string defining the object.'''
@@ -293,9 +292,9 @@ class BlockData(object):
         '''Read points and surfaces from an XC set.'''
         self.name= xcSet.name
         self.points.readFromXCSet(xcSet)
-        print(len(self.points), ' points read.')
+        lmsg.log(len(self.points), ' points read.')
         self.blocks.readFromXCSet(xcSet)
-        print(len(self.blocks), ' blocks read.')
+        lmsg.log(len(self.blocks), ' blocks read.')
         self.pointSupports.readFromXCSet(xcSet,self.points)
 
     def readFromDxfFile(self,fName,preprocessor,dxfLayers):
