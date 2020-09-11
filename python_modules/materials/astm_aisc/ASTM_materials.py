@@ -25,6 +25,7 @@ from misc_utils import log_messages as lmsg
 from materials import buckling_base
 from materials.astm_aisc import AISC_limit_state_checking as aisc
 from import_export import block_topology_entities as bte
+from connections import bolted_plate as bp
 
 class ASTMSteel(steel_base.BasicSteel):
     '''ASTM structural steel.
@@ -346,6 +347,58 @@ M24= BoltFastener(24e-3)
 M27= BoltFastener(27e-3)
 M30= BoltFastener(30e-3)
 M36= BoltFastener(36e-3)
+
+class BoltArray(bp.BoltArrayBase):
+    ''' Bolt array the AISC/ASTM way.'''
+    def __init__(self, bolt= M16, nRows= 1, nCols= 1, dist= None):
+        ''' Constructor.
+
+        :param bolt: bolt type.
+        :param nRows: row number.
+        :param nCols: column number.
+        :param dist: distance between rows and columns
+                     (defaults to three diameters).
+        '''
+        super(BoltArray, self).__init__(bolt, nRows, nCols, dist)
+
+class BoltedPlate(bp.BoltedPlateBase):
+    ''' Bolted plate the AISC/ASTM way.'''
+
+    def __init__(self, boltArray= BoltArray(), thickness= 10e-3, steelType= A36):
+        ''' Constructor.
+
+        :param boltArray: bolt array.
+        :param thickness: plate thickness.
+        :param steelType: steel type.
+        '''
+        super(BoltedPlate, self).__init__(boltArray, thickness, steelType)
+        self.setBoltArray(boltArray)
+        self.thickness= thickness
+        self.steelType= steelType
+        
+    def getFilletMinimumLeg(self, otherThickness):
+        '''
+        Return the minimum leg size for a fillet bead 
+        according to table J2.4 of AISC 360.
+
+        :param otherThickness: thickness of the other part to weld.
+        '''
+        return getFilletWeldMinimumLegSheets(self.thickness, otherThickness)
+        
+    def getFilletMaximumLeg(self, otherThickness):
+        '''
+        Return the minimum leg size for a fillet bead 
+        according to table J2.4 of AISC 360.
+
+        :param otherThickness: thickness of the other part to weld.
+        '''
+        return getFilletWeldMaximumLegSheets(self.thickness, otherThickness)
+
+def readBoltedPlateFromJSONFile(inputFileName):
+    ''' Read bolted plate object from a JSON file.'''
+    retval= BoltedPlate()
+    retval.jsonRead(inputFileName)
+    return retval
         
 class AnchorBolt(BoltBase):
     ''' ASTM anchor bolt according to table 2.2 from the document

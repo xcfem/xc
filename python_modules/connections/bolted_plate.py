@@ -1,16 +1,19 @@
 # -*- coding: utf-8 -*-
-''' Naive gusset plate model.'''
+''' Naive bolted plate model.'''
 
 from __future__ import division
 from __future__ import print_function
 
+import json
 import xc_base
 import geom
 from import_export import block_topology_entities as bte
 
-class BoltArray(object):
+class BoltArrayBase(object):
     distances= [50e-3, 75e-3, 100e-3, 120e-3, 150e-3, 200e-3, 250e-3,.3,.4,.5,.6,.7,.8,.9]
-    ''' Bolt array.
+    ''' Base class for bolt array. This class must be code agnostic
+        i.e. no AISC, EC3, EAE clauses here. Maybe there is some
+        work to do in that sense (LP 09/2020). 
 
     :ivar bolt: bolt type.
     :ivar nRows: row number.
@@ -18,7 +21,7 @@ class BoltArray(object):
     :ivar dist: distance between rows and columns
                  (defaults to three diameters).
     '''
-    def __init__(self, bolt= None, nRows= 1, nCols= 1, dist= None):
+    def __init__(self, bolt, nRows= 1, nCols= 1, dist= None):
         ''' Constructor.
 
         :param bolt: bolt type.
@@ -33,10 +36,7 @@ class BoltArray(object):
         if(dist):
             self.dist= dist
         else:
-            diameter= 16e-3
-            if(self.bolt):
-                diameter= self.bolt.diameter
-            tmp= 3.0*diameter
+            tmp= 3.0*self.bolt.diameter
             for d in self.distances:
                 if(d>= tmp):
                     self.dist= d
@@ -159,35 +159,54 @@ class BoltArray(object):
         self.bolt.report(outputFile)
         
 
-class BoltedPlate(object):
-    ''' Bolted plate.
+class BoltedPlateBase(object):
+    ''' Base class for bolted plates. This class must be code agnostic
+        i.e. no AISC, EC3, EAE clauses here. Maybe there is some
+        work to do in that sense (LP 09/2020).
 
     :ivar boltArray: bolt array.
     :ivar width: plate width.
     :ivar length: plate length.
     :ivar thickness: plate thickness.
     :ivar steelType: steel type.
+    :ivar eccentricity: eccentricity of the plate with respect the center
+                        of the bolt array.
     '''
-    def __init__(self, boltArray= BoltArray(), thickness= 10e-3, steelType= None):
+    def __init__(self, boltArray, thickness= 10e-3, steelType= None, eccentricity= geom.Vector2d(0.0,0.0)):
         ''' Constructor.
 
         :param boltArray: bolt array.
         :param thickness: plate thickness.
         :param steelType: steel type.
+        :param eccentricity: eccentricity of the plate with respect the center
+                             of the bolt array.
         '''
-        self.boltArray= boltArray
+        self.setBoltArray(boltArray)
         self.thickness= thickness
         self.steelType= steelType
-        minWidth= self.boltArray.getMinPlateWidth()
-        for d in self.boltArray.distances:
-            if(d>= minWidth):
-                self.width= d
-                break
-        minLength= self.boltArray.getMinPlateLength()
-        for d in self.boltArray.distances:
-            if(d>= minLength):
-                self.length= d
-                break
+
+    def computeDimensions(self):
+        ''' Assigns the bolt arrangement.'''
+        if(self.boltArray.bolt):
+            minWidth= self.boltArray.getMinPlateWidth()
+            for d in self.boltArray.distances:
+                if(d>= minWidth):
+                    self.width= d
+                    break
+            minLength= self.boltArray.getMinPlateLength()
+            for d in self.boltArray.distances:
+                if(d>= minLength):
+                    self.length= d
+                    break
+        else:
+            self.width= 0.0
+            self.height= 0.0
+                    
+    def setBoltArray(self, boltArray):
+        ''' Assigns the bolt arrangement.'''
+        self.boltArray= boltArray
+        self.computeDimensions()
+        
             
     def getNetWidth(self):
         ''' Return the net width due to the bolt holes. '''
@@ -248,23 +267,6 @@ class BoltedPlate(object):
             lmsg.error('shear not implemented yet.')
         return CF
 
-    def getFilletMinimumLeg(self, otherThickness):
-        '''
-        Return the minimum leg size for a fillet bead 
-        according to table J2.4 of AISC 360.
-
-        :param otherThickness: thickness of the other part to weld.
-        '''
-        return getFilletWeldMinimumLegSheets(self.thickness, otherThickness)
-        
-    def getFilletMaximumLeg(self, otherThickness):
-        '''
-        Return the minimum leg size for a fillet bead 
-        according to table J2.4 of AISC 360.
-
-        :param otherThickness: thickness of the other part to weld.
-        '''
-        return getFilletWeldMaximumLegSheets(self.thickness, otherThickness)
 
     def __str__(self):
         return 'width: '+ str(self.width) + ' length: '+ str(self.length) + ' thickness: '+ str(self.thickness) + ' bolts: ' + str(self.boltArray)
@@ -278,6 +280,7 @@ class BoltedPlate(object):
         self.boltArray.setFromDict(dct['boltArray'])
         self.width= dct['width']
         self.length= dct['length']
+        self.computeDimensions()
         self.thickness= dct['thickness']
         self.steelType.setFromDict(dct['steelType'])
 
@@ -295,9 +298,52 @@ class BoltedPlate(object):
         outputFile.write('    plate thickness: '+str(self.thickness*1000)+' mm\n')
         outputFile.write('    steel type: '+str(self.steelType.name)+'\n')
         self.boltArray.report(outputFile)
+
+    def getContour(self):
+        ''' Return the contour points of the plate.'''
+        retval= list()
+        l2= self.length/2.0
+        w2= self.width/2.0
+        retval.append(geom.Pos2d(-l2+self.eccentricity.x,-w2+self.eccentricity.y))
+        retval.append(geom.Pos2d(l2+self.eccentricity.x,-w2+self.eccentricity.y))
+        retval.append(geom.Pos2d(l2+self.eccentricity.x,w2+self.eccentricity.y))
+        retval.append(geom.Pos2d(-l2+self.eccentricity.x,w2+self.eccentricity.y))
+        return retval
+
+    def getContourBlocks(self, refSys, lbls= []):
+        ''' Return the contour in blocks form.'''
+        labels= ['bolted_plate_contour']
+        if(lbls):
+            labels.extend(lbls)
+        localPos= self.getContour()
+        retval= bte.BlockData()
+        contourVertices= list()
+        for p in localPos:
+            p3d= geom.Pos3d(p.x,p.y,0.0)
+            contourVertices.append(refSys.getPosGlobal(p3d))
+        retval.blockFromPoints(contourVertices,labels)
+        return retval
         
-def readBoltedPlateFromJSONFile(inputFileName):
-    ''' Read bolted plate object from a JSON file.'''
-    retval= BoltedPlate()
-    retval.jsonRead(inputFileName)
-    return retval
+    def getBlocks(self, refSys= geom.Ref3d3d(), lbls= None):
+        ''' Return the blocks that define the gusset for the
+            diagonal argument.
+
+        :param lbls: labels to assign to the newly created blocks.
+        '''
+        retval= bte.BlockData()
+        labels= ['bolted_plate']
+        if(lbls):
+            labels.extend(lbls)
+        boltPositions= self.boltArray.getPositions(refSys)
+        # Get the bolt centers for the new plate.
+        for pos in boltPositions:
+            posLabels= labels+ ['hole_centers']
+            retval.appendPoint(-1, pos.x, pos.y, pos.z, labels= posLabels)
+        # Get the hole blocks for the new plate
+        holeLabels= labels+['holes']
+        holes= self.boltArray.getHoleBlocks(refSys,holeLabels)
+        retval.extend(holes)
+        # Get the plate contour
+        contour= self.getContourBlocks(refSys, labels)
+        retval.extend(contour)
+        return retval

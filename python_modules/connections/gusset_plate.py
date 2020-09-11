@@ -33,7 +33,11 @@ class GussetPlate(object):
         self.halfChamfer= halfChamfer
         self.direction= direction
         self.boltedPlateTemplate= boltedPlateTemplate
-        
+
+    def getThickness(self):
+        ''' Return the plate thickess.'''
+        return self.boltedPlateTemplate.thickness
+    
     def getHorizontalTopLeg(self, origin):
         '''Return the points of an horizontal top leg.
 
