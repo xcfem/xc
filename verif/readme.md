@@ -16,6 +16,6 @@ If you prefer to get rid of the 'ok' messages you can type:
 
 ./run_verif.sh | grep -v ok
 
-
+Of course you can also learn how to work with XC by examining those tests.
 
 
