@@ -299,31 +299,17 @@ class BoltedPlateBase(object):
         outputFile.write('    steel type: '+str(self.steelType.name)+'\n')
         self.boltArray.report(outputFile)
 
-    def getContour(self):
+    def getContour(self, refSys):
         ''' Return the contour points of the plate.'''
-        retval= list()
         l2= self.length/2.0
         w2= self.width/2.0
-        retval.append(geom.Pos2d(-l2+self.eccentricity.x,-w2+self.eccentricity.y))
-        retval.append(geom.Pos2d(l2+self.eccentricity.x,-w2+self.eccentricity.y))
-        retval.append(geom.Pos2d(l2+self.eccentricity.x,w2+self.eccentricity.y))
-        retval.append(geom.Pos2d(-l2+self.eccentricity.x,w2+self.eccentricity.y))
-        return retval
-
-    def getContourBlocks(self, refSys, lbls= []):
-        ''' Return the contour in blocks form.'''
-        labels= ['bolted_plate_contour']
-        if(lbls):
-            labels.extend(lbls)
-        localPos= self.getContour()
-        retval= bte.BlockData()
-        contourVertices= list()
+        localPos= [geom.Pos2d(-l2+self.eccentricity.x,-w2+self.eccentricity.y), geom.Pos2d(l2+self.eccentricity.x,-w2+self.eccentricity.y), geom.Pos2d(l2+self.eccentricity.x,w2+self.eccentricity.y), geom.Pos2d(-l2+self.eccentricity.x,w2+self.eccentricity.y)]
+        retval= list()
         for p in localPos:
             p3d= geom.Pos3d(p.x,p.y,0.0)
-            contourVertices.append(refSys.getPosGlobal(p3d))
-        retval.blockFromPoints(contourVertices,labels)
+            retval.append(refSys.getPosGlobal(p3d))        
         return retval
-        
+
     def getBlocks(self, refSys= geom.Ref3d3d(), lbls= None):
         ''' Return the blocks that define the gusset for the
             diagonal argument.
@@ -334,16 +320,16 @@ class BoltedPlateBase(object):
         labels= ['bolted_plate']
         if(lbls):
             labels.extend(lbls)
-        boltPositions= self.boltArray.getPositions(refSys)
+        # Get the plate contour
+        contourVertices= self.getContour(refSys)
+        blk=  retval.blockFromPoints(contourVertices,labels, thickness= self.thickness, matId= self.steelType.name)
         # Get the bolt centers for the new plate.
+        boltPositions= self.boltArray.getPositions(refSys)
         for pos in boltPositions:
             posLabels= labels+ ['hole_centers']
             retval.appendPoint(-1, pos.x, pos.y, pos.z, labels= posLabels)
         # Get the hole blocks for the new plate
         holeLabels= labels+['holes']
-        holes= self.boltArray.getHoleBlocks(refSys,holeLabels)
-        retval.extend(holes)
-        # Get the plate contour
-        contour= self.getContourBlocks(refSys, labels)
-        retval.extend(contour)
+        blk.holes= self.boltArray.getHoleBlocks(refSys,holeLabels)
+        retval.extend(blk.holes)
         return retval
