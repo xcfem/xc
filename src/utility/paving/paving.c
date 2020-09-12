@@ -13,9 +13,26 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
+#include "paving.h"
 #include "f2c.h"
 #include <stdio.h>
 
+int int_min(int a, int b)
+  { return (((a)<(b))?(a):(b)); }
+
+int int_max(int a, int b)
+  { return (((a)>(b))?(a):(b)); }
+
+double dbl_min(double a, double b)
+  { return fmin(a,b); }
+
+double dbl_max(double a, double b)
+  { return fmax(a,b); }
+
+double dbl_abs(double a)
+  { return fabs(a); }
+
+  
   /* Nomenclature:
      L -> line
      K -> element
@@ -85,33 +102,12 @@ static integer c__1 = 1;
     static integer lcorn[10], ncorn, kloop, nloop[20], itype[1024], iuppr;
     extern /* Subroutine */ int close4_(integer *, integer *, integer *, 
 	    integer *, integer *, integer *, integer *, integer *, integer *, 
-	    integer *, integer *, integer *, logical *), close6_(integer *, 
-	    integer *, integer *, integer *, real *, real *, integer *, 
-	    integer *, integer *, integer *, real *, real *, integer *, 
-	    integer *, integer *, integer *, integer *, integer *, integer *, 
-	    integer *, logical *, real *, real *, real *, real *, char *, 
-	    integer *, integer *, integer *, integer *, integer *, logical *, 
-	    logical *, logical *, logical *, logical *, real *, real *, 
-	    integer *, integer *, integer *, real *, integer *, integer *, 
-	    integer *, integer *, logical *, real *, real *, real *, real *, 
-	    integer *, real *, real *, real *, ftnlen);
+	    integer *, integer *, integer *, logical *);
     static integer nextn1[20];
     static logical adjted;
     extern /* Subroutine */ int mesage_(char *, ftnlen), getime_(real *), 
 	    ringbl_();
     static integer kkkold;
-    extern /* Subroutine */ int addrow_(integer *, integer *, integer *, 
-	    integer *, integer *, integer *, real *, real *, real *, integer *
-	    , integer *, integer *, integer *, real *, real *, integer *, 
-	    integer *, integer *, integer *, integer *, integer *, integer *, 
-	    integer *, integer *, integer *, integer *, integer *, real *, 
-	    real *, real *, real *, real *, real *, char *, integer *, 
-	    integer *, integer *, integer *, integer *, integer *, integer *, 
-	    integer *, logical *, logical *, integer *, logical *, logical *, 
-	    logical *, logical *, real *, real *, integer *, integer *, 
-	    integer *, real *, integer *, integer *, integer *, integer *, 
-	    logical *, real *, real *, real *, real *, integer *, real *, 
-	    real *, real *, ftnlen);
     extern logical cpubrk_(logical *);
     extern /* Subroutine */ int periml_(integer *, integer *, integer *, 
 	    integer *, integer *, real *, real *, real *, integer *, integer *
@@ -407,22 +403,22 @@ static integer c__1 = 1;
 	    node1 = lperim[j];
 /* Computing MIN */
 	    r__1 = xn[node1];
-	    xmin = dmin(r__1,xmin);
+	    xmin = dbl_min(r__1,xmin);
 /* Computing MAX */
 	    r__1 = xn[node1];
-	    xmax = dmax(r__1,xmax);
+	    xmax = dbl_max(r__1,xmax);
 /* Computing MIN */
 	    r__1 = yn[node1];
-	    ymin = dmin(r__1,ymin);
+	    ymin = dbl_min(r__1,ymin);
 /* Computing MAX */
 	    r__1 = yn[node1];
-	    ymax = dmax(r__1,ymax);
+	    ymax = dbl_max(r__1,ymax);
 /* Computing MIN */
 	    r__1 = zn[node1];
-	    zmin = dmin(r__1,zmin);
+	    zmin = dbl_min(r__1,zmin);
 /* Computing MAX */
 	    r__1 = zn[node1];
-	    zmax = dmax(r__1,zmax);
+	    zmax = dbl_max(r__1,zmax);
 /* L170: */
 	}
 /* L180: */
@@ -533,14 +529,14 @@ L210:
 /*  CHECK TO SEE IF WE ARE DONE WITH ONLY 6 NODES LEFT */
     } else if (nloop[0] == 6 && linkpr[kperim * 3 + 2] == 0) {
 	close6_(mxnd, &c__10, mln, &nuid[1], &xn[1], &yn[1], &lxk[5], &kxl[3],
-		 &nxl[3], &lxn[5], &angle[1], &bnsize[3], &lnodes[
-		lnodes_offset], &n1, nloop, &kkkold, &lllold, &nnnold, navail,
-		 iavail, &done, &xmin, &xmax, &ymin, &ymax, dev1, lll, kkk, 
-		nnn, lcorn, &ncorn, graph, video, sizeit, noroom, err, &xnold[
-		1], &ynold[1], &nxkold[nxkold_offset], &linkeg[3], &listeg[1],
-		 &bmesur[1], mlink, npnold, npeold, nnxk, remesh, rexmin, 
-		rexmax, reymin, reymax, idivis, sizmin, emax, emin, (ftnlen)3)
-		;
+		 &nxl[3], &lxn[5], &angle[1], &bnsize[3],
+		&lnodes[lnodes_offset], &n1, nloop, &kkkold, &lllold, &nnnold,
+		navail, iavail, &xmin, &xmax, &ymin, &ymax, dev1, lll,
+		kkk, nnn, lcorn, &ncorn, graph, video, sizeit, noroom, err,
+		&xnold[1], &ynold[1], &nxkold[nxkold_offset], &linkeg[3],
+		&listeg[1], &bmesur[1], mlink, npnold, npeold, nnxk,
+		rexmin, rexmax, reymin, reymax, idivis, sizmin, emax, emin,
+		(ftnlen)3);
 	if (*noroom || *err) {
 	    goto L310;
 	}
@@ -563,7 +559,7 @@ L210:
 	    ymin, &ymax, &zmin, &zmax, dev1, lll, kkk, nnn, &nnn2, &nadj1, &
 	    nadj2, icomb, &kloop, graph, video, kreg, &done, sizeit, noroom, 
 	    err, &xnold[1], &ynold[1], &nxkold[nxkold_offset], &linkeg[3], &
-	    listeg[1], &bmesur[1], mlink, npnold, npeold, nnxk, remesh, 
+	    listeg[1], &bmesur[1], mlink, npnold, npeold, nnxk,
 	    rexmin, rexmax, reymin, reymax, idivis, sizmin, emax, emin, (
 	    ftnlen)3);
     if (*noroom || *err) {
@@ -722,7 +718,7 @@ L240:
 	rplotl_(mxnd, &xn[1], &yn[1], &zn[1], &nxl[3], &xmin1, &xmax1, &ymin1,
 		 &ymax1, &zmin1, &zmax1, lll, dev1, kreg, (ftnlen)3);
     }
-    iuppr = min(*lll,*mxnd);
+    iuppr = int_min(*lll,*mxnd);
     i__1 = iuppr;
     for (i__ = 1; i__ <= i__1; ++i__) {
 	for (j = 1; j <= 4; ++j) {
@@ -733,7 +729,7 @@ L240:
     }
 /* Computing MIN */
     i__1 = *lll, i__2 = *mxnd * 3;
-    iuppr = min(i__1,i__2);
+    iuppr = int_min(i__1,i__2);
     i__1 = iuppr;
     for (i__ = 1; i__ <= i__1; ++i__) {
 	for (j = 1; j <= 2; ++j) {

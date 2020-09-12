@@ -13,7 +13,8 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-#include "f2c.h"
+//#include "f2c.h"
+#include "paving.h"
 
 /*    Copyright(C) 1999-2020 National Technology & Engineering Solutions */
 /*    of Sandia, LLC (NTESS).  Under the terms of Contract DE-NA0003525 with */
@@ -57,16 +58,16 @@ L100:
     if (inow != *node) {
 /* Computing MIN */
 	r__1 = *xmin, r__2 = xn[inow];
-	*xmin = dmin(r__1,r__2);
+	*xmin = dbl_min(r__1,r__2);
 /* Computing MIN */
 	r__1 = *ymin, r__2 = yn[inow];
-	*ymin = dmin(r__1,r__2);
+	*ymin = dbl_min(r__1,r__2);
 /* Computing MAX */
 	r__1 = *xmax, r__2 = xn[inow];
-	*xmax = dmax(r__1,r__2);
+	*xmax = dbl_max(r__1,r__2);
 /* Computing MAX */
 	r__1 = *ymax, r__2 = yn[inow];
-	*ymax = dmax(r__1,r__2);
+	*ymax = dbl_max(r__1,r__2);
 	++kount;
 	if (kount > *nloop) {
 	    mesage_("PROBLEMS IN FLMNMX WITH LOOP NOT CLOSING", (ftnlen)40);
@@ -88,16 +89,16 @@ L110:
 L120:
 /* Computing MIN */
     r__1 = *xmin, r__2 = xn[inow];
-    *xmin = dmin(r__1,r__2);
+    *xmin = dbl_min(r__1,r__2);
 /* Computing MIN */
     r__1 = *ymin, r__2 = yn[inow];
-    *ymin = dmin(r__1,r__2);
+    *ymin = dbl_min(r__1,r__2);
 /* Computing MAX */
     r__1 = *xmax, r__2 = xn[inow];
-    *xmax = dmax(r__1,r__2);
+    *xmax = dbl_max(r__1,r__2);
 /* Computing MAX */
     r__1 = *ymax, r__2 = yn[inow];
-    *ymax = dmax(r__1,r__2);
+    *ymax = dbl_max(r__1,r__2);
     ++kount;
     inow = lnodes[inow * lnodes_dim1 + 3];
     if (inow == linkpr[iperim * 3 + 1]) {

@@ -13,7 +13,8 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-#include "f2c.h"
+//#include "f2c.h"
+#include "paving.h"
 
 /*    Copyright(C) 1999-2020 National Technology & Engineering Solutions */
 /*    of Sandia, LLC (NTESS).  Under the terms of Contract DE-NA0003525 with */
@@ -24,13 +25,13 @@ extern "C" {
 	integer *nuid, real *xn, real *yn, integer *lxk, integer *kxl, 
 	integer *nxl, integer *lxn, real *angle, real *bnsize, integer *
 	lnodes, integer *node, integer *nloop, integer *kkkold, integer *
-	lllold, integer *nnnold, integer *navail, integer *iavail, real *done,
+	lllold, integer *nnnold, integer *navail, integer *iavail, 
 	 real *xmin, real *xmax, real *ymin, real *ymax, char *dev1, integer *
 	lll, integer *kkk, integer *nnn, integer *lcorn, integer *ncorn, 
 	logical *graph, logical *video, logical *sizeit, logical *noroom, 
 	logical *err, real *xnold, real *ynold, integer *nxkold, integer *
 	linkeg, integer *listeg, real *bmesur, integer *mlink, integer *
-	npnold, integer *npeold, integer *nnxk, real *remesh, real *rexmin, 
+	npnold, integer *npeold, integer *nnxk, real *rexmin, 
 	real *rexmax, real *reymin, real *reymax, integer *idivis, real *
 	sizmin, real *emax, real *emin, ftnlen dev1_len)
 {
@@ -47,26 +48,12 @@ extern "C" {
     static real xnew, ynew, dist1, dist2, dist3, xnew1, xnew2, xnew3, ynew1, 
 	    ynew2, ynew3;
     static integer inode;
-    extern /* Subroutine */ int add1cn_(integer *, integer *, real *, real *, 
-	    integer *, integer *, integer *, integer *, integer *, real *, 
-	    real *, integer *, integer *, integer *, integer *, integer *, 
-	    integer *, integer *, real *, real *, integer *, integer *, 
-	    integer *, logical *, logical *, logical *, logical *, logical *, 
-	    real *, real *, integer *, integer *, integer *, real *, integer *
-	    , integer *, integer *, integer *, real *, real *, real *, real *,
-	     real *, integer *, real *, real *, real *), add2el_(integer *, 
+    extern /* Subroutine */ int add2el_(integer *, 
 	    integer *, real *, real *, integer *, integer *, integer *, 
 	    integer *, integer *, real *, integer *, integer *, integer *, 
 	    integer *, integer *, integer *, integer *, integer *, integer *, 
 	    integer *, integer *, logical *, logical *, logical *, logical *),
-	     add2cn_(integer *, integer *, real *, real *, integer *, integer 
-	    *, integer *, integer *, integer *, real *, real *, integer *, 
-	    integer *, integer *, integer *, integer *, integer *, integer *, 
-	    integer *, integer *, integer *, logical *, logical *, logical *, 
-	    logical *, logical *, real *, real *, integer *, integer *, 
-	    integer *, real *, integer *, integer *, integer *, integer *, 
-	    real *, real *, real *, real *, real *, integer *, real *, real *,
-	     real *), mesage_(char *, ftnlen), marksm_(integer *, integer *, 
+	    mesage_(char *, ftnlen), marksm_(integer *, integer *, 
 	    integer *, integer *, integer *, integer *, integer *, integer *, 
 	    logical *), cntcrn_(integer *, integer *, integer *, integer *, 
 	    integer *, integer *, integer *, integer *, logical *);
@@ -133,8 +120,8 @@ L100:
 	i3 = lnodes[lcorn[3] * lnodes_dim1 + 7];
 /*  HANDLE A 4-1-1 TRIANGLE */
 /* Computing MAX */
-	i__1 = max(i1,i2);
-	if (max(i__1,i3) == 4) {
+	i__1 = int_max(i1,i2);
+	if (int_max(i__1,i3) == 4) {
 	    if (i1 == 4) {
 		xnew = ((xn[lcorn[1]] + xn[lcorn[2]]) * (float).5 + xn[lcorn[
 			3]]) * (float).5;
@@ -146,7 +133,7 @@ L100:
 			&xnew, &ynew, &lcorn[1], iavail, navail, graph, video,
 			 sizeit, noroom, err, &xnold[1], &ynold[1], &nxkold[
 			nxkold_offset], &linkeg[3], &listeg[1], &bmesur[1], 
-			mlink, npnold, npeold, nnxk, remesh, rexmin, rexmax, 
+			mlink, npnold, npeold, nnxk, rexmin, rexmax, 
 			reymin, reymax, idivis, sizmin, emax, emin);
 		if (*noroom || *err) {
 		    goto L110;
@@ -162,7 +149,7 @@ L100:
 			&xnew, &ynew, &lcorn[2], iavail, navail, graph, video,
 			 sizeit, noroom, err, &xnold[1], &ynold[1], &nxkold[
 			nxkold_offset], &linkeg[3], &listeg[1], &bmesur[1], 
-			mlink, npnold, npeold, nnxk, remesh, rexmin, rexmax, 
+			mlink, npnold, npeold, nnxk, rexmin, rexmax, 
 			reymin, reymax, idivis, sizmin, emax, emin);
 		if (*noroom || *err) {
 		    goto L110;
@@ -178,7 +165,7 @@ L100:
 			&xnew, &ynew, &lcorn[3], iavail, navail, graph, video,
 			 sizeit, noroom, err, &xnold[1], &ynold[1], &nxkold[
 			nxkold_offset], &linkeg[3], &listeg[1], &bmesur[1], 
-			mlink, npnold, npeold, nnxk, remesh, rexmin, rexmax, 
+			mlink, npnold, npeold, nnxk, rexmin, rexmax, 
 			reymin, reymax, idivis, sizmin, emax, emin);
 		if (*noroom || *err) {
 		    goto L110;
@@ -187,8 +174,8 @@ L100:
 /*  HANDLE A 3-2-1 TRIANGLE */
 	} else /* if(complicated condition) */ {
 /* Computing MAX */
-	    i__1 = max(i1,i2);
-	    if (max(i__1,i3) == 3) {
+	    i__1 = int_max(i1,i2);
+	    if (int_max(i__1,i3) == 3) {
 		if (i1 == 1) {
 		    add2el_(mxnd, mln, &xn[1], &yn[1], &nuid[1], &lxk[5], &
 			    kxl[3], &nxl[3], &lxn[5], &angle[1], &lnodes[
@@ -242,7 +229,7 @@ L100:
 			&xnew, &ynew, &lcorn[1], iavail, navail, graph, video,
 			 sizeit, noroom, err, &xnold[1], &ynold[1], &nxkold[
 			nxkold_offset], &linkeg[3], &listeg[1], &bmesur[1], 
-			mlink, npnold, npeold, nnxk, remesh, rexmin, rexmax, 
+			mlink, npnold, npeold, nnxk, rexmin, rexmax, 
 			reymin, reymax, idivis, sizmin, emax, emin);
 		if (*noroom || *err) {
 		    goto L110;
@@ -257,8 +244,8 @@ L100:
 	i4 = lnodes[lcorn[4] * lnodes_dim1 + 7];
 /*  HANDLE A 3-1-1-1 RECTANGLE */
 /* Computing MAX */
-	i__1 = max(i1,i2), i__1 = max(i__1,i3);
-	if (max(i__1,i4) == 3) {
+	i__1 = int_max(i1,i2), i__1 = int_max(i__1,i3);
+	if (int_max(i__1,i4) == 3) {
 	    if (i1 == 3) {
 		add2cn_(mxnd, mln, &xn[1], &yn[1], &nuid[1], &lxk[5], &kxl[3],
 			 &nxl[3], &lxn[5], &angle[1], &bnsize[3], &lnodes[
@@ -266,7 +253,7 @@ L100:
 			&lcorn[1], iavail, navail, graph, video, sizeit, 
 			noroom, err, &xnold[1], &ynold[1], &nxkold[
 			nxkold_offset], &linkeg[3], &listeg[1], &bmesur[1], 
-			mlink, npnold, npeold, nnxk, remesh, rexmin, rexmax, 
+			mlink, npnold, npeold, nnxk, rexmin, rexmax, 
 			reymin, reymax, idivis, sizmin, emax, emin);
 		if (*noroom || *err) {
 		    goto L110;
@@ -278,7 +265,7 @@ L100:
 			&lcorn[2], iavail, navail, graph, video, sizeit, 
 			noroom, err, &xnold[1], &ynold[1], &nxkold[
 			nxkold_offset], &linkeg[3], &listeg[1], &bmesur[1], 
-			mlink, npnold, npeold, nnxk, remesh, rexmin, rexmax, 
+			mlink, npnold, npeold, nnxk, rexmin, rexmax, 
 			reymin, reymax, idivis, sizmin, emax, emin);
 		if (*noroom || *err) {
 		    goto L110;
@@ -290,7 +277,7 @@ L100:
 			&lcorn[3], iavail, navail, graph, video, sizeit, 
 			noroom, err, &xnold[1], &ynold[1], &nxkold[
 			nxkold_offset], &linkeg[3], &listeg[1], &bmesur[1], 
-			mlink, npnold, npeold, nnxk, remesh, rexmin, rexmax, 
+			mlink, npnold, npeold, nnxk, rexmin, rexmax, 
 			reymin, reymax, idivis, sizmin, emax, emin);
 		if (*noroom || *err) {
 		    goto L110;
@@ -302,7 +289,7 @@ L100:
 			&lcorn[4], iavail, navail, graph, video, sizeit, 
 			noroom, err, &xnold[1], &ynold[1], &nxkold[
 			nxkold_offset], &linkeg[3], &listeg[1], &bmesur[1], 
-			mlink, npnold, npeold, nnxk, remesh, rexmin, rexmax, 
+			mlink, npnold, npeold, nnxk, rexmin, rexmax, 
 			reymin, reymax, idivis, sizmin, emax, emin);
 		if (*noroom || *err) {
 		    goto L110;
@@ -311,9 +298,9 @@ L100:
 /*  HANDLE A 2-2-1-1 RECTANGLE */
 	} else /* if(complicated condition) */ {
 /* Computing MAX */
-	    i__1 = i1 + i2, i__2 = i2 + i3, i__1 = max(i__1,i__2), i__2 = i3 
-		    + i4, i__1 = max(i__1,i__2), i__2 = i4 + i1;
-	    if (max(i__1,i__2) == 4) {
+	    i__1 = i1 + i2, i__2 = i2 + i3, i__1 = int_max(i__1,i__2), i__2 = i3 
+		    + i4, i__1 = int_max(i__1,i__2), i__2 = i4 + i1;
+	    if (int_max(i__1,i__2) == 4) {
 		if (i1 + i2 == 4) {
 		    xnew = (xn[lnodes[lcorn[1] * lnodes_dim1 + 3]] + xn[
 			    lnodes[lcorn[2] * lnodes_dim1 + 3]] + xn[lcorn[3]]
@@ -330,7 +317,7 @@ L100:
 			    navail, graph, video, sizeit, noroom, err, &xnold[
 			    1], &ynold[1], &nxkold[nxkold_offset], &linkeg[3],
 			     &listeg[1], &bmesur[1], mlink, npnold, npeold, 
-			    nnxk, remesh, rexmin, rexmax, reymin, reymax, 
+			    nnxk, rexmin, rexmax, reymin, reymax, 
 			    idivis, sizmin, emax, emin);
 		    if (*noroom || *err) {
 			goto L110;
@@ -351,7 +338,7 @@ L100:
 			    navail, graph, video, sizeit, noroom, err, &xnold[
 			    1], &ynold[1], &nxkold[nxkold_offset], &linkeg[3],
 			     &listeg[1], &bmesur[1], mlink, npnold, npeold, 
-			    nnxk, remesh, rexmin, rexmax, reymin, reymax, 
+			    nnxk, rexmin, rexmax, reymin, reymax, 
 			    idivis, sizmin, emax, emin);
 		    if (*noroom || *err) {
 			goto L110;
@@ -372,7 +359,7 @@ L100:
 			    navail, graph, video, sizeit, noroom, err, &xnold[
 			    1], &ynold[1], &nxkold[nxkold_offset], &linkeg[3],
 			     &listeg[1], &bmesur[1], mlink, npnold, npeold, 
-			    nnxk, remesh, rexmin, rexmax, reymin, reymax, 
+			    nnxk, rexmin, rexmax, reymin, reymax, 
 			    idivis, sizmin, emax, emin);
 		    if (*noroom || *err) {
 			goto L110;
@@ -393,7 +380,7 @@ L100:
 			    navail, graph, video, sizeit, noroom, err, &xnold[
 			    1], &ynold[1], &nxkold[nxkold_offset], &linkeg[3],
 			     &listeg[1], &bmesur[1], mlink, npnold, npeold, 
-			    nnxk, remesh, rexmin, rexmax, reymin, reymax, 
+			    nnxk, rexmin, rexmax, reymin, reymax, 
 			    idivis, sizmin, emax, emin);
 		    if (*noroom || *err) {
 			goto L110;
@@ -429,7 +416,7 @@ L100:
 	i1 = lnodes[lcorn[1] * lnodes_dim1 + 7];
 	i2 = lnodes[lcorn[2] * lnodes_dim1 + 7];
 /*  HANDLE A 5-1 SEMICIRCLE */
-	if (max(i1,i2) == 5) {
+	if (int_max(i1,i2) == 5) {
 	    if (i1 == 1) {
 		add2el_(mxnd, mln, &xn[1], &yn[1], &nuid[1], &lxk[5], &kxl[3],
 			 &nxl[3], &lxn[5], &angle[1], &lnodes[lnodes_offset], 
@@ -450,7 +437,7 @@ L100:
 		}
 	    }
 /*  HANDLE A 4-2 SEMICIRCLE */
-	} else if (max(i1,i2) == 4) {
+	} else if (int_max(i1,i2) == 4) {
 	    if (i1 == 2) {
 		add2el_(mxnd, mln, &xn[1], &yn[1], &nuid[1], &lxk[5], &kxl[3],
 			 &nxl[3], &lxn[5], &angle[1], &lnodes[lnodes_offset], 
@@ -486,7 +473,7 @@ L100:
 /*     &         ANGLE, BNSIZE, LNODES, NNN, KKK, LLL, NNNOLD, LLLOLD, */
 /*     &         NLOOP, LCORN(1), IAVAIL, NAVAIL, GRAPH, VIDEO, SIZEIT, */
 /*     &            NOROOM, ERR, XNOLD, YNOLD, NXKOLD, LINKEG, LISTEG, */
-/*     &            BMESUR, MLINK, NPNOLD, NPEOLD, NNXK, REMESH, REXMIN, */
+/*     &            BMESUR, MLINK, NPNOLD, NPEOLD, NNXK, REXMIN, */
 /*     &            REXMAX, REYMIN, REYMAX, IDIVIS, SIZMIN, EMAX, EMIN) */
 /*            IF ((NOROOM) .OR. (ERR)) GOTO 110 */
 	}

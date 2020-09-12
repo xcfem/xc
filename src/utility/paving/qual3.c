@@ -13,7 +13,8 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-#include "f2c.h"
+//#include "f2c.h"
+#include "paving.h"
 
 /*    Copyright(C) 1999-2020 National Technology & Engineering Solutions */
 /*    of Sandia, LLC (NTESS).  Under the terms of Contract DE-NA0003525 with */
@@ -64,8 +65,8 @@ extern "C" {
     }
 /*  SEE IF A TRIANGLE INTERPRETATION IS POSSIBLE WITH THESE INTERVALS */
 /* Computing MAX */
-    i__1 = max(ltest[1],ltest[2]);
-    mmax = max(i__1,ltest[3]);
+    i__1 = int_max(ltest[1],ltest[2]);
+    mmax = int_max(i__1,ltest[3]);
     if (ltest[1] == mmax) {
 	ibig = ltest[1];
 	isum = ltest[2] + ltest[3];
@@ -99,8 +100,8 @@ extern "C" {
 	*qual *= (float)1.3;
     }
 /* Computing MIN */
-    i__1 = min(ltest[1],ltest[2]);
-    mmin = min(i__1,ltest[3]);
+    i__1 = int_min(ltest[1],ltest[2]);
+    mmin = int_min(i__1,ltest[3]);
     if (mmin == 1) {
 	*qual *= (float)1.3;
     }

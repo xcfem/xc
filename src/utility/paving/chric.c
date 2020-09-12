@@ -13,7 +13,8 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-#include "f2c.h"
+//#include "f2c.h"
+#include "paving.h"
 
 /* Copyright(C) 1999-2020 National Technology & Engineering Solutions */
 /* of Sandia, LLC (NTESS).  Under the terms of Contract DE-NA0003525 with */

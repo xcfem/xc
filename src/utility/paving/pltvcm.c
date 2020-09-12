@@ -13,7 +13,8 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-#include "f2c.h"
+//#include "f2c.h"
+#include "paving.h"
 
 /* Common Block Declarations */
 
@@ -119,7 +120,7 @@ L2180:
     }
 /* Computing MIN */
     i__1 = *n - j;
-    jn = min(i__1,32);
+    jn = int_min(i__1,32);
     ++km;
     j1 = j;
     j += jn;

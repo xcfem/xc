@@ -13,6 +13,7 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
+#include "paving.h"
 #include "f2c.h"
 
 /* Table of constant values */

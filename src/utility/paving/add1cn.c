@@ -13,7 +13,8 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-#include "f2c.h"
+//#include "f2c.h"
+#include "paving.h"
 
 /* Table of constant values */
 
@@ -32,7 +33,7 @@ static integer c__1 = 1;
 	 logical *graph, logical *video, logical *sizeit, logical *noroom, 
 	logical *err, real *xnold, real *ynold, integer *nxkold, integer *
 	linkeg, integer *listeg, real *bmesur, integer *mlink, integer *
-	npnold, integer *npeold, integer *nnxk, real *remesh, real *rexmin, 
+	npnold, integer *npeold, integer *nnxk, real *rexmin, 
 	real *rexmax, real *reymin, real *reymax, integer *idivis, real *
 	sizmin, real *emax, real *emin)
 {
@@ -46,19 +47,7 @@ static integer c__1 = 1;
     extern /* Subroutine */ int d2node_(integer *, real *, real *, integer *, 
 	    integer *), close4_(integer *, integer *, integer *, integer *, 
 	    integer *, integer *, integer *, integer *, integer *, integer *, 
-	    integer *, integer *, logical *), addnod_(integer *, integer *, 
-	    real *, real *, integer *, integer *, integer *, integer *, real *
-	    , real *, integer *, real *, real *, real *, integer *, integer *,
-	     integer *, integer *, integer *, integer *, logical *, integer *,
-	     logical *, logical *, logical *, real *, real *, integer *, 
-	    integer *, integer *, real *, integer *, integer *, integer *, 
-	    integer *, real *, real *, real *, real *, real *, integer *, 
-	    real *, real *, real *), connod_(integer *, integer *, real *, 
-	    real *, integer *, integer *, integer *, integer *, integer *, 
-	    real *, integer *, integer *, integer *, integer *, integer *, 
-	    integer *, integer *, integer *, integer *, integer *, integer *, 
-	    integer *, integer *, integer *, logical *, logical *, logical *, 
-	    logical *), snapit_(integer *), sflush_();
+				integer *, integer *, logical *);
 
 /* *********************************************************************** */
 /*  SUBROUTINE ADD1CN = ADDS ONE CENTER NODE IN THE MIDDLE OF 6 CLOSING */
@@ -98,7 +87,7 @@ static integer c__1 = 1;
 	    angle[1], &bnsize[3], &lnodes[lnodes_offset], xnew, ynew, &zero, 
 	    nnn, kkk, lll, &i6, i1, &i2, &ambig, &idum, sizeit, err, noroom, &
 	    xnold[1], &ynold[1], &nxkold[nxkold_offset], &linkeg[3], &listeg[
-	    1], &bmesur[1], mlink, npnold, npeold, nnxk, remesh, rexmin, 
+	    1], &bmesur[1], mlink, npnold, npeold, nnxk, rexmin, 
 	    rexmax, reymin, reymax, idivis, sizmin, emax, emin);
     if (*err || *noroom) {
 	goto L100;

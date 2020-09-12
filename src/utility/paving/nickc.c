@@ -13,7 +13,8 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-#include "f2c.h"
+//#include "f2c.h"
+#include "paving.h"
 
 /*    Copyright(C) 1999-2020 National Technology & Engineering Solutions */
 /*    of Sandia, LLC (NTESS).  Under the terms of Contract DE-NA0003525 with */
@@ -42,7 +43,7 @@ doublereal nickc_(real *angle, integer *lxn)
     pid2 = atan2((float)0., (float)-1.) * (float).5;
 /* Computing MAX */
     r__1 = (float)0., r__2 = *angle - pid2;
-    adiff = dmax(r__1,r__2);
+    adiff = dbl_max(r__1,r__2);
 /*  IF THE ANGLE HAS 4 LINES ATTACHED */
 /*  A REGULAR NODE WOULD BE FORMED - PENALIZE IT LIGHTLY */
 /*  USE THIS SAME PENALTY FOR BOUNDARY NODES */

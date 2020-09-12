@@ -13,7 +13,8 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-#include "f2c.h"
+//#include "f2c.h"
+#include "paving.h"
 
 /*    Copyright(C) 1999-2020 National Technology & Engineering Solutions */
 /*    of Sandia, LLC (NTESS).  Under the terms of Contract DE-NA0003525 with */
@@ -27,7 +28,7 @@ extern "C" {
 	integer *n2, integer *nloop, logical *sizeit, logical *err, logical *
 	noroom, real *xnold, real *ynold, integer *nxkold, integer *linkeg, 
 	integer *listeg, real *bmesur, integer *mlink, integer *npnold, 
-	integer *npeold, integer *nnxk, real *remesh, real *rexmin, real *
+	integer *npeold, integer *nnxk, real *rexmin, real *
 	rexmax, real *reymin, real *reymax, integer *idivis, real *sizmin, 
 	real *emax, real *emin)
 {
@@ -39,11 +40,7 @@ extern "C" {
     static real size1, size2;
     extern /* Subroutine */ int addkxl_(integer *, integer *, integer *, 
 	    integer *), marksm_(integer *, integer *, integer *, integer *, 
-	    integer *, integer *, integer *, integer *, logical *), getsiz_(
-	    real *, real *, integer *, integer *, integer *, real *, integer *
-	    , integer *, integer *, integer *, real *, real *, real *, real *,
-	     real *, integer *, real *, real *, real *, real *, real *, real *
-	    );
+	    integer *, integer *, integer *, integer *, logical *);
     static real siznew;
 
 /* *********************************************************************** */
@@ -96,13 +93,13 @@ extern "C" {
 /* **               LOCATION SIZE AND PROJECTING FROM LOCATION SIZE. */
 	    getsiz_(&xnold[1], &ynold[1], &nxkold[nxkold_offset], &linkeg[3], 
 		    &listeg[1], &bmesur[1], mlink, npnold, npeold, nnxk, 
-		    remesh, rexmin, rexmax, reymin, reymax, idivis, sizmin, 
+		    rexmin, rexmax, reymin, reymax, idivis, sizmin, 
 		    emax, emin, x1, y1, &size1);
 	    getsiz_(&xnold[1], &ynold[1], &nxkold[nxkold_offset], &linkeg[3], 
 		    &listeg[1], &bmesur[1], mlink, npnold, npeold, nnxk, 
-		    remesh, rexmin, rexmax, reymin, reymax, idivis, sizmin, 
+		    rexmin, rexmax, reymin, reymax, idivis, sizmin, 
 		    emax, emin, &xn[*n1], &yn[*n1], &size2);
-	    siznew = dmin(size1,size2);
+	    siznew = dbl_min(size1,size2);
 	} else {
 	    siznew = bnsize[(*n1 << 1) + 1];
 	}
@@ -120,7 +117,7 @@ extern "C" {
 	if (*sizeit) {
 	    getsiz_(&xnold[1], &ynold[1], &nxkold[nxkold_offset], &linkeg[3], 
 		    &listeg[1], &bmesur[1], mlink, npnold, npeold, nnxk, 
-		    remesh, rexmin, rexmax, reymin, reymax, idivis, sizmin, 
+		    rexmin, rexmax, reymin, reymax, idivis, sizmin, 
 		    emax, emin, x2, y2, &siznew);
 	} else {
 	    siznew = bnsize[(*n2 << 1) + 1];

@@ -13,7 +13,8 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-#include "f2c.h"
+//#include "f2c.h"
+#include "paving.h"
 
 /* Table of constant values */
 
@@ -28,7 +29,7 @@ static integer c__2 = 2;
 /* Subroutine */ int pltfnt_(char *filenm, ftnlen filenm_len)
 {
     /* System generated locals */
-    address a__1[2];
+    char * a__1[2];
     integer i__1[2];
 
     /* Builtin functions */

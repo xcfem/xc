@@ -13,7 +13,8 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-#include "f2c.h"
+//#include "f2c.h"
+#include "paving.h"
 
 /* Common Block Declarations */
 
@@ -137,8 +138,8 @@ static integer c__0 = 0;
 	dshdrn = pltsty_1.savlen;
 /* Computing MAX */
 	r__1 = vector[4] * (float).02;
-	dshlen = dmax(r__1,(float).002);
-	dshlen = dmin(dshlen,(float).005);
+	dshlen = dbl_max(r__1,(float).002);
+	dshlen = dbl_min(dshlen,(float).005);
 	dshdx = dx * (float).5 * (dshlen / linlen);
 	dshdy = dy * (float).5 * (dshlen / linlen);
 	drwlen = linlen - dshlen + dshdrn;
@@ -163,7 +164,7 @@ static integer c__0 = 0;
 /* Computing MAX */
 	    r__1 = drwlen / dshlen;
 	    i__1 = i_nint(&r__1);
-	    numdsh = max(i__1,1);
+	    numdsh = int_max(i__1,1);
 	    i__1 = numdsh - 1;
 	    for (i__ = 1; i__ <= i__1; ++i__) {
 		++idshno;

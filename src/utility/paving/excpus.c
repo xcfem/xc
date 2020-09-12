@@ -18,7 +18,8 @@
  *
  */
 
-#include "f2c.h"
+//#include "f2c.h"
+#include "paving.h"
 
 #include <sys/resource.h>
 #include <sys/time.h>

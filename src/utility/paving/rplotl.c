@@ -13,6 +13,7 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
+#include "paving.h"
 #include "f2c.h"
 
 /* Table of constant values */
@@ -63,11 +64,10 @@ static integer c__10001 = 10001;
     extern /* Subroutine */ int mpd2vc_(integer *, real *, real *, real *, 
 	    real *), mport2_(real *, real *, real *, real *);
     static logical figure;
-    extern /* Subroutine */ int vdescp_(integer *, integer *, integer *), 
-	    getdum_(integer *, char *, integer *, ftnlen), pltbgn_(), vdiqes_(
-	    integer *, integer *), pltfrm_(integer *), pltflu_(), mpview_(
-	    real *, real *, real *, real *), pltxth_(real *, real *, char *, 
-	    ftnlen);
+    extern /* Subroutine */ int getdum_(integer *, char *, integer *, ftnlen),
+            pltbgn_(), vdiqes_(integer *, integer *), pltfrm_(integer *),
+            pltflu_(), mpview_(real *, real *, real *, real *),
+            pltxth_(real *, real *, char *, ftnlen);
 
     /* Fortran I/O blocks */
     static cilist io___24 = { 0, 0, 0, fmt_10000, 0 };
@@ -96,7 +96,7 @@ static integer c__10001 = 10001;
 	if (kaval2 != 1) {
 	    goto L110;
 	}
-	vdescp_(&c__10002, &c__0, &c__0);
+	vdescp_(&c__10002, &c__0, (real *)(&c__0));
     }
 /*  OPEN A FIGURE FILE IF NEEDED */
     if (figure) {
@@ -202,7 +202,7 @@ static integer c__10001 = 10001;
     pltflu_();
     if (hard) {
 	pltflu_();
-	vdescp_(&c__10001, &c__0, &c__0);
+	vdescp_(&c__10001, &c__0, (real *)(&c__0));
     }
 L110:
     if (figure) {

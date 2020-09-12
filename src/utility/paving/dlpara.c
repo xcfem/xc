@@ -13,7 +13,8 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-#include "f2c.h"
+//#include "f2c.h"
+#include "paving.h"
 
 /*    Copyright(C) 1999-2020 National Technology & Engineering Solutions */
 /*    of Sandia, LLC (NTESS).  Under the terms of Contract DE-NA0003525 with */
@@ -40,7 +41,7 @@ extern "C" {
 /*     XM    = THE SLOPE OF A STRIGHT LINE BETWEEN POINT 1 AND 2 */
 /*     B     = THE Y INTERCEPT OF THE STRAIGHT LINE BETWEEN POINT 1 AND 2 */
 /* *********************************************************************** */
-    if ((r__1 = *x2 - *x1, dabs(r__1)) < (float)1e-6) {
+    if ((r__1 = *x2 - *x1, dbl_abs(r__1)) < (float)1e-6) {
 	*bad = TRUE_;
 	*b = *x1;
     } else {

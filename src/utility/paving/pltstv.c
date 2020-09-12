@@ -13,7 +13,8 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-#include "f2c.h"
+//#include "f2c.h"
+#include "paving.h"
 
 /* Common Block Declarations */
 
@@ -92,7 +93,7 @@ logical pltstv_(integer *indx, real *buff)
     static real zzzls = (float)-1.;
 
     /* System generated locals */
-    address a__1[3];
+    char * a__1[3];
     integer i__1[3];
     real r__1;
     logical ret_val;

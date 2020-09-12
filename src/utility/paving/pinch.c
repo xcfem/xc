@@ -13,8 +13,9 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-#include "f2c.h"
-
+//#include "f2c.h"
+#include "paving.h"
+  
 /* Common Block Declarations */
 
 struct {
@@ -201,18 +202,18 @@ L100:
 /* Computing MIN */
 	i__1 = lnodes[lcorn[1] * lnodes_dim1 + 7], i__2 = lnodes[lcorn[2] * 
 		lnodes_dim1 + 7];
-	idif = min(i__1,i__2);
+	idif = int_min(i__1,i__2);
     } else if (*ncorn == 3) {
 /* Computing MIN */
 	i__1 = lnodes[lcorn[1] * lnodes_dim1 + 7], i__2 = lnodes[lcorn[2] * 
-		lnodes_dim1 + 7], i__1 = min(i__1,i__2), i__2 = lnodes[lcorn[
+		lnodes_dim1 + 7], i__1 = int_min(i__1,i__2), i__2 = lnodes[lcorn[
 		3] * lnodes_dim1 + 7];
-	ilow = min(i__1,i__2);
+	ilow = int_min(i__1,i__2);
 /* Computing MAX */
 	i__1 = lnodes[lcorn[1] * lnodes_dim1 + 7], i__2 = lnodes[lcorn[2] * 
-		lnodes_dim1 + 7], i__1 = max(i__1,i__2), i__2 = lnodes[lcorn[
+		lnodes_dim1 + 7], i__1 = int_max(i__1,i__2), i__2 = lnodes[lcorn[
 		3] * lnodes_dim1 + 7];
-	ihigh = max(i__1,i__2);
+	ihigh = int_max(i__1,i__2);
     }
     if (*err) {
 	goto L210;
@@ -230,7 +231,7 @@ L100:
 /* Computing MIN */
 	i__1 = lnodes[lcorn[1] * lnodes_dim1 + 7], i__2 = lnodes[lcorn[2] * 
 		lnodes_dim1 + 7];
-	idif = min(i__1,i__2);
+	idif = int_min(i__1,i__2);
 	if (lnodes[lcorn[1] * lnodes_dim1 + 7] == lnodes[lcorn[2] * 
 		lnodes_dim1 + 7]) {
 	    toler1 = (float).5235988;

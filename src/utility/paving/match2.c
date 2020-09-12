@@ -13,7 +13,8 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-#include "f2c.h"
+//#include "f2c.h"
+#include "paving.h"
 
 /*    Copyright(C) 1999-2020 National Technology & Engineering Solutions */
 /*    of Sandia, LLC (NTESS).  Under the terms of Contract DE-NA0003525 with */
@@ -169,8 +170,8 @@ extern "C" {
 	    *j1 = *n0test;
 	    *j2 = *n1test;
 	    *kountl = *kount2 - 2;
-	} else if ((r__3 = (r__1 = acos(bdot), dabs(r__1)) - (r__2 = acos(
-		fdot), dabs(r__2)), dabs(r__3)) <= (float).3490659) {
+	} else if ((r__3 = (r__1 = acos(bdot), dbl_abs(r__1)) - (r__2 = acos(
+		fdot), dbl_abs(r__2)), dbl_abs(r__3)) <= (float).3490659) {
 	    if (df <= db || *kount2 <= 4) {
 		*j1 = *n2test;
 		*j2 = *n3test;

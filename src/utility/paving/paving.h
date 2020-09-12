@@ -30,6 +30,9 @@
 #ifndef PAVING_H
 #define PAVING_H
 
+#include <math.h>
+#include <stdlib.h>
+
 //#include "f2c.h"
 // f2c.h defines macros for max and min functions
 // and this causes a lot of problems with standard
@@ -39,7 +42,19 @@ typedef int integer;
 typedef float real;
 typedef int logical;
 typedef int ftnlen;
+typedef double doublereal;
 
 #include "paving.ih"
+
+#define TRUE_ (1)
+#define FALSE_ (0)
+
+int int_min(int a, int b);
+int int_max(int a, int b);
+
+double dbl_min(double a, double b);
+double dbl_max(double a, double b);
+
+double dbl_abs(double a);
 
 #endif

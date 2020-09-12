@@ -13,7 +13,8 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-#include "f2c.h"
+//#include "f2c.h"
+#include "paving.h"
 
 /*    Copyright(C) 1999-2020 National Technology & Engineering Solutions */
 /*    of Sandia, LLC (NTESS).  Under the terms of Contract DE-NA0003525 with */
@@ -32,7 +33,7 @@ extern "C" {
     real r__1, r__2, r__3, r__4;
 
     /* Builtin functions */
-    double sqrt(doublereal);
+    //double sqrt(doublereal);
 
     /* Local variables */
     static integer i__, l1, n0, l3, n2, l2, n4, n5, l4, l5, l6, ll, nl, kl1, 
@@ -71,7 +72,7 @@ extern "C" {
 
     /* Function Body */
     *err = FALSE_;
-    *nnnold = min(*nnn,*nnnold);
+    *nnnold = int_min(*nnn,*nnnold);
     if (lxn[(*n1 << 2) + 3] == 0) {
 	twolin = TRUE_;
     } else {
@@ -324,19 +325,19 @@ L180:
     if (bnsize[(*n1 << 1) + 1] > (float)0.) {
 /* Computing MIN */
 	r__1 = bnsize[(*n1 << 1) + 1] * bnsize[(*n1 << 1) + 2], r__2 = bnsize[
-		(n0 << 1) + 1] * bnsize[(n0 << 1) + 2], r__1 = min(r__1,r__2),
+		(n0 << 1) + 1] * bnsize[(n0 << 1) + 2], r__1 = fmin(r__1,r__2),
 		 r__2 = bnsize[(n2 << 1) + 1] * bnsize[(n2 << 1) + 2];
-	sizmin = dmin(r__1,r__2) / bnsize[(*n1 << 1) + 1];
+	sizmin = dbl_min(r__1,r__2) / bnsize[(*n1 << 1) + 1];
     } else {
 /* Computing MIN */
 	r__1 = bnsize[(*n1 << 1) + 1] * bnsize[(*n1 << 1) + 2], r__2 = bnsize[
-		(n0 << 1) + 1] * bnsize[(n0 << 1) + 2], r__1 = min(r__1,r__2),
+		(n0 << 1) + 1] * bnsize[(n0 << 1) + 2], r__1 = fmin(r__1,r__2),
 		 r__2 = bnsize[(n2 << 1) + 1] * bnsize[(n2 << 1) + 2];
 /* Computing 2nd power */
 	r__3 = xn[*n1] - xn[n2];
 /* Computing 2nd power */
 	r__4 = yn[*n1] - yn[n2];
-	sizmin = dmin(r__1,r__2) / sqrt(r__3 * r__3 + r__4 * r__4);
+	sizmin = dbl_min(r__1,r__2) / sqrt(r__3 * r__3 + r__4 * r__4);
     }
     if (*pwedge) {
 	bnsize[(*n6 << 1) + 2] = sizmin;

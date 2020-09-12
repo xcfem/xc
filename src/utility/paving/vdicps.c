@@ -13,6 +13,7 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
+#include "paving.h"
 #include "f2c.h"
 
 /* Common Block Declarations */
@@ -475,7 +476,7 @@ static integer c__22 = 22;
     }
 /* FIGURE MAXIMUM NDC VALUES XNDCMX AND YNDCMX. */
     if (aspec1 >= daspec) {
-	vcndcm_1.xndcmx = dmin((float)1.,aspec1);
+	vcndcm_1.xndcmx = dbl_min((float)1.,aspec1);
 	vcndcm_1.yndcmx = vcndcm_1.xndcmx / aspec1;
     } else {
 	vcndcm_1.xndcmx = aspec1;
@@ -942,7 +943,7 @@ L_vdiqd9:
 
 /* Computing MIN */
     i__1 = i_len(name__, name_len);
-    length = min(i__1,132);
+    length = int_min(i__1,132);
 /* Strip off any leading blanks */
     istart = 0;
     i__1 = length;
@@ -3451,7 +3452,7 @@ L999:
 	goto L999;
     }
 /*     test user define minimum */
-    width = dmax(vcpsta_1.pstmlw,*linwth);
+    width = dbl_max(vcpsta_1.pstmlw,*linwth);
 /* CONVERT LINE-WIDTH TO NDC */
     lw = width * (float).005;
 /* CONVERT WIDTH TO DEVICE COORDINATES AND ADD A DIGIT; NEED IT TO HUNDREDTHS */
@@ -3663,11 +3664,11 @@ L999:
 /*     C C C C C C C C C C C C C C C C C C C C C C C C C C C C C C C C C C C */
 
 /*     check input parameters */
-    int1 = max(*int__,0);
+    int1 = int_max(*int__,0);
     length = i_len(istr, istr_len);
 /* Computing MAX */
-    i__1 = 1, i__2 = min(length,*ndigit);
-    ndig1 = max(i__1,i__2);
+    i__1 = 1, i__2 = int_min(length,*ndigit);
+    ndig1 = int_max(i__1,i__2);
     s_copy(istr, "00000000000000000000000000000000000000000", istr_len, (
 	    ftnlen)41);
     nd = length;

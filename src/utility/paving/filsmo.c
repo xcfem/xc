@@ -13,7 +13,8 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-#include "f2c.h"
+//#include "f2c.h"
+#include "paving.h"
 
 /* Common Block Declarations */
 
@@ -114,7 +115,7 @@ struct {
     wt = (float)10.;
 /* Computing MAX */
     i__1 = *nloop * 5;
-    nit = max(i__1,40);
+    nit = int_max(i__1,40);
     tol = (float).03;
     vro = (float)1.;
     ro = (float)1.;

@@ -13,6 +13,7 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
+#include "paving.h"
 #include "f2c.h"
 
 /* Table of constant values */
@@ -73,7 +74,7 @@ L100:
     n4 = lxn[(nn << 2) + 4];
 /* Computing MIN */
     i__1 = 4, i__2 = *nl - ndone;
-    nr = min(i__1,i__2);
+    nr = int_min(i__1,i__2);
     i__1 = nr;
     for (i__ = 1; i__ <= i__1; ++i__) {
 	j = ndone + i__;

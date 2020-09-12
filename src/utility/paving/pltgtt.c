@@ -13,7 +13,8 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-#include "f2c.h"
+//#include "f2c.h"
+#include "paving.h"
 
 /* Common Block Declarations */
 
@@ -88,7 +89,7 @@ static integer c__3 = 3;
 logical pltgtt_(integer *indx, real *buff)
 {
     /* System generated locals */
-    address a__1[3];
+    char * a__1[3];
     integer i__1[3];
     logical ret_val;
     char ch__1[31];

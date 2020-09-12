@@ -13,7 +13,8 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-#include "f2c.h"
+//#include "f2c.h"
+#include "paving.h"
 
 /* Common Block Declarations */
 
@@ -269,7 +270,7 @@ L140:
 	n11 = lnodes[n11 * lnodes_dim1 + 3];
 /* Computing MAX */
 	i__1 = idepth, i__2 = lnodes[n11 * lnodes_dim1 + 8];
-	idepth = max(i__1,i__2);
+	idepth = int_max(i__1,i__2);
 	if (n11 != *nadj2 && angle[n11] >= pi + eps && lxn[(n11 << 2) + 4] == 
 		0 && lxn[(n11 << 2) + 3] > 0) {
 	    goto L140;

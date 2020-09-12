@@ -13,7 +13,8 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-#include "f2c.h"
+//#include "f2c.h"
+#include "paving.h"
 
 /*    Copyright(C) 1999-2020 National Technology & Engineering Solutions */
 /*    of Sandia, LLC (NTESS).  Under the terms of Contract DE-NA0003525 with */
@@ -34,16 +35,16 @@ extern "C" {
 /*         PAGES 319 - 320. */
 /* *********************************************************************** */
     *lcross = FALSE_;
-    if (dmax(*x1,*x2) < dmin(*x3,*x4)) {
+    if (dbl_max(*x1,*x2) < dbl_min(*x3,*x4)) {
 	return 0;
     }
-    if (dmax(*y1,*y2) < dmin(*y3,*y4)) {
+    if (dbl_max(*y1,*y2) < dbl_min(*y3,*y4)) {
 	return 0;
     }
-    if (dmax(*x3,*x4) < dmin(*x1,*x2)) {
+    if (dbl_max(*x3,*x4) < dbl_min(*x1,*x2)) {
 	return 0;
     }
-    if (dmax(*y3,*y4) < dmin(*y1,*y2)) {
+    if (dbl_max(*y3,*y4) < dbl_min(*y1,*y2)) {
 	return 0;
     }
 /*  SET UP THE FIRST LINE'S VECTORS (A AND B) */

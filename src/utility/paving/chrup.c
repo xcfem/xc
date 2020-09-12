@@ -13,7 +13,8 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-#include "f2c.h"
+//#include "f2c.h"
+#include "paving.h"
 
 /* Copyright(C) 1999-2020 National Technology & Engineering Solutions */
 /* of Sandia, LLC (NTESS).  Under the terms of Contract DE-NA0003525 with */
@@ -35,7 +36,7 @@ extern "C" {
 
 /* Computing MIN */
     i__1 = i_len(line1, line1_len), i__2 = i_len(line2, line2_len);
-    l = min(i__1,i__2);
+    l = int_min(i__1,i__2);
     i__ = 1;
 L2210:
     if (! (i__ <= l)) {

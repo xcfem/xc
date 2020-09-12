@@ -13,7 +13,8 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-#include "f2c.h"
+//#include "f2c.h"
+#include "paving.h"
 
 /* Common Block Declarations */
 
@@ -46,7 +47,7 @@ static integer c__2 = 2;
 	logical *done, logical *sizeit, logical *noroom, logical *err, real *
 	xnold, real *ynold, integer *nxkold, integer *linkeg, integer *listeg,
 	 real *bmesur, integer *mlink, integer *npnold, integer *npeold, 
-	integer *nnxk, real *remesh, real *rexmin, real *rexmax, real *reymin,
+	integer *nnxk, real *rexmin, real *rexmax, real *reymin,
 	 real *reymax, integer *idivis, real *sizmin, real *emax, real *emin, 
 	ftnlen dev1_len)
 {
@@ -70,34 +71,13 @@ static integer c__2 = 2;
 	     integer *, integer *, integer *, integer *, integer *, integer *,
 	     logical *, logical *, integer *, logical *, logical *, ftnlen);
     static integer nlold, ncorn;
-    extern /* Subroutine */ int add2nd_(integer *, integer *, real *, real *, 
-	    integer *, integer *, integer *, integer *, real *, integer *, 
-	    real *, real *, real *, real *, real *, real *, integer *, 
-	    integer *, integer *, integer *, integer *, integer *, logical *, 
-	    logical *, logical *, real *, real *, integer *, integer *, 
-	    integer *, real *, integer *, integer *, integer *, integer *, 
-	    real *, real *, real *, real *, real *, integer *, real *, real *,
-	     real *), add3nd_(integer *, integer *, real *, real *, integer *,
-	     integer *, integer *, integer *, real *, integer *, real *, real 
-	    *, real *, integer *, integer *, integer *, integer *, integer *, 
-	    logical *, logical *, logical *, real *, real *, integer *, 
-	    integer *, integer *, real *, integer *, integer *, integer *, 
-	    integer *, real *, real *, real *, real *, real *, integer *, 
-	    real *, real *, real *);
     static integer kount;
     extern /* Subroutine */ int d2node_(integer *, real *, real *, integer *, 
 	    integer *), extnd1_(integer *, real *, real *, real *, integer *, 
 	    integer *, integer *, real *, real *, real *), extnd3_(integer *, 
 	    real *, real *, real *, integer *, integer *, integer *, real *, 
 	    real *, real *), extnd5_(integer *, real *, real *, real *, 
-	    integer *, integer *, integer *, real *, real *, real *), addnod_(
-	    integer *, integer *, real *, real *, integer *, integer *, 
-	    integer *, integer *, real *, real *, integer *, real *, real *, 
-	    real *, integer *, integer *, integer *, integer *, integer *, 
-	    integer *, logical *, integer *, logical *, logical *, logical *, 
-	    real *, real *, integer *, integer *, integer *, real *, integer *
-	    , integer *, integer *, integer *, real *, real *, real *, real *,
-	     real *, integer *, real *, real *, real *);
+	    integer *, integer *, integer *, real *, real *, real *);
     static integer lambig;
     extern /* Subroutine */ int mesage_(char *, ftnlen), getime_(real *), 
 	    lupang_(integer *, integer *, real *, real *, real *, integer *, 
@@ -171,7 +151,7 @@ static integer c__2 = 2;
     getime_(&time1);
     *err = FALSE_;
     ambig = FALSE_;
-    *nnnold = min(*nnn,*nnnold);
+    *nnnold = int_min(*nnn,*nnnold);
     *nnn2 = *nnnold;
 /*  IN THE LNODES ARRAY, */
 /*  THE CORNER STATUS IS STORED IN LNODES (1, N1): */
@@ -231,7 +211,7 @@ static integer c__2 = 2;
 		    y[1], &dist1, &dist2, nnn, lll, kkk, &n1, &n2, &nloop[1], 
 		    sizeit, err, noroom, &xnold[1], &ynold[1], &nxkold[
 		    nxkold_offset], &linkeg[3], &listeg[1], &bmesur[1], mlink,
-		     npnold, npeold, nnxk, remesh, rexmin, rexmax, reymin, 
+		     npnold, npeold, nnxk, rexmin, rexmax, reymin, 
 		    reymax, idivis, sizmin, emax, emin);
 	    if (*err || *noroom) {
 		goto L120;
@@ -261,7 +241,7 @@ static integer c__2 = 2;
 		    nnn, lll, kkk, &n1, &nloop[1], sizeit, err, noroom, &
 		    xnold[1], &ynold[1], &nxkold[nxkold_offset], &linkeg[3], &
 		    listeg[1], &bmesur[1], mlink, npnold, npeold, nnxk, 
-		    remesh, rexmin, rexmax, reymin, reymax, idivis, sizmin, 
+		    rexmin, rexmax, reymin, reymax, idivis, sizmin, 
 		    emax, emin);
 	    if (*err || *noroom) {
 		goto L120;
@@ -294,7 +274,7 @@ static integer c__2 = 2;
 		    nnn, lll, kkk, &n1, &nloop[1], sizeit, err, noroom, &
 		    xnold[1], &ynold[1], &nxkold[nxkold_offset], &linkeg[3], &
 		    listeg[1], &bmesur[1], mlink, npnold, npeold, nnxk, 
-		    remesh, rexmin, rexmax, reymin, reymax, idivis, sizmin, 
+		    rexmin, rexmax, reymin, reymax, idivis, sizmin, 
 		    emax, emin);
 	    if (*err || *noroom) {
 		goto L120;
@@ -319,7 +299,7 @@ static integer c__2 = 2;
 		    &x[4], &y[4], &dist, &dist, nnn, lll, kkk, nnn, &n1, &
 		    nloop[1], sizeit, err, noroom, &xnold[1], &ynold[1], &
 		    nxkold[nxkold_offset], &linkeg[3], &listeg[1], &bmesur[1],
-		     mlink, npnold, npeold, nnxk, remesh, rexmin, rexmax, 
+		     mlink, npnold, npeold, nnxk, rexmin, rexmax, 
 		    reymin, reymax, idivis, sizmin, emax, emin);
 	    if (*err || *noroom) {
 		goto L120;
@@ -361,7 +341,7 @@ L110:
 		    y, &dist, nnn, kkk, lll, &n0, &n1, &n2, &ambig, &lambig, 
 		    sizeit, err, noroom, &xnold[1], &ynold[1], &nxkold[
 		    nxkold_offset], &linkeg[3], &listeg[1], &bmesur[1], mlink,
-		     npnold, npeold, nnxk, remesh, rexmin, rexmax, reymin, 
+		     npnold, npeold, nnxk, rexmin, rexmax, reymin, 
 		    reymax, idivis, sizmin, emax, emin);
 	    if (*err || *noroom) {
 		goto L120;
@@ -391,7 +371,7 @@ L110:
 		    y, &dist, nnn, kkk, lll, &n0, &n1, &n2, &ambig, &lambig, 
 		    sizeit, err, noroom, &xnold[1], &ynold[1], &nxkold[
 		    nxkold_offset], &linkeg[3], &listeg[1], &bmesur[1], mlink,
-		     npnold, npeold, nnxk, remesh, rexmin, rexmax, reymin, 
+		     npnold, npeold, nnxk, rexmin, rexmax, reymin, 
 		    reymax, idivis, sizmin, emax, emin);
 	    if (*err || *noroom) {
 		goto L120;
@@ -507,7 +487,7 @@ L110:
 			new1, &n2, &nloop[1], sizeit, err, noroom, &xnold[1], 
 			&ynold[1], &nxkold[nxkold_offset], &linkeg[3], &
 			listeg[1], &bmesur[1], mlink, npnold, npeold, nnxk, 
-			remesh, rexmin, rexmax, reymin, reymax, idivis, 
+			rexmin, rexmax, reymin, reymax, idivis, 
 			sizmin, emax, emin);
 		if (*err || *noroom) {
 		    goto L120;
@@ -542,7 +522,7 @@ L110:
 		    y, &dist, nnn, kkk, lll, &n0, &n1, &n2, &ambig, &lambig, 
 		    sizeit, err, noroom, &xnold[1], &ynold[1], &nxkold[
 		    nxkold_offset], &linkeg[3], &listeg[1], &bmesur[1], mlink,
-		     npnold, npeold, nnxk, remesh, rexmin, rexmax, reymin, 
+		     npnold, npeold, nnxk, rexmin, rexmax, reymin, 
 		    reymax, idivis, sizmin, emax, emin);
 	    if (*err || *noroom) {
 		goto L120;
@@ -659,7 +639,7 @@ L110:
 			new1, &n2, &nloop[1], sizeit, err, noroom, &xnold[1], 
 			&ynold[1], &nxkold[nxkold_offset], &linkeg[3], &
 			listeg[1], &bmesur[1], mlink, npnold, npeold, nnxk, 
-			remesh, rexmin, rexmax, reymin, reymax, idivis, 
+			rexmin, rexmax, reymin, reymax, idivis, 
 			sizmin, emax, emin);
 		if (*err || *noroom) {
 		    goto L120;
@@ -782,7 +762,7 @@ L110:
 			new3, &n2, &nloop[1], sizeit, err, noroom, &xnold[1], 
 			&ynold[1], &nxkold[nxkold_offset], &linkeg[3], &
 			listeg[1], &bmesur[1], mlink, npnold, npeold, nnxk, 
-			remesh, rexmin, rexmax, reymin, reymax, idivis, 
+			rexmin, rexmax, reymin, reymax, idivis, 
 			sizmin, emax, emin);
 		if (*err || *noroom) {
 		    goto L120;

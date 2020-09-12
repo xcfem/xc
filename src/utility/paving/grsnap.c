@@ -13,7 +13,8 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-#include "f2c.h"
+//#include "f2c.h"
+#include "paving.h"
 
 /* Common Block Declarations */
 
@@ -63,9 +64,9 @@ static integer c__2 = 2;
     /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    static integer i__, idev, rbuf[2];
-    extern /* Subroutine */ int vdescp_(integer *, integer *, integer *), 
-	    vdnwpg_(), pltflu_();
+    static integer i__, idev;
+    static real rbuf[2];
+    extern /* Subroutine */ int vdnwpg_(), pltflu_();
 
 /* ======================================================================= */
 /*   --*** GRSNAP *** (GRPLIB) Perform movie snap operations */

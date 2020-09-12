@@ -13,7 +13,8 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-#include "f2c.h"
+//#include "f2c.h"
+#include "paving.h"
 
 /*    Copyright(C) 1999-2020 National Technology & Engineering Solutions */
 /*    of Sandia, LLC (NTESS).  Under the terms of Contract DE-NA0003525 with */
@@ -22,7 +23,7 @@ extern "C" {
 /*    See packages/seacas/LICENSE for details */
 /* Subroutine */ int getsiz_(real *xnold, real *ynold, integer *nxkold, 
 	integer *linkeg, integer *listeg, real *bmesur, integer *mlink, 
-	integer *npnold, integer *npeold, integer *nnxk, real *remesh, real *
+	integer *npnold, integer *npeold, integer *nnxk, real *
 	rexmin, real *rexmax, real *reymin, real *reymax, integer *idivis, 
 	real *sizmin, real *emax, real *emin, real *x, real *y, real *size)
 {
@@ -102,16 +103,16 @@ extern "C" {
 	for (ic = 2; ic <= 4; ++ic) {
 /* Computing MIN */
 	    r__1 = xemin, r__2 = xnold[nxkold[ic + kelem * nxkold_dim1]];
-	    xemin = dmin(r__1,r__2);
+	    xemin = dbl_min(r__1,r__2);
 /* Computing MAX */
 	    r__1 = xemax, r__2 = xnold[nxkold[ic + kelem * nxkold_dim1]];
-	    xemax = dmax(r__1,r__2);
+	    xemax = dbl_max(r__1,r__2);
 /* Computing MIN */
 	    r__1 = yemin, r__2 = ynold[nxkold[ic + kelem * nxkold_dim1]];
-	    yemin = dmin(r__1,r__2);
+	    yemin = dbl_min(r__1,r__2);
 /* Computing MAX */
 	    r__1 = yemax, r__2 = ynold[nxkold[ic + kelem * nxkold_dim1]];
-	    yemax = dmax(r__1,r__2);
+	    yemax = dbl_max(r__1,r__2);
 /* L100: */
 	}
 	if (*x < xemin || *x > xemax || *y < yemin || *y > yemax) {
@@ -150,12 +151,12 @@ extern "C" {
 	    dlpara_(&x1, &y1, &x2, &y2, &xm1, &b1, &bad);
 /*  GET DISTANCE FOR VERTICAL LINE */
 	    if (bad) {
-		dtry = (r__1 = x1 - *x, dabs(r__1));
+		dtry = (r__1 = x1 - *x, dbl_abs(r__1));
 		xtry = x1;
 		ytry = *y;
 /*  GET DISTANCE FOR HORIZONTAL LINE */
-	    } else if (dabs(xm1) < (float)1e-6) {
-		dtry = (r__1 = y1 - *y, dabs(r__1));
+	    } else if (dbl_abs(xm1) < (float)1e-6) {
+		dtry = (r__1 = y1 - *y, dbl_abs(r__1));
 		xtry = *x;
 		ytry = y1;
 /*  GET PERPENDICULAR DISTANCE TO ARBITRARY LINE */
@@ -172,8 +173,8 @@ extern "C" {
 	    }
 /*  CHECK THE INTERSECTION TO MAKE SURE THAT IT CUTS THE LINE SEGMENT */
 /*  WE HAVE */
-	    if (xtry >= dmin(x1,x2) && xtry <= dmax(x1,x2) && ytry >= dmin(y1,
-		    y2) && ytry <= dmax(y1,y2)) {
+	    if (xtry >= dbl_min(x1,x2) && xtry <= dbl_max(x1,x2) && ytry >= dbl_min(y1,
+		    y2) && ytry <= dbl_max(y1,y2)) {
 /*  NOW GET THE SHORTEST INTERSECTION AND GET NEEDED SIZE VALUE BASED ON */
 /*  THE XTRY AND YTRY LOCATION */
 		if (dtry < dtest) {
@@ -275,9 +276,9 @@ L170:
 	reduc = *emax - error * *emax + error * *emin;
 /* Computing MAX */
 /* Computing MIN */
-	r__2 = min(d1,d2), r__2 = min(r__2,d3);
-	r__1 = dmin(r__2,d4) * reduc;
-	*size = dmax(r__1,*sizmin);
+	r__2 = dbl_min(d1,d2), r__2 = dbl_min(r__2,d3);
+	r__1 = dbl_min(r__2,d4) * reduc;
+	*size = dbl_max(r__1,*sizmin);
     } else {
 /*  ERROR HAS OCCURRED IN FINDING THE ELEMENT */
 	mesage_("** ERROR - ENCLOSING ELEMENT NOT FOUND IN GETSIZ **", (

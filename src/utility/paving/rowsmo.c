@@ -13,7 +13,8 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-#include "f2c.h"
+//#include "f2c.h"
+#include "paving.h"
 #include <math.h>
 
 /*    Copyright(C) 1999-2020 National Technology & Engineering Solutions */
@@ -133,7 +134,7 @@ extern "C" {
 /*  NODE LOOP */
 /* Computing MAX */
 	i__2 = *nnn2 - 1;
-	nbegin = max(i__2,1);
+	nbegin = int_max(i__2,1);
 	nend = *nnn + 1;
 	i__2 = nend;
 	for (j = nbegin; j <= i__2; ++j)

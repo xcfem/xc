@@ -13,7 +13,8 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-#include "f2c.h"
+//#include "f2c.h"
+#include "paving.h"
 
 /* Common Block Declarations */
 
@@ -98,7 +99,7 @@ static logical c_false = FALSE_;
 /* Subroutine */ int pltxts_(real *x, real *y, char *text, ftnlen text_len)
 {
     /* System generated locals */
-    address a__1[3];
+    char * a__1[3];
     integer i__1, i__2[3], i__3;
     char ch__1[72];
 
@@ -365,7 +366,7 @@ L2050:
     }
 /* Computing MIN */
     i__1 = 32, i__3 = novect - j;
-    jn = min(i__1,i__3);
+    jn = int_min(i__1,i__3);
     pltdv2_(&text_1.textp[13], &jn, &font_1.x0[font_1.idex[ascii + ifont * 
 	    200 - 201] + j + ifont * 2300 - 2301], &font_1.y0[font_1.idex[
 	    ascii + ifont * 200 - 201] + j + ifont * 2300 - 2301], &font_1.x1[

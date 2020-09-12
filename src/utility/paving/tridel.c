@@ -13,7 +13,8 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-#include "f2c.h"
+//#include "f2c.h"
+#include "paving.h"
 
 /* Table of constant values */
 
@@ -235,14 +236,14 @@ L110:
 	    toler2 = (float)2.6179939;
 	    if (*graph && ! (*video)) {
 /* Computing MAX */
-		r__7 = (r__1 = xn[n1] - xn[i__], dabs(r__1)), r__8 = (r__2 = 
-			xn[n2] - xn[i__], dabs(r__2)), r__7 = max(r__7,r__8), 
-			r__8 = (r__3 = xn[n3] - xn[i__], dabs(r__3)), r__7 = 
-			max(r__7,r__8), r__8 = (r__4 = yn[n1] - yn[i__], dabs(
-			r__4)), r__7 = max(r__7,r__8), r__8 = (r__5 = yn[n2] 
-			- yn[i__], dabs(r__5)), r__7 = max(r__7,r__8), r__8 = 
-			(r__6 = yn[n3] - yn[i__], dabs(r__6));
-		dist = dmax(r__7,r__8) * (float)3.;
+		r__7 = (r__1 = xn[n1] - xn[i__], dbl_abs(r__1)), r__8 = (r__2 = 
+			xn[n2] - xn[i__], dbl_abs(r__2)), r__7 = dbl_max(r__7,r__8), 
+			r__8 = (r__3 = xn[n3] - xn[i__], dbl_abs(r__3)), r__7 = 
+			dbl_max(r__7,r__8), r__8 = (r__4 = yn[n1] - yn[i__], dbl_abs(
+			r__4)), r__7 = dbl_max(r__7,r__8), r__8 = (r__5 = yn[n2] 
+			- yn[i__], dbl_abs(r__5)), r__7 = dbl_max(r__7,r__8), r__8 = 
+			(r__6 = yn[n3] - yn[i__], dbl_abs(r__6));
+		dist = dbl_max(r__7,r__8) * (float)3.;
 		*xmin = xn[i__] - dist;
 		*xmax = xn[i__] + dist;
 		*ymin = yn[i__] - dist;
@@ -463,8 +464,8 @@ L130:
 		r__2 = y14;
 		d14 = sqrt(r__1 * r__1 + r__2 * r__2);
 /* Computing MAX */
-		r__1 = max(d21,d32), r__1 = max(r__1,d43);
-		dmax__ = dmax(r__1,d14) * (float)1.5;
+		r__1 = dbl_max(d21,d32), r__1 = dbl_max(r__1,d43);
+		dmax__ = dbl_max(r__1,d14) * (float)1.5;
 		if (lxn[(n1 << 2) + 3] == 0) {
 		    theta1 = pi;
 		} else {

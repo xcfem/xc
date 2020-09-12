@@ -13,7 +13,8 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-#include "f2c.h"
+//#include "f2c.h"
+#include "paving.h"
 
 /* Table of constant values */
 
@@ -143,12 +144,12 @@ L100:
 		if (done) {
 		    if (*graph && ! (*video)) {
 /* Computing MAX */
-			r__5 = (r__1 = xn[i0] - xn[i1], dabs(r__1)), r__6 = (
-				r__2 = xn[i2] - xn[i1], dabs(r__2)), r__5 = 
-				max(r__5,r__6), r__6 = (r__3 = yn[i0] - yn[i1]
-				, dabs(r__3)), r__5 = max(r__5,r__6), r__6 = (
-				r__4 = yn[i2] - yn[i1], dabs(r__4));
-			dist = dmax(r__5,r__6) * (float)3.;
+			r__5 = (r__1 = xn[i0] - xn[i1], dbl_abs(r__1)), r__6 = (
+				r__2 = xn[i2] - xn[i1], dbl_abs(r__2)), r__5 = 
+				dbl_max(r__5,r__6), r__6 = (r__3 = yn[i0] - yn[i1]
+				, dbl_abs(r__3)), r__5 = dbl_max(r__5,r__6), r__6 = (
+				r__4 = yn[i2] - yn[i1], dbl_abs(r__4));
+			dist = dbl_max(r__5,r__6) * (float)3.;
 			*xmin = xn[i1] - dist;
 			*xmax = xn[i1] + dist;
 			*ymin = yn[i1] - dist;
