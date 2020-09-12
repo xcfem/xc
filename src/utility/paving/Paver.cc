@@ -38,10 +38,10 @@ void report_ivector(std::ostream &os, const std::string &name, const std::vector
     os << std::endl;
   }
 
-void report_fvector(std::ostream &os, const std::string &name, const std::vector<real> &v)
+void report_fvector(std::ostream &os, const std::string &name, const std::vector<xc_float> &v)
   {
     os << name << ": ";
-    for(std::vector<real>::const_iterator i= v.begin(); i!=v.end(); i++)
+    for(std::vector<xc_float>::const_iterator i= v.begin(); i!=v.end(); i++)
       os << *i << ' ';
     os << std::endl;
   }
@@ -164,9 +164,9 @@ int XC::Paver::call_paving(const Ref2d3d &ref,const Polygon3d &extContour, const
 	linkeg.resize(2*mlink); // size ok
 	listeg.resize(2*npeold); // size ok
 	
-	real sizmin= 0.0;
-	real emax= 0.0;
-	real emin= 0.0;
+	xc_float sizmin= 0.0;
+	xc_float emax= 0.0;
+	xc_float emin= 0.0;
 	ftnlen dev1_len= 0;
 	
 	retval= paving_(&nbnode, &nprm, &mln,  iptper.data(), numper.data(), lperim.data(), x.data(), y.data(), z.data(), iexk.data(), inxe.data(), &nnn, &lll, &kkk, &mxnd, angle.data(), bnsize.data(), lnodes.data(), linkpr.data(), nperim.data(), lxk.data(), kxl.data(), nxl.data(), lxn.data(), nuid.data(), &iavail, &navail, &graph, &timer, &video, &defsiz, &sizeit, dev1, &kreg, &batch, &noroom, &err, amesur.data(), xnold.data(), ynold.data(), nxkold.data(), mmpold.data(), linkeg.data(), listeg.data(), bmesur.data(), &mlink, &nprold, &npnold, &npeold, &nnxk, &remesh, &rexmin, &rexmax, &reymin, &reymax, &idivis, &sizmin, &emax, &emin, dev1_len);
@@ -253,7 +253,6 @@ std::vector<int> XC::Paver::get_elem_nodes(const std::vector<int> &edges)
 //! @brief Extract mesh data  
 int XC::Paver::extract_mesh(const Ref2d3d &ref)
   {
-    
     nodePos= std::vector<Pos3d>(nnn);
     for(int i= 0;i<nnn; i++)
       {
