@@ -1,13 +1,13 @@
 /* periml.f -- translated by f2c (version 20160102).
    You must link the resulting object file with libf2c:
-	on Microsoft Windows system, link with libf2c.lib;
-	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
-	or, if you install libf2c.a in a standard place, with -lf2c -lm
-	-- in that order, at the end of the command line, as in
-		cc *.o -lf2c -lm
-	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
+        on Microsoft Windows system, link with libf2c.lib;
+        on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+        or, if you install libf2c.a in a standard place, with -lf2c -lm
+        -- in that order, at the end of the command line, as in
+                cc *.o -lf2c -lm
+        Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
 
-		http://www.netlib.org/f2c/libf2c.zip
+                http://www.netlib.org/f2c/libf2c.zip
 */
 
 #ifdef __cplusplus
@@ -22,11 +22,11 @@ extern "C" {
 
 /*    See packages/seacas/LICENSE for details */
 /* Subroutine */ int periml_(integer *nbnode, integer *mxnd, integer *nper, 
-	integer *istart, integer *mln, real *xn, real *yn, real *zn, integer *
-	lxk, integer *kxl, integer *nxl, integer *lxn, real *angle, real *
-	bnsize, integer *lnodes, integer *lperim, integer *lll, integer *
-	lllold, real *xmin, real *xmax, real *ymin, real *ymax, real *zmin, 
-	real *zmax, char *dev1, integer *kreg, logical *err, ftnlen dev1_len)
+        integer *istart, integer *mln, real *xn, real *yn, real *zn, integer *
+        lxk, integer *kxl, integer *nxl, integer *lxn, real *angle, real *
+        bnsize, integer *lnodes, integer *lperim, integer *lll, integer *
+        lllold, real *xmin, real *xmax, real *ymin, real *ymax, real *zmin, 
+        real *zmax, char *dev1, integer *kreg, logical *err, ftnlen dev1_len)
 {
     /* System generated locals */
     integer lnodes_dim1, lnodes_offset, i__1;
@@ -37,11 +37,11 @@ extern "C" {
 
     /* Local variables */
     static integer i__, n0, n2, n1s, iend, node0, node1, node2, kount;
-    extern /* Subroutine */ int mesage_(char *, ftnlen), lupang_(integer *, 
-	    integer *, real *, real *, real *, integer *, integer *, integer *
-	    , integer *, integer *, real *, integer *, integer *, integer *, 
-	    real *, real *, real *, real *, real *, real *, char *, integer *,
-	     logical *, ftnlen);
+    extern /* Subroutine */ int  lupang_(integer *, 
+            integer *, real *, real *, real *, integer *, integer *, integer *
+            , integer *, integer *, real *, integer *, integer *, integer *, 
+            real *, real *, real *, real *, real *, real *, char *, integer *,
+             logical *, ftnlen);
 
 /* *********************************************************************** */
 /*  SUBROUTINE PERIML = LINKS THE PERIMETER OF A REGION TOGETHER FOR */
@@ -87,53 +87,52 @@ extern "C" {
     i__1 = iend;
     for(i__= *istart; i__<=i__1; ++i__)
       {
-	node1 = lperim[i__];
-	if (i__ == iend)
-	  {
-	    node0 = lperim[i__ - 1];
-	    node2 = lperim[*istart];
-	  }
-	else if (i__ == *istart)
-	  {
-	    node0 = lperim[iend];
-	    node2 = lperim[i__ + 1];
-	  }
-	else
-	  {
-	    node0 = lperim[i__ - 1];
-	    node2 = lperim[i__ + 1];
-	  }
-	++(*lll);
+        node1 = lperim[i__];
+        if (i__ == iend)
+          {
+            node0 = lperim[i__ - 1];
+            node2 = lperim[*istart];
+          }
+        else if (i__ == *istart)
+          {
+            node0 = lperim[iend];
+            node2 = lperim[i__ + 1];
+          }
+        else
+          {
+            node0 = lperim[i__ - 1];
+            node2 = lperim[i__ + 1];
+          }
+        ++(*lll);
 /*  FILL UP THE NODES PER LINE ARRAY */
-	nxl[(*lll << 1) + 1] = node1;
-	nxl[(*lll << 1) + 2] = node2;
+        nxl[(*lll << 1) + 1] = node1;
+        nxl[(*lll << 1) + 2] = node2;
 /*  FILL UP THE LINES PER NODE ARRAY */
-	lxn[(node1 << 2) + 1] = *lll;
-	if (i__ == *istart) {
-	    lxn[(node1 << 2) + 2] = -(iend - *istart + 1 + *lllold);
-	} else {
-	    lxn[(node1 << 2) + 2] = 1 - *lll;
-	}
-	lxn[(node1 << 2) + 3] = 0;
-	lxn[(node1 << 2) + 4] = 0;
+        lxn[(node1 << 2) + 1] = *lll;
+        if (i__ == *istart) {
+            lxn[(node1 << 2) + 2] = -(iend - *istart + 1 + *lllold);
+        } else {
+            lxn[(node1 << 2) + 2] = 1 - *lll;
+        }
+        lxn[(node1 << 2) + 3] = 0;
+        lxn[(node1 << 2) + 4] = 0;
 /*  THE LNODES ARRAY IS DOCUMENTED IN THE ADDROW ROUTINE */
-	lnodes[node1 * lnodes_dim1 + 1] = 0;
-	lnodes[node1 * lnodes_dim1 + 2] = node0;
-	lnodes[node1 * lnodes_dim1 + 3] = node2;
-	lnodes[node1 * lnodes_dim1 + 4] = 1;
-	lnodes[node1 * lnodes_dim1 + 5] = *lll;
-	lnodes[node1 * lnodes_dim1 + 6] = 0;
-	lnodes[node1 * lnodes_dim1 + 7] = 0;
-	lnodes[node1 * lnodes_dim1 + 8] = 0;
+        lnodes[node1 * lnodes_dim1 + 1] = 0;
+        lnodes[node1 * lnodes_dim1 + 2] = node0;
+        lnodes[node1 * lnodes_dim1 + 3] = node2;
+        lnodes[node1 * lnodes_dim1 + 4] = 1;
+        lnodes[node1 * lnodes_dim1 + 5] = *lll;
+        lnodes[node1 * lnodes_dim1 + 6] = 0;
+        lnodes[node1 * lnodes_dim1 + 7] = 0;
+        lnodes[node1 * lnodes_dim1 + 8] = 0;
 /* L100: */
     }
 /*  SET ALL THE INTERIOR ANGLES */
     lupang_(mxnd, mln, &xn[1], &yn[1], &zn[1], &lxk[5], &kxl[3], &nxl[3], &
-	    lxn[5], nper, &angle[1], &lnodes[lnodes_offset], &lperim[*istart],
-	     lll, xmin, xmax, ymin, ymax, zmin, zmax, dev1, kreg, err, (
-	    ftnlen)3);
+            lxn[5], nper, &angle[1], &lnodes[lnodes_offset], &lperim[*istart],
+             lll, xmin, xmax, ymin, ymax, zmin, zmax, dev1, kreg, err, (ftnlen)3);
     if (*err) {
-	goto L120;
+        goto L120;
     }
 /*  SET UP THE CORRECT SIZE ARRAY */
     n1s = lperim[*istart];
@@ -143,13 +142,13 @@ L110:
     n2 = lnodes[n1s * lnodes_dim1 + 3];
     n1s = n2;
     if (n1s == lperim[*istart]) {
-	goto L120;
+        goto L120;
     }
     ++kount;
     if (kount > *nper) {
-	mesage_(" ** ERROR IN PERIML GETTING NODE SIZES ** ", (ftnlen)42);
-	*err = TRUE_;
-	goto L120;
+        fprintf(stderr," ** ERROR IN PERIML GETTING NODE SIZES ** ");
+        *err = TRUE_;
+        goto L120;
     }
 /* Computing 2nd power */
     r__1 = xn[n1s] - xn[n0];
@@ -160,7 +159,7 @@ L110:
 /* Computing 2nd power */
     r__4 = yn[n1s] - yn[n2];
     bnsize[(n1s << 1) + 1] = (sqrt(r__1 * r__1 + r__2 * r__2) + sqrt(r__3 * 
-	    r__3 + r__4 * r__4)) * (float).5;
+            r__3 + r__4 * r__4)) * (float).5;
     bnsize[(n1s << 1) + 2] = (float)1.;
     goto L110;
 L120:
@@ -168,5 +167,5 @@ L120:
 } /* periml_ */
 
 #ifdef __cplusplus
-	}
+        }
 #endif

@@ -1,13 +1,13 @@
 /* lupang.f -- translated by f2c (version 20160102).
    You must link the resulting object file with libf2c:
-	on Microsoft Windows system, link with libf2c.lib;
-	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
-	or, if you install libf2c.a in a standard place, with -lf2c -lm
-	-- in that order, at the end of the command line, as in
-		cc *.o -lf2c -lm
-	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
+        on Microsoft Windows system, link with libf2c.lib;
+        on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+        or, if you install libf2c.a in a standard place, with -lf2c -lm
+        -- in that order, at the end of the command line, as in
+                cc *.o -lf2c -lm
+        Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
 
-		http://www.netlib.org/f2c/libf2c.zip
+                http://www.netlib.org/f2c/libf2c.zip
 */
 
 #ifdef __cplusplus
@@ -22,21 +22,21 @@ extern "C" {
 
 /*    See packages/seacas/LICENSE for details */
 /* Subroutine */ int lupang_(integer *mxnd, integer *mln, real *xn, real *yn, 
-	real *zn, integer *lxk, integer *kxl, integer *nxl, integer *lxn, 
-	integer *nloop, real *angle, integer *lnodes, integer *nstart, 
-	integer *lll, real *xmin, real *xmax, real *ymin, real *ymax, real *
-	zmin, real *zmax, char *dev1, integer *kreg, logical *err, ftnlen 
-	dev1_len)
+        real *zn, integer *lxk, integer *kxl, integer *nxl, integer *lxn, 
+        integer *nloop, real *angle, integer *lnodes, integer *nstart, 
+        integer *lll, real *xmin, real *xmax, real *ymin, real *ymax, real *
+        zmin, real *zmax, char *dev1, integer *kreg, logical *err, ftnlen 
+        dev1_len)
 {
     /* System generated locals */
     integer lnodes_dim1, lnodes_offset;
 
     /* Local variables */
     static integer n0, n1, n2, kount;
-    extern /* Subroutine */ int mesage_(char *, ftnlen), getang_(integer *, 
-	    integer *, real *, real *, integer *, integer *, integer *, 
-	    integer *, integer *, integer *, integer *, integer *, real *, 
-	    logical *);
+    extern /* Subroutine */ int  getang_(integer *, 
+            integer *, real *, real *, integer *, integer *, integer *, 
+            integer *, integer *, integer *, integer *, integer *, real *, 
+            logical *);
 
 /* *********************************************************************** */
 /*  SUROUTINE LUPANG = CALCULATES THE NEW ANGLES FOR ALL NODES IN A LOOP */
@@ -64,20 +64,20 @@ L100:
     n0 = lnodes[n1 * lnodes_dim1 + 2];
     n2 = lnodes[n1 * lnodes_dim1 + 3];
     getang_(mxnd, mln, &xn[1], &yn[1], &lnodes[lnodes_offset], &lxk[5], &kxl[
-	    3], &nxl[3], &lxn[5], &n0, &n1, &n2, &angle[n1], err);
+            3], &nxl[3], &lxn[5], &n0, &n1, &n2, &angle[n1], err);
     if (*err) {
-	mesage_(" ** ERROR IN LUPANG ** ", (ftnlen)23);
-	goto L110;
+        fprintf(stderr," ** ERROR IN LUPANG ** ");
+        goto L110;
     }
     n1 = n2;
     if (n1 == *nstart) {
-	goto L110;
+        goto L110;
     }
     ++kount;
     if (kount > *nloop) {
-	mesage_(" ** ERROR IN LUPANG ** ", (ftnlen)23);
-	*err = TRUE_;
-	goto L110;
+        fprintf(stderr," ** ERROR IN LUPANG ** ");
+        *err = TRUE_;
+        goto L110;
     }
     goto L100;
 L110:
@@ -85,5 +85,5 @@ L110:
 } /* lupang_ */
 
 #ifdef __cplusplus
-	}
+        }
 #endif

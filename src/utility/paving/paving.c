@@ -1,13 +1,13 @@
 /* paving.f -- translated by f2c (version 20160102).
    You must link the resulting object file with libf2c:
-	on Microsoft Windows system, link with libf2c.lib;
-	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
-	or, if you install libf2c.a in a standard place, with -lf2c -lm
-	-- in that order, at the end of the command line, as in
-		cc *.o -lf2c -lm
-	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
+        on Microsoft Windows system, link with libf2c.lib;
+        on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+        or, if you install libf2c.a in a standard place, with -lf2c -lm
+        -- in that order, at the end of the command line, as in
+                cc *.o -lf2c -lm
+        Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
 
-		http://www.netlib.org/f2c/libf2c.zip
+                http://www.netlib.org/f2c/libf2c.zip
 */
 
 #ifdef __cplusplus
@@ -63,23 +63,23 @@ static integer c__1 = 1;
 
 /*    See packages/seacas/LICENSE for details */
 /* Subroutine */ int paving_(integer *nbnode, integer *nprm, integer *mln, 
-	integer *iptper, integer *numper, integer *lperim, real *xn, real *yn,
-	 real *zn, integer *iexk, integer *inxe, integer *nnn, integer *lll, 
-	integer *kkk, integer *mxnd, real *angle, real *bnsize, integer *
-	lnodes, integer *linkpr, integer *nperim, integer *lxk, integer *kxl, 
-	integer *nxl, integer *lxn, integer *nuid, integer *iavail, integer *
-	navail, logical *graph, logical *timer, logical *video, real *defsiz, 
-	logical *sizeit, char *dev1, integer *kreg, logical *batch, logical *
-	noroom, logical *err, real *amesur, real *xnold, real *ynold, integer 
-	*nxkold, integer *mmpold, integer *linkeg, integer *listeg, real *
-	bmesur, integer *mlink, integer *nprold, integer *npnold, integer *
-	npeold, integer *nnxk, logical *remesh, real *rexmin, real *rexmax, 
-	real *reymin, real *reymax, integer *idivis, real *sizmin, real *emax,
-	 real *emin, ftnlen dev1_len)
+        integer *iptper, integer *numper, integer *lperim, real *xn, real *yn,
+         real *zn, integer *iexk, integer *inxe, integer *nnn, integer *lll, 
+        integer *kkk, integer *mxnd, real *angle, real *bnsize, integer *
+        lnodes, integer *linkpr, integer *nperim, integer *lxk, integer *kxl, 
+        integer *nxl, integer *lxn, integer *nuid, integer *iavail, integer *
+        navail, logical *graph, logical *timer, logical *video, real *defsiz, 
+        logical *sizeit, char *dev1, integer *kreg, logical *batch, logical *
+        noroom, logical *err, real *amesur, real *xnold, real *ynold, integer 
+        *nxkold, integer *mmpold, integer *linkeg, integer *listeg, real *
+        bmesur, integer *mlink, integer *nprold, integer *npnold, integer *
+        npeold, integer *nnxk, logical *remesh, real *rexmin, real *rexmax, 
+        real *reymin, real *reymax, integer *idivis, real *sizmin, real *emax,
+         real *emin, ftnlen dev1_len)
 {
     /* System generated locals */
     integer lnodes_dim1, lnodes_offset, nxkold_dim1, nxkold_offset, i__1, 
-	    i__2;
+            i__2;
     real r__1;
 
     /* Builtin functions */
@@ -91,74 +91,73 @@ static integer c__1 = 1;
     static real xmin, xmax, ymin, ymax, zmin, zmax;
     static integer nadj1, nadj2, node1;
     static real time1, time2, xmin1, ymin1, xmax1, ymax1, zmin1, zmax1;
-    static integer icomb[10240]	/* was [10][1024] */;
+    static integer icomb[10240]        /* was [10][1024] */;
     extern /* Subroutine */ int pinch_(integer *, integer *, integer *, 
-	    integer *, real *, real *, real *, integer *, integer *, integer *
-	    , integer *, real *, integer *, real *, integer *, integer *, 
-	    integer *, integer *, integer *, integer *, integer *, logical *, 
-	    real *, real *, real *, real *, real *, real *, char *, integer *,
-	     integer *, integer *, integer *, integer *, integer *, integer *,
-	     logical *, logical *, integer *, logical *, logical *, ftnlen);
+            integer *, real *, real *, real *, integer *, integer *, integer *
+            , integer *, real *, integer *, real *, integer *, integer *, 
+            integer *, integer *, integer *, integer *, integer *, logical *, 
+            real *, real *, real *, real *, real *, real *, char *, integer *,
+             integer *, integer *, integer *, integer *, integer *, integer *,
+             logical *, logical *, integer *, logical *, logical *, ftnlen);
     static integer lcorn[10], ncorn, kloop, nloop[20], itype[1024], iuppr;
     extern /* Subroutine */ int close4_(integer *, integer *, integer *, 
-	    integer *, integer *, integer *, integer *, integer *, integer *, 
-	    integer *, integer *, integer *, logical *);
+            integer *, integer *, integer *, integer *, integer *, integer *, 
+            integer *, integer *, integer *, logical *);
     static integer nextn1[20];
     static logical adjted;
-    extern /* Subroutine */ int mesage_(char *, ftnlen), getime_(real *), 
-	    ringbl_();
+    extern /* Subroutine */ int  getime_(real *), 
+            ringbl_();
     static integer kkkold;
     extern logical cpubrk_(logical *);
     extern /* Subroutine */ int periml_(integer *, integer *, integer *, 
-	    integer *, integer *, real *, real *, real *, integer *, integer *
-	    , integer *, integer *, real *, real *, integer *, integer *, 
-	    integer *, integer *, real *, real *, real *, real *, real *, 
-	    real *, char *, integer *, logical *, ftnlen);
+            integer *, integer *, real *, real *, real *, integer *, integer *
+            , integer *, integer *, real *, real *, integer *, integer *, 
+            integer *, integer *, real *, real *, real *, real *, real *, 
+            real *, char *, integer *, logical *, ftnlen);
     static integer lllold, itnper, nnnold;
     extern /* Subroutine */ int rplotl_(integer *, real *, real *, real *, 
-	    integer *, real *, real *, real *, real *, real *, real *, 
-	    integer *, char *, integer *, ftnlen);
+            integer *, real *, real *, real *, real *, real *, real *, 
+            integer *, char *, integer *, ftnlen);
     static integer kperim;
     extern /* Subroutine */ int getrow_(integer *, integer *, integer *, 
-	    integer *, integer *, integer *, integer *, integer *, integer *, 
-	    integer *, integer *, integer *, real *, real *, real *, real *, 
-	    real *, integer *, integer *, integer *, integer *, integer *, 
-	    integer *, integer *, integer *, integer *, integer *, logical *, 
-	    logical *, real *, real *, real *, real *, real *, real *, char *,
-	     integer *, logical *, integer *, logical *, logical *, ftnlen), 
-	    filsmo_(integer *, integer *, real *, real *, real *, integer *, 
-	    integer *, integer *, integer *, integer *, integer *, integer *, 
-	    integer *, real *, integer *, real *, real *, real *, real *, 
-	    real *, real *, char *, integer *, ftnlen), sflush_(), adjrow_(
-	    integer *, integer *, integer *, real *, real *, real *, integer *
-	    , integer *, integer *, integer *, real *, real *, integer *, 
-	    integer *, integer *, integer *, real *, real *, real *, real *, 
-	    real *, real *, char *, integer *, integer *, integer *, integer *
-	    , integer *, integer *, integer *, integer *, integer *, logical *
-	    , logical *, integer *, real *, logical *, logical *, logical *, 
-	    ftnlen), pcross_(integer *, integer *, integer *, integer *, 
-	    integer *, integer *, real *, real *, real *, integer *, integer *
-	    , integer *, integer *, real *, integer *, real *, integer *, 
-	    integer *, integer *, integer *, integer *, integer *, integer *, 
-	    integer *, integer *, integer *, logical *, real *, real *, real *
-	    , real *, real *, real *, char *, integer *, integer *, integer *,
-	     integer *, integer *, integer *, integer *, integer *, logical *,
-	     logical *, integer *, logical *, logical *, ftnlen), colaps_(
-	    integer *, integer *, integer *, integer *, integer *, real *, 
-	    real *, real *, integer *, integer *, integer *, integer *, real *
-	    , integer *, real *, integer *, integer *, integer *, integer *, 
-	    integer *, integer *, logical *, real *, real *, real *, real *, 
-	    real *, real *, char *, integer *, integer *, integer *, integer *
-	    , integer *, integer *, integer *, integer *, logical *, logical *
-	    , integer *, logical *, logical *, ftnlen), flmnmx_(integer *, 
-	    integer *, integer *, integer *, integer *, integer *, real *, 
-	    real *, integer *, integer *, real *, real *, real *, real *, 
-	    logical *), tridel_(integer *, integer *, real *, real *, real *, 
-	    integer *, integer *, integer *, integer *, integer *, integer *, 
-	    integer *, integer *, integer *, integer *, real *, integer *, 
-	    real *, integer *, char *, integer *, real *, real *, real *, 
-	    real *, real *, real *, logical *, logical *, logical *, logical *
-	    , ftnlen);
+            integer *, integer *, integer *, integer *, integer *, integer *, 
+            integer *, integer *, integer *, real *, real *, real *, real *, 
+            real *, integer *, integer *, integer *, integer *, integer *, 
+            integer *, integer *, integer *, integer *, integer *, logical *, 
+            logical *, real *, real *, real *, real *, real *, real *, char *,
+             integer *, logical *, integer *, logical *, logical *, ftnlen), 
+            filsmo_(integer *, integer *, real *, real *, real *, integer *, 
+            integer *, integer *, integer *, integer *, integer *, integer *, 
+            integer *, real *, integer *, real *, real *, real *, real *, 
+            real *, real *, char *, integer *, ftnlen), sflush_(), adjrow_(
+            integer *, integer *, integer *, real *, real *, real *, integer *
+            , integer *, integer *, integer *, real *, real *, integer *, 
+            integer *, integer *, integer *, real *, real *, real *, real *, 
+            real *, real *, char *, integer *, integer *, integer *, integer *
+            , integer *, integer *, integer *, integer *, integer *, logical *
+            , logical *, integer *, real *, logical *, logical *, logical *, ftnlen), pcross_(integer *, integer *, integer *, integer *, 
+            integer *, integer *, real *, real *, real *, integer *, integer *
+            , integer *, integer *, real *, integer *, real *, integer *, 
+            integer *, integer *, integer *, integer *, integer *, integer *, 
+            integer *, integer *, integer *, logical *, real *, real *, real *
+            , real *, real *, real *, char *, integer *, integer *, integer *,
+             integer *, integer *, integer *, integer *, integer *, logical *,
+             logical *, integer *, logical *, logical *, ftnlen), colaps_(
+            integer *, integer *, integer *, integer *, integer *, real *, 
+            real *, real *, integer *, integer *, integer *, integer *, real *
+            , integer *, real *, integer *, integer *, integer *, integer *, 
+            integer *, integer *, logical *, real *, real *, real *, real *, 
+            real *, real *, char *, integer *, integer *, integer *, integer *
+            , integer *, integer *, integer *, integer *, logical *, logical *
+            , integer *, logical *, logical *, ftnlen), flmnmx_(integer *, 
+            integer *, integer *, integer *, integer *, integer *, real *, 
+            real *, integer *, integer *, real *, real *, real *, real *, 
+            logical *), tridel_(integer *, integer *, real *, real *, real *, 
+            integer *, integer *, integer *, integer *, integer *, integer *, 
+            integer *, integer *, integer *, integer *, real *, integer *, 
+            real *, integer *, char *, integer *, real *, real *, real *, 
+            real *, real *, real *, logical *, logical *, logical *, logical *
+            , ftnlen);
 
     /* Fortran I/O blocks */
     static cilist io___39 = { 0, 6, 0, " (A, F10.5)", 0 };
@@ -336,7 +335,7 @@ static integer c__1 = 1;
 
     /* Function Body */
     if(*remesh)
-      {	*sizeit = TRUE_; }
+      {        *sizeit = TRUE_; }
     timing_1.timea = (float)0.;
     timing_1.timep = (float)0.;
     timing_1.timec = (float)0.;
@@ -350,43 +349,43 @@ static integer c__1 = 1;
     i__1 = *mxnd;
     for (i__ = 1; i__ <= i__1; ++i__)
       {
-	for (j = 1; j <= 4; ++j)
-	  {
-	    integer idx= j + (i__ << 2);
-	    lxk[idx]= 0;
-	    lxn[idx]= 0;
+        for (j = 1; j <= 4; ++j)
+          {
+            integer idx= j + (i__ << 2);
+            lxk[idx]= 0;
+            lxn[idx]= 0;
 /* L100: */
-	  }
+          }
 /* L110: */
       }
     i__1 = *mxnd;
     for (i__ = *nnn + 1; i__ <= i__1; ++i__)
       {
-	nuid[i__] = 0;
+        nuid[i__] = 0;
 /* L120: */
       }
     i__1 = *mxnd * 3;
     for (i__ = 1; i__ <= i__1; ++i__)
       {
-	for (j = 1; j <= 2; ++j)
-	  {
-	    kxl[j + (i__ << 1)] = 0;
-	    nxl[j + (i__ << 1)] = 0;
+        for (j = 1; j <= 2; ++j)
+          {
+            kxl[j + (i__ << 1)] = 0;
+            nxl[j + (i__ << 1)] = 0;
 /* L130: */
-	  }
+          }
 /* L140: */
       }
 /*  ZERO THE LOOP COUNTING AND CONNECTING ARRAYS */
     for (i__ = 1; i__ <= 20; ++i__) {
-	nloop[i__ - 1] = 0;
-	nextn1[i__ - 1] = 0;
+        nloop[i__ - 1] = 0;
+        nextn1[i__ - 1] = 0;
 /* L150: */
     }
     i__1 = *nprm;
     for (i__ = 1; i__ <= i__1; ++i__) {
-	linkpr[i__ * 3 + 1] = 0;
-	linkpr[i__ * 3 + 2] = 0;
-	linkpr[i__ * 3 + 3] = 0;
+        linkpr[i__ * 3 + 1] = 0;
+        linkpr[i__ * 3 + 2] = 0;
+        linkpr[i__ * 3 + 3] = 0;
 /* L160: */
     }
 /*  FIND THE EXTREMES OF THE PERIMETERS */
@@ -398,50 +397,50 @@ static integer c__1 = 1;
     zmax = zn[iptper[1]];
     i__1 = *nprm;
     for (i__ = 1; i__ <= i__1; ++i__) {
-	i__2 = iptper[i__] + numper[i__] - 1;
-	for (j = iptper[i__]; j <= i__2; ++j) {
-	    node1 = lperim[j];
+        i__2 = iptper[i__] + numper[i__] - 1;
+        for (j = iptper[i__]; j <= i__2; ++j) {
+            node1 = lperim[j];
 /* Computing MIN */
-	    r__1 = xn[node1];
-	    xmin = dbl_min(r__1,xmin);
+            r__1 = xn[node1];
+            xmin = dbl_min(r__1,xmin);
 /* Computing MAX */
-	    r__1 = xn[node1];
-	    xmax = dbl_max(r__1,xmax);
+            r__1 = xn[node1];
+            xmax = dbl_max(r__1,xmax);
 /* Computing MIN */
-	    r__1 = yn[node1];
-	    ymin = dbl_min(r__1,ymin);
+            r__1 = yn[node1];
+            ymin = dbl_min(r__1,ymin);
 /* Computing MAX */
-	    r__1 = yn[node1];
-	    ymax = dbl_max(r__1,ymax);
+            r__1 = yn[node1];
+            ymax = dbl_max(r__1,ymax);
 /* Computing MIN */
-	    r__1 = zn[node1];
-	    zmin = dbl_min(r__1,zmin);
+            r__1 = zn[node1];
+            zmin = dbl_min(r__1,zmin);
 /* Computing MAX */
-	    r__1 = zn[node1];
-	    zmax = dbl_max(r__1,zmax);
+            r__1 = zn[node1];
+            zmax = dbl_max(r__1,zmax);
 /* L170: */
-	}
+        }
 /* L180: */
     }
 /*  LINK ALL THE NODES IN THE ORIGINAL PERIMETERS TOGETHER */
     i__1 = *nprm;
     for (i__ = 1; i__ <= i__1; ++i__)
       {
-	periml_(nbnode, mxnd, &numper[i__], &iptper[i__], mln, &xn[1], &yn[1],
-		 &zn[1], &lxk[5], &kxl[3], &nxl[3], &lxn[5], &angle[1], &
-		bnsize[3], &lnodes[lnodes_offset], &lperim[1], lll, &lllold, &
-		xmin, &xmax, &ymin, &ymax, &zmin, &zmax, dev1, kreg, err, (ftnlen)3);
-	if(*err)
-	  { goto L310; }
-	linkpr[i__ * 3 + 1] = lperim[iptper[i__]];
-	if (i__ > 1) {
-	    linkpr[(i__ - 1) * 3 + 2] = i__;
-	    linkpr[i__ * 3 + 2] = 1;
-	} else {
-	    linkpr[i__ * 3 + 2] = 0;
-	}
-	linkpr[i__ * 3 + 3] = numper[i__];
-	nperim[1] = numper[i__];
+        periml_(nbnode, mxnd, &numper[i__], &iptper[i__], mln, &xn[1], &yn[1],
+                 &zn[1], &lxk[5], &kxl[3], &nxl[3], &lxn[5], &angle[1], &
+                bnsize[3], &lnodes[lnodes_offset], &lperim[1], lll, &lllold, &
+                xmin, &xmax, &ymin, &ymax, &zmin, &zmax, dev1, kreg, err, (ftnlen)3);
+        if(*err)
+          { goto L310; }
+        linkpr[i__ * 3 + 1] = lperim[iptper[i__]];
+        if (i__ > 1) {
+            linkpr[(i__ - 1) * 3 + 2] = i__;
+            linkpr[i__ * 3 + 2] = 1;
+        } else {
+            linkpr[i__ * 3 + 2] = 0;
+        }
+        linkpr[i__ * 3 + 3] = numper[i__];
+        nperim[1] = numper[i__];
 /* L190: */
     }
     itnper = *nbnode;
@@ -452,16 +451,16 @@ static integer c__1 = 1;
     *navail = *mxnd - *nnn;
     i__1 = *mxnd;
     for (i__ = *iavail; i__ <= i__1; ++i__) {
-	lxn[(i__ << 2) + 1] = 0;
-	lxn[(i__ << 2) + 2] = 0;
-	lxn[(i__ << 2) + 3] = 0;
-	lxn[(i__ << 2) + 4] = i__ + 1;
+        lxn[(i__ << 2) + 1] = 0;
+        lxn[(i__ << 2) + 2] = 0;
+        lxn[(i__ << 2) + 3] = 0;
+        lxn[(i__ << 2) + 4] = i__ + 1;
 /* L200: */
     }
 /*  PLOT THE INITIAL BOUNDARIES */
     if (*graph) {
-	rplotl_(mxnd, &xn[1], &yn[1], &zn[1], &nxl[3], &xmin, &xmax, &ymin, &
-		ymax, &zmin, &zmax, lll, dev1, kreg, (ftnlen)3);
+        rplotl_(mxnd, &xn[1], &yn[1], &zn[1], &nxl[3], &xmin, &xmax, &ymin, &
+                ymax, &zmin, &zmax, lll, dev1, kreg, (ftnlen)3);
     }
     xmin1 = xmin;
     xmax1 = xmax;
@@ -470,11 +469,12 @@ static integer c__1 = 1;
     zmin1 = zmin;
     zmax1 = zmax;
 /*  CHECK INPUT FOR ODDNESS */
-    if (itnper / 2 << 1 != itnper) {
-	mesage_("IN PAVING, NO. OF PERIMETER NODES IS ODD", (ftnlen)40);
-	*err = TRUE_;
-	goto L310;
-    }
+    if (itnper / 2 << 1 != itnper)
+      {
+        fprintf(stderr,"IN PAVING, NO. OF PERIMETER NODES IS ODD");
+        *err = TRUE_;
+        goto L310;
+      }
 /*  NOW BEGIN TO LOOP THROUGH THE INTERIOR NODE LIST */
 /*  FILLING ROWS WITH ELEMENTS */
     n1 = linkpr[4];
@@ -486,103 +486,99 @@ L210:
 /*  SEE IF IT IS TIME TO SWITCH TO THE NEXT PERIMETER */
 /*  BY WHETHER THE CURRENT N0 IS INTERIOR OR NOT */
     if ((i__1 = lnodes[n0 * lnodes_dim1 + 4], abs(i__1)) == 2) {
-	if (linkpr[kperim * 3 + 2] != 0) {
-	    linkpr[kperim * 3 + 3] = nloop[0];
-	    linkpr[kperim * 3 + 1] = n1;
-	    kperim = linkpr[kperim * 3 + 2];
-	    n1 = linkpr[kperim * 3 + 1];
-	    nloop[0] = linkpr[kperim * 3 + 3];
-	    n0 = lnodes[n1 * lnodes_dim1 + 2];
-	} else {
-	    n0 = lnodes[n1 * lnodes_dim1 + 2];
-	}
+        if (linkpr[kperim * 3 + 2] != 0) {
+            linkpr[kperim * 3 + 3] = nloop[0];
+            linkpr[kperim * 3 + 1] = n1;
+            kperim = linkpr[kperim * 3 + 2];
+            n1 = linkpr[kperim * 3 + 1];
+            nloop[0] = linkpr[kperim * 3 + 3];
+            n0 = lnodes[n1 * lnodes_dim1 + 2];
+        } else {
+            n0 = lnodes[n1 * lnodes_dim1 + 2];
+        }
     }
 /*  NOW GET THE BEST CORNERS FOR THE NEXT ROW */
     getrow_(mxnd, &c__10, &c__1024, mln, &nuid[1], &lxk[5], &kxl[3], &nxl[3], 
-	    &lxn[5], &lnodes[lnodes_offset], &ncorn, lcorn, &bnsize[3], &
-	    angle[1], &xn[1], &yn[1], &zn[1], icomb, itype, nloop, &n1, &nend,
-	     iavail, navail, lll, kkk, nnn, graph, video, &xmin, &xmax, &ymin,
-	     &ymax, &zmin, &zmax, dev1, kreg, sizeit, &linkpr[kperim * 3 + 2],
-	     noroom, err, (ftnlen)3);
+            &lxn[5], &lnodes[lnodes_offset], &ncorn, lcorn, &bnsize[3], &
+            angle[1], &xn[1], &yn[1], &zn[1], icomb, itype, nloop, &n1, &nend,
+             iavail, navail, lll, kkk, nnn, graph, video, &xmin, &xmax, &ymin,
+             &ymax, &zmin, &zmax, dev1, kreg, sizeit, &linkpr[kperim * 3 + 2],
+             noroom, err, (ftnlen)3);
     if (*noroom || *err) {
-	goto L310;
+        goto L310;
     }
 /*  CHECK TO SEE IF WE ARE DONE WITH ONLY A QUAD LEFT */
 /*  (AND THAT THE LOOP IS NOT AN INTERIOR HOLE) */
     if (nloop[0] == 4 && linkpr[kperim * 3 + 2] == 0) {
-	close4_(mxnd, mln, &lxk[5], &kxl[3], &nxl[3], &lxn[5], &lnodes[
-		lnodes_offset], &lnodes[n1 * lnodes_dim1 + 2], &n1, &lnodes[
-		n1 * lnodes_dim1 + 3], &lnodes[lnodes[n1 * lnodes_dim1 + 3] * 
-		lnodes_dim1 + 3], kkk, err);
-	if (*err) {
-	    goto L310;
-	}
-	filsmo_(mxnd, mln, &xn[1], &yn[1], &zn[1], &lxk[5], &kxl[3], &nxl[3], 
-		&lxn[5], lll, nnn, nnn, &lnodes[lnodes_offset], &bnsize[3], 
-		nloop, &xmin, &xmax, &ymin, &ymax, &zmin, &zmax, dev1, kreg, (
-		ftnlen)3);
-	if (*graph) {
-	    rplotl_(mxnd, &xn[1], &yn[1], &zn[1], &nxl[3], &xmin, &xmax, &
-		    ymin, &ymax, &zmin, &zmax, lll, dev1, kreg, (ftnlen)3);
-	}
-	goto L240;
+        close4_(mxnd, mln, &lxk[5], &kxl[3], &nxl[3], &lxn[5], &lnodes[
+                lnodes_offset], &lnodes[n1 * lnodes_dim1 + 2], &n1, &lnodes[
+                n1 * lnodes_dim1 + 3], &lnodes[lnodes[n1 * lnodes_dim1 + 3] * 
+                lnodes_dim1 + 3], kkk, err);
+        if (*err) {
+            goto L310;
+        }
+        filsmo_(mxnd, mln, &xn[1], &yn[1], &zn[1], &lxk[5], &kxl[3], &nxl[3], 
+                &lxn[5], lll, nnn, nnn, &lnodes[lnodes_offset], &bnsize[3], 
+                nloop, &xmin, &xmax, &ymin, &ymax, &zmin, &zmax, dev1, kreg, (ftnlen)3);
+        if (*graph) {
+            rplotl_(mxnd, &xn[1], &yn[1], &zn[1], &nxl[3], &xmin, &xmax, &
+                    ymin, &ymax, &zmin, &zmax, lll, dev1, kreg, (ftnlen)3);
+        }
+        goto L240;
 /*  CHECK TO SEE IF WE ARE DONE WITH ONLY 6 NODES LEFT */
     } else if (nloop[0] == 6 && linkpr[kperim * 3 + 2] == 0) {
-	close6_(mxnd, &c__10, mln, &nuid[1], &xn[1], &yn[1], &lxk[5], &kxl[3],
-		 &nxl[3], &lxn[5], &angle[1], &bnsize[3],
-		&lnodes[lnodes_offset], &n1, nloop, &kkkold, &lllold, &nnnold,
-		navail, iavail, &xmin, &xmax, &ymin, &ymax, dev1, lll,
-		kkk, nnn, lcorn, &ncorn, graph, video, sizeit, noroom, err,
-		&xnold[1], &ynold[1], &nxkold[nxkold_offset], &linkeg[3],
-		&listeg[1], &bmesur[1], mlink, npnold, npeold, nnxk,
-		rexmin, rexmax, reymin, reymax, idivis, sizmin, emax, emin,
-		(ftnlen)3);
-	if (*noroom || *err) {
-	    goto L310;
-	}
-	filsmo_(mxnd, mln, &xn[1], &yn[1], &zn[1], &lxk[5], &kxl[3], &nxl[3], 
-		&lxn[5], lll, nnn, nnn, &lnodes[lnodes_offset], &bnsize[3], 
-		nloop, &xmin, &xmax, &ymin, &ymax, &zmin, &zmax, dev1, kreg, (
-		ftnlen)3);
-	if (*graph) {
-	    rplotl_(mxnd, &xn[1], &yn[1], &zn[1], &nxl[3], &xmin, &xmax, &
-		    ymin, &ymax, &zmin, &zmax, lll, dev1, kreg, (ftnlen)3);
-	    sflush_();
-	}
-	goto L240;
+        close6_(mxnd, &c__10, mln, &nuid[1], &xn[1], &yn[1], &lxk[5], &kxl[3],
+                 &nxl[3], &lxn[5], &angle[1], &bnsize[3],
+                &lnodes[lnodes_offset], &n1, nloop, &kkkold, &lllold, &nnnold,
+                navail, iavail, &xmin, &xmax, &ymin, &ymax, dev1, lll,
+                kkk, nnn, lcorn, &ncorn, graph, video, sizeit, noroom, err,
+                &xnold[1], &ynold[1], &nxkold[nxkold_offset], &linkeg[3],
+                &listeg[1], &bmesur[1], mlink, npnold, npeold, nnxk,
+                rexmin, rexmax, reymin, reymax, idivis, sizmin, emax, emin, (ftnlen)3);
+        if (*noroom || *err) {
+            goto L310;
+        }
+        filsmo_(mxnd, mln, &xn[1], &yn[1], &zn[1], &lxk[5], &kxl[3], &nxl[3], 
+                &lxn[5], lll, nnn, nnn, &lnodes[lnodes_offset], &bnsize[3], 
+                nloop, &xmin, &xmax, &ymin, &ymax, &zmin, &zmax, dev1, kreg, (ftnlen)3);
+        if (*graph) {
+            rplotl_(mxnd, &xn[1], &yn[1], &zn[1], &nxl[3], &xmin, &xmax, &
+                    ymin, &ymax, &zmin, &zmax, lll, dev1, kreg, (ftnlen)3);
+            sflush_();
+        }
+        goto L240;
     }
 /*  GENERATE A NEW ROW OF ELEMENTS */
     addrow_(mxnd, &c__10240, &c__20, mln, nprm, &nuid[1], &xn[1], &yn[1], &zn[
-	    1], &lxk[5], &kxl[3], &nxl[3], &lxn[5], &angle[1], &bnsize[3], &
-	    lnodes[lnodes_offset], &n1, &nend, nloop, nextn1, &linkpr[4], &
-	    kperim, &kkkold, &lllold, &nnnold, iavail, navail, &xmin, &xmax, &
-	    ymin, &ymax, &zmin, &zmax, dev1, lll, kkk, nnn, &nnn2, &nadj1, &
-	    nadj2, icomb, &kloop, graph, video, kreg, &done, sizeit, noroom, 
-	    err, &xnold[1], &ynold[1], &nxkold[nxkold_offset], &linkeg[3], &
-	    listeg[1], &bmesur[1], mlink, npnold, npeold, nnxk,
-	    rexmin, rexmax, reymin, reymax, idivis, sizmin, emax, emin, (
-	    ftnlen)3);
+            1], &lxk[5], &kxl[3], &nxl[3], &lxn[5], &angle[1], &bnsize[3], &
+            lnodes[lnodes_offset], &n1, &nend, nloop, nextn1, &linkpr[4], &
+            kperim, &kkkold, &lllold, &nnnold, iavail, navail, &xmin, &xmax, &
+            ymin, &ymax, &zmin, &zmax, dev1, lll, kkk, nnn, &nnn2, &nadj1, &
+            nadj2, icomb, &kloop, graph, video, kreg, &done, sizeit, noroom, 
+            err, &xnold[1], &ynold[1], &nxkold[nxkold_offset], &linkeg[3], &
+            listeg[1], &bmesur[1], mlink, npnold, npeold, nnxk,
+            rexmin, rexmax, reymin, reymax, idivis, sizmin, emax, emin, (ftnlen)3);
     if (*noroom || *err) {
-	goto L310;
+        goto L310;
     }
     if (done) {
-	goto L240;
+        goto L240;
     }
 /*  TRY COLLAPSING CORNERS WITH SMALL ANGLES AFTER A ROW HAS BEEN */
 /*  COMPLETED - NOTE THAT THE ICOMB ARRAY IS SENT TO PINCH IN PLACE */
 /*  OF THE LCORN ARRAY FOR MORE CORNER PROCESSING CAPABILITIES */
 L220:
     pinch_(mxnd, &c__10240, mln, &nuid[1], &xn[1], &yn[1], &zn[1], &lxk[5], &
-	    kxl[3], &nxl[3], &lxn[5], &angle[1], &lnodes[lnodes_offset], &
-	    bnsize[3], &n1, nloop, &kkkold, &lllold, &nnnold, iavail, navail, 
-	    &done, &xmin, &xmax, &ymin, &ymax, &zmin, &zmax, dev1, lll, kkk, 
-	    nnn, icomb, &ncorn, &nadj1, &nadj2, graph, video, kreg, noroom, 
-	    err, (ftnlen)3);
+            kxl[3], &nxl[3], &lxn[5], &angle[1], &lnodes[lnodes_offset], &
+            bnsize[3], &n1, nloop, &kkkold, &lllold, &nnnold, iavail, navail, 
+            &done, &xmin, &xmax, &ymin, &ymax, &zmin, &zmax, dev1, lll, kkk, 
+            nnn, icomb, &ncorn, &nadj1, &nadj2, graph, video, kreg, noroom, 
+            err, (ftnlen)3);
     if (*noroom || *err) {
-	goto L310;
+        goto L310;
     }
     if (done) {
-	goto L240;
+        goto L240;
     }
 /* C */
 /* C  CHECK TO SEE IF ANY ISOLATED ELEMENTS HAVE BEEN FORMED AND */
@@ -598,133 +594,132 @@ L220:
 /*      ENDIF */
 /*  ADJUST THE NEW ROW BY TAKING TUCKS OR INSERTING WEDGES AS NEEDED */
     if (nadj1 > 0 && nadj2 > 0 && nloop[0] > 4) {
-	adjrow_(mxnd, mln, &nuid[1], &xn[1], &yn[1], &zn[1], &lxk[5], &kxl[3],
-		 &nxl[3], &lxn[5], &angle[1], &bnsize[3], &lnodes[
-		lnodes_offset], nloop, iavail, navail, &xmin, &xmax, &ymin, &
-		ymax, &zmin, &zmax, dev1, lll, kkk, nnn, &lllold, &nnnold, &
-		n1, &nadj1, &nadj2, &nnn2, graph, video, kreg, defsiz, &
-		adjted, noroom, err, (ftnlen)3);
-	if (*noroom || *err) {
-	    goto L310;
-	}
-	if (adjted) {
-	    goto L220;
-	}
+        adjrow_(mxnd, mln, &nuid[1], &xn[1], &yn[1], &zn[1], &lxk[5], &kxl[3],
+                 &nxl[3], &lxn[5], &angle[1], &bnsize[3], &lnodes[
+                lnodes_offset], nloop, iavail, navail, &xmin, &xmax, &ymin, &
+                ymax, &zmin, &zmax, dev1, lll, kkk, nnn, &lllold, &nnnold, &
+                n1, &nadj1, &nadj2, &nnn2, graph, video, kreg, defsiz, &
+                adjted, noroom, err, (ftnlen)3);
+        if (*noroom || *err) {
+            goto L310;
+        }
+        if (adjted) {
+            goto L220;
+        }
     }
 /*  CHECK TO SEE IF ANY OF THE CONCURRENT PERIMETERS OVERLAP */
     if (linkpr[kperim * 3 + 2] != 0)
       {
-	linkpr[kperim * 3 + 3] = nloop[0];
-	pcross_(mxnd, &c__10240, mln, &c__20, nprm, &nuid[1], &xn[1], &yn[1], 
-		&zn[1], &lxk[5], &kxl[3], &nxl[3], &lxn[5], &angle[1], &
-		lnodes[lnodes_offset], &bnsize[3], &linkpr[4], &kperim, &n1, &
-		nadj1, &nadj2, &kkkold, &lllold, &nnnold, iavail, navail, &
-		done, &xmin, &xmax, &ymin, &ymax, &zmin, &zmax, dev1, lll, 
-		kkk, nnn, icomb, &ncorn, nloop, nextn1, &kloop, graph, video, 
-		kreg, noroom, err, (ftnlen)3);
+        linkpr[kperim * 3 + 3] = nloop[0];
+        pcross_(mxnd, &c__10240, mln, &c__20, nprm, &nuid[1], &xn[1], &yn[1], 
+                &zn[1], &lxk[5], &kxl[3], &nxl[3], &lxn[5], &angle[1], &
+                lnodes[lnodes_offset], &bnsize[3], &linkpr[4], &kperim, &n1, &
+                nadj1, &nadj2, &kkkold, &lllold, &nnnold, iavail, navail, &
+                done, &xmin, &xmax, &ymin, &ymax, &zmin, &zmax, dev1, lll, 
+                kkk, nnn, icomb, &ncorn, nloop, nextn1, &kloop, graph, video, 
+                kreg, noroom, err, (ftnlen)3);
         if(*err)
-	  fprintf( stderr,"Error in PCROSS routine.\n");
-	if (*noroom || *err)
-	  { goto L310;}
+          fprintf( stderr,"Error in PCROSS routine.\n");
+        if (*noroom || *err)
+          { goto L310;}
       }
 /*  TRY COLLAPSING OVERLAPPING SIDES TO FORM TWO LOOPS OUT OF THE */
 /*  CURRENT SINGLE LOOP - NOTE THAT THE ICOMB ARRAY IS SENT AS */
 /*  WHEN CALLING PINCH IN PLACE OF THE LCORN ARRAY */
 L230:
     if (nloop[0] > 6) {
-	colaps_(mxnd, &c__10240, mln, &c__20, &nuid[1], &xn[1], &yn[1], &zn[1]
-		, &lxk[5], &kxl[3], &nxl[3], &lxn[5], &angle[1], &lnodes[
-		lnodes_offset], &bnsize[3], &n1, &kkkold, &lllold, &nnnold, 
-		iavail, navail, &done, &xmin, &xmax, &ymin, &ymax, &zmin, &
-		zmax, dev1, lll, kkk, nnn, icomb, &ncorn, nloop, nextn1, &
-		kloop, graph, video, kreg, noroom, err, (ftnlen)3);
-	if (*noroom || *err) {
-	    goto L310;
-	}
-	if (done) {
-	    goto L240;
-	}
+        colaps_(mxnd, &c__10240, mln, &c__20, &nuid[1], &xn[1], &yn[1], &zn[1]
+                , &lxk[5], &kxl[3], &nxl[3], &lxn[5], &angle[1], &lnodes[
+                lnodes_offset], &bnsize[3], &n1, &kkkold, &lllold, &nnnold, 
+                iavail, navail, &done, &xmin, &xmax, &ymin, &ymax, &zmin, &
+                zmax, dev1, lll, kkk, nnn, icomb, &ncorn, nloop, nextn1, &
+                kloop, graph, video, kreg, noroom, err, (ftnlen)3);
+        if (*noroom || *err) {
+            goto L310;
+        }
+        if (done) {
+            goto L240;
+        }
     }
 /*  ADJUST THE ZOOMS TO FIT THE NEW AREA */
     if (*graph || cpubrk_(&c_true)) {
-	linkpr[kperim * 3 + 3] = nloop[0];
-	flmnmx_(mxnd, mln, nprm, &linkpr[4], &kperim, &lnodes[lnodes_offset], 
-		&xn[1], &yn[1], nloop, &n1, &xmin, &xmax, &ymin, &ymax, err);
-	if (*err) {
-	    goto L310;
-	}
-	rplotl_(mxnd, &xn[1], &yn[1], &zn[1], &nxl[3], &xmin, &xmax, &ymin, &
-		ymax, &zmin, &zmax, lll, dev1, kreg, (ftnlen)3);
+        linkpr[kperim * 3 + 3] = nloop[0];
+        flmnmx_(mxnd, mln, nprm, &linkpr[4], &kperim, &lnodes[lnodes_offset], 
+                &xn[1], &yn[1], nloop, &n1, &xmin, &xmax, &ymin, &ymax, err);
+        if (*err) {
+            goto L310;
+        }
+        rplotl_(mxnd, &xn[1], &yn[1], &zn[1], &nxl[3], &xmin, &xmax, &ymin, &
+                ymax, &zmin, &zmax, lll, dev1, kreg, (ftnlen)3);
     }
     goto L210;
 /*  CHECK TO MAKE SURE THAT OTHER LOOPS ARE NOT REMAINING TO BE FILLED */
 L240:
     if (kloop > 1) {
-	n1 = nextn1[0];
-	i__1 = kloop - 1;
-	for (i__ = 1; i__ <= i__1; ++i__) {
-	    nloop[i__ - 1] = nloop[i__];
-	    nextn1[i__ - 1] = nextn1[i__];
+        n1 = nextn1[0];
+        i__1 = kloop - 1;
+        for (i__ = 1; i__ <= i__1; ++i__) {
+            nloop[i__ - 1] = nloop[i__];
+            nextn1[i__ - 1] = nextn1[i__];
 /* L250: */
-	}
-	nloop[kloop - 1] = 0;
-	nextn1[kloop - 1] = 0;
-	--kloop;
+        }
+        nloop[kloop - 1] = 0;
+        nextn1[kloop - 1] = 0;
+        --kloop;
 /*  ADJUST THE ZOOMS TO FIT THE NEW AREA */
-	if (*graph) {
-	    flmnmx_(mxnd, mln, nprm, &linkpr[4], &kperim, &lnodes[
-		    lnodes_offset], &xn[1], &yn[1], nloop, &n1, &xmin, &xmax, 
-		    &ymin, &ymax, err);
-	    if (*err) {
-		goto L310;
-	    }
-	    rplotl_(mxnd, &xn[1], &yn[1], &zn[1], &nxl[3], &xmin, &xmax, &
-		    ymin, &ymax, &zmin, &zmax, lll, dev1, kreg, (ftnlen)3);
-	}
-	done = FALSE_;
+        if (*graph) {
+            flmnmx_(mxnd, mln, nprm, &linkpr[4], &kperim, &lnodes[
+                    lnodes_offset], &xn[1], &yn[1], nloop, &n1, &xmin, &xmax, 
+                    &ymin, &ymax, err);
+            if (*err) {
+                goto L310;
+            }
+            rplotl_(mxnd, &xn[1], &yn[1], &zn[1], &nxl[3], &xmin, &xmax, &
+                    ymin, &ymax, &zmin, &zmax, lll, dev1, kreg, (ftnlen)3);
+        }
+        done = FALSE_;
 /*  ENTER THE FILL LOOP WHERE IT CAN CHECK TO SEE IF ANY CROSSINGS */
 /*  ALREADY EXIST IN THIS LOOP */
-	goto L230;
+        goto L230;
     }
 /*  THE FILL HAS BEEN COMPLETED - NOW FIX UP ANY BAD SPOTS */
     i__1 = *nnn;
     for (i__ = 1; i__ <= i__1; ++i__) {
-	lnodes[i__ * lnodes_dim1 + 4] = (i__2 = lnodes[i__ * lnodes_dim1 + 4],
-		 abs(i__2));
+        lnodes[i__ * lnodes_dim1 + 4] = (i__2 = lnodes[i__ * lnodes_dim1 + 4],
+                 abs(i__2));
 /* L260: */
     }
     filsmo_(mxnd, mln, &xn[1], &yn[1], &zn[1], &lxk[5], &kxl[3], &nxl[3], &
-	    lxn[5], lll, nnn, nnn, &lnodes[lnodes_offset], &bnsize[3], nloop, 
-	    &xmin, &xmax, &ymin, &ymax, &zmin, &zmax, dev1, kreg, (ftnlen)3);
+            lxn[5], lll, nnn, nnn, &lnodes[lnodes_offset], &bnsize[3], nloop, 
+            &xmin, &xmax, &ymin, &ymax, &zmin, &zmax, dev1, kreg, (ftnlen)3);
     tridel_(mxnd, mln, &xn[1], &yn[1], &zn[1], &nuid[1], &lxk[5], &kxl[3], &
-	    nxl[3], &lxn[5], nnn, lll, kkk, navail, iavail, &angle[1], &
-	    lnodes[lnodes_offset], &bnsize[3], nloop, dev1, kreg, &xmin, &
-	    xmax, &ymin, &ymax, &zmin, &zmax, graph, video, noroom, err, (
-	    ftnlen)3);
+            nxl[3], &lxn[5], nnn, lll, kkk, navail, iavail, &angle[1], &
+            lnodes[lnodes_offset], &bnsize[3], nloop, dev1, kreg, &xmin, &
+            xmax, &ymin, &ymax, &zmin, &zmax, graph, video, noroom, err, (ftnlen)3);
     if (*noroom || *err) {
-	goto L310;
+        goto L310;
     }
     i__1 = *nnn;
     for (i__ = 1; i__ <= i__1; ++i__) {
-	lnodes[i__ * lnodes_dim1 + 4] = -(i__2 = lnodes[i__ * lnodes_dim1 + 4]
-		, abs(i__2));
+        lnodes[i__ * lnodes_dim1 + 4] = -(i__2 = lnodes[i__ * lnodes_dim1 + 4]
+                , abs(i__2));
 /* L270: */
     }
     filsmo_(mxnd, mln, &xn[1], &yn[1], &zn[1], &lxk[5], &kxl[3], &nxl[3], &
-	    lxn[5], lll, nnn, nnn, &lnodes[lnodes_offset], &bnsize[3], nloop, 
-	    &xmin, &xmax, &ymin, &ymax, &zmin, &zmax, dev1, kreg, (ftnlen)3);
+            lxn[5], lll, nnn, nnn, &lnodes[lnodes_offset], &bnsize[3], nloop, 
+            &xmin, &xmax, &ymin, &ymax, &zmin, &zmax, dev1, kreg, (ftnlen)3);
 /*  SUCCESSFUL EXIT */
     if (*graph) {
-	rplotl_(mxnd, &xn[1], &yn[1], &zn[1], &nxl[3], &xmin1, &xmax1, &ymin1,
-		 &ymax1, &zmin1, &zmax1, lll, dev1, kreg, (ftnlen)3);
+        rplotl_(mxnd, &xn[1], &yn[1], &zn[1], &nxl[3], &xmin1, &xmax1, &ymin1,
+                 &ymax1, &zmin1, &zmax1, lll, dev1, kreg, (ftnlen)3);
     }
     iuppr = int_min(*lll,*mxnd);
     i__1 = iuppr;
     for (i__ = 1; i__ <= i__1; ++i__) {
-	for (j = 1; j <= 4; ++j) {
-	    iexk[j + (i__ << 2)] = lxk[j + (i__ << 2)];
+        for (j = 1; j <= 4; ++j) {
+            iexk[j + (i__ << 2)] = lxk[j + (i__ << 2)];
 /* L280: */
-	}
+        }
 /* L300: */
     }
 /* Computing MIN */
@@ -732,10 +727,10 @@ L240:
     iuppr = int_min(i__1,i__2);
     i__1 = iuppr;
     for (i__ = 1; i__ <= i__1; ++i__) {
-	for (j = 1; j <= 2; ++j) {
-	    inxe[j + (i__ << 1)] = nxl[j + (i__ << 1)];
+        for (j = 1; j <= 2; ++j) {
+            inxe[j + (i__ << 1)] = nxl[j + (i__ << 1)];
 /* L290: */
-	}
+        }
 /* L301: */
     }
 /*  EXIT WITH ERROR */
@@ -743,14 +738,14 @@ L310:
 
     if (*err && ! (*batch))
       {
-	rplotl_(mxnd, &xn[1], &yn[1], &zn[1], &nxl[3], &xmin1, &xmax1, &ymin1,
-		 &ymax1, &zmin1, &zmax1, lll, dev1, kreg, (ftnlen)3);
-	ringbl_();
-	sflush_();
+        rplotl_(mxnd, &xn[1], &yn[1], &zn[1], &nxl[3], &xmin1, &xmax1, &ymin1,
+                 &ymax1, &zmin1, &zmax1, lll, dev1, kreg, (ftnlen)3);
+        ringbl_();
+        sflush_();
       }
     return 0;
 } /* paving_ */
 
 #ifdef __cplusplus
-	}
+        }
 #endif

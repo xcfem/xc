@@ -1,13 +1,13 @@
 /* cntcrn.f -- translated by f2c (version 20160102).
    You must link the resulting object file with libf2c:
-	on Microsoft Windows system, link with libf2c.lib;
-	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
-	or, if you install libf2c.a in a standard place, with -lf2c -lm
-	-- in that order, at the end of the command line, as in
-		cc *.o -lf2c -lm
-	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
+        on Microsoft Windows system, link with libf2c.lib;
+        on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+        or, if you install libf2c.a in a standard place, with -lf2c -lm
+        -- in that order, at the end of the command line, as in
+                cc *.o -lf2c -lm
+        Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
 
-		http://www.netlib.org/f2c/libf2c.zip
+                http://www.netlib.org/f2c/libf2c.zip
 */
 
 #ifdef __cplusplus
@@ -22,15 +22,15 @@ extern "C" {
 
 /*    See packages/seacas/LICENSE for details */
 /* Subroutine */ int cntcrn_(integer *mxnd, integer *mxcorn, integer *mln, 
-	integer *lnodes, integer *lcorn, integer *ncorn, integer *nloop, 
-	integer *n1, logical *err)
+        integer *lnodes, integer *lcorn, integer *ncorn, integer *nloop, 
+        integer *n1, logical *err)
 {
     /* System generated locals */
     integer lnodes_dim1, lnodes_offset;
 
     /* Local variables */
     static integer kkc, node, nold, lastc, kount;
-    extern /* Subroutine */ int mesage_(char *, ftnlen);
+
     static integer kountc;
 
 /* *********************************************************************** */
@@ -55,32 +55,32 @@ extern "C" {
 L100:
     ++kount;
     if (kount > *nloop) {
-	mesage_("PROBLEM IN CNTCRN WITH UNCLOSED LOOP", (ftnlen)36);
-	*err = TRUE_;
-	goto L110;
+        fprintf(stderr,"PROBLEM IN CNTCRN WITH UNCLOSED LOOP");
+        *err = TRUE_;
+        goto L110;
     }
 /*  A NEW CORNER NODE HAS BEEN FOUND */
     if (lnodes[node * lnodes_dim1 + 1] == 1) {
 /*  ADD UP THE NUMBER OF NODES FROM THE LAST "NON-SIDE" */
-	++(*ncorn);
-	if (*ncorn <= *mxcorn) {
-	    lcorn[*ncorn] = node;
-	}
-	if (*ncorn > 1) {
-	    lnodes[lastc * lnodes_dim1 + 7] = kountc + 1;
-	} else {
-	    kkc = kountc + 1;
-	}
-	lastc = node;
-	kountc = 0;
+        ++(*ncorn);
+        if (*ncorn <= *mxcorn) {
+            lcorn[*ncorn] = node;
+        }
+        if (*ncorn > 1) {
+            lnodes[lastc * lnodes_dim1 + 7] = kountc + 1;
+        } else {
+            kkc = kountc + 1;
+        }
+        lastc = node;
+        kountc = 0;
 /*  THIS IS A SIDE - JUST CONTINUE */
     } else {
-	++kountc;
+        ++kountc;
     }
 /*  CHECK FOR COMPLETION OF THE LOOP */
     node = lnodes[node * lnodes_dim1 + 3];
     if (node != nold) {
-	goto L100;
+        goto L100;
     }
 /*  GET THE FIRST CORNER'S DISTANCE FROM PREVIOUS CORNER CORRECT */
     lnodes[lastc * lnodes_dim1 + 7] = kkc + kountc;
@@ -89,5 +89,5 @@ L110:
 } /* cntcrn_ */
 
 #ifdef __cplusplus
-	}
+        }
 #endif

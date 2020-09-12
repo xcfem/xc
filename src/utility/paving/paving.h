@@ -32,6 +32,7 @@
 
 #include <math.h>
 #include <stdlib.h>
+#include <stdio.h>
 
 //#include "f2c.h"
 // f2c.h defines macros for max and min functions

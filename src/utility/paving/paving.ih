@@ -117,8 +117,6 @@ int b4bad_(integer *mxnd, integer *mln, real *xn, real *yn,integer *lxk, integer
 
 int chrrvc_(real *buff, char *txt, integer *l, ftnlen txt_len);
 
-int mesage_(char *prompt, ftnlen prompt_len);
-
 int mxzero_(integer *n, real *mat);
 
 int rowsmo_(integer *mxnd, integer *mln, real *xn, real *yn,real *zn, integer *lxk, integer *kxl, integer *nxl, integer *lxn,integer *nnn, real *wfac, real *wfac2, integer *nit, real *eps, real *ro, integer *nnn2, integer *lnodes, real *bnsize, integer *lll,logical *graph, real *xmin, real *xmax, real *ymin, real *ymax, real *zmin, real *zmax, char *dev1, integer *kreg, ftnlen dev1_len);
