@@ -221,7 +221,6 @@ void XC::PolygonalFace::create_nodes(Paver &paver)
 	    nHolePositions+= holePlg.GetNumVertices();
 	    holePolygons.push_back(holePlg);
 	  }
-
 	const double elemSizeRatio= minElemSize/maxElemSize;
 	if(elemSizeRatio<0.15)
 	  {
@@ -238,37 +237,42 @@ void XC::PolygonalFace::create_nodes(Paver &paver)
 	// Populate node array.
 	const std::vector<Pos3d> &nodePositions= paver.getNodePositions();
 	const size_t nNodes= nodePositions.size();
-	
-        ttzNodes= NodePtrArray3d(1,1,nNodes);
-
-	//// Put perimeter nodes (they exist already)
-	size_t count= 0;
-	const size_t numPerimeterNodes= perimeterNodes.size();
-	for(size_t i= 0;i<numPerimeterNodes;i++, count++)
+	if(nNodes>0)
 	  {
-	    Node *nn= perimeterNodes[i];
-	    size_t index= i;
-	    const Pos3d nodePos= nodePositions[index];
-	    const Pos3d nP= nn->getInitialPosition3d();
-	    const double d2= dist2(nodePos, nP);
-	    if(d2>1e-8)
+	    ttzNodes= NodePtrArray3d(1,1,nNodes);
+
+	    //// Put perimeter nodes (they exist already)
+	    size_t count= 0;
+	    const size_t numPerimeterNodes= perimeterNodes.size();
+	    for(size_t i= 0;i<numPerimeterNodes;i++, count++)
 	      {
-		index= paver.getIndexNearestPosition(nP,numPerimeterNodes);
+		Node *nn= perimeterNodes[i];
+		size_t index= i;
+		const Pos3d nodePos= nodePositions[index];
+		const Pos3d nP= nn->getInitialPosition3d();
+		const double d2= dist2(nodePos, nP);
+		if(d2>1e-8)
+		  {
+		    index= paver.getIndexNearestPosition(nP,numPerimeterNodes);
+		  }
+		ttzNodes(1,1,index+1)= nn;
 	      }
-	    ttzNodes(1,1,index+1)= nn;
+	    //// Create new nodes.
+	    for(size_t k= count;k<nNodes;k++, count++)
+	      {
+		const Pos3d nodePos= nodePositions[count];
+		create_node(nodePos,1,1,k+1);
+	      }
 	  }
-
-	//// Create new nodes.
-	for(size_t k= count;k<nNodes;k++, count++)
-	  {
-	    const Pos3d nodePos= nodePositions[count];
-	    create_node(nodePos,1,1,k+1);
-	  }
+	else
+	  std::cerr << getClassName() << "::" << __FUNCTION__
+		    << "; paving routine returned: " << nNodes
+		    << " nodes. Exiting." << std::endl; 
       }
     else
       if(verbosity>2)
-        std::clog << getClassName() << "::" << __FUNCTION__
-	          << "; nodes of entity: '" << getName()
+	std::clog << getClassName() << "::" << __FUNCTION__
+		  << "; nodes of entity: '" << getName()
 		  << "' already exist." << std::endl; 
   }
 
@@ -351,9 +355,10 @@ void XC::PolygonalFace::genMesh(meshing_dir dm)
     if(verbosity>3)
       std::clog << "Meshing polygonal surface...("
 		<< getName() << ")...";
+
     create_nodes(paver);
     if(ttzElements.Null())
-      create_elements(paver);
+      { create_elements(paver); }
     else
       if(verbosity>2)
         std::clog << getClassName() << "::" << __FUNCTION__
