@@ -34,13 +34,9 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-//#include "f2c.h"
-// f2c.h defines macros for max and min functions
-// and this causes a lot of problems with standard
-// libraries.
-
 typedef int integer;
 typedef float real;
+typedef float f2c_float;
 typedef int logical;
 typedef int ftnlen;
 typedef double doublereal;

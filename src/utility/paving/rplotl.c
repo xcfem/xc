@@ -20,7 +20,7 @@ extern "C" {
 
 static integer c__10002 = 10002;
 static integer c__0 = 0;
-static real c_b9 = (float)0.;
+static f2c_float c_b9 = (float)0.;
 static integer c__1 = 1;
 static integer c__10001 = 10001;
 
@@ -29,9 +29,9 @@ static integer c__10001 = 10001;
 /*    NTESS, the U.S. Government retains certain rights in this software. */
 
 /*    See packages/seacas/LICENSE for details */
-/* Subroutine */ int rplotl_(integer *mxnd, real *xn, real *yn, real *zn, 
-	integer *nxl, real *xmin, real *xmax, real *ymin, real *ymax, real *
-	zmin, real *zmax, integer *lll, char *dev1, integer *kreg, ftnlen 
+/* Subroutine */ int rplotl_(integer *mxnd, f2c_float *xn, f2c_float *yn, f2c_float *zn, 
+	integer *nxl, f2c_float *xmin, f2c_float *xmax, f2c_float *ymin, f2c_float *ymax, f2c_float *
+	zmin, f2c_float *zmax, integer *lll, char *dev1, integer *kreg, ftnlen 
 	dev1_len)
 {
     /* Format strings */
@@ -40,7 +40,7 @@ static integer c__10001 = 10001;
 
     /* System generated locals */
     integer i__1, i__2, i__3, i__4;
-    real r__1, r__2;
+    f2c_float r__1, r__2;
     olist o__1;
     cllist cl__1;
 
@@ -52,22 +52,22 @@ static integer c__10001 = 10001;
 
     /* Local variables */
     static integer i__;
-    static real x[2], y[2], xx1, xx2, yy1, yy2;
+    static f2c_float x[2], y[2], xx1, xx2, yy1, yy2;
     static integer len;
     static logical hard;
     static char hold[72];
     static integer idum;
-    static real xrat, yrat, xdum, ydum, xdimd, ydimd, xdimr, ydimr;
+    static f2c_float xrat, yrat, xdum, ydum, xdimd, ydimd, xdimr, ydimr;
     static integer iunit;
     static char dummy[72];
     static integer kaval2;
-    extern /* Subroutine */ int mpd2vc_(integer *, real *, real *, real *, 
-	    real *), mport2_(real *, real *, real *, real *);
+    extern /* Subroutine */ int mpd2vc_(integer *, f2c_float *, f2c_float *, f2c_float *, 
+	    f2c_float *), mport2_(f2c_float *, f2c_float *, f2c_float *, f2c_float *);
     static logical figure;
     extern /* Subroutine */ int getdum_(integer *, char *, integer *, ftnlen),
             pltbgn_(), vdiqes_(integer *, integer *), pltfrm_(integer *),
-            pltflu_(), mpview_(real *, real *, real *, real *),
-            pltxth_(real *, real *, char *, ftnlen);
+            pltflu_(), mpview_(f2c_float *, f2c_float *, f2c_float *, f2c_float *),
+            pltxth_(f2c_float *, f2c_float *, char *, ftnlen);
 
     /* Fortran I/O blocks */
     static cilist io___24 = { 0, 0, 0, fmt_10000, 0 };
@@ -96,7 +96,7 @@ static integer c__10001 = 10001;
 	if (kaval2 != 1) {
 	    goto L110;
 	}
-	vdescp_(&c__10002, &c__0, (real *)(&c__0));
+	vdescp_(&c__10002, &c__0, (f2c_float *)(&c__0));
     }
 /*  OPEN A FIGURE FILE IF NEEDED */
     if (figure) {
@@ -173,18 +173,18 @@ static integer c__10001 = 10001;
 		i__2 = nxl[(i__ << 1) + 1] + idum;
 		do_fio(&c__1, (char *)&i__2, (ftnlen)sizeof(integer));
 		r__1 = x[0] + xdum;
-		do_fio(&c__1, (char *)&r__1, (ftnlen)sizeof(real));
+		do_fio(&c__1, (char *)&r__1, (ftnlen)sizeof(f2c_float));
 		r__2 = y[0] + ydum;
-		do_fio(&c__1, (char *)&r__2, (ftnlen)sizeof(real));
+		do_fio(&c__1, (char *)&r__2, (ftnlen)sizeof(f2c_float));
 		e_wsfe();
 		io___25.ciunit = iunit;
 		s_wsfe(&io___25);
 		i__2 = nxl[(i__ << 1) + 2] + idum;
 		do_fio(&c__1, (char *)&i__2, (ftnlen)sizeof(integer));
 		r__1 = x[1] + xdum;
-		do_fio(&c__1, (char *)&r__1, (ftnlen)sizeof(real));
+		do_fio(&c__1, (char *)&r__1, (ftnlen)sizeof(f2c_float));
 		r__2 = y[1] + ydum;
-		do_fio(&c__1, (char *)&r__2, (ftnlen)sizeof(real));
+		do_fio(&c__1, (char *)&r__2, (ftnlen)sizeof(f2c_float));
 		e_wsfe();
 		io___26.ciunit = iunit;
 		s_wsfe(&io___26);
@@ -202,7 +202,7 @@ static integer c__10001 = 10001;
     pltflu_();
     if (hard) {
 	pltflu_();
-	vdescp_(&c__10001, &c__0, (real *)(&c__0));
+	vdescp_(&c__10001, &c__0, (f2c_float *)(&c__0));
     }
 L110:
     if (figure) {

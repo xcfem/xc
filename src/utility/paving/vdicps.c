@@ -19,7 +19,7 @@ extern "C" {
 /* Common Block Declarations */
 
 struct {
-    real xinch, yinch;
+    f2c_float xinch, yinch;
 } vcmodr_;
 
 #define vcmodr_1 vcmodr_
@@ -31,19 +31,19 @@ struct {
 #define vcvec1_1 vcvec1_
 
 struct {
-    real xndcmx, yndcmx;
+    f2c_float xndcmx, yndcmx;
 } vcndcm_;
 
 #define vcndcm_1 vcndcm_
 
 struct {
-    real vector[7];
+    f2c_float vector[7];
 } vcattr_;
 
 #define vcattr_1 vcattr_
 
 struct {
-    real xcp, ycp;
+    f2c_float xcp, ycp;
 } vccrps_;
 
 #define vccrps_1 vccrps_
@@ -55,7 +55,7 @@ struct {
 #define vcpstc_1 vcpstc_
 
 struct {
-    real xscale, yscale;
+    f2c_float xscale, yscale;
 } vcscal_;
 
 #define vcscal_1 vcscal_
@@ -74,7 +74,7 @@ struct {
 #define vcjob_1 vcjob_
 
 struct {
-    real dev[33];
+    f2c_float dev[33];
 } devcap_;
 
 #define devcap_1 devcap_
@@ -86,7 +86,7 @@ struct {
 #define vcescp_1 vcescp_
 
 struct {
-    real pstmlw;
+    f2c_float pstmlw;
     integer kpstbg, kpstci;
 } vcpsta_;
 
@@ -105,7 +105,7 @@ struct {
 #define vcpstd_1 vcpstd_
 
 struct {
-    real pcols[768]	/* was [3][256] */;
+    f2c_float pcols[768]	/* was [3][256] */;
 } pcolst_;
 
 #define pcolst_1 pcolst_
@@ -180,7 +180,7 @@ static integer c__22 = 22;
 /* NTESS, the U.S. Government retains certain rights in this software. */
 
 /* See packages/seacas/LICENSE for details */
-/* Subroutine */ int viinit_(real *aspect, integer *justif)
+/* Subroutine */ int viinit_(f2c_float *aspect, integer *justif)
 {
     /* System generated locals */
     address a__1[8];
@@ -188,27 +188,27 @@ static integer c__22 = 22;
 
     /* Builtin functions */
     /* Subroutine */ int s_cat(char *, char **, integer *, integer *, ftnlen);
-    integer i_nint(real *);
+    integer i_nint(f2c_float *);
 
     /* Local variables */
     static integer ic, ik;
-    static real temp;
+    static f2c_float temp;
     static char coord[20];
     extern /* Subroutine */ int vbdev_(char *, ftnlen);
     static integer dummy[1];
-    static real aspec1;
-    extern /* Subroutine */ int vdiqd9_(real *, real *), psti2c_(integer *, 
+    static f2c_float aspec1;
+    extern /* Subroutine */ int vdiqd9_(f2c_float *, f2c_float *), psti2c_(integer *, 
 	    integer *, char *, ftnlen);
     static integer justi1;
-    static real coldef[3], daspec;
+    static f2c_float coldef[3], daspec;
     extern /* Subroutine */ int pstbbg_();
     static char xcoord[4], ycoord[4];
     extern /* Subroutine */ int vberrh_(integer *, integer *), pstsel_(char *,
 	     ftnlen), vdmoni_(integer *), pstofs_(integer *), pstini_(), 
 	    pstbuf_(integer *, char *, ftnlen), vdstco_(integer *, integer *, 
-	    real *, integer *), vbvect_(integer *, real *, real *), vdstlw_(
-	    real *);
-    static real xunits, yunits;
+	    f2c_float *, integer *), vbvect_(integer *, f2c_float *, f2c_float *), vdstlw_(
+	    f2c_float *);
+    static f2c_float xunits, yunits;
     extern /* Subroutine */ int vdstfc_(integer *);
 
 /*     VDI-PostScript driver - B&W and COLOR versions */
@@ -244,14 +244,14 @@ static integer c__22 = 22;
 /* J.P. LONG        -9-NOV-1987 */
 /* ENVIRONMENT      -COMPUTER-INDEPENDENT, SYSTEM-INDEPENDENT, FORTRAN 77 */
 /*                   (postscript) */
-/* ENTRY CONDITIONS -ASPECT = real ratio of X dimension to Y dimension. */
+/* ENTRY CONDITIONS -ASPECT = f2c_float ratio of X dimension to Y dimension. */
 /*                   Range >0.0.  Default: 0. (device dependent). */
 /*                   JUSTIF = integer justification of NDC space on the */
 /*                   device.  Range 0-9.  Default: 0 (device dependent.) */
 /* CALLS            -VBERRH,VDSTCS,VDSTLW,VIMOVA */
-/* EXIT CONDITIONS  -XNDCMX,YNDCMX = real NDC maximum valid values(as */
+/* EXIT CONDITIONS  -XNDCMX,YNDCMX = f2c_float NDC maximum valid values(as */
 /*                   constrained by ASPECT). */
-/*                   VECTOR = real array of attribute values(all device */
+/*                   VECTOR = f2c_float array of attribute values(all device */
 /*                   dependent except VECTOR(4)=0.0). */
 /* NARRATIVE        -This must be the first SVDI call made.  All */
 /*                   attribute values, the color table, and current */
@@ -639,15 +639,15 @@ static integer c__22 = 22;
     return 0;
 } /* viinit_ */
 
-/* Subroutine */ int vdiqdc_0_(int n__, integer *index, real *value, real *
-	xinch, real *yinch)
+/* Subroutine */ int vdiqdc_0_(int n__, integer *index, f2c_float *value, f2c_float *
+	xinch, f2c_float *yinch)
 {
     /* Initialized data */
 
     static integer nocall = 0;
 
     /* Builtin functions */
-    integer i_nint(real *);
+    integer i_nint(f2c_float *);
 
     /* Local variables */
     extern /* Subroutine */ int vberrh_(integer *, integer *), pstsel_(char *,
@@ -658,11 +658,11 @@ static integer c__22 = 22;
 /* ENVIRONMENT      -COMPUTER-INDEPENDENT, SYSTEM-INDEPENDENT, FORTRAN 77 */
 /* ENTRY CONDITIONS -INDEX = integer capability number.  Range 1-33. */
 /* CALLS            - */
-/* EXIT CONDITIONS  -VALUE = real value of the capability indicated by */
+/* EXIT CONDITIONS  -VALUE = f2c_float value of the capability indicated by */
 /*                   INDEX. */
 /* NARRATIVE        -Return values of various device capabilities.  INDEX */
 /*                   is the integer capability number (as given below), */
-/*                   and the real value is returned in VALUE. */
+/*                   and the f2c_float value is returned in VALUE. */
 /*     1. Erasability */
 /*        0.  None (hard copy) */
 /*        1.  Screen (Tektronix 4010) */
@@ -840,14 +840,14 @@ L_vdiqd9:
     return 0;
 } /* vdiqdc_ */
 
-/* Subroutine */ int vdiqdc_(integer *index, real *value)
+/* Subroutine */ int vdiqdc_(integer *index, f2c_float *value)
 {
-    return vdiqdc_0_(0, index, value, (real *)0, (real *)0);
+    return vdiqdc_0_(0, index, value, (f2c_float *)0, (f2c_float *)0);
     }
 
-/* Subroutine */ int vdiqd9_(real *xinch, real *yinch)
+/* Subroutine */ int vdiqd9_(f2c_float *xinch, f2c_float *yinch)
 {
-    return vdiqdc_0_(1, (integer *)0, (real *)0, xinch, yinch);
+    return vdiqdc_0_(1, (integer *)0, (f2c_float *)0, xinch, yinch);
     }
 
 /* Subroutine */ int vberrh_(integer *errnum, integer *errsev)
@@ -1031,9 +1031,9 @@ L303:
     return vdgnam_0_(2, (char *)0, (integer *)0, koutff, kk, (ftnint)0);
     }
 
-/* Subroutine */ int vdinit_(real *aspect, integer *justif)
+/* Subroutine */ int vdinit_(f2c_float *aspect, integer *justif)
 {
-    extern /* Subroutine */ int pstjob_(), viinit_(real *, integer *);
+    extern /* Subroutine */ int pstjob_(), viinit_(f2c_float *, integer *);
 
 /* C C C C C C C C C C C C C C C C C C C C C C C C C C C C C C C C C C C */
 /* VDINIT           -Initialize SVDI. */
@@ -1041,13 +1041,13 @@ L303:
 /*                   30SEP81 */
 /* ENVIRONMENT      -COMPUTER-INDEPENDENT, SYSTEM-INDEPENDENT, FORTRAN 77 */
 /*                   Device-independent. */
-/* ENTRY CONDITIONS -ASPECT = real ratio of X dimension to Y dimension. */
+/* ENTRY CONDITIONS -ASPECT = f2c_float ratio of X dimension to Y dimension. */
 /*                   Range >0.0.  Default: 0.0 (device dependent). */
 /*                   JUSTIF = integer justification of NDC space on the */
 /*                   device.  Range 0-9.  Default: 0 (device dependent). */
 /* CALLS            -PSTJOB, VBERRH, VIINIT. */
-/* EXIT CONDITIONS  -XNDCMX,YNDCMX = real NDC maximum valid values. */
-/*                   VECTOR = real array of default attribute values (all */
+/* EXIT CONDITIONS  -XNDCMX,YNDCMX = f2c_float NDC maximum valid values. */
+/*                   VECTOR = f2c_float array of default attribute values (all */
 /*                   device-dependent except VECTOR(4)=0.0). */
 /* NARRATIVE        -This must be the first SVDI call made.  All */
 /*                   attribute values, the color table, and current */
@@ -1109,18 +1109,18 @@ L303:
     return 0;
 } /* vdinit_ */
 
-/* Subroutine */ int vdiqnd_(real *xndc, real *yndc)
+/* Subroutine */ int vdiqnd_(f2c_float *xndc, f2c_float *yndc)
 {
 /* C C C C C C C C C C C C C C C C C C C C C C C C C C C C C C C C C C C */
 /* VDIQND           -Inquire NDC Space. */
 /* R.W.Simons       -08APR81 */
 /* ENVIRONMENT      -COMPUTER-INDEPENDENT, SYSTEM-INDEPENDENT, FORTRAN 77 */
 /*                   Device-independent. */
-/* ENTRY CONDITIONS -XNDCMX,YNDCMX = real maximum valid NDC values. */
+/* ENTRY CONDITIONS -XNDCMX,YNDCMX = f2c_float maximum valid NDC values. */
 /* CALLS            - */
-/* EXIT CONDITIONS  -XNDC,YNDC = real maximum valid NDC values (XNDCMX, */
+/* EXIT CONDITIONS  -XNDC,YNDC = f2c_float maximum valid NDC values (XNDCMX, */
 /*                   YNDCMX). */
-/* NARRATIVE        -Return the maximum NDC values as set to realize the */
+/* NARRATIVE        -Return the maximum NDC values as set to f2c_floatize the */
 /*                   aspect defined by VDINIT. */
 /* C C C C C C C C C C C C C C C C C C C C C C C C C C C C C C C C C C C */
 /* MAXIMUM VALID NDC VALUES. (DEVICE-INDEPENDENT) */
@@ -1130,7 +1130,7 @@ L303:
     return 0;
 } /* vdiqnd_ */
 
-/* Subroutine */ int vdiqos_(real *attarr)
+/* Subroutine */ int vdiqos_(f2c_float *attarr)
 {
     static integer i__;
 
@@ -1139,9 +1139,9 @@ L303:
 /* K.M. ERICKSON    -14 NOV 80 */
 /* ENVIRONMENT      -COMPUTER-INDEPENDENT, SYSTEM-INDEPENDENT, FORTRAN 77 */
 /*                   Device-independent. */
-/* ENTRY CONDITIONS -VECTOR = real array of current attribute values. */
+/* ENTRY CONDITIONS -VECTOR = f2c_float array of current attribute values. */
 /* CALLS            - */
-/* EXIT CONDITIONS  -ATTARR = real array of current attribute value */
+/* EXIT CONDITIONS  -ATTARR = f2c_float array of current attribute value */
 /*                   (VECTOR). */
 /* NARRATIVE        -Return the current attribute values in ATTARR as */
 /*                   given below. */
@@ -1172,16 +1172,16 @@ L303:
     return 0;
 } /* vdiqos_ */
 
-/* Subroutine */ int vdlina_(real *x, real *y)
+/* Subroutine */ int vdlina_(f2c_float *x, f2c_float *y)
 {
-    extern /* Subroutine */ int vilina_(real *, real *);
+    extern /* Subroutine */ int vilina_(f2c_float *, f2c_float *);
 
 /* C C C C C C C C C C C C C C C C C C C C C C C C C C C C C C C C C C C */
 /* VDLINA           -Line Absolute. */
 /* R.W.Simons       -08APR81 */
 /* ENVIRONMENT      -COMPUTER-INDEPENDENT, SYSTEM-INDEPENDENT, FORTRAN 77 */
 /*                   Device-independent. */
-/* ENTRY CONDITIONS -X,Y = real NDC position. */
+/* ENTRY CONDITIONS -X,Y = f2c_float NDC position. */
 /* CALLS            -VILINA. */
 /* EXIT CONDITIONS  - */
 /* NARRATIVE        -Draw a line from current position to absolute NDC */
@@ -1329,16 +1329,16 @@ L_vbiqdv:
     return vdmoni_0_(4, (integer *)0, (char *)0, c2, (ftnint)0, c2_len);
     }
 
-/* Subroutine */ int vdmova_(real *x, real *y)
+/* Subroutine */ int vdmova_(f2c_float *x, f2c_float *y)
 {
-    extern /* Subroutine */ int vimova_(real *, real *);
+    extern /* Subroutine */ int vimova_(f2c_float *, f2c_float *);
 
 /* C C C C C C C C C C C C C C C C C C C C C C C C C C C C C C C C C C C */
 /* VDMOVA           -Move Absolute. */
 /* R.W.Simons       -08APR81 */
 /* ENVIRONMENT      -COMPUTER-INDEPENDENT, SYSTEM-INDEPENDENT, FORTRAN 77 */
 /*                   Device-independent. */
-/* ENTRY CONDITIONS -X,Y = real NDC position. */
+/* ENTRY CONDITIONS -X,Y = f2c_float NDC position. */
 /* CALLS            -VIMOVA */
 /* EXIT CONDITIONS  - */
 /* NARRATIVE        -Set current position to absolute NDC position X,Y. */
@@ -1372,16 +1372,16 @@ L_vbiqdv:
     return 0;
 } /* vdnwpg_ */
 
-/* Subroutine */ int vdpnta_(real *x, real *y)
+/* Subroutine */ int vdpnta_(f2c_float *x, f2c_float *y)
 {
-    extern /* Subroutine */ int vipnta_(real *, real *);
+    extern /* Subroutine */ int vipnta_(f2c_float *, f2c_float *);
 
 /* C C C C C C C C C C C C C C C C C C C C C C C C C C C C C C C C C C C */
 /* VDPNTA           -Point Absolute. */
 /* R.W.Simons       -08APR81 */
 /* ENVIRONMENT      -COMPUTER-INDEPENDENT, SYSTEM-INDEPENDENT, FORTRAN 77 */
 /*                   Device-independent. */
-/* ENTRY CONDITIONS -X,Y = real NDC position. */
+/* ENTRY CONDITIONS -X,Y = f2c_float NDC position. */
 /* CALLS            -VIPNTA. */
 /* EXIT CONDITIONS  - */
 /* NARRATIVE        -Set current position to absolute NDC position X,Y */
@@ -1394,9 +1394,9 @@ L_vbiqdv:
     return 0;
 } /* vdpnta_ */
 
-/* Subroutine */ int vdpoly_(real *xarray, real *yarray, integer *npts)
+/* Subroutine */ int vdpoly_(f2c_float *xarray, f2c_float *yarray, integer *npts)
 {
-    extern /* Subroutine */ int vipoly_(real *, real *, integer *);
+    extern /* Subroutine */ int vipoly_(f2c_float *, f2c_float *, integer *);
 
 /* C C C C C C C C C C C C C C C C C C C C C C C C C C C C C C C C C C C */
 /* VDPOLY           -POLYGON FILL ROUTINE */
@@ -1447,26 +1447,26 @@ L_vbiqdv:
     return 0;
 } /* vdpoly_ */
 
-/* Subroutine */ int vdstos_(real *attarr)
+/* Subroutine */ int vdstos_(f2c_float *attarr)
 {
     /* System generated locals */
     integer i__1;
 
     /* Builtin functions */
-    integer i_nint(real *);
+    integer i_nint(f2c_float *);
 
     /* Local variables */
     extern /* Subroutine */ int vdstbc_(integer *), vdstfc_(integer *), 
-	    vdstin_(real *), vdstls_(integer *), vdstlw_(real *);
+	    vdstin_(f2c_float *), vdstls_(integer *), vdstlw_(f2c_float *);
 
 /* C C C C C C C C C C C C C C C C C C C C C C C C C C C C C C C C C C C */
 /* VDSTOS           -Set Output Status (of Attributes). */
 /* K.M. ERICKSON    -14 NOV 80 */
 /* ENVIRONMENT      -COMPUTER-INDEPENDENT, SYSTEM-INDEPENDENT, FORTRAN 77 */
 /*                   Device-independent. */
-/* ENTRY CONDITIONS -ATTARR = real array of attribute values. */
+/* ENTRY CONDITIONS -ATTARR = f2c_float array of attribute values. */
 /* CALLS            -VDSTBC,VDSTCS,VDSTFC,VDSTIN,VDSTLS,VDSTLW */
-/* EXIT CONDITIONS  -VECTOR = real updated attribute values (ATTARR). */
+/* EXIT CONDITIONS  -VECTOR = f2c_float updated attribute values (ATTARR). */
 /* NARRATIVE        -Set the attribute values from ATTARR as given below. */
 /*                   ATTARR(1)=Foreground Color */
 /*                         (2)=Background Color */
@@ -1625,7 +1625,7 @@ L_vbiqdv:
     return 0;
 } /* vdaabu_ */
 
-/* Subroutine */ int vdabgl_(integer *btnnum, real *x, real *y)
+/* Subroutine */ int vdabgl_(integer *btnnum, f2c_float *x, f2c_float *y)
 {
 /* C C C C C C C C C C C C C C C C C C C C C C C C C C C C C C C C C C C */
 /* VDABGL           -Await Button, Get Locator. */
@@ -1637,7 +1637,7 @@ L_vbiqdv:
 /* EXIT CONDITIONS  -BTNNUM = integer number of the button pressed. */
 /*                   Range 1 to a device dependent maximum that must be */
 /*                   at least 8. */
-/*                   X,Y = real NDC position of the locator. */
+/*                   X,Y = f2c_float NDC position of the locator. */
 /* NARRATIVE        -Wait until a button is hit, then return the number */
 /*                   of the button in BTNNUM and the NDC value of the */
 /*                   locator in X,Y.  This function flushes the output */
@@ -1656,7 +1656,7 @@ L_vbiqdv:
     return 0;
 } /* vdabgl_ */
 
-/* Subroutine */ int vdakgl_(integer *char__, real *x, real *y)
+/* Subroutine */ int vdakgl_(integer *char__, f2c_float *x, f2c_float *y)
 {
 /* C C C C C C C C C C C C C C C C C C C C C C C C C C C C C C C C C C C */
 /* VDAKGL           -Await Keyboard, Get Locator. */
@@ -1667,7 +1667,7 @@ L_vbiqdv:
 /* CALLS            - */
 /* EXIT CONDITIONS  -CHAR = integer ASCII character input from the */
 /*                   keyboard, right-justified, zero fill.  Range 32-126. */
-/*                   X,Y = real NDC position of the locator. */
+/*                   X,Y = f2c_float NDC position of the locator. */
 /* NARRATIVE        -Wait until a key is hit, then return the character */
 /*                   entered in CHAR and the NDC value of the locator */
 /*                   in X,Y.  If the character entered does not fall in */
@@ -1682,7 +1682,7 @@ L_vbiqdv:
     return 0;
 } /* vdakgl_ */
 
-/* Subroutine */ int vdaloc_(real *x, real *y)
+/* Subroutine */ int vdaloc_(f2c_float *x, f2c_float *y)
 {
 /* C C C C C C C C C C C C C C C C C C C C C C C C C C C C C C C C C C C */
 /* VDALOC           -Await Locator. */
@@ -1691,7 +1691,7 @@ L_vbiqdv:
 /*                   All Batch Devices. */
 /* ENTRY CONDITIONS - */
 /* CALLS            - */
-/* EXIT CONDITIONS  -X,Y = real NDC position of the locator. */
+/* EXIT CONDITIONS  -X,Y = f2c_float NDC position of the locator. */
 /* NARRATIVE        -Wait until the locator is positioned, then return */
 /*                   the NDC value of the locator in X,Y.  The fact that */
 /*                   the locator is positioned can be signaled in a */
@@ -1753,14 +1753,14 @@ L_vbiqdv:
     return 0;
 } /* vdbufl_ */
 
-/* Subroutine */ int vdstla_(real *locx, real *locy)
+/* Subroutine */ int vdstla_(f2c_float *locx, f2c_float *locy)
 {
 /* C C C C C C C C C C C C C C C C C C C C C C C C C C C C C C C C C C C */
 /* VDSTLA           -Set Initial Locator Position. */
 /* R.W.Simons       -08APR81 */
 /* ENVIRONMENT      -COMPUTER-INDEPENDENT, SYSTEM-INDEPENDENT, FORTRAN 77 */
 /*                   All Batch Devices. */
-/* ENTRY CONDITIONS -LOCX,LOCY = real NDC position that the locator is */
+/* ENTRY CONDITIONS -LOCX,LOCY = f2c_float NDC position that the locator is */
 /*                   initilaized to. */
 /* CALLS            - */
 /* EXIT CONDITIONS  - */
@@ -1790,7 +1790,7 @@ L_vbiqdv:
     return 0;
 } /* vdwait_ */
 
-/* Subroutine */ int vdiqco_(integer *num, integer *index, real *clrary, 
+/* Subroutine */ int vdiqco_(integer *num, integer *index, f2c_float *clrary, 
 	integer *clrmod)
 {
     /* System generated locals */
@@ -1821,7 +1821,7 @@ L_vbiqdv:
 
 /*     CALLS            -VBERRH */
 
-/*     EXIT CONDITIONS  -CLRARY = real array of 3 by NUM elements returning */
+/*     EXIT CONDITIONS  -CLRARY = f2c_float array of 3 by NUM elements returning */
 /*     the values of the components of the indexes inquired. */
 /*     Range for RGB: red 0.0-1.0 */
 /*     green 0.0-1.0 */
@@ -1883,7 +1883,7 @@ L999:
     return 0;
 } /* vdiqco_ */
 
-/* Subroutine */ int vdiqcp_(real *x, real *y)
+/* Subroutine */ int vdiqcp_(f2c_float *x, f2c_float *y)
 {
 /* C C C C C C C C C C C C C C C C C C C C C C C C C C C C C C C C C C C */
 /* VDIQCP           -Inquire Where Current Position Is. */
@@ -1893,7 +1893,7 @@ L999:
 /*                   (AP5,GER,H50,HC1,HCB,HPP,I10,I30,LXY,QCR,QMS,XYN) */
 /* ENTRY CONDITIONS - */
 /* CALLS            - */
-/* EXIT CONDITIONS  -X,Y = real NDC position. */
+/* EXIT CONDITIONS  -X,Y = f2c_float NDC position. */
 /* NARRATIVE        -Return the value of current position. */
 /* C C C C C C C C C C C C C C C C C C C C C C C C C C C C C C C C C C C */
 /* CURRENT POSITION. */
@@ -1916,7 +1916,7 @@ L999:
 /* ENTRY CONDITIONS -COLOR = integer color table index. Range 0-255. */
 /*                   Default: device dependent, in range 0-7. */
 /* CALLS            -VBERRH */
-/* EXIT CONDITIONS  -VECTOR(2) = real updated background color (COLOR). */
+/* EXIT CONDITIONS  -VECTOR(2) = f2c_float updated background color (COLOR). */
 /* NARRATIVE        -Set the background color for following VDNWPG or */
 /*                   TEXT primitives for devices supporting these */
 /*                   features.  For example, many raster devices support */
@@ -1943,12 +1943,12 @@ L999:
     }
 /* ONLY THE SINGLE BACKGROUND COLOR 7 (WHITE) IS SUPPORTED, */
 /* SO NO ACTION IS NECESSARY. */
-    vcattr_1.vector[1] = (real) (*color);
+    vcattr_1.vector[1] = (f2c_float) (*color);
 L999:
     return 0;
 } /* vdstbc_ */
 
-/* Subroutine */ int vdstco_(integer *num, integer *index, real *clrary, 
+/* Subroutine */ int vdstco_(integer *num, integer *index, f2c_float *clrary, 
 	integer *clrmod)
 {
     /* Format strings */
@@ -1967,7 +1967,7 @@ L999:
 
     /* Local variables */
     static integer i__, ic, nnn;
-    static real clrar1, clrar2, clrar3;
+    static f2c_float clrar1, clrar2, clrar3;
     static char kolind[6], kolcom[20];
     static integer indexn;
     extern /* Subroutine */ int vberrh_(integer *, integer *), pstbuf_(
@@ -1989,7 +1989,7 @@ L999:
 /*                   Range 1-256. */
 /*                   INDEX = integer array of indexes to be set.  Range */
 /*                   0-255. */
-/*                   CLRARY = real array of 3 by NUM elements specifying */
+/*                   CLRARY = f2c_float array of 3 by NUM elements specifying */
 /*                   the values of the components of the index to be */
 /*                   set. */
 /*                   Range for RGB: red 0.0-1.0 */
@@ -2142,7 +2142,7 @@ L999:
 	    }
 	    for (ic = 1; ic <= 3; ++ic) {
 		i__2 = do_fio(&c__1, (char *)&pcolst_1.pcols[ic + (indexn + 1)
-			 * 3 - 4], (ftnlen)sizeof(real));
+			 * 3 - 4], (ftnlen)sizeof(f2c_float));
 		if (i__2 != 0) {
 		    goto L310;
 		}
@@ -2213,7 +2213,7 @@ L999:
 /* ENTRY CONDITIONS -COLOR = integer color table index . Range 0-255. */
 /*                   Default is device dependent, in range 0-7. */
 /* CALLS            -VBERRH */
-/* EXIT CONDITIONS  -VECTOR(1) = real updated foreground color (COLOR). */
+/* EXIT CONDITIONS  -VECTOR(1) = f2c_float updated foreground color (COLOR). */
 /* NARRATIVE        -Set the foreground color index, i.e., the color */
 /*                   table index used for drawing future primitives. */
 /*                   Color is an integer from 0-255 which is used as an */
@@ -2246,7 +2246,7 @@ L999:
 	vberrh_(&c__724, &c__5);
 	goto L999;
     }
-    vcattr_1.vector[0] = (real) (*color);
+    vcattr_1.vector[0] = (f2c_float) (*color);
     if (vcpstb_1.mocolr == 0) {
 /*       draw any vectors in stack before changing colors */
 	if (vcvec1_1.ivect != 0) {
@@ -2316,7 +2316,7 @@ L999:
     return 0;
 } /* vdstfc_ */
 
-/* Subroutine */ int vdstin_(real *inten)
+/* Subroutine */ int vdstin_(f2c_float *inten)
 {
     extern /* Subroutine */ int vberrh_(integer *, integer *);
 
@@ -2325,12 +2325,12 @@ L999:
 /* R.W.Simons       -05DEC80 */
 /* ENVIRONMENT      -COMPUTER-INDEPENDENT, SYSTEM-INDEPENDENT, FORTRAN 77 */
 /*                   All Single Intensity Devices. (LXY, HC1) */
-/* ENTRY CONDITIONS -INTEN = real intensity of the image of an output */
+/* ENTRY CONDITIONS -INTEN = f2c_float intensity of the image of an output */
 /*                   primitive.  Range 0.-1.  Default: device dependent. */
 /* CALLS            - */
-/* EXIT CONDITIONS  -VECTOR(3) = real updated intensity (INTEN). */
+/* EXIT CONDITIONS  -VECTOR(3) = f2c_float updated intensity (INTEN). */
 /* NARRATIVE        -Set the intensity value indicated for future */
-/*                   primitives.  Intensity is a real value between 0 */
+/*                   primitives.  Intensity is a f2c_float value between 0 */
 /*                   (not visible) and 1 (maximum).  Intensities are */
 /*                   monotonically increasing within this range. */
 /*                   All devices must support at least a single value: */
@@ -2438,16 +2438,16 @@ L349:
     return 0;
 } /* viterm_ */
 
-/* Subroutine */ int vimova_(real *x, real *y)
+/* Subroutine */ int vimova_(f2c_float *x, f2c_float *y)
 {
-    extern /* Subroutine */ int vbvect_(integer *, real *, real *);
+    extern /* Subroutine */ int vbvect_(integer *, f2c_float *, f2c_float *);
 
 /* C C C C C C C C C C C C C C C C C C C C C C C C C C C C C C C C C C C */
 /* VIMOVA           -Move Absolute. */
 /* ENVIRONMENT      -COMPUTER-INDEPENDENT, SYSTEM-INDEPENDENT, FORTRAN 77 */
-/* ENTRY CONDITIONS -X,Y = real NDC position. */
+/* ENTRY CONDITIONS -X,Y = f2c_float NDC position. */
 /* CALLS            - */
-/* EXIT CONDITIONS  -XCP,YCP = real updated current position. (X,Y) */
+/* EXIT CONDITIONS  -XCP,YCP = f2c_float updated current position. (X,Y) */
 /* NARRATIVE        -Set current position to absolute NDC position X,Y. */
 /* C C C C C C C C C C C C C C C C C C C C C C C C C C C C C C C C C C C */
 /* move */
@@ -2455,15 +2455,15 @@ L349:
     return 0;
 } /* vimova_ */
 
-/* Subroutine */ int vipnta_(real *x, real *y)
+/* Subroutine */ int vipnta_(f2c_float *x, f2c_float *y)
 {
-    extern /* Subroutine */ int vilina_(real *, real *), vimova_(real *, real 
+    extern /* Subroutine */ int vilina_(f2c_float *, f2c_float *), vimova_(f2c_float *, f2c_float 
 	    *);
 
 /* C C C C C C C C C C C C C C C C C C C C C C C C C C C C C C C C C C C */
 /* VIPNTA           -Point Absolute. */
 /* ENVIRONMENT      -COMPUTER-INDEPENDENT, SYSTEM-INDEPENDENT, FORTRAN 77 */
-/* ENTRY CONDITIONS -X,Y = real NDC position. */
+/* ENTRY CONDITIONS -X,Y = f2c_float NDC position. */
 /* CALLS            -VIMOVA,VILINA */
 /* EXIT CONDITIONS  - */
 /* NARRATIVE        -Set current position to absolute NDC position X,Y */
@@ -2475,20 +2475,20 @@ L349:
     return 0;
 } /* vipnta_ */
 
-/* Subroutine */ int vipoly_(real *xarray, real *yarray, integer *npts)
+/* Subroutine */ int vipoly_(f2c_float *xarray, f2c_float *yarray, integer *npts)
 {
     /* System generated locals */
     integer i__1;
 
     /* Builtin functions */
-    integer i_nint(real *);
+    integer i_nint(f2c_float *);
 
     /* Local variables */
     static integer i__;
-    static real wsave;
-    extern /* Subroutine */ int vilina_(real *, real *), vberrh_(integer *, 
-	    integer *), vdstfc_(integer *), vdmova_(real *, real *), vimova_(
-	    real *, real *), pstbuf_(integer *, char *, ftnlen), vdstlw_(real 
+    static f2c_float wsave;
+    extern /* Subroutine */ int vilina_(f2c_float *, f2c_float *), vberrh_(integer *, 
+	    integer *), vdstfc_(integer *), vdmova_(f2c_float *, f2c_float *), vimova_(
+	    f2c_float *, f2c_float *), pstbuf_(integer *, char *, ftnlen), vdstlw_(f2c_float 
 	    *);
 
 /* C C C C C C C C C C C C C C C C C C C C C C C C C C C C C C C C C C C */
@@ -2618,12 +2618,12 @@ L999:
     integer s_wsfi(icilist *), do_fio(integer *, char *, ftnlen), e_wsfi();
     /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen), s_cat(char *,
 	     char **, integer *, integer *, ftnlen);
-    integer i_nint(real *);
+    integer i_nint(f2c_float *);
 
     /* Local variables */
     static char kpage[10];
     extern /* Subroutine */ int pstbbg_(), vdstfc_(integer *), vdmoni_(
-	    integer *), pstbuf_(integer *, char *, ftnlen), vdstlw_(real *);
+	    integer *), pstbuf_(integer *, char *, ftnlen), vdstlw_(f2c_float *);
 
     /* Fortran I/O blocks */
     static icilist io___51 = { 1, kpage, 0, "(I10)", 10, 1 };
@@ -2738,7 +2738,7 @@ L370:
     return 0;
 } /* vinwpg_ */
 
-/* Subroutine */ int vdescp_(integer *escpcd, integer *n, real *args)
+/* Subroutine */ int vdescp_(integer *escpcd, integer *n, f2c_float *args)
 {
     extern /* Subroutine */ int vberrh_(integer *, integer *), pstsel_(char *,
 	     ftnlen);
@@ -2748,13 +2748,13 @@ L370:
 /* ENVIRONMENT      -COMPUTER-INDEPENDENT, SYSTEM-INDEPENDENT, FORTRAN 77 */
 /* ENTRY CONDITIONS -ESCPCD = integer escape function code. */
 /*                   N = integer number of arguments in ARG.  RANGE >=0. */
-/*                   ARGS = real array of arguments for the escape */
+/*                   ARGS = f2c_float array of arguments for the escape */
 /*                   function specified. */
 /* CALLS            - */
 /* EXIT CONDITIONS  - */
 /* NARRATIVE        -Invoke the nonstandard, device-dependent function */
 /*                   ESCPCD.  N is the number of arguments used by this */
-/*                   function and ARGS is a real array containing those */
+/*                   function and ARGS is a f2c_float array containing those */
 /*                   arguments.  Unsupported values of ESCPCD are */
 /*                   ignored, not causing an error. */
 /* C C C C C C C C C C C C C C C C C C C C C C C C C C C C C C C C C C C */
@@ -2810,16 +2810,16 @@ L999:
     return 0;
 } /* vdescp_ */
 
-/* Subroutine */ int vilina_0_(int n__, real *x, real *y)
+/* Subroutine */ int vilina_0_(int n__, f2c_float *x, f2c_float *y)
 {
-    extern /* Subroutine */ int vbvect_(integer *, real *, real *);
+    extern /* Subroutine */ int vbvect_(integer *, f2c_float *, f2c_float *);
 
 /* C C C C C C C C C C C C C C C C C C C C C C C C C C C C C C C C C C C */
 /* VILINA */
 /* D.L. CAMPBELL    -1-DEC-1986 */
 /* J.P. LONG        -9-NOV-1987 */
 /* ENVIRONMENT      -DEVICE DEPENDENT, SYSTEM-INDEPENDENT, FORTRAN 77 */
-/* ENTRY CONDITIONS -X,Y REAL NDC COORDINATES */
+/* ENTRY CONDITIONS -X,Y F2C_FLOAT NDC COORDINATES */
 /* CALLS            - */
 /* EXIT CONDITIONS  -CURRENT POSITION IS SET */
 /* NARRATIVE */
@@ -2845,17 +2845,17 @@ L_vblina:
     return 0;
 } /* vilina_ */
 
-/* Subroutine */ int vilina_(real *x, real *y)
+/* Subroutine */ int vilina_(f2c_float *x, f2c_float *y)
 {
     return vilina_0_(0, x, y);
     }
 
-/* Subroutine */ int vblina_(real *x, real *y)
+/* Subroutine */ int vblina_(f2c_float *x, f2c_float *y)
 {
     return vilina_0_(1, x, y);
     }
 
-/* Subroutine */ int vbvect_(integer *ipen, real *x, real *y)
+/* Subroutine */ int vbvect_(integer *ipen, f2c_float *x, f2c_float *y)
 {
     /* System generated locals */
     address a__1[7], a__2[2];
@@ -2864,17 +2864,17 @@ L_vblina:
     /* Builtin functions */
     /* Subroutine */ int s_cat(char *, char **, integer *, integer *, ftnlen),
 	     s_copy(char *, char *, ftnlen, ftnlen);
-    integer i_nint(real *);
+    integer i_nint(f2c_float *);
 
     /* Local variables */
     static integer ixdc, iydc;
-    static real xoff, yoff;
+    static f2c_float xoff, yoff;
     static char ctemp[20];
     extern /* Subroutine */ int psti2c_(integer *, integer *, char *, ftnlen),
 	     vdstfc_(integer *);
     static char xcoord[4], ycoord[4];
     extern /* Subroutine */ int pstbuf_(integer *, char *, ftnlen), vdstlw_(
-	    real *);
+	    f2c_float *);
 
 /* **************************************************** */
 /* vbvect - do move or draw to x,y (depending on ipen) */
@@ -2896,8 +2896,8 @@ L_vblina:
 /*           (7)=CHARACTER BOX X */
 /* compute new point in dev. coord. */
 /*     convert to floating offsets */
-    xoff = (real) vcddim_1.xpad;
-    yoff = (real) vcddim_1.ypad;
+    xoff = (f2c_float) vcddim_1.xpad;
+    yoff = (f2c_float) vcddim_1.ypad;
     ixdc = *x * vcscal_1.xscale + xoff;
     iydc = *y * vcscal_1.yscale + yoff;
 /*        write(xcoord,'(i5)')ixdc */
@@ -2966,13 +2966,13 @@ L_vblina:
 
     /* Local variables */
     static integer i__;
-    static real dx, dy;
+    static f2c_float dx, dy;
     static char str[3], ctemp[150];
     extern /* Subroutine */ int psta2c_(integer *, char *, ftnlen);
     static integer length;
     extern /* Subroutine */ int vberrh_(integer *, integer *), vbvect_(
-	    integer *, real *, real *), pstbuf_(integer *, char *, ftnlen), 
-	    vdstcs_(real *);
+	    integer *, f2c_float *, f2c_float *), pstbuf_(integer *, char *, ftnlen), 
+	    vdstcs_(f2c_float *);
     static integer lenout;
 
 /* C C C C C C C C C C C C C C C C C C C C C C C C C C C C C C C C C C C */
@@ -3112,14 +3112,14 @@ L999:
     /* System generated locals */
     address a__1[5], a__2[9], a__3[2];
     integer i__1[5], i__2[9], i__3[2];
-    real r__1;
+    f2c_float r__1;
 
     /* Builtin functions */
-    integer i_nint(real *);
+    integer i_nint(f2c_float *);
     /* Subroutine */ int s_cat(char *, char **, integer *, integer *, ftnlen);
 
     /* Local variables */
-    static real lw;
+    static f2c_float lw;
     static integer ill, jll, igap;
     static char strg[3], strl[3], strs[3], ctemp[30];
     extern /* Subroutine */ int psti2c_(integer *, integer *, char *, ftnlen),
@@ -3132,7 +3132,7 @@ L999:
 /* ENTRY CONDITIONS -LINSTY = integer linestyle of line drawing output */
 /*                   primitives.  Range 0-5.  Default:0. */
 /* CALLS            - */
-/* EXIT CONDITIONS  -VECTOR(4) = real updated line style (LINSTY). */
+/* EXIT CONDITIONS  -VECTOR(4) = f2c_float updated line style (LINSTY). */
 /* NARRATIVE        -Set the style of line as below.  This applies only */
 /*                   to line drawing primitives.  The line styles are: */
 /*                          0 - solid */
@@ -3155,7 +3155,7 @@ L999:
 /* SCALE FACTORS FOR NDC TO DC MAPPING. (LXY,HC1) */
 /* CURRENT POSITION. */
 /* CURRENT ATTRIBUTE VALUES. (DEVICE-INDEPENDENT) */
-/*      REAL VECTOR(7) */
+/*      F2C_FLOAT VECTOR(7) */
 /*     COMMON /VCATTR/ VECTOR */
 /*     VECTOR(1)=FOREGROUND COLOR */
 /*           (2)=BACKGROUND COLOR */
@@ -3290,7 +3290,7 @@ L_vbstls:
     i__3[1] = 3, a__3[1] = " m ";
     s_cat(ctemp, a__3, i__3, &c__2, (ftnlen)30);
     pstbuf_(&c__14, ctemp, (ftnlen)30);
-    vcattr_1.vector[3] = (real) (*linsty);
+    vcattr_1.vector[3] = (f2c_float) (*linsty);
 L999:
     return 0;
 } /* vdstls_ */
@@ -3305,21 +3305,21 @@ L999:
     return vdstls_0_(1, linsty);
     }
 
-/* Subroutine */ int vdstcs_(real *ysize)
+/* Subroutine */ int vdstcs_(f2c_float *ysize)
 {
     /* System generated locals */
     address a__1[3];
     integer i__1[3];
-    real r__1;
+    f2c_float r__1;
 
     /* Builtin functions */
-    integer i_nint(real *);
+    integer i_nint(f2c_float *);
     /* Subroutine */ int s_cat(char *, char **, integer *, integer *, ftnlen);
 
     /* Local variables */
     static char str[4], ctemp[10];
     extern /* Subroutine */ int psti2c_(integer *, integer *, char *, ftnlen);
-    static real ysize1;
+    static f2c_float ysize1;
     extern /* Subroutine */ int vberrh_(integer *, integer *), pstbuf_(
 	    integer *, char *, ftnlen);
     static integer iysize;
@@ -3331,12 +3331,12 @@ L999:
 /* ENVIRONMENT      -COMPUTER-INDEPENDENT, SYSTEM-INDEPENDENT, FORTRAN 77 */
 /*                   All Devices that support only software characters. */
 /*                   (LXY, HC1) */
-/* ENTRY CONDITIONS -YSIZE = real Y dimension of the character box in NDC */
+/* ENTRY CONDITIONS -YSIZE = f2c_float Y dimension of the character box in NDC */
 /*                   space.  Range 0.-1.  Default: device dependent, */
 /*                   typically the smallest hardware size. */
 /* CALLS            - */
-/* EXIT CONDITIONS  -VECTOR(6) = real updated character box Y (YSIZE). */
-/*                   VECTOR(7) = real updated character box X. */
+/* EXIT CONDITIONS  -VECTOR(6) = f2c_float updated character box Y (YSIZE). */
+/*                   VECTOR(7) = f2c_float updated character box X. */
 /* NARRATIVE        -Set the character size for text primitives.  Size */
 /*                   is given by YSIZE as the Y dimension of the */
 /*                   character box.  The SVDI will assign the X dimension */
@@ -3389,22 +3389,22 @@ L999:
     return 0;
 } /* vdstcs_ */
 
-/* Subroutine */ int vdstlw_(real *linwth)
+/* Subroutine */ int vdstlw_(f2c_float *linwth)
 {
     /* System generated locals */
     address a__1[5], a__2[4];
     integer i__1[5], i__2[4];
-    real r__1;
+    f2c_float r__1;
 
     /* Builtin functions */
-    integer i_nint(real *);
+    integer i_nint(f2c_float *);
     /* Subroutine */ int s_cat(char *, char **, integer *, integer *, ftnlen);
 
     /* Local variables */
-    static real lw;
+    static f2c_float lw;
     static integer ilw;
     static char str[5], ctemp[19];
-    static real width;
+    static f2c_float width;
     extern /* Subroutine */ int psti2c_(integer *, integer *, char *, ftnlen),
 	     vberrh_(integer *, integer *), pstbuf_(integer *, char *, ftnlen)
 	    , vbstls_(integer *);
@@ -3413,10 +3413,10 @@ L999:
 /* C C C C C C C C C C C C C C C C C C C C C C C C C C C C C C C C C C C */
 /* VDSTLW           -Set Line Width. */
 /* ENVIRONMENT      -COMPUTER-INDEPENDENT, SYSTEM-INDEPENDENT, FORTRAN 77 */
-/* ENTRY CONDITIONS -LINWTH = real line width of line drawing output */
+/* ENTRY CONDITIONS -LINWTH = f2c_float line width of line drawing output */
 /*                   primitives.  Range 0.-1.  Default: device dependent. */
 /* CALLS            - */
-/* EXIT CONDITIONS  -VECTOR(5) = real updated line width (LINWTH). */
+/* EXIT CONDITIONS  -VECTOR(5) = f2c_float updated line width (LINWTH). */
 /* NARRATIVE        -Set the relative width of an output line.  Values */
 /*                   are 0.-1. with 1. being .01 in NDC space. */
 /*                   All devices must support at least a single device */
@@ -3689,13 +3689,13 @@ L999:
     integer i__1;
 
     /* Builtin functions */
-    integer i_nint(real *);
+    integer i_nint(f2c_float *);
 
     /* Local variables */
-    static real x[4], y[4];
+    static f2c_float x[4], y[4];
     extern /* Subroutine */ int vdstfc_(integer *);
     static integer kolsav;
-    extern /* Subroutine */ int vipoly_(real *, real *, integer *);
+    extern /* Subroutine */ int vipoly_(f2c_float *, f2c_float *, integer *);
 
 /* C C C C C C C C C C C C C C C C C C C C C C C C C C C C C C C C C C C */
 /*     Color background black for white paper device. */

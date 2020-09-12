@@ -25,7 +25,7 @@ static integer c__1 = 1;
 /*    NTESS, the U.S. Government retains certain rights in this software. */
 
 /*    See packages/seacas/LICENSE for details */
-/* Subroutine */ int delem_(integer *mxnd, real *xn, real *yn, integer *nuid, 
+/* Subroutine */ int delem_(integer *mxnd, f2c_float *xn, f2c_float *yn, integer *nuid, 
         integer *lxk, integer *kxl, integer *nxl, integer *lxn, integer *nnn, 
         integer *navail, integer *iavail, integer *node1, integer *k, integer 
         *n2, integer *n4, logical *done, logical *check, logical *noroom, 
@@ -43,10 +43,10 @@ static integer c__1 = 1;
     /* Local variables */
     static integer i__, j, k1, l1, l2, n1, n3, l3, l4, k4, ll, nl;
     static logical ccw;
-    static real area;
+    static f2c_float area;
     static integer nodes[4];
-    extern /* Subroutine */ int gnxka_(integer *, real *, real *, integer *, 
-            integer *, real *, integer *, integer *, logical *);
+    extern /* Subroutine */ int gnxka_(integer *, f2c_float *, f2c_float *, integer *, 
+            integer *, f2c_float *, integer *, integer *, logical *);
     static integer lines[4], l1list[20];
     extern /* Subroutine */ int addlxn_(integer *, 
             integer *, integer *, integer *, integer *, integer *, integer *, 

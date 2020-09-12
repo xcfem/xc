@@ -43,7 +43,7 @@ double dbl_abs(double a)
 /* Common Block Declarations */
 
 struct {
-    real timea, timep, timec, timepc, timeaj, times;
+    f2c_float timea, timep, timec, timepc, timeaj, times;
 } timing_;
 
 #define timing_1 timing_
@@ -63,24 +63,24 @@ static integer c__1 = 1;
 
 /*    See packages/seacas/LICENSE for details */
 /* Subroutine */ int paving_(integer *nbnode, integer *nprm, integer *mln, 
-        integer *iptper, integer *numper, integer *lperim, real *xn, real *yn,
-         real *zn, integer *iexk, integer *inxe, integer *nnn, integer *lll, 
-        integer *kkk, integer *mxnd, real *angle, real *bnsize, integer *
+        integer *iptper, integer *numper, integer *lperim, f2c_float *xn, f2c_float *yn,
+         f2c_float *zn, integer *iexk, integer *inxe, integer *nnn, integer *lll, 
+        integer *kkk, integer *mxnd, f2c_float *angle, f2c_float *bnsize, integer *
         lnodes, integer *linkpr, integer *nperim, integer *lxk, integer *kxl, 
         integer *nxl, integer *lxn, integer *nuid, integer *iavail, integer *
-        navail, logical *graph, logical *timer, logical *video, real *defsiz, 
+        navail, logical *graph, logical *timer, logical *video, f2c_float *defsiz, 
         logical *sizeit, char *dev1, integer *kreg, logical *batch, logical *
-        noroom, logical *err, real *amesur, real *xnold, real *ynold, integer 
-        *nxkold, integer *mmpold, integer *linkeg, integer *listeg, real *
+        noroom, logical *err, f2c_float *amesur, f2c_float *xnold, f2c_float *ynold, integer 
+        *nxkold, integer *mmpold, integer *linkeg, integer *listeg, f2c_float *
         bmesur, integer *mlink, integer *nprold, integer *npnold, integer *
-        npeold, integer *nnxk, logical *remesh, real *rexmin, real *rexmax, 
-        real *reymin, real *reymax, integer *idivis, real *sizmin, real *emax,
-         real *emin, ftnlen dev1_len)
+        npeold, integer *nnxk, logical *remesh, f2c_float *rexmin, f2c_float *rexmax, 
+        f2c_float *reymin, f2c_float *reymax, integer *idivis, f2c_float *sizmin, f2c_float *emax,
+         f2c_float *emin, ftnlen dev1_len)
 {
     /* System generated locals */
     integer lnodes_dim1, lnodes_offset, nxkold_dim1, nxkold_offset, i__1, 
             i__2;
-    real r__1;
+    f2c_float r__1;
 
     /* Builtin functions */
     integer s_wsfe(cilist *), do_fio(integer *, char *, ftnlen), e_wsfe();
@@ -88,15 +88,15 @@ static integer c__1 = 1;
     /* Local variables */
     static integer i__, j, n0, n1, nnn2, nend;
     static logical done;
-    static real xmin, xmax, ymin, ymax, zmin, zmax;
+    static f2c_float xmin, xmax, ymin, ymax, zmin, zmax;
     static integer nadj1, nadj2, node1;
-    static real time1, time2, xmin1, ymin1, xmax1, ymax1, zmin1, zmax1;
+    static f2c_float time1, time2, xmin1, ymin1, xmax1, ymax1, zmin1, zmax1;
     static integer icomb[10240]        /* was [10][1024] */;
     extern /* Subroutine */ int pinch_(integer *, integer *, integer *, 
-            integer *, real *, real *, real *, integer *, integer *, integer *
-            , integer *, real *, integer *, real *, integer *, integer *, 
+            integer *, f2c_float *, f2c_float *, f2c_float *, integer *, integer *, integer *
+            , integer *, f2c_float *, integer *, f2c_float *, integer *, integer *, 
             integer *, integer *, integer *, integer *, integer *, logical *, 
-            real *, real *, real *, real *, real *, real *, char *, integer *,
+            f2c_float *, f2c_float *, f2c_float *, f2c_float *, f2c_float *, f2c_float *, char *, integer *,
              integer *, integer *, integer *, integer *, integer *, integer *,
              logical *, logical *, integer *, logical *, logical *, ftnlen);
     static integer lcorn[10], ncorn, kloop, nloop[20], itype[1024], iuppr;
@@ -105,58 +105,58 @@ static integer c__1 = 1;
             integer *, integer *, integer *, logical *);
     static integer nextn1[20];
     static logical adjted;
-    extern /* Subroutine */ int  getime_(real *), 
+    extern /* Subroutine */ int  getime_(f2c_float *), 
             ringbl_();
     static integer kkkold;
     extern logical cpubrk_(logical *);
     extern /* Subroutine */ int periml_(integer *, integer *, integer *, 
-            integer *, integer *, real *, real *, real *, integer *, integer *
-            , integer *, integer *, real *, real *, integer *, integer *, 
-            integer *, integer *, real *, real *, real *, real *, real *, 
-            real *, char *, integer *, logical *, ftnlen);
+            integer *, integer *, f2c_float *, f2c_float *, f2c_float *, integer *, integer *
+            , integer *, integer *, f2c_float *, f2c_float *, integer *, integer *, 
+            integer *, integer *, f2c_float *, f2c_float *, f2c_float *, f2c_float *, f2c_float *, 
+            f2c_float *, char *, integer *, logical *, ftnlen);
     static integer lllold, itnper, nnnold;
-    extern /* Subroutine */ int rplotl_(integer *, real *, real *, real *, 
-            integer *, real *, real *, real *, real *, real *, real *, 
+    extern /* Subroutine */ int rplotl_(integer *, f2c_float *, f2c_float *, f2c_float *, 
+            integer *, f2c_float *, f2c_float *, f2c_float *, f2c_float *, f2c_float *, f2c_float *, 
             integer *, char *, integer *, ftnlen);
     static integer kperim;
     extern /* Subroutine */ int getrow_(integer *, integer *, integer *, 
             integer *, integer *, integer *, integer *, integer *, integer *, 
-            integer *, integer *, integer *, real *, real *, real *, real *, 
-            real *, integer *, integer *, integer *, integer *, integer *, 
+            integer *, integer *, integer *, f2c_float *, f2c_float *, f2c_float *, f2c_float *, 
+            f2c_float *, integer *, integer *, integer *, integer *, integer *, 
             integer *, integer *, integer *, integer *, integer *, logical *, 
-            logical *, real *, real *, real *, real *, real *, real *, char *,
+            logical *, f2c_float *, f2c_float *, f2c_float *, f2c_float *, f2c_float *, f2c_float *, char *,
              integer *, logical *, integer *, logical *, logical *, ftnlen), 
-            filsmo_(integer *, integer *, real *, real *, real *, integer *, 
+            filsmo_(integer *, integer *, f2c_float *, f2c_float *, f2c_float *, integer *, 
             integer *, integer *, integer *, integer *, integer *, integer *, 
-            integer *, real *, integer *, real *, real *, real *, real *, 
-            real *, real *, char *, integer *, ftnlen), sflush_(), adjrow_(
-            integer *, integer *, integer *, real *, real *, real *, integer *
-            , integer *, integer *, integer *, real *, real *, integer *, 
-            integer *, integer *, integer *, real *, real *, real *, real *, 
-            real *, real *, char *, integer *, integer *, integer *, integer *
+            integer *, f2c_float *, integer *, f2c_float *, f2c_float *, f2c_float *, f2c_float *, 
+            f2c_float *, f2c_float *, char *, integer *, ftnlen), sflush_(), adjrow_(
+            integer *, integer *, integer *, f2c_float *, f2c_float *, f2c_float *, integer *
+            , integer *, integer *, integer *, f2c_float *, f2c_float *, integer *, 
+            integer *, integer *, integer *, f2c_float *, f2c_float *, f2c_float *, f2c_float *, 
+            f2c_float *, f2c_float *, char *, integer *, integer *, integer *, integer *
             , integer *, integer *, integer *, integer *, integer *, logical *
-            , logical *, integer *, real *, logical *, logical *, logical *, ftnlen), pcross_(integer *, integer *, integer *, integer *, 
-            integer *, integer *, real *, real *, real *, integer *, integer *
-            , integer *, integer *, real *, integer *, real *, integer *, 
+            , logical *, integer *, f2c_float *, logical *, logical *, logical *, ftnlen), pcross_(integer *, integer *, integer *, integer *, 
+            integer *, integer *, f2c_float *, f2c_float *, f2c_float *, integer *, integer *
+            , integer *, integer *, f2c_float *, integer *, f2c_float *, integer *, 
             integer *, integer *, integer *, integer *, integer *, integer *, 
-            integer *, integer *, integer *, logical *, real *, real *, real *
-            , real *, real *, real *, char *, integer *, integer *, integer *,
+            integer *, integer *, integer *, logical *, f2c_float *, f2c_float *, f2c_float *
+            , f2c_float *, f2c_float *, f2c_float *, char *, integer *, integer *, integer *,
              integer *, integer *, integer *, integer *, integer *, logical *,
              logical *, integer *, logical *, logical *, ftnlen), colaps_(
-            integer *, integer *, integer *, integer *, integer *, real *, 
-            real *, real *, integer *, integer *, integer *, integer *, real *
-            , integer *, real *, integer *, integer *, integer *, integer *, 
-            integer *, integer *, logical *, real *, real *, real *, real *, 
-            real *, real *, char *, integer *, integer *, integer *, integer *
+            integer *, integer *, integer *, integer *, integer *, f2c_float *, 
+            f2c_float *, f2c_float *, integer *, integer *, integer *, integer *, f2c_float *
+            , integer *, f2c_float *, integer *, integer *, integer *, integer *, 
+            integer *, integer *, logical *, f2c_float *, f2c_float *, f2c_float *, f2c_float *, 
+            f2c_float *, f2c_float *, char *, integer *, integer *, integer *, integer *
             , integer *, integer *, integer *, integer *, logical *, logical *
             , integer *, logical *, logical *, ftnlen), flmnmx_(integer *, 
-            integer *, integer *, integer *, integer *, integer *, real *, 
-            real *, integer *, integer *, real *, real *, real *, real *, 
-            logical *), tridel_(integer *, integer *, real *, real *, real *, 
+            integer *, integer *, integer *, integer *, integer *, f2c_float *, 
+            f2c_float *, integer *, integer *, f2c_float *, f2c_float *, f2c_float *, f2c_float *, 
+            logical *), tridel_(integer *, integer *, f2c_float *, f2c_float *, f2c_float *, 
             integer *, integer *, integer *, integer *, integer *, integer *, 
-            integer *, integer *, integer *, integer *, real *, integer *, 
-            real *, integer *, char *, integer *, real *, real *, real *, 
-            real *, real *, real *, logical *, logical *, logical *, logical *
+            integer *, integer *, integer *, integer *, f2c_float *, integer *, 
+            f2c_float *, integer *, char *, integer *, f2c_float *, f2c_float *, f2c_float *, 
+            f2c_float *, f2c_float *, f2c_float *, logical *, logical *, logical *, logical *
             , ftnlen);
 
     /* Fortran I/O blocks */
@@ -188,9 +188,9 @@ static integer c__1 = 1;
 /*     NUMPER = INTEGER ARRAY CONTAINING THE NUMBER OF NODES IN EACH */
 /*              OF THE PERIMETERS */
 /*     LPERIM = LIST OF PERIMETER NODES */
-/*     X      = REAL ARRAY OF X VALUES OF NODES DIMENSIONED TO MXND */
-/*     Y      = REAL ARRAY OF Y VALUES OF NODES DIMENSIONED TO MXND */
-/*     Z      = REAL ARRAY OF Z VALUES OF NODES DIMENSIONED TO MXND */
+/*     X      = F2C_FLOAT ARRAY OF X VALUES OF NODES DIMENSIONED TO MXND */
+/*     Y      = F2C_FLOAT ARRAY OF Y VALUES OF NODES DIMENSIONED TO MXND */
+/*     Z      = F2C_FLOAT ARRAY OF Z VALUES OF NODES DIMENSIONED TO MXND */
 /*     IEXK   = INTEGER ARRAY OF EDGES ATTACHED TO EACH ELEMENT */
 /*              DIMENSIONED AS (4, MXND) */
 /*     INXE   = INTEGER ARRAY OF NODES ATTACHED TO EACH EDGE */
@@ -200,9 +200,9 @@ static integer c__1 = 1;
 /*     NELEM  = NUMBER OF ELEMENTS IN THE FINAL MESH */
 /*     MAXND  = MAXIMUM NUMBER OF NODES EXPECTED IN THE MESH */
 /*              (IF THIS IS EXCEEDED, NOROOM IS RETURNED AS .TRUE.) */
-/*     RWORK1 = REAL ARRAY FOR WORKING SPACE IN PAVING - DIMENSIONED */
+/*     RWORK1 = F2C_FLOAT ARRAY FOR WORKING SPACE IN PAVING - DIMENSIONED */
 /*              TO (MXND) - THIS BECOMES THE ANGLE ARRAY */
-/*     RWORK2 = REAL ARRAY FOR WORKING SPACE IN PAVING - DIMENSIONED */
+/*     RWORK2 = F2C_FLOAT ARRAY FOR WORKING SPACE IN PAVING - DIMENSIONED */
 /*              TO (MXND * 2) - THIS BECOMES THE BNSIZE ARRAY */
 /*     IWORK3 = INTEGER ARRAY FOR WORKING SPACE IN PAVING - DIMENSIONED */
 /*              TO (MXND * 8) - THIS BECOMES THE LNODES ARRAY */
@@ -260,8 +260,8 @@ static integer c__1 = 1;
 /*     IDIVIS = NUMBER OF DIVISIONS IN THE SEARCH GRID LINK */
 /* *********************************************************************** */
 /*  INTERNAL VARIABLES: */
-/*     ANGLE  = ARRAY OF REALS FOR STORING BOUNDARY NODE ANGLES. */
-/*     BNSIZE = ARRAY OF REALS FOR STORING ELEMENT SIZE PROPAGATION INFO. */
+/*     ANGLE  = ARRAY OF F2C_FLOATS FOR STORING BOUNDARY NODE ANGLES. */
+/*     BNSIZE = ARRAY OF F2C_FLOATS FOR STORING ELEMENT SIZE PROPAGATION INFO. */
 /*     LNODES = ARRAY OF INTEGERS FOR STORING BOUNDARY NODE INFORMATION. */
 /*              IN THE LNODES ARRAY, */
 /*              THE CORNER STATUS IS STORED IN LNODES (1, N1): */

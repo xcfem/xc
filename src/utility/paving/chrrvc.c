@@ -26,7 +26,7 @@ static integer c__1 = 1;
 
 /* See packages/seacas/LICENSE for details */
 /* ======================================================================= */
-/* Subroutine */ int chrrvc_(real *buff, char *txt, integer *l, ftnlen 
+/* Subroutine */ int chrrvc_(f2c_float *buff, char *txt, integer *l, ftnlen 
 	txt_len)
 {
     /* System generated locals */
@@ -47,7 +47,7 @@ static integer c__1 = 1;
 
     lt = i_len(txt, txt_len);
     s_wsfi(&io___3);
-    do_fio(&c__1, (char *)&(*buff), (ftnlen)sizeof(real));
+    do_fio(&c__1, (char *)&(*buff), (ftnlen)sizeof(f2c_float));
     e_wsfi();
     i__1 = lt;
     for (i__ = 1; i__ <= i__1; ++i__) {
