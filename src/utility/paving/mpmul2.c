@@ -13,7 +13,6 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-//#include "f2c.h"
 #include "paving.h"
 
 /* Copyright(C) 1999-2020 National Technology & Engineering Solutions */

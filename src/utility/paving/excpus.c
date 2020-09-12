@@ -18,7 +18,6 @@
  *
  */
 
-//#include "f2c.h"
 #include "paving.h"
 
 #include <sys/resource.h>

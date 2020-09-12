@@ -2,7 +2,6 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-//#include "f2c.h"
 #include "paving.h"
 #include <stdio.h>
 
