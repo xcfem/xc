@@ -54,11 +54,11 @@ class Paver: public CommandEntity
     std::vector<integer> numper; //!< integer array containing the number of
                                  // nodes in each of the perimeters.
     std::vector<integer> lperim; //!< list of perimeter nodes
-    std::vector<real> x; //!< real array of x values of nodes dimensioned
+    std::vector<xc_float> x; //!< xc_float array of x values of nodes dimensioned
                          // to mxnd.
-    std::vector<real> y; //!< real array of y values of nodes dimensioned
+    std::vector<xc_float> y; //!< xc_float array of y values of nodes dimensioned
                          // to mxnd.
-    std::vector<real> z; //!< real array of z values of nodes dimensioned
+    std::vector<xc_float> z; //!< xc_float array of z values of nodes dimensioned
                          // to mxnd.
     std::vector<integer> iexk; //!< integer array of edges attached to each
                                // element dimensioned as (4, mxnd)
@@ -69,10 +69,10 @@ class Paver: public CommandEntity
     integer kkk= 0; //!< number of elements in the final mesh
     integer mxnd= 0; //!< maximum number of nodes expected in the mesh
                    // (if this is exceeded, noroom is returned as .true.)
-    std::vector<real> angle; //!< real array for working space in
+    std::vector<xc_float> angle; //!< xc_float array for working space in
                               // paving - dimensioned to (mxnd) - this becomes
                               // the angle array.
-    std::vector<real> bnsize; //!< real array for working space in
+    std::vector<xc_float> bnsize; //!< xc_float array for working space in
                               // paving - dimensioned to (mxnd * 2) - this
                               // becomes the bnsize array
     std::vector<integer> lnodes; //!< integer array for working space in
@@ -106,7 +106,7 @@ class Paver: public CommandEntity
     logical graph= 0; //!< .true. if plotting at each stage is desired
     logical timer= 0; //!< .true. if a timing report is desired
     logical video= 0; //!< .true. if a video animation sequence plot is desired
-    real defsiz= 0.0; //!< the default size of the elements in this region
+    xc_float defsiz= 0.0; //!< the default size of the elements in this region
                       // (set it to zero if you don't know what else to do.)
     logical sizeit= 0; //!< .true. if a sizing function is to be used
                        // with paving.
@@ -119,13 +119,13 @@ class Paver: public CommandEntity
                     // exceeded (more space is needed)
     logical err= 0; //!< .true. if an error occurs during paving or if noroom
                  // is .true.
-    std::vector<real> amesur; //!< the nodal error measure variable
+    std::vector<xc_float> amesur; //!< the nodal error measure variable
                                    // (used in adaptive meshing).
-    std::vector<real> bmesur; //!< ??
+    std::vector<xc_float> bmesur; //!< ??
                                    // (used in adaptive meshing).
-    std::vector<real> xnold; //!< the old xn array for the old mesh
+    std::vector<xc_float> xnold; //!< the old xn array for the old mesh
                              //! (used in adaptive meshing)
-    std::vector<real> ynold; //!< the old yn array for the old mesh
+    std::vector<xc_float> ynold; //!< the old yn array for the old mesh
                              //! (used in adaptive meshing)
     std::vector<integer> nxkold; //!< the old connectivity array of the old mesh
                                  // (used in adaptive meshing).
@@ -138,10 +138,10 @@ class Paver: public CommandEntity
     integer npeold= 0; //!< the number of processed elements in the old mesh
     integer nnxk= 0; //!< the number of nodes per element in the old mesh
     logical remesh= 0; //!< .true. if an adaptive meshing is requested
-    real rexmin= 0.0; //!< min x for the old mesh
-    real rexmax= 0.0; //!< max x for the old mesh
-    real reymin= 0.0; //!< min y for the old mesh
-    real reymax= 0.0; //!< max y for the old mesh
+    xc_float rexmin= 0.0; //!< min x for the old mesh
+    xc_float rexmax= 0.0; //!< max x for the old mesh
+    xc_float reymin= 0.0; //!< min y for the old mesh
+    xc_float reymax= 0.0; //!< max y for the old mesh
     int idivis= 0; //!< number of divisions in the search grid link */
     int call_paving(const Ref2d3d &, const Polygon3d &, const std::deque<Polygon3d> &);
     int extract_mesh(const Ref2d3d &);

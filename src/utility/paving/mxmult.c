@@ -21,7 +21,7 @@ extern "C" {
 
 /* See packages/seacas/LICENSE for details */
 /* ======================================================================= */
-/* Subroutine */ int mxmult_(integer *n, real *mat1, real *mat2, real *matr)
+/* Subroutine */ int mxmult_(integer *n, xc_float *mat1, xc_float *mat2, xc_float *matr)
 {
     /* System generated locals */
     integer mat1_dim1, mat1_offset, mat2_dim1, mat2_offset, matr_dim1, 
@@ -112,7 +112,7 @@ extern "C" {
 	for (k = 1; k <= i__1; ++k) {
 	    i__2 = *n;
 	    for (j = 1; j <= i__2; ++j) {
-		matr[k + j * matr_dim1] = (float)0.;
+		matr[k + j * matr_dim1] = (xc_float)0.;
 /* L200: */
 	    }
 	    i__2 = *n;

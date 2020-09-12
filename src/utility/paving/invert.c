@@ -20,11 +20,11 @@ extern "C" {
 /*    NTESS, the U.S. Government retains certain rights in this software. */
 
 /*    See packages/seacas/LICENSE for details */
-/* Subroutine */ int invert_fq__(integer *mxnd, integer *mln, real *xn, real *
-	yn, real *zn, integer *lxk, integer *kxl, integer *nxl, integer *lxn, 
-	integer *lll, integer *lnodes, real *xmin, real *xmax, real *ymin, 
-	real *ymax, real *zmin, real *zmax, char *dev1, integer *kreg, 
-	integer *node, real *xdel, real *ydel, ftnlen dev1_len)
+/* Subroutine */ int invert_fq__(integer *mxnd, integer *mln, xc_float *xn, xc_float *
+	yn, xc_float *zn, integer *lxk, integer *kxl, integer *nxl, integer *lxn, 
+	integer *lll, integer *lnodes, xc_float *xmin, xc_float *xmax, xc_float *ymin, 
+	xc_float *ymax, xc_float *zmin, xc_float *zmax, char *dev1, integer *kreg, 
+	integer *node, xc_float *xdel, xc_float *ydel, ftnlen dev1_len)
 {
     /* System generated locals */
     integer lnodes_dim1, lnodes_offset;
@@ -32,13 +32,13 @@ extern "C" {
     /* Local variables */
     static integer n0, n1, n2, n3, n4;
     static logical err;
-    static real xold, yold, xnew, ynew, ang1a, ang2a, ang3a, ang2b, ang1b, 
+    static xc_float xold, yold, xnew, ynew, ang1a, ang2a, ang3a, ang2b, ang1b, 
 	    ang3b;
-    extern /* Subroutine */ int getang_(integer *, integer *, real *, real *, 
+    extern /* Subroutine */ int getang_(integer *, integer *, xc_float *, xc_float *, 
 	    integer *, integer *, integer *, integer *, integer *, integer *, 
-	    integer *, integer *, real *, logical *), vinter_(integer *, real 
-	    *, real *, integer *, integer *, integer *, real *, real *, real *
-	    , real *, logical *);
+	    integer *, integer *, xc_float *, logical *), vinter_(integer *, xc_float 
+	    *, xc_float *, integer *, integer *, integer *, xc_float *, xc_float *, xc_float *
+	    , xc_float *, logical *);
     static logical vcross;
 
 /* *********************************************************************** */
@@ -83,11 +83,11 @@ extern "C" {
     xn[*node] += *xdel;
     yn[*node] += *ydel;
 /*  GET THE ANGLE BEING ADJUSTED AT THE NODE ITSELF */
-    if (lxn[(n2 << 2) + 4] == 0 && ang2a > (float)0.) {
+    if (lxn[(n2 << 2) + 4] == 0 && ang2a > (xc_float)0.) {
 	getang_(mxnd, mln, &xn[1], &yn[1], &lnodes[lnodes_offset], &lxk[5], &
 		kxl[3], &nxl[3], &lxn[5], &n1, &n2, &n3, &ang2b, &err);
 /*  ADJUST THE NODE LOCATION IF NECESSARY */
-	if (ang2b < (float)0.) {
+	if (ang2b < (xc_float)0.) {
 	    vinter_(mxnd, &xn[1], &yn[1], &n1, &n3, &n2, &xold, &yold, &xnew, 
 		    &ynew, &vcross);
 	    if (vcross) {
@@ -97,11 +97,11 @@ extern "C" {
 	}
     }
 /*  GET THE ANGLE BEING ADJUSTED ON THE CCW SIDE OF THIS NODE */
-    if (lxn[(n1 << 2) + 4] == 0 && ang1a > (float)0.) {
+    if (lxn[(n1 << 2) + 4] == 0 && ang1a > (xc_float)0.) {
 	getang_(mxnd, mln, &xn[1], &yn[1], &lnodes[lnodes_offset], &lxk[5], &
 		kxl[3], &nxl[3], &lxn[5], &n0, &n1, &n2, &ang1b, &err);
 /*  ADJUST THE NODE LOCATION IF NECESSARY */
-	if (ang1b < (float)0.) {
+	if (ang1b < (xc_float)0.) {
 	    vinter_(mxnd, &xn[1], &yn[1], &n1, &n0, &n2, &xold, &yold, &xnew, 
 		    &ynew, &vcross);
 	    if (vcross) {
@@ -111,11 +111,11 @@ extern "C" {
 	}
     }
 /*  GET THE ANGLE BEING ADJUSTED ON THE CW SIDE OF THIS NODE */
-    if (lxn[(n3 << 2) + 4] == 0 && ang3a > (float)0.) {
+    if (lxn[(n3 << 2) + 4] == 0 && ang3a > (xc_float)0.) {
 	getang_(mxnd, mln, &xn[1], &yn[1], &lnodes[lnodes_offset], &lxk[5], &
 		kxl[3], &nxl[3], &lxn[5], &n2, &n3, &n4, &ang3b, &err);
 /*  ADJUST THE NODE LOCATION IF NECESSARY */
-	if (ang3b < (float)0.) {
+	if (ang3b < (xc_float)0.) {
 	    vinter_(mxnd, &xn[1], &yn[1], &n3, &n4, &n2, &xold, &yold, &xnew, 
 		    &ynew, &vcross);
 	    if (vcross) {

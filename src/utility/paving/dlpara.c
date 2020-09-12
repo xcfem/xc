@@ -20,11 +20,11 @@ extern "C" {
 /*    NTESS, the U.S. Government retains certain rights in this software. */
 
 /*    See packages/seacas/LICENSE for details */
-/* Subroutine */ int dlpara_(real *x1, real *y1, real *x2, real *y2, real *xm,
-	 real *b, logical *bad)
+/* Subroutine */ int dlpara_(xc_float *x1, xc_float *y1, xc_float *x2, xc_float *y2, xc_float *xm,
+	 xc_float *b, logical *bad)
 {
     /* System generated locals */
-    real r__1;
+    xc_float r__1;
 
 /* *********************************************************************** */
 /*  SUBROUTINE DLPARA = DETERMINES LINE PARAMETERS FROM TWO POINTS */
@@ -40,7 +40,7 @@ extern "C" {
 /*     XM    = THE SLOPE OF A STRIGHT LINE BETWEEN POINT 1 AND 2 */
 /*     B     = THE Y INTERCEPT OF THE STRAIGHT LINE BETWEEN POINT 1 AND 2 */
 /* *********************************************************************** */
-    if ((r__1 = *x2 - *x1, dbl_abs(r__1)) < (float)1e-6) {
+    if ((r__1 = *x2 - *x1, dbl_abs(r__1)) < (xc_float)1e-6) {
 	*bad = TRUE_;
 	*b = *x1;
     } else {

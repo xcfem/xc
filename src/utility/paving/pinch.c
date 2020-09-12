@@ -18,7 +18,7 @@ extern "C" {
 /* Common Block Declarations */
 
 struct {
-    real timea, timep, timec, timepc, timeaj, times;
+    xc_float timea, timep, timec, timepc, timeaj, times;
 } timing_;
 
 #define timing_1 timing_
@@ -34,87 +34,86 @@ static integer c__2 = 2;
 
 /*    See packages/seacas/LICENSE for details */
 /* Subroutine */ int pinch_(integer *mxnd, integer *mxcorn, integer *mln, 
-        integer *nuid, real *xn, real *yn, real *zn, integer *lxk, integer *
-        kxl, integer *nxl, integer *lxn, real *angle, integer *lnodes, real *
+        integer *nuid, xc_float *xn, xc_float *yn, xc_float *zn, integer *lxk, integer *
+        kxl, integer *nxl, integer *lxn, xc_float *angle, integer *lnodes, xc_float *
         bnsize, integer *node, integer *nloop, integer *kkkold, integer *
         lllold, integer *nnnold, integer *iavail, integer *navail, logical *
-        done, real *xmin, real *xmax, real *ymin, real *ymax, real *zmin, 
-        real *zmax, char *dev1, integer *lll, integer *kkk, integer *nnn, 
+        done, xc_float *xmin, xc_float *xmax, xc_float *ymin, xc_float *ymax, xc_float *zmin, 
+        xc_float *zmax, char *dev1, integer *lll, integer *kkk, integer *nnn, 
         integer *lcorn, integer *ncorn, integer *nadj1, integer *nadj2, 
         logical *graph, logical *video, integer *kreg, logical *noroom, 
         logical *err, ftnlen dev1_len)
 {
     /* System generated locals */
     integer lnodes_dim1, lnodes_offset, i__1, i__2;
-    real r__1, r__2;
+    xc_float r__1, r__2;
 
     /* Builtin functions */
-    double atan2(doublereal, doublereal), sqrt(doublereal);
 
     /* Local variables */
     static integer i__, j, n0, n1, n2, n6, nc, ii, ll;
-    static real pi;
+    static xc_float pi;
     static integer nl;
     static logical bok;
     static integer nnn2, idif;
-    static real fact;
+    static xc_float fact;
     static integer kneg, kold, lold, knew, lnew, ilow, line1, line2, n1old;
-    static real time1, time2;
+    static xc_float time1, time2;
     static integer idum1, idum2;
     static logical check;
-    static real ahold;
+    static xc_float ahold;
     static integer ihigh;
     static logical ddone;
-    extern /* Subroutine */ int delem_(integer *, real *, real *, integer *, 
+    extern /* Subroutine */ int delem_(integer *, xc_float *, xc_float *, integer *, 
             integer *, integer *, integer *, integer *, integer *, integer *, 
             integer *, integer *, integer *, integer *, integer *, logical *, 
             logical *, logical *, logical *), wedge_(integer *, integer *, 
-            integer *, integer *, integer *, integer *, integer *, real *, 
-            real *, integer *, real *, integer *, integer *, integer *, 
+            integer *, integer *, integer *, integer *, integer *, xc_float *, 
+            xc_float *, integer *, xc_float *, integer *, integer *, integer *, 
             integer *, integer *, integer *, integer *, integer *, integer *, 
             integer *, logical *, logical *, logical *, logical *, logical *);
-    static real dist01, dist21;
+    static xc_float dist01, dist21;
     static integer ngone;
     static logical found, onlyc;
-    extern /* Subroutine */ int d2node_(integer *, real *, real *, integer *, 
-            integer *), close2_(integer *, integer *, integer *, real *, real 
-            *, real *, integer *, integer *, integer *, integer *, integer *, 
-            integer *, integer *, integer *, integer *, integer *, real *, 
-            real *, real *, real *, real *, real *, logical *, logical *, 
+    extern /* Subroutine */ int d2node_(integer *, xc_float *, xc_float *, integer *, 
+            integer *), close2_(integer *, integer *, integer *, xc_float *, xc_float 
+            *, xc_float *, integer *, integer *, integer *, integer *, integer *, 
+            integer *, integer *, integer *, integer *, integer *, xc_float *, 
+            xc_float *, xc_float *, xc_float *, xc_float *, xc_float *, logical *, logical *, 
             char *, integer *, logical *, logical *, ftnlen);
-    static real toler1, toler2;
+    static xc_float toler1, toler2;
     static integer l1list[20];
     extern /* Subroutine */ int  bpinch_(integer *, 
-            integer *, integer *, real *, real *, integer *, integer *, real *
-            , integer *, integer *, integer *, integer *, real *, real *, 
+            integer *, integer *, xc_float *, xc_float *, integer *, integer *, xc_float *
+            , integer *, integer *, integer *, integer *, xc_float *, xc_float *, 
             logical *, logical *);
     static logical pwedge;
-    extern /* Subroutine */ int getime_(real *), addlxn_(integer *, integer *,
+    extern /* Subroutine */ int getime_(xc_float *), addlxn_(integer *, integer *,
              integer *, integer *, integer *, integer *, integer *, integer *,
              logical *, logical *);
     static logical wedgok, pgraph;
     extern /* Subroutine */ int getcrn_(integer *, integer *, integer *, 
-            integer *, integer *, integer *, real *, real *, real *, integer *
+            integer *, integer *, integer *, xc_float *, xc_float *, xc_float *, integer *
             , integer *, integer *, logical *, logical *, logical *, logical *
             );
     static integer nthere;
     extern /* Subroutine */ int dellxn_(integer *, integer *, integer *, 
             integer *, integer *, integer *, integer *, integer *, logical *, 
-            logical *), filsmo_(integer *, integer *, real *, real *, real *, 
+            logical *), filsmo_(integer *, integer *, xc_float *, xc_float *, xc_float *, 
             integer *, integer *, integer *, integer *, integer *, integer *, 
-            integer *, integer *, real *, integer *, real *, real *, real *, 
-            real *, real *, real *, char *, integer *, ftnlen), marksm_(
+            integer *, integer *, xc_float *, integer *, xc_float *, xc_float *, xc_float *, 
+            xc_float *, xc_float *, xc_float *, char *, integer *, ftnlen), marksm_(
             integer *, integer *, integer *, integer *, integer *, integer *, 
             integer *, integer *, logical *), lcolor_(char *, ftnlen), 
-            lupang_(integer *, integer *, real *, real *, real *, integer *, 
-            integer *, integer *, integer *, integer *, real *, integer *, 
-            integer *, integer *, real *, real *, real *, real *, real *, 
-            real *, char *, integer *, logical *, ftnlen), snapit_(integer *);
+            lupang_(integer *, integer *, xc_float *, xc_float *, xc_float *, integer *, 
+            integer *, integer *, integer *, integer *, xc_float *, integer *, 
+            integer *, integer *, xc_float *, xc_float *, xc_float *, xc_float *, xc_float *, 
+            xc_float *, char *, integer *, logical *, ftnlen), snapit_(integer *);
     static logical pposbl;
     extern /* Subroutine */ int getlxn_(integer *, integer *, integer *, 
             integer *, integer *, logical *), sflush_(), rplotl_(integer *, 
-            real *, real *, real *, integer *, real *, real *, real *, real *,
-             real *, real *, integer *, char *, integer *, ftnlen);
+            xc_float *, xc_float *, xc_float *, integer *, xc_float *, xc_float *, xc_float *, xc_float *,
+             xc_float *, xc_float *, integer *, char *, integer *, ftnlen);
 
 /* *********************************************************************** */
 /*  SUBROUTINE PINCH = COLLAPSES A CORNER WITH A SMALL ANGLE CLOSED */
@@ -136,7 +135,7 @@ static integer c__2 = 2;
     lnodes -= lnodes_offset;
 
     /* Function Body */
-    pi = atan2((float)0., (float)-1.);
+    pi = M_PI;
     getime_(&time1);
     pgraph = FALSE_;
     pwedge = TRUE_;
@@ -232,25 +231,25 @@ L100:
         idif = int_min(i__1,i__2);
         if (lnodes[lcorn[1] * lnodes_dim1 + 7] == lnodes[lcorn[2] * 
                 lnodes_dim1 + 7]) {
-            toler1 = (float).5235988;
-            toler2 = (float)1.2217305;
+            toler1 = (xc_float).5235988;
+            toler2 = (xc_float)1.2217305;
         } else {
-            toler1 = (float).6108652;
-            toler2 = (float)1.0471976;
+            toler1 = (xc_float).6108652;
+            toler2 = (xc_float)1.0471976;
         }
     } else if (*ncorn == 3 && ilow == 1 && ihigh == 3) {
-        toler1 = (float).6108652;
-        toler2 = (float)1.0471976;
+        toler1 = (xc_float).6108652;
+        toler2 = (xc_float)1.0471976;
     } else {
-        toler1 = (float).3490659;
-        toler2 = (float).8726646;
+        toler1 = (xc_float).3490659;
+        toler2 = (xc_float).8726646;
     }
 /*  NOW MAKE SURE THAT A WEDGE CAN BE ALLOWED */
     if (*nloop <= 4) {
         kneg = 0;
         i__1 = *ncorn;
         for (i__ = 1; i__ <= i__1; ++i__) {
-            if (angle[lcorn[i__]] < (float)0.) {
+            if (angle[lcorn[i__]] < (xc_float)0.) {
                 ++kneg;
             }
 /* L110: */
@@ -314,7 +313,7 @@ L120:
 /* Computing 2nd power */
             r__2 = yn[n1] - yn[n2];
             dist21 = sqrt(r__1 * r__1 + r__2 * r__2);
-            fact = (float)2.5;
+            fact = (xc_float)2.5;
             if (wedgok && dist01 > fact * dist21 && kxl[(lnodes[n0 * 
                     lnodes_dim1 + 5] << 1) + 1] > 0) {
                 marksm_(mxnd, mln, &lxk[5], &kxl[3], &nxl[3], &lxn[5], &
@@ -366,10 +365,10 @@ L120:
                         n6, nloop, &pwedge, graph, video, noroom, err);
 /*  WATCH FOR THE REPEATING CASE */
                 if (n1 == n1old) {
-                    bnsize[(n1 << 1) + 2] *= (float)3.;
-                    bnsize[(lnodes[n6 * lnodes_dim1 + 3] << 1) + 2] *= (float)
+                    bnsize[(n1 << 1) + 2] *= (xc_float)3.;
+                    bnsize[(lnodes[n6 * lnodes_dim1 + 3] << 1) + 2] *= (xc_float)
                             3.;
-                    bnsize[(n6 << 1) + 2] *= (float)3.;
+                    bnsize[(n6 << 1) + 2] *= (xc_float)3.;
                 }
                 n1old = n1;
                 if (*noroom || *err) {
@@ -528,7 +527,7 @@ L120:
                         }
 /* L150: */
                     }
-                    fprintf(stderr,"** PROBLEMS IN PINCH FIXING ELEMENT **");
+                    fprintf(stderr,"** PROBLEMS IN PINCH FIXING ELEMENT **\n");
                     *err = TRUE_;
                     goto L210;
 L160:
@@ -537,7 +536,7 @@ L160:
 /*  RECONNECT ALL LINES CONNECTING TO NGONE TO NTHERE */
                 getlxn_(mxnd, &lxn[5], &ngone, l1list, &nl, err);
                 if (*err) {
-                    fprintf(stderr,"** PROBLEMS IN PINCH GETTING NGONELINES **");
+                    fprintf(stderr,"** PROBLEMS IN PINCH GETTING NGONELINES **\n");
                     goto L210;
                 }
                 i__1 = nl;
@@ -581,13 +580,13 @@ L160:
                 dellxn_(mxnd, &lxn[5], &nuid[1], navail, iavail, &ngone, &
                         lold, nnn, err, noroom);
                 if (*noroom || *err) {
-                    fprintf(stderr,"** PROBLEMS IN PINCH DELETING LOLD FROM NGONE **");
+                    fprintf(stderr,"** PROBLEMS IN PINCH DELETING LOLD FROM NGONE **\n");
                     goto L210;
                 }
                 dellxn_(mxnd, &lxn[5], &nuid[1], navail, iavail, &n1, &lold, 
                         nnn, err, noroom);
                 if (*noroom || *err) {
-                    fprintf(stderr,"** PROBLEMS IN PINCH DELETING LOLD FROM N1 **");
+                    fprintf(stderr,"** PROBLEMS IN PINCH DELETING LOLD FROM N1 **\n");
                     goto L210;
                 }
 /*  ADD ALL LINES STILL HOOKED TO NGONE TO THE LIST OF LINES FOR NTHERE */
@@ -598,7 +597,7 @@ L160:
                         addlxn_(mxnd, &lxn[5], &nuid[1], navail, iavail, &
                                 nthere, &ll, nnn, err, noroom);
                         if (*noroom || *err) {
-                            fprintf(stderr,"** PROBLEMS IN PINCH ADDINGLL TO NTHERE **");
+                            fprintf(stderr,"** PROBLEMS IN PINCH ADDINGLL TO NTHERE **\n");
                             goto L210;
                         }
                     }

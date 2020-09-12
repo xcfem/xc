@@ -32,13 +32,13 @@ struct {
 #define d3nums_1 d3nums_
 
 struct {
-    real vecscl;
+    xc_float vecscl;
 } etcopt_;
 
 #define etcopt_1 etcopt_
 
 struct {
-    real dtw, vwscl;
+    xc_float dtw, vwscl;
 } devdat_;
 
 #define devdat_1 devdat_
@@ -53,23 +53,23 @@ static integer c__2 = 2;
 
 /* See packages/seacas/LICENSE for details */
 /* ======================================================================= */
-/* Subroutine */ int symbol_bl__(char *isytyp, real *varfac, integer *lenf, 
-	integer *nlnkf, logical *hidef, real *xf, real *yf, real *zf, logical 
+/* Subroutine */ int symbol_bl__(char *isytyp, xc_float *varfac, integer *lenf, 
+	integer *nlnkf, logical *hidef, xc_float *xf, xc_float *yf, xc_float *zf, logical 
 	*isvok, integer *blkcol, integer *idelb, ftnlen isytyp_len)
 {
     /* System generated locals */
     integer i__1, i__2;
-    real r__1;
+    xc_float r__1;
 
     /* Local variables */
     static integer ifac, ielb;
     static logical ldum;
-    static real sscl, symsz;
+    static xc_float sscl, symsz;
     extern logical grabrt_();
     extern /* Subroutine */ int ugrcol_(integer *, integer *), pltflu_();
-    extern logical pltgtt_(integer *, real *), pltstt_(integer *, real *);
-    extern /* Subroutine */ int usrsym_(char *, logical *, real *, real *, 
-	    real *, real *, real *, ftnlen);
+    extern logical pltgtt_(integer *, xc_float *), pltstt_(integer *, xc_float *);
+    extern /* Subroutine */ int usrsym_(char *, logical *, xc_float *, xc_float *, 
+	    xc_float *, xc_float *, xc_float *, ftnlen);
 
 /* ======================================================================= */
 /*   --*** SYMBOL *** (DETOUR) Plot element symbol */

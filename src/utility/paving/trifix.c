@@ -24,47 +24,44 @@ static integer c__3 = 3;
 /*    NTESS, the U.S. Government retains certain rights in this software. */
 
 /*    See packages/seacas/LICENSE for details */
-/* Subroutine */ int trifix_(integer *mxnd, integer *mln, real *xn, real *yn, 
-	real *zn, integer *nuid, integer *lxk, integer *kxl, integer *nxl, 
+/* Subroutine */ int trifix_(integer *mxnd, integer *mln, xc_float *xn, xc_float *yn, 
+	xc_float *zn, integer *nuid, integer *lxk, integer *kxl, integer *nxl, 
 	integer *lxn, integer *nnn, integer *lll, integer *kkk, integer *
-	navail, integer *iavail, real *angle, integer *lnodes, real *bnsize, 
-	integer *nloop, char *dev1, integer *kreg, real *xmin, real *xmax, 
-	real *ymin, real *ymax, real *zmin, real *zmaxz, logical *graph, 
+	navail, integer *iavail, xc_float *angle, integer *lnodes, xc_float *bnsize, 
+	integer *nloop, char *dev1, integer *kreg, xc_float *xmin, xc_float *xmax, 
+	xc_float *ymin, xc_float *ymax, xc_float *zmin, xc_float *zmaxz, logical *graph, 
 	logical *video, logical *noroom, logical *err, ftnlen dev1_len)
 {
     /* System generated locals */
     integer lnodes_dim1, lnodes_offset, i__1;
-    real r__1, r__2, r__3, r__4, r__5, r__6;
-
-    /* Builtin functions */
-    double atan2(doublereal, doublereal);
+    xc_float r__1, r__2, r__3, r__4, r__5, r__6;
 
     /* Local variables */
     static integer i__, i0, i1, i2;
-    static real pi, ang;
+    static xc_float pi, ang;
     static logical ccw;
-    static real ang1, ang2, area;
+    static xc_float ang1, ang2, area;
     static logical done, redo;
     static integer kmax;
-    static real dist, zmax;
+    static xc_float dist, zmax;
     static integer kelem, nodes[4];
-    extern /* Subroutine */ int gnxka_(integer *, real *, real *, integer *, 
-	    integer *, real *, integer *, integer *, logical *);
-    static real toler;
+    extern /* Subroutine */ int gnxka_(integer *, xc_float *, xc_float *, integer *, 
+	    integer *, xc_float *, integer *, integer *, logical *);
+    static xc_float toler;
     static integer kount;
-    static real twopi;
+    static xc_float twopi;
     static integer kkkadd;
-    extern /* Subroutine */ int longel_(integer *, integer *, integer *, real 
-	    *, real *, integer *, integer *, integer *, integer *, integer *, 
-	    integer *, integer *, integer *, integer *, integer *, real *, 
-	    real *, integer *, integer *, integer *, real *, real *, real *, 
-	    real *, integer *, integer *, logical *, logical *, logical *, 
+    extern /* Subroutine */ int longel_(integer *, integer *, integer *, xc_float 
+	    *, xc_float *, integer *, integer *, integer *, integer *, integer *, 
+	    integer *, integer *, integer *, integer *, integer *, xc_float *, 
+	    xc_float *, integer *, integer *, integer *, xc_float *, xc_float *, xc_float *, 
+	    xc_float *, integer *, integer *, logical *, logical *, logical *, 
 	    logical *, logical *, integer *), filsmo_(integer *, integer *, 
-	    real *, real *, real *, integer *, integer *, integer *, integer *
-	    , integer *, integer *, integer *, integer *, real *, integer *, 
-	    real *, real *, real *, real *, real *, real *, char *, integer *,
-	     ftnlen), snapit_(integer *), rplotl_(integer *, real *, real *, 
-	    real *, integer *, real *, real *, real *, real *, real *, real *,
+	    xc_float *, xc_float *, xc_float *, integer *, integer *, integer *, integer *
+	    , integer *, integer *, integer *, integer *, xc_float *, integer *, 
+	    xc_float *, xc_float *, xc_float *, xc_float *, xc_float *, xc_float *, char *, integer *,
+	     ftnlen), snapit_(integer *), rplotl_(integer *, xc_float *, xc_float *, 
+	    xc_float *, integer *, xc_float *, xc_float *, xc_float *, xc_float *, xc_float *, xc_float *,
 	     integer *, char *, integer *, ftnlen);
 
 /* *********************************************************************** */
@@ -88,15 +85,15 @@ static integer c__3 = 3;
     lnodes -= lnodes_offset;
 
     /* Function Body */
-    pi = atan2((float)0., (float)-1.);
-    twopi = pi * (float)2.;
+    pi = M_PI;
+    twopi = pi * (xc_float)2.;
     *err = FALSE_;
     done = FALSE_;
     ccw = TRUE_;
     kmax = 30;
     kount = 0;
 /*  TOLERANCE IS SET AT 150 DEGREES */
-    toler = (float)2.6179939;
+    toler = (xc_float)2.6179939;
 L100:
     ++kount;
     if (kount > kmax) {
@@ -121,15 +118,15 @@ L100:
 		    i2 = nodes[i__];
 		}
 		ang1 = atan2(yn[i0] - yn[i1], xn[i0] - xn[i1]);
-		if (ang1 < (float)0.) {
+		if (ang1 < (xc_float)0.) {
 		    ang1 += twopi;
 		}
 		ang2 = atan2(yn[i2] - yn[i1], xn[i2] - xn[i1]);
-		if (ang2 < (float)0.) {
+		if (ang2 < (xc_float)0.) {
 		    ang2 += twopi;
 		}
 		ang = ang1 - ang2;
-		if (ang < (float)0.) {
+		if (ang < (xc_float)0.) {
 		    ang += twopi;
 		}
 		longel_(mxnd, mln, &lnodes[lnodes_offset], &xn[1], &yn[1], &
@@ -148,7 +145,7 @@ L100:
 				dbl_max(r__5,r__6), r__6 = (r__3 = yn[i0] - yn[i1]
 				, dbl_abs(r__3)), r__5 = dbl_max(r__5,r__6), r__6 = (
 				r__4 = yn[i2] - yn[i1], dbl_abs(r__4));
-			dist = dbl_max(r__5,r__6) * (float)3.;
+			dist = dbl_max(r__5,r__6) * (xc_float)3.;
 			*xmin = xn[i1] - dist;
 			*xmax = xn[i1] + dist;
 			*ymin = yn[i1] - dist;

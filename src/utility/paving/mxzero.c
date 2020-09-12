@@ -21,7 +21,7 @@ extern "C" {
 
 /* See packages/seacas/LICENSE for details */
 /* ======================================================================= */
-/* Subroutine */ int mxzero_(integer *n, real *mat)
+/* Subroutine */ int mxzero_(integer *n, xc_float *mat)
 {
     /* System generated locals */
     integer mat_dim1, mat_offset, i__1, i__2;
@@ -36,28 +36,28 @@ extern "C" {
 
     /* Function Body */
     if (*n == 4) {
-	mat[mat_dim1 + 1] = (float)0.;
-	mat[(mat_dim1 << 1) + 1] = (float)0.;
-	mat[mat_dim1 * 3 + 1] = (float)0.;
-	mat[(mat_dim1 << 2) + 1] = (float)0.;
-	mat[mat_dim1 + 2] = (float)0.;
-	mat[(mat_dim1 << 1) + 2] = (float)0.;
-	mat[mat_dim1 * 3 + 2] = (float)0.;
-	mat[(mat_dim1 << 2) + 2] = (float)0.;
-	mat[mat_dim1 + 3] = (float)0.;
-	mat[(mat_dim1 << 1) + 3] = (float)0.;
-	mat[mat_dim1 * 3 + 3] = (float)0.;
-	mat[(mat_dim1 << 2) + 3] = (float)0.;
-	mat[mat_dim1 + 4] = (float)0.;
-	mat[(mat_dim1 << 1) + 4] = (float)0.;
-	mat[mat_dim1 * 3 + 4] = (float)0.;
-	mat[(mat_dim1 << 2) + 4] = (float)0.;
+	mat[mat_dim1 + 1] = (xc_float)0.;
+	mat[(mat_dim1 << 1) + 1] = (xc_float)0.;
+	mat[mat_dim1 * 3 + 1] = (xc_float)0.;
+	mat[(mat_dim1 << 2) + 1] = (xc_float)0.;
+	mat[mat_dim1 + 2] = (xc_float)0.;
+	mat[(mat_dim1 << 1) + 2] = (xc_float)0.;
+	mat[mat_dim1 * 3 + 2] = (xc_float)0.;
+	mat[(mat_dim1 << 2) + 2] = (xc_float)0.;
+	mat[mat_dim1 + 3] = (xc_float)0.;
+	mat[(mat_dim1 << 1) + 3] = (xc_float)0.;
+	mat[mat_dim1 * 3 + 3] = (xc_float)0.;
+	mat[(mat_dim1 << 2) + 3] = (xc_float)0.;
+	mat[mat_dim1 + 4] = (xc_float)0.;
+	mat[(mat_dim1 << 1) + 4] = (xc_float)0.;
+	mat[mat_dim1 * 3 + 4] = (xc_float)0.;
+	mat[(mat_dim1 << 2) + 4] = (xc_float)0.;
     } else {
 	i__1 = *n;
 	for (i__ = 1; i__ <= i__1; ++i__) {
 	    i__2 = *n;
 	    for (j = 1; j <= i__2; ++j) {
-		mat[i__ + j * mat_dim1] = (float)0.;
+		mat[i__ + j * mat_dim1] = (xc_float)0.;
 /* L3050: */
 	    }
 /* L3030: */

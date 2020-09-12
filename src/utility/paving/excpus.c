@@ -14,7 +14,7 @@
  *   undefined; only relative times are valid.
  *
  *   FORMAL PARAMETERS:
- *   CPUSEC    REAL            CPU time
+ *   CPUSEC    XC_FLOAT            CPU time
  *
  */
 
@@ -24,10 +24,10 @@
 #include <sys/time.h>
 
 
-void excpus_(real *cpusec)
+void excpus_(xc_float *cpusec)
 {
 #if defined(interix)
-  *cpusec = ((real)clock()) / CLOCKS_PER_SEC;
+  *cpusec = ((xc_float)clock()) / CLOCKS_PER_SEC;
 #endif /* interix */
 
 #if defined(__NO_CYGWIN_OPTION__)
@@ -65,6 +65,6 @@ void excpus_(real *cpusec)
   getrusage(RUSAGE_SELF, &rusage);
   secs    = rusage.ru_utime.tv_sec + rusage.ru_stime.tv_sec;
   mics    = rusage.ru_utime.tv_usec + rusage.ru_stime.tv_usec;
-  *cpusec = (real)secs + ((real)mics / 1.e6);
+  *cpusec = (xc_float)secs + ((xc_float)mics / 1.e6);
 #endif
 }

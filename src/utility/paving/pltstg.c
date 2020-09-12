@@ -18,38 +18,38 @@ extern "C" {
 /* Common Block Declarations */
 
 struct {
-    real devcap[23], defout[7];
+    xc_float devcap[23], defout[7];
 } status_;
 
 #define status_1 status_
 
 struct {
-    real devp[5];
+    xc_float devp[5];
 } device_;
 
 #define device_1 device_
 
 struct {
-    real colp[3], palett[48]	/* was [3][16] */;
+    xc_float colp[3], palett[48]	/* was [3][16] */;
 } color_;
 
 #define color_1 color_
 
 struct {
-    real textp[40];
+    xc_float textp[40];
 } text_;
 
 #define text_1 text_
 
 struct {
-    real vectp[5], xcur, ycur;
+    xc_float vectp[5], xcur, ycur;
 } vectrc_;
 
 #define vectrc_1 vectrc_
 
 struct {
     integer idex[400]	/* was [200][2] */, nvect[400]	/* was [200][2] */;
-    real xsize[400]	/* was [200][2] */, ysize[400]	/* was [200][2] */, 
+    xc_float xsize[400]	/* was [200][2] */, ysize[400]	/* was [200][2] */, 
 	    x0[4600]	/* was [2300][2] */, y0[4600]	/* was [2300][2] */, 
 	    x1[4600]	/* was [2300][2] */, y1[4600]	/* was [2300][2] */;
 } font_;
@@ -57,13 +57,13 @@ struct {
 #define font_1 font_
 
 struct {
-    real graphp[100];
+    xc_float graphp[100];
 } graph_;
 
 #define graph_1 graph_
 
 struct {
-    real mapp[11];
+    xc_float mapp[11];
 } mappar_;
 
 #define mappar_1 mappar_
@@ -85,7 +85,7 @@ static integer c__3 = 3;
 
 /* See packages/seacas/LICENSE for details */
 /* ======================================================================= */
-logical pltstg_(integer *indx, real *buff)
+logical pltstg_(integer *indx, xc_float *buff)
 {
     /* System generated locals */
     char * a__1[3];
@@ -99,7 +99,7 @@ logical pltstg_(integer *indx, real *buff)
     /* Local variables */
     static integer i__, l;
     extern /* Subroutine */ int chric_(integer *, char *, integer *, ftnlen), 
-	    chrrvc_(real *, char *, integer *, ftnlen);
+	    chrrvc_(xc_float *, char *, integer *, ftnlen);
     static char ierror[16];
     extern /* Subroutine */ int pltflu_(), pltrsg_(), siorpt_(char *, char *, 
 	    integer *, ftnlen, ftnlen);
@@ -124,14 +124,14 @@ logical pltstg_(integer *indx, real *buff)
     } else if (*indx == 6) {
 	graph_1.graphp[37] = buff[1];
     } else if (*indx == 7) {
-	if (buff[1] == (float)0.) {
-	    graph_1.graphp[5] = (float)0.;
+	if (buff[1] == (xc_float)0.) {
+	    graph_1.graphp[5] = (xc_float)0.;
 	} else {
-	    graph_1.graphp[5] = (float)1.;
-	    graph_1.graphp[46] = buff[1] + (float)4.;
+	    graph_1.graphp[5] = (xc_float)1.;
+	    graph_1.graphp[46] = buff[1] + (xc_float)4.;
 	}
     } else if (*indx == 8) {
-	if (buff[1] <= (float)0.) {
+	if (buff[1] <= (xc_float)0.) {
 	    pltflu_();
 	    siorpt_("PLTSTG", "Symbol increment must be greater than zero.", &
 		    c__2, (ftnlen)6, (ftnlen)43);
@@ -144,11 +144,11 @@ logical pltstg_(integer *indx, real *buff)
     } else if (*indx == 10) {
 	graph_1.graphp[36] = buff[1];
     } else if (*indx == 11) {
-	if (buff[1] == (float)1.) {
+	if (buff[1] == (xc_float)1.) {
 	    graph_1.graphp[21] = buff[1];
-	} else if (buff[1] == (float)2.) {
+	} else if (buff[1] == (xc_float)2.) {
 	    graph_1.graphp[21] = buff[1];
-	} else if (buff[1] == (float)3.) {
+	} else if (buff[1] == (xc_float)3.) {
 	    if (buff[2] == buff[3]) {
 		pltflu_();
 		siorpt_("PLTSTG", "XMIN cannot be equal to XMAX.", &c__2, (
@@ -163,14 +163,14 @@ logical pltstg_(integer *indx, real *buff)
 		ret_val = FALSE_;
 		return ret_val;
 	    }
-	    if (buff[4] == (float)0.) {
+	    if (buff[4] == (xc_float)0.) {
 		pltflu_();
 		siorpt_("PLTSTG", "Number of major x intervals cannot equal \
 zero.", &c__2, (ftnlen)6, (ftnlen)46);
 		ret_val = FALSE_;
 		return ret_val;
 	    }
-	    if (buff[8] == (float)0.) {
+	    if (buff[8] == (xc_float)0.) {
 		pltflu_();
 		siorpt_("PLTSTG", "Number of major y intervals cannot equal \
 zero.", &c__2, (ftnlen)6, (ftnlen)46);
@@ -182,7 +182,7 @@ zero.", &c__2, (ftnlen)6, (ftnlen)46);
 		graph_1.graphp[i__ + 23] = buff[i__ + 2];
 /* L2220: */
 	    }
-	} else if (buff[1] == (float)4.) {
+	} else if (buff[1] == (xc_float)4.) {
 	    if (buff[4] == buff[3]) {
 		pltflu_();
 		siorpt_("PLTSTG", "XMAX cannot equal first nice X number.", &
@@ -190,7 +190,7 @@ zero.", &c__2, (ftnlen)6, (ftnlen)46);
 		ret_val = FALSE_;
 		return ret_val;
 	    }
-	    if (buff[5] == (float)0.) {
+	    if (buff[5] == (xc_float)0.) {
 		pltflu_();
 		siorpt_("PLTSTG", "X interval cannot equal zero.", &c__2, (
 			ftnlen)6, (ftnlen)29);
@@ -204,7 +204,7 @@ zero.", &c__2, (ftnlen)6, (ftnlen)46);
 		ret_val = FALSE_;
 		return ret_val;
 	    }
-	    if (buff[10] == (float)0.) {
+	    if (buff[10] == (xc_float)0.) {
 		pltflu_();
 		siorpt_("PLTSTG", "Y interval cannot equal zero.", &c__2, (
 			ftnlen)6, (ftnlen)29);
@@ -227,13 +227,13 @@ YMAX.", &c__2, (ftnlen)6, (ftnlen)46);
 		ret_val = FALSE_;
 		return ret_val;
 	    }
-	    if (buff[4] < buff[2] && buff[5] > (float)0.) {
+	    if (buff[4] < buff[2] && buff[5] > (xc_float)0.) {
 		pltflu_();
 		siorpt_("PLTSTG", "Setting X interval negative as XMAX < XMI\
 N.", &c__2, (ftnlen)6, (ftnlen)43);
 		buff[5] = -buff[5];
 	    }
-	    if (buff[9] < buff[7] && buff[10] > (float)0.) {
+	    if (buff[9] < buff[7] && buff[10] > (xc_float)0.) {
 		pltflu_();
 		siorpt_("PLTSTG", "Setting Y interval negative as YMAX < YMI\
 N.", &c__2, (ftnlen)6, (ftnlen)43);
@@ -343,7 +343,7 @@ N.", &c__2, (ftnlen)6, (ftnlen)43);
 } /* pltstg_ */
 
 /* .. Same as PLTSTG */
-logical pltstg1_(integer *indx, real *buff)
+logical pltstg1_(integer *indx, xc_float *buff)
 {
     /* System generated locals */
     char * a__1[3];
@@ -377,14 +377,14 @@ logical pltstg1_(integer *indx, real *buff)
     } else if (*indx == 6) {
 	graph_1.graphp[37] = *buff;
     } else if (*indx == 7) {
-	if (*buff == (float)0.) {
-	    graph_1.graphp[5] = (float)0.;
+	if (*buff == (xc_float)0.) {
+	    graph_1.graphp[5] = (xc_float)0.;
 	} else {
-	    graph_1.graphp[5] = (float)1.;
-	    graph_1.graphp[46] = *buff + (float)4.;
+	    graph_1.graphp[5] = (xc_float)1.;
+	    graph_1.graphp[46] = *buff + (xc_float)4.;
 	}
     } else if (*indx == 8) {
-	if (*buff <= (float)0.) {
+	if (*buff <= (xc_float)0.) {
 	    pltflu_();
 	    siorpt_("PLTSTG", "Symbol increment must be greater than zero.", &
 		    c__2, (ftnlen)6, (ftnlen)43);

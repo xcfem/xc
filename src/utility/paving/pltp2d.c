@@ -18,38 +18,38 @@ extern "C" {
 /* Common Block Declarations */
 
 struct {
-    real devcap[23], defout[7];
+    xc_float devcap[23], defout[7];
 } status_;
 
 #define status_1 status_
 
 struct {
-    real devp[5];
+    xc_float devp[5];
 } device_;
 
 #define device_1 device_
 
 struct {
-    real colp[3], palett[48]	/* was [3][16] */;
+    xc_float colp[3], palett[48]	/* was [3][16] */;
 } color_;
 
 #define color_1 color_
 
 struct {
-    real textp[40];
+    xc_float textp[40];
 } text_;
 
 #define text_1 text_
 
 struct {
-    real vectp[5], xcur, ycur;
+    xc_float vectp[5], xcur, ycur;
 } vectrc_;
 
 #define vectrc_1 vectrc_
 
 struct {
     integer idex[400]	/* was [200][2] */, nvect[400]	/* was [200][2] */;
-    real xsize[400]	/* was [200][2] */, ysize[400]	/* was [200][2] */, 
+    xc_float xsize[400]	/* was [200][2] */, ysize[400]	/* was [200][2] */, 
 	    x0[4600]	/* was [2300][2] */, y0[4600]	/* was [2300][2] */, 
 	    x1[4600]	/* was [2300][2] */, y1[4600]	/* was [2300][2] */;
 } font_;
@@ -57,13 +57,13 @@ struct {
 #define font_1 font_
 
 struct {
-    real graphp[100];
+    xc_float graphp[100];
 } graph_;
 
 #define graph_1 graph_
 
 struct {
-    real mapp[11];
+    xc_float mapp[11];
 } mappar_;
 
 #define mappar_1 mappar_
@@ -80,26 +80,26 @@ struct {
 
 /* See packages/seacas/LICENSE for details */
 /* ======================================================================= */
-/* Subroutine */ int pltp2d_(real *x, real *y, real *xn, real *yn)
+/* Subroutine */ int pltp2d_(xc_float *x, xc_float *y, xc_float *xn, xc_float *yn)
 {
     /* Initialized data */
 
-    static real dtr = (float).01745329;
+    static xc_float dtr = (xc_float).01745329;
 
     /* Builtin functions */
-    double cos(doublereal), sin(doublereal);
+    
 
     /* Local variables */
-    static real sx, xt, yt, sy, theta;
+    static xc_float sx, xt, yt, sy, theta;
 
-    xt = *x - device_1.devp[3] / (float)2.;
-    yt = *y - device_1.devp[4] / (float)2.;
+    xt = *x - device_1.devp[3] / (xc_float)2.;
+    yt = *y - device_1.devp[4] / (xc_float)2.;
     theta = mappar_1.mapp[4] * dtr;
     xt *= mappar_1.mapp[0];
     yt *= mappar_1.mapp[1];
-    *xn = xt * cos(theta) - yt * sin(theta) + device_1.devp[3] / (float)2. + 
+    *xn = xt * cos(theta) - yt * sin(theta) + device_1.devp[3] / (xc_float)2. + 
 	    mappar_1.mapp[2];
-    *yn = yt * cos(theta) + xt * sin(theta) + device_1.devp[4] / (float)2. + 
+    *yn = yt * cos(theta) + xt * sin(theta) + device_1.devp[4] / (xc_float)2. + 
 	    mappar_1.mapp[3];
     sx = (mappar_1.mapp[7] - mappar_1.mapp[5]) / device_1.devp[3];
     sy = (mappar_1.mapp[8] - mappar_1.mapp[6]) / device_1.devp[4];

@@ -18,7 +18,7 @@ extern "C" {
 /* Common Block Declarations */
 
 struct {
-    real timea, timep, timec, timepc, timeaj, times;
+    xc_float timea, timep, timec, timepc, timeaj, times;
 } timing_;
 
 #define timing_1 timing_
@@ -33,13 +33,13 @@ static integer c__2 = 2;
 
 /*    See packages/seacas/LICENSE for details */
 /* Subroutine */ int pcross_(integer *mxnd, integer *mxcorn, integer *mln, 
-        integer *mxloop, integer *maxprm, integer *nuid, real *xn, real *yn, 
-        real *zn, integer *lxk, integer *kxl, integer *nxl, integer *lxn, 
-        real *angle, integer *lnodes, real *bnsize, integer *linkpr, integer *
+        integer *mxloop, integer *maxprm, integer *nuid, xc_float *xn, xc_float *yn, 
+        xc_float *zn, integer *lxk, integer *kxl, integer *nxl, integer *lxn, 
+        xc_float *angle, integer *lnodes, xc_float *bnsize, integer *linkpr, integer *
         kperim, integer *node, integer *node1, integer *node2, integer *
         kkkold, integer *lllold, integer *nnnold, integer *iavail, integer *
-        navail, logical *done, real *xmin, real *xmax, real *ymin, real *ymax,
-         real *zmin, real *zmax, char *dev1, integer *lll, integer *kkk, 
+        navail, logical *done, xc_float *xmin, xc_float *xmax, xc_float *ymin, xc_float *ymax,
+         xc_float *zmin, xc_float *zmax, char *dev1, integer *lll, integer *kkk, 
         integer *nnn, integer *lcorn, integer *ncorn, integer *nloop, integer 
         *nextn1, integer *kloop, logical *graph, logical *video, integer *
         kreg, logical *noroom, logical *err, ftnlen dev1_len)
@@ -48,7 +48,7 @@ static integer c__2 = 2;
     integer lnodes_dim1, lnodes_offset;
 
     /* Local variables */
-    static real u, w;
+    static xc_float u, w;
     static integer i1, i2, j1, j2, n0, n1, n2, n3;
     static logical bok;
     static integer nnn2;
@@ -58,45 +58,45 @@ static integer c__2 = 2;
             integer *, integer *, logical *, logical *);
     static integer ndum;
     static logical done1;
-    static real time1, time2;
+    static xc_float time1, time2;
     extern /* Subroutine */ int pinch_(integer *, integer *, integer *, 
-            integer *, real *, real *, real *, integer *, integer *, integer *
-            , integer *, real *, integer *, real *, integer *, integer *, 
+            integer *, xc_float *, xc_float *, xc_float *, integer *, integer *, integer *
+            , integer *, xc_float *, integer *, xc_float *, integer *, integer *, 
             integer *, integer *, integer *, integer *, integer *, logical *, 
-            real *, real *, real *, real *, real *, real *, char *, integer *,
+            xc_float *, xc_float *, xc_float *, xc_float *, xc_float *, xc_float *, char *, integer *,
              integer *, integer *, integer *, integer *, integer *, integer *,
              logical *, logical *, integer *, logical *, logical *, ftnlen);
     static integer kount;
-    extern /* Subroutine */ int d2node_(integer *, real *, real *, integer *, 
-            integer *), match2_(integer *, integer *, real *, real *, integer 
-            *, integer *, integer *, real *, integer *, integer *, integer *, 
+    extern /* Subroutine */ int d2node_(integer *, xc_float *, xc_float *, integer *, 
+            integer *), match2_(integer *, integer *, xc_float *, xc_float *, integer 
+            *, integer *, integer *, xc_float *, integer *, integer *, integer *, 
             integer *, integer *, integer *, integer *, integer *, integer *, 
             integer *, integer *, integer *, integer *, logical *, integer *, 
-            integer *, real *, real *, integer *, logical *, logical *);
+            integer *, xc_float *, xc_float *, integer *, logical *, logical *);
     static integer n1test, n0test, n2test, n3test, kount2;
 
     static logical lmatch;
-    extern /* Subroutine */ int getime_(real *);
+    extern /* Subroutine */ int getime_(xc_float *);
     static logical pmatch;
     static integer iperim, jperim;
-    extern /* Subroutine */ int filsmo_(integer *, integer *, real *, real *, 
-            real *, integer *, integer *, integer *, integer *, integer *, 
-            integer *, integer *, integer *, real *, integer *, real *, real *
-            , real *, real *, real *, real *, char *, integer *, ftnlen), 
-            lcolor_(char *, ftnlen), bcross_(integer *, integer *, real *, 
-            real *, real *, integer *, integer *, integer *, integer *, 
+    extern /* Subroutine */ int filsmo_(integer *, integer *, xc_float *, xc_float *, 
+            xc_float *, integer *, integer *, integer *, integer *, integer *, 
+            integer *, integer *, integer *, xc_float *, integer *, xc_float *, xc_float *
+            , xc_float *, xc_float *, xc_float *, xc_float *, char *, integer *, ftnlen), 
+            lcolor_(char *, ftnlen), bcross_(integer *, integer *, xc_float *, 
+            xc_float *, xc_float *, integer *, integer *, integer *, integer *, 
             integer *, integer *, integer *, integer *, integer *, integer *, 
-            logical *, integer *, real *, real *, real *, real *, real *, 
-            real *, char *, integer *, logical *, ftnlen), lupang_(integer *, 
-            integer *, real *, real *, real *, integer *, integer *, integer *
-            , integer *, integer *, real *, integer *, integer *, integer *, 
-            real *, real *, real *, real *, real *, real *, char *, integer *,
+            logical *, integer *, xc_float *, xc_float *, xc_float *, xc_float *, xc_float *, 
+            xc_float *, char *, integer *, logical *, ftnlen), lupang_(integer *, 
+            integer *, xc_float *, xc_float *, xc_float *, integer *, integer *, integer *
+            , integer *, integer *, xc_float *, integer *, integer *, integer *, 
+            xc_float *, xc_float *, xc_float *, xc_float *, xc_float *, xc_float *, char *, integer *,
              logical *, ftnlen), snapit_(integer *);
     static logical lcross;
-    extern /* Subroutine */ int intsct_(real *, real *, real *, real *, real *
-            , real *, real *, real *, real *, real *, logical *), sflush_(), 
-            rplotl_(integer *, real *, real *, real *, integer *, real *, 
-            real *, real *, real *, real *, real *, integer *, char *, 
+    extern /* Subroutine */ int intsct_(xc_float *, xc_float *, xc_float *, xc_float *, xc_float *
+            , xc_float *, xc_float *, xc_float *, xc_float *, xc_float *, logical *), sflush_(), 
+            rplotl_(integer *, xc_float *, xc_float *, xc_float *, integer *, xc_float *, 
+            xc_float *, xc_float *, xc_float *, xc_float *, xc_float *, integer *, char *, 
             integer *, ftnlen);
     static integer kountl;
 
@@ -140,13 +140,14 @@ L110:
     n3 = lnodes[n2 * lnodes_dim1 + 3];
     ++kount;
 /*  CHECK FOR COMPLETION */
-    if (n1 == *node2 && kount > 1) {
-        goto L140;
-    } else if (kount > nloop[1] + 1) {
-        fprintf(stderr,"** PROBLEMS WITH LOOP CLOSING IN PCROSS **");
+    if (n1 == *node2 && kount > 1)
+      { goto L140; }
+    else if (kount > nloop[1] + 1)
+      {
+        fprintf(stderr,"** PROBLEMS WITH LOOP CLOSING IN PCROSS **\n");
         *err = TRUE_;
         goto L140;
-    }
+      }
 /*  LOOP THROUGH ALL THE REMAINING PERIMETERS CHECKING FOR CROSSINGS */
     iperim = linkpr[*kperim * 3 + 2];
 L120:
@@ -171,7 +172,7 @@ L130:
             iperim = linkpr[iperim * 3 + 2];
             goto L120;
         } else if (kount2 > linkpr[iperim * 3 + 3]) {
-            fprintf(stderr,"** PROBLEMS IN PCROSS WITH UNCLOSED PERIMETER **");
+            fprintf(stderr,"** PROBLEMS IN PCROSS WITH UNCLOSED PERIMETER **\n");
             *err = TRUE_;
             goto L140;
         }
@@ -212,7 +213,7 @@ L130:
             iperim = linkpr[iperim * 3 + 2];
             goto L120;
         } else if (kount2 > linkpr[iperim * 3 + 3]) {
-            fprintf(stderr,"** PROBLEMS IN PCROSS WITH UNCLOSED PERIMETER **");
+            fprintf(stderr,"** PROBLEMS IN PCROSS WITH UNCLOSED PERIMETER **\n");
             *err = TRUE_;
             goto L140;
         }
@@ -233,7 +234,7 @@ L130:
             iperim = linkpr[iperim * 3 + 2];
             goto L120;
         } else if (kount2 > linkpr[iperim * 3 + 3]) {
-            fprintf(stderr,"** PROBLEMS IN PCROSS WITH UNCLOSED PERIMETER **");
+            fprintf(stderr,"** PROBLEMS IN PCROSS WITH UNCLOSED PERIMETER **\n");
             *err = TRUE_;
             goto L140;
         }

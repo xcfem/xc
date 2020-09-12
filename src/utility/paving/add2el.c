@@ -20,9 +20,9 @@ extern "C" {
 /*    NTESS, the U.S. Government retains certain rights in this software. */
 
 /*    See packages/seacas/LICENSE for details */
-/* Subroutine */ int add2el_(integer *mxnd, integer *mln, real *xn, real *yn, 
+/* Subroutine */ int add2el_(integer *mxnd, integer *mln, xc_float *xn, xc_float *yn, 
 	integer *nuid, integer *lxk, integer *kxl, integer *nxl, integer *lxn,
-	 real *angle, integer *lnodes, integer *nnn, integer *kkk, integer *
+	 xc_float *angle, integer *lnodes, integer *nnn, integer *kkk, integer *
 	lll, integer *nnnold, integer *lllold, integer *nloop, integer *i1, 
 	integer *i4, integer *iavail, integer *navail, logical *graph, 
 	logical *video, logical *noroom, logical *err)
@@ -35,8 +35,8 @@ extern "C" {
     extern /* Subroutine */ int close4_(integer *, integer *, integer *, 
 	    integer *, integer *, integer *, integer *, integer *, integer *, 
 	    integer *, integer *, integer *, logical *), connod_(integer *, 
-	    integer *, real *, real *, integer *, integer *, integer *, 
-	    integer *, integer *, real *, integer *, integer *, integer *, 
+	    integer *, xc_float *, xc_float *, integer *, integer *, integer *, 
+	    integer *, integer *, xc_float *, integer *, integer *, integer *, 
 	    integer *, integer *, integer *, integer *, integer *, integer *, 
 	    integer *, integer *, integer *, integer *, integer *, logical *, 
 	    logical *, logical *, logical *);

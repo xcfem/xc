@@ -20,13 +20,13 @@ extern "C" {
 /*    NTESS, the U.S. Government retains certain rights in this software. */
 
 /*    See packages/seacas/LICENSE for details */
-logical shrunk_(real *ratio, integer *nrow)
+logical shrunk_(xc_float *ratio, integer *nrow)
 {
     /* Initialized data */
 
-    static real toler1 = (float).85;
-    static real toler2 = (float).75;
-    static real toler3 = (float).6;
+    static xc_float toler1 = (xc_float).85;
+    static xc_float toler2 = (xc_float).75;
+    static xc_float toler3 = (xc_float).6;
 
     /* System generated locals */
     logical ret_val;

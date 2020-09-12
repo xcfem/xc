@@ -20,42 +20,42 @@ extern "C" {
 /*    NTESS, the U.S. Government retains certain rights in this software. */
 
 /*    See packages/seacas/LICENSE for details */
-/* Subroutine */ int getsiz_(real *xnold, real *ynold, integer *nxkold, 
-        integer *linkeg, integer *listeg, real *bmesur, integer *mlink, 
-        integer *npnold, integer *npeold, integer *nnxk, real *
-        rexmin, real *rexmax, real *reymin, real *reymax, integer *idivis, 
-        real *sizmin, real *emax, real *emin, real *x, real *y, real *size)
+/* Subroutine */ int getsiz_(xc_float *xnold, xc_float *ynold, integer *nxkold, 
+        integer *linkeg, integer *listeg, xc_float *bmesur, integer *mlink, 
+        integer *npnold, integer *npeold, integer *nnxk, xc_float *
+        rexmin, xc_float *rexmax, xc_float *reymin, xc_float *reymax, integer *idivis, 
+        xc_float *sizmin, xc_float *emax, xc_float *emin, xc_float *x, xc_float *y, xc_float *size)
 {
     /* System generated locals */
     integer nxkold_dim1, nxkold_offset, i__1;
-    real r__1, r__2;
+    xc_float r__1, r__2;
 
     /* Builtin functions */
-    double sqrt(doublereal);
+    
 
     /* Local variables */
     static integer i__;
-    static real b1, b2, d1, e1, e2, e3, e4, d2, d3, d4;
+    static xc_float b1, b2, d1, e1, e2, e3, e4, d2, d3, d4;
     static integer n1, n2, n3, n4;
-    static real x1, x2, y1, y2;
+    static xc_float x1, x2, y1, y2;
     static integer ic, jc;
-    static real dt;
+    static xc_float dt;
     static integer ix, iy;
-    static real xi, xm1, xm2;
+    static xc_float xi, xm1, xm2;
     static logical bad;
-    static real eta;
+    static xc_float eta;
     static integer kin, iend, icin, jcin;
-    static real delx, dely, dtry, xtry, ytry;
+    static xc_float delx, dely, dtry, xtry, ytry;
     static integer kelem;
-    static real reduc;
+    static xc_float reduc;
     static integer index;
-    static real ratio, xemin, yemin, xemax, yemax, dtest, error;
+    static xc_float ratio, xemin, yemin, xemax, yemax, dtest, error;
     static integer ibegin;
-    extern /* Subroutine */ int  dlpara_(real *, real 
-            *, real *, real *, real *, real *, logical *);
+    extern /* Subroutine */ int  dlpara_(xc_float *, xc_float 
+            *, xc_float *, xc_float *, xc_float *, xc_float *, logical *);
     static logical inside;
-    extern /* Subroutine */ int invmap_(real *, real *, real *, real *, real *
-            , real *, real *, real *, real *, real *, real *, real *, logical 
+    extern /* Subroutine */ int invmap_(xc_float *, xc_float *, xc_float *, xc_float *, xc_float *
+            , xc_float *, xc_float *, xc_float *, xc_float *, xc_float *, xc_float *, xc_float *, logical 
             *);
 
 /* *********************************************************************** */
@@ -133,7 +133,7 @@ extern "C" {
     }
 /*  THERE IS A POSSIBILITY THAT THE POINT IS ON AN ARC WHICH IS NOT */
 /*  INCLUDED IN THE ORIGINAL MESH - THIS MUST BE CHECKED. */
-    dtest = (float)1e15;
+    dtest = (xc_float)1e15;
     i__1 = iend;
     for (i__ = ibegin; i__ <= i__1; ++i__) {
         kelem = listeg[i__];
@@ -154,13 +154,13 @@ extern "C" {
                 xtry = x1;
                 ytry = *y;
 /*  GET DISTANCE FOR HORIZONTAL LINE */
-            } else if (dbl_abs(xm1) < (float)1e-6) {
+            } else if (dbl_abs(xm1) < (xc_float)1e-6) {
                 dtry = (r__1 = y1 - *y, dbl_abs(r__1));
                 xtry = *x;
                 ytry = y1;
 /*  GET PERPENDICULAR DISTANCE TO ARBITRARY LINE */
             } else {
-                xm2 = (float)-1. / xm1;
+                xm2 = (xc_float)-1. / xm1;
                 b2 = *y - xm2 * *x;
                 xtry = (b2 - b1) / (xm1 - xm2);
                 ytry = xm1 * xtry + b1;
@@ -192,16 +192,16 @@ extern "C" {
                     ratio = d1 / dt;
                     if (ic == 1) {
                         xi = ratio;
-                        eta = (float)0.;
+                        eta = (xc_float)0.;
                     } else if (ic == 2) {
-                        xi = (float)0.;
+                        xi = (xc_float)0.;
                         eta = ratio;
                     } else if (ic == 3) {
-                        xi = (float)1. - ratio;
-                        eta = (float)0.;
+                        xi = (xc_float)1. - ratio;
+                        eta = (xc_float)0.;
                     } else {
-                        xi = (float)0.;
-                        eta = (float)1. - ratio;
+                        xi = (xc_float)0.;
+                        eta = (xc_float)1. - ratio;
                     }
                     kin = kelem;
                     icin = ic;
@@ -225,7 +225,7 @@ extern "C" {
                         jc = 1;
                     }
                     if (ic == jcin && jc == icin) {
-                        fprintf(stderr,"** ERROR WITH ELEMENT SIDE FOUND BEING INTERIOR TO MESH IN GETSIZ **");
+                        fprintf(stderr,"** ERROR WITH ELEMENT SIDE FOUND BEING INTERIOR TO MESH IN GETSIZ **\n");
                         inside = FALSE_;
                         goto L160;
                     }
@@ -279,7 +279,7 @@ L170:
         *size = dbl_max(r__1,*sizmin);
     } else {
 /*  ERROR HAS OCCURRED IN FINDING THE ELEMENT */
-        fprintf(stderr,"** ERROR - ENCLOSING ELEMENT NOT FOUND IN GETSIZ **");
+        fprintf(stderr,"** ERROR - ENCLOSING ELEMENT NOT FOUND IN GETSIZ **\n");
     }
     return 0;
 } /* getsiz_ */

@@ -18,38 +18,38 @@ extern "C" {
 /* Common Block Declarations */
 
 struct {
-    real devcap[23], defout[7];
+    xc_float devcap[23], defout[7];
 } status_;
 
 #define status_1 status_
 
 struct {
-    real devp[5];
+    xc_float devp[5];
 } device_;
 
 #define device_1 device_
 
 struct {
-    real colp[3], palett[48]	/* was [3][16] */;
+    xc_float colp[3], palett[48]	/* was [3][16] */;
 } color_;
 
 #define color_1 color_
 
 struct {
-    real textp[40];
+    xc_float textp[40];
 } text_;
 
 #define text_1 text_
 
 struct {
-    real vectp[5], xcur, ycur;
+    xc_float vectp[5], xcur, ycur;
 } vectrc_;
 
 #define vectrc_1 vectrc_
 
 struct {
     integer idex[400]	/* was [200][2] */, nvect[400]	/* was [200][2] */;
-    real xsize[400]	/* was [200][2] */, ysize[400]	/* was [200][2] */, 
+    xc_float xsize[400]	/* was [200][2] */, ysize[400]	/* was [200][2] */, 
 	    x0[4600]	/* was [2300][2] */, y0[4600]	/* was [2300][2] */, 
 	    x1[4600]	/* was [2300][2] */, y1[4600]	/* was [2300][2] */;
 } font_;
@@ -57,13 +57,13 @@ struct {
 #define font_1 font_
 
 struct {
-    real graphp[100];
+    xc_float graphp[100];
 } graph_;
 
 #define graph_1 graph_
 
 struct {
-    real mapp[11];
+    xc_float mapp[11];
 } mappar_;
 
 #define mappar_1 mappar_
@@ -75,7 +75,7 @@ struct {
 #define storag_1 storag_
 
 struct {
-    real tdevp[50]	/* was [5][10] */, ttextp[400]	/* was [40][10] */, 
+    xc_float tdevp[50]	/* was [5][10] */, ttextp[400]	/* was [40][10] */, 
 	    tvectp[50]	/* was [5][10] */, tgraph[1000]	/* was [100][10] */, 
 	    tmapp[110]	/* was [11][10] */;
     integer ipopd, ipopt, ipopv, ipopg, ipopm;
@@ -97,7 +97,7 @@ static integer c__2 = 2;
 /* Subroutine */ int pltrev_()
 {
     static integer i__;
-    extern /* Subroutine */ int pltstv_(integer *, real *);
+    extern /* Subroutine */ int pltstv_(integer *, xc_float *);
 
     if (vectrc_1.vectp[0] != psave_1.tvectp[psave_1.ipopv * 5 - 5]) {
 	pltstv_(&c__1, &psave_1.tvectp[psave_1.ipopv * 5 - 5]);

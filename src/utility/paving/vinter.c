@@ -20,11 +20,11 @@ extern "C" {
 /*    NTESS, the U.S. Government retains certain rights in this software. */
 
 /*    See packages/seacas/LICENSE for details */
-/* Subroutine */ int vinter_(integer *mxnd, real *xn, real *yn, integer *n1, 
-	integer *n2, integer *n3, real *xold, real *yold, real *xnew, real *
+/* Subroutine */ int vinter_(integer *mxnd, xc_float *xn, xc_float *yn, integer *n1, 
+	integer *n2, integer *n3, xc_float *xold, xc_float *yold, xc_float *xnew, xc_float *
 	ynew, logical *vcross)
 {
-    static real u, w, xa, ya, xb, yb, xc, yc, xd, yd, denom;
+    static xc_float u, w, xa, ya, xb, yb, xc, yc, xd, yd, denom;
 
 /* *********************************************************************** */
 /*  SUBROUTINE VINTER = FINDS WHERE A VECTOR FROM N1 TO N2 */
@@ -56,18 +56,18 @@ extern "C" {
 /*  DISTANCE ALONG THE VECTOR B FOR THE INTERSECTION. */
     denom = yb * xd - xb * yd;
 /*  CHECK FOR SPECIAL PARALLEL CASE - THE DENOMINATOR IS EQUAL TO ZERO. */
-    if (denom != (float)0.) {
+    if (denom != (xc_float)0.) {
 /*  GET INTERSECTION LOCATION */
 	w = (yc * xb - xb * ya - xc * yb + yb * xa) / denom;
 /*  GET THE U VALUE TO CONFIRM. */
-	if (xb != (float)0.) {
+	if (xb != (xc_float)0.) {
 	    u = (xc + w * xd - xa) / xb;
 	} else {
 	    u = (yc + w * yd - ya) / yb;
 	}
 /*  CALCULATE THE INTERSECTION POINT BASED ON SIMILAR TRIANGLES */
-	*xnew = (xa + xb * u + (xc + xd * w)) * (float).5;
-	*ynew = (ya + yb * u + (yc + yd * w)) * (float).5;
+	*xnew = (xa + xb * u + (xc + xd * w)) * (xc_float).5;
+	*ynew = (ya + yb * u + (yc + yd * w)) * (xc_float).5;
 	*vcross = TRUE_;
     }
     return 0;

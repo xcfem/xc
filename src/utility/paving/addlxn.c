@@ -71,7 +71,7 @@ L100:
 /* L110: */
         }
 /*  THIS CAN'T HAPPEN */
-        fprintf(stderr,"ERROR IN ADDLXN");
+        fprintf(stderr,"ERROR IN ADDLXN\n");
         *err = TRUE_;
     } else {
 /*  CREATE A CONTINUATION ENTRY */

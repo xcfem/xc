@@ -20,25 +20,25 @@ extern "C" {
 /*    NTESS, the U.S. Government retains certain rights in this software. */
 
 /*    See packages/seacas/LICENSE for details */
-/* Subroutine */ int bcross_(integer *mxnd, integer *mln, real *xn, real *yn, 
-	real *zn, integer *lxk, integer *kxl, integer *nxl, integer *lxn, 
+/* Subroutine */ int bcross_(integer *mxnd, integer *mln, xc_float *xn, xc_float *yn, 
+	xc_float *zn, integer *lxk, integer *kxl, integer *nxl, integer *lxn, 
 	integer *lnodes, integer *i1, integer *i2, integer *j1, integer *j2, 
-	integer *nloop, logical *bok, integer *lll, real *xmin, real *xmax, 
-	real *ymin, real *ymax, real *zmin, real *zmax, char *dev1, integer *
+	integer *nloop, logical *bok, integer *lll, xc_float *xmin, xc_float *xmax, 
+	xc_float *ymin, xc_float *ymax, xc_float *zmin, xc_float *zmax, char *dev1, integer *
 	kreg, logical *err, ftnlen dev1_len)
 {
     /* System generated locals */
     integer lnodes_dim1, lnodes_offset;
 
     /* Local variables */
-    static real u, w;
+    static xc_float u, w;
     static integer j0, j3, node1, node2;
-    static real angle;
+    static xc_float angle;
     static integer kount;
-    extern /* Subroutine */ int getang_(integer *, integer *, real *, real *, 
+    extern /* Subroutine */ int getang_(integer *, integer *, xc_float *, xc_float *, 
 	    integer *, integer *, integer *, integer *, integer *, integer *, 
-	    integer *, integer *, real *, logical *), intsct_(real *, real *, 
-	    real *, real *, real *, real *, real *, real *, real *, real *, 
+	    integer *, integer *, xc_float *, logical *), intsct_(xc_float *, xc_float *, 
+	    xc_float *, xc_float *, xc_float *, xc_float *, xc_float *, xc_float *, xc_float *, xc_float *, 
 	    logical *);
     static logical lcross;
 
@@ -79,7 +79,7 @@ L100:
 		getang_(mxnd, mln, &xn[1], &yn[1], &lnodes[lnodes_offset], &
 			lxk[5], &kxl[3], &nxl[3], &lxn[5], &node1, &j0, j1, &
 			angle, err);
-		if (angle < (float)0.) {
+		if (angle < (xc_float)0.) {
 		    *bok = FALSE_;
 		    goto L130;
 		} else {
@@ -116,7 +116,7 @@ L120:
 		getang_(mxnd, mln, &xn[1], &yn[1], &lnodes[lnodes_offset], &
 			lxk[5], &kxl[3], &nxl[3], &lxn[5], &node1, i1, i2, &
 			angle, err);
-		if (angle < (float)0.) {
+		if (angle < (xc_float)0.) {
 		    *bok = FALSE_;
 		    goto L130;
 		} else {

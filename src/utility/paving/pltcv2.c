@@ -21,9 +21,9 @@ extern "C" {
 
 /* See packages/seacas/LICENSE for details */
 /* ======================================================================= */
-/* Subroutine */ int pltcv2_(integer *n, integer *mask, real *px, real *py, 
-	real *qx, real *qy, real *ppx, real *ppy, real *qqx, real *qqy, real *
-	c1, real *c2)
+/* Subroutine */ int pltcv2_(integer *n, integer *mask, xc_float *px, xc_float *py, 
+	xc_float *qx, xc_float *qy, xc_float *ppx, xc_float *ppy, xc_float *qqx, xc_float *qqy, xc_float *
+	c1, xc_float *c2)
 {
     /* Initialized data */
 
@@ -37,11 +37,11 @@ extern "C" {
 
     /* Local variables */
     static integer j, k, m, j1;
-    static real x1, y1, x2, y2;
+    static xc_float x1, y1, x2, y2;
     static integer jb;
-    static real fp, fq;
+    static xc_float fp, fq;
     static integer km, jn;
-    static real cx, cy, dx, dy, xl;
+    static xc_float cx, cy, dx, dy, xl;
 
     /* Parameter adjustments */
     --c2;
@@ -89,13 +89,13 @@ L2100:
 	y2 = qy[j1 + k];
 	fp = (y1 - cy) * dx - (x1 - cx) * dy;
 	fq = (y2 - cy) * dx - (x2 - cx) * dy;
-	if (fp < (float)0. && fq < (float)0.) {
+	if (fp < (xc_float)0. && fq < (xc_float)0.) {
 	    m &= ~ jb;
-	} else if (fp < (float)0.) {
+	} else if (fp < (xc_float)0.) {
 	    xl = fq / (fq - fp);
 	    x1 = x2 + xl * (x1 - x2);
 	    y1 = y2 + xl * (y1 - y2);
-	} else if (fq < (float)0.) {
+	} else if (fq < (xc_float)0.) {
 	    xl = fp / (fp - fq);
 	    x2 = x1 + xl * (x2 - x1);
 	    y2 = y1 + xl * (y2 - y1);

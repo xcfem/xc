@@ -24,13 +24,13 @@ static integer c__2 = 2;
 /*    NTESS, the U.S. Government retains certain rights in this software. */
 
 /*    See packages/seacas/LICENSE for details */
-/* Subroutine */ int addwdg_(integer *mxnd, integer *mln, integer *nuid, real 
-	*xn, real *yn, real *zn, integer *lxk, integer *kxl, integer *nxl, 
-	integer *lxn, integer *lnodes, real *angle, real *bnsize, integer *
+/* Subroutine */ int addwdg_(integer *mxnd, integer *mln, integer *nuid, xc_float 
+	*xn, xc_float *yn, xc_float *zn, integer *lxk, integer *kxl, integer *nxl, 
+	integer *lxn, integer *lnodes, xc_float *angle, xc_float *bnsize, integer *
 	nloop, integer *iavail, integer *navail, integer *lll, integer *kkk, 
-	integer *nnn, integer *lllold, integer *nnnold, real *tang, integer *
-	kang, integer *nstart, integer *nend, real *xmin, real *xmax, real *
-	ymin, real *ymax, real *zmin, real *zmax, logical *graph, logical *
+	integer *nnn, integer *lllold, integer *nnnold, xc_float *tang, integer *
+	kang, integer *nstart, integer *nend, xc_float *xmin, xc_float *xmax, xc_float *
+	ymin, xc_float *ymax, xc_float *zmin, xc_float *zmax, logical *graph, logical *
 	video, char *dev1, integer *kreg, logical *noroom, logical *err, 
 	ftnlen dev1_len)
 {
@@ -40,8 +40,8 @@ static integer c__2 = 2;
     /* Local variables */
     static integer i__, idum;
     extern /* Subroutine */ int wedge_(integer *, integer *, integer *, 
-	    integer *, integer *, integer *, integer *, real *, real *, 
-	    integer *, real *, integer *, integer *, integer *, integer *, 
+	    integer *, integer *, integer *, integer *, xc_float *, xc_float *, 
+	    integer *, xc_float *, integer *, integer *, integer *, integer *, 
 	    integer *, integer *, integer *, integer *, integer *, integer *, 
 	    logical *, logical *, logical *, logical *, logical *);
     static integer inode[4], nnode, nwant;
@@ -49,11 +49,11 @@ static integer c__2 = 2;
     extern /* Subroutine */ int marksm_(integer *, integer *, integer *, 
 	    integer *, integer *, integer *, integer *, integer *, logical *),
 	     snapit_(integer *), nsplit_(integer *, integer *, integer *, 
-	    real *, integer *, integer *, integer *, integer *, integer *, 
+	    xc_float *, integer *, integer *, integer *, integer *, integer *, 
 	    logical *);
     static logical maxsiz;
-    extern /* Subroutine */ int rplotl_(integer *, real *, real *, real *, 
-	    integer *, real *, real *, real *, real *, real *, real *, 
+    extern /* Subroutine */ int rplotl_(integer *, xc_float *, xc_float *, xc_float *, 
+	    integer *, xc_float *, xc_float *, xc_float *, xc_float *, xc_float *, xc_float *, 
 	    integer *, char *, integer *, ftnlen);
 
 /* *********************************************************************** */
@@ -84,11 +84,11 @@ static integer c__2 = 2;
     maxsiz = TRUE_;
     *err = FALSE_;
     pwedge = FALSE_;
-    if (*tang < (float)2.3561945) {
+    if (*tang < (xc_float)2.3561945) {
 	nwant = 1;
-    } else if (*tang < (float)3.9269908) {
+    } else if (*tang < (xc_float)3.9269908) {
 	nwant = 2;
-    } else if (*tang < (float)5.4977871) {
+    } else if (*tang < (xc_float)5.4977871) {
 	nwant = 3;
     } else {
 	nwant = 4;

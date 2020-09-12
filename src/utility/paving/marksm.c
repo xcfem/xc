@@ -51,7 +51,7 @@ extern "C" {
     }
     getlxn_(mxnd, &lxn[5], node, l1list, &nl1, err);
     if (*err) {
-        fprintf(stderr,"** PROBLEMS IN MARKSM FINDING LXN **");
+        fprintf(stderr,"** PROBLEMS IN MARKSM FINDING LXN **\n");
         goto L120;
     }
     lnodes[*node * lnodes_dim1 + 4] = -(i__1 = lnodes[*node * lnodes_dim1 + 4]
@@ -62,7 +62,7 @@ extern "C" {
                 + 2] - *node;
         getlxn_(mxnd, &lxn[5], &node2, l2list, &nl2, err);
         if (*err) {
-            fprintf(stderr,"** PROBLEMS IN MARKSM FINDING LXN **");
+            fprintf(stderr,"** PROBLEMS IN MARKSM FINDING LXN **\n");
             goto L120;
         }
         lnodes[node2 * lnodes_dim1 + 4] = -(i__2 = lnodes[node2 * lnodes_dim1 

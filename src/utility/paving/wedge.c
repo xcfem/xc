@@ -21,23 +21,23 @@ extern "C" {
 
 /*    See packages/seacas/LICENSE for details */
 /* Subroutine */ int wedge_(integer *mxnd, integer *mln, integer *nuid, 
-        integer *lxk, integer *kxl, integer *nxl, integer *lxn, real *xn, 
-        real *yn, integer *lnodes, real *bnsize, integer *iavail, integer *
+        integer *lxk, integer *kxl, integer *nxl, integer *lxn, xc_float *xn, 
+        xc_float *yn, integer *lnodes, xc_float *bnsize, integer *iavail, integer *
         navail, integer *lll, integer *kkk, integer *nnn, integer *lllold, 
         integer *nnnold, integer *n1, integer *n6, integer *nloop, logical *
         pwedge, logical *graph, logical *video, logical *noroom, logical *err)
 {
     /* System generated locals */
     integer lnodes_dim1, lnodes_offset, i__1;
-    real r__1, r__2, r__3, r__4;
+    xc_float r__1, r__2, r__3, r__4;
 
     /* Builtin functions */
-    //double sqrt(doublereal);
+    //
 
     /* Local variables */
     static integer i__, l1, n0, l3, n2, l2, n4, n5, l4, l5, l6, ll, nl, kl1, 
             kl3, node1, node2, ltest;
-    extern /* Subroutine */ int d2node_(integer *, real *, real *, integer *, 
+    extern /* Subroutine */ int d2node_(integer *, xc_float *, xc_float *, integer *, 
             integer *);
     static integer l1list[20];
     extern /* Subroutine */ int  addlxn_(integer *, 
@@ -49,7 +49,7 @@ extern "C" {
             , fixlxn_(integer *, integer *, integer *, integer *, integer *, 
             integer *, integer *, integer *, integer *, integer *, logical *, 
             logical *);
-    static real sizmin;
+    static xc_float sizmin;
     static logical twolin;
 
 /* *********************************************************************** */
@@ -101,7 +101,7 @@ extern "C" {
             }
 /* L100: */
         }
-        fprintf(stderr,"** PROBLEMS IN WEDGE FINDING L3 AND N4 **");
+        fprintf(stderr,"** PROBLEMS IN WEDGE FINDING L3 AND N4 **\n");
         *err = TRUE_;
         goto L200;
 L110:
@@ -111,7 +111,7 @@ L110:
         } else if (kxl[(l3 << 1) + 2] == kl1) {
             kl3 = kxl[(l3 << 1) + 1];
         } else {
-            fprintf(stderr,"** PROBLEMS IN WEDGE FINDING KL3 **");
+            fprintf(stderr,"** PROBLEMS IN WEDGE FINDING KL3 **\n");
             *err = TRUE_;
             goto L200;
         }
@@ -119,7 +119,7 @@ L110:
 /*  GET ALL THE N1 LINES */
     getlxn_(mxnd, &lxn[5], n1, l1list, &nl, err);
     if (*err) {
-        fprintf(stderr,"** PROBLEMS IN WEDGE GETTING N1 LINES **");
+        fprintf(stderr,"** PROBLEMS IN WEDGE GETTING N1 LINES **\n");
         goto L200;
     }
 /*  ERASE THE LINES */
@@ -151,21 +151,21 @@ L110:
     if (*pwedge) {
         xn[n5] = xn[*n1];
         yn[n5] = yn[*n1];
-        xn[*n1] = xn[n0] + (xn[n5] - xn[n0]) * (float).33333;
-        yn[*n1] = yn[n0] + (yn[n5] - yn[n0]) * (float).33333;
-        xn[*n6] = xn[n0] + (xn[n5] - xn[n0]) * (float).66667;
-        yn[*n6] = yn[n0] + (yn[n5] - yn[n0]) * (float).66667;
+        xn[*n1] = xn[n0] + (xn[n5] - xn[n0]) * (xc_float).33333;
+        yn[*n1] = yn[n0] + (yn[n5] - yn[n0]) * (xc_float).33333;
+        xn[*n6] = xn[n0] + (xn[n5] - xn[n0]) * (xc_float).66667;
+        yn[*n6] = yn[n0] + (yn[n5] - yn[n0]) * (xc_float).66667;
     } else {
         xn[*n6] = xn[n0] + xn[n2] - xn[n4];
         yn[*n6] = yn[n0] + yn[n2] - yn[n4];
-        xn[n5] = (xn[*n1] + (xn[n2] - xn[*n1]) / (float)3. + (xn[*n6] + xn[n2]
-                ) * (float).5) * (float).5;
-        yn[n5] = (yn[*n1] + (yn[n2] - yn[*n1]) / (float)3. + (yn[*n6] + yn[n2]
-                ) * (float).5) * (float).5;
-        xn[*n1] = (xn[n0] + (xn[*n1] - xn[n0]) * (float).666667 + (xn[*n6] + 
-                xn[n0]) * (float).5) * (float).5;
-        yn[*n1] = (yn[n0] + (yn[*n1] - yn[n0]) * (float).666667 + (yn[*n6] + 
-                yn[n0]) * (float).5) * (float).5;
+        xn[n5] = (xn[*n1] + (xn[n2] - xn[*n1]) / (xc_float)3. + (xn[*n6] + xn[n2]
+                ) * (xc_float).5) * (xc_float).5;
+        yn[n5] = (yn[*n1] + (yn[n2] - yn[*n1]) / (xc_float)3. + (yn[*n6] + yn[n2]
+                ) * (xc_float).5) * (xc_float).5;
+        xn[*n1] = (xn[n0] + (xn[*n1] - xn[n0]) * (xc_float).666667 + (xn[*n6] + 
+                xn[n0]) * (xc_float).5) * (xc_float).5;
+        yn[*n1] = (yn[n0] + (yn[*n1] - yn[n0]) * (xc_float).666667 + (yn[*n6] + 
+                yn[n0]) * (xc_float).5) * (xc_float).5;
     }
 /*  NOW ADD LINES L4, L5, AND L6 */
     *lll += 3;
@@ -212,13 +212,13 @@ L110:
             dellxn_(mxnd, &lxn[5], &nuid[1], navail, iavail, n1, &ll, nnn, 
                     err, noroom);
             if (*noroom || *err) {
-              fprintf(stderr,"** PROBLEMS IN WEDGE UNHOOKING LL FROM N1 **");
+              fprintf(stderr,"** PROBLEMS IN WEDGE UNHOOKING LL FROM N1 **\n");
                 goto L200;
             }
             addlxn_(mxnd, &lxn[5], &nuid[1], navail, iavail, &n5, &ll, nnn, 
                     err, noroom);
             if (*noroom || *err) {
-                fprintf(stderr,"** PROBLEMS IN WEDGE HOOKING LL TO N5 **");
+                fprintf(stderr,"** PROBLEMS IN WEDGE HOOKING LL TO N5 **\n");
                 goto L200;
             }
             if (nxl[(ll << 1) + 1] == *n1) {
@@ -226,7 +226,7 @@ L110:
             } else if (nxl[(ll << 1) + 2] == *n1) {
                 nxl[(ll << 1) + 2] = n5;
             } else {
-              fprintf(stderr,"** PROBLEMS IN WEDGE CHANGING LL ENDPOINT FROM N1 TO N5 **");
+              fprintf(stderr,"** PROBLEMS IN WEDGE CHANGING LL ENDPOINT FROM N1 TO N5 **\n");
                 *err = TRUE_;
                 goto L200;
             }
@@ -251,7 +251,7 @@ L110:
         } else if (kxl[(l3 << 1) + 2] == kl3) {
             kxl[(l3 << 1) + 2] = *kkk;
         } else {
-            fprintf(stderr,"** PROBLEMS IN WEDGE REPLACING KL3 FOR L3 **");
+            fprintf(stderr,"** PROBLEMS IN WEDGE REPLACING KL3 FOR L3 **\n");
             *err = TRUE_;
             goto L200;
         }
@@ -276,7 +276,7 @@ L110:
             }
 /* L150: */
         }
-        fprintf(stderr,"** PROBLEMS IN WEDGE REPLACING L2 WITH L4 IN KL1 **");
+        fprintf(stderr,"** PROBLEMS IN WEDGE REPLACING L2 WITH L4 IN KL1 **\n");
         *err = TRUE_;
         goto L200;
 L160:
@@ -290,7 +290,7 @@ L160:
             }
 /* L170: */
         }
-        fprintf(stderr,"** PROBLEMS IN WEDGE REPLACING L3 WITH L4 IN KL3 **");
+        fprintf(stderr,"** PROBLEMS IN WEDGE REPLACING L3 WITH L4 IN KL3 **\n");
         *err = TRUE_;
         goto L200;
 L180:
@@ -315,7 +315,7 @@ L180:
 /*  PUT THE BEGINNING BOUNDARY DISTANCE IN PLACE */
     bnsize[(n5 << 1) + 1] = bnsize[(*n1 << 1) + 1];
     bnsize[(*n6 << 1) + 1] = bnsize[(*n1 << 1) + 1];
-    if (bnsize[(*n1 << 1) + 1] > (float)0.) {
+    if (bnsize[(*n1 << 1) + 1] > (xc_float)0.) {
 /* Computing MIN */
         r__1 = bnsize[(*n1 << 1) + 1] * bnsize[(*n1 << 1) + 2], r__2 = bnsize[
                 (n0 << 1) + 1] * bnsize[(n0 << 1) + 2], r__1 = fmin(r__1,r__2),
@@ -337,9 +337,9 @@ L180:
         bnsize[(n5 << 1) + 2] = sizmin;
         bnsize[(*n1 << 1) + 2] = sizmin;
     } else {
-        bnsize[(n5 << 1) + 2] = bnsize[(*n1 << 1) + 2] * (float)1.15;
+        bnsize[(n5 << 1) + 2] = bnsize[(*n1 << 1) + 2] * (xc_float)1.15;
         bnsize[(*n6 << 1) + 2] = bnsize[(*n1 << 1) + 2];
-        bnsize[(*n1 << 1) + 2] *= (float)1.15;
+        bnsize[(*n1 << 1) + 2] *= (xc_float)1.15;
     }
     *nloop += 2;
     *err = FALSE_;

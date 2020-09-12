@@ -21,8 +21,8 @@ extern "C" {
 
 /*    See packages/seacas/LICENSE for details */
 /* Subroutine */ int qual4_(integer *mxnd, integer *mxcorn, integer *mln, 
-	integer *ncorn, integer *lcorn, integer *lnodes, integer *icomb, real 
-	*angle, integer *lxn, integer *itest, integer *ltest, real *qual, 
+	integer *ncorn, integer *lcorn, integer *lnodes, integer *icomb, xc_float 
+	*angle, integer *lxn, integer *itest, integer *ltest, xc_float *qual, 
 	logical *posbl4, logical *err)
 {
     /* System generated locals */
@@ -30,7 +30,7 @@ extern "C" {
 
     /* Local variables */
     static integer i__, node, ilen;
-    extern doublereal nickc_(real *, integer *), nicks_(real *, integer *);
+    extern doublereal nickc_(xc_float *, integer *), nicks_(xc_float *, integer *);
     extern /* Subroutine */ int spaced_(integer *, integer *, integer *, 
 	    integer *, integer *, integer *, integer *, integer *, integer *, 
 	    integer *, logical *);
@@ -52,7 +52,7 @@ extern "C" {
     /* Function Body */
     *err = FALSE_;
 /*  ASSUME PERFECT QUALITY */
-    *qual = (float)0.;
+    *qual = (xc_float)0.;
     *posbl4 = FALSE_;
 /*  FIRST GET THE INTERVAL LENGTHS TO THE CHOSEN CORNERS */
     ilen = 4;
@@ -73,9 +73,9 @@ extern "C" {
     for (i__ = 1; i__ <= i__1; ++i__) {
 	node = lcorn[i__];
 	if (icomb[i__] == 1) {
-	    *qual += nickc_(&angle[node], &lxn[(node << 2) + 1]) * (float).8;
+	    *qual += nickc_(&angle[node], &lxn[(node << 2) + 1]) * (xc_float).8;
 	} else {
-	    *qual += nicks_(&angle[node], &lxn[(node << 2) + 1]) * (float).8;
+	    *qual += nicks_(&angle[node], &lxn[(node << 2) + 1]) * (xc_float).8;
 	}
 /* L100: */
     }

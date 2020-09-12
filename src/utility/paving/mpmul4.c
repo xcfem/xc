@@ -21,9 +21,9 @@ extern "C" {
 
 /* See packages/seacas/LICENSE for details */
 /* ======================================================================= */
-/* Subroutine */ int mpmul4_(integer *n, integer *mask, real *arr1, real *
-	arr2, real *arr3, real *arr4, real *mat, real *res1, real *res2, real 
-	*res3, real *res4)
+/* Subroutine */ int mpmul4_(integer *n, integer *mask, xc_float *arr1, xc_float *
+	arr2, xc_float *arr3, xc_float *arr4, xc_float *mat, xc_float *res1, xc_float *res2, xc_float 
+	*res3, xc_float *res4)
 {
     /* Initialized data */
 

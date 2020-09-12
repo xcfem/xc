@@ -25,7 +25,7 @@ static integer c__3 = 3;
 
 /*    See packages/seacas/LICENSE for details */
 /* Subroutine */ int undelm_(integer *mxnd, integer *mln, integer *lnodes, 
-        real *xn, real *yn, integer *nuid, integer *lxk, integer *kxl, 
+        xc_float *xn, xc_float *yn, integer *nuid, integer *lxk, integer *kxl, 
         integer *nxl, integer *lxn, integer *nnn, integer *lll, integer *kkk, 
         integer *navail, integer *iavail, integer *n0, integer *n1, integer *
         n2, integer *n3, integer *l1, integer *l2, integer *l3, integer *k1, 
@@ -37,7 +37,7 @@ static integer c__3 = 3;
 
     /* Local variables */
     static integer i__, l4, l5, nnew;
-    extern /* Subroutine */ int d2node_(integer *, real *, real *, integer *, 
+    extern /* Subroutine */ int d2node_(integer *, xc_float *, xc_float *, integer *, 
             integer *), addlxn_(integer *, integer *,
              integer *, integer *, integer *, integer *, integer *, integer *,
              logical *, logical *), dellxn_(integer *, integer *, integer *, 
@@ -69,7 +69,7 @@ static integer c__3 = 3;
 /*  MAKE SURE THAT N2 HAS AT LEAST FOUR LINES ATTACHED TO IT */
     if (lxn[(*n2 << 2) + 4] == 0) {
         *err = TRUE_;
-        fprintf(stderr,"** N2 IN UNDELM CANNOT BE USED TO EXPAND AN ELEMENT **");
+        fprintf(stderr,"** N2 IN UNDELM CANNOT BE USED TO EXPAND AN ELEMENT **\n");
         goto L140;
     }
 /*  ERASE THE LINE L3 */
@@ -93,8 +93,8 @@ static integer c__3 = 3;
         goto L140;
     }
     nnew = *nnn;
-    xn[nnew] = (xn[*n0] + xn[*n2]) * (float).5;
-    yn[nnew] = (yn[*n0] + yn[*n2]) * (float).5;
+    xn[nnew] = (xn[*n0] + xn[*n2]) * (xc_float).5;
+    yn[nnew] = (yn[*n0] + yn[*n2]) * (xc_float).5;
     *lll += 2;
     l4 = *lll - 1;
     l5 = *lll;
@@ -108,7 +108,7 @@ static integer c__3 = 3;
     } else if (nxl[(*l3 << 1) + 2] == *n2) {
         nxl[(*l3 << 1) + 2] = nnew;
     } else {
-        fprintf(stderr,"** PROBLEMS IN UNDLEM WITH L3'S END POINT **");
+        fprintf(stderr,"** PROBLEMS IN UNDLEM WITH L3'S END POINT **\n");
         *err = TRUE_;
         goto L140;
     }
@@ -126,21 +126,21 @@ static integer c__3 = 3;
     dellxn_(mxnd, &lxn[5], &nuid[1], navail, iavail, n2, l3, nnn, err, noroom)
             ;
     if (*noroom || *err) {
-        fprintf(stderr,"** PROBLEMS IN UNDELM UNHOOKING L3 FROM N2 **");
+        fprintf(stderr,"** PROBLEMS IN UNDELM UNHOOKING L3 FROM N2 **\n");
         goto L140;
     }
 /*  ADD LINE L4 TO N1 */
     addlxn_(mxnd, &lxn[5], &nuid[1], navail, iavail, n1, &l4, nnn, err, 
             noroom);
     if (*noroom || *err) {
-        fprintf(stderr,"** PROBLEMS IN UNDELM HOOKING L4 TO N1 **");
+        fprintf(stderr,"** PROBLEMS IN UNDELM HOOKING L4 TO N1 **\n");
         goto L140;
     }
 /*  ADD LINE L5 TO N3 */
     addlxn_(mxnd, &lxn[5], &nuid[1], navail, iavail, n3, &l5, nnn, err, 
             noroom);
     if (*noroom || *err) {
-        fprintf(stderr,"** PROBLEMS IN UNDELM HOOKING L5 TO N3 **");
+        fprintf(stderr,"** PROBLEMS IN UNDELM HOOKING L5 TO N3 **\n");
         goto L140;
     }
 /*  NOW ADD THE NEW ELEMENT */
@@ -155,7 +155,7 @@ static integer c__3 = 3;
     } else if (kxl[(*l1 << 1) + 2] == *k2) {
         kxl[(*l1 << 1) + 2] = *kkk;
     } else {
-        fprintf(stderr,"** PROBLEMS IN UNDELM REPLACING K2 FOR L1 **");
+        fprintf(stderr,"** PROBLEMS IN UNDELM REPLACING K2 FOR L1 **\n");
         *err = TRUE_;
         goto L140;
     }
@@ -165,7 +165,7 @@ static integer c__3 = 3;
     } else if (kxl[(*l2 << 1) + 2] == *k1) {
         kxl[(*l2 << 1) + 2] = *kkk;
     } else {
-        fprintf(stderr,"** PROBLEMS IN UNDELM REPLACING K1 FOR L2 **");
+        fprintf(stderr,"** PROBLEMS IN UNDELM REPLACING K1 FOR L2 **\n");
         *err = TRUE_;
         goto L140;
     }
@@ -182,7 +182,7 @@ static integer c__3 = 3;
         }
 /* L100: */
     }
-    fprintf(stderr,"** PROBLEMS IN UNDELM REPLACING L2 WITH L5 IN K1 **")
+    fprintf(stderr,"** PROBLEMS IN UNDELM REPLACING L2 WITH L5 IN K1 **\n")
             ;
     *err = TRUE_;
     goto L140;
@@ -195,7 +195,7 @@ L110:
         }
 /* L120: */
     }
-    fprintf(stderr,"** PROBLEMS IN UNDELM REPLACING L1 WITH L4 IN K2 **")
+    fprintf(stderr,"** PROBLEMS IN UNDELM REPLACING L1 WITH L4 IN K2 **\n")
             ;
     *err = TRUE_;
     goto L140;

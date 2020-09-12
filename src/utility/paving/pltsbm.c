@@ -21,7 +21,7 @@ extern "C" {
 
 /* See packages/seacas/LICENSE for details */
 /* ======================================================================= */
-/* Subroutine */ int pltsbm_(integer *n, integer *mask, real *x, real *y, 
+/* Subroutine */ int pltsbm_(integer *n, integer *mask, xc_float *x, xc_float *y, 
 	char *symb, ftnlen symb_len)
 {
     /* Initialized data */
@@ -36,7 +36,7 @@ extern "C" {
 
     /* Local variables */
     static integer j, k, m, j1, km, jn;
-    extern /* Subroutine */ int pltxts_(real *, real *, char *, ftnlen);
+    extern /* Subroutine */ int pltxts_(xc_float *, xc_float *, char *, ftnlen);
 
     /* Parameter adjustments */
     --y;

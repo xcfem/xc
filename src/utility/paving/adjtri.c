@@ -21,12 +21,12 @@ extern "C" {
 
 /*    See packages/seacas/LICENSE for details */
 /* Subroutine */ int adjtri_(integer *mxnd, integer *mln, integer *lnodes, 
-	real *xn, real *yn, real *zn, integer *nuid, integer *lxk, integer *
+	xc_float *xn, xc_float *yn, xc_float *zn, integer *nuid, integer *lxk, integer *
 	kxl, integer *nxl, integer *lxn, integer *nnn, integer *navail, 
-	integer *iavail, integer *node, integer *kelem, real *ang, real *
-	toler1, real *toler2, integer *n1, integer *n2, integer *n3, integer *
-	kreg, real *xmin, real *xmax, real *ymin, real *ymax, real *zmin, 
-	real *zmax, integer *kkk, integer *lll, char *dev1, logical *done, 
+	integer *iavail, integer *node, integer *kelem, xc_float *ang, xc_float *
+	toler1, xc_float *toler2, integer *n1, integer *n2, integer *n3, integer *
+	kreg, xc_float *xmin, xc_float *xmax, xc_float *ymin, xc_float *ymax, xc_float *zmin, 
+	xc_float *zmax, integer *kkk, integer *lll, char *dev1, logical *done, 
 	logical *check, logical *graph, logical *video, logical *noroom, 
 	logical *err, integer *kkkadd, ftnlen dev1_len)
 {
@@ -35,18 +35,18 @@ extern "C" {
 
     /* Local variables */
     static integer node1, node3;
-    extern /* Subroutine */ int delem_(integer *, real *, real *, integer *, 
+    extern /* Subroutine */ int delem_(integer *, xc_float *, xc_float *, integer *, 
 	    integer *, integer *, integer *, integer *, integer *, integer *, 
 	    integer *, integer *, integer *, integer *, integer *, logical *, 
-	    logical *, logical *, logical *), d2node_(integer *, real *, real 
+	    logical *, logical *, logical *), d2node_(integer *, xc_float *, xc_float 
 	    *, integer *, integer *), longel_(integer *, integer *, integer *,
-	     real *, real *, integer *, integer *, integer *, integer *, 
+	     xc_float *, xc_float *, integer *, integer *, integer *, integer *, 
 	    integer *, integer *, integer *, integer *, integer *, integer *, 
-	    real *, real *, integer *, integer *, integer *, real *, real *, 
-	    real *, real *, integer *, integer *, logical *, logical *, 
+	    xc_float *, xc_float *, integer *, integer *, integer *, xc_float *, xc_float *, 
+	    xc_float *, xc_float *, integer *, integer *, logical *, logical *, 
 	    logical *, logical *, logical *, integer *), lcolor_(char *, 
-	    ftnlen), sflush_(), rplotl_(integer *, real *, real *, real *, 
-	    integer *, real *, real *, real *, real *, real *, real *, 
+	    ftnlen), sflush_(), rplotl_(integer *, xc_float *, xc_float *, xc_float *, 
+	    integer *, xc_float *, xc_float *, xc_float *, xc_float *, xc_float *, xc_float *, 
 	    integer *, char *, integer *, ftnlen);
 
 /* *********************************************************************** */

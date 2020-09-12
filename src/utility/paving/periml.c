@@ -21,25 +21,25 @@ extern "C" {
 
 /*    See packages/seacas/LICENSE for details */
 /* Subroutine */ int periml_(integer *nbnode, integer *mxnd, integer *nper, 
-        integer *istart, integer *mln, real *xn, real *yn, real *zn, integer *
-        lxk, integer *kxl, integer *nxl, integer *lxn, real *angle, real *
+        integer *istart, integer *mln, xc_float *xn, xc_float *yn, xc_float *zn, integer *
+        lxk, integer *kxl, integer *nxl, integer *lxn, xc_float *angle, xc_float *
         bnsize, integer *lnodes, integer *lperim, integer *lll, integer *
-        lllold, real *xmin, real *xmax, real *ymin, real *ymax, real *zmin, 
-        real *zmax, char *dev1, integer *kreg, logical *err, ftnlen dev1_len)
+        lllold, xc_float *xmin, xc_float *xmax, xc_float *ymin, xc_float *ymax, xc_float *zmin, 
+        xc_float *zmax, char *dev1, integer *kreg, logical *err, ftnlen dev1_len)
 {
     /* System generated locals */
     integer lnodes_dim1, lnodes_offset, i__1;
-    real r__1, r__2, r__3, r__4;
+    xc_float r__1, r__2, r__3, r__4;
 
     /* Builtin functions */
-    double sqrt(doublereal);
+    
 
     /* Local variables */
     static integer i__, n0, n2, n1s, iend, node0, node1, node2, kount;
     extern /* Subroutine */ int  lupang_(integer *, 
-            integer *, real *, real *, real *, integer *, integer *, integer *
-            , integer *, integer *, real *, integer *, integer *, integer *, 
-            real *, real *, real *, real *, real *, real *, char *, integer *,
+            integer *, xc_float *, xc_float *, xc_float *, integer *, integer *, integer *
+            , integer *, integer *, xc_float *, integer *, integer *, integer *, 
+            xc_float *, xc_float *, xc_float *, xc_float *, xc_float *, xc_float *, char *, integer *,
              logical *, ftnlen);
 
 /* *********************************************************************** */
@@ -145,7 +145,7 @@ L110:
     }
     ++kount;
     if (kount > *nper) {
-        fprintf(stderr," ** ERROR IN PERIML GETTING NODE SIZES ** ");
+        fprintf(stderr," ** ERROR IN PERIML GETTING NODE SIZES ** \n");
         *err = TRUE_;
         goto L120;
     }
@@ -158,8 +158,8 @@ L110:
 /* Computing 2nd power */
     r__4 = yn[n1s] - yn[n2];
     bnsize[(n1s << 1) + 1] = (sqrt(r__1 * r__1 + r__2 * r__2) + sqrt(r__3 * 
-            r__3 + r__4 * r__4)) * (float).5;
-    bnsize[(n1s << 1) + 2] = (float)1.;
+            r__3 + r__4 * r__4)) * (xc_float).5;
+    bnsize[(n1s << 1) + 2] = (xc_float)1.;
     goto L110;
 L120:
     return 0;

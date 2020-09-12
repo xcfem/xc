@@ -24,29 +24,29 @@ static integer c__1 = 1;
 /*    NTESS, the U.S. Government retains certain rights in this software. */
 
 /*    See packages/seacas/LICENSE for details */
-/* Subroutine */ int add2cn_(integer *mxnd, integer *mln, real *xn, real *yn, 
+/* Subroutine */ int add2cn_(integer *mxnd, integer *mln, xc_float *xn, xc_float *yn, 
 	integer *nuid, integer *lxk, integer *kxl, integer *nxl, integer *lxn,
-	 real *angle, real *bnsize, integer *lnodes, integer *nnn, integer *
+	 xc_float *angle, xc_float *bnsize, integer *lnodes, integer *nnn, integer *
 	kkk, integer *lll, integer *nnnold, integer *lllold, integer *nloop, 
 	integer *i1, integer *iavail, integer *navail, logical *graph, 
-	logical *video, logical *sizeit, logical *noroom, logical *err, real *
-	xnold, real *ynold, integer *nxkold, integer *linkeg, integer *listeg,
-	 real *bmesur, integer *mlink, integer *npnold, integer *npeold, 
-	integer *nnxk, real *rexmin, real *rexmax, real *reymin,
-	 real *reymax, integer *idivis, real *sizmin, real *emax, real *emin)
+	logical *video, logical *sizeit, logical *noroom, logical *err, xc_float *
+	xnold, xc_float *ynold, integer *nxkold, integer *linkeg, integer *listeg,
+	 xc_float *bmesur, integer *mlink, integer *npnold, integer *npeold, 
+	integer *nnxk, xc_float *rexmin, xc_float *rexmax, xc_float *reymin,
+	 xc_float *reymax, integer *idivis, xc_float *sizmin, xc_float *emax, xc_float *emin)
 {
     /* System generated locals */
     integer lnodes_dim1, lnodes_offset, nxkold_dim1, nxkold_offset;
 
     /* Local variables */
     static integer i2, i3, i4, i5, i6;
-    static real x16, y16, x45, y45;
+    static xc_float x16, y16, x45, y45;
     static integer idum;
-    static real xmid, ymid;
+    static xc_float xmid, ymid;
     static integer inew, jnew;
-    static real zero, xnew1, xnew2, ynew1, ynew2;
+    static xc_float zero, xnew1, xnew2, ynew1, ynew2;
     static logical ambig;
-    extern /* Subroutine */ int d2node_(integer *, real *, real *, integer *, 
+    extern /* Subroutine */ int d2node_(integer *, xc_float *, xc_float *, integer *, 
 	    integer *), close4_(integer *, integer *, integer *, integer *, 
 	    integer *, integer *, integer *, integer *, integer *, integer *, 
 				integer *, integer *, logical *);
@@ -85,17 +85,17 @@ static integer c__1 = 1;
     i5 = lnodes[i4 * lnodes_dim1 + 3];
     i6 = lnodes[i5 * lnodes_dim1 + 3];
 /*  CALCULATE THE TWO NEW CENTER LOCATIONS */
-    x16 = (xn[*i1] + xn[i6]) * (float).5;
-    x45 = (xn[i4] + xn[i5]) * (float).5;
-    xmid = (x16 + x45) * (float).5;
-    xnew1 = (x16 + xmid) * (float).5;
-    xnew2 = (x45 + xmid) * (float).5;
-    y16 = (yn[*i1] + yn[i6]) * (float).5;
-    y45 = (yn[i4] + yn[i5]) * (float).5;
-    ymid = (y16 + y45) * (float).5;
-    ynew1 = (y16 + ymid) * (float).5;
-    ynew2 = (y45 + ymid) * (float).5;
-    zero = (float)0.;
+    x16 = (xn[*i1] + xn[i6]) * (xc_float).5;
+    x45 = (xn[i4] + xn[i5]) * (xc_float).5;
+    xmid = (x16 + x45) * (xc_float).5;
+    xnew1 = (x16 + xmid) * (xc_float).5;
+    xnew2 = (x45 + xmid) * (xc_float).5;
+    y16 = (yn[*i1] + yn[i6]) * (xc_float).5;
+    y45 = (yn[i4] + yn[i5]) * (xc_float).5;
+    ymid = (y16 + y45) * (xc_float).5;
+    ynew1 = (y16 + ymid) * (xc_float).5;
+    ynew2 = (y45 + ymid) * (xc_float).5;
+    zero = (xc_float)0.;
     addnod_(mxnd, mln, &xn[1], &yn[1], &lxk[5], &kxl[3], &nxl[3], &lxn[5], &
 	    angle[1], &bnsize[3], &lnodes[lnodes_offset], &xnew1, &ynew1, &
 	    zero, nnn, kkk, lll, &i6, i1, &i2, &ambig, &idum, sizeit, err, 

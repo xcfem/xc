@@ -21,35 +21,35 @@ extern "C" {
 
 /*    See packages/seacas/LICENSE for details */
 /* Subroutine */ int close6_(integer *mxnd, integer *mxcorn, integer *mln, 
-        integer *nuid, real *xn, real *yn, integer *lxk, integer *kxl, 
-        integer *nxl, integer *lxn, real *angle, real *bnsize, integer *
+        integer *nuid, xc_float *xn, xc_float *yn, integer *lxk, integer *kxl, 
+        integer *nxl, integer *lxn, xc_float *angle, xc_float *bnsize, integer *
         lnodes, integer *node, integer *nloop, integer *kkkold, integer *
         lllold, integer *nnnold, integer *navail, integer *iavail, 
-         real *xmin, real *xmax, real *ymin, real *ymax, char *dev1, integer *
+         xc_float *xmin, xc_float *xmax, xc_float *ymin, xc_float *ymax, char *dev1, integer *
         lll, integer *kkk, integer *nnn, integer *lcorn, integer *ncorn, 
         logical *graph, logical *video, logical *sizeit, logical *noroom, 
-        logical *err, real *xnold, real *ynold, integer *nxkold, integer *
-        linkeg, integer *listeg, real *bmesur, integer *mlink, integer *
-        npnold, integer *npeold, integer *nnxk, real *rexmin, 
-        real *rexmax, real *reymin, real *reymax, integer *idivis, real *
-        sizmin, real *emax, real *emin, ftnlen dev1_len)
+        logical *err, xc_float *xnold, xc_float *ynold, integer *nxkold, integer *
+        linkeg, integer *listeg, xc_float *bmesur, integer *mlink, integer *
+        npnold, integer *npeold, integer *nnxk, xc_float *rexmin, 
+        xc_float *rexmax, xc_float *reymin, xc_float *reymax, integer *idivis, xc_float *
+        sizmin, xc_float *emax, xc_float *emin, ftnlen dev1_len)
 {
     /* System generated locals */
     integer lnodes_dim1, lnodes_offset, nxkold_dim1, nxkold_offset, i__1, 
             i__2;
-    real r__1, r__2;
+    xc_float r__1, r__2;
 
     /* Builtin functions */
-    double sqrt(doublereal);
+    
 
     /* Local variables */
     static integer i1, i2, i3, i4, i5, i6;
-    static real xnew, ynew, dist1, dist2, dist3, xnew1, xnew2, xnew3, ynew1, 
+    static xc_float xnew, ynew, dist1, dist2, dist3, xnew1, xnew2, xnew3, ynew1, 
             ynew2, ynew3;
     static integer inode;
     extern /* Subroutine */ int add2el_(integer *, 
-            integer *, real *, real *, integer *, integer *, integer *, 
-            integer *, integer *, real *, integer *, integer *, integer *, 
+            integer *, xc_float *, xc_float *, integer *, integer *, integer *, 
+            integer *, integer *, xc_float *, integer *, integer *, integer *, 
             integer *, integer *, integer *, integer *, integer *, integer *, 
             integer *, integer *, logical *, logical *, logical *, logical *),
             marksm_(integer *, integer *, 
@@ -92,7 +92,7 @@ extern "C" {
 L100:
     ++ikount;
     if (ikount > 6) {
-        fprintf(stderr,"** PROBLEMS IN CLOSE6 WITH TOO MANY IN LOOP **");
+        fprintf(stderr,"** PROBLEMS IN CLOSE6 WITH TOO MANY IN LOOP **\n");
         *err = TRUE_;
         goto L110;
     }
@@ -122,10 +122,10 @@ L100:
         i__1 = int_max(i1,i2);
         if (int_max(i__1,i3) == 4) {
             if (i1 == 4) {
-                xnew = ((xn[lcorn[1]] + xn[lcorn[2]]) * (float).5 + xn[lcorn[
-                        3]]) * (float).5;
-                ynew = ((yn[lcorn[1]] + yn[lcorn[2]]) * (float).5 + yn[lcorn[
-                        3]]) * (float).5;
+                xnew = ((xn[lcorn[1]] + xn[lcorn[2]]) * (xc_float).5 + xn[lcorn[
+                        3]]) * (xc_float).5;
+                ynew = ((yn[lcorn[1]] + yn[lcorn[2]]) * (xc_float).5 + yn[lcorn[
+                        3]]) * (xc_float).5;
                 add1cn_(mxnd, mln, &xn[1], &yn[1], &nuid[1], &lxk[5], &kxl[3],
                          &nxl[3], &lxn[5], &angle[1], &bnsize[3], &lnodes[
                         lnodes_offset], nnn, kkk, lll, nnnold, lllold, nloop, 
@@ -138,10 +138,10 @@ L100:
                     goto L110;
                 }
             } else if (i2 == 4) {
-                xnew = ((xn[lcorn[2]] + xn[lcorn[3]]) * (float).5 + xn[lcorn[
-                        1]]) * (float).5;
-                ynew = ((yn[lcorn[2]] + yn[lcorn[3]]) * (float).5 + yn[lcorn[
-                        1]]) * (float).5;
+                xnew = ((xn[lcorn[2]] + xn[lcorn[3]]) * (xc_float).5 + xn[lcorn[
+                        1]]) * (xc_float).5;
+                ynew = ((yn[lcorn[2]] + yn[lcorn[3]]) * (xc_float).5 + yn[lcorn[
+                        1]]) * (xc_float).5;
                 add1cn_(mxnd, mln, &xn[1], &yn[1], &nuid[1], &lxk[5], &kxl[3],
                          &nxl[3], &lxn[5], &angle[1], &bnsize[3], &lnodes[
                         lnodes_offset], nnn, kkk, lll, nnnold, lllold, nloop, 
@@ -154,10 +154,10 @@ L100:
                     goto L110;
                 }
             } else {
-                xnew = ((xn[lcorn[3]] + xn[lcorn[1]]) * (float).5 + xn[lcorn[
-                        2]]) * (float).5;
-                ynew = ((yn[lcorn[3]] + yn[lcorn[1]]) * (float).5 + yn[lcorn[
-                        2]]) * (float).5;
+                xnew = ((xn[lcorn[3]] + xn[lcorn[1]]) * (xc_float).5 + xn[lcorn[
+                        2]]) * (xc_float).5;
+                ynew = ((yn[lcorn[3]] + yn[lcorn[1]]) * (xc_float).5 + yn[lcorn[
+                        2]]) * (xc_float).5;
                 add1cn_(mxnd, mln, &xn[1], &yn[1], &nuid[1], &lxk[5], &kxl[3],
                          &nxl[3], &lxn[5], &angle[1], &bnsize[3], &lnodes[
                         lnodes_offset], nnn, kkk, lll, nnnold, lllold, nloop, 
@@ -208,20 +208,20 @@ L100:
                 }
 /*  HANDLE A 2-2-2 TRIANGLE */
             } else {
-                xnew1 = ((xn[lcorn[1]] + xn[lcorn[2]]) * (float).5 + xn[lcorn[
-                        3]]) * (float).5;
-                xnew2 = ((xn[lcorn[2]] + xn[lcorn[3]]) * (float).5 + xn[lcorn[
-                        1]]) * (float).5;
-                xnew3 = ((xn[lcorn[3]] + xn[lcorn[1]]) * (float).5 + xn[lcorn[
-                        2]]) * (float).5;
-                ynew1 = ((yn[lcorn[1]] + yn[lcorn[2]]) * (float).5 + yn[lcorn[
-                        3]]) * (float).5;
-                ynew2 = ((yn[lcorn[2]] + yn[lcorn[3]]) * (float).5 + yn[lcorn[
-                        1]]) * (float).5;
-                ynew3 = ((yn[lcorn[3]] + yn[lcorn[1]]) * (float).5 + yn[lcorn[
-                        2]]) * (float).5;
-                xnew = (xnew1 + xnew2 + xnew3) / (float)3.;
-                ynew = (ynew1 + ynew2 + ynew3) / (float)3.;
+                xnew1 = ((xn[lcorn[1]] + xn[lcorn[2]]) * (xc_float).5 + xn[lcorn[
+                        3]]) * (xc_float).5;
+                xnew2 = ((xn[lcorn[2]] + xn[lcorn[3]]) * (xc_float).5 + xn[lcorn[
+                        1]]) * (xc_float).5;
+                xnew3 = ((xn[lcorn[3]] + xn[lcorn[1]]) * (xc_float).5 + xn[lcorn[
+                        2]]) * (xc_float).5;
+                ynew1 = ((yn[lcorn[1]] + yn[lcorn[2]]) * (xc_float).5 + yn[lcorn[
+                        3]]) * (xc_float).5;
+                ynew2 = ((yn[lcorn[2]] + yn[lcorn[3]]) * (xc_float).5 + yn[lcorn[
+                        1]]) * (xc_float).5;
+                ynew3 = ((yn[lcorn[3]] + yn[lcorn[1]]) * (xc_float).5 + yn[lcorn[
+                        2]]) * (xc_float).5;
+                xnew = (xnew1 + xnew2 + xnew3) / (xc_float)3.;
+                ynew = (ynew1 + ynew2 + ynew3) / (xc_float)3.;
                 add1cn_(mxnd, mln, &xn[1], &yn[1], &nuid[1], &lxk[5], &kxl[3],
                          &nxl[3], &lxn[5], &angle[1], &bnsize[3], &lnodes[
                         lnodes_offset], nnn, kkk, lll, nnnold, lllold, nloop, 
@@ -303,12 +303,12 @@ L100:
                 if (i1 + i2 == 4) {
                     xnew = (xn[lnodes[lcorn[1] * lnodes_dim1 + 3]] + xn[
                             lnodes[lcorn[2] * lnodes_dim1 + 3]] + xn[lcorn[3]]
-                             * (float).5 + xn[lcorn[4]] + xn[lcorn[1]] * (
-                            float).5) * (float).25;
+                             * (xc_float).5 + xn[lcorn[4]] + xn[lcorn[1]] * (
+                            float).5) * (xc_float).25;
                     ynew = (yn[lnodes[lcorn[1] * lnodes_dim1 + 3]] + yn[
                             lnodes[lcorn[2] * lnodes_dim1 + 3]] + yn[lcorn[3]]
-                             * (float).5 + yn[lcorn[4]] + yn[lcorn[1]] * (
-                            float).5) * (float).25;
+                             * (xc_float).5 + yn[lcorn[4]] + yn[lcorn[1]] * (
+                            float).5) * (xc_float).25;
                     add1cn_(mxnd, mln, &xn[1], &yn[1], &nuid[1], &lxk[5], &
                             kxl[3], &nxl[3], &lxn[5], &angle[1], &bnsize[3], &
                             lnodes[lnodes_offset], nnn, kkk, lll, nnnold, 
@@ -324,12 +324,12 @@ L100:
                 } else if (i2 + i3 == 4) {
                     xnew = (xn[lnodes[lcorn[2] * lnodes_dim1 + 3]] + xn[
                             lnodes[lcorn[3] * lnodes_dim1 + 3]] + xn[lcorn[4]]
-                             * (float).5 + xn[lcorn[1]] + xn[lcorn[2]] * (
-                            float).5) * (float).25;
+                             * (xc_float).5 + xn[lcorn[1]] + xn[lcorn[2]] * (
+                            float).5) * (xc_float).25;
                     ynew = (yn[lnodes[lcorn[2] * lnodes_dim1 + 3]] + yn[
                             lnodes[lcorn[3] * lnodes_dim1 + 3]] + yn[lcorn[4]]
-                             * (float).5 + yn[lcorn[1]] + yn[lcorn[2]] * (
-                            float).5) * (float).25;
+                             * (xc_float).5 + yn[lcorn[1]] + yn[lcorn[2]] * (
+                            float).5) * (xc_float).25;
                     add1cn_(mxnd, mln, &xn[1], &yn[1], &nuid[1], &lxk[5], &
                             kxl[3], &nxl[3], &lxn[5], &angle[1], &bnsize[3], &
                             lnodes[lnodes_offset], nnn, kkk, lll, nnnold, 
@@ -345,12 +345,12 @@ L100:
                 } else if (i3 + i4 == 4) {
                     xnew = (xn[lnodes[lcorn[3] * lnodes_dim1 + 3]] + xn[
                             lnodes[lcorn[4] * lnodes_dim1 + 3]] + xn[lcorn[1]]
-                             * (float).5 + xn[lcorn[2]] + xn[lcorn[3]] * (
-                            float).5) * (float).25;
+                             * (xc_float).5 + xn[lcorn[2]] + xn[lcorn[3]] * (
+                            float).5) * (xc_float).25;
                     ynew = (yn[lnodes[lcorn[3] * lnodes_dim1 + 3]] + yn[
                             lnodes[lcorn[4] * lnodes_dim1 + 3]] + yn[lcorn[1]]
-                             * (float).5 + yn[lcorn[2]] + yn[lcorn[3]] * (
-                            float).5) * (float).25;
+                             * (xc_float).5 + yn[lcorn[2]] + yn[lcorn[3]] * (
+                            float).5) * (xc_float).25;
                     add1cn_(mxnd, mln, &xn[1], &yn[1], &nuid[1], &lxk[5], &
                             kxl[3], &nxl[3], &lxn[5], &angle[1], &bnsize[3], &
                             lnodes[lnodes_offset], nnn, kkk, lll, nnnold, 
@@ -366,12 +366,12 @@ L100:
                 } else {
                     xnew = (xn[lnodes[lcorn[4] * lnodes_dim1 + 3]] + xn[
                             lnodes[lcorn[1] * lnodes_dim1 + 3]] + xn[lcorn[2]]
-                             * (float).5 + xn[lcorn[3]] + xn[lcorn[4]] * (
-                            float).5) * (float).25;
+                             * (xc_float).5 + xn[lcorn[3]] + xn[lcorn[4]] * (
+                            float).5) * (xc_float).25;
                     ynew = (yn[lnodes[lcorn[4] * lnodes_dim1 + 3]] + yn[
                             lnodes[lcorn[1] * lnodes_dim1 + 3]] + yn[lcorn[2]]
-                             * (float).5 + yn[lcorn[3]] + yn[lcorn[4]] * (
-                            float).5) * (float).25;
+                             * (xc_float).5 + yn[lcorn[3]] + yn[lcorn[4]] * (
+                            float).5) * (xc_float).25;
                     add1cn_(mxnd, mln, &xn[1], &yn[1], &nuid[1], &lxk[5], &
                             kxl[3], &nxl[3], &lxn[5], &angle[1], &bnsize[3], &
                             lnodes[lnodes_offset], nnn, kkk, lll, nnnold, 

@@ -21,8 +21,8 @@ extern "C" {
 
 /* See packages/seacas/LICENSE for details */
 /* ======================================================================= */
-/* Subroutine */ int pltvwv_(real *pll, real *pur, integer *n, integer *mask, 
-	real *px, real *py, real *qx, real *qy)
+/* Subroutine */ int pltvwv_(xc_float *pll, xc_float *pur, integer *n, integer *mask, 
+	xc_float *px, xc_float *py, xc_float *qx, xc_float *qy)
 {
     /* Initialized data */
 
@@ -36,11 +36,11 @@ extern "C" {
 
     /* Local variables */
     static integer j, k, m, j1;
-    static real x1, y1, x2, y2, df;
+    static xc_float x1, y1, x2, y2, df;
     static integer jb;
-    static real fp, fq;
+    static xc_float fp, fq;
     static integer km, jn;
-    static real dx, dy, tn, pll1, pll2, pur1, pur2;
+    static xc_float dx, dy, tn, pll1, pll2, pur1, pur2;
 
     /* Parameter adjustments */
     --qy;
@@ -52,10 +52,10 @@ extern "C" {
     --pll;
 
     /* Function Body */
-    pur1 = pur[1] + (float)1e-4;
-    pur2 = pur[2] + (float)1e-4;
-    pll1 = pll[1] - (float)1e-4;
-    pll2 = pll[2] - (float)1e-4;
+    pur1 = pur[1] + (xc_float)1e-4;
+    pur2 = pur[2] + (xc_float)1e-4;
+    pll1 = pll[1] - (xc_float)1e-4;
+    pll2 = pll[2] - (xc_float)1e-4;
     dx = pur1 - pll1;
     dy = pur2 - pll2;
     j = 0;
@@ -80,15 +80,15 @@ L10:
 		    y2 = qy[k + j1];
 		    fp = x1 - pll1;
 		    fq = x2 - pll1;
-		    if (fp < (float)0. && fq < (float)0.) {
+		    if (fp < (xc_float)0. && fq < (xc_float)0.) {
 			m &= ~ jb;
 		    } else if (fp > dx && fq > dx) {
 			m &= ~ jb;
 		    } else {
 			df = fq - fp;
-			if (df > (float)0.) {
+			if (df > (xc_float)0.) {
 			    tn = (y2 - y1) / df;
-			    if (fp < (float)0.) {
+			    if (fp < (xc_float)0.) {
 				x1 = pll1;
 				y1 -= fp * tn;
 			    }
@@ -96,9 +96,9 @@ L10:
 				x2 = pur1;
 				y2 += (dx - fq) * tn;
 			    }
-			} else if (df < (float)0.) {
+			} else if (df < (xc_float)0.) {
 			    tn = (y2 - y1) / df;
-			    if (fq < (float)0.) {
+			    if (fq < (xc_float)0.) {
 				x2 = pll1;
 				y2 -= fq * tn;
 			    }
@@ -109,15 +109,15 @@ L10:
 			}
 			fp = y1 - pll2;
 			fq = y2 - pll2;
-			if (fp < (float)0. && fq < (float)0.) {
+			if (fp < (xc_float)0. && fq < (xc_float)0.) {
 			    m &= ~ jb;
 			} else if (fp > dy && fq > dy) {
 			    m &= ~ jb;
 			} else {
 			    df = fq - fp;
-			    if (df > (float)0.) {
+			    if (df > (xc_float)0.) {
 				tn = (x2 - x1) / df;
-				if (fp < (float)0.) {
+				if (fp < (xc_float)0.) {
 				    y1 = pll2;
 				    x1 -= fp * tn;
 				}
@@ -125,9 +125,9 @@ L10:
 				    y2 = pur2;
 				    x2 += (dy - fq) * tn;
 				}
-			    } else if (df < (float)0.) {
+			    } else if (df < (xc_float)0.) {
 				tn = (x2 - x1) / df;
-				if (fq < (float)0.) {
+				if (fq < (xc_float)0.) {
 				    y2 = pll2;
 				    x2 -= fq * tn;
 				}

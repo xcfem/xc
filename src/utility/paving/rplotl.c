@@ -20,7 +20,7 @@ extern "C" {
 
 static integer c__10002 = 10002;
 static integer c__0 = 0;
-static f2c_float c_b9 = (float)0.;
+static f2c_float c_b9 = (f2c_float)0.;
 static integer c__1 = 1;
 static integer c__10001 = 10001;
 
@@ -88,8 +88,8 @@ static integer c__10001 = 10001;
     hard = FALSE_;
     figure = FALSE_;
 /*  INITIALIZE THE PLOTTING SURFACE */
-    xdimd = (float)1.;
-    ydimd = (float).75;
+    xdimd = (f2c_float)1.;
+    ydimd = (f2c_float).75;
 /*  TURN ON THE HARDCOPY IF NEEDED */
     if (hard) {
 	vdiqes_(&c__10002, &kaval2);
@@ -123,23 +123,23 @@ static integer c__10001 = 10001;
     yrat = ydimr / ydimd;
     if (xrat < yrat) {
 	xdimr = xdimd * yrat;
-	xx1 = (*xmin + *xmax - xdimr) * (float).5;
-	xx2 = (*xmin + *xmax + xdimr) * (float).5;
+	xx1 = (*xmin + *xmax - xdimr) * (f2c_float).5;
+	xx2 = (*xmin + *xmax + xdimr) * (f2c_float).5;
 	xdimr = xx2 - xx1;
 	yy1 = *ymin;
 	yy2 = *ymax;
     } else {
 	ydimr = ydimd * xrat;
-	yy1 = (*ymin + *ymax - ydimr) * (float).5;
-	yy2 = (*ymin + *ymax + ydimr) * (float).5;
+	yy1 = (*ymin + *ymax - ydimr) * (f2c_float).5;
+	yy2 = (*ymin + *ymax + ydimr) * (f2c_float).5;
 	ydimr = yy2 - yy1;
 	xx1 = *xmin;
 	xx2 = *xmax;
     }
-    xx1 -= xdimr * (float).1;
-    xx2 += xdimr * (float).1;
-    yy1 -= ydimr * (float).1;
-    yy2 += ydimr * (float).1;
+    xx1 -= xdimr * (f2c_float).1;
+    xx2 += xdimr * (f2c_float).1;
+    yy1 -= ydimr * (f2c_float).1;
+    yy2 += ydimr * (f2c_float).1;
     mport2_(&xx1, &xx2, &yy1, &yy2);
     pltfrm_(&c__0);
     getdum_(kreg, hold, &len, (ftnlen)72);
@@ -147,14 +147,14 @@ static integer c__10001 = 10001;
     s_copy(dummy + 7, hold, len, len);
     s_copy(dummy, "REGION ", (ftnlen)7, (ftnlen)7);
     len += 7;
-    r__1 = xdimd * (float).05;
-    r__2 = ydimd * (float).95;
+    r__1 = xdimd * (f2c_float).05;
+    r__2 = ydimd * (f2c_float).95;
     pltxth_(&r__1, &r__2, dummy, len);
 /*  PLOT THE LINES IN NXL ARRAY,  SKIPPING DELETIONS */
     if (figure) {
 	idum = 0;
-	xdum = (float)0.;
-	ydum = (float)0.;
+	xdum = (f2c_float)0.;
+	ydum = (f2c_float)0.;
     }
     i__1 = *lll;
     for (i__ = 1; i__ <= i__1; ++i__) {

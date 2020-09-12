@@ -24,13 +24,13 @@ static integer c__1 = 1;
 /*    NTESS, the U.S. Government retains certain rights in this software. */
 
 /*    See packages/seacas/LICENSE for details */
-/* Subroutine */ int addtuk_(integer *mxnd, integer *mln, integer *nuid, real 
-	*xn, real *yn, real *zn, integer *lxk, integer *kxl, integer *nxl, 
-	integer *lxn, integer *lnodes, real *angle, integer *nloop, integer *
+/* Subroutine */ int addtuk_(integer *mxnd, integer *mln, integer *nuid, xc_float 
+	*xn, xc_float *yn, xc_float *zn, integer *lxk, integer *kxl, integer *nxl, 
+	integer *lxn, integer *lnodes, xc_float *angle, integer *nloop, integer *
 	iavail, integer *navail, integer *lll, integer *kkk, integer *nnn, 
-	real *tang, integer *kang, integer *nstart, integer *nend, integer *
-	node, real *xmin, real *xmax, real *ymin, real *ymax, real *zmin, 
-	real *zmax, logical *graph, logical *video, char *dev1, logical *
+	xc_float *tang, integer *kang, integer *nstart, integer *nend, integer *
+	node, xc_float *xmin, xc_float *xmax, xc_float *ymin, xc_float *ymax, xc_float *zmin, 
+	xc_float *zmax, logical *graph, logical *video, char *dev1, logical *
 	noroom, logical *err, ftnlen dev1_len)
 {
     /* System generated locals */
@@ -38,19 +38,19 @@ static integer c__1 = 1;
 
     /* Local variables */
     static integer i__, kreg;
-    extern /* Subroutine */ int tuck_(integer *, integer *, integer *, real *,
-	     real *, integer *, integer *, integer *, integer *, integer *, 
+    extern /* Subroutine */ int tuck_(integer *, integer *, integer *, xc_float *,
+	     xc_float *, integer *, integer *, integer *, integer *, integer *, 
 	    integer *, integer *, integer *, integer *, integer *, integer *, 
 	    integer *, logical *, logical *, logical *);
     static integer inode[4], nnode, nwant;
     extern /* Subroutine */ int marksm_(integer *, integer *, integer *, 
 	    integer *, integer *, integer *, integer *, integer *, logical *),
 	     snapit_(integer *), nsplit_(integer *, integer *, integer *, 
-	    real *, integer *, integer *, integer *, integer *, integer *, 
+	    xc_float *, integer *, integer *, integer *, integer *, integer *, 
 	    logical *);
     static logical maxsiz;
-    extern /* Subroutine */ int rplotl_(integer *, real *, real *, real *, 
-	    integer *, real *, real *, real *, real *, real *, real *, 
+    extern /* Subroutine */ int rplotl_(integer *, xc_float *, xc_float *, xc_float *, 
+	    integer *, xc_float *, xc_float *, xc_float *, xc_float *, xc_float *, xc_float *, 
 	    integer *, char *, integer *, ftnlen);
 
 /* *********************************************************************** */
@@ -79,15 +79,15 @@ static integer c__1 = 1;
     /* Function Body */
     *err = FALSE_;
     maxsiz = FALSE_;
-    if (*tang < (float)2.3561945) {
+    if (*tang < (xc_float)2.3561945) {
 	nwant = 1;
-    } else if (*tang < (float)3.9269908) {
+    } else if (*tang < (xc_float)3.9269908) {
 	if (*kang > 2) {
 	    nwant = 2;
 	} else {
 	    nwant = 1;
 	}
-    } else if (*tang < (float)5.4977871) {
+    } else if (*tang < (xc_float)5.4977871) {
 	if (*kang > 4) {
 	    nwant = 3;
 	} else if (*kang > 2) {

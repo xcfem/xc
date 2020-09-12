@@ -24,9 +24,9 @@ static integer c__1 = 1;
 /*    NTESS, the U.S. Government retains certain rights in this software. */
 
 /*    See packages/seacas/LICENSE for details */
-/* Subroutine */ int connod_(integer *mxnd, integer *mln, real *xn, real *yn, 
+/* Subroutine */ int connod_(integer *mxnd, integer *mln, xc_float *xn, xc_float *yn, 
         integer *nuid, integer *lxk, integer *kxl, integer *nxl, integer *lxn,
-         real *angle, integer *lnodes, integer *nnn, integer *kkk, integer *
+         xc_float *angle, integer *lnodes, integer *nnn, integer *kkk, integer *
         lll, integer *nnnold, integer *lllold, integer *n0, integer *n1, 
         integer *n2, integer *node, integer *i__, integer *nloop, integer *
         iavail, integer *navail, logical *graph, logical *video, logical *
@@ -36,7 +36,7 @@ static integer c__1 = 1;
     integer lnodes_dim1, lnodes_offset;
 
     /* Local variables */
-    extern /* Subroutine */ int d2node_(integer *, real *, real *, integer *, 
+    extern /* Subroutine */ int d2node_(integer *, xc_float *, xc_float *, integer *, 
             integer *), addkxl_(integer *, integer *,
              integer *, integer *), marksm_(integer *, integer *, integer *, 
             integer *, integer *, integer *, integer *, integer *, logical *),
@@ -69,8 +69,8 @@ static integer c__1 = 1;
         lnodes[*node * lnodes_dim1 + 2] = *n0;
         lnodes[*n1 * lnodes_dim1 + 4] = -2;
         lnodes[*n2 * lnodes_dim1 + 4] = -2;
-        angle[*n1] = (float)0.;
-        angle[*n2] = (float)0.;
+        angle[*n1] = (xc_float)0.;
+        angle[*n2] = (xc_float)0.;
         ++(*lll);
         ++(*kkk);
         nxl[(*lll << 1) + 1] = *node;
@@ -99,8 +99,8 @@ static integer c__1 = 1;
         lnodes[*n2 * lnodes_dim1 + 2] = *node;
         lnodes[*n0 * lnodes_dim1 + 4] = -2;
         lnodes[*n1 * lnodes_dim1 + 4] = -2;
-        angle[*n0] = (float)0.;
-        angle[*n1] = (float)0.;
+        angle[*n0] = (xc_float)0.;
+        angle[*n1] = (xc_float)0.;
         ++(*lll);
         ++(*kkk);
         nxl[(*lll << 1) + 1] = *node;
@@ -124,8 +124,8 @@ static integer c__1 = 1;
         }
         *i__ = *n2;
     } else {
-        fprintf(stderr,"PROBLEM HANDLING CONNECTION IN CONNOD");
-        fprintf(stderr,"CONNECTION DOES NOT FORM A SIMPLE CORNER");
+        fprintf(stderr,"PROBLEM HANDLING CONNECTION IN CONNOD\n");
+        fprintf(stderr,"CONNECTION DOES NOT FORM A SIMPLE CORNER\n");
         *err = TRUE_;
         goto L100;
     }

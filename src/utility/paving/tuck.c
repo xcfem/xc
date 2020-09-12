@@ -20,8 +20,8 @@ extern "C" {
 /*    NTESS, the U.S. Government retains certain rights in this software. */
 
 /*    See packages/seacas/LICENSE for details */
-/* Subroutine */ int tuck_(integer *mxnd, integer *mln, integer *nuid, real *
-        xn, real *yn, integer *lxk, integer *kxl, integer *nxl, integer *lxn, 
+/* Subroutine */ int tuck_(integer *mxnd, integer *mln, integer *nuid, xc_float *
+        xn, xc_float *yn, integer *lxk, integer *kxl, integer *nxl, integer *lxn, 
         integer *lnodes, integer *iavail, integer *navail, integer *lll, 
         integer *kkk, integer *nnn, integer *n1, integer *nloop, logical *
         graph, logical *noroom, logical *err)
@@ -32,7 +32,7 @@ extern "C" {
     /* Local variables */
     static integer i__, l1, n0, n2, l2, l5, l4, l3, ii, ll, nl, nc1, nc2, kl2,
              kl5, kold, node1, node2, idraw, ltest;
-    extern /* Subroutine */ int d2node_(integer *, real *, real *, integer *, 
+    extern /* Subroutine */ int d2node_(integer *, xc_float *, xc_float *, integer *, 
             integer *);
     static integer l1list[20];
     extern /* Subroutine */ int  addlxn_(integer *, 
@@ -65,7 +65,7 @@ extern "C" {
 /*  CHECK TO MAKE SURE THAT THE NODE STILL EXISTS */
     if (lxn[(*n1 << 2) + 1] <= 0) {
         *err = TRUE_;
-        fprintf(stderr,"** PROBLEMS IN TUCK - N1 DOES NOT EXIST **");
+        fprintf(stderr,"** PROBLEMS IN TUCK - N1 DOES NOT EXIST **\n");
         goto L290;
     }
 /*  GET ALL THE DEFINITIONS IN ORDER */
@@ -91,7 +91,7 @@ extern "C" {
         }
 /* L100: */
     }
-    fprintf(stderr,"** PROBLEMS IN TUCK FINDING L5 AND NC2 **");
+    fprintf(stderr,"** PROBLEMS IN TUCK FINDING L5 AND NC2 **\n");
     *err = TRUE_;
     goto L290;
 L110:
@@ -111,7 +111,7 @@ L110:
         }
 /* L120: */
     }
-    fprintf(stderr,"** PROBLEMS IN TUCK FINDING L4 AND NC1 **");
+    fprintf(stderr,"** PROBLEMS IN TUCK FINDING L4 AND NC1 **\n");
     *err = TRUE_;
     goto L290;
 L130:
@@ -124,7 +124,7 @@ L130:
         }
 /* L140: */
     }
-    fprintf(stderr,"** PROBLEMS IN TUCK FINDING L3 **");
+    fprintf(stderr,"** PROBLEMS IN TUCK FINDING L3 **\n");
     *err = TRUE_;
     goto L290;
 L150:
@@ -134,7 +134,7 @@ L150:
     } else if (kxl[(l5 << 1) + 2] == kold) {
         kl5 = kxl[(l5 << 1) + 1];
     } else {
-        fprintf(stderr,"** PROBLEMS IN TUCK FINDING KL5 **");
+        fprintf(stderr,"** PROBLEMS IN TUCK FINDING KL5 **\n");
         *err = TRUE_;
         goto L290;
     }
@@ -158,7 +158,7 @@ L150:
     } else if (kxl[(l3 << 1) + 2] == kold) {
         kxl[(l3 << 1) + 2] = kl5;
     } else {
-        fprintf(stderr,"** PROBLEMS IN TUCK REPLACING KOLD FOR L3 **");
+        fprintf(stderr,"** PROBLEMS IN TUCK REPLACING KOLD FOR L3 **\n");
         *err = TRUE_;
         goto L290;
     }
@@ -168,7 +168,7 @@ L150:
     } else if (kxl[(l4 << 1) + 2] == kold) {
         kxl[(l4 << 1) + 2] = kl2;
     } else {
-        fprintf(stderr,"** PROBLEMS IN TUCK REPLACING KOLD FOR L4 **");
+        fprintf(stderr,"** PROBLEMS IN TUCK REPLACING KOLD FOR L4 **\n");
         *err = TRUE_;
         goto L290;
     }
@@ -181,7 +181,7 @@ L150:
         }
 /* L160: */
     }
-    fprintf(stderr,"** PROBLEMS IN TUCK FINDING L5 IN KL5 **");
+    fprintf(stderr,"** PROBLEMS IN TUCK FINDING L5 IN KL5 **\n");
     *err = TRUE_;
     goto L290;
 L170:
@@ -194,14 +194,14 @@ L170:
         }
 /* L180: */
     }
-    fprintf(stderr,"** PROBLEMS IN TUCK FINDING L2 IN KL2 **");
+    fprintf(stderr,"** PROBLEMS IN TUCK FINDING L2 IN KL2 **\n");
     *err = TRUE_;
     goto L290;
 L190:
 /*  RECONNECT ALL LINES CONNECTED TO N1 TO NC1 EXCEPT L5 AND L2 */
     getlxn_(mxnd, &lxn[5], n1, l1list, &nl, err);
     if (*err) {
-        fprintf(stderr,"** PROBLEMS IN TUCK GETTING N1 LINES **");
+        fprintf(stderr,"** PROBLEMS IN TUCK GETTING N1 LINES **\n");
         goto L290;
     }
     if (*graph) {
@@ -230,19 +230,19 @@ L190:
     dellxn_(mxnd, &lxn[5], &nuid[1], navail, iavail, n1, &l1, nnn, err, 
             noroom);
     if (*noroom || *err) {
-        fprintf(stderr,"** PROBLEMS IN TUCK UNHOOKING L1 FROM N1 **");
+        fprintf(stderr,"** PROBLEMS IN TUCK UNHOOKING L1 FROM N1 **\n");
         goto L290;
     }
     dellxn_(mxnd, &lxn[5], &nuid[1], navail, iavail, n1, &l2, nnn, err, 
             noroom);
     if (*noroom || *err) {
-        fprintf(stderr,"** PROBLEMS IN TUCK UNHOOKING L2 FROM N1 **");
+        fprintf(stderr,"** PROBLEMS IN TUCK UNHOOKING L2 FROM N1 **\n");
         goto L290;
     }
     dellxn_(mxnd, &lxn[5], &nuid[1], navail, iavail, n1, &l5, nnn, err, 
             noroom);
     if (*noroom || *err) {
-        fprintf(stderr,"** PROBLEMS IN TUCK UNHOOKING L5 FROM N1 **");
+        fprintf(stderr,"** PROBLEMS IN TUCK UNHOOKING L5 FROM N1 **\n");
         goto L290;
     }
 /*  ADD ALL LINES STILL HOOKED TO N1 TO THE LIST OF LINES FOR NC1 */
@@ -253,7 +253,7 @@ L190:
             addlxn_(mxnd, &lxn[5], &nuid[1], navail, iavail, &nc1, &ll, nnn, 
                     err, noroom);
             if (*noroom || *err) {
-                fprintf(stderr,"** PROBLEMS IN TUCK HOOKING N1' LINES TO NC1 **");
+                fprintf(stderr,"** PROBLEMS IN TUCK HOOKING N1' LINES TO NC1 **\n");
                 goto L290;
             }
         }
@@ -271,7 +271,7 @@ L190:
 /*  RECONNECT ALL LINES CONNECTED TO N2 TO N0 (EXCEPT L2) */
     getlxn_(mxnd, &lxn[5], &n2, l1list, &nl, err);
     if (*err) {
-        fprintf(stderr,"** PROBLEMS IN TUCK GETTING N2 LINES **");
+        fprintf(stderr,"** PROBLEMS IN TUCK GETTING N2 LINES **\n");
         goto L290;
     }
     if (*graph) {
@@ -300,19 +300,19 @@ L190:
     dellxn_(mxnd, &lxn[5], &nuid[1], navail, iavail, &n2, &l2, nnn, err, 
             noroom);
     if (*noroom || *err) {
-        fprintf(stderr,"** PROBLEMS IN TUCK UNHOOKING L2 FROM N2 **");
+        fprintf(stderr,"** PROBLEMS IN TUCK UNHOOKING L2 FROM N2 **\n");
         goto L290;
     }
     dellxn_(mxnd, &lxn[5], &nuid[1], navail, iavail, &n0, &l1, nnn, err, 
             noroom);
     if (*noroom || *err) {
-        fprintf(stderr,"** PROBLEMS IN TUCK UNHOOKING L1 FROM N0 **");
+        fprintf(stderr,"** PROBLEMS IN TUCK UNHOOKING L1 FROM N0 **\n");
         goto L290;
     }
     dellxn_(mxnd, &lxn[5], &nuid[1], navail, iavail, &nc2, &l5, nnn, err, 
             noroom);
     if (*noroom || *err) {
-        fprintf(stderr,"** PROBLEMS IN TUCK UNHOOKING L1 FROM N0 **");
+        fprintf(stderr,"** PROBLEMS IN TUCK UNHOOKING L1 FROM N0 **\n");
         goto L290;
     }
 /*  ADD ALL LINES STILL HOOKED TO N2 TO THE LIST OF LINES FOR N0 */
@@ -323,7 +323,7 @@ L190:
             addlxn_(mxnd, &lxn[5], &nuid[1], navail, iavail, &n0, &ll, nnn, 
                     err, noroom);
             if (*noroom || *err) {
-                fprintf(stderr,"** PROBLEMS IN TUCK HOOKING N2' LINES TO N0 **");
+                fprintf(stderr,"** PROBLEMS IN TUCK HOOKING N2' LINES TO N0 **\n");
                 goto L290;
             }
         }

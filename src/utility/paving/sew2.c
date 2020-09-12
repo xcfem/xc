@@ -109,7 +109,7 @@ extern "C" {
             }
 /* L100: */
         }
-        fprintf(stderr,"** PROBLEMS IN SEW2 FIXING THE CHANGINGELEMENT **");
+        fprintf(stderr,"** PROBLEMS IN SEW2 FIXING THE CHANGINGELEMENT **\n");
         *err = TRUE_;
         goto L180;
 L110:
@@ -118,7 +118,7 @@ L110:
 /*  RECONNECT ALL LINES CONNECTING TO NGONE2 TO NSTAY2 */
     getlxn_(mxnd, &lxn[5], &ngone2, l1list, &nl, err);
     if (*err) {
-        fprintf(stderr,"** PROBLEMS IN SEW2 FINDING LXN FOR NGONE2 **");
+        fprintf(stderr,"** PROBLEMS IN SEW2 FINDING LXN FOR NGONE2 **\n");
         goto L180;
     }
     i__1 = nl;
@@ -137,14 +137,14 @@ L110:
         dellxn_(mxnd, &lxn[5], &nuid[1], navail, iavail, j1, &lgone, nnn, err,
                  noroom);
         if (*noroom || *err) {
-          fprintf(stderr,"** PROBLEMS IN SEW2 DELETING NGONE2 LINES **");
+          fprintf(stderr,"** PROBLEMS IN SEW2 DELETING NGONE2 LINES **\n");
           goto L180;
         }
     } else {
         dellxn_(mxnd, &lxn[5], &nuid[1], navail, iavail, i2, &lgone, nnn, err,
                  noroom);
         if (*noroom || *err) {
-          fprintf(stderr,"** PROBLEMS IN SEW2 DELETING NGONE2 LINES **");
+          fprintf(stderr,"** PROBLEMS IN SEW2 DELETING NGONE2 LINES **\n");
             goto L180;
         }
     }
@@ -156,7 +156,7 @@ L110:
             addlxn_(mxnd, &lxn[5], &nuid[1], navail, iavail, &nstay2, &ll, 
                     nnn, err, noroom);
             if (*noroom || *err) {
-              fprintf(stderr,"** PROBLEMS IN SEW2 ADDING NSTAY2 LINES **");
+              fprintf(stderr,"** PROBLEMS IN SEW2 ADDING NSTAY2 LINES **\n");
                 goto L180;
             }
         }
@@ -174,7 +174,7 @@ L110:
 /*  RECONNECT ALL LINES CONNECTING TO NGONE1 TO NSTAY1 */
     getlxn_(mxnd, &lxn[5], &ngone1, l1list, &nl, err);
     if (*err) {
-        fprintf(stderr,"** PROBLEMS IN SEW2 GETTING NGONE1 LINES **");
+        fprintf(stderr,"** PROBLEMS IN SEW2 GETTING NGONE1 LINES **\n");
         goto L180;
     }
     i__1 = nl;
@@ -193,14 +193,14 @@ L110:
         dellxn_(mxnd, &lxn[5], &nuid[1], navail, iavail, i1, &lgone, nnn, err,
                  noroom);
         if (*noroom || *err) {
-          fprintf(stderr,"** PROBLEMS IN SEW2 DELETING NGONE1 LINES **");
+          fprintf(stderr,"** PROBLEMS IN SEW2 DELETING NGONE1 LINES **\n");
             goto L180;
         }
     } else {
         dellxn_(mxnd, &lxn[5], &nuid[1], navail, iavail, j2, &lgone, nnn, err,
                  noroom);
         if (*noroom || *err) {
-          fprintf(stderr,"** PROBLEMS IN SEW2 DELETING NGONE1 LINES **");
+          fprintf(stderr,"** PROBLEMS IN SEW2 DELETING NGONE1 LINES **\n");
             goto L180;
         }
     }
@@ -212,7 +212,7 @@ L110:
             addlxn_(mxnd, &lxn[5], &nuid[1], navail, iavail, &nstay1, &ll, 
                     nnn, err, noroom);
             if (*noroom || *err) {
-              fprintf(stderr,"** PROBLEMS IN SEW2 ADDING NSTAY1 LINES **");
+              fprintf(stderr,"** PROBLEMS IN SEW2 ADDING NSTAY1 LINES **\n");
                 goto L180;
             }
         }

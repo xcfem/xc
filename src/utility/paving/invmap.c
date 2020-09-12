@@ -20,29 +20,29 @@ extern "C" {
 /*    NTESS, the U.S. Government retains certain rights in this software. */
 
 /*    See packages/seacas/LICENSE for details */
-/* Subroutine */ int invmap_(real *x0, real *y0, real *x1, real *y1, real *x2,
-	 real *y2, real *x3, real *y3, real *x4, real *y4, real *sxi, real *
+/* Subroutine */ int invmap_(xc_float *x0, xc_float *y0, xc_float *x1, xc_float *y1, xc_float *x2,
+	 xc_float *y2, xc_float *x3, xc_float *y3, xc_float *x4, xc_float *y4, xc_float *sxi, xc_float *
 	seta, logical *inside)
 {
     /* System generated locals */
     doublereal d__1;
 
     /* Builtin functions */
-    double sqrt(doublereal);
+    
 
     /* Local variables */
-    static real d1, d2;
+    static xc_float d1, d2;
     static doublereal ax, bx, cx, dx, ay, by, cy, dy, xi, xi1, xi2, rad, eta;
-    static real eps;
+    static xc_float eps;
     static doublereal eta1, eta2;
-    static real eps2;
+    static xc_float eps2;
     static doublereal beta, gamma, alpha;
 
 /* *********************************************************************** */
 /*  THIS IS A TEST OF THE INVERTED MAPPING OF AN ELEMENT */
 /* *********************************************************************** */
-    eps = (float).001;
-    eps2 = (float)1e-10;
+    eps = (xc_float).001;
+    eps2 = (xc_float)1e-10;
 /*  GET THE A, B, C, AND D VALUES FOR X AND Y. */
     ax = *x1 - *x0;
     bx = *x2 - *x1;
@@ -57,22 +57,22 @@ extern "C" {
     beta = ax * cy - ay * cx + by * dx - bx * dy;
     gamma = ax * by - ay * bx;
 /*  CALCULATE THE XI AND ETA VALUES. */
-    if (alpha == (float)0.) {
+    if (alpha == (xc_float)0.) {
 	eta = -gamma / beta;
 	if (eta == 0. && bx == 0.) {
 	    xi = (*y0 - *y1) / (*y2 - *y1);
-	} else if (bx == -cx && eta == (float)1.) {
+	} else if (bx == -cx && eta == (xc_float)1.) {
 	    xi = (*y0 - *y3) / (*y4 - *y3);
 	} else if (bx == -cx * eta) {
-	    xi = (float)-1e3;
+	    xi = (xc_float)-1e3;
 	} else {
 	    xi = (-ax - dx * eta) / (bx + cx * eta);
 	}
     } else {
 /* Computing 2nd power */
 	d__1 = beta;
-	rad = d__1 * d__1 - alpha * (float)4. * gamma;
-	if (rad < (float)0.) {
+	rad = d__1 * d__1 - alpha * (xc_float)4. * gamma;
+	if (rad < (xc_float)0.) {
 /* **               NEGATIVE RADICAL PROBLEM AS IT APPEARS THAT */
 /* **               THIS MAY OCCUR - IT JUST MEANS THAT THE POINT */
 /* **               TRULY IS NOT IN THE ELEMENT. */
@@ -81,23 +81,23 @@ extern "C" {
 	    goto L100;
 	}
 	rad = sqrt(rad);
-	eta1 = (-beta + rad) / (alpha * (float)2.);
-	eta2 = (-beta - rad) / (alpha * (float)2.);
+	eta1 = (-beta + rad) / (alpha * (xc_float)2.);
+	eta2 = (-beta - rad) / (alpha * (xc_float)2.);
 	if (abs(eta1) < eps2 && abs(bx) < eps2) {
 	    xi1 = (*y0 - *y1) / (*y2 - *y1);
-	} else if (bx == -cx && eta1 == (float)1.) {
+	} else if (bx == -cx && eta1 == (xc_float)1.) {
 	    xi1 = (*y0 - *y3) / (*y4 - *y3);
 	} else if (bx == -cx * eta1) {
-	    xi1 = (float)-1e3;
+	    xi1 = (xc_float)-1e3;
 	} else {
 	    xi1 = (-ax - dx * eta1) / (bx + cx * eta1);
 	}
 	if (abs(eta2) < eps2 && abs(bx) < eps2) {
 	    xi2 = (*y0 - *y1) / (*y2 - *y1);
-	} else if (bx == -cx && eta2 == (float)1.) {
+	} else if (bx == -cx && eta2 == (xc_float)1.) {
 	    xi2 = (*y0 - *y3) / (*y4 - *y3);
 	} else if (bx == -cx * eta2) {
-	    xi2 = (float)-1e3;
+	    xi2 = (xc_float)-1e3;
 	} else {
 	    xi2 = (-ax - dx * eta2) / (bx + cx * eta2);
 	}
@@ -112,10 +112,10 @@ extern "C" {
 	}
     }
 /*  CHECK TO SEE IF ETA AND XI ARE WITHIN THE ELEMENT */
-    if (! (eta <= eps + (float)1. && eta >= (float)0. - eps)) {
+    if (! (eta <= eps + (xc_float)1. && eta >= (xc_float)0. - eps)) {
 	*inside = FALSE_;
 	goto L100;
-    } else if (! (xi <= eps + (float)1. && xi >= (float)0. - eps)) {
+    } else if (! (xi <= eps + (xc_float)1. && xi >= (xc_float)0. - eps)) {
 	*inside = FALSE_;
 	goto L100;
     } else {

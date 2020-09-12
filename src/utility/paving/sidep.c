@@ -20,26 +20,25 @@ extern "C" {
 /*    NTESS, the U.S. Government retains certain rights in this software. */
 
 /*    See packages/seacas/LICENSE for details */
-logical sidep_(real *angle)
+logical sidep_(xc_float *angle)
 {
     /* Initialized data */
 
-    static real eps = (float)1.27;
+    static xc_float eps = (xc_float)1.27;
 
     /* System generated locals */
     logical ret_val;
 
     /* Builtin functions */
-    double atan2(doublereal, doublereal);
 
     /* Local variables */
-    static real pi;
+    static xc_float pi;
 
 /* *********************************************************************** */
 /*  FUNCTION SIDEP = LOGICAL FUNCTION THAT RETURNS TRUE IF THE ANGLE IS */
 /*                   WITHIN THE CURRENT DEFINITION OF A SIDE */
 /* *********************************************************************** */
-    pi = atan2((float)0., (float)-1.);
+    pi = M_PI;
     if (*angle > pi - eps && *angle < pi + eps) {
 	ret_val = TRUE_;
     } else {

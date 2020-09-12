@@ -57,7 +57,7 @@ extern "C" {
         }
 /* L100: */
     }
-    fprintf(stderr,"** PROBLEMS IN SETN02 FINDING NNEW1 **");
+    fprintf(stderr,"** PROBLEMS IN SETN02 FINDING NNEW1 **\n");
     return 0;
 L110:
 /*  FIND THE NEXT LINE IN K2 */
@@ -73,7 +73,7 @@ L110:
         }
 /* L120: */
     }
-    fprintf(stderr,"** PROBLEMS IN SETN02 FINDING NNEW2 **");
+    fprintf(stderr,"** PROBLEMS IN SETN02 FINDING NNEW2 **\n");
     return 0;
 L130:
 /*  NOW DETERMINE WHICH OF THESE NODES IS N0 AND WHICH IS N2 BASED */
@@ -97,13 +97,13 @@ L130:
                 *n0 = nnew2;
                 *n2 = nnew1;
             } else {
-                fprintf(stderr,"** PROBLEMS IN SETN02 FINDING N0 AND N2 **");
+                fprintf(stderr,"** PROBLEMS IN SETN02 FINDING N0 AND N2 **\n");
             }
             goto L150;
         }
 /* L140: */
     }
-    fprintf(stderr,"** PROBLEMS IN SETN02 FINDING LINE AGAIN **");
+    fprintf(stderr,"** PROBLEMS IN SETN02 FINDING LINE AGAIN **\n");
 L150:
     return 0;
 } /* setn02_ */

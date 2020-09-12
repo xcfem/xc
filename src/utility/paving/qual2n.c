@@ -21,9 +21,9 @@ extern "C" {
 
 /*    See packages/seacas/LICENSE for details */
 /* Subroutine */ int qual2n_(integer *mxnd, integer *mxcorn, integer *mln, 
-	integer *ncorn, integer *lcorn, integer *lnodes, integer *icomb, real 
-	*bnsize, real *angle, integer *lxn, integer *itest, integer *ltest, 
-	real *qual, logical *posbl2, logical *posbl3, logical *rowchn, 
+	integer *ncorn, integer *lcorn, integer *lnodes, integer *icomb, xc_float 
+	*bnsize, xc_float *angle, integer *lxn, integer *itest, integer *ltest, 
+	xc_float *qual, logical *posbl2, logical *posbl3, logical *rowchn, 
 	logical *sidpin, integer *istart, integer *iend, integer *ipinch, 
 	integer *npinch, logical *err)
 {
@@ -32,14 +32,14 @@ extern "C" {
 
     /* Local variables */
     static integer i__, i1, i2, l1, l2, ldif, node, ilen, nchg1, nchg2;
-    extern doublereal nickc_(real *, integer *), nicks_(real *, integer *);
+    extern doublereal nickc_(xc_float *, integer *), nicks_(xc_float *, integer *);
     static integer istep;
     extern /* Subroutine */ int spaced_(integer *, integer *, integer *, 
 	    integer *, integer *, integer *, integer *, integer *, integer *, 
 	    integer *, logical *);
     extern integer jumplp_(integer *, integer *, integer *, integer *, 
 	    integer *);
-    extern logical shrunk_(real *, integer *);
+    extern logical shrunk_(xc_float *, integer *);
 
 /* *********************************************************************** */
 /*  SUBROTINE QUAL2 = CHECKS THE QUALITY OF A SEMICIRCLE INTERPRETATION */
@@ -62,7 +62,7 @@ extern "C" {
 /* ... See note below regarding bug... */
     istep = 0;
 /*  ASSUME PERFECT QUALITY */
-    *qual = (float)0.;
+    *qual = (xc_float)0.;
     *posbl2 = FALSE_;
     *posbl3 = FALSE_;
     *rowchn = FALSE_;

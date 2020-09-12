@@ -48,7 +48,7 @@ extern "C" {
             } else if (nxl[(ill << 1) + 2] == *node) {
                 ntest = nxl[(ill << 1) + 1];
             } else {
-                fprintf(stderr,"** PROBLEMS IN GETFRM **");
+                fprintf(stderr,"** PROBLEMS IN GETFRM **\n");
                 goto L110;
             }
             if (ntest != *n0 && ntest != *n2) {

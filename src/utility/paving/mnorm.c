@@ -20,22 +20,22 @@ extern "C" {
 /*    NTESS, the U.S. Government retains certain rights in this software. */
 
 /*    See packages/seacas/LICENSE for details */
-/* Subroutine */ int mnorm_(integer *mxnd, real *xn, real *yn, integer *nxl, 
-	integer *lll, real *stdlen)
+/* Subroutine */ int mnorm_(integer *mxnd, xc_float *xn, xc_float *yn, integer *nxl, 
+	integer *lll, xc_float *stdlen)
 {
     /* System generated locals */
     integer i__1;
-    real r__1, r__2;
+    xc_float r__1, r__2;
 
     /* Builtin functions */
-    double sqrt(doublereal);
+    
 
     /* Local variables */
-    static real d__;
+    static xc_float d__;
     static integer l;
-    static real s;
+    static xc_float s;
     static integer n1, n2;
-    static real tol;
+    static xc_float tol;
     static integer numl;
 
 /* *********************************************************************** */
@@ -48,9 +48,9 @@ extern "C" {
     --xn;
 
     /* Function Body */
-    *stdlen = (float)0.;
+    *stdlen = (xc_float)0.;
     numl = 0;
-    s = (float)0.;
+    s = (xc_float)0.;
     i__1 = *lll;
     for (l = 1; l <= i__1; ++l) {
 	n1 = nxl[(l << 1) + 1];
@@ -69,9 +69,9 @@ extern "C" {
     if (numl <= 0) {
 	return 0;
     }
-    tol = s * (float)1.25 / (doublereal) numl;
+    tol = s * (xc_float)1.25 / (doublereal) numl;
     numl = 0;
-    s = (float)0.;
+    s = (xc_float)0.;
     i__1 = *lll;
     for (l = 1; l <= i__1; ++l) {
 	n1 = nxl[(l << 1) + 1];

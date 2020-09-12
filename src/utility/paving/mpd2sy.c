@@ -18,13 +18,13 @@ extern "C" {
 /* Common Block Declarations */
 
 struct {
-    real model[16]	/* was [4][4] */, view[16]	/* was [4][4] */, 
+    xc_float model[16]	/* was [4][4] */, view[16]	/* was [4][4] */, 
 	    proj[16]	/* was [4][4] */, cpnear, cpfar, vwport[4], mvp[16]	
 	    /* was [4][4] */, vp[16]	/* was [4][4] */, cpline[40]	/* 
 	    was [2][2][10] */, cpplan[60]	/* was [2][3][10] */, peye[3],
 	     plook[3], etwist;
     integer ncplin, ncplan;
-    real tmat1[16]	/* was [4][4] */, tmat2[16]	/* was [4][4] */, 
+    xc_float tmat1[16]	/* was [4][4] */, tmat2[16]	/* was [4][4] */, 
 	    tmat3[16]	/* was [4][4] */, tvec1[4], tvec2[4], tvec3[4], tvec4[
 	    4], tarr1[32], tarr2[32], tarr3[32], tarr4[32], tarr5[32], tarr6[
 	    32], tarr7[32], tarr8[32];
@@ -38,7 +38,7 @@ struct {
 
 /* See packages/seacas/LICENSE for details */
 /* ======================================================================= */
-/* Subroutine */ int mpd2sy_(integer *n, real *x0, real *y0, char *sym, 
+/* Subroutine */ int mpd2sy_(integer *n, xc_float *x0, xc_float *y0, char *sym, 
 	ftnlen sym_len)
 {
     /* System generated locals */
@@ -46,28 +46,28 @@ struct {
 
     /* Local variables */
     static integer i__, j, k;
-    static real c1[2], c2[2];
+    static xc_float c1[2], c2[2];
     static integer j1, jn;
-    static real vcx, vcy, vsx, vsy;
+    static xc_float vcx, vcy, vsx, vsy;
     static integer mask[1];
-    extern /* Subroutine */ int pltcp2_(integer *, integer *, real *, real *, 
-	    real *, real *), mpmul2_(integer *, real *, real *, real *, real *
-	    , real *, real *, real *), mpmul4_(integer *, integer *, real *, 
-	    real *, real *, real *, real *, real *, real *, real *, real *);
+    extern /* Subroutine */ int pltcp2_(integer *, integer *, xc_float *, xc_float *, 
+	    xc_float *, xc_float *), mpmul2_(integer *, xc_float *, xc_float *, xc_float *, xc_float *
+	    , xc_float *, xc_float *, xc_float *), mpmul4_(integer *, integer *, xc_float *, 
+	    xc_float *, xc_float *, xc_float *, xc_float *, xc_float *, xc_float *, xc_float *, xc_float *);
     static logical noclip;
-    extern /* Subroutine */ int pltsbm_(integer *, integer *, real *, real *, 
-	    char *, ftnlen), pltvwp_(real *, real *, integer *, integer *, 
-	    real *, real *);
+    extern /* Subroutine */ int pltsbm_(integer *, integer *, xc_float *, xc_float *, 
+	    char *, ftnlen), pltvwp_(xc_float *, xc_float *, integer *, integer *, 
+	    xc_float *, xc_float *);
 
     /* Parameter adjustments */
     --y0;
     --x0;
 
     /* Function Body */
-    vcx = (map_1.vwport[0] + map_1.vwport[1]) / (float)2.;
-    vsx = (map_1.vwport[1] - map_1.vwport[0]) / (float)2.;
-    vcy = (map_1.vwport[2] + map_1.vwport[3]) / (float)2.;
-    vsy = (map_1.vwport[3] - map_1.vwport[2]) / (float)2.;
+    vcx = (map_1.vwport[0] + map_1.vwport[1]) / (xc_float)2.;
+    vsx = (map_1.vwport[1] - map_1.vwport[0]) / (xc_float)2.;
+    vcy = (map_1.vwport[2] + map_1.vwport[3]) / (xc_float)2.;
+    vsy = (map_1.vwport[3] - map_1.vwport[2]) / (xc_float)2.;
     noclip = map_1.ncplin == 0;
     j = 0;
 L2600:

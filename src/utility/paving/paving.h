@@ -36,7 +36,10 @@
 
 typedef int integer;
 typedef float real;
+//typedef double f2c_float; Double precision doesn't works well.
+//typedef double xc_float;
 typedef float f2c_float;
+typedef float xc_float;
 typedef int logical;
 typedef int ftnlen;
 typedef double doublereal;

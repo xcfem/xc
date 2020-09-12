@@ -20,11 +20,11 @@ extern "C" {
 /*    NTESS, the U.S. Government retains certain rights in this software. */
 
 /*    See packages/seacas/LICENSE for details */
-/* Subroutine */ int lupang_(integer *mxnd, integer *mln, real *xn, real *yn, 
-        real *zn, integer *lxk, integer *kxl, integer *nxl, integer *lxn, 
-        integer *nloop, real *angle, integer *lnodes, integer *nstart, 
-        integer *lll, real *xmin, real *xmax, real *ymin, real *ymax, real *
-        zmin, real *zmax, char *dev1, integer *kreg, logical *err, ftnlen 
+/* Subroutine */ int lupang_(integer *mxnd, integer *mln, xc_float *xn, xc_float *yn, 
+        xc_float *zn, integer *lxk, integer *kxl, integer *nxl, integer *lxn, 
+        integer *nloop, xc_float *angle, integer *lnodes, integer *nstart, 
+        integer *lll, xc_float *xmin, xc_float *xmax, xc_float *ymin, xc_float *ymax, xc_float *
+        zmin, xc_float *zmax, char *dev1, integer *kreg, logical *err, ftnlen 
         dev1_len)
 {
     /* System generated locals */
@@ -33,8 +33,8 @@ extern "C" {
     /* Local variables */
     static integer n0, n1, n2, kount;
     extern /* Subroutine */ int  getang_(integer *, 
-            integer *, real *, real *, integer *, integer *, integer *, 
-            integer *, integer *, integer *, integer *, integer *, real *, 
+            integer *, xc_float *, xc_float *, integer *, integer *, integer *, 
+            integer *, integer *, integer *, integer *, integer *, xc_float *, 
             logical *);
 
 /* *********************************************************************** */
@@ -65,7 +65,7 @@ L100:
     getang_(mxnd, mln, &xn[1], &yn[1], &lnodes[lnodes_offset], &lxk[5], &kxl[
             3], &nxl[3], &lxn[5], &n0, &n1, &n2, &angle[n1], err);
     if (*err) {
-        fprintf(stderr," ** ERROR IN LUPANG ** ");
+        fprintf(stderr," ** ERROR IN LUPANG ** \n");
         goto L110;
     }
     n1 = n2;
@@ -74,7 +74,7 @@ L100:
     }
     ++kount;
     if (kount > *nloop) {
-        fprintf(stderr," ** ERROR IN LUPANG ** ");
+        fprintf(stderr," ** ERROR IN LUPANG ** \n");
         *err = TRUE_;
         goto L110;
     }

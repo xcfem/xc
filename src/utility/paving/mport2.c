@@ -18,13 +18,13 @@ extern "C" {
 /* Common Block Declarations */
 
 struct {
-    real model[16]	/* was [4][4] */, view[16]	/* was [4][4] */, 
+    xc_float model[16]	/* was [4][4] */, view[16]	/* was [4][4] */, 
 	    proj[16]	/* was [4][4] */, cpnear, cpfar, vwport[4], mvp[16]	
 	    /* was [4][4] */, vp[16]	/* was [4][4] */, cpline[40]	/* 
 	    was [2][2][10] */, cpplan[60]	/* was [2][3][10] */, peye[3],
 	     plook[3], etwist;
     integer ncplin, ncplan;
-    real tmat1[16]	/* was [4][4] */, tmat2[16]	/* was [4][4] */, 
+    xc_float tmat1[16]	/* was [4][4] */, tmat2[16]	/* was [4][4] */, 
 	    tmat3[16]	/* was [4][4] */, tvec1[4], tvec2[4], tvec3[4], tvec4[
 	    4], tarr1[32], tarr2[32], tarr3[32], tarr4[32], tarr5[32], tarr6[
 	    32], tarr7[32], tarr8[32];
@@ -43,15 +43,15 @@ static integer c__4 = 4;
 
 /* See packages/seacas/LICENSE for details */
 /* ======================================================================= */
-logical mport2_(real *left, real *right, real *bottom, real *top)
+logical mport2_(xc_float *left, xc_float *right, xc_float *bottom, xc_float *top)
 {
     /* System generated locals */
     logical ret_val;
 
     /* Local variables */
     extern /* Subroutine */ int pltflu_(), siorpt_(char *, char *, integer *, 
-	    ftnlen, ftnlen), mxzero_(integer *, real *), mxmult_(integer *, 
-	    real *, real *, real *);
+	    ftnlen, ftnlen), mxzero_(integer *, xc_float *), mxmult_(integer *, 
+	    xc_float *, xc_float *, xc_float *);
 
     ret_val = FALSE_;
     if (*right == *left) {
@@ -68,10 +68,10 @@ e clipping rectangle as equal", &c__2, (ftnlen)6, (ftnlen)78);
     }
     ret_val = TRUE_;
     mxzero_(&c__4, map_1.proj);
-    map_1.proj[0] = (float)2. / (*right - *left);
-    map_1.proj[5] = (float)2. / (*top - *bottom);
-    map_1.proj[10] = (float)-1.;
-    map_1.proj[15] = (float)1.;
+    map_1.proj[0] = (xc_float)2. / (*right - *left);
+    map_1.proj[5] = (xc_float)2. / (*top - *bottom);
+    map_1.proj[10] = (xc_float)-1.;
+    map_1.proj[15] = (xc_float)1.;
     map_1.proj[3] = -(*right + *left) / (*right - *left);
     map_1.proj[7] = -(*top + *bottom) / (*top - *bottom);
     mxmult_(&c__4, map_1.view, map_1.proj, map_1.vp);

@@ -1,97 +1,97 @@
 // -*-c++-*-
-int bpinch_(integer *mxnd, integer *mln, integer *lnodes,real *xn, real *yn, integer *lxn, integer *nxl, real *angle, integer *n0, integer *n1, integer *n2, integer *nloop, real *toler1, real *toler2, logical *bok, logical *err);
+int bpinch_(integer *mxnd, integer *mln, integer *lnodes,xc_float *xn, xc_float *yn, integer *lxn, integer *nxl, xc_float *angle, integer *n0, integer *n1, integer *n2, integer *nloop, xc_float *toler1, xc_float *toler2, logical *bok, logical *err);
 
-int pltnor_(real *ybump, real *ychrsz);
+int pltnor_(xc_float *ybump, xc_float *ychrsz);
 
-int filsmo_(integer *mxnd, integer *mln, real *xn, real *yn,real *zn, integer *lxk, integer *kxl, integer *nxl, integer *lxn,integer *lll, integer *nnn, integer *nnn2, integer *lnodes, real *bnsize, integer *nloop, real *xmin, real *xmax, real *ymin, real *ymax, real *zmin, real *zmax, char *dev1, integer *kreg, ftnlen dev1_len);
+int filsmo_(integer *mxnd, integer *mln, xc_float *xn, xc_float *yn,xc_float *zn, integer *lxk, integer *kxl, integer *nxl, integer *lxn,integer *lll, integer *nnn, integer *nnn2, integer *lnodes, xc_float *bnsize, integer *nloop, xc_float *xmin, xc_float *xmax, xc_float *ymin, xc_float *ymax, xc_float *zmin, xc_float *zmax, char *dev1, integer *kreg, ftnlen dev1_len);
 
-int pltdrw_(real *x, real *y);
+int pltdrw_(xc_float *x, xc_float *y);
 
-int ndstat_(integer *node, integer *lxn, real *angle,integer *jstat);
+int ndstat_(integer *node, integer *lxn, xc_float *angle,integer *jstat);
 
-int match2_(integer *mxnd, integer *mln, real *xn, real *yn,integer *nxl, integer *lxn, integer *lnodes, real *angle, integer *n0,integer *n1, integer *n2, integer *n3, integer *n0test, integer *n1test, integer *n2test, integer *n3test, integer *i1, integer *i2,integer *j1, integer *j2, integer *kountl, logical *lmatch, integer *kount2, integer *node, real *u, real *w, integer *nloop, logical *pmatch, logical *err);
+int match2_(integer *mxnd, integer *mln, xc_float *xn, xc_float *yn,integer *nxl, integer *lxn, integer *lnodes, xc_float *angle, integer *n0,integer *n1, integer *n2, integer *n3, integer *n0test, integer *n1test, integer *n2test, integer *n3test, integer *i1, integer *i2,integer *j1, integer *j2, integer *kountl, logical *lmatch, integer *kount2, integer *node, xc_float *u, xc_float *w, integer *nloop, logical *pmatch, logical *err);
 
-int pcross_(integer *mxnd, integer *mxcorn, integer *mln,integer *mxloop, integer *maxprm, integer *nuid, real *xn, real *yn,real *zn, integer *lxk, integer *kxl, integer *nxl, integer *lxn,real *angle, integer *lnodes, real *bnsize, integer *linkpr, integer *kperim, integer *node, integer *node1, integer *node2, integer *kkkold, integer *lllold, integer *nnnold, integer *iavail, integer *navail, logical *done, real *xmin, real *xmax, real *ymin, real *ymax,real *zmin, real *zmax, char *dev1, integer *lll, integer *kkk,integer *nnn, integer *lcorn, integer *ncorn, integer *nloop, integer*nextn1, integer *kloop, logical *graph, logical *video, integer *kreg, logical *noroom, logical *err, ftnlen dev1_len);
+int pcross_(integer *mxnd, integer *mxcorn, integer *mln,integer *mxloop, integer *maxprm, integer *nuid, xc_float *xn, xc_float *yn,xc_float *zn, integer *lxk, integer *kxl, integer *nxl, integer *lxn,xc_float *angle, integer *lnodes, xc_float *bnsize, integer *linkpr, integer *kperim, integer *node, integer *node1, integer *node2, integer *kkkold, integer *lllold, integer *nnnold, integer *iavail, integer *navail, logical *done, xc_float *xmin, xc_float *xmax, xc_float *ymin, xc_float *ymax,xc_float *zmin, xc_float *zmax, char *dev1, integer *lll, integer *kkk,integer *nnn, integer *lcorn, integer *ncorn, integer *nloop, integer*nextn1, integer *kloop, logical *graph, logical *video, integer *kreg, logical *noroom, logical *err, ftnlen dev1_len);
 
 int pltsvv_();
 
-int close2_(integer *mxnd, integer *mln, integer *nuid, real*xn, real *yn, real *zn, integer *lxk, integer *kxl, integer *nxl,integer *lxn, integer *lnodes, integer *iavail, integer *navail,integer *nnn, integer *lll, integer *n1, real *xmin, real *xmax, real*ymin, real *ymax, real *zmin, real *zmax, logical *pgraph, logical *video, char *dev1, integer *kreg, logical *noroom, logical *err,ftnlen dev1_len);
+int close2_(integer *mxnd, integer *mln, integer *nuid, xc_float*xn, xc_float *yn, xc_float *zn, integer *lxk, integer *kxl, integer *nxl,integer *lxn, integer *lnodes, integer *iavail, integer *navail,integer *nnn, integer *lll, integer *n1, xc_float *xmin, xc_float *xmax, xc_float*ymin, xc_float *ymax, xc_float *zmin, xc_float *zmax, logical *pgraph, logical *video, char *dev1, integer *kreg, logical *noroom, logical *err,ftnlen dev1_len);
 
-int tridel_(integer *mxnd, integer *mln, real *xn, real *yn,real *zn, integer *nuid, integer *lxk, integer *kxl, integer *nxl,integer *lxn, integer *nnn, integer *lll, integer *kkk, integer *navail, integer *iavail, real *angle, integer *lnodes, real *bnsize,integer *nloop, char *dev1, integer *kreg, real *xmin, real *xmax,real *ymin, real *ymax, real *zmin, real *zmax, logical *graph,logical *video, logical *noroom, logical *err, ftnlen dev1_len);
+int tridel_(integer *mxnd, integer *mln, xc_float *xn, xc_float *yn,xc_float *zn, integer *nuid, integer *lxk, integer *kxl, integer *nxl,integer *lxn, integer *nnn, integer *lll, integer *kkk, integer *navail, integer *iavail, xc_float *angle, integer *lnodes, xc_float *bnsize,integer *nloop, char *dev1, integer *kreg, xc_float *xmin, xc_float *xmax,xc_float *ymin, xc_float *ymax, xc_float *zmin, xc_float *zmax, logical *graph,logical *video, logical *noroom, logical *err, ftnlen dev1_len);
 
-int qual3_(integer *mxnd, integer *mxcorn, integer *mln,integer *ncorn, integer *lcorn, integer *lnodes, integer *icomb, real*angle, integer *lxn, integer *itest, integer *ltest, real *qual,logical *posbl3, logical *posbl4, logical *err);
+int qual3_(integer *mxnd, integer *mxcorn, integer *mln,integer *ncorn, integer *lcorn, integer *lnodes, integer *icomb, xc_float*angle, integer *lxn, integer *itest, integer *ltest, xc_float *qual,logical *posbl3, logical *posbl4, logical *err);
 
-int mpmul4_(integer *n, integer *mask, real *arr1, real *arr2, real *arr3, real *arr4, real *mat, real *res1, real *res2, real*res3, real *res4);
+int mpmul4_(integer *n, integer *mask, xc_float *arr1, xc_float *arr2, xc_float *arr3, xc_float *arr4, xc_float *mat, xc_float *res1, xc_float *res2, xc_float*res3, xc_float *res4);
 
-int getrow_(integer *mxnd, integer *mxcorn, integer *mxpick,integer *mln, integer *nuid, integer *lxk, integer *kxl, integer *nxl,integer *lxn, integer *lnodes, integer *ncorn, integer *lcorn, real *bnsize, real *angle, real *xn, real *yn, real *zn, integer *icomb,integer *itype, integer *nloop, integer *nbegin, integer *nend,integer *iavail, integer *navail, integer *lll, integer *kkk, integer*nnn, logical *graph, logical *video, real *xmin, real *xmax, real *ymin, real *ymax, real *zmin, real *zmax, char *dev1, integer *kreg,logical *sizeit, integer *nextpr, logical *noroom, logical *err,ftnlen dev1_len);
+int getrow_(integer *mxnd, integer *mxcorn, integer *mxpick,integer *mln, integer *nuid, integer *lxk, integer *kxl, integer *nxl,integer *lxn, integer *lnodes, integer *ncorn, integer *lcorn, xc_float *bnsize, xc_float *angle, xc_float *xn, xc_float *yn, xc_float *zn, integer *icomb,integer *itype, integer *nloop, integer *nbegin, integer *nend,integer *iavail, integer *navail, integer *lll, integer *kkk, integer*nnn, logical *graph, logical *video, xc_float *xmin, xc_float *xmax, xc_float *ymin, xc_float *ymax, xc_float *zmin, xc_float *zmax, char *dev1, integer *kreg,logical *sizeit, integer *nextpr, logical *noroom, logical *err,ftnlen dev1_len);
 
-int addwdg_(integer *mxnd, integer *mln, integer *nuid, real*xn, real *yn, real *zn, integer *lxk, integer *kxl, integer *nxl,integer *lxn, integer *lnodes, real *angle, real *bnsize, integer *nloop, integer *iavail, integer *navail, integer *lll, integer *kkk,integer *nnn, integer *lllold, integer *nnnold, real *tang, integer *kang, integer *nstart, integer *nend, real *xmin, real *xmax, real *ymin, real *ymax, real *zmin, real *zmax, logical *graph, logical *video, char *dev1, integer *kreg, logical *noroom, logical *err,ftnlen dev1_len);
+int addwdg_(integer *mxnd, integer *mln, integer *nuid, xc_float*xn, xc_float *yn, xc_float *zn, integer *lxk, integer *kxl, integer *nxl,integer *lxn, integer *lnodes, xc_float *angle, xc_float *bnsize, integer *nloop, integer *iavail, integer *navail, integer *lll, integer *kkk,integer *nnn, integer *lllold, integer *nnnold, xc_float *tang, integer *kang, integer *nstart, integer *nend, xc_float *xmin, xc_float *xmax, xc_float *ymin, xc_float *ymax, xc_float *zmin, xc_float *zmax, logical *graph, logical *video, char *dev1, integer *kreg, logical *noroom, logical *err,ftnlen dev1_len);
 
-int pltcv2_(integer *n, integer *mask, real *px, real *py,real *qx, real *qy, real *ppx, real *ppy, real *qqx, real *qqy, real *c1, real *c2);
+int pltcv2_(integer *n, integer *mask, xc_float *px, xc_float *py,xc_float *qx, xc_float *qy, xc_float *ppx, xc_float *ppy, xc_float *qqx, xc_float *qqy, xc_float *c1, xc_float *c2);
 
-int intsct_(real *x1, real *y1, real *x2, real *y2, real *x3,real *y3, real *x4, real *y4, real *u, real *w, logical *lcross);
+int intsct_(xc_float *x1, xc_float *y1, xc_float *x2, xc_float *y2, xc_float *x3,xc_float *y3, xc_float *x4, xc_float *y4, xc_float *u, xc_float *w, logical *lcross);
 
-int eqlang_(integer *mxnd, real *xn, real *yn, integer *lxn,integer *node, integer *n0, integer *n2, integer *nfrom, real *dist,real *vro, real *xdel, real *ydel);
+int eqlang_(integer *mxnd, xc_float *xn, xc_float *yn, integer *lxn,integer *node, integer *n0, integer *n2, integer *nfrom, xc_float *dist,xc_float *vro, xc_float *xdel, xc_float *ydel);
 
 int fndlnk_(integer *mxnd, integer *lxk, integer *nxl,integer *k, integer *n1, integer *n2, integer *l, logical *err);
 
 int chrtrm_(char *line, integer *l, ftnlen line_len);
 
-int getime_(real *time);
+int getime_(xc_float *time);
 
 int setn02_(integer *mxnd, integer *nxl, integer *lxk,integer *kxl, integer *line, integer *nend, integer *node, integer *n0, integer *n2);
 
-int pltsup_(real *ybump, real *ychrsz);
+int pltsup_(xc_float *ybump, xc_float *ychrsz);
 
-int periml_(integer *nbnode, integer *mxnd, integer *nper,integer *istart, integer *mln, real *xn, real *yn, real *zn, integer *lxk, integer *kxl, integer *nxl, integer *lxn, real *angle, real *bnsize, integer *lnodes, integer *lperim, integer *lll, integer *lllold, real *xmin, real *xmax, real *ymin, real *ymax, real *zmin,real *zmax, char *dev1, integer *kreg, logical *err, ftnlen dev1_len);
+int periml_(integer *nbnode, integer *mxnd, integer *nper,integer *istart, integer *mln, xc_float *xn, xc_float *yn, xc_float *zn, integer *lxk, integer *kxl, integer *nxl, integer *lxn, xc_float *angle, xc_float *bnsize, integer *lnodes, integer *lperim, integer *lll, integer *lllold, xc_float *xmin, xc_float *xmax, xc_float *ymin, xc_float *ymax, xc_float *zmin,xc_float *zmax, char *dev1, integer *kreg, logical *err, ftnlen dev1_len);
 
 int pltbel_();
 
-int longel_(integer *mxnd, integer *mln, integer *lnodes,real *xn, real *yn, integer *nuid, integer *lxk, integer *kxl,integer *nxl, integer *lxn, integer *nnn, integer *navail, integer *iavail, integer *node, integer *kelem, real *ang, real *toler,integer *n1, integer *n2, integer *kreg, real *xmin, real *xmax, real*ymin, real *ymax, integer *kkk, integer *lll, logical *done, logical*graph, logical *video, logical *noroom, logical *err, integer *kkkadd);
+int longel_(integer *mxnd, integer *mln, integer *lnodes,xc_float *xn, xc_float *yn, integer *nuid, integer *lxk, integer *kxl,integer *nxl, integer *lxn, integer *nnn, integer *navail, integer *iavail, integer *node, integer *kelem, xc_float *ang, xc_float *toler,integer *n1, integer *n2, integer *kreg, xc_float *xmin, xc_float *xmax, xc_float*ymin, xc_float *ymax, integer *kkk, integer *lll, logical *done, logical*graph, logical *video, logical *noroom, logical *err, integer *kkkadd);
 
-int mpd2vc_(integer *n, real *x0, real *y0, real *x1, real *y1);
+int mpd2vc_(integer *n, xc_float *x0, xc_float *y0, xc_float *x1, xc_float *y1);
 
 int pltrim_(char *line, integer *l, ftnlen line_len);
 
-int extnd3_(integer *mxnd, real *xn, real *yn, real *angle,integer *n1, integer *n2, integer *n3, real *x, real *y, real *dist);
+int extnd3_(integer *mxnd, xc_float *xn, xc_float *yn, xc_float *angle,integer *n1, integer *n2, integer *n3, xc_float *x, xc_float *y, xc_float *dist);
 
 int siorpt_(char *module, char *mess, integer *disp, ftnlen module_len, ftnlen mess_len);
 
 int setlop_(integer *mxnd, integer *mln, integer *nloop,integer *lnodes, integer *node, integer *ivalue, logical *err);
 
-int lupang_(integer *mxnd, integer *mln, real *xn, real *yn,real *zn, integer *lxk, integer *kxl, integer *nxl, integer *lxn,integer *nloop, real *angle, integer *lnodes, integer *nstart,integer *lll, real *xmin, real *xmax, real *ymin, real *ymax, real *zmin, real *zmax, char *dev1, integer *kreg, logical *err, ftnlen dev1_len);
+int lupang_(integer *mxnd, integer *mln, xc_float *xn, xc_float *yn,xc_float *zn, integer *lxk, integer *kxl, integer *nxl, integer *lxn,integer *nloop, xc_float *angle, integer *lnodes, integer *nstart,integer *lll, xc_float *xmin, xc_float *xmax, xc_float *ymin, xc_float *ymax, xc_float *zmin, xc_float *zmax, char *dev1, integer *kreg, logical *err, ftnlen dev1_len);
 
-int invert_fq__(integer *mxnd, integer *mln, real *xn, real *yn, real *zn, integer *lxk, integer *kxl, integer *nxl, integer *lxn,integer *lll, integer *lnodes, real *xmin, real *xmax, real *ymin,real *ymax, real *zmin, real *zmax, char *dev1, integer *kreg,integer *node, real *xdel, real *ydel, ftnlen dev1_len);
+int invert_fq__(integer *mxnd, integer *mln, xc_float *xn, xc_float *yn, xc_float *zn, integer *lxk, integer *kxl, integer *nxl, integer *lxn,integer *lll, integer *lnodes, xc_float *xmin, xc_float *xmax, xc_float *ymin,xc_float *ymax, xc_float *zmin, xc_float *zmax, char *dev1, integer *kreg,integer *node, xc_float *xdel, xc_float *ydel, ftnlen dev1_len);
 
-int undelm_(integer *mxnd, integer *mln, integer *lnodes,real *xn, real *yn, integer *nuid, integer *lxk, integer *kxl,integer *nxl, integer *lxn, integer *nnn, integer *lll, integer *kkk,integer *navail, integer *iavail, integer *n0, integer *n1, integer *n2, integer *n3, integer *l1, integer *l2, integer *l3, integer *k1,integer *k2, logical *noroom, logical *err, logical *graph, logical *video);
+int undelm_(integer *mxnd, integer *mln, integer *lnodes,xc_float *xn, xc_float *yn, integer *nuid, integer *lxk, integer *kxl,integer *nxl, integer *lxn, integer *nnn, integer *lll, integer *kkk,integer *navail, integer *iavail, integer *n0, integer *n1, integer *n2, integer *n3, integer *l1, integer *l2, integer *l3, integer *k1,integer *k2, logical *noroom, logical *err, logical *graph, logical *video);
 
-int mpmul2_(integer *n, real *x0, real *y0, real *mat, real *res1, real *res2, real *res3, real *res4);
+int mpmul2_(integer *n, xc_float *x0, xc_float *y0, xc_float *mat, xc_float *res1, xc_float *res2, xc_float *res3, xc_float *res4);
 
 int node12_(integer *mxnd, integer *mln, integer *lnodes,integer *i1, integer *i2, integer *nloop1, integer *nloop2, integer *node1, integer *node2, integer *node, logical *err);
 
 int getdum_(integer *i__, char *dummy, integer *len, ftnlen dummy_len);
 
-int pltvwp_(real *pll, real *pur, integer *n, integer *mask,real *px, real *py);
+int pltvwp_(xc_float *pll, xc_float *pur, integer *n, integer *mask,xc_float *px, xc_float *py);
 
 int chric_(integer *jin, char *ds, integer *nd, ftnlen ds_len);
 
 int pltesc_(char *text, integer *i__, char *esc, ftnlen text_len, ftnlen esc_len);
 
-int pltp2d_(real *x, real *y, real *xn, real *yn);
+int pltp2d_(xc_float *x, xc_float *y, xc_float *xn, xc_float *yn);
 
-int addnod_(integer *mxnd, integer *mln, real *xn, real *yn,integer *lxk, integer *kxl, integer *nxl, integer *lxn, real *angle,real *bnsize, integer *lnodes, real *xnew, real *ynew, real *dist,integer *nnn, integer *kkk, integer *lll, integer *n0, integer *n1,integer *n2, logical *ambig, integer *lambig, logical *sizeit,logical *err, logical *noroom, real *xnold, real *ynold, integer *nxkold, integer *linkeg, integer *listeg, real *bmesur, integer *mlink, integer *npnold, integer *npeold, integer *nnxk, real *rexmin, real *rexmax, real *reymin, real *reymax, integer *idivis, real *sizmin, real *emax, real *emin);
+int addnod_(integer *mxnd, integer *mln, xc_float *xn, xc_float *yn,integer *lxk, integer *kxl, integer *nxl, integer *lxn, xc_float *angle,xc_float *bnsize, integer *lnodes, xc_float *xnew, xc_float *ynew, xc_float *dist,integer *nnn, integer *kkk, integer *lll, integer *n0, integer *n1,integer *n2, logical *ambig, integer *lambig, logical *sizeit,logical *err, logical *noroom, xc_float *xnold, xc_float *ynold, integer *nxkold, integer *linkeg, integer *listeg, xc_float *bmesur, integer *mlink, integer *npnold, integer *npeold, integer *nnxk, xc_float *rexmin, xc_float *rexmax, xc_float *reymin, xc_float *reymax, integer *idivis, xc_float *sizmin, xc_float *emax, xc_float *emin);
 
-int add2cn_(integer *mxnd, integer *mln, real *xn, real *yn,integer *nuid, integer *lxk, integer *kxl, integer *nxl, integer *lxn,real *angle, real *bnsize, integer *lnodes, integer *nnn, integer *kkk, integer *lll, integer *nnnold, integer *lllold, integer *nloop,integer *i1, integer *iavail, integer *navail, logical *graph,logical *video, logical *sizeit, logical *noroom, logical *err, real *xnold, real *ynold, integer *nxkold, integer *linkeg, integer *listeg,real *bmesur, integer *mlink, integer *npnold, integer *npeold,integer *nnxk, real *rexmin, real *rexmax, real *reymin,real *reymax, integer *idivis, real *sizmin, real *emax, real *emin);
+int add2cn_(integer *mxnd, integer *mln, xc_float *xn, xc_float *yn,integer *nuid, integer *lxk, integer *kxl, integer *nxl, integer *lxn,xc_float *angle, xc_float *bnsize, integer *lnodes, integer *nnn, integer *kkk, integer *lll, integer *nnnold, integer *lllold, integer *nloop,integer *i1, integer *iavail, integer *navail, logical *graph,logical *video, logical *sizeit, logical *noroom, logical *err, xc_float *xnold, xc_float *ynold, integer *nxkold, integer *linkeg, integer *listeg,xc_float *bmesur, integer *mlink, integer *npnold, integer *npeold,integer *nnxk, xc_float *rexmin, xc_float *rexmax, xc_float *reymin,xc_float *reymax, integer *idivis, xc_float *sizmin, xc_float *emax, xc_float *emin);
 
-int wedge_(integer *mxnd, integer *mln, integer *nuid,integer *lxk, integer *kxl, integer *nxl, integer *lxn, real *xn,real *yn, integer *lnodes, real *bnsize, integer *iavail, integer *navail, integer *lll, integer *kkk, integer *nnn, integer *lllold,integer *nnnold, integer *n1, integer *n6, integer *nloop, logical *pwedge, logical *graph, logical *video, logical *noroom, logical *err);
+int wedge_(integer *mxnd, integer *mln, integer *nuid,integer *lxk, integer *kxl, integer *nxl, integer *lxn, xc_float *xn,xc_float *yn, integer *lnodes, xc_float *bnsize, integer *iavail, integer *navail, integer *lll, integer *kkk, integer *nnn, integer *lllold,integer *nnnold, integer *n1, integer *n6, integer *nloop, logical *pwedge, logical *graph, logical *video, logical *noroom, logical *err);
 
-int pltvwv_(real *pll, real *pur, integer *n, integer *mask,real *px, real *py, real *qx, real *qy);
+int pltvwv_(xc_float *pll, xc_float *pur, integer *n, integer *mask,xc_float *px, xc_float *py, xc_float *qx, xc_float *qy);
 
-int trifix_(integer *mxnd, integer *mln, real *xn, real *yn,real *zn, integer *nuid, integer *lxk, integer *kxl, integer *nxl,integer *lxn, integer *nnn, integer *lll, integer *kkk, integer *navail, integer *iavail, real *angle, integer *lnodes, real *bnsize,integer *nloop, char *dev1, integer *kreg, real *xmin, real *xmax,real *ymin, real *ymax, real *zmin, real *zmaxz, logical *graph,logical *video, logical *noroom, logical *err, ftnlen dev1_len);
+int trifix_(integer *mxnd, integer *mln, xc_float *xn, xc_float *yn,xc_float *zn, integer *nuid, integer *lxk, integer *kxl, integer *nxl,integer *lxn, integer *nnn, integer *lll, integer *kkk, integer *navail, integer *iavail, xc_float *angle, integer *lnodes, xc_float *bnsize,integer *nloop, char *dev1, integer *kreg, xc_float *xmin, xc_float *xmax,xc_float *ymin, xc_float *ymax, xc_float *zmin, xc_float *zmaxz, logical *graph,logical *video, logical *noroom, logical *err, ftnlen dev1_len);
 
 int nxkord_(integer *nodes, integer *n1);
 
-int pltcp2_(integer *n, integer *mask, real *px, real *py,real *c1, real *c2);
+int pltcp2_(integer *n, integer *mask, xc_float *px, xc_float *py,xc_float *c1, xc_float *c2);
 
 int sflush_();
 
@@ -99,27 +99,27 @@ int gkxn_(integer *mxnd, integer *kxl, integer *lxn, integer*n, integer *ks, int
 
 int grsnap_(char *cmd, integer *indev, ftnlen cmd_len);
 
-int pltsbm_(integer *n, integer *mask, real *x, real *y,char *symb, ftnlen symb_len);
+int pltsbm_(integer *n, integer *mask, xc_float *x, xc_float *y,char *symb, ftnlen symb_len);
 
 int addlxn_(integer *mxnd, integer *lxn, integer *nuid,integer *navail, integer *iavail, integer *node, integer *line,integer *nnn, logical *err, logical *noroom);
 
-int add1cn_(integer *mxnd, integer *mln, real *xn, real *yn,integer *nuid, integer *lxk, integer *kxl, integer *nxl, integer *lxn,real *angle, real *bnsize, integer *lnodes, integer *nnn, integer *kkk, integer *lll, integer *nnnold, integer *lllold, integer *nloop,real *xnew, real *ynew, integer *i1, integer *iavail, integer *navail,logical *graph, logical *video, logical *sizeit, logical *noroom,logical *err, real *xnold, real *ynold, integer *nxkold, integer *linkeg, integer *listeg, real *bmesur, integer *mlink, integer *npnold, integer *npeold, integer *nnxk, real *rexmin,real *rexmax, real *reymin, real *reymax, integer *idivis, real *sizmin, real *emax, real *emin);
+int add1cn_(integer *mxnd, integer *mln, xc_float *xn, xc_float *yn,integer *nuid, integer *lxk, integer *kxl, integer *nxl, integer *lxn,xc_float *angle, xc_float *bnsize, integer *lnodes, integer *nnn, integer *kkk, integer *lll, integer *nnnold, integer *lllold, integer *nloop,xc_float *xnew, xc_float *ynew, integer *i1, integer *iavail, integer *navail,logical *graph, logical *video, logical *sizeit, logical *noroom,logical *err, xc_float *xnold, xc_float *ynold, integer *nxkold, integer *linkeg, integer *listeg, xc_float *bmesur, integer *mlink, integer *npnold, integer *npeold, integer *nnxk, xc_float *rexmin,xc_float *rexmax, xc_float *reymin, xc_float *reymax, integer *idivis, xc_float *sizmin, xc_float *emax, xc_float *emin);
 
 int lcolor_(char *color, ftnlen color_len);
 
-int ch3to4_(integer *mxnd, integer *mxcorn, integer *mln,integer *ncorn, integer *lcorn, integer *lnodes, integer *icomb, real*angle, integer *itest, integer *ltest, real *qual, logical *posbl4,integer *ichang);
+int ch3to4_(integer *mxnd, integer *mxcorn, integer *mln,integer *ncorn, integer *lcorn, integer *lnodes, integer *icomb, xc_float*angle, integer *itest, integer *ltest, xc_float *qual, logical *posbl4,integer *ichang);
 
 int close4_(integer *mxnd, integer *mln, integer *lxk,integer *kxl, integer *nxl, integer *lxn, integer *lnodes, integer *n0, integer *n1, integer *n2, integer *n3, integer *kkk, logical *err);
 
-int getsiz_(real *xnold, real *ynold, integer *nxkold,integer *linkeg, integer *listeg, real *bmesur, integer *mlink,integer *npnold, integer *npeold, integer *nnxk, real *rexmin, real *rexmax, real *reymin, real *reymax, integer *idivis,real *sizmin, real *emax, real *emin, real *x, real *y, real *size);
+int getsiz_(xc_float *xnold, xc_float *ynold, integer *nxkold,integer *linkeg, integer *listeg, xc_float *bmesur, integer *mlink,integer *npnold, integer *npeold, integer *nnxk, xc_float *rexmin, xc_float *rexmax, xc_float *reymin, xc_float *reymax, integer *idivis,xc_float *sizmin, xc_float *emax, xc_float *emin, xc_float *x, xc_float *y, xc_float *size);
 
-int b4bad_(integer *mxnd, integer *mln, real *xn, real *yn,integer *lxk, integer *kxl, integer *nxl, integer *lxn, integer *lnodes, real *angle, integer *i1, integer *i2, integer *j1, integer *j2, integer *nloop, integer *kountl, logical *bok, logical *err);
+int b4bad_(integer *mxnd, integer *mln, xc_float *xn, xc_float *yn,integer *lxk, integer *kxl, integer *nxl, integer *lxn, integer *lnodes, xc_float *angle, integer *i1, integer *i2, integer *j1, integer *j2, integer *nloop, integer *kountl, logical *bok, logical *err);
 
-int chrrvc_(real *buff, char *txt, integer *l, ftnlen txt_len);
+int chrrvc_(xc_float *buff, char *txt, integer *l, ftnlen txt_len);
 
-int mxzero_(integer *n, real *mat);
+int mxzero_(integer *n, xc_float *mat);
 
-int rowsmo_(integer *mxnd, integer *mln, real *xn, real *yn,real *zn, integer *lxk, integer *kxl, integer *nxl, integer *lxn,integer *nnn, real *wfac, real *wfac2, integer *nit, real *eps, real *ro, integer *nnn2, integer *lnodes, real *bnsize, integer *lll,logical *graph, real *xmin, real *xmax, real *ymin, real *ymax, real *zmin, real *zmax, char *dev1, integer *kreg, ftnlen dev1_len);
+int rowsmo_(integer *mxnd, integer *mln, xc_float *xn, xc_float *yn,xc_float *zn, integer *lxk, integer *kxl, integer *nxl, integer *lxn,integer *nnn, xc_float *wfac, xc_float *wfac2, integer *nit, xc_float *eps, xc_float *ro, integer *nnn2, integer *lnodes, xc_float *bnsize, integer *lll,logical *graph, xc_float *xmin, xc_float *xmax, xc_float *ymin, xc_float *ymax, xc_float *zmin, xc_float *zmax, char *dev1, integer *kreg, ftnlen dev1_len);
 
 int pltfnt_(char *filenm, ftnlen filenm_len);
 
@@ -129,21 +129,21 @@ int putlxn_(integer *mxnd, integer *nl, integer *lxn,integer *nuid, integer *nod
 
 int cpudac_(char *ds, ftnlen ds_len);
 
-int connod_(integer *mxnd, integer *mln, real *xn, real *yn,integer *nuid, integer *lxk, integer *kxl, integer *nxl, integer *lxn,real *angle, integer *lnodes, integer *nnn, integer *kkk, integer *lll, integer *nnnold, integer *lllold, integer *n0, integer *n1,integer *n2, integer *node, integer *i__, integer *nloop, integer *iavail, integer *navail, logical *graph, logical *video, logical *noroom, logical *err);
+int connod_(integer *mxnd, integer *mln, xc_float *xn, xc_float *yn,integer *nuid, integer *lxk, integer *kxl, integer *nxl, integer *lxn,xc_float *angle, integer *lnodes, integer *nnn, integer *kkk, integer *lll, integer *nnnold, integer *lllold, integer *n0, integer *n1,integer *n2, integer *node, integer *i__, integer *nloop, integer *iavail, integer *navail, logical *graph, logical *video, logical *noroom, logical *err);
 
-int extnd1_(integer *mxnd, real *xn, real *yn, real *angle,integer *n1, integer *n2, integer *n3, real *x, real *y, real *dist);
+int extnd1_(integer *mxnd, xc_float *xn, xc_float *yn, xc_float *angle,integer *n1, integer *n2, integer *n3, xc_float *x, xc_float *y, xc_float *dist);
 
 int pltrsd_();
 
-int pltxts_(real *x, real *y, char *text, ftnlen text_len);
+int pltxts_(xc_float *x, xc_float *y, char *text, ftnlen text_len);
 
 int snapit_(integer *i__);
 
-int mnorm_(integer *mxnd, real *xn, real *yn, integer *nxl,integer *lll, real *stdlen);
+int mnorm_(integer *mxnd, xc_float *xn, xc_float *yn, integer *nxl,integer *lll, xc_float *stdlen);
 
-int rplotl_(integer *mxnd, real *xn, real *yn, real *zn,integer *nxl, real *xmin, real *xmax, real *ymin, real *ymax, real *zmin, real *zmax, integer *lll, char *dev1, integer *kreg, ftnlen dev1_len);
+int rplotl_(integer *mxnd, xc_float *xn, xc_float *yn, xc_float *zn,integer *nxl, xc_float *xmin, xc_float *xmax, xc_float *ymin, xc_float *ymax, xc_float *zmin, xc_float *zmax, integer *lll, char *dev1, integer *kreg, ftnlen dev1_len);
 
-int add2nd_(integer *mxnd, integer *mln, real *xn, real *yn,integer *lxk, integer *kxl, integer *nxl, integer *lxn, real *bnsize,integer *lnodes, real *x1, real *y1, real *x2, real *y2, real *dist1,real *dist2, integer *nnn, integer *lll, integer *kkk, integer *n1,integer *n2, integer *nloop, logical *sizeit, logical *err, logical *noroom, real *xnold, real *ynold, integer *nxkold, integer *linkeg,integer *listeg, real *bmesur, integer *mlink, integer *npnold,integer *npeold, integer *nnxk, real *rexmin, real *rexmax, real *reymin, real *reymax, integer *idivis, real *sizmin,real *emax, real *emin);
+int add2nd_(integer *mxnd, integer *mln, xc_float *xn, xc_float *yn,integer *lxk, integer *kxl, integer *nxl, integer *lxn, xc_float *bnsize,integer *lnodes, xc_float *x1, xc_float *y1, xc_float *x2, xc_float *y2, xc_float *dist1,xc_float *dist2, integer *nnn, integer *lll, integer *kkk, integer *n1,integer *n2, integer *nloop, logical *sizeit, logical *err, logical *noroom, xc_float *xnold, xc_float *ynold, integer *nxkold, integer *linkeg,integer *listeg, xc_float *bmesur, integer *mlink, integer *npnold,integer *npeold, integer *nnxk, xc_float *rexmin, xc_float *rexmax, xc_float *reymin, xc_float *reymax, integer *idivis, xc_float *sizmin,xc_float *emax, xc_float *emin);
 
 int getlxn_(integer *mxnd, integer *lxn, integer *node,integer *lines, integer *nl, logical *err);
 
@@ -153,79 +153,79 @@ int sew2_(integer *mxnd, integer *mln, integer *nuid,integer *lxk, integer *kxl,
 
 int pltflu_();
 
-int pltmov_(real *x, real *y);
+int pltmov_(xc_float *x, xc_float *y);
 
-int add2el_(integer *mxnd, integer *mln, real *xn, real *yn,integer *nuid, integer *lxk, integer *kxl, integer *nxl, integer *lxn,real *angle, integer *lnodes, integer *nnn, integer *kkk, integer *lll, integer *nnnold, integer *lllold, integer *nloop, integer *i1,integer *i4, integer *iavail, integer *navail, logical *graph,logical *video, logical *noroom, logical *err);
+int add2el_(integer *mxnd, integer *mln, xc_float *xn, xc_float *yn,integer *nuid, integer *lxk, integer *kxl, integer *nxl, integer *lxn,xc_float *angle, integer *lnodes, integer *nnn, integer *kkk, integer *lll, integer *nnnold, integer *lllold, integer *nloop, integer *i1,integer *i4, integer *iavail, integer *navail, logical *graph,logical *video, logical *noroom, logical *err);
 
 int getfrm_(integer *mxnd, integer *lines, integer *nl,integer *nxl, integer *node, integer *n0, integer *n2, integer *nfrom);
 
 int cntcrn_(integer *mxnd, integer *mxcorn, integer *mln,integer *lnodes, integer *lcorn, integer *ncorn, integer *nloop,integer *n1, logical *err);
 
-int invmap_(real *x0, real *y0, real *x1, real *y1, real *x2,real *y2, real *x3, real *y3, real *x4, real *y4, real *sxi, real *seta, logical *inside);
+int invmap_(xc_float *x0, xc_float *y0, xc_float *x1, xc_float *y1, xc_float *x2,xc_float *y2, xc_float *x3, xc_float *y3, xc_float *x4, xc_float *y4, xc_float *sxi, xc_float *seta, logical *inside);
 
-int colaps_(integer *mxnd, integer *mxcorn, integer *mln,integer *mxloop, integer *nuid, real *xn, real *yn, real *zn, integer*lxk, integer *kxl, integer *nxl, integer *lxn, real *angle, integer *lnodes, real *bnsize, integer *node, integer *kkkold, integer *lllold,integer *nnnold, integer *iavail, integer *navail, logical *done,real *xmin, real *xmax, real *ymin, real *ymax, real *zmin, real *zmax, char *dev1, integer *lll, integer *kkk, integer *nnn, integer *lcorn, integer *ncorn, integer *nloop, integer *nextn1, integer *kloop, logical *graph, logical *video, integer *kreg, logical *noroom,logical *err, ftnlen dev1_len);
+int colaps_(integer *mxnd, integer *mxcorn, integer *mln,integer *mxloop, integer *nuid, xc_float *xn, xc_float *yn, xc_float *zn, integer*lxk, integer *kxl, integer *nxl, integer *lxn, xc_float *angle, integer *lnodes, xc_float *bnsize, integer *node, integer *kkkold, integer *lllold,integer *nnnold, integer *iavail, integer *navail, logical *done,xc_float *xmin, xc_float *xmax, xc_float *ymin, xc_float *ymax, xc_float *zmin, xc_float *zmax, char *dev1, integer *lll, integer *kkk, integer *nnn, integer *lcorn, integer *ncorn, integer *nloop, integer *nextn1, integer *kloop, logical *graph, logical *video, integer *kreg, logical *noroom,logical *err, ftnlen dev1_len);
 
 int dellxn_(integer *mxnd, integer *lxn, integer *nuid,integer *navail, integer *iavail, integer *node, integer *line,integer *nnn, logical *err, logical *noroom);
 
-int adjrow_(integer *mxnd, integer *mln, integer *nuid, real*xn, real *yn, real *zn, integer *lxk, integer *kxl, integer *nxl,integer *lxn, real *angle, real *bnsize, integer *lnodes, integer *nloop, integer *iavail, integer *navail, real *xmin, real *xmax, real*ymin, real *ymax, real *zmin, real *zmax, char *dev1, integer *lll,integer *kkk, integer *nnn, integer *lllold, integer *nnnold, integer*node, integer *nadj1, integer *nadj2, integer *nnn2, logical *graph,logical *video, integer *kreg, real *defsiz, logical *adjted, logical*noroom, logical *err, ftnlen dev1_len);
+int adjrow_(integer *mxnd, integer *mln, integer *nuid, xc_float*xn, xc_float *yn, xc_float *zn, integer *lxk, integer *kxl, integer *nxl,integer *lxn, xc_float *angle, xc_float *bnsize, integer *lnodes, integer *nloop, integer *iavail, integer *navail, xc_float *xmin, xc_float *xmax, xc_float*ymin, xc_float *ymax, xc_float *zmin, xc_float *zmax, char *dev1, integer *lll,integer *kkk, integer *nnn, integer *lllold, integer *nnnold, integer*node, integer *nadj1, integer *nadj2, integer *nnn2, logical *graph,logical *video, integer *kreg, xc_float *defsiz, logical *adjted, logical*noroom, logical *err, ftnlen dev1_len);
 
 int chrup_(char *line1, char *line2, ftnlen line1_len,ftnlen line2_len);
 
-int d2node_(integer *mxnd, real *xn, real *yn, integer *node1, integer *node2);
+int d2node_(integer *mxnd, xc_float *xn, xc_float *yn, integer *node1, integer *node2);
 
 int keep3_(integer *itest, integer *ltest, integer *nbegin,integer *nend);
 
-int gnxka_(integer *mxnd, real *xn, real *yn, integer *k,integer *nodes, real *area, integer *lxk, integer *nxl, logical *ccw);
+int gnxka_(integer *mxnd, xc_float *xn, xc_float *yn, integer *k,integer *nodes, xc_float *area, integer *lxk, integer *nxl, logical *ccw);
 
 int ringbl_();
 
-int dlpara_(real *x1, real *y1, real *x2, real *y2, real *xm,real *b, logical *bad);
+int dlpara_(xc_float *x1, xc_float *y1, xc_float *x2, xc_float *y2, xc_float *xm,xc_float *b, logical *bad);
 
-int extnd5_(integer *mxnd, real *xn, real *yn, real *angle,integer *n1, integer *n2, integer *n3, real *x, real *y, real *dist);
+int extnd5_(integer *mxnd, xc_float *xn, xc_float *yn, xc_float *angle,integer *n1, integer *n2, integer *n3, xc_float *x, xc_float *y, xc_float *dist);
 
-int pltsub_(real *ybump, real *ychrsz);
+int pltsub_(xc_float *ybump, xc_float *ychrsz);
 
-int nsplit_(integer *mxnd, integer *mln, integer *lnodes,real *angle, integer *nstart, integer *kang, integer *inode, integer *nnode, integer *nwant, logical *maxsiz);
+int nsplit_(integer *mxnd, integer *mln, integer *lnodes,xc_float *angle, integer *nstart, integer *kang, integer *inode, integer *nnode, integer *nwant, logical *maxsiz);
 
-int symbol_bl__(char *isytyp, real *varfac, integer *lenf,integer *nlnkf, logical *hidef, real *xf, real *yf, real *zf, logical*isvok, integer *blkcol, integer *idelb, ftnlen isytyp_len);
+int symbol_bl__(char *isytyp, xc_float *varfac, integer *lenf,integer *nlnkf, logical *hidef, xc_float *xf, xc_float *yf, xc_float *zf, logical*isvok, integer *blkcol, integer *idelb, ftnlen isytyp_len);
 
 int pltbgn_();
 
 int pltitm_();
 
-int flmnmx_(integer *mxnd, integer *mln, integer *maxprm,integer *linkpr, integer *kperim, integer *lnodes, real *xn, real *yn,integer *nloop, integer *node, real *xmin, real *xmax, real *ymin,real *ymax, logical *err);
+int flmnmx_(integer *mxnd, integer *mln, integer *maxprm,integer *linkpr, integer *kperim, integer *lnodes, xc_float *xn, xc_float *yn,integer *nloop, integer *node, xc_float *xmin, xc_float *xmax, xc_float *ymin,xc_float *ymax, logical *err);
 
 int ugrcol_(integer *indx, integer *blkcol);
 
 int marksm_(integer *mxnd, integer *mln, integer *lxk,integer *kxl, integer *nxl, integer *lxn, integer *lnodes, integer *node, logical *err);
 
-int qual2n_(integer *mxnd, integer *mxcorn, integer *mln,integer *ncorn, integer *lcorn, integer *lnodes, integer *icomb, real*bnsize, real *angle, integer *lxn, integer *itest, integer *ltest,real *qual, logical *posbl2, logical *posbl3, logical *rowchn,logical *sidpin, integer *istart, integer *iend, integer *ipinch,integer *npinch, logical *err);
+int qual2n_(integer *mxnd, integer *mxcorn, integer *mln,integer *ncorn, integer *lcorn, integer *lnodes, integer *icomb, xc_float*bnsize, xc_float *angle, integer *lxn, integer *itest, integer *ltest,xc_float *qual, logical *posbl2, logical *posbl3, logical *rowchn,logical *sidpin, integer *istart, integer *iend, integer *ipinch,integer *npinch, logical *err);
 
-int getcrn_(integer *mxnd, integer *mxcorn, integer *mln,integer *lnodes, integer *ncorn, integer *lcorn, real *angle, real *xn, real *yn, integer *lxn, integer *nloop, integer *n1, logical *onlyc, logical *pposbl, logical *graph, logical *err);
+int getcrn_(integer *mxnd, integer *mxcorn, integer *mln,integer *lnodes, integer *ncorn, integer *lcorn, xc_float *angle, xc_float *xn, xc_float *yn, integer *lxn, integer *nloop, integer *n1, logical *onlyc, logical *pposbl, logical *graph, logical *err);
 
 int addkxl_(integer *mxnd, integer *kxl, integer *k, integer*l);
 
-int tuck_(integer *mxnd, integer *mln, integer *nuid, real *xn, real *yn, integer *lxk, integer *kxl, integer *nxl, integer *lxn,integer *lnodes, integer *iavail, integer *navail, integer *lll,integer *kkk, integer *nnn, integer *n1, integer *nloop, logical *graph, logical *noroom, logical *err);
+int tuck_(integer *mxnd, integer *mln, integer *nuid, xc_float *xn, xc_float *yn, integer *lxk, integer *kxl, integer *nxl, integer *lxn,integer *lnodes, integer *iavail, integer *navail, integer *lll,integer *kkk, integer *nnn, integer *n1, integer *nloop, logical *graph, logical *noroom, logical *err);
 
 int spaced_(integer *mxnd, integer *mxcorn, integer *mln,integer *ilen, integer *ncorn, integer *lcorn, integer *lnodes,integer *icomb, integer *itest, integer *ltest, logical *err);
 
-int add3nd_(integer *mxnd, integer *mln, real *xn, real *yn,integer *lxk, integer *kxl, integer *nxl, integer *lxn, real *bnsize,integer *lnodes, real *x, real *y, real *dist, integer *nnn, integer *lll, integer *kkk, integer *n1, integer *nloop, logical *sizeit,logical *err, logical *noroom, real *xnold, real *ynold, integer *nxkold, integer *linkeg, integer *listeg, real *bmesur, integer *mlink, integer *npnold, integer *npeold, integer *nnxk, real *rexmin, real *rexmax, real *reymin, real *reymax, integer *idivis, real *sizmin, real *emax, real *emin);
+int add3nd_(integer *mxnd, integer *mln, xc_float *xn, xc_float *yn,integer *lxk, integer *kxl, integer *nxl, integer *lxn, xc_float *bnsize,integer *lnodes, xc_float *x, xc_float *y, xc_float *dist, integer *nnn, integer *lll, integer *kkk, integer *n1, integer *nloop, logical *sizeit,logical *err, logical *noroom, xc_float *xnold, xc_float *ynold, integer *nxkold, integer *linkeg, integer *listeg, xc_float *bmesur, integer *mlink, integer *npnold, integer *npeold, integer *nnxk, xc_float *rexmin, xc_float *rexmax, xc_float *reymin, xc_float *reymax, integer *idivis, xc_float *sizmin, xc_float *emax, xc_float *emin);
 
-int pinch_(integer *mxnd, integer *mxcorn, integer *mln,integer *nuid, real *xn, real *yn, real *zn, integer *lxk, integer *kxl, integer *nxl, integer *lxn, real *angle, integer *lnodes, real *bnsize, integer *node, integer *nloop, integer *kkkold, integer *lllold, integer *nnnold, integer *iavail, integer *navail, logical *done, real *xmin, real *xmax, real *ymin, real *ymax, real *zmin,real *zmax, char *dev1, integer *lll, integer *kkk, integer *nnn,integer *lcorn, integer *ncorn, integer *nadj1, integer *nadj2,logical *graph, logical *video, integer *kreg, logical *noroom,logical *err, ftnlen dev1_len);
+int pinch_(integer *mxnd, integer *mxcorn, integer *mln,integer *nuid, xc_float *xn, xc_float *yn, xc_float *zn, integer *lxk, integer *kxl, integer *nxl, integer *lxn, xc_float *angle, integer *lnodes, xc_float *bnsize, integer *node, integer *nloop, integer *kkkold, integer *lllold, integer *nnnold, integer *iavail, integer *navail, logical *done, xc_float *xmin, xc_float *xmax, xc_float *ymin, xc_float *ymax, xc_float *zmin,xc_float *zmax, char *dev1, integer *lll, integer *kkk, integer *nnn,integer *lcorn, integer *ncorn, integer *nadj1, integer *nadj2,logical *graph, logical *video, integer *kreg, logical *noroom,logical *err, ftnlen dev1_len);
 
-int paving_(integer *nbnode, integer *nprm, integer *mln,integer *iptper, integer *numper, integer *lperim, real *xn, real *yn,real *zn, integer *iexk, integer *inxe, integer *nnn, integer *lll,integer *kkk, integer *mxnd, real *angle, real *bnsize, integer *lnodes, integer *linkpr, integer *nperim, integer *lxk, integer *kxl,integer *nxl, integer *lxn, integer *nuid, integer *iavail, integer *navail, logical *graph, logical *timer, logical *video, real *defsiz,logical *sizeit, char *dev1, integer *kreg, logical *batch, logical *noroom, logical *err, real *amesur, real *xnold, real *ynold, integer*nxkold, integer *mmpold, integer *linkeg, integer *listeg, real *bmesur, integer *mlink, integer *nprold, integer *npnold, integer *npeold, integer *nnxk, logical *remesh, real *rexmin, real *rexmax,real *reymin, real *reymax, integer *idivis, real *sizmin, real *emax,real *emin, ftnlen dev1_len);
+int paving_(integer *nbnode, integer *nprm, integer *mln,integer *iptper, integer *numper, integer *lperim, xc_float *xn, xc_float *yn,xc_float *zn, integer *iexk, integer *inxe, integer *nnn, integer *lll,integer *kkk, integer *mxnd, xc_float *angle, xc_float *bnsize, integer *lnodes, integer *linkpr, integer *nperim, integer *lxk, integer *kxl,integer *nxl, integer *lxn, integer *nuid, integer *iavail, integer *navail, logical *graph, logical *timer, logical *video, xc_float *defsiz,logical *sizeit, char *dev1, integer *kreg, logical *batch, logical *noroom, logical *err, xc_float *amesur, xc_float *xnold, xc_float *ynold, integer*nxkold, integer *mmpold, integer *linkeg, integer *listeg, xc_float *bmesur, integer *mlink, integer *nprold, integer *npnold, integer *npeold, integer *nnxk, logical *remesh, xc_float *rexmin, xc_float *rexmax,xc_float *reymin, xc_float *reymax, integer *idivis, xc_float *sizmin, xc_float *emax,xc_float *emin, ftnlen dev1_len);
 
-int pltlig_(real *x, real *y);
+int pltlig_(xc_float *x, xc_float *y);
 
 int pltrst_();
 
-int viinit_(real *aspect, integer *justif);
+int viinit_(xc_float *aspect, integer *justif);
 
-int vdiqdc_0_(int n__, integer *index, real *value, real *xinch, real *yinch);
+int vdiqdc_0_(int n__, integer *index, xc_float *value, xc_float *xinch, xc_float *yinch);
 
-int vdiqdc_(integer *index, real *value);
+int vdiqdc_(integer *index, xc_float *value);
 
-int vdiqd9_(real *xinch, real *yinch);
+int vdiqd9_(xc_float *xinch, xc_float *yinch);
 
 int vberrh_(integer *errnum, integer *errsev);
 
@@ -237,13 +237,13 @@ int pstofs_(integer *koutfl);
 
 int pstcfs_(integer *koutff, integer *kk);
 
-int vdinit_(real *aspect, integer *justif);
+int vdinit_(xc_float *aspect, integer *justif);
 
-int vdiqnd_(real *xndc, real *yndc);
+int vdiqnd_(xc_float *xndc, xc_float *yndc);
 
-int vdiqos_(real *attarr);
+int vdiqos_(xc_float *attarr);
 
-int vdlina_(real *x, real *y);
+int vdlina_(xc_float *x, xc_float *y);
 
 int vdloge_(integer *errnum, integer *errsev);
 
@@ -259,15 +259,15 @@ int vbiqpk_(char *c1, ftnlen c1_len);
 
 int vbiqdv_(char *c2, ftnlen c2_len);
 
-int vdmova_(real *x, real *y);
+int vdmova_(xc_float *x, xc_float *y);
 
 int vdnwpg_();
 
-int vdpnta_(real *x, real *y);
+int vdpnta_(xc_float *x, xc_float *y);
 
-int vdpoly_(real *xarray, real *yarray, integer *npts);
+int vdpoly_(xc_float *xarray, xc_float *yarray, integer *npts);
 
-int vdstos_(real *attarr);
+int vdstos_(xc_float *attarr);
 
 int vdterm_();
 
@@ -279,51 +279,51 @@ int vifram_(integer *itype);
 
 int vdaabu_(integer *btnnum);
 
-int vdabgl_(integer *btnnum, real *x, real *y);
+int vdabgl_(integer *btnnum, xc_float *x, xc_float *y);
 
-int vdakgl_(integer *char__, real *x, real *y);
+int vdakgl_(integer *char__, xc_float *x, xc_float *y);
 
-int vdaloc_(real *x, real *y);
+int vdaloc_(xc_float *x, xc_float *y);
 
 int vdbell_();
 
 int vdbufl_();
 
-int vdstla_(real *locx, real *locy);
+int vdstla_(xc_float *locx, xc_float *locy);
 
 int vdwait_();
 
-int vdiqco_(integer *num, integer *index, real *clrary,integer *clrmod);
+int vdiqco_(integer *num, integer *index, xc_float *clrary,integer *clrmod);
 
-int vdiqcp_(real *x, real *y);
+int vdiqcp_(xc_float *x, xc_float *y);
 
 int vdstbc_(integer *color);
 
-int vdstco_(integer *num, integer *index, real *clrary,integer *clrmod);
+int vdstco_(integer *num, integer *index, xc_float *clrary,integer *clrmod);
 
 int vdstfc_(integer *color);
 
-int vdstin_(real *inten);
+int vdstin_(xc_float *inten);
 
 int viterm_();
 
-int vimova_(real *x, real *y);
+int vimova_(xc_float *x, xc_float *y);
 
-int vipnta_(real *x, real *y);
+int vipnta_(xc_float *x, xc_float *y);
 
-int vipoly_(real *xarray, real *yarray, integer *npts);
+int vipoly_(xc_float *xarray, xc_float *yarray, integer *npts);
 
 int vinwpg_();
 
-int vdescp_(integer *escpcd, integer *n, real *args);
+int vdescp_(integer *escpcd, integer *n, xc_float *args);
 
-int vilina_0_(int n__, real *x, real *y);
+int vilina_0_(int n__, xc_float *x, xc_float *y);
 
-int vilina_(real *x, real *y);
+int vilina_(xc_float *x, xc_float *y);
 
-int vblina_(real *x, real *y);
+int vblina_(xc_float *x, xc_float *y);
 
-int vbvect_(integer *ipen, real *x, real *y);
+int vbvect_(integer *ipen, xc_float *x, xc_float *y);
 
 int vitext_(integer *lengt1, integer *chars);
 
@@ -333,9 +333,9 @@ int vdstls_(integer *linsty);
 
 int vbstls_(integer *linsty);
 
-int vdstcs_(real *ysize);
+int vdstcs_(xc_float *ysize);
 
-int vdstlw_(real *linwth);
+int vdstlw_(xc_float *linwth);
 
 int vdiqes_(integer *escpcd, integer *support);
 
@@ -353,40 +353,40 @@ int pstsel_(char *karg, ftnlen karg_len);
 
 int pstini_();
 
-int addrow_(integer *mxnd, integer *mxcorn, integer *mxloop,integer *mln, integer *maxprm, integer *nuid, real *xn, real *yn,real *zn, integer *lxk, integer *kxl, integer *nxl, integer *lxn,real *angle, real *bnsize, integer *lnodes, integer *nbegin, integer *nend, integer *nloop, integer *nextn1, integer *linkpr, integer *kperim, integer *kkkold, integer *lllold, integer *nnnold, integer *iavail, integer *navail, real *xmin, real *xmax, real *ymin, real *ymax, real *zmin, real *zmax, char *dev1, integer *lll, integer *kkk,integer *nnn, integer *nnn2, integer *nadj1, integer *nadj2, integer *lcorn, integer *kloop, logical *graph, logical *video, integer *kreg,logical *done, logical *sizeit, logical *noroom, logical *err, real *xnold, real *ynold, integer *nxkold, integer *linkeg, integer *listeg,real *bmesur, integer *mlink, integer *npnold, integer *npeold,integer *nnxk, real *rexmin, real *rexmax, real *reymin,real *reymax, integer *idivis, real *sizmin, real *emax, real *emin,ftnlen dev1_len);
+int addrow_(integer *mxnd, integer *mxcorn, integer *mxloop,integer *mln, integer *maxprm, integer *nuid, xc_float *xn, xc_float *yn,xc_float *zn, integer *lxk, integer *kxl, integer *nxl, integer *lxn,xc_float *angle, xc_float *bnsize, integer *lnodes, integer *nbegin, integer *nend, integer *nloop, integer *nextn1, integer *linkpr, integer *kperim, integer *kkkold, integer *lllold, integer *nnnold, integer *iavail, integer *navail, xc_float *xmin, xc_float *xmax, xc_float *ymin, xc_float *ymax, xc_float *zmin, xc_float *zmax, char *dev1, integer *lll, integer *kkk,integer *nnn, integer *nnn2, integer *nadj1, integer *nadj2, integer *lcorn, integer *kloop, logical *graph, logical *video, integer *kreg,logical *done, logical *sizeit, logical *noroom, logical *err, xc_float *xnold, xc_float *ynold, integer *nxkold, integer *linkeg, integer *listeg,xc_float *bmesur, integer *mlink, integer *npnold, integer *npeold,integer *nnxk, xc_float *rexmin, xc_float *rexmax, xc_float *reymin,xc_float *reymax, integer *idivis, xc_float *sizmin, xc_float *emax, xc_float *emin,ftnlen dev1_len);
 
-int vinter_(integer *mxnd, real *xn, real *yn, integer *n1,integer *n2, integer *n3, real *xold, real *yold, real *xnew, real *ynew, logical *vcross);
+int vinter_(integer *mxnd, xc_float *xn, xc_float *yn, integer *n1,integer *n2, integer *n3, xc_float *xold, xc_float *yold, xc_float *xnew, xc_float *ynew, logical *vcross);
 
-int close6_(integer *mxnd, integer *mxcorn, integer *mln,integer *nuid, real *xn, real *yn, integer *lxk, integer *kxl,integer *nxl, integer *lxn, real *angle, real *bnsize, integer *lnodes, integer *node, integer *nloop, integer *kkkold, integer *lllold, integer *nnnold, integer *navail, integer *iavail, real *xmin, real *xmax, real *ymin, real *ymax, char *dev1, integer *lll, integer *kkk, integer *nnn, integer *lcorn, integer *ncorn,logical *graph, logical *video, logical *sizeit, logical *noroom,logical *err, real *xnold, real *ynold, integer *nxkold, integer *linkeg, integer *listeg, real *bmesur, integer *mlink, integer *npnold, integer *npeold, integer *nnxk, real *rexmin,real *rexmax, real *reymin, real *reymax, integer *idivis, real *sizmin, real *emax, real *emin, ftnlen dev1_len);
+int close6_(integer *mxnd, integer *mxcorn, integer *mln,integer *nuid, xc_float *xn, xc_float *yn, integer *lxk, integer *kxl,integer *nxl, integer *lxn, xc_float *angle, xc_float *bnsize, integer *lnodes, integer *node, integer *nloop, integer *kkkold, integer *lllold, integer *nnnold, integer *navail, integer *iavail, xc_float *xmin, xc_float *xmax, xc_float *ymin, xc_float *ymax, char *dev1, integer *lll, integer *kkk, integer *nnn, integer *lcorn, integer *ncorn,logical *graph, logical *video, logical *sizeit, logical *noroom,logical *err, xc_float *xnold, xc_float *ynold, integer *nxkold, integer *linkeg, integer *listeg, xc_float *bmesur, integer *mlink, integer *npnold, integer *npeold, integer *nnxk, xc_float *rexmin,xc_float *rexmax, xc_float *reymin, xc_float *reymax, integer *idivis, xc_float *sizmin, xc_float *emax, xc_float *emin, ftnlen dev1_len);
 
 int comsrt_(integer *mxnd, integer *mxcorn, integer *mxpick,integer *mln, integer *lnodes, integer *lcorn, integer *ncorn,integer *icomb, integer *itype, integer *npick);
 
-int adjtri_(integer *mxnd, integer *mln, integer *lnodes,real *xn, real *yn, real *zn, integer *nuid, integer *lxk, integer *kxl, integer *nxl, integer *lxn, integer *nnn, integer *navail,integer *iavail, integer *node, integer *kelem, real *ang, real *toler1, real *toler2, integer *n1, integer *n2, integer *n3, integer *kreg, real *xmin, real *xmax, real *ymin, real *ymax, real *zmin,real *zmax, integer *kkk, integer *lll, char *dev1, logical *done,logical *check, logical *graph, logical *video, logical *noroom,logical *err, integer *kkkadd, ftnlen dev1_len);
+int adjtri_(integer *mxnd, integer *mln, integer *lnodes,xc_float *xn, xc_float *yn, xc_float *zn, integer *nuid, integer *lxk, integer *kxl, integer *nxl, integer *lxn, integer *nnn, integer *navail,integer *iavail, integer *node, integer *kelem, xc_float *ang, xc_float *toler1, xc_float *toler2, integer *n1, integer *n2, integer *n3, integer *kreg, xc_float *xmin, xc_float *xmax, xc_float *ymin, xc_float *ymax, xc_float *zmin,xc_float *zmax, integer *kkk, integer *lll, char *dev1, logical *done,logical *check, logical *graph, logical *video, logical *noroom,logical *err, integer *kkkadd, ftnlen dev1_len);
 
 int pltrev_();
 
-int pltvcm_(integer *n, integer *mask, real *xx0, real *yy0,real *xx1, real *yy1);
+int pltvcm_(integer *n, integer *mask, xc_float *xx0, xc_float *yy0,xc_float *xx1, xc_float *yy1);
 
-int pltxth_(real *x, real *y, char *text, ftnlen text_len);
+int pltxth_(xc_float *x, xc_float *y, char *text, ftnlen text_len);
 
-int mxmult_(integer *n, real *mat1, real *mat2, real *matr);
+int mxmult_(integer *n, xc_float *mat1, xc_float *mat2, xc_float *matr);
 
-int pltdv2_(real *map, integer *n, real *px, real *py, real *qx, real *qy);
+int pltdv2_(xc_float *map, integer *n, xc_float *px, xc_float *py, xc_float *qx, xc_float *qy);
 
-int qual4_(integer *mxnd, integer *mxcorn, integer *mln,integer *ncorn, integer *lcorn, integer *lnodes, integer *icomb, real*angle, integer *lxn, integer *itest, integer *ltest, real *qual,logical *posbl4, logical *err);
+int qual4_(integer *mxnd, integer *mxcorn, integer *mln,integer *ncorn, integer *lcorn, integer *lnodes, integer *icomb, xc_float*angle, integer *lxn, integer *itest, integer *ltest, xc_float *qual,logical *posbl4, logical *err);
 
-int addtuk_(integer *mxnd, integer *mln, integer *nuid, real*xn, real *yn, real *zn, integer *lxk, integer *kxl, integer *nxl,integer *lxn, integer *lnodes, real *angle, integer *nloop, integer *iavail, integer *navail, integer *lll, integer *kkk, integer *nnn,real *tang, integer *kang, integer *nstart, integer *nend, integer *node, real *xmin, real *xmax, real *ymin, real *ymax, real *zmin,real *zmax, logical *graph, logical *video, char *dev1, logical *noroom, logical *err, ftnlen dev1_len);
+int addtuk_(integer *mxnd, integer *mln, integer *nuid, xc_float*xn, xc_float *yn, xc_float *zn, integer *lxk, integer *kxl, integer *nxl,integer *lxn, integer *lnodes, xc_float *angle, integer *nloop, integer *iavail, integer *navail, integer *lll, integer *kkk, integer *nnn,xc_float *tang, integer *kang, integer *nstart, integer *nend, integer *node, xc_float *xmin, xc_float *xmax, xc_float *ymin, xc_float *ymax, xc_float *zmin,xc_float *zmax, logical *graph, logical *video, char *dev1, logical *noroom, logical *err, ftnlen dev1_len);
 
 int pltrsg_();
 
 int fixlxn_(integer *mxnd, integer *lxn, integer *nxl,integer *nuid, integer *navail, integer *iavail, integer *nnn,integer *lll, integer *nnnold, integer *lllold, logical *err, logical*noroom);
 
-int usrsym_(char *isytyp, logical *is3dim, real *x0, real *y0, real *z0, real *evar, real *scale, ftnlen isytyp_len);
+int usrsym_(char *isytyp, logical *is3dim, xc_float *x0, xc_float *y0, xc_float *z0, xc_float *evar, xc_float *scale, ftnlen isytyp_len);
 
-int delem_(integer *mxnd, real *xn, real *yn, integer *nuid,integer *lxk, integer *kxl, integer *nxl, integer *lxn, integer *nnn,integer *navail, integer *iavail, integer *node1, integer *k, integer*n2, integer *n4, logical *done, logical *check, logical *noroom,logical *err);
+int delem_(integer *mxnd, xc_float *xn, xc_float *yn, integer *nuid,integer *lxk, integer *kxl, integer *nxl, integer *lxn, integer *nnn,integer *navail, integer *iavail, integer *node1, integer *k, integer*n2, integer *n4, logical *done, logical *check, logical *noroom,logical *err);
 
-int getang_(integer *mxnd, integer *mln, real *xn, real *yn,integer *lnodes, integer *lxk, integer *kxl, integer *nxl, integer *lxn, integer *i__, integer *j, integer *k, real *angle, logical *err);
+int getang_(integer *mxnd, integer *mln, xc_float *xn, xc_float *yn,integer *lnodes, integer *lxk, integer *kxl, integer *nxl, integer *lxn, integer *i__, integer *j, integer *k, xc_float *angle, logical *err);
 
-int mpd2sy_(integer *n, real *x0, real *y0, char *sym,ftnlen sym_len);
+int mpd2sy_(integer *n, xc_float *x0, xc_float *y0, char *sym,ftnlen sym_len);
 
-int bcross_(integer *mxnd, integer *mln, real *xn, real *yn,real *zn, integer *lxk, integer *kxl, integer *nxl, integer *lxn,integer *lnodes, integer *i1, integer *i2, integer *j1, integer *j2,integer *nloop, logical *bok, integer *lll, real *xmin, real *xmax,real *ymin, real *ymax, real *zmin, real *zmax, char *dev1, integer *kreg, logical *err, ftnlen dev1_len);
+int bcross_(integer *mxnd, integer *mln, xc_float *xn, xc_float *yn,xc_float *zn, integer *lxk, integer *kxl, integer *nxl, integer *lxn,integer *lnodes, integer *i1, integer *i2, integer *j1, integer *j2,integer *nloop, logical *bok, integer *lll, xc_float *xmin, xc_float *xmax,xc_float *ymin, xc_float *ymax, xc_float *zmin, xc_float *zmax, char *dev1, integer *kreg, logical *err, ftnlen dev1_len);

@@ -20,19 +20,15 @@ extern "C" {
 /*    NTESS, the U.S. Government retains certain rights in this software. */
 
 /*    See packages/seacas/LICENSE for details */
-/* Subroutine */ int eqlang_(integer *mxnd, real *xn, real *yn, integer *lxn, 
-	integer *node, integer *n0, integer *n2, integer *nfrom, real *dist, 
-	real *vro, real *xdel, real *ydel)
+/* Subroutine */ int eqlang_(integer *mxnd, xc_float *xn, xc_float *yn, integer *lxn, 
+	integer *node, integer *n0, integer *n2, integer *nfrom, xc_float *dist, 
+	xc_float *vro, xc_float *xdel, xc_float *ydel)
 {
     /* System generated locals */
-    real r__1, r__2;
-
-    /* Builtin functions */
-    double atan2(doublereal, doublereal), sqrt(doublereal), sin(doublereal), 
-	    asin(doublereal), cos(doublereal);
+    xc_float r__1, r__2;
 
     /* Local variables */
-    static real d0, d1, d2, d3, x0, y0, pi, ang, arg, ang1, ang2, ang3, ang12,
+    static xc_float d0, d1, d2, d3, x0, y0, pi, ang, arg, ang1, ang2, ang3, ang12,
 	     beta, ang3d, dist0, ang12d, twopi;
     static logical expand;
 
@@ -46,8 +42,8 @@ extern "C" {
     --xn;
 
     /* Function Body */
-    pi = atan2((float)0., (float)-1.);
-    twopi = pi * (float)2.;
+    pi = M_PI;
+    twopi = pi * (xc_float)2.;
     if (*nfrom > 0) {
 /*  TEST FOR THE EXPANSION CASE */
 	if ((lxn[(*nfrom << 2) + 4] != 0 && lxn[(*nfrom << 2) + 2] < 0 || lxn[
@@ -58,33 +54,33 @@ extern "C" {
 	    expand = FALSE_;
 	}
 	ang1 = atan2(yn[*n2] - yn[*nfrom], xn[*n2] - xn[*nfrom]);
-	if (ang1 < (float)0.) {
+	if (ang1 < (xc_float)0.) {
 	    ang1 += twopi;
 	}
 	ang2 = atan2(yn[*n0] - yn[*nfrom], xn[*n0] - xn[*nfrom]);
-	if (ang2 < (float)0.) {
+	if (ang2 < (xc_float)0.) {
 	    ang2 += twopi;
 	}
 	ang3 = atan2(yn[*node] - yn[*nfrom], xn[*node] - xn[*nfrom]);
-	if (ang3 < (float)0.) {
+	if (ang3 < (xc_float)0.) {
 	    ang3 += twopi;
 	}
 /*  GET THE APPROPRIATE ANGLE BETWEEN ANGLE 1 AND 2 */
 	ang12d = ang2 - ang1;
-	if (ang12d < (float)0.) {
+	if (ang12d < (xc_float)0.) {
 	    ang12d += twopi;
 	}
 /*  IF THIS IS AN EXPANSION, THEN ADJUST THE ANGLE ACCORDINGLY */
 	if (expand) {
 	    if (lxn[(*n2 << 2) + 3] == 0) {
-		ang12 = ang1 + ang12d * (float).6;
+		ang12 = ang1 + ang12d * (xc_float).6;
 	    } else if (lxn[(*n0 << 2) + 3] == 0) {
-		ang12 = ang1 + ang12d * (float).4;
+		ang12 = ang1 + ang12d * (xc_float).4;
 	    } else {
-		ang12 = ang1 + ang12d * (float).5;
+		ang12 = ang1 + ang12d * (xc_float).5;
 	    }
 	} else {
-	    ang12 = ang1 + ang12d * (float).5;
+	    ang12 = ang1 + ang12d * (xc_float).5;
 	}
 	if (ang12 > twopi) {
 	    ang12 -= twopi;
@@ -93,16 +89,16 @@ extern "C" {
 	if (ang12 > ang3) {
 	    ang3d = ang12 - ang3;
 	    if (ang3d > pi) {
-		ang = ang12 + (twopi - ang3d) * (float).5;
+		ang = ang12 + (twopi - ang3d) * (xc_float).5;
 	    } else {
-		ang = ang12 - ang3d * (float).5;
+		ang = ang12 - ang3d * (xc_float).5;
 	    }
 	} else {
 	    ang3d = ang3 - ang12;
 	    if (ang3d > pi) {
-		ang = ang3 + (twopi - ang3d) * (float).5;
+		ang = ang3 + (twopi - ang3d) * (xc_float).5;
 	    } else {
-		ang = ang3 - ang3d * (float).5;
+		ang = ang3 - ang3d * (xc_float).5;
 	    }
 	}
 /*  GET THE DISTANCE TO MAKE THE OUTSIDE FLAT AT THIS ANGLE */
@@ -122,19 +118,19 @@ extern "C" {
 	r__2 = yn[*nfrom] - yn[*n2];
 	d3 = sqrt(r__1 * r__1 + r__2 * r__2);
 	arg = sin(ang12d) * d1 / d2;
-	if (arg > (float)1.) {
-	    arg = (float)1.;
+	if (arg > (xc_float)1.) {
+	    arg = (xc_float)1.;
 	}
-	if (arg < (float)-1.) {
-	    arg = (float)-1.;
+	if (arg < (xc_float)-1.) {
+	    arg = (xc_float)-1.;
 	}
 	beta = asin(arg);
-	d0 = d3 * sin(beta) / sin(pi - beta - ang12d * (float).5);
+	d0 = d3 * sin(beta) / sin(pi - beta - ang12d * (xc_float).5);
 	if (d0 > *dist) {
 	    if (expand) {
 		dist0 = d0;
 	    } else {
-		dist0 = (*dist + d0) * (float).5;
+		dist0 = (*dist + d0) * (xc_float).5;
 	    }
 	} else {
 	    dist0 = *dist;
@@ -145,8 +141,8 @@ extern "C" {
 	*xdel = (x0 - xn[*node]) * *vro;
 	*ydel = (y0 - yn[*node]) * *vro;
     } else {
-	*xdel = (float)0.;
-	*ydel = (float)0.;
+	*xdel = (xc_float)0.;
+	*ydel = (xc_float)0.;
     }
     return 0;
 } /* eqlang_ */

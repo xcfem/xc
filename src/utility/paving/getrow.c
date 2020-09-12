@@ -28,12 +28,12 @@ static integer c__1 = 1;
 /*    See packages/seacas/LICENSE for details */
 /* Subroutine */ int getrow_(integer *mxnd, integer *mxcorn, integer *mxpick, 
 	integer *mln, integer *nuid, integer *lxk, integer *kxl, integer *nxl,
-	 integer *lxn, integer *lnodes, integer *ncorn, integer *lcorn, real *
-	bnsize, real *angle, real *xn, real *yn, real *zn, integer *icomb, 
+	 integer *lxn, integer *lnodes, integer *ncorn, integer *lcorn, xc_float *
+	bnsize, xc_float *angle, xc_float *xn, xc_float *yn, xc_float *zn, integer *icomb, 
 	integer *itype, integer *nloop, integer *nbegin, integer *nend, 
 	integer *iavail, integer *navail, integer *lll, integer *kkk, integer 
-	*nnn, logical *graph, logical *video, real *xmin, real *xmax, real *
-	ymin, real *ymax, real *zmin, real *zmax, char *dev1, integer *kreg, 
+	*nnn, logical *graph, logical *video, xc_float *xmin, xc_float *xmax, xc_float *
+	ymin, xc_float *ymax, xc_float *zmin, xc_float *zmax, char *dev1, integer *kreg, 
 	logical *sizeit, integer *nextpr, logical *noroom, logical *err, 
 	ftnlen dev1_len)
 {
@@ -42,66 +42,66 @@ static integer c__1 = 1;
 
     /* Local variables */
     static integer i__;
-    static real x[1], y[1];
+    static xc_float x[1], y[1];
     static integer ii, jj, in, is2c, nnn2, iend;
-    static real qual;
-    extern /* Subroutine */ int tuck_(integer *, integer *, integer *, real *,
-	     real *, integer *, integer *, integer *, integer *, integer *, 
+    static xc_float qual;
+    extern /* Subroutine */ int tuck_(integer *, integer *, integer *, xc_float *,
+	     xc_float *, integer *, integer *, integer *, integer *, integer *, 
 	    integer *, integer *, integer *, integer *, integer *, integer *, 
 	    integer *, logical *, logical *, logical *);
     static integer isqr;
     extern /* Subroutine */ int keep3_(integer *, integer *, integer *, 
 	    integer *);
     static logical redo2, redo3;
-    static real best2, best3, best4;
+    static xc_float best2, best3, best4;
     extern /* Subroutine */ int qual3_(integer *, integer *, integer *, 
-	    integer *, integer *, integer *, integer *, real *, integer *, 
-	    integer *, integer *, real *, logical *, logical *, logical *);
+	    integer *, integer *, integer *, integer *, xc_float *, integer *, 
+	    integer *, integer *, xc_float *, logical *, logical *, logical *);
     static integer npin2;
     extern /* Subroutine */ int qual4_(integer *, integer *, integer *, 
-	    integer *, integer *, integer *, integer *, real *, integer *, 
-	    integer *, integer *, real *, logical *, logical *);
+	    integer *, integer *, integer *, integer *, xc_float *, integer *, 
+	    integer *, integer *, xc_float *, logical *, logical *);
     static integer nbeg24, nbeg34, ichng, nend24, nend34, inode, npick;
     extern /* Subroutine */ int ch3to4_(integer *, integer *, integer *, 
-	    integer *, integer *, integer *, integer *, real *, integer *, 
-	    integer *, real *, logical *, integer *);
-    extern logical cornp_(real *);
+	    integer *, integer *, integer *, integer *, xc_float *, integer *, 
+	    integer *, xc_float *, logical *, integer *);
+    extern logical cornp_(xc_float *);
     static logical onlyc;
     static integer istat, itest[5], ltest[5], ibest2, ibest3, ibest4;
     static logical found2, found3, found4, posbl2, posbl3, posbl4;
     extern /* Subroutine */ int qual2n_(integer *, integer *, integer *, 
-	    integer *, integer *, integer *, integer *, real *, real *, 
-	    integer *, integer *, integer *, real *, logical *, logical *, 
+	    integer *, integer *, integer *, integer *, xc_float *, xc_float *, 
+	    integer *, integer *, integer *, xc_float *, logical *, logical *, 
 	    logical *, logical *, integer *, integer *, integer *, integer *, 
 	    logical *);
     static integer ipinch[4], jpinch[4], npinch;
     extern /* Subroutine */ int getcrn_(integer *, integer *, integer *, 
-	    integer *, integer *, integer *, real *, real *, real *, integer *
+	    integer *, integer *, integer *, xc_float *, xc_float *, xc_float *, integer *
 	    , integer *, integer *, logical *, logical *, logical *, logical *
 	    );
     static logical sidpin;
-    extern /* Subroutine */ int lupang_(integer *, integer *, real *, real *, 
-	    real *, integer *, integer *, integer *, integer *, integer *, 
-	    real *, integer *, integer *, integer *, real *, real *, real *, 
-	    real *, real *, real *, char *, integer *, logical *, ftnlen), 
-	    filsmo_(integer *, integer *, real *, real *, real *, integer *, 
+    extern /* Subroutine */ int lupang_(integer *, integer *, xc_float *, xc_float *, 
+	    xc_float *, integer *, integer *, integer *, integer *, integer *, 
+	    xc_float *, integer *, integer *, integer *, xc_float *, xc_float *, xc_float *, 
+	    xc_float *, xc_float *, xc_float *, char *, integer *, logical *, ftnlen), 
+	    filsmo_(integer *, integer *, xc_float *, xc_float *, xc_float *, integer *, 
 	    integer *, integer *, integer *, integer *, integer *, integer *, 
-	    integer *, real *, integer *, real *, real *, real *, real *, 
-	    real *, real *, char *, integer *, ftnlen), lcolor_(char *, 
+	    integer *, xc_float *, integer *, xc_float *, xc_float *, xc_float *, xc_float *, 
+	    xc_float *, xc_float *, char *, integer *, ftnlen), lcolor_(char *, 
 	    ftnlen), marksm_(integer *, integer *, integer *, integer *, 
 	    integer *, integer *, integer *, integer *, logical *), snapit_(
 	    integer *);
     static logical pposbl, rowchn;
-    extern /* Subroutine */ int ndstat_(integer *, integer *, real *, integer 
+    extern /* Subroutine */ int ndstat_(integer *, integer *, xc_float *, integer 
 	    *), setcir_(integer *, integer *, integer *, integer *, integer *,
-	     logical *), sflush_(), symbol_(integer *, real *, real *, char *,
+	     logical *), sflush_(), symbol_(integer *, xc_float *, xc_float *, char *,
 	     ftnlen), setlop_(integer *, integer *, integer *, integer *, 
 	    integer *, integer *, logical *), comsrt_(integer *, integer *, 
 	    integer *, integer *, integer *, integer *, integer *, integer *, 
 	    integer *, integer *);
     static integer istart;
-    extern /* Subroutine */ int rplotl_(integer *, real *, real *, real *, 
-	    integer *, real *, real *, real *, real *, real *, real *, 
+    extern /* Subroutine */ int rplotl_(integer *, xc_float *, xc_float *, xc_float *, 
+	    integer *, xc_float *, xc_float *, xc_float *, xc_float *, xc_float *, xc_float *, 
 	    integer *, char *, integer *, ftnlen);
 
 /* *********************************************************************** */
@@ -166,9 +166,9 @@ L100:
 	goto L130;
     }
 /*  SET UP THE MINIMUM ACCEPTABLE QUALITIES */
-    best2 = (float)3.;
-    best3 = (float)3.;
-    best4 = (float)4.;
+    best2 = (xc_float)3.;
+    best3 = (xc_float)3.;
+    best4 = (xc_float)4.;
     i__1 = npick;
     for (i__ = 1; i__ <= i__1; ++i__) {
 /*  NOW GET THE BEST RECTANGLE COMBINATION */

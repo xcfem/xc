@@ -55,13 +55,13 @@ struct {
 
 struct {
     integer idfor, idfort, idbck, idbckt;
-    real colfor;
+    xc_float colfor;
 } plcol2_;
 
 #define plcol2_1 plcol2_
 
 struct {
-    real colmap[11];
+    xc_float colmap[11];
 } cmap_;
 
 #define cmap_1 cmap_
@@ -94,18 +94,18 @@ static integer c__44 = 44;
 
     /* System generated locals */
     integer i__1;
-    real r__1;
+    xc_float r__1;
 
     /* Local variables */
     static integer i__, ncol;
     static logical ldum;
-    static real rblack;
+    static xc_float rblack;
     static integer frecol[9];
-    extern logical pltstg_(integer *, real *), pltstd_(integer *, real *), 
-	    plticl_(char *, real *, ftnlen);
+    extern logical pltstg_(integer *, xc_float *), pltstd_(integer *, xc_float *), 
+	    plticl_(char *, xc_float *, ftnlen);
     static logical colspc[9];
     static integer numfre;
-    static real rwhite, rcolor;
+    static xc_float rwhite, rcolor;
     static integer icolor, nblnsp;
 
 /* ======================================================================= */
@@ -225,7 +225,7 @@ static integer c__44 = 44;
 		    {
 		cmap_1.colmap[i__ - 1] = rcolor;
 	    } else {
-		cmap_1.colmap[i__ - 1] = (float)-1.;
+		cmap_1.colmap[i__ - 1] = (xc_float)-1.;
 	    }
 /* L100: */
 	}
@@ -248,7 +248,7 @@ static integer c__44 = 44;
 	}
 	numfre = 0;
 	for (i__ = 1; i__ <= 9; ++i__) {
-	    if (! colspc[i__ - 1] && cmap_1.colmap[i__ - 1] != (float)-1.) {
+	    if (! colspc[i__ - 1] && cmap_1.colmap[i__ - 1] != (xc_float)-1.) {
 		++numfre;
 		frecol[numfre - 1] = i__;
 	    }
@@ -269,13 +269,13 @@ static integer c__44 = 44;
 		icolor = grcol_1.iblack;
 	    } else if (plcol2_1.idfor == 2) {
 		icolor = grcol_1.iwhite;
-	    } else if (cmap_1.colmap[plcol2_1.idfor - 3] >= (float)0.) {
+	    } else if (cmap_1.colmap[plcol2_1.idfor - 3] >= (xc_float)0.) {
 		icolor = (integer) cmap_1.colmap[plcol2_1.idfor - 3];
 	    } else {
 		icolor = grcol_1.iwhite;
 		plcol2_1.idfort = 2;
 	    }
-	    plcol2_1.colfor = (real) icolor;
+	    plcol2_1.colfor = (xc_float) icolor;
 	} else if (blkcol[*indx] > 0 && cmap_1.colmap[blkcol[*indx] - 1] != (
 		float)-1.) {
 	    icolor = (integer) cmap_1.colmap[blkcol[*indx] - 1];
@@ -291,7 +291,7 @@ static integer c__44 = 44;
 		    if (blkcol[i__] == -2) {
 			++nblnsp;
 		    } else if (blkcol[i__] > 0) {
-			if (cmap_1.colmap[blkcol[i__] - 1] == (float)-1.) {
+			if (cmap_1.colmap[blkcol[i__] - 1] == (xc_float)-1.) {
 			    ++nblnsp;
 			}
 		    }
@@ -305,13 +305,13 @@ static integer c__44 = 44;
 		    icolor = grcol_1.iblack;
 		} else if (plcol2_1.idfor == 2) {
 		    icolor = grcol_1.iwhite;
-		} else if (cmap_1.colmap[plcol2_1.idfor - 3] >= (float)0.) {
+		} else if (cmap_1.colmap[plcol2_1.idfor - 3] >= (xc_float)0.) {
 		    icolor = (integer) cmap_1.colmap[plcol2_1.idfor - 3];
 		} else {
 		    icolor = grcol_1.iwhite;
 		    plcol2_1.idfort = 2;
 		}
-		plcol2_1.colfor = (real) icolor;
+		plcol2_1.colfor = (xc_float) icolor;
 	    }
 	}
     } else {
@@ -340,21 +340,21 @@ static integer c__44 = 44;
 		icolor = grcol_1.iblack;
 	    } else if (plcol2_1.idfor == 2) {
 		icolor = grcol_1.iwhite;
-	    } else if (cmap_1.colmap[plcol2_1.idfor - 3] >= (float)0.) {
+	    } else if (cmap_1.colmap[plcol2_1.idfor - 3] >= (xc_float)0.) {
 		icolor = (integer) cmap_1.colmap[plcol2_1.idfor - 3];
 	    } else {
 		icolor = grcol_1.iwhite;
 		plcol2_1.idfort = 2;
 	    }
-	    plcol2_1.colfor = (real) icolor;
+	    plcol2_1.colfor = (xc_float) icolor;
 	}
     }
     if (icolor != grcol_1.lstcol) {
-	r__1 = (real) icolor;
+	r__1 = (xc_float) icolor;
 	ldum = pltstd_(&c__1, &r__1);
-	r__1 = (real) icolor;
+	r__1 = (xc_float) icolor;
 	ldum = pltstg_(&c__6, &r__1);
-	r__1 = (real) icolor;
+	r__1 = (xc_float) icolor;
 	ldum = pltstg_(&c__44, &r__1);
 	grcol_1.lstcol = icolor;
     }

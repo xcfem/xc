@@ -18,38 +18,38 @@ extern "C" {
 /* Common Block Declarations */
 
 struct {
-    real devcap[23], defout[7];
+    xc_float devcap[23], defout[7];
 } status_;
 
 #define status_1 status_
 
 struct {
-    real devp[5];
+    xc_float devp[5];
 } device_;
 
 #define device_1 device_
 
 struct {
-    real colp[3], palett[48]	/* was [3][16] */;
+    xc_float colp[3], palett[48]	/* was [3][16] */;
 } color_;
 
 #define color_1 color_
 
 struct {
-    real textp[40];
+    xc_float textp[40];
 } text_;
 
 #define text_1 text_
 
 struct {
-    real vectp[5], xcur, ycur;
+    xc_float vectp[5], xcur, ycur;
 } vectrc_;
 
 #define vectrc_1 vectrc_
 
 struct {
     integer idex[400]	/* was [200][2] */, nvect[400]	/* was [200][2] */;
-    real xsize[400]	/* was [200][2] */, ysize[400]	/* was [200][2] */, 
+    xc_float xsize[400]	/* was [200][2] */, ysize[400]	/* was [200][2] */, 
 	    x0[4600]	/* was [2300][2] */, y0[4600]	/* was [2300][2] */, 
 	    x1[4600]	/* was [2300][2] */, y1[4600]	/* was [2300][2] */;
 } font_;
@@ -57,13 +57,13 @@ struct {
 #define font_1 font_
 
 struct {
-    real graphp[100];
+    xc_float graphp[100];
 } graph_;
 
 #define graph_1 graph_
 
 struct {
-    real mapp[11];
+    xc_float mapp[11];
 } mappar_;
 
 #define mappar_1 mappar_
@@ -85,23 +85,23 @@ static integer c__3 = 3;
 
 /* See packages/seacas/LICENSE for details */
 /* ======================================================================= */
-logical pltstd_(integer *indx, real *buff)
+logical pltstd_(integer *indx, xc_float *buff)
 {
     /* Initialized data */
 
-    static real zzzfc = (float)-1.;
-    static real zzzbc = (float)-1.;
-    static real zzzin = (float)-1.;
+    static xc_float zzzfc = (xc_float)-1.;
+    static xc_float zzzbc = (xc_float)-1.;
+    static xc_float zzzin = (xc_float)-1.;
 
     /* System generated locals */
     char * a__1[3];
     integer i__1, i__2[3];
-    real r__1;
+    xc_float r__1;
     logical ret_val;
     char ch__1[31];
 
     /* Builtin functions */
-    integer i_nint(real *);
+    integer i_nint(xc_float *);
     /* Subroutine */ int s_cat(char *, char **, integer *, integer *, ftnlen);
 
     /* Local variables */
@@ -109,7 +109,7 @@ logical pltstd_(integer *indx, real *buff)
     extern /* Subroutine */ int chric_(integer *, char *, integer *, ftnlen), 
 	    vdstbc_(integer *), vdstfc_(integer *);
     static char ierror[16];
-    extern /* Subroutine */ int pltflu_(), vdstin_(real *), pltrsd_(), 
+    extern /* Subroutine */ int pltflu_(), vdstin_(xc_float *), pltrsd_(), 
 	    siorpt_(char *, char *, integer *, ftnlen, ftnlen);
 
     /* Parameter adjustments */
@@ -140,7 +140,7 @@ logical pltstd_(integer *indx, real *buff)
 	    return ret_val;
 	}
 	zzzin = buff[1];
-	r__1 = buff[1] / (float)100.;
+	r__1 = buff[1] / (xc_float)100.;
 	vdstin_(&r__1);
 	device_1.devp[2] = buff[1];
     } else {

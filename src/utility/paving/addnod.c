@@ -20,27 +20,27 @@ extern "C" {
 /*    NTESS, the U.S. Government retains certain rights in this software. */
 
 /*    See packages/seacas/LICENSE for details */
-/* Subroutine */ int addnod_(integer *mxnd, integer *mln, real *xn, real *yn, 
-	integer *lxk, integer *kxl, integer *nxl, integer *lxn, real *angle, 
-	real *bnsize, integer *lnodes, real *xnew, real *ynew, real *dist, 
+/* Subroutine */ int addnod_(integer *mxnd, integer *mln, xc_float *xn, xc_float *yn, 
+	integer *lxk, integer *kxl, integer *nxl, integer *lxn, xc_float *angle, 
+	xc_float *bnsize, integer *lnodes, xc_float *xnew, xc_float *ynew, xc_float *dist, 
 	integer *nnn, integer *kkk, integer *lll, integer *n0, integer *n1, 
 	integer *n2, logical *ambig, integer *lambig, logical *sizeit, 
-	logical *err, logical *noroom, real *xnold, real *ynold, integer *
-	nxkold, integer *linkeg, integer *listeg, real *bmesur, integer *
+	logical *err, logical *noroom, xc_float *xnold, xc_float *ynold, integer *
+	nxkold, integer *linkeg, integer *listeg, xc_float *bmesur, integer *
 	mlink, integer *npnold, integer *npeold, integer *nnxk,
-	real *rexmin, real *rexmax, real *reymin, real *reymax, integer *
-	idivis, real *sizmin, real *emax, real *emin)
+	xc_float *rexmin, xc_float *rexmax, xc_float *reymin, xc_float *reymax, integer *
+	idivis, xc_float *sizmin, xc_float *emax, xc_float *emin)
 {
     /* System generated locals */
     integer lnodes_dim1, lnodes_offset, nxkold_dim1, nxkold_offset, i__1;
 
     /* Local variables */
     static integer i__;
-    static real size1, size2;
+    static xc_float size1, size2;
     extern /* Subroutine */ int addkxl_(integer *, integer *, integer *, 
 	    integer *), marksm_(integer *, integer *, integer *, integer *, 
 	    integer *, integer *, integer *, integer *, logical *);
-    static real siznew;
+    static xc_float siznew;
 
 /* *********************************************************************** */
 /*  SUBROUTINE ADDNOD = ADDS A NEW ELEMENT TO A NEW NODE */
@@ -77,7 +77,7 @@ extern "C" {
 /*  PUT THE BEGINNING BOUNDARY DISTANCE IN PLACE */
     if (lxn[(*n2 << 2) + 2] < 0) {
 	bnsize[(*nnn << 1) + 1] = *dist;
-	bnsize[(*nnn << 1) + 2] = (float)1.;
+	bnsize[(*nnn << 1) + 2] = (xc_float)1.;
     } else {
 	if (*sizeit) {
 /* **               LOCATION SIZE AND PROJECTING FROM LOCATION SIZE. */
@@ -94,8 +94,8 @@ extern "C" {
 	    siznew = bnsize[(*n2 << 1) + 1];
 	}
 	bnsize[(*nnn << 1) + 1] = siznew;
-	if (bnsize[(*n2 << 1) + 1] == (float)0. || *sizeit) {
-	    bnsize[(*nnn << 1) + 2] = (float)1.;
+	if (bnsize[(*n2 << 1) + 1] == (xc_float)0. || *sizeit) {
+	    bnsize[(*nnn << 1) + 2] = (xc_float)1.;
 	} else {
 	    bnsize[(*nnn << 1) + 2] = *dist / siznew;
 	}

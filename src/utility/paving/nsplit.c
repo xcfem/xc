@@ -21,20 +21,20 @@ extern "C" {
 
 /*    See packages/seacas/LICENSE for details */
 /* Subroutine */ int nsplit_(integer *mxnd, integer *mln, integer *lnodes, 
-	real *angle, integer *nstart, integer *kang, integer *inode, integer *
+	xc_float *angle, integer *nstart, integer *kang, integer *inode, integer *
 	nnode, integer *nwant, logical *maxsiz)
 {
     /* System generated locals */
     integer lnodes_dim1, lnodes_offset, i__1;
-    real r__1, r__2;
+    xc_float r__1, r__2;
     doublereal d__1;
 
     /* Builtin functions */
-    integer i_dnnt(doublereal *), i_nint(real *);
+    integer i_dnnt(doublereal *), i_nint(xc_float *);
 
     /* Local variables */
     static integer i__, nnow;
-    static real xkang;
+    static xc_float xkang;
     static integer njump, njump1, njump2, njump3;
     extern integer jumplp_(integer *, integer *, integer *, integer *, 
 	    integer *);
@@ -88,7 +88,7 @@ extern "C" {
 	}
     } else if (*nwant == 2) {
 	*nnode = 2;
-	d__1 = (doublereal) (*kang + 1) / (float)4.;
+	d__1 = (doublereal) (*kang + 1) / (xc_float)4.;
 	njump = i_dnnt(&d__1);
 	i__1 = njump - 1;
 	inode[1] = jumplp_(mxnd, mln, &lnodes[lnodes_offset], nstart, &i__1);
@@ -96,9 +96,9 @@ extern "C" {
 	inode[2] = jumplp_(mxnd, mln, &lnodes[lnodes_offset], nstart, &i__1);
     } else if (*nwant == 3) {
 	*nnode = 3;
-	d__1 = (doublereal) (*kang + 1) / (float)6.;
+	d__1 = (doublereal) (*kang + 1) / (xc_float)6.;
 	njump1 = i_dnnt(&d__1);
-	d__1 = (doublereal) (*kang + 1) / (float)2.;
+	d__1 = (doublereal) (*kang + 1) / (xc_float)2.;
 	njump2 = i_dnnt(&d__1);
 	i__1 = njump1 - 1;
 	inode[1] = jumplp_(mxnd, mln, &lnodes[lnodes_offset], nstart, &i__1);
@@ -108,14 +108,14 @@ extern "C" {
 	inode[3] = jumplp_(mxnd, mln, &lnodes[lnodes_offset], nstart, &i__1);
     } else if (*nwant == 4) {
 	*nnode = 4;
-	xkang = (real) (*kang + 1);
-	r__1 = xkang / (float)8.;
+	xkang = (xc_float) (*kang + 1);
+	r__1 = xkang / (xc_float)8.;
 	njump1 = i_nint(&r__1) - 1;
-	r__1 = xkang / (float)2.;
-	r__2 = xkang / (float)8.;
+	r__1 = xkang / (xc_float)2.;
+	r__2 = xkang / (xc_float)8.;
 	njump2 = i_nint(&r__1) - i_nint(&r__2) - 1;
-	r__1 = xkang / (float)2.;
-	r__2 = xkang / (float)8.;
+	r__1 = xkang / (xc_float)2.;
+	r__2 = xkang / (xc_float)8.;
 	njump3 = i_nint(&r__1) + i_nint(&r__2) - 1;
 	inode[1] = jumplp_(mxnd, mln, &lnodes[lnodes_offset], nstart, &njump1)
 		;

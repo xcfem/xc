@@ -64,7 +64,7 @@ static integer c__2 = 2;
 
     /* Local variables */
     static integer i__, idev;
-    static real rbuf[2];
+    static xc_float rbuf[2];
     extern /* Subroutine */ int vdnwpg_(), pltflu_();
 
 /* ======================================================================= */

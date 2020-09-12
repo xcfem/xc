@@ -20,10 +20,10 @@ extern "C" {
 /*    NTESS, the U.S. Government retains certain rights in this software. */
 
 /*    See packages/seacas/LICENSE for details */
-/* Subroutine */ int intsct_(real *x1, real *y1, real *x2, real *y2, real *x3,
-	 real *y3, real *x4, real *y4, real *u, real *w, logical *lcross)
+/* Subroutine */ int intsct_(xc_float *x1, xc_float *y1, xc_float *x2, xc_float *y2, xc_float *x3,
+	 xc_float *y3, xc_float *x4, xc_float *y4, xc_float *u, xc_float *w, logical *lcross)
 {
-    static real xa, ya, xb, yb, xc, yc, xd, yd, denom;
+    static xc_float xa, ya, xb, yb, xc, yc, xd, yd, denom;
 
 /* *********************************************************************** */
 /*  SUBROUTINE INTSCT = CHECKS TO SEE IF THE LINE FROM N1 TO N2 */
@@ -63,18 +63,18 @@ extern "C" {
 /*  AN INTERSECTION, BOTH U AND W MUST BE BETWEEN 0 AND 1. */
     denom = yb * xd - xb * yd;
 /*  CHECK FOR SPECIAL PARALLEL CASE - THE DENOMINATOR IS EQUAL TO ZERO. */
-    if (denom != (float)0.) {
+    if (denom != (xc_float)0.) {
 /*  CHECK FOR INTERSECTION */
 	*w = (yc * xb - xb * ya - xc * yb + yb * xa) / denom;
-	if (*w < (float)1. && *w > (float)0.) {
+	if (*w < (xc_float)1. && *w > (xc_float)0.) {
 /*  W INDICATES AN INTERSECTION HAS OCCURRED. */
 /*  GET THE U VALUE AND CONFIRM. */
-	    if (xb != (float)0.) {
+	    if (xb != (xc_float)0.) {
 		*u = (xc + *w * xd - xa) / xb;
 	    } else {
 		*u = (yc + *w * yd - ya) / yb;
 	    }
-	    if (*u < (float)1. && *u > (float)0.) {
+	    if (*u < (xc_float)1. && *u > (xc_float)0.) {
 		*lcross = TRUE_;
 	    }
 	}

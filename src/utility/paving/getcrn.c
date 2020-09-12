@@ -25,8 +25,8 @@ static integer c__1 = 1;
 
 /*    See packages/seacas/LICENSE for details */
 /* Subroutine */ int getcrn_(integer *mxnd, integer *mxcorn, integer *mln, 
-        integer *lnodes, integer *ncorn, integer *lcorn, real *angle, real *
-        xn, real *yn, integer *lxn, integer *nloop, integer *n1, logical *
+        integer *lnodes, integer *ncorn, integer *lcorn, xc_float *angle, xc_float *
+        xn, xc_float *yn, integer *lxn, integer *nloop, integer *n1, logical *
         onlyc, logical *pposbl, logical *graph, logical *err)
 {
     /* System generated locals */
@@ -34,11 +34,11 @@ static integer c__1 = 1;
 
     /* Local variables */
     static integer j;
-    static real x[1], y[1];
+    static xc_float x[1], y[1];
     static integer kkc, node, nold, isqr, istat, kount;
-    extern /* Subroutine */ int  lcolor_(char *, ftnlen), ndstat_(integer *, integer *, real *, integer *);
+    extern /* Subroutine */ int  lcolor_(char *, ftnlen), ndstat_(integer *, integer *, xc_float *, integer *);
     static integer kountc;
-    extern /* Subroutine */ int sflush_(), symbol_(integer *, real *, real *, 
+    extern /* Subroutine */ int sflush_(), symbol_(integer *, xc_float *, xc_float *, 
             char *, ftnlen);
 
 /* *********************************************************************** */
@@ -67,7 +67,7 @@ static integer c__1 = 1;
 L100:
     ++kount;
     if (kount > *nloop) {
-        fprintf(stderr,"PROBLEM IN GETCRN WITH UNCLOSED LOOP");
+        fprintf(stderr,"PROBLEM IN GETCRN WITH UNCLOSED LOOP\n");
         *err = TRUE_;
         goto L120;
     }

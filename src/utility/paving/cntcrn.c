@@ -54,7 +54,7 @@ extern "C" {
 L100:
     ++kount;
     if (kount > *nloop) {
-        fprintf(stderr,"PROBLEM IN CNTCRN WITH UNCLOSED LOOP");
+        fprintf(stderr,"PROBLEM IN CNTCRN WITH UNCLOSED LOOP\n");
         *err = TRUE_;
         goto L110;
     }

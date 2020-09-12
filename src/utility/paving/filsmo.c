@@ -18,7 +18,7 @@ extern "C" {
 /* Common Block Declarations */
 
 struct {
-    real timea, timep, timec, timepc, timeaj, times;
+    xc_float timea, timep, timec, timepc, timeaj, times;
 } timing_;
 
 #define timing_1 timing_
@@ -28,57 +28,57 @@ struct {
 /*    NTESS, the U.S. Government retains certain rights in this software. */
 
 /*    See packages/seacas/LICENSE for details */
-/* Subroutine */ int filsmo_(integer *mxnd, integer *mln, real *xn, real *yn, 
-	real *zn, integer *lxk, integer *kxl, integer *nxl, integer *lxn, 
-	integer *lll, integer *nnn, integer *nnn2, integer *lnodes, real *
-	bnsize, integer *nloop, real *xmin, real *xmax, real *ymin, real *
-	ymax, real *zmin, real *zmax, char *dev1, integer *kreg, ftnlen 
+/* Subroutine */ int filsmo_(integer *mxnd, integer *mln, xc_float *xn, xc_float *yn, 
+	xc_float *zn, integer *lxk, integer *kxl, integer *nxl, integer *lxn, 
+	integer *lll, integer *nnn, integer *nnn2, integer *lnodes, xc_float *
+	bnsize, integer *nloop, xc_float *xmin, xc_float *xmax, xc_float *ymin, xc_float *
+	ymax, xc_float *zmin, xc_float *zmax, char *dev1, integer *kreg, ftnlen 
 	dev1_len)
 {
     /* System generated locals */
     integer lnodes_dim1, lnodes_offset, i__1, i__2, i__3;
-    real r__1, r__2;
+    xc_float r__1, r__2;
 
     /* Builtin functions */
-    double sqrt(doublereal);
+    
 
     /* Local variables */
     static integer i__, l, n0, n2;
-    static real al;
+    static xc_float al;
     static integer ii, il;
-    static real dx;
+    static xc_float dx;
     static integer it;
-    static real fx, fy, sl, ro, vl, dy, wt;
+    static xc_float fx, fy, sl, ro, vl, dy, wt;
     static logical big;
-    static real eps;
+    static xc_float eps;
     static logical err;
     static integer nit;
-    static real tol, vro, eps2, wfac;
+    static xc_float tol, vro, eps2, wfac;
     static integer nend;
     static logical done;
     static integer node;
-    static real delx, dely, wfac2;
+    static xc_float delx, dely, wfac2;
     static integer node1, node2;
-    static real time1, time2;
+    static xc_float time1, time2;
     static logical graph;
     static integer idraw, lines[20];
     extern /* Subroutine */ int setn02_(integer *, integer *, integer *, 
 	    integer *, integer *, integer *, integer *, integer *, integer *);
-    static real vxdel, vydel;
-    extern /* Subroutine */ int mnorm_(integer *, real *, real *, integer *, 
-	    integer *, real *);
+    static xc_float vxdel, vydel;
+    extern /* Subroutine */ int mnorm_(integer *, xc_float *, xc_float *, integer *, 
+	    integer *, xc_float *);
     static integer kount;
-    extern /* Subroutine */ int d2node_(integer *, real *, real *, integer *, 
-	    integer *), eqlang_(integer *, real *, real *, integer *, integer 
-	    *, integer *, integer *, integer *, real *, real *, real *, real *
-	    ), getime_(real *);
-    static real stdlen;
+    extern /* Subroutine */ int d2node_(integer *, xc_float *, xc_float *, integer *, 
+	    integer *), eqlang_(integer *, xc_float *, xc_float *, integer *, integer 
+	    *, integer *, integer *, integer *, xc_float *, xc_float *, xc_float *, xc_float *
+	    ), getime_(xc_float *);
+    static xc_float stdlen;
     extern /* Subroutine */ int lcolor_(char *, ftnlen), getlxn_(integer *, 
 	    integer *, integer *, integer *, integer *, logical *), sflush_(),
-	     rowsmo_(integer *, integer *, real *, real *, real *, integer *, 
-	    integer *, integer *, integer *, integer *, real *, real *, 
-	    integer *, real *, real *, integer *, integer *, real *, integer *
-	    , logical *, real *, real *, real *, real *, real *, real *, char 
+	     rowsmo_(integer *, integer *, xc_float *, xc_float *, xc_float *, integer *, 
+	    integer *, integer *, integer *, integer *, xc_float *, xc_float *, 
+	    integer *, xc_float *, xc_float *, integer *, integer *, xc_float *, integer *
+	    , logical *, xc_float *, xc_float *, xc_float *, xc_float *, xc_float *, xc_float *, char 
 	    *, integer *, ftnlen);
 
 /* *********************************************************************** */
@@ -111,19 +111,19 @@ struct {
     getime_(&time1);
     graph = FALSE_;
     done = FALSE_;
-    wt = (float)10.;
+    wt = (xc_float)10.;
 /* Computing MAX */
     i__1 = *nloop * 5;
     nit = int_max(i__1,40);
-    tol = (float).03;
-    vro = (float)1.;
-    ro = (float)1.;
-    wfac = (float)1.;
-    wfac2 = (float).5;
+    tol = (xc_float).03;
+    vro = (xc_float)1.;
+    ro = (xc_float)1.;
+    wfac = (xc_float)1.;
+    wfac2 = (xc_float).5;
     mnorm_(mxnd, &xn[1], &yn[1], &nxl[3], lll, &stdlen);
     eps = tol * stdlen;
-    if (ro < (float).01) {
-	ro = (float)1.;
+    if (ro < (xc_float).01) {
+	ro = (xc_float)1.;
     }
 /* Computing 2nd power */
     r__1 = eps * ro;
@@ -146,10 +146,10 @@ struct {
 	    if (lxn[(node << 2) + 1] > 0 && lxn[(node << 2) + 2] > 0 && 
 		    lnodes[node * lnodes_dim1 + 4] == -2) {
 		done = TRUE_;
-		fx = (float)0.;
-		fy = (float)0.;
-		sl = (float)0.;
-		vl = (float)0.;
+		fx = (xc_float)0.;
+		fy = (xc_float)0.;
+		sl = (xc_float)0.;
+		vl = (xc_float)0.;
 /*  LOOP THROUGH ALL LINES CONNECTED TO NODE */
 		getlxn_(mxnd, &lxn[5], &node, lines, &kount, &err);
 		if (err) {

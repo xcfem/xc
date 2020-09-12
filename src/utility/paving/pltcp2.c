@@ -21,8 +21,8 @@ extern "C" {
 
 /* See packages/seacas/LICENSE for details */
 /* ======================================================================= */
-/* Subroutine */ int pltcp2_(integer *n, integer *mask, real *px, real *py, 
-	real *c1, real *c2)
+/* Subroutine */ int pltcp2_(integer *n, integer *mask, xc_float *px, xc_float *py, 
+	xc_float *c1, xc_float *c2)
 {
     /* Initialized data */
 
@@ -36,9 +36,9 @@ extern "C" {
 
     /* Local variables */
     static integer j, k, m, j1, jb;
-    static real fp;
+    static xc_float fp;
     static integer km, jn;
-    static real cx, cy, dx, dy;
+    static xc_float cx, cy, dx, dy;
 
     /* Parameter adjustments */
     --c2;
@@ -73,7 +73,7 @@ L2020:
 	jb = izbit[k - 1];
 	if ((m & jb) != 0) {
 	    fp = (py[j1 + k] - cy) * dx - (px[j1 + k] - cx) * dy;
-	    if (fp < (float)0.) {
+	    if (fp < (xc_float)0.) {
 		m &= ~ jb;
 	    }
 	}

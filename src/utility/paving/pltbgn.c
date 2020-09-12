@@ -18,38 +18,38 @@ extern "C" {
 /* Common Block Declarations */
 
 struct {
-    real devcap[23], defout[7];
+    xc_float devcap[23], defout[7];
 } status_;
 
 #define status_1 status_
 
 struct {
-    real devp[5];
+    xc_float devp[5];
 } device_;
 
 #define device_1 device_
 
 struct {
-    real colp[3], palett[48]	/* was [3][16] */;
+    xc_float colp[3], palett[48]	/* was [3][16] */;
 } color_;
 
 #define color_1 color_
 
 struct {
-    real textp[40];
+    xc_float textp[40];
 } text_;
 
 #define text_1 text_
 
 struct {
-    real vectp[5], xcur, ycur;
+    xc_float vectp[5], xcur, ycur;
 } vectrc_;
 
 #define vectrc_1 vectrc_
 
 struct {
     integer idex[400]	/* was [200][2] */, nvect[400]	/* was [200][2] */;
-    real xsize[400]	/* was [200][2] */, ysize[400]	/* was [200][2] */, 
+    xc_float xsize[400]	/* was [200][2] */, ysize[400]	/* was [200][2] */, 
 	    x0[4600]	/* was [2300][2] */, y0[4600]	/* was [2300][2] */, 
 	    x1[4600]	/* was [2300][2] */, y1[4600]	/* was [2300][2] */;
 } font_;
@@ -57,13 +57,13 @@ struct {
 #define font_1 font_
 
 struct {
-    real graphp[100];
+    xc_float graphp[100];
 } graph_;
 
 #define graph_1 graph_
 
 struct {
-    real mapp[11];
+    xc_float mapp[11];
 } mappar_;
 
 #define mappar_1 mappar_
@@ -76,7 +76,7 @@ struct {
 
 /* Table of constant values */
 
-static real c_b2 = (float)0.;
+static xc_float c_b2 = (xc_float)0.;
 
 /* Copyright(C) 1999-2020 National Technology & Engineering Solutions */
 /* of Sandia, LLC (NTESS).  Under the terms of Contract DE-NA0003525 with */
@@ -87,12 +87,12 @@ static real c_b2 = (float)0.;
 /* Subroutine */ int pltbgn_()
 {
     static integer i__;
-    extern /* Subroutine */ int vdnwpg_(), pltmov_(real *, real *);
+    extern /* Subroutine */ int vdnwpg_(), pltmov_(xc_float *, xc_float *);
 
     vdnwpg_();
     pltmov_(&c_b2, &c_b2);
     for (i__ = 4; i__ <= 11; ++i__) {
-	text_1.textp[i__ - 1] = (float)0.;
+	text_1.textp[i__ - 1] = (xc_float)0.;
 /* L2000: */
     }
     return 0;

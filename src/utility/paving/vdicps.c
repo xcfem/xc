@@ -337,39 +337,39 @@ static integer c__22 = 22;
 /*     command is received to dump data to output */
 /*        kempty=0,  frame is void - do not draw */
 /*              >0,  frame has data - draw it */
-    devcap_1.dev[0] = (float)0.;
-    devcap_1.dev[1] = (float)1.;
-    devcap_1.dev[2] = (float)1.;
-    devcap_1.dev[3] = (float)1.;
-    devcap_1.dev[4] = (float)15.;
-    devcap_1.dev[5] = (float)2.;
-    devcap_1.dev[6] = (float)0.;
-    devcap_1.dev[7] = (float)0.;
-    devcap_1.dev[8] = (float)0.;
-    devcap_1.dev[9] = (float)0.;
-    devcap_1.dev[10] = (float)0.;
-    devcap_1.dev[11] = (float)0.;
-    devcap_1.dev[12] = (float)0.;
-    devcap_1.dev[13] = (float)0.;
-    devcap_1.dev[14] = (float)7230.;
-    devcap_1.dev[15] = (float)5040.;
-    devcap_1.dev[16] = (float)254.;
-    devcap_1.dev[17] = (float)178.;
-    devcap_1.dev[18] = (float)4.;
-    devcap_1.dev[19] = (float)10.;
-    devcap_1.dev[20] = (float)84.;
-    devcap_1.dev[21] = (float)0.;
-    devcap_1.dev[22] = (float)0.;
-    devcap_1.dev[23] = (float)3.;
-    devcap_1.dev[24] = (float)99999.;
-    devcap_1.dev[25] = (float)0.;
-    devcap_1.dev[26] = (float)1.;
-    devcap_1.dev[27] = (float)0.;
-    devcap_1.dev[28] = (float)0.;
-    devcap_1.dev[29] = (float)5e3;
-    devcap_1.dev[30] = (float)750.;
-    devcap_1.dev[31] = (float)0.;
-    devcap_1.dev[32] = (float)1.;
+    devcap_1.dev[0] = (f2c_float)0.;
+    devcap_1.dev[1] = (f2c_float)1.;
+    devcap_1.dev[2] = (f2c_float)1.;
+    devcap_1.dev[3] = (f2c_float)1.;
+    devcap_1.dev[4] = (f2c_float)15.;
+    devcap_1.dev[5] = (f2c_float)2.;
+    devcap_1.dev[6] = (f2c_float)0.;
+    devcap_1.dev[7] = (f2c_float)0.;
+    devcap_1.dev[8] = (f2c_float)0.;
+    devcap_1.dev[9] = (f2c_float)0.;
+    devcap_1.dev[10] = (f2c_float)0.;
+    devcap_1.dev[11] = (f2c_float)0.;
+    devcap_1.dev[12] = (f2c_float)0.;
+    devcap_1.dev[13] = (f2c_float)0.;
+    devcap_1.dev[14] = (f2c_float)7230.;
+    devcap_1.dev[15] = (f2c_float)5040.;
+    devcap_1.dev[16] = (f2c_float)254.;
+    devcap_1.dev[17] = (f2c_float)178.;
+    devcap_1.dev[18] = (f2c_float)4.;
+    devcap_1.dev[19] = (f2c_float)10.;
+    devcap_1.dev[20] = (f2c_float)84.;
+    devcap_1.dev[21] = (f2c_float)0.;
+    devcap_1.dev[22] = (f2c_float)0.;
+    devcap_1.dev[23] = (f2c_float)3.;
+    devcap_1.dev[24] = (f2c_float)99999.;
+    devcap_1.dev[25] = (f2c_float)0.;
+    devcap_1.dev[26] = (f2c_float)1.;
+    devcap_1.dev[27] = (f2c_float)0.;
+    devcap_1.dev[28] = (f2c_float)0.;
+    devcap_1.dev[29] = (f2c_float)5e3;
+    devcap_1.dev[30] = (f2c_float)750.;
+    devcap_1.dev[31] = (f2c_float)0.;
+    devcap_1.dev[32] = (f2c_float)1.;
 /* SET DEFAULT ATTRIBUTE VALUES.  ALL ARE DEVICE DEPENDENT EXCEPT */
 /* VECTOR(4)=0.0. */
 /* .. following removed since should be in block data... */
@@ -381,13 +381,13 @@ static integer c__22 = 22;
 /*           (5)=LINE WIDTH       - ABOUT 1/72 INCHES */
 /*           (6)=CHARACTER BOX Y  - ABOUT 1/10 INCHES */
 /*           (7)=CHARACTER BOX X  - 5/7 OF BOX-Y */
-    vcattr_1.vector[0] = (float)0.;
-    vcattr_1.vector[1] = (float)7.;
-    vcattr_1.vector[2] = (float)1.;
-    vcattr_1.vector[3] = (float)0.;
-    vcattr_1.vector[4] = (float).06255;
-    vcattr_1.vector[5] = (float).01;
-    vcattr_1.vector[6] = (float)0.;
+    vcattr_1.vector[0] = (f2c_float)0.;
+    vcattr_1.vector[1] = (f2c_float)7.;
+    vcattr_1.vector[2] = (f2c_float)1.;
+    vcattr_1.vector[3] = (f2c_float)0.;
+    vcattr_1.vector[4] = (f2c_float).06255;
+    vcattr_1.vector[5] = (f2c_float).01;
+    vcattr_1.vector[6] = (f2c_float)0.;
 /* PROTECT INPUT PARAMETERS FROM BEING CHANGED. */
     aspec1 = *aspect;
     justi1 = *justif;
@@ -395,13 +395,13 @@ static integer c__22 = 22;
     vcescp_1.pgform = 0;
     vcescp_1.patno = 20;
     vcescp_1.border = 1;
-    vccrps_1.xcp = (float)0.;
-    vccrps_1.ycp = (float)0.;
+    vccrps_1.xcp = (f2c_float)0.;
+    vccrps_1.ycp = (f2c_float)0.;
 /* CHECK FOR VALID ASPECT.  IF(ASPECT.LT.0.0) THEN CALL VBERRH(721,5), */
 /* AND USE DEFAULT ASPECT. */
-    if (*aspect < (float)0.) {
+    if (*aspect < (f2c_float)0.) {
 	vberrh_(&c__721, &c__5);
-	aspec1 = (float)0.;
+	aspec1 = (f2c_float)0.;
     }
 /* CHECK FOR VALID JUSTIF.  IF(JUSTIF.LT.0 .OR. JUSTIF.GT.9) THEN */
 /* CALL VBERRH(720,5), AND USE DEFAULT JUSTIF. */
@@ -417,8 +417,8 @@ static integer c__22 = 22;
 /* THE DEVICE ASPECT IS XINCH/YINCH */
 /* BUT WE MUST MAP THE ASPECT SPECIFIED IN DC INTO THIS */
 /* ADDRESSABILITY,USING AS MUCH OF THE SPACE AS POSSIBLE. */
-    vcmodr_1.xinch = (float)10.;
-    vcmodr_1.yinch = (float)7.5;
+    vcmodr_1.xinch = (f2c_float)10.;
+    vcmodr_1.yinch = (f2c_float)7.5;
 /*     test for rscors post or direct mode. Use 7.5x7.5 for direct */
 /*     and 10.0x7.5 for post */
 /*     if VDIQDC has already been called, we are in post mode; */
@@ -437,11 +437,11 @@ static integer c__22 = 22;
 	devcap_1.dev[16] = devcap_1.dev[17];
 	devcap_1.dev[17] = temp;
     }
-    xunits = vcmodr_1.xinch * (float)723.;
-    yunits = vcmodr_1.yinch * (float)723.;
+    xunits = vcmodr_1.xinch * (f2c_float)723.;
+    yunits = vcmodr_1.yinch * (f2c_float)723.;
     daspec = xunits / yunits;
 /* DEFAULT ASPECT = 1., DEFAULT JUSTIF = 1. */
-    if (aspec1 == (float)0.) {
+    if (aspec1 == (f2c_float)0.) {
 	aspec1 = daspec;
     }
     if (justi1 == 0) {
@@ -476,21 +476,21 @@ static integer c__22 = 22;
     }
 /* FIGURE MAXIMUM NDC VALUES XNDCMX AND YNDCMX. */
     if (aspec1 >= daspec) {
-	vcndcm_1.xndcmx = dbl_min((float)1.,aspec1);
+	vcndcm_1.xndcmx = dbl_min((f2c_float)1.,aspec1);
 	vcndcm_1.yndcmx = vcndcm_1.xndcmx / aspec1;
     } else {
 	vcndcm_1.xndcmx = aspec1;
-	vcndcm_1.yndcmx = (float)1.;
+	vcndcm_1.yndcmx = (f2c_float)1.;
     }
 /* SET SCALE FACTORS FOR NDC-TO-DEVICE MAPPING. */
     vcscal_1.xscale = (doublereal) vcddim_1.xdevic / vcndcm_1.xndcmx;
     vcscal_1.yscale = (doublereal) vcddim_1.ydevic / vcndcm_1.yndcmx;
     if (vcescp_1.pgform > 0) {
-	vcddim_1.ypad += (float)280.;
-	vcddim_1.xpad += (float)360.;
+	vcddim_1.ypad += (f2c_float)280.;
+	vcddim_1.xpad += (f2c_float)360.;
     } else {
-	vcddim_1.xpad += (float)280.;
-	vcddim_1.ypad += (float)-180.;
+	vcddim_1.xpad += (f2c_float)280.;
+	vcddim_1.ypad += (f2c_float)-180.;
     }
     pstsel_(" ", (ftnlen)1);
 /*  SET UP MONITORING INFORMATION */
@@ -532,7 +532,7 @@ static integer c__22 = 22;
 	    (ftnlen)54);
     pstbuf_(&c__31, "/h {setdash} def /t {show} def ", (ftnlen)31);
     pstbuf_(&c__33, "/d {gsave} def /u {grestore} def ", (ftnlen)33);
-    if (devcap_1.dev[22] >= (float)799.75 && devcap_1.dev[22] <= (float)
+    if (devcap_1.dev[22] >= (f2c_float)799.75 && devcap_1.dev[22] <= (f2c_float)
 	    799.85) {
 	pstbuf_(&c__39, "/q {exch pop exch dup 2 exp 1 exch sub ", (ftnlen)39)
 		;
@@ -541,7 +541,7 @@ static integer c__22 = 22;
 	pstbuf_(&c__40, "{ 0 setgray } if brsum 2 ge{ 1 setgray }", (ftnlen)
 		40);
 	pstbuf_(&c__10, " if } def ", (ftnlen)10);
-    } else if (devcap_1.dev[22] >= (float)799.05 && devcap_1.dev[22] <= (
+    } else if (devcap_1.dev[22] >= (f2c_float)799.05 && devcap_1.dev[22] <= (
 	    float)799.15) {
 	pstbuf_(&c__28, "/q {exch pop exch dup 2 exp ", (ftnlen)28);
 	pstbuf_(&c__39, "setgray add /brsum exch def brsum 0 le ", (ftnlen)39)
@@ -559,7 +559,7 @@ static integer c__22 = 22;
 	pstbuf_(&c__4, "/o {", (ftnlen)4);
 	pstbuf_(&c__10, "90 rotate ", (ftnlen)10);
 	psti2c_(&c__0, &c__4, xcoord, (ftnlen)4);
-	i__1 = (integer) (vcddim_1.ydevic + vcddim_1.ydevic * (float)3. / (
+	i__1 = (integer) (vcddim_1.ydevic + vcddim_1.ydevic * (f2c_float)3. / (
 		float)32.);
 	psti2c_(&i__1, &c__4, ycoord, (ftnlen)4);
 /* Writing concatenation */
@@ -585,44 +585,44 @@ static integer c__22 = 22;
 /*       color is on */
 /*       define some kind of color table */
 	for (ic = 0; ic <= 7; ++ic) {
-	    coldef[0] = (float)0.;
-	    coldef[1] = (float)0.;
-	    coldef[2] = (float)0.;
+	    coldef[0] = (f2c_float)0.;
+	    coldef[1] = (f2c_float)0.;
+	    coldef[2] = (f2c_float)0.;
 	    if (ic == 1) {
-		coldef[0] = (float)1.;
+		coldef[0] = (f2c_float)1.;
 	    } else if (ic == 2) {
-		coldef[1] = (float)1.;
+		coldef[1] = (f2c_float)1.;
 	    } else if (ic == 3) {
-		coldef[0] = (float)1.;
-		coldef[1] = (float)1.;
+		coldef[0] = (f2c_float)1.;
+		coldef[1] = (f2c_float)1.;
 	    } else if (ic == 4) {
-		coldef[2] = (float)1.;
+		coldef[2] = (f2c_float)1.;
 	    } else if (ic == 5) {
-		coldef[0] = (float)1.;
-		coldef[2] = (float)1.;
+		coldef[0] = (f2c_float)1.;
+		coldef[2] = (f2c_float)1.;
 	    } else if (ic == 6) {
-		coldef[1] = (float)1.;
-		coldef[2] = (float)1.;
+		coldef[1] = (f2c_float)1.;
+		coldef[2] = (f2c_float)1.;
 	    } else if (ic == 7) {
-		coldef[0] = (float)1.;
-		coldef[1] = (float)1.;
-		coldef[2] = (float)1.;
+		coldef[0] = (f2c_float)1.;
+		coldef[1] = (f2c_float)1.;
+		coldef[2] = (f2c_float)1.;
 	    }
 	    for (ik = 0; ik <= 255; ik += 8) {
 		dummy[0] = ic + ik;
 		vdstco_(&c__1, dummy, coldef, &c__0);
 		if (ic == 0) {
-		    coldef[0] = (float).2;
-		    coldef[1] = (float).2;
-		    coldef[2] = (float).2;
+		    coldef[0] = (f2c_float).2;
+		    coldef[1] = (f2c_float).2;
+		    coldef[2] = (f2c_float).2;
 		}
 /* L115: */
 	    }
 /* L120: */
 	}
     }
-    vcattr_1.vector[0] = (float)7.;
-    vcattr_1.vector[1] = (float)0.;
+    vcattr_1.vector[0] = (f2c_float)7.;
+    vcattr_1.vector[1] = (f2c_float)0.;
 /*     define the postscript current position */
     vbvect_(&c__0, &vccrps_1.xcp, &vccrps_1.ycp);
 /*     shade background if appropriate */
@@ -834,8 +834,8 @@ L_vdiqd9:
     if (nocall != 0) {
 /*       XINCH=10.0 */
 /*       YINCH=7.5 */
-	*xinch = (float)9.92167;
-	*yinch = (float)7.4412525;
+	*xinch = (f2c_float)9.92167;
+	*yinch = (f2c_float)7.4412525;
     }
     return 0;
 } /* vdiqdc_ */
@@ -1651,8 +1651,8 @@ L_vbiqdv:
 
 /* See packages/seacas/LICENSE for details */
     *btnnum = 32;
-    *x = (float)0.;
-    *y = (float)0.;
+    *x = (f2c_float)0.;
+    *y = (f2c_float)0.;
     return 0;
 } /* vdabgl_ */
 
@@ -1677,8 +1677,8 @@ L_vbiqdv:
 /* C C C C C C C C C C C C C C C C C C C C C C C C C C C C C C C C C C C */
 /*     dummy routine */
     *char__ = 32;
-    *x = (float)0.;
-    *y = (float)0.;
+    *x = (f2c_float)0.;
+    *y = (f2c_float)0.;
     return 0;
 } /* vdakgl_ */
 
@@ -1710,8 +1710,8 @@ L_vbiqdv:
 /* NTESS, the U.S. Government retains certain rights in this software. */
 
 /* See packages/seacas/LICENSE for details */
-    *x = (float)0.;
-    *y = (float)0.;
+    *x = (f2c_float)0.;
+    *y = (f2c_float)0.;
     return 0;
 } /* vdaloc_ */
 
@@ -2066,9 +2066,9 @@ L999:
 	clrar2 = clrary[i__ * 3 + 2];
 	clrar3 = clrary[i__ * 3 + 3];
 	if (*clrmod == 0) {
-	    if (clrar1 < (float)0. || clrar1 > (float)1. || clrar2 < (float)
-		    0. || clrar2 > (float)1. || clrar3 < (float)0. || clrar3 
-		    > (float)1.) {
+	    if (clrar1 < (f2c_float)0. || clrar1 > (f2c_float)1. || clrar2 < (f2c_float)
+		    0. || clrar2 > (f2c_float)1. || clrar3 < (f2c_float)0. || clrar3 
+		    > (f2c_float)1.) {
 		vberrh_(&c__727, &c__5);
 		goto L100;
 	    }
@@ -2167,9 +2167,9 @@ L310:
 L390:
 	    ;
 	} else {
-	    if (clrar1 < (float)0. || clrar1 > (float)360. || clrar2 < (float)
-		    0. || clrar2 > (float)1. || clrar3 < (float)0. || clrar3 
-		    > (float)1.) {
+	    if (clrar1 < (f2c_float)0. || clrar1 > (f2c_float)360. || clrar2 < (f2c_float)
+		    0. || clrar2 > (f2c_float)1. || clrar3 < (f2c_float)0. || clrar3 
+		    > (f2c_float)1.) {
 		vberrh_(&c__727, &c__5);
 		goto L100;
 	    }
@@ -2346,7 +2346,7 @@ L999:
 /*           (6)=CHARACTER BOX Y */
 /*           (7)=CHARACTER BOX X */
 /* CHECK FOR VALID INTEN. */
-    if (*inten < (float)0. || *inten > (float)1.) {
+    if (*inten < (f2c_float)0. || *inten > (f2c_float)1.) {
 	vberrh_(&c__401, &c__5);
 	goto L999;
     }
@@ -2779,7 +2779,7 @@ L370:
     }
 /* 2100 - PAGE FORMAT (0=LANDSCAPE,1=PORTRAIT) */
     if (*escpcd == 2100) {
-	if (args[1] == (float)0.) {
+	if (args[1] == (f2c_float)0.) {
 	    vcescp_1.pgform = 0;
 	} else {
 	    vcescp_1.pgform = 1;
@@ -3047,16 +3047,16 @@ L_vblina:
 	if (chars[i__] < 32 || chars[i__] > 126) {
 	    if (chars[i__] == 8) {
 		dx = -vcattr_1.vector[6];
-		dy = (float)0.;
+		dy = (f2c_float)0.;
 	    } else if (chars[i__] == 10) {
-		dx = (float)0.;
+		dx = (f2c_float)0.;
 		dy = -vcattr_1.vector[5];
 	    } else if (chars[i__] == 13) {
 		dx = vcddim_1.xpad - vccrps_1.xcp;
-		dy = (float)0.;
+		dy = (f2c_float)0.;
 	    } else {
-		dx = (float)0.;
-		dy = (float)0.;
+		dx = (f2c_float)0.;
+		dy = (f2c_float)0.;
 		vberrh_(&c__208, &c__5);
 		goto L100;
 	    }
@@ -3173,7 +3173,7 @@ L999:
 L_vbstls:
     if (*linsty < 0 || *linsty > 5) {
 	vberrh_(&c__401, &c__5);
-	vcattr_1.vector[3] = (float)0.;
+	vcattr_1.vector[3] = (f2c_float)0.;
 	goto L999;
     }
     if (vcvec1_1.ivect != 0) {
@@ -3187,18 +3187,18 @@ L_vbstls:
 /* calculate the linewidth -- it's needed below in every case */
 /*        actual xscale is xscale*.1; linewidth=1 => .01 in NDC */
     lw = vcattr_1.vector[4];
-    lw = vcscal_1.xscale * vcattr_1.vector[4] * (float).001;
+    lw = vcscal_1.xscale * vcattr_1.vector[4] * (f2c_float).001;
 /*        a linewidth of zero isn't good with postscript */
-    if (lw < (float)1.) {
-	lw = (float)1.;
+    if (lw < (f2c_float)1.) {
+	lw = (f2c_float)1.;
     }
 /*     from here on, set up patterns that depend on the linewidth and */
 /*          the extra length added to the line segment */
 /*          by the hemispherical end cap */
     if (*linsty == 1) {
-	r__1 = lw * (float).5;
+	r__1 = lw * (f2c_float).5;
 	ill = i_nint(&r__1);
-	r__1 = lw * (float)3.;
+	r__1 = lw * (f2c_float)3.;
 	igap = i_nint(&r__1);
 	psti2c_(&ill, &c__3, strl, (ftnlen)3);
 	psti2c_(&igap, &c__3, strg, (ftnlen)3);
@@ -3211,11 +3211,11 @@ L_vbstls:
 	s_cat(ctemp, a__1, i__1, &c__5, (ftnlen)30);
 	pstbuf_(&c__14, ctemp, (ftnlen)30);
     } else if (*linsty == 2) {
-	r__1 = lw * (float)18.;
+	r__1 = lw * (f2c_float)18.;
 	ill = i_nint(&r__1);
-	r__1 = lw * (float)1.5;
+	r__1 = lw * (f2c_float)1.5;
 	jll = i_nint(&r__1);
-	r__1 = lw * (float)3.;
+	r__1 = lw * (f2c_float)3.;
 	igap = i_nint(&r__1);
 	psti2c_(&ill, &c__3, strl, (ftnlen)3);
 	psti2c_(&jll, &c__3, strs, (ftnlen)3);
@@ -3234,9 +3234,9 @@ L_vbstls:
 	pstbuf_(&c__22, ctemp, (ftnlen)30);
 /*         call pstbuf(14,'[2 2 6 2] 0 h ') */
     } else if (*linsty == 3) {
-	r__1 = lw * (float)6.;
+	r__1 = lw * (f2c_float)6.;
 	ill = i_nint(&r__1);
-	r__1 = lw * (float)7.;
+	r__1 = lw * (f2c_float)7.;
 	igap = i_nint(&r__1);
 	psti2c_(&ill, &c__3, strl, (ftnlen)3);
 	psti2c_(&igap, &c__3, strg, (ftnlen)3);
@@ -3250,9 +3250,9 @@ L_vbstls:
 	pstbuf_(&c__14, ctemp, (ftnlen)30);
 /*         call pstbuf(8,'[4] 0 h ') */
     } else if (*linsty == 4) {
-	r__1 = lw * (float)24.;
+	r__1 = lw * (f2c_float)24.;
 	ill = i_nint(&r__1);
-	r__1 = lw * (float)18.;
+	r__1 = lw * (f2c_float)18.;
 	igap = i_nint(&r__1);
 	psti2c_(&ill, &c__3, strl, (ftnlen)3);
 	psti2c_(&igap, &c__3, strg, (ftnlen)3);
@@ -3266,9 +3266,9 @@ L_vbstls:
 	pstbuf_(&c__14, ctemp, (ftnlen)30);
 /*         call pstbuf(8,'[8] 0 h ') */
     } else if (*linsty == 5) {
-	r__1 = lw * (float)12.;
+	r__1 = lw * (f2c_float)12.;
 	ill = i_nint(&r__1);
-	r__1 = lw * (float)10.;
+	r__1 = lw * (f2c_float)10.;
 	igap = i_nint(&r__1);
 	psti2c_(&ill, &c__3, strl, (ftnlen)3);
 	psti2c_(&igap, &c__3, strg, (ftnlen)3);
@@ -3359,20 +3359,20 @@ L999:
 /*           (7)=CHARACTER BOX X */
 /* SCALE FACTORS FOR NDC TO DC MAPPING. (LXY,HC1) */
 /* CHECK FOR VALID YSIZE. */
-    if (*ysize < (float)0. || *ysize > (float)1.) {
+    if (*ysize < (f2c_float)0. || *ysize > (f2c_float)1.) {
 	vberrh_(&c__401, &c__5);
 	goto L999;
     }
 /* PROTECT INPUT PARAMETER FROM BEING CHANGED. */
     ysize1 = *ysize;
 /* DON'T ALLOW VALUES BELOW THE MINIMUM "HARDWARE" SIZE. */
-    if (ysize1 < (float).01) {
-	ysize1 = (float).01;
+    if (ysize1 < (f2c_float).01) {
+	ysize1 = (f2c_float).01;
     }
 /* VALUES ESTABLISHED HERE ARE USED BY VBSIM IN SIMULATING CHARACTERS. */
 /* ALWAYS USE A CHARACTER ASPECT RATIO OF 5/7. */
     vcattr_1.vector[5] = ysize1;
-    vcattr_1.vector[6] = ysize1 * (float)5. / (float)7.;
+    vcattr_1.vector[6] = ysize1 * (f2c_float)5. / (f2c_float)7.;
 /* convert the character size into device coords */
     r__1 = vcscal_1.xscale * ysize1;
     iysize = i_nint(&r__1);
@@ -3447,16 +3447,16 @@ L999:
 /*            = 0,  no interchange */
 /*            = 1,  colors interchanged */
 /* CHECK FOR VALID LINWTH. */
-    if (*linwth < (float)0. || *linwth > (float)1.) {
+    if (*linwth < (f2c_float)0. || *linwth > (f2c_float)1.) {
 	vberrh_(&c__401, &c__5);
 	goto L999;
     }
 /*     test user define minimum */
     width = dbl_max(vcpsta_1.pstmlw,*linwth);
 /* CONVERT LINE-WIDTH TO NDC */
-    lw = width * (float).005;
+    lw = width * (f2c_float).005;
 /* CONVERT WIDTH TO DEVICE COORDINATES AND ADD A DIGIT; NEED IT TO HUNDREDTHS */
-    r__1 = vcscal_1.xscale * lw * (float)10.;
+    r__1 = vcscal_1.xscale * lw * (f2c_float)10.;
     ilw = i_nint(&r__1);
 /*     A LINEWIDTH OF ZERO WORKS ONLY PART OF THE TIME */
     if (ilw < 10) {
@@ -3720,23 +3720,23 @@ L999:
 /*           (7)=CHARACTER BOX X */
     if (vcpstb_1.mopoly == 0) {
 	if (vcescp_1.pgform == 0) {
-	    x[0] = (float)0.;
-	    x[1] = (float)0.;
-	    x[2] = (float).99999;
-	    x[3] = (float).99999;
-	    y[0] = (float)0.;
-	    y[1] = (float).75;
-	    y[2] = (float).75;
-	    y[3] = (float)0.;
+	    x[0] = (f2c_float)0.;
+	    x[1] = (f2c_float)0.;
+	    x[2] = (f2c_float).99999;
+	    x[3] = (f2c_float).99999;
+	    y[0] = (f2c_float)0.;
+	    y[1] = (f2c_float).75;
+	    y[2] = (f2c_float).75;
+	    y[3] = (f2c_float)0.;
 	} else {
-	    x[0] = (float)0.;
-	    x[1] = (float)0.;
-	    x[2] = (float).75;
-	    x[3] = (float).75;
-	    y[0] = (float)0.;
-	    y[1] = (float).99999;
-	    y[2] = (float).99999;
-	    y[3] = (float)0.;
+	    x[0] = (f2c_float)0.;
+	    x[1] = (f2c_float)0.;
+	    x[2] = (f2c_float).75;
+	    x[3] = (f2c_float).75;
+	    y[0] = (f2c_float)0.;
+	    y[1] = (f2c_float).99999;
+	    y[2] = (f2c_float).99999;
+	    y[3] = (f2c_float)0.;
 	}
 	kolsav = i_nint(vcattr_1.vector);
 	i__1 = i_nint(&vcattr_1.vector[1]);
@@ -3909,86 +3909,86 @@ ack background\002,/,\002 Enter option number\002)";
 	    }
 	}
 	if (s_cmp(ans, "6", (ftnlen)2, (ftnlen)1) == 0) {
-	    devcap_1.dev[3] = (float)256.;
-	    devcap_1.dev[22] = (float)799.6;
-	    devcap_1.dev[25] = (float)1.;
-	    devcap_1.dev[26] = (float)256.;
-	    devcap_1.dev[31] = (float)1.;
+	    devcap_1.dev[3] = (f2c_float)256.;
+	    devcap_1.dev[22] = (f2c_float)799.6;
+	    devcap_1.dev[25] = (f2c_float)1.;
+	    devcap_1.dev[26] = (f2c_float)256.;
+	    devcap_1.dev[31] = (f2c_float)1.;
 	    vcpstb_1.mopoly = 0;
 	    vcpstb_1.mocolr = 0;
 	} else if (s_cmp(ans, "5", (ftnlen)2, (ftnlen)1) == 0) {
-	    devcap_1.dev[3] = (float)256.;
-	    devcap_1.dev[22] = (float)799.5;
-	    devcap_1.dev[25] = (float)1.;
-	    devcap_1.dev[26] = (float)256.;
-	    devcap_1.dev[31] = (float)1.;
+	    devcap_1.dev[3] = (f2c_float)256.;
+	    devcap_1.dev[22] = (f2c_float)799.5;
+	    devcap_1.dev[25] = (f2c_float)1.;
+	    devcap_1.dev[26] = (f2c_float)256.;
+	    devcap_1.dev[31] = (f2c_float)1.;
 	    vcpstb_1.mopoly = 0;
 	    vcpstb_1.mocolr = 0;
 	} else if (s_cmp(ans, "2", (ftnlen)2, (ftnlen)1) == 0) {
-	    devcap_1.dev[3] = (float)1.;
-	    devcap_1.dev[22] = (float)799.2;
-	    devcap_1.dev[25] = (float)1.;
-	    devcap_1.dev[26] = (float)1.;
-	    devcap_1.dev[31] = (float)0.;
+	    devcap_1.dev[3] = (f2c_float)1.;
+	    devcap_1.dev[22] = (f2c_float)799.2;
+	    devcap_1.dev[25] = (f2c_float)1.;
+	    devcap_1.dev[26] = (f2c_float)1.;
+	    devcap_1.dev[31] = (f2c_float)0.;
 	    vcpstb_1.mopoly = 1;
 	    vcpstb_1.mocolr = 1;
 	} else if (s_cmp(ans, "1", (ftnlen)2, (ftnlen)1) == 0) {
-	    devcap_1.dev[3] = (float)1.;
-	    devcap_1.dev[22] = (float)799.1;
-	    devcap_1.dev[25] = (float)1.;
-	    devcap_1.dev[26] = (float)1.;
-	    devcap_1.dev[31] = (float)0.;
+	    devcap_1.dev[3] = (f2c_float)1.;
+	    devcap_1.dev[22] = (f2c_float)799.1;
+	    devcap_1.dev[25] = (f2c_float)1.;
+	    devcap_1.dev[26] = (f2c_float)1.;
+	    devcap_1.dev[31] = (f2c_float)0.;
 	    vcpstb_1.mopoly = 1;
 	    vcpstb_1.mocolr = 1;
 	} else if (s_cmp(ans, "4", (ftnlen)2, (ftnlen)1) == 0) {
-	    devcap_1.dev[3] = (float)1.;
-	    devcap_1.dev[22] = (float)799.4;
-	    devcap_1.dev[25] = (float)1.;
-	    devcap_1.dev[26] = (float)1.;
-	    devcap_1.dev[31] = (float)0.;
+	    devcap_1.dev[3] = (f2c_float)1.;
+	    devcap_1.dev[22] = (f2c_float)799.4;
+	    devcap_1.dev[25] = (f2c_float)1.;
+	    devcap_1.dev[26] = (f2c_float)1.;
+	    devcap_1.dev[31] = (f2c_float)0.;
 	    vcpstb_1.mopoly = 0;
 	    vcpstb_1.mocolr = 1;
 	} else if (s_cmp(ans, "3", (ftnlen)2, (ftnlen)1) == 0) {
-	    devcap_1.dev[3] = (float)1.;
-	    devcap_1.dev[22] = (float)799.3;
-	    devcap_1.dev[25] = (float)1.;
-	    devcap_1.dev[26] = (float)1.;
-	    devcap_1.dev[31] = (float)0.;
+	    devcap_1.dev[3] = (f2c_float)1.;
+	    devcap_1.dev[22] = (f2c_float)799.3;
+	    devcap_1.dev[25] = (f2c_float)1.;
+	    devcap_1.dev[26] = (f2c_float)1.;
+	    devcap_1.dev[31] = (f2c_float)0.;
 	    vcpstb_1.mopoly = 0;
 	    vcpstb_1.mocolr = 1;
 	} else if (s_cmp(ans, "7", (ftnlen)2, (ftnlen)1) == 0) {
-	    devcap_1.dev[3] = (float)256.;
-	    devcap_1.dev[22] = (float)799.7;
-	    devcap_1.dev[25] = (float)1.;
-	    devcap_1.dev[26] = (float)256.;
-	    devcap_1.dev[31] = (float)1.;
+	    devcap_1.dev[3] = (f2c_float)256.;
+	    devcap_1.dev[22] = (f2c_float)799.7;
+	    devcap_1.dev[25] = (f2c_float)1.;
+	    devcap_1.dev[26] = (f2c_float)256.;
+	    devcap_1.dev[31] = (f2c_float)1.;
 	    vcpstb_1.mopoly = 0;
 	    vcpstb_1.mocolr = 0;
 	    vcpsta_1.kpstci = 1;
 	} else if (s_cmp(ans, "8", (ftnlen)2, (ftnlen)1) == 0) {
-	    devcap_1.dev[3] = (float)256.;
-	    devcap_1.dev[22] = (float)799.8;
-	    devcap_1.dev[25] = (float)1.;
-	    devcap_1.dev[26] = (float)256.;
-	    devcap_1.dev[31] = (float)1.;
+	    devcap_1.dev[3] = (f2c_float)256.;
+	    devcap_1.dev[22] = (f2c_float)799.8;
+	    devcap_1.dev[25] = (f2c_float)1.;
+	    devcap_1.dev[26] = (f2c_float)256.;
+	    devcap_1.dev[31] = (f2c_float)1.;
 	    vcpstb_1.mopoly = 0;
 	    vcpstb_1.mocolr = 0;
 	    vcpsta_1.kpstci = 1;
 	} else if (s_cmp(ans, "9", (ftnlen)2, (ftnlen)1) == 0) {
-	    devcap_1.dev[3] = (float)256.;
-	    devcap_1.dev[22] = (float)799.9;
-	    devcap_1.dev[25] = (float)1.;
-	    devcap_1.dev[26] = (float)256.;
-	    devcap_1.dev[31] = (float)1.;
+	    devcap_1.dev[3] = (f2c_float)256.;
+	    devcap_1.dev[22] = (f2c_float)799.9;
+	    devcap_1.dev[25] = (f2c_float)1.;
+	    devcap_1.dev[26] = (f2c_float)256.;
+	    devcap_1.dev[31] = (f2c_float)1.;
 	    vcpstb_1.mopoly = 0;
 	    vcpstb_1.mocolr = 0;
 	    vcpsta_1.kpstbg = 1;
 	} else if (s_cmp(ans, "10", (ftnlen)2, (ftnlen)2) == 0) {
-	    devcap_1.dev[3] = (float)256.;
-	    devcap_1.dev[22] = (float)799.1;
-	    devcap_1.dev[25] = (float)1.;
-	    devcap_1.dev[26] = (float)256.;
-	    devcap_1.dev[31] = (float)1.;
+	    devcap_1.dev[3] = (f2c_float)256.;
+	    devcap_1.dev[22] = (f2c_float)799.1;
+	    devcap_1.dev[25] = (f2c_float)1.;
+	    devcap_1.dev[26] = (f2c_float)256.;
+	    devcap_1.dev[31] = (f2c_float)1.;
 	    vcpstb_1.mopoly = 0;
 	    vcpstb_1.mocolr = 0;
 	    vcpsta_1.kpstbg = 1;
@@ -3999,11 +3999,11 @@ ack background\002,/,\002 Enter option number\002)";
 L30:
 	s_wsfe(&io___108);
 	e_wsfe();
-	devcap_1.dev[3] = (float)256.;
-	devcap_1.dev[22] = (float)799.7;
-	devcap_1.dev[25] = (float)1.;
-	devcap_1.dev[26] = (float)256.;
-	devcap_1.dev[31] = (float)1.;
+	devcap_1.dev[3] = (f2c_float)256.;
+	devcap_1.dev[22] = (f2c_float)799.7;
+	devcap_1.dev[25] = (f2c_float)1.;
+	devcap_1.dev[26] = (f2c_float)256.;
+	devcap_1.dev[31] = (f2c_float)1.;
 	vcpstb_1.mopoly = 0;
 	vcpstb_1.mocolr = 0;
 	vcpsta_1.kpstci = 1;
@@ -4011,7 +4011,7 @@ L30:
 L50:
 /* - INCLUDE PSTMLW */
 /*       set minimum line width (range 0 to 1) */
-	vcpsta_1.pstmlw = (float).025;
+	vcpsta_1.pstmlw = (f2c_float).025;
 /* - */
     }
     return 0;

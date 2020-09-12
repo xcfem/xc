@@ -18,12 +18,12 @@ extern "C" {
 /* Table of constant values */
 
 static integer c__1 = 1;
-static real c_b4 = (float)7.;
-static real c_b7 = (float)0.;
-static real c_b10 = (float)3.;
-static real c_b13 = (float)5.;
-static real c_b16 = (float)1.;
-static real c_b19 = (float)4.;
+static xc_float c_b4 = (xc_float)7.;
+static xc_float c_b7 = (xc_float)0.;
+static xc_float c_b10 = (xc_float)3.;
+static xc_float c_b13 = (xc_float)5.;
+static xc_float c_b16 = (xc_float)1.;
+static xc_float c_b19 = (xc_float)4.;
 
 /*    Copyright(C) 1999-2020 National Technology & Engineering Solutions */
 /*    of Sandia, LLC (NTESS).  Under the terms of Contract DE-NA0003525 with */
@@ -36,7 +36,7 @@ static real c_b19 = (float)4.;
     integer s_cmp(char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    extern /* Subroutine */ int pltstd_(integer *, real *);
+    extern /* Subroutine */ int pltstd_(integer *, xc_float *);
 
 /* *********************************************************************** */
 /*  SUBROUTINE LCOLOR = SETS THE LINE COLOR */

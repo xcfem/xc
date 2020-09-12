@@ -18,7 +18,7 @@ extern "C" {
 /* Common Block Declarations */
 
 struct {
-    real timea, timep, timec, timepc, timeaj, times;
+    xc_float timea, timep, timec, timepc, timeaj, times;
 } timing_;
 
 #define timing_1 timing_
@@ -32,62 +32,59 @@ static integer c__1 = 1;
 /*    NTESS, the U.S. Government retains certain rights in this software. */
 
 /*    See packages/seacas/LICENSE for details */
-/* Subroutine */ int adjrow_(integer *mxnd, integer *mln, integer *nuid, real 
-        *xn, real *yn, real *zn, integer *lxk, integer *kxl, integer *nxl, 
-        integer *lxn, real *angle, real *bnsize, integer *lnodes, integer *
-        nloop, integer *iavail, integer *navail, real *xmin, real *xmax, real 
-        *ymin, real *ymax, real *zmin, real *zmax, char *dev1, integer *lll, 
+/* Subroutine */ int adjrow_(integer *mxnd, integer *mln, integer *nuid, xc_float 
+        *xn, xc_float *yn, xc_float *zn, integer *lxk, integer *kxl, integer *nxl, 
+        integer *lxn, xc_float *angle, xc_float *bnsize, integer *lnodes, integer *
+        nloop, integer *iavail, integer *navail, xc_float *xmin, xc_float *xmax, xc_float 
+        *ymin, xc_float *ymax, xc_float *zmin, xc_float *zmax, char *dev1, integer *lll, 
         integer *kkk, integer *nnn, integer *lllold, integer *nnnold, integer 
         *node, integer *nadj1, integer *nadj2, integer *nnn2, logical *graph, 
-        logical *video, integer *kreg, real *defsiz, logical *adjted, logical 
+        logical *video, integer *kreg, xc_float *defsiz, logical *adjted, logical 
         *noroom, logical *err, ftnlen dev1_len)
 {
     /* Initialized data */
 
-    static real tmin1 = (float).8;
-    static real tmin2 = (float).3;
-    static real wmin1 = (float)1.25;
-    static real wmin2 = (float)1.35;
+    static xc_float tmin1 = (xc_float).8;
+    static xc_float tmin2 = (xc_float).3;
+    static xc_float wmin1 = (xc_float)1.25;
+    static xc_float wmin2 = (xc_float)1.35;
 
     /* System generated locals */
     integer lnodes_dim1, lnodes_offset, i__1, i__2;
-    real r__1, r__2, r__3, r__4;
-
-    /* Builtin functions */
-    double atan2(doublereal, doublereal), sqrt(doublereal);
+    xc_float r__1, r__2, r__3, r__4;
 
     /* Local variables */
     static integer n0, n1, n2, n11;
-    static real pi, eps;
+    static xc_float pi, eps;
     static integer kang;
-    static real tang, dist, teps, time1, time2;
+    static xc_float tang, dist, teps, time1, time2;
     static integer n11old;
-    static real ratio;
+    static xc_float ratio;
     static integer kount;
-    extern /* Subroutine */ int addwdg_(integer *, integer *, integer *, real 
-            *, real *, real *, integer *, integer *, integer *, integer *, 
-            integer *, real *, real *, integer *, integer *, integer *, 
-            integer *, integer *, integer *, integer *, integer *, real *, 
-            integer *, integer *, integer *, real *, real *, real *, real *, 
-            real *, real *, logical *, logical *, char *, integer *, logical *
-            , logical *, ftnlen), getime_(real *), 
-            addtuk_(integer *, integer *, integer *, real *, real *, real *, 
-            integer *, integer *, integer *, integer *, integer *, real *, 
+    extern /* Subroutine */ int addwdg_(integer *, integer *, integer *, xc_float 
+            *, xc_float *, xc_float *, integer *, integer *, integer *, integer *, 
+            integer *, xc_float *, xc_float *, integer *, integer *, integer *, 
+            integer *, integer *, integer *, integer *, integer *, xc_float *, 
+            integer *, integer *, integer *, xc_float *, xc_float *, xc_float *, xc_float *, 
+            xc_float *, xc_float *, logical *, logical *, char *, integer *, logical *
+            , logical *, ftnlen), getime_(xc_float *), 
+            addtuk_(integer *, integer *, integer *, xc_float *, xc_float *, xc_float *, 
+            integer *, integer *, integer *, integer *, integer *, xc_float *, 
             integer *, integer *, integer *, integer *, integer *, integer *, 
-            real *, integer *, integer *, integer *, integer *, real *, real *
-            , real *, real *, real *, real *, logical *, logical *, char *, 
+            xc_float *, integer *, integer *, integer *, integer *, xc_float *, xc_float *
+            , xc_float *, xc_float *, xc_float *, xc_float *, logical *, logical *, char *, 
             logical *, logical *, ftnlen);
     static integer idepth;
-    extern /* Subroutine */ int lupang_(integer *, integer *, real *, real *, 
-            real *, integer *, integer *, integer *, integer *, integer *, 
-            real *, integer *, integer *, integer *, real *, real *, real *, 
-            real *, real *, real *, char *, integer *, logical *, ftnlen), 
-            filsmo_(integer *, integer *, real *, real *, real *, integer *, 
+    extern /* Subroutine */ int lupang_(integer *, integer *, xc_float *, xc_float *, 
+            xc_float *, integer *, integer *, integer *, integer *, integer *, 
+            xc_float *, integer *, integer *, integer *, xc_float *, xc_float *, xc_float *, 
+            xc_float *, xc_float *, xc_float *, char *, integer *, logical *, ftnlen), 
+            filsmo_(integer *, integer *, xc_float *, xc_float *, xc_float *, integer *, 
             integer *, integer *, integer *, integer *, integer *, integer *, 
-            integer *, real *, integer *, real *, real *, real *, real *, 
-            real *, real *, char *, integer *, ftnlen), snapit_(integer *), 
-            rplotl_(integer *, real *, real *, real *, integer *, real *, 
-            real *, real *, real *, real *, real *, integer *, char *, 
+            integer *, xc_float *, integer *, xc_float *, xc_float *, xc_float *, xc_float *, 
+            xc_float *, xc_float *, char *, integer *, ftnlen), snapit_(integer *), 
+            rplotl_(integer *, xc_float *, xc_float *, xc_float *, integer *, xc_float *, 
+            xc_float *, xc_float *, xc_float *, xc_float *, xc_float *, integer *, char *, 
             integer *, ftnlen);
 
 /* *********************************************************************** */
@@ -109,10 +106,10 @@ static integer c__1 = 1;
     lnodes -= lnodes_offset;
 
     /* Function Body */
-    pi = atan2((float)0., (float)-1.);
+    pi = M_PI;
     getime_(&time1);
     *err = FALSE_;
-    eps = (float).0523599;
+    eps = (xc_float).0523599;
 /*  START BY SETTING UP THE LIMITS OF THE SEARCH */
     if (*nadj1 == *nadj2) {
         n2 = lnodes[*nadj1 * lnodes_dim1 + 3];
@@ -123,20 +120,20 @@ L100:
             *nadj1 = n2;
             *nadj2 = n2;
             teps = (pi - (doublereal) (*nloop - 2) * pi / (doublereal) (*
-                    nloop)) * (float).95;
+                    nloop)) * (xc_float).95;
             if (teps <= eps) {
                 eps = teps;
             }
             goto L110;
         } else if (n2 == *nadj2) {
             teps = (pi - (doublereal) (*nloop - 2) * pi / (doublereal) (*
-                    nloop)) * (float).95;
+                    nloop)) * (xc_float).95;
             if (teps <= eps) {
                 eps = teps;
             }
             goto L110;
         } else if (kount > *nloop) {
-          fprintf(stderr,"** PROBLEMS IN ADJROW WITH LOOP NOT CLOSING **");
+          fprintf(stderr,"** PROBLEMS IN ADJROW WITH LOOP NOT CLOSING **\n");
             *err = TRUE_;
             goto L160;
         } else {
@@ -156,9 +153,9 @@ L120:
     if (angle[n1] < pi - eps && lnodes[n1 * lnodes_dim1 + 8] > 1 && lxn[(n1 <<
              2) + 4] == 0 && lxn[(n1 << 2) + 3] > 0) {
 /*  ADDED UP THE TURNING ANGLE AND THE AVERAGE SIZE REDUCTION */
-        tang = (float)0.;
+        tang = (xc_float)0.;
         kang = 0;
-        ratio = (float)0.;
+        ratio = (xc_float)0.;
         n11 = n1;
 L130:
         tang += pi - angle[n11];
@@ -174,8 +171,8 @@ L130:
 /* Computing 2nd power */
         r__4 = yn[n2] - yn[n11];
         dist = (sqrt(r__1 * r__1 + r__2 * r__2) + sqrt(r__3 * r__3 + r__4 * 
-                r__4)) * (float).5;
-        if (*defsiz > (float)0.) {
+                r__4)) * (xc_float).5;
+        if (*defsiz > (xc_float)0.) {
             if (dist < *defsiz) {
                 ratio += dist / bnsize[(n11 << 1) + 1];
             } else {
@@ -196,8 +193,8 @@ L130:
             ratio /= (doublereal) kang;
 /* **               THIS CRITERIA SHOULD HELP ALLEVIATE THE LONG SKINNY */
 /* **               ELEMENT FORMATIONS WHEN TRANSITIONING. */
-            if (ratio < tmin1 && tang > (float)1.2217 || ratio < tmin2 && 
-                    tang > (float).9) {
+            if (ratio < tmin1 && tang > (xc_float)1.2217 || ratio < tmin2 && 
+                    tang > (xc_float).9) {
                 if (*graph || *video) {
                     rplotl_(mxnd, &xn[1], &yn[1], &zn[1], &nxl[3], xmin, xmax,
                              ymin, ymax, zmin, zmax, lll, dev1, kreg, (ftnlen)
@@ -236,9 +233,9 @@ L130:
     } else if (angle[n1] >= pi + eps && lxn[(n1 << 2) + 3] > 0 && lxn[(n1 << 
             2) + 4] == 0) {
 /*  ADD UP THE TURNING ANGLE AND THE AVERAGE SIZE REDUCTION */
-        tang = (float)0.;
+        tang = (xc_float)0.;
         kang = 0;
-        ratio = (float)0.;
+        ratio = (xc_float)0.;
         idepth = 0;
         n11 = n1;
 L140:
@@ -255,8 +252,8 @@ L140:
 /* Computing 2nd power */
         r__4 = yn[n2] - yn[n11];
         dist = (sqrt(r__1 * r__1 + r__2 * r__2) + sqrt(r__3 * r__3 + r__4 * 
-                r__4)) * (float).5;
-        if (*defsiz > (float)0.) {
+                r__4)) * (xc_float).5;
+        if (*defsiz > (xc_float)0.) {
             if (dist > *defsiz) {
                 ratio += dist / bnsize[(n11 << 1) + 1];
             } else {
@@ -277,7 +274,7 @@ L140:
         if (kang >= 1) {
             ratio /= (doublereal) kang;
             if ((ratio > wmin1 && idepth > 1 || ratio > wmin2 && idepth == 1) 
-                    && tang > (float)1.2217) {
+                    && tang > (xc_float)1.2217) {
                 if (*graph || *video) {
                     rplotl_(mxnd, &xn[1], &yn[1], &zn[1], &nxl[3], xmin, xmax,
                              ymin, ymax, zmin, zmax, lll, dev1, kreg, (ftnlen)

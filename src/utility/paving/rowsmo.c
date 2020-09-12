@@ -21,63 +21,59 @@ extern "C" {
 /*    NTESS, the U.S. Government retains certain rights in this software. */
 
 /*    See packages/seacas/LICENSE for details */
-/* Subroutine */ int rowsmo_(integer *mxnd, integer *mln, real *xn, real *yn, 
-        real *zn, integer *lxk, integer *kxl, integer *nxl, integer *lxn, 
-        integer *nnn, real *wfac, real *wfac2, integer *nit, real *eps, real *
-        ro, integer *nnn2, integer *lnodes, real *bnsize, integer *lll, 
-        logical *graph, real *xmin, real *xmax, real *ymin, real *ymax, real *
-        zmin, real *zmax, char *dev1, integer *kreg, ftnlen dev1_len)
+/* Subroutine */ int rowsmo_(integer *mxnd, integer *mln, xc_float *xn, xc_float *yn, 
+        xc_float *zn, integer *lxk, integer *kxl, integer *nxl, integer *lxn, 
+        integer *nnn, xc_float *wfac, xc_float *wfac2, integer *nit, xc_float *eps, xc_float *
+        ro, integer *nnn2, integer *lnodes, xc_float *bnsize, integer *lll, 
+        logical *graph, xc_float *xmin, xc_float *xmax, xc_float *ymin, xc_float *ymax, xc_float *
+        zmin, xc_float *zmax, char *dev1, integer *kreg, ftnlen dev1_len)
 {
     /* System generated locals */
     integer lnodes_dim1, lnodes_offset, i__1, i__2, i__3;
-    real r__1, r__2;
-
-    /* /\* Builtin functions *\/ */
-    /* double atan2(doublereal, doublereal), cos(doublereal), sin(doublereal),  */
-    /*             sqrt(doublereal); */
+    xc_float r__1, r__2;
 
     /* Local variables */
     static integer j;
-    static real r__;
+    static xc_float r__;
     static integer j1, j2, j3;
-    extern /* Subroutine */ int invert_fq__(integer *, integer *, real *, 
-            real *, real *, integer *, integer *, integer *, integer *, 
-            integer *, integer *, real *, real *, real *, real *, real *, 
-            real *, char *, integer *, integer *, real *, real *, ftnlen);
+    extern /* Subroutine */ int invert_fq__(integer *, integer *, xc_float *, 
+            xc_float *, xc_float *, integer *, integer *, integer *, integer *, 
+            integer *, integer *, xc_float *, xc_float *, xc_float *, xc_float *, xc_float *, 
+            xc_float *, char *, integer *, integer *, xc_float *, xc_float *, ftnlen);
     static integer ii, kk, kl, in;
-    static real pi;
+    static xc_float pi;
     static integer nl;
-    static real x11, y11;
+    static xc_float x11, y11;
     static integer it, ks;
-    static real x21, y21, vx, vy;
+    static xc_float x21, y21, vx, vy;
     static logical big, ccw;
-    static real det, dro;
+    static xc_float det, dro;
     static logical err;
-    static real vro, eps2, area[20];
+    static xc_float vro, eps2, area[20];
     static integer nend, node;
-    static real xdel;
+    static xc_float xdel;
     static logical aver;
-    static real ydel;
+    static xc_float ydel;
     extern /* Subroutine */ int gkxn_(integer *, integer *, integer *, 
             integer *, integer *, integer *, logical *);
     static logical test;
-    static real xnew, ynew, sumx, sumy;
+    static xc_float xnew, ynew, sumx, sumy;
     static integer node1, node2;
-    static real dist0, dist1, dfact;
+    static xc_float dist0, dist1, dfact;
     static integer idraw, nodes[4];
-    extern /* Subroutine */ int gnxka_(integer *, real *, real *, integer *, 
-            integer *, real *, integer *, integer *, logical *);
+    extern /* Subroutine */ int gnxka_(integer *, xc_float *, xc_float *, integer *, 
+            integer *, xc_float *, integer *, integer *, logical *);
     static integer lines[20], nfrom, klist[20];
-    static real xdist, ydist;
-    extern /* Subroutine */ int d2node_(integer *, real *, real *, integer *, 
+    static xc_float xdist, ydist;
+    extern /* Subroutine */ int d2node_(integer *, xc_float *, xc_float *, integer *, 
             integer *);
     static logical near2l;
-    static real theta1, theta2;
+    static xc_float theta1, theta2;
 
     static integer nbegin;
-    extern /* Subroutine */ int eqlang_(integer *, real *, real *, integer *, 
-            integer *, integer *, integer *, integer *, real *, real *, real *
-            , real *), getfrm_(integer *, integer *, integer *, integer *, 
+    extern /* Subroutine */ int eqlang_(integer *, xc_float *, xc_float *, integer *, 
+            integer *, integer *, integer *, integer *, xc_float *, xc_float *, xc_float *
+            , xc_float *), getfrm_(integer *, integer *, integer *, integer *, 
             integer *, integer *, integer *, integer *), lcolor_(char *, ftnlen), getlxn_(integer *, integer *, integer *, integer *, 
             integer *, logical *), sflush_();
 
@@ -106,17 +102,17 @@ extern "C" {
     lnodes -= lnodes_offset;
 
     /* Function Body */
-    pi = M_PI; //atan2((float)0., (float)-1.);
+    pi = M_PI; //atan2((xc_float)0., (xc_float)-1.);
     nodes[0] = -1;
     nodes[1] = -1;
     nodes[2] = -1;
     nodes[3] = -1;
-    if(*ro < (float).01)
+    if(*ro < (xc_float).01)
       {
-        *ro = (float)1.;
+        *ro = (xc_float)1.;
       }
-    dro = (float)1.;
-    vro = (float)1.;
+    dro = (xc_float)1.;
+    vro = (xc_float)1.;
     eps2 = *eps * *ro;
     test = FALSE_;
     aver = TRUE_;
@@ -126,7 +122,7 @@ extern "C" {
       {
         if(it == *nit)
           {
-            fprintf(stderr,"THE ROWSMO ROUTINE IS NOT CONVERGING");
+            fprintf(stderr,"THE ROWSMO ROUTINE IS NOT CONVERGING\n");
           }
         big = FALSE_;
 /*  NODE LOOP */
@@ -152,8 +148,8 @@ extern "C" {
 /*  FIND ELEMENTS AND LINES ATTACHED TO NODE */
                     gkxn_(mxnd, &kxl[3], &lxn[5], &node, &ks, klist, &err);
                     getlxn_(mxnd, &lxn[5], &node, lines, &nl, &err);
-                    sumx = (float)0.;
-                    sumy = (float)0.;
+                    sumx = (xc_float)0.;
+                    sumy = (xc_float)0.;
 /*  PERFORM AN AREA PULL AND LAPLACIAN */
 /*  ON ANY NODE ATTACHED TO A 2-LINE NODE */
 /*               TWOL = .FALSE. */
@@ -208,15 +204,15 @@ extern "C" {
                     if (near2l || test)
                       {
                         theta1 = atan2(yn[nodes[2]] - yn[nodes[0]], xn[nodes[
-                                2]] - xn[nodes[0]]) + pi / (float)2.;
+                                2]] - xn[nodes[0]]) + pi / (xc_float)2.;
                         theta2 = atan2(yn[nodes[2]] - yn[nodes[1]], xn[nodes[
-                                2]] - xn[nodes[1]]) + pi / (float)2.;
+                                2]] - xn[nodes[1]]) + pi / (xc_float)2.;
                         det = -cos(theta1) * sin(theta2) + cos(theta2) * sin(
                                 theta1);
-                        x11 = (xn[nodes[0]] + xn[nodes[2]]) * (float).5;
-                        y11 = (yn[nodes[0]] + yn[nodes[2]]) * (float).5;
-                        x21 = (xn[nodes[1]] + xn[nodes[2]]) * (float).5;
-                        y21 = (yn[nodes[1]] + yn[nodes[2]]) * (float).5;
+                        x11 = (xn[nodes[0]] + xn[nodes[2]]) * (xc_float).5;
+                        y11 = (yn[nodes[0]] + yn[nodes[2]]) * (xc_float).5;
+                        x21 = (xn[nodes[1]] + xn[nodes[2]]) * (xc_float).5;
+                        y21 = (yn[nodes[1]] + yn[nodes[2]]) * (xc_float).5;
                         r__ = (-sin(theta2) * (x21 - x11) + cos(theta2) * (
                                 y21 - y11)) / det;
                         xnew = x11 + r__ * cos(theta1);
@@ -258,8 +254,8 @@ L110:
                                     ] - *wfac * yn[nodes[j2 - 1]];
 /* L120: */
                         }
-                        sumx /= (doublereal) ks * ((float)2. - *wfac);
-                        sumy /= (doublereal) ks * ((float)2. - *wfac);
+                        sumx /= (doublereal) ks * ((xc_float)2. - *wfac);
+                        sumy /= (doublereal) ks * ((xc_float)2. - *wfac);
                         xdel = *ro * (sumx - xn[node]);
                         ydel = *ro * (sumy - yn[node]);
                         getfrm_(mxnd, lines, &nl, &nxl[3], &node, &lnodes[
@@ -289,8 +285,8 @@ L110:
                                         lnodes[node * lnodes_dim1 + 3], &
                                         nfrom, &dist0, &vro, &vx, &vy);
                                 if (aver) {
-                                    xdel = (xdel + vx) * (float).5;
-                                    ydel = (ydel + vy) * (float).5;
+                                    xdel = (xdel + vx) * (xc_float).5;
+                                    ydel = (ydel + vy) * (xc_float).5;
                                 } else {
                                     xdel = vx;
                                     ydel = vy;

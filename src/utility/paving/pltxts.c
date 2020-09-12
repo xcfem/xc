@@ -18,38 +18,38 @@ extern "C" {
 /* Common Block Declarations */
 
 struct {
-    real devcap[23], defout[7];
+    xc_float devcap[23], defout[7];
 } status_;
 
 #define status_1 status_
 
 struct {
-    real devp[5];
+    xc_float devp[5];
 } device_;
 
 #define device_1 device_
 
 struct {
-    real colp[3], palett[48]	/* was [3][16] */;
+    xc_float colp[3], palett[48]	/* was [3][16] */;
 } color_;
 
 #define color_1 color_
 
 struct {
-    real textp[40];
+    xc_float textp[40];
 } text_;
 
 #define text_1 text_
 
 struct {
-    real vectp[5], xcur, ycur;
+    xc_float vectp[5], xcur, ycur;
 } vectrc_;
 
 #define vectrc_1 vectrc_
 
 struct {
     integer idex[400]	/* was [200][2] */, nvect[400]	/* was [200][2] */;
-    real xsize[400]	/* was [200][2] */, ysize[400]	/* was [200][2] */, 
+    xc_float xsize[400]	/* was [200][2] */, ysize[400]	/* was [200][2] */, 
 	    x0[4600]	/* was [2300][2] */, y0[4600]	/* was [2300][2] */, 
 	    x1[4600]	/* was [2300][2] */, y1[4600]	/* was [2300][2] */;
 } font_;
@@ -57,13 +57,13 @@ struct {
 #define font_1 font_
 
 struct {
-    real graphp[100];
+    xc_float graphp[100];
 } graph_;
 
 #define graph_1 graph_
 
 struct {
-    real mapp[11];
+    xc_float mapp[11];
 } mappar_;
 
 #define mappar_1 mappar_
@@ -77,15 +77,15 @@ struct {
 /* Table of constant values */
 
 static integer c__1 = 1;
-static real c_b4 = (float)1.;
+static xc_float c_b4 = (xc_float)1.;
 static integer c__2 = 2;
-static real c_b49 = (float)3.;
-static real c_b51 = (float)0.;
-static real c_b52 = (float).5;
-static real c_b53 = (float)4.;
-static real c_b58 = (float)2.;
-static real c_b67 = (float)5.;
-static real c_b76 = (float)6.;
+static xc_float c_b49 = (xc_float)3.;
+static xc_float c_b51 = (xc_float)0.;
+static xc_float c_b52 = (xc_float).5;
+static xc_float c_b53 = (xc_float)4.;
+static xc_float c_b58 = (xc_float)2.;
+static xc_float c_b67 = (xc_float)5.;
+static xc_float c_b76 = (xc_float)6.;
 static integer c__3 = 3;
 static logical c_false = FALSE_;
 
@@ -95,7 +95,7 @@ static logical c_false = FALSE_;
 
 /* See packages/seacas/LICENSE for details */
 /* ======================================================================= */
-/* Subroutine */ int pltxts_(real *x, real *y, char *text, ftnlen text_len)
+/* Subroutine */ int pltxts_(xc_float *x, xc_float *y, char *text, ftnlen text_len)
 {
     /* System generated locals */
     char * a__1[3];
@@ -116,9 +116,9 @@ static logical c_false = FALSE_;
     extern /* Subroutine */ int chric_(integer *, char *, integer *, ftnlen);
     static integer nchar, ifont;
     extern /* Subroutine */ int chrup_(char *, char *, ftnlen, ftnlen);
-    static real ysave, ybump;
-    extern /* Subroutine */ int pltdv2_(real *, integer *, real *, real *, 
-	    real *, real *);
+    static xc_float ysave, ybump;
+    extern /* Subroutine */ int pltdv2_(xc_float *, integer *, xc_float *, xc_float *, 
+	    xc_float *, xc_float *);
     static char escchr[1];
     extern logical cpuifc_(logical *);
     static char laschr[1];
@@ -126,13 +126,13 @@ static logical c_false = FALSE_;
 	    ftnlen);
     static integer novect;
     extern /* Subroutine */ int pltflu_(), pltrim_(char *, integer *, ftnlen),
-	     pltsub_(real *, real *), pltrev_(), pltnor_(real *, real *), 
-	    siorpt_(char *, char *, integer *, ftnlen, ftnlen), pltmov_(real *
-	    , real *);
-    static real ychrsz;
+	     pltsub_(xc_float *, xc_float *), pltrev_(), pltnor_(xc_float *, xc_float *), 
+	    siorpt_(char *, char *, integer *, ftnlen, ftnlen), pltmov_(xc_float *
+	    , xc_float *);
+    static xc_float ychrsz;
     static logical status;
-    extern /* Subroutine */ int pltsup_(real *, real *), pltstv_(integer *, 
-	    real *), pltsvv_();
+    extern /* Subroutine */ int pltsup_(xc_float *, xc_float *), pltstv_(integer *, 
+	    xc_float *), pltsvv_();
     static char textip1[1];
 
     *(unsigned char *)escchr = '\\';
@@ -278,9 +278,9 @@ L2020:
 	    pltsvv_();
 	    pltstv_(&c__1, &c_b49);
 	    pltdv2_(&text_1.textp[13], &c__1, &c_b51, &c_b52, &c_b53, &c_b52);
-	    text_1.textp[17] += text_1.textp[27] * (float)4. * ychrsz * 
+	    text_1.textp[17] += text_1.textp[27] * (xc_float)4. * ychrsz * 
 		    text_1.textp[30];
-	    text_1.textp[18] += text_1.textp[28] * (float)4. * ychrsz * 
+	    text_1.textp[18] += text_1.textp[28] * (xc_float)4. * ychrsz * 
 		    text_1.textp[30];
 	    *(unsigned char *)laschr = 'M';
 	    pltrev_();
@@ -289,9 +289,9 @@ L2020:
 	    pltsvv_();
 	    pltstv_(&c__1, &c_b58);
 	    pltdv2_(&text_1.textp[13], &c__1, &c_b51, &c_b52, &c_b53, &c_b52);
-	    text_1.textp[17] += text_1.textp[27] * (float)4. * ychrsz * 
+	    text_1.textp[17] += text_1.textp[27] * (xc_float)4. * ychrsz * 
 		    text_1.textp[30];
-	    text_1.textp[18] += text_1.textp[28] * (float)4. * ychrsz * 
+	    text_1.textp[18] += text_1.textp[28] * (xc_float)4. * ychrsz * 
 		    text_1.textp[30];
 	    *(unsigned char *)laschr = 'M';
 	    pltrev_();
@@ -300,9 +300,9 @@ L2020:
 	    pltsvv_();
 	    pltstv_(&c__1, &c_b67);
 	    pltdv2_(&text_1.textp[13], &c__1, &c_b51, &c_b52, &c_b53, &c_b52);
-	    text_1.textp[17] += text_1.textp[27] * (float)4. * ychrsz * 
+	    text_1.textp[17] += text_1.textp[27] * (xc_float)4. * ychrsz * 
 		    text_1.textp[30];
-	    text_1.textp[18] += text_1.textp[28] * (float)4. * ychrsz * 
+	    text_1.textp[18] += text_1.textp[28] * (xc_float)4. * ychrsz * 
 		    text_1.textp[30];
 	    *(unsigned char *)laschr = 'M';
 	    pltrev_();
@@ -311,9 +311,9 @@ L2020:
 	    pltsvv_();
 	    pltstv_(&c__1, &c_b76);
 	    pltdv2_(&text_1.textp[13], &c__1, &c_b51, &c_b52, &c_b53, &c_b52);
-	    text_1.textp[17] += text_1.textp[27] * (float)4. * ychrsz * 
+	    text_1.textp[17] += text_1.textp[27] * (xc_float)4. * ychrsz * 
 		    text_1.textp[30];
-	    text_1.textp[18] += text_1.textp[28] * (float)4. * ychrsz * 
+	    text_1.textp[18] += text_1.textp[28] * (xc_float)4. * ychrsz * 
 		    text_1.textp[30];
 	    *(unsigned char *)laschr = 'M';
 	    pltrev_();
@@ -322,9 +322,9 @@ L2020:
 	    pltsvv_();
 	    pltstv_(&c__1, &c_b53);
 	    pltdv2_(&text_1.textp[13], &c__1, &c_b51, &c_b52, &c_b53, &c_b52);
-	    text_1.textp[17] += text_1.textp[27] * (float)4. * ychrsz * 
+	    text_1.textp[17] += text_1.textp[27] * (xc_float)4. * ychrsz * 
 		    text_1.textp[30];
-	    text_1.textp[18] += text_1.textp[28] * (float)4. * ychrsz * 
+	    text_1.textp[18] += text_1.textp[28] * (xc_float)4. * ychrsz * 
 		    text_1.textp[30];
 	    *(unsigned char *)laschr = 'M';
 	    pltrev_();
@@ -333,9 +333,9 @@ L2020:
 	    pltsvv_();
 	    pltstv_(&c__1, &c_b4);
 	    pltdv2_(&text_1.textp[13], &c__1, &c_b51, &c_b52, &c_b53, &c_b52);
-	    text_1.textp[17] += text_1.textp[27] * (float)4. * ychrsz * 
+	    text_1.textp[17] += text_1.textp[27] * (xc_float)4. * ychrsz * 
 		    text_1.textp[30];
-	    text_1.textp[18] += text_1.textp[28] * (float)4. * ychrsz * 
+	    text_1.textp[18] += text_1.textp[28] * (xc_float)4. * ychrsz * 
 		    text_1.textp[30];
 	    *(unsigned char *)laschr = 'M';
 	    pltrev_();

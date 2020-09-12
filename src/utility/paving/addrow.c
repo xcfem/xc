@@ -18,7 +18,7 @@ extern "C" {
 /* Common Block Declarations */
 
 struct {
-    real timea, timep, timec, timepc, timeaj, times;
+    xc_float timea, timep, timec, timepc, timeaj, times;
 } timing_;
 
 #define timing_1 timing_
@@ -34,20 +34,20 @@ static integer c__2 = 2;
 
 /*    See packages/seacas/LICENSE for details */
 /* Subroutine */ int addrow_(integer *mxnd, integer *mxcorn, integer *mxloop, 
-        integer *mln, integer *maxprm, integer *nuid, real *xn, real *yn, 
-        real *zn, integer *lxk, integer *kxl, integer *nxl, integer *lxn, 
-        real *angle, real *bnsize, integer *lnodes, integer *nbegin, integer *
+        integer *mln, integer *maxprm, integer *nuid, xc_float *xn, xc_float *yn, 
+        xc_float *zn, integer *lxk, integer *kxl, integer *nxl, integer *lxn, 
+        xc_float *angle, xc_float *bnsize, integer *lnodes, integer *nbegin, integer *
         nend, integer *nloop, integer *nextn1, integer *linkpr, integer *
         kperim, integer *kkkold, integer *lllold, integer *nnnold, integer *
-        iavail, integer *navail, real *xmin, real *xmax, real *ymin, real *
-        ymax, real *zmin, real *zmax, char *dev1, integer *lll, integer *kkk, 
+        iavail, integer *navail, xc_float *xmin, xc_float *xmax, xc_float *ymin, xc_float *
+        ymax, xc_float *zmin, xc_float *zmax, char *dev1, integer *lll, integer *kkk, 
         integer *nnn, integer *nnn2, integer *nadj1, integer *nadj2, integer *
         lcorn, integer *kloop, logical *graph, logical *video, integer *kreg, 
-        logical *done, logical *sizeit, logical *noroom, logical *err, real *
-        xnold, real *ynold, integer *nxkold, integer *linkeg, integer *listeg,
-         real *bmesur, integer *mlink, integer *npnold, integer *npeold, 
-        integer *nnxk, real *rexmin, real *rexmax, real *reymin,
-         real *reymax, integer *idivis, real *sizmin, real *emax, real *emin, 
+        logical *done, logical *sizeit, logical *noroom, logical *err, xc_float *
+        xnold, xc_float *ynold, integer *nxkold, integer *linkeg, integer *listeg,
+         xc_float *bmesur, integer *mlink, integer *npnold, integer *npeold, 
+        integer *nnxk, xc_float *rexmin, xc_float *rexmax, xc_float *reymin,
+         xc_float *reymax, integer *idivis, xc_float *sizmin, xc_float *emax, xc_float *emin, 
         ftnlen dev1_len)
 {
     /* System generated locals */
@@ -55,60 +55,60 @@ static integer c__2 = 2;
             i__2;
 
     /* Local variables */
-    static real x[5], y[5];
+    static xc_float x[5], y[5];
     static integer n0, n1, n2, n3, new1, new2, new3, new4, idum;
-    static real dist;
+    static xc_float dist;
     static integer idum1, idum2;
-    static real time1, time2, dist1, dist2;
+    static xc_float time1, time2, dist1, dist2;
     static logical ambig;
-    static real ahold;
+    static xc_float ahold;
     extern /* Subroutine */ int pinch_(integer *, integer *, integer *, 
-            integer *, real *, real *, real *, integer *, integer *, integer *
-            , integer *, real *, integer *, real *, integer *, integer *, 
+            integer *, xc_float *, xc_float *, xc_float *, integer *, integer *, integer *
+            , integer *, xc_float *, integer *, xc_float *, integer *, integer *, 
             integer *, integer *, integer *, integer *, integer *, logical *, 
-            real *, real *, real *, real *, real *, real *, char *, integer *,
+            xc_float *, xc_float *, xc_float *, xc_float *, xc_float *, xc_float *, char *, integer *,
              integer *, integer *, integer *, integer *, integer *, integer *,
              logical *, logical *, integer *, logical *, logical *, ftnlen);
     static integer nlold, ncorn;
     static integer kount;
-    extern /* Subroutine */ int d2node_(integer *, real *, real *, integer *, 
-            integer *), extnd1_(integer *, real *, real *, real *, integer *, 
-            integer *, integer *, real *, real *, real *), extnd3_(integer *, 
-            real *, real *, real *, integer *, integer *, integer *, real *, 
-            real *, real *), extnd5_(integer *, real *, real *, real *, 
-            integer *, integer *, integer *, real *, real *, real *);
+    extern /* Subroutine */ int d2node_(integer *, xc_float *, xc_float *, integer *, 
+            integer *), extnd1_(integer *, xc_float *, xc_float *, xc_float *, integer *, 
+            integer *, integer *, xc_float *, xc_float *, xc_float *), extnd3_(integer *, 
+            xc_float *, xc_float *, xc_float *, integer *, integer *, integer *, xc_float *, 
+            xc_float *, xc_float *), extnd5_(integer *, xc_float *, xc_float *, xc_float *, 
+            integer *, integer *, integer *, xc_float *, xc_float *, xc_float *);
     static integer lambig;
-    extern /* Subroutine */ int  getime_(real *), 
-            lupang_(integer *, integer *, real *, real *, real *, integer *, 
-            integer *, integer *, integer *, integer *, real *, integer *, 
-            integer *, integer *, real *, real *, real *, real *, real *, 
-            real *, char *, integer *, logical *, ftnlen), marksm_(integer *, 
+    extern /* Subroutine */ int  getime_(xc_float *), 
+            lupang_(integer *, integer *, xc_float *, xc_float *, xc_float *, integer *, 
+            integer *, integer *, integer *, integer *, xc_float *, integer *, 
+            integer *, integer *, xc_float *, xc_float *, xc_float *, xc_float *, xc_float *, 
+            xc_float *, char *, integer *, logical *, ftnlen), marksm_(integer *, 
             integer *, integer *, integer *, integer *, integer *, integer *, 
             integer *, logical *), snapit_(integer *), sflush_(), fixlxn_(
             integer *, integer *, integer *, integer *, integer *, integer *, 
             integer *, integer *, integer *, integer *, logical *, logical *),
-             filsmo_(integer *, integer *, real *, real *, real *, integer *, 
+             filsmo_(integer *, integer *, xc_float *, xc_float *, xc_float *, integer *, 
             integer *, integer *, integer *, integer *, integer *, integer *, 
-            integer *, real *, integer *, real *, real *, real *, real *, 
-            real *, real *, char *, integer *, ftnlen), rplotl_(integer *, 
-            real *, real *, real *, integer *, real *, real *, real *, real *,
-             real *, real *, integer *, char *, integer *, ftnlen), colaps_(
-            integer *, integer *, integer *, integer *, integer *, real *, 
-            real *, real *, integer *, integer *, integer *, integer *, real *
-            , integer *, real *, integer *, integer *, integer *, integer *, 
-            integer *, integer *, logical *, real *, real *, real *, real *, 
-            real *, real *, char *, integer *, integer *, integer *, integer *
+            integer *, xc_float *, integer *, xc_float *, xc_float *, xc_float *, xc_float *, 
+            xc_float *, xc_float *, char *, integer *, ftnlen), rplotl_(integer *, 
+            xc_float *, xc_float *, xc_float *, integer *, xc_float *, xc_float *, xc_float *, xc_float *,
+             xc_float *, xc_float *, integer *, char *, integer *, ftnlen), colaps_(
+            integer *, integer *, integer *, integer *, integer *, xc_float *, 
+            xc_float *, xc_float *, integer *, integer *, integer *, integer *, xc_float *
+            , integer *, xc_float *, integer *, integer *, integer *, integer *, 
+            integer *, integer *, logical *, xc_float *, xc_float *, xc_float *, xc_float *, 
+            xc_float *, xc_float *, char *, integer *, integer *, integer *, integer *
             , integer *, integer *, integer *, integer *, logical *, logical *
             , integer *, logical *, logical *, ftnlen), pcross_(integer *, 
-            integer *, integer *, integer *, integer *, integer *, real *, 
-            real *, real *, integer *, integer *, integer *, integer *, real *
-            , integer *, real *, integer *, integer *, integer *, integer *, 
+            integer *, integer *, integer *, integer *, integer *, xc_float *, 
+            xc_float *, xc_float *, integer *, integer *, integer *, integer *, xc_float *
+            , integer *, xc_float *, integer *, integer *, integer *, integer *, 
             integer *, integer *, integer *, integer *, integer *, integer *, 
-            logical *, real *, real *, real *, real *, real *, real *, char *,
+            logical *, xc_float *, xc_float *, xc_float *, xc_float *, xc_float *, xc_float *, char *,
              integer *, integer *, integer *, integer *, integer *, integer *,
              integer *, integer *, logical *, logical *, integer *, logical *,
-             logical *, ftnlen), connod_(integer *, integer *, real *, real *,
-             integer *, integer *, integer *, integer *, integer *, real *, 
+             logical *, ftnlen), connod_(integer *, integer *, xc_float *, xc_float *,
+             integer *, integer *, integer *, integer *, integer *, xc_float *, 
             integer *, integer *, integer *, integer *, integer *, integer *, 
             integer *, integer *, integer *, integer *, integer *, integer *, 
             integer *, integer *, logical *, logical *, logical *, logical *);
@@ -316,8 +316,8 @@ static integer c__2 = 2;
                 }
             }
         } else {
-            fprintf(stderr,"PROBLEMS IN ADDROW - THE CIRCLUAR ROW");
-            fprintf(stderr,"HAS NO END POINT CLASSIFICATION");
+            fprintf(stderr,"PROBLEMS IN ADDROW - THE CIRCLUAR ROW\n");
+            fprintf(stderr,"HAS NO END POINT CLASSIFICATION\n");
             *err = TRUE_;
             goto L120;
         }
@@ -476,7 +476,7 @@ L110:
             if (nlold == nloop[1] && (i__1 = lnodes[new1 * lnodes_dim1 + 4], 
                     abs(i__1)) == 1 && (i__2 = lnodes[*nend * lnodes_dim1 + 4]
                     , abs(i__2)) == 1 && lnodes[n2 * lnodes_dim1 + 2] == new1 
-                    && lxn[(new1 << 2) + 1] > 0 && angle[n2] > (float)
+                    && lxn[(new1 << 2) + 1] > 0 && angle[n2] > (xc_float)
                     2.3561945) {
                 extnd3_(mxnd, &xn[1], &yn[1], &ahold, &n1, &n2, &n3, x, y, &
                         dist);
@@ -628,7 +628,7 @@ L110:
             if (nlold == nloop[1] && (i__1 = lnodes[new1 * lnodes_dim1 + 4], 
                     abs(i__1)) == 1 && lnodes[n2 * lnodes_dim1 + 2] == new1 &&
                      (i__2 = lnodes[*nend * lnodes_dim1 + 4], abs(i__2)) == 1 
-                    && lxn[(new1 << 2) + 1] > 0 && angle[n2] > (float)
+                    && lxn[(new1 << 2) + 1] > 0 && angle[n2] > (xc_float)
                     3.9269908) {
                 extnd5_(mxnd, &xn[1], &yn[1], &ahold, &n1, &n2, &n3, x, y, &
                         dist);
@@ -751,7 +751,7 @@ L110:
             if (nlold == nloop[1] && (i__1 = lnodes[new3 * lnodes_dim1 + 4], 
                     abs(i__1)) == 1 && lnodes[n2 * lnodes_dim1 + 2] == new3 &&
                      (i__2 = lnodes[*nend * lnodes_dim1 + 4], abs(i__2)) == 1 
-                    && lxn[(new3 << 2) + 1] > 0 && angle[n2] > (float)
+                    && lxn[(new3 << 2) + 1] > 0 && angle[n2] > (xc_float)
                     2.3561945) {
                 extnd5_(mxnd, &xn[1], &yn[1], &ahold, &n1, &n2, &n3, x, y, &
                         dist);
@@ -785,13 +785,13 @@ L110:
             n1 = n2;
             goto L100;
         } else {
-            fprintf(stderr,"PROBLEMS IN ADDROW - THE NEXT NODE IN THE");
-            fprintf(stderr,"ROW DOES NOT HAVE THE RIGHT CLASSIFICATION");
+            fprintf(stderr,"PROBLEMS IN ADDROW - THE NEXT NODE IN THE\n");
+            fprintf(stderr,"ROW DOES NOT HAVE THE RIGHT CLASSIFICATION\n");
             *err = TRUE_;
             goto L120;
         }
         if (kount > nloop[1]) {
-            fprintf(stderr,"PROBLEMS IN ADDROW - THE ROW DOESN'T STOP");
+            fprintf(stderr,"PROBLEMS IN ADDROW - THE ROW DOESN'T STOP\n");
             *err = TRUE_;
             goto L120;
         }

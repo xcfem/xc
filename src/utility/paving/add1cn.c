@@ -24,26 +24,26 @@ static integer c__1 = 1;
 /*    NTESS, the U.S. Government retains certain rights in this software. */
 
 /*    See packages/seacas/LICENSE for details */
-/* Subroutine */ int add1cn_(integer *mxnd, integer *mln, real *xn, real *yn, 
+/* Subroutine */ int add1cn_(integer *mxnd, integer *mln, xc_float *xn, xc_float *yn, 
 	integer *nuid, integer *lxk, integer *kxl, integer *nxl, integer *lxn,
-	 real *angle, real *bnsize, integer *lnodes, integer *nnn, integer *
+	 xc_float *angle, xc_float *bnsize, integer *lnodes, integer *nnn, integer *
 	kkk, integer *lll, integer *nnnold, integer *lllold, integer *nloop, 
-	real *xnew, real *ynew, integer *i1, integer *iavail, integer *navail,
+	xc_float *xnew, xc_float *ynew, integer *i1, integer *iavail, integer *navail,
 	 logical *graph, logical *video, logical *sizeit, logical *noroom, 
-	logical *err, real *xnold, real *ynold, integer *nxkold, integer *
-	linkeg, integer *listeg, real *bmesur, integer *mlink, integer *
-	npnold, integer *npeold, integer *nnxk, real *rexmin, 
-	real *rexmax, real *reymin, real *reymax, integer *idivis, real *
-	sizmin, real *emax, real *emin)
+	logical *err, xc_float *xnold, xc_float *ynold, integer *nxkold, integer *
+	linkeg, integer *listeg, xc_float *bmesur, integer *mlink, integer *
+	npnold, integer *npeold, integer *nnxk, xc_float *rexmin, 
+	xc_float *rexmax, xc_float *reymin, xc_float *reymax, integer *idivis, xc_float *
+	sizmin, xc_float *emax, xc_float *emin)
 {
     /* System generated locals */
     integer lnodes_dim1, lnodes_offset, nxkold_dim1, nxkold_offset;
 
     /* Local variables */
     static integer i2, i3, i4, i5, i6, i7, idum;
-    static real zero;
+    static xc_float zero;
     static logical ambig;
-    extern /* Subroutine */ int d2node_(integer *, real *, real *, integer *, 
+    extern /* Subroutine */ int d2node_(integer *, xc_float *, xc_float *, integer *, 
 	    integer *), close4_(integer *, integer *, integer *, integer *, 
 	    integer *, integer *, integer *, integer *, integer *, integer *, 
 				integer *, integer *, logical *);
@@ -81,7 +81,7 @@ static integer c__1 = 1;
     i4 = lnodes[i3 * lnodes_dim1 + 3];
     i5 = lnodes[i4 * lnodes_dim1 + 3];
     i6 = lnodes[i5 * lnodes_dim1 + 3];
-    zero = (float)0.;
+    zero = (xc_float)0.;
     addnod_(mxnd, mln, &xn[1], &yn[1], &lxk[5], &kxl[3], &nxl[3], &lxn[5], &
 	    angle[1], &bnsize[3], &lnodes[lnodes_offset], xnew, ynew, &zero, 
 	    nnn, kkk, lll, &i6, i1, &i2, &ambig, &idum, sizeit, err, noroom, &

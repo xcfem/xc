@@ -20,26 +20,26 @@ extern "C" {
 /*    NTESS, the U.S. Government retains certain rights in this software. */
 
 /*    See packages/seacas/LICENSE for details */
-/* Subroutine */ int add3nd_(integer *mxnd, integer *mln, real *xn, real *yn, 
-	integer *lxk, integer *kxl, integer *nxl, integer *lxn, real *bnsize, 
-	integer *lnodes, real *x, real *y, real *dist, integer *nnn, integer *
+/* Subroutine */ int add3nd_(integer *mxnd, integer *mln, xc_float *xn, xc_float *yn, 
+	integer *lxk, integer *kxl, integer *nxl, integer *lxn, xc_float *bnsize, 
+	integer *lnodes, xc_float *x, xc_float *y, xc_float *dist, integer *nnn, integer *
 	lll, integer *kkk, integer *n1, integer *nloop, logical *sizeit, 
-	logical *err, logical *noroom, real *xnold, real *ynold, integer *
-	nxkold, integer *linkeg, integer *listeg, real *bmesur, integer *
+	logical *err, logical *noroom, xc_float *xnold, xc_float *ynold, integer *
+	nxkold, integer *linkeg, integer *listeg, xc_float *bmesur, integer *
 	mlink, integer *npnold, integer *npeold, integer *nnxk, 
-	real *rexmin, real *rexmax, real *reymin, real *reymax, integer *
-	idivis, real *sizmin, real *emax, real *emin)
+	xc_float *rexmin, xc_float *rexmax, xc_float *reymin, xc_float *reymax, integer *
+	idivis, xc_float *sizmin, xc_float *emax, xc_float *emin)
 {
     /* System generated locals */
     integer lnodes_dim1, lnodes_offset, nxkold_dim1, nxkold_offset;
 
     /* Local variables */
     static integer i__, l1, l2, l3, l4, node1, node2, node3;
-    static real size1, size2;
+    static xc_float size1, size2;
     extern /* Subroutine */ int addkxl_(integer *, integer *, integer *, 
 	    integer *), marksm_(integer *, integer *, integer *, integer *, 
 	    integer *, integer *, integer *, integer *, logical *);
-    static real siznew;
+    static xc_float siznew;
 
 /* *********************************************************************** */
 /*  SUBROUTINE ADD2ND = ADDS A NEW ELEMENT JUTTING OUT FROM AN EXISTING */
@@ -97,9 +97,9 @@ extern "C" {
 	bnsize[(node1 << 1) + 1] = *dist;
 	bnsize[(node2 << 1) + 1] = *dist;
 	bnsize[(node3 << 1) + 1] = *dist;
-	bnsize[(node1 << 1) + 2] = (float)1.;
-	bnsize[(node2 << 1) + 2] = (float)1.;
-	bnsize[(node3 << 1) + 2] = (float)1.;
+	bnsize[(node1 << 1) + 2] = (xc_float)1.;
+	bnsize[(node2 << 1) + 2] = (xc_float)1.;
+	bnsize[(node3 << 1) + 2] = (xc_float)1.;
     } else {
 	if (*sizeit) {
 /* **               LOCATION SIZE AND PROJECTING FROM LOCATION SIZE. */
@@ -118,10 +118,10 @@ extern "C" {
 	bnsize[(node1 << 1) + 1] = siznew;
 	bnsize[(node2 << 1) + 1] = siznew;
 	bnsize[(node3 << 1) + 1] = siznew;
-	if (bnsize[(*n1 << 1) + 1] == (float)0. || *sizeit) {
-	    bnsize[(node1 << 1) + 2] = (float)1.;
-	    bnsize[(node2 << 1) + 2] = (float)1.;
-	    bnsize[(node3 << 1) + 2] = (float)1.;
+	if (bnsize[(*n1 << 1) + 1] == (xc_float)0. || *sizeit) {
+	    bnsize[(node1 << 1) + 2] = (xc_float)1.;
+	    bnsize[(node2 << 1) + 2] = (xc_float)1.;
+	    bnsize[(node3 << 1) + 2] = (xc_float)1.;
 	} else {
 	    bnsize[(node1 << 1) + 2] = *dist / siznew;
 	    bnsize[(node2 << 1) + 2] = *dist / siznew;

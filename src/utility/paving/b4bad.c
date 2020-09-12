@@ -20,9 +20,9 @@ extern "C" {
 /*    NTESS, the U.S. Government retains certain rights in this software. */
 
 /*    See packages/seacas/LICENSE for details */
-/* Subroutine */ int b4bad_(integer *mxnd, integer *mln, real *xn, real *yn, 
+/* Subroutine */ int b4bad_(integer *mxnd, integer *mln, xc_float *xn, xc_float *yn, 
 	integer *lxk, integer *kxl, integer *nxl, integer *lxn, integer *
-	lnodes, real *angle, integer *i1, integer *i2, integer *j1, integer *
+	lnodes, xc_float *angle, integer *i1, integer *i2, integer *j1, integer *
 	j2, integer *nloop, integer *kountl, logical *bok, logical *err)
 {
     /* System generated locals */

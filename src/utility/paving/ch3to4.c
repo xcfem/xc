@@ -21,8 +21,8 @@ extern "C" {
 
 /*    See packages/seacas/LICENSE for details */
 /* Subroutine */ int ch3to4_(integer *mxnd, integer *mxcorn, integer *mln, 
-	integer *ncorn, integer *lcorn, integer *lnodes, integer *icomb, real 
-	*angle, integer *itest, integer *ltest, real *qual, logical *posbl4, 
+	integer *ncorn, integer *lcorn, integer *lnodes, integer *icomb, xc_float 
+	*angle, integer *itest, integer *ltest, xc_float *qual, logical *posbl4, 
 	integer *ichang)
 {
     /* System generated locals */

@@ -21,8 +21,8 @@ extern "C" {
 
 /*    See packages/seacas/LICENSE for details */
 /* Subroutine */ int qual3_(integer *mxnd, integer *mxcorn, integer *mln, 
-	integer *ncorn, integer *lcorn, integer *lnodes, integer *icomb, real 
-	*angle, integer *lxn, integer *itest, integer *ltest, real *qual, 
+	integer *ncorn, integer *lcorn, integer *lnodes, integer *icomb, xc_float 
+	*angle, integer *lxn, integer *itest, integer *ltest, xc_float *qual, 
 	logical *posbl3, logical *posbl4, logical *err)
 {
     /* System generated locals */
@@ -30,7 +30,7 @@ extern "C" {
 
     /* Local variables */
     static integer i__, ibig, node, ilen, mmin, mmax, isum, idiff;
-    extern doublereal nickc_(real *, integer *), nicks_(real *, integer *);
+    extern doublereal nickc_(xc_float *, integer *), nicks_(xc_float *, integer *);
     extern /* Subroutine */ int spaced_(integer *, integer *, integer *, 
 	    integer *, integer *, integer *, integer *, integer *, integer *, 
 	    integer *, logical *);
@@ -52,7 +52,7 @@ extern "C" {
     /* Function Body */
     *err = FALSE_;
 /*  ASSUME PERFECT QUALITY */
-    *qual = (float)0.;
+    *qual = (xc_float)0.;
     *posbl3 = FALSE_;
     *posbl4 = FALSE_;
 /*  FIRST GET THE INTERVAL LENGTHS TO THE CHOSEN CORNERS */
@@ -96,13 +96,13 @@ extern "C" {
 /* L100: */
     }
     if (*posbl4) {
-	*qual *= (float)1.3;
+	*qual *= (xc_float)1.3;
     }
 /* Computing MIN */
     i__1 = int_min(ltest[1],ltest[2]);
     mmin = int_min(i__1,ltest[3]);
     if (mmin == 1) {
-	*qual *= (float)1.3;
+	*qual *= (xc_float)1.3;
     }
 L110:
     return 0;

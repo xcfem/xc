@@ -53,7 +53,7 @@ extern "C" {
         if (icomb[i__] == 1) {
             ++klen;
             if (klen > *ilen) {
-                fprintf(stderr,"PROBLEMS IN SPACED - COUNTERS DON'T MATCH DATA");
+                fprintf(stderr,"PROBLEMS IN SPACED - COUNTERS DON'T MATCH DATA\n");
                 return 0;
             }
             itest[klen] = lcorn[i__];

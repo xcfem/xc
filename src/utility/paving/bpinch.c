@@ -21,21 +21,18 @@ extern "C" {
 
 /*    See packages/seacas/LICENSE for details */
 /* Subroutine */ int bpinch_(integer *mxnd, integer *mln, integer *lnodes, 
-        real *xn, real *yn, integer *lxn, integer *nxl, real *angle, integer *
-        n0, integer *n1, integer *n2, integer *nloop, real *toler1, real *
+        xc_float *xn, xc_float *yn, integer *lxn, integer *nxl, xc_float *angle, integer *
+        n0, integer *n1, integer *n2, integer *nloop, xc_float *toler1, xc_float *
         toler2, logical *bok, logical *err)
 {
     /* System generated locals */
     integer lnodes_dim1, lnodes_offset, i__1;
 
-    /* Builtin functions */
-    double atan2(doublereal, doublereal);
-
     /* Local variables */
     static integer i__, ll, nl, np, n0a, n0b, n2a, n2b, ip1, ip2;
-    static real ang, ang1, ang2;
-    extern logical cornp_(real *);
-    static real twopi;
+    static xc_float ang, ang1, ang2;
+    extern logical cornp_(xc_float *);
+    static xc_float twopi;
     static integer l1list[20];
 
     static logical pangle;
@@ -57,7 +54,7 @@ extern "C" {
     lnodes -= lnodes_offset;
 
     /* Function Body */
-    twopi = atan2((float)0., (float)-1.) * (float)2.;
+    twopi = 2.0*M_PI;
 /*  SEE IF THE ANGLE IS ELIGIBLE FOR PINCHING */
 /*  FIRST CHECK A NONBOUNDARY NODE */
     if (lxn[(*n1 << 2) + 2] > 0) {
@@ -101,7 +98,7 @@ extern "C" {
         } else if (lxn[(*n0 << 2) + 2] < 0 && lxn[(*n1 << 2) + 2] < 0) {
             getlxn_(mxnd, &lxn[5], n1, l1list, &nl, err);
             if (*err) {
-                fprintf(stderr,"** PROBLEMS IN SEW2 FINDING LXN FOR J1 **");
+                fprintf(stderr,"** PROBLEMS IN SEW2 FINDING LXN FOR J1 **\n");
                 goto L140;
             }
             i__1 = nl;
@@ -121,23 +118,23 @@ extern "C" {
                 }
 /* L100: */
             }
-            fprintf(stderr,"** PROBLEMS IN BPINCH FINDING N1 BOUNDARY ANGLE NODE **");
+            fprintf(stderr,"** PROBLEMS IN BPINCH FINDING N1 BOUNDARY ANGLE NODE **\n");
             goto L140;
 L110:
             ang1 = atan2(yn[*n0] - yn[*n1], xn[*n0] - xn[*n1]);
-            if (ang1 < (float)0.) {
+            if (ang1 < (xc_float)0.) {
                 ang1 += twopi;
             }
             ang2 = atan2(yn[np] - yn[*n1], xn[np] - xn[*n1]);
-            if (ang2 < (float)0.) {
+            if (ang2 < (xc_float)0.) {
                 ang2 += twopi;
             }
             ang = ang1 - ang2;
-            if (ang < (float)0.) {
+            if (ang < (xc_float)0.) {
                 ang += twopi;
             }
 /*  NOW CHECK TO MAKE SURE THAT ANGLE IS NOT TOO LARGE */
-            if (ang < (float)2.3561945) {
+            if (ang < (xc_float)2.3561945) {
                 if (lxn[(*n1 << 2) + 3] == 0) {
                     *bok = FALSE_;
                 } else {
@@ -154,7 +151,7 @@ L110:
         } else if (lxn[(*n1 << 2) + 2] < 0 && lxn[(*n2 << 2) + 2] < 0) {
             getlxn_(mxnd, &lxn[5], n1, l1list, &nl, err);
             if (*err) {
-                fprintf(stderr,"** PROBLEMS IN SEW2 FINDING LXN FOR J1 **");
+                fprintf(stderr,"** PROBLEMS IN SEW2 FINDING LXN FOR J1 **\n");
                 goto L140;
             }
             i__1 = nl;
@@ -174,23 +171,23 @@ L110:
                 }
 /* L120: */
             }
-            fprintf(stderr,"** PROBLEMS IN BPINCH FINDING N1 BOUNDARY ANGLE NODE **");
+            fprintf(stderr,"** PROBLEMS IN BPINCH FINDING N1 BOUNDARY ANGLE NODE **\n");
             goto L140;
 L130:
             ang1 = atan2(yn[*n2] - yn[*n1], xn[*n2] - xn[*n1]);
-            if (ang1 < (float)0.) {
+            if (ang1 < (xc_float)0.) {
                 ang1 += twopi;
             }
             ang2 = atan2(yn[np] - yn[*n1], xn[np] - xn[*n1]);
-            if (ang2 < (float)0.) {
+            if (ang2 < (xc_float)0.) {
                 ang2 += twopi;
             }
             ang = ang2 - ang1;
-            if (ang < (float)0.) {
+            if (ang < (xc_float)0.) {
                 ang += twopi;
             }
 /*  NOW CHECK THE ANGLE SIZE */
-            if (ang < (float)2.3561945) {
+            if (ang < (xc_float)2.3561945) {
                 if (lxn[(*n1 << 2) + 3] == 0) {
                     *bok = FALSE_;
                 } else {

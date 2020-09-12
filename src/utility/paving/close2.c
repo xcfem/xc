@@ -24,11 +24,11 @@ static integer c__1 = 1;
 /*    NTESS, the U.S. Government retains certain rights in this software. */
 
 /*    See packages/seacas/LICENSE for details */
-/* Subroutine */ int close2_(integer *mxnd, integer *mln, integer *nuid, real 
-        *xn, real *yn, real *zn, integer *lxk, integer *kxl, integer *nxl, 
+/* Subroutine */ int close2_(integer *mxnd, integer *mln, integer *nuid, xc_float 
+        *xn, xc_float *yn, xc_float *zn, integer *lxk, integer *kxl, integer *nxl, 
         integer *lxn, integer *lnodes, integer *iavail, integer *navail, 
-        integer *nnn, integer *lll, integer *n1, real *xmin, real *xmax, real 
-        *ymin, real *ymax, real *zmin, real *zmax, logical *pgraph, logical *
+        integer *nnn, integer *lll, integer *n1, xc_float *xmin, xc_float *xmax, xc_float 
+        *ymin, xc_float *ymax, xc_float *zmin, xc_float *zmax, logical *pgraph, logical *
         video, char *dev1, integer *kreg, logical *noroom, logical *err, 
         ftnlen dev1_len)
 {
@@ -40,7 +40,7 @@ static integer c__1 = 1;
     static logical done;
     static integer kold, lold, knew, lnew, line1, line2, idum1, idum2;
     static logical check;
-    extern /* Subroutine */ int delem_(integer *, real *, real *, integer *, 
+    extern /* Subroutine */ int delem_(integer *, xc_float *, xc_float *, integer *, 
             integer *, integer *, integer *, integer *, integer *, integer *, 
             integer *, integer *, integer *, integer *, integer *, logical *, 
             logical *, logical *, logical *);
@@ -50,8 +50,8 @@ static integer c__1 = 1;
     static integer nthere;
     extern /* Subroutine */ int dellxn_(integer *, integer *, integer *, 
             integer *, integer *, integer *, integer *, integer *, logical *, 
-            logical *), snapit_(integer *), rplotl_(integer *, real *, real *,
-             real *, integer *, real *, real *, real *, real *, real *, real *
+            logical *), snapit_(integer *), rplotl_(integer *, xc_float *, xc_float *,
+             xc_float *, integer *, xc_float *, xc_float *, xc_float *, xc_float *, xc_float *, xc_float *
             , integer *, char *, integer *, ftnlen);
 
 /* *********************************************************************** */
@@ -101,7 +101,7 @@ L100:
                 ngone = *n1;
                 nthere = n0;
             } else {
-                fprintf(stderr,"** PROBLEMS WITH NO TWO LINE NODE ATTACHED IN CLOSE2 **");
+                fprintf(stderr,"** PROBLEMS WITH NO TWO LINE NODE ATTACHED IN CLOSE2 **\n");
                 *err = TRUE_;
                 goto L150;
             }
@@ -118,13 +118,13 @@ L100:
             dellxn_(mxnd, &lxn[5], &nuid[1], navail, iavail, &nthere, &lold, 
                     nnn, err, noroom);
             if (*err) {
-                fprintf(stderr,"** PROBLEMS IN CLOSE2 DELETING LOLD FROM NTHERE **");
+                fprintf(stderr,"** PROBLEMS IN CLOSE2 DELETING LOLD FROM NTHERE **\n");
                 goto L150;
             }
             dellxn_(mxnd, &lxn[5], &nuid[1], navail, iavail, &nthere, &lnew, 
                     nnn, err, noroom);
             if (*err) {
-                fprintf(stderr,"** PROBLEMS IN CLOSE2 DELETING LNEW FROM NTHERE **");
+                fprintf(stderr,"** PROBLEMS IN CLOSE2 DELETING LNEW FROM NTHERE **\n");
                 goto L150;
             }
 /*  NOW DELETE NGONE AND THE ELEMENT */
@@ -182,7 +182,7 @@ L100:
             }
 /* L130: */
         }
-        fprintf(stderr,"** PROBLEMS IN CLOSE2 WITH CHANGING ELEMENT **");
+        fprintf(stderr,"** PROBLEMS IN CLOSE2 WITH CHANGING ELEMENT **\n");
         *err = TRUE_;
         goto L150;
 L140:
@@ -191,21 +191,21 @@ L140:
         dellxn_(mxnd, &lxn[5], &nuid[1], navail, iavail, &n0, &lold, nnn, err,
                  noroom);
         if (*err) {
-            fprintf(stderr,"** PROBLEMS IN CLOSE2 DELETING NNN LINES **")
+            fprintf(stderr,"** PROBLEMS IN CLOSE2 DELETING NNN LINES **\n")
                     ;
             goto L150;
         }
         dellxn_(mxnd, &lxn[5], &nuid[1], navail, iavail, n1, &lold, nnn, err, 
                 noroom);
         if (*err) {
-            fprintf(stderr,"** PROBLEMS IN CLOSE2 DELETING N1 LINES **");
+            fprintf(stderr,"** PROBLEMS IN CLOSE2 DELETING N1 LINES **\n");
             goto L150;
         }
 /* NOW FIX THE LNODES ARRAY */
         lnodes[*n1 * lnodes_dim1 + 4] = -2;
         lnodes[n0 * lnodes_dim1 + 4] = -2;
     } else {
-        fprintf(stderr,"** PINCHED TOO FAR IN CLOSE2 **");
+        fprintf(stderr,"** PINCHED TOO FAR IN CLOSE2 **\n");
         goto L150;
     }
 /*  NOW SEE IF THE CLOSURE HAS PRODUCED A 2-LINE NODE AND */

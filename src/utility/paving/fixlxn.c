@@ -83,7 +83,7 @@ extern "C" {
             addlxn_(mxnd, &lxn[5], &nuid[1], navail, iavail, &nxl[i__ + (l << 
                     1)], &l, nnn, err, noroom);
             if (*err) {
-                fprintf(stderr,"ERROR IN FIXLXN - NXL TABLE GENERATION");
+                fprintf(stderr,"ERROR IN FIXLXN - NXL TABLE GENERATION\n");
                 goto L140;
             } else if (*noroom) {
                 goto L140;

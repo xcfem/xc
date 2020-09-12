@@ -24,12 +24,12 @@ static integer c__1 = 1;
 /*    NTESS, the U.S. Government retains certain rights in this software. */
 
 /*    See packages/seacas/LICENSE for details */
-/* Subroutine */ int d2node_(integer *mxnd, real *xn, real *yn, integer *
+/* Subroutine */ int d2node_(integer *mxnd, xc_float *xn, xc_float *yn, integer *
 	node1, integer *node2)
 {
-    static real x[2], y[2];
-    extern /* Subroutine */ int mpd2vc_(integer *, real *, real *, real *, 
-	    real *);
+    static xc_float x[2], y[2];
+    extern /* Subroutine */ int mpd2vc_(integer *, xc_float *, xc_float *, xc_float *, 
+	    xc_float *);
 
 /* *********************************************************************** */
 /*  SUBROUTINE D2NODE = DRAWS A LINE BETWEEN TWO NODES */

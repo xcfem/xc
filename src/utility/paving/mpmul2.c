@@ -21,8 +21,8 @@ extern "C" {
 
 /* See packages/seacas/LICENSE for details */
 /* ======================================================================= */
-/* Subroutine */ int mpmul2_(integer *n, real *x0, real *y0, real *mat, real *
-	res1, real *res2, real *res3, real *res4)
+/* Subroutine */ int mpmul2_(integer *n, xc_float *x0, xc_float *y0, xc_float *mat, xc_float *
+	res1, xc_float *res2, xc_float *res3, xc_float *res4)
 {
     /* System generated locals */
     integer i__1;

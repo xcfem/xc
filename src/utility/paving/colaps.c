@@ -18,7 +18,7 @@ extern "C" {
 /* Common Block Declarations */
 
 struct {
-    real timea, timep, timec, timepc, timeaj, times;
+    xc_float timea, timep, timec, timepc, timeaj, times;
 } timing_;
 
 #define timing_1 timing_
@@ -34,11 +34,11 @@ static integer c__2 = 2;
 
 /*    See packages/seacas/LICENSE for details */
 /* Subroutine */ int colaps_(integer *mxnd, integer *mxcorn, integer *mln, 
-        integer *mxloop, integer *nuid, real *xn, real *yn, real *zn, integer 
-        *lxk, integer *kxl, integer *nxl, integer *lxn, real *angle, integer *
-        lnodes, real *bnsize, integer *node, integer *kkkold, integer *lllold,
+        integer *mxloop, integer *nuid, xc_float *xn, xc_float *yn, xc_float *zn, integer 
+        *lxk, integer *kxl, integer *nxl, integer *lxn, xc_float *angle, integer *
+        lnodes, xc_float *bnsize, integer *node, integer *kkkold, integer *lllold,
          integer *nnnold, integer *iavail, integer *navail, logical *done, 
-        real *xmin, real *xmax, real *ymin, real *ymax, real *zmin, real *
+        xc_float *xmin, xc_float *xmax, xc_float *ymin, xc_float *ymax, xc_float *zmin, xc_float *
         zmax, char *dev1, integer *lll, integer *kkk, integer *nnn, integer *
         lcorn, integer *ncorn, integer *nloop, integer *nextn1, integer *
         kloop, logical *graph, logical *video, integer *kreg, logical *noroom,
@@ -46,81 +46,78 @@ static integer c__2 = 2;
 {
     /* System generated locals */
     integer lnodes_dim1, lnodes_offset;
-    real r__1, r__2;
-
-    /* Builtin functions */
-    double atan2(doublereal, doublereal), sqrt(doublereal);
+    xc_float r__1, r__2;
 
     /* Local variables */
     static integer i__;
-    static real u, w;
+    static xc_float u, w;
     static integer i1, i2, j1, j2, n0, n1, n2, n3;
-    static real pi;
+    static xc_float pi;
     static logical bok;
     static integer nnn2;
     extern /* Subroutine */ int sew2_(integer *, integer *, integer *, 
             integer *, integer *, integer *, integer *, integer *, integer *, 
             integer *, integer *, integer *, integer *, integer *, integer *, 
             integer *, integer *, logical *, logical *);
-    static real fact;
+    static xc_float fact;
     static integer idum;
-    extern /* Subroutine */ int b4bad_(integer *, integer *, real *, real *, 
-            integer *, integer *, integer *, integer *, integer *, real *, 
+    extern /* Subroutine */ int b4bad_(integer *, integer *, xc_float *, xc_float *, 
+            integer *, integer *, integer *, integer *, integer *, xc_float *, 
             integer *, integer *, integer *, integer *, integer *, integer *, 
             logical *, logical *);
     static logical done1, done2;
     static integer node1, node2;
-    static real time1, time2;
+    static xc_float time1, time2;
     static integer idum1, idum2;
-    static real ahold;
+    static xc_float ahold;
     extern /* Subroutine */ int node12_(integer *, integer *, integer *, 
             integer *, integer *, integer *, integer *, integer *, integer *, 
             integer *, logical *), wedge_(integer *, integer *, integer *, 
-            integer *, integer *, integer *, integer *, real *, real *, 
-            integer *, real *, integer *, integer *, integer *, integer *, 
+            integer *, integer *, integer *, integer *, xc_float *, xc_float *, 
+            integer *, xc_float *, integer *, integer *, integer *, integer *, 
             integer *, integer *, integer *, integer *, integer *, integer *, 
             logical *, logical *, logical *, logical *, logical *), pinch_(
-            integer *, integer *, integer *, integer *, real *, real *, real *
-            , integer *, integer *, integer *, integer *, real *, integer *, 
-            real *, integer *, integer *, integer *, integer *, integer *, 
-            integer *, integer *, logical *, real *, real *, real *, real *, 
-            real *, real *, char *, integer *, integer *, integer *, integer *
+            integer *, integer *, integer *, integer *, xc_float *, xc_float *, xc_float *
+            , integer *, integer *, integer *, integer *, xc_float *, integer *, 
+            xc_float *, integer *, integer *, integer *, integer *, integer *, 
+            integer *, integer *, logical *, xc_float *, xc_float *, xc_float *, xc_float *, 
+            xc_float *, xc_float *, char *, integer *, integer *, integer *, integer *
             , integer *, integer *, integer *, logical *, logical *, integer *
             , logical *, logical *, ftnlen);
     static logical donep;
-    static real disti, distj;
-    extern /* Subroutine */ int d2node_(integer *, real *, real *, integer *, 
-            integer *), match2_(integer *, integer *, real *, real *, integer 
-            *, integer *, integer *, real *, integer *, integer *, integer *, 
+    static xc_float disti, distj;
+    extern /* Subroutine */ int d2node_(integer *, xc_float *, xc_float *, integer *, 
+            integer *), match2_(integer *, integer *, xc_float *, xc_float *, integer 
+            *, integer *, integer *, xc_float *, integer *, integer *, integer *, 
             integer *, integer *, integer *, integer *, integer *, integer *, 
             integer *, integer *, integer *, integer *, logical *, integer *, 
-            integer *, real *, real *, integer *, logical *, logical *);
+            integer *, xc_float *, xc_float *, integer *, logical *, logical *);
     static integer nloop1, nloop2, n1test, n0test, n2test, kount1, kount2, 
             n3test;
     static logical cwedge;
 
     static logical cgraph, lmatch;
-    extern /* Subroutine */ int getime_(real *);
+    extern /* Subroutine */ int getime_(xc_float *);
     static logical pmatch;
-    extern /* Subroutine */ int lupang_(integer *, integer *, real *, real *, 
-            real *, integer *, integer *, integer *, integer *, integer *, 
-            real *, integer *, integer *, integer *, real *, real *, real *, 
-            real *, real *, real *, char *, integer *, logical *, ftnlen), 
-            filsmo_(integer *, integer *, real *, real *, real *, integer *, 
+    extern /* Subroutine */ int lupang_(integer *, integer *, xc_float *, xc_float *, 
+            xc_float *, integer *, integer *, integer *, integer *, integer *, 
+            xc_float *, integer *, integer *, integer *, xc_float *, xc_float *, xc_float *, 
+            xc_float *, xc_float *, xc_float *, char *, integer *, logical *, ftnlen), 
+            filsmo_(integer *, integer *, xc_float *, xc_float *, xc_float *, integer *, 
             integer *, integer *, integer *, integer *, integer *, integer *, 
-            integer *, real *, integer *, real *, real *, real *, real *, 
-            real *, real *, char *, integer *, ftnlen), lcolor_(char *, ftnlen), bcross_(integer *, integer *, real *, real *, real *, 
+            integer *, xc_float *, integer *, xc_float *, xc_float *, xc_float *, xc_float *, 
+            xc_float *, xc_float *, char *, integer *, ftnlen), lcolor_(char *, ftnlen), bcross_(integer *, integer *, xc_float *, xc_float *, xc_float *, 
             integer *, integer *, integer *, integer *, integer *, integer *, 
             integer *, integer *, integer *, integer *, logical *, integer *, 
-            real *, real *, real *, real *, real *, real *, char *, integer *,
+            xc_float *, xc_float *, xc_float *, xc_float *, xc_float *, xc_float *, char *, integer *,
              logical *, ftnlen), marksm_(integer *, integer *, integer *, 
             integer *, integer *, integer *, integer *, integer *, logical *),
              snapit_(integer *), sflush_();
     static logical lcross;
-    extern /* Subroutine */ int intsct_(real *, real *, real *, real *, real *
-            , real *, real *, real *, real *, real *, logical *), rplotl_(
-            integer *, real *, real *, real *, integer *, real *, real *, 
-            real *, real *, real *, real *, integer *, char *, integer *, ftnlen);
+    extern /* Subroutine */ int intsct_(xc_float *, xc_float *, xc_float *, xc_float *, xc_float *
+            , xc_float *, xc_float *, xc_float *, xc_float *, xc_float *, logical *), rplotl_(
+            integer *, xc_float *, xc_float *, xc_float *, integer *, xc_float *, xc_float *, 
+            xc_float *, xc_float *, xc_float *, xc_float *, integer *, char *, integer *, ftnlen);
     static integer kountl;
 
 /* *********************************************************************** */
@@ -145,7 +142,7 @@ static integer c__2 = 2;
     --nloop;
 
     /* Function Body */
-    pi = atan2((float)0., (float)-1.);
+    pi = M_PI;
 /*  FIND THE FIRST OVERLAPPING LINE STARTING AT THE CURRENT NODE */
     getime_(&time1);
     cgraph = FALSE_;
@@ -171,7 +168,7 @@ L110:
     if (n2 == *node) {
         goto L140;
     } else if (kount1 > nloop[1] + 1) {
-        fprintf(stderr,"** PROBLEMS WITH LOOP CLOSING IN COLAPS **");
+        fprintf(stderr,"** PROBLEMS WITH LOOP CLOSING IN COLAPS **\n");
         *err = TRUE_;
         goto L140;
     }
@@ -293,7 +290,7 @@ L120:
 /* Computing 2nd power */
     r__2 = yn[j1] - yn[j2];
     distj = sqrt(r__1 * r__1 + r__2 * r__2);
-    fact = (float)2.5;
+    fact = (xc_float)2.5;
     if (disti > fact * distj && (lxn[(j1 << 2) + 3] > 0 || lxn[(j1 << 2) + 2] 
             < 0) && (lxn[(j2 << 2) + 3] > 0 || lxn[(j2 << 2) + 2] < 0)) {
         ahold = angle[i2];

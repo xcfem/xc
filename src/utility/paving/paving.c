@@ -335,13 +335,13 @@ static integer c__1 = 1;
 
     /* Function Body */
     if(*remesh)
-      {        *sizeit = TRUE_; }
-    timing_1.timea = (float)0.;
-    timing_1.timep = (float)0.;
-    timing_1.timec = (float)0.;
-    timing_1.timepc = (float)0.;
-    timing_1.timeaj = (float)0.;
-    timing_1.times = (float)0.;
+      { *sizeit = TRUE_; }
+    timing_1.timea = (f2c_float)0.;
+    timing_1.timep = (f2c_float)0.;
+    timing_1.timec = (f2c_float)0.;
+    timing_1.timepc = (f2c_float)0.;
+    timing_1.timeaj = (f2c_float)0.;
+    timing_1.times = (f2c_float)0.;
     getime_(&time1);
     *err = FALSE_;
     done = FALSE_;
@@ -471,7 +471,7 @@ static integer c__1 = 1;
 /*  CHECK INPUT FOR ODDNESS */
     if (itnper / 2 << 1 != itnper)
       {
-        fprintf(stderr,"IN PAVING, NO. OF PERIMETER NODES IS ODD");
+        fprintf(stderr,"IN PAVING, NO. OF PERIMETER NODES IS ODD\n");
         *err = TRUE_;
         goto L310;
       }
@@ -558,12 +558,14 @@ L210:
             err, &xnold[1], &ynold[1], &nxkold[nxkold_offset], &linkeg[3], &
             listeg[1], &bmesur[1], mlink, npnold, npeold, nnxk,
             rexmin, rexmax, reymin, reymax, idivis, sizmin, emax, emin, (ftnlen)3);
-    if (*noroom || *err) {
+    if (*noroom || *err)
+      {
         goto L310;
-    }
-    if (done) {
+      }
+    if (done)
+      {
         goto L240;
-    }
+      }
 /*  TRY COLLAPSING CORNERS WITH SMALL ANGLES AFTER A ROW HAS BEEN */
 /*  COMPLETED - NOTE THAT THE ICOMB ARRAY IS SENT TO PINCH IN PLACE */
 /*  OF THE LCORN ARRAY FOR MORE CORNER PROCESSING CAPABILITIES */
@@ -655,7 +657,8 @@ L230:
     goto L210;
 /*  CHECK TO MAKE SURE THAT OTHER LOOPS ARE NOT REMAINING TO BE FILLED */
 L240:
-    if (kloop > 1) {
+    if (kloop > 1)
+      {
         n1 = nextn1[0];
         i__1 = kloop - 1;
         for (i__ = 1; i__ <= i__1; ++i__) {
@@ -684,11 +687,12 @@ L240:
     }
 /*  THE FILL HAS BEEN COMPLETED - NOW FIX UP ANY BAD SPOTS */
     i__1 = *nnn;
-    for (i__ = 1; i__ <= i__1; ++i__) {
+    for (i__ = 1; i__ <= i__1; ++i__)
+      {
         lnodes[i__ * lnodes_dim1 + 4] = (i__2 = lnodes[i__ * lnodes_dim1 + 4],
                  abs(i__2));
 /* L260: */
-    }
+      }
     filsmo_(mxnd, mln, &xn[1], &yn[1], &zn[1], &lxk[5], &kxl[3], &nxl[3], &
             lxn[5], lll, nnn, nnn, &lnodes[lnodes_offset], &bnsize[3], nloop, 
             &xmin, &xmax, &ymin, &ymax, &zmin, &zmax, dev1, kreg, (ftnlen)3);
@@ -696,43 +700,50 @@ L240:
             nxl[3], &lxn[5], nnn, lll, kkk, navail, iavail, &angle[1], &
             lnodes[lnodes_offset], &bnsize[3], nloop, dev1, kreg, &xmin, &
             xmax, &ymin, &ymax, &zmin, &zmax, graph, video, noroom, err, (ftnlen)3);
-    if (*noroom || *err) {
+    if (*noroom || *err)
+      {
         goto L310;
-    }
+      }
     i__1 = *nnn;
-    for (i__ = 1; i__ <= i__1; ++i__) {
+    for (i__ = 1; i__ <= i__1; ++i__)
+      {
         lnodes[i__ * lnodes_dim1 + 4] = -(i__2 = lnodes[i__ * lnodes_dim1 + 4]
                 , abs(i__2));
 /* L270: */
-    }
+      }
     filsmo_(mxnd, mln, &xn[1], &yn[1], &zn[1], &lxk[5], &kxl[3], &nxl[3], &
             lxn[5], lll, nnn, nnn, &lnodes[lnodes_offset], &bnsize[3], nloop, 
             &xmin, &xmax, &ymin, &ymax, &zmin, &zmax, dev1, kreg, (ftnlen)3);
 /*  SUCCESSFUL EXIT */
-    if (*graph) {
+    if (*graph)
+      {
         rplotl_(mxnd, &xn[1], &yn[1], &zn[1], &nxl[3], &xmin1, &xmax1, &ymin1,
                  &ymax1, &zmin1, &zmax1, lll, dev1, kreg, (ftnlen)3);
-    }
+      }
     iuppr = int_min(*lll,*mxnd);
     i__1 = iuppr;
-    for (i__ = 1; i__ <= i__1; ++i__) {
-        for (j = 1; j <= 4; ++j) {
+    for (i__ = 1; i__ <= i__1; ++i__)
+      {
+        for (j = 1; j <= 4; ++j)
+	  {
             iexk[j + (i__ << 2)] = lxk[j + (i__ << 2)];
 /* L280: */
-        }
+	  }
 /* L300: */
-    }
+      }
 /* Computing MIN */
     i__1 = *lll, i__2 = *mxnd * 3;
     iuppr = int_min(i__1,i__2);
     i__1 = iuppr;
-    for (i__ = 1; i__ <= i__1; ++i__) {
-        for (j = 1; j <= 2; ++j) {
+    for (i__ = 1; i__ <= i__1; ++i__)
+      {
+        for (j = 1; j <= 2; ++j)
+	  {
             inxe[j + (i__ << 1)] = nxl[j + (i__ << 1)];
 /* L290: */
-        }
+	  }
 /* L301: */
-    }
+      }
 /*  EXIT WITH ERROR */
 L310:
 

@@ -21,13 +21,13 @@ extern "C" {
 
 /*    See packages/seacas/LICENSE for details */
 /* Subroutine */ int flmnmx_(integer *mxnd, integer *mln, integer *maxprm, 
-        integer *linkpr, integer *kperim, integer *lnodes, real *xn, real *yn,
-         integer *nloop, integer *node, real *xmin, real *xmax, real *ymin, 
-        real *ymax, logical *err)
+        integer *linkpr, integer *kperim, integer *lnodes, xc_float *xn, xc_float *yn,
+         integer *nloop, integer *node, xc_float *xmin, xc_float *xmax, xc_float *ymin, 
+        xc_float *ymax, logical *err)
 {
     /* System generated locals */
     integer lnodes_dim1, lnodes_offset;
-    real r__1, r__2;
+    xc_float r__1, r__2;
 
     /* Local variables */
     static integer kmax, inow, kount;
@@ -69,7 +69,7 @@ L100:
         *ymax = dbl_max(r__1,r__2);
         ++kount;
         if (kount > *nloop) {
-            fprintf(stderr,"PROBLEMS IN FLMNMX WITH LOOP NOT CLOSING");
+            fprintf(stderr,"PROBLEMS IN FLMNMX WITH LOOP NOT CLOSING\n");
             *err = TRUE_;
             goto L130;
         }
@@ -104,7 +104,7 @@ L120:
         goto L110;
     }
     if (kount > kmax + 1) {
-        fprintf(stderr,"PROBLEMS IN FLMNMX WITH LOOP NOT CLOSING");
+        fprintf(stderr,"PROBLEMS IN FLMNMX WITH LOOP NOT CLOSING\n");
         *err = TRUE_;
         goto L130;
     }

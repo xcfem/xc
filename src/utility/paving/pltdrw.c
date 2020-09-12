@@ -18,38 +18,38 @@ extern "C" {
 /* Common Block Declarations */
 
 struct {
-    real devcap[23], defout[7];
+    xc_float devcap[23], defout[7];
 } status_;
 
 #define status_1 status_
 
 struct {
-    real devp[5];
+    xc_float devp[5];
 } device_;
 
 #define device_1 device_
 
 struct {
-    real colp[3], palett[48]	/* was [3][16] */;
+    xc_float colp[3], palett[48]	/* was [3][16] */;
 } color_;
 
 #define color_1 color_
 
 struct {
-    real textp[40];
+    xc_float textp[40];
 } text_;
 
 #define text_1 text_
 
 struct {
-    real vectp[5], xcur, ycur;
+    xc_float vectp[5], xcur, ycur;
 } vectrc_;
 
 #define vectrc_1 vectrc_
 
 struct {
     integer idex[400]	/* was [200][2] */, nvect[400]	/* was [200][2] */;
-    real xsize[400]	/* was [200][2] */, ysize[400]	/* was [200][2] */, 
+    xc_float xsize[400]	/* was [200][2] */, ysize[400]	/* was [200][2] */, 
 	    x0[4600]	/* was [2300][2] */, y0[4600]	/* was [2300][2] */, 
 	    x1[4600]	/* was [2300][2] */, y1[4600]	/* was [2300][2] */;
 } font_;
@@ -57,13 +57,13 @@ struct {
 #define font_1 font_
 
 struct {
-    real graphp[100];
+    xc_float graphp[100];
 } graph_;
 
 #define graph_1 graph_
 
 struct {
-    real mapp[11];
+    xc_float mapp[11];
 } mappar_;
 
 #define mappar_1 mappar_
@@ -75,7 +75,7 @@ struct {
 #define storag_1 storag_
 
 struct {
-    real savlen;
+    xc_float savlen;
     integer idshsv;
 } pltsty_;
 
@@ -91,7 +91,7 @@ static integer c__0 = 0;
 
 /* See packages/seacas/LICENSE for details */
 /* ======================================================================= */
-/* Subroutine */ int pltdrw_(real *x, real *y)
+/* Subroutine */ int pltdrw_(xc_float *x, xc_float *y)
 {
     /* Initialized data */
 
@@ -100,26 +100,26 @@ static integer c__0 = 0;
 
     /* System generated locals */
     integer i__1;
-    real r__1, r__2;
+    xc_float r__1, r__2;
 
     /* Builtin functions */
-    double sqrt(doublereal);
-    integer i_nint(real *);
+    
+    integer i_nint(xc_float *);
 
     /* Local variables */
     static integer i__;
-    static real x2, y2, dx, dy, xx, yy, dshdx, dshdy, dshlen, linlen, dshdrn;
+    static xc_float x2, y2, dx, dy, xx, yy, dshdx, dshdy, dshlen, linlen, dshdrn;
     static integer idshno;
-    extern /* Subroutine */ int pltlig_(real *, real *);
-    static real drwlen;
+    extern /* Subroutine */ int pltlig_(xc_float *, xc_float *);
+    static xc_float drwlen;
     static integer numdsh;
-    static real vector[7];
-    extern /* Subroutine */ int vdiqos_(real *);
-    static real prvdrn;
+    static xc_float vector[7];
+    extern /* Subroutine */ int vdiqos_(xc_float *);
+    static xc_float prvdrn;
     static integer nstyle;
-    extern /* Subroutine */ int vdstls_(integer *), pltmov_(real *, real *);
+    extern /* Subroutine */ int vdstls_(integer *), pltmov_(xc_float *, xc_float *);
 
-    if (vectrc_1.vectp[0] == (float)0.) {
+    if (vectrc_1.vectp[0] == (xc_float)0.) {
 	vectrc_1.xcur = *x;
 	vectrc_1.ycur = *y;
 	return 0;
@@ -130,19 +130,19 @@ static integer c__0 = 0;
     dy = *y - vectrc_1.ycur;
     linlen = sqrt(dx * dx + dy * dy);
     nstyle = (integer) vector[3];
-    if (nstyle == 0 || linlen == (float)0.) {
+    if (nstyle == 0 || linlen == (xc_float)0.) {
 	pltlig_(x, y);
     } else {
 	idshno = pltsty_1.idshsv;
 	dshdrn = pltsty_1.savlen;
 /* Computing MAX */
-	r__1 = vector[4] * (float).02;
-	dshlen = dbl_max(r__1,(float).002);
-	dshlen = dbl_min(dshlen,(float).005);
-	dshdx = dx * (float).5 * (dshlen / linlen);
-	dshdy = dy * (float).5 * (dshlen / linlen);
+	r__1 = vector[4] * (xc_float).02;
+	dshlen = dbl_max(r__1,(xc_float).002);
+	dshlen = dbl_min(dshlen,(xc_float).005);
+	dshdx = dx * (xc_float).5 * (dshlen / linlen);
+	dshdy = dy * (xc_float).5 * (dshlen / linlen);
 	drwlen = linlen - dshlen + dshdrn;
-	if (drwlen <= (float)0.) {
+	if (drwlen <= (xc_float)0.) {
 	    xx = vectrc_1.xcur;
 	    yy = vectrc_1.ycur;
 	} else {
@@ -155,11 +155,11 @@ static integer c__0 = 0;
 		}
 	    } else if (istyle[(idshno + 1) % 8 + (nstyle << 3) - 8] != 1 && 
 		    dshdrn < dshlen / 2) {
-		r__1 = (vectrc_1.xcur + xx) * (float).5;
-		r__2 = (vectrc_1.ycur + yy) * (float).5;
+		r__1 = (vectrc_1.xcur + xx) * (xc_float).5;
+		r__2 = (vectrc_1.ycur + yy) * (xc_float).5;
 		pltlig_(&r__1, &r__2);
 	    }
-	    dshdrn = (float)0.;
+	    dshdrn = (xc_float)0.;
 /* Computing MAX */
 	    r__1 = drwlen / dshlen;
 	    i__1 = i_nint(&r__1);

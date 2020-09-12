@@ -21,19 +21,19 @@ extern "C" {
 
 /* See packages/seacas/LICENSE for details */
 /* ======================================================================= */
-/* Subroutine */ int pltdv2_(real *map, integer *n, real *px, real *py, real *
-	qx, real *qy)
+/* Subroutine */ int pltdv2_(xc_float *map, integer *n, xc_float *px, xc_float *py, xc_float *
+	qx, xc_float *qy)
 {
     /* System generated locals */
     integer i__1;
 
     /* Local variables */
     static integer i__, j, j1, jn;
-    static real ppx[32], ppy[32], qqx[32], qqy[32];
+    static xc_float ppx[32], ppy[32], qqx[32], qqy[32];
     static integer mask[1];
-    extern /* Subroutine */ int pltvcm_(integer *, integer *, real *, real *, 
-	    real *, real *), pltvwv_(real *, real *, integer *, integer *, 
-	    real *, real *, real *, real *);
+    extern /* Subroutine */ int pltvcm_(integer *, integer *, xc_float *, xc_float *, 
+	    xc_float *, xc_float *), pltvwv_(xc_float *, xc_float *, integer *, integer *, 
+	    xc_float *, xc_float *, xc_float *, xc_float *);
 
     /* Parameter adjustments */
     --qy;

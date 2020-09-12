@@ -39,20 +39,20 @@ static integer c__1 = 1;
 
 /* See packages/seacas/LICENSE for details */
 /* ======================================================================= */
-/* Subroutine */ int usrsym_(char *isytyp, logical *is3dim, real *x0, real *
-	y0, real *z0, real *evar, real *scale, ftnlen isytyp_len)
+/* Subroutine */ int usrsym_(char *isytyp, logical *is3dim, xc_float *x0, xc_float *
+	y0, xc_float *z0, xc_float *evar, xc_float *scale, ftnlen isytyp_len)
 {
     /* System generated locals */
-    real r__1, r__2, r__3, r__4;
+    xc_float r__1, r__2, r__3, r__4;
 
     /* Builtin functions */
     integer s_cmp(char *, char *, ftnlen, ftnlen);
-    double cos(doublereal), sin(doublereal);
+    
 
     /* Local variables */
-    static real sx0, sy0;
-    extern /* Subroutine */ int mpd2vc_(integer *, real *, real *, real *, 
-	    real *), mpd2sy_(integer *, real *, real *, char *, ftnlen);
+    static xc_float sx0, sy0;
+    extern /* Subroutine */ int mpd2vc_(integer *, xc_float *, xc_float *, xc_float *, 
+	    xc_float *), mpd2sy_(integer *, xc_float *, xc_float *, char *, ftnlen);
 
 /* ======================================================================= */
 /*   --*** USRSYM *** (DETOUR) Plot element symbol (slip/angle version) */
@@ -82,9 +82,9 @@ static integer c__1 = 1;
 /*   --      default is device to window conversion */
     if (s_cmp(isytyp, "ANGLE", isytyp_len, (ftnlen)5) == 0) {
 /*      --Angle plot */
-	if (*evar > (float)360.) {
+	if (*evar > (xc_float)360.) {
 	    return 0;
-	} else if (*evar < (float)-360.) {
+	} else if (*evar < (xc_float)-360.) {
 /*         --Indicate multiple failures */
 #if NeedsDoubleEscape
 	    mpd2sy_(&c__1, x0, y0, "\\CX", (ftnlen)3);
@@ -95,8 +95,8 @@ static integer c__1 = 1;
 #endif
 	} else {
 /*         --Indicate crack angle */
-	    sx0 = *scale * (float).01 * cos(*evar * (float).0174532925);
-	    sy0 = *scale * (float).01 * sin(*evar * (float).0174532925);
+	    sx0 = *scale * (xc_float).01 * cos(*evar * (xc_float).0174532925);
+	    sy0 = *scale * (xc_float).01 * sin(*evar * (xc_float).0174532925);
 	    r__1 = *x0 - sx0;
 	    r__2 = *y0 - sy0;
 	    r__3 = *x0 + sx0;
@@ -105,9 +105,9 @@ static integer c__1 = 1;
 	}
     } else if (s_cmp(isytyp, "CRACK", isytyp_len, (ftnlen)5) == 0) {
 /*      --Slip plot */
-	if (*evar == (float)0.) {
+	if (*evar == (xc_float)0.) {
 	    return 0;
-	} else if (*evar < (float)0.) {
+	} else if (*evar < (xc_float)0.) {
 /*         --Indicate sliding joint */
 #if NeedsDoubleEscape
 	    mpd2sy_(&c__1, x0, y0, "\\CX", (ftnlen)3);

@@ -20,9 +20,9 @@ extern "C" {
 /*    NTESS, the U.S. Government retains certain rights in this software. */
 
 /*    See packages/seacas/LICENSE for details */
-/* Subroutine */ int getime_(real *time)
+/* Subroutine */ int getime_(xc_float *time)
 {
-    extern /* Subroutine */ int excpus_(real *);
+    extern /* Subroutine */ int excpus_(xc_float *);
 
 /* *********************************************************************** */
 /*  SUBROUTINE GETIME = GETS THE CPU TIME USED BY THE CURRENT PROCESS */

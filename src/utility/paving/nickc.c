@@ -20,16 +20,13 @@ extern "C" {
 /*    NTESS, the U.S. Government retains certain rights in this software. */
 
 /*    See packages/seacas/LICENSE for details */
-doublereal nickc_(real *angle, integer *lxn)
+doublereal nickc_(xc_float *angle, integer *lxn)
 {
     /* System generated locals */
-    real ret_val, r__1, r__2;
-
-    /* Builtin functions */
-    double atan2(doublereal, doublereal);
+    xc_float ret_val, r__1, r__2;
 
     /* Local variables */
-    static real pid2, adiff;
+    static xc_float pid2, adiff;
 
 /* *********************************************************************** */
 /*  FUNCTION NICKC = RETURNS THE PENALTY FOR A BAD ANGLE AND A BAD */
@@ -39,9 +36,9 @@ doublereal nickc_(real *angle, integer *lxn)
     --lxn;
 
     /* Function Body */
-    pid2 = atan2((float)0., (float)-1.) * (float).5;
+    pid2 = atan2((xc_float)0., (xc_float)-1.) * (xc_float).5;
 /* Computing MAX */
-    r__1 = (float)0., r__2 = *angle - pid2;
+    r__1 = (xc_float)0., r__2 = *angle - pid2;
     adiff = dbl_max(r__1,r__2);
 /*  IF THE ANGLE HAS 4 LINES ATTACHED */
 /*  A REGULAR NODE WOULD BE FORMED - PENALIZE IT LIGHTLY */
@@ -52,21 +49,21 @@ doublereal nickc_(real *angle, integer *lxn)
 /*  THEN A THREE DEGREE IRREGULAR NODE WOULD BE FORMED */
 /*  PENALIZE IT MORE STRINGENTLY */
     } else if (lxn[3] > 0 && lxn[4] == 0) {
-	ret_val = adiff * (float)1.3;
+	ret_val = adiff * (xc_float)1.3;
 /*  IF THE ANGLE HAS MORE THAN 4 LINES ATTACHED */
 /*  THEN A FIVE+ DEGREE IRREGULAR NODE WOULD BE FORMED */
 /*  PENALIZE IT LESS STRINGENTLY */
     } else if (lxn[4] > 0) {
-	ret_val = adiff * (float)1.15;
+	ret_val = adiff * (xc_float)1.15;
 /*  IF THE ANGLE HAS 2 LINES ATTACHED */
 /*  THEN A TWO DEGREE IRREGULAR NODE WOULD BE FORMED (HIGHLY UNLIKELY) */
 /*  PENALIZE IT SEVERELY */
     } else if (lxn[3] == 0) {
-	ret_val = adiff * (float)1.6;
+	ret_val = adiff * (xc_float)1.6;
     } else {
 /*         write (*,*) 'Undefined Option in nickc', */
 /*     $        lxn(1), lxn(2), lxn(3), lxn(4) */
-	ret_val = adiff * (float)2.;
+	ret_val = adiff * (xc_float)2.;
     }
     return ret_val;
 } /* nickc_ */

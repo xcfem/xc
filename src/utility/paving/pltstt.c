@@ -18,38 +18,38 @@ extern "C" {
 /* Common Block Declarations */
 
 struct {
-    real devcap[23], defout[7];
+    xc_float devcap[23], defout[7];
 } status_;
 
 #define status_1 status_
 
 struct {
-    real devp[5];
+    xc_float devp[5];
 } device_;
 
 #define device_1 device_
 
 struct {
-    real colp[3], palett[48]	/* was [3][16] */;
+    xc_float colp[3], palett[48]	/* was [3][16] */;
 } color_;
 
 #define color_1 color_
 
 struct {
-    real textp[40];
+    xc_float textp[40];
 } text_;
 
 #define text_1 text_
 
 struct {
-    real vectp[5], xcur, ycur;
+    xc_float vectp[5], xcur, ycur;
 } vectrc_;
 
 #define vectrc_1 vectrc_
 
 struct {
     integer idex[400]	/* was [200][2] */, nvect[400]	/* was [200][2] */;
-    real xsize[400]	/* was [200][2] */, ysize[400]	/* was [200][2] */, 
+    xc_float xsize[400]	/* was [200][2] */, ysize[400]	/* was [200][2] */, 
 	    x0[4600]	/* was [2300][2] */, y0[4600]	/* was [2300][2] */, 
 	    x1[4600]	/* was [2300][2] */, y1[4600]	/* was [2300][2] */;
 } font_;
@@ -57,13 +57,13 @@ struct {
 #define font_1 font_
 
 struct {
-    real graphp[100];
+    xc_float graphp[100];
 } graph_;
 
 #define graph_1 graph_
 
 struct {
-    real mapp[11];
+    xc_float mapp[11];
 } mappar_;
 
 #define mappar_1 mappar_
@@ -85,7 +85,7 @@ static integer c__3 = 3;
 
 /* See packages/seacas/LICENSE for details */
 /* ======================================================================= */
-logical pltstt_(integer *indx, real *buff)
+logical pltstt_(integer *indx, xc_float *buff)
 {
     /* System generated locals */
     char * a__1[3];
@@ -99,10 +99,10 @@ logical pltstt_(integer *indx, real *buff)
     /* Local variables */
     static integer i__, l;
     extern /* Subroutine */ int chric_(integer *, char *, integer *, ftnlen);
-    static real dummy[7];
-    extern /* Subroutine */ int chrrvc_(real *, char *, integer *, ftnlen);
+    static xc_float dummy[7];
+    extern /* Subroutine */ int chrrvc_(xc_float *, char *, integer *, ftnlen);
     static char ierror[16];
-    extern /* Subroutine */ int vdiqos_(real *), vdstcs_(real *), pltfnt_(
+    extern /* Subroutine */ int vdiqos_(xc_float *), vdstcs_(xc_float *), pltfnt_(
 	    char *, ftnlen), pltitm_(), pltflu_(), siorpt_(char *, char *, 
 	    integer *, ftnlen, ftnlen), pltrst_();
 
@@ -145,15 +145,15 @@ logical pltstt_(integer *indx, real *buff)
     } else if (*indx == 11) {
 	text_1.textp[36] = buff[1];
     } else if (*indx == 12) {
-	if (buff[1] == (float)1.) {
+	if (buff[1] == (xc_float)1.) {
 	    pltfnt_("ROMFNT", (ftnlen)6);
-	    text_1.textp[37] = (float)1.;
-	} else if (buff[1] == (float)2.) {
+	    text_1.textp[37] = (xc_float)1.;
+	} else if (buff[1] == (xc_float)2.) {
 	    pltfnt_("STKFNT", (ftnlen)6);
-	    text_1.textp[37] = (float)2.;
-	} else if (buff[1] == (float)3.) {
+	    text_1.textp[37] = (xc_float)2.;
+	} else if (buff[1] == (xc_float)3.) {
 	    pltfnt_("SSRFNT", (ftnlen)6);
-	    text_1.textp[37] = (float)3.;
+	    text_1.textp[37] = (xc_float)3.;
 	} else {
 	    chrrvc_(&buff[1], ierror, &l, (ftnlen)16);
 	    pltflu_();

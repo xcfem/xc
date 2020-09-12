@@ -21,38 +21,38 @@ extern "C" {
 
 /*    See packages/seacas/LICENSE for details */
 /* Subroutine */ int longel_(integer *mxnd, integer *mln, integer *lnodes, 
-        real *xn, real *yn, integer *nuid, integer *lxk, integer *kxl, 
+        xc_float *xn, xc_float *yn, integer *nuid, integer *lxk, integer *kxl, 
         integer *nxl, integer *lxn, integer *nnn, integer *navail, integer *
-        iavail, integer *node, integer *kelem, real *ang, real *toler, 
-        integer *n1, integer *n2, integer *kreg, real *xmin, real *xmax, real 
-        *ymin, real *ymax, integer *kkk, integer *lll, logical *done, logical 
+        iavail, integer *node, integer *kelem, xc_float *ang, xc_float *toler, 
+        integer *n1, integer *n2, integer *kreg, xc_float *xmin, xc_float *xmax, xc_float 
+        *ymin, xc_float *ymax, integer *kkk, integer *lll, logical *done, logical 
         *graph, logical *video, logical *noroom, logical *err, integer *
         kkkadd)
 {
     /* System generated locals */
     integer lnodes_dim1, lnodes_offset;
-    real r__1, r__2;
+    xc_float r__1, r__2;
 
     /* Builtin functions */
-    double sqrt(doublereal);
+    
 
     /* Local variables */
     static integer i__, l1, l2, l4, l3, l5;
-    static real d12, d22;
+    static xc_float d12, d22;
     static integer il;
-    static real dn1, dn2, dl3, dl4, dl5;
+    static xc_float dn1, dn2, dl3, dl4, dl5;
     static integer il1, il2;
     static logical ccw;
-    static real area, dmin__, dmax__;
+    static xc_float area, dmin__, dmax__;
     static integer node2, node3, nodes[4];
-    extern /* Subroutine */ int gnxka_(integer *, real *, real *, integer *, 
-            integer *, real *, integer *, integer *, logical *);
+    extern /* Subroutine */ int gnxka_(integer *, xc_float *, xc_float *, integer *, 
+            integer *, xc_float *, integer *, integer *, logical *);
     static integer ltest;
-    extern /* Subroutine */ int d2node_(integer *, real *, real *, integer *, 
+    extern /* Subroutine */ int d2node_(integer *, xc_float *, xc_float *, integer *, 
             integer *);
     static integer kelem2;
     extern /* Subroutine */ int  undelm_(integer *, 
-            integer *, integer *, real *, real *, integer *, integer *, 
+            integer *, integer *, xc_float *, xc_float *, integer *, integer *, 
             integer *, integer *, integer *, integer *, integer *, integer *, 
             integer *, integer *, integer *, integer *, integer *, integer *, 
             integer *, integer *, integer *, integer *, integer *, logical *, 
@@ -102,8 +102,8 @@ extern "C" {
 /* Computing 2nd power */
         r__2 = yn[*node] - yn[*n2];
         dn2 = sqrt(r__1 * r__1 + r__2 * r__2);
-        dmin__ = (dn1 + dn2) * (float).5 * (float)1.7;
-        dmax__ = (dn1 + dn2) * (float).5;
+        dmin__ = (dn1 + dn2) * (xc_float).5 * (xc_float)1.7;
+        dmax__ = (dn1 + dn2) * (xc_float).5;
 /*  SEE IF IT IS A LONG LEGGED BEAST */
         if (d12 > dmin__ || d22 > dmin__) {
 /*  FIND L1, L2, L3, AND L4 */
@@ -117,7 +117,7 @@ extern "C" {
                 }
 /* L100: */
             }
-            fprintf(stderr,"** PROBLEMS IN LONGEL FINDING L1 **");
+            fprintf(stderr,"** PROBLEMS IN LONGEL FINDING L1 **\n");
             *err = TRUE_;
             goto L250;
 L110:
@@ -131,7 +131,7 @@ L110:
                 }
 /* L120: */
             }
-            fprintf(stderr,"** PROBLEMS IN LONGEL FINDING L2 **");
+            fprintf(stderr,"** PROBLEMS IN LONGEL FINDING L2 **\n");
             *err = TRUE_;
             goto L250;
 L130:
@@ -149,7 +149,7 @@ L130:
                 }
 /* L140: */
             }
-            fprintf(stderr,"** PROBLEMS IN LONGEL FINDING L4/L3 **");
+            fprintf(stderr,"** PROBLEMS IN LONGEL FINDING L4/L3 **\n");
             *err = TRUE_;
             goto L250;
 L150:
@@ -167,7 +167,7 @@ L150:
                 }
 /* L160: */
             }
-            fprintf(stderr,"** PROBLEMS IN LONGEL FINDING L3/L4 **");
+            fprintf(stderr,"** PROBLEMS IN LONGEL FINDING L3/L4 **\n");
             *err = TRUE_;
             goto L250;
 L170:
@@ -192,7 +192,7 @@ L170:
                     }
 /* L180: */
                 }
-                fprintf(stderr,"** PROBLEMS IN LONGEL FINDING NODE3/D11 **");
+                fprintf(stderr,"** PROBLEMS IN LONGEL FINDING NODE3/D11 **\n");
                 *err = TRUE_;
                 goto L250;
 L190:
@@ -209,7 +209,7 @@ L190:
                     }
 /* L200: */
                 }
-                fprintf(stderr,"** PROBLEMS IN LONGEL FINDING NODE3/D11 **");
+                fprintf(stderr,"** PROBLEMS IN LONGEL FINDING NODE3/D11 **\n");
                 *err = TRUE_;
                 goto L250;
 L210:
@@ -235,7 +235,7 @@ L210:
                 }
 /* L220: */
             }
-            fprintf(stderr,"** PROBLEMS IN LONGEL FINDING L5 **");
+            fprintf(stderr,"** PROBLEMS IN LONGEL FINDING L5 **\n");
             *err = TRUE_;
             goto L250;
 L230:

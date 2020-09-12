@@ -24,70 +24,67 @@ static integer c__3 = 3;
 /*    NTESS, the U.S. Government retains certain rights in this software. */
 
 /*    See packages/seacas/LICENSE for details */
-/* Subroutine */ int tridel_(integer *mxnd, integer *mln, real *xn, real *yn, 
-        real *zn, integer *nuid, integer *lxk, integer *kxl, integer *nxl, 
+/* Subroutine */ int tridel_(integer *mxnd, integer *mln, xc_float *xn, xc_float *yn, 
+        xc_float *zn, integer *nuid, integer *lxk, integer *kxl, integer *nxl, 
         integer *lxn, integer *nnn, integer *lll, integer *kkk, integer *
-        navail, integer *iavail, real *angle, integer *lnodes, real *bnsize, 
-        integer *nloop, char *dev1, integer *kreg, real *xmin, real *xmax, 
-        real *ymin, real *ymax, real *zmin, real *zmax, logical *graph, 
+        navail, integer *iavail, xc_float *angle, integer *lnodes, xc_float *bnsize, 
+        integer *nloop, char *dev1, integer *kreg, xc_float *xmin, xc_float *xmax, 
+        xc_float *ymin, xc_float *ymax, xc_float *zmin, xc_float *zmax, logical *graph, 
         logical *video, logical *noroom, logical *err, ftnlen dev1_len)
 {
     /* System generated locals */
     integer lnodes_dim1, lnodes_offset, i__1;
-    real r__1, r__2, r__3, r__4, r__5, r__6, r__7, r__8;
-
-    /* Builtin functions */
-    double atan2(doublereal, doublereal), sqrt(doublereal), acos(doublereal);
+    xc_float r__1, r__2, r__3, r__4, r__5, r__6, r__7, r__8;
 
     /* Local variables */
     static integer i__, j, k[3], l1, l2, l3, n1, n2, n3, n4;
-    static real d21, d32, d14, d43, pi, x21, y21, x32, x14, x43, y32, y43, 
+    static xc_float d21, d32, d14, d43, pi, x21, y21, x32, x14, x43, y32, y43, 
             y14;
     static logical ccw;
-    static real ang1, ang2, ang3, area, ang12, ang23, ang31;
+    static xc_float ang1, ang2, ang3, area, ang12, ang23, ang31;
     static logical done;
     static integer node;
     static logical redo;
-    static real dmax__;
+    static xc_float dmax__;
     static integer kmax;
-    static real dist;
+    static xc_float dist;
     static integer node1, node3;
     static logical check;
-    extern /* Subroutine */ int delem_(integer *, real *, real *, integer *, 
+    extern /* Subroutine */ int delem_(integer *, xc_float *, xc_float *, integer *, 
             integer *, integer *, integer *, integer *, integer *, integer *, 
             integer *, integer *, integer *, integer *, integer *, logical *, 
             logical *, logical *, logical *);
     static integer kelem, nodes[4];
-    extern /* Subroutine */ int gnxka_(integer *, real *, real *, integer *, 
-            integer *, real *, integer *, integer *, logical *);
+    extern /* Subroutine */ int gnxka_(integer *, xc_float *, xc_float *, integer *, 
+            integer *, xc_float *, integer *, integer *, logical *);
     static integer kount;
-    static real twopi;
-    extern /* Subroutine */ int d2node_(integer *, real *, real *, integer *, 
+    static xc_float twopi;
+    extern /* Subroutine */ int d2node_(integer *, xc_float *, xc_float *, integer *, 
             integer *);
-    static real theta1, theta2, theta3, theta4, toler1, toler2, toler3, 
+    static xc_float theta1, theta2, theta3, theta4, toler1, toler2, toler3, 
             toler4, toler5, toler6;
     static integer kkkadd;
     extern /* Subroutine */ int  adjtri_(integer *, 
-            integer *, integer *, real *, real *, real *, integer *, integer *
+            integer *, integer *, xc_float *, xc_float *, xc_float *, integer *, integer *
             , integer *, integer *, integer *, integer *, integer *, integer *
-            , integer *, integer *, real *, real *, real *, integer *, 
-            integer *, integer *, integer *, real *, real *, real *, real *, 
-            real *, real *, integer *, integer *, char *, logical *, logical *
+            , integer *, integer *, xc_float *, xc_float *, xc_float *, integer *, 
+            integer *, integer *, integer *, xc_float *, xc_float *, xc_float *, xc_float *, 
+            xc_float *, xc_float *, integer *, integer *, char *, logical *, logical *
             , logical *, logical *, logical *, logical *, integer *, ftnlen);
     static logical passed;
-    extern /* Subroutine */ int filsmo_(integer *, integer *, real *, real *, 
-            real *, integer *, integer *, integer *, integer *, integer *, 
-            integer *, integer *, integer *, real *, integer *, real *, real *
-            , real *, real *, real *, real *, char *, integer *, ftnlen), 
+    extern /* Subroutine */ int filsmo_(integer *, integer *, xc_float *, xc_float *, 
+            xc_float *, integer *, integer *, integer *, integer *, integer *, 
+            integer *, integer *, integer *, xc_float *, integer *, xc_float *, xc_float *
+            , xc_float *, xc_float *, xc_float *, xc_float *, char *, integer *, ftnlen), 
             marksm_(integer *, integer *, integer *, integer *, integer *, 
             integer *, integer *, integer *, logical *), lcolor_(char *, ftnlen), snapit_(integer *), sflush_(), nxkord_(integer *, 
-            integer *), trifix_(integer *, integer *, real *, real *, real *, 
+            integer *), trifix_(integer *, integer *, xc_float *, xc_float *, xc_float *, 
             integer *, integer *, integer *, integer *, integer *, integer *, 
-            integer *, integer *, integer *, integer *, real *, integer *, 
-            real *, integer *, char *, integer *, real *, real *, real *, 
-            real *, real *, real *, logical *, logical *, logical *, logical *
-            , ftnlen), rplotl_(integer *, real *, real *, real *, integer *, 
-            real *, real *, real *, real *, real *, real *, integer *, char *,
+            integer *, integer *, integer *, integer *, xc_float *, integer *, 
+            xc_float *, integer *, char *, integer *, xc_float *, xc_float *, xc_float *, 
+            xc_float *, xc_float *, xc_float *, logical *, logical *, logical *, logical *
+            , ftnlen), rplotl_(integer *, xc_float *, xc_float *, xc_float *, integer *, 
+            xc_float *, xc_float *, xc_float *, xc_float *, xc_float *, xc_float *, integer *, char *,
              integer *, ftnlen);
 
 /* *********************************************************************** */
@@ -111,8 +108,8 @@ static integer c__3 = 3;
     lnodes -= lnodes_offset;
 
     /* Function Body */
-    pi = atan2((float)0., (float)-1.);
-    twopi = pi * (float)2.;
+    pi = M_PI;
+    twopi = pi * (xc_float)2.;
     *err = FALSE_;
     done = FALSE_;
     check = TRUE_;
@@ -195,7 +192,7 @@ L110:
                 k[0] = kxl[(l1 << 1) + 2];
             } else {
                 *err = TRUE_;
-                fprintf(stderr,"** PROBLEMS IN TRIDEL FINDING K(1) **");
+                fprintf(stderr,"** PROBLEMS IN TRIDEL FINDING K(1) **\n");
                 goto L180;
             }
             if (kxl[(l2 << 1) + 1] == kxl[(l3 << 1) + 1] || kxl[(l2 << 1) + 1]
@@ -206,7 +203,7 @@ L110:
                 k[1] = kxl[(l2 << 1) + 2];
             } else {
                 *err = TRUE_;
-                fprintf(stderr,"** PROBLEMS IN TRIDEL FINDING K(2) **");
+                fprintf(stderr,"** PROBLEMS IN TRIDEL FINDING K(2) **\n");
                 goto L180;
             }
             if (kxl[(l3 << 1) + 1] == kxl[(l1 << 1) + 1] || kxl[(l3 << 1) + 1]
@@ -217,7 +214,7 @@ L110:
                 k[2] = kxl[(l3 << 1) + 2];
             } else {
                 *err = TRUE_;
-                fprintf(stderr,"** PROBLEMS IN TRIDEL FINDING K(3) **");
+                fprintf(stderr,"** PROBLEMS IN TRIDEL FINDING K(3) **\n");
                 goto L180;
             }
 /*  NOW CHECK K(1)'S, K(2)'S, AND K(3)'S ANGLE AT THE LINE JOINT. */
@@ -228,8 +225,8 @@ L110:
 /*        THE CORRESPONDING ELEMENT DELETED */
 /*     3) AN ELONGATED ELEMENT OVER 150 DEGREES GETS A 3 ELEMENT */
 /*        REPLACEMENT FOR THE TWO ELEMENTS THERE */
-            toler1 = (float)2.9670597;
-            toler2 = (float)2.6179939;
+            toler1 = (xc_float)2.9670597;
+            toler2 = (xc_float)2.6179939;
             if (*graph && ! (*video)) {
 /* Computing MAX */
                 r__7 = (r__1 = xn[n1] - xn[i__], dbl_abs(r__1)), r__8 = (r__2 = 
@@ -239,30 +236,30 @@ L110:
                         r__4)), r__7 = dbl_max(r__7,r__8), r__8 = (r__5 = yn[n2] 
                         - yn[i__], dbl_abs(r__5)), r__7 = dbl_max(r__7,r__8), r__8 = 
                         (r__6 = yn[n3] - yn[i__], dbl_abs(r__6));
-                dist = dbl_max(r__7,r__8) * (float)3.;
+                dist = dbl_max(r__7,r__8) * (xc_float)3.;
                 *xmin = xn[i__] - dist;
                 *xmax = xn[i__] + dist;
                 *ymin = yn[i__] - dist;
                 *ymax = yn[i__] + dist;
             }
             ang1 = atan2(yn[n1] - yn[i__], xn[n1] - xn[i__]);
-            if (ang1 < (float)0.) {
+            if (ang1 < (xc_float)0.) {
                 ang1 += twopi;
             }
             ang2 = atan2(yn[n2] - yn[i__], xn[n2] - xn[i__]);
-            if (ang2 < (float)0.) {
+            if (ang2 < (xc_float)0.) {
                 ang2 += twopi;
             }
             ang3 = atan2(yn[n3] - yn[i__], xn[n3] - xn[i__]);
-            if (ang3 < (float)0.) {
+            if (ang3 < (xc_float)0.) {
                 ang3 += twopi;
             }
 /*  CHECK TO SEE IF THE NODES ARE CLOCKWISE OR COUNTERCLOCKWISE */
 /*  (POSITIVE AREA IS CCW) */
-            area = (yn[n1] + yn[n3]) * (float).5 * (xn[n3] - xn[n1]) + (yn[n2]
-                     + yn[n1]) * (float).5 * (xn[n1] - xn[n2]) + (yn[n3] + yn[
-                    n2]) * (float).5 * (xn[n2] - xn[n3]);
-            if (area > (float)0.) {
+            area = (yn[n1] + yn[n3]) * (xc_float).5 * (xn[n3] - xn[n1]) + (yn[n2]
+                     + yn[n1]) * (xc_float).5 * (xn[n1] - xn[n2]) + (yn[n3] + yn[
+                    n2]) * (xc_float).5 * (xn[n2] - xn[n3]);
+            if (area > (xc_float)0.) {
                 ang12 = ang2 - ang1;
                 ang23 = ang3 - ang2;
                 ang31 = ang1 - ang3;
@@ -271,13 +268,13 @@ L110:
                 ang23 = ang2 - ang3;
                 ang31 = ang3 - ang1;
             }
-            if (ang12 < (float)0.) {
+            if (ang12 < (xc_float)0.) {
                 ang12 += twopi;
             }
-            if (ang23 < (float)0.) {
+            if (ang23 < (xc_float)0.) {
                 ang23 += twopi;
             }
-            if (ang31 < (float)0.) {
+            if (ang31 < (xc_float)0.) {
                 ang31 += twopi;
             }
             if (*graph) {
@@ -292,7 +289,7 @@ L110:
                 sflush_();
             }
 /*  NOW DO THE CHECKS FOR CHANGING THE ELEMENT */
-            if (area > (float)0.) {
+            if (area > (xc_float)0.) {
                 adjtri_(mxnd, mln, &lnodes[lnodes_offset], &xn[1], &yn[1], &
                         zn[1], &nuid[1], &lxk[5], &kxl[3], &nxl[3], &lxn[5], 
                         nnn, navail, iavail, &i__, k, &ang12, &toler1, &
@@ -313,7 +310,7 @@ L110:
             if (done) {
                 goto L130;
             }
-            if (area > (float)0.) {
+            if (area > (xc_float)0.) {
                 adjtri_(mxnd, mln, &lnodes[lnodes_offset], &xn[1], &yn[1], &
                         zn[1], &nuid[1], &lxk[5], &kxl[3], &nxl[3], &lxn[5], 
                         nnn, navail, iavail, &i__, &k[1], &ang23, &toler1, &
@@ -334,7 +331,7 @@ L110:
             if (done) {
                 goto L130;
             }
-            if (area > (float)0.) {
+            if (area > (xc_float)0.) {
                 adjtri_(mxnd, mln, &lnodes[lnodes_offset], &xn[1], &yn[1], &
                         zn[1], &nuid[1], &lxk[5], &kxl[3], &nxl[3], &lxn[5], 
                         nnn, navail, iavail, &i__, &k[2], &ang31, &toler1, &
@@ -399,7 +396,7 @@ L130:
 /*  NOW CHECK THE THREE ELEMENTS TO SEE IF AN ELEMENT EXISTS WHICH: */
 /*    (1) CONTAINS ONLY 2 OPPOSING "LARGE ANGLE" THREE-LINE NODES */
 /*        AND AT LEAST 1 "SMALL ANGLE" FOUR- OR FIVE-LINE NODE */
-/*    (2) ONE THAT IS REALLY SQUASHED WITH AT LEAST ONE */
+/*    (2) ONE THAT IS XC_FLOATLY SQUASHED WITH AT LEAST ONE */
 /*        "SMALL ANGLE" FIVE-LINE NODE. */
 /*    (3) CONTAINS A "LARGE ANGLE" THREE-LINE NODE AND TWO */
 /*        RELATIVELY SMALL FIVE-LINE NODE AND A NORMAL FOUR */
@@ -410,16 +407,16 @@ L130:
 /*        LARGE ANGLES AND IS CONSIDERABLY SMALLER THAN IS */
 /*        DICTATED BY THE DESIRED SIZE */
 /*  THIS ELEMENT SHOULD BE DELETED. */
-            toler3 = (float)1.7453293;
-            toler4 = (float)1.5707963;
-            toler5 = (float)2.0943951;
-            toler6 = (float).9599311;
+            toler3 = (xc_float)1.7453293;
+            toler4 = (xc_float)1.5707963;
+            toler5 = (xc_float)2.0943951;
+            toler6 = (xc_float).9599311;
             for (j = 1; j <= 3; ++j) {
                 gnxka_(mxnd, &xn[1], &yn[1], &k[j - 1], nodes, &area, &lxk[5],
                          &nxl[3], &ccw);
                 if (i__ != nodes[0] && i__ != nodes[1] && i__ != nodes[2] && 
                         i__ != nodes[3]) {
-                    fprintf(stderr,"** PROBLEMS IN TRIDEL - I IS NOT IN ELEMENT K **");
+                    fprintf(stderr,"** PROBLEMS IN TRIDEL - I IS NOT IN ELEMENT K **\n");
                     *err = TRUE_;
                     goto L180;
                 }
@@ -460,7 +457,7 @@ L130:
                 d14 = sqrt(r__1 * r__1 + r__2 * r__2);
 /* Computing MAX */
                 r__1 = dbl_max(d21,d32), r__1 = dbl_max(r__1,d43);
-                dmax__ = dbl_max(r__1,d14) * (float)1.5;
+                dmax__ = dbl_max(r__1,d14) * (xc_float)1.5;
                 if (lxn[(n1 << 2) + 3] == 0) {
                     theta1 = pi;
                 } else {

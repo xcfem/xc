@@ -20,16 +20,15 @@ extern "C" {
 /*    NTESS, the U.S. Government retains certain rights in this software. */
 
 /*    See packages/seacas/LICENSE for details */
-doublereal nicks_(real *angle, integer *lxn)
+doublereal nicks_(xc_float *angle, integer *lxn)
 {
     /* System generated locals */
-    real ret_val;
+    xc_float ret_val;
 
     /* Builtin functions */
-    double atan2(doublereal, doublereal);
 
     /* Local variables */
-    static real pi, adiff;
+    static xc_float pi, adiff;
 
 /* *********************************************************************** */
 /*  FUNCTION NICKS = RETURNS THE PENALTY FOR A BAD ANGLE AND A BAD */
@@ -39,13 +38,13 @@ doublereal nicks_(real *angle, integer *lxn)
     --lxn;
 
     /* Function Body */
-    pi = atan2((float)0., (float)-1.);
+    pi = M_PI;
     adiff = *angle - pi;
 /*  PENALIZE A LARGE ANGLE MORE THAN A SMALL ANGLE */
-    if (adiff < (float)0.) {
+    if (adiff < (xc_float)0.) {
 	adiff = -adiff;
     } else {
-	adiff *= (float)1.2;
+	adiff *= (xc_float)1.2;
     }
 /*  IF THE ANGLE HAS 3 LINES ATTACHED */
 /*  A REGULAR NODE WOULD BE FORMED - PENALIZE IT LIGHTLY */
@@ -56,21 +55,21 @@ doublereal nicks_(real *angle, integer *lxn)
 /*  THEN A THREE DEGREE IRREGULAR NODE WOULD BE FORMED */
 /*  PENALIZE IT MORE STRINGENTLY */
     } else if (lxn[3] == 0) {
-	ret_val = adiff * (float)1.3;
+	ret_val = adiff * (xc_float)1.3;
 /*  IF THE ANGLE HAS 4 LINES ATTACHED */
 /*  THEN A FIVE DEGREE IRREGULAR NODE WOULD BE FORMED */
 /*  PENALIZE IT LESS STRINGENTLY */
     } else if (lxn[4] > 0) {
-	ret_val = adiff * (float)1.15;
+	ret_val = adiff * (xc_float)1.15;
 /*  IF THE ANGLE HAS MORE THAN 4 LINES ATTACHED */
 /*  THEN A FIVE+ DEGREE IRREGULAR NODE WOULD BE FORMED (HIGHLY UNLIKELY) */
 /*  PENALIZE IT SEVERELY */
     } else if (lxn[3] == 0) {
-	ret_val = adiff * (float)1.6;
+	ret_val = adiff * (xc_float)1.6;
     } else {
 /*         write (*,*) 'Undefined Option in nicks', */
 /*     $        adiff, lxn(1), lxn(2), lxn(3), lxn(4) */
-	ret_val = adiff * (float)2.;
+	ret_val = adiff * (xc_float)2.;
     }
     return ret_val;
 } /* nicks_ */

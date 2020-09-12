@@ -18,13 +18,13 @@ extern "C" {
 /* Common Block Declarations */
 
 struct {
-    real model[16]	/* was [4][4] */, view[16]	/* was [4][4] */, 
+    xc_float model[16]	/* was [4][4] */, view[16]	/* was [4][4] */, 
 	    proj[16]	/* was [4][4] */, cpnear, cpfar, vwport[4], mvp[16]	
 	    /* was [4][4] */, vp[16]	/* was [4][4] */, cpline[40]	/* 
 	    was [2][2][10] */, cpplan[60]	/* was [2][3][10] */, peye[3],
 	     plook[3], etwist;
     integer ncplin, ncplan;
-    real tmat1[16]	/* was [4][4] */, tmat2[16]	/* was [4][4] */, 
+    xc_float tmat1[16]	/* was [4][4] */, tmat2[16]	/* was [4][4] */, 
 	    tmat3[16]	/* was [4][4] */, tvec1[4], tvec2[4], tvec3[4], tvec4[
 	    4], tarr1[32], tarr2[32], tarr3[32], tarr4[32], tarr5[32], tarr6[
 	    32], tarr7[32], tarr8[32];
@@ -33,38 +33,38 @@ struct {
 #define map_1 map_
 
 struct {
-    real devcap[23], defout[7];
+    xc_float devcap[23], defout[7];
 } status_;
 
 #define status_1 status_
 
 struct {
-    real devp[5];
+    xc_float devp[5];
 } device_;
 
 #define device_1 device_
 
 struct {
-    real colp[3], palett[48]	/* was [3][16] */;
+    xc_float colp[3], palett[48]	/* was [3][16] */;
 } color_;
 
 #define color_1 color_
 
 struct {
-    real textp[40];
+    xc_float textp[40];
 } text_;
 
 #define text_1 text_
 
 struct {
-    real vectp[5], xcur, ycur;
+    xc_float vectp[5], xcur, ycur;
 } vectrc_;
 
 #define vectrc_1 vectrc_
 
 struct {
     integer idex[400]	/* was [200][2] */, nvect[400]	/* was [200][2] */;
-    real xsize[400]	/* was [200][2] */, ysize[400]	/* was [200][2] */, 
+    xc_float xsize[400]	/* was [200][2] */, ysize[400]	/* was [200][2] */, 
 	    x0[4600]	/* was [2300][2] */, y0[4600]	/* was [2300][2] */, 
 	    x1[4600]	/* was [2300][2] */, y1[4600]	/* was [2300][2] */;
 } font_;
@@ -72,13 +72,13 @@ struct {
 #define font_1 font_
 
 struct {
-    real graphp[100];
+    xc_float graphp[100];
 } graph_;
 
 #define graph_1 graph_
 
 struct {
-    real mapp[11];
+    xc_float mapp[11];
 } mappar_;
 
 #define mappar_1 mappar_
@@ -99,7 +99,7 @@ static integer c__2 = 2;
 
 /* See packages/seacas/LICENSE for details */
 /* ======================================================================= */
-logical mpview_(real *left, real *right, real *bottom, real *top)
+logical mpview_(xc_float *left, xc_float *right, xc_float *bottom, xc_float *top)
 {
     /* System generated locals */
     logical ret_val;
@@ -121,25 +121,25 @@ he right edge", &c__2, (ftnlen)6, (ftnlen)62);
 e bottom edge", &c__2, (ftnlen)6, (ftnlen)62);
 	return ret_val;
     }
-    if (*top < (float)0. || *top > device_1.devp[4]) {
+    if (*top < (xc_float)0. || *top > device_1.devp[4]) {
 	pltflu_();
 	siorpt_("MPVIEW", "Top viewport specification out of range", &c__2, (
 		ftnlen)6, (ftnlen)39);
 	return ret_val;
     }
-    if (*bottom < (float)0. || *bottom > device_1.devp[4]) {
+    if (*bottom < (xc_float)0. || *bottom > device_1.devp[4]) {
 	pltflu_();
 	siorpt_("MPVIEW", "Bottom viewport specification out of range", &c__2,
 		 (ftnlen)6, (ftnlen)42);
 	return ret_val;
     }
-    if (*left < (float)0. || *left > device_1.devp[3]) {
+    if (*left < (xc_float)0. || *left > device_1.devp[3]) {
 	pltflu_();
 	siorpt_("MPVIEW", "Left viewport specification out of range", &c__2, (
 		ftnlen)6, (ftnlen)40);
 	return ret_val;
     }
-    if (*right < (float)0. || *right > device_1.devp[3]) {
+    if (*right < (xc_float)0. || *right > device_1.devp[3]) {
 	pltflu_();
 	siorpt_("MPVIEW", "Right viewport specification out of range", &c__2, 
 		(ftnlen)6, (ftnlen)41);

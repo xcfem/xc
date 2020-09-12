@@ -62,7 +62,7 @@ L110:
 L120:
     ++kount;
     if (kount > *nloop1) {
-        fprintf(stderr,"** PROBLEMS IN NODE12 FINDING NODE **");
+        fprintf(stderr,"** PROBLEMS IN NODE12 FINDING NODE **\n");
         *err = TRUE_;
         goto L130;
     }

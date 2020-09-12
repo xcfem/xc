@@ -20,26 +20,23 @@ extern "C" {
 /*    NTESS, the U.S. Government retains certain rights in this software. */
 
 /*    See packages/seacas/LICENSE for details */
-/* Subroutine */ int match2_(integer *mxnd, integer *mln, real *xn, real *yn, 
-	integer *nxl, integer *lxn, integer *lnodes, real *angle, integer *n0,
+/* Subroutine */ int match2_(integer *mxnd, integer *mln, xc_float *xn, xc_float *yn, 
+	integer *nxl, integer *lxn, integer *lnodes, xc_float *angle, integer *n0,
 	 integer *n1, integer *n2, integer *n3, integer *n0test, integer *
 	n1test, integer *n2test, integer *n3test, integer *i1, integer *i2, 
 	integer *j1, integer *j2, integer *kountl, logical *lmatch, integer *
-	kount2, integer *node, real *u, real *w, integer *nloop, logical *
+	kount2, integer *node, xc_float *u, xc_float *w, integer *nloop, logical *
 	pmatch, logical *err)
 {
     /* System generated locals */
     integer lnodes_dim1, lnodes_offset;
-    real r__1, r__2, r__3;
-
-    /* Builtin functions */
-    double sqrt(doublereal), acos(doublereal);
+    xc_float r__1, r__2, r__3;
 
     /* Local variables */
-    static real d0, d1, d2, db, df, xi, yi, xj, yj, d1b, d2b, d1f, d2f, xib, 
+    static xc_float d0, d1, d2, db, df, xi, yi, xj, yj, d1b, d2b, d1f, d2f, xib, 
 	    xjb, yjb, yib, xjf, yjf, xif, yif, dot, bdot, fdot;
     static integer ibac1, ibac2, jbac1, jbac2, ifor1, ifor2, jfor1, jfor2;
-    extern logical sidep_(real *), cornp_(real *);
+    extern logical sidep_(xc_float *), cornp_(xc_float *);
     static logical bwins, fwins;
     static integer i1hold, i2hold;
     extern logical matchk_(integer *, integer *, integer *, integer *, 
@@ -144,7 +141,7 @@ extern "C" {
 /* Computing 2nd power */
 	r__2 = yn[*n3test] - yn[*i1];
 	d2f = sqrt(r__1 * r__1 + r__2 * r__2);
-	df = (d1f + d2f) * (float).5;
+	df = (d1f + d2f) * (xc_float).5;
 	bdot = (xi * xjb + yi * yjb) / (sqrt(xi * xi + yi * yi) * sqrt(xjb * 
 		xjb + yjb * yjb));
 /* Computing 2nd power */
@@ -157,7 +154,7 @@ extern "C" {
 /* Computing 2nd power */
 	r__2 = yn[*n1test] - yn[*i1];
 	d2b = sqrt(r__1 * r__1 + r__2 * r__2);
-	db = (d1b + d2b) * (float).5;
+	db = (d1b + d2b) * (xc_float).5;
 /*  NOW COMPARE A FORWARD OR BACKWARD SHIFT AND PICK THE MOST */
 /*  APPROPRIATE ONE BASED ON ANGLE COSINE AND END DISTANCES */
 /*  IF ANY STICK OUT AS THE MOST APPROPRIATE */
@@ -170,7 +167,7 @@ extern "C" {
 	    *j2 = *n1test;
 	    *kountl = *kount2 - 2;
 	} else if ((r__3 = (r__1 = acos(bdot), dbl_abs(r__1)) - (r__2 = acos(
-		fdot), dbl_abs(r__2)), dbl_abs(r__3)) <= (float).3490659) {
+		fdot), dbl_abs(r__2)), dbl_abs(r__3)) <= (xc_float).3490659) {
 	    if (df <= db || *kount2 <= 4) {
 		*j1 = *n2test;
 		*j2 = *n3test;
@@ -183,8 +180,8 @@ extern "C" {
 /*  NONE STICK OUT AS THE OVIOUS WINNER - TAKE ONE BASED ON */
 /*  INTERSECTION PORTIONS */
 	} else {
-	    if (*u < (float).5) {
-		if (*w < (float).5 && *kount2 > 4) {
+	    if (*u < (xc_float).5) {
+		if (*w < (xc_float).5 && *kount2 > 4) {
 		    *j1 = *n0test;
 		    *j2 = *n1test;
 		    *kountl = *kount2 - 2;
@@ -194,7 +191,7 @@ extern "C" {
 		    *kountl = *kount2;
 		}
 	    } else {
-		if (*w < (float).5 && *kount2 > 4) {
+		if (*w < (xc_float).5 && *kount2 > 4) {
 		    *j1 = *n0test;
 		    *j2 = *n1test;
 		    *kountl = *kount2 - 2;
@@ -241,7 +238,7 @@ extern "C" {
 /* Computing 2nd power */
     r__2 = yn[ifor2] - yn[jfor2];
     d2f = sqrt(r__1 * r__1 + r__2 * r__2);
-    df = (d1f + d2f) * (float).5;
+    df = (d1f + d2f) * (xc_float).5;
     xib = xn[ibac2] - xn[ibac1];
     yib = yn[ibac2] - yn[ibac1];
     xjb = xn[jbac2] - xn[jbac1];
@@ -258,7 +255,7 @@ extern "C" {
 /* Computing 2nd power */
     r__2 = yn[ibac2] - yn[jbac2];
     d2b = sqrt(r__1 * r__1 + r__2 * r__2);
-    db = (d1b + d2b) * (float).5;
+    db = (d1b + d2b) * (xc_float).5;
     xi = xn[*i2] - xn[*i1];
     yi = yn[*i2] - yn[*i1];
     xj = xn[*j1] - xn[*j2];
@@ -275,17 +272,17 @@ extern "C" {
 /* Computing 2nd power */
     r__2 = yn[*i2] - yn[*j1];
     d2 = sqrt(r__1 * r__1 + r__2 * r__2);
-    d0 = (d1 + d2) * (float).5;
+    d0 = (d1 + d2) * (xc_float).5;
 /*  NOW COMPARE TO SEE IF ANOTHER COMBINATION MAKES BETTER SENSE */
-    if ((fdot > dot && df < d0 || fdot * (float).6 > dot && df * (float).7 < 
-	    d0 || fdot * (float).2 > dot && df * (float).5 < d0) && *kountl > 
+    if ((fdot > dot && df < d0 || fdot * (xc_float).6 > dot && df * (xc_float).7 < 
+	    d0 || fdot * (xc_float).2 > dot && df * (xc_float).5 < d0) && *kountl > 
 	    4) {
 	fwins = TRUE_;
 	d0 = df;
 	dot = fdot;
     }
-    if (bdot > dot && db < d0 || bdot * (float).6 > dot && db * (float).7 < 
-	    d0 || bdot * (float).2 > dot && db * (float).5 < d0 && *nloop - *
+    if (bdot > dot && db < d0 || bdot * (xc_float).6 > dot && db * (xc_float).7 < 
+	    d0 || bdot * (xc_float).2 > dot && db * (xc_float).5 < d0 && *nloop - *
 	    kountl - 2 > 4) {
 	bwins = TRUE_;
     }

@@ -20,18 +20,15 @@ extern "C" {
 /*    NTESS, the U.S. Government retains certain rights in this software. */
 
 /*    See packages/seacas/LICENSE for details */
-/* Subroutine */ int extnd1_(integer *mxnd, real *xn, real *yn, real *angle, 
-	integer *n1, integer *n2, integer *n3, real *x, real *y, real *dist)
+/* Subroutine */ int extnd1_(integer *mxnd, xc_float *xn, xc_float *yn, xc_float *angle, 
+	integer *n1, integer *n2, integer *n3, xc_float *x, xc_float *y, xc_float *dist)
 {
     /* System generated locals */
-    real r__1, r__2;
+    xc_float r__1, r__2;
 
-    /* Builtin functions */
-    double atan2(doublereal, doublereal), sqrt(doublereal), sin(doublereal), 
-	    cos(doublereal);
 
     /* Local variables */
-    static real ang, cang, dist1, dist2, adist;
+    static xc_float ang, cang, dist1, dist2, adist;
 
 /* *********************************************************************** */
 /*  SUBROUTINE EXCORN = CALCULATES A POSITION AN AVERAGE LENGTH AWAY */
@@ -45,7 +42,7 @@ extern "C" {
     --y;
 
     /* Function Body */
-    cang = angle[*n2] * (float).5;
+    cang = angle[*n2] * (xc_float).5;
     ang = atan2(yn[*n1] - yn[*n2], xn[*n1] - xn[*n2]) - cang;
 /* Computing 2nd power */
     r__1 = yn[*n2] - yn[*n1];
@@ -57,8 +54,8 @@ extern "C" {
 /* Computing 2nd power */
     r__2 = xn[*n3] - xn[*n2];
     dist2 = sqrt(r__1 * r__1 + r__2 * r__2);
-    *dist = (dist1 + dist2) * (float).5;
-    if (cang == (float)0.) {
+    *dist = (dist1 + dist2) * (xc_float).5;
+    if (cang == (xc_float)0.) {
 	adist = *dist;
     } else {
 	adist = *dist / sin(cang);

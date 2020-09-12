@@ -50,7 +50,7 @@ L100:
     }
     ++kount;
     if (kount > *nloop) {
-        fprintf(stderr,"PROBLEMS IN SETLOP WITH LOOP NOT CLOSING");
+        fprintf(stderr,"PROBLEMS IN SETLOP WITH LOOP NOT CLOSING\n");
         *err = TRUE_;
         goto L110;
     }

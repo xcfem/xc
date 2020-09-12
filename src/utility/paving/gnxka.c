@@ -20,8 +20,8 @@ extern "C" {
 /*    NTESS, the U.S. Government retains certain rights in this software. */
 
 /*    See packages/seacas/LICENSE for details */
-/* Subroutine */ int gnxka_(integer *mxnd, real *xn, real *yn, integer *k, 
-	integer *nodes, real *area, integer *lxk, integer *nxl, logical *ccw)
+/* Subroutine */ int gnxka_(integer *mxnd, xc_float *xn, xc_float *yn, integer *k, 
+	integer *nodes, xc_float *area, integer *lxk, integer *nxl, logical *ccw)
 {
     static integer i__, l, m1, m2, ntmp;
 
@@ -41,7 +41,7 @@ extern "C" {
     --nodes;
 
     /* Function Body */
-    *area = (float)0.;
+    *area = (xc_float)0.;
     for (i__ = 1; i__ <= 4; ++i__) {
 	nodes[i__] = 0;
 /* L10: */
@@ -75,7 +75,7 @@ extern "C" {
     *area = ((xn[nodes[3]] - xn[nodes[1]]) * (yn[nodes[4]] - yn[nodes[2]]) - (
 	    yn[nodes[3]] - yn[nodes[1]]) * (xn[nodes[4]] - xn[nodes[2]])) * (
 	    float).5;
-    if (*area < (float)0.) {
+    if (*area < (xc_float)0.) {
 /* ... Clockwise case  -  reverse the order */
 	ntmp = nodes[2];
 	nodes[2] = nodes[4];

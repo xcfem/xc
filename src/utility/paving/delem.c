@@ -80,7 +80,7 @@ static integer c__1 = 1;
     gnxka_(mxnd, &xn[1], &yn[1], k, nodes, &area, &lxk[5], &nxl[3], &ccw);
     if (*node1 != nodes[0] && *node1 != nodes[1] && *node1 != nodes[2] && *
             node1 != nodes[3]) {
-        fprintf(stderr,"** PROBLEMS IN DELEM - NODE1 IS NOT IN ELEMENT K **");
+        fprintf(stderr,"** PROBLEMS IN DELEM - NODE1 IS NOT IN ELEMENT K **\n");
         *err = TRUE_;
         goto L190;
     }
@@ -92,7 +92,7 @@ static integer c__1 = 1;
     }
     if (lxn[(nodes[0] << 2) + 2] <= 0) {
         *err = TRUE_;
-        fprintf(stderr,"** BOUNDARY ELEMENT CANNOT BE DELETED IN DELEM **");
+        fprintf(stderr,"** BOUNDARY ELEMENT CANNOT BE DELETED IN DELEM **\n");
         goto L190;
     }
 /*  PREPARE FOR THE SQUASH OF ELEMENT K */
@@ -117,11 +117,11 @@ static integer c__1 = 1;
         fndlnk_(mxnd, &lxk[5], &nxl[3], k, &nodes[i__ - 1], &nodes[j - 1], &
                 lines[i__ - 1], err);
         if (*err) {
-            fprintf(stderr,"** PROBLEMS IN DELEM GETTING NODE LINES **");
+            fprintf(stderr,"** PROBLEMS IN DELEM GETTING NODE LINES **\n");
             goto L190;
         }
         if (lines[i__ - 1] == 0) {
-            fprintf(stderr,"** PROBLEMS IN DELEM WITH 0 NODE LINES **");
+            fprintf(stderr,"** PROBLEMS IN DELEM WITH 0 NODE LINES **\n");
             *err = TRUE_;
             goto L190;
         }
@@ -246,8 +246,8 @@ L140:
 /*  FIX XN AND YN ARRAYS */
 /*  DEFINE POSITION OF N3 */
     if (lxn[(n3 << 2) + 2] > 0) {
-        xn[n3] = (xn[n1] + xn[n3]) * (float).5;
-        yn[n3] = (yn[n1] + yn[n3]) * (float).5;
+        xn[n3] = (xn[n1] + xn[n3]) * (f2c_float).5;
+        yn[n3] = (yn[n1] + yn[n3]) * (f2c_float).5;
     }
     nuid[n1] = 0;
     *done = TRUE_;

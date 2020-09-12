@@ -21,8 +21,8 @@ extern "C" {
 
 /* See packages/seacas/LICENSE for details */
 /* ======================================================================= */
-/* Subroutine */ int pltvwp_(real *pll, real *pur, integer *n, integer *mask, 
-	real *px, real *py)
+/* Subroutine */ int pltvwp_(xc_float *pll, xc_float *pur, integer *n, integer *mask, 
+	xc_float *px, xc_float *py)
 {
     /* Initialized data */
 
@@ -36,7 +36,7 @@ extern "C" {
 
     /* Local variables */
     static integer j, k, j1, km, jn;
-    static real pll1, pll2, pur1, pur2;
+    static xc_float pll1, pll2, pur1, pur2;
 
     /* Parameter adjustments */
     --py;
@@ -46,10 +46,10 @@ extern "C" {
     --pll;
 
     /* Function Body */
-    pur1 = pur[1] + (float)1e-4;
-    pur2 = pur[2] + (float)1e-4;
-    pll1 = pll[1] - (float)1e-4;
-    pll2 = pll[2] - (float)1e-4;
+    pur1 = pur[1] + (xc_float)1e-4;
+    pur2 = pur[2] + (xc_float)1e-4;
+    pll1 = pll[1] - (xc_float)1e-4;
+    pll2 = pll[2] - (xc_float)1e-4;
     j = 0;
     km = 0;
 L2300:

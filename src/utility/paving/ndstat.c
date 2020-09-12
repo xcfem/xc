@@ -20,7 +20,7 @@ extern "C" {
 /*    NTESS, the U.S. Government retains certain rights in this software. */
 
 /*    See packages/seacas/LICENSE for details */
-/* Subroutine */ int ndstat_(integer *node, integer *lxn, real *angle, 
+/* Subroutine */ int ndstat_(integer *node, integer *lxn, xc_float *angle, 
 	integer *jstat)
 {
 /* *********************************************************************** */
@@ -40,11 +40,11 @@ extern "C" {
 /*                225 TO 290 DEGREES = ROW CORNER */
 /*                OVER 290 DEGREES   = ROW REVERSAL */
 	if (lxn[4] <= 0) {
-	    if (*angle < (float)2.3561945) {
+	    if (*angle < (xc_float)2.3561945) {
 		*jstat = 1;
-	    } else if (*angle < (float)3.9269908) {
+	    } else if (*angle < (xc_float)3.9269908) {
 		*jstat = 3;
-	    } else if (*angle < (float)5.0614548) {
+	    } else if (*angle < (xc_float)5.0614548) {
 		*jstat = 5;
 	    } else {
 		*jstat = 7;
@@ -54,9 +54,9 @@ extern "C" {
 /*                110 TO 225 DEGREES = ROW SIDE */
 /*                OVER 225 DEGREES   = ROW CORNER (NEARLY IMPOSSIBLE) */
 	} else {
-	    if (*angle < (float)1.9198622) {
+	    if (*angle < (xc_float)1.9198622) {
 		*jstat = 1;
-	    } else if (*angle < (float)3.9269908) {
+	    } else if (*angle < (xc_float)3.9269908) {
 		*jstat = 3;
 	    } else {
 		*jstat = 5;
@@ -72,11 +72,11 @@ extern "C" {
 /*                135 TO 210 DEGREES = ROW SIDE */
 /*                210 TO 320 DEGREES = ROW CORNER */
 /*                OVER 320 DEGREES   = ROW REVERSAL */
-	    if (*angle < (float)2.3561945) {
+	    if (*angle < (xc_float)2.3561945) {
 		*jstat = 1;
-	    } else if (*angle < (float)3.6651914) {
+	    } else if (*angle < (xc_float)3.6651914) {
 		*jstat = 3;
-	    } else if (*angle < (float)5.5850536) {
+	    } else if (*angle < (xc_float)5.5850536) {
 		*jstat = 5;
 	    } else {
 		*jstat = 7;
@@ -86,12 +86,12 @@ extern "C" {
 /*  CUTOFFS ARE:    0 TO 110 DEGREES = ROW END */
 /*                110 TO 240 DEGREES = ROW SIDE */
 /*                240 TO 320 DEGREES = ROW CORNER */
-/*                OVER 320 DEGREES   = ROW REVERSAL (REALLY IMPOSSIBLE) */
-	    if (*angle < (float)1.9198622) {
+/*                OVER 320 DEGREES   = ROW REVERSAL (XC_FLOATLY IMPOSSIBLE) */
+	    if (*angle < (xc_float)1.9198622) {
 		*jstat = 1;
-	    } else if (*angle < (float)4.1887902) {
+	    } else if (*angle < (xc_float)4.1887902) {
 		*jstat = 3;
-	    } else if (*angle < (float)5.5850536) {
+	    } else if (*angle < (xc_float)5.5850536) {
 		*jstat = 5;
 	    } else {
 		*jstat = 7;
@@ -100,10 +100,10 @@ extern "C" {
 	} else {
 /*  CUTOFFS ARE:    0 TO 145 DEGREES = ROW END */
 /*                145 TO 225 DEGREES = ROW SIDE */
-/*                OVER 225 DEGREES   = ROW CORNER (REALLY IMPOSSIBLE) */
-	    if (*angle < (float)2.5307274) {
+/*                OVER 225 DEGREES   = ROW CORNER (XC_FLOATLY IMPOSSIBLE) */
+	    if (*angle < (xc_float)2.5307274) {
 		*jstat = 1;
-	    } else if (*angle < (float)3.9269908) {
+	    } else if (*angle < (xc_float)3.9269908) {
 		*jstat = 3;
 	    } else {
 		*jstat = 5;
