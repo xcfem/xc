@@ -41,6 +41,7 @@ Some dependencies needed are:
 - Boost c++ libraries (<http://www.boost.org>)
 - f2c Fortran to C translator
 - CGAL (computational geometry algorithms library <http://www.cgal.org/>)
+- Gmsh (A three-dimensional finite element mesh generator with built-in pre- and post-processing facilities <https://gmsh.info/>)
 - GNU plotutils libraries
 - Multiple precision floating-point computation developers tools 
 - Multiprecision arithmetic library developers tools

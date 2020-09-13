@@ -35,6 +35,8 @@ packages_lib="\
     libf2c2-dev                 \
     libglib2.0-dev              \
     libgmp3-dev                 \
+    libgmsh-dev                 \
+    libgmsh3                    \
     libgtk2.0-dev               \
     libgtkgl2.0-dev             \
     libgtkglextmm-x11-1.2-dev   \
