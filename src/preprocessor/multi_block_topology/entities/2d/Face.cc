@@ -697,12 +697,12 @@ int XC::Face::getVtkCellType(void) const
 
 std::set<const XC::Pnt *> XC::getCommonVertex(const Face &f1,const Face &f2, const Face &f3)
   {
-    std::set<const XC::Pnt *> f1v= f1.getVertices();
-    std::set<const XC::Pnt *> f2v= f2.getVertices();
+    std::set<const XC::Pnt *> f1v= f1.getVertexSet();
+    std::set<const XC::Pnt *> f2v= f2.getVertexSet();
     std::set<const XC::Pnt *> f1_f2;
     std::set_intersection(f1v.begin(),f1v.end(),f2v.begin(),f2v.end(),
                   std::inserter(f1_f2,f1_f2.begin()));
-    std::set<const XC::Pnt *> f3v= f3.getVertices();
+    std::set<const XC::Pnt *> f3v= f3.getVertexSet();
     std::set<const XC::Pnt *> retval;
     std::set_intersection(f1_f2.begin(),f1_f2.end(),f3v.begin(),f3v.end(),
                   std::inserter(retval,retval.begin()));

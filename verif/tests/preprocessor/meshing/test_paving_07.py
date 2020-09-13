@@ -97,7 +97,7 @@ for h in holes:
 f15.setElemSize(2.5*minElemSize, True)
 maxElemSize= f15.getMaxElemSize()
 
-f15.genMesh(xc.meshDir.I)
+f15.genMesh(xc.meshDir.I,True)
 
 xcTotalSet= modelSpace.getTotalSet()
 nNodes= len(xcTotalSet.nodes)

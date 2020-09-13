@@ -70,7 +70,7 @@ class Pnt: public EntMdlr
     int getTagNode(void) const;
     Node *getNode(void);
     const Node *getNode(void) const;
-    virtual void genMesh(meshing_dir dm);
+    virtual void genMesh(meshing_dir dm= dirm_i);
 
     //! @brief Returns the object position.
     const Pos3d &GetPos(void) const

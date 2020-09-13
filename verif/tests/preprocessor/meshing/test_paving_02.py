@@ -146,7 +146,7 @@ elem= seedElemHandler.newElement("ShellMITC4",xc.ID([0,0,0,0]))
 polyFace.setNDiv(10)
 hole.setNDiv(1)
 polyFace.addHole(hole)
-polyFace.genMesh(xc.meshDir.I)
+polyFace.genMesh(xc.meshDir.I, True)
 
 xcTotalSet= modelSpace.getTotalSet()
 nNodes= len(xcTotalSet.nodes)

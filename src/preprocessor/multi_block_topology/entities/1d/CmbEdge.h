@@ -65,6 +65,8 @@ class CmbEdge: public Edge
         void SetEdge(Edge *l);
         const Pnt *P1(void) const;
         const Pnt *P2(void) const;
+        Pnt *P1(void);
+        Pnt *P2(void);
         bool areEndPoints(const Pnt *,const Pnt *) const;
         const std::string &getName(void) const;
         inline bool isDirect(void) const
@@ -171,10 +173,16 @@ class CmbEdge: public Edge
     Side *getSideByPoints(const size_t &,const size_t &);
     std::deque<Edge *> getEdges(void);
     std::deque<const Edge *> getEdges(void) const;
+    Side *findSide(const Pos3d &);
+    
     virtual const Pnt *getVertex(const size_t &i) const;
-    std::set<const Pnt *> getVertices(void) const;
+    std::deque<Pnt *> getVertices(void);
+    std::deque<const Pnt *> getVertices(void) const;
+    std::set<const Pnt *> getVertexSet(void) const;
     virtual void SetVertice(const size_t &,Pnt *);
     virtual ID getKPoints(void) const;
+    Pnt *findVertex(const Pos3d &);
+    
     Polyline3d getPolyline(void) const;
 
     BND3d Bnd(void) const;

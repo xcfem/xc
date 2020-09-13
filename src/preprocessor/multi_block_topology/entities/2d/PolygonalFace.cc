@@ -34,6 +34,7 @@
 #include "domain/mesh/element/Element.h"
 #include "preprocessor/Preprocessor.h"
 #include "utility/paving/Paver.h"
+#include <gmsh.h>
 
 //! @brief Constructor.
 XC::PolygonalFace::PolygonalFace(Preprocessor *m)
@@ -162,7 +163,7 @@ void XC::PolygonalFace::create_line_nodes(void)
   }
 
 //! @brief Creates surface nodes.
-void XC::PolygonalFace::create_nodes(Paver &paver)
+void XC::PolygonalFace::create_nodes_from_paving(Paver &paver)
   {
     if(ttzNodes.Null())
       {
@@ -278,7 +279,7 @@ void XC::PolygonalFace::create_nodes(Paver &paver)
 
 //! @brief Creates elements on the nodes created
 //! in create_nodes.
-bool XC::PolygonalFace::create_elements(const Paver &paver)
+bool XC::PolygonalFace::create_elements_from_paving(const Paver &paver)
   {
     bool retval= false;
     if(!ttzNodes.empty())
@@ -348,17 +349,17 @@ bool XC::PolygonalFace::create_elements(const Paver &paver)
     return retval;
   }
 
-//! @brief Triggers mesh creation.
-void XC::PolygonalFace::genMesh(meshing_dir dm)
+//! @brief Creates mesh using paving algorithm.
+void XC::PolygonalFace::gen_mesh_paving(meshing_dir dm)
   {
     Paver paver;
     if(verbosity>3)
       std::clog << "Meshing polygonal surface...("
 		<< getName() << ")...";
 
-    create_nodes(paver);
+    create_nodes_from_paving(paver);
     if(ttzElements.Null())
-      { create_elements(paver); }
+      { create_elements_from_paving(paver); }
     else
       if(verbosity>2)
         std::clog << getClassName() << "::" << __FUNCTION__
@@ -366,4 +367,249 @@ void XC::PolygonalFace::genMesh(meshing_dir dm)
 		  << "' already exist." << std::endl;      
     if(verbosity>3)
       std::clog << "done." << std::endl;
+  }
+
+//! @brief Create Gmsh points from its vertices.
+//!
+//! @param elemSize: target mesh size (the "characteristic  length")
+//! close to the point
+void XC::PolygonalFace::create_gmsh_points(const double &elemSize) const
+  {
+    const std::deque<const Pnt *> vertices= getVertices();
+    for(std::deque<const Pnt *>::const_iterator i= vertices.begin();i!=vertices.end();i++)
+      {
+	const Pnt *pnt= *i;
+	const int tag= pnt->getTag();
+	const Pos3d pos= pnt->GetPos();
+        gmsh::model::geo::addPoint(pos.x(), pos.y(), pos.z(), elemSize, tag);
+      }
+  }
+
+//! @brief Create a Gmsh curve loop from its sides.
+int XC::PolygonalFace::create_gmsh_loop(void) const
+  {
+    const size_t numSides= getNumberOfEdges();
+    std::vector<int> tags(numSides);
+    for(size_t i= 0;i<numSides; i++)
+      {
+	const Side &side= lines[i];
+	const int lineTag= side.getTag();
+	const int p1Tag= side.P1()->getTag();
+	const int p2Tag= side.P2()->getTag();
+	gmsh::model::geo::addLine(p1Tag, p2Tag, lineTag);
+	tags[i]= lineTag;
+      }
+    return gmsh::model::geo::addCurveLoop(tags,getTag());
+  }
+
+//! @brief Return a pointer to the side at the position
+//! argument. If not found returns nullptr.
+XC::PolygonalFace::Side *XC::PolygonalFace::findSide(const Pos3d &pos)
+  {
+    Side *retval= Face::findSide(pos);
+    if(!retval)
+      {
+	 // Search on holes.
+	 for(std::deque<PolygonalFace *>::const_iterator i= holes.begin(); i!= holes.end(); i++)
+	   {
+	     retval= (*i)->findSide(pos);
+	     if(retval)
+	       break;
+	   }
+      }
+    return retval;
+  }
+
+//! @brief Return a pointer to the vertex at the position
+//! argument. If not found returns nullptr.
+XC::Pnt *XC::PolygonalFace::findVertex(const Pos3d &pos)
+  {
+    XC::Pnt *retval= Face::findVertex(pos);
+    if(!retval)
+      {
+	 // Search on holes.
+	 for(std::deque<PolygonalFace *>::const_iterator i= holes.begin(); i!= holes.end(); i++)
+	   {
+	     retval= (*i)->findVertex(pos);
+	     if(retval)
+	       break;
+	   }
+      }
+    return retval;
+  }
+
+//! @brief Create the nodes on this surface from the positions
+//! computed by Gmsh.
+std::map<int, XC::Node *> XC::PolygonalFace::create_nodes_from_gmsh(void)
+  {
+    std::map<int, Node *> mapNodeTags;
+    if(ttzNodes.Null())
+      {
+	std::map<int, std::deque<Node *> > mapEdgeNodes;
+        std::deque<Pnt *> vertices= getVertices();
+	// Nodes
+	std::vector<std::size_t> nodeTags;
+	std::vector<double> nodeCoord;
+	std::vector<double> nodeParametricCoord;
+
+	gmsh::model::mesh::getNodes(nodeTags, nodeCoord, nodeParametricCoord);
+	const size_t nNodes= nodeTags.size();
+        ttzNodes= NodePtrArray3d(1,1,nNodes);
+	size_t nCount= 1;
+	for(size_t i= 0;i<nNodes; i++)
+	  {
+	    const size_t nTag= nodeTags[i];
+	    const size_t j= i*3;
+	    const double x= nodeCoord[j];
+	    const double y= nodeCoord[j+1];
+	    const double z= nodeCoord[j+2];
+	    const Pos3d nodePos(x,y,z);
+	    Node *nodePtr= nullptr;
+	    //Check if it's a vertex node:
+  	    Pnt *p= findVertex(nodePos);
+	    if(p)
+	      {
+		if(p->hasNode())
+		  { nodePtr= p->getNode(); }
+		else
+		  {
+                    p->genMesh();
+		    nodePtr= p->getNode();
+		  }
+		if(nodePtr)
+		  {
+		    ttzNodes(1,1,nCount++)= nodePtr;
+		  }
+	      }
+	    Side *s= findSide(nodePos);
+	    if(s)
+	      {
+		if(s->getEdge()->hasNodes())
+		  std::cerr << getClassName() << "::" << __FUNCTION__
+		            << "; edge: " << s->getName()
+			    << " already meshed. Side node ignored."
+		            << std::endl;
+		else
+		  {
+		    nodePtr= create_node(nodePos,1,1,nCount++);
+	            mapEdgeNodes[s->getTag()].push_back(nodePtr);
+		  }
+	      }
+	    if(!nodePtr) //Node not in the perimeters.
+	      { nodePtr= create_node(nodePos,1,1,nCount++); }
+            mapNodeTags[nTag]= nodePtr;
+	  }
+	//Put nodes in the Edges.
+        for(std::map<int, std::deque<Node *> >::iterator i= mapEdgeNodes.begin();i!=mapEdgeNodes.end();i++)
+	  {
+	    const int tag= (*i).first;
+	    const std::deque<Node *> nodes= (*i).second;
+	    //Edge *e= 
+	  }
+      }
+    return mapNodeTags;
+  }
+
+//! @brief Create the elements on this surface from the mesh
+//! computed by Gmsh.
+bool XC::PolygonalFace::create_elements_from_gmsh(void)
+  {
+    bool retval= false;
+    // Elements
+    std::vector<int> elementTypes;
+    std::vector<std::vector<std::size_t> > elementTags;
+    std::vector<std::vector<std::size_t> > elementNodeTags;
+    gmsh::model::mesh::getElements(elementTypes, elementTags, elementNodeTags);
+    const size_t numTypes= elementTypes.size();
+    for(size_t i= 0;i<numTypes;i++)
+      {
+	std::vector<std::size_t> eTags= elementTags[i];
+	const size_t numElemOfType= eTags.size();
+	std::string elementName= "";
+	int dim= 0;
+	int order= 0;
+	int numNodes= 0;
+	std::vector<double> localNodeCoord;
+	int numPrimaryNodes= 0;
+	gmsh::model::mesh::getElementProperties(elementTypes[i], elementName, dim, order, numNodes, localNodeCoord, numPrimaryNodes);
+	std::cout << "element type: " << elementTypes[i]
+		  << " element name: " << elementName
+		  << " number of nodes: " << numNodes
+		  << " number of elements: "<< numElemOfType
+		  << std::endl;
+	if(numNodes>2) // Quads and triangles.
+	  {
+	    retval= (numElemOfType>0);
+	    for(size_t j= 0;j<numElemOfType;j++)
+	      {
+		std::vector<std::size_t> eNodeTags= elementNodeTags[i];
+		size_t k= j*numNodes;
+		std::cout << " element tag: " << eTags[j]
+			  << " element type: " << elementTypes[i]
+			  << " num. nodes: " << numNodes;
+		for(int l= 0;l<numNodes;l++)
+		  {
+		    int nodeTag= eNodeTags[k+l];
+		    std::cout << ' ' << nodeTag;
+		  }
+		std::cout << std::endl;
+	      }
+
+	  }
+      }
+    return retval;
+  }
+
+//! @brief Creates mesh using paving algorithm.
+void XC::PolygonalFace::gen_mesh_gmsh(meshing_dir dm)
+  {
+    // Before using any functions in the C++ API, Gmsh must be initialized:
+    gmsh::initialize();
+    // By default Gmsh will not print out any messages: in order to output
+    // messages on the terminal, just set the "General.Terminal" option to 1:
+    //gmsh::option::setNumber("General.Terminal", 1);
+    
+    // We now add a new model, named "t1". If gmsh::model::add() is not called, a
+    // new default (unnamed) model will be created on the fly, if necessary.
+    gmsh::model::add("gmsh_"+getName());
+
+    // Element size
+    const double lc= getAvgElemSize();
+
+    // Create gmsh points.
+
+    //// Contour points.
+    create_gmsh_points(lc);
+    //// Hole points.
+    for(std::deque<PolygonalFace *>::iterator i= holes.begin(); i!= holes.end(); i++)
+      { (*i)->create_gmsh_points(lc); }
+
+    // Create gmsh loops.
+    const size_t num_loops= holes.size()+1;
+    std::vector<int> loopTags(num_loops);
+    //// Contour lines.
+    size_t count= 0;
+    loopTags[0]= create_gmsh_loop();
+    count++;
+    //// Hole lines.
+    for(std::deque<PolygonalFace *>::iterator i= holes.begin(); i!= holes.end(); i++, count++)
+      {	loopTags[count]= (*i)->create_gmsh_loop(); }
+    const int pl= gmsh::model::geo::addPlaneSurface(loopTags);
+    gmsh::model::geo::synchronize();
+
+    // To generate quadrangles instead of triangles, we can simply add
+    gmsh::model::mesh::setRecombine(2, pl);
+
+    // We can then generate a 2D mesh...
+    gmsh::model::mesh::generate(2);
+    
+  }
+
+//! @brief Triggers mesh creation.
+void XC::PolygonalFace::genMesh(meshing_dir dm, bool paving)
+  {
+    if(paving)
+      gen_mesh_paving(dm);
+    else
+      gen_mesh_gmsh(dm);
   }

@@ -68,17 +68,33 @@ const XC::Edge *XC::CmbEdge::Side::getEdge(void) const
 //! @brief Assigns the line.
 void XC::CmbEdge::Side::SetEdge(Edge *l)
   { edge= l; }
+
 //! @brief Returns a constant pointer to the back end of the edge.
 const XC::Pnt *XC::CmbEdge::Side::P1(void) const
   {
+    CmbEdge::Side *this_no_const= const_cast<CmbEdge::Side *>(this);
+    return this_no_const->P1();
+  }
+
+//! @brief Returns a constant pointer to the front end of the edge.
+const XC::Pnt *XC::CmbEdge::Side::P2(void) const
+  {
+    CmbEdge::Side *this_no_const= const_cast<CmbEdge::Side *>(this);
+    return this_no_const->P2();
+  }
+
+//! @brief Returns a constant pointer to the back end of the edge.
+XC::Pnt *XC::CmbEdge::Side::P1(void)
+  {
     if(!edge) return nullptr;
     if(forward)
       return edge->P1();
     else
       return edge->P2();
   }
+
 //! @brief Returns a constant pointer to the front end of the edge.
-const XC::Pnt *XC::CmbEdge::Side::P2(void) const
+XC::Pnt *XC::CmbEdge::Side::P2(void)
   {
     if(!edge) return nullptr;
     if(forward)
@@ -86,7 +102,6 @@ const XC::Pnt *XC::CmbEdge::Side::P2(void) const
     else
       return edge->P1();
   }
-
 
 //! @brief Returns true if the points being passed as parameters
 //! are the endpoints of the side.
@@ -791,6 +806,26 @@ std::deque<const XC::Edge *> XC::CmbEdge::getEdges(void) const
     return retval;
   }
 
+//! @brief Return a pointer to the side at the position
+//! argument. If not found returns nullptr.
+XC::CmbEdge::Side *XC::CmbEdge::findSide(const Pos3d &pos)
+  {
+    Side *retval= nullptr;
+    const double elemSize= getAvgElemSize();
+    for(std::deque<Side>::iterator i=lines.begin();i!=lines.end();i++)
+      {
+	Side *s= &(*i);
+	const Pos3d p1= s->P1()->GetPos();
+	const Pos3d p2= s->P2()->GetPos();
+	const double d= dist(Segment3d(p1,p2), pos);
+        if(d<elemSize/100.0)
+	  {
+	    retval= s;
+	    break;
+	  }
+      }
+    return retval;
+  }
   
 //! @brief Return the i-th vertex.
 const XC::Pnt *XC::CmbEdge::getVertex(const size_t &i) const
@@ -802,12 +837,33 @@ const XC::Pnt *XC::CmbEdge::getVertex(const size_t &i) const
   }
 
 //! @brief Return the vertices.
-std::set<const XC::Pnt *> XC::CmbEdge::getVertices(void) const
+std::deque<XC::Pnt *> XC::CmbEdge::getVertices(void)
+  {
+    std::deque<Pnt *> retval;
+    for(std::deque<Side>::iterator i=lines.begin();i!=lines.end();i++)
+      retval.push_back((*i).P1());
+    retval.push_back(P2()); //Last vertex.
+    return retval;
+  }
+
+//! @brief Return the vertices.
+std::deque<const XC::Pnt *> XC::CmbEdge::getVertices(void) const
+  {
+    CmbEdge *this_no_const= const_cast<CmbEdge *>(this);
+    std::deque<Pnt *> tmp= this_no_const->getVertices();
+    std::deque<const Pnt *> retval;
+    for(std::deque<Pnt *>::const_iterator i=tmp.begin();i!=tmp.end();i++)
+      retval.push_back((*i));
+    return retval;
+  }
+
+//! @brief Return the vertices.
+std::set<const XC::Pnt *> XC::CmbEdge::getVertexSet(void) const
   {
     std::set<const XC::Pnt *> retval;
-    for(std::deque<Side>::const_iterator i=lines.begin();i!=lines.end();i++)
-      retval.insert((*i).P1());
-    retval.insert(P2()); //Last vertex.
+    std::deque<const XC::Pnt *> tmp= getVertices();
+    for(std::deque<const XC::Pnt *>::const_iterator i=tmp.begin();i!=tmp.end();i++)
+      retval.insert((*i));
     return retval;
   }
 
@@ -816,6 +872,26 @@ void XC::CmbEdge::SetVertice(const size_t &,Pnt *)
   {
     std::cerr << getClassName() << "::" << __FUNCTION__
 	      << "; not implemented." << std::endl;
+  }
+
+//! @brief Return a pointer to the vertex at the position
+//! argument. If not found returns nullptr.
+XC::Pnt *XC::CmbEdge::findVertex(const Pos3d &pos)
+  {
+    XC::Pnt *retval= nullptr;
+    const double elemSize= getAvgElemSize();
+    std::deque<Pnt *> vertices= getVertices();
+    for(std::deque<Pnt *>::iterator i= vertices.begin();i!=vertices.end();i++)
+      {
+	Pnt *p= *i;
+        const double d= dist(p->GetPos(), pos);
+        if(d<elemSize/100.0)
+	  {
+	    retval= p;
+	    break;
+	  }
+      }
+    return retval;
   }
 
 //! @brief Returns object k-points.

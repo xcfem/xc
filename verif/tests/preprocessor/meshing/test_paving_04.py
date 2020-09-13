@@ -182,7 +182,7 @@ polyFace.setNDiv(10)
 for h in pFaceHoles:
     h.setNDiv(1)
     polyFace.addHole(h)
-polyFace.genMesh(xc.meshDir.I)
+polyFace.genMesh(xc.meshDir.I, True)
 
 xcTotalSet= modelSpace.getTotalSet()
 nNodes= len(xcTotalSet.nodes)

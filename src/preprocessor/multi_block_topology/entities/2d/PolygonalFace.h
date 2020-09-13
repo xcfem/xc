@@ -51,27 +51,36 @@ class PolygonalFace: public Face
     Ref2d3d ref; //!< local reference system.
     dq_holes holes;
     void create_line_nodes(void);
-    void create_nodes(Paver &paver);
-    bool create_elements(const Paver &paver);
+    void create_nodes_from_paving(Paver &paver);
+    bool create_elements_from_paving(const Paver &paver);
+    void gen_mesh_paving(meshing_dir dm);
+    void create_gmsh_points(const double &) const;
+    int create_gmsh_loop(void) const;
+    std::map<int, Node *> create_nodes_from_gmsh(void);
+    bool create_elements_from_gmsh(void);
+    void gen_mesh_gmsh(meshing_dir dm);
   public:
     PolygonalFace(Preprocessor *m);
     virtual SetEstruct *getCopy(void) const;
 
     // Surface geometry.
     void setPoints(const ID &);
+    Pnt *findVertex(const Pos3d &);
+    
     void addHole(PolygonalFace *);
     hole_iterator findHole(PolygonalFace *);
     hole_const_iterator findHole(PolygonalFace *) const;
     const PolygonalFace *findHolePtr(PolygonalFace *) const;
     PolygonalFace *findHolePtr(PolygonalFace *);
     boost::python::list getHoles(void) const;
+    Side *findSide(const Pos3d &);
 
     // Surface orientation.
     Vector3d getIVector(void) const;
     Vector3d getJVector(void) const;
 
     // Mesh generation.
-    void genMesh(meshing_dir dm);
+    void genMesh(meshing_dir dm, bool paving= false);
   };
 
 } //end of XC namespace

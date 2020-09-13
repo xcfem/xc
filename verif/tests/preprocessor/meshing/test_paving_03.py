@@ -166,7 +166,7 @@ holeA.setNDiv(1)
 holeB.setNDiv(1)
 polyFace.addHole(holeA)
 polyFace.addHole(holeB)
-polyFace.genMesh(xc.meshDir.I)
+polyFace.genMesh(xc.meshDir.I, True)
 
 xcTotalSet= modelSpace.getTotalSet()
 nNodes= len(xcTotalSet.nodes)
