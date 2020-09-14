@@ -842,7 +842,6 @@ std::deque<XC::Pnt *> XC::CmbEdge::getVertices(void)
     std::deque<Pnt *> retval;
     for(std::deque<Side>::iterator i=lines.begin();i!=lines.end();i++)
       retval.push_back((*i).P1());
-    retval.push_back(P2()); //Last vertex.
     return retval;
   }
 
@@ -860,8 +859,8 @@ std::deque<const XC::Pnt *> XC::CmbEdge::getVertices(void) const
 //! @brief Return the vertices.
 std::set<const XC::Pnt *> XC::CmbEdge::getVertexSet(void) const
   {
-    std::set<const XC::Pnt *> retval;
-    std::deque<const XC::Pnt *> tmp= getVertices();
+    std::set<const Pnt *> retval;
+    std::deque<const Pnt *> tmp= getVertices();
     for(std::deque<const XC::Pnt *>::const_iterator i=tmp.begin();i!=tmp.end();i++)
       retval.insert((*i));
     return retval;
