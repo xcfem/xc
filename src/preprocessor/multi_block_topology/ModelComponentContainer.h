@@ -71,10 +71,12 @@ template <class T>
 ModelComponentContainer<T>::ModelComponentContainer(MultiBlockTopology *mbt)
   : ModelComponentContainerBase(mbt) {}
 
-//! @brief Return a pointer to the geometry entity whose identifier is passed as parameter.
+//! @brief Return a pointer to the geometry entity whose identifier
+//! is passed as parameter.
 template <class T>
 T * ModelComponentContainer<T>::busca(const Indice &id)
-  {    T * retval= nullptr;
+  {
+    T * retval= nullptr;
     iterator i= this->find(id);
     if(i!= this->end()) //Entity exists.
       retval= (*i).second;

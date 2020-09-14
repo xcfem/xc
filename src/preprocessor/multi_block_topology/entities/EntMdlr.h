@@ -77,13 +77,11 @@ class EntMdlr: public SetEstruct
     EntMdlr(Preprocessor *m,const size_t &i= 0);
     EntMdlr(const std::string &name= "",const size_t &i= 0,Preprocessor *m= nullptr);
     EntMdlr(const EntMdlr &);
+    virtual ~EntMdlr(void);
     EntMdlr &operator=(const EntMdlr &);
     virtual bool operator==(const EntMdlr &) const;
 
     virtual void set_index(const size_t &i);
-    //! @brief Returns the index of the object for it use in VTK arrays.
-    inline size_t getIdx(void) const
-      { return idx; }
 
     virtual bool In(const GeomObj3d &, const double &tol= 0.0) const;
     virtual bool Out(const GeomObj3d &, const double &tol= 0.0) const;
@@ -144,7 +142,6 @@ class EntMdlr: public SetEstruct
 
     void fix(const SFreedom_Constraint &);
 
-    virtual int getVtkCellType(void) const;
 
     void setGenMesh(bool m);
     const bool &getGenMesh(void) const;
@@ -160,7 +157,11 @@ class EntMdlr: public SetEstruct
 
     virtual Pos3d getCentroid(void) const;
 
-    virtual ~EntMdlr(void);
+    // VTK
+    virtual int getVtkCellType(void) const;
+    //! @brief Returns the index of the object for it use in VTK arrays.
+    inline size_t getIdx(void) const
+      { return idx; }
   };
 
 } //end of XC namespace

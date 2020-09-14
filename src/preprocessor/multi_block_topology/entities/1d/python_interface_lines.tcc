@@ -48,10 +48,11 @@ class_<XC::Edge, XC::Edge*, bases<XC::EntMdlr>, boost::noncopyable >("Edge","Bas
 
 const XC::Pnt *(XC::LineBase::*getFirstVertex)(void) const= &XC::LineBase::P1;
 const XC::Pnt *(XC::LineBase::*getLastVertex)(void) const= &XC::LineBase::P2;
+double (XC::LineBase::*getLambdaPt)(const Pos3d &) const= &XC::LineBase::getLambda;
 class_<XC::LineBase, bases<XC::Edge>, boost::noncopyable >("LineBase", no_init)
   .add_property("firstVertex", make_function(getFirstVertex, return_internal_reference<>() ),"Return the first vertex.")
   .add_property("lastVertex", make_function(getLastVertex, return_internal_reference<>() ),"Return the last vertex.")
-  .def("getLambda",&XC::LineBase::getLambda,"Returns the parameter of the point in the line (distance to the line's first point measured over the line).")
+  .def("getLambda",getLambdaPt,"Returns the parameter of the point in the line (distance to the line's first point measured over the line).")
    ;
 
 class_<XC::Line, bases<XC::LineBase>, boost::noncopyable >("Line", no_init)

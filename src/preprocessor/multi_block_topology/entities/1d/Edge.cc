@@ -42,11 +42,13 @@
 #include "domain/mesh/element/Element.h"
 
 //! @brief Constructor.
+//! 
 //! @param nd: Number of divisions.
 XC::Edge::Edge(Preprocessor *m,const size_t &nd)
   : EntMdlr(m), ndiv(nd) {}
 
 //! @brief Constructor.
+//! 
 //! @param name: object identifier.
 //! @param m: pointer to preprocessor.
 //! @param nd: number of divisions.
@@ -605,11 +607,11 @@ void XC::Edge::create_nodes_on_endpoints(void)
 
     if(verbosity>4)
       std::cerr << getClassName() << "::" << __FUNCTION__
-	        << "; creados." << std::endl;
+	        << "; created." << std::endl;
   }
 
-//! @brief Create nodes on objects.
-void XC::Edge::create_nodes(void)
+//! @brief Create nodes on the positions argument.
+void XC::Edge::create_nodes(const Pos3dArray &positions)
   {
     if(verbosity>4)
       std::clog << "Creating nodes for edge: '" << getName() << "'...";
@@ -622,19 +624,18 @@ void XC::Edge::create_nodes(void)
 	            << "; preprocessor undefined." << std::endl;
         else
           {
-            const Pos3dArray positions= get_nodes_pos();
             const size_t n_rows= positions.getNumberOfRows();
-            const size_t cols= positions.getNumberOfColumns();
-            ttzNodes= NodePtrArray3d(1,n_rows,cols);
+            const size_t n_cols= positions.getNumberOfColumns();
+            ttzNodes= NodePtrArray3d(1,n_rows,n_cols);
 
             create_nodes_on_endpoints();
 
 
-            if((n_rows*cols)>2) //If it has intermediate nodes...
+            if((n_rows*n_cols)>2) //If it has intermediate nodes...
               {
                 const size_t end_row= std::max(n_rows-1,size_t(1));
                 const size_t begin_row= (end_row == 1 ? 1 : 2);
-                const size_t end_column= std::max(cols-1,size_t(1));
+                const size_t end_column= std::max(n_cols-1,size_t(1));
                 const size_t begin_column= (end_column == 1 ? 1 : 2);
                 for( size_t j= begin_row;j<=end_row;j++)
                   for( size_t k= begin_column;k<=end_column;k++)
@@ -659,6 +660,13 @@ void XC::Edge::create_nodes(void)
       std::clog << getClassName() << "::" << __FUNCTION__
 	        << "; warning 0 nodes created for line: " << getName()
 	        << std::endl;
+  }
+
+//! @brief Create nodes on objects.
+void XC::Edge::create_nodes(void)
+  {
+    const Pos3dArray positions= get_nodes_pos();
+    create_nodes(positions);
   }
 
 //! @brief Trigger mesh generation.

@@ -50,17 +50,19 @@ void XC::PntPtrArray::setPnt(const size_t &j,const size_t &k,const int &id_point
         MultiBlockTopology *c= getMultiBlockTopology();
         Pnt *tmp= at(j,k);
         if(tmp!= nullptr)
-          std::clog << "Warning!, position: (" 
+          std::clog << getClassName() << "::" << __FUNCTION__
+		    << "; warning!, position: (" 
                     << j << "," << k 
                     << ") is already assigned to point: "
                     << tmp->getName() << std::endl;
         at(j,k)= c->getPoints().busca(id_point);
      }
    else
-     std::cerr << "(PntPtrArray::setPnt): '"
-               << "'; indices: ("
+     std::cerr << getClassName() << "::" << __FUNCTION__
+ 	       << "; indices: ("
                << j << ',' << k << ") out of range;"
-               << " number of rows: " << n_rows << " number of columns: " << n_columns
+               << " number of rows: " << n_rows
+	       << " number of columns: " << n_columns
                << std::endl;
   }
 

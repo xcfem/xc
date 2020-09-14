@@ -65,6 +65,7 @@ bool XC::LineBase::operator==(const LineBase &other) const
 //! @brief Returns a constant pointer to start point.
 const XC::Pnt *XC::LineBase::P1(void) const
   { return p1; }
+
 //! @brief Returns a constant pointer to end point.
 const XC::Pnt *XC::LineBase::P2(void) const
   { return p2; }
@@ -76,6 +77,73 @@ const XC::Pnt *XC::LineBase::getVertex(const size_t &i) const
       return p1;
     else
       return p2;
+  }
+
+//! @brief Return the parameter of the point on the line (distance to the
+//! line first point measured over the line).
+double XC::LineBase::getLambda(const Node &n) const
+  {
+    const Pos3d p= n.getInitialPosition3d();
+    return getLambda(p);
+  }
+
+//! @brief Return true if lambda value (see getLambda) of point a
+//! is smaller than lambda value of point b.
+bool XC::LineBase::less(const Pos3d &a, const Pos3d &b) const
+  { return (getLambda(a)<getLambda(b)); }
+
+//! @brief Return true if lambda value (see getLambda) of node a
+//! is smaller than lambda value of node b.
+bool XC::LineBase::less(const Node &a, const Node &b) const
+  { return (getLambda(a)<getLambda(b)); }
+
+//! @brief Return the positions sorted by its distance to the first
+//! point of the line.
+std::vector<std::pair<double,Pos3d> >XC::LineBase::sort(const std::deque<Pos3d> &positions) const
+  {
+    const size_t sz= positions.size();
+    std::vector<std::pair<double, size_t> > tmp(sz);
+    for(size_t i= 0;i<sz;i++)
+      {
+	Pos3d p= positions[i]; 
+	tmp[i]= std::pair(getLambda(p), i);
+      }
+    std::sort(tmp.begin(), tmp.end());
+    std::vector<std::pair<double,Pos3d> > retval(sz);
+    for(size_t i= 0;i<sz;i++)
+      {
+	Pos3d p= positions[tmp[i].second]; 
+	retval[i]= std::pair(getLambda(p), p);
+      }
+    return retval;
+  }
+
+//! @brief Return the nodes sorted by its distance to the line
+//! first point.
+std::vector<std::pair<double,XC::Node *> >XC::LineBase::sort(const std::deque<Node *> &nodes) const
+  {
+    const size_t sz= nodes.size();
+    std::vector<std::pair<double, Node *> > retval(sz);
+    for(size_t i= 0;i<sz;i++)
+      {
+	Node *n= nodes[i]; 
+	retval[i]= std::pair(getLambda(*n), n);
+      }
+    std::sort(retval.begin(), retval.end());
+    return retval;
+  }
+
+//! @brief Create nodes on the positions argument.
+//!
+//! @param Positions to create nodes on.
+void XC::LineBase::create_nodes(const std::deque<Pos3d> &positions)
+  {
+    std::vector<std::pair<double, Pos3d> > sortedNodes= sort(positions);
+    const size_t sz= sortedNodes.size();
+    Pos3dArray sortedPositions(sz);
+    for(size_t i= 0; i<sz;i++)
+      sortedPositions(i+1,1)= sortedNodes[i].second;
+    Edge::create_nodes(sortedPositions);
   }
 
 //! @brief Checks that the points are defined.

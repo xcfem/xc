@@ -211,7 +211,7 @@ XC::Edge *XC::Line::splitAtNaturalCoord(const double &chi)
   }
 
 //! @brief Divides the edge at the point argument. Returns the new
-//! Edge.
+//! edge.
 XC::Edge *XC::Line::splitAtPos3d(const Pos3d &p, const double &tol)
   {
     XC::Edge *retval= nullptr;

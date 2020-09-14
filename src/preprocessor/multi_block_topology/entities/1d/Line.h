@@ -49,6 +49,7 @@ class Line: public LineBase
     Line(const std::string &name= "",Preprocessor *m= nullptr,const size_t &ndiv= 4);
     virtual SetEstruct *getCopy(void) const;
 
+    // Geometry.
     double getLength(void) const;
     Pos3d getCentroid(void) const;
     virtual Vector3d getIVector(void) const;
@@ -57,21 +58,18 @@ class Line: public LineBase
     Edge *splitAtLambda(const double &);
     Edge *splitAtNaturalCoord(const double &);
     Edge *splitAtPos3d(const Pos3d &, const double &tol= 1e-6);
-
     double getLambda(const Pos3d &) const;
-    
     //! @brief Return the number of vertices.
     inline virtual size_t getNumberOfVertices(void) const
       { return 2; }
     virtual BND3d Bnd(void) const;
     double getSquaredDistanceTo(const Pos3d &pt) const;
-
     const Vector &getVector(void) const;
     Segment3d getLineSegment(void) const;
     virtual const Vector &getTang(const double &) const;
+
+    // VTK
     int getVtkCellType(void) const;
-
-
   };
 
 } //end of XC namespace

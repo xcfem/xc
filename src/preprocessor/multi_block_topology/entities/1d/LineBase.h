@@ -59,13 +59,18 @@ class LineBase: public Edge
     const Pnt *P2(void) const;
 
     virtual double getLambda(const Pos3d &) const= 0;
+    double getLambda(const Node &n) const;
+    bool less(const Pos3d &a, const Pos3d &b) const;
+    bool less(const Node &a, const Node &b) const;
+    std::vector<std::pair<double,Pos3d> > sort(const std::deque<Pos3d> &) const;
+    std::vector<std::pair<double,Node *> > sort(const std::deque<Node *> &) const;
+    
+    void create_nodes(const std::deque<Pos3d> &positions);
 
     virtual const Pnt *getVertex(const size_t &i) const;
     virtual void SetVertice(const size_t &,Pnt *);
     void SetVertice(const size_t &,const size_t &);
     void SetVertices(Pnt *,Pnt *);
-
-
   };
 
 } //end of XC namespace

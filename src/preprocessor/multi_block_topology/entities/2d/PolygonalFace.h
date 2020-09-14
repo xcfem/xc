@@ -56,8 +56,8 @@ class PolygonalFace: public Face
     void gen_mesh_paving(meshing_dir dm);
     void create_gmsh_points(const double &) const;
     int create_gmsh_loop(void) const;
-    std::map<int, Node *> create_nodes_from_gmsh(void);
-    bool create_elements_from_gmsh(void);
+    std::map<int, const Node *> create_nodes_from_gmsh(void);
+    bool create_elements_from_gmsh(const std::map<int, const Node *> &);
     void gen_mesh_gmsh(meshing_dir dm);
   public:
     PolygonalFace(Preprocessor *m);

@@ -53,9 +53,7 @@ class Edge: public EntMdlr
     size_t ndiv; //!< number of divisions
     std::set<const Face *> surfaces_line; //!< Surface neighbors (topology).
   protected:
-
     void insert_surf(Face *s);
-
     virtual Pnt *P1(void);
     virtual Pnt *P2(void);
     void create_nodes_on_endpoints(void);
@@ -63,10 +61,11 @@ class Edge: public EntMdlr
     Edge(Preprocessor *m,const size_t &nd= 4);
     Edge(const std::string &name= "",Preprocessor *m= nullptr,const size_t &nd= 4);
     virtual bool operator==(const Edge &) const;
+
+    // Geometry.
     //! @brief Return the object dimension (0, 1, 2 or 3).
     inline virtual unsigned short int GetDimension(void) const
       { return 1; }
-
     virtual const Pnt *P1(void) const;
     virtual const Pnt *P2(void) const;
     bool In(const GeomObj3d &, const double &tol= 0.0) const;
@@ -74,42 +73,33 @@ class Edge: public EntMdlr
     bool areEndPoints(const Pnt *,const Pnt *) const;
     //! @brief Return the number of vertices.
     virtual size_t getNumberOfVertices(void) const= 0;
-
     virtual double getLength(void) const= 0;
     virtual Pos3d getCentroid(void) const;
     virtual Vector3d getIVector(void) const;
     virtual Vector3d getJVector(void) const;
     virtual Vector3d getKVector(void) const;
     virtual Matrix getLocalAxes(void) const;
-
     virtual const Pnt *getVertex(const size_t &i) const= 0;
     virtual void SetVertice(const size_t &,Pnt *)= 0;
     std::vector<int> getIndicesVertices(void) const;
     virtual ID getKPoints(void) const;
     virtual std::deque<Segment3d> getSegments(void) const;
+    virtual Pos3dArray get_positions(void) const= 0;
+    virtual Pos3dArray get_nodes_pos(void) const;
+    virtual BND3d Bnd(void) const= 0;
+    virtual const Vector &getTang(const double &) const;
+    void divide(void);
 
+    // Meshing.
     void setNDivHomologousEdges(const size_t &);
     virtual void setNDiv(const size_t &);
     inline virtual size_t NDiv(void) const
       { return ndiv; }
     void SetElemSize(const double &sz);
     double getElemSize(void) const;
-    std::set<const XC::Edge *> getHomologousSides(void) const;
-    void update_topology(void);
-
-    const size_t getNumConnectedSurfaces(void) const;
-    const std::set<const Face *> &getConnectedSurfaces(void) const;
-    const std::string &getConnectedSurfacesNames(void) const;
-    bool isConnectedTo(const Face &s) const;
-    bool isConnectedTo(const Body &b) const;
-    bool isEndPoint(const Pnt &) const;
-    virtual BND3d Bnd(void) const= 0;
+    virtual void create_nodes(const Pos3dArray &positions);
     virtual void create_nodes(void);
     virtual void genMesh(meshing_dir dm);
-
-    virtual Pos3dArray get_positions(void) const= 0;
-    virtual Pos3dArray get_nodes_pos(void) const;
-
     virtual Node *getNode(const size_t &i1,const size_t &j,const size_t &k=1);
     virtual const Node *getNode(const size_t &i,const size_t &j,const size_t &k=1) const;
     virtual Node *getNode(const size_t &i);
@@ -128,15 +118,22 @@ class Edge: public EntMdlr
     Pos3dArray getNodePosForward(void) const;
     Pos3dArray getNodePosReverse(void) const;
 
-    std::set<SetBase *> get_sets(void) const;
-    void add_to_sets(std::set<SetBase *> &);
-
-    virtual const Vector &getTang(const double &) const;
-    void divide(void);
+    // Topology.
+    std::set<const XC::Edge *> getHomologousSides(void) const;
+    void update_topology(void);
+    const size_t getNumConnectedSurfaces(void) const;
+    const std::set<const Face *> &getConnectedSurfaces(void) const;
+    const std::string &getConnectedSurfacesNames(void) const;
+    bool isConnectedTo(const Face &s) const;
+    bool isConnectedTo(const Body &b) const;
+    bool isEndPoint(const Pnt &) const;
     virtual Edge *splitAtPoint(Pnt *p);
     virtual Edge *splitAtLambda(const double &);
     virtual Edge *splitAtNaturalCoord(const double &);
     virtual Edge *splitAtPos3d(const Pos3d &, const double &tol= 1e-6);
+
+    std::set<SetBase *> get_sets(void) const;
+    void add_to_sets(std::set<SetBase *> &);
   };
 
 std::set<const Edge *> getConnectedLines(const Pnt &p);
