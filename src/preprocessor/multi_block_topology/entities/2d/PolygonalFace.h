@@ -51,14 +51,14 @@ class PolygonalFace: public Face
     Ref2d3d ref; //!< local reference system.
     dq_holes holes;
     void create_line_nodes(void);
-    bool create_elements_from_quads(const std::deque<std::vector<int> > &);
+    int create_elements_from_quads(const std::deque<std::vector<int> > &);
     void create_nodes_from_paving(Paver &paver);
-    bool create_elements_from_paving(const Paver &paver);
+    int create_elements_from_paving(const Paver &paver);
     void gen_mesh_paving(meshing_dir dm);
     void create_gmsh_points(const double &) const;
     int create_gmsh_loop(void) const;
     std::map<int, const Node *> create_nodes_from_gmsh(void);
-    bool create_elements_from_gmsh(const std::map<int, const Node *> &);
+    int create_elements_from_gmsh(const std::map<int, const Node *> &);
     void gen_mesh_gmsh(meshing_dir dm);
   public:
     PolygonalFace(Preprocessor *m);

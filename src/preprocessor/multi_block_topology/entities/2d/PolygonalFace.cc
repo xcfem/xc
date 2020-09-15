@@ -140,7 +140,6 @@ void XC::PolygonalFace::setPoints(const ID &point_indexes)
 		<< "; surface: " << getTag()
                 << "is inverted." << std::endl;
     ref= getPolygon().getRef();
-    
   }
 
 //! @brief Returns a vector in the direction of the local
@@ -280,9 +279,9 @@ void XC::PolygonalFace::create_nodes_from_paving(Paver &paver)
   }
 
 //! @brief Create nodes from quad tags (i.e. [tagI, tagJ, tagK, tagL].
-bool XC::PolygonalFace::create_elements_from_quads(const std::deque<std::vector<int> > &quads)
+int XC::PolygonalFace::create_elements_from_quads(const std::deque<std::vector<int> > &quads)
   {
-    bool retval= false;
+    int retval= 0;
     const Element *seed= getPreprocessor()->getElementHandler().get_seed_element();
     if(seed)
       {
@@ -307,7 +306,7 @@ bool XC::PolygonalFace::create_elements_from_quads(const std::deque<std::vector<
 			<< std::endl;
 	  }
 	add_elements_to_handler(ttzElements);
-	retval= true;
+	retval= numElements;
       }
     else if(verbosity>0)
       std::clog << getClassName() << "::" << __FUNCTION__
@@ -317,9 +316,9 @@ bool XC::PolygonalFace::create_elements_from_quads(const std::deque<std::vector<
 
 //! @brief Creates elements on the nodes created
 //! in create_nodes_from_paving.
-bool XC::PolygonalFace::create_elements_from_paving(const Paver &paver)
+int XC::PolygonalFace::create_elements_from_paving(const Paver &paver)
   {
-    bool retval= false;
+    bool retval= 0;
     if(!ttzNodes.empty())
       {
         if(ttzNodes.HasNull())
@@ -366,8 +365,8 @@ bool XC::PolygonalFace::create_elements_from_paving(const Paver &paver)
     else
       std::cerr << getClassName() << "::" << __FUNCTION__
 		<< "; there is no nodes for the elements." << std::endl;
-    const size_t numElements= ttzElements.NumPtrs();
-    if(numElements==0 && verbosity>0)
+    retval= ttzElements.NumPtrs();
+    if(retval==0 && verbosity>0)
       std::clog << getClassName() << "::" << __FUNCTION__
 	        << "; warning 0 elements created for entity: " << getName()
 	        << std::endl;
@@ -601,16 +600,15 @@ std::map<int, const XC::Node *> XC::PolygonalFace::create_nodes_from_gmsh(void)
 
 //! @brief Create the elements on this surface from the mesh
 //! computed by Gmsh.
-bool XC::PolygonalFace::create_elements_from_gmsh(const std::map<int, const XC::Node *> &nodeMap)
+int XC::PolygonalFace::create_elements_from_gmsh(const std::map<int, const XC::Node *> &nodeMap)
   {
-    bool retval= false;
+    int retval= 0;
     // Elements
     std::vector<int> elementTypes;
     std::vector<std::vector<std::size_t> > elementTags;
     std::vector<std::vector<std::size_t> > elementNodeTags;
     gmsh::model::mesh::getElements(elementTypes, elementTags, elementNodeTags);
     const size_t numTypes= elementTypes.size();
-
     std::deque<std::vector<int> > quads;
     for(size_t i= 0;i<numTypes;i++)
       {
@@ -658,7 +656,8 @@ void XC::PolygonalFace::gen_mesh_gmsh(meshing_dir dm)
     gmsh::initialize();
     // By default Gmsh will not print out any messages: in order to output
     // messages on the terminal, just set the "General.Terminal" option to 1:
-    //gmsh::option::setNumber("General.Terminal", 1);
+    if(verbosity>1)
+      gmsh::option::setNumber("General.Terminal", 1);
     
     // We now add a new model, named "t1". If gmsh::model::add() is not called, a
     // new default (unnamed) model will be created on the fly, if necessary.
@@ -668,7 +667,6 @@ void XC::PolygonalFace::gen_mesh_gmsh(meshing_dir dm)
     const double lc= getAvgElemSize();
 
     // Create gmsh points.
-
     //// Contour points.
     create_gmsh_points(lc);
     //// Hole points.
@@ -694,11 +692,12 @@ void XC::PolygonalFace::gen_mesh_gmsh(meshing_dir dm)
 
     // We can then generate a 2D mesh...
     gmsh::model::mesh::generate(2);
-    //gmsh::fltk::run(); // Display mesh for debugging.
+    if(verbosity>1)
+      gmsh::fltk::run(); // Display mesh for debugging.
 
     // Extract mesh data.
-    std::map<int, const XC::Node *> mapNodes= create_nodes_from_gmsh();
-    create_elements_from_gmsh(mapNodes);
+    std::map<int, const Node *> mapNodes= create_nodes_from_gmsh();
+    const int numElements= create_elements_from_gmsh(mapNodes);
     
     // This should be called when you are done using the Gmsh C++ API:
     gmsh::finalize();
