@@ -290,17 +290,13 @@ bool XC::PolygonalFace::create_elements_from_quads(const std::deque<std::vector<
 	ttzElements= ElemPtrArray3d(1,1,numElements);
 	for(size_t i= 0;i<numElements;i++)
 	  {
-	    std::vector<int> nodeIndexes= quads[i];
-	    const size_t nNodes= nodeIndexes.size();
+	    std::vector<int> quad= quads[i];
+	    const size_t nNodes= quad.size();
 	    if(nNodes>0)
 	      {
 		ID nTags(nNodes);
 		for(size_t j= 0; j<nNodes; j++)
-		  {
-		    const Node *n= ttzNodes(1,1,nodeIndexes[j]+1);
-		    const int nTag= n->getTag();
-		    nTags[j]= nTag;
-		  }
+		  { nTags[j]= quad[j]; }
 		Element *tmp= seed->getCopy();
 		tmp->setIdNodes(nTags);
 		ttzElements(1,1,i+1)= tmp;
@@ -338,8 +334,27 @@ bool XC::PolygonalFace::create_elements_from_paving(const Paver &paver)
                   if(verbosity>4)
                     std::clog << "Creating elements of entity: '"
 			      << getName() << "'...";   
-                  const std::deque<std::vector<int> > &quads= paver.getQuads();
-		  retval= create_elements_from_quads(quads);
+                  const std::deque<std::vector<int> > &paverQuads= paver.getQuads();
+		  const size_t numQuads= paverQuads.size();
+		  std::deque<std::vector<int> > xcQuads(numQuads);
+		  // Get XC tags from paver tags.
+		  for(size_t i= 0;i<numQuads;i++)
+		    {
+		      const std::vector<int> &paverQuad= paverQuads[i];
+		      const size_t nNodes= paverQuad.size();
+		      std::vector<int> xcQuad(nNodes);
+		      if(nNodes>0)
+			{
+			  for(size_t j= 0; j<nNodes; j++)
+			    {
+			      const Node *n= ttzNodes(1,1,paverQuad[j]+1);
+			      const int nTag= n->getTag();
+			      xcQuad[j]= nTag;
+			    }
+			}
+		      xcQuads[i]= xcQuad;
+		    }
+		  retval= create_elements_from_quads(xcQuads);
                   if(verbosity>4)
                     std::clog << "created." << std::endl;
                 }
