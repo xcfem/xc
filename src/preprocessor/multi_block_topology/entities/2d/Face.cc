@@ -28,6 +28,7 @@
 
 #include "Face.h"
 #include "xc_utils/src/geom/pos_vec/Vector3d.h"
+#include "xc_utils/src/geom/sis_ref/Ref2d3d.h"
 #include "xc_utils/src/geom/d3/BND3d.h"
 #include "xc_utils/src/geom/d1/Polyline3d.h"
 #include "xc_utils/src/geom/d2/Triangle3d.h"
@@ -569,6 +570,14 @@ XC::Matrix XC::Face::getLocalAxes(void) const
 //! @brief Returns the centroid of the quad surface.
 Pos3d XC::Face::getCentroid(void) const
   { return getPolygon().getCenterOfMass(); }
+
+Ref2d3d XC::Face::getRef(void) const
+  {
+    const Pos3d org= getCentroid();
+    const Vector3d vI= getIVector();
+    const Vector3d vJ= getJVector();
+    return Ref2d3d(org, vI, vJ);
+  }
 
 //! @brief Returns the face area.
 double XC::Face::getArea(void) const

@@ -34,6 +34,7 @@
 #include "preprocessor/multi_block_topology/entities/1d/CmbEdge.h"
 
 class Polygon3d;
+class Ref2d3d;
 namespace XC {
 class Body;
 
@@ -74,6 +75,7 @@ class Face: public CmbEdge
     // Surface orientation.
     Vector3d getKVector(void) const;
     Matrix getLocalAxes(void) const;
+    Ref2d3d getRef(void) const;
     
     // Number of divisions
     void setNDiv(const size_t &);
