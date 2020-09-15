@@ -42,18 +42,20 @@ class ElementHandler: public ProtoElementHandler
   public:
     class SeedElemHandler: public ProtoElementHandler
       {
+      private:
         Element *seed;
         SeedElemHandler(const SeedElemHandler &);
         SeedElemHandler &operator=(const SeedElemHandler &);
-        void free_mem(void);
+        void free(void);
+	void alloc(Element *);
       protected:
         void add(Element *);
       public:
         SeedElemHandler(Preprocessor *preprocessor)
           : ProtoElementHandler(preprocessor), seed(nullptr) {}
-	Element *GetSeedElement(void)
+	Element *getSeedElement(void)
           { return seed; }
-	const Element *GetSeedElement(void) const
+	const Element *getSeedElement(void) const
           { return seed; }
         int getDefaultTag(void) const;
         void clearAll(void);
@@ -71,7 +73,7 @@ class ElementHandler: public ProtoElementHandler
     inline SeedElemHandler &getSeedElemHandler(void)
       { return seed_elem_handler; }
     const Element *get_seed_element(void) const
-      { return seed_elem_handler.GetSeedElement(); }
+      { return seed_elem_handler.getSeedElement(); }
 
     virtual void Add(Element *);
 

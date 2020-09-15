@@ -808,9 +808,9 @@ std::deque<const XC::Edge *> XC::CmbEdge::getEdges(void) const
 
 //! @brief Return a pointer to the side at the position
 //! argument. If not found returns nullptr.
-XC::CmbEdge::Side *XC::CmbEdge::findSide(const Pos3d &pos)
+std::deque<XC::CmbEdge::Side *> XC::CmbEdge::findSides(const Pos3d &pos)
   {
-    Side *retval= nullptr;
+    std::deque<XC::CmbEdge::Side *> retval;
     const double elemSize= getAvgElemSize();
     for(std::deque<Side>::iterator i=lines.begin();i!=lines.end();i++)
       {
@@ -818,11 +818,8 @@ XC::CmbEdge::Side *XC::CmbEdge::findSide(const Pos3d &pos)
 	const Pos3d p1= s->P1()->GetPos();
 	const Pos3d p2= s->P2()->GetPos();
 	const double d= dist(Segment3d(p1,p2), pos);
-        if(d<elemSize/100.0)
-	  {
-	    retval= s;
-	    break;
-	  }
+        if(d<elemSize/1e4)
+	  { retval.push_back(s); }
       }
     return retval;
   }
@@ -883,8 +880,8 @@ XC::Pnt *XC::CmbEdge::findVertex(const Pos3d &pos)
     for(std::deque<Pnt *>::iterator i= vertices.begin();i!=vertices.end();i++)
       {
 	Pnt *p= *i;
-        const double d= dist(p->GetPos(), pos);
-        if(d<elemSize/100.0)
+        const double d2= dist2(p->GetPos(), pos);
+        if(d2<elemSize/1e6)
 	  {
 	    retval= p;
 	    break;

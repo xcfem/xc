@@ -365,7 +365,7 @@ bool XC::EntMdlr::create_elements(meshing_dir dm)
                   if(seed)
                     {
                       ttzElements= seed->put_on_mesh(ttzNodes,dm);
-                      add_elements(ttzElements);
+                      add_elements_to_handler(ttzElements);
                       retval= true;
                     }
                   else if(verbosity>0)

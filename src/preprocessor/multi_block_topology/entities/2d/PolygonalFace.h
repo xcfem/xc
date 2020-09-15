@@ -51,6 +51,7 @@ class PolygonalFace: public Face
     Ref2d3d ref; //!< local reference system.
     dq_holes holes;
     void create_line_nodes(void);
+    bool create_elements_from_quads(const std::deque<std::vector<int> > &);
     void create_nodes_from_paving(Paver &paver);
     bool create_elements_from_paving(const Paver &paver);
     void gen_mesh_paving(meshing_dir dm);
@@ -73,7 +74,7 @@ class PolygonalFace: public Face
     const PolygonalFace *findHolePtr(PolygonalFace *) const;
     PolygonalFace *findHolePtr(PolygonalFace *);
     boost::python::list getHoles(void) const;
-    Side *findSide(const Pos3d &);
+    std::deque<Side *> findSides(const Pos3d &);
 
     // Surface orientation.
     Vector3d getIVector(void) const;

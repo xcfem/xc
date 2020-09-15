@@ -47,7 +47,7 @@ class SetEstruct: public SetBase
   {
   protected:
     friend class Preprocessor;
-    void add_elements(const ElemPtrArray3d &);
+    void add_elements_to_handler(const ElemPtrArray3d &);
 
     NodePtrSet getNodePtrSet(void);
   public:

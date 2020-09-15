@@ -173,7 +173,7 @@ class CmbEdge: public Edge
     Side *getSideByPoints(const size_t &,const size_t &);
     std::deque<Edge *> getEdges(void);
     std::deque<const Edge *> getEdges(void) const;
-    Side *findSide(const Pos3d &);
+    std::deque<Side *> findSides(const Pos3d &);
     
     virtual const Pnt *getVertex(const size_t &i) const;
     std::deque<Pnt *> getVertices(void);

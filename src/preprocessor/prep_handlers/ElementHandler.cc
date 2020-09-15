@@ -36,10 +36,21 @@
 #include "domain/mesh/node/Node.h"
 #include "utility/tagged/DefaultTag.h"
 
-void XC::ElementHandler::SeedElemHandler::free_mem(void)
+//! @brief Frees the seed element pointer.
+void XC::ElementHandler::SeedElemHandler::free(void)
   {
-    if(seed) delete seed;
-    seed= nullptr;
+    if(seed)
+      {
+	delete seed;
+        seed= nullptr;
+      }
+  }
+
+//! @brief Set the seed element pointer.
+void XC::ElementHandler::SeedElemHandler::alloc(Element *e)
+  {
+    free();
+    e= e; // Element allocated elsewhere.
   }
 
 //! @brief Copy constructor.
@@ -57,17 +68,17 @@ XC::ElementHandler::SeedElemHandler &XC::ElementHandler::SeedElemHandler::operat
 //! @brief Defines seed element.
 void XC::ElementHandler::SeedElemHandler::add(Element *e)
   {
-    free_mem();
+    free();
     assert(e);
     seed= e;
   }
 
 //! @brief Destructor.
 XC::ElementHandler::SeedElemHandler::~SeedElemHandler(void)
-  { free_mem(); }
+  { clearAll(); }
 
 void XC::ElementHandler::SeedElemHandler::clearAll(void)
-  { free_mem(); }
+  { free(); }
 
 int XC::ElementHandler::SeedElemHandler::getDefaultTag(void) const
   {
@@ -129,6 +140,9 @@ void XC::ElementHandler::Add(Element *e)
         add(e);
 	Element::getDefaultTag()++;
       }
+    else
+      std::cerr << getClassName() << "::" << __FUNCTION__
+	        << "; null pointer to element." << std::endl;
   }
 
 

@@ -166,7 +166,19 @@ template <int NNODES,class PhysProp>
 double XC::PlaneElement<NNODES, PhysProp>::getMaximumCornerAngle(bool initialGeometry) const
   {
     const std::deque<Pos3d> positions= this->getPosNodes(initialGeometry);
-    return getMaxCornerAngle(positions.begin(),positions.end());
+    // Filter collapsed sides:
+    std::deque<Pos3d>::const_iterator i= positions.begin();
+    Pos3d p0= (*i); i++;
+    std::deque<Pos3d> tmp;
+    tmp.push_back(p0);
+    for(;i!= positions.end();i++)
+      {
+	Pos3d p1= (*i);
+	if(p1!=p0)
+	  tmp.push_back(p1);
+	p0= p1;
+      }
+    return getMaxCornerAngle(tmp.begin(),tmp.end());
   }
 
 //! @brief Returns the element contour as a polygon.

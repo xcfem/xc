@@ -137,19 +137,22 @@ XC::ElementEdges XC::SetEstruct::getElementEdges(void)
     return getElementEdgesBetweenNodes(nodes);
   }
 
-//! @brief Adds to the model the elements being passed as parameters.
-void XC::SetEstruct::add_elements(const ElemPtrArray3d &elements)
+//! @brief Adds the elements to the element handler.
+void XC::SetEstruct::add_elements_to_handler(const ElemPtrArray3d &elements)
   {
     const size_t n_layers= elements.getNumberOfLayers();
-    if(n_layers<1) return;
-    const size_t numberOfRows= elements(1).getNumberOfRows();
-    const size_t cols= elements(1).getNumberOfColumns();
-    for( size_t i= 1;i<=n_layers;i++)
-      for( size_t j= 1;j<=numberOfRows;j++)
-        for( size_t k= 1;k<=cols;k++)
-	  {
-            getPreprocessor()->getElementHandler().Add(elements(i,j,k));
-	  }
+    if(n_layers>0)
+      {
+	const size_t numberOfRows= elements(1).getNumberOfRows();
+	const size_t cols= elements(1).getNumberOfColumns();
+	ElementHandler &eHandler= getPreprocessor()->getElementHandler();
+	for( size_t i= 1;i<=n_layers;i++)
+	  for( size_t j= 1;j<=numberOfRows;j++)
+	    for( size_t k= 1;k<=cols;k++)
+	      {
+		eHandler.Add(elements(i,j,k));
+	      }
+      }
   }
 
 //! @brief Returns the tags of the nodes.

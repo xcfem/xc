@@ -221,7 +221,7 @@ void XC::Domain::clearAll(void)
     currentGeoTag = 0;
     lastGeoSendTag = -1;
     lastChannel = 0;
-  }
+ }
 
 //! @brief Destructor.
 //!

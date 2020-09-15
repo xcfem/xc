@@ -174,7 +174,6 @@ void XC::Mesh::clearAll(void)
     // set the bounds around the origin
     theBounds.Zero();
 
-
     // rest the flag to be as initial
     nodeGraphBuiltFlag= false;
     eleGraphBuiltFlag= false;

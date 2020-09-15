@@ -82,7 +82,9 @@ XC::FE_Datastore *XC::FEProblem::defineDatabase(const std::string &type, const s
   }
 
 XC::FEProblem::~FEProblem(void)
-  { clearAll(); }
+  {
+    clearAll();
+  }
 
 //! @brief Delete all entities in the FE problem
 void XC::FEProblem::clearAll(void)
