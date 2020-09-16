@@ -198,7 +198,7 @@ class BoltBase(object):
         ownerId= 'hole_center_owr_f'+str(blk.id) # Hole center owner.
         diameterLabel= 'diam_'+str(self.diameter)
         materialLabel= 'mat_'+str(self.steelType.name)
-        centerLabels= labels+['hole_centers',ownerId, diameterLabel. materialLabel]
+        centerLabels= labels+['hole_centers',ownerId, diameterLabel, materialLabel]
         center3d= self.pos3d
         retval.appendPoint(-1, center3d.x, center3d.y, center3d.z, labels= centerLabels)        
         return retval
