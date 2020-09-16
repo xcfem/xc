@@ -311,7 +311,7 @@ class BoltedPlateBase(object):
         return retval
 
     def getBlocks(self, refSys= geom.Ref3d3d(), lbls= None):
-        ''' Return the blocks that define the gusset for the
+        ''' Return the blocks that define the plate for the
             diagonal argument.
 
         :param lbls: labels to assign to the newly created blocks.
@@ -329,7 +329,8 @@ class BoltedPlateBase(object):
             posLabels= labels+ ['hole_centers']
             retval.appendPoint(-1, pos.x, pos.y, pos.z, labels= posLabels)
         # Get the hole blocks for the new plate
-        holeLabels= labels+['holes']
+        ownerId= 'owr_'+str(blk.id) # Hole owner.
+        holeLabels= labels+['holes',ownerId]
         blk.holes= self.boltArray.getHoleBlocks(refSys,holeLabels)
         retval.extend(blk.holes)
         return retval
