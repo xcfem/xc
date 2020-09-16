@@ -91,10 +91,14 @@ class ElasticFoundation(object):
     :ivar wModulus: Winkler modulus of the foundation (springs in Z direction)
     :ivar cRoz:     fraction of the Winkler modulus to apply for friction in
                 the contact plane (springs in X, Y directions)
+    :ivar noTensionZ: if True springs in Z direction are made of 
+                      no-tension material (defaults to None)
     '''
-    def __init__(self,wModulus,cRoz):
+    def __init__(self,wModulus,cRoz,noTensionZ=False):
         self.wModulus= wModulus
         self.cRoz= cRoz
+        self.noTensionZ=noTensionZ
+        
     def createMaterials(self,preprocessor,name):
         #elastic materials (los incializamos aquí para luego aplicar el módulo elástico que corresponda a cada nudo)
         self.xSpringName= name + '_xSpring'
@@ -102,9 +106,13 @@ class ElasticFoundation(object):
         self.ySpringName= name + '_ySpring'
         self.ySpring=typical_materials.defElasticMaterial(preprocessor,self.ySpringName,0.1)
         self.zSpringName= name + '_zSpring'
-        self.zSpring=typical_materials.defElasticMaterial(preprocessor,self.zSpringName,1)
+        if self.noTensionZ:
+            self.zSpring=typical_materials.defElastNoTensMaterial(preprocessor,self.zSpringName,1)
+        else:
+            self.zSpring=typical_materials.defElasticMaterial(preprocessor,self.zSpringName,1)
+            
     def generateSprings(self,xcSet):
-        '''Creates the springs at the nodes.'''
+        '''Creates the springs at the nodes of the xcSet given as parameter.'''
         self.foundationSet= xcSet #Set with elastic supported elements
         self.springs= list() #spring elements.
         self.foundationSet.resetTributaries()
@@ -122,6 +130,7 @@ class ElasticFoundation(object):
             nn= modelSpace.setBearing(n.tag,[self.xSpringName,self.ySpringName,self.zSpringName])
             self.springs.append(preprocessor.getElementHandler.getElement(idElem))
             idElem+= 1
+            
     def getCentroid(self):
         '''Returns the geometric baricenter of the springs.'''
         dx= 0.0; dy= 0.0; dz= 0.0
@@ -134,6 +143,7 @@ class ElasticFoundation(object):
             dx+= a*pos[0]; dy+= a*pos[1]; dz+= a*pos[2]
         dx/=A; dy/=A; dz/=A
         return geom.Pos3d(dx,dy,dz)
+    
     def calcPressures(self):
         ''' Foundation pressures over the soil. Calculates pressures
          and forces in the free nodes of the springs
