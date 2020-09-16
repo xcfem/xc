@@ -497,9 +497,7 @@ std::map<int, const XC::Node *> XC::PolygonalFace::create_nodes_from_gmsh(void)
 	    //Check if it's a vertex node:
   	    Pnt *p= findVertex(gmshPos);
 	    if(p)
-	      {
-		mapVertexNodes[p->getTag()]= gmshTag;
-	      }
+	      {	mapVertexNodes[p->getTag()]= gmshTag; }
 	    std::deque<Side *> posSides= findSides(gmshPos);
 	    const size_t nSides= posSides.size();
 	    if(nSides>0)
@@ -513,16 +511,12 @@ std::map<int, const XC::Node *> XC::PolygonalFace::create_nodes_from_gmsh(void)
 				<< " already meshed. Side node ignored."
 				<< std::endl;
 		    else
-		      {
-			mapEdgeNodes[s->getTag()].push_back(std::pair(gmshTag, gmshPos));
-		      }
+		      {	mapEdgeNodes[s->getTag()].push_back(std::pair(gmshTag, gmshPos)); }
 		  }
 	      }
 	    else // not a side node.
 	      if(!p)
-	        {
-		  dqInteriorNodes.push_back(std::pair(gmshTag, gmshPos));
-		}
+	        { dqInteriorNodes.push_back(std::pair(gmshTag, gmshPos)); }
 	  } // End Gmsh positions.
 
 	// Create nodes.
@@ -564,7 +558,7 @@ std::map<int, const XC::Node *> XC::PolygonalFace::create_nodes_from_gmsh(void)
 		    interior= (interior && (dist2(gmshPos,p1->GetPos())>elemSize/1e6));
 		    const Pnt *p2= cl->P2();
 		    interior= (interior && (dist2(gmshPos,p2->GetPos())>elemSize/1e6));
-		    if(interior) // is an interior node.
+		    if(interior) // is an interior (to the edge) node.
 		      {		    
 			 Node *nodePtr= l->getNearestNode(gmshPos);
 			 const Pos3d nodePos= nodePtr->getInitialPosition3d();
@@ -585,6 +579,7 @@ std::map<int, const XC::Node *> XC::PolygonalFace::create_nodes_from_gmsh(void)
 		        << "; line with tag: " << xcTag
 		        << " not found." << std::endl;	      
 	  }
+	// Put nodes in the interior.
 	for(DqInteriorNodes::const_iterator i= dqInteriorNodes.begin();i!= dqInteriorNodes.end();i++)
 	  {
 	    const std::pair<const int, Pos3d> pair= (*i);
@@ -603,49 +598,52 @@ std::map<int, const XC::Node *> XC::PolygonalFace::create_nodes_from_gmsh(void)
 int XC::PolygonalFace::create_elements_from_gmsh(const std::map<int, const XC::Node *> &nodeMap)
   {
     int retval= 0;
-    // Elements
-    std::vector<int> elementTypes;
-    std::vector<std::vector<std::size_t> > elementTags;
-    std::vector<std::vector<std::size_t> > elementNodeTags;
-    gmsh::model::mesh::getElements(elementTypes, elementTags, elementNodeTags);
-    const size_t numTypes= elementTypes.size();
-    std::deque<std::vector<int> > quads;
-    for(size_t i= 0;i<numTypes;i++)
+    if(!nodeMap.empty())
       {
-	std::vector<std::size_t> eTags= elementTags[i];
-	const size_t numElemOfType= eTags.size();
-	std::string elementName= "";
-	int dim= 0;
-	int order= 0;
-	int numNodes= 0;
-	std::vector<double> localNodeCoord;
-	int numPrimaryNodes= 0;
-	gmsh::model::mesh::getElementProperties(elementTypes[i], elementName, dim, order, numNodes, localNodeCoord, numPrimaryNodes);
-	if(numNodes>2) // Quads and triangles.
+	// Elements
+	std::vector<int> elementTypes;
+	std::vector<std::vector<std::size_t> > elementTags;
+	std::vector<std::vector<std::size_t> > elementNodeTags;
+	gmsh::model::mesh::getElements(elementTypes, elementTags, elementNodeTags);
+	const size_t numTypes= elementTypes.size();
+	std::deque<std::vector<int> > quads;
+	for(size_t i= 0;i<numTypes;i++)
 	  {
-	    if(verbosity>4)
-	      std::clog << "Creating elements of entity: '"
-			<< getName() << "'...";   
-	    for(size_t j= 0;j<numElemOfType;j++)
+	    std::vector<std::size_t> eTags= elementTags[i];
+	    const size_t numElemOfType= eTags.size();
+	    std::string elementName= "";
+	    int dim= 0;
+	    int order= 0;
+	    int numNodes= 0;
+	    std::vector<double> localNodeCoord;
+	    int numPrimaryNodes= 0;
+	    gmsh::model::mesh::getElementProperties(elementTypes[i], elementName, dim, order, numNodes, localNodeCoord, numPrimaryNodes);
+	    if(numNodes>2) // Quads and triangles.
 	      {
-		std::vector<std::size_t> eNodeTags= elementNodeTags[i];
-		size_t k= j*numNodes;
-		std::vector<int> quad(4);
-		for(int l= 0;l<numNodes;l++)
+		if(verbosity>4)
+		  std::clog << "Creating elements of entity: '"
+			    << getName() << "'...";   
+		for(size_t j= 0;j<numElemOfType;j++)
 		  {
-		    const int gmshTag= eNodeTags[k+l];
-		    const Node *nPtr= nodeMap.at(gmshTag);
-		    quad[l]= nPtr->getTag();
+		    std::vector<std::size_t> eNodeTags= elementNodeTags[i];
+		    size_t k= j*numNodes;
+		    std::vector<int> quad(4);
+		    for(int l= 0;l<numNodes;l++)
+		      {
+			const int gmshTag= eNodeTags[k+l];
+			const Node *nPtr= nodeMap.at(gmshTag);
+			quad[l]= nPtr->getTag();
+		      }
+		    if(numNodes==3)
+		      quad[3]= quad[2];
+		    quads.push_back(quad);
 		  }
-		if(numNodes==3)
-		  quad[3]= quad[2];
-		quads.push_back(quad);
 	      }
 	  }
+	retval= create_elements_from_quads(quads);
+	if(verbosity>4)
+	  std::clog << "created." << std::endl;
       }
-    retval= create_elements_from_quads(quads);
-    if(verbosity>4)
-      std::clog << "created." << std::endl;
     return retval;
   }
 
@@ -696,7 +694,7 @@ void XC::PolygonalFace::gen_mesh_gmsh(meshing_dir dm)
       gmsh::fltk::run(); // Display mesh for debugging.
 
     // Extract mesh data.
-    std::map<int, const Node *> mapNodes= create_nodes_from_gmsh();
+    const std::map<int, const Node *> mapNodes= create_nodes_from_gmsh();
     const int numElements= create_elements_from_gmsh(mapNodes);
     
     // This should be called when you are done using the Gmsh C++ API:

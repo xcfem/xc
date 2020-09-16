@@ -222,8 +222,9 @@ class RectangularBasePlate(object):
         for p2d in contour:
             points.append(geom.Pos3d(p2d.x, p2d.y, 0.0))
         blk= retval.blockFromPoints(points, labels, thickness= self.t, matId= self.steel.name)
-        holeLabels= ['holes']+labels
-        blk.holes= self.anchorGroup.getBlocks(self.getLocalRefSys(), holeLabels)
+        ownerId= 'hole_owr_f'+str(blk.id) # Hole owner.
+        holeLabels= labels+['holes',ownerId]
+        blk.holes= self.anchorGroup.getHoleBlocks(self.getLocalRefSys(), holeLabels)
         retval.extend(blk.holes)
         return retval
 

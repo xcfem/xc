@@ -15,7 +15,7 @@ kip2N= 4448.2216
 import math
 from materials.astm_aisc import ASTM_materials
 
-bolt= ASTM_materials.BoltFastener(0.75*in2m, group= 'A')
+bolt= ASTM_materials.BoltFastener(0.75*in2m, steelType= ASTM_materials.A325) # group A
 boltArray= ASTM_materials.BoltArray(bolt, nRows= 2, nCols= 2)
 boltedPlate= ASTM_materials.BoltedPlate(boltArray, thickness= 20e-3, steelType= ASTM_materials.A36)
 

@@ -120,7 +120,7 @@ int XC::Paver::call_paving(const Ref2d3d &ref,const Polygon3d &extContour, const
 	int nv= ext.GetNumVertices();
 	for(int i= 1; i<=nv; i++, vertexCounter++)
 	  {
-	    Pos2d p= ref.GetPosLocal(ext.Vertice(i));
+	    const Pos2d p= ref.GetPosLocal(ext.Vertice(i));
 	    x[vertexCounter-1]= p.x();
 	    y[vertexCounter-1]= p.y();
 	    z[vertexCounter-1]= 0.0;

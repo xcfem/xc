@@ -65,14 +65,19 @@ class ASTMSteel(steel_base.BasicSteel):
             name= dct['name']
             if(name): self.name= name
 
-A36= ASTMSteel('A36', 250e6,400e6,1.0)
-A529= ASTMSteel('A529', 290e6,414e6,1.0)
-A572= ASTMSteel('A572', 345e6,450e6,1.0)
-A53= ASTMSteel('A53', 240e6,414e6,1.0)
-A992= ASTMSteel('A992', 345e6,450e6,1.0)
-A500= ASTMSteel('A500', 315e6,400e6,1.0)
-A307= ASTMSteel('A307', 245e6,390e6,1.0)
-A325= ASTMSteel('A325', 660e6,830e6,1.0)
+A36= ASTMSteel('A36', fy= 250e6, fu=400e6, gammaM= 1.0)
+A529= ASTMSteel('A529', fy=290e6, fu=414e6, gammaM= 1.0)
+A572= ASTMSteel('A572', fy=345e6, fu=450e6, gammaM= 1.0)
+A53= ASTMSteel('A53', fy=240e6, fu=414e6, gammaM= 1.0)
+A992= ASTMSteel('A992', fy=345e6, fu=450e6, gammaM= 1.0)
+A500= ASTMSteel('A500', fy=315e6, fu=400e6, gammaM= 1.0)
+A307= ASTMSteel('A307', fy=245e6, fu=390e6, gammaM= 1.0)
+A325= ASTMSteel('A325', fy=660e6, fu= 830e6, gammaM= 1.0)
+
+ksi= 6.89475908677537e6
+A354BC= ASTMSteel('A354BC', fy=109*ksi, fu= 125*ksi, gammaM= 1.0)
+A354BD= ASTMSteel('A354BD', fy=115*ksi, fu= 140*ksi, gammaM= 1.0) # Higher values for bolts under 2.5 in.
+A490= ASTMSteel('A490', fy=940e6, fu= 1040e6, gammaM= 1.0)
 
 def getFilletWeldMinimumLeg(t):
     '''
@@ -185,9 +190,17 @@ class BoltBase(object):
         
     def getHoleBlock(self, refSys= geom.Ref3d3d(), labels= []):
         ''' Return and octagon inscribed in the hole.'''
-        octagon= self.getHoleAsPolygon(refSys, nSides= 8).getVertexList()
         retval= bte.BlockData()
-        retval.blockFromPoints(octagon,labels)
+        # Hole vertices.
+        octagon= self.getHoleAsPolygon(refSys, nSides= 8).getVertexList()
+        blk= retval.blockFromPoints(octagon,labels)
+        # Hole center.
+        ownerId= 'hole_center_owr_f'+str(blk.id) # Hole center owner.
+        diameterLabel= 'diam_'+str(self.diameter)
+        materialLabel= 'mat_'+str(self.steelType.name)
+        centerLabels= labels+['hole_centers',ownerId, diameterLabel, materialLabel]
+        center3d= self.pos3d
+        retval.appendPoint(-1, center3d.x, center3d.y, center3d.z, labels= centerLabels)        
         return retval
     
     def report(self, outputFile):
@@ -198,8 +211,7 @@ class BoltBase(object):
 class BoltFastener(BoltBase):
     ''' ASTM bolt according to chapter J of AISC 360-16.
 
-    :ivar group: bolt material strength group according to section
-                 J3.1 of AISC 360-16.
+    :ivar group: 
     '''
     # See table J3.4 M of AISC 360-16.
     bf_diams= [16e-3, 20e-3, 22e-3, 24e-3, 27e-3, 30e-3, 36e-3]
@@ -210,17 +222,32 @@ class BoltFastener(BoltBase):
     oversizeHoleDia= [20e-3, 24e-3, 28e-3, 30e-3, 35e-3, 38e-3]
     fStandardHoleDia= scipy.interpolate.interp1d(bf_diams[:-1], standardHoleDia)
     fOversizeHoleDia= scipy.interpolate.interp1d(bf_diams[:-1], oversizeHoleDia)
-    def __init__(self, diameter, group= 'A', pos3d= None):
+    groupA= ['A325', 'A325M', 'A354BC']
+    groupB= ['A490', 'A490M', 'A354BD']
+    groupC= ['F3043', 'F3111']
+    
+    def __init__(self, diameter, steelType= A307, pos3d= None):
        ''' Constructor.
 
        :param diameter: bolt diameter.
-       :param group: bolt material strength group according to section
-                     J3.1 of AISC 360-16.
+       :param steelType: bolt steel type.
        :param pos3d: bolt position.
        '''
        super(BoltFastener,self).__init__(diameter, pos3d)
-       self.group= group
-    
+       self.steelType= steelType
+
+    def getGroup(self):
+        ''' Return the bolt material strength group according to section
+                 J3.1 of AISC 360-16.'''
+        retval= None
+        if(self.steelType.name in self.groupA):
+            retval= 'A'
+        elif(self.steelType.name in self.groupB):
+            retval= 'B'
+        elif(self.steelType.name in self.groupC):
+            retval= 'C'
+        return retval
+            
     def getMinDistanceBetweenCenters(self):
         ''' Return the minimum distance between centers of standard, 
             oversized or slotted holes according to section J3.3 of
@@ -265,16 +292,19 @@ class BoltFastener(BoltBase):
             to table J3.2 of AISC 360-16.
         '''
         retval= self.getArea()
-        if(self.group=='A307'):
-            retval*= 310e6
-        elif(self.group=='A'):
-            retval*= 620e6
-        elif(self.group=='B'):
-            retval*= 780e6
-        elif(self.group=='C'):
-            retval*= 1040e6
+        group= self.getGroup()
+        if(group):
+            if(group=='A'):
+                retval*= 620e6
+            elif(group=='B'):
+                retval*= 780e6
+            elif(group=='C'):
+                retval*= 1040e6
         else:
-            lmsg.error('Unknown strength group: \''+self.group+'.\n')
+            if(self.steelType.name=='A307'):
+                retval*= 310e6
+            else:
+                retval*= 0.75*steelType.fu
         return retval
             
     def getDesignTensileStrength(self):
@@ -291,25 +321,31 @@ class BoltFastener(BoltBase):
                                 shank are excluded from the shear plane.
         '''
         retval= self.getArea()
-        if(self.group=='A307'):
-            retval*= 186e6
-        elif(self.group=='A'):
-            if(threadsExcluded):
-                retval*= 469e6
-            else:
-                retval*= 372e6
-        elif(self.group=='B'):
-            if(threadsExcluded):
-                retval*= 579e6
-            else:
-                retval*= 469e6
-        elif(self.group=='C'):
-            if(threadsExcluded):
-                retval*= 779e6
-            else:
-                retval*= 620e6
+        group= self.getGroup()
+        if(group):
+            if(group=='A'):
+                if(threadsExcluded):
+                    retval*= 469e6
+                else:
+                    retval*= 372e6
+            elif(group=='B'):
+                if(threadsExcluded):
+                    retval*= 579e6
+                else:
+                    retval*= 469e6
+            elif(group=='C'):
+                if(threadsExcluded):
+                    retval*= 779e6
+                else:
+                    retval*= 620e6
         else:
-            lmsg.error('Unknown strength group: \''+self.group+'.\n')
+            if(self.steelType.name=='A307'):
+                retval*= 186e6
+            else:
+                if(threadsExcluded):
+                    retval*= 0.563*steelType.fu
+                else:
+                    retval*= 0.45*steelType.fu
         return retval
 
     def getDesignShearStrength(self, threadsExcluded= False):
@@ -327,18 +363,21 @@ class BoltFastener(BoltBase):
     def getDict(self):
         ''' Put member values in a dictionary.'''
         retval= super(BoltFastener,self).getDict()
-        retval.update({'group':self.group})
+        steelTypeClassName= str(self.steelType.__class__)[8:-2]
+        retval.update({'steelTypeClassName':steelTypeClassName, 'steelType':self.steelType.getDict()})
         return retval
 
     def setFromDict(self,dct):
         ''' Read member values from a dictionary.'''
         super(BoltFastener,self).setFromDict(dct)
-        self.group= dct['group']
+        steelTypeClassName= dct['steelTypeClassName']+'()'
+        self.steelType= eval(steelTypeClassName)
+        self.steelType.setFromDict(dct['steelType'])
 
     def report(self, outputFile):
         ''' Reports bolt design values.'''
         super(BoltFastener,self).report(outputFile)
-        outputFile.write('      group: '+self.group+'\n')
+        outputFile.write('      steel: '+self.steelType.name+'\n')
 
 M16= BoltFastener(16e-3)
 M20= BoltFastener(20e-3)
@@ -625,8 +664,8 @@ class AnchorGroup(object):
         retval*=4.4482216 # pounds to Newtons
         return retval
     
-    def getBlocks(self, refSys, labels):
-        ''' Return the block decomposition of the base plate.'''
+    def getHoleBlocks(self, refSys, labels):
+        ''' Return octagons inscribed in the holes.'''
         retval= bte.BlockData()
         for anchor in self.anchors:
             retval.extend(anchor.getHoleBlock(refSys, labels))
