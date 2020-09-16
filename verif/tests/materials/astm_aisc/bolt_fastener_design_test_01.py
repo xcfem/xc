@@ -16,7 +16,7 @@ import math
 from materials.astm_aisc import ASTM_materials
 
 
-bolt= ASTM_materials.BoltFastener(0.75*in2m, group= 'A')
+bolt= ASTM_materials.BoltFastener(0.75*in2m, steelType= ASTM_materials.A325) # group A
 designShearStrength= 2.0*bolt.getDesignShearStrength() # double shear
 designShearStrengthRef= 159.042810002e3 #31.8*kip2N
 ratio1= abs(designShearStrength-designShearStrengthRef)/designShearStrengthRef

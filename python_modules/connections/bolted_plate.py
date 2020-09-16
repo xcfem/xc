@@ -128,15 +128,24 @@ class BoltArrayBase(object):
         for pLocal in localPos:
             circle= geom.Circle2d(pLocal,self.bolt.diameter/2.0)
             octagon= circle.getInscribedPolygon(8,0.0).getVertexList()
-            holes.append(octagon)
+            holes.append((pLocal,octagon))
         retval= bte.BlockData()
         # Base points (A)
         for h in holes:
+            # Hole vertices.
             holeVertices= list()
-            for v in h:
+            for v in h[1]:
                 p3d= geom.Pos3d(v.x,v.y,0.0)
                 holeVertices.append(refSys.getPosGlobal(p3d))
-            retval.blockFromPoints(holeVertices,labels)
+            blk= retval.blockFromPoints(holeVertices,labels)
+            # Hole center.
+            ownerId= 'hole_center_owr_f'+str(blk.id) # Hole center owner.
+            diameterLabel= 'diam_'+str(self.bolt.diameter)
+            materialLabel= 'mat_'+str(self.bolt.steelType.name)
+            centerLabels= labels+['hole_centers',ownerId, diameterLabel, materialLabel]
+            center= h[0]
+            center3d= refSys.getPosGlobal(geom.Pos3d(center.x, center.y, 0.0))
+            retval.appendPoint(-1, center3d.x, center3d.y, center3d.z, labels= centerLabels)
         return retval
                     
     def getPositions(self, refSys= geom.Ref3d3d()):
@@ -323,13 +332,8 @@ class BoltedPlateBase(object):
         # Get the plate contour
         contourVertices= self.getContour(refSys)
         blk=  retval.blockFromPoints(contourVertices,labels, thickness= self.thickness, matId= self.steelType.name)
-        # Get the bolt centers for the new plate.
-        boltPositions= self.boltArray.getPositions(refSys)
-        for pos in boltPositions:
-            posLabels= labels+ ['hole_centers']
-            retval.appendPoint(-1, pos.x, pos.y, pos.z, labels= posLabels)
         # Get the hole blocks for the new plate
-        ownerId= 'owr_'+str(blk.id) # Hole owner.
+        ownerId= 'hole_owr_f'+str(blk.id) # Hole owner.
         holeLabels= labels+['holes',ownerId]
         blk.holes= self.boltArray.getHoleBlocks(refSys,holeLabels)
         retval.extend(blk.holes)

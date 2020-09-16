@@ -114,12 +114,8 @@ class GussetPlate(object):
         if(lbls):
             labels.extend(lbls)
         blk= retval.blockFromPoints(self.contour, labels= labels, thickness= self.boltedPlateTemplate.thickness, matId= self.boltedPlateTemplate.steelType.name)
-        boltPositions= self.getBoltPositions()
-        for pos in boltPositions:
-            posLabels= labels+ ['hole_centers']
-            retval.appendPoint(-1, pos.x, pos.y, pos.z, labels= posLabels)
         # Get the hole blocks for the new plate
-        ownerId= 'owr_'+str(blk.id) # Hole owner.
+        ownerId= 'hole_owr_f'+str(blk.id) # Hole owner.
         holeLabels= labels+['holes',ownerId]
         boltRefSys= self.getBoltRefSys()
         blk.holes= self.boltedPlateTemplate.boltArray.getHoleBlocks(boltRefSys,holeLabels)
