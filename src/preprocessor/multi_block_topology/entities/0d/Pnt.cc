@@ -109,6 +109,23 @@ boost::python::list XC::Pnt::getConnectedEdgesTags(void) const
     return retval;
   }
 
+boost::python::list XC::Pnt::getConnectedEdgesPy(void)
+  {
+    boost::python::list retval;
+    if(!lines_pt.empty())
+      {
+        std::set<const Edge *>::const_iterator i= lines_pt.begin();
+        for(;i!=lines_pt.end();i++)
+          {
+            const Edge *tmp= *i;
+	    boost::python::object pyObj(boost::ref(*tmp));
+	    retval.append(pyObj);
+          }
+      }
+    return retval;
+  }
+
+
 //! @brief Return the lines that start o finish in this point.
 std::set<const XC::Edge *> XC::Pnt::getEdgesThatEndOnThisPoint(void) const
   {

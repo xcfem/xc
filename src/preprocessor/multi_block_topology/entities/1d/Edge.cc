@@ -758,5 +758,35 @@ XC::ID XC::Edge::getKPoints(void) const
     return retval;
   }
 
+//! @brief Return the vertices.
+std::deque<XC::Pnt *> XC::Edge::getVertices(void)
+  {
+    std::deque<Pnt *> retval(2);
+    retval[0]= P1();
+    retval[1]= P2();
+    return retval;
+  }
 
+//! @brief Return the vertices.
+std::deque<const XC::Pnt *> XC::Edge::getVertices(void) const
+  {
+    std::deque<const Pnt *> retval(2);
+    retval[0]= P1();
+    retval[1]= P2();
+    return retval;
+  }
+
+//! @brief Return the vertices in a Python list.
+boost::python::list XC::Edge::getVerticesPy(void)
+  {
+    boost::python::list retval;
+    std::deque<Pnt *> tmp= getVertices();
+    for(std::deque<Pnt *>::iterator i= tmp.begin();i!=tmp.end();i++)
+      {
+	Pnt *tmp= *i;
+	boost::python::object pyObj(boost::ref(*tmp));
+	retval.append(pyObj);
+      }
+    return retval;
+  }
 

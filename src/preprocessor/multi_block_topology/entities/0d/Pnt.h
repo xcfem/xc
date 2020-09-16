@@ -93,6 +93,7 @@ class Pnt: public EntMdlr
     const std::set<const Edge *> &getConnectedEdges(void) const
       { return lines_pt; }
     boost::python::list getConnectedEdgesTags(void) const;
+    boost::python::list getConnectedEdgesPy(void);
 
     //! @brief Return the number of connected edges.
     const size_t getNLines(void) const

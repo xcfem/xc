@@ -82,6 +82,9 @@ class Edge: public EntMdlr
     virtual const Pnt *getVertex(const size_t &i) const= 0;
     virtual void SetVertice(const size_t &,Pnt *)= 0;
     std::vector<int> getIndicesVertices(void) const;
+    virtual std::deque<Pnt *> getVertices(void);
+    virtual std::deque<const Pnt *> getVertices(void) const;
+    boost::python::list getVerticesPy(void);
     virtual ID getKPoints(void) const;
     virtual std::deque<Segment3d> getSegments(void) const;
     virtual Pos3dArray get_positions(void) const= 0;
