@@ -225,11 +225,11 @@ class CellDict(dict):
     def writeToXCFile(self,f,xcImportExportData):
         '''Write the XC commands that define the cells (elements).'''
         for key in self:
-          cell= self[key]
-          type= xcImportExportData.convertCellType(cell.cellType)
-          if(type!=None):
-            strCommand= self[key].getStrXCCommand(xcImportExportData)
-            f.write(strCommand+'\n')
+            cell= self[key]
+            type= xcImportExportData.convertCellType(cell.cellType)
+            if(type!=None):
+                strCommand= self[key].getStrXCCommand(xcImportExportData)
+                f.write(strCommand+'\n')
     def getTags(self):
         retval= list()
         for key in self:

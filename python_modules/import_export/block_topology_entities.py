@@ -37,7 +37,7 @@ class PointRecord(me.NodeRecord):
         return 'pt' + strId + '= ' + pointHandlerName + strCommand
 
 class PointDict(me.NodeDict):
-    ''' Node container.'''
+    ''' Point container.'''
     def append(self,id,x,y,z):
         pr= PointRecord(int(id),[x,y,z])
         self[pr.id]= pr
@@ -51,15 +51,20 @@ class PointDict(me.NodeDict):
         for p in pointSet:
             pos= p.getPos
             self.append(p.tag, pos.x, pos.y, pos.z)
+            
     def writeToXCFile(self,f,xcImportExportData):
         ''' Write the XC commands that define nodes.'''
+        strDict= ''
         for key in self:
             strCommand= self[key].getStrXCCommand(xcImportExportData.pointHandlerName)
             f.write(strCommand+'\n')
-            if(self.labels):
-                pointName= strCommand.split('= ')[0]
-                strCommand= pointName+'.setProp("labels",'+str(self.labels)+')'
-                f.write(strCommand+'\n')
+            pointName= strCommand.split('= ')[0]
+            pointId= pointName[2:]
+            strDict+= pointId+':'+pointName+','
+        # Write a dictionary to access those points from its id.
+        f.write('\n')
+        f.write('xcPointsDict= {'+strDict[:-1]+'}\n\n')
+            
 
 class BlockRecord(me.CellRecord):
     '''Block type entities: line, face, body,...'''    
@@ -175,12 +180,17 @@ class BlockDict(dict):
 
     def writeToXCFile(self,f,xcImportExportData):
         '''Write the XC commands that define the cells (elements).'''
+        strDict= ''
         for key in self:
-            cell= self[key]
-            type= xcImportExportData.convertCellType(cell.cellType)
-            if(type!=None):
-                strCommand= self[key].getStrXCCommand(xcImportExportData)
-                f.write(strCommand+'\n')
+            block= self[key]
+            strCommand= self[key].getStrXCCommand(xcImportExportData)
+            f.write(strCommand+'\n')
+            blockName= strCommand.split('= ')[0]
+            blockId= blockName[1:]
+            strDict+= blockId+':'+blockName+','
+        # Write a dictionary to access those blocks from its id.
+        f.write('\n')
+        f.write('xcBlocksDict= {'+strDict[:-1]+'}\n\n')
           
     def getTags(self):
         ''' Return the identifiers of the objects.'''
@@ -345,13 +355,8 @@ class BlockData(object):
         f= xcImportExportData.outputFile
         if(hasattr(self,'logMessage')): # not a very elegant solution.
             f.write(self.logMessage+'\n')
-        for key in self.points:
-            strCommand= self.points[key].getStrXCCommand(xcImportExportData.pointHandlerName)
-            f.write(strCommand+'\n')
-        for key in self.blocks:
-            block= self.blocks[key]
-            strCommand= block.getStrXCCommand(xcImportExportData)
-            f.write(strCommand+'\n')
+        self.points.writeToXCFile(f,xcImportExportData)
+        self.blocks.writeToXCFile(f,xcImportExportData)
         f.close()
 
     def getPointTags(self):
