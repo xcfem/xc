@@ -200,7 +200,7 @@ class BoltBase(object):
         materialLabel= 'mat_'+str(self.steelType.name)
         centerLabelsB= labels+['hole_centers', diameterLabel, materialLabel]
         centerLabelsA= centerLabelsB+[ownerId]
-        center3d= self.pos3d
+        center3d= refSys.getPosGlobal(self.pos3d)
         pA= retval.appendPoint(-1, center3d.x, center3d.y, center3d.z, labels= centerLabelsA)        
         pB= retval.appendPoint(-1, center3d.x, center3d.y, center3d.z-10*self.diameter, labels= centerLabelsB)
         boltBlk= bte.BlockRecord(id= -1, typ= 'line', kPoints= [pA, pB])
