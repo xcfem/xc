@@ -198,10 +198,11 @@ class BoltBase(object):
         ownerId= 'hole_center_owr_f'+str(blk.id) # Hole center owner.
         diameterLabel= 'diam_'+str(self.diameter)
         materialLabel= 'mat_'+str(self.steelType.name)
-        centerLabels= labels+['hole_centers',ownerId, diameterLabel, materialLabel]
+        centerLabelsB= labels+['hole_centers', diameterLabel, materialLabel]
+        centerLabelsA= centerLabelsB+[ownerId]
         center3d= self.pos3d
-        pA= retval.appendPoint(-1, center3d.x, center3d.y, center3d.z, labels= centerLabels)        
-        pB= retval.appendPoint(-1, center3d.x, center3d.y, center3d.z-10*self.diameter, labels= centerLabels)
+        pA= retval.appendPoint(-1, center3d.x, center3d.y, center3d.z, labels= centerLabelsA)        
+        pB= retval.appendPoint(-1, center3d.x, center3d.y, center3d.z-10*self.diameter, labels= centerLabelsB)
         boltBlk= bte.BlockRecord(id= -1, typ= 'line', kPoints= [pA, pB])
         id= retval.appendBlock(boltBlk)       
         return retval
