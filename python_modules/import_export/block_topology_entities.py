@@ -67,7 +67,11 @@ class PointDict(me.NodeDict):
             
 
 class BlockRecord(me.CellRecord):
-    '''Block type entities: line, face, body,...'''    
+    '''Block type entities: line, face, body,...
+
+    :ivar labels: string list that helps to identify the role 
+                       of the block in the model.
+    '''    
     def __init__(self,id, typ, kPoints, labels= None, thk= 0.0, matId= None):
         '''
         Block record constructor.
@@ -89,7 +93,11 @@ class BlockRecord(me.CellRecord):
             self.matId= matId
         else:
             self.matId= None
-            
+
+    def getKPointIds(self):
+        ''' Return the key points identifiers of the block.'''
+        return self.nodeIds
+    
     def getType(self):
         '''Return the type of the block.'''
         return self.cellType
@@ -284,7 +292,12 @@ class BlockData(object):
         pointIds= list()
         for p in points:
             pointIds.append(self.appendPoint(-1, p.x, p.y, p.z, labels))
-        block= BlockRecord(-1, 'face', pointIds,labels, thk= thickness, matId= matId)
+        if(len(pointIds)>2):
+            block= BlockRecord(-1, 'face', pointIds, labels, thk= thickness, matId= matId)
+        elif(len(pointIds)>1):
+            block= BlockRecord(-1, 'line', pointIds, labels, thk= thickness, matId= matId)
+        else:
+            lmsg.error('At least 2 points required.')
         self.appendBlock(block)
         return block
     

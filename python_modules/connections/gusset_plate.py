@@ -103,6 +103,14 @@ class GussetPlate(object):
         boltRefSys= self.getBoltRefSys()
         return self.boltedPlateTemplate.boltArray.getPositions(boltRefSys)
 
+    def getWeldLinesIndexes(self):
+        ''' Return the indexes of the points in the contour
+            that define the lines that must be welded to the structure.'''
+        retval= list()
+        retval.append((1, 2))
+        retval.append((2, 3))
+        return retval
+
     def getBlocks(self, lbls= None):
         ''' Return the blocks that define the gusset for the
             diagonal argument.
@@ -114,10 +122,20 @@ class GussetPlate(object):
         if(lbls):
             labels.extend(lbls)
         blk= retval.blockFromPoints(self.contour, labels= labels, thickness= self.boltedPlateTemplate.thickness, matId= self.boltedPlateTemplate.steelType.name)
+        ownerId= 'owr_f'+str(blk.id) # owner identifier.
         # Get the hole blocks for the new plate
-        ownerId= 'hole_owr_f'+str(blk.id) # Hole owner.
-        holeLabels= labels+['holes',ownerId]
+        holeOwnerId= 'hole_'+ownerId # Hole owner id.
+        holeLabels= labels+['holes',holeOwnerId]
         boltRefSys= self.getBoltRefSys()
         blk.holes= self.boltedPlateTemplate.boltArray.getHoleBlocks(boltRefSys,holeLabels)
         retval.extend(blk.holes)
+        weldOwnerId= 'weld_'+ownerId # Hole owner id.
+        weldLabels= labels+['welds',weldOwnerId]
+        weldLinesIndexes= self.getWeldLinesIndexes()
+        kPointIds= blk.getKPointIds()
+        for l in weldLinesIndexes:
+            pA= kPointIds[l[0]]
+            pB= kPointIds[l[1]]
+            weldBlk= bte.BlockRecord(id= -1, typ= 'line', kPoints= [pA, pB], labels= weldLabels, thk= None)
+            retval.appendBlock(weldBlk)
         return retval
