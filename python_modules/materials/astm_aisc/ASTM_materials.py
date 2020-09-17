@@ -308,7 +308,7 @@ class BoltFastener(BoltBase):
             if(self.steelType.name=='A307'):
                 retval*= 310e6
             else:
-                retval*= 0.75*steelType.fu
+                retval*= 0.75*self.steelType.fu
         return retval
             
     def getDesignTensileStrength(self):
@@ -347,9 +347,9 @@ class BoltFastener(BoltBase):
                 retval*= 186e6
             else:
                 if(threadsExcluded):
-                    retval*= 0.563*steelType.fu
+                    retval*= 0.563*self.steelType.fu
                 else:
-                    retval*= 0.45*steelType.fu
+                    retval*= 0.45*self.steelType.fu
         return retval
 
     def getDesignShearStrength(self, threadsExcluded= False):
