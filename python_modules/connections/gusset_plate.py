@@ -129,7 +129,7 @@ class GussetPlate(object):
         boltRefSys= self.getBoltRefSys()
         blk.holes= self.boltedPlateTemplate.boltArray.getHoleBlocks(boltRefSys,holeLabels)
         retval.extend(blk.holes)
-        weldOwnerId= 'weld_'+ownerId # Hole owner id.
+        weldOwnerId= 'weld_'+ownerId # weld owner id.
         weldLabels= labels+['welds',weldOwnerId]
         weldLinesIndexes= self.getWeldLinesIndexes()
         kPointIds= blk.getKPointIds()
