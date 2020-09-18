@@ -542,7 +542,11 @@ Polyline3d XC::Face::getContour(void) const
 
 //! @brief Return the surface contour as a polygon.
 Polygon3d XC::Face::getPolygon(void) const
-  { return Polygon3d(getContour()); }
+  {
+    Polyline3d contour= getContour();
+    contour.pop_back(); // remove repeated vertex.
+    return Polygon3d(contour);
+  }
 
 //! @brief Returns a vector in the direction of the local
 //! Z axis.

@@ -31,6 +31,7 @@ class_<XC::Face, XC::Face *,bases<XC::CmbEdge>, boost::noncopyable >("Face", no_
   .def("setElemSizeJ",&XC::Face::SetElemSizeJ,"setElementSizeJ(sz) set the element size on the odd sides of the surface.")
   .def("setElemSizeIJ",&XC::Face::SetElemSizeIJ,"setElementSizeIJ(szI, szJ) set the element size on the even and odd sides of the surface.")
   .def("setElemSize",&XC::Face::SetElemSize,"setElementSizeJ(sz, mustBeEven) set the element size on the sides of the surface; if mustBeEven is true the number of divisions in each side is forced to the next even number.")
+  .def("getPolygon",&XC::Face::getPolygon,"Return the contour as a 3D polygon.")
    ;
 
 class_<XC::QuadSurface, XC::QuadSurface *, bases<XC::Face>, boost::noncopyable >("QuadSurface", no_init)
@@ -39,7 +40,6 @@ class_<XC::QuadSurface, XC::QuadSurface *, bases<XC::Face>, boost::noncopyable >
   .add_property("getJVector", &XC::QuadSurface::getJVector,"Return the local x vector.")
   .add_property("getKVector", &XC::QuadSurface::getKVector,"Return the local x vector.")
   .def("getLocalAxes",&XC::QuadSurface::getLocalAxes,"Return the surface local axes as matrix rows: [[x1,y1,z1],[x2,y2,z2],...·] .")
-  .def("getPolygon",&XC::QuadSurface::getPolygon,"Return the contour as a 3D polygon.")
    ;
 
 class_<XC::PolygonalFace, XC::PolygonalFace *, bases<XC::Face>, boost::noncopyable >("PolygonalFace", no_init)
