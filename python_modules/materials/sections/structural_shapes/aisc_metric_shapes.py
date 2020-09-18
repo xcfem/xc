@@ -468,6 +468,47 @@ class WShape(structural_steel.IShape):
 
         return retval
         
+    def getWeldBlockData(self, org, extrusionVDir, lbls= None):
+        ''' Return the kpoints and lines roughly corresponding to weld beads.
+
+        :param org: origin point.
+        '''
+        labels= [self.name]
+        if(lbls):
+            labels.extend(lbls)
+        halfB= self.get('b')/2.0
+        halfH= self.h()/2.0
+        tf= self.get('tf')
+        tf2= tf/2.0 # Half flange thickness.
+        retval= bte.BlockData()
+        # Base points (A)
+        bottom= org.y-halfH+tf2
+        top= org.y+halfH-tf2
+        bottomFlangeA= [geom.Pos3d(org.x-halfB,bottom, org.z), geom.Pos3d(org.x,bottom, org.z), geom.Pos3d(org.x+halfB,bottom, org.z)]
+        topFlangeA= [geom.Pos3d(org.x-halfB, top, org.z), geom.Pos3d(org.x, top, org.z), geom.Pos3d(org.x+halfB, top, org.z)]
+        bottomFlangeAId= list()
+        for p in bottomFlangeA:
+            bottomFlangeAId.append(retval.appendPoint(-1,p.x,p.y,p.z,labels))
+        topFlangeAId= list()
+        for p in topFlangeA:
+            topFlangeAId.append(retval.appendPoint(-1,p.x,p.y,p.z,labels))
+
+        # Lines
+        flangeLabels= labels+['flange']
+        bottomFlange1= bte.BlockRecord(-1, 'line', [bottomFlangeAId[0],bottomFlangeAId[1]],labels= flangeLabels, thk= None, matId= self.steelType.name)
+        retval.appendBlock(bottomFlange1)
+        bottomFlange2= bte.BlockRecord(-1, 'line', [bottomFlangeAId[1],bottomFlangeAId[2]],labels= flangeLabels, thk= None, matId= self.steelType.name)
+        retval.appendBlock(bottomFlange2)
+        topFlange1= bte.BlockRecord(-1, 'line', [topFlangeAId[0],topFlangeAId[1]],labels= flangeLabels, thk= None, matId= self.steelType.name)
+        retval.appendBlock(topFlange1)
+        topFlange2= bte.BlockRecord(-1, 'line', [topFlangeAId[1],topFlangeAId[2]],labels= flangeLabels, thk= None, matId= self.steelType.name)
+        retval.appendBlock(topFlange2)
+        webLabels= labels+['web']
+        web= bte.BlockRecord(-1, 'line', [bottomFlangeAId[1],topFlangeAId[1]],labels= webLabels, thk= None, matId= self.steelType.name)
+        retval.appendBlock(web)
+
+        return retval
+        
 
         
 
