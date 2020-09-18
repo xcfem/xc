@@ -414,7 +414,32 @@ class WShape(structural_steel.IShape):
         p1= geom.Pos3d(org.x+halfB,org.y+top, org.z)
         p2= p0+extrusionVDir
         return geom.Plane3d(p0,p1,p2)
-            
+
+    def getMidPoints(self, org, extrusionVDir):
+        ''' Return the points at the middle of the
+            plates.
+
+        :param org: origin point.
+        :param extrusionVDir: extrusion direction vector.
+        '''
+        halfB= self.get('b')/2.0
+        halfH= self.h()/2.0
+        tf= self.get('tf')
+        tf2= tf/2.0 # Half flange thickness.
+        # Base points (Down)
+        bottom= org.y-halfH+tf2
+        top= org.y+halfH-tf2
+        bottomFlangeDown= [geom.Pos3d(org.x-halfB,bottom, org.z), geom.Pos3d(org.x,bottom, org.z), geom.Pos3d(org.x+halfB,bottom, org.z)]
+        topFlangeDown= [geom.Pos3d(org.x-halfB, top, org.z), geom.Pos3d(org.x, top, org.z), geom.Pos3d(org.x+halfB, top, org.z)]
+        # Extruded points (Up)
+        bottomFlangeUp= list()
+        for p in bottomFlangeDown:
+            bottomFlangeUp.append(p+extrusionVDir)
+        topFlangeUp= list()
+        for p in topFlangeDown:
+            topFlangeUp.append(p+extrusionVDir)
+        return {'bottomFlangeDown':bottomFlangeDown,'topFlangeDown':topFlangeDown,'bottomFlangeUp':bottomFlangeUp,'topFlangeUp':topFlangeUp}
+                
     def getBlockData(self, org, extrusionVDir, lbls= None):
         ''' Return the kpoints and faces.
 
@@ -425,92 +450,62 @@ class WShape(structural_steel.IShape):
         labels= [self.name]
         if(lbls):
             labels.extend(lbls)
-        halfB= self.get('b')/2.0
-        halfH= self.h()/2.0
-        tf= self.get('tf')
-        tf2= tf/2.0 # Half flange thickness.
+        midPoints= self.getMidPoints(org, extrusionVDir)
         retval= bte.BlockData()
         # Base points (A)
-        bottom= org.y-halfH+tf2
-        top= org.y+halfH-tf2
-        bottomFlangeA= [geom.Pos3d(org.x-halfB,bottom, org.z), geom.Pos3d(org.x,bottom, org.z), geom.Pos3d(org.x+halfB,bottom, org.z)]
-        topFlangeA= [geom.Pos3d(org.x-halfB, top, org.z), geom.Pos3d(org.x, top, org.z), geom.Pos3d(org.x+halfB, top, org.z)]
-        bottomFlangeAId= list()
+        bottomFlangeA= midPoints['bottomFlangeDown']
+        topFlangeA= midPoints['topFlangeDown']
+        bottomFlangeB= midPoints['bottomFlangeUp']
+        topFlangeB= midPoints['topFlangeUp']
+        self.bottomFlangeAId= list() # Dirty solution I know (LCPT)
         for p in bottomFlangeA:
-            bottomFlangeAId.append(retval.appendPoint(-1,p.x,p.y,p.z,labels))
-        topFlangeAId= list()
+            self.bottomFlangeAId.append(retval.appendPoint(-1,p.x,p.y,p.z,labels))
+        self.topFlangeAId= list()
         for p in topFlangeA:
-            topFlangeAId.append(retval.appendPoint(-1,p.x,p.y,p.z,labels))
+            self.topFlangeAId.append(retval.appendPoint(-1,p.x,p.y,p.z,labels))
         # Extruded points (B)
-        bottomFlangeB= list()
-        for p in bottomFlangeA:
-            bottomFlangeB.append(p+extrusionVDir)
-        topFlangeB= list()
-        for p in topFlangeA:
-            topFlangeB.append(p+extrusionVDir)
-        bottomFlangeBId= list()
+        self.bottomFlangeBId= list()
         for p in bottomFlangeB:
-            bottomFlangeBId.append(retval.appendPoint(-1,p.x,p.y,p.z,labels))
-        topFlangeBId= list()
+            self.bottomFlangeBId.append(retval.appendPoint(-1,p.x,p.y,p.z,labels))
+        self.topFlangeBId= list()
         for p in topFlangeB:
-            topFlangeBId.append(retval.appendPoint(-1,p.x,p.y,p.z,labels))
+            self.topFlangeBId.append(retval.appendPoint(-1,p.x,p.y,p.z,labels))
         # Faces
-        bottomFlange1= bte.BlockRecord(-1, 'face', [bottomFlangeAId[0],bottomFlangeAId[1],bottomFlangeBId[1],bottomFlangeBId[0]],labels, thk= tf, matId= self.steelType.name)
+        tf= self.get('tf')
+        bottomFlange1= bte.BlockRecord(-1, 'face', [self.bottomFlangeAId[0],self.bottomFlangeAId[1],self.bottomFlangeBId[1],self.bottomFlangeBId[0]],labels+['bottom_flange1'], thk= tf, matId= self.steelType.name)
         retval.appendBlock(bottomFlange1)
-        bottomFlange2= bte.BlockRecord(-1, 'face', [bottomFlangeAId[1],bottomFlangeAId[2],bottomFlangeBId[2],bottomFlangeBId[1]],labels, thk= tf, matId= self.steelType.name)
+        bottomFlange2= bte.BlockRecord(-1, 'face', [self.bottomFlangeAId[1],self.bottomFlangeAId[2],self.bottomFlangeBId[2],self.bottomFlangeBId[1]],labels+['bottom_flange2'], thk= tf, matId= self.steelType.name)
         retval.appendBlock(bottomFlange2)
-        topFlange1= bte.BlockRecord(-1, 'face', [topFlangeAId[0],topFlangeAId[1],topFlangeBId[1],topFlangeBId[0]],labels, thk= tf, matId= self.steelType.name)
+        topFlange1= bte.BlockRecord(-1, 'face', [self.topFlangeAId[0],self.topFlangeAId[1],self.topFlangeBId[1],self.topFlangeBId[0]],labels+['top_flange1'], thk= tf, matId= self.steelType.name)
         retval.appendBlock(topFlange1)
-        topFlange2= bte.BlockRecord(-1, 'face', [topFlangeAId[1],topFlangeAId[2],topFlangeBId[2],topFlangeBId[1]],labels, thk= tf, matId= self.steelType.name)
+        topFlange2= bte.BlockRecord(-1, 'face', [self.topFlangeAId[1],self.topFlangeAId[2],self.topFlangeBId[2],self.topFlangeBId[1]],labels+['top_flange2'], thk= tf, matId= self.steelType.name)
         retval.appendBlock(topFlange2)
-        web= bte.BlockRecord(-1, 'face', [bottomFlangeAId[1],topFlangeAId[1],topFlangeBId[1],bottomFlangeBId[1]],labels, thk= self.get('tw'), matId= self.steelType.name)
+        web= bte.BlockRecord(-1, 'face', [self.bottomFlangeAId[1],self.topFlangeAId[1],self.topFlangeBId[1],self.bottomFlangeBId[1]],labels+['web'], thk= self.get('tw'), matId= self.steelType.name)
+        retval.faceBlocks= [bottomFlange1, bottomFlange2, topFlange1, topFlange2, web] # Dirty solution, I know (LCPT).
         retval.appendBlock(web)
 
         return retval
         
     def getWeldBlockData(self, org, extrusionVDir, lbls= None):
-        ''' Return the kpoints and lines roughly corresponding to weld beads.
+        ''' Return the lines corresponding to weld beads.
 
         :param org: origin point.
         '''
-        labels= [self.name]
-        if(lbls):
-            labels.extend(lbls)
-        halfB= self.get('b')/2.0
-        halfH= self.h()/2.0
-        tf= self.get('tf')
-        tf2= tf/2.0 # Half flange thickness.
         retval= bte.BlockData()
-        # Base points (A)
-        bottom= org.y-halfH+tf2
-        top= org.y+halfH-tf2
-        bottomFlangeA= [geom.Pos3d(org.x-halfB,bottom, org.z), geom.Pos3d(org.x,bottom, org.z), geom.Pos3d(org.x+halfB,bottom, org.z)]
-        topFlangeA= [geom.Pos3d(org.x-halfB, top, org.z), geom.Pos3d(org.x, top, org.z), geom.Pos3d(org.x+halfB, top, org.z)]
-        bottomFlangeAId= list()
-        for p in bottomFlangeA:
-            bottomFlangeAId.append(retval.appendPoint(-1,p.x,p.y,p.z,labels))
-        topFlangeAId= list()
-        for p in topFlangeA:
-            topFlangeAId.append(retval.appendPoint(-1,p.x,p.y,p.z,labels))
-
+        
         # Lines
-        flangeLabels= labels+['flange']
-        bottomFlange1= bte.BlockRecord(-1, 'line', [bottomFlangeAId[0],bottomFlangeAId[1]],labels= flangeLabels, thk= None, matId= self.steelType.name)
+        bottomFlange1= bte.BlockRecord(-1, 'line', [self.bottomFlangeAId[0],self.bottomFlangeAId[1]],labels= lbls+['bottom_flange1'], thk= None, matId= self.steelType.name)
         retval.appendBlock(bottomFlange1)
-        bottomFlange2= bte.BlockRecord(-1, 'line', [bottomFlangeAId[1],bottomFlangeAId[2]],labels= flangeLabels, thk= None, matId= self.steelType.name)
+        bottomFlange2= bte.BlockRecord(-1, 'line', [self.bottomFlangeAId[1],self.bottomFlangeAId[2]],labels= lbls+['bottom_flange2'], thk= None, matId= self.steelType.name)
         retval.appendBlock(bottomFlange2)
-        topFlange1= bte.BlockRecord(-1, 'line', [topFlangeAId[0],topFlangeAId[1]],labels= flangeLabels, thk= None, matId= self.steelType.name)
+        topFlange1= bte.BlockRecord(-1, 'line', [self.topFlangeAId[0],self.topFlangeAId[1]],labels= lbls+['top_flange1'], thk= None, matId= self.steelType.name)
         retval.appendBlock(topFlange1)
-        topFlange2= bte.BlockRecord(-1, 'line', [topFlangeAId[1],topFlangeAId[2]],labels= flangeLabels, thk= None, matId= self.steelType.name)
+        topFlange2= bte.BlockRecord(-1, 'line', [self.topFlangeAId[1],self.topFlangeAId[2]],labels= lbls+['top_flange2'], thk= None, matId= self.steelType.name)
         retval.appendBlock(topFlange2)
-        webLabels= labels+['web']
-        web= bte.BlockRecord(-1, 'line', [bottomFlangeAId[1],topFlangeAId[1]],labels= webLabels, thk= None, matId= self.steelType.name)
+        web= bte.BlockRecord(-1, 'line', [self.bottomFlangeAId[1],self.topFlangeAId[1]],labels=  lbls+['web'], thk= None, matId= self.steelType.name)
+        retval.weldBlocks= [bottomFlange1, bottomFlange2, topFlange1, topFlange2, web] # Dirty solution, I know (LCPT).
         retval.appendBlock(web)
-
-        return retval
-        
-
-        
+        return retval        
 
     def getLambdaPFlange(self):
         '''Return he limiting slenderness for a compact flange, 
