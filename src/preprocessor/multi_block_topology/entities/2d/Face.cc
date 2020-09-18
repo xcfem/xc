@@ -540,6 +540,14 @@ const XC::Pnt *XC::Face::getVertex(const size_t &i) const
 Polyline3d XC::Face::getContour(void) const
   { return getPolyline(); }
 
+//! @brief Return the plane containing the face.
+Plane XC::Face::getPlane(void) const
+  {
+    Polyline3d contour= getContour();
+    contour.pop_back(); // remove repeated vertex.
+    return Plane(contour.begin(), contour.end());
+  }
+
 //! @brief Return the surface contour as a polygon.
 Polygon3d XC::Face::getPolygon(void) const
   {

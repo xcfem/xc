@@ -96,6 +96,7 @@ class Face: public CmbEdge
       { return getNumberOfEdges(); }
     virtual const Pnt *getVertex(const size_t &i) const;
     Pos3d getCentroid(void) const;
+    Plane getPlane(void) const;
     Polyline3d getContour(void) const;
     Polygon3d getPolygon(void) const;
     double getArea(void) const;
