@@ -2014,15 +2014,24 @@ std::set<XC::Element *> XC::Node::getConnectedElements(void)
     return retval;
   }
 
-//! @brief Return a python list to the tags of the elements that
+
+//! @brief Return a python list of pointers to the elements that
 //! are connected with this node.
-//!
-//! There is no simple solution to return a list of element pointers
-//! instead of the element tags. Apparently the pointers inside the
-//! list are useless to Python. The alternative is to use a container
-//! like XC::NodePtrsWithIDs which holds the pointers inside it during
-//! its lifespan. Here we have the "connected" container but it contains
-//! all the mesh components connected to the node not only the elements.
+boost::python::list XC::Node::getConnectedElementsPy(void)
+  {
+    boost::python::list retval;
+    std::set<Element *> elements= getConnectedElements();
+    for(std::set<Element *>::iterator i= elements.begin(); i!= elements.end(); i++)
+      {
+        Element *ptrElem= *i;
+	boost::python::object pyObj(boost::ref(*ptrElem));
+	retval.append(pyObj);
+      }
+    return retval;
+  }
+
+//! @brief Return a python list containing the tags of the elements that
+//! are connected with this node.
 boost::python::list XC::Node::getConnectedElementTags(void)
   {
     boost::python::list retval;
