@@ -185,7 +185,21 @@ double XC::PlaneElement<NNODES, PhysProp>::getMaximumCornerAngle(bool initialGeo
 template <int NNODES,class PhysProp>
 Polygon3d XC::PlaneElement<NNODES, PhysProp>::getPolygon(bool initialGeometry) const
   {
-    const std::deque<Pos3d> positions= this->getPosNodes(initialGeometry);
+    const std::deque<Pos3d> tmp= this->getPosNodes(initialGeometry);
+    // Remove repeated positions (degenerated elements).
+    std::deque<Pos3d> positions;
+    std::deque<Pos3d>::const_iterator i= tmp.begin();
+    Pos3d p0= *i;
+    i++;
+    positions.push_back(p0);
+    for(;i!= tmp.end();i++)
+      {
+	Pos3d p1= *i;
+	if(dist2(p0,p1)>1e-12)
+	  positions.push_back(p1);
+	p0= p1;
+      }
+    // Repeated nodes removed (if any).
     Polygon3d retval= Polygon3d(positions.begin(),positions.end());
     const double maxAngle= getMaximumCornerAngle();
     if((PlaneElement<NNODES, PhysProp>::verbosity>1) && (abs(maxAngle-M_PI)<1e-3))
