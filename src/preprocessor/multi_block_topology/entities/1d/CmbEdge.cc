@@ -806,6 +806,20 @@ std::deque<const XC::Edge *> XC::CmbEdge::getEdges(void) const
     return retval;
   }
 
+//! @brief Return the lines that define the edges in a Python list.
+boost::python::list XC::CmbEdge::getEdgesPy(void) const
+  {
+    std::deque<const Edge *> edges= getEdges();
+    boost::python::list retval;
+    for(std::deque<const Edge *>::const_iterator i= edges.begin(); i!= edges.end(); i++)
+      {
+	const Edge *pEdge= *i;	
+        boost::python::object pyObj(boost::ref(*pEdge));
+	retval.append(pyObj);
+      }
+    return retval;
+  }
+
 //! @brief Return a pointer to the side at the position
 //! argument. If not found returns nullptr.
 std::deque<XC::CmbEdge::Side *> XC::CmbEdge::findSides(const Pos3d &pos)
