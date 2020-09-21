@@ -1,4 +1,5 @@
 from __future__ import print_function
+
 # -*- coding: utf-8 -*-
 '''Particular geometry organization, linked to a framework of spaced points, 
 usually referenced by their indices (i,j,k) that point to the global 
