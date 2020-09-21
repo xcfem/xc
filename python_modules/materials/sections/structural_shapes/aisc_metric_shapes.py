@@ -486,10 +486,10 @@ class WShape(structural_steel.IShape):
 
         return retval
         
-    def getWeldBlockData(self, org, extrusionVDir, lbls= None):
+    def getWeldBlockData(self, lbls= None):
         ''' Return the lines corresponding to weld beads.
 
-        :param org: origin point.
+        :param labels: labels for the created blocks.
         '''
         retval= bte.BlockData()
         
