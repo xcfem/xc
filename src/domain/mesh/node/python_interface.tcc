@@ -125,7 +125,8 @@ class_<XC::Node, XC::Node *, bases<XC::MeshComponent>, boost::noncopyable >("Nod
 
   .def("getNumberOfConnectedConstraints",&XC::Node::getNumberOfConnectedConstraints,"Returns the number of constraints that affect the node.")
   .def("getNumberOfConnectedElements",&XC::Node::getNumberOfConnectedElements,"Returns the number of elements connected to the node.")
-  .def("getConnectedElementTags",&XC::Node::getConnectedElementTags,"Returns the elements connected to the node.")
+  .def("getConnectedElements",&XC::Node::getConnectedElementsPy,"Returns the elements connected to the node.")
+  .def("getConnectedElementTags",&XC::Node::getConnectedElementTags,"Returns the tags of the elements connected to the node.")
 
   .def("getMaxModalDisplacement",getMaxModalDisplacement)
   .def("getMaxModalVelocity",getMaxModalVelocity)
