@@ -79,6 +79,7 @@ class_<XC::CircularArc, bases<XC::LineBase>, boost::noncopyable >("CircleArc", "
 
 XC::Edge *(XC::CmbEdge::Side::*getEdge)(void)= &XC::CmbEdge::Side::getEdge;
 class_<XC::CmbEdge::Side,bases<CommandEntity> >("Side", no_init)
+  .add_property("name", make_function(&XC::CmbEdge::Side::getName,return_value_policy<copy_const_reference>()), "return object name.")
   .add_property("isDirect", &XC::CmbEdge::Side::isDirect)
   .add_property("getEdge", make_function(getEdge, return_internal_reference<>()))
   .def("getLength", &XC::CmbEdge::Side::getLength,"Return edge's length.")
