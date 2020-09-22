@@ -545,7 +545,13 @@ Plane XC::Face::getPlane(void) const
   {
     Polyline3d contour= getContour();
     contour.pop_back(); // remove repeated vertex.
-    return Plane(contour.begin(), contour.end());
+    Plane retval= Plane(contour.begin(), contour.end());
+    const Vector3d planeNormal= retval.Normal();
+    const Vector3d thisNormal= getKVector();
+    const double tmp= (planeNormal-thisNormal).GetModulus2(); //must be zero.
+    if(tmp>1e-2) // plane is inverted.
+      retval.swap();
+    return retval;
   }
 
 //! @brief Return the surface contour as a polygon.
