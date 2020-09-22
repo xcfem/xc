@@ -25,11 +25,10 @@ modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
 nod1= nodes.newNodeXYZ(0,0.0,0.0)
 nod2= nodes.newNodeXYZ(L,0.0,0.0)
 
-
 # Constraints
 modelSpace.fixNode('000_000',nod1.tag)
 modelSpace.fixNode('F00_000',nod2.tag)
-rr= modelSpace.setHugeTrussBetweenNodes(nod1.tag,nod2.tag)
+rr= modelSpace.setHugeTrussBetweenNodes(nod1,nod2)
 
 # Loads definition
 loadHandler= preprocessor.getLoadHandler
@@ -48,7 +47,6 @@ lPatterns.addToDomain(lp0.name)
 # Solution
 analysis= predefined_solutions.simple_static_linear(feProblem)
 result= analysis.analyze(1)
-
 
 deltaX= nod2.getDisp[0]
 rr.getResistingForce()

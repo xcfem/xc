@@ -130,32 +130,32 @@ class PredefinedSpace(object):
         ''' Return the preprocessor material handler.'''
         return self.preprocessor.getLoadHandler
 
-    def newTimeSeries(self, name= 'ts', typ= 'constant_ts'):
+    def newTimeSeries(self, name= 'ts', tsType= 'constant_ts'):
         ''' Creates a times series -modulation of the load
             in time-.
 
         :param name: name of the new time series.
-        :param typ: type of the time series -constant_ts, linear_ts,
-                    path-ts, pulse_ts, rectangular_ts, triangular_ts
-                    or trig_ts-. Defaults to constant_ts.
+        :param tsType: type of the time series -constant_ts, linear_ts,
+                       path-ts, pulse_ts, rectangular_ts, triangular_ts
+                       or trig_ts-. Defaults to constant_ts.
         '''
         lPatterns= self.getLoadHandler().getLoadPatterns
-        ts= lPatterns.newTimeSeries(typ,name)
+        ts= lPatterns.newTimeSeries(tsType,name)
         lPatterns.currentTimeSeries= name
         return ts
     
-    def newLoadPattern(self, name, typ= 'default'):
+    def newLoadPattern(self, name, lpType= 'default'):
         ''' Creates a times series -modulation of the load
             in time-.
 
         :param name: name of the new time load pattern.
-        :param typ: type of the load pattern -default, uniform_excitation,
-                    multi_support_pattern, pbowl_loading-.
+        :param lpType: type of the load pattern -default, uniform_excitation,
+                       multi_support_pattern, pbowl_loading-.
         '''
         lPatterns= self.getLoadHandler().getLoadPatterns
         if(lPatterns.currentTimeSeries=='nil'):
             self.newTimeSeries()
-        lp= lPatterns.newLoadPattern(typ,name)
+        lp= lPatterns.newLoadPattern(lpType,name)
         return lp
     
     def setPrescribedDisplacements(self,nodeTag,prescDisplacements):
@@ -840,6 +840,23 @@ class StructuralMechanics2D(StructuralMechanics):
         trfs= self.preprocessor.getTransfCooHandler
         retval= trfs.newCorotCrdTransf2d(trfName)
         return retval
+    
+    def newCrdTransf(self, trfName, trfType= 'linear'):
+        ''' Creates a new 3D transformation.
+
+          :param trfName: name for the new transformation.
+          :param trfType: type of the transformation ('linear', 'p_delta' or 'corotational')
+        '''
+        retval= None
+        if(trfType=='linear'):
+            retval= self.newLinearCrdTransf(trfName)
+        elif(trfType=='p_delta'):
+            retval= self.newPDeltaCrdTransf(trfName)
+        elif(trfType=='corotational'):
+            retval= self.newCorotCrdTransf(trfName)
+        else:
+            lmsg.error('Unknown transformation type: \''+trfType+'\'')
+        return retval
 
     def fixNode000(self, nodeTag):
         '''Restrain all three node DOFs (i. e. make them zero).
@@ -1213,6 +1230,24 @@ class StructuralMechanics3D(StructuralMechanics):
         retval.xzVector= xzVector
         return retval
 
+    def newCrdTransf(self, trfName, xzVector, trfType= 'linear'):
+        ''' Creates a new 3D transformation.
+
+          :param trfName: name for the new transformation.
+          :param xzVector: vector defining transformation XZ plane.
+          :param trfType: type of the transformation ('linear', 'p_delta' or 'corotational')
+        '''
+        retval= None
+        if(trfType=='linear'):
+            retval= self.newLinearCrdTransf(trfName, xzVector)
+        elif(trfType=='p_delta'):
+            retval= self.newPDeltaCrdTransf(trfName, xzVector)
+        elif(trfType=='corotational'):
+            retval= self.newCorotCrdTransf(trfName, xzVector)
+        else:
+            lmsg.error('Unknown transformation type: \''+trfType+'\'')
+        return retval
+
     def fixNode(self,DOFpattern,nodeTag):
         '''Restrain DOF of a node according to the DOFpattern, which is a given
          string of type '0FF_00F' that matches the DOFs (uX,uY,uZ,rotX,rotY,rotZ)
@@ -1405,44 +1440,48 @@ class StructuralMechanics3D(StructuralMechanics):
                 if(constrCond[i] != 'free'):
                     self.constraints.newSPConstraint(n.tag,i,constrCond[i])
                     
-                    
-    def setHugeBeamBetweenNodes(self,nodeTagA, nodeTagB, nmbTransf):
+    def setHugeBeamBetweenNodes(self,nodeA, nodeB, nmbTransf= None, trfType= 'linear'):
         '''
         Creates a very stiff bar between the two nodes being passed as parameters.
         (it was a workaround to the problem with the reactions values in nodes when
         using multipoint constraints. This problem has been be solved with the
         implementation of MFreedom_ConstraintBase::addResistingForceToNodalReaction).
 
-        :param   nodeTagA: tag of bar's from node.
-        :param   nodeTagB: tag of bar's to node.
+        :param   nodeA: bar's from node.
+        :param   nodeB: bar's to node.
         :param   nmbTransf: name of the coordinate transformation to use for the new bar.
+        :param trfType: type of the transformation ('linear', 'p_delta' or 'corotational')
+                        used only if nmbTransf==None.
         '''
         elements= self.getElementHandler()
+        if(not nmbTransf): # define a new transformation.
+            nmbTransf= 'bar' + str(nodeA.tag) + str(nodeB.tag)
+            xzVector= self.getSuitableXZVector(nodeA, nodeB)
+            trf= self.newCrdTransf(nmbTransf, xzVector= xzVector, trfType= trfType)
         elements.defaultTransformation= nmbTransf
         # Material definition
-        matName= 'bar' + str(nodeTagA) + str(nodeTagB) + nmbTransf
+        matName= 'bar' + str(nodeA.tag) + str(nodeB.tag) + nmbTransf
         (A,E,G,Iz,Iy,J)= (10, 1e14 , 1e12 , 10, 10, 10)
         scc= tm.defElasticSection3d(self.preprocessor,matName,A,E,G,Iz,Iy,J)
         elements.defaultMaterial= matName
-        elem= elements.newElement("ElasticBeam3d",xc.ID([nodeTagA,nodeTagB]))
-        scc= elem.sectionProperties
+        elem= elements.newElement("ElasticBeam3d",xc.ID([nodeA.tag,nodeB.tag]))
         return elem
 
-    def setHugeTrussBetweenNodes(self,nodeTagA, nodeTagB):
+    def setHugeTrussBetweenNodes(self,nodeA, nodeB):
         '''
         Creates a very stiff bar between the two nodes being passed as parameters.
 
-        :param   nodeTagA: tag of bar's from node.
-        :param   nodeTagB: tag of bar's to node.
+        :param   nodeA: tag of bar's from node.
+        :param   nodeB: bar's to node.
         '''
         elements= self.getElementHandler()
         # Material definition
-        matName= 'truss' + str(nodeTagA) + str(nodeTagB)
+        matName= 'truss' + str(nodeA.tag) + str(nodeB.tag)
         (A,E)=( 10 , 1e14)
         mat= tm.defElasticMaterial(self.preprocessor, matName,E)
         elements.dimElem= 3
         elements.defaultMaterial= matName
-        elem= elements.newElement("Truss",xc.ID([nodeTagA,nodeTagB]))
+        elem= elements.newElement("Truss",xc.ID([nodeA.tag,nodeB.tag]))
         elem.sectionArea=A
         return elem
 

@@ -30,7 +30,7 @@ nod2= nodes.newNodeXYZ(L,0.0,0.0)
 
 modelSpace.fixNode000_000(nod1.tag)
 linCrdTr=modelSpace.newLinearCrdTransf('linCrdTr',xzVector=xc.Vector([0,1,0]))
-rr= modelSpace.setHugeBeamBetweenNodes(nod1.tag,nod2.tag,'linCrdTr')
+rr= modelSpace.setHugeBeamBetweenNodes(nod1,nod2,'linCrdTr')
 
 
 
