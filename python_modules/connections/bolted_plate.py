@@ -319,11 +319,13 @@ class BoltedPlateBase(object):
             retval.append(refSys.getPosGlobal(p3d))        
         return retval
 
-    def getBlocks(self, refSys= geom.Ref3d3d(), lbls= None):
+    def getBlocks(self, refSys= geom.Ref3d3d(), lbls= None, loadTag= None, loadDir= None):
         ''' Return the blocks that define the plate for the
             diagonal argument.
 
         :param lbls: labels to assign to the newly created blocks.
+        :param loadTag: tag of the applied loads in the internal forces file.
+        :param loadDir: vector that points to the loaded side of the plate.
         '''
         retval= bte.BlockData()
         labels= ['bolted_plate']
@@ -331,7 +333,7 @@ class BoltedPlateBase(object):
             labels.extend(lbls)
         # Get the plate contour
         contourVertices= self.getContour(refSys)
-        blk=  retval.blockFromPoints(contourVertices,labels, thickness= self.thickness, matId= self.steelType.name)
+        blk=  retval.blockFromPoints(contourVertices,labels+[loadTag,loadDir], thickness= self.thickness, matId= self.steelType.name)
         # Get the hole blocks for the new plate
         ownerId= 'hole_owr_f'+str(blk.id) # Hole owner.
         holeLabels= labels+['holes',ownerId]
