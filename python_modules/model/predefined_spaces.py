@@ -157,6 +157,14 @@ class PredefinedSpace(object):
             self.newTimeSeries()
         lp= lPatterns.newLoadPattern(lpType,name)
         return lp
+        
+    def getCurrentLoadPattern(self):
+        ''' Return the current load pattern.'''
+        return self.getLoadHandler().getLoadPatterns.currentLoadPattern
+    
+    def getLoadPattern(self, lpName):
+        ''' Return the load pattern with the argument name.'''
+        return self.getLoadHandler().getLoadPatterns[lpName]
     
     def setPrescribedDisplacements(self,nodeTag,prescDisplacements):
         '''Prescribe displacement for node DOFs.
