@@ -125,7 +125,39 @@ class PredefinedSpace(object):
         ''' Return the nearest point to the position
             argument.'''
         return self.preprocessor.getMultiBlockTopology.getPoints.getNearest(pos3d)
-        
+
+    def getLoadHandler(self):
+        ''' Return the preprocessor material handler.'''
+        return self.preprocessor.getLoadHandler
+
+    def newTimeSeries(self, name= 'ts', typ= 'constant_ts'):
+        ''' Creates a times series -modulation of the load
+            in time-.
+
+        :param name: name of the new time series.
+        :param typ: type of the time series -constant_ts, linear_ts,
+                    path-ts, pulse_ts, rectangular_ts, triangular_ts
+                    or trig_ts-. Defaults to constant_ts.
+        '''
+        lPatterns= self.getLoadHandler().getLoadPatterns
+        ts= lPatterns.newTimeSeries(typ,name)
+        lPatterns.currentTimeSeries= name
+        return ts
+    
+    def newLoadPattern(self, name, typ= 'default'):
+        ''' Creates a times series -modulation of the load
+            in time-.
+
+        :param name: name of the new time load pattern.
+        :param typ: type of the load pattern -default, uniform_excitation,
+                    multi_support_pattern, pbowl_loading-.
+        '''
+        lPatterns= self.getLoadHandler().getLoadPatterns
+        if(lPatterns.currentTimeSeries=='nil'):
+            self.newTimeSeries()
+        lp= lPatterns.newLoadPattern(typ,name)
+        return lp
+    
     def setPrescribedDisplacements(self,nodeTag,prescDisplacements):
         '''Prescribe displacement for node DOFs.
 
@@ -309,6 +341,10 @@ class PredefinedSpace(object):
            entities.'''
         return self.preprocessor.getSets.getSet("total")
 
+    def defSet(self, setName):
+        ''' Defines a set with the name argument.'''
+        return self.preprocessor.getSets.defSet(setName)
+
     def setSum(self, setName, setsToSum):
         ''' Return a set that contains the union of the
             arguments.
@@ -319,7 +355,7 @@ class PredefinedSpace(object):
         '''
         if(setName=='auto'):
             setName= uuid.uuid4().hex
-        retval= self.preprocessor.getSets.defSet(setName)
+        retval= self.defSet(setName)
         for s in setsToSum:
             retval+= s
         retval.name= setName # remove all the expressions from name.
@@ -335,7 +371,7 @@ class PredefinedSpace(object):
         '''
         if(setName=='auto'):
             setName= uuid.uuid4().hex
-        retval= self.preprocessor.getSets.defSet(setName)
+        retval= self.defSet(setName)
         retval+= setsToIntersect[0]
         for s in setsToIntersect[1:]:
             retval*= s
@@ -356,7 +392,7 @@ class PredefinedSpace(object):
 
            :param loadCaseName: name of the load pattern or combination.
         '''
-        self.preprocessor.getLoadHandler.addToDomain(loadCaseName)
+        self.getLoadHandler().addToDomain(loadCaseName)
 
     def removeLoadCaseFromDomain(self, loadCaseName):
         '''Add the load case argument (load pattern or
@@ -364,7 +400,7 @@ class PredefinedSpace(object):
 
            :param loadCaseName: name of the load pattern or combination.
         '''
-        self.preprocessor.getLoadHandler.removeFromDomain(loadCaseName)
+        self.getLoadHandler().removeFromDomain(loadCaseName)
         
     def addNewLoadCaseToDomain(self, loadCaseName, loadCaseExpression):
         '''Defines a new combination and add it to the domain.
@@ -374,7 +410,7 @@ class PredefinedSpace(object):
                                       combination of previously defined actions
                                       e.g. '1.0*GselfWeight+1.0*GearthPress'
         '''
-        combs= self.preprocessor.getLoadHandler.getLoadCombinations
+        combs= self.getLoadHandler().getLoadCombinations
         lCase=combs.newLoadCombination(loadCaseName,loadCaseExpression)
         self.preprocessor.resetLoadCase()
         self.addLoadCaseToDomain(loadCaseName)
