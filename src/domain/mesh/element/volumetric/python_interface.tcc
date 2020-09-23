@@ -29,9 +29,9 @@ class_<brick_base_8n, bases<element_base_8n>, boost::noncopyable >("brick_base_8
   .def("getExtrapolatedValues", &brick_base_8n::getExtrapolatedValues,"Return the values at nodes from the values at the Gauss points")
   ;
 
-XC::NDMaterialPhysicalProperties &(XC::BrickBase::*getPhysicalPropertiesPtr)(void) = &brick_base_8n::getPhysicalProperties;
+XC::NDMaterialPhysicalProperties &(XC::BrickBase::*getBrickPhysicalPropertiesPtr)(void) = &brick_base_8n::getPhysicalProperties;
 class_<XC::BrickBase , bases<brick_base_8n>, boost::noncopyable >("BrickBase", no_init)
-  .add_property("physicalProperties",make_function(getPhysicalPropertiesPtr,return_internal_reference<>() ),"Returns element physical propertis (material).")
+  .add_property("physicalProperties",make_function(getBrickPhysicalPropertiesPtr,return_internal_reference<>() ),"Returns element physical properties (material).")
   ;
 
 typedef XC::ElementBase<20> element_base_20n;

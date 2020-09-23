@@ -64,6 +64,8 @@ class_<XC::Element, XC::Element *,bases<XC::MeshComponent>, boost::noncopyable >
   .def("getPoints",&XC::Element::getPoints,"Return a uniform grid of points over the element.")
   .def("getDist",getDistPos3d,"Return the distance from the point to this element.")
   .def("getDist2",getDist2Pos3d,"Return the squared distance from the point to this element.")
+  .def("getDist",getDistPos2d,"Return the distance from the point to this element.")
+  .def("getDist2",getDist2Pos2d,"Return the squared distance from the point to this element.")
 
   .def("resetTributaries",&XC::Element::resetTributaries)
   .def("dumpTributaries",&XC::Element::dumpTributaries)
