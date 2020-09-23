@@ -36,6 +36,10 @@ const XC::Matrix &(XC::Element::*getTangentStiffRef)(void) const= &XC::Element::
 bool (XC::Element::*ElementIn3D)(const GeomObj3d &,const double &,const double &) const= &XC::Element::In;
 bool (XC::Element::*ElementOut3D)(const GeomObj3d &,const double &,const double &) const= &XC::Element::Out;
 void (XC::Element::*setIdNodesRef)(const XC::ID &inodes)= &XC::Element::setIdNodes;
+double (XC::Element::*getDistPos2d)(const Pos2d &,bool initialGeometry) const= &XC::Element::getDist;
+double (XC::Element::*getDistPos3d)(const Pos3d &,bool initialGeometry) const= &XC::Element::getDist;
+double (XC::Element::*getDist2Pos2d)(const Pos2d &,bool initialGeometry) const= &XC::Element::getDist2;
+double (XC::Element::*getDist2Pos3d)(const Pos3d &,bool initialGeometry) const= &XC::Element::getDist2;
 class_<XC::Element, XC::Element *,bases<XC::MeshComponent>, boost::noncopyable >("Element", no_init)
   .add_property("getNodes", make_function( getNodePtrsRef, return_internal_reference<>() ))
   .add_property("getIdxNodes",&XC::Element::getIdxNodes,"Return the node indices for its use in VTK arrays.")
@@ -58,6 +62,9 @@ class_<XC::Element, XC::Element *,bases<XC::MeshComponent>, boost::noncopyable >
   .def("Out", ElementOut3D,"\n""Out(geomObject,factor,tolerance) \n""Return true if current positions of all the nodes scaled by a factor: initialPos+factor*currentDisplacement lie outside the geometric object.")
   .def("getLocalAxes",&XC::Element::getLocalAxes,"Return the element local axes as matrix rows: [[x1,y1,z1],[x2,y2,z2],...·] .")
   .def("getPoints",&XC::Element::getPoints,"Return a uniform grid of points over the element.")
+  .def("getDist",getDistPos3d,"Return the distance from the point to this element.")
+  .def("getDist2",getDist2Pos3d,"Return the squared distance from the point to this element.")
+
   .def("resetTributaries",&XC::Element::resetTributaries)
   .def("dumpTributaries",&XC::Element::dumpTributaries)
   .def("computeTributaryLengths",&XC::Element::computeTributaryLengths)

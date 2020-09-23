@@ -1067,6 +1067,9 @@ double XC::Element::getTributaryVolumeByTag(const int &tag) const
 
 //! @brief Returns the squared distance from the element to the point
 //! being passed as parameter.
+//!
+//! @param p: point to query.
+//! @param initialGeometry: if true check with undeformed model.
 double XC::Element::getDist2(const Pos2d &p,bool initialGeometry) const
   {
     std::cerr << getClassName() << "::" << __FUNCTION__
@@ -1076,6 +1079,9 @@ double XC::Element::getDist2(const Pos2d &p,bool initialGeometry) const
 
 //! @brief Returns the the distance from the element to the point
 //! being passed as parameter.
+//!
+//! @param p: point to query.
+//! @param initialGeometry: if true check with undeformed model.
 double XC::Element::getDist(const Pos2d &p,bool initialGeometry) const
   {
     std::cerr << getClassName() << "::" << __FUNCTION__
