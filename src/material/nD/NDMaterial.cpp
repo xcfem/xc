@@ -190,6 +190,28 @@ const XC::Vector &XC::NDMaterial::getStrain(void) const
     return errVector;    
   }
 
+//! @brief return the Von Mises equivalent stress.
+//!
+//! <a href="https://en.wikipedia.org/wiki/Von_Mises_yield_criterion"> Von Mises yield criterion.</a>
+double XC::NDMaterial::getVonMisesStress(void) const
+  {
+    double retval= 0.0;
+    const Vector sg= getStress();
+    const size_t sz= sg.Size();
+    //NDmaterial stress order = 11, 22, 33, 12, 23, 31 
+    if(sz==6) // 3D material
+      {
+	const double sg11= sg[0]; const double sg22= sg[1]; const double sg33= sg[2];
+	const double sg12= sg[3]; const double sg23= sg[4]; const double sg31= sg[5];
+	retval= sqrt(0.5*(pow(sg11-sg22,2)+pow(sg22-sg33,2)+pow(sg33-sg11,2)+6*(sg12*sg12+sg23+sg23+sg31+sg31)));
+      }
+    else
+      std::cerr << getClassName() << "::" << __FUNCTION__
+	        << ", wrong stress vector size (" << sz
+	        << ")." << std::endl;
+    return retval;
+  }
+
 //! @brief Return the initial strain.
 const XC::Vector &XC::NDMaterial::getInitialGeneralizedStrain(void) const
   {

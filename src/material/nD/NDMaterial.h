@@ -134,6 +134,7 @@ class NDMaterial: public Material
     //! @brief Return the generalized strain.
     inline const Vector &getGeneralizedStrain(void) const
       { return getStrain(); }
+    double getVonMisesStress(void) const;
 
     virtual int setTrialStrain(const Tensor &);
     virtual int setTrialStrain(const Tensor &, const Tensor &);
