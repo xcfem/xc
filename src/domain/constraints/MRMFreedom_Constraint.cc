@@ -96,13 +96,20 @@ XC::MRMFreedom_Constraint::MRMFreedom_Constraint(int tag,const Element &elem, co
     const size_t numNodes= retainedNodeTags.Size();
     const size_t numDOFs= constrainedDOF.Size();
     constraintMatrix= Matrix(numDOFs,numNodes*numDOFs);
-    Pos3d pos= node.getInitialPosition3d(); //XXX Time dependence?
+    const Pos3d pos= node.getInitialPosition3d(); //XXX Time dependence?
     const Vector interpolationFactors= elem.getInterpolationFactors(pos);
     for(size_t j= 0;j<numNodes;j++)
       {
         const int offset= j*numDOFs;
         for(size_t i= 0;i<numDOFs;i++)
-          constraintMatrix(i,offset+i)= interpolationFactors(j);
+	  {
+	    const double iFactorJ= interpolationFactors(j);
+	    if(iFactorJ>1.0)
+	      std::clog << getClassName() << "::" << __FUNCTION__
+		        << "; warning, glue node is outside the element."
+		        << std::endl;
+            constraintMatrix(i,offset+i)= iFactorJ;
+	  }
       }
   }
 
