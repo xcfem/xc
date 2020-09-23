@@ -26,6 +26,7 @@ class_<XC::NDMaterial, XC::NDMaterial *, bases<XC::Material>, boost::noncopyable
     .add_property("getE", &XC::NDMaterial::getE)
     .add_property("getnu", &XC::NDMaterial::getnu)
     .add_property("getpsi", &XC::NDMaterial::getpsi)
+    .add_property("getVonMisesStress", &XC::NDMaterial::getVonMisesStress)
        ;
 
 class_<XC::ElasticIsotropicMaterial, bases<XC::NDMaterial>, boost::noncopyable >("ElasticIsotropicMaterial", no_init)
@@ -45,3 +46,17 @@ class_<XC::ElasticIsotropicMaterial, bases<XC::NDMaterial>, boost::noncopyable >
 #include "nd_adaptor/python_interface.tcc"
 
 #include "soil/python_interface.tcc"
+
+typedef std::vector<XC::NDMaterial *> vectorNDMaterial;
+class_<vectorNDMaterial,boost::noncopyable>("vectorNDMaterial")
+  .def(vector_indexing_suite<vectorNDMaterial>() )
+  ;
+
+class_<material_vector_NDMat,bases<vectorNDMaterial,CommandEntity>,boost::noncopyable>("MaterialVectorNDMat", no_init)
+  .def("commitState", &material_vector_NDMat::commitState,"Commits materials state.")
+  .def("revertToLastCommit", &material_vector_NDMat::revertToLastCommit,"Returns the material to its last committed state.")
+  .def("revertToStart", &material_vector_NDMat::revertToStart,"Returns the material to its initial state.")
+  .add_property("generalizedStresses", &material_vector_NDMat::getGeneralizedStresses, "Return generalized stresses.")
+  .add_property("generalizedStrains", &material_vector_NDMat::getGeneralizedStrains, "Return generalized strains.")
+  .def("getNames",&material_vector_NDMat::getNamesPy,"Returns the names of the materials.")
+  ;

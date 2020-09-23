@@ -107,15 +107,15 @@ int XC::PlateFiberMaterial::setTrialStrain(const XC::Vector &strainFromElement)
   this->strain(4) = strainFromElement(4); //31
 
   double norm;
-  static XC::Vector outOfPlaneStress(1);
-  static XC::Vector strainIncrement(1);
-  static XC::Vector threeDstress(6);
-  static XC::Vector threeDstrain(6);
-  static XC::Matrix threeDtangent(6,6);
-  static XC::Vector threeDstressCopy(6); 
+  static Vector outOfPlaneStress(1);
+  static Vector strainIncrement(1);
+  static Vector threeDstress(6);
+  static Vector threeDstrain(6);
+  static Matrix threeDtangent(6,6);
+  static Vector threeDstressCopy(6); 
 
-  static XC::Matrix threeDtangentCopy(6,6);
-  static XC::Matrix dd22(1,1);
+  static Matrix threeDtangentCopy(6,6);
+  static Matrix dd22(1,1);
 
   int i, j;
   int ii, jj;
@@ -194,7 +194,7 @@ int XC::PlateFiberMaterial::setTrialStrain(const XC::Vector &strainFromElement)
 const XC::Vector &XC::PlateFiberMaterial::getStress(void) const
 {
   const XC::Vector &threeDstress = theMaterial->getStress();
-  static XC::Vector threeDstressCopy(6);
+  static Vector threeDstressCopy(6);
 
   //swap matrix indices to sort out-of-plane components 
   int i, ii;
@@ -212,104 +212,101 @@ const XC::Vector &XC::PlateFiberMaterial::getStress(void) const
   return this->stress;
 }
 
-//send back the tangent 
+//! @brief Return the tangent stiffness matrix.
 const XC::Matrix  &XC::PlateFiberMaterial::getTangent(void) const
-{
-  static XC::Matrix dd11(5,5);
-  static XC::Matrix dd12(5,1);
-  static XC::Matrix dd21(1,5);
-  static XC::Matrix dd22(1,1);
-  static XC::Matrix dd22invdd21(1,5);
+  {
+    static Matrix dd11(5,5);
+    static Matrix dd12(5,1);
+    static Matrix dd21(1,5);
+    static Matrix dd22(1,1);
+    static Matrix dd22invdd21(1,5);
 
-  static XC::Matrix threeDtangentCopy(6,6);
-  const XC::Matrix &threeDtangent = theMaterial->getTangent();
+    static Matrix threeDtangentCopy(6,6);
+    const Matrix &threeDtangent = theMaterial->getTangent();
 
-  //swap matrix indices to sort out-of-plane components 
-  int i,j, ii, jj;
-  for(i=0; i<6; i++) {
+    //swap matrix indices to sort out-of-plane components 
+    int i,j, ii, jj;
+    for(i=0; i<6; i++) {
 
-    ii = this->indexMap(i);
+      ii = this->indexMap(i);
 
-    for(j=0; j<6; j++) {
+      for(j=0; j<6; j++) {
 
-      jj = this->indexMap(j);
+	jj = this->indexMap(j);
 
-      threeDtangentCopy(ii,jj) = threeDtangent(i,j);
+	threeDtangentCopy(ii,jj) = threeDtangent(i,j);
 
-    }//end for j
+      }//end for j
 
-  }//end for i
-  
-  dd22(0,0) = threeDtangentCopy(5,5);
+    }//end for i
 
-  for(i=0; i<5; i++) {
+    dd22(0,0) = threeDtangentCopy(5,5);
 
-    dd12(i,0) = threeDtangentCopy(i,5);
-    dd21(0,i) = threeDtangentCopy(5,i);
-    
-    for(int j=0; j<5; j++) 
-      dd11(i,j) = threeDtangentCopy(i,j);
-    
-  }//end for i
-    
-  //int Solve(const XC::Vector &V, XC::Vector &res) const;
-  //int Solve(const XC::Matrix &M, XC::Matrix &res) const;
-  //condensation 
-  dd22.Solve(dd21, dd22invdd21);
-  this->tangent   = dd11; 
-  this->tangent  -= (dd12*dd22invdd21);
+    for(i=0; i<5; i++) {
 
-  return this->tangent;
-}
+      dd12(i,0) = threeDtangentCopy(i,5);
+      dd21(0,i) = threeDtangentCopy(5,i);
+
+      for(int j=0; j<5; j++) 
+	dd11(i,j) = threeDtangentCopy(i,j);
+
+    }//end for i
+
+    //int Solve(const XC::Vector &V, XC::Vector &res) const;
+    //int Solve(const XC::Matrix &M, XC::Matrix &res) const;
+    //condensation 
+    dd22.Solve(dd21, dd22invdd21);
+    this->tangent   = dd11; 
+    this->tangent  -= (dd12*dd22invdd21);
+
+    return this->tangent;
+  }
 
 
 const XC::Matrix  &XC::PlateFiberMaterial::getInitialTangent(void) const
   {
-  std::cerr << "PlateFiberMaterial::getInitialTangent() - not yet implemented\n";
-  return this->getTangent();
-}
+    std::cerr << getClassName() << "::" << __FUNCTION__
+              << "; not yet implemented.\n";
+    return this->getTangent();
+  }
 
 
 int XC::PlateFiberMaterial::indexMap(int i) const
-{
-  int ii;
+  {
+    int retval= 1;
+    switch(i+1) //add 1 for standard vector indices
+      { 
+      case 1 :
+	retval = 1; 
+	break;
 
-  switch(i+1) { //add 1 for standard vector indices
+      case 2 :
+	retval = 2;
+	break;
 
-    case 1 :
-      ii = 1; 
-      break;
- 
-    case 2 :
-      ii = 2;
-      break;
+      case 3 :
+	retval = 6;
+	break;
 
-    case 3 :
-      ii = 6;
-      break;
+      case 4 :
+	retval = 3;
+	break;
 
-    case 4 :
-      ii = 3;
-      break;
+      case 5 :
+	retval = 4;
+	break;
 
-    case 5 :
-      ii = 4;
-      break;
+      case 6 :
+	retval = 5;
+	break;
 
-    case 6 :
-      ii = 5;
-      break;
-
-    default :
-      ii = 1;
-      break;
-
-  } //end switch
-
-  ii--;
-
-  return ii;
-}
+      default :
+	retval = 1;
+	break;
+      } //end switch
+    retval--;
+    return retval;
+  }
 
 
 

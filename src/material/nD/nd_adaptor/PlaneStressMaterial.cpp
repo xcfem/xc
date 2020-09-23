@@ -229,12 +229,12 @@ int XC::PlaneStressMaterial::setTrialStrain( const XC::Vector &strainFromElement
 }
 
 
-//send back the stress 
+//! @brief Return the material stress.
 const XC::Vector &XC::PlaneStressMaterial::getStress(void) const
 {
   //three dimensional stress
-  const XC::Vector &threeDstress = theMaterial->getStress();
-  static XC::Vector threeDstressCopy(6);
+  const Vector &threeDstress = theMaterial->getStress();
+  static Vector threeDstressCopy(6);
 
   //partitioned stresses and tangent
   //swap matrix indices to sort out-of-plane components 
@@ -253,59 +253,59 @@ const XC::Vector &XC::PlaneStressMaterial::getStress(void) const
 }
 
 
-//send back the tangent 
+//! @brief Return the tangent stiffness matrix.
 const XC::Matrix &XC::PlaneStressMaterial::getTangent(void) const
-{
-  static XC::Matrix dd11(3,3) ;
-  static XC::Matrix dd12(3,3) ;
-  static XC::Matrix dd21(3,3) ;
-  static XC::Matrix dd22(3,3) ;
+  {
+    static Matrix dd11(3,3) ;
+    static Matrix dd12(3,3) ;
+    static Matrix dd21(3,3) ;
+    static Matrix dd22(3,3) ;
 
-  static XC::Matrix dd22invdd21(3,3) ;
-  static XC::Matrix threeDtangentCopy(6,6);
+    static Matrix dd22invdd21(3,3) ;
+    static Matrix threeDtangentCopy(6,6);
 
-  //three dimensional tangent 
-  const XC::Matrix &threeDtangent = theMaterial->getTangent( ) ;
+    //three dimensional tangent 
+    const XC::Matrix &threeDtangent = theMaterial->getTangent( ) ;
 
-  //NDmaterial strain order          = 11, 22, 33, 12, 23, 31 
-  //PlaneStressMaterial strain order = 11, 22, 12, 33, 23, 31 
+    //NDmaterial strain order          = 11, 22, 33, 12, 23, 31 
+    //PlaneStressMaterial strain order = 11, 22, 12, 33, 23, 31 
 
-  //swap matrix indices to sort out-of-plane components 
-  int i,j, ii, jj;
+    //swap matrix indices to sort out-of-plane components 
+    int i,j, ii, jj;
 
-  for( i=0; i<6; i++ ) {
+    for( i=0; i<6; i++ ) {
 
-    ii = this->indexMap(i) ;
+      ii = this->indexMap(i) ;
 
-    for( j=0; j<6; j++ ) {
-      jj = this->indexMap(j) ;
-      threeDtangentCopy(ii,jj) = threeDtangent(i,j) ;
-    }//end for j
+      for( j=0; j<6; j++ ) {
+	jj = this->indexMap(j) ;
+	threeDtangentCopy(ii,jj) = threeDtangent(i,j) ;
+      }//end for j
 
-  }//end for i
+    }//end for i
 
 
-  //out of plane stress and tangents
-  for( i=0; i<3; i++ ) {
-    for( j=0; j<3; j++ ) {
-    
-      dd11(i,j) = threeDtangentCopy(i,  j  ) ;
-      dd12(i,j) = threeDtangentCopy(i,  j+3) ;
-      dd21(i,j) = threeDtangentCopy(i+3,j  ) ;
-      dd22(i,j) = threeDtangentCopy(i+3,j+3) ;
+    //out of plane stress and tangents
+    for( i=0; i<3; i++ ) {
+      for( j=0; j<3; j++ ) {
 
-    }//end for j
-  }//end for i
+	dd11(i,j) = threeDtangentCopy(i,  j  ) ;
+	dd12(i,j) = threeDtangentCopy(i,  j+3) ;
+	dd21(i,j) = threeDtangentCopy(i+3,j  ) ;
+	dd22(i,j) = threeDtangentCopy(i+3,j+3) ;
 
-  //int Solve(const XC::Vector &V, XC::Vector &res) const;
-  //int Solve(const XC::Matrix &M, XC::Matrix &res) const;
-  //condensation 
-  dd22.Solve( dd21, dd22invdd21 ) ;
-  this->tangent   = dd11 ; 
-  this->tangent  -= ( dd12*dd22invdd21 ) ;
+      }//end for j
+    }//end for i
 
-  return this->tangent ;
-}
+    //int Solve(const XC::Vector &V, XC::Vector &res) const;
+    //int Solve(const XC::Matrix &M, XC::Matrix &res) const;
+    //condensation 
+    dd22.Solve( dd21, dd22invdd21 ) ;
+    this->tangent   = dd11 ; 
+    this->tangent  -= ( dd12*dd22invdd21 ) ;
+
+    return this->tangent ;
+  }
 
 
 

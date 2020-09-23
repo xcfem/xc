@@ -51,8 +51,8 @@
 // Written: MHS
 // Created: Aug 2001
 //
-// Description: This file contains the class definition of XC::BeamFiberMaterial.
-// The XC::BeamFiberMaterial class is a wrapper class that performs static
+// Description: This file contains the class definition of BeamFiberMaterial.
+// The BeamFiberMaterial class is a wrapper class that performs static
 // condensation on a three-dimensional material model to give the 11, 12, and 13
 // stress components which can then be integrated over an area to model a
 // shear flexible 3D beam.
@@ -117,127 +117,126 @@ int XC::BeamFiberMaterial::revertToStart()
     return NDAdaptorMaterial::revertToStart();
   }
 
-//receive the strain
+//! @brief Set trial strain
 //NDmaterial strain order        = 11, 22, 33, 12, 23, 31  
 //BeamFiberMaterial strain order = 11, 12, 31, 22, 33, 23
-int XC::BeamFiberMaterial::setTrialStrain(const XC::Vector &strainFromElement)
-{
-  static const double tolerance = 1.0e-08;
+int XC::BeamFiberMaterial::setTrialStrain(const Vector &strainFromElement)
+  {
+    static const double tolerance = 1.0e-08;
 
-  this->strain(0) = strainFromElement(0);
-  this->strain(1) = strainFromElement(1);
-  this->strain(2) = strainFromElement(2);
+    this->strain(0) = strainFromElement(0);
+    this->strain(1) = strainFromElement(1);
+    this->strain(2) = strainFromElement(2);
 
-  //newton loop to solve for out-of-plane strains
+    //newton loop to solve for out-of-plane strains
 
-  double norm;
-  static XC::Vector condensedStress(3);
-  static XC::Vector strainIncrement(3);
-  static XC::Vector threeDstress(6);
-  static XC::Vector threeDstrain(6);
-  static XC::Matrix threeDtangent(6,6);
-  static XC::Vector threeDstressCopy(6); 
-  static XC::Matrix threeDtangentCopy(6,6);
-  static XC::Matrix dd22(3,3);
+    double norm;
+    static Vector condensedStress(3);
+    static Vector strainIncrement(3);
+    static Vector threeDstress(6);
+    static Vector threeDstrain(6);
+    static Matrix threeDtangent(6,6);
+    static Vector threeDstressCopy(6); 
+    static Matrix threeDtangentCopy(6,6);
+    static Matrix dd22(3,3);
 
-  int i, j;
-  int ii, jj;
+    int i, j;
+    int ii, jj;
 
-  do {
-    //set three dimensional strain
-    threeDstrain(0) = this->strain(0);
-    threeDstrain(1) = this->Tstrain22;
-    threeDstrain(2) = this->Tstrain33;
-    threeDstrain(3) = this->strain(1); 
-    threeDstrain(4) = this->Tgamma23;
-    threeDstrain(5) = this->strain(2);
+    do {
+      //set three dimensional strain
+      threeDstrain(0) = this->strain(0);
+      threeDstrain(1) = this->Tstrain22;
+      threeDstrain(2) = this->Tstrain33;
+      threeDstrain(3) = this->strain(1); 
+      threeDstrain(4) = this->Tgamma23;
+      threeDstrain(5) = this->strain(2);
 
-    if(theMaterial->setTrialStrain(threeDstrain) < 0) {
-      std::cerr << "BeamFiberMaterial::setTrialStrain - setStrain failed in material with strain " << threeDstrain;
-      return -1;   
-    }
+      if(theMaterial->setTrialStrain(threeDstrain) < 0) {
+	std::cerr << "BeamFiberMaterial::setTrialStrain - setStrain failed in material with strain " << threeDstrain;
+	return -1;   
+      }
 
-    //three dimensional stress
-    threeDstress = theMaterial->getStress();
+      //three dimensional stress
+      threeDstress = theMaterial->getStress();
 
-    //three dimensional tangent 
-    threeDtangent = theMaterial->getTangent();
+      //three dimensional tangent 
+      threeDtangent = theMaterial->getTangent();
 
-    //NDmaterial strain order        = 11, 22, 33, 12, 23, 31  
-    //BeamFiberMaterial strain order = 11, 12, 31, 22, 33, 23
+      //NDmaterial strain order        = 11, 22, 33, 12, 23, 31  
+      //BeamFiberMaterial strain order = 11, 12, 31, 22, 33, 23
 
-    //swap matrix indices to sort out-of-plane components 
-    for(i=0; i<6; i++) {
+      //swap matrix indices to sort out-of-plane components 
+      for(i=0; i<6; i++) {
 
-      ii = this->indexMap(i);
+	ii = this->indexMap(i);
 
-      threeDstressCopy(ii) = threeDstress(i);
+	threeDstressCopy(ii) = threeDstress(i);
 
-      for(j=0; j<6; j++) {
+	for(j=0; j<6; j++) {
 
-    jj = this->indexMap(j);
-    
-    threeDtangentCopy(ii,jj) = threeDtangent(i,j);
+      jj = this->indexMap(j);
 
-      }//end for j
-       
-    }//end for i
+      threeDtangentCopy(ii,jj) = threeDtangent(i,j);
+
+	}//end for j
+
+      }//end for i
 
 
-    //out of plane stress and tangents
-    for(i=0; i<3; i++) {
+      //out of plane stress and tangents
+      for(i=0; i<3; i++) {
 
-      condensedStress(i) = threeDstressCopy(i+3);
+	condensedStress(i) = threeDstressCopy(i+3);
 
-      for(j=0; j<3; j++) 
-    dd22(i,j) = threeDtangentCopy(i+3,j+3);
+	for(j=0; j<3; j++) 
+      dd22(i,j) = threeDtangentCopy(i+3,j+3);
 
-    }//end for i
+      }//end for i
 
-    //set norm
-    norm = condensedStress.Norm();
+      //set norm
+      norm = condensedStress.Norm();
 
-    //condensation 
-    dd22.Solve(condensedStress, strainIncrement);
+      //condensation 
+      dd22.Solve(condensedStress, strainIncrement);
 
-    //update out of plane strains
-    this->Tstrain22 -= strainIncrement(0);
-    this->Tstrain33 -= strainIncrement(1);
-    this->Tgamma23  -= strainIncrement(2);
+      //update out of plane strains
+      this->Tstrain22 -= strainIncrement(0);
+      this->Tstrain33 -= strainIncrement(1);
+      this->Tgamma23  -= strainIncrement(2);
 
-  } while(norm > tolerance);
+    } while(norm > tolerance);
 
-  return 0;
-}
-
-const XC::Vector &XC::BeamFiberMaterial::getStress(void) const
-{
-  const XC::Vector &threeDstress = theMaterial->getStress();
-  static XC::Vector threeDstressCopy(6);
-
-  int i, ii;
-  //swap matrix indices to sort out-of-plane components 
-  for(i=0; i<6; i++) {
-
-    ii = this->indexMap(i);
-
-    threeDstressCopy(ii) = threeDstress(i);
+    return 0;
   }
 
-  for(i=0; i<3; i++) 
-    this->stress(i)     = threeDstressCopy(i);
+const XC::Vector &XC::BeamFiberMaterial::getStress(void) const
+  {
+    const Vector &threeDstress= theMaterial->getStress();
+    static Vector threeDstressCopy(6);
 
-  return this->stress;
-}
+    int i, ii;
+    //swap matrix indices to sort out-of-plane components 
+    for(i=0; i<6; i++)
+      {
+	ii = this->indexMap(i);
+	threeDstressCopy(ii) = threeDstress(i);
+      }
+
+    for(i=0; i<3; i++) 
+      this->stress(i)     = threeDstressCopy(i);
+
+    return this->stress;
+  }
 
 const XC::Matrix &XC::BeamFiberMaterial::getTangent(void) const
 {
-  static XC::Matrix dd11(3,3);
-  static XC::Matrix dd12(3,3);
-  static XC::Matrix dd21(3,3);
-  static XC::Matrix dd22(3,3);
-  static XC::Matrix dd22invdd21(3,3);
-  static XC::Matrix threeDtangentCopy(6,6);
+  static Matrix dd11(3,3);
+  static Matrix dd12(3,3);
+  static Matrix dd21(3,3);
+  static Matrix dd22(3,3);
+  static Matrix dd22invdd21(3,3);
+  static Matrix threeDtangentCopy(6,6);
 
   const XC::Matrix &threeDtangent = theMaterial->getTangent();
 
@@ -279,74 +278,73 @@ const XC::Matrix &XC::BeamFiberMaterial::getTangent(void) const
 }
 
 const XC::Matrix &XC::BeamFiberMaterial::getInitialTangent(void) const
-{
-  static XC::Matrix dd11(3,3);
-  static XC::Matrix dd12(3,3);
-  static XC::Matrix dd21(3,3);
-  static XC::Matrix dd22(3,3);
-  static XC::Matrix dd22invdd21(3,3);
-  static XC::Matrix threeDtangentCopy(6,6);
+  {
+    static Matrix dd11(3,3);
+    static Matrix dd12(3,3);
+    static Matrix dd21(3,3);
+    static Matrix dd22(3,3);
+    static Matrix dd22invdd21(3,3);
+    static Matrix threeDtangentCopy(6,6);
 
-  const XC::Matrix &threeDtangent = theMaterial->getInitialTangent();
+    const XC::Matrix &threeDtangent = theMaterial->getInitialTangent();
 
-  //swap matrix indices to sort out-of-plane components 
-  int i, j , ii, jj;
-  for(i=0; i<6; i++) {
+    //swap matrix indices to sort out-of-plane components 
+    int i, j , ii, jj;
+    for(i=0; i<6; i++) {
 
-    ii = this->indexMap(i);
+      ii = this->indexMap(i);
 
-    for(j=0; j<6; j++) {
-      
-      jj = this->indexMap(j);
-      
-      threeDtangentCopy(ii,jj) = threeDtangent(i,j);
-      
-    }//end for j
-       
-  }//end for i
+      for(j=0; j<6; j++) {
+
+	jj = this->indexMap(j);
+
+	threeDtangentCopy(ii,jj) = threeDtangent(i,j);
+
+      }//end for j
+
+    }//end for i
 
 
-  for(i=0; i<3; i++) {
-    for(j=0; j<3; j++) {
-      dd11(i,j) = threeDtangentCopy(i,  j );
-      dd12(i,j) = threeDtangentCopy(i,  j+3);
-      dd21(i,j) = threeDtangentCopy(i+3,j );
-      dd22(i,j) = threeDtangentCopy(i+3,j+3);
-      
+    for(i=0; i<3; i++) {
+      for(j=0; j<3; j++) {
+	dd11(i,j) = threeDtangentCopy(i,  j );
+	dd12(i,j) = threeDtangentCopy(i,  j+3);
+	dd21(i,j) = threeDtangentCopy(i+3,j );
+	dd22(i,j) = threeDtangentCopy(i+3,j+3);
+
+      }
     }
+
+    //int Solve(const XC::Vector &V, XC::Vector &res) const;
+    //int Solve(const XC::Matrix &M, XC::Matrix &res) const;
+    //condensation 
+    dd22.Solve(dd21, dd22invdd21);
+    this->tangent   = dd11; 
+    this->tangent  -= (dd12*dd22invdd21);
+
+    return this->tangent;
   }
-
-  //int Solve(const XC::Vector &V, XC::Vector &res) const;
-  //int Solve(const XC::Matrix &M, XC::Matrix &res) const;
-  //condensation 
-  dd22.Solve(dd21, dd22invdd21);
-  this->tangent   = dd11; 
-  this->tangent  -= (dd12*dd22invdd21);
-
-  return this->tangent;
-}
 
 //NDmaterial strain order        = 11, 22, 33, 12, 23, 31 
 //BeamFiberMaterial strain order = 11, 12, 31, 22, 33, 23
 int XC::BeamFiberMaterial::indexMap(int i) const
-{
-  int ii;
+  {
+    int retval;
 
-  if(i == 3) 
-      ii = 1;
-  else if(i == 5)
-      ii = 2;
-  else if(i == 1)
-      ii = 3;
-  else if(i == 2)
-      ii = 4;
-  else if(i == 4)
-      ii = 5;
-  else 
-      ii = i;
-
-  return ii;
-}
+    if(i == 3) 
+	retval = 1;
+    else if(i == 5)
+	retval = 2;
+    else if(i == 1)
+	retval = 3;
+    else if(i == 2)
+	retval = 4;
+    else if(i == 4)
+	retval = 5;
+    else 
+	retval = i;
+    return retval;
+  }
 
 void XC::BeamFiberMaterial::Print(std::ostream &s, int flag) const
   {
