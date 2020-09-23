@@ -1448,7 +1448,7 @@ class StructuralMechanics3D(StructuralMechanics):
                 if(constrCond[i] != 'free'):
                     self.constraints.newSPConstraint(n.tag,i,constrCond[i])
                     
-    def setHugeBeamBetweenNodes(self,nodeA, nodeB, nmbTransf= None, trfType= 'linear'):
+    def setHugeBeamBetweenNodes(self,nodeA, nodeB, nmbTransf= None, trfType= 'linear', stiffnessFactor= 1.0):
         '''
         Creates a very stiff bar between the two nodes being passed as parameters.
         (it was a workaround to the problem with the reactions values in nodes when
@@ -1460,6 +1460,7 @@ class StructuralMechanics3D(StructuralMechanics):
         :param   nmbTransf: name of the coordinate transformation to use for the new bar.
         :param trfType: type of the transformation ('linear', 'p_delta' or 'corotational')
                         used only if nmbTransf==None.
+        :param stiffnessFactor: factor to apply to the beam stiffness.
         '''
         elements= self.getElementHandler()
         if(not nmbTransf): # define a new transformation.
@@ -1469,23 +1470,24 @@ class StructuralMechanics3D(StructuralMechanics):
         elements.defaultTransformation= nmbTransf
         # Material definition
         matName= 'bar' + str(nodeA.tag) + str(nodeB.tag) + nmbTransf
-        (A,E,G,Iz,Iy,J)= (10, 1e14 , 1e12 , 10, 10, 10)
+        (A,E,G,Iz,Iy,J)= (10, 1e14*stiffnessFactor , 1e12*stiffnessFactor , 10, 10, 10)
         scc= tm.defElasticSection3d(self.preprocessor,matName,A,E,G,Iz,Iy,J)
         elements.defaultMaterial= matName
         elem= elements.newElement("ElasticBeam3d",xc.ID([nodeA.tag,nodeB.tag]))
         return elem
 
-    def setHugeTrussBetweenNodes(self,nodeA, nodeB):
+    def setHugeTrussBetweenNodes(self,nodeA, nodeB, stiffnessFactor= 1.0):
         '''
         Creates a very stiff bar between the two nodes being passed as parameters.
 
         :param   nodeA: tag of bar's from node.
         :param   nodeB: bar's to node.
+        :param stiffnessFactor: factor to apply to the beam stiffness.
         '''
         elements= self.getElementHandler()
         # Material definition
         matName= 'truss' + str(nodeA.tag) + str(nodeB.tag)
-        (A,E)=( 10 , 1e14)
+        (A,E)=( 10 , 1e14*stiffnessFactor)
         mat= tm.defElasticMaterial(self.preprocessor, matName,E)
         elements.dimElem= 3
         elements.defaultMaterial= matName
