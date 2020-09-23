@@ -49,6 +49,8 @@ class_<XC::NDMaterialPhysicalProperties, bases<PhysicalProperties_NDMat>, boost:
   .add_property("getCommittedAvgStress",getCommittedAvgStressVector,"Returns a vector with average stress values for gauss points.")
   .def("getCommittedAvgStrainComponent",getCommittedAvgStrainDouble,"Returns i-component of average strain values vector for gauss points.")
   .def("getCommittedAvgStressComponent",getCommittedAvgStressDouble,"Returns i-component  of average stress values vector for gauss points.")
+    .def("getMeanGeneralizedStressByName", &XC::NDMaterialPhysicalProperties::getMeanGeneralizedStressByName)
+    .def("getMeanGeneralizedStrainByName", &XC::NDMaterialPhysicalProperties::getMeanGeneralizedStrainByName)
    ;
 
 class_<XC::SolidMech2D, bases<XC::NDMaterialPhysicalProperties>, boost::noncopyable  >("SolidMech2D", no_init)

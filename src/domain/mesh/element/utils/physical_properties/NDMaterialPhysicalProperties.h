@@ -55,6 +55,9 @@ class NDMaterialPhysicalProperties: public PhysicalProperties<NDMaterial>
     Vector getCommittedAvgStress(void) const;
     double getCommittedAvgStrain(const size_t &iComp) const;
     double getCommittedAvgStress(const size_t &iComp) const;
+    double getMeanGeneralizedStrainByName(const std::string &) const;
+    double getMeanGeneralizedStressByName(const std::string &) const;
+    virtual size_t getComponentIndexFromCode(const std::string &) const;
 
     Matrix getCommittedStrain(void) const;
     Matrix getCommittedStress(void) const;

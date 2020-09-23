@@ -44,6 +44,21 @@ XC::SolidMech2D::SolidMech2D(const size_t &nMat, NDMaterial &theMat,const std::s
     setRho(r);
   }
 
+size_t  XC::SolidMech2D::getComponentIndexFromCode(const std::string &code) const
+  {
+    if(code=="sigma_11")
+      return 0;
+    else if(code=="sigma_22")
+      return 1;
+    else if(code=="sigma_12")
+      return 2;
+    else
+      std::cerr << getClassName() << "::" << __FUNCTION__
+	        << "; code: '" << code << "' unknown."
+	        << std::endl;
+    return 0;
+  }
+
 #define DBTAGS_SIZE 3
 //! @brief Returns a vector to store the dbTags
 //! of the class members.

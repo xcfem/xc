@@ -137,6 +137,33 @@ double XC::NDMaterialPhysicalProperties::getCommittedAvgStrain(const size_t &iCo
     return retval;
   }
 
+//! @brief Returns the component of the average strain vector which
+//! has the code being passed as parameter.
+//!
+//! @param cod: component code.
+double XC::NDMaterialPhysicalProperties::getMeanGeneralizedStrainByName(const std::string &cod) const
+  {
+    const size_t iComp= getComponentIndexFromCode(cod);
+    return getCommittedAvgStrain(iComp);
+  }
+
+//! @brief Returns the component of the average strain vector which
+//! has the code being passed as parameter.
+//!
+//! @param cod: component code.
+double XC::NDMaterialPhysicalProperties::getMeanGeneralizedStressByName(const std::string &cod) const
+  {
+    const size_t iComp= getComponentIndexFromCode(cod);
+    return getCommittedAvgStress(iComp);
+  }
+
+size_t  XC::NDMaterialPhysicalProperties::getComponentIndexFromCode(const std::string &) const
+  {
+    std::cerr << getClassName() << "::" << __FUNCTION__
+              << "; not implemented yet." << std::endl;
+    return 0;
+  }
+
 // check to see if have mass
 bool XC::NDMaterialPhysicalProperties::haveRho(void) const
   {

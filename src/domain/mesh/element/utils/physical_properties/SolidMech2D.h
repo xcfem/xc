@@ -49,6 +49,8 @@ class SolidMech2D: public NDMaterialPhysicalProperties
     SolidMech2D(const size_t &nMat= 0, const NDMaterial *ptr_mat= nullptr, const double &t=0.0, const double &r= 0.0);
     SolidMech2D(const size_t &, NDMaterial &,const std::string &, const double &t=0.0, const double &r= 0.0);
 
+    virtual size_t getComponentIndexFromCode(const std::string &) const;
+    
     inline double getThickness(void) const
       { return thickness; }
     inline void setThickness(const double &t)
