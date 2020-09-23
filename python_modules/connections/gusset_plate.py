@@ -76,14 +76,28 @@ class GussetPlate(object):
         p2= geom.Pos3d(p1.x,p1.y,origin.z) # Vertical leg.
         return p1, p2
     
-    def getToColumnBottomLeg(self, p0):
+    def getToColumnBottomLeg(self, p0, cutKnifePoint= 1.0):
         '''Return the points of a verticol bottom leg.
 
         :param p0: intersection of the member axis with the column.
+        :param cutKnifePoint: if <1 cuts the point of the knife at
+                              the contact of the leg with the column
+                              surface.
         '''
         p1= self.gussetTip-self.halfChamfer
-        p2= p0-geom.Vector3d(0.0,0.0,p0.z) # vertical of the intersection with the column.
-        return p1, p2
+        tmp= p0-geom.Vector3d(0.0,0.0,p0.z) # vertical of the intersection
+                                            # with the column.
+        if(cutKnifePoint==1.0):
+            p2= tmp
+            p3= None
+        else:
+            knifeEdge= geom.Segment3d(p1, tmp)
+            p3= p0-geom.Vector3d(0.0,0.0,cutKnifePoint*p0.z)
+            # Horizontal plane through p3
+            planeP3= geom.Plane3d(p3, geom.Vector3d(1,0,0), geom.Vector3d(0,1,0))
+            # Cut the point
+            p2= planeP3.getIntersection(knifeEdge)
+        return p1, p2, p3
 
     def setContour(self, pointList):
         ''' Set the points that define the contour of the gusset plate.
