@@ -71,7 +71,7 @@ XC::PlateFiberMaterial::PlateFiberMaterial(int tag)
   {}
 
 //! @brief Full constructor
-XC::PlateFiberMaterial::PlateFiberMaterial(int tag, XC::NDMaterial &the3DMaterial) :
+XC::PlateFiberMaterial::PlateFiberMaterial(int tag, NDMaterial &the3DMaterial) :
   XC::NDAdaptorMaterial(ND_TAG_PlateFiberMaterial,tag,the3DMaterial,5)
   {}
 
