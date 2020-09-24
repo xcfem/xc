@@ -553,6 +553,7 @@ const XC::Vector &XC::ElasticBeam3d::getResistingForceIncInertia(void) const
       P*=dead_srf;
   }
 
+//! @brief Return the element resisting force.
 const XC::Vector &XC::ElasticBeam3d::getResistingForce(void) const
   {
     const Vector &v= getSectionDeformation();
@@ -584,12 +585,15 @@ const XC::Vector &XC::ElasticBeam3d::getResistingForce(void) const
     q.Mz2()+= q0[2];
     q.My1()+= q0[3];
     q.My2()+= q0[4];
+    
+    if(isDead())
+      q*= dead_srf;
 
-    Vector p0Vec= p0.getVector();
+    const Vector p0Vec= p0.getVector();
 
     //  std::cerr << q;
 
-    P = theCoordTransf->getGlobalResistingForce(q, p0Vec);
+    P= theCoordTransf->getGlobalResistingForce(q, p0Vec);
 
     // std::cerr << P;
 
@@ -597,7 +601,7 @@ const XC::Vector &XC::ElasticBeam3d::getResistingForce(void) const
     P.addVector(1.0, load, -1.0);
 
     if(isDead())
-      P*=dead_srf;
+      P*= dead_srf;
     return P;
   }
 
