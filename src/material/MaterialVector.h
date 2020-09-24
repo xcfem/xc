@@ -253,7 +253,7 @@ int MaterialVector<MAT>::revertToStart(void)
     int retVal = 0;
 
     for(iterator i=mat_vector::begin();i!=mat_vector::end();i++)
-      retVal+= (*i)->revertToStart() ;
+      retVal+= (*i)->revertToStart();
     return retVal;
   }
 
@@ -262,20 +262,34 @@ template <class MAT>
 XC::Matrix XC::MaterialVector<MAT>::getValues(const std::string &code) const
   {
     Matrix retval;
-    std::cerr << getClassName() << "::" << __FUNCTION__
-	      << "; not implemented yet." << std::endl;
-    if(code=="strain")
+    const size_t nMat= this->size();
+    std::vector<Matrix> tmp(nMat);
+    int count= 0;
+    int nRows= 0;
+    int nCols= 0;
+    for(iterator i=mat_vector::begin();i!=mat_vector::end();i++, count++)
       {
-	retval= getGeneralizedStrains();
+        const Matrix v= (*i)->getValues(code);
+	nRows+= v.noRows();
+	nCols= std::max(nCols, v.noCols());
+	tmp[count]= v;
       }
-    else if(code=="stress")
+    retval.resize(nRows,nCols);
+    int iRow= 0;
+    int iCol= 0;
+    for(int i= 0;i<nMat;i++)
       {
-	retval= getGeneralizedStresses();
+	const Matrix v= tmp[i];
+        for(int j= 0;j<v.noRows();j++)
+	  {
+	    iRow+= j;
+	    for(int k= 0;k<v.noCols();k++)
+	      {
+		iCol= k;
+	        retval(iRow,iCol)= v(j,k);
+	      }
+	  }
       }
-    else
-      std::cerr << getClassName() << "::" << __FUNCTION__
-	        << "; no property with code: '" << code
-		<< "'." << std::endl;
     return retval;
   }
   

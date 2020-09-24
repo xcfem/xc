@@ -62,6 +62,7 @@
 #include "Material.h"
 #include "preprocessor/prep_handlers/MaterialHandler.h"
 #include "utility/matrix/Vector.h"
+#include "utility/matrix/Matrix.h"
 #include "utility/matrix/ID.h"
 
 //! @brief Constructor.
@@ -118,6 +119,15 @@ XC::Response* XC::Material::setResponse(const std::vector<std::string> &argv, In
 //! @brief Returns material response.
 int XC::Material::getResponse(int responseID, Information &info)
   { return -1; }
+
+//! @brief Returns material response.
+XC::Matrix XC::Material::getValues(const std::string &) const
+  {
+    Matrix retval;
+    std::cerr << getClassName() << "::" << __FUNCTION__
+              << "; not implemented." << std::endl;
+    return retval;
+  }
 
 //! @brief Update state variables for the material
 //! according to the new values of the parameters.
