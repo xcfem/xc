@@ -284,7 +284,7 @@ class OutputHandler(object):
         captionText= self.getCaptionText(itemToDisp, unitDescription, setToDisplay)
         self.displayScalarPropertyAtNodes(propertyName, unitConversionFactor, unitDescription, captionText, setToDisplay, fileName, defFScale, rgMinMax)
         
-    def displayReactions(self,setToDisplay=None,fileName=None,defFScale=0.0):
+    def displayReactions(self,setToDisplay=None,fileName=None,defFScale=0.0, inclInertia= False):
         ''' Display reactions.
 
         :param setToDisplay: set of entities to be represented.
@@ -295,10 +295,11 @@ class OutputHandler(object):
                 the initial position plus its displacement multiplied
                 by this factor. (Defaults to 0.0, i.e. display of 
                 initial/undeformed shape)
+        :param inclInertia: include inertia effects (defaults to false).
         '''
         if(setToDisplay==None):
             setToDisplay= self.modelSpace.getTotalSet()
-        self.modelSpace.preprocessor.getNodeHandler.calculateNodalReactions(True,1e-7)
+        self.modelSpace.preprocessor.getNodeHandler.calculateNodalReactions(inclInertia,1e-7)
         #auto-scale
         LrefModSize= setToDisplay.getBnd(1.0).diagonal.getModulus() #representative length of set size (to autoscale)
         maxAbs=0.0

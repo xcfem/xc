@@ -10,13 +10,19 @@ __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
 class Reactions(object):
-  def __init__(self,preprocessor,supportNodes):
+  def __init__(self,preprocessor,supportNodes, inclInertia= False):
+      ''' Constructor.
+
+      :param preprocessor: XC preprocessor of the problem.
+      :param supportNodes: nodes to compute reactions.
+      :param inclInertia: include inertia effects (defaults to false).
+      '''
       self.forces= dict()
       self.moments= dict()
       self.positions= dict()
       self.svdReac= geom.SlidingVectorsSystem3d()
       nodeHandler= preprocessor.getNodeHandler
-      nodeHandler.calculateNodalReactions(True, 1e-7)
+      nodeHandler.calculateNodalReactions(inclInertia, 1e-7)
       f3d= geom.Vector3d(0.0,0.0,0.0)
       m3d= geom.Vector3d(0.0,0.0,0.0)
       for n in supportNodes:
@@ -43,7 +49,7 @@ class Reactions(object):
          The key of the map is the node tag.''' 
       return self.moments
 
-  def getResultant(self):
+  def getResultantSVS(self):
       return self.svdReac
 
 

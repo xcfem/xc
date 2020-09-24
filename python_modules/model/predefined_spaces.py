@@ -13,6 +13,7 @@ from misc_utils import log_messages as lmsg
 import geom
 from materials import typical_materials as tm
 from postprocess import extrapolate_elem_attr
+from postprocess import get_reactions
 from solution import predefined_solutions
 import uuid
 
@@ -29,6 +30,7 @@ class PredefinedSpace(object):
         nodes.dimSpace= dimSpace
         nodes.numDOFs= numDOFs
         self.analysis= None
+        self.fixedNodesTags= set()
 
     def getProblem(self):
         ''' Return the XC finite element problem object.
@@ -165,7 +167,17 @@ class PredefinedSpace(object):
     def getLoadPattern(self, lpName):
         ''' Return the load pattern with the argument name.'''
         return self.getLoadHandler().getLoadPatterns[lpName]
-    
+
+    def newSPConstraint(self, nodeTag, dof, prescribedDisp= 0.0):
+        ''' Prescribe displacement for node DOFs.
+
+        :param nodeTag: tag of the node.
+        :param dof: index of the degree of freedom.
+        :param prescribedDisp: values of the displacement.
+        '''
+        self.constraints.newSPConstraint(nodeTag,dof,prescribedDisp)
+        self.fixedNodesTags.add(nodeTag)
+
     def setPrescribedDisplacements(self,nodeTag,prescDisplacements):
         '''Prescribe displacement for node DOFs.
 
@@ -179,7 +191,7 @@ class PredefinedSpace(object):
             lmsg.warning('prescribed '+str(numDisp)+' displacements, nDOFS= '+str(numDOFs))
         sz= min(numDOFs,numDisp)
         for i in range(0,sz):
-            spc= self.constraints.newSPConstraint(nodeTag,i,prescDisplacements[i])
+            spc= self.newSPConstraint(nodeTag,i,prescDisplacements[i])
 
     def setRigidBeamBetweenNodes(self,nodeTagA, nodeTagB):
         '''Create a rigid beam between the nodes passed as parameters.
@@ -296,7 +308,7 @@ class PredefinedSpace(object):
         constraints= self.preprocessor.getBoundaryCondHandler
         numDOFs= self.preprocessor.getNodeHandler.numDOFs
         for i in range(0,numDOFs):
-            spc= constraints.newSPConstraint(newNode.tag,i,0.0)
+            spc= self.newSPConstraint(newNode.tag,i,0.0)
         return newNode, newElement
 
     def setBearingOnX(self,iNod,bearingMaterial):
@@ -341,8 +353,23 @@ class PredefinedSpace(object):
         # Boundary conditions
         numDOFs= self.preprocessor.getNodeHandler.numDOFs
         for i in range(0,numDOFs):
-            spc= self.constraints.newSPConstraint(newNode.tag,i,0.0)
+            spc= self.newSPConstraint(newNode.tag,i,0.0)
         return newNode.tag, zl.tag
+
+    def getReactions(self, xcSet= None):
+        ''' Return a Reactions object containing the reactions
+            obtained during the analysis.
+
+        :param xcSet: compute only the reactions of the nodes
+                      in the set.
+        '''
+        if(xcSet==None):
+            xcSet= self.getTotalSet()
+        supportNodes= list()
+        for nTag in self.fixedNodesTags:
+            n= self.preprocessor.getNodeHandler.getNode(nTag)
+            supportNodes.append(n)
+        return get_reactions.Reactions(self.preprocessor, supportNodes)
 
     def getTotalSet(self):
         '''Return the set that contains all the defined
@@ -646,22 +673,22 @@ class SolidMechanics2D(PredefinedSpace):
 
          :param nodeTag: node identifier.
         '''
-        self.constraints.newSPConstraint(nodeTag,0,0.0) # nodeTag, DOF, constrValue
-        self.constraints.newSPConstraint(nodeTag,1,0.0)
+        self.newSPConstraint(nodeTag,0,0.0) # nodeTag, DOF, constrValue
+        self.newSPConstraint(nodeTag,1,0.0)
 
     def fixNode0F(self, nodeTag):
         '''Restrain only displacement DOFs (i. e. Ux= 0 and Uy= 0).
 
          :param nodeTag: node identifier.
         '''
-        self.constraints.newSPConstraint(nodeTag,0,0.0) # nodeTag, DOF, constrValue
+        self.newSPConstraint(nodeTag,0,0.0) # nodeTag, DOF, constrValue
         
     def fixNodeF0(self, nodeTag):
         '''Restrain only displacement DOFs (i. e. Ux= 0 and Uy= 0).
 
          :param nodeTag: node identifier.
         '''
-        self.constraints.newSPConstraint(nodeTag,1,0.0) # nodeTag, DOF, constrValue
+        self.newSPConstraint(nodeTag,1,0.0) # nodeTag, DOF, constrValue
 
 def gdls_elasticidad2D(nodes):
     '''Defines the dimension of the space: nodes by two coordinates (x,y) and two DOF for each node (Ux,Uy)
@@ -901,46 +928,46 @@ class StructuralMechanics2D(StructuralMechanics):
 
          :param nodeTag: node identifier.
         '''
-        self.constraints.newSPConstraint(nodeTag,0,0.0) # nodeTag, DOF, constrValue
-        self.constraints.newSPConstraint(nodeTag,1,0.0)
-        self.constraints.newSPConstraint(nodeTag,2,0.0)
+        self.newSPConstraint(nodeTag,0,0.0) # nodeTag, DOF, constrValue
+        self.newSPConstraint(nodeTag,1,0.0)
+        self.newSPConstraint(nodeTag,2,0.0)
 
     def fixNode00F(self, nodeTag):
         '''Restrain only displacement DOFs (i. e. Ux= 0 and Uy= 0).
 
          :param nodeTag: node identifier.
         '''
-        self.constraints.newSPConstraint(nodeTag,0,0.0) # nodeTag, DOF, constrValue
-        self.constraints.newSPConstraint(nodeTag,1,0.0)
+        self.newSPConstraint(nodeTag,0,0.0) # nodeTag, DOF, constrValue
+        self.newSPConstraint(nodeTag,1,0.0)
 
     def fixNode0F0(self, nodeTag):
         '''Restrain all three node DOFs (i. e. make them zero).
 
          :param nodeTag: node identifier.
         '''
-        self.constraints.newSPConstraint(nodeTag,0,0.0) # nodeTag, DOF, constrValue
-        self.constraints.newSPConstraint(nodeTag,2,0.0)
+        self.newSPConstraint(nodeTag,0,0.0) # nodeTag, DOF, constrValue
+        self.newSPConstraint(nodeTag,2,0.0)
 
     def fixNode0FF(self, nodeTag):
         '''Restrain only X displacement DOF (i. e. Ux= 0).
 
          :param nodeTag: node identifier.
         '''
-        self.preprocessor.getBoundaryCondHandler.newSPConstraint(nodeTag,0,0.0) 
+        self.newSPConstraint(nodeTag,0,0.0) 
 
     def fixNodeF0F(self, nodeTag):
         '''Restrain only Y displacement DOF (i. e. Uy= 0).
 
          :param nodeTag: node identifier.
         '''
-        self.preprocessor.getBoundaryCondHandler.newSPConstraint(nodeTag,1,0.0) 
+        self.newSPConstraint(nodeTag,1,0.0) 
 
     def fixNodeFF0(self, nodeTag):
         '''Restrain only rotation DOF (i. e. Theta= 0).
 
          :param nodeTag: node identifier.
         '''
-        self.preprocessor.getBoundaryCondHandler.newSPConstraint(nodeTag,2,0.0)
+        self.newSPConstraint(nodeTag,2,0.0)
 
     def fixNodesLine(self, line):
         '''Restrain all DOFs of the line nodes.'''  
@@ -1080,9 +1107,9 @@ class SolidMechanics3D(PredefinedSpace):
 
           :param nodeTag: node identifier.
         '''
-        self.constraints.newSPConstraint(nodeTag,0,0.0) # nodeTag, DOF, constrValue
-        self.constraints.newSPConstraint(nodeTag,1,0.0)
-        self.constraints.newSPConstraint(nodeTag,2,0.0)
+        self.newSPConstraint(nodeTag,0,0.0) # nodeTag, DOF, constrValue
+        self.newSPConstraint(nodeTag,1,0.0)
+        self.newSPConstraint(nodeTag,2,0.0)
         
     def fixNode(self,DOFpattern,nodeTag):
         '''Restrain DOF of a node according to the DOFpattern, which is a given
@@ -1095,7 +1122,7 @@ class SolidMechanics3D(PredefinedSpace):
         DOFpatclean=DOFpattern.replace('_','')
         DOFtoConstr=[i for i in range(len(DOFpatclean)) if DOFpatclean[i]=='0']
         for nc in DOFtoConstr:
-            self.constraints.newSPConstraint(nodeTag,nc,0.0)
+            self.newSPConstraint(nodeTag,nc,0.0)
 
 def gdls_elasticidad3D(nodes):
     '''Defines the dimension of the space: nodes by three coordinates (x,y,z) 
@@ -1297,7 +1324,7 @@ class StructuralMechanics3D(StructuralMechanics):
         DOFpatclean=DOFpattern.replace('_','')
         DOFtoConstr=[i for i in range(len(DOFpatclean)) if DOFpatclean[i]=='0']
         for nc in DOFtoConstr:
-            self.constraints.newSPConstraint(nodeTag,nc,0.0)
+            self.newSPConstraint(nodeTag,nc,0.0)
 
     def fixNode000_000(self, nodeTag):
         '''Restrain all six node DOFs (i. e. make them zero).
@@ -1476,7 +1503,7 @@ class StructuralMechanics3D(StructuralMechanics):
         for n in lstNodes:
             for i in range(0,6):
                 if(constrCond[i] != 'free'):
-                    self.constraints.newSPConstraint(n.tag,i,constrCond[i])
+                    self.newSPConstraint(n.tag,i,constrCond[i])
                     
     def setHugeBeamBetweenNodes(self,nodeA, nodeB, nmbTransf= None, trfType= 'linear', stiffnessFactor= 1.0):
         '''
