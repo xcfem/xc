@@ -123,6 +123,7 @@ python tests/elements/plane/test_four_node_quad_01.py
 python tests/elements/plane/test_four_node_quad_02.py
 python tests/elements/plane/test_maximum_corner_angle.py
 python tests/elements/plane/test_extrapolate_values_quad_01.py
+python tests/elements/plane/test_extrapolate_values_quad_01.py
 echo "$BLEU" "  Shell elements tests." "$NORMAL"
 python tests/elements/shell/test_shell_mitc4_01.py
 python tests/elements/shell/test_shell_mitc4_02.py
@@ -182,6 +183,8 @@ python tests/elements/birth_and_death/kill_elements_03.py
 python tests/elements/birth_and_death/kill_elements_04.py
 python tests/elements/birth_and_death/kill_elements_05.py
 python tests/elements/birth_and_death/kill_elements_06.py
+python tests/elements/birth_and_death/kill_elements_07.py
+python tests/elements/birth_and_death/kill_elements_08.py
 
 echo "$BLEU" "Solver tests." "$NORMAL"
 python tests/solution/superlu_solver_test_01.py
