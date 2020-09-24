@@ -380,15 +380,17 @@ def plain_static_modified_newton(prb, mxNumIter= 10, convergenceTestTol= .01):
     solution.convergenceTestTol= convergenceTestTol
     return solution.plainStaticModifiedNewton(prb)
 
-def penalty_newton_raphson(prb, mxNumIter= 10, convergenceTestTol= 1e-4):
+def penalty_newton_raphson(prb, mxNumIter= 10, convergenceTestTol= 1e-4, printFlag= 0):
     ''' Return a penalty Newton-Raphson solution procedure.
 
     :ivar maxNumIter: maximum number of iterations (defauts to 10)
     :ivar convergenceTestTol: convergence tolerance (defaults to 1e-9)
+    :ivar printFlag: print message on each iteration
     '''
     solution= SolutionProcedure()
     solution.maxNumIter= mxNumIter
     solution.convergenceTestTol= convergenceTestTol
+    solution.printFlag= printFlag
     return solution.penaltyNewtonRaphson(prb)
 
 def frequency_analysis(prb):
