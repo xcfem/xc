@@ -98,10 +98,13 @@ def extrapolate_elem_data_to_nodes(elemSet,attributeName, function, argument= No
     :param elemSet: set of elements.
     :param attributeName: name of the property which will be defined
      at the nodes.
-    :param method: name of the method to call for each element.
+    :param function: name of the method to call for each element.
     :param argument: name of the argument for the function call function (optional).
     :param initialValue: initial value for the attribute defined at the nodes.
     '''
+    print('**** ',attributeName)
+    print('**** function: ', function)
+    print('**** argument: ', argument)
     touchedNodesTags= create_attribute_at_nodes(elemSet,attributeName,initialValue)
     #Calculate totals.
     for e in elemSet:

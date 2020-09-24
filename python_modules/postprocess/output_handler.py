@@ -167,7 +167,7 @@ class OutputHandler(object):
         displaySettings= vtk_FE_graphic.DisplaySettingsFE()
         displaySettings.cameraParameters= self.getCameraParameters()
         displaySettings.displayMesh(xcSets=setToDisplay,field=field, diagrams= None, caption= captionText, fileName=fileName, defFScale=defFScale)
-
+        
     def displayDispRot(self,itemToDisp, setToDisplay=None, fileName=None,defFScale=0.0, rgMinMax=None):
         '''displays the component of the displacement or rotations in the 
         set of entities.
@@ -189,10 +189,10 @@ class OutputHandler(object):
 
         '''
         # Define the property at nodes.
-        propertyName= 'disp'+itemToDisp
-        vCompDisp= self.modelSpace.getDispComponentFromName(itemToDisp)
         if(setToDisplay==None):
             setToDisplay= self.modelSpace.getTotalSet()
+        propertyName= 'disp'+itemToDisp
+        vCompDisp= self.modelSpace.getDispComponentFromName(itemToDisp)
         nodSet= setToDisplay.nodes
         for n in nodSet:
             n.setProp(propertyName,n.getDisp[vCompDisp])
@@ -222,12 +222,7 @@ class OutputHandler(object):
         # Define the property at nodes.
         if(setToDisplay==None):
             setToDisplay= self.modelSpace.getTotalSet()
-        self.modelSpace.computeValuesAtNodes(setToDisplay, propToDefine= 'stress')
-        propertyName= 'stress'+itemToDisp
-        vCompStress= self.modelSpace.getStressComponentFromName(itemToDisp)
-        nodSet= setToDisplay.nodes
-        for n in nodSet:
-            n.setProp(propertyName,n.getProp('stress')[vCompStress])
+        propertyName= self.modelSpace.setNodePropertyFromElements(compName= itemToDisp, xcSet= setToDisplay, function= self.modelSpace.getStressComponentFromName, propToDefine= 'stress')
         unitConversionFactor, unitDescription= self.outputStyle.getUnitParameters(itemToDisp)
 
         captionText= self.getCaptionText(itemToDisp, unitDescription, setToDisplay)
@@ -254,12 +249,36 @@ class OutputHandler(object):
         # Define the property at nodes.
         if(setToDisplay==None):
             setToDisplay= self.modelSpace.getTotalSet()
-        self.modelSpace.computeValuesAtNodes(setToDisplay, propToDefine= 'strain')
-        propertyName= 'strain'+itemToDisp
-        vCompStrain= self.modelSpace.getStrainComponentFromName(itemToDisp)
-        nodSet= setToDisplay.nodes
-        for n in nodSet:
-            n.setProp(propertyName,n.getProp('strain')[vCompStrain])
+        propertyName= self.modelSpace.setNodePropertyFromElements(compName= itemToDisp, xcSet= setToDisplay, function= self.modelSpace.getStrainComponentFromName, propToDefine= 'strain')
+        unitConversionFactor, unitDescription= self.outputStyle.getUnitParameters(itemToDisp)
+
+        captionText= self.getCaptionText(itemToDisp, unitDescription, setToDisplay)
+        self.displayScalarPropertyAtNodes(propertyName, unitConversionFactor, unitDescription, captionText, setToDisplay, fileName, defFScale, rgMinMax)
+        
+    def displayVonMisesStresses(self,layer= None, setToDisplay=None, fileName=None,defFScale=0.0, rgMinMax=None):
+        '''display the stresses on the elements.
+
+        :param layer: number of the layer which will be asked
+                      for its Von Mises stress (use only with plate 
+                      fiber materials).
+        :param setToDisplay: set of entities to be represented.
+        :param fileName: name of the file to plot the graphic. Defaults to 
+                    None, in that case an screen display is generated
+        :param defFScale: factor to apply to current displacement of nodes 
+                so that the display position of each node equals to
+                the initial position plus its displacement multiplied
+                by this factor. (Defaults to 0.0, i.e. display of 
+                initial/undeformed shape)
+        :param rgMinMax: range (vmin,vmax) with the maximum and minimum values of 
+              the field to be represented. All the values less than vmin are 
+              displayed in blue and those greater than vmax in red
+              (defaults to None)
+
+        '''
+        # Define the property at nodes.
+        if(setToDisplay==None):
+            setToDisplay= self.modelSpace.getTotalSet()
+        propertyName= self.modelSpace.setNodePropertyFromElements(compName= layer, xcSet= setToDisplay, function= self.modelSpace.getStressComponentFromName, propToDefine= 'von_mises_stress')
         unitConversionFactor, unitDescription= self.outputStyle.getUnitParameters(itemToDisp)
 
         captionText= self.getCaptionText(itemToDisp, unitDescription, setToDisplay)

@@ -96,6 +96,8 @@ class MaterialVector: public std::vector<MAT *>, public CommandEntity, public Mo
     Matrix getGeneralizedStrain(const int &defID) const;
     Matrix getGeneralizedStress(const int &defID) const;
 
+    Matrix getValues(const std::string &) const;
+    
     std::set<std::string> getNames(void) const;
     boost::python::list getNamesPy(void) const;
 
@@ -255,6 +257,28 @@ int MaterialVector<MAT>::revertToStart(void)
     return retVal;
   }
 
+//! @brief Ask the materials about the values that correspond to the code.
+template <class MAT>
+XC::Matrix XC::MaterialVector<MAT>::getValues(const std::string &code) const
+  {
+    Matrix retval;
+    std::cerr << getClassName() << "::" << __FUNCTION__
+	      << "; not implemented yet." << std::endl;
+    if(code=="strain")
+      {
+	retval= getGeneralizedStrains();
+      }
+    else if(code=="stress")
+      {
+	retval= getGeneralizedStresses();
+      }
+    else
+      std::cerr << getClassName() << "::" << __FUNCTION__
+	        << "; no property with code: '" << code
+		<< "'." << std::endl;
+    return retval;
+  }
+  
 //! @brief Returns the size of stress vector.
 template <class MAT>
 size_t MaterialVector<MAT>::getGeneralizedStressSize(void) const

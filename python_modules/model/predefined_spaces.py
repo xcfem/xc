@@ -352,6 +352,16 @@ class PredefinedSpace(object):
     def defSet(self, setName):
         ''' Defines a set with the name argument.'''
         return self.preprocessor.getSets.defSet(setName)
+    
+    def removeSet(self, setName):
+        ''' Defines a set with the name argument.'''
+        return self.preprocessor.getSets.removeSet(setName)
+
+    def renewSet(self, setName):
+        ''' Redefines the set with the name argument.'''
+        if self.preprocessor.getSets.exists(setName):
+            self.preprocessor.getSets.removeSet(setName)
+        return self.defSet(setName)
 
     def setSum(self, setName, setsToSum):
         ''' Return a set that contains the union of the
@@ -511,7 +521,27 @@ class PredefinedSpace(object):
         :param setToDefine: set of elements to be processed.
         :param propToDefine: name of the property to define at the nodes.
         '''
+        print('**** ',propToDefine)
         extrapolate_elem_attr.extrapolate_elem_data_to_nodes(setToCompute.getElements,propToDefine,self.getValuesAtNodes, argument= propToDefine, initialValue= xc.Vector([0.0,0.0,0.0,0.0,0.0,0.0]))
+
+    def setNodePropertyFromElements(self,compName, xcSet, function, propToDefine):
+        '''display the stresses on the elements.
+
+        :param compName: name of the component of the magnitude ('sigma_11', 'strain_xx', ...)
+        :param xcSet: set of nodes to define the propery at.
+        :param function: function to call to retrieve the component value.
+        :param propToDefine: name of the property to define at the nodes.
+        '''
+        # Define the property at nodes.
+        self.computeValuesAtNodes(xcSet, propToDefine= propToDefine)
+        propertyName= propToDefine
+        nodSet= xcSet.nodes
+        if(compName): # Defined property has components.
+            propertyName+= compName
+            vComp= function(compName)
+            for n in nodSet:
+                n.setProp(propertyName,n.getProp(propToDefine)[vComp])
+        return propertyName
 
     def getDisplacementFileHeader(self):
         ''' Return the string header for the file with the displacements.'''
