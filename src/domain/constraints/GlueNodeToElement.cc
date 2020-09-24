@@ -33,6 +33,7 @@
 // Purpose: This file contains the implementation of class XC::GlueNodeToElement.
 
 #include <domain/constraints/GlueNodeToElement.h>
+#include "vtkCellType.h"
 
 //! @brief Constructor.
 //! @param tag: tag for the constraint.
@@ -47,5 +48,6 @@ XC::GlueNodeToElement::GlueNodeToElement(int tag)
 XC::GlueNodeToElement::GlueNodeToElement(int tag, const Node &node,const Element &elem, const ID &constrainedDOF)
   : MRMFreedom_Constraint(tag, elem, node, constrainedDOF) {}
 
-
-
+//! @brief VTK interface.
+int XC::GlueNodeToElement::getVtkCellType(void) const
+  { return VTK_VERTEX; }

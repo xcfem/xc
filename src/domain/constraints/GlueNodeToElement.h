@@ -60,6 +60,8 @@ class GlueNodeToElement: public MRMFreedom_Constraint
     // constructors        
     GlueNodeToElement(int tag); // LCPT
     GlueNodeToElement(int tag, const Node &,const Element &, const ID &);
+
+    int getVtkCellType(void) const;
   };
 } // end of XC namespace
 
