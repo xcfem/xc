@@ -586,7 +586,7 @@ const XC::Vector &XC::ElasticBeam3d::getResistingForce(void) const
     q.My1()+= q0[3];
     q.My2()+= q0[4];
     
-    if(isDead())
+    if(isDead()) //Set internal forces to zero when element is dead.
       q*= dead_srf;
 
     const Vector p0Vec= p0.getVector();

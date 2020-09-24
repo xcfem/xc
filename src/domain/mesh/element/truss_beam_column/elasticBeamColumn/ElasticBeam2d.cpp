@@ -554,6 +554,9 @@ const XC::Vector &XC::ElasticBeam2d::getResistingForce(void) const
     q(0)+= q0[0];
     q(1)+= q0[1];
     q(2)+= q0[2];
+    
+    if(isDead()) //Set internal forces to zero when element is dead.
+      q*= dead_srf;
 
     // Vector for reactions in basic system
     Vector p0Vec= p0.getVector();
