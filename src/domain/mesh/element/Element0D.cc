@@ -458,7 +458,7 @@ int XC::Element0D::recvData(const Communicator &comm)
     return res;
   }
 
-//! @brief Interfaz con VTK.
+//! @brief VTK interface.
 int XC::Element0D::getVtkCellType(void) const
   { return VTK_VERTEX; }
 
