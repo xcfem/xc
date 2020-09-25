@@ -1527,7 +1527,13 @@ class StructuralMechanics3D(StructuralMechanics):
         elements.defaultTransformation= nmbTransf
         # Material definition
         matName= 'bar' + str(nodeA.tag) + str(nodeB.tag) + nmbTransf
-        (A,E,G,Iz,Iy,J)= (10, 1e14*stiffnessFactor , 1e12*stiffnessFactor , 10, 10, 10)
+        E= 1e14*stiffnessFactor
+        G= E/(2.0*(1+0.3)) # nu= 0.3
+        side= 3.0
+        area= side**2
+        inertia= 1/12.0*side**4
+        torsional_inertia= inertia/100
+        (A,Iz,Iy,J)= (area, inertia, inertia, torsional_inertia)
         scc= tm.defElasticSection3d(self.preprocessor,matName,A,E,G,Iz,Iy,J)
         elements.defaultMaterial= matName
         elem= elements.newElement("ElasticBeam3d",xc.ID([nodeA.tag,nodeB.tag]))
