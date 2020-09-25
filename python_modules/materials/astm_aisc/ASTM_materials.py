@@ -79,6 +79,10 @@ A354BC= ASTMSteel('A354BC', fy=109*ksi, fu= 125*ksi, gammaM= 1.0)
 A354BD= ASTMSteel('A354BD', fy=115*ksi, fu= 140*ksi, gammaM= 1.0) # Higher values for bolts under 2.5 in.
 A490= ASTMSteel('A490', fy=940e6, fu= 1040e6, gammaM= 1.0)
 
+F1554gr36=ASTMSteel('F1554gr36', fy=248e6, fu= 400e6, gammaM= 1.0)  #steel for anchor bolts
+F1554gr55=ASTMSteel('F1554gr55', fy=380e6, fu= 517e6, gammaM= 1.0)  #steel for anchor bolts
+F1554gr105=ASTMSteel('F1554gr105', fy=724e6, fu= 862e6, gammaM= 1.0)  #steel for anchor bolts
+
 def getFilletWeldMinimumLeg(t):
     '''
     Return the minimum leg size for a fillet bead that welds a sheet 
@@ -202,7 +206,7 @@ class BoltBase(object):
         centerLabelsA= centerLabelsB+[ownerId]
         center3d= refSys.getPosGlobal(self.pos3d)
         pA= retval.appendPoint(-1, center3d.x, center3d.y, center3d.z, labels= centerLabelsA)        
-        pB= retval.appendPoint(-1, center3d.x, center3d.y, center3d.z-10*self.diameter, labels= centerLabelsB)
+        pB= retval.appendPoint(-1, center3d.x, center3d.y, center3d.z-1*self.diameter, labels= centerLabelsB)  #testing
         boltBlk= bte.BlockRecord(id= -1, typ= 'line', kPoints= [pA, pB])
         id= retval.appendBlock(boltBlk)       
         return retval
