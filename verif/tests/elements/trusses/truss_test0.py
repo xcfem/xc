@@ -1,9 +1,7 @@
 # -*- coding: utf-8 -*-
-
+''' Checks the orientation of the element's unary vectors.
+Home made test'''
 from __future__ import print_function
-
-# Home made test
-# Checks the orientation of the element's unary vectors.
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
 __copyright__= "Copyright 2015, LCPT and AOO"

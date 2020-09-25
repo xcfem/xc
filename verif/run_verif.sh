@@ -238,6 +238,7 @@ python tests/solution/geom_nl/aisc_360_benchmark_problem_case_08.py
 ## Time history.
 echo "$BLEU" "  Time history solution tests." "$NORMAL"
 python tests/solution/time_history/test_time_history_01.py
+python tests/solution/time_history/test_pseudo_time_history.py
 
 #Preprocessor tests
 echo "$BLEU" "Preprocessor tests." "$NORMAL"
