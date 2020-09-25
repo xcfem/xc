@@ -202,7 +202,7 @@ class BoltBase(object):
         centerLabelsA= centerLabelsB+[ownerId]
         center3d= refSys.getPosGlobal(self.pos3d)
         pA= retval.appendPoint(-1, center3d.x, center3d.y, center3d.z, labels= centerLabelsA)        
-        pB= retval.appendPoint(-1, center3d.x, center3d.y, center3d.z-10*self.diameter, labels= centerLabelsB)
+        pB= retval.appendPoint(-1, center3d.x, center3d.y, center3d.z-1*self.diameter, labels= centerLabelsB)  #testing
         boltBlk= bte.BlockRecord(id= -1, typ= 'line', kPoints= [pA, pB])
         id= retval.appendBlock(boltBlk)       
         return retval
