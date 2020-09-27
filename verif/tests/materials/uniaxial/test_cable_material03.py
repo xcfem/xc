@@ -33,7 +33,7 @@ nodes= preprocessor.getNodeHandler
 modelSpace= predefined_spaces.SolidMechanics2D(nodes)
 
 
-nodes.defaultTag= 1 #First node number.
+nodes.defaultTag= 1 # First node number.
 nod= nodes.newNodeXY(0,0)
 nod= nodes.newNodeXY(l/2,0.0)
 nod= nodes.newNodeXY(l,0.0)
@@ -49,7 +49,7 @@ cable= typical_materials.defCableMaterial(preprocessor, "cable",E,sigmaPret,0.0)
 elements= preprocessor.getElementHandler
 elements.defaultMaterial= cable.name
 elements.dimElem= 2 # Dimension of element space
-elements.defaultTag= 1 #First node number.
+elements.defaultTag= 1 # First node number.
 truss1= elements.newElement("CorotTruss",xc.ID([1,2]))
 truss1.sectionArea= area
 truss2= elements.newElement("CorotTruss",xc.ID([2,3]))
@@ -63,17 +63,13 @@ spc= constraints.newSPConstraint(1,1,0.0)
 spc= constraints.newSPConstraint(3,0,0.0) # Node 3
 spc= constraints.newSPConstraint(3,1,0.0)
 
-# Loads definition
-loadHandler= preprocessor.getLoadHandler
-lPatterns= loadHandler.getLoadPatterns
-#Load modulation.
-ts= lPatterns.newTimeSeries("constant_ts","ts")
-lPatterns.currentTimeSeries= "ts"
-lPattern= "0"
-lp0= lPatterns.newLoadPattern("default",lPattern)
-#lPatterns.currentLoadPattern= lPattern
+
+# Load case definition.
+lPattern= '0'
+lp0= modelSpace.newLoadPattern(name= lPattern)
+
 lp0.newNodalLoad(2,xc.Vector([0,-F]))
-lPatterns.addToDomain(lPattern)
+modelSpace.addLoadCaseToDomain(lPattern)
 
 # Solution procedure
 analysis= predefined_solutions.plain_newton_raphson(feProblem)

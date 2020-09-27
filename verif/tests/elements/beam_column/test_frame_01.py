@@ -55,7 +55,7 @@ section= typical_materials.defElasticSectionFromMechProp2d(preprocessor, "sectio
 elements= preprocessor.getElementHandler
 elements.defaultTransformation= lin.name
 elements.defaultMaterial= section.name
-elements.defaultTag= 1 #Tag for next element.
+elements.defaultTag= 1 # Tag for next element.
 beam2d= elements.newElement("ElasticBeam2d",xc.ID([1,2]))
 beam2d= elements.newElement("ElasticBeam2d",xc.ID([2,4]))
 beam2d= elements.newElement("ElasticBeam2d",xc.ID([4,3]))
@@ -70,15 +70,9 @@ modelSpace.fixNode000(3)
 modelSpace.fixNode000(5)
 modelSpace.fixNode000(7)
 
-# Loads definition
-loadHandler= preprocessor.getLoadHandler
-lPatterns= loadHandler.getLoadPatterns
-#Load modulation.
-ts= lPatterns.newTimeSeries("constant_ts","ts")
-lPatterns.currentTimeSeries= "ts"
-#Load case definition
-lp0= lPatterns.newLoadPattern("default","0")
-#lPatterns.currentLoadPattern= "0"
+# Load definition.
+lp0= modelSpace.newLoadPattern(name= '0')
+
 eleLoad= lp0.newElementalLoad("beam2d_point_load")
 eleLoad.elementTags= xc.ID([2])
 eleLoad.transComponent= -P
@@ -87,8 +81,8 @@ eleLoad= lp0.newElementalLoad("beam2d_point_load")
 eleLoad.elementTags= xc.ID([5])
 eleLoad.transComponent= -P
 eleLoad.x= 0.25
-#We add the load case to domain.
-lPatterns.addToDomain(lp0.name)
+# We add the load case to domain.
+modelSpace.addLoadCaseToDomain(lp0.name)
 
 # Solution
 analysis= predefined_solutions.simple_static_linear(feProblem)
@@ -104,7 +98,7 @@ ratioM12= 0.0
 M21= 0.0 # Bending moment acting on element 2 back end.
 M21Teor= -8333.3 # Theorethical value of the bending moment
                  # acting on element 2 back end.
-ratioM21= 0.0 #Rotation of the node
+ratioM21= 0.0 # Rotation of the node
 Q= 0.0 # Shear on element 1
 QTeor= 125 # Theorethical value of the shear on element 1
 ratioQ= 0.0

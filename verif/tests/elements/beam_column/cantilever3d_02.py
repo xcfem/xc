@@ -39,7 +39,7 @@ preprocessor=  feProblem.getPreprocessor
 nodes= preprocessor.getNodeHandler
 # Problem type
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
-nodes.defaultTag= 1 #First node number.
+nodes.defaultTag= 1 # First node number.
 nodes.newNodeXYZ(0,0.0,0.0)
 nodes.newNodeXYZ(L,0.0,0.0)
 
@@ -55,28 +55,24 @@ section= typical_materials.defElasticSectionFromMechProp3d(preprocessor, "sectio
 elements= preprocessor.getElementHandler
 elements.defaultTransformation= lin.name
 elements.defaultMaterial= section.name
-elements.defaultTag= 1 #Tag for the next element.
+elements.defaultTag= 1 # Tag for the next element.
 beam3d= elements.newElement("ElasticBeam3d",xc.ID([1,2]))
 
 
 
 modelSpace.fixNode000_000(1)
 
-loadHandler= preprocessor.getLoadHandler
-lPatterns= loadHandler.getLoadPatterns
-#Load modulation.
-ts= lPatterns.newTimeSeries("constant_ts","ts")
-lPatterns.currentTimeSeries= "ts"
-lp0= lPatterns.newLoadPattern("default","0")
+# Load case definition.
+lp0= modelSpace.newLoadPattern(name= '0')
 lp0.newNodalLoad(2,xc.Vector([0,-F,0,0,0,0]))
-#We add the load case to domain.
-lPatterns.addToDomain(lp0.name)
+# We add the load case to domain.
+modelSpace.addLoadCaseToDomain(lp0.name)
 
 # Solution
 analysis= predefined_solutions.simple_static_linear(feProblem)
 result= analysis.analyze(1)
 
-delta= nodes.getNode(2).getDisp[1] #ydisplacement of node 2.
+delta= nodes.getNode(2).getDisp[1] # ydisplacement of node 2.
 elements.getElement(1).getResistingForce()
 M= elements.getElement(1).getMy1
 MTeor= F*L

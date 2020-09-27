@@ -63,17 +63,13 @@ modelSpace.fixNode000(nod1.tag)
 
 # Load definition
 P= 1e3 # punctual load.
-loadHandler= preprocessor.getLoadHandler
-lPatterns= loadHandler.getLoadPatterns
-## Load modulation.
-ts= lPatterns.newTimeSeries("constant_ts","ts")
-lPatterns.currentTimeSeries= "ts"
-## Load case definition
-lp0= lPatterns.newLoadPattern("default","0")
-lPatterns.currentLoadPattern= "0"
+
+## Load case definition.
+lp0= modelSpace.newLoadPattern(name= '0')
+modelSpace.setCurrentLoadPattern("0")
 nod2.newLoad(xc.Vector([0,-P,0]))
 ## We add the load case to domain.
-lPatterns.addToDomain(lp0.name)
+modelSpace.addLoadCaseToDomain(lp0.name)
 
 # Solution
 analysis= predefined_solutions.simple_static_linear(feProblem)

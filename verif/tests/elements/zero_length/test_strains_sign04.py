@@ -38,10 +38,10 @@ epsilon2= 0.0
 epsilon3= -epsilon
 epsilon4= 0.0
 
-#Read section definition from file.
+# Read section definition from file.
 import os
 pth= os.path.dirname(__file__)
-#print("pth= ", pth)
+# print("pth= ", pth)
 if(not pth):
   pth= "."
 exec(open(pth+"/../../aux/four_fiber_section.py").read())
@@ -56,7 +56,7 @@ Mz= -2*F*depthOverY/2.0
 fourFibersSection.revertToStart()
 nodes= preprocessor.getNodeHandler
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
-nodes.defaultTag= 1 #First node number.
+nodes.defaultTag= 1 # First node number.
 nod= nodes.newNodeXYZ(0.0,0.0,0.0)
 nod= nodes.newNodeXYZ(0.0,0.0,0.0)
 
@@ -73,18 +73,12 @@ spc= modelSpace.constraints.newSPConstraint(2,2,0.0)
 spc= modelSpace.constraints.newSPConstraint(2,3,0.0)
 
 
-# Loads definition
-loadHandler= preprocessor.getLoadHandler
-lPatterns= loadHandler.getLoadPatterns
-#Load modulation.
-ts= lPatterns.newTimeSeries("constant_ts","ts")
-lPatterns.currentTimeSeries= "ts"
-#Load case definition
-lp0= lPatterns.newLoadPattern("default","0")
-lp0.newNodalLoad(2,xc.Vector([N,0,0,0,My,Mz])) #Section's y axis is element z axis.
+# Load definition.
+lp0= modelSpace.newLoadPattern(name= '0')
+lp0.newNodalLoad(2,xc.Vector([N,0,0,0,My,Mz])) # Section's y axis is element z axis.
 
-#Add the load pattern to the domain.
-lPatterns.addToDomain(lp0.name)
+# Add the load pattern to the domain.
+modelSpace.addLoadCaseToDomain(lp0.name)
 
 # Solution
 analysis= predefined_solutions.simple_static_linear(feProblem)

@@ -32,7 +32,7 @@ nodes= preprocessor.getNodeHandler
 modelSpace= predefined_spaces.SolidMechanics2D(nodes)
 
 
-nodes.defaultTag= 1 #First node number.
+nodes.defaultTag= 1 # First node number.
 nod= nodes.newNodeXY(0,0)
 nod= nodes.newNodeXY(0.0,l-a-b)
 nod= nodes.newNodeXY(0.0,l-a)
@@ -51,7 +51,7 @@ elements.defaultMaterial= elast.name
 elements.dimElem= 2 # Dimension of element space
 #  sintaxis: truss[<tag>] 
 #  sintaxis: truss[tag,nmb_mat,dim] 
-elements.defaultTag= 1 #Tag for the next element.
+elements.defaultTag= 1 # Tag for the next element.
 truss= elements.newElement("Truss",xc.ID([1,2]))
 truss.sectionArea= 1
 truss= elements.newElement("Truss",xc.ID([2,3]))
@@ -70,19 +70,13 @@ spc= constraints.newSPConstraint(2,0,0.0) # Node 2
 spc= constraints.newSPConstraint(3,0,0.0) # Node 3
 
 
-# Loads definition
-loadHandler= preprocessor.getLoadHandler
-lPatterns= loadHandler.getLoadPatterns
-#Load modulation.
-ts= lPatterns.newTimeSeries("constant_ts","ts")
-lPatterns.currentTimeSeries= "ts"
-#Load case definition
-lp0= lPatterns.newLoadPattern("default","0")
+# Load definition.
+lp0= modelSpace.newLoadPattern(name= '0')
 lp0.newNodalLoad(2,xc.Vector([0,-F2]))
 lp0.newNodalLoad(3,xc.Vector([0,-F1]))
 
-#We add the load case to domain.
-lPatterns.addToDomain(lp0.name)
+# We add the load case to domain.
+modelSpace.addLoadCaseToDomain(lp0.name)
 
 # Solution procedure
 solver= predefined_solutions.SolutionProcedure()

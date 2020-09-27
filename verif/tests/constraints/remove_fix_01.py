@@ -59,17 +59,11 @@ beam3d= elements.newElement("ElasticBeam3d",xc.ID([nod1.tag,nod2.tag]))
 modelSpace.fixNode000_000(nod1.tag)
 spc= modelSpace.constraints.newSPConstraint(nod2.tag,1,0.0)
 
-# Loads definition
-loadHandler= preprocessor.getLoadHandler
-lPatterns= loadHandler.getLoadPatterns
-#Load modulation.
-ts= lPatterns.newTimeSeries("constant_ts","ts")
-lPatterns.currentTimeSeries= "ts"
-#Load case definition
-lp0= lPatterns.newLoadPattern("default","0")
+# Load definition.
+lp0= modelSpace.newLoadPattern(name= '0')
 lp0.newNodalLoad(nod2.tag,xc.Vector([0,-F,0,0,0,0]))
-#We add the load case to domain.
-lPatterns.addToDomain(lp0.name)
+# We add the load case to domain.
+modelSpace.addLoadCaseToDomain(lp0.name)
 
 # Solution
 analysis= predefined_solutions.simple_static_linear(feProblem)
@@ -83,7 +77,7 @@ delta0= nod2.getDisp[1]  # Node 2 yAxis displacement
 
 
 modelSpace.constraints.removeSPConstraint(spc.tag)
-#remove_fix{20}
+# remove_fix{20}
 
 
 
@@ -96,7 +90,7 @@ result= analysis.analyze(1)
 nodes= preprocessor.getNodeHandler 
 delta= nod2.getDisp[1]  # Node 2 yAxis displacement
 
-#beam3d= elements.getElement(1)
+# beam3d= elements.getElement(1)
 beam3d.getResistingForce()
 M= beam3d.getMy1
 MTeor= F*L

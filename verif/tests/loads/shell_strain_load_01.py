@@ -33,9 +33,8 @@ AT= 10.0 # Temperature increment (Celsius degrees)
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
 nodes= preprocessor.getNodeHandler
-nodes.dimSpace= 3 # coord. for each node (x,y,z).
-nodes.numDOFs= 6 # DOF for each node (Ux,Uy,Uz,ThX,ThY,ThZ).
-nodes.defaultTag= 1 #First node number.
+modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
+nodes.defaultTag= 1 # First node number.
 nod1= nodes.newNodeXYZ(0.0,0.0,0.0)
 nod2= nodes.newNodeXYZ(L,0.0,0.0)
 nod3= nodes.newNodeXYZ(L,h,0.0)
@@ -66,15 +65,9 @@ spc= constraints.newSPConstraint(nod4.tag,2,0.0)
 spc= constraints.newSPConstraint(nod1.tag,1,0.0)
 spc= constraints.newSPConstraint(nod2.tag,1,0.0)
 
-# Loads definition
-loadHandler= preprocessor.getLoadHandler
+# Load case definition.
+lp0= modelSpace.newLoadPattern(name= '0')
 
-lPatterns= loadHandler.getLoadPatterns
-ts= lPatterns.newTimeSeries("linear_ts","ts")
-lPatterns.currentTimeSeries= "ts"
-#Load case definition
-lp0= lPatterns.newLoadPattern("default","0")
-#lPatterns.currentLoadPattern= "0"
 eleLoad= lp0.newElementalLoad("shell_strain_load")
 eleLoad.elementTags= xc.ID([elem1.tag])
 eleLoad.setStrainComp(0,0,alpha*AT) #(id of Gauss point, id of component, value)
@@ -82,8 +75,8 @@ eleLoad.setStrainComp(1,0,alpha*AT)
 eleLoad.setStrainComp(2,0,alpha*AT)
 eleLoad.setStrainComp(3,0,alpha*AT)
 
-#We add the load case to domain.
-lPatterns.addToDomain(lp0.name)
+# We add the load case to domain.
+modelSpace.addLoadCaseToDomain(lp0.name)
 
 analysis= predefined_solutions.simple_static_linear(feProblem)
 result= analysis.analyze(1)

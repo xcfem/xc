@@ -69,7 +69,7 @@ preprocessor=  feProblem.getPreprocessor
 nodes= preprocessor.getNodeHandler
 # Problem type
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
-nodes.defaultTag= 1 #First node number.
+nodes.defaultTag= 1 # First node number.
 nodes.newNodeXYZ(0,0.0,0.0)
 nodes.newNodeXYZ(L,0.0,0.0)
 
@@ -84,24 +84,20 @@ section= typical_materials.defElasticSectionFromMechProp3d(preprocessor, "sectio
 elements= preprocessor.getElementHandler
 elements.defaultTransformation= lin.name
 elements.defaultMaterial= section.name
-elements.defaultTag= 1 #Tag for the next element.
+elements.defaultTag= 1 # Tag for the next element.
 beam3d= elements.newElement("ElasticBeam3d",xc.ID([1,2]))
 
 
 modelSpace.fixNode000_000(1)
 
-elem=preprocessor.getElementHandler.getElement(1) #element 1
+elem=preprocessor.getElementHandler.getElement(1) # element 1
 
-loadHandler= preprocessor.getLoadHandler
-lPatterns= loadHandler.getLoadPatterns
-#Load modulation.
-ts= lPatterns.newTimeSeries("constant_ts","ts")
-lPatterns.currentTimeSeries= "ts"
-lp0= lPatterns.newLoadPattern("default","0")
-lPatterns.currentLoadPattern= "0"
+# Load case definition.
+lp0= modelSpace.newLoadPattern(name= '0')
+modelSpace.setCurrentLoadPattern("0")
 elem.vector3dPointByRelDistLoadLocal(xRelPtoAplic,xc.Vector([F,0,0]))
-#We add the load case to domain.
-lPatterns.addToDomain(lp0.name)
+# We add the load case to domain.
+modelSpace.addLoadCaseToDomain(lp0.name)
 
 # Solution 0 N 
 analysis= predefined_solutions.simple_static_linear(feProblem)
@@ -126,10 +122,10 @@ ratios.extend(phaseRatios)
 # printResults(N1,Vy1,Vz1,T1,My1,Mz1,N2,Vy2,Vz2,T2,My2,Mz2,phaseRatios,'')
 
 lp0.removeFromDomain()
-lp1= lPatterns.newLoadPattern("default","1")
-lPatterns.currentLoadPattern= "1"
+lp1= modelSpace.newLoadPattern(name= '1')
+modelSpace.setCurrentLoadPattern("1")
 elem.vector3dPointByRelDistLoadLocal(xRelPtoAplic,xc.Vector([0,F,0]))
-lPatterns.addToDomain("1")
+modelSpace.addLoadCaseToDomain("1")
 
 # Solution 1 Mz Vy
 analysis= predefined_solutions.simple_static_linear(feProblem)
@@ -156,10 +152,10 @@ ratios.extend(phaseRatios)
 
 
 lp1.removeFromDomain()
-lp2= lPatterns.newLoadPattern("default","2")
-lPatterns.currentLoadPattern= "2"
+lp2= modelSpace.newLoadPattern(name= '2')
+modelSpace.setCurrentLoadPattern("2")
 elem.vector3dPointByRelDistLoadLocal(xRelPtoAplic,xc.Vector([0,0,F]))
-lPatterns.addToDomain("2")
+modelSpace.addLoadCaseToDomain("2")
 
 
 # Solution 2 My Vz
@@ -187,10 +183,10 @@ ratios.extend(phaseRatios)
 
 
 lp2.removeFromDomain()
-lp3= lPatterns.newLoadPattern("default","3")
-lPatterns.currentLoadPattern= "3"
+lp3= modelSpace.newLoadPattern(name= '3')
+modelSpace.setCurrentLoadPattern("3")
 elem.vector3dUniformLoadLocal(xc.Vector([0,0,F]))
-lPatterns.addToDomain("3")
+modelSpace.addLoadCaseToDomain("3")
 
 # Solution 3 T
 analysis= predefined_solutions.simple_static_linear(feProblem)

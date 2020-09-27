@@ -48,19 +48,11 @@ modelSpace.fixNode000_000(1)
 modelSpace.fixNode000_000(4)
 
 # Loads definition
-loadHandler= preprocessor.getLoadHandler
-
-lPatterns= loadHandler.getLoadPatterns
-
-#Load modulation.
-ts= lPatterns.newTimeSeries("constant_ts","ts")
-lPatterns.currentTimeSeries= "ts"
-#Load case definition
-lp0= lPatterns.newLoadPattern("default","0")
+lp0= modelSpace.newLoadPattern(name= '0')
 lp0.newNodalLoad(2,xc.Vector([0,0,F,0,0,0]))
 lp0.newNodalLoad(3,xc.Vector([0,0,F,0,0,0]))
-#We add the load case to domain.
-lPatterns.addToDomain(lp0.name)
+# We add the load case to domain.
+modelSpace.addLoadCaseToDomain(lp0.name)
 
 
 
@@ -72,8 +64,8 @@ result= analysis.analyze(1)
 q13MedioElem= 0.0
 q23MedioElem= 0.0
 elem.getResistingForce()
-mats= elem.getPhysicalProperties.getVectorMaterials #Materials at gauss points.
-#Gauss points iterator
+mats= elem.getPhysicalProperties.getVectorMaterials # Materials at gauss points.
+# Gauss points iterator
 for m in mats:
   q13MedioElem= q13MedioElem+m.getStressResultantComponent("q13")
   q23MedioElem= q23MedioElem+m.getStressResultantComponent("q23")

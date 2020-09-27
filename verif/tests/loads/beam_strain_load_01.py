@@ -61,14 +61,10 @@ spc= constraints.newSPConstraint(n2.tag,1,0.0)
 spc= constraints.newSPConstraint(n2.tag,2,0.0)
 
 # Loads definition
-loadHandler= preprocessor.getLoadHandler
-lPatterns= loadHandler.getLoadPatterns
-#Load modulation.
-ts= lPatterns.newTimeSeries("linear_ts","ts")
-#ts.factor= 1.0
-lPatterns.currentTimeSeries= "ts"
-#Load case definition
-lp0= lPatterns.newLoadPattern("default","0")
+
+# Load modulation.
+# Load case definition.
+lp0= modelSpace.newLoadPattern(name= '0')
 #\set_current_load_pattern{"0"}
 eleLoad= lp0.newElementalLoad("beam_strain_load")
 eleLoad.elementTags= xc.ID([beam2d.tag])
@@ -76,8 +72,8 @@ thermalDeformation= xc.DeformationPlane(alpha*AT)
 eleLoad.backEndDeformationPlane= thermalDeformation
 eleLoad.frontEndDeformationPlane= thermalDeformation
 
-#We add the load case to domain.
-lPatterns.addToDomain(lp0.name)
+# We add the load case to domain.
+modelSpace.addLoadCaseToDomain(lp0.name)
 
 result= modelSpace.analyze(calculateNodalReactions= False)
 

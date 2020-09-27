@@ -338,13 +338,13 @@ int XC::NDMaterial::activateParameter(int parameterID)
 
 const XC::Vector &XC::NDMaterial::getStressSensitivity(int gradNumber, bool conditional)
   {
-    static XC::Vector dummy(1);
+    static Vector dummy(1);
     return dummy;
   }
 
 const XC::Vector &XC::NDMaterial::getStrainSensitivity(int gradNumber)
   {
-    static XC::Vector dummy(1);
+    static Vector dummy(1);
     return dummy;
   }
 
@@ -353,7 +353,7 @@ double XC::NDMaterial::getRhoSensitivity(int gradNumber)
 
 const XC::Matrix &XC::NDMaterial::getDampTangentSensitivity(int gradNumber)
   {
-    static XC::Matrix dummy(1,1);
+    static Matrix dummy(1,1);
     return dummy;
   }
 

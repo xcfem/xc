@@ -38,7 +38,7 @@ nodes= preprocessor.getNodeHandler
 
 # Problem type
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
-nodes.defaultTag= 1 #First node number.
+nodes.defaultTag= 1 # First node number.
 nodes.newNodeXYZ(0.0,0.0,0.0)
 nodes.newNodeXYZ(L,0.0,0.0)
 
@@ -52,20 +52,16 @@ elements= preprocessor.getElementHandler
 elements.defaultTransformation= lin.name
 elements.defaultMaterial= scc.name
 elements.dimElem= 2 # Dimension of element space
-elements.defaultTag= 1 #Tag for next element.
+elements.defaultTag= 1 # Tag for next element.
 beam3d= elements.newElement("ElasticBeam3d",xc.ID([1,2]))
     
 # Constraints
 modelSpace.fixNode000_000(1)
 modelSpace.fixNode000_000(2)
 
-    # Loads definition
-loadHandler= preprocessor.getLoadHandler
-lPatterns= loadHandler.getLoadPatterns
-ts= lPatterns.newTimeSeries("linear_ts","ts")
-lPatterns.currentTimeSeries= "ts"
-#Load case definition
-lp0= lPatterns.newLoadPattern("default","0")
+    
+# Load case definition.
+lp0= modelSpace.newLoadPattern(name= '0')
 #\set_current_load_pattern{"0"}
 eleLoad= lp0.newElementalLoad("beam_strain_load")
 eleLoad.elementTags= xc.ID([1])
@@ -73,8 +69,8 @@ thermalDeformation= xc.DeformationPlane(alpha*AT)
 eleLoad.backEndDeformationPlane= thermalDeformation
 eleLoad.frontEndDeformationPlane= thermalDeformation
 
-#We add the load case to domain.
-lPatterns.addToDomain(lp0.name)
+# We add the load case to domain.
+modelSpace.addLoadCaseToDomain(lp0.name)
 
 analysis= predefined_solutions.simple_static_linear(feProblem)
 result= analysis.analyze(1)

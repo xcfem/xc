@@ -71,32 +71,27 @@ modelSpace.fixNode('F0F_FFF',ptD.getNode().tag)  # Fix the y displacement DOFs o
                                                  # at point D.
 
 #########################################################
-# Load
-lPatterns= preprocessor.getLoadHandler.getLoadPatterns  # Load pattern container.
-# Variation of load with time.
-ts= lPatterns.newTimeSeries("constant_ts","ts")  # Constant load, no variation.
-lPatterns.currentTimeSeries= "ts"  # Time series to use for the new load patterns.
-# Load pattern definition
-lp0= lPatterns.newLoadPattern("default","0") #New load pattern named 0
-lPatterns.currentLoadPattern= lp0.name
+# Load case definition.
+lp0= modelSpace.newLoadPattern(name= '0')
+modelSpace.setCurrentLoadPattern(lp0.name)
 
 centerSpacing= 16.0*inchToMeter
 creepFactorDeadLoad= 1.0
 creepFactorLiveLoad= 1.0
-#Upper chord loads
+# Upper chord loads
 uniformLiveLoad= (creepFactorDeadLoad*10.0+creepFactorLiveLoad*40.0)*centerSpacing*psfTokNm2*1e3
 loadVector=xc.Vector([0,0,-uniformLiveLoad,0,0,0])
 for e in truss.upperChordSet.getElements:
     e.vector3dUniformLoadGlobal(loadVector)
 
-#Lower chord loads
+# Lower chord loads
 uniformLiveLoad= (creepFactorDeadLoad*5.0)*centerSpacing*psfTokNm2*1e3
 loadVector=xc.Vector([0,0,-uniformLiveLoad,0,0,0])
 for e in truss.lowerChordSet.getElements:
     e.vector3dUniformLoadGlobal(loadVector)
 
 # We add the load case to domain.
-lPatterns.addToDomain(lp0.getName())
+modelSpace.addLoadCaseToDomain(lp0.getName())
 
 xcTotalSet= preprocessor.getSets.getSet("total")
 

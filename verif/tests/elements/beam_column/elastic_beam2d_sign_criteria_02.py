@@ -63,7 +63,7 @@ preprocessor=  feProblem.getPreprocessor
 nodes= preprocessor.getNodeHandler
 # Problem type
 modelSpace= predefined_spaces.StructuralMechanics2D(nodes)
-nodes.defaultTag= 1 #First node number.
+nodes.defaultTag= 1 # First node number.
 nodes.newNodeXY(0,0.0)
 nodes.newNodeXY(L,0.0)
 
@@ -78,7 +78,7 @@ section= typical_materials.defElasticSectionFromMechProp2d(preprocessor, "sectio
 elements= preprocessor.getElementHandler
 elements.defaultTransformation= lin.name
 elements.defaultMaterial= section.name
-elements.defaultTag= 1 #Tag for the next element.
+elements.defaultTag= 1 # Tag for the next element.
 beam2d= elements.newElement("ElasticBeam2d",xc.ID([1,2]))
 
 
@@ -86,18 +86,14 @@ beam2d= elements.newElement("ElasticBeam2d",xc.ID([1,2]))
 constraints= preprocessor.getBoundaryCondHandler
 modelSpace.fixNode000(1)
 
-loadHandler= preprocessor.getLoadHandler
-lPatterns= loadHandler.getLoadPatterns
-#Load modulation.
-ts= lPatterns.newTimeSeries("constant_ts","ts")
-lPatterns.currentTimeSeries= "ts"
-lp0= lPatterns.newLoadPattern("default","0")
+# Load case definition.
+lp0= modelSpace.newLoadPattern(name= '0')
 eleLoad= lp0.newElementalLoad("beam2d_point_load")
 eleLoad.elementTags= xc.ID([1])
 eleLoad.axialComponent= F
 eleLoad.x= xRelPtoAplic
-#We add the load case to domain.
-lPatterns.addToDomain(lp0.name)
+# We add the load case to domain.
+modelSpace.addLoadCaseToDomain(lp0.name)
 
 # Solution 0 N
 analysis= predefined_solutions.simple_static_linear(feProblem)
@@ -120,12 +116,12 @@ ratios.extend(phaseRatios)
 # printResults(N1,V1,M1,N2,V2,M2,phaseRatios,'')
 
 lp0.removeFromDomain()
-lp1= lPatterns.newLoadPattern("default","1")
+lp1= modelSpace.newLoadPattern(name= '1')
 eleLoad= lp1.newElementalLoad("beam2d_point_load")
 eleLoad.elementTags= xc.ID([1])
 eleLoad.transComponent= F
 eleLoad.x= xRelPtoAplic
-lPatterns.addToDomain("1")
+modelSpace.addLoadCaseToDomain("1")
 
 # Solution 1 V
 analysis= predefined_solutions.simple_static_linear(feProblem)
@@ -144,8 +140,8 @@ ratio12= abs((M1-M1Teor)/M1)+abs(M2)
 phaseRatios= [ratio10,ratio11,ratio12]
 ratios.extend(phaseRatios)
 
-#print("RF= ",RF)
-#printResults(N1,V1,M1,N2,V2,M2,phaseRatios,'1')
+# print("RF= ",RF)
+# printResults(N1,V1,M1,N2,V2,M2,phaseRatios,'1')
 
 result= 0.0
 for r in ratios:

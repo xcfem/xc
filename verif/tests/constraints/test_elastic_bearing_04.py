@@ -27,23 +27,23 @@ preprocessor=  feProblem.getPreprocessor
 nodes= preprocessor.getNodeHandler
 # Problem type
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
-nodes.defaultTag= 1 #First node number.
-nodXYZ= [nodes.newNodeXYZ(i,1,0) for i in range(3)] #nodes to be connected to
-                                                    #springs in X,Y,Z directions
-nodZ= [nodes.newNodeXYZ(i,2,0) for i in range(3)] #nodes to be connected to
-                                                  #springs in Z direction only
+nodes.defaultTag= 1 # First node number.
+nodXYZ= [nodes.newNodeXYZ(i,1,0) for i in range(3)] # nodes to be connected to
+                                                    # springs in X,Y,Z directions
+nodZ= [nodes.newNodeXYZ(i,2,0) for i in range(3)] # nodes to be connected to
+                                                  # springs in Z direction only
 
 
-#Generation on spring boundary conditions
+# Generation on spring boundary conditions
 springXYZ=springs.SpringBC(name='springXYZ',modelSpace=modelSpace,Kx=KX,Ky=KY,Kz=KZ)
 springXYZ.applyOnNodesLst(Nodelist=nodXYZ)
 
-fixedNodXYZ=[nodes.getNode(7),nodes.getNode(8),nodes.getNode(9)] #fixed nodes
+fixedNodXYZ=[nodes.getNode(7),nodes.getNode(8),nodes.getNode(9)] # fixed nodes
 
 springZ=springs.SpringBC(name='springZ',modelSpace=modelSpace,Kx=0,Ky=0,Kz=KZ)
 springZ.applyOnNodesLst(Nodelist=nodZ)
 
-fixedNodZ=[nodes.getNode(10),nodes.getNode(11),nodes.getNode(12)] #fixed nodes
+fixedNodZ=[nodes.getNode(10),nodes.getNode(11),nodes.getNode(12)] # fixed nodes
 
 
 # Constraints
@@ -58,22 +58,14 @@ for n in range(4,7):
 
 
 # Loads definition
-loadHandler= preprocessor.getLoadHandler
-
-lPatterns= loadHandler.getLoadPatterns
-
-#Load modulation.
-ts= lPatterns.newTimeSeries("constant_ts","ts")
-lPatterns.currentTimeSeries= "ts"
-#Load case definition
-lp0= lPatterns.newLoadPattern("default","0")
+lp0= modelSpace.newLoadPattern(name= '0')
 for n in range(1,4):
     lp0.newNodalLoad(n,xc.Vector([FX,FY,FZ,0,0,0]))
 for n in range(4,7):
     lp0.newNodalLoad(n,xc.Vector([0,0,FZ,0,0,0]))
 
-#We add the load case to domain.
-lPatterns.addToDomain(lp0.name)
+# We add the load case to domain.
+modelSpace.addLoadCaseToDomain(lp0.name)
 
 
 # Solution

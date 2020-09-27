@@ -46,14 +46,14 @@ feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
 # Materials definition
 concr= EHE_materials.HA25
-concr.alfacc=0.85    #f_maxd= 0.85*fcd concrete long term compressive strength factor (normally alfacc=1)
+concr.alfacc=0.85    # f_maxd= 0.85*fcd concrete long term compressive strength factor (normally alfacc=1)
 steel= EHE_materials.B500S
 
 # Section geometry
 section= def_simple_RC_section.RCRectangularSection(name='test', width= width, depth= depth, concrType= concr, reinfSteelType= steel)
 section.positvRebarRows= def_simple_RC_section.LongReinfLayers([lowerRow])
 section.negatvRebarRows= def_simple_RC_section.LongReinfLayers([upperRow])
-#section.shReinfY= shearReinf
+# section.shReinfY= shearReinf
 
 section.defRCSection(preprocessor,matDiagType= 'd')
 scc3d_testing_bench.sectionModel(preprocessor, section.sectionName)
@@ -64,23 +64,15 @@ modelSpace= predefined_spaces.getStructuralMechanics3DSpace(preprocessor)
 modelSpace.fixNode000_000(1)
 
 # Loads definition
-loadHandler= preprocessor.getLoadHandler
-
-lPatterns= loadHandler.getLoadPatterns
-
-#Load modulation.
-ts= lPatterns.newTimeSeries("constant_ts","ts")
-lPatterns.currentTimeSeries= "ts"
-#Load case definition
-lp0= lPatterns.newLoadPattern("default","0")
+lp0= modelSpace.newLoadPattern(name= '0')
 lp0.newNodalLoad(2,xc.Vector([NDato,0,0,0,MyDato,MzDato]))
-lp1= lPatterns.newLoadPattern("default","1")
+lp1= modelSpace.newLoadPattern(name= '1')
 lp1.newNodalLoad(2,xc.Vector([NDato,0,0,0,MzDato/10.0,MyDato/10.0]))
-lp2= lPatterns.newLoadPattern("default","2")
+lp2= modelSpace.newLoadPattern(name= '2')
 lp2.newNodalLoad(2,xc.Vector([NDato,0,0,0,0,0]))
 
-#We add the load case to domain.
-lPatterns.addToDomain(lp0.name)
+# We add the load case to domain.
+modelSpace.addLoadCaseToDomain(lp0.name)
 
 
 # Solution procedure

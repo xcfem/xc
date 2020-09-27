@@ -59,14 +59,14 @@ scc= typical_materials.defElasticSection2d(preprocessor, "scc",A,E,I)
 
 setTotal= preprocessor.getSets.getSet("total")
 
-feProblem.setVerbosityLevel(0) #Dont print(warning messages about element seed.)
+feProblem.setVerbosityLevel(0) # Dont print(warning messages about element seed.)
 setL1= preprocessor.getSets.getSet("l1")
 setL1.genMesh(xc.meshDir.I)
 
 
 setL2= preprocessor.getSets.getSet("l2")
 setL2.genMesh(xc.meshDir.I)
-feProblem.setVerbosityLevel(1) #print(warnings again )
+feProblem.setVerbosityLevel(1) # print(warnings again )
 
 # totalSetNodes= setTotal.getNodes
 # for n in totalSetNodes:
@@ -76,7 +76,7 @@ elements.defaultMaterial= scc.name
 for i in range(1,NumDiv+2):
   n1= l1.getNodeI(i)
   n2= l2.getNodeI(i)
-  #print("i= ", i, "n1= ", n1.tag, "n2= ", n2.tag)
+  # print("i= ", i, "n1= ", n1.tag, "n2= ", n2.tag)
   beam2d= elements.newElement("ElasticBeam2d",xc.ID([n1.tag,n2.tag]))
   beam2d.h= h
 
@@ -86,15 +86,9 @@ modelSpace.fixNodesLine(line= l1)
 
 
 # Load patterns
-loadHandler= preprocessor.getLoadHandler
-#Load pattern container:
-lPatterns= loadHandler.getLoadPatterns
-#Load modulation.
-ts= lPatterns.newTimeSeries("constant_ts","ts")
-lPatterns.currentTimeSeries= "ts"
-#Load case definition
-lp0= lPatterns.newLoadPattern("default","0")
-#lPatterns.currentLoadPattern= "0"
+# Load definition.
+lp0= modelSpace.newLoadPattern(name= '0')
+
 
 l2= preprocessor.getSets.getSet("l2")
 
@@ -106,7 +100,7 @@ for i in range(1,nNodes+1):
   F= (100*xNod+10)
   lp0.newNodalLoad(nodeTag,xc.Vector([0,F,0]))
 
-lPatterns.addToDomain(lp0.name)
+modelSpace.addLoadCaseToDomain(lp0.name)
 nCargasNod= lp0.getNumNodalLoads
 
 ''' 

@@ -39,7 +39,7 @@ nodes= preprocessor.getNodeHandler
 
 # Problem type
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
-nodes.defaultTag= 1 #First node number.
+nodes.defaultTag= 1 # First node number.
 nod= nodes.newNodeXYZ(0,0.0,0.0)
 nod= nodes.newNodeXYZ(L,0.0,0.0)
 
@@ -52,24 +52,17 @@ scc= typical_materials.defElasticSection3d(preprocessor, "scc",A,E,G,Iz,Iy,J)
 elements= preprocessor.getElementHandler
 elements.defaultTransformation= lin.name
 elements.defaultMaterial= scc.name
-elements.defaultTag= 1 #Tag for next element.
+elements.defaultTag= 1 # Tag for next element.
 beam3d= elements.newElement("ElasticBeam3d",xc.ID([1,2]))
 
 
 modelSpace.fixNode000_000(1)
 
-loadHandler= preprocessor.getLoadHandler
-
-lPatterns= loadHandler.getLoadPatterns
-
-#Load modulation.
-ts= lPatterns.newTimeSeries("constant_ts","ts")
-lPatterns.currentTimeSeries= "ts"
-#Load case definition
-lp0= lPatterns.newLoadPattern("default","0")
+# Load definition.
+lp0= modelSpace.newLoadPattern(name= '0')
 lp0.newNodalLoad(2,xc.Vector([F,0,0,0,0,0]))
-#We add the load case to domain.
-lPatterns.addToDomain(lp0.name)
+# We add the load case to domain.
+modelSpace.addLoadCaseToDomain(lp0.name)
 
 
 import os
@@ -77,10 +70,10 @@ os.system("rm -r -f /tmp/test09.db")
 db= feProblem.newDatabase("BerkeleyDB","/tmp/test09.db")
 db.save(100)
 feProblem.clearAll()
-feProblem.setVerbosityLevel(0) #Dont print(warning messages)
-                            #about pointers to material.
+feProblem.setVerbosityLevel(0) # Dont print(warning messages)
+                            # about pointers to material.
 db.restore(100)
-feProblem.setVerbosityLevel(1) #print(warnings again )
+feProblem.setVerbosityLevel(1) # print(warnings again )
 
 # Solution
 analysis= predefined_solutions.simple_static_linear(feProblem)

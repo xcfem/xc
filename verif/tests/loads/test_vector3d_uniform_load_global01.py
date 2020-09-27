@@ -40,7 +40,7 @@ feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
 nodes= preprocessor.getNodeHandler
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
-nodes.defaultTag= 1 #First node number.
+nodes.defaultTag= 1 # First node number.
 nod= nodes.newNodeXYZ(0,0.0,0.0)
 nod= nodes.newNodeXYZ(L*math.sqrt(2)/2,L*math.sqrt(2)/2,0.0)
 
@@ -57,7 +57,7 @@ respVz= typical_materials.defElasticMaterial(preprocessor, "respVz",1e9) # Shear
 # Sections
 import os
 pth= os.path.dirname(__file__)
-#print("pth= ", pth)
+# print("pth= ", pth)
 if(not pth):
   pth= "."
 exec(open(pth+"/../aux/testQuadRegion.py").read())
@@ -87,19 +87,13 @@ el= elements.newElement("ForceBeamColumn3d",xc.ID([1,2]))
 # Constraints
 modelSpace.fixNode000_000(1)
 
-# Loads definition
-loadHandler= preprocessor.getLoadHandler
-lPatterns= loadHandler.getLoadPatterns
-#Load modulation.
-ts= lPatterns.newTimeSeries("constant_ts","ts")
-lPatterns.currentTimeSeries= "ts"
-#Load case definition
-lp0= lPatterns.newLoadPattern("default","0")
-lPatterns.currentLoadPattern= "0"
+# Load definition.
+lp0= modelSpace.newLoadPattern(name= '0')
+modelSpace.setCurrentLoadPattern("0")
 el.vector3dUniformLoadGlobal(xc.Vector([f*math.sqrt(2)/2,f*math.sqrt(2)/2,0]))
 
-#We add the load case to domain.
-lPatterns.addToDomain(lp0.name)
+# We add the load case to domain.
+modelSpace.addLoadCaseToDomain(lp0.name)
 # Solution procedure
 analysis= predefined_solutions.plain_static_modified_newton(feProblem)
 result= analysis.analyze(10)

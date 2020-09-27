@@ -163,9 +163,19 @@ class PredefinedSpace(object):
     def getCurrentLoadPattern(self):
         ''' Return the current load pattern.'''
         return self.getLoadHandler().getLoadPatterns.currentLoadPattern
+        
+    def setCurrentLoadPattern(self, lpName):
+        ''' Set the current load pattern.
+
+        :param lpName: load pattern name.
+        '''
+        self.getLoadHandler().getLoadPatterns.currentLoadPattern= lpName
     
     def getLoadPattern(self, lpName):
-        ''' Return the load pattern with the argument name.'''
+        ''' Return the load pattern with the argument name.
+
+        :param lpName: load pattern name.
+        '''
         return self.getLoadHandler().getLoadPatterns[lpName]
 
     def newSPConstraint(self, nodeTag, dof, prescribedDisp= 0.0):

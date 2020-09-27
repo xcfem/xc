@@ -80,19 +80,11 @@ modelSpace.fixNode000_000(1)
 modelSpace.fixNodeF00_0FF(2)
 
 # Loads definition
-loadHandler= preprocessor.getLoadHandler
-
-lPatterns= loadHandler.getLoadPatterns
-
-#Load modulation.
-ts= lPatterns.newTimeSeries("constant_ts","ts")
-lPatterns.currentTimeSeries= "ts"
-#Load case definition
-lp0= lPatterns.newLoadPattern("default","0")
+lp0= modelSpace.newLoadPattern(name= '0')
 lp0.newNodalLoad(2,xc.Vector([NDato,0,0,0,MyDato,MzDato]))
 
-#We add the load case to domain.
-lPatterns.addToDomain(lp0.name)
+# We add the load case to domain.
+modelSpace.addLoadCaseToDomain(lp0.name)
 
 
 

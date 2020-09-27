@@ -54,12 +54,12 @@ modelSpace.fixNode000_FFF(n1.tag)
 modelSpace.fixNode000_FFF(n2.tag)
 modelSpace.fixNode000_FFF(n3.tag)
 modelSpace.fixNode000_FFF(n4.tag)
-#modelSpace.fixNode000_000( 1)
-#modelSpace.fixNode000_000( 2)
-#modelSpace.fixNode000_000( 3)
-#modelSpace.fixNode000_000( 4)
+# modelSpace.fixNode000_000( 1)
+# modelSpace.fixNode000_000( 2)
+# modelSpace.fixNode000_000( 3)
+# modelSpace.fixNode000_000( 4)
 
-#Glued node.
+# Glued node.
 gluedDOFs= [0,1,2,3,4,5]
 loadOnDOFs= [0,0,0,0,0,0]
 for i in range(0,6):
@@ -71,18 +71,10 @@ for i in range(0,6):
 glue= modelSpace.constraints.newGlueNodeToElement(nA,elem,xc.ID(gluedDOFs))
 
 # Loads definition
-loadHandler= preprocessor.getLoadHandler
-
-lPatterns= loadHandler.getLoadPatterns
-
-#Load modulation.
-ts= lPatterns.newTimeSeries("constant_ts","ts")
-lPatterns.currentTimeSeries= "ts"
-#Load case definition
-lp0= lPatterns.newLoadPattern("default","0")
+lp0= modelSpace.newLoadPattern(name= '0')
 lp0.newNodalLoad(nA.tag,xc.Vector(loadOnDOFs))
-#We add the load case to domain.
-lPatterns.addToDomain(lp0.name)
+# We add the load case to domain.
+modelSpace.addLoadCaseToDomain(lp0.name)
 
 # Solution
 analysis= predefined_solutions.simple_static_linear(feProblem)

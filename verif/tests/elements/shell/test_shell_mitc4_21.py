@@ -49,21 +49,13 @@ modelSpace.fixNode000_FFF(nod3.tag)
 modelSpace.fixNode000_FFF(nod4.tag)
 
 # Loads definition
-loadHandler= preprocessor.getLoadHandler
+lp0= modelSpace.newLoadPattern(name= '0')
 
-lPatterns= loadHandler.getLoadPatterns
-
-#Load modulation.
-ts= lPatterns.newTimeSeries("constant_ts","ts")
-lPatterns.currentTimeSeries= "ts"
-#Load case definition
-lp0= lPatterns.newLoadPattern("default","0")
-#lPatterns.currentLoadPattern= "0"
 eleLoad= lp0.newElementalLoad("shell_uniform_load")
 eleLoad.elementTags= xc.ID([elem.tag]) 
 eleLoad.transComponent= q
-#We add the load case to domain.
-lPatterns.addToDomain(lp0.name)
+# We add the load case to domain.
+modelSpace.addLoadCaseToDomain(lp0.name)
 
 # Solution
 result= modelSpace.analyze(calculateNodalReactions= True)

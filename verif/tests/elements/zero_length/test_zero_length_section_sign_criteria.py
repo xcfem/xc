@@ -49,7 +49,7 @@ feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor   
 nodes= preprocessor.getNodeHandler
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
-nodes.defaultTag= 1 #First node number.
+nodes.defaultTag= 1 # First node number.
 nod= nodes.newNodeXYZ(0,0.0,0.0)
 nod= nodes.newNodeXYZ(0.0+L,0.0,0.0)
 
@@ -91,18 +91,14 @@ zl= elements.newElement("ZeroLengthSection",xc.ID([1,2]))
 modelSpace.fixNode000_000(1)
 
 # Loads definition
-loadHandler= preprocessor.getLoadHandler
-lPatterns= loadHandler.getLoadPatterns
-#Load modulation.
-ts= lPatterns.newTimeSeries("constant_ts","ts")
-lPatterns.currentTimeSeries= "ts"
-#Load case definition
-lp0= lPatterns.newLoadPattern("default","0")
-lp1= lPatterns.newLoadPattern("default","1")
-lp2= lPatterns.newLoadPattern("default","2")
-lp3= lPatterns.newLoadPattern("default","3")
-lp4= lPatterns.newLoadPattern("default","4")
-lp5= lPatterns.newLoadPattern("default","5")
+# Load modulation.
+# Load case definition.
+lp0= modelSpace.newLoadPattern(name= '0')
+lp1= modelSpace.newLoadPattern(name= '1')
+lp2= modelSpace.newLoadPattern(name= '2')
+lp3= modelSpace.newLoadPattern(name= '3')
+lp4= modelSpace.newLoadPattern(name= '4')
+lp5= modelSpace.newLoadPattern(name= '5')
 lp0.newNodalLoad(2,xc.Vector([F,0,0,0,0,0]))
 lp1.newNodalLoad(2,xc.Vector([0,2*F,0,0,0,0]))
 lp2.newNodalLoad(2,xc.Vector([0,0,3*F,0,0,0]))
@@ -111,6 +107,7 @@ lp4.newNodalLoad(2,xc.Vector([0,0,0,0,5*F,0]))
 lp5.newNodalLoad(2,xc.Vector([0,0,0,0,0,6*F]))
 
 
+lPatterns= preprocessor.getLoadHandler.getLoadPatterns
 listaHipotesis= []
 for key in lPatterns.getKeys():
   listaHipotesis.append(key)

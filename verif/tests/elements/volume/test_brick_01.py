@@ -30,7 +30,7 @@ elast3d= typical_materials.defElasticIsotropic3d(preprocessor, "elast3d",200000,
 
 nodes= preprocessor.getNodeHandler 
 modelSpace= predefined_spaces.SolidMechanics3D(nodes)
-nodes.defaultTag= 1 #Next node number.
+nodes.defaultTag= 1 # Next node number.
 nod1= nodes.newNodeXYZ(100,0,100)
 nod2= nodes.newNodeXYZ(0,0,100)
 nod3= nodes.newNodeXYZ(0,0,200)
@@ -56,7 +56,7 @@ nod20= nodes.newNodeXYZ(0,200,0)
 
 elements= preprocessor.getElementHandler
 elements.defaultMaterial= elast3d.name
-elements.defaultTag= 1 #Tag for the next element.
+elements.defaultTag= 1 # Tag for the next element.
 
 brick1= elements.newElement("Brick",xc.ID([1,2,3,4,5,6,7,8]))
 brick2= elements.newElement("Brick",xc.ID([5,6,7,8,9,10,11,12]))
@@ -68,17 +68,11 @@ nod18.fix(xc.ID([0,1,2]),xc.Vector([0,0,0]))
 nod19.fix(xc.ID([0,1,2]),xc.Vector([0,0,0]))
 nod20.fix(xc.ID([0,1,2]),xc.Vector([0,0,0]))
 
-# Loads definition
-loadHandler= preprocessor.getLoadHandler
-lPatterns= loadHandler.getLoadPatterns
-#Load modulation.
-ts= lPatterns.newTimeSeries("constant_ts","ts")
-lPatterns.currentTimeSeries= "ts"
-#Load case definition
-lp0= lPatterns.newLoadPattern("default","0")
+# Load definition.
+lp0= modelSpace.newLoadPattern(name= '0')
 lp0.newNodalLoad(4,xc.Vector([0,0,-80000]))
-#We add the load case to domain.
-lPatterns.addToDomain(lp0.name)
+# We add the load case to domain.
+modelSpace.addLoadCaseToDomain(lp0.name)
 
 # # Output stuff.
 # oh= output_handler.OutputHandler(modelSpace)

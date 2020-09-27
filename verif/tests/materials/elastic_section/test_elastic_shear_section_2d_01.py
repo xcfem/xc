@@ -34,20 +34,14 @@ elemZLS= scc2d_testing_bench.sectionModel(preprocessor, scc10x20.sectionName)
 modelSpace= predefined_spaces.getStructuralMechanics2DSpace(preprocessor)
 modelSpace.fixNode000(1)
 
-# Loads definition
-loadHandler= preprocessor.getLoadHandler
-lPatterns= loadHandler.getLoadPatterns
-#Load modulation.
-ts= lPatterns.newTimeSeries("constant_ts","ts")
-lPatterns.currentTimeSeries= "ts"
-#Load case definition
-lp0= lPatterns.newLoadPattern("default","0")
-#lPatterns.currentLoadPattern= "0"
+# Load definition.
+lp0= modelSpace.newLoadPattern(name= '0')
+
 loadMz= 1e3
 lp0.newNodalLoad(2,xc.Vector([0,0,loadMz]))
 
-#We add the load case to domain.
-lPatterns.addToDomain(lp0.name)
+# We add the load case to domain.
+modelSpace.addLoadCaseToDomain(lp0.name)
 
 
 # Solution

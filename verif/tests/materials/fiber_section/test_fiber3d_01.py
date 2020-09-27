@@ -35,7 +35,7 @@ modelSpace= predefined_spaces.StructuralMechanics2D(nodes)
 
 # Node definition
 
-nodes.defaultTag= 1 #First node number.
+nodes.defaultTag= 1 # First node number.
 nod1= nodes.newNodeXY(1,0)
 nod2= nodes.newNodeXY(1,0)
 
@@ -48,7 +48,7 @@ steel= typical_materials.defSteel01(preprocessor=preprocessor,name="steel",E=E,f
 # Sections
 import os
 pth= os.path.dirname(__file__)
-#print("pth= ", pth)
+# print("pth= ", pth)
 if(not pth):
   pth= "."
 exec(open(pth+"/../../aux/testQuadRegion.py").read())
@@ -87,18 +87,12 @@ spc= constraints.newSPConstraint(1,2,0.0)
 spc= constraints.newSPConstraint(2,1,0.0)
 spc= constraints.newSPConstraint(2,2,0.0)
 
-# Loads definition
-loadHandler= preprocessor.getLoadHandler
-lPatterns= loadHandler.getLoadPatterns
-#Load modulation.
-ts= lPatterns.newTimeSeries("constant_ts","ts")
-lPatterns.currentTimeSeries= "ts"
-#Load case definition
-lp0= lPatterns.newLoadPattern("default","0")
+# Load definition.
+lp0= modelSpace.newLoadPattern(name= '0')
 lp0.newNodalLoad(2,xc.Vector([F,0.0,0.0]))
 
-#We add the load case to domain.
-lPatterns.addToDomain(lp0.name)
+# We add the load case to domain.
+modelSpace.addLoadCaseToDomain(lp0.name)
 
 # Solution
 result= modelSpace.analyze(calculateNodalReactions= True)

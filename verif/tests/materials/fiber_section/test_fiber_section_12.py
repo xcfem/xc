@@ -9,7 +9,7 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
-# feProblem.logFileName= "/tmp/erase.log"  #Ignore warning messages
+# feProblem.logFileName= "/tmp/erase.log"  # Ignore warning messages
 
 import xc_base
 import geom
@@ -34,7 +34,7 @@ import os
 pth= os.path.dirname(__file__)
 if(not pth):
   pth= "."
-#print("pth= ", pth)
+# print("pth= ", pth)
 exec(open(pth+"/prestressed_concrete_section_01.py").read())
 materialHandler= preprocessor.getMaterialHandler
 secHP= materialHandler.newMaterial("fiber_section_3d","secHP")
@@ -50,19 +50,11 @@ modelSpace.fixNode000_000(1)
 modelSpace.fixNodeF00_00F(2)
 
 # Loads definition
-loadHandler= preprocessor.getLoadHandler
-
-lPatterns= loadHandler.getLoadPatterns
-
-#Load modulation.
-ts= lPatterns.newTimeSeries("constant_ts","ts")
-lPatterns.currentTimeSeries= "ts"
-#Load case definition
-lp0= lPatterns.newLoadPattern("default","0")
+lp0= modelSpace.newLoadPattern(name= '0')
 lp0.newNodalLoad(2,xc.Vector([NDato,0,0,0,0,MzDato]))
 
-#We add the load case to domain.
-lPatterns.addToDomain(lp0.name)
+# We add the load case to domain.
+modelSpace.addLoadCaseToDomain(lp0.name)
 
 
 # Solution procedure

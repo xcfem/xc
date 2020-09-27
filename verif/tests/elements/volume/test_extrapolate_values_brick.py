@@ -66,14 +66,10 @@ nod3.fix(xc.ID([0,1,2]),xc.Vector([0,0,0]) )
 
 # Load definition
 P= 1e3 # punctual load.
-loadHandler= preprocessor.getLoadHandler
-lPatterns= loadHandler.getLoadPatterns
-## Load modulation.
-ts= lPatterns.newTimeSeries("constant_ts","ts")
-lPatterns.currentTimeSeries= "ts"
-## Load case definition
-lp0= lPatterns.newLoadPattern("default","0")
-lPatterns.currentLoadPattern= "0"
+
+## Load case definition.
+lp0= modelSpace.newLoadPattern(name= '0')
+modelSpace.setCurrentLoadPattern("0")
 nod4.newLoad(xc.Vector([0,0,P]))
 nod5.newLoad(xc.Vector([0,0,P]))
 nod6.newLoad(xc.Vector([0,0,P]))
@@ -87,7 +83,7 @@ nod13.newLoad(xc.Vector([0,0,P]))
 nod14.newLoad(xc.Vector([0,0,P]))
 nod15.newLoad(xc.Vector([0,0,P]))
 ## We add the load case to domain.
-lPatterns.addToDomain(lp0.name)
+modelSpace.addLoadCaseToDomain(lp0.name)
 
 # # Graphic stuff.
 # oh= output_handler.OutputHandler(modelSpace)

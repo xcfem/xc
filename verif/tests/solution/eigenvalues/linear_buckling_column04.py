@@ -54,7 +54,7 @@ lin= modelSpace.newPDeltaCrdTransf("lin")
 seedElemHandler= preprocessor.getElementHandler.seedElemHandler
 seedElemHandler.defaultMaterial= scc.name
 seedElemHandler.defaultTransformation= lin.name
-seedElemHandler.defaultTag= 1 #Tag for next element.
+seedElemHandler.defaultTag= 1 # Tag for next element.
 beam2d= seedElemHandler.newElement("ForceBeamColumn2d",xc.ID([0,0]))
 beam2d.h= h
 beam2d.rho= 0.0
@@ -82,19 +82,11 @@ spc= constraints.newSPConstraint(n1.tag,1,0.0) # Node 1,gdl 1
 spc= constraints.newSPConstraint(n2.tag,0,0.0) # Node 2,gdl 0
 
 # Loads definition
-loadHandler= preprocessor.getLoadHandler
-
-lPatterns= loadHandler.getLoadPatterns
-
-#Load modulation.
-ts= lPatterns.newTimeSeries("constant_ts","ts")
-lPatterns.currentTimeSeries= "ts"
-#Load case definition
-lp0= lPatterns.newLoadPattern("default","0")
+lp0= modelSpace.newLoadPattern(name= '0')
 lp0.newNodalLoad(n2.tag,xc.Vector([0,P,0]))
 
-#We add the load case to domain.
-lPatterns.addToDomain(lp0.name)
+# We add the load case to domain.
+modelSpace.addLoadCaseToDomain(lp0.name)
 
 
 # Solution procedure
@@ -102,7 +94,7 @@ import os
 pth= os.path.dirname(__file__)
 if(not pth):
   pth= "."
-#print("pth= ", pth)
+# print("pth= ", pth)
 exec(open(pth+"/../../aux/solu_linear_buckling.py").read())
 
 

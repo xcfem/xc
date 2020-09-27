@@ -31,24 +31,24 @@ datosScc1LosC= def_simple_RC_section.RCRectangularSection()
 datosScc1LosC.sectionName= "secHA1LosC"
 datosScc1LosC.sectionDescr= "Deck. Central portion. Section normal to X axis."
 concr= EHE_materials.HA30
-concr.alfacc=0.85 #f_maxd= 0.85*fcd
+concr.alfacc=0.85 # f_maxd= 0.85*fcd
 datosScc1LosC.fiberSectionParameters.concrType= concr
 datosScc1LosC.h= 0.35
 datosScc1LosC.b= 1.0001
 datosScc1LosC.fiberSectionParameters.reinfSteelType= EHE_materials.B500S
 negRebRow=def_simple_RC_section.ReinfRow(nRebars=2,rebarsDiam=10e-10,width=datosScc1LosC.b)
-#negRebRow=def_simple_RC_section.ReinfRow()
-#negRebRow=def_simple_RC_section.ReinfRow(rebarsDiam=10e-3,areaRebar= EHE_materials.Fi10,rebarsSpacing=0.2,width=1.0,nominalCover=0.03)
-#negRebRow.setUp(nRebars=0,rebarsDiam=0.0,areaRebar=0.0,width=datosScc1LosC.b,cover=0.1)
+# negRebRow=def_simple_RC_section.ReinfRow()
+# negRebRow=def_simple_RC_section.ReinfRow(rebarsDiam=10e-3,areaRebar= EHE_materials.Fi10,rebarsSpacing=0.2,width=1.0,nominalCover=0.03)
+# negRebRow.setUp(nRebars=0,rebarsDiam=0.0,areaRebar=0.0,width=datosScc1LosC.b,cover=0.1)
 datosScc1LosC.negatvRebarRows= def_simple_RC_section.LongReinfLayers([negRebRow])
 posRebRow=def_simple_RC_section.ReinfRow(nRebars=6,rebarsDiam=26e-3,areaRebar=(areaFi22+areaFi26)/2.0,width=datosScc1LosC.b,nominalCover=0.05,nominalLatCover=0.08333-26e-3/2.)
-#posRebRow=def_simple_RC_section.ReinfRow()
-#posRebRow=def_simple_RC_section.ReinfRow(rebarsDiam=10e-3,areaRebar= EHE_materials.Fi10,rebarsSpacing=0.2,width=1.0,nominalCover=0.03)
-#posRebRow.setUp(nRebars=6,rebarsDiam=26e-3,areaRebar=(areaFi22+areaFi26)/2.0,width=datosScc1LosC.b,cover=0.05+0.026/2.0)
+# posRebRow=def_simple_RC_section.ReinfRow()
+# posRebRow=def_simple_RC_section.ReinfRow(rebarsDiam=10e-3,areaRebar= EHE_materials.Fi10,rebarsSpacing=0.2,width=1.0,nominalCover=0.03)
+# posRebRow.setUp(nRebars=6,rebarsDiam=26e-3,areaRebar=(areaFi22+areaFi26)/2.0,width=datosScc1LosC.b,cover=0.05+0.026/2.0)
 datosScc1LosC.positvRebarRows= def_simple_RC_section.LongReinfLayers([posRebRow])
 
-#datosScc1LosC.negatvRebars.setUp(0,0.0,0.0,datosScc1LosC.b,0.1)
-#datosScc1LosC.positvRebars.setUp(6,26e-3,(areaFi22+areaFi26)/2.0,datosScc1LosC.b,0.05+0.026/2.0)
+# datosScc1LosC.negatvRebars.setUp(0,0.0,0.0,datosScc1LosC.b,0.1)
+# datosScc1LosC.positvRebars.setUp(6,26e-3,(areaFi22+areaFi26)/2.0,datosScc1LosC.b,0.05+0.026/2.0)
 
 
 
@@ -72,19 +72,11 @@ modelSpace.fixNode000_000(1)
 modelSpace.fixNodeF00_0F0(2)
 
 # Loads definition
-loadHandler= preprocessor.getLoadHandler
-
-lPatterns= loadHandler.getLoadPatterns
-
-#Load modulation.
-ts= lPatterns.newTimeSeries("constant_ts","ts")
-lPatterns.currentTimeSeries= "ts"
-#Load case definition
-lp0= lPatterns.newLoadPattern("default","0")
+lp0= modelSpace.newLoadPattern(name= '0')
 lp0.newNodalLoad(2,xc.Vector([NDato,0,0,0,MyDato,3.55271e-15]))
 
-#We add the load case to domain.
-lPatterns.addToDomain(lp0.name)
+# We add the load case to domain.
+modelSpace.addLoadCaseToDomain(lp0.name)
 
 
 

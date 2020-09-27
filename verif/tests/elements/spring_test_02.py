@@ -42,7 +42,7 @@ elast= typical_materials.defElasticMaterial(preprocessor, "elast",K)
 elements= preprocessor.getElementHandler
 elements.defaultMaterial= elast.name
 elements.dimElem= 2 # Dimension of element space
-elements.defaultTag= 1 #First node number.
+elements.defaultTag= 1 # First node number.
 spring= elements.newElement("Spring",xc.ID([nodA.tag,nodB.tag]))
     
 # Constraints
@@ -52,19 +52,13 @@ spc= constraints.newSPConstraint(nodA.tag,0,0.0) # Node 1
 spc= constraints.newSPConstraint(nodA.tag,1,0.0)
 spc= constraints.newSPConstraint(nodB.tag,1,0.0) # Node 2
 
-# Loads definition
-loadHandler= preprocessor.getLoadHandler
-lPatterns= loadHandler.getLoadPatterns
-#Load modulation.
-ts= lPatterns.newTimeSeries("constant_ts","ts")
-lPatterns.currentTimeSeries= "ts"
-#Load case definition
-lp0= lPatterns.newLoadPattern("default","0")
-#lPatterns.currentLoadPattern= "0"
+# Load definition.
+lp0= modelSpace.newLoadPattern(name= '0')
+
 lp0.newSPConstraint(nodB.tag,0,D)
 
-#We add the load case to domain.
-lPatterns.addToDomain(lp0.name)
+# We add the load case to domain.
+modelSpace.addLoadCaseToDomain(lp0.name)
 # Solution
 result= modelSpace.analyze(calculateNodalReactions= True)
 

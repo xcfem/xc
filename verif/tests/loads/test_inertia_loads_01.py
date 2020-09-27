@@ -18,10 +18,10 @@ from materials import typical_materials
 import math
 
 
-E= 30e6 #Young modulus (psi)
+E= 30e6 # Young modulus (psi)
 nu= 0.3 # Poisson's ratio
 G= E/(2*(1+nu)) # Shear modulus
-l= 10 #Bar length
+l= 10 # Bar length
 b= 0.1
 A= b*b #Área in square inches.
 Iz= 1/12.0*b**4 # Cross section moment of inertia (m4)
@@ -51,7 +51,7 @@ section= typical_materials.defElasticSectionFromMechProp2d(preprocessor, "sectio
 
 # Element definition.
 elements= preprocessor.getElementHandler
-elements.dimElem= 2 #Bidimensional space.
+elements.dimElem= 2 # Bidimensional space.
 elements.defaultMaterial= elast.name
 truss= elements.newElement("Truss",xc.ID([n1.tag,n2.tag]))
 truss.sectionArea= A
@@ -59,29 +59,23 @@ elements.defaultTransformation= lin.name
 elements.defaultMaterial= section.name
 beam= elements.newElement("ElasticBeam2d",xc.ID([n1.tag,n2.tag]))
 constraints= preprocessor.getBoundaryCondHandler
-#Zero movement for node 1.
+# Zero movement for node 1.
 spc1= constraints.newSPConstraint(n1.tag,0,0.0)
 spc2= constraints.newSPConstraint(n1.tag,1,0.0)
 spc3= constraints.newSPConstraint(n1.tag,2,0.0)
-#Zero movement for node 2.
+# Zero movement for node 2.
 spc4= constraints.newSPConstraint(n2.tag,0,0.0)
 spc5= constraints.newSPConstraint(n2.tag,1,0.0)
 spc6= constraints.newSPConstraint(n2.tag,2,0.0)
 
-loadHandler= preprocessor.getLoadHandler
-#Load case container:
-lPatterns= loadHandler.getLoadPatterns
-#Load modulation.
-ts= lPatterns.newTimeSeries("constant_ts","ts")
-lPatterns.currentTimeSeries= "ts"
-#Load case definition
-lp0= lPatterns.newLoadPattern("default","0")
-lPatterns.currentLoadPattern= "0"
+# Load definition.
+lp0= modelSpace.newLoadPattern(name= '0')
+modelSpace.setCurrentLoadPattern("0")
 accel= xc.Vector([0,9.81])
 truss.createInertiaLoad(accel)
 beam.createInertiaLoad(accel)
-#We add the load case to domain.
-lPatterns.addToDomain(lp0.name)
+# We add the load case to domain.
+modelSpace.addLoadCaseToDomain(lp0.name)
 
 # Solution
 result= modelSpace.analyze(calculateNodalReactions= True)

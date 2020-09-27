@@ -15,9 +15,9 @@ import xc
 from model import predefined_spaces
 from materials import typical_materials
 
-E= 30e6 #Young modulus (psi)
-l= 10 #Bar length in inches
-F1= 1000 #Force magnitude 1 (pounds)
+E= 30e6 # Young modulus (psi)
+l= 10 # Bar length in inches
+F1= 1000 # Force magnitude 1 (pounds)
 
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
@@ -34,30 +34,25 @@ elast= typical_materials.defElasticMaterial(preprocessor, "elast",E)
     cross section of unit area.'''
 
 elements= preprocessor.getElementHandler
-elements.dimElem= 2 #Bars defined ina a two dimensional space.
+elements.dimElem= 2 # Bars defined ina a two dimensional space.
 elements.defaultMaterial= elast.name
 truss= elements.newElement("Truss",xc.ID([n1.tag,n2.tag]))
 truss.sectionArea= 1
 
 constraints= preprocessor.getBoundaryCondHandler
-#Constrain the displacement of node 1.
+# Constrain the displacement of node 1.
 spc1= constraints.newSPConstraint(n1.tag,0,0.0)
 spc2= constraints.newSPConstraint(n1.tag,1,0.0)
-#Constrain the displacement of node 4.
+# Constrain the displacement of node 4.
 spc3= constraints.newSPConstraint(n2.tag,0,0.0)
 
-loadHandler= preprocessor.getLoadHandler
-#Load pattern container:
-lPatterns= loadHandler.getLoadPatterns
-#time series for the load pattern:
-ts= lPatterns.newTimeSeries("constant_ts","ts")
-lPatterns.currentTimeSeries= "ts"
-#Load case definition
-lp0= lPatterns.newLoadPattern("default","0")
+# time series for the load pattern:
+# Load case definition.
+lp0= modelSpace.newLoadPattern(name= '0')
 lp0.newNodalLoad(n2.tag,xc.Vector([0,F1]))
 
-#Add the load pattern to the domain.
-lPatterns.addToDomain(lp0.name)
+# Add the load pattern to the domain.
+modelSpace.addLoadCaseToDomain(lp0.name)
 
 # Solution
 lp0.gammaF= 0.5

@@ -41,7 +41,7 @@ preprocessor=  feProblem.getPreprocessor
 nodes= preprocessor.getNodeHandler
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
 
-nodes.defaultTag= 1 #First node number.
+nodes.defaultTag= 1 # First node number.
 nod= nodes.newNodeXYZ(0,0.0,0.0)
 nod= nodes.newNodeXYZ(L,0.0,0.0)
 
@@ -62,16 +62,12 @@ beam= elements.newElement("ForceBeamColumn3d",xc.ID([1,2]))
 # Constraints
 modelSpace.fixNode000_000(1)
 
-# Loads definition
-loadHandler= preprocessor.getLoadHandler
-lPatterns= loadHandler.getLoadPatterns
-#Load modulation.
-ts= lPatterns.newTimeSeries("constant_ts","ts")
-lPatterns.currentTimeSeries= "ts"
-lp0= lPatterns.newLoadPattern("default","0") 
+
+# Load case definition.
+lp0= modelSpace.newLoadPattern(name= '0') 
 lp0.newNodalLoad(2,xc.Vector([0,0,-F,0,0,0]))
-#We add the load case to domain.
-lPatterns.addToDomain(lp0.name)
+# We add the load case to domain.
+modelSpace.addLoadCaseToDomain(lp0.name)
 
 # Solution
 analysis= predefined_solutions.simple_static_linear(feProblem)

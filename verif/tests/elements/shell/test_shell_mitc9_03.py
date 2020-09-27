@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import print_function
 '''
-Example from http://feacluster.com/CalculiX/ccx_2.13/doc/ccx/node7.html#beam5
+Example from http://feacluster.com/CalculiX/ccx_2.13/doc/ccx/node7.html# beam5
 done with 2D shell elements
 '''
 
@@ -30,7 +30,7 @@ modelSpace = predefined_spaces.StructuralMechanics3D(preprocessor.getNodeHandler
 
 # *********geometry*********
 L= 8.0 #8.0
-inPlane= True #False
+inPlane= True # False
 points = preprocessor.getMultiBlockTopology.getPoints  # Point container.
 if(inPlane):
   pt0 = points.newPntFromPos3d(geom.Pos3d(0.0,0.0,0.0)) 
@@ -46,8 +46,8 @@ else:
 surfaces = preprocessor.getMultiBlockTopology.getSurfaces  # Face container.
 surfaces.defaultTag = 1
 face0 = surfaces.newQuadSurfacePts(pt0.tag, pt1.tag, pt2.tag, pt3.tag)
-#face0.setElemSizeIJ(0.5,0.25) #Element size in (pt0->pt1,pt1->pt2) directions 
-face0.setElemSizeIJ(0.5,0.5) #Element size in (pt0->pt1,pt1->pt2) directions 
+# face0.setElemSizeIJ(0.5,0.25) # Element size in (pt0->pt1,pt1->pt2) directions 
+face0.setElemSizeIJ(0.5,0.5) # Element size in (pt0->pt1,pt1->pt2) directions 
 
 # Ascii art:
 #
@@ -97,12 +97,9 @@ for n in nodesToFix:
 
 
 # *********Load*********
-lPatterns = preprocessor.getLoadHandler.getLoadPatterns  # Load pattern container.
 # Variation of load with time.
-ts = lPatterns.newTimeSeries("constant_ts","ts")  # Constant load, no variation.
-lPatterns.currentTimeSeries= "ts"  # Time series to use for the new load patterns.
-# Load pattern definition
-lp0 = lPatterns.newLoadPattern("default","0")  # New load pattern named 0
+# Load case definition.
+lp0= modelSpace.newLoadPattern(name= '0')
 
 # Nodes to load.
 #   We ask for the line to load:
@@ -116,7 +113,7 @@ for n in nodesToLoad:
     lp0.newNodalLoad(n.tag,xc.Vector([0.0,loadForEachNode,0.0,0.0,0.0,0.0]))
 
 # We add the load case to domain.
-lPatterns.addToDomain(lp0.getName())
+modelSpace.addLoadCaseToDomain(lp0.getName())
 
 
 # *********xcTotalSet*********

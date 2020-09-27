@@ -41,7 +41,7 @@ sectionTestMaterial=typical_materials.MaterialData(name='sectionTestMaterial',E=
 modelSpace= predefined_spaces.StructuralMechanics2D(nodes)
 # Definimos el material
 def_secc_aggregation.def_secc_aggregation2d(preprocessor, sectionTest,sectionTestMaterial)
-nodes.defaultTag= 1 #First node number.
+nodes.defaultTag= 1 # First node number.
 nod= nodes.newNodeXY(0,0)
 nod= nodes.newNodeXY(L,0.0)
 
@@ -56,7 +56,7 @@ scc= typical_materials.defElasticSection2d(preprocessor, "scc",A,E,I)
 elements= preprocessor.getElementHandler
 elements.defaultTransformation= lin.name# Coordinate transformation for the new elements
 elements.defaultMaterial= sectionTest.sectionName
-elements.defaultTag= 1 #Tag for next element.
+elements.defaultTag= 1 # Tag for next element.
 beam2d= elements.newElement("ForceBeamColumn2d",xc.ID([1,2]))
     
 # Constraints
@@ -64,17 +64,11 @@ constraints= preprocessor.getBoundaryCondHandler
 modelSpace.fixNode000(1)
 
 
-# Loads definition
-loadHandler= preprocessor.getLoadHandler
-lPatterns= loadHandler.getLoadPatterns
-#Load modulation.
-ts= lPatterns.newTimeSeries("constant_ts","ts")
-lPatterns.currentTimeSeries= "ts"
-#Load case definition
-lp0= lPatterns.newLoadPattern("default","0")
+# Load definition.
+lp0= modelSpace.newLoadPattern(name= '0')
 lp0.newNodalLoad(2,xc.Vector([0,-P,0]))
-#We add the load case to domain.
-lPatterns.addToDomain(lp0.name)
+# We add the load case to domain.
+modelSpace.addLoadCaseToDomain(lp0.name)
 
 # Solution
 analysis= predefined_solutions.simple_static_linear(feProblem)

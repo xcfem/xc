@@ -13,21 +13,21 @@ from materials.ehe import EHE_materials
 from materials import typical_materials as tm
 from model.boundary_cond import spring_bound_cond as sbc
 
-#Calculation of displacements and internal forces of a pile taken from project "Reordenación del Enlace de la Pañoleta y Accesos a Camas (Sevilla)", annex nº 13 Structures, pages 93-96 
+# Calculation of displacements and internal forces of a pile taken from project "Reordenación del Enlace de la Pañoleta y Accesos a Camas (Sevilla)", annex nº 13 Structures, pages 93-96 
 
-#Data
-fiPile=1.5  #pile diameter [m]
-Emat=2.8e6    #elastic modulus of pile material [Pa]
-bearCap=450e4 #total bearing capacity of the pile [N]
-pType='endBearing' #type of pile
-zGround=0  #ground elevation
+# Data
+fiPile=1.5  # pile diameter [m]
+Emat=2.8e6    # elastic modulus of pile material [Pa]
+bearCap=450e4 # total bearing capacity of the pile [N]
+pType='endBearing' # type of pile
+zGround=0  # ground elevation
 Lpile=36
 soils=[[-1,'sandy',8025e3],
        [-1.85,'clay',8025e3/75.],
        [-6.55,'clay',122e3],
        [-16.45,'clay',18.75e3],
        [-26.25,'clay',4500e4/75.],
-       [-36.0,'clay',253e3]] #Properties of the soils:
+       [-36.0,'clay',253e3]] # Properties of the soils:
 # sandy soils [(zBottom,type, nh), ...]  where 'zBottom' is the global Z 
 #  coordinate of the bottom level of the soil and 'nh' [Pa/m] is the 
 #  coefficient corresponding to the compactness of the sandy soil.
@@ -35,27 +35,27 @@ soils=[[-1,'sandy',8025e3],
 #  coordinate of the bottom level of the soil and 'su' [Pa/m] is the shear  
 #  strength of the saturated cohesive soil.
 
-eSize= 0.24     #length of elements
+eSize= 0.24     # length of elements
 # loads
 Fh=706.9e3+572.5e3
 N=-1532e3-1470.1e3
 Fh=706.9e3
 N=-1532e3
 
-#End data
+# End data
 LeqPile=round(math.pi**0.5*fiPile/2.,3) # equivalent side of the square pile
 
-#Materials
+# Materials
 concrete=EHE_materials.HA30
 #             *** GEOMETRIC model (points, lines, surfaces) - SETS ***
 FEcase= xc.FEProblem()
 preprocessor=FEcase.getPreprocessor
-prep=preprocessor   #short name
+prep=preprocessor   # short name
 nodes= prep.getNodeHandler
 elements= prep.getElementHandler
 elements.dimElem= 3
 # Problem type
-modelSpace= predefined_spaces.StructuralMechanics3D(nodes) #Defines the
+modelSpace= predefined_spaces.StructuralMechanics3D(nodes) # Defines the
 # dimension of the space: nodes by three coordinates (x,y,z) and 
 # six DOF for each node (Ux,Uy,Uz,thetaX,thetaY,thetaZ)
 # coordinates in global X,Y,Z axes for the grid generation
@@ -68,14 +68,14 @@ gridGeom= gm.GridModel(prep,xList,yList,zList)
 # Grid geometric entities definition (points, lines, surfaces)
 # Points' generation
 gridGeom.generatePoints()
-#Lines generation
+# Lines generation
 pile_rg=gm.IJKRange((0,0,0),(0,0,1))
 pile=gridGeom.genLinOneRegion(ijkRange=pile_rg,setName='pile')
 
 #                         *** MATERIALS *** 
 concrProp=tm.MaterialData(name='concrProp',E=concrete.Ecm(),nu=concrete.nuc,rho=concrete.density())
-#Geometric sections
-#rectangular sections
+# Geometric sections
+# rectangular sections
 from materials.sections import section_properties as sectpr
 geomSectPile=sectpr.RectangularSection(name='geomSectPile',b=LeqPile,h=LeqPile)
 # Elastic material-section
@@ -94,7 +94,7 @@ springs=pileBC.springs
 springSet=preprocessor.getSets.defSet('springSet')
 for e in springs:
     springSet.getElements.append(e)
-    #print('z:',e.getCooCentroid(True)[2], ' Kx (t/m):',round(e.getMaterials()[0].E*1e-4,2))
+    # print('z:',e.getCooCentroid(True)[2], ' Kx (t/m):',round(e.getMaterials()[0].E*1e-4,2))
 springSet.fillDownwards()
 allSets= modelSpace.setSum('allSets',[pile,springSet])
 '''
@@ -110,19 +110,13 @@ modelSpace.fixNode('FFF_FF0',nBase.tag)  #
 modelSpace.fixNode('FFF_F0F',nTop.tag)  #
 
 
-# Loads definition
-loadHandler= preprocessor.getLoadHandler
-lPatterns= loadHandler.getLoadPatterns
-#Load modulation.
-ts= lPatterns.newTimeSeries("constant_ts","ts")
-lPatterns.currentTimeSeries= "ts"
-#Load case definition
-lp0= lPatterns.newLoadPattern("default","0")
+# Load definition.
+lp0= modelSpace.newLoadPattern(name= '0')
 
 lp0.newNodalLoad(nTop.tag,xc.Vector([Fh,0,N,0,0,0]))
 
-#We add the load case to domain.
-lPatterns.addToDomain(lp0.name)
+# We add the load case to domain.
+modelSpace.addLoadCaseToDomain(lp0.name)
 lp0.gammaF=1
 
 # Solution

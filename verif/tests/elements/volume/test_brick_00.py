@@ -36,32 +36,26 @@ nod16= nodes.newNodeXYZ(0,1,1)
 
 elements= preprocessor.getElementHandler
 elements.defaultMaterial= elast3d.name
-elements.defaultTag= 1 #Tag for the next element.
+elements.defaultTag= 1 # Tag for the next element.
 brick= elements.newElement("Brick",xc.ID([nod9.tag,nod10.tag,nod11.tag,nod12.tag,nod13.tag,nod14.tag,nod15.tag,nod16.tag]))
 
 constraints= preprocessor.getBoundaryCondHandler
-#Constrain the displacement of node 1.
+# Constrain the displacement of node 1.
 
 nod9.fix(xc.ID([0,1,2]),xc.Vector([0,0,0]))
 nod10.fix(xc.ID([0,1,2]),xc.Vector([0,0,0]))
 nod11.fix(xc.ID([0,1,2]),xc.Vector([0,0,0]))
 nod12.fix(xc.ID([0,1,2]),xc.Vector([0,0,0]))
 
-# Loads definition
-loadHandler= preprocessor.getLoadHandler
-lPatterns= loadHandler.getLoadPatterns
-#Load modulation.
-ts= lPatterns.newTimeSeries("constant_ts","ts")
-lPatterns.currentTimeSeries= "ts"
-#Load case definition
-lp0= lPatterns.newLoadPattern("default","0")
-#lPatterns.currentLoadPattern= "0"
+# Load definition.
+lp0= modelSpace.newLoadPattern(name= '0')
+
 lp0.newNodalLoad(nod13.tag, xc.Vector([0,0,-1]))
 lp0.newNodalLoad(nod14.tag, xc.Vector([0,0,-1]))
 lp0.newNodalLoad(nod15.tag, xc.Vector([0,0,-1]))
 lp0.newNodalLoad(nod16.tag, xc.Vector([0,0,-1]))
-#We add the load case to domain.
-lPatterns.addToDomain(lp0.name)
+# We add the load case to domain.
+modelSpace.addLoadCaseToDomain(lp0.name)
 
 # # Graphic stuff.
 # oh= output_handler.OutputHandler(modelSpace)

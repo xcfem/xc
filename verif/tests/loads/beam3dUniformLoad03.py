@@ -34,7 +34,7 @@ sectionTestMaterial= typical_materials.MaterialData("sectionTestMaterial",E=7E9,
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
 # Definimos el material
 def_secc_aggregation.def_secc_aggregation3d(preprocessor, sectionTest,sectionTestMaterial)
-nodes.defaultTag= 1 #First node number.
+nodes.defaultTag= 1 # First node number.
 nod= nodes.newNodeXYZ(0,0,0)
 nod= nodes.newNodeXYZ(L/2,0,0)
 nod= nodes.newNodeXYZ(L,0,0)
@@ -54,20 +54,16 @@ beam3d2= elements.newElement("ForceBeamColumn3d",xc.ID([2,3]))
 modelSpace.fixNode000_000(1)
 
 
-# Loads definition
-loadHandler= preprocessor.getLoadHandler
-lPatterns= loadHandler.getLoadPatterns
-ts= lPatterns.newTimeSeries("constant_ts","ts")
-lPatterns.currentTimeSeries= "ts"
-#Load case definition
-lp0= lPatterns.newLoadPattern("default","0")
-#lPatterns.currentLoadPattern= "0"
+
+# Load case definition.
+lp0= modelSpace.newLoadPattern(name= '0')
+
 eleLoad= lp0.newElementalLoad("beam3d_uniform_load")
 eleLoad.elementTags= xc.ID([1,2]) 
 eleLoad.transComponent= -P 
 eleLoad.axialComponent= n
-#We add the load case to domain.
-lPatterns.addToDomain(lp0.name)
+# We add the load case to domain.
+modelSpace.addLoadCaseToDomain(lp0.name)
 
 
 # Solution procedure

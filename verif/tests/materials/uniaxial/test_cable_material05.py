@@ -47,7 +47,7 @@ cable= typical_materials.defCableMaterial(preprocessor, "cable",E,sigmaPret,0.0)
 seedElemHandler= preprocessor.getElementHandler.seedElemHandler
 seedElemHandler.defaultMaterial= cable.name
 seedElemHandler.dimElem= 3 # Dimension of element space
-seedElemHandler.defaultTag= 1 #Number for the next element will be 1.
+seedElemHandler.defaultTag= 1 # Number for the next element will be 1.
 truss= seedElemHandler.newElement("CorotTruss",xc.ID([1,2]))
 truss.sectionArea= area
 # seed element definition ends
@@ -68,17 +68,13 @@ constraints= preprocessor.getBoundaryCondHandler
 predefined_spaces.ConstraintsForLineExtremeNodes(l,modelSpace.fixNode000_000)
 predefined_spaces.ConstraintsForLineInteriorNodes(l,modelSpace.fixNodeFFF_000)
 
-# Loads definition
-loadHandler= preprocessor.getLoadHandler
-lPatterns= loadHandler.getLoadPatterns
-#Load modulation.
-ts= lPatterns.newTimeSeries("constant_ts","ts")
-lPatterns.currentTimeSeries= "ts"
-lPattern= "0"
-lp0= lPatterns.newLoadPattern("default",lPattern)
-lPatterns.currentLoadPattern= lPattern
+
+# Load case definition.
+lPattern= '0'
+lp0= modelSpace.newLoadPattern(name= lPattern)
+modelSpace.setCurrentLoadPattern(lPattern)
 nodal_loads.load_on_nodes_in_line(l1,lp0,xc.Vector([0,-F,0,0,0,0]))
-lPatterns.addToDomain(lPattern)
+modelSpace.addLoadCaseToDomain(lPattern)
 
 
 Nstep= 10  #  apply load in 10 steps

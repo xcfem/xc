@@ -71,19 +71,11 @@ modelSpace.fixNode000_000(1)
 modelSpace.fixNodeF00_0FF(2)
 
 # Loads definition
-loadHandler= preprocessor.getLoadHandler
-
-lPatterns= loadHandler.getLoadPatterns
-
-#Load modulation.
-ts= lPatterns.newTimeSeries("constant_ts","ts")
-lPatterns.currentTimeSeries= "ts"
-#Load case definition
-lp0= lPatterns.newLoadPattern("default","0")
+lp0= modelSpace.newLoadPattern(name= '0')
 lp0.newNodalLoad(2,xc.Vector([NDato,0,0,0,MyDato,MzDato]))
 
-#We add the load case to domain.
-lPatterns.addToDomain(lp0.name)
+# We add the load case to domain.
+modelSpace.addLoadCaseToDomain(lp0.name)
 
 # Solution procedure
 analysis= predefined_solutions.plain_newton_raphson(feProblem)
@@ -98,7 +90,7 @@ ele1= elements.getElement(1)
 scc= ele1.getSection()
 secHAParamsFis.computeWk(scc,concr.matTagK,EHE_materials.B500S.matTagK,concr.fctm())
 
-#wkcomp changed from 0.550225e-3 to 0.55189e-3 after considering fmaxK=fck instead of 0.85fck
+# wkcomp changed from 0.550225e-3 to 0.55189e-3 after considering fmaxK=fck instead of 0.85fck
 
 ratio1= ((secHAParamsFis.Wk- 0.55189e-3)/0.55189e-3)
 

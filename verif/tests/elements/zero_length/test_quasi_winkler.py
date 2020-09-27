@@ -50,7 +50,7 @@ scc= typical_materials.defElasticSection2d(preprocessor, "scc",A,E,I)
 seedElemHandler= preprocessor.getElementHandler.seedElemHandler
 seedElemHandler.defaultTransformation= lin.name
 seedElemHandler.defaultMaterial= scc.name
-seedElemHandler.defaultTag= 1 #Tag for next element.
+seedElemHandler.defaultTag= 1 # Tag for next element.
 beam2d= seedElemHandler.newElement("ElasticBeam2d",xc.ID([0,0]))
 beam2d.h= h
 
@@ -100,19 +100,13 @@ for n in l2InteriorNodes:
   fixedNodeId, idElem= modelSpace.setUniaxialBearing2D(n.tag,"kY",[0,1])
 
 
-# Loads definition
-loadHandler= preprocessor.getLoadHandler
-lPatterns= loadHandler.getLoadPatterns
-#Load modulation.
-ts= lPatterns.newTimeSeries("constant_ts","ts")
-lPatterns.currentTimeSeries= "ts"
-#Load case definition
-lp0= lPatterns.newLoadPattern("default","0")
-#lPatterns.currentLoadPattern= "0"
+# Load definition.
+lp0= modelSpace.newLoadPattern(name= '0')
+
 lp0.newNodalLoad(idCentralNode,xc.Vector([0,-F,0]))
 
-#We add the load case to domain.
-lPatterns.addToDomain(lp0.name)
+# We add the load case to domain.
+modelSpace.addLoadCaseToDomain(lp0.name)
 
 
 

@@ -44,10 +44,10 @@ sectionProperties.A= A; sectionProperties.E= E; sectionProperties.G= G
 sectionProperties.Iz= Iz; sectionProperties.Iy= Iy; sectionProperties.J= J
 section= typical_materials.defElasticSectionFromMechProp3d(preprocessor, "section",sectionProperties)
 
-#Nodes
+# Nodes
 nodes= preprocessor.getNodeHandler
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
-nodes.defaultTag= 1 #First node number.
+nodes.defaultTag= 1 # First node number.
 nod1= nodes.newNodeXYZ(0,0.0,0.0)
 nod2= nodes.newNodeXYZ(L/2.0,0.0,0.0)
 nod3= nodes.newNodeXYZ(L,0.0,0.0)
@@ -57,7 +57,7 @@ lin= modelSpace.newLinearCrdTransf("lin",xc.Vector([0,1,0]))
 elements= preprocessor.getElementHandler
 elements.defaultTransformation= lin.name
 elements.defaultMaterial= section.name
-elements.defaultTag= 1 #Tag for next element.
+elements.defaultTag= 1 # Tag for next element.
 beam3d= elements.newElement("ElasticBeam3d",xc.ID([nod1.tag,nod2.tag]))
 
 # Constraints
@@ -68,28 +68,20 @@ rr= preprocessor.getBoundaryCondHandler.newRigidBeam(nod2.tag,nod3.tag)
 
 
 # Loads definition
-loadHandler= preprocessor.getLoadHandler
-
-lPatterns= loadHandler.getLoadPatterns
-
-#Load modulation.
-ts= lPatterns.newTimeSeries("constant_ts","ts")
-lPatterns.currentTimeSeries= "ts"
-#Load case definition
-lp0= lPatterns.newLoadPattern("default","0")
+lp0= modelSpace.newLoadPattern(name= '0')
 lp0.newNodalLoad(2,xc.Vector([F,0,0,0,0,0]))
-#We add the load case to domain.
-lPatterns.addToDomain(lp0.name)
+# We add the load case to domain.
+modelSpace.addLoadCaseToDomain(lp0.name)
 
 # Solution
 import os
 pth= os.path.dirname(__file__)
-#print("pth= ", pth)
+# print("pth= ", pth)
 if(not pth):
   pth= "."
 exec(open(pth+"/../../aux/solu_transf_handler2.py").read())
 
-delta= nodes.getNode(nod3.tag).getDisp[0] #x displacement of node 3.
+delta= nodes.getNode(nod3.tag).getDisp[0] # x displacement of node 3.
 elements.getElement(1).getResistingForce()
 N1= elements.getElement(nod1.tag).getN1
 

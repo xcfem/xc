@@ -67,7 +67,7 @@ preprocessor=  feProblem.getPreprocessor
 nodes= preprocessor.getNodeHandler
 # Problem type
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
-nodes.defaultTag= 1 #First node number.
+nodes.defaultTag= 1 # First node number.
 nodes.newNodeXYZ(0,0.0,0.0)
 nodes.newNodeXYZ(L,0.0,0.0)
 
@@ -82,22 +82,18 @@ section= typical_materials.defElasticSectionFromMechProp3d(preprocessor, "sectio
 elements= preprocessor.getElementHandler
 elements.defaultTransformation= lin.name
 elements.defaultMaterial= section.name
-elements.defaultTag= 1 #Tag for the next element.
+elements.defaultTag= 1 # Tag for the next element.
 beam3d= elements.newElement("ElasticBeam3d",xc.ID([1,2]))
 
 
 
 modelSpace.fixNode000_000(1)
 
-loadHandler= preprocessor.getLoadHandler
-lPatterns= loadHandler.getLoadPatterns
-#Load modulation.
-ts= lPatterns.newTimeSeries("constant_ts","ts")
-lPatterns.currentTimeSeries= "ts"
-lp0= lPatterns.newLoadPattern("default","0")
-lp0.newNodalLoad(2,xc.Vector([F,0,0,0,0,0])) #Positive force along x axis
-#We add the load case to domain.
-lPatterns.addToDomain(lp0.name)
+# Load case definition.
+lp0= modelSpace.newLoadPattern(name= '0')
+lp0.newNodalLoad(2,xc.Vector([F,0,0,0,0,0])) # Positive force along x axis
+# We add the load case to domain.
+modelSpace.addLoadCaseToDomain(lp0.name)
 
 # Solution 0 N
 analysis= predefined_solutions.simple_static_linear(feProblem)
@@ -119,14 +115,14 @@ phaseRatios= [ratio0,ratio1,ratio2,ratio3,ratio4,ratio5]
 ratios.extend(phaseRatios)
 
 # print('RF= ',RF)
-#printResults(N1,Vy1,Vz1,T1,My1,Mz1,N2,Vy2,Vz2,T2,My2,Mz2,phaseRatios,'')
+# printResults(N1,Vy1,Vz1,T1,My1,Mz1,N2,Vy2,Vz2,T2,My2,Mz2,phaseRatios,'')
 
 
 lp0.removeFromDomain()
-lp1= lPatterns.newLoadPattern("default","1")
-lp1.newNodalLoad(2,xc.Vector([0,F,0,0,0,0])) #Positive force along y axis
-#We add the load case to domain.
-lPatterns.addToDomain("1")
+lp1= modelSpace.newLoadPattern(name= '1')
+lp1.newNodalLoad(2,xc.Vector([0,F,0,0,0,0])) # Positive force along y axis
+# We add the load case to domain.
+modelSpace.addLoadCaseToDomain("1")
 
 # Solution 1 My Vz
 analysis= predefined_solutions.simple_static_linear(feProblem)
@@ -148,13 +144,13 @@ phaseRatios= [ratio10,ratio11,ratio12,ratio13,ratio14,ratio15]
 ratios.extend(phaseRatios)
 
 # print("RF= ",RF)
-#printResults(N1,Vy1,Vz1,T1,My1,Mz1,N2,Vy2,Vz2,T2,My2,Mz2,phaseRatios,'1')
+# printResults(N1,Vy1,Vz1,T1,My1,Mz1,N2,Vy2,Vz2,T2,My2,Mz2,phaseRatios,'1')
 
 lp1.removeFromDomain()
-lp2= lPatterns.newLoadPattern("default","2")
-lp2.newNodalLoad(2,xc.Vector([0,0,F,0,0,0])) #Positive force along z axis
-#We add the load case to domain.
-lPatterns.addToDomain("2")
+lp2= modelSpace.newLoadPattern(name= '2')
+lp2.newNodalLoad(2,xc.Vector([0,0,F,0,0,0])) # Positive force along z axis
+# We add the load case to domain.
+modelSpace.addLoadCaseToDomain("2")
 
 # Solution 2 Mz Vy
 analysis= predefined_solutions.simple_static_linear(feProblem)
@@ -176,14 +172,14 @@ phaseRatios= [ratio20,ratio21,ratio22,ratio23,ratio24,ratio25]
 ratios.extend(phaseRatios)
 
 # print("RF= ",RF)
-#printResults(N1,Vy1,Vz1,T1,My1,Mz1,N2,Vy2,Vz2,T2,My2,Mz2,phaseRatios,'2')
+# printResults(N1,Vy1,Vz1,T1,My1,Mz1,N2,Vy2,Vz2,T2,My2,Mz2,phaseRatios,'2')
 
 
 lp2.removeFromDomain()
-lp3= lPatterns.newLoadPattern("default","3")
-lp3.newNodalLoad(2,xc.Vector([0,0,0,F,0,0])) #Positive moment about x axis
-#We add the load case to domain.
-lPatterns.addToDomain("3")
+lp3= modelSpace.newLoadPattern(name= '3')
+lp3.newNodalLoad(2,xc.Vector([0,0,0,F,0,0])) # Positive moment about x axis
+# We add the load case to domain.
+modelSpace.addLoadCaseToDomain("3")
 
 # Solution 3 T
 analysis= predefined_solutions.simple_static_linear(feProblem)
@@ -204,13 +200,13 @@ phaseRatios= [ratio30,ratio31,ratio32,ratio33,ratio34,ratio35]
 ratios.extend(phaseRatios)
 
 # print("RF= ",RF)
-#printResults(N1,Vy1,Vz1,T1,My1,Mz1,N2,Vy2,Vz2,T2,My2,Mz2,phaseRatios,'3')
+# printResults(N1,Vy1,Vz1,T1,My1,Mz1,N2,Vy2,Vz2,T2,My2,Mz2,phaseRatios,'3')
 
 lp3.removeFromDomain()
-lp4= lPatterns.newLoadPattern("default","4")
-lp4.newNodalLoad(2,xc.Vector([0,0,0,0,F,0])) #Positive moment about y axis
-#We add the load case to domain.
-lPatterns.addToDomain("4")
+lp4= modelSpace.newLoadPattern(name= '4')
+lp4.newNodalLoad(2,xc.Vector([0,0,0,0,F,0])) # Positive moment about y axis
+# We add the load case to domain.
+modelSpace.addLoadCaseToDomain("4")
 
 # Solution 4 T
 analysis= predefined_solutions.simple_static_linear(feProblem)
@@ -231,13 +227,13 @@ phaseRatios= [ratio40,ratio41,ratio42,ratio43,ratio44,ratio45]
 ratios.extend(phaseRatios)
 
 # print("RF= ",RF)
-#printResults(N1,Vy1,Vz1,T1,My1,Mz1,N2,Vy2,Vz2,T2,My2,Mz2,phaseRatios,'4')
+# printResults(N1,Vy1,Vz1,T1,My1,Mz1,N2,Vy2,Vz2,T2,My2,Mz2,phaseRatios,'4')
 
 lp4.removeFromDomain()
-lp5= lPatterns.newLoadPattern("default","5")
-lp5.newNodalLoad(2,xc.Vector([0,0,0,0,0,F])) #Positive moment about z axis
-#We add the load case to domain.
-lPatterns.addToDomain("5")
+lp5= modelSpace.newLoadPattern(name= '5')
+lp5.newNodalLoad(2,xc.Vector([0,0,0,0,0,F])) # Positive moment about z axis
+# We add the load case to domain.
+modelSpace.addLoadCaseToDomain("5")
 
 # Solution 5 T
 analysis= predefined_solutions.simple_static_linear(feProblem)
@@ -258,7 +254,7 @@ phaseRatios= [ratio50,ratio51,ratio52,ratio53,ratio54,ratio55]
 ratios.extend(phaseRatios)
 
 # print("RF= ",RF)
-#printResults(N1,Vy1,Vz1,T1,My1,Mz1,N2,Vy2,Vz2,T2,My2,Mz2,phaseRatios,'5')
+# printResults(N1,Vy1,Vz1,T1,My1,Mz1,N2,Vy2,Vz2,T2,My2,Mz2,phaseRatios,'5')
 
 result= 0.0
 for r in ratios:

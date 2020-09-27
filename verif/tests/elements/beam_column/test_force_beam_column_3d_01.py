@@ -33,7 +33,7 @@ preprocessor=  feProblem.getPreprocessor
 nodes= preprocessor.getNodeHandler
 # Problem type
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
-nodes.defaultTag= 1 #First node number.
+nodes.defaultTag= 1 # First node number.
 nod= nodes.newNodeXYZ(0,0.0,0.0)
 nod= nodes.newNodeXYZ(L,0.0,0.0)
 
@@ -47,45 +47,39 @@ steel= typical_materials.defSteel01(preprocessor, "steel",E,fy,0.001)
 
 import os
 pth= os.path.dirname(__file__)
-#print("pth= ", pth)
+# print("pth= ", pth)
 if(not pth):
   pth= "."
-exec(open(pth+"/../../aux/testQuadRegion.py").read()) #Definition of section geometry (regions and rebars)
+exec(open(pth+"/../../aux/testQuadRegion.py").read()) # Definition of section geometry (regions and rebars)
 # Definition of a new empty fiber section named 'quadFibers' and stored in a
 # Python variable of the same name (surprisingly enough).
 quadFibers= preprocessor.getMaterialHandler.newMaterial("fiber_section_3d","quadFibers")
-fiberSectionRepr= quadFibers.getFiberSectionRepr() #Fiber section representation
+fiberSectionRepr= quadFibers.getFiberSectionRepr() # Fiber section representation
                                                      # of 'quadFibers'
-fiberSectionRepr.setGeomNamed("testQuadRegion") #We assign the geometry (regions and rebars)
-                                                  #to the fiber section representation
-                                                  #of 'quadFibers'
-quadFibers.setupFibers() #Create the fibers from the information contained in th
-                           #geometry.
-fibras= quadFibers.getFibers() #Get the fiber container from the object.
-A= fibras.getArea(1.0) #Get the sum of the fiber areas.
+fiberSectionRepr.setGeomNamed("testQuadRegion") # We assign the geometry (regions and rebars)
+                                                  # to the fiber section representation
+                                                  # of 'quadFibers'
+quadFibers.setupFibers() # Create the fibers from the information contained in th
+                           # geometry.
+fibras= quadFibers.getFibers() # Get the fiber container from the object.
+A= fibras.getArea(1.0) # Get the sum of the fiber areas.
 
 
 
 # Elements definition
 elements= preprocessor.getElementHandler
 elements.defaultTransformation= lin.name
-elements.defaultMaterial= quadFibers.name #Material name for the element (the fiber section).
+elements.defaultMaterial= quadFibers.name # Material name for the element (the fiber section).
 beam3d= elements.newElement("ForceBeamColumn3d",xc.ID([1,2]))
 
 # Constraints
 modelSpace.fixNode000_000(1)
 
-# Loads definition
-loadHandler= preprocessor.getLoadHandler
-lPatterns= loadHandler.getLoadPatterns
-#Load modulation.
-ts= lPatterns.newTimeSeries("constant_ts","ts")
-lPatterns.currentTimeSeries= "ts"
-#Load case definition
-lp0= lPatterns.newLoadPattern("default","0")
+# Load definition.
+lp0= modelSpace.newLoadPattern(name= '0')
 lp0.newNodalLoad(2,xc.Vector([F,0,0,0,0,0]))
-#We add the load case to domain.
-lPatterns.addToDomain(lp0.name)
+# We add the load case to domain.
+modelSpace.addLoadCaseToDomain(lp0.name)
 # Solution procedure
 analysis= predefined_solutions.plain_static_modified_newton(feProblem)
 result= analysis.analyze(10)

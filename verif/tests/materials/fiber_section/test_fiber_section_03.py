@@ -34,7 +34,7 @@ import os
 pth= os.path.dirname(__file__)
 if(not pth):
   pth= "."
-#print("pth= ", pth)
+# print("pth= ", pth)
 exec(open(pth+"/fiber_section_test_macros.py").read())
 
 fy= 2600 # Yield stress of the material expressed in kp/cm2.
@@ -46,10 +46,10 @@ preprocessor=  feProblem.getPreprocessor
 # Materials definition
 epp= typical_materials.defElasticPPMaterial(preprocessor, "epp",E,fy,-fy)
 # Section geometry
-#creation
+# creation
 geomRectang= preprocessor.getMaterialHandler.newSectionGeometry("geomRectang")
-#generation of a quadrilateral region of the scc10x20 sizes and number of
-#divisions made of material nmbMat
+# generation of a quadrilateral region of the scc10x20 sizes and number of
+# divisions made of material nmbMat
 rreg= scc10x20.getRegion(geomRectang,"epp")
 rectang= preprocessor.getMaterialHandler.newMaterial("fiber_section_3d","rectang")
 fiberSectionRepr= rectang.getFiberSectionRepr()
@@ -65,21 +65,13 @@ modelSpace.fixNode000_000(1)
 modelSpace.fixNode000_0F0(2)
 
 # Loads definition
-loadHandler= preprocessor.getLoadHandler
+lp0= modelSpace.newLoadPattern(name= '0')
 
-lPatterns= loadHandler.getLoadPatterns
-
-#Load modulation.
-ts= lPatterns.newTimeSeries("constant_ts","ts")
-lPatterns.currentTimeSeries= "ts"
-#Load case definition
-lp0= lPatterns.newLoadPattern("default","0")
-#lPatterns.currentLoadPattern= "0"
 loadMy= 0.999*scc10x20.getPlasticMomentY(fy)
 lp0.newNodalLoad(2,xc.Vector([0,0,0,0,loadMy,0]))
 
-#We add the load case to domain.
-lPatterns.addToDomain(lp0.name)
+# We add the load case to domain.
+modelSpace.addLoadCaseToDomain(lp0.name)
 
 
 # Solve

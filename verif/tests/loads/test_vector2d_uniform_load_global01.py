@@ -43,7 +43,7 @@ nodes= preprocessor.getNodeHandler
 # Problem type
 modelSpace= predefined_spaces.StructuralMechanics2D(nodes)
 
-nodes.defaultTag= 1 #First node number.
+nodes.defaultTag= 1 # First node number.
 nod= nodes.newNodeXY(0,0.0)
 nod= nodes.newNodeXY(L*math.sqrt(2)/2,L*math.sqrt(2)/2)
 
@@ -59,7 +59,7 @@ respVz= typical_materials.defElasticMaterial(preprocessor, "respVz",1e9) # Shear
 # Sections
 import os
 pth= os.path.dirname(__file__)
-#print("pth= ", pth)
+# print("pth= ", pth)
 if(not pth):
   pth= "."
 exec(open(pth+"/../aux/testQuadRegion.py").read())
@@ -92,15 +92,9 @@ el= elements.newElement("ForceBeamColumn2d",xc.ID([1,2]))
 constraints= preprocessor.getBoundaryCondHandler
 modelSpace.fixNode000(1)
 
-# Loads definition
-loadHandler= preprocessor.getLoadHandler
-lPatterns= loadHandler.getLoadPatterns
-#Load modulation.
-ts= lPatterns.newTimeSeries("constant_ts","ts")
-lPatterns.currentTimeSeries= "ts"
-#Load case definition
-lp0= lPatterns.newLoadPattern("default","0")
-lPatterns.currentLoadPattern= "0"
+# Load definition.
+lp0= modelSpace.newLoadPattern(name= '0')
+modelSpace.setCurrentLoadPattern("0")
 crdTransf= el.getCoordTransf
 vIElem= crdTransf.getIVector
 vJElem= crdTransf.getJVector

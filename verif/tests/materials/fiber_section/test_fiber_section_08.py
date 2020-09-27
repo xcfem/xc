@@ -11,7 +11,7 @@ The results obtained are acceptable considering that:
 - Fiber model discretization introduces an error.
  '''
 
-# feProblem.logFileName= "/tmp/erase.log"  #Ignore warning messages
+# feProblem.logFileName= "/tmp/erase.log"  # Ignore warning messages
 
 from __future__ import print_function
 from __future__ import division
@@ -43,14 +43,14 @@ preprocessor=  feProblem.getPreprocessor
 reinfMatTag= EHE_materials.B500S.defDiagD(preprocessor)
 dgDB500S= EHE_materials.B500S.getDiagD(preprocessor)
 concr= EHE_materials.HA25
-concr.alfacc=0.85    #f_maxd= 0.85*fcd concrete long term compressive strength factor (normally alfacc=1)
+concr.alfacc=0.85    # f_maxd= 0.85*fcd concrete long term compressive strength factor (normally alfacc=1)
 concreteTag= concr.defDiagD(preprocessor)
 
 import os
 pth= os.path.dirname(__file__)
 if(not pth):
   pth= "."
-#print("pth= ", pth)
+# print("pth= ", pth)
 exec(open(pth+"/concrete_section_01.py").read())
 secHA= preprocessor.getMaterialHandler.newMaterial("fiber_section_3d","secHA")
 fiberSectionRepr= secHA.getFiberSectionRepr()
@@ -65,19 +65,11 @@ modelSpace.fixNode000_000(1)
 modelSpace.fixNodeF00_00F(2)
 
 # Loads definition
-loadHandler= preprocessor.getLoadHandler
-
-lPatterns= loadHandler.getLoadPatterns
-
-#Load modulation.
-ts= lPatterns.newTimeSeries("constant_ts","ts")
-lPatterns.currentTimeSeries= "ts"
-#Load case definition
-lp0= lPatterns.newLoadPattern("default","0")
+lp0= modelSpace.newLoadPattern(name= '0')
 lp0.newNodalLoad(2,xc.Vector([0,0,0,0,0,MzDato]))
 
-#We add the load case to domain.
-lPatterns.addToDomain(lp0.name)
+# We add the load case to domain.
+modelSpace.addLoadCaseToDomain(lp0.name)
 
 
 # Solution procedure

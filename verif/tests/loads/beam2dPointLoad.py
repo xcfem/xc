@@ -36,7 +36,7 @@ nodes= preprocessor.getNodeHandler
 
 modelSpace= predefined_spaces.StructuralMechanics2D(nodes)
 
-nodes.defaultTag= 1 #First node number.
+nodes.defaultTag= 1 # First node number.
 nod= nodes.newNodeXY(0,0)
 nod= nodes.newNodeXY(L,0.0)
 
@@ -52,7 +52,7 @@ elements= preprocessor.getElementHandler
 elements.defaultTransformation= lin.name
 elements.defaultMaterial= scc.name
 #  sintaxis: beam2d_02[<tag>] 
-elements.defaultTag= 1 #Tag for next element.
+elements.defaultTag= 1 # Tag for next element.
 beam2d= elements.newElement("ElasticBeam2d",xc.ID([1,2]))
 beam2d.h= h
     
@@ -61,22 +61,16 @@ constraints= preprocessor.getBoundaryCondHandler
 modelSpace.fixNode000(1)
 
 
-# Loads definition
-loadHandler= preprocessor.getLoadHandler
-lPatterns= loadHandler.getLoadPatterns
-#Load modulation.
-ts= lPatterns.newTimeSeries("constant_ts","ts")
-lPatterns.currentTimeSeries= "ts"
-#Load case definition
-lp0= lPatterns.newLoadPattern("default","0")
-#lPatterns.currentLoadPattern= "0"
+# Load definition.
+lp0= modelSpace.newLoadPattern(name= '0')
+
 eleLoad= lp0.newElementalLoad("beam2d_point_load")
 eleLoad.elementTags= xc.ID([1])
 eleLoad.transComponent= -P
 eleLoad.axialComponent= n
 eleLoad.x= x
-#We add the load case to domain.
-lPatterns.addToDomain(lp0.name)
+# We add the load case to domain.
+modelSpace.addLoadCaseToDomain(lp0.name)
 
 # Solution
 analysis= predefined_solutions.simple_static_linear(feProblem)

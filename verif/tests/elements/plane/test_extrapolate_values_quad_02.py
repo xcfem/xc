@@ -19,7 +19,7 @@ import xc
 from solution import predefined_solutions
 from model import predefined_spaces
 from materials import typical_materials
-#from postprocess import output_handler
+# from postprocess import output_handler
 
 # Problem type
 feProblem= xc.FEProblem()
@@ -58,14 +58,9 @@ nod2.fix(xc.ID([1]),xc.Vector([0]) )
 
 # Load definition
 P= 10e3*2/3 # punctual load.
-loadHandler= preprocessor.getLoadHandler
-lPatterns= loadHandler.getLoadPatterns
-## Load modulation.
-ts= lPatterns.newTimeSeries("constant_ts","ts")
-lPatterns.currentTimeSeries= "ts"
-## Load case definition
-lp0= lPatterns.newLoadPattern("default","0")
-lPatterns.currentLoadPattern= "0"
+## Load case definition.
+lp0= modelSpace.newLoadPattern(name= '0')
+modelSpace.setCurrentLoadPattern("0")
 nod2.newLoad(xc.Vector([P,0]))
 nod3.newLoad(xc.Vector([-P,0]))
 nod5.newLoad(xc.Vector([P,0]))
@@ -73,7 +68,7 @@ nod6.newLoad(xc.Vector([-P,P]))
 nod7.newLoad(xc.Vector([0,P]))
 nod8.newLoad(xc.Vector([P,P]))
 ## We add the load case to domain.
-lPatterns.addToDomain(lp0.name)
+modelSpace.addLoadCaseToDomain(lp0.name)
 
 # Graphic stuff. Uncomment to get graphics working.
 oh= output_handler.OutputHandler(modelSpace)
@@ -95,8 +90,8 @@ count= 0.0
 for q in quads:
     elementStresses= q.physicalProperties.getVectorMaterials.generalizedStresses
     nodeStresses= q.getExtrapolatedValues(elementStresses)
-    #print('element stresses: ', elementStresses)
-    #print('node stresses: ', nodeStresses)
+    # print('element stresses: ', elementStresses)
+    # print('node stresses: ', nodeStresses)
 
     sz= nodeStresses.noRows
     for i in range(0,sz):
@@ -115,12 +110,12 @@ sYerr= (sY-3*P)/3/P
 tauErr= sXY
 
 # oh.displayLoads()
-#oh.displayDispRot('uY')
-#oh.displayStresses('sigma_11')
-#oh.displayVonMisesStresses()
-#oh.displayStresses('sigma_22')
-#oh.displayStresses('sigma_12')
-#oh.displayStrains('epsilon_xx')
+# oh.displayDispRot('uY')
+# oh.displayStresses('sigma_11')
+# oh.displayVonMisesStresses()
+# oh.displayStresses('sigma_22')
+# oh.displayStresses('sigma_12')
+# oh.displayStrains('epsilon_xx')
 # oh.displayStrains('epsilon_yy')
 
 '''

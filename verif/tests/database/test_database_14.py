@@ -28,7 +28,7 @@ preprocessor=  feProblem.getPreprocessor
 nodes= preprocessor.getNodeHandler
 
 modelSpace= predefined_spaces.StructuralMechanics2D(nodes)
-nodes.defaultTag= 1 #First node number.
+nodes.defaultTag= 1 # First node number.
 nod= nodes.newNodeXY(0,0)
 nod= nodes.newNodeXY(l,0.0)
 nod= nodes.newNodeXY(2*l,0.0)
@@ -47,7 +47,7 @@ elements= preprocessor.getElementHandler
 elements.defaultTransformation= lin.name
 elements.defaultMaterial= scc.name
 #  sintaxis: beam2d_02[<tag>] 
-elements.defaultTag= 1 #Tag for next element.
+elements.defaultTag= 1 # Tag for next element.
 beam2d= elements.newElement("ElasticBeam2d",xc.ID([1,2]))
 beam2d.h= h
         
@@ -72,27 +72,21 @@ mesh= preprocessor.getDomain.getMesh
 mesh.setDeadSRF(0.0)
 mesh.freezeDeadNodes("congela") # Constraint inactive nodes.
 
-# Loads definition
-loadHandler= preprocessor.getLoadHandler
-lPatterns= loadHandler.getLoadPatterns
-#Load modulation.
-ts= lPatterns.newTimeSeries("constant_ts","ts")
-lPatterns.currentTimeSeries= "ts"
-#Load case definition
-lp0= lPatterns.newLoadPattern("default","0")
+# Load definition.
+lp0= modelSpace.newLoadPattern(name= '0')
 lp0.newNodalLoad(2,xc.Vector([F,F,F]))
-#We add the load case to domain.
-lPatterns.addToDomain(lp0.name)
+# We add the load case to domain.
+modelSpace.addLoadCaseToDomain(lp0.name)
 
 import os
 os.system("rm -r -f /tmp/test14.db")
 db= feProblem.newDatabase("BerkeleyDB","/tmp/test14.db")
 db.save(100)
 feProblem.clearAll()
-feProblem.setVerbosityLevel(0) #Dont print(warning messages)
-                            #about pointers to material.
+feProblem.setVerbosityLevel(0) # Dont print(warning messages)
+                            # about pointers to material.
 db.restore(100)
-feProblem.setVerbosityLevel(1) #print(warnings again )
+feProblem.setVerbosityLevel(1) # print(warnings again )
 
 
 # Solution
@@ -120,10 +114,10 @@ result= analysis.analyze(1)
 
 db.save(105)
 feProblem.clearAll()
-feProblem.setVerbosityLevel(0) #Dont print(warning messages)
-                            #about pointers to material.
+feProblem.setVerbosityLevel(0) # Dont print(warning messages)
+                            # about pointers to material.
 db.restore(105)
-feProblem.setVerbosityLevel(1) #print(warnings again )
+feProblem.setVerbosityLevel(1) # print(warnings again )
 
 
 nodes.calculateNodalReactions(True,1e-7)

@@ -52,19 +52,15 @@ spc2= constraints.newSPConstraint(n1.tag,1,0.0)
 spc3= constraints.newSPConstraint(n2.tag,1,0.0) # Node 2
 
 
-# Loads definition
-loadHandler= preprocessor.getLoadHandler
-lPatterns= loadHandler.getLoadPatterns
-#Load modulation.
-ts= lPatterns.newTimeSeries("constant_ts","ts")
-lPatterns.currentTimeSeries= "ts"
-lPattern= "0"
-lp0= lPatterns.newLoadPattern("default",lPattern)
-#lPatterns.currentLoadPattern= lPattern
+
+# Load case definition.
+lPattern= '0'
+lp0= modelSpace.newLoadPattern(name= lPattern)
+
 # we check that loads are cummulated by the way.
 lp0.newNodalLoad(n2.tag,xc.Vector([F/2.0,0]))
 lp0.newNodalLoad(n2.tag,xc.Vector([F/2.0,0]))
-lPatterns.addToDomain(lPattern) # Append load pattern to domain.
+modelSpace.addLoadCaseToDomain(lPattern) # Append load pattern to domain.
 # Solution
 result= modelSpace.analyze(calculateNodalReactions= True)
 

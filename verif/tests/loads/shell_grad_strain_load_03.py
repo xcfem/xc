@@ -22,9 +22,9 @@ __email__= "ana.ortega@ciccp.es l.pereztato@gmail.com"
 L= 1.0 # Size of element edge (m)
 E= 2.1e6*9.81/1e-4 # Elastic modulus
 alpha= 1.2e-5 # Thermal expansion coefficient of steel 1/ºC
-b= 1 #width of the element
-#A= h*h # bar area expressed in square meters
-#I= (h)**4/12 # Cross section moment of inertia (m4)
+b= 1 # width of the element
+# A= h*h # bar area expressed in square meters
+# I= (h)**4/12 # Cross section moment of inertia (m4)
 Ttop=20 # Temperature at top side (Celsius degrees)
 Tbottom=10 # Temperature at bottom side (Celsius degrees)
 thickness=2e-2
@@ -34,7 +34,7 @@ preprocessor=  feProblem.getPreprocessor
 nodes= preprocessor.getNodeHandler
 nodes.dimSpace= 3 # coord. for each node (x,y,z).
 nodes.numDOFs= 6 # DOF for each node (Ux,Uy,Uz,ThX,ThY,ThZ).
-nodes.defaultTag= 1 #First node number.
+nodes.defaultTag= 1 # First node number.
 nod1= nodes.newNodeXYZ(0.0,b,0.0)
 nod2= nodes.newNodeXYZ(L,b,0.0)
 nod3= nodes.newNodeXYZ(L,0.0,0.0)
@@ -65,25 +65,19 @@ spc= constraints.newSPConstraint(nod4.tag,2,0.0)
 spc= constraints.newSPConstraint(nod4.tag,4,0.0)
 
 
-# Loads definition
-loadHandler= preprocessor.getLoadHandler
+# Load case definition.
+lp0= modelSpace.newLoadPattern(name= '0')
 
-lPatterns= loadHandler.getLoadPatterns
-ts= lPatterns.newTimeSeries("linear_ts","ts")
-lPatterns.currentTimeSeries= "ts"
-#Load case definition
-lp0= lPatterns.newLoadPattern("default","0")
-#lPatterns.currentLoadPattern= "0"
 eleLoad= lp0.newElementalLoad("shell_strain_load")
 eleLoad.elementTags= xc.ID([elem1.tag])
-curvature=alpha*(Ttop-Tbottom)/thickness  #rad/m
+curvature=alpha*(Ttop-Tbottom)/thickness  # rad/m
 eleLoad.setStrainComp(0,3,curvature) #(id of Gauss point, id of component, value)
 eleLoad.setStrainComp(1,3,curvature)
 eleLoad.setStrainComp(2,3,curvature)
 eleLoad.setStrainComp(3,3,curvature)
 
-#We add the load case to domain.
-lPatterns.addToDomain(lp0.name)
+# We add the load case to domain.
+modelSpace.addLoadCaseToDomain(lp0.name)
 
 analysis= predefined_solutions.simple_static_linear(feProblem)
 result= analysis.analyze(1)
@@ -91,11 +85,11 @@ result= analysis.analyze(1)
 elem1= elements.getElement(1)
 elem1.getResistingForce()
 
-#Displacements free nodes 
+# Displacements free nodes 
 uz_n2=nod2.getDispXYZ[2]
 uz_n3=nod3.getDispXYZ[2]
 
-#theoretical displacement
+# theoretical displacement
 R=1/curvature+thickness/2.
 deltaz_theor=-R*(1-math.cos(curvature))
 

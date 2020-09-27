@@ -31,7 +31,7 @@ fs3d= IPE200.getFiberSection3d(preprocessor,'epp')
 L= 1.0
 nodes= preprocessor.getNodeHandler
 modelSpace= predefined_spaces.StructuralMechanics2D(nodes)
-nodes.defaultTag= 10 #First node number.
+nodes.defaultTag= 10 # First node number.
 nod1= nodes.newNodeXY(0,0.0)
 nod2= nodes.newNodeXY(L,0.0)
 
@@ -51,16 +51,11 @@ modelSpace.fixNode000(nod1.tag)
 WzplTeor= IPE200.get('Wzpl')
 M0Teor= -WzplTeor*S355JR.fyd()
 F= M0Teor*0.87
-loadHandler= preprocessor.getLoadHandler
-lPatterns= loadHandler.getLoadPatterns
-#Load modulation.
-ts= lPatterns.newTimeSeries("constant_ts","ts")
-lPatterns.currentTimeSeries= "ts"
-#Load case definition
-lp0= lPatterns.newLoadPattern("default","0")
+# Load definition.
+lp0= modelSpace.newLoadPattern(name= '0')
 lp0.newNodalLoad(nod2.tag,xc.Vector([0,F,0]))
-#We add the load case to domain.
-lPatterns.addToDomain(lp0.name)
+# We add the load case to domain.
+modelSpace.addLoadCaseToDomain(lp0.name)
 
 # Solution procedure
 analysis= predefined_solutions.plain_static_modified_newton(test)

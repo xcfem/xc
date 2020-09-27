@@ -37,32 +37,26 @@ n1= nodes.newNodeXY(0,0)
 n2= nodes.newNodeXY(l,0)
 
 elements= preprocessor.getElementHandler
-elements.dimElem= 2 #Bars defined in a two dimensional space.
+elements.dimElem= 2 # Bars defined in a two dimensional space.
 elements.defaultMaterial= section.name
 trussA= elements.newElement("CorotTrussSection",xc.ID([n1.tag,n2.tag]))
 trussB= elements.newElement("CorotTrussSection",xc.ID([n1.tag,n2.tag]))
 
 # Constraints
 constraints= preprocessor.getBoundaryCondHandler
-#Constrain the displacement of node 1.
+# Constrain the displacement of node 1.
 spc1= constraints.newSPConstraint(n1.tag,0,0.0)
 spc2= constraints.newSPConstraint(n1.tag,1,0.0)
-#Constrain the displacement of node 2 in Y axis (gdl 1).
+# Constrain the displacement of node 2 in Y axis (gdl 1).
 spc5= constraints.newSPConstraint(n2.tag,1,0.0)
 
-# Loads
-loadHandler= preprocessor.getLoadHandler
-## Load pattern container:
-lPatterns= loadHandler.getLoadPatterns
-## time series for the load pattern:
-ts= lPatterns.newTimeSeries("constant_ts","ts")
-lPatterns.currentTimeSeries= "ts"
-## Load case definition
-lp0= lPatterns.newLoadPattern("default","0")
+
+## Load case definition.
+lp0= modelSpace.newLoadPattern(name= '0')
 lp0.newNodalLoad(n2.tag,xc.Vector([F,0]))
 
 ## Add the load pattern to the domain.
-lPatterns.addToDomain(lp0.name)
+modelSpace.addLoadCaseToDomain(lp0.name)
 
 # Solution
 result= modelSpace.analyze(calculateNodalReactions= True)

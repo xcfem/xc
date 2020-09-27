@@ -28,7 +28,7 @@ feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
 nodes= preprocessor.getNodeHandler
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
-nodes.defaultTag= 1 #First node number.
+nodes.defaultTag= 1 # First node number.
 nod= nodes.newNodeXYZ(0,0,0)
 nod= nodes.newNodeXYZ(L,0,0)
 nod= nodes.newNodeXYZ(L,L,0)
@@ -52,19 +52,11 @@ spc= modelSpace.constraints.newSPConstraint(3,2,0.0)
 spc= modelSpace.constraints.newSPConstraint(4,2,0.0)
 
 # Loads definition
-loadHandler= preprocessor.getLoadHandler
-
-lPatterns= loadHandler.getLoadPatterns
-
-#Load modulation.
-ts= lPatterns.newTimeSeries("constant_ts","ts")
-lPatterns.currentTimeSeries= "ts"
-#Load case definition
-lp0= lPatterns.newLoadPattern("default","0")
+lp0= modelSpace.newLoadPattern(name= '0')
 lp0.newNodalLoad(3,xc.Vector([0,F,0,0,0,0]))
 lp0.newNodalLoad(4,xc.Vector([0,-F,0,0,0,0]))
-#We add the load case to domain.
-lPatterns.addToDomain(lp0.name)
+# We add the load case to domain.
+modelSpace.addLoadCaseToDomain(lp0.name)
 
 
 
@@ -80,8 +72,8 @@ n12Min= 0.0
 
 # print("G1= ",vectorG1)
 elem.getResistingForce()
-mats= elem.getPhysicalProperties.getVectorMaterials #Materials at gauss points.
-#Gauss points iterator
+mats= elem.getPhysicalProperties.getVectorMaterials # Materials at gauss points.
+# Gauss points iterator
 for m in mats:
   n1Medio= n1Medio+m.getStressResultantComponent("n1")
   n2Medio= n2Medio+m.getStressResultantComponent("n2")

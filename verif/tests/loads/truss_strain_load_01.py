@@ -57,23 +57,16 @@ spc1= constraints.newSPConstraint(nod1.tag,0,0.0)
 spc2= constraints.newSPConstraint(nod1.tag,1,0.0)
 spc3= constraints.newSPConstraint(nod2.tag,0,0.0)
 spc4= constraints.newSPConstraint(nod2.tag,1,0.0)
-
     
-# Loads definition
-loadHandler= preprocessor.getLoadHandler
+# Load case definition.
+lp0= modelSpace.newLoadPattern(name= '0')
 
-lPatterns= loadHandler.getLoadPatterns
-ts= lPatterns.newTimeSeries("linear_ts","ts")
-lPatterns.currentTimeSeries= "ts"
-#Load case definition
-lp0= lPatterns.newLoadPattern("default","0")
-#lPatterns.currentLoadPattern= "0"
 eleLoad= lp0.newElementalLoad("truss_strain_load")
 eleLoad.elementTags= xc.ID([truss.tag])
 eleLoad.eps1= alpha*AT
 eleLoad.eps2= alpha*AT
-#We add the load case to domain.
-lPatterns.addToDomain(lp0.name)
+# We add the load case to domain.
+modelSpace.addLoadCaseToDomain(lp0.name)
 
 result= modelSpace.analyze(calculateNodalReactions= False)
 

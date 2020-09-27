@@ -76,19 +76,15 @@ s.nDivJ= NumDivJ
 f1= preprocessor.getSets.getSet("f1")
 f1.genMesh(xc.meshDir.I)
 sides= s.getSides
-#Edge iterator
+# Edge iterator
 for l in sides:
   for i in l.getEdge.getNodeTags():
     modelSpace.fixNode000_000(i)
 
 # Loads definition
-loadHandler= preprocessor.getLoadHandler
-lPatterns= loadHandler.getLoadPatterns
-ts= lPatterns.newTimeSeries("constant_ts","ts")
-# \constant_ts["ts"]{ \factor{1.0} } # Time series: constant_ts[name]{factor}
-lPatterns.currentTimeSeries= "ts"
-lp0= lPatterns.newLoadPattern("default","0") 
-#lPatterns.currentLoadPattern= "0"
+# Load case definition.
+lp0= modelSpace.newLoadPattern(name= '0') 
+
 
 nodal_loads.load_on_nodes_in_face(f1,lp0,[0,0,-nLoad,0,0,0])
 f1= preprocessor.getSets.getSet("f1")
@@ -100,8 +96,8 @@ nodes= preprocessor.getNodeHandler
 nNodes= f1.getNumNodes
 
 nElems= f1.getNumElements
-#We add the load case to domain.
-lPatterns.addToDomain(lp0.name)
+# We add the load case to domain.
+modelSpace.addLoadCaseToDomain(lp0.name)
 
 
 # Solution procedure

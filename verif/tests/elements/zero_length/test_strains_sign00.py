@@ -52,7 +52,7 @@ feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor   
 nodes= preprocessor.getNodeHandler
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
-nodes.defaultTag= 1 #First node number.
+nodes.defaultTag= 1 # First node number.
 nod= nodes.newNodeXYZ(0,0.0,0.0)
 nod= nodes.newNodeXYZ(0.0+L,0.0,0.0)
 
@@ -96,18 +96,14 @@ zl= elements.newElement("ZeroLengthSection",xc.ID([1,2]))
 modelSpace.fixNode000_000(1)
 
 # Loads definition
-loadHandler= preprocessor.getLoadHandler
-lPatterns= loadHandler.getLoadPatterns
-#Load modulation.
-ts= lPatterns.newTimeSeries("constant_ts","ts")
-lPatterns.currentTimeSeries= "ts"
-#Load case definition
-lp0= lPatterns.newLoadPattern("default","0")
-lp1= lPatterns.newLoadPattern("default","1")
-lp2= lPatterns.newLoadPattern("default","2")
-lp3= lPatterns.newLoadPattern("default","3")
-lp4= lPatterns.newLoadPattern("default","4")
-lp5= lPatterns.newLoadPattern("default","5")
+# Load modulation.
+# Load case definition.
+lp0= modelSpace.newLoadPattern(name= '0')
+lp1= modelSpace.newLoadPattern(name= '1')
+lp2= modelSpace.newLoadPattern(name= '2')
+lp3= modelSpace.newLoadPattern(name= '3')
+lp4= modelSpace.newLoadPattern(name= '4')
+lp5= modelSpace.newLoadPattern(name= '5')
 lp0.newNodalLoad(2,xc.Vector([F,0,0,0,0,0]))
 lp1.newNodalLoad(2,xc.Vector([0,2*F,0,0,0,0]))
 lp2.newNodalLoad(2,xc.Vector([0,0,3*F,0,0,0]))
@@ -139,7 +135,7 @@ def solve():
   return analysis.analyze(1)
 
 
-#numHipotesis= listaHipotesis.size
+# numHipotesis= listaHipotesis.size
 i= 0.0
 epsMy= 0.0
 MyTot= 0.0
@@ -161,9 +157,10 @@ epsYMin= 0.0
 yEpsYMin= 0.0
 zEpsYMin= 0.0
 
+lPatterns= preprocessor.getLoadHandler.getLoadPatterns
 for key in lPatterns.getKeys():
   lp= lPatterns[key]
-  lPatterns.addToDomain(key)
+  modelSpace.addLoadCaseToDomain(key)
   ok= solve()
   if(ok==0):
     ele1= elements.getElement(0)
@@ -177,7 +174,7 @@ for key in lPatterns.getKeys():
       epsZMax= fibraEpsZMax.getMaterial().getStrain()
       yEpsZMax= fibraEpsZMax.getPos().x
       zEpsZMax= fibraEpsZMax.getPos().y
-      epsMy= scc.getSectionDeformationByName("defMy")#defMy
+      epsMy= scc.getSectionDeformationByName("defMy")# defMy
     Mz= scc.getStressResultantComponent("Mz")
     MzTot+= Mz
     if(abs(Mz)>1):
@@ -186,13 +183,13 @@ for key in lPatterns.getKeys():
       epsYMax= fibraEpsYMax.getMaterial().getStrain()
       yEpsYMax= fibraEpsYMax.getPos().x
       zEpsYMax= fibraEpsYMax.getPos().y
-      fibraEpsYMin= prop_statistics.getItemWithMinProp(scc.getSection().getFibers(),"getMaterial.getStrain")#IMinProp("getMaterial.getStrain")
+      fibraEpsYMin= prop_statistics.getItemWithMinProp(scc.getSection().getFibers(),"getMaterial.getStrain")# IMinProp("getMaterial.getStrain")
       epsYMin= fibraEpsYMin.getMaterial().getStrain()
       yEpsYMin= fibraEpsYMin.getPos().x
       zEpsYMin= fibraEpsYMin.getPos().y
       epsilonYPos= scc.getStrain(yEpsYMin,zEpsYMin)
       epsilonYPosTeor= -Mz/(E*Iz)*yEpsYMin
-      epsMz= scc.getSectionDeformationByName("defMz")#defMz
+      epsMz= scc.getSectionDeformationByName("defMz")# defMz
   lPatterns.removeFromDomain(key)
   dom= preprocessor.getDomain
   dom.revertToStart()

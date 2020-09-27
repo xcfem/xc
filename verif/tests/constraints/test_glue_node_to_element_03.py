@@ -59,7 +59,7 @@ modelSpace.fixNode000_FFF(n4.tag)
 # modelSpace.fixNode000_000( n3.tag)
 # modelSpace.fixNode000_000( n4.tag)
 
-#Glued node.
+# Glued node.
 gluedDOFs= [0,2,5]
 loadOnDOFs= [0,0,0,0,0,0]
 for i in range(0,6):
@@ -69,22 +69,14 @@ for i in range(0,6):
     loadOnDOFs[i]= -1000.0
 
 glue= modelSpace.constraints.newGlueNodeToElement(n10,elem,xc.ID(gluedDOFs))
-#Equivalent in this case:
-#glue= modelSpace.constraints.newEqualDOF(n10.tag,1,xc.ID(gluedDOFs))
+# Equivalent in this case:
+# glue= modelSpace.constraints.newEqualDOF(n10.tag,1,xc.ID(gluedDOFs))
 
 # Loads definition
-loadHandler= preprocessor.getLoadHandler
-
-lPatterns= loadHandler.getLoadPatterns
-
-#Load modulation.
-ts= lPatterns.newTimeSeries("constant_ts","ts")
-lPatterns.currentTimeSeries= "ts"
-#Load case definition
-lp0= lPatterns.newLoadPattern("default","0")
+lp0= modelSpace.newLoadPattern(name= '0')
 lp0.newNodalLoad(10,xc.Vector(loadOnDOFs))
-#We add the load case to domain.
-lPatterns.addToDomain(lp0.name)
+# We add the load case to domain.
+modelSpace.addLoadCaseToDomain(lp0.name)
 
 # Solution
 solver= predefined_solutions.SolutionProcedure()

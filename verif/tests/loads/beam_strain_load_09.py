@@ -39,7 +39,7 @@ feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
 nodes= preprocessor.getNodeHandler
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
-nodes.defaultTag= 1 #First node number.
+nodes.defaultTag= 1 # First node number.
 nod= nodes.newNodeXYZ(0.0,0.0,0.0)
 nod= nodes.newNodeXYZ(L/2,0.0,0.0)
 nod= nodes.newNodeXYZ(L,0.0,0.0)
@@ -62,23 +62,18 @@ beam2= elements.newElement("ForceBeamColumn3d",xc.ID([2,3]))
 modelSpace.fixNode000_000(1)
 modelSpace.fixNode000_000(3)
 
-# Loads definition
-loadHandler= preprocessor.getLoadHandler
-
-lPatterns= loadHandler.getLoadPatterns
-ts= lPatterns.newTimeSeries("linear_ts","ts")
-lPatterns.currentTimeSeries= "ts"
-lp0= lPatterns.newLoadPattern("default","0")
+# Load case definition.
+lp0= modelSpace.newLoadPattern(name= '0')
 lp0.gammaF= gammaF
-#lPatterns.currentLoadPattern= "0"
+
 eleLoad= lp0.newElementalLoad("beam_strain_load")
 eleLoad.elementTags= xc.ID([1,2])
 thermalDeformation= xc.DeformationPlane(alpha*AT)
 eleLoad.backEndDeformationPlane= thermalDeformation
 eleLoad.frontEndDeformationPlane= thermalDeformation
 
-#We add the load case to domain.
-lPatterns.addToDomain(lp0.name)
+# We add the load case to domain.
+modelSpace.addLoadCaseToDomain(lp0.name)
 
 
 # Solution procedure

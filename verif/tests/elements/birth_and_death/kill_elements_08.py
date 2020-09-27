@@ -61,20 +61,14 @@ modelSpace.fixNode000_000(n1.tag) # Node 1
 setTotal= preprocessor.getSets.getSet("total")
 
 
-# Loads definition
-loadHandler= preprocessor.getLoadHandler
-lPatterns= loadHandler.getLoadPatterns
-#Load modulation.
-ts= lPatterns.newTimeSeries("constant_ts","ts")
-lPatterns.currentTimeSeries= "ts"
-#Load case definition
-lp0= lPatterns.newLoadPattern("default","0")
+# Load definition.
+lp0= modelSpace.newLoadPattern(name= '0')
 lp0.newNodalLoad(n2.tag,xc.Vector([-F,0,0,0,0,0]))
-lp1= lPatterns.newLoadPattern("default","1")
+lp1= modelSpace.newLoadPattern(name= '1')
 lp1.newNodalLoad(n2.tag,xc.Vector([-F,0,0,0,0,0]))
 
-#We add the load case to domain and solve.
-lPatterns.addToDomain(lp0.name)
+# We add the load case to domain and solve.
+modelSpace.addLoadCaseToDomain(lp0.name)
 result= modelSpace.analyze(calculateNodalReactions= True)
 
 R1= n1.getReaction[0] 
@@ -83,7 +77,7 @@ R2= n2.getReaction[0]
 N= beam.getN()
 modelSpace.deactivateElements(setTotal)
 
-#We add the load case to domain and solve.
+# We add the load case to domain and solve.
 result= modelSpace.analyze(calculateNodalReactions= True)
 
 R1B= n1.getReaction[0] 
@@ -91,7 +85,7 @@ R2B= n2.getReaction[0]
 
 NB= beam.getN()
 
-lPatterns.addToDomain(lp1.name)
+modelSpace.addLoadCaseToDomain(lp1.name)
 result= modelSpace.analyze(calculateNodalReactions= True)
 
 R1C= n1.getReaction[0] 

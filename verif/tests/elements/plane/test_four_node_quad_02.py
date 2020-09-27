@@ -30,14 +30,14 @@ nodes= preprocessor.getNodeHandler
 
 modelSpace= predefined_spaces.SolidMechanics2D(nodes)
 
-nodes.defaultTag= 1; nodes.newNodeXY(0,0)
-nodes.defaultTag= 2; nodes.newNodeXY(L/3,0)
-nodes.defaultTag= 3; nodes.newNodeXY(2*L/3,0)
-nodes.defaultTag= 4; nodes.newNodeXY(L,0)
-nodes.defaultTag= 5; nodes.newNodeXY(0,h)
-nodes.defaultTag= 6; nodes.newNodeXY(L/3,h)
-nodes.defaultTag= 7; nodes.newNodeXY(2*L/3,h)
-nodes.defaultTag= 8; nodes.newNodeXY(L,h)
+n1= nodes.newNodeXY(0,0)
+n2= nodes.newNodeXY(L/3,0)
+n3= nodes.newNodeXY(2*L/3,0)
+n4= nodes.newNodeXY(L,0)
+n5= nodes.newNodeXY(0,h)
+n6= nodes.newNodeXY(L/3,h)
+n7= nodes.newNodeXY(2*L/3,h)
+n8= nodes.newNodeXY(L,h)
 
 
 # Materials definition
@@ -45,70 +45,51 @@ elast2d= typical_materials.defElasticIsotropicPlaneStress(preprocessor, "elast2d
 
 elements= preprocessor.getElementHandler
 elements.defaultMaterial= elast2d.name
-quad1= elements.newElement("FourNodeQuad",xc.ID([1,2,6,5]))
+quad1= elements.newElement("FourNodeQuad",xc.ID([n1.tag,n2.tag,n6.tag,n5.tag]))
 quad1.thickness= t
-quad2= elements.newElement("FourNodeQuad",xc.ID([2,3,7,6]))
+quad2= elements.newElement("FourNodeQuad",xc.ID([n2.tag,n3.tag,n7.tag,n6.tag]))
 quad2.thickness= t
-quad3= elements.newElement("FourNodeQuad",xc.ID([3,4,8,7]))
+quad3= elements.newElement("FourNodeQuad",xc.ID([n3.tag,n4.tag,n8.tag,n7.tag]))
 quad3.thickness= t
 
 # Constraints
 constraints= preprocessor.getBoundaryCondHandler
 
-spc= constraints.newSPConstraint(1,0,0.0)
-spc= constraints.newSPConstraint(1,1,0.0)
-spc= constraints.newSPConstraint(5,0,0.0)
-spc= constraints.newSPConstraint(5,1,0.0)
+spc= constraints.newSPConstraint(n1.tag,0,0.0)
+spc= constraints.newSPConstraint(n1.tag,1,0.0)
+spc= constraints.newSPConstraint(n5.tag,0,0.0)
+spc= constraints.newSPConstraint(n5.tag,1,0.0)
 
-# Loads definition
-loadHandler= preprocessor.getLoadHandler
+# Load case definition.
+lp0= modelSpace.newLoadPattern(name= '0')
+lp0.newNodalLoad(n8.tag,xc.Vector([0,-F]))
 
-lPatterns= loadHandler.getLoadPatterns
-
-#Load modulation.
-ts= lPatterns.newTimeSeries("constant_ts","ts")
-lPatterns.currentTimeSeries= "ts"
-#Load case definition
-lp0= lPatterns.newLoadPattern("default","0")
-lp0.newNodalLoad(8,xc.Vector([0,-F]))
-
-#We add the load case to domain.
-lPatterns.addToDomain(lp0.name)
+# We add the load case to domain.
+modelSpace.addLoadCaseToDomain(lp0.name)
 
 
 # Solution
 analOk= modelSpace.analyze(calculateNodalReactions= True)
  
-nod1= nodes.getNode(1)
-
-
 # print("reac node 1: ",reac)
-Fx= nod1.getReaction[0]
-Fy= nod1.getReaction[1]
+Fx= n1.getReaction[0]
+Fy= n1.getReaction[1]
 # \print{"Fx= ",Fx
-#print("Fy= ",Fy})
+# print("Fy= ",Fy})
 
-nod3= nodes.getNode(3)
-disp= nod3.getDisp
+disp= n3.getDisp
 UX3= disp[0] # Node 3 xAxis displacement
 UY3= disp[1] # Node 3 yAxis displacement
 
 
-nod5= nodes.getNode(5)
-
-
 # print("reac node 5: ",reac)
-Fx= (Fx+nod5.getReaction[0])
-Fy= (Fy+nod5.getReaction[1])
+Fx= (Fx+n5.getReaction[0])
+Fy= (Fy+n5.getReaction[1])
 # \print{"Fx= ",Fx
-#print("Fy= ",Fy})
+# print("Fy= ",Fy})
 
-nod8= nodes.getNode(8)
-
-# print(.getDisp)
-                     
-UX8= nod8.getDisp[0] # Node 8 xAxis displacement
-UY8= nod8.getDisp[1] # Node 8 yAxis displacement
+UX8= n8.getDisp[0] # Node 8 xAxis displacement
+UY8= n8.getDisp[1] # Node 8 yAxis displacement
 
 
 UX8SP2K= 0.016110

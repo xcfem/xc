@@ -57,7 +57,7 @@ pd= modelSpace.newPDeltaCrdTransf("pd")
 seedElemHandler= preprocessor.getElementHandler.seedElemHandler
 seedElemHandler.defaultTransformation= pd.name
 seedElemHandler.defaultMaterial= scc.name
-seedElemHandler.defaultTag= 1 #Tag for next element.
+seedElemHandler.defaultTag= 1 # Tag for next element.
 beam2d= seedElemHandler.newElement("ElasticBeam2d",xc.ID([0,0]))
 
 points= preprocessor.getMultiBlockTopology.getPoints
@@ -108,19 +108,13 @@ tagElem5F= mesh.getNearestElement(geom.Pos3d(offset+B-B/(10*nDivLines),H,0.0)).t
 tagElem6= mesh.getNearestElement(geom.Pos3d(offset+B,H/(10*nDivLines),0.0)).tag
 
 
-# Loads definition
-loadHandler= preprocessor.getLoadHandler
-lPatterns= loadHandler.getLoadPatterns
-#Load modulation.
-ts= lPatterns.newTimeSeries("constant_ts","ts")
-lPatterns.currentTimeSeries= "ts"
-#Load case definition
-lp0= lPatterns.newLoadPattern("default","0")
-#lPatterns.currentLoadPattern= "0"
+# Load definition.
+lp0= modelSpace.newLoadPattern(name= '0')
+
 lp0.newNodalLoad(nodeTagCentralLoad,xc.Vector([0,-P,0]))
 lp0.newNodalLoad(nodeTagLateralLoad,xc.Vector([0,-P,0]))
-#We add the load case to domain.
-lPatterns.addToDomain(lp0.name)
+# We add the load case to domain.
+modelSpace.addLoadCaseToDomain(lp0.name)
 
 # Solution procedure
 

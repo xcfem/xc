@@ -32,7 +32,7 @@ nodes= preprocessor.getNodeHandler
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
 
 # Model definition
-nodes.defaultTag= 1 #First node number.
+nodes.defaultTag= 1 # First node number.
 nod= nodes.newNodeXYZ(0,0,0)
 nod= nodes.newNodeXYZ(l/2,0.0,0)
 nod= nodes.newNodeXYZ(l,0.0,0)
@@ -59,17 +59,13 @@ modelSpace.fixNode000_000(1)
 modelSpace.fixNodeFFF_000(2)
 modelSpace.fixNode000_000(3)
 
-# Loads definition
-loadHandler= preprocessor.getLoadHandler
-lPatterns= loadHandler.getLoadPatterns
-#Load modulation.
-ts= lPatterns.newTimeSeries("constant_ts","ts")
-lPatterns.currentTimeSeries= "ts"
-lPattern= "0"
-lp0= lPatterns.newLoadPattern("default",lPattern)
-#lPatterns.currentLoadPattern= lPattern
+
+# Load case definition.
+lPattern= '0'
+lp0= modelSpace.newLoadPattern(name= lPattern)
+
 lp0.newNodalLoad(2,xc.Vector([0,-F,0,0,0,0]))
-lPatterns.addToDomain(lPattern) # Append load pattern to domain.
+modelSpace.addLoadCaseToDomain(lPattern) # Append load pattern to domain.
 
 # Solution procedure
 analysis= predefined_solutions.plain_newton_raphson(feProblem)

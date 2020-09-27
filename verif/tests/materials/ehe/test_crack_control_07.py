@@ -77,19 +77,15 @@ modelSpace.fixNode000_000(1)
 Nd= -550e3/1.5 # Axial force when checking crack width.
 Myd= 190e3/1.5 # # Y bending moment when checking crack width.
 Mzd= 0.0 # Z bending moment value when checking shear.
-#Vd= 148.7e3 # Shear value.
+# Vd= 148.7e3 # Shear value.
 
-lPatterns= preprocessor.getLoadHandler.getLoadPatterns
-#Load modulation.
-ts= lPatterns.newTimeSeries("constant_ts","ts")
-lPatterns.currentTimeSeries= "ts"
-#Load case definition
-lp0= lPatterns.newLoadPattern("default","0")
+# Load definition.
+lp0= modelSpace.newLoadPattern(name= '0')
 
 lp0.newNodalLoad(2,xc.Vector([Nd,0,0,0,Myd,Mzd]))
 
-#We add the load case to domain.
-lPatterns.addToDomain(lp0.name)
+# We add the load case to domain.
+modelSpace.addLoadCaseToDomain(lp0.name)
 
 
 # Solution procedure

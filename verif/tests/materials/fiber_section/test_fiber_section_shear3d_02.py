@@ -32,7 +32,7 @@ import os
 pth= os.path.dirname(__file__)
 if(not pth):
   pth= "."
-#print("pth= ", pth)
+# print("pth= ", pth)
 exec(open(pth+"/fiber_section_test_macros.py").read())
 
 fy= 2600 # yield strength [kp/cm2].
@@ -48,7 +48,7 @@ respVy= typical_materials.defElasticMaterial(preprocessor, "respVy",1e6) # Shear
 respVz= typical_materials.defElasticMaterial(preprocessor, "respVz",1e6) # Shear response in y direction.
 
 # Section geometry
-#creation
+# creation
 geomRectang= preprocessor.getMaterialHandler.newSectionGeometry("geomRectang")
 reg= scc1x1.getRegion(geomRectang,"elast")
 sa= preprocessor.getMaterialHandler.newMaterial("fiberSectionShear3d","sa")
@@ -66,16 +66,8 @@ modelSpace= predefined_spaces.getStructuralMechanics3DSpace(preprocessor)
 modelSpace.fixNode000_000(1)
 
 # Loads definition
-loadHandler= preprocessor.getLoadHandler
+lp0= modelSpace.newLoadPattern(name= '0')
 
-lPatterns= loadHandler.getLoadPatterns
-
-#Load modulation.
-ts= lPatterns.newTimeSeries("constant_ts","ts")
-lPatterns.currentTimeSeries= "ts"
-#Load case definition
-lp0= lPatterns.newLoadPattern("default","0")
-#lPatterns.currentLoadPattern= "0"
 loadN= -1
 loadVy= -2
 loadVz= -3
@@ -84,8 +76,8 @@ loadMy= -5
 loadMz= -6
 lp0.newNodalLoad(2,xc.Vector([loadN,loadVy,loadVz,loadMx,loadMy,loadMz]))
 
-#We add the load case to domain.
-lPatterns.addToDomain(lp0.name)
+# We add the load case to domain.
+modelSpace.addLoadCaseToDomain(lp0.name)
 
 
 # Solution procedure

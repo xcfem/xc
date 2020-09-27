@@ -22,7 +22,7 @@ steelBeam.title= 'Release beam end test.'
 preprocessor= steelBeam.getPreprocessor
 nodes= preprocessor.getNodeHandler
 
-#Materials
+# Materials
 ## Steel material
 steel= ASTM_materials.A992
 steel.gammaM= 1.00
@@ -70,20 +70,14 @@ modelSpace.fixNode('000_000',n1.tag)
 index= elemToRelease.getNodes.getNodeIndex(n0)
 ratio0= (index+1)
 
-# Loads definition
-loadHandler= preprocessor.getLoadHandler
-lPatterns= loadHandler.getLoadPatterns
-#Load modulation.
-ts= lPatterns.newTimeSeries("constant_ts","ts")
-lPatterns.currentTimeSeries= "ts"
-#Load case definition
-lp0= lPatterns.newLoadPattern("default","0")
-lPatterns.currentLoadPattern= "0"
+# Load definition.
+lp0= modelSpace.newLoadPattern(name= '0')
+modelSpace.setCurrentLoadPattern("0")
 f= 1e3
 for e in l1.elements:
     e.vector3dUniformLoadGlobal(xc.Vector([f,0.0,0.0]))
-#We add the load case to domain.
-lPatterns.addToDomain(lp0.name)
+# We add the load case to domain.
+modelSpace.addLoadCaseToDomain(lp0.name)
 
 # Solution procedure
 modelSpace.analyze(calculateNodalReactions= True)
