@@ -159,6 +159,28 @@ const XC::Vector &XC::ElasticIsotropicPlaneStress2D::getStress(void) const
     return sigma;
   }
 
+//! @brief return the Von Mises equivalent stress.
+//!
+//! <a href="https://en.wikipedia.org/wiki/Von_Mises_yield_criterion"> Von Mises yield criterion.</a>
+double XC::ElasticIsotropicPlaneStress2D::getVonMisesStress(void) const
+  {
+    double retval= 0.0;
+    const Vector sg= getStress();
+    const size_t sz= sg.Size();
+    //NDmaterial stress order = 11, 22, 33, 12, 23, 31 
+    if(sz==3) // 2D material
+      {
+	const double sg11= sg[0]; const double sg22= sg[1]; 
+	const double sg12= sg[2]; 
+	retval= sqrt(sg11*sg11+sg11*sg22+sg22*sg22+3.0*sg12*sg12);
+      }
+    else
+      std::cerr << getClassName() << "::" << __FUNCTION__
+	        << ", wrong stress vector size (" << sz
+	        << ")." << std::endl;
+    return retval;
+  }
+
 //! @brief zeroes initial generalized strain
 void XC::ElasticIsotropicPlaneStress2D::zeroInitialGeneralizedStrain(void)
   {

@@ -108,6 +108,7 @@ class PlaneStressMaterial: public NDAdaptorMaterial
 
     //send back the stress 
     const Vector& getStress(void) const;
+    double getVonMisesStress(void) const;
 
     //send back the tangent 
     const Matrix& getTangent(void) const;

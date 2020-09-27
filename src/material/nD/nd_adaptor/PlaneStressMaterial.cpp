@@ -82,16 +82,16 @@ XC::PlaneStressMaterial::PlaneStressMaterial(int tag, XC::NDMaterial &the3DMater
     Cgamma12 = 0.0;
   }
 
-//make a clone of this material
+//! @brief make a clone of this material
 XC::NDMaterial *XC::PlaneStressMaterial::getCopy(void) const 
   { return new PlaneStressMaterial(*this); }
 
-//make a clone of this material
+//! @brief make a clone of this material
 XC::NDMaterial *XC::PlaneStressMaterial::getCopy(const std::string &type) const
   { return this->getCopy( ) ; }
 
 
-//send back order of strain in vector form
+//! @brief send back order of strain in vector form
 int XC::PlaneStressMaterial::getOrder( ) const
   { return 3; }
 
@@ -101,7 +101,7 @@ const std::string &XC::PlaneStressMaterial::getType( ) const
 
 
 
-//swap history variables
+//! @brief Commit state (swap history variables).
 int XC::PlaneStressMaterial::commitState(void) 
   {
     Cgamma02 = Tgamma02;
@@ -111,8 +111,8 @@ int XC::PlaneStressMaterial::commitState(void)
 
 
 
-//revert to last saved state
-int XC::PlaneStressMaterial::revertToLastCommit( )
+//! @brief Revert to last saved state
+int XC::PlaneStressMaterial::revertToLastCommit(void)
   {
     Tgamma02 = Cgamma02;
     Tgamma12 = Cgamma12;
@@ -120,8 +120,8 @@ int XC::PlaneStressMaterial::revertToLastCommit( )
   }
 
 
-//revert to start
-int XC::PlaneStressMaterial::revertToStart( )
+//! @brief Revert the material to its initial state.
+int XC::PlaneStressMaterial::revertToStart(void)
   {
     Tgamma12  = 0.0;
     Tgamma02  = 0.0;
@@ -131,7 +131,7 @@ int XC::PlaneStressMaterial::revertToStart( )
   }
 
 
-//receive the strain
+//! @brief receive the strain
 int XC::PlaneStressMaterial::setTrialStrain( const XC::Vector &strainFromElement )
 {
   static const double tolerance = 1.0e-08 ;
@@ -231,27 +231,46 @@ int XC::PlaneStressMaterial::setTrialStrain( const XC::Vector &strainFromElement
 
 //! @brief Return the material stress.
 const XC::Vector &XC::PlaneStressMaterial::getStress(void) const
-{
-  //three dimensional stress
-  const Vector &threeDstress = theMaterial->getStress();
-  static Vector threeDstressCopy(6);
+  {
+    //three dimensional stress
+    const Vector &threeDstress = theMaterial->getStress();
+    static Vector threeDstressCopy(6);
 
-  //partitioned stresses and tangent
-  //swap matrix indices to sort out-of-plane components 
-  int i, ii;
-  for( i=0; i<6; i++ ) {
+    //partitioned stresses and tangent
+    //swap matrix indices to sort out-of-plane components 
+    for(int i=0; i<6; i++ )
+      {
+	const int ii = this->indexMap(i) ;
+	threeDstressCopy(ii) = threeDstress(i) ;
+      }
 
-    ii = this->indexMap(i) ;
+    for(int i=0; i<3; i++ ) 
+      this->stress(i)= threeDstressCopy(i) ;
 
-    threeDstressCopy(ii) = threeDstress(i) ;
+    return this->stress;
   }
 
-  for( i=0; i<3; i++ ) 
-    this->stress(i)     = threeDstressCopy(i) ;
-  
-  return this->stress ;
-}
-
+//! @brief return the Von Mises equivalent stress.
+//!
+//! <a href="https://en.wikipedia.org/wiki/Von_Mises_yield_criterion"> Von Mises yield criterion.</a>
+double XC::PlaneStressMaterial::getVonMisesStress(void) const
+  {
+    double retval= 0.0;
+    const Vector sg= getStress();
+    const size_t sz= sg.Size();
+    //NDmaterial stress order = 11, 22, 33, 12, 23, 31 
+    if(sz==3) // 2D material
+      {
+	const double sg11= sg[0]; const double sg22= sg[1]; 
+	const double sg12= sg[2]; 
+	retval= sqrt(sg11*sg11+sg11*sg22+sg22*sg22+3.0*sg12*sg12);
+      }
+    else
+      std::cerr << getClassName() << "::" << __FUNCTION__
+	        << ", wrong stress vector size (" << sz
+	        << ")." << std::endl;
+    return retval;
+  }
 
 //! @brief Return the tangent stiffness matrix.
 const XC::Matrix &XC::PlaneStressMaterial::getTangent(void) const
@@ -323,7 +342,7 @@ int XC::PlaneStressMaterial::indexMap(int i) const
 
 
 
-//print out data
+//! @brief Print stuff.
 void XC::PlaneStressMaterial::Print( std::ostream &s, int flag ) const
  {
   s << "General Plane Stress XC::Material \n" ;

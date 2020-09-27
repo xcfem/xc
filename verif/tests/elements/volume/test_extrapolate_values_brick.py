@@ -95,7 +95,7 @@ modelSpace.addLoadCaseToDomain(lp0.name)
 analysis= predefined_solutions.simple_static_linear(feProblem)
 result= analysis.analyze(1)
 
-elementStresses= brick0.physicalProperties.getVectorMaterials.generalizedStresses
+elementStresses= brick0.physicalProperties.getVectorMaterials.getValues('stress')
 nodeStresses= brick0.getExtrapolatedValues(elementStresses)
 
 sz= nodeStresses.noRows

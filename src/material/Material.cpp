@@ -121,11 +121,26 @@ int XC::Material::getResponse(int responseID, Information &info)
   { return -1; }
 
 //! @brief Returns material response.
-XC::Matrix XC::Material::getValues(const std::string &) const
+XC::Matrix XC::Material::getValues(const std::string &cod) const
   {
     Matrix retval;
-    std::cerr << getClassName() << "::" << __FUNCTION__
-              << "; not implemented." << std::endl;
+    if(cod == "stress" || cod == "stresses")
+      {
+	const Vector stress(getGeneralizedStress());
+	const size_t sz= stress.Size();
+	retval.resize(1,sz);
+	retval.putRow(0,stress);
+      }
+    else if(cod == "strain" || cod == "strains")
+      {
+	const Vector strain(getGeneralizedStrain());
+	const size_t sz= strain.Size();
+	retval.resize(1,sz);
+	retval.putRow(0,strain);
+      }
+    else
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; not implemented." << std::endl;
     return retval;
   }
 

@@ -1037,20 +1037,66 @@ XC::Matrix XC::Matrix::operator()(const ID &rows, const ID & cols) const
 XC::Vector XC::Matrix::getRow(int row) const
   {
     Vector retval(numCols);
-    for(int j=0; j<numCols; j++)
-      retval(j)= (*this)(row,j);
+    if(row<numRows)
+      {
+	for(int j=0; j<numCols; j++)
+	  retval(j)= (*this)(row,j);
+      }
+    else
+      std::cerr << getClassName() << "::" << __FUNCTION__
+	        << " row: " << row << " out of range[0,"
+	        << numRows << ").\n";
     return retval;
+  }
+
+//! @brief Put the vector at the i-th row.
+void XC::Matrix::putRow(int i, const Vector &v)
+  {
+    if(i<numRows)
+      {
+	const int sz= v.Size();
+	const int nCols= std::min(numCols,sz);
+	for(int j=0; j<nCols; j++)
+	  (*this)(i,j)= v(j);
+      }
+    else
+      std::cerr << getClassName() << "::" << __FUNCTION__
+	        << " row: " << i << " out of range[0,"
+	        << numRows << ").\n";
   }
 
 //! @brief Return the column which index being passed as parameter.
 XC::Vector XC::Matrix::getCol(int col) const
   {
     Vector retval(numRows);
-    for(int i=0; i<numRows; i++)
-      retval(i)= (*this)(i,col);
+    if(col<numCols)
+      {
+        for(int i=0; i<numRows; i++)
+          retval(i)= (*this)(i,col);
+      }
+    else
+      std::cerr << getClassName() << "::" << __FUNCTION__
+	        << " column: " << col << " out of range[0,"
+	        << numCols << ").\n";
     return retval;
   }
 
+
+//! @brief Put the vector at the i-th col.
+void XC::Matrix::putCol(int j, const Vector &v)
+  {
+    if(j<numCols)
+      {
+	const int sz= v.Size();
+	const int nRows= std::min(numRows,sz);
+	for(int i=0; i<nRows; i++)
+	  (*this)(i,j)= v(i);
+      }
+    else
+      std::cerr << getClassName() << "::" << __FUNCTION__
+	        << " col: " << j << " out of range[0,"
+	        << numCols << ").\n";
+  }
 		
 // Matrix &operator=(const Matrix  &V):
 //      the assignment operator, This is assigned to be a copy of V. if sizes

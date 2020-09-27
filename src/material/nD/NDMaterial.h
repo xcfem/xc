@@ -134,7 +134,7 @@ class NDMaterial: public Material
     //! @brief Return the generalized strain.
     inline const Vector &getGeneralizedStrain(void) const
       { return getStrain(); }
-    double getVonMisesStress(void) const;
+    virtual double getVonMisesStress(void) const;
 
     virtual int setTrialStrain(const Tensor &);
     virtual int setTrialStrain(const Tensor &, const Tensor &);
@@ -158,6 +158,7 @@ class NDMaterial: public Material
     virtual const std::string &getType(void) const = 0;
     virtual int getOrder(void) const = 0;
 
+    Matrix getValues(const std::string &) const;
     virtual Response *setResponse(const std::vector<std::string> &argv, Information &matInformation);
     virtual int getResponse (int responseID, Information &matInformation);
 

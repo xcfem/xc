@@ -88,6 +88,7 @@ class ElasticIsotropicPlaneStress2D: public ElasticIsotropic2D
     const Matrix &getInitialTangent(void) const;
 
     const Vector &getStress(void) const;
+    double getVonMisesStress(void) const;
         
     void zeroInitialGeneralizedStrain(void);
     int commitState(void);

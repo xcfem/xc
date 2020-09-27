@@ -70,7 +70,7 @@ modelSpace.addLoadCaseToDomain(lp0.name)
 analysis= predefined_solutions.simple_static_linear(feProblem)
 result= analysis.analyze(1)
 
-elementStresses= quad0.physicalProperties.getVectorMaterials.generalizedStresses
+elementStresses= quad0.physicalProperties.getVectorMaterials.getValues('stress')
 nodeStresses= quad0.getExtrapolatedValues(elementStresses)
 
 sz= nodeStresses.noRows

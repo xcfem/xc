@@ -71,7 +71,7 @@ nod8.newLoad(xc.Vector([P,P]))
 modelSpace.addLoadCaseToDomain(lp0.name)
 
 # Graphic stuff. Uncomment to get graphics working.
-oh= output_handler.OutputHandler(modelSpace)
+#oh= output_handler.OutputHandler(modelSpace)
 
 # Uncomment to display the mesh
 # oh.displayFEMesh()
@@ -87,9 +87,10 @@ sX= 0.0
 sY= 0.0
 sXY= 0.0
 count= 0.0
-for q in quads:
-    elementStresses= q.physicalProperties.getVectorMaterials.generalizedStresses
+for q in quads:    
+    elementStresses= q.physicalProperties.getVectorMaterials.getValues('stress')
     nodeStresses= q.getExtrapolatedValues(elementStresses)
+    #vMises= q.physicalProperties.getVectorMaterials.getValues('von_mises_stress')
     # print('element stresses: ', elementStresses)
     # print('node stresses: ', nodeStresses)
 

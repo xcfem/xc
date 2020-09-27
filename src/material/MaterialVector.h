@@ -262,12 +262,12 @@ template <class MAT>
 XC::Matrix XC::MaterialVector<MAT>::getValues(const std::string &code) const
   {
     Matrix retval;
-    const size_t nMat= this->size();
+    const int nMat= this->size();
     std::vector<Matrix> tmp(nMat);
     int count= 0;
     int nRows= 0;
     int nCols= 0;
-    for(iterator i=mat_vector::begin();i!=mat_vector::end();i++, count++)
+    for(const_iterator i=mat_vector::begin();i!=mat_vector::end();i++, count++)
       {
         const Matrix v= (*i)->getValues(code);
 	nRows+= v.noRows();
@@ -282,12 +282,12 @@ XC::Matrix XC::MaterialVector<MAT>::getValues(const std::string &code) const
 	const Matrix v= tmp[i];
         for(int j= 0;j<v.noRows();j++)
 	  {
-	    iRow+= j;
 	    for(int k= 0;k<v.noCols();k++)
 	      {
 		iCol= k;
 	        retval(iRow,iCol)= v(j,k);
 	      }
+	    iRow+= 1;
 	  }
       }
     return retval;
@@ -313,8 +313,7 @@ Matrix MaterialVector<MAT>::getGeneralizedStresses(void) const
     for(size_t i= 0;i<nMat;i++)
       {
         const Vector &s= (*this)[i]->getGeneralizedStress();
-        for(size_t j= 0;j<ncol;j++)
-          retval(i,j)= s(j);
+        retval.putRow(i,s);
       }
     return retval;
   }

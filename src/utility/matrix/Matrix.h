@@ -177,7 +177,9 @@ class Matrix: public CommandEntity
     const double &operator()(int row, int col) const;
     Matrix operator()(const ID &rows, const ID & cols) const;
     Vector getRow(int row) const;
+    void putRow(int , const Vector &);
     Vector getCol(int col) const;
+    void putCol(int , const Vector &);
 
     template <class TNSR>
     Matrix &operator=(const TNSR &);

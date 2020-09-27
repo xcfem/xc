@@ -219,6 +219,7 @@ const XC::Vector &XC::NDMaterial::getInitialGeneralizedStrain(void) const
               << "; subclass responsibility\n";
     return errVector;    
   }
+
 //! @brief Set trial strain value.
 int XC::NDMaterial::setTrialStrain(const Tensor &v)
   {
@@ -293,7 +294,7 @@ XC::Response* XC::NDMaterial::setResponse(const std::vector<std::string> &argv, 
 	vec.Zero();
         return new MaterialResponse(this, 5, vec); // zero vector
       }
-    else
+
       return 0;
   }
 
@@ -310,6 +311,22 @@ int XC::NDMaterial::getResponse(int responseID, Information &matInfo)
       default:
         return -1;
       }
+  }
+
+//! @brief Returns material response.
+XC::Matrix XC::NDMaterial::getValues(const std::string &cod) const
+  {
+    Matrix retval;
+    if((cod == "tangent") || (cod == "Tangent"))
+      retval= this->getTangent();
+    else if((cod == "von_mises_stress") || (cod == "Von_Mises_stress"))
+      {
+	retval.resize(1,1);
+	retval(0,0)= getVonMisesStress();
+      }
+    else
+      retval= Material::getValues(cod);
+    return retval;
   }
 
 //! @brief Send object members through the communicator argument.
