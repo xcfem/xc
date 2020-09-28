@@ -97,7 +97,7 @@ def VtkDibujaIdsKPts(uGrid, setToDraw, renderer):
 
         renderer.AddActor2D(pointLabels)
     else:
-        print("El conjunto: '",setToDraw,"' no tiene KPts.")
+        lmsg.warning("El conjunto: '"+setToDraw.name+"' no tiene KPts.")
 
 # ****** Creamos las etiquetas para las celdas *******
 def VtkDibujaIdsCells(uGrid, setToDraw, entTypeName, renderer):
@@ -128,16 +128,19 @@ def VtkDibujaIdsCells(uGrid, setToDraw, entTypeName, renderer):
 
     renderer.AddActor2D(cellLabels)
 
-def VtkCargaMalla(recordGrid):
+def vtk_load_mesh_data(recordGrid):
     kpoints= vtk.vtkPoints()
-    # Definimos grid
+    # Grid definition
     recordGrid.uGrid.SetPoints(kpoints)
     setToDraw= recordGrid.xcSet
     setToDraw.numerate()
     pnts= setToDraw.getPoints
+    kpoints.SetDataTypeToDouble()
+    nPoints= len(pnts)
+    kpoints.SetNumberOfPoints(nPoints)
     for p in pnts:
         kpoints.InsertPoint(p.getIdx,p.getPos.x,p.getPos.y,p.getPos.z)
-    cellSet= setToDraw.getLines # cells are lines as default.
+    cellSet= setToDraw.getLines # cells are lines by default.
     if(recordGrid.cellType=="faces"):
         cellSet= setToDraw.getSurfaces
     elif (recordGrid.cellType=="bodies"):
