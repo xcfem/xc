@@ -8,6 +8,7 @@ import json
 import xc_base
 import geom
 from import_export import block_topology_entities as bte
+from misc_utils import log_messages as lmsg
 
 class BoltArrayBase(object):
     distances= [50e-3, 75e-3, 100e-3, 120e-3, 150e-3, 200e-3, 250e-3,.3,.4,.5,.6,.7,.8,.9]
