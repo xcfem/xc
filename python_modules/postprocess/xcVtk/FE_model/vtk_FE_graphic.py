@@ -197,7 +197,7 @@ class DisplaySettingsFE(vtk_graphic_base.DisplaySettings):
         self.displayGrid(caption)
         
     def displayLocalAxes(self,setToDisplay,caption= 'local axis', vectorScale=1.0, fileName= None, defFScale= 0.0):
-        '''vector field display of the loads applied to the chosen set of elements in the load case passed as parameter
+        '''Display the element local axes.
 
         :param setToDisplay:   set of elements to be displayed (defaults to total set)
         :param caption:        text to display in the graphic 
@@ -212,9 +212,9 @@ class DisplaySettingsFE(vtk_graphic_base.DisplaySettings):
         self.setupGrid(setToDisplay)
         vField=lavf.LocalAxesVectorField(setToDisplay.name+'_localAxes',vectorScale)
         vField.dumpVectors(setToDisplay)
-        self.defineMeshScene(None) 
+        self.defineMeshScene(field= None) 
         vField.addToDisplay(self)
-        self.displayScene(caption)
+        self.displayScene(caption, fileName)
 
     def displayStrongWeakAxis(self,setToDisplay,caption= 'strong [red] and weak [blue] axes', vectorScale=1.0):
         '''vector field display of the loads applied to the chosen set of elements in the load case passed as parameter
@@ -226,7 +226,7 @@ class DisplaySettingsFE(vtk_graphic_base.DisplaySettings):
         self.setupGrid(setToDisplay)
         vField=lavf.StrongWeakAxisVectorField(setToDisplay.name+'_strongWeakAxis',vectorScale)
         vField.dumpVectors(setToDisplay)
-        self.defineMeshScene(None) 
+        self.defineMeshScene(field= None) 
         vField.addToDisplay(self)
         self.displayScene(caption)
 
