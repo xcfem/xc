@@ -94,7 +94,7 @@ for h in holes:
     h.setNDiv(1)
     minElemSize= min(minElemSize,h.getMinElemSize())
     f15.addHole(h)
-f15.setElemSize(2.5*minElemSize, True)
+f15.setElemSize(2.0*minElemSize, True)
 maxElemSize= f15.getMaxElemSize()
 
 f15.genMesh(xc.meshDir.I,True)
@@ -102,8 +102,8 @@ f15.genMesh(xc.meshDir.I,True)
 xcTotalSet= modelSpace.getTotalSet()
 nNodes= len(xcTotalSet.nodes)
 nElements= len(xcTotalSet.elements)
-ratio1= (nNodes-382)
-ratio2= (nElements-277)
+ratio1= (nNodes-420)
+ratio2= (nElements-310)
 
 '''
 print("minElemSize= ",minElemSize)

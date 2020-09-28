@@ -137,9 +137,9 @@ quads= paver.getQuads()
 # drawMesh(nodPos, quads)
 
 nNodPos= len(nodPos)
-ratio1= (nNodPos-254)
+ratio1= (nNodPos-302)
 nquads= len(quads)
-ratio2= (nquads-165)
+ratio2= (nquads-201)
 
 # Test paving routine inside XC modeler.
 
