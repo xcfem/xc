@@ -217,7 +217,6 @@ class DisplaySettings(object):
         self.cameraParameters.setView(cam)
         self.renderer.ResetCameraClippingRange()
 
-
     def setupAxes(self):
         '''Add an vtkAxesActor to the renderer.'''
         bnd= self.gridRecord.getGridBND()
