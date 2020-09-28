@@ -1,8 +1,5 @@
 # -*- coding: utf-8 -*-
-'''8 node brick element Patch test.
-
-Reference: MacNeal & Harder, “A Proposed Standard Set of Problems to Test Finite Element Accuracy”, Finite Elements in Analysis and Design, 1 (1985) 3-20
-'''
+'''Test extrapolation from Gauss points. Home made test.'''
 
 from __future__ import division
 from __future__ import print_function
