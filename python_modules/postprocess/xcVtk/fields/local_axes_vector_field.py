@@ -81,8 +81,8 @@ class LinesLocalAxesVectorField(LocalAxesVectorField):
         for s in lineSet:
           self.dumpPair(s.getPosCentroid(),s.getLocalAxes())
 
-class QuadSurfacesLocalAxesVectorField(LocalAxesVectorField):
-    '''Draws the local axes on quadrilateral surfaces
+class SurfacesLocalAxesVectorField(LocalAxesVectorField):
+    '''Draws the local axes of the surfaces
        of the multi-block model.'''
     def dumpVectors(self,xcSet):
         ''' Iterate over the surfaces and collect it axes.
@@ -91,7 +91,7 @@ class QuadSurfacesLocalAxesVectorField(LocalAxesVectorField):
         '''
         surfaceSet= xcSet.getSurfaces
         for s in surfaceSet:
-          self.dumpPair(s.getPosCentroid(),s.getLocalAxes())
+            self.dumpPair(s.getPosCentroid(),s.getLocalAxes())
 
     
 class StrongWeakAxisVectorField(object):
