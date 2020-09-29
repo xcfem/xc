@@ -560,23 +560,36 @@ int XC::ZeroLength::addInertiaLoadToUnbalance(const Vector &accel)
     return 0;
   }
 
+//! @brief Return the element internal forces.
+XC::Vector XC::ZeroLength::getInternalForces(void) const
+  {
+    const size_t sz= theMaterial1d.size();
+    Vector retval(sz);
+
+    // loop over 1d materials
+    for(size_t mat=0; mat<sz; mat++)
+      {
+        // get resisting force for material
+        retval(mat)= theMaterial1d[mat]->getStress();
+      } // end loop over 1d materials
+    return retval;
+  }
+
 //! @brief Return resisting force vector.
 const XC::Vector &XC::ZeroLength::getResistingForce(void) const
   {
-    double force;
-
     // zero the residual
     theVector->Zero();
 
+    const Vector internalForces= getInternalForces();
+    const size_t sz= internalForces.Size();
     // loop over 1d materials
-    for(size_t mat=0; mat<theMaterial1d.size(); mat++)
+    for(size_t mat=0; mat<sz; mat++)
       {
-        // get resisting force for material
-        force= theMaterial1d[mat]->getStress();
-
+        const double &force= internalForces[mat];
         // compute residual due to resisting force
         for(int i=0; i<numDOF; i++)
-            (*theVector)(i)  += t1d(mat,i) * force;
+            (*theVector)(i)+= t1d(mat,i) * force;
       } // end loop over 1d materials
     if(isDead())
       (*theVector)*=dead_srf;
@@ -588,6 +601,57 @@ const XC::Vector &XC::ZeroLength::getResistingForceIncInertia(void) const
   {
     // there is no mass, so return
     return this->getResistingForce();
+  }
+
+//! @brief Extrapolate from Gauss points to nodes.
+XC::Matrix XC::ZeroLength::getExtrapolatedValues(const Matrix &values) const
+  {
+    const size_t sz= values.noRows();
+    Matrix retval(2,sz); // Two nodes and sz values per node.
+    const Matrix &e_matrix= getExtrapolationMatrix();
+    std::cout << "values: " << values << std::endl;
+    for(size_t i= 0;i<sz;i++)
+      {
+	retval(0,i)= e_matrix(0,0)*values(i,0);
+	retval(1,i)= e_matrix(1,0)*values(i,0);
+      }
+    return retval;
+  }
+
+//! @brief Return a python list with the values of the argument property
+//! at element nodes.
+//!
+//! When the property requested its located at the integration point this
+//! function is responsible of the extrapolation of values from
+//! Gauss points to nodes.
+boost::python::list XC::ZeroLength::getValuesAtNodes(const std::string &code) const
+  {
+    boost::python::list retval;
+    if(code=="strain")
+      {
+	const Matrix elementStrains= theMaterial1d.getGeneralizedStrains();
+	const Matrix strainsAtNodes= getExtrapolatedValues(elementStrains);
+	const size_t nRows= strainsAtNodes.noRows();
+	for(size_t i= 0;i<nRows;i++)
+	  {
+	    Vector strainAtNode= strainsAtNodes.getRow(i);
+	    retval.append(strainAtNode);
+	  }
+      }
+    else if(code=="stress")
+      {
+	const Matrix elementStresses= theMaterial1d.getGeneralizedStresses();
+	const Matrix stressesAtNodes= getExtrapolatedValues(elementStresses);
+	const size_t nRows= stressesAtNodes.noRows();
+	for(size_t i= 0;i<nRows;i++)
+	  {
+	    Vector stressAtNode= stressesAtNodes.getRow(i);
+	    retval.append(stressAtNode);
+	  }
+      }
+    else
+      retval= Element0D::getValuesAtNodes(code); 
+    return retval;
   }
 
 //! @brief Send members through the communicator argument.

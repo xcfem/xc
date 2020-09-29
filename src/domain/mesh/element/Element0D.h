@@ -44,6 +44,7 @@ class Material;
 class Element0D: public ElementBase<2>
   {
   protected:
+    static Matrix extrapolation_matrix; //!< Extrapolation matrix.
     static const double LenTol; //!< Tolerance for zero length of element.
     class Vxy: public CommandEntity
       {
@@ -82,6 +83,9 @@ class Element0D: public ElementBase<2>
     Rect3d3dCooSys getCooSys(bool) const;    
     inline virtual const Matrix &getTransformation(void) const
       { return transformation; }
+    
+    inline virtual const Matrix &getExtrapolationMatrix(void) const
+      { return extrapolation_matrix; }
 
     virtual void setUpVectors(const Vector &, const Vector &);
   };

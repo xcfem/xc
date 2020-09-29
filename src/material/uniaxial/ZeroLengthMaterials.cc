@@ -143,6 +143,44 @@ void XC::ZeroLengthMaterials::push_front(const int &dir,const UniaxialMaterial *
       }
   }
 
+//! @brief Return the size of the generalized stress vector.
+size_t XC::ZeroLengthMaterials::getGeneralizedStressSize(void) const
+  { return (*this)[0]->getGeneralizedStress().Size(); }
+
+//! @brief Return the size of the generalized strain vector.
+size_t XC::ZeroLengthMaterials::getGeneralizedStrainSize(void) const
+  { return (*this)[0]->getGeneralizedStrain().Size(); }
+
+//! @brief Returns generalized stress values on each direction.
+XC::Matrix XC::ZeroLengthMaterials::getGeneralizedStresses(void) const
+  {
+    const size_t ncol= getGeneralizedStressSize();
+    const size_t nMat= this->size();
+    Matrix retval(nMat,ncol);
+    for(size_t i= 0;i<nMat;i++)
+      {
+        const Vector &s= (*this)[i]->getGeneralizedStress();
+        retval.putRow(i,s);
+      }
+    return retval;
+  }
+
+//! @brief Returns generalized strain values on each direction.
+XC::Matrix XC::ZeroLengthMaterials::getGeneralizedStrains(void) const
+  {
+    const size_t ncol= getGeneralizedStrainSize();
+    const size_t nMat= this->size();
+    Matrix retval(nMat,ncol);
+    for(size_t i= 0;i<nMat;i++)
+      {
+        const Vector &s= (*this)[i]->getGeneralizedStrain();
+        for(size_t j= 0;j<ncol;j++)
+          retval(i,j)= s(j);
+      }
+    return retval;
+  }
+
+//! @brief Sends the materials through the communicator argument.
 int XC::ZeroLengthMaterials::sendSelf(Communicator &comm)
   {
     setDbTag(comm);

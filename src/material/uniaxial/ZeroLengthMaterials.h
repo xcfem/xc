@@ -81,10 +81,13 @@ class ZeroLengthMaterials: public DqUniaxialMaterial
     int sendSelf(Communicator &);
     int recvSelf(const Communicator &);
     void Print(std::ostream &s, int flag =0) const;
+    
+    size_t getGeneralizedStressSize(void) const;
+    size_t getGeneralizedStrainSize(void) const;
+    Matrix getGeneralizedStresses(void) const;
+    Matrix getGeneralizedStrains(void) const;
 
     void clear(void);    
-
-
   };
 } // end of XC namespace
 

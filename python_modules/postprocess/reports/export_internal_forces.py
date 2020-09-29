@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+from __future__ import print_function
+
 __author__= "Luis C. Pérez Tato (LCPT)"
 __copyright__= "Copyright 2016,LCPT"
 __license__= "GPL"
@@ -124,9 +126,22 @@ def getInternalForcesDict(nmbComb, elems):
                 internalForcesDict[1]['chiN']= e.getProp('chiN')
             elemDict['internalForces']= internalForcesDict
         elif('ZeroLength' in elementType):
-          lmsg.warning("exportInternalForces for element type: '"+elementType+"' not implemented.")
+            e.getResistingForce()
+            F= e.getValuesAtNodes("stress")
+            internalForcesDict= dict()
+            nDOFs= len(F[0]) # Number of degrees of freedom.
+            if(nDOFs!= 6):
+                lmsg.warning('exportInternalForces for '+str(nDOFs)+ " DOFs in element type: '"+elementType+"' not implemented.")
+            else:
+                F0= F[0]
+                internalForces= internal_forces.CrossSectionInternalForces(N= F0[0],Vy= F0[1], Vz= F0[2],T= F0[3],My= F0[4], Mz= F0[5]) # Internal forces at the origin node.
+                internalForcesDict[0]= internalForces.getDict()
+                F1= F[1]
+                internalForces= internal_forces.CrossSectionInternalForces(N= F1[0],Vy= F1[1], Vz= F1[2],T= F1[3],My= F1[4], Mz= F1[5]) # Internal forces at the end node.
+                internalForcesDict[1]= internalForces.getDict()
+            elemDict['internalForces']= internalForcesDict
         else:
-          lmsg.error("exportInternalForces error; element type: '"+elementType+"' unknown.")
+            lmsg.error("exportInternalForces error; element type: '"+elementType+"' unknown.")
     return combInternalForcesDict
 
 def exportInternalForces(nmbComb, elems, fDesc):

@@ -38,6 +38,10 @@
 #include "utility/actor/actor/MovableMatrix.h"
 #include "vtkCellType.h"
 
+double extrapolation_data[2]= {1.0,-1.0};
+
+XC::Matrix XC::Element0D::extrapolation_matrix(extrapolation_data,2,1); // 2 nodes 1 gauss points
+
 const double XC::Element0D::LenTol= 1.0e-6; // Tolerance for zero length of element
 
 XC::Element0D::Vxy::Vxy(void)
