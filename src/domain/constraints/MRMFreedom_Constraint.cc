@@ -107,7 +107,8 @@ XC::MRMFreedom_Constraint::MRMFreedom_Constraint(int tag,const Element &elem, co
 	    if(iFactorJ>1.0)
 	      std::clog << getClassName() << "::" << __FUNCTION__
 		        << "; warning, glue node is outside the element."
-		        << std::endl;
+		        << " Natural coordinate " << i
+		        << "= " << iFactorJ << std::endl;
             constraintMatrix(i,offset+i)= iFactorJ;
 	  }
       }
