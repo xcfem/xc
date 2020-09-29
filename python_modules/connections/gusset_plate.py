@@ -125,6 +125,35 @@ class GussetPlate(object):
         retval.append((2, 3))
         return retval
 
+    def getHoleBlocks(self, ownerId, labels= None):
+        ''' Return the blocks representing the holes for the bolts.
+
+        :param ownerId: identifier of the face with the holes.
+        :param lbls: labels to assign to the newly created blocks.
+        '''
+        holeOwnerId= 'hole_'+ownerId # Hole owner id.
+        holeLabels= labels+['holes',holeOwnerId]
+        boltRefSys= self.getBoltRefSys()
+        return self.boltedPlateTemplate.boltArray.getHoleBlocks(boltRefSys,holeLabels)
+    
+    def getWeldBlocks(self, ownerId, kPointIds, labels= None):
+        ''' Return the blocks representing the welds.
+
+        :param ownerId: identifier of the face with the welds.
+        :param kPointIds: identifiers of the points at weld ends.
+        :param lbls: labels to assign to the newly created blocks.
+        '''
+        retval= bte.BlockData()
+        weldOwnerId= 'weld_'+ownerId # weld owner id.
+        weldLabels= labels+['welds',weldOwnerId]
+        weldLinesIndexes= self.getWeldLinesIndexes()
+        for l in weldLinesIndexes:
+            pA= kPointIds[l[0]]
+            pB= kPointIds[l[1]]
+            weldBlk= bte.BlockRecord(id= -1, typ= 'line', kPoints= [pA, pB], labels= weldLabels, thk= None)
+            retval.appendBlock(weldBlk)
+        return retval
+        
     def getBlocks(self, lbls= None):
         ''' Return the blocks that define the gusset for the
             diagonal argument.
@@ -137,19 +166,9 @@ class GussetPlate(object):
             labels.extend(lbls)
         blk= retval.blockFromPoints(self.contour, labels= labels, thickness= self.boltedPlateTemplate.thickness, matId= self.boltedPlateTemplate.steelType.name)
         ownerId= 'owr_f'+str(blk.id) # owner identifier.
-        # Get the hole blocks for the new plate
-        holeOwnerId= 'hole_'+ownerId # Hole owner id.
-        holeLabels= labels+['holes',holeOwnerId]
-        boltRefSys= self.getBoltRefSys()
-        blk.holes= self.boltedPlateTemplate.boltArray.getHoleBlocks(boltRefSys,holeLabels)
+        blk.holes= self.getHoleBlocks(ownerId, labels) # Get the hole blocks for the new plate
         retval.extend(blk.holes)
-        weldOwnerId= 'weld_'+ownerId # weld owner id.
-        weldLabels= labels+['welds',weldOwnerId]
-        weldLinesIndexes= self.getWeldLinesIndexes()
         kPointIds= blk.getKPointIds()
-        for l in weldLinesIndexes:
-            pA= kPointIds[l[0]]
-            pB= kPointIds[l[1]]
-            weldBlk= bte.BlockRecord(id= -1, typ= 'line', kPoints= [pA, pB], labels= weldLabels, thk= None)
-            retval.appendBlock(weldBlk)
+        blk.weldBlocks= self.getWeldBlocks(ownerId, kPointIds, labels) # Get the weld blocks for the new plate
+        retval.extend(blk.weldBlocks)
         return retval
