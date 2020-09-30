@@ -117,12 +117,16 @@ class GussetPlate(object):
         boltRefSys= self.getBoltRefSys()
         return self.boltedPlateTemplate.boltArray.getPositions(boltRefSys)
 
-    def getWeldLinesIndexes(self):
+    def getWeldLinesIndexes(self, verticalWeldLegSize, horizontalWeldLegSize):
         ''' Return the indexes of the points in the contour
-            that define the lines that must be welded to the structure.'''
+            that define the lines that must be welded to the structure.
+
+        :param verticalWeldLegSize: leg size for the vertical welds.
+        :param horizontalWeldLegSize: leg size for the horizontal welds.
+        '''
         retval= list()
-        retval.append((1, 2))
-        retval.append((2, 3))
+        retval.append((1, 2, verticalWeldLegSize)) # vertical weld
+        retval.append((2, 3, horizontalWeldLegSize)) # horizontal weld.
         return retval
 
     def getHoleBlocks(self, ownerId, labels= None):
@@ -136,28 +140,34 @@ class GussetPlate(object):
         boltRefSys= self.getBoltRefSys()
         return self.boltedPlateTemplate.boltArray.getHoleBlocks(boltRefSys,holeLabels)
     
-    def getWeldBlocks(self, ownerId, kPointIds, labels= None):
+    def getWeldBlocks(self, ownerId, kPointIds, verticalWeldLegSize, horizontalWeldLegSize, labels= None):
         ''' Return the blocks representing the welds.
 
         :param ownerId: identifier of the face with the welds.
         :param kPointIds: identifiers of the points at weld ends.
+        :param verticalWeldLegSize: leg size for the vertical welds.
+        :param horizontalWeldLegSize: leg size for the horizontal welds.
         :param lbls: labels to assign to the newly created blocks.
         '''
         retval= bte.BlockData()
         weldOwnerId= 'weld_'+ownerId # weld owner id.
         weldLabels= labels+['welds',weldOwnerId]
-        weldLinesIndexes= self.getWeldLinesIndexes()
+        weldLinesIndexes= self.getWeldLinesIndexes(verticalWeldLegSize, horizontalWeldLegSize)
         for l in weldLinesIndexes:
             pA= kPointIds[l[0]]
             pB= kPointIds[l[1]]
-            weldBlk= bte.BlockRecord(id= -1, typ= 'line', kPoints= [pA, pB], labels= weldLabels, thk= None)
+            weldLegSize= l[2]
+            weldLegSizeLabel= 'weld_leg_size_'+str(weldLegSize)
+            weldBlk= bte.BlockRecord(id= -1, typ= 'line', kPoints= [pA, pB], labels= weldLabels+[weldLegSizeLabel], thk= None)
             retval.appendBlock(weldBlk)
         return retval
         
-    def getBlocks(self, lbls= None):
+    def getBlocks(self, verticalWeldLegSize, horizontalWeldLegSize, lbls= None):
         ''' Return the blocks that define the gusset for the
             diagonal argument.
 
+        :param verticalWeldLegSize: leg size for the vertical welds.
+        :param horizontalWeldLegSize: leg size for the horizontal welds.
         :param lbls: labels to assign to the newly created blocks.
         '''
         retval= bte.BlockData()
@@ -169,6 +179,6 @@ class GussetPlate(object):
         blk.holes= self.getHoleBlocks(ownerId, labels) # Get the hole blocks for the new plate
         retval.extend(blk.holes)
         kPointIds= blk.getKPointIds()
-        blk.weldBlocks= self.getWeldBlocks(ownerId, kPointIds, labels) # Get the weld blocks for the new plate
+        blk.weldBlocks= self.getWeldBlocks(ownerId, kPointIds, verticalWeldLegSize, horizontalWeldLegSize, labels) # Get the weld blocks for the new plate
         retval.extend(blk.weldBlocks)
         return retval
