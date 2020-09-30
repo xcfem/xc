@@ -174,6 +174,7 @@ class SectionForceDeformation: public Material
     virtual double getRhoSensitivity(int gradNumber);
     virtual int commitSensitivity(const Vector& sectionDeformationGradient, int gradNumber, int numGrads);
 // AddingSensitivity:END ///////////////////////////////////////////
+    virtual double getEnergy(void) const;
   };
 
 } // end of XC namespace

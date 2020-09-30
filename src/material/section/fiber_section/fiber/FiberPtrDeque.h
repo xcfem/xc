@@ -219,7 +219,10 @@ class FiberPtrDeque: public CommandEntity, public std::deque<Fiber *>, public Mo
     Pos2d GetPMax(void) const;
     Pos2d GetPMin(void) const;
     BND2d Bnd(void) const;
+    size_t nearest_fiber(const double &y,const double &z) const;
     Fiber *getClosestFiber(const int matTag, const double &yCoord);
+    Fiber *getClosestFiber(const double &y, const double &z);
+    std::vector<double> getFiberAreas(void) const;
     double getArea(const double &factor= 1.0) const;
     double getAreaHomogenizedSection(const double &E0) const;
     const Vector &getCenterOfMassHomogenizedSection(const double &E0) const;
@@ -259,7 +262,6 @@ class FiberPtrDeque: public CommandEntity, public std::deque<Fiber *>, public Mo
     //! parallel to y through the centroid.
     inline double getiy(const double factor= 1.0) const
       { return getIy(factor,zCenterOfMass)/getArea(factor); }
-    size_t nearest_fiber(const double &y,const double &z) const;
 
     void Print(std::ostream &s,const int &flag) const;
     int sendSelf(Communicator &);

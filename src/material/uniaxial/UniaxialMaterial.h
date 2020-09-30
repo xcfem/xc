@@ -147,6 +147,7 @@ class UniaxialMaterial: public Material
     virtual double getRhoSensitivity(int gradNumber);
     virtual int    commitSensitivity(double strainGradient, int gradNumber, int numGrads);
 // AddingSensitivity:END ///////////////////////////////////////////
+    virtual double getEnergy(void) const;
   };
 UniaxialMaterial *receiveUniaxialMaterialPtr(UniaxialMaterial *,DbTagData &,const Communicator &,const BrokedPtrCommMetaData &);
 

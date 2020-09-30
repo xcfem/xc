@@ -119,6 +119,54 @@ bool XC::FiberPtrDeque::in(const Fiber *ptr) const
         }
     return retval;
   }
+
+//! @brief Return the index of the fiber that is closest to the given position.
+size_t XC::FiberPtrDeque::nearest_fiber(const double &y,const double &z) const
+  {
+    size_t retval= 0;
+    const size_t nf= getNumFibers();
+    if(nf<1)
+      {
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; fiber container empty." << std::endl;
+        return retval;
+      }
+    size_t i= 0;
+    Fiber *f= (*this)[i];
+    double yf= 0.0;
+    double zf= 0.0;
+    if(f)
+      f->getFiberLocation(yf,zf);
+    else
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; null pointer to fiber." << std::endl;
+    double d2= sqr(yf-y)+sqr(zf-z);
+    i++;
+    for(;i<nf;i++)
+      if((*this)[i])
+        {
+          (*this)[i]->getFiberLocation(yf,zf);
+          double d2i= sqr(yf-y)+sqr(zf-z);
+          if(d2i<d2)
+            {
+              d2= d2i;
+              retval=i;
+            }
+        }
+      else
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; null pointer to fiber." << std::endl;
+    return retval;
+  }
+
+//! @brief Return the fiber closest to y which has the material
+//! defined by matTag.
+XC::Fiber *XC::FiberPtrDeque::getClosestFiber(const double &yCoord,const double &zCoord)
+  {
+    const size_t key= nearest_fiber(yCoord, zCoord);
+    return (*this)[key];
+  }
+    
 //! @brief Return the fiber closest to y which has the material
 //! defined by matTag.
 XC::Fiber *XC::FiberPtrDeque::getClosestFiber(const int matTag, const double &yCoord)
@@ -154,6 +202,7 @@ XC::Fiber *XC::FiberPtrDeque::getClosestFiber(const int matTag, const double &yC
       }
     return retval;
   }
+
 //! @brief Returns minimal y coordinate value of the fibers.
 double XC::FiberPtrDeque::GetYMin(void) const
   {
@@ -265,6 +314,17 @@ Pos2d XC::FiberPtrDeque::GetPMin(void) const
 //! @brief Return the bounding rectangle.
 BND2d XC::FiberPtrDeque::Bnd(void) const
   { return BND2d(GetPMin(),GetPMax()); }
+
+
+//! @brief Return the areas of each fiber.
+std::vector<double> XC::FiberPtrDeque::getFiberAreas(void) const
+  {
+    const size_t numFibers= getNumFibers();
+    std::vector<double> retval(numFibers);
+    for( size_t i=0;i<numFibers;i++)
+      retval[i]= (*this)[i]->getArea();
+    return retval;
+  }
 
 //! @brief Return the sum of the fibers areas multiplied by the factor.
 double XC::FiberPtrDeque::getArea(const double &factor) const
@@ -986,45 +1046,6 @@ const XC::Vector &XC::FiberPtrDeque::getCentroidFibersWithStrainGreaterThan(cons
       retval/= r;
     else
       { retval[0]= NAN; retval[1]= NAN; }
-    return retval;
-  }
-
-//! @brief Return the fiber that is closest to the given position.
-size_t XC::FiberPtrDeque::nearest_fiber(const double &y,const double &z) const
-  {
-    size_t retval= 0;
-    const size_t nf= getNumFibers();
-    if(nf<1)
-      {
-        std::cerr << getClassName() << "::" << __FUNCTION__
-		  << "; fiber container empty." << std::endl;
-        return retval;
-      }
-    size_t i= 0;
-    Fiber *f= (*this)[i];
-    double yf= 0.0;
-    double zf= 0.0;
-    if(f)
-      f->getFiberLocation(yf,zf);
-    else
-      std::cerr << getClassName() << "::" << __FUNCTION__
-		<< "; null pointer to fiber." << std::endl;
-    double d2= sqr(yf-y)+sqr(zf-z);
-    i++;
-    for(;i<nf;i++)
-      if((*this)[i])
-        {
-          (*this)[i]->getFiberLocation(yf,zf);
-          double d2i= sqr(yf-y)+sqr(zf-z);
-          if(d2i<d2)
-            {
-              d2= d2i;
-              retval=i;
-            }
-        }
-      else
-        std::cerr << getClassName() << "::" << __FUNCTION__
-		  << "; null pointer to fiber." << std::endl;
     return retval;
   }
 

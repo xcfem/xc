@@ -440,6 +440,14 @@ const XC::Matrix &XC::SectionForceDeformation::getInitialFlexibilitySensitivity(
 double XC::SectionForceDeformation::getRhoSensitivity(int gradNumber)
   { return 0.0; }
 
+//! @brief Return the energy stored in the material.
+double XC::SectionForceDeformation::getEnergy(void) const
+  {
+    std::cerr << getClassName() << "::" << __FUNCTION__
+	      << "; not implemented yet." << std::endl;
+    return 0;
+  }  
+
 int XC::SectionForceDeformation::commitSensitivity(const XC::Vector& defSens, int gradNumber, int numGrads)
   { return -1; }
 // AddingSensitivity:END ///////////////////////////////////////////

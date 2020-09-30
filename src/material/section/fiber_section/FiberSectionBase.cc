@@ -28,9 +28,6 @@
 
 #include "FiberSectionBase.h"
 #include "utility/matrix/Vector.h"
-
-
-
 #include "material/section/ResponseId.h"
 #include "material/section/repres/section/FiberSectionRepr.h"
 #include "material/section/repres/geom_section/GeomSection.h"
@@ -43,6 +40,7 @@
 #include "material/section/interaction_diagram/InteractionDiagram2d.h"
 #include "material/section/interaction_diagram/NMPointCloud.h"
 #include "material/section/interaction_diagram/NMyMzPointCloud.h"
+#include "material/section/fiber_section/fiber/Fiber.h"
 #include "xc_utils/src/geom/pos_vec/Vector3d.h"
 #include "xc_utils/src/geom/d2/Triang3dMesh.h"
 #include "xc_utils/src/geom/d3/ConvexHull3d.h"
@@ -51,6 +49,8 @@
 #include "xc_utils/src/geom/d2/2d_polygons/polygon2d_bool_op.h"
 #include "xc_utils/src/geom/d1/Ray2d.h"
 #include "xc_utils/src/geom/d1/Segment2d.h"
+#include "utility/recorder/response/MaterialResponse.h"
+#include "material/uniaxial/UniaxialMaterial.h"
 
 
 //! @brief Constructor.
@@ -928,6 +928,124 @@ double XC::FiberSectionBase::getSPosHomogeneizada(const double &E0) const
 
 std::string XC::FiberSectionBase::getStrClaseEsfuerzo(const double &tol) const
   { return fibers.getStrClaseEsfuerzo(); }
+
+double XC::FiberSectionBase::getEnergy(void) const
+  {
+    const size_t numFibers= fibers.getNumFibers();
+    std::vector<double> fiberArea;
+    // if(sectionIntegr)
+    //   {
+    //     fiberArea= sectionIntegr->getFiberWeights();
+    //   }
+    // else
+    //   {
+        fiberArea= fibers.getFiberAreas();
+    //  }
+    double retval= 0;
+    for(size_t i = 0; i < numFibers; i++)
+      {
+	Fiber *fiberPtr= fibers[i];
+	UniaxialMaterial *mat= fiberPtr->getMaterial();
+	const double A= fiberArea[i];
+	retval+= A * mat->getEnergy();
+      }
+    return retval;
+  }
+
+
+XC::Response *XC::FiberSectionBase::setResponse(const std::vector<std::string> &argv, Information &info)
+  {
+    const size_t argc= argv.size();
+    Response *theResponse= nullptr;
+
+    const size_t numFibers= fibers.getNumFibers();
+    if(argc > 2 || (argv[0]=="fiber"))
+      {
+
+        int key = numFibers;
+        int passarg = 2;
+
+	Fiber *fiberPtr= nullptr;
+	if(argc <= 3)
+	  {		  // fiber number was input directly
+  	    key = atoi(argv[1]);
+	    fiberPtr= fibers[key];
+	  }
+	else if(argc > 4)
+	  {  // find fiber closest to coord. with mat tag
+	    const int matTag = atoi(argv[3]);
+	    const double yCoord= atof(argv[1]);
+	    //const double zCoord= atof(argv[2]);
+	    fiberPtr= fibers.getClosestFiber(matTag, yCoord);
+	    passarg = 4;
+	  }
+        else // fiber near-to coordinate specified
+	  {
+	    const double yCoord= atof(argv[1]);
+	    const double zCoord= atof(argv[2]);
+	    fiberPtr= fibers.getClosestFiber(yCoord,zCoord);
+	    passarg = 3;
+	  }
+	if(fiberPtr)
+	  {
+	    //info.tag("FiberOutput");
+	    //info.attr("yLoc",fiber->getLocY());
+	    //info.attr("zLoc",fiber->getLocZ());
+	    //info.attr("area",fiber->getArea());
+	    std::vector<std::string> argvFiber(1);
+	    argvFiber[0]= argv[passarg];
+	    theResponse= fiberPtr->setResponse(argvFiber,info);
+	    //info.endTag();
+	  }
+	else
+	  std::cerr << getClassName() << "::" << __FUNCTION__
+		    << "; fiber not found."
+		    << std::endl;
+      }
+    else if((argv[0]=="fiberData"))
+      {
+	int numData = numFibers*5;
+	std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; argument: " << argv[0] << " not implemented yet."
+		  << std::endl;
+	// for(int j = 0; j < numFibers; j++)
+	//   {
+	//     Fiber *fiber= fibers[j];
+	//     info.tag("FiberOutput");
+	//     info.attr("yLoc", fiber->getLocY());
+	//     info.attr("zLoc", fiber->getLocZ());
+	//     info.attr("area", fiber->getArea());    
+	//     info.tag("ResponseType","yCoord");
+	//     info.tag("ResponseType","zCoord");
+	//     info.tag("ResponseType","area");
+	//     info.tag("ResponseType","stress");
+	//     info.tag("ResponseType","strain");
+	//     info.endTag();
+	//   }
+	Vector theResponseData(numData);
+	theResponse = new MaterialResponse(this, 5, theResponseData);
+      }
+    else if((argv[0]=="numFailedFiber") ||(argv[0]=="numFiberFailed"))
+      {
+        int count = 0;
+        theResponse = new MaterialResponse(this, 6, count);
+      }
+    else if((argv[0]=="sectionFailed") || 
+	       (argv[0]=="hasSectionFailed") ||
+	       (argv[0]=="hasFailed"))
+      {
+        int count = 0;
+        theResponse = new MaterialResponse(this, 7, count);
+      }
+    //by SAJalali
+    else if((argv[0]=="energy") || (argv[0]=="Energy"))
+      {
+        theResponse = new MaterialResponse(this, 8, getEnergy());
+      }
+    if(not theResponse) // If not a fiber response, call the base class method
+       theResponse= PrismaticBarCrossSection::setResponse(argv, info);
+    return theResponse;
+  }
 
 int XC::FiberSectionBase::setParameter(const std::vector<std::string> &argv, Parameter &param)
   {

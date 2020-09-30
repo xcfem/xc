@@ -170,9 +170,12 @@ class FiberSectionBase: public PrismaticBarCrossSection
     InteractionDiagram2d GetNMyInteractionDiagram(const InteractionDiagramData &);
     InteractionDiagram2d GetNMzInteractionDiagram(const InteractionDiagramData &);
 
+    virtual Response *setResponse(const std::vector<std::string> &, Information &);
+    
     // AddingSensitivity:BEGIN //////////////////////////////////////////
     int setParameter(const std::vector<std::string> &argv, Parameter &param);
     // AddingSensitivity:END ///////////////////////////////////////////
+    double getEnergy(void) const;
   };
 } // end of XC namespace
 

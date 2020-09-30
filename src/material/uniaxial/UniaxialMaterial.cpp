@@ -302,6 +302,16 @@ int XC::UniaxialMaterial::recvData(const Communicator &comm)
     return res;
   }
 
+//! @brief Return the energy stored in the material.
+double XC::UniaxialMaterial::getEnergy(void) const
+  {
+     std::cerr << getClassName() << "::" << __FUNCTION__
+	      << "; this method " << std::endl
+              << " is not implemented for the selected material. "
+	      << std::endl;
+   return 0;
+  }
+
 //! @brief Receives a pointer to uniaxial material through the communicator argument.
 XC::UniaxialMaterial *XC::receiveUniaxialMaterialPtr(UniaxialMaterial *ptr,DbTagData &dt,const Communicator &comm,const BrokedPtrCommMetaData &md)
   {
