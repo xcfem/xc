@@ -279,9 +279,9 @@ class OutputHandler(object):
         if(setToDisplay==None):
             setToDisplay= self.modelSpace.getTotalSet()
         propertyName= self.modelSpace.setNodePropertyFromElements(compName= layer, xcSet= setToDisplay, function= self.modelSpace.getStressComponentFromName, propToDefine= 'von_mises_stress')
-        unitConversionFactor, unitDescription= self.outputStyle.getUnitParameters(itemToDisp)
+        unitConversionFactor, unitDescription= self.outputStyle.getUnitParameters('stress')
 
-        captionText= self.getCaptionText(itemToDisp, unitDescription, setToDisplay)
+        captionText= self.getCaptionText('von_mises_stress', unitDescription, setToDisplay)
         self.displayScalarPropertyAtNodes(propertyName, unitConversionFactor, unitDescription, captionText, setToDisplay, fileName, defFScale, rgMinMax)
         
     def displayReactions(self,setToDisplay=None,fileName=None,defFScale=0.0, inclInertia= False):
