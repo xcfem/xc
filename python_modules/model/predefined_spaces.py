@@ -588,7 +588,42 @@ class PredefinedSpace(object):
             retval+= ', '+dl
         return retval
 
+    def newKPoint(self, x, y, z= 0.0):
+        ''' Creates a key point.
 
+        :param x: x coordinate for the new point.
+        :param y: y coordinate for the new point.
+        :param z: z coordinate for the new point (defaults to 0.0).
+        '''
+        pos3d= geom.Pos3d(x,y,0.0)
+        return self.preprocessor.getMultiBlockTopology.getPoints.newPntFromPos3d(pos3d)
+    def newLine(self, p1, p2):
+        ''' Creates a line between the argument points.
+
+        :param p1: from point.
+        :param p2: to point.
+        '''
+        return self.preprocessor.getMultiBlockTopology.getLines.newLine(p1.tag, p2.tag)
+    def getLineWithEndPoints(self, pA, pB):
+        ''' Return the line from its endpoints.'''
+        return self.preprocessor.getMultiBlockTopology.getLineWithEndPoints(pA.tag, pB.tag)
+        
+    def newSurface(self, pointList):
+        ''' Creates a surface whose vertices are the argument points.
+
+        :param pointList: list of vertices.
+        '''
+        numPoints= len(pointList)
+        surfaceHandler= self.preprocessor.getMultiBlockTopology.getSurfaces
+        pntTags= list()
+        for p in pointList:
+            pntTags.append(p.tag)
+        if(numPoints==4):
+            retval= surfaceHandler.newQuadSurfacePts(pntTags[0], pntTags[1], pntTags[2], pntTags[3])
+        else:
+            retval= surfaceHandler.newPolygonalFacePts(pntTags)
+        return retval
+        
 def getModelSpace(preprocessor):
       '''Return a PredefinedSpace from the dimension of the space 
        and the number of DOFs for each node obtained from the preprocessor.
@@ -679,7 +714,7 @@ class SolidMechanics2D(PredefinedSpace):
         return xc.Vector([disp[self.Ux],disp[self.Uy]])
     
     def fixNode00(self, nodeTag):
-        '''Restrain all three node DOFs (i. e. make them zero).
+        '''Restrain both node DOFs (i. e. make them zero).
 
          :param nodeTag: node identifier.
         '''
