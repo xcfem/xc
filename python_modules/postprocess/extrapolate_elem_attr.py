@@ -45,18 +45,18 @@ def create_attribute_at_nodes(xcSet,attributeName,initialValue):
     '''
     touchedNodesTags= {}
     for e in xcSet:
-      elemNodes= e.getNodes
-      sz= len(elemNodes)
-      for i in range(0,sz):
-        n= elemNodes[i]
-        tag= n.tag
-        if tag not in touchedNodesTags:
-          touchedNodesTags[tag]= 1
-          if(n.hasProp(attributeName)):
-            lmsg.warning('node: '+ str(n.tag) + ' already has a property named: \'' + attributeName +'\'.')
-          n.setProp(attributeName,initialValue)
-        else:
-          touchedNodesTags[tag]+=1
+        elemNodes= e.getNodes
+        sz= len(elemNodes)
+        for i in range(0,sz):
+            n= elemNodes[i]
+            tag= n.tag
+            if tag not in touchedNodesTags:
+                touchedNodesTags[tag]= 1
+                if(n.hasProp(attributeName)):
+                    lmsg.warning('node: '+ str(n.tag) + ' already has a property named: \'' + attributeName +'\'.')
+                n.setProp(attributeName,initialValue)
+            else:
+                touchedNodesTags[tag]+=1
     return touchedNodesTags
 
 def average_on_nodes(preprocessor, touchedNodesTags, attributeName):
@@ -102,9 +102,6 @@ def extrapolate_elem_data_to_nodes(elemSet,attributeName, function, argument= No
     :param argument: name of the argument for the function call function (optional).
     :param initialValue: initial value for the attribute defined at the nodes.
     '''
-    print('**** ',attributeName)
-    print('**** function: ', function)
-    print('**** argument: ', argument)
     touchedNodesTags= create_attribute_at_nodes(elemSet,attributeName,initialValue)
     #Calculate totals.
     for e in elemSet:
@@ -120,7 +117,8 @@ def extrapolate_elem_data_to_nodes(elemSet,attributeName, function, argument= No
             valueAtNode= values[i]
             if(valueAtNode):
                 oldValue= n.getProp(attributeName)
-                n.setProp(attributeName,oldValue+valueAtNode)
+                newValue= oldValue+valueAtNode
+                n.setProp(attributeName,newValue)
     #Divide by number of elements in the set that touch the node.
     preprocessor= elemSet.owner.getPreprocessor
     average_on_nodes(preprocessor,touchedNodesTags, attributeName)
