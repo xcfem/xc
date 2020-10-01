@@ -204,7 +204,6 @@ int XC::BandSPDLinSOE::addA(const Matrix &m, const ID &id, double fact)
   {
     // check for a quick return
     if(fact == 0.0)  return 0;
-
     // check that m and id are of similar size
     int idSize = id.Size();
     if(idSize != m.noRows() && idSize != m.noCols())

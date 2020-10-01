@@ -71,13 +71,54 @@ XC::BandSPDLinLapackSolver::BandSPDLinLapackSolver(void)
 XC::LinearSOESolver *XC::BandSPDLinLapackSolver::getCopy(void) const
    { return new BandSPDLinLapackSolver(*this); }
 
+//! @brief Computes the solution to a real system of linear equations
+//!     A * X = B,
+//!  where A is an N-by-N symmetric positive definite band matrix and X
+//!  and B are N-by-NRHS matrices.
+//! 
+//!  The Cholesky decomposition is used to factor A as
+//!     A = U**T * U,  if UPLO = 'U', or
+//!     A = L * L**T,  if UPLO = 'L',
+//!  where U is an upper triangular band matrix, and L is a lower
+//!  triangular band matrix, with the same number of superdiagonals or
+//!  subdiagonals as A.  The factored form of A is then used to solve the
+//!  system of equations A * X = B.
 extern "C" int dpbsv_(char *UPLO, int *N, int *KD, int *NRHS, 
 		      double *A, int *LDA, double *B, int *LDB, 
 		      int *INFO);
 
+//! @brief Solves a system of linear equations A*X = B with a symmetric
+//! positive definite band matrix A using the Cholesky factorization
+//! A = U**T*U or A = L*L**T computed by DPBTRF.
 extern "C" int dpbtrs_(char *UPLO, int *N, int *KD, int *NRHS, 
 		       double *A, int *LDA, double *B, int *LDB, 
 		       int *INFO);
+
+//! @brief Computes the Cholesky factorization of a real symmetric
+//! positive definite band matrix A.
+//!
+//! The factorization has the form
+//!    A = U**T * U,  if UPLO = 'U', or
+//!    A = L  * L**T,  if UPLO = 'L',
+//! where U is an upper triangular matrix and L is lower triangular.
+extern "C" int dpbtrf_(char *UPLO, int *N, int *KD, 
+		       double *A, int *LDA, int *INFO);
+
+//! @brief  Returns the value of the 1-norm, or the Frobenius norm, or the infinity norm,
+//! or the element of largest absolute value of a symmetric band matrix. 
+extern "C" double dlansb_(const char *norm, const char *uplo,
+			  const int *n, const int *k,
+			  const double *a, const int *lda, double *work);
+
+//! @brief Estimates the reciprocal of the condition number (in the
+//! 1-norm) of a real symmetric positive definite band matrix using the
+//! Cholesky factorization A = U**T*U or A = L*L**T computed by DPBTRF.
+//!
+//! An estimate is obtained for norm(inv(A)), and the reciprocal of the
+//! condition number is computed as RCOND = 1 / (ANORM * norm(inv(A))).
+extern "C" int dpbcon_(char *UPLO, int *N, int *KD, double *A,
+		       int *LDA, const double *anorm, double *rcond,
+		       double *work, int *iwork, int *INFO);
 //! Compute solution.
 //! 
 //! The solver first copies the B vector into X and then solves the
@@ -90,49 +131,112 @@ extern "C" int dpbtrs_(char *UPLO, int *N, int *KD, int *NRHS,
 //! returns INFO. The solve process changes \f$A\f$ and \f$X\f$.   
 int XC::BandSPDLinLapackSolver::solve(void)
   {
+    int retval= 0;
     if(!theSOE)
       {
 	std::cerr << getClassName() << "::" << __FUNCTION__
 	          << "; no LinearSOE object has been set\n";
-	return -1;
+	retval= -1;
       }
+    else
+      {
+	int n = theSOE->size;
+	int kd = theSOE->half_band -1;
+	int ldA = kd +1;
+	int nrhs = 1;
+	int ldB = n;
+	int info;
+	double *Aptr = theSOE->A.getDataPtr();
+	double *Xptr = theSOE->getPtrX();
+	double *Bptr = theSOE->getPtrB();
 
-    int n = theSOE->size;
-    int kd = theSOE->half_band -1;
-    int ldA = kd +1;
-    int nrhs = 1;
-    int ldB = n;
-    int info;
-    double *Aptr = theSOE->A.getDataPtr();
-    double *Xptr = theSOE->getPtrX();
-    double *Bptr = theSOE->getPtrB();
+	// first copy B into X
+	for(int i=0; i<n; i++)
+	  *(Xptr++) = *(Bptr++);
+	Xptr= theSOE->getPtrX();
 
-    // first copy B into X
-    for(int i=0; i<n; i++)
-      *(Xptr++) = *(Bptr++);
-    Xptr= theSOE->getPtrX();
+	char strU[]= "U";
+	// now solve AX = Y
+	{ if (theSOE->factored == false)          
+	    dpbsv_(strU,&n,&kd,&nrhs,Aptr,&ldA,Xptr,&ldB,&info);
+	  else
+	    dpbtrs_(strU,&n,&kd,&nrhs,Aptr,&ldA,Xptr,&ldB,&info);
+	}
 
-    char strU[]= "U";
-    // now solve AX = Y
-    { if (theSOE->factored == false)          
-	dpbsv_(strU,&n,&kd,&nrhs,Aptr,&ldA,Xptr,&ldB,&info);
-      else
-	dpbtrs_(strU,&n,&kd,&nrhs,Aptr,&ldA,Xptr,&ldB,&info);
-    }
+	// check if successful
+	if(info != 0)
+	  {
+	    std::cerr << getClassName() << "::" << __FUNCTION__
+		      << "; WARNING - the LAPACK"
+		      << " routines returned " << info << std::endl;
+	    retval= -info;
+	  }
+	theSOE->factored = true;
+      }
+    return retval;
+  }
 
-    // check if successful
-    if(info != 0)
+//! Compute solution.
+//! 
+//! The solver first copies the B vector into X and then solves the
+//! BandSPDLinSOE system by calling the LAPACK routines {\em 
+//! dpbsv()}, if the system is marked as not having been factored,
+//! and dpbtrs() if system is marked as having been factored. 
+//! If the solution is successfully obtained, i.e. the LAPACK routines
+//! return \f$0\f$ in the INFO argument, it marks the system has having been 
+//! factored and returns \f$0\f$, otherwise it prints a warning message and
+//! returns INFO. The solve process changes \f$A\f$ and \f$X\f$.   
+double XC::BandSPDLinLapackSolver::getRCond(const char &c)
+  {
+    double retval= 0.0;
+    if(!theSOE)
       {
 	std::cerr << getClassName() << "::" << __FUNCTION__
-		  << "; WARNING - the LAPACK"
-		  << " routines returned " << info << std::endl;
-	return -info;
+	          << "; no LinearSOE object has been set\n";
+	retval= -1.0;
       }
-    theSOE->factored = true;
+    else
+      {
+	int n = theSOE->size;
+	int kd = theSOE->half_band -1;
+	int ldA = kd+1;
+	int info;
+	double *Aptr = theSOE->A.getDataPtr();
 
-    return 0;
+	char strU[]= "U";
+	// now compute condition number
+	if(theSOE->factored == false) // factorize
+	  {
+	    dpbtrf_(strU,&n,&kd,Aptr,&ldA,&info);
+	    theSOE->factored= true;
+	  }
+	if(info != 0)
+	  std::cerr << getClassName() << "::" << __FUNCTION__
+		    << "; LaPack dpbtrf_ failure with error: " << info
+		    << std::endl;
+	else
+	  {
+	    char norm[1];
+	    norm[0]= c;
+            Vector wrk(3*n);
+            double *wrkPtr= wrk.getDataPtr();
+	    ID iwrk(n);
+	    int *iwrkPtr= iwrk.getDataPtr();
+            const double anorm= dlansb_(norm, strU, &n, &kd, Aptr, &ldA, wrkPtr);
+	    dpbcon_(norm,&n,&kd,Aptr,&ldA,&anorm,&retval,wrkPtr,iwrkPtr,&info);
+	  }
+	// check if successful
+	if(info != 0)
+	  {
+	    std::cerr << getClassName() << "::" << __FUNCTION__
+		      << "; WARNING - the LAPACK"
+		      << " routines returned " << info << std::endl;
+	    retval= -info;
+	  }
+      }
+    return retval;
   }
-    
+
 
 //! @brief Does nothing but return \f$0\f$.
 int XC::BandSPDLinLapackSolver::setSize()

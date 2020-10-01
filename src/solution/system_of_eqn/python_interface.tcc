@@ -21,7 +21,8 @@
 //----------------------------------------------------------------------------
 //python_interface.tcc
 
-class_<XC::SystemOfEqn, bases<XC::MovableObject,CommandEntity>, boost::noncopyable >("SystemOfEqn", no_init);
+class_<XC::SystemOfEqn, bases<XC::MovableObject,CommandEntity>, boost::noncopyable >("SystemOfEqn", no_init)
+  ;
 
 class_<XC::Solver, bases<XC::MovableObject,CommandEntity>, boost::noncopyable >("Solver", no_init)
   .def("getDeterminant",&XC::Solver::getDeterminant,"Return the determinant of the matrix.")

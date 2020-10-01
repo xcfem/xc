@@ -87,6 +87,7 @@ class BandSPDLinLapackSolver: public BandSPDLinSolver
 
     int solve(void);
     int setSize(void);
+    double getRCond(const char &);
     
     int sendSelf(Communicator &);
     int recvSelf(const Communicator &);  
