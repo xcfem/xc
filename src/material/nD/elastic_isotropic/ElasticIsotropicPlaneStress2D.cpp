@@ -103,17 +103,7 @@ int XC::ElasticIsotropicPlaneStress2D::setTrialStrainIncr(const Vector &strain, 
 //! \end{displaymath}
 //! \f]
 const XC::Matrix &XC::ElasticIsotropicPlaneStress2D::getTangent(void) const
-  {
-    const double d00= E/(1.0-v*v);
-    const double d01= v*d00;
-    const double d22= 0.5*(d00-d01);
-
-    D(0,0)= D(1,1) = d00;
-    D(1,0)= D(0,1) = d01;
-    D(2,2)= d22;
-
-    return D;
-  }
+  { return getInitialTangent(); }
 
 //! @brief Returns the material tangent stiffness matrix, \f$\D\f$.
 const XC::Matrix &XC::ElasticIsotropicPlaneStress2D::getInitialTangent(void) const
