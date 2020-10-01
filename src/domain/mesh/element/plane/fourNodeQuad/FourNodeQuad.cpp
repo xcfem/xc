@@ -189,9 +189,14 @@ const XC::Matrix &XC::FourNodeQuad::getTangentStiff(void) const
         const GaussPoint &gp= getGaussModel().getGaussPoints()[i];
         dvol= this->shapeFunction(gp);
         dvol*= (physicalProperties.getThickness()*gp.weight());
+	if(dvol<0.0)
+	  std::cerr << getClassName() << "::" << __FUNCTION__
+	            << "; negative Jacobian-determinant ("
+	            << "dvol= " << dvol << ")"
+	            << std::endl;
 
         // Get the material tangent
-        const XC::Matrix &D = physicalProperties[i]->getTangent();
+        const Matrix &D = physicalProperties[i]->getTangent();
 
         // Perform numerical integration
         //K = K + (B^ D * B) * intWt(i)*intWt(j) * detJ;
@@ -250,6 +255,11 @@ const XC::Matrix &XC::FourNodeQuad::getInitialStiff(void) const
         const GaussPoint &gp= getGaussModel().getGaussPoints()[i];
         dvol= this->shapeFunction(gp);
         dvol*= (physicalProperties.getThickness()*gp.weight());
+	if(dvol<0.0)
+	  std::cerr << getClassName() << "::" << __FUNCTION__
+	            << "; negative Jacobian-determinant ("
+	            << "dvol= " << dvol << ")"
+	            << std::endl;
 
         // Get the material tangent
         const XC::Matrix &D = physicalProperties[i]->getInitialTangent();
