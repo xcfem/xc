@@ -26,6 +26,8 @@ class_<XC::NDMaterial, XC::NDMaterial *, bases<XC::Material>, boost::noncopyable
     .add_property("getE", &XC::NDMaterial::getE)
     .add_property("getnu", &XC::NDMaterial::getnu)
     .add_property("getpsi", &XC::NDMaterial::getpsi)
+.def("getTangent",make_function(&XC::NDMaterial::getTangent,return_internal_reference<>()), "Return material stiffness matrix.")
+    .def("getInitialTangent",make_function(&XC::NDMaterial::getInitialTangent,return_internal_reference<>()), "Return material initial stiffness matrix.")
     .add_property("getVonMisesStress", &XC::NDMaterial::getVonMisesStress)
        ;
 
