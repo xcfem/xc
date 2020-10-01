@@ -150,27 +150,16 @@ template <int NNODOS,class PhysProp>
 boost::python::list ElemWithMaterial<NNODOS, PhysProp>::getValuesAtNodes(const std::string &code) const
   {
     boost::python::list retval;
-    if(code=="strain")
+    const Matrix matValues= physicalProperties.getMaterialsVector().getValues(code);
+    if(matValues.noRows()>0)
       {
-	const Matrix elementStrains= physicalProperties.getMaterialsVector().getGeneralizedStrains();
-	const Matrix strainsAtNodes= getExtrapolatedValues(elementStrains);
-	const size_t nRows= strainsAtNodes.noRows();
-	for(size_t i= 0;i<nRows;i++)
-	  {
-	    Vector strainAtNode= strainsAtNodes.getRow(i);
-	    retval.append(strainAtNode);
-	  }
-      }
-    else if(code=="stress")
-      {
-	const Matrix elementStresses= physicalProperties.getMaterialsVector().getGeneralizedStresses();
-	const Matrix stressesAtNodes= getExtrapolatedValues(elementStresses);
-	const size_t nRows= stressesAtNodes.noRows();
-	for(size_t i= 0;i<nRows;i++)
-	  {
-	    Vector stressAtNode= stressesAtNodes.getRow(i);
-	    retval.append(stressAtNode);
-	  }
+        const Matrix nodeValues= getExtrapolatedValues(matValues);
+    	const size_t nRows= nodeValues.noRows();
+    	for(size_t i= 0;i<nRows;i++)
+    	  {
+    	    Vector valueAtNode= nodeValues.getRow(i);
+    	    retval.append(valueAtNode);
+    	  }
       }
     else
       retval= ElementBase<NNODOS>::getValuesAtNodes(code); 
