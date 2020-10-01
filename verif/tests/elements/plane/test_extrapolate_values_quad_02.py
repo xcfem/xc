@@ -57,7 +57,7 @@ nod2.fix(xc.ID([1]),xc.Vector([0]) )
 P= 10e3*2/3 # punctual load.
 ## Load case definition.
 lp0= modelSpace.newLoadPattern(name= '0')
-modelSpace.setCurrentLoadPattern("0")
+modelSpace.setCurrentLoadPattern(lp0.name)
 nod2.newLoad(xc.Vector([P,0]))
 nod3.newLoad(xc.Vector([-P,0]))
 nod5.newLoad(xc.Vector([P,0]))
