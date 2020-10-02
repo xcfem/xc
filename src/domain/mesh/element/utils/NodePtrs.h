@@ -115,6 +115,8 @@ class NodePtrs: public CommandEntity, public std::vector<Node *>
 
     const std::vector<int> &getTags(void) const;
     int getNodeIndex(const Node *) const;
+
+    void reverse(void);
   };
 } // end of XC namespace
 

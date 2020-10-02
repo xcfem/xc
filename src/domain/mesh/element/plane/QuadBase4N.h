@@ -57,6 +57,11 @@ class QuadBase4N: public PlaneElement<4,PhysProp>
     ID getLocalIndexNodesEdge(const size_t &i) const;
     int getEdgeNodes(const Node *,const Node *) const;
 
+    double getRho(void) const;
+    void setRho(const double &);
+    double getThickness(void) const;
+    void setThickness(const double &);
+    
     int getVtkCellType(void) const;
 
     void zeroLoad(void);	
@@ -159,6 +164,26 @@ ID XC::QuadBase4N<PhysProp>::getLocalIndexNodesEdge(const size_t &i) const
       }
     return retval;
   }
+
+//! @brief Return material density.
+template <class PhysProp>
+double XC::QuadBase4N<PhysProp>::getRho(void) const
+  { return this->physicalProperties.getRho(); }
+  
+//! @brief Return material density.
+template <class PhysProp>
+void XC::QuadBase4N<PhysProp>::setRho(const double &r)
+  { this->physicalProperties.setRho(r); }
+  
+//! @brief Return material density.
+template <class PhysProp>
+double XC::QuadBase4N<PhysProp>::getThickness(void) const
+  { return this->physicalProperties.getThickness(); }
+  
+//! @brief Return material density.
+template <class PhysProp>
+void XC::QuadBase4N<PhysProp>::setThickness(const double &t)
+  { this->physicalProperties.setThickness(t); }
 
 //! @brief Zeroes loads on element.
 template <class PhysProp>

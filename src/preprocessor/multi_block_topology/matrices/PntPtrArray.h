@@ -63,6 +63,10 @@ class PntPtrArray: public PtrArrayBase<Pnt>
 
     void setPnt(const size_t &,const size_t &,const int &);
     Pnt *getPnt(const size_t &,const size_t &);
+    
+    bool clockwise(bool initialGeometry= true) const;
+    bool counterclockwise(bool initialGeometry= true) const;
+    std::deque<Pnt *> getLoop(const std::vector<size_t> &rowIndexes, const std::vector<size_t> &columnIndexes, bool counterclockwise= true) const;
 
     Pnt *findPoint(const size_t &);
     const Pnt *findPoint(const size_t &) const;
@@ -70,7 +74,7 @@ class PntPtrArray: public PtrArrayBase<Pnt>
     const Pnt *getNearestPnt(const Pos3d &p) const;
     std::deque<size_t> copyPoints(const MatrixRange &,const std::vector<size_t> &,const Vector3d &);
 
-    Pos3d getCentroide(void) const;
+    Pos3d getCentroid(void) const;
 
 
   };

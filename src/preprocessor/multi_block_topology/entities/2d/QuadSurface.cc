@@ -74,55 +74,61 @@ void XC::QuadSurface::setPoints(const ID &point_indexes)
 //! passed as parameter.
 void XC::QuadSurface::setPoints(const PntPtrArray &pntPtrs)
   {
-    const size_t nf= pntPtrs.getNumberOfRows(); //No. de rows of points.
-    if(nf<2)
+    const size_t nRows= pntPtrs.getNumberOfRows(); //No. de rows of points.
+    if(nRows<2)
       {
         std::cerr << getClassName() << "::" << __FUNCTION__
 		  << "; pointer matrix must have at least two rows."
 		  << std::endl;
         return;
       }
-    const size_t nc= pntPtrs.getNumberOfColumns(); //No. de columns of points.
-    if(nc<2)
+    const size_t nColumns= pntPtrs.getNumberOfColumns(); //No. de columns of points.
+    if(nColumns<2)
       {
         std::cerr << getClassName() << "::" << __FUNCTION__
 		  << "; pointer matrix must have at least two columns."
 		  << std::endl;
         return;
       }
-    if(nf==2)
+    if(nRows==2)
       {
-        if(nc==2)
+        if(nColumns==2)
           {
-            newLine(pntPtrs(1,1),pntPtrs(1,2));
-            newLine(pntPtrs(1,2),pntPtrs(2,2));
-            newLine(pntPtrs(2,2),pntPtrs(2,1));
-            newLine(pntPtrs(2,1),pntPtrs(1,1));
+	    std::deque<Pnt *> loop= pntPtrs.getLoop({1,2},{1,2},true);
+            newLine(loop[0],loop[1]); // 3 +-----------+ 2
+            newLine(loop[1],loop[2]); //  |            |
+            newLine(loop[2],loop[3]); //  |            |
+            newLine(loop[3],loop[1]); // 0 +-----------+ 1
           }
-        else //nc>= 3
+        else //nColumns>= 3
           {
-            newLine(pntPtrs(1,1),pntPtrs(1,2),pntPtrs(1,3));
-            newLine(pntPtrs(1,3),pntPtrs(2,3));
-            newLine(pntPtrs(2,3),pntPtrs(2,2),pntPtrs(2,1));
-            newLine(pntPtrs(2,1),pntPtrs(1,1));
+	    std::deque<Pnt *> loop= pntPtrs.getLoop({1,2},{1,2,3},true);
+            newLine(loop[0],loop[1],loop[2]); // 5 +-----+-----+ 3
+            newLine(loop[2],loop[3]);         //   |     4     |
+            newLine(loop[3],loop[4],loop[5]); //   |     1     |
+            newLine(loop[5],loop[0]);         // 0 +-----+-----+ 2
           }
       }
-    else //nf>=3
+    else //nRows>=3
       {
-        if(nc==2)
+        if(nColumns==2)
           {
-            newLine(pntPtrs(1,1),pntPtrs(1,2));
-            newLine(pntPtrs(1,2),pntPtrs(2,2),pntPtrs(3,2));
-            newLine(pntPtrs(3,2),pntPtrs(3,1));
-            newLine(pntPtrs(3,1),pntPtrs(2,1),pntPtrs(1,1));
+	    std::deque<Pnt *> loop= pntPtrs.getLoop({1,2,3},{1,2},true);
+	                                       // 4 +--------+ 3
+            newLine(loop[0],loop[1]);          //   |        |
+            newLine(loop[1],loop[2],loop[3]);  // 5 +        + 2
+            newLine(loop[3],loop[4]);          //   |        |
+            newLine(loop[4],loop[5],loop[0]);  // 0 +--------+ 1
           }
-        else //nc>= 3
+        else //nColumns>= 3
           {
-            newLine(pntPtrs(1,1),pntPtrs(1,2),pntPtrs(1,3));
-            newLine(pntPtrs(1,3),pntPtrs(2,3),pntPtrs(3,3));
-            newLine(pntPtrs(3,3),pntPtrs(3,2),pntPtrs(3,1));
-            newLine(pntPtrs(3,1),pntPtrs(2,1),pntPtrs(1,1));
-          }
+	    std::deque<Pnt *> loop= pntPtrs.getLoop({1,2,3},{1,2,3},true);
+	                                       // 6 +----+----+ 4
+            newLine(loop[0],loop[1],loop[2]);  //   |    5    |
+            newLine(loop[2],loop[3],loop[4]);  // 7 +         + 3
+            newLine(loop[4],loop[5],loop[6]);  //   |         |
+            newLine(loop[6],loop[7],loop[0]);  // 0 +----+----+ 2
+          }                                    //        1
       }
   }
 
@@ -131,9 +137,9 @@ void XC::QuadSurface::setPoints(const PntPtrArray &pntPtrs)
 //! to define the surface.
 void XC::QuadSurface::setPoints(const m_int &point_indexes)
   {
-    const size_t nf= point_indexes.getNumberOfRows(); //No. de rows of points.
-    const size_t nc= point_indexes.getNumberOfColumns(); //No. de columns of points.
-    if(nf<2)
+    const size_t nRows= point_indexes.getNumberOfRows(); //No. de rows of points.
+    const size_t nColumns= point_indexes.getNumberOfColumns(); //No. de columns of points.
+    if(nRows<2)
       {
         std::cerr << getClassName() << "::" << __FUNCTION__
 		  << "; matrix of indexes: '"
@@ -141,7 +147,7 @@ void XC::QuadSurface::setPoints(const m_int &point_indexes)
                   << "' must have at least two rows." << std::endl;
         return;
       }
-    if(nc<2)
+    if(nColumns<2)
       {
         std::cerr << getClassName() << "::" << __FUNCTION__
 		  << "; matrix of indexes: '"
@@ -149,9 +155,9 @@ void XC::QuadSurface::setPoints(const m_int &point_indexes)
                   << "' must have at least two columns." << std::endl;
         return;
       }
-    PntPtrArray points(nf,nc);
-    for(size_t i= 1;i<=nf;i++)
-      for(size_t j= 1;j<=nc;j++)
+    PntPtrArray points(nRows,nColumns);
+    for(size_t i= 1;i<=nRows;i++)
+      for(size_t j= 1;j<=nColumns;j++)
         {
           const int iPoint= point_indexes(i,j);
           if(iPoint>=0)

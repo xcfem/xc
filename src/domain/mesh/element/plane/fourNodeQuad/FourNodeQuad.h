@@ -114,15 +114,6 @@ class FourNodeQuad: public QuadBase4N<SolidMech2D>
 
     const GaussModel &getGaussModel(void) const;
 
-    inline double getRho(void) const
-      { return physicalProperties.getRho(); }
-    void setRho(const double &r)
-      { physicalProperties.setRho(r); }
-    double getThickness(void) const
-      { return physicalProperties.getThickness(); }
-    void setThickness(const double &t)
-      { physicalProperties.setThickness(t); }
-
     int addLoad(ElementalLoad *theLoad, double loadFactor);
     int addInertiaLoadToUnbalance(const Vector &accel);
 

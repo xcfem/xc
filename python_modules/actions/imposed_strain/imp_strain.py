@@ -53,14 +53,37 @@ class gradThermalStrain(basicData):
     :ivar alpha: Thermal expansion coefficient of material (1/ºC)
     :ivar Ttop: Temperature (ºC) at the top face of elements
     :ivar Tbottom: Temperature (ºC) at the bottom face of elements
+    :ivar curvature: Curvature induced by the thermal gradient.
     '''
     def __init__(self,elemSet,elThick,DOF,alpha,Ttop,Tbottom):
+        ''' Constructor.
+        Curvature is positive when the center of curvature
+        lies along the direction of the normal to the element
+        so when the temperature at the bottom face is
+         greater than the temperature at the top face.
+
+        :param elemSet: set of shell elements to which apply the strain
+        :param DOF: degree of freedom (3,4 or 5) involving the curvature due to
+                   gradient of temeperature.
+        :param alpha: Thermal expansion coefficient of material (1/ºC)
+        :param Ttop: Temperature (ºC) at the top face of elements
+        :param Tbottom: Temperature (ºC) at the bottom face of elements
+        '''
         super(gradThermalStrain,self).__init__(elemSet,DOF)
         self.elThick=elThick
         self.alpha=alpha
         self.Ttop=Ttop
         self.Tbottom=Tbottom
-        self.curvature=self.alpha*(self.Ttop-self.Tbottom)/self.elThick 
+        self.curvature= self.getCurvature() # Redundant information: remove?
 
+    def getCurvature(self):
+        ''' Return the curvature induced by the thermal gradient.
+        Curvature is positive when the center of curvature
+        lies along the direction of the normal to the element
+        so when the temperature at the bottom face is
+         greater than the temperature at the top face.
+        '''
+        return self.alpha*(self.Tbottom-self.Ttop)/self.elThick 
+        
         
     

@@ -42,7 +42,7 @@ class_<XC::PntPtrArray, bases<point_ptr_matrix>, boost::noncopyable >("PntPtrArr
   .def("getPntWithTag",make_function(getPntWithTagPntPtrArray, return_internal_reference<>() ),"Returns point by tag.")
   .def("setPnt", &XC::PntPtrArray::setPnt)
   .def("getPnt", &XC::PntPtrArray::getPnt, return_internal_reference<>())
-  .def("getCentroid",&XC::PntPtrArray::getCentroide)
+  .def("getCentroid",&XC::PntPtrArray::getCentroid)
   ;
 
 typedef std::vector<XC::PntPtrArray> vector_mp_points;
@@ -65,7 +65,7 @@ class_<XC::PntPtrArray3d, bases<array3d_points>, boost::noncopyable >("PntPtrArr
   .def("getPntWithTag",make_function(getPntWithTagPntPtrArray3d, return_internal_reference<>() ),"Returns point by tag.")
   .def("setPnt", &XC::PntPtrArray3d::setPnt)
   .def("getPnt", &XC::PntPtrArray3d::getPnt, return_internal_reference<>())
-  .def("getCentroid",&XC::PntPtrArray3d::getCentroide)
+  .def("getCentroid",&XC::PntPtrArray3d::getCentroid)
   ;
 
 //Node pointers arrays

@@ -15,6 +15,7 @@ import math
 from solution import predefined_solutions
 from model import predefined_spaces
 from materials import typical_materials
+#from postprocess import output_handler
 
 __author__= "Ana Ortega (AO_O) and Luis C. Pérez Tato (LCPT)"
 __copyright__= "Copyright 2019, AO_O and LCPT"
@@ -35,9 +36,7 @@ thickness=2e-2
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
 nodes= preprocessor.getNodeHandler
-nodes.dimSpace= 3 # coord. for each node (x,y,z).
-nodes.numDOFs= 6 # DOF for each node (Ux,Uy,Uz,ThX,ThY,ThZ).
-nodes.defaultTag= 1 #First node number.
+modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
 nod1= nodes.newNodeXYZ(0.0,b,0.0)
 nod2= nodes.newNodeXYZ(L,b,0.0)
 nod3= nodes.newNodeXYZ(L,0.0,0.0)
@@ -51,8 +50,7 @@ memb1= typical_materials.defElasticMembranePlateSection(preprocessor=preprocesso
 # Elements definition
 elements= preprocessor.getElementHandler
 elements.defaultMaterial= memb1.name
-elements.defaultTag= 1
-elem1= elements.newElement("ShellMITC4",xc.ID([nod1.tag,nod2.tag,nod3.tag,nod4.tag]))
+elem1= elements.newElement("ShellMITC4",xc.ID([nod4.tag,nod3.tag,nod2.tag,nod1.tag]))
 
 
 # Constraints
@@ -71,30 +69,33 @@ elSet=preprocessor.getSets.getSet('total')
 from actions.roadway_trafic import IAP_load_models as slm
 from actions.imposed_strain import imp_strain as imps
 
-lp0=slm.gradient_thermal_LC(lcName='lp0', lstGradThStrnData=[imps.gradThermalStrain(elemSet=elSet,elThick=thickness, DOF=3, alpha=alpha, Ttop=Ttop, Tbottom=Tbottom)])
+lp0= slm.gradient_thermal_LC(lcName='lp0', lstGradThStrnData=[imps.gradThermalStrain(elemSet=elSet, elThick=thickness, DOF=3, alpha=alpha, Ttop=Ttop, Tbottom=Tbottom)])
 loadHandler= preprocessor.getLoadHandler
 lPatterns= loadHandler.getLoadPatterns
 lPatterns.addToDomain('lp0')
 analysis= predefined_solutions.simple_static_linear(feProblem)
 result= analysis.analyze(1)
-elem1= elements.getElement(1)
 elem1.getResistingForce()
 
-#Displacements free nodes 
-uz_n2=nod2.getDispXYZ[2]
-uz_n3=nod3.getDispXYZ[2]
+# Displacements free nodes 
+uz_n2= nod2.getDispXYZ[2]
+uz_n3= nod3.getDispXYZ[2]
 
-#theoretical displacement
-curvature=alpha*(Ttop-Tbottom)/thickness  #rad/m
-R=1/curvature+thickness/2.
-deltaz_theor=-R*(1-math.cos(curvature))
+# theoretical displacement
+curvature= alpha*(Tbottom-Ttop)/thickness  #rad/m
+R=1.0/curvature+thickness/2.
+deltaz_theor=R*(1-math.cos(curvature))
 
-ratio1=uz_n2-deltaz_theor
-ratio2=uz_n3-deltaz_theor
+ratio1= uz_n2-deltaz_theor
+ratio2= uz_n3-deltaz_theor
 
 '''
+print('Ttop= ', Ttop, ' Tbottom= ', Tbottom)
+print('curvature= ', curvature)
+print('R= ', R)
 print("uz_n2= ",uz_n2)
 print("uz_n3= ",uz_n3)
+print("deltaz_theor=",deltaz_theor)
 print("ratio1= ",ratio1)
 print("ratio2= ",ratio2)
 '''
@@ -106,3 +107,8 @@ if (abs(ratio1)<2e-7) & (abs(ratio2)<2e-7):
   print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')
+  
+# # Graphic stuff.
+# oh= output_handler.OutputHandler(modelSpace)
+# #oh.displayFEMesh()
+# oh.displayLocalAxes()

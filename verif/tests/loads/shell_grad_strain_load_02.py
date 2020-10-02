@@ -12,6 +12,7 @@ import math
 from solution import predefined_solutions
 from model import predefined_spaces
 from materials import typical_materials
+#from postprocess import output_handler
 
 __author__= "Ana Ortega (AO_O) and Luis C. Pérez Tato (LCPT)"
 __copyright__= "Copyright 2019, AO_O and LCPT"
@@ -48,7 +49,7 @@ memb1= typical_materials.defElasticMembranePlateSection(preprocessor=preprocesso
 elements= preprocessor.getElementHandler
 elements.defaultMaterial= memb1.name
 elements.defaultTag= 1
-elem1= elements.newElement("ShellMITC4",xc.ID([nod1.tag,nod2.tag,nod3.tag,nod4.tag]))
+elem1= elements.newElement("ShellMITC4",xc.ID([nod4.tag,nod3.tag,nod2.tag,nod1.tag]))
 
 
 # Constraints
@@ -69,7 +70,10 @@ lp0= modelSpace.newLoadPattern(name= '0')
 
 eleLoad= lp0.newElementalLoad("shell_strain_load")
 eleLoad.elementTags= xc.ID([elem1.tag])
-curvature=alpha*(Ttop-Tbottom)/thickness  # rad/m
+curvature=alpha*(Tbottom-Ttop)/thickness  # rad/m
+# Curvature is positive when the center of curvature
+# lies along the direction of the normal to the element
+# so, in this case, is negative.
 eleLoad.setStrainComp(0,3,curvature) #(id of Gauss point, id of component, value)
 eleLoad.setStrainComp(1,3,curvature)
 eleLoad.setStrainComp(2,3,curvature)
@@ -81,7 +85,6 @@ modelSpace.addLoadCaseToDomain(lp0.name)
 analysis= predefined_solutions.simple_static_linear(feProblem)
 result= analysis.analyze(1)
 
-elem1= elements.getElement(1)
 elem1.getResistingForce()
 
 # Displacements free nodes 
@@ -89,8 +92,8 @@ uz_n2=nod2.getDispXYZ[2]
 uz_n3=nod3.getDispXYZ[2]
 
 # theoretical displacement
-R=1/curvature+thickness/2.
-deltaz_theor=-R*(1-math.cos(curvature))
+R=1.0/curvature+thickness/2.
+deltaz_theor=R*(1-math.cos(curvature))
 
 ratio1=uz_n2-deltaz_theor
 ratio2=uz_n3-deltaz_theor
@@ -98,6 +101,7 @@ ratio2=uz_n3-deltaz_theor
 '''
 print("uz_n2= ",uz_n2)
 print("uz_n3= ",uz_n3)
+print('deltaz_theor= ', deltaz_theor)
 print("ratio1= ",ratio1)
 print("ratio2= ",ratio2)
 '''
@@ -109,3 +113,8 @@ if (abs(ratio1)<2e-7) & (abs(ratio2)<2e-7):
   print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')
+
+# # Graphic stuff.
+# oh= output_handler.OutputHandler(modelSpace)
+# #oh.displayFEMesh()
+# oh.displayLocalAxes()

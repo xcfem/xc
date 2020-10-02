@@ -333,3 +333,10 @@ int XC::NodePtrsWithIDs::recvSelf(const Communicator &comm)
       res+= recvData(comm);
     return res;
   }
+
+//! @brief Reverse the node sequence.
+void XC::NodePtrsWithIDs::reverse(void)
+  {
+    NodePtrs::reverse();
+    connectedExternalNodes.reverse();
+  }

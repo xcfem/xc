@@ -23,8 +23,11 @@
 
 XC::SolidMech2D &(XC::FourNodeQuad::*getFourNodeQuadPhysicalPropertiesPtr)(void) = &XC::FourNodeQuad::getPhysicalProperties;
 class_<XC::FourNodeQuad, bases<QuadBase4N_Mech2D>, boost::noncopyable >("FourNodeQuad", no_init)
-  .add_property("rho", &XC::FourNodeQuad::getRho,&XC::FourNodeQuad::setRho)
-  .add_property("thickness", &XC::FourNodeQuad::getThickness,&XC::FourNodeQuad::setThickness)
   .def("detJ", &XC::FourNodeQuad::detJ)
   .add_property("physicalProperties",make_function(getFourNodeQuadPhysicalPropertiesPtr,return_internal_reference<>() ),"Returns element physical properties (material).")
+   ;
+
+XC::SolidMech2D &(XC::EnhancedQuad::*getEnhancedQuadPhysicalPropertiesPtr)(void) = &XC::EnhancedQuad::getPhysicalProperties;
+class_<XC::EnhancedQuad, bases<QuadBase4N_Mech2D>, boost::noncopyable >("EnhancedQuad", no_init)
+  .add_property("physicalProperties",make_function(getEnhancedQuadPhysicalPropertiesPtr,return_internal_reference<>() ),"Returns element physical properties (material).")
    ;

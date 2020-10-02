@@ -35,6 +35,7 @@
 
 #include "xc_utils/src/geom/pos_vec/Pos3d.h"
 #include "xc_utils/src/geom/pos_vec/Vector3d.h"
+#include "xc_utils/src/geom/d2/Polygon3d.h"
 
 #include "domain/mesh/element/Element.h"
 #include "domain/mesh/node/Node.h"
@@ -207,7 +208,7 @@ m_int XC::PntPtrArray::getTags(void) const
   }
 
 //! @brief Return the framework centroid.
-Pos3d XC::PntPtrArray::getCentroide(void) const
+Pos3d XC::PntPtrArray::getCentroid(void) const
   {
     Pos3d retval;
     const size_t numberOfRows= getNumberOfRows();
@@ -230,6 +231,104 @@ Pos3d XC::PntPtrArray::getCentroide(void) const
     retval= Pos3d(x,y,z);
     return retval;
   }
+
+//! @brief Return true if the points are clockwise ordered
+//! with respect to the face.
+bool XC::PntPtrArray::clockwise(bool initialGeometry) const
+  {
+    bool retval= false;
+    const size_t nRows= getNumberOfRows(); //No. of point rows.
+    if(nRows<2)
+      {
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; pointer matrix must have at least two rows."
+		  << std::endl;
+      }
+    const size_t nColumns= getNumberOfColumns(); //No. of point columns.
+    if(nColumns<2)
+      {
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; pointer matrix must have at least two columns."
+		  << std::endl;
+      }
+    if(nRows>=2 && nColumns>=2)
+      {
+        const Pos3d p1= (*this)(1,1)->GetPos();
+        const Pos3d p2= (*this)(1,2)->GetPos();
+        const Pos3d p3= (*this)(2,2)->GetPos();
+        const Pos3d p4= (*this)(2,1)->GetPos();
+	Polygon3d plg(p1,p2,p3);
+	plg.push_back(p4);
+	retval= plg.clockwise();
+      }
+    return retval;
+  }
+
+//! @brief Return true if the nodes are counter-clockwise ordered
+//! with respect to the element.
+bool XC::PntPtrArray::counterclockwise(bool initialGeometry) const
+  { return !clockwise(); }
+
+//! @brief Return a loop passing through the contour defined by the indexes.
+//!
+//! @param rowIndexes: row indexes.
+//! @param colIndexes: column indexes.
+//! @param counterclockwise: make the resulting contour be counterclockwise
+//!                          oriented.
+std::deque<XC::Pnt *> XC::PntPtrArray::getLoop(const std::vector<size_t> &rowIndexes, const std::vector<size_t> &columnIndexes, bool counterclockwise) const
+  {
+    std::deque<Pnt *> retval;
+    const size_t nRows= rowIndexes.size();
+    if(nRows<2)
+      {
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; pointer matrix must have at least two rows."
+		  << std::endl;
+      }
+    const size_t nColumns= columnIndexes.size(); //No. of point columns.
+    if(nColumns<2)
+      {
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; pointer matrix must have at least two columns."
+		  << std::endl;
+      }
+    if(nRows>=2 && nColumns>=2)
+      {
+	//Bottom line.
+	size_t row= rowIndexes[0]; // first row.
+	size_t col= columnIndexes[0];
+	for(size_t j= 0;j<nColumns;j++)
+	  {
+	    col= columnIndexes[j];
+	    retval.push_back((*this)(row,col));
+	  }
+	//Right line.
+	col= columnIndexes[nColumns-1]; // last column.
+	for(size_t i= 1;i<nRows-1;i++) // interior points only (no top no bottom)
+	  {
+	    row= rowIndexes[i];
+	    retval.push_back((*this)(row,col));
+	  }
+	//Top line.
+	row= rowIndexes[nRows-1]; // last row.
+	for(size_t j= nColumns;j>0;j--)
+	  {
+	    col= columnIndexes[j-1];
+	    retval.push_back((*this)(row,col));
+	  }
+	// Left line.
+	col= columnIndexes[0]; // first column.
+	for(size_t i= nRows-2;i>0;i--) // interior points only (no top no bottom)
+	  {
+	    row= rowIndexes[i];
+	    retval.push_back((*this)(row,col));
+	  }
+	// Check orientation ??.
+	// How to check the orientation of a not necessarily planar 3D curve??
+      }
+    return retval;
+  }
+
 
 //! @brief Copy the points from the range being passed as parameter, and places
 //! the at the positions of the matrix that result form adding to the (i,j)

@@ -562,6 +562,19 @@ Polygon3d XC::Face::getPolygon(void) const
     return Polygon3d(contour);
   }
 
+//! @brief Return true if the points are clockwise ordered
+//! with respect to the face.
+bool XC::Face::clockwise(bool initialGeometry) const
+  {
+    const Polygon3d plg= getPolygon();
+    return plg.clockwise();
+  }
+
+//! @brief Return true if the nodes are counter-clockwise ordered
+//! with respect to the element.
+bool XC::Face::counter_clockwise(bool initialGeometry) const
+  { return !clockwise(); }
+
 //! @brief Returns a vector in the direction of the local
 //! Z axis.
 Vector3d XC::Face::getKVector(void) const

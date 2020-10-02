@@ -59,6 +59,8 @@ class PlaneElement: public ElemWithMaterial<NNODES, PhysProp>
     void setDomain(Domain *theDomain);
 
     virtual Polygon3d getPolygon(bool initialGeometry= true) const;
+    bool clockwise(bool initialGeometry= true) const;
+    bool counter_clockwise(bool initialGeometry= true) const;
     virtual Segment3d getSide(const size_t &i,bool initialGeometry= true) const;
     double getMaximumCornerAngle(bool initialGeometry= true) const;
     Pos3d getCenterOfMassPosition(bool initialGeometry= true) const;
@@ -105,6 +107,8 @@ void XC::PlaneElement<NNODES, PhysProp>::checkElem(void)
 	      std::clog << "," << *i;
             std::clog << "] has a very little area (" << area << ").\n";
           }
+        if(this->clockwise())
+	  { this->getNodePtrs().reverse(); }
       }
   }
 
@@ -214,6 +218,22 @@ Polygon3d XC::PlaneElement<NNODES, PhysProp>::getPolygon(bool initialGeometry) c
       }
     return retval;
   }
+
+//! @brief Return true if the nodes are clockwise ordered
+//! with respect to the element.
+template <int NNODES,class PhysProp>
+bool XC::PlaneElement<NNODES, PhysProp>::clockwise(bool initialGeometry) const
+  {
+    const Polygon3d plg= this->getPolygon();
+    return plg.clockwise();
+  }
+  
+//! @brief Return true if the nodes are counter-clockwise ordered
+//! with respect to the element.
+template <int NNODES,class PhysProp>
+bool XC::PlaneElement<NNODES, PhysProp>::counter_clockwise(bool initialGeometry) const
+  { return !this->clockwise(); }
+
 
 //! @brief Returns a lado of the element. 
 // Redefine for elements with more than two nodes by face.

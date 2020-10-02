@@ -212,6 +212,7 @@ void materialNotSuitableMsg(const std::string &errHeader, const std::string &mat
 //! - ShellNLDKGQ: Defines a geometric non-linear shell element (ShellNLDKGQ),
 //!   for shell problems.
 //! - FourNodeQuad: Defines a four node quad (FourNodeQuad),
+//! - EnhancedQuad: Defines an enhanced quad (EnhancedQuad),
 //! - Tri31: Defines a three node triangle with just a Gauss point (Tri31),
 //!   for plane problems.
 //! - Brick: Defines an eight node hexahedron (Brick),
@@ -393,6 +394,12 @@ XC::Element *XC::ProtoElementHandler::create_element(const std::string &cmd,int 
 	if(cmd=="quad4n")
 	  deprecatedElementNameMsg(errHeader,cmd,"FourNodeQuad");
         retval= new_element_mat<FourNodeQuad,NDMaterial>(tag_elem, get_ptr_material());
+        if(!retval)
+	  materialNotSuitableMsg(errHeader,material_name,cmd);
+      }
+    else if(cmd == "EnhancedQuad")
+      {
+        retval= new_element_mat<EnhancedQuad,NDMaterial>(tag_elem, get_ptr_material());
         if(!retval)
 	  materialNotSuitableMsg(errHeader,material_name,cmd);
       }

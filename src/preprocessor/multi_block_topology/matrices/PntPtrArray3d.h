@@ -73,7 +73,7 @@ class PntPtrArray3d: public PtrArray3dBase<PntPtrArray>
     PntPtrArray3d getCellPoints(const size_t &,const size_t &,const size_t &,const Indices3dArray &);
     PntPtrArray getCellPoints(const size_t &,const size_t &,const IndicesMatrix &);
 
-    Pos3d getCentroide(void) const;
+    Pos3d getCentroid(void) const;
 
     void setPnt(const size_t &,const size_t &,const size_t &,const int &);
     Pnt *getPnt(const size_t &,const size_t &,const size_t &);

@@ -75,6 +75,16 @@ XC::Vector XC::FourNodeQuad::P(8);
 double XC::FourNodeQuad::shp[3][4]; //Values of shape functions.
 
 //! @brief Constructor.
+//!
+//! @param nd1, nd2, nd3, nd3: four nodes defining element boundaries,
+//!                            input in counter-clockwise order around
+//!                            the element.
+//! @param t: element thickness.
+//! @param type: string representing material behavior. Valid options
+//!              depend on the NDMaterial object and its available material
+//!              formulations. The type parameter can be either "PlaneStrain"
+//!              or "PlaneStress."
+//! @param m: element material.
 XC::FourNodeQuad::FourNodeQuad(int tag, int nd1, int nd2, int nd3, int nd4,
                                NDMaterial &m, const std::string &type, double t,
                            double p, double r, const BodyForces2D &bForces)

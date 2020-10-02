@@ -37,6 +37,8 @@ class_<PlaneElement4N_Mech2D, bases<ElemWithMaterial4N_Mech2D>, boost::noncopyab
    ;
 
 class_<QuadBase4N_Mech2D, bases<PlaneElement4N_Mech2D>, boost::noncopyable >("QuadBase4N_Mech2D", no_init)
+  .add_property("rho", &XC::FourNodeQuad::getRho,&XC::FourNodeQuad::setRho)
+  .add_property("thickness", &XC::FourNodeQuad::getThickness,&XC::FourNodeQuad::setThickness)
    ;
 
 #include "fourNodeQuad/python_interface.tcc"

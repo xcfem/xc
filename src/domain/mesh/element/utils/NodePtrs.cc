@@ -559,3 +559,9 @@ XC::Matrix XC::NodePtrs::getNodeVectors(const Vector &v) const
     return retval;
     
   }
+
+//! @brief Reverse the node sequence.
+void XC::NodePtrs::reverse(void)
+  { std::reverse(begin(),end()); }
+
+  

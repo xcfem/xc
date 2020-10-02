@@ -171,11 +171,15 @@ int XC::ID::removeValue(const int &value)
     return place;
   }    
 
+//! @brief Reverse sequence.
+void XC::ID::reverse(void)
+  { std::reverse(begin(),end()); }
+
 //! @brief Return the reversed sequence.
 XC::ID XC::ID::getReversed(void) const
   {
     ID retval(*this);
-    std::reverse(retval.begin(),retval.end());
+    retval.reverse();
     return retval;
   }
 

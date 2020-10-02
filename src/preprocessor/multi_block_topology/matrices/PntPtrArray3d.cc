@@ -81,7 +81,7 @@ XC::Pnt *XC::PntPtrArray3d::getPnt(const size_t &i,const size_t &j,const size_t 
   { return getAtIJK(i,j,k); }
 
 //! @brief Return the framework centroid.
-Pos3d XC::PntPtrArray3d::getCentroide(void) const
+Pos3d XC::PntPtrArray3d::getCentroid(void) const
   {
     Pos3d retval;
     const size_t numberOfLayers= getNumberOfLayers();
@@ -89,7 +89,7 @@ Pos3d XC::PntPtrArray3d::getCentroide(void) const
     for(size_t i=1;i<=numberOfLayers;i++)
       {
         const PntPtrArray &layer= operator()(i);
-        Pos3d p= layer.getCentroide();
+        Pos3d p= layer.getCentroid();
         x+= p.x();
         y+= p.y();
         z+= p.z(); 

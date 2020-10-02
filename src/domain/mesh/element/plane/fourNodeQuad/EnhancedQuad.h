@@ -50,7 +50,7 @@
 // $Source: /usr/local/cvs/OpenSees/SRC/element/fourNodeQuad/EnhancedQuad.h,v $
                                                                         
 #include "domain/mesh/element/plane/QuadBase4N.h"
-#include "domain/mesh/element/utils/physical_properties/NDMaterialPhysicalProperties.h"
+#include "domain/mesh/element/utils/physical_properties/SolidMech2D.h"
 #include <utility/matrix/Vector.h>
 #include <utility/matrix/Matrix.h>
 
@@ -59,7 +59,7 @@ namespace XC {
 //
 //! @brief Four-node quadrilateral element, which uses a
 //! bilinear isoparametric formulation with enhanced strain modes.
-class EnhancedQuad: public QuadBase4N<NDMaterialPhysicalProperties>
+class EnhancedQuad: public QuadBase4N<SolidMech2D>
   {
   private:
 
@@ -124,12 +124,11 @@ class EnhancedQuad: public QuadBase4N<NDMaterialPhysicalProperties>
     int sendData(Communicator &);
     int recvData(const Communicator &);
   public:
-
-  //full constructor
+    EnhancedQuad(void);
+    EnhancedQuad(int tag,const NDMaterial *ptr_mat);
+    //full constructor
     EnhancedQuad(int tag, int nd1, int nd2, int nd3, int nd4, NDMaterial &, const std::string &);
 
-    //null constructor
-    EnhancedQuad(void);
     Element *getCopy(void) const;
     //destructor
     virtual ~EnhancedQuad(void);
