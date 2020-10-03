@@ -91,13 +91,21 @@ ELEM *new_element_ns_gen_mat_crd_integ(int tag_elem, const Material *ptrMat, int
     return retval;
   }
 
+//! @brief Creates an element of type ELEM with a material of type MAT.
+//! @tparam ELEM: type of element to create.
+//! @tparam MAT: type of material to assign to the element.
 template <typename ELEM, typename MAT>
 ELEM *new_element_mat(int tag_elem, const Material *ptrMat)
   {
     ELEM *retval= nullptr;
     const MAT *ptr_mat= dynamic_cast<const MAT *>(ptrMat);
     if(ptr_mat)
-      retval= new ELEM(tag_elem,ptr_mat); //We create it.
+      {
+        retval= new ELEM(tag_elem,ptr_mat); //We create it.
+      }
+    else
+      std::cerr << "Could not cast the material pointer."
+	        << std::endl;
     return retval;
   }
 

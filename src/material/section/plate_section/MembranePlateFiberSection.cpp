@@ -116,7 +116,11 @@ void XC::MembranePlateFiberSection::copy_fibers(const MembranePlateFiberSection 
   {
     free();
     for(int i= 0;i<numFibers;i++ )
-      theFibers[i]= other.theFibers[i]->getCopy();
+      {
+	const NDMaterial *ndMatPtr= other.theFibers[i];
+	if(ndMatPtr)
+          theFibers[i]= ndMatPtr->getCopy();
+      }
   }
 
 //! @brief Releases material pointers.
@@ -143,7 +147,10 @@ XC::MembranePlateFiberSection::MembranePlateFiberSection(int tag, double thickne
 //! @brief Copy constructor.
 XC::MembranePlateFiberSection::MembranePlateFiberSection(const MembranePlateFiberSection &other)
   : PlateBase(other), strainResultant(other.strainResultant) 
-  { copy_fibers(other); }
+  {
+    init();
+    copy_fibers(other);
+  }
 
 //! @brief Assignment operator.
 XC::MembranePlateFiberSection &XC::MembranePlateFiberSection::operator=(const MembranePlateFiberSection &other)

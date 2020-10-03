@@ -39,7 +39,7 @@
 //! @brief Constructor
 XC::SectionFDPhysicalProperties::SectionFDPhysicalProperties(const size_t &nMat,const SectionForceDeformation *ptr_mat)
   : PhysicalProperties<SectionForceDeformation>(nMat,ptr_mat)
-  { }
+  {}
 
 XC::SectionFDPhysicalProperties::SectionFDPhysicalProperties(const size_t &nMat,const Material *ptr)
   : PhysicalProperties<SectionForceDeformation>(nMat,nullptr)
