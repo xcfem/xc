@@ -103,12 +103,9 @@ XC::fdFlowDP::fdFlowDP(double DilatedAngle_in, double Cohesion_in, int ConeIndex
    }
 }
 
-//--------------------------------------------------------------------
- XC::fdFlow * XC::fdFlowDP::getCopy(void)
-{
-     fdFlow *newfdyd = new fdFlowDP(DilatedAngle, Cohesion, ConeIndex);
-     return newfdyd;
-}
+//! @brief Virtual constructor.
+XC::fdFlow * XC::fdFlowDP::getCopy(void)
+  { return new fdFlowDP(*this); }
 
 //-------------------------------------------------------------------
 // Q = k1*I1 + sqrt(0.5*Sij*Sji) - k2*(c+q) = 0, 

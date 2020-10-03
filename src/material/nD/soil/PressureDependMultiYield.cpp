@@ -346,6 +346,7 @@ const XC::Vector & XC::PressureDependMultiYield::getStress(void) const
   }
 }
 
+//! @brief Virtual constructor.
 XC::NDMaterial *XC::PressureDependMultiYield::getCopy(void) const
   { return new PressureDependMultiYield(*this); }
 

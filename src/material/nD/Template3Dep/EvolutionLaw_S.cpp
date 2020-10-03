@@ -64,17 +64,10 @@
 // #include "material/nD/Template3Dep/EPState.h"
 // #include "material/nD/Template3Dep/PotentialSurface.h"    
 
-//================================================================================
-//  Create a clone of itself 
-//================================================================================
-XC::EvolutionLaw_S * XC::EvolutionLaw_S::getCopy(void)
-  {
-    
-    EvolutionLaw_S *newEL = new EvolutionLaw_S( *this );
-    
-    return newEL;
 
-}
+//! @brief Virtual constructor.
+XC::EvolutionLaw_S * XC::EvolutionLaw_S::getCopy(void)
+  { return new EvolutionLaw_S(*this); }
 
 
 //================================================================================

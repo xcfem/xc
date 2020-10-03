@@ -53,12 +53,16 @@ class NDAdaptorMaterial: public NDMaterial
     NDMaterial *theMaterial;
     Vector strain;
   protected:
+    void free(void);
+    void alloc(const NDMaterial *, const std::string &type);
     int sendData(Communicator &);
     int recvData(const Communicator &);
   public:
-    NDAdaptorMaterial(int classTag,int tag, NDMaterial &theMat, int strain_size);
-    NDAdaptorMaterial(int classTag,int tag, int strain_size);
+    NDAdaptorMaterial(int classTag, int tag, const NDMaterial &theMat, int strain_size);
+    NDAdaptorMaterial(int classTag, int tag, int strain_size);
     NDAdaptorMaterial(int classTag, int strain_size);
+    NDAdaptorMaterial(const NDAdaptorMaterial &);
+    NDAdaptorMaterial &operator=(const NDAdaptorMaterial &);
     virtual ~NDAdaptorMaterial(void);
 
     const Vector& getStrain(void);

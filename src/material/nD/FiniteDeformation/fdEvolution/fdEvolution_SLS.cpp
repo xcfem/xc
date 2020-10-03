@@ -68,12 +68,9 @@ XC::fdEvolution_SLS::fdEvolution_SLS(double H_linear_in,
     
 }
 
-//------------------------------------------------------------------------
- XC::fdEvolution_S * XC::fdEvolution_SLS::getCopy(void) 
-{   
-    fdEvolution_S *newEL = new fdEvolution_SLS( *this );    
-    return newEL;
-}
+//! @brief Virtual constructor.
+XC::fdEvolution_S * XC::fdEvolution_SLS::getCopy(void) 
+  { return new fdEvolution_SLS(*this); }    
 
 //------------------------------------------------------------------------
 double XC::fdEvolution_SLS::HModulus(const XC::stresstensor &sts, const XC::FDEPState &fdepstate) const 

@@ -61,16 +61,9 @@
 //
 //}
 
-//================================================================================
-//create a clone of itself
-//================================================================================
-
+//! @brief Virtual constructor.
 XC::PotentialSurface * XC::VonMisesPotentialSurface::getCopy(void)
-  {  
-
-     PotentialSurface  *newYieldSurface = new VonMisesPotentialSurface();
-     return newYieldSurface;
-  }
+  { return new VonMisesPotentialSurface(*this); }
 
 
 //================================================================================

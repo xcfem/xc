@@ -75,11 +75,9 @@ XC::TriFCYieldSurface::TriFCYieldSurface (double fc, double ft, double e, double
   }
 
 
-//! @brief create a clone of itself
+//! @brief Virtual constructor.
 XC::YieldSurface * XC::TriFCYieldSurface::getCopy(void) 
-  {  
-    return new TriFCYieldSurface(*this);
-  }
+  { return new TriFCYieldSurface(*this); }
 
 //! @brief Yield criterion evaluation function F(EPState)
 double XC::TriFCYieldSurface::f(const XC::EPState *EPS) const 

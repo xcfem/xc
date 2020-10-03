@@ -92,7 +92,7 @@ XC::FDEPState::FDEPState ( const XC::straintensor& xFpInVar,
 	CommittedStrainLikeKiVar = xCommittedStrainLikeKiVar;
 }
 
-//------------------------------------------------------------------------------
+//! @brief Virtual constructor.
 XC::FDEPState *XC::FDEPState::getCopy(void)
   { return new FDEPState(*this); }
 

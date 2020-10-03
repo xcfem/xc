@@ -57,13 +57,12 @@
 
 using namespace XC;
 
- XC::fdEvolution_T * XC::fdEvolution_T::getCopy(void) 
-{   
-    fdEvolution_T *newEL = new fdEvolution_T( *this );    
-    return newEL;
-}
+//! @brief Virtual constructor.
+XC::fdEvolution_T *XC::fdEvolution_T::getCopy(void) 
+  { return new fdEvolution_T(*this); }    
 
- XC::BJtensor XC::fdEvolution_T::HModulus(const XC::stresstensor &sts, const XC::FDEPState &fdepstate) const
+
+XC::BJtensor XC::fdEvolution_T::HModulus(const XC::stresstensor &sts, const XC::FDEPState &fdepstate) const
 {
     BJtensor Z400(4, def_dim_4, 0.0);
     return Z400;

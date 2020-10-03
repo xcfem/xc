@@ -65,10 +65,7 @@ XC::CamClayPotentialSurface::CamClayPotentialSurface(double Mp )
 //================================================================================
 
 XC::PotentialSurface *XC::CamClayPotentialSurface::getCopy(void)
-  {  
-    PotentialSurface  *newYieldSurface = new CamClayPotentialSurface(M);
-    return newYieldSurface;
-  }
+  { return new CamClayPotentialSurface(*this); }
 
 //================================================================================
 // Copy constrstructor

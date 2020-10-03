@@ -66,18 +66,9 @@ XC::ManzariDafaliasPotentialSurface01::ManzariDafaliasPotentialSurface01(double 
   Pc = pc;
 } 
 
-
-//================================================================================
-//create a clone of itself
-//================================================================================
-
+//! @brief Virtual constructor.
 XC::PotentialSurface * XC::ManzariDafaliasPotentialSurface01::getCopy(void)
-  {  
-
-     PotentialSurface  *newPotentialSurface = new ManzariDafaliasPotentialSurface01(Pc);
-     return newPotentialSurface;
-
-}
+  { return new ManzariDafaliasPotentialSurface01(*this); }
 
 //================================================================================
 //  BJtensor dQ/dsigma_ij: the normal to the potential surface

@@ -356,6 +356,7 @@ int XC::FluidSolidPorousMaterial::revertToStart(void)
     return theSoilMaterial->revertToStart();
 }
 
+//! @brief Virtual constructor.
 XC::NDMaterial * XC::FluidSolidPorousMaterial::getCopy(void) const
   { return new FluidSolidPorousMaterial(*this); }
 

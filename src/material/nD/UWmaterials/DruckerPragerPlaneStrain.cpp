@@ -50,12 +50,7 @@ XC::DruckerPragerPlaneStrain::~DruckerPragerPlaneStrain()
 
 //make a clone of this material
 XC::NDMaterial *XC::DruckerPragerPlaneStrain::getCopy() const
-  { 
-    DruckerPragerPlaneStrain  *clone;
-    clone = new DruckerPragerPlaneStrain();   //new instance of this class
-    *clone = *this ;          //asignment to make copy
-    return clone ;
-  }
+  { return new DruckerPragerPlaneStrain(*this); }
 
 //send back type of material
 const std::string &XC::DruckerPragerPlaneStrain::getType() const 

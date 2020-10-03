@@ -65,9 +65,7 @@ XC::OgdenSimoWEnergy::OgdenSimoWEnergy(int N_in, double  *cr_in, double *mur_in,
 XC::OgdenSimoWEnergy::OgdenSimoWEnergy(void)
   : OgdenWEnergyBase(), K(0.0) {}
 
-//================================================================================
-//create a clone of itself
-//================================================================================
+//! @brief Virtual constructor.
 XC::WEnergy * XC::OgdenSimoWEnergy::getCopy(void) const
   { return new OgdenSimoWEnergy(*this); }
 

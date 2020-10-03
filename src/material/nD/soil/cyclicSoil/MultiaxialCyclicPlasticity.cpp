@@ -690,6 +690,7 @@ return;
 }
 
 
+//! @brief Virtual constructor.
 XC::NDMaterial *XC::MultiaxialCyclicPlasticity::getCopy(void) const
   {
     std::cerr << "MultiaxialCyclicPlasticity::getCopy -- subclass responsibility\n"; 

@@ -205,7 +205,8 @@ int XC::FiniteDeformationElastic3D::revertToStart(void)
    exit(-1);
    return -1;
 }
-//---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+//! @brief Virtual constructor.
 XC::NDMaterial * XC::FiniteDeformationElastic3D::getCopy(void) const
 {
    std::cerr << "FiniteDeformationElastic3D-- subclass responsibility\n";

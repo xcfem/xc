@@ -30,6 +30,29 @@
 #include "utility/matrix/ID.h"
 #include "material/nD/NDMaterialType.h"
 
+void XC::NDAdaptorMaterial::free(void)
+  {
+    if(theMaterial)
+      {
+	delete theMaterial;
+	theMaterial= nullptr;
+      }
+  }
+
+void XC::NDAdaptorMaterial::alloc(const NDMaterial *other, const std::string &type)
+  {
+    free();
+    if(type!="")
+      theMaterial= other->getCopy(type); // Get a copy of the material
+    else
+      theMaterial= other->getCopy();
+    if(!theMaterial)
+      {
+        std::cerr << getClassName() << "::" << __FUNCTION__
+	          << "; failed to get copy of material.\n";
+        exit(-1);
+     }
+  }
 
 XC::NDAdaptorMaterial::NDAdaptorMaterial(int classTag, int strain_size)
   : NDMaterial(0, classTag), Tstrain22(0.0), Cstrain22(0.0), theMaterial(nullptr), strain(strain_size)
@@ -39,22 +62,32 @@ XC::NDAdaptorMaterial::NDAdaptorMaterial(int classTag, int tag, int strain_size)
   : NDMaterial(tag, classTag), Tstrain22(0.0), Cstrain22(0.0), theMaterial(nullptr), strain(strain_size)
   {}
 
-XC::NDAdaptorMaterial::NDAdaptorMaterial(int classTag, int tag, XC::NDMaterial &theMat, int strain_size)
-: XC::NDMaterial(tag, classTag), Tstrain22(0.0), Cstrain22(0.0), theMaterial(nullptr), strain(strain_size)
+XC::NDAdaptorMaterial::NDAdaptorMaterial(int classTag, int tag, const NDMaterial &theMat, int strain_size)
+  : NDMaterial(tag, classTag), Tstrain22(0.0), Cstrain22(0.0), theMaterial(nullptr), strain(strain_size)
 
   {
-    // Get a copy of the material
-    theMaterial = theMat.getCopy(strTypeThreeDimensional);
-  
-    if(!theMaterial)
-      {
-        std::cerr << "NDAdaptorMaterial::NDAdaptorMaterial -- failed to get copy of material\n";
-        exit(-1);
-     }
+    alloc(&theMat, strTypeThreeDimensional);
+  }
+
+XC::NDAdaptorMaterial::NDAdaptorMaterial(const NDAdaptorMaterial &other)
+  : NDMaterial(other), Tstrain22(other.Tstrain22), Cstrain22(other.Cstrain22), theMaterial(nullptr),
+    strain(other.strain)
+  {
+    alloc(other.theMaterial, "");
+  }
+
+XC::NDAdaptorMaterial &XC::NDAdaptorMaterial::operator=(const NDAdaptorMaterial &other)
+  {
+    NDMaterial::operator=(other);
+    Tstrain22= other.Tstrain22;
+    Cstrain22= other.Cstrain22;
+    alloc(other.theMaterial, "");
+    strain= other.strain;
+    return *this;
   }
 
 XC::NDAdaptorMaterial::~NDAdaptorMaterial(void) 
-  { if(theMaterial) delete theMaterial; } 
+  { free(); } 
 
 
 int XC::NDAdaptorMaterial::commitState(void)

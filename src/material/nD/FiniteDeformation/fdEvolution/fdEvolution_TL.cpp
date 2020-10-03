@@ -66,10 +66,7 @@ XC::fdEvolution_TL::fdEvolution_TL(double H_linear_in)
 
 //------------------------------------------------------------------------
 XC::fdEvolution_T * XC::fdEvolution_TL::getCopy(void) 
-  {   
-    fdEvolution_T *newEL = new fdEvolution_TL( *this );    
-    return newEL;
-  }
+  { return new fdEvolution_TL(*this); }
 
 //------------------------------------------------------------------------
  XC::BJtensor XC::fdEvolution_TL::HModulus(const XC::stresstensor &sts, const XC::FDEPState &fdepstate) const 

@@ -61,17 +61,9 @@
 //
 //}
 
-//================================================================================
-//create a clone of itself
-//================================================================================
-
+//! @brief Virtual constructor.
 XC::YieldSurface *XC::VonMisesYieldSurface::getCopy(void)
-  {  
-
-     YieldSurface  *newYieldSurface = new VonMisesYieldSurface();
-     return newYieldSurface;
-
-  }
+  { return new VonMisesYieldSurface(*this); }
 
 //================================================================================
 //  Yield criterion evaluation function f = 3/2 *Sij_bar Sij_bar- k^2

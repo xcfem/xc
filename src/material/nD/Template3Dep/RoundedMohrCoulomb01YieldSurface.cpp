@@ -71,15 +71,9 @@
 #include "utility/matrix/nDarray/BJtensor.h"
 #include "material/nD/Template3Dep/EPState.h"
 
-//================================================================================
-//create a clone of itself
-//================================================================================
-
+//! @brief Virtual constructor.
 XC::YieldSurface * XC::RoundedMohrCoulomb01YieldSurface::getCopy(void) 
-  {  
-    YieldSurface  *newYieldSurface = new RoundedMohrCoulomb01YieldSurface();
-    return newYieldSurface;
-  }
+  { return new RoundedMohrCoulomb01YieldSurface(*this); }
 
 //================================================================================
 //  Yield criterion evaluation function F(EPState)

@@ -78,11 +78,7 @@ XC::EvolutionLaw_L_Eeq::EvolutionLaw_L_Eeq(const EvolutionLaw_L_Eeq &LE )
 
 //! @brief Virtual constructor.
 XC::EvolutionLaw_S * XC::EvolutionLaw_L_Eeq::getCopy(void) 
-  {    
-    EvolutionLaw_S *newEL = new EvolutionLaw_L_Eeq( *this );
-    
-    return newEL;
-  }
+  { return new EvolutionLaw_L_Eeq(*this); }
 
 ////================================================================================
 ////  Initialize some  vars in XC::EPState				        

@@ -66,17 +66,9 @@ XC::CamClayYieldSurface::CamClayYieldSurface(double Mp )
 } 
 
 
-//================================================================================
-//create a clone of itself
-//================================================================================
-
+//! @brief Virtual constructor.
 XC::YieldSurface *XC::CamClayYieldSurface::getCopy(void)
-  {  
-
-     YieldSurface  *newYieldSurface = new CamClayYieldSurface(M);
-     return newYieldSurface;
-
-}
+  { return new CamClayYieldSurface(*this); }
 
 //================================================================================
 // Copy constrstructor

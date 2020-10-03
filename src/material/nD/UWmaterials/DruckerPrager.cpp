@@ -280,7 +280,7 @@ XC::NDMaterial *XC::DruckerPrager::getCopy(const std::string &type) const
       }
     else
       {
-  	std::cerr << "XC::DruckerPrager::getCopy failed to get copy: " << type << std::endl;
+  	std::cerr << "DruckerPrager::getCopy failed to get copy: " << type << std::endl;
   	return nullptr;
       }
   }
@@ -316,7 +316,9 @@ int XC::DruckerPrager::revertToStart(void)
 
 XC::NDMaterial *XC::DruckerPrager::getCopy(void) const
   {
-    std::cerr << "XC::DruckerPrager::getCopy -- subclass responsibility\n"; 
+    std::cerr << getClassName() << "::" << __FUNCTION__
+              << "; not implemented yet."
+              << std::endl; 
     exit(-1);
     return 0;
   }

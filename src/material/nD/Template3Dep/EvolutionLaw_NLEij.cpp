@@ -76,16 +76,9 @@ XC::EvolutionLaw_NL_Eij::EvolutionLaw_NL_Eij(const EvolutionLaw_NL_Eij &LE ) {
 }
 
 
-//================================================================================
-//  Create a clone of itself 
-//================================================================================
+//! @brief Virtual constructor.
 XC::EvolutionLaw_T * XC::EvolutionLaw_NL_Eij::getCopy(void)
-  {
-    
-    EvolutionLaw_T *newEL = new EvolutionLaw_NL_Eij( *this );
-    
-    return newEL;
-  }
+  { return new EvolutionLaw_NL_Eij(*this); }
 
 ////================================================================================
 ////  Initialize some  vars in XC::EPState                

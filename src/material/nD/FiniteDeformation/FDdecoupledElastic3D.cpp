@@ -452,16 +452,16 @@ int XC::FDdecoupledElastic3D::revertToStart(void)
 
    return 0;
 }
-//! @brief 
+
+//! @brief Virtual constructor.
 XC::NDMaterial *XC::FDdecoupledElastic3D::getCopy(void) const
   { return new FDdecoupledElastic3D(*this); }
 
 //! @brief 
 XC::NDMaterial *XC::FDdecoupledElastic3D::getCopy(const std::string &type) const
   {
-
     std::cerr << "FDdecoupledElastic3D::getCopy(const std::string &) - not yet implemented\n";
-    return 0;
+    return nullptr;
   }
 //! @brief 
 const std::string &XC::FDdecoupledElastic3D::getType(void) const

@@ -78,17 +78,9 @@ XC::DruckerPragerPotentialSurface::DruckerPragerPotentialSurface(const DruckerPr
 }
 
 
-//================================================================================
-//create a clone of itself
-//================================================================================
-
+//! @brief Virtual constructor.
 XC::PotentialSurface * XC::DruckerPragerPotentialSurface::getCopy(void)
-  {  
-
-     PotentialSurface  *newPotentialSurface = new DruckerPragerPotentialSurface( this->getalfa2() );
-     return newPotentialSurface;
-
-}
+  {  return new DruckerPragerPotentialSurface(*this); }
 
 
 

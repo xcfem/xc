@@ -300,7 +300,7 @@ XC::NDMaterial *XC::FeapMaterial::getCopy(void) const
 
 XC::NDMaterial *XC::FeapMaterial::getCopy(const std::string &type) const
   {
-    FeapMaterial *theCopy = (FeapMaterial*)this->getCopy();
+    FeapMaterial *theCopy = dynamic_cast<FeapMaterial *>(this->getCopy());
   
     if((type==strTypeThreeDimensional) || (type==strType3D))
       theCopy->myFormulation = ThreeDimensional;

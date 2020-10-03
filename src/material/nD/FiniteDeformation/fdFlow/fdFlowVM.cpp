@@ -64,12 +64,9 @@ XC::fdFlowVM::fdFlowVM(double Y0_in) :Y0(Y0_in)
 
 }
 
-//--------------------------------------------------------------------
-XC::fdFlow * XC::fdFlowVM::getCopy(void)
-{
-     fdFlow *newfdyd = new fdFlowVM(Y0);
-     return newfdyd;
-}
+//! @brief Virtual constructor.
+XC::fdFlow *XC::fdFlowVM::getCopy(void)
+  { return new fdFlowVM(*this); }
 
 //-------------------------------------------------------------------
 // Q = 1.5*(S_ij-a_ij)*(S_ij-a_ij)  - (Y0+q)*(Y0+q) = 0, Note here NumRank = 2

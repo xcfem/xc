@@ -100,12 +100,9 @@ XC::fdYieldDP::fdYieldDP(double FricAngle_in, double Cohesion_in, int ConeIndex_
    }
 }
 
-//--------------------------------------------------------------------
- XC::fdYield * XC::fdYieldDP::getCopy(void)
-{
-    fdYield *newfdyd = new fdYieldDP(FricAngle, Cohesion, ConeIndex);
-    return newfdyd;
-}
+//! @brief Virtual constructor.
+XC::fdYield * XC::fdYieldDP::getCopy(void)
+  { return new fdYieldDP(*this); }
 
 int XC::fdYieldDP::getNumRank()
 {

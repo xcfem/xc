@@ -390,7 +390,7 @@ const XC::Vector & XC::PressureDependMultiYield02::getStress(void) const
 XC::NDMaterial *XC::PressureDependMultiYield02::getCopy(void) const
   { return new PressureDependMultiYield02(*this); }
 
-XC::NDMaterial * XC::PressureDependMultiYield02::getCopy(const std::string &code) const
+XC::NDMaterial *XC::PressureDependMultiYield02::getCopy(const std::string &code) const
   {
     PressureDependMultiYield02 *copy= nullptr;
     if((code==strTypePressureIndependMultiYield02) || (code==strTypePlaneStrain)

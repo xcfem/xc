@@ -73,9 +73,7 @@ XC::LogWEnergy::LogWEnergy( ) :K(0.0), G(0.0)
 
 }
 
-//================================================================================
-//create a clone of itself
-//================================================================================
+//! @brief Virtual constructor.
 XC::WEnergy * XC::LogWEnergy::getCopy(void) const
   { return new LogWEnergy(*this); }
 

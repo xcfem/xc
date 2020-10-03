@@ -467,6 +467,7 @@ XC::EPState::EPState( )
 //create a clone of itself
 //================================================================================
 
+//! @brief Virtual constructor.
 XC::EPState* XC::EPState::getCopy(void)
   {
 

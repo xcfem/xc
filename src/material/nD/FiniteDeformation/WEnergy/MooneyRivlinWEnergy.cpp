@@ -74,9 +74,7 @@ XC::MooneyRivlinWEnergy::MooneyRivlinWEnergy( )
 
 }
 
-//================================================================================
-//create a clone of itself
-//================================================================================
+//! @brief Virtual constructor.
 XC::WEnergy * XC::MooneyRivlinWEnergy::getCopy(void) const
   { return new MooneyRivlinWEnergy(*this); }
 

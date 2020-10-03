@@ -106,7 +106,7 @@ XC::MultiaxialCyclicPlasticity3D::MultiaxialCyclicPlasticity3D(int tag)
 
 
 
-//make a clone of this material
+//! @brief Virtual constructor.
 XC::NDMaterial* XC::MultiaxialCyclicPlasticity3D::getCopy(void) const 
   { return new MultiaxialCyclicPlasticity3D(*this); }
 

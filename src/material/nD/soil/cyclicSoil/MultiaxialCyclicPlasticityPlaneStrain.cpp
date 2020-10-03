@@ -101,7 +101,7 @@ XC::MultiaxialCyclicPlasticityPlaneStrain::MultiaxialCyclicPlasticityPlaneStrain
 
 }
 
-//make a clone of this material
+//! @brief Virtual constructor.
 XC::NDMaterial* XC::MultiaxialCyclicPlasticityPlaneStrain::getCopy(void) const
   { return new MultiaxialCyclicPlasticityPlaneStrain(*this); }
 

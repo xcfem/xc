@@ -66,15 +66,9 @@ XC::DruckerPragerYieldSurface01::DruckerPragerYieldSurface01(double pc)
 } 
 
 
-//================================================================================
-//create a clone of itself
-//================================================================================
-
+//! @brief Virtual constructor.
 XC::YieldSurface * XC::DruckerPragerYieldSurface01::getCopy(void)
-  {  
-     YieldSurface  *newYieldSurface = new DruckerPragerYieldSurface01( Pc );
-     return newYieldSurface;
-  }
+  { return new DruckerPragerYieldSurface01(*this); }
 
 //================================================================================
 // Copy constrstructor

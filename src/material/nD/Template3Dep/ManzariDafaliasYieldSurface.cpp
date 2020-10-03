@@ -69,13 +69,9 @@ XC::ManzariDafaliasYieldSurface::ManzariDafaliasYieldSurface( )  { }
 //create a clone of itself
 //================================================================================
 
+//! @brief Virtual constructor.
 XC::YieldSurface * XC::ManzariDafaliasYieldSurface::getCopy(void)
-  {  
-
-     YieldSurface  *newYieldSurface = new ManzariDafaliasYieldSurface();
-     return newYieldSurface;
-
-}
+  {  return new ManzariDafaliasYieldSurface(*this); }
 
 //================================================================================
 // Copy constrstructor

@@ -82,9 +82,7 @@ XC::ManzariDafaliasEvolutionLaw::ManzariDafaliasEvolutionLaw(const ManzariDafali
 }
 
 
-//================================================================================
-//  Create a clone of itself 
-//================================================================================
+//! @brief Virtual constructor.
 XC::ManzariDafaliasEvolutionLaw *XC::ManzariDafaliasEvolutionLaw::getCopy(void)
   { return new ManzariDafaliasEvolutionLaw(*this); }
 

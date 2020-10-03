@@ -69,15 +69,9 @@
 #include "utility/matrix/nDarray/BJtensor.h"
 #include "material/nD/Template3Dep/EPState.h"
 
-//================================================================================
-//create a clone of itself
-//================================================================================
-
+//! @brief Virtual constructor.
 XC::PotentialSurface * XC::RoundedMohrCoulomb01PotentialSurface::getCopy(void)
-  {
-    PotentialSurface  *newYieldSurface = new RoundedMohrCoulomb01PotentialSurface();
-    return newYieldSurface;
-  }
+  { return new RoundedMohrCoulomb01PotentialSurface(*this); }
 
 
 

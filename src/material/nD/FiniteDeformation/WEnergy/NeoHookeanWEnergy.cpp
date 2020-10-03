@@ -68,9 +68,7 @@ XC::NeoHookeanWEnergy::NeoHookeanWEnergy(double K_in, double G_in )
 XC::NeoHookeanWEnergy::NeoHookeanWEnergy(  )
  :K(0.0), G(0.0) {}
 
-//================================================================================
-//create a clone of itself
-//================================================================================
+//! @brief Virtual constructor.
 XC::WEnergy * XC::NeoHookeanWEnergy::getCopy(void) const
   { return new NeoHookeanWEnergy(*this); }
 

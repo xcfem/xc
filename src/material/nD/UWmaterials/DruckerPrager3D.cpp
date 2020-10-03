@@ -42,14 +42,9 @@ XC::DruckerPrager3D::~DruckerPrager3D( )
 {} 
 
 
-//make a clone of this material
+//! @brief Virtual constructor.
 XC::NDMaterial* XC::DruckerPrager3D::getCopy(void) const 
-{ 
-  DruckerPrager3D  *clone;
-  clone = new DruckerPrager3D( ) ;   //new instance of this class
-  *clone = *this ;          //asignment to make copy
-  return clone ;
-}
+  { return new DruckerPrager3D(*this); }
 
 
 //send back type of material

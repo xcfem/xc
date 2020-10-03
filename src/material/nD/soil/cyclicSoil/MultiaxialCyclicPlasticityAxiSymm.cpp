@@ -102,7 +102,7 @@ XC::MultiaxialCyclicPlasticityAxiSymm::MultiaxialCyclicPlasticityAxiSymm(   int 
 
 }
 
-//make a clone of this material
+//! @brief Virtual constructor.
 XC::NDMaterial* XC::MultiaxialCyclicPlasticityAxiSymm::getCopy(void) const 
   { return new MultiaxialCyclicPlasticityAxiSymm(*this); }
 

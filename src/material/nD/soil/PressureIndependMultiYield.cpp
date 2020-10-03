@@ -381,7 +381,7 @@ int XC::PressureIndependMultiYield::revertToLastCommit(void)
   return 0;
 }
 
-
+//! @brief Virtual constructor.
 XC::NDMaterial *XC::PressureIndependMultiYield::getCopy(void) const
   { return new PressureIndependMultiYield(*this); }
 

@@ -211,7 +211,7 @@ int XC::NeoHookeanCompressible3D::revertToStart(void)
    return 0;
 }
 
-//---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//! @brief Virtual constructor.
 XC::NDMaterial * XC::NeoHookeanCompressible3D::getCopy(void) const
   { return new NeoHookeanCompressible3D(*this); }
 
@@ -219,7 +219,7 @@ XC::NDMaterial * XC::NeoHookeanCompressible3D::getCopy(void) const
 XC::NDMaterial * XC::NeoHookeanCompressible3D::getCopy(const std::string &type) const
   {
     std::cerr << "NeoHookeanCompressible3D::getCopy(const std::string &) - not yet implemented\n";
-    return 0;
+    return nullptr;
   }
 
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------------------

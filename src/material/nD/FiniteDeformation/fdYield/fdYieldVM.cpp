@@ -63,12 +63,9 @@ XC::fdYieldVM::fdYieldVM(double Y0_in) :Y0(Y0_in)
 
 }
 
-//--------------------------------------------------------------------
+//! @brief Virtual constructor.
 XC::fdYield * XC::fdYieldVM::getCopy(void)
-  {
-    fdYield *newfdyd = new fdYieldVM(Y0);
-    return newfdyd;
-  }
+  { return new fdYieldVM(*this); }
 
 int XC::fdYieldVM::getNumRank()
 {

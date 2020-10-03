@@ -1025,16 +1025,7 @@ int XC::Template3Dep::revertToStart(void)
   return err;
 }
 
-////================================================================================
-//// Get one copy of the XC::NDMaterial model
-////XC::NDMaterial *XC::Template3Dep::getCopy(void)
-//{
-//      Template3Dep *t3d;
-//      return t3d;
-//}
-
-//================================================================================
-// Get one copy of the XC::NDMaterial model
+//! @brief Virtual constructor.
 XC::NDMaterial * XC::Template3Dep::getCopy(void) const
   { return new Template3Dep(*this); }
 
