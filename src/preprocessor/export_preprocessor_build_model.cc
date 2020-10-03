@@ -72,8 +72,6 @@ class_<XC::SetEstruct, XC::SetEstruct *, bases<XC::SetBase>, boost::noncopyable 
   .add_property("getNumElementLayers", &XC::SetEstruct::getNumElementLayers,"Return the number of element layers.")
   .add_property("getNumElementRows", &XC::SetEstruct::getNumElementRows,"Return the number of element rows.")
   .add_property("getNumElementColumns", &XC::SetEstruct::getNumElementColumns,"Return the number of element columns.")
-  .add_property("getNumNodes", &XC::SetEstruct::getNumberOfNodes,"Return the number or nodes.")
-  .add_property("getNumElements", &XC::SetEstruct::getNumberOfElements,"Return the number or elements.")
   .add_property("isIRow", &XC::SetEstruct::isIRow)
   .add_property("isJRow", &XC::SetEstruct::isJRow)
   .add_property("isKRow", &XC::SetEstruct::isKRow)
