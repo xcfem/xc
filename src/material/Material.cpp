@@ -140,7 +140,8 @@ XC::Matrix XC::Material::getValues(const std::string &cod) const
       }
     else
       std::cerr << getClassName() << "::" << __FUNCTION__
-		<< "; not implemented." << std::endl;
+		<< "; property: " << cod
+	        << " not found." << std::endl;
     return retval;
   }
 
