@@ -512,6 +512,7 @@ python tests/materials/fiber_section/test_tangent_stiffness_01.py
 python tests/materials/fiber_section/test_section_aggregator_01.py
 python tests/materials/fiber_section/test_fiber_section_shear3d_01.py
 python tests/materials/fiber_section/test_fiber_section_shear3d_02.py
+echo "$BLEU" "    Fiber section interaction diagrams." "$NORMAL"
 python tests/materials/fiber_section/test_interaction_diagram01.py
 python tests/materials/fiber_section/test_interaction_diagram02.py
 python tests/materials/fiber_section/test_interaction_diagram03.py
@@ -519,7 +520,9 @@ python tests/materials/fiber_section/test_interaction_diagram04.py
 python tests/materials/fiber_section/test_interaction_diagram05.py
 python tests/materials/fiber_section/test_interaction_diagram06.py
 python tests/materials/fiber_section/plastic_hinge_on_IPE200.py
-python tests/materials/fiber_section/test_plate_fiber_material.py
+echo "$BLEU" "    Membrane plate fiber section tests." "$NORMAL"
+python tests/materials/fiber_section/test_plate_fiber_material_01.py
+python tests/materials/fiber_section/test_plate_fiber_material_02.py
 echo "$BLEU" "  RC sections test." "$NORMAL"
 python tests/materials/ehe/test_Ecm_concrete.py
 python tests/materials/ehe/test_EHEconcrete.py
