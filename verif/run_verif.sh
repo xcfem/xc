@@ -481,10 +481,9 @@ python tests/materials/elastic_section/test_section_rotation_3d_02.py
 python tests/materials/elastic_section/test_section_rotation_3d_03.py
 python tests/materials/elastic_section/test_section_rotation_3d_04.py
 echo "$BLEU" "  Fiber section tests." "$NORMAL"
+python tests/materials/fiber_section/test_tangent_stiffness_01.py
 python tests/materials/fiber_section/test_reg_cuad_01.py
 python tests/materials/fiber_section/test_straight_reinf_layer_01.py
-python tests/materials/fiber_section/test_fiber_section_discretization_error_01.py
-python tests/materials/fiber_section/test_fiber_section_prop.py
 python tests/materials/fiber_section/test_fiber2d_01.py
 python tests/materials/fiber_section/test_fiber3d_01.py
 python tests/materials/fiber_section/test_fiber3d_02.py
@@ -495,34 +494,37 @@ python tests/materials/fiber_section/test_fiber3d_06.py
 python tests/materials/fiber_section/test_fiber3d_07.py
 python tests/materials/fiber_section/test_fiber3d_08.py
 python tests/materials/fiber_section/test_fiber3d_09.py
-python tests/materials/fiber_section/test_fiber_section_01.py
-python tests/materials/fiber_section/test_fiber_section_02.py
-python tests/materials/fiber_section/test_fiber_section_03.py
-python tests/materials/fiber_section/test_fiber_section_04.py
-python tests/materials/fiber_section/test_fiber_section_05.py
-python tests/materials/fiber_section/test_fiber_section_06.py
-python tests/materials/fiber_section/test_fiber_section_07.py
-python tests/materials/fiber_section/test_fiber_section_08.py
-python tests/materials/fiber_section/test_fiber_section_09.py
-python tests/materials/fiber_section/test_fiber_section_10.py
-python tests/materials/fiber_section/test_fiber_section_11.py
-python tests/materials/fiber_section/test_fiber_section_12.py
-python tests/materials/fiber_section/test_fiber_section_13.py
-python tests/materials/fiber_section/test_tangent_stiffness_01.py
-python tests/materials/fiber_section/test_section_aggregator_01.py
-python tests/materials/fiber_section/test_fiber_section_shear3d_01.py
-python tests/materials/fiber_section/test_fiber_section_shear3d_02.py
+echo "$BLEU" "    Beam fiber section tests." "$NORMAL"
+python tests/materials/fiber_section/beam_fiber_sections/test_fiber_section_prop.py
+python tests/materials/fiber_section/beam_fiber_sections/test_fiber_section_01.py
+python tests/materials/fiber_section/beam_fiber_sections/test_fiber_section_02.py
+python tests/materials/fiber_section/beam_fiber_sections/test_fiber_section_03.py
+python tests/materials/fiber_section/beam_fiber_sections/test_fiber_section_04.py
+python tests/materials/fiber_section/beam_fiber_sections/test_fiber_section_05.py
+python tests/materials/fiber_section/beam_fiber_sections/test_fiber_section_06.py
+python tests/materials/fiber_section/beam_fiber_sections/test_fiber_section_07.py
+python tests/materials/fiber_section/beam_fiber_sections/test_fiber_section_08.py
+python tests/materials/fiber_section/beam_fiber_sections/test_fiber_section_09.py
+python tests/materials/fiber_section/beam_fiber_sections/test_fiber_section_10.py
+python tests/materials/fiber_section/beam_fiber_sections/test_fiber_section_11.py
+python tests/materials/fiber_section/beam_fiber_sections/test_fiber_section_12.py
+python tests/materials/fiber_section/beam_fiber_sections/test_fiber_section_13.py
+python tests/materials/fiber_section/beam_fiber_sections/test_fiber_section_discretization_error_01.py
+python tests/materials/fiber_section/beam_fiber_sections/test_fiber_section_shear3d_01.py
+python tests/materials/fiber_section/beam_fiber_sections/test_fiber_section_shear3d_02.py
+python tests/materials/fiber_section/beam_fiber_sections/test_section_aggregator_01.py
 echo "$BLEU" "    Fiber section interaction diagrams." "$NORMAL"
-python tests/materials/fiber_section/test_interaction_diagram01.py
-python tests/materials/fiber_section/test_interaction_diagram02.py
-python tests/materials/fiber_section/test_interaction_diagram03.py
-python tests/materials/fiber_section/test_interaction_diagram04.py
-python tests/materials/fiber_section/test_interaction_diagram05.py
-python tests/materials/fiber_section/test_interaction_diagram06.py
+python tests/materials/fiber_section/interaction_diagram/test_interaction_diagram01.py
+python tests/materials/fiber_section/interaction_diagram/test_interaction_diagram02.py
+python tests/materials/fiber_section/interaction_diagram/test_interaction_diagram03.py
+python tests/materials/fiber_section/interaction_diagram/test_interaction_diagram04.py
+python tests/materials/fiber_section/interaction_diagram/test_interaction_diagram05.py
+python tests/materials/fiber_section/interaction_diagram/test_interaction_diagram06.py
 python tests/materials/fiber_section/plastic_hinge_on_IPE200.py
 echo "$BLEU" "    Membrane plate fiber section tests." "$NORMAL"
-python tests/materials/fiber_section/test_membrane_plate_fiber_material_01.py
-python tests/materials/fiber_section/test_membrane_plate_fiber_material_02.py
+python tests/materials/fiber_section/membrane_plate/test_membrane_plate_fiber_material_01.py
+python tests/materials/fiber_section/membrane_plate/test_membrane_plate_fiber_material_02.py
+python tests/materials/fiber_section/membrane_plate/test_membrane_plate_fiber_material_03.py
 echo "$BLEU" "  RC sections test." "$NORMAL"
 python tests/materials/ehe/test_Ecm_concrete.py
 python tests/materials/ehe/test_EHEconcrete.py

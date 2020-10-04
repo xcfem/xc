@@ -255,12 +255,13 @@ class OutputHandler(object):
         captionText= self.getCaptionText(itemToDisp, unitDescription, setToDisplay)
         self.displayScalarPropertyAtNodes(propertyName, unitConversionFactor, unitDescription, captionText, setToDisplay, fileName, defFScale, rgMinMax)
         
-    def displayVonMisesStresses(self,layer= None, setToDisplay=None, fileName=None,defFScale=0.0, rgMinMax=None):
+    def displayVonMisesStresses(self, vMisesCode= 'von_mises_stress', setToDisplay=None, fileName=None,defFScale=0.0, rgMinMax=None):
         '''display the stresses on the elements.
 
-        :param layer: number of the layer which will be asked
-                      for its Von Mises stress (use only with plate 
-                      fiber materials).
+        :param vMisesCode: string that will be passed to the element
+                             getValues method to retrieve the Von Mises
+                             stress. This may vary depending on the
+                             element type.
         :param setToDisplay: set of entities to be represented.
         :param fileName: name of the file to plot the graphic. Defaults to 
                     None, in that case an screen display is generated
@@ -278,10 +279,10 @@ class OutputHandler(object):
         # Define the property at nodes.
         if(setToDisplay==None):
             setToDisplay= self.modelSpace.getTotalSet()
-        propertyName= self.modelSpace.setNodePropertyFromElements(compName= layer, xcSet= setToDisplay, function= self.modelSpace.getStressComponentFromName, propToDefine= 'von_mises_stress')
+        propertyName= self.modelSpace.setNodePropertyFromElements(compName= None, xcSet= setToDisplay, function= self.modelSpace.getStressComponentFromName, propToDefine= vMisesCode)
         unitConversionFactor, unitDescription= self.outputStyle.getUnitParameters('stress')
 
-        captionText= self.getCaptionText('von_mises_stress', unitDescription, setToDisplay)
+        captionText= self.getCaptionText(vMisesCode, unitDescription, setToDisplay)
         self.displayScalarPropertyAtNodes(propertyName, unitConversionFactor, unitDescription, captionText, setToDisplay, fileName, defFScale, rgMinMax)
         
     def displayReactions(self,setToDisplay=None,fileName=None,defFScale=0.0, inclInertia= False):
