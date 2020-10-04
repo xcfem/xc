@@ -26,7 +26,6 @@ h= 60e-3 # Height of the beam cross section (m)
 t= 20e-3 # Thicknessof the beam cross section (m)
 E= 210e9 # Young’s modulus (Pa)
 nu= 0.3 # Poisson’s ratio
-sg_yield= 235e6 # Allowable stress: yield stress of steel (Pa)
 
 # Problem type
 feProblem= xc.FEProblem()

@@ -521,8 +521,8 @@ python tests/materials/fiber_section/test_interaction_diagram05.py
 python tests/materials/fiber_section/test_interaction_diagram06.py
 python tests/materials/fiber_section/plastic_hinge_on_IPE200.py
 echo "$BLEU" "    Membrane plate fiber section tests." "$NORMAL"
-python tests/materials/fiber_section/test_plate_fiber_material_01.py
-python tests/materials/fiber_section/test_plate_fiber_material_02.py
+python tests/materials/fiber_section/test_membrane_plate_fiber_material_01.py
+python tests/materials/fiber_section/test_membrane_plate_fiber_material_02.py
 echo "$BLEU" "  RC sections test." "$NORMAL"
 python tests/materials/ehe/test_Ecm_concrete.py
 python tests/materials/ehe/test_EHEconcrete.py
