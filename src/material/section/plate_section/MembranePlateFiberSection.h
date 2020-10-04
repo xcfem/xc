@@ -72,7 +72,7 @@ class NDMaterial;
 class MembranePlateFiberSection: public PlateBase
   {
   private:
-    enum {numFibers = 5};
+    static constexpr int numFibers = 5;
     
     //quadrature data
     static const double sg[numFibers];
@@ -83,6 +83,7 @@ class MembranePlateFiberSection: public PlateBase
     
     NDMaterial *theFibers[numFibers];  //pointers to five materials (fibers)
     Vector strainResultant;
+    Vector initialStrain;
 
     void init(void);
     void alloc(const NDMaterial &);
@@ -91,7 +92,7 @@ class MembranePlateFiberSection: public PlateBase
   protected:
     int sendData(Communicator &);
     int recvData(const Communicator &);
-  public : 
+  public: 
     MembranePlateFiberSection(int tag= 0);
     MembranePlateFiberSection(int tag, double thickness, NDMaterial &Afiber);
     MembranePlateFiberSection(const MembranePlateFiberSection &);
@@ -100,6 +101,10 @@ class MembranePlateFiberSection: public PlateBase
 
     inline void setMaterial(const NDMaterial &ndmat)
       { alloc(ndmat); }
+
+    std::vector<double> getLayerZs(void) const;
+    std::vector<double> getLayerWeights(void) const;
+    std::vector<std::pair<double, double> > getLayerZsAndWeights(void) const;
 
     SectionForceDeformation *getCopy(void) const;
     double getRho(void) const;
@@ -115,7 +120,7 @@ class MembranePlateFiberSection: public PlateBase
     void zeroInitialSectionDeformation(void);
     int setTrialSectionDeformation(const Vector &strain_from_element);
     const Vector &getInitialSectionDeformation(void) const;
-    const Vector& getSectionDeformation(void) const; //send back the strain
+    const Vector &getSectionDeformation(void) const; //send back the strain
     const Vector &getStressResultant(void) const; //send back the stress 
     const Matrix &getSectionTangent(void) const; //send back the tangent 
     const Matrix &getInitialTangent(void) const //send back the initial tangent 

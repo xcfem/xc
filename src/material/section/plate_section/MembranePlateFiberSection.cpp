@@ -136,17 +136,20 @@ void XC::MembranePlateFiberSection::free(void)
 
 //! @brief Default constructor.
 XC::MembranePlateFiberSection::MembranePlateFiberSection(int tag)
-  : PlateBase( tag, SEC_TAG_MembranePlateFiberSection ), strainResultant(8) 
+  : PlateBase( tag, SEC_TAG_MembranePlateFiberSection ),
+    strainResultant(8), initialStrain(8)
   { init(); }
 
 //! @brief full constructor
 XC::MembranePlateFiberSection::MembranePlateFiberSection(int tag, double thickness, XC::NDMaterial &Afiber )
-  : PlateBase( tag, SEC_TAG_MembranePlateFiberSection,thickness, Afiber.getRho()), strainResultant(8)
+  : PlateBase( tag, SEC_TAG_MembranePlateFiberSection,thickness, Afiber.getRho()),
+    strainResultant(8), initialStrain(8)
   { alloc(Afiber); }
 
 //! @brief Copy constructor.
 XC::MembranePlateFiberSection::MembranePlateFiberSection(const MembranePlateFiberSection &other)
-  : PlateBase(other), strainResultant(other.strainResultant) 
+  : PlateBase(other),
+    strainResultant(other.strainResultant), initialStrain(other.initialStrain) 
   {
     init();
     copy_fibers(other);
@@ -157,6 +160,7 @@ XC::MembranePlateFiberSection &XC::MembranePlateFiberSection::operator=(const Me
   {
     PlateBase::operator=(other);
     strainResultant= other.strainResultant;
+    initialStrain= other.initialStrain;
     copy_fibers(other);
     return *this;
   }
@@ -171,6 +175,35 @@ XC::MembranePlateFiberSection::~MembranePlateFiberSection(void)
 XC::SectionForceDeformation  *XC::MembranePlateFiberSection::getCopy(void) const 
   { return new MembranePlateFiberSection(*this); }
 
+//! @brief Return the z coordinate for each fiber (layer if you prefer).
+std::vector<double> XC::MembranePlateFiberSection::getLayerZs(void) const
+  {
+    std::vector<double> retval(numFibers,0.0);
+    for(int i = 0; i < numFibers; i++ )
+      { retval[i]= ( 0.5*h ) * sg[i]; }
+    return retval;
+  }
+
+//! @brief Return the weight coordinate for each fiber (layer if you prefer).
+std::vector<double> XC::MembranePlateFiberSection::getLayerWeights(void) const
+  {
+    std::vector<double> retval(numFibers,0.0);
+    for(int i = 0; i < numFibers; i++)
+      { retval[i]= (0.5*h) * wg[i];}
+    return retval;
+  }
+  
+//! @brief Return the weight coordinate for each fiber (layer if you prefer).
+std::vector<std::pair<double, double> > XC::MembranePlateFiberSection::getLayerZsAndWeights(void) const
+  {
+    std::vector<std::pair<double, double> > retval(numFibers,std::pair<double,double>(0.0,0.0));
+    for(int i = 0; i < numFibers; i++)
+      {
+	retval[i].first= (0.5*h) * sg[i];
+	retval[i].second= (0.5*h) * wg[i];
+      }
+    return retval;
+  }
 
 
 //! @brief send back order of strainResultant in vector form
@@ -219,31 +252,40 @@ int XC::MembranePlateFiberSection::revertToStart(void)
 double XC::MembranePlateFiberSection::getRho(void) const
   {
     double rhoH = 0.0;
+    const std::vector<double> weights= getLayerWeights();
     for(int i = 0; i < numFibers; i++ )
-      {
-        double weight= ( 0.5*h ) * wg[i];
-        rhoH+= ( theFibers[i]->getRho() ) * weight;
-      }
+      { rhoH+= ( theFibers[i]->getRho() ) * weights[i]; }
     return rhoH;
   }
 
 //! @brief Asigns density per unit area
 void XC::MembranePlateFiberSection::setRho(const double &r)
   {
+    const std::vector<double> weights= getLayerWeights();
     for(int i = 0; i < numFibers; i++ )
-      {
-        double weight= ( 0.5*h ) * wg[i];
-        theFibers[i]->setRho(r/weight);
-      }
+      { theFibers[i]->setRho(r/weights[i]); }
   }
 
 
 //! @brief Set initial values for deformation.
-int XC::MembranePlateFiberSection::setInitialSectionDeformation(const Vector &strainResultant_from_element)
+int XC::MembranePlateFiberSection::setInitialSectionDeformation(const Vector &initialStrain_from_element)
   {
-    std::cerr << getClassName() << "::" << __FUNCTION__
-	      << "; not implemented." << std::endl;
-    return 0;
+    this->initialStrain = initialStrain_from_element;
+
+    static Vector strain(numFibers);
+    int success= 0;
+    const std::vector<double> layerZ= getLayerZs();
+    for(int i = 0; i < numFibers; i++ )
+      {
+        const double &z= layerZ[i];
+        strain(0)= initialStrain(0)-z*initialStrain(3);
+        strain(1)= initialStrain(1)-z*initialStrain(4);
+        strain(2)= initialStrain(2)-z*initialStrain(5);
+        strain(3)= root56*initialStrain(6);
+        strain(4)= root56*initialStrain(7);
+        success+= theFibers[i]->setInitialStrain(strain);
+      } //end for i
+    return success;
   }
 
 //! @brief Zero initial deformation.
@@ -256,9 +298,7 @@ void XC::MembranePlateFiberSection::zeroInitialSectionDeformation(void)
 //! @brief Return initial deformation.
 const XC::Vector &XC::MembranePlateFiberSection::getInitialSectionDeformation(void) const
   {
-    std::cerr << getClassName() << "::" << __FUNCTION__
-	      << "; not implemented." << std::endl;
-    return strainResultant;
+    return initialStrain;
   }
 
 //! @brief Set trial deformation. 
@@ -267,18 +307,17 @@ int XC::MembranePlateFiberSection::setTrialSectionDeformation(const Vector &stra
     this->strainResultant = strainResultant_from_element;
 
     static Vector strain(numFibers);
-
     int success= 0;
-
+    const std::vector<double> layerZ= getLayerZs();
     for(int i = 0; i < numFibers; i++ )
       {
-        double z= ( 0.5*h ) * sg[i];
+        const double &z= layerZ[i];
         strain(0)=  strainResultant(0)  - z*strainResultant(3);
         strain(1)=  strainResultant(1)  - z*strainResultant(4);
         strain(2)=  strainResultant(2)  - z*strainResultant(5);
         strain(3)=  root56*strainResultant(6);
         strain(4)=  root56*strainResultant(7);
-        success+= theFibers[i]->setTrialStrain( strain );
+        success+= theFibers[i]->setTrialStrain(strain);
       } //end for i
     return success;
   }
@@ -286,7 +325,11 @@ int XC::MembranePlateFiberSection::setTrialSectionDeformation(const Vector &stra
 
 //! @brief Returns section deformation.
 const XC::Vector &XC::MembranePlateFiberSection::getSectionDeformation(void) const
-  { return strainResultant; }
+  {
+    static Vector retval;
+    retval= strainResultant-initialStrain;
+    return retval;
+  }
 
 
 //! @brief Return stress resultant.
@@ -295,10 +338,11 @@ const XC::Vector &XC::MembranePlateFiberSection::getStressResultant(void) const
     static Vector stress(numFibers);
     stressResultant.Zero( );
 
+    const std::vector< std::pair<double, double> > zsAndWeights= getLayerZsAndWeights();
     for(int i = 0; i < numFibers; i++ )
       {
-        double z= ( 0.5*h ) * sg[i];
-        double weight= ( 0.5*h ) * wg[i];
+        const double &z= zsAndWeights[i].first;
+        const double &weight= zsAndWeights[i].second;
         stress= theFibers[i]->getStress( );
         //membrane
         stressResultant(0)+= stress(0)*weight;
@@ -326,14 +370,13 @@ const XC::Matrix &XC::MembranePlateFiberSection::getSectionTangent(void) const
     static Matrix Aeps(numFibers,8);
     static Matrix Asig(8,numFibers);
 
-    double z, weight;
     tangent.Zero( );
 
+    const std::vector< std::pair<double, double> > zsAndWeights= getLayerZsAndWeights();
     for(int i = 0; i < numFibers; i++)
       {
-        z = ( 0.5*h ) * sg[i];
-        weight = (0.5*h) * wg[i];
-
+        const double &z= zsAndWeights[i].first;
+        const double &weight= zsAndWeights[i].second;
 /*      //compute Aeps
 
       Aeps.Zero( );
@@ -495,6 +538,7 @@ int XC::MembranePlateFiberSection::sendData(Communicator &comm)
     res+= comm.sendBrokedPtr(theFibers[3],getDbTagData(),BrokedPtrCommMetaData(16,17,18));
     res+= comm.sendBrokedPtr(theFibers[4],getDbTagData(),BrokedPtrCommMetaData(19,20,21));
     res+= comm.sendVector(strainResultant,getDbTagData(),CommMetaData(22));
+    res+= comm.sendVector(initialStrain,getDbTagData(),CommMetaData(23));
     return res;
   }
 
@@ -508,6 +552,7 @@ int XC::MembranePlateFiberSection::recvData(const Communicator &comm)
     theFibers[3]= comm.getBrokedMaterial(theFibers[3],getDbTagData(),BrokedPtrCommMetaData(16,17,18));
     theFibers[4]= comm.getBrokedMaterial(theFibers[4],getDbTagData(),BrokedPtrCommMetaData(19,20,21));
     res+= comm.receiveVector(strainResultant,getDbTagData(),CommMetaData(22));
+    res+= comm.receiveVector(initialStrain,getDbTagData(),CommMetaData(23));
     return res;
   }
 
@@ -516,7 +561,7 @@ int XC::MembranePlateFiberSection::sendSelf(Communicator &comm)
   {
     setDbTag(comm);
     const int dataTag= getDbTag();
-    inicComm(23);
+    inicComm(24);
     int res= sendData(comm);
 
     res+= comm.sendIdData(getDbTagData(),dataTag);
@@ -530,7 +575,7 @@ int XC::MembranePlateFiberSection::sendSelf(Communicator &comm)
 //! @brief Receive object itself through the communicator argument.
 int XC::MembranePlateFiberSection::recvSelf(const Communicator &comm)
   {
-    inicComm(23);
+    inicComm(24);
     const int dataTag= getDbTag();
     int res= comm.receiveIdData(getDbTagData(),dataTag);
 
