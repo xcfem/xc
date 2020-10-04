@@ -268,9 +268,12 @@ void XC::PrismaticBarCrossSectionsVector::zeroInitialSectionDeformations(void)
 //! @brief Set initial strains.
 void XC::PrismaticBarCrossSectionsVector::setInitialSectionDeformations(const std::vector<Vector> &vs)
   {
-    const size_t nSections= std::min(size(),vs.size());
-    if(vs.size()<nSections)
-      std::cerr << "Error en PrismaticBarCrossSectionsVector::setInitialSectionDeformations" << std::endl;
+    const size_t sz= vs.size();
+    const size_t nSections= std::min(size(),sz);
+    if(sz<nSections)
+      std::cerr << getClassName() << "::" << __FUNCTION__
+	        << "; wrong size (" << sz << ")."
+		<< std::endl;
     for(size_t i= 0;i<nSections;i++)
       (*this)[i]->setInitialSectionDeformation(vs[i]);
   }
@@ -281,7 +284,9 @@ void XC::PrismaticBarCrossSectionsVector::addInitialSectionDeformations(const Be
     const size_t numAbcisas= xi.noRows();
     const size_t nSections= std::min(size(),numAbcisas);
     if(numAbcisas<nSections)
-      std::cerr << "Error en PrismaticBarCrossSectionsVector::setInitialSectionDeformations" << std::endl;
+      std::cerr << getClassName() << "::" << __FUNCTION__
+	        << "; wrong number of sections (" << numAbcisas << ")."
+		<< std::endl;
     if(nSections>0)
       {
         const Vector e1= (*this)[0]->getGeneralizedStrainVector(strainLoad.getDeformationPlane1())*loadFactor;

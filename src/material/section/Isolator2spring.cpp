@@ -84,7 +84,7 @@ XC::Isolator2spring::Isolator2spring(int tag)
   }
 
 XC::Isolator2spring::Isolator2spring(void)
-  :SectionForceDeformation(0, SEC_TAG_Isolator2spring), tol(1.0e-12), k1(0.0), Fyo(0.0), kbo(0.0), kvo(0.0), h(0.0), Pe(0.0), po(0.0)
+  : SectionForceDeformation(0, SEC_TAG_Isolator2spring), tol(1.0e-12), k1(0.0), Fyo(0.0), kbo(0.0), kvo(0.0), h(0.0), Pe(0.0), po(0.0)
   {
     this->revertToStart();
     pcr= sqrt(Pe*kbo*h);

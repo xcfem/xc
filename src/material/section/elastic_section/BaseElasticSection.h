@@ -65,7 +65,7 @@ class BaseElasticSection: public PrismaticBarCrossSection
     int setTrialSectionDeformation(const Vector&);
     inline Vector &getTrialSectionDeformation(void)
       { return eTrial; }
-    int setInitialSectionDeformation(const Vector&);
+    int setInitialSectionDeformation(const Vector &);
     inline const Vector &getInitialSectionDeformation(void) const
       { return eInic; }
     void zeroInitialSectionDeformation(void)

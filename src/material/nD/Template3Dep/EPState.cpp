@@ -520,7 +520,8 @@ XC::EPState* XC::EPState::getCopy(void)
 //================================================================================
 // Copy constructor
 //================================================================================
-XC::EPState::EPState( const XC::EPState &rhs ) {
+XC::EPState::EPState( const EPState &rhs )
+  {
 
 //ZC05/2004       Eo               = rhs.getEo();
 //ZC05/2004       E_Young          = rhs.getE();

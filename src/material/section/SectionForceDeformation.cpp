@@ -88,7 +88,7 @@ XC::SectionForceDeformation::SectionForceDeformation(int tag, int classTag,Mater
 std::string XC::SectionForceDeformation::getTypeString(void) const
   { return getType().getString(); }
 
-//! @brief Adds to the generalized strains vector inicial el
+//! @brief Adds to the generalized initial strains vector inicial the vector
 //! being passed as parameter.
 int XC::SectionForceDeformation::addInitialSectionDeformation(const Vector &def)
   { return setInitialSectionDeformation(getInitialSectionDeformation()+def); }
