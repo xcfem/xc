@@ -87,10 +87,11 @@ namespace XC {
 class ElasticIsotropicMaterial: public NDMaterial
   {
   protected:
-    double E; //!< Elastic modulus
-    double v; //!< Poisson ratio
-    double rho ; //!< mass per unit 3D volume
-    Vector epsilon; //!< Strain vector
+    double E; //!< Elastic modulus.
+    double v; //!< Poisson ratio.
+    double rho ; //!< mass per unit 3D volume.
+    Vector epsilon; //!< trial strain vector.
+    Vector epsilon0; //!< initial strain vector.
 
     int sendData(Communicator &);
     int recvData(const Communicator &);
@@ -106,18 +107,25 @@ class ElasticIsotropicMaterial: public NDMaterial
     // For parallel processing
     ElasticIsotropicMaterial(void);
 
+    //! @brief Return material density.
     inline virtual double getRho(void) const
       { return rho; }
+    //! @brief Set material density.
     inline virtual void setRho(const double &r)
       { rho= r; }
 // BJ added 19June2002
-    double getE(void);
+    double getE(void) const;
+    //! @brief Set material elastic modulus.
     inline void setE(const double &e)
       { E= e; }
-    double getnu(void);
+    double getnu(void) const;
+    //! @brief Set material Poisson's ratio.
     inline void setnu(const double &nu)
       { v= nu; }
 
+    
+    virtual int setInitialStrain(const Vector &v);
+    virtual const Vector &getInitialStrain(void) const;
     virtual int setTrialStrain(const Vector &v);
     virtual int setTrialStrain(const Vector &v, const Vector &r);
     virtual int setTrialStrainIncr(const Vector &v);
@@ -131,12 +139,7 @@ class ElasticIsotropicMaterial: public NDMaterial
     virtual int revertToLastCommit(void);
     virtual int revertToStart(void);
     
-    // Create a copy of material parameters AND state variables
-    // Called by GenericSectionXD
     virtual NDMaterial *getCopy(void) const;
-
-    // Create a copy of just the material parameters
-    // Called by the continuum elements
     virtual NDMaterial *getCopy(const std::string &) const;
 
     // Return a string indicating the type of material model

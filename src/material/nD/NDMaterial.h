@@ -113,11 +113,13 @@ class NDMaterial: public Material
     virtual double getRho(void) const;
     virtual void setRho(const double &);
 // BJ added 19June2002
-    virtual double getE(void);
-    virtual double getnu(void);
-    virtual double getpsi(void);
+    virtual double getE(void) const;
+    virtual double getnu(void) const;
+    virtual double getpsi(void) const;
 
 
+    virtual int setInitialStrain(const Vector &v);
+    virtual const Vector &getInitialStrain(void) const;
     virtual int setTrialStrain(const Vector &v);
     virtual int setTrialStrain(const Vector &v, const Vector &r);
     virtual int setTrialStrainIncr(const Vector &v);

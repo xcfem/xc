@@ -58,32 +58,40 @@
 XC::Vector XC::ElasticIsotropicPlateFiber::sigma(5);
 XC::Matrix XC::ElasticIsotropicPlateFiber::D(5,5);
 
-XC::ElasticIsotropicPlateFiber::ElasticIsotropicPlateFiber(int tag, double E, double nu, double rho)
-  : ElasticIsotropicMaterial(tag, ND_TAG_ElasticIsotropicPlateFiber,5, E, nu, rho)
-  {}
-
+//! @brief Default constructor.
 XC::ElasticIsotropicPlateFiber::ElasticIsotropicPlateFiber(int tag)
   : ElasticIsotropicMaterial(tag, ND_TAG_ElasticIsotropicPlateFiber,5, 0.0, 0.0)
   {}
 
-XC::ElasticIsotropicPlateFiber::ElasticIsotropicPlateFiber()
-  : ElasticIsotropicMaterial(0, ND_TAG_ElasticIsotropicPlateFiber,5, 0.0, 0.0)
+//! @brief Default constructor.
+//! @param tag: object identifier.
+//! @param E: elastic modulus.
+//! @param nu: Poisson's coefficient.
+//! @param rho: material density.
+XC::ElasticIsotropicPlateFiber::ElasticIsotropicPlateFiber(int tag, double E, double nu, double rho)
+  : ElasticIsotropicMaterial(tag, ND_TAG_ElasticIsotropicPlateFiber,5, E, nu, rho)
   {}
 
-int XC::ElasticIsotropicPlateFiber::setTrialStrainIncr(const XC::Vector &strain)
-{
-  epsilon += strain;
-  return 0;
-}
+//! @brief Increment the current trial strain with the argument.
+//! @param strain: strain increment. 
+int XC::ElasticIsotropicPlateFiber::setTrialStrainIncr(const Vector &strain)
+  {
+    epsilon += strain;
+    return 0;
+  }
 
-int XC::ElasticIsotropicPlateFiber::setTrialStrainIncr(const XC::Vector &strain, const XC::Vector &rate)
-{
-  epsilon += strain;
-  return 0;
-}
+//! @brief Increment the current trial strain with the argument.
+//! @param strain: strain increment.
+//! @param rate: unused argument.
+int XC::ElasticIsotropicPlateFiber::setTrialStrainIncr(const Vector &strain, const XC::Vector &rate)
+  {
+    epsilon += strain;
+    return 0;
+  }
 
+//! @brief Return the tangent stiffness matrix.
 const XC::Matrix &XC::ElasticIsotropicPlateFiber::getTangent(void) const
-{
+  {
     double d00 = E/(1.0-v*v);
     double d01 = v*d00;
     double d22 = 0.5*(d00-d01);
@@ -95,10 +103,11 @@ const XC::Matrix &XC::ElasticIsotropicPlateFiber::getTangent(void) const
     D(4,4) = d22;
 
     return D;
-}
+  }
 
+//! @brief Return the initial tangent stiffness matrix.
 const XC::Matrix &XC::ElasticIsotropicPlateFiber::getInitialTangent(void) const
-{
+  {
     double d00 = E/(1.0-v*v);
     double d01 = v*d00;
     double d22 = 0.5*(d00-d01);
@@ -110,8 +119,9 @@ const XC::Matrix &XC::ElasticIsotropicPlateFiber::getInitialTangent(void) const
     D(4,4) = d22;
 
     return D;
-}
+  }
 
+//! @brief Return the material stresses.
 const XC::Vector &XC::ElasticIsotropicPlateFiber::getStress(void) const
   {
     const double d00 = E/(1.0-v*v);
@@ -132,27 +142,29 @@ const XC::Vector &XC::ElasticIsotropicPlateFiber::getStress(void) const
     return sigma;
   }
 
+//! @brief Commit the material state.
 int XC::ElasticIsotropicPlateFiber::commitState(void)
-{
-  return 0;
-}
+  { return 0; }
 
+//! @brief Revert the material state to its last commit.
 int XC::ElasticIsotropicPlateFiber::revertToLastCommit(void)
-{
-  return 0;
-}
+  { return 0; }
 
+//! @brief Revert the to its initial state.
 int XC::ElasticIsotropicPlateFiber::revertToStart(void)
-{
-  epsilon.Zero();
-  return 0;
-}
+  {
+    ElasticIsotropicMaterial::revertToStart();
+    return 0;
+  }
 
+//! @brief Virtual constructor.
 XC::NDMaterial *XC::ElasticIsotropicPlateFiber::getCopy(void) const
   { return new ElasticIsotropicPlateFiber(*this); }
 
+//! @brief Return a string that identifies the material type.
 const std::string &XC::ElasticIsotropicPlateFiber::getType(void) const
   { return strTypePlateFiber; }
 
+//! @brief ??
 int XC::ElasticIsotropicPlateFiber::getOrder(void) const
   { return 5; }

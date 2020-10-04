@@ -75,9 +75,8 @@ class ElasticIsotropicPlateFiber: public ElasticIsotropicMaterial
     static Vector sigma; //!< Stress vector ... class-wide for returns
     static Matrix D; //!< Elastic constants
   public:
+    ElasticIsotropicPlateFiber(int tag= 0);
     ElasticIsotropicPlateFiber(int tag, double E, double nu, double rho);
-    ElasticIsotropicPlateFiber(int tag);
-    ElasticIsotropicPlateFiber(void);
 
     int setTrialStrainIncr(const Vector &v);
     int setTrialStrainIncr(const Vector &v, const Vector &r);

@@ -103,15 +103,18 @@ void XC::NDMaterial::setRho(const double &)
   }
 
 // BJ added 19June2002
-double XC::NDMaterial::getE(void) 
+//! @brief Return the material elastic modulus.
+double XC::NDMaterial::getE(void) const 
   { return 0.0; }
 
 // BJ added 19June2002
-double XC::NDMaterial::getnu(void)
+//! @brief Return the material Poisson's ratio.
+double XC::NDMaterial::getnu(void) const
   { return 0.0; }
 
 // BJ added 19June2002
-double XC::NDMaterial::getpsi(void)
+//! @brief Return the material psi??.
+double XC::NDMaterial::getpsi(void) const
   { return 0.0; }
 
 //! @brief Returns committed stresses
@@ -130,7 +133,7 @@ const XC::Vector &XC::NDMaterial::getCommittedStrain(void)
 int XC::NDMaterial::setTrialStrain(const Vector &v)
   {
     std::cerr << getClassName() << "::" << __FUNCTION__
-              << "; subclass responsibility\n";
+              << "; subclass responsibility.\n";
     return -1;    
   }
 
@@ -138,7 +141,7 @@ int XC::NDMaterial::setTrialStrain(const Vector &v)
 int XC::NDMaterial::setTrialStrain(const Vector &v, const Vector &r)
   {
     std::cerr << getClassName() << "::" << __FUNCTION__
-              << "; subclass responsibility\n";
+              << "; subclass responsibility.\n";
     return -1;    
   }
 
@@ -146,7 +149,7 @@ int XC::NDMaterial::setTrialStrain(const Vector &v, const Vector &r)
 int XC::NDMaterial::setTrialStrainIncr(const Vector &v)
   {
     std::cerr << getClassName() << "::" << __FUNCTION__
-              << "; subclass responsibility\n";
+              << "; subclass responsibility.\n";
     return -1;    
   }
 
@@ -154,15 +157,15 @@ int XC::NDMaterial::setTrialStrainIncr(const Vector &v)
 int XC::NDMaterial::setTrialStrainIncr(const Vector &v, const Vector &r)
   {
      std::cerr << getClassName() << "::" << __FUNCTION__
-              << "; subclass responsibility\n";
+              << "; subclass responsibility.\n";
      return -1;    
   }
 
-//! @brief Asigna el initial strain value.
+//! @brief Sets the initial strain value.
 void XC::NDMaterial::setInitialGeneralizedStrain(const Vector &)
   {
      std::cerr << getClassName() << "::" << __FUNCTION__
-              << "; subclass responsibility\n";
+              << "; subclass responsibility.\n";
   }
 
 //! @brief Return the tangent stiffness matrix at the current trial
@@ -170,7 +173,7 @@ void XC::NDMaterial::setInitialGeneralizedStrain(const Vector &)
 const XC::Matrix &XC::NDMaterial::getTangent(void) const
   {
      std::cerr << getClassName() << "::" << __FUNCTION__
-              << "; subclass responsibility\n";
+              << "; subclass responsibility.\n";
      return errMatrix;
   }
 
@@ -178,7 +181,7 @@ const XC::Matrix &XC::NDMaterial::getTangent(void) const
 const XC::Vector &XC::NDMaterial::getStress(void) const
   {
     std::cerr << getClassName() << "::" << __FUNCTION__
-              << "; subclass responsibility\n";
+              << "; subclass responsibility.\n";
     return errVector;    
   }
 
@@ -186,7 +189,7 @@ const XC::Vector &XC::NDMaterial::getStress(void) const
 const XC::Vector &XC::NDMaterial::getStrain(void) const
   {
     std::cerr << getClassName() << "::" << __FUNCTION__
-              << "; subclass responsibility\n";
+              << "; subclass responsibility.\n";
     return errVector;    
   }
 
@@ -216,15 +219,32 @@ double XC::NDMaterial::getVonMisesStress(void) const
 const XC::Vector &XC::NDMaterial::getInitialGeneralizedStrain(void) const
   {
     std::cerr << getClassName() << "::" << __FUNCTION__
-              << "; subclass responsibility\n";
+              << "; subclass responsibility.\n";
     return errVector;    
+  }
+
+//! @brief Set initial strain value.
+int XC::NDMaterial::setInitialStrain(const Vector &v)
+  {
+    std::cerr << getClassName() << "::" << __FUNCTION__
+              << "; subclass responsibility.\n";
+    return -1;    
+  }
+
+//! @brief Return the value of the initial strain.
+const XC::Vector &XC::NDMaterial::getInitialStrain(void) const
+  {
+    static Vector retval;
+    std::cerr << getClassName() << "::" << __FUNCTION__
+              << "; subclass responsibility.\n";
+    return retval;
   }
 
 //! @brief Set trial strain value.
 int XC::NDMaterial::setTrialStrain(const Tensor &v)
   {
     std::cerr << getClassName() << "::" << __FUNCTION__
-              << "; subclass responsibility\n";
+              << "; subclass responsibility.\n";
     return -1;    
   }
 
@@ -232,7 +252,7 @@ int XC::NDMaterial::setTrialStrain(const Tensor &v)
 int XC::NDMaterial::setTrialStrain(const Tensor &v, const Tensor &r)    
   {
     std::cerr << getClassName() << "::" << __FUNCTION__
-              << "; subclass responsibility\n";
+              << "; subclass responsibility.\n";
     return -1;    
   }
 
@@ -240,7 +260,7 @@ int XC::NDMaterial::setTrialStrain(const Tensor &v, const Tensor &r)
 int XC::NDMaterial::setTrialStrainIncr(const Tensor &v)
   {
     std::cerr << getClassName() << "::" << __FUNCTION__
-              << "; subclass responsibility\n";
+              << "; subclass responsibility.\n";
     return -1;    
   }
 
@@ -248,13 +268,13 @@ int XC::NDMaterial::setTrialStrainIncr(const Tensor &v)
 int XC::NDMaterial::setTrialStrainIncr(const Tensor &v, const Tensor &r)
   {
     std::cerr << getClassName() << "::" << __FUNCTION__
-              << "; subclass responsibility\n";
+              << "; subclass responsibility.\n";
     return -1;    
   }
 const XC::straintensor &XC::NDMaterial::getPlasticStrainTensor(void) const
   {
      std::cerr << getClassName() << "::" << __FUNCTION__
-		<< "; subclass responsibility\n";
+		<< "; subclass responsibility.\n";
      static straintensor errstraintensor;
      return errstraintensor;
   }

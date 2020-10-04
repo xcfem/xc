@@ -91,37 +91,43 @@
 //! @param nu: material Poisson coefficient.
 //! @param r: material density.
 XC::ElasticIsotropicMaterial::ElasticIsotropicMaterial(int tag, int classTag, int eps_size, double e, double nu, double r)
-  :XC::NDMaterial(tag, classTag), E(e), v(nu), rho(r), epsilon(eps_size) {}
+  :XC::NDMaterial(tag, classTag), E(e), v(nu), rho(r),
+  epsilon(eps_size), epsilon0(eps_size) {}
 
 //! @brief Constructor.
 XC::ElasticIsotropicMaterial::ElasticIsotropicMaterial(int tag, int eps_size)
-  :XC::NDMaterial(tag, ND_TAG_ElasticIsotropic), E(0.0), v(0.0), rho(0.0), epsilon(eps_size) {}
+  :XC::NDMaterial(tag, ND_TAG_ElasticIsotropic), E(0.0), v(0.0), rho(0.0),
+  epsilon(eps_size), epsilon0(eps_size) {}
 
 //! @brief Constructor.
 XC::ElasticIsotropicMaterial::ElasticIsotropicMaterial(int tag, int eps_size, double e, double nu, double r)
-  :XC::NDMaterial(tag, ND_TAG_ElasticIsotropic), E(e), v(nu), rho(r), epsilon(eps_size) {}
+  :XC::NDMaterial(tag, ND_TAG_ElasticIsotropic), E(e), v(nu), rho(r),
+  epsilon(eps_size), epsilon0(eps_size) {}
 
 // Boris Jeremic (@ucdavis.edu) 19June2002
-double XC::ElasticIsotropicMaterial::getE(void)
+//! @brief Return the elastic modulus.
+double XC::ElasticIsotropicMaterial::getE(void) const
   { return E; }
 
 // Boris Jeremic (@ucdavis.edu) 19June2002
-double XC::ElasticIsotropicMaterial::getnu(void)
+//! @brief Return the material Poisson's ratio.
+double XC::ElasticIsotropicMaterial::getnu(void) const
   { return v; }
 
 //! @brief Returns a specific implementation of an ElasticIsotropicMaterial by
 //! switching on \p type.  Outputs an error if \p type is not valid.
-//! This is the prototype method.
+//! This is the prototype method. Create a copy of just the material parameters
+//! Called by the continuum elements.
 XC::NDMaterial *XC::ElasticIsotropicMaterial::getCopy(const std::string &type) const
   {
     if((type==strTypePlaneStress2D) || (type==strTypePlaneStress))
       {
         ElasticIsotropicPlaneStress2D *theModel;
         theModel = new ElasticIsotropicPlaneStress2D(this->getTag(), E, v, rho);
-                // DOES NOT COPY sigma, D, and epsilon ...
-                // This function should only be called during element instantiation, so
-                // no state determination is performed on the material model object
-                // prior to copying the material model (calling this function)
+	// DOES NOT COPY sigma, D, and epsilon ...
+	// This function should only be called during element instantiation, so
+	// no state determination is performed on the material model object
+	// prior to copying the material model (calling this function)
         return theModel;
       }
 
@@ -129,20 +135,20 @@ XC::NDMaterial *XC::ElasticIsotropicMaterial::getCopy(const std::string &type) c
       {
         ElasticIsotropicPlaneStrain2D *theModel;
         theModel = new ElasticIsotropicPlaneStrain2D(this->getTag(), E, v, rho);
-                // DOES NOT COPY sigma, D, and epsilon ...
-                // This function should only be called during element instantiation, so
-                // no state determination is performed on the material model object
-                // prior to copying the material model (calling this function)
+	// DOES NOT COPY sigma, D, and epsilon ...
+	// This function should only be called during element instantiation, so
+	// no state determination is performed on the material model object
+	// prior to copying the material model (calling this function)
         return theModel;
       }
     else if((type==strTypeAxiSymmetric2D) || (type==strTypeAxiSymmetric))
       {
         ElasticIsotropicAxiSymm *theModel;
         theModel = new ElasticIsotropicAxiSymm(this->getTag(), E, v, rho);
-                // DOES NOT COPY sigma, D, and epsilon ...
-                // This function should only be called during element instantiation, so
-                // no state determination is performed on the material model object
-                // prior to copying the material model (calling this function)
+	// DOES NOT COPY sigma, D, and epsilon ...
+	// This function should only be called during element instantiation, so
+	// no state determination is performed on the material model object
+	// prior to copying the material model (calling this function)
         return theModel;
       }
 ///////////////////////////////
@@ -151,10 +157,10 @@ XC::NDMaterial *XC::ElasticIsotropicMaterial::getCopy(const std::string &type) c
       {
         ElasticIsotropic3D *theModel;
         theModel = new ElasticIsotropic3D(this->getTag(), E, v, rho);
-                // DOES NOT COPY sigma, D, and epsilon ...
-                // This function should only be called during element instantiation, so
-                // no state determination is performed on the material model object
-                // prior to copying the material model (calling this function)
+	// DOES NOT COPY sigma, D, and epsilon ...
+	// This function should only be called during element instantiation, so
+	// no state determination is performed on the material model object
+	// prior to copying the material model (calling this function)
         return theModel;
       }
 ///////////////////////////////
@@ -162,20 +168,20 @@ XC::NDMaterial *XC::ElasticIsotropicMaterial::getCopy(const std::string &type) c
       {
         ElasticIsotropicPlateFiber *theModel;
         theModel = new ElasticIsotropicPlateFiber(this->getTag(), E, v, rho);
-                // DOES NOT COPY sigma, D, and epsilon ...
-                // This function should only be called during element instantiation, so
-                // no state determination is performed on the material model object
-                // prior to copying the material model (calling this function)
+	// DOES NOT COPY sigma, D, and epsilon ...
+	// This function should only be called during element instantiation, so
+	// no state determination is performed on the material model object
+	// prior to copying the material model (calling this function)
         return theModel;
       }
     else if((type==strTypeBeamFiber))
       {
         ElasticIsotropicBeamFiber *theModel;
         theModel = new ElasticIsotropicBeamFiber(this->getTag(), E, v, rho);
-                // DOES NOT COPY sigma, D, and epsilon ...
-                // This function should only be called during element instantiation, so
-                // no state determination is performed on the material model object
-                // prior to copying the material model (calling this function)
+	// DOES NOT COPY sigma, D, and epsilon ...
+	// This function should only be called during element instantiation, so
+	// no state determination is performed on the material model object
+	// prior to copying the material model (calling this function)
         return theModel;
       }
     else // Handle other cases
@@ -188,27 +194,48 @@ XC::NDMaterial *XC::ElasticIsotropicMaterial::getCopy(const std::string &type) c
     return 0;
   }
 
-int XC::ElasticIsotropicMaterial::setTrialStrain(const Vector &v)
+//! @brief Sets the initial strain value.
+int XC::ElasticIsotropicMaterial::setInitialStrain(const Vector &eps)
   {
-    epsilon= v;
+    epsilon0= eps;
     return 0;
   }
 
-int XC::ElasticIsotropicMaterial::setTrialStrain(const Vector &v, const XC::Vector &rate)
+//! @brief Returns the value of the initial strain.
+const XC::Vector &XC::ElasticIsotropicMaterial::getInitialStrain(void) const
+  { return epsilon0; }
+
+//! @brief Set the value of the trial strain.
+//! @param eps: value of the trial strain.
+int XC::ElasticIsotropicMaterial::setTrialStrain(const Vector &eps)
   {
-    epsilon= v;
+    epsilon= eps;
     return 0;
   }
 
-int XC::ElasticIsotropicMaterial::setTrialStrainIncr(const Vector &v)
+//! @brief Set the value of the trial strain.
+//! @param eps: value of the trial strain.
+//! @param rate: not used.
+int XC::ElasticIsotropicMaterial::setTrialStrain(const Vector &eps, const XC::Vector &rate)
   {
-    epsilon+= v;
+    epsilon= eps;
     return 0;
   }
 
-int XC::ElasticIsotropicMaterial::setTrialStrainIncr(const Vector &v, const XC::Vector &rate)
+//! @brief Increment the value of the trial strain.
+//! @param epsInc: value of the trial strain increment.
+int XC::ElasticIsotropicMaterial::setTrialStrainIncr(const Vector &epsInc)
   {
-    epsilon+= v;
+    epsilon+= epsInc;
+    return 0;
+  }
+
+//! @brief Increment the value of the trial strain.
+//! @param epsInc: value of the trial strain increment.
+//! @param rate: not used.
+int XC::ElasticIsotropicMaterial::setTrialStrainIncr(const Vector &epsInc, const XC::Vector &rate)
+  {
+    epsilon+= epsInc;
     return -1;
   }
 
@@ -224,6 +251,7 @@ const XC::Matrix &XC::ElasticIsotropicMaterial::getTangent(void) const
     return ret;
   }
 
+//! @brief Returns material initial tangent stiffness matrix.
 const XC::Matrix &XC::ElasticIsotropicMaterial::getInitialTangent(void) const
   {
     std::cerr << getClassName() << "::" << __FUNCTION__
@@ -235,6 +263,7 @@ const XC::Matrix &XC::ElasticIsotropicMaterial::getInitialTangent(void) const
     return ret;
   }
 
+//! @brief Returns the material stress.
 const XC::Vector &XC::ElasticIsotropicMaterial::getStress(void) const
   {
     std::cerr << getClassName() << "::" << __FUNCTION__
@@ -246,8 +275,13 @@ const XC::Vector &XC::ElasticIsotropicMaterial::getStress(void) const
     return ret;
   }
 
+//! @brief Return the material strain.
 const XC::Vector &XC::ElasticIsotropicMaterial::getStrain(void) const
-  { return epsilon; }
+  {
+    static Vector retval;
+    retval= epsilon-epsilon0;
+    return retval;
+  }
 
 //! @brief To accept the current value of the trial strain vector
 //! as being on the solution path. To return \f$0\f$ if
@@ -280,6 +314,8 @@ int XC::ElasticIsotropicMaterial::revertToStart(void)
     return 0;
   }
 
+//! @brief Virtual constructor. Create a copy of material parameters
+//! AND state variables. Called by GenericSectionXD
 XC::NDMaterial *XC::ElasticIsotropicMaterial::getCopy(void) const
   {
     std::cerr << getClassName() << "::" << __FUNCTION__
