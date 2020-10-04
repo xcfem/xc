@@ -72,6 +72,7 @@ namespace XC {
 class ElasticIsotropicPlateFiber: public ElasticIsotropicMaterial
   {
   private:
+    static constexpr int order= 5;
     static Vector sigma; //!< Stress vector ... class-wide for returns
     static Matrix D; //!< Elastic constants
   public:
@@ -84,6 +85,7 @@ class ElasticIsotropicPlateFiber: public ElasticIsotropicMaterial
     const Matrix &getInitialTangent(void) const;
 
     const Vector &getStress(void) const;
+    double getVonMisesStress(void) const;
         
     int commitState(void);
     int revertToLastCommit(void);

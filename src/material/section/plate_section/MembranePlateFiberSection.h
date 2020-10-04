@@ -72,12 +72,13 @@ class NDMaterial;
 class MembranePlateFiberSection: public PlateBase
   {
   private:
-    static constexpr int numFibers = 5;
+    static constexpr int numFibers= 5;
+    static constexpr int order= 8;
     
     //quadrature data
     static const double sg[numFibers];
     static const double wg[numFibers];
-    static const double root56; // =sqrt(5/6) 
+    static constexpr double root56= sqrt(5.0/6.0); //shear correction
     static Vector stressResultant;
     static Matrix tangent;
     
@@ -102,9 +103,9 @@ class MembranePlateFiberSection: public PlateBase
     inline void setMaterial(const NDMaterial &ndmat)
       { alloc(ndmat); }
 
-    std::vector<double> getLayerZs(void) const;
-    std::vector<double> getLayerWeights(void) const;
-    std::vector<std::pair<double, double> > getLayerZsAndWeights(void) const;
+    std::vector<double> getFiberZs(void) const;
+    std::vector<double> getFiberWeights(void) const;
+    std::vector<std::pair<double, double> > getFiberZsAndWeights(void) const;
 
     SectionForceDeformation *getCopy(void) const;
     double getRho(void) const;
@@ -125,6 +126,12 @@ class MembranePlateFiberSection: public PlateBase
     const Matrix &getSectionTangent(void) const; //send back the tangent 
     const Matrix &getInitialTangent(void) const //send back the initial tangent 
       {return this->getSectionTangent();}
+    Vector getVonMisesStressAtFibers(void) const;
+    double getMinVonMisesStress(void) const;
+    double getMaxVonMisesStress(void) const;
+    double getAvgVonMisesStress(void) const;
+    
+    virtual Matrix getValues(const std::string &) const;
 
     //print out data
     void Print( std::ostream &s, int flag ) const;

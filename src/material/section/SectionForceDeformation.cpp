@@ -59,18 +59,17 @@
 //
 // What: "@(#) SectionForceDeformation.C, revA"
 
+#include <deque>
+#include <regex>
 #include <material/section/SectionForceDeformation.h>
+#include "material/section/ResponseId.h"
 #include <domain/mesh/element/utils/Information.h>
 #include <domain/mesh/element/truss_beam_column/nonlinearBeamColumn/matrixutil/MatrixUtil.h>
 #include <utility/matrix/Vector.h>
 #include <utility/recorder/response/MaterialResponse.h>
-#include <deque>
-
-
-#include "material/section/ResponseId.h"
-#include "preprocessor/prep_handlers/MaterialHandler.h"
 #include "utility/actor/actor/MovableMatrix.h"
 #include "utility/actor/actor/MatrixCommMetaData.h"
+#include "preprocessor/prep_handlers/MaterialHandler.h"
 
 
 const XC::Matrix *ptr_section_tangent= nullptr;
@@ -259,6 +258,38 @@ int XC::SectionForceDeformation::getResponse(int responseID, Information &secInf
       }
   }
 
+//! @brief Return values of internal forces, deformations...
+XC::Matrix XC::SectionForceDeformation::getValues(const std::string &cod) const
+  {
+    Matrix retval;
+    const std::regex internal_forces_regexp("[nNPmMqQvV][12][12]*");
+    const std::regex deformations_regexp("(def)([nNPmMqQvV][12][12]*)");
+    if((cod == "forces") || (cod == "force") || (cod == "generalized_stress"))
+      { retval= Matrix(getStressResultant()); }
+    else if((cod == "deformations") || (cod == "deformation") || (cod == "generalized_strain"))
+      { retval= Matrix(getStressResultant()); }
+    else if((cod == "stress") || (cod == "stresses"))
+      {
+	std::cerr << getClassName() << "::" << __FUNCTION__
+	          << "; stresses are not constant in the section."
+	          << " Returning internal forces.";
+	retval= Matrix(this->getSectionDeformation());
+      }
+    else if(std::regex_match(cod, internal_forces_regexp)) // internal force.
+      {
+	retval.resize(1,1);
+	retval(0,0)= getStressResultantByName(cod);
+      }
+    else if(std::regex_match(cod, deformations_regexp)) // deformations
+      {
+	retval.resize(1,1);
+	retval(0,0)= getSectionDeformationByName(cod);
+      }
+    else
+      retval= Material::getValues(cod);
+    return retval;
+  }
+
 //! @brief Return the section deformation vector, \f$esec\f$.
 XC::Vector XC::SectionForceDeformation::getTrialSectionDeformation(void) const
   { return getSectionDeformation()+getInitialSectionDeformation(); }
@@ -293,9 +324,9 @@ double XC::SectionForceDeformation::getStressResultant(const int &defID) const
 double XC::SectionForceDeformation::getStressResultantByName(const std::string &cod) const
   {
     double retval= 0.0;
-    if(cod == "n1") //Esfuerzo axil per unit length, parallel to the axis 1.
+    if(cod == "n1") //Axial force axil per unit length, parallel to the axis 1.
       retval= getStressResultant(MEMBRANE_RESPONSE_n1);
-    else if(cod == "n2") //Esfuerzo axil per unit length, parallel to the axis 2.
+    else if(cod == "n2") //Axial force per unit length, parallel to the axis 2.
       retval= getStressResultant(MEMBRANE_RESPONSE_n2);
     else if(cod == "n12")
       retval= getStressResultant(MEMBRANE_RESPONSE_n12);

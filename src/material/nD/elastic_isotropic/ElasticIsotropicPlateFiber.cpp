@@ -55,8 +55,8 @@
 #include "utility/matrix/Matrix.h"
 #include "material/nD/NDMaterialType.h"
 
-XC::Vector XC::ElasticIsotropicPlateFiber::sigma(5);
-XC::Matrix XC::ElasticIsotropicPlateFiber::D(5,5);
+XC::Vector XC::ElasticIsotropicPlateFiber::sigma(ElasticIsotropicPlateFiber::order);
+XC::Matrix XC::ElasticIsotropicPlateFiber::D(ElasticIsotropicPlateFiber::order, ElasticIsotropicPlateFiber::order);
 
 //! @brief Default constructor.
 XC::ElasticIsotropicPlateFiber::ElasticIsotropicPlateFiber(int tag)
@@ -69,14 +69,14 @@ XC::ElasticIsotropicPlateFiber::ElasticIsotropicPlateFiber(int tag)
 //! @param nu: Poisson's coefficient.
 //! @param rho: material density.
 XC::ElasticIsotropicPlateFiber::ElasticIsotropicPlateFiber(int tag, double E, double nu, double rho)
-  : ElasticIsotropicMaterial(tag, ND_TAG_ElasticIsotropicPlateFiber,5, E, nu, rho)
+  : ElasticIsotropicMaterial(tag, ND_TAG_ElasticIsotropicPlateFiber, ElasticIsotropicPlateFiber::order, E, nu, rho)
   {}
 
 //! @brief Increment the current trial strain with the argument.
 //! @param strain: strain increment. 
 int XC::ElasticIsotropicPlateFiber::setTrialStrainIncr(const Vector &strain)
   {
-    epsilon += strain;
+    epsilon+= strain;
     return 0;
   }
 
@@ -85,7 +85,7 @@ int XC::ElasticIsotropicPlateFiber::setTrialStrainIncr(const Vector &strain)
 //! @param rate: unused argument.
 int XC::ElasticIsotropicPlateFiber::setTrialStrainIncr(const Vector &strain, const XC::Vector &rate)
   {
-    epsilon += strain;
+    epsilon+= strain;
     return 0;
   }
 
@@ -128,18 +128,45 @@ const XC::Vector &XC::ElasticIsotropicPlateFiber::getStress(void) const
     const double d01 = v*d00;
     const double d22 = 0.5*(d00-d01);
 
-    const double eps0 = epsilon(0);
-    const double eps1 = epsilon(1);
+    const double eps0= epsilon(0);
+    const double eps1= epsilon(1);
 
     //sigma = D*epsilon;
-    sigma(0) = d00*eps0 + d01*eps1;
-    sigma(1) = d01*eps0 + d00*eps1;
+    sigma(0)= d00*eps0 + d01*eps1;
+    sigma(1)= d01*eps0 + d00*eps1;
 
-    sigma(2) = d22*epsilon(2);
-    sigma(3) = d22*epsilon(3);
-    sigma(4) = d22*epsilon(4);
+    sigma(2)= d22*epsilon(2);
+    sigma(3)= d22*epsilon(3);
+    sigma(4)= d22*epsilon(4);
 	
     return sigma;
+  }
+
+//! @brief return the Von Mises equivalent stress.
+//!
+//! <a href="https://en.wikipedia.org/wiki/Von_Mises_yield_criterion"> Von Mises yield criterion.</a>
+double XC::ElasticIsotropicPlateFiber::getVonMisesStress(void) const
+  {
+    double retval= 0.0;
+    const Vector sg= getStress();
+    const size_t sz= sg.Size();
+    //NDmaterial stress order= 11, 22, 33, 12, 23, 31 
+    //PlateFiberMaterial stress order= 11, 22, 12, 23, 31, (33) 
+    if(sz==5) // plate fiber material
+      {
+	const double sg11= sg[0]; //11
+	const double sg22= sg[1]; //22
+	const double sg12= sg[2]; //12
+	const double sg23= sg[3]; //23
+	const double sg31= sg[4]; //31
+	
+	retval= sqrt(0.5*(pow(sg11-sg22,2)+(sg22*sg22)+(sg11*sg11)+6*(sg12*sg12+sg23+sg23+sg31+sg31)));
+      }
+    else
+      std::cerr << getClassName() << "::" << __FUNCTION__
+	        << ", wrong stress vector size (" << sz
+	        << ")." << std::endl;
+    return retval;
   }
 
 //! @brief Commit the material state.
@@ -167,4 +194,4 @@ const std::string &XC::ElasticIsotropicPlateFiber::getType(void) const
 
 //! @brief ??
 int XC::ElasticIsotropicPlateFiber::getOrder(void) const
-  { return 5; }
+  { return ElasticIsotropicPlateFiber::order; }

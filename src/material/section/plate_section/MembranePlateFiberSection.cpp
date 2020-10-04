@@ -59,12 +59,9 @@
 #include "material/section/ResponseId.h"
 
 
-//parameters
-const double XC::MembranePlateFiberSection::root56 = sqrt(5.0/6.0); //shear correction
-
 //static vector and matrices
-XC::Vector  XC::MembranePlateFiberSection::stressResultant(8);
-XC::Matrix  XC::MembranePlateFiberSection::tangent(8,8);
+XC::Vector XC::MembranePlateFiberSection::stressResultant(XC::MembranePlateFiberSection::order);
+XC::Matrix XC::MembranePlateFiberSection::tangent(XC::MembranePlateFiberSection::order, XC::MembranePlateFiberSection::order);
 
 
 const double XC::MembranePlateFiberSection::sg[] = { -1, 
@@ -137,13 +134,13 @@ void XC::MembranePlateFiberSection::free(void)
 //! @brief Default constructor.
 XC::MembranePlateFiberSection::MembranePlateFiberSection(int tag)
   : PlateBase( tag, SEC_TAG_MembranePlateFiberSection ),
-    strainResultant(8), initialStrain(8)
+    strainResultant(order), initialStrain(order)
   { init(); }
 
 //! @brief full constructor
 XC::MembranePlateFiberSection::MembranePlateFiberSection(int tag, double thickness, XC::NDMaterial &Afiber )
   : PlateBase( tag, SEC_TAG_MembranePlateFiberSection,thickness, Afiber.getRho()),
-    strainResultant(8), initialStrain(8)
+    strainResultant(order), initialStrain(order)
   { alloc(Afiber); }
 
 //! @brief Copy constructor.
@@ -176,7 +173,7 @@ XC::SectionForceDeformation  *XC::MembranePlateFiberSection::getCopy(void) const
   { return new MembranePlateFiberSection(*this); }
 
 //! @brief Return the z coordinate for each fiber (layer if you prefer).
-std::vector<double> XC::MembranePlateFiberSection::getLayerZs(void) const
+std::vector<double> XC::MembranePlateFiberSection::getFiberZs(void) const
   {
     std::vector<double> retval(numFibers,0.0);
     for(int i = 0; i < numFibers; i++ )
@@ -185,7 +182,7 @@ std::vector<double> XC::MembranePlateFiberSection::getLayerZs(void) const
   }
 
 //! @brief Return the weight coordinate for each fiber (layer if you prefer).
-std::vector<double> XC::MembranePlateFiberSection::getLayerWeights(void) const
+std::vector<double> XC::MembranePlateFiberSection::getFiberWeights(void) const
   {
     std::vector<double> retval(numFibers,0.0);
     for(int i = 0; i < numFibers; i++)
@@ -194,7 +191,7 @@ std::vector<double> XC::MembranePlateFiberSection::getLayerWeights(void) const
   }
   
 //! @brief Return the weight coordinate for each fiber (layer if you prefer).
-std::vector<std::pair<double, double> > XC::MembranePlateFiberSection::getLayerZsAndWeights(void) const
+std::vector<std::pair<double, double> > XC::MembranePlateFiberSection::getFiberZsAndWeights(void) const
   {
     std::vector<std::pair<double, double> > retval(numFibers,std::pair<double,double>(0.0,0.0));
     for(int i = 0; i < numFibers; i++)
@@ -208,7 +205,7 @@ std::vector<std::pair<double, double> > XC::MembranePlateFiberSection::getLayerZ
 
 //! @brief send back order of strainResultant in vector form
 int XC::MembranePlateFiberSection::getOrder(void) const
-  { return 8; }
+  { return order; }
 
 
 //! @brief Returns the labels of the DOFs for which the element
@@ -226,8 +223,6 @@ int XC::MembranePlateFiberSection::commitState(void)
       success += theFibers[i]->commitState( );
     return success;
   }
-
-
 
 //! @brief Revert to last committed state.
 int XC::MembranePlateFiberSection::revertToLastCommit(void)
@@ -252,7 +247,7 @@ int XC::MembranePlateFiberSection::revertToStart(void)
 double XC::MembranePlateFiberSection::getRho(void) const
   {
     double rhoH = 0.0;
-    const std::vector<double> weights= getLayerWeights();
+    const std::vector<double> weights= getFiberWeights();
     for(int i = 0; i < numFibers; i++ )
       { rhoH+= ( theFibers[i]->getRho() ) * weights[i]; }
     return rhoH;
@@ -261,7 +256,7 @@ double XC::MembranePlateFiberSection::getRho(void) const
 //! @brief Asigns density per unit area
 void XC::MembranePlateFiberSection::setRho(const double &r)
   {
-    const std::vector<double> weights= getLayerWeights();
+    const std::vector<double> weights= getFiberWeights();
     for(int i = 0; i < numFibers; i++ )
       { theFibers[i]->setRho(r/weights[i]); }
   }
@@ -274,10 +269,10 @@ int XC::MembranePlateFiberSection::setInitialSectionDeformation(const Vector &in
 
     static Vector strain(numFibers);
     int success= 0;
-    const std::vector<double> layerZ= getLayerZs();
+    const std::vector<double> fiberZ= getFiberZs();
     for(int i = 0; i < numFibers; i++ )
       {
-        const double &z= layerZ[i];
+        const double &z= fiberZ[i];
         strain(0)= initialStrain(0)-z*initialStrain(3);
         strain(1)= initialStrain(1)-z*initialStrain(4);
         strain(2)= initialStrain(2)-z*initialStrain(5);
@@ -308,10 +303,10 @@ int XC::MembranePlateFiberSection::setTrialSectionDeformation(const Vector &stra
 
     static Vector strain(numFibers);
     int success= 0;
-    const std::vector<double> layerZ= getLayerZs();
+    const std::vector<double> fiberZ= getFiberZs();
     for(int i = 0; i < numFibers; i++ )
       {
-        const double &z= layerZ[i];
+        const double &z= fiberZ[i];
         strain(0)=  strainResultant(0)  - z*strainResultant(3);
         strain(1)=  strainResultant(1)  - z*strainResultant(4);
         strain(2)=  strainResultant(2)  - z*strainResultant(5);
@@ -331,14 +326,13 @@ const XC::Vector &XC::MembranePlateFiberSection::getSectionDeformation(void) con
     return retval;
   }
 
-
 //! @brief Return stress resultant.
 const XC::Vector &XC::MembranePlateFiberSection::getStressResultant(void) const
   {
     static Vector stress(numFibers);
     stressResultant.Zero( );
 
-    const std::vector< std::pair<double, double> > zsAndWeights= getLayerZsAndWeights();
+    const std::vector< std::pair<double, double> > zsAndWeights= getFiberZsAndWeights();
     for(int i = 0; i < numFibers; i++ )
       {
         const double &z= zsAndWeights[i].first;
@@ -367,12 +361,12 @@ const XC::Vector &XC::MembranePlateFiberSection::getStressResultant(void) const
 const XC::Matrix &XC::MembranePlateFiberSection::getSectionTangent(void) const
   {
     static Matrix dd(numFibers,numFibers);
-    static Matrix Aeps(numFibers,8);
-    static Matrix Asig(8,numFibers);
+    static Matrix Aeps(numFibers,order);
+    static Matrix Asig(order,numFibers);
 
     tangent.Zero( );
 
-    const std::vector< std::pair<double, double> > zsAndWeights= getLayerZsAndWeights();
+    const std::vector< std::pair<double, double> > zsAndWeights= getFiberZsAndWeights();
     for(int i = 0; i < numFibers; i++)
       {
         const double &z= zsAndWeights[i].first;
@@ -516,7 +510,77 @@ const XC::Matrix &XC::MembranePlateFiberSection::getSectionTangent(void) const
   } //end for i
 
   return this->tangent;
-}
+  }
+
+//! @brief Return the Von Mises stress at each fiber.
+XC::Vector XC::MembranePlateFiberSection::getVonMisesStressAtFibers(void) const
+  {
+    Vector retval(numFibers);
+    for(int i= 0;i<numFibers; i++)
+      retval[i]= theFibers[i]->getVonMisesStress();
+    return retval;
+  }
+
+//! @brief Return the minimum Von Mises stress at fibers.
+double XC::MembranePlateFiberSection::getMinVonMisesStress(void) const
+  {
+    const Vector tmp= getVonMisesStressAtFibers();
+    double retval= tmp[0];
+    for(int i= 1;i<numFibers; i++)
+      retval= std::min(retval, tmp[i]);
+    return retval;
+  }
+
+//! @brief Return the maximum Von Mises stress at fibers.
+double XC::MembranePlateFiberSection::getMaxVonMisesStress(void) const
+  {
+    const Vector tmp= getVonMisesStressAtFibers();
+    double retval= tmp[0];
+    for(int i= 1;i<numFibers; i++)
+      retval= std::max(retval, tmp[i]);
+    return retval;
+  }
+  
+//! @brief Return the maximum Von Mises stress at fibers.
+double XC::MembranePlateFiberSection::getAvgVonMisesStress(void) const
+  {
+    const Vector tmp= getVonMisesStressAtFibers();
+    double retval= 0.0;
+    for(int i= 0;i<numFibers; i++)
+      retval+= tmp[i];
+    retval/=numFibers;
+    return retval;
+  }
+
+//! @brief Return values of internal forces, deformations...
+XC::Matrix XC::MembranePlateFiberSection::getValues(const std::string &cod) const
+  {
+    Matrix retval;
+    if(cod == "max_von_mises_stress")
+      {
+	retval.resize(1,1);
+	retval(0,0)= getMaxVonMisesStress();
+      }
+    else if(cod == "min_von_mises_stress")
+      {
+	retval.resize(1,1);
+	retval(0,0)= getMinVonMisesStress();
+      }
+    else if(cod == "avg_von_mises_stress")
+      {
+	retval.resize(1,1);
+	retval(0,0)= getAvgVonMisesStress();
+      }
+    else if((cod == "von_mises_stress") || (cod == "Von_Mises_stress"))
+      {
+	retval.resize(5,1);
+	const Vector vm= getVonMisesStressAtFibers();
+	retval.putCol(0,vm);
+      }
+    else
+      retval= PlateBase::getValues(cod);
+    return retval;
+  }
 
 //! @brief Print out data
 void  XC::MembranePlateFiberSection::Print( std::ostream &s, int flag ) const
