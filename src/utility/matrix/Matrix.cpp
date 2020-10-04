@@ -149,6 +149,11 @@ XC::Matrix::Matrix(double *theData, int nRows, int nCols)
 #endif
   }
 
+//! @brief Construct from vector.
+XC::Matrix::Matrix(const Vector &v)
+  : numRows(1), numCols(v.Size()), data(v.Size())
+  { putRow(0, v); }
+
 //! @brief Constructor (Python interface).
 XC::Matrix::Matrix(const boost::python::list &l)
   :numRows(len(l)), numCols(0)

@@ -132,6 +132,7 @@ class Matrix: public CommandEntity
     Matrix(void);	
     Matrix(int nrows, int ncols);
     Matrix(double *data, int nrows, int ncols);
+    explicit Matrix(const Vector &v);
     Matrix(const boost::python::list &l);
     inline virtual ~Matrix(void) {}
 
