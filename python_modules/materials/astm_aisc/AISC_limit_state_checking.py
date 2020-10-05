@@ -238,7 +238,31 @@ class Member(buckling_base.MemberBase):
             recorder.callbackRecord= controlULSCriterion()
 #        recorder.callbackRestart= "print(\"Restart method called.\")" #20181121
         return recorder
+    
+class AISCBiaxialBendingControlVars(cv.SSBiaxialBendingControlVars):
+    '''Control variables for biaxial bending normal stresses LS 
+    verification in steel-shape elements according to AISC.
 
+    :ivar chiN:    reduction factor for compressive strength (defaults to 1)
+    '''
+    def __init__(self,idSection= 'nil',combName= 'nil',CF= -1.0,N= 0.0,My= 0.0,Mz= 0.0,Ncrd=0.0,McRdy=0.0,McRdz=0.0,MvRdz=0.0,MbRdz=0.0, chiLT=1.0, chiN= 1.0):
+        super(AISCBiaxialBendingControlVars,self).__init__(idSection,combName,CF,N,My,Mz,Ncrd=Ncrd,McRdy=McRdy,McRdz=McRdz,MvRdz=MvRdz,MbRdz=MbRdz, chiLT=chiLT)
+        self.chiN=chiN
+        
+    def getLaTeXFields(self,factor= 1e-3):
+        ''' Returns a string with the intermediate fields of the LaTeX string.
+
+        :param factor: factor for units (default 1e-3 -> kN)'''
+        retval= super(SSBiaxialBendingControlVars,self).getLaTeXFields(factor)+" & "+fmt.Esf.format(self.chiN)
+        return retval
+
+    def getStrArguments(self):
+        '''Returns a string for a 'copy' (kind of) constructor.'''
+        retval= super(AISCBiaxialBendingControlVars,self).getStrArguments()
+        retval+= ',chiN= ' + str(self.chiN)
+        retval+= ',chiLT= ' + str(self.chiLT)
+        return retval
+    
 class BiaxialBendingNormalStressController(lsc.LimitStateControllerBase):
     '''Object that controls normal stresses limit state.'''
 
@@ -251,8 +275,8 @@ class BiaxialBendingNormalStressController(lsc.LimitStateControllerBase):
         :param setCalc: set of elements to which define control variables
         '''
         for e in setCalc.elements:
-            e.setProp(self.limitStateLabel+'Sect1',cv.AISCBiaxialBendingControlVars(idSection= 'Sect1'))
-            e.setProp(self.limitStateLabel+'Sect2',cv.AISCBiaxialBendingControlVars(idSection= 'Sect2'))
+            e.setProp(self.limitStateLabel+'Sect1',AISCBiaxialBendingControlVars(idSection= 'Sect1'))
+            e.setProp(self.limitStateLabel+'Sect2',AISCBiaxialBendingControlVars(idSection= 'Sect2'))
 
     def checkSetFromIntForcFile(self,intForcCombFileName,setCalc=None):
         '''Launch checking.
@@ -274,11 +298,11 @@ class BiaxialBendingNormalStressController(lsc.LimitStateControllerBase):
                 if lf.idSection == 0:
                     label= self.limitStateLabel+'Sect1'
                     if(CFtmp>e.getProp(label).CF):
-                        e.setProp(label,cv.AISCBiaxialBendingControlVars('Sect1',lf.idComb,CFtmp,lf.N,lf.My,lf.Mz,NcRdtmp,McRdytmp,McRdztmp,MvRdztmp,MbRdztmp,lf.chiLT, lf.chiN))
+                        e.setProp(label,AISCBiaxialBendingControlVars('Sect1',lf.idComb,CFtmp,lf.N,lf.My,lf.Mz,NcRdtmp,McRdytmp,McRdztmp,MvRdztmp,MbRdztmp,lf.chiLT, lf.chiN))
                 else:
                     label= self.limitStateLabel+'Sect2'
                     if(CFtmp>e.getProp(label).CF):
-                        e.setProp(label,cv.AISCBiaxialBendingControlVars('Sect2',lf.idComb,CFtmp,lf.N,lf.My,lf.Mz,NcRdtmp,McRdytmp,McRdztmp,MvRdztmp,MbRdztmp,lf.chiLT, lf.chiN))
+                        e.setProp(label,AISCBiaxialBendingControlVars('Sect2',lf.idComb,CFtmp,lf.N,lf.My,lf.Mz,NcRdtmp,McRdytmp,McRdztmp,MvRdztmp,MbRdztmp,lf.chiLT, lf.chiN))
 
 class ShearController(lsc.LimitStateControllerBase):
     '''Object that controls shear limit state.'''

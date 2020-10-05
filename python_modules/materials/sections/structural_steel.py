@@ -334,21 +334,25 @@ class SteelShape(sp.SectionProperties):
             e.setProp('FCVCP',[-1.0,-1.0]) #Shear stresses efficiency.
 
     def checkUniaxialBendingForElement(self,elem,nmbComb):
-        '''Called in every commit to check uniaxial bending criterion (bars in 2D problems).'''
+        '''Called in every commit to check uniaxial bending criterion (bars in 2D problems).
+
+        :param elem: finite element to check.
+        :param nmbComb: name of the load combination.
+        '''
         elem.getResistingForce()
         sectionClass= elem.getProp('sectionClass')
         chiLT= elem.getProp('chiLT')
         N1= 0.0; M1= 0.0; V1= 0.0
         N2= 0.0; M2= 0.0; V2= 0.0
-        axialForces= elem.getValuesAtNodes('N')
+        axialForces= elem.getValuesAtNodes('N', False)
         if(len(axialForces)>1): # 'N' found.
             N1= axialForces[0]
             N2= axialForces[1]
-        bending= elem.getValuesAtNodes('M')
+        bending= elem.getValuesAtNodes('M', False)
         if(len(bending)>1): # 'M' found.
             M1= bending[0]
             M2= bending[1]
-        shear= elem.getValuesAtNodes('V')
+        shear= elem.getValuesAtNodes('V', False)
         if(len(shear)>1): # 'V' found.
             V1= shear[0]
             V2= shear[1]
@@ -365,25 +369,30 @@ class SteelShape(sp.SectionProperties):
         vc.updateEnvelopeInternalForcesBeamElem2D(elem)
 
     def checkBiaxialBendingForElement(self,elem,nmbComb):
-        '''Called in every commit to check biaxial bending criterion (bars in 3D problems).'''
+        '''Called in every commit to check biaxial bending criterion 
+            (bars in 3D problems).
+
+        :param elem: finite element to check.
+        :param nmbComb: name of the load combination.
+        '''
         elem.getResistingForce()
         sectionClass= elem.getProp('sectionClass')
         chiLT= elem.getProp('chiLT')
         N1= 0.0; My1= 0.0; Mz1= 0.0; Vy1= 0.0;
         N2= 0.0; My2= 0.0; Mz2= 0.0; Vy2= 0.0;
-        axialForces= elem.getValuesAtNodes('N')
+        axialForces= elem.getValuesAtNodes('N', False)
         if(len(axialForces)>1): # 'N' found.
             N1= axialForces[0]
             N2= axialForces[1]
-        bendingY= elem.getValuesAtNodes('My')
+        bendingY= elem.getValuesAtNodes('My', False)
         if(len(bendingY)>1): # 'My' found.
             My1= bendingY[0]
             My2= bendingY[1]
-        bendingZ= elem.getValuesAtNodes('Mz')
+        bendingZ= elem.getValuesAtNodes('Mz', False)
         if(len(bendingZ)>1): # 'Mz' found.
             Mz1= bendingZ[0]
             Mz2= bendingZ[1]
-        shearY= elem.getValuesAtNodes('Vy')
+        shearY= elem.getValuesAtNodes('Vy', False)
         if(len(shearY)>1): # 'Vy' found.
             Vy1= shearY[0]
             Vy2= shearY[1]
@@ -400,12 +409,16 @@ class SteelShape(sp.SectionProperties):
         vc.updateEnvelopeInternalForcesBeamElem(elem)
 
     def checkYShearForElement(self,elem,nmbComb):
-        '''Called in every commit to y shear criterion.'''
+        '''Called in every commit to y shear criterion.
+
+        :param elem: finite element to check.
+        :param nmbComb: name of the load combination.
+        '''
         elem.getResistingForce()
         sectionClass= elem.getProp('sectionClass')
         Vy1= 0.0
         Vy2= 0.0
-        shearY= elem.getValuesAtNodes('Vy')
+        shearY= elem.getValuesAtNodes('Vy', False)
         if(len(shearY)>1): # 'Vy' found.
             Vy1= shearY[0]
             Vy2= shearY[1]
@@ -421,12 +434,16 @@ class SteelShape(sp.SectionProperties):
         elem.setProp("FCVCP",fcv)
         
     def checkZShearForElement(self,elem,nmbComb):
-        '''Called in every commit to z shear criterion.'''
+        '''Called in every commit to z shear criterion.
+
+        :param elem: finite element to check.
+        :param nmbComb: name of the load combination.
+        '''
         elem.getResistingForce()
         sectionClass= elem.getProp('sectionClass')
         Vz1= 0.0
         Vz2= 0.0
-        shearZ= elem.getValuesAtNodes('Vz')
+        shearZ= elem.getValuesAtNodes('Vz', False)
         if(len(shearZ)>1): # 'Vz' found.
             Vz1= shearZ[0]
             Vz2= shearZ[1]
