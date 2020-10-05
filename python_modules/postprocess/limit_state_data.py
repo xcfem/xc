@@ -1,4 +1,8 @@
 # -*- coding: utf-8 -*-
+''' Utilities for limit state checking.'''
+
+from __future__ import print_function
+from __future__ import division
 
 __author__= "Luis C. Pérez Tato (LCPT), Ana Ortega(AO_O)"
 __copyright__= "Copyright 2016,LCPT, AO_O"
@@ -169,7 +173,7 @@ class LimitStateData(object):
             comb.removeFromDomain() #Remove combination from the model.
         self.writeInternalForces(internalForcesDict)
 #20181117
-    def runChecking(self,outputCfg):
+    def runChecking(self,outputCfg, sections= ['Sect1', 'Sect2']):
         '''This method reads, for the elements in setCalc,  the internal 
         forces previously calculated and saved in the corresponding file.
         Using the 'initControlVars' and 'checkSetFromIntForcFile' methods of 
@@ -182,11 +186,7 @@ class LimitStateData(object):
                elements to be analyzed, append or not the results to the 
                result file [defatults to 'N'], generation or not
                of list file [defatults to 'N', ...)
-        :param setCalc: set that contains elements to be checked
-        :param appendToResFile:  'Yes','Y','y',.., if results are appended to 
-               existing file of results (defaults to 'N')
-        :param listFile: 'Yes','Y','y',.., if latex listing file of results 
-                        is desired to be generated (defaults to 'N')
+        :param sections: names of the sections to write the output for.
         '''
         retval=None
         if outputCfg.setCalc:
@@ -194,7 +194,7 @@ class LimitStateData(object):
             intForcCombFileName= self.getInternalForcesFileName()
             self.controller.initControlVars(outputCfg.setCalc)
             self.controller.checkSetFromIntForcFile(intForcCombFileName,outputCfg.setCalc)
-            retval= cv.writeControlVarsFromElements(self.controller.limitStateLabel,prep,self.getOutputDataBaseFileName(),outputCfg)
+            retval= cv.writeControlVarsFromElements(self.controller.limitStateLabel,prep,self.getOutputDataBaseFileName(),outputCfg, sections)
         else:
             lmsg.error("Result file hasn't been created, you must specify a valid set of elements")
         return retval
@@ -345,7 +345,6 @@ class FreqLoadsDisplacementControlLimitStateData(LimitStateData):
         '''
         lmsg.error('FreqLoadsDisplacementControlLimitStateData.check() not implemented.')
 
-
 class FatigueResistanceRCLimitStateData(LimitStateData):
     ''' Reinforced concrete shear resistance limit state data.'''
     def __init__(self):
@@ -377,6 +376,36 @@ class FatigueResistanceRCLimitStateData(LimitStateData):
         '''
         return reinfConcreteSections.internalForcesVerification3D(self, "d",outputCfg)
 
+class VonMisesStressLimitStateData(LimitStateData):
+    ''' Steel Von Mises stress limit state data.'''
+    def __init__(self):
+        '''Limit state data constructor '''
+        super(VonMisesStressLimitStateData,self).__init__('ULS_VonMisesStressResistance','verifRsl_von_misesULS')
+        
+    def dumpCombinations(self,combContainer,loadCombinations):
+        '''Load into the solver the combinations needed for this limit state.
+
+        :param combContainer: container with the definition of the different
+                              combination families (ULS, fatigue, SLS,...)
+                              see actions/combinations module.
+        :param loadCombinations: load combination handler inside the XC solver.
+        '''
+        loadCombinations.clear()
+        combContainer.ULS.perm.dumpCombinations(loadCombinations)
+        return loadCombinations
+    
+    def check(self,elementsToCheck,outputCfg= VerifOutVars()):
+        '''Checking of fatigue under fatigue combinations loads in
+        ultimate limit states (see self.dumpCombinations).
+
+        :param elementsToCheck: elements to check.
+        :param outputCfg: instance of class 'VerifOutVars' which defines the 
+               variables that control the output of the checking (set of 
+               elements to be analyzed, append or not the results to a file,
+               generation or not of lists, ...)
+        '''
+        return elementsToCheck.internalForcesVerification3D(self, "d",outputCfg)
+
 
 freqLoadsDisplacementControl= FreqLoadsDisplacementControlLimitStateData()
 freqLoadsCrackControl= FreqLoadsCrackControlRCLimitStateData()
@@ -384,7 +413,7 @@ quasiPermanentLoadsCrackControl= QPLoadsCrackControlRCLimitStateData()
 normalStressesResistance= NormalStressesRCLimitStateData()
 shearResistance= ShearResistanceRCLimitStateData()
 fatigueResistance= FatigueResistanceRCLimitStateData()
-
+vonMisesStressResistance= VonMisesStressLimitStateData()
 
 def readIntForcesDict(intForcCombFileName,setCalc=None):
     '''Extracts element and combination identifiers from the internal
@@ -425,6 +454,8 @@ def readIntForcesDict(intForcCombFileName,setCalc=None):
                     crossSectionInternalForces.idComb= idComb
                     crossSectionInternalForces.tagElem= tagElem
                     crossSectionInternalForces.idSection= idSection
+                    if('max_von_mises_stress' in forces):
+                        crossSectionInternalForces.maxVonMisesStress= forces['max_von_mises_stress']
                     internalForcesValues[tagElem].append(crossSectionInternalForces)
     else:
         setElTags=setCalc.getElementTags()
@@ -446,6 +477,8 @@ def readIntForcesDict(intForcCombFileName,setCalc=None):
                         crossSectionInternalForces.idComb= idComb
                         crossSectionInternalForces.tagElem= tagElem
                         crossSectionInternalForces.idSection= idSection
+                        if('max_von_mises_stress' in forces):
+                            crossSectionInternalForces.maxVonMisesStress= forces['max_von_mises_stress']
                         internalForcesValues[tagElem].append(crossSectionInternalForces)
     return (elementTags,idCombs,internalForcesValues)
 

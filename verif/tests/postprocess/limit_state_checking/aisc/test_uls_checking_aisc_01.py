@@ -134,7 +134,6 @@ for l in xcTotalSet.getLines:
 for ls in limitStates:
     ls.saveAll(combContainer,xcTotalSet,lstSteelBeams=aiscMembers)
 
-
 outCfg= lsd.VerifOutVars(setCalc=xcTotalSet, appendToResFile='Y', listFile='N', calcMeanCF='Y')
 limitState=lsd.normalStressesResistance
 limitState.controller= aisc.BiaxialBendingNormalStressController(limitState.label)
@@ -152,9 +151,9 @@ print('ratio= ', ratio)
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if(ratio<1e-8):
-  print("test ",fname,": ok.")
+    print("test ",fname,": ok.")
 else:
-  lmsg.error(fname+' ERROR.')
+    lmsg.error(fname+' ERROR.')
 
 # #########################################################
 # # Graphic stuff.

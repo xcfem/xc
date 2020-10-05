@@ -32,12 +32,21 @@ class ControlVarsBase(object):
     :ivar combName: name of the load combination to deal with
     '''
     def __init__(self,combName= 'nil'):
+        ''' Constructor.
+
+        :param combName: name of the load combinations to deal with
+        '''
         self.combName= combName #Name of the corresponding load combination
 
     def getCF(self):
+        ''' Return the capacity factor.'''
         return -1.0
 
     def __call__(self,arguments):
+        ''' Allow the object behave like a funcion.
+
+        :param arguments: function arguments.
+        '''
         retval= None
         obj= self
         args= arguments.split('.')
@@ -52,6 +61,10 @@ class ControlVarsBase(object):
         return retval
   
     def getFieldNames(self,parent= ''):
+        ''' Return the object field names.
+
+        :param parent: parent object name.
+        '''
         retval= list()
         for key in self.__dict__:
             obj= getattr(self,key)
@@ -62,55 +75,58 @@ class ControlVarsBase(object):
         return retval
 
     def getLaTeXFields(self,factor= 1e-3):
-      ''' Returns a string with the intermediate fields of the LaTeX string.
+        ''' Returns a string with the intermediate fields of the LaTeX string.
 
-      :param factor: factor for units (default 1e-3 -> kN)'''
-      return self.combName
+        :param factor: factor for units (default 1e-3 -> kN)'''
+        return self.combName
 
     def getLaTeXString(self,eTag,factor= 1e-3):
-      ''' Returns a string that we can insert in a LaTeX table.
+        ''' Returns a string that we can insert in a LaTeX table.
 
-      :param eTag:   element identifier.
-      :param factor: factor for units (default 1e-3 -> kN)'''
-      return str(eTag)+" & "+self.getLaTeXFields(factor)+" & "+fmt.Esf.format(self.getCF())+"\\\\\n"
+        :param eTag:   element identifier.
+        :param factor: factor for units (default 1e-3 -> kN)'''
+        return str(eTag)+" & "+self.getLaTeXFields(factor)+" & "+fmt.Esf.format(self.getCF())+"\\\\\n"
 
     def getAnsysStrings(self,eTag,axis, factor= 1e-3):
-      ''' Returns a string to represent fields in ANSYS (R).
+        ''' Returns a string to represent fields in ANSYS (R).
 
-      :param eTag:   element identifier.
-      :param axis:   section 1 or 2
-      :param factor: factor for units (default 1e-3 -> kN)'''
-      retval= []
-      retval.append("detab,"+str(eTag)+",CF" +axis+","+str(self.getCF())+"\n")
-      return retval
+        :param eTag:   element identifier.
+        :param axis:   section 1 or 2
+        :param factor: factor for units (default 1e-3 -> kN)'''
+        retval= []
+        retval.append("detab,"+str(eTag)+",CF" +axis+","+str(self.getCF())+"\n")
+        return retval
 
     def getStrArguments(self):
-      '''Returns a string for a 'copy' (kind of) constructor.
+        '''Returns a string for a 'copy' (kind of) constructor.
 
-      '''
-      retval= 'combName= "' + self.combName 
-      retval+= '", CF=' + str(self.getCF())
-      return retval
+        '''
+        retval= 'combName= "' + self.combName 
+        retval+= '", CF=' + str(self.getCF())
+        return retval
 
     def getStrConstructor(self):
-      retval= self.__class__.__name__ 
-      retval+= '(' + self.getStrArguments() + ')'
-      return retval
+        ''' Return a python sentence that can construct a clone
+            of this object: kin of naïve serialization.'''
+        retval= self.__class__.__name__ 
+        retval+= '(' + self.getStrArguments() + ')'
+        return retval
 
     def strElementProp(self,eTag,nmbProp):
-      '''Writes a string that will serve to read the element property from a file.
+        '''Writes a string that will serve to read the element property from a file.
 
-      :param eTag:    element identifier.
-      :param nmbProp: name of the element property
-      '''
-      retval= 'preprocessor.getElementHandler.getElement('
-      retval+= str(eTag)
-      retval+= ").setProp("
-      retval+= '"' + nmbProp + '"'
-      retval+= ',' + self.getStrConstructor()
-      retval+= ")\n"
-      return retval
+        :param eTag:    element identifier.
+        :param nmbProp: name of the element property
+        '''
+        retval= 'preprocessor.getElementHandler.getElement('
+        retval+= str(eTag)
+        retval+= ").setProp("
+        retval+= '"' + nmbProp + '"'
+        retval+= ',' + self.getStrConstructor()
+        retval+= ")\n"
+        return retval
 
+  
 class NMy(ControlVarsBase):
     '''Uniaxial bending. Internal forces [N,My] for a combination.
 
@@ -200,15 +216,21 @@ class CFNMy(NMy):
         self.CF= CF # Capacity factor or efficiency
 
     def getCF(self):
+        ''' Return the capacity factor.'''
         return self.CF
 
 class ShVy(ControlVarsBase):
     '''Shear along Y axis. Internal forces [Vy] for a combination.
 
     :ivar combName: name of the load combinations to deal with
-    :ivar Vy:       bending moment about Y axis (defaults to 0.0)
+    :ivar Vy:       shear along Y axis (defaults to 0.0)
     '''
     def __init__(self,combName= 'nil',Vy= 0.0):
+        ''' Constructor.
+
+        :param combName: name of the load combinations to deal with
+        :param Vy:       shear along Y axis (defaults to 0.0)
+        '''
         super(ShVy,self).__init__(combName)
         self.Vy= Vy #Shear along y axis.
 
@@ -237,7 +259,7 @@ class ShVy(ControlVarsBase):
         return retval
 
 class CFVy(ShVy):
-    '''Uniaxial bending. Normal stresses limit state variables.
+    '''Uniaxial bending. Shear stresses limit state variables.
 
     :ivar combName: name of the load combinations to deal with
     :ivar CF:       capacity factor (efficiency) (defaults to -1.0; CF<1.0 -> Ok; CF>1.0 -> KO)
@@ -248,6 +270,7 @@ class CFVy(ShVy):
         self.CF= CF # Capacity factor or efficiency
 
     def getCF(self):
+        ''' Return the capacity factor.'''
         return self.CF
 
 class ShearYControlVars(CFVy):
@@ -462,31 +485,6 @@ class SSBiaxialBendingControlVars(BiaxialBendingControlVars):
         retval+= ',chiLT= ' + str(self.chiLT)
         return retval
 
-class AISCBiaxialBendingControlVars(SSBiaxialBendingControlVars):
-    '''Control variables for biaxial bending normal stresses LS 
-    verification in steel-shape elements according to AISC.
-
-    :ivar chiN:    reduction factor for compressive strength (defaults to 1)
-    '''
-    def __init__(self,idSection= 'nil',combName= 'nil',CF= -1.0,N= 0.0,My= 0.0,Mz= 0.0,Ncrd=0.0,McRdy=0.0,McRdz=0.0,MvRdz=0.0,MbRdz=0.0, chiLT=1.0, chiN= 1.0):
-        super(AISCBiaxialBendingControlVars,self).__init__(idSection,combName,CF,N,My,Mz,Ncrd=Ncrd,McRdy=McRdy,McRdz=McRdz,MvRdz=MvRdz,MbRdz=MbRdz, chiLT=chiLT)
-        self.chiN=chiN
-        
-    def getLaTeXFields(self,factor= 1e-3):
-        ''' Returns a string with the intermediate fields of the LaTeX string.
-
-        :param factor: factor for units (default 1e-3 -> kN)'''
-        retval= super(SSBiaxialBendingControlVars,self).getLaTeXFields(factor)+" & "+fmt.Esf.format(self.chiN)
-        return retval
-
-    def getStrArguments(self):
-        '''Returns a string for a 'copy' (kind of) constructor.'''
-        retval= super(SSBiaxialBendingControlVars,self).getStrArguments()
-        retval+= ',chiN= ' + str(self.chiN)
-        retval+= ',chiLT= ' + str(self.chiLT)
-        return retval
-
-    
 class RCShearControlVars(BiaxialBendingControlVars):
     '''Control variables for shear limit state verification in reinforced concrete elements.
 
@@ -607,6 +605,7 @@ class CrackControlVars(ControlVarsBase):
             self.crackControlVarsNeg= CrackControlBaseVars()
 
     def getCF(self):
+        ''' Return the capacity factor.'''
         return max(self.crackControlVarsPos.getCF(),self.crackControlVarsNeg.getCF())
 
     def getMaxSteelStress(self):
@@ -807,6 +806,40 @@ class FatigueControlVars(ControlVarsBase):
         retval+= ', Vu= ' + str(self.Vu)
         return retval
   
+class VonMisesControlVars(ControlVarsBase):
+    '''Shear along Y axis. Internal forces [Vy] for a combination.
+
+    :ivar combName: name of the load combinations to deal with
+    :ivar von_mises_stress:  Von Mises stress (defaults to 0.0)
+    '''
+    def __init__(self,combName= 'nil', CF= -1.0, vm_stress= 0.0):
+        ''' Constructor.
+
+        :param combName: name of the load combinations to deal with
+        :param vm_stress: von mises stress (defaults to 0.0)
+        :ivar CF: capacity factor (efficiency) (defaults to -1.0; CF<1.0 -> Ok; CF>1.0 -> KO)
+        '''
+        super(VonMisesControlVars,self).__init__(combName)
+        self.vm_stress= vm_stress #Shear along y axis.
+        self.CF= CF # Capacity factor or efficiency
+
+    def getLaTeXFields(self,factor= 1e-3):
+        ''' Returns a string with the intermediate fields of the LaTeX string.
+
+        :param factor: factor for units (default 1e-3 -> kN)'''
+        retval= super(VonMisesControlVars,self).getLaTeXFields(factor)
+        retval+= " & "+ fmt.Esf.format(self.vm_stress*factor)
+        return retval
+
+    def getStrArguments(self):
+        '''Returns a string for a 'copy' (kind of) constructor.'''
+        retval= super(VonMisesControlVars,self).getStrArguments()
+        retval+= ', vm_stress= ' + str(self.vm_stress)
+        return retval
+
+    def getCF(self):
+        ''' Return the capacity factor.'''
+        return self.CF
 
 def writeControlVarsFromPhantomElements(controlVarName,preprocessor,outputFileName,outputCfg):
     '''Writes in file 'outputFileName' the control-variable values calculated for
@@ -871,7 +904,7 @@ def writeControlVarsFromPhantomElements(controlVarName,preprocessor,outputFileNa
         retval= [scipy.mean(fcs1),scipy.mean(fcs2)]
     return retval
 
-def writeControlVarsFromElements(controlVarName,preprocessor,outputFileName,outputCfg):
+def writeControlVarsFromElements(controlVarName, preprocessor, outputFileName, outputCfg, sections):
     '''Writes in file 'outputFileName' the control-variable values calculated for elements in set 'setCalc'. 
 
     :param controlVarName: name of the control var (e.g. 'ULS_normalStressesResistance' )
@@ -882,6 +915,7 @@ def writeControlVarsFromElements(controlVarName,preprocessor,outputFileName,outp
            elements to be analyzed [defaults to 'total'], append or not the 
            results to the result file [defatults to 'N'], generation or not of 
            list file [defatults to 'N', ...)
+    :param sections: names of the sections to write the output for.
     '''
     if outputCfg.setCalc:
         elems=outputCfg.setCalc.elements
@@ -892,37 +926,34 @@ def writeControlVarsFromElements(controlVarName,preprocessor,outputFileName,outp
     else:
         xcOutput= open(outputFileName+".py","w+")
     for e in elems:
-        controlVar1= e.getProp(controlVarName+'Sect1')
-        controlVar2= e.getProp(controlVarName+'Sect2')
-        xcOutput.write(controlVar1.strElementProp(e.tag,controlVarName+'Sect1'))
-        xcOutput.write(controlVar2.strElementProp(e.tag,controlVarName+'Sect2'))
+        for s in sections:
+            propName= controlVarName+s
+            controlVar= e.getProp(propName)
+            xcOutput.write(controlVar.strElementProp(e.tag,propName))
     xcOutput.close()
     if outputCfg.listFile.lower()[0]=='y':
         if outputCfg.appendToResFile.lower()[0]=='y':
             texOutput= open(outputFileName+".tex","a+")
         else:
             texOutput= open(outputFileName+".tex","w+")
-        texOutput.write("Section 1\n")
-        for e in elems:
-            controlVar1= e.getProp(controlVarName+'Sect1')
-            outStr1= controlVar1.getLaTeXString(e.tag,1e-3)
-            texOutput.write(outStr1)
-        texOutput.write("Section 2\n")
-        for e in elems:
-            controlVar2= e.getProp(controlVarName+'Sect2')
-            outStr2= controlVar2.getLaTeXString(e.tag,1e-3)
-            texOutput.write(outStr2)
+        for s in sections:
+            texOutput.write("Section: "+s+"\n")
+            propName= controlVarName+s
+            for e in elems:
+                controlVar= e.getProp(propName)
+                outStr= controlVar.getLaTeXString(e.tag,1e-3)
+                texOutput.write(outStr)
         texOutput.close()
     retval=None
     if outputCfg.calcMeanCF.lower()[0]=='y':
-        fcs1= [] #Capacity factors at section 1.
-        fcs2= [] #Capacity factors at section 2.
-        for e in elems:
-            controlVar1= e.getProp(controlVarName+'Sect1')
-            controlVar2= e.getProp(controlVarName+'Sect2')
-            fcs1.append(controlVar1.getCF())
-            fcs2.append(controlVar2.getCF())
-        retval= [scipy.mean(fcs1),scipy.mean(fcs2)]
+        retval= list() # mean capacity factors
+        for s in sections:
+            sFcs= list()
+            propName= controlVarName+s
+            for e in elems:
+                controlVar= e.getProp(propName)
+                sFcs.append(controlVar.getCF())
+            retval.append(scipy.mean(sFcs))
     return retval
 
 

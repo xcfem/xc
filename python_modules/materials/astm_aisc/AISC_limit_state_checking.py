@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 ''' Classes and functions for limit state checking according to Eurocode 3. '''
+
 from __future__ import print_function
 from __future__ import division
 
@@ -340,6 +341,45 @@ class ShearController(lsc.LimitStateControllerBase):
                 else:
                     if(CFtmp>e.getProp(self.limitStateLabel+'Sect2').CF):
                         e.setProp(self.limitStateLabel+'Sect2',cv.ShearYControlVars('Sects2',lf.idComb,CFtmp,lf.Vy))
+
+class VonMisesStressController(lsc.LimitStateControllerBase):
+    '''Object that controls Von Mises stress limit state.'''
+
+    def __init__(self,limitStateLabel):
+        ''' Constructor.
+
+        :param limitStateLabel: limit state identifier.
+        :param yieldStress: material yield stress.
+        '''
+        super(VonMisesStressController,self).__init__(limitStateLabel)
+
+    def initControlVars(self,setCalc):
+        '''Initialize control variables over elements.
+
+        :param setCalc: set of elements to which define control variables
+        '''
+        for e in setCalc.elements:
+            e.setProp(self.limitStateLabel,cv.VonMisesControlVars())
+
+    def checkSetFromIntForcFile(self,intForcCombFileName,setCalc=None):
+        '''Launch checking.
+
+        :param intForcCombFileName: file containing the internal forces
+                                    for each element.
+        :param setCalc: set of elements to check
+        '''
+        intForcItems= lsd.readIntForcesFile(intForcCombFileName,setCalc)
+        internalForcesValues= intForcItems[2]
+        for e in setCalc.elements:
+            yieldStress=e.getProp('yieldStress')
+            elIntForc=internalForcesValues[e.tag]
+            if(len(elIntForc)==0):
+                lmsg.warning('No internal forces for element: '+str(e.tag)+' of type: '+e.type())
+            for lf in elIntForc:
+                CFtmp= lf.maxVonMisesStress/yieldStress
+                # Both sections will have the same Von Mises stress so this is redundant.
+                if(CFtmp>e.getProp(self.limitStateLabel).CF):
+                    e.setProp(self.limitStateLabel,cv.VonMisesControlVars(lf.idComb,CFtmp,lf.maxVonMisesStress))
 
                         
 def controlULSCriterion():
