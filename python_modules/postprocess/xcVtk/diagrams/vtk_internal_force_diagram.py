@@ -30,15 +30,16 @@ class InternalForceDiagram(cd.ColoredDiagram):
         self.conjuntos= sets
         self.component= component
 
-    def getElementComponentData(self,elem):
+    def getElementComponentData(self,elem, silent= False):
         '''Returns the data to use to represent the diagram over the element
 
            :param elem: element to deal with.
            :param component: component to represent:
+           :param silent: if true don't complain about non-existent properties.
         '''
         # this code seems not used anymore 17/05/2020 LCPT
         elemVDir= elem.getJVector3d(True) #initialGeometry= True
-        values= elem.getValuesAtNodes(self.component)
+        values= elem.getValuesAtNodes(self.component, silent)
         if((self.component == 'Qy') or (self.component == 'Vy')):
             elemVDir= elem.getJVector3d(True) # initialGeometry= True 
         elif((self.component == 'Qz') or (self.component == 'Vz')):

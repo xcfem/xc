@@ -120,19 +120,22 @@ def defVarsEnvelopeInternalForcesBeamElems(elems):
     e.setProp('T-',[6.023e23,6.023e23]) #Negative torque envelope
 
 def updateEnvelopeInternalForcesBeamElem2D(beamElem2D):
-    '''Update values for extreme values of internal forces in 2D elements.'''
+    '''Update values for extreme values of internal forces in 2D elements.
+
+    :param beamElem2D: finite element to update internal forces.
+    '''
     beamElem2D.getResistingForce()
     N1= 0.0; M1= 0.0; V1= 0.0
     N2= 0.0; M2= 0.0; V2= 0.0
-    axialForces= beamElem2D.getValuesAtNodes('N')
+    axialForces= beamElem2D.getValuesAtNodes('N', False)
     if(len(axialForces)>1): # 'N' found.
         N1= axialForces[0]
         N2= axialForces[1]
-    bending= beamElem2D.getValuesAtNodes('M')
+    bending= beamElem2D.getValuesAtNodes('M', False)
     if(len(bending)>1): # 'M' found.
         M1= bending[0]
         M2= bending[1]
-    shear= beamElem2D.getValuesAtNodes('V')
+    shear= beamElem2D.getValuesAtNodes('V', False)
     if(len(shear)>1): # 'V' found.
         V1= shear[0]
         V2= shear[1]
@@ -175,27 +178,30 @@ def updateEnvelopeInternalForcesBeamElem2D(beamElem2D):
 
 
 def updateEnvelopeInternalForcesBeamElem(beamElem):
-    '''Update values for extreme values of internal forces.'''
+    '''Update values for extreme values of internal forces.
+
+    :param beamElem: finite element to update internal forces.
+     '''
     beamElem.getResistingForce()
     N1= 0.0; My1= 0.0; Mz1= 0.0; Vy1= 0.0; Vz1= 0.0
     N2= 0.0; My2= 0.0; Mz2= 0.0; Vy2= 0.0; Vz2= 0.0
-    axialForces= beamElem.getValuesAtNodes('N')
+    axialForces= beamElem.getValuesAtNodes('N', False)
     if(len(axialForces)>1): # 'N' found.
         N1= axialForces[0]
         N2= axialForces[1]
-    bendingY= beamElem.getValuesAtNodes('My')
+    bendingY= beamElem.getValuesAtNodes('My', False)
     if(len(bendingY)>1): # 'My' found.
         My1= bendingY[0]
         My2= bendingY[1]
-    bendingZ= beamElem.getValuesAtNodes('Mz')
+    bendingZ= beamElem.getValuesAtNodes('Mz', False)
     if(len(bendingZ)>1): # 'Mz' found.
         Mz1= bendingZ[0]
         Mz2= bendingZ[1]
-    shearY= beamElem.getValuesAtNodes('Vy')
+    shearY= beamElem.getValuesAtNodes('Vy', False)
     if(len(shearY)>1): # 'Vy' found.
         Vy1= shearY[0]
         Vy2= shearY[1]
-    shearZ= beamElem.getValuesAtNodes('Vz')
+    shearZ= beamElem.getValuesAtNodes('Vz', False)
     if(len(shearZ)>1): # 'Vz' found.
         Vz1= shearZ[0]
         Vz2= shearZ[1]

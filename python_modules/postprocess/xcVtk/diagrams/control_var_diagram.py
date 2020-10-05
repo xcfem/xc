@@ -76,7 +76,7 @@ class ControlVarDiagram(cd.ColoredDiagram):
                 value1= None
                 value2= None
         else:
-            values= elem.getValuesAtNodes(self.component)
+            values= elem.getValuesAtNodes(self.component, False)
             if(len(values)>1): # component found.
                 value1= values[0]; value2= values[1]
         if((self.component == 'Qy') or (self.component == 'Vy')):

@@ -543,13 +543,14 @@ class PredefinedSpace(object):
         lockerName= elemSet.name+'_locker'
         mesh.meltAliveNodes(lockerName)
 
-    def getValuesAtNodes(self, element, code):
+    def getValuesAtNodes(self, element, code, silent= False):
         ''' Return the values corresponding to code at each of the element nodes.
 
          :param element: element which the stresses at its nodes will be calculated.
          :param code: magnitude to return (stress, strain,...).
+         :param silent: if true don't complain about non-existent properties.
         '''
-        return element.getValuesAtNodes(code)
+        return element.getValuesAtNodes(code, silent)
     
     def computeValuesAtNodes(self, setToCompute, propToDefine= 'stress'):
         ''' Extrapolate the stresses to the nodes of the set argument and

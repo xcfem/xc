@@ -31,12 +31,24 @@ def getInternalForcesDict(nmbComb, elems):
             internalForces= internal_forces.ShellMaterialInternalForces()
             internalForces.setFromAverageInShellElement(e)
             internalForces= internalForces.getWoodArmer()
+            # Silently ask about maximum Von-Mises stress.
+            maxVonMisesAtNodes= e.getValuesAtNodes('max_von_mises_stress', True) 
+            avgMaxVM= None
+            if(len(maxVonMisesAtNodes)>1): # 'max_von_mises_stress' found.
+                avgMaxVM= 0.0
+                avgMaxVM+= maxVonMisesAtNodes[0][0] # at node 1
+                avgMaxVM+= maxVonMisesAtNodes[1][0] # at node 2
+                avgMaxVM+= maxVonMisesAtNodes[2][0] # at node 3
+                avgMaxVM+= maxVonMisesAtNodes[3][0] # at node 4
+                avgMaxVM/= 4.0 # average of the max. value at nodes.
             sz= len(internalForces)
             internalForcesDict= dict()
             for i in range(0,sz):
                 nForceDict= dict()
                 force= internalForces[i]
                 internalForcesDict[i]= force.getDict()
+                if(avgMaxVM):
+                    internalForcesDict[i].update({'max_von_mises_stress':avgMaxVM})
             elemDict['internalForces']= internalForcesDict
         elif('Beam2d' in elementType):
             e.getResistingForce()
@@ -44,15 +56,15 @@ def getInternalForcesDict(nmbComb, elems):
             # Internal forces of the bar. 
             N1= 0.0; M1= 0.0; V1= 0.0
             N2= 0.0; M2= 0.0; V2= 0.0
-            axialForces= e.getValuesAtNodes('N')
+            axialForces= e.getValuesAtNodes('N', False)
             if(len(axialForces)>1): # 'N' found.
                 N1= axialForces[0]
                 N2= axialForces[1]
-            bending= e.getValuesAtNodes('M')
+            bending= e.getValuesAtNodes('M', False)
             if(len(bending)>1): # 'M' found.
                 M1= bending[0]
                 M2= bending[1]
-            shear= e.getValuesAtNodes('V')
+            shear= e.getValuesAtNodes('V', False)
             if(len(shear)>1): # 'V' found.
                 V1= shear[0]
                 V2= shear[1]
@@ -66,27 +78,27 @@ def getInternalForcesDict(nmbComb, elems):
             internalForcesDict= dict()
             N1= 0.0; My1= 0.0; Mz1= 0.0; Vy1= 0.0;
             N2= 0.0; My2= 0.0; Mz2= 0.0; Vy2= 0.0;
-            axialForces= e.getValuesAtNodes('N')
+            axialForces= e.getValuesAtNodes('N', False)
             if(len(axialForces)>1): # 'N' found.
                 N1= axialForces[0]
                 N2= axialForces[1]
-            shearY= e.getValuesAtNodes('Vy')
+            shearY= e.getValuesAtNodes('Vy', False)
             if(len(shearY)>1): # 'Vy' found.
                 Vy1= shearY[0]
                 Vy2= shearY[1]
-            shearZ= e.getValuesAtNodes('Vz')
+            shearZ= e.getValuesAtNodes('Vz', False)
             if(len(shearZ)>1): # 'Vz' found.
                 Vz1= shearZ[0]
                 Vz2= shearZ[1]
-            torque= e.getValuesAtNodes('T')
+            torque= e.getValuesAtNodes('T', False)
             if(len(torque)>1): # 'T' found.
                 T1= torque[0]
                 T2= torque[1]
-            bendingY= e.getValuesAtNodes('My')
+            bendingY= e.getValuesAtNodes('My', False)
             if(len(bendingY)>1): # 'My' found.
                 My1= bendingY[0]
                 My2= bendingY[1]
-            bendingZ= e.getValuesAtNodes('Mz')
+            bendingZ= e.getValuesAtNodes('Mz', False)
             if(len(bendingZ)>1): # 'Mz' found.
                 Mz1= bendingZ[0]
                 Mz2= bendingZ[1]
@@ -108,7 +120,7 @@ def getInternalForcesDict(nmbComb, elems):
             internalForcesDict= dict()
             N1= 0.0
             N2= 0.0
-            axialForces= e.getValuesAtNodes('N')
+            axialForces= e.getValuesAtNodes('N', False)
             if(len(axialForces)>1): # 'N' found.
                 N1= axialForces[0]
                 N2= axialForces[1]
@@ -127,7 +139,7 @@ def getInternalForcesDict(nmbComb, elems):
             elemDict['internalForces']= internalForcesDict
         elif('ZeroLength' in elementType):
             e.getResistingForce()
-            F= e.getValuesAtNodes("stress")
+            F= e.getValuesAtNodes("stress", False)
             internalForcesDict= dict()
             nDOFs= len(F[0]) # Number of degrees of freedom.
             if(nDOFs!= 6):
@@ -149,7 +161,8 @@ def exportInternalForces(nmbComb, elems, fDesc):
 
     :param nmbComb: combination name.
     :param elems: element set.
-    :param fDesc: file descriptor to write internal forces on.'''
+    :param fDesc: file descriptor to write internal forces on.
+    '''
     errMsg= 'exportInternalForces deprecated use getInternalForcesDict'
     errMsg+= 'with apropriate arguments'
     for e in elems:
@@ -168,15 +181,15 @@ def exportInternalForces(nmbComb, elems, fDesc):
             # Internal forces at the origin of the bar. 
             N1= 0.0; M1= 0.0; V1= 0.0
             N2= 0.0; M2= 0.0; V2= 0.0
-            axialForces= e.getValuesAtNodes('N')
+            axialForces= e.getValuesAtNodes('N', False)
             if(len(axialForces)>1): # 'N' found.
                 N1= axialForces[0]
                 N2= axialForces[1]
-            bending= e.getValuesAtNodes('M')
+            bending= e.getValuesAtNodes('M', False)
             if(len(bending)>1): # 'M' found.
                 M1= bending[0]
                 M2= bending[1]
-            shear= e.getValuesAtNodes('V')
+            shear= e.getValuesAtNodes('V', False)
             if(len(shear)>1): # 'V' found.
                 V1= shear[0]
                 V2= shear[1]
@@ -188,27 +201,27 @@ def exportInternalForces(nmbComb, elems, fDesc):
             e.getResistingForce()
             N1= 0.0; Vy1= 0.0; Vz1= 0.0; T1= 0.0; My1= 0.0; Mz1= 0.0
             N2= 0.0; Vy2= 0.0; Vz2= 0.0; T2= 0.0; My2= 0.0; Mz2= 0.0 
-            axialForces= e.getValuesAtNodes('N')
+            axialForces= e.getValuesAtNodes('N', False)
             if(len(axialForces)>1): # 'N' found.
                 N1= axialForces[0]
                 N2= axialForces[1]
-            shearY= e.getValuesAtNodes('Vy')
+            shearY= e.getValuesAtNodes('Vy', False)
             if(len(shearY)>1): # 'Vy' found.
                 Vy1= shearY[0]
                 Vy2= shearY[1]
-            shearZ= e.getValuesAtNodes('Vz')
+            shearZ= e.getValuesAtNodes('Vz', False)
             if(len(shearZ)>1): # 'Vz' found.
                 Vz1= shearZ[0]
                 Vz2= shearZ[1]
-            torque= e.getValuesAtNodes('T')
+            torque= e.getValuesAtNodes('T', False)
             if(len(torque)>1): # 'T' found.
                 T1= torque[0]
                 T2= torque[1]
-            bendingY= e.getValuesAtNodes('My')
+            bendingY= e.getValuesAtNodes('My', False)
             if(len(bendingY)>1): # 'My' found.
                 My1= bendingY[0]
                 My2= bendingY[1]
-            bendingZ= e.getValuesAtNodes('Mz')
+            bendingZ= e.getValuesAtNodes('Mz', False)
             if(len(bendingZ)>1): # 'Mz' found.
                 Mz1= bendingZ[0]
                 Mz2= bendingZ[1]
@@ -226,7 +239,7 @@ def exportInternalForces(nmbComb, elems, fDesc):
             e.getResistingForce()
             N1= 0.0
             N2= 0.0
-            axialForces= e.getValuesAtNodes('N')
+            axialForces= e.getValuesAtNodes('N', False)
             if(len(axialForces)>1): # 'N' found.
                 N1= axialForces[0]
                 N2= axialForces[1]
@@ -271,32 +284,36 @@ def exportaEsfuerzosShellSet(preprocessor,nmbComb, st, fName):
     exportShellInternalForces(nmbComb,elems,fName)
 
 def exportBeamInternalForces(nmbComb, elems, fName):
-    '''Writes a comma separated values file with the element's internal forces.'''
+    '''Writes a comma separated values file with the element's internal forces.
+
+    :param nmbComb: name of the load combination.
+    :param elems: finite elements to export internal forces from.
+    '''
     for e in elems:
         e.getResistingForce()
         N1= 0.0; Vy1= 0.0; Vz1= 0.0; T1= 0.0; My1= 0.0; Mz1= 0.0
         N2= 0.0; Vy2= 0.0; Vz2= 0.0; T2= 0.0; My2= 0.0; Mz2= 0.0; 
-        axialForces= e.getValuesAtNodes('N')
+        axialForces= e.getValuesAtNodes('N', False)
         if(len(axialForces)>1): # 'N' found.
             N1= axialForces[0]
             N2= axialForces[1]
-        shearY= e.getValuesAtNodes('Vy')
+        shearY= e.getValuesAtNodes('Vy', False)
         if(len(shearY)>1): # 'Vy' found.
             Vy1= shearY[0]
             Vy2= shearY[1]
-        shearZ= e.getValuesAtNodes('Vz')
+        shearZ= e.getValuesAtNodes('Vz', False)
         if(len(shearZ)>1): # 'Vz' found.
             Vz1= shearZ[0]
             Vz2= shearZ[1]
-        torque= e.getValuesAtNodes('T')
+        torque= e.getValuesAtNodes('T', False)
         if(len(torque)>1): # 'T' found.
             T1= torque[0]
             T2= torque[1]
-        bendingY= e.getValuesAtNodes('My')
+        bendingY= e.getValuesAtNodes('My', False)
         if(len(bendingY)>1): # 'My' found.
             My1= bendingY[0]
             My2= bendingY[1]
-        bendingZ= e.getValuesAtNodes('Mz')
+        bendingZ= e.getValuesAtNodes('Mz', False)
         if(len(bendingZ)>1): # 'Mz' found.
             Mz1= bendingZ[0]
             Mz2= bendingZ[1]
