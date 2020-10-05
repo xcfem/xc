@@ -85,9 +85,9 @@ sY= 0.0
 sXY= 0.0
 count= 0.0
 for q in quads:    
-    elementStresses= q.physicalProperties.getVectorMaterials.getValues('stress')
+    elementStresses= q.physicalProperties.getVectorMaterials.getValues('stress', False)
     nodeStresses= q.getExtrapolatedValues(elementStresses)
-    #vMises= q.physicalProperties.getVectorMaterials.getValues('von_mises_stress')
+    #vMises= q.physicalProperties.getVectorMaterials.getValues('von_mises_stress', False)
     # print('element stresses: ', elementStresses)
     # print('node stresses: ', nodeStresses)
 

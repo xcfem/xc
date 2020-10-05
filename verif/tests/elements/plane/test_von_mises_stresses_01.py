@@ -114,7 +114,7 @@ Mmax= F/2.0*L/2.0
 sg_max_theor= -Mmax/I*h/2.0
 n1= p1.getNode() # Node at point 1
 e= n1.getConnectedElements()[0] # element connected to n1.
-stressAtNodes= e.getValuesAtNodes('stress')
+stressAtNodes= e.getValuesAtNodes('stress', False)
 sg11Min= 1e12
 worstCase= None
 for s in stressAtNodes:
@@ -130,7 +130,7 @@ vMisesRef= math.sqrt(sg11*sg11+sg11*sg22+sg22*sg22+3.0*sg12*sg12)
 # Theoretical value sg22= 0 (free surface) and sg12= 0
 vMisesTheor= abs(sg_max_theor)
 # Von mises returned by XC
-vMisesAtNodes= e.getValuesAtNodes('von_mises_stress')
+vMisesAtNodes= e.getValuesAtNodes('von_mises_stress', False)
 vMisesXC= 0.0
 for vm in vMisesAtNodes:
     vMisesXC= max(vMisesXC,vm[0])
