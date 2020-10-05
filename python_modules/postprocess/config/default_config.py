@@ -73,36 +73,46 @@ class ProjectDirTree(object):
         return self.workingDirectory+'/'+self.intForcPath
     
     def getFullVerifPath(self):
+        ''' Return the path for the limit state checking files.'''
         return self.workingDirectory+'/'+self.verifPath
     
     def getFullReportPath(self):
+        ''' Return the full path for the report files.'''        
         return self.workingDirectory+'/'+self.reportPath+self.resultsPath+'text/'
-    
     def getRltvReportPath(self):
+        ''' Return the relative path for the report files.'''  
         return self.resultsPath+'text/'
     
     def getFullGraphicsPath(self):
+        ''' Return the full path for the graphic files.'''        
         return self.getFullReportPath()+'graphics/'
 
     def getRltvGraphicsPath(self):
+        ''' Return the relative path for the graphic files.'''        
         return self.getRltvReportPath()+'graphics/'
 
     def getReportSectionsFile(self):
+        ''' Return the full path for the sections report file.'''        
         return self.getFullReportPath()+'sectReport.tex'
     
     def getReportSectionsGrPath(self):
+        ''' Return the full path for the sections graphic files.'''        
         return self.getFullReportPath()+'sections/'
 
     def getRltvReportSectionsGrPath(self):
+        ''' Return the relative path for the sections graphic files.'''        
         return self.getRltvReportPath()+'sections/'
 
     def getReportLoadsFile(self):
+        ''' Return the path for the load report file.'''        
         return self.getFullReportPath()+'report_loads.tex'
     
     def getReportLoadsGrPath(self):
+        ''' Return the path for the load graphic files.'''        
         return self.getFullGraphicsPath()+'loads/'
     
     def getRltvReportLoadsGrPath(self):
+        ''' Return the relative path for the load graphic files.'''        
         return self.getRltvGraphicsPath()+'loads/'
     
     def getVerifNormStrFile(self):
@@ -145,6 +155,26 @@ class ProjectDirTree(object):
             graphics files.'''
         return self.getRltvGraphicsPath()+'shearULS/'
 
+    def getVerifVonMisesStressFile(self):
+        ''' Return the path of the VonMisesStress verification
+            results file.'''
+        return self.getFullVerifPath()+'verifRsl_VonMisesStressULS.py'
+    
+    def getReportVonMisesStressFile(self):
+        ''' Return the path of the VonMisesStress verification
+            report file.'''
+        return self.getFullReportPath()+'report_VonMisesStressULS.tex'
+    
+    def getReportVonMisesStressGrPath(self):
+        ''' Return the path for the VonMisesStress verification
+            graphics files.'''
+        return self.getFullGraphicsPath()+'VonMisesStressULS/'
+
+    def getRltvReportVonMisesStressGrPath(self):
+        ''' Return the path for the VonMisesStress verification
+            graphics files.'''
+        return self.getRltvGraphicsPath()+'VonMisesStressULS/'
+    
     def getVerifCrackFreqFile(self):
         ''' Return the path of the crack verification
             results file (frequent loads).'''
@@ -221,6 +251,8 @@ class ProjectDirTree(object):
             return self.getVerifCrackQpermFile()
         elif(limitStateLabel=='ULS_fatigueResistance'):
             return self.getVerifFatigueFile()
+        elif(limitStateLabel=='ULS_VonMisesStressResistance'):
+            return self.getVerifVonMisesStressFile()
         else:
             lmsg.error('Label: '+limitStateLabel+' unknown.')
             return None
@@ -241,6 +273,8 @@ class ProjectDirTree(object):
             return self.getReportCrackQpermFile()
         elif(limitStateLabel=='ULS_fatigueResistance'):
             return self.getReportFatigueFile()
+        elif(limitStateLabel=='ULS_VonMisesStressResistance'):
+            return self.getReportVonMisesStressFile()
         else:
             lmsg.error('Label: '+limitStateLabel+' unknown.')
             return None
@@ -261,6 +295,8 @@ class ProjectDirTree(object):
             return self.getReportCrackQpermGrPath()
         elif(limitStateLabel=='ULS_fatigueResistance'):
             return self.getReportFatigueGrPath()
+        elif(limitStateLabel=='ULS_VonMisesStressResistance'):
+            return self.getReportVonMisesStressGrPath()
         else:
             lmsg.error('Label: '+limitStateLabel+' unknown.')
             return None
@@ -281,6 +317,8 @@ class ProjectDirTree(object):
             return self.getRltvReportCrackQpermGrPath()
         elif(limitStateLabel=='ULS_fatigueResistance'):
             return self.getRltvReportFatigueGrPath()
+        elif(limitStateLabel=='ULS_VonMisesStressResistanc'):
+            return self.getRltvReportVonMisesStressResistancGrPath()
         else:
             lmsg.error('Label: '+limitStateLabel+' unknown.')
             return None

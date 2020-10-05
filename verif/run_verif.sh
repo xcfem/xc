@@ -744,6 +744,7 @@ python tests/postprocess/limit_state_checking/aisc/test_uls_checking_aisc_01.py
 python tests/postprocess/limit_state_checking/aisc/test_uls_checking_aisc_02.py
 python tests/postprocess/limit_state_checking/aisc/test_uls_checking_aisc_03.py
 python tests/postprocess/limit_state_checking/aisc/test_uls_checking_aisc_04.py
+python tests/postprocess/limit_state_checking/aisc/test_uls_checking_aisc_05.py
 
 #VTK tests
 ##python tests/vtk/dibuja_edges.py

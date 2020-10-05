@@ -799,7 +799,7 @@ class OutputHandler(object):
            directions.
 
         :param limitStateLabel: label that identifies the limit state.
-        :param section: section to display (1 or 2)
+        :param section: section to display (1 or 2 or None if the value is not section dependent).
         :param argument: name of the control var to represent.
         :param component: component of the control var to represent.
         :param setToDisplay: represent the field over those elements.
@@ -814,11 +814,15 @@ class OutputHandler(object):
                     less than vmin are displayed in blue and those greater than vmax 
                     in red (defaults to None)
         '''
-        if section not in [1,2]:
-            lmsg.warning('section', section, "doesn't exist, section 1 is displayed instead")
-            section=1
-        sectRef='Sect'+str(section)
- 
+        sectRef= ''
+        sectDescr= ''
+        if(section):
+            if section not in [1,2]:
+                lmsg.warning('section', section, "doesn't exist, section 1 is displayed instead")
+                section=1
+            sectRef='Sect'+str(section)
+            sectDescr= self.outputStyle.directionDescription[section-1]
+  
         if(setToDisplay==None):
             setToDisplay= self.modelSpace.getTotalSet()
         
@@ -829,9 +833,8 @@ class OutputHandler(object):
 
         field= fields.getScalarFieldFromControlVar(attributeName,argument,setToDisplay,component,fUnitConv,rgMinMax)
         captionTexts= self.outputStyle.getCaptionTextsDict()
-        sectDescr= self.outputStyle.directionDescription
         captionBaseText= captionTexts[limitStateLabel] + ', ' + captionTexts[argument] + unitDescription + '. '+ setToDisplay.description.capitalize()
-        field.display(displaySettings,caption=  captionBaseText + ', ' + sectDescr[section-1], fileName= fileName, defFScale= defFScale)
+        field.display(displaySettings,caption=  captionBaseText + ', ' + sectDescr, fileName= fileName, defFScale= defFScale)
 
 def insertGrInTex(texFile,grFileNm,grWdt,capText,labl=''):
     '''Include a graphic in a LaTeX file.
