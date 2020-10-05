@@ -95,13 +95,10 @@ for e in xcTotalSet.elements:
 
 ## Load combinations
 combContainer= combs.CombContainer()
-
 ### Serviceability limit states.
 combContainer.SLS.qp.add('combSLS01', '1.0*liveLoad')
-
 ### Ultimate limit state.
 combContainer.ULS.perm.add('combULS01','1.2*deadLoad+1.6*liveLoad')
-
 ### Dump combination definition into XC.
 combContainer.dumpCombinations(preprocessor)
 
@@ -111,7 +108,7 @@ xcTotalSet= modelSpace.getTotalSet()
 
 ## Setup working directory.
 fname= os.path.basename(__file__)
-cfg=default_config.EnvConfig(language='en',intForcPath= 'results/internalForces/',verifPath= 'results/verifications/',reportPath='./',resultsPath= 'annex/',grWidth='120mm')
+cfg= default_config.EnvConfig(language='en',intForcPath= 'results/internalForces/',verifPath= 'results/verifications/',reportPath='./',resultsPath= 'annex/',grWidth='120mm')
 cfg.projectDirTree.workingDirectory= '/tmp/'+os.path.splitext(fname)[0]
 lsd.LimitStateData.envConfig= cfg
 
