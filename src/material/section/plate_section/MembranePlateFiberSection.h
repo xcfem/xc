@@ -78,7 +78,7 @@ class MembranePlateFiberSection: public PlateBase
     //quadrature data
     static const double sg[numFibers];
     static const double wg[numFibers];
-    static constexpr double root56= sqrt(5.0/6.0); //shear correction
+    static const double root56; //shear correction
     static Vector stressResultant;
     static Matrix tangent;
     

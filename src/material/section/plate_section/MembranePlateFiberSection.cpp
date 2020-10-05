@@ -58,6 +58,7 @@
 #include <material/nD/NDMaterial.h>
 #include "material/section/ResponseId.h"
 
+const double XC::MembranePlateFiberSection::root56= sqrt(5.0/6.0); //shear correction
 
 //static vector and matrices
 XC::Vector XC::MembranePlateFiberSection::stressResultant(XC::MembranePlateFiberSection::order);
