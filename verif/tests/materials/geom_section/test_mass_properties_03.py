@@ -52,9 +52,6 @@ G= sectionGeometryTest.getCenterOfMassHomogenizedSection(Ec)
 Iy= sectionGeometryTest.getIyHomogenizedSection(Ec)
 Iz= sectionGeometryTest.getIzHomogenizedSection(Ec)
 
-
-
-
 areaTeor= b*hf+(d-hf)*bw+n*5*areaBar
 yG= G[0]
 zG= G[1]
