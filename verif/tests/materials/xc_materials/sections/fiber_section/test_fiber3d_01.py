@@ -51,7 +51,7 @@ pth= os.path.dirname(__file__)
 # print("pth= ", pth)
 if(not pth):
   pth= "."
-exec(open(pth+"/../../aux/testQuadRegion.py").read())
+exec(open(pth+"/../../../../aux/testQuadRegion.py").read())
 quadFibers= preprocessor.getMaterialHandler.newMaterial("fiber_section_3d","quadFibers")
 fiberSectionRepr= quadFibers.getFiberSectionRepr()
 fiberSectionRepr.setGeomNamed("testQuadRegion")

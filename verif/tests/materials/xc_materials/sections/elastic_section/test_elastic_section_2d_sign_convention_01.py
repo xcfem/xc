@@ -37,7 +37,7 @@ pth= os.path.dirname(__file__)
 #print("pth= ", pth)
 if(not pth):
   pth= "."
-exec(open(pth+"/../../aux/elastic_section_2d.py").read())
+exec(open(pth+"/../../../../aux/elastic_section_2d.py").read())
 
 sigma= E*epsilon
 N0Teor= (epsilon1+epsilon2+epsilon3+epsilon4)/4.0*E*A
