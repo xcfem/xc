@@ -168,7 +168,7 @@ class ZeroLength: public Element0D
     int addInertiaLoadToUnbalance(const Vector &accel);    
 
     Matrix getExtrapolatedValues(const Matrix &) const;
-    boost::python::list getValuesAtNodes(const std::string &) const;
+    boost::python::list getValuesAtNodes(const std::string &, bool silent= false) const;
     
     Vector getInternalForces(void) const;
     const Vector &getResistingForce(void) const;

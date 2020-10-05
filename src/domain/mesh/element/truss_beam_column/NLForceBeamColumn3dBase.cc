@@ -180,7 +180,9 @@ int XC::NLForceBeamColumn3dBase::recvData(const Communicator &comm)
 //! When the property requested its located at the integration point this
 //! function is responsible of the extrapolation of values from
 //! Gauss points to nodes.
-boost::python::list XC::NLForceBeamColumn3dBase::getValuesAtNodes(const std::string &code) const
+//! @param code: identifier of the requested value.
+//! @param silent: if true don't complaint about non-existen property.
+boost::python::list XC::NLForceBeamColumn3dBase::getValuesAtNodes(const std::string &code, bool silent) const
   {
     boost::python::list retval;
     if(code=="N")
@@ -214,6 +216,6 @@ boost::python::list XC::NLForceBeamColumn3dBase::getValuesAtNodes(const std::str
 	retval.append(getMz2());
       }
     else
-      retval= BeamColumnWithSectionFDTrf3d::getValuesAtNodes(code); 
+      retval= BeamColumnWithSectionFDTrf3d::getValuesAtNodes(code, silent); 
     return retval;
   }

@@ -554,7 +554,9 @@ double XC::MembranePlateFiberSection::getAvgVonMisesStress(void) const
   }
 
 //! @brief Return values of internal forces, deformations...
-XC::Matrix XC::MembranePlateFiberSection::getValues(const std::string &cod) const
+//! @param cod: name of the requested value.
+//! @param silent: if true don't complain about non-existen property.
+XC::Matrix XC::MembranePlateFiberSection::getValues(const std::string &cod, bool silent) const
   {
     Matrix retval;
     if(cod == "max_von_mises_stress")
@@ -579,7 +581,7 @@ XC::Matrix XC::MembranePlateFiberSection::getValues(const std::string &cod) cons
 	retval.putCol(0,vm);
       }
     else
-      retval= PlateBase::getValues(cod);
+      retval= PlateBase::getValues(cod, silent);
     return retval;
   }
 

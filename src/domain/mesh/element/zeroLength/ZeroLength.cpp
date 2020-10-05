@@ -624,7 +624,9 @@ XC::Matrix XC::ZeroLength::getExtrapolatedValues(const Matrix &values) const
 //! When the property requested its located at the integration point this
 //! function is responsible of the extrapolation of values from
 //! Gauss points to nodes.
-boost::python::list XC::ZeroLength::getValuesAtNodes(const std::string &code) const
+//! @param code: identifier of the requested value.
+//! @param silent: if true don't complain about non-existen property.
+boost::python::list XC::ZeroLength::getValuesAtNodes(const std::string &code, bool silent) const
   {
     boost::python::list retval;
     if(code=="strain")
@@ -650,7 +652,7 @@ boost::python::list XC::ZeroLength::getValuesAtNodes(const std::string &code) co
 	  }
       }
     else
-      retval= Element0D::getValuesAtNodes(code); 
+      retval= Element0D::getValuesAtNodes(code, silent); 
     return retval;
   }
 

@@ -179,7 +179,7 @@ class ElasticBeam2d: public ProtoBeam2d
     int setParameter(const std::vector<std::string> &argv, Parameter &param);
     int updateParameter(int parameterID, Information &info);
 
-    boost::python::list getValuesAtNodes(const std::string &) const;
+    boost::python::list getValuesAtNodes(const std::string &, bool silent= false) const;
   };
 } // end of XC namespace
 

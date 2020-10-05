@@ -243,7 +243,7 @@ class NLForceBeamColumn3dBase: public BeamColumnWithSectionFDTrf3d
         return Secommit.T2(); 
       }
     
-    boost::python::list getValuesAtNodes(const std::string &) const;
+    boost::python::list getValuesAtNodes(const std::string &, bool silent= false) const;
   };
 } // end of XC namespace
 

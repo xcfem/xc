@@ -305,7 +305,7 @@ class Element: public MeshComponent
     virtual std::set<std::string> getMaterialNames(void) const;
     boost::python::list getMaterialNamesPy(void) const;
 
-    virtual boost::python::list getValuesAtNodes(const std::string &) const;
+    virtual boost::python::list getValuesAtNodes(const std::string &, bool silent= false) const;
 
     std::set<SetBase *> get_sets(void) const;
     void add_to_sets(std::set<SetBase *> &);

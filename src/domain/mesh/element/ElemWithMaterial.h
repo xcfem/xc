@@ -72,7 +72,7 @@ class ElemWithMaterial: public ElementBase<NNODOS>
     
     int getResponse(int responseID, Information &eleInformation);
     Response *setResponse(const std::vector<std::string> &argv, Information &eleInformation);
-    boost::python::list getValuesAtNodes(const std::string &) const;
+    boost::python::list getValuesAtNodes(const std::string &, bool silent= false) const;
   };
 
 template <int NNODOS,class PhysProp>
@@ -146,11 +146,15 @@ Matrix ElemWithMaterial<NNODOS, PhysProp>::getExtrapolatedValues(const Matrix &v
 //! When the property requested its located at the integration point this
 //! function is responsible of the extrapolation of values from
 //! Gauss points to nodes.
+//! @tparam NNODOS: number of nodes.
+//! @tparam PhysProp: type of material container (physical properties).
+//! @param code: identifier of the requested value.
+//! @param silent: if true don't complaint about non-existen property.
 template <int NNODOS,class PhysProp>
-boost::python::list ElemWithMaterial<NNODOS, PhysProp>::getValuesAtNodes(const std::string &code) const
+boost::python::list ElemWithMaterial<NNODOS, PhysProp>::getValuesAtNodes(const std::string &code, bool silent) const
   {
     boost::python::list retval;
-    const Matrix matValues= physicalProperties.getMaterialsVector().getValues(code);
+    const Matrix matValues= physicalProperties.getMaterialsVector().getValues(code, silent);
     if(matValues.noRows()>0)
       {
         const Matrix nodeValues= getExtrapolatedValues(matValues);
@@ -162,7 +166,7 @@ boost::python::list ElemWithMaterial<NNODOS, PhysProp>::getValuesAtNodes(const s
     	  }
       }
     else
-      retval= ElementBase<NNODOS>::getValuesAtNodes(code); 
+      retval= ElementBase<NNODOS>::getValuesAtNodes(code, silent); 
     return retval;
   }
   

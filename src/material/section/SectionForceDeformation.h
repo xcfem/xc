@@ -140,7 +140,7 @@ class SectionForceDeformation: public Material
     //! @brief Return generalized strain.
     virtual const Vector &getGeneralizedStrain(void) const
       { return getSectionDeformation(); }
-    virtual Matrix getValues(const std::string &) const;
+    virtual Matrix getValues(const std::string &, bool silent= false) const;
 
     virtual double getRho(void) const;
 

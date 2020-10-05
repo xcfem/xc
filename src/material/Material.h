@@ -107,7 +107,7 @@ class Material: public TaggedObject, public MovableObject
 
     virtual Response *setResponse(const std::vector<std::string> &argv, Information &eleInformation);
     virtual int getResponse(int responseID, Information &info);
-    virtual Matrix getValues(const std::string &) const;
+    virtual Matrix getValues(const std::string &, bool silent= false) const;
 
     virtual void update(void);
 

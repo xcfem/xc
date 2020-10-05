@@ -792,7 +792,9 @@ int XC::ElasticBeam2d::updateParameter(int parameterID, Information &info)
 //! When the property requested its located at the integration point this
 //! function is responsible of the extrapolation of values from
 //! Gauss points to nodes.
-boost::python::list XC::ElasticBeam2d::getValuesAtNodes(const std::string &code) const
+//! @param code: identifier of the requested value.
+//! @param silent: if true don't complaint about non-existen property.
+boost::python::list XC::ElasticBeam2d::getValuesAtNodes(const std::string &code, bool silent) const
   {
     boost::python::list retval;
     if(code=="N")
@@ -811,6 +813,6 @@ boost::python::list XC::ElasticBeam2d::getValuesAtNodes(const std::string &code)
 	retval.append(getV2());
       }
     else
-      retval= ProtoBeam2d::getValuesAtNodes(code); 
+      retval= ProtoBeam2d::getValuesAtNodes(code, silent); 
     return retval;
   }

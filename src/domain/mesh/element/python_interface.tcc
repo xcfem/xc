@@ -87,7 +87,7 @@ class_<XC::Element, XC::Element *,bases<XC::MeshComponent>, boost::noncopyable >
   .def("getJVector3d",&XC::Element::getJVector3d,"Return a 3D vector in the direction of the local axis 2.")
   .def("getKVector3d",&XC::Element::getKVector3d,"Return a 3D vector in the direction of the local axis 3.")
   .def("getCoordinateSystem",&XC::Element::getCooSys,"Return the element coordinate system.")
-  .def("getValuesAtNodes",&XC::Element::getValuesAtNodes,"getValuesAtNodes(string): return the value of the argument at the element nodes.")
+  .def("getValuesAtNodes",&XC::Element::getValuesAtNodes,"getValuesAtNodes(string, silent): return the value of the argument at the element nodes. If silent==True don't complain about non-existent property.")
    ;
 
 class_<XC::ElementIter, boost::noncopyable >("ElementIter", no_init)

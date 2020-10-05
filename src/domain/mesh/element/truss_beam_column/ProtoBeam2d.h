@@ -98,7 +98,7 @@ class ProtoBeam2d: public Element1D
     double getStrongAxisAngle(void) const;
     double getWeakAxisAngle(void) const;
 
-    boost::python::list getValuesAtNodes(const std::string &) const;
+    boost::python::list getValuesAtNodes(const std::string &, bool silent= false) const;
   };
 } // end of XC namespace
 

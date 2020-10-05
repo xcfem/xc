@@ -160,7 +160,7 @@ class NDMaterial: public Material
     virtual const std::string &getType(void) const = 0;
     virtual int getOrder(void) const = 0;
 
-    Matrix getValues(const std::string &) const;
+    Matrix getValues(const std::string &, bool silent= false) const;
     virtual Response *setResponse(const std::vector<std::string> &argv, Information &matInformation);
     virtual int getResponse (int responseID, Information &matInformation);
 

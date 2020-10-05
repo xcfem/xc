@@ -96,7 +96,7 @@ class MaterialVector: public std::vector<MAT *>, public CommandEntity, public Mo
     Matrix getGeneralizedStrain(const int &defID) const;
     Matrix getGeneralizedStress(const int &defID) const;
 
-    Matrix getValues(const std::string &) const;
+    Matrix getValues(const std::string &, bool silent= false) const;
     
     std::set<std::string> getNames(void) const;
     boost::python::list getNamesPy(void) const;
@@ -258,8 +258,11 @@ int MaterialVector<MAT>::revertToStart(void)
   }
 
 //! @brief Ask the materials about the values that correspond to the code.
+//! @tparam MAT: material type.
+//! @param cod: identifier of the requested value.
+//! @param silent: if true don't complaint about non-existen property.
 template <class MAT>
-XC::Matrix XC::MaterialVector<MAT>::getValues(const std::string &code) const
+XC::Matrix XC::MaterialVector<MAT>::getValues(const std::string &code, bool silent) const
   {
     Matrix retval;
     const int nMat= this->size();
@@ -269,7 +272,7 @@ XC::Matrix XC::MaterialVector<MAT>::getValues(const std::string &code) const
     int nCols= 0;
     for(const_iterator i=mat_vector::begin();i!=mat_vector::end();i++, count++)
       {
-        const Matrix v= (*i)->getValues(code);
+        const Matrix v= (*i)->getValues(code, silent);
 	nRows+= v.noRows();
 	nCols= std::max(nCols, v.noCols());
 	tmp[count]= v;

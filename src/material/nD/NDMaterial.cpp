@@ -334,7 +334,9 @@ int XC::NDMaterial::getResponse(int responseID, Information &matInfo)
   }
 
 //! @brief Returns material response.
-XC::Matrix XC::NDMaterial::getValues(const std::string &cod) const
+//! @param cod: name of the requested value.
+//! @param silent: if true don't complain about non-existen property.
+XC::Matrix XC::NDMaterial::getValues(const std::string &cod, bool silent) const
   {
     Matrix retval;
     if((cod == "tangent") || (cod == "Tangent"))
@@ -345,7 +347,7 @@ XC::Matrix XC::NDMaterial::getValues(const std::string &cod) const
 	retval(0,0)= getVonMisesStress();
       }
     else
-      retval= Material::getValues(cod);
+      retval= Material::getValues(cod, silent);
     return retval;
   }
 

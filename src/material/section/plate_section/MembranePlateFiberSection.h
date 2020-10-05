@@ -131,7 +131,7 @@ class MembranePlateFiberSection: public PlateBase
     double getMaxVonMisesStress(void) const;
     double getAvgVonMisesStress(void) const;
     
-    virtual Matrix getValues(const std::string &) const;
+    virtual Matrix getValues(const std::string &, bool silent= false) const;
 
     //print out data
     void Print( std::ostream &s, int flag ) const;

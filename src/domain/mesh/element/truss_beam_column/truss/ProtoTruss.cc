@@ -185,7 +185,9 @@ double XC::ProtoTruss::getInitialStrain(void) const
 //! When the property requested its located at the integration point this
 //! function is responsible of the extrapolation of values from
 //! Gauss points to nodes.
-boost::python::list XC::ProtoTruss::getValuesAtNodes(const std::string &code) const
+//! @param code: identifier of the requested value.
+//! @param silent: if true don't complaint about non-existen property.
+boost::python::list XC::ProtoTruss::getValuesAtNodes(const std::string &code, bool silent) const
   {
     boost::python::list retval;
     if(code=="rho")
@@ -236,6 +238,6 @@ boost::python::list XC::ProtoTruss::getValuesAtNodes(const std::string &code) co
 	  }
       }
     else
-      retval= Element1D::getValuesAtNodes(code); 
+      retval= Element1D::getValuesAtNodes(code, silent); 
     return retval;
   }

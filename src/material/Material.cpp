@@ -121,7 +121,9 @@ int XC::Material::getResponse(int responseID, Information &info)
   { return -1; }
 
 //! @brief Returns material response.
-XC::Matrix XC::Material::getValues(const std::string &cod) const
+//! @param cod: name of the requested value.
+//! @param silent: if true don't complaint about non-existen property.
+XC::Matrix XC::Material::getValues(const std::string &cod, bool silent) const
   {
     Matrix retval;
     if(cod == "stress" || cod == "stresses")
@@ -139,9 +141,10 @@ XC::Matrix XC::Material::getValues(const std::string &cod) const
 	retval.putRow(0,strain);
       }
     else
-      std::cerr << getClassName() << "::" << __FUNCTION__
-		<< "; property: " << cod
-	        << " not found." << std::endl;
+      if(!silent)
+        std::cerr << getClassName() << "::" << __FUNCTION__
+	 	  << "; property: " << cod
+	          << " not found." << std::endl;
     return retval;
   }
 

@@ -259,7 +259,9 @@ int XC::SectionForceDeformation::getResponse(int responseID, Information &secInf
   }
 
 //! @brief Return values of internal forces, deformations...
-XC::Matrix XC::SectionForceDeformation::getValues(const std::string &cod) const
+//! @param cod: name of the requested value.
+//! @param silent: if true don't complain about non-existen property.
+XC::Matrix XC::SectionForceDeformation::getValues(const std::string &cod, bool silent) const
   {
     Matrix retval;
     const std::regex internal_forces_regexp("[nNPmMqQvV][12][12]*");
@@ -286,7 +288,7 @@ XC::Matrix XC::SectionForceDeformation::getValues(const std::string &cod) const
 	retval(0,0)= getSectionDeformationByName(cod);
       }
     else
-      retval= Material::getValues(cod);
+      retval= Material::getValues(cod, silent);
     return retval;
   }
 
