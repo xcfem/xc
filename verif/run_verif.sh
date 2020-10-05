@@ -646,7 +646,7 @@ python tests/materials/awc_nds/test_beam_stability_factor.py
 echo "$BLEU" "  Plate and membrane materials." "$NORMAL"
 python tests/materials/test_material_elastic_membrane_plate_section_01.py
 python tests/materials/test_material_elastic_plate_section_01.py
-python tests/materials/test_inercia_torsion_cajon.py
+python tests/materials/test_box_girder_torsional_stiffness.py
 
 echo "$BLEU" "  Prestressing." "$NORMAL"
 python tests/materials/prestressing/test_layout2D_frictLoss_prestress_tendon.py
