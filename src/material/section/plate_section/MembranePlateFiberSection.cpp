@@ -569,12 +569,12 @@ XC::Matrix XC::MembranePlateFiberSection::getValues(const std::string &cod, bool
 	retval.resize(1,1);
 	retval(0,0)= getMinVonMisesStress();
       }
-    else if(cod == "avg_von_mises_stress")
+    else if((cod == "avg_von_mises_stress") || (cod == "mean_von_mises_stress"))
       {
 	retval.resize(1,1);
 	retval(0,0)= getAvgVonMisesStress();
       }
-    else if((cod == "von_mises_stress") || (cod == "Von_Mises_stress"))
+    else if((cod == "von_mises_stresses") || (cod == "Von_Mises_stresses"))
       {
 	retval.resize(5,1);
 	const Vector vm= getVonMisesStressAtFibers();

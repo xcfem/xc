@@ -378,10 +378,18 @@ class FatigueResistanceRCLimitStateData(LimitStateData):
 
 class VonMisesStressLimitStateData(LimitStateData):
     ''' Steel Von Mises stress limit state data.'''
-    def __init__(self):
+    def __init__(self, vonMisesStressId= 'max_von_mises_stress'):
         '''Limit state data constructor '''
         super(VonMisesStressLimitStateData,self).__init__('ULS_VonMisesStressResistance','verifRsl_von_misesULS')
+        self.vonMisesStressId= vonMisesStressId
         
+    def readInternalForces(self, setCalc):
+        ''' Read the internal forces for the elements in the set argument.
+
+        :param setCalc: elements to read internal forces for.
+        '''
+        return readIntForcesFile(self.getInternalForcesFileName(), setCalc, vonMisesStressId= self.vonMisesStressId)
+    
     def dumpCombinations(self,combContainer,loadCombinations):
         '''Load into the solver the combinations needed for this limit state.
 
@@ -415,9 +423,9 @@ shearResistance= ShearResistanceRCLimitStateData()
 fatigueResistance= FatigueResistanceRCLimitStateData()
 vonMisesStressResistance= VonMisesStressLimitStateData()
 
-def readIntForcesDict(intForcCombFileName,setCalc=None):
+def readIntForcesDict(intForcCombFileName,setCalc=None, vonMisesStressId= 'max_von_mises_stress'):
     '''Extracts element and combination identifiers from the internal
-    forces listing file. Return elementTags, idCombs and 
+    forces JSON file. Return elementTags, idCombs and 
     internal-forces values
     
     :param   intForcCombFileName: name of the file containing the internal
@@ -425,7 +433,9 @@ def readIntForcesDict(intForcCombFileName,setCalc=None):
                                   the combinations analyzed
     :param setCalc: set of elements to be analyzed (defaults to None which 
                     means that all the elements in the file of internal forces
-                    results are analyzed) 
+                    results are analyzed)
+    :param vonMisesStressId: identifier of the Von Mises stress to read
+                            (see NDMaterial and MembranePlateFiberSection).
     '''
     elementTags= set()
     idCombs= set()
@@ -454,8 +464,8 @@ def readIntForcesDict(intForcCombFileName,setCalc=None):
                     crossSectionInternalForces.idComb= idComb
                     crossSectionInternalForces.tagElem= tagElem
                     crossSectionInternalForces.idSection= idSection
-                    if('max_von_mises_stress' in forces):
-                        crossSectionInternalForces.maxVonMisesStress= forces['max_von_mises_stress']
+                    if(vonMisesStressId in forces):
+                        crossSectionInternalForces.maxVonMisesStress= forces[vonMisesStressId]
                     internalForcesValues[tagElem].append(crossSectionInternalForces)
     else:
         setElTags=setCalc.getElementTags()
@@ -477,8 +487,8 @@ def readIntForcesDict(intForcCombFileName,setCalc=None):
                         crossSectionInternalForces.idComb= idComb
                         crossSectionInternalForces.tagElem= tagElem
                         crossSectionInternalForces.idSection= idSection
-                        if('max_von_mises_stress' in forces):
-                            crossSectionInternalForces.maxVonMisesStress= forces['max_von_mises_stress']
+                        if(vonMisesStressId in forces):
+                            crossSectionInternalForces.maxVonMisesStress= forces[vonMisesStressId]
                         internalForcesValues[tagElem].append(crossSectionInternalForces)
     return (elementTags,idCombs,internalForcesValues)
 
@@ -536,22 +546,24 @@ def oldReadIntForcesFile(intForcCombFileName,setCalc=None):
     f.close()
     return (elementTags,idCombs,internalForcesValues)
 
-def readIntForcesFile(intForcCombFileName,setCalc=None):
+def readIntForcesFile(intForcCombFileName, setCalc=None, vonMisesStressId= 'max_von_mises_stress'):
     '''Extracts element and combination identifiers from the internal
     forces listing file. Return elementTags, idCombs and 
     internal-forces values
     
-    :param   intForcCombFileName: name of the file containing the internal
-                                  forces obtained for each element for 
-                                  the combinations analyzed
+    :param intForcCombFileName: name of the file containing the internal
+                                forces obtained for each element for 
+                                the combinations analyzed
     :param setCalc: set of elements to be analyzed (defaults to None which 
                     means that all the elements in the file of internal forces
                     results are analyzed) 
+    :param vonMisesStressId: identifier of the Von Mises stress to read
+                            (see NDMaterial and MembranePlateFiberSection).
     '''
     f= open(intForcCombFileName,"r")
     c= f.read(1)
     if(c=='{'):
-        return readIntForcesDict(intForcCombFileName,setCalc)
+        return readIntForcesDict(intForcCombFileName,setCalc, vonMisesStressId)
     else:
         return oldReadIntForcesFile(intForcCombFileName,setCalc)
     f.close()

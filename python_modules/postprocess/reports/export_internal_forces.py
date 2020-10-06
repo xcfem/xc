@@ -12,12 +12,13 @@ import math
 from materials.sections import internal_forces
 from misc_utils import log_messages as lmsg
 
-def getInternalForcesDict(nmbComb, elems):
+def getInternalForcesDict(nmbComb, elems, vonMisesStressId= 'max_von_mises_stress'):
     '''Creates a dictionary with the element's internal forces.
 
     :param nmbComb: combination name.
     :param elems: element set.
-    :param fDesc: file descriptor to write internal forces on.
+    :param vonMisesStressId: identifier of the Von Mises stress to read
+                            (see NDMaterial and MembranePlateFiberSection).
     '''
     combInternalForcesDict= dict()
     outDict= dict()
@@ -32,9 +33,9 @@ def getInternalForcesDict(nmbComb, elems):
             internalForces.setFromAverageInShellElement(e)
             internalForces= internalForces.getWoodArmer()
             # Silently ask about maximum Von-Mises stress.
-            maxVonMisesAtNodes= e.getValuesAtNodes('max_von_mises_stress', True) 
+            maxVonMisesAtNodes= e.getValuesAtNodes(vonMisesStressId, True) 
             avgMaxVM= None
-            if(len(maxVonMisesAtNodes)>1): # 'max_von_mises_stress' found.
+            if(len(maxVonMisesAtNodes)>1): # vonMisesStressId found.
                 avgMaxVM= 0.0
                 avgMaxVM+= maxVonMisesAtNodes[0][0] # at node 1
                 avgMaxVM+= maxVonMisesAtNodes[1][0] # at node 2
@@ -48,7 +49,7 @@ def getInternalForcesDict(nmbComb, elems):
                 force= internalForces[i]
                 internalForcesDict[i]= force.getDict()
                 if(avgMaxVM):
-                    internalForcesDict[i].update({'max_von_mises_stress':avgMaxVM})
+                    internalForcesDict[i].update({vonMisesStressId:avgMaxVM})
             elemDict['internalForces']= internalForcesDict
         elif('Beam2d' in elementType):
             e.getResistingForce()
