@@ -32,7 +32,7 @@ from materials.astm_aisc import AISC_limit_state_checking as aisc
 F= 5e3 # Applied (full!) force (N)
 L= 2 # Length of the(full!)beam (m)
 h= 60e-3 # Height of the beam cross section (m)
-t= 20e-3 # Thicknessof the beam cross section (m)
+t= 20e-3 # Thickness of the beam cross section (m)
 
 # Problem type
 feProblem= xc.FEProblem()
@@ -144,7 +144,7 @@ for ls in limitStates:
 outCfg= lsd.VerifOutVars(setCalc=xcTotalSet, appendToResFile='Y', listFile='N', calcMeanCF='Y')
 limitState= lsd.vonMisesStressResistance
 limitState.controller= aisc.VonMisesStressController(limitState.label)
-average= limitState.runChecking(outCfg, sections= [''])
+average= limitState.runChecking(outCfg)
 ratio= ((average[0]-0.27083778356986787)/0.27083778356986787)**2
 
 '''
