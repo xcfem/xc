@@ -325,7 +325,7 @@ class ShearController(lsc.LimitStateControllerBase):
 
         :param setCalc: set of elements to check
         '''
-        intForcItems=lsd.readIntForcesFile(intForcCombFileName,setCalc)
+        intForcItems= lsd.readIntForcesFile(intForcCombFileName,setCalc)
         internalForcesValues=intForcItems[2]
         for e in setCalc.elements:
             sh=e.getProp('crossSection')
@@ -345,11 +345,12 @@ class ShearController(lsc.LimitStateControllerBase):
 class VonMisesStressController(lsc.LimitStateControllerBase):
     '''Object that controls Von Mises stress limit state.'''
 
-    def __init__(self,limitStateLabel):
+    def __init__(self,limitStateLabel, vonMisesStressId= 'max_von_mises_stress'):
         ''' Constructor.
 
         :param limitStateLabel: limit state identifier.
-        :param yieldStress: material yield stress.
+        :param vonMisesStressId: identifier of the Von Mises stress to read
+                                (see NDMaterial and MembranePlateFiberSection).
         '''
         super(VonMisesStressController,self).__init__(limitStateLabel)
 
@@ -368,7 +369,7 @@ class VonMisesStressController(lsc.LimitStateControllerBase):
                                     for each element.
         :param setCalc: set of elements to check
         '''
-        intForcItems= lsd.readIntForcesFile(intForcCombFileName,setCalc)
+        intForcItems= lsd.readIntForcesFile(intForcCombFileName,setCalc, self.vonMisesStressId)
         internalForcesValues= intForcItems[2]
         for e in setCalc.elements:
             factoredYieldStress= 0.9*e.getProp('yieldStress')
@@ -376,10 +377,10 @@ class VonMisesStressController(lsc.LimitStateControllerBase):
             if(len(elIntForc)==0):
                 lmsg.warning('No internal forces for element: '+str(e.tag)+' of type: '+e.type())
             for lf in elIntForc:
-                CFtmp= lf.maxVonMisesStress/factoredYieldStress
+                CFtmp= lf.vonMisesStress/factoredYieldStress
                 # Both sections will have the same Von Mises stress so this is redundant.
                 if(CFtmp>e.getProp(self.limitStateLabel).CF):
-                    e.setProp(self.limitStateLabel,cv.VonMisesControlVars(lf.idComb,CFtmp,lf.maxVonMisesStress))
+                    e.setProp(self.limitStateLabel,cv.VonMisesControlVars(lf.idComb,CFtmp,lf.vonMisesStress))
 
                         
 def controlULSCriterion():

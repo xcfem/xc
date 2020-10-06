@@ -76,13 +76,21 @@ class LimitStateData(object):
         '''Return the file name to read: combination name, element number and 
         internal forces.'''
         return self.envConfig.projectDirTree.getInternalForcesResultsPath()+'intForce_'+ self.label +'.json'
-    
+        
     def readInternalForces(self, setCalc):
         ''' Read the internal forces for the elements in the set argument.
 
         :param setCalc: elements to read internal forces for.
         '''
         return readIntForcesFile(self.getInternalForcesFileName(), setCalc)
+
+    def getInternalForcesDict(self, nmbComb, elems):
+        '''Creates a dictionary with the element's internal forces.
+
+         :param nmbComb: combination name.
+         :param elems: element set.
+        '''
+        return eif.getInternalForcesDict(nmbComb,elems)
     
     def getDisplacementsFileName(self):
         '''Return the file name to read: combination name, node number and 
@@ -168,7 +176,7 @@ class LimitStateData(object):
                 for sb in lstSteelBeams:
                     sb.updateReductionFactors()
             #Writing results.
-            internalForcesDict.update(eif.getInternalForcesDict(comb.getName,elemSet))
+            internalForcesDict.update(self.getInternalForcesDict(comb.getName,elemSet))
             self.writeDisplacements(comb.getName,nodSet)
             comb.removeFromDomain() #Remove combination from the model.
         self.writeInternalForces(internalForcesDict)
@@ -379,10 +387,21 @@ class FatigueResistanceRCLimitStateData(LimitStateData):
 class VonMisesStressLimitStateData(LimitStateData):
     ''' Steel Von Mises stress limit state data.'''
     def __init__(self, vonMisesStressId= 'max_von_mises_stress'):
-        '''Limit state data constructor '''
+        '''Von Mises stress limit state data constructor.
+
+        :param vonMisesStressId: identifier of the Von Mises stress to read
+                                (see NDMaterial and MembranePlateFiberSection).
+        '''
         super(VonMisesStressLimitStateData,self).__init__('ULS_VonMisesStressResistance','verifRsl_von_misesULS')
         self.vonMisesStressId= vonMisesStressId
         
+    def getInternalForcesDict(self, nmbComb, elems):
+        '''Creates a dictionary with the element's internal forces.
+
+        :param nmbComb: combination name.
+        :param elems: element set.
+        '''
+        return eif.getInternalForcesDict(nmbComb,elems, vonMisesStressId= self.vonMisesStressId)
     def readInternalForces(self, setCalc):
         ''' Read the internal forces for the elements in the set argument.
 
@@ -413,6 +432,24 @@ class VonMisesStressLimitStateData(LimitStateData):
                generation or not of lists, ...)
         '''
         return elementsToCheck.internalForcesVerification3D(self, "d",outputCfg)
+    
+    def runChecking(self,outputCfg):
+        '''This method reads, for the elements in setCalc,  the internal 
+        forces previously calculated and saved in the corresponding file.
+        Using the 'initControlVars' and 'checkSetFromIntForcFile' methods of 
+        the controller, the appropiate attributes are assigned to the 
+        elements and the associated limit state verification is run.
+        The results are written to a file in order to be displayed or listed.
+
+        :param outputCfg: instance of class 'VerifOutVars' which defines the 
+               variables that control the output of the checking (set of 
+               elements to be analyzed, append or not the results to the 
+               result file [defatults to 'N'], generation or not
+               of list file [defatults to 'N', ...)
+        '''
+        self.controller.vonMisesStressId= self.vonMisesStressId
+        retval= super(VonMisesStressLimitStateData,self).runChecking(outputCfg, sections= [''])
+        return retval
 
 
 freqLoadsDisplacementControl= FreqLoadsDisplacementControlLimitStateData()
@@ -465,7 +502,7 @@ def readIntForcesDict(intForcCombFileName,setCalc=None, vonMisesStressId= 'max_v
                     crossSectionInternalForces.tagElem= tagElem
                     crossSectionInternalForces.idSection= idSection
                     if(vonMisesStressId in forces):
-                        crossSectionInternalForces.maxVonMisesStress= forces[vonMisesStressId]
+                        crossSectionInternalForces.vonMisesStress= forces[vonMisesStressId]
                     internalForcesValues[tagElem].append(crossSectionInternalForces)
     else:
         setElTags=setCalc.getElementTags()
@@ -488,7 +525,7 @@ def readIntForcesDict(intForcCombFileName,setCalc=None, vonMisesStressId= 'max_v
                         crossSectionInternalForces.tagElem= tagElem
                         crossSectionInternalForces.idSection= idSection
                         if(vonMisesStressId in forces):
-                            crossSectionInternalForces.maxVonMisesStress= forces[vonMisesStressId]
+                            crossSectionInternalForces.vonMisesStress= forces[vonMisesStressId]
                         internalForcesValues[tagElem].append(crossSectionInternalForces)
     return (elementTags,idCombs,internalForcesValues)
 

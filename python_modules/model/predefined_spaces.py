@@ -1650,7 +1650,24 @@ class StructuralMechanics3D(StructuralMechanics):
                 newNodes.append(newNode)
                 newElements.append(newElement)
         return (newNodes, newElements)
-                
+
+    def distributeLoadOnNodes(self, loadSVS, nodeSet, loadPattern):
+        ''' Distribute the load (represented by a sliding vector system
+            between the nodes of the set.
+
+        :param loadSVS: sliding vector system representing the load to be
+                        distributed.
+        :param nodeSet: the nodes receiving the loads.
+        :param loadPattern: load pattern to create the loads into.
+        '''
+        ptList= list()
+        nodeList= nodeSet.nodes
+        for n in nodeList:
+            ptList.append(n.getInitialPos3d)
+        loadVectors= loadSVS.distribute(ptList)
+        for n, v in zip(nodeList,loadVectors):
+            f= v.getVector3d()
+            loadPattern.newNodalLoad(n.tag, xc.Vector([f.x,f.y,f.z,0.0,0.0,0.0]))
 
 def getStructuralMechanics3DSpace(preprocessor):
     '''Return a tStructuralMechanics3DSpace from an
