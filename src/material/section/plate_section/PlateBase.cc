@@ -49,6 +49,21 @@ double XC::PlateBase::getRho(void) const
 void XC::PlateBase::setRho(const double &r)
   { rhoH= r; }
 
+//! @brief Return values of internal forces, deformations...
+//! @param cod: name of the requested value.
+//! @param silent: if true don't complain about non-existen property.
+XC::Matrix XC::PlateBase::getValues(const std::string &cod, bool silent) const
+  {
+    Matrix retval;
+    if(cod == "thickness")
+      {
+	retval.resize(1,1);
+	retval(0,0)= getH();
+      }
+    else
+      retval= SectionForceDeformation::getValues(cod, silent);
+    return retval;
+  }
 
 //! @brief Returns strain at position being passed as parameter.
 double XC::PlateBase::getStrain(const double &,const double &) const
