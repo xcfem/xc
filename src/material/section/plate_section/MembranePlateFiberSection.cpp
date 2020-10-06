@@ -139,7 +139,7 @@ XC::MembranePlateFiberSection::MembranePlateFiberSection(int tag)
   { init(); }
 
 //! @brief full constructor
-XC::MembranePlateFiberSection::MembranePlateFiberSection(int tag, double thickness, XC::NDMaterial &Afiber )
+XC::MembranePlateFiberSection::MembranePlateFiberSection(int tag, double thickness, NDMaterial &Afiber)
   : PlateBase( tag, SEC_TAG_MembranePlateFiberSection,thickness, Afiber.getRho()),
     strainResultant(order), initialStrain(order)
   { alloc(Afiber); }
