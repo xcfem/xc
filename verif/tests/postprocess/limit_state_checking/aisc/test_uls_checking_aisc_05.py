@@ -145,7 +145,7 @@ outCfg= lsd.VerifOutVars(setCalc=xcTotalSet, appendToResFile='Y', listFile='N', 
 limitState= lsd.vonMisesStressResistance
 limitState.controller= aisc.VonMisesStressController(limitState.label)
 average= limitState.runChecking(outCfg, sections= [''])
-ratio= ((average[0]-0.2437540052128811)/0.2437540052128811)**2
+ratio= ((average[0]-0.27083778356986787)/0.27083778356986787)**2
 
 '''
 print(average)
@@ -166,6 +166,4 @@ else:
 #oh.displayField(limitStateLabel= limitState.label, section= None, argument= 'CF', component= None, setToDisplay= None, fileName= None)
 #oh.displayLoads()
 #oh.displayDispRot('uY')
-#oh.displayStrains('epsilon_xx')
-#oh.displayStresses('sigma_11')
 #oh.displayVonMisesStresses(vMisesCode= 'max_von_mises_stress')

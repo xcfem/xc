@@ -371,12 +371,12 @@ class VonMisesStressController(lsc.LimitStateControllerBase):
         intForcItems= lsd.readIntForcesFile(intForcCombFileName,setCalc)
         internalForcesValues= intForcItems[2]
         for e in setCalc.elements:
-            yieldStress=e.getProp('yieldStress')
-            elIntForc=internalForcesValues[e.tag]
+            factoredYieldStress= 0.9*e.getProp('yieldStress')
+            elIntForc= internalForcesValues[e.tag]
             if(len(elIntForc)==0):
                 lmsg.warning('No internal forces for element: '+str(e.tag)+' of type: '+e.type())
             for lf in elIntForc:
-                CFtmp= lf.maxVonMisesStress/yieldStress
+                CFtmp= lf.maxVonMisesStress/factoredYieldStress
                 # Both sections will have the same Von Mises stress so this is redundant.
                 if(CFtmp>e.getProp(self.limitStateLabel).CF):
                     e.setProp(self.limitStateLabel,cv.VonMisesControlVars(lf.idComb,CFtmp,lf.maxVonMisesStress))
