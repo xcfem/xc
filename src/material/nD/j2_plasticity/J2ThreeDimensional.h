@@ -92,65 +92,52 @@ namespace XC{
 //! for 3D problems.
 class J2ThreeDimensional: public J2Plasticity
   {
-
 //-------------------Declarations-------------------------------
-  private :
+  private:
+    //static vectors and matrices
+    static Vector strain_vec ;     //strain in vector notation
+    static Vector stress_vec ;     //stress in vector notation
+    static Matrix tangent_matrix ; //material tangent in matrix notation
+  public: 
+    J2ThreeDimensional(int tag= 0);
+    J2ThreeDimensional(   int    tag, 
+		     double K,
+		     double G,
+		     double yield0,
+		     double yield_infty,
+		     double d,
+		     double H,
+		     double viscosity = 0 );
+    //elastic constructor
+    J2ThreeDimensional( int tag, double K, double G );
 
-  //static vectors and matrices
-  static Vector strain_vec ;     //strain in vector notation
-  static Vector stress_vec ;     //stress in vector notation
-  static Matrix tangent_matrix ; //material tangent in matrix notation
+    //make a clone of this material
+    NDMaterial* getCopy(void) const;
 
-  public : 
+    //send back type of material
+    const std::string &getType( ) const ;
 
-  J2ThreeDimensional(int tag);
+    //send back order of strain in vector form
+    int getOrder( ) const ;
 
- //null constructor
-  J2ThreeDimensional( );
+    //get the strain and integrate plasticity equations
+    int setTrialStrain( const Vector &strain_from_element);
 
-  //full constructor
-  J2ThreeDimensional(   int    tag, 
-                   double K,
-                   double G,
-                   double yield0,
-                   double yield_infty,
-                   double d,
-                   double H,
-                   double viscosity = 0 );
+    //unused trial strain functions
+    int setTrialStrain( const Vector &v, const Vector &r );
+    int setTrialStrainIncr( const Vector &v );
+    int setTrialStrainIncr( const Vector &v, const Vector &r );
 
+    //send back the strain
+    const Vector& getStrain(void) const;
 
-  //elastic constructor
-  J2ThreeDimensional( int tag, double K, double G );
+    //send back the stress 
+    const Vector& getStress(void) const;
 
-  //make a clone of this material
-  NDMaterial* getCopy(void) const;
-
-  //send back type of material
-  const std::string &getType( ) const ;
-
-  //send back order of strain in vector form
-  int getOrder( ) const ;
-
-  //get the strain and integrate plasticity equations
-  int setTrialStrain( const Vector &strain_from_element);
-
-  //unused trial strain functions
-  int setTrialStrain( const Vector &v, const Vector &r );
-  int setTrialStrainIncr( const Vector &v );
-  int setTrialStrainIncr( const Vector &v, const Vector &r );
-
-  //send back the strain
-  const Vector& getStrain(void) const;
-
-  //send back the stress 
-  const Vector& getStress(void) const;
-
-  //send back the tangent 
-  const Matrix& getTangent(void) const;
-  const Matrix& getInitialTangent(void) const;
-
-
-} ; //end of J2ThreeDimensional declarations
+    //send back the tangent 
+    const Matrix& getTangent(void) const;
+    const Matrix& getInitialTangent(void) const;
+  }; //end of J2ThreeDimensional declaration
 
 
 } //end of XC namespace

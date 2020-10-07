@@ -86,14 +86,14 @@
 namespace XC{
 //! @ingroup J2NDMat
 //
-//! @brief J2 Isotropic hardening material class para
-  //! axysimmetric problems.
+//! @brief J2 Isotropic hardening material class for
+//! axysimmetric problems.
 class J2AxiSymm: public J2Plasticity
   {
   private :
-    static Vector strain_vec ;     //strain in vector notation
-    static Vector stress_vec ;     //stress in vector notation
-    static Matrix tangent_matrix ; //material tangent in matrix notation
+    static Vector strain_vec;     //strain in vector notation
+    static Vector stress_vec;     //stress in vector notation
+    static Matrix tangent_matrix; //material tangent in matrix notation
 
     double commitEps00;
     double commitEps11;
@@ -103,59 +103,56 @@ class J2AxiSymm: public J2Plasticity
     int sendData(Communicator &);
     int recvData(const Communicator &);
   public: 
-    //null constructor
-    J2AxiSymm( ) ;
+    J2AxiSymm(int tag= 0);
+    //full constructor
+    J2AxiSymm(   int    tag, 
+		     double K,
+		     double G,
+		     double yield0,
+		     double yield_infty,
+		     double d,
+		     double H,
+		     double viscosity = 0 );
 
-  //full constructor
-  J2AxiSymm(   int    tag, 
-                   double K,
-                   double G,
-                   double yield0,
-                   double yield_infty,
-                   double d,
-                   double H,
-                   double viscosity = 0 ) ;
 
-  J2AxiSymm(int tag);
+    //elastic constructor
+    J2AxiSymm( int tag, double K, double G );
 
-  //elastic constructor
-  J2AxiSymm( int tag, double K, double G ) ;
+    //make a clone of this material
+    NDMaterial* getCopy(void) const;
 
-  //make a clone of this material
-  NDMaterial* getCopy(void) const;
+    //send back type of material
+    const std::string &getType( ) const;
 
-  //send back type of material
-  const std::string &getType( ) const ;
+    //send back order of strain in vector form
+    int getOrder( ) const;
 
-  //send back order of strain in vector form
-  int getOrder( ) const ;
+    //get the strain and integrate plasticity equations
+    int setTrialStrain( const Vector &strain_from_element);
 
-  //get the strain and integrate plasticity equations
-  int setTrialStrain( const Vector &strain_from_element) ;
+    //unused trial strain functions
+    int setTrialStrain( const Vector &v, const Vector &r );
+    int setTrialStrainIncr( const Vector &v );
+    int setTrialStrainIncr( const Vector &v, const Vector &r );
 
-  //unused trial strain functions
-  int setTrialStrain( const Vector &v, const Vector &r ) ;
-  int setTrialStrainIncr( const Vector &v ) ;
-  int setTrialStrainIncr( const Vector &v, const Vector &r ) ;
+    //send back the strain
+    const Vector& getStrain(void) const;
 
-  //send back the strain
-  const Vector& getStrain(void) const;
+    //send back the stress 
+    const Vector& getStress(void);
 
-  //send back the stress 
-  const Vector& getStress(void) ;
+    //send back the tangent 
+    const Matrix& getTangent(void) const;
+    const Matrix& getInitialTangent(void) const;
 
-  //send back the tangent 
-  const Matrix& getTangent(void) const;
-  const Matrix& getInitialTangent(void) const;
+    //swap history variables
+    int commitState( ); 
+    int revertToLastCommit( );
+    int revertToStart( );
 
-  //swap history variables
-  int commitState( ) ; 
-  int revertToLastCommit( ) ;
-  int revertToStart( ) ;
-
-  //sending and receiving
-  int sendSelf(Communicator &) ;  
-  int recvSelf(const Communicator &) ;
+    //sending and receiving
+    int sendSelf(Communicator &);  
+    int recvSelf(const Communicator &);
   }; //end of J2AxiSymm declarations
 
 } //end of XC namespace

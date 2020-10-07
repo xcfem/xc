@@ -93,19 +93,13 @@ XC::Vector XC::J2ThreeDimensional::strain_vec(6) ;
 XC::Vector XC::J2ThreeDimensional::stress_vec(6) ;
 XC::Matrix XC::J2ThreeDimensional::tangent_matrix(6,6) ;
 
+//! @brief Default constructor.
 XC::J2ThreeDimensional::J2ThreeDimensional(int tag)
   : XC::J2Plasticity(tag,ND_TAG_J2ThreeDimensional) 
   {}
 
-
-//null constructor
- XC::J2ThreeDimensional::J2ThreeDimensional( ) : 
- XC::J2Plasticity( ) 
-{  }
-
-
-//full constructor
- XC::J2ThreeDimensional::J2ThreeDimensional(   int    tag, 
+//! @brief full constructor
+XC::J2ThreeDimensional::J2ThreeDimensional(   int    tag, 
                  double K,
                  double G,
                  double yield0,
@@ -113,16 +107,13 @@ XC::J2ThreeDimensional::J2ThreeDimensional(int tag)
                  double d,
                  double H,
                  double viscosity ) : 
- XC::J2Plasticity( tag, ND_TAG_J2ThreeDimensional, 
+XC::J2Plasticity( tag, ND_TAG_J2ThreeDimensional, 
              K, G, yield0, yield_infty, d, H, viscosity )
-{ 
-
-}
+  {}
 
 
 //elastic constructor
- XC::J2ThreeDimensional::J2ThreeDimensional(   int    tag, 
-                 double K, 
+XC::J2ThreeDimensional::J2ThreeDimensional(   int    tag, double K, 
                  double G ) :
  XC::J2Plasticity( tag, ND_TAG_J2ThreeDimensional, K, G )
 { 
@@ -131,22 +122,22 @@ XC::J2ThreeDimensional::J2ThreeDimensional(int tag)
 
 
 
-//make a clone of this material
+//! @brief make a clone of this material
 XC::NDMaterial* XC::J2ThreeDimensional::getCopy(void) const 
   { return new J2ThreeDimensional(*this); }
 
 
-//send back type of material
+//! @brief send back type of material
 const std::string &XC::J2ThreeDimensional::getType( ) const 
   { return strTypeThreeDimensional; }
 
 
-//send back order of strain in vector form
+//! @brief send back order of strain in vector form
 int XC::J2ThreeDimensional::getOrder( ) const 
   { return 6; } 
 
 
-//get the strain and integrate plasticity equations
+//! @brief get the strain and integrate plasticity equations
 int XC::J2ThreeDimensional::setTrialStrain( const XC::Vector &strain_from_element) 
 {
   strain.Zero( ) ;
@@ -170,7 +161,7 @@ int XC::J2ThreeDimensional::setTrialStrain( const XC::Vector &strain_from_elemen
 }
 
 
-//unused trial strain functions
+//! @brief unused trial strain functions
 int XC::J2ThreeDimensional::setTrialStrain( const XC::Vector &v, const XC::Vector &r )
 { 
    return this->setTrialStrain( v ) ;
@@ -178,7 +169,7 @@ int XC::J2ThreeDimensional::setTrialStrain( const XC::Vector &v, const XC::Vecto
 
 int XC::J2ThreeDimensional::setTrialStrainIncr( const XC::Vector &v ) 
 {
-  static XC::Vector newStrain(6);
+  static Vector newStrain(6);
   newStrain(0) = strain(0,0) + v(0);
   newStrain(1) = strain(1,1) + v(1);
   newStrain(2) = strain(2,2) + v(2);
@@ -196,7 +187,7 @@ int XC::J2ThreeDimensional::setTrialStrainIncr( const XC::Vector &v, const XC::V
 
 
 
-//send back the strain
+//! @brief send back the strain
 const XC::Vector &XC::J2ThreeDimensional::getStrain(void) const
 {
   strain_vec(0) =       strain(0,0) ;
@@ -213,7 +204,7 @@ const XC::Vector &XC::J2ThreeDimensional::getStrain(void) const
 } 
 
 
-//send back the stress 
+//! @brief send back the stress 
 const XC::Vector &XC::J2ThreeDimensional::getStress(void) const
 {
   stress_vec(0) = stress(0,0) ;
@@ -229,7 +220,7 @@ const XC::Vector &XC::J2ThreeDimensional::getStress(void) const
   return stress_vec ;
 }
 
-//send back the tangent 
+//! @brief send back the tangent 
 const XC::Matrix& XC::J2ThreeDimensional::getTangent(void) const
 {
   // matrix to tensor mapping
@@ -260,7 +251,7 @@ const XC::Matrix& XC::J2ThreeDimensional::getTangent(void) const
   return tangent_matrix ;
 } 
 
-//send back the tangent 
+//! @brief send back the tangent 
 const XC::Matrix& XC::J2ThreeDimensional::getInitialTangent(void) const
 {
   // matrix to tensor mapping

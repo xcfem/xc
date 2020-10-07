@@ -80,18 +80,17 @@
 #include "material/nD/NDMaterialType.h"
 
 //static vectors and matrices
-XC::Vector XC::J2AxiSymm::strain_vec(4) ;
-XC::Vector XC::J2AxiSymm::stress_vec(4) ;
-XC::Matrix XC::J2AxiSymm::tangent_matrix(4,4) ;
+XC::Vector XC::J2AxiSymm::strain_vec(4);
+XC::Vector XC::J2AxiSymm::stress_vec(4);
+XC::Matrix XC::J2AxiSymm::tangent_matrix(4,4);
 
+//! @brief Default constructor
+XC::J2AxiSymm::J2AxiSymm(int tag)
+  : XC::J2Plasticity(tag, ND_TAG_J2AxiSymm)
+  {}
 
-//null constructor
- XC::J2AxiSymm::J2AxiSymm( )
-  :J2Plasticity( ) {}
-
-
-//full constructor
- XC::J2AxiSymm::J2AxiSymm(   int    tag, 
+//! @brief full constructor
+XC::J2AxiSymm::J2AxiSymm(   int    tag, 
                  double K,
                  double G,
                  double yield0,
@@ -102,94 +101,88 @@ XC::Matrix XC::J2AxiSymm::tangent_matrix(4,4) ;
   : XC::J2Plasticity( tag, ND_TAG_J2AxiSymm, K, G, yield0, yield_infty, d, H, viscosity )
   {}
 
-
-//elastic constructor
-XC::J2AxiSymm::J2AxiSymm(int tag)
-  : XC::J2Plasticity(tag, ND_TAG_J2AxiSymm)
-  {}
-
-//elastic constructor
+//! @brief elastic constructor
 XC::J2AxiSymm::J2AxiSymm(int tag, double K, double G )
   : XC::J2Plasticity( tag, ND_TAG_J2AxiSymm, K, G )
   {}
 
-//make a clone of this material
+//! @brief make a clone of this material
 XC::NDMaterial *XC::J2AxiSymm::getCopy(void) const 
   { return new J2AxiSymm(*this); }
 
 
-//send back type of material
+//! @brief send back type of material
 const std::string &XC::J2AxiSymm::getType(void) const 
-  { return strTypeAxiSymmetric2D ; }
+  { return strTypeAxiSymmetric2D; }
 
 
-//send back order of strain in vector form
+//! @brief send back order of strain in vector form
 int XC::J2AxiSymm::getOrder(void) const 
   { return 4; } 
 
 
-//get the strain and integrate plasticity equations
+//! @brief get the strain and integrate plasticity equations
 int XC::J2AxiSymm::setTrialStrain( const XC::Vector &strain_from_element) 
 {
-  strain.Zero( ) ;
+  strain.Zero( );
 
-  strain(0,0) =        strain_from_element(0) ;
-  strain(1,1) =        strain_from_element(1) ;
-  strain(2,2) =        strain_from_element(2) ;
+  strain(0,0) =        strain_from_element(0);
+  strain(1,1) =        strain_from_element(1);
+  strain(2,2) =        strain_from_element(2);
 
-  strain(0,1) = 0.50 * strain_from_element(3) ;
-  strain(1,0) =        strain(0,1) ;
+  strain(0,1) = 0.50 * strain_from_element(3);
+  strain(1,0) =        strain(0,1);
 
-  this->plastic_integrator( ) ;
+  this->plastic_integrator( );
 
-  return 0 ;
+  return 0;
 }
 
 
-//unused trial strain functions
+//! @brief unused trial strain functions
 int XC::J2AxiSymm::setTrialStrain( const XC::Vector &v, const XC::Vector &r )
 { 
-   return this->setTrialStrain( v ) ;
+   return this->setTrialStrain( v );
 } 
 
 int XC::J2AxiSymm::setTrialStrainIncr( const XC::Vector &v ) 
 {
-    return -1 ;
+    return -1;
 }
 
 int XC::J2AxiSymm::setTrialStrainIncr( const XC::Vector &v, const XC::Vector &r ) 
 {
-    return -1 ;
+    return -1;
 }
 
 
 
-//send back the strain
+//! @brief send back the strain
 const XC::Vector& XC::J2AxiSymm::getStrain(void) const 
 {
-  strain_vec(0) =       strain(0,0) ;
-  strain_vec(1) =       strain(1,1) ;
-  strain_vec(2) =       strain(2,2) ;
+  strain_vec(0) =       strain(0,0);
+  strain_vec(1) =       strain(1,1);
+  strain_vec(2) =       strain(2,2);
 
-  strain_vec(3) = 2.0 * strain(0,1) ;
+  strain_vec(3) = 2.0 * strain(0,1);
 
-  return strain_vec ;
+  return strain_vec;
 } 
 
 
-//send back the stress 
+//! @brief send back the stress 
 const XC::Vector& XC::J2AxiSymm::getStress(void) 
 {
-  stress_vec(0) = stress(0,0) ;
-  stress_vec(1) = stress(1,1) ;
-  stress_vec(2) = stress(2,2) ;
+  stress_vec(0) = stress(0,0);
+  stress_vec(1) = stress(1,1);
+  stress_vec(2) = stress(2,2);
 
-  stress_vec(3) = stress(0,1) ;
+  stress_vec(3) = stress(0,1);
 
-  return stress_vec ;
+  return stress_vec;
 }
 
-//send back the tangent 
+//! @brief send back the tangent 
 const XC::Matrix& XC::J2AxiSymm::getTangent(void) const
 {
   // matrix to tensor mapping
@@ -200,24 +193,24 @@ const XC::Matrix& XC::J2AxiSymm::getTangent(void) const
   //   2           2 2   
   //   3           0 1  ( or 1 0 )
   
-  int ii, jj ;
-  int i, j, k, l ;
+  int ii, jj;
+  int i, j, k, l;
 
   for( ii = 0; ii < 4; ii++ ) {
     for( jj = 0; jj < 4; jj++ ) {
 
-      index_map( ii, i, j ) ;
-      index_map( jj, k, l ) ;
+      index_map( ii, i, j );
+      index_map( jj, k, l );
 
-      tangent_matrix(ii,jj) = tangent[i][j][k][l] ;
+      tangent_matrix(ii,jj) = tangent[i][j][k][l];
 
     } //end for j
   } //end for i
 
-  return tangent_matrix ;
+  return tangent_matrix;
 } 
 
-//send back the tangent 
+//! @brief send back the tangent 
 const XC::Matrix& XC::J2AxiSymm::getInitialTangent(void) const
 {
   // matrix to tensor mapping
@@ -230,45 +223,45 @@ const XC::Matrix& XC::J2AxiSymm::getInitialTangent(void) const
 
   this->doInitialTangent();
 
-  int ii, jj ;
-  int i, j, k, l ;
+  int ii, jj;
+  int i, j, k, l;
 
   for( ii = 0; ii < 4; ii++ ) {
     for( jj = 0; jj < 4; jj++ ) {
 
-      index_map( ii, i, j ) ;
-      index_map( jj, k, l ) ;
+      index_map( ii, i, j );
+      index_map( jj, k, l );
 
-      tangent_matrix(ii,jj) = initialTangent[i][j][k][l] ;
+      tangent_matrix(ii,jj) = initialTangent[i][j][k][l];
 
     } //end for j
   } //end for i
 
-  return tangent_matrix ;
+  return tangent_matrix;
 } 
 
 
 
-//swap history variables
+//! @brief swap history variables
 int XC::J2AxiSymm::commitState( )  
   {
-    epsilon_p_n = epsilon_p_nplus1 ;
-    xi_n        = xi_nplus1 ;
-    return 0 ;
+    epsilon_p_n = epsilon_p_nplus1;
+    xi_n        = xi_nplus1;
+    return 0;
   }
 
 
-//revert to last saved state
+//! @brief revert to last saved state
 int XC::J2AxiSymm::revertToLastCommit( )
 { 
-  return 0 ;
+  return 0;
 } 
 
-//revert to start
+//! @brief revert to start
 int XC::J2AxiSymm::revertToStart( ) 
   {  
-    this->zero( ) ;
-    return 0 ;
+    this->zero( );
+    return 0;
   }
 
 //! @brief Send object members through the communicator argument.

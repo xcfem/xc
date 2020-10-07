@@ -87,17 +87,12 @@ XC::Vector XC::J2PlaneStress::strain_vec(3);
 XC::Vector XC::J2PlaneStress::stress_vec(3);
 XC::Matrix XC::J2PlaneStress::tangent_matrix(3,3);
 
-XC::J2PlaneStress:: J2PlaneStress(int tag)
+//! @brief Default constructor.
+XC::J2PlaneStress::J2PlaneStress(int tag)
   : XC::J2Plasticity(tag, ND_TAG_J2PlaneStress) 
   {}
 
-//null constructor
- XC::J2PlaneStress:: J2PlaneStress( ) : 
- XC::J2Plasticity( ) 
-{  }
-
-
-//full constructor
+//! @brief full constructor
  XC::J2PlaneStress::J2PlaneStress(   int    tag, 
                  double K,
                  double G,
@@ -113,7 +108,7 @@ XC::J2PlaneStress:: J2PlaneStress(int tag)
 }
 
 
-//elastic constructor
+//! @brief elastic constructor
  XC::J2PlaneStress::J2PlaneStress(   int    tag, 
                  double K, 
                  double G ) :
@@ -123,21 +118,21 @@ XC::J2PlaneStress:: J2PlaneStress(int tag)
 }
 
 
-//make a clone of this material
+//! @brief make a clone of this material
 XC::NDMaterial *XC::J2PlaneStress::getCopy(void) const 
   { return new J2PlaneStress(*this); }
 
 
-//send back type of material
+//! @brief send back type of material
 const std::string &XC::J2PlaneStress::getType(void) const 
   { return strTypePlaneStress;}
 
 
-//send back order of strain in vector form
+//! @brief send back order of strain in vector form
 int XC::J2PlaneStress::getOrder(void) const 
   { return 3; } 
 
-//get the strain and integrate plasticity equations
+//! @brief get the strain and integrate plasticity equations
 int XC::J2PlaneStress::setTrialStrain(const Vector &strain_from_element) 
   {
     const double tolerance= (1.0e-8)*sigma_0;
@@ -203,7 +198,7 @@ int XC::J2PlaneStress::setTrialStrain(const Vector &strain_from_element)
   }
 
 
-//unused trial strain functions
+//! @brief unused trial strain functions
 int XC::J2PlaneStress::setTrialStrain( const XC::Vector &v, const XC::Vector &r )
   { return this->setTrialStrain( v ); } 
 
@@ -223,7 +218,7 @@ int XC::J2PlaneStress::setTrialStrainIncr( const XC::Vector &v, const XC::Vector
 }
 
 
-//send back the strain
+//! @brief send back the strain
 const XC::Vector &XC::J2PlaneStress::getStrain(void) const
 {
   strain_vec(0)= strain(0,0);
@@ -234,7 +229,7 @@ const XC::Vector &XC::J2PlaneStress::getStrain(void) const
 } 
 
 
-//send back the stress 
+//! @brief send back the stress 
 const XC::Vector &XC::J2PlaneStress::getStress(void) const
 {
   stress_vec(0)= stress(0,0);
@@ -244,7 +239,7 @@ const XC::Vector &XC::J2PlaneStress::getStress(void) const
   return stress_vec;
 }
 
-//send back the tangent 
+//! @brief send back the tangent 
 const XC::Matrix &XC::J2PlaneStress::getTangent(void) const
   {
   // matrix to tensor mapping
@@ -272,7 +267,7 @@ const XC::Matrix &XC::J2PlaneStress::getTangent(void) const
 } 
 
 
-//send back the tangent 
+//! @brief send back the tangent 
 const XC::Matrix &XC::J2PlaneStress::getInitialTangent(void) const
 {
   // matrix to tensor mapping
@@ -325,7 +320,7 @@ int XC::J2PlaneStress::revertToStart( )
     return 0;
   }
 
-//! @brief Send object members through the communicator argument.
+//! @brief ! @brief Send object members through the communicator argument.
 int XC::J2PlaneStress::sendData(Communicator &comm)
   {
     int res= J2Plasticity::sendData(comm);
@@ -375,12 +370,14 @@ int XC::J2PlaneStress::recvSelf(const Communicator &comm)
   }
 
 
-//matrix_index --->tensor indices i,j
-// plane stress different because of condensation on tangent
-// case 3 switched to 1-2 and case 4 to 3-3 
+//! @brief Mapping between matrix and tensor
+//! indices: matrix_index ---> tensor indices i,j
+//! plane stress different because of condensation on tangent
+//! case 3 switched to 1-2 and case 4 to 3-3 
 void XC::J2PlaneStress::index_map(int matrix_index, int &i, int &j )
 {
-  switch( matrix_index+1 ) { //add 1 for standard tensor indices
+  switch( matrix_index+1 )
+    { //add 1 for standard tensor indices
 
     case 1 :
       i= 1; 

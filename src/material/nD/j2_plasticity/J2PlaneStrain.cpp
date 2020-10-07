@@ -87,22 +87,17 @@
 #include "material/nD/NDMaterialType.h"
 
 //static vectors and matrices
-XC::Vector XC::J2PlaneStrain::strain_vec(3) ;
-XC::Vector XC::J2PlaneStrain::stress_vec(3) ;
-XC::Matrix XC::J2PlaneStrain::tangent_matrix(3,3) ;
+XC::Vector XC::J2PlaneStrain::strain_vec(3);
+XC::Vector XC::J2PlaneStrain::stress_vec(3);
+XC::Matrix XC::J2PlaneStrain::tangent_matrix(3,3);
 
-
-//null constructor
-XC::J2PlaneStrain::J2PlaneStrain(void)
-  :  XC::J2Plasticity( ) 
-  {}
 
 //! @brief Constructor.
 XC::J2PlaneStrain::J2PlaneStrain(int tag)
   :  XC::J2Plasticity(tag, ND_TAG_J2PlaneStrain) 
   {}
 
-//full constructor
+//! @brief full constructor
  XC::J2PlaneStrain::J2PlaneStrain(   int    tag, 
                  double K,
                  double G,
@@ -118,7 +113,7 @@ XC::J2PlaneStrain::J2PlaneStrain(int tag)
 }
 
 
-//elastic constructor
+//! @brief elastic constructor
  XC::J2PlaneStrain::J2PlaneStrain(   int    tag, 
                  double K, 
                  double G ) :
@@ -129,42 +124,42 @@ XC::J2PlaneStrain::J2PlaneStrain(int tag)
 
 
 
-//make a clone of this material
+//! @brief make a clone of this material
 XC::NDMaterial *XC::J2PlaneStrain::getCopy(void) const 
   { return new J2PlaneStrain(*this); }
 
 
 
-//send back type of material
+//! @brief send back type of material
 const std::string &XC::J2PlaneStrain::getType(void) const 
   { return strTypePlaneStrain; }
 
 
-//send back order of strain in vector form
+//! @brief send back order of strain in vector form
 int XC::J2PlaneStrain::getOrder( ) const 
   { return 3; } 
 
 
-//get the strain and integrate plasticity equations
+//! @brief get the strain and integrate plasticity equations
 int XC::J2PlaneStrain::setTrialStrain( const XC::Vector &strain_from_element) 
 {
-  strain.Zero( ) ;
+  strain.Zero( );
 
-  strain(0,0) =        strain_from_element(0) ;
-  strain(1,1) =        strain_from_element(1) ;
-  strain(0,1) = 0.50 * strain_from_element(2) ;
-  strain(1,0) =        strain(0,1) ;
+  strain(0,0) =        strain_from_element(0);
+  strain(1,1) =        strain_from_element(1);
+  strain(0,1) = 0.50 * strain_from_element(2);
+  strain(1,0) =        strain(0,1);
 
-  this->plastic_integrator( ) ;
+  this->plastic_integrator( );
 
-  return 0 ;
+  return 0;
 }
 
 
-//unused trial strain functions
+//! @brief unused trial strain functions
 int XC::J2PlaneStrain::setTrialStrain( const XC::Vector &v, const XC::Vector &r )
 { 
-   return this->setTrialStrain( v ) ;
+   return this->setTrialStrain( v );
 } 
 
 int XC::J2PlaneStrain::setTrialStrainIncr( const XC::Vector &v ) 
@@ -181,28 +176,28 @@ int XC::J2PlaneStrain::setTrialStrainIncr( const XC::Vector &v, const XC::Vector
   { return this->setTrialStrainIncr(v); }
 
 
-//send back the strain
+//! @brief send back the strain
 const XC::Vector &XC::J2PlaneStrain::getStrain(void) const
 {
-  strain_vec(0) =       strain(0,0) ;
-  strain_vec(1) =       strain(1,1) ;
-  strain_vec(2) = 2.0 * strain(0,1) ;
+  strain_vec(0) =       strain(0,0);
+  strain_vec(1) =       strain(1,1);
+  strain_vec(2) = 2.0 * strain(0,1);
 
-  return strain_vec ;
+  return strain_vec;
 } 
 
 
-//send back the stress 
+//! @brief send back the stress 
 const XC::Vector &XC::J2PlaneStrain::getStress(void) const
 {
-  stress_vec(0) = stress(0,0) ;
-  stress_vec(1) = stress(1,1) ;
-  stress_vec(2) = stress(0,1) ;
+  stress_vec(0) = stress(0,0);
+  stress_vec(1) = stress(1,1);
+  stress_vec(2) = stress(0,1);
 
-  return stress_vec ;
+  return stress_vec;
 }
 
-//send back the tangent 
+//! @brief send back the tangent 
 const XC::Matrix &XC::J2PlaneStrain::getTangent(void) const
 {
   // matrix to tensor mapping
@@ -213,24 +208,24 @@ const XC::Matrix &XC::J2PlaneStrain::getTangent(void) const
   //   2           0 1  ( or 1 0 ) 
   // 
        
-  tangent_matrix(0,0) = tangent [0][0] [0][0] ;
-  tangent_matrix(1,1) = tangent [1][1] [1][1] ;
-  tangent_matrix(2,2) = tangent [0][1] [0][1] ;
+  tangent_matrix(0,0) = tangent [0][0] [0][0];
+  tangent_matrix(1,1) = tangent [1][1] [1][1];
+  tangent_matrix(2,2) = tangent [0][1] [0][1];
 
-  tangent_matrix(0,1) = tangent [0][0] [1][1] ;
-  tangent_matrix(1,0) = tangent [1][1] [0][0] ;
+  tangent_matrix(0,1) = tangent [0][0] [1][1];
+  tangent_matrix(1,0) = tangent [1][1] [0][0];
 
-  tangent_matrix(0,2) = tangent [0][0] [0][1] ;
-  tangent_matrix(2,0) = tangent [0][1] [0][0] ;
+  tangent_matrix(0,2) = tangent [0][0] [0][1];
+  tangent_matrix(2,0) = tangent [0][1] [0][0];
 
-  tangent_matrix(1,2) = tangent [1][1] [0][1] ;
-  tangent_matrix(2,1) = tangent [0][1] [1][1] ;
+  tangent_matrix(1,2) = tangent [1][1] [0][1];
+  tangent_matrix(2,1) = tangent [0][1] [1][1];
 
-  return tangent_matrix ;
+  return tangent_matrix;
 } 
 
 
-//send back the tangent 
+//! @brief send back the tangent 
 const XC::Matrix &XC::J2PlaneStrain::getInitialTangent(void) const
 {
   // matrix to tensor mapping
@@ -243,23 +238,23 @@ const XC::Matrix &XC::J2PlaneStrain::getInitialTangent(void) const
 
   this->doInitialTangent();
 
-  tangent_matrix(0,0) = initialTangent [0][0] [0][0] ;
-  tangent_matrix(1,1) = initialTangent [1][1] [1][1] ;
-  tangent_matrix(2,2) = initialTangent [0][1] [0][1] ;
+  tangent_matrix(0,0) = initialTangent [0][0] [0][0];
+  tangent_matrix(1,1) = initialTangent [1][1] [1][1];
+  tangent_matrix(2,2) = initialTangent [0][1] [0][1];
 
-  tangent_matrix(0,1) = initialTangent [0][0] [1][1] ;
-  tangent_matrix(1,0) = initialTangent [1][1] [0][0] ;
+  tangent_matrix(0,1) = initialTangent [0][0] [1][1];
+  tangent_matrix(1,0) = initialTangent [1][1] [0][0];
 
-  tangent_matrix(0,2) = initialTangent [0][0] [0][1] ;
-  tangent_matrix(2,0) = initialTangent [0][1] [0][0] ;
+  tangent_matrix(0,2) = initialTangent [0][0] [0][1];
+  tangent_matrix(2,0) = initialTangent [0][1] [0][0];
 
-  tangent_matrix(1,2) = initialTangent [1][1] [0][1] ;
-  tangent_matrix(2,1) = initialTangent [0][1] [1][1] ;
+  tangent_matrix(1,2) = initialTangent [1][1] [0][1];
+  tangent_matrix(2,1) = initialTangent [0][1] [1][1];
 
-  return tangent_matrix ;
+  return tangent_matrix;
 } 
 
-int XC::J2PlaneStrain::commitState( ) 
+int XC::J2PlaneStrain::commitState(void) 
 {
   epsilon_p_n = epsilon_p_nplus1;
   xi_n        = xi_nplus1;

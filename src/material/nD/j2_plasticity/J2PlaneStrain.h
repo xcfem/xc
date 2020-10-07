@@ -90,14 +90,14 @@ class J2PlaneStrain: public J2Plasticity
   {
   private:
     //static vectors and matrices
-    static Vector strain_vec ;     //strain in vector notation
-    static Vector stress_vec ;     //stress in vector notation
-    static Matrix tangent_matrix ; //material tangent in matrix notation
+    static Vector strain_vec;     //strain in vector notation
+    static Vector stress_vec;     //stress in vector notation
+    static Matrix tangent_matrix; //material tangent in matrix notation
 
   public: 
-     //null constructor
-     J2PlaneStrain( ) ;
-
+     J2PlaneStrain(int tag= 0);
+     //elastic constructor
+     J2PlaneStrain( int tag, double K, double G );
      //full constructor
      J2PlaneStrain(   int    tag, 
                       double K,
@@ -106,45 +106,40 @@ class J2PlaneStrain: public J2Plasticity
                       double yield_infty,
                       double d,
                       double H,
-                      double viscosity = 0 ) ;
-
-
-     J2PlaneStrain(int tag) ;
-     //elastic constructor
-     J2PlaneStrain( int tag, double K, double G ) ;
+                      double viscosity = 0 );
 
      //make a clone of this material
      NDMaterial* getCopy(void) const;
 
      //send back type of material
-     const std::string &getType( ) const ;
+     const std::string &getType( ) const;
 
      //send back order of strain in vector form
-     int getOrder( ) const ;
+     int getOrder( ) const;
 
 
      //get the strain and integrate plasticity equations
-     int setTrialStrain( const Vector &strain_from_element) ;
+     int setTrialStrain( const Vector &strain_from_element);
 
      //unused trial strain functions
-     int setTrialStrain( const Vector &v, const Vector &r ) ;
-     int setTrialStrainIncr( const Vector &v ) ;
-     int setTrialStrainIncr( const Vector &v, const Vector &r ) ;
+     int setTrialStrain( const Vector &v, const Vector &r );
+     int setTrialStrainIncr( const Vector &v );
+     int setTrialStrainIncr( const Vector &v, const Vector &r );
 
      //send back the strain
      const Vector& getStrain(void) const;
 
      //send back the stress 
-     const Vector& getStress(void) const ;
+     const Vector& getStress(void) const;
 
      //send back the tangent 
      const Matrix& getTangent(void) const;
      const Matrix& getInitialTangent(void) const;
 
      //swap history variables
-     int commitState( ) ; 
-     int revertToLastCommit( ) ;
-     int revertToStart( ) ;
+     int commitState( ); 
+     int revertToLastCommit( );
+     int revertToStart( );
   };
 
 } //end of XC namespace

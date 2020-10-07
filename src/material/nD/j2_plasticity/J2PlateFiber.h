@@ -104,10 +104,7 @@ class J2PlateFiber: public J2Plasticity
     int recvData(const Communicator &);
   public : 
 
-    J2PlateFiber(int tag);
-
-    //null constructor
-    J2PlateFiber(void);
+    J2PlateFiber(int tag= 0);
 
     //full constructor
     J2PlateFiber(   int    tag, 

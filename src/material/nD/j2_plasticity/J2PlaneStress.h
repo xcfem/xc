@@ -90,9 +90,9 @@ class J2PlaneStress: public J2Plasticity
   {
   private: 
     //static vectors and matrices
-    static Vector strain_vec ;     //strain in vector notation
-    static Vector stress_vec ;     //stress in vector notation
-    static Matrix tangent_matrix ; //material tangent in matrix notation
+    static Vector strain_vec;     //strain in vector notation
+    static Vector stress_vec;     //stress in vector notation
+    static Matrix tangent_matrix; //material tangent in matrix notation
 
     double commitEps22;
 
@@ -103,8 +103,9 @@ class J2PlaneStress: public J2Plasticity
     int sendData(Communicator &);
     int recvData(const Communicator &);
   public : 
-    //null constructor
-    J2PlaneStress( ) ;
+    J2PlaneStress(int tag= 0);
+    //elastic constructor
+    J2PlaneStress( int tag, double K, double G);
 
     //full constructor
     J2PlaneStress(   int    tag, 
@@ -114,21 +115,18 @@ class J2PlaneStress: public J2Plasticity
                      double yield_infty,
                      double d,
                      double H,
-                     double viscosity ) ;
+                     double viscosity );
 
 
-    J2PlaneStress(int tag);
-    //elastic constructor
-    J2PlaneStress( int tag, double K, double G);
 
     //make a clone of this material
     NDMaterial* getCopy(void) const;
 
     //send back type of material
-    const std::string &getType( ) const ;
+    const std::string &getType(void) const;
 
     //send back order of strain in vector form
-    int getOrder( ) const ;
+    int getOrder( ) const;
 
     //get the strain and integrate plasticity equations
     int setTrialStrain( const Vector &strain_from_element);
@@ -159,7 +157,7 @@ class J2PlaneStress: public J2Plasticity
     
 
 
-} ; //end of J2PlaneStress declarations
+}; //end of J2PlaneStress declarations
 
 
 } //end of XC namespace

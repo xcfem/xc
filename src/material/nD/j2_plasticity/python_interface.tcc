@@ -21,14 +21,17 @@
 //----------------------------------------------------------------------------
 //python_interface.tcc
 
-class_<XC::J2Plasticity, bases<XC::NDMaterial>, boost::noncopyable >("J2Plasticity", no_init);
+class_<XC::J2Plasticity, bases<XC::NDMaterial>, boost::noncopyable >("J2Plasticity", no_init)
+  ;
 
-// class_<XC::J2AxiSymm, bases<XC::J2Plasticity>, boost::noncopyable >("J2AxiSymm", no_init);
+class_<XC::J2AxiSymm, bases<XC::J2Plasticity>, boost::noncopyable >("J2AxiSymm", no_init)
+  ;
 
-// class_<XC::J2PlaneStrain , bases<XC::J2Plasticity>, boost::noncopyable >("J2PlaneStrain", no_init);
+class_<XC::J2PlaneStrain , bases<XC::J2Plasticity>, boost::noncopyable >("J2PlaneStrain", no_init)
+  ;
 
-// class_<XC::J2PlaneStress, bases<XC::J2Plasticity>, boost::noncopyable >("J2PlaneStress", no_init);
+class_<XC::J2PlaneStress, bases<XC::J2Plasticity>, boost::noncopyable >("J2PlaneStress", no_init);
 
-// class_<XC::J2PlateFiber , bases<XC::J2Plasticity>, boost::noncopyable >("J2PlateFiber", no_init);
+class_<XC::J2PlateFiber , bases<XC::J2Plasticity>, boost::noncopyable >("J2PlateFiber", no_init);
 
-// class_<XC::J2ThreeDimensional , bases<XC::J2Plasticity {>, boost::noncopyable >("J2ThreeDimensional", no_init);
+class_<XC::J2ThreeDimensional , bases<XC::J2Plasticity>, boost::noncopyable >("J2ThreeDimensional", no_init);
