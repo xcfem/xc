@@ -80,6 +80,17 @@ XC::KrylovNewton::KrylovNewton(AnalysisAggregation *owr,int theTangentToUse, int
 XC::SolutionAlgorithm *XC::KrylovNewton::getCopy(void) const
   { return new KrylovNewton(*this); }
 
+int XC::KrylovNewton::getMaxDimension(void) const
+  { return maxDimension; }
+
+void XC::KrylovNewton::setMaxDimension(const int &maxDim)
+  {
+    maxDimension= maxDim;
+    if(maxDimension < 0)
+      maxDimension = 0;
+  }
+  
+
 //! @brief resuelve el paso actual.
 int XC::KrylovNewton::solveCurrentStep(void)
   {

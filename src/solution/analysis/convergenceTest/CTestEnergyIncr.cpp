@@ -76,6 +76,11 @@ XC::CTestEnergyIncr::CTestEnergyIncr(CommandEntity *owr)
 //! @param theTol: tolerance used int test().
 //! @param maxIter: max number of iterations to be performed.
 //! @param printFlag: what, if anything, is printed on each test.
+//!                  - 0 print nothing
+//!                  - 1 print information on norms each time test() is invoked
+//!                  - 2 print information on norms and number of iterations at end of successful test
+//!                  - 4 at each step it will print the norms and also the \f$\Delta U\f$ and \f$R(U)\f$ vectors.
+//!                  - 5 if it fails to converge at end of $numIter it will print an error message BUT RETURN A SUCCESSFUL test 
 //! @param normType: type of norm to use (1-norm, 2-norm, p-norm, max-norm).
 XC::CTestEnergyIncr::CTestEnergyIncr(CommandEntity *owr,double theTol, int maxIter, int printFlag, int normType)
   : ConvergenceTestTol(owr,CONVERGENCE_TEST_CTestEnergyIncr,theTol,maxIter,printFlag,normType,maxIter) {}

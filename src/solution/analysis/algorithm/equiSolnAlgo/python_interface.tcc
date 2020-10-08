@@ -31,7 +31,9 @@ class_<XC::BFGS, bases<XC::BFBRoydenBase>, boost::noncopyable >("BFGS", no_init)
 
 class_<XC::Broyden, bases<XC::BFBRoydenBase>, boost::noncopyable >("Broyden", no_init);
 
-class_<XC::KrylovNewton, bases<XC::EquiSolnAlgo>, boost::noncopyable >("KrylovNewton", no_init);
+class_<XC::KrylovNewton, bases<XC::EquiSolnAlgo>, boost::noncopyable >("KrylovNewton", no_init)
+  .add_property("maxDimension", &XC::KrylovNewton::getMaxDimension, &XC::KrylovNewton::setMaxDimension,"max number of iterations until the tangent is reformed and the acceleration restarts (default = 3)")
+  ;
 
 class_<XC::Linear, bases<XC::EquiSolnAlgo>, boost::noncopyable >("Linear", no_init);
 

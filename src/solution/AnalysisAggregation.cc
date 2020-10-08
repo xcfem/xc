@@ -491,8 +491,8 @@ bool XC::AnalysisAggregation::alloc_system_of_equations(const std::string &nmb,A
       theSOE= new DistributedSparseGenRowLinSOE(this);
     else if(nmb=="sym_sparse_lin_soe")
       theSOE= new SymSparseLinSOE(this);
-//     else if(nmb=="umfpack_gen_lin_soe")
-//       theSOE= new UmfpackGenLinSOE();
+    else if(nmb=="umfpack_gen_lin_soe")
+      theSOE= new UmfpackGenLinSOE(this);
     else
       std::cerr << getClassName() << "::" << __FUNCTION__
 		<< "; system of equations: '"

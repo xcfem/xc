@@ -72,11 +72,25 @@ namespace XC {
 //! and 0.5 times the displacement increment vector (energy increment) to
 //! be used as convergence criterion on each iteration.
 //!
+//! This command is used to construct a convergence test which uses the dot
+//! product of the solution vector and norm of the right hand side of the
+//! matrix equation to determine if convergence has been reached. The
+//! physical meaning of this quantity depends on the integrator and
+//! constraint handler chosen. Usually, though not always, it is equal
+//! to the energy unbalance in the system.
+//! 
 //! A CTestEnergyIncr object is an object which can be used in an
 //! algorithmic class to test if convergence has been achieved. The
 //! CTestEnergyIncr class tests using the energy increment, 0.5 times the
 //! absolute value of the dot product of the LinearSOE objects solution
 //! and rhs Vectors, and a user specified tolerance value.
+//! NOTES:
+//! - When using the Penalty method additional large forces to enforce
+//!   the penalty functions exist on the right hand side, making convergence
+//!   using this test usually impossible (even though solution might have
+//!   converged).
+//! - When Lagrange multipliers are used, the solution vector contains
+//!   the Lagrange multipliers.
 class CTestEnergyIncr: public ConvergenceTestTol
   {
   public:

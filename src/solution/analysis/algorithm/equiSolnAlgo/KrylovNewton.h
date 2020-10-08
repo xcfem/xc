@@ -113,6 +113,9 @@ class KrylovNewton: public EquiSolnAlgo
     virtual SolutionAlgorithm *getCopy(void) const;
   public:
     int solveCurrentStep(void);    
+
+    int getMaxDimension(void) const;
+    void setMaxDimension(const int &);
     
     virtual int sendSelf(Communicator &);
     virtual int recvSelf(const Communicator &);
