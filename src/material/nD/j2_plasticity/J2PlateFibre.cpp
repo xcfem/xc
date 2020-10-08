@@ -59,12 +59,13 @@ void XC::J2PlateFibre::init(void)
 XC::J2PlateFibre::J2PlateFibre(int tag):
   NDMaterial(tag, ND_TAG_J2PlateFibre),
   E(0.0), nu(0.0), sigmaY(0.0), Hiso(0.0), Hkin(0.0), 
-  parameterID(0), SHVs(), Tepsilon(order), dg_n1(0.0)
+  parameterID(0), SHVs(), Tepsilon(order), Tepsilon0(order), dg_n1(0.0)
   { init(); }
 
 XC::J2PlateFibre::J2PlateFibre(int tag, double e, double g, double sy, double hi, double hk)
-  : NDMaterial(tag, ND_TAG_J2PlateFibre), E(e), nu(g), sigmaY(sy), Hiso(hi), Hkin(hk),
-  parameterID(0), SHVs(), Tepsilon(order), dg_n1(0.0)
+  : NDMaterial(tag, ND_TAG_J2PlateFibre), E(e), nu(g), sigmaY(sy),
+    Hiso(hi), Hkin(hk), parameterID(0), SHVs(),
+    Tepsilon(order), Tepsilon0(order), dg_n1(0.0)
   { init(); }
 
 
@@ -115,6 +116,17 @@ double XC::J2PlateFibre::getHkin(void) const
 //! @param hkin: material kinematic hardening parameter.
 void XC::J2PlateFibre::setHkin(const double &hkin)
   { Hkin= hkin; }
+
+//! @brief Sets the initial strain value.
+int XC::J2PlateFibre::setInitialStrain(const Vector &eps)
+  {
+    Tepsilon0= eps;
+    return 0;
+  }
+
+//! @brief Returns the value of the initial strain.
+const XC::Vector &XC::J2PlateFibre::getInitialStrain(void) const
+  { return Tepsilon0; }
 
 //! @brief Set the material trial strain.
 int XC::J2PlateFibre::setTrialStrain(const Vector &strain)
@@ -436,8 +448,40 @@ const XC::Vector &XC::J2PlateFibre::getStress(void) const
     return sigma;
   }
 
+//! @brief return the Von Mises equivalent stress.
+//!
+//! <a href="https://en.wikipedia.org/wiki/Von_Mises_yield_criterion"> Von Mises yield criterion.</a>
+double XC::J2PlateFibre::getVonMisesStress(void) const
+  {
+    double retval= 0.0;
+    const Vector sg= getStress();
+    const size_t sz= sg.Size();
+    //NDmaterial stress order = 11, 22, 33, 12, 23, 31 
+    //NDmaterial stress order= 11, 22, 33, 12, 23, 31 
+    //PlateFiberMaterial stress order= 11, 22, 12, 23, 31, (33) 
+    if(sz==5) // plate fiber material
+      {
+	const double sg11= sg[0]; //11
+	const double sg22= sg[1]; //22
+	const double sg12= sg[2]; //12
+	const double sg23= sg[3]; //23
+	const double sg31= sg[4]; //31
+	
+	retval= sqrt(0.5*(pow(sg11-sg22,2)+(sg22*sg22)+(sg11*sg11)+6*(sg12*sg12+sg23+sg23+sg31+sg31)));
+      }
+    else
+      std::cerr << getClassName() << "::" << __FUNCTION__
+	        << ", wrong stress vector size (" << sz
+	        << ")." << std::endl;
+    return retval;
+  }
+
 const XC::Vector &XC::J2PlateFibre::getStrain(void) const
-  { return Tepsilon; }
+  {
+    static Vector retval;
+    retval= Tepsilon-Tepsilon0;
+    return retval;
+  }
 
 int XC::J2PlateFibre::commitState(void)
   {

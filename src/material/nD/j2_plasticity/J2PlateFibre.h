@@ -75,16 +75,17 @@ class J2PlateFibre: public NDMaterial
     static Vector sigma; // Stress vector ... class-wide for returns
     static Matrix D; // Elastic constants
     
-    double E;
-    double nu;
-    double sigmaY;
-    double Hiso;
-    double Hkin;
+    double E; //!< Elastic modulus.
+    double nu; //!< Poisson's ration.
+    double sigmaY; //!< Yield stress.
+    double Hiso; //!< Isotropic hardening parameter.
+    double Hkin; //!< Kinematic hardening parameter.
 
     int parameterID;
     Matrix SHVs;
 
-    Vector Tepsilon; // Trial strains
+    Vector Tepsilon; //!< Trial strains
+    Vector Tepsilon0; //!< Initial strains.
 
     double alphan;
     mutable double alphan1;
@@ -116,6 +117,8 @@ class J2PlateFibre: public NDMaterial
     double getHkin(void) const;
     void setHkin(const double &);
     
+    int setInitialStrain(const Vector &v);
+    const Vector &getInitialStrain(void) const;
     int setTrialStrain(const Vector &v);
     int setTrialStrain(const Vector &v, const Vector &r);
     int setTrialStrainIncr(const Vector &v);
@@ -124,6 +127,7 @@ class J2PlateFibre: public NDMaterial
     const Matrix &getInitialTangent(void) const;
     const Vector &getStress(void) const;
     const Vector &getStrain(void) const;
+    double getVonMisesStress(void) const;
 
     int commitState(void);
     int revertToLastCommit(void);
