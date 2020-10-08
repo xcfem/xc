@@ -109,7 +109,8 @@
 #include <solution/system_of_eqn/linearSOE/sparseSYM/SymSparseLinSOE.h>
 #include <solution/system_of_eqn/linearSOE/sparseSYM/SymSparseLinSolver.h>
 
-//#include <solution/system_of_eqn/linearSOE/umfGEN/UmfpackGenLinSOE.h>
+#include <solution/system_of_eqn/linearSOE/umfGEN/UmfpackGenLinSOE.h>
+#include <solution/system_of_eqn/linearSOE/umfGEN/UmfpackGenLinSolver.h>
 #ifdef _PARALLEL_PROCESSING
 #include "solution/system_of_eqn/linearSOE/bandSPD/DistributedBandSPDLinSOE.h"
 #include "solution/system_of_eqn/linearSOE/profileSPD/DistributedProfileSPDLinSOE.h"

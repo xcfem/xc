@@ -75,17 +75,19 @@ XC::UmfpackGenLinSOE::UmfpackGenLinSOE(AnalysisAggregation *owr)
   :FactoredSOEBase(owr,LinSOE_TAGS_UmfpackGenLinSOE), nnz(0)
   {}
 
+XC::SystemOfEqn *XC::UmfpackGenLinSOE::UmfpackGenLinSOE::getCopy(void) const
+  { return new UmfpackGenLinSOE(*this); }
 
 bool XC::UmfpackGenLinSOE::setSolver(LinearSOESolver *newSolver)
   {
     bool retval= false;
     UmfpackGenLinSolver *tmp= dynamic_cast<UmfpackGenLinSolver *>(newSolver);
     if(tmp)
-      {
-        retval= FactoredSOEBase::setSolver(tmp);
-      }
+      { retval= FactoredSOEBase::setSolver(tmp); }
     else
-      std::cerr << "XC::UmfpackGenLinSOE::setSolver; solver incompatible con system of equations." << std::endl;
+      std::cerr << getClassName() << "::" << __FUNCTION__
+	        << "; solver not compatible with system of equations."
+		<< std::endl;
     return retval;
   }
 
@@ -106,8 +108,6 @@ int XC::UmfpackGenLinSOE::setSize(Graph &theGraph)
       }
     nnz = newNNZ;
     lValue = 20*nnz; // 20 because 3 (10 also) was not working for some instances
-
-    std::cerr << "XC::UmfpackGenLinSOE::setSize - n " << size << " nnz " << nnz << " lVal " << lValue << std::endl;
 
     if(lValue > A.Size())
       { // we have to get more space for A and colA

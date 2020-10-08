@@ -412,21 +412,24 @@ void XC::ShadowPetscSOE::setX(int loc, double value)
 
 bool XC::ShadowPetscSOE::setSolver(PetscSolver &newSolver)
   {
-    std::cerr << "XC::ShadowPetscSOE::setSolver - not yet working\n";
+    std::cerr << getClassName() << "::" << __FUNCTION__
+              << "; not yet working\n";
     return false;
   }
 
 
 int XC::ShadowPetscSOE::sendSelf(Communicator &comm)
   {
-    std::cerr << "WARNING XC::ShadowPetscSOE::sendSelf - does not send itself YET\n";
+    std::cerr  << getClassName() << "::" << __FUNCTION__
+	       << "; WARNING does not send itself YET\n";
     return 0;
   }
 
 
 int XC::ShadowPetscSOE::recvSelf(const Communicator &comm)
   {
-    std::cerr << "WARNING XC::ShadowPetscSOE::sendSelf - does not receive itself YET\n";
+    std::cerr  << getClassName() << "::" << __FUNCTION__
+	       << "; WARNING does not receive itself YET\n";
     return 0;
   }
 

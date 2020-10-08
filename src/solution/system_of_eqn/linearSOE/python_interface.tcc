@@ -99,8 +99,8 @@ class_<XC::SparseGenRowLinSOE, bases<XC::SparseGenSOEBase>, boost::noncopyable >
 class_<XC::SymSparseLinSOE, bases<XC::SparseSOEBase>, boost::noncopyable >("SymSparseLinSOE", no_init)
     ;
 
-// class_<XC::UmfpackGenLinSOE, bases<XC::FactoredSOEBase>, boost::noncopyable >("UmfpackGenLinSOE", no_init)
-//     ;
+class_<XC::UmfpackGenLinSOE, bases<XC::FactoredSOEBase>, boost::noncopyable >("UmfpackGenLinSOE", no_init)
+  ;
 
 class_<XC::LinearSOESolver, bases<XC::Solver>, boost::noncopyable >("LinearSOESolver", no_init)
   ;
@@ -153,7 +153,8 @@ class_<XC::SparseGenRowLinSolver, bases<XC::LinearSOESolver>, boost::noncopyable
 
 class_<XC::SymSparseLinSolver, bases<XC::LinearSOESolver>, boost::noncopyable >("SymSparseLinSolver", no_init);
 
-// class_<XC::UmfpackGenLinSolver, bases<XC::LinearSOESolver>, boost::noncopyable >("UmfpackGenLinSolver", no_init);
+class_<XC::UmfpackGenLinSolver, bases<XC::LinearSOESolver>, boost::noncopyable >("UmfpackGenLinSolver", no_init)
+  ;
 
 
 

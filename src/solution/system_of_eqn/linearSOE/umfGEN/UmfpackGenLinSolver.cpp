@@ -76,6 +76,8 @@ XC::UmfpackGenLinSolver::UmfpackGenLinSolver()
     umd21i_(keep, cntl, icntl);
   }
 
+XC::LinearSOESolver *XC::UmfpackGenLinSolver::getCopy(void) const
+   { return new UmfpackGenLinSolver(*this); }
 
 extern "C" int umd2fa_(const int *n, int *ne, int *job, logical *transa,
 		       int *lvalue, int *lindex, double *value,

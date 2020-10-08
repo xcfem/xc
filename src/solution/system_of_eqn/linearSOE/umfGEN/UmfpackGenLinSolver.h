@@ -74,7 +74,7 @@ class UmfpackGenLinSOE;
 //
 //! @brief <a href="http://faculty.cse.tamu.edu/davis/research.html" target="_new">UMFPACK </a> based sparse matrix linear SOE solver.
 class UmfpackGenLinSolver: public LinearSOESolver
-{
+  {
   private:
     int icntl[20];
     int keep[20];
@@ -88,7 +88,9 @@ class UmfpackGenLinSolver: public LinearSOESolver
   protected:    
     UmfpackGenLinSOE *theSOE;
 
-    UmfpackGenLinSolver();     
+    friend class FEM_ObjectBroker;
+    friend class LinearSOE;
+    UmfpackGenLinSolver(void);     
     virtual LinearSOESolver *getCopy(void) const;
     virtual bool setLinearSOE(LinearSOE *theSOE);
   public:
@@ -102,8 +104,6 @@ class UmfpackGenLinSolver: public LinearSOESolver
     int recvSelf(const Communicator &);    
   };
 
-inline LinearSOESolver *UmfpackGenLinSolver::getCopy(void) const
-   { return new UmfpackGenLinSolver(*this); }
 } // end of XC namespace
 
 #endif
