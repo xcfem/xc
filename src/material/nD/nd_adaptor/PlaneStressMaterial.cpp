@@ -259,7 +259,7 @@ double XC::PlaneStressMaterial::getVonMisesStress(void) const
     const Vector sg= getStress();
     const size_t sz= sg.Size();
     //NDmaterial stress order = 11, 22, 33, 12, 23, 31 
-    if(sz==3) // 2D material
+    if(sz==3) // 2D material order = 11, 22, 12
       {
 	const double sg11= sg[0]; const double sg22= sg[1]; 
 	const double sg12= sg[2]; 
