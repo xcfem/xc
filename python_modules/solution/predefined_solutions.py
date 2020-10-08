@@ -245,6 +245,35 @@ class SolutionProcedure(object):
         self.solver= self.soe.newSolver("super_lu_solver")
         self.analysis= self.solu.newAnalysis("static_analysis","analysisAggregation","")
         return self.analysis
+    
+    def plainKrylovNewton(self,prb, maxDim= 6):
+        ''' Return a static solution procedure with a modified Newton
+            solution algorithm with a plain constraint handler.
+
+        See appendix C. Analysis model script of the document
+        "Finite Element Modeling of Gusset Plate Failure Using Opensees"
+        Andrew J. Walker. Oregon State University
+        '''
+        self.solu= prb.getSoluProc
+        self.solCtrl= self.solu.getSoluControl
+        solModels= self.solCtrl.getModelWrapperContainer
+        self.sm= solModels.newModelWrapper("sm")
+        self.numberer= self.sm.newNumberer("default_numberer")
+        self.numberer.useAlgorithm("simple")
+        self.cHandler= self.getConstraintHandler('plain')
+        analysisAggregations= self.solCtrl.getAnalysisAggregationContainer
+        self.analysisAggregation= analysisAggregations.newAnalysisAggregation("analysisAggregation","sm")
+        self.solAlgo= self.analysisAggregation.newSolutionAlgorithm("krylov_newton_soln_algo")
+        self.solAlgo.maxDimension= maxDim
+        self.integ= self.analysisAggregation.newIntegrator("load_control_integrator",xc.Vector([]))
+        self.ctest= self.analysisAggregation.newConvergenceTest("energy_inc_conv_test")
+        self.ctest.tol= self.convergenceTestTol
+        self.ctest.maxNumIter= 150 #Make this configurable
+        self.ctest.printFlag= self.printFlag
+        self.soe= self.analysisAggregation.newSystemOfEqn("umfpack_gen_lin_soe")
+        self.solver= self.soe.newSolver("umfpack_gen_lin_solver")
+        self.analysis= self.solu.newAnalysis("static_analysis","analysisAggregation","")
+        return self.analysis
       
     def penaltyNewtonRaphson(self, prb):
         ''' Return a static solution procedure with a Newton Raphson algorithm
@@ -392,6 +421,19 @@ def penalty_newton_raphson(prb, mxNumIter= 10, convergenceTestTol= 1e-4, printFl
     solution.convergenceTestTol= convergenceTestTol
     solution.printFlag= printFlag
     return solution.penaltyNewtonRaphson(prb)
+
+def plain_krylov_newton(prb, mxNumIter= 10, convergenceTestTol= 1e-4, printFlag= 0):
+    ''' Return a penalty Newton-Raphson solution procedure.
+
+    :ivar maxNumIter: maximum number of iterations (defauts to 10)
+    :ivar convergenceTestTol: convergence tolerance (defaults to 1e-9)
+    :ivar printFlag: print message on each iteration
+    '''
+    solution= SolutionProcedure()
+    solution.maxNumIter= mxNumIter
+    solution.convergenceTestTol= convergenceTestTol
+    solution.printFlag= printFlag
+    return solution.plainKrylovNewton(prb)
 
 def frequency_analysis(prb):
     ''' Return a solution procedure that computes the natural
