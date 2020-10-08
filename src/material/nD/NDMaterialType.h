@@ -45,6 +45,7 @@ namespace XC {
   const std::string strTypePlaneStrain2D= "PlaneStrain2D";
   const std::string strTypePlaneStrain= "PlaneStrain";
   const std::string strTypePlateFiber= "PlateFiber";
+  const std::string strTypePlateFibre= "PlateFiber"; // Yeah Fiber not Fibre 
   const std::string strTypePressureIndependMultiYield= "PressureIndependMultiYield";
   const std::string strTypePressureIndependMultiYield02= "PressureIndependMultiiYield02";
   const std::string strTypeTemplate3Dep= "Template3Dep";

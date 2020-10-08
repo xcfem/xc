@@ -267,7 +267,7 @@ SET(section_material material/section/interaction_diagram/DeformationPlane mater
 
 SET(nD_elastic_isotropic material/nD/elastic_isotropic/ElasticIsotropic3D material/nD/elastic_isotropic/ElasticIsotropicAxiSymm material/nD/elastic_isotropic/ElasticIsotropicBeamFiber material/nD/elastic_isotropic/ElasticIsotropicMaterial material/nD/elastic_isotropic/ElasticIsotropic2D material/nD/elastic_isotropic/ElasticIsotropicPlaneStrain2D material/nD/elastic_isotropic/ElasticIsotropicPlaneStress2D material/nD/elastic_isotropic/ElasticIsotropicPlateFiber  material/nD/elastic_isotropic/PressureDependentElastic3D)
 
-SET(nD_j2_plasticity material/nD/j2_plasticity/J2AxiSymm material/nD/j2_plasticity/J2PlaneStrain material/nD/j2_plasticity/J2PlaneStress material/nD/j2_plasticity/J2Plasticity material/nD/j2_plasticity/J2PlateFiber material/nD/j2_plasticity/J2ThreeDimensional)
+SET(nD_j2_plasticity material/nD/j2_plasticity/J2AxiSymm material/nD/j2_plasticity/J2PlaneStrain material/nD/j2_plasticity/J2PlaneStress material/nD/j2_plasticity/J2Plasticity material/nD/j2_plasticity/J2PlateFiber material/nD/j2_plasticity/J2PlateFibre material/nD/j2_plasticity/J2ThreeDimensional)
 
 SET(nD_uvmaterial material/nD/UWmaterials/DruckerPrager material/nD/UWmaterials/DruckerPragerPlaneStrain material/nD/UWmaterials/DruckerPrager3D)
 

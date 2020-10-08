@@ -88,7 +88,8 @@ namespace XC{
 //! for plate problems.
 class J2PlateFiber: public J2Plasticity
   {
-  private : 
+  private:
+    static constexpr int order= 5;
     //static vectors and matrices
     static Vector strain_vec ;     //strain in vector notation
     static Vector stress_vec ;     //stress in vector notation
@@ -102,7 +103,7 @@ class J2PlateFiber: public J2Plasticity
   protected:
     int sendData(Communicator &);
     int recvData(const Communicator &);
-  public : 
+  public: 
 
     J2PlateFiber(int tag= 0);
 
@@ -124,10 +125,10 @@ class J2PlateFiber: public J2Plasticity
     NDMaterial* getCopy(void) const;
 
     //send back type of material
-    const std::string &getType( ) const ;
+    const std::string &getType(void) const;
 
     //send back order of strain in vector form
-    int getOrder( ) const ;
+    int getOrder( ) const;
 
     //get the strain and integrate plasticity equations
     int setTrialStrain( const Vector &strain_from_element);

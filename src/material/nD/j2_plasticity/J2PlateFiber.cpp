@@ -85,9 +85,9 @@
 #include <utility/matrix/Matrix.h>
 #include "material/nD/NDMaterialType.h"
 
-XC::Vector XC::J2PlateFiber::strain_vec(5);
-XC::Vector XC::J2PlateFiber::stress_vec(5);
-XC::Matrix XC::J2PlateFiber::tangent_matrix(5,5);
+XC::Vector XC::J2PlateFiber::strain_vec(order);
+XC::Vector XC::J2PlateFiber::stress_vec(order);
+XC::Matrix XC::J2PlateFiber::tangent_matrix(order,order);
 
 //! @brief Default constructor.
 XC::J2PlateFiber::J2PlateFiber(int tag)
@@ -103,21 +103,14 @@ XC::J2PlateFiber::J2PlateFiber(int tag)
                  double d,
                  double H,
                  double viscosity ) : 
- XC::J2Plasticity(tag, ND_TAG_J2PlateFiber, 
-             K, G, yield0, yield_infty, d, H, viscosity )
-{ 
-  commitEps22 =0.0;
-}
+ XC::J2Plasticity(tag, ND_TAG_J2PlateFiber, K, G, yield0, yield_infty, d, H, viscosity )
+  { commitEps22 =0.0; }
 
 
 //! @brief elastic constructor
- XC::J2PlateFiber::J2PlateFiber(   int    tag, 
-                 double K, 
-                 double G ) :
- XC::J2Plasticity(tag, ND_TAG_J2PlateFiber, K, G )
-{ 
-  commitEps22 =0.0;
-}
+XC::J2PlateFiber::J2PlateFiber(int tag, double K, double G ) :
+XC::J2Plasticity(tag, ND_TAG_J2PlateFiber, K, G )
+  { commitEps22 =0.0; }
 
 //! @brief make a clone of this material
 XC::NDMaterial *XC::J2PlateFiber::getCopy(void) const
@@ -130,78 +123,78 @@ const std::string &XC::J2PlateFiber::getType(void) const
 
 
 //! @brief send back order of strain in vector form
-int XC::J2PlateFiber::getOrder( ) const 
-  { return 5; } 
+int XC::J2PlateFiber::getOrder(void) const 
+  { return order; } 
 
 //! @brief get the strain and integrate plasticity equations
-int XC::J2PlateFiber::setTrialStrain( const XC::Vector &strain_from_element ) 
-{
-  const double tolerance = 1e-8;
+int XC::J2PlateFiber::setTrialStrain( const Vector &strain_from_element ) 
+  {
+    const double tolerance = 1e-8;
 
-  const int max_iterations = 25;
-  int iteration_counter  = 0;
+    const int max_iterations= 25;
+    int iteration_counter= 0;
 
-  int i, j, k, l;
-  int ii, jj;
+    int i, j, k, l;
+    int ii, jj;
 
-  double eps22  =  strain(2,2);
-  strain.Zero( );
+    double eps22  =  strain(2,2);
+    strain.Zero( );
 
-  strain(0,0) =        strain_from_element(0);
-  strain(1,1) =        strain_from_element(1);
+    strain(0,0) =        strain_from_element(0);
+    strain(1,1) =        strain_from_element(1);
 
-  strain(0,1) = 0.50 * strain_from_element(2);
-  strain(1,0) =        strain(0,1);
+    strain(0,1) = 0.50 * strain_from_element(2);
+    strain(1,0) =        strain(0,1);
 
-  strain(1,2) = 0.50 * strain_from_element(3);
-  strain(2,1) =        strain(1,2);
-  
-  strain(2,0) = 0.50 * strain_from_element(4);
-  strain(0,2) =        strain(2,0);
+    strain(1,2) = 0.50 * strain_from_element(3);
+    strain(2,1) =        strain(1,2);
 
-  strain(2,2) =        eps22; 
+    strain(2,0) = 0.50 * strain_from_element(4);
+    strain(0,2) =        strain(2,0);
 
-  //enforce the plane stress condition sigma_22 = 0 
-  //solve for epsilon_22 
-  iteration_counter = 0;  
-  do {
+    strain(2,2) =        eps22; 
 
-     this->plastic_integrator( );
-    
-     strain(2,2) -= stress(2,2) / tangent[2][2][2][2];
+    //enforce the plane stress condition sigma_22 = 0 
+    //solve for epsilon_22 
+    iteration_counter = 0;  
+    do
+      {
+       this->plastic_integrator( );
 
-     //std::cerr << stress(2,2) << std::endl;;
+       strain(2,2) -= stress(2,2) / tangent[2][2][2][2];
 
-     iteration_counter++;
-     if( iteration_counter > max_iterations ) {
-       std::cerr << "More than " << max_iterations;
-       std::cerr << " iterations in setTrialStrain of XC::J2PlateFiber \n";
-       break;
-     }// end if 
+       //std::cerr << stress(2,2) << std::endl;;
 
-  } while( fabs(stress(2,2)) > tolerance );
+       iteration_counter++;
+       if( iteration_counter > max_iterations ) {
+	 std::cerr << "More than " << max_iterations;
+	 std::cerr << " iterations in setTrialStrain of XC::J2PlateFiber \n";
+	 break;
+       }// end if 
 
-  //modify tangent for plane stress 
-  for( ii = 0; ii < 5; ii++ ) {
-    for( jj = 0; jj < 5; jj++ )  {
+      } while( fabs(stress(2,2)) > tolerance );
 
-          index_map( ii, i, j );
-          index_map( jj, k, l );
+    //modify tangent for plane stress 
+    for( ii = 0; ii < order; ii++ )
+      {
+	for( jj = 0; jj < order; jj++ )
+	  {
+	    index_map( ii, i, j );
+	    index_map( jj, k, l );
 
-          tangent[i][j][k][l] -=   tangent[i][j][2][2] 
-                                 * tangent[2][2][k][l] 
-                                 / tangent[2][2][2][2];
+	    tangent[i][j][k][l] -=   tangent[i][j][2][2] 
+				   * tangent[2][2][k][l] 
+				   / tangent[2][2][2][2];
 
-          //minor symmetries 
-          tangent [j][i][k][l] = tangent[i][j][k][l];
-          tangent [i][j][l][k] = tangent[i][j][k][l];
-          tangent [j][i][l][k] = tangent[i][j][k][l];
+	    //minor symmetries 
+	    tangent [j][i][k][l] = tangent[i][j][k][l];
+	    tangent [i][j][l][k] = tangent[i][j][k][l];
+	    tangent [j][i][l][k] = tangent[i][j][k][l];
+	  } // end for jj
+      } // end for ii 
 
-    } // end for jj
-  } // end for ii 
-
-  return 0;
-}
+    return 0;
+  }
 
 
 //! @brief unused trial strain functions
@@ -220,111 +213,112 @@ int XC::J2PlateFiber::setTrialStrainIncr( const XC::Vector &v, const XC::Vector 
 
 //! @brief send back the strain
 const XC::Vector &XC::J2PlateFiber::getStrain(void) const
-{
+  {
+    strain_vec(0) =       strain(0,0);
+    strain_vec(1) =       strain(1,1);
 
-  strain_vec(0) =       strain(0,0);
-  strain_vec(1) =       strain(1,1);
+    strain_vec(2) = 2.0 * strain(0,1);
 
-  strain_vec(2) = 2.0 * strain(0,1);
+    strain_vec(3) = 2.0 * strain(1,2);
 
-  strain_vec(3) = 2.0 * strain(1,2);
+    strain_vec(4) = 2.0 * strain(2,0);
 
-  strain_vec(4) = 2.0 * strain(2,0);
-
-  return strain_vec;
-} 
+    return strain_vec;
+  } 
 
 
 //! @brief send back the stress 
 const XC::Vector &XC::J2PlateFiber::getStress(void) const 
-{
- 
-  stress_vec(0) = stress(0,0);
-  stress_vec(1) = stress(1,1);
+  {
 
-  stress_vec(2) = stress(0,1);
+    stress_vec(0) = stress(0,0);
+    stress_vec(1) = stress(1,1);
 
-  stress_vec(3) = stress(1,2);
-  
-  stress_vec(4) = stress(2,0);
+    stress_vec(2) = stress(0,1);
 
-  return stress_vec;
-}
+    stress_vec(3) = stress(1,2);
+
+    stress_vec(4) = stress(2,0);
+
+    return stress_vec;
+  }
 
 //! @brief send back the tangent 
 const XC::Matrix &XC::J2PlateFiber::getTangent(void) const
-{
+  {
 
-  // matrix to tensor mapping
-  // Matrix      Tensor
-  // -------     -------
-  //   0           0 0
-  //   1           1 1
-  //   2           0 1  ( or 1 0 )
-  //   3           1 2  ( or 2 1 )
-  //   4           2 0  ( or 0 2 ) 
-    
-  int ii, jj;
-  int i, j, k, l;
+    // matrix to tensor mapping
+    // Matrix      Tensor
+    // -------     -------
+    //   0           0 0
+    //   1           1 1
+    //   2           0 1  ( or 1 0 )
+    //   3           1 2  ( or 2 1 )
+    //   4           2 0  ( or 0 2 ) 
 
-  for( ii = 0; ii < 5; ii++ ) {
-    for( jj = 0; jj < 5; jj++ ) {
+    int ii, jj;
+    int i, j, k, l;
 
-      index_map( ii, i, j );
-      index_map( jj, k, l );
+    for( ii = 0; ii < order; ii++ )
+      {
+      for( jj = 0; jj < order; jj++ )
+	{
 
-      tangent_matrix(ii,jj) = tangent[i][j][k][l];
+	index_map( ii, i, j );
+	index_map( jj, k, l );
 
-    } //end for j
-  } //end for i
-       
+	tangent_matrix(ii,jj) = tangent[i][j][k][l];
 
-  return tangent_matrix;
-} 
+      } //end for j
+    } //end for i
+
+
+    return tangent_matrix;
+  } 
 
 
 //! @brief Reurn the tangent 
 const XC::Matrix &XC::J2PlateFiber::getInitialTangent(void) const
-{
+  {
 
-  // matrix to tensor mapping
-  //  Matrix      Tensor
-  // -------     -------
-  //   0           0 0
-  //   1           1 1
-  //   2           0 1  ( or 1 0 )
-  //   3           1 2  ( or 2 1 )
-  //   4           2 0  ( or 0 2 ) 
-    
-  int ii, jj;
-  int i, j, k, l;
+    // matrix to tensor mapping
+    //  Matrix      Tensor
+    // -------     -------
+    //   0           0 0
+    //   1           1 1
+    //   2           0 1  ( or 1 0 )
+    //   3           1 2  ( or 2 1 )
+    //   4           2 0  ( or 0 2 ) 
 
-  this->doInitialTangent();
+    int ii, jj;
+    int i, j, k, l;
 
-  for( ii = 0; ii < 5; ii++ ) {
-    for( jj = 0; jj < 5; jj++ ) {
+    this->doInitialTangent();
 
-      index_map( ii, i, j );
-      index_map( jj, k, l );
+    for( ii = 0; ii < order; ii++ ) {
+      for( jj = 0; jj < order; jj++ ) {
 
-      tangent_matrix(ii,jj) = initialTangent[i][j][k][l];
+	index_map( ii, i, j );
+	index_map( jj, k, l );
 
-    } //end for j
-  } //end for i
-       
+	tangent_matrix(ii,jj) = initialTangent[i][j][k][l];
 
-  return tangent_matrix;
-} 
+      } //end for j
+    } //end for i
+
+
+    return tangent_matrix;
+  } 
 
 int XC::J2PlateFiber::commitState( ) 
-{
-  epsilon_p_n = epsilon_p_nplus1;
-  xi_n        = xi_nplus1;
+  {
+    epsilon_p_n = epsilon_p_nplus1;
+    xi_n        = xi_nplus1;
 
-  commitEps22 = strain(2,2);
+    commitEps22 = strain(2,2);
 
-  return 0;
-}
+    return 0;
+  }
 
 int XC::J2PlateFiber::revertToLastCommit( )
  {
@@ -334,10 +328,10 @@ int XC::J2PlateFiber::revertToLastCommit( )
 
 
 int XC::J2PlateFiber::revertToStart( )
- {
-   commitEps22 = 0.0;
-   this->zero( );
-   return 0;
+  {
+    commitEps22 = 0.0;
+    this->zero( );
+    return 0;
   }
 
 //! @brief Send object members through the communicator argument.
@@ -358,7 +352,7 @@ int XC::J2PlateFiber::recvData(const Communicator &comm)
 
 //! @brief Sends object through the communicator argument.
 int XC::J2PlateFiber::sendSelf(Communicator &comm)
-   {
+  {
     setDbTag(comm);
     const int dataTag= getDbTag();
     inicComm(89);
@@ -366,7 +360,8 @@ int XC::J2PlateFiber::sendSelf(Communicator &comm)
 
     res+= comm.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
-      std::cerr << getClassName() << "sendSelf() - failed to send data\n";
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; failed to send data\n";
     return res;
   }
 
@@ -378,14 +373,16 @@ int XC::J2PlateFiber::recvSelf(const Communicator &comm)
     int res= comm.receiveIdData(getDbTagData(),dataTag);
 
     if(res<0)
-      std::cerr << getClassName() << "::recvSelf - failed to receive ids.\n";
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; failed to receive ids.\n";
     else
       {
         setTag(getDbTagDataPos(0));
         res+= recvData(comm);
         if(res<0)
-          std::cerr << getClassName() << "::recvSelf - failed to receive data.\n";
-      }
+          std::cerr << getClassName() << "::" << __FUNCTION__
+		    << "; failed to receive data.\n";
+       }
     return res;
   }
 
@@ -396,49 +393,37 @@ int XC::J2PlateFiber::recvSelf(const Communicator &comm)
 //! case 3 switched to 1-2 and case 4 to 3-3 
 void XC::J2PlateFiber::index_map( int matrix_index, int &i, int &j ) const
   {
-    switch( matrix_index+1 ) //add 1 for standard tensor indices
+    switch(matrix_index+1) //add 1 for standard tensor indices
       { 
-      case 1 :
-	i = 1; 
-	j = 1;
+      case 1:
+	i = 1; j = 1;
 	break;
 
-      case 2 :
-	i = 2;
-	j = 2; 
+      case 2:
+	i = 2; j = 2; 
 	break;
 
-      case 3 :
-	i = 1;
-	j = 2;
+      case 3:
+	i = 1; j = 2;
 	break;
 
-      case 4 :
-	i = 2;
-	j = 3;
+      case 4:
+	i = 2; j = 3;
 	break;
 
-      case 5 :
-	i = 3;
-	j = 1;
+      case 5:
+	i = 3; j = 1;
 	break;
 
-      case 6 :
-	i = 3;
-	j = 3;
+      case 6:
+	i = 3; j = 3;
 	break;
 
-
-      default :
-	i = 1;
-	j = 1;
+      default:
+	i = 1; j = 1;
 	break;
-
-    } //end switch
-
-  i--; //subtract 1 for C-indexing
-  j--;
-
-  return; 
-}
+      } //end switch
+    i--; //subtract 1 for C-indexing
+    j--;
+  }
 

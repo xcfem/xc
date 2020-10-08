@@ -88,6 +88,10 @@ namespace XC{
 //! @ingroup J2NDMat
 //
 //! @brief J2 Isotropic hardening material class.
+//!
+//! The von Mises theory is often called “J2 plasticity” because it is usually
+//! described in terms of the so-called second mechanics invariant of the
+//! stress. 
 class J2Plasticity: public NDMaterial
   {
   protected :
@@ -108,18 +112,19 @@ class J2Plasticity: public NDMaterial
 
     //material response
     Matrix stress; //!< stress tensor
-    double tangent[3][3][3][3]; //!< material tangent
-    static double initialTangent[3][3][3][3]; //!< material tangent
-    static double IIdev[3][3][3][3]; //!< rank 4 deviatoric
-    static double IbunI[3][3][3][3]; //!< rank 4 I bun I
+    static constexpr int tDim= 3; //! tensor dimension
+    double tangent[tDim][tDim][tDim][tDim]; //!< material tangent
+    static double initialTangent[tDim][tDim][tDim][tDim]; //!< material tangent
+    static double IIdev[tDim][tDim][tDim][tDim]; //!< rank 4 deviatoric
+    static double IbunI[tDim][tDim][tDim][tDim]; //!< rank 4 I bun I
 
     //material input
     Matrix strain; //!< strain tensor
 
     //parameters
-    static const double one3;
-    static const double two3;
-    static const double four3;
+    static constexpr double one3= 1.0/3.0;
+    static constexpr double two3= 2.0/3.0;
+    static constexpr double four3= 4.0/3.0;
     static const double root23;
 
 
@@ -153,6 +158,7 @@ class J2Plasticity: public NDMaterial
 
     virtual NDMaterial* getCopy(const std::string &) const;
 
+    void setup(const double &K= 0.0, const double &G= 0.0, const double &yield0= 0.0, const double &yield_infty= 0.0, const double &d= 0.0, const double &H= 0.0, const double &viscosity= 0.0);
     //swap history variables
     virtual int commitState(void);
     //revert to last saved state

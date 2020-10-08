@@ -22,6 +22,7 @@
 //python_interface.tcc
 
 class_<XC::J2Plasticity, bases<XC::NDMaterial>, boost::noncopyable >("J2Plasticity", no_init)
+  .def("setup",&XC::J2Plasticity::setup,"setup(K, G, initYield, finalYield, delta, linearHardening, viscosity) set paramater values")
   ;
 
 class_<XC::J2AxiSymm, bases<XC::J2Plasticity>, boost::noncopyable >("J2AxiSymm", no_init)
@@ -32,6 +33,10 @@ class_<XC::J2PlaneStrain , bases<XC::J2Plasticity>, boost::noncopyable >("J2Plan
 
 class_<XC::J2PlaneStress, bases<XC::J2Plasticity>, boost::noncopyable >("J2PlaneStress", no_init);
 
-class_<XC::J2PlateFiber , bases<XC::J2Plasticity>, boost::noncopyable >("J2PlateFiber", no_init);
+class_<XC::J2PlateFiber , bases<XC::J2Plasticity>, boost::noncopyable >("J2PlateFiber", no_init)
+  ;
+
+class_<XC::J2PlateFibre , bases<XC::NDMaterial>, boost::noncopyable >("J2PlateFibre", no_init)
+  ;
 
 class_<XC::J2ThreeDimensional , bases<XC::J2Plasticity>, boost::noncopyable >("J2ThreeDimensional", no_init);

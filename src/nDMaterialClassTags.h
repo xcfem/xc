@@ -42,6 +42,7 @@
 #define ND_TAG_J2AxiSymm                                2011 
 #define ND_TAG_J2ThreeDimensional                       2012 
 #define ND_TAG_J2PlateFiber				2013
+#define ND_TAG_J2PlateFibre			       91625
 #define ND_TAG_J2BeamFiber				2014
 #define ND_TAG_PressureDependentElastic3D               2015
 #define ND_TAG_Template3Dep 			        2016

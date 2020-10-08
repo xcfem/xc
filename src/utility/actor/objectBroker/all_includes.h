@@ -127,6 +127,7 @@
 #include "material/nD/j2_plasticity/J2PlaneStrain.h"
 #include "material/nD/j2_plasticity/J2PlaneStress.h"
 #include "material/nD/j2_plasticity/J2PlateFiber.h"
+#include "material/nD/j2_plasticity/J2PlateFibre.h"
 #include "material/nD/j2_plasticity/J2AxiSymm.h"
 #include "material/nD/j2_plasticity/J2ThreeDimensional.h"
 //#include "material/nD/feap/FeapMaterial03.h"

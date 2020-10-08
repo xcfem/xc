@@ -692,6 +692,8 @@ XC::NDMaterial *XC::FEM_ObjectBroker::getNewNDMaterial(int classTag)
       return new J2AxiSymm();
     case ND_TAG_J2PlateFiber:
       return new J2PlateFiber();
+    case ND_TAG_J2PlateFibre:
+      return new J2PlateFibre();
     case ND_TAG_J2ThreeDimensional:
       return new J2ThreeDimensional();
     case ND_TAG_PlaneStressMaterial:

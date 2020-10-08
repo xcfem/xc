@@ -98,6 +98,7 @@
 #include "material/nD/j2_plasticity/J2PlaneStrain.h"
 #include "material/nD/j2_plasticity/J2PlaneStress.h"
 #include "material/nD/j2_plasticity/J2PlateFiber.h"
+#include "material/nD/j2_plasticity/J2PlateFibre.h"
 #include "material/nD/j2_plasticity/J2ThreeDimensional.h"
 
 #include "material/nD/nd_adaptor/PlaneStressMaterial.h"
@@ -306,6 +307,8 @@ XC::Material *load_nD_material(int tag_mat,const std::string &cmd)
       retval= new XC::J2PlaneStress(tag_mat);
     else if(cmd == "J2_plate_fiber")
       retval= new XC::J2PlateFiber(tag_mat);
+    else if(cmd == "J2_plate_fibre")
+      retval= new XC::J2PlateFibre(tag_mat);
     else if(cmd == "J2_three_dimensional")
       retval= new XC::J2ThreeDimensional(tag_mat);
     else if(cmd == "plane_stress_material")
