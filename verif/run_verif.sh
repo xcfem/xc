@@ -534,6 +534,7 @@ echo "$BLEU" "        Membrane plate fiber section tests." "$NORMAL"
 python tests/materials/xc_materials/sections/fiber_section/membrane_plate/test_membrane_plate_fiber_material_01.py
 python tests/materials/xc_materials/sections/fiber_section/membrane_plate/test_membrane_plate_fiber_material_02.py
 python tests/materials/xc_materials/sections/fiber_section/membrane_plate/test_membrane_plate_fiber_material_03.py
+python tests/materials/xc_materials/sections/fiber_section/membrane_plate/test_j2_plate_fibre_material_01.py
 echo "$BLEU" "  RC sections test." "$NORMAL"
 python tests/materials/ehe/test_Ecm_concrete.py
 python tests/materials/ehe/test_EHEconcrete.py

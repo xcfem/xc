@@ -7,6 +7,7 @@ E= 29e6 # Young modulus (psi)
 nu= 0.3 # Poisson's ratio
 fy= 36e3 # yield stress
 alpha= .01 # strain hardening ratio
+rho= 7850
 
 import xc_base
 import geom
@@ -22,7 +23,7 @@ __email__= "l.pereztato@gmail.com"
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
 
-j2plate= typical_materials.defJ2PlateFibre(preprocessor, 'j2plate',E,nu,fy,alpha)
+j2plate= typical_materials.defJ2PlateFibre(preprocessor, 'j2plate',E,nu,fy,alpha, rho)
 EE= j2plate.E
 V= j2plate.nu
 Fy= j2plate.fy
@@ -39,7 +40,7 @@ print('Hkin= ', Hkin)
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
-if (abs(E-EE)<1e-15) and (abs(V-nu)<1e-15) and (abs(fy-Fy)<1e-15) and (abs(h-Hiso)<1e-15) and (abs(Hkin)<1e-15):
-  print("test ",fname,": ok.")
+if (abs(E-EE)<1e-15) and (abs(V-nu)<1e-15) and (abs(fy-Fy)<1e-15) and (abs(h-Hiso)<1e-15) and (abs(Hkin)<1e-15) and (abs(j2plate.rho-rho)<1e-15):
+  print("test "+fname+": ok.")
 else:
   lmsg.error(fname+' ERROR.')
