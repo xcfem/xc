@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import print_function
+from __future__ import division
 
 
 __author__= "Luis C. Pérez Tato (LCPT) Ana Ortega (AO_O)"
@@ -422,10 +423,10 @@ def penalty_newton_raphson(prb, mxNumIter= 10, convergenceTestTol= 1e-4, printFl
     solution.printFlag= printFlag
     return solution.penaltyNewtonRaphson(prb)
 
-def plain_krylov_newton(prb, mxNumIter= 10, convergenceTestTol= 1e-4, printFlag= 0):
-    ''' Return a penalty Newton-Raphson solution procedure.
+def plain_krylov_newton(prb, mxNumIter= 300, convergenceTestTol= 1e-9, printFlag= 0):
+    ''' Return a plain Krylov Newton solution procedure.
 
-    :ivar maxNumIter: maximum number of iterations (defauts to 10)
+    :ivar maxNumIter: maximum number of iterations (defauts to 300)
     :ivar convergenceTestTol: convergence tolerance (defaults to 1e-9)
     :ivar printFlag: print message on each iteration
     '''
