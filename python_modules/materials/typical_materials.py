@@ -444,13 +444,13 @@ def defJ2PlateFibre(preprocessor, name, E, nu, fy, alpha):
     :param  alpha:        strain hardening ratio (default: (0.01), range: 0 to 1).
     '''
     materialHandler= preprocessor.getMaterialHandler
-    retval= materialHandler.newMaterial("j2_plate_fibre",name)
+    retval= materialHandler.newMaterial("J2_plate_fibre",name)
     retval.E= E
     retval.nu= nu
     retval.fy= fy
     if(alpha<0 or alpha>1):
         lmsg.error('alpha value: '+str(alpha)+' out of range (0,1)')
-    retval.H= alpha*E/(1-alpha)
+    retval.Hiso= alpha*E/(1-alpha)
     return retval
 
 #Elastic membrane plate section.
