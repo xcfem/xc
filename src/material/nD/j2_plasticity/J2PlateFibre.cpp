@@ -71,7 +71,52 @@ XC::J2PlateFibre::J2PlateFibre(int tag, double e, double g, double sy, double hi
 XC::J2PlateFibre::~J2PlateFibre(void)
   {}
 
+//! @brief Return elastic modulus
+double XC::J2PlateFibre::getE(void) const
+  { return E; }
 
+//! @brief Set elastic modulus
+//! @param e: elastic modulus.
+void XC::J2PlateFibre::setE(const double &e)
+  { E= e; }
+
+//! @brief Return the material Poisson's ratio.
+double XC::J2PlateFibre::getnu(void) const
+  { return nu; }
+
+//! @brief Set the material Poisson's ratio.
+//! @param g: Poisson's ratio.
+void XC::J2PlateFibre::setnu(const double &g)
+  { nu= g; }
+
+//! @brief Return the material yield stress.
+double XC::J2PlateFibre::getYieldStress(void) const
+  { return sigmaY; }
+
+//! @brief Set the material yield stress.
+//! @param g: yield stress.
+void XC::J2PlateFibre::setYieldStress(const double &sgY)
+  { sigmaY= sgY; }
+
+//! @brief Return the material isotropic hardening parameter.
+double XC::J2PlateFibre::getHiso(void) const
+  { return Hiso; }
+
+//! @brief Set the material isotropic hardening parameter.
+//! @param hiso: material isotropic hardening parameter.
+void XC::J2PlateFibre::setHiso(const double &hiso)
+  { Hiso= hiso; }
+
+//! @brief Return the material kinematic hardening parameter.
+double XC::J2PlateFibre::getHkin(void) const
+  { return Hkin; }
+
+//! @brief Set the material kinematic hardening parameter.
+//! @param hkin: material kinematic hardening parameter.
+void XC::J2PlateFibre::setHkin(const double &hkin)
+  { Hkin= hkin; }
+
+//! @brief Set the material trial strain.
 int XC::J2PlateFibre::setTrialStrain(const Vector &strain)
   {
     Tepsilon= strain;

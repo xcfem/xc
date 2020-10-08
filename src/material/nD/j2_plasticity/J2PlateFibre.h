@@ -105,6 +105,17 @@ class J2PlateFibre: public NDMaterial
     NDMaterial *getCopy(void) const;
     NDMaterial *getCopy(const std::string &type) const;
 
+    double getE(void) const;
+    void setE(const double &);
+    double getnu(void) const;
+    void setnu(const double &);
+    double getYieldStress(void) const;
+    void setYieldStress(const double &);
+    double getHiso(void) const;
+    void setHiso(const double &);
+    double getHkin(void) const;
+    void setHkin(const double &);
+    
     int setTrialStrain(const Vector &v);
     int setTrialStrain(const Vector &v, const Vector &r);
     int setTrialStrainIncr(const Vector &v);
