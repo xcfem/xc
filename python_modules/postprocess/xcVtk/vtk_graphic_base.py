@@ -169,8 +169,13 @@ class CameraParameters(object):
         elif(self.viewName!="Custom"):
           sys.stderr.write("View name: '"+self.viewName+"' unknown.")
 
-    def setView(self, camera):
-        '''Sets the camera parameters.'''
+    def setView(self, vtkCamera):
+        '''Sets the camera parameters.
+        
+        :param vtkCamera: VTK camera object whose parameters will be changed
+                          according to the information stored in this
+                          object.
+        '''
         if(self.viewName!="Custom"):
           self.defineViewParametersFromViewName()
         camera.SetViewUp(self.viewUpVc[0],self.viewUpVc[1],self.viewUpVc[2])
