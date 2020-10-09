@@ -59,8 +59,15 @@ class OutputHandler(object):
         if(not self.outputStyle.cameraParameters):
             self.outputStyle.cameraParameters= self.getDefaultCameraParameters()
         return self.outputStyle.cameraParameters
+
+    def setCameraParameters(self, cameraParameters):
+        ''' Set the camera parameters from the arguments.
+
+        :param cameraParameters: CameraParameters object (see vtk_graphic_base)
+                                 parameters that define the camera.               
+        '''
+        self.outputStyle.cameraParameters= cameraParameters
         
-            
     def displayBlocks(self, setToDisplay= None, caption= None, fileName=None):
         '''Display the blocks (points, lines, surfaces and volumes)
            of the set.
