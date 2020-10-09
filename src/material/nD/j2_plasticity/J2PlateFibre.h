@@ -69,8 +69,8 @@ class J2PlateFibre: public NDMaterial
   {
   private:
     static constexpr int order= 5;
-    static constexpr double one3= 1.0/3.0;
-    static constexpr double two3= 2.0/3.0;
+    static constexpr double one3= (1/3);
+    static constexpr double two3= (2/3);
     static const double root23;
     static Vector sigma; // Stress vector ... class-wide for returns
     static Matrix D; // Elastic constants

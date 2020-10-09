@@ -122,9 +122,9 @@ class J2Plasticity: public NDMaterial
     Matrix strain; //!< strain tensor
 
     //parameters
-    static constexpr double one3= 1.0/3.0;
-    static constexpr double two3= 2.0/3.0;
-    static constexpr double four3= 4.0/3.0;
+    static constexpr double one3= (1/3);
+    static constexpr double two3= (2/3);
+    static constexpr double four3= (4/3);
     static const double root23;
 
 
