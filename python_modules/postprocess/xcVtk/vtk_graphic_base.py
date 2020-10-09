@@ -178,10 +178,10 @@ class CameraParameters(object):
         '''
         if(self.viewName!="Custom"):
           self.defineViewParametersFromViewName()
-        camera.SetViewUp(self.viewUpVc[0],self.viewUpVc[1],self.viewUpVc[2])
-        camera.SetPosition(self.posCVc[0],self.posCVc[1],self.posCVc[2])
-        camera.SetParallelProjection(1)
-        camera.Zoom(self.zoom)
+        vtkCamera.SetViewUp(self.viewUpVc[0],self.viewUpVc[1],self.viewUpVc[2])
+        vtkCamera.SetPosition(self.posCVc[0],self.posCVc[1],self.posCVc[2])
+        vtkCamera.SetParallelProjection(1)
+        vtkCamera.Zoom(self.zoom)
 
 class DisplaySettings(object):
     ''' Provides the variables to define the output device.
