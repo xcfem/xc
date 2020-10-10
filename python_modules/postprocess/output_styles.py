@@ -122,7 +122,7 @@ class OutputStyle(object):
         elif(itemToDisp.startswith('sigma_')):
             fConvUnits= self.getPressureUnitsScaleFactor()
             unitDescription= self.getPressureUnitsDescription()
-        elif(itemToDisp.endswith('Stress')):
+        elif(itemToDisp.endswith('stress')):
             fConvUnits= self.getPressureUnitsScaleFactor()
             unitDescription= self.getPressureUnitsDescription()
         elif(itemToDisp.startswith('epsilon_')):
