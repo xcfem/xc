@@ -48,6 +48,9 @@ const double elem_warning_area= 1e-6; // If area smaller than this trig a warnin
 //
 //! @ingroup PlaneElements
 //! @brief Base class for plane elements.
+//! @details
+//! @tparam NNODES number of nodes.
+//! @tparam PhysProp material properties.
 template <int NNODES,class PhysProp>
 class PlaneElement: public ElemWithMaterial<NNODES, PhysProp>
   {
@@ -55,12 +58,13 @@ class PlaneElement: public ElemWithMaterial<NNODES, PhysProp>
     mutable std::vector<double> tributaryAreas;
   public:
     PlaneElement(int tag, int classTag,const PhysProp &);
-    void checkElem(void);
+    virtual void checkElem(void);
     void setDomain(Domain *theDomain);
 
     virtual Polygon3d getPolygon(bool initialGeometry= true) const;
-    bool clockwise(bool initialGeometry= true) const;
-    bool counter_clockwise(bool initialGeometry= true) const;
+    bool clockwise(const Pos3d &, bool initialGeometry= true) const;
+    bool counterclockwise(const Pos3d &, bool initialGeometry= true) const;
+    std::string orientation(const Pos3d &, bool initialGeometry= true) const;
     virtual Segment3d getSide(const size_t &i,bool initialGeometry= true) const;
     double getMaximumCornerAngle(bool initialGeometry= true) const;
     Pos3d getCenterOfMassPosition(bool initialGeometry= true) const;
@@ -79,12 +83,16 @@ class PlaneElement: public ElemWithMaterial<NNODES, PhysProp>
   };
 
 //! @brief Constructor.
+//! @tparam NNODES number of nodes.
+//! @tparam PhysProp material properties.
 template <int NNODES,class PhysProp>
 XC::PlaneElement<NNODES, PhysProp>::PlaneElement(int tag,int classTag,const PhysProp &physProp)
   :ElemWithMaterial<NNODES, PhysProp>(tag,classTag,physProp), tributaryAreas(NNODES,0.0)
   {}
 
 //! @brief Sets nodes and checks the element.
+//! @tparam NNODES number of nodes.
+//! @tparam PhysProp material properties.
 template <int NNODES,class PhysProp>
 void XC::PlaneElement<NNODES, PhysProp>::checkElem(void)
   {
@@ -107,12 +115,12 @@ void XC::PlaneElement<NNODES, PhysProp>::checkElem(void)
 	      std::clog << "," << *i;
             std::clog << "] has a very little area (" << area << ").\n";
           }
-        if(this->clockwise())
-	  { this->getNodePtrs().reverse(); }
       }
   }
 
 //! @brief Sets the element domain.
+//! @tparam NNODES number of nodes.
+//! @tparam PhysProp material properties.
 template <int NNODES,class PhysProp>
 void XC::PlaneElement<NNODES, PhysProp>::setDomain(Domain *theDomain)
   {
@@ -125,28 +133,38 @@ void XC::PlaneElement<NNODES, PhysProp>::setDomain(Domain *theDomain)
   }
 
 //! @brief Return the position of the element centroid.
+//! @tparam NNODES number of nodes.
+//! @tparam PhysProp material properties.
 template <int NNODES,class PhysProp>
 Pos3d XC::PlaneElement<NNODES, PhysProp>::getCenterOfMassPosition(bool initialGeometry) const
   { return getPolygon(initialGeometry).getCenterOfMass(); }
 
 //! @brief Return the element dimension (0, 1, 2 o3 3).
+//! @tparam NNODES number of nodes.
+//! @tparam PhysProp material properties.
 template <int NNODES,class PhysProp>
 size_t XC::PlaneElement<NNODES, PhysProp>::getDimension(void) const
   { return 2; }
 
 //! @brief Returns the perimeter of the element.
+//! @tparam NNODES number of nodes.
+//! @tparam PhysProp material properties.
 template <int NNODES,class PhysProp>
 double XC::PlaneElement<NNODES, PhysProp>::getPerimeter(bool initialGeometry) const
   { return getPolygon(initialGeometry).getPerimeter(); }
 
 //! @brief Returns element area.
 //!
+//! @tparam NNODES number of nodes.
+//! @tparam PhysProp material properties.
 //! @param initialGeometry: if true returns the area of the undeformed geometry.
 template <int NNODES,class PhysProp>
 double XC::PlaneElement<NNODES, PhysProp>::getArea(bool initialGeometry) const
   { return getPolygon(initialGeometry).getArea(); }
 
 //! @brief Computes tributary areas that correspond to each node.
+//! @tparam NNODES number of nodes.
+//! @tparam PhysProp material properties.
 template <int NNODES,class PhysProp>
 void XC::PlaneElement<NNODES, PhysProp>::computeTributaryAreas(bool initialGeometry) const
   {
@@ -155,6 +173,8 @@ void XC::PlaneElement<NNODES, PhysProp>::computeTributaryAreas(bool initialGeome
   }
 
 //! @brief Returns tributary area for the node being passed as parameter.
+//! @tparam NNODES number of nodes.
+//! @tparam PhysProp material properties.
 template <int NNODES,class PhysProp>
 double XC::PlaneElement<NNODES, PhysProp>::getTributaryArea(const Node *nod) const
   {
@@ -166,6 +186,8 @@ double XC::PlaneElement<NNODES, PhysProp>::getTributaryArea(const Node *nod) con
   }
 
 //! @brief Returns the maximum corner angle quality parameter.
+//! @tparam NNODES number of nodes.
+//! @tparam PhysProp material properties.
 template <int NNODES,class PhysProp>
 double XC::PlaneElement<NNODES, PhysProp>::getMaximumCornerAngle(bool initialGeometry) const
   {
@@ -186,6 +208,8 @@ double XC::PlaneElement<NNODES, PhysProp>::getMaximumCornerAngle(bool initialGeo
   }
 
 //! @brief Returns the element contour as a polygon.
+//! @tparam NNODES number of nodes.
+//! @tparam PhysProp material properties.
 template <int NNODES,class PhysProp>
 Polygon3d XC::PlaneElement<NNODES, PhysProp>::getPolygon(bool initialGeometry) const
   {
@@ -221,22 +245,41 @@ Polygon3d XC::PlaneElement<NNODES, PhysProp>::getPolygon(bool initialGeometry) c
 
 //! @brief Return true if the nodes are clockwise ordered
 //! with respect to the element.
+//! @tparam NNODES number of nodes.
+//! @tparam PhysProp material properties.
 template <int NNODES,class PhysProp>
-bool XC::PlaneElement<NNODES, PhysProp>::clockwise(bool initialGeometry) const
+bool XC::PlaneElement<NNODES, PhysProp>::clockwise(const Pos3d &vPoint, bool initialGeometry) const
   {
-    const Polygon3d plg= this->getPolygon();
-    return plg.clockwise();
+    const Polygon3d plg= this->getPolygon(initialGeometry);
+    return plg.clockwise(vPoint);
   }
   
-//! @brief Return true if the nodes are counter-clockwise ordered
+//! @brief Return true if the nodes are counterclockwise ordered
 //! with respect to the element.
+//! @tparam NNODES number of nodes.
+//! @tparam PhysProp material properties.
 template <int NNODES,class PhysProp>
-bool XC::PlaneElement<NNODES, PhysProp>::counter_clockwise(bool initialGeometry) const
-  { return !this->clockwise(); }
+bool XC::PlaneElement<NNODES, PhysProp>::counterclockwise(const Pos3d &vPoint, bool initialGeometry) const
+{ return !this->clockwise(vPoint, initialGeometry); }
+
+//! @brief Return the orientation of the element
+//! (clockwise or counterclockwise).
+//! @tparam NNODES number of nodes.
+//! @tparam PhysProp material properties.
+template <int NNODES,class PhysProp>
+std::string XC::PlaneElement<NNODES, PhysProp>::orientation(const Pos3d &vPoint, bool initialGeometry) const
+  {
+    std::string retval= "counterclockwise";
+    if(this->clockwise(vPoint, initialGeometry))
+      { retval= "clockwise"; }
+    return retval;
+  }
 
 
 //! @brief Returns a lado of the element. 
 // Redefine for elements with more than two nodes by face.
+//! @tparam NNODES number of nodes.
+//! @tparam PhysProp material properties.
 template <int NNODES,class PhysProp>
 Segment3d XC::PlaneElement<NNODES, PhysProp>::getSide(const size_t &i,bool initialGeometry) const
   {
@@ -256,24 +299,32 @@ Segment3d XC::PlaneElement<NNODES, PhysProp>::getSide(const size_t &i,bool initi
 
 //! @brief Returns the squared distance from the element to the point
 //! being passed as parameter.
+//! @tparam NNODES number of nodes.
+//! @tparam PhysProp material properties.
 template <int NNODES,class PhysProp>
 double XC::PlaneElement<NNODES, PhysProp>::getDist2(const Pos2d &p,bool initialGeometry) const
   { return getDist2(To3dXY2d(p),initialGeometry); }
 
 //! @brief Return the distance from the element to the point
 //! being passed as parameter.
+//! @tparam NNODES number of nodes.
+//! @tparam PhysProp material properties.
 template <int NNODES,class PhysProp>
 double XC::PlaneElement<NNODES, PhysProp>::getDist(const Pos2d &p,bool initialGeometry) const
   { return getDist(To3dXY2d(p),initialGeometry); }
 
 //! @brief Returns the squared distance from the element to the point
 //! being passed as parameter.
+//! @tparam NNODES number of nodes.
+//! @tparam PhysProp material properties.
 template <int NNODES,class PhysProp>
 double XC::PlaneElement<NNODES, PhysProp>::getDist2(const Pos3d &p,bool initialGeometry) const
   { return getPolygon(initialGeometry).dist2(p); }
 
 //! @brief Return the distance from the element to the point
 //! being passed as parameter.
+//! @tparam NNODES number of nodes.
+//! @tparam PhysProp material properties.
 template <int NNODES,class PhysProp>
 double XC::PlaneElement<NNODES, PhysProp>::getDist(const Pos3d &p,bool initialGeometry) const
   { return getPolygon(initialGeometry).dist(p); }
