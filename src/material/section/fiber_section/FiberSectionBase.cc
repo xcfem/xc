@@ -618,7 +618,7 @@ void XC::FiberSectionBase::getInteractionDiagramPointsForTheta(NMyMzPointCloud &
       {
         //Domains 1 and 2
         Pos3d P1= pivots.getAPivot(); //Pivot.
-        Pos3d P2= P1+100.0*cp.GetK(); //Bending around local z axis.
+        Pos3d P2= P1+100.0*cp.getKVector(); //Bending around local z axis.
         Pos3d P3;
         DeformationPlane def;
         const double inc_eps_B= diag_data.getIncEps();
@@ -631,7 +631,7 @@ void XC::FiberSectionBase::getInteractionDiagramPointsForTheta(NMyMzPointCloud &
           }
         //Domains 3 and 4
         P1= pivots.getBPivot(); //Pivot
-        P2= P1+100.0*cp.GetK(); 
+        P2= P1+100.0*cp.getKVector(); 
         const double inc_eps_A= diag_data.getIncEps();
         for(double e= eps_agot_A;e>=0.0;e-=inc_eps_A)
           {
@@ -657,7 +657,7 @@ void XC::FiberSectionBase::getInteractionDiagramPointsForTheta(NMyMzPointCloud &
           }
         //Domain 5
         P1= pivots.getCPivot(); //Pivot
-        P2= P1+100.0*cp.GetK(); 
+        P2= P1+100.0*cp.getKVector(); 
         const double eps_agot_C= diag_data.getPivotsUltimateStrains().getUltimateStrainCPivot();
         const double inc_eps_D= diag_data.getIncEps();
         for(double e= 0.0;e>=eps_agot_C;e-=inc_eps_D)

@@ -675,12 +675,12 @@ XC::Matrix XC::Element1D::getLocalAxes(bool initialGeometry) const
         const Pos3d p0= theNodes[0]->getCurrentPosition3d(factor);
         const Pos3d p1= theNodes[1]->getCurrentPosition3d(factor);
 	const Rect3d3dCooSys sc(p0,p1);
-	const Vector3d i= sc.GetI();
+	const Vector3d i= sc.getIVector();
 	retval= Matrix(3,3);
 	retval(0,0)= i.x(); retval(0,1)= i.y(); retval(0,2)= i.z();
-	const Vector3d j= sc.GetJ();
+	const Vector3d j= sc.getJVector();
 	retval(1,0)= j.x(); retval(1,1)= j.y(); retval(1,2)= j.z();
-	const Vector3d k= sc.GetK();
+	const Vector3d k= sc.getKVector();
 	retval(2,0)= k.x(); retval(2,1)= k.y(); retval(2,2)= k.z();
       }
     return retval;

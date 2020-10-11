@@ -32,17 +32,17 @@
 
 //! @brief Return the $\vec{i}$ unit vector expressed in the global coordinate
 //! system for the position passed as parameter.
-Vector3d XC::ReferenceFrame::GetI(const Pos3d &p) const
+Vector3d XC::ReferenceFrame::getIVector(const Pos3d &p) const
   { return getAxisVDir(1,p); }
 
 //! @brief Return the $\vec{j}$ unit vector expressed in the global coordinate
 //! system for the position being passed as parameter.
-Vector3d XC::ReferenceFrame::GetJ(const Pos3d &p) const
+Vector3d XC::ReferenceFrame::getJVector(const Pos3d &p) const
   { return getAxisVDir(2,p); }
 
 //! @brief Return the $\vec{k}$ unit vector expressed in the global coordinate
 //! system for the position being passed as parameter.
-Vector3d XC::ReferenceFrame::GetK(const Pos3d &p) const
+Vector3d XC::ReferenceFrame::getKVector(const Pos3d &p) const
   { return getAxisVDir(3,p); }
 
 

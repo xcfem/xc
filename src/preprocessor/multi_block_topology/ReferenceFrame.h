@@ -60,9 +60,9 @@ class ReferenceFrame: public EntMdlrBase
     //! @brief Returns the i-th axis unit vector
     //! for the position being passed as parameter.
     virtual Vector3d getAxisVDir(const size_t &,const Pos3d &) const= 0;
-    Vector3d GetI(const Pos3d &) const;
-    Vector3d GetJ(const Pos3d &) const;
-    Vector3d GetK(const Pos3d &) const;
+    Vector3d getIVector(const Pos3d &) const;
+    Vector3d getJVector(const Pos3d &) const;
+    Vector3d getKVector(const Pos3d &) const;
 
     //! @brief Return the global coordinates of point p.
     virtual Pos3d GetPosGlobal(const Pos3d &p) const= 0;

@@ -44,7 +44,7 @@
 #include "xc_utils/src/geom/d2/HalfPlane2d.h"
 #include "utility/actor/actor/MovableMatrix.h"
 #include "utility/actor/actor/MatrixCommMetaData.h"
-#include "xc_utils/src/geom/sis_ref/PrincipalAxesOfInertia2D.h"
+#include "xc_utils/src/geom/ref_sys/PrincipalAxesOfInertia2D.h"
 #include "xc_utils/src/utils/misc_utils/inertia.h"
 
 //! @brief Constructor.

@@ -48,7 +48,7 @@ class QuadBase4N: public PlaneElement<4,PhysProp>
   protected:
     ElemPtrArray3d put_on_mesh(const NodePtrArray3d &,meshing_dir dm) const;
   public:
-    QuadBase4N(int classTag,const PhysProp &pp);
+    QuadBase4N(int classTag, const PhysProp &);
     QuadBase4N(int tag, int classTag,const PhysProp &);
     QuadBase4N(int tag, int classTag, int node1, int node2, int node3, int node4,const PhysProp &pp);
 
