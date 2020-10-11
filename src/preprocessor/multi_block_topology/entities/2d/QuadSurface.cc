@@ -94,7 +94,7 @@ void XC::QuadSurface::setPoints(const PntPtrArray &pntPtrs)
       {
         if(nColumns==2)
           {
-	    std::deque<Pnt *> loop= pntPtrs.getLoop({1,2},{1,2},true);
+	    std::deque<Pnt *> loop= pntPtrs.getLoop({1,2},{1,2});
             newLine(loop[0],loop[1]); // 3 +-----------+ 2
             newLine(loop[1],loop[2]); //  |            |
             newLine(loop[2],loop[3]); //  |            |
@@ -102,7 +102,7 @@ void XC::QuadSurface::setPoints(const PntPtrArray &pntPtrs)
           }
         else //nColumns>= 3
           {
-	    std::deque<Pnt *> loop= pntPtrs.getLoop({1,2},{1,2,3},true);
+	    std::deque<Pnt *> loop= pntPtrs.getLoop({1,2},{1,2,3});
             newLine(loop[0],loop[1],loop[2]); // 5 +-----+-----+ 3
             newLine(loop[2],loop[3]);         //   |     4     |
             newLine(loop[3],loop[4],loop[5]); //   |     1     |
@@ -113,7 +113,7 @@ void XC::QuadSurface::setPoints(const PntPtrArray &pntPtrs)
       {
         if(nColumns==2)
           {
-	    std::deque<Pnt *> loop= pntPtrs.getLoop({1,2,3},{1,2},true);
+	    std::deque<Pnt *> loop= pntPtrs.getLoop({1,2,3},{1,2});
 	                                       // 4 +--------+ 3
             newLine(loop[0],loop[1]);          //   |        |
             newLine(loop[1],loop[2],loop[3]);  // 5 +        + 2
@@ -122,7 +122,7 @@ void XC::QuadSurface::setPoints(const PntPtrArray &pntPtrs)
           }
         else //nColumns>= 3
           {
-	    std::deque<Pnt *> loop= pntPtrs.getLoop({1,2,3},{1,2,3},true);
+	    std::deque<Pnt *> loop= pntPtrs.getLoop({1,2,3},{1,2,3});
 	                                       // 6 +----+----+ 4
             newLine(loop[0],loop[1],loop[2]);  //   |    5    |
             newLine(loop[2],loop[3],loop[4]);  // 7 +         + 3

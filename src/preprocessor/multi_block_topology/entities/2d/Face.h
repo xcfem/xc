@@ -99,8 +99,9 @@ class Face: public CmbEdge
     Plane getPlane(void) const;
     Polyline3d getContour(void) const;
     Polygon3d getPolygon(void) const;
-    bool clockwise(bool initialGeometry= true) const;
-    bool counter_clockwise(bool initialGeometry= true) const;
+    bool clockwise(const Pos3d &) const;
+    bool counterclockwise(const Pos3d &) const;
+    std::string orientation(const Pos3d &) const;
     double getArea(void) const;
     //! @brief Return the bodies that touch this surface (neighbors).
     const std::set<const Body *> &getConnectedBodies(void) const

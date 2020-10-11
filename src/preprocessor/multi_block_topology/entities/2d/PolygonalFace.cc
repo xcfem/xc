@@ -145,12 +145,12 @@ void XC::PolygonalFace::setPoints(const ID &point_indexes)
 //! @brief Returns a vector in the direction of the local
 //! X axis.
 Vector3d XC::PolygonalFace::getIVector(void) const
-  { return ref.GetI(); }
+  { return ref.getIVector(); }
 
 //! @brief Returns a vector in the direction of the local
 //! Y axis.
 Vector3d XC::PolygonalFace::getJVector(void) const
-  { return ref.GetJ(); }
+  { return ref.getJVector(); }
 
 //! @brief Triggers node creation on the edges.
 void XC::PolygonalFace::create_line_nodes(void)
