@@ -64,9 +64,7 @@ class PntPtrArray: public PtrArrayBase<Pnt>
     void setPnt(const size_t &,const size_t &,const int &);
     Pnt *getPnt(const size_t &,const size_t &);
     
-    bool clockwise(bool initialGeometry= true) const;
-    bool counterclockwise(bool initialGeometry= true) const;
-    std::deque<Pnt *> getLoop(const std::vector<size_t> &rowIndexes, const std::vector<size_t> &columnIndexes, bool counterclockwise= true) const;
+    std::deque<Pnt *> getLoop(const std::vector<size_t> &rowIndexes, const std::vector<size_t> &columnIndexes) const;
 
     Pnt *findPoint(const size_t &);
     const Pnt *findPoint(const size_t &) const;

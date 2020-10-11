@@ -232,50 +232,11 @@ Pos3d XC::PntPtrArray::getCentroid(void) const
     return retval;
   }
 
-//! @brief Return true if the points are clockwise ordered
-//! with respect to the face.
-bool XC::PntPtrArray::clockwise(bool initialGeometry) const
-  {
-    bool retval= false;
-    const size_t nRows= getNumberOfRows(); //No. of point rows.
-    if(nRows<2)
-      {
-        std::cerr << getClassName() << "::" << __FUNCTION__
-		  << "; pointer matrix must have at least two rows."
-		  << std::endl;
-      }
-    const size_t nColumns= getNumberOfColumns(); //No. of point columns.
-    if(nColumns<2)
-      {
-        std::cerr << getClassName() << "::" << __FUNCTION__
-		  << "; pointer matrix must have at least two columns."
-		  << std::endl;
-      }
-    if(nRows>=2 && nColumns>=2)
-      {
-        const Pos3d p1= (*this)(1,1)->GetPos();
-        const Pos3d p2= (*this)(1,2)->GetPos();
-        const Pos3d p3= (*this)(2,2)->GetPos();
-        const Pos3d p4= (*this)(2,1)->GetPos();
-	Polygon3d plg(p1,p2,p3);
-	plg.push_back(p4);
-	retval= plg.clockwise();
-      }
-    return retval;
-  }
-
-//! @brief Return true if the nodes are counter-clockwise ordered
-//! with respect to the element.
-bool XC::PntPtrArray::counterclockwise(bool initialGeometry) const
-  { return !clockwise(); }
-
 //! @brief Return a loop passing through the contour defined by the indexes.
 //!
 //! @param rowIndexes: row indexes.
 //! @param colIndexes: column indexes.
-//! @param counterclockwise: make the resulting contour be counterclockwise
-//!                          oriented.
-std::deque<XC::Pnt *> XC::PntPtrArray::getLoop(const std::vector<size_t> &rowIndexes, const std::vector<size_t> &columnIndexes, bool counterclockwise) const
+std::deque<XC::Pnt *> XC::PntPtrArray::getLoop(const std::vector<size_t> &rowIndexes, const std::vector<size_t> &columnIndexes) const
   {
     std::deque<Pnt *> retval;
     const size_t nRows= rowIndexes.size();
