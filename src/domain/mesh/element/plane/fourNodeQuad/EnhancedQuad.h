@@ -49,7 +49,7 @@
 // $Date: 2003/02/14 23:01:10 $
 // $Source: /usr/local/cvs/OpenSees/SRC/element/fourNodeQuad/EnhancedQuad.h,v $
                                                                         
-#include "domain/mesh/element/plane/QuadBase4N.h"
+#include "domain/mesh/element/plane/SolidMech4N.h"
 #include "domain/mesh/element/utils/physical_properties/SolidMech2D.h"
 #include <utility/matrix/Vector.h>
 #include <utility/matrix/Matrix.h>
@@ -59,12 +59,11 @@ namespace XC {
 //
 //! @brief Four-node quadrilateral element, which uses a
 //! bilinear isoparametric formulation with enhanced strain modes.
-class EnhancedQuad: public QuadBase4N<SolidMech2D>
+class EnhancedQuad: public SolidMech4N
   {
   private:
 
     mutable Vector alpha; //!< enhanced strain parameters
-    mutable Matrix *Ki;
 
     //static data
     static Matrix stiff;
@@ -119,13 +118,11 @@ class EnhancedQuad: public QuadBase4N<SolidMech2D>
     static void shape2d( double ss, double tt, const double x[2][4], double shp[3][4], double &xsj );
 
 
-    bool check_material_type(const std::string &type) const;
   protected:
     int sendData(Communicator &);
     int recvData(const Communicator &);
   public:
-    EnhancedQuad(void);
-    EnhancedQuad(int tag,const NDMaterial *ptr_mat);
+    EnhancedQuad(int tag= 0,const NDMaterial *ptr_mat= nullptr);
     //full constructor
     EnhancedQuad(int tag, int nd1, int nd2, int nd3, int nd4, NDMaterial &, const std::string &);
 
@@ -133,8 +130,7 @@ class EnhancedQuad: public QuadBase4N<SolidMech2D>
     //destructor
     virtual ~EnhancedQuad(void);
 
-    //set domain
-    void setDomain(Domain *);
+    void setDomain(Domain *); //set domain
 
     //return number of dofs
     int getNumDOF(void) const;

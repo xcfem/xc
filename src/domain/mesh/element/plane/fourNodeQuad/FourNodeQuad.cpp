@@ -75,9 +75,14 @@ XC::Vector XC::FourNodeQuad::P(8);
 double XC::FourNodeQuad::shp[3][4]; //Values of shape functions.
 
 //! @brief Constructor.
+XC::FourNodeQuad::FourNodeQuad(int tag,const NDMaterial *ptr_mat)
+  :SolidMech4N(tag,ELE_TAG_FourNodeQuad,SolidMech2D(4,ptr_mat,1.0,0.0)), pressureLoad(8), pressure(0.0)
+  {load.reset(8);}
+
+//! @brief Constructor.
 //!
 //! @param nd1, nd2, nd3, nd3: four nodes defining element boundaries,
-//!                            input in counter-clockwise order around
+//!                            input in counterclockwise order around
 //!                            the element.
 //! @param t: element thickness.
 //! @param type: string representing material behavior. Valid options
@@ -88,21 +93,10 @@ double XC::FourNodeQuad::shp[3][4]; //Values of shape functions.
 XC::FourNodeQuad::FourNodeQuad(int tag, int nd1, int nd2, int nd3, int nd4,
                                NDMaterial &m, const std::string &type, double t,
                            double p, double r, const BodyForces2D &bForces)
-  :QuadBase4N<SolidMech2D>(tag,ELE_TAG_FourNodeQuad,nd1,nd2,nd3,nd4,SolidMech2D(4,m,type,t,r)), bf(bForces), pressureLoad(8), pressure(p), Ki(nullptr)
+  : SolidMech4N(tag,ELE_TAG_FourNodeQuad,nd1,nd2,nd3,nd4,SolidMech2D(4,m,type,t,r)), bf(bForces), pressureLoad(8), pressure(p)
   {
     load.reset(8);
   }
-
-//! @brief Constructor.
-XC::FourNodeQuad::FourNodeQuad(int tag,const NDMaterial *ptr_mat)
-  :QuadBase4N<SolidMech2D>(tag,ELE_TAG_FourNodeQuad,SolidMech2D(4,ptr_mat,1.0,0.0)), pressureLoad(8), pressure(0.0), Ki(nullptr)
-  {load.reset(8);}
-
-//! @brief Constructor.
-XC::FourNodeQuad::FourNodeQuad(void)
-  :QuadBase4N<SolidMech2D>(ELE_TAG_FourNodeQuad,SolidMech2D(4,nullptr,1.0,0.0)),
-   pressureLoad(8), pressure(0.0), Ki(nullptr)
-  {load.reset(8);}
 
 //! @brief Virtual constructor.
 XC::Element* XC::FourNodeQuad::getCopy(void) const
@@ -110,17 +104,7 @@ XC::Element* XC::FourNodeQuad::getCopy(void) const
 
 //! @brief Destructor.
 XC::FourNodeQuad::~FourNodeQuad(void)
-  {
-    if(Ki)
-      {
-        delete Ki;
-        Ki= nullptr;
-      }
-  }
-
-//! @brief Checks the material type.
-bool XC::FourNodeQuad::check_material_type(const std::string &type) const
-  { return physicalProperties.check_material_elast_plana(type); }
+  {}
 
 //! @brief Return the number of element DOFs.
 int XC::FourNodeQuad::getNumDOF(void) const
@@ -129,7 +113,7 @@ int XC::FourNodeQuad::getNumDOF(void) const
 //! @brief Sets domain pointer and computes the consistent load vector due to pressure.
 void XC::FourNodeQuad::setDomain(Domain *theDomain)
   {
-    QuadBase4N<SolidMech2D>::setDomain(theDomain);
+    SolidMech4N::setDomain(theDomain);
 
     if(!theNodes.checkNumDOF(2,getTag()))
       std::cerr << theNodes << std::endl;
@@ -141,10 +125,10 @@ void XC::FourNodeQuad::setDomain(Domain *theDomain)
 //! @brief Update the values of the state variables.
 int XC::FourNodeQuad::update(void)
   {
-    const Vector &disp1 = theNodes[0]->getTrialDisp();
-    const Vector &disp2 = theNodes[1]->getTrialDisp();
-    const Vector &disp3 = theNodes[2]->getTrialDisp();
-    const Vector &disp4 = theNodes[3]->getTrialDisp();
+    const Vector &disp1= theNodes[0]->getTrialDisp();
+    const Vector &disp2= theNodes[1]->getTrialDisp();
+    const Vector &disp3= theNodes[2]->getTrialDisp();
+    const Vector &disp4= theNodes[3]->getTrialDisp();
 
     static double u[2][4];
 
@@ -250,59 +234,58 @@ const XC::Matrix &XC::FourNodeQuad::getTangentStiff(void) const
 //! @brief Return the initial tangent stiffness matrix.
 const XC::Matrix &XC::FourNodeQuad::getInitialStiff(void) const
   {
-    if(!Ki)
+    if(Ki.isEmpty())
       {
+	K.Zero();
 
-    K.Zero();
+	double dvol;
+	double DB[3][2];
 
-    double dvol;
-    double DB[3][2];
+	// Loop over the integration points
+	for(size_t i= 0;i<physicalProperties.size();i++)
+	  {
+	    // Determine Jacobian for this integration point
+	    const GaussPoint &gp= getGaussModel().getGaussPoints()[i];
+	    dvol= this->shapeFunction(gp);
+	    dvol*= (physicalProperties.getThickness()*gp.weight());
+	    if(dvol<0.0)
+	      std::cerr << getClassName() << "::" << __FUNCTION__
+			<< "; negative Jacobian-determinant ("
+			<< "dvol= " << dvol << ")"
+			<< std::endl;
 
-    // Loop over the integration points
-    for(size_t i= 0;i<physicalProperties.size();i++)
-      {
-        // Determine Jacobian for this integration point
-        const GaussPoint &gp= getGaussModel().getGaussPoints()[i];
-        dvol= this->shapeFunction(gp);
-        dvol*= (physicalProperties.getThickness()*gp.weight());
-	if(dvol<0.0)
-	  std::cerr << getClassName() << "::" << __FUNCTION__
-	            << "; negative Jacobian-determinant ("
-	            << "dvol= " << dvol << ")"
-	            << std::endl;
+	    // Get the material tangent
+	    const XC::Matrix &D = physicalProperties[i]->getInitialTangent();
 
-        // Get the material tangent
-        const XC::Matrix &D = physicalProperties[i]->getInitialTangent();
+	    double D00 = D(0,0); double D01 = D(0,1); double D02 = D(0,2);
+	    double D10 = D(1,0); double D11 = D(1,1); double D12 = D(1,2);
+	    double D20 = D(2,0); double D21 = D(2,1); double D22 = D(2,2);
 
-        double D00 = D(0,0); double D01 = D(0,1); double D02 = D(0,2);
-        double D10 = D(1,0); double D11 = D(1,1); double D12 = D(1,2);
-        double D20 = D(2,0); double D21 = D(2,1); double D22 = D(2,2);
+	    // Perform numerical integration
+	    //K = K + (B^ D * B) * intWt(i)*intWt(j) * detJ;
+	    //K.addMatrixTripleProduct(1.0, B, D, intWt(i)*intWt(j)*detJ);
+	    for(int beta= 0,ib= 0,colIb= 0,colIbP1= 8;beta<4;beta++,ib+=2,colIb+=16,colIbP1+=16)
+	      {
+		for(int alpha= 0,ia = 0;alpha<4;alpha++,ia += 2)
+		  {
+		    DB[0][0] = dvol * (D00 * shp[0][beta] + D02 * shp[1][beta]);
+		    DB[1][0] = dvol * (D10 * shp[0][beta] + D12 * shp[1][beta]);
+		    DB[2][0] = dvol * (D20 * shp[0][beta] + D22 * shp[1][beta]);
+		    DB[0][1] = dvol * (D01 * shp[1][beta] + D02 * shp[0][beta]);
+		    DB[1][1] = dvol * (D11 * shp[1][beta] + D12 * shp[0][beta]);
+		    DB[2][1] = dvol * (D21 * shp[1][beta] + D22 * shp[0][beta]);
 
-        // Perform numerical integration
-        //K = K + (B^ D * B) * intWt(i)*intWt(j) * detJ;
-        //K.addMatrixTripleProduct(1.0, B, D, intWt(i)*intWt(j)*detJ);
-        for(int beta= 0,ib= 0,colIb= 0,colIbP1= 8;beta<4;beta++,ib+=2,colIb+=16,colIbP1+=16)
-          {
-            for(int alpha= 0,ia = 0;alpha<4;alpha++,ia += 2)
-              {
-                DB[0][0] = dvol * (D00 * shp[0][beta] + D02 * shp[1][beta]);
-                DB[1][0] = dvol * (D10 * shp[0][beta] + D12 * shp[1][beta]);
-                DB[2][0] = dvol * (D20 * shp[0][beta] + D22 * shp[1][beta]);
-                DB[0][1] = dvol * (D01 * shp[1][beta] + D02 * shp[0][beta]);
-                DB[1][1] = dvol * (D11 * shp[1][beta] + D12 * shp[0][beta]);
-                DB[2][1] = dvol * (D21 * shp[1][beta] + D22 * shp[0][beta]);
-
-                matrixData[colIb   +   ia] += shp[0][alpha]*DB[0][0] + shp[1][alpha]*DB[2][0];
-                matrixData[colIbP1 +   ia] += shp[0][alpha]*DB[0][1] + shp[1][alpha]*DB[2][1];
-                matrixData[colIb   + ia+1] += shp[1][alpha]*DB[1][0] + shp[0][alpha]*DB[2][0];
-                matrixData[colIbP1 + ia+1] += shp[1][alpha]*DB[1][1] + shp[0][alpha]*DB[2][1];
-              }
-          }
-       }
-    Ki= new Matrix(K);
+		    matrixData[colIb   +   ia] += shp[0][alpha]*DB[0][0] + shp[1][alpha]*DB[2][0];
+		    matrixData[colIbP1 +   ia] += shp[0][alpha]*DB[0][1] + shp[1][alpha]*DB[2][1];
+		    matrixData[colIb   + ia+1] += shp[1][alpha]*DB[1][0] + shp[0][alpha]*DB[2][0];
+		    matrixData[colIbP1 + ia+1] += shp[1][alpha]*DB[1][1] + shp[0][alpha]*DB[2][1];
+		  }
+	      }
+	   }
+	Ki= Matrix(K);
       }
     if(isDead())
-      K*=dead_srf;
+      K*= dead_srf;
     return K;
   }
 
@@ -342,7 +325,7 @@ const XC::Matrix &XC::FourNodeQuad::getMass(void) const
           }
       }
     if(isDead())
-      K*=dead_srf;
+      K*= dead_srf;
     return K;
   }
 
@@ -512,20 +495,18 @@ const XC::Vector &XC::FourNodeQuad::getResistingForceIncInertia(void) const
 //! @brief Send object members through the communicator argument.
 int XC::FourNodeQuad::sendData(Communicator &comm)
   {
-    int res= QuadBase4N<SolidMech2D>::sendData(comm);
-    res+=comm.sendDoubles(bf[0],bf[1],pressure,getDbTagData(),CommMetaData(8));
-    res+= comm.sendVector(pressureLoad,getDbTagData(),CommMetaData(9));
-    res+= comm.sendMatrixPtr(Ki,getDbTagData(),MatrixCommMetaData(10,11,12,13));
+    int res= SolidMech4N::sendData(comm);
+    res+=comm.sendDoubles(bf[0],bf[1],pressure,getDbTagData(),CommMetaData(9));
+    res+= comm.sendVector(pressureLoad,getDbTagData(),CommMetaData(10));
     return res;
   }
 
 //! @brief Receives object members through the communicator argument.
 int XC::FourNodeQuad::recvData(const Communicator &comm)
   {
-    int res= QuadBase4N<SolidMech2D>::recvData(comm);
-    res+=comm.receiveDoubles(bf[0],bf[1],pressure,getDbTagData(),CommMetaData(8));
-    res+= comm.receiveVector(pressureLoad,getDbTagData(),CommMetaData(9));
-    Ki= comm.receiveMatrixPtr(Ki,getDbTagData(),MatrixCommMetaData(10,11,12,13));
+    int res= SolidMech4N::recvData(comm);
+    res+=comm.receiveDoubles(bf[0],bf[1],pressure,getDbTagData(),CommMetaData(9));
+    res+= comm.receiveVector(pressureLoad,getDbTagData(),CommMetaData(10));
     return res;
   }
 
@@ -534,7 +515,7 @@ int XC::FourNodeQuad::sendSelf(Communicator &comm)
   {
     setDbTag(comm);
     const int dataTag= getDbTag();
-    inicComm(14);
+    inicComm(11);
     int res= sendData(comm);
 
     res+= comm.sendIdData(getDbTagData(),dataTag);
@@ -547,7 +528,7 @@ int XC::FourNodeQuad::sendSelf(Communicator &comm)
 //! @brief Receives object through the communicator argument.
 int XC::FourNodeQuad::recvSelf(const Communicator &comm)
   {
-    inicComm(14);
+    inicComm(11);
     const int dataTag= getDbTag();
     int res= comm.receiveIdData(getDbTagData(),dataTag);
 
