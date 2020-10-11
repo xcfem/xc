@@ -25,6 +25,7 @@
 class_<XC::Face, XC::Face *,bases<XC::CmbEdge>, boost::noncopyable >("Face", no_init)
   .add_property("nDivI", &XC::Face::NDivI, &XC::Face::setNDivI,"get/set the number of divisions of the even sides of the surface.")
   .add_property("nDivJ", &XC::Face::NDivJ, &XC::Face::setNDivJ,"get/set the number of divisions of the odd sides of the surface.")
+  .def("orientation", &XC::Face::orientation, "Return the orientation of the face.")
   .def("getContour",&XC::Face::getContour,"Return the face contour as a 3D polyline.")
   .def("getArea",&XC::Face::getArea,"Return the face area.")
   .def("setElemSizeI",&XC::Face::SetElemSizeI,"setElementSizeI(sz) set the element size on the even sides of the surface.")
