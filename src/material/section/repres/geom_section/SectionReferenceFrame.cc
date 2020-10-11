@@ -32,11 +32,11 @@
 
 //! @brief Returns the $\vec{i}$ unit vector expressed in global coordinates
 //! for the position being passed as parameter.
-Vector2d XC::SectionReferenceFrame::GetI(const Pos2d &p) const
+Vector2d XC::SectionReferenceFrame::getIVector(const Pos2d &p) const
   { return getAxisVDir(1,p); }
 
 //! @brief Returns the $\vec{j}$ unit vector expressed in global coordinates
 //! for the position being passed as parameter.
-Vector2d XC::SectionReferenceFrame::GetJ(const Pos2d &p) const
+Vector2d XC::SectionReferenceFrame::getJVector(const Pos2d &p) const
   { return getAxisVDir(2,p); }
 

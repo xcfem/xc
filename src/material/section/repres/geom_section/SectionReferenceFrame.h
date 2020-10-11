@@ -55,8 +55,8 @@ class SectionReferenceFrame: public EntGeomSection
     //! expressed in global coordinates 
     //! for the position being passed as parameter.
     virtual Vector2d getAxisVDir(const size_t &,const Pos2d &) const= 0;
-    Vector2d GetI(const Pos2d &) const;
-    Vector2d GetJ(const Pos2d &) const;
+    Vector2d getIVector(const Pos2d &) const;
+    Vector2d getJVector(const Pos2d &) const;
 
     //! @brief Return the position of point p expressed in local coordinates
     //! expresada en global coordinates.

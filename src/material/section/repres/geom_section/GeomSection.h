@@ -65,7 +65,7 @@ class GeomSection: public SectionMassProperties
   {
   public:
 
-    typedef std::map<size_t,SectionReferenceFrame *> lst_sis_ref;//!< reference systems container.
+    typedef std::map<size_t,SectionReferenceFrame *> lst_ref_sys;//!< reference systems container.
     typedef std::map<size_t,Spot *> lst_spots; //!< point container.
     typedef std::map<size_t,Axis *> axes_container; //!< line container.
 
@@ -75,8 +75,8 @@ class GeomSection: public SectionMassProperties
     RegionContainer regions; //!< Region container.
     ListReinfLayer reinforcement_layers; //!< Rebar layers container.
 
-    lst_sis_ref reference_systems; //!< Spatial reference systems.
-    size_t tag_sis_ref; //!< Default identifier for next spatial reference system.
+    lst_ref_sys reference_systems; //!< Spatial reference systems.
+    size_t tag_ref_sys; //!< Default identifier for next spatial reference system.
 
     lst_spots spots; //!< Point container.
     size_t tag_spot; //!< Default identifier for next point.
@@ -89,15 +89,15 @@ class GeomSection: public SectionMassProperties
     inline virtual ~GeomSection(void) {}
 
     inline int getReferenceFrameTag(void) const
-      { return tag_sis_ref; }
+      { return tag_ref_sys; }
     void setReferenceFrameTag(int i)
-      { tag_sis_ref= i; }
+      { tag_ref_sys= i; }
     SectionReferenceFrame *get_reference_system(const size_t &id);
     const SectionReferenceFrame *get_reference_system(const size_t &id) const;
     inline SectionReferenceFrame *current_reference_system(void)
-      { return get_reference_system(tag_sis_ref); }
+      { return get_reference_system(tag_ref_sys); }
     const SectionReferenceFrame *current_reference_system(void) const
-      { return get_reference_system(tag_sis_ref); }
+      { return get_reference_system(tag_ref_sys); }
     SectionReferenceFrame *createReferenceFrame(const std::string &); 
 
     // Section edition functions

@@ -28,7 +28,7 @@
 
 #include <material/section/repres/CrossSectionProperties3d.h>
 #include "xc_utils/src/utils/misc_utils/inertia.h"
-#include "xc_utils/src/geom/sis_ref/PrincipalAxesOfInertia2D.h"
+#include "xc_utils/src/geom/ref_sys/PrincipalAxesOfInertia2D.h"
 #include <domain/mesh/element/utils/Information.h>
 
 #include <utility/matrix/Vector.h>
@@ -237,7 +237,7 @@ const XC::Matrix &XC::CrossSectionProperties3d::getInitialFlexibility6x6(void) c
   { return getSectionFlexibility6x6(); }
 
 
-//! @brief Couterclockwise rotation of the section by the angle being passed as parameter.
+//! @brief Counterclockwise rotation of the section by the angle being passed as parameter.
 void XC::CrossSectionProperties3d::rotate(const double &theta)
   {
     const double &iiy= Iy();

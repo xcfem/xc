@@ -46,7 +46,7 @@
 #include "xc_utils/src/geom/pos_vec/Dir2d.h"
 #include "xc_utils/src/geom/pos_vec/Vector2d.h"
 #include "xc_utils/src/geom/pos_vec/Pos2d.h"
-#include "xc_utils/src/geom/sis_ref/Ref2d2d.h"
+#include "xc_utils/src/geom/ref_sys/Ref2d2d.h"
 #include "xc_utils/src/geom/d2/2d_polygons/Polygon2d.h"
 #include "xc_utils/src/geom/d2/HalfPlane2d.h"
 #include "xc_utils/src/geom/d1/Segment2d.h"
@@ -54,7 +54,7 @@
 #include "boost/lexical_cast.hpp"
 
 XC::GeomSection::GeomSection(MaterialHandler *ml)
-  : SectionMassProperties(),material_handler(ml), regions(ml), reinforcement_layers(this,ml), tag_sis_ref(0),tag_spot(0) {}
+  : SectionMassProperties(),material_handler(ml), regions(ml), reinforcement_layers(this,ml), tag_ref_sys(0),tag_spot(0) {}
 
 //! @brief Returns a geometry that contains only the regions
 //! defined in this object.
@@ -91,7 +91,7 @@ XC::SectionReferenceFrame *XC::GeomSection::get_reference_system(const size_t &i
     SectionReferenceFrame *retval= nullptr;
     if(id>0) //0 is reserved for the universal coordinate system.
       {
-        lst_sis_ref::iterator i= reference_systems.find(id);
+        lst_ref_sys::iterator i= reference_systems.find(id);
         if(i!= reference_systems.end()) //Reference system exists.
         retval= (*i).second;
       }
@@ -104,7 +104,7 @@ const XC::SectionReferenceFrame *XC::GeomSection::get_reference_system(const siz
     SectionReferenceFrame *retval= nullptr;
     if(id>0) //0 is reserved for the universal coordinate system.
       {
-        lst_sis_ref::const_iterator i= reference_systems.find(id);
+        lst_ref_sys::const_iterator i= reference_systems.find(id);
         if(i!= reference_systems.end()) //Reference system exists.
           retval= (*i).second;
       }
@@ -154,14 +154,14 @@ const XC::Axis *XC::GeomSection::find_axis(const size_t &id) const
 //! @brief Creates a new reference frame of the type being passed as parameter.
 XC::SectionReferenceFrame *XC::GeomSection::createReferenceFrame(const std::string &type)
   {
-    SectionReferenceFrame *retval= get_reference_system(tag_sis_ref);
+    SectionReferenceFrame *retval= get_reference_system(tag_ref_sys);
     if(!retval) //New reference system.
       {
         if((type == "cartesian") || (type == "cartesianas"))
           {
-            retval= new SectionCartesianReferenceFrame("r"+boost::lexical_cast<std::string>(tag_sis_ref),this);
-            reference_systems[tag_sis_ref]= retval;
-            tag_sis_ref++;
+            retval= new SectionCartesianReferenceFrame("r"+boost::lexical_cast<std::string>(tag_ref_sys),this);
+            reference_systems[tag_ref_sys]= retval;
+            tag_ref_sys++;
           }
         else
 	  std::cerr << getClassName() << __FUNCTION__
@@ -189,15 +189,15 @@ XC::Spot *XC::GeomSection::creaSpot(const Pos2d &p)
 XC::Spot *XC::GeomSection::newSpot(const Pos2d &p)
   {
     Pos2d trfP(p);
-    if(tag_sis_ref != 0) //Not the global coordinate system.
+    if(tag_ref_sys != 0) //Not the global coordinate system.
       {
-        SectionReferenceFrame *sr= get_reference_system(tag_sis_ref);
+        SectionReferenceFrame *sr= get_reference_system(tag_ref_sys);
         if(sr)
           trfP= sr->GetPosGlobal(p); //Pass to global coordinates.
         else
 	  std::cerr << getClassName() << "::" << __FUNCTION__
 		    << "; reference system with identifier: "
-		    << tag_sis_ref << " not found.\n";
+		    << tag_ref_sys << " not found.\n";
        }
     Spot *retval= creaSpot(trfP);
     return retval;

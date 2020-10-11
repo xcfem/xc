@@ -32,7 +32,7 @@
 #define SISREFSCCCARTESIANAS2D_H
 
 #include "SectionReferenceFrame.h"
-#include "xc_utils/src/geom/sis_ref/Ref2d2d.h"
+#include "xc_utils/src/geom/ref_sys/Ref2d2d.h"
 
 namespace XC {
 
