@@ -28,7 +28,7 @@
 
 #include "Face.h"
 #include "xc_utils/src/geom/pos_vec/Vector3d.h"
-#include "xc_utils/src/geom/sis_ref/Ref2d3d.h"
+#include "xc_utils/src/geom/ref_sys/Ref2d3d.h"
 #include "xc_utils/src/geom/d3/BND3d.h"
 #include "xc_utils/src/geom/d1/Polyline3d.h"
 #include "xc_utils/src/geom/d2/Triangle3d.h"
@@ -562,18 +562,28 @@ Polygon3d XC::Face::getPolygon(void) const
     return Polygon3d(contour);
   }
 
-//! @brief Return true if the points are clockwise ordered
-//! with respect to the face.
-bool XC::Face::clockwise(bool initialGeometry) const
+//! @brief Return true if the point list is oriented clockwise.
+//! @param vPoint: position of the point of view.
+bool XC::Face::clockwise(const Pos3d &vPoint) const
   {
     const Polygon3d plg= getPolygon();
-    return plg.clockwise();
+    return plg.clockwise(vPoint);
   }
 
-//! @brief Return true if the nodes are counter-clockwise ordered
+//! @brief Return the orientation of the face
+//! @param vPoint: position of the point of view.
+std::string XC::Face::orientation(const Pos3d &vPoint) const
+  {
+    std::string retval= "counterclockwise";
+    if(clockwise(vPoint))
+      { retval= "clockwise"; }
+    return retval;
+  }
+
+//! @brief Return true if the points are counter-clockwise ordered
 //! with respect to the element.
-bool XC::Face::counter_clockwise(bool initialGeometry) const
-  { return !clockwise(); }
+bool XC::Face::counterclockwise(const Pos3d &vPoint) const
+  { return !clockwise(vPoint); }
 
 //! @brief Returns a vector in the direction of the local
 //! Z axis.

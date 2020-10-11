@@ -67,7 +67,7 @@
 #include "xc_utils/src/geom/pos_vec/Pos3dArray.h"
 #include "xc_utils/src/geom/pos_vec/Vector2d.h"
 #include "xc_utils/src/geom/pos_vec/Vector3d.h"
-#include "xc_utils/src/geom/sis_ref/Ref3d3d.h"
+#include "xc_utils/src/geom/ref_sys/Ref3d3d.h"
 #include "utility/actor/actor/MovableMatrix.h"
 #include "xc_utils/src/matrices/giros.h"
 
