@@ -76,8 +76,11 @@ int XC::Paver::call_paving(const Ref2d3d &ref,const Polygon3d &extContour, const
   {
     int retval= 0;
     Polygon3d ext= extContour;
+    const Pos3d O= ext.getCenterOfMass();
+    const Vector3d K= ext.getKVector();
+    const Pos3d vPoint= O+10.0*K;
     nprm= 1;
-    if(ext.clockwise())
+    if(ext.clockwise(vPoint))
       ext.swap();
     nbnode= extContour.GetNumVertices();
     if(nbnode==0)
@@ -92,7 +95,7 @@ int XC::Paver::call_paving(const Ref2d3d &ref,const Polygon3d &extContour, const
 	for(std::deque<Polygon3d>::const_iterator i= intContours.begin(); i!= intContours.end(); i++)
 	  {
 	    Polygon3d tmp= *i;
-	    if(tmp.counterclockwise())
+	    if(tmp.counterclockwise(vPoint))
 	      { tmp.swap(); }
 	    const int nv= (*i).GetNumVertices();
 	    if(nv>0)
