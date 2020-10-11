@@ -122,7 +122,7 @@ class OutputStyle(object):
         elif(itemToDisp.startswith('sigma_')):
             fConvUnits= self.getPressureUnitsScaleFactor()
             unitDescription= self.getPressureUnitsDescription()
-        elif(itemToDisp.endswith('Stress')):
+        elif(itemToDisp.endswith('stress')):
             fConvUnits= self.getPressureUnitsScaleFactor()
             unitDescription= self.getPressureUnitsDescription()
         elif(itemToDisp.startswith('epsilon_')):
@@ -188,6 +188,7 @@ sp_capTexts={
     'getMaxSteelStress': "tensión máxima en la armadura",
     'SLS_frequentLoadsCrackControl': 'Comprobación ELS fisuración, casos de carga frecuentes',
     'SLS_quasiPermanentLoadsLoadsCrackControl': 'Comprobación ELS fisuración, casos de carga quasi-permanentes',
+    'vm_stress': 'tensión de Von Mises',
     
   }
 
@@ -231,7 +232,7 @@ en_capTexts={
     'MvRdz': 'reduced design moment resistance about Z (strong) axis for shear interaction',
     'MbRdz':'reduced design moment resistance about Z (strong) axis for lateral-torsional bucking',
     'chiLT': 'reduction factor for lateral-torsional buckling ',
-    
+    'vm_stress': 'Von Mises stress',
   }
 
 #Caption texts in French
@@ -277,5 +278,5 @@ fr_capTexts={
     'concreteLimitStress':'vérification du béton. Limites contraintes de compression',
     'concreteShearCF':'vérification du béton. Facteur de capacité effort tranchant',
     'shearLimit': 'vérification du béton. Limites effort tranchant',
-    
+    'vm_stress': 'contrainte de von Mises',    
   }
