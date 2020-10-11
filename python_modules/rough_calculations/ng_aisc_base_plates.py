@@ -390,9 +390,9 @@ class RectangularBasePlate(object):
         flangeThickness= self.steelShape.get('tf')
         return self.getFilletMaximumLeg(flangeThickness)
     
-    def getFlangeLegSize(self, factor= 0.75):
-        ''' Return the leg size of the gusset plate
-            with the flange.
+    def getFlangeWeldLegSize(self, factor= 0.75):
+        ''' Return the leg size of the welds that connect the gusset plate
+            to the flange.
         '''
         minFlangeThickness= self.getFlangeLegMinSize()
         maxFlangeThickness= self.getFlangeLegMaxSize()
@@ -412,8 +412,8 @@ class RectangularBasePlate(object):
         webThickness= self.steelShape.get('tw')
         return self.getFilletMaximumLeg(webThickness)
     
-    def getWebLegSize(self, factor= 0.6):
-        ''' Return the leg size of the gusset plate
+    def getWebWeldLegSize(self, factor= 0.6):
+        ''' Return the leg size of the weld that connects the gusset plate
             with the web.
         '''
         minWebThickness= self.getWebLegMinSize()
@@ -429,7 +429,7 @@ class RectangularBasePlate(object):
         outputFile.write('    width offset: '+str(self.offsetB*1000)+ ' mm\n')
         outputFile.write('    thickness: '+ str(self.t*1000)+ ' mm\n')
         outputFile.write('    base plate - column welds:\n')
-        outputFile.write('      with the flange(s): 2 x '+str(math.floor(self.getFlangeLegSize(0.3)*1000))+' mm (fillet weld leg size)\n')
-        outputFile.write('      with the web: 2 x '+str(math.floor(self.getWebLegSize()*1000))+' mm (fillet weld leg size)\n')
+        outputFile.write('      with the flange(s): 2 x '+str(math.floor(self.getFlangeWeldLegSize(0.3)*1000))+' mm (fillet weld leg size)\n')
+        outputFile.write('      with the web: 2 x '+str(math.floor(self.getWebWeldLegSize()*1000))+' mm (fillet weld leg size)\n')
         #outputFile.write('   area: '+ self.getArea()+ ' m2')
         self.anchorGroup.report(outputFile)

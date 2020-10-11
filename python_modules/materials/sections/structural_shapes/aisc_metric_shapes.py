@@ -486,16 +486,18 @@ class WShape(structural_steel.IShape):
 
         return retval
         
-    def getWeldBlockData(self, flangeLegSize, webLegSize, lbls= None):
+    def getWeldBlockData(self, flangeWeldLegSize, webWeldLegSize, lbls= None):
         ''' Return the lines corresponding to weld beads.
 
-        :param labels: labels for the created blocks.
+        :param flangeWeldLegSize: leg size for the weld to the flange.
+        :param webWeldLegSize: leg size for the weld to the web.
+        :param lbls: labels for the created blocks.
         '''
         retval= bte.BlockData()
 
         # Weld sizes.
-        flangeLegLabel= 'weld_leg_size_'+str(flangeLegSize)
-        webLegLabel= 'weld_leg_size_'+str(webLegSize)
+        flangeLegLabel= 'weld_leg_size_'+str(flangeWeldLegSize)
+        webLegLabel= 'weld_leg_size_'+str(webWeldLegSize)
         # Lines
         bottomFlange1= bte.BlockRecord(-1, 'line', [self.bottomFlangeAId[0],self.bottomFlangeAId[1]],labels= lbls+['bottom_flange1',flangeLegLabel], thk= None, matId= self.steelType.name)
         retval.appendBlock(bottomFlange1)
