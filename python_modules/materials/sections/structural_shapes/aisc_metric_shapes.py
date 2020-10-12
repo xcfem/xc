@@ -415,22 +415,54 @@ class WShape(structural_steel.IShape):
         p2= p0+extrusionVDir
         return geom.Plane3d(p0,p1,p2)
 
-    def getMidPoints(self, org, extrusionVDir):
-        ''' Return the points at the middle of the
-            plates.
-
-        :param org: origin point.
-        :param extrusionVDir: extrusion direction vector.
+    def getMidPoints(self):
+        ''' Return the point at the middle of the web
+            and the flange in local coordinates.
         '''
         halfB= self.get('b')/2.0
         halfH= self.h()/2.0
         tf= self.get('tf')
         tf2= tf/2.0 # Half flange thickness.
         # Base points (Down)
-        bottom= org.y-halfH+tf2
-        top= org.y+halfH-tf2
-        bottomFlangeDown= [geom.Pos3d(org.x-halfB,bottom, org.z), geom.Pos3d(org.x,bottom, org.z), geom.Pos3d(org.x+halfB,bottom, org.z)]
-        topFlangeDown= [geom.Pos3d(org.x-halfB, top, org.z), geom.Pos3d(org.x, top, org.z), geom.Pos3d(org.x+halfB, top, org.z)]
+        bottom= -halfH+tf2
+        bottomFlange= [geom.Pos2d(-halfB,bottom), geom.Pos2d(0.0,bottom), geom.Pos2d(halfB,bottom)]
+        top= halfH-tf2
+        topFlange= [geom.Pos2d(-halfB, top), geom.Pos2d(0.0, top), geom.Pos2d(halfB, top)]
+        return bottomFlange, topFlange
+
+    def getMidPointsGlobalPos(self, refSys):
+        ''' Return the position expressed in global coordinates
+            of the pointsat the middle of the shape.
+
+        :param refSys: reference systems which computes the global coordinates.
+        '''
+        localBottomFlange, localTopFlange= self.getMidPoints()
+        bottomFlange= list()
+        for p in localBottomFlange:
+            bottomFlange.append(refSys.getPosGlobal(p))
+        topFlange= list()
+        for p in localTopFlange:
+            topFlange.append(refSys.getPosGlobal(p))
+        return bottomFlange, topFlange
+
+    def getMidPlanesPoints(self, org, extrusionVDir):
+        ''' Return the points at the middle of the
+            plates.
+
+        :param org: origin point.
+        :param extrusionVDir: extrusion direction vector.
+        '''
+        # Reference system
+        refPlane= geom.Plane3d(org, extrusionVDir)
+        ref= geom.Ref2d3d(org, refPlane.getBase1(), refPlane.getBase2())
+        # Base points (Down)
+        localBottomFlange, localTopFlange= self.getMidPoints()
+        bottomFlangeDown= list()
+        for p in localBottomFlange:
+            bottomFlangeDown.append(ref.getPosGlobal(p))
+        topFlangeDown= list()
+        for p in localTopFlange:
+            topFlangeDown.append(ref.getPosGlobal(p))
         # Extruded points (Up)
         bottomFlangeUp= list()
         for p in bottomFlangeDown:
@@ -450,7 +482,7 @@ class WShape(structural_steel.IShape):
         labels= [self.name]
         if(lbls):
             labels.extend(lbls)
-        midPoints= self.getMidPoints(org, extrusionVDir)
+        midPoints= self.getMidPlanesPoints(org, extrusionVDir)
         retval= bte.BlockData()
         # Base points (A)
         bottomFlangeA= midPoints['bottomFlangeDown']

@@ -47,7 +47,22 @@ class ConnectedMemberMetaData(object):
         for n in nodes:
             self.nodePositions.append(n.getInitialPos3d)
 
-    def getMemberSort(self, tol= math.radians(5)):
+    def getReferenceSystem(self, origin):
+        ''' Return the member reference system.
+
+        :param origin: member origin.
+        '''
+        return geom.Ref2d3d(origin, self.kVector, -self.jVector) # right-handed
+
+    def getMidPoints(self, origin):
+        ''' Return the position expressed in global coordinates
+            of the pointsat the middle of the shape.
+
+        :param origin: member origin.
+        '''
+        return self.shape.getMidPointsGlobalPos(self.getReferenceSystem(origin))
+    
+    def getMemberSort(self, tol= math.radians(5)):        
         ''' Return the member sort: horizontal, vertical or diagonal.
 
         :param tol: tolerance.
@@ -217,7 +232,8 @@ class ConnectedMemberMetaData(object):
             labels.extend(lbls)
         labels.append(self.getMemberType())
         labels.extend(self.getMemberLoadLabels())
-        extrusionVector= self.getExtrusionVector(factor)
+        f= factor*self.getOrientation(origin)
+        extrusionVector= self.getExtrusionVector(f)
         return self.shape.getBlockData(org= origin, extrusionVDir= extrusionVector, lbls= labels)
     
     def getFrontalWeldBlocks(self, flangeWeldLegSize, webWeldLegSize, lbls= None):
@@ -281,6 +297,12 @@ class ConnectionMetaData(object):
     def getOrigin(self):
         ''' Return the connection origin.'''
         return self.originNode.getInitialPos3d
+
+    def getReferenceSystem(self):
+        ''' Return the connection reference system.'''
+        origin= self.getOrigin()
+        plane= geom.Plane3d(origin, self.column.getDirection(origin))
+        return geom.Ref3d3d(origin, self.column.jVector, self.column.kVector)
     
     def getColumnShape(self):
         ''' Return the shape of the column shaft.'''
@@ -292,7 +314,21 @@ class ConnectionMetaData(object):
         for b in self.beams:
             retval.append(b.shape)
         return retval
-    
+
+    def getBeamsTop(self):
+        ''' Return the maximum local z coordinate of the beams in the
+            connection.'''
+        retval= 0 # if no beams, no top.
+        origin= self.getOrigin()
+        ref= self.getReferenceSystem()
+        for b in self.beams:
+            bottomFlangePts, topFlangePts= b.getMidPoints(origin)
+            beamPoints= bottomFlangePts+topFlangePts
+            for p in beamPoints:
+                lp= ref.getPosLocal(p)
+                retval= max(retval,lp.z)
+        return retval
+                    
     def getDiagonalShapes(self):
         ''' Return the shapes of the diagonals.'''
         retval= list()
@@ -307,7 +343,10 @@ class ConnectionMetaData(object):
                        of the member to define its extrusion 
                        direction and lenght.
         '''
-        return self.column.getShapeBlocks(self.getOrigin(),factor, lbls)
+        beamsTop= self.getBeamsTop()
+        ref= self.getReferenceSystem()
+        origin= self.getOrigin()+1.25*beamsTop*self.column.iVector
+        return self.column.getShapeBlocks(origin,factor, lbls)
 
     def getBeamShapeBlocks(self, factor, lbls= None):
         ''' Return the faces of the beams.
@@ -377,7 +416,6 @@ def getConnectedMembers(xcSet):
         for e in elements:
             cm= ConnectedMemberMetaData(e)
             memberSort= cm.getMemberSort()
-            print(e.tag, cm.shape.name, memberSort)
             if(memberSort==MemberSort.diagonal):
                 diagonals.append(cm)
             elif(memberSort==MemberSort.horizontal):
