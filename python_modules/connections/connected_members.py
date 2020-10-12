@@ -308,6 +308,22 @@ class ConnectionMetaData(object):
                        direction and lenght.
         '''
         return self.column.getShapeBlocks(self.getOrigin(),factor, lbls)
+
+    def getBeamShapeBlocks(self, factor, lbls= None):
+        ''' Return the faces of the beams.
+
+        :param factor: factor multiplies the unary direction vector
+                       of the member to define its extrusion 
+                       direction and lenght.
+        '''
+        retval= bte.BlockData()
+        origin= self.getOrigin()
+        labels= ['beam']
+        if(lbls):
+            labels.extend(lbls)
+        for b in self.beams:
+            retval.extend(b.getShapeBlocks(origin,factor, labels))
+        return retval
     
     def getColumnWebDirection(self):
         ''' Return the direction of the column web.'''
