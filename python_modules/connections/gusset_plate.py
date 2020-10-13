@@ -182,3 +182,33 @@ class GussetPlate(object):
         blk.weldBlocks= self.getWeldBlocks(ownerId, kPointIds, verticalWeldLegSize, horizontalWeldLegSize, labels) # Get the weld blocks for the new plate
         retval.extend(blk.weldBlocks)
         return retval
+
+    def getBoltedPlateBlocks(self, boltedPlate, diagonal, origin, labels, side= 1):
+        ''' Return the blocks corresponding to the plate
+            bolted to the gusset plate.
+
+        :param boltedPlateTemplate: bolted plate that will be attached 
+                                    to this one.
+        :param diagonal: element that provide the internal forces in the
+                         bolted plate edge.
+        :param labels: labels to put in the blocks to create.
+        :param side: if side==1 put the plate at the positive side of the
+                     gusset plate reference system, if side==-1 put the
+                     plate at the negative side.
+
+        :return: return the distance between the plates midplanes
+                 and the blocks corresponding to the bolted plate.
+        '''
+        # Move the reference system.
+        boltedPlateRefSys= self.getBoltRefSys()
+        distBetweenPlates= (self.getThickness()+boltedPlate.thickness)*0.5*side
+        vMove= boltedPlateRefSys.getKVector()*distBetweenPlates
+        boltedPlateRefSys.Org+= vMove
+        # Get loads on the plate edge.
+        loadTag= 'loadTag_'+str(diagonal.eTag)
+        diagonalOrientation= diagonal.getOrientation(origin)
+        loadDirI= 'loadDirI_'+str(diagonalOrientation*diagonal.iVector)
+        loadDirJ= 'loadDirJ_'+str(diagonalOrientation*diagonal.jVector)
+        loadDirK= 'loadDirK_'+str(diagonalOrientation*diagonal.kVector)
+        # Create blocks.
+        return distBetweenPlates, boltedPlate.getBlocks(boltedPlateRefSys, labels, loadTag, loadDirI, loadDirJ, loadDirK)

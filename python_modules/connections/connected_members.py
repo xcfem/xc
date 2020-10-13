@@ -400,7 +400,6 @@ class ConnectionMetaData(object):
             retval[d.eTag]= d.getLoadData(internalForces, self.originNode)
         return retval
 
-    
 def getConnectedMembers(xcSet):
     '''Return the node, and the data of the members
        connected to the nodes of the argument set.
@@ -423,4 +422,31 @@ def getConnectedMembers(xcSet):
             elif(cm.shape.name.startswith('W')):
                 column= cm
         retval[n.tag]= ConnectionMetaData(n,column,beams,diagonals)
+    return retval
+
+def getBoltedPointBlocks(gussetPlateBlocks, boltedPlateBlocks, distBetweenPlates):
+    ''' Return the points linked by bolts between the two pieces.
+
+    :param gussetPlateBlocks: blocks of the gusset plate.
+    :param boltedPlateBlocks: plate bolted to the gusset plate.
+    :param distBetweenPlates: distance between plates.
+    '''
+    retval= bte.BlockData()
+    gussetPlateBoltCenters= list()
+    for key in gussetPlateBlocks.points:
+        p= gussetPlateBlocks.points[key]
+        if('hole_centers' in p.labels):
+            gussetPlateBoltCenters.append(p)
+    boltedPlateBoltCenters= list()
+    for key in boltedPlateBlocks.points:
+        p= boltedPlateBlocks.points[key]
+        if('hole_centers' in p.labels):
+            boltedPlateBoltCenters.append(p)
+    tol= distBetweenPlates/100.0
+    for pA in gussetPlateBoltCenters:
+        for pB in boltedPlateBoltCenters:
+            dist= math.sqrt((pA.coords[0]-pB.coords[0])**2+(pA.coords[1]-pB.coords[1])**2+(pA.coords[2]-pB.coords[2])**2)
+            if(abs(dist-distBetweenPlates)<tol):
+                boltBlk= bte.BlockRecord(id= -1, typ= 'line', kPoints= [pA.id, pB.id])
+                id= retval.appendBlock(boltBlk)
     return retval
