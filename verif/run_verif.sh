@@ -17,7 +17,8 @@ START=$(date +%s.%N)
 echo "$BLEU" "Actions tests." "$NORMAL"
 python tests/actions/test_snowSIA.py
 python tests/actions/test_windSIA.py
-python tests/actions/test_wind_cylindr.py
+python tests/actions/test_wind_cylindr_01.py
+python tests/actions/test_wind_cylindr_02.py
 python tests/actions/test_wind_beam_truss.py
 python tests/actions/test_derailment_SIA.py
 python tests/actions/test_prestressing.py
