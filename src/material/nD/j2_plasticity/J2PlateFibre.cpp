@@ -33,6 +33,8 @@
 #include "domain/component/Parameter.h"
 #include "material/nD/NDMaterialType.h"
 
+const double XC::J2PlateFibre::one3= (1.0/3.0);
+const double XC::J2PlateFibre::two3= (2.0/3.0);
 const double XC::J2PlateFibre::root23= sqrt( 2.0 / 3.0 );
 XC::Vector XC::J2PlateFibre::sigma(order);
 XC::Matrix XC::J2PlateFibre::D(order,order);
@@ -364,14 +366,16 @@ const XC::Vector &XC::J2PlateFibre::getStress(void) const
 		    2.0*(xsi[2]*xsi[2] + xsi[3]*xsi[3] + xsi[4]*xsi[4]));
     const double F= q - root23*(sigmaY + Hiso*alphan);
 
-    if(F < -100*DBL_EPSILON) {
-      epsPn1[0]= epsPn[0];
-      epsPn1[1]= epsPn[1];
-      epsPn1[2]= epsPn[2];
-      epsPn1[3]= epsPn[3];
-      epsPn1[4]= epsPn[4];
-    }
-    else {
+    if(F < -100*DBL_EPSILON)
+      {
+	epsPn1[0]= epsPn[0];
+	epsPn1[1]= epsPn[1];
+	epsPn1[2]= epsPn[2];
+	epsPn1[3]= epsPn[3];
+	epsPn1[4]= epsPn[4];
+      }
+    else
+      {
       // Solve for dg
       double dg= 0.0;
 
@@ -388,47 +392,49 @@ const XC::Vector &XC::J2PlateFibre::getStress(void) const
       static Vector dx(6);
 
       int iter= 0; int maxIter= 25;
-      while(iter < maxIter && R.Norm() > 1.0e-14) {
-	iter++;
+      while(iter < maxIter && R.Norm() > 1.0e-14)
+	{
+	  iter++;
 
-	J(0,0)= 1.0 + dg*(two3*C00-one3*C01+two3Hkin); J(0,1)= dg*(two3*C01-one3*C00);
-	J(1,0)= dg*(two3*C10-one3*C11); J(1,1)= 1.0 + dg*(two3*C11-one3*C10+two3Hkin);
-	J(2,2)= 1.0 + dg*(twoG+two3Hkin);
-	J(3,3)= 1.0 + dg*(twoG+two3Hkin);
-	J(4,4)= 1.0 + dg*(twoG+two3Hkin);
+	  J(0,0)= 1.0 + dg*(two3*C00-one3*C01+two3Hkin); J(0,1)= dg*(two3*C01-one3*C00);
+	  J(1,0)= dg*(two3*C10-one3*C11); J(1,1)= 1.0 + dg*(two3*C11-one3*C10+two3Hkin);
+	  J(2,2)= 1.0 + dg*(twoG+two3Hkin);
+	  J(3,3)= 1.0 + dg*(twoG+two3Hkin);
+	  J(4,4)= 1.0 + dg*(twoG+two3Hkin);
 
-	J(0,5)= (two3*C00-one3*C01+two3Hkin)*x(0) + (two3*C01-one3*C00)*x(1);
-	J(1,5)= (two3*C10-one3*C11)*x(0) + (two3*C11-one3*C10+two3Hkin)*x(1);
-	J(2,5)= (twoG+two3Hkin)*x(2);
-	J(3,5)= (twoG+two3Hkin)*x(3);
-	J(4,5)= (twoG+two3Hkin)*x(4);
+	  J(0,5)= (two3*C00-one3*C01+two3Hkin)*x(0) + (two3*C01-one3*C00)*x(1);
+	  J(1,5)= (two3*C10-one3*C11)*x(0) + (two3*C11-one3*C10+two3Hkin)*x(1);
+	  J(2,5)= (twoG+two3Hkin)*x(2);
+	  J(3,5)= (twoG+two3Hkin)*x(3);
+	  J(4,5)= (twoG+two3Hkin)*x(4);
 
-	J(5,0)= (1.0-two3*Hiso*dg)*(two3*x(0)-one3*x(1))/q;
-	J(5,1)= (1.0-two3*Hiso*dg)*(two3*x(1)-one3*x(0))/q;
-	J(5,2)= (1.0-two3*Hiso*dg)*2.0*x(2)/q;
-	J(5,3)= (1.0-two3*Hiso*dg)*2.0*x(3)/q;
-	J(5,4)= (1.0-two3*Hiso*dg)*2.0*x(4)/q;
+	  J(5,0)= (1.0-two3*Hiso*dg)*(two3*x(0)-one3*x(1))/q;
+	  J(5,1)= (1.0-two3*Hiso*dg)*(two3*x(1)-one3*x(0))/q;
+	  J(5,2)= (1.0-two3*Hiso*dg)*2.0*x(2)/q;
+	  J(5,3)= (1.0-two3*Hiso*dg)*2.0*x(3)/q;
+	  J(5,4)= (1.0-two3*Hiso*dg)*2.0*x(4)/q;
 
-	J(5,5)= -two3*Hiso*q;
+	  J(5,5)= -two3*Hiso*q;
 
-	J.Solve(R, dx);
-	x.addVector(1.0, dx, -1.0);
+	  J.Solve(R, dx);
+	  x.addVector(1.0, dx, -1.0);
 
-	dg= x(5);
-	dg_n1= dg;
+	  dg= x(5);
+	  dg_n1= dg;
 
-	q= sqrt(two3*(x(0)*x(0) + x(1)*x(1) - x(0)*x(1)) + 2.0*(x(2)*x(2) + x(3)*x(3) + x(4)*x(4)));
+	  q= sqrt(two3*(x(0)*x(0) + x(1)*x(1) - x(0)*x(1)) + 2.0*(x(2)*x(2) + x(3)*x(3) + x(4)*x(4)));
 
-	R(0)= x(0) - xsi[0] + dg*((two3*C00-one3*C01+two3Hkin)*x(0) + (two3*C01-one3*C00)*x(1));
-	R(1)= x(1) - xsi[1] + dg*((two3*C10-one3*C11)*x(0) + (two3*C11-one3*C10+two3Hkin)*x(1));
-	R(2)= x(2) - xsi[2] + dg*(twoG+two3Hkin)*x(2);
-	R(3)= x(3) - xsi[3] + dg*(twoG+two3Hkin)*x(3);
-	R(4)= x(4) - xsi[4] + dg*(twoG+two3Hkin)*x(4);
-	R(5)= q - root23*(sigmaY + Hiso*(alphan+dg*root23*q));
-      }
-      if (iter == maxIter) {
-	//std::cerr << getClassName() << "::" << __FUNCTION__ << ";maxIter reached " << R.Norm() << std::endl;
-      }
+	  R(0)= x(0) - xsi[0] + dg*((two3*C00-one3*C01+two3Hkin)*x(0) + (two3*C01-one3*C00)*x(1));
+	  R(1)= x(1) - xsi[1] + dg*((two3*C10-one3*C11)*x(0) + (two3*C11-one3*C10+two3Hkin)*x(1));
+	  R(2)= x(2) - xsi[2] + dg*(twoG+two3Hkin)*x(2);
+	  R(3)= x(3) - xsi[3] + dg*(twoG+two3Hkin)*x(3);
+	  R(4)= x(4) - xsi[4] + dg*(twoG+two3Hkin)*x(4);
+	  R(5)= q - root23*(sigmaY + Hiso*(alphan+dg*root23*q));
+	}
+      if(iter == maxIter)
+	{
+	  //std::cerr << getClassName() << "::" << __FUNCTION__ << ";maxIter reached " << R.Norm() << std::endl;
+        }
 
       alphan1= alphan + dg*root23*q;
 
@@ -457,7 +463,6 @@ double XC::J2PlateFibre::getVonMisesStress(void) const
     const Vector sg= getStress();
     const size_t sz= sg.Size();
     //NDmaterial stress order = 11, 22, 33, 12, 23, 31 
-    //NDmaterial stress order= 11, 22, 33, 12, 23, 31 
     //PlateFiberMaterial stress order= 11, 22, 12, 23, 31, (33) 
     if(sz==5) // plate fiber material
       {
