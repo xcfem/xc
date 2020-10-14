@@ -21,6 +21,7 @@
 //----------------------------------------------------------------------------
 //python_interface.tcc
 
+int (XC::NDMaterial::*setNDTrialStrain)(const XC::Vector &)= &XC::NDMaterial::setTrialStrain;
 class_<XC::NDMaterial, XC::NDMaterial *, bases<XC::Material>, boost::noncopyable >("NDMaterial", no_init)
     .add_property("getRho", &XC::NDMaterial::getRho,"Return the material density.")
     .add_property("getE", &XC::NDMaterial::getE)
@@ -29,6 +30,8 @@ class_<XC::NDMaterial, XC::NDMaterial *, bases<XC::Material>, boost::noncopyable
     .def("getTangent",make_function(&XC::NDMaterial::getTangent,return_internal_reference<>()), "Return material stiffness matrix.")
     .def("getInitialTangent",make_function(&XC::NDMaterial::getInitialTangent,return_internal_reference<>()), "Return material initial stiffness matrix.")
     .add_property("getVonMisesStress", &XC::NDMaterial::getVonMisesStress)
+    .def("setTrialStrain",setNDTrialStrain, "Set the trial strains for the material (the order of the components depends on the subclass) [eps_11, eps_22, eps_33, eps_12, eps_23, eps_31].") 
+    .def("getStress",make_function(&XC::NDMaterial::getStress,return_internal_reference<>()), "Return the material stresses (the order of the components depends on the subclass) [sigma_11, sigma_22, sigma_33, sigma_12, sigma_23, sigma_31].") 
        ;
 
 class_<XC::ElasticIsotropicMaterial, bases<XC::NDMaterial>, boost::noncopyable >("ElasticIsotropicMaterial", no_init)
