@@ -255,7 +255,7 @@ extern "C" int dgels_(char *T, int *M, int *N, int *NRHS,
 int XC::KrylovNewton::leastSquares(int k)
 {
   LinearSOE *theSOE = this->getLinearSOEPtr();
-  const XC::Vector &r = theSOE->getX();
+  const Vector &r = theSOE->getX();
 
   // v_{k+1} = w_{k+1} + q_{k+1}
   v[k]= r;
