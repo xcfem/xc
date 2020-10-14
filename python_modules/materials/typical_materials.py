@@ -1,5 +1,8 @@
 # -*- coding: utf-8 -*-
 
+from __future__ import print_function
+from __future__ import division
+
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AO_O)"
 __copyright__= "Copyright 2015, LCPT and AO_O"
 __license__= "GPL"
@@ -452,7 +455,7 @@ def defJ2PlateFibre(preprocessor, name, E, nu, fy, alpha= .01, rho= 0.0):
     retval.fy= fy
     if(alpha<0 or alpha>1):
         lmsg.error('alpha value: '+str(alpha)+' out of range (0,1)')
-    retval.Hiso= alpha*E/(1-alpha)
+    retval.Hiso= alpha*E/(1.0-alpha)
     retval.rho= rho
     return retval
 
