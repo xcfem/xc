@@ -4,6 +4,7 @@
 from __future__ import division
 from __future__ import print_function
 
+import math
 import json
 import xc_base
 import geom
@@ -349,3 +350,30 @@ class BoltedPlateBase(object):
         blk.holes= self.boltArray.getHoleBlocks(refSys,holeLabels)
         retval.extend(blk.holes)
         return retval
+    
+def getBoltedPointBlocks(gussetPlateBlocks, boltedPlateBlocks, distBetweenPlates):
+    ''' Return the points linked by bolts between the two pieces.
+
+    :param gussetPlateBlocks: blocks of the gusset plate.
+    :param boltedPlateBlocks: plate bolted to the gusset plate.
+    :param distBetweenPlates: distance between plates.
+    '''
+    retval= bte.BlockData()
+    gussetPlateBoltCenters= list()
+    for key in gussetPlateBlocks.points:
+        p= gussetPlateBlocks.points[key]
+        if('hole_centers' in p.labels):
+            gussetPlateBoltCenters.append(p)
+    boltedPlateBoltCenters= list()
+    for key in boltedPlateBlocks.points:
+        p= boltedPlateBlocks.points[key]
+        if('hole_centers' in p.labels):
+            boltedPlateBoltCenters.append(p)
+    tol= distBetweenPlates/100.0
+    for pA in gussetPlateBoltCenters:
+        for pB in boltedPlateBoltCenters:
+            dist= math.sqrt((pA.coords[0]-pB.coords[0])**2+(pA.coords[1]-pB.coords[1])**2+(pA.coords[2]-pB.coords[2])**2)
+            if(abs(dist-distBetweenPlates)<tol):
+                boltBlk= bte.BlockRecord(id= -1, typ= 'line', kPoints= [pA.id, pB.id])
+                id= retval.appendBlock(boltBlk)
+    return retval
