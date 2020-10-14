@@ -469,7 +469,7 @@ def penalty_modified_newton(prb, mxNumIter= 10, convergenceTestTol= 1e-4, printF
     solution.maxNumIter= mxNumIter
     solution.convergenceTestTol= convergenceTestTol
     solution.printFlag= printFlag
-    return solution.plainStaticModifiedNewton(prb)
+    return solution.penaltyModifiedNewton(prb)
 
 def frequency_analysis(prb):
     ''' Return a solution procedure that computes the natural
