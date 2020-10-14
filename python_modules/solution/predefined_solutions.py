@@ -299,6 +299,29 @@ class SolutionProcedure(object):
         self.analysis= self.solu.newAnalysis("static_analysis","analysisAggregation","")
         return self.analysis
 
+    def penaltyModifiedNewton(self, prb):
+        ''' Return a static solution procedure with a Newton Raphson algorithm
+            and a penalty constraint handler.'''
+        self.solu= prb.getSoluProc
+        self.solCtrl= self.solu.getSoluControl
+        solModels= self.solCtrl.getModelWrapperContainer
+        self.sm= solModels.newModelWrapper("sm")
+        self.numberer= self.sm.newNumberer("default_numberer")
+        self.numberer.useAlgorithm("rcm")
+        self.cHandler= self.getConstraintHandler('penalty')
+        analysisAggregations= self.solCtrl.getAnalysisAggregationContainer
+        self.analysisAggregation= analysisAggregations.newAnalysisAggregation("analysisAggregation","sm")
+        self.solAlgo= self.analysisAggregation.newSolutionAlgorithm("modified_newton_soln_algo")
+        self.integ= self.analysisAggregation.newIntegrator("load_control_integrator",xc.Vector([]))
+        self.ctest= self.analysisAggregation.newConvergenceTest("relative_total_norm_disp_incr_conv_test")
+        self.ctest.tol= self.convergenceTestTol
+        self.ctest.printFlag= self.printFlag
+        self.ctest.maxNumIter= 150 #Make this configurable
+        self.soe= self.analysisAggregation.newSystemOfEqn("sparse_gen_col_lin_soe")
+        self.solver= self.soe.newSolver("super_lu_solver")
+        self.analysis= self.solu.newAnalysis("static_analysis","analysisAggregation","")
+        return self.analysis
+    
     def penaltyNewmarkNewtonRapshon(self,prb):
         ''' Return a Newmark solution procedure with a Newton Raphson algorithm
             and a penalty constraint handler.'''
@@ -410,6 +433,19 @@ def plain_static_modified_newton(prb, mxNumIter= 10, convergenceTestTol= .01):
     solution.convergenceTestTol= convergenceTestTol
     return solution.plainStaticModifiedNewton(prb)
 
+def plain_krylov_newton(prb, mxNumIter= 300, convergenceTestTol= 1e-9, printFlag= 0):
+    ''' Return a plain Krylov Newton solution procedure.
+
+    :ivar maxNumIter: maximum number of iterations (defauts to 300)
+    :ivar convergenceTestTol: convergence tolerance (defaults to 1e-9)
+    :ivar printFlag: print message on each iteration
+    '''
+    solution= SolutionProcedure()
+    solution.maxNumIter= mxNumIter
+    solution.convergenceTestTol= convergenceTestTol
+    solution.printFlag= printFlag
+    return solution.plainKrylovNewton(prb)
+
 def penalty_newton_raphson(prb, mxNumIter= 10, convergenceTestTol= 1e-4, printFlag= 0):
     ''' Return a penalty Newton-Raphson solution procedure.
 
@@ -423,18 +459,17 @@ def penalty_newton_raphson(prb, mxNumIter= 10, convergenceTestTol= 1e-4, printFl
     solution.printFlag= printFlag
     return solution.penaltyNewtonRaphson(prb)
 
-def plain_krylov_newton(prb, mxNumIter= 300, convergenceTestTol= 1e-9, printFlag= 0):
-    ''' Return a plain Krylov Newton solution procedure.
+def penalty_modified_newton(prb, mxNumIter= 10, convergenceTestTol= 1e-4, printFlag= 0):
+    ''' Return a simple static modified Newton solution procedure.
 
-    :ivar maxNumIter: maximum number of iterations (defauts to 300)
+    :ivar maxNumIter: maximum number of iterations (defauts to 10)
     :ivar convergenceTestTol: convergence tolerance (defaults to 1e-9)
-    :ivar printFlag: print message on each iteration
     '''
     solution= SolutionProcedure()
     solution.maxNumIter= mxNumIter
     solution.convergenceTestTol= convergenceTestTol
     solution.printFlag= printFlag
-    return solution.plainKrylovNewton(prb)
+    return solution.plainStaticModifiedNewton(prb)
 
 def frequency_analysis(prb):
     ''' Return a solution procedure that computes the natural

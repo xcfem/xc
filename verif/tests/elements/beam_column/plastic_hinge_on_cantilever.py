@@ -59,6 +59,7 @@ modelSpace.addLoadCaseToDomain(lp0.name)
 
 # Solution procedure
 analysis= predefined_solutions.plain_static_modified_newton(test)
+#analysis= predefined_solutions.penalty_modified_newton(test, convergenceTestTol= 1e-2)
 result= analysis.analyze(10)
 
 elem1= elements.getElement(0)
