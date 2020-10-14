@@ -154,6 +154,7 @@ int XC::CTestEnergyIncr::test(void)
               {
                 std::clog << getTestIterationMessage();
                 std::clog << getEnergyProductMessage();
+                std::clog << std::endl;
               }
           }
         // return the number of times test has been called - SUCCESSFUL
