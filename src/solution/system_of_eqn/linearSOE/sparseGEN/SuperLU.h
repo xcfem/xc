@@ -94,15 +94,26 @@ namespace XC {
 class SuperLU: public SparseGenColLinSolver
   {
   private:
-    SuperMatrix A,B,AC;
-    SuperMatrix L,U;
-    ID perm_r;
-    ID perm_c;
+    SuperMatrix A;
+    SuperMatrix B; //!< On entry, the right hand side matrix; on exit, the solution matrix if info = 0;
+    SuperMatrix AC; //!< The resulting matrix after applied the column
+                    //! permutation perm_c[] to matrix A.
+    SuperMatrix L; //!< The factor L from the factorization Pr*A*Pc=L*U as
+                   // computed by dgstrf(). Use compressed row subscripts
+                   // storage for supernodes, i.e., L has types:
+                   // Stype = SLU_SC, Dtype = SLU_D, Mtype = SLU_TRLU.
+    SuperMatrix U; //!< The factor U from the factorization Pr*A*Pc=L*U as
+                   // computed by dgstrf(). Use compressed row subscripts
+                   // storage for supernodes, i.e., U has types:
+                   // Stype = SLU_SC, Dtype = SLU_D, Mtype = SLU_TRLU.
+    ID perm_r; //!< row permutation vector dimension(L->nrow)
+    ID perm_c; //!< column permutation vector dimension(L->ncol)
     ID etree;
     int relax, permSpec, panelSize;
     char symmetric;
-    superlu_options_t options;
-    SuperLUStat_t stat;
+    superlu_options_t options; //! @brief Specifies whether or not the elimination tree will be re-used.
+    SuperLUStat_t stat; //!< Record the statistics on runtime and
+                        // floating-point operation count.
     void free_matricesLU(void);
     void free_matricesABAC(void);
     void free_matrices(void);

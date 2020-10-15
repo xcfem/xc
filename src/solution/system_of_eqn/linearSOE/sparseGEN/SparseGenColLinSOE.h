@@ -157,10 +157,7 @@ class SparseGenColLinSOE: public SparseGenSOEBase
 #else
     friend class SuperLU;    
 #endif
-
   };
-inline SystemOfEqn *SparseGenColLinSOE::getCopy(void) const
-  { return new SparseGenColLinSOE(*this); }
 } // end of XC namespace
 
 

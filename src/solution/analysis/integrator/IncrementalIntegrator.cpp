@@ -116,7 +116,7 @@ int XC::IncrementalIntegrator::formTangent(int statFlag)
     // loop through the FE_Elements adding their contributions to the tangent
     FE_Element *elePtr;
     FE_EleIter &theEles2= mdl->getFEs();    
-    while((elePtr = theEles2()) != 0)     
+    while((elePtr = theEles2()) != 0)  
       if(theSOE->addA(elePtr->getTangent(this),elePtr->getID()) < 0)
         {
 	  std::cerr << getClassName() << "::" << __FUNCTION__

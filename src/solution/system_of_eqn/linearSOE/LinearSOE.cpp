@@ -197,7 +197,8 @@ XC::LinearSOESolver &XC::LinearSOE::newSolver(const std::string &type)
     else if(type=="umfpack_gen_lin_solver")
       setSolver(new UmfpackGenLinSolver());
     else
-      std::cerr << "Solver of type: '"
+      std::cerr << getClassName() << "::" << __FUNCTION__
+	        << "; solver of type: '"
                 << type << "' unknown." << std::endl;
     assert(theSolver);
     return *theSolver;

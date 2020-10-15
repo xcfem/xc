@@ -190,6 +190,7 @@ python tests/elements/birth_and_death/kill_elements_08.py
 
 echo "$BLEU" "Solver tests." "$NORMAL"
 python tests/solution/superlu_solver_test_01.py
+python tests/solution/superlu_solver_test_02.py
 python tests/solution/ill_conditioning_01.py
 
 ## Constraint handlers tests.

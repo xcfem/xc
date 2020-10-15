@@ -58,8 +58,8 @@
 //
 // What: "@(#) SuperLU.h, revA"
 
-#include <solution/system_of_eqn/linearSOE/sparseGEN/SuperLU.h>
-#include <solution/system_of_eqn/linearSOE/sparseGEN/SparseGenColLinSOE.h>
+#include "SuperLU.h"
+#include "SparseGenColLinSOE.h"
 #include <cmath>
 
 #define RESET   "\033[0m"
@@ -84,37 +84,43 @@ void XC::SuperLU::free_matricesABAC(void)
   {
     if(AC.ncol != 0)
       {
-        NCPformat *ACstore = static_cast<NCPformat *>(AC.Store);
-        if(ACstore)
-          {
-            SUPERLU_FREE(ACstore->colbeg);
-            SUPERLU_FREE(ACstore->colend);
-            SUPERLU_FREE(ACstore);
-            AC.ncol= 0;
-          }
-        else
-	  std::cerr << getClassName() << "::" << __FUNCTION__
-		    << "; ERROR when releasing AC matrix."
-		    << std::endl;
+        Destroy_CompCol_Permuted(&AC);	
+	// NCPformat *ACstore = static_cast<NCPformat *>(AC.Store);
+        // if(ACstore)
+        //   {
+        //     SUPERLU_FREE(ACstore->colbeg);
+        //     SUPERLU_FREE(ACstore->colend);
+        //     SUPERLU_FREE(ACstore);
+        //     AC.ncol= 0;
+        //   }
+        // else
+	//   std::cerr << getClassName() << "::" << __FUNCTION__
+	// 	    << "; ERROR when releasing AC matrix."
+	// 	    << std::endl;
+	AC.ncol= 0;
       }
     if(A.ncol != 0)
       {
-	SUPERLU_FREE(A.Store);
+	Destroy_SuperMatrix_Store(&A);
+	//SUPERLU_FREE(A.Store);
         A.ncol= 0;
       }
     if(B.ncol != 0)
       {
-	SUPERLU_FREE(B.Store);
+	Destroy_SuperMatrix_Store(&B);
+	//SUPERLU_FREE(B.Store);
         B.ncol= 0;
       }
   }
 
+//! @brief Frees memory allocated for matrices.
 void XC::SuperLU::free_matrices(void)
   {
     free_matricesLU();
     free_matricesABAC();
   }
 
+//! @brief Frees memory.
 void XC::SuperLU::free_mem(void)
   {
     free_matrices();
@@ -122,7 +128,7 @@ void XC::SuperLU::free_mem(void)
     perm_c.resize(0);
     if(etree.Size()>0)
       {
-         etree.resize(0);		
+         etree.resize(0);	
          StatFree(&stat);
       }
   }
@@ -149,13 +155,18 @@ void XC::SuperLU::alloc_matrices(const size_t &n)
     // obtain and apply column permutation to give SuperMatrix AC
     get_perm_c(permSpec, &A, perm_c.getDataPtr());
 
-    sp_preorder(&options, &A, perm_c.getDataPtr(), etree.getDataPtr(), &AC);
+    // IMPORTANT: here options.Fact MUST BE equal to DOFACT.
+    //dPrint_CompCol_Matrix("before A",&A);
+    sp_preorder(&options, &A, perm_c.getDataPtr(), etree.getDataPtr(), &AC);   
+    //dPrint_CompCol_Matrix("after A",&A);
+    //dPrint_CompCol_Matrix("after AC",&AC);
     
     // create the rhs SuperMatrix B 
     dCreate_Dense_Matrix(&B, n, 1, theSOE->getPtrX(), n, SLU_DN, SLU_D, SLU_GE);
   }
 void XC::SuperLU::alloc(const size_t &n)
   {
+    free_mem();
     if(n>0)
       {
         alloc_permutation_vectors(n);
@@ -253,6 +264,7 @@ int XC::SuperLU::factorize(void)
 
 	//dPrint_CompCol_Matrix("AC",&AC);
         dgstrf(&options, &AC, relax, panelSize,etree.getDataPtr(), nullptr, 0, perm_c.getDataPtr(), perm_r.getDataPtr(), &L, &U, &Glu, &stat, &info);	
+	
         if(info != 0)
           {        
              std::cerr << getClassName() << "::" << __FUNCTION__
@@ -317,14 +329,17 @@ int XC::SuperLU::solve(void)
                 if(ok==0)
                   {
                     // do forward and backward substitution
-                    trans_t trans= NOTRANS;
-                    int info= 0;
-                    dgstrs(trans, &L, &U, perm_c.getDataPtr(), perm_r.getDataPtr(), &B, &stat, &info);    
+                    trans_t trans= NOTRANS; //Specifies the form of the system of equations.
+                    int info= 0; // 0: successful exit
+                                 // < 0: if info = -i, the i-th argument
+		                 // had an illegal value.
+                    dgstrs(trans, &L, &U, perm_c.getDataPtr(), perm_r.getDataPtr(), &B, &stat, &info);
                     if(info != 0)
                       {        
                         std::cerr << getClassName() << "::" << __FUNCTION__
 				  << "; WARNING - "
-				  << " error " << info << " returned in substitution dgstrs()\n";
+				  << " error " << info
+				  << " returned in substitution dgstrs()\n";
                         retval= -info;
                       }
                   }
@@ -362,15 +377,15 @@ int XC::SuperLU::setSize(void)
 		    << " SuperLU, sometimes, fails when dimension"
 	            << " of the system is changed." << std::endl;
 
-	// 13/07/2020 SuperLU solver fails sometimes trying
-	// to reuse super matrices.
-        alloc(n);
         
         // set the refact variable to 'N' after first factorization with new_ size 
         // can set to 'Y'.
-        options.Fact = DOFACT;
+        options.Fact = DOFACT; // IMPORTANT make this BEFORE alloc.
         //set_default_options(&options);
 	
+	// 13/07/2020 SuperLU solver fails sometimes trying
+	// to reuse super matrices.
+        alloc(n);
 
         if(symmetric == 'Y')
 	  options.SymmetricMode= YES;

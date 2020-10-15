@@ -26,7 +26,7 @@
 //----------------------------------------------------------------------------
 //SparseSOEBase.cpp
 
-#include <solution/system_of_eqn/linearSOE/SparseSOEBase.h>
+#include "solution/system_of_eqn/linearSOE/SparseSOEBase.h"
 
 //! @brief Constructor.
 //!

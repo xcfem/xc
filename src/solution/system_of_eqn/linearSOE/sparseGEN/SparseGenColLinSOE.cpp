@@ -77,6 +77,9 @@ XC::SparseGenColLinSOE::SparseGenColLinSOE(AnalysisAggregation *owr)
 XC::SparseGenColLinSOE::SparseGenColLinSOE(AnalysisAggregation *owr,int classTag)
   : SparseGenSOEBase(owr,classTag) {}
 
+XC::SystemOfEqn *XC::SparseGenColLinSOE::getCopy(void) const
+  { return new SparseGenColLinSOE(*this); }
+
 //! @brief Set the solver to use.
 //!
 //! Invokes {\em setLinearSOE(*this)} on \p newSolver.
@@ -206,7 +209,7 @@ int XC::SparseGenColLinSOE::setSize(Graph &theGraph)
 		  << "; WARNING :"
 		  << " solver failed setSize()\n";
 	return solverOK;
-      }   
+      }
     return result;
   }
 
@@ -224,57 +227,73 @@ int XC::SparseGenColLinSOE::setSize(Graph &theGraph)
 int XC::SparseGenColLinSOE::addA(const Matrix &m, const ID &id, double fact)
   {
     // check for a quick return 
-    if (fact == 0.0)  
+    if(fact == 0.0)  
 	return 0;
 
-    int idSize = id.Size();
+    const int idSize = id.Size();
     
     // check that m and id are of similar size
-    if (idSize != m.noRows() && idSize != m.noCols()) {
+    if(idSize != m.noRows() && idSize != m.noCols())
+      {
 	std::cerr << getClassName() << "::" << __FUNCTION__
 		  << "; Matrix and ID not of similar sizes\n";
 	return -1;
-    }
+      }
     
-    if (fact == 1.0) { // do not need to multiply 
-      for (int i=0; i<idSize; i++) {
-	int col = id(i);
-	if (col < size && col >= 0) {
-	  int startColLoc = colStartA(col);
-	  int endColLoc = colStartA(col+1);
-	  for (int j=0; j<idSize; j++) {
-	    int row = id(j);
-	    if (row <size && row >= 0) {
-	      // find place in A using rowA
-	      for (int k=startColLoc; k<endColLoc; k++)
-		if(rowA(k) == row) {
-		  A[k] += m(j,i);
-		  k = endColLoc;
-		}
-	    }
-	  }  // for j		
-	} 
-      }  // for i
-    } else {
-      for (int i=0; i<idSize; i++) {
-	int col = id(i);
-	if (col < size && col >= 0) {
-	  int startColLoc = colStartA(col);
-	  int endColLoc = colStartA(col+1);
-	  for (int j=0; j<idSize; j++) {
-	    int row = id(j);
-	    if (row <size && row >= 0) {
-	      // find place in A using rowA
-	      for (int k=startColLoc; k<endColLoc; k++)
-		if(rowA(k) == row) {
-		  A[k] += fact * m(j,i);
-		  k = endColLoc;
-		}
-	    }
-	  }  // for j		
-	} 
-      }  // for i
-    }
+    if(fact == 1.0)
+      { // do not need to multiply 
+	for(int i=0; i<idSize; i++)
+	  {
+	    const int col= id(i);
+	    if(col < size && col >= 0)
+	      {
+		const int startColLoc= colStartA(col);
+		const int endColLoc= colStartA(col+1);
+		for(int j=0; j<idSize; j++)
+		  {
+		    const int row= id(j);
+		    if(row <size && row >= 0)
+		      {
+			// find place in A using rowA
+			for(int k=startColLoc; k<endColLoc; k++)
+			  {
+			    if(rowA(k) == row)
+			      {
+			        A[k]+= m(j,i);
+			        break; //k = endColLoc;
+			      }
+			  }
+		      }
+		  }  // for j		
+	      } 
+	  } // for i
+      }
+    else
+      {
+	for(int i=0; i<idSize; i++)
+	  {
+	    const int col = id(i);
+	    if(col < size && col >= 0)
+	      {
+		const int startColLoc = colStartA(col);
+		const int endColLoc = colStartA(col+1);
+		for(int j=0; j<idSize; j++)
+		  {
+		    const int row = id(j);
+		    if(row <size && row >= 0)
+		      {
+			// find place in A using rowA
+			for(int k= startColLoc; k<endColLoc; k++)
+			  if(rowA(k) == row)
+			    {
+			      A[k]+= fact * m(j,i);
+			      break; //k= endColLoc;
+			    }
+		      }
+		  }  // for j
+	      } 
+	  }  // for i
+      }
     return 0;
   }
 

@@ -108,13 +108,13 @@ XC::SolutionAlgorithm *XC::ModifiedNewton::getCopy(void) const
 int XC::ModifiedNewton::solveCurrentStep(void)
   {
     // set up some pointers and check they are valid
-    // NOTE this could be taken away if we set Ptrs as protecetd in superclass
+    // NOTE this could be taken away if we set Ptrs as protected in superclass
     AnalysisModel *theAnalysisModel= getAnalysisModelPtr();
     IncrementalIntegrator *theIncIntegratorr= getIncrementalIntegratorPtr();
     LinearSOE *theSOE= getLinearSOEPtr();
     ConvergenceTest *theTest= getConvergenceTestPtr();
 
-    if((theAnalysisModel==nullptr) || (theIncIntegratorr==nullptr) || (theSOE==nullptr) || (theTest==nullptr))
+    if((!theAnalysisModel) || (!theIncIntegratorr) || (!theSOE) || (!theTest))
       {
         std::cerr << getClassName() << "::" << __FUNCTION__
 		  << "; WARNING undefined model, integrator "
@@ -125,7 +125,7 @@ int XC::ModifiedNewton::solveCurrentStep(void)
     // we form the tangent
     //    Timer timer1;
     // timer1.start();
-
+    
     if(theIncIntegratorr->formUnbalance() < 0)
       {
         std::cerr << getClassName() << "::" << __FUNCTION__
@@ -142,7 +142,7 @@ int XC::ModifiedNewton::solveCurrentStep(void)
       }
 
 
-    // set itself as the XC::ConvergenceTest objects XC::EquiSolnAlgo
+    // set itself as the ConvergenceTest objects EquiSolnAlgo
     theTest->set_owner(getAnalysisAggregation());
     if(theTest->start() < 0)
       {
@@ -166,7 +166,6 @@ int XC::ModifiedNewton::solveCurrentStep(void)
           }
         //timer2.pause();
         //std::cerr << "TIMER::SOLVE()- " << timer2;
-
         if(theIncIntegratorr->update(theSOE->getX()) < 0)
           {
             std::cerr << getClassName() << "::" << __FUNCTION__
