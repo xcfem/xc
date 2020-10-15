@@ -65,6 +65,15 @@ class ASTMSteel(steel_base.BasicSteel):
             name= dct['name']
             if(name): self.name= name
 
+    def getPeakConnectionStrengthFactor(self):
+        ''' Return the factor to account for peak connection strength, 
+            including strain hardening, local restraint, additional 
+            reinforcement and other connection conditions according
+            to clause 2.4.3 (equation 2.4-2) of AISC 358-16.'''
+        retval= (self.fy+self.fu)/(2*self.fy)
+        retval= min(retval, 1.2)
+        return retval
+
 A36= ASTMSteel('A36', fy= 250e6, fu=400e6, gammaM= 1.0)
 A529= ASTMSteel('A529', fy=290e6, fu=414e6, gammaM= 1.0)
 A572= ASTMSteel('A572', fy=345e6, fu=450e6, gammaM= 1.0)
