@@ -32,7 +32,7 @@
 //!
 //! @param owr: analysis aggregation that will own this object.
 //! @param classTag: class identifier.
-XC::HHTRayleighBase::HHTRayleighBase(AnalysisAggregation *owr,int classTag)
+XC::HHTRayleighBase::HHTRayleighBase(SolutionStrategy *owr,int classTag)
   : RayleighBase(owr,classTag),
     alpha(1.0), gamma(0.0), c2(0.0), c3(0.0), Ut(0), U(0), Ualpha(0) {}
 
@@ -43,7 +43,7 @@ XC::HHTRayleighBase::HHTRayleighBase(AnalysisAggregation *owr,int classTag)
 //! @param owr: analysis aggregation that will own this object.
 //! @param classTag: class identifier.
 //! @param _alpha: value for the alpha parameter.
-XC::HHTRayleighBase::HHTRayleighBase(AnalysisAggregation *owr,int classTag,double _alpha)
+XC::HHTRayleighBase::HHTRayleighBase(SolutionStrategy *owr,int classTag,double _alpha)
     : RayleighBase(owr,classTag),
     alpha(_alpha),gamma(1.5-_alpha), c2(0.0), c3(0.0), Ut(0), U(0), Ualpha(0) {}
 
@@ -55,7 +55,7 @@ XC::HHTRayleighBase::HHTRayleighBase(AnalysisAggregation *owr,int classTag,doubl
 //! @param classTag: class identifier.
 //! @param _alpha: value for the alpha parameter.
 //! @param rF: value of the Rayleigh damping factors.
-XC::HHTRayleighBase::HHTRayleighBase(AnalysisAggregation *owr,int classTag,double _alpha,const RayleighDampingFactors &rF)
+XC::HHTRayleighBase::HHTRayleighBase(SolutionStrategy *owr,int classTag,double _alpha,const RayleighDampingFactors &rF)
     : RayleighBase(owr,classTag,rF),
     alpha(_alpha), gamma(1.5-_alpha), c2(0.0), c3(0.0), Ut(0), U(0), Ualpha(0) {}
 
@@ -65,7 +65,7 @@ XC::HHTRayleighBase::HHTRayleighBase(AnalysisAggregation *owr,int classTag,doubl
 //! @param classTag: class identifier.
 //! @param _alpha: value for the alpha parameter.
 //! @param _gamma: value for the gamma parameter.
-XC::HHTRayleighBase::HHTRayleighBase(AnalysisAggregation *owr,int classTag,double _alpha, double _gamma)
+XC::HHTRayleighBase::HHTRayleighBase(SolutionStrategy *owr,int classTag,double _alpha, double _gamma)
     : RayleighBase(owr,classTag),
     alpha(_alpha), gamma(_gamma), c2(0.0), c3(0.0), Ut(0), U(0), Ualpha(0) {}
 
@@ -76,7 +76,7 @@ XC::HHTRayleighBase::HHTRayleighBase(AnalysisAggregation *owr,int classTag,doubl
 //! @param _alpha: value for the alpha parameter.
 //! @param _gamma: value for the gamma parameter.
 //! @param rF: value of the Rayleigh damping factors.
-XC::HHTRayleighBase::HHTRayleighBase(AnalysisAggregation *owr,int classTag,double _alpha, double _gamma,const RayleighDampingFactors &rF)
+XC::HHTRayleighBase::HHTRayleighBase(SolutionStrategy *owr,int classTag,double _alpha, double _gamma,const RayleighDampingFactors &rF)
     : RayleighBase(owr,classTag,rF), alpha(_alpha), gamma(_gamma), c2(0.0), c3(0.0), 
     Ut(0), U(0), Ualpha(0) {}
 

@@ -138,10 +138,10 @@ class WilsonTheta: public RayleighBase
     int sendData(Communicator &);
     int recvData(const Communicator &);
 
-    friend class AnalysisAggregation;
-    WilsonTheta(AnalysisAggregation *);
-    WilsonTheta(AnalysisAggregation *,double theta);
-    WilsonTheta(AnalysisAggregation *,double theta,const RayleighDampingFactors &rF);    
+    friend class SolutionStrategy;
+    WilsonTheta(SolutionStrategy *);
+    WilsonTheta(SolutionStrategy *,double theta);
+    WilsonTheta(SolutionStrategy *,double theta,const RayleighDampingFactors &rF);    
     Integrator *getCopy(void) const;
   public:
 

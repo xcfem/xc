@@ -49,7 +49,7 @@ XC::KEigenIntegrator *XC::KEigenAlgo::getKEigenIntegrator(void)
   }
 
 //! @brief Constructor.
-XC::KEigenAlgo::KEigenAlgo(AnalysisAggregation *owr)
+XC::KEigenAlgo::KEigenAlgo(SolutionStrategy *owr)
   :EigenAlgorithm(owr,EigenALGORITHM_TAGS_KEigen), ns(0), nl(0), condNumberThreshold(1e5) {}
 
 //! @brief Compute the smallest or largest eigenvalues.

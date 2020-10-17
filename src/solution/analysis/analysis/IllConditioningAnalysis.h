@@ -47,7 +47,7 @@ class IllConditioningAnalysis: public EigenAnalysis
   protected:
     friend class ProcSolu;
     friend class KEigenAnalysis;
-    IllConditioningAnalysis(AnalysisAggregation *analysis_aggregation);
+    IllConditioningAnalysis(SolutionStrategy *analysis_aggregation);
     Analysis *getCopy(void) const;
   public:
      

@@ -55,13 +55,13 @@ class ArpackSolver;
 class LinearBucklingAnalysis: public StaticAnalysis
   {
   private:
-    AnalysisAggregation *eigen_solu; //!< Solutio strategy for the eigenvalue problem.
+    SolutionStrategy *eigen_solu; //!< Solutio strategy for the eigenvalue problem.
     LinearBucklingEigenAnalysis linearBucklingEigenAnalysis;
     int numModes;
     int linear_buckling_analysis_step; //!Step in which the linear buckling analysis is started.
   protected:
     friend class ProcSolu;
-    LinearBucklingAnalysis(AnalysisAggregation *analysis_aggregation,AnalysisAggregation *eigen_solu);
+    LinearBucklingAnalysis(SolutionStrategy *analysis_aggregation,SolutionStrategy *eigen_solu);
     Analysis *getCopy(void) const;
   public:
     void clearAll(void);	    

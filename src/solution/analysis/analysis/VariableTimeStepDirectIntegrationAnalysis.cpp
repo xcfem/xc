@@ -66,10 +66,10 @@
 #include <domain/domain/Domain.h>
 #include <solution/analysis/convergenceTest/ConvergenceTest.h>
 #include <cfloat>
-#include "solution/AnalysisAggregation.h"
+#include "solution/SolutionStrategy.h"
 
 //! @brief Constructor.
-XC::VariableTimeStepDirectIntegrationAnalysis::VariableTimeStepDirectIntegrationAnalysis(AnalysisAggregation *analysis_aggregation)
+XC::VariableTimeStepDirectIntegrationAnalysis::VariableTimeStepDirectIntegrationAnalysis(SolutionStrategy *analysis_aggregation)
   :DirectIntegrationAnalysis(analysis_aggregation) {}    
 
 //! @brief Performs the analysis.
@@ -80,9 +80,9 @@ XC::VariableTimeStepDirectIntegrationAnalysis::VariableTimeStepDirectIntegration
 //! @param dtMax: Maximum value for the time increment.
 int XC::VariableTimeStepDirectIntegrationAnalysis::analyze(int numSteps, double dT, double dtMin, double dtMax, int Jd)
   {
-    assert(solution_method);
-    CommandEntity *old= solution_method->Owner();
-    solution_method->set_owner(this);
+    assert(solution_strategy);
+    CommandEntity *old= solution_strategy->Owner();
+    solution_strategy->set_owner(this);
 
     // get some pointers
     Domain *theDom = this->getDomainPtr();
@@ -156,7 +156,7 @@ int XC::VariableTimeStepDirectIntegrationAnalysis::analyze(int numSteps, double 
         // now we determine a new_ delta T for next loop
         currentDt = this->determineDt(currentDt, dtMin, dtMax, Jd, theTest);
       }
-    solution_method->set_owner(old);
+    solution_strategy->set_owner(old);
     return 0;
   }
 

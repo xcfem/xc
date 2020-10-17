@@ -24,7 +24,7 @@
 XC::Domain *(XC::Analysis::*getAnalysisDomain)(void)= &XC::Analysis::getDomainPtr;
 class_<XC::Analysis, XC::Analysis *, bases<CommandEntity>, boost::noncopyable >("Analysis", no_init)
   .add_property("getAnalysisResult", &XC::Analysis::getAnalysisResult)
-  .add_property("analysisAggregation",make_function(&XC::Analysis::getAnalysisAggregationPtr, return_internal_reference<>() ),"return a reference to the analysis aggregation.")
+  .add_property("analysisAggregation",make_function(&XC::Analysis::getSolutionStrategyPtr, return_internal_reference<>() ),"return a reference to the analysis aggregation.")
   .add_property("getDomain", make_function( getAnalysisDomain, return_internal_reference<>() ),"return a reference to the domain.")
 ;
 

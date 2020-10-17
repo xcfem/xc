@@ -61,7 +61,7 @@
 
 #include <solution/system_of_eqn/SystemOfEqn.h>
 #include <solution/analysis/model/AnalysisModel.h>
-#include "solution/AnalysisAggregation.h"
+#include "solution/SolutionStrategy.h"
 #include "solution/graph/graph/Graph.h"
 
 //! @brief Constructor. The integer \p classTag is provided to
@@ -69,21 +69,21 @@
 //!
 //! @param owr: analysis aggregation that owns this object.
 //! @param classTag: identifier of the class.
-XC::SystemOfEqn::SystemOfEqn(AnalysisAggregation *owr,int classTag)
+XC::SystemOfEqn::SystemOfEqn(SolutionStrategy *owr,int classTag)
   : MovableObject(classTag), CommandEntity(owr), tmpFileName("") {}
 
 //! @brief Returns a pointer to the solution method that owns this object.
-XC::AnalysisAggregation *XC::SystemOfEqn::getAnalysisAggregation(void)
-  { return dynamic_cast<AnalysisAggregation *>(Owner()); }
+XC::SolutionStrategy *XC::SystemOfEqn::getSolutionStrategy(void)
+  { return dynamic_cast<SolutionStrategy *>(Owner()); }
 
 //! @brief Returns a const pointer to the solution method that owns this object.
-const XC::AnalysisAggregation *XC::SystemOfEqn::getAnalysisAggregation(void) const
-  { return dynamic_cast<const AnalysisAggregation *>(Owner()); }
+const XC::SolutionStrategy *XC::SystemOfEqn::getSolutionStrategy(void) const
+  { return dynamic_cast<const SolutionStrategy *>(Owner()); }
 
 //! @brief Returns a const pointer to the analysis model.
 const XC::AnalysisModel *XC::SystemOfEqn::getAnalysisModelPtr(void) const
   {
-    const AnalysisAggregation *sm= getAnalysisAggregation();
+    const SolutionStrategy *sm= getSolutionStrategy();
     assert(sm);
     return sm->getAnalysisModelPtr();
   }
@@ -91,7 +91,7 @@ const XC::AnalysisModel *XC::SystemOfEqn::getAnalysisModelPtr(void) const
 //! @brief Returns a pointer to the analysis model.
 XC::AnalysisModel *XC::SystemOfEqn::getAnalysisModelPtr(void)
   {
-    const AnalysisAggregation *sm= getAnalysisAggregation();
+    const SolutionStrategy *sm= getSolutionStrategy();
     assert(sm);
     return sm->getAnalysisModelPtr();
   }

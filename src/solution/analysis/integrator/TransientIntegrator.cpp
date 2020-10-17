@@ -75,7 +75,7 @@
 //! @brief Constructor.
 //!
 //! @param owr: set of objects used to perform the analysis.
-XC::TransientIntegrator::TransientIntegrator(AnalysisAggregation *owr,int clasTag)
+XC::TransientIntegrator::TransientIntegrator(SolutionStrategy *owr,int clasTag)
   : IncrementalIntegrator(owr,clasTag) {}
 
 //! @brief Builds tangent stiffness matrix.

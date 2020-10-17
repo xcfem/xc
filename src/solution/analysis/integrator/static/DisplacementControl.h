@@ -106,9 +106,9 @@ class DisplacementControl: public DispBase
     const Domain *getDomainPtr(void) const;
     Domain *getDomainPtr(void);
 
-    friend class AnalysisAggregation;
-    DisplacementControl(AnalysisAggregation *); 
-    DisplacementControl(AnalysisAggregation *,int nodeTag, int dof, double increment,int numIncrStep, double minIncrement, double maxIncrement);
+    friend class SolutionStrategy;
+    DisplacementControl(SolutionStrategy *); 
+    DisplacementControl(SolutionStrategy *,int nodeTag, int dof, double increment,int numIncrStep, double minIncrement, double maxIncrement);
     Integrator *getCopy(void) const;
 
   public:

@@ -25,14 +25,14 @@
 // along with this program.
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
-//AnalysisAggregationMap.h
+//SolutionStrategyMap.h
 
 #ifndef MAPSOLUMETHOD_H
 #define MAPSOLUMETHOD_H
 
 #include "xc_utils/src/kernel/CommandEntity.h"
 #include "utility/handler/DataOutputHandler.h"
-#include "AnalysisAggregation.h"
+#include "SolutionStrategy.h"
 
 namespace XC {
 
@@ -41,17 +41,17 @@ class ModelWrapper;
 
 //!  @ingroup Solu
 //! 
-//! @brief Solution methods container.
-class AnalysisAggregationMap: public CommandEntity
+//! @brief Solution strategies container.
+class SolutionStrategyMap: public CommandEntity
   {
   private:
-    typedef std::map<std::string,AnalysisAggregation> map_solu_method;
+    typedef std::map<std::string,SolutionStrategy> map_solu_method;
     typedef map_solu_method::iterator iterator;
     typedef map_solu_method::const_iterator const_iterator;
 
-    map_solu_method solu_methods; //!< Solution method container.
+    map_solu_method solu_methods; //!< Solution strategies container.
   public:
-    AnalysisAggregationMap(ProcSoluControl *owr);
+    SolutionStrategyMap(ProcSoluControl *owr);
 
     inline iterator begin()
       { return solu_methods.begin(); }
@@ -67,12 +67,12 @@ class AnalysisAggregationMap: public CommandEntity
     inline size_t size(void) const
       { return solu_methods.size(); }
 
-    bool AnalysisAggregationExists(const std::string &) const;
-    AnalysisAggregation &createAnalysisAggregation(const std::string &,ModelWrapper *);
-    const AnalysisAggregation *getAnalysisAggregation(const std::string &) const;
-    AnalysisAggregation *getAnalysisAggregation(const std::string &);
+    bool SolutionStrategyExists(const std::string &) const;
+    SolutionStrategy &createSolutionStrategy(const std::string &,ModelWrapper *);
+    const SolutionStrategy *getSolutionStrategy(const std::string &) const;
+    SolutionStrategy *getSolutionStrategy(const std::string &);
 
-    AnalysisAggregation &newAnalysisAggregation(const std::string &,const std::string &);
+    SolutionStrategy &newSolutionStrategy(const std::string &,const std::string &);
 
     void revertToStart(void);
     void clearAll(void);

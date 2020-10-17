@@ -76,7 +76,7 @@ class Subdomain;
 class StaticDomainDecompositionAnalysis: public DomainDecompositionAnalysis
   {
     friend class ProcSolu;
-    StaticDomainDecompositionAnalysis(Subdomain &theDomain,AnalysisAggregation *s= nullptr);
+    StaticDomainDecompositionAnalysis(Subdomain &theDomain,SolutionStrategy *s= nullptr);
     Analysis *getCopy(void) const;
   public:
     ~StaticDomainDecompositionAnalysis(void);

@@ -73,7 +73,7 @@ namespace XC {
 class Graph;
 class AnalysisModel;
 class FEM_ObjectBroker;
-class AnalysisAggregation;
+class SolutionStrategy;
 
 //!  @ingroup Solu
 //! 
@@ -89,15 +89,15 @@ class AnalysisAggregation;
 //! system of equations.
 class SystemOfEqn: public MovableObject, public CommandEntity
   {
-    AnalysisAggregation *getAnalysisAggregation(void);
-    const AnalysisAggregation *getAnalysisAggregation(void) const;
+    SolutionStrategy *getSolutionStrategy(void);
+    const SolutionStrategy *getSolutionStrategy(void) const;
   protected:
     mutable std::string tmpFileName; //!< File name to store matrices
     virtual AnalysisModel *getAnalysisModelPtr(void);
     virtual const AnalysisModel *getAnalysisModelPtr(void) const;
 
-    friend class AnalysisAggregation;
-    SystemOfEqn(AnalysisAggregation *,int classTag);
+    friend class SolutionStrategy;
+    SystemOfEqn(SolutionStrategy *,int classTag);
     //! @brief Virtual constructor.
     virtual SystemOfEqn *getCopy(void) const= 0;
   public:

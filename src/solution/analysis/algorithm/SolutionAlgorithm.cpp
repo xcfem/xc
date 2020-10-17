@@ -50,7 +50,7 @@
                                                                         
                                                                         
 #include "SolutionAlgorithm.h"
-#include "solution/AnalysisAggregation.h"
+#include "solution/SolutionStrategy.h"
 // #include <utility/recorder/Recorder.h>
 // #include <utility/recorder/DamageRecorder.h>
 // #include <utility/recorder/DatastoreRecorder.h>
@@ -67,7 +67,7 @@
 
 
 //! @brief Constructor.
-XC::SolutionAlgorithm::SolutionAlgorithm(AnalysisAggregation *owr,int clasTag)
+XC::SolutionAlgorithm::SolutionAlgorithm(SolutionStrategy *owr,int clasTag)
   :MovableObject(clasTag), ObjWithRecorders(owr,nullptr)
   {
     Domain *dom= get_domain_ptr();
@@ -89,18 +89,18 @@ int XC::SolutionAlgorithm::domainChanged(void)
   { return 0; }
 
 //! @brief Return a pointer to the solution method which owns this object.
-XC::AnalysisAggregation *XC::SolutionAlgorithm::getAnalysisAggregation(void)
-  { return dynamic_cast<AnalysisAggregation *>(Owner()); }
+XC::SolutionStrategy *XC::SolutionAlgorithm::getSolutionStrategy(void)
+  { return dynamic_cast<SolutionStrategy *>(Owner()); }
 
 //! @brief Return a pointer to the solution method which owns this object.
-const XC::AnalysisAggregation *XC::SolutionAlgorithm::getAnalysisAggregation(void) const
-  { return dynamic_cast<const AnalysisAggregation *>(Owner()); }
+const XC::SolutionStrategy *XC::SolutionAlgorithm::getSolutionStrategy(void) const
+  { return dynamic_cast<const SolutionStrategy *>(Owner()); }
 
 
 //! @brief Return a const pointer to the analysis model.
 const XC::AnalysisModel *XC::SolutionAlgorithm::getAnalysisModelPtr(void) const
   {
-    const AnalysisAggregation *sm= getAnalysisAggregation();
+    const SolutionStrategy *sm= getSolutionStrategy();
     assert(sm);
     return sm->getAnalysisModelPtr();
   }
@@ -108,7 +108,7 @@ const XC::AnalysisModel *XC::SolutionAlgorithm::getAnalysisModelPtr(void) const
 //! @brief Return a pointer to the analysis model.
 XC::AnalysisModel *XC::SolutionAlgorithm::getAnalysisModelPtr(void)
   {
-    const AnalysisAggregation *sm= getAnalysisAggregation();
+    const SolutionStrategy *sm= getSolutionStrategy();
     assert(sm);
     return sm->getAnalysisModelPtr();
   }
@@ -116,7 +116,7 @@ XC::AnalysisModel *XC::SolutionAlgorithm::getAnalysisModelPtr(void)
 //! @brief Return a pointer to the integrator.
 XC::Integrator *XC::SolutionAlgorithm::getIntegratorPtr(void)
   {
-    AnalysisAggregation *sm= getAnalysisAggregation();
+    SolutionStrategy *sm= getSolutionStrategy();
     assert(sm);
     return sm->getIntegratorPtr();
   }
@@ -124,7 +124,7 @@ XC::Integrator *XC::SolutionAlgorithm::getIntegratorPtr(void)
 //! @brief Return a const pointer to the integrator.
 const XC::Integrator *XC::SolutionAlgorithm::getIntegratorPtr(void) const
   {
-    const AnalysisAggregation *sm= getAnalysisAggregation();
+    const SolutionStrategy *sm= getSolutionStrategy();
     assert(sm);
     return sm->getIntegratorPtr();
   }
@@ -132,7 +132,7 @@ const XC::Integrator *XC::SolutionAlgorithm::getIntegratorPtr(void) const
 //! @brief Return a pointer to the linear system of equations.
 XC::LinearSOE *XC::SolutionAlgorithm::getLinearSOEPtr(void)
   {
-    AnalysisAggregation *sm= getAnalysisAggregation();
+    SolutionStrategy *sm= getSolutionStrategy();
     assert(sm);
     return sm->getLinearSOEPtr();
   }
@@ -140,7 +140,7 @@ XC::LinearSOE *XC::SolutionAlgorithm::getLinearSOEPtr(void)
 //! @brief Return a const pointer to the linear system of equations.
 const XC::LinearSOE *XC::SolutionAlgorithm::getLinearSOEPtr(void) const
   {
-    const AnalysisAggregation *sm= getAnalysisAggregation();
+    const SolutionStrategy *sm= getSolutionStrategy();
     assert(sm);
     return sm->getLinearSOEPtr();
   }
@@ -148,7 +148,7 @@ const XC::LinearSOE *XC::SolutionAlgorithm::getLinearSOEPtr(void) const
 //! @brief Return a pointer to the eigen system of equations.
 XC::EigenSOE *XC::SolutionAlgorithm::getEigenSOEPtr(void)
   {
-    AnalysisAggregation *sm= getAnalysisAggregation();
+    SolutionStrategy *sm= getSolutionStrategy();
     assert(sm);
     return sm->getEigenSOEPtr();
   }
@@ -156,7 +156,7 @@ XC::EigenSOE *XC::SolutionAlgorithm::getEigenSOEPtr(void)
 //! @brief Return a const pointer to the eigen system of equations.
 const XC::EigenSOE *XC::SolutionAlgorithm::getEigenSOEPtr(void) const
   {
-    const AnalysisAggregation *sm= getAnalysisAggregation();
+    const SolutionStrategy *sm= getSolutionStrategy();
     assert(sm);
     return sm->getEigenSOEPtr();
   }
@@ -164,7 +164,7 @@ const XC::EigenSOE *XC::SolutionAlgorithm::getEigenSOEPtr(void) const
 //! @brief Return a const pointer to the DomainSolver.
 const XC::DomainSolver *XC::SolutionAlgorithm::getDomainSolverPtr(void) const
   {
-    const AnalysisAggregation *sm= getAnalysisAggregation();
+    const SolutionStrategy *sm= getSolutionStrategy();
     assert(sm);
     return sm->getDomainSolverPtr();
   }
@@ -172,7 +172,7 @@ const XC::DomainSolver *XC::SolutionAlgorithm::getDomainSolverPtr(void) const
 //! @brief Return a pointer to the DomainSolver.
 XC::DomainSolver *XC::SolutionAlgorithm::getDomainSolverPtr(void)
   {
-    AnalysisAggregation *sm= getAnalysisAggregation();
+    SolutionStrategy *sm= getSolutionStrategy();
     assert(sm);
     return sm->getDomainSolverPtr();
   }
@@ -180,7 +180,7 @@ XC::DomainSolver *XC::SolutionAlgorithm::getDomainSolverPtr(void)
 //! @brief Return a const pointer to the subdomain.
 const XC::Subdomain *XC::SolutionAlgorithm::getSubdomainPtr(void) const
   {
-    const AnalysisAggregation *sm= getAnalysisAggregation();
+    const SolutionStrategy *sm= getSolutionStrategy();
     assert(sm);
     return sm->getSubdomainPtr();
   }
@@ -188,7 +188,7 @@ const XC::Subdomain *XC::SolutionAlgorithm::getSubdomainPtr(void) const
 //! @brief Return a pointer to the subdomain.
 XC::Subdomain *XC::SolutionAlgorithm::getSubdomainPtr(void)
   {
-    AnalysisAggregation *sm= getAnalysisAggregation();
+    SolutionStrategy *sm= getSolutionStrategy();
     assert(sm);
     return sm->getSubdomainPtr();
   }
@@ -196,7 +196,7 @@ XC::Subdomain *XC::SolutionAlgorithm::getSubdomainPtr(void)
 //! @brief Return a pointer to the domain.
 XC::Domain *XC::SolutionAlgorithm::get_domain_ptr(void)
   {
-    AnalysisAggregation *sm= getAnalysisAggregation();
+    SolutionStrategy *sm= getSolutionStrategy();
     assert(sm);
     return sm->getDomainPtr();
   }

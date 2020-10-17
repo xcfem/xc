@@ -46,7 +46,7 @@ class DispBase: public BaseControl
     int sendData(Communicator &);
     int recvData(const Communicator &);
 
-    DispBase(AnalysisAggregation *,int classTag,const int &numIncr= 1);
+    DispBase(SolutionStrategy *,int classTag,const int &numIncr= 1);
   };
 } // end of XC namespace
 

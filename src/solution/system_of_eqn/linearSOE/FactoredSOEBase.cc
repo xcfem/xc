@@ -32,7 +32,7 @@
 //!
 //! @param owr: analysis aggregation that owns this object.
 //! @param classTag: identifier of the class.
-XC::FactoredSOEBase::FactoredSOEBase(AnalysisAggregation *owr,int classTag,int N)
+XC::FactoredSOEBase::FactoredSOEBase(SolutionStrategy *owr,int classTag,int N)
   : LinearSOEData(owr,classTag,N), factored(false){}
 
 

@@ -64,10 +64,10 @@
 #include <solution/system_of_eqn/linearSOE/LinearSOE.h>
 #include <utility/matrix/ID.h>
 #include <solution/analysis/convergenceTest/ConvergenceTest.h>
-#include "solution/AnalysisAggregation.h"
+#include "solution/SolutionStrategy.h"
 
 //! @brief Constructor
-XC::PeriodicNewton::PeriodicNewton(AnalysisAggregation *owr,int theTangentToUse, int mc)
+XC::PeriodicNewton::PeriodicNewton(SolutionStrategy *owr,int theTangentToUse, int mc)
   :NewtonBased(owr,EquiALGORITHM_TAGS_PeriodicNewton,theTangentToUse), maxCount(mc) {}
 
 //! @brief Virtual constructor.
@@ -108,7 +108,7 @@ int XC::PeriodicNewton::solveCurrentStep(void)
       }
 
     // set itself as the XC::ConvergenceTest objects XC::EquiSolnAlgo
-    theTest->set_owner(getAnalysisAggregation());
+    theTest->set_owner(getSolutionStrategy());
     if(theTest->start() < 0)
       {
         std::cerr << "XC::PeriodicNewton::solveCurrentStep() -"

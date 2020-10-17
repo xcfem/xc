@@ -29,7 +29,7 @@
 #include <solution/analysis/algorithm/equiSolnAlgo/NewtonBased.h>
 
 //! @brief Constructor
-XC::NewtonBased::NewtonBased(AnalysisAggregation *owr,int classTag,int theTangentToUse)
+XC::NewtonBased::NewtonBased(SolutionStrategy *owr,int classTag,int theTangentToUse)
   :EquiSolnAlgo(owr,classTag), tangent(theTangentToUse) {}
 
 //! @brief Send object members through the communicator argument.

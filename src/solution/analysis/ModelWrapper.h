@@ -41,7 +41,7 @@ class DOF_Numberer;
 class FEM_ObjectBroker;
 class ID;
 class Communicator;
-class AnalysisAggregation;
+class SolutionStrategy;
 class Integrator;
 
 //! @ingroup Analysis
@@ -78,14 +78,14 @@ class ModelWrapper: public CommandEntity
     void copy(const ModelWrapper &);
     void free_mem(void);
 
-    AnalysisAggregation *getAnalysisAggregation(void);
-    const AnalysisAggregation *getAnalysisAggregation(void) const;
+    SolutionStrategy *getSolutionStrategy(void);
+    const SolutionStrategy *getSolutionStrategy(void) const;
   protected:
     friend class FEProblem;
-    friend class AnalysisAggregation;
+    friend class SolutionStrategy;
 
   public:
-    ModelWrapper(AnalysisAggregation *owr= nullptr);
+    ModelWrapper(SolutionStrategy *owr= nullptr);
     ModelWrapper(const ModelWrapper &);
     ModelWrapper &operator=(const ModelWrapper &);
     ~ModelWrapper(void);

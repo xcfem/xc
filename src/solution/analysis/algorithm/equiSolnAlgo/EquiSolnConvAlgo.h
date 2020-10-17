@@ -82,8 +82,8 @@ class EquiSolnConvAlgo: public EquiSolnAlgo
   protected:
     ConvergenceTest *theTest;
 
-    EquiSolnConvAlgo(AnalysisAggregation *,int classTag);    
-    EquiSolnConvAlgo(AnalysisAggregation *,int classTag,ConvergenceTest *);
+    EquiSolnConvAlgo(SolutionStrategy *,int classTag);    
+    EquiSolnConvAlgo(SolutionStrategy *,int classTag,ConvergenceTest *);
   public:
 
     int setConvergenceTest(ConvergenceTest *theNewTest);

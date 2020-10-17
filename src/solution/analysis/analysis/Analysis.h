@@ -68,7 +68,7 @@
 
 namespace XC {
 
-class AnalysisAggregation;
+class SolutionStrategy;
 class ProcSolu;
 
 class Domain;
@@ -118,21 +118,23 @@ class Analysis: public CommandEntity
   {
   protected:
     int analysis_result; //!< Equal to zero if success.
-    AnalysisAggregation *solution_method; //!< Solution method.
+    SolutionStrategy *solution_strategy; //!< Solution strategy.
 
     int newStepDomain(AnalysisModel *theModel,const double &dT =0.0);
     ProcSolu *getProcSolu(void);
     const ProcSolu *getProcSolu(void) const;    
 
     friend class ProcSolu;
-    Analysis(AnalysisAggregation *analysis_aggregation);
+    Analysis(SolutionStrategy *analysis_aggregation);
     //! @brief Virtual constructor.
     virtual Analysis *getCopy(void) const= 0;
   public:
     inline virtual ~Analysis(void) {}
 
-    inline AnalysisAggregation *getAnalysisAggregationPtr(void)
-      { return solution_method; }
+    //! @brief Returns the solution strategy to which this
+    //! analysis belongs.
+    inline SolutionStrategy *getSolutionStrategyPtr(void)
+      { return solution_strategy; }
     Domain *getDomainPtr(void);
     const Domain *getDomainPtr(void) const;
     ConstraintHandler *getConstraintHandlerPtr(void);

@@ -69,16 +69,16 @@
 #include "utility/actor/actor/ArrayCommMetaData.h"
 
 //! @brief Constructor.
-XC::NewmarkHybridSimulation::NewmarkHybridSimulation(AnalysisAggregation *owr)
+XC::NewmarkHybridSimulation::NewmarkHybridSimulation(SolutionStrategy *owr)
     : NewmarkBase2(owr,INTEGRATOR_TAGS_NewmarkHybridSimulation), theTest(nullptr), rFact(1.0) {}
 
 //! @brief Constructor.
-XC::NewmarkHybridSimulation::NewmarkHybridSimulation(AnalysisAggregation *owr,double _gamma, double _beta,
+XC::NewmarkHybridSimulation::NewmarkHybridSimulation(SolutionStrategy *owr,double _gamma, double _beta,
     ConvergenceTest &theT)
   :NewmarkBase2(owr,INTEGRATOR_TAGS_NewmarkHybridSimulation,_gamma,_beta), theTest(&theT), rFact(1.0) {}
 
 //! @brief Constructor.
-XC::NewmarkHybridSimulation::NewmarkHybridSimulation(AnalysisAggregation *owr,double _gamma, double _beta,ConvergenceTest &theT,const RayleighDampingFactors &rF)
+XC::NewmarkHybridSimulation::NewmarkHybridSimulation(SolutionStrategy *owr,double _gamma, double _beta,ConvergenceTest &theT,const RayleighDampingFactors &rF)
   : NewmarkBase2(owr,INTEGRATOR_TAGS_NewmarkHybridSimulation,_gamma,_beta,rF), theTest(&theT), rFact(1.0) {}
 
 int XC::NewmarkHybridSimulation::newStep(double deltaT)

@@ -34,7 +34,7 @@
 //! @param classTag: class identifier.
 //! @param N: system size.
 //! @param NNZ: number of non-zeros.
-XC::SparseSOEBase::SparseSOEBase(AnalysisAggregation *owr,int classTag,int N, int NNZ)
+XC::SparseSOEBase::SparseSOEBase(SolutionStrategy *owr,int classTag,int N, int NNZ)
   : FactoredSOEBase(owr,classTag), nnz(NNZ), Bsize(0){}
 
 

@@ -43,7 +43,7 @@ class FactoredSOEBase: public LinearSOEData
   protected:
     bool factored; //!< True if the system is factored.
 
-    FactoredSOEBase(AnalysisAggregation *,int classTag,int N= 0);
+    FactoredSOEBase(SolutionStrategy *,int classTag,int N= 0);
   };
 } // end of XC namespace
 

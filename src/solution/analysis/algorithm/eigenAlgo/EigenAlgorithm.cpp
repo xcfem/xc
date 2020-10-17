@@ -70,7 +70,7 @@
 #include <utility/matrix/Vector.h>
 
 //! @brief Constructor.
-XC::EigenAlgorithm::EigenAlgorithm(AnalysisAggregation *owr,int classTag)
+XC::EigenAlgorithm::EigenAlgorithm(SolutionStrategy *owr,int classTag)
   :SolutionAlgorithm(owr,classTag) {}
 
 //! @brief Return a pointer to the integrator.

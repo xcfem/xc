@@ -50,8 +50,8 @@ class LinearBucklingIntegrator: public EigenIntegrator
   {
   protected:
 
-    friend class AnalysisAggregation;
-    LinearBucklingIntegrator(AnalysisAggregation *);
+    friend class SolutionStrategy;
+    LinearBucklingIntegrator(SolutionStrategy *);
     Integrator *getCopy(void) const;
   public:
      

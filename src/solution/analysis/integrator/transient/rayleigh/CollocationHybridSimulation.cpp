@@ -67,12 +67,12 @@
 #include <solution/analysis/convergenceTest/ConvergenceTest.h>
 
 //! @brief Constructor.
-XC::CollocationHybridSimulation::CollocationHybridSimulation(AnalysisAggregation *owr)
+XC::CollocationHybridSimulation::CollocationHybridSimulation(SolutionStrategy *owr)
     : HHTBase(owr,INTEGRATOR_TAGS_CollocationHybridSimulation),
     theta(1.0), rFact(1.0), theTest(nullptr) {}
 
 //! @brief Constructor.
-XC::CollocationHybridSimulation::CollocationHybridSimulation(AnalysisAggregation *owr,double _theta,ConvergenceTest &theT)
+XC::CollocationHybridSimulation::CollocationHybridSimulation(SolutionStrategy *owr,double _theta,ConvergenceTest &theT)
   : HHTBase(owr,INTEGRATOR_TAGS_CollocationHybridSimulation,_theta,0.0,0.5),
     theta(_theta), rFact(1.0), theTest(&theT)
   {
@@ -89,7 +89,7 @@ XC::CollocationHybridSimulation::CollocationHybridSimulation(AnalysisAggregation
   }
 
 //! @brief Constructor.
-XC::CollocationHybridSimulation::CollocationHybridSimulation(AnalysisAggregation *owr,double _theta, ConvergenceTest &theT,const RayleighDampingFactors &rF)
+XC::CollocationHybridSimulation::CollocationHybridSimulation(SolutionStrategy *owr,double _theta, ConvergenceTest &theT,const RayleighDampingFactors &rF)
     : HHTBase(owr,INTEGRATOR_TAGS_CollocationHybridSimulation,_theta,0.0,0.5,rF),
       theta(_theta), rFact(1.0)
   {
@@ -106,13 +106,13 @@ XC::CollocationHybridSimulation::CollocationHybridSimulation(AnalysisAggregation
   }
 
 //! @brief Constructor.
-XC::CollocationHybridSimulation::CollocationHybridSimulation(AnalysisAggregation *owr,double _theta,
+XC::CollocationHybridSimulation::CollocationHybridSimulation(SolutionStrategy *owr,double _theta,
     double _beta, double _gamma, ConvergenceTest &theT)
   : HHTBase(owr,INTEGRATOR_TAGS_CollocationHybridSimulation,_theta,_beta,_gamma),
     theta(_theta), rFact(1.0), theTest(&theT) {}
 
 //! @brief Constructor.
-XC::CollocationHybridSimulation::CollocationHybridSimulation(AnalysisAggregation *owr,double _theta,
+XC::CollocationHybridSimulation::CollocationHybridSimulation(SolutionStrategy *owr,double _theta,
     double _beta, double _gamma, ConvergenceTest &theT,const RayleighDampingFactors &rF)
     : HHTBase(owr,INTEGRATOR_TAGS_CollocationHybridSimulation,_theta,_beta,_gamma,rF),
     theta(_theta), rFact(1.0), theTest(&theT) {}

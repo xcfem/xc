@@ -74,7 +74,7 @@ class StaticSensitivityIntegrator: public SensitivityIntegrator, public StaticIn
   private:
     int gradNumber;
   public:
-    StaticSensitivityIntegrator(AnalysisAggregation *owr);
+    StaticSensitivityIntegrator(SolutionStrategy *owr);
     
 
 	// Methods promised by the ordinary integrator

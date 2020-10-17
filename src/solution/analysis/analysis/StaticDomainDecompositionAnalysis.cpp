@@ -65,7 +65,7 @@
 #include <solution/analysis/integrator/StaticIntegrator.h>
 #include <solution/analysis/convergenceTest/ConvergenceTest.h>
 #include "domain/domain/subdomain/Subdomain.h"
-#include "solution/AnalysisAggregation.h"
+#include "solution/SolutionStrategy.h"
 
 // AddingSensitivity:BEGIN //////////////////////////////////
 #ifdef _RELIABILITY
@@ -78,7 +78,7 @@
 #include "utility/matrix/ID.h"
 
 //! @brief Constructor.
-XC::StaticDomainDecompositionAnalysis::StaticDomainDecompositionAnalysis(Subdomain &the_Domain,AnalysisAggregation *s)
+XC::StaticDomainDecompositionAnalysis::StaticDomainDecompositionAnalysis(Subdomain &the_Domain,SolutionStrategy *s)
   :DomainDecompositionAnalysis(ANALYSIS_TAGS_StaticDomainDecompositionAnalysis, the_Domain) {}    
 
 //! @brief Destructor.
@@ -106,9 +106,9 @@ bool XC::StaticDomainDecompositionAnalysis::doesIndependentAnalysis(void)
 //! @param dT: time increment.
 int XC::StaticDomainDecompositionAnalysis::analyze(double dT)
   {
-    assert(solution_method);
-    CommandEntity *old= solution_method->Owner();
-    solution_method->set_owner(this);
+    assert(solution_strategy);
+    CommandEntity *old= solution_strategy->Owner();
+    solution_strategy->set_owner(this);
 
     int result = 0;
     Domain *the_Domain = this->getDomainPtr();
@@ -182,7 +182,7 @@ int XC::StaticDomainDecompositionAnalysis::analyze(double dT)
         return -4;
       }    	
     //   std::cerr << " XC::StaticDomainDecompositionAnalysis::analyze() - done COMMIT\n";
-    solution_method->set_owner(old);
+    solution_strategy->set_owner(old);
     return 0;
   }
 
@@ -372,8 +372,8 @@ int XC::StaticDomainDecompositionAnalysis::sendSelf(Communicator &comm)
   data(5) = theSolver->getClassTag();
   data(6) = getStaticIntegratorPtr()->getClassTag();
 
-  if(solution_method->getConvergenceTestPtr())
-    data(7) = solution_method->getConvergenceTestPtr()->getClassTag();
+  if(solution_strategy->getConvergenceTestPtr())
+    data(7) = solution_strategy->getConvergenceTestPtr()->getClassTag();
   else
     data(7) = -1;
 
@@ -418,8 +418,8 @@ int XC::StaticDomainDecompositionAnalysis::sendSelf(Communicator &comm)
     return -1;
   }
 
-  if(solution_method->getConvergenceTestPtr())
-    if(solution_method->getConvergenceTestPtr()->sendSelf(comm) != 0) {
+  if(solution_strategy->getConvergenceTestPtr())
+    if(solution_strategy->getConvergenceTestPtr()->sendSelf(comm) != 0) {
       std::cerr << "XC::StaticDomainDecompositionAnalysis::sendSelf() - failed to send integrator\n";
       return -1;
   }
@@ -534,11 +534,11 @@ int XC::StaticDomainDecompositionAnalysis::recvSelf(const Communicator &comm)
     getStaticIntegratorPtr()->recvSelf(comm);
 
 
-    if(solution_method->getConvergenceTestPtr() == 0 || solution_method->getConvergenceTestPtr()->getClassTag() != data(7))
+    if(solution_strategy->getConvergenceTestPtr() == 0 || solution_strategy->getConvergenceTestPtr()->getClassTag() != data(7))
       {
 	std::cerr << "StaticDomainDecompositionAnalysis::recvSelf; falta implementar la lectura del convergence test." << std::endl;
-//         if(solution_method->getConvergenceTestPtr() != 0)
-//           delete solution_method->getConvergenceTestPtr();
+//         if(solution_strategy->getConvergenceTestPtr() != 0)
+//           delete solution_strategy->getConvergenceTestPtr();
     
 //         if(data(7) != -1)
 //           {
@@ -550,11 +550,11 @@ int XC::StaticDomainDecompositionAnalysis::recvSelf(const Communicator &comm)
 // 	        return -1;
 //               }
 //             else
-//               solution_method->setConvergenceTest(*tmp);
+//               solution_strategy->setConvergenceTest(*tmp);
 //           }
        }
-     if(solution_method->getConvergenceTestPtr() != 0)
-        solution_method->getConvergenceTestPtr()->recvSelf(comm);
+     if(solution_strategy->getConvergenceTestPtr() != 0)
+        solution_strategy->getConvergenceTestPtr()->recvSelf(comm);
 
      // set up the links needed by the elements in the aggregation
      set_all_links();

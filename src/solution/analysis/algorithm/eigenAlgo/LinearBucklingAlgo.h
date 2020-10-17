@@ -82,8 +82,8 @@ class LinearBucklingAlgo: public EigenAlgorithm
     LinearBucklingIntegrator *getLinearBucklingIntegrator(void);
     virtual void eigen_to_model(int numModes);
 
-    friend class AnalysisAggregation;
-    LinearBucklingAlgo(AnalysisAggregation *);
+    friend class SolutionStrategy;
+    LinearBucklingAlgo(SolutionStrategy *);
     virtual SolutionAlgorithm *getCopy(void) const;
   public:
     virtual int solveCurrentStep(int numModes);

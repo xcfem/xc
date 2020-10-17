@@ -40,12 +40,12 @@
 #include "solution/analysis/integrator/StaticIntegrator.h"
 #include "solution/analysis/integrator/eigen/LinearBucklingIntegrator.h"
 #include "domain/domain/Domain.h"
-#include "solution/AnalysisAggregation.h"
+#include "solution/SolutionStrategy.h"
 #include "solution/ProcSolu.h"
 
 
 //! @brief Constructor.
-XC::LinearBucklingAnalysis::LinearBucklingAnalysis(AnalysisAggregation *analysis_aggregation,AnalysisAggregation *esolu)
+XC::LinearBucklingAnalysis::LinearBucklingAnalysis(SolutionStrategy *analysis_aggregation,SolutionStrategy *esolu)
   :StaticAnalysis(analysis_aggregation), eigen_solu(esolu), linearBucklingEigenAnalysis(esolu),
    numModes(0),linear_buckling_analysis_step(0) {}
 
@@ -64,9 +64,9 @@ void XC::LinearBucklingAnalysis::clearAll(void)
 //! increase the number of steps so \p numSteps= 1)
 int XC::LinearBucklingAnalysis::analyze(int numSteps)
   {
-    assert(solution_method);
-    CommandEntity *old= solution_method->Owner();
-    solution_method->set_owner(this);
+    assert(solution_strategy);
+    CommandEntity *old= solution_strategy->Owner();
+    solution_strategy->set_owner(this);
     assert(eigen_solu);
     CommandEntity *oldE= eigen_solu->Owner();
     eigen_solu->set_owner(this);
@@ -87,7 +87,7 @@ int XC::LinearBucklingAnalysis::analyze(int numSteps)
         if(result < 0) //Fallo en run_analysis_step.
           return result;
       }
-    solution_method->set_owner(old);
+    solution_strategy->set_owner(old);
     eigen_solu->set_owner(oldE);
     return result;
   }

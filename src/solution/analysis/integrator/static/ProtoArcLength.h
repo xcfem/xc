@@ -54,7 +54,7 @@ class ProtoArcLength: public StaticIntegrator
     int sendData(Communicator &);
     int recvData(const Communicator &);
 
-    ProtoArcLength(AnalysisAggregation *,int classTag,double ArcLength);
+    ProtoArcLength(SolutionStrategy *,int classTag,double ArcLength);
   public:
 
     int newStep(void);

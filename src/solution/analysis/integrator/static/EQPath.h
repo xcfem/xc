@@ -70,7 +70,7 @@ class EQPath: public StaticIntegrator
     int sendData(Communicator &);
     int recvData(const Communicator &);
   public:
-    EQPath(AnalysisAggregation *owr,double arcLeng,int type);
+    EQPath(SolutionStrategy *owr,double arcLeng,int type);
 
     ~EQPath(void);
 

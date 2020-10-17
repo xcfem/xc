@@ -68,7 +68,7 @@
 
 namespace XC {
 class EquiSolnAlgo;
-class AnalysisAggregation;
+class SolutionStrategy;
 
 //! @ingroup CTest
 //
@@ -80,8 +80,8 @@ class AnalysisAggregation;
 //! the interface that all subclasses must provide.
 class ConvergenceTest: public MovableObject, public EntityWithOwner
   {
-    AnalysisAggregation *getAnalysisAggregation(void);
-    const AnalysisAggregation *getAnalysisAggregation(void) const;
+    SolutionStrategy *getSolutionStrategy(void);
+    const SolutionStrategy *getSolutionStrategy(void) const;
   protected:
     int currentIter; //!< number of times test() has been invokes since last start()
     int maxNumIter;  //!< max number of iterations

@@ -57,7 +57,7 @@
 // What: "@(#) IncrementalIntegrator.C, revA"
 
 #include <solution/analysis/integrator/IncrementalIntegrator.h>
-#include "solution/AnalysisAggregation.h"
+#include "solution/SolutionStrategy.h"
 #include <solution/analysis/model/fe_ele/FE_Element.h>
 #include <solution/system_of_eqn/linearSOE/LinearSOE.h>
 #include <solution/analysis/model/AnalysisModel.h>
@@ -70,7 +70,7 @@
 //! @brief Constructor.
 //!
 //! @param owr: set of objects used to perform the analysis.
-XC::IncrementalIntegrator::IncrementalIntegrator(AnalysisAggregation *owr,int clasTag)
+XC::IncrementalIntegrator::IncrementalIntegrator(SolutionStrategy *owr,int clasTag)
   : Integrator(owr,clasTag), statusFlag(CURRENT_TANGENT) {}
 
 
@@ -262,7 +262,7 @@ int XC::IncrementalIntegrator::revertToStart()
 //! associated with the IncrementalIntegrator object, i.e. \p theSOE.
 XC::LinearSOE *XC::IncrementalIntegrator::getLinearSOEPtr(void)
   {
-    AnalysisAggregation *sm= getAnalysisAggregation();
+    SolutionStrategy *sm= getSolutionStrategy();
     assert(sm);
     return sm->getLinearSOEPtr();
   }
@@ -273,7 +273,7 @@ XC::LinearSOE *XC::IncrementalIntegrator::getLinearSOEPtr(void)
 //! associated with the IncrementalIntegrator object, i.e. \p theSOE.
 const XC::LinearSOE *XC::IncrementalIntegrator::getLinearSOEPtr(void) const
   {
-    const AnalysisAggregation *sm= getAnalysisAggregation();
+    const SolutionStrategy *sm= getSolutionStrategy();
     assert(sm);
     return sm->getLinearSOEPtr();
   }

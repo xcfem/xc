@@ -113,10 +113,10 @@ class FullGenLinSOE: public FactoredSOEBase
   protected:
     virtual bool setSolver(LinearSOESolver *);
 
-    friend class AnalysisAggregation;
+    friend class SolutionStrategy;
     friend class FEM_ObjectBroker;
-    FullGenLinSOE(AnalysisAggregation *);        
-    FullGenLinSOE(AnalysisAggregation *,int N);        
+    FullGenLinSOE(SolutionStrategy *);        
+    FullGenLinSOE(SolutionStrategy *,int N);        
     SystemOfEqn *getCopy(void) const;
   public:
     int setSize(Graph &theGraph);

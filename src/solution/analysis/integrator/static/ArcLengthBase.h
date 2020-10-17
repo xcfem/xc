@@ -52,7 +52,7 @@ class ArcLengthBase: public ProtoArcLength
     int sendData(Communicator &);
     int recvData(const Communicator &);
 
-    ArcLengthBase(AnalysisAggregation *,int classTag,double ArcLength, double alpha = 1.0);
+    ArcLengthBase(SolutionStrategy *,int classTag,double ArcLength, double alpha = 1.0);
   public:
 
     int sendSelf(Communicator &);

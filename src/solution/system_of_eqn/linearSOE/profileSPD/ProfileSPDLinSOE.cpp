@@ -66,7 +66,7 @@
 //! @brief Constructor.
 //!
 //! @param owr: analysis aggregation that owns this object.
-XC::ProfileSPDLinSOE::ProfileSPDLinSOE(AnalysisAggregation *owr)
+XC::ProfileSPDLinSOE::ProfileSPDLinSOE(SolutionStrategy *owr)
   :FactoredSOEBase(owr,LinSOE_TAGS_ProfileSPDLinSOE),
    profileSize(0), isAcondensed(false), numInt(0) {}
 
@@ -74,7 +74,7 @@ XC::ProfileSPDLinSOE::ProfileSPDLinSOE(AnalysisAggregation *owr)
 //!
 //! @param owr: analysis aggregation that owns this object.
 //! @param classTag: identifier of the class.
-XC::ProfileSPDLinSOE::ProfileSPDLinSOE(AnalysisAggregation *owr,int classTag)
+XC::ProfileSPDLinSOE::ProfileSPDLinSOE(SolutionStrategy *owr,int classTag)
   :FactoredSOEBase(owr,classTag),
    profileSize(0), isAcondensed(false), numInt(0) {}
 
@@ -92,7 +92,7 @@ XC::ProfileSPDLinSOE::ProfileSPDLinSOE(AnalysisAggregation *owr,int classTag)
 //! @param owr: analysis aggregation that owns this object.
 //! @param N: size of the system.
 //! @param the_Solver: pointer to the solver to use.
-XC::ProfileSPDLinSOE::ProfileSPDLinSOE(AnalysisAggregation *owr,int N, int *iLoc,ProfileSPDLinSolver *the_Solver)
+XC::ProfileSPDLinSOE::ProfileSPDLinSOE(SolutionStrategy *owr,int N, int *iLoc,ProfileSPDLinSolver *the_Solver)
   :FactoredSOEBase(owr,LinSOE_TAGS_ProfileSPDLinSOE,N),
    profileSize(0), isAcondensed(false), numInt(0)
   {

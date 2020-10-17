@@ -32,7 +32,7 @@
 //!
 //! @param owr: analysis aggregation that will own this object.
 //! @param classTag: class identifier.
-XC::RayleighBase::RayleighBase(AnalysisAggregation *owr,int classTag)
+XC::RayleighBase::RayleighBase(SolutionStrategy *owr,int classTag)
     : DampingFactorsIntegrator(owr,classTag), deltaT(0.0) {}
 
 //! @brief Constructor.
@@ -40,7 +40,7 @@ XC::RayleighBase::RayleighBase(AnalysisAggregation *owr,int classTag)
 //! @param owr: analysis aggregation that will own this object.
 //! @param classTag: class identifier.
 //! @param fF: Rayleigh damping factors.
-XC::RayleighBase::RayleighBase(AnalysisAggregation *owr,int classTag,const RayleighDampingFactors &rF)
+XC::RayleighBase::RayleighBase(SolutionStrategy *owr,int classTag,const RayleighDampingFactors &rF)
   : DampingFactorsIntegrator(owr,classTag,rF),deltaT(0.0) {}
 
 

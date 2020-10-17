@@ -56,10 +56,10 @@
 #include <solution/analysis/algorithm/equiSolnAlgo/BFGS.h>
 #include <solution/system_of_eqn/linearSOE/LinearSOE.h> 
 #include <solution/analysis/convergenceTest/ConvergenceTest.h>
-#include "solution/AnalysisAggregation.h"
+#include "solution/SolutionStrategy.h"
 
 //! @brief Constructor
-XC::BFGS::BFGS(AnalysisAggregation *owr,int theTangentToUse, int n)
+XC::BFGS::BFGS(SolutionStrategy *owr,int theTangentToUse, int n)
   :BFBRoydenBase(owr,EquiALGORITHM_TAGS_BFGS,theTangentToUse,n) {}
 
 //! @brief Virtual constructor.
@@ -67,7 +67,7 @@ XC::SolutionAlgorithm *XC::BFGS::getCopy(void) const
   { return new BFGS(*this); }
 
 //! @brief Constructor.
-XC::BFGS::BFGS(AnalysisAggregation *owr,ConvergenceTest &theT, int theTangentToUse, int n)
+XC::BFGS::BFGS(SolutionStrategy *owr,ConvergenceTest &theT, int theTangentToUse, int n)
   :BFBRoydenBase(owr,EquiALGORITHM_TAGS_BFGS,theT,theTangentToUse,n) {}
 
 //! @brief resuelve el paso actual.
@@ -88,7 +88,7 @@ int XC::BFGS::solveCurrentStep(void)
       }	
 
     // set itself as the ConvergenceTest objects EquiSolnConvAlgo
-    theTest->set_owner(getAnalysisAggregation());
+    theTest->set_owner(getSolutionStrategy());
     if(theTest->start() < 0)
       {
         std::cerr << getClassName() << "::" << __FUNCTION__
@@ -96,7 +96,7 @@ int XC::BFGS::solveCurrentStep(void)
         return -3;
       }
 
-    localTest->set_owner(getAnalysisAggregation());
+    localTest->set_owner(getSolutionStrategy());
 
     rdotz.resize(numberLoops+3);
     sdotr.resize(numberLoops+3);

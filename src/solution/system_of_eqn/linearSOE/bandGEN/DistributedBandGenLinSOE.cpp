@@ -64,7 +64,7 @@
 #include <utility/actor/objectBroker/FEM_ObjectBroker.h>
 
 //! @brief Constructor.
-XC::DistributedBandGenLinSOE::DistributedBandGenLinSOE(AnalysisAggregation *owr)
+XC::DistributedBandGenLinSOE::DistributedBandGenLinSOE(SolutionStrategy *owr)
   :BandGenLinSOE(owr,LinSOE_TAGS_DistributedBandGenLinSOE), DistributedBandLinSOE() {}
 
 

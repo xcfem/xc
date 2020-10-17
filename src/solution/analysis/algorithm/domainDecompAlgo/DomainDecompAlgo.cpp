@@ -74,7 +74,7 @@
 //! @brief Constructor.
 //!
 //! @param owr: object owner.
-XC::DomainDecompAlgo::DomainDecompAlgo(AnalysisAggregation *owr)
+XC::DomainDecompAlgo::DomainDecompAlgo(SolutionStrategy *owr)
   :SolutionAlgorithm(owr,DomDecompALGORITHM_TAGS_DomainDecompAlgo) {}
 
 //! @brief Solve current step.

@@ -67,7 +67,7 @@
 //! @brief Constructor.
 //!
 //! @param owr: set of objects used to perform the analysis.
-XC::MinUnbalDispNorm::MinUnbalDispNorm(AnalysisAggregation *owr,double lambda1, int specNumIter,double min, double max, int signFirstStep)
+XC::MinUnbalDispNorm::MinUnbalDispNorm(SolutionStrategy *owr,double lambda1, int specNumIter,double min, double max, int signFirstStep)
   :DispBase(owr,INTEGRATOR_TAGS_MinUnbalDispNorm,specNumIter),
    dLambda1LastStep(lambda1), signLastDeltaLambdaStep(1),
    dLambda1min(min), dLambda1max(max), signLastDeterminant(1),

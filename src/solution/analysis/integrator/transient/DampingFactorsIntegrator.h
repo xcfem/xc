@@ -48,8 +48,8 @@ class DampingFactorsIntegrator: public TransientIntegrator
     int sendData(Communicator &);
     int recvData(const Communicator &);
 
-    DampingFactorsIntegrator(AnalysisAggregation *,int classTag);
-    DampingFactorsIntegrator(AnalysisAggregation *,int classTag,const RayleighDampingFactors &rF);
+    DampingFactorsIntegrator(SolutionStrategy *,int classTag);
+    DampingFactorsIntegrator(SolutionStrategy *,int classTag,const RayleighDampingFactors &rF);
   public:
     void Print(std::ostream &s, int flag = 0) const;        
     

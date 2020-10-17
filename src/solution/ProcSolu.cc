@@ -42,7 +42,7 @@
 
 
 #include "solution/analysis/ModelWrapper.h"
-#include "solution/AnalysisAggregation.h"
+#include "solution/SolutionStrategy.h"
 
 #include <domain/domain/Domain.h>
 
@@ -63,7 +63,7 @@ void XC::ProcSolu::free_analysis(void)
 bool XC::ProcSolu::alloc_analysis(const std::string &nmb,const std::string &analysis_aggregation_code,const std::string &cod_solu_eigenM)
   {
     free_analysis();
-    AnalysisAggregation *analysis_aggregation= solu_control.getAnalysisAggregation(analysis_aggregation_code);
+    SolutionStrategy *analysis_aggregation= solu_control.getSolutionStrategy(analysis_aggregation_code);
     if(analysis_aggregation)
       {
         if(analysis_aggregation->CheckPointers())
@@ -76,7 +76,7 @@ bool XC::ProcSolu::alloc_analysis(const std::string &nmb,const std::string &anal
               theAnalysis= new ModalAnalysis(analysis_aggregation);
             else if(nmb=="linear_buckling_analysis")
               {
-                AnalysisAggregation *eigenM= solu_control.getAnalysisAggregation(cod_solu_eigenM);
+                SolutionStrategy *eigenM= solu_control.getSolutionStrategy(cod_solu_eigenM);
                 if(eigenM)
                   theAnalysis= new LinearBucklingAnalysis(analysis_aggregation,eigenM);
               }

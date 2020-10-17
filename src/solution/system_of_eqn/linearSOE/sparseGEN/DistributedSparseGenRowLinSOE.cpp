@@ -68,7 +68,7 @@
 //! @brief Constructor.
 //!
 //! @param owr: analysis aggregation that owns this object.
-XC::DistributedSparseGenRowLinSOE::DistributedSparseGenRowLinSOE(AnalysisAggregation *owr)
+XC::DistributedSparseGenRowLinSOE::DistributedSparseGenRowLinSOE(SolutionStrategy *owr)
   :SparseGenSOEBase(owr,LinSOE_TAGS_DistributedSparseGenRowLinSOE),
    colA(0), rowStartA(0), 
    numP(0), rank(-1), startRow(-1), endRow(-1), numRows(0),

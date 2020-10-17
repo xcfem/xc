@@ -81,10 +81,10 @@ class NewmarkExplicit: public NewmarkBase
     int sendData(Communicator &);
     int recvData(const Communicator &);
 
-    friend class AnalysisAggregation;
-    NewmarkExplicit(AnalysisAggregation *);
-    NewmarkExplicit(AnalysisAggregation *,double gamma);
-    NewmarkExplicit(AnalysisAggregation *,double gamma,const RayleighDampingFactors &rF); 
+    friend class SolutionStrategy;
+    NewmarkExplicit(SolutionStrategy *);
+    NewmarkExplicit(SolutionStrategy *,double gamma);
+    NewmarkExplicit(SolutionStrategy *,double gamma,const RayleighDampingFactors &rF); 
     Integrator *getCopy(void) const;
   public:
     // methods which define what the FE_Element and DOF_Groups add

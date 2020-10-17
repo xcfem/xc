@@ -49,7 +49,7 @@ class NewtonBased: public EquiSolnAlgo
     int sendData(Communicator &);
     int recvData(const Communicator &);
 
-    NewtonBased(AnalysisAggregation *,int classTag,int tangent = CURRENT_TANGENT);
+    NewtonBased(SolutionStrategy *,int classTag,int tangent = CURRENT_TANGENT);
   public:
     virtual int sendSelf(Communicator &);
     virtual int recvSelf(const Communicator &);

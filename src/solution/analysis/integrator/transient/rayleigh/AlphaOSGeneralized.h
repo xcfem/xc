@@ -85,12 +85,12 @@ class AlphaOSGeneralized: public AlphaOSBase
     int recvData(const Communicator &);
     virtual int formElementResidual(void);
 
-    friend class AnalysisAggregation;
-    AlphaOSGeneralized(AnalysisAggregation *);
-    AlphaOSGeneralized(AnalysisAggregation *,double rhoInf);
-    AlphaOSGeneralized(AnalysisAggregation *,double rhoInf,const RayleighDampingFactors &rF);
-    AlphaOSGeneralized(AnalysisAggregation *,double alphaI, double alphaF, double beta, double gamma);
-    AlphaOSGeneralized(AnalysisAggregation *,double alphaI, double alphaF, double beta, double gamma,const RayleighDampingFactors &rF);
+    friend class SolutionStrategy;
+    AlphaOSGeneralized(SolutionStrategy *);
+    AlphaOSGeneralized(SolutionStrategy *,double rhoInf);
+    AlphaOSGeneralized(SolutionStrategy *,double rhoInf,const RayleighDampingFactors &rF);
+    AlphaOSGeneralized(SolutionStrategy *,double alphaI, double alphaF, double beta, double gamma);
+    AlphaOSGeneralized(SolutionStrategy *,double alphaI, double alphaF, double beta, double gamma,const RayleighDampingFactors &rF);
     Integrator *getCopy(void) const;
 
   public:

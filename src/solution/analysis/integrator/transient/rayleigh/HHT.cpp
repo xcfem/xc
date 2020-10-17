@@ -68,13 +68,13 @@
 //! @brief Constructor.
 //!
 //! @param owr: analysis aggregation that will own this object.
-XC::HHT::HHT(AnalysisAggregation *owr)
+XC::HHT::HHT(SolutionStrategy *owr)
   : HHTBase(owr,INTEGRATOR_TAGS_HHT) {}
 
 //! @brief Constructor.
 //!
 //! @param owr: analysis aggregation that will own this object.
-XC::HHT::HHT(AnalysisAggregation *owr,double _alpha)
+XC::HHT::HHT(SolutionStrategy *owr,double _alpha)
   : HHTBase(owr,INTEGRATOR_TAGS_HHT,_alpha) {}
 
 //! @brief Constructor.
@@ -84,7 +84,7 @@ XC::HHT::HHT(AnalysisAggregation *owr,double _alpha)
 //!
 //! @param owr: analysis aggregation that will own this object.
 //! @param rF: value of the Rayleigh damping factors.
-XC::HHT::HHT(AnalysisAggregation *owr,double _alpha,const RayleighDampingFactors &rF)
+XC::HHT::HHT(SolutionStrategy *owr,double _alpha,const RayleighDampingFactors &rF)
   : HHTBase(owr,INTEGRATOR_TAGS_HHT,_alpha,rF) {}
 
 //! @brief Constructor.
@@ -93,7 +93,7 @@ XC::HHT::HHT(AnalysisAggregation *owr,double _alpha,const RayleighDampingFactors
 //! @param _alpha: value for the alpha parameter.
 //! @param _beta: value for the beta parameter.
 //! @param _gamma: value for the gamma parameter.
-XC::HHT::HHT(AnalysisAggregation *owr,double _alpha, double _beta, double _gamma)
+XC::HHT::HHT(SolutionStrategy *owr,double _alpha, double _beta, double _gamma)
   : HHTBase(owr,INTEGRATOR_TAGS_HHT,_alpha,_beta,_gamma) {}
 
 //! @brief Constructor.
@@ -103,7 +103,7 @@ XC::HHT::HHT(AnalysisAggregation *owr,double _alpha, double _beta, double _gamma
 //! @param _beta: value for the beta parameter.
 //! @param _gamma: value for the gamma parameter.
 //! @param rF: value of the Rayleigh damping factors.
-XC::HHT::HHT(AnalysisAggregation *owr,double _alpha, double _beta, double _gamma,const RayleighDampingFactors &rF)
+XC::HHT::HHT(SolutionStrategy *owr,double _alpha, double _beta, double _gamma,const RayleighDampingFactors &rF)
   : HHTBase(owr,INTEGRATOR_TAGS_HHT,_alpha,_beta,_gamma,rF) {}
 
 XC::Integrator *XC::HHT::getCopy(void) const

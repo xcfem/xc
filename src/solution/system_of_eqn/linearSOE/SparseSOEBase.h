@@ -44,7 +44,7 @@ class SparseSOEBase: public FactoredSOEBase
     int nnz; //! number of non-zeros in A
     int Bsize;
 
-    SparseSOEBase(AnalysisAggregation *,int classTag,int N= 0, int NNZ= 0);
+    SparseSOEBase(SolutionStrategy *,int classTag,int N= 0, int NNZ= 0);
   };
 } // end of XC namespace
 

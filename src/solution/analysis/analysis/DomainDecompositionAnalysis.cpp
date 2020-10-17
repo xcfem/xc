@@ -65,7 +65,7 @@
 
 #include <solution/analysis/analysis/DomainDecompositionAnalysis.h>
 #include "solution/analysis/ModelWrapper.h"
-#include "solution/AnalysisAggregation.h"
+#include "solution/SolutionStrategy.h"
 #include <solution/analysis/handler/ConstraintHandler.h>
 #include <solution/analysis/numberer/DOF_Numberer.h>
 #include <solution/analysis/model/AnalysisModel.h>
@@ -97,7 +97,7 @@ void XC::DomainDecompositionAnalysis::set_all_links(void)
 //! Invokes {\em setAnalysis(this)} on the Subdomain.
 //! @param subDomain: Subdomain to deal with.
 //! @param s: solution method to use.
-XC::DomainDecompositionAnalysis::DomainDecompositionAnalysis(Subdomain &subDomain,AnalysisAggregation *s)
+XC::DomainDecompositionAnalysis::DomainDecompositionAnalysis(Subdomain &subDomain,SolutionStrategy *s)
   : Analysis(s),
     MovableObject(DomDecompANALYSIS_TAGS_DomainDecompositionAnalysis),
     theSubdomain(&subDomain),
@@ -113,7 +113,7 @@ XC::DomainDecompositionAnalysis::DomainDecompositionAnalysis(Subdomain &subDomai
 //! @param subDomain: subdomain to deal with.
 //! @param theSolvr: Solver to use.
 //! @param s: solution method to use.
-XC::DomainDecompositionAnalysis::DomainDecompositionAnalysis(Subdomain &subDomain,DomainSolver &theSlvr,AnalysisAggregation *s)
+XC::DomainDecompositionAnalysis::DomainDecompositionAnalysis(Subdomain &subDomain,DomainSolver &theSlvr,SolutionStrategy *s)
   : Analysis(s),
     MovableObject(DomDecompANALYSIS_TAGS_DomainDecompositionAnalysis),
     theSubdomain(&subDomain),
@@ -129,7 +129,7 @@ XC::DomainDecompositionAnalysis::DomainDecompositionAnalysis(Subdomain &subDomai
 //! @param clsTag: class identifier.
 //! @param subDomain: subdomain to deal with.
 //! @param s: solution method to use.
-XC::DomainDecompositionAnalysis::DomainDecompositionAnalysis(int clsTag, Subdomain &subDomain,AnalysisAggregation *s)
+XC::DomainDecompositionAnalysis::DomainDecompositionAnalysis(int clsTag, Subdomain &subDomain,SolutionStrategy *s)
   : Analysis(s),
     MovableObject(clsTag),
     theSubdomain(&subDomain),
@@ -142,7 +142,7 @@ XC::DomainDecompositionAnalysis::DomainDecompositionAnalysis(int clsTag, Subdoma
 //! @param subDomain: subdomain to deal with.
 //! @param theSolver: Solver to use.
 //! @param s: solution method to use.
-XC::DomainDecompositionAnalysis::DomainDecompositionAnalysis(int clsTag, Subdomain &theDomain,DomainSolver &theSolver,AnalysisAggregation *s)
+XC::DomainDecompositionAnalysis::DomainDecompositionAnalysis(int clsTag, Subdomain &theDomain,DomainSolver &theSolver,SolutionStrategy *s)
   : Analysis(s),
     MovableObject(clsTag),
     theSubdomain(&theDomain),
@@ -648,6 +648,6 @@ int XC::DomainDecompositionAnalysis::setLinearSOE(LinearSOE &theSOE)
 
 //! @brief Sets the convergence test to use in the analysis.
 int XC::DomainDecompositionAnalysis::setConvergenceTest(ConvergenceTest &theTest)
-  { return solution_method->setConvergenceTest(theTest); }
+  { return solution_strategy->setConvergenceTest(theTest); }
 
 

@@ -27,7 +27,7 @@
 //ModelWrapper.cc
 
 #include "ModelWrapper.h"
-#include "solution/AnalysisAggregation.h"
+#include "solution/SolutionStrategy.h"
 #include <solution/analysis/model/AnalysisModel.h>
 
 //Constraints handler.
@@ -198,15 +198,15 @@ void XC::ModelWrapper::copy(const ModelWrapper &other)
     if(other.theDOFNumberer) copy_numerador(other.theDOFNumberer);
   }
 
-XC::AnalysisAggregation *XC::ModelWrapper::getAnalysisAggregation(void)
-  { return dynamic_cast<AnalysisAggregation *>(Owner()); }
+XC::SolutionStrategy *XC::ModelWrapper::getSolutionStrategy(void)
+  { return dynamic_cast<SolutionStrategy *>(Owner()); }
 
-const XC::AnalysisAggregation *XC::ModelWrapper::getAnalysisAggregation(void) const
-  { return dynamic_cast<const AnalysisAggregation *>(Owner()); }
+const XC::SolutionStrategy *XC::ModelWrapper::getSolutionStrategy(void) const
+  { return dynamic_cast<const SolutionStrategy *>(Owner()); }
 
 
 //! @brief Default constructor.
-XC::ModelWrapper::ModelWrapper(AnalysisAggregation *owr)
+XC::ModelWrapper::ModelWrapper(SolutionStrategy *owr)
   : CommandEntity(owr), theModel(nullptr), theHandler(nullptr), theDOFNumberer(nullptr)
   { alloc_analysis_model(); }
 
@@ -233,7 +233,7 @@ void XC::ModelWrapper::clearAll(void)
 //! @brief Return a pointer to the domain.
 XC::Domain *XC::ModelWrapper::getDomainPtr(void)
   {
-    AnalysisAggregation *sm= getAnalysisAggregation();
+    SolutionStrategy *sm= getSolutionStrategy();
     assert(sm);
     return sm->getDomainPtr();
   }
@@ -241,7 +241,7 @@ XC::Domain *XC::ModelWrapper::getDomainPtr(void)
 //! @brief Return a pointer to the domain.
 const XC::Domain *XC::ModelWrapper::getDomainPtr(void) const
   {
-    const AnalysisAggregation *sm= getAnalysisAggregation();
+    const SolutionStrategy *sm= getSolutionStrategy();
     assert(sm);
     return sm->getDomainPtr();
   }
@@ -249,7 +249,7 @@ const XC::Domain *XC::ModelWrapper::getDomainPtr(void) const
 //! @brief Return a pointer to the integrator.
 XC::Integrator *XC::ModelWrapper::getIntegratorPtr(void)
   {
-    AnalysisAggregation *sm= getAnalysisAggregation();
+    SolutionStrategy *sm= getSolutionStrategy();
     assert(sm);
     return sm->getIntegratorPtr();
   }
@@ -257,7 +257,7 @@ XC::Integrator *XC::ModelWrapper::getIntegratorPtr(void)
 //! @brief Return a pointer to the integrator.
 const XC::Integrator *XC::ModelWrapper::getIntegratorPtr(void) const
   {
-    const AnalysisAggregation *sm= getAnalysisAggregation();
+    const SolutionStrategy *sm= getSolutionStrategy();
     assert(sm);
     return sm->getIntegratorPtr();
   }

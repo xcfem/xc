@@ -67,24 +67,24 @@
 #include <solution/analysis/model/FE_EleIter.h>
 
 //! @brief Constructor.
-XC::AlphaOS::AlphaOS(AnalysisAggregation *owr)
+XC::AlphaOS::AlphaOS(SolutionStrategy *owr)
     : AlphaOSBase(owr,INTEGRATOR_TAGS_AlphaOS), alpha(1.0) {}
 
 //! @brief Constructor.
-XC::AlphaOS::AlphaOS(AnalysisAggregation *owr,double _alpha)
+XC::AlphaOS::AlphaOS(SolutionStrategy *owr,double _alpha)
   : AlphaOSBase(owr,INTEGRATOR_TAGS_AlphaOS,(2-_alpha)*(2-_alpha)*0.25,1.5-_alpha),
     alpha(_alpha) {}
 
 //! @brief Constructor.
-XC::AlphaOS::AlphaOS(AnalysisAggregation *owr,double _alpha,const RayleighDampingFactors &rF)
+XC::AlphaOS::AlphaOS(SolutionStrategy *owr,double _alpha,const RayleighDampingFactors &rF)
   : AlphaOSBase(owr,INTEGRATOR_TAGS_AlphaOS,(2-_alpha)*(2-_alpha)*0.25,1.5-_alpha,rF), alpha(_alpha) {}
 
 //! @brief Constructor.
-XC::AlphaOS::AlphaOS(AnalysisAggregation *owr,double _alpha, double _beta, double _gamma)
+XC::AlphaOS::AlphaOS(SolutionStrategy *owr,double _alpha, double _beta, double _gamma)
   : AlphaOSBase(owr,INTEGRATOR_TAGS_AlphaOS,_beta,_gamma), alpha(_alpha) {}
 
 //! @brief Constructor.
-XC::AlphaOS::AlphaOS(AnalysisAggregation *owr,double _alpha, double _beta, double _gamma,const RayleighDampingFactors &rF)
+XC::AlphaOS::AlphaOS(SolutionStrategy *owr,double _alpha, double _beta, double _gamma,const RayleighDampingFactors &rF)
   : AlphaOSBase(owr,INTEGRATOR_TAGS_AlphaOS,_beta,_gamma,rF), alpha(_alpha) {}
 
 

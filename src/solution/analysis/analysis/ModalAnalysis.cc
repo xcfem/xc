@@ -35,7 +35,7 @@
 #include "utility/matrix/Matrix.h"
 
 //! @brief Constructor.
-XC::ModalAnalysis::ModalAnalysis(AnalysisAggregation *analysis_aggregation)
+XC::ModalAnalysis::ModalAnalysis(SolutionStrategy *analysis_aggregation)
   :EigenAnalysis(analysis_aggregation), espectro() {}
 
 //! @brief Returns the acceleration that corresponds to the period

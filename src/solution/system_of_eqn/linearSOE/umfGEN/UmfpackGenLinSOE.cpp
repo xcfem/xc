@@ -71,7 +71,7 @@
 #include <cmath>
 
 
-XC::UmfpackGenLinSOE::UmfpackGenLinSOE(AnalysisAggregation *owr)
+XC::UmfpackGenLinSOE::UmfpackGenLinSOE(SolutionStrategy *owr)
   :FactoredSOEBase(owr,LinSOE_TAGS_UmfpackGenLinSOE), nnz(0)
   {}
 

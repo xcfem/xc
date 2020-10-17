@@ -66,7 +66,7 @@
 #include <solution/analysis/model/AnalysisModel.h>
 
 //! @brief Constructor.
-XC::CentralDifferenceNoDamping::CentralDifferenceNoDamping(AnalysisAggregation *owr)
+XC::CentralDifferenceNoDamping::CentralDifferenceNoDamping(SolutionStrategy *owr)
 :CentralDifferenceBase(owr,INTEGRATOR_TAGS_CentralDifferenceNoDamping) {}
 
 int XC::CentralDifferenceNoDamping::formEleResidual(FE_Element *theEle)

@@ -78,9 +78,9 @@ class DiagonalSOE: public FactoredSOEBase
   protected:
     virtual bool setSolver(LinearSOESolver *);
 
-    friend class AnalysisAggregation;
-    DiagonalSOE(AnalysisAggregation *);
-    DiagonalSOE(AnalysisAggregation *,int N);
+    friend class SolutionStrategy;
+    DiagonalSOE(SolutionStrategy *);
+    DiagonalSOE(SolutionStrategy *,int N);
     SystemOfEqn *getCopy(void) const;
   public:
     int setSize(Graph &theGraph);

@@ -67,7 +67,7 @@
 
 #include <solution/analysis/integrator/static/DisplacementControl.h>
 #include <solution/analysis/model/AnalysisModel.h>
-#include "solution/AnalysisAggregation.h"
+#include "solution/SolutionStrategy.h"
 #include <solution/system_of_eqn/linearSOE/LinearSOE.h>
 #include <utility/matrix/Vector.h>
 #include <domain/domain/Domain.h>
@@ -79,7 +79,7 @@
 //! @brief Constructor.
 //!
 //! @param owr: set of objects used to perform the analysis.
-XC::DisplacementControl::DisplacementControl(AnalysisAggregation *owr) 
+XC::DisplacementControl::DisplacementControl(SolutionStrategy *owr) 
   :DispBase(owr,INTEGRATOR_TAGS_DisplacementControl,1),
    theNodeTag(-1), theDof(-1), theDofID(0),
    theIncrement(1.0), minIncrement(1.0), maxIncrement(1.0) {}
@@ -93,7 +93,7 @@ XC::DisplacementControl::DisplacementControl(AnalysisAggregation *owr)
 //! @param numIncr: number of increments.
 //! @param min: minimum value of deltaU at i-th step.
 //! @param max: maximum value of deltaU at i-th step.
-XC::DisplacementControl::DisplacementControl(AnalysisAggregation *owr,int nodeTag, int dof, double increment, int numIncr, double min, double max) 
+XC::DisplacementControl::DisplacementControl(SolutionStrategy *owr,int nodeTag, int dof, double increment, int numIncr, double min, double max) 
   :DispBase(owr,INTEGRATOR_TAGS_DisplacementControl,numIncr),
    theNodeTag(nodeTag), theDof(dof), theDofID(0),
    theIncrement(increment), minIncrement(min), maxIncrement(max) {}
@@ -130,7 +130,7 @@ int XC::DisplacementControl::commit(void)
 //! @brief Returns a pointer to the domain.
 XC::Domain *XC::DisplacementControl::getDomainPtr(void)
   {
-    AnalysisAggregation  *sm= getAnalysisAggregation();
+    SolutionStrategy  *sm= getSolutionStrategy();
     assert(sm);
     return sm->getDomainPtr();
   }
@@ -138,7 +138,7 @@ XC::Domain *XC::DisplacementControl::getDomainPtr(void)
 //! @brief Returns a pointer to the domain.
 const XC::Domain *XC::DisplacementControl::getDomainPtr(void) const
   {
-    const AnalysisAggregation  *sm= getAnalysisAggregation();
+    const SolutionStrategy  *sm= getSolutionStrategy();
     assert(sm);
     return sm->getDomainPtr();
   }

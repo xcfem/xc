@@ -63,8 +63,8 @@ class BFBRoydenBase: public EquiSolnConvAlgo
     Vector du; //!< displacement increment
     Vector temp; //!< temporary vector
 
-    BFBRoydenBase(AnalysisAggregation *,int classTag,int tangent = CURRENT_TANGENT, int n = 10);    
-    BFBRoydenBase(AnalysisAggregation *,int classTag,ConvergenceTest &theTest, int tangent= CURRENT_TANGENT, int n=10);
+    BFBRoydenBase(SolutionStrategy *,int classTag,int tangent = CURRENT_TANGENT, int n = 10);    
+    BFBRoydenBase(SolutionStrategy *,int classTag,ConvergenceTest &theTest, int tangent= CURRENT_TANGENT, int n=10);
   public:
     ~BFBRoydenBase(void);
 

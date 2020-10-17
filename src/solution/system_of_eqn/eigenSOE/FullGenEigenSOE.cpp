@@ -63,7 +63,7 @@
 #include <solution/graph/graph/VertexIter.h>
 #include <cmath>
 
-XC::FullGenEigenSOE::FullGenEigenSOE(AnalysisAggregation *owr)
+XC::FullGenEigenSOE::FullGenEigenSOE(SolutionStrategy *owr)
   : EigenSOE(owr,EigenSOE_TAGS_FullGenEigenSOE) {}
 
 //! @brief Set the solver.

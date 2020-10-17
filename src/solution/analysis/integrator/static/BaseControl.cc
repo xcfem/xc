@@ -72,7 +72,7 @@
 //! @param owr: set of objects used to perform the analysis.
 //! @param classTag: class identifier.
 //! @param numIncr: number of increments.
-XC::BaseControl::BaseControl(AnalysisAggregation *owr,int classTag,int numIncr)
+XC::BaseControl::BaseControl(SolutionStrategy *owr,int classTag,int numIncr)
 :StaticIntegrator(owr,classTag), specNumIncrStep(numIncr), numIncrLastStep(numIncr)
   { setup_numIncr(numIncr); }
 

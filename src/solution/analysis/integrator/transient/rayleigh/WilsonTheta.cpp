@@ -71,7 +71,7 @@
 //! @brief Constructor. \f$\theta\f$ is set to zero.
 //!
 //! @param owr: analysis aggregation that will own this object.
-XC::WilsonTheta::WilsonTheta(AnalysisAggregation *owr)
+XC::WilsonTheta::WilsonTheta(SolutionStrategy *owr)
 :RayleighBase(owr,INTEGRATOR_TAGS_WilsonTheta),
  theta(0), c1(0.0), c2(0.0), c3(0.0) {}
 
@@ -83,7 +83,7 @@ XC::WilsonTheta::WilsonTheta(AnalysisAggregation *owr)
 //!
 //! @param owr: analysis aggregation that will own this object.
 //! @param _theta: value for the theta parameteros.
-XC::WilsonTheta::WilsonTheta(AnalysisAggregation *owr,double _theta)
+XC::WilsonTheta::WilsonTheta(SolutionStrategy *owr,double _theta)
 :RayleighBase(owr,INTEGRATOR_TAGS_WilsonTheta),
  theta(_theta), c1(0.0), c2(0.0), c3(0.0) {}
 
@@ -100,7 +100,7 @@ XC::WilsonTheta::WilsonTheta(AnalysisAggregation *owr,double _theta)
 //! @param owr: analysis aggregation that will own this object.
 //! @param _theta: value for the theta parameteros.
 //! @param rF: value of the Rayleigh damping factors.
-XC::WilsonTheta::WilsonTheta(AnalysisAggregation *owr,double _theta,const RayleighDampingFactors &rF)
+XC::WilsonTheta::WilsonTheta(SolutionStrategy *owr,double _theta,const RayleighDampingFactors &rF)
   :RayleighBase(owr,INTEGRATOR_TAGS_WilsonTheta,rF), theta(_theta),
    c1(0.0), c2(0.0), c3(0.0) {}
 

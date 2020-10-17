@@ -34,7 +34,7 @@
 //! @param classTag: class identifier.
 //! @param N: system size.
 //! @param NNZ: number of non-zeros.
-XC::SparseGenSOEBase::SparseGenSOEBase(AnalysisAggregation *owr,int classTag,int N, int NNZ)
+XC::SparseGenSOEBase::SparseGenSOEBase(SolutionStrategy *owr,int classTag,int N, int NNZ)
   :SparseSOEBase(owr,classTag,N,NNZ) {}
 
 //! @brief Zeros the entries in the 1d array for \f$A\f$ and marks the system

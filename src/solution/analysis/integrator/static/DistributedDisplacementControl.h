@@ -87,9 +87,9 @@ class DistributedDisplacementControl: public DisplacementControl, public Distrib
     int sendData(Communicator &);
     int recvData(const Communicator &);
 
-    friend class AnalysisAggregation;
-    DistributedDisplacementControl(AnalysisAggregation *);
-    DistributedDisplacementControl(AnalysisAggregation *,int node, int dof, double increment, int numIncrStep, double minIncrement, double maxIncrement);
+    friend class SolutionStrategy;
+    DistributedDisplacementControl(SolutionStrategy *);
+    DistributedDisplacementControl(SolutionStrategy *,int node, int dof, double increment, int numIncrStep, double minIncrement, double maxIncrement);
     Integrator *getCopy(void) const;
   public:
 

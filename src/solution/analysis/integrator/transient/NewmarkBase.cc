@@ -39,7 +39,7 @@
 //!
 //! @param owr: analysis aggregation that will own this object.
 //! @param classTag: class identifier.
-XC::NewmarkBase::NewmarkBase(AnalysisAggregation *owr,int classTag)
+XC::NewmarkBase::NewmarkBase(SolutionStrategy *owr,int classTag)
  : DampingFactorsIntegrator(owr,classTag),gamma(0.0), c2(0.0), c3(0.0) {}
 
 //! @brief Constructor.
@@ -47,7 +47,7 @@ XC::NewmarkBase::NewmarkBase(AnalysisAggregation *owr,int classTag)
 //! @param owr: analysis aggregation that will own this object.
 //! @param classTag: class identifier.
 //! @param _gamma: gamma factor for Newmark method.
-XC::NewmarkBase::NewmarkBase(AnalysisAggregation *owr,int classTag, double _gamma)
+XC::NewmarkBase::NewmarkBase(SolutionStrategy *owr,int classTag, double _gamma)
  : DampingFactorsIntegrator(owr,INTEGRATOR_TAGS_Newmark), gamma(_gamma), c2(0.0), c3(0.0) {}
 
 //! @brief Constructor.
@@ -56,7 +56,7 @@ XC::NewmarkBase::NewmarkBase(AnalysisAggregation *owr,int classTag, double _gamm
 //! @param classTag: class identifier.
 //! @param _gamma: gamma factor for Newmark method.
 //! @param fF: Rayleigh damping factors.
-XC::NewmarkBase::NewmarkBase(AnalysisAggregation *owr,int classTag,double _gamma,const RayleighDampingFactors &rF)
+XC::NewmarkBase::NewmarkBase(SolutionStrategy *owr,int classTag,double _gamma,const RayleighDampingFactors &rF)
   : DampingFactorsIntegrator(owr,classTag,rF),  gamma(_gamma),  c2(0.0), c3(0.0) {}
 
 //! @brief Populate U, Udot and Udotdot by iterating through the DOF_Groups and 

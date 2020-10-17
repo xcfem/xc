@@ -71,7 +71,7 @@
 #include <solution/analysis/model/DOF_GrpIter.h>
 
 
-XC::DistributedDiagonalSOE::DistributedDiagonalSOE(AnalysisAggregation *owr)
+XC::DistributedDiagonalSOE::DistributedDiagonalSOE(SolutionStrategy *owr)
   :FactoredSOEBase(owr,LinSOE_TAGS_DistributedDiagonalSOE),
    DistributedLinSOE(), numProcesses(0),
    myDOFs(0,32), myDOFsShared(0,16), numShared(0) {}

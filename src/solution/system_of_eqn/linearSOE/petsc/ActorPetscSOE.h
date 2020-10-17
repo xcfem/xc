@@ -92,8 +92,8 @@ class ActorPetscSOE
     void *recvBuffer;
     int numProcessors;
 
-    friend class AnalysisAggregation;
-    ActorPetscSOE(AnalysisAggregation *,PetscSolver &theSolver, int blockSize);     
+    friend class SolutionStrategy;
+    ActorPetscSOE(SolutionStrategy *,PetscSolver &theSolver, int blockSize);     
   public:
     ~ActorPetscSOE(void);
     int run(void);

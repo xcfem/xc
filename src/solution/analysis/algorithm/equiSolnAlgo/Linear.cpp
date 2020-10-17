@@ -72,7 +72,7 @@
 #include <utility/Timer.h>
 
 //! @brief Constructor
-XC::Linear::Linear(AnalysisAggregation *owr)
+XC::Linear::Linear(SolutionStrategy *owr)
   :EquiSolnAlgo(owr,EquiALGORITHM_TAGS_Linear) {}
 
 XC::SolutionAlgorithm *XC::Linear::getCopy(void) const

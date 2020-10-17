@@ -63,7 +63,7 @@
 #include <solution/analysis/algorithm/equiSolnAlgo/EquiSolnAlgo.h>
 #include <solution/system_of_eqn/linearSOE/LinearSOE.h>
 
-#include "solution/AnalysisAggregation.h"
+#include "solution/SolutionStrategy.h"
 
 //! @brief Default constructor.
 //!
@@ -158,12 +158,12 @@ int XC::ConvergenceTest::start(void)
   }
 
 //! @brief Returns a pointer to the solution method that owns this object.
-XC::AnalysisAggregation *XC::ConvergenceTest::getAnalysisAggregation(void)
-  { return dynamic_cast<AnalysisAggregation *>(Owner()); }
+XC::SolutionStrategy *XC::ConvergenceTest::getSolutionStrategy(void)
+  { return dynamic_cast<SolutionStrategy *>(Owner()); }
 
 //! @brief Returns a const pointer to the solution method that owns this object.
-const XC::AnalysisAggregation *XC::ConvergenceTest::getAnalysisAggregation(void) const
-  { return dynamic_cast<const AnalysisAggregation *>(Owner()); }
+const XC::SolutionStrategy *XC::ConvergenceTest::getSolutionStrategy(void) const
+  { return dynamic_cast<const SolutionStrategy *>(Owner()); }
 
 //! @brief Returns true ifpuede acceder al system of equations.
 bool XC::ConvergenceTest::hasLinearSOE(void) const
@@ -172,7 +172,7 @@ bool XC::ConvergenceTest::hasLinearSOE(void) const
 //! @brief Returns a pointer to the system of equations.
 XC::LinearSOE *XC::ConvergenceTest::getLinearSOEPtr(void)
   {
-    AnalysisAggregation *sm= getAnalysisAggregation();
+    SolutionStrategy *sm= getSolutionStrategy();
     assert(sm);
     return sm->getLinearSOEPtr();
   }
@@ -180,7 +180,7 @@ XC::LinearSOE *XC::ConvergenceTest::getLinearSOEPtr(void)
 //! @brief Returns a const pointer to the system of equations.
 const XC::LinearSOE *XC::ConvergenceTest::getLinearSOEPtr(void) const
   {
-    const AnalysisAggregation *sm= getAnalysisAggregation();
+    const SolutionStrategy *sm= getSolutionStrategy();
     assert(sm);
     return sm->getLinearSOEPtr();
   }

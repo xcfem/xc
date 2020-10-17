@@ -46,7 +46,7 @@
 #include <utility/matrix/Vector.h>
 
 //! @brief Constructor.
-XC::SymArpackSOE::SymArpackSOE(AnalysisAggregation *owr,double theShift)
+XC::SymArpackSOE::SymArpackSOE(SolutionStrategy *owr,double theShift)
   :ArpackSOE(owr,EigenSOE_TAGS_SymArpackSOE,theShift),
    nnz(0), colA(0), rowStartA(0), 
    nblks(0), xblk(0), invp(0), diag(0), penv(0), rowblks(0),

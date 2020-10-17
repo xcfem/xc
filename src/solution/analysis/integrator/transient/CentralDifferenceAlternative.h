@@ -81,9 +81,9 @@ class CentralDifferenceAlternative: public CentralDifferenceBase
   private:
     Vector Ut, Utp1;  // disp response quantities at time t and t + deltaT
 
-    friend class AnalysisAggregation;
+    friend class SolutionStrategy;
     friend class FEM_ObjectBroker;
-    CentralDifferenceAlternative(AnalysisAggregation *);
+    CentralDifferenceAlternative(SolutionStrategy *);
     Integrator *getCopy(void) const;
   public:
 

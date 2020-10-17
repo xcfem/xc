@@ -67,28 +67,28 @@
 #include <solution/analysis/model/FE_EleIter.h>
 
 //! @brief Constructor.
-XC::AlphaOSGeneralized::AlphaOSGeneralized(AnalysisAggregation *owr)
+XC::AlphaOSGeneralized::AlphaOSGeneralized(SolutionStrategy *owr)
   : AlphaOSBase(owr,INTEGRATOR_TAGS_AlphaOSGeneralized),
     alphaI(1.0), alphaF(1.0) {}
 
 //! @brief Constructor.
-XC::AlphaOSGeneralized::AlphaOSGeneralized(AnalysisAggregation *owr,double _rhoInf)
+XC::AlphaOSGeneralized::AlphaOSGeneralized(SolutionStrategy *owr,double _rhoInf)
   : AlphaOSBase(owr,INTEGRATOR_TAGS_AlphaOSGeneralized,1.0/(1.0+_rhoInf)/(1.0+_rhoInf),0.5*(3.0-_rhoInf)/(1.0+_rhoInf)),
     alphaI((2.0-_rhoInf)/(1.0+_rhoInf)), alphaF(1.0/(1.0+_rhoInf)) {}
 
 //! @brief Constructor.
-XC::AlphaOSGeneralized::AlphaOSGeneralized(AnalysisAggregation *owr,double _rhoInf,const RayleighDampingFactors &rF)
+XC::AlphaOSGeneralized::AlphaOSGeneralized(SolutionStrategy *owr,double _rhoInf,const RayleighDampingFactors &rF)
   : AlphaOSBase(owr,INTEGRATOR_TAGS_AlphaOSGeneralized,1.0/(1.0+_rhoInf)/(1.0+_rhoInf),
                 0.5*(3.0-_rhoInf)/(1.0+_rhoInf),rF),
     alphaI((2.0-_rhoInf)/(1.0+_rhoInf)), alphaF(1.0/(1.0+_rhoInf)) {}
 
 //! @brief Constructor.
-XC::AlphaOSGeneralized::AlphaOSGeneralized(AnalysisAggregation *owr,double _alphaI, double _alphaF, double _beta, double _gamma)
+XC::AlphaOSGeneralized::AlphaOSGeneralized(SolutionStrategy *owr,double _alphaI, double _alphaF, double _beta, double _gamma)
   : AlphaOSBase(owr,INTEGRATOR_TAGS_AlphaOSGeneralized,_beta,_gamma),
     alphaI(_alphaI), alphaF(_alphaF) {}
 
 //! @brief Constructor.
-XC::AlphaOSGeneralized::AlphaOSGeneralized(AnalysisAggregation *owr,double _alphaI, double _alphaF,double _beta, double _gamma,const RayleighDampingFactors &rF)
+XC::AlphaOSGeneralized::AlphaOSGeneralized(SolutionStrategy *owr,double _alphaI, double _alphaF,double _beta, double _gamma,const RayleighDampingFactors &rF)
   : AlphaOSBase(owr,INTEGRATOR_TAGS_AlphaOSGeneralized,_beta,_gamma,rF), alphaI(_alphaI), alphaF(_alphaF)
   {}
 

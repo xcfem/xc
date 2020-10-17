@@ -96,8 +96,8 @@ class MinUnbalDispNorm: public DispBase
     int recvData(const Communicator &);
 
 
-    friend class AnalysisAggregation;
-    MinUnbalDispNorm(AnalysisAggregation *,double lambda1, int specNumIterStep, 
+    friend class SolutionStrategy;
+    MinUnbalDispNorm(SolutionStrategy *,double lambda1, int specNumIterStep, 
 		     double dlambda1min, double dlambda1max,
 		     int signFirstStepMethod = SIGN_LAST_STEP);
     Integrator *getCopy(void) const;

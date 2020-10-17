@@ -68,7 +68,7 @@
 #include <solution/analysis/model/AnalysisModel.h>
 #include <solution/system_of_eqn/linearSOE/LinearSOE.h>
 #include <solution/system_of_eqn/linearSOE/DomainSolver.h>
-#include "solution/AnalysisAggregation.h"
+#include "solution/SolutionStrategy.h"
 #include <solution/analysis/integrator/IncrementalIntegrator.h>
 #include "domain/domain/subdomain/Subdomain.h"
 
@@ -77,7 +77,7 @@
 //! The constructor is responsible for ensuring a Substructuring solver is
 //! passed in as an argument. The base class does the rest. For this reason
 //! WE WILL FORGET THIS CLASS.
-XC::SubstructuringAnalysis::SubstructuringAnalysis(Subdomain &the_Domain,DomainSolver &theSolver,AnalysisAggregation *s)
+XC::SubstructuringAnalysis::SubstructuringAnalysis(Subdomain &the_Domain,DomainSolver &theSolver,SolutionStrategy *s)
   :DomainDecompositionAnalysis(the_Domain,theSolver,s)
   {}
 

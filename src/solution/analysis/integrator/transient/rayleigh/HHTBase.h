@@ -59,11 +59,11 @@ class HHTBase: public HHTRayleighBase
     int sendData(Communicator &);
     int recvData(const Communicator &);
 
-    HHTBase(AnalysisAggregation *,int classTag);
-    HHTBase(AnalysisAggregation *,int classTag,double alpha);
-    HHTBase(AnalysisAggregation *,int classTag,double alpha,const RayleighDampingFactors &rF);
-    HHTBase(AnalysisAggregation *,int classTag,double alpha, double beta, double gamma);
-    HHTBase(AnalysisAggregation *,int classTag,double alpha, double beta, double gamma,const RayleighDampingFactors &rF);    
+    HHTBase(SolutionStrategy *,int classTag);
+    HHTBase(SolutionStrategy *,int classTag,double alpha);
+    HHTBase(SolutionStrategy *,int classTag,double alpha,const RayleighDampingFactors &rF);
+    HHTBase(SolutionStrategy *,int classTag,double alpha, double beta, double gamma);
+    HHTBase(SolutionStrategy *,int classTag,double alpha, double beta, double gamma,const RayleighDampingFactors &rF);    
   };
 } // end of XC namespace
 

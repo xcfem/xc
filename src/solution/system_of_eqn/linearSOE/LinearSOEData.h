@@ -63,7 +63,7 @@ class LinearSOEData: public LinearSOE
     inline const double *getPtrX(void) const
       { return X.getDataPtr(); }
 
-    LinearSOEData(AnalysisAggregation *,int classTag,int N= 0);
+    LinearSOEData(SolutionStrategy *,int classTag,int N= 0);
   public:
     virtual int getNumEqn(void) const;
     virtual void zeroB(void);

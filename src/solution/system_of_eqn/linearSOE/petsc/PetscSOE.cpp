@@ -67,7 +67,7 @@
 #include <utility/actor/objectBroker/FEM_ObjectBroker.h>
 
 //! @brief Constructor.
-XC::PetscSOE::PetscSOE(AnalysisAggregation *owr,int bs)
+XC::PetscSOE::PetscSOE(SolutionStrategy *owr,int bs)
   :FactoredSOEBase(owr,LinSOE_TAGS_PetscSOE),
    numProcesses(0), A(0), x(0), b(0), blockSize(bs) {}
 

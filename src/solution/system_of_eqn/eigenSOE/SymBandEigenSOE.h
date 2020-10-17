@@ -77,9 +77,9 @@ class SymBandEigenSOE: public EigenSOE
   protected:
     bool setSolver(EigenSolver *);
 
-    friend class AnalysisAggregation;
+    friend class SolutionStrategy;
     friend class FEM_ObjectBroker;
-    SymBandEigenSOE(AnalysisAggregation *);
+    SymBandEigenSOE(SolutionStrategy *);
     SystemOfEqn *getCopy(void) const;
   public:
     virtual int setSize(Graph &theGraph);

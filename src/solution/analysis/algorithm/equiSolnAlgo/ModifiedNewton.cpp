@@ -71,12 +71,12 @@
 #include <utility/matrix/ID.h>
 #include <solution/analysis/convergenceTest/ConvergenceTest.h>
 #include <utility/Timer.h>
-#include "solution/AnalysisAggregation.h"
+#include "solution/SolutionStrategy.h"
 
 //! @brief Constructor
 //!
-//! @param AnalysisAggregation: object that owns this one.
-XC::ModifiedNewton::ModifiedNewton(AnalysisAggregation *owr,int theTangentToUse)
+//! @param SolutionStrategy: object that owns this one.
+XC::ModifiedNewton::ModifiedNewton(SolutionStrategy *owr,int theTangentToUse)
   :NewtonBased(owr,EquiALGORITHM_TAGS_ModifiedNewton,theTangentToUse) {}
 
 //! @brief Virtual constructor.
@@ -143,7 +143,7 @@ int XC::ModifiedNewton::solveCurrentStep(void)
 
 
     // set itself as the ConvergenceTest objects EquiSolnAlgo
-    theTest->set_owner(getAnalysisAggregation());
+    theTest->set_owner(getSolutionStrategy());
     if(theTest->start() < 0)
       {
         std::cerr << getClassName() << "::" << __FUNCTION__

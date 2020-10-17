@@ -77,7 +77,7 @@ class Vector;
 class ID;
 class FEM_ObjectBroker;
 class RayleighDampingFactors;
-class AnalysisAggregation ;
+class SolutionStrategy ;
 
 //! @ingroup AnalysisType
 //!
@@ -100,8 +100,8 @@ class AnalysisAggregation ;
 class Integrator: public MovableObject, public CommandEntity
   {
   protected:
-    AnalysisAggregation  *getAnalysisAggregation (void);
-    const AnalysisAggregation  *getAnalysisAggregation (void) const;
+    SolutionStrategy  *getSolutionStrategy (void);
+    const SolutionStrategy  *getSolutionStrategy (void) const;
     void applyLoadModel(double newTime);
     int updateModel(void);
     int updateModel(double newTime, double dT);
@@ -115,8 +115,8 @@ class Integrator: public MovableObject, public CommandEntity
     virtual AnalysisModel *getAnalysisModelPtr(void);
     virtual const AnalysisModel *getAnalysisModelPtr(void) const;
 
-    Integrator(AnalysisAggregation *,int classTag);
-    friend class AnalysisAggregation ;
+    Integrator(SolutionStrategy *,int classTag);
+    friend class SolutionStrategy ;
     virtual Integrator *getCopy(void) const= 0;
   public:
     inline virtual ~Integrator(void) {}

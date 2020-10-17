@@ -35,7 +35,7 @@
 #include <solution/analysis/model/DOF_GrpIter.h>
 
 //! @brief Constructor.
-XC::KEigenIntegrator::KEigenIntegrator(AnalysisAggregation *owr)
+XC::KEigenIntegrator::KEigenIntegrator(SolutionStrategy *owr)
   : EigenIntegrator(owr) {}
 
 //! @brief Identity matrix assembly.

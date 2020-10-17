@@ -147,11 +147,11 @@ class Newmark: public NewmarkBase2
     int sendData(Communicator &);
     int recvData(const Communicator &);
 
-    friend class AnalysisAggregation;
+    friend class SolutionStrategy;
     friend class FEM_ObjectBroker;
-    Newmark(AnalysisAggregation *);
-    Newmark(AnalysisAggregation *,double gamma, double beta, bool disp = true);
-    Newmark(AnalysisAggregation *,double gamma, double beta,const RayleighDampingFactors &rF, bool disp = true);
+    Newmark(SolutionStrategy *);
+    Newmark(SolutionStrategy *,double gamma, double beta, bool disp = true);
+    Newmark(SolutionStrategy *,double gamma, double beta,const RayleighDampingFactors &rF, bool disp = true);
     Integrator *getCopy(void) const;
   public:
 

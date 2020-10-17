@@ -90,8 +90,8 @@ class DomainDecompAlgo: public SolutionAlgorithm
   {
   protected:
     friend class FEM_ObjectBroker;
-    friend class AnalysisAggregation;
-    DomainDecompAlgo(AnalysisAggregation *);
+    friend class SolutionStrategy;
+    DomainDecompAlgo(SolutionStrategy *);
     SolutionAlgorithm *getCopy(void) const;
   public:
     // public functions defined for subclasses

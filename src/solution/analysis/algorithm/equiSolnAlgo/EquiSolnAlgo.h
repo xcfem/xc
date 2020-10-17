@@ -91,7 +91,7 @@ class IncrementalIntegrator;
 class EquiSolnAlgo: public SolutionAlgorithm
   {
   protected:
-    EquiSolnAlgo(AnalysisAggregation *,int classTag);
+    EquiSolnAlgo(SolutionStrategy *,int classTag);
   public:
     // virtual functions
     //! @brief steps taken in order to get the system into an

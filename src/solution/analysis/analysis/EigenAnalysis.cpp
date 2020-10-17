@@ -72,14 +72,14 @@
 #include <solution/analysis/integrator/EigenIntegrator.h>
 #include <domain/domain/Domain.h>
 #include "solution/analysis/ModelWrapper.h"
-#include "solution/AnalysisAggregation.h"
+#include "solution/SolutionStrategy.h"
 
 
 
 #include "utility/matrix/Matrix.h"
 
 //! @brief Constructor.
-XC::EigenAnalysis::EigenAnalysis(AnalysisAggregation *analysis_aggregation)
+XC::EigenAnalysis::EigenAnalysis(SolutionStrategy *analysis_aggregation)
   :Analysis(analysis_aggregation), domainStamp(0) {}
 
 //! @brief Virtual constructor.
@@ -100,9 +100,9 @@ void XC::EigenAnalysis::clearAll(void)
 int XC::EigenAnalysis::analyze(int numModes)
   {
     int result= 0;
-    assert(solution_method);
-    CommandEntity *old= solution_method->Owner();
-    solution_method->set_owner(this);
+    assert(solution_strategy);
+    CommandEntity *old= solution_strategy->Owner();
+    solution_strategy->set_owner(this);
 
     // check for change in Domain since last step. As a change can
     // occur in a commit() in a domaindecomp with load balancing
@@ -133,7 +133,7 @@ int XC::EigenAnalysis::analyze(int numModes)
 		  << "; algorithm failed\n";
 	return -3;
       }
-    solution_method->set_owner(old);
+    solution_strategy->set_owner(old);
     return 0;
   }
 

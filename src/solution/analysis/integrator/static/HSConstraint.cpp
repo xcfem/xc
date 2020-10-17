@@ -60,7 +60,7 @@
 #include "utility/actor/actor/MatrixCommMetaData.h"
 
 //! @brief Constructor.
-XC::HSConstraint::HSConstraint(AnalysisAggregation *owr,double arcLength, double psi_u, double psi_f, double u_ref)
+XC::HSConstraint::HSConstraint(SolutionStrategy *owr,double arcLength, double psi_u, double psi_f, double u_ref)
   :ProtoArcLength(owr,INTEGRATOR_TAGS_HSConstraint,arcLength),
    psi_u2(psi_u*psi_u), psi_f2(psi_f*psi_f), u_ref2(u_ref*u_ref) {}
 

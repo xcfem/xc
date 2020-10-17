@@ -64,7 +64,7 @@
 #include <solution/analysis/convergenceTest/ConvergenceTest.h>
 #include <solution/analysis/integrator/StaticIntegrator.h>
 #include <domain/domain/Domain.h>
-#include "solution/AnalysisAggregation.h"
+#include "solution/SolutionStrategy.h"
 
 // AddingSensitivity:BEGIN //////////////////////////////////
 #ifdef _RELIABILITY
@@ -75,7 +75,7 @@
 const std::string stepNumberMessage= "In a static analysis, a number of steps greater than 1 is useless if the loads and constraints are constant.";
 
 //! @brief Constructor.
-XC::StaticAnalysis::StaticAnalysis(AnalysisAggregation *analysis_aggregation)
+XC::StaticAnalysis::StaticAnalysis(SolutionStrategy *analysis_aggregation)
   :Analysis(analysis_aggregation), domainStamp(0)
   {
     // AddingSensitivity:BEGIN ////////////////////////////////////
@@ -292,9 +292,9 @@ int XC::StaticAnalysis::run_analysis_step(int num_step,int numSteps)
 //! increase the number of steps so \p numSteps= 1)
 int XC::StaticAnalysis::analyze(int numSteps)
   {
-    assert(solution_method);
-    CommandEntity *old= solution_method->Owner();
-    solution_method->set_owner(this);
+    assert(solution_strategy);
+    CommandEntity *old= solution_strategy->Owner();
+    solution_strategy->set_owner(this);
     int result= 0;
     for(int i=0; i<numSteps; i++)
       {
@@ -302,7 +302,7 @@ int XC::StaticAnalysis::analyze(int numSteps)
         if(result < 0) //Fallo en run_analysis_step.
           break;
       }
-    solution_method->set_owner(old);
+    solution_strategy->set_owner(old);
     return result;
   }
 
@@ -499,14 +499,14 @@ int XC::StaticAnalysis::setLinearSOE(LinearSOE &theNewSOE)
 
 //! @brief Sets the convergence test to use in the analysis.
 int XC::StaticAnalysis::setConvergenceTest(ConvergenceTest &theNewTest)
-  { return solution_method->setConvergenceTest(theNewTest); }
+  { return solution_strategy->setConvergenceTest(theNewTest); }
 
 
 
 XC::ConvergenceTest *XC::StaticAnalysis::getConvergenceTest(void)
   {
-    if(solution_method)
-      return solution_method->getConvergenceTestPtr();
+    if(solution_strategy)
+      return solution_strategy->getConvergenceTestPtr();
     else
       return nullptr;
   }

@@ -64,7 +64,7 @@
 #include <utility/actor/objectBroker/FEM_ObjectBroker.h>
 #include "utility/actor/channel/ChannelQueue.h"
 
-XC::DistributedBandSPDLinSOE::DistributedBandSPDLinSOE(AnalysisAggregation *owr)
+XC::DistributedBandSPDLinSOE::DistributedBandSPDLinSOE(SolutionStrategy *owr)
   :BandSPDLinSOE(owr,LinSOE_TAGS_DistributedBandSPDLinSOE), DistributedBandLinSOE() {}
 
 //! @brief Compute the values of numSubD y numSuperD.

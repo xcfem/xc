@@ -84,12 +84,12 @@ class AlphaOS: public AlphaOSBase
     int recvData(const Communicator &);
     virtual int formElementResidual(void);
 
-    friend class AnalysisAggregation;
-    AlphaOS(AnalysisAggregation *);
-    AlphaOS(AnalysisAggregation *,double alpha);
-    AlphaOS(AnalysisAggregation *,double alpha,const RayleighDampingFactors &rF);
-    AlphaOS(AnalysisAggregation *,double alpha, double beta, double gamma);
-    AlphaOS(AnalysisAggregation *,double alpha, double beta, double gamma,const RayleighDampingFactors &rF);
+    friend class SolutionStrategy;
+    AlphaOS(SolutionStrategy *);
+    AlphaOS(SolutionStrategy *,double alpha);
+    AlphaOS(SolutionStrategy *,double alpha,const RayleighDampingFactors &rF);
+    AlphaOS(SolutionStrategy *,double alpha, double beta, double gamma);
+    AlphaOS(SolutionStrategy *,double alpha, double beta, double gamma,const RayleighDampingFactors &rF);
     Integrator *getCopy(void) const;
   public:
     

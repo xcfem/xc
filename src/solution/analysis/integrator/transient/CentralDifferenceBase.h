@@ -45,7 +45,7 @@ class CentralDifferenceBase: public TransientIntegrator
     Vector Udot; //!< vel response quantity at time t-1/2 delta t
     double deltaT;
 
-    CentralDifferenceBase(AnalysisAggregation *,int classTag);
+    CentralDifferenceBase(SolutionStrategy *,int classTag);
   public:
     // methods which define what the FE_Element and DOF_Groups add
     // to the system of equation object.

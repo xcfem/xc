@@ -63,7 +63,7 @@
 
 
 //! @brief Constructor.
-XC::StandardEigenAlgo::StandardEigenAlgo(AnalysisAggregation *owr)
+XC::StandardEigenAlgo::StandardEigenAlgo(SolutionStrategy *owr)
   :EigenAlgorithm(owr,EigenALGORITHM_TAGS_Standard) {}
 
 //! @brief Calculate the eigenvalues for the current step.

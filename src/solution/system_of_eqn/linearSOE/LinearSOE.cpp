@@ -104,7 +104,7 @@
 //!
 //! @param owr: analysis aggregation that owns this object.
 //! @param classTag: identifier of the class.
-XC::LinearSOE::LinearSOE(AnalysisAggregation *owr,int classTag)
+XC::LinearSOE::LinearSOE(SolutionStrategy *owr,int classTag)
   :SystemOfEqn(owr,classTag), theSolver(nullptr) {}
 
 //! @brief Frees memory.

@@ -37,15 +37,15 @@
 #include <solution/analysis/model/FE_EleIter.h>
 
 //! @brief Constructor.
-XC::AlphaOSBase::AlphaOSBase(AnalysisAggregation *owr,int classTag)
+XC::AlphaOSBase::AlphaOSBase(SolutionStrategy *owr,int classTag)
     : HHTBase(owr,classTag) {}
 
 //! @brief Constructor.
-XC::AlphaOSBase::AlphaOSBase(AnalysisAggregation *owr,int classTag, double _beta, double _gamma)
+XC::AlphaOSBase::AlphaOSBase(SolutionStrategy *owr,int classTag, double _beta, double _gamma)
   : HHTBase(owr,classTag,0,_beta,_gamma) {}
 
 //! @brief Constructor.
-XC::AlphaOSBase::AlphaOSBase(AnalysisAggregation *owr,int classTag, double _beta, double _gamma,const RayleighDampingFactors &rF)
+XC::AlphaOSBase::AlphaOSBase(SolutionStrategy *owr,int classTag, double _beta, double _gamma,const RayleighDampingFactors &rF)
   : HHTBase(owr,classTag,0,_beta,_gamma,rF) {}
 
 int XC::AlphaOSBase::newStep(double _deltaT)

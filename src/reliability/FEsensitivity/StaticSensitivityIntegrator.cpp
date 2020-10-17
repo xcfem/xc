@@ -74,7 +74,7 @@
 #include <classTags.h>
 
 
-XC::StaticSensitivityIntegrator::StaticSensitivityIntegrator(AnalysisAggregation *owr)
+XC::StaticSensitivityIntegrator::StaticSensitivityIntegrator(SolutionStrategy *owr)
   : SensitivityIntegrator(), StaticIntegrator(owr,INTEGRATOR_TAGS_StaticSensitivity) {}
 
 

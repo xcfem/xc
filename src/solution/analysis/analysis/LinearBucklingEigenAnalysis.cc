@@ -38,7 +38,7 @@
 
 
 //! @brief Constructor.
-XC::LinearBucklingEigenAnalysis::LinearBucklingEigenAnalysis(AnalysisAggregation *analysis_aggregation)
+XC::LinearBucklingEigenAnalysis::LinearBucklingEigenAnalysis(SolutionStrategy *analysis_aggregation)
   :EigenAnalysis(analysis_aggregation) {}
 
 //! @brief Performs the analysis.

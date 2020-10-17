@@ -36,7 +36,7 @@
 #include <domain/domain/Domain.h>
 
 //! @brief Constructor.
-XC::IllConditioningAnalysis::IllConditioningAnalysis(AnalysisAggregation *analysis_aggregation)
+XC::IllConditioningAnalysis::IllConditioningAnalysis(SolutionStrategy *analysis_aggregation)
   :EigenAnalysis(analysis_aggregation) {}
 
 //! @brief Sets the algorithm to use in the analysis.

@@ -75,7 +75,7 @@ class AnalysisModel;
 class Integrator;
 class SystemOfEqn;
 class Recorder;
-class AnalysisAggregation;
+class SolutionStrategy;
 
 //! @ingroup Analysis
 //!
@@ -91,15 +91,15 @@ class AnalysisAggregation;
 class SolutionAlgorithm: public MovableObject, public ObjWithRecorders
   {
   protected:
-    AnalysisAggregation *getAnalysisAggregation(void);
-    const AnalysisAggregation *getAnalysisAggregation(void) const;
+    SolutionStrategy *getSolutionStrategy(void);
+    const SolutionStrategy *getSolutionStrategy(void) const;
 
     virtual Domain *get_domain_ptr(void);
     int sendData(Communicator &);
     int recvData(const Communicator &);
 
-    SolutionAlgorithm(AnalysisAggregation *,int classTag);
-    friend class AnalysisAggregation;
+    SolutionAlgorithm(SolutionStrategy *,int classTag);
+    friend class SolutionStrategy;
     friend class FEM_ObjectBroker;
     virtual SolutionAlgorithm *getCopy(void) const= 0;
   public:

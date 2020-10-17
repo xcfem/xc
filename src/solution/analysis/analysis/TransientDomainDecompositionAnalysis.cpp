@@ -65,7 +65,7 @@
 #include <solution/analysis/integrator/TransientIntegrator.h>
 #include <solution/analysis/convergenceTest/ConvergenceTest.h>
 #include "domain/domain/subdomain/Subdomain.h"
-#include "solution/AnalysisAggregation.h"
+#include "solution/SolutionStrategy.h"
 
 // AddingSensitivity:BEGIN //////////////////////////////////
 #ifdef _RELIABILITY
@@ -77,7 +77,7 @@
 #include "utility/matrix/ID.h"
 
 //! @brief Constructor.
-XC::TransientDomainDecompositionAnalysis::TransientDomainDecompositionAnalysis(Subdomain &the_Domain,AnalysisAggregation *s)
+XC::TransientDomainDecompositionAnalysis::TransientDomainDecompositionAnalysis(Subdomain &the_Domain,SolutionStrategy *s)
   :DomainDecompositionAnalysis(ANALYSIS_TAGS_TransientDomainDecompositionAnalysis, the_Domain,s)
   {}
 
@@ -105,9 +105,9 @@ bool XC::TransientDomainDecompositionAnalysis::doesIndependentAnalysis(void)
 //! @param dT: time increment.
 int XC::TransientDomainDecompositionAnalysis::analyze(double dT)
   {
-    assert(solution_method);
-    CommandEntity *old= solution_method->Owner();
-    solution_method->set_owner(this);
+    assert(solution_strategy);
+    CommandEntity *old= solution_strategy->Owner();
+    solution_strategy->set_owner(this);
     int result = 0;
     Domain *the_Domain = this->getDomainPtr();
 
@@ -176,7 +176,7 @@ int XC::TransientDomainDecompositionAnalysis::analyze(double dT)
         getTransientIntegratorPtr()->revertToLastStep();
         return -4;
       }    	
-    solution_method->set_owner(old);
+    solution_strategy->set_owner(old);
     return 0;
   }
 
@@ -377,8 +377,8 @@ int XC::TransientDomainDecompositionAnalysis::sendSelf(Communicator &comm)
     data(5)= theSolver->getClassTag();
     data(6)= getTransientIntegratorPtr()->getClassTag();
 
-    if(solution_method->getConvergenceTestPtr() != 0)
-      data(7) = solution_method->getConvergenceTestPtr()->getClassTag();
+    if(solution_strategy->getConvergenceTestPtr() != 0)
+      data(7) = solution_strategy->getConvergenceTestPtr()->getClassTag();
     else
       data(7) = -1;
 
@@ -438,8 +438,8 @@ int XC::TransientDomainDecompositionAnalysis::sendSelf(Communicator &comm)
         return -1;
       }
 
-    if(solution_method->getConvergenceTestPtr() != 0)
-      if(solution_method->getConvergenceTestPtr()->sendSelf(comm) != 0)
+    if(solution_strategy->getConvergenceTestPtr() != 0)
+      if(solution_strategy->getConvergenceTestPtr()->sendSelf(comm) != 0)
         {
           std::cerr << getClassName() << "::" << __FUNCTION__
 		    << "; failed to send integrator\n";
@@ -558,8 +558,8 @@ int XC::TransientDomainDecompositionAnalysis::recvSelf(const Communicator &comm)
     if(getConvergenceTestPtr() == 0 || getConvergenceTestPtr()->getClassTag() != data(7))
       {
 	std::cerr << "TransientDomainDecompositionAnalysis; falta implementar la lectura del convergence test." << std::endl;
-//         if(solution_method->getConvergenceTestPtr() != 0)
-//           delete solution_method->getConvergenceTestPtr();
+//         if(solution_strategy->getConvergenceTestPtr() != 0)
+//           delete solution_strategy->getConvergenceTestPtr();
     
 //         if(data(7) != -1)
 //           {
@@ -571,7 +571,7 @@ int XC::TransientDomainDecompositionAnalysis::recvSelf(const Communicator &comm)
 // 	        return -1;
 //               }
 //             else
-//               solution_method->setConvergenceTest(*tmp);
+//               solution_strategy->setConvergenceTest(*tmp);
 //           }
       }
     if(getConvergenceTestPtr() != 0)

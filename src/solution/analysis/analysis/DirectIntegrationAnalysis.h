@@ -93,7 +93,7 @@ class DirectIntegrationAnalysis: public TransientAnalysis
     // AddingSensitivity:END ///////////////////////////////
   protected:
     friend class ProcSolu;
-    DirectIntegrationAnalysis(AnalysisAggregation *analysis_aggregation);
+    DirectIntegrationAnalysis(SolutionStrategy *analysis_aggregation);
     Analysis *getCopy(void) const;
   public:
     virtual ~DirectIntegrationAnalysis(void);

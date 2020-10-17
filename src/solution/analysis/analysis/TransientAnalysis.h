@@ -73,7 +73,7 @@ namespace XC {
 class TransientAnalysis: public Analysis
   {
   protected:
-    TransientAnalysis(AnalysisAggregation *);
+    TransientAnalysis(SolutionStrategy *);
   public:
     //! @brief Performs the analysis.
     //!

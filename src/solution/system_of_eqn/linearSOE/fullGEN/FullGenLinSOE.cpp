@@ -68,14 +68,14 @@
 //! @brief Constructor.
 //!
 //! @param owr: analysis aggregation that owns this object.
-XC::FullGenLinSOE::FullGenLinSOE(AnalysisAggregation *owr)
+XC::FullGenLinSOE::FullGenLinSOE(SolutionStrategy *owr)
   :FactoredSOEBase(owr,LinSOE_TAGS_FullGenLinSOE) {}
 
 
 //! @brief Constructor.
 //!
 //! @param owr: analysis aggregation that owns this object.
-XC::FullGenLinSOE::FullGenLinSOE(AnalysisAggregation *owr,int N)
+XC::FullGenLinSOE::FullGenLinSOE(SolutionStrategy *owr,int N)
   :FactoredSOEBase(owr,LinSOE_TAGS_FullGenLinSOE,N)
   {
     A= Vector(size*size);

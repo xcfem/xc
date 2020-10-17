@@ -84,15 +84,15 @@ cHandler= sm.newConstraintHandler("transformation_constraint_handler")
 numberer= sm.newNumberer("default_numberer")
 numberer.useAlgorithm("rcm")
 
-analysisAggregations= solCtrl.getAnalysisAggregationContainer
-analysisAggregation= analysisAggregations.newAnalysisAggregation("analysisAggregation","sm")
-solAlgo= analysisAggregation.newSolutionAlgorithm("frequency_soln_algo")
-integ= analysisAggregation.newIntegrator("eigen_integrator",xc.Vector([]))
+solutionStrategies= solCtrl.getSolutionStrategyContainer
+solutionStrategy= solutionStrategies.newSolutionStrategy("solutionStrategy","sm")
+solAlgo= solutionStrategy.newSolutionAlgorithm("frequency_soln_algo")
+integ= solutionStrategy.newIntegrator("eigen_integrator",xc.Vector([]))
 
-soe= analysisAggregation.newSystemOfEqn("full_gen_eigen_soe")
+soe= solutionStrategy.newSystemOfEqn("full_gen_eigen_soe")
 solver= soe.newSolver("full_gen_eigen_solver")
 
-analysis= solu.newAnalysis("modal_analysis","analysisAggregation","")
+analysis= solu.newAnalysis("modal_analysis","solutionStrategy","")
 analOk= analysis.analyze(3)
 periods= analysis.getPeriods()
 angularFrequencies= analysis.getAngularFrequencies()

@@ -75,8 +75,8 @@ class HSConstraint: public ProtoArcLength
     int sendData(Communicator &);
     int recvData(const Communicator &);
 
-    friend class AnalysisAggregation ;
-    HSConstraint(AnalysisAggregation *,double arcLength, double psi_u=1.0, double psi_f=1.0, double u_ref=1.0);
+    friend class SolutionStrategy ;
+    HSConstraint(SolutionStrategy *,double arcLength, double psi_u=1.0, double psi_f=1.0, double u_ref=1.0);
     Integrator *getCopy(void) const;
   public:
     int sendSelf(Communicator &);

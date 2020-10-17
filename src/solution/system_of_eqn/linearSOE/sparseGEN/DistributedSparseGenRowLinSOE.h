@@ -96,8 +96,8 @@ class DistributedSparseGenRowLinSolver;
   protected:
     virtual bool setSolver(LinearSOESolver *);
 
-    friend class AnalysisAggregation;
-    DistributedSparseGenRowLinSOE(AnalysisAggregation *); 
+    friend class SolutionStrategy;
+    DistributedSparseGenRowLinSOE(SolutionStrategy *); 
     SystemOfEqn *getCopy(void) const;
   public:
     int setSize(Graph &theGraph);

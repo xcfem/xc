@@ -54,9 +54,9 @@ class NewmarkBase: public DampingFactorsIntegrator
     int sendData(Communicator &);
     int recvData(const Communicator &);
 
-    NewmarkBase(AnalysisAggregation *,int classTag);
-    NewmarkBase(AnalysisAggregation *,int classTag,double gamma);
-    NewmarkBase(AnalysisAggregation *,int classTag,double gamma,const RayleighDampingFactors &rF);
+    NewmarkBase(SolutionStrategy *,int classTag);
+    NewmarkBase(SolutionStrategy *,int classTag,double gamma);
+    NewmarkBase(SolutionStrategy *,int classTag,double gamma,const RayleighDampingFactors &rF);
   };
 } // end of XC namespace
 

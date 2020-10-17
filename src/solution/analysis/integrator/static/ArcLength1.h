@@ -236,8 +236,8 @@ class ArcLength1: public ArcLengthBase
   {
     double getDLambdaUpdate(void) const;
   protected:
-    friend class AnalysisAggregation;
-    ArcLength1(AnalysisAggregation *,double arcLength, double alpha = 1.0);
+    friend class SolutionStrategy;
+    ArcLength1(SolutionStrategy *,double arcLength, double alpha = 1.0);
     Integrator *getCopy(void) const;
   public:
     void Print(std::ostream &s, int flag =0) const;    

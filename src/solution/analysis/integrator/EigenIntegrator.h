@@ -91,8 +91,8 @@ class EigenIntegrator: public Integrator
     EigenSOE *getEigenSOEPtr(void);
     const EigenSOE *getEigenSOEPtr(void) const;
 
-    friend class AnalysisAggregation ;
-    EigenIntegrator(AnalysisAggregation *);
+    friend class SolutionStrategy ;
+    EigenIntegrator(SolutionStrategy *);
     Integrator *getCopy(void) const;
   public:
      

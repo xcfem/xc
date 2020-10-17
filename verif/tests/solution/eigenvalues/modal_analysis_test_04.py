@@ -112,17 +112,17 @@ sm= solModels.newModelWrapper("sm")
 cHandler= sm.newConstraintHandler("transformation_constraint_handler")
 numberer= sm.newNumberer("default_numberer")
 numberer.useAlgorithm("rcm")
-analysisAggregations= solCtrl.getAnalysisAggregationContainer
-analysisAggregation= analysisAggregations.newAnalysisAggregation("analysisAggregation","sm")
-solAlgo= analysisAggregation.newSolutionAlgorithm("frequency_soln_algo")
-integ= analysisAggregation.newIntegrator("eigen_integrator",xc.Vector([]))
-soe= analysisAggregation.newSystemOfEqn("band_arpack_soe")
+solutionStrategies= solCtrl.getSolutionStrategyContainer
+solutionStrategy= solutionStrategies.newSolutionStrategy("solutionStrategy","sm")
+solAlgo= solutionStrategy.newSolutionAlgorithm("frequency_soln_algo")
+integ= solutionStrategy.newIntegrator("eigen_integrator",xc.Vector([]))
+soe= solutionStrategy.newSystemOfEqn("band_arpack_soe")
 soe.shift= 0.0
 solver= soe.newSolver("band_arpack_solver")
 solver.tol= 1e-3
 solver.maxNumIter= 5
 
-analysis= solu.newAnalysis("modal_analysis","analysisAggregation","")
+analysis= solu.newAnalysis("modal_analysis","solutionStrategy","")
 analOk= analysis.analyze(4)
 periods= analysis.getPeriods()
 modos= analysis.getNormalizedEigenvectors()

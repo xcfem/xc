@@ -43,7 +43,7 @@
 #include <solution/graph/graph/VertexIter.h>
 
 //! @brief Constructor.
-XC::BandArpackSOE::BandArpackSOE(AnalysisAggregation *owr, double theShift)
+XC::BandArpackSOE::BandArpackSOE(SolutionStrategy *owr, double theShift)
   :ArpackSOE(owr,EigenSOE_TAGS_BandArpackSOE,theShift),
    numSuperD(0), numSubD(0) {}
 

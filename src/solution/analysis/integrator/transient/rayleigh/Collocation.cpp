@@ -67,12 +67,12 @@
 #include <cmath>
 
 //! @brief Constructor.
-XC::Collocation::Collocation(AnalysisAggregation *owr)
+XC::Collocation::Collocation(SolutionStrategy *owr)
     : RayleighBase(owr,INTEGRATOR_TAGS_Collocation),
     theta(1.0), beta(0.0), gamma(0.0), c1(0.0), c2(0.0), c3(0.0) {}
 
 //! @brief Constructor.
-XC::Collocation::Collocation(AnalysisAggregation *owr,double _theta)
+XC::Collocation::Collocation(SolutionStrategy *owr,double _theta)
     : RayleighBase(owr,INTEGRATOR_TAGS_Collocation),
     theta(_theta), beta(0.0), gamma(0.5), c1(0.0), c2(0.0), c3(0.0)
   {
@@ -89,7 +89,7 @@ XC::Collocation::Collocation(AnalysisAggregation *owr,double _theta)
   }
 
 //! @brief Constructor.
-XC::Collocation::Collocation(AnalysisAggregation *owr,double _theta,const RayleighDampingFactors &rF)
+XC::Collocation::Collocation(SolutionStrategy *owr,double _theta,const RayleighDampingFactors &rF)
     : RayleighBase(owr,INTEGRATOR_TAGS_Collocation,rF),
     theta(_theta), beta(0.0), gamma(0.5), c1(0.0), c2(0.0), c3(0.0)
   {
@@ -106,12 +106,12 @@ XC::Collocation::Collocation(AnalysisAggregation *owr,double _theta,const Raylei
   }
 
 //! @brief Constructor.
-XC::Collocation::Collocation(AnalysisAggregation *owr,double _theta, double _beta, double _gamma)
+XC::Collocation::Collocation(SolutionStrategy *owr,double _theta, double _beta, double _gamma)
     : RayleighBase(owr,INTEGRATOR_TAGS_Collocation),
     theta(_theta), beta(_beta), gamma(_gamma), c1(0.0), c2(0.0), c3(0.0) {}
 
 //! @brief Constructor.
-XC::Collocation::Collocation(AnalysisAggregation *owr,double _theta, double _beta, double _gamma,const RayleighDampingFactors &rF)
+XC::Collocation::Collocation(SolutionStrategy *owr,double _theta, double _beta, double _gamma,const RayleighDampingFactors &rF)
     : RayleighBase(owr,INTEGRATOR_TAGS_Collocation,rF),
     theta(_theta), beta(_beta), gamma(_gamma), c1(0.0), c2(0.0), c3(0.0) {}
 

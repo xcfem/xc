@@ -105,9 +105,9 @@ class LoadPath: public StaticIntegrator
     int sendData(Communicator &);
     int recvData(const Communicator &);
 
-    friend class AnalysisAggregation;
-    LoadPath(AnalysisAggregation *);
-    LoadPath(AnalysisAggregation *,const Vector &theLoadPath);
+    friend class SolutionStrategy;
+    LoadPath(SolutionStrategy *);
+    LoadPath(SolutionStrategy *,const Vector &theLoadPath);
     Integrator *getCopy(void) const;
   public:
 

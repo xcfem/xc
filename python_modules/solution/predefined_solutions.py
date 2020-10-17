@@ -16,7 +16,7 @@ from misc_utils import log_messages as lmsg
 
 class SolutionProcedure(object):
     '''
-    :ivar analysisAggregation: object that aggregates all the component objects
+    :ivar solutionStrategy: object that aggregates all the component objects
           that define the type of analysis (constraint handler, DOF_Numberer, 
           integrator, solution algorithm, system of equations, convergence test)
     :ivar cHandler:  constraint handler. Determines how the constraint equations 
@@ -63,7 +63,7 @@ class SolutionProcedure(object):
         self.sm= None
         self.numberer= None
         self.cHandler= None
-        self.analysisAggregation= None
+        self.solutionStrategy= None
         self.solAlgo= None
         self.integ= None
         self.soe= None
@@ -108,13 +108,13 @@ class SolutionProcedure(object):
         self.numberer= self.sm.newNumberer("default_numberer")
         self.numberer.useAlgorithm("rcm")
         self.cHandler= self.getConstraintHandler('penalty')
-        analysisAggregations= self.solCtrl.getAnalysisAggregationContainer
-        self.analysisAggregation= analysisAggregations.newAnalysisAggregation("analysisAggregation","sm")
-        self.solAlgo= self.analysisAggregation.newSolutionAlgorithm("linear_soln_algo")
-        self.integ= self.analysisAggregation.newIntegrator("load_control_integrator",xc.Vector([]))
-        self.soe= self.analysisAggregation.newSystemOfEqn("band_spd_lin_soe")
+        solutionStrategies= self.solCtrl.getSolutionStrategyContainer
+        self.solutionStrategy= solutionStrategies.newSolutionStrategy("solutionStrategy","sm")
+        self.solAlgo= self.solutionStrategy.newSolutionAlgorithm("linear_soln_algo")
+        self.integ= self.solutionStrategy.newIntegrator("load_control_integrator",xc.Vector([]))
+        self.soe= self.solutionStrategy.newSystemOfEqn("band_spd_lin_soe")
         self.solver= self.soe.newSolver("band_spd_lin_lapack_solver")
-        self.analysis= self.solu.newAnalysis("static_analysis","analysisAggregation","")
+        self.analysis= self.solu.newAnalysis("static_analysis","solutionStrategy","")
         return self.analysis
       
     def plainLinearNewmark(self,prb):
@@ -128,13 +128,13 @@ class SolutionProcedure(object):
         self.numberer= self.sm.newNumberer("default_numberer")
         self.numberer.useAlgorithm("simple")
         self.cHandler= self.getConstraintHandler('plain')
-        analysisAggregations= self.solCtrl.getAnalysisAggregationContainer
-        self.analysisAggregation= analysisAggregations.newAnalysisAggregation("analysisAggregation","sm")
-        self.solAlgo= self.analysisAggregation.newSolutionAlgorithm("linear_soln_algo")
-        self.integ= self.analysisAggregation.newIntegrator("newmark_integrator",xc.Vector([0.5,0.25]))
-        self.soe= self.analysisAggregation.newSystemOfEqn("band_gen_lin_soe")
+        solutionStrategies= self.solCtrl.getSolutionStrategyContainer
+        self.solutionStrategy= solutionStrategies.newSolutionStrategy("solutionStrategy","sm")
+        self.solAlgo= self.solutionStrategy.newSolutionAlgorithm("linear_soln_algo")
+        self.integ= self.solutionStrategy.newIntegrator("newmark_integrator",xc.Vector([0.5,0.25]))
+        self.soe= self.solutionStrategy.newSystemOfEqn("band_gen_lin_soe")
         self.solver= self.soe.newSolver("band_gen_lin_lapack_solver")
-        self.analysis= self.solu.newAnalysis("direct_integration_analysis","analysisAggregation","")
+        self.analysis= self.solu.newAnalysis("direct_integration_analysis","solutionStrategy","")
         return self.analysis
       
     def simpleLagrangeStaticLinear(self,prb):
@@ -148,13 +148,13 @@ class SolutionProcedure(object):
         self.numberer= self.sm.newNumberer("default_numberer")
         self.numberer.useAlgorithm("rcm")
         self.cHandler= self.getConstraintHandler('lagrange')
-        analysisAggregations= self.solCtrl.getAnalysisAggregationContainer
-        self.analysisAggregation= analysisAggregations.newAnalysisAggregation("analysisAggregation","sm")
-        self.solAlgo= self.analysisAggregation.newSolutionAlgorithm("linear_soln_algo")
-        self.integ= self.analysisAggregation.newIntegrator("load_control_integrator",xc.Vector([]))
-        self.soe= self.analysisAggregation.newSystemOfEqn("sparse_gen_col_lin_soe")
+        solutionStrategies= self.solCtrl.getSolutionStrategyContainer
+        self.solutionStrategy= solutionStrategies.newSolutionStrategy("solutionStrategy","sm")
+        self.solAlgo= self.solutionStrategy.newSolutionAlgorithm("linear_soln_algo")
+        self.integ= self.solutionStrategy.newIntegrator("load_control_integrator",xc.Vector([]))
+        self.soe= self.solutionStrategy.newSystemOfEqn("sparse_gen_col_lin_soe")
         self.solver= self.soe.newSolver("super_lu_solver")
-        self.analysis= self.solu.newAnalysis("static_analysis","analysisAggregation","")
+        self.analysis= self.solu.newAnalysis("static_analysis","solutionStrategy","")
         return self.analysis
       
     def simpleTransformationStaticLinear(self,prb):
@@ -168,13 +168,13 @@ class SolutionProcedure(object):
         self.numberer= self.sm.newNumberer("default_numberer")
         self.numberer.useAlgorithm("rcm")
         self.cHandler= self.getConstraintHandler('transformation')
-        analysisAggregations= self.solCtrl.getAnalysisAggregationContainer
-        self.analysisAggregation= analysisAggregations.newAnalysisAggregation("analysisAggregation","sm")
-        self.solAlgo= self.analysisAggregation.newSolutionAlgorithm("linear_soln_algo")
-        self.integ= self.analysisAggregation.newIntegrator("load_control_integrator",xc.Vector([]))
-        self.soe= self.analysisAggregation.newSystemOfEqn("sparse_gen_col_lin_soe")
+        solutionStrategies= self.solCtrl.getSolutionStrategyContainer
+        self.solutionStrategy= solutionStrategies.newSolutionStrategy("solutionStrategy","sm")
+        self.solAlgo= self.solutionStrategy.newSolutionAlgorithm("linear_soln_algo")
+        self.integ= self.solutionStrategy.newIntegrator("load_control_integrator",xc.Vector([]))
+        self.soe= self.solutionStrategy.newSystemOfEqn("sparse_gen_col_lin_soe")
         self.solver= self.soe.newSolver("super_lu_solver")
-        self.analysis= self.solu.newAnalysis("static_analysis","analysisAggregation","")
+        self.analysis= self.solu.newAnalysis("static_analysis","solutionStrategy","")
         return self.analysis
       
     def plainNewtonRaphson(self,prb):
@@ -188,16 +188,16 @@ class SolutionProcedure(object):
         self.numberer= self.sm.newNumberer("default_numberer")
         self.numberer.useAlgorithm("simple")
         self.cHandler= self.getConstraintHandler('plain')
-        analysisAggregations= self.solCtrl.getAnalysisAggregationContainer
-        self.analysisAggregation= analysisAggregations.newAnalysisAggregation("analysisAggregation","sm")
-        self.solAlgo= self.analysisAggregation.newSolutionAlgorithm("newton_raphson_soln_algo")
-        self.integ= self.analysisAggregation.newIntegrator("load_control_integrator",xc.Vector([]))
-        self.ctest= self.analysisAggregation.newConvergenceTest("norm_unbalance_conv_test")
+        solutionStrategies= self.solCtrl.getSolutionStrategyContainer
+        self.solutionStrategy= solutionStrategies.newSolutionStrategy("solutionStrategy","sm")
+        self.solAlgo= self.solutionStrategy.newSolutionAlgorithm("newton_raphson_soln_algo")
+        self.integ= self.solutionStrategy.newIntegrator("load_control_integrator",xc.Vector([]))
+        self.ctest= self.solutionStrategy.newConvergenceTest("norm_unbalance_conv_test")
         self.ctest.tol= self.convergenceTestTol
         self.ctest.maxNumIter= self.maxNumIter
-        self.soe= self.analysisAggregation.newSystemOfEqn("sparse_gen_col_lin_soe")
+        self.soe= self.solutionStrategy.newSystemOfEqn("sparse_gen_col_lin_soe")
         self.solver= self.soe.newSolver("super_lu_solver")
-        self.analysis= self.solu.newAnalysis("static_analysis","analysisAggregation","")
+        self.analysis= self.solu.newAnalysis("static_analysis","solutionStrategy","")
         return self.analysis
       
     def plainNewtonRaphsonBandGen(self,prb):
@@ -212,16 +212,16 @@ class SolutionProcedure(object):
         self.numberer= self.sm.newNumberer("default_numberer")
         self.numberer.useAlgorithm("simple")
         self.cHandler= self.getConstraintHandler('plain')
-        analysisAggregations= self.solCtrl.getAnalysisAggregationContainer
-        self.analysisAggregation= analysisAggregations.newAnalysisAggregation("analysisAggregation","sm")
-        self.solAlgo= self.analysisAggregation.newSolutionAlgorithm("newton_raphson_soln_algo")
-        self.integ= self.analysisAggregation.newIntegrator("load_control_integrator",xc.Vector([]))
-        self.ctest= self.analysisAggregation.newConvergenceTest("norm_unbalance_conv_test")
+        solutionStrategies= self.solCtrl.getSolutionStrategyContainer
+        self.solutionStrategy= solutionStrategies.newSolutionStrategy("solutionStrategy","sm")
+        self.solAlgo= self.solutionStrategy.newSolutionAlgorithm("newton_raphson_soln_algo")
+        self.integ= self.solutionStrategy.newIntegrator("load_control_integrator",xc.Vector([]))
+        self.ctest= self.solutionStrategy.newConvergenceTest("norm_unbalance_conv_test")
         self.ctest.tol= self.convergenceTestTol
         self.ctest.maxNumIter= self.maxNumIter
-        self.soe= self.analysisAggregation.newSystemOfEqn("band_gen_lin_soe")
+        self.soe= self.solutionStrategy.newSystemOfEqn("band_gen_lin_soe")
         self.solver= self.soe.newSolver("band_gen_lin_lapack_solver")
-        self.analysis= self.solu.newAnalysis("static_analysis","analysisAggregation","")
+        self.analysis= self.solu.newAnalysis("static_analysis","solutionStrategy","")
         return self.analysis
       
     def plainStaticModifiedNewton(self,prb):
@@ -235,16 +235,16 @@ class SolutionProcedure(object):
         self.numberer= self.sm.newNumberer("default_numberer")
         self.numberer.useAlgorithm("simple")
         self.cHandler= self.getConstraintHandler('plain')
-        analysisAggregations= self.solCtrl.getAnalysisAggregationContainer
-        self.analysisAggregation= analysisAggregations.newAnalysisAggregation("analysisAggregation","sm")
-        self.solAlgo= self.analysisAggregation.newSolutionAlgorithm("modified_newton_soln_algo")
-        self.integ= self.analysisAggregation.newIntegrator("load_control_integrator",xc.Vector([]))
-        self.ctest= self.analysisAggregation.newConvergenceTest("relative_total_norm_disp_incr_conv_test")
+        solutionStrategies= self.solCtrl.getSolutionStrategyContainer
+        self.solutionStrategy= solutionStrategies.newSolutionStrategy("solutionStrategy","sm")
+        self.solAlgo= self.solutionStrategy.newSolutionAlgorithm("modified_newton_soln_algo")
+        self.integ= self.solutionStrategy.newIntegrator("load_control_integrator",xc.Vector([]))
+        self.ctest= self.solutionStrategy.newConvergenceTest("relative_total_norm_disp_incr_conv_test")
         self.ctest.tol= self.convergenceTestTol
         self.ctest.maxNumIter= 150 #Make this configurable
-        self.soe= self.analysisAggregation.newSystemOfEqn("sparse_gen_col_lin_soe")
+        self.soe= self.solutionStrategy.newSystemOfEqn("sparse_gen_col_lin_soe")
         self.solver= self.soe.newSolver("super_lu_solver")
-        self.analysis= self.solu.newAnalysis("static_analysis","analysisAggregation","")
+        self.analysis= self.solu.newAnalysis("static_analysis","solutionStrategy","")
         return self.analysis
     
     def plainKrylovNewton(self,prb, maxDim= 6):
@@ -262,18 +262,18 @@ class SolutionProcedure(object):
         self.numberer= self.sm.newNumberer("default_numberer")
         self.numberer.useAlgorithm("simple")
         self.cHandler= self.getConstraintHandler('plain')
-        analysisAggregations= self.solCtrl.getAnalysisAggregationContainer
-        self.analysisAggregation= analysisAggregations.newAnalysisAggregation("analysisAggregation","sm")
-        self.solAlgo= self.analysisAggregation.newSolutionAlgorithm("krylov_newton_soln_algo")
+        solutionStrategies= self.solCtrl.getSolutionStrategyContainer
+        self.solutionStrategy= solutionStrategies.newSolutionStrategy("solutionStrategy","sm")
+        self.solAlgo= self.solutionStrategy.newSolutionAlgorithm("krylov_newton_soln_algo")
         self.solAlgo.maxDimension= maxDim
-        self.integ= self.analysisAggregation.newIntegrator("load_control_integrator",xc.Vector([]))
-        self.ctest= self.analysisAggregation.newConvergenceTest("energy_inc_conv_test")
+        self.integ= self.solutionStrategy.newIntegrator("load_control_integrator",xc.Vector([]))
+        self.ctest= self.solutionStrategy.newConvergenceTest("energy_inc_conv_test")
         self.ctest.tol= self.convergenceTestTol
         self.ctest.maxNumIter= 150 #Make this configurable
         self.ctest.printFlag= self.printFlag
-        self.soe= self.analysisAggregation.newSystemOfEqn("umfpack_gen_lin_soe")
+        self.soe= self.solutionStrategy.newSystemOfEqn("umfpack_gen_lin_soe")
         self.solver= self.soe.newSolver("umfpack_gen_lin_solver")
-        self.analysis= self.solu.newAnalysis("static_analysis","analysisAggregation","")
+        self.analysis= self.solu.newAnalysis("static_analysis","solutionStrategy","")
         return self.analysis
       
     def penaltyNewtonRaphson(self, prb):
@@ -286,17 +286,17 @@ class SolutionProcedure(object):
         self.numberer= self.sm.newNumberer("default_numberer")
         self.numberer.useAlgorithm("rcm")
         self.cHandler= self.getConstraintHandler('penalty')
-        analysisAggregations= self.solCtrl.getAnalysisAggregationContainer
-        self.analysisAggregation= analysisAggregations.newAnalysisAggregation("analysisAggregation","sm")
-        self.solAlgo= self.analysisAggregation.newSolutionAlgorithm("newton_raphson_soln_algo")
-        self.ctest= self.analysisAggregation.newConvergenceTest("norm_unbalance_conv_test")
+        solutionStrategies= self.solCtrl.getSolutionStrategyContainer
+        self.solutionStrategy= solutionStrategies.newSolutionStrategy("solutionStrategy","sm")
+        self.solAlgo= self.solutionStrategy.newSolutionAlgorithm("newton_raphson_soln_algo")
+        self.ctest= self.solutionStrategy.newConvergenceTest("norm_unbalance_conv_test")
         self.ctest.tol= self.convergenceTestTol #1.0e-4
         self.ctest.maxNumIter= self.maxNumIter
         self.ctest.printFlag= self.printFlag
-        self.integ= self.analysisAggregation.newIntegrator("load_control_integrator",xc.Vector([]))
-        self.soe= self.analysisAggregation.newSystemOfEqn("band_gen_lin_soe")
+        self.integ= self.solutionStrategy.newIntegrator("load_control_integrator",xc.Vector([]))
+        self.soe= self.solutionStrategy.newSystemOfEqn("band_gen_lin_soe")
         self.solver= self.soe.newSolver("band_gen_lin_lapack_solver")
-        self.analysis= self.solu.newAnalysis("static_analysis","analysisAggregation","")
+        self.analysis= self.solu.newAnalysis("static_analysis","solutionStrategy","")
         return self.analysis
 
     def penaltyModifiedNewton(self, prb):
@@ -309,17 +309,17 @@ class SolutionProcedure(object):
         self.numberer= self.sm.newNumberer("default_numberer")
         self.numberer.useAlgorithm("rcm")
         self.cHandler= self.getConstraintHandler('penalty')
-        analysisAggregations= self.solCtrl.getAnalysisAggregationContainer
-        self.analysisAggregation= analysisAggregations.newAnalysisAggregation("analysisAggregation","sm")
-        self.solAlgo= self.analysisAggregation.newSolutionAlgorithm("modified_newton_soln_algo")
-        self.integ= self.analysisAggregation.newIntegrator("load_control_integrator",xc.Vector([]))
-        self.ctest= self.analysisAggregation.newConvergenceTest("relative_total_norm_disp_incr_conv_test")
+        solutionStrategies= self.solCtrl.getSolutionStrategyContainer
+        self.solutionStrategy= solutionStrategies.newSolutionStrategy("solutionStrategy","sm")
+        self.solAlgo= self.solutionStrategy.newSolutionAlgorithm("modified_newton_soln_algo")
+        self.integ= self.solutionStrategy.newIntegrator("load_control_integrator",xc.Vector([]))
+        self.ctest= self.solutionStrategy.newConvergenceTest("relative_total_norm_disp_incr_conv_test")
         self.ctest.tol= self.convergenceTestTol
         self.ctest.printFlag= self.printFlag
         self.ctest.maxNumIter= 150 #Make this configurable
-        self.soe= self.analysisAggregation.newSystemOfEqn("sparse_gen_col_lin_soe")
+        self.soe= self.solutionStrategy.newSystemOfEqn("sparse_gen_col_lin_soe")
         self.solver= self.soe.newSolver("super_lu_solver")
-        self.analysis= self.solu.newAnalysis("static_analysis","analysisAggregation","")
+        self.analysis= self.solu.newAnalysis("static_analysis","solutionStrategy","")
         return self.analysis
     
     def penaltyNewmarkNewtonRapshon(self,prb):
@@ -332,17 +332,17 @@ class SolutionProcedure(object):
         self.numberer= self.sm.newNumberer("default_numberer")
         self.numberer.useAlgorithm("rcm")
         self.cHandler= self.getConstraintHandler('penalty', alphaSP= 1.0e18, alphaMP= 1.0e18)
-        analysisAggregations= self.solCtrl.getAnalysisAggregationContainer
-        self.analysisAggregation= analysisAggregations.newAnalysisAggregation("analysisAggregation","sm")
-        self.solAlgo= self.analysisAggregation.newSolutionAlgorithm("newton_raphson_soln_algo")
-        self.ctest= self.analysisAggregation.newConvergenceTest("norm_disp_incr_conv_test")
+        solutionStrategies= self.solCtrl.getSolutionStrategyContainer
+        self.solutionStrategy= solutionStrategies.newSolutionStrategy("solutionStrategy","sm")
+        self.solAlgo= self.solutionStrategy.newSolutionAlgorithm("newton_raphson_soln_algo")
+        self.ctest= self.solutionStrategy.newConvergenceTest("norm_disp_incr_conv_test")
         self.ctest.tol= self.convergenceTestTol # 1.0e-3
         self.ctest.maxNumIter= self.maxNumIter
         self.ctest.printFlag= self.printFlag
-        self.integ= self.analysisAggregation.newIntegrator("newmark_integrator",xc.Vector([]))
-        self.soe= self.analysisAggregation.newSystemOfEqn("profile_spd_lin_soe")
+        self.integ= self.solutionStrategy.newIntegrator("newmark_integrator",xc.Vector([]))
+        self.soe= self.solutionStrategy.newSystemOfEqn("profile_spd_lin_soe")
         self.solver= self.soe.newSolver("profile_spd_lin_direct_solver")
-        self.analysis= self.solu.newAnalysis("direct_integration_analysis","analysisAggregation","")
+        self.analysis= self.solu.newAnalysis("direct_integration_analysis","solutionStrategy","")
         return self.analysis
 
     def frequencyAnalysis(self,prb,systemPrefix= 'sym_band'):
@@ -354,15 +354,15 @@ class SolutionProcedure(object):
         self.cHandler= self.getConstraintHandler('transformation')
         self.numberer= self.sm.newNumberer("default_numberer")
         self.numberer.useAlgorithm("rcm")
-        analysisAggregations= self.solCtrl.getAnalysisAggregationContainer
-        self.analysisAggregation= analysisAggregations.newAnalysisAggregation("analysisAggregation","sm")
-        self.solAlgo= self.analysisAggregation.newSolutionAlgorithm("frequency_soln_algo")
-        self.integ= self.analysisAggregation.newIntegrator("eigen_integrator",xc.Vector([]))
+        solutionStrategies= self.solCtrl.getSolutionStrategyContainer
+        self.solutionStrategy= solutionStrategies.newSolutionStrategy("solutionStrategy","sm")
+        self.solAlgo= self.solutionStrategy.newSolutionAlgorithm("frequency_soln_algo")
+        self.integ= self.solutionStrategy.newIntegrator("eigen_integrator",xc.Vector([]))
         soe_string= systemPrefix+'_eigen_soe'
         solver_string= systemPrefix+'_eigen_solver'
-        self.soe= self.analysisAggregation.newSystemOfEqn(soe_string)
+        self.soe= self.solutionStrategy.newSystemOfEqn(soe_string)
         self.solver= self.soe.newSolver(solver_string)
-        self.analysis= self.solu.newAnalysis("modal_analysis","analysisAggregation","")
+        self.analysis= self.solu.newAnalysis("modal_analysis","solutionStrategy","")
         return self.analysis
     
     def illConditioningAnalysisBase(self, prb, soePrefix= 'sym_band_eigen', shift= None):
@@ -376,17 +376,17 @@ class SolutionProcedure(object):
         self.cHandler= self.getConstraintHandler('penalty')
         self.numberer= self.sm.newNumberer("default_numberer")
         self.numberer.useAlgorithm("rcm")
-        self.analysisAggregations= self.solCtrl.getAnalysisAggregationContainer
-        self.analysisAggregation= self.analysisAggregations.newAnalysisAggregation("analysisAggregation","sm")
+        self.solutionStrategies= self.solCtrl.getSolutionStrategyContainer
+        self.solutionStrategy= self.solutionStrategies.newSolutionStrategy("solutionStrategy","sm")
 
-        self.solAlgo= self.analysisAggregation.newSolutionAlgorithm("ill-conditioning_soln_algo")
-        self.integ= self.analysisAggregation.newIntegrator("ill-conditioning_integrator",xc.Vector([]))
-        self.soe= self.analysisAggregation.newSystemOfEqn(soePrefix+"_soe")
+        self.solAlgo= self.solutionStrategy.newSolutionAlgorithm("ill-conditioning_soln_algo")
+        self.integ= self.solutionStrategy.newIntegrator("ill-conditioning_integrator",xc.Vector([]))
+        self.soe= self.solutionStrategy.newSystemOfEqn(soePrefix+"_soe")
         if(shift):
             self.soe.shift= shift
         self.solver= self.soe.newSolver(soePrefix+"_solver")
 
-        self.analysis= self.solu.newAnalysis("ill-conditioning_analysis","analysisAggregation","")
+        self.analysis= self.solu.newAnalysis("ill-conditioning_analysis","solutionStrategy","")
         return self.analysis
     
     def zeroEnergyModes(self, prb):
@@ -520,12 +520,12 @@ def solveStaticNoLinCase(nmbComb):
 #       {
 #         \control
 #           {
-#             \solu_method["analysisAggregation","sm"]
+#             \solu_method["solutionStrategy","sm"]
 #               {
 #                 \norm_unbalance_conv_test \tol{1.0e-2} \print_flag{0} \max_num_iter{10}
 #               }
 #           }
-#         \static_analysis["analysisAggregation"]  \analyze{1} analOk= result 
+#         \static_analysis["solutionStrategy"]  \analyze{1} analOk= result 
 #       }
 #     cargas.removeFromDomain(nmbComb)
 #     # print("Resuelto caso: ",nmbComb,"\n")

@@ -119,10 +119,10 @@ class CentralDifference: public RayleighBase
     int sendData(Communicator &);
     int recvData(const Communicator &);
 
-    friend class AnalysisAggregation;
+    friend class SolutionStrategy;
     friend class FEM_ObjectBroker;
-    CentralDifference(AnalysisAggregation *);
-    CentralDifference(AnalysisAggregation *,const RayleighDampingFactors &rF);
+    CentralDifference(SolutionStrategy *);
+    CentralDifference(SolutionStrategy *,const RayleighDampingFactors &rF);
     Integrator *getCopy(void) const;
   public:
     // methods which define what the FE_Element and DOF_Groups add

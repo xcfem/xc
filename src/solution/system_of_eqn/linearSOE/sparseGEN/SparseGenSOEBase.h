@@ -43,7 +43,7 @@ class SparseGenSOEBase: public SparseSOEBase
   {
   protected:
     Vector A; //! 1d array containing coefficient of A
-    SparseGenSOEBase(AnalysisAggregation *,int classTag,int N= 0, int NNZ= 0);
+    SparseGenSOEBase(SolutionStrategy *,int classTag,int N= 0, int NNZ= 0);
 
   public:
     virtual void zeroA(void);

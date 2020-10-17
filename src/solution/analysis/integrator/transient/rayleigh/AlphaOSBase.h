@@ -50,9 +50,9 @@ class AlphaOSBase: public HHTBase
     int sendData(Communicator &);
     int recvData(const Communicator &);
 
-    AlphaOSBase(AnalysisAggregation *,int classTag);
-    AlphaOSBase(AnalysisAggregation *,int classTag,double beta, double gamma);
-    AlphaOSBase(AnalysisAggregation *,int classTag,double beta, double gamma,const RayleighDampingFactors &rF);
+    AlphaOSBase(SolutionStrategy *,int classTag);
+    AlphaOSBase(SolutionStrategy *,int classTag,double beta, double gamma);
+    AlphaOSBase(SolutionStrategy *,int classTag,double beta, double gamma,const RayleighDampingFactors &rF);
   public:
     int newStep(double deltaT);    
     int revertToLastStep(void);

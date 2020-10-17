@@ -74,7 +74,7 @@
 //! @param numIncr: number of load increments.
 //! @param min: minimum value for the load factor at each step.
 //! @param max: maximum value for the load factor at each step.
-XC::LoadControl::LoadControl(AnalysisAggregation *owr,double dLambda, int numIncr, double min, double max)
+XC::LoadControl::LoadControl(SolutionStrategy *owr,double dLambda, int numIncr, double min, double max)
   :BaseControl(owr,INTEGRATOR_TAGS_LoadControl,numIncr), deltaLambda(dLambda), dLambdaMin(min), dLambdaMax(max) {}
 
 //! @brief Perform a new analysis step.

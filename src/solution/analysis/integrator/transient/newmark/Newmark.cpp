@@ -71,7 +71,7 @@
 //! @brief Constructor.
 //!
 //! @param owr: analysis aggregation that will own this object.
-XC::Newmark::Newmark(AnalysisAggregation *owr)
+XC::Newmark::Newmark(SolutionStrategy *owr)
   : NewmarkBase2(owr,INTEGRATOR_TAGS_Newmark),
     displ(true), determiningMass(false) {}
 
@@ -84,7 +84,7 @@ XC::Newmark::Newmark(AnalysisAggregation *owr)
 //!                  of displacement otherwise it's done in terms
 //!                  of acceleration (and then, in addition, a flag is set
 //!                  indicating that Rayleigh damping will not be used.
-XC::Newmark::Newmark(AnalysisAggregation *owr,double _gamma, double _beta, bool dispFlag)
+XC::Newmark::Newmark(SolutionStrategy *owr,double _gamma, double _beta, bool dispFlag)
   : NewmarkBase2(owr,INTEGRATOR_TAGS_Newmark,_gamma,_beta),
     displ(dispFlag), determiningMass(false) {}
 
@@ -98,7 +98,7 @@ XC::Newmark::Newmark(AnalysisAggregation *owr,double _gamma, double _beta, bool 
 //!                  of displacement otherwise it's done in terms
 //!                  of acceleration (and then, in addition, a flag is set
 //!                  indicating that Rayleigh damping will not be used.
-XC::Newmark::Newmark(AnalysisAggregation *owr,double _gamma, double _beta,const RayleighDampingFactors &rF,bool dispFlag)
+XC::Newmark::Newmark(SolutionStrategy *owr,double _gamma, double _beta,const RayleighDampingFactors &rF,bool dispFlag)
   : NewmarkBase2(owr,INTEGRATOR_TAGS_Newmark,_gamma,_beta,rF),
     displ(dispFlag), determiningMass(false) {}
 

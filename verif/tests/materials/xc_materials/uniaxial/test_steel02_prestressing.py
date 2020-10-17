@@ -66,16 +66,16 @@ numberer.useAlgorithm("rcm")
 cHandler= sm.newConstraintHandler("penalty_constraint_handler")
 cHandler.alphaSP= 1.0e15
 cHandler.alphaMP= 1.0e15
-analysisAggregations= solCtrl.getAnalysisAggregationContainer
-analysisAggregation= analysisAggregations.newAnalysisAggregation("analysisAggregation","sm")
-solAlgo= analysisAggregation.newSolutionAlgorithm("newton_raphson_soln_algo")
-convTest= analysisAggregation.newConvergenceTest("norm_unbalance_conv_test")
+solutionStrategies= solCtrl.getSolutionStrategyContainer
+solutionStrategy= solutionStrategies.newSolutionStrategy("solutionStrategy","sm")
+solAlgo= solutionStrategy.newSolutionAlgorithm("newton_raphson_soln_algo")
+convTest= solutionStrategy.newConvergenceTest("norm_unbalance_conv_test")
 convTest.tol=1.0e-9
 convTest.maxNumIter= 10
-integ= analysisAggregation.newIntegrator("load_control_integrator",xc.Vector([]))
-soe= analysisAggregation.newSystemOfEqn("band_gen_lin_soe")
+integ= solutionStrategy.newIntegrator("load_control_integrator",xc.Vector([]))
+soe= solutionStrategy.newSystemOfEqn("band_gen_lin_soe")
 solver= soe.newSolver("band_gen_lin_lapack_solver")
-analysis= solu.newAnalysis("static_analysis","analysisAggregation","")
+analysis= solu.newAnalysis("static_analysis","solutionStrategy","")
 result= analysis.analyze(10)
 
 

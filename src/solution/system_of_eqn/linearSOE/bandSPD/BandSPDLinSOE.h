@@ -118,11 +118,11 @@ class BandSPDLinSOE: public FactoredSOEBase
     void inicA(const size_t &);
     bool setSolver(LinearSOESolver *);
 
-    friend class AnalysisAggregation;
+    friend class SolutionStrategy;
     friend class FEM_ObjectBroker;
-    BandSPDLinSOE(AnalysisAggregation *);    
-    BandSPDLinSOE(AnalysisAggregation *,int classTag);    
-    BandSPDLinSOE(AnalysisAggregation *,int N, int bandwidth, BandSPDLinSolver *the_Solver= nullptr);
+    BandSPDLinSOE(SolutionStrategy *);    
+    BandSPDLinSOE(SolutionStrategy *,int classTag);    
+    BandSPDLinSOE(SolutionStrategy *,int N, int bandwidth, BandSPDLinSolver *the_Solver= nullptr);
     SystemOfEqn *getCopy(void) const;
   public:
     virtual int setSize(Graph &theGraph);

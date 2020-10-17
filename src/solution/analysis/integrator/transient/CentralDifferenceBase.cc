@@ -33,7 +33,7 @@
 #include <solution/analysis/model/dof_grp/DOF_Group.h>
 
 //! @brief Constructor.
-XC::CentralDifferenceBase::CentralDifferenceBase(AnalysisAggregation *owr,int classTag)
+XC::CentralDifferenceBase::CentralDifferenceBase(SolutionStrategy *owr,int classTag)
 :TransientIntegrator(owr,classTag), updateCount(0), deltaT(0) {}
 
 int XC::CentralDifferenceBase::newStep(double _deltaT)

@@ -42,7 +42,7 @@ class ArpackSOE: public EigenSOE
   protected:
     double shift;
 
-    ArpackSOE(AnalysisAggregation *,int classTag,double shift = 0.0);
+    ArpackSOE(SolutionStrategy *,int classTag,double shift = 0.0);
   public:
     virtual const double &getShift(void) const;
     void setShift(const double &);

@@ -70,8 +70,8 @@ namespace XC {
 class StandardEigenAlgo: public EigenAlgorithm
   {
   protected:
-    friend class AnalysisAggregation;
-    StandardEigenAlgo(AnalysisAggregation *);
+    friend class SolutionStrategy;
+    StandardEigenAlgo(SolutionStrategy *);
     virtual SolutionAlgorithm *getCopy(void) const;
   public:
     virtual int solveCurrentStep(int numModes);

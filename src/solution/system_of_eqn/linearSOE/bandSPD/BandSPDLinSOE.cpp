@@ -79,7 +79,7 @@ void XC::BandSPDLinSOE::inicA(const size_t &hsz)
 //! \p solver. No memory is allocated for the 3 1d arrays.
 //! 
 //! @param owr: analysis aggregation that owns this object.
-XC::BandSPDLinSOE::BandSPDLinSOE(AnalysisAggregation *owr)
+XC::BandSPDLinSOE::BandSPDLinSOE(SolutionStrategy *owr)
   :FactoredSOEBase(owr,LinSOE_TAGS_BandSPDLinSOE), half_band(0){}
 
 
@@ -87,7 +87,7 @@ XC::BandSPDLinSOE::BandSPDLinSOE(AnalysisAggregation *owr)
 //!
 //! @param owr: analysis aggregation that owns this object.
 //! @param classTag: identifier of the class.
-XC::BandSPDLinSOE::BandSPDLinSOE(AnalysisAggregation *owr,int classTag)
+XC::BandSPDLinSOE::BandSPDLinSOE(SolutionStrategy *owr,int classTag)
   :FactoredSOEBase(owr,classTag), half_band(0) {}
 
 
@@ -103,7 +103,7 @@ XC::BandSPDLinSOE::BandSPDLinSOE(AnalysisAggregation *owr,int classTag)
 //! @param N: size of the system.
 //! @param numSuper: number of super diagonals.
 //! @param the_Solver: pointer to the solver.
-XC::BandSPDLinSOE::BandSPDLinSOE(AnalysisAggregation *owr,int N, int numSuper,BandSPDLinSolver *the_Solver)
+XC::BandSPDLinSOE::BandSPDLinSOE(SolutionStrategy *owr,int N, int numSuper,BandSPDLinSolver *the_Solver)
   :FactoredSOEBase(owr,LinSOE_TAGS_BandSPDLinSOE,N), half_band(0)
   {
     half_band = numSuper+1;

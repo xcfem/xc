@@ -47,7 +47,7 @@ class LinearBucklingEigenAnalysis: public EigenAnalysis
 
     friend class ProcSolu;
     friend class LinearBucklingAnalysis;
-    LinearBucklingEigenAnalysis(AnalysisAggregation *analysis_aggregation);
+    LinearBucklingEigenAnalysis(SolutionStrategy *analysis_aggregation);
     Analysis *getCopy(void) const;
   public:
      

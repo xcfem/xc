@@ -32,7 +32,7 @@
 
 #include "xc_utils/src/kernel/CommandEntity.h"
 #include "analysis/MapModelWrapper.h"
-#include "AnalysisAggregationMap.h"
+#include "SolutionStrategyMap.h"
 
 namespace XC {
 
@@ -46,7 +46,7 @@ class ProcSoluControl: public CommandEntity
   {
   private:
     MapModelWrapper solu_models; //!< Wrapper for the finite element model
-    AnalysisAggregationMap solu_methods; //!< Solution methods.
+    SolutionStrategyMap solu_methods; //!< Solution methods.
 
     ProcSolu *getProcSolu(void);
     const ProcSolu *getProcSolu(void) const;
@@ -63,11 +63,11 @@ class ProcSoluControl: public CommandEntity
     DataOutputHandler::map_output_handlers *getOutputHandlers(void) const;
     const ModelWrapper *getModelWrapper(const std::string &) const;
     ModelWrapper *getModelWrapper(const std::string &);
-    const AnalysisAggregation *getAnalysisAggregation(const std::string &) const;
-    AnalysisAggregation *getAnalysisAggregation(const std::string &);
+    const SolutionStrategy *getSolutionStrategy(const std::string &) const;
+    SolutionStrategy *getSolutionStrategy(const std::string &);
 
     MapModelWrapper &getModelWrapperContainer(void);
-    AnalysisAggregationMap &getAnalysisAggregationContainer(void);
+    SolutionStrategyMap &getSolutionStrategyContainer(void);
 
     void revertToStart(void);
     void clearAll(void);

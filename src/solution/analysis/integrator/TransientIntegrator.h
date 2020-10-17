@@ -179,7 +179,7 @@ class Vector;
 class TransientIntegrator: public IncrementalIntegrator
   {
   protected:
-    TransientIntegrator(AnalysisAggregation *,int classTag);
+    TransientIntegrator(SolutionStrategy *,int classTag);
   public:
 
     virtual int formTangent(int statFlag);

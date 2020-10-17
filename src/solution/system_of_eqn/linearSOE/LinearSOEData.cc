@@ -35,7 +35,7 @@
 //! @param owr: analysis aggregation that owns this object.
 //! @param classTag: identifier of the class.
 //! @param N: size of the system.
-XC::LinearSOEData::LinearSOEData(AnalysisAggregation *owr,int classTag,int N)
+XC::LinearSOEData::LinearSOEData(SolutionStrategy *owr,int classTag,int N)
   :LinearSOE(owr,classTag), size(N) {}
 
 

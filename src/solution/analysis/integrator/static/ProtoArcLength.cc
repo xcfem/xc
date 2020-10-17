@@ -38,7 +38,7 @@
 //! @param owr: set of objects used to perform the analysis.
 //! @param classTag: class identifier.
 //! @param arcLength: value for the arc length.
-XC::ProtoArcLength::ProtoArcLength(AnalysisAggregation *owr,int classTag,double arcLength)
+XC::ProtoArcLength::ProtoArcLength(SolutionStrategy *owr,int classTag,double arcLength)
   :StaticIntegrator(owr,classTag), arcLength2(arcLength*arcLength), signLastDeltaLambdaStep(1) {}
 
 //! Performs the first iteration, that is it solves for 

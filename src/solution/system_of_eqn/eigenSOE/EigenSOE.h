@@ -76,7 +76,7 @@ class EigenSOE: public SystemOfEqn
     virtual bool setSolver(EigenSolver *);
     void resize_mass_matrix_if_needed(const size_t &);
 
-    EigenSOE(AnalysisAggregation *,int classTag);
+    EigenSOE(SolutionStrategy *,int classTag);
   public:
     virtual ~EigenSOE(void);
      

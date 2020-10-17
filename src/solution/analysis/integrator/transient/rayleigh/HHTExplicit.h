@@ -84,12 +84,12 @@ class HHTExplicit: public HHTRayleighBase
     int sendData(Communicator &);
     int recvData(const Communicator &);
 
-    friend class AnalysisAggregation;
-    HHTExplicit(AnalysisAggregation *);
-    HHTExplicit(AnalysisAggregation *,double alpha);
-    HHTExplicit(AnalysisAggregation *,double alpha,const RayleighDampingFactors &rF);
-    HHTExplicit(AnalysisAggregation *,double alpha, double gamma);
-    HHTExplicit(AnalysisAggregation *,double alpha, double gamma,const RayleighDampingFactors &rF);
+    friend class SolutionStrategy;
+    HHTExplicit(SolutionStrategy *);
+    HHTExplicit(SolutionStrategy *,double alpha);
+    HHTExplicit(SolutionStrategy *,double alpha,const RayleighDampingFactors &rF);
+    HHTExplicit(SolutionStrategy *,double alpha, double gamma);
+    HHTExplicit(SolutionStrategy *,double alpha, double gamma,const RayleighDampingFactors &rF);
     Integrator *getCopy(void) const;
   public:
     

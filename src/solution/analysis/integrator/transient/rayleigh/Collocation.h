@@ -86,12 +86,12 @@ class Collocation: public RayleighBase
     int sendData(Communicator &);
     int recvData(const Communicator &);
 
-    friend class AnalysisAggregation;
-    Collocation(AnalysisAggregation *);
-    Collocation(AnalysisAggregation *,double theta);
-    Collocation(AnalysisAggregation *,double theta,const RayleighDampingFactors &rF);
-    Collocation(AnalysisAggregation *,double theta, double beta, double gamma);
-    Collocation(AnalysisAggregation *,double theta, double beta, double gamma,const RayleighDampingFactors &rF);
+    friend class SolutionStrategy;
+    Collocation(SolutionStrategy *);
+    Collocation(SolutionStrategy *,double theta);
+    Collocation(SolutionStrategy *,double theta,const RayleighDampingFactors &rF);
+    Collocation(SolutionStrategy *,double theta, double beta, double gamma);
+    Collocation(SolutionStrategy *,double theta, double beta, double gamma,const RayleighDampingFactors &rF);
     Integrator *getCopy(void) const;
   public:    
     // methods which define what the FE_Element and DOF_Groups add

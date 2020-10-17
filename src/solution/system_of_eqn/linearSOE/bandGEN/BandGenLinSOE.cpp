@@ -65,14 +65,14 @@
 //! @brief Constructor.
 //!
 //! @param owr: analysis aggregation that owns this object.
-XC::BandGenLinSOE::BandGenLinSOE(AnalysisAggregation *owr)
+XC::BandGenLinSOE::BandGenLinSOE(SolutionStrategy *owr)
   :FactoredSOEBase(owr,LinSOE_TAGS_BandGenLinSOE), numSuperD(0), numSubD(0) {}
 
 //! @brief Constructor.
 //!
 //! @param owr: analysis aggregation that owns this object.
 //! @param classTag: class identifier.
-XC::BandGenLinSOE::BandGenLinSOE(AnalysisAggregation *owr,int classTag)
+XC::BandGenLinSOE::BandGenLinSOE(SolutionStrategy *owr,int classTag)
   :FactoredSOEBase(owr,classTag), numSuperD(0), numSubD(0) {}
 
 
@@ -86,7 +86,7 @@ XC::BandGenLinSOE::BandGenLinSOE(AnalysisAggregation *owr,int classTag)
 //! @param N: size of the system.
 //! @param numSuperDiag: number of superdiagonals.
 //! @param numSubDiag: number of subdiagonals.
-XC::BandGenLinSOE::BandGenLinSOE(AnalysisAggregation *owr,int N, int numSuperDiag, int numSubDiag,BandGenLinSolver *theSolvr)
+XC::BandGenLinSOE::BandGenLinSOE(SolutionStrategy *owr,int N, int numSuperDiag, int numSubDiag,BandGenLinSolver *theSolvr)
   :FactoredSOEBase(owr,LinSOE_TAGS_BandGenLinSOE,N),
    numSuperD(numSuperDiag), numSubD(numSubDiag)
   {

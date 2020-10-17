@@ -88,17 +88,17 @@ sm= solModels.newModelWrapper("sm")
 numberer= sm.newNumberer("default_numberer")
 numberer.useAlgorithm("simple")
 cHandler= sm.newConstraintHandler("plain_handler")
-analysisAggregations= solCtrl.getAnalysisAggregationContainer
-analysisAggregation= analysisAggregations.newAnalysisAggregation("analysisAggregation","sm")
-solAlgo= analysisAggregation.newSolutionAlgorithm("newton_raphson_soln_algo")
-ctest= analysisAggregation.newConvergenceTest("norm_unbalance_conv_test")
+solutionStrategies= solCtrl.getSolutionStrategyContainer
+solutionStrategy= solutionStrategies.newSolutionStrategy("solutionStrategy","sm")
+solAlgo= solutionStrategy.newSolutionAlgorithm("newton_raphson_soln_algo")
+ctest= solutionStrategy.newConvergenceTest("norm_unbalance_conv_test")
 ctest.tol= 1e-6
 ctest.maxNumIter= 100
-integ= analysisAggregation.newIntegrator("load_control_integrator",xc.Vector([]))
+integ= solutionStrategy.newIntegrator("load_control_integrator",xc.Vector([]))
 integ.dLambda1= DInc
-soe= analysisAggregation.newSystemOfEqn("band_gen_lin_soe")
+soe= solutionStrategy.newSystemOfEqn("band_gen_lin_soe")
 solver= soe.newSolver("band_gen_lin_lapack_solver")
-analysis= solu.newAnalysis("static_analysis","analysisAggregation","")
+analysis= solu.newAnalysis("static_analysis","solutionStrategy","")
 result= analysis.analyze(Nstep)
 
 

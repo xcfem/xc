@@ -72,7 +72,7 @@
 //! @brief Constructor.
 //!
 //! @param owr: set of objects used to perform the analysis.
-XC::StaticIntegrator::StaticIntegrator(AnalysisAggregation *owr,int clasTag)
+XC::StaticIntegrator::StaticIntegrator(SolutionStrategy *owr,int clasTag)
   :IncrementalIntegrator(owr,clasTag) {}
 
 //! @brief Asks the element  being passed as parameter to build

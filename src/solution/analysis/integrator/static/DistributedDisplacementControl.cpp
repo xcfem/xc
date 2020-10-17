@@ -74,11 +74,11 @@
 #include <utility/matrix/ID.h>
 
 //! @brief Constructor.
-XC::DistributedDisplacementControl::DistributedDisplacementControl(AnalysisAggregation *owr)
+XC::DistributedDisplacementControl::DistributedDisplacementControl(SolutionStrategy *owr)
   :DisplacementControl(owr) {}
 
 //! @brief Constructor.
-XC::DistributedDisplacementControl::DistributedDisplacementControl(AnalysisAggregation *owr,int node, int dof, double increment, int numIncr, double min, double max)
+XC::DistributedDisplacementControl::DistributedDisplacementControl(SolutionStrategy *owr,int node, int dof, double increment, int numIncr, double min, double max)
   :DisplacementControl(owr,node,dof,increment,numIncr,min,max) {}
 
 

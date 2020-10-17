@@ -24,33 +24,33 @@
 // along with this program.
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
-//AnalysisAggregationMap.cc
+//SolutionStrategyMap.cc
 
-#include "AnalysisAggregationMap.h"
+#include "SolutionStrategyMap.h"
 #include "domain/domain/Domain.h"
 #include "ProcSolu.h"
 
 #include "solution/analysis/ModelWrapper.h"
-#include "solution/AnalysisAggregation.h"
+#include "solution/SolutionStrategy.h"
 
 #include "boost/any.hpp"
 
 
 //! @brief Default constructor.
-XC::AnalysisAggregationMap::AnalysisAggregationMap(ProcSoluControl *owr)
+XC::SolutionStrategyMap::SolutionStrategyMap(ProcSoluControl *owr)
   : CommandEntity(owr) {}
 
 //! @brief Return true if the solution method exists
-bool XC::AnalysisAggregationMap::AnalysisAggregationExists(const std::string &cod) const
+bool XC::SolutionStrategyMap::SolutionStrategyExists(const std::string &cod) const
   { 
     map_solu_method::const_iterator i= solu_methods.find(cod);
     return (i != solu_methods.end());
   }
 
 //! @brief Returns a const pointer to the solution method.
-const XC::AnalysisAggregation *XC::AnalysisAggregationMap::getAnalysisAggregation(const std::string &cod) const
+const XC::SolutionStrategy *XC::SolutionStrategyMap::getSolutionStrategy(const std::string &cod) const
   {
-    const AnalysisAggregation *retval= nullptr;
+    const SolutionStrategy *retval= nullptr;
     map_solu_method::const_iterator i= solu_methods.find(cod);
     if(i != solu_methods.end())
       retval= &((*i).second);
@@ -58,9 +58,9 @@ const XC::AnalysisAggregation *XC::AnalysisAggregationMap::getAnalysisAggregatio
   }
 
 //! @brief Returns a pointer to the solution method.
-XC::AnalysisAggregation *XC::AnalysisAggregationMap::getAnalysisAggregation(const std::string &cod)
+XC::SolutionStrategy *XC::SolutionStrategyMap::getSolutionStrategy(const std::string &cod)
   {
-    AnalysisAggregation *retval= nullptr;
+    SolutionStrategy *retval= nullptr;
     map_solu_method::iterator i= solu_methods.find(cod);
     if(i != solu_methods.end())
       retval= &((*i).second);
@@ -69,34 +69,34 @@ XC::AnalysisAggregation *XC::AnalysisAggregationMap::getAnalysisAggregation(cons
 
 //! @brief Creates a new solution method with the code being passed as parameter.
 //! @brief Si ya existe returns a pointer al mismo.
-XC::AnalysisAggregation &XC::AnalysisAggregationMap::createAnalysisAggregation(const std::string &cod,ModelWrapper *sm)
+XC::SolutionStrategy &XC::SolutionStrategyMap::createSolutionStrategy(const std::string &cod,ModelWrapper *sm)
   {
-    AnalysisAggregation *retval= nullptr;
-    if(AnalysisAggregationExists(cod))
-      retval= getAnalysisAggregation(cod);
+    SolutionStrategy *retval= nullptr;
+    if(SolutionStrategyExists(cod))
+      retval= getSolutionStrategy(cod);
     else 
-      retval= &(solu_methods[cod]= AnalysisAggregation(nullptr,sm));
+      retval= &(solu_methods[cod]= SolutionStrategy(nullptr,sm));
     return *retval;
   }
 
 //! @brief Creates a new solution method with the code being passed as parameter.
-XC::AnalysisAggregation &XC::AnalysisAggregationMap::newAnalysisAggregation(const std::string &cod_solu_method,const std::string &cod_solu_model)
+XC::SolutionStrategy &XC::SolutionStrategyMap::newSolutionStrategy(const std::string &cod_solu_method,const std::string &cod_solu_model)
   {
     ProcSoluControl *sc= dynamic_cast<ProcSoluControl *>(Owner());
     ModelWrapper *mdl= sc->getModelWrapper(cod_solu_model);
-    AnalysisAggregation &retval= createAnalysisAggregation(cod_solu_method,mdl);
+    SolutionStrategy &retval= createSolutionStrategy(cod_solu_method,mdl);
     return retval;
   }
 
 //! @brief Returns todo a su estado original.
-void XC::AnalysisAggregationMap::revertToStart(void)
+void XC::SolutionStrategyMap::revertToStart(void)
   {
     for(iterator i= solu_methods.begin();i!=solu_methods.end();i++)
       (*i).second.revertToStart();
   }
 
 //! @brief Clears all.
-void XC::AnalysisAggregationMap::clearAll(void)
+void XC::SolutionStrategyMap::clearAll(void)
   { solu_methods.clear(); }
 
 

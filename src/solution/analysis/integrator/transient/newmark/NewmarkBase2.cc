@@ -33,7 +33,7 @@
 //!
 //! @param owr: analysis aggregation that will own this object.
 //! @param classTag: class identifier.
-XC::NewmarkBase2::NewmarkBase2(AnalysisAggregation *owr,int classTag)
+XC::NewmarkBase2::NewmarkBase2(SolutionStrategy *owr,int classTag)
   :NewmarkBase(owr,classTag), beta(0.0), c1(0.0) {}
 
 //! @brief Constructor.
@@ -42,7 +42,7 @@ XC::NewmarkBase2::NewmarkBase2(AnalysisAggregation *owr,int classTag)
 //! @param classTag: class identifier.
 //! @param theGamma: gamma factor for Newmark method.
 //! @param theBeta: beta factor for Newmark method.
-XC::NewmarkBase2::NewmarkBase2(AnalysisAggregation *owr,int classTag, double theGamma, double theBeta)
+XC::NewmarkBase2::NewmarkBase2(SolutionStrategy *owr,int classTag, double theGamma, double theBeta)
   :NewmarkBase(owr,classTag,theGamma), beta(theBeta), c1(0.0) {}
 
 //! @brief Constructor.
@@ -52,7 +52,7 @@ XC::NewmarkBase2::NewmarkBase2(AnalysisAggregation *owr,int classTag, double the
 //! @param theGamma: gamma factor for Newmark method.
 //! @param theBeta: beta factor for Newmark method.
 //! @param fF: Rayleigh damping factors.
-XC::NewmarkBase2::NewmarkBase2(AnalysisAggregation *owr,int classTag,double theGamma, double theBeta,const RayleighDampingFactors &rF)
+XC::NewmarkBase2::NewmarkBase2(SolutionStrategy *owr,int classTag,double theGamma, double theBeta,const RayleighDampingFactors &rF)
   :NewmarkBase(owr,classTag,theGamma,rF), beta(theBeta), c1(0.0) {}
 
 //! @brief Send object members through the communicator argument.

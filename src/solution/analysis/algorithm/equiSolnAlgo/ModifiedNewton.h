@@ -109,9 +109,9 @@ class ConvergenceTest;
 //! determines if convergence has been achieved.
 class ModifiedNewton: public NewtonBased
   {
-    friend class AnalysisAggregation;
+    friend class SolutionStrategy;
     friend class FEM_ObjectBroker;
-    ModifiedNewton(AnalysisAggregation *,int tangent = CURRENT_TANGENT);
+    ModifiedNewton(SolutionStrategy *,int tangent = CURRENT_TANGENT);
     virtual SolutionAlgorithm *getCopy(void) const;
   public:
     int solveCurrentStep(void);    

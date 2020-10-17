@@ -73,7 +73,7 @@ class Subdomain;
 class TransientDomainDecompositionAnalysis: public DomainDecompositionAnalysis
   {
     friend class ProcSolu;
-    TransientDomainDecompositionAnalysis(Subdomain &theDomain,AnalysisAggregation *s= nullptr);
+    TransientDomainDecompositionAnalysis(Subdomain &theDomain,SolutionStrategy *s= nullptr);
     Analysis *getCopy(void) const;
   public:
     ~TransientDomainDecompositionAnalysis(void);

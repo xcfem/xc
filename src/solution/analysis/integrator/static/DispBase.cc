@@ -42,7 +42,7 @@
 //! @param owr: set of objects used to perform the analysis.
 //! @param classTag: class identifier.
 //! @param numIncr: number of increments.
-XC::DispBase::DispBase(AnalysisAggregation *owr,int classTag,const int &numIncr) 
+XC::DispBase::DispBase(SolutionStrategy *owr,int classTag,const int &numIncr) 
   :BaseControl(owr,classTag,numIncr){}
 
 //! @brief Send object members through the communicator argument.

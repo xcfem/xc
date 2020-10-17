@@ -51,8 +51,8 @@ class KEigenAlgo: public EigenAlgorithm
     KEigenIntegrator *getKEigenIntegrator(void);
     virtual void eigen_to_model(void);
 
-    friend class AnalysisAggregation;
-    KEigenAlgo(AnalysisAggregation *);
+    friend class SolutionStrategy;
+    KEigenAlgo(SolutionStrategy *);
     virtual SolutionAlgorithm *getCopy(void) const;
     int form_matrices(void);
     int dump_modes(void);

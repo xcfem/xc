@@ -47,7 +47,7 @@
 #include "domain/mesh/element/ElementIter.h"
 #include "domain/mesh/element/utils/NodePtrsWithIDs.h"
 
-XC::EQPath::EQPath(AnalysisAggregation *owr,double arcLen,int method)
+XC::EQPath::EQPath(SolutionStrategy *owr,double arcLen,int method)
   :StaticIntegrator(owr,INTEGRATOR_TAGS_EQPath),
  arclen(arcLen), dl(0), m(1),
  type(method),changed(0),nitr(0),

@@ -90,13 +90,13 @@ class HHTHybridSimulation: public HHTBase
     int sendData(Communicator &);
     int recvData(const Communicator &);
 
-    friend class AnalysisAggregation;
-    HHTHybridSimulation(AnalysisAggregation *);
-    HHTHybridSimulation(AnalysisAggregation *,double rhoInf, ConvergenceTest &theTest);
-    HHTHybridSimulation(AnalysisAggregation *,double rhoInf, ConvergenceTest &theTest,const RayleighDampingFactors &rF);
-    HHTHybridSimulation(AnalysisAggregation *,double alphaI, double alphaF,
+    friend class SolutionStrategy;
+    HHTHybridSimulation(SolutionStrategy *);
+    HHTHybridSimulation(SolutionStrategy *,double rhoInf, ConvergenceTest &theTest);
+    HHTHybridSimulation(SolutionStrategy *,double rhoInf, ConvergenceTest &theTest,const RayleighDampingFactors &rF);
+    HHTHybridSimulation(SolutionStrategy *,double alphaI, double alphaF,
         double beta, double gamma, ConvergenceTest &theTest);
-    HHTHybridSimulation(AnalysisAggregation *,double alphaI, double alphaF,
+    HHTHybridSimulation(SolutionStrategy *,double alphaI, double alphaF,
 			double beta, double gamma, ConvergenceTest &theTest,const RayleighDampingFactors &rF);
     Integrator *getCopy(void) const;
   public:

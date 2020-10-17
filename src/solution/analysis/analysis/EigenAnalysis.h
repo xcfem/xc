@@ -82,7 +82,7 @@ class EigenAnalysis: public Analysis
     int domainStamp;
 
     friend class ProcSolu;
-    EigenAnalysis(AnalysisAggregation *analysis_aggregation);
+    EigenAnalysis(SolutionStrategy *analysis_aggregation);
     Analysis *getCopy(void) const;
   public:     
     virtual int analyze(int numModes);

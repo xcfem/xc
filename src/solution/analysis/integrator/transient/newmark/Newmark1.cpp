@@ -70,17 +70,17 @@
 #include "utility/actor/actor/ArrayCommMetaData.h"
 
 //! @brief Constructor.
-XC::Newmark1::Newmark1(AnalysisAggregation *owr)
+XC::Newmark1::Newmark1(SolutionStrategy *owr)
   :NewmarkBase2(owr,INTEGRATOR_TAGS_Newmark1),
    c4(0.0) {}
 
 //! @brief Constructor.
-XC::Newmark1::Newmark1(AnalysisAggregation *owr,double theGamma, double theBeta, bool dispFlag)
+XC::Newmark1::Newmark1(SolutionStrategy *owr,double theGamma, double theBeta, bool dispFlag)
   :NewmarkBase2(owr,INTEGRATOR_TAGS_Newmark1,theGamma,theBeta),
    c4(0.0) {}
 
 //! @brief Constructor.
-XC::Newmark1::Newmark1(AnalysisAggregation *owr,double theGamma, double theBeta,const RayleighDampingFactors &rF)
+XC::Newmark1::Newmark1(SolutionStrategy *owr,double theGamma, double theBeta,const RayleighDampingFactors &rF)
   :NewmarkBase2(owr,INTEGRATOR_TAGS_Newmark1,theGamma,theBeta,rF),
    c4(0.0) {}
 

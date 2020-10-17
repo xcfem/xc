@@ -67,14 +67,14 @@
 //! @brief Constructor.
 //!
 //! @param owr: analysis aggregation that owns this object.
-XC::SparseGenColLinSOE::SparseGenColLinSOE(AnalysisAggregation *owr)
+XC::SparseGenColLinSOE::SparseGenColLinSOE(SolutionStrategy *owr)
   :SparseGenSOEBase(owr,LinSOE_TAGS_SparseGenColLinSOE) {}
 
 //! @brief Constructor.
 //!
 //! @param owr: analysis aggregation that owns this object.
 //! @param classTag: class identifier.
-XC::SparseGenColLinSOE::SparseGenColLinSOE(AnalysisAggregation *owr,int classTag)
+XC::SparseGenColLinSOE::SparseGenColLinSOE(SolutionStrategy *owr,int classTag)
   : SparseGenSOEBase(owr,classTag) {}
 
 XC::SystemOfEqn *XC::SparseGenColLinSOE::getCopy(void) const

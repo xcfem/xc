@@ -25,7 +25,7 @@
 // along with this program.
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
-//AnalysisAggregation.h
+//SolutionStrategy.h
 
 #ifndef ANALYSISAGGREGATION_H
 #define ANALYSISAGGREGATION_H
@@ -67,8 +67,8 @@ class ID;
 
 //!  @ingroup Solu
 //! 
-//! @brief Solution procedure for the finite element problem. The
-//! solution procedure is defined by specifying:
+//! @brief Solution strategy for the finite element problem. The
+//! solution strategy is defined by specifying:
 //! - Wrapper for the finite element model. Container for the finite
 //!   element model "as seen" from the solver.
 //! - Solution algorithm.  An algorithmic class specifying the
@@ -87,7 +87,7 @@ class ID;
 //!   form \f$Ax = b\f$, where \f$A\f$ is a matrix and \f$x\f$
 //!   and \f$b\f$ are vectors.
 //! - Convergence test.
-class AnalysisAggregation: public CommandEntity
+class SolutionStrategy: public CommandEntity
   {
     ModelWrapper *base; //!< Wrapper for the finite element model.
     SolutionAlgorithm *theSolnAlgo; //!< Solution algorithm.
@@ -116,13 +116,13 @@ class AnalysisAggregation: public CommandEntity
     void copy_conv_test(ConvergenceTest *);
 
     void free_mem(void);
-    void copy(const AnalysisAggregation &);
+    void copy(const SolutionStrategy &);
 
   public:
-    AnalysisAggregation(Analysis *a= nullptr,ModelWrapper *b= nullptr);
-    AnalysisAggregation(const AnalysisAggregation &);
-    AnalysisAggregation &operator=(const AnalysisAggregation &);
-    ~AnalysisAggregation(void);
+    SolutionStrategy(Analysis *a= nullptr,ModelWrapper *b= nullptr);
+    SolutionStrategy(const SolutionStrategy &);
+    SolutionStrategy &operator=(const SolutionStrategy &);
+    ~SolutionStrategy(void);
 
     inline ModelWrapper *getModelWrapperPtr(void)
       { return base; }

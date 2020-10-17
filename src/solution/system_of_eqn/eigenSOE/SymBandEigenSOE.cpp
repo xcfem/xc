@@ -65,7 +65,7 @@
 #include <cstdio>
 
 //! @brief Constructor.
-XC::SymBandEigenSOE::SymBandEigenSOE(AnalysisAggregation *owr)
+XC::SymBandEigenSOE::SymBandEigenSOE(SolutionStrategy *owr)
   :EigenSOE(owr,EigenSOE_TAGS_SymBandEigenSOE), numSuperD(0) {}
 
 //! @brief Sets the solver that will be used to solve the eigenvalue problem.

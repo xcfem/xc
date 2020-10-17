@@ -38,7 +38,7 @@
 //! @param classTag: class identifier.
 //! @param arcLength: value for the arc length.
 //! @param alpha: scaling factor on the reference loads.
-XC::ArcLengthBase::ArcLengthBase(AnalysisAggregation *owr,int classTag,double arcLength, double alpha)
+XC::ArcLengthBase::ArcLengthBase(SolutionStrategy *owr,int classTag,double arcLength, double alpha)
   :ProtoArcLength(owr,classTag,arcLength), alpha2(alpha*alpha) {}
 
 //! @brief Returns the dLambda value for the newStep method.

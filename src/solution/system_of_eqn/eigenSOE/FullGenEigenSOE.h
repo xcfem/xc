@@ -78,9 +78,9 @@ class FullGenEigenSOE: public EigenSOE
   protected:
     bool setSolver(EigenSolver *);
 
-    friend class AnalysisAggregation;
+    friend class SolutionStrategy;
     friend class FullGenEigenSolver;
-    FullGenEigenSOE(AnalysisAggregation *);
+    FullGenEigenSOE(SolutionStrategy *);
     SystemOfEqn *getCopy(void) const;
   public:
     virtual int setSize(Graph &theGraph);

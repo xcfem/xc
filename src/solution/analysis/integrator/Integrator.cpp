@@ -60,14 +60,14 @@
 // What: "@(#) Integrator.C, revA"
 
 #include <solution/analysis/integrator/Integrator.h>
-#include "solution/AnalysisAggregation.h"
+#include "solution/SolutionStrategy.h"
 #include "solution/analysis/model/AnalysisModel.h"
 #include "domain/mesh/element/utils/RayleighDampingFactors.h"
 
 //! @brief Constructor.
 //!
 //! @param owr: set of objects used to perform the analysis.
-XC::Integrator::Integrator(AnalysisAggregation *owr,int clasTag)
+XC::Integrator::Integrator(SolutionStrategy *owr,int clasTag)
   :MovableObject(clasTag), CommandEntity(owr) {}
 
 void XC::Integrator::applyLoadModel(double newTime)
@@ -92,12 +92,12 @@ int XC::Integrator::commitModel(void)
   { return getAnalysisModelPtr()->commitDomain(); }
 
 //! @brief Returns a pointer to the solution method that owns this object.
-XC::AnalysisAggregation *XC::Integrator::getAnalysisAggregation(void)
-  { return dynamic_cast<AnalysisAggregation *>(Owner()); }
+XC::SolutionStrategy *XC::Integrator::getSolutionStrategy(void)
+  { return dynamic_cast<SolutionStrategy *>(Owner()); }
 
 //! @brief Returns a const pointer to the solution method that owns this object.
-const XC::AnalysisAggregation *XC::Integrator::getAnalysisAggregation(void) const
-  { return dynamic_cast<const AnalysisAggregation *>(Owner()); }
+const XC::SolutionStrategy *XC::Integrator::getSolutionStrategy(void) const
+  { return dynamic_cast<const SolutionStrategy *>(Owner()); }
 
 
 //! @brief Returns a pointer to the analysis model.
@@ -106,7 +106,7 @@ const XC::AnalysisAggregation *XC::Integrator::getAnalysisAggregation(void) cons
 //! associated with the Integrator object, i.e. \p theModel.
 const XC::AnalysisModel *XC::Integrator::getAnalysisModelPtr(void) const
   {
-    const AnalysisAggregation *sm= getAnalysisAggregation();
+    const SolutionStrategy *sm= getSolutionStrategy();
     assert(sm);
     return sm->getAnalysisModelPtr();
   }
@@ -117,7 +117,7 @@ const XC::AnalysisModel *XC::Integrator::getAnalysisModelPtr(void) const
 //! associated with the Integrator object, i.e. \p theModel.
 XC::AnalysisModel *XC::Integrator::getAnalysisModelPtr(void)
   {
-    const AnalysisAggregation *sm= getAnalysisAggregation();
+    const SolutionStrategy *sm= getSolutionStrategy();
     assert(sm);
     return sm->getAnalysisModelPtr();
   }

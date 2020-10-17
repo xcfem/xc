@@ -67,28 +67,28 @@
 #include <solution/analysis/convergenceTest/ConvergenceTest.h>
 
 //! @brief Constructor.
-XC::HHTHybridSimulation::HHTHybridSimulation(AnalysisAggregation *owr)
+XC::HHTHybridSimulation::HHTHybridSimulation(SolutionStrategy *owr)
   : HHTBase(owr,INTEGRATOR_TAGS_HHTHybridSimulation,1.0),
     alphaF(1.0), theTest(nullptr), rFact(1.0) {}
 
 //! @brief Constructor.
-XC::HHTHybridSimulation::HHTHybridSimulation(AnalysisAggregation *owr,double _rhoInf, ConvergenceTest &theT)
+XC::HHTHybridSimulation::HHTHybridSimulation(SolutionStrategy *owr,double _rhoInf, ConvergenceTest &theT)
   : HHTBase(owr,INTEGRATOR_TAGS_HHTHybridSimulation,(2.0-_rhoInf)/(1.0+_rhoInf),1.0/(1.0+_rhoInf)/(1.0+_rhoInf),0.5*(3.0-_rhoInf)/(1.0+_rhoInf)), alphaF(1.0/(1.0+_rhoInf)),theTest(&theT),
     rFact(1.0)
   {}
 
 //! @brief Constructor.
-XC::HHTHybridSimulation::HHTHybridSimulation(AnalysisAggregation *owr,double _rhoInf, ConvergenceTest &theT,const RayleighDampingFactors &rF)
+XC::HHTHybridSimulation::HHTHybridSimulation(SolutionStrategy *owr,double _rhoInf, ConvergenceTest &theT,const RayleighDampingFactors &rF)
   : HHTBase(owr,INTEGRATOR_TAGS_HHTHybridSimulation,(2.0-_rhoInf)/(1.0+_rhoInf),1.0/(1.0+_rhoInf)/(1.0+_rhoInf),0.5*(3.0-_rhoInf)/(1.0+_rhoInf),rF), alphaF(1.0/(1.0+_rhoInf)),
     theTest(&theT), rFact(1.0) {}
 
 //! @brief Constructor.
-XC::HHTHybridSimulation::HHTHybridSimulation(AnalysisAggregation *owr,double _alphaI, double _alphaF, double _beta, double _gamma, ConvergenceTest &theT)
+XC::HHTHybridSimulation::HHTHybridSimulation(SolutionStrategy *owr,double _alphaI, double _alphaF, double _beta, double _gamma, ConvergenceTest &theT)
     : HHTBase(owr,INTEGRATOR_TAGS_HHTHybridSimulation,_alphaI,_beta,_gamma),
     alphaF(_alphaF), theTest(&theT), rFact(1.0) {}
 
 //! @brief Constructor.
-XC::HHTHybridSimulation::HHTHybridSimulation(AnalysisAggregation *owr,double _alphaI, double _alphaF,
+XC::HHTHybridSimulation::HHTHybridSimulation(SolutionStrategy *owr,double _alphaI, double _alphaF,
     double _beta, double _gamma, ConvergenceTest &theT,const RayleighDampingFactors &rF)
     : HHTBase(owr,INTEGRATOR_TAGS_HHTHybridSimulation,_alphaI,_beta,_gamma,rF), alphaF(_alphaF),
     theTest(&theT), rFact(1.0) {}

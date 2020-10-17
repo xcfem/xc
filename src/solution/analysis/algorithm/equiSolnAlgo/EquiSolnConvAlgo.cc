@@ -30,11 +30,11 @@
 #include <solution/analysis/algorithm/equiSolnAlgo/EquiSolnConvAlgo.h>
 
 //! @brief Constructor
-XC::EquiSolnConvAlgo::EquiSolnConvAlgo(AnalysisAggregation *owr,int classTag)
+XC::EquiSolnConvAlgo::EquiSolnConvAlgo(SolutionStrategy *owr,int classTag)
   :EquiSolnAlgo(owr,classTag), theTest(nullptr) {}
 
 
-XC::EquiSolnConvAlgo::EquiSolnConvAlgo(AnalysisAggregation *owr,int classTag,ConvergenceTest *theT)
+XC::EquiSolnConvAlgo::EquiSolnConvAlgo(SolutionStrategy *owr,int classTag,ConvergenceTest *theT)
   : EquiSolnAlgo(owr,classTag), theTest(theT) {}
 
 int XC::EquiSolnConvAlgo::setConvergenceTest(ConvergenceTest *nwTest)

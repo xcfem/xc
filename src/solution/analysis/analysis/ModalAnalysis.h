@@ -46,7 +46,7 @@ class ModalAnalysis: public EigenAnalysis
     FunctionFromPointsR_R espectro;
 
     friend class ProcSolu;
-    ModalAnalysis(AnalysisAggregation *analysis_aggregation);
+    ModalAnalysis(SolutionStrategy *analysis_aggregation);
   public:
     inline const FunctionFromPointsR_R &getSpectrum(void) const
       { return espectro; }

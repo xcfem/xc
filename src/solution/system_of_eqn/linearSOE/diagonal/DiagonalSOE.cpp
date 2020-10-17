@@ -63,11 +63,11 @@
 #include <solution/graph/graph/Vertex.h>
 #include <solution/graph/graph/VertexIter.h>
 
-XC::DiagonalSOE::DiagonalSOE(AnalysisAggregation *owr)
+XC::DiagonalSOE::DiagonalSOE(SolutionStrategy *owr)
   :FactoredSOEBase(owr,LinSOE_TAGS_DiagonalSOE) {}
 
 
-XC::DiagonalSOE::DiagonalSOE(AnalysisAggregation *owr,int N)
+XC::DiagonalSOE::DiagonalSOE(SolutionStrategy *owr,int N)
   :FactoredSOEBase(owr,LinSOE_TAGS_DiagonalSOE,N)
   {
     if(size > 0)

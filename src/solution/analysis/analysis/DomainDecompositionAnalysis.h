@@ -113,10 +113,10 @@ class DomainDecompositionAnalysis: public Analysis, public MovableObject
 
     friend class ProcSolu;
     friend class FEM_ObjectBroker;
-    DomainDecompositionAnalysis(Subdomain &theDomain,AnalysisAggregation *s= nullptr);
-    DomainDecompositionAnalysis(Subdomain &theDomain,DomainSolver &theSolver,AnalysisAggregation *s= nullptr);
-    DomainDecompositionAnalysis(int classTag, Subdomain &theDomain,AnalysisAggregation *s= nullptr);
-    DomainDecompositionAnalysis(int classTag, Subdomain &theDomain,DomainSolver &theSolver,AnalysisAggregation *s);
+    DomainDecompositionAnalysis(Subdomain &theDomain,SolutionStrategy *s= nullptr);
+    DomainDecompositionAnalysis(Subdomain &theDomain,DomainSolver &theSolver,SolutionStrategy *s= nullptr);
+    DomainDecompositionAnalysis(int classTag, Subdomain &theDomain,SolutionStrategy *s= nullptr);
+    DomainDecompositionAnalysis(int classTag, Subdomain &theDomain,DomainSolver &theSolver,SolutionStrategy *s);
     Analysis *getCopy(void) const;
   public:
 

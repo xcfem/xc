@@ -75,7 +75,7 @@
 //! @param owr: set of objects used to perform the analysis.
 //! @param arcLength: value for the arc length.
 //! @param alpha: scaling factor on the reference loads.
-XC::ArcLength1::ArcLength1(AnalysisAggregation *owr,double arcLength, double alpha)
+XC::ArcLength1::ArcLength1(SolutionStrategy *owr,double arcLength, double alpha)
   : ArcLengthBase(owr,INTEGRATOR_TAGS_ArcLength1,arcLength,alpha) {}
 
 //! @brief Virtual constructor.

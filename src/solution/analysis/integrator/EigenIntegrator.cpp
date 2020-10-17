@@ -61,7 +61,7 @@
 
 
 #include "solution/analysis/integrator/EigenIntegrator.h"
-#include "solution/AnalysisAggregation.h"
+#include "solution/SolutionStrategy.h"
 #include <solution/analysis/model/fe_ele/FE_Element.h>
 #include <solution/analysis/model/AnalysisModel.h>
 #include <solution/system_of_eqn/eigenSOE/EigenSOE.h>
@@ -71,7 +71,7 @@
 #include <solution/analysis/model/DOF_GrpIter.h>
 
 //! @brief Constructor.
-XC::EigenIntegrator::EigenIntegrator(AnalysisAggregation *owr)
+XC::EigenIntegrator::EigenIntegrator(SolutionStrategy *owr)
   :Integrator(owr,EigenINTEGRATOR_TAGS_Eigen) {}
 
 //! @brief Asks the element being passed as parameter
@@ -224,7 +224,7 @@ int XC::EigenIntegrator::update(const XC::Vector &deltaU)
 //! @brief Returns a pointer to the system of equations de eigenvalues.
 XC::EigenSOE *XC::EigenIntegrator::getEigenSOEPtr(void)
   {
-    AnalysisAggregation  *sm= getAnalysisAggregation();
+    SolutionStrategy  *sm= getSolutionStrategy();
     assert(sm);
     return sm->getEigenSOEPtr();
   }
@@ -232,7 +232,7 @@ XC::EigenSOE *XC::EigenIntegrator::getEigenSOEPtr(void)
 //! @brief Returns a pointer to the system of equations de eigenvalues.
 const XC::EigenSOE *XC::EigenIntegrator::getEigenSOEPtr(void) const
   {
-    const AnalysisAggregation  *sm= getAnalysisAggregation();
+    const SolutionStrategy  *sm= getSolutionStrategy();
     assert(sm);
     return sm->getEigenSOEPtr();
   }

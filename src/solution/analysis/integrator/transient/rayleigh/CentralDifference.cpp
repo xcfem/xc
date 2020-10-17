@@ -68,7 +68,7 @@
 //! @brief Constructor.
 //!
 //! @param owr: analysis aggregation that will own this object.
-XC::CentralDifference::CentralDifference(AnalysisAggregation *owr)
+XC::CentralDifference::CentralDifference(SolutionStrategy *owr)
   : RayleighBase(owr,INTEGRATOR_TAGS_CentralDifference),
     c2(0.0), c3(0.0), Utm1(0), Ut(0), U(0) {}
 
@@ -76,7 +76,7 @@ XC::CentralDifference::CentralDifference(AnalysisAggregation *owr)
 //!
 //! @param owr: analysis aggregation that will own this object.
 //! @param rF: value of the Rayleigh damping factors.
-XC::CentralDifference::CentralDifference(AnalysisAggregation *owr,const RayleighDampingFactors &rF)
+XC::CentralDifference::CentralDifference(SolutionStrategy *owr,const RayleighDampingFactors &rF)
   : RayleighBase(owr,INTEGRATOR_TAGS_CentralDifference,rF),
     c2(0.0), c3(0.0), Utm1(0), Ut(0), U(0) {}
 
