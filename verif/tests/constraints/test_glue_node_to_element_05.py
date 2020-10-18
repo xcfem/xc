@@ -71,9 +71,8 @@ lp0.newNodalLoad(n10.tag,xc.Vector(loadOnDOFs))
 modelSpace.addLoadCaseToDomain(lp0.name)
 
 # Solution
-solver= predefined_solutions.SolutionProcedure()
-analysis= solver.simpleTransformationStaticLinear(feProblem)
-result= analysis.analyze(1)
+solProc= predefined_solutions.SimpleTransformationStaticLinear(feProblem)
+result= solProc.analysis.analyze(1)
 
 nodes.calculateNodalReactions(False,1e-7)
 
