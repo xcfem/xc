@@ -145,13 +145,8 @@ lp0.newNodalLoad(2,pointLoad)    # applies the point load on node 2
 modelSpace.addLoadCaseToDomain(lp0.name)           # reads load pattern "0" and adds it to the domain
 
 # Solve
-solution=  predefined_solutions.SolutionProcedure()
-solution.convergenceTestTol= 1e-2
-analysis= solution.plainStaticModifiedNewton(problem)
-analOk= analysis.analyze(1)
-# # analysis= predefined_solutions.plain_newton_raphson(problem)
-# analysis= predefined_solutions.plain_static_modified_newton(problem)
-# analOk= analysis.analyze(1)
+solProc= predefined_solutions.PlainStaticModifiedNewton(problem, convergenceTestTol= 1e-2)
+analOk= solProc.analysis.analyze(1)
 
 
 # printing results

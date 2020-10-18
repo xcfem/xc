@@ -93,9 +93,8 @@ lp0.newNodalLoad(n2.tag,xc.Vector([0.0,-2000,0]))
 loadPatterns.addToDomain(lp0.getName()) # Append load pattern to domain.
 
 ## Static analysis.
-solution= predefined_solutions.SolutionProcedure()
-analysis= solution.simpleStaticLinear(FEcase)
-result= analysis.analyze(1)
+solProc= predefined_solutions.SimpleStaticLinear(FEcase)
+result= solProc.analysis.analyze(1)
 
 prep.getDomain.setLoadConstant()
 prep.getDomain.setTime(0.0)
@@ -113,10 +112,10 @@ recRBase.callbackSetup= "self.getDomain.calculateNodalReactions(True,1e-4)"
 #Drift recorder not implemented yet. It can be emulated though.
 
 ### Eigen analysis.
-solution.clear()
-analysis= solution.frequencyAnalysis(FEcase,'full_gen')
-result= analysis.analyze(1)
-eig1= analysis.getEigenvalue(1)
+solProc.clear()
+solProc= predefined_solutions.FrequencyAnalysis(FEcase,systemPrefix='full_gen')
+result= solProc.analysis.analyze(1)
+eig1= solProc.analysis.getEigenvalue(1)
 freq= math.sqrt(eig1)
 
 dampRatio= 0.02
@@ -142,11 +141,11 @@ duration= mr.getDuration()
 loadPatterns.addToDomain(gm.getName()) # Append load pattern to domain.
 
 ### Dynamic analysis.
-solution.clear()
-analysis= solution.plainLinearNewmark(FEcase)
+solProc.clear()
+solProc= predefined_solutions.PlainLinearNewmark(FEcase)
 dT= 0.01
 numberOfSteps= int(duration/dT)
-result= analysis.analyze(numberOfSteps,dT)
+result= solProc.analysis.analyze(numberOfSteps,dT)
 
 
 ratio0= (eig1-25.02037)/25.02037

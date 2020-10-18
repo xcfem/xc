@@ -189,40 +189,40 @@ analysis= predefined_solutions.penalty_newton_raphson(feProblem)
 from solution import database_helper
 
 def solveStaticLinearComb(tagComb,comb,tagSaveFase0):
-  preprocessor.resetLoadCase()
-  db.restore(tagSaveFase0)
+    preprocessor.resetLoadCase()
+    db.restore(tagSaveFase0)
 
-  #exec(open("solution/database_helper_solve.xci").read())
+    #exec(open("solution/database_helper_solve.xci").read())
 
-  ''' 
-  print("previousName= ",previousName)
-  print("tag= ",tagComb)
-  print("tagPrevia= ",tagPrevia)
-  print("descomp previa= ",getDescompCombPrevia)
-  print("resto sobre previa= ",getDescompRestoSobrePrevia)
-  '''
+    ''' 
+    print("previousName= ",previousName)
+    print("tag= ",tagComb)
+    print("tagPrevia= ",tagPrevia)
+    print("descomp previa= ",getDescompCombPrevia)
+    print("resto sobre previa= ",getDescompRestoSobrePrevia)
+    '''
 
-  comb.addToDomain()
-  result= analysis.analyze(1)
-  db.save(tagComb*100)
-  comb.removeFromDomain()
+    comb.addToDomain()
+    result= analysis.analyze(1)
+    db.save(tagComb*100)
+    comb.removeFromDomain()
 
 
 dXMin=1e9
 dXMax=-1e9
 
 def procesResultVerif(tagComb, nmbComb):
-  nodes= preprocessor.getNodeHandler
-  nod8= nodes.getNode(8)
-  deltaX= nod8.getDisp[0] # x displacement of node 8
-  global dXMin; dXMin= min(dXMin,deltaX)
-  global dXMax; dXMax= max(dXMax,deltaX)
-  ''' 
-  print("nmbComb= ",nmbComb)
-  print("tagComb= ",tagComb)
-  print("descomp= ",getDescomp("%3.1f"))
-  print("dXMin= ",(dXMin*1e3)," mm\n")
-  print("dXMax= ",(dXMax*1e3)," mm\n")
+    nodes= preprocessor.getNodeHandler
+    nod8= nodes.getNode(8)
+    deltaX= nod8.getDisp[0] # x displacement of node 8
+    global dXMin; dXMin= min(dXMin,deltaX)
+    global dXMax; dXMax= max(dXMax,deltaX)
+    ''' 
+    print("nmbComb= ",nmbComb)
+    print("tagComb= ",tagComb)
+    print("descomp= ",getDescomp("%3.1f"))
+    print("dXMin= ",(dXMin*1e3)," mm\n")
+    print("dXMax= ",(dXMax*1e3)," mm\n")
    '''
 import os
 os.system("rm -r -f /tmp/test_shrinkage_02.db")
