@@ -79,10 +79,8 @@ lp0.newNodalLoad(10,xc.Vector(loadOnDOFs))
 modelSpace.addLoadCaseToDomain(lp0.name)
 
 # Solution
-solver= predefined_solutions.SolutionProcedure()
-analysis= solver.simpleLagrangeStaticLinear(feProblem)
-# analysis= predefined_solutions.simple_static_linear(feProblem)
-result= analysis.analyze(1)
+solProc= predefined_solutions.SimpleLagrangeStaticLinear(feProblem)
+result= solProc.analysis.analyze(1)
 nodes.calculateNodalReactions(False,1e-7)
 
 reactionNode10= nodes.getNode(10).getReaction
