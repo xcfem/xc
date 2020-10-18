@@ -81,9 +81,8 @@ feProblem.clearAll() #Erase all the fake stuff
 
 #Checking shear.
 def custom_newton_raphson(prb):
-    solution=  predefined_solutions.SolutionProcedure()
-    solution.convergenceTestTol= 1e-6
-    return solution.plainNewtonRaphson(prb)
+    solProc= predefined_solutions.PlainNewtonRaphson(prb, convergenceTestTol= 1e-6)
+    return solProc.analysis
 
 import os
 pth= os.path.dirname(__file__)

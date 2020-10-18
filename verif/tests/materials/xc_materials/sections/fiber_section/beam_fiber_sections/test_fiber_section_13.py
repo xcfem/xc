@@ -60,11 +60,8 @@ modelSpace.addLoadCaseToDomain(lp0.name)
 
 
 # Solution procedure
-solution= predefined_solutions.SolutionProcedure()
-analysis= solution.plainNewtonRaphson(feProblem)
-solution.ctest.tol= 1e-8
-solution.ctest.printFlag= 0 # flag used to print(information on convergence (optional))
-analOk= analysis.analyze(10)
+solProc= predefined_solutions.PlainNewtonRaphson(feProblem, convergenceTestTol= 1e-8)
+analOk= solProc.analysis.analyze(1)
 
 if(analOk!=0): 
   print("ERROR: Thist test fails when running in 32 bits machines. Solution pending (2013/03/11). It seems to be a problem with the tolerance of the convergence test. In my new machine (Dell precision M4800 with Ubuntu 64bits it fails with tol= 1e-9 and works if tol= 1e-5) (2016/01/06) LP.\n")

@@ -86,24 +86,8 @@ modelSpace.addLoadCaseToDomain(lp0.name)
 
 
 # Solution procedure
-solu= feProblem.getSoluProc
-solCtrl= solu.getSoluControl
-
-
-solModels= solCtrl.getModelWrapperContainer
-sm= solModels.newModelWrapper("sm")
-
-
-cHandler= sm.newConstraintHandler("plain_handler")
-numberer= sm.newNumberer("default_numberer")
-numberer.useAlgorithm("simple")
-
-
-solution= predefined_solutions.SolutionProcedure()
-solution.convergenceTestTol= 1.0e-2
-analysis= solution.plainNewtonRaphsonBandGen(feProblem)
-
-analOk= analysis.analyze(1)
+solProc= predefined_solutions.PlainNewtonRaphson(feProblem, convergenceTestTol= 1e-8)
+analOk= solProc.analysis.analyze(1)
 
 nodes= preprocessor.getNodeHandler
 nodes.calculateNodalReactions(True,1e-7)
