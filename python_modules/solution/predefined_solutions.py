@@ -54,12 +54,13 @@ class SolutionProcedure(object):
     '''
     _counter = 0 # Counts the objects of this type.
     
-    def __init__(self, name= None, maxNumIter= 10, convergenceTestTol= 1e-9):
+    def __init__(self, name= None, maxNumIter= 10, convergenceTestTol= 1e-9, printFlag= 0):
         ''' Constructor.
 
         :param name: identifier for the solution procedure.
         :param maxNumIter: maximum number of iterations (defauts to 10)
         :param convergenceTestTol: convergence tolerance (defaults to 1e-9)
+        :param printFlag: if not zero print convergence results on each step.
         '''
         SolutionProcedure._counter += 1
         self.id = SolutionProcedure._counter
@@ -78,9 +79,9 @@ class SolutionProcedure(object):
         self.soe= None
         self.solver= None
         self.analysis= None
-        self.convergenceTestTol= 1e-9
-        self.maxNumIter= 10
-        self.printFlag= 0
+        self.convergenceTestTol= convergenceTestTol
+        self.maxNumIter= maxNumIter
+        self.printFlag= printFlag
         
     def clear(self):
         ''' Wipe out the solution procedure.'''
@@ -94,7 +95,7 @@ class SolutionProcedure(object):
         ''' Defines the model wrapper.
 
         :param prb: XC finite element problem.
-        :param numberginMethod: numbering method (plain or reverse Cuthill-McKee algorithm).
+        :param numberingMethod: numbering method (plain or reverse Cuthill-McKee algorithm).
         '''
         self.solu= prb.getSoluProc
         self.solCtrl= self.solu.getSoluControl
@@ -119,7 +120,7 @@ class SolutionProcedure(object):
         ''' Return the name for the model wrapper.'''
         return 'se_'+self.name
     
-    def defineSolutionStrategy(self, solAlgType= 'linear_soln_algo', integratorType= 'load_control_integrator', convTestType= None):
+    def defineSolutionAlgorithm(self, solAlgType= 'linear_soln_algo', integratorType= 'load_control_integrator', convTestType= None):
         ''' Define the solution strategy.
         
         :param solAlgType: type of the solution algorithm (linear, Newton, modified Newton, ...)
@@ -138,64 +139,55 @@ class SolutionProcedure(object):
             self.ctest.maxNumIter= self.maxNumIter
             self.ctest.printFlag= self.printFlag
 
-    def getConstraintHandler(self, cHType= None, alphaSP= 1e15, alphaMP= 1e15):
+    def defineSysOfEq(self, soeType, solverType):
+        ''' Defines the solver to use for the resulting system of
+            equations.
+
+        :param soeType: type of the system of equations object.
+        :param solverType: type of the solver.
+        '''
+        self.soe= self.solutionStrategy.newSystemOfEqn(soeType)
+        self.solver= self.soe.newSolver(solverType)
+
+    def defineConstraintHandler(self, cHType= None, alphaSP= 1e15, alphaMP= 1e15):
         ''' Define the constraint handler and return a reference to it.
         
         :param cHType: type of the constraint handler (plain, penalty, transformation or langrange).
         :param alphaSP: penalty factor on single points constraints (defaults to 1e15).
         :param alphaMP: penalty factor on multi-poing constraints (defaults to 1e15).
         '''
-        cHandler= None
         if(cHType):
             self.cHandlerType= cHType
         if(self.cHandlerType=='penalty'):
-            cHandler= self.sm.newConstraintHandler("penalty_constraint_handler")
-            cHandler.alphaSP= alphaSP
-            cHandler.alphaMP= alphaMP
+            self.cHandler= self.sm.newConstraintHandler("penalty_constraint_handler")
+            self.cHandler.alphaSP= alphaSP
+            self.cHandler.alphaMP= alphaMP
         elif(self.cHandlerType=='transformation'):
-            cHandler= self.sm.newConstraintHandler("transformation_constraint_handler")
+            self.cHandler= self.sm.newConstraintHandler("transformation_constraint_handler")
         elif(self.cHandlerType=='lagrange'):
-            self.sm.newConstraintHandler("lagrange_constraint_handler")
+            self.cHandler= self.sm.newConstraintHandler("lagrange_constraint_handler")
         elif(self.cHandlerType=='plain'):
-            cHandler= self.sm.newConstraintHandler("plain_handler")
+            self.cHandler= self.sm.newConstraintHandler("plain_handler")
         else:
             lmsg.error('unknown constraint handler type: '+self.cHandlerType)
-        return cHandler
-            
-    def simpleStaticLinear(self,prb):
-        ''' Return a linear static solution algorithm
-            with a penalty constraint handler.
+
+    def defineAnalysis(self, analysisType= 'static_analysis'):
+        ''' Define the analysis object.
+
+        :param analysisType: type of the analysis to perform.
         '''
-        modelWrapperName= self.defineModelWrapper(prb, numberingMethod= 'rcm')
-        self.cHandler= self.getConstraintHandler('penalty')
-        self.defineSolutionStrategy(solAlgType= 'linear_soln_algo', integratorType= 'load_control_integrator', convTestType= None)
-        self.soe= self.solutionStrategy.newSystemOfEqn("band_spd_lin_soe")
-        self.solver= self.soe.newSolver("band_spd_lin_lapack_solver")
-        self.analysis= self.solu.newAnalysis("static_analysis", self.getSolutionStrategyName(),"")
-        return self.analysis
-      
-    def plainLinearNewmark(self,prb):
-        ''' Return a linear Newmark solution algorithm
-            with a plain constraint handler.
-        '''
-        modelWrapperName= self.defineModelWrapper(prb, numberingMethod= 'simple')
-        self.cHandler= self.getConstraintHandler('plain')
-        self.defineSolutionStrategy(solAlgType= 'linear_soln_algo', integratorType= 'newmark_integrator', convTestType= None)
-        self.soe= self.solutionStrategy.newSystemOfEqn("band_gen_lin_soe")
-        self.solver= self.soe.newSolver("band_gen_lin_lapack_solver")
-        self.analysis= self.solu.newAnalysis("direct_integration_analysis", self.getSolutionStrategyName(),"")
-        return self.analysis
+        self.analysis= self.solu.newAnalysis(analysisType, self.getSolutionStrategyName(),"")
+              
       
     def simpleLagrangeStaticLinear(self,prb):
         ''' Return a linear static solution algorithm
             with a Lagrange constraint handler.
         '''
         modelWrapperName= self.defineModelWrapper(prb, numberingMethod= 'rcm')
-        self.cHandler= self.getConstraintHandler('lagrange')
-        self.defineSolutionStrategy(solAlgType= 'linear_soln_algo', integratorType= 'load_control_integrator', convTestType= None)
-        self.soe= self.solutionStrategy.newSystemOfEqn("sparse_gen_col_lin_soe")
-        self.solver= self.soe.newSolver("super_lu_solver")
-        self.analysis= self.solu.newAnalysis("static_analysis", self.getSolutionStrategyName(),"")
+        self.defineConstraintHandler('lagrange')
+        self.defineSolutionAlgorithm(solAlgType= 'linear_soln_algo', integratorType= 'load_control_integrator', convTestType= None)
+        self.defineSysOfEq(soeType= 'sparse_gen_col_lin_soe', solverType= 'super_lu_solver')
+        self.defineAnalysis('static_analysis')
         return self.analysis
       
     def simpleTransformationStaticLinear(self,prb):
@@ -203,112 +195,43 @@ class SolutionProcedure(object):
             transformation constraint handler.
         '''
         modelWrapperName= self.defineModelWrapper(prb, numberingMethod= 'rcm')
-        self.cHandler= self.getConstraintHandler('transformation')
-        self.defineSolutionStrategy(solAlgType= 'linear_soln_algo', integratorType= 'load_control_integrator', convTestType= None)
-        self.soe= self.solutionStrategy.newSystemOfEqn("sparse_gen_col_lin_soe")
-        self.solver= self.soe.newSolver("super_lu_solver")
-        self.analysis= self.solu.newAnalysis("static_analysis", self.getSolutionStrategyName(),"")
+        self.defineConstraintHandler('transformation')
+        self.defineSolutionAlgorithm(solAlgType= 'linear_soln_algo', integratorType= 'load_control_integrator', convTestType= None)
+        self.defineSysOfEq(soeType= 'sparse_gen_col_lin_soe', solverType= 'super_lu_solver')
+        self.defineAnalysis('static_analysis')
         return self.analysis
-      
-    def plainNewtonRaphson(self,prb):
-        ''' Return a Newton-Raphson solution algorithm with a 
-            plain constraint handler.
-        '''
-        modelWrapperName= self.defineModelWrapper(prb, numberingMethod= 'simple')
-        self.cHandler= self.getConstraintHandler('plain')
-        self.defineSolutionStrategy(solAlgType= 'newton_raphson_soln_algo', integratorType= 'load_control_integrator', convTestType= 'norm_unbalance_conv_test')
-        self.soe= self.solutionStrategy.newSystemOfEqn("sparse_gen_col_lin_soe")
-        self.solver= self.soe.newSolver("super_lu_solver")
-        self.analysis= self.solu.newAnalysis("static_analysis", self.getSolutionStrategyName(),"")
-        return self.analysis
-      
-    def plainNewtonRaphsonBandGen(self,prb):
-        ''' Return a Newton-Raphson solution algorithm with a 
-            plain constraint handler and a band general
-            SOE solver.
-        '''
-        modelWrapperName= self.defineModelWrapper(prb, numberingMethod= 'simple')
-        self.cHandler= self.getConstraintHandler('plain')
-        self.defineSolutionStrategy(solAlgType= 'newton_raphson_soln_algo', integratorType= 'load_control_integrator', convTestType= 'norm_unbalance_conv_test')
-        self.soe= self.solutionStrategy.newSystemOfEqn("band_gen_lin_soe")
-        self.solver= self.soe.newSolver("band_gen_lin_lapack_solver")
-        self.analysis= self.solu.newAnalysis("static_analysis", self.getSolutionStrategyName(),"")
-        return self.analysis
-      
-    def plainStaticModifiedNewton(self,prb):
-        ''' Return a static solution procedure with a modified Newton
-            solution algorithm with a plain constraint handler.
-        '''
-        modelWrapperName= self.defineModelWrapper(prb, numberingMethod= 'simple')
-        self.cHandler= self.getConstraintHandler('plain')
-        self.maxNumIter= 150 #Make this configurable
-        self.defineSolutionStrategy(solAlgType= 'modified_newton_soln_algo', integratorType= 'load_control_integrator', convTestType= 'relative_total_norm_disp_incr_conv_test')
-        self.soe= self.solutionStrategy.newSystemOfEqn("sparse_gen_col_lin_soe")
-        self.solver= self.soe.newSolver("super_lu_solver")
-        self.analysis= self.solu.newAnalysis("static_analysis", self.getSolutionStrategyName(),"")
-        return self.analysis
+                  
     
-    def plainKrylovNewton(self,prb, maxDim= 6):
-        ''' Return a static solution procedure with a modified Newton
-            solution algorithm with a plain constraint handler.
-
-        See appendix C. Analysis model script of the document
-        "Finite Element Modeling of Gusset Plate Failure Using Opensees"
-        Andrew J. Walker. Oregon State University
-        '''
-        modelWrapperName= self.defineModelWrapper(prb, numberingMethod= 'simple')
-        self.cHandler= self.getConstraintHandler('plain')
-        self.maxNumIter= 150 #Make this configurable
-        self.defineSolutionStrategy(solAlgType= 'krylov_newton_soln_algo', integratorType= 'load_control_integrator', convTestType= 'energy_inc_conv_test')
-        self.soe= self.solutionStrategy.newSystemOfEqn("umfpack_gen_lin_soe")
-        self.solver= self.soe.newSolver("umfpack_gen_lin_solver")
-        self.analysis= self.solu.newAnalysis("static_analysis", self.getSolutionStrategyName(),"")
-        return self.analysis
-      
     def penaltyNewtonRaphson(self, prb):
         ''' Return a static solution procedure with a Newton Raphson algorithm
             and a penalty constraint handler.'''
         modelWrapperName= self.defineModelWrapper(prb, numberingMethod= 'rcm')
-        self.cHandler= self.getConstraintHandler('penalty')
-        self.defineSolutionStrategy(solAlgType= 'newton_raphson_soln_algo', integratorType= 'load_control_integrator', convTestType= 'norm_unbalance_conv_test')
+        self.defineConstraintHandler('penalty')
+        self.defineSolutionAlgorithm(solAlgType= 'newton_raphson_soln_algo', integratorType= 'load_control_integrator', convTestType= 'norm_unbalance_conv_test')
         self.soe= self.solutionStrategy.newSystemOfEqn("band_gen_lin_soe")
         self.solver= self.soe.newSolver("band_gen_lin_lapack_solver")
         self.analysis= self.solu.newAnalysis("static_analysis", self.getSolutionStrategyName(),"")
-        return self.analysis
+        return self.analysis      
 
     def penaltyModifiedNewton(self, prb):
         ''' Return a static solution procedure with a Newton Raphson algorithm
             and a penalty constraint handler.'''
         modelWrapperName= self.defineModelWrapper(prb, numberingMethod= 'rcm')
-        self.cHandler= self.getConstraintHandler('penalty')
+        self.defineConstraintHandler('penalty')
         self.maxNumIter= 150 #Make this configurable
-        self.defineSolutionStrategy(solAlgType= 'modified_newton_soln_algo', integratorType= 'load_control_integrator', convTestType= 'relative_total_norm_disp_incr_conv_test')
-        self.soe= self.solutionStrategy.newSystemOfEqn("sparse_gen_col_lin_soe")
-        self.solver= self.soe.newSolver("super_lu_solver")
-        self.analysis= self.solu.newAnalysis("static_analysis", self.getSolutionStrategyName(),"")
+        self.defineSolutionAlgorithm(solAlgType= 'modified_newton_soln_algo', integratorType= 'load_control_integrator', convTestType= 'relative_total_norm_disp_incr_conv_test')
+        self.defineSysOfEq(soeType= 'sparse_gen_col_lin_soe', solverType= 'super_lu_solver')
+        self.defineAnalysis('static_analysis')
         return self.analysis
     
     def penaltyNewmarkNewtonRapshon(self,prb):
         ''' Return a Newmark solution procedure with a Newton Raphson algorithm
             and a penalty constraint handler.'''
         modelWrapperName= self.defineModelWrapper(prb, numberingMethod= 'rcm')
-        self.cHandler= self.getConstraintHandler('penalty', alphaSP= 1.0e18, alphaMP= 1.0e18)
-        self.defineSolutionStrategy(solAlgType= 'newton_raphson_soln_algo', integratorType= 'newmark_integrator', convTestType= 'norm_disp_incr_conv_test')
-        self.soe= self.solutionStrategy.newSystemOfEqn("profile_spd_lin_soe")
-        self.solver= self.soe.newSolver("profile_spd_lin_direct_solver")
-        self.analysis= self.solu.newAnalysis("direct_integration_analysis", self.getSolutionStrategyName(),"")
-        return self.analysis
-
-    def frequencyAnalysis(self,prb,systemPrefix= 'sym_band'):
-        ''' Return a natural frequency computation procedure.'''
-        modelWrapperName= self.defineModelWrapper(prb, numberingMethod= 'rcm')
-        self.cHandler= self.getConstraintHandler('transformation')
-        self.defineSolutionStrategy(solAlgType= 'frequency_soln_algo', integratorType= 'eigen_integrator', convTestType= None)
-        soe_string= systemPrefix+'_eigen_soe'
-        solver_string= systemPrefix+'_eigen_solver'
-        self.soe= self.solutionStrategy.newSystemOfEqn(soe_string)
-        self.solver= self.soe.newSolver(solver_string)
-        self.analysis= self.solu.newAnalysis("modal_analysis", self.getSolutionStrategyName(),"")
+        self.defineConstraintHandler('penalty', alphaSP= 1.0e18, alphaMP= 1.0e18)
+        self.defineSolutionAlgorithm(solAlgType= 'newton_raphson_soln_algo', integratorType= 'newmark_integrator', convTestType= 'norm_disp_incr_conv_test')
+        self.defineSysOfEq(soeType= 'profile_spd_lin_soe', solverType= 'profile_spd_lin_direct_solver')
+        self.defineAnalysis('direct_integration_analysis')
         return self.analysis
     
     def illConditioningAnalysisBase(self, prb, soePrefix= 'sym_band_eigen', shift= None):
@@ -316,14 +239,13 @@ class SolutionProcedure(object):
             analysis.
         '''
         modelWrapperName= self.defineModelWrapper(prb, numberingMethod= 'rcm')
-        self.cHandler= self.getConstraintHandler('penalty')
-        self.defineSolutionStrategy(solAlgType= 'ill-conditioning_soln_algo', integratorType= 'ill-conditioning_integrator', convTestType= None)
-        self.soe= self.solutionStrategy.newSystemOfEqn(soePrefix+"_soe")
+        self.defineConstraintHandler('penalty')
+        self.defineSolutionAlgorithm(solAlgType= 'ill-conditioning_soln_algo', integratorType= 'ill-conditioning_integrator', convTestType= None)
+        self.defineSysOfEq(soeType= soePrefix+"_soe", solverType= soePrefix+"_solver")
         if(shift):
             self.soe.shift= shift
-        self.solver= self.soe.newSolver(soePrefix+"_solver")
 
-        self.analysis= self.solu.newAnalysis("ill-conditioning_analysis", self.getSolutionStrategyName(),"")
+        self.defineAnalysis('ill-conditioning_analysis')
         return self.analysis
     
     def zeroEnergyModes(self, prb):
@@ -343,88 +265,258 @@ class SolutionProcedure(object):
 #Typical solution procedures.
 
 ## Linear static analysis.
+class SimpleStaticLinear(SolutionProcedure):
+    ''' Return a linear static solution algorithm
+        with a penalty constraint handler.
+    '''
+    def __init__(self, prb, name= None, maxNumIter= 10, convergenceTestTol= 1e-9, printFlag= 0):
+        ''' Constructor.
+
+        :param prb: XC finite element problem.
+        :param name: identifier for the solution procedure.
+        :param maxNumIter: maximum number of iterations (defauts to 10)
+        :param convergenceTestTol: convergence tolerance (defaults to 1e-9)
+        :param printFlag: if not zero print convergence results on each step.
+        '''
+        super(SimpleStaticLinear,self).__init__(name, maxNumIter, convergenceTestTol, printFlag)
+        modelWrapperName= self.defineModelWrapper(prb, numberingMethod= 'rcm')
+        self.defineConstraintHandler('penalty')
+        self.defineSolutionAlgorithm(solAlgType= 'linear_soln_algo', integratorType= 'load_control_integrator', convTestType= None)
+        self.defineSysOfEq(soeType= 'band_spd_lin_soe', solverType= 'band_spd_lin_lapack_solver')
+        self.defineAnalysis('static_analysis')
+
+### Convenience function.
 def simple_static_linear(prb):
     ''' Return a simple static linear solution procedure.'''
-    solution= SolutionProcedure()
-    return solution.simpleStaticLinear(prb)
+    solProc= SimpleStaticLinear(prb)
+    return solProc.analysis
 
 ## Non-linear static analysis.
+class PlainNewtonRaphson(SolutionProcedure):
+    ''' Newton-Raphson solution algorithm with a 
+        plain constraint handler.
+    '''
+    def __init__(self, prb, name= None, maxNumIter= 10, convergenceTestTol= 1e-9, printFlag= 0):
+        ''' Constructor.
+
+        :param prb: XC finite element problem.
+        :param name: identifier for the solution procedure.
+        :param maxNumIter: maximum number of iterations (defauts to 10)
+        :param convergenceTestTol: convergence tolerance (defaults to 1e-9)
+        :param printFlag: if not zero print convergence results on each step.
+        '''
+        super(PlainNewtonRaphson,self).__init__(name, maxNumIter, convergenceTestTol, printFlag)
+        modelWrapperName= self.defineModelWrapper(prb, numberingMethod= 'simple')
+        self.defineConstraintHandler('plain')
+        self.defineSolutionAlgorithm(solAlgType= 'newton_raphson_soln_algo', integratorType= 'load_control_integrator', convTestType= 'norm_unbalance_conv_test')
+        self.defineSysOfEq(soeType= 'sparse_gen_col_lin_soe', solverType= 'super_lu_solver')
+        self.defineAnalysis('static_analysis')
+
+### Convenience function
 def plain_newton_raphson(prb, mxNumIter= 10):
-    solution= SolutionProcedure()
-    solution.maxNumIter= mxNumIter
-    return solution.plainNewtonRaphson(prb)
+    solProc= PlainNewtonRaphson(prb, maxNumIter= mxNumIter)
+    return solProc.analysis
 
+class PlainNewtonRaphsonBandGen(SolutionProcedure):
+    ''' Newton-Raphson solution algorithm with a 
+        plain constraint handler and a band general
+        SOE solver.
+    '''
+    def __init__(self, prb, name= None, maxNumIter= 10, convergenceTestTol= 1e-9, printFlag= 0):
+        ''' Constructor.
+
+        :param prb: XC finite element problem.
+        :param name: identifier for the solution procedure.
+        :param maxNumIter: maximum number of iterations (defauts to 10)
+        :param convergenceTestTol: convergence tolerance (defaults to 1e-9)
+        :param printFlag: if not zero print convergence results on each step.
+        '''
+        super(PlainNewtonRaphsonBandGen,self).__init__(name, maxNumIter, convergenceTestTol, printFlag)
+        modelWrapperName= self.defineModelWrapper(prb, numberingMethod= 'simple')
+        self.defineConstraintHandler('plain')
+        self.defineSolutionAlgorithm(solAlgType= 'newton_raphson_soln_algo', integratorType= 'load_control_integrator', convTestType= 'norm_unbalance_conv_test')
+        self.defineSysOfEq(soeType= 'band_gen_lin_soe', solverType= 'band_gen_lin_lapack_solver')
+        self.defineAnalysis('static_analysis')
+
+### Convenience function
 def plain_newton_raphson_band_gen(prb, mxNumIter= 10):
-    solution= SolutionProcedure()
-    solution.maxNumIter= mxNumIter
-    return solution.plainNewtonRaphsonBandGen(prb)
+    solProc= PlainNewtonRaphsonBandGen(prb, maxNumIter= mxNumIter)
+    return solProc.analysis
 
+class PenaltyNewtonRaphson(SolutionProcedure):
+    ''' Return a static solution procedure with a Newton Raphson algorithm
+        and a penalty constraint handler.'''
+    def __init__(self, prb, name= None, maxNumIter= 10, convergenceTestTol= 1e-9, printFlag= 0):
+        ''' Constructor.
+
+        :param prb: XC finite element problem.
+        :param name: identifier for the solution procedure.
+        :param maxNumIter: maximum number of iterations (defauts to 10)
+        :param convergenceTestTol: convergence tolerance (defaults to 1e-9)
+        :param printFlag: if not zero print convergence results on each step.
+        '''
+        super(PenaltyNewtonRaphson,self).__init__(name, maxNumIter, convergenceTestTol, printFlag)
+        modelWrapperName= self.defineModelWrapper(prb, numberingMethod= 'rcm')
+        self.defineConstraintHandler('penalty')
+        self.defineSolutionAlgorithm(solAlgType= 'newton_raphson_soln_algo', integratorType= 'load_control_integrator', convTestType= 'norm_unbalance_conv_test')
+        self.defineSysOfEq(soeType= 'band_gen_lin_soe', solverType= 'band_gen_lin_lapack_solver')
+        self.defineAnalysis('static_analysis')
+
+### Convenience function
+def penalty_newton_raphson(prb, mxNumIter= 10, convergenceTestTol= 1e-4, printFlag= 0):
+    ''' Return a penalty Newton-Raphson solution procedure.
+
+    :param maxNumIter: maximum number of iterations (defauts to 10)
+    :param convergenceTestTol: convergence tolerance (defaults to 1e-9)
+    :param printFlag: print message on each iteration
+    '''
+    solProc= PenaltyNewtonRaphson(prb, maxNumIter= mxNumIter, convergenceTestTol= convergenceTestTol, printFlag= printFlag)
+    return solProc.analysis
+
+class PlainStaticModifiedNewton(SolutionProcedure):
+    ''' Return a static solution procedure with a modified Newton
+        solution algorithm with a plain constraint handler.
+    '''
+    def __init__(self, prb, name= None, maxNumIter= 10, convergenceTestTol= 1e-9, printFlag= 0):
+        ''' Constructor.
+
+        :param prb: XC finite element problem.
+        :param name: identifier for the solution procedure.
+        :param maxNumIter: maximum number of iterations (defauts to 10)
+        :param convergenceTestTol: convergence tolerance (defaults to 1e-9)
+        :param printFlag: if not zero print convergence results on each step.
+        '''
+        super(PlainStaticModifiedNewton,self).__init__(name, maxNumIter, convergenceTestTol, printFlag)
+        modelWrapperName= self.defineModelWrapper(prb, numberingMethod= 'simple')
+        self.defineConstraintHandler('plain')
+        self.maxNumIter= 150 #Make this configurable
+        self.defineSolutionAlgorithm(solAlgType= 'modified_newton_soln_algo', integratorType= 'load_control_integrator', convTestType= 'relative_total_norm_disp_incr_conv_test')
+        self.defineSysOfEq(soeType= 'sparse_gen_col_lin_soe', solverType= 'super_lu_solver')
+        self.defineAnalysis('static_analysis')
+    
+### Convenience function
 def plain_static_modified_newton(prb, mxNumIter= 10, convergenceTestTol= .01):
     ''' Return a simple static modified Newton solution procedure.
 
     :ivar maxNumIter: maximum number of iterations (defauts to 10)
     :ivar convergenceTestTol: convergence tolerance (defaults to 1e-9)
     '''
-    solution= SolutionProcedure()
-    solution.maxNumIter= mxNumIter
-    solution.convergenceTestTol= convergenceTestTol
-    return solution.plainStaticModifiedNewton(prb)
+    solProc= PlainStaticModifiedNewton(prb, maxNumIter= mxNumIter, convergenceTestTol= convergenceTestTol)
+    return solProc.analysis
 
-def plain_krylov_newton(prb, mxNumIter= 300, convergenceTestTol= 1e-9, printFlag= 0):
+class PlainKrylovNewton(SolutionProcedure):
+    ''' KrylovNewton algorithm object which uses a Krylov subspace 
+        accelerator to accelerate the convergence of the modified 
+        newton method.
+
+    See appendix C. Analysis model script of the document
+    "Finite Element Modeling of Gusset Plate Failure Using Opensees"
+    Andrew J. Walker. Oregon State University
+    '''
+    def __init__(self, prb, name= None, maxNumIter= 150, convergenceTestTol= 1e-9, printFlag= 0, maxDim= 6):
+        ''' Constructor.
+
+        :param prb: XC finite element problem.
+        :param name: identifier for the solution procedure.
+        :param maxNumIter: maximum number of iterations (defauts to 10)
+        :param convergenceTestTol: convergence tolerance (defaults to 1e-9)
+        :param printFlag: if not zero print convergence results on each step.
+        :param maxDim: max number of iterations until the tangent is reformed and the acceleration restarts (default = 6).
+        '''
+        super(PlainKrylovNewton,self).__init__(name, maxNumIter, convergenceTestTol, printFlag)
+        modelWrapperName= self.defineModelWrapper(prb, numberingMethod= 'simple')
+        self.defineConstraintHandler('plain')
+        self.defineSolutionAlgorithm(solAlgType= 'krylov_newton_soln_algo', integratorType= 'load_control_integrator', convTestType= 'energy_inc_conv_test')
+        self.solAlgo.maxDimension= maxDim
+        self.defineSysOfEq(soeType= 'umfpack_gen_lin_soe', solverType= 'umfpack_gen_lin_solver')
+        self.defineAnalysis('static_analysis')
+
+### Convenience function
+def plain_krylov_newton(prb, mxNumIter= 300, convergenceTestTol= 1e-9, printFlag= 0, maxDim= 6):
     ''' Return a plain Krylov Newton solution procedure.
 
-    :ivar maxNumIter: maximum number of iterations (defauts to 300)
-    :ivar convergenceTestTol: convergence tolerance (defaults to 1e-9)
-    :ivar printFlag: print message on each iteration
+    :param maxNumIter: maximum number of iterations (defauts to 300)
+    :param convergenceTestTol: convergence tolerance (defaults to 1e-9)
+    :param printFlag: print message on each iteration
+    :param maxDim: max number of iterations until the tangent is reformed and the acceleration restarts (default = 6).
     '''
-    solution= SolutionProcedure()
-    solution.maxNumIter= mxNumIter
-    solution.convergenceTestTol= convergenceTestTol
-    solution.printFlag= printFlag
-    return solution.plainKrylovNewton(prb)
+    solProc= PlainKrylovNewton(prb, maxNumIter= mxNumIter, convergenceTestTol= convergenceTestTol, printFlag= printFlag, maxDim= 6)
+    return solProc.analysis
 
-def penalty_newton_raphson(prb, mxNumIter= 10, convergenceTestTol= 1e-4, printFlag= 0):
-    ''' Return a penalty Newton-Raphson solution procedure.
-
-    :ivar maxNumIter: maximum number of iterations (defauts to 10)
-    :ivar convergenceTestTol: convergence tolerance (defaults to 1e-9)
-    :ivar printFlag: print message on each iteration
+## Dynamic analysis        
+class PlainLinearNewmark(SolutionProcedure):
+    ''' Return a linear Newmark solution algorithm
+        with a plain constraint handler.
     '''
-    solution= SolutionProcedure()
-    solution.maxNumIter= mxNumIter
-    solution.convergenceTestTol= convergenceTestTol
-    solution.printFlag= printFlag
-    return solution.penaltyNewtonRaphson(prb)
+    def __init__(self, prb, name= None, maxNumIter= 10, convergenceTestTol= 1e-9, printFlag= 0):
+        ''' Constructor.
+
+        :param prb: XC finite element problem.
+        :param name: identifier for the solution procedure.
+        :param maxNumIter: maximum number of iterations (defauts to 10)
+        :param convergenceTestTol: convergence tolerance (defaults to 1e-9)
+        :param printFlag: if not zero print convergence results on each step.
+        '''
+        super(PlainLinearNewmark,self).__init__(name, maxNumIter, convergenceTestTol, printFlag)
+        modelWrapperName= self.defineModelWrapper(prb, numberingMethod= 'simple')
+        self.defineConstraintHandler('plain')
+        self.defineSolutionAlgorithm(solAlgType= 'linear_soln_algo', integratorType= 'newmark_integrator', convTestType= None)
+        self.defineSysOfEq(soeType= 'band_gen_lin_soe', solverType= 'band_gen_lin_lapack_solver')
+        self.defineAnalysis('direct_integration_analysis')
+    
+class FrequencyAnalysis(SolutionProcedure):
+    ''' Return a natural frequency computation procedure.'''
+
+    def __init__(self, prb, name= None, maxNumIter= 10, convergenceTestTol= 1e-9, printFlag= 0, systemPrefix= 'sym_band'):
+        ''' Constructor.
+
+        :param prb: XC finite element problem.
+        :param name: identifier for the solution procedure.
+        :param maxNumIter: maximum number of iterations (defauts to 10)
+        :param convergenceTestTol: convergence tolerance (defaults to 1e-9)
+        :param printFlag: if not zero print convergence results on each step.
+        '''        
+        super(FrequencyAnalysis,self).__init__(name, maxNumIter, convergenceTestTol, printFlag)
+        modelWrapperName= self.defineModelWrapper(prb, numberingMethod= 'rcm')
+        self.defineConstraintHandler('transformation')
+        self.defineSolutionAlgorithm(solAlgType= 'frequency_soln_algo', integratorType= 'eigen_integrator', convTestType= None)
+        soe_string= systemPrefix+'_eigen_soe'
+        solver_string= systemPrefix+'_eigen_solver'
+        self.defineSysOfEq(soeType= soe_string, solverType= solver_string)
+        self.defineAnalysis('modal_analysis')
+
+### Convenience function
+def frequency_analysis(prb):
+    ''' Return a solution procedure that computes the natural
+        frequencies of the model.'''
+    solProc= FrequencyAnalysis(prb)
+    return solProc.analysis
+
+## Non-linear static analysis.
 
 def penalty_modified_newton(prb, mxNumIter= 10, convergenceTestTol= 1e-4, printFlag= 0):
     ''' Return a simple static modified Newton solution procedure.
 
-    :ivar maxNumIter: maximum number of iterations (defauts to 10)
-    :ivar convergenceTestTol: convergence tolerance (defaults to 1e-9)
+    :param maxNumIter: maximum number of iterations (defauts to 10)
+    :param convergenceTestTol: convergence tolerance (defaults to 1e-9)
     '''
-    solution= SolutionProcedure()
-    solution.maxNumIter= mxNumIter
-    solution.convergenceTestTol= convergenceTestTol
-    solution.printFlag= printFlag
-    return solution.penaltyModifiedNewton(prb)
-
-def frequency_analysis(prb):
-    ''' Return a solution procedure that computes the natural
-        frequencies of the model.'''
-    solution= SolutionProcedure()
-    return solution.frequencyAnalysis(prb)
+    solProc= SolutionProcedure()
+    solProc.maxNumIter= mxNumIter
+    solProc.convergenceTestTol= convergenceTestTol
+    solProc.printFlag= printFlag
+    return solProc.penaltyModifiedNewton(prb)
 
 def zero_energy_modes(prb):
     ''' Return a solution procedure that computes the zero
         energy modes of the model.'''
-    solution= SolutionProcedure()
-    return solution.zeroEnergyModes(prb)
+    solProc= SolutionProcedure()
+    return solProc.zeroEnergyModes(prb)
 
 def ill_conditioning_analysis(prb):
     ''' Return a solution procedure that computes the modes
         that correspond to ill-conditioned degrees of freedom.'''
-    solution= SolutionProcedure()
-    return solution.illConditioningAnalysis(prb)
+    solProc= SolutionProcedure()
+    return solProc.illConditioningAnalysis(prb)
 
 def solveComb(preprocessor,nmbComb,analysis,numSteps):
     preprocessor.resetLoadCase()
