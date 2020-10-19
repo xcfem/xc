@@ -38,7 +38,7 @@ class LimitStateControllerBase(object):
         self.limitStateLabel= limitStateLabel
         self.fakeSection= fakeSection
         #Linear analysis by default.
-        self.analysisToPerform= predefined_solutions.simple_static_linear
+        self.solutionProcedureType=  predefined_solutions.SimpleStaticLinear
         self.preprocessor=None
         self.verbose= True # display log messages by default
 

@@ -81,9 +81,9 @@ reinfConcreteSectionDistribution.assign(fakeElementSet,setRCSects=piersRCSects)
 feProblem.clearAll() #Erase all the fake stuff
 
 #Checking shear.
-def custom_newton_raphson(prb):
-    solProc= predefined_solutions.PlainNewtonRaphson(prb, convergenceTestTol= 1e-6)
-    return solProc.analysis
+class CustomNewtonRaphson(predefined_solutions.PlainNewtonRaphson):
+    def __init__(self, prb):
+        super(CustomNewtonRaphson, self).__init__(prb,convergenceTestTol= 1e-6)
 
 import os
 pth= os.path.dirname(__file__)
@@ -94,7 +94,7 @@ fname= os.path.basename(__file__)
 
 limit_state_data.shearResistance.controller= EHE_limit_state_checking.ShearController(limitStateLabel= limit_state_data.shearResistance.label)
 limit_state_data.shearResistance.controller.verbose= False # Don't display log messages.
-limit_state_data.shearResistance.controller.analysisToPerform= custom_newton_raphson
+limit_state_data.shearResistance.controller.solutionProcedureType= CustomNewtonRaphson
 cfg=default_config.EnvConfig(language='en',intForcPath= 'results/internalForces/',verifPath= 'results/verifications/',reportPath='./',resultsPath= 'annex/',grWidth='120mm')
 cfg.projectDirTree.workingDirectory= '/tmp/'+os.path.splitext(fname)[0]
 cfg.projectDirTree.createTree() # To allow copying existing internal force data into.

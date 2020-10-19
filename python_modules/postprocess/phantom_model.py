@@ -195,15 +195,14 @@ class PhantomModel(object):
         parameters
 
         :param elements: elements to check
-        :param analysis: type of analysis
         :param controller: object that controls limit state in elements.
         '''
         combs= self.preprocessor.getLoadHandler.getLoadPatterns #Here each load pattern represents a combination.
         elements= self.preprocessor.getSets.getSet("total").elements
         for key in combs.getKeys():
             comb= combs[key]
-            #print("Resolving load combination: ",key)
-            predefined_solutions.solveComb(self.preprocessor,key,controller.analysis,1)
+            #print("Solving load combination: ",key)
+            controller.solutionProcedure.solveComb(key)
             controller.preprocessor=self.preprocessor
             controller.check(elements,key)
 

@@ -28,6 +28,7 @@ import xc
 from model import predefined_spaces
 from materials import typical_materials
 from solution import database_helper as dbHelper
+from solution import predefined_solutions
 
 # Problem type
 feProblem= xc.FEProblem()
@@ -159,31 +160,7 @@ comb026= combs.newLoadCombination("ELU026","1.35*G + 1.05*SC + 0.90*VT + 1.50*NV
 
 printFlag= 0
 
-solu= feProblem.getSoluProc
-solCtrl= solu.getSoluControl
-
-
-solModels= solCtrl.getModelWrapperContainer
-sm= solModels.newModelWrapper("sm")
-
-
-cHandler= sm.newConstraintHandler("penalty_constraint_handler")
-cHandler.alphaSP= 1.0e15
-cHandler.alphaMP= 1.0e15
-numberer= sm.newNumberer("default_numberer")
-numberer.useAlgorithm("rcm")
-
-solutionStrategies= solCtrl.getSolutionStrategyContainer
-solutionStrategy= solutionStrategies.newSolutionStrategy("solutionStrategy","sm")
-solAlgo= solutionStrategy.newSolutionAlgorithm("newton_raphson_soln_algo")
-ctest= solutionStrategy.newConvergenceTest("norm_unbalance_conv_test")
-ctest.tol= 1e-3
-ctest.maxNumIter= 10
-#ctest.printFlag= printFlag
-integ= solutionStrategy.newIntegrator("load_control_integrator",xc.Vector([]))
-soe= solutionStrategy.newSystemOfEqn("band_gen_lin_soe")
-solver= soe.newSolver("band_gen_lin_lapack_solver")
-analysis= solu.newAnalysis("static_analysis","solutionStrategy","")
+solProc= predefined_solutions.PlainNewtonRaphson(feProblem, maxNumIter= 10,  convergenceTestTol= 1e-3)
 
 def solveStaticLinearComb(comb,db,dbHelp):
   preprocessor.resetLoadCase()
@@ -197,7 +174,7 @@ def solveStaticLinearComb(comb,db,dbHelp):
     print("resto sobre previa= ",getDescompRestoSobrePrevia)
   '''
   comb.addToDomain()
-  analOk= analysis.analize(1)
+  analOk= solProc.solve(1)
   db.save(comb.tag*100)
   comb.removeFromDomain()
 
@@ -233,7 +210,7 @@ tagPrevia= 0
 tagSave= 0
 for key in combs.getKeys():
   comb= combs[key]
-  helper.solveComb(preprocessor, comb,analysis)
+  helper.solveComb(comb,solProc)
   procesResultVerif(comb)
 
 ## Small differences after changing

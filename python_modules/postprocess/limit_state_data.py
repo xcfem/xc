@@ -21,11 +21,7 @@ import csv
 from postprocess import control_vars as cv
 import json
 
-def defaultAnalysis(feProb,steps= 1):
-    '''Default analysis procedure for saveAll method.'''
-    analysis= predefined_solutions.simple_static_linear(feProb)
-    result= analysis.analyze(steps) #Same with the number of steps.
-    return result
+defaultSolutionProcedureType=  predefined_solutions.SimpleStaticLinear
 
 class VerifOutVars(object):
     '''Variables that control the output of limit state verifications.
@@ -149,15 +145,18 @@ class LimitStateData(object):
             json.dump(internalForcesDict, outfile)
         outfile.close()
         
-    def saveAll(self, combContainer, setCalc, analysisToPerform= defaultAnalysis, lstSteelBeams=None):
+    def saveAll(self, combContainer, setCalc, solutionProcedureType= defaultSolutionProcedureType, lstSteelBeams=None):
         '''Write internal forces, displacements, .., for each combination
 
         :param setCalc: set of entities for which the verification is 
                           going to be performed
+        :param solutionProcedureType: type of the solution strategy to solve
+                                      the finite element problem.
         :param lstSteelBeams: list of steel beams to analyze (defaults to None)
         '''
         preprocessor= setCalc.getPreprocessor
         feProblem= preprocessor.getProblem
+        solutionProcedure= solutionProcedureType(feProblem)
         preprocessor= feProblem.getPreprocessor
         loadCombinations= preprocessor.getLoadHandler.getLoadCombinations
         #Putting combinations inside XC.
@@ -171,7 +170,7 @@ class LimitStateData(object):
             feProblem.getPreprocessor.resetLoadCase()
             comb.addToDomain() #Combination to analyze.
             #Solution
-            result= analysisToPerform(feProblem)
+            result= solutionProcedure.solve()
             if lstSteelBeams:
                 for sb in lstSteelBeams:
                     sb.updateReductionFactors()

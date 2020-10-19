@@ -44,23 +44,25 @@ class SolutionProcedure(object):
                    - Broyden
     :ivar soe:       sparse system of equations: band general, band SPD, 
                      profile SPD, sparse general, umfPack, sparse SPD
-    :ivar solver:
+    :ivar solver: solver for the system of equations.
     :ivar analysis:  determines what type of analysis is to be performed
     :ivar convergenceTestTol: convergence tolerance (defaults to 1e-9)
     :ivar maxNumIter: maximum number of iterations (defauts to 10)
+    :ivar numSteps: number of steps to use in the analysis (useful only when loads are variable in time).
     :ivar solu:
     :ivar solCtrl:
     :ivar sm:
     '''
     _counter = 0 # Counts the objects of this type.
     
-    def __init__(self, name= None, maxNumIter= 10, convergenceTestTol= 1e-9, printFlag= 0):
+    def __init__(self, name= None, maxNumIter= 10, convergenceTestTol= 1e-9, printFlag= 0, numSteps= 1):
         ''' Constructor.
 
         :param name: identifier for the solution procedure.
         :param maxNumIter: maximum number of iterations (defauts to 10)
         :param convergenceTestTol: convergence tolerance (defaults to 1e-9)
         :param printFlag: if not zero print convergence results on each step.
+        :param numSteps: number of steps to use in the analysis (useful only when loads are variable in time).
         '''
         SolutionProcedure._counter += 1
         self.id = SolutionProcedure._counter
@@ -82,6 +84,7 @@ class SolutionProcedure(object):
         self.convergenceTestTol= convergenceTestTol
         self.maxNumIter= maxNumIter
         self.printFlag= printFlag
+        self.numSteps= numSteps
         
     def clear(self):
         ''' Wipe out the solution procedure.'''
@@ -97,7 +100,8 @@ class SolutionProcedure(object):
         :param prb: XC finite element problem.
         :param numberingMethod: numbering method (plain or reverse Cuthill-McKee algorithm).
         '''
-        self.solu= prb.getSoluProc
+        self.feProblem= prb
+        self.solu= self.feProblem.getSoluProc
         self.solCtrl= self.solu.getSoluControl
         solModels= self.solCtrl.getModelWrapperContainer
         modelWrapperName= self.getModelWrapperName()
@@ -177,7 +181,29 @@ class SolutionProcedure(object):
         :param analysisType: type of the analysis to perform.
         '''
         self.analysis= self.solu.newAnalysis(analysisType, self.getSolutionStrategyName(),"")
-                                    
+
+    def solve(self):
+        ''' Runs the analysis.'''
+        return self.analysis.analyze(self.numSteps)
+
+    def resetLoadCase(self):
+        ''' Remove previous load from the domain.'''
+        preprocessor= self.feProblem.getPreprocessor
+        preprocessor.resetLoadCase() # Remove previous loads.
+        preprocessor.getDomain.revertToStart() # Revert to initial state.
+        
+    def solveComb(self,combName):
+        ''' Obtains the solution for the combination argument.
+
+        :param combName: name of the combination to obtain the response for.
+        '''
+        self.resetLoadCase() # Remove previous loads.
+        preprocessor= self.feProblem.getPreprocessor
+        preprocessor.getLoadHandler.addToDomain(combName) # Add comb. loads.
+        analOk= self.solve()
+        preprocessor.getLoadHandler.removeFromDomain(combName) # Remove comb.
+        # print("Combination: ",combName," solved.\n")
+        return analOk
 
 #Typical solution procedures.
 
@@ -186,7 +212,7 @@ class SimpleStaticLinear(SolutionProcedure):
     ''' Return a linear static solution algorithm
         with a penalty constraint handler.
     '''
-    def __init__(self, prb, name= None, maxNumIter= 10, convergenceTestTol= 1e-9, printFlag= 0):
+    def __init__(self, prb, name= None, maxNumIter= 10, convergenceTestTol= 1e-9, printFlag= 0, numSteps= 1):
         ''' Constructor.
 
         :param prb: XC finite element problem.
@@ -194,8 +220,9 @@ class SimpleStaticLinear(SolutionProcedure):
         :param maxNumIter: maximum number of iterations (defauts to 10)
         :param convergenceTestTol: convergence tolerance (defaults to 1e-9)
         :param printFlag: if not zero print convergence results on each step.
+        :param numSteps: number of steps to use in the analysis (useful only when loads are variable in time).
         '''
-        super(SimpleStaticLinear,self).__init__(name, maxNumIter, convergenceTestTol, printFlag)
+        super(SimpleStaticLinear,self).__init__(name, maxNumIter, convergenceTestTol, printFlag, numSteps)
         modelWrapperName= self.defineModelWrapper(prb, numberingMethod= 'rcm')
         self.defineConstraintHandler('penalty')
         self.defineSolutionAlgorithm(solAlgType= 'linear_soln_algo', integratorType= 'load_control_integrator', convTestType= None)
@@ -212,7 +239,7 @@ class SimpleLagrangeStaticLinear(SolutionProcedure):
     ''' Linear static solution algorithm
         with a Lagrange constraint handler.
     '''
-    def __init__(self, prb, name= None, maxNumIter= 10, convergenceTestTol= 1e-9, printFlag= 0):
+    def __init__(self, prb, name= None, maxNumIter= 10, convergenceTestTol= 1e-9, printFlag= 0, numSteps= 1):
         ''' Constructor.
 
         :param prb: XC finite element problem.
@@ -220,8 +247,9 @@ class SimpleLagrangeStaticLinear(SolutionProcedure):
         :param maxNumIter: maximum number of iterations (defauts to 10)
         :param convergenceTestTol: convergence tolerance (defaults to 1e-9)
         :param printFlag: if not zero print convergence results on each step.
+        :param numSteps: number of steps to use in the analysis (useful only when loads are variable in time).
         '''
-        super(SimpleLagrangeStaticLinear,self).__init__(name, maxNumIter, convergenceTestTol, printFlag)
+        super(SimpleLagrangeStaticLinear,self).__init__(name, maxNumIter, convergenceTestTol, printFlag, numSteps)
         modelWrapperName= self.defineModelWrapper(prb, numberingMethod= 'rcm')
         self.defineConstraintHandler('lagrange')
         self.defineSolutionAlgorithm(solAlgType= 'linear_soln_algo', integratorType= 'load_control_integrator', convTestType= None)
@@ -232,7 +260,7 @@ class SimpleTransformationStaticLinear(SolutionProcedure):
     ''' Linear static solution algorithm with a 
         transformation constraint handler.
     '''
-    def __init__(self, prb, name= None, maxNumIter= 10, convergenceTestTol= 1e-9, printFlag= 0):
+    def __init__(self, prb, name= None, maxNumIter= 10, convergenceTestTol= 1e-9, printFlag= 0, numSteps= 1):
         ''' Constructor.
 
         :param prb: XC finite element problem.
@@ -240,8 +268,9 @@ class SimpleTransformationStaticLinear(SolutionProcedure):
         :param maxNumIter: maximum number of iterations (defauts to 10)
         :param convergenceTestTol: convergence tolerance (defaults to 1e-9)
         :param printFlag: if not zero print convergence results on each step.
+        :param numSteps: number of steps to use in the analysis (useful only when loads are variable in time).
         '''
-        super(SimpleTransformationStaticLinear,self).__init__(name, maxNumIter, convergenceTestTol, printFlag)
+        super(SimpleTransformationStaticLinear,self).__init__(name, maxNumIter, convergenceTestTol, printFlag, numSteps)
         modelWrapperName= self.defineModelWrapper(prb, numberingMethod= 'rcm')
         self.defineConstraintHandler('transformation')
         self.defineSolutionAlgorithm(solAlgType= 'linear_soln_algo', integratorType= 'load_control_integrator', convTestType= None)
@@ -253,7 +282,7 @@ class PlainNewtonRaphson(SolutionProcedure):
     ''' Newton-Raphson solution algorithm with a 
         plain constraint handler.
     '''
-    def __init__(self, prb, name= None, maxNumIter= 10, convergenceTestTol= 1e-9, printFlag= 0):
+    def __init__(self, prb, name= None, maxNumIter= 10, convergenceTestTol= 1e-9, printFlag= 0, numSteps= 1):
         ''' Constructor.
 
         :param prb: XC finite element problem.
@@ -261,8 +290,9 @@ class PlainNewtonRaphson(SolutionProcedure):
         :param maxNumIter: maximum number of iterations (defauts to 10)
         :param convergenceTestTol: convergence tolerance (defaults to 1e-9)
         :param printFlag: if not zero print convergence results on each step.
+        :param numSteps: number of steps to use in the analysis (useful only when loads are variable in time).
         '''
-        super(PlainNewtonRaphson,self).__init__(name, maxNumIter, convergenceTestTol, printFlag)
+        super(PlainNewtonRaphson,self).__init__(name, maxNumIter, convergenceTestTol, printFlag, numSteps)
         modelWrapperName= self.defineModelWrapper(prb, numberingMethod= 'simple')
         self.defineConstraintHandler('plain')
         self.defineSolutionAlgorithm(solAlgType= 'newton_raphson_soln_algo', integratorType= 'load_control_integrator', convTestType= 'norm_unbalance_conv_test')
@@ -279,7 +309,7 @@ class PlainNewtonRaphsonBandGen(SolutionProcedure):
         plain constraint handler and a band general
         SOE solver.
     '''
-    def __init__(self, prb, name= None, maxNumIter= 10, convergenceTestTol= 1e-9, printFlag= 0):
+    def __init__(self, prb, name= None, maxNumIter= 10, convergenceTestTol= 1e-9, printFlag= 0, numSteps= 1):
         ''' Constructor.
 
         :param prb: XC finite element problem.
@@ -287,8 +317,9 @@ class PlainNewtonRaphsonBandGen(SolutionProcedure):
         :param maxNumIter: maximum number of iterations (defauts to 10)
         :param convergenceTestTol: convergence tolerance (defaults to 1e-9)
         :param printFlag: if not zero print convergence results on each step.
+        :param numSteps: number of steps to use in the analysis (useful only when loads are variable in time).
         '''
-        super(PlainNewtonRaphsonBandGen,self).__init__(name, maxNumIter, convergenceTestTol, printFlag)
+        super(PlainNewtonRaphsonBandGen,self).__init__(name, maxNumIter, convergenceTestTol, printFlag, numSteps)
         modelWrapperName= self.defineModelWrapper(prb, numberingMethod= 'simple')
         self.defineConstraintHandler('plain')
         self.defineSolutionAlgorithm(solAlgType= 'newton_raphson_soln_algo', integratorType= 'load_control_integrator', convTestType= 'norm_unbalance_conv_test')
@@ -303,7 +334,7 @@ def plain_newton_raphson_band_gen(prb, mxNumIter= 10):
 class PenaltyNewtonRaphson(SolutionProcedure):
     ''' Return a static solution procedure with a Newton Raphson algorithm
         and a penalty constraint handler.'''
-    def __init__(self, prb, name= None, maxNumIter= 10, convergenceTestTol= 1e-9, printFlag= 0):
+    def __init__(self, prb, name= None, maxNumIter= 10, convergenceTestTol= 1e-9, printFlag= 0, numSteps= 1):
         ''' Constructor.
 
         :param prb: XC finite element problem.
@@ -311,8 +342,9 @@ class PenaltyNewtonRaphson(SolutionProcedure):
         :param maxNumIter: maximum number of iterations (defauts to 10)
         :param convergenceTestTol: convergence tolerance (defaults to 1e-9)
         :param printFlag: if not zero print convergence results on each step.
+        :param numSteps: number of steps to use in the analysis (useful only when loads are variable in time).
         '''
-        super(PenaltyNewtonRaphson,self).__init__(name, maxNumIter, convergenceTestTol, printFlag)
+        super(PenaltyNewtonRaphson,self).__init__(name, maxNumIter, convergenceTestTol, printFlag, numSteps)
         modelWrapperName= self.defineModelWrapper(prb, numberingMethod= 'rcm')
         self.defineConstraintHandler('penalty')
         self.defineSolutionAlgorithm(solAlgType= 'newton_raphson_soln_algo', integratorType= 'load_control_integrator', convTestType= 'norm_unbalance_conv_test')
@@ -334,7 +366,7 @@ class PlainStaticModifiedNewton(SolutionProcedure):
     ''' Static solution procedure with a modified Newton
         solution algorithm with a plain constraint handler.
     '''
-    def __init__(self, prb, name= None, maxNumIter= 10, convergenceTestTol= 1e-9, printFlag= 0):
+    def __init__(self, prb, name= None, maxNumIter= 10, convergenceTestTol= 1e-9, printFlag= 0, numSteps= 1):
         ''' Constructor.
 
         :param prb: XC finite element problem.
@@ -342,8 +374,9 @@ class PlainStaticModifiedNewton(SolutionProcedure):
         :param maxNumIter: maximum number of iterations (defauts to 10)
         :param convergenceTestTol: convergence tolerance (defaults to 1e-9)
         :param printFlag: if not zero print convergence results on each step.
+        :param numSteps: number of steps to use in the analysis (useful only when loads are variable in time).
         '''
-        super(PlainStaticModifiedNewton,self).__init__(name, maxNumIter, convergenceTestTol, printFlag)
+        super(PlainStaticModifiedNewton,self).__init__(name, maxNumIter, convergenceTestTol, printFlag, numSteps)
         modelWrapperName= self.defineModelWrapper(prb, numberingMethod= 'simple')
         self.defineConstraintHandler('plain')
         self.maxNumIter= 150 #Make this configurable
@@ -364,7 +397,7 @@ def plain_static_modified_newton(prb, mxNumIter= 10, convergenceTestTol= .01):
 class PenaltyModifiedNewton(SolutionProcedure):
     ''' Static solution procedure with a modified Newton algorithm
         and a penalty constraint handler.'''
-    def __init__(self, prb, name= None, maxNumIter= 150, convergenceTestTol= 1e-9, printFlag= 0):
+    def __init__(self, prb, name= None, maxNumIter= 150, convergenceTestTol= 1e-9, printFlag= 0, numSteps= 1):
         ''' Constructor.
 
         :param prb: XC finite element problem.
@@ -372,8 +405,9 @@ class PenaltyModifiedNewton(SolutionProcedure):
         :param maxNumIter: maximum number of iterations (defauts to 10)
         :param convergenceTestTol: convergence tolerance (defaults to 1e-9)
         :param printFlag: if not zero print convergence results on each step.
+        :param numSteps: number of steps to use in the analysis (useful only when loads are variable in time).
         '''
-        super(PenaltyModifiedNewton,self).__init__(name, maxNumIter, convergenceTestTol, printFlag)
+        super(PenaltyModifiedNewton,self).__init__(name, maxNumIter, convergenceTestTol, printFlag, numSteps)
         modelWrapperName= self.defineModelWrapper(prb, numberingMethod= 'rcm')
         self.defineConstraintHandler('penalty')
         self.defineSolutionAlgorithm(solAlgType= 'modified_newton_soln_algo', integratorType= 'load_control_integrator', convTestType= 'relative_total_norm_disp_incr_conv_test')
@@ -399,7 +433,7 @@ class PlainKrylovNewton(SolutionProcedure):
     "Finite Element Modeling of Gusset Plate Failure Using Opensees"
     Andrew J. Walker. Oregon State University
     '''
-    def __init__(self, prb, name= None, maxNumIter= 150, convergenceTestTol= 1e-9, printFlag= 0, maxDim= 6):
+    def __init__(self, prb, name= None, maxNumIter= 150, convergenceTestTol= 1e-9, printFlag= 0, numSteps= 1, maxDim= 6):
         ''' Constructor.
 
         :param prb: XC finite element problem.
@@ -407,9 +441,10 @@ class PlainKrylovNewton(SolutionProcedure):
         :param maxNumIter: maximum number of iterations (defauts to 10)
         :param convergenceTestTol: convergence tolerance (defaults to 1e-9)
         :param printFlag: if not zero print convergence results on each step.
+        :param numSteps: number of steps to use in the analysis (useful only when loads are variable in time).
         :param maxDim: max number of iterations until the tangent is reformed and the acceleration restarts (default = 6).
         '''
-        super(PlainKrylovNewton,self).__init__(name, maxNumIter, convergenceTestTol, printFlag)
+        super(PlainKrylovNewton,self).__init__(name, maxNumIter, convergenceTestTol, printFlag, numSteps)
         modelWrapperName= self.defineModelWrapper(prb, numberingMethod= 'simple')
         self.defineConstraintHandler('plain')
         self.defineSolutionAlgorithm(solAlgType= 'krylov_newton_soln_algo', integratorType= 'load_control_integrator', convTestType= 'energy_inc_conv_test')
@@ -434,7 +469,7 @@ class PlainLinearNewmark(SolutionProcedure):
     ''' Return a linear Newmark solution algorithm
         with a plain constraint handler.
     '''
-    def __init__(self, prb, name= None, maxNumIter= 10, convergenceTestTol= 1e-9, printFlag= 0):
+    def __init__(self, prb, name= None, maxNumIter= 10, convergenceTestTol= 1e-9, printFlag= 0, numSteps= 1):
         ''' Constructor.
 
         :param prb: XC finite element problem.
@@ -442,8 +477,9 @@ class PlainLinearNewmark(SolutionProcedure):
         :param maxNumIter: maximum number of iterations (defauts to 10)
         :param convergenceTestTol: convergence tolerance (defaults to 1e-9)
         :param printFlag: if not zero print convergence results on each step.
+        :param numSteps: number of steps to use in the analysis (useful only when loads are variable in time).
         '''
-        super(PlainLinearNewmark,self).__init__(name, maxNumIter, convergenceTestTol, printFlag)
+        super(PlainLinearNewmark,self).__init__(name, maxNumIter, convergenceTestTol, printFlag, numSteps)
         modelWrapperName= self.defineModelWrapper(prb, numberingMethod= 'simple')
         self.defineConstraintHandler('plain')
         self.defineSolutionAlgorithm(solAlgType= 'linear_soln_algo', integratorType= 'newmark_integrator', convTestType= None)
@@ -453,7 +489,7 @@ class PlainLinearNewmark(SolutionProcedure):
 class PenaltyNewmarkNewtonRapshon(SolutionProcedure):
     ''' Newmark solution procedure with a Newton Raphson algorithm
         and a penalty constraint handler.'''
-    def __init__(self, prb, name= None, maxNumIter= 10, convergenceTestTol= 1e-9, printFlag= 0):
+    def __init__(self, prb, name= None, maxNumIter= 10, convergenceTestTol= 1e-9, printFlag= 0, numSteps= 1):
         ''' Constructor.
 
         :param prb: XC finite element problem.
@@ -461,8 +497,9 @@ class PenaltyNewmarkNewtonRapshon(SolutionProcedure):
         :param maxNumIter: maximum number of iterations (defauts to 10)
         :param convergenceTestTol: convergence tolerance (defaults to 1e-9)
         :param printFlag: if not zero print convergence results on each step.
+        :param numSteps: number of steps to use in the analysis (useful only when loads are variable in time).
         '''
-        super(PenaltyNewmarkNewtonRapshon,self).__init__(name, maxNumIter, convergenceTestTol, printFlag)
+        super(PenaltyNewmarkNewtonRapshon,self).__init__(name, maxNumIter, convergenceTestTol, printFlag, numSteps)
         modelWrapperName= self.defineModelWrapper(prb, numberingMethod= 'rcm')
         self.defineConstraintHandler('penalty', alphaSP= 1.0e18, alphaMP= 1.0e18)
         self.defineSolutionAlgorithm(solAlgType= 'newton_raphson_soln_algo', integratorType= 'newmark_integrator', convTestType= 'norm_disp_incr_conv_test')
@@ -561,26 +598,21 @@ def ill_conditioning_analysis(prb):
     return solProc.analysis
 
 ## Utility functions
-def solveComb(preprocessor,nmbComb,analysis,numSteps):
-    preprocessor.resetLoadCase()
-    preprocessor.getLoadHandler.addToDomain(nmbComb)
-    analOk= analysis.analyze(numSteps)
-    preprocessor.getLoadHandler.removeFromDomain(nmbComb)
-    # print("Resuelta combinación: ",nmbComb,"\n")
 
-def solveStaticLinearComb(preprocessor,nmbComb,analysis,numSteps):
+def solveStaticLinearComb(combName,solutionProcedure):
     print("DEPRECATED; use solveComb")
-    solveComb(preprocessor,nmbComb,analysis,numSteps)
+    solutionProcedure.solveComb(combName)
 
-def solveCombEstat2ndOrderLin(preprocessor,nmbComb,analysis,numSteps):
-    preprocessor.resetLoadCase()
-    preprocessor.getLoadHandler.addToDomain(nmbComb)
-    analOk= analysis.analyze(numSteps)
-    analOk= analysis.analyze(numSteps)
-    preprocessor.getLoadHandler.removeFromDomain(nmbComb)
-    # print("Resuelta combinación: ",nmbComb,"\n")
+def solveCombEstat2ndOrderLin(combName,solutionProcedure):
+    solutionProcedure.resetLoadCase()
+    preprocessor= solutionProcedure.feProblem.getPreprocessor
+    preprocessor.getLoadHandler.addToDomain(combName)
+    analOk= solutionProcedure.solve()
+    analOk= solutionProcedure.solve()
+    preprocessor.getLoadHandler.removeFromDomain(combName)
+    # print("Resuelta combinación: ",combName,"\n")
 
-def solveStaticNoLinCase(nmbComb):
+def solveStaticNoLinCase(combName):
     print("DEPRECATED; use use solveComb")
-    solveComb(preprocessor,nmbComb,analysis,numSteps)
+    solveComb(preprocessor,combName,analysis,numSteps)
 

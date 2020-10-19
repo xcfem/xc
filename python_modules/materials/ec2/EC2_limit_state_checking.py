@@ -119,7 +119,7 @@ class CrackStraightController(lscb.LimitStateControllerBase):
             e.setProp('ResF',R)   #vector resisting force
             e.setProp('s_rmax',s_rmax)  #maximum crack distance
         self.preprocessor.getDomain.revertToStart()
-        predefined_solutions.solveComb(self.preprocessor,nmbComb,self.analysis,1)
+        self.solutionProcedure.solveComb(nmbComb)
         for e in elements:
             sct=e.getSection()
             rfset=sct.getFiberSets()["reinfSetFb"]

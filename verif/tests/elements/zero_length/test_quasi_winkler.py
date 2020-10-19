@@ -112,7 +112,7 @@ modelSpace.addLoadCaseToDomain(lp0.name)
 
 # Solution procedure
 solProc= predefined_solutions.PlainNewtonRaphsonBandGen(feProblem, convergenceTestTol= 1e-2)
-predefined_solutions.solveComb(preprocessor, "0",solProc.analysis,10)
+solProc.solveComb("0")
 
 Lmedios= L/2
 EIbeta3= F/(E*I*pow(beta,3))

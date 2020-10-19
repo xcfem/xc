@@ -138,7 +138,7 @@ class RCMaterialDistribution(object):
             self.sectionDefinition.calcInteractionDiagrams(preprocessor,matDiagType)
         else:
             self.sectionDefinition.calcInteractionDiagrams(preprocessor,matDiagType,'NMy')
-        limitStateData.controller.analysis= limitStateData.controller.analysisToPerform(feProblem)
+        limitStateData.controller.solutionProcedure= limitStateData.controller.solutionProcedureType(feProblem)
         phantomModel= phm.PhantomModel(preprocessor,self)
         result= phantomModel.runChecking(limitStateData,outputCfg)
         return (feProblem, result)

@@ -133,13 +133,12 @@ def procesResultVerif(nmbComb):
 
 NMin1= 1e9
 NMin2= 1e9
-numSteps= 1
 
 # Solve.
-analysis= predefined_solutions.simple_static_linear(feProblem)
+solProc= predefined_solutions.SimpleStaticLinear(feProblem)
 
 for key in combs.getKeys():
-  predefined_solutions.solveComb(preprocessor, key,analysis,numSteps)
+  analOk= solProc.solveComb(key)
   procesResultVerif(key)
 
 NMin1Teor= 440.7e3
