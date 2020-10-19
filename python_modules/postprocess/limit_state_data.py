@@ -167,7 +167,8 @@ class LimitStateData(object):
         internalForcesDict= dict()
         for key in loadCombinations.getKeys():
             comb= loadCombinations[key]
-            feProblem.getPreprocessor.resetLoadCase()
+            preprocessor.resetLoadCase()
+            preprocessor.getDomain.revertToStart()
             comb.addToDomain() #Combination to analyze.
             #Solution
             result= solutionProcedure.solve()
