@@ -17,18 +17,22 @@ from postprocess import get_reactions
 from solution import predefined_solutions
 import uuid
 
+defaultSolutionProcedureType= predefined_solutions.SimpleStaticLinear
+
 class PredefinedSpace(object):
-    def __init__(self,nodes,dimSpace,numDOFs):
+    def __init__(self,nodes,dimSpace,numDOFs, solProcType= defaultSolutionProcedureType):
         '''Defines the dimension of the space and the number 
          of DOFs for each node.
 
          :param nodes: preprocessor nodes handler
          :param dimSpace: dimension of the space (1, 2 or 3)
          :param numDOFs: number of degrees of freedom for each node.
+         :param solProcType: type of the solution procedure.
         '''
         self.setPreprocessor(nodes.getPreprocessor)
         nodes.dimSpace= dimSpace
         nodes.numDOFs= numDOFs
+        self.solutionProcedureType= solProcType
         self.analysis= None
         self.fixedNodesTags= set()
 
@@ -478,11 +482,19 @@ class PredefinedSpace(object):
         for e in xcSet.getElements:
             e.createInertiaLoad(gravityVector)
 
+    def setSolutionProcedureType(self, solutionProcedureType):
+        ''' Set the solution procedure that will be used
+            to solve the finite element problem.
+
+        :param solutionProcedureType: type of the solution procedure.
+        '''
+        self.solutionProcedureType= solutionProcedureType
+
     def analyze(self, numSteps= 1, calculateNodalReactions= False, includeInertia= False):
         ''' Triggers the analysis of the model with a simple static linear
             solution.
 
-        :param numSteps: number of analysis steps.
+        :param numSteps: number of analysis steps (only useful for loads that vary with time).
         :param calculateNodalReactions: if true calculate reactions at
                                         nodes.
         :param includeInertia: if true calculate reactions including inertia
@@ -491,7 +503,8 @@ class PredefinedSpace(object):
         result= 0
         problem= self.getProblem()
         if(not self.analysis):
-            self.analysis= predefined_solutions.simple_static_linear(problem)
+            solProc= self.solutionProcedureType(problem)
+            self.analysis= solProc.analysis
         result= self.analysis.analyze(numSteps)
         if(calculateNodalReactions):
             self.preprocessor.getNodeHandler.calculateNodalReactions(includeInertia,1e-7)
