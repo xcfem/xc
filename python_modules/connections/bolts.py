@@ -37,7 +37,7 @@ class BoltBase(object):
         return 'M'+str(self.diameter*1e3)[0:2]
 
     def getArea(self):
-        ''' Return the area of the anchor rod.
+        ''' Return the area of the bolt.
         '''
         return math.pi*(self.diameter/2.0)**2
     
