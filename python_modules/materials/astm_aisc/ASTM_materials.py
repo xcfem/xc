@@ -318,6 +318,19 @@ class BoltFastener(bolts.BoltBase):
         '''
         return 0.75*self.getNominalShearStrength(threadsExcluded)
 
+    def getNumberOfBoltsForShear(self, shearForce, numberOfRows= 1, threadsExcluded= False):
+        ''' Estimate the number of bolts required for resisting the
+            shear force.
+
+        :param shearForce: shear force to be resisted by the bolts.
+        :param numberOfRows: number of rows of the bolt array.
+        :param threadsExcluded: true if threads and transition area of 
+                                shank are excluded from the shear plane.
+        '''
+        designShear= self.getDesignShearStrength(threadsExcluded)
+        n= shearForce/designShear
+        return math.ceil(n/numberOfRows)*numberOfRows
+
     def __str__(self):
         return self.getName()
     
@@ -429,10 +442,10 @@ class BoltedPlate(bp.BoltedPlateBase):
         :param Pd: design value of the force to resist.
         '''
         # Yielding in the gross section.
-        minThicknessA= Pd/0.9/self.steelType.fy/self.width
+        minThicknessFy= Pd/0.9/self.steelType.getYt()/self.steelType.fy/self.width
         # Tension fracture in the net section.
-        minThicknessB= Pd/0.75/self.steelType.fu/self.getNetWidth()
-        return max(minThicknessA,minThicknessB)
+        minThicknessFu= Pd/0.75/self.steelType.fu/self.getNetWidth()
+        return max(minThicknessFy,minThicknessFu)
 
 def readBoltedPlateFromJSONFile(inputFileName):
     ''' Read bolted plate object from a JSON file.'''
