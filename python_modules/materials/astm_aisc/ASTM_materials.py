@@ -493,6 +493,26 @@ class BoltedPlate(bp.BoltedPlateBase):
         :param otherThickness: thickness of the other part to weld.
         '''
         return getFilletWeldMaximumLegSheets(self.thickness, otherThickness)
+    
+    def getNetWidth(self):
+        ''' Return the net area of the base plate according to clause
+        B.4.3b of AISC 360-16.
+        '''
+        diameterIncrement= 2e-3
+        retval= super(BoltedPlate,self).getNetWidth(diameterIncrement)
+        return retval
+    
+    def getMinThickness(self, Pd):
+        ''' Return the minimum thickness of the plate
+            to resist the force argument.
+
+        :param Pd: design value of the force to resist.
+        '''
+        # Yielding in the gross section.
+        minThicknessA= Pd/0.9/self.steelType.fy/self.width
+        # Tension fracture in the net section.
+        minThicknessB= Pd/0.75/self.steelType.fu/self.getNetWidth()
+        return max(minThicknessA,minThicknessB)
 
 def readBoltedPlateFromJSONFile(inputFileName):
     ''' Read bolted plate object from a JSON file.'''

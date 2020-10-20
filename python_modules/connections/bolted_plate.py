@@ -63,11 +63,14 @@ class BoltArrayBase(object):
         minEdgeDist= self.bolt.getMinimumEdgeDistanceJ3_4M()
         return 2.0*minEdgeDist+self.dist*(self.nCols-1)
 
-    def getNetWidth(self, plateWidth):
+    def getNetWidth(self, plateWidth, diameterIncrement):
         ''' Return the net width due to the bolt holes.
 
         :param plateWidth: width of the bolted plate.
+        :param diameterIncrement: increment of the diameter with respect
+                                  the nominal diameter.
         '''
+        designDiameter= self.bolt.getNominalHoleDiameter()+diameterIncrement
         return plateWidth-self.nRows*self.bolt.getNominalHoleDiameter()
 
     def getDesignShearStrength(self, doubleShear= False):
@@ -224,25 +227,17 @@ class BoltedPlateBase(object):
         self.computeDimensions()
         
             
-    def getNetWidth(self):
-        ''' Return the net width due to the bolt holes. '''
-        return self.boltArray.getNetWidth(self.width)        
+    def getNetWidth(self, diameterIncrement):
+        ''' Return the net width due to the bolt holes.
+
+        :param diameterIncrement: increment of the diameter with respect
+                                  the nominal diameter.
+        '''
+        return self.boltArray.getNetWidth(self.width, diameterIncrement)        
             
     def getPlateDimensions(self):
         ''' Return the dimensions of the plate.'''
         return (self.width, self.length, self.thickness)
-
-    def getMinThickness(self, Pd):
-        ''' Return the minimum thickness of the plate
-            to resist the force argument.
-
-        :param Pd: design value of the force to resist.
-        '''
-        # Yielding in the gross section.
-        minThicknessA= Pd/0.9/self.steelType.fy/self.width
-        # Tension fracture in the net section.
-        minThicknessB= Pd/0.75/self.steelType.fu/self.getNetWidth()
-        return max(minThicknessA,minThicknessB)
 
     def checkThickness(self, Pd):
         ''' Check plate thickness; return a number < 1 if the 
