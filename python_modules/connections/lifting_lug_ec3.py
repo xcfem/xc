@@ -1,6 +1,9 @@
 # -*- coding: utf-8 -*-
 '''Design of a lifting lug according to clause 3.13 of EC3 part 1_8.'''
 
+from __future__ import division
+from __future__ import print_function
+
 __author__= "Luis C. Pérez Tato (LCPT)"
 __copyright__= "Copyright 2016, LCPT"
 __license__= "GPL"

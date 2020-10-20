@@ -1447,7 +1447,6 @@ class HSSShape(structural_steel.QHShape):
         if(not majorAxis):
             I= self.get('Iy')        
         return I+A*dna**2-I_neg-A_removed*d_neg**2
-
     
     def getEffectiveSectionModulus(self, majorAxis= True):
         ''' Return the effective section modulus determined 

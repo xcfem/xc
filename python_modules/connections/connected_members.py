@@ -5,6 +5,12 @@
 from __future__ import division
 from __future__ import print_function
 
+__author__= "Luis C. Pérez Tato (LCPT) , Ana Ortega (AO_O) "
+__copyright__= "Copyright 2020, LCPT, AO_O"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@ciccp.es, ana.ortega@ciccp.es "
+
 import enum
 import math
 import ezdxf
