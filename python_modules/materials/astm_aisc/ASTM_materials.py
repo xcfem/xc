@@ -34,20 +34,34 @@ class ASTMSteel(steel_base.BasicSteel):
     :ivar fy: yield stress (defaults to 250e6 Pa)
     :ivar fu: ultimate tensile strength (defaults to 400e6 Pa)
     :ivar gammaM: partial factor (defaults to 1.0)
+    :ivar Rt: Ratio of the expected tensile strength to the 
+              specified minimum tensile strength, Fu.
+              See table A3.1 of AISC 341 seismic provisions.
+    :ivar Ry: Ratio of the expected yield stress to the specified
+              minimum yield stress, Fy.
+              See table A3.1 of AISC 341 seismic provisions.
     '''
-    def __init__(self, name= None, fy= 250e6, fu= 400e6, gammaM= 1.0):
+    def __init__(self, name= None, fy= 250e6, fu= 400e6, gammaM= 1.0, Rt= None, Ry= None):
         ''' Constructor.
 
         :param name: steel identifier.
         :param fy: yield stress (defaults to 250e6 Pa)
         :param fu: ultimate tensile strength (defaults to 400e6 Pa)
         :param gammaM: partial factor (defaults to 1.0)
+        :param Rt: Ratio of the expected tensile strength to the 
+                  specified minimum tensile strength, Fu.
+                  See table A3.1 of AISC 341 seismic provisions.
+        :param Ry: Ratio of the expected yield stress to the specified
+                  minimum yield stress, Fy.
+                  See table A3.1 of AISC 341 seismic provisions.
         '''
         super(ASTMSteel,self).__init__(200e9,0.3,fy,fu,gammaM)
         if(name):
             self.name= name
         else:
             self.name= None
+        self.Rt= Rt
+        self.Ry= Ry
 
     def getDict(self):
         ''' Put member values in a dictionary.'''
@@ -74,14 +88,24 @@ class ASTMSteel(steel_base.BasicSteel):
         retval= min(retval, 1.2)
         return retval
 
-A36= ASTMSteel('A36', fy= 250e6, fu=400e6, gammaM= 1.0)
-A529= ASTMSteel('A529', fy=290e6, fu=414e6, gammaM= 1.0)
-A572= ASTMSteel('A572', fy=345e6, fu=450e6, gammaM= 1.0)
-A53= ASTMSteel('A53', fy=240e6, fu=414e6, gammaM= 1.0)
-A992= ASTMSteel('A992', fy=345e6, fu=450e6, gammaM= 1.0)
-A500= ASTMSteel('A500', fy=315e6, fu=400e6, gammaM= 1.0)
-A307= ASTMSteel('A307', fy=245e6, fu=390e6, gammaM= 1.0)
-A325= ASTMSteel('A325', fy=660e6, fu= 830e6, gammaM= 1.0)
+    def getYt(self):
+        ''' Return the Yt factor to use in clause F13.1 of AISC 360-16
+            to obtain the strength reduction for members with holes
+            in the tension flange.'''
+        retval= 1.0
+        tmp= self.fy/self.fu
+        if(tmp>=0.8):
+            retval= 1.1
+        return retval
+
+A36= ASTMSteel('A36', fy= 250e6, fu=400e6, gammaM= 1.0, Rt= 1.2, Ry= 1.5)
+A529= ASTMSteel('A529', fy= 290e6, fu= 414e6, gammaM= 1.0, Rt= 1.2, Ry= 1.2)
+A572= ASTMSteel('A572', fy= 345e6, fu= 450e6, gammaM= 1.0, Rt= 1.1, Ry= 1.1)
+A53= ASTMSteel('A53', fy= 240e6, fu= 414e6, gammaM= 1.0, Rt= 1.2, Ry= 1.5)
+A992= ASTMSteel('A992', fy= 345e6, fu= 450e6, gammaM= 1.0, Rt= 1.1, Ry= 1.1)
+A500= ASTMSteel('A500', fy= 315e6, fu= 400e6, gammaM= 1.0, Rt= 1.3, Ry= 1.4)
+A307= ASTMSteel('A307', fy= 245e6, fu= 390e6, gammaM= 1.0)
+A325= ASTMSteel('A325', fy= 660e6, fu= 830e6, gammaM= 1.0)
 
 ksi= 6.89475908677537e6
 A354BC= ASTMSteel('A354BC', fy=109*ksi, fu= 125*ksi, gammaM= 1.0)
@@ -403,6 +427,26 @@ M24= BoltFastener(24e-3)
 M27= BoltFastener(27e-3)
 M30= BoltFastener(30e-3)
 M36= BoltFastener(36e-3)
+
+# Standard bolt diameters
+standardBolts= [M16, M20, M22, M24, M27, M30, M36]
+
+def getBoltForHole(holeDiameter, tol= 0.5e-3):
+    ''' Return the bolt that fits in the hole diameter
+        argument.
+
+    :param holeDiamter: diameter of the hole.
+    :param tol: tolerance (defaults to 0.5 mm).
+    '''
+    retval= None
+    threshold= holeDiameter+tol
+    for b in standardBolts[::-1]:
+        holeDiameter= b.getNominalHoleDiameter()
+        if(holeDiameter<threshold):
+            retval= b
+            break
+    return retval
+     
 
 class BoltArray(bp.BoltArrayBase):
     ''' Bolt array the AISC/ASTM way.'''
@@ -928,6 +972,27 @@ class ASTMShape(object):
             e.setProp('chiLT',chiLT) #Lateral torsional buckling reduction factor.
             e.setProp('chiN',chiN) # Axial strength reduction factor.
             e.setProp('crossSection',self)
+
+    def getProbableMaxMomentAtPlasticHinge(self, majorAxis):
+        ''' Return the probable maximum moment at plastic hinge according
+            to clause 2.4.3 of AISC-358.'''
+        Mp= self.getPlasticMoment(majorAxis)
+        Cpr= self.steelType.getPeakConnectionStrengthFactor()
+        Ry= self.steelType.Ry
+        return Cpr*Ry*Mp
+        
+    def getFlangeMaximumBoltDiameter(self):
+        ''' Return the maximum bolt diameter to prevent beam flange 
+            tensile rupture according to equation 7.6-2M
+            of AISC 358-16.'''
+        bf_2= self.getFlangeWidth()/2.0
+        Fy= self.steelType.fy
+        Ry= self.steelType.Ry
+        Rt= self.steelType.Rt
+        Fu= self.steelType.fu
+        return bf_2*(1-Ry*Fy/(Rt*Fu))-3e-3
+    
+
             
 from materials.sections.structural_shapes import aisc_metric_shapes
 
@@ -1055,7 +1120,7 @@ class MemberConnection(buckling_base.MemberConnection):
             return bendingState.getLateralTorsionalBucklingModificationFactor()
 
 class ConnectedMember(object):
-    """C shape with ASTM 3 verification routines."""
+    '''Steel member with end connections with ASTM 3 verification routines.'''
     def __init__(self,shape,connection):
         ''' Constructor.
 
@@ -1110,15 +1175,29 @@ class ConnectedMember(object):
         cb= self.connection.getLateralTorsionalBucklingModificationFactor(bendingState)
         return self.shape.getLateralTorsionalBucklingLimit(Lb= self.connection.Lb, Cb= cb, majorAxis= True)
     
-    def getZNominalflexuralStrength(self, bendingState):
+    def getZNominalFlexuralStrength(self, bendingState, AfgAfnRatio= 1.0):
         ''' Return the nominal flexural strength
             around z axis.
 
 
-            :param bendingState: bending moments along the member.
+        :param bendingState: bending moments along the member.
+        :param AfgAfnRatio: value of gross area of tension flange calculated
+                            in accordance with the provisions of Section
+                            B4.3a of AISC 360-16 divided by the net area
+                            of tension flange calculated in accordance with
+                            the provisions of Section B4.3b. 
         '''
         cb= self.connection.getLateralTorsionalBucklingModificationFactor(bendingState)
-        return self.shape.getNominalFlexuralStrength(lateralUnbracedLength= self.connection.Lb, Cb= cb, majorAxis= True)
+        retval= self.shape.getNominalFlexuralStrength(lateralUnbracedLength= self.connection.Lb, Cb= cb, majorAxis= True)
+        if(AfgAfnRatio>1.0): # Holes in flange
+            Yt= self.shape.steelType.getYt()
+            Fu= self.shape.steelType.fu
+            if(Fu<self.steelType.fy*Yt*AfgAfnRatio):
+                Sx= self.get('Wyel')
+                Mn= Fu/AfgAfnRatio*Sx # Equation F13-1
+                retval= min(retval,Mn) 
+        return retval
+        
     def getYLateralTorsionalBucklingFlexuralStrength(self, bendingState):
         ''' Return the maximum flexural strength
             due to web local buckling according to
@@ -1129,7 +1208,7 @@ class ConnectedMember(object):
         cb= self.connection.getLateralTorsionalBucklingModificationFactor(bendingState)
         return self.shape.getLateralTorsionalBucklingLimit(Lb= self.connection.Lb, Cb= cb, majorAxis= False)
     
-    def getYNominalflexuralStrength(self, bendingState):
+    def getYNominalFlexuralStrength(self, bendingState):
         ''' Return the nominal flexural strength
             around z axis.
 
@@ -1138,7 +1217,7 @@ class ConnectedMember(object):
         cb= self.connection.getLateralTorsionalBucklingModificationFactor(bendingState)
         return self.shape.getNominalFlexuralStrength(lateralUnbracedLength= self.connection.Lb, Cb= cb, majorAxis= False)
     
-    def getCapacityFactor(self,Nd,Myd,Mzd,gammaC,bendingStateY,bendingStateZ):
+    def getCapacityFactor(self,Nd,Myd,Mzd,gammaC,bendingStateY,bendingStateZ, AfgAfnRatio= 1.0):
         ''' Return the capacity factor according to section
             H1 of AISC 360-16.
 
@@ -1150,11 +1229,16 @@ class ConnectedMember(object):
         :param Myd: design value for the bending moment around z axis.
         :param bendingStateY: y bending moments along the member.
         :param bendingStateZ: z bending moments along the member.
+        :param AfgAfnRatio: value of gross area of tension flange calculated
+                            in accordance with the provisions of Section
+                            B4.3a of AISC 360-16 divided by the net area
+                            of tension flange calculated in accordance with
+                            the provisions of Section B4.3b. 
         '''
         if(Nd<=0.0):
             Pn= self.getNominalCompressiveStrength()/gammaC
-            Mnz= self.getZNominalflexuralStrength(bendingStateZ)/gammaC
-            Mny= self.getYNominalflexuralStrength(bendingStateY)/gammaC
+            Mnz= self.getZNominalFlexuralStrength(bendingStateZ, AfgAfnRatio)/gammaC
+            Mny= self.getYNominalFlexuralStrength(bendingStateY)/gammaC
             ratioN= abs(Nd)/Pn
             Msum= (abs(Mzd)/Mnz+abs(Myd)/Mny)
             if(ratioN>=0.2):

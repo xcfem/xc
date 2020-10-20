@@ -335,6 +335,18 @@ class WShape(structural_steel.IShape):
         less the fillet at each flange (h in AISC tables).'''
         return self.get('d')
 
+    def getFlangeThickness(self):
+        ''' Return the thickness of the flange.'''
+        return self.get('tf')
+
+    def getFlangeWidth(self):
+        ''' Return the width of the flange.'''
+        return self.get('b')
+    
+    def getWebThickness(self):
+        ''' Return the thickness of the web.'''
+        return self.getWebThickness()
+    
     def getMetricName(self):
         '''Return the metric label from the US customary one.'''
         return getMetricLabel(self.name)
@@ -342,10 +354,10 @@ class WShape(structural_steel.IShape):
     def getContour(self):
         ''' Return the section contour.'''
         retval= geom.Polygon2d()
-        halfB= self.get('b')/2.0
+        halfB= self.getFlangeWidth()/2.0
         halfH= self.h()/2.0
-        tf= self.get('tf')
-        tw= self.get('tw')
+        tf= self.getFlangeThickness()
+        tw= self.getWebThickness()
         retval.appendVertex(geom.Pos2d(-halfB,-halfH))
         retval.appendVertex(geom.Pos2d(halfB,-halfH))
         retval.appendVertex(geom.Pos2d(halfB,-halfH+tf))
@@ -363,9 +375,9 @@ class WShape(structural_steel.IShape):
     
     def getMidLines(self):
         ''' Return the section mid-lines.'''
-        halfB= self.get('b')/2.0
+        halfB= self.getFlangeWidth()/2.0
         halfH= self.h()/2.0
-        tf2= self.get('tf')/2.0
+        tf2= self.getFlangeThickness()/2.0
         bottom= -halfH+tf2
         top= halfH-tf2
         s0= geom.Segment2d(geom.Pos2d(-halfB,bottom), geom.Pos2d(0.0,bottom)) #Bottom flange.
@@ -393,9 +405,9 @@ class WShape(structural_steel.IShape):
         :param org: origin point.
         :param extrusionVDir: extrusion direction vector.
         '''
-        halfB= self.get('b')/2.0
+        halfB= self.getFlangeWidth()/2.0
         halfH= self.h()/2.0
-        bottom= -halfH+self.get('tf')/2.0
+        bottom= -halfH+self.getFlangeThickness()/2.0
         p0= geom.Pos3d(org.x-halfB,org.y+bottom, org.z)
         p1= geom.Pos3d(org.x+halfB,org.y+bottom, org.z)
         p2= p0+extrusionVDir
@@ -407,9 +419,9 @@ class WShape(structural_steel.IShape):
         :param org: origin point.
         :param extrusionVDir: extrusion direction vector.
         '''
-        halfB= self.get('b')/2.0
+        halfB= self.getFlangeWidth()/2.0
         halfH= self.h()/2.0
-        top= halfH-self.get('tf')/2.0
+        top= halfH-self.getFlangeThickness()/2.0
         p0= geom.Pos3d(org.x-halfB,org.y+top, org.z)
         p1= geom.Pos3d(org.x+halfB,org.y+top, org.z)
         p2= p0+extrusionVDir
@@ -419,9 +431,9 @@ class WShape(structural_steel.IShape):
         ''' Return the point at the middle of the web
             and the flange in local coordinates.
         '''
-        halfB= self.get('b')/2.0
+        halfB= self.getFlangeWidth()/2.0
         halfH= self.h()/2.0
-        tf= self.get('tf')
+        tf= self.getFlangeThickness()
         tf2= tf/2.0 # Half flange thickness.
         # Base points (Down)
         bottom= -halfH+tf2
@@ -503,7 +515,7 @@ class WShape(structural_steel.IShape):
         for p in topFlangeB:
             self.topFlangeBId.append(retval.appendPoint(-1,p.x,p.y,p.z,labels))
         # Faces
-        tf= self.get('tf')
+        tf= self.getFlangeThickness()
         bottomFlange1= bte.BlockRecord(-1, 'face', [self.bottomFlangeAId[0],self.bottomFlangeAId[1],self.bottomFlangeBId[1],self.bottomFlangeBId[0]],labels+['bottom_flange1'], thk= tf, matId= self.steelType.name)
         retval.appendBlock(bottomFlange1)
         bottomFlange2= bte.BlockRecord(-1, 'face', [self.bottomFlangeAId[1],self.bottomFlangeAId[2],self.bottomFlangeBId[2],self.bottomFlangeBId[1]],labels+['bottom_flange2'], thk= tf, matId= self.steelType.name)
@@ -512,7 +524,7 @@ class WShape(structural_steel.IShape):
         retval.appendBlock(topFlange1)
         topFlange2= bte.BlockRecord(-1, 'face', [self.topFlangeAId[1],self.topFlangeAId[2],self.topFlangeBId[2],self.topFlangeBId[1]],labels+['top_flange2'], thk= tf, matId= self.steelType.name)
         retval.appendBlock(topFlange2)
-        web= bte.BlockRecord(-1, 'face', [self.bottomFlangeAId[1],self.topFlangeAId[1],self.topFlangeBId[1],self.bottomFlangeBId[1]],labels+['web'], thk= self.get('tw'), matId= self.steelType.name)
+        web= bte.BlockRecord(-1, 'face', [self.bottomFlangeAId[1],self.topFlangeAId[1],self.topFlangeBId[1],self.bottomFlangeBId[1]],labels+['web'], thk= self.getWebThickness(), matId= self.steelType.name)
         retval.faceBlocks= [bottomFlange1, bottomFlange2, topFlange1, topFlange2, web] # Dirty solution, I know (LCPT).
         retval.appendBlock(web)
 

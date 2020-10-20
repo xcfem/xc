@@ -40,11 +40,11 @@ Pn= member.getNominalCompressiveStrength()
 # Z axis bending
 Mz= Pd*0.05
 bStateZ= ASTM_materials.BendingState(Mmax= Mz,Ma= Mz, Mb= Mz, Mc= Mz)
-Mrz= member.getZNominalflexuralStrength(bStateZ)
+Mrz= member.getZNominalFlexuralStrength(bStateZ)
 # Y axis bending
 My= Pd*0.02
 bStateY= ASTM_materials.BendingState(Mmax= My,Ma= My, Mb= My, Mc= My)
-Mry= member.getYNominalflexuralStrength(bStateY)
+Mry= member.getYNominalFlexuralStrength(bStateY)
 
 
 # Capacity factor.
