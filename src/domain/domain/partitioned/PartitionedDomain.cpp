@@ -1050,12 +1050,14 @@ int XC::PartitionedDomain::commit(void)
       }
 
     // now we load balance if we have subdomains and a partitioner
+    /* turning off load balancing (Frank Mackenna 20201021)
     int numSubdomains= this->getNumSubdomains();
     if(numSubdomains != 0 && theDomainPartitioner != 0)
       {
         Graph &theSubGraphs= this->getSubdomainGraph();
         theDomainPartitioner->balance(theSubGraphs);
       }
+    */
     return 0;
   }
 
