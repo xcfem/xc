@@ -918,7 +918,12 @@ class ASTMShape(object):
 
     def setupULSControlVars(self,elems,sectionClass= 1, chiN=1.0, chiLT=1.0):
         '''For each element creates the variables
-           needed to check ultimate limit state criterion to be satisfied.'''
+           needed to check ultimate limit state criterion to be satisfied.
+
+           :param sectionClass: section classification compact, noncompact, slender or too slender.
+           :param chiN: axial load reduction reduction factor (default= 1.0).
+           :param chiLT: lateral buckling reduction factor (default= 1.0).
+        '''
         super(ASTMShape,self).setupULSControlVars(elems)
         for e in elems:
             e.setProp('sectionClass',sectionClass) #Cross section class.
