@@ -37,10 +37,23 @@ class VerifOutVars(object):
            meant to be calculated (defaults to 'N')
     '''
     def __init__(self,setCalc=None,appendToResFile='N',listFile='N',calcMeanCF='N'):
-        self.setCalc=setCalc
-        self.appendToResFile=appendToResFile
-        self.listFile=listFile
+        self.setCalc= setCalc
+        self.appendToResFile= appendToResFile
+        self.listFile= listFile
         self.calcMeanCF= calcMeanCF
+
+    def getCalcSetElements(self, preprocessor):
+        ''' Return the set of elements to be analyzed.
+
+        :param preprocessor: pre-processor for the XC finite element problem.
+        '''
+        retval= None
+        if(self.setCalc):
+            retval= self.setCalc.elements
+        else:
+            retval= preprocessor.getSets['total'].elements
+        return retval
+        
 
 class LimitStateData(object):
     ''' Data used when checking limit states.
@@ -198,7 +211,7 @@ class LimitStateData(object):
         '''
         retval=None
         if outputCfg.setCalc:
-            prep=outputCfg.setCalc.getPreprocessor
+            prep= outputCfg.setCalc.getPreprocessor
             intForcCombFileName= self.getInternalForcesFileName()
             self.controller.initControlVars(outputCfg.setCalc)
             self.controller.checkSetFromIntForcFile(intForcCombFileName,outputCfg.setCalc)
@@ -615,6 +628,8 @@ def calc_max_tension_axial_forces(setCalc,intForcCombFileName,outputFileName):
     among the load combinations for which internal-force results are stored in 
     intForcCombFileName. The maximum tension forces calculated are written to
     outputFileName file. 
+
+    :param setCalc: set of elements to be analyzed.
     '''
     f=open(outputFileName,"w")
     etags,combs,intForc=readIntForcesFile(intForcCombFileName,setCalc)
@@ -643,11 +658,13 @@ def calc_max_compression_axial_forces(setCalc,intForcCombFileName,outputFileName
     '''Calculate maximum compression forces for the elements included in setCalc 
     among the load combinations for which internal-force results are stored in 
     intForcCombFileName. The maximum tension forces calculated are written to
-    outputFileName file. 
+    outputFileName file.
+
+    :param setCalc: set of elements to be analyzed.
     '''
     f=open(outputFileName,"w")
     etags,combs,intForc=readIntForcesFile(intForcCombFileName,setCalc)
-    setName=setCalc.name
+    setName= setCalc.name
     for el in etags:
         #init compression axial forces
         maxNsect1,maxNsect2=(0.0,0.0)

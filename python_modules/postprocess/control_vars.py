@@ -105,6 +105,13 @@ class ControlVarsBase(object):
         retval+= '", CF=' + str(self.getCF())
         return retval
 
+    def getModuleImportString(self):
+        ''' Return the string to import the module where the control 
+            var is defined.'''
+        retval= 'from '+ self.__module__
+        retval+= ' import ' + self.__class__.__name__
+        return retval
+        
     def getStrConstructor(self):
         ''' Return a python sentence that can construct a clone
             of this object: kin of naïve serialization.'''
@@ -963,7 +970,7 @@ def writeControlVarsFromPhantomElements(controlVarName,preprocessor,outputFileNa
            variables that control the output of the checking (append or not
            the results to a file, generation or not of lists, ...)
     '''
-    elems= preprocessor.getSets["total"].elements
+    elems= preprocessor.getSets['total'].elements
     if outputCfg.appendToResFile.lower()[0]=='y':
         xcOutput= open(outputFileName+".py","a+")
     else:
@@ -1014,6 +1021,28 @@ def writeControlVarsFromPhantomElements(controlVarName,preprocessor,outputFileNa
         retval= [scipy.mean(fcs1),scipy.mean(fcs2)]
     return retval
 
+def getControlVarImportModuleStr(controlVarName, preprocessor, outputCfg, sections):
+    '''Return the string to import the module where the control var is defined.
+
+    :param controlVarName: name of the control var (e.g. 'ULS_normalStressesResistance' )
+    :param preprocessor:    preprocessor from FEA model.
+    :param outputCfg: instance of class 'VerifOutVars' which defines the 
+           variables that control the output of the checking (set of 
+           elements to be analyzed [defaults to 'total'], append or not the 
+           results to the result file [defatults to 'N'], generation or not of 
+           list file [defatults to 'N', ...)
+    :param sections: names of the sections to write the output for.
+    '''
+    retval= None
+    elems= outputCfg.getCalcSetElements(preprocessor) # elements in set 'setCalc'
+    if(len(elems)>0):
+        e0= elems[0]
+        s= sections[0]
+        propName= controlVarName+s
+        controlVar= e0.getProp(propName)
+        retval= controlVar.getModuleImportString()
+    return retval
+
 def writeControlVarsFromElements(controlVarName, preprocessor, outputFileName, outputCfg, sections):
     '''Writes in file 'outputFileName' the control-variable values calculated for elements in set 'setCalc'. 
 
@@ -1027,14 +1056,13 @@ def writeControlVarsFromElements(controlVarName, preprocessor, outputFileName, o
            list file [defatults to 'N', ...)
     :param sections: names of the sections to write the output for.
     '''
-    if outputCfg.setCalc:
-        elems=outputCfg.setCalc.elements
-    else:
-        elemens= preprocessor.getSets["total"].elements
+    elems= outputCfg.getCalcSetElements(preprocessor) # elements in set 'setCalc'
     if outputCfg.appendToResFile.lower()[0]=='y':
         xcOutput= open(outputFileName+".py","a+")
     else:
         xcOutput= open(outputFileName+".py","w+")
+    importString= getControlVarImportModuleStr(controlVarName, preprocessor, outputCfg, sections)
+    xcOutput.write(importString+'\n')
     for e in elems:
         for s in sections:
             propName= controlVarName+s
