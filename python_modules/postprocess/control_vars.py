@@ -130,14 +130,20 @@ class ControlVarsBase(object):
 class NMy(ControlVarsBase):
     '''Uniaxial bending. Internal forces [N,My] for a combination.
 
-    :ivar combName: name of the load combinations to deal with
     :ivar N:        axial force (defaults to 0.0)
     :ivar My:       bending moment about Y axis (defaults to 0.0)
     '''
     def __init__(self,combName= 'nil',N= 0.0,My= 0.0):
+        '''
+        Constructor.
+
+        :param combName: name of the load combinations to deal with
+        :param N:        axial force (defaults to 0.0)
+        :param My:       bending moment about Y axis (defaults to 0.0)
+        '''
         super(NMy,self).__init__(combName)
         self.N= N # Axial force.
-        self.My= My #Bending moment about y axis.
+        self.My= My # Bending moment about y axis.
 
     def getLaTeXFields(self,factor= 1e-3):
       ''' Returns a string with the intermediate fields of the LaTeX string.
@@ -168,12 +174,17 @@ class NMy(ControlVarsBase):
 class NMyMz(NMy):
     '''Biaxial bending. Internal forces [N,My,Mz] for a combination.
 
-    :ivar combName: name of the load combinations to deal with
-    :ivar N:        axial force (defaults to 0.0)
-    :ivar My:       bending moment about Y axis (defaults to 0.0)
     :ivar Mz:       bending moment about Z axis (defaults to 0.0)
     '''
     def __init__(self,combName= 'nil',N= 0.0,My= 0.0, Mz= 0.0):
+        '''
+        Constructor.
+
+        :param combName: name of the load combinations to deal with
+        :param N:        axial force (defaults to 0.0)
+        :param My:       bending moment about Y axis (defaults to 0.0)
+        :param Mz:       bending moment about Z axis (defaults to 0.0)
+        '''
         super(NMyMz,self).__init__(combName,N,My)
         self.Mz= Mz #Bending moment about z axis.
 
@@ -205,13 +216,17 @@ class NMyMz(NMy):
 class CFNMy(NMy):
     '''Uniaxial bending. Normal stresses limit state variables.
 
-    :ivar combName: name of the load combinations to deal with
     :ivar CF:       capacity factor (efficiency) (defaults to -1.0; CF<1.0 -> Ok; CF>1.0 -> KO)
-    :ivar N:        axial force (defaults to 0.0)
-    :ivar My:       bending moment about Y axis (defaults to 0.0)
-    :ivar Mz:       bending moment about Z axis (defaults to 0.0)
     '''
     def __init__(self,combName= 'nil',CF= -1.0,N= 0.0,My= 0.0):
+        '''
+        Constructor.
+
+        :param combName: name of the load combinations to deal with
+        :param CF:       capacity factor (efficiency) (defaults to -1.0; CF<1.0 -> Ok; CF>1.0 -> KO)
+        :param N:        axial force (defaults to 0.0)
+        :param My:       bending moment about Y axis (defaults to 0.0)
+        '''
         super(CFNMy,self).__init__(combName,N,My)
         self.CF= CF # Capacity factor or efficiency
 
@@ -261,11 +276,16 @@ class ShVy(ControlVarsBase):
 class CFVy(ShVy):
     '''Uniaxial bending. Shear stresses limit state variables.
 
-    :ivar combName: name of the load combinations to deal with
     :ivar CF:       capacity factor (efficiency) (defaults to -1.0; CF<1.0 -> Ok; CF>1.0 -> KO)
-    :ivar Vy:       shear along Y axis (defaults to 0.0)
     '''
     def __init__(self,combName= 'nil',CF= -1.0,Vy= 0.0):
+        '''
+        Constructor.
+
+        :param combName: name of the load combinations to deal with
+        :param CF:       capacity factor (efficiency) (defaults to -1.0; CF<1.0 -> Ok; CF>1.0 -> KO)
+        :param Vy:       shear along Y axis (defaults to 0.0)
+        '''
         super(CFVy,self).__init__(combName,Vy)
         self.CF= CF # Capacity factor or efficiency
 
@@ -277,11 +297,16 @@ class ShearYControlVars(CFVy):
     '''Shear along Y axis. Limit state variables [CF,Vy].
 
     :ivar idSection: section identifier
-    :ivar combName: name of the load combinations to deal with
-    :ivar CF:       capacity factor (efficiency) (defaults to -1; CF<1.0 -> Ok; CF>1.0 -> KO)
-    :ivar Vy:       shear along Y axis (defaults to 0.0)
     '''
     def __init__(self,idSection= 'nil',combName= 'nil',CF= -1.0,Vy= 0.0):
+        '''
+        Constructor.
+
+        :param idSection: section identifier
+        :param combName: name of the load combinations to deal with
+        :param CF:       capacity factor (efficiency) (defaults to -1; CF<1.0 -> Ok; CF>1.0 -> KO)
+        :param Vy:       shear along Y axis (defaults to 0.0)
+        '''
         super(ShearYControlVars,self).__init__(combName,CF,Vy)
         self.idSection= idSection # Section identifier.
 
@@ -304,14 +329,19 @@ class UniaxialBendingControlVars(CFNMy):
     '''Uniaxial bending. Normal stresses limit state variables [CF,N,My].
 
     :ivar idSection: section identifier
-    :ivar combName: name of the load combinations to deal with
-    :ivar CF:       capacity factor (efficiency) (defaults to -1; CF<1.0 -> Ok; CF>1.0 -> KO)
-    :ivar N:        axial force (defaults to 0.0)
-    :ivar My:       bending moment about Y axis (defaults to 0.0)
     '''
     def __init__(self,idSection= 'nil',combName= 'nil',CF= -1.0,N= 0.0,My= 0.0):
+        '''
+        Constructor.
+
+        :param idSection: section identifier
+        :param combName: name of the load combinations to deal with
+        :param CF:       capacity factor (efficiency) (defaults to -1; CF<1.0 -> Ok; CF>1.0 -> KO)
+        :param N:        axial force (defaults to 0.0)
+        :param My:       bending moment about Y axis (defaults to 0.0)
+        '''
         super(UniaxialBendingControlVars,self).__init__(combName,CF,N,My)
-        self.idSection= idSection #Reinforced concrete section identifier.
+        self.idSection= idSection # Section identifier.
 
     def getLaTeXFields(self,factor= 1e-3):
         ''' Returns a string with the intermediate fields of the LaTeX string.
@@ -331,13 +361,18 @@ class UniaxialBendingControlVars(CFNMy):
 class CFNMyMz(CFNMy):
     '''Biaxial bending. Normal stresses limit state variables. [CF,N,My,Mz].
 
-    :ivar combName: name of the load combinations to deal with
-    :ivar CF:       capacity factor (efficiency) (defaults to -1)
-    :ivar N:        axial force (defaults to 0.0)
-    :ivar My:       bending moment about Y axis (defaults to 0.0)
-    :ivar Mz:       bending moment about Y axis (defaults to 0.0)
+    :ivar Mz:       bending moment about Z axis (defaults to 0.0)
     '''
     def __init__(self,combName= 'nil',CF= -1.0,N= 0.0,My= 0.0,Mz= 0.0):
+        '''
+        Constructor.
+
+        :param combName: name of the load combinations to deal with
+        :param CF:       capacity factor (efficiency) (defaults to -1; CF<1.0 -> Ok; CF>1.0 -> KO)
+        :param N:        axial force (defaults to 0.0)
+        :param My:       bending moment about Y axis (defaults to 0.0)
+        :param Mz:       bending moment about Z axis (defaults to 0.0)
+        '''
         super(CFNMyMz,self).__init__(combName,CF,N,My)
         self.Mz= Mz #Bending moment about z axis.
 
@@ -368,11 +403,18 @@ class AxialForceControlVars(ControlVarsBase):
     '''Axial force. Internal forces [N] for a combination.
 
     :ivar idSection: section identifier
-    :ivar combName: name of the load combinations to deal with
     :ivar N:        axial force (defaults to 0.0)
     '''
     def __init__(self,idSection= 'nil',combName= 'nil',N= 0.0):
+        '''
+        Constructor.
+
+        :param idSection: section identifier
+        :param combName: name of the load combinations to deal with
+        :param N:        axial force (defaults to 0.0)
+        '''
         super(AxialForceControlVars,self).__init__(combName)
+        self.idSection= idSection # Section identifier.
         self.N= N # Axial force.
 
     def getLaTeXFields(self,factor= 1e-3):
@@ -406,14 +448,19 @@ class AxialForceControlVars(ControlVarsBase):
 class BiaxialBendingControlVars(UniaxialBendingControlVars):
     '''Biaxial bending. Normal stresses limit state variables. [CF,N,My,Mz].
 
-    :ivar idSection: section identifier
-    :ivar combName: name of the load combinations to deal with
-    :ivar CF:       capacity factor (efficiency) (defaults to -1)
-    :ivar N:        axial force (defaults to 0.0)
-    :ivar My:       bending moment about Y axis (defaults to 0.0)
     :ivar Mz:       bending moment about Z axis (defaults to 0.0)
     '''
     def __init__(self,idSection= 'nil',combName= 'nil',CF= -1.0,N= 0.0,My= 0.0,Mz= 0.0):
+        '''
+        Constructor.
+
+        :param idSection: section identifier
+        :param combName: name of the load combinations to deal with
+        :param CF:       capacity factor (efficiency) (defaults to -1)
+        :param N:        axial force (defaults to 0.0)
+        :param My:       bending moment about Y axis (defaults to 0.0)
+        :param Mz:       bending moment about Z axis (defaults to 0.0)
+        '''
         super(BiaxialBendingControlVars,self).__init__(idSection,combName,CF,N,My)
         self.Mz= Mz #Bending moment about z axis.
 
@@ -445,12 +492,6 @@ class SSBiaxialBendingControlVars(BiaxialBendingControlVars):
     '''Control variables for biaxial bending normal stresses LS 
     verification en steel-shape elements.
 
-    :ivar idSection: section identifier
-    :ivar combName: name of the load combinations to deal with
-    :ivar CF:       capacity factor (efficiency) (defaults to -1)
-    :ivar N:        axial force (defaults to 0.0)
-    :ivar My:       bending moment about Y (weak) axis (defaults to 0.0)
-    :ivar Mz:       bending moment about Z (strong) axis (defaults to 0.0)
     :ivar Ncrd:     design strength to axial compression
     :ivar McRdy:    design moment strength about Y (weak) axis
     :ivar McRdz:    design moment strength about Z (strong) axis
@@ -459,6 +500,22 @@ class SSBiaxialBendingControlVars(BiaxialBendingControlVars):
     :ivar chiLT:    reduction factor for lateral-torsional buckling (defaults to 1)
     '''
     def __init__(self,idSection= 'nil',combName= 'nil',CF= -1.0,N= 0.0,My= 0.0,Mz= 0.0,Ncrd=0.0,McRdy=0.0,McRdz=0.0,MvRdz=0.0,MbRdz=0.0,chiLT=1.0):
+        '''
+        Constructor.
+
+        :param idSection: section identifier
+        :param combName: name of the load combinations to deal with
+        :param CF:       capacity factor (efficiency) (defaults to -1)
+        :param N:        axial force (defaults to 0.0)
+        :param My:       bending moment about Y axis (defaults to 0.0)
+        :param Mz:       bending moment about Z axis (defaults to 0.0)
+        :param Ncrd:     design strength to axial compression
+        :param McRdy:    design moment strength about Y (weak) axis
+        :param McRdz:    design moment strength about Z (strong) axis
+        :param MvRdz:    reduced design moment strength about Z (strong) axis for shear interaction
+        :param MbRdz:    reduced design moment strength about Z (strong) axis for lateral-torsional bucking
+        :param chiLT:    reduction factor for lateral-torsional buckling (defaults to 1)
+        '''
         super(SSBiaxialBendingControlVars,self).__init__(idSection,combName,CF,N,My,Mz)
         self.Ncrd=Ncrd
         self.McRdy=McRdy
@@ -488,12 +545,6 @@ class SSBiaxialBendingControlVars(BiaxialBendingControlVars):
 class RCShearControlVars(BiaxialBendingControlVars):
     '''Control variables for shear limit state verification in reinforced concrete elements.
 
-    :ivar idSection: section identifier
-    :ivar combName: name of the load combinations to deal with
-    :ivar CF:       capacity factor (efficiency)
-    :ivar N:        axial force
-    :ivar My:       bending moment about Y axis
-    :ivar Mz:       bending moment about Z axis
     :ivar Mu:       ultimate bending moment
     :ivar Vy:       shear force parallel to the y axis
     :ivar Vz:       shear force parallel to the z axis
@@ -504,6 +555,23 @@ class RCShearControlVars(BiaxialBendingControlVars):
 
     '''
     def __init__(self,idSection=-1,combName= 'nil',CF= -1.0,N= 0.0, My= 0.0, Mz= 0.0, Mu= 0.0, Vy= 0.0, Vz= 0.0, theta= 0.0, Vcu= 0.0, Vsu= 0.0, Vu= 0.0):
+        '''
+        Constructor.
+
+        :param idSection: section identifier
+        :param combName: name of the load combinations to deal with
+        :param CF:       capacity factor (efficiency) (defaults to -1)
+        :param N:        axial force (defaults to 0.0)
+        :param My:       bending moment about Y axis (defaults to 0.0)
+        :param Mz:       bending moment about Z axis (defaults to 0.0)
+        :param Mu:       ultimate bending moment
+        :param Vy:       shear force parallel to the y axis
+        :param Vz:       shear force parallel to the z axis
+        :param theta:    angle between the concrete compression struts and the beam axis
+        :param Vcu:      Vcu component of the shear strength (defined in the codes)
+        :param Vsu:      Vsu component of the shear strength (defined in the codes)
+        :param Vu:       shear strength
+        '''
         super(RCShearControlVars,self).__init__(idSection,combName,CF,N,My,Mz)
         self.Mu= Mu #Ultimate bending moment.
         self.Vy= Vy #Shear parallel to the y axis.
@@ -550,14 +618,19 @@ class RCShearControlVars(BiaxialBendingControlVars):
 class CrackControlBaseVars(CFNMyMz):
     '''Biaxial bending. Cracking serviceability limit state variables.
 
-    :ivar combName: name of the load combinations to deal with
-    :ivar CF:       capacity factor (efficiency)
-    :ivar N:        axial force
-    :ivar My:       bending moment about Y axis
-    :ivar Mz:       bending moment about Z axis
     :ivar steelStress: maximum stress in the reinforcement bars
     '''
     def __init__(self,combName= 'nil',CF= -1.0,N= 0.0, My= 0.0, Mz= 0.0, steelStress= 0.0):
+        '''
+        Constructor.
+
+        :param combName: name of the load combinations to deal with
+        :param CF:       capacity factor (efficiency)
+        :param N:        axial force
+        :param My:       bending moment about Y axis
+        :param Mz:       bending moment about Z axis
+        :param steelStress: maximum stress in the reinforcement bars
+        '''
     #    super(CrackControlBaseVars,self).__init__(combName,CF,N,My) #Jan 26th 2017
         super(CrackControlBaseVars,self).__init__(combName,CF,N,My,Mz)
         self.steelStress= steelStress #Stress in rebars.
@@ -594,7 +667,14 @@ class CrackControlVars(ControlVarsBase):
     :ivar crackControlVarsNeg:     Crack control in - face.
     '''
     def __init__(self,idSection= 'nil', crackControlBaseVarsPos= None ,crackControlBaseVarsNeg= None):
-        self.idSection= idSection #Reinforced concrete section identifier.
+        '''
+        Constructor.
+
+        :param idSection: section identifier
+        :param crackControlVarsPos:     Crack control in + face.
+        :param crackControlVarsNeg:     Crack control in - face.
+        '''
+        self.idSection= idSection # Section identifier.
         if(crackControlBaseVarsPos):
             self.crackControlVarsPos= crackControlBaseVarsPos #Cracks in + face.
         else:
@@ -637,15 +717,23 @@ class RCCrackStraightControlVars(NMyMz):
     the effects of tension stiffening.
 
     :ivar idSection: section identifier
-    :ivar combName: name of the load combinations to deal with
-    :ivar N:        axial force
-    :ivar My:       bending moment about Y axis
-    :ivar Mz:       bending moment about Z axis
     :ivar s_rmax:   maximum distance between cracks (otherwise a new crack could occur in-between
     :ivar eps_sm:   mean strain in the reinforcement when taking into account the effects of tension stiffening
     :ivar wk:       crack width
     '''
     def __init__(self,idSection=-1,combName= 'nil',CF=-1,N= 0.0, My= 0.0, Mz= 0.0, s_rmax=0.0,eps_sm=0.0,wk=0.0):
+        '''
+        Constructor.
+
+        :param idSection: section identifier
+        :param combName: name of the load combinations to deal with
+        :param N:        axial force
+        :param My:       bending moment about Y axis
+        :param Mz:       bending moment about Z axis
+        :param s_rmax:   maximum distance between cracks (otherwise a new crack could occur in-between
+        :param eps_sm:   mean strain in the reinforcement when taking into account the effects of tension stiffening
+        :param wk:       crack width
+        '''
         super(RCCrackStraightControlVars,self).__init__(combName,N,My,Mz)
         self.idSection=idSection
         self.s_rmax=s_rmax
@@ -670,16 +758,24 @@ class RCCrackStraightControlVars(NMyMz):
 class FatigueControlBaseVars(NMyMz):
     '''Biaxial bending. Fatigue limit state variables.
 
-    :ivar combName: name of the load combinations to deal with
-    :ivar N:        axial force (defaults to 0.0)
-    :ivar My:       bending moment about Y axis (defaults to 0.0)
-    :ivar Mz:       bending moment about Z axis (defaults to 0.0)
     :ivar Vy:       shear force parallel to Y axis.
     :ivar posSteelStress: traction stress in rebars.
     :ivar negSteelStress: compression stress in rebars.
     :ivar concreteStress: compression stress in concrete.
     '''
     def __init__(self,combName= 'nil',CF=-1.0,N= 0.0, My= 0.0, Mz= 0.0, Vy= 0.0, posSteelStress= 0.0, negSteelStress= 0.0, concreteStress= 0.0):
+        '''
+        Constructor.
+
+        :param combName: name of the load combination to deal with
+        :param N:        axial force (defaults to 0.0)
+        :param My:       bending moment about Y axis (defaults to 0.0)
+        :param Mz:       bending moment about Z axis (defaults to 0.0)
+        :param Vy:       shear force parallel to Y axis.
+        :param posSteelStress: traction stress in rebars.
+        :param negSteelStress: compression stress in rebars.
+        :param concreteStress: compression stress in concrete.
+        '''
         #Note: Currently, CF attribute  has no sense in fatigue verification. Perhaps, in the future, the maximum value
         #of the CF calculated can be represented by CF. For now, this attribute remains in this class only for a purpose
         #of compatibility with the parent classes
@@ -733,7 +829,21 @@ class FatigueControlVars(ControlVarsBase):
     :ivar Vu:        ultimate shear force  
     '''
     def __init__(self,idSection= 'nil', controlBaseVars0= None, controlBaseVars1= None, concreteLimitStress= 0.0,concreteBendingCF=-1.0,shearLimit=0.0,concreteShearCF=-1.0,Mu=0.0,Vu=0.0):
-        self.idSection= idSection #Reinforced concrete section identifier.
+        '''
+        Constructor.
+
+        :param idSection: section identifier
+        :param combName:  name of the load combinations to deal with
+        :param state0:    Fatigue values (FatigueControlBaseVars) under permanent load.
+        :param state1:    Fatigue values (FatigueControlBaseVars) under fatigue load.
+        :param concreteLimitStress: limit for the concrete stress as specified in SIA 262(2013)  4.3.8.3.1
+        :param concreteBendingCF:   concrete capacity factor under fatigue due to normal stresses.
+        :param shearLimit:        limit for the shear force as sepecified in SIA 262(2013)  4.3.8.3.2
+        :param concreteShearCF:   concrete capacity factor under fatigue due to shear forces.
+        :param Mu:        ultimate bending moment
+        :param Vu:        ultimate shear force  
+        '''
+        self.idSection= idSection # Section identifier.
         if(controlBaseVars0):
             self.state0=  controlBaseVars0 #Under permanent loads.
         else:
@@ -807,17 +917,17 @@ class FatigueControlVars(ControlVarsBase):
         return retval
   
 class VonMisesControlVars(ControlVarsBase):
-    '''Shear along Y axis. Internal forces [Vy] for a combination.
+    '''Von Mises stresses control vars.
 
-    :ivar combName: name of the load combinations to deal with
     :ivar von_mises_stress:  Von Mises stress (defaults to 0.0)
+    :ivar CF: capacity factor (efficiency) (defaults to -1.0; CF<1.0 -> Ok; CF>1.0 -> KO)
     '''
     def __init__(self,combName= 'nil', CF= -1.0, vm_stress= 0.0):
         ''' Constructor.
 
         :param combName: name of the load combinations to deal with
         :param vm_stress: von mises stress (defaults to 0.0)
-        :ivar CF: capacity factor (efficiency) (defaults to -1.0; CF<1.0 -> Ok; CF>1.0 -> KO)
+        :param CF: capacity factor (efficiency) (defaults to -1.0; CF<1.0 -> Ok; CF>1.0 -> KO)
         '''
         super(VonMisesControlVars,self).__init__(combName)
         self.vm_stress= vm_stress #Shear along y axis.
