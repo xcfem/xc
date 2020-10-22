@@ -318,6 +318,32 @@ class BoltFastener(bolts.BoltBase):
         '''
         return 0.75*self.getNominalShearStrength(threadsExcluded)
 
+    def getNominalCombinedStrength(self, V, threadsExcluded= False):
+        ''' Return the nominal tensile stress modified to include the 
+            effects of shear stress according to equations J3-3a 
+            of AISC 360-16.
+
+        :param V: shear force on the bolt.
+        :param threadsExcluded: true if threads and transition area of 
+                                shank are excluded from the shear plane.
+        '''
+        A= self.getArea()
+        Fnt= self.getNominalTensileStrength()/A
+        Fnv= self.getNominalShearStrength(threadsExcluded)/A
+        frv= V/A
+        return min(1.3*Fnt-Fnt/(0.75*Fnv)*frv, Fnt)*A
+
+    def getDesignCombinedStrength(self, V, threadsExcluded= False):
+        ''' Return the nominal tensile stress modified to include the 
+            effects of shear stress according to equations J3-3a 
+            of AISC 360-16.
+
+        :param V: shear force on the bolt.
+        :param threadsExcluded: true if threads and transition area of 
+                                shank are excluded from the shear plane.
+        '''
+        return 0.75*self.getNominalCombinedStrength(V, threadsExcluded)
+
     def getNumberOfBoltsForShear(self, shearForce, numberOfRows= 1, threadsExcluded= False):
         ''' Estimate the number of bolts required for resisting the
             shear force.

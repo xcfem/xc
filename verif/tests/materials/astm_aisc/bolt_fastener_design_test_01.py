@@ -8,6 +8,11 @@ from __future__ import print_function
     of the course:
     Design of Bolts in Shear-BearingConnections per AISC LRFD 3rdEdition (2001)
 '''
+__author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
+__copyright__= "Copyright 2020, LCPT and AOO"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com"
 
 in2m= 25.4e-3
 kip2N= 4448.2216
