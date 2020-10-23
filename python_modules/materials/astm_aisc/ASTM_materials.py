@@ -775,7 +775,7 @@ class ASTMShape(object):
         :param effectiveLengthY: effective length of member (minor axis).
         :param effectiveLengthZ: effective length of member (major axis).
         '''
-        sc= self.slendernessCheck()
+        sc= self.compressionSlendernessCheck()
         if(sc>1.01):
             lmsg.warning('Member section has slender members. Results are not valid.')
         retval= effectiveLengthZ/self.get('iz')
