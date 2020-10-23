@@ -329,6 +329,40 @@ def getShapeTorsionalElasticBucklingStress(shape, effectiveLengthX):
 
     return retval
 
+
+# AISC 341-16 Seismic Provisions for Structural Steel Buildings
+def getUIShapeLambdaMDFlange(shape):
+    '''Return the limiting width-to-thickness ratio for the unstiffened flange
+       of a moderate ductile member according to table D1.1 of AISC 341-16.'''
+    E= shape.get('E')
+    Fy= shape.steelType.fy
+    Ry= shape.steelType.Ry
+    return 0.40*math.sqrt(E/Fy/Ry) # Case 1
+
+def getUIShapeLambdaHDFlange(shape):
+    '''Return the limiting width-to-thickness ratio for the unstiffened flange
+       of a highly ductile member according to table D1.1 of AISC 341-16.'''
+    E= shape.get('E')
+    Fy= shape.steelType.fy
+    Ry= shape.steelType.Ry
+    return 0.32*math.sqrt(E/Fy/Ry) # Case 1
+
+def getUIShapeLambdaMDWeb(shape):
+    '''Return the limiting width-to-thickness ratio for the web
+       of a moderate ductile member according to table D1.1 of AISC 341-16.'''
+    E= shape.get('E')
+    Fy= shape.steelType.fy
+    Ry= shape.steelType.Ry
+    return 1.57*math.sqrt(E/Fy/Ry) # Case 5
+
+def getUIShapeLambdaHDWeb(shape):
+    '''Return the limiting width-to-thickness ratio for the web
+       of a higly ductile member according to table D1.1 of AISC 341-16.'''
+    E= shape.get('E')
+    Fy= shape.steelType.fy
+    Ry= shape.steelType.Ry
+    return 1.57*math.sqrt(E/Fy/Ry) # Case 5
+
 class WShape(structural_steel.IShape):
     '''W shape
 
@@ -842,6 +876,59 @@ class WShape(structural_steel.IShape):
         '''
         return 0.9*self.getNominalFlexuralStrength(lateralUnbracedLength, Cb, majorAxis)
 
+    def getLambdaMDFlange(self):
+        '''Return the limiting width-to-thickness ratio for the unstiffened 
+           flange of a moderate ductile member according to table D1.1 
+           of AISC 341-16.'''
+        return getUIShapeLambdaMDFlange(self)
+    
+    def getLambdaHDFlange(self):
+        '''Return the limiting width-to-thickness ratio for the unstiffened 
+           flange of a highly ductile member according to table D1.1 
+           of AISC 341-16.'''
+        return getUIShapeLambdaHDFlange(self)
+    
+    def getLambdaMDWeb(self):
+        '''Return the limiting width-to-thickness ratio for the unstiffened 
+           web of a moderate ductile member according to table D1.1 
+           of AISC 341-16.'''
+        return getUIShapeLambdaMDWeb(self)
+    
+    def getLambdaHDWeb(self):
+        '''Return the limiting width-to-thickness ratio for the unstiffened 
+           web of a highly ductile member according to table D1.1 
+           of AISC 341-16.'''
+        return getUIShapeLambdaHDWeb(self)
+
+    def flangeLocalBucklingCheck(self, highlyDuctile= True):
+        ''' Checks local buckling according to width-to-thickness ratios
+            of members according to table D1.1 of AISC 341-16.
+
+        :param higlyDuctile: if true the member is considered as highly
+                             ductile.
+        '''
+        slendernessRatio= self.get('bSlendernessRatio')
+        retval= slendernessRatio
+        if(highlyDuctile):
+            retval/= self.getLambdaHDFlange()
+        else: # moderate ductile
+            retval/= self.getLambdaMDFlange()            
+        return retval
+
+    def webLocalBucklingCheck(self, highlyDuctile= True):
+        ''' Checks local buckling according to width-to-thickness ratios
+            of members according to table D1.1 of AISC 341-16.
+
+        :param higlyDuctile: if true the member is considered as highly
+                             ductile.
+        '''
+        slendernessRatio= self.get('hSlendernessRatio')
+        retval= slendernessRatio
+        if(highlyDuctile):
+            retval/= self.getLambdaHDWeb()
+        else: # moderate ductile
+            retval/= self.getLambdaMDWeb()            
+        return retval
  
 # *************************************************************************
 # AISC C profiles.
@@ -1140,6 +1227,29 @@ class CShape(structural_steel.UShape):
         '''
         return 0.9*self.getNominalFlexuralStrength(lateralUnbracedLength, Cb, majorAxis)
     
+    def getLambdaMDFlange(self):
+        '''Return the limiting width-to-thickness ratio for the unstiffened 
+           flange of a moderate ductile member according to table D1.1 
+           of AISC 341-16.'''
+        return getUIShapeLambdaMDFlange(self)
+    
+    def getLambdaHDFlange(self):
+        '''Return the limiting width-to-thickness ratio for the unstiffened 
+           flange of a highly ductile member according to table D1.1 
+           of AISC 341-16.'''
+        return getUIShapeLambdaHDFlange(self)
+    
+    def getLambdaMDWeb(self):
+        '''Return the limiting width-to-thickness ratio for the unstiffened 
+           web of a moderate ductile member according to table D1.1 
+           of AISC 341-16.'''
+        return getUIShapeLambdaMDWeb(self)
+    
+    def getLambdaHDWeb(self):
+        '''Return the limiting width-to-thickness ratio for the unstiffened 
+           web of a highly ductile member according to table D1.1 
+           of AISC 341-16.'''
+        return getUIShapeLambdaHDWeb(self)
 
 # *************************************************************************
 # AISC Hollow Structural Sections.
@@ -1664,7 +1774,25 @@ class HSSShape(structural_steel.QHShape):
         :param majorAxis: true if flexure about the major axis.
         '''
         return 0.9*self.getNominalFlexuralStrength(lateralUnbracedLength, Cb, majorAxis)
-
+    
+    def getLambdaMD(self):
+        '''Return the limiting width-to-thickness ratio for the walls 
+           of a moderate ductile member according to table D1.1 
+           of AISC 341-16.'''
+        E= shape.get('E')
+        Fy= shape.steelType.fy
+        Ry= shape.steelType.Ry
+        return 0.76*math.sqrt(E/Fy/Ry) # Case 4
+    
+    def getLambdaHD(self):
+        '''Return the limiting width-to-thickness ratio for the walls 
+           of a highly ductile member according to table D1.1 
+           of AISC 341-16.'''
+        E= shape.get('E')
+        Fy= shape.steelType.fy
+        Ry= shape.steelType.Ry
+        return 0.65*math.sqrt(E/Fy/Ry) # Case 4
+    
 for item in shapes.CHSS:
     shape= shapes.CHSS[item]
     shape['alpha']= 5/12.0
@@ -1829,6 +1957,23 @@ class CHSSShape(structural_steel.CHShape):
         '''
         return 0.9*self.getNominalFlexuralStrength(lateralUnbracedLength, Cb, majorAxis)
 
+    def getLambdaMD(self):
+        '''Return the limiting width-to-thickness ratio for the wall 
+           of a moderate ductile member according to table D1.1 
+           of AISC 341-16.'''
+        E= shape.get('E')
+        Fy= shape.steelType.fy
+        Ry= shape.steelType.Ry
+        return 0.062*(E/Fy/Ry) # Case 10
+    
+    def getLambdaHD(self):
+        '''Return the limiting width-to-thickness ratio for the wall 
+           of a highly ductile member according to table D1.1 
+           of AISC 341-16.'''
+        E= shape.get('E')
+        Fy= shape.steelType.fy
+        Ry= shape.steelType.Ry
+        return 0.053*math.sqrt(E/Fy/Ry) # Case 10
     
 # Label conversion metric->US customary | US customary -> metric.
 def getUSLabel(metricLabel):
