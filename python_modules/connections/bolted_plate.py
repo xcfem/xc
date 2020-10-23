@@ -194,10 +194,12 @@ class BoltedPlateBase(object):
     :ivar doublePlate: if true there is one plate on each side
                        of the main member.
     '''
-    def __init__(self, boltArray, thickness= 10e-3, steelType= None, eccentricity= geom.Vector2d(0.0,0.0), doublePlate= False):
+    def __init__(self, boltArray, width= None, length= None, thickness= 10e-3, steelType= None, eccentricity= geom.Vector2d(0.0,0.0), doublePlate= False):
         ''' Constructor.
 
         :param boltArray: bolt array.
+        :param width: plate width (if None it will be computed from the bolt arrangement.)
+        :param length: plate length (if None it will be computed from the bolt arrangement.)
         :param thickness: plate thickness.
         :param steelType: steel type.
         :param eccentricity: eccentricity of the plate with respect the center
@@ -205,42 +207,110 @@ class BoltedPlateBase(object):
         :param doublePlate: if true there is one plate on each side
                             of the main member.
         '''
+        self.width= width
+        self.length= length
         self.setBoltArray(boltArray)
         self.thickness= thickness
         self.steelType= steelType
         self.doublePlate= doublePlate
 
-    def computeDimensions(self):
-        ''' Assigns the bolt arrangement.'''
+    def getMinWidth(self):
+        ''' Return the minimum plate width.'''
+        retval= 0.0
         if(self.boltArray.bolt):
-            minWidth= self.boltArray.getMinPlateWidth()
-            for d in self.boltArray.distances:
-                if(d>= minWidth):
-                    self.width= d
-                    break
-            minLength= self.boltArray.getMinPlateLength()
-            for d in self.boltArray.distances:
-                if(d>= minLength):
-                    self.length= d
-                    break
+            retval= self.boltArray.getMinPlateWidth()
+        return retval        
+
+    def getMinLength(self):
+        ''' Return the minimum plate length.'''
+        retval= 0.0
+        if(self.boltArray.bolt):
+            retval= self.boltArray.getMinPlateWidth()
+        return retval
+
+    def checkWidth(self):
+        ''' Return true if the plate width is enough with respect to
+            the bolt arrangement.'''
+        return (self.width>self.getMinWidth())
+
+    def checkLength(self):
+        ''' Return true if the plate length is enough with respect to
+            the bolt arrangement.'''
+        return (self.length>self.getMinLength())
+    
+    def checkDimensions(self):
+        ''' Check the plate dimensions with respect to the bolt
+            arrangement.'''
+        minWidth= self.getMinWidth()
+        minLength= self.getMinLength()
+        return ((self.width>=minWidth) and (self.length>=minLength))
+        
+    def computeWidth(self):
+        ''' Compute the plate width from the bolt
+            arrangement.'''
+        minWidth= self.getMinWidth()
+        for d in self.boltArray.distances:
+            if(d>= minWidth):
+                self.width= d
+                break
+            
+    def computeLength(self):
+        ''' Assigns the bolt arrangement.'''
+        minLength= self.getMinLength()
+        for d in self.boltArray.distances:
+            if(d>= minLength):
+                self.length= d
+                break
+        
+    def computeDimensions(self):
+        ''' Compute the plate dimensions from the bolt
+            arrangement.'''
+        if(not self.width):
+            self.computeWidth()
         else:
-            self.width= 0.0
-            self.height= 0.0
+            self.checkWidth()
+        if(not self.length):
+            self.computeLength()
+        else:
+            self.checkLength()
                     
     def setBoltArray(self, boltArray):
         ''' Assigns the bolt arrangement.'''
         self.boltArray= boltArray
-        self.computeDimensions()
-        
-            
+        ok= True
+        if(self.width and self.length):
+            ok= self.checkDimensions()
+        elif(self.width):
+            self.computeLength()
+            ok= self.checkWidth()            
+        elif(self.length):
+            self.computeWidth()
+            ok= self.checkLength()
+        else:
+            self.computeDimensions()
+        if(not ok):
+            lmsg.error('Plate too small for the bolt arrangement.')
+ 
     def getNetWidth(self, diameterIncrement):
         ''' Return the net width due to the bolt holes.
 
         :param diameterIncrement: increment of the diameter with respect
                                   the nominal diameter.
         '''
-        return self.boltArray.getNetWidth(self.width, diameterIncrement)        
-            
+        return self.boltArray.getNetWidth(self.width, diameterIncrement)
+
+    def getNetArea(self, diameterIncrement):
+        ''' Return the net area due to the bolt holes.
+
+        :param diameterIncrement: increment of the diameter with respect
+                                  the nominal diameter.
+        '''
+        return self.getNetWidth(self.width, diameterIncrement)*self.thickness
+    
+    def getGrossArea(self):
+        ''' Return the gross area of the plate.'''
+        return self.width*self.thickness
+    
     def getPlateDimensions(self):
         ''' Return the dimensions of the plate.'''
         return (self.width, self.length, self.thickness)

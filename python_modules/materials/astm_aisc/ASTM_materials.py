@@ -423,18 +423,31 @@ class BoltArray(bp.BoltArrayBase):
 class BoltedPlate(bp.BoltedPlateBase):
     ''' Bolted plate the AISC/ASTM way.'''
 
-    def __init__(self, boltArray= BoltArray(), thickness= 10e-3, steelType= A36):
+    def __init__(self, boltArray= BoltArray(), width= None, length= None, thickness= 10e-3, steelType= A36, eccentricity= geom.Vector2d(0.0,0.0), doublePlate= False):
         ''' Constructor.
 
         :param boltArray: bolt array.
+        :param width: plate width (if None it will be computed from the bolt arrangement.)
+        :param length: plate length (if None it will be computed from the bolt arrangement.)
         :param thickness: plate thickness.
         :param steelType: steel type.
+        :param eccentricity: eccentricity of the plate with respect the center
+                             of the bolt array.
+        :param doublePlate: if true there is one plate on each side
+                            of the main member.
         '''
-        super(BoltedPlate, self).__init__(boltArray, thickness, steelType)
-        self.setBoltArray(boltArray)
-        self.thickness= thickness
-        self.steelType= steelType
-        
+        super(BoltedPlate, self).__init__(boltArray, width, length, thickness, steelType, eccentricity, doublePlate)
+
+    def getGrossSectionYieldingLoad(self):
+        ''' Return the load that determines the yielding of the gross
+            section.'''
+        return self.steelType.getYt()*self.steelType.fy*self.getGrossArea()
+
+    def getNetSectionFractureLoad(self):
+        ''' Return the load that determines the fracture of the net
+            section.'''
+        return self.steelType.fu*self.getNetArea()
+    
     def getFilletMinimumLeg(self, otherThickness):
         '''
         Return the minimum leg size for a fillet bead 
@@ -454,12 +467,18 @@ class BoltedPlate(bp.BoltedPlateBase):
         return getFilletWeldMaximumLegSheets(self.thickness, otherThickness)
     
     def getNetWidth(self):
-        ''' Return the net area of the base plate according to clause
+        ''' Return the net width of the base plate according to clause
         B.4.3b of AISC 360-16.
         '''
         diameterIncrement= 2e-3
         retval= super(BoltedPlate,self).getNetWidth(diameterIncrement)
         return retval
+    
+    def getNetArea(self):
+        ''' Return the net area of the base plate according to clause
+        B.4.3b of AISC 360-16.
+        '''
+        return self.getNetWidth()*self.thickness
     
     def getMinThickness(self, Pd):
         ''' Return the minimum thickness of the plate
