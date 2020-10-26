@@ -347,21 +347,21 @@ def getUIShapeLambdaHDFlange(shape):
     Ry= shape.steelType.Ry
     return 0.32*math.sqrt(E/Fy/Ry) # Case 1
 
-def getUIShapeLambdaMDWeb(shape):
+def getUIShapeLambdaMDWeb(shape, factor= 1.57):
     '''Return the limiting width-to-thickness ratio for the web
        of a moderate ductile member according to table D1.1 of AISC 341-16.'''
     E= shape.get('E')
     Fy= shape.steelType.fy
     Ry= shape.steelType.Ry
-    return 1.57*math.sqrt(E/Fy/Ry) # Case 5
+    return factor*math.sqrt(E/Fy/Ry) # Case 5
 
-def getUIShapeLambdaHDWeb(shape):
+def getUIShapeLambdaHDWeb(shape, factor= 1.57):
     '''Return the limiting width-to-thickness ratio for the web
        of a higly ductile member according to table D1.1 of AISC 341-16.'''
     E= shape.get('E')
     Fy= shape.steelType.fy
     Ry= shape.steelType.Ry
-    return 1.57*math.sqrt(E/Fy/Ry) # Case 5
+    return factor*math.sqrt(E/Fy/Ry) # Case 5
 
 class WShape(structural_steel.IShape):
     '''W shape
@@ -888,17 +888,61 @@ class WShape(structural_steel.IShape):
            of AISC 341-16.'''
         return getUIShapeLambdaHDFlange(self)
     
-    def getLambdaMDWeb(self):
+    def getLambdaMDWeb(self, N, M, momentFrameType= 0):
         '''Return the limiting width-to-thickness ratio for the unstiffened 
-           web of a moderate ductile member according to table D1.1 
-           of AISC 341-16.'''
-        return getUIShapeLambdaMDWeb(self)
+           web of a moderately ductile member according to table D1.1 
+           of AISC 341-16.
+
+        :param N: axial load.
+        :param M: bending moment.
+        :param momentFrameType: type of the moment frame (0: ordinary moment frame (OMF), 1: intermediate moment frame (IMF) 3: special moment frame).
+        '''
+        factor= 1.57
+        e= 0.0 # eccentricity.
+        if(N!=0.0):
+            e= abs(M/N)
+        else:
+            e= abs(M)*1e6
+        if(e>self.h()/2.0): # Bending -> beam.            
+            # Ratio of required strength to available axial yield strength.
+            Ca= N/self.getDesignTensileStrength() # table D1.1
+            if(Ca<=0.114):
+                factor= 3.96*(1-3.04*Ca)
+            else:
+                factor= max(1.29*(2.12-Ca),1.57)
+            if(momentFrameType== 1): #IMF
+                factor= min(factor, 3.96)
+            elif(momentFrameType== 2): # SMF
+                factor= min(factor, 2.57)
+        return getUIShapeLambdaMDWeb(self, factor)
     
-    def getLambdaHDWeb(self):
+    def getLambdaHDWeb(self, N, M, momentFrameType= 0):
         '''Return the limiting width-to-thickness ratio for the unstiffened 
            web of a highly ductile member according to table D1.1 
-           of AISC 341-16.'''
-        return getUIShapeLambdaHDWeb(self)
+           of AISC 341-16.
+
+        :param N: axial load. 
+        :param M: bending moment.
+        :param momentFrameType: type of the moment frame (0: ordinary moment frame (OMF), 1: intermediate moment frame (IMF) 2: special moment frame).
+        '''
+        factor= 1.57
+        e= 0.0 # eccentricity.
+        if(N!=0.0):
+            e= abs(M/N)
+        else:
+            e= abs(M)*1e6
+        if(e>self.h()/2.0): # Bending -> beam.            
+            # Ratio of required strength to available axial yield strength.
+            Ca= N/self.getDesignTensileStrength() # table D1.1
+            if(Ca<=0.114):
+                factor= 2.57*(1-1.04*Ca)
+            else:
+                factor= max(0.88*(2.68-Ca),1.57)
+            if(momentFrameType== 1): #IMF
+                factor= min(factor, 3.96)
+            elif(momentFrameType== 2): # SMF
+                factor= min(factor, 2.57)
+        return getUIShapeLambdaHDWeb(self, factor)
 
     def flangeLocalBucklingCheck(self, highlyDuctile= True):
         ''' Checks local buckling according to width-to-thickness ratios
@@ -915,19 +959,22 @@ class WShape(structural_steel.IShape):
             retval/= self.getLambdaMDFlange()            
         return retval
 
-    def webLocalBucklingCheck(self, highlyDuctile= True):
+    def webLocalBucklingCheck(self, N, M, momentFrameType= 0, highlyDuctile= True):
         ''' Checks local buckling according to width-to-thickness ratios
             of members according to table D1.1 of AISC 341-16.
 
+        :param N: axial load. 
+        :param M: bending moment.
+        :param momentFrameType: type of the moment frame (0: ordinary moment frame (OMF), 1: intermediate moment frame (IMF) 2: special moment frame).
         :param higlyDuctile: if true the member is considered as highly
                              ductile.
         '''
         slendernessRatio= self.get('hSlendernessRatio')
         retval= slendernessRatio
         if(highlyDuctile):
-            retval/= self.getLambdaHDWeb()
-        else: # moderate ductile
-            retval/= self.getLambdaMDWeb()            
+            retval/= self.getLambdaHDWeb(N, M, momentFrameType)
+        else: # moderately ductile
+            retval/= self.getLambdaMDWeb(N, M, momentFrameType)            
         return retval
  
 # *************************************************************************
