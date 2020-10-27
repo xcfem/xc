@@ -212,6 +212,7 @@ class BoltedPlateBase(object):
         self.setBoltArray(boltArray)
         self.thickness= thickness
         self.steelType= steelType
+        self.eccentricity= eccentricity
         self.doublePlate= doublePlate
             
     def getMinWidth(self):
@@ -389,11 +390,16 @@ class BoltedPlateBase(object):
         outputFile.write('    steel type: '+str(self.steelType.name)+'\n')
         self.boltArray.report(outputFile)
 
-    def getContour(self, refSys):
-        ''' Return the contour points of the plate.'''
+    def getContour2d(self):
+        ''' Return the contour points of the plate in local coordinates.'''
         l2= self.length/2.0
         w2= self.width/2.0
-        localPos= [geom.Pos2d(-l2+self.eccentricity.x,-w2+self.eccentricity.y), geom.Pos2d(l2+self.eccentricity.x,-w2+self.eccentricity.y), geom.Pos2d(l2+self.eccentricity.x,w2+self.eccentricity.y), geom.Pos2d(-l2+self.eccentricity.x,w2+self.eccentricity.y)]
+        return [geom.Pos2d(-l2+self.eccentricity.x,-w2+self.eccentricity.y), geom.Pos2d(l2+self.eccentricity.x,-w2+self.eccentricity.y), geom.Pos2d(l2+self.eccentricity.x,w2+self.eccentricity.y), geom.Pos2d(-l2+self.eccentricity.x,w2+self.eccentricity.y)]
+        
+
+    def getContour(self, refSys):
+        ''' Return the contour points of the plate.'''
+        localPos= self.getContour2d()
         retval= list()
         for p in localPos:
             p3d= geom.Pos3d(p.x,p.y,0.0)
@@ -424,6 +430,18 @@ class BoltedPlateBase(object):
         blk.holes= self.boltArray.getHoleBlocks(refSys,holeLabels)
         retval.extend(blk.holes)
         return retval
+
+    def getClearDistances(self):
+        ''' Return the clear distance between the edge of the hole and
+            the edge of the adjacent hole or edge of the material.'''
+        retval= list()
+        contour= geom.Polygon2d(self.getContour2d())
+        boltPositions= self.boltArray.getLocalPositions()
+        dist= self.boltArray.dist
+        for p in boltPositions:
+            cover= contour.getCover(p)-holeDiameter/2.0
+            retval.append(min(cover, dist))
+        return retval    
 
 class FinPlate(BoltedPlateBase):
     ''' Fin plate.This class must be code agnostic

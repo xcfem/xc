@@ -464,8 +464,8 @@ class BoltedPlate(bp.BoltedPlateBase):
 
         :param otherThickness: thickness of the other part to weld.
         '''
-        return getFilletWeldMaximumLegSheets(self.thickness, otherThickness)
-    
+        return getFilletWeldMaximumLegSheets(self.thickness, otherThickness)        
+        
     def getNetWidth(self):
         ''' Return the net width of the base plate according to clause
         B.4.3b of AISC 360-16.
@@ -491,9 +491,42 @@ class BoltedPlate(bp.BoltedPlateBase):
         # Tension fracture in the net section.
         minThicknessFu= Pd/0.75/self.steelType.fu/self.getNetWidth()
         return max(minThicknessFy,minThicknessFu)
+
+    def getNominalBearingStrength(self, C= 2.4, longSlottedHoles= False):
+        ''' Return the nominal bearing strength at bolt holes according to
+            clause J3.10.1 of AISC 360-16.
+
+        :param C: 2.4 when deformation at the bolt hole at service load is 
+                  a design consideration (J3-6a) 3.0 when is not.
+        '''
+        if(logSlottedHoles):
+            lmsg.error('Long slotted holes not implemented yet.')
+        return C*self.boltArray.bolt.diameter*self.thickness*self.steelType.fu
+
+    def getNominalTearoutStrength(self, C= 1.2, longSlottedHoles= False):
+        ''' Return the nominal tearout strength at bolt holes according to
+            clause J3.10.2 of AISC 360-16.
+
+        :param C: 1.2 when deformation at the bolt hole at service load is 
+                  a design consideration (J3-6a) 1.5 when is not.
+        '''
+        if(logSlottedHoles):
+            lmsg.error('Long slotted holes not implemented yet.')
+        return C*self.boltArray.bolt.diameter*self.thickness*self.steelType.fu
+
     
 class FinPlate(bp.FinPlate):
     ''' Fin plate the AISC/ASTM way.'''
+
+    def getFilletWeldLegSize(self):
+        ''' Return the conventional leg size for two fillet
+            welds attaching the plate to the main member.
+
+            Based on the document: Single-Plate Shear Connection Design 
+            to Meet Structural Integrity Requirements. LOUIS F. GESCHWINDNER 
+            and KURT D. GUSTAFSON. 2010
+        '''
+        return 5.0/8.0*self.thickness
 
 
 def readBoltedPlateFromJSONFile(inputFileName):
