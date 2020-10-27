@@ -20,7 +20,7 @@ from misc_utils import log_messages as lmsg
 class BoltArrayBase(object):
     distances= [50e-3, 75e-3, 100e-3, 120e-3, 150e-3, 200e-3, 250e-3,.3,.4,.5,.6,.7,.8,.9]
     ''' Base class for bolt array. This class must be code agnostic
-        i.e. no AISC, EC3, EAE clauses here. Maybe there is some
+        i.e. no AISC, EC3, EAE clauses here. There is certainly some
         work to do in that sense (LP 09/2020). 
 
     :ivar bolt: bolt type.
@@ -59,16 +59,16 @@ class BoltArrayBase(object):
             number < 1 if the distance is ok.'''
         return self.bolt.getRecommendedDistanceBetweenCenters()/self.dist
 
-    def getMinPlateWidth(self):
-        ''' Return the minimum width of the bolted plate.'''
-        minEdgeDist= self.bolt.getMinimumEdgeDistanceJ3_4M()
-        return 2.0*minEdgeDist+self.dist*(self.nRows-1)
+    def getWidth(self):
+        ''' Return the distance between the centers of the first and the 
+            last rows.'''
+        return self.dist*(self.nRows-1)
 
-    def getMinPlateLength(self):
-        ''' Return the minimum length of the bolted plate.'''
-        minEdgeDist= self.bolt.getMinimumEdgeDistanceJ3_4M()
-        return 2.0*minEdgeDist+self.dist*(self.nCols-1)
-
+    def getLength(self):
+        ''' Return the distance between the centers of the first and the 
+            last columns.'''
+        return self.dist*(self.nCols-1)
+    
     def getNetWidth(self, plateWidth, diameterIncrement):
         ''' Return the net width due to the bolt holes.
 
@@ -181,7 +181,7 @@ class BoltArrayBase(object):
 
 class BoltedPlateBase(object):
     ''' Base class for bolted plates. This class must be code agnostic
-        i.e. no AISC, EC3, EAE clauses here. Maybe there is some
+        i.e. no AISC, EC3, EAE clauses here. There is certainly some
         work to do in that sense (LP 09/2020).
 
     :ivar boltArray: bolt array.
@@ -213,19 +213,21 @@ class BoltedPlateBase(object):
         self.thickness= thickness
         self.steelType= steelType
         self.doublePlate= doublePlate
-
+            
     def getMinWidth(self):
         ''' Return the minimum plate width.'''
         retval= 0.0
         if(self.boltArray.bolt):
-            retval= self.boltArray.getMinPlateWidth()
+            minEdgeDist= self.boltArray.bolt.getMinimumEdgeDistance()
+            return 2.0*minEdgeDist+self.boltArray.getWidth()
         return retval        
 
     def getMinLength(self):
         ''' Return the minimum plate length.'''
         retval= 0.0
         if(self.boltArray.bolt):
-            retval= self.boltArray.getMinPlateWidth()
+            minEdgeDist= self.boltArray.bolt.getMinimumEdgeDistance()
+            return 2.0*minEdgeDist+self.boltArray.getLength()
         return retval
 
     def checkWidth(self):
@@ -312,7 +314,8 @@ class BoltedPlateBase(object):
         return self.width*self.thickness
     
     def getPlateDimensions(self):
-        ''' Return the dimensions of the plate.'''
+        ''' Return the width, length and thickness of the the 
+            plate in a tuple.'''
         return (self.width, self.length, self.thickness)
 
     def checkThickness(self, Pd):
@@ -421,6 +424,24 @@ class BoltedPlateBase(object):
         blk.holes= self.boltArray.getHoleBlocks(refSys,holeLabels)
         retval.extend(blk.holes)
         return retval
+
+class FinPlate(BoltedPlateBase):
+    ''' Fin plate.This class must be code agnostic
+        i.e. no AISC, EC3, EAE clauses here. There is certainly some
+        work to do in that sense (LP 10/2020). '''
+    def __init__(self, boltArray, width= None, length= None, thickness= 10e-3, steelType= None, eccentricity= geom.Vector2d(0.0,0.0)):
+        ''' Constructor.
+
+        :param boltArray: bolt array.
+        :param width: plate width (if None it will be computed from the bolt arrangement.)
+        :param length: plate length (if None it will be computed from the bolt arrangement.)
+        :param thickness: plate thickness.
+        :param steelType: steel type.
+        :param eccentricity: eccentricity of the plate with respect the center
+                             of the bolt array.
+        '''
+        super(FinPlate, self).__init__(boltArray, width, length, thickness, steelType, eccentricity, doublePlate= False)    
+    
     
 def getBoltedPointBlocks(gussetPlateBlocks, boltedPlateBlocks, distBetweenPlates):
     ''' Return the points linked by bolts between the two pieces.

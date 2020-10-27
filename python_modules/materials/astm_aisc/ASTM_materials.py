@@ -221,8 +221,8 @@ class BoltFastener(bolts.BoltBase):
             AISC 360-16.'''
         return 3.0*self.diameter
 
-    def getMinimumEdgeDistanceJ3_4M(self):
-        ''' Return the minimum edge Distance from center of standard 
+    def getMinimumEdgeDistance(self):
+        ''' Return the minimum edge distance from center of standard 
             hole to edge of connected part according to toble
             J3.4M of AISC 360-16.'''
         if(self.diameter<=36e-3):
@@ -491,6 +491,10 @@ class BoltedPlate(bp.BoltedPlateBase):
         # Tension fracture in the net section.
         minThicknessFu= Pd/0.75/self.steelType.fu/self.getNetWidth()
         return max(minThicknessFy,minThicknessFu)
+    
+class FinPlate(bp.FinPlate):
+    ''' Fin plate the AISC/ASTM way.'''
+
 
 def readBoltedPlateFromJSONFile(inputFileName):
     ''' Read bolted plate object from a JSON file.'''

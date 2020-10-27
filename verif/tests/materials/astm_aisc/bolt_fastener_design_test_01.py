@@ -29,7 +29,7 @@ ratio1= abs(designShearStrength-designShearStrengthRef)/designShearStrengthRef
 Pd= 121.6*kip2N
 n= math.ceil(Pd/designShearStrength)
 centersDist= bolt.getRecommendedDistanceBetweenCenters()
-minEdgeDist= bolt.getMinimumEdgeDistanceJ3_4M()
+minEdgeDist= bolt.getMinimumEdgeDistance()
 minWidth= 2.0*minEdgeDist+centersDist
 netWidth= minWidth-2.0*bolt.getNominalHoleDiameter()
 # Yielding in the gross section.
