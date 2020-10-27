@@ -40,7 +40,7 @@ NRds= eota.axialResistanceSteelFailure(barArea,fuk)/gammaMs
 
 # Edge distance influence
 CcrN= eota.getCcrNp(barDiameter,hef,tauRkUcr)
-C= baseMaterialContour.getRecubrimiento(anchorPosition) 
+C= baseMaterialContour.getCover(anchorPosition) 
 Cmin= 5*barDiameter+10e-3
 
 if (C<Cmin):

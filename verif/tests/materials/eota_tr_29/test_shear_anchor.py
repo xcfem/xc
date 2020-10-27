@@ -47,7 +47,7 @@ NRds= 28e3
 ## Design combined pull-out and concrete cone resistance
 ###  Edge distance influence
 CcrN= eota.getCcrNp(boltDiameter,hef,tauRk)
-C= baseMaterialContour.getRecubrimiento(anchorPosition) 
+C= baseMaterialContour.getCover(anchorPosition) 
 Cmin= 5*boltDiameter+10e-3
 
 if(C<Cmin):
