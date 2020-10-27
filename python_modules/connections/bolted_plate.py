@@ -68,7 +68,7 @@ class BoltArrayBase(object):
         ''' Return the distance between the centers of the first and the 
             last columns.'''
         return self.dist*(self.nCols-1)
-    
+        
     def getNetWidth(self, plateWidth, diameterIncrement):
         ''' Return the net width due to the bolt holes.
 
@@ -119,19 +119,62 @@ class BoltArrayBase(object):
         self.nCols= dct['nCols']
         self.dist= dct['dist']
 
+    def getCenter(self):
+        ''' Return the position of the bolt array centroid.'''
+        x0= self.dist*(self.nCols-1)/2.0
+        y0= self.dist*(self.nRows-1)/2.0
+        return geom.Pos2d(x0,y0)
+        
     def getLocalPositions(self):
         ''' Return the local coordinates of the bolts.'''
         retval= list()
-        x0= self.dist*(self.nCols-1)/2.0
-        y0= self.dist*(self.nRows-1)/2.0
-        center= geom.Pos2d(x0,y0)
-        for i in range(0,self.nCols):
-            for j in range(0,self.nRows):
-                x= i*self.dist-center.x
-                y= j*self.dist-center.y
+        center= self.getCenter()
+        for j in range(0,self.nCols):
+            for i in range(0,self.nRows):
+                x= j*self.dist-center.x
+                y= i*self.dist-center.y
                 retval.append(geom.Pos2d(x, y))
         return retval
-        
+
+    def getColumnPositions(self, j):
+        ''' Return the local coordinates of the bolts at
+            the j-th column.
+
+        :param j: index of the column.
+        '''
+        retval= list()
+        center= self.getCenter()
+        for i in range(0,self.nRows):
+            x= j*self.dist-center.x
+            y= i*self.dist-center.y
+            retval.append(geom.Pos2d(x, y))
+        return retval
+    
+    def getRowPositions(self, i):
+        ''' Return the local coordinates of the bolts at
+            the i-th row.
+
+        :param i: index of the column.
+        '''
+        retval= list()
+        center= self.getCenter()
+        for j in range(0,self.nCols):
+            x= j*self.dist-center.x
+            y= i*self.dist-center.y
+            retval.append(geom.Pos2d(x, y))
+        return retval
+    
+    def getClearDistances(self, contour, loadDirection):
+        ''' Return the clear distance between the edge of the hole and
+            the edge of the adjacent hole or edge of the material.
+
+        :param countour: 2D polygon defining the bolted plate contour.
+        :param loadDirection: direction of the load.
+        '''
+        retval= list()
+        lmsg.error('Implementation pending')
+        return retval
+    
     def getHoleBlocks(self, refSys= geom.Ref3d3d(), labels= []):
         ''' Return octagons inscribed in the holes.'''
         localPos= self.getLocalPositions()
@@ -431,16 +474,15 @@ class BoltedPlateBase(object):
         retval.extend(blk.holes)
         return retval
 
-    def getClearDistances(self):
+    def getClearDistances(self, loadDirection):
         ''' Return the clear distance between the edge of the hole and
-            the edge of the adjacent hole or edge of the material.'''
+            the edge of the adjacent hole or edge of the material.
+
+        :param loadDirection: direction of the load.
+        '''
         retval= list()
         contour= geom.Polygon2d(self.getContour2d())
-        boltPositions= self.boltArray.getLocalPositions()
-        dist= self.boltArray.dist
-        for p in boltPositions:
-            cover= contour.getCover(p)-holeDiameter/2.0
-            retval.append(min(cover, dist))
+        retval= self.boltArray.getClearDistances(contour, loadDirection)
         return retval    
 
 class FinPlate(BoltedPlateBase):
