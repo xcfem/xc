@@ -356,7 +356,7 @@ class LoadCaseDispParameters(RecordDisp):
         '''
         preprocessor= FEcase.getPreprocessor
         modelSpace= predefined_spaces.getModelSpaceFromPreprocessor(preprocessor)
-        self.writeLoadsReport(modelSpace, texFile,cfg)
+        self.writeLoadReport(modelSpace, texFile,cfg)
 
     def writeSimpleLoadCaseReport(self, modelSpace, texFile, cfg):
         '''Creates the graphics files of displacements and internal forces 
