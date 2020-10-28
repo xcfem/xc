@@ -590,6 +590,15 @@ class FinPlate(BoltedPlate):
         intersection= contour.clip(line)
         return intersection.getLength()*self.thickness
 
+    def getNetAreaSubjectedToShear(self, Agv, shearVector):
+        ''' Return the net area of the plate subjected to shear.
+
+        :param Agv: gross area of the plate subjected to shear.
+        :param shearVector: 2D shear load vector.
+        '''
+        holeDiameter= self.boltArray.bolt.getDesignHoleDiameter()
+        return Agv-self.boltArray.getNumberOfBolts()*holeDiameter*self.thickness
+    
     def getNominalShearYieldingStrength(self, shearVector):
         ''' Return the design shear strength of the plate according to
             clause J.4.2 of AISC 360-16.
@@ -597,7 +606,6 @@ class FinPlate(BoltedPlate):
         :param shearVector: 2D shear load vector.
         '''
         Agv= self.getGrossAreaSubjectedToShear(shearVector) # gross area subject to shear.
-        print('Agv= ', Agv*1e6, ' mm2')
         return 0.6*self.steelType.fy*Agv # (J4-3)
     
     def getDesignShearYieldingStrength(self, shearVector):
@@ -615,10 +623,8 @@ class FinPlate(BoltedPlate):
         :param shearVector: 2D shear load vector.
         '''
         holeDiameter= self.boltArray.bolt.getDesignHoleDiameter()
-        print('hole diameter: ', holeDiameter*1e3, 'mm')
         Agv= self.getGrossAreaSubjectedToShear(shearVector) # gross area subject to shear.
-        Anv= Agv-self.boltArray.getNumberOfBolts()*holeDiameter*self.thickness # net area subject to shear.
-        print('Anv= ', Anv*1e6, ' mm2')
+        Anv= self.getNetAreaSubjectedToShear(Agv, shearVector) # net area subject to shear.
         return 0.6*self.steelType.fu*Anv # (J4-4) 
  
     def getDesignShearRuptureStrength(self, shearVector):
@@ -636,9 +642,7 @@ class FinPlate(BoltedPlate):
         :param shearVector: 2D shear load vector.
         '''
         shearYielding= self.getDesignShearYieldingStrength(shearVector)
-        print('shearYielding= ', shearYielding/1e3, ' kN')
         shearRupture= self.getDesignShearRuptureStrength(shearVector)
-        print('shearRupture= ', shearRupture/1e3, ' kN')
         return min(shearYielding, shearRupture)
 
     def getDesignShearEfficiency(self, shearVector):
@@ -655,7 +659,8 @@ class FinPlate(BoltedPlate):
             in the calculation of the block shear strength.'''
         retval= self.thickness
         cover= self.getMinimumCover()
-        holeDiameter= self.boltArray.bolt.getNominalHoleDiameter()
+        print('cover= ', cover)
+        holeDiameter= self.boltArray.bolt.getDesignHoleDiameter()
         if(self.boltArray.nCols==1): # single vertical line of bolts
             retval*= (cover-holeDiameter/2.0)
         elif(self.boltArray.nCols==2): # two vertical lines of bolts
