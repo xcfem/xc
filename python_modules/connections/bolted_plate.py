@@ -20,7 +20,7 @@ from misc_utils import log_messages as lmsg
 class BoltArrayBase(object):
     distances= [50e-3, 75e-3, 100e-3, 120e-3, 150e-3, 200e-3, 250e-3,.3,.4,.5,.6,.7,.8,.9]
     ''' Base class for bolt array. This class must be code agnostic
-        i.e. no AISC, EC3, EAE clauses here. Maybe there is some
+        i.e. no AISC, EC3, EAE clauses here. There is certainly some
         work to do in that sense (LP 09/2020). 
 
     :ivar bolt: bolt type.
@@ -59,16 +59,16 @@ class BoltArrayBase(object):
             number < 1 if the distance is ok.'''
         return self.bolt.getRecommendedDistanceBetweenCenters()/self.dist
 
-    def getMinPlateWidth(self):
-        ''' Return the minimum width of the bolted plate.'''
-        minEdgeDist= self.bolt.getMinimumEdgeDistanceJ3_4M()
-        return 2.0*minEdgeDist+self.dist*(self.nRows-1)
+    def getWidth(self):
+        ''' Return the distance between the centers of the first and the 
+            last rows.'''
+        return self.dist*(self.nRows-1)
 
-    def getMinPlateLength(self):
-        ''' Return the minimum length of the bolted plate.'''
-        minEdgeDist= self.bolt.getMinimumEdgeDistanceJ3_4M()
-        return 2.0*minEdgeDist+self.dist*(self.nCols-1)
-
+    def getLength(self):
+        ''' Return the distance between the centers of the first and the 
+            last columns.'''
+        return self.dist*(self.nCols-1)
+        
     def getNetWidth(self, plateWidth, diameterIncrement):
         ''' Return the net width due to the bolt holes.
 
@@ -119,19 +119,62 @@ class BoltArrayBase(object):
         self.nCols= dct['nCols']
         self.dist= dct['dist']
 
+    def getCenter(self):
+        ''' Return the position of the bolt array centroid.'''
+        x0= self.dist*(self.nCols-1)/2.0
+        y0= self.dist*(self.nRows-1)/2.0
+        return geom.Pos2d(x0,y0)
+        
     def getLocalPositions(self):
         ''' Return the local coordinates of the bolts.'''
         retval= list()
-        x0= self.dist*(self.nCols-1)/2.0
-        y0= self.dist*(self.nRows-1)/2.0
-        center= geom.Pos2d(x0,y0)
-        for i in range(0,self.nCols):
-            for j in range(0,self.nRows):
-                x= i*self.dist-center.x
-                y= j*self.dist-center.y
+        center= self.getCenter()
+        for j in range(0,self.nCols):
+            for i in range(0,self.nRows):
+                x= j*self.dist-center.x
+                y= i*self.dist-center.y
                 retval.append(geom.Pos2d(x, y))
         return retval
-        
+
+    def getColumnPositions(self, j):
+        ''' Return the local coordinates of the bolts at
+            the j-th column.
+
+        :param j: index of the column.
+        '''
+        retval= list()
+        center= self.getCenter()
+        for i in range(0,self.nRows):
+            x= j*self.dist-center.x
+            y= i*self.dist-center.y
+            retval.append(geom.Pos2d(x, y))
+        return retval
+    
+    def getRowPositions(self, i):
+        ''' Return the local coordinates of the bolts at
+            the i-th row.
+
+        :param i: index of the column.
+        '''
+        retval= list()
+        center= self.getCenter()
+        for j in range(0,self.nCols):
+            x= j*self.dist-center.x
+            y= i*self.dist-center.y
+            retval.append(geom.Pos2d(x, y))
+        return retval
+    
+    def getClearDistances(self, contour, loadDirection):
+        ''' Return the clear distance between the edge of the hole and
+            the edge of the adjacent hole or edge of the material.
+
+        :param countour: 2D polygon defining the bolted plate contour.
+        :param loadDirection: direction of the load.
+        '''
+        retval= list()
+        lmsg.error('Implementation pending')
+        return retval
+    
     def getHoleBlocks(self, refSys= geom.Ref3d3d(), labels= []):
         ''' Return octagons inscribed in the holes.'''
         localPos= self.getLocalPositions()
@@ -181,7 +224,7 @@ class BoltArrayBase(object):
 
 class BoltedPlateBase(object):
     ''' Base class for bolted plates. This class must be code agnostic
-        i.e. no AISC, EC3, EAE clauses here. Maybe there is some
+        i.e. no AISC, EC3, EAE clauses here. There is certainly some
         work to do in that sense (LP 09/2020).
 
     :ivar boltArray: bolt array.
@@ -194,10 +237,12 @@ class BoltedPlateBase(object):
     :ivar doublePlate: if true there is one plate on each side
                        of the main member.
     '''
-    def __init__(self, boltArray, thickness= 10e-3, steelType= None, eccentricity= geom.Vector2d(0.0,0.0), doublePlate= False):
+    def __init__(self, boltArray, width= None, length= None, thickness= 10e-3, steelType= None, eccentricity= geom.Vector2d(0.0,0.0), doublePlate= False):
         ''' Constructor.
 
         :param boltArray: bolt array.
+        :param width: plate width (if None it will be computed from the bolt arrangement.)
+        :param length: plate length (if None it will be computed from the bolt arrangement.)
         :param thickness: plate thickness.
         :param steelType: steel type.
         :param eccentricity: eccentricity of the plate with respect the center
@@ -205,44 +250,116 @@ class BoltedPlateBase(object):
         :param doublePlate: if true there is one plate on each side
                             of the main member.
         '''
+        self.width= width
+        self.length= length
         self.setBoltArray(boltArray)
         self.thickness= thickness
         self.steelType= steelType
+        self.eccentricity= eccentricity
         self.doublePlate= doublePlate
-
-    def computeDimensions(self):
-        ''' Assigns the bolt arrangement.'''
+            
+    def getMinWidth(self):
+        ''' Return the minimum plate width.'''
+        retval= 0.0
         if(self.boltArray.bolt):
-            minWidth= self.boltArray.getMinPlateWidth()
-            for d in self.boltArray.distances:
-                if(d>= minWidth):
-                    self.width= d
-                    break
-            minLength= self.boltArray.getMinPlateLength()
-            for d in self.boltArray.distances:
-                if(d>= minLength):
-                    self.length= d
-                    break
+            minEdgeDist= self.boltArray.bolt.getMinimumEdgeDistance()
+            return 2.0*minEdgeDist+self.boltArray.getWidth()
+        return retval        
+
+    def getMinLength(self):
+        ''' Return the minimum plate length.'''
+        retval= 0.0
+        if(self.boltArray.bolt):
+            minEdgeDist= self.boltArray.bolt.getMinimumEdgeDistance()
+            return 2.0*minEdgeDist+self.boltArray.getLength()
+        return retval
+
+    def checkWidth(self):
+        ''' Return true if the plate width is enough with respect to
+            the bolt arrangement.'''
+        return (self.width>self.getMinWidth())
+
+    def checkLength(self):
+        ''' Return true if the plate length is enough with respect to
+            the bolt arrangement.'''
+        return (self.length>self.getMinLength())
+    
+    def checkDimensions(self):
+        ''' Check the plate dimensions with respect to the bolt
+            arrangement.'''
+        minWidth= self.getMinWidth()
+        minLength= self.getMinLength()
+        return ((self.width>=minWidth) and (self.length>=minLength))
+        
+    def computeWidth(self):
+        ''' Compute the plate width from the bolt
+            arrangement.'''
+        minWidth= self.getMinWidth()
+        for d in self.boltArray.distances:
+            if(d>= minWidth):
+                self.width= d
+                break
+            
+    def computeLength(self):
+        ''' Assigns the bolt arrangement.'''
+        minLength= self.getMinLength()
+        for d in self.boltArray.distances:
+            if(d>= minLength):
+                self.length= d
+                break
+        
+    def computeDimensions(self):
+        ''' Compute the plate dimensions from the bolt
+            arrangement.'''
+        if(not self.width):
+            self.computeWidth()
         else:
-            self.width= 0.0
-            self.height= 0.0
+            self.checkWidth()
+        if(not self.length):
+            self.computeLength()
+        else:
+            self.checkLength()
                     
     def setBoltArray(self, boltArray):
         ''' Assigns the bolt arrangement.'''
         self.boltArray= boltArray
-        self.computeDimensions()
-        
-            
+        ok= True
+        if(self.width and self.length):
+            ok= self.checkDimensions()
+        elif(self.width):
+            self.computeLength()
+            ok= self.checkWidth()            
+        elif(self.length):
+            self.computeWidth()
+            ok= self.checkLength()
+        else:
+            self.computeDimensions()
+        if(not ok):
+            lmsg.error('Plate too small for the bolt arrangement.')
+ 
     def getNetWidth(self, diameterIncrement):
         ''' Return the net width due to the bolt holes.
 
         :param diameterIncrement: increment of the diameter with respect
                                   the nominal diameter.
         '''
-        return self.boltArray.getNetWidth(self.width, diameterIncrement)        
-            
+        return self.boltArray.getNetWidth(self.width, diameterIncrement)
+
+    def getNetArea(self, diameterIncrement):
+        ''' Return the net area due to the bolt holes.
+
+        :param diameterIncrement: increment of the diameter with respect
+                                  the nominal diameter.
+        '''
+        return self.getNetWidth(self.width, diameterIncrement)*self.thickness
+    
+    def getGrossArea(self):
+        ''' Return the gross area of the plate.'''
+        return self.width*self.thickness
+    
     def getPlateDimensions(self):
-        ''' Return the dimensions of the plate.'''
+        ''' Return the width, length and thickness of the the 
+            plate in a tuple.'''
         return (self.width, self.length, self.thickness)
 
     def checkThickness(self, Pd):
@@ -316,11 +433,16 @@ class BoltedPlateBase(object):
         outputFile.write('    steel type: '+str(self.steelType.name)+'\n')
         self.boltArray.report(outputFile)
 
-    def getContour(self, refSys):
-        ''' Return the contour points of the plate.'''
+    def getContour2d(self):
+        ''' Return the contour points of the plate in local coordinates.'''
         l2= self.length/2.0
         w2= self.width/2.0
-        localPos= [geom.Pos2d(-l2+self.eccentricity.x,-w2+self.eccentricity.y), geom.Pos2d(l2+self.eccentricity.x,-w2+self.eccentricity.y), geom.Pos2d(l2+self.eccentricity.x,w2+self.eccentricity.y), geom.Pos2d(-l2+self.eccentricity.x,w2+self.eccentricity.y)]
+        return [geom.Pos2d(-l2+self.eccentricity.x,-w2+self.eccentricity.y), geom.Pos2d(l2+self.eccentricity.x,-w2+self.eccentricity.y), geom.Pos2d(l2+self.eccentricity.x,w2+self.eccentricity.y), geom.Pos2d(-l2+self.eccentricity.x,w2+self.eccentricity.y)]
+        
+
+    def getContour(self, refSys):
+        ''' Return the contour points of the plate.'''
+        localPos= self.getContour2d()
         retval= list()
         for p in localPos:
             p3d= geom.Pos3d(p.x,p.y,0.0)
@@ -351,6 +473,35 @@ class BoltedPlateBase(object):
         blk.holes= self.boltArray.getHoleBlocks(refSys,holeLabels)
         retval.extend(blk.holes)
         return retval
+
+    def getClearDistances(self, loadDirection):
+        ''' Return the clear distance between the edge of the hole and
+            the edge of the adjacent hole or edge of the material.
+
+        :param loadDirection: direction of the load.
+        '''
+        retval= list()
+        contour= geom.Polygon2d(self.getContour2d())
+        retval= self.boltArray.getClearDistances(contour, loadDirection)
+        return retval    
+
+class FinPlate(BoltedPlateBase):
+    ''' Fin plate.This class must be code agnostic
+        i.e. no AISC, EC3, EAE clauses here. There is certainly some
+        work to do in that sense (LP 10/2020). '''
+    def __init__(self, boltArray, width= None, length= None, thickness= 10e-3, steelType= None, eccentricity= geom.Vector2d(0.0,0.0)):
+        ''' Constructor.
+
+        :param boltArray: bolt array.
+        :param width: plate width (if None it will be computed from the bolt arrangement.)
+        :param length: plate length (if None it will be computed from the bolt arrangement.)
+        :param thickness: plate thickness.
+        :param steelType: steel type.
+        :param eccentricity: eccentricity of the plate with respect the center
+                             of the bolt array.
+        '''
+        super(FinPlate, self).__init__(boltArray, width, length, thickness, steelType, eccentricity, doublePlate= False)    
+    
     
 def getBoltedPointBlocks(gussetPlateBlocks, boltedPlateBlocks, distBetweenPlates):
     ''' Return the points linked by bolts between the two pieces.

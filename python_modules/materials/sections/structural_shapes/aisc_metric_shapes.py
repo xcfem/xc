@@ -70,13 +70,13 @@ def getShapePlasticMoment(shape, majorAxis= True):
         retval= min(Fy*shape.get('Wypl'), 1.6*Fy*shape.get('Wyel')) # equation F6-1
     return retval
 
-def getShapeCompactWebAndFlangeRatio(shape, majorAxis= True):
+def getShapeBendingCompactWebAndFlangeRatio(shape, majorAxis= True):
     ''' If web and flanges are compact according to table 4.1b of 
         AISC-360-16 return a value less than one.
 
     :param majorAxis: true if flexure about the major axis.
     '''
-    return max(shape.compactWebRatio(majorAxis),shape.compactFlangeRatio(majorAxis))
+    return max(shape.bendingCompactWebRatio(majorAxis),shape.bendingCompactFlangeRatio(majorAxis))
     
 def getUIShapeRts(shape, majorAxis= True):
     ''' Return the value of rts according to equation F2-7
@@ -92,19 +92,33 @@ def getUIShapeRts(shape, majorAxis= True):
     Sz= shape.get('Wzel') # Elastic section modulus about major axis.
     return math.sqrt(math.sqrt(Iy*Cw)/Sz)
 
-def getUIShapeLambdaPFlange(shape):
+def getUIShapeLambdaPFlangeBending(shape):
     '''Return he limiting slenderness for a compact flange, 
        defined in Table B4.1b of AISC-360-16.'''
     E= shape.get('E')
     Fy= shape.steelType.fy
     return 0.38*math.sqrt(E/Fy) # Case 10 or case 13
 
-def getUIShapeLambdaRFlange(shape):
+def getUIShapeLambdaRFlangeBending(shape):
     '''Return he limiting slenderness for a noncompact flange, 
        defined in Table B4.1b of AISC-360-16.'''
     E= shape.get('E')
     Fy= shape.steelType.fy
     return 1.0*math.sqrt(E/Fy) # Case 10 or case 13
+
+def getUIShapeLambdaRFlangeCompression(shape):
+    '''Return he limiting slenderness for a nonslender flange, 
+       defined in Table B4.1a of AISC-360-16.'''
+    E= shape.get('E')
+    Fy= shape.steelType.fy
+    return 0.56*math.sqrt(E/Fy) # Case 1
+
+def getUIShapeLambdaPWebBending(shape):
+    '''Return he limiting slenderness for a compact web, 
+       defined in Table B4.1b of AISC-360-16.'''
+    E= shape.get('E')
+    Fy= shape.steelType.fy
+    return 3.76*math.sqrt(E/Fy) # Case 10 or case 13
 
 
 def getUIShapeLp(shape, majorAxis= True):
@@ -187,23 +201,23 @@ def getUIShapeNominalFlexuralStrength(shape, lateralUnbracedLength, Cb, majorAxi
     Mp= shape.getPlasticMoment(majorAxis) # plastic moment.
     Fy= shape.steelType.fy # specified minimum yield stress
     if(not majorAxis): # section F6
-        compactFlanges= shape.compactFlangeRatio(majorAxis)
+        compactFlanges= shape.bendingCompactFlangeRatio(majorAxis)
         if(compactFlanges<=1.0): # flanges are compact.
             Mn= Mp # equation F6-1
         else: 
-            slenderFlanges= shape.slenderFlangeRatio(majorAxis)
+            slenderFlanges= shape.bendingSlenderFlangeRatio(majorAxis)
             Sy= shape.get('Wyel') # Elastic section modulus about minor axis.
             if(slenderFlanges<=1.0): # flanges are noncompact -> equation F6-2 applies.
                 lmbd= 2.0*shape.get('bSlendernessRatio') # see lambda expression in F6. 
-                lmbd_pf= shape.getLambdaPFlange()
-                lmbd_rf= shape.getLambdaRFlange()
+                lmbd_pf= shape.getLambdaPFlangeBending()
+                lmbd_rf= shape.getLambdaRFlangeBending()
                 Mn= Mp-(Mp-0.7*Fy*Sy)*((lmbd-lmbd_pf)/(lmbd_rf-lmbd_pf)) # equation F6-2
             else: # slender flanges.
 
                 Fcr= shape.getCriticalStressF(None, None, majorAxis)
                 Mn= Fcr*Sy # equation F6-3
     else:
-        compactRatio= shape.compactWebAndFlangeRatio(majorAxis)
+        compactRatio= shape.bendingCompactWebAndFlangeRatio(majorAxis)
         Sz= shape.get('Wzel') # Elastic section modulus about major axis.
         if(compactRatio<=1.0): # flange and web are compact.
             Lb= lateralUnbracedLength
@@ -219,13 +233,13 @@ def getUIShapeNominalFlexuralStrength(shape, lateralUnbracedLength, Cb, majorAxi
                     Fcr= shape.getCriticalStressF(Lb, Cb, majorAxis)
                     Mn= min(Fcr*Sz, Mp)
         else: # flange or web or both are not compact.
-            compactWeb= shape.compactWebRatio(majorAxis)
+            compactWeb= shape.bendingCompactWebRatio(majorAxis)
             if(compactWeb<=1.0): # web is compact.
-                slenderFlanges= shape.slenderFlangeRatio(majorAxis)
+                slenderFlanges= shape.bendingSlenderFlangeRatio(majorAxis)
                 lmbd= shape.get('bSlendernessRatio')
                 if(slenderFlanges<=1.0): # flanges are noncompact -> equation F3-1 applies.
-                    lmbd_pf= shape.getLambdaPFlange()
-                    lmbd_rf= shape.getLambdaRFlange()
+                    lmbd_pf= shape.getLambdaPFlangeBending()
+                    lmbd_rf= shape.getLambdaRFlangeBending()
                     Mn= Mp-(Mp-0.7*Fy*Sz)*((lmbd-lmbd_pf)/(lmbd_rf-lmbd_pf)) # equation F3-1
                 else: # flanges are slender -> equation F3-2 applies.
                     kc= max(min(4.0/math.sqrt(shape.get('hSlendernessRatio')),0.76),0.35)
@@ -314,6 +328,40 @@ def getShapeTorsionalElasticBucklingStress(shape, effectiveLengthX):
         lmsg.error('Torsional elastic buckling stress for unsymmetric members not implemented yet.')
 
     return retval
+
+
+# AISC 341-16 Seismic Provisions for Structural Steel Buildings
+def getUIShapeLambdaMDFlange(shape):
+    '''Return the limiting width-to-thickness ratio for the unstiffened flange
+       of a moderate ductile member according to table D1.1 of AISC 341-16.'''
+    E= shape.get('E')
+    Fy= shape.steelType.fy
+    Ry= shape.steelType.Ry
+    return 0.40*math.sqrt(E/Fy/Ry) # Case 1
+
+def getUIShapeLambdaHDFlange(shape):
+    '''Return the limiting width-to-thickness ratio for the unstiffened flange
+       of a highly ductile member according to table D1.1 of AISC 341-16.'''
+    E= shape.get('E')
+    Fy= shape.steelType.fy
+    Ry= shape.steelType.Ry
+    return 0.32*math.sqrt(E/Fy/Ry) # Case 1
+
+def getUIShapeLambdaMDWeb(shape, factor= 1.57):
+    '''Return the limiting width-to-thickness ratio for the web
+       of a moderate ductile member according to table D1.1 of AISC 341-16.'''
+    E= shape.get('E')
+    Fy= shape.steelType.fy
+    Ry= shape.steelType.Ry
+    return factor*math.sqrt(E/Fy/Ry) # Case 5
+
+def getUIShapeLambdaHDWeb(shape, factor= 1.57):
+    '''Return the limiting width-to-thickness ratio for the web
+       of a higly ductile member according to table D1.1 of AISC 341-16.'''
+    E= shape.get('E')
+    Fy= shape.steelType.fy
+    Ry= shape.steelType.Ry
+    return factor*math.sqrt(E/Fy/Ry) # Case 5
 
 class WShape(structural_steel.IShape):
     '''W shape
@@ -556,38 +604,52 @@ class WShape(structural_steel.IShape):
         retval.appendBlock(web)
         return retval        
 
-    def getLambdaPFlange(self):
+    def getLambdaPFlangeBending(self):
         '''Return he limiting slenderness for a compact flange, 
            defined in Table B4.1b of AISC-360-16.'''
-        return getUIShapeLambdaPFlange(self)
+        return getUIShapeLambdaPFlangeBending(self)
 
-    def getLambdaRFlange(self):
+    def getLambdaRFlangeBending(self):
         '''Return he limiting slenderness for a noncompact flange, 
            defined in Table B4.1b of AISC-360-16.'''
-        return getUIShapeLambdaRFlange(self)
+        return getUIShapeLambdaRFlangeBending(self)
 
-    def compactFlangeRatio(self, majorAxis= True):
+    def bendingCompactFlangeRatio(self, majorAxis= True):
         ''' If flanges are compact according to table 4.1b of 
             AISC-360-16 return a value less than one.
 
         :param majorAxis: true if flexure about the major axis.
         '''
-        lambda_p= self.getLambdaPFlange()
+        lambda_p= self.getLambdaPFlangeBending()
         slendernessRatio= self.get('bSlendernessRatio')
         return slendernessRatio/lambda_p # if <1 then flanges are compact.
     
-    def slenderFlangeRatio(self, majorAxis= True):
+    def bendingSlenderFlangeRatio(self, majorAxis= True):
         ''' If flanges are noncompact according to table 4.1b of 
             AISC-360-16 return a value less than one otherwise
             they are slender.
 
         :param majorAxis: true if flexure about the major axis.
         '''
-        lambda_r= self.getLambdaRFlange()
+        lambda_r= self.getLambdaRFlangeBending()
         slendernessRatio= self.get('bSlendernessRatio')
         return slendernessRatio/lambda_r # if <1 then flanges are noncompact.
+    
+    def getLambdaPWebBending(self):
+        ''' Return the limiting Width-to-Thickness Ratio 
+        between compact and noncompact webs according to 
+        table B4.1b of AISC-360-16 case 15.
+        '''
+        return getUIShapeLambdaPWebBending(self)
+    
+    def getLambdaRWebBending(self):
+        ''' Return the limiting Width-to-Thickness Ratio 
+        between noncompact and slender webs according to 
+        table B4.1b of AISC-360-16 case 15.
+        '''
+        return 5.70*math.sqrt(self.steelType.E/self.steelType.fy) # Case 19
 
-    def compactWebRatio(self, majorAxis= True):
+    def bendingCompactWebRatio(self, majorAxis= True):
         ''' If web is compact according to case 15 of table 4.1b of 
             AISC-360-16 return a value less than one.
 
@@ -595,13 +657,11 @@ class WShape(structural_steel.IShape):
         '''
         if(not majorAxis):
             lmsg.error(__name__+': compact web ratio not implemented for minor axis.')
-        E= self.get('E')
-        Fy= self.steelType.fy
-        lambda_p= 3.76*math.sqrt(E/Fy) # Case 15
+        lambda_p= self.getLambdaPWebBending()
         slendernessRatio= self.get('hSlendernessRatio')
         return slendernessRatio/lambda_p # if <1 then web is compact.
 
-    def slenderWebRatio(self, majorAxis= True):
+    def bendingSlenderWebRatio(self, majorAxis= True):
         ''' If web is noncompact according to case 15 of table 4.1b of 
             AISC-360-16 return a value less than one, otherwise the web
             is slender.
@@ -610,26 +670,31 @@ class WShape(structural_steel.IShape):
         '''
         if(not majorAxis):
             lmsg.error(__name__+': compact web ratio not implemented for minor axis.')
-        E= self.get('E')
-        Fy= self.steelType.fy
-        lambda_p= 5.70*math.sqrt(E/Fy) # Case 15
+        lambda_r= self.getLambdaRWebBending() # Case 15
         slendernessRatio= self.get('hSlendernessRatio')
-        return slendernessRatio/lambda_p # if <1 then web is noncompact.
+        return slendernessRatio/lambda_r # if <1 then web is noncompact.
     
-    def compactWebAndFlangeRatio(self, shape, majorAxis= True):
+    def bendingCompactWebAndFlangeRatio(self, shape, majorAxis= True):
         ''' If web and flanges are compact according to table 4.1b of 
             AISC-360-16 return a value less than one.
 
         :param majorAxis: true if flexure about the major axis.
         '''
-        return getShapeCompactWebAndFlangeRatio(self, majorAxis)
+        return getShapeBendingCompactWebAndFlangeRatio(self, majorAxis)
 
-    def slendernessCheck(self):
+    def getLambdaRFlangeCompression(self):
+        ''' Return the limiting Width-to-Thickness Ratio 
+        between nonslender and slender flanges according to 
+        table B4.1a of AISC-360-16 case 1.
+        '''
+        return getUIShapeLambdaRFlangeCompression(self)
+    
+    def compressionSlendernessCheck(self):
         ''' Verify that the section doesn't contains slender elements
             according to table B4.1a of AISC-360-16.'''
         E= self.get('E')
         Fy= self.steelType.fy
-        lambda_r= 0.56*math.sqrt(E/Fy) # Case 1
+        lambda_r= self.getLambdaRFlangeCompression()
         slendernessRatio= self.get('bSlendernessRatio')
         return slendernessRatio/lambda_r # OK if < 1.0
 
@@ -811,6 +876,106 @@ class WShape(structural_steel.IShape):
         '''
         return 0.9*self.getNominalFlexuralStrength(lateralUnbracedLength, Cb, majorAxis)
 
+    def getLambdaMDFlange(self):
+        '''Return the limiting width-to-thickness ratio for the unstiffened 
+           flange of a moderate ductile member according to table D1.1 
+           of AISC 341-16.'''
+        return getUIShapeLambdaMDFlange(self)
+    
+    def getLambdaHDFlange(self):
+        '''Return the limiting width-to-thickness ratio for the unstiffened 
+           flange of a highly ductile member according to table D1.1 
+           of AISC 341-16.'''
+        return getUIShapeLambdaHDFlange(self)
+    
+    def getLambdaMDWeb(self, N, M, momentFrameType= 0):
+        '''Return the limiting width-to-thickness ratio for the unstiffened 
+           web of a moderately ductile member according to table D1.1 
+           of AISC 341-16.
+
+        :param N: axial load.
+        :param M: bending moment.
+        :param momentFrameType: type of the moment frame (0: ordinary moment frame (OMF), 1: intermediate moment frame (IMF) 3: special moment frame).
+        '''
+        factor= 1.57
+        e= 0.0 # eccentricity.
+        if(N!=0.0):
+            e= abs(M/N)
+        else:
+            e= abs(M)*1e6
+        if(e>self.h()/2.0): # Bending -> beam.            
+            # Ratio of required strength to available axial yield strength.
+            Ca= N/self.getDesignTensileStrength() # table D1.1
+            if(Ca<=0.114):
+                factor= 3.96*(1-3.04*Ca)
+            else:
+                factor= max(1.29*(2.12-Ca),1.57)
+            if(momentFrameType== 1): #IMF
+                factor= min(factor, 3.96)
+            elif(momentFrameType== 2): # SMF
+                factor= min(factor, 2.57)
+        return getUIShapeLambdaMDWeb(self, factor)
+    
+    def getLambdaHDWeb(self, N, M, momentFrameType= 0):
+        '''Return the limiting width-to-thickness ratio for the unstiffened 
+           web of a highly ductile member according to table D1.1 
+           of AISC 341-16.
+
+        :param N: axial load. 
+        :param M: bending moment.
+        :param momentFrameType: type of the moment frame (0: ordinary moment frame (OMF), 1: intermediate moment frame (IMF) 2: special moment frame).
+        '''
+        factor= 1.57
+        e= 0.0 # eccentricity.
+        if(N!=0.0):
+            e= abs(M/N)
+        else:
+            e= abs(M)*1e6
+        if(e>self.h()/2.0): # Bending -> beam.            
+            # Ratio of required strength to available axial yield strength.
+            Ca= N/self.getDesignTensileStrength() # table D1.1
+            if(Ca<=0.114):
+                factor= 2.57*(1-1.04*Ca)
+            else:
+                factor= max(0.88*(2.68-Ca),1.57)
+            if(momentFrameType== 1): #IMF
+                factor= min(factor, 3.96)
+            elif(momentFrameType== 2): # SMF
+                factor= min(factor, 2.57)
+        return getUIShapeLambdaHDWeb(self, factor)
+
+    def flangeLocalBucklingCheck(self, highlyDuctile= True):
+        ''' Checks local buckling according to width-to-thickness ratios
+            of members according to table D1.1 of AISC 341-16.
+
+        :param higlyDuctile: if true the member is considered as highly
+                             ductile.
+        '''
+        slendernessRatio= self.get('bSlendernessRatio')
+        retval= slendernessRatio
+        if(highlyDuctile):
+            retval/= self.getLambdaHDFlange()
+        else: # moderate ductile
+            retval/= self.getLambdaMDFlange()            
+        return retval
+
+    def webLocalBucklingCheck(self, N, M, momentFrameType= 0, highlyDuctile= True):
+        ''' Checks local buckling according to width-to-thickness ratios
+            of members according to table D1.1 of AISC 341-16.
+
+        :param N: axial load. 
+        :param M: bending moment.
+        :param momentFrameType: type of the moment frame (0: ordinary moment frame (OMF), 1: intermediate moment frame (IMF) 2: special moment frame).
+        :param higlyDuctile: if true the member is considered as highly
+                             ductile.
+        '''
+        slendernessRatio= self.get('hSlendernessRatio')
+        retval= slendernessRatio
+        if(highlyDuctile):
+            retval/= self.getLambdaHDWeb(N, M, momentFrameType)
+        else: # moderately ductile
+            retval/= self.getLambdaMDWeb(N, M, momentFrameType)            
+        return retval
  
 # *************************************************************************
 # AISC C profiles.
@@ -842,38 +1007,43 @@ class CShape(structural_steel.UShape):
         '''Return the metric label from the US customary one.'''
         return getMetricLabel(self.name)
         
-    def getLambdaPFlange(self):
+    def getLambdaPFlangeBending(self):
         '''Return he limiting slenderness for a compact flange, 
            defined in Table B4.1b of AISC-360-16.'''
-        return getUIShapeLambdaPFlange(self)
+        return getUIShapeLambdaPFlangeBending(self)
 
-    def getLambdaRFlange(self):
+    def getLambdaRFlangeBending(self):
         '''Return he limiting slenderness for a noncompact flange, 
            defined in Table B4.1b of AISC-360-16.'''
-        return getUIShapeLambdaRFlange(self)
+        return getUIShapeLambdaRFlangeBending(self)
 
-    def compactFlangeRatio(self, majorAxis= True):
+    def getLambdaPWebBending(self):
+        '''Return he limiting slenderness for a compact flange, 
+           defined in Table B4.1b of AISC-360-16.'''
+        return getUIShapeLambdaPWebBending(self)
+    
+    def bendingCompactFlangeRatio(self, majorAxis= True):
         ''' If flanges are compact according to table 4.1b of 
             AISC-360-16 return a value less than one.
 
         :param majorAxis: true if flexure about the major axis.
         '''
-        lambda_p= self.getLambdaPFlange()
+        lambda_p= self.getLambdaPFlangeBending()
         slendernessRatio= self.get('bSlendernessRatio')
         return slendernessRatio/lambda_p # if <1 then flanges are compact.
     
-    def slenderFlangeRatio(self, majorAxis= True):
+    def bendingSlenderFlangeRatio(self, majorAxis= True):
         ''' If flanges are noncompact according to table 4.1b of 
             AISC-360-16 return a value less than one otherwise
             they are slender.
 
         :param majorAxis: true if flexure about the major axis.
         '''
-        lambda_r= self.getLambdaRFlange()
+        lambda_r= self.getLambdaRFlangeBending()
         slendernessRatio= self.get('bSlendernessRatio')
         return slendernessRatio/lambda_r # if <1 then flanges are noncompact.
     
-    def compactWebRatio(self, majorAxis= True):
+    def bendingCompactWebRatio(self, majorAxis= True):
         ''' If web is compact according to case 15 of table 4.1b of 
             AISC-360-16 return a value less than one.
 
@@ -881,13 +1051,11 @@ class CShape(structural_steel.UShape):
         '''
         if(not majorAxis):
             lmsg.error(__name__+': compact web ratio not implemented for minor axis.')
-        E= self.get('E')
-        Fy= self.steelType.fy
-        lambda_p= 3.76*math.sqrt(E/Fy) # Case 15
+        lambda_p= self.getLambdaPWebBending()
         slendernessRatio= self.get('hSlendernessRatio')
         return slendernessRatio/lambda_p # if <1 then web is compact.
 
-    def slenderWebRatio(self, majorAxis= True):
+    def bendingSlenderWebRatio(self, majorAxis= True):
         ''' If web is noncompact according to case 15 of table 4.1b of 
             AISC-360-16 return a value less than one, otherwise the web
             is slender.
@@ -902,13 +1070,13 @@ class CShape(structural_steel.UShape):
         slendernessRatio= self.get('hSlendernessRatio')
         return slendernessRatio/lambda_p # if <1 then web is noncompact.
     
-    def compactWebAndFlangeRatio(self, majorAxis= True):
+    def bendingCompactWebAndFlangeRatio(self, majorAxis= True):
         ''' If web and flanges are compact according to table 4.1b of 
             AISC-360-16 return a value less than one.
 
         :param majorAxis: true if flexure about the major axis.
         '''
-        return getShapeCompactWebAndFlangeRatio(self,majorAxis)
+        return getShapeBendingCompactWebAndFlangeRatio(self,majorAxis)
     
     def getAw(self, majorAxis= True):
         ''' Return area for shear strength calculation.'''
@@ -975,12 +1143,17 @@ class CShape(structural_steel.UShape):
         '''
         return self.getDesignShearStrengthWithoutTensionFieldAction(a,majorAxis)
 
-    def slendernessCheck(self):
+    def getLambdaRFlangeCompression(self):
+        ''' Return the limiting Width-to-Thickness Ratio 
+        between nonslender and slender flanges according to 
+        table B4.1a of AISC-360-16 case 1.
+        '''
+        return getUIShapeLambdaRFlangeCompression(self)
+
+    def compressionSlendernessCheck(self):
         ''' Verify that the section doesn't contains slender elements
-            according to table B4.1 a of AISC-360-16.'''
-        E= self.get('E')
-        Fy= self.steelType.fy
-        lambda_r= 0.56*math.sqrt(E/Fy) # Case 1
+            according to table B4.1a of AISC-360-16.'''
+        lambda_r= self.getLambdaRFlangeCompression()
         slendernessRatio= self.get('bSlendernessRatio')
         return slendernessRatio/lambda_r # OK if < 1.0
     
@@ -1101,6 +1274,29 @@ class CShape(structural_steel.UShape):
         '''
         return 0.9*self.getNominalFlexuralStrength(lateralUnbracedLength, Cb, majorAxis)
     
+    def getLambdaMDFlange(self):
+        '''Return the limiting width-to-thickness ratio for the unstiffened 
+           flange of a moderate ductile member according to table D1.1 
+           of AISC 341-16.'''
+        return getUIShapeLambdaMDFlange(self)
+    
+    def getLambdaHDFlange(self):
+        '''Return the limiting width-to-thickness ratio for the unstiffened 
+           flange of a highly ductile member according to table D1.1 
+           of AISC 341-16.'''
+        return getUIShapeLambdaHDFlange(self)
+    
+    def getLambdaMDWeb(self):
+        '''Return the limiting width-to-thickness ratio for the unstiffened 
+           web of a moderate ductile member according to table D1.1 
+           of AISC 341-16.'''
+        return getUIShapeLambdaMDWeb(self)
+    
+    def getLambdaHDWeb(self):
+        '''Return the limiting width-to-thickness ratio for the unstiffened 
+           web of a highly ductile member according to table D1.1 
+           of AISC 341-16.'''
+        return getUIShapeLambdaHDWeb(self)
 
 # *************************************************************************
 # AISC Hollow Structural Sections.
@@ -1137,9 +1333,10 @@ class HSSShape(structural_steel.QHShape):
         '''Return the metric label from the US customary one.'''
         return getMetricLabel(self.name)
 
-    def getLimitingWidthToThicknessRatio(self):
-        ''' Return the Limiting Width-to-Thickness Ratio 
-        according to table B4.1a of AISC-360-16.
+    def getLambdaRCompression(self):
+        ''' Return the Limiting Width-to-Thickness Ratio
+        between nonslender and slender elements
+        according to case 6 of table B4.1a of AISC-360-16.
         '''
         return 1.4*math.sqrt(self.steelType.E/self.steelType.fy)
 
@@ -1150,7 +1347,7 @@ class HSSShape(structural_steel.QHShape):
         '''
         retval= 'nonslender'
         bSlendernessRatio= self.get('bSlendernessRatio')
-        lambda_r= self.getLimitingWidthToThicknessRatio()
+        lambda_r= self.getLambdaRCompression()
         if(bSlendernessRatio>lambda_r):
             retval= 'slender'
         return retval
@@ -1162,7 +1359,7 @@ class HSSShape(structural_steel.QHShape):
         '''
         retval= 'nonslender'
         hSlendernessRatio= self.get('hSlendernessRatio')
-        lambda_r= self.getLimitingWidthToThicknessRatio()
+        lambda_r= self.getLambdaRCompression()
         if(hSlendernessRatio>lambda_r):
             retval= 'slender'
         return retval
@@ -1175,17 +1372,18 @@ class HSSShape(structural_steel.QHShape):
         if((self.getHClassification()=='slender') or (self.getBClassification()=='slender')):
             retval= 'slender'
         return retval
-    def getLambdaP(self):
-        ''' Return the limiting Width-to-Thickness Ratio (compact/noncompact)
-            according to table B4.1b of AISC 360-16.
-        '''
-        return 1.12*math.sqrt(self.steelType.E/self.steelType.fy)
     
-    def getLambdaR(self):
+    def getLambdaPFlangeBending(self):
         ''' Return the limiting Width-to-Thickness Ratio (compact/noncompact)
             according to table B4.1b of AISC 360-16.
         '''
-        return 1.40*math.sqrt(self.steelType.E/self.steelType.fy)
+        return 1.12*math.sqrt(self.steelType.E/self.steelType.fy) # Case 17
+    
+    def getLambdaRFlangeBending(self):
+        ''' Return the limiting Width-to-Thickness Ratio (compact/noncompact)
+            according to table B4.1b of AISC 360-16.
+        '''
+        return 1.40*math.sqrt(self.steelType.E/self.steelType.fy) # Case 17
     
     def getBFlexureClassification(self):
         ''' Return the classification for local buckling of the
@@ -1194,13 +1392,25 @@ class HSSShape(structural_steel.QHShape):
         '''
         retval= 'compact'
         bSlendernessRatio= self.get('bSlendernessRatio')
-        lambda_P= self.getLambdaP()
-        lambda_R= self.getLambdaR()
+        lambda_P= self.getLambdaPFlangeBending()
+        lambda_R= self.getLambdaRFlangeBending()
         if(bSlendernessRatio>lambda_P):
             retval= 'noncompact'
         elif(bSlendernessRatio>lambda_R):
             retval= 'slender'
         return retval
+    
+    def getLambdaPWebBending(self):
+        ''' Return the limiting Width-to-Thickness Ratio (compact/noncompact)
+            according to table B4.1b of AISC 360-16.
+        '''
+        return 2.42*math.sqrt(self.steelType.E/self.steelType.fy) # Case 19
+    
+    def getLambdaRWebBending(self):
+        ''' Return the limiting Width-to-Thickness Ratio (compact/noncompact)
+            according to table B4.1b of AISC 360-16.
+        '''
+        return 5.70*math.sqrt(self.steelType.E/self.steelType.fy) # Case 19
     
     def getHFlexureClassification(self):
         ''' Return the classification for local buckling of the
@@ -1209,8 +1419,8 @@ class HSSShape(structural_steel.QHShape):
         '''
         retval= 'compact'
         hSlendernessRatio= self.get('hSlendernessRatio')
-        lambda_P= self.getLambdaP()
-        lambda_R= self.getLambdaR()
+        lambda_P= self.getLambdaPWebBending()
+        lambda_R= self.getLambdaRWebBending()
         if(hSlendernessRatio>lambda_P):
             retval= 'noncompact'
         elif(hSlendernessRatio>lambda_R):
@@ -1218,7 +1428,7 @@ class HSSShape(structural_steel.QHShape):
         return retval
 
     # Bending
-    def compactFlangeRatio(self, majorAxis= True):
+    def bendingCompactFlangeRatio(self, majorAxis= True):
         ''' If flanges are compact according to case
             17 (HSS sections subject to flexure) of
             table 4.1b of AISC-360-16 return a value 
@@ -1227,9 +1437,7 @@ class HSSShape(structural_steel.QHShape):
         :param majorAxis: true if flexure about the major axis.
         '''
         retval= 10.0
-        E= self.get('E')
-        Fy= self.steelType.fy
-        lambda_p= 1.12*math.sqrt(E/Fy) # Case 17
+        lambda_p= self.getLambdaPFlangeBending()
         if(majorAxis):
             slendernessRatio= self.get('bSlendernessRatio')
         else:
@@ -1237,7 +1445,7 @@ class HSSShape(structural_steel.QHShape):
         retval= slendernessRatio/lambda_p
         return retval # if <1 then flanges are compact.
     
-    def slenderFlangeRatio(self, majorAxis= True):
+    def bendingSlenderFlangeRatio(self, majorAxis= True):
         ''' If flanges are noncompact according to table 4.1b of 
             AISC-360-16 return a value less than one otherwise
             they are slender.
@@ -1245,9 +1453,7 @@ class HSSShape(structural_steel.QHShape):
         :param majorAxis: true if flexure about the major axis.
         '''
         retval= 10.0
-        E= self.get('E')
-        Fy= self.steelType.fy
-        lambda_r= 1.40*math.sqrt(E/Fy) # Case 17
+        lambda_r= self.getLambdaRFlangeBending()
         if(majorAxis):
             slendernessRatio= self.get('bSlendernessRatio')
         else:
@@ -1255,16 +1461,14 @@ class HSSShape(structural_steel.QHShape):
         retval= slendernessRatio/lambda_r
         return retval # if <1 then flanges are compact.
     
-    def compactWebRatio(self, majorAxis= True):
+    def bendingCompactWebRatio(self, majorAxis= True):
         ''' If webs are compact according to table 4.1b of 
             AISC-360-16 return a value less than one.
 
         :param majorAxis: true if flexure about the major axis.
         '''
         retval= 10.0
-        E= self.get('E')
-        Fy= self.steelType.fy
-        lambda_p= 2.42*math.sqrt(E/Fy) # Case 19
+        lambda_p= self.getLambdaPWebBending()
         if(majorAxis):
             slendernessRatio= self.get('bSlendernessRatio')
         else:
@@ -1272,7 +1476,7 @@ class HSSShape(structural_steel.QHShape):
         retval= slendernessRatio/lambda_p
         return retval # if <1 then webs are compact.
     
-    def slenderWebRatio(self, majorAxis= True):
+    def bendingSlenderWebRatio(self, majorAxis= True):
         ''' If web is noncompact according to table 4.1b of 
             AISC-360-16 return a value less than one otherwise
             it's slender.
@@ -1280,9 +1484,7 @@ class HSSShape(structural_steel.QHShape):
         :param majorAxis: true if flexure about the major axis.
         '''
         retval= 10.0
-        E= self.get('E')
-        Fy= self.steelType.fy
-        lambda_r= 5.7*math.sqrt(E/Fy) # Case 19
+        lambda_r= self.getLambdaRWebBending()
         if(majorAxis):
             slendernessRatio= self.get('bSlendernessRatio')
         else:
@@ -1290,13 +1492,13 @@ class HSSShape(structural_steel.QHShape):
         retval= slendernessRatio/lambda_r
         return retval # if <1 then webs are noncompact.
     
-    def compactWebAndFlangeRatio(self, majorAxis= True):
+    def bendingCompactWebAndFlangeRatio(self, majorAxis= True):
         ''' If web and flanges are compact according to table 4.1b of 
             AISC-360-16 return a value less than one.
 
         :param majorAxis: true if flexure about the major axis.
         '''
-        return getShapeCompactWebAndFlangeRatio(self,majorAxis)
+        return getShapeBendingCompactWebAndFlangeRatio(self,majorAxis)
     
     def getAw(self, majorAxis= True):
         ''' Return area for shear strength calculation.'''
@@ -1343,12 +1545,10 @@ class HSSShape(structural_steel.QHShape):
 
         return 0.9*self.getNominalShearStrength(majorAxis)
     
-    def slendernessCheck(self):
+    def compressionSlendernessCheck(self):
         ''' Verify that the section doesn't contains slender elements
-            according to table B4.1 a of AISC-360-16.'''
-        E= self.get('E')
-        Fy= self.steelType.fy
-        lambda_r= 1.4*math.sqrt(E/Fy)
+            according to table B4.1a of AISC-360-16.'''
+        lambda_r= self.getLambdaRCompression()
         slendernessRatio= max(self.get('hSlendernessRatio'),self.get('bSlendernessRatio'))
         return slendernessRatio/lambda_r # OK if < 1.0
     
@@ -1468,12 +1668,12 @@ class HSSShape(structural_steel.QHShape):
         :param majorAxis: true if flexure about the major axis.'''
         Mp= self.getPlasticMoment(majorAxis)
         Mn= 0.0 
-        compactFlanges= self.compactFlangeRatio(majorAxis)
+        compactFlanges= self.bendingCompactFlangeRatio(majorAxis)
         if(compactFlanges<=1.0):
             Mn= Mp # equation F7-1
         else:
             Fy= self.steelType.fy
-            slenderFlanges= self.slenderFlangeRatio(majorAxis)
+            slenderFlanges= self.bendingSlenderFlangeRatio(majorAxis)
             if(slenderFlanges<1.0): # flanges are noncompact.
                 E= self.get('E')
                 S= self.get('Wzel') # Elastic section modulus about major axis.
@@ -1495,12 +1695,12 @@ class HSSShape(structural_steel.QHShape):
         :param majorAxis: true if flexure about the major axis.'''
         Mp= self.getPlasticMoment(majorAxis)
         Mn= 0.0
-        compactWebs= self.compactWebRatio(majorAxis)
+        compactWebs= self.bendingCompactWebRatio(majorAxis)
         if(compactWebs<=1.0):
             Mn= Mp # equation F7-1
         else:
             Fy= self.steelType.fy
-            slenderWebs= self.slenderWebRatio(majorAxis)
+            slenderWebs= self.bendingSlenderWebRatio(majorAxis)
             if(slenderWebs<1.0): # webs are noncompact.
                 E= self.get('E')
                 S= self.get('Wzel') # Elastic section modulus about major axis.
@@ -1596,7 +1796,7 @@ class HSSShape(structural_steel.QHShape):
         Mp= self.getPlasticMoment(majorAxis)
         Mn= 0.0
 
-        compactSection= self.compactWebAndFlangeRatio(majorAxis)
+        compactSection= self.bendingCompactWebAndFlangeRatio(majorAxis)
         if(compactSection<=1.0):
             Mn= Mp # equation F7-1
         else:
@@ -1621,7 +1821,25 @@ class HSSShape(structural_steel.QHShape):
         :param majorAxis: true if flexure about the major axis.
         '''
         return 0.9*self.getNominalFlexuralStrength(lateralUnbracedLength, Cb, majorAxis)
-
+    
+    def getLambdaMD(self):
+        '''Return the limiting width-to-thickness ratio for the walls 
+           of a moderate ductile member according to table D1.1 
+           of AISC 341-16.'''
+        E= shape.get('E')
+        Fy= shape.steelType.fy
+        Ry= shape.steelType.Ry
+        return 0.76*math.sqrt(E/Fy/Ry) # Case 4
+    
+    def getLambdaHD(self):
+        '''Return the limiting width-to-thickness ratio for the walls 
+           of a highly ductile member according to table D1.1 
+           of AISC 341-16.'''
+        E= shape.get('E')
+        Fy= shape.steelType.fy
+        Ry= shape.steelType.Ry
+        return 0.65*math.sqrt(E/Fy/Ry) # Case 4
+    
 for item in shapes.CHSS:
     shape= shapes.CHSS[item]
     shape['alpha']= 5/12.0
@@ -1649,52 +1867,47 @@ class CHSSShape(structural_steel.CHShape):
         '''Return the metric label from the US customary one.'''
         return getMetricLabel(self.name)
 
-    def getLimitingWidthToThicknessRatio(self):
-        ''' Return the Limiting Width-to-Thickness Ratio 
-        according to table B4.1A of AISC-360-16.
+    def getLambdaRCompression(self):
+        ''' Return the Limiting Width-to-Thickness Ratio
+        between nonslender and slender elements 
+        according to case 9 in table B4.1a of AISC-360-16.
         '''
-        return 1.4*math.sqrt(self.steelType.E/self.steelType.fy)
+        return 0.11*(self.steelType.E/self.steelType.fy)
 
-    def getLambdaP(self):
+    def getLambdaPBending(self):
         ''' Return the limiting Width-to-Thickness Ratio (compact/noncompact)
-            according to table B4.1b of AISC 360-16.
+            according to case 20 in table B4.1b of AISC 360-16.
         '''
-        return 1.12*math.sqrt(self.steelType.E/self.steelType.fy)
+        return 0.07*(self.steelType.E/self.steelType.fy) # Case 20 (no square root here)
     
-    def getLambdaR(self):
-        ''' Return the limiting Width-to-Thickness Ratio (compact/noncompact)
-            according to table B4.1b of AISC 360-16.
+    def getLambdaRBending(self):
+        ''' Return the limiting Width-to-Thickness Ratio (noncompact/slender)
+            according to case 20 in table B4.1b of AISC 360-16.
         '''
-        return 1.40*math.sqrt(self.steelType.E/self.steelType.fy)
-    
+        return 0.31*(self.steelType.E/self.steelType.fy) # Case 20 (no square root here)
 
     # Bending
-    def compactRatio(self):
+    def bendingCompactRatio(self):
         ''' If section is compact according to case
             20 (round HSS sections subject to flexure) of
             table B4.1b of AISC-360-16 return a value 
             less than one.
-
         '''
         retval= 10.0
-        E= self.get('E')
-        Fy= self.steelType.fy
         slendernessRatio= self.get('slendernessRatio')
-        lambda_p= 0.07*(E/Fy) # Case 20 (no square root here)
+        lambda_p= self.getLambdaPBending() 
         retval= slendernessRatio/lambda_p
         return retval # if <1 then section is compact.
     
-    def slenderRatio(self):
+    def bendingSlenderRatio(self):
         ''' If section is noncompact according to table B4.1b of 
             AISC-360-16 return a value less than one otherwise
             they are slender.
 
         '''
         retval= 10.0
-        E= self.get('E')
-        Fy= self.steelType.fy
         slendernessRatio= self.get('slendernessRatio')
-        lambda_r= 0.31*(E/Fy) # Case 20 (no square root here)
+        lambda_r= self.getLambdaRBending()
         retval= slendernessRatio/lambda_r
         return retval # if <1 then flanges are compact.
     
@@ -1730,12 +1943,10 @@ class CHSSShape(structural_steel.CHShape):
         '''
         return 0.9*self.getNominalShearStrength()
     
-    def slendernessCheck(self):
+    def compressionSlendernessCheck(self):
         ''' Verify that the section doesn't contains slender elements
             according to case 9 of table B4.1a of AISC-360-16.'''
-        E= self.get('E')
-        Fy= self.steelType.fy
-        lambda_r= 0.11*(E/Fy)
+        lambda_r= self.getLambdaRCompression()
         slendernessRatio= self.get('slendernessRatio')
         return slendernessRatio/lambda_r # nonslender if < 1.0
     
@@ -1793,6 +2004,23 @@ class CHSSShape(structural_steel.CHShape):
         '''
         return 0.9*self.getNominalFlexuralStrength(lateralUnbracedLength, Cb, majorAxis)
 
+    def getLambdaMD(self):
+        '''Return the limiting width-to-thickness ratio for the wall 
+           of a moderate ductile member according to table D1.1 
+           of AISC 341-16.'''
+        E= shape.get('E')
+        Fy= shape.steelType.fy
+        Ry= shape.steelType.Ry
+        return 0.062*(E/Fy/Ry) # Case 10
+    
+    def getLambdaHD(self):
+        '''Return the limiting width-to-thickness ratio for the wall 
+           of a highly ductile member according to table D1.1 
+           of AISC 341-16.'''
+        E= shape.get('E')
+        Fy= shape.steelType.fy
+        Ry= shape.steelType.Ry
+        return 0.053*math.sqrt(E/Fy/Ry) # Case 10
     
 # Label conversion metric->US customary | US customary -> metric.
 def getUSLabel(metricLabel):

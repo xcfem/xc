@@ -221,8 +221,8 @@ class BoltFastener(bolts.BoltBase):
             AISC 360-16.'''
         return 3.0*self.diameter
 
-    def getMinimumEdgeDistanceJ3_4M(self):
-        ''' Return the minimum edge Distance from center of standard 
+    def getMinimumEdgeDistance(self):
+        ''' Return the minimum edge distance from center of standard 
             hole to edge of connected part according to toble
             J3.4M of AISC 360-16.'''
         if(self.diameter<=36e-3):
@@ -318,6 +318,32 @@ class BoltFastener(bolts.BoltBase):
         '''
         return 0.75*self.getNominalShearStrength(threadsExcluded)
 
+    def getNominalCombinedStrength(self, V, threadsExcluded= False):
+        ''' Return the nominal tensile stress modified to include the 
+            effects of shear stress according to equations J3-3a 
+            of AISC 360-16.
+
+        :param V: shear force on the bolt.
+        :param threadsExcluded: true if threads and transition area of 
+                                shank are excluded from the shear plane.
+        '''
+        A= self.getArea()
+        Fnt= self.getNominalTensileStrength()/A
+        Fnv= self.getNominalShearStrength(threadsExcluded)/A
+        frv= V/A
+        return min(1.3*Fnt-Fnt/(0.75*Fnv)*frv, Fnt)*A
+
+    def getDesignCombinedStrength(self, V, threadsExcluded= False):
+        ''' Return the nominal tensile stress modified to include the 
+            effects of shear stress according to equations J3-3a 
+            of AISC 360-16.
+
+        :param V: shear force on the bolt.
+        :param threadsExcluded: true if threads and transition area of 
+                                shank are excluded from the shear plane.
+        '''
+        return 0.75*self.getNominalCombinedStrength(V, threadsExcluded)
+
     def getNumberOfBoltsForShear(self, shearForce, numberOfRows= 1, threadsExcluded= False):
         ''' Estimate the number of bolts required for resisting the
             shear force.
@@ -397,18 +423,31 @@ class BoltArray(bp.BoltArrayBase):
 class BoltedPlate(bp.BoltedPlateBase):
     ''' Bolted plate the AISC/ASTM way.'''
 
-    def __init__(self, boltArray= BoltArray(), thickness= 10e-3, steelType= A36):
+    def __init__(self, boltArray= BoltArray(), width= None, length= None, thickness= 10e-3, steelType= A36, eccentricity= geom.Vector2d(0.0,0.0), doublePlate= False):
         ''' Constructor.
 
         :param boltArray: bolt array.
+        :param width: plate width (if None it will be computed from the bolt arrangement.)
+        :param length: plate length (if None it will be computed from the bolt arrangement.)
         :param thickness: plate thickness.
         :param steelType: steel type.
+        :param eccentricity: eccentricity of the plate with respect the center
+                             of the bolt array.
+        :param doublePlate: if true there is one plate on each side
+                            of the main member.
         '''
-        super(BoltedPlate, self).__init__(boltArray, thickness, steelType)
-        self.setBoltArray(boltArray)
-        self.thickness= thickness
-        self.steelType= steelType
-        
+        super(BoltedPlate, self).__init__(boltArray, width, length, thickness, steelType, eccentricity, doublePlate)
+
+    def getGrossSectionYieldingLoad(self):
+        ''' Return the load that determines the yielding of the gross
+            section.'''
+        return self.steelType.getYt()*self.steelType.fy*self.getGrossArea()
+
+    def getNetSectionFractureLoad(self):
+        ''' Return the load that determines the fracture of the net
+            section.'''
+        return self.steelType.fu*self.getNetArea()
+    
     def getFilletMinimumLeg(self, otherThickness):
         '''
         Return the minimum leg size for a fillet bead 
@@ -425,15 +464,21 @@ class BoltedPlate(bp.BoltedPlateBase):
 
         :param otherThickness: thickness of the other part to weld.
         '''
-        return getFilletWeldMaximumLegSheets(self.thickness, otherThickness)
-    
+        return getFilletWeldMaximumLegSheets(self.thickness, otherThickness)        
+        
     def getNetWidth(self):
-        ''' Return the net area of the base plate according to clause
+        ''' Return the net width of the base plate according to clause
         B.4.3b of AISC 360-16.
         '''
         diameterIncrement= 2e-3
         retval= super(BoltedPlate,self).getNetWidth(diameterIncrement)
         return retval
+    
+    def getNetArea(self):
+        ''' Return the net area of the base plate according to clause
+        B.4.3b of AISC 360-16.
+        '''
+        return self.getNetWidth()*self.thickness
     
     def getMinThickness(self, Pd):
         ''' Return the minimum thickness of the plate
@@ -446,6 +491,43 @@ class BoltedPlate(bp.BoltedPlateBase):
         # Tension fracture in the net section.
         minThicknessFu= Pd/0.75/self.steelType.fu/self.getNetWidth()
         return max(minThicknessFy,minThicknessFu)
+
+    def getNominalBearingStrength(self, C= 2.4, longSlottedHoles= False):
+        ''' Return the nominal bearing strength at bolt holes according to
+            clause J3.10.1 of AISC 360-16.
+
+        :param C: 2.4 when deformation at the bolt hole at service load is 
+                  a design consideration (J3-6a) 3.0 when is not.
+        '''
+        if(logSlottedHoles):
+            lmsg.error('Long slotted holes not implemented yet.')
+        return C*self.boltArray.bolt.diameter*self.thickness*self.steelType.fu
+
+    def getNominalTearoutStrength(self, C= 1.2, longSlottedHoles= False):
+        ''' Return the nominal tearout strength at bolt holes according to
+            clause J3.10.2 of AISC 360-16.
+
+        :param C: 1.2 when deformation at the bolt hole at service load is 
+                  a design consideration (J3-6a) 1.5 when is not.
+        '''
+        if(logSlottedHoles):
+            lmsg.error('Long slotted holes not implemented yet.')
+        return C*self.boltArray.bolt.diameter*self.thickness*self.steelType.fu
+
+    
+class FinPlate(bp.FinPlate):
+    ''' Fin plate the AISC/ASTM way.'''
+
+    def getFilletWeldLegSize(self):
+        ''' Return the conventional leg size for two fillet
+            welds attaching the plate to the main member.
+
+            Based on the document: Single-Plate Shear Connection Design 
+            to Meet Structural Integrity Requirements. LOUIS F. GESCHWINDNER 
+            and KURT D. GUSTAFSON. 2010
+        '''
+        return 5.0/8.0*self.thickness
+
 
 def readBoltedPlateFromJSONFile(inputFileName):
     ''' Read bolted plate object from a JSON file.'''
@@ -730,7 +812,7 @@ class ASTMShape(object):
         :param effectiveLengthY: effective length of member (minor axis).
         :param effectiveLengthZ: effective length of member (major axis).
         '''
-        sc= self.slendernessCheck()
+        sc= self.compressionSlendernessCheck()
         if(sc>1.01):
             lmsg.warning('Member section has slender members. Results are not valid.')
         retval= effectiveLengthZ/self.get('iz')

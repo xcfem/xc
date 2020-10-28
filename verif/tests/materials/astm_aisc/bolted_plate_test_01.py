@@ -22,8 +22,8 @@ boltedPlate= ASTM_materials.BoltedPlate(boltArray, thickness= 20e-3, steelType= 
 Pd= 121.6*kip2N
 CFShear= boltArray.getDesignShearEfficiency(Pd, doubleShear= True)
 CFCenterDist= boltArray.checkDistanceBetweenCenters()
-minPlateWidth= boltArray.getMinPlateWidth()
 CFthickness= boltedPlate.checkThickness(Pd)
+minPlateWidth= boltedPlate.getMinWidth()
 ratio1= abs(CFShear-0.85024866348)/0.85024866348
 ratio2= abs(CFCenterDist-0.762)/0.762
 ratio3= abs(CFthickness-0.835501616559)/0.835501616559

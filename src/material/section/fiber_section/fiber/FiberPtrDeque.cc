@@ -1495,7 +1495,7 @@ void XC::FiberPtrDeque::computeCovers(const GeomSection &g) const
   {
     const GeomObj::list_Pos2d positions= getPositions();
     const Polygon2d contour= g.getRegionsContour();
-    recubs= getRecubrimientos(positions,contour);
+    recubs= getCovers(positions,contour);
     const size_t sz= recubs.size();
     for(size_t i= 0;i<sz;i++)
       if(recubs[i]<0)

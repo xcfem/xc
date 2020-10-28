@@ -33,6 +33,19 @@ class BoltBase(object):
        else:
            self.pos3d= None
            
+    def getMinDistanceBetweenCenters(self):
+        ''' Return the minimum distance between centers.'''
+        raise NotImplementedError()
+    
+    def getRecommendedDistanceBetweenCenters(self):
+        ''' Return the recommended distance between centers.'''
+        raise NotImplementedError()
+           
+    def getMinimumEdgeDistance(self):
+        ''' Return the minimum edge distance from center of standard 
+            hole to edge of connected part.'''
+        raise NotImplementedError()
+    
     def getName(self):
         return 'M'+str(self.diameter*1e3)[0:2]
 
