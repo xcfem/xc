@@ -248,6 +248,11 @@ class BoltFastener(bolts.BoltBase):
             else:
                 return float(self.fStandardHoleDia(self.diameter))
 
+    def getDesignHoleDiameter(self):
+        ''' Return the hole diameter to use in net area calculations.'''
+        diameterIncrement= 2e-3
+        return self.getNominalHoleDiameter()+diameterIncrement
+
     def getNominalTensileStrength(self):
         ''' Return the nominal strength of the fastener according
             to table J3.2 of AISC 360-16.
@@ -421,8 +426,13 @@ class BoltArray(bp.BoltArrayBase):
         super(BoltArray, self).__init__(bolt, nRows, nCols, dist)
 
 class BoltedPlate(bp.BoltedPlateBase):
-    ''' Bolted plate the AISC/ASTM way.'''
+    ''' Bolted plate the AISC/ASTM way.
 
+    :ivar Cbearing: 2.4 when deformation at the bolt hole at service load is 
+                    a design consideration (J3-6a) 3.0 when is not
+                    (see J3-6a and J3-6b).
+    :ivar longSlottedHoles: true if the holes are of the log slotted type.
+    '''
     def __init__(self, boltArray= BoltArray(), width= None, length= None, thickness= 10e-3, steelType= A36, eccentricity= geom.Vector2d(0.0,0.0), doublePlate= False):
         ''' Constructor.
 
@@ -437,6 +447,8 @@ class BoltedPlate(bp.BoltedPlateBase):
                             of the main member.
         '''
         super(BoltedPlate, self).__init__(boltArray, width, length, thickness, steelType, eccentricity, doublePlate)
+        self.Cbearing= 2.4
+        self.longSlottedHoles= False
 
     def getGrossSectionYieldingLoad(self):
         ''' Return the load that determines the yielding of the gross
@@ -470,8 +482,7 @@ class BoltedPlate(bp.BoltedPlateBase):
         ''' Return the net width of the base plate according to clause
         B.4.3b of AISC 360-16.
         '''
-        diameterIncrement= 2e-3
-        retval= super(BoltedPlate,self).getNetWidth(diameterIncrement)
+        retval= super(BoltedPlate,self).getNetWidth()
         return retval
     
     def getNetArea(self):
@@ -492,32 +503,72 @@ class BoltedPlate(bp.BoltedPlateBase):
         minThicknessFu= Pd/0.75/self.steelType.fu/self.getNetWidth()
         return max(minThicknessFy,minThicknessFu)
 
-    def getNominalBearingStrength(self, C= 2.4, longSlottedHoles= False):
+    def getNominalBearingStrength(self):
         ''' Return the nominal bearing strength at bolt holes according to
             clause J3.10.1 of AISC 360-16.
-
-        :param C: 2.4 when deformation at the bolt hole at service load is 
-                  a design consideration (J3-6a) 3.0 when is not.
         '''
-        if(logSlottedHoles):
+        if(self.longSlottedHoles):
             lmsg.error('Long slotted holes not implemented yet.')
-        return C*self.boltArray.bolt.diameter*self.thickness*self.steelType.fu
+        return self.boltArray.getNumberOfBolts()*self.Cbearing*self.boltArray.bolt.diameter*self.thickness*self.steelType.fu
 
-    def getNominalTearoutStrength(self, C= 1.2, longSlottedHoles= False):
+    def getNominalTearoutStrength(self, loadDir):
         ''' Return the nominal tearout strength at bolt holes according to
             clause J3.10.2 of AISC 360-16.
 
-        :param C: 1.2 when deformation at the bolt hole at service load is 
-                  a design consideration (J3-6a) 1.5 when is not.
+        :param loadDir: direction of the load.
         '''
-        if(logSlottedHoles):
+        if(self.longSlottedHoles):
             lmsg.error('Long slotted holes not implemented yet.')
-        return C*self.boltArray.bolt.diameter*self.thickness*self.steelType.fu
+        clearDistances= self.getClearDistances(loadDir)
+        retval= 0.0
+        C= self.Cbearing/2.0 # Half the value of C bearing (see J3-6c and J3-6d)
+        for lc in clearDistances:
+            retval+= C*lc*self.thickness*self.steelType.fu
+        return retval
 
+    def getDesignBearingStrength(self):
+        ''' Return the design bearing strength at bolt holes according to
+            clause J3.10.1 of AISC 360-16.
+        '''
+        if(self.longSlottedHoles):
+            lmsg.error('Long slotted holes not implemented yet.')
+        return 0.75*self.getNominalBearingStrength()
+
+    def getDesignTearoutStrength(self, loadDir):
+        ''' Return the design tearout strength at bolt holes according to
+            clause J3.10.2 of AISC 360-16.
+
+        :param loadDir: direction of the load.
+        '''
+        return 0.75*self.getNominalTearoutStrength(loadDir)
+
+    def getDesignBearingEfficiency(self, load):
+        ''' Return the efficiency of the plate with respect to the 
+            bolt bearing under the load argument. '''
+        return load/self.getDesignBearingStrength()
     
-class FinPlate(bp.FinPlate):
-    ''' Fin plate the AISC/ASTM way.'''
+    def getDesignTearoutEfficiency(self, loadVector):
+        ''' Return the efficiency of the plate with respect to the 
+            bolt tearout under the load argument. '''
+        load= loadVector.getModulus()
+        return load/self.getDesignTearoutStrength(loadVector)
+        
 
+class FinPlate(BoltedPlate):
+    ''' Fin plate the AISC/ASTM way.'''
+    def __init__(self, boltArray, width= None, length= None, thickness= 10e-3, steelType= None, eccentricity= geom.Vector2d(0.0,0.0)):
+        ''' Constructor.
+
+        :param boltArray: bolt array.
+        :param width: plate width (if None it will be computed from the bolt arrangement.)
+        :param length: plate length (if None it will be computed from the bolt arrangement.)
+        :param thickness: plate thickness.
+        :param steelType: steel type.
+        :param eccentricity: eccentricity of the plate with respect the center
+                             of the bolt array.
+        '''
+        super(FinPlate, self).__init__(boltArray, width, length, thickness, steelType, eccentricity, doublePlate= False)
+        
     def getFilletWeldLegSize(self):
         ''' Return the conventional leg size for two fillet
             welds attaching the plate to the main member.
@@ -528,6 +579,158 @@ class FinPlate(bp.FinPlate):
         '''
         return 5.0/8.0*self.thickness
 
+    def getGrossAreaSubjectedToShear(self, shearVector):
+        ''' Return the gross area of the plate subjected to shear.
+
+        :param shearVector: 2D shear load vector.
+        '''
+        contour=  geom.Polygon2d(self.getContour2d())
+        centroid= contour.getCenterOfMass()
+        line= geom.Line2d(centroid, centroid+shearVector)
+        intersection= contour.clip(line)
+        return intersection.getLength()*self.thickness
+
+    def getNominalShearYieldingStrength(self, shearVector):
+        ''' Return the design shear strength of the plate according to
+            clause J.4.2 of AISC 360-16.
+
+        :param shearVector: 2D shear load vector.
+        '''
+        Agv= self.getGrossAreaSubjectedToShear(shearVector) # gross area subject to shear.
+        print('Agv= ', Agv*1e6, ' mm2')
+        return 0.6*self.steelType.fy*Agv # (J4-3)
+    
+    def getDesignShearYieldingStrength(self, shearVector):
+        ''' Return the design shear strength of the plate according to
+            clause J.4.2 of AISC 360-16.
+
+        :param shearVector: 2D shear load vector.
+        '''
+        return self.getNominalShearYieldingStrength(shearVector) # (J4-3)
+
+    def getNominalShearRuptureStrength(self, shearVector):
+        ''' Return the design shear strength of the plate according to
+            clause J.4.2 of AISC 360-16.
+
+        :param shearVector: 2D shear load vector.
+        '''
+        holeDiameter= self.boltArray.bolt.getDesignHoleDiameter()
+        print('hole diameter: ', holeDiameter*1e3, 'mm')
+        Agv= self.getGrossAreaSubjectedToShear(shearVector) # gross area subject to shear.
+        Anv= Agv-self.boltArray.getNumberOfBolts()*holeDiameter*self.thickness # net area subject to shear.
+        print('Anv= ', Anv*1e6, ' mm2')
+        return 0.6*self.steelType.fu*Anv # (J4-4) 
+ 
+    def getDesignShearRuptureStrength(self, shearVector):
+        ''' Return the design shear strength of the plate according to
+            clause J.4.2 of AISC 360-16.
+
+        :param shearVector: 2D shear load vector.
+        '''
+        return 0.75*self.getNominalShearRuptureStrength(shearVector)
+    
+    def getDesignShearStrength(self, shearVector):
+        ''' Return the design shear strength of the plate according to
+            clause J.4.2 of AISC 360-16.
+
+        :param shearVector: 2D shear load vector.
+        '''
+        shearYielding= self.getDesignShearYieldingStrength(shearVector)
+        print('shearYielding= ', shearYielding/1e3, ' kN')
+        shearRupture= self.getDesignShearRuptureStrength(shearVector)
+        print('shearRupture= ', shearRupture/1e3, ' kN')
+        return min(shearYielding, shearRupture)
+
+    def getDesignShearEfficiency(self, shearVector):
+        ''' Return the design shear strength of the plate according to
+            clause J.4.2 of AISC 360-16.
+
+        :param shearVector: 2D shear load vector.
+        '''
+        shearStrength= self.getDesignShearStrength(shearVector)
+        return shearVector.getModulus()/shearStrength
+    
+    def getNetAreaSubjectedToBlockTension(self):
+        ''' Return the net area the net area subjected to tension used
+            in the calculation of the block shear strength.'''
+        retval= self.thickness
+        cover= self.getMinimumCover()
+        holeDiameter= self.boltArray.bolt.getNominalHoleDiameter()
+        if(self.boltArray.nCols==1): # single vertical line of bolts
+            retval*= (cover-holeDiameter/2.0)
+        elif(self.boltArray.nCols==2): # two vertical lines of bolts
+            dist= self.boltArray.dist
+            retval*= (cover+dist-3*holeDiameter/2.0)
+        return retval
+
+    def getNetAreaSubjectedToBlockShear(self, loadDir):
+        ''' Return the net area the net area subjected to tension used
+            in the calculation of the block shear strength.
+
+        :param loadDir: direction of the load.
+        '''
+        Agv= self.getGrossAreaSubjectedToShear(loadDir) # gross area subject to shear.
+        cover= self.getMinimumCoverInDir(-loadDir) # opposite direction
+        holeDiameter= self.boltArray.bolt.getNominalHoleDiameter()
+        retval= Agv-self.thickness*(cover+(self.boltArray.nRows-0.5)*holeDiameter)
+        return retval
+                    
+    def getNominalBlockShearStrength(self, shearVector, Ubs= 0.5):
+        ''' Return the nominal shear strength of the plate according to
+            clause J.4.3 of AISC 360-16.
+
+        :param shearVector: 2D shear load vector.
+        :param Ubs: Reduction coefficient, used in calculating 
+                    block shear rupture strength.
+        '''
+        # (J4-5)
+        Ant= self.getNetAreaSubjectedToBlockTension()
+        tensionStrength= self.steelType.fu*Ubs*Ant
+        Anv= self.getNetAreaSubjectedToBlockShear(shearVector)
+        Agv= self.getGrossAreaSubjectedToShear(shearVector)
+        shearStrength= 0.6*min(self.steelType.fu*Anv,self.steelType.fy*Agv)
+        return tensionStrength+shearStrength
+
+    def getDesignBlockShearStrength(self, shearVector, Ubs= 0.5):
+        ''' Return the design shear strength of the plate according to
+            clause J.4.3 of AISC 360-16.
+
+        :param shearVector: 2D shear load vector.
+        :param Ubs: Reduction coefficient, used in calculating 
+                    block shear rupture strength.
+        '''
+        return 0.75*self.getNominalBlockShearStrength(shearVector, Ubs)
+    
+    def getDesignBlockShearEfficiency(self, shearVector, Ubs= 0.5):
+        ''' Return the design shear strength of the plate according to
+            clause J.4.2 of AISC 360-16.
+
+        :param shearVector: 2D shear load vector.
+        :param Ubs: Reduction coefficient, used in calculating 
+                    block shear rupture strength.
+        '''
+        blockShearStrength= self.getDesignBlockShearStrength(shearVector, Ubs)
+        print('blockShearStrength= ', blockShearStrength/1e3,' kN')
+        return shearVector.getModulus()/blockShearStrength
+    
+    def getDesignEfficiency(self, loadVector, Ubs= 0.5):
+        ''' Return the efficiency of the fin plate under the load
+            argument. Checks bolt shear, bolt bearing and tearout.
+            Don't checks weld shear, shear rupture an block shear
+            rupture (those will be checked using the CBFEM model).
+
+        :param loadVector: 2D load vector.
+        :param Ubs: Reduction coefficient, used in calculating 
+                    block shear rupture strength.
+        '''
+        Rd= loadVector.getModulus()
+        retval= self.boltArray.getDesignShearEfficiency(Rd, doubleShear= self.doublePlate)
+        retval= max(retval, self.getDesignBearingEfficiency(Rd))
+        retval= max(retval, self.getDesignTearoutEfficiency(loadVector))
+        retval= max(retval, self.getDesignShearEfficiency(loadVector))
+        retval= max(retval, self.getDesignBlockShearEfficiency(loadVector, Ubs))
+        return retval
+        
 
 def readBoltedPlateFromJSONFile(inputFileName):
     ''' Read bolted plate object from a JSON file.'''

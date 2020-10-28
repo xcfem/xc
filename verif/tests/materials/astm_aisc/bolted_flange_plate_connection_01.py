@@ -54,7 +54,7 @@ flangeAsBoltedPlate= ASTM_materials.BoltedPlate(boltArray, width= shape.getFlang
 ## Gross section yielding load and net section fracture load
 flangeNetSectionFractureLoad= flangeAsBoltedPlate.getNetSectionFractureLoad()
 flangeGrossSectionYieldingLoad= flangeAsBoltedPlate.getGrossSectionYieldingLoad()
-ratio4= abs(flangeGrossSectionYieldingLoad-1656e3)/1656e3+abs(flangeNetSectionFractureLoad-1701e3)/1701e3
+ratio4= abs(flangeGrossSectionYieldingLoad-1656.207e3)/1656.207e3+abs(flangeNetSectionFractureLoad-1666.98e3)/1666.98e3
 
 ## Check local buckling
 lambda_hd_flange= shape.getLambdaHDFlange()
@@ -74,7 +74,7 @@ ratio7= (Nplate<N)
 ### Check net and gross areas for the plate
 plateNetSectionFractureLoad= boltedPlate.getNetSectionFractureLoad()
 plateGrossSectionYieldingLoad= boltedPlate.getGrossSectionYieldingLoad()
-ratio8= abs(plateGrossSectionYieldingLoad-3477.6e3)/3477.6e3+abs(plateNetSectionFractureLoad-3855e3)/3855e3
+ratio8= abs(plateGrossSectionYieldingLoad-3477.6e3)/3477.6e3+abs(plateNetSectionFractureLoad-3805.2e3)/3805.2e3
 
 '''
 print('Mpr= ', Mpr/1e3, 'kN.m')
@@ -85,10 +85,10 @@ print('ratio2= ', ratio2)
 print('maximum hole diameter db= ', db*1e3, ' mm')
 print('maximum bolt diameter: ', bolt.diameter*1e3, ' mm')
 print('ratio3= ', ratio3)
-print('ratio4= ', ratio4)
 print('number of bolts N= ', N)
 print('flange gross section yielding load: ', flangeGrossSectionYieldingLoad/1e3, ' kN')
 print('flange net section fracture load: ', flangeNetSectionFractureLoad/1e3, ' kN')
+print('ratio4= ', ratio4)
 print('lambda_hd flange: ', lambda_hd_flange)
 print('flange buckling check: ', flange_buckling_check)
 print('ratio5= ', ratio5)

@@ -26,7 +26,7 @@ CFthickness= boltedPlate.checkThickness(Pd)
 minPlateWidth= boltedPlate.getMinWidth()
 ratio1= abs(CFShear-0.85024866348)/0.85024866348
 ratio2= abs(CFCenterDist-0.762)/0.762
-ratio3= abs(CFthickness-0.835501616559)/0.835501616559
+ratio3= abs(CFthickness-0.867667222586)/0.867667222586
 
 '''
 print('Pd= ', Pd/1e3, 'kN')

@@ -50,7 +50,7 @@ class BoltArrayBase(object):
                     self.dist= d
                     break
 
-    def getNumBolts(self):
+    def getNumberOfBolts(self):
         ''' Return the number of bolts of the array.'''
         return self.nRows*self.nCols
 
@@ -69,22 +69,20 @@ class BoltArrayBase(object):
             last columns.'''
         return self.dist*(self.nCols-1)
         
-    def getNetWidth(self, plateWidth, diameterIncrement):
+    def getNetWidth(self, plateWidth):
         ''' Return the net width due to the bolt holes.
 
         :param plateWidth: width of the bolted plate.
-        :param diameterIncrement: increment of the diameter with respect
-                                  the nominal diameter.
         '''
-        designDiameter= self.bolt.getNominalHoleDiameter()+diameterIncrement
-        return plateWidth-self.nRows*self.bolt.getNominalHoleDiameter()
+        designDiameter= self.bolt.getDesignHoleDiameter()
+        return plateWidth-self.nRows*designDiameter
 
     def getDesignShearStrength(self, doubleShear= False):
         ''' Return the shear strength of the bolt group.
 
         :param doubleShear: true if double shear action.
         '''
-        retval= self.getNumBolts()*self.bolt.getDesignShearStrength()
+        retval= self.getNumberOfBolts()*self.bolt.getDesignShearStrength()
         if(doubleShear):
             retval*=2.0
         return retval
@@ -168,13 +166,45 @@ class BoltArrayBase(object):
         ''' Return the clear distance between the edge of the hole and
             the edge of the adjacent hole or edge of the material.
 
-        :param countour: 2D polygon defining the bolted plate contour.
+        :param contour: 2D polygon defining the bolted plate contour.
         :param loadDirection: direction of the load.
         '''
         retval= list()
-        lmsg.error('Implementation pending')
+        localPos= self.getLocalPositions()
+        for pLocal in localPos:
+            cover= contour.getCover(pLocal, loadDirection)
+            retval.append(min(self.dist,cover))
         return retval
     
+    def getMinimumCover(self, contour):
+        ''' Return the minimum of the distances between the centers
+            of the holes and the plate contour.
+
+        :param contour: 2D polygon defining the bolted plate contour.
+        :param loadDirection: direction of the load.
+        '''
+        retval= 1e6
+        localPos= self.getLocalPositions()
+        for pLocal in localPos:
+            cover= contour.getCover(pLocal)
+            retval= min(retval,cover)
+        return retval
+
+    def getMinimumCoverInDir(self, contour, direction):
+        ''' Return the minimum of the distances between the centers
+            of the holes and the intersection of the ray from that
+            point in the direction argument with the contour.
+
+        :param contour: 2D polygon defining the bolted plate contour.
+        :param direction: direction of the rays.
+        '''
+        retval= 1e6
+        localPos= self.getLocalPositions()
+        for pLocal in localPos:
+            cover= contour.getCover(pLocal, direction)
+            retval= min(retval,cover)
+        return retval
+        
     def getHoleBlocks(self, refSys= geom.Ref3d3d(), labels= []):
         ''' Return octagons inscribed in the holes.'''
         localPos= self.getLocalPositions()
@@ -217,7 +247,7 @@ class BoltArrayBase(object):
     def report(self, outputFile):
         ''' Reports connection design values.'''
         outputFile.write('    bolts:\n')
-        outputFile.write('      number of bolts: '+str(self.getNumBolts())+' x '+self.bolt.getName()+'\n')
+        outputFile.write('      number of bolts: '+str(self.getNumberOfBolts())+' x '+self.bolt.getName()+'\n')
         outputFile.write('      spacing: '+str(self.dist*1000)+' mm\n')
         self.bolt.report(outputFile)
         
@@ -337,21 +367,13 @@ class BoltedPlateBase(object):
         if(not ok):
             lmsg.error('Plate too small for the bolt arrangement.')
  
-    def getNetWidth(self, diameterIncrement):
-        ''' Return the net width due to the bolt holes.
+    def getNetWidth(self):
+        ''' Return the net width due to the bolt holes.'''
+        return self.boltArray.getNetWidth(self.width)
 
-        :param diameterIncrement: increment of the diameter with respect
-                                  the nominal diameter.
-        '''
-        return self.boltArray.getNetWidth(self.width, diameterIncrement)
-
-    def getNetArea(self, diameterIncrement):
-        ''' Return the net area due to the bolt holes.
-
-        :param diameterIncrement: increment of the diameter with respect
-                                  the nominal diameter.
-        '''
-        return self.getNetWidth(self.width, diameterIncrement)*self.thickness
+    def getNetArea(self):
+        ''' Return the net area due to the bolt holes.'''
+        return self.getNetWidth(self.width)*self.thickness
     
     def getGrossArea(self):
         ''' Return the gross area of the plate.'''
@@ -483,26 +505,28 @@ class BoltedPlateBase(object):
         retval= list()
         contour= geom.Polygon2d(self.getContour2d())
         retval= self.boltArray.getClearDistances(contour, loadDirection)
-        return retval    
+        return retval
+    
+    def getMinimumCover(self):
+        ''' Return the minimum of the distances between the centers
+            of the holes and the plate contour.
 
-class FinPlate(BoltedPlateBase):
-    ''' Fin plate.This class must be code agnostic
-        i.e. no AISC, EC3, EAE clauses here. There is certainly some
-        work to do in that sense (LP 10/2020). '''
-    def __init__(self, boltArray, width= None, length= None, thickness= 10e-3, steelType= None, eccentricity= geom.Vector2d(0.0,0.0)):
-        ''' Constructor.
-
-        :param boltArray: bolt array.
-        :param width: plate width (if None it will be computed from the bolt arrangement.)
-        :param length: plate length (if None it will be computed from the bolt arrangement.)
-        :param thickness: plate thickness.
-        :param steelType: steel type.
-        :param eccentricity: eccentricity of the plate with respect the center
-                             of the bolt array.
+        :param loadDirection: direction of the load.
         '''
-        super(FinPlate, self).__init__(boltArray, width, length, thickness, steelType, eccentricity, doublePlate= False)    
-    
-    
+        contour= geom.Polygon2d(self.getContour2d())
+        return self.boltArray.getMinimumCover(contour)
+
+    def getMinimumCoverInDir(self, direction):
+        ''' Return the minimum of the distances between the centers
+            of the holes and the intersection of the ray from that
+            point in the direction argument with the plate contour.
+
+        :param direction: direction of the rays.
+        '''
+        contour= geom.Polygon2d(self.getContour2d())
+        return self.boltArray.getMinimumCoverInDir(contour, direction)
+
+
 def getBoltedPointBlocks(gussetPlateBlocks, boltedPlateBlocks, distBetweenPlates):
     ''' Return the points linked by bolts between the two pieces.
 

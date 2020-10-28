@@ -46,6 +46,14 @@ class BoltBase(object):
             hole to edge of connected part.'''
         raise NotImplementedError()
     
+    def getNominalHoleDiameter(self):
+        ''' Return the nominal hole diameter for the bolt.'''
+        raise NotImplementedError()
+    
+    def getDesignHoleDiameter(self):
+        ''' Return the hole diameter to use in net area calculations.'''
+        raise NotImplementedError()
+    
     def getName(self):
         return 'M'+str(self.diameter*1e3)[0:2]
 
