@@ -1,6 +1,4 @@
 # -*- coding: utf-8 -*-
-from __future__ import print_function
-from __future__ import division
 '''Test for checking variation of initial prestress force along a 
 post-tensioned member.
 
@@ -19,6 +17,10 @@ mm. Given the following:
 • e at mid-span = 558 mm
 • Es = 195 kN/mm2
 '''
+
+from __future__ import print_function
+from __future__ import division
+
 __author__= "Ana Ortega (AO_O)"
 __copyright__= "Copyright 2017, AO_O"
 __license__= "GPL"

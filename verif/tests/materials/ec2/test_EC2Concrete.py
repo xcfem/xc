@@ -1,15 +1,18 @@
 # -*- coding: utf-8 -*-
+
 from __future__ import print_function
 from __future__ import division
-from materials.ec2 import EC2_materials
-import os
-from misc_utils import log_messages as lmsg
 
 __author__= "Ana Ortega (AO_O) "
 __copyright__= "Copyright 2015, AO_O"
 __license__= "GPL"
 __version__= "3.0"
 __email__= "ana.ortega@ciccp.es"
+
+from materials.ec2 import EC2_materials
+import os
+from misc_utils import log_messages as lmsg
+
 
 fckDat=[12,16,20,25,30,35,40,45,50,55,60,70,80,90]
 fcmCalc=[]

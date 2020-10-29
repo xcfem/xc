@@ -13,13 +13,6 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
-import math
-import xc_base
-import geom
-import xc
-import scipy.interpolate
-
-
 from materials.ec3 import EC3_materials
 from rough_calculations import ng_simple_beam as sb
 from geom_utils import interpolation as intp

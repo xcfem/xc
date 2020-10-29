@@ -11,9 +11,6 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
-import xc_base
-import geom
-import xc
 import math
 from actions.earth_pressure import earth_pressure
 

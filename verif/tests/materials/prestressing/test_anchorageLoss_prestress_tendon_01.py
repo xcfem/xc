@@ -1,6 +1,4 @@
 # -*- coding: utf-8 -*-
-from __future__ import print_function
-from __future__ import division
 '''Test for checking the calculation of loss of prestress due to 
 the anchorage slip.
 Data for the problem and approximate calculation are taken from 
@@ -8,6 +6,10 @@ Example 4.3 of the topic 4 of course "Prestressed Concrete Design
 (SAB 4323) by Baderul Hisham Ahmad 
 ocw.utm.my
 '''
+
+from __future__ import print_function
+from __future__ import division
+
 __author__= "Ana Ortega (AO_O)"
 __copyright__= "Copyright 2017, AO_O"
 __license__= "GPL"

@@ -1,6 +1,9 @@
 # -*- coding: utf-8 -*-
+''' Near slope reduction factor verification test. Home-made test.'''
+
 from __future__ import print_function
-# Home-made test.
+from __future__ import division
+
 import math
 from rough_calculations import ng_isolated_footing as za
 

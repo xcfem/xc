@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
-from __future__ import print_function
-from __future__ import division
 '''Test for checking the calculation of loss of prestress due to 
 the anchorage slip whem this loss affects the whole length of tendon.
 '''
+from __future__ import print_function
+from __future__ import division
+
 __author__= "Ana Ortega (AO_O)"
 __copyright__= "Copyright 2017, AO_O"
 __license__= "GPL"

@@ -1,11 +1,10 @@
 # -*- coding: utf-8 -*-
-from __future__ import print_function
+'''Home-made test on earth pressures with various soil strata
+'''
 
-import os
-import xc_base
-import geom
-import xc
-import math
+from __future__ import print_function
+from __future__ import division
+
 from actions.earth_pressure import earth_pressure as ep
 
 
@@ -15,8 +14,6 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "ana.ortega@ciccp.es"
 
-'''Home-made test on earth pressures with various soil strata
-'''
 
 soil01=ep.EarthPressureModel(zGround=50, zBottomSoils=[40,30,20,10,-10],KSoils=[1.1,1.2,1.3,1.4,1.5],gammaSoils=[2,2.1,2.2,2.3,2.4], zWater=25, gammaWater=1)
 

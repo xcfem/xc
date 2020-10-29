@@ -16,7 +16,6 @@ from materials.sia262 import SIA262_limit_state_checking
 from materials.sections import rebar_family
 from rough_calculations import ng_rc_section as rc
 
-
 beton= SIA262_materials.c30_37
 acier= SIA262_materials.B500B
 A10_15= SIA262_limit_state_checking.SIARebarFamily(acier,10e-3,0.15,0.05)

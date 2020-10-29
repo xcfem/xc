@@ -3,10 +3,8 @@
    Home made. '''
 from __future__ import print_function
 from __future__ import division
+
 import math
-import xc_base
-import geom
-import xc
 from materials.ec3 import EC3_limit_state_checking as EC3lsc
 from geom_utils import interpolation as intp
 import scipy.interpolate

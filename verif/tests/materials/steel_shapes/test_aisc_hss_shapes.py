@@ -1,9 +1,6 @@
 # -*- coding: utf-8 -*-
+
 from __future__ import print_function
-import xc_base
-import geom
-import xc
-from model import predefined_spaces
 from materials import typical_materials
 from materials.sections.structural_shapes import aisc_metric_shapes
 from sympy.physics import units

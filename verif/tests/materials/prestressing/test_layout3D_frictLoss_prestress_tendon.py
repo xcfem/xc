@@ -1,10 +1,11 @@
 # -*- coding: utf-8 -*-
-from __future__ import print_function
-
 '''Home made test to check the accuracy of the 3D spline interpolation to 
 be used in the layout of prestressing tendons and to check the calculation
 of prestress losss due to firction.
 '''
+
+from __future__ import print_function
+
 __author__= "Ana Ortega (AO_O)"
 __copyright__= "Copyright 2017, AO_O"
 __license__= "GPL"

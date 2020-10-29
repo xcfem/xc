@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
+'''Classification of steel cross-sections (clause 5.5 of EN 1993-1-1:2005).'''
+
 from __future__ import print_function
 from __future__ import division
 
-#Classification of steel cross-sections (clause 5.5 of EN 1993-1-1:2005)
 
 __author__= "Ana Ortega (AO_O)"
 __copyright__= "Copyright 2018, AO_O"
@@ -10,9 +11,6 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "ana.ortega@ciccp.es"
 
-import xc_base
-import geom
-import xc
 from materials.ec3 import EC3_materials
 
 S235JR= EC3_materials.S235JR

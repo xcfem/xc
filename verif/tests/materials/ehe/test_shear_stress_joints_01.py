@@ -11,9 +11,6 @@ __version__= "3.0"
 __email__= "ana.ortega.ort@gmail.com"
 
 import math
-import xc_base
-import geom
-import xc
 from materials.ehe import EHE_materials as EHEmat
 from materials.ehe import EHE_limit_state_checking as EHEverif
 

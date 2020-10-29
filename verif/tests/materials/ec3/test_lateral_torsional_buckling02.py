@@ -13,14 +13,7 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
-import math
-import xc_base
-import geom
-import xc
 from geom_utils import interpolation as intp
-
-
-
 from materials.ec3 import EC3_limit_state_checking as EC3lsc
 from materials.ec3 import EC3_materials
 

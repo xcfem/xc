@@ -1,11 +1,12 @@
 # -*- coding: utf-8 -*-
-from __future__ import print_function
-from __future__ import division
 '''Test for checking the calculation of loss of prestress due to 
 the anchorage slip. It compares the results obtained from symetrical 
 problems when prestressing from extremity 1 (left-end) of the cable
 and from extremity 2 (right-end)
 '''
+from __future__ import print_function
+from __future__ import division
+
 __author__= "Ana Ortega (AO_O)"
 __copyright__= "Copyright 2017, AO_O"
 __license__= "GPL"

@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
+'''Home-made test on earth pressures on a sloped wall
+'''
+
 from __future__ import print_function
-import xc_base
-import geom
-import xc
-import math
+from __future__ import division
+
 from actions.earth_pressure import earth_pressure as ep
 
 
@@ -13,8 +14,6 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "ana.ortega@ciccp.es"
 
-'''Home-made test on earth pressures on a sloped wall
-'''
 Ksoil=0.5    #pressure coefficient of the soil
 gammaSoil=2  #weight density of the soil
 zGroundPnt1=4 #global Z coordinate of ground level at point 1

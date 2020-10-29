@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
-#Shrinkage verification test. 
+'''Shrinkage verification test.'''
+
 #Data for comparison from the JRC technical report: 
 #"Bridge design to Eurocodes. Worked examples"
 #Sect. 4.5.3

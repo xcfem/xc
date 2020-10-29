@@ -5,7 +5,6 @@ Home made test.
 from __future__ import division
 from __future__ import print_function
 
-import math
 import xc_base
 import geom
 from materials.astm_aisc import ASTM_materials

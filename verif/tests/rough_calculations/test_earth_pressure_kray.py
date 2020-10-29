@@ -1,11 +1,10 @@
 # -*- coding: utf-8 -*-
-from __future__ import print_function
-# home made test
-# Verification of Krey expressions for earth lateral pressures.
+''' home made test
+    Verification of Krey expressions for earth lateral pressures.'''
 
-import xc_base
-import geom
-import xc
+from __future__ import print_function
+from __future__ import division
+
 from rough_calculations import ng_earth_pressure as pt
 import math
 

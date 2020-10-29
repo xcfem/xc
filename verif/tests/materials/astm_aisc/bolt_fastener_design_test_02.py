@@ -12,11 +12,6 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
-# Testing hinge development in a cantilever.
-import xc_base
-import geom
-import xc
-
 in2m= 25.4e-3
 kip2N= 4448.2216
 
