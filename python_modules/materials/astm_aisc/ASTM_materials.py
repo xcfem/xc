@@ -339,7 +339,7 @@ class BoltFastener(bolts.BoltBase):
         return min(1.3*Fnt-Fnt/(0.75*Fnv)*frv, Fnt)*A
 
     def getDesignCombinedStrength(self, V, threadsExcluded= False):
-        ''' Return the nominal tensile stress modified to include the 
+        ''' Return the design tensile stress modified to include the 
             effects of shear stress according to equations J3-3a 
             of AISC 360-16.
 
@@ -654,12 +654,14 @@ class FinPlate(BoltedPlate):
         shearStrength= self.getDesignShearStrength(shearVector)
         return shearVector.getModulus()/shearStrength
     
-    def getNetAreaSubjectedToBlockTension(self):
+    def getNetAreaSubjectedToBlockTension(self, shearVector):
         ''' Return the net area the net area subjected to tension used
-            in the calculation of the block shear strength.'''
+            in the calculation of the block shear strength.
+
+        :param shearVector: 2D shear load vector.
+        '''
         retval= self.thickness
-        cover= self.getMinimumCover()
-        print('cover= ', cover)
+        cover= self.getMinimumCoverInDir(shearVector.getNormalVector())
         holeDiameter= self.boltArray.bolt.getDesignHoleDiameter()
         if(self.boltArray.nCols==1): # single vertical line of bolts
             retval*= (cover-holeDiameter/2.0)
@@ -668,16 +670,25 @@ class FinPlate(BoltedPlate):
             retval*= (cover+dist-3*holeDiameter/2.0)
         return retval
 
-    def getNetAreaSubjectedToBlockShear(self, loadDir):
-        ''' Return the net area the net area subjected to tension used
+    def getGrossAreaSubjectedToBlockShear(self, loadDir):
+        ''' Return the net area the gross area subjected to tension used
             in the calculation of the block shear strength.
 
         :param loadDir: direction of the load.
         '''
         Agv= self.getGrossAreaSubjectedToShear(loadDir) # gross area subject to shear.
         cover= self.getMinimumCoverInDir(-loadDir) # opposite direction
-        holeDiameter= self.boltArray.bolt.getNominalHoleDiameter()
-        retval= Agv-self.thickness*(cover+(self.boltArray.nRows-0.5)*holeDiameter)
+        return Agv-self.thickness*cover
+    
+    def getNetAreaSubjectedToBlockShear(self, loadDir):
+        ''' Return the net area the net area subjected to tension used
+            in the calculation of the block shear strength.
+
+        :param loadDir: direction of the load.
+        '''
+        Agv= self.getGrossAreaSubjectedToBlockShear(loadDir) # gross area subject to shear.
+        holeDiameter= self.boltArray.bolt.getDesignHoleDiameter()
+        retval= Agv-self.thickness*(self.boltArray.nRows-0.5)*holeDiameter
         return retval
                     
     def getNominalBlockShearStrength(self, shearVector, Ubs= 0.5):
@@ -689,10 +700,10 @@ class FinPlate(BoltedPlate):
                     block shear rupture strength.
         '''
         # (J4-5)
-        Ant= self.getNetAreaSubjectedToBlockTension()
+        Ant= self.getNetAreaSubjectedToBlockTension(shearVector)
         tensionStrength= self.steelType.fu*Ubs*Ant
         Anv= self.getNetAreaSubjectedToBlockShear(shearVector)
-        Agv= self.getGrossAreaSubjectedToShear(shearVector)
+        Agv= self.getGrossAreaSubjectedToBlockShear(shearVector)
         shearStrength= 0.6*min(self.steelType.fu*Anv,self.steelType.fy*Agv)
         return tensionStrength+shearStrength
 
@@ -715,7 +726,6 @@ class FinPlate(BoltedPlate):
                     block shear rupture strength.
         '''
         blockShearStrength= self.getDesignBlockShearStrength(shearVector, Ubs)
-        print('blockShearStrength= ', blockShearStrength/1e3,' kN')
         return shearVector.getModulus()/blockShearStrength
     
     def getDesignEfficiency(self, loadVector, Ubs= 0.5):
