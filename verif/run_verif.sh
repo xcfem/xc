@@ -618,35 +618,38 @@ python tests/materials/sia263/test_coefs_fatique_SIA263.py
 echo "$BLEU" "    ASTM/AISC tests." "$NORMAL"
 python tests/materials/astm_aisc/create_self_weight_load_01.py
 python tests/materials/astm_aisc/create_self_weight_load_02.py
-python tests/materials/astm_aisc/hss12x8_test.py
-python tests/materials/astm_aisc/hss8x8_test_01.py
-python tests/materials/astm_aisc/hss8x8_test_02.py
-python tests/materials/astm_aisc/flexural_member_design_test_01.py
-python tests/materials/astm_aisc/flexural_member_design_test_02.py
-python tests/materials/astm_aisc/flexural_member_design_test_03.py
-python tests/materials/astm_aisc/flexural_member_design_test_04.py
-python tests/materials/astm_aisc/flexural_member_design_test_05.py
-python tests/materials/astm_aisc/flexural_member_design_test_06.py
-python tests/materials/astm_aisc/flexural_member_design_test_07.py
-python tests/materials/astm_aisc/flexural_member_design_test_08.py
-python tests/materials/astm_aisc/flexural_member_design_test_09.py
-python tests/materials/astm_aisc/flexural_member_design_test_10.py
-python tests/materials/astm_aisc/compression_member_design_test_01.py
-python tests/materials/astm_aisc/compression_member_design_test_02.py
-python tests/materials/astm_aisc/compression_member_design_test_03.py
-python tests/materials/astm_aisc/shear_member_design_test_01.py
-python tests/materials/astm_aisc/shear_member_design_test_02.py
-python tests/materials/astm_aisc/shear_member_design_test_03.py
-python tests/materials/astm_aisc/shear_member_design_test_04.py
-python tests/materials/astm_aisc/shear_member_design_test_05.py
-python tests/materials/astm_aisc/shear_member_design_test_06.py
 python tests/materials/astm_aisc/combined_internal_forces_test_01.py
 python tests/materials/astm_aisc/combined_internal_forces_test_02.py
-python tests/materials/astm_aisc/bolt_fastener_design_test_01.py
-python tests/materials/astm_aisc/bolt_fastener_design_test_02.py
-python tests/materials/astm_aisc/bolted_plate_test_01.py
-python tests/materials/astm_aisc/bolted_flange_plate_connection_01.py
-python tests/materials/astm_aisc/single_plate_connection_01.py
+echo "$BLEU" "      ASTM/AISC member design tests." "$NORMAL"
+python tests/materials/astm_aisc/member_design/hss12x8_test.py
+python tests/materials/astm_aisc/member_design/hss8x8_test_01.py
+python tests/materials/astm_aisc/member_design/hss8x8_test_02.py
+python tests/materials/astm_aisc/member_design/flexural_member_design_test_01.py
+python tests/materials/astm_aisc/member_design/flexural_member_design_test_02.py
+python tests/materials/astm_aisc/member_design/flexural_member_design_test_03.py
+python tests/materials/astm_aisc/member_design/flexural_member_design_test_04.py
+python tests/materials/astm_aisc/member_design/flexural_member_design_test_05.py
+python tests/materials/astm_aisc/member_design/flexural_member_design_test_06.py
+python tests/materials/astm_aisc/member_design/flexural_member_design_test_07.py
+python tests/materials/astm_aisc/member_design/flexural_member_design_test_08.py
+python tests/materials/astm_aisc/member_design/flexural_member_design_test_09.py
+python tests/materials/astm_aisc/member_design/flexural_member_design_test_10.py
+python tests/materials/astm_aisc/member_design/compression_member_design_test_01.py
+python tests/materials/astm_aisc/member_design/compression_member_design_test_02.py
+python tests/materials/astm_aisc/member_design/compression_member_design_test_03.py
+python tests/materials/astm_aisc/member_design/shear_member_design_test_01.py
+python tests/materials/astm_aisc/member_design/shear_member_design_test_02.py
+python tests/materials/astm_aisc/member_design/shear_member_design_test_03.py
+python tests/materials/astm_aisc/member_design/shear_member_design_test_04.py
+python tests/materials/astm_aisc/member_design/shear_member_design_test_05.py
+python tests/materials/astm_aisc/member_design/shear_member_design_test_06.py
+echo "$BLEU" "      ASTM/AISC connection design tests." "$NORMAL"
+python tests/materials/astm_aisc/connection_design/bolt_fastener_design_test_01.py
+python tests/materials/astm_aisc/connection_design/bolt_fastener_design_test_02.py
+python tests/materials/astm_aisc/connection_design/bolted_plate_test_01.py
+python tests/materials/astm_aisc/connection_design/bolted_flange_plate_connection_01.py
+python tests/materials/astm_aisc/connection_design/single_plate_connection_01.py
+python tests/materials/astm_aisc/connection_design/single_plate_connection_02.py
 
 echo "$BLEU" "  Wood sections test." "$NORMAL"
 echo "$BLEU" "    AWC NDS tests." "$NORMAL"
