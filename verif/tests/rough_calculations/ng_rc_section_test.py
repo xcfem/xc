@@ -11,16 +11,10 @@ __email__= "l.pereztato@gmail.com"
 '''
    Wall stability
 '''
-import math
-import scipy.integrate
-import xc_base
-import geom
-import matplotlib
 from materials.sia262 import SIA262_materials
 from materials.sia262 import SIA262_limit_state_checking
 from materials.sections import rebar_family
 from rough_calculations import ng_rc_section as rc
-import sys
 
 
 beton= SIA262_materials.c30_37
