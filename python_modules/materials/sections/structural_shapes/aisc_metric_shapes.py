@@ -393,7 +393,7 @@ class WShape(structural_steel.IShape):
     
     def getWebThickness(self):
         ''' Return the thickness of the web.'''
-        return self.getWebThickness()
+        return self.get('tw')
     
     def getMetricName(self):
         '''Return the metric label from the US customary one.'''
