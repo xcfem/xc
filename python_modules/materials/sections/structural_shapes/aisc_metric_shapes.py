@@ -532,16 +532,15 @@ class WShape(structural_steel.IShape):
             topFlangeUp.append(p+extrusionVDir)
         return {'bottomFlangeDown':bottomFlangeDown,'topFlangeDown':topFlangeDown,'bottomFlangeUp':bottomFlangeUp,'topFlangeUp':topFlangeUp}
                 
-    def getBlockData(self, org, extrusionVDir, lbls= None):
+    def getBlockData(self, org, extrusionVDir, blockProperties= None):
         ''' Return the kpoints and faces.
 
         :param org: origin point.
         :param extrusionVDir: extrusion direction vector.
-        :param labels: labels for the created blocks.
+        :param blockProperties: labels and attributes for the created blocks.
         '''
-        labels= [self.name]
-        if(lbls):
-            labels.extend(lbls)
+        shapeProperties= bte.BlockProperties(blockProperties)
+        shapeProperties.appendAttribute('shape',self.name)
         midPoints= self.getMidPlanesPoints(org, extrusionVDir)
         retval= bte.BlockData()
         # Base points (A)
@@ -578,12 +577,12 @@ class WShape(structural_steel.IShape):
 
         return retval
         
-    def getWeldBlockData(self, flangeWeldLegSize, webWeldLegSize, lbls= None):
+    def getWeldBlockData(self, flangeWeldLegSize, webWeldLegSize, blockProperties= None):
         ''' Return the lines corresponding to weld beads.
 
         :param flangeWeldLegSize: leg size for the weld to the flange.
         :param webWeldLegSize: leg size for the weld to the web.
-        :param lbls: labels for the created blocks.
+        :param blockProperties: labels and attributes for the created blocks.
         '''
         retval= bte.BlockData()
 
@@ -591,15 +590,34 @@ class WShape(structural_steel.IShape):
         flangeLegLabel= 'weld_leg_size_'+str(flangeWeldLegSize)
         webLegLabel= 'weld_leg_size_'+str(webWeldLegSize)
         # Lines
-        bottomFlange1= bte.BlockRecord(-1, 'line', [self.bottomFlangeAId[0],self.bottomFlangeAId[1]],labels= lbls+['bottom_flange1',flangeLegLabel], thk= None, matId= self.steelType.name)
+        bottomFlange1Properties= bte.BlockProperties(blockProperties)
+        bottomFlange1Properties.setAttribute('part','bottom_flange')
+        bottomFlange1Properties.setAttribute('sub_part',1)
+        bottomFlange1Properties.setAttribute('legSize',flangeWeldLegSize)
+        bottomFlange1= bte.BlockRecord(-1, 'line', [self.bottomFlangeAId[0],self.bottomFlangeAId[1]], blockProperties= bottomFlange1Properties, thk= None, matId= self.steelType.name)
         retval.appendBlock(bottomFlange1)
-        bottomFlange2= bte.BlockRecord(-1, 'line', [self.bottomFlangeAId[1],self.bottomFlangeAId[2]],labels= lbls+['bottom_flange2',flangeLegLabel], thk= None, matId= self.steelType.name)
+        bottomFlange2Properties= bte.BlockProperties(blockProperties)
+        bottomFlange2Properties.setAttribute('part','bottom_flange')
+        bottomFlange2Properties.setAttribute('sub_part',2)
+        bottomFlange2Properties.setAttribute('legSize',flangeWeldLegSize)
+        bottomFlange2= bte.BlockRecord(-1, 'line', [self.bottomFlangeAId[1],self.bottomFlangeAId[2]], blockProperties= bottomFlange2Properties, thk= None, matId= self.steelType.name)
         retval.appendBlock(bottomFlange2)
-        topFlange1= bte.BlockRecord(-1, 'line', [self.topFlangeAId[0],self.topFlangeAId[1]],labels= lbls+['top_flange1',flangeLegLabel], thk= None, matId= self.steelType.name)
+        topFlange1Properties= bte.BlockProperties(blockProperties)
+        topFlange1Properties.setAttribute('part','top_flange')
+        topFlange1Properties.setAttribute('sub_part',1)
+        topFlange1Properties.setAttribute('legSize',flangeWeldLegSize)
+        topFlange1= bte.BlockRecord(-1, 'line', [self.topFlangeAId[0],self.topFlangeAId[1]], blockProperties= topFlange1Properties, thk= None, matId= self.steelType.name)
         retval.appendBlock(topFlange1)
-        topFlange2= bte.BlockRecord(-1, 'line', [self.topFlangeAId[1],self.topFlangeAId[2]],labels= lbls+['top_flange2',flangeLegLabel], thk= None, matId= self.steelType.name)
+        topFlange2Properties= bte.BlockProperties(blockProperties)
+        topFlange2Properties.setAttribute('part','top_flange')
+        topFlange2Properties.setAttribute('sub_part',2)
+        topFlange2Properties.setAttribute('legSize',flangeWeldLegSize)
+        topFlange2= bte.BlockRecord(-1, 'line', [self.topFlangeAId[1],self.topFlangeAId[2]], blockProperties= topFlange2Properties, thk= None, matId= self.steelType.name)
         retval.appendBlock(topFlange2)
-        web= bte.BlockRecord(-1, 'line', [self.bottomFlangeAId[1],self.topFlangeAId[1]],labels=  lbls+['web', webLegLabel], thk= None, matId= self.steelType.name)
+        webProperties= bte.BlockProperties(blockProperties)
+        webProperties.setAttribute('part','web')
+        webProperties.setAttribute('legSize',webWeldLegSize)
+        web= bte.BlockRecord(-1, 'line', [self.bottomFlangeAId[1],self.topFlangeAId[1]], blockProperties= webProperties, thk= None, matId= self.steelType.name)
         retval.weldBlocks= [bottomFlange1, bottomFlange2, topFlange1, topFlange2, web] # Dirty solution, I know (LCPT).
         retval.appendBlock(web)
         return retval        

@@ -93,23 +93,24 @@ class BoltBase(object):
         retval= hole.getInscribedPolygon(8,0.0)
         return retval
         
-    def getHoleBlock(self, refSys= geom.Ref3d3d(), labels= []):
+    def getHoleBlock(self, refSys= geom.Ref3d3d(), blockProperties= None):
         ''' Return and octagon inscribed in the hole.'''
         retval= bte.BlockData()
         # Hole vertices.
         octagon= self.getHoleAsPolygon(refSys, nSides= 8).getVertexList()
-        blk= retval.blockFromPoints(octagon,labels)
+        blk= retval.blockFromPoints(octagon, blockProperties)
         # Hole center.
-        ownerId= 'hole_center_owr_f'+str(blk.id) # Hole center owner.
-        diameterLabel= 'diam_'+str(self.diameter)
-        materialLabel= 'mat_'+str(self.steelType.name)
-        centerLabelsB= labels+['hole_centers', diameterLabel, materialLabel]
-        centerLabelsA= centerLabelsB+[ownerId]
+        holePropertiesB= bte.BlockProperties(blockProperties)
+        holePropertiesB.appendAttribute('objType', 'hole_center')
+        holePropertiesB.appendAttribute('diameter', self.diameter)
+        holePropertiesB.appendAttribute('boltMaterial', self.steelType.name)
+        holePropertiesA= bte.BlockProperties(holePropertiesB)
+        holePropertiesA.appendAttribute('ownerId', blk.id) # Hole center owner.
         center3d= refSys.getPosGlobal(self.pos3d)
-        pA= retval.appendPoint(-1, center3d.x, center3d.y, center3d.z, labels= centerLabelsA)        
-        pB= retval.appendPoint(-1, center3d.x, center3d.y, center3d.z-1*self.diameter, labels= centerLabelsB)  #testing
+        pA= retval.appendPoint(-1, center3d.x, center3d.y, center3d.z, blockProperties= holePropertiesA)        
+        pB= retval.appendPoint(-1, center3d.x, center3d.y, center3d.z-1*self.diameter, blockProperties= holePropertiesB)  #testing
         boltBlk= bte.BlockRecord(id= -1, typ= 'line', kPoints= [pA, pB])
-        id= retval.appendBlock(boltBlk)       
+        id= retval.appendBlock(boltBlk)
         return retval
     
     def report(self, outputFile):

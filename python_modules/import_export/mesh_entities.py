@@ -268,16 +268,16 @@ class NodeSupportDict(dict):
       supportId= 1
       for tagNode in spConstraintsByNode:
           constraintsNode= spConstraintsByNode[tagNode]
-          labels= ['Free','Free','Free','Free','Free','Free']
+          gdlLabels= ['Free','Free','Free','Free','Free','Free']
           for sp in constraintsNode:
               gdl= sp.getDOFNumber
               dispValue= sp.getValue
               if(dispValue == 0.0):
-                  labels[gdl]= 'Rigid'
+                  gdlLabels[gdl]= 'Rigid'
               else:
                   lmsg.error('Error; imposed displacement constraints not implemented.')
           nsr= NodeSupportRecord(supportId,tagNode)
-          nsr.setupFromComponentLabels(labels)
+          nsr.setupFromComponentLabels(gdlLabels)
           self.append(nsr)
           supportId+= 1
         

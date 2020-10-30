@@ -186,6 +186,7 @@ class BoltFastener(bolts.BoltBase):
     groupA= ['A325', 'A325M', 'A354BC']
     groupB= ['A490', 'A490M', 'A354BD']
     groupC= ['F3043', 'F3111']
+    diameterIncrement= 2e-3 # difference nominal and real hole diameter.
     
     def __init__(self, diameter, steelType= A307, pos3d= None):
        ''' Constructor.
@@ -250,8 +251,7 @@ class BoltFastener(bolts.BoltBase):
 
     def getDesignHoleDiameter(self):
         ''' Return the hole diameter to use in net area calculations.'''
-        diameterIncrement= 2e-3
-        return self.getNominalHoleDiameter()+diameterIncrement
+        return self.getNominalHoleDiameter()+self.diameterIncrement
 
     def getNominalTensileStrength(self):
         ''' Return the nominal strength of the fastener according
@@ -360,7 +360,12 @@ class BoltFastener(bolts.BoltBase):
         '''
         designShear= self.getDesignShearStrength(threadsExcluded)
         n= shearForce/designShear
-        return math.ceil(n/numberOfRows)*numberOfRows
+        retval= 0
+        if(numberOfRows!=1):
+            retval= math.ceil(n/numberOfRows)*numberOfRows
+        else:
+            retval= math.ceil(n)
+        return retval
 
     def __str__(self):
         return self.getName()
@@ -395,7 +400,7 @@ M36= BoltFastener(36e-3)
 # Standard bolt diameters
 standardBolts= [M16, M20, M22, M24, M27, M30, M36]
 
-def getBoltForHole(holeDiameter, tol= 0.5e-3):
+def getBoltForHole(holeDiameter, steelType= A307,tol= 0.5e-3):
     ''' Return the bolt that fits in the hole diameter
         argument.
 
@@ -1249,7 +1254,28 @@ class ASTMShape(object):
         Rt= self.steelType.Rt
         Fu= self.steelType.fu
         return bf_2*(1-Ry*Fy/(Rt*Fu))-3e-3
-    
+
+    def getFlangeMaximumHoleDiameter(self):
+        ''' Return the maximum hole diameter to prevent beam flange 
+            tensile rupture according to equation 7.6-2M
+            of AISC 358-16.'''
+        db= self.getFlangeMaximumBoltDiameter()
+        return db+BoltFastener.diameterIncrement
+
+    def getFlangeMaximumBolt(self, steelType= A307):
+        ''' Return the maximum bolt to prevent beam flange 
+            tensile rupture according to equation 7.6-2M
+            of AISC 358-16.'''
+        return getBoltForHole(self.getFlangeMaximumBoltDiameter(), steelType)
+
+    def getFlangeGrossArea(self):
+        ''' Return the gross area of the flange.'''
+        return self.getFlangeWidth()*self.getFlangeThickness()
+        
+    def getFlangeYieldStrength(self):
+        ''' Return the yield strength of the flange.'''
+        stress= self.steelType.getYt()*self.steelType.fy
+        return stress*self.getFlangeGrossArea()
 
             
 from materials.sections.structural_shapes import aisc_metric_shapes
@@ -1288,6 +1314,11 @@ class CShape(ASTMShape,aisc_metric_shapes.CShape):
         '''
         ASTMShape.__init__(self, name)
         aisc_metric_shapes.CShape.__init__(self,steel,name)
+        
+    def getFlangeYieldStrength(self):
+        ''' Return the yield strength of the flange.'''
+        grossArea= self.getFlangeWidth()*self.getFlangeThickness()
+        return self.steelType.getYt()*self.steelType.fy*grossArea
 
 class HSSShape(ASTMShape,aisc_metric_shapes.HSSShape):
     """Rectangular HSS shape with ASTM/AISC verification routines.

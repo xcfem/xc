@@ -205,8 +205,13 @@ class BoltArrayBase(object):
             retval= min(retval,cover)
         return retval
         
-    def getHoleBlocks(self, refSys= geom.Ref3d3d(), labels= []):
-        ''' Return octagons inscribed in the holes.'''
+    def getHoleBlocks(self, refSys= geom.Ref3d3d(), blockProperties= None):
+        ''' Return octagons inscribed in the holes.
+
+        :param refSys: coordinate reference system used to compute
+                       the geometry of the holes.
+        :param blockProperties: labels and attributes of the holes.
+        '''
         localPos= self.getLocalPositions()
         holes= list()
         for pLocal in localPos:
@@ -221,15 +226,17 @@ class BoltArrayBase(object):
             for v in h[1]:
                 p3d= geom.Pos3d(v.x,v.y,0.0)
                 holeVertices.append(refSys.getPosGlobal(p3d))
-            blk= retval.blockFromPoints(holeVertices,labels)
+            blk= retval.blockFromPoints(holeVertices, blockProperties)
             # Hole center.
-            ownerId= 'hole_center_owr_f'+str(blk.id) # Hole center owner.
-            diameterLabel= 'diam_'+str(self.bolt.diameter)
-            materialLabel= 'mat_'+str(self.bolt.steelType.name)
-            centerLabels= labels+['hole_centers',ownerId, diameterLabel, materialLabel]
+            centerProperties= bte.BlockProperties(blockProperties)
+            centerProperties.appendAttribute('objType','hole_center')
+            centerProperties.appendAttribute('ownerId', blk.id) # Hole center owner.
+            centerProperties.appendAttribute('diameter', self.bolt.diameter)
+            centerProperties.appendAttribute('boltMaterial', self.bolt.steelType.name)
+            centerProperties.extendLabels(['hole_centers'])
             center= h[0]
             center3d= refSys.getPosGlobal(geom.Pos3d(center.x, center.y, 0.0))
-            retval.appendPoint(-1, center3d.x, center3d.y, center3d.z, labels= centerLabels)
+            retval.appendPoint(-1, center3d.x, center3d.y, center3d.z, blockProperties= centerProperties)
         return retval
                     
     def getPositions(self, refSys= geom.Ref3d3d()):
@@ -471,11 +478,11 @@ class BoltedPlateBase(object):
             retval.append(refSys.getPosGlobal(p3d))        
         return retval
 
-    def getBlocks(self, refSys= geom.Ref3d3d(), lbls= None, loadTag= None, loadDirI= None, loadDirJ= None, loadDirK= None):
+    def getBlocks(self, refSys= geom.Ref3d3d(), blockProperties= None, loadTag= None, loadDirI= None, loadDirJ= None, loadDirK= None):
         ''' Return the blocks that define the plate for the
             diagonal argument.
 
-        :param lbls: labels to assign to the newly created blocks.
+        :param blockProperties: labels and attributes to assign to the newly created blocks.
         :param loadTag: tag of the applied loads in the internal forces file.
         :param loadDirI: I vector of the original element. Vector that 
                          points to the loaded side of the plate.
@@ -483,16 +490,21 @@ class BoltedPlateBase(object):
         :param loadDirK: K vector of the of the original element.
         '''
         retval= bte.BlockData()
-        labels= ['bolted_plate']
-        if(lbls):
-            labels.extend(lbls)
+        plateProperties= bte.BlockProperties(blockProperties)
+        plateProperties.appendAttribute('objType', 'bolted_plate')
+        plateProperties.appendAttribute('loadTag', loadTag)
+        plateProperties.appendAttribute('loadDirI', loadDirI)
+        plateProperties.appendAttribute('loadDirJ', loadDirJ)
+        plateProperties.appendAttribute('loadDirK', loadDirK)
         # Get the plate contour
         contourVertices= self.getContour(refSys)
-        blk= retval.blockFromPoints(contourVertices,labels+[loadTag,loadDirI, loadDirJ, loadDirK], thickness= self.thickness, matId= self.steelType.name)
+        blk= retval.blockFromPoints(contourVertices,blockProperties, thickness= self.thickness, matId= self.steelType.name)
         # Get the hole blocks for the new plate
-        ownerId= 'hole_owr_f'+str(blk.id) # Hole owner.
-        holeLabels= labels+['holes',ownerId]
-        blk.holes= self.boltArray.getHoleBlocks(refSys,holeLabels)
+        holeProperties= bte.BlockProperties(blockProperties)
+        holeProperties.appendAttribute('objType', 'hole')
+        holeProperties.appendAttribute('ownerId', blk.id)
+        holeProperties.appendLabel('holes')
+        blk.holes= self.boltArray.getHoleBlocks(refSys,holeProperties)
         retval.extend(blk.holes)
         return retval
 
@@ -538,12 +550,12 @@ def getBoltedPointBlocks(gussetPlateBlocks, boltedPlateBlocks, distBetweenPlates
     gussetPlateBoltCenters= list()
     for key in gussetPlateBlocks.points:
         p= gussetPlateBlocks.points[key]
-        if('hole_centers' in p.labels):
+        if(p.getAttribute('objType')=='hole_center'):
             gussetPlateBoltCenters.append(p)
     boltedPlateBoltCenters= list()
     for key in boltedPlateBlocks.points:
         p= boltedPlateBlocks.points[key]
-        if('hole_centers' in p.labels):
+        if(p.getAttribute('objType')=='hole_center'):
             boltedPlateBoltCenters.append(p)
     tol= distBetweenPlates/100.0
     for pA in gussetPlateBoltCenters:

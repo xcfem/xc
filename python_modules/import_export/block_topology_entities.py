@@ -13,28 +13,133 @@ from import_export import basic_entities as be
 from import_export import mesh_entities as me
 from misc_utils import log_messages as lmsg
 
+class BlockProperties(object):
+    ''' Labels and attributes of the block.
+
+    :ivar labels: string list that helps to identify the role of the block in the model.
+    :ivar attributes: block attributes stored in a dictionary.
+    ''' 
+    def __init__(self, labels= None, attributes= None):
+        '''
+        Constructor.
+
+        :param labels: string list that helps to identify the role of the block in the model.
+        :param attributes: block attributes stored in a dictionary.
+        '''    
+        if(labels):
+            self.labels= labels
+        else:
+            self.labels= list()
+        if(attributes):
+            self.attributes= attributes
+        else:
+            self.attributes= dict()
+
+    def appendLabel(self, label):
+        ''' Append the label argument to the container.'''
+        self.labels.append(label)
+    
+    def extendLabels(self, labels):
+        ''' Append the labels argument to the container.'''
+        self.labels.extend(labels)
+        
+    def appendAttribute(self, key, value):
+        ''' Append the label argument to the container.'''
+        self.attributes[key]= value
+    
+    def extendAttributes(self, attributes):
+        ''' Append the labels argument to the container.'''
+        self.attributes.update(attributes)
+
+    def extend(self, blockProperties):
+        ''' Append the argument labels and attributes to
+            the container.'''
+        self.extendLabels(blockProperties.labels)
+        self.extendAttributes(blockProperties.attributes)
+
+    def hasLabel(self, label):
+        ''' Return true if the label argument is the label
+            container.'''
+        return (label in self.labels)
+
+    def hasAttribute(self, key):
+        ''' Return true if the key argument is the attribute
+            dictionary.'''
+        return (key in self.attributes.keys)
+    
+    def getAttribute(self, key):
+        ''' Return the attribute corresponding to the 
+            key argument in the dictionary.'''
+        retval= None
+        if(self.hasAtttribute(key)):
+            retval= self.attributes[key]
+        return retval
+    
+    def __add__(self, other):
+        retval= BlockProperties(self)
+        retval.extend(other)
+        return retval
+        
+    def __iadd__(self, other):
+        self.extend(other)
+        return self
+
+    def getStrXCCommand(self, strId):
+        ''' Return the XC command that stores the properties.
+ 
+        :param strId: identifier of the object.
+        '''
+        retval= ''
+        if(self.labels):
+            retval+= strId+'.setProp("labels",'+str(self.labels)+')'
+        if(self.attributes):
+            if(len(retval)>0):
+                retval+= '; '
+            retval+= strId+'.setProp("attributes",'+str(self.attributes)+')'
+        return retval 
+
+
 class PointRecord(me.NodeRecord):
-    '''kPoint type entity'''
-    def __init__(self,id, coords, labels= None):
+    '''kPoint type entity
+
+    '''
+    def __init__(self,id, coords, blockProperties= None):
         '''
         Key point constructor.
 
         :param id: identifier for the point.
         :param coords: coordinates of the point.
-        :param labels: string list that helps to identify the role of the point in the model.
+        :param blockProperties: labels and attributes of the point.
         '''    
         super(PointRecord,self).__init__(id,coords)
-        if(labels):
-            self.labels= labels
+        if(blockProperties):
+            self.blockProperties= blockProperties
         else:
-            self.labels= list()
+            self.blockProperties= BlockProperties()
+            
     def getStrXCCommand(self,pointHandlerName):
         ''' Return the XC command that creates the point.''' 
         strId= str(self.id)
         strCommand= '.newPntIDPos3d(' + strId + ',geom.Pos3d(' + str(self.coords[0]) + ',' + str(self.coords[1]) +','+ str(self.coords[2])+'))'
-        if(self.labels):
-          strCommand+= '; pt'+strId+'.setProp("labels",'+str(self.labels)+')'
+        propCommand= self.blockProperties.getStrXCCommand('pt'+strId)
+        if(len(propCommand)>0):
+          strCommand+= '; '+propCommand
         return 'pt' + strId + '= ' + pointHandlerName + strCommand
+    
+    def hasLabel(self, label):
+        ''' Return true if the label argument is the label
+            container.'''
+        return self.blockProperties.hasLabel(label)
+
+    def hasAttribute(self, key):
+        ''' Return true if the key argument is the attribute
+            dictionary.'''
+        return self.blockProperties.hasAttribute(key)
+    
+    def getAttribute(self, key):
+        ''' Return the attribute corresponding to the 
+            key argument in the dictionary.'''
+        return self.blockProperties.getAttribute(key)
 
 class PointDict(me.NodeDict):
     ''' Point container.'''
@@ -69,30 +174,25 @@ class PointDict(me.NodeDict):
 class BlockRecord(me.CellRecord):
     '''Block type entities: line, face, body,...
 
-    :ivar labels: string list that helps to identify the role 
-                       of the block in the model.
+    :ivar blockProperties: labels and attributes of the block.
     '''    
-    def __init__(self,id, typ, kPoints, labels= None, thk= 0.0, matId= None):
+    def __init__(self,id, typ, kPoints, blockProperties= None, thk= 0.0, matId= None):
         '''
         Block record constructor.
 
         :param id: identifier for the block.
         :param typ: block type.
         :param kPoints: key points that define block geometry and topology.
-        :param labels: string list that helps to identify the role 
-                       of the block in the model.
+        :param blockProperties: labels and attributes of the block.
         :param thk: block thickness.
         :param matId: material identifier.
         '''
         super(BlockRecord,self).__init__(id,typ,kPoints,thk)
-        if(labels):
-            self.labels= labels
+        if(blockProperties):
+            self.blockProperties= blockProperties
         else:
-            self.labels= list()
-        if(matId):
-            self.matId= matId
-        else:
-            self.matId= None
+            self.blockProperties= BlockProperties()
+        self.blockProperties.appendAttribute('matId', matId)
 
     def getKPointIds(self):
         ''' Return the key points identifiers of the block.'''
@@ -118,17 +218,6 @@ class BlockRecord(me.CellRecord):
         tmp= str(self.nodeIds)
         return tmp[tmp.index("[") + 1:tmp.rindex("]")]
 
-    def getStrMaterialCommand(self, strId):
-        ''' Return a string defining the material
-            property of the cell.
-
-        :param strId: object identifier.
-        '''
-        retval= ''
-        if(self.matId):
-            retval+= '; '+strId+'.setProp(\'matId\',\''+str(self.matId)+'\')'
-        return retval
-    
     def getStrXCCommand(self,xcImportExportData):
         ''' Return the XC Python string defining the object.'''
         strId= str(self.id)
@@ -146,11 +235,26 @@ class BlockRecord(me.CellRecord):
                 strCommand= strId + '= ' + handlerName + '.newPolygonalFacePts([' + pointIds  +'])'
         else:
             lmsg.error('BlockRecord::getStrXCCommand not implemented for blocks of type: '+ self.cellType)
-        if(self.labels):
-            strCommand+= '; '+strId+'.setProp("labels",'+str(self.labels)+')'
+        propCommand= self.blockProperties.getStrXCCommand(strId)
+        if(len(propCommand)>0):
+          strCommand+= '; '+propCommand
         strCommand+= self.getStrThicknessCommand(strId)
-        strCommand+= self.getStrMaterialCommand(strId)
         return strCommand
+    
+    def hasLabel(self, label):
+        ''' Return true if the label argument is the label
+            container.'''
+        return self.blockProperties.hasLabel(label)
+
+    def hasAttribute(self, key):
+        ''' Return true if the key argument is the attribute
+            dictionary.'''
+        return self.blockProperties.hasAttribute(key)
+    
+    def getAttribute(self, key):
+        ''' Return the attribute corresponding to the 
+            key argument in the dictionary.'''
+        return self.blockProperties.getAttribute(key)
 
 class BlockDict(dict):
     '''Block container.'''    
@@ -258,16 +362,16 @@ class BlockData(object):
         self.blocks= BlockDict()
         self.pointSupports= PointSupportDict()
 
-    def appendPoint(self,id,x,y,z,labels= None):
+    def appendPoint(self,id,x,y,z, pointProperties= None):
         ''' Append a point to the block data.
 
         :param id: point identifier (-1 == auto).
         :param x: x coordinate of the point.
         :param y: y coordinate of the point.
         :param z: z coordinate of the point.
-        :param labels: labels for the point.
+        :param pointProperties: labels and attributes for the point.
         '''
-        pr= PointRecord(id,[x,y,z],labels)
+        pr= PointRecord(id,[x,y,z], pointProperties)
         self.points[pr.id]= pr 
         return pr.id
         
@@ -280,22 +384,22 @@ class BlockData(object):
         self.blocks[block.id]= block
         return block.id
 
-    def blockFromPoints(self, points, labels, thickness= 0.0, matId= None):
+    def blockFromPoints(self, points, blockProperties, thickness= 0.0, matId= None):
         ''' Create a block with the points and append it
             to the container.
 
         :param points: points to build the new block.
-        :param labels: labels to assing to the new block.
+        :param blockProperties: labels and attributes for the new block.
         :param thickness: thickness of the new block.
         :param matId: material of the new block.
         '''
         pointIds= list()
         for p in points:
-            pointIds.append(self.appendPoint(-1, p.x, p.y, p.z, labels))
+            pointIds.append(self.appendPoint(-1, p.x, p.y, p.z, blockProperties))
         if(len(pointIds)>2):
-            block= BlockRecord(-1, 'face', pointIds, labels, thk= thickness, matId= matId)
+            block= BlockRecord(-1, 'face', pointIds, blockPropoerties, thk= thickness, matId= matId)
         elif(len(pointIds)>1):
-            block= BlockRecord(-1, 'line', pointIds, labels, thk= thickness, matId= matId)
+            block= BlockRecord(-1, 'line', pointIds, blockProperties, thk= thickness, matId= matId)
         else:
             lmsg.error('At least 2 points required.')
         self.appendBlock(block)

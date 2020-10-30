@@ -30,7 +30,7 @@ def to_float(s):
     except ValueError:
         return None
 
-def import_load_combinations_from_sheet(pyExcelBook, sheetName, nameColumsRow, combNameColumn,actionLabels):
+def import_load_combinations_from_sheet(pyExcelBook, sheetName, nameColumsRow, combNameColumn, actionLabels):
     ''' Import load combinations from an spreadsheet sheet
 
     :param pyExcelBook: spreadsheet book to import from.
@@ -60,7 +60,7 @@ def import_load_combinations_from_sheet(pyExcelBook, sheetName, nameColumsRow, c
                 retval[combName]= combExpr
     return retval
     
-def import_load_combinations_from_book(fileName, sheetNames, nameColumsRow, combNameColumn,actionLabels):
+def import_load_combinations_from_book(fileName, sheetNames, nameColumsRow, combNameColumn, actionLabels):
     ''' Import load combinations from an spreadsheet sheet
 
     :param fileName: spreadsheet file name import from.

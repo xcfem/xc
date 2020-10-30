@@ -194,10 +194,10 @@ def get_extended_data(obj, appName= 'XC'):
     xdata= obj.get_xdata('XC')
     for tag in xdata:
         if(tag[0]==1000): # string data
-            labels= tag[1].split(',')
+            xDataLabels= tag[1].split(',')
             # remove leading and trailing spaces
-            labels2= [x.strip(' ') for x in labels]
-            retval.extend(labels2)
+            strippedLabels= [x.strip(' ') for x in xDataLabels]
+            retval.extend(strippedLabels)
     return retval
     
     
@@ -534,13 +534,15 @@ class DXFImport(object):
         if(self.kPoints):
             for p in self.kPoints:
                 key= self.kPointsNames[counter]
-                retval.appendPoint(id= counter,x= p[0],y= p[1],z= p[2], labels= self.labelDict[key])
+                bp= bte.BlockProperties(labels= self.labelDict[key])
+                retval.appendPoint(id= counter,x= p[0],y= p[1],z= p[2], pointProperties= bp)
                 counter+= 1
 
             counter= 0
             for key in self.lines:
                 line= self.lines[key]
-                block= bte.BlockRecord(counter,'line',line,self.labelDict[key])
+                bp= bte.BlockProperties(labels= self.labelDict[key])
+                block= bte.BlockRecord(counter,'line',line, blockProperties= bp)
                 retval.appendBlock(block)
                 counter+= 1
 
@@ -548,7 +550,8 @@ class DXFImport(object):
                 fg= self.facesByLayer[name]
                 for key in fg:
                     face= fg[key]
-                    block= bte.BlockRecord(counter,'face',face,self.labelDict[key])
+                    bp= bte.BlockProperties(labels= self.labelDict[key])
+                    block= bte.BlockRecord(counter,'face',face, blockProperties= bp)
                     retval.appendBlock(block)
                     counter+= 1
         else:

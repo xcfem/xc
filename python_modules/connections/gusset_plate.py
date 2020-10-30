@@ -154,60 +154,62 @@ class GussetPlate(object):
         retval.append((2, 3, horizontalWeldLegSize)) # horizontal weld.
         return retval
 
-    def getHoleBlocks(self, ownerId, labels= None):
+    def getHoleBlocks(self, ownerId, blockProperties= None):
         ''' Return the blocks representing the holes for the bolts.
 
         :param ownerId: identifier of the face with the holes.
-        :param lbls: labels to assign to the newly created blocks.
+        :param blockProperties: labels and attributes to assign to the newly created blocks.
         '''
-        holeOwnerId= 'hole_'+ownerId # Hole owner id.
-        holeLabels= labels+['holes',holeOwnerId]
+        holeProperties= bpe.BlockProperties(blockProperties)
+        holeProperties.appendAttribute('objType', 'hole')
+        holeProperties.appendAttribute('ownerId', ownerId) # Hole owner id.
         boltRefSys= self.getBoltRefSys()
-        return self.boltedPlateTemplate.boltArray.getHoleBlocks(boltRefSys,holeLabels)
+        return self.boltedPlateTemplate.boltArray.getHoleBlocks(boltRefSys,holeProperties)
     
-    def getWeldBlocks(self, ownerId, kPointIds, verticalWeldLegSize, horizontalWeldLegSize, labels= None):
+    def getWeldBlocks(self, ownerId, kPointIds, verticalWeldLegSize, horizontalWeldLegSize, blockProperties= None):
         ''' Return the blocks representing the welds.
 
         :param ownerId: identifier of the face with the welds.
         :param kPointIds: identifiers of the points at weld ends.
         :param verticalWeldLegSize: leg size for the vertical welds.
         :param horizontalWeldLegSize: leg size for the horizontal welds.
-        :param lbls: labels to assign to the newly created blocks.
+        :param blockProperties: labels and attributes to assign to the newly created blocks.
         '''
         retval= bte.BlockData()
-        weldOwnerId= 'weld_'+ownerId # weld owner id.
-        weldLabels= labels+['welds',weldOwnerId]
+        weldProperties= bpe.BlockProperties(blockProperties)
+        weldProperties.appendAttribute('objType', 'weld')
+        weldProperties.appendAttribute('ownerId', ownerId) # Weld owner id.
         weldLinesIndexes= self.getWeldLinesIndexes(verticalWeldLegSize, horizontalWeldLegSize)
         for l in weldLinesIndexes:
             pA= kPointIds[l[0]]
             pB= kPointIds[l[1]]
             weldLegSize= l[2]
-            weldLegSizeLabel= 'weld_leg_size_'+str(weldLegSize)
-            weldBlk= bte.BlockRecord(id= -1, typ= 'line', kPoints= [pA, pB], labels= weldLabels+[weldLegSizeLabel], thk= None)
+            weldProperties.appendAttribute('legSize', weldLegSize)
+            weldBlk= bte.BlockRecord(id= -1, typ= 'line', kPoints= [pA, pB], blockProperties= weldProperties, thk= None)
             retval.appendBlock(weldBlk)
         return retval
         
-    def getGussetBlocks(self, verticalWeldLegSize, horizontalWeldLegSize, lbls= None):
+    def getGussetBlocks(self, verticalWeldLegSize, horizontalWeldLegSize, blockProperties= None):
         ''' Return the blocks that define the gusset.
 
         :param verticalWeldLegSize: leg size for the vertical welds.
         :param horizontalWeldLegSize: leg size for the horizontal welds.
-        :param lbls: labels to assign to the newly created blocks.
+        :param blockProperties: labels and attributes to assign to the newly created blocks.
         '''
         retval= bte.BlockData()
-        labels= ['gusset_plate']
-        if(lbls):
-            labels.extend(lbls)
-        blk= retval.blockFromPoints(self.contour, labels= labels, thickness= self.boltedPlateTemplate.thickness, matId= self.boltedPlateTemplate.steelType.name)
-        ownerId= 'owr_f'+str(blk.id) # owner identifier.
-        blk.holes= self.getHoleBlocks(ownerId, labels) # Get the hole blocks for the new plate
+        gussetPlateProperties= bpe.BlockProperties(blockProperties)
+        gussetPlateProperties.appendAttribute('objType', 'gusset_plate')
+        blk= retval.blockFromPoints(self.contour, blockProperties= gussetPlateProperties, thickness= self.boltedPlateTemplate.thickness, matId= self.boltedPlateTemplate.steelType.name)
+        holeProperties= bpe.BlockProperties(blockProperties)
+        holeProperties.appendAttribute('ownerId', blk.id) # Hole owner id.
+        blk.holes= self.getHoleBlocks(ownerId, blockProperties= holeProperties) # Get the hole blocks for the new plate
         retval.extend(blk.holes)
         kPointIds= blk.getKPointIds()
-        blk.weldBlocks= self.getWeldBlocks(ownerId, kPointIds, verticalWeldLegSize, horizontalWeldLegSize, labels) # Get the weld blocks for the new plate
+        blk.weldBlocks= self.getWeldBlocks(ownerId, kPointIds, verticalWeldLegSize, horizontalWeldLegSize, blockProperties) # Get the weld blocks for the new plate
         retval.extend(blk.weldBlocks)
         return retval
 
-    def getBoltedPlateBlocks(self, boltedPlate, diagonal, origin, labels, side= 1):
+    def getBoltedPlateBlocks(self, boltedPlate, diagonal, origin, blockProperties, side= 1):
         ''' Return the blocks corresponding to the plate
             bolted to the gusset plate.
 
@@ -215,7 +217,7 @@ class GussetPlate(object):
                             to this one.
         :param diagonal: element that provide the internal forces in the
                          bolted plate edge.
-        :param labels: labels to put in the blocks to create.
+        :param blockProperties: labels and attributes to assign to the newly created blocks.
         :param side: if side==1 put the plate at the positive side of the
                      gusset plate reference system, if side==-1 put the
                      plate at the negative side.
@@ -229,15 +231,17 @@ class GussetPlate(object):
         vMove= boltedPlateRefSys.getKVector()*distBetweenPlates
         boltedPlateRefSys.Org+= vMove
         # Get loads on the plate edge.
-        loadTag= 'loadTag_'+str(diagonal.eTag)
+        loadTag= diagonal.eTag
         diagonalOrientation= diagonal.getOrientation(origin)
-        loadDirI= 'loadDirI_'+str(diagonalOrientation*diagonal.iVector)
-        loadDirJ= 'loadDirJ_'+str(diagonalOrientation*diagonal.jVector)
-        loadDirK= 'loadDirK_'+str(diagonalOrientation*diagonal.kVector)
+        loadDirI= diagonalOrientation*diagonal.iVector
+        loadDirJ= diagonalOrientation*diagonal.jVector
+        loadDirK= diagonalOrientation*diagonal.kVector
+        plateProperties= bte.BlockProperties(blockProperties)
+        plateProperties.appendAttribute('side', side)
         # Create blocks.
-        return distBetweenPlates, boltedPlate.getBlocks(boltedPlateRefSys, labels, loadTag, loadDirI, loadDirJ, loadDirK)
+        return distBetweenPlates, boltedPlate.getBlocks(boltedPlateRefSys, plateProperties, loadTag, loadDirI, loadDirJ, loadDirK)
 
-    def getBlocks(self, verticalWeldLegSize, horizontalWeldLegSize, boltedPlate, diagonal, origin, labels):
+    def getBlocks(self, verticalWeldLegSize, horizontalWeldLegSize, boltedPlate, diagonal, origin, blockProperties):
         ''' Return the blocks corresponding to the gusset plate connection
             and the single or double plates bolted to it.
 
@@ -248,19 +252,19 @@ class GussetPlate(object):
                             to this one.
         :param diagonal: element that provide the internal forces in the
                          bolted plate edge.
-        :param labels: labels to put in the blocks to create.
+        :param blockProperties: labels and attributes to assign to the newly created blocks.
 
         :return: return the blocks corresponding to the connection.
         '''
         retval= bte.BlockData()
-        gussetPlateBlocks= self.getGussetBlocks(verticalWeldLegSize, horizontalWeldLegSize, labels)
+        gussetPlateBlocks= self.getGussetBlocks(verticalWeldLegSize, horizontalWeldLegSize, blockProperties)
         retval.extend(gussetPlateBlocks)
-        distBetweenPlates1, attachedPlateBlocks1= self.getBoltedPlateBlocks(boltedPlate, diagonal, origin, labels+['side1'], side= 1) # bolted plate at positive side.
+        distBetweenPlates1, attachedPlateBlocks1= self.getBoltedPlateBlocks(boltedPlate, diagonal, origin, blockProperties, side= 1) # bolted plate at positive side.
         retval.extend(attachedPlateBlocks1)
         boltBlocks1= bolted_plate.getBoltedPointBlocks(gussetPlateBlocks, attachedPlateBlocks1, abs(distBetweenPlates1)) # points linked by bolts.
         retval.extend(boltBlocks1)
         if(self.boltedPlateTemplate.doublePlate):
-            distBetweenPlates2, attachedPlateBlocks2= self.getBoltedPlateBlocks(boltedPlate, diagonal, origin, labels+['side1'], side= -1) # bolted plate at negative side.
+            distBetweenPlates2, attachedPlateBlocks2= self.getBoltedPlateBlocks(boltedPlate, diagonal, origin, blockProperties, side= -1) # bolted plate at negative side.
             retval.extend(attachedPlateBlocks2)
             boltBlocks2= bolted_plate.getBoltedPointBlocks(gussetPlateBlocks, attachedPlateBlocks2, abs(distBetweenPlates2)) # points linked by bolts.
             retval.extend(boltBlocks2)            

@@ -20,7 +20,6 @@ import xc_base
 import geom
 from misc_utils import log_messages as lmsg
 from import_export import neutral_mesh_description as nmd
-from connections import gusset_plate as gp
 
 class MemberSort(enum.IntEnum):
     '''Classification of members by its angle with the horizon.'''
@@ -52,6 +51,7 @@ class ConnectedMemberMetaData(object):
     :ivar jVector: J direction vector.
     :ivar kVector: K direction vector.
     :ivar nodePositions: positions of the element nodes.
+    :ivar memberOrigin: origin for this member.
     '''
     def __init__(self, element):
         ''' Extracts member data from element.
@@ -67,15 +67,18 @@ class ConnectedMemberMetaData(object):
         nodes= element.getNodes
         for n in nodes:
             self.nodePositions.append(n.getInitialPos3d)
+        self.memberOrigin= None
 
-    def getReferenceSystem(self, origin):
+    def getReferenceSystem(self, origin= None):
         ''' Return the member reference system.
 
         :param origin: member origin.
         '''
+        if(not origin):
+            origin= self.memberOrigin
         return geom.Ref2d3d(origin, self.kVector, -self.jVector) # right-handed
 
-    def getMidPoints(self, origin):
+    def getMidPoints(self, origin= None):
         ''' Return the position expressed in global coordinates
             of the pointsat the middle of the shape.
 
@@ -128,9 +131,8 @@ class ConnectedMemberMetaData(object):
     def getDirection(self, origin):
         ''' Return the local base vectors with respect
             to the origin (to or from the origin).'''
-        retval= [self.iVector, self.jVector, self.kVector]
-        for r in retval:
-            r*= self.getOrientation(origin)
+        orientation= self.getOrientation(origin)
+        retval= [orientation*self.iVector, orientation*self.jVector, self.kVector]
         return retval
 
     def getExtrusionVector(self, factor):
@@ -220,17 +222,18 @@ class ConnectedMemberMetaData(object):
             p0= webPlane.getIntersection(sg)
         return p0
     
-    def getMemberLoadLabels(self):
-        ''' Return the labels with the loading data
+    def getMemberLoadAttributes(self):
+        ''' Return the attirbutes with the loading data
             for this member.
         '''
-        loadTag= 'loadTag_'+str(self.eTag)
-        loadDirI= 'loadDirI_'+str(self.iVector)
-        loadDirJ= 'loadDirJ_'+str(self.jVector)
-        loadDirK= 'loadDirK_'+str(self.kVector)
-        return [loadTag, loadDirI, loadDirJ, loadDirK]
+        retval= dict()
+        retval['loadTag']= self.eTag
+        retval['loadDirI']= self.iVector
+        retval['loadDirJ']= self.jVector
+        retval['loadDirK']= self.kVector
+        return retval
     
-    def getMemberBlocks(self, connectionOrigin, memberOrigin, factor, lbls= None):
+    def getMemberBlocks(self, connectionOrigin, memberOrigin, factor, blockProperties= None):
         ''' Return the faces of the member.
 
         :param connectionOrigin: connection origin.
@@ -238,27 +241,27 @@ class ConnectedMemberMetaData(object):
         :param factor: factor that multiplies the unary direction vector
                        of the member to define its extrusion 
                        direction and lenght.
+        :param blockProperties: labels and attributes to assign to the newly created blocks.
         '''
-        labels= list()
-        if(lbls):
-            labels.extend(lbls)
-        labels.append(self.getMemberType())
-        labels.extend(self.getMemberLoadLabels())
+        self.memberOrigin= memberOrigin
+        memberProperties= bte.BlockProperties(blockProperties)
+        memberProperties.appendAttribute('objType', self.getMemberType())
+        memberProperties.extendAttributes(self.getMemberLoadAttributes())
         f= factor*self.getOrientation(connectionOrigin)
         extrusionVector= self.getExtrusionVector(f)
-        return self.shape.getBlockData(org= memberOrigin, extrusionVDir= extrusionVector, lbls= labels)
+        return self.shape.getBlockData(org= self.memberOrigin, extrusionVDir= extrusionVector, blockProperties= memberProperties)
     
-    def getFrontalWeldBlocks(self, flangeWeldLegSize, webWeldLegSize, lbls= None):
+    def getFrontalWeldBlocks(self, flangeWeldLegSize, webWeldLegSize, blockProperties= None):
         ''' Return the lines corresponding to weld beads with a frontal plate.
 
         :param flangeWeldLegSize: leg size for the weld to the flange.
         :param webWeldLegSize: leg size for the weld to the web.
-        :param lbls: labels for the created blocks.
+        :param blockProperties: labels and attributes to assign to the newly created blocks.
         '''
-        labels=[self.getMemberType(),'welds']
-        if(lbls):
-            labels.extend(lbls)
-        return self.shape.getWeldBlockData(flangeWeldLegSize, webWeldLegSize, lbls= labels)
+        frontalWeldProperties= bte.BlockProperties(blockProperties)
+        frontalWeldProperties.appendAttribute('objType', self.getMemberType())
+        frontalWeldProperties.appendLabel('welds')
+        return self.shape.getWeldBlockData(flangeWeldLegSize, webWeldLegSize, blockProperties= frontalWeldProperties)
     
     def getLoadData(self, internalForces, origin):
         ''' Extracts the internal forces for this member from the
@@ -295,7 +298,7 @@ class ConnectionMetaData(object):
     :iver beams: beam members.
     :ivar diagonals: diagonal members.
     '''
-    def __init__(self, originNode, column, beams, diagonals):
+    def __init__(self, originNode, column, beams, diagonals, boltSteel= None):
         ''' Constructor.
 
         :param connectionData: connection origin node and elements connected 
@@ -305,6 +308,7 @@ class ConnectionMetaData(object):
         self.column= column
         self.beams= beams
         self.diagonals= diagonals
+        self.boltSteel= boltSteel
         
     def getOrigin(self):
         ''' Return the connection origin.'''
@@ -348,46 +352,49 @@ class ConnectionMetaData(object):
             retval.append(d.shape)
         return retval
     
-    def getColumnShapeBlocks(self, factor, lbls= None):
+    def getColumnShapeBlocks(self, factor, blockProperties= None):
         ''' Return the faces of the column shaft.
 
         :param factor: factor multiplies the unary direction vector
                        of the member to define its extrusion 
                        direction and lenght.
+        :param blockProperties: labels and attributes to assign to the newly created blocks.
         '''
         beamsTop= self.getBeamsTop()
         ref= self.getReferenceSystem()
         origin= self.getOrigin()
         columnOrigin= origin+1.25*beamsTop*self.column.iVector
-        return self.column.getMemberBlocks(origin,columnOrigin,factor, lbls)
+        return self.column.getMemberBlocks(origin,columnOrigin,factor, blockProperties)
 
-    def getBeamShapeBlocks(self, factor, lbls= None):
+    def getBeamShapeBlocks(self, factor, blockProperties= None):
         ''' Return the faces of the beams.
 
         :param factor: factor multiplies the unary direction vector
                        of the member to define its extrusion 
                        direction and lenght.
+        :param blockProperties: labels and attributes to assign to the newly created blocks.
         '''
         retval= bte.BlockData()
-        labels= ['beam']
-        if(lbls):
-            labels.extend(lbls)
+        beamShapeProperties= bte.BlockProperties(blockProperties)
+        beamShapeProperties.appendAttribute('objType', 'beam')
         for b in self.beams:
             webPlane= self.getColumnWebMidPlane()
             angleWithWeb= webPlane.getAngleWithVector3d(b.iVector)
             columnShape= self.getColumnShape()
-            columnHalfB= columnShape.get('b')/2.0
+            columnHalfB= columnShape.getFlangeWidth()/2.0
             columnHalfH= columnShape.h()/2.0
             origin= self.getOrigin()
             beamOrientation= b.getOrientation(origin)
-            if(abs(angleWithWeb)<1e-3): # diagonal parallel to web => flange gusset.
+            if(abs(angleWithWeb)<1e-3): # beam parallel to web => flange beam.
                 beam_label= 'flange_beam'
-                offset= (25e-3+columnHalfH-columnShape.get('tf')/2.0)*beamOrientation
-            else: # diagonal normal to web  => web gusset
+                tf= columnShape.getFlangeThickness()
+                offset= (25e-3+columnHalfH-tf/2.0)*beamOrientation
+            else: # beam normal to web  => web beam
                 beam_label= 'web_beam'
                 offset= (20e-3+columnHalfB)*beamOrientation
+            beamShapeProperties.appendAttribute('beamLabel', beam_label)
             beamOrigin= origin+offset*b.iVector # beam direction
-            retval.extend(b.getMemberBlocks(origin, beamOrigin, factor, labels))
+            retval.extend(b.getMemberBlocks(origin, beamOrigin, factor, beamShapeProperties))
         return retval
     
     def getColumnWebDirection(self):
@@ -426,7 +433,7 @@ class ConnectionMetaData(object):
             retval[d.eTag]= d.getLoadData(internalForces, self.originNode)
         return retval
 
-def getConnectedMembers(xcSet):
+def getConnectedMembers(xcSet, ConnectedMemberType= ConnectedMemberMetaData):
     '''Return the node, and the data of the members
        connected to the nodes of the argument set.
 
@@ -439,7 +446,7 @@ def getConnectedMembers(xcSet):
         beams= list()
         column= None
         for e in elements:
-            cm= ConnectedMemberMetaData(e)
+            cm= ConnectedMemberType(e)
             memberSort= cm.getMemberSort()
             if(memberSort==MemberSort.diagonal):
                 diagonals.append(cm)
