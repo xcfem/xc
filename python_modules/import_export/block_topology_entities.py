@@ -9,6 +9,9 @@ __version__= "3.0"
 __email__= "l.pereztato@gmail.com" "ana.ortega.ort@gmail.com"
 
 import ezdxf
+import copy
+import xc_base
+import geom
 from import_export import basic_entities as be
 from import_export import mesh_entities as me
 from misc_utils import log_messages as lmsg
@@ -35,6 +38,21 @@ class BlockProperties(object):
         else:
             self.attributes= dict()
 
+    @staticmethod
+    def copyFrom(blockProperties):
+        ''' If the argument is not None creates a new BlockProperties
+            object with the arguments contents, otherwise return an
+            empty BlockProperties object.
+
+        :param blockProperties: object to copy contents from.
+        '''
+        retval= None
+        if(blockProperties):
+            retval= BlockProperties(blockProperties.labels, copy.deepcopy(blockProperties.attributes))
+        else:
+            retval= BlockProperties()
+        return retval
+    
     def appendLabel(self, label):
         ''' Append the label argument to the container.'''
         self.labels.append(label)
@@ -65,18 +83,18 @@ class BlockProperties(object):
     def hasAttribute(self, key):
         ''' Return true if the key argument is the attribute
             dictionary.'''
-        return (key in self.attributes.keys)
+        return (key in self.attributes)
     
     def getAttribute(self, key):
         ''' Return the attribute corresponding to the 
             key argument in the dictionary.'''
         retval= None
-        if(self.hasAtttribute(key)):
+        if(self.hasAttribute(key)):
             retval= self.attributes[key]
         return retval
     
     def __add__(self, other):
-        retval= BlockProperties(self)
+        retval= BlockProperties(labels= self.labels, attributes= self.attributes)
         retval.extend(other)
         return retval
         
@@ -98,7 +116,7 @@ class BlockProperties(object):
             retval+= strId+'.setProp("attributes",'+str(self.attributes)+')'
         return retval 
 
-
+    
 class PointRecord(me.NodeRecord):
     '''kPoint type entity
 
@@ -212,6 +230,30 @@ class BlockRecord(me.CellRecord):
         retval= None
         if(self.hasHoles()):
             retval= self.holes
+        return retval
+
+    def getVertices(self, pointDict):
+        ''' Return the positions of the k-points defining
+            this block.'''
+        retval= list()
+        pointIds= self.getKPointIds()
+        for pId in pointIds:
+            p= pointDict[pId]
+            retval.append(geom.Pos3d(p.getX(), p.getY(), p.getZ()))
+        return retval
+
+    def getGeomObject(self, pointDict):
+        ''' Return the geometric object that represents this
+            line, surface or volume.'''
+        retval= None
+        vertices= self.getVertices(pointDict)
+        if(self.cellType=='line'):
+            p1= vertices[0]
+            retval= geom.Segment3d(vertices[0], vertices[1])
+        elif(self.cellType=='face'):
+            retval= geom.Polygon3d(vertices)
+        else:
+            lmsg.error('BlockRecord::getGeomObject not implemented for blocks of type: '+ self.cellType)
         return retval
       
     def getStrKeyPointsIds(self):
@@ -395,9 +437,9 @@ class BlockData(object):
         '''
         pointIds= list()
         for p in points:
-            pointIds.append(self.appendPoint(-1, p.x, p.y, p.z, blockProperties))
+            pointIds.append(self.appendPoint(-1, p.x, p.y, p.z, pointProperties= blockProperties))
         if(len(pointIds)>2):
-            block= BlockRecord(-1, 'face', pointIds, blockPropoerties, thk= thickness, matId= matId)
+            block= BlockRecord(-1, 'face', pointIds, blockProperties, thk= thickness, matId= matId)
         elif(len(pointIds)>1):
             block= BlockRecord(-1, 'line', pointIds, blockProperties, thk= thickness, matId= matId)
         else:
@@ -490,8 +532,45 @@ class BlockData(object):
             tags.append(self.blocks[key].id)
         return tags
 
+    def hasHoles(self):
+        ''' Return true if one or more of the surfaces has
+            holes in it.'''
+        retval= False
+        for key in self.blocks:
+            block= self.blocks[key]
+            if(block.hasHoles()):
+                retval= True
+                break
+        return retval
+
+    def getHoles(self):
+        ''' Return the holes defined in this container.'''
+        retval= list()
+        for key in self.blocks:
+            block= self.blocks[key]
+            if(block.hasHoles()):
+                retval.append(block.holes)
+        return retval
+
+    def getNearest(self, pos3d):
+        ''' Return the block nearest to the point argument.
+
+        :param pos3d: position of the point.
+        '''
+        retval= None
+        dist= 6.023e23
+        for key in self.blocks:
+            block= self.blocks[key]
+            geomObj= block.getGeomObject(self.points)
+            d= geomObj.dist(pos3d)
+            if(d<dist):
+                dist= d
+                retval= block
+        return retval
+            
     def __str__(self):
         ''' Return a string representing the object.'''
+        retval= ''
         for key in self.points:
             retval+= str(self.points[key]) + '\n'
         for key in self.blocks:

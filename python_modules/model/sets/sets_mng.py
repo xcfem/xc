@@ -315,7 +315,7 @@ def get_nodes_wire(setBusq,lstPtsWire,tol=0.01):
         segmAux= geom.Segment3d(lstPtsWire[i],lstPtsWire[i+1])
         for n in nodAux:
             p= n.getInitialPos3d
-            d= p.distSegment3d(segmAux)
+            d= p.dist(segmAux)
             if(d<tol):
                 retval.append(n)
     retval= list(set(retval))       #clear duplicated nodes

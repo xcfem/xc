@@ -34,7 +34,7 @@ pt16= points.newPntIDPos3d(16,geom.Pos3d(-2.045,-1.7169980504,0.614721101481)); 
 f5= surfaces.newPolygonalFacePts([12, 13, 14, 15, 16]); f5.setProp("labels",['gusset_plate', 'flange_gusset', 'joint_1800']); f5.setProp("thickness",0.015); f5.setProp('matId','A36')
 
 plg= f5.getPolygon();
-d= plg.distPos3d(geom.Pos3d(0,0,0))
+d= plg.dist(geom.Pos3d(0,0,0))
 
 ratio= (d-2.045)/2.045
 

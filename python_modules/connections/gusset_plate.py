@@ -52,9 +52,9 @@ class GussetPlate(object):
                 -1 if the iVector is orientes towards the origin argument.
         '''
         retval= 1.0
-        d0= origin.dist2Pos3d(self.gussetTip)
+        d0= origin.dist2(self.gussetTip)
         p1= self.gussetTip+10.0*self.iVector
-        d1= origin.dist2Pos3d(p1)
+        d1= origin.dist2(p1)
         if(d0>d1):
             retval= -1.0
         return retval
@@ -160,7 +160,7 @@ class GussetPlate(object):
         :param ownerId: identifier of the face with the holes.
         :param blockProperties: labels and attributes to assign to the newly created blocks.
         '''
-        holeProperties= bpe.BlockProperties(blockProperties)
+        holeProperties= bpe.BlockProperties.copyFrom(blockProperties)
         holeProperties.appendAttribute('objType', 'hole')
         holeProperties.appendAttribute('ownerId', ownerId) # Hole owner id.
         boltRefSys= self.getBoltRefSys()
@@ -176,7 +176,7 @@ class GussetPlate(object):
         :param blockProperties: labels and attributes to assign to the newly created blocks.
         '''
         retval= bte.BlockData()
-        weldProperties= bpe.BlockProperties(blockProperties)
+        weldProperties= bpe.BlockProperties.copyFrom(blockProperties)
         weldProperties.appendAttribute('objType', 'weld')
         weldProperties.appendAttribute('ownerId', ownerId) # Weld owner id.
         weldLinesIndexes= self.getWeldLinesIndexes(verticalWeldLegSize, horizontalWeldLegSize)
@@ -197,11 +197,12 @@ class GussetPlate(object):
         :param blockProperties: labels and attributes to assign to the newly created blocks.
         '''
         retval= bte.BlockData()
-        gussetPlateProperties= bpe.BlockProperties(blockProperties)
+        gussetPlateProperties= bpe.BlockProperties.copyFrom(blockProperties)
         gussetPlateProperties.appendAttribute('objType', 'gusset_plate')
         blk= retval.blockFromPoints(self.contour, blockProperties= gussetPlateProperties, thickness= self.boltedPlateTemplate.thickness, matId= self.boltedPlateTemplate.steelType.name)
-        holeProperties= bpe.BlockProperties(blockProperties)
-        holeProperties.appendAttribute('ownerId', blk.id) # Hole owner id.
+        holeProperties= bpe.BlockProperties.copyFrom(blockProperties)
+        ownerId= 'f'+str(blk.id)
+        holeProperties.appendAttribute('ownerId', ownerId) # Hole owner id.
         blk.holes= self.getHoleBlocks(ownerId, blockProperties= holeProperties) # Get the hole blocks for the new plate
         retval.extend(blk.holes)
         kPointIds= blk.getKPointIds()
@@ -236,7 +237,7 @@ class GussetPlate(object):
         loadDirI= diagonalOrientation*diagonal.iVector
         loadDirJ= diagonalOrientation*diagonal.jVector
         loadDirK= diagonalOrientation*diagonal.kVector
-        plateProperties= bte.BlockProperties(blockProperties)
+        plateProperties= bte.BlockProperties.copyFrom(blockProperties)
         plateProperties.appendAttribute('side', side)
         # Create blocks.
         return distBetweenPlates, boltedPlate.getBlocks(boltedPlateRefSys, plateProperties, loadTag, loadDirI, loadDirJ, loadDirK)

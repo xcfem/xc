@@ -51,9 +51,9 @@ centroideB= coordTransf.getPointBasicCoordFromGlobal(centroideG)
 
 
 centroideGTeor= geom.Pos2d(L*math.sqrt(2)/4,L*math.sqrt(2)/4) # global coordinates of the centroid.
-ratio1= posCentroideG.distPos2d(centroideGTeor)
+ratio1= posCentroideG.dist(centroideGTeor)
 centroideLTeor= geom.Pos2d(10,0) # local coordinates of the centroid.
-ratio2= posCentroideL.distPos2d(centroideLTeor)
+ratio2= posCentroideL.dist(centroideLTeor)
 centroideBTeor= 0.5 # Basic coordinates of the centroid.
 ratio3= abs(centroideB-centroideBTeor)
 

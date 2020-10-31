@@ -91,5 +91,5 @@ def distance_2points(preprocessor,tagPt1,tagPt2):
     points= preprocessor.getMultiBlockTopology.getPoints
     pA= points.get(tagPt1).getPos
     pB= points.get(tagPt2).getPos
-    return pA.distPos3d(pB)
+    return pA.dist(pB)
   

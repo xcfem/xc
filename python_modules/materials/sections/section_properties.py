@@ -887,7 +887,7 @@ class CompoundSection(SectionProperties):
       center= geom.Pos2d(self.yCenterOfMass(), self.zCenterOfMass())
       retval= 0.0
       for s in self.sectionList:
-        retval+= s[1].SteinerJ(s[0].distPos2d(center))
+        retval+= s[1].SteinerJ(s[0].dist(center))
       return retval
   
     def alphaY(self):

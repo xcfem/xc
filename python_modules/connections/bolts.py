@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-''' Naive gusset plate model.'''
+''' Bolt fasteners basic properties.'''
 
 from __future__ import division
 from __future__ import print_function
@@ -100,15 +100,15 @@ class BoltBase(object):
         octagon= self.getHoleAsPolygon(refSys, nSides= 8).getVertexList()
         blk= retval.blockFromPoints(octagon, blockProperties)
         # Hole center.
-        holePropertiesB= bte.BlockProperties(blockProperties)
+        holePropertiesB= bte.BlockProperties.copyFrom(blockProperties)
         holePropertiesB.appendAttribute('objType', 'hole_center')
         holePropertiesB.appendAttribute('diameter', self.diameter)
         holePropertiesB.appendAttribute('boltMaterial', self.steelType.name)
-        holePropertiesA= bte.BlockProperties(holePropertiesB)
-        holePropertiesA.appendAttribute('ownerId', blk.id) # Hole center owner.
+        holePropertiesA= bte.BlockProperties.copyFrom(holePropertiesB)
+        holePropertiesA.appendAttribute('ownerId', 'f'+str(blk.id)) # Hole center owner.
         center3d= refSys.getPosGlobal(self.pos3d)
-        pA= retval.appendPoint(-1, center3d.x, center3d.y, center3d.z, blockProperties= holePropertiesA)        
-        pB= retval.appendPoint(-1, center3d.x, center3d.y, center3d.z-1*self.diameter, blockProperties= holePropertiesB)  #testing
+        pA= retval.appendPoint(-1, center3d.x, center3d.y, center3d.z, pointProperties= holePropertiesA)        
+        pB= retval.appendPoint(-1, center3d.x, center3d.y, center3d.z-1*self.diameter, pointProperties= holePropertiesB)  #testing
         boltBlk= bte.BlockRecord(id= -1, typ= 'line', kPoints= [pA, pB])
         id= retval.appendBlock(boltBlk)
         return retval

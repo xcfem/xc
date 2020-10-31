@@ -35,7 +35,7 @@ for x in abscissae:
 centroide= porticoLateral.getCentroid()
 
 
-ratio1= centroideTeor.distPos3d(centroide)
+ratio1= centroideTeor.dist(centroide)
 
 ''' 
 print("centroide= ",centroide)

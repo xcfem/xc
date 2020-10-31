@@ -36,8 +36,8 @@ def getSegmentOrientation(origin, sg):
             -1 if the segment to point is nearest to origin
     '''
     retval= 1.0
-    d0= origin.dist2Pos3d(sg.getFromPoint())
-    d1= origin.dist2Pos3d(sg.getToPoint())
+    d0= origin.dist2(sg.getFromPoint())
+    d1= origin.dist2(sg.getToPoint())
     if(d0>d1):
         retval= -1.0
     
@@ -122,8 +122,8 @@ class ConnectedMemberMetaData(object):
         :param origin: connection origin.
         '''
         retval= 1.0
-        d0= origin.dist2Pos3d(self.nodePositions[0])
-        d1= origin.dist2Pos3d(self.nodePositions[1])
+        d0= origin.dist2(self.nodePositions[0])
+        d1= origin.dist2(self.nodePositions[1])
         if(d0>d1):
             retval= -1.0
         return retval
@@ -205,8 +205,8 @@ class ConnectedMemberMetaData(object):
             pIntB= topFlangeMidPlane.getIntersection(sg)
             if(pIntA.exists): # segment intersects bottom flange.
                 if(pIntB.exists): # segment intersects top flange.
-                    dA= p1.dist2Pos3d(pIntA)
-                    dB= p1.dist2Pos3d(pIntB)
+                    dA= p1.dist2(pIntA)
+                    dB= p1.dist2(pIntB)
                     if(dA<dB):
                         p0= pIntA
                     else:
@@ -228,9 +228,9 @@ class ConnectedMemberMetaData(object):
         '''
         retval= dict()
         retval['loadTag']= self.eTag
-        retval['loadDirI']= self.iVector
-        retval['loadDirJ']= self.jVector
-        retval['loadDirK']= self.kVector
+        retval['loadDirI']= [self.iVector.x, self.iVector.y, self.iVector.z]
+        retval['loadDirJ']= [self.jVector.x, self.jVector.y, self.jVector.z]
+        retval['loadDirK']= [self.kVector.x, self.kVector.y, self.kVector.z]
         return retval
     
     def getMemberBlocks(self, connectionOrigin, memberOrigin, factor, blockProperties= None):
@@ -244,7 +244,7 @@ class ConnectedMemberMetaData(object):
         :param blockProperties: labels and attributes to assign to the newly created blocks.
         '''
         self.memberOrigin= memberOrigin
-        memberProperties= bte.BlockProperties(blockProperties)
+        memberProperties= bte.BlockProperties.copyFrom(blockProperties)
         memberProperties.appendAttribute('objType', self.getMemberType())
         memberProperties.extendAttributes(self.getMemberLoadAttributes())
         f= factor*self.getOrientation(connectionOrigin)
@@ -258,7 +258,7 @@ class ConnectedMemberMetaData(object):
         :param webWeldLegSize: leg size for the weld to the web.
         :param blockProperties: labels and attributes to assign to the newly created blocks.
         '''
-        frontalWeldProperties= bte.BlockProperties(blockProperties)
+        frontalWeldProperties= bte.BlockProperties.copyFrom(blockProperties)
         frontalWeldProperties.appendAttribute('objType', self.getMemberType())
         frontalWeldProperties.appendLabel('welds')
         return self.shape.getWeldBlockData(flangeWeldLegSize, webWeldLegSize, blockProperties= frontalWeldProperties)
@@ -375,7 +375,7 @@ class ConnectionMetaData(object):
         :param blockProperties: labels and attributes to assign to the newly created blocks.
         '''
         retval= bte.BlockData()
-        beamShapeProperties= bte.BlockProperties(blockProperties)
+        beamShapeProperties= bte.BlockProperties.copyFrom(blockProperties)
         beamShapeProperties.appendAttribute('objType', 'beam')
         for b in self.beams:
             webPlane= self.getColumnWebMidPlane()

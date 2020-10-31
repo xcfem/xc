@@ -228,15 +228,15 @@ class BoltArrayBase(object):
                 holeVertices.append(refSys.getPosGlobal(p3d))
             blk= retval.blockFromPoints(holeVertices, blockProperties)
             # Hole center.
-            centerProperties= bte.BlockProperties(blockProperties)
+            centerProperties= bte.BlockProperties.copyFrom(blockProperties)
             centerProperties.appendAttribute('objType','hole_center')
-            centerProperties.appendAttribute('ownerId', blk.id) # Hole center owner.
+            centerProperties.appendAttribute('ownerId', 'f'+str(blk.id)) # Hole center owner.
             centerProperties.appendAttribute('diameter', self.bolt.diameter)
             centerProperties.appendAttribute('boltMaterial', self.bolt.steelType.name)
             centerProperties.extendLabels(['hole_centers'])
             center= h[0]
             center3d= refSys.getPosGlobal(geom.Pos3d(center.x, center.y, 0.0))
-            retval.appendPoint(-1, center3d.x, center3d.y, center3d.z, blockProperties= centerProperties)
+            retval.appendPoint(-1, center3d.x, center3d.y, center3d.z, pointProperties= centerProperties)
         return retval
                     
     def getPositions(self, refSys= geom.Ref3d3d()):
@@ -490,7 +490,7 @@ class BoltedPlateBase(object):
         :param loadDirK: K vector of the of the original element.
         '''
         retval= bte.BlockData()
-        plateProperties= bte.BlockProperties(blockProperties)
+        plateProperties= bte.BlockProperties.copyFrom(blockProperties)
         plateProperties.appendAttribute('objType', 'bolted_plate')
         plateProperties.appendAttribute('loadTag', loadTag)
         plateProperties.appendAttribute('loadDirI', loadDirI)
@@ -498,11 +498,11 @@ class BoltedPlateBase(object):
         plateProperties.appendAttribute('loadDirK', loadDirK)
         # Get the plate contour
         contourVertices= self.getContour(refSys)
-        blk= retval.blockFromPoints(contourVertices,blockProperties, thickness= self.thickness, matId= self.steelType.name)
+        blk= retval.blockFromPoints(contourVertices, plateProperties, thickness= self.thickness, matId= self.steelType.name)
         # Get the hole blocks for the new plate
-        holeProperties= bte.BlockProperties(blockProperties)
+        holeProperties= bte.BlockProperties.copyFrom(blockProperties)
         holeProperties.appendAttribute('objType', 'hole')
-        holeProperties.appendAttribute('ownerId', blk.id)
+        holeProperties.appendAttribute('ownerId', 'f'+str(blk.id))
         holeProperties.appendLabel('holes')
         blk.holes= self.boltArray.getHoleBlocks(refSys,holeProperties)
         retval.extend(blk.holes)

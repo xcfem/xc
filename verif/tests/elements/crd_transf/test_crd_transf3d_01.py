@@ -53,9 +53,9 @@ posCentroidL= geom.Pos2d(centroidL[0],centroidL[1])
 centroidB= beam3d.getCoordTransf.getPointBasicCoordFromGlobal(centroidG)
 
 centroidGTeor= geom.Pos3d(L*math.sqrt(3)/6,L*math.sqrt(3)/6,L*math.sqrt(3)/6) # Centroid en globales.
-ratio1= posCentroidG.distPos3d(centroidGTeor)
+ratio1= posCentroidG.dist(centroidGTeor)
 centroidLTeor= geom.Pos2d(10,0) # Local coordinates of the centroid.
-ratio2= posCentroidL.distPos2d(centroidLTeor)
+ratio2= posCentroidL.dist(centroidLTeor)
 centroidBTeor= 0.5 # Basic coordinates of the centroid.
 ratio3= abs(centroidB-centroidBTeor)
 

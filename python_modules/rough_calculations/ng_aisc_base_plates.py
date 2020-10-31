@@ -211,8 +211,11 @@ class RectangularBasePlate(object):
         retval.appendVertex(origin2d+geom.Vector2d(deltaX+self.offsetB,-deltaY+self.offsetN))
         return retval
 
-    def getBlocks(self, lbls= None):
-        ''' Return the block decomposition of the base plate.'''
+    def getBlocks(self, blockProperties= None):
+        ''' Return the block decomposition of the base plate.
+
+        :param blockProperties: labels and attributes to assign to the newly created blocks.
+        '''
         retval= bte.BlockData()
         contour= self.getContour().getVertexList()
         labels= ['baseplate']
@@ -222,9 +225,11 @@ class RectangularBasePlate(object):
         for p2d in contour:
             points.append(geom.Pos3d(p2d.x, p2d.y, 0.0))
         blk= retval.blockFromPoints(points, labels, thickness= self.t, matId= self.steel.name)
-        ownerId= 'hole_owr_f'+str(blk.id) # Hole owner.
-        holeLabels= labels+['holes',ownerId]
-        blk.holes= self.anchorGroup.getHoleBlocks(self.getLocalRefSys(), holeLabels)
+        ownerId= 'f'+str(blk.id) # Hole owner.
+        holeProperties= bte.BlockProperties.copyFrom(blockProperties)
+        holeProperties.appendAttribute('objType', 'hole')
+        holeProperties.appendAttribute('ownerId', ownerId)
+        blk.holes= self.anchorGroup.getHoleBlocks(self.getLocalRefSys(), blockProperties= holeProperties)
         retval.extend(blk.holes)
         return retval
 

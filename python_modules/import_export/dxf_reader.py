@@ -570,7 +570,7 @@ class OldDxfReader(object):
     dist= 1e9
     nearestPoint= self.pointHandler.getNearest(pos3D)
     if(nearestPoint):
-      dist= nearestPoint.getPos.distPos3d(pos3D)
+      dist= nearestPoint.getPos.dist(pos3D)
     if(dist>self.tol):
       retval= self.pointHandler.newPntFromPos3d(pos3D)
     return retval

@@ -110,11 +110,11 @@ p3=geom.Pos3d(0.0 , 3.66350463128 , 1.5)
 p4=geom.Pos3d(0.0 , 5.7331401345 , 1.5)
 p5=geom.Pos3d(0,7,0)
 
-ratio1=v1CP.dist2Pos3d(p1)
-ratio2=v2CP.dist2Pos3d(p2)
-ratio3=v3CP.dist2Pos3d(p3)
-ratio4=v4CP.dist2Pos3d(p4)
-ratio5=v5CP.dist2Pos3d(p5)
+ratio1=v1CP.dist2(p1)
+ratio2=v2CP.dist2(p2)
+ratio3=v3CP.dist2(p3)
+ratio4=v4CP.dist2(p4)
+ratio5=v5CP.dist2(p5)
 
 import os
 from misc_utils import log_messages as lmsg
