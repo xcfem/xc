@@ -758,7 +758,7 @@ def readBoltedPlateFromJSONFile(inputFileName):
     retval.jsonRead(inputFileName)
     return retval
         
-class AnchorBolt(bolts.BoltBase):
+class AnchorBolt(bolts.AnchorBase):
     ''' ASTM anchor bolt according to table 2.2 from the document
     Base Plate and Anchor Rod Design Second Edition
     American Institute of Steel Construction, Inc.
@@ -983,11 +983,19 @@ class AnchorGroup(object):
         retval*=4.4482216 # pounds to Newtons
         return retval
     
-    def getHoleBlocks(self, refSys, labels):
-        ''' Return octagons inscribed in the holes.'''
+    def getHoleBlocks(self, refSys, blockProperties, ownerId):
+        ''' Return octagons inscribed in the holes.
+
+        :param refSys: coordinate reference system.
+        :param blockProperties: labels and attributes to assign to the newly created blocks.
+        :param ownerId: identifier of the holed surface.
+        '''
         retval= bte.BlockData()
+        holeProperties= bte.BlockProperties.copyFrom(blockProperties)
+        holeProperties.appendAttribute('objType', 'hole')
+        holeProperties.appendAttribute('ownerId', ownerId)
         for anchor in self.anchors:
-            retval.extend(anchor.getHoleBlock(refSys, labels))
+            retval.extend(anchor.getAnchorBlock(refSys, holeProperties))
         return retval
 
     def report(self, outputFile):

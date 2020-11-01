@@ -55,7 +55,8 @@ class BlockProperties(object):
     
     def appendLabel(self, label):
         ''' Append the label argument to the container.'''
-        self.labels.append(label)
+        if(label not in self.labels):
+            self.labels.append(label)
     
     def extendLabels(self, labels):
         ''' Append the labels argument to the container.'''

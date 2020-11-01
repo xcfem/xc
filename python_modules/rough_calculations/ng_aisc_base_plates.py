@@ -218,18 +218,14 @@ class RectangularBasePlate(object):
         '''
         retval= bte.BlockData()
         contour= self.getContour().getVertexList()
-        labels= ['baseplate']
-        if(lbls):
-            labels.extend(lbls)
+        plateProperties= bte.BlockProperties.copyFrom(blockProperties)
+        plateProperties.appendAttribute('objType', 'baseplate')
         points= list()
         for p2d in contour:
             points.append(geom.Pos3d(p2d.x, p2d.y, 0.0))
-        blk= retval.blockFromPoints(points, labels, thickness= self.t, matId= self.steel.name)
+        blk= retval.blockFromPoints(points, plateProperties, thickness= self.t, matId= self.steel.name)
         ownerId= 'f'+str(blk.id) # Hole owner.
-        holeProperties= bte.BlockProperties.copyFrom(blockProperties)
-        holeProperties.appendAttribute('objType', 'hole')
-        holeProperties.appendAttribute('ownerId', ownerId)
-        blk.holes= self.anchorGroup.getHoleBlocks(self.getLocalRefSys(), blockProperties= holeProperties)
+        blk.holes= self.anchorGroup.getHoleBlocks(self.getLocalRefSys(), blockProperties= blockProperties, ownerId= ownerId)
         retval.extend(blk.holes)
         return retval
 

@@ -233,7 +233,7 @@ class BoltArrayBase(object):
             centerProperties.appendAttribute('ownerId', 'f'+str(blk.id)) # Hole center owner.
             centerProperties.appendAttribute('diameter', self.bolt.diameter)
             centerProperties.appendAttribute('boltMaterial', self.bolt.steelType.name)
-            centerProperties.extendLabels(['hole_centers'])
+            centerProperties.appendLabel('hole_centers')
             center= h[0]
             center3d= refSys.getPosGlobal(geom.Pos3d(center.x, center.y, 0.0))
             retval.appendPoint(-1, center3d.x, center3d.y, center3d.z, pointProperties= centerProperties)
@@ -493,9 +493,9 @@ class BoltedPlateBase(object):
         plateProperties= bte.BlockProperties.copyFrom(blockProperties)
         plateProperties.appendAttribute('objType', 'bolted_plate')
         plateProperties.appendAttribute('loadTag', loadTag)
-        plateProperties.appendAttribute('loadDirI', loadDirI)
-        plateProperties.appendAttribute('loadDirJ', loadDirJ)
-        plateProperties.appendAttribute('loadDirK', loadDirK)
+        plateProperties.appendAttribute('loadDirI', [loadDirI.x, loadDirI.y, loadDirI.z])
+        plateProperties.appendAttribute('loadDirJ', [loadDirJ.x, loadDirJ.y, loadDirJ.z])
+        plateProperties.appendAttribute('loadDirK', [loadDirK.x, loadDirK.y, loadDirK.z])
         # Get the plate contour
         contourVertices= self.getContour(refSys)
         blk= retval.blockFromPoints(contourVertices, plateProperties, thickness= self.thickness, matId= self.steelType.name)
