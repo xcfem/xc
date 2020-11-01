@@ -259,7 +259,7 @@ class ConnectedMemberMetaData(object):
         :param blockProperties: labels and attributes to assign to the newly created blocks.
         '''
         frontalWeldProperties= bte.BlockProperties.copyFrom(blockProperties)
-        frontalWeldProperties.appendAttribute('objType', self.getMemberType())
+        frontalWeldProperties.appendAttribute('objType', 'weld')
         frontalWeldProperties.appendLabel('welds')
         return self.shape.getWeldBlockData(flangeWeldLegSize, webWeldLegSize, blockProperties= frontalWeldProperties)
     
