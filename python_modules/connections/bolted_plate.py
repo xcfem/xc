@@ -233,7 +233,6 @@ class BoltArrayBase(object):
             centerProperties.appendAttribute('ownerId', 'f'+str(blk.id)) # Hole center owner.
             centerProperties.appendAttribute('diameter', self.bolt.diameter)
             centerProperties.appendAttribute('boltMaterial', self.bolt.steelType.name)
-            centerProperties.appendLabel('hole_centers')
             center= h[0]
             center3d= refSys.getPosGlobal(geom.Pos3d(center.x, center.y, 0.0))
             retval.appendPoint(-1, center3d.x, center3d.y, center3d.z, pointProperties= centerProperties)
@@ -503,7 +502,6 @@ class BoltedPlateBase(object):
         holeProperties= bte.BlockProperties.copyFrom(blockProperties)
         holeProperties.appendAttribute('objType', 'hole')
         holeProperties.appendAttribute('ownerId', 'f'+str(blk.id))
-        holeProperties.appendLabel('holes')
         blk.holes= self.boltArray.getHoleBlocks(refSys,holeProperties)
         retval.extend(blk.holes)
         return retval

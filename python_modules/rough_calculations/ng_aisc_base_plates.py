@@ -225,7 +225,11 @@ class RectangularBasePlate(object):
             points.append(geom.Pos3d(p2d.x, p2d.y, 0.0))
         blk= retval.blockFromPoints(points, plateProperties, thickness= self.t, matId= self.steel.name)
         ownerId= 'f'+str(blk.id) # Hole owner.
-        blk.holes= self.anchorGroup.getHoleBlocks(self.getLocalRefSys(), blockProperties= blockProperties, ownerId= ownerId)
+        boltGroup= 'joint_'+plateProperties.getAttribute('jointId') # Joint id.
+        boltGroup+= '_'+plateProperties.getAttribute('objType')
+        holeProperties= bte.BlockProperties.copyFrom(plateProperties)
+        holeProperties.appendAttribute('boltGroup', boltGroup)        
+        blk.holes= self.anchorGroup.getHoleBlocks(self.getLocalRefSys(), blockProperties= holeProperties, ownerId= ownerId)
         retval.extend(blk.holes)
         return retval
 

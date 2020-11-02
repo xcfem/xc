@@ -238,6 +238,12 @@ class GussetPlate(object):
         loadDirK= diagonalOrientation*diagonal.kVector
         plateProperties= bte.BlockProperties.copyFrom(blockProperties)
         plateProperties.appendAttribute('side', side)
+        # Name for bolt group.
+        boltGroup= 'joint_'+plateProperties.getAttribute('jointId') # Joint id.
+        boltGroup+= '_'+plateProperties.getAttribute('objType')
+        boltGroup+= '_'+str(loadTag) # Diagonal identifier.
+        boltGroup+= '_'+str(side) # side
+        plateProperties.appendAttribute('boltGroup', boltGroup)
         # Create blocks.
         return distBetweenPlates, boltedPlate.getBlocks(boltedPlateRefSys, plateProperties, loadTag, loadDirI, loadDirJ, loadDirK)
 
