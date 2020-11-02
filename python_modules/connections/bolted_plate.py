@@ -69,6 +69,32 @@ class BoltArrayBase(object):
             last columns.'''
         return self.dist*(self.nCols-1)
         
+    def getMinPlateWidth(self):
+        ''' Return the minimum plate width.'''
+        retval= 0.0
+        if(self.bolt):
+            minEdgeDist= self.bolt.getMinimumEdgeDistance()
+            return 2.0*minEdgeDist+self.getWidth()
+        return retval        
+
+    def getMinPlateLength(self):
+        ''' Return the minimum plate length.'''
+        retval= 0.0
+        if(self.bolt):
+            minEdgeDist= self.bolt.getMinimumEdgeDistance()
+            return 2.0*minEdgeDist+self.getLength()
+        return retval
+
+    def getStandardPlateLength(self):
+        ''' Assigns the bolt arrangement.'''
+        minLength= self.getMinPlateLength()
+        retval= minLength
+        for d in self.distances:
+            if(d>= minLength):
+                retval= d
+                break
+        return retval
+
     def getNetWidth(self, plateWidth):
         ''' Return the net width due to the bolt holes.
 
@@ -215,7 +241,7 @@ class BoltArrayBase(object):
         localPos= self.getLocalPositions()
         holes= list()
         for pLocal in localPos:
-            circle= geom.Circle2d(pLocal,self.bolt.diameter/2.0)
+            circle= geom.Circle2d(pLocal,self.bolt.getNominalHoleDiameter()/2.0)
             octagon= circle.getInscribedPolygon(8,0.0).getVertexList()
             holes.append((pLocal,octagon))
         retval= bte.BlockData()
@@ -296,19 +322,11 @@ class BoltedPlateBase(object):
             
     def getMinWidth(self):
         ''' Return the minimum plate width.'''
-        retval= 0.0
-        if(self.boltArray.bolt):
-            minEdgeDist= self.boltArray.bolt.getMinimumEdgeDistance()
-            return 2.0*minEdgeDist+self.boltArray.getWidth()
-        return retval        
+        return self.boltArray.getMinPlateWidth()
 
     def getMinLength(self):
         ''' Return the minimum plate length.'''
-        retval= 0.0
-        if(self.boltArray.bolt):
-            minEdgeDist= self.boltArray.bolt.getMinimumEdgeDistance()
-            return 2.0*minEdgeDist+self.boltArray.getLength()
-        return retval
+        return self.boltArray.getMinPlateLength()
 
     def checkWidth(self):
         ''' Return true if the plate width is enough with respect to
@@ -371,7 +389,7 @@ class BoltedPlateBase(object):
         else:
             self.computeDimensions()
         if(not ok):
-            lmsg.error('Plate too small for the bolt arrangement.')
+            lmsg.error('Plate too small for the bolt arrangement. Length= '+str(self.length)+', min. length: '+str(self.getMinLength()))
  
     def getNetWidth(self):
         ''' Return the net width due to the bolt holes.'''
@@ -491,10 +509,11 @@ class BoltedPlateBase(object):
         retval= bte.BlockData()
         plateProperties= bte.BlockProperties.copyFrom(blockProperties)
         plateProperties.appendAttribute('objType', 'bolted_plate')
-        plateProperties.appendAttribute('loadTag', loadTag)
-        plateProperties.appendAttribute('loadDirI', [loadDirI.x, loadDirI.y, loadDirI.z])
-        plateProperties.appendAttribute('loadDirJ', [loadDirJ.x, loadDirJ.y, loadDirJ.z])
-        plateProperties.appendAttribute('loadDirK', [loadDirK.x, loadDirK.y, loadDirK.z])
+        if(loadTag):
+            plateProperties.appendAttribute('loadTag', loadTag)
+            plateProperties.appendAttribute('loadDirI', [loadDirI.x, loadDirI.y, loadDirI.z])
+            plateProperties.appendAttribute('loadDirJ', [loadDirJ.x, loadDirJ.y, loadDirJ.z])
+            plateProperties.appendAttribute('loadDirK', [loadDirK.x, loadDirK.y, loadDirK.z])
         # Get the plate contour
         contourVertices= self.getContour(refSys)
         blk= retval.blockFromPoints(contourVertices, plateProperties, thickness= self.thickness, matId= self.steelType.name)

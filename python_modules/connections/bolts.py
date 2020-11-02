@@ -13,6 +13,7 @@ __email__= "l.pereztato@ciccp.es, ana.ortega@ciccp.es "
 import math
 import xc_base
 import geom
+import importlib
 from import_export import block_topology_entities as bte
 
 class BoltBase(object):
@@ -122,12 +123,14 @@ class BoltBase(object):
         '''
         retval= bte.BlockData()
         # Hole vertices.
+        holeProperties= bte.BlockProperties.copyFrom(blockProperties)
+        holeProperties.appendAttribute('objType', 'hole')
         octagon= self.getHoleAsPolygon(refSys, nSides= 8).getVertexList()
-        blk= retval.blockFromPoints(octagon, blockProperties)
+        blk= retval.blockFromPoints(octagon, holeProperties)
         # Hole center.
-        holePropertiesA= self.getHoleCenterBlockProperties(blockProperties, blk.id)
+        centerProperties= self.getHoleCenterBlockProperties(blockProperties, blk.id)
         center3d= refSys.getPosGlobal(self.pos3d)
-        pA= retval.appendPoint(-1, center3d.x, center3d.y, center3d.z, pointProperties= holePropertiesA)
+        pA= retval.appendPoint(-1, center3d.x, center3d.y, center3d.z, pointProperties= centerProperties)
         retval.topPoint= retval.points[pA]
         return retval
     
@@ -169,3 +172,40 @@ class AnchorBase(BoltBase):
         id= retval.appendBlock(boltBlk)
         return retval
     
+
+def createHolesOnMemberBlocks(templateHoles, memberBlocks, boltProperties, materialsModuleName):
+    ''' Projects the holes in the argument onto the surfaces
+        of the member blocks to create the holes in those
+        surfaces.
+
+    :param templateHoles: holes that will be projected on the
+                          member surfaces, typically from a bolted
+                          plate that will be attached to the
+                          member.
+    :param memberBlocks: surfaces corresponding to the member plates:
+                          flanges, web, etc. Those surfaces will receive
+                          the new holes into them.
+    :param blockProperties: labels and attributes to assign to the newly created blocks.
+    :param materialsModuleName: name of the module that contains the material for the new bolts.
+    '''
+    retval= bte.BlockData()
+    # Import the materials module
+    matModule= importlib.import_module(materialsModuleName)
+    for holes in templateHoles:
+        for key in holes.points:
+            p= holes.points[key]
+            objType= p.getAttribute('objType')
+            if(objType=='hole_center'):
+                pos= geom.Pos3d(p.getX(), p.getY(), p.getZ())
+                boltDiameter= p.getAttribute('diameter')
+                boltMaterialId= p.getAttribute('boltMaterial')
+                boltMaterial= getattr(matModule,boltMaterialId)
+                nearestFace= memberBlocks.getNearest(pos)
+                boltProperties.appendAttribute('ownerId','f'+str(nearestFace.id)) # Hole owner
+                nearestFacePlane= nearestFace.getGeomObject(memberBlocks.points).getPlane()
+                posInFlange= nearestFacePlane.getPos3dProjection(pos)
+                refSys= geom.Ref3d3d(posInFlange, nearestFacePlane.getBase1(), nearestFacePlane.getBase2())
+                bolt= matModule.BoltFastener(diameter= boltDiameter, steelType= boltMaterial, pos3d= geom.Pos3d(0,0,0))
+                boltBlk= bolt.getBoltBlock(refSys, boltProperties)
+                retval.extend(boltBlk)
+    return retval

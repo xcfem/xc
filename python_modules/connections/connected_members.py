@@ -387,10 +387,12 @@ class ConnectionMetaData(object):
             beamOrientation= b.getOrientation(origin)
             if(abs(angleWithWeb)<1e-3): # beam parallel to web => flange beam.
                 beam_label= 'flange_beam'
+                b.connectedTo= 'flange'
                 tf= columnShape.getFlangeThickness()
                 offset= (25e-3+columnHalfH-tf/2.0)*beamOrientation
             else: # beam normal to web  => web beam
                 beam_label= 'web_beam'
+                b.connectedTo= 'web'
                 offset= (20e-3+columnHalfB)*beamOrientation
             beamShapeProperties.appendAttribute('beamLabel', beam_label)
             beamOrigin= origin+offset*b.iVector # beam direction
