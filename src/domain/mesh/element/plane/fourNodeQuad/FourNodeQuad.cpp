@@ -632,7 +632,7 @@ int XC::FourNodeQuad::updateParameter(int parameterID, Information &info)
         return 0;
       case 2:
         pressure = info.theDouble;
-        this->setPressureLoadAtNodes();        // update consistent nodal loads
+        this->setPressureLoadAtNodes(); // update consistent nodal loads
         return 0;
       default:
         if(parameterID >= 100)

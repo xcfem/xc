@@ -588,22 +588,47 @@ void XC::Tri31::Print(std::ostream &s, int flag) const
 
 XC::Response *XC::Tri31::setResponse(const std::vector<std::string> &argv, Information &eleInfo)
   {
-     if(argv[0] == "force" || argv[0] == "forces")
-      return new ElementResponse(this, 1, P);
+    XC::Response *retval= nullptr;
+    if(argv[0] == "force" || argv[0] == "forces")
+      retval= new ElementResponse(this, 1, P);
     else if(argv[0] == "stiff" || argv[0] == "stiffness")
-      return new ElementResponse(this, 2, K);
+      retval= new ElementResponse(this, 2, K);
     else if(argv[0] == "material" || argv[0] == "integrPoint")
       {
         size_t pointNum = atoi(argv[1]);
         if(pointNum > 0 && pointNum <= physicalProperties.size())
-          return setMaterialResponse(physicalProperties[pointNum-1],argv,2,eleInfo);
+          retval= setMaterialResponse(physicalProperties[pointNum-1],argv,2,eleInfo);
         else
-          return nullptr;
+          retval= nullptr;
       }
     else if(argv[0] == "stresses" || argv[0] == "stress")
-      { return new ElementResponse(this, 3, P); }
+      { retval= new ElementResponse(this, 3, P); }
+    else if(argv[0] == "stressesAtNodes" || argv[0] == "stressAtNodes")
+      {
+	const int numnodes= numNodes();
+	for (int i=0; i<numnodes; i++)
+	  {
+	    // output.tag("NodalPoint");
+	    // output.attr("number",i+1);
+	    // // output.attr("eta",pts[i][0]);
+	    // // output.attr("neta",pts[i][1]);
+
+	    // // output.tag("NdMaterialOutput");
+	    // // output.attr("classType", theMaterial[i]->getClassTag());
+	    // // output.attr("tag", theMaterial[i]->getTag());
+
+	    // output.tag("ResponseType","sigma11");
+	    // output.tag("ResponseType","sigma22");
+	    // output.tag("ResponseType","sigma12");
+
+	    // output.endTag(); // GaussPoint
+	    // output.endTag(); // NdMaterialOutput
+	  }
+        retval= new ElementResponse(this, 11, Vector(3*numnodes));
+      }
     else // otherwise response quantity is unknown for the quad class
-      return nullptr;
+      retval= nullptr;
+    return retval;
   }
 
 int XC::Tri31::getResponse(int responseID, Information &eleInfo)                                        
