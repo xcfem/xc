@@ -451,7 +451,10 @@ class PredefinedSpace(object):
 
            :param loadCaseName: name of the load pattern or combination.
         '''
-        self.getLoadHandler().addToDomain(loadCaseName)
+        loadHandler= self.getLoadHandler()
+        loadHandler.addToDomain(loadCaseName)
+        # Return the current load pattern.
+        return loadHandler.getLoadPatterns[loadCaseName]
 
     def removeLoadCaseFromDomain(self, loadCaseName):
         '''Add the load case argument (load pattern or
