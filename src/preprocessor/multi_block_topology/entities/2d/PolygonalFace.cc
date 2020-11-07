@@ -656,6 +656,8 @@ void XC::PolygonalFace::gen_mesh_gmsh(meshing_dir dm)
     // messages on the terminal, just set the "General.Terminal" option to 1:
     if(verbosity>1)
       gmsh::option::setNumber("General.Terminal", 1);
+    else
+      gmsh::option::setNumber("General.Terminal", 0);
     
     // We now add a new model, named "t1". If gmsh::model::add() is not called, a
     // new default (unnamed) model will be created on the fly, if necessary.
