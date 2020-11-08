@@ -462,9 +462,9 @@ class BlockData(object):
         '''Read points and surfaces from an XC set.'''
         self.name= xcSet.name
         self.points.readFromXCSet(xcSet)
-        lmsg.log(len(self.points), ' points read.')
+        lmsg.log(str(len(self.points))+ ' points read.')
         self.blocks.readFromXCSet(xcSet)
-        lmsg.log(len(self.blocks), ' blocks read.')
+        lmsg.log(str(len(self.blocks))+ ' blocks read.')
         self.pointSupports.readFromXCSet(xcSet,self.points)
 
     def readFromDxfFile(self,fName,preprocessor,dxfLayers):
