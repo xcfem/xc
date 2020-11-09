@@ -110,7 +110,8 @@ int XC::CTestFixedNumIter::test(void)
     // may never get convergence later on in analysis!
     if(currentIter == 0)
       {
-        std::cerr << "WARNING: CTestFixedNumIter::test() - start() was never invoked.\n";	
+        std::cerr << getClassName() << "::" << __FUNCTION__
+	          << "; WARNING: start() was never invoked.\n";	
         return -2;
       }
         
@@ -122,7 +123,7 @@ int XC::CTestFixedNumIter::test(void)
 
     // print the data if required
     if(printFlag)
-      std::clog << getStatusMsg(printFlag);
+      std::clog << getStatusMsg(printFlag) << std::endl;
 
     //
     // check if the algorithm converged
