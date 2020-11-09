@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-from __future__ import print_function
 '''Home cooked test.'''
+from __future__ import print_function
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
 __copyright__= "Copyright 2015, LCPT and AOO"
@@ -18,8 +18,6 @@ from materials import typical_materials
 # Problem type
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
-# Materials definition
-concrete= typical_materials.defElasticIsotropic3d(preprocessor, "concrete3d",28.3e9,0.2,0.0)
 
 # Geometry
 
