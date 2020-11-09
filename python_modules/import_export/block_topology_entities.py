@@ -175,6 +175,7 @@ class PointDict(me.NodeDict):
         for p in pointSet:
             pos= p.getPos
             self.append(p.tag, pos.x, pos.y, pos.z)
+        return len(self)
             
     def writeToXCFile(self,f,xcImportExportData):
         ''' Write the XC commands that define nodes.'''
@@ -312,7 +313,9 @@ class BlockDict(dict):
             numPoints= len(points)
             if(numPoints==4):
                 tagPoints= [points[0],points[1],points[2],points[3]]
-                thickness= s.getElement(1,1,1).getPhysicalProperties.getVectorMaterials[0].h
+                thickness= 0.0
+                if(len(s.elements)>0):
+                    thickness= s.getElement(1,1,1).getPhysicalProperties.getVectorMaterials[0].h
                 block= BlockRecord(id= s.tag, typ= 'surface',kPoints= tagPoints,thk= thickness)
             else:
                 lmsg.error('surface with ',str(numPoints), 'points.')
@@ -325,6 +328,7 @@ class BlockDict(dict):
                 tagPoints= [points[0],points[1]]
                 block= BlockRecord(id= l.tag, typ= 'line',kPoints= tagPoints, thk= 0.0)
             self.append(block)
+        return len(self)
         
     def writeDxf(self, name, pointDict,drawing):
         '''Write the cells in dxf file.'''
@@ -383,27 +387,38 @@ class PointSupportDict(dict):
         preprocessor= xcSet.getPreprocessor
         nodeSupports.readFromXCDomain(preprocessor.getDomain)
         nodeSupportsTags= nodeSupports.getNodeTags()
-        supportId= 0
-        for k in points:
-          p= preprocessor.getMultiBlockTopology.getPoints.get(k)
-          pointTag= p.tag
-          node= p.getNode()
-          if(node):
-            nodeTag= node.tag
-            if(nodeTag in nodeSupportsTags):
-              psr= PointSupportRecord(supportId,pointTag,nodeSupports[nodeTag])
-              self.append(psr)
-              supportId+= 1
+        if(len(nodeSupportsTags)>0):
+            supportId= 0
+            for k in points:
+              p= preprocessor.getMultiBlockTopology.getPoints.get(k)
+              pointTag= p.tag
+              node= p.getNode()
+              if(node):
+                nodeTag= node.tag
+                if(nodeTag in nodeSupportsTags):
+                  psr= PointSupportRecord(supportId,pointTag,nodeSupports[nodeTag])
+                  self.append(psr)
+                  supportId+= 1
+        return len(self)
 
 class BlockData(object):
-    '''Block topology entities container: points, lines, faces, solids,... '''
-    def __init__(self):
+    '''Block topology entities container: points, lines, faces, solids,...
+
+    :ivar name: container name.
+    :ivar materials: materials dictionary.
+    :ivar points: point container.
+    :ivar blocks: block (line, surface, volumen) container.
+    :ivar pointSupports: constrained points.
+    :ivar verbosity: verbosity level.
+    '''
+    def __init__(self, verbosity= 1):
         ''' Constructor.'''
         self.name= None
         self.materials= me.MaterialDict()
         self.points= PointDict()
         self.blocks= BlockDict()
         self.pointSupports= PointSupportDict()
+        self.verbosity= verbosity
 
     def appendPoint(self,id,x,y,z, pointProperties= None):
         ''' Append a point to the block data.
@@ -461,11 +476,14 @@ class BlockData(object):
     def readFromXCSet(self,xcSet):
         '''Read points and surfaces from an XC set.'''
         self.name= xcSet.name
-        self.points.readFromXCSet(xcSet)
-        lmsg.log(str(len(self.points))+ ' points read.')
-        self.blocks.readFromXCSet(xcSet)
-        lmsg.log(str(len(self.blocks))+ ' blocks read.')
-        self.pointSupports.readFromXCSet(xcSet,self.points)
+        retval= self.points.readFromXCSet(xcSet)
+        if(self.verbosity>0):
+            lmsg.log(str(len(self.points))+ ' points read.')
+        retval+= self.blocks.readFromXCSet(xcSet)
+        if(self.verbosity>0):
+            lmsg.log(str(len(self.blocks))+ ' blocks read.')
+        retval+= self.pointSupports.readFromXCSet(xcSet,self.points)
+        return retval
 
     def readFromDxfFile(self,fName,preprocessor,dxfLayers):
         ''' Read block topology from a DXF file.

@@ -335,10 +335,11 @@ python tests/preprocessor/sets/test_set_transformation_02.py
 echo "$BLEU" "  Preprocessor grid model tests." "$NORMAL"
 python tests/preprocessor/grid_model/test_grid_model_01.py
 python tests/preprocessor/grid_model/test_grid_model_02.py
-echo "$BLEU" "  Import file tests." "$NORMAL"
-python tests/preprocessor/import/test_split_lines.py
-python tests/preprocessor/import/test_dxf_groups.py
-python tests/preprocessor/import/test_dxf_surfaces.py
+echo "$BLEU" "  Import/export tests." "$NORMAL"
+python tests/preprocessor/import_export/test_split_lines.py
+python tests/preprocessor/import_export/test_dxf_groups.py
+python tests/preprocessor/import_export/test_dxf_surfaces.py
+python tests/preprocessor/import_export/test_dxf_export_01.py
 
 #Tests about constraints.
 echo "$BLEU" "Displacement constraints tests." "$NORMAL"
