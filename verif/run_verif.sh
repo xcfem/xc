@@ -223,7 +223,7 @@ python tests/solution/eigenvalues/modal_analysis_test_05.py
 python tests/solution/eigenvalues/test_cqc_01.py
 python tests/solution/eigenvalues/test_band_arpackpp_solver_01.py
 
-## Eigenvalues.
+## Geometric non-linearity.
 echo "$BLEU" "  PDelta solution tests." "$NORMAL"
 python tests/solution/geom_nl/test_pdelta_01.py
 python tests/solution/geom_nl/test_pdelta_02.py
@@ -242,6 +242,10 @@ python tests/solution/geom_nl/aisc_360_benchmark_problem_case_08.py
 echo "$BLEU" "  Time history solution tests." "$NORMAL"
 python tests/solution/time_history/test_time_history_01.py
 python tests/solution/time_history/test_pseudo_time_history.py
+
+## Convergence tests.
+echo "$BLEU" "  Convergence tests." "$NORMAL"
+python tests/solution/convergence_test/relative_total_norm_disp_incr_test_01.py
 
 #Preprocessor tests
 echo "$BLEU" "Preprocessor tests." "$NORMAL"
