@@ -102,7 +102,8 @@ int XC::CTestRelativeEnergyIncr::test(void)
     // may never get convergence later on in analysis!
     if(currentIter == 0)
       {
-        std::cerr << "WARNING: CTestRelativeEnergyIncr::test() - start() was never invoked.\n";	
+        std::cerr << getClassName() << "::" << __FUNCTION__
+	          << "; WARNING: start() was never invoked.\n";	
         return -2;
       }
     
