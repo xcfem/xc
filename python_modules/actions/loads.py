@@ -10,6 +10,7 @@ __version__= "3.0"
 __email__= "ana.Ortega@ciccp.es"
 
 import xc
+import geom
 from actions.earth_pressure import earth_pressure as ep
 from model.sets import sets_mng as sets
 from misc_utils import log_messages as lmsg
@@ -571,3 +572,33 @@ class WindLoadOnTrusses(BaseVectorLoad):
                 
         return maxValue
 
+
+class SlindingVectorLoad(BaseVectorLoad):
+    '''Distribute load expressed as a sliding vector over the nodes in 
+    a set.
+
+    :ivar name:       name identifying the load
+    :ivar xcSet:      set that contains the nodes
+    :ivar pntCoord:    (x,y,z) coordinates of a point of the sliding vector
+    :ivar loadVector:  xc.Vector(Fx,Fy,Fz,Mx,My,Mz) components of the force sliding vector
+    '''
+    def __init__(self,name, xcSet, pntCoord,loadVector):
+        super(SlindingVectorLoad,self).__init__(name,loadVector)
+        self.xcSet=xcSet
+        self.pntCoord=pntCoord
+        
+    def appendLoadToCurrentLoadPattern(self):
+        O=geom.Pos3d(self.pntCoord[0],self.pntCoord[1],self.pntCoord[2])
+        force=geom.Vector3d(self.loadVector[0],self.loadVector[1],self.loadVector[2])
+        moment=geom.Vector3d(self.loadVector[3],self.loadVector[4],self.loadVector[5])
+        loadSVS=geom.SlidingVectorsSystem3d(O,force,moment)
+        ptList= list()
+        nodeList= self.xcSet.nodes
+        for n in nodeList:
+            ptList.append(n.getInitialPos3d)
+        loadVectors= loadSVS.distribute(ptList)
+        for n, v in zip(nodeList,loadVectors):
+            f= v.getVector3d()
+            n.newLoad(xc.Vector([f.x,f.y,f.z,0.0,0.0,0.0]))
+
+        
