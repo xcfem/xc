@@ -26,6 +26,7 @@ from materials import buckling_base
 from materials.astm_aisc import AISC_limit_state_checking as aisc
 from import_export import block_topology_entities as bte
 from connections import bolts
+from connections import square_plate_washer as swp
 from connections import bolted_plate as bp
 
 class ASTMSteel(steel_base.BasicSteel):
@@ -430,6 +431,19 @@ class BoltArray(bp.BoltArrayBase):
         '''
         super(BoltArray, self).__init__(bolt, nRows, nCols, dist)
 
+class SquarePlateWasher(swp.SquarePlateWasher):
+    ''' Class for AISC plate washers.'''
+    def __init__(self, bolt, side= None, thickness= None, steelType= A36):
+        ''' Constructor.
+
+        :param bolt: bolt.
+        :param side: plate side (if None compute automatically).
+        :param thickness: plate thickness (defaults to nut height).
+        :param steelType: steel type.
+        '''
+        super(SquarePlateWasher, self).__init__(bolt, side, thickness, steelType)
+
+        
 class BoltedPlate(bp.BoltedPlateBase):
     ''' Bolted plate the AISC/ASTM way.
 
@@ -779,15 +793,16 @@ class AnchorBolt(bolts.AnchorBase):
     fHoleDiameter= scipy.interpolate.interp1d(rDiams,hDiams)
     
 
-    def __init__(self, name, steel, diameter, pos3d= None):
+    def __init__(self, name, steel, diameter, pos3d= None, plateWasher= None):
        ''' Constructor.
 
        :param name: bolt identifier
        :param steel: steel material.
        :param diameter: bolt diameter.
        :param pos3d: bolt position.
+       :param plateWasher: plate washer (if any).
        '''
-       super(AnchorBolt,self).__init__(diameter, pos3d)
+       super(AnchorBolt,self).__init__(diameter, pos3d, plateWasher)
        self.name= name
        self.steelType= steel
 
@@ -863,7 +878,9 @@ class AnchorBolt(bolts.AnchorBase):
         '''
         Abrg= self.getBearingArea() # the bearing area of the anchor
                                     # rod head or nut.
-        return psi4*Abrg*8*fc
+        if(self.plateWasher):
+            Abrg= self.plateWasher.getBearingArea()
+        return psi4*Abrg*8.0*fc
     
     def getDesignPulloutStrength(self, fc, psi4= 1.0, phi= 0.7):
         ''' Return the design pullout strength of the anchor 

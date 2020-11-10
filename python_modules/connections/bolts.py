@@ -14,8 +14,59 @@ import math
 import xc_base
 import geom
 import importlib
+import scipy.interpolate
 from import_export import block_topology_entities as bte
 
+class Nut(object):
+    # Bolt nominal diameters (m)
+    diameters= [1.6e-3, 2e-3, 2.5e-3, 3e-3, 3.5e-3, 4e-3, 5e-3, 6e-3, 8e-3, 10e-3, 12e-3, 14e-3, 16e-3, 18e-3, 20e-3, 22e-3, 24e-3, 27e-3, 30e-3, 33e-3, 36e-3, 39e-3, 42e-3, 45e-3, 48e-3, 52e-3, 56e-3, 60e-3, 64e-3]
+    # Maximum width across flats (m)
+    s_max= [3.2e-3, 4e-3, 5e-3, 5.5e-3, 6e-3, 7e-3, 8e-3, 10e-3, 13e-3, 16e-3, 18e-3, 21e-3, 24e-3, 27e-3, 30e-3, 34e-3, 36e-3, 41e-3, 46e-3, 50e-3, 55e-3, 60e-3, 65e-3, 70e-3, 75e-3, 80e-3, 85e-3, 90e-3, 95e-3]
+    fs_max= scipy.interpolate.interp1d(diameters,s_max)
+    # Minimum widht across flats (m)
+    s_min= [3.02e-3, 3.82e-3, 4.82e-3, 5.32e-3, 5.82e-3, 6.78e-3, 7.78e-3, 9.78e-3, 12.73e-3, 15.73e-3, 17.73e-3, 20.67e-3, 23.67e-3, 26.16e-3, 29.16e-3, 33e-3, 35e-3, 40e-3, 45e-3, 49e-3, 53.8e-3, 58.8e-3, 63.1e-3, 68.1e-3, 73.1e-3, 78.1e-3, 82.8e-3, 87.8e-3, 92.8e-3]
+    fs_min= scipy.interpolate.interp1d(diameters,s_min)
+    # Width across corners (m)
+    e= [3.41e-3, 4.32e-3, 5.45e-3, 6.01e-3, 6.58e-3, 7.66e-3, 8.79e-3, 11.05e-3, 14.38e-3, 17.77e-3, 20.03e-3, 23.36e-3, 26.75e-3, 29.56e-3, 32.95e-3, 37.29e-3, 39.55e-3, 45.2e-3, 50.85e-3, 55.37e-3, 60.79e-3, 66.44e-3, 71.3e-3, 76.95e-3, 82.6e-3, 88.25e-3, 93.56e-3, 99.21e-3, 104.86e-3]
+    fe= scipy.interpolate.interp1d(diameters,e)
+    # Maximum height of the nut (m).
+    m_max= [1.3e-3, 1.6e-3, 2e-3, 2.4e-3, 2.8e-3, 3.2e-3, 4.7e-3, 5.2e-3, 6.8e-3, 8.4e-3, 10.8e-3, 12.8e-3, 14.8e-3, 15.8e-3, 18e-3, 19.4e-3, 21.5e-3, 23.8e-3, 25.6e-3, 28.7e-3, 31e-3, 33.4e-3, 34e-3, 36e-3, 38e-3, 42e-3, 45e-3, 48e-3, 51e-3]
+    fm_max= scipy.interpolate.interp1d(diameters,m_max)
+    # Minimum height of the nut (m).
+    m_min= [1.05e-3, 1.35e-3, 1.75e-3, 2.15e-3, 2.55e-3, 2.9e-3, 4.4e-3, 4.9e-3, 6.44e-3, 8.04e-3, 10.37e-3, 12.1e-3, 14.1e-3, 15.1e-3, 16.9e-3, 18.1e-3, 20.2e-3, 22.5e-3, 24.3e-3, 27.4e-3, 29.4e-3, 31.8e-3, 32.4e-3, 34.4e-3, 36.4e-3, 40.4e-3, 43.4e-3, 46.4e-3, 49.1e-3]
+    fm_min= scipy.interpolate.interp1d(diameters,m_min)
+    ''' Nut dimensions.
+
+    :ivar boltDiameter: nominal diameter of the bolt.
+    :ivar m: height of the nut.
+    '''
+    def __init__(self, nominalBoltDiameter):
+        ''' Constructor.
+        :param boltDiameter: nominal diameter of the bolt.
+        '''
+        self.boltDiameter= nominalBoltDiameter
+
+    def getMaxWidthAcrossFlats(self):
+        ''' Return the maximum width across flats of the nut.'''
+        return self.fs_max(self.boltDiameter)
+
+    def getMinWidthAcrossFlats(self):
+        ''' Return the minimum width across flats of the nut.'''
+        return self.fs_min(self.boltDiameter)
+    
+    def getMaxHeight(self):
+        ''' Return the maximum height.'''
+        return self.fm_max(self.boltDiameter)
+
+    def getMinHeight(self):
+        ''' Return the minimum height.'''
+        return self.fm_min(self.boltDiameter)
+
+    def getWidthAcrossCorners(self):
+        ''' Return the width across corners.'''
+        return self.fe(self.boltDiameter)
+    
+        
 class BoltBase(object):
     ''' Base class for bolts.
 
@@ -33,7 +84,11 @@ class BoltBase(object):
            self.pos3d= pos3d
        else:
            self.pos3d= None
-           
+
+    def getNut(self):
+        ''' Return a nut object that corresponds to this bolt.'''
+        return Nut(self.diameter)
+    
     def getMinDistanceBetweenCenters(self):
         ''' Return the minimum distance between centers.'''
         raise NotImplementedError()
@@ -140,7 +195,20 @@ class BoltBase(object):
 
 class AnchorBase(BoltBase):
     ''' Base class for anchor bolts.
+
+    :ivar plateWasher: plate washer (if any).
     '''
+    def __init__(self, diameter, pos3d= None, plateWasher= None):
+       ''' Constructor.
+
+       :param steel: steel material.
+       :param diameter: bolt diameter.
+       :param pos3d: bolt position.
+       :param plateWasher: plate washer (if any).
+       '''
+       super(AnchorBase,self).__init__(diameter, pos3d)
+       self.plateWasher= plateWasher
+       
     def getAnchorPointBlockProperties(self, blockProperties):
         ''' Return the labels and attributes for the anchor point.
 
