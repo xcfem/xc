@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
-from __future__ import division
-from __future__ import print_function
-
 ''' Structural steel as specified in ASTM standard.
 
 Predefined ASTM steel types: A36, A529, A572, A53, A992, A500, A307,
                              A325 (bolts M12 to M36)
 '''
+
+from __future__ import division
+from __future__ import print_function
 
 __author__= "Luis C. Pérez Tato (LCPT) , Ana Ortega (AO_O) "
 __copyright__= "Copyright 2016, LCPT, AO_O"
@@ -28,6 +28,9 @@ from import_export import block_topology_entities as bte
 from connections import bolts
 from connections import square_plate_washer as swp
 from connections import bolted_plate as bp
+
+# Units
+in2m= 25.4e-3
 
 class ASTMSteel(steel_base.BasicSteel):
     '''ASTM structural steel.
@@ -786,12 +789,15 @@ class AnchorBolt(bolts.AnchorBase):
     ab_diams= [0.015875, 0.01905, 0.022225, 0.0254, 0.028575, 0.03175, 0.0381, 0.04445, 0.0508, 0.05715, 0.0635, 0.06985, 0.0762, 0.08255, 0.0889, 0.09525, 0.1016]
     bearingArea=[0.00044451524, 0.00058451496, 0.0007870952, 0.00096774, 0.0011677396, 0.0014451584, 0.0020193508, 0.0026903172, 0.003451606, 0.0043161204, 0.0052709572, 0.006322568, 0.007354824, 0.008580628, 0.009870948, 0.0112903, 0.012838684]
     fBearingArea= scipy.interpolate.interp1d(ab_diams,bearingArea)
-
+    # Threads per inch
+    diam_threads_per_inch= [12.7e-3, 14.2875e-3, 15.875e-3, 19.05e-3, 22.225e-3, 25.4e-3, 28.575e-3, 31.75e-3, 25.4e-3, 38.1e-3, 44.45e-3, 50.8e-3, 57.15e-3, 63.5e-3, 69.85e-3, 76.2e-3, 82.55e-3, 88.9e-3, 95.25e-3, 101.6e-3] # Diameters (m)
+    threads_per_inch= [13, 12, 11, 10, 9, 8, 7, 7, 6, 6, 5, 4.5, 4.5, 4, 4, 4, 4, 4, 4, 4]
+    fThreadsPerInch= scipy.interpolate.interp1d(diam_threads_per_inch, threads_per_inch)
+    
     # Hole diameters; see table 2.3 of the design guide:
     rDiams= [0.01905, 0.022225, 0.0254, 0.03175, 0.0381, 0.04445, 0.0508, 0.0635] # rod diameters.
     hDiams= [0.0333375, 0.0396875, 0.0460375, 0.0523875, 0.0587375, 0.06985, 0.08255, 0.08255] # hole diameters.
     fHoleDiameter= scipy.interpolate.interp1d(rDiams,hDiams)
-    
 
     def __init__(self, name, steel, diameter, pos3d= None, plateWasher= None):
        ''' Constructor.
@@ -820,18 +826,40 @@ class AnchorBolt(bolts.AnchorBase):
         steelTypeClassName= dct['steelTypeClassName']+'()'
         self.steelType= eval(steelTypeClassName)
         self.steelType.setFromDict(dct['steelType'])
+
+    def getNumOfThreadsPerInch(self):
+        ''' Return the number of threads per inch.'''
+        return self.fThreadsPerInch(self.diameter)
         
+
+    def getTensionEffectiveCrossSectionalArea(self):
+        ''' Return the effective cross-sectional area of the
+            anchor according to clause R17.4.1.2
+            of ACI 318R-14.
+        '''
+        d_in= self.diameter/in2m # diameter in inches.
+        nt= self.getNumOfThreadsPerInch()
+        deff= (d_in-0.9743/nt)*in2m # effective diameter in m.
+        return math.pi/4.0*deff**2
+    
+    def getShearEffectiveCrossSectionalArea(self):
+        ''' Return the effective cross-sectional area of the
+            anchor according to clause R17.5.1.2
+            of ACI 318R-14.
+        '''
+        return self.getTensionEffectiveCrossSectionalArea()
+    
     # Tension
     def getTensileStrength(self):
         ''' Return the tensile strength of the anchor rod.
         '''
-        Ag= self.getArea()
+        Ag= self.getTensionEffectiveCrossSectionalArea()
         return self.steelType.fu*Ag
     
     def getNominalTensileStrength(self):
         ''' Return the tensile strength of the anchor rod.
         '''
-        return 0.75*self.getTensileStrength()
+        return self.getTensileStrength()
     
     def getNominalShearStrength(self, typ= 'N'):
         ''' Return the shear strength of the anchor rod.
@@ -894,6 +922,17 @@ class AnchorBolt(bolts.AnchorBase):
         '''
         return phi*self.getNominalPulloutStrength(fc,psi4)
 
+    def getPulloutEfficiency(self, Pu, fc):
+        ''' Return the pullout efficiency of the bolt.
+
+        :param Pu: axial load (LRFD).
+        :param fc: concrete strength.
+        '''
+        retval= 0.0
+        Np= self.getNominalPulloutStrength(fc)
+        retval= Pu/Np
+        return retval
+
     def getConcreteBreakoutConePolygon(self, h_ef):
         ''' Return the full breakout cone in tension as per ACI 318-02.
 
@@ -901,6 +940,8 @@ class AnchorBolt(bolts.AnchorBase):
         '''
         retval= geom.Polygon2d()
         delta= 1.5*h_ef
+        if(self.plateWasher):
+            delta+= math.sqrt(self.plateWasher.getBearingArea())
         if(self.pos3d):
             origin= geom.Pos2d(self.pos3d.x, self.pos3d.y)
             retval.appendVertex(origin+geom.Vector2d(delta,delta))
@@ -910,7 +951,57 @@ class AnchorBolt(bolts.AnchorBase):
         else:
             lmsg.error('Anchor position not specified.')        
         return retval
+    
+    def getNominalConcreteBreakoutStrength(self, h_ef, fc, psi3= 1.0):
+        ''' Return the nominal value of the concrete breakout strength
+            for the anchor group as per ACI 318-02, Appendix D.
 
+        :param h_ef: depth of embedment.
+        :param fc: concrete strength.
+        :param psi3: 1.25 if the anchor is located in a region of a
+                     concrete member where analysis indicates no
+                     cracking at service levels, otherwise 1.0
+        '''
+        fc_psi= fc*145.038e-6
+        retval= psi3*math.sqrt(fc_psi)
+        h_ef_in= h_ef/in2m
+        if(h_ef_in>25): # embedment length outside CCD method range (0.0 to 0.635 m)
+            he_ef_in= 25
+        if(h_ef_in<11): 
+            retval*= 24*math.pow(h_ef_in,1.5) # Eq. (D-7)
+        else:
+            retval*= 16*math.pow(h_ef_in,5.0/3.0) # Eq. (D-8)
+        retval*= 4.4482216 # pounds to Newtons
+        return retval
+    
+    def getDesignConcreteBreakoutStrength(self, h_ef, fc, psi3= 1.0, phi= 0.7):
+        ''' Return the design value of the concrete breakout strength 
+            for the anchor group as per ACI 318-02, Appendix D.
+
+        :param h_ef: depth of embedment.
+        :param fc: concrete strength.
+        :param psi3: 1.25 if the anchor is located in a region of a
+                     concrete member where analysis indicates no
+                     cracking at service levels, otherwise 1.0
+        :param phi: resistance factor for concrete breakout  
+                    (defaults to 0.70).
+        '''
+        nominalValue= self.getNominalConcreteBreakoutStrength(h_ef, fc, psi3= 1.0)
+        return phi*nominalValue
+
+    def checkDuctility(self, h_ef, fc):
+        ''' Check the ductility of the anchor. If returned value
+        is less or equal than 1.0 then ductility OK.
+
+        :param h_ef: depth of embedment.
+        :param fc: concrete strength.
+        '''
+        retval= 0.0
+        Np_lim= 0.85*self.getNominalPulloutStrength(fc)
+        Nsa= self.getNominalTensileStrength()
+        Ncb_lim= 0.85*self.getNominalConcreteBreakoutStrength(h_ef, fc)
+        return max(Nsa/Np_lim, Nsa/Ncb_lim)
+    
     def report(self, outputFile):
         ''' Write the anchor specification.'''
         super(AnchorBolt,self).report(outputFile)
@@ -922,17 +1013,18 @@ class AnchorGroup(object):
     :ivar anchors: anchor list.
     '''
     
-    def __init__(self, steel, diameter, positions):
+    def __init__(self, steel, diameter, positions, plateWasher= None):
         ''' Creates an anchor group in the positions argument.
 
         :param steel: steel material.
         :param diameter: bolt diameter.
         :param positions: bolt positions.
+        :param plateWasher: washer plate for the bolts (if any)
         '''
         self.anchors= list()
         count= 0
         for p in positions:
-            self.anchors.append(AnchorBolt(name= str(count), steel= steel, diameter= diameter, pos3d= p))
+            self.anchors.append(AnchorBolt(name= str(count), steel= steel, diameter= diameter, pos3d= p, plateWasher= plateWasher))
             count+= 1
 
     def setPositions(self, positions):
@@ -976,9 +1068,26 @@ class AnchorGroup(object):
             retval.unePolygon2d(plg)
         return retval
 
-    def getConcreteBreakoutStrength(self, h_ef, fc, psi3= 1.25, phi= 0.7):
+    def getNominalConcreteBreakoutStrength(self, h_ef, fc, psi3= 1.25):
         ''' Return the concrete breakout strength for the anchor
             group as per ACI 318-02, Appendix D.
+
+        :param h_ef: depth of embedment.
+        :param fc: concrete strength.
+        :param psi3: 1.25 if the anchor is located in a region of a
+                     concrete member where analysis indicates no
+                     cracking at service levels, otherwise 1.0
+        '''
+        AN= self.getConcreteBreakoutConePolygon(h_ef).getArea()
+        ANo= self.anchors[0].getConcreteBreakoutConePolygon(h_ef).getArea()
+        surfRatio= AN/ANo
+        fc_psi= fc*145.038e-6
+        retval= self.anchors[0].getNominalConcreteBreakoutStrength(h_ef, fc,psi3)*surfRatio
+        return retval
+    
+    def getDesignConcreteBreakoutStrength(self, h_ef, fc, psi3= 1.25, phi= 0.7):
+        ''' Return the design value of the concrete breakout strength
+            for the anchor group as per ACI 318-02, Appendix D.
 
         :param h_ef: depth of embedment.
         :param fc: concrete strength.
@@ -988,17 +1097,8 @@ class AnchorGroup(object):
         :param phi: resistance factor for concrete breakout  
                     (defaults to 0.70).
         '''
-        AN= self.getConcreteBreakoutConePolygon(h_ef).getArea()
-        ANo= self.anchors[0].getConcreteBreakoutConePolygon(h_ef).getArea()
-        fc_psi= fc*145.038e-6
-        retval= phi*psi3*math.sqrt(fc_psi)*AN/ANo
-        h_ef_in= h_ef/0.0254
-        if(h_ef_in<11): 
-            retval*= 24*math.pow(h_ef_in,1.5)
-        else:
-            retval*= 16*math.pow(h_ef_in,5.0/3.0)
-        retval*=4.4482216 # pounds to Newtons
-        return retval
+        nominalValue= self.getNominalConcreteBreakoutStrength(h_ef, fc, psi3)
+        return phi*nominalValue
     
     def getHoleBlocks(self, refSys, blockProperties, ownerId):
         ''' Return octagons inscribed in the holes.

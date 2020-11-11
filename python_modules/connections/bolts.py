@@ -48,24 +48,32 @@ class Nut(object):
 
     def getMaxWidthAcrossFlats(self):
         ''' Return the maximum width across flats of the nut.'''
-        return self.fs_max(self.boltDiameter)
+        return float(self.fs_max(self.boltDiameter))
 
     def getMinWidthAcrossFlats(self):
         ''' Return the minimum width across flats of the nut.'''
-        return self.fs_min(self.boltDiameter)
+        return float(self.fs_min(self.boltDiameter))
     
     def getMaxHeight(self):
         ''' Return the maximum height.'''
-        return self.fm_max(self.boltDiameter)
+        return float(self.fm_max(self.boltDiameter))
 
     def getMinHeight(self):
         ''' Return the minimum height.'''
-        return self.fm_min(self.boltDiameter)
+        return float(self.fm_min(self.boltDiameter))
 
     def getWidthAcrossCorners(self):
         ''' Return the width across corners.'''
-        return self.fe(self.boltDiameter)
+        return float(self.fe(self.boltDiameter))
     
+    def getDict(self):
+        ''' Put member values in a dictionary.'''
+        retval= {'boltDiameter':self.boltDiameter}
+        return retval
+
+    def setFromDict(self,dct):
+        ''' Read member values from a dictionary.'''
+        self.boltDiameter= dct['boltDiameter']
         
 class BoltBase(object):
     ''' Base class for bolts.
@@ -168,7 +176,6 @@ class BoltBase(object):
         retval.appendAttribute('boltMaterial', self.steelType.name)
         retval.appendAttribute('ownerId', 'f'+str(ownerId)) # Hole center owner.
         return retval
-
         
     def getBoltBlock(self, refSys= geom.Ref3d3d(), blockProperties= None):
         ''' Return the hole contour and hole center as block topology entities.
@@ -240,6 +247,20 @@ class AnchorBase(BoltBase):
         id= retval.appendBlock(boltBlk)
         return retval
     
+    def getDict(self):
+        ''' Put member values in a dictionary.'''
+        retval= super(AnchorBase, self).getDict()
+        if(self.plateWasher):
+            retval['plateWasher']= self.plateWasher.getDict()
+        return retval
+
+    def setFromDict(self,dct):
+        ''' Read member values from a dictionary.'''
+        super(AnchorBase, self).setFromDict(dct)
+        if('plateWasher' in dct):
+            self.plateWasher= spw.SquarePlateWasher()
+            self.plateWasher.setFromDict(dct['plateWasher'])
+
 
 def createHolesOnMemberBlocks(templateHoles, memberBlocks, boltProperties, materialsModuleName):
     ''' Projects the holes in the argument onto the surfaces

@@ -303,10 +303,9 @@ class RectangularBasePlate(object):
         :param Pu: axial load (LRFD).
         '''
         retval= 0.0
-        if(Pu<0): # tensile load
-            anchorConcretePulloutStrength= self.anchorGroup.anchors[0].getDesignPulloutStrength(self.fc)
-            T_rod= -Pu/self.anchorGroup.getNumberOfBolts() # Tensile load per anchor
-            retval= T_rod/anchorConcretePulloutStrength
+        if(Pu>0): # tensile load
+            T_rod= Pu/self.anchorGroup.getNumberOfBolts() # Tensile load per anchor
+            retval= self.anchorGroup.anchors[0].getPulloutEfficiency(T_rod, self.fc)
         return retval
         
     def getBreakoutEfficiency(self, h_ef, Pu):
@@ -318,7 +317,8 @@ class RectangularBasePlate(object):
         '''
         retval= 0.0
         if(Pu<0): # tensile load
-            anchorConcreteBreakoutStrength= self.anchorGroup.getConcreteBreakoutStrength(h_ef, self.fc)
+            anchorConcreteBreakoutStrength= self.anchorGroup.getDesignConcreteBreakoutStrength(h_ef, self.fc)
+            print('here Pu= ', Pu/1e3, ' kN', Pu*0.00022480894387096, ' kips')
             retval= -Pu/anchorConcreteBreakoutStrength
         return retval
         

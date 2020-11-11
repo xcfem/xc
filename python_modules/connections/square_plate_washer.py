@@ -11,6 +11,7 @@ __version__= "3.0"
 __email__= "l.pereztato@ciccp.es, ana.ortega@ciccp.es "
 
 from misc_utils import log_messages as lmsg
+from connections import bolts
 
 class SquarePlateWasher(object):
     ''' Base class for plate washers. This class must be code agnostic
@@ -38,12 +39,11 @@ class SquarePlateWasher(object):
             self.side= side
         else:
             self.side= self.getMinSide()
-        self.steelType= steelType
-            
+        self.steelType= steelType            
 
     def getNut(self):
         ''' Return a nut object that corresponds to the bolt.'''
-        return bolt.getNut()
+        return self.bolt.getNut()
         
     def getMinSide(self):
         ''' Return the minimum side of the plate to take full
@@ -55,4 +55,24 @@ class SquarePlateWasher(object):
     def getBearingArea(self):
         ''' Return the bearing area of the plate washer.'''
         s= min(self.side, self.getMinSide())
-        return s*s
+        retval= s*s-self.bolt.getArea()
+        return retval
+    
+    def getDict(self):
+        ''' Put member values in a dictionary.'''
+        retval= {'bolt':self.bolt.getDict()}
+        retval['thickness']= self.thickness
+        retval['side']= self.side
+        steelTypeClassName= str(self.steelType.__class__)[8:-2]
+        retval.update({'steelTypeClassName':steelTypeClassName, 'steelType':self.steelType.getDict()})
+        return retval
+
+    def setFromDict(self,dct):
+        ''' Read member values from a dictionary.'''
+        self.bolt= bolts.BoltBase()
+        self.bolt.setFromDict(dct['bolt'])
+        self.thickness= dct['thickness']
+        self.side= dct['side']
+        steelTypeClassName= dct['steelTypeClassName']+'()'
+        self.steelType= eval(steelTypeClassName)
+        self.steelType.setFromDict(dct['steelType'])

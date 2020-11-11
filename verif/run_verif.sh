@@ -649,6 +649,7 @@ python tests/materials/astm_aisc/member_design/shear_member_design_test_04.py
 python tests/materials/astm_aisc/member_design/shear_member_design_test_05.py
 python tests/materials/astm_aisc/member_design/shear_member_design_test_06.py
 echo "$BLEU" "      ASTM/AISC connection design tests." "$NORMAL"
+python tests/materials/astm_aisc/connection_design/anchor_bolt_design_test_01.py
 python tests/materials/astm_aisc/connection_design/bolt_fastener_design_test_01.py
 python tests/materials/astm_aisc/connection_design/bolt_fastener_design_test_02.py
 python tests/materials/astm_aisc/connection_design/bolted_plate_test_01.py
