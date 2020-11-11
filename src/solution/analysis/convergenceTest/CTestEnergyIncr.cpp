@@ -136,7 +136,7 @@ int XC::CTestEnergyIncr::test(void)
     
     // print the data if required
     if(printFlag)
-      std::clog << getStatusMsg(printFlag);
+      std::clog << getStatusMsg(printFlag) << std::endl;
     
     //
     // check if the algorithm converged

@@ -164,7 +164,7 @@ class PredefinedSpace(object):
         lp= lPatterns.newLoadPattern(lpType,name)
         return lp
         
-    def getCurrentLoadPattern(self):
+    def getCurrentLoadPatternName(self):
         ''' Return the current load pattern.'''
         return self.getLoadHandler().getLoadPatterns.currentLoadPattern
         
@@ -181,6 +181,11 @@ class PredefinedSpace(object):
         :param lpName: load pattern name.
         '''
         return self.getLoadHandler().getLoadPatterns[lpName]
+
+    def getCurrentLoadPattern(self):
+        ''' Return the current load pattern.'''
+        lpName= self.getCurrentLoadPatternName()
+        return self.getLoadPattern(lpName)
 
     def newSPConstraint(self, nodeTag, dof, prescribedDisp= 0.0):
         ''' Prescribe displacement for node DOFs.
@@ -1668,23 +1673,30 @@ class StructuralMechanics3D(StructuralMechanics):
                 newElements.append(newElement)
         return (newNodes, newElements)
 
-    def distributeLoadOnNodes(self, loadSVS, nodeSet, loadPattern):
+    def distributeLoadOnNodes(self, loadSVS, nodeSet, loadPattern= None):
         ''' Distribute the load (represented by a sliding vector system
             between the nodes of the set.
 
         :param loadSVS: sliding vector system representing the load to be
                         distributed.
         :param nodeSet: the nodes receiving the loads.
-        :param loadPattern: load pattern to create the loads into.
+        :param loadPattern: load pattern to create the loads into. If None
+                            use the current load pattern.
         '''
         ptList= list()
         nodeList= nodeSet.nodes
-        for n in nodeList:
-            ptList.append(n.getInitialPos3d)
-        loadVectors= loadSVS.distribute(ptList)
-        for n, v in zip(nodeList,loadVectors):
-            f= v.getVector3d()
-            loadPattern.newNodalLoad(n.tag, xc.Vector([f.x,f.y,f.z,0.0,0.0,0.0]))
+        if(len(nodeList)>0):
+            for n in nodeList:
+                ptList.append(n.getInitialPos3d)
+            loadVectors= loadSVS.distribute(ptList)
+            if(not loadPattern):
+                loadPattern= self.getCurrentLoadPattern()
+            for n, v in zip(nodeList,loadVectors):
+                f= v.getVector3d()
+                loadPattern.newNodalLoad(n.tag, xc.Vector([f.x,f.y,f.z,0.0,0.0,0.0]))
+        else:
+            lmsg.warning("Set: '"+nodeSet.name+"' argument has no nodes.")
+                
 
 def getStructuralMechanics3DSpace(preprocessor):
     '''Return a tStructuralMechanics3DSpace from an

@@ -105,7 +105,8 @@ int XC::CTestRelativeTotalNormDispIncr::test(void)
     // may never get convergence later on in analysis!
     if(currentIter == 0)
       {
-        std::cerr << "WARNING: CTestRelativeTotalNormDispIncr::test() - start() was never invoked.\n";	
+        std::cerr << getClassName() << "::" << __FUNCTION__
+	          << "; WARNING: - start() was never invoked.\n";	
         return -2;
       }
     
@@ -119,12 +120,12 @@ int XC::CTestRelativeTotalNormDispIncr::test(void)
     norm0+= calculatedNormX;
     
     // get ratio
-    if(norm0 != 0.0)
+    if(norm0 >= (tol/1e6)) // not extremely small
       lastRatio/= norm0;
     
     // print the data if required
     if(printFlag)
-      std::clog << getStatusMsg(printFlag);
+      std::clog << getStatusMsg(printFlag) << std::endl;
 
     //
     // check if the algorithm converged
