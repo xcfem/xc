@@ -464,6 +464,36 @@ class StrainGradientThermalLoadOnShells(imps.gradThermalStrain):
             eLoad.setStrainComp(2,self.DOF,self.curvature)
             eLoad.setStrainComp(3,self.DOF,self.curvature)
 
+class WindLoadOnShells(BaseVectorLoad):
+    '''Wind load applied on the beam elements in the set passed as 
+    parameter.
+
+    :ivar name:       name identifying the load
+    :ivar xcSet:      set that contains the elements
+    :ivar windParams: instance of class base_wind.windParams defining 
+                      the parameters to calculate wind pressure.
+    :ivar Cp: pressure coefficient
+    :ivar positFace: if True wind acts against the positive face 
+                     of the shell (defaults to True)
+    :ivar Gf: gust factor (defaults to 1.0)
+    '''
+    def __init__(self,name, xcSet, windParams,Cp,positFace=True,Gf=1.0):
+        vDirWind=None
+        super(WindLoadOnShells,self).__init__(name,vDirWind)
+        self.xcSet=xcSet
+        self.windParams=windParams
+        self.Cp=Cp
+        self.positFace=positFace
+        self.Gf=Gf
+
+    def appendLoadToCurrentLoadPattern(self):
+        for e in self.xcSet.elements:
+            zCoo=e.getPosCentroid(True).z
+            press=self.windParams.qz(zCoo)*self.Cp*self.Gf
+            if self.positFace: press*=-1
+            loadVector=xc.Vector([0,0,press])
+            e.vector3dUniformLoadLocal(loadVector)
+ 
 class WindLoadOnBeams(BaseVectorLoad):
     '''Wind load applied on the beam elements in the set passed as 
     parameter.
