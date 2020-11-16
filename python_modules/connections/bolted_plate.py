@@ -448,7 +448,7 @@ class BoltedPlateBase(object):
 
 
     def __str__(self):
-        return 'width: '+ str(self.width) + ' length: '+ str(self.length) + ' thickness: '+ str(self.thickness) + ' bolts: ' + str(self.boltArray)
+        return 'width: '+ str(self.width) + ' length: '+ str(self.length) + ' thickness: '+ str(self.thickness) + ' double plate: '+ str(self.doublePlate) + ' bolts: ' + str(self.boltArray)
     
     def getDict(self):
         ''' Put member values in a dictionary.'''
