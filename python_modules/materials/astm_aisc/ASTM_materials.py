@@ -400,6 +400,7 @@ M24= BoltFastener(24e-3)
 M27= BoltFastener(27e-3)
 M30= BoltFastener(30e-3)
 M36= BoltFastener(36e-3)
+M42= BoltFastener(42e-3)
 
 # Standard bolt diameters
 standardBolts= [M16, M20, M22, M24, M27, M30, M36]
