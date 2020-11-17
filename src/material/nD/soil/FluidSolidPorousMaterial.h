@@ -40,7 +40,7 @@
 #ifndef FluidSolidPorousMaterial_h
 #define FluidSolidPorousMaterial_h
 
-#include <material/nD/NDMaterial.h>
+#include "material/nD/NDMaterial.h"
 
 namespace XC {
 class Response;
@@ -51,7 +51,11 @@ class Response;
 //
 //! @ingroup SoilNDMat
 //
-//! @brief ??.
+//! @brief Material that couples the responses of two phases: fluid and solid.
+//!
+//! The fluid phase response is only volumetric and linear elastic. The solid
+//! phase can be any NDMaterial. This material is developed to simulate the
+//! response of saturated porous media under fully undrained condition. 
 class FluidSolidPorousMaterial: public NDMaterial
   {
   private:
