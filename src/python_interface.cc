@@ -78,8 +78,6 @@ BOOST_PYTHON_MODULE(xc)
     export_preprocessor_main();
     export_solution(); // Solution routines exposition.
 
-#include "post_process/python_interface.tcc"
-
     XC::Domain *(XC::FEProblem::*getDomainRef)(void)= &XC::FEProblem::getDomain;
     XC::Preprocessor &(XC::FEProblem::*getPreprocessorRef)(void)= &XC::FEProblem::getPreprocessor;
     XC::ProcSolu &(XC::FEProblem::*getSoluProcRef)(void)= &XC::FEProblem::getSoluProc;
@@ -91,7 +89,6 @@ BOOST_PYTHON_MODULE(xc)
       .add_property("getSoluProc", make_function( getSoluProcRef, return_internal_reference<>() ),"Return a reference to the solver")
       .add_property("getDatabase", make_function( &XC::FEProblem::getDataBase, return_internal_reference<>() ),"Return a reference to the data base")
       .def("newDatabase", make_function( &XC::FEProblem::defineDatabase, return_internal_reference<>() ),"Create a data base")
-      .add_property("getFields", make_function( &XC::FEProblem::getFields, return_internal_reference<>() ),"Return fields definition (export).")
       .def("clearAll",&XC::FEProblem::clearAll,"Delete all entities in the FE problem.")
    ;
     def("getXCVersion",XC::getXCVersion);

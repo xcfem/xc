@@ -95,7 +95,6 @@ void XC::FEProblem::clearAll(void)
         if(tmp) delete tmp;
       }
     output_handlers.clear();
-    fields.clearAll();
     proc_solu.clearAll();
     preprocessor.clearAll();
   }

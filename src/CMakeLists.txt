@@ -169,8 +169,6 @@ SET(matrix utility/matrix/ID utility/matrix/IDVarSize utility/matrix/IntPtrWrapp
 
 SET(utility ${actor} ${mpi} ${alpha_broker} ${database} ${handler} ${package} ${paving} ${recorder} ${remote} ${tagged} ${matrix}  utility/Timer)
 
-SET(post_process post_process/FieldInfo post_process/MapFields)
-
 SET(static_integrators solution/analysis/integrator/static/IntegratorVectors solution/analysis/integrator/static/ProtoArcLength solution/analysis/integrator/static/ArcLength1 solution/analysis/integrator/static/BaseControl solution/analysis/integrator/static/DispBase solution/analysis/integrator/static/DisplacementControl solution/analysis/integrator/static/LoadControl solution/analysis/integrator/static/ArcLengthBase solution/analysis/integrator/static/DistributedDisplacementControl solution/analysis/integrator/static/LoadPath solution/analysis/integrator/static/ArcLength solution/analysis/integrator/static/EQPath solution/analysis/integrator/static/HSConstraint solution/analysis/integrator/static/MinUnbalDispNorm)
 
 SET(transient_newmark_integrators solution/analysis/integrator/transient/NewmarkBase solution/analysis/integrator/transient/newmark/NewmarkBase2 solution/analysis/integrator/transient/newmark/Newmark solution/analysis/integrator/transient/newmark/NewmarkHybridSimulation solution/analysis/integrator/transient/newmark/Newmark1 solution/analysis/integrator/transient/newmark/NewmarkExplicit)
@@ -351,7 +349,7 @@ SET(preprocessor preprocessor/EntMdlrBase preprocessor/MeshingParams ${preproces
 SET(solution solution/analysis/ModelWrapper solution/SolutionStrategy solution/SolutionStrategyMap solution/analysis/MapModelWrapper solution/ProcSoluControl solution/ProcSolu)
 
 # Build our library
-add_library(XcBib SHARED ${utility} ${material} ${siseq} ${analysis} ${convergenceTest} ${coordTransformation} ${damage} ${domain} ${gauss_models} ${cyclic_model} ${element} ${graph} ${modelbuilder} ${reliability} ${unitest} ${preprocessor} ${solution} ${post_process} version FEProblem)
+add_library(XcBib SHARED ${utility} ${material} ${siseq} ${analysis} ${convergenceTest} ${coordTransformation} ${damage} ${domain} ${gauss_models} ${cyclic_model} ${element} ${graph} ${modelbuilder} ${reliability} ${unitest} ${preprocessor} ${solution} version FEProblem)
 
 #Python interface
 TARGET_LINK_LIBRARIES(XcBib xc_utils xc_basic_utils OpenMP::OpenMP_CXX ${VTK_BIB} CGAL::CGAL CGAL::CGAL_Core ${Plot_LIBRARY} ${MPFR_LIBRARIES} ${GMP_LIBRARY} ${MYSQL_LIBRARY} ${MySQLpp_LIBRARIES} ${SQLITE3_LIBRARY} ${GNUGTS_LIBRARIES} ${BerkeleyDB_LIBRARIES} ${ARPACK_LIB} ${ARPACKPP_LIB} ${LAPACK_LIBRARIES} ${SUPERLU_LIBRARIES} ${BLAS_LIBRARIES} ${PETSC_LIB_PETSC} ${METIS_LIBRARIES} ${TCL_LIBRARY} ${XC_UTILS_BOOST_LIBRARIES} ${PYTHON_LIBRARIES} ${F2C_LIBRARY} ${GMSH_LIBRARIES})
