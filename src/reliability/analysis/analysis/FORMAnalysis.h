@@ -72,24 +72,27 @@ using std::ofstream;
 namespace XC {
 //! @ingroup ReliabilityAnalysis
 //!
-//! @brief ??
+//! @brief First-order reliability method.
+//!
+//! The first-order reliability method, (FORM), is a semi-probabilistic
+//! reliability analysis method devised to evaluate the reliability of
+//! a system. <a href="https://en.wikipedia.org/wiki/First-order_reliability_method">Wikipedia</a> 
 class FORMAnalysis: public ReliabilityAnalysis
-{
-private:
-	ReliabilityDomain *theReliabilityDomain;
-	FindDesignPointAlgorithm *theFindDesignPointAlgorithm;
-	ProbabilityTransformation *theProbabilityTransformation;
-	std::string fileName;
-	int relSensTag;
-
-public:
-	FORMAnalysis(ReliabilityDomain *passedReliabilityDomain,
-				 FindDesignPointAlgorithm *passedFindDesignPointAlgorithm,
-				 ProbabilityTransformation *passedProbabilityTransformation,
-				 const std::string &fileName,
-				 int relSensTag);
-	int analyze(void);
-};
+  {
+  private:
+    ReliabilityDomain *theReliabilityDomain;
+    FindDesignPointAlgorithm *theFindDesignPointAlgorithm;
+    ProbabilityTransformation *theProbabilityTransformation;
+    std::string fileName;
+    int relSensTag;
+  public:
+    FORMAnalysis(ReliabilityDomain *passedReliabilityDomain,
+		 FindDesignPointAlgorithm *passedFindDesignPointAlgorithm,
+		 ProbabilityTransformation *passedProbabilityTransformation,
+		 const std::string &fileName,
+		 int relSensTag);
+    int analyze(void);
+  };
 } // end of XC namespace
 
 #endif

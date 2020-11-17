@@ -73,7 +73,9 @@
 namespace XC {
 //! @ingroup ReliabilityAnalysis
 //!
-//! @brief ??
+//! @brief First-order second moment reliability analysis.
+//!
+//!  <a href="https://orbi.uliege.be/bitstream/2268/164363/1/An%20Introduction%20To%20Reliability%20Analysis%20DENOEL.pdf"> An introduction to reliability analysis.</a> 
 class FOSMAnalysis: public ReliabilityAnalysis
 {
 private:
