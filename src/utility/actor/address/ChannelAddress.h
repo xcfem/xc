@@ -68,7 +68,13 @@
 
 namespace XC {
 //! @brief Base class for classes that encapsulate
-//! channel addresses. 
+//! channel addresses.
+//!
+//! An Address object represents the location of a Channel object in the
+//! machine space. Channel objects send information to other Channel objects,
+//! whose locations are given by an Address object. Channel objects also
+//! receive information from other Channel objects, whose locations are
+//! given by an Address object.
 class ChannelAddress
   {
   private:
