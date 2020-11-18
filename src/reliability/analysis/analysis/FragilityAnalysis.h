@@ -76,31 +76,32 @@ class GradGEvaluator;
 
 //! @ingroup ReliabilityAnalysis
 //!
-//! @brief ??
+//! @brief Fragility analysis class.
+//!
+//! Seismic fragility is a probabilistic measure for seismic
+//! performance assessment of structural components.
 class FragilityAnalysis: public ReliabilityAnalysis
-{
-private:
-	ReliabilityDomain *theReliabilityDomain;
-	FindDesignPointAlgorithm *theFindDesignPointAlgorithm;
-	GradGEvaluator *theGradGEvaluator;
-	std::string fileName;
-	double first, last;
-	int parameterNumber, numIntervals;
-	Tcl_Interp *theTclInterp;
-
-public:
-	FragilityAnalysis(ReliabilityDomain *theReliabilityDomain,
-					  FindDesignPointAlgorithm *theFindDesignPointAlgorithm,
-					  GradGEvaluator *theGradGEvaluator,
-					  int parameterNumber,
-					  double first,
-					  double last,
-					  int numIntervals,
-			  const std::string &fName,
-					  Tcl_Interp *theTclInterp);
-
-	int analyze(void);
-};
+  {
+  private:
+    ReliabilityDomain *theReliabilityDomain;
+    FindDesignPointAlgorithm *theFindDesignPointAlgorithm;
+    GradGEvaluator *theGradGEvaluator;
+    std::string fileName;
+    double first, last;
+    int parameterNumber, numIntervals;
+    Tcl_Interp *theTclInterp;
+  public:
+    FragilityAnalysis(ReliabilityDomain *theReliabilityDomain,
+		      FindDesignPointAlgorithm *theFindDesignPointAlgorithm,
+		      GradGEvaluator *theGradGEvaluator,
+		      int parameterNumber,
+		      double first,
+		      double last,
+		      int numIntervals,
+      		      const std::string &fName,
+		      Tcl_Interp *theTclInterp);
+    int analyze(void);
+  };
 } // end of XC namespace
 
 #endif
