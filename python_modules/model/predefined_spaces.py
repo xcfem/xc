@@ -485,7 +485,7 @@ class PredefinedSpace(object):
     def createSelfWeightLoad(self,xcSet, gravityVector):
         ''' Creates the self-weight load on the elements.
 
-         :param xcSet: set with the lines to load.
+         :param xcSet: set with the elements to load.
         '''
         for e in xcSet.getElements:
             e.createInertiaLoad(gravityVector)
