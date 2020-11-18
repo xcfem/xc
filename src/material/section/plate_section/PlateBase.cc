@@ -41,13 +41,21 @@ XC::PlateBase::PlateBase(int tag, int classTag, double thickness, double rho)
   : SectionForceDeformation(tag,classTag), h(thickness), rhoH(rho*thickness)
   {}
 
-//! @brief Density per unit area
+//! @brief Return material density.
 double XC::PlateBase::getRho(void) const
   { return rhoH; }
 
-//! @brief Asigns density per unit area
+//! @brief Assign material density.
 void XC::PlateBase::setRho(const double &r)
   { rhoH= r; }
+
+//! @brief Return density per unit area
+double XC::PlateBase::getAreaDensity(void) const
+  { return rhoH*h; }
+
+//! @brief Assign density per unit area
+void XC::PlateBase::setAreaDensity(const double &r)
+  { rhoH= r/h; }
 
 //! @brief Return values of internal forces, deformations...
 //! @param cod: name of the requested value.

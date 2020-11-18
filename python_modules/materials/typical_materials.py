@@ -525,9 +525,10 @@ class DeckMaterialData(MaterialData):
         super(DeckMaterialData,self).__init__(name,material.E,material.nu,material.rho)
         self.name= name
         self.thickness= thickness
-        self.material=material
+        self.material= material
     def getAreaDensity(self):
         '''return the mass per unit area'''
+        lmsg.warning('DeckMaterialData.getAreaDensity will be deprecated soon. Use the XC material method.')
         return self.rho*self.thickness
     def setupElasticSection(self,preprocessor):
         '''create an elastic isotropic section appropiate for plate and shell analysis

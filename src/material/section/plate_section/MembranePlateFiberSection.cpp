@@ -262,6 +262,13 @@ void XC::MembranePlateFiberSection::setRho(const double &r)
       { theFibers[i]->setRho(r/weights[i]); }
   }
 
+//! @brief Return mass per unit area.
+double XC::MembranePlateFiberSection::getAreaDensity(void) const
+  { return getRho(); }
+    
+//! @brief Return mass per unit area.
+void XC::MembranePlateFiberSection::setAreaDensity(const double &r)
+  { setRho(r); }
 
 //! @brief Set initial values for deformation.
 int XC::MembranePlateFiberSection::setInitialSectionDeformation(const Vector &initialStrain_from_element)

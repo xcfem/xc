@@ -109,7 +109,9 @@ class MembranePlateFiberSection: public PlateBase
 
     SectionForceDeformation *getCopy(void) const;
     double getRho(void) const;
-    virtual void setRho(const double &);
+    void setRho(const double &);
+    double getAreaDensity(void) const;
+    void setAreaDensity(const double &);
     int getOrder(void) const;
     const ResponseId &getType(void) const;
     
