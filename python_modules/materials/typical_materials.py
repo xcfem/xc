@@ -539,7 +539,7 @@ class DeckMaterialData(MaterialData):
                 lmsg.warning("Section: "+self.name+" already defined.")
                 self.xc_material= materialHandler.getMaterial(self.name)
             else:
-                self.xc_material= defElasticMembranePlateSection(preprocessor,self.name,self.E,self.nu,self.getAreaDensity(),self.thickness)
+                self.xc_material= defElasticMembranePlateSection(preprocessor,self.name,self.E,self.nu,self.rho,self.thickness)
         else:
             lmsg.warning('Material: ', self.name, ' already defined.')
         return self.xc_material
