@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
+''' Inertia load on truss section elements. 
+    Equilibrium based home made test.'''
 
 from __future__ import division
 from __future__ import print_function
-
-# Mome made test.
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
 __copyright__= "Copyright 2020, LCPT and AOO"
@@ -24,7 +24,7 @@ nu= 0.3 # Poisson's ratio
 G= E/(2*(1+nu)) # Shear modulus
 l= 10 # Bar length
 b= 0.1
-A= b*b #Área in square inches.
+A= b*b # Area in square inches.
 Iz= 1/12.0*b**4 # Cross section moment of inertia (m4)
 
 feProblem= xc.FEProblem()
@@ -41,7 +41,6 @@ n2= nodes.newNodeXYZ(l,0,0)
 # Materials definition
 trussScc= typical_materials.defElasticSection1d(preprocessor, "trussScc",A,E, linearRho= 10.0*A)
 
-
 # Element definition.
 elements= preprocessor.getElementHandler
 elements.dimElem= 3 # Three-dimensional space.
@@ -50,19 +49,9 @@ truss= elements.newElement("TrussSection",xc.ID([n1.tag,n2.tag]))
 
 constraints= preprocessor.getBoundaryCondHandler
 # Zero movement for node 1.
-spc1= constraints.newSPConstraint(n1.tag,0,0.0)
-spc2= constraints.newSPConstraint(n1.tag,1,0.0)
-spc3= constraints.newSPConstraint(n1.tag,2,0.0)
-spc4= constraints.newSPConstraint(n1.tag,3,0.0)
-spc5= constraints.newSPConstraint(n1.tag,4,0.0)
-spc6= constraints.newSPConstraint(n1.tag,5,0.0)
+modelSpace.fixNode000_000(n1.tag)
 # Zero movement for node 2.
-spc7= constraints.newSPConstraint(n2.tag,0,0.0)
-spc8= constraints.newSPConstraint(n2.tag,1,0.0)
-spc9= constraints.newSPConstraint(n2.tag,2,0.0)
-spc10= constraints.newSPConstraint(n2.tag,3,0.0)
-spc11= constraints.newSPConstraint(n2.tag,4,0.0)
-spc12= constraints.newSPConstraint(n2.tag,5,0.0)
+modelSpace.fixNode000_000(n2.tag)
 
 # Load definition.
 lp0= modelSpace.newLoadPattern(name= '0')

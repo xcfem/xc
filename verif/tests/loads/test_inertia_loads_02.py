@@ -1,10 +1,9 @@
 # -*- coding: utf-8 -*-
+''' Inertia load on truss and elastic beam elements. 
+    Equilibrium based home made test.'''
 
 from __future__ import division
 from __future__ import print_function
-
-# Test from Ansys manual
-# Reference:  Strength of Material, Part I, Elementary Theory and Problems, pg. 10, problem 2
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
 __copyright__= "Copyright 2015, LCPT and AOO"
@@ -61,21 +60,13 @@ truss.sectionArea= A
 elements.defaultTransformation= lin.name
 elements.defaultMaterial= section.name
 beam= elements.newElement("ElasticBeam3d",xc.ID([n1.tag,n2.tag]))
-constraints= preprocessor.getBoundaryCondHandler
+
+# Constraints.
 # Zero movement for node 1.
-spc1= constraints.newSPConstraint(n1.tag,0,0.0)
-spc2= constraints.newSPConstraint(n1.tag,1,0.0)
-spc3= constraints.newSPConstraint(n1.tag,2,0.0)
-spc4= constraints.newSPConstraint(n1.tag,3,0.0)
-spc5= constraints.newSPConstraint(n1.tag,4,0.0)
-spc6= constraints.newSPConstraint(n1.tag,5,0.0)
-# Zero movement for node 2.
-spc7= constraints.newSPConstraint(n2.tag,0,0.0)
-spc8= constraints.newSPConstraint(n2.tag,1,0.0)
-spc9= constraints.newSPConstraint(n2.tag,2,0.0)
-# spc10= constraints.newSPConstraint(n2.tag,3,0.0)
-# spc11= constraints.newSPConstraint(n2.tag,4,0.0)
-spc12= constraints.newSPConstraint(n2.tag,5,0.0)
+modelSpace.fixNode000_000(n1.tag)
+# Partial constraint for node 2.
+modelSpace.fixNode000_FF0(n2.tag)
+
 
 # Load definition.
 lp0= modelSpace.newLoadPattern(name= '0')
