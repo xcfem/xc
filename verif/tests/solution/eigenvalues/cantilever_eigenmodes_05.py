@@ -36,7 +36,7 @@ nodes= preprocessor.getNodeHandler
 
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
 # Define materials
-elast= typical_materials.defElasticMembranePlateSection(preprocessor, "elast",EMat,nuMat,espChapa*dens,espChapa)
+elast= typical_materials.defElasticMembranePlateSection(preprocessor, "elast",EMat,nuMat,dens,espChapa)
 
 
 points= preprocessor.getMultiBlockTopology.getPoints
