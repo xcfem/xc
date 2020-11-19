@@ -116,6 +116,7 @@ class Shell4NBase: public QuadBase4N<SectionFDPhysicalProperties>
     const ShellUniformLoad *vector3dUniformLoadLocal(const Vector &);
     const ShellUniformLoad *vector3dUniformLoadGlobal(const Vector &);
     void strainLoad(const Matrix &);
+    virtual void createInertiaLoad(const Vector &);
 
     // methods for applying loads
     void zeroLoad(void);

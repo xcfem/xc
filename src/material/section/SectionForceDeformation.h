@@ -143,6 +143,9 @@ class SectionForceDeformation: public Material
     virtual Matrix getValues(const std::string &, bool silent= false) const;
 
     virtual double getRho(void) const;
+    virtual double getLinearDensity(void) const;
+    virtual double getArealDensity(void) const;
+    virtual double getVolumetricDensity(void) const;
 
     //! @brief Virtual constructor.
     virtual SectionForceDeformation *getCopy(void) const= 0;

@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+''' Inertia load on 2D corotational truss elements. 
+    Equilibrium based home made test.'''
 
 from __future__ import division
 from __future__ import print_function
@@ -47,13 +49,9 @@ truss= elements.newElement("CorotTrussSection",xc.ID([n1.tag,n2.tag]))
 # Constraints
 constraints= preprocessor.getBoundaryCondHandler
 # Zero movement for node 1.
-spc1= constraints.newSPConstraint(n1.tag,0,0.0)
-spc2= constraints.newSPConstraint(n1.tag,1,0.0)
-spc3= constraints.newSPConstraint(n1.tag,2,0.0)
+modelSpace.fixNode000(n1.tag)
 # Zero movement for node 2.
-spc4= constraints.newSPConstraint(n2.tag,0,0.0)
-spc5= constraints.newSPConstraint(n2.tag,1,0.0)
-spc6= constraints.newSPConstraint(n2.tag,2,0.0)
+modelSpace.fixNode000(n2.tag)
 
 # Load definition.
 lp0= modelSpace.newLoadPattern(name= '0')

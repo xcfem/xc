@@ -61,21 +61,21 @@
 #ifndef HessianApproximation_h
 #define HessianApproximation_h
 
-#include <utility/matrix/Matrix.h>
+#include "utility/matrix/Matrix.h"
 
 namespace XC {
 
 //! @ingroup ReliabilityAnalysis
 // 
-//! @brief ??
+//! @brief Base class for Hessian approximations.
 class HessianApproximation
   {
   public:
-	HessianApproximation();
+    HessianApproximation(void);
 
-	virtual Matrix  getHessianApproximation() = 0;
-	virtual int     setHessianToIdentity(int size) = 0;
-	virtual int     updateHessianApproximation(Vector u_old, double g_old,Vector gradG_old, double stepSize, Vector searchDirection, double g_new, Vector gradG_new) = 0;
+    virtual Matrix getHessianApproximation() = 0;
+    virtual int setHessianToIdentity(int size) = 0;
+    virtual int updateHessianApproximation(Vector u_old, double g_old,Vector gradG_old, double stepSize, Vector searchDirection, double g_new, Vector gradG_new) = 0;
   };
 } // end of XC namespace
 

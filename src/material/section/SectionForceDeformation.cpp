@@ -157,6 +157,29 @@ const XC::Matrix &XC::SectionForceDeformation::getInitialFlexibility(void) const
 double XC::SectionForceDeformation::getRho(void) const
   { return 0.0; }
 
+//! @brief Returns the mass per unit length of the section.
+double XC::SectionForceDeformation::getLinearDensity(void) const
+  {
+    std::cerr << getClassName() << "::" << __FUNCTION__
+              << "; not defined yet" << std::endl;
+    return 0.0;
+  }
+
+//! @brief Returns the mass per unit area of the section.
+double XC::SectionForceDeformation::getArealDensity(void) const
+  {
+    std::cerr << getClassName() << "::" << __FUNCTION__
+              << "; not defined yet" << std::endl;
+    return 0.0;
+  }
+
+//! @brief Returns the mass per unit volume of the section.
+double XC::SectionForceDeformation::getVolumetricDensity(void) const
+  {
+    std::cerr << getClassName() << "::" << __FUNCTION__
+              << "; not defined yet" << std::endl;
+    return 0.0;
+  }
 
 /*
 int 
