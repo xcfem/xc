@@ -107,8 +107,8 @@ XC::DefaultTag XC::Node::defaultTag;
 //! to recvSelf().
 XC::Node::Node(int theClassTag)
  :MeshComponent(defaultTag++,theClassTag),numberDOF(0), theDOF_GroupPtr(nullptr), 
-  disp(), vel(), accel(), unbalLoad(numberDOF), unbalLoadWithInertia(numberDOF), reaction(numberDOF),
-  alphaM(0.0), tributary(0.0)
+  disp(), vel(), accel(), unbalLoad(numberDOF), unbalLoadWithInertia(numberDOF),
+  reaction(numberDOF), alphaM(0.0), tributary(0.0)
   {
     // for FEM_ObjectBroker, recvSelf() must be invoked on object
     parameterID = 0;
@@ -1289,7 +1289,7 @@ int XC::Node::setR(int row, int col, double Value)
   }
 
 
-//! This is a method provided for Element objects, the Node object returns
+//! @brief This is a method provided for Element objects, the Node object returns
 //! the product of the matrix R and the vector V. If the matrix 
 //! and vector are of inappropriate size a warning message is printed and
 //! a zero vector is returned. 
