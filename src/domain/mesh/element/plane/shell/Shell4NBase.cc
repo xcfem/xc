@@ -328,7 +328,7 @@ const XC::Matrix &XC::Shell4NBase::getTangentStiff(void) const
 const XC::Matrix& XC::Shell4NBase::getMass(void) const
   {
     int tangFlag= 1;
-    formInertiaTerms( tangFlag );
+    formInertiaTerms(tangFlag);
     if(isDead())
       mass*=dead_srf;
     return mass;
@@ -373,31 +373,83 @@ int XC::Shell4NBase::addLoad(ElementalLoad *theLoad, double loadFactor)
     return 0;
   }
 
+//! @brief Creates the inertia load that corresponds to the
+//! acceleration argument.
+void XC::Shell4NBase::createInertiaLoad(const Vector &accel)
+  {
+    const bool haveRho= physicalProperties.haveRho();
+    if(haveRho)
+      {
+	const int dim= std::min(accel.Size(),6);
+	// Create 6 DOF acceleration vector.
+	Vector tmpAccel(6);
+	tmpAccel.Zero();
+        for(int i= 0; i<dim;i++)
+	  tmpAccel(i)= accel(i);
+	// Create 24 rows acceleration vector.
+        Vector nodeAccel(24);
+	nodeAccel.Zero();
+	for(int i= 0; i<4; i++)
+	  for(int j= 0; j<6;j++)
+	    {
+	      const int k= 6*i+j;
+	      nodeAccel(k)= tmpAccel(j);
+	    }        
+	const int tangFlag= 1;
+	formInertiaTerms(tangFlag);
+        const Vector force= mass*nodeAccel;
+	Vector avgForce(6);
+	avgForce.Zero();
+	for(int i=0;i<4;i++)
+	  for(int j= 0; j<6;j++)
+	     {
+ 	       const int k= 6*i+j;
+	       avgForce(j)+= force(k);
+	     }
+	// Compute error due to different masses of Gauss points
+	double err= 0.0;
+	for(int i= 0;i<6;i++)
+	  {
+	    err+= (force(i)-force(i+6))*(force(i)-force(i+6));
+	    err+= (force(i)-force(i+12))*(force(i)-force(i+12));
+	    err+= (force(i)-force(i+18))*(force(i)-force(i+18));
+	  }
+	err= sqrt(err);
+	if(err>.05)
+	  std::cerr << getClassName() << "::" << __FUNCTION__
+	            << "; mass in not uniform across the element."
+	            << " The mean quadratic error when computing uniform load"
+	            << " was: " << err << std::endl; 
+        vector3dUniformLoadGlobal(avgForce);
+      }
+  }
+
+//! @brief Add to the unbalance vector the inertial load
+//! corresponding to the acceleration argument.
 int XC::Shell4NBase::addInertiaLoadToUnbalance(const Vector &accel)
   {
-    int tangFlag= 1;
-
-    int i;
+    int retval= 0;
 
     const bool haveRho= physicalProperties.haveRho();
-    if(!haveRho)
-      return 0;
-
-    formInertiaTerms(tangFlag);
-
-    int count= 0;
-    for(i=0;i<4;i++)
+    if(haveRho)
       {
-        const Vector &Raccel= theNodes[i]->getRV(accel);
-        //XXX ¿change the basis of Raccel to the local system?
-        for(int j=0;j<6;j++)
-          resid(count++)= Raccel(i);
-      }
+	const int tangFlag= 1;
+	formInertiaTerms(tangFlag);
 
-    if(load.isEmpty())
-      load.reset(24);
-    load.addMatrixVector(1.0, mass, resid, -1.0);
-    return 0;
+	int count= 0;
+	for(int i=0;i<4;i++)
+	  {
+	    const Vector &Raccel= theNodes[i]->getRV(accel);
+	    //XXX ¿change the basis of Raccel to the local system?
+	    for(int j=0;j<6;j++)
+	      resid(count++)= Raccel(i);
+	  }
+
+	if(load.isEmpty())
+	  load.reset(24);
+	load.addMatrixVector(1.0, mass, resid, -1.0);
+      }
+    return retval;
   }
 
 double XC::Shell4NBase::getMeanInternalForce(const std::string &code) const
@@ -517,8 +569,6 @@ void XC::Shell4NBase::formInertiaTerms( int tangFlag ) const
 
     //translational mass only
     //rotational inertia terms are neglected
-
-
     static const int ndf= 6;
     static const int numberNodes= 4;
     static const int numberGauss= 4;
@@ -531,7 +581,7 @@ void XC::Shell4NBase::formInertiaTerms( int tangFlag ) const
     static Vector momentum(ndf);
 
 
-    double temp, rhoH, massJK;
+    double temp, massJK;
     double sx[2][2]; //inverse jacobian matrix.
 
 
@@ -560,7 +610,7 @@ void XC::Shell4NBase::formInertiaTerms( int tangFlag ) const
           momentum.addVector(1.0, theCoordTransf->getBasicTrialAccel(j), shp[massIndex][j] );
 
         //density on the Gauss point i.
-        rhoH= physicalProperties[i]->getRho();
+        const double rhoH= physicalProperties[i]->getArealDensity(); //getRho();
 
         //multiply acceleration by density to form momentum
         momentum*= rhoH;

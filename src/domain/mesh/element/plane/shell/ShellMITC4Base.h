@@ -76,7 +76,6 @@ class ShellMITC4Base: public Shell4NBase
 
     const Vector &getResistingForce(void) const;
     const Vector &getResistingForceIncInertia(void) const;
-
   }; 
 
 } // end of XC namespace
