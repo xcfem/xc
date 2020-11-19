@@ -50,11 +50,11 @@ void XC::PlateBase::setRho(const double &r)
   { rhoH= r; }
 
 //! @brief Return density per unit area
-double XC::PlateBase::getAreaDensity(void) const
+double XC::PlateBase::getArealDensity(void) const
   { return rhoH*h; }
 
 //! @brief Assign density per unit area
-void XC::PlateBase::setAreaDensity(const double &r)
+void XC::PlateBase::setArealDensity(const double &r)
   { rhoH= r/h; }
 
 //! @brief Return values of internal forces, deformations...
