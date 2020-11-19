@@ -47,32 +47,19 @@ class InertialLoad(BaseVectorLoad):
     of mesh-sets
 
     :ivar name:     name identifying the load
-    :ivar lstMeshSets: list of mesh-sets (of type LinSetToMesh or SurfSetToMesh)
+    :ivar lstSets: list of sets of elements
     :ivar vAccel:   acceleration vector xc.Vector([ax,ay,az])
     '''
-    def __init__(self,name, lstMeshSets, vAccel):
+    def __init__(self,name, lstSets, vAccel):
         super(InertialLoad,self).__init__(name,vAccel)
-        self.lstMeshSets=lstMeshSets
+        self.lstSets=lstSets
 
     def appendLoadToCurrentLoadPattern(self):
-        for ms in self.lstMeshSets:
-            el_group= ms.primitiveSet.elements
-            if 'shell' in ms.elemType.lower():
-                loadVector= ms.matSect.getAreaDensity()*self.loadVector
-                for e in el_group:
-                    e.vector3dUniformLoadGlobal(loadVector)
-            elif 'beam' in ms.elemType.lower():
-                loadVector= ms.matSect.getRho()*self.loadVector
-                for e in el_group:
-                    e.vector3dUniformLoadGlobal(loadVector)
-            elif 'truss' in ms.elemType.lower():
-                for e in el_group:
-                    e.createInertiaLoad(-self.loadVector)
-            else:
-                lmsg.warning('Inertial load not applied on ' + ms.elemType + 'elements')    
-
+        for s in self.lstSets:
+            s.createInertiaLoads(self.loadVector)
+'''
     def getMaxMagnitude(self):
-        '''Return the maximum magnitude of the vector loads'''
+#        Return the maximum magnitude of the vector loads
         maxValue=0
         for ms in self.lstMeshSets:
             if 'shell' in ms.elemType.lower():
@@ -81,7 +68,7 @@ class InertialLoad(BaseVectorLoad):
                 val= ms.matSect.getRho()*self.loadVector.Norm()
             maxValue=max(val,maxValue)
         return maxValue
-
+'''
              
 
 class NodalLoad(BaseVectorLoad):
