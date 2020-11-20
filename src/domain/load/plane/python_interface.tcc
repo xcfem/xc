@@ -22,13 +22,10 @@
 //python_interface.tcc
 
 class_<XC::BidimLoad, bases<XC::ElementBodyLoad>, boost::noncopyable >("BidimLoad", no_init)
-  .add_property("category", &XC::BidimLoad::Categoria)
+  .add_property("category", &XC::BidimLoad::Category)
   ;
 
 class_<XC::BidimMecLoad, bases<XC::BidimLoad>, boost::noncopyable >("BidimMecLoad", no_init)
-  .add_property("axial1Component", &XC::BidimMecLoad::getAxial1Component, &XC::BidimMecLoad::setAxial1Component)
-  .add_property("axial2Component", &XC::BidimMecLoad::getAxial2Component, &XC::BidimMecLoad::setAxial2Component)
-  .add_property("transComponent", &XC::BidimMecLoad::getTransComponent, &XC::BidimMecLoad::setTransComponent)
   .def("getResultant", &XC::BidimMecLoad::getResultant,"Returns load resultant (force and moment integration over the elements).")
   ;
 
@@ -47,6 +44,9 @@ class_<XC::ShellMecLoad, bases<XC::BidimMecLoad>, boost::noncopyable >("ShellMec
   ;
 
 class_<XC::ShellUniformLoad, bases<XC::ShellMecLoad>, boost::noncopyable >("ShellUniformLoad", no_init)
+  .add_property("axial1Component", &XC::ShellUniformLoad::getAxial1Component, &XC::ShellUniformLoad::setAxial1Component)
+  .add_property("axial2Component", &XC::ShellUniformLoad::getAxial2Component, &XC::ShellUniformLoad::setAxial2Component)
+  .add_property("transComponent", &XC::ShellUniformLoad::getTransComponent, &XC::ShellUniformLoad::setTransComponent)
   .add_property("Wx",make_function(&XC::ShellUniformLoad::Wx, return_value_policy <copy_const_reference> ()))
   .add_property("Wy",make_function(&XC::ShellUniformLoad::Wy, return_value_policy <copy_const_reference> ()))
   .add_property("Wz",make_function(&XC::ShellUniformLoad::Wz, return_value_policy <copy_const_reference> ()))
@@ -55,6 +55,9 @@ class_<XC::ShellUniformLoad, bases<XC::ShellMecLoad>, boost::noncopyable >("Shel
   .def("getGlobalPressures",make_function(&XC::ShellUniformLoad::getGlobalPressures, return_internal_reference<>() ),"Returns pressure vectors (one for each element) expressed in global coordinates.")
   .def("getDistributedGlobalMoments",make_function(&XC::ShellUniformLoad::getDistributedGlobalMoments, return_internal_reference<>() ),"Returns distributed moment vectors (one for each element) expressed in global coordinates.")
   .def("getResultant",&XC::ShellUniformLoad::getResultant,"Returns the load resultant (integration of the pressures over the elements).")
+  ;
+
+class_<XC::ShellRawLoad, bases<XC::ShellMecLoad>, boost::noncopyable >("ShellRawLoad", no_init)
   ;
 
 class_<XC::BidimStrainLoad, bases<XC::BidimLoad>, boost::noncopyable >("BidimStrainLoad", no_init)

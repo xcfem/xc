@@ -51,7 +51,7 @@
 #include "domain/mesh/element/utils/gauss_models/GaussModel.h"
 #include "domain/mesh/element/plane/shell/R3vectors.h"
 #include "utility/actor/actor/MatrixCommMetaData.h"
-#include "domain/load/plane/ShellUniformLoad.h"
+#include "domain/load/plane/ShellMecLoad.h"
 
 //static data
 XC::Matrix  XC::ShellMITC9::stiff(54,54);
@@ -343,12 +343,13 @@ int XC::ShellMITC9::addLoad(ElementalLoad *theLoad, double loadFactor)
                 << getTag() << std::endl;
     else
       {
-        const double area= getArea();
+	computeTributaryAreas();
+        const std::vector<double> areas= getTributaryAreas();
 
         // Accumulate elastic deformations in basic system
         if(ShellMecLoad *shellMecLoad= dynamic_cast<ShellMecLoad *>(theLoad))
           {
-            shellMecLoad->addReactionsInBasicSystem(area,loadFactor,p0); // Accumulate reactions in basic system
+            shellMecLoad->addReactionsInBasicSystem(areas,loadFactor,p0); // Accumulate reactions in basic system
           }
         else
           return QuadBase9N<SectionFDPhysicalProperties>::addLoad(theLoad,loadFactor);

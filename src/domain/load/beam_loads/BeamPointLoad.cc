@@ -62,7 +62,7 @@ XC::BeamPointLoad::BeamPointLoad(int tag, int classTag, double Pt, double dist, 
 XC::BeamPointLoad::BeamPointLoad(int tag, int classTag)
   :BeamMecLoad(tag, classTag), x(0.0) {}
 
-std::string XC::BeamPointLoad::Categoria(void) const
+std::string XC::BeamPointLoad::Category(void) const
   { return "punctual"; }
 
 //! @brief Send data through the communicator argument.

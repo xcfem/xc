@@ -174,17 +174,19 @@ const XC::Matrix &XC::Beam2dPointLoad::getAppliedSectionForces(const double &L,c
   }
 
 //! @brief Adds the load to the consistent load vector (see page 108 Eugenio Oñate's book).
-//! @param L Element length.
+//! @param Li: tributary lengths of each node.
 //! @param loadFactor Load factor.
 //! @param p0 element load vector.
-void XC::Beam2dPointLoad::addReactionsInBasicSystem(const double &L,const double &loadFactor,FVector &p0) const
+void XC::Beam2dPointLoad::addReactionsInBasicSystem(const std::vector<double> &Li,const double &loadFactor,FVector &p0) const
   {
     const double aOverL= X();
 
     if(aOverL < 0.0 || aOverL > 1.0)
       {
-        std::cerr << "XC::Beam2dPointLoad::addReactionsInBasicSystem; el value of x ("
-                  << aOverL << ") es incorrecto, debe estar entre 0 y 1. Load ignored."
+        std::cerr << getClassName() << "::" << __FUNCTION__
+	          << "; the value of x ("
+                  << aOverL
+		  << ") es incorrecto, debe estar entre 0 y 1. Load ignored."
                   << std::endl;
         return;
       }
@@ -207,7 +209,7 @@ void XC::Beam2dPointLoad::addReactionsInBasicSystem(const double &L,const double
 //! @param loadFactor Load factor.
 //! @param q0 Consistent load vector.
 //! @param release Moment release: 0=none, 1=I, 2=J, 3=I,J
-void XC::Beam2dPointLoad::addFixedEndForcesInBasicSystem(const double &L,const double &loadFactor,FVector &q0, int release) const
+void XC::Beam2dPointLoad::addFixedEndForcesInBasicSystem(const std::vector<double> &Li,const double &loadFactor,FVector &q0, int release) const
   {
     const double aOverL= X();
 
@@ -220,6 +222,7 @@ void XC::Beam2dPointLoad::addFixedEndForcesInBasicSystem(const double &L,const d
       }
     else
       {
+	const double L= Li[0];
         const double a= aOverL*L;
         const double b= L-a;
         const double L2 = 1.0/(L*L);

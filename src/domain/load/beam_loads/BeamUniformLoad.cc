@@ -44,7 +44,7 @@ XC::BeamUniformLoad::BeamUniformLoad(int tag,int classTag)
 XC::BeamUniformLoad::BeamUniformLoad(int classTag)
   :BeamMecLoad(0,classTag) {}
 
-std::string XC::BeamUniformLoad::Categoria(void) const
+std::string XC::BeamUniformLoad::Category(void) const
   { return "uniform"; }
 
 //! brief Returns load resultant (force and moment integration over the elements).

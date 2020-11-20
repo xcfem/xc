@@ -42,6 +42,7 @@ class Polygon3d;
 
 namespace XC {
 
+class ShellRawLoad;
 class ShellUniformLoad;
 
 //! @ingroup PlaneElements
@@ -113,6 +114,8 @@ class Shell4NBase: public QuadBase4N<SectionFDPhysicalProperties>
     Vector getInterpolatedDisplacements(const Pos3d &) const;
 
     //Load definition methods.
+    const ShellRawLoad *vector3dRawLoadLocal(const std::vector<Vector> &);
+    const ShellRawLoad *vector3dRawLoadGlobal(const std::vector<Vector> &);
     const ShellUniformLoad *vector3dUniformLoadLocal(const Vector &);
     const ShellUniformLoad *vector3dUniformLoadGlobal(const Vector &);
     void strainLoad(const Matrix &);

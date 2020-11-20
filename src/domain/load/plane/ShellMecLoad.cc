@@ -36,28 +36,30 @@
 #include "domain/mesh/element/plane/shell/ShellNLDKGQ.h"
 #include "domain/mesh/element/utils/coordTransformation/CrdTransf.h"
 #include "domain/mesh/node/Node.h"
+#include "xc_utils/src/geom/pos_vec/SlidingVectorsSystem3d.h"
+#include "xc_utils/src/geom/pos_vec/SlidingVector3d.h"
 
-XC::ShellMecLoad::ShellMecLoad(int tag,int classTag,const double &wt,const double &wa1,const double &wa2,const ID &theElementTags)
-  :BidimMecLoad(tag, classTag, wt, wa1, wa2, theElementTags) {}
+XC::ShellMecLoad::ShellMecLoad(int tag,int classTag,const ID &theElementTags)
+  :BidimMecLoad(tag, classTag, theElementTags) {}
 
 XC::ShellMecLoad::ShellMecLoad(int tag,int classTag)
   :BidimMecLoad(tag, classTag) {}
 
-//! @brief Adds the load al consistent load vector (see page 108 libro Eugenio Oñate).
-//! @param area Area of the element.
+//! @brief Adds the load the consistent load vector (see page 108 libro Eugenio Oñate).
+//! @param areas tributary areas for each node.
 //! @param loadFactor Load factor.
 //! @param p0 element load vector.
-void XC::ShellMecLoad::addReactionsInBasicSystem(const double &,const double &,FVectorShell &) const
+void XC::ShellMecLoad::addReactionsInBasicSystem(const std::vector<double> &,const double &,FVectorShell &) const
   {
     std::cerr << getClassName() << "::" << __FUNCTION__
 	      << "; not implemented." << std::endl;
   }
 
 //! @brief ??
-//! @param area Area of the element.
+//! @param areas tributary areas for each node.
 //! @param loadFactor Load factor.
 //! @param q0 
-void XC::ShellMecLoad::addFixedEndForcesInBasicSystem(const double &,const double &loadFactor,FVectorShell &) const
+void XC::ShellMecLoad::addFixedEndForcesInBasicSystem(const std::vector<double> &,const double &loadFactor,FVectorShell &) const
   {
     std::cerr << getClassName() << "::" << __FUNCTION__
 	      << "; not implemented." << std::endl;
@@ -75,9 +77,8 @@ size_t XC::ShellMecLoad::getMomentVectorDimension(void) const
 XC::Vector XC::ShellMecLoad::getLocalForce(void) const
   {
     Vector retval(3);
-    retval(0)= Axial1;
-    retval(1)= Axial2;
-    retval(2)= Trans;
+    std::cerr << getClassName() << "::" << __FUNCTION__
+	      << "; not implemented." << std::endl;
     return retval;
   }
 
@@ -85,9 +86,8 @@ XC::Vector XC::ShellMecLoad::getLocalForce(void) const
 XC::Vector XC::ShellMecLoad::getLocalMoment(void) const
   {
     Vector retval(3);
-    retval(0)= 0.0;
-    retval(1)= 0.0;
-    retval(2)= 0.0;
+    std::cerr << getClassName() << "::" << __FUNCTION__
+	      << "; not implemented." << std::endl;
     return retval;
   }
 
@@ -111,14 +111,8 @@ Vector3d XC::ShellMecLoad::getVector3dLocalMoment(void) const
 const XC::Matrix &XC::ShellMecLoad::getLocalForces(void) const
   {
     static Matrix retval;
-    const size_t sz= numElements();
-    retval= Matrix(sz,3);
-    for(size_t i=0; i<sz; i++)
-      {
-        retval(i,0)= Trans;
-        retval(i,1)= Axial1;
-        retval(i,2)= Axial2;
-      }
+    std::cerr << getClassName() << "::" << __FUNCTION__
+	      << "; not implemented." << std::endl;
     return retval;
   }
 
@@ -126,14 +120,8 @@ const XC::Matrix &XC::ShellMecLoad::getLocalForces(void) const
 const XC::Matrix &XC::ShellMecLoad::getLocalMoments(void) const
   {
     static Matrix retval;
-    const size_t sz= numElements();
-    retval= Matrix(sz,3);
-    for(size_t i=0; i<sz; i++)
-      {
-        retval(i,0)= 0.0;
-        retval(i,1)= 0.0;
-        retval(i,2)= 0.0;
-      }
+    std::cerr << getClassName() << "::" << __FUNCTION__
+	      << "; not implemented." << std::endl;
     return retval;
   }
 
@@ -156,8 +144,9 @@ const XC::Matrix &XC::ShellMecLoad::getGlobalVectors(const Matrix &localVectors)
                 if(ptrTransf)
                   retval= ptrTransf->getVectorGlobalCoordFromLocal(localVectors);
                 else
-		  std::cerr << "ShellMecLoad::getGlobalVectors; the element: "
-                        << elemTag << " no tiene coordinate transformation." << std::endl;
+		  std::cerr << getClassName() << "::" << __FUNCTION__
+			    << ": the element: " << elemTag
+			    << " has not coordinate transformation." << std::endl;
               }
             else if(const ShellMITC9 *ptrShell= dynamic_cast<const ShellMITC9 *>(ptrElem))
               {
@@ -165,8 +154,9 @@ const XC::Matrix &XC::ShellMecLoad::getGlobalVectors(const Matrix &localVectors)
                 if(ptrTransf)
                   retval= ptrTransf->getVectorGlobalCoordFromLocal(localVectors);
                 else
-		  std::cerr << "ShellMecLoad::getGlobalVectors; the element: "
-                        << elemTag << " no tiene coordinate transformation." << std::endl;
+		  std::cerr << getClassName() << "::" << __FUNCTION__
+			    << ": the element: " << elemTag
+			    << " has not coordinate transformation." << std::endl;
               }
             else if(const ShellNLDKGQ *ptrShell= dynamic_cast<const ShellNLDKGQ *>(ptrElem))
               {
@@ -174,16 +164,18 @@ const XC::Matrix &XC::ShellMecLoad::getGlobalVectors(const Matrix &localVectors)
                 if(ptrTransf)
                   retval= ptrTransf->getVectorGlobalCoordFromLocal(localVectors);
                 else
-		  std::cerr << "ShellMecLoad::getGlobalVectors; the element: "
-                        << elemTag << " no tiene coordinate transformation." << std::endl;
+		  std::cerr << getClassName() << "::" << __FUNCTION__
+			    << ": the element: " << elemTag
+			    << " has not coordinate transformation." << std::endl;
               }
             else
-	      std::cerr << "ShellMecLoad::getGlobalVectors; the element: "
+	      std::cerr << getClassName() << "::" << __FUNCTION__ << ": the element: "
                         << elemTag << " is not a shell element." << std::endl;
           }
       }
     else
-      std::cerr << "ShellMecLoad::getGlobalVectors; pointer to domain is NULL." << std::endl;
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< ": pointer to domain is NULL." << std::endl;
     return retval;
   }
 
@@ -194,3 +186,34 @@ const XC::Matrix &XC::ShellMecLoad::getGlobalForces(void) const
 //! @brief Returns the bending moment expressed in global coordinates.
 const XC::Matrix &XC::ShellMecLoad::getGlobalMoments(void) const
   { return getGlobalVectors(getLocalMoments()); }
+
+//! brief Returns load resultant (force and moment integration over the elements).
+SlidingVectorsSystem3d XC::ShellMecLoad::getResultant(const Pos3d &centro, bool initialGeometry) const
+  {
+    SlidingVectorsSystem3d retval(centro);
+    Matrix forces= getGlobalForces();
+    const Domain *ptrDom= getDomain();
+    if(ptrDom)
+      {
+        const size_t sz= forces.noRows();
+        for(size_t i=0; i<sz; i++)
+          {
+            const size_t elemTag= getElementTags()(i);
+            const Element *ptrElem= ptrDom->getElement(elemTag);
+            if(const Shell4NBase *ptrShell= dynamic_cast<const Shell4NBase *>(ptrElem))
+	      {
+  	        const double area= ptrShell->getArea();
+		const Vector3d force(area*forces(i,0),area*forces(i,1),area*forces(i,2));
+		retval+= SlidingVector3d(ptrShell->getCenterOfMassPosition(),force);
+              }
+            else
+	      std::cerr << getClassName() << "::" << __FUNCTION__
+			<< "; the element: "
+                        << elemTag << " is not a shell element." << std::endl;
+          }
+      }
+    else
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; pointer to domain is NULL." << std::endl;
+    return retval;
+  }

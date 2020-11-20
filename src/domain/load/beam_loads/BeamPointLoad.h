@@ -53,7 +53,7 @@ class BeamPointLoad: public BeamMecLoad
     inline void setX(const double &X)
       { x= X; } 
     
-    std::string Categoria(void) const;
+    std::string Category(void) const;
 
 
   };

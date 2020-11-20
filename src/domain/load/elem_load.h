@@ -38,6 +38,7 @@
 #include "domain/load/beam_loads/Beam3dUniformLoad.h"
 #include "domain/load/beam_loads/TrussStrainLoad.h"
 #include "domain/load/volumetric/BrickSelfWeight.h"
+#include "domain/load/plane/ShellRawLoad.h"
 #include "domain/load/plane/ShellUniformLoad.h"
 #include "domain/load/plane/BidimStrainLoad.h"
 #include "domain/load/plane/ShellStrainLoad.h"

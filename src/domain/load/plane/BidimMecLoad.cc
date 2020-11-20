@@ -36,41 +36,20 @@
 #include "domain/mesh/node/Node.h"
 #include "xc_utils/src/geom/pos_vec/SlidingVectorsSystem3d.h"
 
-XC::BidimMecLoad::BidimMecLoad(int tag,int classTag,const double &wt,const double &wa1,const double &wa2,const ID &theElementTags)
-  :BidimLoad(tag, classTag, theElementTags), Trans(wt), Axial1(wa1), Axial2(wa2) {}
+XC::BidimMecLoad::BidimMecLoad(int tag, int classTag, const ID &theElementTags)
+  :BidimLoad(tag, classTag, theElementTags) {}
 
 XC::BidimMecLoad::BidimMecLoad(int tag,int classTag)
-  :BidimLoad(tag, classTag), Trans(0.0), Axial1(0.0), Axial2(0.0) {}
-
-void XC::BidimMecLoad::Print(std::ostream &s, int flag) const
-  {
-    s << "BidimMecLoad - Reference load" << std::endl;
-    s << "  Transverse: " << Trans << std::endl;
-    s << "  Axial1:      " << Axial1 << std::endl;
-    s << "  Axial2:      " << Axial2 << std::endl;
-    BidimLoad::Print(s,flag);
-  }
+  :BidimLoad(tag, classTag) {}
 
 //! brief Returns load resultant (force and moment integration over the elements).
-SlidingVectorsSystem3d XC::BidimMecLoad::getResultant(const Pos3d &centro, bool initialGeometry) const
+//!
+//! @param center: origin for the sliding vector system.
+//! @param initialGeometry: if true don't use deformed geometry.
+SlidingVectorsSystem3d XC::BidimMecLoad::getResultant(const Pos3d &center, bool initialGeometry) const
   {
-    std::cerr << getClassName()
-              << "::getResultant not yet implemented." << std::endl;
-    return SlidingVectorsSystem3d(centro);
+    std::cerr << getClassName() << "::" << __FUNCTION__
+              << "; not yet implemented." << std::endl;
+    return SlidingVectorsSystem3d(center);
   }
 
-//! @brief Send data through the communicator argument.
-int XC::BidimMecLoad::sendData(Communicator &comm)
-  {
-    int res= BidimLoad::sendData(comm);
-    res+= comm.sendDoubles(Trans,Axial1,Axial2,getDbTagData(),CommMetaData(5));
-    return res;
-  }
-
-//! @brief Receive data through the communicator argument.
-int XC::BidimMecLoad::recvData(const Communicator &comm)
-  {
-    int res= BidimLoad::recvData(comm);
-    res+= comm.receiveDoubles(Trans,Axial1,Axial2,getDbTagData(),CommMetaData(5));
-    return res;
-  }

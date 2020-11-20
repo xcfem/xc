@@ -191,6 +191,7 @@
 #define LOAD_TAG_TrussStrainLoad          5020 //Added by LCPT.
 #define LOAD_TAG_LoadPatternCombination   5029 //Added by LCPT.
 #define LOAD_TAG_LoadCombination          5030 //Added by LCPT.
+#define LOAD_TAG_ShellRawLoad             5035 //Added by LCPT.
 #define LOAD_TAG_ShellUniformLoad         5040 //Added by LCPT.
 #define LOAD_TAG_BidimStrainLoad          5050 //Added by LCPT.
 #define LOAD_TAG_ShellStrainLoad          5060 //Added by LCPT.

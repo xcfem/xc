@@ -65,12 +65,11 @@
 
 
 #include "xc_utils/src/geom/d2/Polygon3d.h"
-#include "domain/load/plane/ShellUniformLoad.h"
-#include "domain/load/plane/ShellStrainLoad.h"
 #include "preprocessor/Preprocessor.h"
 #include "preprocessor/prep_handlers/LoadHandler.h"
 #include "utility/actor/actor/MatrixCommMetaData.h"
 #include "domain/mesh/element/utils/gauss_models/GaussModel.h"
+#include "domain/load/plane/ShellMecLoad.h"
 
 
 //static data
@@ -92,8 +91,7 @@ XC::ShellMITC4Base::ShellMITC4Base(int tag, int classTag,int node1,int node2,int
   : Shell4NBase(tag,node1,node2,node3,node4,classTag,physProp,crdTransf), Ktt(0.0), p0()
   { }
 
-
-//! @brief set domain
+//! @brief Set the element domain.
 void XC::ShellMITC4Base::setDomain(Domain *theDomain)
   {
     Shell4NBase::setDomain(theDomain);
@@ -122,7 +120,6 @@ void XC::ShellMITC4Base::setDomain(Domain *theDomain)
     //basis vectors and local coordinates
     computeBasis(); 
   }
-
 
 //! @brief Reactivates the element.
 void XC::ShellMITC4Base::alive(void)
@@ -426,12 +423,13 @@ int XC::ShellMITC4Base::addLoad(ElementalLoad *theLoad, double loadFactor)
                 << getTag() << std::endl;
     else
       {
-        const double area= getPolygon().getArea();
-
+	computeTributaryAreas();
+        const std::vector<double> areas= getTributaryAreas();
+	
         // Accumulate elastic deformations in basic system
         if(ShellMecLoad *shellMecLoad= dynamic_cast<ShellMecLoad *>(theLoad))
           {
-            shellMecLoad->addReactionsInBasicSystem(area,loadFactor,p0); // Accumulate reactions in basic system
+            shellMecLoad->addReactionsInBasicSystem(areas,loadFactor,p0); // Accumulate reactions in basic system
           }
         else
           return Shell4NBase::addLoad(theLoad,loadFactor);

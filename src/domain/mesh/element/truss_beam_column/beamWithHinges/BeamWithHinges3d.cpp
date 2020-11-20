@@ -512,7 +512,7 @@ int XC::BeamWithHinges3d::addLoad(ElementalLoad *theLoad, double loadFactor)
 			    << "; out of memory\n";
               }
             (*applied_sf)+= beamMecLoad->getAppliedSectionForces(L,xi_pt,loadFactor); // Accumulate applied section forces due to element loads
-            beamMecLoad->addReactionsInBasicSystem(L,loadFactor,p0); // Accumulate reactions in basic system
+            beamMecLoad->addReactionsInBasicSystem({L},loadFactor,p0); // Accumulate reactions in basic system
             beamMecLoad->addElasticDeformations(L,ctes_scc,lp1,lp2,loadFactor,v0);
           }
         else

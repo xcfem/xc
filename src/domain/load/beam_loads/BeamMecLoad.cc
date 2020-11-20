@@ -56,7 +56,7 @@ const XC::Matrix &XC::BeamMecLoad::getAppliedSectionForces(const double &L,const
 //! @param L Length of the element.
 //! @param loadFactor Load factor.
 //! @param p0 element load vector.
-void XC::BeamMecLoad::addReactionsInBasicSystem(const double &,const double &,FVector &) const
+void XC::BeamMecLoad::addReactionsInBasicSystem(const std::vector<double> &,const double &,FVector &) const
   {
     std::cerr << getClassName() << "::" << __FUNCTION__
               << "; not implemented yet." << std::endl;
@@ -67,7 +67,7 @@ void XC::BeamMecLoad::addReactionsInBasicSystem(const double &,const double &,FV
 //! @param loadFactor Load factor.
 //! @param q0 consistent load vector.
 //! @param release Moment release: 0=none, 1=I, 2=J, 3=I,J
-void XC::BeamMecLoad::addFixedEndForcesInBasicSystem(const double &L,const double &loadFactor,FVector &, int release) const
+void XC::BeamMecLoad::addFixedEndForcesInBasicSystem(const std::vector<double> &L,const double &loadFactor,FVector &, int release) const
   {
     std::cerr << getClassName() << "::" << __FUNCTION__
               << "; not implemented yet." << std::endl;

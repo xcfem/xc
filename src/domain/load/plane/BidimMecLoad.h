@@ -44,33 +44,13 @@ class Matrix;
 class BidimMecLoad: public BidimLoad
   {
   protected:
-    double Trans; //!< Transverse load.
-    double Axial1; //!< Axial load on axis 1.
-    double Axial2; //!< Axial load on axis 2.
-
-    int sendData(Communicator &comm);
-    int recvData(const Communicator &comm);
 
   public:
-    BidimMecLoad(int tag, int classTag,const double &Trans,const double &,const double &,const ID &theElementTags);
+    BidimMecLoad(int tag, int classTag, const ID &theElementTags);
     BidimMecLoad(int tag, int classTag);
-
-    inline double getAxial1Component(void)
-      { return Axial1; }
-    inline void setAxial1Component(const double &d)
-      { Axial1= d; }
-    inline double getAxial2Component(void)
-      { return Axial2; }
-    inline void setAxial2Component(const double &d)
-      { Axial2= d; }
-    inline double getTransComponent(void)
-      { return Trans; }
-    inline void setTransComponent(const double &d)
-      { Trans= d; }
 
     virtual SlidingVectorsSystem3d getResultant(const Pos3d &p= Pos3d(), bool initialGeometry= true) const;
 
-    void Print(std::ostream &s, int flag =0) const;
 
   };
 } // end of XC namespace

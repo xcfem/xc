@@ -49,8 +49,6 @@ class ShellNLDKGQ: public Shell4NBase
     Vector CstrainGauss;
     mutable Vector TstrainGauss;  //modify for geometric nonlinearity
     
-    //compute local coordinates and basis
-    void computeBasis(void);
     //start Yuli Huang (yulihuang@gmail.com) & Xinzheng Lu (luxz@tsinghua.edu.cn)
     void updateBasis(void) const;
     //end Yuli Huang (yulihuang@gmail.com) & Xinzheng Lu (luxz@tsinghua.edu.cn)

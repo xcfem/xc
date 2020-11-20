@@ -315,6 +315,7 @@
 #include "domain/load/beam_loads/TrussStrainLoad.h"
 #include "domain/load/beam_loads/BeamStrainLoad.h"
 #include "domain/load/beam_loads/TrussStrainLoad.h"
+#include "domain/load/plane/ShellRawLoad.h"
 #include "domain/load/plane/ShellUniformLoad.h"
 #include "domain/load/plane/ShellStrainLoad.h"
 #include "domain/load/volumetric/BrickSelfWeight.h"

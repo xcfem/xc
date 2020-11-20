@@ -43,5 +43,5 @@ void XC::BidimLoad::Print(std::ostream &s, int flag) const
     ElementBodyLoad::Print(s,flag);
   }
 
-std::string XC::BidimLoad::Categoria(void) const
+std::string XC::BidimLoad::Category(void) const
   { return "bidim_nodef"; }

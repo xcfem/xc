@@ -464,8 +464,8 @@ int XC::ElasticBeam3d::addLoad(ElementalLoad *theLoad, double loadFactor)
         if(const BeamMecLoad *beamMecLoad= dynamic_cast<const BeamMecLoad *>(theLoad))
           {
             const double L = theCoordTransf->getInitialLength();
-            beamMecLoad->addReactionsInBasicSystem(L,loadFactor,p0); // Accumulate reactions in basic system
-            beamMecLoad->addFixedEndForcesInBasicSystem(L,loadFactor,q0); // Fixed end forces in basic system
+            beamMecLoad->addReactionsInBasicSystem({L},loadFactor,p0); // Accumulate reactions in basic system
+            beamMecLoad->addFixedEndForcesInBasicSystem({L},loadFactor,q0); // Fixed end forces in basic system
           }
         else if(const BeamStrainLoad *strainLoad= dynamic_cast<const BeamStrainLoad *>(theLoad)) //Prescribed strains.
           {

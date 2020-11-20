@@ -457,8 +457,8 @@ int XC::ElasticBeam2d::addLoad(ElementalLoad *theLoad, double loadFactor)
         const double L= theCoordTransf->getInitialLength();
         if(const BeamMecLoad *beamMecLoad= dynamic_cast<const BeamMecLoad *>(theLoad))
           {
-            beamMecLoad->addReactionsInBasicSystem(L,loadFactor,p0); // Accumulate reactions in basic system
-            beamMecLoad->addFixedEndForcesInBasicSystem(L,loadFactor,q0,release); // Fixed end forces in basic system
+            beamMecLoad->addReactionsInBasicSystem({L},loadFactor,p0); // Accumulate reactions in basic system
+            beamMecLoad->addFixedEndForcesInBasicSystem({L},loadFactor,q0,release); // Fixed end forces in basic system
           }
         else if(const BeamStrainLoad *strainLoad= dynamic_cast<BeamStrainLoad *>(theLoad)) //Prescribed strains.
           {

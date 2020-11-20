@@ -24,81 +24,84 @@
 // along with this program.
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
-//ShellUniformLoad.cpp
+//ShellRawLoad.cpp
 
-#include "ShellUniformLoad.h"
+#include "ShellRawLoad.h"
 #include "domain/mesh/element/utils/fvectors/FVectorShell.h"
 #include "domain/domain/Domain.h"
 #include "domain/mesh/element/Element.h"
 #include "domain/mesh/element/plane/shell/ShellMITC4Base.h"
 #include "utility/matrix/Matrix.h"
 #include "utility/matrix/ID.h"
+#include "xc_utils/src/geom/pos_vec/SlidingVectorsSystem3d.h"
+#include "xc_utils/src/geom/pos_vec/SlidingVector3d.h"
 
-XC::ShellUniformLoad::ShellUniformLoad(int tag,const double &wt,const double &wa1,const double &wa2,const ID &theElementTags)
-  :ShellMecLoad(tag, LOAD_TAG_ShellUniformLoad,theElementTags),
-   Trans(wt), Axial1(wa1), Axial2(wa2) {}
-XC::ShellUniformLoad::ShellUniformLoad(int tag, const Vector &Fxyz, const ID &theElementTags)
-  :ShellMecLoad(tag, LOAD_TAG_ShellUniformLoad, theElementTags),
-   Trans(Fxyz[2]), Axial1(Fxyz[0]), Axial2(Fxyz[1]) {}
+//! @brief Default constructor.
+XC::ShellRawLoad::ShellRawLoad(int tag)
+  :ShellMecLoad(tag, LOAD_TAG_ShellRawLoad) {}
 
-XC::ShellUniformLoad::ShellUniformLoad(int tag)
-  :ShellMecLoad(tag, LOAD_TAG_ShellUniformLoad) {}
+//! @brief Constructor.
+//!
+//! @param tag: load identifier.
+//! @param nLoads: nodal loads.
+//! @param theElementTags: tags of the loaded elements.
+XC::ShellRawLoad::ShellRawLoad(int tag, const std::vector<Vector> &nLoads, const ID &theElementTags)
+  : ShellMecLoad(tag, LOAD_TAG_ShellRawLoad, theElementTags),
+    nodalLoads(nLoads) {}
 
-std::string XC::ShellUniformLoad::Category(void) const
-  { return "uniform"; }
+
+std::string XC::ShellRawLoad::Category(void) const
+  { return "raw"; }
 
 //! @brief Returns force expressed in local coordinates.
-XC::Vector XC::ShellUniformLoad::getLocalForce(void) const
+XC::Vector XC::ShellRawLoad::getLocalForce(void) const
   {
     Vector retval(3);
-    retval(0)= Axial1;
-    retval(1)= Axial2;
-    retval(2)= Trans;
+    for(std::vector<Vector>::const_iterator i= nodalLoads.begin(); i!= nodalLoads.end();i++)
+      {
+	const Vector &nLoad= *i;
+	retval(0)+= nLoad[0]; retval(1)+= nLoad[1]; retval(2)+= nLoad[2];
+      }
     return retval;
   }
 
 //! @brief Returns moment expressed in local coordinates.
-XC::Vector XC::ShellUniformLoad::getLocalMoment(void) const
+XC::Vector XC::ShellRawLoad::getLocalMoment(void) const
   {
     Vector retval(3);
-    retval(0)= 0.0;
-    retval(1)= 0.0;
-    retval(2)= 0.0;
+    std::cerr << getClassName() << "::" << __FUNCTION__
+	      << "; not implemented yet." << std::endl;
     return retval;
   }
 
 //! @brief Returns the components of the force vectors.
-const XC::Matrix &XC::ShellUniformLoad::getLocalForces(void) const
+const XC::Matrix &XC::ShellRawLoad::getLocalForces(void) const
   {
     static Matrix retval;
     const size_t sz= numElements();
     retval= Matrix(sz,3);
+    const Vector f= getLocalForce();
     for(size_t i=0; i<sz; i++)
-      {
-        retval(i,0)= Wx();
-        retval(i,1)= Wy();
-        retval(i,2)= Wz();
-      }
+      { retval(i,0)= f[0]; retval(i,1)= f[1]; retval(i,2)= f[2]; }
     return retval;
   }
 
 //! @brief Returns the components of the moment vectors.
-const XC::Matrix &XC::ShellUniformLoad::getLocalMoments(void) const
+const XC::Matrix &XC::ShellRawLoad::getLocalMoments(void) const
   {
     static Matrix retval;
     const size_t sz= numElements();
     retval= Matrix(sz,3);
     for(size_t i=0; i<sz; i++)
       {
-        retval(i,0)= 0.0;
-        retval(i,1)= 0.0;
-        retval(i,2)= 0.0;
+        const Vector m= getLocalMoment();
+	retval(i,0)= m[0]; retval(i,1)= m[1]; retval(i,2)= m[2];
       }
     return retval;
   }
 
 
-const XC::Vector &XC::ShellUniformLoad::getData(int &type, const double &loadFactor) const
+const XC::Vector &XC::ShellRawLoad::getData(int &type, const double &loadFactor) const
   {
     type = getClassTag();
     std::cerr << getClassName() << "::" << __FUNCTION__
@@ -111,18 +114,14 @@ const XC::Vector &XC::ShellUniformLoad::getData(int &type, const double &loadFac
 //! @param areas tributary areas for each node.
 //! @param loadFactor Load factor.
 //! @param p0 element load vector.
-void XC::ShellUniformLoad::addReactionsInBasicSystem(const std::vector<double> &areas,const double &loadFactor,FVectorShell &p0) const
+void XC::ShellRawLoad::addReactionsInBasicSystem(const std::vector<double> &,const double &loadFactor,FVectorShell &p0) const
   {
-    //Loads over nodes.
-    const double Px= Wx()*loadFactor;
-    const double Py= Wy()*loadFactor;
-    const double Pz= Wz()*loadFactor;
-
+    const size_t sz= nodalLoads.size();
     // Reactions in basic system
-    for(int i= 0;i<4;i++)
+    for(size_t i= 0;i<sz;i++)
       {
-        const double a= areas[i];
-        p0.addForce(i,Px*a,Py*a,Pz*a); // i-th node.
+	const Vector f= nodalLoads[i]*loadFactor; // Load on node i.
+        p0.addForce(i,f[0],f[1],f[2]); // i-th node.
       }
   }
 
@@ -130,39 +129,38 @@ void XC::ShellUniformLoad::addReactionsInBasicSystem(const std::vector<double> &
 //! @param areas tributary areas for each node.
 //! @param loadFactor Load factor.
 //! @param q0 
-void XC::ShellUniformLoad::addFixedEndForcesInBasicSystem(const std::vector<double> &,const double &,FVectorShell &) const
+void XC::ShellRawLoad::addFixedEndForcesInBasicSystem(const std::vector<double> &,const double &,FVectorShell &) const
   {
     std::cerr << getClassName() << "::" << __FUNCTION__
               << "; not implemented." << std::endl;
   }
 
-
 //! @brief Returns a vector to store the dbTags
 //! of the class members.
-XC::DbTagData &XC::ShellUniformLoad::getDbTagData(void) const
+XC::DbTagData &XC::ShellRawLoad::getDbTagData(void) const
   {
     static DbTagData retval(6);
     return retval;
   }
 
 //! @brief Send data through the communicator argument.
-int XC::ShellUniformLoad::sendData(Communicator &comm)
+int XC::ShellRawLoad::sendData(Communicator &comm)
   {
     int res= BidimLoad::sendData(comm);
-    res+= comm.sendDoubles(Trans,Axial1,Axial2,getDbTagData(),CommMetaData(5));
+    res+= comm.sendVectors(nodalLoads,getDbTagData(),CommMetaData(5));
     return res;
   }
 
 //! @brief Receive data through the communicator argument.
-int XC::ShellUniformLoad::recvData(const Communicator &comm)
+int XC::ShellRawLoad::recvData(const Communicator &comm)
   {
     int res= BidimLoad::recvData(comm);
-    res+= comm.receiveDoubles(Trans,Axial1,Axial2,getDbTagData(),CommMetaData(5));
+    res+= comm.receiveVectors(nodalLoads,getDbTagData(),CommMetaData(5));
     return res;
   }
 
 //! @brief Send the object through the communicator argument.
-int XC::ShellUniformLoad::sendSelf(Communicator &comm)
+int XC::ShellRawLoad::sendSelf(Communicator &comm)
   {
     setDbTag(comm);
     const int dataTag= getDbTag();
@@ -177,7 +175,7 @@ int XC::ShellUniformLoad::sendSelf(Communicator &comm)
   }
 
 //! @brief Receive the object through the communicator argument.
-int XC::ShellUniformLoad::recvSelf(const Communicator &comm)
+int XC::ShellRawLoad::recvSelf(const Communicator &comm)
   {
     inicComm(6);
     const int dataTag= getDbTag();
@@ -190,11 +188,13 @@ int XC::ShellUniformLoad::recvSelf(const Communicator &comm)
     return res;
   }
 
-void  XC::ShellUniformLoad::Print(std::ostream &s, int flag) const
+void  XC::ShellRawLoad::Print(std::ostream &s, int flag) const
   {
-    s << "ShellUniformLoad - Reference load" << std::endl;
-    s << "  Transverse:  " << Trans << std::endl;
-    s << "  Axial1:      " << Axial1 << std::endl;
-    s << "  Axial2:      " << Axial2 << std::endl;
+    s << "ShellRawLoad - Reference load" << std::endl;
+    int count= 0;
+    for(std::vector<Vector>::const_iterator i= nodalLoads.begin(); i!= nodalLoads.end();i++)
+      {
+        s << "  load node( " << count << "): " << *i << std::endl;
+      }
     s << "  Elements acted on: " << getElementTags();
   }

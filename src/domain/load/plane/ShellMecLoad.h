@@ -42,11 +42,11 @@ class FVectorShell;
 class ShellMecLoad: public BidimMecLoad
   {
   public:
-    ShellMecLoad(int tag, int classTag,const double &Trans,const double &,const double &,const ID &theElementTags);
+    ShellMecLoad(int tag, int classTag, const ID &theElementTags);
     ShellMecLoad(int tag, int classTag);
 
-    virtual void addReactionsInBasicSystem(const double &,const double &,FVectorShell &) const;
-    virtual void addFixedEndForcesInBasicSystem(const double &,const double &,FVectorShell &) const;
+    virtual void addReactionsInBasicSystem(const std::vector<double> &,const double &,FVectorShell &) const;
+    virtual void addFixedEndForcesInBasicSystem(const std::vector<double> &,const double &,FVectorShell &) const;
 
     virtual size_t getForceVectorDimension(void) const;
     virtual size_t getMomentVectorDimension(void) const;
@@ -54,11 +54,12 @@ class ShellMecLoad: public BidimMecLoad
     virtual Vector getLocalMoment(void) const;
     virtual const Matrix &getLocalForces(void) const;
     virtual const Matrix &getLocalMoments(void) const;
-    virtual const Matrix &getGlobalVectors(const Matrix &) const;
     virtual const Matrix &getGlobalForces(void) const;
     virtual const Matrix &getGlobalMoments(void) const;
+    virtual const Matrix &getGlobalVectors(const Matrix &) const;
     virtual Vector3d getVector3dLocalForce(void) const;
     virtual Vector3d getVector3dLocalMoment(void) const;
+    SlidingVectorsSystem3d getResultant(const Pos3d &centro, bool initialGeometry) const;
   };
 } // end of XC namespace
 

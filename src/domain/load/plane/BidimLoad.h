@@ -46,7 +46,7 @@ class BidimLoad: public ElementBodyLoad
     BidimLoad(int tag, int classTag,const ID &theElementTags);
     BidimLoad(int tag, int classTag);
 
-    virtual std::string Categoria(void) const;
+    virtual std::string Category(void) const;
 
     void Print(std::ostream &s, int flag =0) const;
 

@@ -64,11 +64,6 @@ int XC::ShellNLCrdTransf3d::initialize(const NodePtrs &ptrs)
     //and use those as basis vectors but this is easier
     //and the shell is flat anyway.
 
-    static Vector temp(3);
-
-    static Vector v1(3);
-    static Vector v2(3);
-    static Vector v3(3);
 
     //get two vectors (v1, v2) in plane of shell by
     // nodal coordinate differences
@@ -78,6 +73,11 @@ int XC::ShellNLCrdTransf3d::initialize(const NodePtrs &ptrs)
     const Vector &coor2= (*theNodes)[2]->getCrds();
     const Vector &coor3= (*theNodes)[3]->getCrds();
 
+    static Vector temp(3);
+    static Vector v1(3);
+    static Vector v2(3);
+    static Vector v3(3);
+    
     v1.Zero( );
     //v1= 0.5 * ( coor2 + coor1 - coor3 - coor0 );
     v1= coor2;
@@ -118,7 +118,6 @@ int XC::ShellNLCrdTransf3d::initialize(const NodePtrs &ptrs)
     //cross product for v3
     v3= LovelyCrossProduct( v1, v2 );
     
-    setup_nodal_local_coordinates();
     g1= v1; g2= v2; g3= v3;
     return 0;
   }
@@ -192,11 +191,11 @@ int XC::ShellNLCrdTransf3d::update(void)
     v2/= temp(1);
     v3/= temp(2);
 
-    //local nodal coordinates in plane of shell
-    setup_nodal_local_coordinates();
-
     //basis vectors stored as array of doubles
     g1= v1; g2= v2; g3= v3;
+    
+    //local nodal coordinates in plane of shell
+    setup_nodal_local_coordinates();
     return 0;
   }
 

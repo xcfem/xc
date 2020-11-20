@@ -44,7 +44,7 @@ class BeamUniformLoad: public BeamMecLoad
     BeamUniformLoad(int tag, int classTag);
     BeamUniformLoad(int classTag);
 
-    std::string Categoria(void) const;
+    std::string Category(void) const;
     //! @brief Returns distributed force vectors (one for each element) expressed in element local coordinates. Is simply a convenience function that makes the distributedness more explicit.
     inline const Matrix &getDistributedLocalForces(void) const
       { return getLocalForces(); }

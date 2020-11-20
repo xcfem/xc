@@ -71,6 +71,8 @@ class PlaneElement: public ElemWithMaterial<NNODES, PhysProp>
     virtual double getPerimeter(bool initialGeometry= true) const;
     virtual double getArea(bool initialGeometry= true) const;
     virtual void computeTributaryAreas(bool initialGeometry= true) const;
+    const std::vector<double> &getTributaryAreas(void) const;
+    double getTributaryArea(const int &) const;
     double getTributaryArea(const Node *) const;
 
     double getDist2(const Pos2d &p,bool initialGeometry= true) const;
@@ -172,17 +174,32 @@ void XC::PlaneElement<NNODES, PhysProp>::computeTributaryAreas(bool initialGeome
     this->dumpTributaries(tributaryAreas);
   }
 
+//! @brief Return tributary areas that correspond to each node.
+template <int NNODES,class PhysProp>
+const std::vector<double> &XC::PlaneElement<NNODES, PhysProp>::getTributaryAreas(void) const
+  { return this->tributaryAreas; }
+  
+
+//! @brief Returns tributary area for the i-th node.
+//! @tparam NNODES number of nodes.
+//! @tparam PhysProp material properties.
+template <int NNODES,class PhysProp>
+double XC::PlaneElement<NNODES, PhysProp>::getTributaryArea(const int &i) const
+  {
+    double retval= 0;
+    if((i>0) && (i<NNODES)) 
+      retval= tributaryAreas[i];
+    return retval;
+  }
+  
 //! @brief Returns tributary area for the node being passed as parameter.
 //! @tparam NNODES number of nodes.
 //! @tparam PhysProp material properties.
 template <int NNODES,class PhysProp>
 double XC::PlaneElement<NNODES, PhysProp>::getTributaryArea(const Node *nod) const
   {
-    double retval= 0.0;
     const int i= this->theNodes.find(nod);
-    if(i>=0) //The node belongs to this element.
-      retval= tributaryAreas[i];
-    return retval;
+    return getTributaryArea(i);
   }
 
 //! @brief Returns the maximum corner angle quality parameter.

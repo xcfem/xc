@@ -64,11 +64,6 @@ int XC::ShellLinearCrdTransf3d::initialize(const NodePtrs &ptrs)
     //and use those as basis vectors but this is easier
     //and the shell is flat anyway.
 
-    static Vector temp(3);
-
-    static Vector v1(3);
-    static Vector v2(3);
-    static Vector v3(3);
 
     //get two vectors (v1, v2) in plane of shell by
     // nodal coordinate differences
@@ -78,6 +73,11 @@ int XC::ShellLinearCrdTransf3d::initialize(const NodePtrs &ptrs)
     const Vector &coor2= (*theNodes)[2]->getCrds();
     const Vector &coor3= (*theNodes)[3]->getCrds();
 
+    static Vector temp(3);
+    static Vector v1(3);
+    static Vector v2(3);
+    static Vector v3(3);
+    
     v1.Zero( );
     //v1= 0.5 * ( coor2 + coor1 - coor3 - coor0 );
     v1= coor2;

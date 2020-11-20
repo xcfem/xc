@@ -190,14 +190,17 @@ const XC::Matrix &XC::Beam3dPointLoad::getAppliedSectionForces(const double &L,c
 //! @param L Length of the element.
 //! @param loadFactor Load factor.
 //! @param p0 element load vector.
-void XC::Beam3dPointLoad::addReactionsInBasicSystem(const double &L,const double &loadFactor,FVector &p0) const
+void XC::Beam3dPointLoad::addReactionsInBasicSystem(const std::vector<double> &,const double &loadFactor,FVector &p0) const
   {
     const double aOverL= X();
 
     if(aOverL < 0.0 || aOverL > 1.0)
       {
-        std::cerr << "XC::Element1D::addReactionsInBasicSystem; el value of x ("
-                  << aOverL << ") es incorrecto, debe estar entre 0 y 1. Load ignored." << std::endl;
+        std::cerr << getClassName() << "::" << __FUNCTION__
+	          << "; the value of x ("
+                  << aOverL << ") out of range"
+	          << "; it must be between 0 and 1. Load ignored."
+		  << std::endl;
         return;
       }
     else
@@ -226,7 +229,7 @@ void XC::Beam3dPointLoad::addReactionsInBasicSystem(const double &L,const double
 //! @param loadFactor Load factor.
 //! @param q0 Consistent load vector.
 //! @param release Moment release: 0=none, 1=I, 2=J, 3=I,J
-void XC::Beam3dPointLoad::addFixedEndForcesInBasicSystem(const double &L,const double &loadFactor,FVector &q0, int release) const
+void XC::Beam3dPointLoad::addFixedEndForcesInBasicSystem(const std::vector<double> &Li,const double &loadFactor,FVector &q0, int release) const
   {
     if(release!=0)
         std::cerr << getClassName() << "::" << __FUNCTION__
@@ -244,6 +247,7 @@ void XC::Beam3dPointLoad::addFixedEndForcesInBasicSystem(const double &L,const d
       }
     else
       {
+	const double L= Li[0];
         const double a= aOverL*L;
         const double b= L-a;
         const double L2 = 1.0/(L*L);

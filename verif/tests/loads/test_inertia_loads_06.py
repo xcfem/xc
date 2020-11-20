@@ -24,10 +24,10 @@ nodes= preprocessor.getNodeHandler
 
 # Problem type
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
-n1= nodes.newNodeXYZ(0,0,0)
-n2= nodes.newNodeXYZ(1,0,0)
-n3= nodes.newNodeXYZ(1,1,0)
-n4= nodes.newNodeXYZ(0,1,0)
+n1= nodes.newNodeXYZ(-1,-1,0)
+n2= nodes.newNodeXYZ(1,-2,0)
+n3= nodes.newNodeXYZ(1,2,0)
+n4= nodes.newNodeXYZ(-1,1,0)
 
 # Materials definition
 E= 2.1e6 # Steel Young's modulus [kg/cm2].
@@ -44,7 +44,6 @@ g= 1.0#9.81 # m/s2
 # Element mass
 eMass= elem.getArea(True)*dens*h
 eForce= eMass*g
-nForce= eForce/4.0
 
 # Constraints.
 constrainedNodes= [n1, n2, n3, n4]
@@ -63,21 +62,17 @@ modelSpace.addLoadCaseToDomain(lp0.name)
 result= modelSpace.analyze(calculateNodalReactions= True)
 
 
-zReactions= list()
+zReaction= 0.0
 for n in constrainedNodes:
-    zReactions.append(n.getReaction[2])
+    zReaction+= n.getReaction[2]
 
-err= 0.0
-for r in zReactions:
-  err+=(nForce+r)**2
-err= math.sqrt(err)
+err= (eForce+zReaction)/eForce
 
-'''
-print('reactions= ', zReactions)
+print(zReaction)
 print('eMass= ', eMass)
 print('eForce= ', eForce)
-print('nForce= ', nForce)
 print('err= ', err)
+'''
 '''
 
 import os

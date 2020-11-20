@@ -51,6 +51,8 @@ XC::ElementalLoad *XC::procesa_element_load(XC::LoadPattern *lp,int &tag_el,cons
       retval= new_elem_load<Beam3dUniformLoad>(lp,tag_el);
     else if(loadType == "brick_self_weight")
       retval= new_elem_load<BrickSelfWeight>(lp,tag_el);
+    else if(loadType == "shell_raw_load")
+      retval= new_elem_load<ShellRawLoad>(lp,tag_el);
     else if(loadType == "shell_uniform_load")
       retval= new_elem_load<ShellUniformLoad>(lp,tag_el);
     else if(loadType == "bidim_strain_load")

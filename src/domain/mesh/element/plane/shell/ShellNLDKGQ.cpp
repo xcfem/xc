@@ -59,6 +59,7 @@
 #include "ShellNLDKGQ.h"
 #include "domain/mesh/element/utils/gauss_models/GaussModel.h"
 #include "utility/recorder/response/ElementResponse.h"
+//#include "domain/load/plane/ShellMecLoad.h"
 
 XC::ShellNLCrdTransf3d XC::ShellNLDKGQ::non_linear_trf;
 
@@ -66,7 +67,7 @@ XC::ShellNLCrdTransf3d XC::ShellNLDKGQ::non_linear_trf;
 XC::ShellNLDKGQ::ShellNLDKGQ(void)
   : Shell4NBase(ELE_TAG_ShellNLDKGQ,&non_linear_trf),
     CstrainGauss(32),TstrainGauss(32) //modify for geometric nonlinearity
-    {}
+  {}
 
 //! @brief full constructor
 XC::ShellNLDKGQ::ShellNLDKGQ(int tag,const SectionForceDeformation *ptr_mat)
@@ -86,13 +87,12 @@ XC::ShellNLDKGQ::ShellNLDKGQ(int tag,
 XC::Element* XC::ShellNLDKGQ::getCopy(void) const
   { return new ShellNLDKGQ(*this); }
 
-
 //! @brief set domain
 void XC::ShellNLDKGQ::setDomain(Domain *theDomain)
-  {
+  {    
     Shell4NBase::setDomain(theDomain);
     //basis vectors and local coordinates
-    updateBasis();
+    computeBasis();
   }
 
 //! @brief commit state
@@ -503,10 +503,25 @@ const XC::Matrix &XC::ShellNLDKGQ::getMass(void) const
 //! @brief Applies a load to the element.
 int XC::ShellNLDKGQ::addLoad(ElementalLoad *theLoad, double loadFactor)
   {
-    std::cerr << getClassName() << "::" << __FUNCTION__
-              << "; load type unknown for ele with tag: "
-              << this->getTag() << std::endl;
-    return -1;
+    int retval= 0;
+    if(isDead())
+      std::cerr << getClassName() << "::" << __FUNCTION__ 
+                << "; load over inactive element: "
+                << getTag() << std::endl;
+    else
+      {
+	computeTributaryAreas();
+        const std::vector<double> areas= getTributaryAreas();
+
+        // // Accumulate elastic deformations in basic system
+        // if(ShellMecLoad *shellMecLoad= dynamic_cast<ShellMecLoad *>(theLoad))
+        //   {
+        //     shellMecLoad->addReactionsInBasicSystem(areas,loadFactor,p0); // Accumulate reactions in basic system
+        //   }
+        // else
+          retval= Shell4NBase::addLoad(theLoad,loadFactor);
+      }
+    return retval;
   }
 
 
@@ -1043,26 +1058,11 @@ void XC::ShellNLDKGQ::formResidAndTangent(int tangFlag) const
   }
 
 
-//************************************************************************
-//! @brief compute local coordinates and basis
-
-void XC::ShellNLDKGQ::computeBasis(void)
-  {
-    //could compute derivatives \frac{ \partial {\bf x} }{ \partial L_1 }
-    //                     and  \frac{ \partial {\bf x} }{ \partial L_2 }
-    //and use those as basis vectors but this is easier
-    //and the shell is flat anyway.
-
-    theCoordTransf->initialize(theNodes);
-  }
-
 //start Yuli Huang (yulihuang@gmail.com) & Xinzheng Lu (luxz@tsinghua.edu.cn)
 //************************************************************************
 //! @brief compute local coordinates and basis
 void XC::ShellNLDKGQ::updateBasis(void) const
-  {
-    theCoordTransf->update();
-  }
+  { theCoordTransf->update(); }
 //end Yuli Huang (yulihuang@gmail.com) & Xinzheng Lu (luxz@tsinghua.edu.cn)
 
 //! @brief assemble a B matrix

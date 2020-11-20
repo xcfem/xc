@@ -107,8 +107,8 @@ class Beam3dUniformLoad: public BeamUniformLoad
     const Matrix &getLocalMoments(void) const;
 
     const Matrix &getAppliedSectionForces(const double &L,const Matrix &xi,const double &loadFactor) const;
-    void addReactionsInBasicSystem(const double &,const double &,FVector &) const;
-    void addFixedEndForcesInBasicSystem(const double &L,const double &loadFactor,FVector &, int release= 0) const;
+    void addReactionsInBasicSystem(const std::vector<double> &,const double &,FVector &) const;
+    void addFixedEndForcesInBasicSystem(const std::vector<double> &L,const double &loadFactor,FVector &, int release= 0) const;
     void addElasticDeformations(const double &L,const CrossSectionProperties3d &ctes_scc,const double &lpI,const double &lpJ,const double &loadFactor,FVector &v0);
 
     int sendSelf(Communicator &);  

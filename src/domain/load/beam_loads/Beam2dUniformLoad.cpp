@@ -154,15 +154,16 @@ const XC::Matrix &XC::Beam2dUniformLoad::getAppliedSectionForces(const double &L
   }
 
 //! @brief Returns the consistent load vector (see page 108 libro Eugenio Oñate).
-//! @param L Length of the element edge.
+//! @param Li: Length of the element edge.
 //! @param loadFactor Load factor.
 //! @param p0 element Load vector.
-void XC::Beam2dUniformLoad::addReactionsInBasicSystem(const double &L,const double &loadFactor,FVector &p0) const
+void XC::Beam2dUniformLoad::addReactionsInBasicSystem(const std::vector<double> &Li,const double &loadFactor,FVector &p0) const
   {
     const double wa= WAxial()*loadFactor;  // Axial
     const double wy= WTrans()*loadFactor;  // Transverse
 
     //Forces over element.
+    const double L= Li[0];
     const double V = 0.5*wy*L; // Shear force in the element ends.
     const double P= wa*L; //Axil.
 
@@ -177,11 +178,12 @@ void XC::Beam2dUniformLoad::addReactionsInBasicSystem(const double &L,const doub
 //! @param loadFactor Load factor.
 //! @param q0 Consistent load vector.
 //! @param release Moment release: 0=none, 1=I, 2=J, 3=I,J
-void XC::Beam2dUniformLoad::addFixedEndForcesInBasicSystem(const double &L,const double &loadFactor,FVector &q0, int release) const
+void XC::Beam2dUniformLoad::addFixedEndForcesInBasicSystem(const std::vector<double> &Li,const double &loadFactor,FVector &q0, int release) const
   {
     const double wy = WTrans()*loadFactor;  // Transverse
     const double wx = WAxial()*loadFactor;  // Axial (+ve from node I to J)
 
+    const double L= Li[0];
     //Forces over element.
     const double Mz = wy*L*L/12.0; // z bending moment at the ends of the element.
     const double P = wx*L; //Axial force at the back end.

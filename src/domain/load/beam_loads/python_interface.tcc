@@ -27,7 +27,7 @@ class_<XC::TrussStrainLoad, bases<XC::ElementBodyLoad>, boost::noncopyable >("Tr
   ;
 
 class_<XC::BeamLoad, bases<XC::ElementBodyLoad>, boost::noncopyable >("BeamLoad", no_init)
-  .add_property("category", &XC::BeamLoad::Categoria)
+  .add_property("category", &XC::BeamLoad::Category)
   ;
 
 class_<XC::BeamStrainLoad, bases<XC::BeamLoad>, boost::noncopyable >("BeamStrainLoad", no_init)

@@ -68,6 +68,7 @@
 
 
 #include "xc_utils/src/geom/d2/Polygon3d.h"
+#include "domain/load/plane/ShellRawLoad.h"
 #include "domain/load/plane/ShellUniformLoad.h"
 #include "domain/load/plane/ShellStrainLoad.h"
 #include "preprocessor/Preprocessor.h"
@@ -165,7 +166,80 @@ XC::Shell4NBase &XC::Shell4NBase::operator=(const Shell4NBase &other)
 XC::Shell4NBase::~Shell4NBase(void)
   { free_mem(); }
 
+//! @brief Defines a load over the element from a vector of nodal loads
+//! in local coordinates.
+//!
+//! @param nLoads: loads on each element node.
+const XC::ShellRawLoad *XC::Shell4NBase::vector3dRawLoadLocal(const std::vector<Vector> &nLoads)
+  {
+    ShellRawLoad *retval= nullptr;
+    Preprocessor *preprocessor= getPreprocessor();
+    if(preprocessor)
+      {
+        MapLoadPatterns &lPatterns= preprocessor->getLoadHandler().getLoadPatterns();
+        static ID eTags(1);
+        eTags[0]= getTag(); //Load for this element.
+        const int &loadTag= lPatterns.getCurrentElementLoadTag(); //Load identifier.
+
+        const size_t sz= nLoads.size();
+	const size_t nn= getNumExternalNodes();
+        if(sz==nn)
+          {
+            LoadPattern *lp= lPatterns.getCurrentLoadPatternPtr();
+            if(lp)
+              {
+                retval= new ShellRawLoad(loadTag,nLoads,eTags);
+                lp->addElementalLoad(retval);
+                lPatterns.setCurrentElementLoadTag(loadTag+1);
+              }
+            else
+	      std::cerr << getClassName() << "::" << __FUNCTION__
+                        << " there is no current load pattern."
+                        << " Load ignored." << std::endl; 
+          }
+        else
+          std::cerr << getClassName() << "::" << __FUNCTION__
+                    << "; a vector of dimension " << nn
+	            << " was expected." << std::endl;
+      }
+    else
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; modeler not defined." << std::endl;
+    return retval;
+  }
+
+//! @brief Defines a load over the element from a vector of nodal loads
+//! in global coordinates.
+//!
+//! @param nLoads: loads on each element node.
+const XC::ShellRawLoad *XC::Shell4NBase::vector3dRawLoadGlobal(const std::vector<Vector> &nLoads)
+  {
+    const ShellRawLoad *retval= nullptr;
+    const size_t sz= nLoads.size();
+    const size_t nn= getNumExternalNodes();
+    if(sz==nn)
+      {
+        assert(theCoordTransf);
+	std::vector<Vector> tmp(nn);
+        // Transform loads to local coordinates.
+	for(size_t i= 0;i<nn;i++)
+	  {
+	    const Vector v= nLoads[i];
+            const Vector vTrf= theCoordTransf->getVectorLocalCoordFromGlobal(v);
+	    tmp[i]= vTrf;
+	  }
+        retval= vector3dRawLoadLocal(tmp);
+      }
+    else
+      std::cerr << getClassName() << "::" << __FUNCTION__
+                << "; a vector of dimension " << nn
+                << " was expected." << std::endl;
+    return retval;
+  }
+
 //! @brief Defines a load over the element from a vector in local coordinates.
+//!
+//! @param v: vector that defines the load values.
 const XC::ShellUniformLoad *XC::Shell4NBase::vector3dUniformLoadLocal(const Vector &v)
   {
     ShellUniformLoad *retval= nullptr;
@@ -202,7 +276,9 @@ const XC::ShellUniformLoad *XC::Shell4NBase::vector3dUniformLoadLocal(const Vect
     return retval;
   }
 
-//! @brief Defines a load over the element from a vector in global coordinates.  
+//! @brief Defines a load over the element from a vector in global coordinates. 
+//!
+//! @param v: vector that defines the load values.
 const XC::ShellUniformLoad *XC::Shell4NBase::vector3dUniformLoadGlobal(const Vector &v)
   {
     const ShellUniformLoad *retval= nullptr;
@@ -219,7 +295,8 @@ const XC::ShellUniformLoad *XC::Shell4NBase::vector3dUniformLoadGlobal(const Vec
     return retval;
   }
 
-//! @brief  
+//! @brief Defines a strain load on this element.
+//! 
 void XC::Shell4NBase::strainLoad(const Matrix &strains)
   {
     Preprocessor *preprocessor= getPreprocessor();
@@ -375,6 +452,8 @@ int XC::Shell4NBase::addLoad(ElementalLoad *theLoad, double loadFactor)
 
 //! @brief Creates the inertia load that corresponds to the
 //! acceleration argument.
+//!
+//! @param accel: acceleration vector.
 void XC::Shell4NBase::createInertiaLoad(const Vector &accel)
   {
     const bool haveRho= physicalProperties.haveRho();
@@ -398,34 +477,26 @@ void XC::Shell4NBase::createInertiaLoad(const Vector &accel)
 	const int tangFlag= 1;
 	formInertiaTerms(tangFlag);
         const Vector force= mass*nodeAccel;
-	Vector avgForce(6);
-	avgForce.Zero();
+	// Extract nodal loads.
+	std::vector<Vector> nLoads(4);
 	for(int i=0;i<4;i++)
-	  for(int j= 0; j<6;j++)
-	     {
- 	       const int k= 6*i+j;
-	       avgForce(j)+= force(k);
-	     }
-	// Compute error due to different masses of Gauss points
-	double err= 0.0;
-	for(int i= 0;i<6;i++)
 	  {
-	    err+= (force(i)-force(i+6))*(force(i)-force(i+6));
-	    err+= (force(i)-force(i+12))*(force(i)-force(i+12));
-	    err+= (force(i)-force(i+18))*(force(i)-force(i+18));
+	    Vector nLoad(6);
+	    for(int j= 0; j<6;j++)
+	       {
+ 	         const int k= 6*i+j;
+	         nLoad(j)+= force(k);
+	       }
+	    nLoads[i]= nLoad;
 	  }
-	err= sqrt(err);
-	if(err>.05)
-	  std::cerr << getClassName() << "::" << __FUNCTION__
-	            << "; mass in not uniform across the element."
-	            << " The mean quadratic error when computing uniform load"
-	            << " was: " << err << std::endl; 
-        vector3dUniformLoadGlobal(avgForce);
+        vector3dRawLoadGlobal(nLoads);
       }
   }
 
 //! @brief Add to the unbalance vector the inertial load
 //! corresponding to the acceleration argument.
+//!
+//! @param accel: acceleration vector.
 int XC::Shell4NBase::addInertiaLoadToUnbalance(const Vector &accel)
   {
     int retval= 0;
@@ -667,10 +738,6 @@ void XC::Shell4NBase::computeBasis(void)
     theCoordTransf->initialize(theNodes);
     theCoordTransf->setup_nodal_local_coordinates();
   }
-
-
-
-
 
 //! @brief shape function routine for MITC4 elements.
 //! @param ss "s" natural coordinate of the point.

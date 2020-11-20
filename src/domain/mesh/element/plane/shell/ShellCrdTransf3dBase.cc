@@ -71,7 +71,7 @@ int XC::ShellCrdTransf3dBase::initialize(const NodePtrs &ptrs)
 //! @brief Update local coordinates of the nodes.
 int XC::ShellCrdTransf3dBase::setup_nodal_local_coordinates(void) const
   {
-    const ShellMITC4Base *element= dynamic_cast<const ShellMITC4Base *>(Owner());
+    const Shell4NBase *element= dynamic_cast<const Shell4NBase *>(Owner());
     Shell4NBase::pointer_to_xl xl= element->get_xl();
     //local nodal coordinates in plane of shell
     for(int i= 0;i<4;i++)

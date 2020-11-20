@@ -907,7 +907,7 @@ int XC::NLBeamColumn2d::addLoad(ElementalLoad *theLoad, double loadFactor)
             if(sp.isEmpty())
               sp= Matrix(3,nSections);
             sp+= beamMecLoad->getAppliedSectionForces(L,xi_pt,loadFactor); // Accumulate applied section forces due to element loads
-            beamMecLoad->addReactionsInBasicSystem(L,loadFactor,p0); // Accumulate reactions in basic system
+            beamMecLoad->addReactionsInBasicSystem({L},loadFactor,p0); // Accumulate reactions in basic system
           }
         else
           {

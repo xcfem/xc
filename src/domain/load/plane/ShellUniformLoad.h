@@ -40,13 +40,32 @@ namespace XC {
 class ShellUniformLoad: public ShellMecLoad
   {
   protected:
+    double Trans; //!< Transverse load.
+    double Axial1; //!< Axial load on axis 1.
+    double Axial2; //!< Axial load on axis 2.
+
+    int sendData(Communicator &comm);
+    int recvData(const Communicator &comm);
+    
     DbTagData &getDbTagData(void) const;
   public:
+    ShellUniformLoad(int tag= 0);
     ShellUniformLoad(int tag,const double &,const double &,const double &,const ID &theElementTags);
     ShellUniformLoad(int tag, const Vector &Fxyz, const ID &theElementTags);
-    ShellUniformLoad(int tag= 0);
 
-    std::string Categoria(void) const;
+    inline double getAxial1Component(void)
+      { return Axial1; }
+    inline void setAxial1Component(const double &d)
+      { Axial1= d; }
+    inline double getAxial2Component(void)
+      { return Axial2; }
+    inline void setAxial2Component(const double &d)
+      { Axial2= d; }
+    inline double getTransComponent(void)
+      { return Trans; }
+    inline void setTransComponent(const double &d)
+      { Trans= d; }    
+    std::string Category(void) const;
     inline const double &Wx(void) const
       { return Axial1; }
     inline const double &Wy(void) const
@@ -55,13 +74,13 @@ class ShellUniformLoad: public ShellMecLoad
       { return Trans; }
     const Vector &getData(int &type, const double &loadFactor) const;
 
-    size_t getForceVectorDimension(void) const;
-    size_t getMomentVectorDimension(void) const;
+    virtual Vector getLocalForce(void) const;
+    virtual Vector getLocalMoment(void) const;
     const Matrix &getLocalForces(void) const;
     const Matrix &getLocalMoments(void) const;
 
-    void addReactionsInBasicSystem(const double &,const double &,FVectorShell &) const;
-    void addFixedEndForcesInBasicSystem(const double &,const double &loadFactor,FVectorShell &) const;
+    void addReactionsInBasicSystem(const std::vector<double> &,const double &,FVectorShell &) const;
+    void addFixedEndForcesInBasicSystem(const std::vector<double> &,const double &loadFactor,FVectorShell &) const;
 
     //! @brief Returns pressure vectors (one for each element) expressed in element local coordinates. Is simply a convenience function that makes the distributedness more explicit.
     inline const Matrix &getLocalPressures(void) const
@@ -75,8 +94,6 @@ class ShellUniformLoad: public ShellMecLoad
     //! @brief Returns distributed moments (one for each element) expressed in global coordinates. Is simply a convenience function that makes the distributedness more explicit.
     inline const Matrix &getDistributedGlobalMoments(void) const
       { return getGlobalMoments(); }
-
-    virtual SlidingVectorsSystem3d getResultant(const Pos3d &p= Pos3d(), bool initialGeometry= true) const;
 
     int sendSelf(Communicator &);  
     int recvSelf(const Communicator &);

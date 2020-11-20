@@ -115,15 +115,16 @@ const XC::Matrix &XC::Beam3dUniformLoad::getAppliedSectionForces(const double &L
   }
 
 //! @brief Adds the load al consistent load vector (see page 108 libro Eugenio Oñate).
-//! @param L Length of the element.
+//! @param Li: tributary lengths of each node.
 //! @param loadFactor Load factor.
 //! @param p0 element load vector.
-void XC::Beam3dUniformLoad::addReactionsInBasicSystem(const double &L,const double &loadFactor,FVector &p0) const
+void XC::Beam3dUniformLoad::addReactionsInBasicSystem(const std::vector<double> &Li,const double &loadFactor,FVector &p0) const
   {
     const double wy= Wy()*loadFactor;  // Transverse
     const double wz= Wz()*loadFactor;  // Transverse
     const double wx= Wx()*loadFactor;  // Axial (+ve from node I to J)
     //const double tx= Tx()*loadFactor;  // Torsor
+    const double L= Li[0]; // whole element reactions in basic system 
 
     //Forces over the element.
     const double Vy = 0.5*wy*L; // Y shear at element ends.
@@ -143,7 +144,7 @@ void XC::Beam3dUniformLoad::addReactionsInBasicSystem(const double &L,const doub
 //! @param loadFactor Load factor.
 //! @param q0 Consistent load vector.
 //! @param release Moment release: 0=none, 1=I, 2=J, 3=I,J
-void XC::Beam3dUniformLoad::addFixedEndForcesInBasicSystem(const double &L,const double &loadFactor,FVector &q0, int release) const
+void XC::Beam3dUniformLoad::addFixedEndForcesInBasicSystem(const std::vector<double> &Li,const double &loadFactor,FVector &q0, int release) const
   {
     if(release!=0)
         std::cerr << getClassName() << "::" << __FUNCTION__
@@ -154,6 +155,8 @@ void XC::Beam3dUniformLoad::addFixedEndForcesInBasicSystem(const double &L,const
     const double wz = Wz()*loadFactor;  // Transverse
     const double wx = Wx()*loadFactor;  // Axial (+ve from node I to J)
     //const double tx= Tx()*loadFactor; // Torsor
+
+    const double L= Li[0];
 
     //Forces over the element.
     const double Mz = wy*L*L/12.0; // Bending moment about z axis at the ends of the element: wy*L*L/12

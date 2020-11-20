@@ -44,5 +44,5 @@ void XC::BeamLoad::Print(std::ostream &s, int flag) const
     s << "  Elements acted on: " << this->getElementTags();
   }
 
-std::string XC::BeamLoad::Categoria(void) const
+std::string XC::BeamLoad::Category(void) const
   { return "undefined"; }
