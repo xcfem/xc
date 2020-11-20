@@ -58,8 +58,10 @@ class ShellCrdTransf3dBase: public CommandEntity, public MovableObject
     int sendData(Communicator &);
     int recvData(const Communicator &);
 
-    Vector local_to_global(const Matrix &,const Vector &) const;
-    Matrix local_to_global(const Matrix &,const Matrix &) const;
+    Vector local_to_global(const Vector &) const;
+    Matrix local_to_global(const Matrix &) const;
+    const Vector &local_to_global_resisting_force(const Vector &pl) const;
+    const Matrix &local_to_global_stiff_matrix(const Matrix &kl) const;
 
   public:
     ShellCrdTransf3dBase(void);
@@ -99,7 +101,7 @@ class ShellCrdTransf3dBase: public CommandEntity, public MovableObject
 
     virtual void getGlobalTangent(Matrix &stiff) const;
     virtual void getGlobalResidAndTangent(Vector &resid,Matrix &stiff) const;
-    virtual const Vector &getGlobalResistingForce(const Vector &p0) const= 0;
+    virtual const Vector &getGlobalResistingForce(const Vector &p0) const;
 
     const Vector &getVectorGlobalCoordFromLocal(const Vector &localCoords) const;
     const Matrix &getVectorGlobalCoordFromLocal(const Matrix &localCoords) const;

@@ -117,15 +117,6 @@ class ShellNLDKGQ: public Shell4NBase
     const Matrix &getInitialStiff(void) const;
     const Matrix &getMass(void) const;
 
-    // methods for applying loads
-    int addLoad( ElementalLoad *theLoad, double loadFactor);
-    int addInertiaLoadToUnbalance(const Vector &accel);
-
-    //get residual
-    const Vector &getResistingForce(void) const;
-    //get residual with inertia terms
-    const Vector &getResistingForceIncInertia(void) const;
-
     // public methods for element output
     int sendSelf(Communicator &);
     int recvSelf(const Communicator &);

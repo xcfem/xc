@@ -177,9 +177,10 @@ XC::Matrix XC::ShellCrdTransf3dBase::getTrfMatrix(void) const
   }
 
 //! @brief Returns the vector in global coordinates.
-XC::Vector XC::ShellCrdTransf3dBase::local_to_global(const Matrix &R,const Vector &pl) const
+XC::Vector XC::ShellCrdTransf3dBase::local_to_global(const Vector &pl) const
   {
     Vector retval(24);
+    const Matrix &R= getTrfMatrix();
     //Node 1.
     retval(0)= R(0,0)*pl[0] + R(1,0)*pl[1] + R(2,0)*pl[2];
     retval(1)= R(0,1)*pl[0] + R(1,1)*pl[1] + R(2,1)*pl[2];
@@ -220,9 +221,10 @@ XC::Vector XC::ShellCrdTransf3dBase::local_to_global(const Matrix &R,const Vecto
   }
 
 //! @brief Returns the matrix in global coordinates.
-XC::Matrix XC::ShellCrdTransf3dBase::local_to_global(const Matrix &R,const Matrix &kl) const
+XC::Matrix XC::ShellCrdTransf3dBase::local_to_global(const Matrix &kl) const
   {
     static Matrix tmp(24,24);
+    const Matrix &R= getTrfMatrix();
 
     // Transform local matrix to global system
     // First compute kl*T_{lg}
@@ -300,11 +302,33 @@ XC::Matrix XC::ShellCrdTransf3dBase::local_to_global(const Matrix &R,const Matri
     return retval;
   }
 
+//! @brief Returns the load vector in global coordinates.
+const XC::Vector &XC::ShellCrdTransf3dBase::local_to_global_resisting_force(const Vector &pl) const
+  {
+    // transform resisting forces  from local to global coordinates
+    static Vector pg(24);
+    pg= local_to_global(pl);
+    return pg;
+  }
+
+//! @brief Returns the stiffness matrix in global coordinates.
+const XC::Matrix &XC::ShellCrdTransf3dBase::local_to_global_stiff_matrix(const Matrix &kl) const
+  {
+    static Matrix kg(24,24);
+
+    kg= local_to_global(kl);
+    return kg;
+  }
+
 //! @brief Return the tangent stiffness matrix expressed in
 //! the global coordinate sistem.
 void XC::ShellCrdTransf3dBase::getGlobalTangent(Matrix &stiff) const
-{ //Already in global coordinates by default.
+  { //Already in global coordinates by default.
   }
+
+//! @brief Returns the load vector expressend in global coordinates.
+const XC::Vector &XC::ShellCrdTransf3dBase::getGlobalResistingForce(const Vector &p0) const
+  { return local_to_global_resisting_force(p0); }
 
 //! @brief Returns the residual vector and tangent stiffness matrix expressed in
 //! the global coordinate sistem.

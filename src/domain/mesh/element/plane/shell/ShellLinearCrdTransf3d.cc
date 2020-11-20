@@ -152,30 +152,7 @@ XC::Vector XC::ShellLinearCrdTransf3d::getBasicTrialVel(const int &i) const
 XC::Vector XC::ShellLinearCrdTransf3d::getBasicTrialAccel(const int &i) const
   { return (*theNodes)[i]->getTrialAccel(); }
 
-//! @brief Returns the load vector in global coordinates.
-const XC::Vector &XC::ShellLinearCrdTransf3d::local_to_global_resisting_force(const Vector &pl) const
-  {
-    // transform resisting forces  from local to global coordinates
-    static Vector pg(24);
-    const Matrix &R= getTrfMatrix();
-    pg= local_to_global(R,pl);
 
-    return pg;
-  }
-
-//! @brief Returns the stiffness matrix in global coordinates.
-const XC::Matrix &XC::ShellLinearCrdTransf3d::local_to_global_stiff_matrix(const Matrix &kl) const
-  {
-    static Matrix kg(24,24);
-    const Matrix &R= getTrfMatrix();
-
-    kg= local_to_global(R,kl);
-    return kg;
-  }
-
-//! @brief Returns the load vector expressend in global coordinates.
-const XC::Vector &XC::ShellLinearCrdTransf3d::getGlobalResistingForce(const Vector &p0) const
-  { return local_to_global_resisting_force(p0); }
 
 //! @brief Send the object through the communicator argument.
 int XC::ShellLinearCrdTransf3d::sendSelf(Communicator &comm)

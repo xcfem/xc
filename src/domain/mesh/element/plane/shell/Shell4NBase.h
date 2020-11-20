@@ -61,6 +61,7 @@ class Shell4NBase: public QuadBase4N<SectionFDPhysicalProperties>
     std::vector<Vector> initDisp; //!< Initial displacements.
 
     mutable Matrix Ki;
+    FVectorShell p0; //!< Reactions in the basic system due to element loads
 
 
     //static data
@@ -146,7 +147,10 @@ class Shell4NBase: public QuadBase4N<SectionFDPhysicalProperties>
     
     Response *setResponse(const std::vector<std::string> &argv, Information &eleInformation);
     int getResponse(int responseID, Information &eleInformation);
-
+    
+    const Vector &getResistingForce(void) const;
+    const Vector &getResistingForceIncInertia(void) const;
+    
     void Print(std::ostream &s, int flag ) const;
   }; 
 

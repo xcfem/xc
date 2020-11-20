@@ -105,7 +105,8 @@ void XC::Shell4NBase::alloc(const ShellCrdTransf3dBase *crdTransf)
 
 //! @brief Constructor
 XC::Shell4NBase::Shell4NBase(int classTag, const ShellCrdTransf3dBase *crdTransf)
-  : QuadBase4N<SectionFDPhysicalProperties>(0,classTag,SectionFDPhysicalProperties(4)), theCoordTransf(nullptr), applyLoad(0), initDisp(4,Vector(6))
+  : QuadBase4N<SectionFDPhysicalProperties>(0,classTag,SectionFDPhysicalProperties(4)),
+  theCoordTransf(nullptr), applyLoad(0), initDisp(4,Vector(6)), p0()
   {
     alloc(crdTransf);
     appliedB[0]= 0.0;
@@ -116,7 +117,8 @@ XC::Shell4NBase::Shell4NBase(int classTag, const ShellCrdTransf3dBase *crdTransf
 
 //! @brief Constructor
 XC::Shell4NBase::Shell4NBase(int tag, int classTag,const SectionForceDeformation *ptr_mat, const ShellCrdTransf3dBase *crdTransf)
-  : QuadBase4N<SectionFDPhysicalProperties>(tag,classTag,SectionFDPhysicalProperties(4,ptr_mat)), theCoordTransf(nullptr), applyLoad(0), initDisp(4,Vector(6))
+  : QuadBase4N<SectionFDPhysicalProperties>(tag,classTag,SectionFDPhysicalProperties(4,ptr_mat)),
+  theCoordTransf(nullptr), applyLoad(0), initDisp(4,Vector(6)), p0()
   {
     alloc(crdTransf);
     appliedB[0]= 0.0;
@@ -127,7 +129,8 @@ XC::Shell4NBase::Shell4NBase(int tag, int classTag,const SectionForceDeformation
 
 //! @brief Constructor
 XC::Shell4NBase::Shell4NBase(int tag, int classTag,int node1,int node2,int node3,int node4,const SectionFDPhysicalProperties &physProp, const ShellCrdTransf3dBase *crdTransf)
-  : QuadBase4N<SectionFDPhysicalProperties>(tag,classTag,physProp), theCoordTransf(nullptr), applyLoad(0), initDisp(4,Vector(6))
+  : QuadBase4N<SectionFDPhysicalProperties>(tag,classTag,physProp),
+  theCoordTransf(nullptr), applyLoad(0), initDisp(4,Vector(6)), p0()
   {
     theNodes.set_id_nodes(node1,node2,node3,node4);
     alloc(crdTransf);
@@ -140,7 +143,7 @@ XC::Shell4NBase::Shell4NBase(int tag, int classTag,int node1,int node2,int node3
 
 //! @brief Copy constructor.
 XC::Shell4NBase::Shell4NBase(const Shell4NBase &other)
-  : QuadBase4N<SectionFDPhysicalProperties>(other), theCoordTransf(nullptr), applyLoad(other.applyLoad), initDisp(4,Vector(6))
+  : QuadBase4N<SectionFDPhysicalProperties>(other), theCoordTransf(nullptr), applyLoad(other.applyLoad), initDisp(4,Vector(6)), p0(other.p0)
   {
     alloc(other.theCoordTransf);
     appliedB[0]= other.appliedB[0];
@@ -159,6 +162,7 @@ XC::Shell4NBase &XC::Shell4NBase::operator=(const Shell4NBase &other)
     appliedB[1]= other.appliedB[1];
     appliedB[2]= other.appliedB[2];
     initDisp= other.initDisp;
+    p0= other.p0;
     return *this;
   }
 
@@ -424,6 +428,7 @@ void XC::Shell4NBase::zeroLoad(void)
     appliedB[0] = 0.0;
     appliedB[1] = 0.0;
     appliedB[2] = 0.0;
+    p0.zero();
   }
 
 //! @brief Applies on the element the load being passed as parameter.
@@ -444,6 +449,12 @@ int XC::Shell4NBase::addLoad(ElementalLoad *theLoad, double loadFactor)
 	    appliedB[1] += loadFactor*shellLoad->getYFact();
 	    appliedB[2] += loadFactor*shellLoad->getZFact();
 	  }
+        else if(ShellMecLoad *shellMecLoad= dynamic_cast<ShellMecLoad *>(theLoad))
+          {
+   	    computeTributaryAreas();
+            const std::vector<double> areas= getTributaryAreas();
+            shellMecLoad->addReactionsInBasicSystem(areas,loadFactor,p0); // Accumulate reactions in basic system
+          }	
         else
           return QuadBase4N<SectionFDPhysicalProperties>::addLoad(theLoad,loadFactor);
       }
@@ -491,6 +502,38 @@ void XC::Shell4NBase::createInertiaLoad(const Vector &accel)
 	  }
         vector3dRawLoadGlobal(nLoads);
       }
+  }
+
+//! @brief get residual
+const XC::Vector &XC::Shell4NBase::getResistingForce(void) const
+  {
+    theCoordTransf->update();
+
+    const int tang_flag= 0; //don't get the tangent
+    formResidAndTangent(tang_flag);
+    // subtract external loads
+    if(!load.isEmpty())
+      resid-= load;
+    resid+= theCoordTransf->getGlobalResistingForce(p0.getVector());
+
+    if(isDead())
+      resid*=dead_srf;
+    return resid;
+  }
+
+//! @brief get residual with inertia terms
+const XC::Vector &XC::Shell4NBase::getResistingForceIncInertia(void) const
+  {
+    static Vector res(24);
+    res= getResistingForce();
+
+    formInertiaTerms(0);
+
+    // add the damping forces if rayleigh damping
+    if(!rayFactors.nullValues())
+      res+= this->getRayleighDampingForces();
+
+    return res;
   }
 
 //! @brief Add to the unbalance vector the inertial load
@@ -847,6 +890,7 @@ int XC::Shell4NBase::sendData(Communicator &comm)
     res+= comm.sendInt(applyLoad,getDbTagData(),CommMetaData(13));
     res+= comm.sendDoubles(appliedB[0],appliedB[1],appliedB[2],getDbTagData(),CommMetaData(14));
     res+= comm.sendVectors(initDisp,getDbTagData(),CommMetaData(15));
+    res+= p0.sendData(comm,getDbTagData(),CommMetaData(16));
     return res;
   }
 
@@ -860,6 +904,7 @@ int XC::Shell4NBase::recvData(const Communicator &comm)
     res+= comm.receiveInt(applyLoad,getDbTagData(),CommMetaData(13));
     res+= comm.receiveDoubles(appliedB[0],appliedB[1],appliedB[2],getDbTagData(),CommMetaData(14));
     res+= comm.receiveVectors(initDisp,getDbTagData(),CommMetaData(15));
+    res+= p0.receiveData(comm,getDbTagData(),CommMetaData(16));
     return res;
   }
 
