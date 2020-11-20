@@ -68,11 +68,11 @@ for n in constrainedNodes:
 
 err= (eForce+zReaction)/eForce
 
-print(zReaction)
+'''
+print('zREaction= ', zReaction)
 print('eMass= ', eMass)
 print('eForce= ', eForce)
 print('err= ', err)
-'''
 '''
 
 import os
