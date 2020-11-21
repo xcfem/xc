@@ -43,7 +43,14 @@ class YS_Evolution;
 class ID;
 
 //! @ingroup MATYS
-//! @brief Yield surface.
+//!
+//! @defgroup YS_BC Interface between yield surfaces and beam-column elements.
+//!
+//! @ingroup YS_BC
+//! @brief YieldSurface_BC is an abstract class and provides the interface
+//! between the specific yield surface description and the beam-column
+//! element. It implements methods to transform vectors and matrices between
+//! the element system and local yield-surface coordinates.
 class YieldSurface_BC: public TaggedObject, public MovableObject
   {
   private:

@@ -36,9 +36,9 @@
 #include <material/uniaxial/UniaxialMaterial.h>
 
 namespace XC {
-//! @ingroup MATYS
+//! @ingroup YS_BC
 //
-//! @brief XXX??
+//! @brief Hajjar yield surface for concrete filled tubes.
 class Hajjar2D: public YieldSurface_BC2D
   {
   public:

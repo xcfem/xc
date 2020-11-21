@@ -43,10 +43,7 @@ const int XC::YieldSurface_BC::NoFP(4);
 const int XC::YieldSurface_BC::SurfOnly(5);
 const int XC::YieldSurface_BC::StateLoading(6);
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
-
+//! @brief Constructor.
 XC::YieldSurface_BC::YieldSurface_BC(int tag, int classtag, YS_Evolution &model,
 								double capx)
 :TaggedObject(tag), MovableObject(classtag),

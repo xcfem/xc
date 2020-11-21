@@ -36,8 +36,12 @@
 #include <material/uniaxial/UniaxialMaterial.h>
 
 namespace XC {
-//! @ingroup MATYS
-//! @brief BC 2D yield surface.
+//! @ingroup YS_BC
+//! 
+//! @brief YieldSurfaceBC2D is an abstract class that implements methods
+//! for two-dimensional (e.g., P-M) force point interpolations (e.g., drift
+//! control using radial or constant P return) and interactions with the
+//! hardening model.
 class YieldSurface_BC2D: public YieldSurface_BC
   {
   protected:
