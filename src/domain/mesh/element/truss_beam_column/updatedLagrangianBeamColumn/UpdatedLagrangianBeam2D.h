@@ -71,8 +71,15 @@ namespace XC {
 class Response;
 
 //! @ingroup BeamColumnElemGrp
+//! @defgroup UpdatedLagrangianBeams Updated Lagrangian beam-column elements.
+//! @ingroup UpdatedLagrangianBeams
 //
-//! @brief Lagrangian 2D beam element.
+//! @brief Updated Lagrangian 2D beam element.
+//!
+//! UpdatedLagrangianBeam2D is an abstract class providing most methods
+//! required by the base class "Element", for 2D beam-column elements.
+//! Geometric nonlinearity is incorporated at this level using updated
+//! lagrangian formulation
 class UpdatedLagrangianBeam2D: public Element1D
   {
   protected:

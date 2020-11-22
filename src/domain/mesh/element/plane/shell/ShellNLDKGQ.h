@@ -39,6 +39,11 @@
 
 namespace XC {
 
+//! @brief four node flat shell element with membrane and drill DOF
+//!  considering geometric nonlinear, form nonlinear shell element
+//!  using updated Lagrangian formula.
+//!
+//! <a href="http://www.luxinzheng.net/publication7/2017-JEE-DKGQ_OpenSees.htm">A high-performance quadrilateral flat shell element for seismic collapse simulation of tall buildings and its implementation in OpenSees</a>
 class ShellNLDKGQ: public Shell4NBase
   {
   private: 

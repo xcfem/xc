@@ -55,10 +55,10 @@
 
 // List of included files
 // UpdatedLagrangianBeam2D - parent class of this class
-#include "domain/mesh/element/truss_beam_column/updatedLagrangianBeamColumn/UpdatedLagrangianBeam2D.h"
+#include "UpdatedLagrangianBeam2D.h"
 
 namespace XC {
-//! @ingroup BeamColumnElemGrp
+//! @ingroup UpdatedLagrangianBeams
 //
 //! @brief Elastic2dGNL is a subclass of UpdatedLagrangianBeam2D, that can be 
 // used to model 2d beam column elements with large deformation effects.
