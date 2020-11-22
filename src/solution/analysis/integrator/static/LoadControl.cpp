@@ -77,6 +77,9 @@
 XC::LoadControl::LoadControl(SolutionStrategy *owr,double dLambda, int numIncr, double min, double max)
   :BaseControl(owr,INTEGRATOR_TAGS_LoadControl,numIncr), deltaLambda(dLambda), dLambdaMin(min), dLambdaMax(max) {}
 
+XC::Integrator *XC::LoadControl::getCopy(void) const
+  { return new LoadControl(*this); }
+
 //! @brief Perform a new analysis step.
 //!
 //! The object obtains the current value of \f$\lambda\f$ from the AnalysisModel
