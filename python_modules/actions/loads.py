@@ -53,7 +53,7 @@ class InertialLoad(BaseVectorLoad):
 
     def appendLoadToCurrentLoadPattern(self):
         for s in self.lstSets:
-            s.createInertiaLoads(self.loadVector)
+            s.createInertiaLoads((-1)*self.loadVector)
 '''
     def getMaxMagnitude(self):
 #        Return the maximum magnitude of the vector loads
