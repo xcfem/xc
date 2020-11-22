@@ -95,8 +95,8 @@ uz_n3=nod3.getDispXYZ[2]
 R=1.0/curvature+thickness/2.
 deltaz_theor=R*(1-math.cos(curvature))
 
-ratio1=uz_n2-deltaz_theor
-ratio2=uz_n3-deltaz_theor
+ratio1= uz_n2-deltaz_theor
+ratio2= uz_n3-deltaz_theor
 
 '''
 print("uz_n2= ",uz_n2)
