@@ -243,10 +243,12 @@ XC::TimeSeries *XC::MapLoadPatterns::newTimeSeries(const std::string &type, cons
     else if(type == "trig_ts")
       ts= create_time_series<TrigSeries>(cod_ts);
     else
-      std::cerr << "Time series type: '" << type
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; ime series type: '" << type
                 << "' unknown." << std::endl;
     if(!ts)
-      std::cerr << "Error in time series definition of type: '" 
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; error in time series definition of type: '" 
                 << type << "'." << std::endl;
     return ts;
   }

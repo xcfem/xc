@@ -112,8 +112,8 @@ namespace XC {
 class LoadControl: public BaseControl
   {
   private:
-    double deltaLambda;  //!< Valor de dLambda en el paso (i-1).
-    double dLambdaMin, dLambdaMax; //!< Maximum and minimum values for dlambda at i-th step.
+    double deltaLambda;  //!< Value of dLambda for step (i-1).
+    double dLambdaMin, dLambdaMax; //!< Maximum and minimum step values for dlambda at i-th step.
   protected:
     int sendData(Communicator &);
     int recvData(const Communicator &);
@@ -143,8 +143,6 @@ class LoadControl: public BaseControl
 
     void Print(std::ostream &s, int flag =0) const;    
   };
-inline Integrator *LoadControl::getCopy(void) const
-  { return new LoadControl(*this); }
 } // end of XC namespace
 
 #endif

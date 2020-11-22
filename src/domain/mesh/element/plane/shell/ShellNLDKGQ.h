@@ -39,6 +39,11 @@
 
 namespace XC {
 
+//! @brief four node flat shell element with membrane and drill DOF
+//!  considering geometric nonlinear, form nonlinear shell element
+//!  using updated Lagrangian formula.
+//!
+//! <a href="http://www.luxinzheng.net/publication7/2017-JEE-DKGQ_OpenSees.htm">A high-performance quadrilateral flat shell element for seismic collapse simulation of tall buildings and its implementation in OpenSees</a>
 class ShellNLDKGQ: public Shell4NBase
   {
   private: 
@@ -116,15 +121,6 @@ class ShellNLDKGQ: public Shell4NBase
     const Matrix &getTangentStiff(void) const;
     const Matrix &getInitialStiff(void) const;
     const Matrix &getMass(void) const;
-
-    // methods for applying loads
-    int addLoad( ElementalLoad *theLoad, double loadFactor);
-    int addInertiaLoadToUnbalance(const Vector &accel);
-
-    //get residual
-    const Vector &getResistingForce(void) const;
-    //get residual with inertia terms
-    const Vector &getResistingForceIncInertia(void) const;
 
     // public methods for element output
     int sendSelf(Communicator &);

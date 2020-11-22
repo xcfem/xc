@@ -28,12 +28,12 @@
 #ifndef Inelastic2DYS03_H
 #define Inelastic2DYS03_H
 
-#include "domain/mesh/element/truss_beam_column/updatedLagrangianBeamColumn/InelasticYS2DGNL.h"
+#include "InelasticYS2DGNL.h"
 
 namespace XC {
-//! @ingroup BeamColumnElemGrp
+//! @ingroup UpdatedLagrangianBeams
 //
-//! @brief ??.
+//! @brief Updated Lagrangian inelastic element.
 class Inelastic2DYS03: public InelasticYS2DGNL
   {
   private:

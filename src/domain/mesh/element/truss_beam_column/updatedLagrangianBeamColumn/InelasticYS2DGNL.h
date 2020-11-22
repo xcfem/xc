@@ -36,7 +36,7 @@
 
 namespace XC {
 
-//! @ingroup BeamColumnElemGrp
+//! @ingroup UpdatedLagrangianBeams
 //
 //! @brief Inelastic Element - concentrated hinge model, Fi - Fj interaction
 //!  at each ends using yield surfaces

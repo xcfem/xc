@@ -41,9 +41,6 @@ class Matrix;
 //! @brief Base class for small displacement 3D coordinate transformations.
 class ShellLinearCrdTransf3d: public ShellCrdTransf3dBase
   {
-  protected:
-    const Vector &local_to_global_resisting_force(const Vector &pl) const;
-    const Matrix &local_to_global_stiff_matrix(const Matrix &kl) const;
   public:
     ShellLinearCrdTransf3d(void);
     ShellLinearCrdTransf3d(const Vector &,const Vector &,const Vector &);
@@ -60,8 +57,6 @@ class ShellLinearCrdTransf3d: public ShellCrdTransf3dBase
     virtual Vector getBasicTrialDisp(const int &) const;
     virtual Vector getBasicTrialVel(const int &) const;
     virtual Vector getBasicTrialAccel(const int &) const;
-
-    virtual const Vector &getGlobalResistingForce(const Vector &p0) const;
 
     int sendSelf(Communicator &);
     int recvSelf(const Communicator &);

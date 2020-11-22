@@ -35,8 +35,8 @@
 #include "material/yieldSurface/yieldSurfaceBC/YieldSurface_BC2D.h"
 
 namespace XC {
-//! @ingroup MATYS
-//! @brief El Tawil 2D yield surface.
+//! @ingroup YS_BC
+//! @brief El Tawil 2D yield surface for reinforced concrete sections.
 class ElTawil2D: public YieldSurface_BC2D
   {
   protected:

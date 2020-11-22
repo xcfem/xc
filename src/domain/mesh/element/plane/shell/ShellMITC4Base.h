@@ -41,7 +41,6 @@ class ShellMITC4Base: public Shell4NBase
   {
   protected:
     double Ktt; //!<drilling stiffness
-    FVectorShell p0; //!< Reactions in the basic system due to element loads
 
     static ShellBData BData; //!< B-bar data
 
@@ -68,14 +67,8 @@ class ShellMITC4Base: public Shell4NBase
     //return stiffness matrix 
     const Matrix &getInitialStiff(void) const;
 
-    // methods for applying loads
-    void zeroLoad(void);
-    int addLoad(ElementalLoad *theLoad, double loadFactor);
-
     void alive(void);
 
-    const Vector &getResistingForce(void) const;
-    const Vector &getResistingForceIncInertia(void) const;
   }; 
 
 } // end of XC namespace

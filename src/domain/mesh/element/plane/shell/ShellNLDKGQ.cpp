@@ -123,17 +123,12 @@ int XC::ShellNLDKGQ::revertToStart(void)
     return success;
   }
 
-
-
 //! @brief return stiffness matrix
 const XC::Matrix &XC::ShellNLDKGQ::getTangentStiff(void) const
   {
     int tang_flag= 1; //get the tangent
-
     //do tangent and residual here
-    formResidAndTangent( tang_flag );
-
-    //std::cerr << stiff << std::endl;
+    formResidAndTangent(tang_flag);
     return stiff;
   }
 
@@ -500,96 +495,6 @@ const XC::Matrix &XC::ShellNLDKGQ::getMass(void) const
     return mass;
   }
 
-//! @brief Applies a load to the element.
-int XC::ShellNLDKGQ::addLoad(ElementalLoad *theLoad, double loadFactor)
-  {
-    int retval= 0;
-    if(isDead())
-      std::cerr << getClassName() << "::" << __FUNCTION__ 
-                << "; load over inactive element: "
-                << getTag() << std::endl;
-    else
-      {
-	computeTributaryAreas();
-        const std::vector<double> areas= getTributaryAreas();
-
-        // // Accumulate elastic deformations in basic system
-        // if(ShellMecLoad *shellMecLoad= dynamic_cast<ShellMecLoad *>(theLoad))
-        //   {
-        //     shellMecLoad->addReactionsInBasicSystem(areas,loadFactor,p0); // Accumulate reactions in basic system
-        //   }
-        // else
-          retval= Shell4NBase::addLoad(theLoad,loadFactor);
-      }
-    return retval;
-  }
-
-
-int XC::ShellNLDKGQ::addInertiaLoadToUnbalance(const Vector &accel)
-  {
-    const int tangFlag= 1;
-    static Vector r(24);
-
-    int allRhoZero= 0;
-    for(int i=0; i<4; i++)
-      {
-        if(physicalProperties[i]->getRho() != 0.0)
-          allRhoZero= 1;
-      }
-
-    if(allRhoZero != 0)
-      {
-        formInertiaTerms(tangFlag);
-
-        int count= 0;
-        for(int i=0; i<4; i++)
-          {
-            const Vector &Raccel= theNodes[i]->getRV(accel);
-            for(int j=0; j<6; j++)
-              r(count++)= Raccel(j);
-          }
-        load.addMatrixVector(1.0, mass, r, -1.0);
-      }
-    return 0;
-  }
-
-//! @brief get residual
-const XC::Vector &XC::ShellNLDKGQ::getResistingForce(void) const
-  {
-    int tangFlag= 0; //don't get the tangent
-
-    formResidAndTangent(tangFlag);
-
-    // subtract external loads
-    if(!load.isEmpty())
-      resid-= load;
-
-    return resid;
-  }
-
-//! @brief get residual with inertia terms
-const XC::Vector &XC::ShellNLDKGQ::getResistingForceIncInertia(void) const
-  {
-    static Vector res(24);
-    int tangFlag= 0; //don't get the tangent
-
-    //do tangent and residual here
-    formResidAndTangent(tangFlag);
-
-    formInertiaTerms(tangFlag);
-
-    res= resid;
-    // add the damping forces if rayleigh damping
-    if(!rayFactors.nullValues())
-      res += this->getRayleighDampingForces();
-
-    // subtract external loads
-    if(!load.isEmpty())
-      resid-= load;
-
-    return res;
-  }
-
 //! @brief form inertia terms
 void XC::ShellNLDKGQ::formInertiaTerms(int tangFlag) const
   {
@@ -710,10 +615,10 @@ void XC::ShellNLDKGQ::formResidAndTangent(int tangFlag) const
     //  Shear strains gamma02, gamma12 constant through cross section
     //     neglected in this shell element   Zero();
     //
-    static const int ndf= 6; //two membrane + 3 moment +drill
-    static const int nstress= 8; //3 membrane , 3 moment, 2 shear
-    static const int ngauss= 4;
-    static const int numnodes= 4;
+    static constexpr int ndf= 6; //two membrane + 3 moment +drill
+    static constexpr int nstress= 8; //3 membrane , 3 moment, 2 shear
+    static constexpr int ngauss= 4;
+    static constexpr int numnodes= 4;
 
     int success;
 
@@ -795,7 +700,7 @@ void XC::ShellNLDKGQ::formResidAndTangent(int tangFlag) const
 
     //define Pmat- transpose the dofs
     Pmat.Zero();
-    const double one=1.00;
+    const double one= 1.00;
     Pmat(0,0)= one;
     Pmat(1,1)= one;
     Pmat(2,5)= one;
@@ -811,7 +716,7 @@ void XC::ShellNLDKGQ::formResidAndTangent(int tangFlag) const
 
     const Vector &g1= theCoordTransf->G1();
     const Vector &g2= theCoordTransf->G2();
-    const Vector &g3= theCoordTransf->G2();
+    const Vector &g3= theCoordTransf->G3();
     //define Tmat xl=Tmat * x from global to local coordinates
     Tmat.Zero();
     Tmat(0,0)= g1[0]; Tmat(0,1)= g1[1]; Tmat(0,2)= g1[2];

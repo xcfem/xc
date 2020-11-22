@@ -225,16 +225,6 @@ XC::Vector XC::ShellNLCrdTransf3d::getBasicTrialVel(const int &i) const
 XC::Vector XC::ShellNLCrdTransf3d::getBasicTrialAccel(const int &i) const
   { return (*theNodes)[i]->getTrialAccel(); }
 
-//! @brief Returns the load vector expressend in global coordinates.
-const XC::Vector &XC::ShellNLCrdTransf3d::getGlobalResistingForce(const Vector &p0) const
-  {
-    static Vector retval;
-    std::cerr << getClassName() << "::" << __FUNCTION__
-              << "; not implemented yet."
-              << std::endl;
-    return retval;
-  }
-
 //! @brief Send the object through the communicator argument.
 int XC::ShellNLCrdTransf3d::sendSelf(Communicator &comm)
   {

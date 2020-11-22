@@ -58,8 +58,6 @@ class ShellNLCrdTransf3d: public ShellCrdTransf3dBase
     virtual Vector getBasicTrialVel(const int &) const;
     virtual Vector getBasicTrialAccel(const int &) const;
 
-    virtual const Vector &getGlobalResistingForce(const Vector &p0) const;
-
     int sendSelf(Communicator &);
     int recvSelf(const Communicator &);
   };

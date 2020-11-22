@@ -77,18 +77,17 @@ XC::ShellBData XC::ShellMITC4Base::BData;
 
 //! @brief Constructor
 XC::ShellMITC4Base::ShellMITC4Base(int classTag, const ShellCrdTransf3dBase *crdTransf)
-  : Shell4NBase(classTag,crdTransf), Ktt(0.0), p0()
+  : Shell4NBase(classTag,crdTransf), Ktt(0.0)
   { }
 
 //! @brief Constructor
 XC::ShellMITC4Base::ShellMITC4Base(int tag, int classTag,const SectionForceDeformation *ptr_mat, const ShellCrdTransf3dBase *crdTransf)
-  : Shell4NBase(tag,classTag,ptr_mat,crdTransf), Ktt(0.0),
-    p0()
+  : Shell4NBase(tag,classTag,ptr_mat,crdTransf), Ktt(0.0)
   { }
 
 //! @brief Constructor
 XC::ShellMITC4Base::ShellMITC4Base(int tag, int classTag,int node1,int node2,int node3,int node4,const SectionFDPhysicalProperties &physProp, const ShellCrdTransf3dBase *crdTransf)
-  : Shell4NBase(tag,node1,node2,node3,node4,classTag,physProp,crdTransf), Ktt(0.0), p0()
+  : Shell4NBase(tag,node1,node2,node3,node4,classTag,physProp,crdTransf), Ktt(0.0)
   { }
 
 //! @brief Set the element domain.
@@ -405,70 +404,6 @@ const XC::Matrix &XC::ShellMITC4Base::getInitialStiff(void) const
     theCoordTransf->getGlobalTangent(stiff);
     Ki= stiff;
     return stiff;
-  }
-
-//! @brief Zeroes the element load vector.
-void XC::ShellMITC4Base::zeroLoad(void)
-  {
-    Shell4NBase::zeroLoad();
-    p0.zero();
-  }
-
-//! @brief Applies on the element the load being passed as parameter.
-int XC::ShellMITC4Base::addLoad(ElementalLoad *theLoad, double loadFactor)
-  {
-    if(isDead())
-      std::cerr << getClassName() << "::" << __FUNCTION__ 
-                << "; load over inactive element: "
-                << getTag() << std::endl;
-    else
-      {
-	computeTributaryAreas();
-        const std::vector<double> areas= getTributaryAreas();
-	
-        // Accumulate elastic deformations in basic system
-        if(ShellMecLoad *shellMecLoad= dynamic_cast<ShellMecLoad *>(theLoad))
-          {
-            shellMecLoad->addReactionsInBasicSystem(areas,loadFactor,p0); // Accumulate reactions in basic system
-          }
-        else
-          return Shell4NBase::addLoad(theLoad,loadFactor);
-      }
-    return 0;
-  }
-
-
-
-//! @brief get residual
-const XC::Vector &XC::ShellMITC4Base::getResistingForce(void) const
-  {
-    theCoordTransf->update();
-
-    const int tang_flag= 0; //don't get the tangent
-    formResidAndTangent(tang_flag);
-    // subtract external loads
-    if(!load.isEmpty())
-      resid-= load;
-    resid+= theCoordTransf->getGlobalResistingForce(p0.getVector());
-
-    if(isDead())
-      resid*=dead_srf;
-    return resid;
-  }
-
-//! @brief get residual with inertia terms
-const XC::Vector &XC::ShellMITC4Base::getResistingForceIncInertia(void) const
-  {
-    static Vector res(24);
-    res= getResistingForce();
-
-    formInertiaTerms(0);
-
-    // add the damping forces if rayleigh damping
-    if(!rayFactors.nullValues())
-      res+= this->getRayleighDampingForces();
-
-    return res;
   }
 
 //! @brief form residual and tangent
@@ -1030,8 +965,7 @@ const XC::Matrix &XC::ShellMITC4Base::computeBbend( int node, const double shp[3
 int XC::ShellMITC4Base::sendData(Communicator &comm)
   {
     int res= Shell4NBase::sendData(comm);
-    res+=comm.sendDoubles(Ktt,xl[0][0],xl[0][1],xl[0][2],xl[0][3],getDbTagData(),CommMetaData(16));
-    res+= p0.sendData(comm,getDbTagData(),CommMetaData(17));
+    res+=comm.sendDoubles(Ktt,xl[0][0],xl[0][1],xl[0][2],xl[0][3],getDbTagData(),CommMetaData(17));
     return res;
   }
 
@@ -1039,8 +973,7 @@ int XC::ShellMITC4Base::sendData(Communicator &comm)
 int XC::ShellMITC4Base::recvData(const Communicator &comm)
   {
     int res= Shell4NBase::recvData(comm);
-    res+=comm.receiveDoubles(Ktt,xl[0][0],xl[0][1],xl[0][2],xl[0][3],getDbTagData(),CommMetaData(16));
-    res+= p0.receiveData(comm,getDbTagData(),CommMetaData(17));
+    res+=comm.receiveDoubles(Ktt,xl[0][0],xl[0][1],xl[0][2],xl[0][3],getDbTagData(),CommMetaData(17));
     return res;
   }
 

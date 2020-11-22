@@ -33,7 +33,8 @@ class_<XC::ArcLength , bases<XC::ArcLengthBase>, boost::noncopyable >("ArcLength
 
 class_<XC::ArcLength1 , bases<XC::ArcLengthBase>, boost::noncopyable >("ArcLength1", no_init);
 
-class_<XC::BaseControl , bases<XC::StaticIntegrator>, boost::noncopyable >("BaseControl", no_init);
+class_<XC::BaseControl , bases<XC::StaticIntegrator>, boost::noncopyable >("BaseControl", no_init)
+  ;
 
 class_<XC::DispBase, bases<XC::BaseControl>, boost::noncopyable >("DispBase", no_init);
 

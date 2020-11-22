@@ -36,8 +36,8 @@
 #include <material/uniaxial/UniaxialMaterial.h>
 
 namespace XC {
-//! @ingroup MATYS
-//! @brief Orbison 2D yield surface.
+//! @ingroup YS_BC
+//! @brief Orbison 2D yield surface for steel sections.
 class Orbison2D: public YieldSurface_BC2D
   {
   public:

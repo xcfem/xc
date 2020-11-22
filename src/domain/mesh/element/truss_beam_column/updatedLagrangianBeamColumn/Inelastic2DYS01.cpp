@@ -57,7 +57,7 @@ XC::Element* XC::Inelastic2DYS01::getCopy(void) const
 // provides the elastic stiffness based on the average degraded
 // Iz at each ends
 void XC::Inelastic2DYS01::getLocalStiff(Matrix &K) const
-{
+  {
 
 //	double i1Factor = (1 - damageFactorEnd1); // this->getDegradeFactor(1);
 //	double i2Factor = (1 - damageFactorEnd2); // this->getDegradeFactor(2);

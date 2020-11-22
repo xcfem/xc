@@ -28,12 +28,13 @@
 #ifndef Inelastic2DYS01_H
 #define Inelastic2DYS01_H
 
-#include "domain/mesh/element/truss_beam_column/updatedLagrangianBeamColumn/InelasticYS2DGNL.h"
+#include "InelasticYS2DGNL.h"
 
 namespace XC {
-//! @ingroup BeamColumnElemGrp
+//! @ingroup UpdatedLagrangianBeams
 //
-//! @brief ??.
+//! @brief Very simple Updated Lagrangian inelastic element; provides
+//! the elastic stiffness based on the average degraded Iz at each ends.
 class Inelastic2DYS01: public InelasticYS2DGNL
   {
   private:

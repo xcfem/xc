@@ -115,13 +115,6 @@ refMom= [38.0e3,53.1e3,67.7e3,96.2e3]
 refDisp= [22.9e-3, 33.9e-3, 44.6e-3, 65.4e-3]
 
 # Solution
-## Solution procedure
-# SIMPLE NEWTON-RAPHSON segfaults when computing more
-# than a combination. See SuperLU.setSize()
-# solution= predefined_solutions.SolutionProcedure()
-# solution.convergenceTestTol= 1e-5
-# analysis= solution.plainNewtonRaphson(steelColumn)
-
 analysis= predefined_solutions.penalty_newton_raphson(steelColumn)
 
 disp= list()

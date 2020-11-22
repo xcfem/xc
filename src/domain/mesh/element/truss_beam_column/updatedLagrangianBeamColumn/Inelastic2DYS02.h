@@ -33,9 +33,9 @@
 namespace XC {
 class CyclicModel;
 
-//! @ingroup BeamColumnElemGrp
+//! @ingroup UpdatedLagrangianBeams
 //
-//! @brief ??.
+//! @brief Updated Lagrangian inelastic element.
 class Inelastic2DYS02: public InelasticYS2DGNL
  {
  private:

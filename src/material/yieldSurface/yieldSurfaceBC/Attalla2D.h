@@ -35,8 +35,8 @@
 #include "material/yieldSurface/yieldSurfaceBC/YieldSurface_BC2D.h"
 
 namespace XC {
-//! @ingroup MATYS
-//! @brief Atalla 2D yield surface.
+//! @ingroup YS_BC
+//! @brief Atalla 2D yield surface for steel sections.
 class Attalla2D: public YieldSurface_BC2D
   {
   protected:
