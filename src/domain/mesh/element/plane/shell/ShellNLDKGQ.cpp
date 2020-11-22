@@ -123,17 +123,12 @@ int XC::ShellNLDKGQ::revertToStart(void)
     return success;
   }
 
-
-
 //! @brief return stiffness matrix
 const XC::Matrix &XC::ShellNLDKGQ::getTangentStiff(void) const
   {
     int tang_flag= 1; //get the tangent
-
     //do tangent and residual here
-    formResidAndTangent( tang_flag );
-
-    //std::cerr << stiff << std::endl;
+    formResidAndTangent(tang_flag);
     return stiff;
   }
 
@@ -620,10 +615,10 @@ void XC::ShellNLDKGQ::formResidAndTangent(int tangFlag) const
     //  Shear strains gamma02, gamma12 constant through cross section
     //     neglected in this shell element   Zero();
     //
-    static const int ndf= 6; //two membrane + 3 moment +drill
-    static const int nstress= 8; //3 membrane , 3 moment, 2 shear
-    static const int ngauss= 4;
-    static const int numnodes= 4;
+    static constexpr int ndf= 6; //two membrane + 3 moment +drill
+    static constexpr int nstress= 8; //3 membrane , 3 moment, 2 shear
+    static constexpr int ngauss= 4;
+    static constexpr int numnodes= 4;
 
     int success;
 
@@ -705,7 +700,7 @@ void XC::ShellNLDKGQ::formResidAndTangent(int tangFlag) const
 
     //define Pmat- transpose the dofs
     Pmat.Zero();
-    const double one=1.00;
+    const double one= 1.00;
     Pmat(0,0)= one;
     Pmat(1,1)= one;
     Pmat(2,5)= one;
@@ -721,7 +716,7 @@ void XC::ShellNLDKGQ::formResidAndTangent(int tangFlag) const
 
     const Vector &g1= theCoordTransf->G1();
     const Vector &g2= theCoordTransf->G2();
-    const Vector &g3= theCoordTransf->G2();
+    const Vector &g3= theCoordTransf->G3();
     //define Tmat xl=Tmat * x from global to local coordinates
     Tmat.Zero();
     Tmat(0,0)= g1[0]; Tmat(0,1)= g1[1]; Tmat(0,2)= g1[2];
