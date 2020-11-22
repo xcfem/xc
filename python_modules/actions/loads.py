@@ -39,9 +39,6 @@ class BaseVectorLoad(object):
         self.loadVector=factor*self.loadVector
         self.appendLoadToCurrentLoadPattern()
      
-
-        
-
 class InertialLoad(BaseVectorLoad):
     '''Inertial load (density*acceleration) applied to the elements in the list
     of mesh-sets
