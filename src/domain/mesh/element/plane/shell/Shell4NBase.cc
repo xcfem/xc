@@ -487,7 +487,8 @@ void XC::Shell4NBase::createInertiaLoad(const Vector &accel)
 	    }        
 	const int tangFlag= 1;
 	formInertiaTerms(tangFlag);
-        const Vector force= mass*nodeAccel;
+        Vector force(24);
+	force.addMatrixVector(1.0, mass, nodeAccel, -1.0);//= -mass*nodeAccel;
 	// Extract nodal loads.
 	std::vector<Vector> nLoads(4);
 	for(int i=0;i<4;i++)

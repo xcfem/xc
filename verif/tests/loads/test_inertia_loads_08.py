@@ -71,7 +71,7 @@ for n in constrainedNodes:
 
 err= 0.0
 for r in zReactions:
-  err+=(nForce+r)**2
+    err+=(nForce-r)**2
 err= math.sqrt(err)
 
 '''

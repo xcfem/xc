@@ -79,7 +79,7 @@ zReaction= 0.0
 for n in constrainedNodes:
     zReaction+= n.getReaction[2]
 
-err= (weight+zReaction)/weight
+err= (weight-zReaction)/weight
     
 '''
 print('weight= ', weight/1e3, 'kN')

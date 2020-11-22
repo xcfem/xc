@@ -11,12 +11,13 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
+import math
 import xc_base
 import geom
 import xc
 from model import predefined_spaces
 from materials import typical_materials
-import math
+#from postprocess import output_handler
 
 
 E= 30e6 # Young modulus (psi)
@@ -63,30 +64,38 @@ beam= elements.newElement("ElasticBeam3d",xc.ID([n1.tag,n2.tag]))
 
 # Constraints.
 # Zero movement for node 1.
-modelSpace.fixNode000_000(n1.tag)
+modelSpace.fixNode000_0FF(n1.tag)
 # Partial constraint for node 2.
-modelSpace.fixNode000_FF0(n2.tag)
+modelSpace.fixNode000_FFF(n2.tag)
 
 
 # Load definition.
 lp0= modelSpace.newLoadPattern(name= '0')
 modelSpace.setCurrentLoadPattern("0")
-accel= xc.Vector([0,9.81,0])
-truss.createInertiaLoad(accel)
-beam.createInertiaLoad(accel)
+gravity= 9.81
+accel= xc.Vector([0,0,gravity])
+xcTotalSet= modelSpace.getTotalSet()
+xcTotalSet.createInertiaLoads(accel)
+#truss.createInertiaLoad(accel)
+#beam.createInertiaLoad(accel)
 # We add the load case to domain.
 modelSpace.addLoadCaseToDomain(lp0.name)
 
 # Solution
 result= modelSpace.analyze(calculateNodalReactions= True)
 
-R= n2.getReaction[1]
-R_ref= 0.5*truss.sectionArea*truss.getMaterial().rho*l*9.81
-R_ref+= 0.5*beam.sectionProperties.A*truss.getMaterial().rho*l*9.81
+reac1= n1.getReaction
+reac2= n2.getReaction
+R= n2.getReaction[2]
+R_ref= 0.0
+R_ref+= 0.5*truss.sectionArea*truss.getMaterial().rho*l*gravity
+R_ref+= 0.5*beam.sectionProperties.A*truss.getMaterial().rho*l*gravity
 
-ratio1= abs(R-R_ref)/(-R_ref)
+ratio1= abs(R-R_ref)/R_ref
 
 '''
+print('reac1= ', reac1)
+print('reac2= ', reac2)
 print('R= ', R)
 print('R_ref= ', R_ref)
 print('ratio1= ', ratio1)
@@ -100,3 +109,8 @@ if abs(ratio1)<1e-5 :
 else:
   lmsg.error(fname+' ERROR.')
 
+# # Graphic stuff.
+# oh= output_handler.OutputHandler(modelSpace)
+# #oh.displayFEMesh()
+# #oh.displayLocalAxes()
+# oh.displayReactions()

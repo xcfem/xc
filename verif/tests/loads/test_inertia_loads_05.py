@@ -11,12 +11,13 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
+import math
 import xc_base
 import geom
 import xc
 from model import predefined_spaces
 from materials import typical_materials
-import math
+#from postprocess import output_handler
 
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
@@ -69,7 +70,7 @@ for n in constrainedNodes:
 
 err= 0.0
 for r in zReactions:
-  err+=(nForce+r)**2
+    err+=(nForce-r)**2
 err= math.sqrt(err)
 
 '''
@@ -84,7 +85,12 @@ import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if abs(err)<1e-12 :
-  print("test ",fname,": ok.")
+    print("test ",fname,": ok.")
 else:
-  lmsg.error(fname+' ERROR.')
+    lmsg.error(fname+' ERROR.')
 
+# # Graphic stuff.
+# oh= output_handler.OutputHandler(modelSpace)
+# #oh.displayFEMesh()
+# #oh.displayLocalAxes()
+# oh.displayReactions()
