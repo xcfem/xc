@@ -62,23 +62,24 @@ class LoadVectorField(LoadOnPoints):
         retval= dict()
         eTagsSet=self.setToDisp.getElements.getTags()
         while(elementLoad):
-          tags= elementLoad.elementTags
-          for i in range(0,len(tags)):
-            eTag= tags[i]
-            if eTag in eTagsSet:
-                elem= preprocessor.getElementHandler.getElement(eTag)
-                if(elem.getDimension==2):
-                  vLoad= elem.getCoordTransf.getVectorGlobalCoordFromLocal(elementLoad.getLocalForce())
-                  if(self.multiplyByElementArea):
-                    vLoad*=elem.getArea(True)
-                  v= xc.Vector([vLoad[comp_i],vLoad[comp_j],vLoad[comp_k]])
-                  if eTag in retval:
-                    retval[eTag]+= v
-                  else:
-                    retval[eTag]= v
-        #        else:
-        #          lmsg.warning('displaying of loads over 1D elements not yet implemented')
-          elementLoad= lIter.next()
+            if hasattr(elementLoad,'getLocalForce'):
+                tags= elementLoad.elementTags
+                for i in range(0,len(tags)):
+                  eTag= tags[i]
+                  if eTag in eTagsSet:
+                      elem= preprocessor.getElementHandler.getElement(eTag)
+                      if(elem.getDimension==2):
+                        vLoad= elem.getCoordTransf.getVectorGlobalCoordFromLocal(elementLoad.getLocalForce())
+                        if(self.multiplyByElementArea):
+                          vLoad*=elem.getArea(True)
+                        v= xc.Vector([vLoad[comp_i],vLoad[comp_j],vLoad[comp_k]])
+                        if eTag in retval:
+                          retval[eTag]+= v
+                        else:
+                          retval[eTag]= v
+              #        else:
+              #          lmsg.warning('displaying of loads over 1D elements not yet implemented')
+            elementLoad= lIter.next()
         return retval
 
     def populateWithElementalLoads(self,preprocessor,lp):
