@@ -65,7 +65,7 @@ for n in xcTotalSet.nodes:
 
 #out.displayFEMesh()
 
-selfWeight= loads.InertialLoad(name='selfWeight', lstSets=[ring], vAccel=xc.Vector( [0.0,0.0,grav]))
+selfWeight= loads.InertialLoad(name='selfWeight', lstSets=[ring], vAccel=xc.Vector( [0.0,0.0,-grav])) # Ana uses -accel
 D=lcases.LoadCase(preprocessor=prep,name="D",loadPType="default",timeSType="constant_ts")
 D.create()
 D.addLstLoads([selfWeight])
@@ -73,6 +73,7 @@ modelSpace.addLoadCaseToDomain("D")
 
 # Solution
 result= modelSpace.analyze(calculateNodalReactions= True)
+#out.displayReactions()
 
 
 zReaction= 0.0
