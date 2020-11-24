@@ -405,7 +405,7 @@ class VonMisesStressLimitStateData(LimitStateData):
         :param vonMisesStressId: identifier of the Von Mises stress to read
                                 (see NDMaterial and MembranePlateFiberSection).
         '''
-        super(VonMisesStressLimitStateData,self).__init__('ULS_VonMisesStressResistance','verifRsl_von_misesULS')
+        super(VonMisesStressLimitStateData,self).__init__('ULS_VonMisesStressResistance','verifRsl_VonMisesStressULS')
         self.vonMisesStressId= vonMisesStressId
         
     def getInternalForcesDict(self, nmbComb, elems):
