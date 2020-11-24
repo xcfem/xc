@@ -60,13 +60,11 @@ namespace XC {
   class EPState;
   class BJtensor;
 
-//! @ingroup EPMat3D
-//!
 //! @defgroup MatNDYS Yield surface.
-//!
-//! @ingroup MatNDYS
-//!
+//! @ingroup EPMat3D
+
 //! @brief Base class for yield surfaces.
+//! @ingroup MatNDYS
 class YieldSurface
   {
   public:

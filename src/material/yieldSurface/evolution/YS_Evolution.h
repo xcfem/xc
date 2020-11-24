@@ -41,13 +41,12 @@ class Information;
 class Response;
 class YieldSurface_BC;
 
-//! @ingroup MATYS
-//!
+// YSEvolution group.
 //! @defgroup YSEvolution Yield surface evolution laws.
-//!
-//! @ingroup YSEvolution
-//!
+//! @ingroup MATYS
+
 //! @brief Yield surface evolution law.
+//! @ingroup YSEvolution
 class YS_Evolution: public TaggedObject, public MovableObject
   {
   public:

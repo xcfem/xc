@@ -35,9 +35,8 @@
 #include "YS_Evolution.h"
 
 namespace XC {
-//! @ingroup YSEvolution
-//!
 //! @brief 2D yield surface evolution law.
+//! @ingroup YSEvolution
 class YS_Evolution2D: public YS_Evolution
   {
   protected:
