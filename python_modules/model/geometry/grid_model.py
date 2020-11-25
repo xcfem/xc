@@ -270,7 +270,7 @@ class GridModel(object):
         :param pt1,pt2,pt3,pt4: tags of the points (in right order) 
                that define the surface 
         '''
-        return 's'+'%04.0f' % pt1 +'%04.0f' % pt2 +'%04.0f' % pt3 +'%04.0f' % pt4
+        return 's'+'%06.0f' % pt1 +'%06.0f' % pt2 +'%06.0f' % pt3 +'%06.0f' % pt4
 
 
     def gridLinName(self,pt1,pt2):
@@ -280,7 +280,7 @@ class GridModel(object):
                define the line
 
         '''
-        return 'l'+'%04.0f' % pt1 +'%04.0f' % pt2
+        return 'l'+'%06.0f' % pt1 +'%06.0f' % pt2
 
     def getNmSurfInRange(self,ijkRange,closeCyl='N'):
         '''Return a list with the names of the surfaces limited by a volume 
@@ -541,7 +541,7 @@ class GridModel(object):
         return the quadrangle surface
         '''
         points= self.prep.getMultiBlockTopology.getPoints
-        (tgPt1,tgPt2,tgPt3,tgPt4)=(int(surfName[1:5]),int(surfName[5:9]),int(surfName[9:13]),int(surfName[13:17]))
+        (tgPt1,tgPt2,tgPt3,tgPt4)=(int(surfName[1:7]),int(surfName[7:13]),int(surfName[13:19]),int(surfName[19:25]))
         surfaces= self.prep.getMultiBlockTopology.getSurfaces
         qs= surfaces.newQuadSurfacePts(tgPt1,tgPt2,tgPt3,tgPt4)
         qs.name= surfName
@@ -581,7 +581,7 @@ class GridModel(object):
         return the line
         '''
         points= self.prep.getMultiBlockTopology.getPoints
-        (tgPt1,tgPt2)=(int(linName[1:5]),int(linName[5:9]))
+        (tgPt1,tgPt2)=(int(linName[1:7]),int(linName[7:15]))
         lines= self.prep.getMultiBlockTopology.getLines
         ln= lines.newLine(tgPt1,tgPt2)
         ln.name= linName
