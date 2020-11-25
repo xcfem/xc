@@ -65,6 +65,11 @@
 
 namespace XC{
 
+//! @brief J2 Isotropic linear-strain strain hardening material
+//! for plate problems.
+//! @ingroup J2NDMat
+//!
+//! See <a href="https://portwooddigital.com/2019/12/20/opensees-shells-by-the-seashore">OpenSees Shells by the Seashore</a>
 class J2PlateFibre: public NDMaterial
   {
   private:
@@ -72,8 +77,8 @@ class J2PlateFibre: public NDMaterial
     static const double one3;
     static const double two3;
     static const double root23;
-    static Vector sigma; // Stress vector ... class-wide for returns
-    static Matrix D; // Elastic constants
+    static Vector sigma; //!< Stress vector ... class-wide for returns
+    static Matrix D; //!< Elastic constants
     
     double E; //!< Elastic modulus.
     double nu; //!< Poisson's ration.

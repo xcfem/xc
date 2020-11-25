@@ -66,9 +66,10 @@
 #include <material/nD/elastic_isotropic/ElasticIsotropicMaterial.h>
 
 namespace XC {
-//! @ingroup EINDMat
-//
 //! @brief Elastic isotropic material for plate elements.
+//! @ingroup EINDMat
+//!
+//! See <a href="https://portwooddigital.com/2019/12/20/opensees-shells-by-the-seashore">OpenSees Shells by the Seashore</a>
 class ElasticIsotropicPlateFiber: public ElasticIsotropicMaterial
   {
   private:

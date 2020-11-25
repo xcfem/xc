@@ -81,13 +81,17 @@
 namespace XC{
 
 //! @ingroup NDMat
-//
+//  ===== Group documentation begins. ===== 
 //!
-//! @defgroup J2NDMat J2 Isotropic hardening materials.
+//! @defgroup J2NDMat J2 isotropic hardening materials.
+//!
+//! The von Mises theory is often called “J2 plasticity” because it is usually
+//! described in terms of the so-called second mechanics invariant of the
+//! stress. See <a href=https://en.wikipedia.org/wiki/Von_Mises_yield_criterion>von Mises yield criterion</a>
+//  ===== Group documentation ends. =====
 //
+//! @brief J2 isotropic hardening material class.
 //! @ingroup J2NDMat
-//
-//! @brief J2 Isotropic hardening material class.
 //!
 //! The von Mises theory is often called “J2 plasticity” because it is usually
 //! described in terms of the so-called second mechanics invariant of the

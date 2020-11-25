@@ -82,10 +82,11 @@
 #include "J2Plasticity.h"
 
 namespace XC{
-//! @ingroup J2NDMat
-//
-//! @brief J2 Isotropic hardening material class
+//! @brief J2 Isotropic nonlinear strain hardening material
 //! for plate problems.
+//! @ingroup J2NDMat
+//! 
+//! See <a href="https://portwooddigital.com/2019/12/20/opensees-shells-by-the-seashore">OpenSees Shells by the Seashore</a>
 class J2PlateFiber: public J2Plasticity
   {
   private:
