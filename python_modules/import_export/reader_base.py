@@ -10,10 +10,11 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@ciccp.es" "ana.ortega.ort@gmail.com"
 
-from import_export import block_topology_entities as bte
+import re
 import datetime
 from scipy.spatial.distance import cdist
-import re
+from misc_utils import log_messages as lmsg
+from import_export import block_topology_entities as bte
 
 def nameToImport(testName,namesToImport):
     '''Return true if the name matches one of the regular expressions
@@ -136,6 +137,7 @@ class ReaderBase(object):
            are closer than the threshold distance are melted into one k-point.
         '''
         points, layers= self.extractPoints()
+        indexDict= None
         if(len(points)>0):
             self.kPoints= [points[0]]
             pointName= layers[0][0]

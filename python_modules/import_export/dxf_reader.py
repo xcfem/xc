@@ -392,44 +392,28 @@ class DXFImport(reader_base.ReaderBase):
                             v1= v2
 
     def importFaces(self):
-      ''' Import 3D faces from DXF.'''
-      self.facesTree= {}
-      for name in self.layersToImport:
-        self.facesTree[name]= dict()
+        ''' Import 3D faces from DXF.'''
+        self.facesTree= {}
+        for name in self.layersToImport:
+            self.facesTree[name]= dict()
 
-      for obj in self.dxfFile.entities:
-        type= obj.dxftype()
-        layerName= obj.dxf.layer
-        if(layerName in self.layersToImport):
-            facesDict= self.facesTree[layerName]
-            if(type == '3DFACE'):
-                vertices= list()
-                objPoints= [obj.dxf.vtx0, obj.dxf.vtx1, obj.dxf.vtx2, obj.dxf.vtx3]
-                for pt in objPoints:
-                    p= self.getRelativeCoo(pt)
-                    idx= self.getIndexNearestPoint(p)
-                    vertices.append(idx)
-                self.labelDict[obj.dxf.handle]= [layerName]
-                facesDict[obj.dxf.handle]= vertices
-            elif(type == 'POLYFACE'):
-                count= 0
-                for q in self.polyfaceQuads[obj.dxf.handle]:
+        for obj in self.dxfFile.entities:
+            dxfType= obj.dxftype()
+            layerName= obj.dxf.layer
+            if(layerName in self.layersToImport):
+                facesDict= self.facesTree[layerName]
+                if(dxfType == '3DFACE'):
                     vertices= list()
-                    for pt in q:
+                    objPoints= [obj.dxf.vtx0, obj.dxf.vtx1, obj.dxf.vtx2, obj.dxf.vtx3]
+                    for pt in objPoints:
                         p= self.getRelativeCoo(pt)
                         idx= self.getIndexNearestPoint(p)
-                        if not idx in vertices:
-                            vertices.append(idx)
-                        else:
-                            lmsg.error('Point p: '+str(p)+' idx: '+str(idx)+' repeated in '+str(q)+' vertices: '+str(vertices))
-                    count+= 1
-                    id= obj.dxf.handle+'_'+str(count)
-                    self.labelDict[id]= [layerName]
-                    facesDict[id]= vertices
-            elif((type == 'POLYLINE') or (type == 'LWPOLYLINE')):
-                count= 0
-                if(self.polylinesAsSurfaces): # Import as surfaces
-                    for q in self.polylineQuads[obj.dxf.handle]:
+                        vertices.append(idx)
+                    self.labelDict[obj.dxf.handle]= [layerName]
+                    facesDict[obj.dxf.handle]= vertices
+                elif(dxfType == 'POLYFACE'):
+                    count= 0
+                    for q in self.polyfaceQuads[obj.dxf.handle]:
                         vertices= list()
                         for pt in q:
                             p= self.getRelativeCoo(pt)
@@ -442,14 +426,27 @@ class DXFImport(reader_base.ReaderBase):
                         id= obj.dxf.handle+'_'+str(count)
                         self.labelDict[id]= [layerName]
                         facesDict[id]= vertices
-            elif(type == 'LINE'):
-                count= 0
-                # Nothing to do with lines for the moment.
-            elif(type == 'POINT'):
-                count= 0
-                # Nothing to do with points for the moment.
-            else:
-              lmsg.log('Entity of type: '+type+' ignored.')      
+                elif((dxfType == 'POLYLINE') or (dxfType == 'LWPOLYLINE')):
+                    count= 0
+                    if(self.polylinesAsSurfaces): # Import as surfaces
+                        for q in self.polylineQuads[obj.dxf.handle]:
+                            vertices= list()
+                            for pt in q:
+                                p= self.getRelativeCoo(pt)
+                                idx= self.getIndexNearestPoint(p)
+                                if not idx in vertices:
+                                    vertices.append(idx)
+                                else:
+                                    lmsg.error('Point p: '+str(p)+' idx: '+str(idx)+' repeated in '+str(q)+' vertices: '+str(vertices))
+                            count+= 1
+                            id= obj.dxf.handle+'_'+str(count)
+                            self.labelDict[id]= [layerName]
+                            facesDict[id]= vertices
+                elif(dxfType in ['LINE', 'POINT']):
+                    count= 0
+                    # Nothing to do with those.
+                else:
+                    lmsg.log('Entity of type: '+dxfType+' ignored.')      
 
     def getNamesToImport(self):
         ''' Return the layer names to import.'''
@@ -481,16 +478,16 @@ class OldDxfReader(object):
     retval= []
     for obj in entities:
       if(obj.dxf.layer == layerName):
-        type= obj.dxftype()
+        dxfType= obj.dxftype()
         color= obj.color
-        if(type=='LINE'):
+        if(dxfType=='LINE'):
           pt= self.newKeyPoint(obj.start)
           if(pt):
             retval.append(pt.tag)
           pt= self.newKeyPoint(obj.end)
           if(pt):
             retval.append(pt.tag)
-        elif((type == 'POLYLINE') or (type == 'LWPOLYLINE')):
+        elif((dxfType == 'POLYLINE') or (dxfType == 'LWPOLYLINE')):
           pts= obj.points
           for p in pts:
             pt= self.newKeyPoint(p)
@@ -501,11 +498,11 @@ class OldDxfReader(object):
     retval= []
     for obj in entities:
       if(obj.dxf.layer == layerName):
-        type= obj.dxftype()
+        dxfType= obj.dxftype()
         color= obj.color
-        if(type=='LINE'):
+        if(dxfType=='LINE'):
           retval.append(self.newLine(obj).tag)
-        if((type == 'POLYLINE') or (type == 'LWPOLYLINE')):
+        if((dxfType == 'POLYLINE') or (dxfType == 'LWPOLYLINE')):
           pts= obj.points
           sz= len(pts)
           for i in range(0,sz):
