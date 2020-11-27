@@ -15,11 +15,9 @@ import ezdxf
 import xc_base
 import geom
 import xc
-import re
-import datetime
-from scipy.spatial.distance import cdist
-from import_export import block_topology_entities as bte
+from import_export import reader_base
 from misc_utils import log_messages as lmsg
+from scipy.spatial.distance import cdist
 
 class FloatList(list):
     '''List of floats that are more than
@@ -176,17 +174,6 @@ def decompose_polyface(polyface, tol= .01):
                 break
     return quads2d_to_global_coordinates(sisRef, selected)
 
-def layerToImport(layerName,namesToImport):
-    '''Return true if the layer name matches one of the regular expressions
-       contained in the second argument.
-
-       :param layerName: name of the layer.
-       :param namesToImport: list of regular expressions to be tested.
-    '''
-    for regExp in namesToImport:
-        if(re.match(regExp,layerName)):
-            return True
-    return False
 
 def get_extended_data(obj, appName= 'XC'):
     '''Extract dxf object extended data.'''
@@ -201,47 +188,42 @@ def get_extended_data(obj, appName= 'XC'):
     return retval
     
     
-class DXFImport(object):
-    '''Import DXF entities.'''
+class DXFImport(reader_base.ReaderBase):
+    '''Import DXF entities.
+
+     :ivar layerNamesToImport: list of regular expressions to be tested.
+     :ivar polylinesAsSurfaces: if true import polylines as surfaces.
+     :ivar tolerance: tolerance for polyface and polyline decomposition
+    '''
     def __init__(self,dxfFileName,layerNamesToImport, getRelativeCoo, threshold= 0.01,importLines= True, importSurfaces= True, polylinesAsSurfaces= False, tolerance= .01):
         ''' Constructor.
 
+           :param dxfFileName: file name to import.
            :param layerNamesToImport: list of regular expressions to be tested.
            :param getRelativeCoo: coordinate transformation to be applied to the
                                   points.
+           :param importLines: if true import lines.
+           :param importSurfaces: if true import surfaces.
+           :param polylinesAsSurfaces: if true import polylines as surfaces.
+           :param tolerance: tolerance for polyface and polyline decomposition
         '''
-        self.dxfFileName= dxfFileName
-        self.dxfFile= ezdxf.readfile(filename= self.dxfFileName)
+        super(DXFImport, self).__init__(dxfFileName, getRelativeCoo, threshold, importLines, importSurfaces)
+        self.dxfFile= ezdxf.readfile(filename= self.fileName)
         self.tolerance= tolerance
-        self.impLines= importLines
-        self.impSurfaces= importSurfaces
         self.polylinesAsSurfaces= polylinesAsSurfaces
         self.layersToImport= self.getLayersToImport(layerNamesToImport)
         if(len(self.layersToImport)):
             self.polyfaceQuads= dict()
             self.polylineQuads= dict()
-            self.getRelativeCoo= getRelativeCoo
-            self.threshold= threshold
-            self.labelDict= {}
-            self.importGroups();
+            self.importGroups()
             self.kPointsNames= self.selectKPoints()
             self.importPoints()
             if(self.impLines):
                 self.importLines()
-            else:
-                self.lines= {}
             if(self.impSurfaces):
                 self.importFaces()
-            else:
-                self.facesByLayer= {}
         else:
             self.kPoints= None
-
-    def getIndexNearestPoint(self, pt):
-        return cdist([pt], self.kPoints).argmin()
-
-    def getNearestPoint(self, pt):
-        return self.kPoints[self.getIndexNearestPoint(pt)]
 
     def importGroups(self):
         ''' Import the DXF groups on the file.'''
@@ -265,7 +247,7 @@ class DXFImport(object):
         retval= []
         for layer in self.dxfFile.layers:
             layerName= layer.dxf.name
-            if(layerToImport(layerName,namesToImport)):
+            if(reader_base.nameToImport(layerName,namesToImport)):
                 retval.append(layerName)
         if(len(retval)==0):
             lmsg.warning('No layers to import (names to import: '+str(namesToImport)+')')
@@ -337,39 +319,6 @@ class DXFImport(object):
                             append_point(pt, layerName, pointName, objLabels)
         return retval_pos, retval_labels
 
-    def selectKPoints(self):
-        '''Selects the k-points to be used in the model. All the points that
-           are closer than the threshold distance are melted into one k-point.
-        '''
-        points, layers= self.extractPoints()
-        if(len(points)>0):
-            self.kPoints= [points[0]]
-            pointName= layers[0][0]
-            objLabels= layers[0][1]
-            self.labelDict[pointName]= objLabels
-            indexDict= dict()
-            indexDict[0]= pointName
-            for p, l in zip(points, layers):
-                pointName= l[0]
-                objLabels= l[1]
-                indexNearestPoint= self.getIndexNearestPoint(p)
-                nearestPoint= self.kPoints[indexNearestPoint]
-                dist= cdist([p],[nearestPoint])[0][0]
-                if(dist>self.threshold): # new point.
-                    indexNearestPoint= len(self.kPoints) # The point itself.
-                    self.kPoints.append(p)
-                    self.labelDict[pointName]= objLabels
-                    indexDict[indexNearestPoint]= pointName
-                else:
-                    pointName= indexDict[indexNearestPoint]
-                    labels= self.labelDict[pointName]
-                    for l in objLabels:
-                        if(not l in labels):
-                            labels.append(l)
-        else:
-            lmsg.warning('No points in DXF file.')
-        return indexDict
-
     def importPoints(self):
         ''' Import points from DXF.'''
         self.points= dict()
@@ -385,26 +334,6 @@ class DXFImport(object):
                     self.points[pointName]= vertices
                     self.labelDict[pointName]= [layerName]
                     
-    def getOrientation(self, p0, p1, length):
-        ''' Return the points in the order that makes the resulting
-            vector to point outwards the origin.'''
-        idx0= self.getIndexNearestPoint(p0)
-        idx1= self.getIndexNearestPoint(p1)
-        v0= self.kPoints[idx0]
-        v1= self.kPoints[idx1]
-        deltas= [abs(v0[0]-v1[0]), abs(v0[1]-v1[1]), abs(v0[2]-v1[2])]
-        indexes= sorted(range(len(deltas)), key=lambda k: deltas[k])
-        i0= indexes[2]; i1= indexes[1]; i2= indexes[0]
-        if(v0[i0]>v1[i0]): # r1<r2
-            idx0, idx1= idx1, idx0 # swap
-        elif(abs(v0[i0]-v1[i0])<length/1e4): # x1==x2
-            if(v0[i1]>v1[i1]):
-                idx0, idx1= idx1, idx0 # swap
-            elif(abs(v0[i1]-v1[i1])<length/1e4): # y1==y2
-                if(v0[i2]>v1[i2]):
-                    idx0, idx1= idx1, idx0 # swap
-        return idx0, idx1
-
     def importLines(self):
         ''' Import lines from DXF.'''
         self.lines= {}
@@ -421,7 +350,7 @@ class DXFImport(object):
                     length= cdist([p1],[p2])[0][0]
                     # Try to have all lines with the
                     # same orientation.
-                    idx0, idx1= self.getOrientation(p1, p2, length)
+                    idx0, idx1= self.getOrientation(p1, p2, length/1e4)
                     # end orientation.
                     vertices[0]= idx0
                     vertices[1]= idx1
@@ -464,15 +393,15 @@ class DXFImport(object):
 
     def importFaces(self):
       ''' Import 3D faces from DXF.'''
-      self.facesByLayer= {}
+      self.facesTree= {}
       for name in self.layersToImport:
-        self.facesByLayer[name]= dict()
+        self.facesTree[name]= dict()
 
       for obj in self.dxfFile.entities:
         type= obj.dxftype()
         layerName= obj.dxf.layer
         if(layerName in self.layersToImport):
-            facesDict= self.facesByLayer[layerName]
+            facesDict= self.facesTree[layerName]
             if(type == '3DFACE'):
                 vertices= list()
                 objPoints= [obj.dxf.vtx0, obj.dxf.vtx1, obj.dxf.vtx2, obj.dxf.vtx3]
@@ -522,43 +451,9 @@ class DXFImport(object):
             else:
               lmsg.log('Entity of type: '+type+' ignored.')      
 
-
-    def exportBlockTopology(self, name):
-        retval= bte.BlockData()
-        retval.name= name
-        retval.dxfFileName= self.dxfFileName
-        retval.logMessage= '# imported from DXF file: '+self.dxfFileName+' on '
-        retval.logMessage+= str(datetime.datetime.now())
-
-        counter= 0
-        if(self.kPoints):
-            for p in self.kPoints:
-                key= self.kPointsNames[counter]
-                bp= bte.BlockProperties(labels= self.labelDict[key])
-                retval.appendPoint(id= counter,x= p[0],y= p[1],z= p[2], pointProperties= bp)
-                counter+= 1
-
-            counter= 0
-            for key in self.lines:
-                line= self.lines[key]
-                bp= bte.BlockProperties(labels= self.labelDict[key])
-                block= bte.BlockRecord(counter,'line',line, blockProperties= bp)
-                retval.appendBlock(block)
-                counter+= 1
-
-            for name in self.layersToImport:
-                fg= self.facesByLayer[name]
-                for key in fg:
-                    face= fg[key]
-                    bp= bte.BlockProperties(labels= self.labelDict[key])
-                    block= bte.BlockRecord(counter,'face',face, blockProperties= bp)
-                    retval.appendBlock(block)
-                    counter+= 1
-        else:
-            lmsg.warning('Nothing to export.')
-        return retval
-    
-
+    def getNamesToImport(self):
+        ''' Return the layer names to import.'''
+        return self.layersToImport
 
 class OldDxfReader(object):
   '''Reading of DXF entities for further processing.'''
