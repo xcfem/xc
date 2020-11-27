@@ -54,9 +54,13 @@ class LoadVectorField(LoadOnPoints):
         self.multiplyByElementArea= multiplyByElementArea
         self.setToDisp=setToDisp
 
-    def sumElementalLoads(self,preprocessor,lp):
-        ''' Iterate over loaded elements and cumulate their loads.'''
+    def sumElementalLoads(self,lp):
+        ''' Iterate over loaded elements and cumulate their loads.
+
+        :param lp: load pattern.
+        '''
         lIter= lp.loads.getElementalLoadIter
+        preprocessor= lp.getDomain.getPreprocessor
         elementLoad= lIter.next()
         comp_i= self.components[0]; comp_j= self.components[1]; comp_k= self.components[2]
         retval= dict()
@@ -69,45 +73,54 @@ class LoadVectorField(LoadOnPoints):
                   if eTag in eTagsSet:
                       elem= preprocessor.getElementHandler.getElement(eTag)
                       if(elem.getDimension==2):
-                        vLoad= elem.getCoordTransf.getVectorGlobalCoordFromLocal(elementLoad.getLocalForce())
-                        if(self.multiplyByElementArea):
-                          vLoad*=elem.getArea(True)
-                        v= xc.Vector([vLoad[comp_i],vLoad[comp_j],vLoad[comp_k]])
-                        if eTag in retval:
-                          retval[eTag]+= v
-                        else:
-                          retval[eTag]= v
-              #        else:
-              #          lmsg.warning('displaying of loads over 1D elements not yet implemented')
+                          vLoad= elem.getCoordTransf.getVectorGlobalCoordFromLocal(elementLoad.getLocalForce())
+                          category= elementLoad.category
+                          if(category=='raw'): # Those loads return the total load over the element.
+                              vLoad*= (1.0/elem.getArea(True))
+                          if(self.multiplyByElementArea):
+                              vLoad*= elem.getArea(True)
+                          v= xc.Vector([vLoad[comp_i],vLoad[comp_j],vLoad[comp_k]])
+                          if eTag in retval:
+                              retval[eTag]+= v
+                          else:
+                              retval[eTag]= v
             elementLoad= lIter.next()
         return retval
 
-    def populateWithElementalLoads(self,preprocessor,lp):
+    def populateWithElementalLoads(self, lp):
         ''' Populate the vector container with elemental loads 
-            from the load pattern argument.'''
-        self.elementalLoadVectors= self.sumElementalLoads(preprocessor,lp)
+            from the load pattern argument.
+
+        :param lp: load pattern.
+        '''
+        self.elementalLoadVectors= self.sumElementalLoads(lp)
+        preprocessor= lp.getDomain.getPreprocessor
         for eTag in self.elementalLoadVectors.keys():
-          elem= preprocessor.getElementHandler.getElement(eTag)
-          if(elem.getDimension==2):
-            vLoad= self.elementalLoadVectors[eTag]
-            self.data.insertNextVector(vLoad[0],vLoad[1],vLoad[2])
-          else:
-            lmsg.warning('displaying of loads over 1D elements not yet implemented')
+            elem= preprocessor.getElementHandler.getElement(eTag)
+            if(elem.getDimension==2):
+                vLoad= self.elementalLoadVectors[eTag]
+                self.data.insertNextVector(vLoad[0],vLoad[1],vLoad[2])
+            else:
+                lmsg.warning('displaying of loads over 1D elements not yet implemented')
         return len(self.elementalLoadVectors)
 
-    def dumpElementalPositions(self,preprocessor,lp):
-        ''' Iterate over cumulated loads dumping them into the graphic.'''
+    def dumpElementalPositions(self,lp):
+        ''' Iterate over cumulated loads dumping them into the graphic.
+
+        :param lp: load pattern.
+        '''
+        preprocessor= lp.getDomain.getPreprocessor
         for eTag in self.elementalLoadVectors.keys():
-          elem= preprocessor.getElementHandler.getElement(eTag)
-          if(elem.getDimension==2):
-            vLoad= self.elementalLoadVectors[eTag]
-            p= elem.getPosCentroid(True)
-            self.data.insertNextPair(p.x,p.y,p.z,vLoad[0],vLoad[1],vLoad[2],self.fUnitConv,self.showPushing)
-          else:
-            lmsg.warning('displaying of loads over 1D elements not yet implemented')
+            elem= preprocessor.getElementHandler.getElement(eTag)
+            if(elem.getDimension==2):
+                vLoad= self.elementalLoadVectors[eTag]
+                p= elem.getPosCentroid(True)
+                self.data.insertNextPair(p.x,p.y,p.z,vLoad[0],vLoad[1],vLoad[2],self.fUnitConv,self.showPushing)
+            else:
+                lmsg.warning('displaying of loads over 1D elements not yet implemented')
         return len(self.elementalLoadVectors)
 
-    def sumNodalLoads(self,preprocessor,lp):
+    def sumNodalLoads(self,lp):
         ''' Iterate over loaded nodes to cumulate their loads.
 
         :param lp: load pattern
@@ -116,6 +129,7 @@ class LoadVectorField(LoadOnPoints):
         nl= lIter.next()
         retval= dict()
         nTagsSet=self.setToDisp.getNodes.getTags()
+        preprocessor= lp.getDomain.getPreprocessor
         while(nl):
           nTag= nl.getNodeTag
           if nTag in nTagsSet:
@@ -129,16 +143,19 @@ class LoadVectorField(LoadOnPoints):
           nl= lIter.next()
         return retval
 
-    def populateWithNodalLoads(self,preprocessor,lp):
+    def populateWithNodalLoads(self, lp):
         ''' Populate the vector container with nodal loads 
-            from the load pattern argument.'''
-        self.nodalLoadVectors= self.sumNodalLoads(preprocessor,lp)
+            from the load pattern argument.
+
+        :param lp: load pattern
+        '''
+        self.nodalLoadVectors= self.sumNodalLoads(lp)
         for nTag in self.nodalLoadVectors.keys():
-          vLoad= self.nodalLoadVectors[nTag]
-          self.data.insertNextVector(vLoad[0],vLoad[1],vLoad[2])
+            vLoad= self.nodalLoadVectors[nTag]
+            self.data.insertNextVector(vLoad[0],vLoad[1],vLoad[2])
         return len(self.nodalLoadVectors)
 
-    def dumpNodalPositions(self,preprocessor,lp,defFScale):
+    def dumpNodalPositions(self, lp, defFScale):
         ''' Iterate over loaded nodes dumping its loads into the graphic.
 
         :param lp: load pattern
@@ -147,27 +164,28 @@ class LoadVectorField(LoadOnPoints):
                   the initial position plus its displacement multiplied
                   by this factor.    
         '''
+        preprocessor= lp.getDomain.getPreprocessor
         for nTag in self.nodalLoadVectors.keys():
-          node= preprocessor.getNodeHandler.getNode(nTag)
-          p= node.getCurrentPos3d(defFScale)
-          vLoad= self.nodalLoadVectors[nTag]
-          self.data.insertNextPair(p.x,p.y,p.z,vLoad[0],vLoad[1],vLoad[2],self.fUnitConv,self.showPushing)
+            node= preprocessor.getNodeHandler.getNode(nTag)
+            p= node.getCurrentPos3d(defFScale)
+            vLoad= self.nodalLoadVectors[nTag]
+            self.data.insertNextPair(p.x,p.y,p.z,vLoad[0],vLoad[1],vLoad[2],self.fUnitConv,self.showPushing)
         return len(self.nodalLoadVectors)
 
-    def populateLoads(self,preprocessor,lp, showElementalLoads= True, showNodalLoads= True):
+    def populateLoads(self, lp, showElementalLoads= True, showNodalLoads= True):
         ''' Populate the vector container with loads 
             from the load pattern argument.'''
         numberOfLoads= 0
         if(showElementalLoads):
-          numberOfLoads+= self.populateWithElementalLoads(preprocessor,lp)
+            numberOfLoads+= self.populateWithElementalLoads(lp)
         if(showNodalLoads):
-          numberOfLoads+= self.populateWithNodalLoads(preprocessor,lp)
+            numberOfLoads+= self.populateWithNodalLoads(lp)
         return numberOfLoads
 
-    def dumpVectors(self, preprocessor,defFScale, showElementalLoads= True, showNodalLoads= True):
+    def dumpVectors(self, preprocessor, defFScale, showElementalLoads= True, showNodalLoads= True):
         ''' Iterate over loads dumping them into the graphic.
 
-        :param lp: load pattern
+        :param preprocessor: preprocessor of the FE problem.
         :param defFScale: factor to apply to current displacement of nodes 
                   so that the display position of each node equals to
                   the initial position plus its displacement multiplied
@@ -179,27 +197,28 @@ class LoadVectorField(LoadOnPoints):
         activeLoadPatterns= preprocessor.getDomain.getConstraints.getLoadPatterns
         if(len(activeLoadPatterns)<1):
             lmsg.warning('No active load patterns.')
-        for lp in activeLoadPatterns: #Iterate over loaded elements.
-          numberOfLoads= self.populateLoads(preprocessor,lp.data())
-          if(numberOfLoads>0):
-            self.data.scaleFactor/= self.getMaxLoad()
-            #Iterate over loaded elements.
-            count+= self.dumpElementalPositions(preprocessor,lp.data())
-            #Iterate over loaded nodes.
-            count+= self.dumpNodalPositions(preprocessor,lp.data(),defFScale)
-            if(count==0):
-              lmsg.warning('LoadVectorField.dumpVectors: no loads defined.')
+        else:
+            for lp in activeLoadPatterns: #Iterate over loaded elements.
+                numberOfLoads= self.populateLoads(lp.data())
+                if(numberOfLoads>0):
+                    self.data.scaleFactor/= self.getMaxLoad()
+                    #Iterate over loaded elements.
+                    count+= self.dumpElementalPositions(lp.data())
+                    #Iterate over loaded nodes.
+                    count+= self.dumpNodalPositions(lp.data(), defFScale)
+                    if(count==0):
+                        lmsg.warning('LoadVectorField.dumpVectors: no loads defined.')
         return count
 
-    def dumpNodalLoads(self, preprocessor,defFScale):
+    def dumpNodalLoads(self, preprocessor, defFScale):
         ''' Iterate over nodal loads dumping them into the graphic.
 
-        :param lp: load pattern
+        :param preprocessor: preprocessor of the FE problem.
         :param defFScale: factor to apply to current displacement of nodes 
                   so that the display position of each node equals to
                   the initial position plus its displacement multiplied
                   by this factor.
         '''
-        return self.dumpVectors(preprocessor,defFScale,False,True)
+        return self.dumpVectors(defFScale,False,True)
     
 
