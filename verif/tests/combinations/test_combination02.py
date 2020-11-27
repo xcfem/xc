@@ -85,7 +85,7 @@ loadHandler.addToDomain("A") # Append the combination to the domain
 analysis= predefined_solutions.simple_static_linear(feProblem)
 result= analysis.analyze(1)
 
-lpA.removeFromDomain() # Quitamos la carga del domain
+lpA.removeFromDomain() # Remove load from domain
 
 nodes= preprocessor.getNodeHandler
 nod2= nodes.getNode(2)
