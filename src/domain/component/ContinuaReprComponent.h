@@ -45,12 +45,17 @@ class ContinuaReprComponent: public DomainComponent
     // constructors
     ContinuaReprComponent(int classTag);
     ContinuaReprComponent(int tag, int classTag);
+
+    //! @brief Return true if the component is not active.
     virtual const bool isDead(void) const
       { return dead; }
+    //! @brief Return true if the component is active.
     virtual const bool isAlive(void) const
       { return !dead; }
+    //! @brief Deactivates the component.
     virtual void kill(void)
       { dead= true; }
+    //! @brief Activates the component.
     virtual void alive(void)
       { dead= false; }
   };
