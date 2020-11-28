@@ -89,17 +89,28 @@ class FreeCADImport(reader_base.ReaderBase):
                 
         for grpName in self.groupsToImport:
             grp= self.document.getObjectsByLabel(grpName)[0]
-            if(len(grp.OutList)>0): # Object is a group
-                for obj in grp.OutList: 
-                    objType= obj.Shape.ShapeType
-                    objName= obj.Name
-                    objLabels= [obj.Label]
-                    if(objType in ['Face', 'Shell']):
-                        append_points(obj.Shape.Vertexes, objName, grpName, objLabels)
-            elif(hasattr(grp,'Shape')): # Object has shape.
+            if(hasattr(grp,'Shape')): # Object has shape.
                 objName= grp.Name
+                shape= grp.Shape
+                shapeType= shape.ShapeType
                 objLabels= [grp.Label]
-                append_points(grp.Shape.Vertexes, objName, grpName, objLabels)
+                if(shapeType=='Shell'):
+                    fCount= 0
+                    for f in shape.SubShapes:
+                        thisFaceName= objName+'.'+str(fCount)
+                        append_points(f.OuterWire.OrderedVertexes, thisFaceName, grpName, objLabels)
+
+                        fCount+= 1                        
+                else:
+                    append_points(grp.Shape.Vertexes, objName, grpName, objLabels)
+            elif(len(grp.OutList)>0): # Object is a group
+                for obj in grp.OutList: 
+                    if(hasattr(obj,'Shape')): # Object has shape.
+                        objType= obj.Shape.ShapeType
+                        objName= obj.Name
+                        objLabels= [obj.Label]
+                        if(objType=='Face'):
+                            append_points(obj.Shape.Vertexes, objName, grpName, objLabels)
                 
         return retval_pos, retval_labels
     
@@ -164,7 +175,6 @@ class FreeCADImport(reader_base.ReaderBase):
                 objPoints.append([float(v.X), float(v.Y), float(v.Z)])
             for pt in objPoints:
                 p= self.getRelativeCoo(pt)
-                print(p)
                 idx= self.getIndexNearestPoint(p)
                 vertices.append(idx)
             self.labelDict[faceName]= [labelName]
@@ -183,7 +193,6 @@ class FreeCADImport(reader_base.ReaderBase):
                         fCount= 0
                         for f in obj.Shape.SubShapes:
                             thisFaceName= faceName+'.'+str(fCount)
-                            print(thisFaceName)
                             add_face(f, thisFaceName, labelName)
                             fCount+= 1
                     elif(objType in ['Wire']):
