@@ -77,6 +77,8 @@ namespace XC {
 //! @brief Class designed to perform the Reverse Cuthill-McKee numbering
 //! scheme on the vertices of a graph. This is done by invoking the
 //! number() method with the Graph to be numbered.
+//! 
+//! Reference: <a href="https://en.wikipedia.org/wiki/Cuthill%E2%80%93McKee_algorithm"> Cuthill–McKee algorithm.</a> 
 class RCM: public BaseNumberer
   {
   private:

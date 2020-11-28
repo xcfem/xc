@@ -11,16 +11,16 @@
 //  of the original program (see copyright_opensees.txt)
 //  XC is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
-//  the Free Software Foundation, either version 3 of the License, or
+//  the Free Software Foundation, either version 3 of the License, or 
 //  (at your option) any later version.
 //
-//  This software is distributed in the hope that it will be useful, but
+//  This software is distributed in the hope that it will be useful, but 
 //  WITHOUT ANY WARRANTY; without even the implied warranty of
 //  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-//  GNU General Public License for more details.
+//  GNU General Public License for more details. 
 //
 //
-// You should have received a copy of the GNU General Public License
+// You should have received a copy of the GNU General Public License 
 // along with this program.
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
@@ -43,72 +43,101 @@
 **   Filip C. Filippou (filippou@ce.berkeley.edu)                     **
 **                                                                    **
 ** ****************************************************************** */
+                                                                        
+// $Revision: 1.1 $
+// $Date: 2009-12-10 00:40:01 $
+// $Source: /usr/local/cvs/OpenSees/SRC/graph/numberer/AMD.cpp,v $
+                                                                        
 
-// $Revision: 1.3 $
-// $Date: 2006/01/12 23:39:21 $
-// $Source: /usr/local/cvs/OpenSees/SRC/graph/numberer/SimpleNumberer.cpp,v $
+// Description: This file contains the class definition for AMD.
+
+// What: "@(#) AMD.C, revA"
 
 
-
-// Written: fmk
-// Revision: A
-//
-// Description: This file contains the class definition for XC::SimpleNumberer.
-// SimpleNumberer is an object to perform a simple numbering of the vertices.
-// It does this by using the graphs XC::VertexIter and assigning the numbers as
-// it comes across the vertices.
-//
-// What: "@(#) SimpleNumberer.C, revA"
-
-#include "SimpleNumberer.h"
+#include "AMD.h"
 #include "solution/graph/graph/Graph.h"
 #include "solution/graph/graph/Vertex.h"
 #include "solution/graph/graph/VertexIter.h"
 #include "utility/matrix/ID.h"
+#include "suitesparse/amd.h"
 
-//! @brief Constructor
-XC::SimpleNumberer::SimpleNumberer(void)
- :BaseNumberer(GraphNUMBERER_TAG_SimpleNumberer) {}
+// Constructor
+XC::AMD::AMD(void)
+ : BaseNumberer(GraphNUMBERER_TAG_AMD) {}
 
 //! @brief Virtual constructor.
-XC::GraphNumberer *XC::SimpleNumberer::getCopy(void) const
-  { return new SimpleNumberer(*this); }
+XC::GraphNumberer *XC::AMD::getCopy(void) const
+  { return new AMD(*this); }
 
-const XC::ID &XC::SimpleNumberer::number(Graph &theGraph, int lastVertex)
+//! @brief Do the numbering.
+const XC::ID &XC::AMD::number(Graph &theGraph, int startVertex)
   {
-    // see if we can do quick return
-    if(!checkSize(theGraph))
+    int numVertex = theGraph.getNumVertex();
+
+    if (numVertex == 0) 
       return theRefResult;
-        
 
-    // Now we go through the iter and assign the numbers
+    theRefResult.resize(numVertex);
 
-    if(lastVertex != -1)
+    int nnz = 0;
+    Vertex *vertexPtr;
+    VertexIter &vertexIter = theGraph.getVertices();
+
+    while ((vertexPtr = vertexIter()) != 0)
       {
-        std::cerr << "WARNING:  SimpleNumberer::number -";
-        std::cerr << " - does not deal with lastVertex";
+        const std::set<int> &adjacency = vertexPtr->getAdjacency();
+        nnz+= adjacency.size();
       }
 
-    Vertex *vertexPtr= nullptr;
-    VertexIter &vertexIter= theGraph.getVertices();
-    int count = 0;
+    std::vector<int> P(numVertex);
+    std::vector<int> Ap(numVertex+1);
+    std::vector<int> Ai(nnz);
+    //double Control[AMD_CONTROL];
+    //double Info[AMD_INFO];
 
-    while((vertexPtr = vertexIter()) != 0)
+    VertexIter &vertexIter2 = theGraph.getVertices();
+
+    nnz = 0;
+    int count = 1;
+    Ap[0] = 0;
+
+    while((vertexPtr = vertexIter2()) != 0)
       {
-        theRefResult(count++) = vertexPtr->getTag();
-        vertexPtr->setTmp(count);
-      }
+        const std::set<int> &adjacency = vertexPtr->getAdjacency();
+        for(std::set<int>::const_iterator i= adjacency.begin(); i!= adjacency.end(); i++)
+	  { Ai[nnz++]= *i; }
+        Ap[count++] = nnz;
+      }  
+
+    amd_order(numVertex, Ap.data(), Ai.data(), P.data(), (double *)nullptr, (double *)nullptr);
+
+    for(int i=0; i<numVertex; i++)
+      theRefResult[i] = P[i];
+
     return theRefResult;
   }
 
+
+
 //! @brief Send the object thru the communicator argument.
-int XC::SimpleNumberer::sendSelf(Communicator &comm)
+int XC::AMD::sendSelf(Communicator &comm)
   { return 0; }
 
 //! @brief Receive the object thru the communicator argument.
-int XC::SimpleNumberer::recvSelf(const Communicator &comm)
+int  XC::AMD::recvSelf(const Communicator &comm)
   { return 0; }
 
+
 //! @brief Do the numbering.
-const XC::ID &XC::SimpleNumberer::number(Graph &theGraph, const XC::ID &startVertices)
-  { return this->number(theGraph); }
+const XC::ID &XC::AMD::number(Graph &theGraph, const ID &startVertices)
+  {
+    std::cerr << getClassName() << "::" << __FUNCTION__
+              << "; WARNING: not implemented with startVertices";
+    return theRefResult;
+  }
+
+
+
+
+
+
