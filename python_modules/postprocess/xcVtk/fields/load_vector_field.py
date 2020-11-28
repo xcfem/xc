@@ -219,6 +219,6 @@ class LoadVectorField(LoadOnPoints):
                   the initial position plus its displacement multiplied
                   by this factor.
         '''
-        return self.dumpVectors(defFScale,False,True)
+        return self.dumpVectors(preprocessor, defFScale,False,True)
     
 
