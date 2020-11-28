@@ -482,13 +482,15 @@ class OutputHandler(object):
         LrefModSize=setToDisplay.getBnd(1.0).diagonal.getModulus() #representative length of set size (to auto-scale)
         vectorScale= self.outputStyle.loadVectorsScaleFactor*LrefModSize/10.
         vField= lvf.LoadVectorField(loadCaseName,setToDisplay,unitConversionFactor,vectorScale)
+        print('multLoadsByElemArea=',self.outputStyle.multLoadsByElemArea)
         vField.multiplyByElementArea= self.outputStyle.multLoadsByElemArea
         displaySettings= vtk_FE_graphic.DisplaySettingsFE()
         displaySettings.cameraParameters= self.getCameraParameters()
         displaySettings.setupGrid(setToDisplay)
         vField.dumpVectors(preprocessor,defFScale)
-        displaySettings.defineMeshScene(None,defFScale,color=setToDisplay.color) 
-        vField.addToDisplay(displaySettings)
+        displaySettings.defineMeshScene(None,defFScale,color=setToDisplay.color)
+        print('aquí 0')
+        vField.addToDisplay(displaySettings,orientation='H')
         displaySettings.displayScene(caption,fileName)
         return displaySettings
         
@@ -512,7 +514,15 @@ class OutputHandler(object):
         '''
         if(setToDisplay==None):
             setToDisplay= self.modelSpace.getTotalSet()
+        print('set2Disp=',setToDisplay.name)
         preprocessor= self.modelSpace.preprocessor
+        set1D=preprocessor.getSets.defSet('set1D')
+        set2D=preprocessor.getSets.defSet('set2D')
+        for e in setToDisplay.elements:
+            if e.getDimension==2:
+                set2D.elements.append(e)
+            elif e.getDimension==1:
+                set1D.elements.append(e)
         loadCaseName= self.modelSpace.preprocessor.getDomain.currentCombinationName
         unitConversionFactor= self.outputStyle.getForceUnitsScaleFactor()
         unitDescription= self.outputStyle.getForceUnitsDescription()
@@ -526,22 +536,33 @@ class OutputHandler(object):
         elLoadScaleF= self.outputStyle.loadDiagramsScaleFactor
         diagAux=lld.LinearLoadDiagram(setToDisp=setToDisplay,scale=elLoadScaleF,fUnitConv= unitConversionFactor,component=elLoadComp)
         maxAbs=diagAux.getMaxAbsComp(preprocessor)
-        if(maxAbs>0):
+        if(maxAbs>0) and (set1D.elements.size > 0):
             elLoadScaleF*=LrefModSize/maxAbs*100
             #Linear loads
-            diagram= lld.LinearLoadDiagram(setToDisp=setToDisplay,scale=elLoadScaleF,fUnitConv= unitConversionFactor,component=elLoadComp)
+            diagram= lld.LinearLoadDiagram(setToDisp=set1D,scale=elLoadScaleF,fUnitConv= unitConversionFactor,component=elLoadComp)
             diagram.addDiagram(preprocessor)
             if diagram.isValid():
                 displaySettings.appendDiagram(diagram)
+        if(maxAbs>0) and (set2D.elements.size > 0):
+            vectorScale= self.outputStyle.loadVectorsScaleFactor*LrefModSize/10.
+            vField2= lvf.LoadVectorField(loadPatternName=loadCaseName,setToDisp=set2D,fUnitConv= unitConversionFactor,scaleFactor=vectorScale)
+            vField2.multiplyByElementArea= self.outputStyle.multLoadsByElemArea
+            vField2.dumpVectors(preprocessor,defFScale)
+            vField2.addToDisplay(displaySettings,orientation='LV')
         # nodal loads
+        # print('set2Disp=',setToDisplay.name)
         vField= lvf.LoadVectorField(loadPatternName=loadCaseName,setToDisp=setToDisplay,fUnitConv= unitConversionFactor,scaleFactor=self.outputStyle.loadVectorsScaleFactor,showPushing= self.outputStyle.showLoadsPushing)
         count=vField.dumpNodalLoads(preprocessor,defFScale=defFScale)
-        if(count >0):
-            vField.addToDisplay(displaySettings,orientation= self.outputStyle.nodalLoadBarOrientation)
+        # if(count >0):
+        #     print('count=',count)
+        #     vField.addToDisplay(displaySettings,orientation= 'RV')
         if(not caption):
           caption= 'load case: ' + loadCaseName +' '+elLoadComp + ', set: ' + setToDisplay.name + ', '  + unitDescription
+        preprocessor.getSets.removeSet('set1D')
+        preprocessor.getSets.removeSet('set2D')
         displaySettings.displayScene(caption=caption,fileName=fileName)
-        
+        return displaySettings
+         
     def displayNodeValueDiagram(self, itemToDisp, setToDisplay=None,caption= None,fileName=None,defFScale=0.0):
         '''displays the a displacement (uX,uY,...) or a property defined in nodes 
         as a diagram over lines.
