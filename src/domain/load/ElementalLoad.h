@@ -86,6 +86,7 @@ class ElementalLoad: public Load
     ElementalLoad(int tag= 0, int classTag= 0);
     ElementalLoad(int tag, int classTag,const ID &);
 
+    virtual std::string Category(void) const;
     int numElements(void) const;
     int setElementTags(const ID &theEleTags);
     virtual const ID &getElementTags(void) const;

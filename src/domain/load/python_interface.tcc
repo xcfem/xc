@@ -37,6 +37,7 @@ class_<XC::NodalLoadIter, boost::noncopyable >("NodalLoadIter", no_init)
 class_<XC::ElementalLoad, bases<XC::Load>, boost::noncopyable >("ElementalLoad", no_init)
   .add_property("numElements", &XC::ElementalLoad::numElements, "Returns the number of loaded elements.")
   .add_property("elementTags", make_function(&XC::ElementalLoad::getElementTags,return_internal_reference<>()),&XC::ElementalLoad::setElementTags)
+  .add_property("category", &XC::ElementalLoad::Category," Return the category of the load (uniform, punctual,...)"); 
   ;
 
 class_<XC::ElementalLoadIter, boost::noncopyable >("ElementalLoadIter", no_init)

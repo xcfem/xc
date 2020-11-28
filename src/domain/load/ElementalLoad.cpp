@@ -81,6 +81,17 @@ int XC::ElementalLoad::numElements(void) const
 const XC::ID &XC::ElementalLoad::getElementTags(void) const
   { return elemTags; }
 
+//! @brief Return the category of the load.
+//!
+//! Return a string like 'uniform', 'punctual',...
+std::string XC::ElementalLoad::Category(void) const
+  {
+    std::cerr << getClassName() << "::" << __FUNCTION__
+              << "; not implemented yet." << std::endl;
+    return "unknown";
+  }
+
+
 //! @brief Sets the identifiers of the loaded elements.
 int XC::ElementalLoad::setElementTags(const ID &theEleTags)
   {
