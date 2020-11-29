@@ -37,9 +37,8 @@ class Pos3d;
 namespace XC {
 class Element;
 
-//! @ingroup FEMisc
-//
 //! @brief Element position for KDTree building.
+//! @ingroup FEMisc
 class ElemPos: public KDTreePos
   {
   private:
@@ -57,6 +56,10 @@ inline bool operator==(const ElemPos &A,const ElemPos &B)
   { return ((A.getElementPtr()== B.getElementPtr()) && (A[0] == B[0]) && (A[1] == B[1]) && (A[2] == B[2])); }
 
 
+//! @brief k-d tree for searching the nearest element to a given position.
+//! @ingroup FEMisc
+//!
+//! See <a href="https://en.wikipedia.org/wiki/K-d_tree"> k-d tree <\a>
 class KDTreeElements: protected kd_tree::KDTree<3, ElemPos, std::pointer_to_binary_function<ElemPos,size_t,double> >
   {
     size_t pend_optimizar;

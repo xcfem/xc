@@ -58,13 +58,10 @@
 #define LOW_LIMIT   20.*DBL_EPSILON
 
 namespace XC {
-// global function: scalar product of two second order tensor vectors
 double operator &&(const Vector &, const Vector &);
 
-// define second order tensor vector class
+//! @brief Second order tensor vector class.
 //! @ingroup NDMat
-//
-//! @brief Tensor de segundo orden.
 class T2Vector: public MovableObject
   {
   private:

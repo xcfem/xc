@@ -32,139 +32,159 @@
 // Created: August 2000
 
 //
-// XC::T2Vector.cpp
+// T2Vector.cpp
 // ----------
 //
 #include <cmath>
 #include <cstdlib>
-#include <material/nD/soil/T2Vector.h>
+#include "T2Vector.h"
 
 
 XC::Vector XC::T2Vector::engrgStrain(6);
 
+//! @brief scalar product of two second order tensor vectors
 double XC::operator && (const XC::Vector & a, const XC::Vector & b)
-{
-  if (a.Size() !=6 || b.Size() !=6) {
-    std::cerr << "FATAL:operator && (XC::Vector &, XC::Vector &): vector size not equal 6" << std::endl;
-    exit(-1);
+  {
+    if(a.Size() !=6 || b.Size() !=6)
+      {
+        std::cerr << "T2Vector::" << __FUNCTION__
+	          << "; FATAL:operator && (Vector &, Vector &): "
+	          << " vector size not equal 6" << std::endl;
+        exit(-1);
+      }
+
+    double result = 0.;  
+
+    for(int i=0; i<3; i++)
+      result += a[i]*b[i] + 2*a[i+3]*b[i+3];
+    return result;
   }
-
-  double result = 0.;  
-
-  for (int i=0; i<3; i++)
-    result += a[i]*b[i] + 2*a[i+3]*b[i+3];
-  return result;
-}
 
 
 // XC::T2Vector class methods
-XC::T2Vector::T2Vector() 
-  :MovableObject(0), theT2Vector(6), theDeviator(6), theVolume(0.0) {}
+XC::T2Vector::T2Vector(void) 
+  : MovableObject(0), theT2Vector(6), theDeviator(6), theVolume(0.0) {}
 
 
-XC::T2Vector::T2Vector(const XC::Vector &init, int isEngrgStrain)
+XC::T2Vector::T2Vector(const Vector &init, int isEngrgStrain)
   :MovableObject(0),theT2Vector(6), theDeviator(6), theVolume(0)
-{
-  if (init.Size() != 6) {
-    std::cerr << "FATAL:XC::T2Vector::XC::T2Vector(XC::Vector &): vector size not equal to 6" << std::endl;
-    exit(-1);
-  }
-  theT2Vector = init;
-
-  theVolume = (theT2Vector[0]+theT2Vector[1]+theT2Vector[2])/3.0;
-  for(int i=0; i<3; i++){
-    theDeviator[i] = theT2Vector[i] - theVolume;
-    theDeviator[i+3] = theT2Vector[i+3];
-    if (isEngrgStrain==1) {
-      theDeviator[i+3] /= 2.;
-      theT2Vector[i+3] /= 2.;
+  {
+    if(init.Size() != 6)
+      {
+        std::cerr << "T2Vector::" << __FUNCTION__
+                  << "; FATAL: vector size not equal to 6"
+		  << std::endl;
+        exit(-1);
     }
+    theT2Vector = init;
+
+    theVolume = (theT2Vector[0]+theT2Vector[1]+theT2Vector[2])/3.0;
+    for(int i=0; i<3; i++)
+      {
+        theDeviator[i] = theT2Vector[i] - theVolume;
+        theDeviator[i+3] = theT2Vector[i+3];
+        if(isEngrgStrain==1)
+	  {
+	    theDeviator[i+3] /= 2.;
+	    theT2Vector[i+3] /= 2.;
+          }
+      }
   }
-}
 
 
 XC::T2Vector::T2Vector(const XC::Vector & deviat_init, double volume_init)
  :MovableObject(0), theT2Vector(6), theDeviator(6), theVolume(volume_init)
-{
-  if (deviat_init.Size() != 6) {
-    std::cerr << "FATAL:XC::T2Vector::XC::T2Vector(XC::Vector &, double): vector size not equal 6" << std::endl;
-    exit(-1);
+  {
+    if(deviat_init.Size() != 6)
+      {
+        std::cerr << "T2Vector::" << __FUNCTION__
+                  << "; FATAL: vector size not equal to 6"
+		  << std::endl;
+        exit(-1);
+      }
+
+    //make sure the deviator has truly volume=0 
+    double devolum = (deviat_init[0]+deviat_init[1]+deviat_init[2])/3.;
+
+    for(int i=0; i<3; i++)
+      {
+	theDeviator[i] = deviat_init[i] - devolum;
+	theDeviator[i+3] = deviat_init[i+3];
+	theT2Vector[i] = theDeviator[i] + theVolume;
+	theT2Vector[i+3] = theDeviator[i+3]; 
+      }
   }
 
-  //make sure the deviator has truly volume=0 
-  double devolum = (deviat_init[0]+deviat_init[1]+deviat_init[2])/3.;
 
-  for(int i=0; i<3; i++){
-    theDeviator[i] = deviat_init[i] - devolum;
-    theDeviator[i+3] = deviat_init[i+3];
-    theT2Vector[i] = theDeviator[i] + theVolume;
-    theT2Vector[i+3] = theDeviator[i+3]; 
-  }
-}
+void XC::T2Vector::setData(const Vector &init, int isEngrgStrain)
+  {
+    if(init.Size() != 6)
+      {
+        std::cerr << "T2Vector::" << __FUNCTION__
+                  << "; FATAL: vector size not equal to 6"
+		  << std::endl;
+        exit(-1);
+      }
 
+    theT2Vector = init;
 
-void XC::T2Vector::setData(const XC::Vector &init, int isEngrgStrain)
-{
-  if ( init.Size() != 6) {
-    std::cerr << "FATAL:XC::T2Vector::XC::T2Vector(XC::Vector &): vector size not equal to 6" << std::endl;
-    exit(-1);
-  }
-  theT2Vector = init;
-
-  theVolume = (theT2Vector[0]+theT2Vector[1]+theT2Vector[2])/3.0;
-  for(int i=0; i<3; i++){
-    theDeviator[i] = theT2Vector[i] - theVolume;
-    theDeviator[i+3] = theT2Vector[i+3];
-    if (isEngrgStrain==1) {
-      theDeviator[i+3] /= 2.;
-      theT2Vector[i+3] /= 2.;
-    }
-  }
-}
-
-void XC::T2Vector::setData(const XC::Vector & deviat, double volume)
-{
-  theVolume = volume;
-  
-  if (deviat.Size() != 6) {
-    std::cerr << "FATAL:XC::T2Vector::XC::T2Vector(XC::Vector &, double): vector size not equal 6" << std::endl;
-    exit(-1);
+    theVolume = (theT2Vector[0]+theT2Vector[1]+theT2Vector[2])/3.0;
+    for(int i=0; i<3; i++)
+      {
+        theDeviator[i] = theT2Vector[i] - theVolume;
+        theDeviator[i+3] = theT2Vector[i+3];
+        if(isEngrgStrain==1)
+	  {
+	    theDeviator[i+3] /= 2.;
+	    theT2Vector[i+3] /= 2.;
+          }
+      }
   }
 
-  //make sure the deviator has truly volume=0 
-  double devolum = (deviat[0]+deviat[1]+deviat[2])/3.;
+void XC::T2Vector::setData(const Vector &deviat, double volume)
+  {
+    theVolume = volume;
 
-  for(int i=0; i<3; i++){
-    theDeviator[i] = deviat[i] - devolum;
-    theDeviator[i+3] = deviat[i+3];
-    theT2Vector[i] = theDeviator[i] + theVolume;
-    theT2Vector[i+3] = theDeviator[i+3]; 
+    if (deviat.Size() != 6)
+      {
+	std::cerr << "T2Vector::" << __FUNCTION__
+		  << "; FATAL: vector size not equal to 6"
+		  << std::endl;
+	exit(-1);
+      }
+
+    //make sure the deviator has truly volume=0 
+    double devolum = (deviat[0]+deviat[1]+deviat[2])/3.;
+
+    for(int i=0; i<3; i++)
+      {
+        theDeviator[i] = deviat[i] - devolum;
+        theDeviator[i+3] = deviat[i+3];
+        theT2Vector[i] = theDeviator[i] + theVolume;
+        theT2Vector[i+3] = theDeviator[i+3]; 
+      }
   }
-}
 
-const XC::Vector & 
-XC::T2Vector::t2Vector(int isEngrgStrain) const
-{
-  if (isEngrgStrain==0) return theT2Vector;
+const XC::Vector &XC::T2Vector::t2Vector(int isEngrgStrain) const
+  {
+    if (isEngrgStrain==0) return theT2Vector;
 
-  engrgStrain = theT2Vector;
-  for(int i=0; i<3; i++){
-    engrgStrain[i+3] *= 2.;
+    engrgStrain = theT2Vector;
+    for(int i=0; i<3; i++)
+      { engrgStrain[i+3] *= 2.; }
+    return engrgStrain;
   }
-  return engrgStrain;
-}
 
 
 const XC::Vector & XC::T2Vector::deviator(int isEngrgStrain) const
-{
-  if (isEngrgStrain==0) return theDeviator;
+  {
+    if (isEngrgStrain==0) return theDeviator;
 
-  engrgStrain = theDeviator;
-  for(int i=0; i<3; i++){
-    engrgStrain[i+3] *= 2.;
+    engrgStrain = theDeviator;
+    for(int i=0; i<3; i++)
+      { engrgStrain[i+3] *= 2.; }
+    return engrgStrain;
   }
-  return engrgStrain;
-}
 
 
 double XC::T2Vector::t2VectorLength() const
@@ -184,96 +204,104 @@ double XC::T2Vector::octahedralShear(int isEngrgStain) const
   }
 
 
-double 
-XC::T2Vector::deviatorRatio(double residualPress) const
-{
-  if ((fabs(theVolume)+fabs(residualPress)) <= LOW_LIMIT) {
-	std::cerr << "FATAL:XC::T2Vector::deviatorRatio(): volume <=" << LOW_LIMIT << std::endl;
+double XC::T2Vector::deviatorRatio(double residualPress) const
+  {
+    if((fabs(theVolume)+fabs(residualPress)) <= LOW_LIMIT)
+      {
+	  std::cerr << "T2Vector::" << __FUNCTION__
+		    << "; FATAL: volume <=" << LOW_LIMIT << std::endl;
+	  exit(-1);
+      }
+    return sqrt(3./2.* (theDeviator && theDeviator)) / (fabs(theVolume)+fabs(residualPress));
+  }
+
+
+const XC::Vector &XC::T2Vector::unitT2Vector(void) const
+  {
+    engrgStrain = theT2Vector;	
+    double length = this->t2VectorLength();
+    if(length <= LOW_LIMIT)
+      {
+	std::cerr << "T2Vector::" << __FUNCTION__
+		  << "; WARNING: vector length <=" << LOW_LIMIT
+		  << std::endl;
+	engrgStrain /= LOW_LIMIT;
+      }
+    else
+      engrgStrain /= length;
+
+    return engrgStrain;
+  }
+
+
+const XC::Vector &XC::T2Vector::unitDeviator(void) const
+  {
+    engrgStrain = theDeviator;	
+    double length = this->deviatorLength();
+    if(length <= LOW_LIMIT)
+      {
+	std::cerr << "T2Vector::" << __FUNCTION__
+		  << "; WARNING: vector length <="
+		  << LOW_LIMIT << std::endl;
+        engrgStrain /= LOW_LIMIT;
+      }
+    else
+      engrgStrain /= length;
+    return engrgStrain;
+  }
+
+
+double XC::T2Vector::angleBetweenT2Vector(const T2Vector & a) const
+  {
+    if (t2VectorLength() <= LOW_LIMIT || a.t2VectorLength() <= LOW_LIMIT)
+      {
+	std::cerr << "T2Vector::" << __FUNCTION__
+		  << "; FATAL: vector length <=" << LOW_LIMIT
+		  << std::endl;
 	exit(-1);
-  }
-  return sqrt(3./2.* (theDeviator && theDeviator)) / (fabs(theVolume)+fabs(residualPress));
-}
+      }
 
+    double angle = (theT2Vector && a.theT2Vector) / (t2VectorLength() * a.t2VectorLength());
+    if(angle > 1.) angle = 1.;
+    if(angle < -1.) angle = -1.;
 
-const XC::Vector &
-XC::T2Vector::unitT2Vector() const
-{
-  engrgStrain = theT2Vector;	
-  double length = this->t2VectorLength();
-  if (length <= LOW_LIMIT) {
-    std::cerr << "WARNING:XC::T2Vector::unitT2Vector(): vector length <=" << LOW_LIMIT << std::endl;
-    engrgStrain /= LOW_LIMIT;
-  } else
-    engrgStrain /= length;
-
-  return engrgStrain;
-}
-
-
-const XC::Vector &
-XC::T2Vector::unitDeviator() const
-{
-
-  engrgStrain = theDeviator;	
-  double length = this->deviatorLength();
-  if (length <= LOW_LIMIT) {
-    std::cerr << "WARNING:XC::T2Vector::unitT2Vector(): vector length <=" << LOW_LIMIT << std::endl;
-    engrgStrain /= LOW_LIMIT;
-  } else
-    engrgStrain /= length;
-
-  return engrgStrain;
-}
-
-
-double 
-XC::T2Vector::angleBetweenT2Vector(const XC::T2Vector & a) const
-{
-  if (t2VectorLength() <= LOW_LIMIT || a.t2VectorLength() <= LOW_LIMIT) {
-    std::cerr << "FATAL:XC::T2Vector::angleBetweenT2Vector(XC::T2Vector &): vector length <=" << LOW_LIMIT << std::endl;
-    exit(-1);
+    return acos(angle);
   }
 
-  double angle = (theT2Vector && a.theT2Vector) / (t2VectorLength() * a.t2VectorLength());
-  if(angle > 1.) angle = 1.;
-  if(angle < -1.) angle = -1.;
 
-  return acos(angle);
-}
+double XC::T2Vector::angleBetweenDeviator(const T2Vector & a) const
+  {
+    if (deviatorLength() <= LOW_LIMIT || a.deviatorLength() <= LOW_LIMIT)
+      {
+	std::cerr << "T2Vector::" << __FUNCTION__
+		  << "; FATAL: vector length <="
+		  << LOW_LIMIT << std::endl;
+	exit(-1);
+      }
 
+    double angle = (theDeviator && a.theDeviator) / (deviatorLength() * a.deviatorLength());
+    if(angle > 1.) angle = 1.;
+    if(angle < -1.) angle = -1.;
 
-double 
-XC::T2Vector::angleBetweenDeviator(const XC::T2Vector & a) const
-{
-  if (deviatorLength() <= LOW_LIMIT || a.deviatorLength() <= LOW_LIMIT) {
-    std::cerr << "FATAL:XC::T2Vector::angleBetweenDeviator(XC::T2Vector &): vector length <=" << LOW_LIMIT << std::endl;
-    exit(-1);
+    return acos(angle);
   }
 
-  double angle = (theDeviator && a.theDeviator) / (deviatorLength() * a.deviatorLength());
-  if(angle > 1.) angle = 1.;
-  if(angle < -1.) angle = -1.;
 
-  return acos(angle);
-}
-
-
-int XC::T2Vector::operator == (const XC::T2Vector & a) const
+int XC::T2Vector::operator == (const T2Vector & a) const
   {
     for(int i=0; i<6; i++)
-    if(theT2Vector[i] != a.theT2Vector[i]) return 0;
+    if(theT2Vector[i] != a.theT2Vector[i])
+      return 0;
+    return 1;
+  }
 
-  return 1;
-}
+int XC::T2Vector::isZero(void) const
+  {
+    for(int i=0; i<6; i++)
+      if(theT2Vector[i] != 0.0) return 0;
 
-int 
-XC::T2Vector::isZero(void) const
-{
-  for(int i=0; i<6; i++)
-    if(theT2Vector[i] != 0.0) return 0;
-
-  return 1;
-}
+    return 1;
+  }
 
 //! @brief Send object members through the communicator argument.
 int XC::T2Vector::sendData(Communicator &comm)
@@ -305,7 +333,8 @@ int XC::T2Vector::sendSelf(Communicator &comm)
 
     res+= comm.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
-      std::cerr << "T2Vector::sendSelf() - failed to send data\n";
+      std::cerr << "T2Vector::" << __FUNCTION__
+		<< "; failed to send data\n";
     return res;
   }
 
@@ -317,13 +346,15 @@ int XC::T2Vector::recvSelf(const Communicator &comm)
     int res= comm.receiveIdData(getDbTagData(),dataTag);
 
     if(res<0)
-      std::cerr << "T2Vector::recvSelf - failed to receive ids.\n";
+      std::cerr << "T2Vector::" << __FUNCTION__
+                << "; failed to receive ids.\n";
     else
       {
         //setTag(getDbTagDataPos(0));
         res+= recvData(comm);
         if(res<0)
-          std::cerr << "T2Vector::recvSelf - failed to receive data.\n";
+          std::cerr << "T2Vector::" << __FUNCTION__
+		    << "; failed to receive data.\n";
       }
     return res;
   }
@@ -346,7 +377,7 @@ ostream & operator<< (ostream & os, const XC::T2Vector & a)
 
 istream & operator>> (istream & is, XC::T2Vector & a)
 {
-  XC::Vector temp;
+  Vector temp;
 
   is >> temp;
   a = XC::T2Vector(temp);

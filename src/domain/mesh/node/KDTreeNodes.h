@@ -37,9 +37,8 @@ class Pos3d;
 namespace XC {
 class Node;
 
-//! @ingroup Nod
-//
 //! @brief Node position for its use in the KDTree.
+//! @ingroup Nod
 class NodePos: public KDTreePos
   {
   private:
@@ -56,6 +55,10 @@ inline bool operator==(const NodePos &A,const NodePos &B)
   { return ((A.getNodePtr()== B.getNodePtr()) && (A[0] == B[0]) && (A[1] == B[1]) && (A[2] == B[2])); }
 
 
+//! @brief k-d tree for searching the nearest node to a given position.
+//! @ingroup Nod
+//!
+//! See <a href="https://en.wikipedia.org/wiki/K-d_tree"> k-d tree <\a>
 class KDTreeNodes: protected kd_tree::KDTree<3, NodePos, std::pointer_to_binary_function<NodePos,size_t,double> >
   {
     size_t pend_optimizar;
