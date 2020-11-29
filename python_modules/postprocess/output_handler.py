@@ -524,18 +524,20 @@ class OutputHandler(object):
         # auto-scaling parameters
         LrefModSize=setToDisplay.getBnd(1.0).diagonal.getModulus() #representative length of set size (to auto-scale)
         elLoadScaleF= self.outputStyle.loadDiagramsScaleFactor
-        diagAux=lld.LinearLoadDiagram(setToDisp=setToDisplay,scale=elLoadScaleF,fUnitConv= unitConversionFactor,component=elLoadComp)
-        maxAbs=diagAux.getMaxAbsComp(preprocessor)
+        diagram= lld.LinearLoadDiagram(setToDisp=setToDisplay,scale=elLoadScaleF,fUnitConv= unitConversionFactor,component=elLoadComp)
+        maxAbs= diagram.getMaxAbsComp(preprocessor)
         if(maxAbs>0):
-            elLoadScaleF*=LrefModSize/maxAbs*100
+            elLoadScaleF*= LrefModSize/maxAbs*100.0
+            diagram.scaleFactor= elLoadScaleF
             #Linear loads
-            diagram= lld.LinearLoadDiagram(setToDisp=setToDisplay,scale=elLoadScaleF,fUnitConv= unitConversionFactor,component=elLoadComp)
             diagram.addDiagram(preprocessor)
-            if diagram.isValid():
+            if(diagram.isValid()):
                 displaySettings.appendDiagram(diagram)
         # nodal loads
-        vField= lvf.LoadVectorField(loadPatternName=loadCaseName,setToDisp=setToDisplay,fUnitConv= unitConversionFactor,scaleFactor=self.outputStyle.loadVectorsScaleFactor,showPushing= self.outputStyle.showLoadsPushing)
-        count=vField.dumpNodalLoads(preprocessor,defFScale=defFScale)
+        vectorScale= self.outputStyle.loadVectorsScaleFactor*LrefModSize/10.
+        vField= lvf.LoadVectorField(loadPatternName= loadCaseName,setToDisp=setToDisplay,fUnitConv= unitConversionFactor,scaleFactor= vectorScale, showPushing= self.outputStyle.showLoadsPushing)
+        vField.multiplyByElementArea= self.outputStyle.multLoadsByElemArea
+        count= vField.dumpNodalLoads(preprocessor, defFScale=defFScale)
         if(count >0):
             vField.addToDisplay(displaySettings,orientation= self.outputStyle.nodalLoadBarOrientation)
         if(not caption):
