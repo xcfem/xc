@@ -93,23 +93,30 @@ class LUTField(object):
         '''Creates the scalar bar that indicates to the viewer the correspondence
         between color values and data values
 
-        :param orientation: 'H' for horizontal bar, 'V' for vertical bar (defaults to 'H')
+        :param orientation: 'H' for horizontal bar, 'VL' for left-vertical bar 
+                             'VR' for right-vertical bar(defaults to 'H')
         '''
 
         self.scalarBar= vtk.vtkScalarBarActor()
 
         pos= self.scalarBar.GetPositionCoordinate()
         pos.SetCoordinateSystemToNormalizedViewport()
-        if orientation=='H':
-            pos.SetValue(0.1,0.1)        
-            self.scalarBar.SetOrientationToHorizontal()
-            self.scalarBar.SetWidth(0.8)
-            self.scalarBar.SetHeight(0.06)
-        else:
-            pos.SetValue(0.85,0.25)     
+        if orientation=='RV':
+            pos.SetValue(0.87,0.20)     
             self.scalarBar.SetOrientationToVertical()
             self.scalarBar.SetWidth(0.1)
             self.scalarBar.SetHeight(0.7)
+        elif orientation=='LV':
+            pos.SetValue(0.04,0.20)     
+            self.scalarBar.SetOrientationToVertical()
+            self.scalarBar.SetWidth(0.1)
+            self.scalarBar.SetHeight(0.7)
+        else: #horizontal
+            pos.SetValue(0.1,0.08)        
+            self.scalarBar.SetOrientationToHorizontal()
+            self.scalarBar.SetWidth(0.8)
+            self.scalarBar.SetHeight(0.06)
+            
         self.scalarBar.SetLookupTable(self.lookUpTable)
         self.scalarBar.Modified()
         #self.scalarBar.SetLabelFormat("%.2f")
