@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
+'''Routines for cantilever retaining walls design.'''
+
 from __future__ import division
 from __future__ import print_function
-
-'''Routines for cantilever retaining walls design.'''
 
 __author__= "Luis C. Pérez Tato (LCPT)"
 __copyright__= "Copyright 2016, LCPT"
@@ -176,7 +176,11 @@ class ReinforcementMap(dict):
     return self[index]
   
   def getBasicAnchorageLength(self,index, concrete):
-    '''Returns basic anchorage length for the reinforcement at "index".''' 
+    '''Returns basic anchorage length for the reinforcement at "index".
+
+    :param index: key of the reinforcement bar in this map.
+    :param concrete: concrete material.
+    '''
     return self.getReinforcement(index).getBasicAnchorageLength(concrete)
     
 class WallStabilityResults(object):
@@ -400,7 +404,8 @@ class StemReinforcement(ReinforcementMap):
       CExtStemBottom.writeResultStress(outputFile,MdMaxEncastrement)
 
       # Exterior reinforcement in stem.
-      yCoupeExtStem= self.wallGeom.internalForcesULS.getYStem(self.getBasicAnchorageLength(self.extStemBottomIndex, self.wallGeom.concrete))
+      anchorageLength= self.getBasicAnchorageLength(self.extStemBottomIndex, self.wallGeom.concrete)
+      yCoupeExtStem= self.wallGeom.internalForcesULS.getYStem(anchorageLength)
       CExtStem= self.getSectionExtStem(yCoupeExtStem)
       NdExtStem= 0.0 #we neglect axial force
       VdExtStem= self.wallGeom.internalForcesULS.VdMax(yCoupeExtStem)
@@ -717,7 +722,6 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
                 y= -e.getPosCentroid(True).y
                 h= self.getDepth(y)
                 stemSection.h= h
-                print('h= ', h)
                 e.sectionProperties= stemSection.getCrossSectionProperties2D(wallMatData)
                 self.stemSet.elements.append(e)
                 self.wallSet.elements.append(e)

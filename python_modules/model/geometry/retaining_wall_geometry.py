@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
-from __future__ import division
 '''Geometry of retaining walls.'''
+
+from __future__ import division
+from __future__ import print_function
 
 __author__= "Luis C. Pérez Tato (LCPT)"
 __copyright__= "Copyright 2017, LCPT"
@@ -83,7 +85,7 @@ class CantileverRetainingWallGeometry(object):
     
     def getWFStemBottomPosition(self):
         ''' Returns the position of the stem bottom in the wireframe model.'''
-        h= self.stemHeight
+        h= self.getWFStemHeigth()
         return geom.Pos2d(self.stemTopPosition.x+self.stemBackSlope*h-self.stemBottomWidth/2.0,self.stemTopPosition.y-h)
 
     def getWFToeEndPosition(self):

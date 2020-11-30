@@ -88,9 +88,9 @@ class RebarController(object):
         m= self.getM(concrete,steel)
         f= phi*100.0
         if(self.pos=='I'):
-            retval= max(m*f**2,steel.fyk/20e6*f)
+            retval= max(m*f**2,steel.fyk/20e6*f)/100.0
         elif(self.pos=='II'):
-            retval= max(1.4*m*f**2,steel.fyk/14e6*f)
+            retval= max(1.4*m*f**2,steel.fyk/14e6*f)/100.0
         else:
             lmsg.error('position must be I or II')
         return retval
@@ -1905,7 +1905,6 @@ class EHERebarFamily(rf.RebarFamily):
         :param thickness: height of the rectangular section.
         '''
         retval= getFcvEH91(concrete.fcd())*b*0.9*thickness
-        print('retval= ', retval/1e3,'kN')
         return retval
 
     

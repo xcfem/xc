@@ -164,7 +164,10 @@ class DoubleRebarFamily(object):
     T= T1+T2
     return (self.f1.getEffectiveCover()*T1+self.f2.getEffectiveCover()*T2)/T
   def getBasicAnchorageLength(self,concrete):
-    ''' Return the basic anchorage length of the bars.'''
+    ''' Return the basic anchorage length of the bars.
+
+    :param concrete: concrete material.
+    '''
     l1= self.f1.getBasicAnchorageLength(concrete)
     l2= self.f2.getBasicAnchorageLength(concrete)
     return max(l1,l2)
