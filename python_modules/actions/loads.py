@@ -214,7 +214,42 @@ class UniformLoadOnSurfaces(BaseVectorLoad):
     def getMaxMagnitude(self):
         '''Return the maximum magnitude of the vector loads'''
         return self.loadVector.Norm()
-                
+
+class UnifLoadSurfNodesDistributed(BaseVectorLoad):
+    '''Distribute uniform load defined on surfaces in surfSet 
+    (not necessarily meshed) among the nodes that touch each 
+    surface.
+
+    :ivar name:       name identifying the load
+    :ivar surfSet:    set that contains the surfaces (not necesarily meshed)
+    :ivar loadVector: xc.Vector with the six components of the load: 
+                      xc.Vector([Fx,Fy,Fz,Mx,My,Mz]).
+    '''
+    def __init__(self,name, surfSet, loadVector):
+        super(UnifLoadSurfNodesDistributed,self).__init__(name,loadVector)
+        self.surfSet=surfSet
+        
+    def appendLoadToCurrentLoadPattern(self):
+        ''' Append load to the current load pattern.'''
+        prep=self.surfSet.getPreprocessor
+        if prep.getSets.exists('auxNodSet'): prep.getSets.removeSet('auxNodSet')
+        for s in self.surfSet.surfaces:
+            lstNodes=list()
+            auxNodSet=prep.getSets.defSet('auxNodSet')
+            lstNodes+=[n for n in self.surfSet.nodes]
+            for l in s.getEdges: lstNodes+=l.nodes
+            for p in s.getVertices: lstNodes+=p.nodes
+            for n in lstNodes: auxNodSet.nodes.append(n)
+            surfLoadVect=s.getArea()*self.loadVector
+            slv=SlindingVectorLoad('slv',auxNodSet,s.getCentroid(),surfLoadVect)
+            slv.appendLoadToCurrentLoadPattern()
+            prep.getSets.removeSet('auxNodSet')
+            
+    def getMaxMagnitude(self):
+        '''Return the maximum magnitude of the vector loads'''
+        return self.loadVector.Norm()
+
+    
 class PointLoadOverShellElems(BaseVectorLoad):
     '''Point load distributed over the shell elements in xcSet whose 
     centroids are inside the prism defined by the 2D polygon prismBase

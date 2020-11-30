@@ -28,6 +28,7 @@ python tests/actions/test_earth_pressure.py
 python tests/actions/test_earth_pressure_sloped_wall.py
 python tests/actions/test_thermal_grad_shell.py 
 python tests/actions/test_cte_wind_load.py
+python tests/actions/test_surf_unif_load_distributed.py
 #Combinations tests.
 echo "$BLEU" "Load combination tests." "$NORMAL"
 python tests/combinations/add_loads_01.py

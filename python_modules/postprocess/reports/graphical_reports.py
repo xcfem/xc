@@ -358,6 +358,16 @@ class LoadCaseDispParameters(RecordDisp):
         modelSpace= predefined_spaces.getModelSpaceFromPreprocessor(preprocessor)
         self.writeLoadReport(modelSpace, texFile,cfg)
 
+    def solveLC(self, modelSpace):
+        '''Solve load case
+        '''
+        modelSpace.removeAllLoadPatternsFromDomain()
+        modelSpace.revertToStart()
+        modelSpace.addNewLoadCaseToDomain(self.loadCaseName,self.loadCaseExpr)
+        #solve for load case
+        modelSpace.analyze()
+         
+
     def writeSimpleLoadCaseReport(self, modelSpace, texFile, cfg):
         '''Creates the graphics files of displacements and internal forces 
          calculated for a simple load case and insert them in a LaTex file
@@ -370,11 +380,6 @@ class LoadCaseDispParameters(RecordDisp):
         fullPath=cfg.projectDirTree.getReportSimplLCGrPath()
         rltvPath=cfg.projectDirTree.getRltvReportSimplLCGrPath()
         outputHandler= output_handler.OutputHandler(modelSpace)
-        modelSpace.removeAllLoadPatternsFromDomain()
-        modelSpace.revertToStart()
-        modelSpace.addNewLoadCaseToDomain(self.loadCaseName,self.loadCaseExpr)
-        #solve for load case
-        modelSpace.analyze()
         #Displacements and rotations displays
         for st in self.setsToDispDspRot:
             for arg in self.listDspRot:
@@ -425,6 +430,7 @@ class LoadCaseDispParameters(RecordDisp):
         '''
         preprocessor= FEproblem.getPreprocessor
         modelSpace= predefined_spaces.getModelSpaceFromPreprocessor(preprocessor)
+        self.solveLC(modelSpace)
         self.writeSimpleLoadCaseReport(modelSpace, texFile,cfg)
 
 
