@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
-from __future__ import division
-
 ''' Loads represented as vectors. '''
+
+from __future__ import division
+from __future__ import print_function
 
 __author__= "Luis C. Pérez Tato (LCPT) , Ana Ortega (AO_O) "
 __copyright__= "Copyright 2018, LCPT, AO_O"
@@ -201,7 +202,9 @@ class LoadVectorField(LoadOnPoints):
             for lp in activeLoadPatterns: #Iterate over loaded elements.
                 numberOfLoads= self.populateLoads(lp.data())
                 if(numberOfLoads>0):
-                    self.data.scaleFactor/= self.getMaxLoad()
+                    maxLoad= self.getMaxLoad()
+                    if(maxLoad!= 0):
+                        self.data.scaleFactor/= self.getMaxLoad()
                     #Iterate over loaded elements.
                     count+= self.dumpElementalPositions(lp.data())
                     #Iterate over loaded nodes.

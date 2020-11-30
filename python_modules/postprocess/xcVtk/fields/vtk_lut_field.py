@@ -1,8 +1,12 @@
  # -*- coding: utf-8 -*-
-
+ 
 ''' Drawing of diagrams showing a law of internal 
     forces (or any other input) on linear elements
 '''
+
+from __future__ import print_function
+from __future__ import division
+
 __author__= "Luis C. Pérez Tato (LCPT) Ana Ortega (AOO)"
 __copyright__= "Copyright 2015, LCPT AOO"
 __license__= "GPL"

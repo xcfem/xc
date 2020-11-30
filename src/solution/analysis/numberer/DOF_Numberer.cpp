@@ -64,6 +64,7 @@
 #include <solution/analysis/model/AnalysisModel.h>
 #include "solution/graph/numberer/GraphNumberer.h"
 #include "solution/graph/numberer/RCM.h"
+#include "solution/graph/numberer/AMD.h"
 #include "solution/graph/numberer/SimpleNumberer.h"
 #include <utility/matrix/ID.h>
 #include <solution/analysis/model/dof_grp/DOF_Group.h>
@@ -86,6 +87,8 @@ void XC::DOF_Numberer::alloc(const std::string &str)
     free_mem();
     if(str=="rcm")
       theGraphNumberer=new RCM(); //Reverse Cuthill-Macgee.
+    else if(str=="amd")
+      theGraphNumberer=new AMD(); //Approximate minimum degree ordering
     else if(str=="simple")
       theGraphNumberer=new SimpleNumberer();
     else

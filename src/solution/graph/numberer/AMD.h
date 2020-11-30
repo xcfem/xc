@@ -1,3 +1,4 @@
+// -*-c++-*-
 //----------------------------------------------------------------------------
 //  XC program; finite element analysis code
 //  for structural analysis and design.
@@ -11,16 +12,16 @@
 //  of the original program (see copyright_opensees.txt)
 //  XC is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
-//  the Free Software Foundation, either version 3 of the License, or
+//  the Free Software Foundation, either version 3 of the License, or 
 //  (at your option) any later version.
 //
-//  This software is distributed in the hope that it will be useful, but
+//  This software is distributed in the hope that it will be useful, but 
 //  WITHOUT ANY WARRANTY; without even the implied warranty of
 //  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-//  GNU General Public License for more details.
+//  GNU General Public License for more details. 
 //
 //
-// You should have received a copy of the GNU General Public License
+// You should have received a copy of the GNU General Public License 
 // along with this program.
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
@@ -43,72 +44,49 @@
 **   Filip C. Filippou (filippou@ce.berkeley.edu)                     **
 **                                                                    **
 ** ****************************************************************** */
-
-// $Revision: 1.3 $
-// $Date: 2006/01/12 23:39:21 $
-// $Source: /usr/local/cvs/OpenSees/SRC/graph/numberer/SimpleNumberer.cpp,v $
-
-
-
-// Written: fmk
+                                                                        
+// $Revision: 1.1 $
+// $Date: 2009-12-10 00:40:01 $
+// $Source: /usr/local/cvs/OpenSees/SRC/graph/numberer/AMD.h,v $
+                                                                        
+                                                                        
+// Written: fmk 
+// Created: 12/09
 // Revision: A
 //
-// Description: This file contains the class definition for XC::SimpleNumberer.
-// SimpleNumberer is an object to perform a simple numbering of the vertices.
-// It does this by using the graphs XC::VertexIter and assigning the numbers as
-// it comes across the vertices.
+// Description: This file contains the class definition for AMD.
+// AMD is an object to perform the Approx. Min Degree Ordering
 //
-// What: "@(#) SimpleNumberer.C, revA"
+// What: "@(#) AMD.h, revA"
 
-#include "SimpleNumberer.h"
-#include "solution/graph/graph/Graph.h"
-#include "solution/graph/graph/Vertex.h"
-#include "solution/graph/graph/VertexIter.h"
-#include "utility/matrix/ID.h"
+#ifndef AMD_h
+#define AMD_h
 
-//! @brief Constructor
-XC::SimpleNumberer::SimpleNumberer(void)
- :BaseNumberer(GraphNUMBERER_TAG_SimpleNumberer) {}
+#include "BaseNumberer.h"
 
-//! @brief Virtual constructor.
-XC::GraphNumberer *XC::SimpleNumberer::getCopy(void) const
-  { return new SimpleNumberer(*this); }
-
-const XC::ID &XC::SimpleNumberer::number(Graph &theGraph, int lastVertex)
+namespace XC {
+//! @ingroup Graph
+//
+//! @brief AMD numberer uses approximate minimum degree
+//! ordering to number the equations.
+//!
+//! Reference: <a href="https://people.engr.tamu.edu/davis/publications_files/An_Approximate_Minimum_Degree_Ordering_Algorithm.pdf">Approximate minimum degree ordering algorhitm.</a> 
+class AMD: public BaseNumberer
   {
-    // see if we can do quick return
-    if(!checkSize(theGraph))
-      return theRefResult;
-        
+  protected:
+    friend class FEM_ObjectBroker;
+    friend class DOF_Numberer;
+    AMD(void);
+    GraphNumberer *getCopy(void) const;
+  public:
+    
+    const ID &number(Graph &theGraph, int lastVertex = -1);
+    const ID &number(Graph &theGraph, const ID &lastVertices);
 
-    // Now we go through the iter and assign the numbers
+    virtual int sendSelf(Communicator &);
+    virtual int recvSelf(const Communicator &);    
+  };
+} // end of XC namespace
 
-    if(lastVertex != -1)
-      {
-        std::cerr << "WARNING:  SimpleNumberer::number -";
-        std::cerr << " - does not deal with lastVertex";
-      }
+#endif
 
-    Vertex *vertexPtr= nullptr;
-    VertexIter &vertexIter= theGraph.getVertices();
-    int count = 0;
-
-    while((vertexPtr = vertexIter()) != 0)
-      {
-        theRefResult(count++) = vertexPtr->getTag();
-        vertexPtr->setTmp(count);
-      }
-    return theRefResult;
-  }
-
-//! @brief Send the object thru the communicator argument.
-int XC::SimpleNumberer::sendSelf(Communicator &comm)
-  { return 0; }
-
-//! @brief Receive the object thru the communicator argument.
-int XC::SimpleNumberer::recvSelf(const Communicator &comm)
-  { return 0; }
-
-//! @brief Do the numbering.
-const XC::ID &XC::SimpleNumberer::number(Graph &theGraph, const XC::ID &startVertices)
-  { return this->number(theGraph); }

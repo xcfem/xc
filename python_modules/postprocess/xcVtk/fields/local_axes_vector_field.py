@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
+''' Represent local axes as vectors. '''
 
 from __future__ import print_function
-
-''' Local axes represented as vectors. '''
+from __future__ import division
 
 __author__= "Luis C. Pérez Tato (LCPT)"
 __copyright__= "Copyright 2016 LCPT"
@@ -55,7 +55,7 @@ class LocalAxesVectorField(object):
         '''
         elemSet= xcSet.elements
         for e in elemSet:
-          self.dumpPair(e.getPosCentroid(True),e.getLocalAxes(True))
+            self.dumpPair(e.getPosCentroid(True),e.getLocalAxes(True))
 
     def addToDisplay(self,recordDisplay):
         '''Appends the axes into the container of things to display.

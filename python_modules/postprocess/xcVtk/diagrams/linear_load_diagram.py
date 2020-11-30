@@ -17,8 +17,17 @@ from postprocess.xcVtk.diagrams import colored_diagram as cd
 from misc_utils import log_messages as lmsg
 
 class LinearLoadDiagram(cd.ColoredDiagram):
-    '''Draw a load over a set of linear element (qx,qy,qz,...)'''
+    '''Draw a load over a set of linear element (qx,qy,qz,...)
+
+    :ivar setToDisp: set to display.
+    :ivar component: component to display.
+    '''
     def __init__(self,setToDisp,scale,fUnitConv,component):
+        ''' Constructor.
+
+        :param setToDisp: set to display.
+        :param component: component to display.
+        '''
         super(LinearLoadDiagram,self).__init__(scale,fUnitConv)
         self.setToDisp=setToDisp
         self.component= component
@@ -34,30 +43,34 @@ class LinearLoadDiagram(cd.ColoredDiagram):
                 eTag= tags[i]
                 if eTag in eTagsSet:
                     elem= preprocessor.getElementHandler.getElement(eTag)
-                    vJ= elem.getJVector3d(True)
-                    vK= elem.getKVector3d(True)
-                    if(self.component=='axialComponent'):
-                        self.vDir= vJ
-                        indxDiagram= self.appendDataToDiagram(elem,indxDiagram,eLoad.axialComponent,eLoad.axialComponent)
-                    elif(self.component=='transComponent'):
-                        self.vDir= vJ
-                        indxDiagram= self.appendDataToDiagram(elem,indxDiagram,eLoad.transComponent,eLoad.transComponent)
-                    elif(self.component=='transYComponent'):
-                        self.vDir= vJ
-                        indxDiagram= self.appendDataToDiagram(elem,indxDiagram,eLoad.transYComponent,eLoad.transYComponent)
-                    elif(self.component=='transZComponent'):
-                        self.vDir= vK
-                        indxDiagram= self.appendDataToDiagram(elem,indxDiagram,eLoad.transZComponent,eLoad.transZComponent)
-                    elif(self.component=='xyzComponents'):
-                        vI= elem.getIVector3d(True)
-                        localForce= eLoad.getVector3dLocalForce() # Local components of the force.
-                        v= localForce.x*vI+localForce.y*vJ+localForce.z*vK # Global force vector.
-                        self.vDir= v.normalized() 
-                        value= v.getModulus()
-                        indxDiagram= self.appendDataToDiagram(elem,indxDiagram,value,value)
-                    else:    
-                        lmsg.error("LinearLoadDiagram :'"+self.component+"' unknown.")        
-                eLoad= lIter.next()
+                    dim= elem.getDimension
+                    if(dim==1):
+                        vJ= elem.getJVector3d(True)
+                        vK= elem.getKVector3d(True)
+                        if(self.component=='axialComponent'):
+                            self.vDir= vJ
+                            indxDiagram= self.appendDataToDiagram(elem,indxDiagram,eLoad.axialComponent,eLoad.axialComponent)
+                        elif(self.component=='transComponent'):
+                            self.vDir= vJ
+                            indxDiagram= self.appendDataToDiagram(elem,indxDiagram,eLoad.transComponent,eLoad.transComponent)
+                        elif(self.component=='transYComponent'):
+                            self.vDir= vJ
+                            indxDiagram= self.appendDataToDiagram(elem,indxDiagram,eLoad.transYComponent,eLoad.transYComponent)
+                        elif(self.component=='transZComponent'):
+                            self.vDir= vK
+                            indxDiagram= self.appendDataToDiagram(elem,indxDiagram,eLoad.transZComponent,eLoad.transZComponent)
+                        elif(self.component=='xyzComponents'):
+                            vI= elem.getIVector3d(True)
+                            localForce= eLoad.getVector3dLocalForce() # Local components of the force.
+                            v= localForce.x*vI+localForce.y*vJ+localForce.z*vK # Global force vector.
+                            self.vDir= v.normalized() 
+                            value= v.getModulus()
+                            indxDiagram= self.appendDataToDiagram(elem,indxDiagram,value,value)
+                        else:    
+                            lmsg.error("LinearLoadDiagram :'"+self.component+"' unknown.")        
+            eLoad= lIter.next()
+        return indxDiagram
+        
 
     def getMaxAbsComp(self,preprocessor):
         '''Return the maximum absolute value of the component.
@@ -101,8 +114,10 @@ class LinearLoadDiagram(cd.ColoredDiagram):
         activeLoadPatterns= preprocessor.getDomain.getConstraints.getLoadPatterns
         if(len(activeLoadPatterns)<1):
             lmsg.warning('No active load patterns.')
+        retval= 0
         for lp in activeLoadPatterns: #Iterate over loaded elements.
-            self.dumpElementalLoads(preprocessor,lp.data(),indxDiagram)
+            retval+= self.dumpElementalLoads(preprocessor,lp.data(),indxDiagram)
+        return retval
 
     def addDiagram(self,preprocessor):
         self.creaEstrucDatosDiagrama()
@@ -110,7 +125,8 @@ class LinearLoadDiagram(cd.ColoredDiagram):
         self.creaActorDiagrama()
 
         indxDiagram= 0
-        self.dumpLoads(preprocessor,indxDiagram)
+        indxDiagram= self.dumpLoads(preprocessor,indxDiagram)
 
-        self.updateLookUpTable()
-        self.updateActorDiagrama()
+        if(indxDiagram>0):
+            self.updateLookUpTable()
+            self.updateActorDiagrama()

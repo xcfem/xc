@@ -71,7 +71,7 @@
 namespace XC {
 //! @ingroup Graph
 //
-//! @brief Triviel DOF numberer.
+//! @brief Trivial DOF numberer.
 class SimpleNumberer: public BaseNumberer
   {
   protected:

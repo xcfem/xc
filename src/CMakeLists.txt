@@ -245,7 +245,7 @@ SET(element ${physical_properties}  ${body_forces} domain/mesh/element/Element d
 
 SET(element_feap domain/mesh/element/feap/fElement domain/mesh/element/feap/fElmt02 domain/mesh/element/feap/fElmt05)
 
-SET(graph solution/graph/graph/ModelGraph solution/graph/graph/ArrayGraph solution/graph/graph/ArrayVertexIter solution/graph/graph/DOF_Graph solution/graph/graph/DOF_GroupGraph solution/graph/graph/Graph solution/graph/graph/Vertex solution/graph/graph/VertexIter solution/graph/numberer/GraphNumberer solution/graph/numberer/MyRCM solution/graph/numberer/RCM solution/graph/numberer/BaseNumberer solution/graph/numberer/SimpleNumberer solution/graph/partitioner/Metis)
+SET(graph solution/graph/graph/ModelGraph solution/graph/graph/ArrayGraph solution/graph/graph/ArrayVertexIter solution/graph/graph/DOF_Graph solution/graph/graph/DOF_GroupGraph solution/graph/graph/Graph solution/graph/graph/Vertex solution/graph/graph/VertexIter solution/graph/numberer/GraphNumberer solution/graph/numberer/MyRCM solution/graph/numberer/RCM solution/graph/numberer/AMD solution/graph/numberer/BaseNumberer solution/graph/numberer/SimpleNumberer solution/graph/partitioner/Metis)
 
 SET(graph2 solution/graph/graph/FE_VertexIter solution/graph/numberer/MetisNumberer)
 
@@ -352,7 +352,7 @@ SET(solution solution/analysis/ModelWrapper solution/SolutionStrategy solution/S
 add_library(XcBib SHARED ${utility} ${material} ${siseq} ${analysis} ${convergenceTest} ${coordTransformation} ${damage} ${domain} ${gauss_models} ${cyclic_model} ${element} ${graph} ${modelbuilder} ${reliability} ${unitest} ${preprocessor} ${solution} version FEProblem)
 
 #Python interface
-TARGET_LINK_LIBRARIES(XcBib xc_utils xc_basic_utils OpenMP::OpenMP_CXX ${VTK_BIB} CGAL::CGAL CGAL::CGAL_Core ${Plot_LIBRARY} ${MPFR_LIBRARIES} ${GMP_LIBRARY} ${MYSQL_LIBRARY} ${MySQLpp_LIBRARIES} ${SQLITE3_LIBRARY} ${GNUGTS_LIBRARIES} ${BerkeleyDB_LIBRARIES} ${ARPACK_LIB} ${ARPACKPP_LIB} ${LAPACK_LIBRARIES} ${SUPERLU_LIBRARIES} ${BLAS_LIBRARIES} ${PETSC_LIB_PETSC} ${METIS_LIBRARIES} ${TCL_LIBRARY} ${XC_UTILS_BOOST_LIBRARIES} ${PYTHON_LIBRARIES} ${F2C_LIBRARY} ${GMSH_LIBRARIES})
+TARGET_LINK_LIBRARIES(XcBib xc_utils xc_basic_utils OpenMP::OpenMP_CXX ${VTK_BIB} CGAL::CGAL CGAL::CGAL_Core ${Plot_LIBRARY} ${MPFR_LIBRARIES} ${GMP_LIBRARY} ${MYSQL_LIBRARY} ${MySQLpp_LIBRARIES} ${SQLITE3_LIBRARY} ${GNUGTS_LIBRARIES} ${BerkeleyDB_LIBRARIES} ${ARPACK_LIB} ${ARPACKPP_LIB} ${LAPACK_LIBRARIES} ${SUPERLU_LIBRARIES} ${BLAS_LIBRARIES} ${PETSC_LIB_PETSC} ${METIS_LIBRARIES} ${TCL_LIBRARY} ${XC_UTILS_BOOST_LIBRARIES} ${PYTHON_LIBRARIES} ${F2C_LIBRARY} ${GMSH_LIBRARIES} ${SUITESPARSE_LIBRARIES})
 add_definitions(-fno-strict-aliasing)
 # Define the wrapper library that wraps our library
 add_library(xc SHARED utility/export_utility material/export_material_base material/uniaxial/export_material_uniaxial material/nD/export_material_nD material/section/export_material_section material/section/export_material_fiber_section  material/damage/export_material_damage domain/export_domain domain/mesh/export_domain_mesh preprocessor/export_preprocessor_handlers preprocessor/export_preprocessor_build_model  preprocessor/export_preprocessor_sets preprocessor/export_preprocessor_main solution/export_solution python_interface)
