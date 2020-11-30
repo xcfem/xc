@@ -191,7 +191,7 @@ class WallStabilityResults(object):
         self.FadmPressureComb= ''
         for comb in combinations:
             reactions= wall.resultComb(comb)
-            R= reactions.getResultant()
+            R= reactions.getResultantSVS()
             Foverturning= wall.getOverturningSafetyFactor(R,gammaR)
             if(Foverturning<self.Foverturning):
                 self.Foverturning= Foverturning
@@ -564,7 +564,7 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
         '''Assigns the ultimate limit state infernal forces envelope for the stem.'''
         if(hasattr(self,'stemHeight')):
             if(self.getWFStemHeigth()!=wallInternalForces.stemHeight):
-                lmsg.warning('stem height (' + str(self.getWFStemHeigth()) + ' m) different from length of internal forces envelope law('+ str(wallInternalForces.stemHeight)+ ' m)') 
+                lmsg.warning('stem height (' + str(self.getWFStemHeigth()) + ' m) different from length of internal forces envelope law ('+ str(wallInternalForces.stemHeight)+ ' m)') 
         else:
             self.stemHeight= wallInternalForces.stemHeight-self.footingThickness/2.0
         self.internalForcesULS= wallInternalForces
@@ -977,9 +977,8 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
         preprocessor.resetLoadCase()
         preprocessor.getLoadHandler.addToDomain(nmbComb)
         #Solution
-        solution= predefined_solutions.SolutionProcedure()
-        analysis= solution.simpleStaticLinear(self.feProblem)
-        result= analysis.analyze(1)
+        solution= predefined_solutions.SimpleStaticLinear(self.feProblem)
+        result= solution.solve()
         reactions= self.getReactions()
         #preprocessor.getLoadHandler.removeFromDomain(nmbComb)
         return reactions
