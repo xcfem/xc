@@ -14,6 +14,7 @@ import xc_base
 import geom
 from model import predefined_spaces
 from postprocess.reports import common_formats as fmt
+import matplotlib.pyplot as plt
 
 #     Stem |-------- Earth fill
 #          |
@@ -150,7 +151,7 @@ class CantileverRetainingWallGeometry(object):
         '''
         return toeFillDepth+self.footingThickness
 
-    def getContour(self):
+    def getContourPoints(self):
         ''' Return a list with the points that form the wall contour.'''
         retval= list()
         toePosBottom= self.getToePosition() # toe
@@ -158,8 +159,9 @@ class CantileverRetainingWallGeometry(object):
         heelEndPosBottom= toePosBottom+geom.Vector2d(self.getFootingWidth(), 0.0) # heel end
         retval.append(heelEndPosBottom)
         heelEndPosTop= heelEndPosBottom+geom.Vector2d(0.0, self.footingThickness)
-        stemOutsideTop= self.stemTopPosition-geom.Vector2d(self.stemTopWidth,0.0) # stem top
-        stemOutsideBottom= stemOutsideTop+geom.Vector2d(self.stemHeight*self.stemBackSlope,0.0) #stem bottom
+        retval.append(heelEndPosTop)        
+        stemOutsideTop= self.stemTopPosition+geom.Vector2d(self.stemTopWidth,0.0) # stem top
+        stemOutsideBottom= stemOutsideTop+geom.Vector2d(self.stemHeight*self.stemBackSlope,-self.stemHeight) #stem bottom
         retval.append(stemOutsideBottom)
         retval.append(stemOutsideTop) # stem top
         retval.append(self.stemTopPosition)
@@ -167,7 +169,43 @@ class CantileverRetainingWallGeometry(object):
         retval.append(stemInsideBottom)
         toePosTop= toePosBottom+geom.Vector2d(0.0, self.footingThickness)
         retval.append(toePosTop)
-        return retval        
+        return retval
+    
+    def getXYVertices(self):
+        ''' Return the contour X,Y coordinates in two separate
+            lists to be used with pyplot.''' 
+        x= list()
+        y= list()
+        vertices= self.getContourPoints()
+        for p in vertices:
+            x.append(p.x)
+            y.append(p.y)
+        x.append(vertices[0].x)
+        y.append(vertices[0].y)
+        return x,y
+
+    def draw(self, notes= None):
+        ''' Draw the wall contour using pyplot.'''
+        fig = plt.figure()
+        #plt.axis('equal')
+        #plt.grid(axis= 'both')
+        ax = fig.add_subplot(111, aspect= 'equal') # subplot axes
+        x,y= self.getXYVertices()
+        ax.fill(x,y,'tab:gray')
+        ax.plot(x,y,'k')
+        if(notes):
+            # build a rectangle in axes coords
+            left, width = .25, .5
+            bottom, height = .25, .5
+            right = left + width
+            top = bottom + height
+            for text in notes:
+                ax.text(left+width/2, top, text,
+                horizontalalignment='left',
+                verticalalignment='top',
+                transform= ax.transAxes)
+                top-= 0.05
+        plt.show()
 
     def writeGeometry(self,outputFile):
         '''Write wall geometry in LaTeX format.'''
