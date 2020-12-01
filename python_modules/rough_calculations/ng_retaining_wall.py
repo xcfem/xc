@@ -925,6 +925,8 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
         '''
         e= self.getEccentricity(R) #eccentricity
         b= self.getFootingWidth()
+        if(e>0.0): # Overturning not possible.
+            e= -.001*b
         bReduced= 2*(b/2.0+e)
         return b/(3*(-e)*gammaR)
 
