@@ -150,6 +150,25 @@ class CantileverRetainingWallGeometry(object):
         '''
         return toeFillDepth+self.footingThickness
 
+    def getContour(self):
+        ''' Return a list with the points that form the wall contour.'''
+        retval= list()
+        toePosBottom= self.getToePosition() # toe
+        retval.append(toePosBottom)
+        heelEndPosBottom= toePosBottom+geom.Vector2d(self.getFootingWidth(), 0.0) # heel end
+        retval.append(heelEndPosBottom)
+        heelEndPosTop= heelEndPosBottom+geom.Vector2d(0.0, self.footingThickness)
+        stemOutsideTop= self.stemTopPosition-geom.Vector2d(self.stemTopWidth,0.0) # stem top
+        stemOutsideBottom= stemOutsideTop+geom.Vector2d(self.stemHeight*self.stemBackSlope,0.0) #stem bottom
+        retval.append(stemOutsideBottom)
+        retval.append(stemOutsideTop) # stem top
+        retval.append(self.stemTopPosition)
+        stemInsideBottom= self.stemTopPosition-geom.Vector2d(0.0,self.stemHeight)
+        retval.append(stemInsideBottom)
+        toePosTop= toePosBottom+geom.Vector2d(0.0, self.footingThickness)
+        retval.append(toePosTop)
+        return retval        
+
     def writeGeometry(self,outputFile):
         '''Write wall geometry in LaTeX format.'''
         outputFile.write("\\begin{tabular}{l}\n")
