@@ -154,7 +154,13 @@ class CantileverRetainingWallGeometry(object):
     def getContourPoints(self):
         ''' Return a list with the points that form the wall contour.'''
         retval= list()
-        toePosBottom= self.getToePosition() # toe
+        retval.append(self.stemTopPosition)
+        stemInsideBottom= self.stemTopPosition-geom.Vector2d(0.0,self.stemHeight)
+        retval.append(stemInsideBottom)
+        toePosTop= stemInsideBottom+geom.Vector2d(-self.bToe, 0.0) # toe
+        retval.append(toePosTop)
+        
+        toePosBottom= toePosTop-geom.Vector2d(0.0,self.footingThickness)
         retval.append(toePosBottom)
         heelEndPosBottom= toePosBottom+geom.Vector2d(self.getFootingWidth(), 0.0) # heel end
         retval.append(heelEndPosBottom)
@@ -164,11 +170,6 @@ class CantileverRetainingWallGeometry(object):
         stemOutsideBottom= stemOutsideTop+geom.Vector2d(self.stemHeight*self.stemBackSlope,-self.stemHeight) #stem bottom
         retval.append(stemOutsideBottom)
         retval.append(stemOutsideTop) # stem top
-        retval.append(self.stemTopPosition)
-        stemInsideBottom= self.stemTopPosition-geom.Vector2d(0.0,self.stemHeight)
-        retval.append(stemInsideBottom)
-        toePosTop= toePosBottom+geom.Vector2d(0.0, self.footingThickness)
-        retval.append(toePosTop)
         return retval
     
     def getXYVertices(self):

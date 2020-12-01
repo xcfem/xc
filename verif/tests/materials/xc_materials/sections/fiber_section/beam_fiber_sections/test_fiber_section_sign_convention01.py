@@ -33,7 +33,6 @@ epsilon4= epsilon
 #Read section definition from file.
 import os
 pth= os.path.dirname(__file__)
-#print("pth= ", pth)
 if(not pth):
   pth= "."
 exec(open(pth+"/../../aux/four_fiber_section.py").read())
