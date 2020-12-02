@@ -539,7 +539,8 @@ class OutputHandler(object):
         vField.multiplyByElementArea= self.outputStyle.multLoadsByElemArea
         count= vField.dumpNodalLoads(preprocessor, defFScale=defFScale)
         if(count >0):
-            vField.addToDisplay(displaySettings,orientation= self.outputStyle.nodalLoadBarOrientation)
+#            vField.addToDisplay(displaySettings,orientation= self.outputStyle.nodalLoadBarOrientation)
+            vField.addToDisplay(displaySettings,orientation= 'RV')
         if(not caption):
           caption= 'load case: ' + loadCaseName +' '+elLoadComp + ', set: ' + setToDisplay.name + ', '  + unitDescription
         displaySettings.displayScene(caption=caption,fileName=fileName)
