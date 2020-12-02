@@ -236,13 +236,14 @@ class UnifLoadSurfNodesDistributed(BaseVectorLoad):
         for s in self.surfSet.surfaces:
             lstNodes=list()
             auxNodSet=prep.getSets.defSet('auxNodSet')
-            lstNodes+=[n for n in self.surfSet.nodes]
+            lstNodes+=[n for n in s.nodes]
             for l in s.getEdges: lstNodes+=l.nodes
             for p in s.getVertices: lstNodes+=p.nodes
-            for n in lstNodes: auxNodSet.nodes.append(n)
-            surfLoadVect=s.getArea()*self.loadVector
-            slv=SlindingVectorLoad('slv',auxNodSet,s.getCentroid(),surfLoadVect)
-            slv.appendLoadToCurrentLoadPattern()
+            if len(lstNodes) > 0:
+                for n in lstNodes: auxNodSet.nodes.append(n)
+                surfLoadVect=s.getArea()*self.loadVector
+                slv=SlindingVectorLoad('slv',auxNodSet,s.getCentroid(),surfLoadVect)
+                slv.appendLoadToCurrentLoadPattern()
             prep.getSets.removeSet('auxNodSet')
             
     def getMaxMagnitude(self):
@@ -643,11 +644,12 @@ class SlindingVectorLoad(BaseVectorLoad):
         loadSVS=geom.SlidingVectorsSystem3d(O,force,moment)
         ptList= list()
         nodeList= self.xcSet.nodes
-        for n in nodeList:
-            ptList.append(n.getInitialPos3d)
-        loadVectors= loadSVS.distribute(ptList)
-        for n, v in zip(nodeList,loadVectors):
-            f= v.getVector3d()
-            n.newLoad(xc.Vector([f.x,f.y,f.z,0.0,0.0,0.0]))
+        if len(nodeList)>0:
+            for n in nodeList:
+                ptList.append(n.getInitialPos3d)
+                loadVectors= loadSVS.distribute(ptList)
+            for n, v in zip(nodeList,loadVectors):
+                f= v.getVector3d()
+                n.newLoad(xc.Vector([f.x,f.y,f.z,0.0,0.0,0.0]))
 
         
