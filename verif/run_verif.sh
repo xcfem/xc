@@ -90,6 +90,7 @@ python tests/elements/beam_column/cantilever3d_08.py
 python tests/elements/beam_column/cantilever3d_09.py
 python tests/elements/beam_column/cantilever3d_10.py
 python tests/elements/beam_column/test_torsion_01.py
+python tests/elements/beam_column/test_torsion_02.py
 echo "$BLEU" "    Force beam-column 2D tests." "$NORMAL"
 python tests/elements/beam_column/test_force_beam_column_2d_01.py
 python tests/elements/beam_column/test_force_beam_column_2d_02.py
