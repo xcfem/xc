@@ -60,19 +60,28 @@ void XC::J2PlateFibre::init(void)
 //! @brief Default constructor.
 XC::J2PlateFibre::J2PlateFibre(int tag):
   NDMaterial(tag, ND_TAG_J2PlateFibre),
-  E(0.0), nu(0.0), sigmaY(0.0), Hiso(0.0), Hkin(0.0), 
+  E(0.0), nu(0.0), sigmaY(0.0), Hiso(0.0), Hkin(0.0), rho(0.0),
   parameterID(0), SHVs(), Tepsilon(order), Tepsilon0(order), dg_n1(0.0)
   { init(); }
 
 XC::J2PlateFibre::J2PlateFibre(int tag, double e, double g, double sy, double hi, double hk)
   : NDMaterial(tag, ND_TAG_J2PlateFibre), E(e), nu(g), sigmaY(sy),
-    Hiso(hi), Hkin(hk), parameterID(0), SHVs(),
+    Hiso(hi), Hkin(hk), rho(0.0), parameterID(0), SHVs(),
     Tepsilon(order), Tepsilon0(order), dg_n1(0.0)
   { init(); }
 
 
 XC::J2PlateFibre::~J2PlateFibre(void)
   {}
+
+//! @brief Return material density
+double XC::J2PlateFibre::getRho(void) const
+  { return rho; }
+
+//! @brief Set density
+//! @param r: density.
+void XC::J2PlateFibre::setRho(const double &r)
+  { rho= r; }
 
 //! @brief Return elastic modulus
 double XC::J2PlateFibre::getE(void) const

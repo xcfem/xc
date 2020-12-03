@@ -24,6 +24,7 @@
 int (XC::NDMaterial::*setNDTrialStrain)(const XC::Vector &)= &XC::NDMaterial::setTrialStrain;
 class_<XC::NDMaterial, XC::NDMaterial *, bases<XC::Material>, boost::noncopyable >("NDMaterial", no_init)
     .add_property("getRho", &XC::NDMaterial::getRho,"Return the material density.")
+    .add_property("rho", &XC::NDMaterial::getRho, &XC::NDMaterial::setRho,"Material density.")
     .add_property("getE", &XC::NDMaterial::getE)
     .add_property("getnu", &XC::NDMaterial::getnu)
     .add_property("getpsi", &XC::NDMaterial::getpsi)

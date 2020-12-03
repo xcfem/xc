@@ -85,6 +85,7 @@ class J2PlateFibre: public NDMaterial
     double sigmaY; //!< Yield stress.
     double Hiso; //!< Isotropic hardening parameter.
     double Hkin; //!< Kinematic hardening parameter.
+    double rho; //!< Density.
 
     int parameterID;
     Matrix SHVs;
@@ -111,6 +112,8 @@ class J2PlateFibre: public NDMaterial
     NDMaterial *getCopy(void) const;
     NDMaterial *getCopy(const std::string &type) const;
 
+    double getRho(void) const;
+    void setRho(const double &);
     double getE(void) const;
     void setE(const double &);
     double getnu(void) const;
