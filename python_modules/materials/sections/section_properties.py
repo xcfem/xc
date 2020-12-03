@@ -21,11 +21,14 @@ class SectionProperties(object):
     '''Abstract section properties (area, moments of inertia,...)
 
      :ivar sectionName:  name identifying the section
-     :ivar xc_material:  pointer to XC material.    
+     :ivar xc_material:  pointer to XC material.
+     :ivar torsionalStiffnessFactor: factor to apply to the sectional
+                                     stiffness (defaults to 1.0).
     '''
     def __init__(self,name):
         self.sectionName= name
         self.xc_material= None
+        self.torsionalStiffnessFactor= 1.0
         
     def getDict(self):
         ''' Put member values in a dictionary.'''
@@ -188,7 +191,7 @@ class SectionProperties(object):
     def defElasticSection3d(self, preprocessor, material):
         ''' Return an elastic section appropiate for 3D beam analysis
 
-        :param  preprocessor: preprocessor object.
+        :param preprocessor: preprocessor object.
         :param material:      material (for which E is the Young's modulus and G() the shear modulus)  
         '''
         if(not self.xc_material):
@@ -206,7 +209,7 @@ class SectionProperties(object):
         '''elastic section appropiate for 3D beam analysis, including shear 
            deformations
 
-        :param  preprocessor: preprocessor object.
+        :param preprocessor: preprocessor object.
         :param material:      material (for which E is the Young's modulus and G() the shear modulus)  
         '''
         if(not self.xc_material):
@@ -427,14 +430,15 @@ class RectangularSection(SectionProperties):
       alphaJT= self.getAlphaTorsion()
       retval= 0.0
       if self.b<self.h:
-        retval= alphaJT*pow(self.b,3)*self.h
+          retval= alphaJT*pow(self.b,3)*self.h
       else:
-        retval= alphaJT*self.b*pow(self.h,3)
+          retval= alphaJT*self.b*pow(self.h,3)
+      retval*= self.torsionalStiffnessFactor
       return retval
   
     def getTorsionalStiffness(self, G):
         '''Return the torsional stiffness of the section.'''
-        return G*self.getJTorsion()
+        return G*self.J()
     
     def getShearStiffnessY(self, G):
         '''Return the shear stiffness of the section.'''
@@ -490,7 +494,7 @@ class CircularSection(SectionProperties):
   
     def J(self):
         '''Return torsional constant of the section'''
-        return 2*self.Iy()
+        return 2*self.Iy()*self.torsionalStiffnessFactor
   
     def alphaY(self):
         '''Return distorsion coefficient with respect to local Y axis
@@ -563,7 +567,7 @@ class GenericSection(SectionProperties):
   
     def J(self):
       '''Return torsional constant of the section'''
-      return self.Jtors
+      return self.Jtors*self.torsionalStiffnessFactor
   
     def Wyel(self):
       '''Return section modulus with respect to local y-axis'''
@@ -660,6 +664,7 @@ class ISection(SectionProperties):
       '''Return torsional constant of the section'''
       hPrf=self.hTotal()-self.tTF/2.0-self.tBF/2.0
       retval=(self.wTF*self.tTF**3+self.wBF*self.tBF**3+hPrf*self.tW**3)/3.0
+      retval*= self.torsionalStiffnessFactor
       return retval
   
     def Wyel(self):
@@ -739,7 +744,7 @@ class PolygonalSection(SectionProperties):
            Return the torsional constant of a circle with the same area.
         '''
         R2= self.A()/math.pi
-        return 0.5*math.pi*R2**2
+        return 0.5*math.pi*R2**2*self.torsionalStiffnessFactor
     
     def alphaY(self):
         '''Return shear shape factor with respect to local y-axis'''
@@ -790,41 +795,41 @@ def getInerciaTorsionCajonMonocelular(bs,bi,h,ts,ti,td):
     return (bs+bi)**2*h**2/(bs/ts+2*longAlma/td+bi/ti)
 
 def solicitationType(epsCMin, epsSMax):
-  ''' Solicitation type from maximum and minimum strain.
+    ''' Solicitation type from maximum and minimum strain.
 
-  Return:
-    1: Pure or combined tension  (all fibers are tensioned).
-    2: Pure or combined bending (tensioned and compressed fibers).
-    3: Pure or combined compression (all fibers are compressed).
-
-    :param epsCMin: Minimal strain.
-    :param epsCMax: Maximal strain.
-  '''
-  if(epsCMin>0.0): # All material in tension.
-    return 1 
-  else: # Some material in compression
-    if(epsSMax>0): # Some material in tension.
-      return 2  # Pure or combined bending
-    else: # All material in compression.
-      return 3  # Pure or combined compression.
-
-def solicitationTypeString(tipoSol):
-  ''' Returns a string describing the solicitation type.
-
-    :param solType: number identifiying the solicitation type:
+    Return:
       1: Pure or combined tension  (all fibers are tensioned).
       2: Pure or combined bending (tensioned and compressed fibers).
       3: Pure or combined compression (all fibers are compressed).
 
-  '''
-  if(tipoSol==1):
-    return "simple of combined tension"
-  elif(tipoSol==2): 
-    return "simple or combined bending" 
-  elif(tipoSol==3):
-    return "simple or combined compression"
-  else: 
-    return "error"
+      :param epsCMin: Minimal strain.
+      :param epsCMax: Maximal strain.
+    '''
+    if(epsCMin>0.0): # All material in tension.
+        return 1 
+    else: # Some material in compression
+        if(epsSMax>0): # Some material in tension.
+            return 2  # Pure or combined bending
+        else: # All material in compression.
+            return 3  # Pure or combined compression.
+
+def solicitationTypeString(tipoSol):
+    ''' Returns a string describing the solicitation type.
+
+      :param solType: number identifiying the solicitation type:
+        1: Pure or combined tension  (all fibers are tensioned).
+        2: Pure or combined bending (tensioned and compressed fibers).
+        3: Pure or combined compression (all fibers are compressed).
+
+    '''
+    if(tipoSol==1):
+        return "simple of combined tension"
+    elif(tipoSol==2): 
+        return "simple or combined bending" 
+    elif(tipoSol==3):
+        return "simple or combined compression"
+    else: 
+        return "error"
 
 class CompoundSection(SectionProperties):
     '''Compound section properties (area, moments of inertia,...)
@@ -832,37 +837,37 @@ class CompoundSection(SectionProperties):
     :ivar name:         name identifying the section
     '''
     def __init__(self,name, section_list):
-      super(CompoundSection,self).__init__(name)
-      self.sectionList= section_list
+        super(CompoundSection,self).__init__(name)
+        self.sectionList= section_list
       
     def A(self):
-      '''cross-sectional area'''
-      retval= 0.0
-      for s in self.sectionList:
-        retval+= s[1].A()
-      return retval
+        '''cross-sectional area'''
+        retval= 0.0
+        for s in self.sectionList:
+            retval+= s[1].A()
+        return retval
   
     def yCenterOfMass(self):
-      '''y coordinate of the center of mass.'''
-      retval= 0.0
-      totalArea= 0.0
-      for s in self.sectionList:
-        area= s[1].A()
-        totalArea+=area 
-        retval+= s[0].x*area
-      retval/= totalArea
-      return retval
+        '''y coordinate of the center of mass.'''
+        retval= 0.0
+        totalArea= 0.0
+        for s in self.sectionList:
+            area= s[1].A()
+            totalArea+=area 
+            retval+= s[0].x*area
+        retval/= totalArea
+        return retval
   
     def zCenterOfMass(self):
-      '''y coordinate of the center of mass.'''
-      retval= 0.0
-      totalArea= 0.0
-      for s in self.sectionList:
-        area= s[1].A()
-        totalArea+=area 
-        retval+= s[0].y*area
-      retval/= totalArea
-      return retval
+        '''y coordinate of the center of mass.'''
+        retval= 0.0
+        totalArea= 0.0
+        for s in self.sectionList:
+            area= s[1].A()
+            totalArea+=area 
+            retval+= s[0].y*area
+        retval/= totalArea
+        return retval
   
     def Iy(self):
       '''second moment of area about the local y-axis.'''
@@ -874,41 +879,42 @@ class CompoundSection(SectionProperties):
       return retval
   
     def Iz(self):
-      '''second moment of area about the local z-axis (abstract method)'''
-      yCenter= self.yCenterOfMass()
-      retval= 0.0
-      for s in self.sectionList:
-        y= s[0].x
-        retval+= s[1].SteinerZ(y-yCenter)
-      return retval
+        '''second moment of area about the local z-axis (abstract method)'''
+        yCenter= self.yCenterOfMass()
+        retval= 0.0
+        for s in self.sectionList:
+          y= s[0].x
+          retval+= s[1].SteinerZ(y-yCenter)
+        return retval
   
     def J(self):
-      '''torsional constant of the section.'''
-      center= geom.Pos2d(self.yCenterOfMass(), self.zCenterOfMass())
-      retval= 0.0
-      for s in self.sectionList:
-        retval+= s[1].SteinerJ(s[0].dist(center))
-      return retval
+        '''torsional constant of the section.'''
+        center= geom.Pos2d(self.yCenterOfMass(), self.zCenterOfMass())
+        retval= 0.0
+        for s in self.sectionList:
+            retval+= s[1].SteinerJ(s[0].dist(center))
+        retval*= self.torsionalStiffnessFactor
+        return retval
   
     def alphaY(self):
-      '''return shear shape factor with respect to local y-axis'''
-      retval= 0.0
-      totalArea= 0.0
-      for s in self.sectionList:
-        area= s[1].A()
-        totalArea+=area 
-        retval+= s[1].alphaY()*area
-      retval/= totalArea
-      return retval
+        '''return shear shape factor with respect to local y-axis'''
+        retval= 0.0
+        totalArea= 0.0
+        for s in self.sectionList:
+            area= s[1].A()
+            totalArea+=area 
+            retval+= s[1].alphaY()*area
+        retval/= totalArea
+        return retval
   
     def alphaZ(self):
-      '''return shear shape factor with respect to local z-axis'''
-      retval= 0.0
-      totalArea= 0.0
-      for s in self.sectionList:
-        area= s[1].A()
-        totalArea+=area 
-        retval+= s[1].alphaZ()*area
-      retval/= totalArea
-      return retval
+        '''return shear shape factor with respect to local z-axis'''
+        retval= 0.0
+        totalArea= 0.0
+        for s in self.sectionList:
+            area= s[1].A()
+            totalArea+=area 
+            retval+= s[1].alphaZ()*area
+        retval/= totalArea
+        return retval
 

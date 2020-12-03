@@ -236,7 +236,7 @@ class SteelShape(sp.SectionProperties):
 
     def J(self):
         '''return torsional moment of inertia of the section'''
-        return self.get('It')
+        return self.get('It')*self.torsionalStiffnessFactor
 
     def It(self):
         '''return Saint Venant torsional constant.'''
