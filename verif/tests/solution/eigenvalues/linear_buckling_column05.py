@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-from __future__ import print_function
 ''' Taken from figure 6.22 of "Finite Element Procedures"
      by "Klaus Jurgen Bathe".
 
@@ -11,6 +10,9 @@ from __future__ import print_function
 
     See the article 'Meshing for Column Loads <https://portwooddigital.com/2020/05/10/meshing-for-column-loads/amp/>'
  '''
+
+from __future__ import print_function
+
 import xc_base
 import geom
 import xc
@@ -19,6 +21,7 @@ from model import predefined_spaces
 from solution import predefined_solutions
 from materials import typical_materials
 import math
+from postprocess import output_handler
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
 __copyright__= "Copyright 2015, LCPT and AOO"
@@ -115,7 +118,7 @@ ratio2= (blCalc-blTeor)/blTeor
 ''' 
 print("deltay= ",(deltay))
 print("deltayTeor= ",(deltayTeor))
-print("eig1= ",(eig1))
+print("eig1= ",eig1)
 print("ratio1= ",(ratio1))
 print("blCalc= ",(blCalc/1e3)," kN")
 print("blTeor= ",(blTeor/1e3)," kN")
@@ -129,3 +132,11 @@ if (abs(ratio1)<1e-5) & (abs(ratio2)<0.03):
   print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')
+  
+# Graphic stuff.
+#oh= output_handler.OutputHandler(modelSpace)
+#oh.displayFEMesh()
+#oh.displayEigenvectors(1)
+#oh.displayEigenResult(1, defFScale= 10.0)
+#oh.displayLocalAxes()
+#oh.displayReactions()
