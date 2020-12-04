@@ -33,7 +33,8 @@ class OutputStyle(object):
        :ivar showLoadsPushing: true if the vector ends in the loaded node (push
                                the node).
        :iver nodalLoadBarOrientation: orientation of scale bar for nodal loads
-                                      'H' -> horizontal, 'V' -> vertical
+                                      'H' -> horizontal, 'VR' -> vertical right
+                                      'VL' vertical left
        :ivar multByElemAreaLoads: boolean value that must be True if we want to 
                         represent the total load on each element 
                         (=load multiplied by element area) and False if we 
@@ -63,7 +64,7 @@ class OutputStyle(object):
         self.internalForcesDiagramScaleFactor= 1.0
         self.loadVectorsScaleFactor= 1.0
         self.loadDiagramsScaleFactor= 1.0
-        self.nodalLoadBarOrientation= 'V'
+        self.nodalLoadBarOrientation= 'VR'
         self.showLoadsPushing= True
         self.multLoadsByElemArea=False
         if(language):
