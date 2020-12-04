@@ -38,6 +38,7 @@ typedef XC::EntityMap<XC::Pnt> point_map;
 XC::Pnt *(point_map::*getNearestPoint)(const Pos3d &)= &point_map::getNearest;
 class_<point_map, bases<cm_point_map>, boost::noncopyable >("point_map", no_init)
   .def("getNearest", getNearestPoint, return_internal_reference<>(),"Return the nearest point.")
+  .def("genMesh", &point_map::genMesh, "Generate mesh.")
    ;
 
 XC::Pnt *(XC::PntMap::*newPoint)(void)= &XC::PntMap::New;
@@ -61,6 +62,7 @@ class_<map_cm_edges, bases<XC::ModelComponentContainerBase>, boost::noncopyable 
 
 typedef XC::EntityMap<XC::Edge> map_edges;
 class_<map_edges, bases<map_cm_edges>, boost::noncopyable >("map_edges", no_init)
+  .def("genMesh", &map_edges::genMesh, "Generate mesh.")
    ;
 
 class_<XC::LineMap, bases<map_edges>, boost::noncopyable >("LineMap", no_init)
@@ -83,6 +85,7 @@ class_<map_cm_faces, bases<XC::ModelComponentContainerBase>, boost::noncopyable 
 
 typedef XC::EntityMap<XC::Face> map_faces;
 class_<map_faces, bases<map_cm_faces>, boost::noncopyable >("map_faces", no_init)
+  .def("genMesh", &map_faces::genMesh, "Generate mesh.")
    ;
 
 class_<XC::SurfaceMap, bases<map_faces>, boost::noncopyable >("SurfaceMap", no_init)
@@ -107,6 +110,7 @@ class_<map_cm_bodies, bases<XC::ModelComponentContainerBase>, boost::noncopyable
 
 typedef XC::EntityMap<XC::Body> map_bodies;
 class_<map_bodies, bases<map_cm_bodies>, boost::noncopyable >("map_bodies", no_init)
+  .def("genMesh", &map_bodies::genMesh, "Generate mesh.")
    ;
 
 class_<XC::BodyMap, bases<map_bodies>, boost::noncopyable >("MapBodies", no_init)

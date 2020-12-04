@@ -200,3 +200,4 @@ double XC::SurfaceMap::getAverageArea(void) const
     retval/=(size());
     return retval;
   }
+

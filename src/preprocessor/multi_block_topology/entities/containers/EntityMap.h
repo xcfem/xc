@@ -51,6 +51,7 @@ class EntityMap: public ModelComponentContainer<Entity>
     Entity *getNearest(const Pos3d &p);
     const Entity *getNearest(const Pos3d &p) const;
     void numera(void);
+    void genMesh(meshing_dir dm);
   };
 
 //! @brief Constructor.
@@ -105,6 +106,15 @@ void EntityMap<Entity>::numera(void)
         ptr->set_index(idx);
       }
   }
-
+//!  @brief Generate mesh.
+template <class Entity>
+void EntityMap<Entity>::genMesh(meshing_dir dm)
+  {
+    for(iterator i= this->begin();i!=this->end();i++)
+      {
+	EntMdlr *ptr= (*i).second;
+        ptr->genMesh(dm);
+      }
+  }
 } //end of XC namespace
 #endif
