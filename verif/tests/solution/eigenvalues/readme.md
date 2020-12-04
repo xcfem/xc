@@ -1,3 +1,3 @@
 ## Eigenvalue computation
 
-Eigenvalue computation related verification tests.
+[Eigenvalue and eigenvector](https://en.wikipedia.org/wiki/Eigenvalues_and_eigenvectors) computation related verification tests.
