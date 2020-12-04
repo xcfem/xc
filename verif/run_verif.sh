@@ -213,6 +213,7 @@ python tests/solution/eigenvalues/cantilever_eigenmodes_03.py
 python tests/solution/eigenvalues/cantilever_eigenmodes_04.py
 python tests/solution/eigenvalues/cantilever_eigenmodes_05.py
 python tests/solution/eigenvalues/cantilever_eigenmodes_06.py
+python tests/solution/eigenvalues/cantilever_eigenmodes_07.py
 python tests/solution/eigenvalues/linear_buckling_column01.py
 python tests/solution/eigenvalues/linear_buckling_column02.py
 python tests/solution/eigenvalues/linear_buckling_column03.py
