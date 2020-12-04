@@ -659,7 +659,7 @@ class OutputHandler(object):
                 scaleFactor*=0.15*LrefModSize/(maxAbs)
             #
             if(not caption):
-              caption= 'Mode '+ str(mode) + ' eigenvectors' + ' '+setToDisplay.description
+                caption= 'Mode '+ str(mode) + ' eigenvectors' + ' '+setToDisplay.description
             vFieldD= vf.VectorField(name='Deigenvectors',fUnitConv=1.0,scaleFactor=scaleFactor,showPushing= True,symType=vtk.vtkArrowSource()) #Force
             vFieldR= vf.VectorField(name='Reigenvectors',fUnitConv=1.0,scaleFactor=scaleFactor,showPushing= True,symType=vtk.vtkArrowSource())
             vFieldD.populateFromPairList(dispPairs)
@@ -710,9 +710,11 @@ class OutputHandler(object):
             setNodes= setToDisplay.nodes
             for n in setNodes:
                 pos= n.getEigenPos3d(defFScale,eigenMode)
-                vEqLoad=n.getEquivalentStaticLoad(eigenMode,accelMode)
+                vEqLoad= n.getEquivalentStaticLoad(eigenMode,accelMode)
                 vField.data.insertNextPair(pos.x,pos.y,pos.z,vEqLoad[0],vEqLoad[1],vEqLoad[2],unitsScale,pushing= True)
             vField.addToDisplay(displaySettings)
+        if(not caption):
+            caption= 'Mode '+ str(eigenMode) + ' shape' + ' '+setToDisplay.description            
         displaySettings.displayScene(caption,fileName)
         return displaySettings
 
