@@ -1,13 +1,15 @@
 # -*- coding: utf-8 -*-
-# Verification test according to ACI 349.2 R-07.
-# Guide to the Concrete Capacity Design (CCD) Method—Embedment Design Examples
-# Example A1. Single stud, tension only, no edge effects
+''' Verification test according to ACI 349.2 R-07.
+  Guide to the Concrete Capacity Design (CCD) Method—Embedment Design Examples
+  Example A1. Single stud, tension only, no edge effects.'''
+
 from __future__ import division
 from __future__ import print_function
 
 import math
 from materials.aci import ACI_materials
 from materials.aci import ACI_limit_state_checking
+
 __author__= "Ana Ortega (AO_O)"
 __copyright__= "Copyright 2019, AO_O"
 __license__= "GPL"

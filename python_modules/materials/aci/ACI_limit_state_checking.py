@@ -605,7 +605,7 @@ class AnchorBolt(object):
                    anchor, ca1 is taken in the direc-tion of the applied shear.
                    If the tension isapplied to the anchor, ca1 is the minimum
                    edge distance.
-        :parameter ca2: distance from center of an anchor shaft to the edge of
+        :parameter ca2: distance from centerof an anchor shaft to the edge of
                    concrete in the direction orthogonal to ca1.
         :parameter ha: thickness  of  member  in  which  an  anchor  is
                   located, measured parallel to anchor axis.
