@@ -54,11 +54,11 @@
 #include "utility/actor/actor/MovableVector.h"
 #include "preprocessor/multi_block_topology/matrices/ElemPtrArray3d.h"
 #include "preprocessor/multi_block_topology/aux_meshing.h"
-#include <domain/mesh/node/Node.h>
-#include <material/section/SectionForceDeformation.h>
-#include <domain/domain/Domain.h>
-#include <domain/mesh/element/plane/shell/R3vectors.h>
-#include <domain/load/volumetric/SelfWeight.h>
+#include "domain/mesh/node/Node.h"
+#include "material/section/SectionForceDeformation.h"
+#include "domain/domain/Domain.h"
+#include "domain/mesh/element/utils/coordTransformation/R3vectors.h"
+#include "domain/load/volumetric/SelfWeight.h"
 
 
 
@@ -105,7 +105,7 @@ void XC::Shell4NBase::alloc(const ShellCrdTransf3dBase *crdTransf)
 
 //! @brief Constructor
 XC::Shell4NBase::Shell4NBase(int classTag, const ShellCrdTransf3dBase *crdTransf)
-  : QuadBase4N<SectionFDPhysicalProperties>(0,classTag,SectionFDPhysicalProperties(4)),
+  : QuadBase4N<SectionFDPhysicalProperties>(0,classTag, SectionFDPhysicalProperties(4)),
   theCoordTransf(nullptr), applyLoad(0), initDisp(4,Vector(6)), p0()
   {
     alloc(crdTransf);

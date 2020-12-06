@@ -93,4 +93,27 @@ class_<XC::PDeltaCrdTransf2d, XC::PDeltaCrdTransf2d*, bases<XC::SmallDispCrdTran
 
 class_<XC::PDeltaCrdTransf3d, XC::PDeltaCrdTransf3d*, bases<XC::SmallDispCrdTransf3d>, boost::noncopyable >("PDeltaCrdTransf3d", no_init);
 
+const XC::Vector &(XC::ShellCrdTransf3dBase::*getVGlobalFromLocal)(const XC::Vector &) const= &XC::ShellCrdTransf3dBase::getVectorGlobalCoordFromLocal;
+const XC::Vector &(XC::ShellCrdTransf3dBase::*getVLocalFromGlobal)(const XC::Vector &) const= &XC::ShellCrdTransf3dBase::getVectorLocalCoordFromGlobal;
+class_<XC::ShellCrdTransf3dBase, bases<CommandEntity>, boost::noncopyable >("ShellCrdTransf3dBase", no_init)
+  .add_property("getTrfMatrix", &XC::ShellCrdTransf3dBase::getTrfMatrix,"Returns the transformation matrix.")
+  .add_property("getLocalAxes", &XC::ShellCrdTransf3dBase::getTrfMatrix,"Returns transformation local axes as matrix rows: [[x1,y1,z1],[x2,y2,z2],...·] .")
+  .add_property("getG1Vector", make_function(&XC::ShellCrdTransf3dBase::G1, return_internal_reference<>() ))
+  .add_property("getG2Vector", make_function(&XC::ShellCrdTransf3dBase::G2, return_internal_reference<>() ))
+  .add_property("getG3Vector", make_function(&XC::ShellCrdTransf3dBase::G3, return_internal_reference<>() ))
+  .add_property("getVPosCentroide", make_function(&XC::ShellCrdTransf3dBase::getVPosCentroide, return_internal_reference<>() ))
+  .add_property("getPlane", &XC::ShellCrdTransf3dBase::getPlane)
+  .def("update", &XC::ShellCrdTransf3dBase::update)
+  .def("getBasicTrialDisp", &XC::ShellCrdTransf3dBase::getBasicTrialDisp)
+  .def("getBasicTrialVel", &XC::ShellCrdTransf3dBase::getBasicTrialVel)
+  .def("getBasicTrialAccel", &XC::ShellCrdTransf3dBase::getBasicTrialAccel)
+  .def("getProj", &XC::ShellCrdTransf3dBase::getProj)
+  .add_property("getLocalReference", &XC::ShellCrdTransf3dBase::getLocalReference)
+  .def("getLocalCoordinates", &XC::ShellCrdTransf3dBase::getLocalCoordinates,"Returns local coordinates of a point.")
+  .def("getNaturalCoordinates", &XC::ShellCrdTransf3dBase::getNaturalCoordinates,"Returns local coordinates of a point.")
+  .def("getVectorGlobalCoordFromLocal", getVGlobalFromLocal, return_value_policy<copy_const_reference>(),"Returns global coordinates of a vector.")
+  .def("getVectorLocalCoordFromGlobal", getVLocalFromGlobal,  return_value_policy<copy_const_reference>(),"Returns local coordinates of a vector.")
+   ;
 
+class_<XC::ShellLinearCrdTransf3d, bases<XC::ShellCrdTransf3dBase>, boost::noncopyable >("ShellLinearCrdTransf3d", no_init)
+   ;

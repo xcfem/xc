@@ -63,12 +63,11 @@
 #define CorotCrdTransf2d_h
 
 #include "CrdTransf2d.h"
-#include <utility/matrix/Matrix.h>
+#include "utility/matrix/Matrix.h"
 
 namespace XC {
-//! @ingroup ElemCT
-//
 //! @brief Coordinate transformation corrotacional en 3d.
+//! @ingroup ElemCT
 class CorotCrdTransf2d: public CrdTransf2d
   {
   private:

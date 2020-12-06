@@ -49,9 +49,9 @@
 
 #include "ShellMITC9.h"
 #include "domain/mesh/element/utils/gauss_models/GaussModel.h"
-#include "domain/mesh/element/plane/shell/R3vectors.h"
 #include "utility/actor/actor/MatrixCommMetaData.h"
 #include "domain/load/plane/ShellMecLoad.h"
+#include "domain/mesh/element/utils/coordTransformation/R3vectors.h"
 
 //static data
 XC::Matrix  XC::ShellMITC9::stiff(54,54);

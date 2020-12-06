@@ -33,9 +33,9 @@
 #include "utility/actor/objectBroker/FEM_ObjectBroker.h"
 #include "utility/actor/actor/MovableVector.h"
 #include "utility/matrix/ID.h"
-#include "domain/mesh/element/plane/shell/R3vectors.h"
+#include "domain/mesh/element/utils/coordTransformation/R3vectors.h"
 #include "domain/mesh/element/utils/NodePtrs.h"
-#include "ShellMITC4Base.h"
+#include "domain/mesh/element/plane/shell/Shell4NBase.h"
 
 
 #include "xc_utils/src/geom/pos_vec/Pos2d.h"

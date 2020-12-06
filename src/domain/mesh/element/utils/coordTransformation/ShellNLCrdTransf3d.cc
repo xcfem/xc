@@ -34,8 +34,7 @@
 #include "utility/actor/actor/MovableVector.h"
 #include "utility/matrix/ID.h"
 #include "domain/mesh/element/utils/NodePtrs.h"
-#include "domain/mesh/element/plane/shell/R3vectors.h"
-#include "ShellMITC4Base.h"
+#include "domain/mesh/element/utils/coordTransformation/R3vectors.h"
 
 //! @brief Default constructor
 XC::ShellNLCrdTransf3d::ShellNLCrdTransf3d(void)

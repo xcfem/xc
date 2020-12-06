@@ -46,11 +46,11 @@
                                                                         
 // $Revision: 1.3 $
 // $Date: 2002/12/05 22:20:44 $
-// $Source: /usr/local/cvs/OpenSees/SRC/element/shell/R3vectors.cpp,v $
+// $Source: /usr/local/cvs/OpenSees/SRC/element/utils/coordTransformation/R3vectors.cpp,v $
 
 // Ed "C++" Love
 
-#include <domain/mesh/element/plane/shell/R3vectors.h>
+#include "R3vectors.h"
 #include <utility/matrix/Vector.h>
 #include <utility/matrix/Matrix.h> 
 #include <cmath>

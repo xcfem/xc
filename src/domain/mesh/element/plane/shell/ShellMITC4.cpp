@@ -61,11 +61,11 @@
 #include "utility/actor/actor/MovableVector.h"
 #include "preprocessor/multi_block_topology/matrices/ElemPtrArray3d.h"
 #include "preprocessor/multi_block_topology/aux_meshing.h"
-#include <domain/mesh/node/Node.h>
-#include <material/section/SectionForceDeformation.h>
-#include <domain/domain/Domain.h>
-#include <domain/mesh/element/plane/shell/R3vectors.h>
-#include "ShellLinearCrdTransf3d.h"
+#include "domain/mesh/node/Node.h"
+#include "material/section/SectionForceDeformation.h"
+#include "domain/domain/Domain.h"
+#include "domain/mesh/element/utils/coordTransformation/R3vectors.h"
+#include "domain/mesh/element/utils/coordTransformation/ShellLinearCrdTransf3d.h"
 
 
 #include "utility/actor/actor/MovableVector.h"
@@ -73,7 +73,6 @@
 #include "utility/actor/actor/MovableVectors.h"
 
 
-#include "xc_utils/src/geom/d2/Polygon3d.h"
 #include "preprocessor/Preprocessor.h"
 #include "preprocessor/prep_handlers/LoadHandler.h"
 #include "utility/actor/actor/MatrixCommMetaData.h"

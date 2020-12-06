@@ -31,8 +31,8 @@
 #include <domain/mesh/node/Node.h>
 
 #include "domain/mesh/element/utils/NodePtrs.h"
-#include "domain/mesh/element/plane/shell/R3vectors.h"
-#include "ShellMITC4Base.h"
+#include "R3vectors.h"
+#include "domain/mesh/element/plane/shell/ShellMITC4Base.h"
 
 //! @brief Default constructor
 XC::ShellUpBasisCrdTransf3d::ShellUpBasisCrdTransf3d(void)

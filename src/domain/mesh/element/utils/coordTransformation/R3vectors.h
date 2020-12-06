@@ -47,7 +47,7 @@
                                                                         
 // $Revision: 1.1 $
 // $Date: 2001/05/19 06:00:28 $
-// $Source: /usr/local/cvs/OpenSees/SRC/element/plane/shell/R3vectors.h,v $
+// $Source: /usr/local/cvs/OpenSees/SRC/element/utils/coordTransformation/R3vectors.h,v $
 
 // Ed "C++" Love
 #ifndef R3Vectors_h

@@ -26,7 +26,7 @@
 
 #include "domain/mesh/element/plane/QuadBase9N.h"
 #include "domain/mesh/element/utils/physical_properties/SectionFDPhysicalProperties.h"
-#include "ShellLinearCrdTransf3d.h"
+#include "domain/mesh/element/utils/coordTransformation/ShellLinearCrdTransf3d.h"
 #include "domain/mesh/element/utils/fvectors/FVectorShell.h"
 
 namespace XC {

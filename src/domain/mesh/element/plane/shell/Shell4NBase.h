@@ -32,7 +32,7 @@
 
 #include "domain/mesh/element/plane/QuadBase4N.h"
 #include "domain/mesh/element/utils/physical_properties/SectionFDPhysicalProperties.h"
-#include "ShellCrdTransf3dBase.h"
+#include "domain/mesh/element/utils/coordTransformation/ShellCrdTransf3dBase.h"
 #include "ShellBData.h"
 #include <utility/matrix/Vector.h>
 #include <utility/matrix/Matrix.h>
