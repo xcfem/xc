@@ -29,7 +29,7 @@ def torsional_stiffness_factor(case, steelShape, z, L, zT):
     :param zT: length from left support to cross-section where torque
                is applied.
     '''
-    thetaFactor= torsional_function_curves.theta_factor(3, beam_mat, z= 0.5*L, L= L, zT= 0.5*L)
+    thetaFactor= torsional_function_curves.theta_factor(3, steelShape, z, L, zT)
     return zT/L*z/L/thetaFactor
 
 
@@ -107,6 +107,7 @@ ratio2= abs(rot-refRot)/-refRot
 '''
 print('refRot= ', refRot/rot)
 print('theta factor: ', thetaFactor)
+print('torsional stiffness factor: ', beam_mat.torsionalStiffnessFactor)
 print('beam G= ', testElem.sectionProperties.G/1e6)
 print('beam J= ', testElem.sectionProperties.J)
 print('element torsional stiffness: ', elementTorsionalStiffness/1e6)
