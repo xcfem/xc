@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 ''' Taken from example 1.2.4 of "Abacus Benchmarks Manual".
+
+Reference: Timoshenko, S. P., and J. M. Gere, Theory of Elastic Stability, 2nd Edition, McGraw-Hill, New York, 1961.
 '''
 
 from __future__ import print_function
