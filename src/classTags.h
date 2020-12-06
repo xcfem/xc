@@ -253,6 +253,8 @@
 #define ELE_TAG_ShellMITC9      2025 
 #define ELE_TAG_ShellNLDKGQ      157
 #define ELE_TAG_ShellNLDKGT      168
+#define ELE_TAG_ASDShellQ4       203  // Massimo Petracca (ASDEA)
+#define ELE_TAG_ASDShellT3       204  // Massimo Petracca (ASDEA)
 #define ELE_TAG_Brick                      3458 
 #define ELE_TAG_BbarBrick                  3457 
 #define ELE_TAG_FLBrick                  3455 
