@@ -274,7 +274,14 @@ w_k=srmax*(eps_sm-eps_cm)
 
 xComp= -0.178266877222
 epsCMinComp= -0.0006080494122
-sgCMinComp= 930543.821563
+# LCPT 20201207
+# The value of sgCMinComp has changed from 930543.821563
+# to -17.0154068793e6 as a result of adding the update
+# method to the ZeroLengthSection element.
+# The previous value was certainly erroneous because it
+# doesn't corresponds to a negative strain (epsCMinComp= -0.0006080494122)
+# so I changed it.
+sgCMinComp= -17.0154068793e6
 epsSMaxComp= 0.000949058858185
 sgSMaxComp= 189811771.637
 hceffComp= 0.107244374259
@@ -284,15 +291,31 @@ eps_cmComp= 4.67648930823e-05
 w_kComp= 0.00021534934049485558
 
 ratio1=(xComp-x)/xComp
-ratio2=(epsCMinComp- epsCMin)/epsCMinComp
-ratio3=(sgCMinComp- sgCMin)/sgCMinComp
-ratio4=(epsSMaxComp- epsSMax)/epsSMaxComp
-ratio5=(sgSMaxComp- sgSMax)/sgSMaxComp
+ratio2=(epsCMinComp-epsCMin)/epsCMinComp
+ratio3=(sgCMinComp-sgCMin)/sgCMinComp
+ratio4=(epsSMaxComp-epsSMax)/epsSMaxComp
+ratio5=(sgSMaxComp-sgSMax)/sgSMaxComp
 ratio6=(hceffComp-hceff)/hceffComp
 ratio7=(roseffComp-roseff)/roseffComp
 ratio8=(srmaxComp-srmax)/srmaxComp
 ratio9=(eps_cmComp-eps_cm)/eps_cmComp
 ratio10=(w_kComp-w_k)/w_kComp
+
+'''
+print('ratio1= ', ratio1)
+print('ratio2= ', ratio2)
+print('sgCMinComp= ', sgCMinComp/1e6, 'MPa')
+print('sgCMin= ', sgCMin/1e6, 'MPa')
+print('sgCMax= ', sgCMax/1e6, 'MPa')
+print('ratio3= ', ratio3)
+print('ratio4= ', ratio4)
+print('ratio5= ', ratio5)
+print('ratio6= ', ratio6)
+print('ratio7= ', ratio7)
+print('ratio8= ', ratio8)
+print('ratio9= ', ratio9)
+print('ratio10= ', ratio10)
+'''
 
 import os
 from misc_utils import log_messages as lmsg
