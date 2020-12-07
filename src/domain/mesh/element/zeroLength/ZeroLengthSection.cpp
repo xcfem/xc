@@ -271,6 +271,25 @@ void XC::ZeroLengthSection::setDomain(Domain *theDomain)
     setTransformation(); // Set up the A matrix
   }
 
+//! @brief Update element state.
+// MSN: added to allow error identification in setTrialSectionDeformation()
+int XC::ZeroLengthSection::update()		
+  {
+    int retval= 0;
+    // Compute section deformation vector
+    this->computeSectionDefs();
+    // Set trial section deformation
+    if(theSection->setTrialSectionDeformation(v) < 0)
+      {
+	std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; WARNING! element: " << this->getTag()
+		  << " failed in setTrialSectionDeformation.\n";
+	retval= -1;
+      }
+    return retval;
+  }
+
+
 //! @brief Commit state of element by committing state of the section.
 //! Return 0 if successful, !0 otherwise.
 int XC::ZeroLengthSection::commitState()
@@ -307,10 +326,10 @@ int XC::ZeroLengthSection::revertToStart()
 const XC::Matrix &XC::ZeroLengthSection::getTangentStiff(void) const
   {
     // Compute section deformation vector
-    this->computeSectionDefs();
+    // this->computeSectionDefs();	// MSN: commented out beause the method "update()" was added to the class
 
     // Set trial section deformation
-    theSection->setTrialSectionDeformation(v);
+    // theSection->setTrialSectionDeformation(*v);	// MSN: commented out beause the method "update()" was added to the class
 
     // Get section tangent stiffness, the element basic stiffness
     const Matrix &kb = theSection->getSectionTangent();
@@ -360,10 +379,10 @@ int XC::ZeroLengthSection::addInertiaLoadToUnbalance(const Vector &accel)
 const XC::Vector &XC::ZeroLengthSection::getResistingForce(void) const
   {
     // Compute section deformation vector
-    this->computeSectionDefs();
+    // this->computeSectionDefs(); // MSN: commented out beause the method "update()" was added to the class
 
     // Set trial section deformation
-    theSection->setTrialSectionDeformation(v);
+    // theSection->setTrialSectionDeformation(v); // MSN: commented out beause the method "update()" was added to the class
 
     // Get section stress resultants, the element basic forces
     const Vector &q = theSection->getStressResultant();
@@ -695,3 +714,41 @@ void XC::ZeroLengthSection::computeSectionDefs(void) const
         def(i)+= -diff(j)*tran(i,j);
   }
 
+const XC::Vector &XC::ZeroLengthSection::getResistingForceSensitivity(int gradIndex)
+  {
+    // Compute section deformation vector
+    // this->computeSectionDefs();	// MSN: commented out beause the method "update()" was added to the class
+
+    // Set trial section deformation
+    // theSection->setTrialSectionDeformation(*v);	// MSN: commented out beause the method "update()" was added to the class
+
+    // Get section stress resultants, the element basic forces
+    const Vector &dqdh = theSection->getStressResultantSensitivity(gradIndex, true);
+
+    // Compute element resisting force ... P = A^*q
+    P->addMatrixTransposeVector(0.0, A, dqdh, 1.0);
+
+    return *P;
+  }
+    
+int XC::ZeroLengthSection::commitSensitivity(int gradIndex, int numGrads)
+  {
+    // Get nodal displacement sensitivity
+    Vector diff(numDOF/2);
+    for(int i = 0; i < numDOF/2; i++)
+      {
+        diff(i) = theNodes[1]->getDispSensitivity(i+1,gradIndex) - theNodes[0]->getDispSensitivity(i+1,gradIndex);
+      }
+
+    // Set some references to make the syntax nicer
+    Vector &dedh = v;
+    const Matrix &tran = A;
+
+    dedh.Zero();
+
+    // Compute element basic deformations ... v = A*(u2-u1)
+    for (int i = 0; i < order; i++)
+      for (int j = 0; j < numDOF/2; j++)
+	dedh(i) += -diff(j)*tran(i,j);
+    return theSection->commitSensitivity(dedh, gradIndex, numGrads);
+  }

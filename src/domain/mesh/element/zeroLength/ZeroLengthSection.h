@@ -134,6 +134,7 @@ class ZeroLengthSection: public Element0D
       { return order; }
    
     // public methods to set the state of the element    
+    int update(void); // added by MSN to allow errors in setting section trial deformation
     int commitState(void);
     int revertToLastCommit(void);        
     int revertToStart(void);
@@ -170,6 +171,11 @@ class ZeroLengthSection: public Element0D
 
     Response *setResponse(const std::vector<std::string> &argv, Information &eleInformation);
     int getResponse(int responseID, Information &eleInformation);
+    
+// AddingSensitivity:BEGIN //////////////////////////////////////////
+    const Vector &getResistingForceSensitivity(int gradIndex);
+    int commitSensitivity(int gradIndex, int numGrads);
+// AddingSensitivity:END ///////////////////////////////////////////
   };
 } // end of XC namespace
 
