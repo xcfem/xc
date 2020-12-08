@@ -59,33 +59,13 @@ types of objects, as shown in figure~\ref{main}:
 \end{figure}
 
 \begin{enumerate}
-\item {\bf ModelBuilder}: As in any finite element analysis, the analyst's first
-step is to subdivide the body under study into elements and nodes,
-to define loads acting on the elements and nodes, and to define constraints
-acting on the nodes. The ModelBuilder is the object in the program
-responsible for building the Element, Node, LoadPattern, TimeSeries,
-Load and Constraint objects.
+\item {\bf ModelBuilder}: - text moved to readme file-
 
-\item {\bf Domain}: The Domain object is responsible for
-storing the objects created by the ModelBuilder object and for providing the
-Analysis and Recorder objects access to these objects.
+\item {\bf Domain}: -text moved to readme file-
 
-\item {\bf Analysis}: Once the analyst has defined the model, the next step
-is to define the analysis that is to be performed on the model. This
-may vary from a simple static linear analysis to a transient
-non-linear analysis. The Analysis object is responsible for performing
-the analysis. In OpenSees each Analysis object is composed of several component
-objects, which define how the analysis is performed. The component
-classes consist of the following: { SolutionAlgorithm}, {
-Integrator}, { ConstraintHandler}, { DOF\_Numberer}, {
-SystemOfEqn}, { Solver}, and { AnalysisModel}. 
+\item {\bf Analysis}: -text moved to readme file-
 
-\item {\bf Recorder}: Once the model and analysis objects have been
-defined, the analyst has the option of specifying what is to be
-monitored during the analysis. This, for example, could be the
-displacement history at a node in a transient analysis or the entire
-state of the model at each step in the solution procedure. Several
-Recorder objects are created by the analyst to monitor the analysis.
+\item {\bf Recorder}: -text moved to readme file-
 \end{enumerate}
 
 The main abstractions of OpenSees will be explained using opensees. opensees is an
