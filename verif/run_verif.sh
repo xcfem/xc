@@ -559,6 +559,7 @@ echo "$BLEU" "  RC sections test." "$NORMAL"
 python tests/materials/ehe/test_Ecm_concrete.py
 python tests/materials/ehe/test_EHEconcrete.py
 python tests/materials/ehe/test_anchorage_length_01.py
+python tests/materials/ehe/test_anchorage_length_02.py
 echo "$BLEU" "    Crack amplitude determination tests (EHE-08)." "$NORMAL"
 python tests/materials/ehe/test_crack_control_01.py
 python tests/materials/ehe/test_crack_control_02.py

@@ -38,11 +38,18 @@ class RebarController(object):
     '''
     # Table 66.5.2.a of EHE
     x= [25e6,30e6,35e6,40e6,45e6,50e6]
-    y400= [12.,10.,9.,8.,7.,7.]
-    y500= [15.,13.,12.,11.,10.,10.]
+    y400= [1.2,1.0,.9,.8,.7,.7]
+    y500= [1.5,1.3,1.2,1.1,1.0,1.0]
     f400= interpolate.interp1d(x, y400)
     f500= interpolate.interp1d(x, y500)
 
+    # Table 69.5.2.2 of EHE
+    alpha_ratios=[0.0,0.2,0.25,0.33,0.5,0.51,1.0]
+    alpha_leq_10phi= [1.0,1.2,1.4,1.6,1.8,2.0,2.0]
+    alpha_gt_10phi= [1.0,1.0,1.1,1.2,1.3,1.4,1.4]
+    f_alpha_leq_10phi= interpolate.interp1d(alpha_ratios,alpha_leq_10phi)
+    f_alpha_gt_10phi= interpolate.interp1d(alpha_ratios,alpha_gt_10phi)
+    
     def __init__(self, concreteCover= 35e-3, spacing= 150e-3, pos= 'II'):
         '''Constructor.
 
@@ -58,7 +65,7 @@ class RebarController(object):
         self.spacing= spacing
 
     def getM(self, concrete, steel):
-        ''' Return the "m" coefficient according to table 66.5.2.a of
+        ''' Return the "m" coefficient according to table 66.5.1.2.a of
             EHE-08
 
         :param concrete: concrete material.
@@ -66,33 +73,95 @@ class RebarController(object):
         '''
         retval= 15.0
         fck= -concrete.fck
+        m400= float(self.f400(fck))
+        m500= float(self.f500(fck))
         if(steel.fyk==400e6):
-            retval= self.f400(fck)
+            retval= m400
         elif(steel.fyk==500e6):
-            retval= self.f500(fck)
+            retval= m500
         else:
-            m400= self.f400(fck)
-            m500= self.f500(fck)
             retval= (m400*(500e6-steel.fyk)+m500*(steel.fyk-400e6))/100e6
         return retval
 
-    def getBasicAnchorageLength(self, concrete, phi, steel):
-        '''Returns anchorage length in tension according to clause
-           66.5.2 of EHE.
+    def getBasicAnchorageLength(self, concrete, phi, steel, dynamicEffects= False):
+        '''Returns basic anchorage length in tension according to clause
+           66.5.1.2 of EHE.
 
         :param concrete: concrete material.
         :param phi: nominal diameter of bar, wire, or prestressing strand.
         :param steel: reinforcement steel.
+        :param dynamicEffects: true if the anchorage is subjected to
+                               dynamic effects.
         '''
         retval= 60.0*phi
         m= self.getM(concrete,steel)
-        f= phi*100.0
+        f= phi*1000.0
+        m_phi= m*f
         if(self.pos=='I'):
-            retval= max(m*f**2,steel.fyk/20e6*f)/100.0
+            retval= max(m_phi, steel.fyk/20e6)*phi
         elif(self.pos=='II'):
-            retval= max(1.4*m*f**2,steel.fyk/14e6*f)/100.0
+            retval= max(1.4*m_phi,steel.fyk/14e6)*phi
         else:
             lmsg.error('position must be I or II')
+        if(dynamicEffects):
+            retval+= 10*phi
+        return retval
+
+    def getNetAnchorageLength(self ,concrete, phi, steel, beta= 1.0, efficiency= 1.0, tensionedBars= True, dynamicEffects= False):
+        '''Returns net anchorage length in tension according to clause
+           6.5.1.2 of EHE.
+
+        :param concrete: concrete material.
+        :param phi: nominal diameter of bar, wire, or prestressing strand.
+        :param steel: reinforcement steel.
+        :param beta: reduction factor defined in Table 69.5.1.2.b.
+        :param efficiency: working stress of the reinforcement that it is 
+                           intended to anchor, on the most unfavourable 
+                           load hypothesis, in the section from which 
+                           the anchorage length will be determined divided
+                           by the steel design yield strength.
+        :param tensionedBars: true if the bars are in tension.
+        :param dynamicEffects: true if the anchorage is subjected to
+                               dynamic effects.
+        '''
+        lb= self.getBasicAnchorageLength(concrete, phi, steel, dynamicEffects)
+        retval= beta*efficiency*lb
+        retval= max(retval, 10.0*phi)
+        retval= max(retval, 0.15)
+        if(tensionedBars):
+            retval= max(retval,lb/3.0)
+        else:
+            retval= max(retval,2.0*lb/3.0)
+        return retval
+
+    def getOverlapLength(self ,concrete, phi, steel, distBetweenNearestSplices, beta= 1.0, efficiency= 1.0, ratioOfOverlapedTensionBars= 1.0, tensionedBars= True, dynamicEffects= False):
+        '''Returns net anchorage length in tension according to clause
+           6.5.1.2 of EHE.
+
+        :param concrete: concrete material.
+        :param phi: nominal diameter of bar, wire, or prestressing strand.
+        :param steel: reinforcement steel.
+        :param distBetweenNearestSplices: distance between the nearest splices
+                                          according to figure 69.5.2.2.a.
+        :param beta: reduction factor defined in Table 69.5.1.2.b.
+        :param efficiency: working stress of the reinforcement that it is 
+                           intended to anchor, on the most unfavourable 
+                           load hypothesis, in the section from which 
+                           the anchorage length will be determined divided
+                           by the steel design yield strength.
+        :param ratioOfOverlapedTensionBars: ratio of overlapped tension bars 
+                                            in relation to the total steel
+                                            section.
+        :param tensionedBars: true if the bars are in tension.
+        :param dynamicEffects: true if the anchorage is subjected to
+                               dynamic effects.
+        '''
+        retval= self.getNetAnchorageLength(concrete, phi, steel, beta, efficiency, tensionedBars, dynamicEffects)
+        if(distBetweenNearestSplices<10.0*phi):
+            alph= float(self.f_alpha_leq_10phi(ratioOfOverlapedTensionBars))
+        else:
+            alph= float(self.f_alpha_gt_10phi(ratioOfOverlapedTensionBars))
+        retval*= alph
         return retval
 
 # Reinforced concrete section shear checking.
