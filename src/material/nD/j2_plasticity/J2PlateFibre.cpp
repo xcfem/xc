@@ -166,11 +166,12 @@ const XC::Matrix &XC::J2PlateFibre::getTangent(void) const
     double C01= nu*C00; double C10= C01;
 
     double sig[order];
-    sig[0]= C00*(Tepsilon(0)-epsPn[0]) + C01*(Tepsilon(1)-epsPn[1]);
-    sig[1]= C01*(Tepsilon(0)-epsPn[0]) + C00*(Tepsilon(1)-epsPn[1]);
-    sig[2]= G*(Tepsilon(2)-epsPn[2]);
-    sig[3]= G*(Tepsilon(3)-epsPn[3]);
-    sig[4]= G*(Tepsilon(4)-epsPn[4]);
+    const Vector Cepsilon= getStrain();
+    sig[0]= C00*(Cepsilon(0)-epsPn[0]) + C01*(Cepsilon(1)-epsPn[1]);
+    sig[1]= C01*(Cepsilon(0)-epsPn[0]) + C00*(Cepsilon(1)-epsPn[1]);
+    sig[2]= G*(Cepsilon(2)-epsPn[2]);
+    sig[3]= G*(Cepsilon(3)-epsPn[3]);
+    sig[4]= G*(Cepsilon(4)-epsPn[4]);
 
     const double two3Hkin= two3*Hkin;
 
@@ -356,11 +357,12 @@ const XC::Vector &XC::J2PlateFibre::getStress(void) const
     const double C00= E/(1-nu*nu); double C11= C00;
     const double C01= nu*C00; double C10= C01;
 
-    sigma(0)= C00*(Tepsilon(0)-epsPn[0]) + C01*(Tepsilon(1)-epsPn[1]);
-    sigma(1)= C01*(Tepsilon(0)-epsPn[0]) + C00*(Tepsilon(1)-epsPn[1]);
-    sigma(2)= G*(Tepsilon(2)-epsPn[2]);
-    sigma(3)= G*(Tepsilon(3)-epsPn[3]);
-    sigma(4)= G*(Tepsilon(4)-epsPn[4]);
+    const Vector Cepsilon= getStrain();
+    sigma(0)= C00*(Cepsilon(0)-epsPn[0]) + C01*(Cepsilon(1)-epsPn[1]);
+    sigma(1)= C01*(Cepsilon(0)-epsPn[0]) + C00*(Cepsilon(1)-epsPn[1]);
+    sigma(2)= G*(Cepsilon(2)-epsPn[2]);
+    sigma(3)= G*(Cepsilon(3)-epsPn[3]);
+    sigma(4)= G*(Cepsilon(4)-epsPn[4]);
 
     const double two3Hkin= two3*Hkin;
 
@@ -614,11 +616,12 @@ const XC::Vector &XC::J2PlateFibre::getStressSensitivity(int gradIndex, bool con
     double two3Hkin= two3*Hkin;
 
     double xsi[order];
-    xsi[0]= C00*(Tepsilon(0)-epsPn[0]) + C01*(Tepsilon(1)-epsPn[1]);
-    xsi[1]= C01*(Tepsilon(0)-epsPn[0]) + C00*(Tepsilon(1)-epsPn[1]);
-    xsi[2]= G*(Tepsilon(2)-epsPn[2]);
-    xsi[3]= G*(Tepsilon(3)-epsPn[3]);
-    xsi[4]= G*(Tepsilon(4)-epsPn[4]);
+    const Vector Cepsilon= getStrain();
+    xsi[0]= C00*(Cepsilon(0)-epsPn[0]) + C01*(Cepsilon(1)-epsPn[1]);
+    xsi[1]= C01*(Cepsilon(0)-epsPn[0]) + C00*(Cepsilon(1)-epsPn[1]);
+    xsi[2]= G*(Cepsilon(2)-epsPn[2]);
+    xsi[3]= G*(Cepsilon(3)-epsPn[3]);
+    xsi[4]= G*(Cepsilon(4)-epsPn[4]);
 
     xsi[0] -= two3Hkin*(2*epsPn[0]+epsPn[1]); 
     xsi[1] -= two3Hkin*(2*epsPn[1]+epsPn[0]); 
@@ -634,22 +637,22 @@ const XC::Vector &XC::J2PlateFibre::getStressSensitivity(int gradIndex, bool con
     dbetadh[4]= one3*(dHkindh*epsPn[4] + Hkin*depsPdh[4]);
 
     double dxsidh[order];
-    dxsidh[0]= -C00*depsPdh[0] - C01*depsPdh[1] + dC00dh*(Tepsilon(0)-epsPn[0]) + dC01dh*(Tepsilon(1)-epsPn[1]) - dbetadh[0];
-    dxsidh[1]= -C01*depsPdh[0] - C00*depsPdh[1] + dC01dh*(Tepsilon(0)-epsPn[0]) + dC00dh*(Tepsilon(1)-epsPn[1]) - dbetadh[1];
-    dxsidh[2]= -G*depsPdh[2] + dGdh*(Tepsilon(2)-epsPn[2]) - dbetadh[2];
-    dxsidh[3]= -G*depsPdh[3] + dGdh*(Tepsilon(3)-epsPn[3]) - dbetadh[3];
-    dxsidh[4]= -G*depsPdh[4] + dGdh*(Tepsilon(4)-epsPn[4]) - dbetadh[4];
+    dxsidh[0]= -C00*depsPdh[0] - C01*depsPdh[1] + dC00dh*(Cepsilon(0)-epsPn[0]) + dC01dh*(Cepsilon(1)-epsPn[1]) - dbetadh[0];
+    dxsidh[1]= -C01*depsPdh[0] - C00*depsPdh[1] + dC01dh*(Cepsilon(0)-epsPn[0]) + dC00dh*(Cepsilon(1)-epsPn[1]) - dbetadh[1];
+    dxsidh[2]= -G*depsPdh[2] + dGdh*(Cepsilon(2)-epsPn[2]) - dbetadh[2];
+    dxsidh[3]= -G*depsPdh[3] + dGdh*(Cepsilon(3)-epsPn[3]) - dbetadh[3];
+    dxsidh[4]= -G*depsPdh[4] + dGdh*(Cepsilon(4)-epsPn[4]) - dbetadh[4];
 
     double q= two3*(xsi[0]*xsi[0] + xsi[1]*xsi[1] - xsi[0]*xsi[1]) + 
       2.0*(xsi[2]*xsi[2] + xsi[3]*xsi[3] + xsi[4]*xsi[4]);
     double F= q - root23*(sigmaY + Hiso*alphan1);
 
     if(F <= -100*DBL_EPSILON) {
-      sigma(0)= dC00dh*(Tepsilon(0)-epsPn[0]) + dC01dh*(Tepsilon(1)-epsPn[1]) - C00*depsPdh[0] - C01*depsPdh[1];
-      sigma(1)= dC01dh*(Tepsilon(0)-epsPn[0]) + dC00dh*(Tepsilon(1)-epsPn[1]) - C01*depsPdh[0] - C00*depsPdh[1];
-      sigma(2)= dGdh*(Tepsilon(2)-epsPn1[2]) - G*depsPdh[2];
-      sigma(3)= dGdh*(Tepsilon(3)-epsPn1[3]) - G*depsPdh[3];
-      sigma(4)= dGdh*(Tepsilon(4)-epsPn1[4]) - G*depsPdh[4];
+      sigma(0)= dC00dh*(Cepsilon(0)-epsPn[0]) + dC01dh*(Cepsilon(1)-epsPn[1]) - C00*depsPdh[0] - C01*depsPdh[1];
+      sigma(1)= dC01dh*(Cepsilon(0)-epsPn[0]) + dC00dh*(Cepsilon(1)-epsPn[1]) - C01*depsPdh[0] - C00*depsPdh[1];
+      sigma(2)= dGdh*(Cepsilon(2)-epsPn1[2]) - G*depsPdh[2];
+      sigma(3)= dGdh*(Cepsilon(3)-epsPn1[3]) - G*depsPdh[3];
+      sigma(4)= dGdh*(Cepsilon(4)-epsPn1[4]) - G*depsPdh[4];
     }
     else {
       static Matrix J(6,6);
@@ -754,11 +757,12 @@ int XC::J2PlateFibre::commitSensitivity(const Vector &depsdh, int gradIndex, int
     double two3Hkin= two3*Hkin;
 
     double xsi[order];
-    xsi[0]= C00*(Tepsilon(0)-epsPn[0]) + C01*(Tepsilon(1)-epsPn[1]);
-    xsi[1]= C01*(Tepsilon(0)-epsPn[0]) + C00*(Tepsilon(1)-epsPn[1]);
-    xsi[2]= G*(Tepsilon(2)-epsPn[2]);
-    xsi[3]= G*(Tepsilon(3)-epsPn[3]);
-    xsi[4]= G*(Tepsilon(4)-epsPn[4]);
+    const Vector Cepsilon= getStrain();
+    xsi[0]= C00*(Cepsilon(0)-epsPn[0]) + C01*(Cepsilon(1)-epsPn[1]);
+    xsi[1]= C01*(Cepsilon(0)-epsPn[0]) + C00*(Cepsilon(1)-epsPn[1]);
+    xsi[2]= G*(Cepsilon(2)-epsPn[2]);
+    xsi[3]= G*(Cepsilon(3)-epsPn[3]);
+    xsi[4]= G*(Cepsilon(4)-epsPn[4]);
 
     xsi[0] -= two3Hkin*(2*epsPn[0]+epsPn[1]);
     xsi[1] -= two3Hkin*(2*epsPn[1]+epsPn[0]);
@@ -814,8 +818,9 @@ int XC::J2PlateFibre::sendData(Communicator &comm)
     res+= comm.sendInt(parameterID,getDbTagData(),CommMetaData(2));
     res+= comm.sendMatrix(SHVs,getDbTagData(),CommMetaData(3));
     res+= comm.sendVector(Tepsilon,getDbTagData(),CommMetaData(4));
-    res+= comm.sendDoubles(alphan, alphan1, dg_n1,getDbTagData(),CommMetaData(5));
-    size_t conta= 6;
+    res+= comm.sendVector(Tepsilon0,getDbTagData(),CommMetaData(5));
+    res+= comm.sendDoubles(alphan, alphan1, dg_n1,getDbTagData(),CommMetaData(6));
+    size_t conta= 7;
     for(size_t i=0;i<order;i++)
       res+= comm.sendDoubles(epsPn[i],epsPn1[i],getDbTagData(),CommMetaData(conta++));
     return res;
@@ -829,8 +834,9 @@ int XC::J2PlateFibre::recvData(const Communicator &comm)
     res+= comm.receiveInt(parameterID,getDbTagData(),CommMetaData(2));
     res+= comm.receiveMatrix(SHVs,getDbTagData(),CommMetaData(3));
     res+= comm.receiveVector(Tepsilon,getDbTagData(),CommMetaData(4));
-    res+= comm.receiveDoubles(alphan, alphan1, getDbTagData(),CommMetaData(5));
-    size_t conta= 6;
+    res+= comm.receiveVector(Tepsilon0,getDbTagData(),CommMetaData(5));
+    res+= comm.receiveDoubles(alphan, alphan1, getDbTagData(),CommMetaData(6));
+    size_t conta= 7;
     for(size_t i=0;i<order;i++)
       res+= comm.receiveDoubles(epsPn[i],epsPn1[i],getDbTagData(),CommMetaData(conta++));
     return res;
@@ -841,7 +847,7 @@ int XC::J2PlateFibre::sendSelf(Communicator &comm)
   {
     setDbTag(comm);
     const int dataTag= getDbTag();
-    inicComm(6+order);
+    inicComm(7+order);
     int res= sendData(comm);
 
     res+= comm.sendIdData(getDbTagData(),dataTag);
@@ -854,7 +860,7 @@ int XC::J2PlateFibre::sendSelf(Communicator &comm)
 //! @brief Receives object through the communicator argument.
 int XC::J2PlateFibre::recvSelf(const Communicator &comm)
   {
-    inicComm(6+order);
+    inicComm(7+order);
     const int dataTag= getDbTag();
     int res= comm.receiveIdData(getDbTagData(),dataTag);
 
