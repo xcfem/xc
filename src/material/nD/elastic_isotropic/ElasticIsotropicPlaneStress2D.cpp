@@ -75,20 +75,6 @@ XC::ElasticIsotropicPlaneStress2D::ElasticIsotropicPlaneStress2D(int tag)
   : ElasticIsotropic2D(tag, ND_TAG_ElasticIsotropicPlaneStress2d, 0.0, 0.0, 0.0)
   {}
 
-//! @brief Increments the strain vector [epsilon_xx, epsilon_yy, epsilon_xy]
-int XC::ElasticIsotropicPlaneStress2D::setTrialStrainIncr(const Vector &strain)
-  {
-    epsilon+= strain;
-    return 0;
-  }
-
-//! @brief Increments the strain vector [epsilon_xx, epsilon_yy, epsilon_xy]
-int XC::ElasticIsotropicPlaneStress2D::setTrialStrainIncr(const Vector &strain, const Vector &rate)
-  {
-    epsilon+= strain;
-    return 0;
-  }
-
 //! @brief Returns the material tangent stiffness matrix, \f$\D\f$.
 //!
 //! \f[
@@ -139,13 +125,14 @@ const XC::Vector &XC::ElasticIsotropicPlaneStress2D::getStress(void) const
     const double d01= v*d00;
     const double d22= 0.5*(d00-d01);
 
-    const double eps0= epsilon(0); //epsilon_xx
-    const double eps1= epsilon(1);
+    const Vector strain= getStrain();
+    const double eps0= strain(0); //epsilon_xx
+    const double eps1= strain(1);
 
     //sigma = D*epsilon;
     sigma(0)= d00*eps0 + d01*eps1;
     sigma(1)= d01*eps0 + d00*eps1;
-    sigma(2)= d22*epsilon(2);
+    sigma(2)= d22*strain(2);
     return sigma;
   }
 
@@ -171,12 +158,6 @@ double XC::ElasticIsotropicPlaneStress2D::getVonMisesStress(void) const
     return retval;
   }
 
-//! @brief zeroes initial generalized strain
-void XC::ElasticIsotropicPlaneStress2D::zeroInitialGeneralizedStrain(void)
-  {
-    //Initial strains not yet implemented so nothing to do.
-  }
-
 //! @brief Accept the current material state
 //! as being on the solution path. To return \f$0\f$ if
 //! successful, a negative number if not.
@@ -186,13 +167,6 @@ int XC::ElasticIsotropicPlaneStress2D::commitState(void)
 //! @brief Revert material to its last committed state.
 int XC::ElasticIsotropicPlaneStress2D::revertToLastCommit(void)
   { return 0; }
-
-//! @brief Revert material to its initial state.
-int XC::ElasticIsotropicPlaneStress2D::revertToStart(void)
-  {
-    epsilon.Zero();
-    return 0;
-  }
 
 //! @brief Virtual constructor.
 XC::NDMaterial *XC::ElasticIsotropicPlaneStress2D::getCopy(void) const

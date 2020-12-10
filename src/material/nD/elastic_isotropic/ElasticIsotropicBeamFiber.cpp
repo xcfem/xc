@@ -113,15 +113,15 @@ const XC::Matrix &XC::ElasticIsotropicBeamFiber::getInitialTangent(void) const
 
 const XC::Vector &XC::ElasticIsotropicBeamFiber::getStress(void) const
   {
-	double mu2 = E/(1.0+v);
-	double lam = v*mu2/(1.0-2.0*v);
-	double mu = 0.50*mu2;
+    const double mu2 = E/(1.0+v);
+    const double lam = v*mu2/(1.0-2.0*v);
+    const double mu = 0.50*mu2;
 
-	sigma(0) = mu*(mu2+3.0*lam)/(mu+lam)*epsilon(0);
-	sigma(1) = mu*epsilon(1);
-	sigma(2) = mu*epsilon(2);
-	
-	return sigma;
+    const Vector strain= getStrain();
+    sigma(0) = mu*(mu2+3.0*lam)/(mu+lam)*strain(0);
+    sigma(1) = mu*strain(1);
+    sigma(2) = mu*strain(2);
+    return sigma;
   }
 
 int XC::ElasticIsotropicBeamFiber::commitState(void)

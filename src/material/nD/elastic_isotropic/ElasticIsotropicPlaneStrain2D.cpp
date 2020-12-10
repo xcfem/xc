@@ -75,18 +75,6 @@ XC::ElasticIsotropicPlaneStrain2D::ElasticIsotropicPlaneStrain2D(int tag, double
 XC::ElasticIsotropicPlaneStrain2D::ElasticIsotropicPlaneStrain2D(int tag)
   : ElasticIsotropic2D(tag, ND_TAG_ElasticIsotropicPlaneStrain2d, 0.0, 0.0, 0.0) {}
 
-int XC::ElasticIsotropicPlaneStrain2D::setTrialStrainIncr(const Vector &strain)
-  {
-    epsilon+= strain;
-    return 0;
-  }
-
-int XC::ElasticIsotropicPlaneStrain2D::setTrialStrainIncr(const Vector &strain, const Vector &rate)
-  {
-    epsilon+= strain;
-    return 0;
-  }
-
 //! @brief Returns the material tangent stiffness matrix, \f$D\f$.
 //!
 //! \f[
@@ -147,15 +135,16 @@ const XC::Vector &XC::ElasticIsotropicPlaneStrain2D::getStress(void) const
     const double lam = v*mu2/(1.0-2.0*v);
     const double mu = 0.50*mu2;
 
-    const double eps0 = epsilon(0);
-    const double eps1 = epsilon(1);
+    const Vector strain= getStrain();
+    const double eps0 = strain(0);
+    const double eps1 = strain(1);
 
     mu2+= lam;
 
     //sigma = D*epsilon;
     sigma(0) = mu2*eps0 + lam*eps1; //sigma_xx
     sigma(1) = lam*eps0 + mu2*eps1; //sigma_yy
-    sigma(2) = mu*epsilon(2); //tau_xy
+    sigma(2) = mu*strain(2); //tau_xy
     return sigma;
   }
 
@@ -166,13 +155,6 @@ int XC::ElasticIsotropicPlaneStrain2D::commitState(void)
 //! @brief Revert the material to its last committed state.
 int XC::ElasticIsotropicPlaneStrain2D::revertToLastCommit(void)
   { return 0; }
-
-//! @brief Revert the material to its initial state.
-int XC::ElasticIsotropicPlaneStrain2D::revertToStart(void)
-  {
-    epsilon.Zero();
-    return 0;
-  }
 
 //! @brief @brief Virtual constructor.
 XC::NDMaterial *XC::ElasticIsotropicPlaneStrain2D::getCopy(void) const

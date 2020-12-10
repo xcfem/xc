@@ -469,6 +469,7 @@ echo "$BLEU" "      nD materials tests." "$NORMAL"
 python tests/materials/xc_materials/nD/test_elastic_isotropic_plane_strain_2d_01.py
 python tests/materials/xc_materials/nD/test_elastic_isotropic_plane_stress_2d_01.py
 python tests/materials/xc_materials/nD/test_elastic_isotropic_3d_01.py
+python tests/materials/xc_materials/nD/test_elastic_isotropic_3d_strain_load.py
 echo "$BLEU" "        J2 (Von Mises) materials tests." "$NORMAL"
 python tests/materials/xc_materials/nD/test_j2_plate_fibre.py
 python tests/materials/xc_materials/nD/test_j2_plate_fibre_strain_load.py

@@ -110,9 +110,10 @@ const XC::Vector& XC::PressureDependentElastic3D::getStress(void) const
 
     mu2 += lam;
 
-    const double eps0 = epsilon(0);
-    const double eps1 = epsilon(1);
-    const double eps2 = epsilon(2);
+    const Vector strain= getStrain();
+    const double eps0 = strain(0);
+    const double eps1 = strain(1);
+    const double eps2 = strain(2);
 
     sigma(0) = mu2*eps0 + lam*(eps1+eps2);
     sigma(1) = mu2*eps1 + lam*(eps2+eps0);
@@ -120,9 +121,9 @@ const XC::Vector& XC::PressureDependentElastic3D::getStress(void) const
 
     p_n1 = (sigma(0)+sigma(1)+sigma(2))/3.0;
 
-    sigma(3) = mu*epsilon(3);
-    sigma(4) = mu*epsilon(4);
-    sigma(5) = mu*epsilon(5);
+    sigma(3) = mu*strain(3);
+    sigma(4) = mu*strain(4);
+    sigma(5) = mu*strain(5);
 
     return sigma;
   }

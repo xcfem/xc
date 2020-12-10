@@ -67,8 +67,6 @@ class ElasticIsotropic3D: public ElasticIsotropicMaterial
   private:
     static Vector sigma; //!< Stress vector
     static Matrix D; //!< Elastic constantsVector sigma;
-    Vector Cepsilon; //!< Committed strain
-
   public:
     ElasticIsotropic3D(int tag= 0);
     ElasticIsotropic3D(int tag, double E, double nu, double rho);
@@ -78,9 +76,9 @@ class ElasticIsotropic3D: public ElasticIsotropicMaterial
 
     const Vector &getStress(void) const;
     
-    int commitState (void);
-    int revertToLastCommit (void);
-    int revertToStart (void);
+    int commitState(void);
+    int revertToLastCommit(void);
+    int revertToStart(void);
     
     NDMaterial *getCopy(void) const;
     const std::string &getType(void) const;

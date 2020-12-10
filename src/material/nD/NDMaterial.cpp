@@ -289,7 +289,7 @@ const XC::stresstensor &XC::NDMaterial::getStressTensor(void) const
 const XC::straintensor &XC::NDMaterial::getStrainTensor(void) const
   {
     static straintensor st;
-    st= straintensor(getStress());
+    st= straintensor(getStrain());
     return st;
   }
 

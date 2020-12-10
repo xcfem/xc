@@ -77,13 +77,10 @@ class ElasticIsotropicPlaneStrain2D: public ElasticIsotropic2D
   {
   private:
     static Vector sigma; //!< Stress vector ... class-wide for returns
-    Vector epsilon; //! Trial strains
   public:
     ElasticIsotropicPlaneStrain2D(int tag, double E, double nu, double rho);
     ElasticIsotropicPlaneStrain2D(int tag= 0);
 
-    int setTrialStrainIncr(const Vector &v);
-    int setTrialStrainIncr(const Vector &v, const Vector &r);
     const Matrix &getTangent(void) const;
     const Matrix &getInitialTangent(void) const;
 
@@ -91,7 +88,6 @@ class ElasticIsotropicPlaneStrain2D: public ElasticIsotropic2D
     
     int commitState (void);
     int revertToLastCommit (void);
-    int revertToStart (void);
     
     NDMaterial *getCopy(void) const;
     const std::string &getType(void) const;

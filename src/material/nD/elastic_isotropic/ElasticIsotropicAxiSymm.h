@@ -79,15 +79,12 @@ class ElasticIsotropicAxiSymm: public ElasticIsotropicMaterial
     ElasticIsotropicAxiSymm(int tag);
     ElasticIsotropicAxiSymm();
 
-    int setTrialStrainIncr (const Vector &v);
-    int setTrialStrainIncr (const Vector &v, const Vector &r);
     const Matrix &getTangent(void) const;
     const Matrix &getInitialTangent(void) const;
     const Vector &getStress(void) const;
     
     int commitState (void);
     int revertToLastCommit (void);
-    int revertToStart (void);
     
     NDMaterial *getCopy(void) const;
     const std::string &getType(void) const;

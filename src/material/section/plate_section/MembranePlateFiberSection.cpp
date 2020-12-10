@@ -345,7 +345,7 @@ const XC::Vector &XC::MembranePlateFiberSection::getStressResultant(void) const
       {
         const double &z= zsAndWeights[i].first;
         const double &weight= zsAndWeights[i].second;
-        stress= theFibers[i]->getStress( );
+        stress= theFibers[i]->getStress();
         //membrane
         stressResultant(0)+= stress(0)*weight;
         stressResultant(1)+= stress(1)*weight;

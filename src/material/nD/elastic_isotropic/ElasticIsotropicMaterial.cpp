@@ -233,7 +233,7 @@ int XC::ElasticIsotropicMaterial::setTrialStrainIncr(const Vector &epsInc)
 //! @brief Increment the value of the trial strain.
 //! @param epsInc: value of the trial strain increment.
 //! @param rate: not used.
-int XC::ElasticIsotropicMaterial::setTrialStrainIncr(const Vector &epsInc, const XC::Vector &rate)
+int XC::ElasticIsotropicMaterial::setTrialStrainIncr(const Vector &epsInc, const Vector &rate)
   {
     epsilon+= epsInc;
     return -1;
@@ -282,6 +282,10 @@ const XC::Vector &XC::ElasticIsotropicMaterial::getStrain(void) const
     retval= epsilon-epsilon0;
     return retval;
   }
+
+//! @brief zeroes initial generalized strain
+void XC::ElasticIsotropicMaterial::zeroInitialGeneralizedStrain(void)
+  { epsilon0.Zero(); }
 
 //! @brief To accept the current value of the trial strain vector
 //! as being on the solution path. To return \f$0\f$ if

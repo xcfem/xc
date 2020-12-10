@@ -68,22 +68,8 @@ XC::ElasticIsotropicAxiSymm::ElasticIsotropicAxiSymm(void)
   : ElasticIsotropicMaterial(0, ND_TAG_ElasticIsotropicAxiSymm,4, 0.0, 0.0)
   {}
 
-int XC::ElasticIsotropicAxiSymm::setTrialStrainIncr(const XC::Vector &strain)
-  {
-    epsilon+=strain;
-    return 0;
-  }
-
-int
-XC::ElasticIsotropicAxiSymm::setTrialStrainIncr(const XC::Vector &strain, const XC::Vector &rate)
-{
-	epsilon+=strain;
-
-	return 0;
-}
-
 const XC::Matrix &XC::ElasticIsotropicAxiSymm::getTangent(void) const
-{
+  {
 	double mu2 = E/(1.0+v);
 	double lam = v*mu2/(1.0-2.0*v);
 	double mu = 0.50*mu2;
@@ -95,7 +81,7 @@ const XC::Matrix &XC::ElasticIsotropicAxiSymm::getTangent(void) const
 	D(3,3) = mu;
 
 	return D;
-}
+  }
 
 const XC::Matrix &XC::ElasticIsotropicAxiSymm::getInitialTangent(void) const
 {
@@ -113,25 +99,26 @@ const XC::Matrix &XC::ElasticIsotropicAxiSymm::getInitialTangent(void) const
 }
 
 const XC::Vector &XC::ElasticIsotropicAxiSymm::getStress(void) const
-{
-  double mu2 = E/(1.0+v);
-  double lam = v*mu2/(1.0-2.0*v);
-  double mu = 0.50*mu2;
+  {
+    double mu2 = E/(1.0+v);
+    const double lam = v*mu2/(1.0-2.0*v);
+    const double mu = 0.50*mu2;
 
-  double eps0 = epsilon(0);
-  double eps1 = epsilon(1);
-  double eps2 = epsilon(2);
+    const Vector strain= getStrain();
+    const double eps0 = strain(0);
+    const double eps1 = strain(1);
+    const double eps2 = strain(2);
 
-  mu2 += lam;
+    mu2 += lam;
 
-  //sigma = D*epsilon;
-  sigma(0) = mu2*eps0 + lam*(eps1+eps2);
-  sigma(1) = mu2*eps1 + lam*(eps0+eps2);
-  sigma(2) = mu2*eps2 + lam*(eps0+eps1);
-  sigma(3) = mu*epsilon(3);
-	
-  return sigma;
-}
+    //sigma = D*epsilon;
+    sigma(0) = mu2*eps0 + lam*(eps1+eps2);
+    sigma(1) = mu2*eps1 + lam*(eps0+eps2);
+    sigma(2) = mu2*eps2 + lam*(eps0+eps1);
+    sigma(3) = mu*strain(3);
+
+    return sigma;
+  }
 
 int XC::ElasticIsotropicAxiSymm::commitState(void)
 {
@@ -141,13 +128,6 @@ int XC::ElasticIsotropicAxiSymm::commitState(void)
 int
 XC::ElasticIsotropicAxiSymm::revertToLastCommit(void)
 {
-  return 0;
-}
-
-int
-XC::ElasticIsotropicAxiSymm::revertToStart(void)
-{
-  epsilon.Zero();
   return 0;
 }
 

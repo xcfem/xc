@@ -59,33 +59,22 @@
 XC::Matrix XC::ElasticIsotropic3D::D(6,6); // global for ElasticIsotropic3D only
 XC::Vector XC::ElasticIsotropic3D::sigma(6); // global for ElasticIsotropic3D only
 
-XC::ElasticIsotropic3D::ElasticIsotropic3D(int tag, double E, double nu, double rho)
-  : ElasticIsotropicMaterial(tag, ND_TAG_ElasticIsotropic3D,6, E, nu, rho),
-    Cepsilon(6)
-  { Cepsilon.Zero(); }
-
+//! @brief Constructor.
 XC::ElasticIsotropic3D::ElasticIsotropic3D(int tag)
-  : ElasticIsotropicMaterial(tag, ND_TAG_ElasticIsotropic3D,6, 0.0, 0.0, 0.0),
-    Cepsilon(6)
-  { Cepsilon.Zero(); }
+  : ElasticIsotropicMaterial(tag, ND_TAG_ElasticIsotropic3D,6, 0.0, 0.0, 0.0)
+  {}
 
+//! @brief Constructor.
+XC::ElasticIsotropic3D::ElasticIsotropic3D(int tag, double E, double nu, double rho)
+  : ElasticIsotropicMaterial(tag, ND_TAG_ElasticIsotropic3D,6, E, nu, rho)
+  {}
+
+
+//! @brief Return the tangent stiffness matrix.
 const XC::Matrix &XC::ElasticIsotropic3D::getTangent(void) const
-  {
-    double mu2= E/(1.0+v);
-    const double lam= v*mu2/(1.0-2.0*v);
-    const double mu= 0.50*mu2;
-    mu2 += lam;
+  { return getInitialTangent(); }
 
-    D(0,0) = D(1,1) = D(2,2) = mu2;
-    D(0,1) = D(1,0) = lam;
-    D(0,2) = D(2,0) = lam;
-    D(1,2) = D(2,1) = lam;
-    D(3,3) = mu;
-    D(4,4) = mu;
-    D(5,5) = mu;
-    return D;
-  }
-
+//! @brief Return the tangent stiffness matrix.
 const XC::Matrix &XC::ElasticIsotropic3D::getInitialTangent(void) const
   {
     double mu2 = E/(1.0+v);
@@ -106,14 +95,15 @@ const XC::Matrix &XC::ElasticIsotropic3D::getInitialTangent(void) const
 const XC::Vector &XC::ElasticIsotropic3D::getStress(void) const
   {
     double mu2 = E/(1.0+v);
-    double lam = v*mu2/(1.0-2.0*v);
-    double mu  = 0.50*mu2;
+    const double lam = v*mu2/(1.0-2.0*v);
+    const double mu  = 0.50*mu2;
 
     mu2 += lam;
 
-    double eps0 = epsilon(0);
-    double eps1 = epsilon(1);
-    double eps2 = epsilon(2);
+    const Vector strain= getStrain();
+    const double eps0= strain(0);
+    const double eps1= strain(1);
+    const double eps2= strain(2);
     
     D(0,0) = D(1,1) = D(2,2) = mu2;
     D(0,1) = D(1,0) = D(0,2) = D(2,0) = D(1,2) = D(2,1) = lam;
@@ -125,9 +115,9 @@ const XC::Vector &XC::ElasticIsotropic3D::getStress(void) const
     sigma(1) = mu2*eps1 + lam*(eps2+eps0);
     sigma(2) = mu2*eps2 + lam*(eps0+eps1);
 
-    sigma(3) = mu*epsilon(3);
-    sigma(4) = mu*epsilon(4);
-    sigma(5) = mu*epsilon(5);
+    sigma(3) = mu*strain(3);
+    sigma(4) = mu*strain(4);
+    sigma(5) = mu*strain(5);
 
     return sigma;
   }
@@ -135,14 +125,12 @@ const XC::Vector &XC::ElasticIsotropic3D::getStress(void) const
 //! @brief Commit the material state.
 int XC::ElasticIsotropic3D::commitState(void)
   {
-    Cepsilon=epsilon;
     return 0;
   }
 
 //! @brief Return the material to its last committed state.
 int XC::ElasticIsotropic3D::revertToLastCommit(void)
   {
-    epsilon=Cepsilon;
     return 0;
   }
 
@@ -150,7 +138,6 @@ int XC::ElasticIsotropic3D::revertToLastCommit(void)
 int XC::ElasticIsotropic3D::revertToStart(void)
   {
     int retval= ElasticIsotropicMaterial::revertToStart();
-    Cepsilon.Zero();
     return retval;
   }
 

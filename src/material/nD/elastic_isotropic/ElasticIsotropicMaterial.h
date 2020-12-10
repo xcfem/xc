@@ -92,7 +92,6 @@ class ElasticIsotropicMaterial: public NDMaterial
     double rho ; //!< mass per unit 3D volume.
     Vector epsilon; //!< trial strain vector.
     Vector epsilon0; //!< initial strain vector.
-
     int sendData(Communicator &);
     int recvData(const Communicator &);
 
@@ -135,6 +134,7 @@ class ElasticIsotropicMaterial: public NDMaterial
     virtual const Vector &getStress(void) const;
     virtual const Vector &getStrain(void) const;
 
+    void zeroInitialGeneralizedStrain(void);
     virtual int commitState(void);
     virtual int revertToLastCommit(void);
     virtual int revertToStart(void);

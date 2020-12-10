@@ -82,18 +82,14 @@ class ElasticIsotropicPlaneStress2D: public ElasticIsotropic2D
     ElasticIsotropicPlaneStress2D(int tag= 0);
     ElasticIsotropicPlaneStress2D(int tag, double E, double nu, double rho);
 
-    int setTrialStrainIncr(const Vector &v);
-    int setTrialStrainIncr(const Vector &v, const Vector &r);
     const Matrix &getTangent(void) const;
     const Matrix &getInitialTangent(void) const;
 
     const Vector &getStress(void) const;
     double getVonMisesStress(void) const;
         
-    void zeroInitialGeneralizedStrain(void);
     int commitState(void);
     int revertToLastCommit(void);
-    int revertToStart(void);
     
     NDMaterial *getCopy(void) const;
     const std::string &getType(void) const;

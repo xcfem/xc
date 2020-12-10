@@ -80,8 +80,6 @@ class ElasticIsotropicPlateFiber: public ElasticIsotropicMaterial
     ElasticIsotropicPlateFiber(int tag= 0);
     ElasticIsotropicPlateFiber(int tag, double E, double nu, double rho);
 
-    int setTrialStrainIncr(const Vector &v);
-    int setTrialStrainIncr(const Vector &v, const Vector &r);
     const Matrix &getTangent(void) const;
     const Matrix &getInitialTangent(void) const;
 
@@ -90,7 +88,6 @@ class ElasticIsotropicPlateFiber: public ElasticIsotropicMaterial
         
     int commitState(void);
     int revertToLastCommit(void);
-    int revertToStart(void);
     
     NDMaterial *getCopy(void) const;
     const std::string &getType(void) const;
