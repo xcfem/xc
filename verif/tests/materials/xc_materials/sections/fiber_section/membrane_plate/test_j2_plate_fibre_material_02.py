@@ -49,7 +49,7 @@ stressData= list()
 stressDataReference= [65916936.263736255, 153806184.6153846, 219723120.8791209, 439446241.7582418, 454599560.4395605, 450432397.8021978, 461418553.8461538, 468395440.42208517, 473603507.07051563, 482821782.0083271, 498619262.7797404, 512958121.12695897, 526644802.06423455, 540040628.3697585]
 
 for strain in strainData:
-    j2plate.setTrialStrain(xc.Vector([strain,0,0]))
+    j2plate.setTrialStrain(xc.Vector([strain,0,0,0,0]))
     j2plate.commitState()
     stress= j2plate.getStress()
     sigma_11= stress[0]
