@@ -40,7 +40,7 @@ XC::BandArpackppSolver::BandArpackppSolver(const int &nModes)
  :EigenSolver(EigenSOLVER_TAGS_BandArpackppSolver,nModes),
  theSOE(nullptr), eigenvalues(nModes), eigenvectors(nModes,Vector()) {}
 
-ARbdNonSymMatrix<double, double> creaARbdNonSymMatrix(const msp_double &m,XC::Vector &v)
+ARbdNonSymMatrix<double, double> creaARbdNonSymMatrix(const msp_double &m, XC::Vector &v)
   {
     const size_t ndiagL= m.ndiagL();
     const size_t ndiagU= m.ndiagU();
@@ -55,13 +55,13 @@ ARbdNonSymMatrix<double, double> creaARbdNonSymMatrix(const msp_double &m,XC::Ve
     return ARbdNonSymMatrix<double, double>(n_columns,ndiagL,ndiagU,v.getDataPtr());
   }
 
-void XC::BandArpackppSolver::setup_autos(const size_t &nmodos,const size_t &n)
+void XC::BandArpackppSolver::setup_autos(const size_t &nmodes,const size_t &n)
   {
-    if(eigenvalues.size()!=nmodos)
-      eigenvalues.resize(nmodos);
-    if(eigenvectors.size()!=nmodos)
-      eigenvectors.resize(nmodos);
-    for(size_t i=0;i<nmodos;i++)
+    if(eigenvalues.size()!=nmodes)
+      eigenvalues.resize(nmodes);
+    if(eigenvectors.size()!=nmodes)
+      eigenvectors.resize(nmodes);
+    for(size_t i=0;i<nmodes;i++)
       eigenvectors[i].resize(n);
   }
 
