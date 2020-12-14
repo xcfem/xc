@@ -93,8 +93,8 @@ class LUTField(object):
         '''Creates the scalar bar that indicates to the viewer the correspondence
         between color values and data values
 
-        :param orientation: 'H' for horizontal bar, 'VL' for left-vertical bar 
-                             'VR' for right-vertical bar(defaults to 'H')
+        :param orientation: 'H' for horizontal bar, 'LV' for left-vertical bar 
+                             'RV' for right-vertical bar(defaults to 'H')
         '''
 
         self.scalarBar= vtk.vtkScalarBarActor()
