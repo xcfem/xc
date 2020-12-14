@@ -47,7 +47,8 @@ bool XC::BandArpackppSOE::setSolver(EigenSolver *newSolver)
         retval= ArpackSOE::setSolver(tmp);
       }
     else
-      std::cerr << "BandArpackppSOE::setSolver; incompatible solver." << std::endl;
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; incompatible solver." << std::endl;
     return retval;
   }
 

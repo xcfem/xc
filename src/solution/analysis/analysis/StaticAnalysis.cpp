@@ -253,6 +253,7 @@ int XC::StaticAnalysis::run_analysis_step(int num_step,int numSteps)
     result= check_domain_change(num_step,numSteps);
     if(result < 0) //Fallo en check_domain_change.
       return -1;
+    
 
     result= new_integrator_step(num_step);
     if(result < 0) //Fallo en new_integrator_step.
@@ -261,7 +262,6 @@ int XC::StaticAnalysis::run_analysis_step(int num_step,int numSteps)
     result= solve_current_step(num_step);
     if(result<0) //Fallo en solve_current_step.
       return -3;
-
 
 // AddingSensitivity:BEGIN ////////////////////////////////////
 #ifdef _RELIABILITY
