@@ -130,7 +130,7 @@ class FreeCADImport(reader_base.ReaderBase):
                     self.labelDict[pointName]= [labelName]
                     
     def importLines(self):
-        ''' Import lines from DXF.'''
+        ''' Import lines from FreeCAD file.'''
         self.lines= {}
         for obj in self.document.Objects:
             if(hasattr(obj,'Shape')):
@@ -161,13 +161,15 @@ class FreeCADImport(reader_base.ReaderBase):
                         self.labelDict[lineName]= objLabels
                     else:
                         lmsg.error('line too short: '+str(p1)+','+str(p2)+str(length))
+
+                        
     def importFaces(self):
-        ''' Import 3D faces from DXF.'''
+        ''' Import faces from FreeCAD file.'''
         self.facesTree= {}
         for name in self.groupsToImport:
             self.facesTree[name]= dict()
 
-        def add_face(faceShape, faceName, labelName):
+        def import_face(faceShape, faceName, labelName):
             ''' Add the face argument to the dictionary.'''
             vertices= list()
             objPoints= list()
@@ -180,25 +182,44 @@ class FreeCADImport(reader_base.ReaderBase):
             self.labelDict[faceName]= [labelName]
             facesDict[faceName]= vertices
 
+        def import_shell(shapeContainer, faceName, labelName):
+            ''' Import shell objects from the container argument.'''
+            fCount= 0
+            for f in shapeContainer:
+                thisFaceName= faceName+'.'+str(fCount)
+                import_face(f, thisFaceName, labelName)
+                fCount+= 1
+
+        def import_shape(shape, faceName, labelName):
+            ''' Import simple shape.'''
+            shapeType= shape.ShapeType
+            if(shapeType=='Face'):
+                import_face(shape, faceName, labelName)
+            elif(shapeType=='Shell'):
+                for s in shape.SubShapes:
+                    import_shape(s, faceName, labelName)
+            elif(shapeType=='Compound'):
+                cCount= 0
+                for ss in obj.Shape.SubShapes:
+                    ssType= ss.ShapeType
+                    ssName= faceName+'.'+str(cCount)
+                    import_shape(ss, ssName, labelName)
+                    cCount+= 1          
+            elif(shapeType in ['Wire']):
+                count= 0 # Nothing to do with those.
+            else:
+                lmsg.log('Entity with shape of type: '+shapeType+' ignored.')      
+            
+
         for obj in self.document.Objects:
             if(hasattr(obj,'Shape')):
-                objType= obj.Shape.ShapeType
+                shapeType= obj.Shape.ShapeType
                 faceName= obj.Name
                 labelName= obj.Label
                 if(labelName in self.groupsToImport):
                     facesDict= self.facesTree[labelName]
-                    if(objType=='Face'):
-                        add_face(obj.Shape, faceName, labelName)
-                    elif(objType=='Shell'):
-                        fCount= 0
-                        for f in obj.Shape.SubShapes:
-                            thisFaceName= faceName+'.'+str(fCount)
-                            add_face(f, thisFaceName, labelName)
-                            fCount+= 1
-                    elif(objType in ['Wire']):
-                        count= 0 # Nothing to do with those.
-                    else:
-                        lmsg.log('Entity of type: '+objType+' ignored.')      
+                    import_shape(obj.Shape, faceName, labelName)
+
               
     def getNamesToImport(self):
         ''' Return the names of the objects to import.'''
