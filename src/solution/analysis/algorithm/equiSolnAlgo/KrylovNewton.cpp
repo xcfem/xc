@@ -101,7 +101,7 @@ int XC::KrylovNewton::solveCurrentStep(void)
     LinearSOE *theSOE= getLinearSOEPtr();
     ConvergenceTest *theTest= getConvergenceTestPtr();
 
-    if((theAnaModel == 0) || (theIntegrator == 0) || (theSOE == 0) || (theTest == 0))
+    if((theAnaModel == nullptr) || (theIntegrator == nullptr) || (theSOE == nullptr) || (theTest == nullptr))
       {
         std::cerr << getClassName() << "::" << __FUNCTION__
 		  << "; undefined model, integrator or system of equations.\n";
@@ -139,7 +139,6 @@ int XC::KrylovNewton::solveCurrentStep(void)
 		  << "; the Integrator failed in formUnbalance()\n";
         return -2;
       }
-
 
     // set itself as the XC::ConvergenceTest objects XC::EquiSolnAlgo
     theTest->set_owner(getSolutionStrategy());
@@ -180,7 +179,6 @@ int XC::KrylovNewton::solveCurrentStep(void)
                 return -1;
               }
           }
-
         // Solve for residual f(y_k) = J^{-1} R(y_k)
         if(theSOE->solve() < 0)
           {
@@ -188,7 +186,6 @@ int XC::KrylovNewton::solveCurrentStep(void)
                       << "; the LinearSysOfEqn failed in solve()\n";
             return -3;
           }
-
         // Solve least squares A w_{k+1} = r_k
         if(this->leastSquares(dim) < 0)
           {
@@ -196,7 +193,6 @@ int XC::KrylovNewton::solveCurrentStep(void)
                       << "; the Integrator failed in leastSquares()\n";
             return -1;
           }
-
         // Update system with v_k
         if(theIntegrator->update(v[dim]) < 0)
           {
@@ -204,7 +200,6 @@ int XC::KrylovNewton::solveCurrentStep(void)
                       << "; the Integrator failed in update()\n";
             return -4;
           }
-
         // Evaluate system residual R(y_k)
         if(theIntegrator->formUnbalance() < 0)
           {
@@ -215,7 +210,7 @@ int XC::KrylovNewton::solveCurrentStep(void)
 
         // Increase current dimension of Krylov subspace
         dim++;
-
+	
         result = theTest->test();
         this->record(k++); //Call the record(...) method of all the recorders.
       }
@@ -232,6 +227,7 @@ int XC::KrylovNewton::solveCurrentStep(void)
 
     // note - if positive result we are returning what the convergence
     // test returned which should be the number of iterations
+    
     return result;
   }
 
