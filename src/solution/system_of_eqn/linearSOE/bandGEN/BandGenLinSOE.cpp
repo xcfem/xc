@@ -151,16 +151,28 @@ int XC::BandGenLinSOE::setSize(Graph &theGraph)
     int result = 0;
     size= checkSize(theGraph);
 
-    /*
-     * determine the number of superdiagonals and subdiagonals
-     */
+    // determine the number of superdiagonals and subdiagonals
     theGraph.getBand(numSubD,numSuperD);
 
-    int newSize = size * (2*numSubD + numSuperD +1);
+    const int newSize= size * (2*numSubD + numSuperD +1);
+
     if(newSize > A.Size())
       { // we have to get another space for A
         A.resize(newSize);
       }
+    else if(newSize<0)
+      {
+	if((numSubD>0) && (numSuperD>0)) // integer overflow
+	  std::cerr << getClassName() << "::" << __FUNCTION__
+	            << "; ERROR integer overflow."
+	            << " System of equations too big."
+	            << std::endl;
+        else
+          std::cerr << getClassName() << "::" << __FUNCTION__
+	  	    << "; ERROR, something went wrong: array size < 0.\n";
+        return newSize;
+      }
+	
     A.Zero();
 
     factored = false;
@@ -201,8 +213,6 @@ int XC::BandGenLinSOE::setSize(Graph &theGraph)
 //! @param fact: factor.
 int XC::BandGenLinSOE::addA(const Matrix &m, const ID &id, double fact)
   {
-  //  std::cerr << "BAND- addA() " << m << id;
-
     // check for a quick return
     if(fact == 0.0)  return 0;
 
@@ -212,12 +222,11 @@ int XC::BandGenLinSOE::addA(const Matrix &m, const ID &id, double fact)
     if(idSize != m.noRows() && idSize != m.noCols())
       {
         std::cerr << getClassName() << "::" << __FUNCTION__
-		  << "; Matrix and ID not of similar sizes.\n";
+		  << "; matrix and ID not of similar sizes.\n";
         return -1;
       }
 
     const int ldA = 2*numSubD + numSuperD + 1;
-
 
     if(fact == 1.0)
       { // do not need to multiply
@@ -226,14 +235,15 @@ int XC::BandGenLinSOE::addA(const Matrix &m, const ID &id, double fact)
             const int col = id(i);
             if(col < size && col >= 0)
               {
-                double *coliiPtr = A.getDataPtr() + col*ldA + numSubD + numSuperD;
+	        const int offset= col*ldA + numSubD + numSuperD;
+                double *coliiPtr= A.getDataPtr() + offset;
                 for(int j=0; j<idSize; j++)
                   {
-                    int row = id(j);
+                    const int row = id(j);
                     if(row <size && row >= 0)
                       {
-                        int diff = col - row;
-                        if(diff > 0)
+                        int diff= col - row;
+                        if(diff >= 0)
                           {
                             if(diff <= numSuperD)
                               {
@@ -243,7 +253,7 @@ int XC::BandGenLinSOE::addA(const Matrix &m, const ID &id, double fact)
                           }
                         else
                           {
-                            diff *= -1;
+                            diff*= -1;
                             if(diff <= numSubD)
                               {
                                 double *APtr = coliiPtr + diff;
@@ -291,8 +301,6 @@ int XC::BandGenLinSOE::addA(const Matrix &m, const ID &id, double fact)
               }
           }  // for i
       }
-    //    std::cerr << A;
-    // std::cerr << std::endl;
     return 0;
   }
 
