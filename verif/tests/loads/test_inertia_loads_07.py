@@ -42,7 +42,7 @@ elements= prep.getElementHandler
 elements.dimElem= 3
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
 
-gridGeom=gm.GridModel(prep,rList,angList,zList,xCentCyl=0,yCentCyl=0)
+gridGeom=gm.GridModel(prep,rList,angList,zList,xCentCoo=0,yCentCoo=0)
 gridGeom.generateCylZPoints()
 
 ring=gridGeom.genSurfOneXYZRegion([(r1,0,0),(r2,angList[-1],0)],setName='ring',closeCyl='Y')
