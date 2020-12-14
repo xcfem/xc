@@ -31,8 +31,6 @@
 #include "solution/graph/graph/Graph.h"
 #include "utility/matrix/Matrix.h"
 #include "utility/matrix/ID.h"
-//#include "boost/any.hpp"
-
 
 //! @brief Constructor.
 XC::BandArpackppSOE::BandArpackppSOE(SolutionStrategy *owr,const double &shift)
@@ -79,7 +77,8 @@ int XC::BandArpackppSOE::addToMatrix(msp_double &MT,const Matrix &m, const ID &i
     const int idSize = id.Size();
     if(idSize != m.noRows() && idSize != m.noCols())
       {
-        std::cerr << "BandArpackppSOE::addToMatrix() -- Matrix and XC::ID not of similar sizes,\n";
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; Matrix and ID not of similar sizes.\n";
         return -1;
       }
     if(fact == 1.0)
@@ -140,7 +139,6 @@ int XC::BandArpackppSOE::addToMatrix(msp_double &MT,const Matrix &m, const ID &i
 int XC::BandArpackppSOE::addA(const Matrix &a, const ID &id, double fact)
   { return addToMatrix(A,a,id,fact); }
 
-
 //! @brief Zeroes the matrix A.
 void XC::BandArpackppSOE::zeroA(void)
   { A.Anula(); }
@@ -157,7 +155,8 @@ int XC::BandArpackppSOE::addM(const Matrix &m, const ID &id, double fact)
         // check that m and id are of same size
         if(idSize != m.noRows() && idSize != m.noCols())
           {
-            std::cerr << "BandArpackppSOE::addM(); Matrix and ID not of similar sizes\n";
+            std::cerr <<  getClassName() << "::" << __FUNCTION__
+		      << "; matrix and ID not of similar sizes\n";
             retval= -1;
           }
         else
