@@ -114,16 +114,18 @@ int XC::IncrementalIntegrator::formTangent(int statFlag)
     // efficiency when performing parallel computations - CHANGE
 
     // loop through the FE_Elements adding their contributions to the tangent
-    FE_Element *elePtr;
-    FE_EleIter &theEles2= mdl->getFEs();    
-    while((elePtr = theEles2()) != 0)  
-      if(theSOE->addA(elePtr->getTangent(this),elePtr->getID()) < 0)
-        {
-	  std::cerr << getClassName() << "::" << __FUNCTION__
-		    << "; WARNING failed in addA for ID "
-		    << elePtr->getID();	    
-	  result = -3;
-	}
+    FE_Element *elePtr= nullptr;
+    FE_EleIter &theEles2= mdl->getFEs();   
+    while((elePtr = theEles2()) != 0)
+      {
+        if(theSOE->addA(elePtr->getTangent(this),elePtr->getID()) < 0)
+          {
+	    std::cerr << getClassName() << "::" << __FUNCTION__
+	  	      << "; WARNING failed in addA for ID "
+		      << elePtr->getID();	    
+	    result = -3;
+	  }
+      }
     return result;
   }
 
