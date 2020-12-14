@@ -67,7 +67,7 @@ Rcoo=[R]
 Angcoo=[i*360/25 for i in range(25)]
 zTop=zBase+height
 Zcoo=[zBase,zTop]
-grid=gm.GridModel(prep,Rcoo,Angcoo,Zcoo,xCentCyl=xCent,yCentCyl=yCent)
+grid=gm.GridModel(prep,Rcoo,Angcoo,Zcoo,xCentCoo=xCent,yCentCoo=yCent)
 grid.generateCylZPoints()
 
 tank=grid.genSurfOneXYZRegion(xyzRange=((R,0,zBase),(R,Angcoo[-1],zTop)), setName='tank',closeCyl='Y')

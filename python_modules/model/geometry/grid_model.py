@@ -180,24 +180,30 @@ class GridModel(object):
     Several grids can coexist in a FE problem.
 
     :ivar prep: preprocessor
-    :ivar xList: ordered list of x-coordinates for the grid 
-                 (radius in cylindrical coordinate system)
-    :ivar yList: ordered list of y-coordinates for the grid 
-                 (angle in degrees counterclockwise from the X-axis directio for cylindrical coordinate system)
-    :ivar xList: ordered list of z-coordinates for the grid.
-    :ivar xCentCyl, yCentCy: x and y coordinates of the points of the
-          Z axis for the cylindrical coordinate system 
+    :ivar xList: - cartesian coord: ordered list of x-coordinates for the grid 
+                 - cylindrical coord: ordered list of radius
+                 - elliptical coord: ordered list of semi-axes X
+    :ivar yList: - cartesian coord: ordered list of y-coordinates for the grid 
+                 - cylindrical and elliptical coord: ordered list of angles 
+                   expressed in degrees counterclockwise from the X-axis direction
+                 -  elliptical coord: ordered list of semi-axes Y
+    :ivar zList: ordered list of z-coordinates for the grid.
+    :ivar xCentCoo, yCentCoo: x and y coordinates of the center point
+          in cylindrical or elliptical coordinates
           (both coordinates default to 0)
-    :ivar dicLin: dictionary with all the lines linked to the grid. 
+    :ivar semiYellipList: (only used for elliptical coordinates) ordered list of 
+                    semi-axes Y that correspond with each semi-axis X
+                    in xList 
+    :ivar dicLin: generated dictionary with all the lines linked to the grid. 
           Each key is the name of a line, the value associated is the line 
           itself.
-    :ivar dicQuadSurf: dictionary with all the surfaces linked to the grid. 
+    :ivar dicQuadSurf: generated dictionary with all the surfaces linked to the grid. 
           Each key is the name of a surface, the value associated is the surface 
           itself.
 
 
     '''
-    def __init__(self,prep,xList,yList,zList,xCentCyl=0,yCentCyl=0):
+    def __init__(self,prep,xList,yList,zList,xCentCoo=0,yCentCoo=0,semiYellipList=None):
         self.gridCoo= list()
         self.gridCoo.append(xList)
         self.gridCoo.append(yList)
@@ -208,8 +214,9 @@ class GridModel(object):
         self.pointCounter=0
         self.dicQuadSurf=dict()
         self.dicLin=dict()
-        self.xCentCyl=xCentCyl
-        self.yCentCyl=yCentCyl
+        self.xCentCoo=xCentCoo
+        self.yCentCoo=yCentCoo
+        self.semiYellipList=semiYellipList
 
     def lastXIndex(self):
         return len(self.gridCoo[0])-1
@@ -342,7 +349,7 @@ class GridModel(object):
     def generateCylZPoints(self):
         '''Point generation in the following cylindrical coordinate system:
 
-        - Origin: point of coordinates (xCentCyl,yCentCyl,0)
+        - Origin: point of coordinates (xCentCoo,yCentCoo,0)
         - Longitudinal axis: Z
         - Azimuth expressed in degrees counterclockwise from the X-axis direction
         
@@ -355,8 +362,8 @@ class GridModel(object):
         points= self.prep.getMultiBlockTopology.getPoints
         inicTag=points.defaultTag
         lstPt=[(i+1,j+1,k+1,
-                self.xCentCyl+self.gridCoo[0][i]*math.cos(math.radians(self.gridCoo[1][j])),
-                self.yCentCyl+self.gridCoo[0][i]*math.sin(math.radians(self.gridCoo[1][j])),
+                self.xCentCoo+self.gridCoo[0][i]*math.cos(math.radians(self.gridCoo[1][j])),
+                self.yCentCoo+self.gridCoo[0][i]*math.sin(math.radians(self.gridCoo[1][j])),
                 self.gridCoo[2][k]) for i in range(len(self.gridCoo[0]))
                for j in range(len(self.gridCoo[1]))
                for k in range(len(self.gridCoo[2])) ]
@@ -365,18 +372,47 @@ class GridModel(object):
             self.pointCounter+=1
             pnt=points.newPntIDPos3d(self.pointCounter+inicTag,geom.Pos3d(x,y,z))
             self.indices.setPnt(i,j,k,pnt.tag)
+            
+    def generateEllipZPoints(self):
+        '''Point generation in the following elliptical coordinate system:
 
-    def moveCylPointsRadius(self,ijkRange,radius):
-        '''Move points in a 3D grid-region limited by the ijkRange 
-        in the cylindrical coordinate system to radius coordinate 
-        given as parameter
+        - Origin: point of coordinates (xCentCoo,yCentCoo,0)
+        - Longitudinal axis: Z
+        - Azimuth expressed in degrees counterclockwise from the X-axis direction
+        
+        Coordinates are defined:
+        
+        - x: semi-axis X of the ellipse
+        - y: angular coordinate (degrees counterclockwise from X-axis)
+        - z: height coordinate (Z axis)
+        - semiYellipList contains a list of semi-axis Y of the ellipse
+          that correspond element to element with the semi-axis X in xList
         '''
-        sPtMove=self.getSetPntRange(ijkRange,'sPtMove')
-        for p in sPtMove.getPoints:
-            vdir=geom.Vector2d(p.getPos.x-self.xCentCyl,p.getPos.y-self.yCentCyl,).normalized()
-            p.getPos.x= radius*vdir.x
-            p.getPos.y= radius*vdir.y
-        sPtMove.clear()
+        points= self.prep.getMultiBlockTopology.getPoints
+        inicTag=points.defaultTag
+#        lstPt=[(i+1,j+1,k+1,
+#                self.xCentCoo+self.gridCoo[0][i]*math.cos(math.radians(self.gridCoo[1][j])),
+#                self.yCentCoo+self.gridCoo[0][i]*math.sin(math.radians(self.gridCoo[1][j])),
+#                self.gridCoo[2][k]) for i in range(len(self.gridCoo[0]))
+#               for j in range(len(self.gridCoo[1]))
+#               for k in range(len(self.gridCoo[2])) ]
+        lstPt=list()
+        for i in range(len(self.gridCoo[0])):
+            sx=self.gridCoo[0][i]
+            sy=self.semiYellipList[i]
+            for j in range(len(self.gridCoo[1])):
+                ang=math.radians(self.gridCoo[1][j])
+                paramCoo=math.sqrt((math.cos(ang)/sx)**2+(math.sin(ang)/sy)**2)
+                x=self.xCentCoo+1/paramCoo*math.cos(ang)
+                y=self.yCentCoo+1/paramCoo*math.sin(ang)
+                for k in range(len(self.gridCoo[2])):
+                    z=self.gridCoo[2][k]
+                    lstPt.append((i+1,j+1,k+1,x,y,z))
+        for p in lstPt:
+            (i,j,k,x,y,z)=p
+            self.pointCounter+=1
+            pnt=points.newPntIDPos3d(self.pointCounter+inicTag,geom.Pos3d(x,y,z))
+            self.indices.setPnt(i,j,k,pnt.tag)
 
     def movePointsRange(self,ijkRange,vDisp):
         '''Move points  in a 3D grid-region limited by 
@@ -491,6 +527,19 @@ class GridModel(object):
             p.getPos.z= zOrig+scale*(zpt-zOrig)
         sPtZscale.clear()
 
+    def moveCylPointsRadius(self,ijkRange,radius):
+        '''Move points in a 3D grid-region limited by the ijkRange 
+        in the cylindrical coordinate system to radius coordinate 
+        given as parameter
+        '''
+        sPtMove=self.getSetPntRange(ijkRange,'sPtMove')
+        for p in sPtMove.getPoints:
+            vdir=geom.Vector2d(p.getPos.x-self.xCentCoo,p.getPos.y-self.yCentCoo,).normalized()
+            p.getPos.x= self.xCentCoo+radius*vdir.x
+            p.getPos.y= self.yCentCoo+radius*vdir.y
+            
+        sPtMove.clear()
+
     def movePointsRangeToZcylinder(self,ijkRange,xCent,yCent,R):
         '''Moves the points in the range to make them belong to 
         a cylinder with radius R and axis parallel to global Z passing 
@@ -533,6 +582,19 @@ class GridModel(object):
             p.getPos.z=zCent+R*vdir.y
         setPnt.clear()
 
+    def movePointsEllipse(self,ijkRange,semiAxX,semiAXY):
+        ''''Move points in a 3D grid-region limited by the ijkRange 
+        in the elliptical coordinate system to an ellipse of
+        semi-axes semiAxX and semiAXY given as parameters
+        '''
+        sPtMove=self.getSetPntRange(ijkRange,'sPtMove')
+        for p in sPtMove.getPoints:
+            ang=math.atan2(p.getPos.y-self.yCentCoo,p.getPos.x-self.xCentCoo)
+            paramCoo=math.sqrt((math.cos(ang)/semiAxX)**2+(math.sin(ang)/semiAXY)**2)
+            p.getPos.x=self.xCentCoo+1/paramCoo*math.cos(ang)
+            p.getPos.y= self.yCentCoo++1/paramCoo*math.sin(ang)
+        sPtMove.clear()
+            
     def newQuadGridSurface(self,surfName):
         '''Generate the quadrangle surface defined by the 4 vertex whose tags
         are implicit in the name of the surface.

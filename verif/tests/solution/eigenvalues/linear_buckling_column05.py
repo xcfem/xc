@@ -134,9 +134,9 @@ else:
   lmsg.error(fname+' ERROR.')
   
 # Graphic stuff.
-#oh= output_handler.OutputHandler(modelSpace)
-#oh.displayFEMesh()
-#oh.displayEigenvectors(1)
-#oh.displayEigenResult(1, defFScale= 10.0)
-#oh.displayLocalAxes()
-#oh.displayReactions()
+# oh= output_handler.OutputHandler(modelSpace)
+# oh.displayFEMesh()
+# oh.displayEigenvectors(1)
+# oh.displayEigenResult(1, defFScale= 10.0)
+# oh.displayLocalAxes()
+# oh.displayReactions()
