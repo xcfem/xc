@@ -176,6 +176,7 @@ class_<XC::SetEntities::lst_ptr_points, bases<dq_ptrs_pnt>>("lstPnts",no_init)
   .def("getBnd", &XC::SetEntities::lst_ptr_points::Bnd, "Return points boundary.")
   .def("getNearest",make_function(getNearestPnt, return_internal_reference<>() ),"Return the nearest point to the position argument.")
   .def("findTag",make_function(&XC::SetEntities::lst_ptr_points::findTag, return_internal_reference<>() ),"Returns the point identified by the tag argument.")
+  .def("conciliaNDivs", &XC::SetEntities::conciliaNDivs)
    ;
 
 typedef XC::DqPtrs<XC::Edge> dq_line_ptrs;
@@ -236,11 +237,12 @@ class_<XC::SetEntities::lst_body_pointers, bases<dq_body_ptrs> >("lstBodies",no_
   .def("findTag",make_function(&XC::SetEntities::lst_body_pointers::findTag, return_internal_reference<>() ),"Returns the body identified by the tag argument.")
    ;
 
+void (XC::SetEntities::*fillDownwardsMesh)(XC::SetMeshComp &)= &XC::SetEntities::fillDownwards;
 XC::Pnt *(XC::SetEntities::*getNearestPoint)(const Pos3d &)= &XC::SetEntities::getNearestPoint;
 class_<XC::SetEntities, bases<XC::PreprocessorContainer> >("SetEntities",no_init)
   .def("getBnd", &XC::SetEntities::Bnd, "return entities boundary.")
   .def("fillUpwards", &XC::SetEntities::fillUpwards,"add entities upwards.")
-  .def("fillDownwards", &XC::SetEntities::fillDownwards,"add entities downwards.")
+  .def("fillDownwards", fillDownwardsMesh,"add entities downwards.")
   .def("splitLinesAtIntersections",&XC::SetEntities::splitLinesAtIntersections,"divide the lines of the set at intersection points.")
   .def("getAverageSize",&XC::SetEntities::getAverageSize,"Return the average length of the entities.")
   .def("getNearestPoint",make_function(getNearestPoint, return_internal_reference<>() ),"Return the nearest point to the position argument.")
@@ -268,6 +270,7 @@ class_<XC::Set, XC::Set *,bases<XC::SetMeshComp> >("Set")
   .def("getMeshComponentsSet", &XC::Set::getMeshComponentsSet, "Return the mesh components (nodes, elements,...) on a set.")
   .def("fillUpwards", &XC::Set::fillUpwards,"add entities upwards.")
   .def("fillDownwards", &XC::Set::fillDownwards,"add entities downwards.")
+  .def("conciliaNDivs", &XC::Set::conciliaNDivs)
   .def("numerate", &XC::Set::numera,"Numerate entities (VTK).")
   .def("clear",&XC::Set::clear,"Removes all items.")
   .def("getBnd", &XC::Set::Bnd, "Returns set boundary.")

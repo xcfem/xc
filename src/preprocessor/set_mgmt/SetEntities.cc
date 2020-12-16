@@ -29,6 +29,7 @@
 #include "SetEntities.h"
 #include "domain/domain/Domain.h"
 #include "preprocessor/Preprocessor.h"
+#include "preprocessor/multi_block_topology/MultiBlockTopology.h"
 #include "preprocessor/multi_block_topology/entities/0d/Pnt.h"
 #include "preprocessor/multi_block_topology/entities/1d/Edge.h"
 #include "preprocessor/multi_block_topology/entities/2d/Face.h"
@@ -191,7 +192,7 @@ void XC::SetEntities::clearAll(void)
 //! @brief Appends to the set being passed as parameter
 //! the elements that intervene on the definition
 //! of those entities that are already in the set.
-void XC::SetEntities::fillDownwards(SetMeshComp &mc)
+void XC::SetEntities::fillDownwards(void)
   {
     // Bodies
 //     for(lst_bodies::iterator i=bodies.begin();i!=bodies.end();i++)
@@ -202,11 +203,36 @@ void XC::SetEntities::fillDownwards(SetMeshComp &mc)
     // Surfaces
     for(sup_iterator i=surfaces.begin();i!=surfaces.end();i++)
       {
-        //Lines.
+        // append surface lines.
         lst_line_pointers ll((*i)->getEdges());
         lines.insert_unique(lines.end(),ll.begin(),ll.end());
+      }
+    // Lines
+    for(lin_iterator i=lines.begin();i!=lines.end();i++)
+      {
+        // append line points.
+        const size_t nv= (*i)->getNumberOfVertices();
+        for( size_t j=1;j<=nv;j++)
+          points.push_back(const_cast<Pnt *>((*i)->getVertex(j)));
+      }
+  }
 
-        //Elements.
+//! @brief Appends to the set being passed as parameter
+//! the elements that intervene on the definition
+//! of those entities that are already in the set.
+void XC::SetEntities::fillDownwards(SetMeshComp &mc)
+  {
+    fillDownwards(); // append entities.
+    // Bodies
+//     for(lst_bodies::iterator i=bodies.begin();i!=bodies.end();i++)
+//       {
+//         lst_surfaces ss= (*i)->getSurfaces();
+//         surfaces.insert_unique(surfaces.end(),ss.begin(),ss.end());
+//       }
+    // Surfaces
+    for(sup_iterator i=surfaces.begin();i!=surfaces.end();i++)
+      {
+        // append elements.
         ElemPtrArray3d &ttz_elements= (*i)->getTtzElements();
         const size_t numberOfLayers= ttz_elements.getNumberOfLayers();
         const size_t numberOfRows= ttz_elements.getNumberOfRows();
@@ -220,12 +246,7 @@ void XC::SetEntities::fillDownwards(SetMeshComp &mc)
     // Lines
     for(lin_iterator i=lines.begin();i!=lines.end();i++)
       {
-        //Points.
-        const size_t nv= (*i)->getNumberOfVertices();
-        for( size_t j=1;j<=nv;j++)
-          points.push_back(const_cast<Pnt *>((*i)->getVertex(j)));
-
-        //Elements.
+        // append elements.
         ElemPtrArray3d &ttz_elements= (*i)->getTtzElements();
         const size_t numberOfLayers= ttz_elements.getNumberOfLayers();
         const size_t numberOfRows= ttz_elements.getNumberOfRows();
@@ -238,7 +259,7 @@ void XC::SetEntities::fillDownwards(SetMeshComp &mc)
     // Points
     for(pnt_iterator i= points.begin();i!=points.end();i++)
       {
-        //Nodes.
+        // append nodes.
 	Pnt &p= *(*i);
 	if(p.hasNode())
 	  {
@@ -334,6 +355,13 @@ XC::SetEntities XC::SetEntities::create_copy(const std::string &name,const Vecto
     return retval;
   }
 
+//! @brief Conciliate number of divisions of the lines shared by
+//! faces.
+void XC::SetEntities::conciliaNDivs(void)
+  {
+    fillDownwards();
+    conciliate_divisions(surfaces, lines);
+  }
 
 //! @brief Create nodes and, where appropriate, elements on set points.
 void XC::SetEntities::point_meshing(meshing_dir dm)

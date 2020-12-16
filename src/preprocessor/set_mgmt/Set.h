@@ -162,6 +162,7 @@ class Set: public SetMeshComp
     BND3d Bnd(const double &) const;
     Set pickEntitiesInside(const std::string &, const GeomObj3d &, const double &tol= 0.0);
     
+    void conciliaNDivs(void);
     void genMesh(meshing_dir dm);
 
 

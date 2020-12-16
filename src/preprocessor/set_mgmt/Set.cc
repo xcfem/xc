@@ -188,6 +188,10 @@ void XC::Set::create_copy(const std::string &name,const Vector3d &v= Vector3d())
     new_set->entities= entities.create_copy(name,v);
   }
 
+//! @brief Conciliate number of divisions of the lines shared by
+//! faces.
+void XC::Set::conciliaNDivs(void)
+  { entities.conciliaNDivs(); }
 
 //!  @brief Triggers mesh generation from set components.
 //!

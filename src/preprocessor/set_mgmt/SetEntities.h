@@ -197,10 +197,12 @@ class SetEntities: public PreprocessorContainer, public MovableObject
     SetEntities pickEntitiesInside(const GeomObj3d &, const double &tol= 0.0) const;
 
     void fillUpwards(const SetMeshComp &);
+    void fillDownwards(void);
     void fillDownwards(SetMeshComp &);
 
     void Transform(const TrfGeom &trf);
 
+    void conciliaNDivs(void);
     void genMesh(const std::string &, meshing_dir dm);
 
     virtual int sendSelf(Communicator &);
