@@ -39,6 +39,7 @@ namespace XC {
 //! @ingroup MATPLAC
 //
 //! @brief Base class for elastic plate materials.
+//! @ingroup MATPLAC
 class ElasticPlateBase: public PlateBase
   {
   protected:

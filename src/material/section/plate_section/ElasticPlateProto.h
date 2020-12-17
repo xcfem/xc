@@ -38,9 +38,8 @@
 
 
 namespace XC {
-//! @ingroup MATPLAC
-//
 //! @brief Base class for ElasticPlateSection and ElasticMembranePlateSection.
+//! @ingroup MATPLAC
 template <int SZ>
 class ElasticPlateProto: public ElasticPlateBase
   {

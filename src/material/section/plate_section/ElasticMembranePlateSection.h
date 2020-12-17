@@ -60,9 +60,8 @@
 
 
 namespace XC {
-//! @ingroup MATPLAC
-//
 //! @brief Elastic section for membrane/plate materials.
+//! @ingroup MATPLAC
 class ElasticMembranePlateSection: public ElasticPlateProto<8>
   {
   protected:

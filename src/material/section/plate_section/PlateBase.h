@@ -41,9 +41,8 @@ namespace XC {
 //! @ingroup MATSCC
 //!  @defgroup MATPLAC Materials for bidimensional elements (plates, membranes, shells,...).
 //
-//! @ingroup MATPLAC
-//
 //! @brief Base class for bidimensional membrane/plate/shell materials.
+//! @ingroup MATPLAC
 class PlateBase: public SectionForceDeformation
   {
   protected:
