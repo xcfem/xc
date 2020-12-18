@@ -64,7 +64,9 @@ spc= constraints.newSPConstraint(n2.tag,2,0.0)
 
 # Load modulation.
 # Load case definition.
+factor= 0.85
 lp0= modelSpace.newLoadPattern(name= '0')
+lp0.gammaF= factor
 #\set_current_load_pattern{"0"}
 eleLoad= lp0.newElementalLoad("beam_strain_load")
 eleLoad.elementTags= xc.ID([beam2d.tag])
@@ -81,18 +83,20 @@ beam2d.getResistingForce()
 axil1= beam2d.getN1
 axil2= beam2d.getN2
 
-N= (-E*A*alpha*AT)
-ratio= ((axil2-N)/N)
+N= (-factor*E*A*alpha*AT)
+ratio= abs((axil2-N)/N)
 
-# print("N= ",N)
-# print("axil1= ",axil1)
-# print("axil2= ",axil2)
-# print("ratio= ",ratio)
+'''
+print("N= ",N)
+print("axil1= ",axil1)
+print("axil2= ",axil2)
+print("ratio= ",ratio)
+'''
 
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
-if abs(ratio)<1e-5:
+if(ratio<1e-5):
   print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')

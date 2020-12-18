@@ -34,14 +34,19 @@ class_<XC::ElasticPlateBase, bases<XC::PlateBase>, boost::noncopyable >("Elastic
 
 typedef XC::ElasticPlateProto<8> ElasticPlateProto8;
 class_<ElasticPlateProto8, bases<XC::ElasticPlateBase>, boost::noncopyable >("ElasticPlateProto8", no_init)
+ .add_property("initialStrain", make_function(&ElasticPlateProto8::getInitialSectionDeformation, return_internal_reference<>() ),&ElasticPlateProto8::setInitialSectionDeformation, "Material initial strain.")
   ;
 
 class_<XC::ElasticMembranePlateSection, bases<ElasticPlateProto8>, boost::noncopyable  >("ElasticMembranePlateSection", no_init)
   ;
 
 typedef XC::ElasticPlateProto<5> ElasticPlateProto5;
-class_<ElasticPlateProto5, bases<XC::ElasticPlateBase>, boost::noncopyable >("ElasticPlateProto5", no_init);
-class_<XC::ElasticPlateSection, bases<ElasticPlateProto5>, boost::noncopyable >("ElasticPlateSection", no_init);
+class_<ElasticPlateProto5, bases<XC::ElasticPlateBase>, boost::noncopyable >("ElasticPlateProto5", no_init)
+ .add_property("initialStrain", make_function(&ElasticPlateProto5::getInitialSectionDeformation, return_internal_reference<>() ),&ElasticPlateProto5::setInitialSectionDeformation, "Material initial strain.")
+  ;
+
+class_<XC::ElasticPlateSection, bases<ElasticPlateProto5>, boost::noncopyable >("ElasticPlateSection", no_init)
+  ;
 
 class_<XC::MembranePlateFiberSection, bases<XC::PlateBase>, boost::noncopyable >("MembranePlateFiberSection", no_init)
   .def("setMaterial", &XC::MembranePlateFiberSection::setMaterial, " assigns the material to the fibers.")

@@ -831,6 +831,7 @@ void XC::ShellNLDKGQ::formResidAndTangent(int tangFlag) const
         for(int q=0;q<nstress;q++)
           { strain(q)= Cstrain(q) + dstrain(q); }//end for q
 
+        //send the strain to the material
 	// not very elegant. Maybe formResidAndTangent must not be const. 
         SectionForceDeformation *mat_no_const= const_cast<SectionForceDeformation *>(physicalProperties[i]);
         success= mat_no_const->setTrialSectionDeformation(strain);
