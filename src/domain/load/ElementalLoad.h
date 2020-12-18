@@ -62,7 +62,8 @@
 
 namespace XC {
  
-
+class SetBase;
+  
 //! @ingroup Loads
 //!
 //!
@@ -88,7 +89,8 @@ class ElementalLoad: public Load
 
     virtual std::string Category(void) const;
     int numElements(void) const;
-    int setElementTags(const ID &theEleTags);
+    int setElementTags(const ID &);
+    int setElementTagsFromSet(const SetBase &);
     virtual const ID &getElementTags(void) const;
     virtual const Vector &getData(int &type, const double &loadFactor) const= 0;
     virtual const Vector &getSensitivityData(const int &gradIndex) const;

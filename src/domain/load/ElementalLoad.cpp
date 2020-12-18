@@ -56,6 +56,7 @@
 
 #include "domain/load/ElementalLoad.h"
 #include "utility/matrix/Vector.h"
+#include "preprocessor/set_mgmt/SetBase.h"
 
 
 //! @brief Constructor.
@@ -96,6 +97,14 @@ std::string XC::ElementalLoad::Category(void) const
 int XC::ElementalLoad::setElementTags(const ID &theEleTags)
   {
     elemTags= theEleTags;
+    return 0;
+  }
+
+//! @brief Sets the identifiers of the loaded elements.
+int XC::ElementalLoad::setElementTagsFromSet(const SetBase &s)
+  {
+    const std::set<int> elementTags= s.getElementTags();
+    elemTags= ID(elementTags.begin(), elementTags.end());
     return 0;
   }
 

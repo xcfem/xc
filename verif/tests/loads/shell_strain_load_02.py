@@ -1,12 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import print_function
-''' home made test
-    Reference:  Cálculo de estructuras por el método de los elemen-
-    tos finitos. 1991. E. Oñate, page 165, example 5.3
-
-    isbn={9788487867002}
-    url={https://books.google.ch/books?id=lV1GSQAACAAJ}
-
+''' Home made test based on symmetry and equilibrium considerations.
 '''
 
 import xc_base
@@ -34,7 +28,6 @@ feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
 nodes= preprocessor.getNodeHandler
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
-nodes.defaultTag= 1 # First node number.
 nod1= nodes.newNodeXYZ(0.0,0.0,0.0)
 nod2= nodes.newNodeXYZ(L,0.0,0.0)
 nod3= nodes.newNodeXYZ(L,L,0.0)

@@ -42,20 +42,22 @@ seedElemHandler.defaultMaterial= memb1.name
 elem= seedElemHandler.newElement("ShellNLDKGQ",xc.ID([0,0,0,0]))
 
 # Block topology
+b_2= b/2.0
 points= preprocessor.getMultiBlockTopology.getPoints
 pt1= points.newPntFromPos3d(geom.Pos3d(0.0,0.0,0.0))
-pt2= points.newPntFromPos3d(geom.Pos3d(b/2.0,0.0,0.0))
-pt3= points.newPntFromPos3d(geom.Pos3d(b/2.0,b/2.0,0.0))
-pt4= points.newPntFromPos3d(geom.Pos3d(0.0,b/2.0,0.0))
+pt2= points.newPntFromPos3d(geom.Pos3d(b_2,0.0,0.0))
+pt3= points.newPntFromPos3d(geom.Pos3d(b_2,b_2,0.0))
+pt4= points.newPntFromPos3d(geom.Pos3d(0.0,b_2,0.0))
 surfaces= preprocessor.getMultiBlockTopology.getSurfaces
 s1= surfaces.newQuadSurfacePts(pt1.tag, pt2.tag, pt3.tag, pt4.tag)
+
+# Mesh generation
 nDiv= 4
 s1.nDivI= nDiv
 s1.nDivJ= nDiv
 
 s1.genMesh(xc.meshDir.I)
 
-b_2= b/2.0
 
 # Constraints.
 for n in s1.nodes:
