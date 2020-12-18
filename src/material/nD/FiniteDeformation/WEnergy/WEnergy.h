@@ -59,9 +59,9 @@
 namespace XC {
   class Vector;
   class BJtensor;
+
+//! @brief Base class for <a href="https://en.wikipedia.org/wiki/Strain_energy_density_function">strain energy density function</a> based materials.
 //! @ingroup FDNDMat
-//
-//! @brief ??
 class WEnergy
   {
   public:

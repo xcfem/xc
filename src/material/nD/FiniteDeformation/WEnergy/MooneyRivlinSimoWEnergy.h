@@ -61,7 +61,7 @@
 namespace XC {
 //! @ingroup FDNDMat
 //
-//! @brief Large deformation hyperelastic Mooney-Rivlin Simo material ??.
+//! @brief Large deformation hyperelastic Mooney-Rivlin Simo material.
 class MooneyRivlinSimoWEnergy: public WEnergy
   {
   private:

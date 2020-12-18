@@ -32,9 +32,16 @@
 #include <material/nD/NDMaterial.h>
 
 namespace XC {
-//! @ingroup FDNDMat
 //
 //! @brief Base class for finite deformation materials.
+//! @ingroup FDNDMat
+//!
+//! In continuum mechanics, the finite strain theory—also called large
+//! strain theory, or large deformation theory—deals with deformations
+//! in which strains and/or rotations are large enough to invalidate
+//! assumptions inherent in infinitesimal strain theory. In this case,
+//! the undeformed and deformed configurations of the continuum are
+//! significantly different, requiring a clear distinction between them.
 class FiniteDeformationMaterial: public NDMaterial
   {
   public:    

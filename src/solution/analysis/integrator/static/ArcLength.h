@@ -79,7 +79,7 @@ namespace XC {
 //! @brief  ArcLength is an algorithmic class for performing a static analysis
 //! using the arc length scheme.
 //!
-//!ArcLength is a subclass of StaticIntegrator, it is
+//! ArcLength is a subclass of StaticIntegrator, it is
 //! used to when performing a static analysis on the FE\_Model using an
 //! arc length method. In the arc length method implemented by this class,
 //! the following constraint equation is added to

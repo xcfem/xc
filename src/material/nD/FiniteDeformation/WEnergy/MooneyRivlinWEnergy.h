@@ -61,7 +61,7 @@
 namespace XC {
 //! @ingroup FDNDMat
 //
-//! @brief Large deformation hyperelasticit Mooney-Rivlin material ??.
+//! @brief Large deformation hyperelasticit <a href="https://en.wikipedia.org/wiki/Mooney%E2%80%93Rivlin_solid"> Mooney-Rivlin material<\a>.
 class MooneyRivlinWEnergy: public WEnergy
   {
   private:
