@@ -70,9 +70,7 @@ for n in s1.nodes:
         modelSpace.fixNode('FF0_F0F',n.tag)
         
 # Load case definition.
-factor= 0.85
 lp0= modelSpace.newLoadPattern(name= '0')
-lp0.gammaF= factor
 eleLoad= lp0.newElementalLoad("shell_strain_load")
 eleLoad.setElementTags(s1)
 for gp in [0,1,2,3]: # Gauss points
@@ -91,10 +89,17 @@ for e in s1.elements:
     avgN1= e.getMeanInternalForce("n1")
     avgN2= e.getMeanInternalForce("n2")
     error+= avgN1**2+avgN2**2
+    
+d3= pt3.getNode().getDisp
+uX= d3[0]
+uY= d3[1]
+uRef= L_2*alpha*AT
+error+= (uX-uRef)**2+(uY-uRef)**2
 
 error= math.sqrt(error)
 
 ''' 
+print(uX,uY,uRef)
 print('error: ', error)
    '''
 

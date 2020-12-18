@@ -98,9 +98,18 @@ for e in s1.elements:
     avgN2= e.getMeanInternalForce("n2")
     error+= avgN1**2+avgN2**2
 
+d3= pt3.getNode().getDisp
+uX= d3[0]
+uY= d3[1]
+uRef= L_2*alpha*AT
+error+= (uX-uRef)**2+(uY-uRef)**2
+
 error= math.sqrt(error)
 
+
+
 ''' 
+print(uX,uY,uRef)
 print('error: ', error)
    '''
 
