@@ -180,9 +180,9 @@ void XC::SetMeshComp::appendFromGeomEntity(const SetBase &s)
     for(std::set<int>::const_iterator i= nodeTags.begin();i!=nodeTags.end();i++)
       nodes.push_back(dom->getNode(*i));
       
-    const std::set<int> elementTags= getElementTags();
-    for(std::set<int>::const_iterator i= nodeTags.begin();i!=nodeTags.end();i++)
-      nodes.push_back(dom->getNode(*i));
+    const std::set<int> elementTags= s.getElementTags();
+    for(std::set<int>::const_iterator i= elementTags.begin();i!=elementTags.end();i++)
+      elements.push_back(dom->getElement(*i));
   }
 
 //!  @brief Clears all the objects of the lists.
