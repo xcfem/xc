@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 2.6)
+cmake_minimum_required(VERSION 2.6.3)
 set(CMAKE_BUILD_TYPE to "Release")
 #cygwin
 set(CMAKE_LEGACY_CYGWIN_WIN32 0)
@@ -9,6 +9,7 @@ IF (${CMAKE_VERSION_STRING} GREATER 2.8.4)
 ELSE (${CMAKE_VERSION_STRING} GREATER 2.8.4)
   MESSAGE ("CMake version is not greater than 2.8.4")
 ENDIF (${CMAKE_VERSION_STRING} GREATER 2.8.4)
+set(OpenGL_GL_PREFERENCE "GLVND")
 # Project name.
 PROJECT(LIBXC)
 
