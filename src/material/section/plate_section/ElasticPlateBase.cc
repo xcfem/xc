@@ -49,7 +49,7 @@ XC::ElasticPlateBase::ElasticPlateBase(int tag, int classTag,
                                            double poisson,
 				           double thickness,
 				           double rho)
-  :XC::PlateBase(tag,classTag,h,rho), E(young), nu(poisson) {}
+  :XC::PlateBase(tag,classTag,thickness,rho), E(young), nu(poisson) {}
 
 //! @brief swap history variables
 int XC::ElasticPlateBase::commitState(void) 

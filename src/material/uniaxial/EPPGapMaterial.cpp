@@ -71,7 +71,7 @@
 
 //! @brief Constructor.
 XC::EPPGapMaterial::EPPGapMaterial(int tag, double e, double fyl, double gap0, double eta0, int accum)
-  : EPPBaseMaterial(tag,MAT_TAG_EPPGap,E), fy(fyl),
+  : EPPBaseMaterial(tag,MAT_TAG_EPPGap,e), fy(fyl),
     gap(gap0), eta(eta0),minElasticYieldStrain(gap0),damage(accum)
   {
     if(E == 0.0)
