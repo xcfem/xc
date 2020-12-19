@@ -1,3 +1,4 @@
+# Time series
 Time series objects are used in XC to describe time variation
 of earthquake ground motions or nodal loads. This is made by changing
 determine the load factor to be applied to the loads in a pattern.
