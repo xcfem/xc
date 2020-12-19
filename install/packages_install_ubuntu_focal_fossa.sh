@@ -36,7 +36,7 @@ packages_lib="\
     libglib2.0-dev              \
     libgmp3-dev                 \
     libgmsh-dev                 \
-    libgmsh3                    \
+    libgmsh4                    \
     libgtk2.0-dev               \
     libgtkgl2.0-dev             \
     libgtkglextmm-x11-1.2-dev   \
