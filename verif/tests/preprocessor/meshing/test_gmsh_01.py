@@ -60,9 +60,16 @@ xcTotalSet= modelSpace.getTotalSet()
 nNodes= len(xcTotalSet.nodes)
 nElements= len(xcTotalSet.elements)
 
-ratio1= (nNodes-95)
-ratio2= (nElements-78)
+nNodesRef= [95, 108] # Different Gmsh versions give different results
+nElementsRef= [78, 91]
 
+nNodesOk= False
+if nNodes in nNodesRef:
+   nNodesOk= True
+nElementsOk= False
+if nElements in nElementsRef:
+   nElementsOk= True
+   
 '''
 print('number of nodes: ', nNodes)
 print('number of elements: ', nElements)
@@ -71,20 +78,20 @@ print('number of elements: ', nElements)
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
-if (ratio1==0) & (ratio2==0) :
-  print("test "+fname+": ok.")
+if nNodesOk & nElementsOk :
+    print("test "+fname+": ok.")
 else:
-  lmsg.error(fname+' ERROR.')
+    lmsg.error(fname+' ERROR.')
 
        
-# Graphic stuff.
-#oh= output_handler.OutputHandler(modelSpace)
+#Graphic stuff.
+# oh= output_handler.OutputHandler(modelSpace)
 
-#oh.displayBlocks()#setToDisplay= )
-#oh.displayFEMesh()#setsToDisplay=[])
-#oh.displayLocalAxes()
-#oh.displayLoads()
-#oh.displayReactions()
-#oh.displayDispRot(itemToDisp='uX')
-#oh.displayDispRot(itemToDisp='uY')
-#oh.displayDispRot(itemToDisp='uZ')
+# oh.displayBlocks()#setToDisplay= )
+# oh.displayFEMesh()#setsToDisplay=[])
+# oh.displayLocalAxes()
+# oh.displayLoads()
+# oh.displayReactions()
+# oh.displayDispRot(itemToDisp='uX')
+# oh.displayDispRot(itemToDisp='uY')
+# oh.displayDispRot(itemToDisp='uZ')
