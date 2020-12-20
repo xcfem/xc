@@ -91,4 +91,6 @@ apt-get clean
 # (to reconsider because we already use VTK 6 LCPT 24/09/2018)
 sudo -H pip install mayavi
 sudo -H pip install ezdxf
+sudo -H pip install pyexcel
+sudo -H pip install pyexcel-ods
 sudo -H pip install dxfwrite # To replace with ezdxf
