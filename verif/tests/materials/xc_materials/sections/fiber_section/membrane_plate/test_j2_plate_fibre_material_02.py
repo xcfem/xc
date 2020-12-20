@@ -78,8 +78,8 @@ plt.show()
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
-if(err<1e-12):
-  print("test ",fname,": ok.")
+if(err<1e-6):
+    print("test ",fname,": ok.")
 else:
-  lmsg.error(fname+' ERROR.')
+    lmsg.error(fname+' ERROR.')
 
