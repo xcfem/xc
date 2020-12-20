@@ -70,19 +70,76 @@
 //! @brief Constructor.
 //!
 //! @param theFactor: factor used in the relation.
-XC::LinearSeries::LinearSeries(double theFactor)
-  :CFactorSeries(TSERIES_TAG_LinearSeries,theFactor)
+XC::LinearSeries::LinearSeries(const double &theFactor, const double &startTime)
+  :CFactorSeries(TSERIES_TAG_LinearSeries,theFactor), tStart(startTime)
   {}
 
 //! @brief Returns the load factor at the specified time
 //! (product of \p cFactor and \p pseudoTime).
 double XC::LinearSeries::getFactor(double pseudoTime) const
-  { return cFactor*pseudoTime; }
+  {
+    double retval= 0.0;
+    if(pseudoTime >= tStart)
+      retval= cFactor*(pseudoTime-tStart);
+    return retval;
+  }
 
+//! @brief Returns a vector to store the dbTags
+//! of the class members.
+XC::DbTagData &XC::LinearSeries::getDbTagData(void) const
+  {
+    static DbTagData retval(2);
+    return retval;
+  }
+
+//! @brief Send object members through the communicator argument.
+int XC::LinearSeries::sendData(Communicator &comm)
+  {
+    int retval= CFactorSeries::sendData(comm);
+    retval+= comm.sendDouble(tStart,getDbTagData(),CommMetaData(1));
+    return retval;
+  }
+
+//! @brief Receives object members through the communicator argument.
+int XC::LinearSeries::recvData(const Communicator &comm)
+  {
+    int retval= CFactorSeries::recvData(comm);
+    retval+= comm.receiveDouble(tStart,getDbTagData(),CommMetaData(1));
+    return retval;
+  }
+
+//! @brief Sends object through the communicator argument.
+int XC::LinearSeries::sendSelf(Communicator &comm)
+  {
+    inicComm(2);
+    int result= sendData(comm);
+
+    const int dataTag= getDbTag(comm);
+    result+= comm.sendIdData(getDbTagData(),dataTag);
+    if(result < 0)
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; ch failed to send data.\n";
+    return result;
+  }
+
+//! @brief Receives object through the communicator argument.
+int XC::LinearSeries::recvSelf(const Communicator &comm)
+  {
+    inicComm(2);
+
+    const int dataTag = this->getDbTag();  
+    int result = comm.receiveIdData(getDbTagData(),dataTag);
+    if(result<0)
+      std::cerr << getClassName() << "::" << __FUNCTION__
+                << "; ch failed to receive data.\n";
+    else
+      result+= recvData(comm);
+    return result;    
+  }
 
 //! @brief Print stuff.
 void XC::LinearSeries::Print(std::ostream &s, int flag) const
   {
     s << getClassName() << ": linear factor: "
-      << cFactor << "\n";
+      << cFactor << " start time: " << tStart << "\n";
   }

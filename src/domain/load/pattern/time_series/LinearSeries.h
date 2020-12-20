@@ -77,8 +77,14 @@ namespace XC {
 //! the pseudo time and the load factor.
 class LinearSeries: public CFactorSeries
   {
+  private:
+    double tStart; //!< factor = cFactor * (pseudoTime-tStart), factor=0 if pseudoTime < tStart
+  protected:
+    DbTagData &getDbTagData(void) const;
+    int sendData(Communicator &comm);
+    int recvData(const Communicator &comm);
   public:
-    LinearSeries(double cFactor = 1.0);
+    LinearSeries(const double &cFactor = 1.0, const double &tStart= 0.0);
 
     //! @brief Virtual constructor.
     TimeSeries *getCopy(void) const
@@ -92,6 +98,9 @@ class LinearSeries: public CFactorSeries
     double getDuration(void) const {return 0.0;} // dummy function
     double getPeakFactor(void) const {return cFactor;} // dummy function
     double getTimeIncr(double pseudoTime) const {return 1.0;} // dummy function
+    
+    int sendSelf(Communicator &);
+    int recvSelf(const Communicator &);
     
     void Print(std::ostream &s, int flag =0) const;    
   };
