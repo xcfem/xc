@@ -73,8 +73,11 @@ sudo apt-get install -y $packages_python
 
 packages_div="\
     gnuplot \
-    bc"
-# bc is needed by xc_utils verification tests
+    bc \
+    graphicsmagick-imagemagick-compat"
+# - bc is needed by xc_utils verification tests
+# - graphicsmagick-imagemagick-compat is needed to convert between image
+#   formats.
 sudo apt-get install -y $packages_div
 
 # free disk space by cleaning install files
