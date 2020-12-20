@@ -208,7 +208,7 @@ wall.drawSchema(pth)
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
-if(abs(err)<1e-11):
+if(abs(err)<1e-9):
   print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')
