@@ -4,6 +4,7 @@
 from __future__ import division
 from __future__ import print_function
 
+import logging
 import xc_base
 import geom
 import xc
@@ -48,10 +49,12 @@ import ezdxf
 bdTotal= bte.BlockData(verbosity= 0)
 numEntitiesRead= bdTotal.readFromXCSet(xcTotalSet)
 ok1= (abs(numEntitiesRead-8)==0)
+# Avoid info messages
+logging.getLogger(ezdxf.__name__).setLevel(logging.ERROR)
 bdTotal.writeDxfFile(outputFileName)
 import os
 fileSize= os.path.getsize(outputFileName)
-ok2= (fileSize>3000) and (fileSize<12000) # file exists and has a size that
+ok2= (fileSize>3000) and (fileSize<20000) # file exists and has a size that
                                           # seems reasonable.
 
 '''
