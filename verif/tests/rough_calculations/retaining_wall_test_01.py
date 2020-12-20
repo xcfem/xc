@@ -68,7 +68,7 @@ reinfSteel= EHE_materials.B500S
 pthAux= os.path.dirname(__file__)
 if(not pthAux):
   pth= "."
-exec(open(pthAux+"/../aux/rebar_types.py").read())
+exec(open(pthAux+"../aux/rebar_types.py").read())
 
 sectionName= "mur10m"
 wall= ng_retaining_wall.RetainingWall(sectionName,cover,stemBottomWidth,stemTopWidth, stemBackSlope= 1/10.0, footingThickness= footingThickness, concrete= concrete, steel= reinfSteel)
