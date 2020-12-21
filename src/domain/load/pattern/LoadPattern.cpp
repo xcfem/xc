@@ -264,7 +264,7 @@ XC::ElementalLoad *XC::LoadPattern::newElementalLoad(const std::string &loadType
     MapLoadPatterns *map= dynamic_cast<MapLoadPatterns *>(Owner());
     assert(map);
     int nextTag= map->getCurrentElementLoadTag();
-    ElementalLoad *retval= procesa_element_load(this,nextTag,loadType);
+    ElementalLoad *retval= process_element_load(this,nextTag,loadType);
     if(retval)
       map->setCurrentElementLoadTag(++nextTag);
     return retval;

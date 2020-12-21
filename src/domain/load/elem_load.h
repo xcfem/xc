@@ -74,7 +74,7 @@ ELEM_LOAD *new_elem_load(LoadPattern *lp,int &tag_el)
     return load;
   }
 
-ElementalLoad *procesa_element_load(LoadPattern *,int &,const std::string &);
+ElementalLoad *process_element_load(LoadPattern *,int &,const std::string &);
 
 } // end of XC namespace
 

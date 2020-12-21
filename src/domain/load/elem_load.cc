@@ -34,7 +34,7 @@
 //! @param lp: load patter to append the load into.
 //! @param tag_el: identifier of the element load.
 //! @param loadType: load type
-XC::ElementalLoad *XC::procesa_element_load(XC::LoadPattern *lp,int &tag_el,const std::string &loadType)
+XC::ElementalLoad *XC::process_element_load(XC::LoadPattern *lp,int &tag_el,const std::string &loadType)
   {
     ElementalLoad *retval= nullptr;
     if(loadType == "beam2d_uniform_load")
