@@ -80,6 +80,8 @@ XC::Matrix XC::ElasticBeam2d::K(6,6);
 XC::Vector XC::ElasticBeam2d::P(6);
 XC::Matrix XC::ElasticBeam2d::kb(3,3);
 
+
+//! @brief Set the coordinate transformation for the element.
 void XC::ElasticBeam2d::set_transf(const CrdTransf *trf)
   {
     if(theCoordTransf)
@@ -106,6 +108,7 @@ void XC::ElasticBeam2d::set_transf(const CrdTransf *trf)
 		<< std::endl;
   }
 
+//! @brief Initizalize values.
 void XC::ElasticBeam2d::init(void)
   {
     load.reset(6);
@@ -113,6 +116,7 @@ void XC::ElasticBeam2d::init(void)
     p0.zero();
   }
 
+//! @brief Constructor.
 XC::ElasticBeam2d::ElasticBeam2d(int tag)
   :ProtoBeam2d(tag,ELE_TAG_ElasticBeam2d), alpha(0.0), d(0.0),
    q(3), theCoordTransf(nullptr), release(0)
@@ -167,7 +171,7 @@ XC::ElasticBeam2d &XC::ElasticBeam2d::operator=(const ElasticBeam2d &other)
 XC::Element* XC::ElasticBeam2d::getCopy(void) const
   { return new ElasticBeam2d(*this); }
 
-
+//! brief Destructor.
 XC::ElasticBeam2d::~ElasticBeam2d(void)
   { if(theCoordTransf) delete theCoordTransf; }
 
@@ -414,6 +418,7 @@ const XC::Matrix &XC::ElasticBeam2d::getInitialStiff(void) const
     return retval;
   }
 
+//! @brief Return the mass matrix.
 const XC::Matrix &XC::ElasticBeam2d::getMass(void) const
   {
     K.Zero();
@@ -438,6 +443,7 @@ const XC::Matrix &XC::ElasticBeam2d::getMass(void) const
     return K;
   }
 
+//! @brief Make the load null.
 void XC::ElasticBeam2d::zeroLoad(void)
   {
     ProtoBeam2d::zeroLoad();
@@ -445,6 +451,7 @@ void XC::ElasticBeam2d::zeroLoad(void)
     p0.zero();
   }
 
+//! @brief Add the load to the element.
 int XC::ElasticBeam2d::addLoad(ElementalLoad *theLoad, double loadFactor)
   {
     if(isDead())
