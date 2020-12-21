@@ -629,13 +629,14 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
             self.stemHeight= wallInternalForces.stemHeight
         self.internalForcesSLS= wallInternalForces
 
-    def writeDef(self,pth,outputFile):
+    def writeDef(self,pth,outputFile, convertToEPS= False):
         '''Write wall definition in LaTeX format.'''
         pathFiguraEPS= pth+self.name+".eps"
         pathFiguraPNG= pth+self.name+".png"
         #self.internalForcesULS.writeGraphic(pathFiguraEPS)
         self.internalForcesULS.writeGraphic(pathFiguraPNG)
-        os.system("convert "+pathFiguraPNG+" "+pathFiguraEPS)
+        if(convertToEPS):
+            os.system("convert "+pathFiguraPNG+" "+pathFiguraEPS)
         outputFile.write("\\begin{table}\n")
         outputFile.write("\\begin{center}\n")
         outputFile.write("\\begin{tabular}[H]{|l|}\n")

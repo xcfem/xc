@@ -22,6 +22,13 @@ import numpy as np
 from matplotlib.ticker import MultipleLocator
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 
+def convert_to_eps(fileName, epsFileName):
+    ''' Uses ImageMagick convert command to create a postcript file.
+
+    :param fileName: name of the graphic file to convert.
+    :param epsFileName: postscript file to create.
+    '''
+    os.system("convert "+ fileName + " " + epsFileName)
 
 class setToDisplay(object):
     '''Defines the description of a set of elements to be used in the graphics
@@ -85,65 +92,88 @@ class FigureBase(object):
         fichLatexList.write('}: ' + self.getCaption() + '\n' )
 
 class SlideDefinition(FigureBase):
+    ''' Slide definition.
+
+    :ivar field: field to display in the slide.
+    :ivar diagrams: list of diagrams to display in the slide.
+    '''
     def __init__(self,pLabel,limitStateLabel,figDescr,reinfDescr=None,units=None,sz= "90mm"):
         ''' Slide constructor.
 
-        :ivar pLabel: part label; something like 'wall' or '2ndFloorDeck'
-        :ivar limitStateLabel; limit state check label; Something like "Fatigue" or "CrackControl"
-        :ivar figDescr: figure description; text to insert as caption in the figure file and int the LaTeX file.
-        :ivar units: units displayed; something like '[MPa]' or 'radians'...
-        :ivar reinfDescr: reinforcement description; sSomething like "horizontal reinforcement."
-        :ivar sz: LaTeX size for the figure.
+        :param pLabel: part label; something like 'wall' or '2ndFloorDeck'
+        :param limitStateLabel; limit state check label; Something like "Fatigue" or "CrackControl"
+        :param figDescr: figure description; text to insert as caption in the figure file and int the LaTeX file.
+        :param reinfDescr: reinforcement description; sSomething like "horizontal reinforcement."
+        :param units: units displayed; something like '[MPa]' or 'radians'...
+        :param sz: LaTeX size for the figure.
         '''
         super(SlideDefinition,self).__init__(pLabel,limitStateLabel,figDescr,reinfDescr,units,sz)
         self.field= None
         self.diagrams= list()
 
     def setupDiagrams(self):
+        ''' Call addDiagram on each diagram of the list.'''
         for d in self.diagrams:
             d.addDiagram()
 
-    def genGraphicFile(self,preprocessor,displaySettings, xcSet, nmbFichGraf):
-        jpegName= nmbFichGraf+".jpeg"
-        epsName= nmbFichGraf+".eps"
+    def genGraphicFile(self, displaySettings, xcSet, graphFileName, convertToEPS= False):
+        ''' Create a graphic file.
+
+        :param displaySettings: variables that define the ouput device.
+        :param xcSet: set to display.
+        :param graphFileName: name of the graphic file.
+        :param convertToEPS: if true use ImageMagick convert to create a postrscript file.
+        '''
+        preprocessor= self.getPreprocessor
+        jpegName= graphFileName+".jpeg"
+        epsName= graphFileName+".eps"
         self.setupDiagrams()
         displaySettings.cameraParameters= self.cameraParameters
         if(self.field):
             self.field.plot(preprocessor, displaySettings,fileName)
         else:
             displaySettings.displayMesh(xcSet,None,self.diagrams,jpegName,self.getCaption())
-        os.system("convert "+ jpegName + " " + epsName)
+        if(convertToEPS):
+            convert_to_eps(jpegName,epsName)
   
 
 class FigureDefinition(SlideDefinition):
-    diagrams= None #List of diagrams to display (see ColoredDiagram, LinearLoadDiagram,...)
 
     def __init__(self,pLabel,limitStateLabel,attrName,argument,figDescr,reinfDescr=None,units=None,sz= "90mm"):
         ''' Figure constructor.
 
-        :ivar pLabel: part label as defined in model; something like 'wall' or '2ndFloorDeck'
-        :ivar limitStateLabel; limit state check label; Something like "Fatigue" or "CrackControl"
-        :ivar figDescr: figure description; text to insert as caption in the figure file and int the LaTeX file.
-        :ivar units: units displayed; something like '[MPa]' or 'radians'...
-        :ivar reinfDescr: reinforcement description; sSomething like "horizontal reinforcement."
-        :ivar sz: LaTeX size for the figure.
+        :param pLabel: part label as defined in model; something like 'wall' or '2ndFloorDeck'
+        :param limitStateLabel; limit state check label; Something like "Fatigue" or "CrackControl"
+        :param figDescr: figure description; text to insert as caption in the figure file and int the LaTeX file.
+        :param units: units displayed; something like '[MPa]' or 'radians'...
+        :param reinfDescr: reinforcement description; sSomething like "horizontal reinforcement."
+        :param sz: LaTeX size for the figure.
         '''
         super(FigureDefinition,self).__init__(pLabel,limitStateLabel,figDescr,reinfDescr,units,sz)
         self.attributeName= attrName
         self.argument= argument
 
     def defField(self, xcSet):
+        ''' Define field.'''
         print('********** Enters FigureDefinition::defField; limit state: ', self.limitStateLabel, ' attributeName= ', self.attributeName, ' xcSet.name= ', xcSet.name)
         #self.field= fields.ExtrapolatedScalarField(self.attributeName,"getProp",None,1.0,xcSet)
         self.field= fields.getScalarFieldFromControlVar(attributeName=self.attributeName,argument=self.argument,xcSet=xcSet,component=None,fUnitConv=1.0,rgMinMax=None)
         print('********** Exits FigureDefinition::defField; limit state: ', self.limitStateLabel, ' attributeName= ', self.attributeName, ' xcSet.name= ', xcSet.name)
 
-    def genGraphicFile(self,displaySettings, xcSet, nmbFichGraf):
-        jpegName= nmbFichGraf+".jpeg"
-        epsName= nmbFichGraf+".eps"
+    def genGraphicFile(self,displaySettings, xcSet, graphFileName, convertToEPS= False):
+        ''' Create a graphic file.
+
+        :param displaySettings: variables that define the ouput device.
+        :param xcSet: set to display.
+        :param graphFileName: name of the graphic file.
+        :param convertToEPS: if true use ImageMagick convert to create a postrscript file.
+        '''
+        jpegName= graphFileName+".jpeg"
+        epsName= graphFileName+".eps"
         self.defField(xcSet)
         self.field.plot(displaySettings,jpegName,self.getCaption())
-        os.system("convert "+ jpegName + " " + epsName)
+        if(convertToEPS):
+            convert_to_eps(jpegName,epsName)
  
 class TakePhotos(object):
     '''Generation of bitmaps with analysis and design results.'''
@@ -196,9 +226,9 @@ class PartToDisplay(object):
     def __init__(self,partName, surfaceList,reinforcementLabels):
         ''' PartsToDisplay constructor
 
-        :ivar partName: name assigned to the part to show.
-        :ivar surfaceList: list of surfaces to show (with the names used in the model).
-        :ivar reinforcementLabels: labels to identify the rebars (longitudinal reinf, vertical reinf,...).    
+        :param partName: name assigned to the part to show.
+        :param surfaceList: list of surfaces to show (with the names used in the model).
+        :param reinforcementLabels: labels to identify the rebars (longitudinal reinf, vertical reinf,...).    
         '''
         self.partName= partName
         self.surfaceList= surfaceList
