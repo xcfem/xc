@@ -167,8 +167,8 @@
 #define PATTERN_TAG_FirePattern           3
 #define PATTERN_TAG_PBowlLoading          4
 #define PATTERN_TAG_DRMLoadPattern        5
-#define PATTERN_TAG_NodeLocker		  5001 //Modificado LCPT.Added by LCPT.
-#define PATTERN_TAG_LoadContainer	  5002 //Modificado LCPT.
+#define PATTERN_TAG_NodeLocker		  5001 //Modified LCPT.Added by LCPT.
+#define PATTERN_TAG_LoadContainer	  5002 //Modified LCPT.
 
 #define LOAD_TAG_Beam2dUniformLoad        3
 #define LOAD_TAG_Beam2dPointLoad          4
