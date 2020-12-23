@@ -120,6 +120,6 @@ print("ratio2= ",ratio2)
 import os
 from misc_utils import log_messages as lmsg
 if (ratio1<1e-4) and (ratio2<1e-4):
-  print("test ",fname,": ok.")
+  print('test '+fname+': ok.')
 else:
   lmsg.error(fname+' ERROR.')

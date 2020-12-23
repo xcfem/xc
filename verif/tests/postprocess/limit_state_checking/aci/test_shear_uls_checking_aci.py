@@ -155,6 +155,6 @@ print("ratio2= ",ratio2)
 import os
 fname= os.path.basename(__file__)
 if((ratio1<0.01) and (ratio2<0.01)):
-  print("test ",fname,": ok.")
+  print('test '+fname+': ok.')
 else:
   lmsg.error(fname+' ERROR.')

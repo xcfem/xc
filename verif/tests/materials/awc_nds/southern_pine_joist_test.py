@@ -59,6 +59,6 @@ print('ratio3= ',ratio3)
 import os
 fname= os.path.basename(__file__)
 if(abs(ratio1)<1e-12 and abs(ratio2)<1e-12 and abs(ratio3)<1e-11):
-  print("test ",fname,": ok.")
+  print('test '+fname+': ok.')
 else:
   print("test ",fname,": ERROR.")

@@ -62,6 +62,6 @@ err= math.sqrt(err)
 import os
 fname= os.path.basename(__file__)
 if(err<.05):
-  print("test ",fname,": ok.")
+  print('test '+fname+': ok.')
 else:
   lmsg.error(fname+' ERROR.')

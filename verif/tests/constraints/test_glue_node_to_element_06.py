@@ -113,6 +113,6 @@ fname= os.path.basename(__file__)
 condNode10= (abs(ratio1)<1e-10) & (abs(ratio2)<1e-9) & (abs(ratio3)<1e-9)
 condNode20= (abs(ratio4)<1e-10)
 if (result==0) & condNode10 & condNode20:
-  print("test ",fname,": ok.")
+  print('test '+fname+': ok.')
 else:
   lmsg.error(fname+' ERROR.')

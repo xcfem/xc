@@ -63,6 +63,6 @@ from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 #Don't make a check over ratio1 SEE NOTE above.
 if(ratio2<0.05):
-  print("test ",fname,": ok.")
+  print('test '+fname+': ok.')
 else:
   lmsg.error(fname+' ERROR.')

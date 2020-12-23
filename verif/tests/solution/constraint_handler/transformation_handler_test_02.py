@@ -104,7 +104,7 @@ ratio2= (sigma/(-11400))
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (abs(ratio1-1.0)<3e-3) & (abs(ratio2-1.0)<1e-3):
-  print("test ",fname,": ok.")
+  print('test '+fname+': ok.')
 else:
   lmsg.error(fname+' ERROR.')
 

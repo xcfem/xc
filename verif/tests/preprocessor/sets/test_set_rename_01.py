@@ -33,6 +33,6 @@ from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 
 if (oldName=='S1') and (newName=='Lola'):
-  print("test ",fname,": ok.")
+  print('test '+fname+': ok.')
 else:
   lmsg.error(fname+' ERROR.')

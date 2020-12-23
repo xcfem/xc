@@ -39,7 +39,7 @@ import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if abs(pres1-pres1_tg)<1e-6 and abs(pres2-pres2_tg)<1e-6 and abs(pres3-pres3_tg)<1e-6 and abs(pres4-pres4_tg)<1e-6:
-    print("test ",fname,": ok.")
+    print('test '+fname+': ok.')
 else:
     lmsg.error(fname+' ERROR.')
     

@@ -26,7 +26,7 @@ ratio1= math.sqrt((pNew.x+pOld.x)**2+(pNew.y+pOld.y)**2+(pNew.z-pOld.z)**2)
 import os
 fname= os.path.basename(__file__)
 if(ratio1<1e-15):
-    print("test ",fname,": ok.")
+    print('test '+fname+': ok.')
 else:
     print("test ",fname,": ERROR.")
  

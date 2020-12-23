@@ -179,7 +179,7 @@ import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if(ratio1==0) & (ratio2==0) & (ratio3==0) & (ratio4==0) & (ratio5==0) & (ratio6==0) & (ratio7==0) & (ratio8==0) & (ratio9==0) & (ratio10==0) & (ratio11==0):
-  print("test ",fname,": ok.")
+  print('test '+fname+': ok.')
 else:
   lmsg.error(fname+' ERROR.')
 

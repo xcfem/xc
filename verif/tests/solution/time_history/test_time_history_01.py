@@ -220,7 +220,7 @@ for readed,computed in zip(openSeesRBase,rBase):
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if((abs(ratio0)<1e-8) and (ratio1<1e-5) and (ratioT<1e-10) and (ratioRx<0.08) and (ratioRz<0.01)):
-  print("test ",fname,": ok.")
+  print('test '+fname+': ok.')
 else:
   lmsg.error(fname+' ERROR.')
 

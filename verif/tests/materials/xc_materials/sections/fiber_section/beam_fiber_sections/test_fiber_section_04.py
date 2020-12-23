@@ -181,6 +181,6 @@ import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (abs(ratio1)<5e-3) & (abs(ratio2)<5e-3) & (abs(ratio3)<5e-3) & (abs(ratio4)<5e-3) & (abs(ratio5)<5e-3) & (abs(ratio6)<5e-3) :
-  print("test ",fname,": ok.")
+  print('test '+fname+': ok.')
 else:
   lmsg.error(fname+' ERROR.')

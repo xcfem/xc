@@ -33,6 +33,6 @@ print(count)
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if(ratio1==0):
-  print("test ",fname,": ok.")
+  print('test '+fname+': ok.')
 else:
   lmsg.error(fname+' ERROR.')

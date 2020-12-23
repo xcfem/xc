@@ -98,6 +98,6 @@ print(ratio)
 import os
 fname= os.path.basename(__file__)
 if abs(ratio)<0.015:
-  print("test ",fname,": ok.")
+  print('test '+fname+': ok.')
 else:
   print("test ",fname,": ERROR.")

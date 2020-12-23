@@ -146,7 +146,7 @@ import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (flatwall.getElements.size==60) & (cylwall.getElements.size==600) & (flatdeck.getElements.size==330) & (cyldeck.getElements.size==660) & (deck2.getElements.size==260):
-    print("test ",fname,": ok.")
+    print('test '+fname+': ok.')
 else:
   lmsg.error(fname+' ERROR.')
     

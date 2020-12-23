@@ -47,6 +47,6 @@ print('ratio= ',ratio)
 import os
 fname= os.path.basename(__file__)
 if(abs(ratio)<1e-11):
-  print("test ",fname,": ok.")
+  print('test '+fname+': ok.')
 else:
   print("test ",fname,": ERROR.")

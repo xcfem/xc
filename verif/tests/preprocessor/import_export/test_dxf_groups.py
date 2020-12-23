@@ -46,6 +46,6 @@ print('ok: ', ok)
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if(ok):
-  print("test ",fname,": ok.")
+  print('test '+fname+': ok.')
 else:
   lmsg.error(fname+' ERROR.')

@@ -57,6 +57,6 @@ import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (gs3.name==name3) and (gs4.name==name4) and (gs5.name==name5) and (gs6.name==name6):
-  print("test ",fname,": ok.")
+  print('test '+fname+': ok.')
 else:
   lmsg.error(fname+' ERROR.')
