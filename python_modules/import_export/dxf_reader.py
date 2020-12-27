@@ -257,16 +257,13 @@ class DXFImport(reader_base.ReaderBase):
     def extractPoints(self):
         '''Extract the points from the entities argument.'''
         retval_pos= []
-        retval_labels= []
-        def append_point(pt, layerName, pointName, objLabels):
+        retval_properties= []
+        def append_point(pt, layerName, pointName, objProperties):
             '''Append the point to the lists.'''
             retval_pos.append(self.getRelativeCoo(pt))
             # layer name as label.
-            ptLabels= [layerName]
-            # xdata as label.
-            for l in objLabels:
-                ptLabels.append(l)
-            retval_labels.append((pointName, ptLabels))
+            objProperties.extendLabels([layerName])
+            retval_properties.append((pointName, objProperties))
         count= 0
         for obj in self.dxfFile.entities:
             type= obj.dxftype()
@@ -274,36 +271,36 @@ class DXFImport(reader_base.ReaderBase):
             objName= obj.dxf.handle
             pointName= objName
             # xdata
-            objLabels= list()
+            objProperties= bte.BlockProperties()
             if(obj.has_xdata('XC')):
-                objLabels.extend(get_extended_data(obj))
+                objProperties.extendLabels(get_extended_data(obj))
             # groups
             if(objName in self.entitiesGroups):
-                objLabels.extend(self.entitiesGroups[objName])
+                objProperties.extendLabels(self.entitiesGroups[objName])
             if(layerName in self.layersToImport):
                 if(type == 'POINT'):
                     count+= 1
                     pointName+= str(count)
-                    append_point(obj.dxf.location, layerName, pointName, objLabels)
+                    append_point(obj.dxf.location, layerName, pointName, objProperties)
                 if(self.impSurfaces):
                     if(type == '3DFACE'):
                         objPoints= [obj.dxf.vtx0, obj.dxf.vtx1, obj.dxf.vtx2, obj.dxf.vtx3]
                         for pt in objPoints:
                             count+= 1
                             pointName+= str(count)
-                            append_point(pt, layerName, pointName, objLabels)
+                            append_point(pt, layerName, pointName, objProperties)
                     elif(type == 'POLYLINE' and obj.get_mode()== 'AcDbPolyFaceMesh'): # POLYFACE
                         self.polyfaceQuads[objName]= decompose_polyface(obj, tol= self.tolerance)
                         for q in self.polyfaceQuads[objName]:
                             for pt in q:
                                 count+= 1
                                 pointName+= str(count)
-                                append_point(pt, layerName, pointName, objLabels)
+                                append_point(pt, layerName, pointName, objProperties)
                 if(type == 'LINE'):
                     for pt in [obj.dxf.start,obj.dxf.end]:
                         count+= 1
                         pointName+= str(count)
-                        append_point(pt, layerName, pointName, objLabels)
+                        append_point(pt, layerName, pointName, objProperties)
                 elif((type == 'POLYLINE') or (type == 'LWPOLYLINE')):
                     if(self.polylinesAsSurfaces):
                         self.polylineQuads[objName]= decompose_polyline(obj, tol= self.tolerance)
@@ -311,14 +308,14 @@ class DXFImport(reader_base.ReaderBase):
                             for pt in q:
                                 count+= 1
                                 pointName+= str(count)
-                                append_point(pt, layerName, pointName, objLabels)
+                                append_point(pt, layerName, pointName, objProperties)
                     else:
                         pts= obj.points
                         for pt in pts:
                             count+= 1
                             pointName+= str(count)
-                            append_point(pt, layerName, pointName, objLabels)
-        return retval_pos, retval_labels
+                            append_point(pt, layerName, pointName, objProperties)
+        return retval_pos, retval_properties
 
     def importPoints(self):
         ''' Import points from DXF.'''
@@ -359,14 +356,14 @@ class DXFImport(reader_base.ReaderBase):
                         lmsg.error('Error in line '+lineName+' vertices are equal: '+str(vertices))
                     if(length>self.threshold):
                         self.lines[lineName]= vertices
-                        objLabels= [layerName]
+                        objProperties= bte.BlockProperties(labels= [layerName])
                         # xdata
                         if(obj.has_xdata('XC')):
-                            objLabels.extend(get_extended_data(obj))
+                            objProperties.extendLabels(get_extended_data(obj))
                         # groups
                         if(lineName in self.entitiesGroups):
-                            objLabels.extend(self.entitiesGroups[lineName])
-                        self.propertyDict[lineName]= bte.BlockProperties(labels= objLabels)
+                            objProperties.extendLabels(self.entitiesGroups[lineName])
+                        self.propertyDict[lineName]= objProperties
                     else:
                         lmsg.error('line too short: '+str(p1)+','+str(p2)+str(length))
                 elif((type == 'POLYLINE') or (type == 'LWPOLYLINE')):
@@ -382,14 +379,14 @@ class DXFImport(reader_base.ReaderBase):
                             else:
                                 name= lineName+str(v1)+str(v2)
                                 self.lines[name]= [v1,v2]
-                                objLabels= [layerName]
+                                objProperties= bte.BlockProperties(labels= [layerName])
                                 # xdata
                                 if(obj.has_xdata('XC')):
-                                    objLabels.extend(get_extended_data(obj))
+                                    objProperties.extendLabels(get_extended_data(obj))
                                 # groups
                                 if(lineName in self.entitiesGroups):
-                                    objLabels.extend(self.entitiesGroups[lineName])
-                                self.propertyDict[name]= bte.BlockProperties(labels= objLabels)
+                                    objProperties.extendLabels(self.entitiesGroups[lineName])
+                                self.propertyDict[name]= objProperties
                             v1= v2
 
     def importFaces(self):

@@ -25,12 +25,22 @@ sys.path.append(FREECADPATH)
 # import FreeCAD
 import FreeCAD
 
+def get_ifc_attributes(obj):
+    ''' Return the ifc attributes of the argument.
+
+    :param obj: object to get the IFC attributes from.
+    '''
+    retval= dict()
+    if(hasattr(obj,'IfcType')):
+        retval['IfcType']= obj.IfcType
+    return retval
+
 class FreeCADImport(reader_base.ReaderBase):
     '''Import FreeCAD geometric entities.
 
      :ivar groupsToImport: list of regular expressions to be tested.
     '''
-    def __init__(self,fileName,groupsToImport, getRelativeCoo, threshold= 0.01,importLines= True, importSurfaces= True):
+    def __init__(self,fileName, groupsToImport, getRelativeCoo, threshold= 0.01,importLines= True, importSurfaces= True):
         ''' Constructor.
 
            :param fileName: file name to import.
@@ -70,23 +80,24 @@ class FreeCADImport(reader_base.ReaderBase):
     def extractPoints(self):
         '''Extract the points from the entities argument.'''
         retval_pos= []
-        retval_labels= []
-        def append_point(pt, groupName, pointName, objLabels):
+        retval_properties= []
+        def append_point(pt, groupName, pointName, objProperties):
             '''Append the point to the lists.'''
             retval_pos.append(self.getRelativeCoo(pt))
             # group name as label.
-            ptLabels= [groupName]
-            # xdata as label.
-            for l in objLabels:
-                ptLabels.append(l)
-            retval_labels.append((pointName, ptLabels))
-        def append_points(vertexes, objName, groupName, objLabels):
+            objProperties.extendLabels([groupName])
+            retval_properties.append((pointName, objProperties))
+        def append_points(vertexes, objName, groupName, objProperties):
             '''Append the points to the list.'''
-            ptCount= 0
-            for v in vertexes:
-                pointName= objName+'.'+str(ptCount)
-                append_point([v.X, v.Y, v.Z], grpName, pointName, objLabels)
-                ptCount+= 1
+            if(len(vertexes)>1):
+                ptCount= 0
+                for v in vertexes:
+                    pointName= objName+'.'+str(ptCount)
+                    append_point([v.X, v.Y, v.Z], grpName, pointName, objProperties)
+                    ptCount+= 1
+            else:
+                v= vertexes[0]
+                append_point([v.X, v.Y, v.Z], grpName, objName, objProperties)
                 
         for grpName in self.groupsToImport:
             grp= self.document.getObjectsByLabel(grpName)[0]
@@ -94,25 +105,24 @@ class FreeCADImport(reader_base.ReaderBase):
                 objName= grp.Name
                 shape= grp.Shape
                 shapeType= shape.ShapeType
-                objLabels= [grp.Label]
+                objProperties= bte.BlockProperties(labels= [grp.Label])
                 if(shapeType=='Shell'):
                     fCount= 0
                     for f in shape.SubShapes:
                         thisFaceName= objName+'.'+str(fCount)
-                        append_points(f.OuterWire.OrderedVertexes, thisFaceName, grpName, objLabels)
+                        append_points(f.OuterWire.OrderedVertexes, thisFaceName, grpName, objProperties)
                         fCount+= 1                        
                 else:
-                    append_points(grp.Shape.Vertexes, objName, grpName, objLabels)
+                    append_points(grp.Shape.Vertexes, objName, grpName, objProperties)
             elif(len(grp.OutList)>0): # Object is a group
                 for obj in grp.OutList: 
                     if(hasattr(obj,'Shape')): # Object has shape.
                         shapeType= obj.Shape.ShapeType
                         objName= obj.Name
-                        objLabels= [obj.Label]
+                        objProperties= bte.BlockProperties(labels= [obj.Label])
                         if(shapeType=='Face'):
-                            append_points(obj.Shape.Vertexes, objName, grpName, objLabels)
-                
-        return retval_pos, retval_labels
+                            append_points(obj.Shape.Vertexes, objName, grpName, objProperties)
+        return retval_pos, retval_properties
     
     def importPoints(self):
         ''' Import points from FreeCAD.'''
@@ -128,8 +138,8 @@ class FreeCADImport(reader_base.ReaderBase):
                     p= self.getRelativeCoo([float(shape.X), float(shape.Y), float(shape.Z)])
                     vertices[0]= self.getIndexNearestPoint(p)
                     self.points[pointName]= vertices
-                    self.propertyDict[pointName]= bte.BlockProperties(labels= [labelName])
-                    print(self.propertyDict[pointName].labels)
+                    properties= bte.BlockProperties(labels= [labelName], attributes= get_ifc_attributes(obj))
+                    self.propertyDict[pointName]= properties
                     
     def importLines(self):
         ''' Import lines from FreeCAD file.'''
@@ -194,7 +204,6 @@ class FreeCADImport(reader_base.ReaderBase):
 
         def import_shape(shape, objName, labelName):
             ''' Import simple shape.'''
-            print('import shape: ', shape, objName, labelName)
             shapeType= shape.ShapeType
             if(shapeType=='Face'):
                 import_face(shape, objName, labelName)

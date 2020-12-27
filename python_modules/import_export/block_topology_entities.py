@@ -60,7 +60,8 @@ class BlockProperties(object):
     
     def extendLabels(self, labels):
         ''' Append the labels argument to the container.'''
-        self.labels.extend(labels)
+        for lbl in labels:
+            self.appendLabel(lbl)
         
     def appendAttribute(self, key, value):
         ''' Append the label argument to the container.'''
@@ -115,7 +116,10 @@ class BlockProperties(object):
             if(len(retval)>0):
                 retval+= '; '
             retval+= strId+'.setProp("attributes",'+str(self.attributes)+')'
-        return retval 
+        return retval
+
+    def __str__(self):
+        return 'labels: '+str(self.labels)+' attributes: '+str(self.attributes)
 
     
 class PointRecord(me.NodeRecord):

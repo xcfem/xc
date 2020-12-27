@@ -141,27 +141,24 @@ class ReaderBase(object):
         if(len(points)>0):
             self.kPoints= [points[0]]
             pointName= layers[0][0]
-            objLabels= layers[0][1]
-            self.propertyDict[pointName]= bte.BlockProperties(labels= objLabels)
+            objProperties= layers[0][1]
+            self.propertyDict[pointName]= objProperties
             indexDict= dict()
             indexDict[0]= pointName
             for p, l in zip(points, layers):
                 pointName= l[0]
-                objLabels= l[1]
+                objProperties= l[1]
                 indexNearestPoint= self.getIndexNearestPoint(p)
                 nearestPoint= self.kPoints[indexNearestPoint]
                 dist= cdist([p],[nearestPoint])[0][0]
                 if(dist>self.threshold): # new point.
                     indexNearestPoint= len(self.kPoints) # The point itself.
                     self.kPoints.append(p)
-                    self.propertyDict[pointName]= bte.BlockProperties(labels= objLabels)
+                    self.propertyDict[pointName]= objProperties
                     indexDict[indexNearestPoint]= pointName
                 else:
                     pointName= indexDict[indexNearestPoint]
-                    labels= self.propertyDict[pointName].labels
-                    for l in objLabels:
-                        if(not l in labels):
-                            labels.append(l)
+                    self.propertyDict[pointName].extend(objProperties)
         else:
             lmsg.warning('No points in :'+self.fileName+' file.')
         return indexDict
