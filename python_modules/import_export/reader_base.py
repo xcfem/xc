@@ -40,7 +40,7 @@ class ReaderBase(object):
                        are melted into one k-point.
      :ivar impLines: if true import lines.
      :ivar impSurfaces: if true import surfaces.
-     :ivar labelDict: dictionary that relies each object name with its labels.
+     :ivar propertyDict: dictionary that relies each object name with its properties (labels and attributes).
      :ivar lines: dictionary storing the imported lines.
      :ivar facesTree: dictionary storing the imported faces.
     '''
@@ -62,7 +62,7 @@ class ReaderBase(object):
         self.threshold= threshold
         self.impLines= importLines
         self.impSurfaces= importSurfaces
-        self.labelDict= {}
+        self.propertyDict= {}
         self.lines= {}
         self.facesTree= {}
 
@@ -83,14 +83,14 @@ class ReaderBase(object):
         if(self.kPoints):
             for p in self.kPoints:
                 key= self.kPointsNames[counter]
-                bp= bte.BlockProperties(labels= self.labelDict[key])
+                bp= self.propertyDict[key]
                 retval.appendPoint(id= counter,x= p[0],y= p[1],z= p[2], pointProperties= bp)
                 counter+= 1
 
             counter= 0
             for key in self.lines:
                 line= self.lines[key]
-                bp= bte.BlockProperties(labels= self.labelDict[key])
+                bp= self.propertyDict[key]
                 block= bte.BlockRecord(counter,'line',line, blockProperties= bp)
                 retval.appendBlock(block)
                 counter+= 1
@@ -99,7 +99,7 @@ class ReaderBase(object):
                 fg= self.facesTree[name]
                 for key in fg:
                     face= fg[key]
-                    bp= bte.BlockProperties(labels= self.labelDict[key])
+                    bp= self.propertyDict[key]
                     block= bte.BlockRecord(counter,'face',face, blockProperties= bp)
                     retval.appendBlock(block)
                     counter+= 1
@@ -142,7 +142,7 @@ class ReaderBase(object):
             self.kPoints= [points[0]]
             pointName= layers[0][0]
             objLabels= layers[0][1]
-            self.labelDict[pointName]= objLabels
+            self.propertyDict[pointName]= bte.BlockProperties(labels= objLabels)
             indexDict= dict()
             indexDict[0]= pointName
             for p, l in zip(points, layers):
@@ -154,11 +154,11 @@ class ReaderBase(object):
                 if(dist>self.threshold): # new point.
                     indexNearestPoint= len(self.kPoints) # The point itself.
                     self.kPoints.append(p)
-                    self.labelDict[pointName]= objLabels
+                    self.propertyDict[pointName]= bte.BlockProperties(labels= objLabels)
                     indexDict[indexNearestPoint]= pointName
                 else:
                     pointName= indexDict[indexNearestPoint]
-                    labels= self.labelDict[pointName]
+                    labels= self.propertyDict[pointName].labels
                     for l in objLabels:
                         if(not l in labels):
                             labels.append(l)

@@ -14,6 +14,7 @@ import sys
 import reader_base
 from scipy.spatial.distance import cdist
 from misc_utils import log_messages as lmsg
+from import_export import block_topology_entities as bte
 
 # path to FreeCAD.so
 FREECADPATH = '/usr/lib/freecad-daily-python2/lib/' 
@@ -99,17 +100,16 @@ class FreeCADImport(reader_base.ReaderBase):
                     for f in shape.SubShapes:
                         thisFaceName= objName+'.'+str(fCount)
                         append_points(f.OuterWire.OrderedVertexes, thisFaceName, grpName, objLabels)
-
                         fCount+= 1                        
                 else:
                     append_points(grp.Shape.Vertexes, objName, grpName, objLabels)
             elif(len(grp.OutList)>0): # Object is a group
                 for obj in grp.OutList: 
                     if(hasattr(obj,'Shape')): # Object has shape.
-                        objType= obj.Shape.ShapeType
+                        shapeType= obj.Shape.ShapeType
                         objName= obj.Name
                         objLabels= [obj.Label]
-                        if(objType=='Face'):
+                        if(shapeType=='Face'):
                             append_points(obj.Shape.Vertexes, objName, grpName, objLabels)
                 
         return retval_pos, retval_labels
@@ -119,25 +119,27 @@ class FreeCADImport(reader_base.ReaderBase):
         self.points= dict()
         for obj in self.document.Objects:
             if(hasattr(obj,'Shape')):
-                objType= obj.Shape.ShapeType
+                shape= obj.Shape
+                shapeType= shape.ShapeType
                 pointName= obj.Name
                 labelName= obj.Label
-                if((objType=='Vertex') and (labelName in self.groupsToImport)):
+                if((shapeType=='Vertex') and (labelName in self.groupsToImport)):
                     vertices= [-1]
-                    p= self.getRelativeCoo([float(obj.X), float(obj.Y), float(obj.Z)])
+                    p= self.getRelativeCoo([float(shape.X), float(shape.Y), float(shape.Z)])
                     vertices[0]= self.getIndexNearestPoint(p)
                     self.points[pointName]= vertices
-                    self.labelDict[pointName]= [labelName]
+                    self.propertyDict[pointName]= bte.BlockProperties(labels= [labelName])
+                    print(self.propertyDict[pointName].labels)
                     
     def importLines(self):
         ''' Import lines from FreeCAD file.'''
         self.lines= {}
         for obj in self.document.Objects:
             if(hasattr(obj,'Shape')):
-                objType= obj.Shape.ShapeType
+                shapeType= obj.Shape.ShapeType
                 lineName= obj.Name
                 labelName= obj.Label
-                if((objType=='Wire') and (labelName in self.groupsToImport)):
+                if((shapeType=='Wire') and (labelName in self.groupsToImport)):
                     vertices= [-1,-1]
                     v0= obj.Shape.Vertexes[0]
                     v1= obj.Shape.Vertexes[1]
@@ -158,7 +160,7 @@ class FreeCADImport(reader_base.ReaderBase):
                         # # groups
                         # if(lineName in self.entitiesGroups):
                         #     objLabels.extend(self.entitiesGroups[lineName])
-                        self.labelDict[lineName]= objLabels
+                        self.propertyDict[lineName]= bte.BlockProperties(labels= objLabels)
                     else:
                         lmsg.error('line too short: '+str(p1)+','+str(p2)+str(length))
 
@@ -179,7 +181,7 @@ class FreeCADImport(reader_base.ReaderBase):
                 p= self.getRelativeCoo(pt)
                 idx= self.getIndexNearestPoint(p)
                 vertices.append(idx)
-            self.labelDict[faceName]= [labelName]
+            self.propertyDict[faceName]= bte.BlockProperties(labels= [labelName])
             facesDict[faceName]= vertices
 
         def import_shell(shapeContainer, faceName, labelName):
@@ -190,21 +192,24 @@ class FreeCADImport(reader_base.ReaderBase):
                 import_face(f, thisFaceName, labelName)
                 fCount+= 1
 
-        def import_shape(shape, faceName, labelName):
+        def import_shape(shape, objName, labelName):
             ''' Import simple shape.'''
+            print('import shape: ', shape, objName, labelName)
             shapeType= shape.ShapeType
             if(shapeType=='Face'):
-                import_face(shape, faceName, labelName)
+                import_face(shape, objName, labelName)
             elif(shapeType=='Shell'):
                 for s in shape.SubShapes:
-                    import_shape(s, faceName, labelName)
+                    import_shape(s, objName, labelName)
             elif(shapeType=='Compound'):
                 cCount= 0
                 for ss in obj.Shape.SubShapes:
                     ssType= ss.ShapeType
-                    ssName= faceName+'.'+str(cCount)
+                    ssName= objName+'.'+str(cCount)
                     import_shape(ss, ssName, labelName)
-                    cCount+= 1          
+                    cCount+= 1
+            elif(shapeType=='Vertex'):
+                count=0 # Nothing to do with those here.
             elif(shapeType in ['Wire']):
                 count= 0 # Nothing to do with those.
             else:
@@ -214,11 +219,11 @@ class FreeCADImport(reader_base.ReaderBase):
         for obj in self.document.Objects:
             if(hasattr(obj,'Shape')):
                 shapeType= obj.Shape.ShapeType
-                faceName= obj.Name
+                objName= obj.Name
                 labelName= obj.Label
                 if(labelName in self.groupsToImport):
                     facesDict= self.facesTree[labelName]
-                    import_shape(obj.Shape, faceName, labelName)
+                    import_shape(obj.Shape, objName, labelName)
 
               
     def getNamesToImport(self):

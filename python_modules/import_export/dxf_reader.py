@@ -18,6 +18,7 @@ import xc
 from import_export import reader_base
 from misc_utils import log_messages as lmsg
 from scipy.spatial.distance import cdist
+from import_export import block_topology_entities as bte
 
 class FloatList(list):
     '''List of floats that are more than
@@ -332,7 +333,7 @@ class DXFImport(reader_base.ReaderBase):
                     p= self.getRelativeCoo(obj.dxf.location)
                     vertices[0]= self.getIndexNearestPoint(p)
                     self.points[pointName]= vertices
-                    self.labelDict[pointName]= [layerName]
+                    self.propertyDict[pointName]= bte.BlockProperties(labels= [layerName])
                     
     def importLines(self):
         ''' Import lines from DXF.'''
@@ -365,7 +366,7 @@ class DXFImport(reader_base.ReaderBase):
                         # groups
                         if(lineName in self.entitiesGroups):
                             objLabels.extend(self.entitiesGroups[lineName])
-                        self.labelDict[lineName]= objLabels
+                        self.propertyDict[lineName]= bte.BlockProperties(labels= objLabels)
                     else:
                         lmsg.error('line too short: '+str(p1)+','+str(p2)+str(length))
                 elif((type == 'POLYLINE') or (type == 'LWPOLYLINE')):
@@ -388,7 +389,7 @@ class DXFImport(reader_base.ReaderBase):
                                 # groups
                                 if(lineName in self.entitiesGroups):
                                     objLabels.extend(self.entitiesGroups[lineName])
-                                self.labelDict[name]= objLabels
+                                self.propertyDict[name]= bte.BlockProperties(labels= objLabels)
                             v1= v2
 
     def importFaces(self):
@@ -409,7 +410,7 @@ class DXFImport(reader_base.ReaderBase):
                         p= self.getRelativeCoo(pt)
                         idx= self.getIndexNearestPoint(p)
                         vertices.append(idx)
-                    self.labelDict[obj.dxf.handle]= [layerName]
+                    self.propertyDict[obj.dxf.handle]= bte.BlockProperties(labels= [layerName])
                     facesDict[obj.dxf.handle]= vertices
                 elif(dxfType == 'POLYFACE'):
                     count= 0
@@ -424,7 +425,7 @@ class DXFImport(reader_base.ReaderBase):
                                 lmsg.error('Point p: '+str(p)+' idx: '+str(idx)+' repeated in '+str(q)+' vertices: '+str(vertices))
                         count+= 1
                         id= obj.dxf.handle+'_'+str(count)
-                        self.labelDict[id]= [layerName]
+                        self.propertyDict[id]= bte.BlockProperties(labels= [layerName])
                         facesDict[id]= vertices
                 elif((dxfType == 'POLYLINE') or (dxfType == 'LWPOLYLINE')):
                     count= 0
@@ -440,7 +441,7 @@ class DXFImport(reader_base.ReaderBase):
                                     lmsg.error('Point p: '+str(p)+' idx: '+str(idx)+' repeated in '+str(q)+' vertices: '+str(vertices))
                             count+= 1
                             id= obj.dxf.handle+'_'+str(count)
-                            self.labelDict[id]= [layerName]
+                            self.propertyDict[id]= bte.BlockProperties(labels= [layerName])
                             facesDict[id]= vertices
                 elif(dxfType in ['LINE', 'POINT']):
                     count= 0
