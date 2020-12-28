@@ -68,7 +68,9 @@ namespace XC {
 //! @ingroup MatUnx
 //
 //! @brief Pinching material which is defined by 4 points on the positive and
-//! negative envelopes and a bunch of damage parameters.
+//! negative envelopes and a bunch of damage parameters. The pinching parameters
+//! allow the modeler to simulate the opening and closing of cracks in cyclic
+//! loading of reinforced concrete members.
 //! 
 //! Pinching material which is defined by 4 points on the positive and
 //! negative envelopes and a bunch of damage parameters. The material accounts

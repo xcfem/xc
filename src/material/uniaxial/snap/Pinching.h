@@ -76,9 +76,11 @@ namespace XC {
 //
 //! @defgroup SnapUnx Uniaxial materials comming from SNAP code.
 //!
-//! @ingroup SnapUnx
 //!
-//! @brief Pinching hysteretic model with degradation.
+//! @brief Pinching hysteretic model with degradation. The pinching parameters
+//! allow the modeler to simulate the opening and closing of cracks in cyclic
+//! loading of reinforced concrete members.
+//! @ingroup SnapUnx
 class Pinching: public UniaxialMaterial
   {
   protected:
