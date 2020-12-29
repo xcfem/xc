@@ -226,7 +226,7 @@ class FreeCADImport(reader_base.ReaderBase):
                     import_shape(s, objName, labelName)
             elif(shapeType=='Compound'):
                 cCount= 0
-                for ss in obj.Shape.SubShapes:
+                for ss in shape.SubShapes:
                     ssType= ss.ShapeType
                     ssName= objName+'.'+str(cCount)
                     import_shape(ss, ssName, labelName)
