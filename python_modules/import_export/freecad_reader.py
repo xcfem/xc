@@ -11,7 +11,7 @@ __version__= "3.0"
 __email__= "l.pereztato@gmail.com" "ana.ortega.ort@gmail.com"
 
 import sys
-import reader_base
+from import_export import reader_base
 from scipy.spatial.distance import cdist
 from misc_utils import log_messages as lmsg
 from import_export import block_topology_entities as bte
