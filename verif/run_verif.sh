@@ -337,7 +337,7 @@ python tests/preprocessor/sets/test_get_contours_02.py
 python tests/preprocessor/sets/test_pick_entities.py
 python tests/preprocessor/sets/test_sets_and_grids.py
 python tests/preprocessor/sets/test_sets_and_grids_02.py
-python tests/preproccd essor/sets/test_get_bnd_01.py
+python tests/preprocessor/sets/test_get_bnd_01.py
 python tests/preprocessor/sets/test_fill_downwards_01.py
 python tests/preprocessor/sets/test_get_mesh_components_01.py
 python tests/preprocessor/sets/test_set_transformation_01.py
@@ -352,6 +352,7 @@ python tests/preprocessor/import_export/test_dxf_groups.py
 python tests/preprocessor/import_export/test_dxf_surfaces.py
 python tests/preprocessor/import_export/test_dxf_export_01.py
 python tests/preprocessor/import_export/test_ifc_points.py
+python tests/preprocessor/import_export/test_ifc_surface.py
 
 #Tests about constraints.
 echo "$BLEU" "Displacement constraints tests." "$NORMAL"
