@@ -36,7 +36,7 @@ ieData.writeToXCFile()
 
 FEcase= xc.FEProblem()
 FEcase.title= 'Knife plate model'
-exec(open('/tmp/knife_plate_model_blocks.py').read())
+exec(open(fileName+'.py').read())
 
 xcTotalSet= preprocessor.getSets.getSet('total')
 
