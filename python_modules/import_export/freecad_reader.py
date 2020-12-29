@@ -23,7 +23,11 @@ if(sys.version_info.major == 3):
 sys.path.append(FREECADPATH)
 
 # import FreeCAD
-import FreeCAD
+try:
+    import FreeCAD
+except ModuleNotFoundError as err:
+    # Error handling
+    lmsg.error(err)
 
 def get_ifc_attributes(obj):
     ''' Return the ifc attributes of the argument.

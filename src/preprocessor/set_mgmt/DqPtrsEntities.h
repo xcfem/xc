@@ -34,6 +34,7 @@
 
 #include "DqPtrs.h"
 #include "xc_utils/src/geom/pos_vec/Pos3d.h"
+#include "xc_utils/src/geom/pos_vec/Vector3d.h"
 #include "xc_utils/src/geom/d3/BND3d.h"
 
 class GeomObj3d;
@@ -68,6 +69,7 @@ class DqPtrsEntities: public DqPtrs<T>
     T *searchName(const std::string &nmb);
     T *findTag(const size_t &);
     T *getNearest(const Pos3d &p);
+    Pos3d getCentroid(void) const;
     const T *getNearest(const Pos3d &p) const;
     DqPtrsEntities<T> pickEntitiesInside(const GeomObj3d &, const double &tol= 0.0) const;
     BND3d Bnd(void) const;
@@ -90,6 +92,41 @@ T *DqPtrsEntities<T>::findTag(const size_t &tag)
     for(const_iterator i= this->begin();i!=this->end();i++)
       if((*i)->getTag()==tag) return *i;
     return nullptr;
+  }
+  
+//! @brief Returns the centroid of the entities.
+template <class T>
+Pos3d DqPtrsEntities<T>::getCentroid(void) const
+  {
+    Pos3d retval;
+    if(!this->empty())
+      {
+	const size_t sz= this->size();
+	const_iterator bg= this->begin();
+	if(sz<2)
+	  {
+	    const Pos3d pos= (*bg)->getCentroid();
+	    retval= pos;
+	  }
+        else
+	  {
+	    const_iterator i= bg;
+	    const Pos3d pos= (*i)->getCentroid();
+            Vector3d vpos_center_of_mass(pos.VectorPos());
+            i++;
+            for(; i != this->end(); i++)
+	      {
+   	        const Pos3d pos= (*i)->getCentroid();
+                vpos_center_of_mass= vpos_center_of_mass + pos.VectorPos();
+	      }
+            vpos_center_of_mass= vpos_center_of_mass * (1.0/sz);
+            retval+= vpos_center_of_mass;
+	  }
+      }
+    else
+      std::cerr << this->getClassName() << "::" << __FUNCTION__
+		<< "; point set is empty." << std::endl;
+    return retval;
   }
   
 //! @brief Returns the object closest to the position being passed as parameter.

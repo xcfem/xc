@@ -48,8 +48,9 @@ class_<XC::PntMap, bases<point_map>, boost::noncopyable >("PntMap", no_init)
   .def("newPnt", newPoint, return_internal_reference<>(),"Creates a point.")
   .def("newPntFromPos3d", newPointFromPos3d, return_internal_reference<>(),"Creates a point in the position.")
   .def("newPntIDPos3d", newPointIDPos3d, return_internal_reference<>(),"Creates a point with the ID and the the position provided.")
-   .def("get", &XC::PntMap::get, return_internal_reference<>(),"Return the i-th point.")
-   ;
+  .def("get", &XC::PntMap::get, return_internal_reference<>(),"Return the i-th point.")
+  .def("getCentroid", &XC::PntMap::getCentroid, "Return the centroid of the point set.")
+  ;
 
 typedef XC::ModelComponentContainer<XC::Edge> map_cm_edges;
 class_<map_cm_edges, bases<XC::ModelComponentContainerBase>, boost::noncopyable >("MapCMEdges", no_init)

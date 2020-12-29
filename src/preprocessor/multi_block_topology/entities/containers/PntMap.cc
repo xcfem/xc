@@ -60,6 +60,40 @@ void XC::PntMap::updateSets(Pnt *new_point) const
       }
   }
 
+//! @brief Return the centroid of the points.
+Pos3d XC::PntMap::getCentroid(void) const
+  {
+    Pos3d retval;
+    if(!this->empty())
+      {
+	const size_t sz= this->size();
+	const_iterator bg= this->begin();
+	if(sz<2)
+	  {
+	    const Pos3d pos= (*bg).second->GetPos();
+	    retval= pos;
+	  }
+        else
+	  {
+	    const_iterator i= bg;
+	    const Pos3d pos= (*i).second->GetPos();
+            Vector3d vpos_center_of_mass(pos.VectorPos());
+            i++;
+            for(; i != this->end(); i++)
+	      {
+   	        const Pos3d pos= (*i).second->GetPos();
+                vpos_center_of_mass= vpos_center_of_mass + pos.VectorPos();
+	      }
+            vpos_center_of_mass= vpos_center_of_mass * (1.0/sz);
+            retval+= vpos_center_of_mass;
+	  }
+      }
+    else
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; point set is empty." << std::endl;
+    return retval;
+  }
+
 //! @brief Return the vector defined by the points which indices are being passed as parameters.
 Vector3d XC::PntMap::getVector(const Indice &i,const Indice &j) const
   {

@@ -176,6 +176,7 @@ class_<XC::SetEntities::lst_ptr_points, bases<dq_ptrs_pnt>>("lstPnts",no_init)
   .def("getBnd", &XC::SetEntities::lst_ptr_points::Bnd, "Return points boundary.")
   .def("getNearest",make_function(getNearestPnt, return_internal_reference<>() ),"Return the nearest point to the position argument.")
   .def("findTag",make_function(&XC::SetEntities::lst_ptr_points::findTag, return_internal_reference<>() ),"Returns the point identified by the tag argument.")
+  .def("getCentroid", &XC::SetEntities::lst_ptr_points::getCentroid, "Returns the centroid of the points.")
   .def("conciliaNDivs", &XC::SetEntities::conciliaNDivs)
    ;
 

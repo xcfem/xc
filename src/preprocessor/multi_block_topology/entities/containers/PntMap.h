@@ -59,6 +59,7 @@ class PntMap: public EntityMap<Pnt>
   public:
     PntMap(MultiBlockTopology *mbt= nullptr);
 
+    Pos3d getCentroid(void) const;
     Vector3d getVector(const Indice &i,const Indice &j) const;
     Line3d getRecta(const Indice &i,const Indice &j) const;
     Plane getPlane(const Indice &i,const Indice &j,const Indice &k) const;
