@@ -27,7 +27,7 @@ try:
     import FreeCAD
 except ModuleNotFoundError as err:
     # Error handling
-    lmsg.error(err)
+    lmsg.log(err)
     quit()
 
 def get_ifc_attributes(obj):
