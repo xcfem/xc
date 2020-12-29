@@ -4,6 +4,7 @@ from __future__ import print_function
 
 from import_export import freecad_reader
 from import_export import neutral_mesh_description as nmd
+import os
 import xc_base
 import geom
 import xc

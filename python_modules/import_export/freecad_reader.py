@@ -28,6 +28,7 @@ try:
 except ModuleNotFoundError as err:
     # Error handling
     lmsg.error(err)
+    quit()
 
 def get_ifc_attributes(obj):
     ''' Return the ifc attributes of the argument.
