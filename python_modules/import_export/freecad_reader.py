@@ -38,6 +38,14 @@ def get_ifc_attributes(obj):
     retval= dict()
     if(hasattr(obj,'IfcType')):
         retval['IfcType']= obj.IfcType
+    if(hasattr(obj,'PredefinedType')):
+        retval['PredefinedType']= obj.PredefinedType
+    if(hasattr(obj,'Thickness')):
+        retval['Thickness']= float(obj.Thickness)*1e-3 # mm->m
+    if(hasattr(obj,'Material')):
+        mat= obj.Material
+        if(mat):
+            retval['Material']= str(mat.Label)
     return retval
 
 class FreeCADImport(reader_base.ReaderBase):
@@ -196,8 +204,9 @@ class FreeCADImport(reader_base.ReaderBase):
                 p= self.getRelativeCoo(pt)
                 idx= self.getIndexNearestPoint(p)
                 vertices.append(idx)
-            self.propertyDict[faceName]= bte.BlockProperties(labels= [labelName])
             facesDict[faceName]= vertices
+            properties= bte.BlockProperties(labels= [labelName], attributes= get_ifc_attributes(obj))
+            self.propertyDict[faceName]= properties
 
         def import_shell(shapeContainer, faceName, labelName):
             ''' Import shell objects from the container argument.'''

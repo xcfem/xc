@@ -211,12 +211,16 @@ class BlockRecord(me.CellRecord):
         :param thk: block thickness.
         :param matId: material identifier.
         '''
-        super(BlockRecord,self).__init__(id,typ,kPoints,thk)
         if(blockProperties):
             self.blockProperties= blockProperties
         else:
             self.blockProperties= BlockProperties()
+        if('Material' in self.blockProperties.attributes):
+            matId= self.blockProperties.attributes['Material']
         self.blockProperties.appendAttribute('matId', matId)
+        if('Thickness' in self.blockProperties.attributes):
+            thk= self.blockProperties.attributes['Thickness']
+        super(BlockRecord,self).__init__(id,typ,kPoints,thk)
 
     def getKPointIds(self):
         ''' Return the key points identifiers of the block.'''
