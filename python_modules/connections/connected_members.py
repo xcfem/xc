@@ -146,7 +146,7 @@ class ConnectedMemberMetaData(object):
     
     def getWebDirection(self):
         ''' Return the direction of the member web.'''
-        return self.getJVector3d(False)
+        return self.jVector
 
     def getWebMidPlane(self, origin, factor):
         ''' Return the mid-plane of the member web.
@@ -157,7 +157,7 @@ class ConnectedMemberMetaData(object):
                        direction and lenght.
         '''
         extrusionVector= self.getExtrusionVector(factor)
-        return self.shape.getWebMidPlane(org= origin, extrusionVDir= extrusionVector)
+        return self.shape.getWebMidPlane(org= origin, extrusionVDir= extrusionVector, weakAxisVDir= self.jVector)
     
     def getBottomFlangeMidPlane(self, origin, factor):
         ''' Return the mid-plane of the bottom flange.
@@ -168,7 +168,7 @@ class ConnectedMemberMetaData(object):
                        direction and lenght.
         '''
         extrusionVector= self.getExtrusionVector(factor)
-        return self.shape.getBottomFlangeMidPlane(org= origin, extrusionVDir= extrusionVector)
+        return self.shape.getBottomFlangeMidPlane(org= origin, extrusionVDir= extrusionVector, weakAxisVDir= self.jVector)
 
     def getTopFlangeMidPlane(self, origin, factor):
         ''' Return the mid-plane of the top flange.
@@ -179,7 +179,7 @@ class ConnectedMemberMetaData(object):
                        direction and lenght.
         '''
         extrusionVector= self.getExtrusionVector(factor)
-        return self.shape.getTopFlangeMidPlane(org= origin, extrusionVDir= extrusionVector)
+        return self.shape.getTopFlangeMidPlane(org= origin, extrusionVDir= extrusionVector, weakAxisVDir= self.jVector)
     
     def getIntersectionPoint(self, origin, factor, sg):
         ''' Get the intersection of the segment with the member
@@ -249,7 +249,7 @@ class ConnectedMemberMetaData(object):
         memberProperties.extendAttributes(self.getMemberLoadAttributes())
         f= factor*self.getOrientation(connectionOrigin)
         extrusionVector= self.getExtrusionVector(f)
-        return self.shape.getBlockData(org= self.memberOrigin, extrusionVDir= extrusionVector, blockProperties= memberProperties)
+        return self.shape.getBlockData(org= self.memberOrigin, extrusionVDir= extrusionVector, weakAxisVDir= self.jVector, blockProperties= memberProperties)
     
     def getFrontalWeldBlocks(self, flangeWeldLegSize, webWeldLegSize, blockProperties= None):
         ''' Return the lines corresponding to weld beads with a frontal plate.
@@ -401,7 +401,7 @@ class ConnectionMetaData(object):
     
     def getColumnWebDirection(self):
         ''' Return the direction of the column web.'''
-        return self.column.getJVector3d(False)
+        return self.column.getWebDirection(False)
 
     def getColumnWebMidPlane(self):
         ''' Return the mid-plane of the column web.'''

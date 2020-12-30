@@ -31,7 +31,7 @@ class_<XC::ProtoBeam2d, bases<XC::Element1D>, boost::noncopyable >("ProtoBeam2d"
   .def("setSectionProperties",&XC::ProtoBeam2d::setSectionProperties,"Set cross section properties.")
   .def("getVDirStrongAxisLocalCoord",&XC::ProtoBeam2d::getVDirStrongAxisLocalCoord,"Returns the direction vector of element strong axis expressed in the local coordinate system.")
   .def("getVDirWeakAxisLocalCoord",&XC::ProtoBeam2d::getVDirWeakAxisLocalCoord,"Returns the direction vector of element weak axis expressed in the local coordinate system.")
-.def("getStrongAxisAngle",&XC::ProtoBeam2d::getStrongAxisAngle,"Returns the angle between element strong axis and local XZ plane.")
+  .def("getStrongAxisAngle",&XC::ProtoBeam2d::getStrongAxisAngle,"Returns the angle between element strong axis and local XZ plane.")
   .def("getWeakAxisAngle",&XC::ProtoBeam2d::getWeakAxisAngle,"Returns the angle between element weak axis and local XZ plane.")
    ;
 
