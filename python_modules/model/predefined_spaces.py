@@ -390,10 +390,17 @@ class PredefinedSpace(object):
             supportNodes.append(n)
         return get_reactions.Reactions(self.preprocessor, supportNodes)
 
+    def getSet(self, setName):
+        '''Return the set with the name argument.
+
+        :param setName: name of the set to retrieve.
+        '''
+        return self.preprocessor.getSets.getSet(setName)
+    
     def getTotalSet(self):
         '''Return the set that contains all the defined
            entities.'''
-        return self.preprocessor.getSets.getSet("total")
+        return self.getSet('total')
 
     def defSet(self, setName):
         ''' Defines a set with the name argument.'''
