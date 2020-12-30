@@ -87,7 +87,7 @@ class FreeCADImport(reader_base.ReaderBase):
             if(reader_base.nameToImport(obj.Label, namesToImport)):
                 retval.append(obj.Label)
         if(len(retval)==0):
-            lmsg.warning('No layers to import (names to import: '+str(namesToImport)+')')
+            lmsg.warning('No groups to import (names to import: '+str(namesToImport)+')')
         return retval
     
     def extractPoints(self):
