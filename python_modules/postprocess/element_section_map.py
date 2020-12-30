@@ -6,6 +6,7 @@ from __future__ import print_function
 import copy
 from misc_utils import log_messages as lmsg
 from materials.sections.fiber_section import def_simple_RC_section
+from materials import typical_materials
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AO_O)"
 __copyright__= "Copyright 2016, LCPT and AO_O"
@@ -421,6 +422,21 @@ class RCSlabBeamSection(setRCSections2SetElVerif):
             return self.getS(code)
         elif('d' in code):
             return self.getDiam(code)
+
+    def getElasticMembranePlateSection(self, preprocessor, reductionFactor= 1.0):
+        ''' Return an elastic membrane plate section material.
+
+        :param preprocessor: proprocessor for the finite element problem.
+        :param reductionFactor: factor that divides the concrete elastic
+                                modulus to simulate the effect of cracking,
+                                normally between 1.0 and 7.0.
+        '''
+        shellMatName= self.name+'_membrane_plate'
+        Ec= self.concrType.getEcm()/reductionFactor
+        nu= 0.3
+        thickness= self.depth
+        rho= 2500.0*thickness
+        return typical_materials.defElasticMembranePlateSection(preprocessor,shellMatName,Ec,nu,rho,thickness)
 
 class RCMemberSection(ElementSections):
     '''This class is an specialization of ElemenSections for rectangular
