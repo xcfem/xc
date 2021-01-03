@@ -16,7 +16,8 @@ import xc_base
 import geom
 import xc
 from model import predefined_spaces
-from materials import typical_materials
+from materials.ehe import EHE_materials
+from postprocess import element_section_map
 #from postprocess import output_handler
 
 feProblem= xc.FEProblem()
@@ -31,11 +32,11 @@ n3= nodes.newNodeXYZ(1,1,0)
 n4= nodes.newNodeXYZ(0,1,0)
 
 # Materials definition
-E= 2.1e6 # Steel Young's modulus [kg/cm2].
-nu= 0.3 # Poisson's ratio.
-h= 0.2 # thickness.
-dens= 4.0 # specific mass [kg/m3].
-memb1= typical_materials.defElasticMembranePlateSection(preprocessor, "memb1",E,nu,dens,h)
+h= 0.4 # thickness.
+concrete= EHE_materials.HA30
+reinfSteel= EHE_materials.B500S
+rcSection= element_section_map.RCSlabBeamSection(name= 'rcSection',sectionDescr= 'test', concrType= concrete, reinfSteelType= reinfSteel, depth= h)
+memb1= rcSection.getElasticMembranePlateSection(preprocessor)
 
 elements= preprocessor.getElementHandler
 elements.defaultMaterial= memb1.name
@@ -43,7 +44,7 @@ elem= elements.newElement("ShellMITC4",xc.ID([n1.tag,n2.tag,n3.tag,n4.tag]))
 
 g= 1.0#9.81 # m/s2
 # Element mass
-eMass= elem.getArea(True)*dens*h
+eMass= elem.getArea(True)*concrete.density()*h
 eForce= eMass*g
 nForce= eForce/4.0
 
@@ -91,6 +92,7 @@ else:
 
 # # Graphic stuff.
 # oh= output_handler.OutputHandler(modelSpace)
-# #oh.displayFEMesh()
-# #oh.displayLocalAxes()
+# oh.displayFEMesh()
+# oh.displayLoads()
+# oh.displayLocalAxes()
 # oh.displayReactions()

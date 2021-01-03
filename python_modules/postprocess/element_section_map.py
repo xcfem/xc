@@ -435,7 +435,7 @@ class RCSlabBeamSection(setRCSections2SetElVerif):
         Ec= self.concrType.getEcm()/reductionFactor
         nu= 0.3
         thickness= self.depth
-        rho= 2500.0*thickness
+        rho= self.concrType.density()
         return typical_materials.defElasticMembranePlateSection(preprocessor,shellMatName,Ec,nu,rho,thickness)
 
 class RCMemberSection(ElementSections):
