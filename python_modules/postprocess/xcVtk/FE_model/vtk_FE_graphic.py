@@ -238,7 +238,7 @@ class DisplaySettingsFE(vtk_graphic_base.DisplaySettings):
         self.VtkDefineNodesActor(nodeSize)
         self.VtkDefineElementsActor("surface",field,elemSet.color)
 
-    def displayMesh(self, xcSets, field= None, diagrams= None, caption= '',fileName= None,defFScale=0.0,nodeSize=0.01,scaleConstr=0.2):
+    def displayMesh(self, xcSets, field= None, diagrams= None, caption= '',fileName= None, defFScale=0.0, nodeSize=0.01, scaleConstr= 0.2):
         '''Display the finite element mesh 
 
         :param xcSets: set or list of sets to be displayed
@@ -372,7 +372,7 @@ class DisplaySettingsFE(vtk_graphic_base.DisplaySettings):
     def appendDiagram(self,diagram):
         diagram.addDiagramToScene(self)
 
-    def displaySPconstraints(self, setToDisplay,scale):
+    def displaySPconstraints(self, setToDisplay, scale):
         ''' Display single point constraints.
 
         :param setToDisplay: set to be displayed
@@ -387,7 +387,7 @@ class DisplaySettingsFE(vtk_graphic_base.DisplaySettings):
         spIter= prep.getDomain.getConstraints.getSPs
         sp= spIter.next()
         while sp:
-            nod=sp.getNode
+            nod= sp.getNode
             if nod.tag in nodInSet:
                 dof= sp.getDOFNumber
                 if dof < 3: # This is not true in 2D problems.
