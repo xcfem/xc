@@ -559,9 +559,11 @@ class BeamMaterialData(MaterialData):
         self.name= name
         self.section= section
         self.material= material
+        
     def getRho(self):
         '''return the mass per unit length'''
         return self.rho*self.section.A()
+    
     def setupElasticShear3DSection(self,preprocessor):
         '''Return an elastic section appropiate for 3D beam linear elastic analysis
         '''
