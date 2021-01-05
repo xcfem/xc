@@ -1600,7 +1600,7 @@ class StructuralMechanics3D(StructuralMechanics):
             trf= self.newCrdTransf(nmbTransf, xzVector= xzVector, trfType= trfType)
         elements.defaultTransformation= nmbTransf
         # Element definition
-        elements.defaultMaterial= matName
+        elements.defaultMaterial= sectionName
         elem= elements.newElement(beamElementType,xc.ID([nodeA.tag,nodeB.tag]))
         return elem
     
