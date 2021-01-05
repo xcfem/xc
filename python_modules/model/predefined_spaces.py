@@ -1580,6 +1580,30 @@ class StructuralMechanics3D(StructuralMechanics):
                 if(constrCond[i] != 'free'):
                     self.newSPConstraint(n.tag,i,constrCond[i])
                     
+    def setBeamBetweenNodes(self,nodeA, nodeB, sectionName, nmbTransf= None, trfType= 'linear', beamElementType= 'ElasticBeam3d'):
+        '''
+        Creates a beam/column element between the two nodes being passed as parameters.
+
+        :param nodeA: bar's from node.
+        :param nodeB: bar's to node.
+        :param sectionName: name of the section material to assign to the element.
+        :param nmbTransf: name of the coordinate transformation to use for the new bar.
+        :param trfType: type of the transformation ('linear', 'p_delta' or 'corotational')
+                        used only if nmbTransf==None.
+        :param stiffnessFactor: factor to apply to the beam stiffness.
+        '''
+        elements= self.getElementHandler()
+        # Transformation definition.
+        if(not nmbTransf): # define a new transformation.
+            nmbTransf= 'bar' + str(nodeA.tag) + str(nodeB.tag)
+            xzVector= self.getSuitableXZVector(nodeA, nodeB)
+            trf= self.newCrdTransf(nmbTransf, xzVector= xzVector, trfType= trfType)
+        elements.defaultTransformation= nmbTransf
+        # Element definition
+        elements.defaultMaterial= matName
+        elem= elements.newElement(beamElementType,xc.ID([nodeA.tag,nodeB.tag]))
+        return elem
+    
     def setHugeBeamBetweenNodes(self,nodeA, nodeB, nmbTransf= None, trfType= 'linear', stiffnessFactor= 1.0):
         '''
         Creates a very stiff bar between the two nodes being passed as parameters.
@@ -1587,19 +1611,13 @@ class StructuralMechanics3D(StructuralMechanics):
         using multipoint constraints. This problem has been be solved with the
         implementation of MFreedom_ConstraintBase::addResistingForceToNodalReaction).
 
-        :param   nodeA: bar's from node.
-        :param   nodeB: bar's to node.
-        :param   nmbTransf: name of the coordinate transformation to use for the new bar.
+        :param nodeA: bar's from node.
+        :param nodeB: bar's to node.
+        :param nmbTransf: name of the coordinate transformation to use for the new bar.
         :param trfType: type of the transformation ('linear', 'p_delta' or 'corotational')
                         used only if nmbTransf==None.
         :param stiffnessFactor: factor to apply to the beam stiffness.
         '''
-        elements= self.getElementHandler()
-        if(not nmbTransf): # define a new transformation.
-            nmbTransf= 'bar' + str(nodeA.tag) + str(nodeB.tag)
-            xzVector= self.getSuitableXZVector(nodeA, nodeB)
-            trf= self.newCrdTransf(nmbTransf, xzVector= xzVector, trfType= trfType)
-        elements.defaultTransformation= nmbTransf
         # Material definition
         matName= 'bar' + str(nodeA.tag) + str(nodeB.tag) + nmbTransf
         E= 1e14*stiffnessFactor
@@ -1610,9 +1628,7 @@ class StructuralMechanics3D(StructuralMechanics):
         torsional_inertia= inertia/100
         (A,Iz,Iy,J)= (area, inertia, inertia, torsional_inertia)
         scc= tm.defElasticSection3d(self.preprocessor,matName,A,E,G,Iz,Iy,J)
-        elements.defaultMaterial= matName
-        elem= elements.newElement("ElasticBeam3d",xc.ID([nodeA.tag,nodeB.tag]))
-        return elem
+        return self.setBeamBetweenNodes(nodeA, nodeB, matName, nmbTransf, trfType, beamElementType= 'ElasticBeam3d')
 
     def setHugeTrussBetweenNodes(self,nodeA, nodeB, stiffnessFactor= 1.0):
         '''
