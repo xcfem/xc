@@ -547,7 +547,7 @@ class DeckMaterialData(MaterialData):
 class BeamMaterialData(MaterialData):
     '''Elastic section appropiate for 3D beam analysis, including shear deformations.
 
-    :ivar name:         name identifying the section
+    :ivar name:         name identifying the section.
     :ivar section:      instance of a class that defines the geometric and
                         mechanical characteristiscs of a section
                         e.g: RectangularSection, CircularSection, ISection, ...
@@ -563,7 +563,7 @@ class BeamMaterialData(MaterialData):
         '''return the mass per unit length'''
         return self.rho*self.section.A()
     def setupElasticShear3DSection(self,preprocessor):
-        '''Return an elastic section appropiate for 3D beam analysis
+        '''Return an elastic section appropiate for 3D beam linear elastic analysis
         '''
         if(not self.xc_material):
             materialHandler= preprocessor.getMaterialHandler
