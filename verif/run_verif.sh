@@ -702,6 +702,7 @@ python tests/materials/prestressing/test_loss_prestress_units_01.py
 python tests/materials/prestressing/test_deflection_prestressed_beam_01.py
 python tests/materials/prestressing/test_short_term_loss_prestress_01.py
 python tests/materials/prestressing/test_short_term_loss_prestress_02.py
+python tests/materials/prestressing/test_strand_data_01.py
 
 echo "$BLEU" "  EOTA TR-29." "$NORMAL"
 python tests/materials/eota_tr_29/test_anchor_bolt01.py

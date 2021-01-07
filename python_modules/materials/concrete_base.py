@@ -1095,7 +1095,7 @@ class PrestressingSteel(matWDKD.MaterialWithDKDiagrams):
     # relaxation at times shorter than 1000 hours.
     ptsShortTermRelaxation= scipy.interpolate.interp1d([0, 1, 5, 20, 100, 200, 500, 1000],[0, 0.25, 0.45, 0.55, 0.7, 0.8, 0.9, 1])
 
-    def __init__(self,steelName,fpk,fmax= 1860e6, alpha= 0.75, steelRelaxationClass=1, tendonClass= 'strand'):
+    def __init__(self,steelName,fpk,fmax= 1860e6, alpha= 0.75, steelRelaxationClass=1, tendonClass= 'strand', Es= 190e9):
       ''' Prestressing steel base class.
 
          :param fpk: Elastic limit.
@@ -1104,14 +1104,15 @@ class PrestressingSteel(matWDKD.MaterialWithDKDiagrams):
          :param steelRelaxationClass: Relaxation class 1: normal, 2: improved, 
                                       and 3: relaxation for bars.
          :param tendonClass: Tendon class wire, strand or bar.
+         :param Es: elastic modulus.
       '''
       super(PrestressingSteel,self).__init__(steelName)
       self.gammaS= 1.15 # partial safety factor for steel.
       self.fpk= fpk # elastic limit.
       self.fmax= fmax
       self.alpha= alpha
-      self.Es= 190e9 # elastic modulus.
-      self.bsh= 0.001 # slope ration (yield branch/elastic branch)
+      self.Es= Es # elastic modulus.
+      self.bsh= 0.001 # slope ratio (yield branch/elastic branch)
       self.steelRelaxationClass= steelRelaxationClass
       self.tendonClass= tendonClass
       

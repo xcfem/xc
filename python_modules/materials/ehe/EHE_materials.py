@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
+''' Reinforced concrete materials according to EHE-08.'''
+
 from __future__ import division
 from __future__ import print_function
-
-''' Reinforced concrete materials according to EHE-08.'''
 
 __author__= "Ana Ortega (AO_O) and Luis C. Pérez Tato (LCPT)"
 __copyright__= "Copyright 2015, AO_O and LCPT"
@@ -293,7 +293,20 @@ class EHEPrestressingSteel(concrete_base.PrestressingSteel):
     ptsRO1000Bars= scipy.interpolate.interp1d([0,.5,.6,.7,.8],[0,0,2,3,7])
 
 
-    def __init__(self,steelName,fpk,fmax= 1860e6, alpha= 0.75, steelRelaxationClass=1, tendonClass= 'strand'):
+    def __init__(self,steelName,fpk,fmax= 1860e6, alpha= 0.75, steelRelaxationClass= 1, tendonClass= 'strand', Es= 190e9):
+        ''' Prestressing steel base class.
+
+           :param steelName: steel name.
+           :param fpk: Elastic limit.
+           :param fmax: Steel strength.
+           :param alpha: stress-to-strength ratio.
+           :param steelRelaxationClass: Relaxation class 1: normal, 
+                                        2: improved, 
+                                        and 3: relaxation for bars.
+           :param tendonClass: tendon class: wire, strand or bar.
+           :param Es: elastic modulus.
+        '''
+    
         super(EHEPrestressingSteel,self).__init__(steelName,fpk,fmax,alpha,steelRelaxationClass, tendonClass)
 
     def getRO1000(self):
@@ -373,4 +386,54 @@ def get_losses_elastic_shortening_concrete_in_tendons(sigma_cp, Ep, Ecj):
                  active reinforcements.
     '''
     return sigma_cp*Ep/Ecj
+
+class Y1860S7Strand(EHEPrestressingSteel):
+    ''' Uncoated strand 7-Steel wire for prestressed concrete
+        according to EN 0138 - 3: March 2011.
+
+     :ivar diameter: strand diameter.
+     :ivar area: cross sectional area.
+     '''
+    def __init__(self, diameter, area):
+        ''' Constructor.
+
+        :param diameter: strand diameter.
+        :param area: cross sectional area.
+        '''
+        super(Y1860S7Strand,self).__init__(steelName= "Y1860S7",fpk= 1171e6,fmax= 1860e6)
+        self.diameter= diameter
+        self.area= area
+
+    def massPerMeter(self):
+        ''' Return the mass per meter of the strand.'''
+        return self.area*7810.35496123245 # Adjusted value for steel density.
+
+
+    def Fm(self):
+        ''' Return the characteristic valu of maximum force.'''
+        return self.area*self.fmax
+
+    def Fm_max(self):
+        ''' Return the maximum valu of maximum force.'''
+        return self.gammaS*self.Fm()
+
+    def Fp(self):
+        return 0.86*self.Fm()
+
+
+# Strands mechanical properties.    
+Y1860S7Strand_6_9= Y1860S7Strand(diameter= 6.90e-3, area= 29.00e-6)
+Y1860S7Strand_7_0= Y1860S7Strand(diameter= 7.00e-3, area= 30.00e-6)
+Y1860S7Strand_8_0= Y1860S7Strand(diameter= 8.00e-3, area= 38.00e-6)
+Y1860S7Strand_9_0= Y1860S7Strand(diameter= 9.00e-3, area= 50.00e-6)
+Y1860S7Strand_9_3= Y1860S7Strand(diameter= 9.30e-3, area= 52.00e-6)
+Y1860S7Strand_9_6= Y1860S7Strand(diameter= 9.60e-3, area= 55.00e-6)
+Y1860S7Strand_11_0= Y1860S7Strand(diameter= 11.00e-3, area= 70.00e-6)
+Y1860S7Strand_11_3= Y1860S7Strand(diameter= 11.30e-3, area= 75.00e-6)
+Y1860S7Strand_12_5= Y1860S7Strand(diameter= 12.50e-3, area= 93.00e-6)
+Y1860S7Strand_12_9= Y1860S7Strand(diameter= 12.90e-3, area= 100.00e-6)
+Y1860S7Strand_13_0= Y1860S7Strand(diameter= 13.00e-3, area= 102.00e-6)
+Y1860S7Strand_15_2= Y1860S7Strand(diameter= 15.20e-3, area= 139.00e-6)
+Y1860S7Strand_15_3= Y1860S7Strand(diameter= 15.30e-3, area= 140.00e-6)
+Y1860S7Strand_15_7= Y1860S7Strand(diameter= 15.70e-3, area= 150.00e-6)
 
