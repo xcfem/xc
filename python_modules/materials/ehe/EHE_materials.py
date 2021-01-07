@@ -373,3 +373,4 @@ def get_losses_elastic_shortening_concrete_in_tendons(sigma_cp, Ep, Ecj):
                  active reinforcements.
     '''
     return sigma_cp*Ep/Ecj
+

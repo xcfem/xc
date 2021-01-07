@@ -1114,6 +1114,7 @@ class PrestressingSteel(matWDKD.MaterialWithDKDiagrams):
       self.bsh= 0.001 # slope ration (yield branch/elastic branch)
       self.steelRelaxationClass= steelRelaxationClass
       self.tendonClass= tendonClass
+      
     def getKRelaxation(self):
       ''' Return the value of k factor for the relaxation expression
          from the relaxation class. See Model Code 1990 paragraph 2.3.4.5.
@@ -1125,15 +1126,19 @@ class PrestressingSteel(matWDKD.MaterialWithDKDiagrams):
       else:
         lmsg.error("Relaxation class : ",self.steelRelaxationClass," not implemented.\n")
         return 0
+    
     def fpd(self):
       return self.fpk/self.gammaS
+  
     def tInic(self):
-      return self.alpha**2*self.fmax # Pretensado final (incial al 75 por ciento y 25 por ciento de pérdidas totales).
+      return self.alpha**2*self.fmax # Final presstressing (initial at 75 percent  and 25 percent of total losses).
+  
     def defDiagK(self,preprocessor,initialStress):
       '''Characteristic stress-strain diagram.'''
       self.materialDiagramK= typical_materials.defSteel02(preprocessor,self.nmbDiagK,self.Es,self.fpk,self.bsh,initialStress)
       self.matTagK= self.materialDiagramK.tag
-      return self.materialDiagramK 
+      return self.materialDiagramK
+  
     def defDiagD(self,preprocessor,initialStress):
       '''Design stress-strain diagram.'''
       self.materialDiagramD= typical_materials.defSteel02(preprocessor,self.nmbDiagD,self.Es,self.fpd(),self.bsh,initialStress)
