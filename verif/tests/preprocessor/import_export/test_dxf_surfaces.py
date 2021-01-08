@@ -13,11 +13,11 @@ import logging
 layerNamesToImport= ['xc_*']
 
 def getRelativeCoo(pt):
-  return [pt[0],pt[1],pt[2]] #No modification.
+    return [pt[0],pt[1],pt[2]] #No modification.
 
 pth= os.path.dirname(__file__)
 if(not pth):
-  pth= "."
+    pth= "."
 dxfFilePath= pth+'/../../aux/dxf/knife_plate.dxf' 
 logger= logging.getLogger('ezdxf')
 logger.setLevel(level=logging.WARNING) #Avoid logging info messages.
@@ -55,7 +55,7 @@ print(ratio2)
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if(ratio1==0 and ratio2<1e-11):
-  print('test '+fname+': ok.')
+    print('test '+fname+': ok.')
 else:
-  lmsg.error(fname+' ERROR.')
+    lmsg.error(fname+' ERROR.')
 
