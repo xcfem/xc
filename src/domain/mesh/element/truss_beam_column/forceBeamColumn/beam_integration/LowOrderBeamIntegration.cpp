@@ -200,6 +200,7 @@ int XC::LowOrderBeamIntegration::recvSelf(const Communicator &comm)
     return res;
   }
 
+//! @brief Set parameter value.
 int XC::LowOrderBeamIntegration::setParameter(const std::vector<std::string> &argv, Parameter &param)
   {
     const int argc= argv.size();
@@ -214,15 +215,25 @@ int XC::LowOrderBeamIntegration::setParameter(const std::vector<std::string> &ar
     const int Nf = N-Nc;
 
     if( (argv[0]=="xf") && point <= Nf)
-      return param.addObject(point, this);
+      {
+	param.setValue(pts(Nc+(point-1)));
+        return param.addObject(point, this);
+      }
     else if( (argv[0] == "xc") && point <= Nc)
-      return param.addObject(10+point, this);
+      {
+	param.setValue(pts(point-1));
+        return param.addObject(10+point, this);
+      }
     else if( (argv[0] == "wc") && point <= Nc)
-      return param.addObject(20+point, this);
+      {
+	param.setValue(wts(point-1));
+        return param.addObject(20+point, this);
+      }
     else
       return -1;
   }
 
+//! @brief Update parameter value.
 int XC::LowOrderBeamIntegration::updateParameter(int parameterID, Information &info)
   {
     if(parameterID <= 10)
