@@ -35,6 +35,7 @@ class EHEConcrete(concrete_base.Concrete):
     def __init__(self,nmbConcrete, fck, gammaC,typeAggregate='cuarcita'):
         super(EHEConcrete,self).__init__(nmbConcrete,fck, gammaC)
         self.typeAggregate=typeAggregate
+        
     def getAlphaEcm(self):
         '''Correction coefficient to the longitudinal modulus of deformation 
         taking into account the type of aggregate.
@@ -379,9 +380,8 @@ def get_losses_elastic_shortening_concrete_in_tendons(sigma_cp, Ep, Ecj):
                      center of gravity of the active reinforcement, due to 
                      prestressing after deducting the losses due to wedge 
                      penetration
-    :param Ep: modulus of longitudinal elasticity of the active reinforcements
-                (190e9).
-    :param Ecj: modulus of longitudinal elasticity of the concrete for the age
+    :param Ep: elastic modulus of the active reinforcements (defaults to 190e9).
+    :param Ecj: elastic modulus of the concrete for the age
                  j corresponding to the moment of applying the load to the 
                  active reinforcements.
     '''
@@ -421,7 +421,7 @@ class Y1860S7Strand(EHEPrestressingSteel):
         return 0.86*self.Fm()
 
 
-# Strands mechanical properties.    
+# Strands mechanical properties.   
 Y1860S7Strand_6_9= Y1860S7Strand(diameter= 6.90e-3, area= 29.00e-6)
 Y1860S7Strand_7_0= Y1860S7Strand(diameter= 7.00e-3, area= 30.00e-6)
 Y1860S7Strand_8_0= Y1860S7Strand(diameter= 8.00e-3, area= 38.00e-6)
