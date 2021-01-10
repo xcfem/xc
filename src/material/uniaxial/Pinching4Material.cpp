@@ -66,7 +66,8 @@
 #include <cmath>
 #include <cfloat>
 #include <cstring>
-
+#include "domain/component/Parameter.h"
+#include "domain/mesh/element/utils/Information.h"
 
 XC::Pinching4Material::Pinching4Material(int tag,
                                      double f1p, double d1p, double f2p, double d2p,
@@ -1198,46 +1199,249 @@ double XC::Pinching4Material::Envlp4Stress(XC::Vector s4Strain, XC::Vector s4Str
                         }
 
 void XC::Pinching4Material::updateDmg(double strain, double dstrain)
-        {
-                double tes = 0.0;
-                double umaxAbs = (TmaxStrainDmnd>-TminStrainDmnd) ? TmaxStrainDmnd:-TminStrainDmnd;
-                double uultAbs = (envlpPosStrain(4)>-envlpNegStrain(4)) ? envlpPosStrain(4):-envlpNegStrain(4);
-                TnCycle = CnCycle + fabs(dstrain)/(4*umaxAbs);
-                if ((strain<uultAbs && strain>-uultAbs)&& Tenergy< energyCapacity)
-                {
-                        TgammaK = gammaK1*pow((umaxAbs/uultAbs),gammaK3);
-                        TgammaD = gammaD1*pow((umaxAbs/uultAbs),gammaD3);
-                        TgammaF = gammaF1*pow((umaxAbs/uultAbs),gammaF3);
+  {
+    double tes = 0.0;
+    double umaxAbs = (TmaxStrainDmnd>-TminStrainDmnd) ? TmaxStrainDmnd:-TminStrainDmnd;
+    double uultAbs = (envlpPosStrain(4)>-envlpNegStrain(4)) ? envlpPosStrain(4):-envlpNegStrain(4);
+    TnCycle = CnCycle + fabs(dstrain)/(4*umaxAbs);
+    if((strain<uultAbs && strain>-uultAbs)&& Tenergy< energyCapacity)
+      {
+	TgammaK = gammaK1*pow((umaxAbs/uultAbs),gammaK3);
+	TgammaD = gammaD1*pow((umaxAbs/uultAbs),gammaD3);
+	TgammaF = gammaF1*pow((umaxAbs/uultAbs),gammaF3);
 
-                        if (Tenergy>elasticStrainEnergy && DmgCyc == 0) {
-                                tes = ((Tenergy-elasticStrainEnergy)/energyCapacity);
-                                TgammaK = TgammaK + gammaK2*pow(tes,gammaK4);
-                                TgammaD = TgammaD + gammaD2*pow(tes,gammaD4);
-                                TgammaF = TgammaF + gammaF2*pow(tes,gammaF4);
-                        } else if (DmgCyc == 1) {
-                                TgammaK = TgammaK + gammaK2*pow(TnCycle,gammaK4);
-                                TgammaD = TgammaD + gammaD2*pow(TnCycle,gammaD4);
-                                TgammaF = TgammaF + gammaF2*pow(TnCycle,gammaF4);
-                        }
-                        double kminP = (posEnvlpStress(TmaxStrainDmnd)/TmaxStrainDmnd);
-                        double kminN = (negEnvlpStress(TminStrainDmnd)/TminStrainDmnd);
-                        double kmin = ((kminP/kElasticPos)>(kminN/kElasticNeg)) ? (kminP/kElasticPos):(kminN/kElasticNeg);
-                        double gammaKLimEnv = (0.0>(1.0-kmin)) ? 0.0:(1.0-kmin);
-                        
-                        double k1 = (TgammaK<gammaKLimit) ? TgammaK:gammaKLimit;
-                        TgammaK = (k1<gammaKLimEnv) ? k1:gammaKLimEnv;
-                        TgammaD = (TgammaD<gammaDLimit) ? TgammaD:gammaDLimit;
-                        TgammaF = (TgammaF<gammaFLimit) ? TgammaF:gammaFLimit;
-                }
-                else if (strain<uultAbs && strain>-uultAbs) {
-                        double kminP = (posEnvlpStress(TmaxStrainDmnd)/TmaxStrainDmnd);
-                        double kminN = (negEnvlpStress(TminStrainDmnd)/TminStrainDmnd);
-                        double kmin = ((kminP/kElasticPos)>(kminN/kElasticNeg)) ? (kminP/kElasticPos):(kminN/kElasticNeg);
-                        double gammaKLimEnv = (0.0>(1.0-kmin)) ? 0.0:(1.0-kmin);
-                        
-                        TgammaK = (gammaKLimit<gammaKLimEnv) ? gammaKLimit:gammaKLimEnv;
-                        TgammaD = gammaDLimit;
-                        TgammaF = gammaFLimit;
-                }
-                
-        }
+	if(Tenergy>elasticStrainEnergy && DmgCyc == 0)
+	  {
+	    tes = ((Tenergy-elasticStrainEnergy)/energyCapacity);
+	    TgammaK = TgammaK + gammaK2*pow(tes,gammaK4);
+	    TgammaD = TgammaD + gammaD2*pow(tes,gammaD4);
+	    TgammaF = TgammaF + gammaF2*pow(tes,gammaF4);
+	  }
+	else if(DmgCyc == 1)
+	  {
+	    TgammaK = TgammaK + gammaK2*pow(TnCycle,gammaK4);
+	    TgammaD = TgammaD + gammaD2*pow(TnCycle,gammaD4);
+	    TgammaF = TgammaF + gammaF2*pow(TnCycle,gammaF4);
+	  }
+	double kminP = (posEnvlpStress(TmaxStrainDmnd)/TmaxStrainDmnd);
+	double kminN = (negEnvlpStress(TminStrainDmnd)/TminStrainDmnd);
+	double kmin = ((kminP/kElasticPos)>(kminN/kElasticNeg)) ? (kminP/kElasticPos):(kminN/kElasticNeg);
+	double gammaKLimEnv = (0.0>(1.0-kmin)) ? 0.0:(1.0-kmin);
+
+	double k1 = (TgammaK<gammaKLimit) ? TgammaK:gammaKLimit;
+	TgammaK = (k1<gammaKLimEnv) ? k1:gammaKLimEnv;
+	TgammaD = (TgammaD<gammaDLimit) ? TgammaD:gammaDLimit;
+	TgammaF = (TgammaF<gammaFLimit) ? TgammaF:gammaFLimit;
+      }
+    else if (strain<uultAbs && strain>-uultAbs)
+      {
+	double kminP = (posEnvlpStress(TmaxStrainDmnd)/TmaxStrainDmnd);
+	double kminN = (negEnvlpStress(TminStrainDmnd)/TminStrainDmnd);
+	double kmin = ((kminP/kElasticPos)>(kminN/kElasticNeg)) ? (kminP/kElasticPos):(kminN/kElasticNeg);
+	double gammaKLimEnv = (0.0>(1.0-kmin)) ? 0.0:(1.0-kmin);
+
+	TgammaK = (gammaKLimit<gammaKLimEnv) ? gammaKLimit:gammaKLimEnv;
+	TgammaD = gammaDLimit;
+	TgammaF = gammaFLimit;
+      }
+  }
+
+int XC::Pinching4Material::setParameter(const std::vector<std::string>  &argv, Parameter &param)
+  {
+    // Parameters for backbone control points
+    if((argv[0]=="f1p") || (argv[0]=="stress1p"))
+      {
+	param.setValue(stress1p);
+	return param.addObject(1, this);
+      }
+    if((argv[0]=="d1p") || (argv[0]=="strain1p"))
+      {
+	param.setValue(strain1p);
+	return param.addObject(2, this);
+      }
+    if((argv[0]=="f2p") || (argv[0]=="stress2p"))
+      {
+	param.setValue(stress2p);
+	return param.addObject(3, this);
+      }
+    if((argv[0]=="d2p") || (argv[0]=="strain2p"))
+      {
+	param.setValue(strain2p);
+	return param.addObject(4, this);
+      }
+    if((argv[0]=="f3p") || (argv[0]=="stress3p"))
+      {
+	param.setValue(stress3p);
+	return param.addObject(5, this);
+      }
+    if((argv[0]=="d3p") || (argv[0]=="strain3p"))
+      {
+	param.setValue(strain3p);
+	return param.addObject(6, this);
+      }
+    if((argv[0]=="f4p") || (argv[0]=="stress4p"))
+      {
+	param.setValue(stress4p);
+	return param.addObject(7, this);
+      }
+    if((argv[0]=="d4p") || (argv[0]=="strain4p"))
+      {
+	param.setValue(strain4p);
+	return param.addObject(8, this);
+      }
+    if((argv[0]=="f1n") || (argv[0]=="stress1n"))
+      {
+	param.setValue(stress1n);
+	return param.addObject(9, this);
+      }
+    if((argv[0]=="d1n") || (argv[0]=="strain1n"))
+      {
+	param.setValue(strain1n);
+	return param.addObject(10, this);
+      }
+    if((argv[0]=="f2n") || (argv[0]=="stress2n"))
+      {
+	param.setValue(stress2n);
+	return param.addObject(11, this);
+      }
+    if((argv[0]=="d2n") || (argv[0]=="strain2n"))
+      {
+	param.setValue(strain2n);
+	return param.addObject(12, this);
+      }
+    if((argv[0]=="f3n") || (argv[0]=="stress3n"))
+      {
+	param.setValue(stress3n);
+	return param.addObject(13, this);
+      }
+    if((argv[0]=="d3n") || (argv[0]=="strain3n"))
+      {
+	param.setValue(strain3n);
+	return param.addObject(14, this);
+      }
+    if((argv[0]=="f4n") || (argv[0]=="stress4n"))
+      {
+	param.setValue(stress4n);
+	return param.addObject(15, this);
+      }
+    if((argv[0]=="d4n") || (argv[0]=="strain4n"))
+      {
+	param.setValue(strain4n);
+	return param.addObject(16, this);
+      }
+    // Parameters for hysteretic rules
+    if((argv[0]=="rDispP"))
+      {
+	param.setValue(rDispP);
+	return param.addObject(17, this);
+      }
+    if((argv[0]=="rForceP"))
+      {
+	param.setValue(rForceP);
+	return param.addObject(18, this);
+      }
+    if((argv[0]=="uForceP"))
+      {
+	param.setValue(uForceP);
+	return param.addObject(19, this);
+      }
+    if((argv[0]=="rDispN"))
+      {
+	param.setValue(rDispN);
+	return param.addObject(20, this);
+      }
+    if((argv[0]=="rForceN"))
+      {
+	param.setValue(rForceN);
+	return param.addObject(21, this);
+      }
+    if((argv[0]=="uForceN"))
+      {
+	param.setValue(uForceN);
+	return param.addObject(22, this);
+      }
+
+    return -1;
+  }
+
+
+
+int XC::Pinching4Material::updateParameter(int parameterID, Information &info)
+  {
+    switch (parameterID)
+      {
+	case -1:
+	  return -1;
+	case 1:
+	  this->stress1p = info.theDouble;
+	  break;
+	case 2:
+	  this->strain1p = info.theDouble;
+	  break;
+	case 3:
+	  this->stress2p = info.theDouble;
+	  break;
+	case 4:
+	  this->strain2p = info.theDouble;
+	  break;
+	case 5:
+	  this->stress3p = info.theDouble;
+	  break;
+	case 6:
+	  this->strain3p = info.theDouble;
+	  break;
+	case 7:
+	  this->stress4p = info.theDouble;
+	  break;
+	case 8:
+	  this->strain4p = info.theDouble;
+	  break;
+	case 9:
+	  this->stress1n = info.theDouble;
+	  break;
+	case 10:
+	  this->strain1n = info.theDouble;
+	  break;
+	case 11:
+	  this->stress2n = info.theDouble;
+	  break;
+	case 12:
+	  this->strain2n = info.theDouble;
+	  break;
+	case 13:
+	  this->stress3n = info.theDouble;
+	  break;
+	case 14:
+	  this->strain3n = info.theDouble;
+	  break;
+	case 15:
+	  this->stress4n = info.theDouble;
+	  break;
+	case 16:
+	  this->strain4n = info.theDouble;
+	  break;
+	case 17:
+	  this->rDispP = info.theDouble;
+	  break;
+	case 18:
+	  this->rForceP = info.theDouble;
+	  break;
+	case 19:
+	  this->uForceP = info.theDouble;
+	  break;
+	case 20:
+	  this->rDispN = info.theDouble;
+	  break;
+	case 21:
+	  this->rForceN = info.theDouble;
+	  break;
+	case 22:
+	  this->uForceN = info.theDouble;
+	  break;
+	default:
+	  return -1;
+      }
+    // Changed a parameter: we need to update the envelope?
+    this->SetEnvelope();
+    return 0;
+  }

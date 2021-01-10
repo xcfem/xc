@@ -215,6 +215,8 @@ class Pinching4Material: public UniaxialMaterial
     int sendSelf(Communicator &);
     int recvSelf(const Communicator &);
     void Print(std::ostream &s, int flag = 0) const;
+    int setParameter(const std::vector<std::string> &argv, Parameter &param);
+    int updateParameter(int parameterID, Information &info);
   };
 } // end of XC namespace
 #endif
