@@ -16,6 +16,6 @@ The main capabilities of the program:
 - Fiber section models (modelization of RC members,...)
 - Activation an deactivation of elements (construction phases,...)
 - Tools for implementing structural codes (Eurocodes, ACI, AISC,...) verifications (in progress...)
-- Interface with Salome (in progress...)
+- Interface with IFC through FreeCAD (in progress...)
 
 
