@@ -19,8 +19,7 @@ from materials import typical_materials
 from materials.astm_aisc import ASTM_materials
 #from postprocess import output_handler
 
-def getHoleAsPolygonalSurface(bolt_fastener: ASTM_materials.BoltFastener,
-                            surfaces):
+def getHoleAsPolygonalSurface(bolt_fastener, surfaces):
     ''' Create the polygonal surface that represents the hole.
 
     :param bolt_fastener: ASTM bolt fastener material to create the hole surface for.
