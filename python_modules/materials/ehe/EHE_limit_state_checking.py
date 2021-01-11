@@ -24,8 +24,23 @@ from scipy import interpolate
 from materials.sections import rebar_family as rf
 from postprocess.reports import common_formats as fmt
 
+class BaseReinfController(object):
+    '''Base class for reinforcement controllers 
+       (objects that check that code prescriptions are respected).
 
-class RebarController(object):
+       :ivar pos: reinforcement position according to clause 66.5.1
+                  of EHE-08.
+    '''
+    def __init__(self, pos= 'II'):
+        '''Constructor.
+
+        :param pos: reinforcement position according to clause 66.5.1
+                   of EHE-08.
+        '''
+        self.pos= pos
+
+
+class RebarController(BaseReinfController):
     '''Control of some parameters as development length 
        minimum reinforcement and so on.
 
@@ -60,7 +75,7 @@ class RebarController(object):
         :param pos: reinforcement position according to clause 66.5.1
                    of EHE-08.
         '''
-        self.pos= pos
+        super(RebarController,self).__init__(pos)
         self.concreteCover= concreteCover
         self.spacing= spacing
 
@@ -164,8 +179,78 @@ class RebarController(object):
         retval*= alph
         return retval
 
-# Reinforced concrete section shear checking.
+class StrandController(BaseReinfController):
+    '''Control of some parameters as the length of transmission.
 
+       :ivar pos: reinforcement position according to clause 66.5.1
+                  of EHE-08.
+       :ivar reinfType: prestressed reinforcement type: 'wire' or 'strand'
+    '''
+    # Table 70.2.3 of EHE
+    x= [25e6,30e6,35e6,40e6,45e6,50e6]
+    ## Strands
+    fpbdStrandValues= [1.4e6,1.6e6,1.8e6,1.9e6,2.1e6,2.2e6]
+    fpbdStrand= interpolate.interp1d(x, fpbdStrandValues)
+    ## Wires
+    fpbdWireValues= [1.6e6,1.8e6,2.0e6,2.2e6,2.4e6,2.6e6]
+    fpbdWire= interpolate.interp1d(x, fpbdWireValues)
+    def __init__(self, reinfType= 'strand', pos= 'II'):
+        '''Constructor.
+
+        :param pos: reinforcement position according to clause 66.5.1
+                   of EHE-08.
+        '''
+        super(StrandController,self).__init__(pos)
+        self.reinfType= reinfType
+
+    def fpbd(self, concrete, t= 28):
+        ''' Return the design value of the adherence stress according
+            to the commentaries to the article 70.2.3 of EHE.
+
+        :param concrete: concrete material.
+        :param t: concrete age at themoment of the prestress transmission
+                  expressed in days.
+        '''
+        retval= 0.0
+        if(t!=28):
+            lmsg.error('design value of the adherence stress for concrete age different of 28 days not implemented yet.')
+        if(self.reinfType=='strand'):
+            retval= self.fpbdStrand(-concrete.fck)
+        elif(self.reinfType=='wire'):
+            retval= self.fpbdWire(-concrete.fck)
+        else:
+            lmsg.error('prestressed reinforcement type: \''+str(self.reinfType)+'\' unknown')
+        if(self.pos=='II'):
+            retval*= 0.7
+        print('fpbd= ', retval/1e6, 'MPa')
+        return retval
+
+    def lbtp(self, phi, concrete, sg_pi, suddenTransf= True, ELU= True, t= 28):
+        ''' Return the length of transmission for the strand according
+            to the commentaries to the article 70.2.3 of EHE.
+
+        :param phi: nominal diameter of the wire, or prestressing strand.
+        :param concrete: concrete material.
+        :param sg_pi: initial prestressing stress.
+        :param suddenTransf: if true, prestressing is transfered to concrete
+                             in a very short time.
+        :param ELU: true if ultimate limit state checking.
+        :param t: concrete age at themoment of the prestress transmission
+                  expressed in days.
+        '''
+        alpha1= 1.25
+        if(not suddenTransf): # slow prestressing transfer
+            alpha1= 1.0
+        alpha2= 1.0
+        if(not ELU): # Serviceability limit state.
+            alpha2= 0.5
+        alpha3= 0.5
+        if(self.reinfType=='wire'):
+            alpha3= 0.7
+        fbptdt= self.fpbd(concrete, t)
+        return alpha1*alpha2*alpha3*phi*sg_pi/4.0/fbptdt
+    
+# Reinforced concrete section shear checking.
 def getFcvEH91(fcd):
     '''
     Return fcv (concrete virtual shear strength)
