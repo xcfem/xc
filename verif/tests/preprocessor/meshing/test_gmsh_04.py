@@ -17,24 +17,8 @@ import matplotlib.pyplot as plt
 from model import predefined_spaces
 from materials import typical_materials
 from materials.astm_aisc import ASTM_materials
+from helper_funcs import getHoleAsPolygonalSurface
 #from postprocess import output_handler
-
-def getHoleAsPolygonalSurface(bolt_fastener, surfaces):
-    ''' Create the polygonal surface that represents the hole.
-
-    :param bolt_fastener: ASTM bolt fastener material to create the hole surface for.
-    :param surfaces: XC surface handler.
-    '''
-    plg= bolt_fastener.getHoleAsPolygon()
-    vertices= plg.getVertexList()
-    newPnts= list()
-    for v in vertices:
-        newPnts.append(points.newPntFromPos3d(v))
-    pntTags= list()
-    for p in newPnts:
-        pntTags.append(p.tag)
-    pFace= surfaces.newPolygonalFacePts(pntTags)
-    return pFace
 
 
 p1= geom.Pos3d(-1.82,-1.82,0)
@@ -73,7 +57,7 @@ surfaces= modelSpace.getSurfaceHandler()
 polyFace= surfaces.newPolygonalFacePts([pt1.tag, pt2.tag, pt3.tag, pt4.tag])
 pFaceHoles= list()
 for b in bolts:
-    pFace= getHoleAsPolygonalSurface(b,surfaces)
+    pFace= getHoleAsPolygonalSurface(b,surfaces, points)
     pFaceHoles.append(pFace)
     
 ### Define material
