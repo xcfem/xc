@@ -50,21 +50,7 @@ class RebarController(BaseReinfController):
                             nearest concrete surface.
        :ivar spacing: center-to-center spacing of bars or wires being 
                       developed, in.
-    '''
-    # Table 66.5.2.a of EHE
-    x= [25e6,30e6,35e6,40e6,45e6,50e6]
-    y400= [1.2,1.0,.9,.8,.7,.7]
-    y500= [1.5,1.3,1.2,1.1,1.0,1.0]
-    f400= interpolate.interp1d(x, y400)
-    f500= interpolate.interp1d(x, y500)
-
-    # Table 69.5.2.2 of EHE
-    alpha_ratios=[0.0,0.2,0.25,0.33,0.5,0.51,1.0]
-    alpha_leq_10phi= [1.0,1.2,1.4,1.6,1.8,2.0,2.0]
-    alpha_gt_10phi= [1.0,1.0,1.1,1.2,1.3,1.4,1.4]
-    f_alpha_leq_10phi= interpolate.interp1d(alpha_ratios,alpha_leq_10phi)
-    f_alpha_gt_10phi= interpolate.interp1d(alpha_ratios,alpha_gt_10phi)
-    
+    '''    
     def __init__(self, concreteCover= 35e-3, spacing= 150e-3, pos= 'II'):
         '''Constructor.
 
@@ -86,17 +72,7 @@ class RebarController(BaseReinfController):
         :param concrete: concrete material.
         :param steel: reinforcing steel.
         '''
-        retval= 15.0
-        fck= -concrete.fck
-        m400= float(self.f400(fck))
-        m500= float(self.f500(fck))
-        if(steel.fyk==400e6):
-            retval= m400
-        elif(steel.fyk==500e6):
-            retval= m500
-        else:
-            retval= (m400*(500e6-steel.fyk)+m500*(steel.fyk-400e6))/100e6
-        return retval
+        return concrete.getM(steel)
 
     def getBasicAnchorageLength(self, concrete, phi, steel, dynamicEffects= False):
         '''Returns basic anchorage length in tension according to clause
@@ -108,19 +84,7 @@ class RebarController(BaseReinfController):
         :param dynamicEffects: true if the anchorage is subjected to
                                dynamic effects.
         '''
-        retval= 60.0*phi
-        m= self.getM(concrete,steel)
-        f= phi*1000.0
-        m_phi= m*f
-        if(self.pos=='I'):
-            retval= max(m_phi, steel.fyk/20e6)*phi
-        elif(self.pos=='II'):
-            retval= max(1.4*m_phi,steel.fyk/14e6)*phi
-        else:
-            lmsg.error('position must be I or II')
-        if(dynamicEffects):
-            retval+= 10*phi
-        return retval
+        return steel.getBasicAnchorageLength(concrete, phi, self.pos, dynamicEffects)
 
     def getNetAnchorageLength(self ,concrete, phi, steel, beta= 1.0, efficiency= 1.0, tensionedBars= True, dynamicEffects= False):
         '''Returns net anchorage length in tension according to clause
@@ -139,15 +103,7 @@ class RebarController(BaseReinfController):
         :param dynamicEffects: true if the anchorage is subjected to
                                dynamic effects.
         '''
-        lb= self.getBasicAnchorageLength(concrete, phi, steel, dynamicEffects)
-        retval= beta*efficiency*lb
-        retval= max(retval, 10.0*phi)
-        retval= max(retval, 0.15)
-        if(tensionedBars):
-            retval= max(retval,lb/3.0)
-        else:
-            retval= max(retval,2.0*lb/3.0)
-        return retval
+        return steel.getNetAnchorageLength(concrete, phi, self.pos, beta, efficiency, tensionedBars, dynamicEffects)
 
     def getOverlapLength(self ,concrete, phi, steel, distBetweenNearestSplices, beta= 1.0, efficiency= 1.0, ratioOfOverlapedTensionBars= 1.0, tensionedBars= True, dynamicEffects= False):
         '''Returns net anchorage length in tension according to clause
@@ -171,13 +127,7 @@ class RebarController(BaseReinfController):
         :param dynamicEffects: true if the anchorage is subjected to
                                dynamic effects.
         '''
-        retval= self.getNetAnchorageLength(concrete, phi, steel, beta, efficiency, tensionedBars, dynamicEffects)
-        if(distBetweenNearestSplices<10.0*phi):
-            alph= float(self.f_alpha_leq_10phi(ratioOfOverlapedTensionBars))
-        else:
-            alph= float(self.f_alpha_gt_10phi(ratioOfOverlapedTensionBars))
-        retval*= alph
-        return retval
+        return steel.getOverlapLength(concrete, phi, self.pos, distBetweenNearestSplices, beta, efficiency, ratioOfOverlapedTensionBars, tensionedBars, dynamicEffects)
 
 class StrandController(BaseReinfController):
     '''Control of some parameters as the length of transmission.
@@ -186,14 +136,7 @@ class StrandController(BaseReinfController):
                   of EHE-08.
        :ivar reinfType: prestressed reinforcement type: 'wire' or 'strand'
     '''
-    # Table 70.2.3 of EHE
-    x= [25e6,30e6,35e6,40e6,45e6,50e6]
-    ## Strands
-    fpbdStrandValues= [1.4e6,1.6e6,1.8e6,1.9e6,2.1e6,2.2e6]
-    fpbdStrand= interpolate.interp1d(x, fpbdStrandValues)
-    ## Wires
-    fpbdWireValues= [1.6e6,1.8e6,2.0e6,2.2e6,2.4e6,2.6e6]
-    fpbdWire= interpolate.interp1d(x, fpbdWireValues)
+    
     def __init__(self, reinfType= 'strand', pos= 'II'):
         '''Constructor.
 
@@ -202,53 +145,51 @@ class StrandController(BaseReinfController):
         '''
         super(StrandController,self).__init__(pos)
         self.reinfType= reinfType
-
-    def fpbd(self, concrete, t= 28):
+    
+    def getDesignAdherenceStress(self, concrete, steel, t= 28):
         ''' Return the design value of the adherence stress according
             to the commentaries to the article 70.2.3 of EHE.
 
         :param concrete: concrete material.
+        :param steel: prestressing steel material.
         :param t: concrete age at themoment of the prestress transmission
                   expressed in days.
         '''
-        retval= 0.0
-        if(t!=28):
-            lmsg.error('design value of the adherence stress for concrete age different of 28 days not implemented yet.')
-        if(self.reinfType=='strand'):
-            retval= self.fpbdStrand(-concrete.fck)
-        elif(self.reinfType=='wire'):
-            retval= self.fpbdWire(-concrete.fck)
-        else:
-            lmsg.error('prestressed reinforcement type: \''+str(self.reinfType)+'\' unknown')
-        if(self.pos=='II'):
-            retval*= 0.7
-        print('fpbd= ', retval/1e6, 'MPa')
-        return retval
+        return steel.getDesignAdherenceStress(concrete,self.pos,t)
 
-    def lbtp(self, phi, concrete, sg_pi, suddenTransf= True, ELU= True, t= 28):
+    def getTransmissionLength(self, phi, concrete, steel, sg_pi, suddenRelease= True, ELU= True, t= 28):
         ''' Return the length of transmission for the strand according
             to the commentaries to the article 70.2.3 of EHE.
 
         :param phi: nominal diameter of the wire, or prestressing strand.
         :param concrete: concrete material.
-        :param sg_pi: initial prestressing stress.
-        :param suddenTransf: if true, prestressing is transfered to concrete
-                             in a very short time.
+        :param steel: prestressing steel material.
+        :param sg_pi: steel stress just after release.
+        :param suddenRelease: if true, prestressing is transfered to concrete
+                              in a very short time.
         :param ELU: true if ultimate limit state checking.
         :param t: concrete age at themoment of the prestress transmission
                   expressed in days.
         '''
-        alpha1= 1.25
-        if(not suddenTransf): # slow prestressing transfer
-            alpha1= 1.0
-        alpha2= 1.0
-        if(not ELU): # Serviceability limit state.
-            alpha2= 0.5
-        alpha3= 0.5
-        if(self.reinfType=='wire'):
-            alpha3= 0.7
-        fbptdt= self.fpbd(concrete, t)
-        return alpha1*alpha2*alpha3*phi*sg_pi/4.0/fbptdt
+        return steel.getTransmissionLength(phi, concrete, steel, sg_pi, suddenRelease, ELU, t)
+
+
+    def lbpd(self, phi, concrete, sg_pi, suddenRelease= True, ELU= True, t= 28):
+        ''' Return the design anchorage length for the strand according
+            to the commentaries to the article 70.2.3 of EHE.
+
+        :param phi: nominal diameter of the wire, or prestressing strand.
+        :param concrete: concrete material.
+        :param sg_pi: tendon stress just after release.
+        :param sg_pd: tendon stress under design load.
+        :param sg_pcs: tendon stress due to prestress after all losses.
+        :param suddenRelease: if true, prestressing is transfered to concrete
+                              in a very short time.
+        :param ELU: true if ultimate limit state checking.
+        :param t: concrete age at themoment of the prestress transmission
+                  expressed in days.
+        '''
+        lbpt= self.lbtp(phi, concrete, sg_pi, suddenRelease, ELU, t)
     
 # Reinforced concrete section shear checking.
 def getFcvEH91(fcd):

@@ -18,12 +18,126 @@ from materials import concrete_base
 ReinforcedConcreteLimitStrainsEHE08= concrete_base.ReinforcedConcreteLimitStrains(EpsCU= -3.5e-3,EpsC0= -2.0e-3,SMaxStrain= 10e-3)
 
 
+class ReinforcingSteel(concrete_base.ReinforcingSteel):
+    ''' Reinforcing steel as defined in EHE-08.
+
+    '''
+    # Table 69.5.1.2.a of EHE-08
+    x= [25e6,30e6,35e6,40e6,45e6,50e6]
+    y400= [1.2,1.0,.9,.8,.7,.7]
+    y500= [1.5,1.3,1.2,1.1,1.0,1.0]
+    f400= scipy.interpolate.interp1d(x, y400)
+    f500= scipy.interpolate.interp1d(x, y500)
+    # Table 69.5.2.2 of EHE
+    alpha_ratios=[0.0,0.2,0.25,0.33,0.5,0.51,1.0]
+    alpha_leq_10phi= [1.0,1.2,1.4,1.6,1.8,2.0,2.0]
+    alpha_gt_10phi= [1.0,1.0,1.1,1.2,1.3,1.4,1.4]
+    f_alpha_leq_10phi= scipy.interpolate.interp1d(alpha_ratios,alpha_leq_10phi)
+    f_alpha_gt_10phi= scipy.interpolate.interp1d(alpha_ratios,alpha_gt_10phi)
+
+    def getM(self, concrete):
+        ''' Return the 'm' factor from table 69.5.1.2.a
+            of EHE-08.
+
+        :param concrete: concrete material.
+        ''' 
+        m400= float(self.f400(-concrete.fck))
+        m500= float(self.f500(-concrete.fck))
+        if(self.fyk==400e6):
+            retval= m400
+        elif(self.fyk==500e6):
+            retval= m500
+        else:
+            retval= (m400*(500e6-self.fyk)+m500*(self.fyk-400e6))/100e6
+        return retval
+
+    def getBasicAnchorageLength(self, concrete, phi, pos, dynamicEffects= False):
+        '''Returns basic anchorage length in tension according to clause
+           66.5.1.2 of EHE.
+
+        :param concrete: concrete material.
+        :param phi: nominal diameter of bar, wire, or prestressing strand.
+        :param pos: reinforcement position according to clause 66.5.1
+                   of EHE-08.
+        :param dynamicEffects: true if the anchorage is subjected to
+                               dynamic effects.
+        '''
+        retval= 60.0*phi
+        m= self.getM(concrete)
+        f= phi*1000.0
+        m_phi= m*f
+        if(pos=='I'):
+            retval= max(m_phi, self.fyk/20e6)*phi
+        elif(pos=='II'):
+            retval= max(1.4*m_phi,self.fyk/14e6)*phi
+        else:
+            lmsg.error('position must be I or II')
+        if(dynamicEffects):
+            retval+= 10*phi
+        return retval
+    
+    def getNetAnchorageLength(self ,concrete, phi, pos, beta= 1.0, efficiency= 1.0, tensionedBars= True, dynamicEffects= False):
+        '''Returns net anchorage length in tension according to clause
+           6.5.1.2 of EHE.
+
+        :param concrete: concrete material.
+        :param phi: nominal diameter of bar, wire, or prestressing strand.
+        :param pos: reinforcement position according to clause 66.5.1
+                   of EHE-08.
+        :param beta: reduction factor defined in Table 69.5.1.2.b.
+        :param efficiency: working stress of the reinforcement that it is 
+                           intended to anchor, on the most unfavourable 
+                           load hypothesis, in the section from which 
+                           the anchorage length will be determined divided
+                           by the steel design yield strength.
+        :param tensionedBars: true if the bars are in tension.
+        :param dynamicEffects: true if the anchorage is subjected to
+                               dynamic effects.
+        '''
+        lb= self.getBasicAnchorageLength(concrete, phi, pos, dynamicEffects)
+        retval= beta*efficiency*lb
+        retval= max(retval, 10.0*phi)
+        retval= max(retval, 0.15)
+        if(tensionedBars):
+            retval= max(retval,lb/3.0)
+        else:
+            retval= max(retval,2.0*lb/3.0)
+        return retval
+    
+    def getOverlapLength(self ,concrete, phi, pos, distBetweenNearestSplices, beta= 1.0, efficiency= 1.0, ratioOfOverlapedTensionBars= 1.0, tensionedBars= True, dynamicEffects= False):
+        '''Returns net anchorage length in tension according to clause
+           6.5.1.2 of EHE.
+
+        :param concrete: concrete material.
+        :param phi: nominal diameter of bar, wire, or prestressing strand.
+        :param pos: reinforcement position according to clause 66.5.1
+                   of EHE-08.
+        :param distBetweenNearestSplices: distance between the nearest splices
+                                          according to figure 69.5.2.2.a.
+        :param beta: reduction factor defined in Table 69.5.1.2.b.
+        :param efficiency: working stress of the reinforcement that it is 
+                           intended to anchor, on the most unfavourable 
+                           load hypothesis, in the section from which 
+                           the anchorage length will be determined divided
+                           by the steel design yield strength.
+        :param ratioOfOverlapedTensionBars: ratio of overlapped tension bars 
+                                            in relation to the total steel
+                                            section.
+        :param tensionedBars: true if the bars are in tension.
+        :param dynamicEffects: true if the anchorage is subjected to
+                               dynamic effects.
+        '''
+        retval= self.getNetAnchorageLength(concrete, phi, pos, beta, efficiency, tensionedBars, dynamicEffects)
+        if(distBetweenNearestSplices<10.0*phi):
+            alph= float(self.f_alpha_leq_10phi(ratioOfOverlapedTensionBars))
+        else:
+            alph= float(self.f_alpha_gt_10phi(ratioOfOverlapedTensionBars))
+        retval*= alph
+        return retval
+
 class EHEConcrete(concrete_base.Concrete):
     """ Concrete model according to EHE
     
-    :ivar nmbConcrete: name of the concrete
-    :ivar fck: characteristic strength [Pa]
-    :ivar gammaC: concrete partial safety factor
     :ivar typeAggregate: types of aggregate= 
             "cuarcita", "arenisca", "caliza normal", 
             "caliza densa", "volcanica porosa", 
@@ -33,9 +147,28 @@ class EHEConcrete(concrete_base.Concrete):
     """
 
     def __init__(self,nmbConcrete, fck, gammaC,typeAggregate='cuarcita'):
+        ''' Constructor.
+
+        :param nmbConcrete: name of the concrete
+        :param fck: characteristic strength [Pa]
+        :param gammaC: concrete partial safety factor
+        :param typeAggregate: types of aggregate= 
+                "cuarcita", "arenisca", "caliza normal", 
+                "caliza densa", "volcanica porosa", 
+                "volcanica normal", "granito", "diabasa" 
+                (defaults to 'cuarcita')
+        '''
         super(EHEConcrete,self).__init__(nmbConcrete,fck, gammaC)
-        self.typeAggregate=typeAggregate
-        
+        self.typeAggregate= typeAggregate
+
+    def getM(self, steel):
+        ''' Return the "m" coefficient according to table 66.5.1.2.a of
+            EHE-08
+
+        :param steel: reinforcing steel.
+        '''
+        return steel.getM(-self.fck)
+
     def getAlphaEcm(self):
         '''Correction coefficient to the longitudinal modulus of deformation 
         taking into account the type of aggregate.
@@ -57,7 +190,7 @@ class EHEConcrete(concrete_base.Concrete):
         elif self.typeAggregate=="diabasa":
             return 1.3
         else:
-            print('Error in type of aggregate (Possible choices: "cuarcita", "arenisca", "caliza normal", "caliza densa", "volcanica porosa", "volcanica normal", "granito", "diabasa").')
+            lmsg.error('Error in type of aggregate (Possible choices: "cuarcita", "arenisca", "caliza normal", "caliza densa", "volcanica porosa", "volcanica normal", "granito", "diabasa").')
             return 0.0
 
     def getEcm(self):
@@ -253,8 +386,8 @@ factorRTensionJDaysNormal= scipy.interpolate.interp1d(x,y)
 #   emax:     maximum strain in tension
 #   gammaS:   Partial factor for material.
 #   k:        fmaxk/fyk ratio
-B400S= concrete_base.ReinforcingSteel(steelName="B400S", fyk=400e6, emax=0.08,gammaS=1.15)
-B500S= concrete_base.ReinforcingSteel(steelName="B500S", fyk=500e6, emax=0.05,gammaS=1.15)
+B400S= ReinforcingSteel(steelName="B400S", fyk=400e6, emax=0.08,gammaS=1.15)
+B500S= ReinforcingSteel(steelName="B500S", fyk=500e6, emax=0.05,gammaS=1.15)
 
 steelOfName={"B400S":B400S,"B500S":B500S}
 # Bar areas in square meters.
@@ -274,16 +407,8 @@ Fi40=12.56e-4
 # Relaxation of steel according to EHE-08 (Artº 38.9)
 # and Model Code CEB-FIP 1990.
 
-class EHEPrestressingSteel(concrete_base.PrestressingSteel):
-    ''' Prestressing steel model according to EHE-08.
-
-       :param fpk: Elastic limit.
-       :param fmax: Steel strength.
-       :param alpha: stress-to-strength ratio.
-       :param steelRelaxationClass: Relaxation class 1: normal, 2: improved, 
-                                    and 3: relaxation for bars.
-       :param tendonClass: Tendon class wire, strand or bar.
-    '''
+class PrestressingSteel(concrete_base.PrestressingSteel):
+    ''' Prestressing steel model according to EHE-08. '''
     # Points from the table 38.7.a of EHE-08 to determine the 
     # relaxation at 1000 hours, used to estimate
     # the relaxation at times greater than 1000 hours.
@@ -293,6 +418,14 @@ class EHEPrestressingSteel(concrete_base.PrestressingSteel):
     #For bars:
     ptsRO1000Bars= scipy.interpolate.interp1d([0,.5,.6,.7,.8],[0,0,2,3,7])
 
+    # Table 70.2.3 of EHE
+    x= [25e6,30e6,35e6,40e6,45e6,50e6]
+    ## For strands
+    fpbdStrandValues= [1.4e6,1.6e6,1.8e6,1.9e6,2.1e6,2.2e6]
+    fpbdStrand= scipy.interpolate.interp1d(x, fpbdStrandValues)
+    ## For wires
+    fpbdWireValues= [1.6e6,1.8e6,2.0e6,2.2e6,2.4e6,2.6e6]
+    fpbdWire= scipy.interpolate.interp1d(x, fpbdWireValues)
 
     def __init__(self,steelName,fpk,fmax= 1860e6, alpha= 0.75, steelRelaxationClass= 1, tendonClass= 'strand', Es= 190e9):
         ''' Prestressing steel base class.
@@ -308,8 +441,82 @@ class EHEPrestressingSteel(concrete_base.PrestressingSteel):
            :param Es: elastic modulus.
         '''
     
-        super(EHEPrestressingSteel,self).__init__(steelName,fpk,fmax,alpha,steelRelaxationClass, tendonClass)
+        super(PrestressingSteel,self).__init__(steelName,fpk,fmax,alpha,steelRelaxationClass, tendonClass)
+        
+    def getDesignAdherenceStress(self, concrete, pos, t= 28):
+        ''' Return the design value of the adherence stress according
+            to the commentaries to the article 70.2.3 of EHE.
 
+        :param concrete: concrete material.
+        :param pos: reinforcement position according to clause 66.5.1
+                   of EHE-08.
+        :param t: concrete age at themoment of the prestress transmission
+                  expressed in days.
+        '''
+        retval= 0.0
+        if(t!=28):
+            lmsg.error('design value of the adherence stress for concrete age different of 28 days not implemented yet.')
+        if(self.tendonClass=='strand'):
+            retval= self.fpbdStrand(-concrete.fck)
+        elif(self.tendonClass=='wire'):
+            retval= self.fpbdWire(-concrete.fck)
+        else:
+            lmsg.error('prestressed reinforcement type: \''+str(self.tendonClass)+'\' unknown')
+        if(pos=='II'):
+            retval*= 0.7
+        return retval
+        
+    def getTransmissionLength(self, phi, concrete, pos, sg_pi, suddenRelease= True, ELU= True, t= 28):
+        ''' Return the length of transmission for the strand according
+            to the commentaries to the article 70.2.3 of EHE.
+
+        :param phi: nominal diameter of the wire, or prestressing strand.
+        :param concrete: concrete material.
+        :param pos: reinforcement position according to clause 66.5.1
+                   of EHE-08.
+        :param sg_pi: steel stress just after release.
+        :param suddenRelease: if true, prestressing is transfered to concrete
+                              in a very short time.
+        :param ELU: true if ultimate limit state checking.
+        :param t: concrete age at themoment of the prestress transmission
+                  expressed in days.
+        '''
+        alpha1= 1.25
+        if(not suddenRelease): # slow prestressing transfer
+            alpha1= 1.0
+        alpha2= 1.0
+        if(not ELU): # Serviceability limit state.
+            alpha2= 0.5
+        alpha3= 0.5 # strands
+        if(self.tendonClass=='wire'):
+            alpha3= 0.7 # indented of crimped wires
+        fbptdt= self.getDesignAdherenceStress(concrete, pos, t)
+        return alpha1*alpha2*alpha3*phi/4.0*sg_pi/fbptdt
+        
+    def getAnchorageLength(self, phi, concrete, pos, sg_pi, sg_pd, sg_pcs, suddenRelease= True, ELU= True, t= 28):
+        ''' Return the design anchorage length for the strand according
+            to the commentaries to the article 70.2.3 of EHE.
+
+        :param phi: nominal diameter of the wire, or prestressing strand.
+        :param concrete: concrete material.
+        :param pos: reinforcement position according to clause 66.5.1
+                   of EHE-08.
+        :param sg_pi: tendon stress just after release.
+        :param sg_pd: tendon stress under design load.
+        :param sg_pcs: tendon stress due to prestress after all losses.
+        :param suddenRelease: if true, prestressing is transfered to concrete
+                              in a very short time.
+        :param ELU: true if ultimate limit state checking.
+        :param t: concrete age at themoment of the prestress transmission
+                  expressed in days.
+        '''
+        lbpt= self.getTransmissionLength(phi, concrete, pos, sg_pi, suddenRelease, ELU, t)
+        alpha4= 0.8 # strands
+        if(self.tendonClass=='wire'):
+            alpha4= 1.0 # indented of crimped wires
+        fbptdt= self.getDesignAdherenceStress(concrete, pos, t)
+        return lbpt+alpha4*phi/4.0*(sg_pd-sg_pcs)/fbptdt
+        
     def getRO1000(self):
         '''
         Return the relaxation at 1000 hours after stressing (See table 38.9.a at EHE-08)
@@ -361,7 +568,7 @@ class EHEPrestressingSteel(concrete_base.PrestressingSteel):
         ROFINAL= 2.9e-2*self.getRelaxationT(1000/24.0)
         return initialStress*ROFINAL
 
-Y1860S7= EHEPrestressingSteel(steelName= "Y1860S7",fpk= 1171e6,fmax= 1860e6)
+Y1860S7= PrestressingSteel(steelName= "Y1860S7",fpk= 1171e6,fmax= 1860e6)
 
 def get_losses_wedge_penetration_short_straight_tendon(a, L, Ep):
     '''Losses due to wedge penetration in post-tensioned straight
@@ -387,7 +594,7 @@ def get_losses_elastic_shortening_concrete_in_tendons(sigma_cp, Ep, Ecj):
     '''
     return sigma_cp*Ep/Ecj
 
-class Y1860S7Strand(EHEPrestressingSteel):
+class Y1860S7Strand(PrestressingSteel):
     ''' Uncoated strand 7-Steel wire for prestressed concrete
         according to EN 0138 - 3: March 2011.
 
@@ -400,7 +607,7 @@ class Y1860S7Strand(EHEPrestressingSteel):
         :param diameter: strand diameter.
         :param area: cross sectional area.
         '''
-        super(Y1860S7Strand,self).__init__(steelName= "Y1860S7",fpk= 1171e6,fmax= 1860e6)
+        super(Y1860S7Strand,self).__init__(steelName= "Y1860S7",fpk= 1171e6,fmax= 1860e6, tendonClass= 'strand')
         self.diameter= diameter
         self.area= area
 

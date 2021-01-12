@@ -18,7 +18,7 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
-prestressingSteelEHE= EHE_materials.EHEPrestressingSteel('prestressingSteelEHE',fpk= 1171e6,fmax= 1860e6, alpha= 0.7,steelRelaxationClass=2, tendonClass= 'wire')
+prestressingSteelEHE= EHE_materials.PrestressingSteel('prestressingSteelEHE',fpk= 1171e6,fmax= 1860e6, alpha= 0.7,steelRelaxationClass=2, tendonClass= 'wire')
 
 prestressingSteelCEB= CEB_materials.CEBPrestressingSteel('prestressingSteelCEB',fpk= 1171e6,fmax= 1860e6, alpha= 0.7,steelRelaxationClass=2, tendonClass= 'wire')
 
