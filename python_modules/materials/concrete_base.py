@@ -1130,6 +1130,14 @@ class PrestressingSteel(matWDKD.MaterialWithDKDiagrams):
     
     def fpd(self):
       return self.fpk/self.gammaS
+
+    def getUltimateStress(self):
+        ''' Return steel ultimate stress.'''
+        return self.fmax
+  
+    def getDesignUltimateStress(self):
+        ''' Return steel design ultimate stress.'''
+        return self.fmax/self.gammaS
   
     def tInic(self):
       return self.alpha**2*self.fmax # Final presstressing (initial at 75 percent  and 25 percent of total losses).

@@ -467,7 +467,7 @@ class PrestressingSteel(concrete_base.PrestressingSteel):
         return retval
         
     def getTransmissionLength(self, phi, concrete, pos, sg_pi, suddenRelease= True, ELU= True, t= 28):
-        ''' Return the length of transmission for the strand according
+        ''' Return the length of transmission for the tendon according
             to the commentaries to the article 70.2.3 of EHE.
 
         :param phi: nominal diameter of the wire, or prestressing strand.
@@ -492,9 +492,29 @@ class PrestressingSteel(concrete_base.PrestressingSteel):
             alpha3= 0.7 # indented of crimped wires
         fbptdt= self.getDesignAdherenceStress(concrete, pos, t)
         return alpha1*alpha2*alpha3*phi/4.0*sg_pi/fbptdt
+
+    def get_anchorage_length(self, phi, lbpt, concrete, pos, sg_pd, sg_pcs, t):
+        ''' Return the design anchorage length for the tendon according
+            to the commentaries to the article 70.2.3 of EHE.
+
+        :param phi: nominal diameter of the wire, or prestressing strand.
+        :param lbpt: length of transmission for the tendon.
+        :param concrete: concrete material.
+        :param pos: reinforcement position according to clause 66.5.1
+                   of EHE-08.
+        :param sg_pi: tendon stress just after release.
+        :param sg_pd: tendon stress under design load.
+        :param t: concrete age at themoment of the prestress transmission
+                  expressed in days.
+        '''
+        alpha4= 0.8 # strands
+        if(self.tendonClass=='wire'):
+            alpha4= 1.0 # indented of crimped wires
+        fbptdt= self.getDesignAdherenceStress(concrete, pos, t)
+        return lbpt+alpha4*phi/4.0*(sg_pd-sg_pcs)/fbptdt
         
     def getAnchorageLength(self, phi, concrete, pos, sg_pi, sg_pd, sg_pcs, suddenRelease= True, ELU= True, t= 28):
-        ''' Return the design anchorage length for the strand according
+        ''' Return the design anchorage length for the tendon according
             to the commentaries to the article 70.2.3 of EHE.
 
         :param phi: nominal diameter of the wire, or prestressing strand.
@@ -511,11 +531,7 @@ class PrestressingSteel(concrete_base.PrestressingSteel):
                   expressed in days.
         '''
         lbpt= self.getTransmissionLength(phi, concrete, pos, sg_pi, suddenRelease, ELU, t)
-        alpha4= 0.8 # strands
-        if(self.tendonClass=='wire'):
-            alpha4= 1.0 # indented of crimped wires
-        fbptdt= self.getDesignAdherenceStress(concrete, pos, t)
-        return lbpt+alpha4*phi/4.0*(sg_pd-sg_pcs)/fbptdt
+        return self.get_anchorage_length(phi, lbpt, concrete, pos, sg_pd, sg_pcs, t)
         
     def getRO1000(self):
         '''
@@ -615,7 +631,6 @@ class Y1860S7Strand(PrestressingSteel):
         ''' Return the mass per meter of the strand.'''
         return self.area*7810.35496123245 # Adjusted value for steel density.
 
-
     def Fm(self):
         ''' Return the characteristic valu of maximum force.'''
         return self.area*self.fmax
@@ -627,7 +642,41 @@ class Y1860S7Strand(PrestressingSteel):
     def Fp(self):
         return 0.86*self.Fm()
 
+    def getTransmissionLength(self, concrete, pos, sg_pi, suddenRelease= True, ELU= True, t= 28):
+        ''' Return the length of transmission for the strand according
+            to the commentaries to the article 70.2.3 of EHE.
 
+        :param concrete: concrete material.
+        :param pos: reinforcement position according to clause 66.5.1
+                   of EHE-08.
+        :param sg_pi: steel stress just after release.
+        :param suddenRelease: if true, prestressing is transfered to concrete
+                              in a very short time.
+        :param ELU: true if ultimate limit state checking.
+        :param t: concrete age at themoment of the prestress transmission
+                  expressed in days.
+        '''
+        return super(Y1860S7Strand,self).getTransmissionLength(self.diameter, concrete, pos, sg_pi, suddenRelease, ELU, t)
+
+    def getAnchorageLength(self, concrete, pos, sg_pi, sg_pd, sg_pcs, suddenRelease= True, ELU= True, t= 28):
+        ''' Return the design anchorage length for the strand according
+            to the commentaries to the article 70.2.3 of EHE.
+
+        :param concrete: concrete material.
+        :param pos: reinforcement position according to clause 66.5.1
+                   of EHE-08.
+        :param sg_pi: tendon stress just after release.
+        :param sg_pd: tendon stress under design load.
+        :param sg_pcs: tendon stress due to prestress after all losses.
+        :param suddenRelease: if true, prestressing is transfered to concrete
+                              in a very short time.
+        :param ELU: true if ultimate limit state checking.
+        :param t: concrete age at themoment of the prestress transmission
+                  expressed in days.
+        '''
+        lbpt= self.getTransmissionLength(concrete, pos, sg_pi, suddenRelease, ELU, t)
+        return self.get_anchorage_length(self.diameter, lbpt, concrete, pos, sg_pd, sg_pcs, t)
+    
 # Strands mechanical properties.   
 Y1860S7Strand_6_9= Y1860S7Strand(diameter= 6.90e-3, area= 29.00e-6)
 Y1860S7Strand_7_0= Y1860S7Strand(diameter= 7.00e-3, area= 30.00e-6)

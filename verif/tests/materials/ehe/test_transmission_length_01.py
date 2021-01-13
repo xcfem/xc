@@ -20,14 +20,15 @@ concrete= EHE_materials.HP30
 strand= EHE_materials.Y1860S7Strand_9_3
 
 steelStressAtTransfer= 1080e6
-tendonStressUnderDesignLoad= 1617e6
+steelDesignUltimateStress= strand.getUltimateStress()
+tendonStressUnderDesignLoad= strand.getDesignUltimateStress()
 tendonStressAfterAllLosses= 872e6
 
-transmissionLength= strand.getTransmissionLength(phi= strand.diameter, concrete= concrete, pos= 'I', sg_pi= steelStressAtTransfer, suddenRelease= False, ELU= True, t= 28)
-anchorageLength= strand.getAnchorageLength(phi= strand.diameter, concrete= concrete, pos= 'I', sg_pi= steelStressAtTransfer, sg_pd= tendonStressUnderDesignLoad, sg_pcs= tendonStressAfterAllLosses, suddenRelease= True, ELU= True, t= 28)
+transmissionLength= strand.getTransmissionLength(concrete= concrete, pos= 'I', sg_pi= steelStressAtTransfer, suddenRelease= False, ELU= True, t= 28)
+anchorageLength= strand.getAnchorageLength(concrete= concrete, pos= 'I', sg_pi= steelStressAtTransfer, sg_pd= tendonStressUnderDesignLoad, sg_pcs= tendonStressAfterAllLosses, suddenRelease= True, ELU= True, t= 28)
 
 ratio1= abs(transmissionLength-0.7846875)/0.7846875
-ratio2= abs(anchorageLength-1.846921875)/1.846921875
+ratio2= abs(anchorageLength-1.8473767663)/1.8473767663
 
 '''
 print('transference length: ', transmissionLength, 'm')
