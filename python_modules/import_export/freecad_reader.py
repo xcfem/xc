@@ -46,6 +46,8 @@ def get_ifc_attributes(obj):
         mat= obj.Material
         if(mat):
             retval['Material']= str(mat.Label)
+    if(hasattr(obj,'IfcProperties')):
+        retval['IfcProperties']= obj.IfcProperties
     return retval
 
 class FreeCADImport(reader_base.ReaderBase):
@@ -183,7 +185,7 @@ class FreeCADImport(reader_base.ReaderBase):
                         # # groups
                         # if(lineName in self.entitiesGroups):
                         #     objLabels.extend(self.entitiesGroups[lineName])
-                        self.propertyDict[lineName]= bte.BlockProperties(labels= objLabels)
+                        self.propertyDict[lineName]= bte.BlockProperties(labels= objLabels, attributes= get_ifc_attributes(obj))
                     else:
                         lmsg.error('line too short: '+str(p1)+','+str(p2)+str(length))
 
