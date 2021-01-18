@@ -21,6 +21,8 @@
 //----------------------------------------------------------------------------
 //python_interface_lines.tcc
 
+XC::Pnt *(XC::Edge::*getP1)(void)= &XC::Edge::P1;
+XC::Pnt *(XC::Edge::*getP2)(void)= &XC::Edge::P2;
 XC::Node *(XC::Edge::*getFirstNodePtr)(void)= &XC::Edge::getFirstNode;
 XC::Node *(XC::Edge::*getLastNodePtr)(void)= &XC::Edge::getLastNode;
 class_<XC::Edge, XC::Edge*, bases<XC::EntMdlr>, boost::noncopyable >("Edge","Base class for one-dimensional geometry objects." ,no_init)
@@ -38,6 +40,8 @@ class_<XC::Edge, XC::Edge*, bases<XC::EntMdlr>, boost::noncopyable >("Edge","Bas
   .def("getCentroid", &XC::Edge::getCentroid,"Return the centroid of the edge.")
   .def("getTang", &XC::Edge::getTang, return_internal_reference<>(),"Return a vector tangent to the edge at parameter 0<=s<=L.")
   .def("divide",&XC::Edge::divide,"Create points along the line.")
+  .def("getP1",make_function(getP1, return_internal_reference<>()),"Return the start point of the edge")
+  .def("getP2",make_function(getP2, return_internal_reference<>()),"Return the end point of the edge")
   .def("getKPoints",&XC::Edge::getKPoints,"Return the tags of the edge end points.")
   .def("getTagsNodes",&XC::Edge::getTagsNodesForward,"Return node tags in forward order.")
   .def("getTagsNodesReverse",&XC::Edge::getTagsNodesReverse,"Return node tags in reverse order.")

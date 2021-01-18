@@ -54,8 +54,6 @@ class Edge: public EntMdlr
     std::set<const Face *> surfaces_line; //!< Surface neighbors (topology).
   protected:
     void insert_surf(Face *s);
-    virtual Pnt *P1(void);
-    virtual Pnt *P2(void);
     void create_nodes_on_endpoints(void);
   public:
     Edge(Preprocessor *m,const size_t &nd= 4);
@@ -66,6 +64,8 @@ class Edge: public EntMdlr
     //! @brief Return the object dimension (0, 1, 2 or 3).
     inline virtual unsigned short int GetDimension(void) const
       { return 1; }
+    virtual Pnt *P1(void);
+    virtual Pnt *P2(void);
     virtual const Pnt *P1(void) const;
     virtual const Pnt *P2(void) const;
     bool In(const GeomObj3d &, const double &tol= 0.0) const;

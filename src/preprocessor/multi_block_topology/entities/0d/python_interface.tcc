@@ -23,7 +23,8 @@
 
 XC::Node *(XC::Pnt::*getNodePnt)(void)= &XC::Pnt::getNode;
 class_<XC::Pnt, XC::Pnt *, bases<XC::EntMdlr>, boost::noncopyable >("Pnt", no_init)
-  .add_property("getPos", make_function(&XC::Pnt::GetPos, return_internal_reference<>() ),&XC::Pnt::setPos)
+  .add_property("getPos", make_function(&XC::Pnt::GetPos, return_internal_reference<>() ),&XC::Pnt::setPos,"TO DEPRECATE: return the position vector of the point.")
+  .add_property("pos", make_function(&XC::Pnt::GetPos, return_internal_reference<>() ),&XC::Pnt::setPos,"TO DEPRECATE: return the position vector of the point.")
   .def("getVectorPos", &XC::Pnt::VectorPos,"Return the position vector of the point.")
   .add_property("hasNode",&XC::Pnt::hasNode,"True if the point has a node.")
   .add_property("getTagNode",&XC::Pnt::getTagNode,"Returns node's tag.")

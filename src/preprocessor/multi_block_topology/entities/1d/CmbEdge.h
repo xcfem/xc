@@ -121,8 +121,6 @@ class CmbEdge: public Edge
   protected:
     virtual void create_line_nodes(void);
     void line_meshing(meshing_dir dm);
-    Pnt *P1(void);
-    Pnt *P2(void);
     void close(void); 
   public:
     CmbEdge(void);
@@ -161,6 +159,8 @@ class CmbEdge: public Edge
     virtual size_t getNumberOfVertices(void) const
       { return getNumberOfEdges()+1; }
 
+    Pnt *P1(void);
+    Pnt *P2(void);
     const Pnt *P1(void) const;
     const Pnt *P2(void) const;
 

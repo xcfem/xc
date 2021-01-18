@@ -44,17 +44,17 @@ class LineBase: public Edge
     Pnt *p1; //!< Back end.
     Pnt *p2; //!< Front end.
 
+    virtual bool check_points(void) const;
+  public:
+    LineBase(Preprocessor *m,const size_t &ndiv= 4);
+    LineBase(const std::string &name,Preprocessor *m,const size_t &ndiv= 4);
+    virtual bool operator==(const LineBase &) const;
     //! @brief Return pointer to back end.
     inline Pnt *P1(void)
       { return p1; }
     //! @brief Return pointer to front end.
     virtual Pnt *P2(void)
       { return p2; }
-    virtual bool check_points(void) const;
-  public:
-    LineBase(Preprocessor *m,const size_t &ndiv= 4);
-    LineBase(const std::string &name,Preprocessor *m,const size_t &ndiv= 4);
-    virtual bool operator==(const LineBase &) const;
     const Pnt *P1(void) const;
     const Pnt *P2(void) const;
 
