@@ -29,9 +29,8 @@ preprocessor=  feProblem.getPreprocessor
 nodes= preprocessor.getNodeHandler
 
 modelSpace= predefined_spaces.SolidMechanics2D(nodes)
-nodes.defaultTag= 1 #First node number.
-nod= nodes.newNodeXY(0.0,0.0)
-nod= nodes.newNodeXY(L,0.0)
+n1= nodes.newNodeXY(0.0,0.0)
+n2= nodes.newNodeXY(L,0.0)
 
 
 # Materials definition
@@ -41,8 +40,7 @@ prestressingSteel= typical_materials.defSteel02(preprocessor, "prestressingSteel
 elements= preprocessor.getElementHandler
 elements.defaultMaterial= prestressingSteel.name
 elements.dimElem= 2 # Dimension of element space
-elements.defaultTag= 1 #Tag for the next element.
-truss= elements.newElement("Truss",xc.ID([1,2]))
+truss= elements.newElement("Truss",xc.ID([n1.tag,n2.tag]))
 truss.sectionArea= A
 
     
@@ -50,12 +48,10 @@ truss.sectionArea= A
 constraints= preprocessor.getBoundaryCondHandler
 
 #
-spc= constraints.newSPConstraint(1,0,0.0)
-spc= constraints.newSPConstraint(1,1,0.0)
-spc= constraints.newSPConstraint(2,0,0.0)
-spc= constraints.newSPConstraint(2,1,0.0)
-
-    
+spc= constraints.newSPConstraint(n1.tag,0,0.0)
+spc= constraints.newSPConstraint(n1.tag,1,0.0)
+spc= constraints.newSPConstraint(n2.tag,0,0.0)
+spc= constraints.newSPConstraint(n2.tag,1,0.0)
 
 solu= feProblem.getSoluProc
 solCtrl= solu.getSoluControl
@@ -82,9 +78,8 @@ result= analysis.analyze(10)
 
 elements= preprocessor.getElementHandler
 
-elem1= elements.getElement(1)
-elem1.getResistingForce()
-ratio= (tInic*A-elem1.getN())/(tInic*A)
+truss.getResistingForce()
+ratio= (tInic*A-truss.getN())/(tInic*A)
 
 '''
 # print{"force= ",getN()
