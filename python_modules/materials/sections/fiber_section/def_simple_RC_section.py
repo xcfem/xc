@@ -62,7 +62,7 @@ class ReinfRow(object):
     :ivar nominalCover:  nominal cover (defaults to 0.03m)
     :ivar nominalLatCover: nominal lateral cover (only considered if nRebars is defined, defaults to 0.03)
     '''
-    def __init__(self,rebarsDiam=None,areaRebar= None,rebarsSpacing=None,nRebars=None,width=1.0,nominalCover=0.03,nominalLatCover=0.03):
+    def __init__(self, rebarsDiam=None, areaRebar= None, rebarsSpacing= None, nRebars= None, width= 1.0, nominalCover= 0.03, nominalLatCover= 0.03):
         ''' Constructor.
 
             :param rebarsDiam:    diameter of the bars (if omitted, the diameter is calculated from the rebar area) 
@@ -566,7 +566,7 @@ class RCRectangularSection(BasicRectangularRCSection):
     :ivar positvRebarRows: layers of main rebars in the local positive face of 
                            the section
     '''
-    def __init__(self,name= 'noName', sectionDescr= None, width=0.25,depth=0.25,concrType=None,reinfSteelType=None):
+    def __init__(self,name= 'noName', sectionDescr= None, width=0.25, depth=0.25, concrType= None, reinfSteelType= None):
         ''' Constructor.
 
         :param name: name of the section 
@@ -580,8 +580,8 @@ class RCRectangularSection(BasicRectangularRCSection):
 
         # Longitudinal reinforcement
         self.minCover= 0.0 
-        self.positvRebarRows= LongReinfLayers()  #list of ReinfRow data (positive face)
-        self.negatvRebarRows= LongReinfLayers() #list of ReinfRow data (negative face)
+        self.positvRebarRows= LongReinfLayers() # list of ReinfRow data (positive face)
+        self.negatvRebarRows= LongReinfLayers() # list of ReinfRow data (negative face)
 
     def getAsPos(self):
         '''returns the cross-sectional area of the rebars in the positive face.'''
@@ -616,8 +616,26 @@ class RCRectangularSection(BasicRectangularRCSection):
         return -self.h/2.0+self.getNegRowsCGcover()
 
     def getAc(self):
-        '''returns the cross-sectional area of the section'''
+        '''Returns the cross-sectional area of the section'''
         return self.b*self.h
+
+    def getAreaHomogenizedSection(self):
+        '''Return the area of the homogenized section.'''
+        retval= self.getAc()
+        n= self.getHomogenizationCoefficient()
+        retval+= n*(self.getAsNeg()+self.getAsPos())
+        return retval
+    
+    def hCOGHomogenizedSection(self):
+        '''Return distance from the bottom fiber to the 
+        centre of gravity of the homogenized section.
+        '''
+        retval= self.h/2.0*self.getAc()
+        n= self.getHomogenizationCoefficient()
+        retval+= self.getYAsPos()*n*self.getAsPos()
+        retval+= self.getYAsNeg()*n*self.getAsNeg()
+        retval/=self.getAreaHomogenizedSection()
+        return retval
     
     def getRoughVcuEstimation(self):
         '''returns a minimal value (normally shear strength will be greater)
@@ -630,6 +648,43 @@ class RCRectangularSection(BasicRectangularRCSection):
         the width '''
         return 1/12.0*self.b*self.h**3
 
+    def getIzHomogenizedSection(self):
+        '''returns the second moment of area about the axis parallel to 
+        the section width through the center of gravity'''
+        retval= 1/12.0*self.b*self.h**3
+        hCOGH= self.hCOGHomogenizedSection()
+        d= self.hCOG()-hCOGH
+        retval+= self.getAc()*d**2 # Steiner.
+        n= self.getHomogenizationCoefficient()
+        d= self.getYAsPos()-hCOGH
+        retval+= n*self.getAsPos()*d**2
+        d= self.getYAsNeg()-hCOGH
+        retval+= n*self.getAsNeg()*d**2
+        return retval
+    
+    def izHomogenizedSection(self):
+        '''Return the radius of gyration of the section around
+           the axis parallel to the section width that passes 
+           through section centroid.
+        '''
+        return math.sqrt(self.getIzHomogenizedSection()/self.getAreaHomogenizedSection())
+   
+    def getIyHomogenizedSection(self):
+        '''returns the second moment of area about the axis parallel to 
+        the section depth through the center of gravity'''
+        lmsg.error('getIyHomogenizedSection not implemented yet.')
+        # Need to compute the steel distribution along the z axis.
+        return self.getIy()
+    
+    def iyHomogenizedSection(self):
+        '''Return the radius of gyration of the section around
+           the axis parallel to the section depth that passes 
+           through section centroid.
+        '''
+        lmsg.error('iyHomogenizedSection not implemented yet.')
+        # Need to compute the steel distribution along the z axis.
+        return self.iy()
+    
     def getIz_RClocalZax(self):
         '''returns the second moment of area about the middle axis parallel to 
         the width (RClocalZaxis)'''
@@ -744,7 +799,10 @@ class RCRectangularSection(BasicRectangularRCSection):
     def getTorsionalThickness(self):
         '''Return the section thickness for torsion.'''
         return min(self.b,self.h)/2.0
-    
+
+    def getHomogenizationCoefficient(self):
+        '''Return the homogenization coefficient of the section.'''
+        return self.fiberSectionParameters.reinfSteelType.Es/self.fiberSectionParameters.concrType.Ecm()
     def getStressCalculator(self):
         Ec= self.fiberSectionParameters.concrType.Ecm()
         Es= self.fiberSectionParameters.reinfSteelType.Es
