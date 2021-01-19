@@ -565,6 +565,10 @@ python tests/materials/xc_materials/sections/fiber_section/membrane_plate/test_j
 python tests/materials/xc_materials/sections/fiber_section/membrane_plate/test_j2_plate_fibre_material_02.py
 python tests/materials/xc_materials/sections/fiber_section/membrane_plate/test_j2_plate_fibre_material_03.py
 echo "$BLEU" "  RC sections test." "$NORMAL"
+echo "$BLEU" "    concrete shapes tests." "$NORMAL"
+python tests/materials/concrete_shapes/test_mass_properties_rc_section.py
+echo "$BLEU" "    Misc. (EHE-08)." "$NORMAL"
+python tests/materials/ehe/test_concrete_corbel_ehe.py
 python tests/materials/ehe/test_Ecm_concrete.py
 python tests/materials/ehe/test_EHEconcrete.py
 python tests/materials/ehe/test_anchorage_length_01.py
@@ -589,8 +593,6 @@ python tests/materials/ehe/test_shear_stress_joints_02.py
 python tests/materials/ehe/test_fiber_section_shear_01.py
 python tests/materials/ehe/test_fiber_section_shear_02.py
 python tests/materials/ehe/test_fiber_section_shear_03.py
-echo "$BLEU" "    Misc. (EHE-08)." "$NORMAL"
-python tests/materials/ehe/test_concrete_corbel_ehe.py
 echo "$BLEU" "    EC2 tests." "$NORMAL"
 python tests/materials/ec2/test_EC2Concrete.py
 python tests/materials/ec2/test_EC2creep.py
