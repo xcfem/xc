@@ -47,122 +47,137 @@ class SectionProperties(object):
         raise "Abstract method, please override"
         return 0.0
     
+    def hCOG(self):
+        '''Return distance from the bottom fiber to the 
+        centre of gravity of the section.
+        '''
+        raise "Abstract method, please override"
+        return 0.0
+  
+    def bCOG(self):
+        '''Return distance from the leftmost fiber to the 
+        centre of gravity of the section.
+        '''
+        raise "Abstract method, please override"
+        return 0.0
+    
     def Iy(self):
-      '''second moment of area about the local y-axis (abstract method)'''
-      raise "Abstract method, please override"
-      return 0.0
+        '''second moment of area about the local y-axis (abstract method)'''
+        raise "Abstract method, please override"
+        return 0.0
   
     def iy(self):
-      '''Return the radius of gyration of the section around
-         the axis parallel to Z that passes through section centroid.
-      '''
-      return math.sqrt(self.Iy()/self.A())
+        '''Return the radius of gyration of the section around
+           the axis parallel to Z that passes through section centroid.
+        '''
+        return math.sqrt(self.Iy()/self.A())
+  
     def Iz(self):
-      '''second moment of area about the local z-axis (abstract method)'''
-      raise "Abstract method, please override"
-      return 0.0
+        '''second moment of area about the local z-axis (abstract method)'''
+        raise "Abstract method, please override"
+        return 0.0
   
     def iz(self):
-      '''Return the radius of gyration of the section around
-         the axis parallel to Z that passes through section centroid.
-      '''
-      return math.sqrt(self.Iz()/self.A())
+        '''Return the radius of gyration of the section around
+           the axis parallel to Z that passes through section centroid.
+        '''
+        return math.sqrt(self.Iz()/self.A())
   
     def J(self):
-      '''torsional constant of the section (abstract method)'''
-      raise "Abstract method, please override"
-      return 0.0
+        '''torsional constant of the section (abstract method)'''
+        raise "Abstract method, please override"
+        return 0.0
   
     def Wyel(self):
-      '''section modulus with respect to local y-axis (abstract method)'''
-      raise "Abstract method, please override"
-      return 0.0
+        '''section modulus with respect to local y-axis (abstract method)'''
+        raise "Abstract method, please override"
+        return 0.0
   
     def Wzel(self):
-      '''section modulus with respect to local z-axis (abstract method)'''
-      raise "Abstract method, please override"
-      return 0.0
+        '''section modulus with respect to local z-axis (abstract method)'''
+        raise "Abstract method, please override"
+        return 0.0
   
     def SteinerY(self,z):
-      '''Return the moment of inertia obtained by applying
-         the parallel axis theorem (or Huygens-Steiner theorem
-         or Steiner's theorem.
+        '''Return the moment of inertia obtained by applying
+           the parallel axis theorem (or Huygens-Steiner theorem
+           or Steiner's theorem.
 
-        :param pos: position of the original section centroid
-      '''
-      return self.Iy()+self.A()*z**2
+          :param pos: position of the original section centroid
+        '''
+        return self.Iy()+self.A()*z**2
   
     def SteinerZ(self,y):
-      '''Return the moment of inertia obtained by applying
-         the parallel axis theorem (or Huygens-Steiner theorem
-         or Steiner's theorem.
+        '''Return the moment of inertia obtained by applying
+           the parallel axis theorem (or Huygens-Steiner theorem
+           or Steiner's theorem.
 
-        :param pos: position of the original section centroid
-      '''
-      return self.Iz()+self.A()*y**2
+          :param pos: position of the original section centroid
+        '''
+        return self.Iz()+self.A()*y**2
   
     def Steiner(self,pos):
-      '''Return the moments of inertia obtained by applying
-         the parallel axis theorem (or Huygens-Steiner theorem
-         or Steiner's theorem.
+        '''Return the moments of inertia obtained by applying
+           the parallel axis theorem (or Huygens-Steiner theorem
+           or Steiner's theorem.
 
-        :param pos: position of the original section centroid
-      '''
-      y= pos.x
-      z= pos.y
-      A= self.A()
-      newIy= self.Iy()+A*z**2
-      newIz= self.Iz()+A*y**2
-      return newIy,newIz
+          :param pos: position of the original section centroid
+        '''
+        y= pos.x
+        z= pos.y
+        A= self.A()
+        newIy= self.Iy()+A*z**2
+        newIz= self.Iz()+A*y**2
+        return newIy,newIz
   
     def SteinerJ(self,pos):
-      '''Return the moments of inertia obtained by applying
-         the parallel axis theorem (or Huygens-Steiner theorem
-         or Steiner's theorem.
+        '''Return the moments of inertia obtained by applying
+           the parallel axis theorem (or Huygens-Steiner theorem
+           or Steiner's theorem.
 
-        :param pos: position of the original section centroid
-      '''
-      d2= pos.x**2+pos.y**2
-      A= self.A()
-      return self.J()+A*d2
+          :param pos: position of the original section centroid
+        '''
+        d2= pos.x**2+pos.y**2
+        A= self.A()
+        return self.J()+A*d2
   
     def getPlasticSectionModulusY(self):
-      '''Returns the plastic section modulus around Y axis.
+        '''Returns the plastic section modulus around Y axis.
 
-         Computes the plastic section modulus assuming that plastic neutral 
-         axis passes through section centroid (which is true whenever the 
-         rectangular section is homogeneous).
-      '''
-      lmsg.error('getPlasticSectionModulusY not implemented.')
-      return 0.0
+           Computes the plastic section modulus assuming that plastic neutral 
+           axis passes through section centroid (which is true whenever the 
+           rectangular section is homogeneous).
+        '''
+        lmsg.error('getPlasticSectionModulusY not implemented.')
+        return 0.0
   
     def getPlasticMomentY(self,fy):
-      '''Return section plastic moment around Y axis.
+        '''Return section plastic moment around Y axis.
 
-         Computes the plastic moment of the section assuming that plastic
-         neutral axis passes through section centroid (which is true
-         whenever the rectangular section is homogeneous).
-      '''
-      return 2*self.getPlasticSectionModulusY()*fy
+           Computes the plastic moment of the section assuming that plastic
+           neutral axis passes through section centroid (which is true
+           whenever the rectangular section is homogeneous).
+        '''
+        return 2*self.getPlasticSectionModulusY()*fy
   
     def getPlasticSectionModulusZ(self):
-      '''Returns the plastic section modulus around Z axis.
+        '''Returns the plastic section modulus around Z axis.
 
-         Computes the plastic section modulus assuming that plastic neutral 
-         axis passes through section centroid (which is true whenever the 
-         rectangular section is homogeneous).
-      '''
-      lmsg.error('getPlasticSectionModulusZ not implemented.')
-      return 0.0
+           Computes the plastic section modulus assuming that plastic neutral 
+           axis passes through section centroid (which is true whenever the 
+           rectangular section is homogeneous).
+        '''
+        lmsg.error('getPlasticSectionModulusZ not implemented.')
+        return 0.0
   
     def getPlasticMomentZ(self,fy):
-      '''Return section plastic moment around Z axis.
+        '''Return section plastic moment around Z axis.
 
-         Computes the plastic moment of the section assuming that plastic
-         neutral axis passes through section centroid (which is true
-         whenever the rectangular section is homogeneous).
-      '''
-      return 2*self.getPlasticSectionModulusZ()*fy
+           Computes the plastic moment of the section assuming that plastic
+           neutral axis passes through section centroid (which is true
+           whenever the rectangular section is homogeneous).
+        '''
+        return 2*self.getPlasticSectionModulusZ()*fy
   
     def respTName(self):
         ''' returns a name to identify the torsional response of the section'''
@@ -313,128 +328,141 @@ class RectangularSection(SectionProperties):
     betaTable= scipy.interpolate.interp1d(xBeta,yBeta)
 
     def __init__(self,name,b,h):
-      super(RectangularSection,self).__init__(name)
-      self.b= b
-      self.h= h
+        super(RectangularSection,self).__init__(name)
+        self.b= b
+        self.h= h
       
     def A(self):
-      '''Return cross-sectional area of the section'''
-      return self.b*self.h
+        '''Return cross-sectional area of the section'''
+        return self.b*self.h
+  
+    def hCOG(self):
+        '''Return distance from the bottom fiber to the 
+        centre of gravity of the section.
+        '''
+        return self.h/2.0
+  
+    def bCOG(self):
+        '''Return distance from the leftmost fiber to the 
+        centre of gravity of the section.
+        '''
+        return self.b/2.0
   
     def Iy(self):
-      '''Return second moment of area about the local y-axis'''
-      return 1/12.0*self.h*self.b**3
+        '''Return second moment of area about the local y-axis'''
+        return 1/12.0*self.h*self.b**3
+    
     def Iz(self):
-      '''Return second moment of area about the local z-axis'''
-      return 1/12.0*self.b*self.h**3
+        '''Return second moment of area about the local z-axis'''
+        return 1/12.0*self.b*self.h**3
   
     def J(self):
-      '''Return torsional constant of the section'''
-      return self.getJTorsion()
+        '''Return torsional constant of the section'''
+        return self.getJTorsion()
   
     def Wyel(self):
-      '''Return section modulus with respect to local y-axis'''
-      return self.Iy()/(self.b/2.0)
+        '''Return section modulus with respect to local y-axis'''
+        return self.Iy()/(self.b/2.0)
   
     def Wzel(self):
-      '''Return section modulus with respect to local z-axis'''
-      return self.Iz()/(self.h/2.0)
+        '''Return section modulus with respect to local z-axis'''
+        return self.Iz()/(self.h/2.0)
   
     def alphaY(self):
-      '''Return shear shape factor with respect to local y-axis'''
-      return 5.0/6.0 #Shear distortion constant. See E. Oñate book page 122.
+        '''Return shear shape factor with respect to local y-axis'''
+        return 5.0/6.0 #Shear distortion constant. See E. Oñate book page 122.
   
     def alphaZ(self):
-      '''Return shear shape factor with respect to local z-axis'''
-      return self.alphaY()
+        '''Return shear shape factor with respect to local z-axis'''
+        return self.alphaY()
   
     def getYieldMomentY(self,fy):
-      '''Return section yield moment.
+        '''Return section yield moment.
 
-         :param fy: material yield stress.
-      '''
-      return 2*fy/self.b*self.Iy()
+           :param fy: material yield stress.
+        '''
+        return 2*fy/self.b*self.Iy()
   
     def getElasticSectionModulusY(self):
-      '''Returns the plastic section modulus.
+        '''Returns the plastic section modulus.
 
-         Computes the plastic section modulus assuming that plastic neutral 
-         axis passes through section centroid (which is true whenever the 
-         rectangular section is homogeneous).
-      '''
-      return (self.b*self.h)*self.b/6.0
+           Computes the plastic section modulus assuming that plastic neutral 
+           axis passes through section centroid (which is true whenever the 
+           rectangular section is homogeneous).
+        '''
+        return (self.b*self.h)*self.b/6.0
   
     def getPlasticSectionModulusY(self):
-      '''Returns the plastic section modulus.
+        '''Returns the plastic section modulus.
 
-         Computes the plastic section modulus assuming that plastic neutral 
-         axis passes through section centroid (which is true whenever the 
-         rectangular section is homogeneous).
-      '''
-      return (self.b*self.h/2.0)*self.b/4.0
+           Computes the plastic section modulus assuming that plastic neutral 
+           axis passes through section centroid (which is true whenever the 
+           rectangular section is homogeneous).
+        '''
+        return (self.b*self.h/2.0)*self.b/4.0
   
     def getYieldMomentZ(self,fy):
-      '''Return section yield moment.
+        '''Return section yield moment.
 
-         :param fy: material yield stress.
-      '''
-      return 2*fy/self.h*self.Iz()
+           :param fy: material yield stress.
+        '''
+        return 2*fy/self.h*self.Iz()
   
     def getElasticSectionModulusZ(self):
-      '''Returns the plastic section modulus.
+        '''Returns the plastic section modulus.
 
-         Computes the plastic section modulus assuming that plastic neutral 
-         axis passes through section centroid (which is true whenever the 
-         rectangular section is homogeneous).
-      '''
-      return (self.b*self.h)*self.h/6.0
+           Computes the plastic section modulus assuming that plastic neutral 
+           axis passes through section centroid (which is true whenever the 
+           rectangular section is homogeneous).
+        '''
+        return (self.b*self.h)*self.h/6.0
   
     def getPlasticSectionModulusZ(self):
-      '''Returns the plastic section modulus.
+        '''Returns the plastic section modulus.
 
-         Computes the plastic section modulus assuming that plastic neutral 
-         axis passes through section centroid (which is true whenever the 
-         rectangular section is homogeneous).
-      '''
-      return (self.b*self.h/2.0)*self.h/4.0
+           Computes the plastic section modulus assuming that plastic neutral 
+           axis passes through section centroid (which is true whenever the 
+           rectangular section is homogeneous).
+        '''
+        return (self.b*self.h/2.0)*self.h/4.0
   
     def getAlphaTorsion(self):
-      '''Return alpha coefficient of the section.
+        '''Return alpha coefficient of the section.
 
-      Reference: concrete book Jiménez Montoya 14a. edition page 405
-      '''
-      retval= 0.0
-      if self.b<self.h:
-        retval= self.alphaTable(self.h/self.b)
-      else:
-        retval= self.alphaTable(self.b/self.h)
-      return retval
+        Reference: concrete book Jiménez Montoya 14a. edition page 405
+        '''
+        retval= 0.0
+        if self.b<self.h:
+            retval= self.alphaTable(self.h/self.b)
+        else:
+            retval= self.alphaTable(self.b/self.h)
+        return retval
   
     def getBetaTorsion(self):
-      '''Return beta coefficient of the section.
+        '''Return beta coefficient of the section.
 
-      Reference: concrete book Jiménez Montoya 14a. edition page 405
-      '''
-      retval= 0.0
-      if self.b<self.h:
-        retval= self.betaTable(self.h/self.b)
-      else:
-        retval= self.betaTable(self.b/self.h)
-      return retval
+        Reference: concrete book Jiménez Montoya 14a. edition page 405
+        '''
+        retval= 0.0
+        if self.b<self.h:
+            retval= self.betaTable(self.h/self.b)
+        else:
+            retval= self.betaTable(self.b/self.h)
+        return retval
   
     def getJTorsion(self):
-      '''Return torsional constant of the section.
+        '''Return torsional constant of the section.
 
-      Reference: concrete book Jiménez Montoya 14a. edition page 405
-      '''
-      alphaJT= self.getAlphaTorsion()
-      retval= 0.0
-      if self.b<self.h:
-          retval= alphaJT*pow(self.b,3)*self.h
-      else:
-          retval= alphaJT*self.b*pow(self.h,3)
-      retval*= self.torsionalStiffnessFactor
-      return retval
+        Reference: concrete book Jiménez Montoya 14a. edition page 405
+        '''
+        alphaJT= self.getAlphaTorsion()
+        retval= 0.0
+        if self.b<self.h:
+            retval= alphaJT*pow(self.b,3)*self.h
+        else:
+            retval= alphaJT*self.b*pow(self.h,3)
+        retval*= self.torsionalStiffnessFactor
+        return retval
   
     def getTorsionalStiffness(self, G):
         '''Return the torsional stiffness of the section.'''
@@ -449,20 +477,20 @@ class RectangularSection(SectionProperties):
         return 5.0/6.0*G*self.A()
     
     def getRegion(self,gm,nmbMat):
-      '''generation of a quadrilateral region from the section 
-      geometry (sizes and number of divisions for the cells)
-      made of the specified material
+        '''generation of a quadrilateral region from the section 
+        geometry (sizes and number of divisions for the cells)
+        made of the specified material
 
-      :param gm: object of type section_geometry
-      :param nmbMat: name of the material (string)
-      '''
-      regions= gm.getRegions
-      reg= regions.newQuadRegion(nmbMat)
-      reg.nDivIJ= self.nDivIJ
-      reg.nDivJK= self.nDivJK
-      reg.pMin= geom.Pos2d(-self.h/2.0,-self.b/2.0)
-      reg.pMax= geom.Pos2d(self.h/2.0,self.b/2.0)
-      return reg
+        :param gm: object of type section_geometry
+        :param nmbMat: name of the material (string)
+        '''
+        regions= gm.getRegions
+        reg= regions.newQuadRegion(nmbMat)
+        reg.nDivIJ= self.nDivIJ
+        reg.nDivJK= self.nDivJK
+        reg.pMin= geom.Pos2d(-self.h/2.0,-self.b/2.0)
+        reg.pMax= geom.Pos2d(self.h/2.0,self.b/2.0)
+        return reg
 
 class CircularSection(SectionProperties):
     '''Geometric parameters of a circular or circular hollow section
@@ -543,49 +571,47 @@ class GenericSection(SectionProperties):
     :ivar alphZ:        shear shape factor with respect to local z-axis
     '''
     def __init__(self,name,area,I_y,I_z,Jtors,W_y,W_z,alphY,alphZ):
-      super(GenericSection,self).__init__(name)
-      self.area=area
-      self.I_y=I_y
-      self.I_z=I_z
-      self.Jtors=Jtors
-      self.W_y=W_y
-      self.W_z=W_z
-      self.alphY=alphY
-      self.alphZ=alphZ
+        super(GenericSection,self).__init__(name)
+        self.area=area
+        self.I_y=I_y
+        self.I_z=I_z
+        self.Jtors=Jtors
+        self.W_y=W_y
+        self.W_z=W_z
+        self.alphY=alphY
+        self.alphZ=alphZ
       
     def A(self):
-      '''Return cross-sectional area'''
-      return self.area
+        '''Return cross-sectional area'''
+        return self.area
   
     def Iy(self):
-      '''Return second moment of area about the local y-axis'''
-      return self.I_y
+        '''Return second moment of area about the local y-axis'''
+        return self.I_y
   
     def Iz(self):
-      '''Return second moment of area about the local z-axis'''
-      return self.I_z
+        '''Return second moment of area about the local z-axis'''
+        return self.I_z
   
     def J(self):
-      '''Return torsional constant of the section'''
-      return self.Jtors*self.torsionalStiffnessFactor
+        '''Return torsional constant of the section'''
+        return self.Jtors*self.torsionalStiffnessFactor
   
     def Wyel(self):
-      '''Return section modulus with respect to local y-axis'''
-      return self.W_y
+        '''Return section modulus with respect to local y-axis'''
+        return self.W_y
   
     def Wzel(self):
-      '''Return section modulus with respect to local z-axis'''
-      return self.W_z
+        '''Return section modulus with respect to local z-axis'''
+        return self.W_z
   
     def alphaY(self):
-      '''Return shear shape factor with respect to local y-axis'''
-      return self.alphY #Shear distortion constant. See E. Oñate book page 122.
+        '''Return shear shape factor with respect to local y-axis'''
+        return self.alphY #Shear distortion constant. See E. Oñate book page 122.
   
     def alphaZ(self):
-      '''Return shear shape factor with respect to local z-axis'''
-      return self.alphZ
-
-
+        '''Return shear shape factor with respect to local z-axis'''
+        return self.alphZ
 
 class ISection(SectionProperties):
     '''I section geometric parameters
@@ -612,93 +638,93 @@ class ISection(SectionProperties):
       #      wdBotFlange
 
     def __init__(self,name,wdTopFlange,thTopFlange,thWeb,hgWeb,wdBotFlange,thBotFlange):
-      super(ISection,self).__init__(name)
-      self.wTF= wdTopFlange
-      self.tTF= thTopFlange
-      self.tW=thWeb
-      self.hW=hgWeb
-      self.wBF= wdBotFlange
-      self.tBF= thBotFlange
+        super(ISection,self).__init__(name)
+        self.wTF= wdTopFlange
+        self.tTF= thTopFlange
+        self.tW=thWeb
+        self.hW=hgWeb
+        self.wBF= wdBotFlange
+        self.tBF= thBotFlange
       
     def hTotal(self):
-      '''Return total height (parallel to local y axis) of the section
-      '''
-      retval=self.tTF+self.hW+self.tBF
-      return retval
+        '''Return total height (parallel to local y axis) of the section
+        '''
+        retval=self.tTF+self.hW+self.tBF
+        return retval
   
     def A(self):
-      '''Return cross-sectional area of the section'''
-      retval=self.wTF*self.tTF+self.tW*self.hW+self.wBF*self.tBF
-      return retval
+        '''Return cross-sectional area of the section'''
+        retval=self.wTF*self.tTF+self.tW*self.hW+self.wBF*self.tBF
+        return retval
   
     def hCOG(self):
-      '''Return distance from the bottom fiber of the inferior flange to the 
-      centre of gravity of the section
-      '''
-      ATF=self.wTF*self.tTF
-      AW=self.tW*self.hW
-      ABF=self.wBF*self.tBF
-      retval=(ATF*(self.hTotal()-self.tTF/2.0)+AW*(self.tBF+self.hW/2.0)+ABF*self.tBF/2.0)/self.A()
-      return retval
+        '''Return distance from the bottom fiber of the inferior flange to the 
+        centre of gravity of the section.
+        '''
+        ATF=self.wTF*self.tTF
+        AW=self.tW*self.hW
+        ABF=self.wBF*self.tBF
+        retval=(ATF*(self.hTotal()-self.tTF/2.0)+AW*(self.tBF+self.hW/2.0)+ABF*self.tBF/2.0)/self.A()
+        return retval
   
     def Iy(self):
-      '''Return second moment of area about the local y-axis
-      '''
-      retval=1/12.0*self.tTF*self.wTF**3+1/12.0*self.hW*self.tW**3+1/12.0*self.tBF*self.wBF**3
-      return retval
+        '''Return second moment of area about the local y-axis
+        '''
+        retval=1/12.0*self.tTF*self.wTF**3+1/12.0*self.hW*self.tW**3+1/12.0*self.tBF*self.wBF**3
+        return retval
   
     def Iz(self):
-      '''Return second moment of area about the local z-axis
-      '''
-      ATF=self.wTF*self.tTF
-      AW=self.tW*self.hW
-      ABF=self.wBF*self.tBF
-      ITF=1/12.0*self.wTF*self.tTF**3
-      IW=1/12.0*self.tW*self.hW**3
-      IBF=1/12.0*self.wBF*self.tBF**3
-      retval1=ITF+ATF*(self.hTotal()-self.tTF/2.0-self.hCOG())**2
-      retval=retval1+IW+AW*(self.tBF+self.hW/2-self.hCOG())**2+IBF+ABF*(self.tBF/2.0-self.hCOG())**2
-      return retval
+        '''Return second moment of area about the local z-axis
+        '''
+        ATF=self.wTF*self.tTF
+        AW=self.tW*self.hW
+        ABF=self.wBF*self.tBF
+        ITF=1/12.0*self.wTF*self.tTF**3
+        IW=1/12.0*self.tW*self.hW**3
+        IBF=1/12.0*self.wBF*self.tBF**3
+        retval1=ITF+ATF*(self.hTotal()-self.tTF/2.0-self.hCOG())**2
+        retval=retval1+IW+AW*(self.tBF+self.hW/2-self.hCOG())**2+IBF+ABF*(self.tBF/2.0-self.hCOG())**2
+        return retval
   
     def J(self):
-      '''Return torsional constant of the section'''
-      hPrf=self.hTotal()-self.tTF/2.0-self.tBF/2.0
-      retval=(self.wTF*self.tTF**3+self.wBF*self.tBF**3+hPrf*self.tW**3)/3.0
-      retval*= self.torsionalStiffnessFactor
-      return retval
+        '''Return torsional constant of the section'''
+        hPrf=self.hTotal()-self.tTF/2.0-self.tBF/2.0
+        retval=(self.wTF*self.tTF**3+self.wBF*self.tBF**3+hPrf*self.tW**3)/3.0
+        retval*= self.torsionalStiffnessFactor
+        return retval
   
     def Wyel(self):
-      '''Return section modulus with respect to local y-axis'''
-      zmax=max(self.wTF/2.0,self.wBF/2.0)
-      return self.Iy()/zmax
+        '''Return section modulus with respect to local y-axis'''
+        zmax=max(self.wTF/2.0,self.wBF/2.0)
+        return self.Iy()/zmax
   
     def Wzel(self):
-      '''Return section modulus with respect to local z-axis'''
-      ymax=max(self.hCOG(),self.hTotal()-self.hCOG())
-      return self.Iz()/ymax
+        '''Return section modulus with respect to local z-axis'''
+        ymax=max(self.hCOG(),self.hTotal()-self.hCOG())
+        return self.Iz()/ymax
   
     def Wxel(self):
-      ''' Return torsional section modulus of the section.
+        ''' Return torsional section modulus of the section.
 
-      reference: article «I Beam» of Wikipedia.
-      '''
-      return self.J()/max(max(self.tTF,self.tBF),self.tW)
+        reference: article «I Beam» of Wikipedia.
+        '''
+        return self.J()/max(max(self.tTF,self.tBF),self.tW)
   
     def alphaY(self):
-      '''Return shear shape factor with respect to local y-axis'''
-      return 0.32 #Shear distortion constant. See E. Oñate book page 122.
+        '''Return shear shape factor with respect to local y-axis'''
+        return 0.32 #Shear distortion constant. See E. Oñate book page 122.
   
     def alphaZ(self):
-      '''Return shear shape factor with respect to local z-axis'''
-      return 0.69
+        '''Return shear shape factor with respect to local z-axis'''
+        return 0.69
   
     def getWarpingMoment(self):
-      '''Return warping moment of a I-section
+        '''Return warping moment of a I-section
 
-      reference: article «I Beam» of Wikipedia.
-      '''
-      hPrf=self.hTotal()-self.tTF/2.0-self.tBF/2.0
-      return (self.tTF+self.tBF)/2.0*hPrf**2/12*self.wTF**3*self.wBF**3/(self.wTF**3+self.wBF**3)
+        reference: article «I Beam» of Wikipedia.
+        '''
+        hPrf=self.hTotal()-self.tTF/2.0-self.tBF/2.0
+        return (self.tTF+self.tBF)/2.0*hPrf**2/12*self.wTF**3*self.wBF**3/(self.wTF**3+self.wBF**3)
 
 class PolygonalSection(SectionProperties):
     '''Polygonal section geometric parameters
