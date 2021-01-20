@@ -32,6 +32,8 @@
 #include "preprocessor/multi_block_topology/matrices/ElemPtrArray3d.h"
 #include "preprocessor/set_mgmt/SetEstruct.h"
 
+#include "xc_utils/src/geom/pos_vec/Pos2d.h"
+#include "xc_utils/src/geom/pos_vec/Vector2d.h"
 #include "xc_utils/src/geom/pos_vec/Pos3d.h"
 #include "xc_utils/src/geom/pos_vec/Vector3d.h"
 #include "xc_utils/src/geom/coo_sys/Rect3d3dCooSys.h"
@@ -439,10 +441,23 @@ XC::ElemPtrArray3d XC::Element0D::sew(const SetEstruct &f1,const SetEstruct &f2)
       }
     if(dimf1>1)
       {
-	std::cerr << "Sewing in 2 or 3 dimensions not implemented." << std::endl;
+	std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; sewing in 2 or 3 dimensions not implemented." << std::endl;
       }
     return retval;
   }
+
+//! @brief Return the projection of the argument on the element.
+//! @param p: position to project.
+//! @param initialGeometry: if true use undeformed element geometry.
+Pos2d XC::Element0D::getProjection(const Pos2d &p,bool initialGeometry) const
+  { return getCenterOfMassPosition(initialGeometry).XY2DProjection(); }
+  
+//! @brief Return the projection of the argument on the element.
+//! @param p: position to project.
+//! @param initialGeometry: if true use undeformed element geometry.
+Pos3d XC::Element0D::getProjection(const Pos3d &p,bool initialGeometry) const
+  { return getCenterOfMassPosition(initialGeometry); }
 
 //! @brief Send members through the communicator argument.
 int XC::Element0D::sendData(Communicator &comm)

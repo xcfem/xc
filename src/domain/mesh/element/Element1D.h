@@ -82,6 +82,8 @@ class Element1D: public ElementBase<2>
     double getDist(const Pos2d &p,bool initialGeometry= true) const;
     double getDist2(const Pos3d &p,bool initialGeometry= true) const;
     double getDist(const Pos3d &p,bool initialGeometry= true) const;
+    Pos2d getProjection(const Pos2d &p,bool initialGeometry= true) const;
+    Pos3d getProjection(const Pos3d &p,bool initialGeometry= true) const;
 
     size_t getDimension(void) const;
     double getLength(bool initialGeometry= true) const;

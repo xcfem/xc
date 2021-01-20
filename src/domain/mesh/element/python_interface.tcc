@@ -29,6 +29,8 @@
 #include "utils/physical_properties/python_interface.tcc"
 #include "domain/mesh/element/utils/python_interface.tcc"
 
+Pos2d (XC::Element::*getProjection2D)(const Pos2d &,bool) const= &XC::Element::getProjection;
+Pos3d (XC::Element::*getProjection3D)(const Pos3d &,bool) const= &XC::Element::getProjection;
 XC::NodePtrsWithIDs &(XC::Element::*getNodePtrsRef)(void)= &XC::Element::getNodePtrs;
 const XC::Vector &(XC::Element::*getResistingForceRef)(void) const= &XC::Element::getResistingForce;
 const XC::Matrix &(XC::Element::*getInitialStiffRef)(void) const= &XC::Element::getInitialStiff;
@@ -66,6 +68,8 @@ class_<XC::Element, XC::Element *,bases<XC::MeshComponent>, boost::noncopyable >
   .def("getDist2",getDist2Pos3d,"Return the squared distance from the point to this element.")
   .def("getDist",getDistPos2d,"Return the distance from the point to this element.")
   .def("getDist2",getDist2Pos2d,"Return the squared distance from the point to this element.")
+  .def("getProjection", getProjection2D, "Return the projection of the argument on the element.")
+  .def("getProjection", getProjection3D, "Return the projection of the argument on the element.")
 
   .def("resetTributaries",&XC::Element::resetTributaries)
   .def("dumpTributaries",&XC::Element::dumpTributaries)

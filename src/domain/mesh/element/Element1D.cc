@@ -741,6 +741,24 @@ Segment3d XC::Element1D::getLineSegment(bool initialGeometry) const
       return Segment3d(theNodes[0]->getCurrentPosition3d(),theNodes[1]->getCurrentPosition3d());
   }
 
+//! @brief Return the projection of the argument on the element.
+//! @param p: position to project.
+//! @param initialGeometry: if true use undeformed element geometry.
+Pos2d XC::Element1D::getProjection(const Pos2d &p,bool initialGeometry) const
+  {
+    const Pos3d tmp(getProjection(Pos3d(p.x(),p.y(),0.0)));
+    return tmp.XY2DProjection();
+  }
+  
+//! @brief Return the projection of the argument on the element.
+//! @param p: position to project.
+//! @param initialGeometry: if true use undeformed element geometry.
+Pos3d XC::Element1D::getProjection(const Pos3d &p,bool initialGeometry) const
+  {
+    const Segment3d sg= getLineSegment(initialGeometry);
+    return sg.Projection(p);
+  }
+
 //! @brief Return the segment defined by the element.
 double XC::Element1D::getLength(bool initialGeometry) const
   {

@@ -83,6 +83,8 @@ class Element0D: public ElementBase<2>
     Rect3d3dCooSys getCooSys(bool) const;    
     inline virtual const Matrix &getTransformation(void) const
       { return transformation; }
+    Pos2d getProjection(const Pos2d &p,bool initialGeometry= true) const;
+    Pos3d getProjection(const Pos3d &p,bool initialGeometry= true) const;
     
     inline virtual const Matrix &getExtrapolationMatrix(void) const
       { return extrapolation_matrix; }

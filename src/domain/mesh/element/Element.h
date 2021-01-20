@@ -276,7 +276,9 @@ class Element: public MeshComponent
     virtual double getDist(const Pos2d &p,bool initialGeometry= true) const;
     virtual double getDist2(const Pos3d &p,bool initialGeometry= true) const;
     virtual double getDist(const Pos3d &p,bool initialGeometry= true) const;
-
+    virtual Pos2d getProjection(const Pos2d &p,bool initialGeometry= true) const;
+    virtual Pos3d getProjection(const Pos3d &p,bool initialGeometry= true) const;
+    
     void resetTributaries(void) const;
     void dumpTributaries(const std::vector<double> &) const;
     virtual void computeTributaryLengths(bool initialGeometry= true) const;

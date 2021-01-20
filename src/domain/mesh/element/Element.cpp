@@ -1107,12 +1107,34 @@ double XC::Element::getDist(const Pos3d &p,bool initialGeometry) const
     return 0.0;
   }
 
+//! @brief Return the projection of the argument on the element.
+//! @param p: position to project.
+//! @param initialGeometry: if true use undeformed element geometry.
+Pos2d XC::Element::getProjection(const Pos2d &p,bool initialGeometry) const
+  {
+    Pos2d retval;
+    std::cerr << getClassName() << "::" << __FUNCTION__
+              << " is not implemented." << std::endl;
+    return retval;
+  }
+  
+//! @brief Return the projection of the argument on the element.
+//! @param p: position to project.
+//! @param initialGeometry: if true use undeformed element geometry.
+Pos3d XC::Element::getProjection(const Pos3d &p,bool initialGeometry) const
+  {
+    Pos3d retval;
+    std::cerr << getClassName() << "::" << __FUNCTION__
+              << " is not implemented." << std::endl;
+    return retval;
+  }
+
 //! @brief Returns the coordinates del center of gravity of the element.
 Pos3d XC::Element::getCenterOfMassPosition(bool initialGeometry) const
   {
+    Pos3d retval;
     std::cerr << getClassName() << "::" << __FUNCTION__
               << " is not implemented." << std::endl;
-    static Pos3d retval;
     return retval;
   }
 

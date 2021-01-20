@@ -61,6 +61,8 @@ class PlaneElement: public ElemWithMaterial<NNODES, PhysProp>
     virtual void checkElem(void);
     void setDomain(Domain *theDomain);
 
+    std::deque<Pos3d> getNodePositions(bool initialGeometry= true) const;
+    Plane getPlane(bool initialGeometry= true) const;
     virtual Polygon3d getPolygon(bool initialGeometry= true) const;
     bool clockwise(const Pos3d &, bool initialGeometry= true) const;
     bool counterclockwise(const Pos3d &, bool initialGeometry= true) const;
@@ -79,6 +81,8 @@ class PlaneElement: public ElemWithMaterial<NNODES, PhysProp>
     double getDist(const Pos2d &p,bool initialGeometry= true) const;
     double getDist2(const Pos3d &p,bool initialGeometry= true) const;
     double getDist(const Pos3d &p,bool initialGeometry= true) const;
+    Pos2d getProjection(const Pos2d &p,bool initialGeometry= true) const;
+    Pos3d getProjection(const Pos3d &p,bool initialGeometry= true) const;
 
     size_t getDimension(void) const;
 
@@ -208,44 +212,53 @@ double XC::PlaneElement<NNODES, PhysProp>::getTributaryArea(const Node *nod) con
 template <int NNODES,class PhysProp>
 double XC::PlaneElement<NNODES, PhysProp>::getMaximumCornerAngle(bool initialGeometry) const
   {
-    const std::deque<Pos3d> positions= this->getPosNodes(initialGeometry);
-    // Filter collapsed sides:
-    std::deque<Pos3d>::const_iterator i= positions.begin();
-    Pos3d p0= (*i); i++;
-    std::deque<Pos3d> tmp;
-    tmp.push_back(p0);
-    for(;i!= positions.end();i++)
+    const std::deque<Pos3d> positions= getNodePositions(initialGeometry);
+    return getMaxCornerAngle(positions.begin(),positions.end());
+  }
+  
+//! @brief Returns the positions of the element nodes
+//! (without duplicates corresponding to degenerated elements).
+//! @tparam NNODES number of nodes.
+//! @tparam PhysProp material properties.
+template <int NNODES,class PhysProp>
+std::deque<Pos3d> XC::PlaneElement<NNODES, PhysProp>::getNodePositions(bool initialGeometry) const
+  {
+    const std::deque<Pos3d> tmp= this->getPosNodes(initialGeometry);
+    // Filter collapsed sides.
+    std::deque<Pos3d> retval;
+    std::deque<Pos3d>::const_iterator i= tmp.begin();
+    Pos3d p0= *i;
+    i++;
+    retval.push_back(p0);
+    for(;i!= tmp.end();i++)
       {
-	Pos3d p1= (*i);
-	if(p1!=p0)
-	  tmp.push_back(p1);
+	Pos3d p1= *i;
+	if(dist2(p0,p1)>1e-12)
+	  retval.push_back(p1);
 	p0= p1;
       }
-    return getMaxCornerAngle(tmp.begin(),tmp.end());
+    // Repeated nodes removed (if any).
+    return retval;
   }
 
+//! @brief Returns the plane that contains the element.
+//! @tparam NNODES number of nodes.
+//! @tparam PhysProp material properties.
+template <int NNODES,class PhysProp>
+Plane XC::PlaneElement<NNODES, PhysProp>::getPlane(bool initialGeometry) const
+  {
+    const std::deque<Pos3d> positions= getNodePositions(initialGeometry);
+    return Plane(positions.begin(),positions.end());
+  }
+  
 //! @brief Returns the element contour as a polygon.
 //! @tparam NNODES number of nodes.
 //! @tparam PhysProp material properties.
 template <int NNODES,class PhysProp>
 Polygon3d XC::PlaneElement<NNODES, PhysProp>::getPolygon(bool initialGeometry) const
   {
-    const std::deque<Pos3d> tmp= this->getPosNodes(initialGeometry);
-    // Remove repeated positions (degenerated elements).
-    std::deque<Pos3d> positions;
-    std::deque<Pos3d>::const_iterator i= tmp.begin();
-    Pos3d p0= *i;
-    i++;
-    positions.push_back(p0);
-    for(;i!= tmp.end();i++)
-      {
-	Pos3d p1= *i;
-	if(dist2(p0,p1)>1e-12)
-	  positions.push_back(p1);
-	p0= p1;
-      }
-    // Repeated nodes removed (if any).
-    Polygon3d retval= Polygon3d(positions.begin(),positions.end());
+    const std::deque<Pos3d> positions= getNodePositions(initialGeometry);
+    Polygon3d retval(positions.begin(),positions.end());
     const double maxAngle= getMaximumCornerAngle();
     if((PlaneElement<NNODES, PhysProp>::verbosity>1) && (abs(maxAngle-M_PI)<1e-3))
       {
@@ -260,6 +273,26 @@ Polygon3d XC::PlaneElement<NNODES, PhysProp>::getPolygon(bool initialGeometry) c
     return retval;
   }
 
+//! @brief Return the projection of the argument on the element.
+//! @param p: position to project.
+//! @param initialGeometry: if true use undeformed element geometry.
+template <int NNODES,class PhysProp>
+Pos2d XC::PlaneElement<NNODES, PhysProp>::getProjection(const Pos2d &p,bool initialGeometry) const
+  {
+    const Pos3d tmp(getProjection(Pos3d(p.x(),p.y(),0.0)));
+    return tmp.XY2DProjection();    
+  }
+
+//! @brief Return the projection of the argument on the element.
+//! @param p: position to project.
+//! @param initialGeometry: if true use undeformed element geometry.
+template <int NNODES,class PhysProp>
+Pos3d XC::PlaneElement<NNODES, PhysProp>::getProjection(const Pos3d &p,bool initialGeometry) const
+  {
+    const Plane plane= getPlane(initialGeometry);
+    return plane.Projection(p);
+  }
+  
 //! @brief Return true if the nodes are clockwise ordered
 //! with respect to the element.
 //! @tparam NNODES number of nodes.
