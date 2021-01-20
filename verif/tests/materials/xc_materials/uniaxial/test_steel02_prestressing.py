@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
+'''Home made test
+steel02 material presstressing.
+'''
+
 from __future__ import print_function
-# home made test
-# steel02 material presstressing.
 
 L= 1.0 # Bar length (m)
 E= 190e9 # Elastic modulus expressed in MPa
@@ -16,6 +18,7 @@ import geom
 import xc
 from model import predefined_spaces
 from materials import typical_materials
+from solution import predefined_solutions
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
 __copyright__= "Copyright 2015, LCPT and AOO"
@@ -53,28 +56,8 @@ spc= constraints.newSPConstraint(n1.tag,1,0.0)
 spc= constraints.newSPConstraint(n2.tag,0,0.0)
 spc= constraints.newSPConstraint(n2.tag,1,0.0)
 
-solu= feProblem.getSoluProc
-solCtrl= solu.getSoluControl
-solModels= solCtrl.getModelWrapperContainer
-sm= solModels.newModelWrapper("sm")
-numberer= sm.newNumberer("default_numberer")
-numberer.useAlgorithm("rcm")
-cHandler= sm.newConstraintHandler("penalty_constraint_handler")
-cHandler.alphaSP= 1.0e15
-cHandler.alphaMP= 1.0e15
-solutionStrategies= solCtrl.getSolutionStrategyContainer
-solutionStrategy= solutionStrategies.newSolutionStrategy("solutionStrategy","sm")
-solAlgo= solutionStrategy.newSolutionAlgorithm("newton_raphson_soln_algo")
-convTest= solutionStrategy.newConvergenceTest("norm_unbalance_conv_test")
-convTest.tol=1.0e-9
-convTest.maxNumIter= 10
-integ= solutionStrategy.newIntegrator("load_control_integrator",xc.Vector([]))
-soe= solutionStrategy.newSystemOfEqn("band_gen_lin_soe")
-solver= soe.newSolver("band_gen_lin_lapack_solver")
-analysis= solu.newAnalysis("static_analysis","solutionStrategy","")
-result= analysis.analyze(10)
-
-
+solProc= predefined_solutions.PenaltyNewtonRaphson(feProblem)
+result= solProc.solve()
 
 elements= preprocessor.getElementHandler
 
