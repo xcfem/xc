@@ -19,6 +19,7 @@ import xc
 from model import predefined_spaces
 from materials import typical_materials
 from solution import predefined_solutions
+#from postprocess import output_handler
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
 __copyright__= "Copyright 2015, LCPT and AOO"
@@ -78,6 +79,8 @@ if abs(ratio)<0.02:
 else:
   lmsg.error(fname+' ERROR.')
 
-
-
+# Graphic stuff.
+#oh= output_handler.OutputHandler(modelSpace)
+#oh.displayFEMesh(setsToDisplay= xcSets)
+#oh.displayIntForcDiag(itemToDisp= 'N', setToDisplay= modelSpace.getSet('total'))
 
