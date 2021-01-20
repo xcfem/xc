@@ -1,9 +1,12 @@
 # -*- coding: utf-8 -*-
+''' Home made test
+Sign criteria for the internal forces in an elastic beam 3d element.
+3D cantilever beam, start node  with all its 6DOF fixed, point loads on the 
+end node (x=L)
+'''
+
 from __future__ import print_function
-# Home made test
-# Sign criteria for the internal forces in an elastic beam 3d element.
-# 3D cantilever beam, start node  with all its 6DOF fixed, point loads on the 
-# end node (x=L)
+from __future__ import division
 
 __author__= "Luis C. Pérez Tato (LCPT) , Ana Ortega (AO_O) "
 __copyright__= "Copyright 2016, LCPT, AO_O"
