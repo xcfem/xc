@@ -262,6 +262,7 @@ class SectionProperties(object):
         :param preprocessor: preprocessor object.
         :param material:     material constitutive model 
                              (for which E is the Young's modulus)
+        :param majorAxis: true if bending occurs in the section major axis.
         '''
         if(not self.xc_material):
             materialHandler= preprocessor.getMaterialHandler
@@ -283,6 +284,7 @@ class SectionProperties(object):
         :param  preprocessor: preprocessor object.
         :param material: material constitutive model (for which 
                          E is the Young's modulus and G() the shear modulus).
+        :param majorAxis: true if bending occurs in the section major axis.
         '''
         if(not self.xc_material):
             materialHandler= preprocessor.getMaterialHandler
