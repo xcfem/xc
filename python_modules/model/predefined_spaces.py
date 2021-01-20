@@ -35,7 +35,7 @@ class PredefinedSpace(object):
         self.solutionProcedureType= solProcType
         self.analysis= None
         self.fixedNodesTags= set()
-
+    
     def getProblem(self):
         ''' Return the XC finite element problem object.
         '''
@@ -74,6 +74,27 @@ class PredefinedSpace(object):
             retval.append(e)
         return retval
 
+    def getNodeHandler(self):
+        ''' Return the node handler for this model.'''
+        return self.preprocessor.getNodeHandler
+    
+    def newNodeXY(self, x, y):
+        ''' Create a new node.
+
+        :param x: x coordinate for the new node.
+        :param y: y coordinate for the new node.
+        '''
+        return self.getNodeHandler().newNodeXY(x,y)
+    
+    def newNodeXYZ(self, x, y, z):
+        ''' Create a new node.
+
+        :param x: x coordinate for the new node.
+        :param y: y coordinate for the new node.
+        :param z: z coordinate for the new node.
+        '''
+        return self.getNodeHandler().newNodeXYZ(x,y,z)
+    
     def getNodes(self, tags):
         ''' Return the nodes that correspond to the argument
             tags.
@@ -81,11 +102,11 @@ class PredefinedSpace(object):
         :param tags: node tags.
         '''
         retval= list()
-        nodeHandler= self.preprocessor.getNodeHandler
+        nodeHandler= self.getNodeHandler()
         for t in tags:
             n= nodeHandler.getNode(t)
             retval.append(n)
-        return retval    
+        return retval
     
     def getIntForceComponentFromName(self,componentName):
         if componentName[0] in ['N','M']:
@@ -681,7 +702,15 @@ class SolidMechanics2D(PredefinedSpace):
         self.sigma_11= 0 # Stress components
         self.sigma_22= 1
         self.sigma_12= 2
+ 
+    def newNode(self, x, y):
+        ''' Create a new node.
 
+        :param x: x coordinate for the new node.
+        :param y: y coordinate for the new node.
+        '''
+        return super(SolidMechanics2D,self).newNodeXY(x,y)
+        
     def getDisplacementComponentsLabels(self):
         ''' Return a list with the labels of the
             displacement components.'''
@@ -887,6 +916,14 @@ class StructuralMechanics2D(StructuralMechanics):
         self.M= 1 # bending,
         self.Q= 2 # shear.
 
+    def newNode(self, x, y):
+        ''' Create a new node.
+
+        :param x: x coordinate for the new node.
+        :param y: y coordinate for the new node.
+        '''
+        return super(StructuralMechanics2D,self).newNodeXY(x,y)
+        
     def getDisplacementComponentsLabels(self):
         ''' Return a list with the labels of the
             displacement components.'''
@@ -1095,6 +1132,15 @@ class SolidMechanics3D(PredefinedSpace):
         self.sigma_23= 4
         self.sigma_13= 5
 
+    def newNode(self, x, y, z):
+        ''' Create a new node.
+
+        :param x: x coordinate for the new node.
+        :param y: y coordinate for the new node.
+        :param z: z coordinate for the new node.
+        '''
+        return super(SolidMechanics3D,self).newNodeXYZ(x,y,z)
+    
     def getDisplacementComponentsLabels(self):
         ''' Return a list with the labels of the
             displacement components.'''
@@ -1235,6 +1281,15 @@ class StructuralMechanics3D(StructuralMechanics):
         self.My= 3 # curvature about y-axis,
         self.Vz= 4 # shear along z-axis.
         self.T= 5 # torsion along x-axis.
+
+    def newNode(self, x, y, z):
+        ''' Create a new node.
+
+        :param x: x coordinate for the new node.
+        :param y: y coordinate for the new node.
+        :param z: z coordinate for the new node.
+        '''
+        return super(StructuralMechanics3D,self).newNodeXYZ(x,y,z)
         
     def getDisplacementComponentsLabels(self):
         ''' Return a list with the labels of the
