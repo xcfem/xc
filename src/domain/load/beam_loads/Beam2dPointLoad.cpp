@@ -365,7 +365,9 @@ int XC::Beam2dPointLoad::recvSelf(const Communicator &comm)
 
 void XC::Beam2dPointLoad::Print(std::ostream &s, int flag) const
   {
-    s << "Beam2dPointLoad - reference load : (" << pTrans()
-      << ", " << pAxial() << ") acting at : " << X() << " relative to length\n";
-    s << "  elements acted on: " << this->getElementTags();
+    s << getClassName() << " - Reference load : (" << std::endl
+      << "  Transverse: " << pTrans() << std::endl
+      << "  Axial:" << pAxial() << std::endl
+      << "  Relative distance: " << X() << std::endl
+      << "  Elements: " << this->getElementTags() << std::endl;
   }

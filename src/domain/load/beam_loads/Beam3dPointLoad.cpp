@@ -440,9 +440,10 @@ int XC::Beam3dPointLoad::recvSelf(const Communicator &comm)
 //! @brief Print load information.
 void XC::Beam3dPointLoad::Print(std::ostream &s, int flag) const
   {
-    s << "Beam3dPointLoad - Reference load" << std::endl;
+    s << getClassName() << " - Reference load" << std::endl;
     s << "  Transverse (y): " << Trans << std::endl;
     s << "  Transverse (z): " << Pz << std::endl;
-    s << "  Axial (x):      " << Axial << std::endl;
+    s << "  Axial (x): " << Axial << std::endl;
+    s << "  Relative distance: " << X() << std::endl;
     s << "  Elements acted on: " << this->getElementTags();
   }
