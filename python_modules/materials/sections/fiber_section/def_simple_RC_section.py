@@ -491,6 +491,7 @@ class RCSectionBase(object):
             lmsg.error("defInteractionDiagramNMz: fiber section representation for section: "+ self.sectionName + ";  not defined yet; use defRCSection method.\n")
         self.defInteractionDiagramParameters(preprocessor)
         return preprocessor.getMaterialHandler.calcInteractionDiagramNMz(self.sectionName,self.fiberSectionParameters.idParams)
+   
 
 class BasicRectangularRCSection(RCSectionBase, section_properties.RectangularSection):
     '''
@@ -540,10 +541,15 @@ class BasicRectangularRCSection(RCSectionBase, section_properties.RectangularSec
         return section_properties.RectangularSection.getRespVy(self,preprocessor,self.fiberSectionParameters.concrType.Gcm())
 
     def getRespVz(self,preprocessor):
-        '''Material for modeling Z shear response of section'''
+        '''Material for modeling Z shear response of section.
+
+        :param preprocessor: preprocessor object.
+        '''
         return section_properties.RectangularSection.getRespVz(self,preprocessor,self.fiberSectionParameters.concrType.Gcm())
 
-    def defConcreteRegion(self,geomSection):
+    def defConcreteRegion(self, geomSection):
+        ''' Define a rectangular region filled with concrete.
+        '''
         regions= geomSection.getRegions
         rg= regions.newQuadRegion(self.fiberSectionParameters.concrDiagName)
         rg.nDivIJ= self.fiberSectionParameters.nDivIJ
@@ -551,6 +557,49 @@ class BasicRectangularRCSection(RCSectionBase, section_properties.RectangularSec
         rg.pMin= geom.Pos2d(-self.b/2,-self.h/2)
         rg.pMax= geom.Pos2d(self.b/2,self.h/2)
 
+    def defElasticSection1d(self, preprocessor):
+        ''' Return an elastic section appropiate for truss analysis.
+
+        :param preprocessor: preprocessor object.
+        '''
+        mat= self.fiberSectionParameters.concrType.getElasticMaterialData()
+        return super(BasicRectangularRCSection, self).defElasticSection1d(preprocessor, mat)
+    
+    def defElasticSection3d(self, preprocessor):
+        ''' Return an elastic section appropiate for 3D beam analysis
+
+        :param preprocessor: preprocessor object.
+        :param material:      material (for which E is the Young's modulus and G() the shear modulus)  
+        '''
+        mat= self.fiberSectionParameters.concrType.getElasticMaterialData()
+        return super(BasicRectangularRCSection, self).defElasticSection3d(preprocessor, mat)
+    
+    def defElasticShearSection3d(self, preprocessor):
+        '''elastic section appropiate for 3D beam analysis, including shear 
+           deformations
+
+        :param preprocessor: preprocessor object.
+         '''
+        mat= self.fiberSectionParameters.concrType.getElasticMaterialData()
+        return super(BasicRectangularRCSection, self).defElasticShearSection3d(preprocessor, mat)
+    
+    def defElasticSection2d(self, preprocessor, majorAxis= True):
+        ''' Return an elastic section appropiate for 2D beam analysis
+
+        :param preprocessor: preprocessor object.
+        :param majorAxis: true if bending occurs in the section major axis.
+        '''
+        mat= self.fiberSectionParameters.concrType.getElasticMaterialData()
+        return super(BasicRectangularRCSection, self).defElasticSection2d(preprocessor, mat, majorAxis)
+        
+    def defElasticShearSection2d(self, preprocessor, material, majorAxis= True):
+        '''elastic section appropiate for 2D beam analysis, including shear deformations
+
+        :param  preprocessor: preprocessor object.
+        :param majorAxis: true if bending occurs in the section major axis.
+        '''
+        mat= self.fiberSectionParameters.concrType.getElasticMaterialData()
+        return super(BasicRectangularRCSection, self).defElasticShearSection2d(preprocessor, mat, majorAxis)
 
 class RCRectangularSection(BasicRectangularRCSection):
     '''
