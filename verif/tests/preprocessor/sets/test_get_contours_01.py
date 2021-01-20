@@ -21,7 +21,7 @@ rho= 0.0 # Density
 
 # Problem type
 feProblem= xc.FEProblem()
-feProblem.logFileName= "/tmp/erase.log" # Para no imprimir mensajes de advertencia
+feProblem.logFileName= "/tmp/erase.log" # Don't print warning messages.
 preprocessor=  feProblem.getPreprocessor
 nodes= preprocessor.getNodeHandler
 modelSpace= predefined_spaces.SolidMechanics2D(nodes)
