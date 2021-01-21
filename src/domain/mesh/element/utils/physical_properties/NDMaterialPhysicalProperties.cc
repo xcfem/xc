@@ -46,7 +46,8 @@ XC::NDMaterialPhysicalProperties::NDMaterialPhysicalProperties(const size_t &nMa
 //! @brief Check the material type, MUST be redefined in derived classes.
 bool XC::NDMaterialPhysicalProperties::check_material_type(const std::string &type) const
   {
-    std::cerr << "Error; se debe redefinir check_material_type en la clase: " << getClassName() << std::endl;
+    std::cerr << getClassName() << "::" << __FUNCTION__
+              << "Error; must be overloaded." << std::endl;
     return false;
   }
 
@@ -55,7 +56,8 @@ bool XC::NDMaterialPhysicalProperties::check_material_elast_plana(const std::str
     if((type!="PlaneStrain") && (type!="PlaneStress")
       && (type!="PlaneStrain2D") && (type!="PlaneStress2D"))
        {
-         std::cerr << "XC::SolidMech2D::SolidMech2D -- improper material type " << type << " for XC::SolidMech2D\n";
+         std::cerr << "NDMaterialPhysicalProperties::" << __FUNCTION__
+		   << "; improper material type '" << type << "'.\n";
          return false;
        }
     else

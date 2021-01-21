@@ -89,8 +89,8 @@ void XC::ZeroLengthSection::setup_section(const Material *sec)
         const SectionForceDeformation *ptr= dynamic_cast<const SectionForceDeformation *>(sec);
         if(!ptr)
           std::cerr << getClassName() << "::" << __FUNCTION__
-		    << "; material type is not valid."
-                    << std::endl;
+                    << "; material type: '" << sec->getClassName()
+	            << "' is not valid.\n";
         else
           {
             theSection = ptr->getCopy();// Obtain copy of section model

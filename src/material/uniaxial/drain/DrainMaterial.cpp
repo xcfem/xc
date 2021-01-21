@@ -449,8 +449,10 @@ int XC::DrainMaterial::invokeSubroutine(void)
         // Add more cases as needed
 
         default:
-                std::cerr << "XC::DrainMaterial::invokeSubroutine -- unknown material type\n"; exit(-1);
-                return -1;
+	  std::cerr << getClassName() << "::" << __FUNCTION__
+		    << "; unknown material type\n";
+	  exit(-1);
+          return -1;
         }
     for(int i= 0;i<numData;i++)
       matParams[i]= dblDataPtr[i];

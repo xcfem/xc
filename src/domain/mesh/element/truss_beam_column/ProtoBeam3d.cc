@@ -43,7 +43,8 @@ void XC::ProtoBeam3d::set_material(const Material *m)
           physicalProperties.set(0,scc->getCrossSectionProperties());
         else
           std::cerr << getClassName() << "::" << __FUNCTION__
-	            << "; material type is not valid.\n";
+                    << "; material type: '" << m->getClassName()
+	            << "' is not valid.\n";
       }
     else
       if(verbosity>0)
