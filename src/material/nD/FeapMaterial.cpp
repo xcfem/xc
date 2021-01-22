@@ -525,7 +525,8 @@ XC::FeapMaterial::invokeSubroutine(int isw)
     
     // Add more cases as needed
   default:
-    std::cerr << "FeapMaterial::invokeSubroutine -- unknown material type\n";
+    std::cerr << getClassName() << "::" << __FUNCTION__
+	      << "; unknown material type\n";
     return -1;
   }
   

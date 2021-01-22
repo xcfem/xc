@@ -140,8 +140,9 @@ void XC::PrismaticBarCrossSectionsVector::setupSection(const Material *sec)
       {
         const PrismaticBarCrossSection *ptr= dynamic_cast<const PrismaticBarCrossSection *>(sec);
         if(!ptr)
-          std::cerr << "XC::PrismaticBarCrossSectionsVector::setupSection; material type not valid." 
-                    << std::endl;
+          std::cerr << getClassName() << "::" << __FUNCTION__
+                    << "; material type: '" << sec->getClassName()
+	            << "' is not valid.\n";
         else
           setSection(ptr);
       }

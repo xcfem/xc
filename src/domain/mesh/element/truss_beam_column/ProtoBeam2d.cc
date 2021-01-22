@@ -44,7 +44,8 @@ void XC::ProtoBeam2d::set_material(const Material *m)
         else
           {
             std::cerr << getClassName() << "::" << __FUNCTION__
-	              << "; material type is not valid.\n";
+	              << "; material type: '" << m->getClassName()
+	              << "' is not valid.\n";
           }
       }
     else

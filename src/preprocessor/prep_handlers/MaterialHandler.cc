@@ -494,7 +494,7 @@ XC::Material *XC::MaterialHandler::newMaterial(const std::string &mat_type,const
       }
     else
       std::cerr << getClassName() << "::" << __FUNCTION__
-	        << "; material type: " << mat_type << " not found."
+	        << "; material type: '" << mat_type << "' not found."
 	        << std::endl;
     return retval;
   }
