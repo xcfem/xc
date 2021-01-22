@@ -348,7 +348,8 @@ class OutputHandler(object):
         if(len(forcePairs)>0):
             vFieldF.addToDisplay(displaySettings)
         if(len(momentPairs)>0):
-            vFieldM.addToDisplay(displaySettings,'V')
+            vFieldM.addToDisplay(displaySettings,'LV')
+            captionText+='(vertical bar: moments, horiz. bar: forces)'
         displaySettings.displayScene(captionText,fileName)
         
     def displayDiagram(attributeName,component, setToDispRes,setDisp,caption,scaleFactor= 1.0, fileName= None, defFScale= 0.0):
