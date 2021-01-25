@@ -315,21 +315,21 @@ class EHEConcrete(concrete_base.Concrete):
     #         return 0.0
     #     else:
     #       return 0.0 
-    def getCreepDeformation(self, t,t0,RH,h0mm, sigmaT0):
+    def getCreepDeformation(self, t,t0,RH,h0, sigmaT0):
         '''
         return the creep deformation between t0 and t
         
         :param t:     age of concrete in days at the moment considered
         :param t0:    age of concrete in days at loading
         :param RH:    ambient relative humidity(%)
-        :param h0mm:  notional size of the member in mm 
-                   h0mm=2*Ac/u, where:
-
+        :param h0:  notional size of the member.
+ 
+                       - h0=2*Ac/u, where:
                        - Ac= cross sectional area
                        - u = perimeter of the member in contact with the atmosphere
-                       - sigmaT0: Constant stress appliend in t0.
+        :param sigmaT0: Constant stress appliend in t0.
         '''
-        return sigmaT0*(1.0/self.getEcmT(t0)+self.getCreepFitt0(t,t0,RH,h0mm)/self.getEcm())
+        return sigmaT0*(1.0/self.getEcmT(t0)+self.getCreepFitt0(t,t0,RH,h0)/self.getEcm())
  
 
 # EHE concretes

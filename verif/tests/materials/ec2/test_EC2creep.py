@@ -22,7 +22,7 @@ concrDeck= EC2_materials.EC2Concrete("C35/45",-35e6,1.5)
 
 Ac=3.9     #area of the concrete slab (m2)
 u=11.6     #perimeter exposed to drying (m)
-h0mm=2*Ac/u*1000    #notional size of the member h0 (mm)
+h0=2*Ac/u  #notional size of the member h0.
 RH=80               #ambient relative humidity(%)
 t=1e6               #long term
 #age of concrete in days at loading
@@ -38,7 +38,7 @@ alfa2=concrDeck.getCreepAlfa2() #Coefficient for the calculation of the creep co
 ratio2=round(alfa2,2)-0.96
 alfa3=concrDeck.getCreepAlfa3() #Coefficient for the calculation of the creep coefficient
 ratio3=round(alfa3,2)-0.90
-fiRH=concrDeck.getCreepFiRH(RH,h0mm) #factor to allow for the effect of relative humidity
+fiRH=concrDeck.getCreepFiRH(RH,h0) #factor to allow for the effect of relative humidity
                                      #on the notional creep coefficient
 ratio4=round(fiRH,2)-1.15
 betafcm=concrDeck.getCreepBetafcm()  #factor to allow for the effect of concrete strength
@@ -47,21 +47,21 @@ ratio5=round(betafcm,2)-2.56
 betat0=concrDeck.getCreepBetat0(t0)  #factor to allow for the effect of concrete age at loading
                                      #on the notional creep coefficient
 ratio6=round(betat0,2)-0.44
-fi0=concrDeck.getCreepFi0(t0,RH,h0mm) #notational creep coefficient for the calculation 
+fi0=concrDeck.getCreepFi0(t0,RH,h0) #notational creep coefficient for the calculation 
                                       #of the creep coefficient
 ratio7=round(fi0,2)-1.29
-betactt0=concrDeck.getCreepBetactt0(t,t0,RH,h0mm) #coefficient to describe the development of 
+betactt0=concrDeck.getCreepBetactt0(t,t0,RH,h0) #coefficient to describe the development of 
                                                   #creep with time after loading
 ratio8=round(betactt0,2)-1.00
 
 #Creep coefficients:
-fitt0Concreting=concrDeck.getCreepFitt0(t,t0concreting,RH,h0mm)
+fitt0Concreting=concrDeck.getCreepFitt0(t,t0concreting,RH,h0)
 ratio9=round(fitt0Concreting,2)-1.51
-fitt0Shrinkage=concrDeck.getCreepFitt0(t,t0shrinkage,RH,h0mm)
+fitt0Shrinkage=concrDeck.getCreepFitt0(t,t0shrinkage,RH,h0)
 ratio10=round(fitt0Shrinkage,2)-2.68
-fitt0Equipments=concrDeck.getCreepFitt0(t,t0equipments,RH,h0mm)
+fitt0Equipments=concrDeck.getCreepFitt0(t,t0equipments,RH,h0)
 ratio11=round(fitt0Equipments,2)-1.15
-fitt0Settlement=concrDeck.getCreepFitt0(t,t0settlement,RH,h0mm)
+fitt0Settlement=concrDeck.getCreepFitt0(t,t0settlement,RH,h0)
 ratio12=round(fitt0Settlement,2)-1.29
 
 comp=[ratio1,ratio2,ratio3,ratio4,ratio5,ratio6,ratio7,ratio8,ratio9,ratio10,ratio11,ratio12]

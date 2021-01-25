@@ -9,14 +9,15 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@ciccp.es" "ana.Ortega@ciccp.es"
 
+import math
+import sys
+import uuid
 import xc_base
 import geom
 import xc
 from materials.sections import section_properties
 from materials import typical_materials
-import math
 from materials.sections import stress_calc as sc
-import sys
 from misc_utils import log_messages as lmsg
 
 # Classes defining reinforcement.
@@ -36,7 +37,10 @@ class ShearReinforcement(object):
     :ivar angThetaConcrStruts: angle between the concrete's compression struts 
                              and the axis of the member
     '''
-    def __init__(self,familyName= "noName",nShReinfBranches= 0.0,areaShReinfBranch= 0.0,shReinfSpacing= 0.2,angAlphaShReinf= math.pi/2.0,angThetaConcrStruts= math.pi/4.0):
+    def __init__(self,familyName= None,nShReinfBranches= 0.0,areaShReinfBranch= 0.0,shReinfSpacing= 0.2,angAlphaShReinf= math.pi/2.0,angThetaConcrStruts= math.pi/4.0):
+        # If no name provided, generate it.
+        if(not familyName):
+            familyName= str(uuid.uuid1())
         self.familyName= familyName # name identifying the family of shear reinforcing bars
         self.nShReinfBranches= nShReinfBranches # Number of effective branches
         self.areaShReinfBranch= areaShReinfBranch # Area of the shear reinforcing bar
@@ -503,7 +507,7 @@ class BasicRectangularRCSection(RCSectionBase, section_properties.RectangularSec
     :ivar shReinfY:        record of type ShearReinforcement
                            defining the shear reinforcement in Y direction
     '''
-    def __init__(self,name= 'noName', sectionDescr= None, width=0.25,depth=0.25,concrType=None,reinfSteelType=None):
+    def __init__(self,name= None, sectionDescr= None, width=0.25,depth=0.25,concrType=None,reinfSteelType=None):
         ''' Constructor.
 
         :param name: name of the section     
@@ -615,7 +619,7 @@ class RCRectangularSection(BasicRectangularRCSection):
     :ivar positvRebarRows: layers of main rebars in the local positive face of 
                            the section
     '''
-    def __init__(self,name= 'noName', sectionDescr= None, width=0.25, depth=0.25, concrType= None, reinfSteelType= None):
+    def __init__(self, name= None, sectionDescr= None, width=0.25, depth=0.25, concrType= None, reinfSteelType= None):
         ''' Constructor.
 
         :param name: name of the section 

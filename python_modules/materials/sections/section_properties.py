@@ -10,6 +10,7 @@ __email__= "l.pereztato@gmail.com, ana.Ortega.Ort@gmail.com "
 
 import sys
 import math
+import uuid
 from materials import typical_materials
 from misc_utils import log_messages as lmsg
 import scipy.interpolate
@@ -26,6 +27,8 @@ class SectionProperties(object):
                                      stiffness (defaults to 1.0).
     '''
     def __init__(self,name):
+        if(not name):
+            name= str(uuid.uuid1())        
         self.sectionName= name
         self.xc_material= None
         self.torsionalStiffnessFactor= 1.0
