@@ -171,7 +171,7 @@ class RecordDisp(OuputUnits):
             for arg in self.listDspRot:
                 outputHandler.displayDispRot(itemToDisp=arg,setToDisplay=st,fileName= fileName)
 
-    def displayIntForcDiag(self,itemToDisp,fileName=None,defFScale=0.0):
+    def displayIntForcDiag(self,itemToDisp,fileName=None,defFScale=0.0,orientScbar=1,titleScbar=None):
         '''displays the component of internal forces as a 
          diagram over lines (i.e. appropiated for beam elements).
 
@@ -185,10 +185,12 @@ class RecordDisp(OuputUnits):
                 the initial position plus its displacement multiplied
                 by this factor. (Defaults to 0.0, i.e. display of 
                 initial/undeformed shape)
+        :param orientScbar: orientation of the scalar bar (defaults to 1-horiz)
+        :param titleScbar: title for the scalar bar (defaults to None)
         '''
         outputHandler= self.getOutputHandler(self.setsToDispDspRot)
         for st in self.setsToDispIntForc:
-            qg.displayIntForcDiag(itemToDisp= itemToDisp,setToDisplay= st,fileName= fileName, defFScale= defFScale)
+            qg.displayIntForcDiag(itemToDisp= itemToDisp,setToDisplay= st,fileName= fileName, defFScale= defFScale,orientScbar=orientScbar,titleScbar=titleScbar)
 
     def dispLoadCaseBeamEl(self, setToDisplay,caption= None,fileName=None,defFScale=0.0):
         '''Display the loads applied on beam elements and nodes for a given load case
@@ -405,7 +407,7 @@ class LoadCaseDispParameters(RecordDisp):
                 fullgrfname=fullPath+self.loadCaseName+st.name+arg
                 rltvgrfname=rltvPath+self.loadCaseName+st.name+arg
                 jpegFileName= fullgrfname+'.jpg'
-                outputHandler.displayIntForc(itemToDisp=arg,setToDisplay=st,fileName= jpegFileName)
+                outputHandler.displayIntForc(itemToDisp=arg,setToDisplay=st,fileName= jpegFileName,orientScbar=1,titleScbar=None)
                 capt= self.getCaptionText(setDescr= st.description, captTexts= cfg.capTexts[arg], unitsDescr= cfg.getForceUnitsDescription())
                 oh.insertGrInTex(texFile=texFile,grFileNm=rltvgrfname,grWdt=cfg.grWidth,capText=capt)
         #Internal forces displays on sets of «beam» elements
@@ -414,7 +416,7 @@ class LoadCaseDispParameters(RecordDisp):
                 fullgrfname=fullPath+self.loadCaseName+st.name+arg
                 rltvgrfname=rltvPath+self.loadCaseName+st.name+arg
                 jpegFileName= fullgrfname+'.jpg'
-                outputHandler.displayIntForcDiag(itemToDisp=arg,setToDisplay=st,fileName= jpegFileName)
+                outputHandler.displayIntForcDiag(itemToDisp=arg,setToDisplay=st,fileName= jpegFileName,orientScbar=1,titleScbar=None)
                 capt= self.getCaptionText(setDescr= st.description, captTexts= cfg.capTexts[arg], unitsDescr= cfg.getForceUnitsDescription())
                 oh.insertGrInTex(texFile=texFile,grFileNm=rltvgrfname,grWdt=cfg.grWidth,capText=capt)
         texFile.write('\\cleardoublepage\n')

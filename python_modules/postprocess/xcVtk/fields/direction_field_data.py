@@ -4,8 +4,8 @@ from __future__ import print_function
 
 '''Data to represent directions (modulus doesn't matters) field in VTK.'''
 
-__author__= "Ana Ortega (AOO) and Luis C. Pérez Tato (LCPT)"
-__copyright__= "Copyright 2016, AOO and LCPT"
+__author__= "Ana Ortega (AO_O) and Luis C. Pérez Tato (LCPT)"
+__copyright__= "Copyright 2016, AO_O and LCPT"
 __license__= "GPL"
 __version__= "3.0"
 __email__= " ana.Ortega.Ort@gmail.com, l.pereztato@gmail.com"

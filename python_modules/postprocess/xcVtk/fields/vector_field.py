@@ -53,13 +53,19 @@ class VectorField(fb.FieldBase):
             self.data.insertNextPair(p[0],p[1],p[2],v[0],v[1],v[2],self.fUnitConv,self.showPushing)
 
 
-    def addToDisplay(self, recordDisplay, orientation= 'H'):
-        # Adds the vector field to the display.
+    def addToDisplay(self, recordDisplay, orientation= 1,title=None):
+        ''' Adds the vector field to the display. 
+
+        :param orientation: orientation of the scalar bar (1: horizontal,
+                            2: left-vertical, 3 right-vertical)
+                            (defaults to horizontal scalar bar)
+        :param title: title to the scalar bar
+        '''
         nTuples= self.data.getNumberOfTuples()
         if(nTuples>0):
           self.setupActor()
           recordDisplay.renderer.AddActor(self.actor)
-          self.creaColorScaleBar(orientation)
+          self.creaColorScaleBar(orientation,title)
           # mapper2D= vtk.vtkPolyDataMapper2D()
           # self.scalarBar.SetMapper(mapper2D)
           recordDisplay.renderer.AddActor2D(self.scalarBar)
