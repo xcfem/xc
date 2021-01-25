@@ -593,6 +593,15 @@ python tests/materials/ehe/test_shear_stress_joints_02.py
 python tests/materials/ehe/test_fiber_section_shear_01.py
 python tests/materials/ehe/test_fiber_section_shear_02.py
 python tests/materials/ehe/test_fiber_section_shear_03.py
+echo "$BLEU" "    Shrinkage and creep determination tests (EHE-08)." "$NORMAL"
+python tests/materials/ehe/test_creep_01.py
+python tests/materials/ehe/test_creep_02.py
+python tests/materials/ehe/test_creep_03.py
+python tests/materials/ehe/test_shrinkage_01.py
+#python tests/materials/ehe/test_shrinkage_02.py
+echo "$BLEU" "    Steel relaxation determination tests (EHE-08)." "$NORMAL"
+python tests/materials/ehe/test_steel_relaxation_01.py
+
 echo "$BLEU" "    EC2 tests." "$NORMAL"
 python tests/materials/ec2/test_EC2Concrete.py
 python tests/materials/ec2/test_EC2creep.py
@@ -714,12 +723,6 @@ python tests/materials/eota_tr_29/test_shear_anchor.py
 
 echo "$BLEU" "  Other materials tests." "$NORMAL"
 python tests/materials/test_elastomeric_bearing_stiffness.py
-python tests/materials/ehe/test_creep_01.py
-python tests/materials/ehe/test_creep_02.py
-python tests/materials/ehe/test_creep_03.py
-python tests/materials/ehe/test_shrinkage_01.py
-#python tests/materials/ehe/test_shrinkage_02.py
-python tests/materials/ehe/test_steel_relaxation_01.py
 
 #Database tests
 echo "$BLEU" "Database tests (MySQL, Berkeley db, sqlite,...)." "$NORMAL"

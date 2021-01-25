@@ -29,7 +29,7 @@ t=77     #age of the concrete at traffic openning
 ts=1     #drying shrinkage begins at the age 1 day
 Ac=3.9     #area of the concrete slab (m2)
 u=11.6     #perimeter exposed to drying (m)
-h0mm=2*Ac/u*1000    #notional size of the member h0 (mm)
+h0=2*Ac/u  #notional size of the member h0.
 #   autogenous shrinkage
 Epscainf=concrDeck.getShrEpscainf(t)  #coefficient for calculating the autogenous shrinkage strain
 vCalc.append(round(Epscainf*(-1),7))
@@ -53,18 +53,18 @@ vComp.append(0.12)
 Epscd0=concrDeck.getShrEpscd0(RH)   #Basic drying shrinkage strain
 vCalc.append(round(Epscd0*(-1),6))
 vComp.append(2.53e-4)
-Kh=concrDeck.getShrKh(h0mm)         #coefficient  for the calculation of the drying shrinkage strain
+Kh=concrDeck.getShrKh(h0)         #coefficient  for the calculation of the drying shrinkage strain
 vCalc.append(round(float(Kh),2))
 vComp.append(0.7)
-Betadstts=concrDeck.getShrBetadstts(t,ts,h0mm)   #coefficient  for the calculation of the drying shrinkage strain
+Betadstts=concrDeck.getShrBetadstts(t,ts,h0)   #coefficient  for the calculation of the drying shrinkage strain
 
 vCalc.append(round(Betadstts,1))
 vComp.append(0.1)
-Epscd=concrDeck.getShrEpscd(t,ts,RH,h0mm)   #Drying shrinkage strain
+Epscd=concrDeck.getShrEpscd(t,ts,RH,h0)   #Drying shrinkage strain
 
 vCalc.append(round(Epscd*(-1),7))
 vComp.append(1.8e-5)
-Epscs=concrDeck.getShrEpscs(t,ts,RH,h0mm)   #Total shrinkage 
+Epscs=concrDeck.getShrEpscs(t,ts,RH,h0)   #Total shrinkage 
 
 vCalc.append(round(Epscs*(-1),5))
 vComp.append(7.0e-5)

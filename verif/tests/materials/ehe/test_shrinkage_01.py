@@ -21,23 +21,23 @@ concrHA70.cemType='N'
 
 # Comprobamos con los valores de la tabla 39.7.c de la norma.
 err2= 0.0
-epsR1= concrHA30.getShrEpscs(14,tS,50,50)
+epsR1= concrHA30.getShrEpscs(14,tS,50,50e-3)
 err2= err2+(epsR1+186e-6)**2
-epsR2= concrHA30.getShrEpscs(10000,tS,50,50)
+epsR2= concrHA30.getShrEpscs(10000,tS,50,50e-3)
 err2= err2+(epsR2+532e-6)**2
-epsR3= concrHA30.getShrEpscs(14,tS,90,600)
+epsR3= concrHA30.getShrEpscs(14,tS,90,600e-3)
 err2= err2+(epsR3+28e-6)**2
-epsR4= concrHA30.getShrEpscs(10000,tS,90,600)
+epsR4= concrHA30.getShrEpscs(10000,tS,90,600e-3)
 err2= err2+(epsR4+149e-6)**2
 
 # Comprobamos con los valores de la tabla 39.7.d de la norma.
-epsR1d=concrHA70.getShrEpscs(14,tS,50,50)
+epsR1d=concrHA70.getShrEpscs(14,tS,50,50e-3)
 err2= err2+(epsR1d+178e-6)**2
-epsR2d=concrHA70.getShrEpscs(10000,tS,50,50)
+epsR2d=concrHA70.getShrEpscs(10000,tS,50,50e-3)
 err2= err2+(epsR2d+448e-6)**2
-epsR3d=concrHA70.getShrEpscs(14,tS,90,600)
+epsR3d=concrHA70.getShrEpscs(14,tS,90,600e-3)
 err2= err2+(epsR3d+80e-6)**2
-epsR4d=concrHA70.getShrEpscs(10000,tS,90,600)
+epsR4d=concrHA70.getShrEpscs(10000,tS,90,600e-3)
 err2= err2+(epsR4d+211e-6)**2
 
 ratio1= math.sqrt(err2)
