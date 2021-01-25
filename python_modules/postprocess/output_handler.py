@@ -487,7 +487,7 @@ class OutputHandler(object):
         displaySettings= vtk_FE_graphic.DisplaySettingsFE()
         displaySettings.cameraParameters= self.getCameraParameters()
         displaySettings.setupGrid(setToDisplay)
-        vField.dumpVectors(preprocessor,defFScale)
+        vField.dumpVectors(preprocessor,defFScale,showElementalLoads= True, showNodalLoads= True)
         displaySettings.defineMeshScene(None,defFScale,color=setToDisplay.color) 
         vField.addToDisplay(displaySettings)
         displaySettings.displayScene(caption,fileName)
@@ -536,12 +536,16 @@ class OutputHandler(object):
                 displaySettings.appendDiagram(diagram)
         # nodal loads
         vectorScale= self.outputStyle.loadVectorsScaleFactor*LrefModSize/10.
-        vField= lvf.LoadVectorField(loadPatternName= loadCaseName,setToDisp=setToDisplay,fUnitConv= unitConversionFactor,scaleFactor= vectorScale, showPushing= self.outputStyle.showLoadsPushing)
-        vField.multiplyByElementArea= self.outputStyle.multLoadsByElemArea
-        count= vField.dumpNodalLoads(preprocessor, defFScale=defFScale)
+        vFieldNod= lvf.LoadVectorField(loadPatternName= loadCaseName,setToDisp=setToDisplay,fUnitConv= unitConversionFactor,scaleFactor= vectorScale, showPushing= self.outputStyle.showLoadsPushing)
+        count= vFieldNod.dumpNodalLoads(preprocessor, defFScale=defFScale)
         if(count >0):
-#            vField.addToDisplay(displaySettings,orientation= self.outputStyle.nodalLoadBarOrientation)
-            vField.addToDisplay(displaySettings,orientation= 'RV')
+            vFieldNod.addToDisplay(displaySettings,orientation= 'LV')
+        # elemental loads
+        vFieldEl= lvf.LoadVectorField(loadPatternName= loadCaseName,setToDisp=setToDisplay,fUnitConv= unitConversionFactor,scaleFactor= vectorScale, showPushing= self.outputStyle.showLoadsPushing)
+        vFieldEl.multiplyByElementArea= self.outputStyle.multLoadsByElemArea
+        count= vFieldEl.dumpElementalLoads(preprocessor, defFScale=defFScale)
+        if(count >0):
+            vFieldEl.addToDisplay(displaySettings,orientation= 'RV')
         if(not caption):
           caption= 'load case: ' + loadCaseName +' '+elLoadComp + ', set: ' + setToDisplay.name + ', '  + unitDescription
         displaySettings.displayScene(caption=caption,fileName=fileName)
