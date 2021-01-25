@@ -319,9 +319,9 @@ class EHEConcrete(concrete_base.Concrete):
         '''
         return the creep deformation between t0 and t
         
-        :param t:     age of concrete in days at the moment considered
-        :param t0:    age of concrete in days at loading
-        :param RH:    ambient relative humidity(%)
+        :param t:   age of concrete in days at the moment considered
+        :param t0:  age of concrete in days at loading
+        :param RH:  ambient relative humidity(%)
         :param h0:  notional size of the member.
  
                        - h0=2*Ac/u, where:

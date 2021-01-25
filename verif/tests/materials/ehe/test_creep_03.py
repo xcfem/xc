@@ -185,23 +185,23 @@ from solution import database_helper
 
 
 def solveStaticLinearComb(preprocessor, comb,tagSaveFase0,dbHelp):
-  preprocessor.resetLoadCase()
-  db.restore(tagSaveFase0)
+    preprocessor.resetLoadCase()
+    db.restore(tagSaveFase0)
 
-  dbHelp.helpSolve(comb)
+    dbHelp.helpSolve(comb)
 
-  ''' 
-    print("previousName= ",previousName)
-    print("tag= ",tagComb)
-    print("tagPrevia= ",tagPrevia)
-    print("descomp previa= ",getDescompCombPrevia)
-    print("resto sobre previa= ",getDescompRestoSobrePrevia)
-  '''
+    ''' 
+      print("previousName= ",previousName)
+      print("tag= ",tagComb)
+      print("tagPrevia= ",tagPrevia)
+      print("descomp previa= ",getDescompCombPrevia)
+      print("resto sobre previa= ",getDescompRestoSobrePrevia)
+    '''
 
-  comb.addToDomain()
-  analOk= analysis.analyze(1)
-  db.save(comb.tag*100)
-  comb.removeFromDomain()
+    comb.addToDomain()
+    analOk= analysis.analyze(1)
+    db.save(comb.tag*100)
+    comb.removeFromDomain()
 
 
 dXMin=1e9
@@ -210,30 +210,30 @@ dYMin=1e9
 dYMax=-1e9
 
 def procesResultVerif(preprocessor,  comb):
-  tagComb= comb.tag
-  nmbComb= comb.getName
-  nodes= preprocessor.getNodeHandler
-  nod8= nodes.getNode(8)
-  global deltaX
-  deltaX= nod8.getDisp[0]
-  global deltaY
-  deltaY= nod8.getDisp[1]
-  global dXMin
-  dXMin= min(dXMin,deltaX)
-  global dXMax
-  dXMax= max(dXMax,deltaX)
-  global dYMin
-  dYMin= min(dYMin,deltaY)
-  global dYMax
-  dYMax= max(dYMax,deltaY)
+    tagComb= comb.tag
+    nmbComb= comb.getName
+    nodes= preprocessor.getNodeHandler
+    nod8= nodes.getNode(8)
+    global deltaX
+    deltaX= nod8.getDisp[0]
+    global deltaY
+    deltaY= nod8.getDisp[1]
+    global dXMin
+    dXMin= min(dXMin,deltaX)
+    global dXMax
+    dXMax= max(dXMax,deltaX)
+    global dYMin
+    dYMin= min(dYMin,deltaY)
+    global dYMax
+    dYMax= max(dYMax,deltaY)
 
-  ''' 
-  print("nmbComb=  ",nmbComb)
-  print("tagComb=  ",tagComb)
-  print("descomp=  ",getDescomp("%3.1f"))
-  print("dXMin=  ",(dXMin*1e3)," mm\n")
-  print("dXMax=  ",(dXMax*1e3)," mm\n")
-  '''
+    ''' 
+    print("nmbComb=  ",nmbComb)
+    print("tagComb=  ",tagComb)
+    print("descomp=  ",getDescomp("%3.1f"))
+    print("dXMin=  ",(dXMin*1e3)," mm\n")
+    print("dXMax=  ",(dXMax*1e3)," mm\n")
+    '''
 
 import os
 os.system("rm -r -f /tmp/test_fluencia_03.db")
@@ -294,11 +294,10 @@ db.save(tagSaveFase0)
 
 # Deformaciones de fluencia.
 for e in setShells.getElements:
-  tension1Media= e.getMeanInternalForce("n1")/Ac
-  tension2Media= e.getMeanInternalForce("n2")/Ac
-#  fi1= shrinkage_fluencia.getPhiFluencia(fckHA30,tFin,t0,Hrel,u,Ac)
-  epsFluencia1=concrHA30.getCreepDeformation(tFin,t0,Hrel*100,espMedio,tension1Media)
-  epsFluencia2=concrHA30.getCreepDeformation(tFin,t0,Hrel*100,espMedio,tension2Media)
+    tension1Media= e.getMeanInternalForce("n1")/Ac
+    tension2Media= e.getMeanInternalForce("n2")/Ac
+    epsFluencia1=concrHA30.getCreepDeformation(tFin,t0,Hrel*100,espMedio,tension1Media)
+    epsFluencia2=concrHA30.getCreepDeformation(tFin,t0,Hrel*100,espMedio,tension2Media)
 
 
 loadHandler= preprocessor.getLoadHandler
@@ -335,9 +334,9 @@ previousName=""
 tagPrevia= 0 
 tagSave= 0
 for key in combs.getKeys():
-  comb= combs[key]
-  solveStaticLinearComb(preprocessor, comb,tagSaveFase0,helper)
-  procesResultVerif(preprocessor, comb)
+    comb= combs[key]
+    solveStaticLinearComb(preprocessor, comb,tagSaveFase0,helper)
+    procesResultVerif(preprocessor, comb)
 
 # 2015.07.06 Values changed when zeroed initial strains in revertToStart
 # 2019.12.22 Values changed again when initial displacements were accounted
@@ -373,8 +372,8 @@ import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (ratio1<1e-5) & (ratio2<1e-5) & (ratio3<1e-5) & (ratio4<1e-5)  :
-  print('test '+fname+': ok.')
+    print('test '+fname+': ok.')
 else:
-  lmsg.error(fname+' ERROR.')
+    lmsg.error(fname+' ERROR.')
 
 os.system("rm -r -f /tmp/test_fluencia_03.db") # Your garbage you clean it

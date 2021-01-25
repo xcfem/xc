@@ -72,9 +72,9 @@ elem.getResistingForce()
 mats= elem.getPhysicalProperties.getVectorMaterials # Materials at gauss points.
 # Gauss points iterator
 for m in mats:
-  n1MedioElem= n1MedioElem+m.getStressResultantComponent("n1")
-  n2MedioElem= n2MedioElem+m.getStressResultantComponent("n2")
-  n12MedioElem= n12MedioElem+m.getStressResultantComponent("n12")
+    n1MedioElem= n1MedioElem+m.getStressResultantComponent("n1")
+    n2MedioElem= n2MedioElem+m.getStressResultantComponent("n2")
+    n12MedioElem= n12MedioElem+m.getStressResultantComponent("n12")
 
 
 # print("G1= ",vectorG1)
