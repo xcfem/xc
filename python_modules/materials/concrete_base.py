@@ -445,54 +445,54 @@ class Concrete(matWDKD.MaterialWithDKDiagrams):
             alfads2=0.12
         return alfads2
 
-    def getShrEpscd(self,t,ts,RH,h0mm):
+    def getShrEpscd(self,t,ts,RH,h0):
         '''Drying shrinkage strain[-] (art. 3.1.4 Eurocode 2 part 1-1)
 
         :param t:     age of concrete in days at the moment considered
         :param ts:    age of concrete in days at the beginning of drying shrinkage (or swelling).  Normally this is at the end of curing
         :param RH:    ambient relative humidity(%)
-        :param h0mm:  notional size of the member in mm
+        :param h0:  notional size of the member.
 
-           - h0mm=``2*Ac/u``, where:
+               - h0=``2*Ac/u``, where:
                - Ac= cross sectional area
                - u = perimeter of the member in contact with the atmosphere
 
         '''
         #epscd: drying shrinkage strain
-        epscd=self.getShrBetadstts(t,ts,h0mm)*self.getShrKh(h0mm)*self.getShrEpscd0(RH)
+        epscd=self.getShrBetadstts(t,ts,h0)*self.getShrKh(h0)*self.getShrEpscd0(RH)
         return epscd
 
-    def getShrKh(self,h0mm):
-        '''coefficient depending on the notional size h0mm
+    def getShrKh(self,h0):
+        '''coefficient depending on the notional size h0
         for the calculation of the drying shrinkage strain
         (table 3.3 Eurocode 2 part 1-1)
 
-        :param h0mm:  notional size of the member in mm
+        :param h0:  notional size of the member.
 
-                  - h0mm=``2*Ac/u``, where:
+                  - h0=``2*Ac/u``, where:
                        - Ac= cross sectional area
                        - u = perimeter of the member in contact with the atmosphere
         '''
-        x=(0,100,200,300,500,1e10)
+        x=(0.0, 0.1, 0.2, 0.3, 0.5, 1e10)
         y=(1.0,1.0,0.85,0.75,0.70,0.70)
-        f=scipy.interpolate.interp1d(x, y)
-        kh=f(h0mm)
+        f= scipy.interpolate.interp1d(x, y)
+        kh= f(h0)
         return kh
 
-    def getShrBetadstts(self,t,ts,h0mm):
+    def getShrBetadstts(self,t,ts,h0):
         '''coefficient for the calculation of the drying shrinkage strain
         (table 3.3 Eurocode 2 part 1-1)
  
         :param t:     age of concrete in days at the moment considered
         :param ts:    age of concrete in days at the beginning of drying shrinkage (or swelling)
                    Normally this is at the end of curing
-        :param h0mm:  notional size of the member in mm
+        :param h0:  notional size of the member.
 
-                   - h0mm=2*Ac/u, where:
-                        - Ac= cross sectional area
-                        - u = perimeter of the member in contact with the atmosphere
+                   - h0= 2*Ac/u, where:
+                   - Ac= cross sectional area
+                   - u= perimeter of the member in contact with the atmosphere
         '''
-        betadstts=(t-ts)/(t-ts+0.04*(h0mm)**(3.0/2.0))
+        betadstts=(t-ts)/(t-ts+0.04*(h0*1e3)**(3.0/2.0))
         return betadstts
 
 #   Autogenous shrinkage strain
@@ -524,7 +524,7 @@ class Concrete(matWDKD.MaterialWithDKDiagrams):
         return betaast
 
 #Total shrinkage
-    def getShrEpscs(self,t,ts,RH,h0mm):
+    def getShrEpscs(self,t,ts,RH,h0):
         '''Total shrinkage strain = 
         autogenous + drying shrinkages
 
@@ -532,30 +532,30 @@ class Concrete(matWDKD.MaterialWithDKDiagrams):
         :param ts:    age of concrete in days at the beginning of drying shrinkage (or swelling)
                    Normally this is at the end of curing
         :param RH:    ambient relative humidity(%)
-        :param h0mm:  notional size of the member in mm
+        :param h0:  notional size of the member.
 
-                  - h0mm=2*Ac/u, where:
-                       - Ac= cross sectional area
-                       - u = perimeter of the member in contact with the atmosphere
+                  - h0= 2*Ac/u, where:
+                  - Ac= cross sectional area
+                  - u = perimeter of the member in contact with the atmosphere
         '''
-        epscs=self.getShrEpscd(t,ts,RH,h0mm)+self.getShrEpsca(t)
+        epscs=self.getShrEpscd(t,ts,RH,h0)+self.getShrEpsca(t)
         return epscs
 
 #Creep
-    def getCreepFitt0(self,t,t0,RH,h0mm):
+    def getCreepFitt0(self,t,t0,RH,h0):
         '''Creep coefficient  
         (Annex B Eurocode 2 part 1-1)
 
-        :param t:     age of concrete in days at the moment considered
-        :param t0:    age of concrete in days at loading
-        :param RH:    ambient relative humidity(%)
-        :param h0mm:  notional size of the member in mm
+        :param t: age of concrete in days at the moment considered
+        :param t0: age of concrete in days at loading
+        :param RH: ambient relative humidity(%)
+        :param h0: notional size of the member in mm
 
-                  - h0mm=2*Ac/u, where:
-                       - Ac= cross sectional area
-                       - u = perimeter of the member in contact with the atmosphere
+                  - h0= 2*Ac/u, where:
+                  - Ac= cross sectional area
+                  - u = perimeter of the member in contact with the atmosphere
         '''
-        fitt0=self.getCreepFi0(t0,RH,h0mm)*self.getCreepBetactt0(t,t0,RH,h0mm)
+        fitt0=self.getCreepFi0(t0,RH,h0)*self.getCreepBetactt0(t,t0,RH,h0)
         return fitt0
 
     def getCreepAlfa1(self):
@@ -582,19 +582,20 @@ class Concrete(matWDKD.MaterialWithDKDiagrams):
         alfa3=(35/fcmMPa)**0.5
         return alfa3
 
-    def getCreepFiRH(self,RH,h0mm):
+    def getCreepFiRH(self,RH,h0):
         '''factor to allow for the effect of relative humidity 
         on the notional creep coefficient
         (Annex B Eurocode 2 part 1-1)
 
         :param RH:    ambient relative humidity(%)
-        :param h0mm:  notional size of the member in mm
+        :param h0:  notional size of the member.
  
-                  - h0mm=2*Ac/u, where:
-                        - Ac= cross sectional area
-                        - u = perimeter of the member in contact with the atmosphere
+                  - h0= 2*Ac/u, where:
+                  - Ac= cross sectional area
+                  - u = perimeter of the member in contact with the atmosphere
         '''
         fcmMPa=abs(self.getFcm())/1e6
+        h0mm= h0*1e3
         if fcmMPa <= 35:
             fiRH=1+(1-RH/100)/0.1/h0mm**(1/3.0)
         else:
@@ -618,39 +619,39 @@ class Concrete(matWDKD.MaterialWithDKDiagrams):
         betat0=1/(0.1+t0**0.20)
         return betat0
 
-    def getCreepFi0(self,t0,RH,h0mm):
+    def getCreepFi0(self,t0,RH,h0):
         '''notational creep coefficient for the calculation of the creep coefficient
         (Annex B Eurocode 2 part 1-1)
 
         :param t0:    age of concrete in days at loading
         :param RH:    ambient relative humidity(%)
-        :param h0mm:  notional size of the member in mm
+        :param h0:  notional size of the member.
 
-                   - h0mm=2*Ac/u, where:
-                       - Ac= cross sectional area
-                       - u = perimeter of the member in contact with the atmosphere
+                   - h0= 2*Ac/u, where:
+                   - Ac= cross sectional area
+                   - u= perimeter of the member in contact with the atmosphere
         '''
-        fi0=self.getCreepFiRH(RH,h0mm)*self.getCreepBetafcm()*self.getCreepBetat0(t0)
+        fi0=self.getCreepFiRH(RH,h0)*self.getCreepBetafcm()*self.getCreepBetat0(t0)
         return fi0
 
-    def getCreepBetactt0(self,t,t0,RH,h0mm):
+    def getCreepBetactt0(self,t,t0,RH,h0):
         '''coefficient to describe the development of creep with time after loading, used to calculate the creep coefficient
         (Annex B Eurocode 2 part 1-1)
  
         :param t:     age of concrete in days at the moment considered
         :param t0:    age of concrete in days at loading
         :param RH:    ambient relative humidity(%)
-        :param h0mm:  notional size of the member in mm
+        :param h0:  notional size of the member.
 
-                   - h0mm=2*Ac/u, where:
-                       - Ac= cross sectional area
-                       - u = perimeter of the member in contact with the atmosphere
+                   - h0=2*Ac/u, where:
+                   - Ac= cross sectional area
+                   - u = perimeter of the member in contact with the atmosphere
         '''
         fcmMPa=abs(self.getFcm())/1e6
         if fcmMPa <= 35:
-            betaH=min(1.5*(1+(0.012*RH)**18)*h0mm+250,1500)
+            betaH= min(1.5*(1+(0.012*RH)**18)*h0*1e3+250,1500)
         else:
-            betaH=min(1.5*(1+(0.012*RH)**18)*h0mm+250*self.getCreepAlfa3(),1500*self.getCreepAlfa3())
+            betaH=min(1.5*(1+(0.012*RH)**18)*h0*1e3+250*self.getCreepAlfa3(),1500*self.getCreepAlfa3())
         betactt0=((t-t0)/(betaH+t-t0))**0.3
         return betactt0
 

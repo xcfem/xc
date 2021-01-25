@@ -297,8 +297,8 @@ for e in setShells.getElements:
   tension1Media= e.getMeanInternalForce("n1")/Ac
   tension2Media= e.getMeanInternalForce("n2")/Ac
 #  fi1= shrinkage_fluencia.getPhiFluencia(fckHA30,tFin,t0,Hrel,u,Ac)
-  epsFluencia1=concrHA30.getCreepDeformation(tFin,t0,Hrel*100,espMedio*1000,tension1Media)
-  epsFluencia2=concrHA30.getCreepDeformation(tFin,t0,Hrel*100,espMedio*1000,tension2Media)
+  epsFluencia1=concrHA30.getCreepDeformation(tFin,t0,Hrel*100,espMedio,tension1Media)
+  epsFluencia2=concrHA30.getCreepDeformation(tFin,t0,Hrel*100,espMedio,tension2Media)
 
 
 loadHandler= preprocessor.getLoadHandler
@@ -342,8 +342,9 @@ for key in combs.getKeys():
 # 2015.07.06 Values changed when zeroed initial strains in revertToStart
 # 2019.12.22 Values changed again when initial displacements were accounted
 # 2019.12.22 Values changed again when initial displacements were accounted
-dXMaxTeor= -0.254204581384e-3 #0.115734009591e-3 #-1.04244692895e-3
-dXMinTeor= -0.579396575376e-3 #-0.0872327603415e-3 #-1.24522898798e-3
+# 2020.01.25 Values changed again when notional size expressed in m in getCreepDeformation.
+dXMaxTeor= -0.26498373792738855e-3 #-0.254204581384e-3 #0.115734009591e-3 #-1.04244692895e-3
+dXMinTeor= -0.5904250199155021e-3 #-0.579396575376e-3 #-0.0872327603415e-3 #-1.24522898798e-3
 # End of change
 
 dYMaxTeor= 0
@@ -366,7 +367,7 @@ print("ratio3= ",ratio3)
 print("dYMax= ",(dYMax*1e3)," mm")
 print("dYMaxTeor= ",(dYMaxTeor*1e3)," mm")
 print("ratio4= ",ratio4)
-   '''
+'''
 
 import os
 from misc_utils import log_messages as lmsg
