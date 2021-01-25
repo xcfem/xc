@@ -200,15 +200,17 @@ class LoadVectorField(LoadOnPoints):
             lmsg.warning('No active load patterns.')
         else:
             for lp in activeLoadPatterns: #Iterate over loaded elements.
-                numberOfLoads= self.populateLoads(lp.data())
+                numberOfLoads= self.populateLoads(lp.data(),showElementalLoads, showNodalLoads)
                 if(numberOfLoads>0):
                     maxLoad= self.getMaxLoad()
                     if(maxLoad!= 0):
                         self.data.scaleFactor/= self.getMaxLoad()
                     #Iterate over loaded elements.
-                    count+= self.dumpElementalPositions(lp.data())
+                    if showElementalLoads:
+                        count+= self.dumpElementalPositions(lp.data())
                     #Iterate over loaded nodes.
-                    count+= self.dumpNodalPositions(lp.data(), defFScale)
+                    if showNodalLoads:
+                        count+= self.dumpNodalPositions(lp.data(), defFScale)
                     if(count==0):
                         lmsg.warning('LoadVectorField.dumpVectors: no loads defined.')
         return count
@@ -222,6 +224,17 @@ class LoadVectorField(LoadOnPoints):
                   the initial position plus its displacement multiplied
                   by this factor.
         '''
-        return self.dumpVectors(preprocessor, defFScale,False,True)
+        return self.dumpVectors(preprocessor, defFScale,showElementalLoads=False,showNodalLoads=True)
+    
+    def dumpElementalLoads(self, preprocessor, defFScale):
+            ''' Iterate over nodal loads dumping them into the graphic.
+
+            :param preprocessor: preprocessor of the FE problem.
+            :param defFScale: factor to apply to current displacement of nodes 
+                      so that the display position of each node equals to
+                      the initial position plus its displacement multiplied
+                      by this factor.
+            '''
+            return self.dumpVectors(preprocessor, defFScale,showElementalLoads=True,showNodalLoads=False)
     
 
