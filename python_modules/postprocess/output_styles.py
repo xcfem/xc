@@ -64,7 +64,7 @@ class OutputStyle(object):
         self.internalForcesDiagramScaleFactor= 1.0
         self.loadVectorsScaleFactor= 1.0
         self.loadDiagramsScaleFactor= 1.0
-        self.nodalLoadBarOrientation= 'RV'
+        self.nodalLoadBarOrientation= 2 #right-vertical
         self.showLoadsPushing= True
         self.multLoadsByElemArea=False
         if(language):

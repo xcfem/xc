@@ -369,8 +369,12 @@ class DisplaySettingsFE(vtk_graphic_base.DisplaySettings):
         self.displayElementalLoads(preprocessor, loadPattern,clrVectores,fScaleVectores)
         self.displayNodalLoads(preprocessor, loadPattern,clrVectores,fScaleVectores)
 
-    def appendDiagram(self,diagram):
-        diagram.addDiagramToScene(self)
+    def appendDiagram(self,diagram,orientScbar=1,titleScbar=None):
+        '''
+        :param orientScbar: orientation of the scalar bar (defaults to 1-horiz)
+        :param titleScbar: title for the scalar bar (defaults to None)
+        '''
+        diagram.addDiagramToScene(self,orientScbar,titleScbar)
 
     def displaySPconstraints(self, setToDisplay, scale):
         ''' Display single point constraints.

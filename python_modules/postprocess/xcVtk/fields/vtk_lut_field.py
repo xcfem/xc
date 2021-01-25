@@ -89,34 +89,34 @@ class LUTField(object):
         '''
         self.mapper.SetScalarRange(self.valMin,self.valMax)
 
-    def creaColorScaleBar(self,orientation='H'):
+    def creaColorScaleBar(self,orientation=1,title=None):
         '''Creates the scalar bar that indicates to the viewer the correspondence
         between color values and data values
 
-        :param orientation: 'H' for horizontal bar, 'LV' for left-vertical bar 
-                             'RV' for right-vertical bar(defaults to 'H')
+        :param orientation: 1 for horizontal bar, 2 for left-vertical bar 
+                             3 for right-vertical bar(defaults to horizontal)
         '''
 
         self.scalarBar= vtk.vtkScalarBarActor()
-
+        
         pos= self.scalarBar.GetPositionCoordinate()
         pos.SetCoordinateSystemToNormalizedViewport()
-        if orientation=='RV':
-            pos.SetValue(0.87,0.20)     
+        if orientation>1: #vertical
             self.scalarBar.SetOrientationToVertical()
-            self.scalarBar.SetWidth(0.1)
+            self.scalarBar.SetWidth(0.075)
             self.scalarBar.SetHeight(0.7)
-        elif orientation=='LV':
-            pos.SetValue(0.04,0.20)     
-            self.scalarBar.SetOrientationToVertical()
-            self.scalarBar.SetWidth(0.1)
-            self.scalarBar.SetHeight(0.7)
+            pos.SetValue(0.04,0.20) if orientation==2 else pos.SetValue(0.87,0.20) 
+            if title:
+                title=title.replace(' ',' \n ')
+                self.scalarBar.SetTitle(title)
         else: #horizontal
-            pos.SetValue(0.1,0.08)        
             self.scalarBar.SetOrientationToHorizontal()
             self.scalarBar.SetWidth(0.8)
-            self.scalarBar.SetHeight(0.06)
-            
+            self.scalarBar.SetHeight(0.055)
+            pos.SetValue(0.1,0.07)
+            if title:
+                self.scalarBar.SetHeight(0.09)
+                self.scalarBar.SetTitle(title)
         self.scalarBar.SetLookupTable(self.lookUpTable)
         self.scalarBar.Modified()
         #self.scalarBar.SetLabelFormat("%.2f")

@@ -42,7 +42,13 @@ class OutputHandler(object):
         ''' Return the text to use in the image caption.'''
         loadCaseName= self.modelSpace.preprocessor.getDomain.currentCombinationName
         return loadCaseName+' '+itemToDisp+' '+unitDescription+' '+setToDisplay.description
-        
+
+    def getOutputLengthUnitSym(self):
+        return self.outputStyle.outputUnits.dynamicUnits.lengthUnit.symbol
+
+    def getOutputForceUnitSym(self):
+        return self.outputStyle.outputUnits.dynamicUnits.forceUnit.symbol
+
     def getDefaultCameraParameters(self):
         '''Return the default camera parameters.'''
         if(self.modelSpace.getSpaceDimension()==3): # 3D problem
@@ -345,14 +351,17 @@ class OutputHandler(object):
         displaySettings.cameraParameters= self.getCameraParameters()
         displaySettings.setupGrid(setToDisplay)
         displaySettings.defineMeshScene(None,defFScale,color= setToDisplay.color)
+        scOrient=1
         if(len(forcePairs)>0):
-            vFieldF.addToDisplay(displaySettings)
+            vFieldF.addToDisplay(displaySettings,orientation=scOrient,
+                                 title='Forces ('+ self.getOutputForceUnitSym() +')')
+            scOrient+=1
         if(len(momentPairs)>0):
-            vFieldM.addToDisplay(displaySettings,'LV')
-            captionText+='(vertical bar: moments, horiz. bar: forces)'
+            vFieldM.addToDisplay(displaySettings,orientation=scOrient,
+                                 title='Moments (' + self.getOutputForceUnitSym() + self.getOutputLengthUnitSym() +')')
         displaySettings.displayScene(captionText,fileName)
         
-    def displayDiagram(attributeName,component, setToDispRes,setDisp,caption,scaleFactor= 1.0, fileName= None, defFScale= 0.0):
+    def displayDiagram(attributeName,component, setToDispRes,setDisp,caption,scaleFactor= 1.0, fileName= None, defFScale= 0.0,orientScbar=1,titleScbar=None):
         '''Auxiliary function to display results on linear elements.
 
         :param attributeName: attribute name(e.g. 'ULS_normalStressesResistance')
@@ -368,6 +377,8 @@ class OutputHandler(object):
                     the initial position plus its displacement multiplied
                     by this factor. (Defaults to 0.0, i.e. display of 
                     initial/undeformed shape)
+        :param orientScbar: orientation of the scalar bar (defaults to 1-horiz)
+        :param titleScbar: title for the scalar bar (defaults to None)
         '''
         diagram= cvd.ControlVarDiagram(scaleFactor= scaleFactor,fUnitConv= unitConversionFactor,sets=[setToDispRes],attributeName= attributeName,component= component)
         diagram.addDiagram()
@@ -375,10 +386,10 @@ class OutputHandler(object):
         displaySettings.cameraParameters=cameraParameters
         displaySettings.setupGrid(setToDisplay)
         displaySettings.defineMeshScene(None,defFScale,color=setToDisplay.color)
-        displaySettings.appendDiagram(diagram) #Append diagram to the scene.
+        displaySettings.appendDiagram(diagram,orientScbar,titleScbar) #Append diagram to the scene.
         displaySettings.displayScene(caption=caption,fileName=fileName)
 
-    def displayIntForcDiag(self,itemToDisp, setToDisplay=None,fileName=None,defFScale=0.0):
+    def displayIntForcDiag(self,itemToDisp, setToDisplay=None,fileName=None,defFScale=0.0,orientScbar=1,titleScbar=None):
         '''displays the component of internal forces in the set of entities as a 
          diagram over lines (i.e. appropiated for beam elements).
 
@@ -393,6 +404,8 @@ class OutputHandler(object):
                 the initial position plus its displacement multiplied
                 by this factor. (Defaults to 0.0, i.e. display of 
                 initial/undeformed shape)
+        :param orientScbar: orientation of the scalar bar (defaults to 1-horiz)
+        :param titleScbar: title for the scalar bar (defaults to None)
         '''
         if(setToDisplay==None):
             setToDisplay= self.modelSpace.getTotalSet()
@@ -412,7 +425,7 @@ class OutputHandler(object):
         displaySettings.cameraParameters= self.getCameraParameters()
         displaySettings.setupGrid(setToDisplay)
         displaySettings.defineMeshScene(None,defFScale,color= setToDisplay.color)
-        displaySettings.appendDiagram(diagram) #Append diagram to the scene.
+        displaySettings.appendDiagram(diagram,orientScbar,titleScbar) #Append diagram to the scene.
         displaySettings.displayScene(caption= captionText,fileName= fileName)
         
     def displayIntForc(self,itemToDisp, setToDisplay=None,fileName=None,defFScale=0.0, rgMinMax=None):
@@ -472,6 +485,7 @@ class OutputHandler(object):
                       by this factor. (Defaults to 0.0, i.e. display of 
                       initial/undeformed shape)
         '''
+        lmsg.warning('displayLoadVectors:: deprecated; Use displayLoads')
         if(setToDisplay==None):
             setToDisplay= self.modelSpace.getTotalSet()
         preprocessor= self.modelSpace.preprocessor
@@ -522,6 +536,7 @@ class OutputHandler(object):
         displaySettings.cameraParameters= self.getCameraParameters()
         grid= displaySettings.setupGrid(setToDisplay)
         displaySettings.defineMeshScene(None,defFScale,color=setToDisplay.color)
+        scOrient=1 #scalar bar orientation (1 horiz., 2 left-vert, 3 right-vert)
         # auto-scaling parameters
         LrefModSize=setToDisplay.getBnd(1.0).diagonal.getModulus() #representative length of set size (to auto-scale)
         elLoadScaleF= self.outputStyle.loadDiagramsScaleFactor
@@ -533,19 +548,34 @@ class OutputHandler(object):
             #Linear loads
             diagram.addDiagram(preprocessor)
             if(diagram.isValid()):
-                displaySettings.appendDiagram(diagram)
-        # nodal loads
+                displaySettings.appendDiagram(diagram,orientScbar=scOrient,
+                                              titleScbar='Linear loads ('+self.getOutputForceUnitSym()+'/'+
+                                              self.getOutputLengthUnitSym()+')' )
+                scOrient+=1
+        
         vectorScale= self.outputStyle.loadVectorsScaleFactor*LrefModSize/10.
-        vFieldNod= lvf.LoadVectorField(loadPatternName= loadCaseName,setToDisp=setToDisplay,fUnitConv= unitConversionFactor,scaleFactor= vectorScale, showPushing= self.outputStyle.showLoadsPushing)
-        count= vFieldNod.dumpNodalLoads(preprocessor, defFScale=defFScale)
-        if(count >0):
-            vFieldNod.addToDisplay(displaySettings,orientation= 'LV')
         # elemental loads
-        vFieldEl= lvf.LoadVectorField(loadPatternName= loadCaseName,setToDisp=setToDisplay,fUnitConv= unitConversionFactor,scaleFactor= vectorScale, showPushing= self.outputStyle.showLoadsPushing)
+        vFieldEl= lvf.LoadVectorField(loadPatternName= loadCaseName,setToDisp=setToDisplay,
+                                      fUnitConv= unitConversionFactor,scaleFactor= vectorScale,
+                                      showPushing= self.outputStyle.showLoadsPushing)
         vFieldEl.multiplyByElementArea= self.outputStyle.multLoadsByElemArea
         count= vFieldEl.dumpElementalLoads(preprocessor, defFScale=defFScale)
         if(count >0):
-            vFieldEl.addToDisplay(displaySettings,orientation= 'RV')
+            print('surf',scOrient)
+            vFieldEl.addToDisplay(displaySettings,orientation= scOrient,
+                                  title='Surface loads ('+self.getOutputForceUnitSym()+'/'+
+                                  self.getOutputLengthUnitSym()+'2)' )
+            scOrient+=1
+        # nodal loads
+        vFieldNod= lvf.LoadVectorField(loadPatternName= loadCaseName,
+                                       setToDisp=setToDisplay,fUnitConv= unitConversionFactor,
+                                       scaleFactor= vectorScale, showPushing= self.outputStyle.showLoadsPushing)
+        count= vFieldNod.dumpNodalLoads(preprocessor, defFScale=defFScale)
+        if(count >0):
+            print('nod',scOrient)
+            vFieldNod.addToDisplay(displaySettings,orientation= scOrient,
+                                   title='Nodal loads ('+self.getOutputForceUnitSym()+')')
+            scOrient+=1
         if(not caption):
           caption= 'load case: ' + loadCaseName +' '+elLoadComp + ', set: ' + setToDisplay.name + ', '  + unitDescription
         displaySettings.displayScene(caption=caption,fileName=fileName)
@@ -674,10 +704,12 @@ class OutputHandler(object):
             displaySettings.cameraParameters= self.getCameraParameters()
             displaySettings.setupGrid(setToDisplay)
             displaySettings.defineMeshScene(None,defFScale,color=setToDisplay.color)
+            scOrient=1
             if(len(dispPairs)>0):
-                vFieldD.addToDisplay(displaySettings)
+                vFieldD.addToDisplay(displaySettings,orientation=scOrient,title='Displacement')
+                scOrient+=1
             if(len(rotPairs)>0):
-                vFieldR.addToDisplay(displaySettings,'V')
+                vFieldR.addToDisplay(displaySettings,orientation=scOrient,title='Rotation')
             displaySettings.displayScene(caption,fileName)
         else:
             lmsg.error('mode: '+str(mode)+' out of range (1,'+str(numModes)+')')
