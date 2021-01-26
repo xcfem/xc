@@ -1,13 +1,17 @@
 # -*- coding: utf-8 -*-
 from __future__ import print_function
-# Test from Ansys manual
-# Reference:  Strength of Material, Part I, Elementary Theory & Problems, pg. 26, problem 10
+''' Test from Ansys manual
+    Reference:  Strength of Material, Part I, Elementary Theory & Problems, pg. 26, problem 10
+
+    Test the UMFPACK solver.
+'''
 
 import xc_base
 import geom
 import xc
 from model import predefined_spaces
 from materials import typical_materials
+from solution import predefined_solutions
 
 __author__= "Luis C. Pérez Tato (LCPT)"
 __copyright__= "Copyright 2014, LCPT"
@@ -78,9 +82,9 @@ pth= os.path.dirname(__file__)
 # print("pth= ", pth)
 if(not pth):
   pth= "."
-exec(open(pth+"/../aux/sol_superlu.py").read())
 
-
+solProc= predefined_solutions.PenaltyModifiedNewtonUMF(feProblem)
+result= solProc.solve()
 
 nodes.calculateNodalReactions(True,1e-7)
 R1= n4.getReaction[1] 

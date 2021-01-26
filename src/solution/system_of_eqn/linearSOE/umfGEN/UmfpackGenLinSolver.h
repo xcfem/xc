@@ -70,9 +70,9 @@
 namespace XC {
 class UmfpackGenLinSOE;
 
+//! @brief Solver that makes use of the UMFPACK routines
+//! (Unsymmetric MultiFrontal Method). See <a href="http://faculty.cse.tamu.edu/davis/research.html" target="_new"> SuiteSparse</a>.
 //! @ingroup Solver
-//
-//! @brief <a href="http://faculty.cse.tamu.edu/davis/research.html" target="_new">UMFPACK </a> based sparse matrix linear SOE solver.
 class UmfpackGenLinSolver: public LinearSOESolver
   {
   private:

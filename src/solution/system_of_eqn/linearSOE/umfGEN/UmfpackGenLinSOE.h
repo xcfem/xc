@@ -72,9 +72,9 @@
 namespace XC {
 class UmfpackGenLinSolver;
 
+//! @brief System of equations that can be used with the UMFPACK routines
+//! (Unsymmetric MultiFrontal Method). See <a href="http://faculty.cse.tamu.edu/davis/research.html" target="_new"> SuiteSparse</a>.
 //! @ingroup SOE
-//
-//! @brief UMFPACK (see <a href="http://faculty.cse.tamu.edu/davis/research.html" target="_new"> SuiteSparse</a>) based systems of equations.
 class UmfpackGenLinSOE: public FactoredSOEBase
   {
   private:

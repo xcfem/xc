@@ -129,7 +129,7 @@ class SolutionProcedure(object):
         
         :param solAlgType: type of the solution algorithm (linear, Newton, modified Newton, ...)
         :param integratorType: type of integrator to use.
-        :poram convTestType: convergence test for non linear analysis (norm unbalance,...).
+        :param convTestType: convergence test for non linear analysis (norm unbalance,...).
         '''
         solutionStrategies= self.solCtrl.getSolutionStrategyContainer
         modelWrapperName= self.getModelWrapperName()
@@ -202,7 +202,7 @@ class SolutionProcedure(object):
         preprocessor.getLoadHandler.addToDomain(combName) # Add comb. loads.
         analOk= self.solve()
         preprocessor.getLoadHandler.removeFromDomain(combName) # Remove comb.
-        # print("Combination: ",combName," solved.\n")
+        # lmsg.info("Combination: ",combName," solved.\n")
         return analOk
 
 #Typical solution procedures.
@@ -394,10 +394,9 @@ def plain_static_modified_newton(prb, mxNumIter= 10, convergenceTestTol= .01):
     solProc= PlainStaticModifiedNewton(prb, maxNumIter= mxNumIter, convergenceTestTol= convergenceTestTol)
     return solProc.analysis
 
-class PenaltyModifiedNewton(SolutionProcedure):
-    ''' Static solution procedure with a modified Newton algorithm
-        and a penalty constraint handler.'''
-    def __init__(self, prb, name= None, maxNumIter= 150, convergenceTestTol= 1e-9, printFlag= 0, numSteps= 1):
+class PenaltyModifiedNewtonBase(SolutionProcedure):
+    ''' Base class for penalty modified Newton solution aggregation.'''
+    def __init__(self, prb, name, maxNumIter, convergenceTestTol, printFlag, numSteps, numberingMethod):
         ''' Constructor.
 
         :param prb: XC finite element problem.
@@ -407,13 +406,28 @@ class PenaltyModifiedNewton(SolutionProcedure):
         :param printFlag: if not zero print convergence results on each step.
         :param numSteps: number of steps to use in the analysis (useful only when loads are variable in time).
         '''
-        super(PenaltyModifiedNewton,self).__init__(name, maxNumIter, convergenceTestTol, printFlag, numSteps)
-        modelWrapperName= self.defineModelWrapper(prb, numberingMethod= 'rcm')
+        super(PenaltyModifiedNewtonBase,self).__init__(name, maxNumIter, convergenceTestTol, printFlag, numSteps)
+        modelWrapperName= self.defineModelWrapper(prb, numberingMethod= numberingMethod)
         self.defineConstraintHandler('penalty')
         self.defineSolutionAlgorithm(solAlgType= 'modified_newton_soln_algo', integratorType= 'load_control_integrator', convTestType= 'relative_total_norm_disp_incr_conv_test')
+        
+class PenaltyModifiedNewton(PenaltyModifiedNewtonBase):
+    ''' Static solution procedure with a modified Newton algorithm
+        and a penalty constraint handler.'''
+    def __init__(self, prb, name= None, maxNumIter= 150, convergenceTestTol= 1e-9, printFlag= 0, numSteps= 1, numberingMethod= 'rcm'):
+        ''' Constructor.
+
+        :param prb: XC finite element problem.
+        :param name: identifier for the solution procedure.
+        :param maxNumIter: maximum number of iterations (defauts to 10)
+        :param convergenceTestTol: convergence tolerance (defaults to 1e-9)
+        :param printFlag: if not zero print convergence results on each step.
+        :param numSteps: number of steps to use in the analysis (useful only when loads are variable in time).
+        '''
+        super(PenaltyModifiedNewton,self).__init__(prb, name, maxNumIter, convergenceTestTol, printFlag, numSteps, numberingMethod)
         self.defineSysOfEq(soeType= 'sparse_gen_col_lin_soe', solverType= 'super_lu_solver')
         self.defineAnalysis('static_analysis')
-        
+
 ### Convenience function
 def penalty_modified_newton(prb, mxNumIter= 10, convergenceTestTol= 1e-4, printFlag= 0):
     ''' Return a simple static modified Newton solution procedure.
@@ -423,6 +437,24 @@ def penalty_modified_newton(prb, mxNumIter= 10, convergenceTestTol= 1e-4, printF
     '''
     solProc= PenaltyModifiedNewton(prb,maxNumIter= mxNumIter, convergenceTestTol= convergenceTestTol, printFlag= printFlag)
     return solProc.analysis
+    
+class PenaltyModifiedNewtonUMF(PenaltyModifiedNewtonBase):
+    ''' Static solution procedure with a modified Newton algorithm,
+        a penalty constraint handler and a UMF
+        (Unsimmetric multi-frontal method) solver.'''
+    def __init__(self, prb, name= None, maxNumIter= 150, convergenceTestTol= 1e-9, printFlag= 0, numSteps= 1, numberingMethod= 'rcm'):
+        ''' Constructor.
+
+        :param prb: XC finite element problem.
+        :param name: identifier for the solution procedure.
+        :param maxNumIter: maximum number of iterations (defauts to 10)
+        :param convergenceTestTol: convergence tolerance (defaults to 1e-9)
+        :param printFlag: if not zero print convergence results on each step.
+        :param numSteps: number of steps to use in the analysis (useful only when loads are variable in time).
+        '''
+        super(PenaltyModifiedNewtonUMF,self).__init__(prb, name, maxNumIter, convergenceTestTol, printFlag, numSteps, numberingMethod)
+        self.defineSysOfEq(soeType= 'umfpack_gen_lin_soe', solverType= 'umfpack_gen_lin_solver')
+        self.defineAnalysis('static_analysis')
 
 class PlainKrylovNewton(SolutionProcedure):
     ''' KrylovNewton algorithm object which uses a Krylov subspace 
@@ -600,7 +632,7 @@ def ill_conditioning_analysis(prb):
 ## Utility functions
 
 def solveStaticLinearComb(combName,solutionProcedure):
-    print("DEPRECATED; use solveComb")
+    lmsg.warning("DEPRECATED; use solveComb")
     solutionProcedure.solveComb(combName)
 
 def solveCombEstat2ndOrderLin(combName,solutionProcedure):
@@ -610,9 +642,9 @@ def solveCombEstat2ndOrderLin(combName,solutionProcedure):
     analOk= solutionProcedure.solve()
     analOk= solutionProcedure.solve()
     preprocessor.getLoadHandler.removeFromDomain(combName)
-    # print("Resuelta combinación: ",combName,"\n")
+    # lmsg.info("Resuelta combinación: ",combName,"\n")
 
 def solveStaticNoLinCase(combName):
-    print("DEPRECATED; use use solveComb")
+    lmsg.warning("DEPRECATED; use use solveComb")
     solveComb(preprocessor,combName,analysis,numSteps)
 
