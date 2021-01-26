@@ -293,7 +293,7 @@ class PlainNewtonRaphson(SolutionProcedure):
         :param numSteps: number of steps to use in the analysis (useful only when loads are variable in time).
         '''
         super(PlainNewtonRaphson,self).__init__(name, maxNumIter, convergenceTestTol, printFlag, numSteps)
-        modelWrapperName= self.defineModelWrapper(prb, numberingMethod= 'simple')
+        modelWrapperName= self.defineModelWrapper(prb, numberingMethod= 'rcm')
         self.defineConstraintHandler('plain')
         self.defineSolutionAlgorithm(solAlgType= 'newton_raphson_soln_algo', integratorType= 'load_control_integrator', convTestType= 'norm_unbalance_conv_test')
         self.defineSysOfEq(soeType= 'sparse_gen_col_lin_soe', solverType= 'super_lu_solver')
@@ -377,7 +377,7 @@ class PlainStaticModifiedNewton(SolutionProcedure):
         :param numSteps: number of steps to use in the analysis (useful only when loads are variable in time).
         '''
         super(PlainStaticModifiedNewton,self).__init__(name, maxNumIter, convergenceTestTol, printFlag, numSteps)
-        modelWrapperName= self.defineModelWrapper(prb, numberingMethod= 'simple')
+        modelWrapperName= self.defineModelWrapper(prb, numberingMethod= 'rcm')
         self.defineConstraintHandler('plain')
         self.maxNumIter= 150 #Make this configurable
         self.defineSolutionAlgorithm(solAlgType= 'modified_newton_soln_algo', integratorType= 'load_control_integrator', convTestType= 'relative_total_norm_disp_incr_conv_test')
@@ -408,7 +408,7 @@ class PenaltyModifiedNewton(SolutionProcedure):
         :param numSteps: number of steps to use in the analysis (useful only when loads are variable in time).
         '''
         super(PenaltyModifiedNewton,self).__init__(name, maxNumIter, convergenceTestTol, printFlag, numSteps)
-        modelWrapperName= self.defineModelWrapper(prb, numberingMethod= 'simple')
+        modelWrapperName= self.defineModelWrapper(prb, numberingMethod= 'rcm')
         self.defineConstraintHandler('penalty')
         self.defineSolutionAlgorithm(solAlgType= 'modified_newton_soln_algo', integratorType= 'load_control_integrator', convTestType= 'relative_total_norm_disp_incr_conv_test')
         self.defineSysOfEq(soeType= 'sparse_gen_col_lin_soe', solverType= 'super_lu_solver')

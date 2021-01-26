@@ -75,7 +75,9 @@ bool XC::SparseGenRowLinSOE::setSolver(LinearSOESolver *newSolver)
     if(tmp)
       retval= SparseGenSOEBase::setSolver(tmp);
     else
-      std::cerr << "SparseGenRowLinSOE::setSolver; solver incompatible con system of equations." << std::endl;
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; solver type incompatible with this system of equations."
+		<< std::endl;
     return retval;
   }
 
@@ -120,57 +122,59 @@ int XC::SparseGenRowLinSOE::setSize(Graph &theGraph)
         for(int a=0; a<size; a++)
           {
             theVertex = theGraph.getVertexPtr(a);
-	if (theVertex == 0) {
-	  std::cerr << "WARNING:XC::SparseGenRowLinSOE::setSize :";
-	  std::cerr << " vertex " << a << " not in graph! - size set to 0\n";
-	  size = 0;
-	  return -1;
-	}
+	    if(!theVertex)
+	      {
+		std::cerr << getClassName() << "::" << __FUNCTION__
+			  << "WARNING: vertex " << a
+			  << " not in graph! - size set to 0\n";
+		size = 0;
+		return -1;
+	      }
 
-	colA(lastLoc++) = theVertex->getTag(); // place diag in first
-	const std::set<int> &theAdjacency = theVertex->getAdjacency();
+  	    colA(lastLoc++) = theVertex->getTag(); // place diag in first
+	    const std::set<int> &theAdjacency = theVertex->getAdjacency();
 	
-	// now we have to place the entries in the XC::ID into order in colA
-        for(std::set<int>::const_iterator i=theAdjacency.begin(); i!=theAdjacency.end(); i++)
-	  {
+	    // now we have to place the entries in the XC::ID into order in colA
+	    for(std::set<int>::const_iterator i=theAdjacency.begin(); i!=theAdjacency.end(); i++)
+	      {
+		int row = *i;
+		bool foundPlace = false;
+		// find a place in colA for current col
+		for (int j=startLoc; j<lastLoc; j++)
+		  if (colA(j) > row)
+		    { 
+		    // move the entries already there one further on
+		    // and place col in current location
+		    for (int k=lastLoc; k>j; k--)
 
-	  int row = *i;
-	  bool foundPlace = false;
-	  // find a place in colA for current col
-	  for (int j=startLoc; j<lastLoc; j++)
-	    if (colA(j) > row) { 
-	      // move the entries already there one further on
-	      // and place col in current location
-	      for (int k=lastLoc; k>j; k--)
-		
-		colA(k) = colA(k-1);
-	      colA(j) = row;
-	      foundPlace = true;
-	      j = lastLoc;
-	    }
-	  if(foundPlace == false) // put in at the end
-	    colA(lastLoc) = row;
+		      colA(k) = colA(k-1);
+		    colA(j) = row;
+		    foundPlace = true;
+		    j = lastLoc;
+		    }
+		if(foundPlace == false) // put in at the end
+		  colA(lastLoc) = row;
 
-	  lastLoc++;
-	}
-	rowStartA(a+1)= lastLoc;;	    
-	startLoc = lastLoc;
+		lastLoc++;
+	      }
+		rowStartA(a+1)= lastLoc;;	    
+		startLoc = lastLoc;
+	  }
       }
-    }
     
     // invoke setSize() on the XC::Solver   
-     LinearSOESolver *the_Solver = this->getSolver();
+    LinearSOESolver *the_Solver = this->getSolver();
     int solverOK = the_Solver->setSize();
-    if (solverOK < 0) {
-	std::cerr << "WARNING:XC::SparseGenRowLinSOE::setSize :";
-	std::cerr << " solver failed setSize()\n";
+    if(solverOK < 0)
+      {
+	std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; WARNING: solver failed setSize()\n";
 	return solverOK;
-    }    
+      }    
     return result;
-}
+  }
 
-int 
-XC::SparseGenRowLinSOE::addA(const XC::Matrix &m, const XC::ID &id, double fact)
+int XC::SparseGenRowLinSOE::addA(const XC::Matrix &m, const XC::ID &id, double fact)
 {
     // check for a quick return 
     if (fact == 0.0)  
@@ -179,11 +183,12 @@ XC::SparseGenRowLinSOE::addA(const XC::Matrix &m, const XC::ID &id, double fact)
     int idSize = id.Size();
     
     // check that m and id are of similar size
-    if (idSize != m.noRows() && idSize != m.noCols()) {
-	std::cerr << "XC::SparseGenRowLinSOE::addA() ";
-	std::cerr << " - Matrix and XC::ID not of similar sizes\n";
+    if(idSize != m.noRows() && idSize != m.noCols())
+      {
+	std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; Matrix and ID not of similar sizes\n";
 	return -1;
-    }
+      }
     
     if (fact == 1.0) { // do not need to multiply 
 	for (int i=0; i<idSize; i++) {

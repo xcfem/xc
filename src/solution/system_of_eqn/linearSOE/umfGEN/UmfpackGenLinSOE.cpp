@@ -86,7 +86,7 @@ bool XC::UmfpackGenLinSOE::setSolver(LinearSOESolver *newSolver)
       { retval= FactoredSOEBase::setSolver(tmp); }
     else
       std::cerr << getClassName() << "::" << __FUNCTION__
-	        << "; solver not compatible with system of equations."
+	        << "; solver not compatible with this system of equations."
 		<< std::endl;
     return retval;
   }
