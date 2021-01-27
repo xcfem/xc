@@ -338,10 +338,10 @@ bool XC::Domain::addSFreedom_Constraint(SFreedom_Constraint *spConstraint, int p
 //! is raised and and {\em false} is returned. 
 //!
 //! @param load: load over node.
-//! @param pattern: load pattern identifier.
-bool XC::Domain::addNodalLoad(NodalLoad *load, int pattern)
+//! @param loadPatternTag: load pattern identifier.
+bool XC::Domain::addNodalLoad(NodalLoad *load, int loadPatternTag)
   {
-    bool result= constraints.addNodalLoad(load,pattern);
+    bool result= constraints.addNodalLoad(load,loadPatternTag);
     if(result)
       {
         load->setDomain(this); // done in LoadPattern::addNodalLoad()
@@ -363,15 +363,15 @@ bool XC::Domain::addNodalLoad(NodalLoad *load, int pattern)
 //! is raised and and {\em false} is returned.
 //!
 //! @param load: load over element.
-//! @param pattern: load pattern identifier.
-bool XC::Domain::addElementalLoad(ElementalLoad *load, int pattern)
+//! @param loadPatternTag: load pattern identifier.
+bool XC::Domain::addElementalLoad(ElementalLoad *load, int loadPatternTag)
   {
-    bool result= constraints.addElementalLoad(load,pattern);
+    bool result= constraints.addElementalLoad(load,loadPatternTag);
     if(result == false)
       {
         std::cerr << getClassName() << "::" << __FUNCTION__
 		  << "; no pattern with tag "
-		  << pattern
+		  << loadPatternTag
 		  << " in the model, not adding the ele load"
 		  << *load << std::endl;
         return false;
