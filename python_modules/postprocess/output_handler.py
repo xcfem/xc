@@ -561,7 +561,6 @@ class OutputHandler(object):
         vFieldEl.multiplyByElementArea= self.outputStyle.multLoadsByElemArea
         count= vFieldEl.dumpElementalLoads(preprocessor, defFScale=defFScale)
         if(count >0):
-            print('surf',scOrient)
             vFieldEl.addToDisplay(displaySettings,orientation= scOrient,
                                   title='Surface loads ('+self.getOutputForceUnitSym()+'/'+
                                   self.getOutputLengthUnitSym()+'2)' )
@@ -572,7 +571,6 @@ class OutputHandler(object):
                                        scaleFactor= vectorScale, showPushing= self.outputStyle.showLoadsPushing)
         count= vFieldNod.dumpNodalLoads(preprocessor, defFScale=defFScale)
         if(count >0):
-            print('nod',scOrient)
             vFieldNod.addToDisplay(displaySettings,orientation= scOrient,
                                    title='Nodal loads ('+self.getOutputForceUnitSym()+')')
             scOrient+=1
