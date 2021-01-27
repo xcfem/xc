@@ -9,6 +9,7 @@ __email__= "l.pereztato@ciccp.es, ana.ortega@ciccp.es "
 
 '''Data to represent field vector in VTK.'''
 
+import uuid
 import math
 import zlib
 import vtk
@@ -34,6 +35,8 @@ class VectorFieldData(object):
     self.vectors.SetNumberOfComponents(numberOfComponents)
 
   def getNumberOfTuples(self):
+    ''' Return the number of tuples in the VTK 
+        double array.'''
     return self.vectors.GetNumberOfTuples()
 
   def getLengthsName(self):
@@ -41,8 +44,7 @@ class VectorFieldData(object):
          object that contains the vector lengths.'''
       retval= self.name
       if(len(retval)>=70):
-          lmsg.log('lengthsName string compressed to avoid buffer overflow.')
-          retval= zlib.compress(retval)
+          retval= str(uuid.uuid1())
           if(len(retval)>=70):
               lmsg.log('lengthsName string truncated to avoid buffer overflow.')
               retval= retval[:70]
