@@ -182,9 +182,19 @@ class SolutionProcedure(object):
         '''
         self.analysis= self.solu.newAnalysis(analysisType, self.getSolutionStrategyName(),"")
 
-    def solve(self):
-        ''' Runs the analysis.'''
-        return self.analysis.analyze(self.numSteps)
+    def solve(self, calculateNodalReactions= False, includeInertia= False):
+        ''' Compute the solution (run the analysis).
+
+        :param calculateNodalReactions: if true calculate reactions at
+                                        nodes.
+        :param includeInertia: if true calculate reactions including inertia
+                               effects.
+        '''
+        result= self.analysis.analyze(self.numSteps)
+        if(calculateNodalReactions):
+            preprocessor= self.feProblem.getPreprocessor
+            preprocessor.getNodeHandler.calculateNodalReactions(includeInertia,1e-7)
+            return result
 
     def resetLoadCase(self):
         ''' Remove previous load from the domain.'''
@@ -192,15 +202,19 @@ class SolutionProcedure(object):
         preprocessor.resetLoadCase() # Remove previous loads.
         preprocessor.getDomain.revertToStart() # Revert to initial state.
         
-    def solveComb(self,combName):
+    def solveComb(self,combName, calculateNodalReactions= False, includeInertia= False):
         ''' Obtains the solution for the combination argument.
 
         :param combName: name of the combination to obtain the response for.
+        :param calculateNodalReactions: if true calculate reactions at
+                                        nodes.
+        :param includeInertia: if true calculate reactions including inertia
+                               effects.
         '''
         self.resetLoadCase() # Remove previous loads.
         preprocessor= self.feProblem.getPreprocessor
         preprocessor.getLoadHandler.addToDomain(combName) # Add comb. loads.
-        analOk= self.solve()
+        analOk= self.solve(calculateNodalReactions, includeInertia)
         preprocessor.getLoadHandler.removeFromDomain(combName) # Remove comb.
         # lmsg.info("Combination: ",combName," solved.\n")
         return analOk
