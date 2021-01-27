@@ -99,11 +99,11 @@ class EPPGapMaterial: public EPPBaseMaterial
     double minElasticYieldStrain;
     int damage;
   protected:
-
+    int sendData(Communicator &);
+    int recvData(const Communicator &);    
   public:
+    EPPGapMaterial(int tag= 0);  
     EPPGapMaterial(int tag, double E, double fy, double gap, double eta, int damage = 0);
-    EPPGapMaterial(int tag);  
-    EPPGapMaterial(void);  
 
     int setTrialStrain(double strain, double strainRate = 0.0); 
     double getStrain(void) const;          

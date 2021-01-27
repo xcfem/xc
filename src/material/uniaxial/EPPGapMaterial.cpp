@@ -76,12 +76,14 @@ XC::EPPGapMaterial::EPPGapMaterial(int tag, double e, double fyl, double gap0, d
   {
     if(E == 0.0)
       {
-        std::cerr << "XC::EPPGapMaterial::EPPGapMaterial -- E is zero, continuing with E = fy/0.002\n";
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; E is zero, continuing with E = fy/0.002\n";
         if(fy != 0.0)
           E = fabs(fy)/0.002;
         else
           {
-            std::cerr << "XC::EPPGapMaterial::EPPGapMaterial -- E and fy are zero\n";
+            std::cerr << getClassName() << "::" << __FUNCTION__
+		      << "; E and fy are zero\n";
             exit(-1);
           }
       }
@@ -89,24 +91,27 @@ XC::EPPGapMaterial::EPPGapMaterial(int tag, double e, double fyl, double gap0, d
       maxElasticYieldStrain = fy/E + gap;
 
     if(fy*gap<0)
-      { std::cerr << "XC::EPPGapMaterial::EPPGapMaterial -- Alternate signs on fy and E encountered, continuing anyway\n"; }
+      {
+	std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; alternate signs on fy and gap encountered"
+	          << ", continuing anyway\n";
+      }
     if((eta >= 1) || (eta <= -1))
       {
-        std::cerr << "XC::EPPGapMaterial::EPPGapMaterial -- value of eta must be -1 <= eta <= 1, setting eta to 0\n";
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; value of eta must be -1 <= eta <= 1, setting eta to 0\n";
         eta = 0;
       }
     if((damage < 0) || (damage > 1))
-      { std::cerr << "%s -- damage switch must be 0 or 1\n"; }
+      { std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "%s -- damage switch must be 0 or 1\n"; }
   }
 
 //! @brief Constructor.
 XC::EPPGapMaterial::EPPGapMaterial(int tag)
   :EPPBaseMaterial(tag,MAT_TAG_EPPGap), fy(0.0),
-   gap(0.0), eta(0.0), minElasticYieldStrain(0.0), damage(0) {}
-
-XC::EPPGapMaterial::EPPGapMaterial(void)
-  :EPPBaseMaterial(0,MAT_TAG_EPPGap), fy(0.0),
-   gap(0.0), eta(0.0), minElasticYieldStrain(0.0), damage(0) {}
+   gap(0.0), eta(0.0), maxElasticYieldStrain(0.0),
+   minElasticYieldStrain(0.0), damage(0) {}
 
 int XC::EPPGapMaterial::setTrialStrain(double strain, double strainRate)
   {
@@ -217,37 +222,53 @@ int XC::EPPGapMaterial::revertToStart(void)
 XC::UniaxialMaterial *XC::EPPGapMaterial::getCopy(void) const
   { return new EPPGapMaterial(*this); }
 
+//! @brief Send object members through the communicator argument.
+int XC::EPPGapMaterial::sendData(Communicator &comm)
+  {
+    int res= EPPBaseMaterial::sendData(comm);
+    res+= comm.sendDoubles(commitStrain,E,fy,gap,getDbTagData(),CommMetaData(4));
+    res+= comm.sendDoubles(eta,maxElasticYieldStrain,minElasticYieldStrain,getDbTagData(),CommMetaData(5));
+    res+= comm.sendInt(damage,getDbTagData(), CommMetaData(6));
+    return res;
+  }
+
+//! @brief Receives object members through the communicator argument.
+int XC::EPPGapMaterial::recvData(const Communicator &comm)
+  {
+    int res= EPPBaseMaterial::recvData(comm);
+    res+= comm.receiveDoubles(commitStrain,E,fy,gap,getDbTagData(),CommMetaData(4));
+    res+= comm.receiveDoubles(eta,maxElasticYieldStrain,minElasticYieldStrain,getDbTagData(),CommMetaData(5));
+    res+= comm.receiveInt(damage,getDbTagData(), CommMetaData(6));
+    return res;
+  }
+
 int XC::EPPGapMaterial::sendSelf(Communicator &comm)
   {
-    int res = 0;
     setDbTag(comm);
     const int dataTag= getDbTag();
-    inicComm(4); 
-
-    setDbTagDataPos(0,this->getTag());
-    res+= comm.sendDoubles(commitStrain,E,fy,gap,getDbTagData(),CommMetaData(1));
-    res+= comm.sendDoubles(eta,maxElasticYieldStrain,minElasticYieldStrain,getDbTagData(),CommMetaData(2));
-    setDbTagDataPos(3,damage);
-
-    res = comm.sendIdData(getDbTagData(),dataTag);
-    if(res < 0) 
-      std::cerr << "XC::EPPGapMaterial::sendSelf() - failed to send data\n";
+    inicComm(7);
+    int res= sendData(comm);
+    res+= comm.sendIdData(getDbTagData(),dataTag);
+    if(res < 0)
+      std::cerr << getClassName() << "::" << __FUNCTION__
+	        << "; failed to send data\n";
     return res;
   }
 
 int XC::EPPGapMaterial::recvSelf(const Communicator &comm)
   {
-    int res = 0;
-    inicComm(3);
+    inicComm(7);
     const int dataTag= getDbTag();
-    res= comm.receiveIdData(getDbTagData(),dataTag);
-    if(res < 0)
-      std::cerr << "XC::EPPGapMaterial::recvSelf() - failed to recv data\n";
+    int res= comm.receiveIdData(getDbTagData(),dataTag);
+    if(res<0)
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; failed to receive ids.\n";
     else
       {
-        res+= comm.receiveDoubles(commitStrain,E,fy,gap,getDbTagData(),CommMetaData(1));
-        res+= comm.receiveDoubles(eta,maxElasticYieldStrain,minElasticYieldStrain,getDbTagData(),CommMetaData(2));
-        damage= getDbTagDataPos(3);
+        res= recvData(comm);
+        if(res < 0)
+          std::cerr << getClassName() << "::" << __FUNCTION__
+	            << "; - failed to receive data\n";
       }
     return res;
   }
