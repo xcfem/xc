@@ -38,16 +38,20 @@
 #include "preprocessor/set_mgmt/MapSet.h"
 #include "domain/mesh/node/Node.h"
 
-XC::ElementBodyLoad::ElementBodyLoad(int tag, int classTag, const XC::ID &theEleTags)
-  :ElementalLoad(tag, classTag,theEleTags), theElements() {}
+//! @brief Constructor. Provided for the FEM_Object broker; the tag
+//! and elementTag need to be supplied in recvSelf();
+XC::ElementBodyLoad::ElementBodyLoad(int classTag)
+  :ElementalLoad(0, classTag), theElements() {}
 
+//! @brief Constructor.
 XC::ElementBodyLoad::ElementBodyLoad(int tag, int classTag)
   :ElementalLoad(tag, classTag), theElements() {}
 
-// provided for the FEM_Object broker; the tag and elementTag need
-// to be supplied in recvSelf();
-XC::ElementBodyLoad::ElementBodyLoad(int classTag)
-  :ElementalLoad(0, classTag), theElements() {}
+//! @brief Constructor.
+XC::ElementBodyLoad::ElementBodyLoad(int tag, int classTag, const ID &theEleTags)
+  :ElementalLoad(tag, classTag,theEleTags), theElements() {}
+
+
 
 void XC::ElementBodyLoad::setDomain(Domain *theDomain)
   {
@@ -56,19 +60,31 @@ void XC::ElementBodyLoad::setDomain(Domain *theDomain)
     if(sz==0)
       std::clog << getClassName() << "::" << __FUNCTION__
                 << "; no element identifiers." << std::endl;
-    theElements.setPtrs(theDomain,elemTags);
+    else
+      theElements.setPtrs(theDomain,elemTags);
   }
 
 //! @brief Applies the load to the elements.
 void XC::ElementBodyLoad::applyLoad(double loadFactor) 
   {
-    const int sz= theElements.size();
+    int sz= theElements.size();
     const int numEle= numElements();
     if(sz!=numEle)
-      std::cerr << getClassName() << "::" << __FUNCTION__
-		<< "; the number of pointers (" << sz
-	        << ") does not match the number of identifiers ("
-	        << numEle << "); something went wrong." << std::endl;
+      {
+	// Try to set the pointers.
+	Domain *dom= getDomain();
+	if(dom)
+	  theElements.setPtrs(dom, elemTags);
+	sz= theElements.size();
+	if(sz!=numEle)
+	  std::cerr << getClassName() << "::" << __FUNCTION__
+		    << "; the number of pointers (" << sz
+		    << ") does not match the number of identifiers ("
+		    << numEle << "); something went wrong."
+		    << " Load tag: " << getTag()
+		    << " load pattern tag: " << getLoadPatternTag()
+		    << " element tags: " << elemTags << std::endl;
+      }
     for(int i=0; i<sz; i++)
       if(theElements[i])
         theElements[i]->addLoad(this, loadFactor);

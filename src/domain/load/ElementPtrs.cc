@@ -39,7 +39,6 @@
 XC::ElementPtrs::ElementPtrs(void)
   : theElements(0) {}
 
-
 //! @brief Destructor.
 XC::ElementPtrs::~ElementPtrs(void)
   { theElements.clear(); }

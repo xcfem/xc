@@ -31,7 +31,8 @@
 
 //! @brief Constructor.
 XC::EPPBaseMaterial::EPPBaseMaterial(int tag, int classtag, double e,double e0)
-  :ElasticBaseMaterial(tag,classtag,e,e0), trialStress(0.0), trialTangent(e), commitStrain(0.0) {}
+  :ElasticBaseMaterial(tag,classtag,e,e0), trialStress(0.0),
+   trialTangent(e), commitStrain(0.0) {}
 
 //! @brief Send object members through the communicator argument.
 int XC::EPPBaseMaterial::sendData(Communicator &comm)

@@ -51,9 +51,9 @@ class ElementBodyLoad: public ElementalLoad
     int recvData(const Communicator &comm);
 
   public:
-    ElementBodyLoad(int tag, int classTag, const ID &theElementTags);
-    ElementBodyLoad(int tag, int classTag);
     ElementBodyLoad(int classTag);    
+    ElementBodyLoad(int tag, int classTag);
+    ElementBodyLoad(int tag, int classTag, const ID &theElementTags);
 
     virtual void setDomain(Domain *theDomain);
     virtual void applyLoad(double loadfactor);

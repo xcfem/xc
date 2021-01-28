@@ -241,7 +241,7 @@ XC::NodalLoad *XC::LoadPattern::newNodalLoad(const int &nodeTag,const Vector &f)
       std::clog << getClassName() << "::" << __FUNCTION__
 	        << "; this load pattern is already active,"
 	        << " loads must be defined previously."
-	        << " results are undefined." << std::endl;
+	        << " Results are undefined." << std::endl;
     MapLoadPatterns *map= dynamic_cast<MapLoadPatterns *>(Owner());
     assert(map);
     int nextTag= map->getCurrentNodeLoadTag();
@@ -260,7 +260,7 @@ XC::ElementalLoad *XC::LoadPattern::newElementalLoad(const std::string &loadType
       std::clog << getClassName() << "::" << __FUNCTION__
 	        << "; this load pattern is already active,"
 	        << " loads must be defined previously."
-	        << " results are undefined." << std::endl;
+	        << " Results are undefined." << std::endl;
     MapLoadPatterns *map= dynamic_cast<MapLoadPatterns *>(Owner());
     assert(map);
     int nextTag= map->getCurrentElementLoadTag();
