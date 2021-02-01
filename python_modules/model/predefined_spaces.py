@@ -7,6 +7,7 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@ciccp.es, ana.Ortega@ciccp.es "
 
+from typing import Sequence
 import xc
 import numpy as np
 from misc_utils import log_messages as lmsg
@@ -20,7 +21,15 @@ import uuid
 defaultSolutionProcedureType= predefined_solutions.SimpleStaticLinear
 
 class PredefinedSpace(object):
-    def __init__(self,nodes,dimSpace,numDOFs, solProcType= defaultSolutionProcedureType):
+    ''' Convenience class that sets the space dimension and
+        the number of degrees of freedom for a XC finite element
+        problem.
+    :ivar dimSpace: dimension of the space (1, 2 or 3).
+    :ivar numDOFs: number of degrees of freedom for each node (1, 2, 3 or 6).
+    :ivar solProcType: type of the solution procedure.
+    :ivar fixedNodesTags: tags of the constrained nodes.
+    '''
+    def __init__(self, nodes, dimSpace, numDOFs, solProcType: predefined_solutions.SolutionProcedure = defaultSolutionProcedureType):
         '''Defines the dimension of the space and the number 
          of DOFs for each node.
 
@@ -61,7 +70,7 @@ class PredefinedSpace(object):
         ''' Return the seed element handler for this model.'''
         return self.getElementHandler().seedElemHandler
 
-    def getElements(self, tags):
+    def getElements(self, tags: Sequence[int]):
         ''' Return the elements that correspond to the argument
             tags.
 
@@ -95,7 +104,7 @@ class PredefinedSpace(object):
         '''
         return self.getNodeHandler().newNodeXYZ(x,y,z)
     
-    def getNodes(self, tags):
+    def getNodes(self, tags: Sequence[int]):
         ''' Return the nodes that correspond to the argument
             tags.
 
@@ -108,7 +117,11 @@ class PredefinedSpace(object):
             retval.append(n)
         return retval
     
-    def getIntForceComponentFromName(self,componentName):
+    def getIntForceComponentFromName(self, componentName: str):
+        ''' Return the internal force component from the name argument.
+
+        :param componentName: name of the component.
+        '''
         if componentName[0] in ['N','M']:
             return componentName.lower()
         elif componentName == 'Q1':
@@ -119,7 +132,7 @@ class PredefinedSpace(object):
             lmsg.error('Item '+str(componentName) + ' is not a valid component. Available components are: N1, N2, N12, M1, M2, M12, Q1, Q2')
             return 'N1'
         
-    def setPreprocessor(self,preprocessor):
+    def setPreprocessor(self, preprocessor: xc.Preprocessor):
         '''Sets suitable values for the members from the dimension of the space 
          and the number of DOFs for each node obtained from the argument.
 
@@ -171,7 +184,7 @@ class PredefinedSpace(object):
         lPatterns.currentTimeSeries= name
         return ts
     
-    def newLoadPattern(self, name, lpType= 'default'):
+    def newLoadPattern(self, name: str, lpType= 'default'):
         ''' Creates a times series -modulation of the load
             in time-.
 
@@ -189,14 +202,14 @@ class PredefinedSpace(object):
         ''' Return the current load pattern.'''
         return self.getLoadHandler().getLoadPatterns.currentLoadPattern
         
-    def setCurrentLoadPattern(self, lpName):
+    def setCurrentLoadPattern(self, lpName: str):
         ''' Set the current load pattern.
 
         :param lpName: load pattern name.
         '''
         self.getLoadHandler().getLoadPatterns.currentLoadPattern= lpName
     
-    def getLoadPattern(self, lpName):
+    def getLoadPattern(self, lpName: str):
         ''' Return the load pattern with the argument name.
 
         :param lpName: load pattern name.
@@ -208,7 +221,7 @@ class PredefinedSpace(object):
         lpName= self.getCurrentLoadPatternName()
         return self.getLoadPattern(lpName)
 
-    def newSPConstraint(self, nodeTag, dof, prescribedDisp= 0.0):
+    def newSPConstraint(self, nodeTag: int, dof: int, prescribedDisp= 0.0):
         ''' Prescribe displacement for node DOFs.
 
         :param nodeTag: tag of the node.
@@ -218,7 +231,7 @@ class PredefinedSpace(object):
         self.constraints.newSPConstraint(nodeTag,dof,prescribedDisp)
         self.fixedNodesTags.add(nodeTag)
 
-    def setPrescribedDisplacements(self,nodeTag,prescDisplacements):
+    def setPrescribedDisplacements(self, nodeTag: int, prescDisplacements: Sequence[float]):
         '''Prescribe displacement for node DOFs.
 
         :param nodeTag: tag of the node.
@@ -233,7 +246,7 @@ class PredefinedSpace(object):
         for i in range(0,sz):
             spc= self.newSPConstraint(nodeTag,i,prescDisplacements[i])
 
-    def setRigidBeamBetweenNodes(self,nodeTagA, nodeTagB):
+    def setRigidBeamBetweenNodes(self,nodeTagA: int, nodeTagB: int):
         '''Create a rigid beam between the nodes passed as parameters.
 
         :param   nodeTagA: tag of the master node.
@@ -241,7 +254,7 @@ class PredefinedSpace(object):
         '''
         return self.constraints.newRigidBeam(nodeTagA,nodeTagB)
 
-    def setRigidRodBetweenNodes(self,nodeTagA, nodeTagB):
+    def setRigidRodBetweenNodes(self, nodeTagA: int, nodeTagB: int):
         '''Create a rigid rod between the nodes passed as parameters.
 
         :param   nodeTagA: tag of the master node.
@@ -249,35 +262,33 @@ class PredefinedSpace(object):
         '''
         return self.constraints.newRigidRod(nodeTagA,nodeTagB)
 
-    def newEqualDOF(self,nodeTagA, nodeTagB,dofs):
+    def newEqualDOF(self, nodeTagA: int, nodeTagB: int , dofs: xc.ID):
         '''Create an equal DOF constraint between the nodes.
 
-        :param   nodeTagA: tag of the master node.
-        :param   nodeTagB: tag of the slave node.
+        :param nodeTagA: tag of the master node.
+        :param nodeTagB: tag of the slave node.
         :param dofs: degrees of freedom to be glued 
                    (e.g.: dofs=xc.ID([0,3,6]) means to equal ux,uz,rotz)
         '''
         return self.constraints.newEqualDOF(nodeTagA,nodeTagB,dofs)
     
-    def setFulcrumBetweenNodes(self,nodeTagA, pivotNode):
+    def setFulcrumBetweenNodes(self,nodeTagA: int, pivotNodeTag: int):
         '''Create a fulcrum between the nodes passed as parameters.
 
         Creates a rigid link between the nodes.
-        It's called fulcrum because it's pinned on pivotNode.
+        It's called fulcrum because it's pinned on pivotNodeTag.
 
         :param   nodeTagA: tag of the primary node.
-        :param   pivotNode: tag of the pivot (secondary node).
-        :param dofs: degrees of freedom to be glued 
-                   (e.g.: dofs=xc.ID([0,3,6]) means to equal ux,uz,rotz)
+        :param   pivotNodeTag: tag of the pivot (secondary node).
         '''
         nodes= self.preprocessor.getNodeHandler
-        coordNodeB= nodes.getNode(pivotNode).getCoo
+        coordNodeB= nodes.getNode(pivotNodeTag).getCoo
         fulcrumNode= nodes.newNodeFromVector(coordNodeB)
         rb= self.constraints.newRigidBeam(nodeTagA,fulcrumNode.tag)
-        ed= self.constraints.newEqualDOF(fulcrumNode.tag,pivotNode,xc.ID(self.getDisplacementDOFs()))
+        ed= self.constraints.newEqualDOF(fulcrumNode.tag,pivotNodeTag,xc.ID(self.getDisplacementDOFs()))
         return fulcrumNode
 
-    def setBearingBetweenNodes(self,iNodA,iNodB,bearingMaterialNames,orientation= None):
+    def setBearingBetweenNodes(self,iNodA: int, iNodB: int, bearingMaterialNames: Sequence[str], orientation= None):
         '''Modelize a bearing between the nodes
 
          :param iNodA: (int) first node identifier (tag).
@@ -298,8 +309,8 @@ class PredefinedSpace(object):
           element axes coincide with the global axes. Otherwise, the local
           z-axis is defined by the cross product between the vectors x 
           and yp specified in the command line.
-          :return: newly created zero length element that represents the bearing.
-
+          :return: newly created zero length element that represents the 
+                   bearing.
         '''
         # Element definition
         elems= self.getElementHandler()
@@ -316,7 +327,7 @@ class PredefinedSpace(object):
                 zl.setMaterial(i,material)
         return zl
 
-    def setBearing(self,iNod,bearingMaterialNames, orientation= None):
+    def setBearing(self, iNod: int, bearingMaterialNames: Sequence[str], orientation= None):
         '''Modelize a bearing on X, XY or XYZ directions.
 
           :param iNod: (int) node identifier (tag).
@@ -351,16 +362,16 @@ class PredefinedSpace(object):
             spc= self.newSPConstraint(newNode.tag,i,0.0)
         return newNode, newElement
 
-    def setBearingOnX(self,iNod,bearingMaterial):
+    def setBearingOnX(self, iNod: int, bearingMaterialName: str):
         '''Modelize a bearing on X direction.
 
            :param iNod (int): node identifier (tag).
-           :param bearingMaterial (string): material name for the zero length
-                 element.
+           :param bearingMaterialName (string): material name for the zero 
+                                                length element.
         '''
-        return setBearing(iNod,[bearingMaterial])
+        return setBearing(iNod,[bearingMaterialName])
 
-    def setBearingOnXYRigZ(self,iNod,bearingMaterialNames):
+    def setBearingOnXYRigZ(self, iNod: int, bearingMaterialNames: Sequence[str]):
         '''Modelize a non rigid on X and Y directions and rigid on Z bearing.
 
            :param   iNod (int): node identifier (tag).
@@ -370,13 +381,14 @@ class PredefinedSpace(object):
         eDofs= self.constraints.newEqualDOF(newNode.tag,iNod,xc.ID([2]))
         return newNode, newElement
 
-    def setUniaxialBearing2D(self,iNod,bearingMaterial,direction):
+    def setUniaxialBearing2D(self, iNod: int, bearingMaterialName: str, direction):
         '''Modelize an uniaxial bearing on the defined direction.
 
          :param iNod (int): node identifier (tag).
-         :param  bearingMaterial (str): material name for the zero length
+         :param bearingMaterialName (str): material name for the zero length
                  element.
-          :return rtype: (int, int) new node tag, new element tag.
+         :param direction: direction of the bearing.
+         :return rtype: (int, int) new node tag, new element tag.
         '''
         nodes= self.preprocessor.getNodeHandler
         newNode= nodes.duplicateNode(iNod) # new node.
@@ -385,11 +397,11 @@ class PredefinedSpace(object):
         elems.dimElem= self.preprocessor.getNodeHandler.dimSpace # space dimension.
         if(elems.dimElem>2):
             lmsg.warning("Not a bi-dimensional space.")
-        elems.defaultMaterial= bearingMaterial
+        elems.defaultMaterial= bearingMaterialName
         zl= elems.newElement("ZeroLength",xc.ID([newNode.tag,iNod]))
         zl.setupVectors(xc.Vector([direction[0],direction[1],0]),xc.Vector([-direction[1],direction[0],0]))
         zl.clearMaterials()
-        zl.setMaterial(0,bearingMaterial)
+        zl.setMaterial(0,bearingMaterialName)
         # Boundary conditions
         numDOFs= self.preprocessor.getNodeHandler.numDOFs
         for i in range(0,numDOFs):
@@ -411,7 +423,7 @@ class PredefinedSpace(object):
             supportNodes.append(n)
         return get_reactions.Reactions(self.preprocessor, supportNodes)
 
-    def getSet(self, setName):
+    def getSet(self, setName: str):
         '''Return the set with the name argument.
 
         :param setName: name of the set to retrieve.
@@ -423,21 +435,30 @@ class PredefinedSpace(object):
            entities.'''
         return self.getSet('total')
 
-    def defSet(self, setName):
-        ''' Defines a set with the name argument.'''
+    def defSet(self, setName: str):
+        ''' Defines a set with the name argument.
+
+        :param setName: name of the set to define.
+        '''
         return self.preprocessor.getSets.defSet(setName)
     
-    def removeSet(self, setName):
-        ''' Defines a set with the name argument.'''
+    def removeSet(self, setName: str):
+        ''' Remove the set whose name corresponds to the argument.
+
+        :param setName: name of the set to remove.
+        '''
         return self.preprocessor.getSets.removeSet(setName)
 
-    def renewSet(self, setName):
-        ''' Redefines the set with the name argument.'''
+    def renewSet(self, setName: str):
+        ''' Redefines the set with the name argument.
+
+        :param setName: name of the set to renew.
+        '''
         if self.preprocessor.getSets.exists(setName):
             self.preprocessor.getSets.removeSet(setName)
         return self.defSet(setName)
 
-    def setSum(self, setName, setsToSum):
+    def setSum(self, setName:str, setsToSum: Sequence[xc.Set]):
         ''' Return a set that contains the union of the
             arguments.
 
@@ -453,7 +474,7 @@ class PredefinedSpace(object):
         retval.name= setName # remove all the expressions from name.
         return retval
     
-    def setIntersection(self, setName, setsToIntersect):
+    def setIntersection(self, setName: str, setsToIntersect: Sequence[xc.Set]):
         ''' Return a set that contains the union of the
             arguments.
 
@@ -478,7 +499,7 @@ class PredefinedSpace(object):
         ''' Revert the domain to its initial state..'''
         self.preprocessor.getDomain.revertToStart()
 
-    def addLoadCaseToDomain(self, loadCaseName):
+    def addLoadCaseToDomain(self, loadCaseName: str):
         '''Add the load case argument (load pattern or
            combination) to the domain.
 
@@ -489,7 +510,7 @@ class PredefinedSpace(object):
         # Return the current load pattern.
         return loadHandler.getLoadPatterns[loadCaseName]
 
-    def removeLoadCaseFromDomain(self, loadCaseName):
+    def removeLoadCaseFromDomain(self, loadCaseName: str):
         '''Add the load case argument (load pattern or
            combination) to the domain.
 
@@ -497,7 +518,7 @@ class PredefinedSpace(object):
         '''
         self.getLoadHandler().removeFromDomain(loadCaseName)
         
-    def addNewLoadCaseToDomain(self, loadCaseName, loadCaseExpression):
+    def addNewLoadCaseToDomain(self, loadCaseName: str, loadCaseExpression: str):
         '''Defines a new combination and add it to the domain.
 
            :param loadCaseName: name of the load pattern or combination.
@@ -510,15 +531,16 @@ class PredefinedSpace(object):
         self.preprocessor.resetLoadCase()
         self.addLoadCaseToDomain(loadCaseName)
 
-    def createSelfWeightLoad(self,xcSet, gravityVector):
+    def createSelfWeightLoad(self,xcSet: xc.Set, gravityVector):
         ''' Creates the self-weight load on the elements.
 
-         :param xcSet: set with the elements to load.
+        :param xcSet: set with the elements to load.
+        :param gravityVector: gravity acceleration vector.
         '''
         for e in xcSet.getElements:
             e.createInertiaLoad(gravityVector)
 
-    def setSolutionProcedureType(self, solutionProcedureType):
+    def setSolutionProcedureType(self, solutionProcedureType: predefined_solutions.SolutionProcedure):
         ''' Set the solution procedure that will be used
             to solve the finite element problem.
 
@@ -568,7 +590,7 @@ class PredefinedSpace(object):
         self.analysis= predefined_solutions.ill_conditioning_analysis(problem)
         return self.analysis.analyze(numModes)
 
-    def deactivateElements(self, elemSet, srf= 1e-6):
+    def deactivateElements(self, elemSet: xc.Set, srf= 1e-6):
         ''' Deactivate the elements on the set argument.
 
         :param elemSet: set of elements to be deactivated.
@@ -581,18 +603,17 @@ class PredefinedSpace(object):
         lockerName= elemSet.name+'_locker'
         mesh.freezeDeadNodes(lockerName)
 
-    def activateElements(self, elemSet):
+    def activateElements(self, elemSet: xc.Set):
         ''' Activate the (previoulsy deactivated) elements on the set argument.
 
         :param elemSet: set of elements to be deactivated.
-        :param srf: stress reduction factor for element deactivation.
         '''
         elemSet.aliveElements()
         mesh= self.preprocessor.getDomain.getMesh
         lockerName= elemSet.name+'_locker'
         mesh.meltAliveNodes(lockerName)
 
-    def getValuesAtNodes(self, element, code, silent= False):
+    def getValuesAtNodes(self, element, code: str, silent= False):
         ''' Return the values corresponding to code at each of the element nodes.
 
          :param element: element which the stresses at its nodes will be calculated.
@@ -601,16 +622,16 @@ class PredefinedSpace(object):
         '''
         return element.getValuesAtNodes(code, silent)
     
-    def computeValuesAtNodes(self, setToCompute, propToDefine= 'stress'):
+    def computeValuesAtNodes(self, setToCompute: xc.Set, propToDefine= 'stress'):
         ''' Extrapolate the stresses to the nodes of the set argument and
             stores them in the property "propToDefine".
 
-        :param setToDefine: set of elements to be processed.
+        :param setToCompute: set of elements to be processed.
         :param propToDefine: name of the property to define at the nodes.
         '''
         extrapolate_elem_attr.extrapolate_elem_data_to_nodes(setToCompute.getElements,propToDefine,self.getValuesAtNodes, argument= propToDefine, initialValue= xc.Vector([0.0,0.0,0.0,0.0,0.0,0.0]))
 
-    def setNodePropertyFromElements(self,compName, xcSet, function, propToDefine):
+    def setNodePropertyFromElements(self, compName: str, xcSet: xc.Set, function, propToDefine: str):
         '''display the stresses on the elements.
 
         :param compName: name of the component of the magnitude ('sigma_11', 'strain_xx', ...)
@@ -648,18 +669,22 @@ class PredefinedSpace(object):
         pos3d= geom.Pos3d(x,y,z)
         return self.preprocessor.getMultiBlockTopology.getPoints.newPntFromPos3d(pos3d)
     
-    def newLine(self, p1, p2):
+    def newLine(self, p1: xc.Pnt, p2: xc.Pnt):
         ''' Creates a line between the argument points.
 
         :param p1: from point.
         :param p2: to point.
         '''
         return self.preprocessor.getMultiBlockTopology.getLines.newLine(p1.tag, p2.tag)
-    def getLineWithEndPoints(self, pA, pB):
-        ''' Return the line from its endpoints.'''
+    def getLineWithEndPoints(self, pA: xc.Pnt, pB: xc.Pnt):
+        ''' Return the line from its endpoints.
+
+        :param pA: from point.
+        :param pB: to point.
+        '''
         return self.preprocessor.getMultiBlockTopology.getLineWithEndPoints(pA.tag, pB.tag)
         
-    def newSurface(self, pointList):
+    def newSurface(self, pointList: Sequence[xc.Pnt]):
         ''' Creates a surface whose vertices are the argument points.
 
         :param pointList: list of vertices.
@@ -675,7 +700,7 @@ class PredefinedSpace(object):
             retval= surfaceHandler.newPolygonalFacePts(pntTags)
         return retval
         
-def getModelSpace(preprocessor):
+def getModelSpace(preprocessor: xc.Preprocessor):
       '''Return a PredefinedSpace from the dimension of the space 
        and the number of DOFs for each node obtained from the preprocessor.
 
@@ -716,9 +741,12 @@ class SolidMechanics2D(PredefinedSpace):
             displacement components.'''
         return ['uX', 'uY']
         
-    def getDispComponentFromName(self,compName):
+    def getDispComponentFromName(self,compName: str):
         '''Return the component index from the
-           displacement name.'''
+           displacement component name.
+
+        :param compName: displacement component name.
+        '''
         retval= 0
         if compName == 'uX':
             retval= self.Ux
@@ -728,9 +756,12 @@ class SolidMechanics2D(PredefinedSpace):
             lmsg.error('Item '+str(compName) + ' is not a valid component. Available components are: uX, uY')
         return retval
 
-    def getStrainComponentFromName(self, compName):
+    def getStrainComponentFromName(self, compName: str):
         '''Return the component index from the
-           strain name.'''
+           strain component name.
+
+        :param compName: strain component name.
+        '''
         retval= 0
         if((compName == 'epsilon_xx') or (compName == 'epsilon_11')):
             retval= self.epsilon_11
@@ -743,9 +774,12 @@ class SolidMechanics2D(PredefinedSpace):
             lmsg.error('Item '+str(compName) + ' is not a valid component. Available components are: epsilon_11, epsilon_22, epsilon_12')
         return retval
 
-    def getStressComponentFromName(self, compName):
+    def getStressComponentFromName(self, compName: str):
         '''Return the component index from the
-           stress name.'''
+           stress component name.
+
+        :param compName: strain component name.
+        '''
         retval= 0
         if((compName == 'sigma_xx') or (compName == 'sigma_11')):
             retval= self.sigma_11
@@ -766,13 +800,17 @@ class SolidMechanics2D(PredefinedSpace):
         ''' Return the indices of the rotational DOFs.'''
         return []
 
-    def getDisplacementVector(self,nodeTag):
-        ''' Return a vector with the displacement components of the node motion.'''
+    def getDisplacementVector(self,nodeTag: int):
+        ''' Return a vector with the displacement components of the 
+            node motion.
+
+        :param nodeTag: identifier of the node.
+        '''
         nod= self.preprocessor.getNodeHandler.getNode(nodeTag)
         disp= nod.getDisp
         return xc.Vector([disp[self.Ux],disp[self.Uy]])
     
-    def fixNode00(self, nodeTag):
+    def fixNode00(self, nodeTag: int):
         '''Restrain both node DOFs (i. e. make them zero).
 
          :param nodeTag: node identifier.
@@ -780,14 +818,14 @@ class SolidMechanics2D(PredefinedSpace):
         self.newSPConstraint(nodeTag,0,0.0) # nodeTag, DOF, constrValue
         self.newSPConstraint(nodeTag,1,0.0)
 
-    def fixNode0F(self, nodeTag):
+    def fixNode0F(self, nodeTag: int):
         '''Restrain only displacement DOFs (i. e. Ux= 0 and Uy= 0).
 
          :param nodeTag: node identifier.
         '''
         self.newSPConstraint(nodeTag,0,0.0) # nodeTag, DOF, constrValue
         
-    def fixNodeF0(self, nodeTag):
+    def fixNodeF0(self, nodeTag: int):
         '''Restrain only displacement DOFs (i. e. Ux= 0 and Uy= 0).
 
          :param nodeTag: node identifier.
@@ -804,7 +842,7 @@ def gdls_elasticidad2D(nodes):
 
 class StructuralMechanics(PredefinedSpace):
     '''Structural mechanics finite element problem.'''
-    def __init__(self,nodes,dimSpace,numDOFs):
+    def __init__(self, nodes, dimSpace: int, numDOFs: int):
         '''Defines the dimension of the space: nodes by two coordinates (x,y) 
          and three DOF for each node (Ux,Uy,theta)
 
@@ -814,7 +852,7 @@ class StructuralMechanics(PredefinedSpace):
         '''
         super(StructuralMechanics,self).__init__(nodes,dimSpace,numDOFs)
             
-    def createTrusses(self, xcSet, material, area, crossSection= None, corotational= False):
+    def createTrusses(self, xcSet: xc.Set, material, area, crossSection= None, corotational= False):
         ''' Meshes the lines of the set argument with Truss
             elements.
 
@@ -1089,7 +1127,7 @@ class StructuralMechanics2D(StructuralMechanics):
             self.fixNode000(nodeTag)
             
 
-def getStructuralMechanics2DSpace(preprocessor):
+def getStructuralMechanics2DSpace(preprocessor: xc.Preprocessor):
     '''Return a PredefinedSpace from the dimension of the space 
      and the number of DOFs for each node obtained from the preprocessor.
 
@@ -1776,7 +1814,7 @@ class StructuralMechanics3D(StructuralMechanics):
             lmsg.warning("Set: '"+nodeSet.name+"' argument has no nodes.")
                 
 
-def getStructuralMechanics3DSpace(preprocessor):
+def getStructuralMechanics3DSpace(preprocessor: xc.Preprocessor):
     '''Return a tStructuralMechanics3DSpace from an
        already defined preprocessor.
 
@@ -1787,7 +1825,7 @@ def getStructuralMechanics3DSpace(preprocessor):
     assert(nodes.numDOFs==6)
     return StructuralMechanics3D(nodes)
 
-def getModelSpaceFromPreprocessor(preprocessor):
+def getModelSpaceFromPreprocessor(preprocessor: xc.Preprocessor):
     '''Return a PredefinedSpace from the dimension of the space 
        and the number of DOFs for each node obtained from the preprocessor.
 
@@ -1837,13 +1875,13 @@ def ConstraintsForLineExtremeNodes(lineSet, constraint):
     constraint(fN)
     constraint(lN)
 
-def glueSets(preprocessor,DOF2Glue,masterSet,slaveSet,onCoord=None):
+def glueSets(preprocessor: xc.Preprocessor,DOF2Glue,masterSet,slaveSet,onCoord=None):
     '''Creates rigid links between nodes in masterSet and their 
     corresponding ones (for reasons of proximity) in slaveSet.
     Each node in masterSet coupled with one and only one node in
     slaveSet. 
 
-    :param preprocessor: preprocessor
+    :param preprocessor: preprocessor of the finite element problem.
     :param DOF2Glue: degrees of freedom to match. (e.g. [1,4] equals 
            DOF 1 and 4 between coupled nodes.
     :param masterSet: set with the master nodes

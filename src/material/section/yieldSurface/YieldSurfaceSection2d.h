@@ -43,12 +43,11 @@ class YieldSurface_BC;
 
 //! @ingroup MATSCC
 //
-//! @defroup MATSCCYS Cross sections with yield surface.
-//
-//! @ingroup MATSCCYS
+//! @defgroup MATSCCYS Cross sections with yield surface.
 //
 //! @brief Base class for cross sections with yield surface
 //! on a bi-dimensional space (three DOFs for each section).
+//! @ingroup MATSCCYS
 class YieldSurfaceSection2d: public PrismaticBarCrossSection
   {
   protected:
