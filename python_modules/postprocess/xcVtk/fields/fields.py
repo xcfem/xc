@@ -26,7 +26,7 @@ class ScalarField(fb.FieldBase):
                 (defaults to None)
 
     '''
-    def __init__(self,name, functionName, component=None, fUnitConv= 1.0,rgMinMax=None):
+    def __init__(self, name, functionName, component=None, fUnitConv= 1.0,rgMinMax=None):
         super(ScalarField,self).__init__(name,fUnitConv)
         self.attrName= functionName
         self.attrComponent= component
@@ -107,7 +107,7 @@ class ExtrapolatedScalarField(ScalarField):
                   by this factor. (Defaults to 0.0, i.e. display of 
                   initial/undeformed shape)
     '''
-    displaySettings.displayMesh(xcSets= self.xcSet,field= self, diagrams= None,caption= caption, fileName= fileName, defFScale= defFScale)
+    displaySettings.displayMesh(xcSets= self.xcSet, field= self, diagrams= None,caption= caption, fileName= fileName, defFScale= defFScale)
     
 class ExtrapolatedProperty(ExtrapolatedScalarField):
   '''Scalar field defined as property value at nodes.'''
@@ -125,7 +125,7 @@ class ExtrapolatedProperty(ExtrapolatedScalarField):
     '''
 
     self.extrapolate()
-    displaySettings.displayMesh(self.xcSet,field= self, diagrams= None, caption= caption, fileName= fileName, defFScale= defFScale)
+    displaySettings.displayMesh(self.xcSet, field= self, diagrams= None, caption= caption, fileName= fileName, defFScale= defFScale)
 
 def getScalarFieldFromControlVar(attributeName,argument,xcSet,component,fUnitConv,rgMinMax):
     '''return an scalar field that represents the control var over the 
