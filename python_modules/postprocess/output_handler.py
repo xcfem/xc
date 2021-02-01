@@ -511,9 +511,10 @@ class OutputHandler(object):
         '''Display the loads applied on beam elements and nodes for a given load case
 
         :param setToDisplay: set of beam elements to be represented (defaults to TotalSet)
-        :param elLoadComp:  component of the loads on elements to be depicted
-                     [possible components: 'axialComponent', 'transComponent', 
-                      'transYComponent', 'transZComponent','xyzComponents']
+        :param elLoadComp:component of the linear loads on elements to be 
+               depicted [available components: 'xyzComponents' (default),
+               'axialComponent', 'transComponent', 'transYComponent', 
+               'transZComponent']
         :param fUnitConv:  factor of conversion to be applied to the results
                         (defaults to 1)
         :param caption:   caption for the graphic
@@ -554,7 +555,7 @@ class OutputHandler(object):
                 scOrient+=1
         
         vectorScale= self.outputStyle.loadVectorsScaleFactor*LrefModSize/10.
-        # elemental loads
+        # surface loads
         vFieldEl= lvf.LoadVectorField(loadPatternName= loadCaseName,setToDisp=setToDisplay,
                                       fUnitConv= unitConversionFactor,scaleFactor= vectorScale,
                                       showPushing= self.outputStyle.showLoadsPushing)
