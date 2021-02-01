@@ -17,6 +17,7 @@ from misc_utils import log_messages as lmsg
 import xc_base
 from vtk_utils import utils_vtk
 from postprocess.xcVtk import vtk_graphic_base
+from postprocess.xcVtk.fields import fields
 from postprocess.xcVtk.fields import local_axes_vector_field as lavf
 import random as rd 
 import xc
@@ -30,12 +31,12 @@ class DisplaySettingsFE(vtk_graphic_base.DisplaySettings):
         self.nodes= None
         self.gridMapper= None
         
-    def VtkDefineElementsActor(self, reprType,field,color=xc.Vector([rd.random(),rd.random(),rd.random()])):
+    def VtkDefineElementsActor(self, reprType, field: fields.ScalarField,color=xc.Vector([rd.random(),rd.random(),rd.random()])):
         ''' Define the actor to display elements
 
         :param reprType: type of representation ("points", "wireframe" or
                "surface")
-        :param field: field to be repreresented
+        :param field: scalar field to be represented.
         :param color: RGB color to represent the elements (defaults to random
                       color)
         '''
@@ -85,7 +86,7 @@ class DisplaySettingsFE(vtk_graphic_base.DisplaySettings):
         visNodes.GetProperty().SetColor(rd.random(),rd.random(),rd.random())
         self.renderer.AddActor(visNodes)
 
-    def VtkLoadElemMesh(self,field,defFScale=0.0,eigenMode=None):
+    def VtkLoadElemMesh(self, field: fields.ScalarField, defFScale=0.0,eigenMode=None):
         '''Load the element mesh
 
         :param field: scalar field to be represented
@@ -96,10 +97,10 @@ class DisplaySettingsFE(vtk_graphic_base.DisplaySettings):
                   position of each node equals to the initial position plus
                   its eigenVector multiplied by this factor.
                   (Defaults to 0.0, i.e. display of initial/undeformed shape)
-        :param eigenMode: eigenvibration mode if we want to display the deformed 
-                 shape associated with it when a modal analysis has been carried out. 
-                 Defaults to None: no modal analysis.
-
+        :param eigenMode: eigenvibration mode if we want to display the 
+                          deformed shape associated with it when a modal 
+                          analysis has been carried out. 
+                          Defaults to None: no modal analysis.
         '''
         # Define grid
         self.nodes= vtk.vtkPoints()
@@ -141,7 +142,7 @@ class DisplaySettingsFE(vtk_graphic_base.DisplaySettings):
                 if(c.getVtkCellType!= vtk.VTK_VERTEX):
                     self.gridRecord.uGrid.InsertNextCell(c.getVtkCellType,vtx)
 
-    def defineMeshScene(self, field,defFScale=0.0,eigenMode=None,color=xc.Vector([rd.random(),rd.random(),rd.random()])):
+    def defineMeshScene(self, field: fields.ScalarField, defFScale= 0.0, eigenMode= None, color= xc.Vector([rd.random(),rd.random(),rd.random()])):
         '''Define the scene for the mesh
 
         :param field: scalar field to be represented
@@ -150,12 +151,18 @@ class DisplaySettingsFE(vtk_graphic_base.DisplaySettings):
                     the initial position plus its displacement multiplied
                     by this factor. (Defaults to 0.0, i.e. display of 
                     initial/undeformed shape)
+        :param eigenMode: eigenvibration mode if we want to display the 
+                          deformed shape associated with it when a modal 
+                          analysis has been carried out. 
+                          Defaults to None: no modal analysis.
+        :param color: RGB color to represent the elements (defaults to random
+                      color)
         '''
-        self.VtkLoadElemMesh(field,defFScale,eigenMode)
+        self.VtkLoadElemMesh(field, defFScale, eigenMode)
         self.renderer= vtk.vtkRenderer()
         self.renderer.SetBackground(self.bgRComp,self.bgGComp,self.bgBComp)
         self.VtkDefineNodesActor(0.002)
-        self.VtkDefineElementsActor("surface",field,color)
+        self.VtkDefineElementsActor("surface", field, color)
         self.renderer.ResetCamera()
 
         #Implement labels.
@@ -210,13 +217,13 @@ class DisplaySettingsFE(vtk_graphic_base.DisplaySettings):
                    initial/undeformed shape)
         '''
         self.setupGrid(setToDisplay)
-        vField=lavf.LocalAxesVectorField(setToDisplay.name+'_localAxes',vectorScale)
+        vField= lavf.LocalAxesVectorField(setToDisplay.name+'_localAxes',vectorScale)
         vField.dumpVectors(setToDisplay)
         self.defineMeshScene(field= None) 
         vField.addToDisplay(self)
         self.displayScene(caption, fileName)
 
-    def displayStrongWeakAxis(self,setToDisplay,caption= 'strong [red] and weak [blue] axes', vectorScale=1.0):
+    def displayStrongWeakAxis(self, setToDisplay, caption= 'strong [red] and weak [blue] axes', vectorScale=1.0):
         '''vector field display of the loads applied to the chosen set of elements in the load case passed as parameter
 
         :param setToDisplay:   set of elements to be displayed (defaults to total set)
@@ -224,21 +231,32 @@ class DisplaySettingsFE(vtk_graphic_base.DisplaySettings):
         :param vectorScale:    factor to apply to the vectors length in the representation
         '''
         self.setupGrid(setToDisplay)
-        vField=lavf.StrongWeakAxisVectorField(setToDisplay.name+'_strongWeakAxis',vectorScale)
+        vField= lavf.StrongWeakAxisVectorField(setToDisplay.name+'_strongWeakAxis',vectorScale)
         vField.dumpVectors(setToDisplay)
         self.defineMeshScene(field= None) 
         vField.addToDisplay(self)
         self.displayScene(caption)
 
-    def defineMeshActorsSet(self,elemSet,field,defFScale,nodeSize):
+    def defineMeshActorsSet(self, elemSet, field: fields.ScalarField, defFScale, nodeSize):
+        ''' Define mesh
+
+        :param elemSet: set of elements that form the mesh to display.
+        :param field: scalar field to be represented
+        :param defFScale: factor to apply to current displacement of nodes 
+                   so that the display position of each node equals to
+                   the initial position plus its displacement multiplied
+                   by this factor. (Defaults to 0.0, i.e. display of 
+                   initial/undeformed shape)
+        :param nodeSize: size of the spheres that represent nodes.
+        '''
         self.setupGrid(elemSet)
         if elemSet.color.Norm()==0:
             elemSet.color=xc.Vector([rd.random(),rd.random(),rd.random()])
         self.VtkLoadElemMesh(field,defFScale,eigenMode=None)
         self.VtkDefineNodesActor(nodeSize)
-        self.VtkDefineElementsActor("surface",field,elemSet.color)
+        self.VtkDefineElementsActor("surface", field, elemSet.color)
 
-    def displayMesh(self, xcSets, field= None, diagrams= None, caption= '',fileName= None, defFScale=0.0, nodeSize=0.01, scaleConstr= 0.2):
+    def displayMesh(self, xcSets, field: fields.ScalarField = None, diagrams= None, caption= '',fileName= None, defFScale=0.0, nodeSize=0.01, scaleConstr= 0.2):
         '''Display the finite element mesh 
 
         :param xcSets: set or list of sets to be displayed
@@ -251,7 +269,7 @@ class DisplaySettingsFE(vtk_graphic_base.DisplaySettings):
                     the initial position plus its displacement multiplied
                     by this factor. (Defaults to 0.0, i.e. display of 
                     initial/undeformed shape)
-        :param nodeSize: size of the points that represent nodes (defaults to
+        :param nodeSize: size of the spheres that represent nodes (defaults to
                     0.01)
         :param scaleConstr: scale of SPConstraints symbols (defaults to 0.2)
         '''
@@ -259,11 +277,11 @@ class DisplaySettingsFE(vtk_graphic_base.DisplaySettings):
         self.renderer.SetBackground(self.bgRComp,self.bgGComp,self.bgBComp)
         if(type(xcSets)==list):
             for s in xcSets:
-                self.defineMeshActorsSet(s,field,defFScale,nodeSize)
-                self.displaySPconstraints(s,scaleConstr)
+                self.defineMeshActorsSet(s, field, defFScale, nodeSize)
+                self.displaySPconstraints(s, scaleConstr)
         else:
-            self.defineMeshActorsSet(xcSets,field,defFScale,nodeSize)
-            self.displaySPconstraints(xcSets,scaleConstr)
+            self.defineMeshActorsSet(xcSets, field, defFScale, nodeSize)
+            self.displaySPconstraints(xcSets, scaleConstr)
         self.renderer.ResetCamera()
         if(diagrams):
             for d in diagrams:
