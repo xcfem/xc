@@ -16,10 +16,6 @@ START=$(date +%s.%N)
 #Tests about actions.
 echo "$BLEU" "Actions tests." "$NORMAL"
 python tests/actions/test_snowSIA.py
-python tests/actions/test_windSIA.py
-python tests/actions/test_wind_cylindr_01.py
-python tests/actions/test_wind_cylindr_02.py
-python tests/actions/test_wind_beam_truss.py
 python tests/actions/test_derailment_SIA.py
 python tests/actions/test_prestressing.py
 python tests/actions/test_peck_pressure_envelope.py
@@ -27,8 +23,15 @@ python tests/actions/mononobe_okabe_test_01.py
 python tests/actions/test_earth_pressure.py
 python tests/actions/test_earth_pressure_sloped_wall.py
 python tests/actions/test_thermal_grad_shell.py 
-python tests/actions/test_cte_wind_load.py
 python tests/actions/test_surf_unif_load_distributed.py
+echo "$BLEU" "  Wind action tests." "$NORMAL"
+python tests/actions/wind/test_windSIA.py
+python tests/actions/wind/test_wind_cylindr_01.py
+python tests/actions/wind/test_wind_cylindr_02.py
+python tests/actions/wind/test_wind_beam_truss.py
+python tests/actions/wind/test_cte_wind_load.py
+python tests/actions/wind/test_iap_hiding_ratio.py
+
 #Combinations tests.
 echo "$BLEU" "Load combination tests." "$NORMAL"
 python tests/combinations/add_loads_01.py
