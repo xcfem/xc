@@ -105,11 +105,9 @@ class FreeCADImport(reader_base.ReaderBase):
         def append_points(vertexes, objName, groupName, objProperties):
             '''Append the points to the list.'''
             if(len(vertexes)>1):
-                ptCount= 0
-                for v in vertexes:
+                for ptCount, v in enumerate(vertexes):
                     pointName= objName+'.'+str(ptCount)
                     append_point([v.X, v.Y, v.Z], grpName, pointName, objProperties)
-                    ptCount+= 1
             else:
                 v= vertexes[0]
                 append_point([v.X, v.Y, v.Z], grpName, objName, objProperties)
@@ -122,11 +120,9 @@ class FreeCADImport(reader_base.ReaderBase):
                 shapeType= shape.ShapeType
                 objProperties= bte.BlockProperties(labels= [grp.Label])
                 if(shapeType=='Shell'):
-                    fCount= 0
-                    for f in shape.SubShapes:
+                    for fCount, f in enumerate(shape.SubShapes):
                         thisFaceName= objName+'.'+str(fCount)
                         append_points(f.OuterWire.OrderedVertexes, thisFaceName, grpName, objProperties)
-                        fCount+= 1                        
                 else:
                     append_points(grp.Shape.Vertexes, objName, grpName, objProperties)
             elif(len(grp.OutList)>0): # Object is a group
@@ -212,11 +208,9 @@ class FreeCADImport(reader_base.ReaderBase):
 
         def import_shell(shapeContainer, faceName, labelName):
             ''' Import shell objects from the container argument.'''
-            fCount= 0
-            for f in shapeContainer:
+            for fCount, f in enumerate(shapeContainer):
                 thisFaceName= faceName+'.'+str(fCount)
                 import_face(f, thisFaceName, labelName)
-                fCount+= 1
 
         def import_shape(shape, objName, labelName):
             ''' Import simple shape.'''
@@ -227,12 +221,10 @@ class FreeCADImport(reader_base.ReaderBase):
                 for s in shape.SubShapes:
                     import_shape(s, objName, labelName)
             elif(shapeType=='Compound'):
-                cCount= 0
-                for ss in shape.SubShapes:
+                for cCount, ss in enumerate(shape.SubShapes):
                     ssType= ss.ShapeType
                     ssName= objName+'.'+str(cCount)
                     import_shape(ss, ssName, labelName)
-                    cCount+= 1
             elif(shapeType=='Vertex'):
                 count=0 # Nothing to do with those here.
             elif(shapeType in ['Wire']):
