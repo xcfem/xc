@@ -87,7 +87,7 @@ class FreeCADImport(reader_base.ReaderBase):
             if(reader_base.nameToImport(obj.Label, namesToImport)):
                 retval.append(obj.Label)
         if(len(retval)==0):
-            lmsg.warning('No groups to import (names to import: '+str(namesToImport)+')')
+            lmsg.warning(f'No groups to import (names to import: {namesToImport})')
         return retval
     
     def extractPoints(self):
@@ -104,7 +104,7 @@ class FreeCADImport(reader_base.ReaderBase):
             '''Append the points to the list.'''
             if(len(vertexes)>1):
                 for ptCount, v in enumerate(vertexes):
-                    pointName= objName+'.'+str(ptCount)
+                    pointName= f'{objName}.{ptCount}'
                     append_point([v.X, v.Y, v.Z], grpName, pointName, objProperties)
             else:
                 v= vertexes[0]
@@ -119,7 +119,7 @@ class FreeCADImport(reader_base.ReaderBase):
                 objProperties= bte.BlockProperties(labels= [grp.Label])
                 if(shapeType=='Shell'):
                     for fCount, f in enumerate(shape.SubShapes):
-                        thisFaceName= objName+'.'+str(fCount)
+                        thisFaceName= f'{objName}.{fCount}'
                         append_points(f.OuterWire.OrderedVertexes, thisFaceName, grpName, objProperties)
                 else:
                     append_points(grp.Shape.Vertexes, objName, grpName, objProperties)
@@ -172,7 +172,7 @@ class FreeCADImport(reader_base.ReaderBase):
                     vertices[0]= idx0
                     vertices[1]= idx1
                     if(vertices[0]==vertices[1]):
-                        lmsg.error('Error in line '+lineName+' vertices are equal: '+str(vertices))
+                        lmsg.error(f'Error in line {lineName} vertices are equal: {vertices}')
                     if(length>self.threshold):
                         self.lines[lineName]= vertices
                         objLabels= [labelName]
@@ -181,7 +181,7 @@ class FreeCADImport(reader_base.ReaderBase):
                         #     objLabels.extend(self.entitiesGroups[lineName])
                         self.propertyDict[lineName]= bte.BlockProperties(labels= objLabels, attributes= get_ifc_attributes(obj))
                     else:
-                        lmsg.error('line too short: '+str(p1)+','+str(p2)+str(length))
+                        lmsg.error(f'line too short: {p1},{p2}, {length}')
 
                         
     def importFaces(self):
@@ -207,7 +207,7 @@ class FreeCADImport(reader_base.ReaderBase):
         def import_shell(shapeContainer, faceName, labelName):
             ''' Import shell objects from the container argument.'''
             for fCount, f in enumerate(shapeContainer):
-                thisFaceName= faceName+'.'+str(fCount)
+                thisFaceName= f'{faceName}.{fCount}'
                 import_face(f, thisFaceName, labelName)
 
         def import_shape(shape, objName, labelName):
@@ -221,7 +221,7 @@ class FreeCADImport(reader_base.ReaderBase):
             elif(shapeType=='Compound'):
                 for cCount, ss in enumerate(shape.SubShapes):
                     ssType= ss.ShapeType
-                    ssName= objName+'.'+str(cCount)
+                    ssName= f'{objName}.{cCount}'
                     import_shape(ss, ssName, labelName)
             elif(shapeType=='Vertex'):
                 count=0 # Nothing to do with those here.
