@@ -36,17 +36,15 @@ def get_ifc_attributes(obj):
     :param obj: object to get the IFC attributes from.
     '''
     retval= dict()
-    if(hasattr(obj,'IfcType')):
+    if hasattr(obj,'IfcType'):
         retval['IfcType']= obj.IfcType
-    if(hasattr(obj,'PredefinedType')):
+    if hasattr(obj,'PredefinedType'):
         retval['PredefinedType']= obj.PredefinedType
-    if(hasattr(obj,'Thickness')):
-        retval['Thickness']= float(obj.Thickness)*1e-3 # mm->m
-    if(hasattr(obj,'Material')):
-        mat= obj.Material
-        if(mat):
-            retval['Material']= str(mat.Label)
-    if(hasattr(obj,'IfcProperties')):
+    if hasattr(obj,'Thickness'):
+        retval['Thickness']= obj.Thickness.getValueAs("m") # meter
+    if hasattr(obj,'Material') and obj.Material:
+        retval['Material']= obj.Material.Label
+    if hasattr(obj,'IfcProperties'):
         retval['IfcProperties']= obj.IfcProperties
     return retval
 
