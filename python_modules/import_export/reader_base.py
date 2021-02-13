@@ -88,8 +88,7 @@ class ReaderBase(object):
                 counter+= 1
 
             counter= 0
-            for key in self.lines:
-                line= self.lines[key]
+            for key, line in self.lines.items():
                 bp= self.propertyDict[key]
                 block= bte.BlockRecord(counter,'line',line, blockProperties= bp)
                 retval.appendBlock(block)
@@ -97,8 +96,7 @@ class ReaderBase(object):
 
             for name in self.getNamesToImport():
                 fg= self.facesTree[name]
-                for key in fg:
-                    face= fg[key]
+                for key, face in fg.items():
                     bp= self.propertyDict[key]
                     block= bte.BlockRecord(counter,'face',face, blockProperties= bp)
                     retval.appendBlock(block)
