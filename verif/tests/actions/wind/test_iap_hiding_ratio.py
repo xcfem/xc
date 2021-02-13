@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
-from __future__ import print_function
+''' Test computation of hiding ratios according to table 4.2-c of IAP-11.'''
 
+from __future__ import print_function
+from __future__ import division
 
 from actions.wind import IAP_wind
 
@@ -11,10 +13,10 @@ __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
 ratio1= abs(IAP_wind.getHidingFactor(0.5, 0.1)-0.75)/0.75
-ratio2= abs(IAP_wind.getHidingFactor(0.5, 100)-0.06)/0.06
+ratio2= abs(IAP_wind.getHidingFactor(0.5, 1.0)-0.06)/0.06
 ratio3= abs(IAP_wind.getHidingFactor(3, 0.3)-0.72)/0.72
 ratio4= abs(IAP_wind.getHidingFactor(6, 0.1)-1.0)/1.0
-ratio5= abs(IAP_wind.getHidingFactor(6, 100)-1.0)/1.0
+ratio5= abs(IAP_wind.getHidingFactor(6, 1.0)-1.0)/1.0
 
 '''
 print("ratio1= ",ratio1)
