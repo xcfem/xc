@@ -73,7 +73,7 @@ class ForceBeamColumn3d: public NLForceBeamColumn3dBase
     void getForceInterpolatMatrix(double xi, Matrix &b, const ID &code);
     void getDistrLoadInterpolatMatrix(double xi, Matrix &bp, const ID &code);
     void compSectionDisplacements(std::vector<Vector> &,std::vector<Vector> &) const;
-  
+    
     // internal data
     BeamIntegration *beamIntegr;
 
@@ -85,7 +85,7 @@ class ForceBeamColumn3d: public NLForceBeamColumn3dBase
 
   protected:
     void setSectionPointers(const std::vector<PrismaticBarCrossSection *> &secPtrs);
-    int getInitialFlexibility(Matrix &fe) const;
+    int getInitialFlexibility(Matrix &) const;
     int sendData(Communicator &);
     int recvData(const Communicator &);
   public:
@@ -127,8 +127,6 @@ class ForceBeamColumn3d: public NLForceBeamColumn3dBase
     int getResponse(int responseID, Information &eleInformation);
     int setParameter(const std::vector<std::string> &argv, Parameter &param);
     int updateParameter(int parameterID, Information &info);
-
-
   };
 std::ostream &operator<<(std::ostream &, const ForceBeamColumn3d &);
 } // end of XC namespace
