@@ -70,6 +70,7 @@
 #include <domain/mesh/node/Node.h>
 #include <domain/constraints/SFreedom_Constraint.h>
 #include <domain/constraints/MFreedom_Constraint.h>
+#include <utility/tagged/storage/MapOfTaggedObjects.h>
 #include <utility/tagged/storage/ArrayOfTaggedObjects.h>
 #include <utility/tagged/storage/ArrayOfTaggedObjectsIter.h>
 #include "domain/domain/subdomain/Subdomain.h"
@@ -102,16 +103,16 @@ void XC::PartitionedDomain::free_mem(void)
 void XC::PartitionedDomain::alloc(void)
   {
     free_mem();
-    elements= new ArrayOfTaggedObjects(this,1024,"element");
+    elements= new MapOfTaggedObjects(this,"element");//,1024,"element");
     theSubdomains= new ArrayOfTaggedObjects(this,32,"subdomains");
     theSubdomainIter= new PartitionedDomainSubIter(theSubdomains);
 
     mainEleIter= new SingleDomEleIter(elements);
     theEleIter= new PartitionedDomainEleIter(this);
 
-    if(theSubdomains == 0 || elements == 0 ||
-        theSubdomainIter == 0 ||
-        theEleIter == 0 || mainEleIter == 0)
+    if(theSubdomains == nullptr || elements == nullptr ||
+        theSubdomainIter == nullptr ||
+        theEleIter == nullptr || mainEleIter == nullptr)
       {
 
         std::cerr << getClassName() << "::" << __FUNCTION__
@@ -126,7 +127,7 @@ void XC::PartitionedDomain::alloc(void)
 //! @param oh: to DEPRECATE.
 XC::PartitionedDomain::PartitionedDomain(CommandEntity *owr,DataOutputHandler::map_output_handlers *oh)
   :Domain(owr,oh), theSubdomains(nullptr),theDomainPartitioner(nullptr),
-   theSubdomainIter(nullptr), mySubdomainGraph()
+   theSubdomainIter(nullptr), mySubdomainGraph(), has_sent_yet(false)
   { alloc(); }
 
 
@@ -141,7 +142,7 @@ XC::PartitionedDomain::PartitionedDomain(CommandEntity *owr,DataOutputHandler::m
 //! @param oh: to DEPRECATE.
 XC::PartitionedDomain::PartitionedDomain(CommandEntity *owr,DomainPartitioner &thePartitioner,DataOutputHandler::map_output_handlers *oh)
   :Domain(owr,oh), theSubdomains(nullptr),theDomainPartitioner(&thePartitioner),
- theSubdomainIter(nullptr), mySubdomainGraph()
+ theSubdomainIter(nullptr), mySubdomainGraph(), has_sent_yet(false)
   { alloc(); }
 
 
@@ -162,8 +163,8 @@ XC::PartitionedDomain::PartitionedDomain(CommandEntity *owr,int numNodes, int nu
                                      DomainPartitioner &thePartitioner,DataOutputHandler::map_output_handlers *oh)
 
   : Domain(owr,numNodes,0,numSPs,numMPs,numLoadPatterns,numNodeLockers,oh),
-    theSubdomains(nullptr),theDomainPartitioner(&thePartitioner),theSubdomainIter(nullptr),
-    mySubdomainGraph()
+    theSubdomains(nullptr),theDomainPartitioner(&thePartitioner),
+    theSubdomainIter(nullptr), mySubdomainGraph(), has_sent_yet(false)
   { alloc(); }
 
 //! @brief Destructor.
@@ -175,14 +176,16 @@ XC::PartitionedDomain::~PartitionedDomain(void)
 
 void XC::PartitionedDomain::clearAll(void)
   {
-    Domain::clearAll();
-    elements->clearAll();
-
+    // Clear the subdomains.
     SubdomainIter &mySubdomains= this->getSubdomains();
     Subdomain *theSub;
-    while((theSub= mySubdomains()) != 0)
+    while((theSub= mySubdomains()) != nullptr)
       theSub->clearAll();
     theSubdomains->clearAll();
+
+    // Clear itself.
+    Domain::clearAll();
+    elements->clearAll();
   }
 
 
@@ -224,7 +227,7 @@ bool XC::PartitionedDomain::addElement(Element *elePtr)
           {
             int nodeTag= nodes(i);
             Node *nodePtr= this->getNode(nodeTag);
-            if(nodePtr == 0)
+            if(nodePtr)
               {
                 std::cerr << getClassName() << "::" << __FUNCTION__
 			  << "; in element " << eleTag
@@ -237,13 +240,14 @@ bool XC::PartitionedDomain::addElement(Element *elePtr)
 #endif
 
     TaggedObject *other= elements->getComponentPtr(eleTag);
-    if(other != 0)
+    if(other)
       return false;
 
     bool result= elements->addComponent(elePtr);
     if(result == true)
       {
         elePtr->setDomain(this);
+	elePtr->update();
         this->domainChange();
       }
     return result;
@@ -284,24 +288,46 @@ bool XC::PartitionedDomain::addNode(Node *nodePtr)
 bool XC::PartitionedDomain::addSFreedom_Constraint(SFreedom_Constraint *load)
   {
     int nodeTag= load->getNodeTag();
+    
+    if(!has_sent_yet)
+      {
+	  Node *nodePtr = this->getNode(nodeTag);
+	  if(nodePtr != nullptr)
+	    {
+	      return this->Domain::addSFreedom_Constraint(load);
+	    }
+	  else 
+	    return false;
+      }
+    
+    // check the node exists in the Domain or one of Subdomains
 
-    // check the XC::Node exists in the Domain or one of Subdomains
-
-    // if in XC::Domain add it as external .. ignore Subdomains
+    // if in domain add it as external .. ignore Subdomains
     Node *nodePtr= this->getNode(nodeTag);
     if(nodePtr)
       { return (Domain::addSFreedom_Constraint(load)); }
-
-    // find subdomain with node and add it .. break if find as internal node
-    SubdomainIter &theSubdomains= this->getSubdomains();
-    Subdomain *theSub;
-    while((theSub= theSubdomains()) != 0)
+    else
       {
-        bool res= theSub->hasNode(nodeTag);
-        if(res)
-          return theSub->addSFreedom_Constraint(load);
+	// find subdomain with node and add it .. break if find as internal node
+	SubdomainIter &theSubdomains= this->getSubdomains();
+	Subdomain *theSub= nullptr;
+	while((theSub= theSubdomains()) != nullptr)
+	  {
+	    bool res= theSub->hasNode(nodeTag);
+	    if(res)
+	      {
+		bool ok= theSub->addSFreedom_Constraint(load);
+		if(!ok)
+		  {
+		    std::cerr << getClassName() << "::" << __FUNCTION__
+	                      << "; failed to add node with tag: "
+	                      << nodeTag << " to remote subdomain.\n";
+		    load->Print(std::cerr);
+		  }
+		return ok;
+	      }
+	  }
       }
-
 
     // if no subdomain .. node not in model .. error message and return failure
     std::cerr << getClassName() << "::" << __FUNCTION__
@@ -314,23 +340,41 @@ bool XC::PartitionedDomain::addSFreedom_Constraint(SFreedom_Constraint *load, in
   {
     int nodeTag= load->getNodeTag();
 
-    // check the XC::Node exists in the XC::Domain or one of Subdomains
+    // check if the node exists in the domain or one of Subdomains
 
     // if in XC::Domain add it as external .. ignore Subdomains
     Node *nodePtr= this->getNode(nodeTag);
+    bool ok= false;
     if(nodePtr)
-      { return (Domain::addSFreedom_Constraint(load, pattern)); }
-
-    // find subdomain with node and add it .. break if find as internal node
-    SubdomainIter &theSubdomains= this->getSubdomains();
-    Subdomain *theSub;
-    while((theSub= theSubdomains()) != 0)
       {
-        bool res= theSub->hasNode(nodeTag);
-        if(res == true)
-          return theSub->addSFreedom_Constraint(load, pattern);
+	ok= Domain::addSFreedom_Constraint(load, pattern);
+	if(!ok)
+	  return ok;
       }
-
+    else
+      {
+	if(!has_sent_yet)
+	  { return ok; }
+        // find subdomain with node and add it .. break if find as internal node
+        SubdomainIter &theSubdomains= this->getSubdomains();
+        Subdomain *theSub= nullptr;
+        while((theSub= theSubdomains()) != 0)
+          {
+            bool res= theSub->hasNode(nodeTag);
+            if(res)
+	      {
+                bool ok= theSub->addSFreedom_Constraint(load, pattern);
+		if(!ok)
+		  {
+		    std::cerr << getClassName() << "::" << __FUNCTION__
+	                      << "; failed to add node with tag: "
+	                      << nodeTag << " to remote subdomain.\n";
+		    load->Print(std::cerr);
+		  }
+		return ok;
+	      }
+          }
+      }
     // if no subdomain .. node not in model .. error message and return failure
     std::cerr << getClassName() << "::" << __FUNCTION__
 	      << "; cannot add as node with tag: "
@@ -367,7 +411,7 @@ bool XC::PartitionedDomain::addMFreedom_Constraint(MFreedom_Constraint *load)
     Node *constrainedNodePtr = this->Domain::getNode(constrainedNodeTag);
     if(constrainedNodePtr)
       {
-	if (retainedNodePtr != 0)
+	if(retainedNodePtr)
 	  {
 	    res = this->Domain::addMFreedom_Constraint(load);    
 	    if (res == false)
@@ -382,6 +426,9 @@ bool XC::PartitionedDomain::addMFreedom_Constraint(MFreedom_Constraint *load)
 	else
 	  { getRetained = true; }
       }
+    
+    if(!has_sent_yet)
+      { return addedMain; }
 
     //
     // now we check all subdomains
@@ -546,20 +593,23 @@ bool XC::PartitionedDomain::addLoadPattern(LoadPattern *loadPattern)
         return false;
       }
 
-    SubdomainIter &theSubdomains= this->getSubdomains();
-    Subdomain *theSub;
-    while((theSub= theSubdomains()) != 0)
+    if(has_sent_yet)
       {
-        bool res= theSub->addLoadPattern(loadPattern);
-        if(res != true)
-          {
-            std::cerr << getClassName() << "::" << __FUNCTION__
-		      << "; cannot add as LoadPattern with tag: "
-		      << tag << " to subdomain.\n";
-            result= res;
-          }
+	SubdomainIter &theSubdomains= this->getSubdomains();
+	Subdomain *theSub;
+	while((theSub= theSubdomains()) != 0)
+	  {
+	    bool res= theSub->addLoadPattern(loadPattern);
+	    if(res != true)
+	      {
+		std::cerr << getClassName() << "::" << __FUNCTION__
+			  << "; cannot add as LoadPattern with tag: "
+			  << tag << " to subdomain.\n";
+		result= res;
+	      }
+	  }
       }
-    XC::Domain::addLoadPattern(loadPattern);
+    Domain::addLoadPattern(loadPattern);
     return result;
   }
 
@@ -573,8 +623,10 @@ bool XC::PartitionedDomain::addNodalLoad(NodalLoad *load, int pattern)
     // if in XC::Domain add it as external .. ignore Subdomains
     Node *nodePtr= this->getNode(nodeTag);
     if(nodePtr != 0)
-      { return (this->XC::Domain::addNodalLoad(load, pattern)); }
+      { return (this->Domain::addNodalLoad(load, pattern)); }
 
+    if(!has_sent_yet)
+      { return false; }
 
     // find subdomain with node and add it .. break if find as internal node
     SubdomainIter &theSubdomains= this->getSubdomains();
@@ -599,8 +651,40 @@ bool XC::PartitionedDomain::addNodalLoad(NodalLoad *load, int pattern)
 
 bool XC::PartitionedDomain::addElementalLoad(ElementalLoad *load, int pattern)
   {
-    std::cerr << getClassName() << "::" << __FUNCTION__
-	      << "; not yet implemented\n";
+    const ID &eleTags= load->getElementTags();
+    const size_t sz= eleTags.Size();
+    for(size_t i= 0;i<sz;i++)
+      {
+	const int eleTag = eleTags[i];
+
+	// check the Node exists in the Domain or one of Subdomains
+
+	// if in Domain add it as external .. ignore Subdomains
+	Element *elePtr = this->getElement(eleTag);
+	if(elePtr != 0)
+	  { return (this->Domain::addElementalLoad(load, pattern)); }
+
+	if(!has_sent_yet)
+	  { return false; }
+
+	// find subdomain with element and add it .. break if find as internal node
+	SubdomainIter &theSubdomains = this->getSubdomains();
+	Subdomain *theSub;
+	while ((theSub = theSubdomains()) != 0)
+	  {
+	    bool res = theSub->hasElement(eleTag);
+	    if (res == true)
+	      {
+		// std::cerr << getClassName() << "::" << __FUNCTION__ " SUB " << theSub->getTag() << *load;
+		return theSub->addElementalLoad(load, pattern);
+	      }
+	  }
+
+	// if no subdomain .. node not in model
+	std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; cannot add as element with tag"
+		  << eleTag << "does not exist in model\n";
+      }
     return false;
   }
 
@@ -616,9 +700,11 @@ bool XC::PartitionedDomain::removeElement(int tag)
     // we first see if its in the original domain
     bool res= elements->removeComponent(tag);
     if(res)
-      this->domainChange();
+      { this->domainChange(); }
     else
       {
+	 if(!has_sent_yet)
+	   { return 0; }
         // if not there we must check all the other subdomains
         if(theSubdomains)
           {
@@ -650,7 +736,8 @@ bool XC::PartitionedDomain::removeNode(int tag)
   {
     // we first remove it form the original domain (in case on boundary)
     bool result= this->Domain::removeNode(tag);
-
+    if(!has_sent_yet)
+      { return result; }
     // we must also try removing from the subdomains
     if(theSubdomains)
       {
@@ -681,17 +768,23 @@ bool XC::PartitionedDomain::removeSFreedom_Constraint(int tag)
     bool retval= this->Domain::removeSFreedom_Constraint(tag);
     if(retval)
       this->domainChange();
-    else if(theSubdomains)  // if not there we must check all the other subdomains
+    else
       {
-        ArrayOfTaggedObjectsIter theSubsIter(*theSubdomains);
-        TaggedObject *theObject= nullptr;
-        while((theObject= theSubsIter()) != 0)
-          {
-            Subdomain *theSub= dynamic_cast<Subdomain *>(theObject);
-            retval= theSub->removeSFreedom_Constraint(tag);
-            if(retval)
-              break;
-          }
+	if(!has_sent_yet)
+	  { return retval; }
+	
+	if(theSubdomains)  // if not there we must check all the other subdomains
+	  {
+	    ArrayOfTaggedObjectsIter theSubsIter(*theSubdomains);
+	    TaggedObject *theObject= nullptr;
+	    while((theObject= theSubsIter()) != 0)
+	      {
+		Subdomain *theSub= dynamic_cast<Subdomain *>(theObject);
+		retval= theSub->removeSFreedom_Constraint(tag);
+		if(retval)
+		  break;
+	      }
+	  }
       }
     return retval;
   }
@@ -713,6 +806,9 @@ bool XC::PartitionedDomain::removeMFreedom_Constraint(int tag)
       }
     else
       {
+	if(!has_sent_yet)
+	  { return result; }
+	
         // if not there we must check all the other subdomains
         if(theSubdomains)
           {
@@ -740,7 +836,9 @@ bool XC::PartitionedDomain::removeLoadPattern(int tag)
   {
     // we first see if its in the original domain
     bool result= this->Domain::removeLoadPattern(tag);
-
+    if(!has_sent_yet)
+      { return result; }
+    
     // we must also try removing from the subdomains
     if(theSubdomains)
       {
@@ -843,21 +941,21 @@ void XC::PartitionedDomain::applyLoad(double timeStep)
 
 
 void XC::PartitionedDomain::setCommitTag(int newTag)
-{
+  {
     this->XC::Domain::setCommitTag(newTag);
 
     // do the same for all the subdomains
-    if(theSubdomains != 0) {
+    if(theSubdomains)
+      {
         ArrayOfTaggedObjectsIter theSubsIter(*theSubdomains);
         TaggedObject *theObject;
-        while((theObject= theSubsIter()) != 0) {
-          Subdomain *theSub= dynamic_cast<Subdomain *>(theObject);
-            theSub->setCommitTag(newTag);
-        }
-    }
-}
-
-
+        while((theObject= theSubsIter()) != 0)
+	  {
+            Subdomain *theSub= dynamic_cast<Subdomain *>(theObject);
+              theSub->setCommitTag(newTag);
+          }
+      }
+  }
 
 //! @brief Sets the current pseudo-time of the domain.
 //!
@@ -944,29 +1042,29 @@ int XC::PartitionedDomain::update(void)
 
 #ifdef _PARALLEL_PROCESSING
 int XC::PartitionedDomain::barrierCheck(int res)
-{
-  int result= res;
+  {
+    int result= res;
 
-  // do the same for all the subdomains
-  if(theSubdomains != 0) {
-    ArrayOfTaggedObjectsIter theSubsIter(*theSubdomains);
-    TaggedObject *theObject;
-    while((theObject= theSubsIter()) != 0) {
-      Subdomain *theSub= dynamic_cast<Subdomain *>(theObject);
-      int subResult= theSub->barrierCheckIN();
-      if(subResult != 0)
-        result= subResult;
+    // do the same for all the subdomains
+    if(theSubdomains != 0) {
+      ArrayOfTaggedObjectsIter theSubsIter(*theSubdomains);
+      TaggedObject *theObject;
+      while((theObject= theSubsIter()) != 0) {
+	Subdomain *theSub= dynamic_cast<Subdomain *>(theObject);
+	int subResult= theSub->barrierCheckIN();
+	if(subResult != 0)
+	  result= subResult;
+      }
+
+      ArrayOfTaggedObjectsIter theSubsIter1(*theSubdomains);
+      while((theObject= theSubsIter1()) != 0) {
+	Subdomain *theSub= dynamic_cast<Subdomain *>(theObject);
+	theSub->barrierCheckOUT(result);
+      }
     }
 
-    ArrayOfTaggedObjectsIter theSubsIter1(*theSubdomains);
-    while((theObject= theSubsIter1()) != 0) {
-      Subdomain *theSub= dynamic_cast<Subdomain *>(theObject);
-      theSub->barrierCheckOUT(result);
-    }
+    return result;
   }
-
-  return result;
-}
 #endif
 
 int XC::PartitionedDomain::update(double newTime, double dT)
@@ -1062,9 +1160,8 @@ int XC::PartitionedDomain::commit(void)
   }
 
 
-int
-XC::PartitionedDomain::revertToLastCommit(void)
-{
+int XC::PartitionedDomain::revertToLastCommit(void)
+  {
     int result= this->XC::Domain::revertToLastCommit();
     if(result < 0)
       {
@@ -1127,14 +1224,18 @@ int XC::PartitionedDomain::revertToStart(void)
     return 0;
 }
 
-
+//! @brief Add the recorder to the partitioned domain.
 int XC::PartitionedDomain::addRecorder(Recorder &theRecorder)
   {
-    if(this->XC::Domain::addRecorder(theRecorder) < 0)
+    const int result= this->XC::Domain::addRecorder(theRecorder);
+    if(result < 0)
       return -1;
+    
+    if(!has_sent_yet)
+      { return result; }
 
     // do the same for all the subdomains
-    if(theSubdomains != 0)
+    if(theSubdomains)
       {
         ArrayOfTaggedObjectsIter theSubsIter(*theSubdomains);
         TaggedObject *theObject;
@@ -1146,7 +1247,7 @@ int XC::PartitionedDomain::addRecorder(Recorder &theRecorder)
               {
                 std::cerr << getClassName() << "::" << __FUNCTION__
 			  << "(void); "
-			  << "failed in Subdomain::revertToLastCommit().\n";
+			  << "failed in Subdomain::addRecorder().\n";
                 return res;
               }
           }
@@ -1222,7 +1323,7 @@ int XC::PartitionedDomain::partition(int numPartitions, bool usingMain, int main
 
     // now we call partition on the domainPartitioner which does the partitioning
     DomainPartitioner *thePartitioner= this->getPartitioner();
-    if(thePartitioner != 0)
+    if(thePartitioner)
       {
         thePartitioner->setPartitionedDomain(*this);
         result=  thePartitioner->partition(numPartitions, usingMain, mainPartitionID);
@@ -1260,6 +1361,9 @@ int XC::PartitionedDomain::partition(int numPartitions, bool usingMain, int main
               }
           }
       }
+    
+    has_sent_yet = true;
+    
     return result;
   }
 

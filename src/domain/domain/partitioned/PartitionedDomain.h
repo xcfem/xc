@@ -99,7 +99,9 @@ class PartitionedDomain: public Domain
     PartitionedDomainSubIter   *theSubdomainIter;
     PartitionedDomainEleIter   *theEleIter;
     
-    Graph mySubdomainGraph; //! Grafo de conectividad de subdomains.
+    Graph mySubdomainGraph; //!< graph of subdomain connectivity
+    bool has_sent_yet;
+    
     void alloc(void);
     void free_mem(void);
   protected:
