@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Home made test.
+''' Test for snow loads according to Swiss standard (SIA).'''
 
 from __future__ import print_function
 from __future__ import division
