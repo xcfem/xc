@@ -30,7 +30,7 @@ fMinAnnualTemp= scipy.interpolate.interp2d(climateZone, height, minAnnualTemp, k
 def getMinAnnualTemp(climateZn: int, height: float, returnPeriod: float= 100):
     '''Return the minimal annual temperature according to table 4.3-a of IAP-11.
 
-    :param climateZn: climate zone according to figure 4.3-a of IAP-11.
+    :param climateZn: climate zone according to figure 4.3-b of IAP-11.
     :param height: height of the bridge location.
     :parem returnPeriod: return period of the temperature minimum in years.
     '''
@@ -40,5 +40,19 @@ def getMinAnnualTemp(climateZn: int, height: float, returnPeriod: float= 100):
         k4= -0.156
         p= 1.0/returnPeriod
         retval*= (k3+k4*math.log(-math.log(1-p)))
+    return retval
+
+def getMaxAnnualTemp(tMax: float, returnPeriod: float= 100):
+    '''Return the maximal annual temperature according to IAP-11.
+
+    :param tMax: annual maximum temperature according to figure 4.3-a of IAP-11.
+    :parem returnPeriod: return period of the temperature minimum in years.
+    '''
+    retval= tMax
+    if(returnPeriod!=50.0):
+        k1= 0.781
+        k2= 0.056
+        p= 1.0/returnPeriod
+        retval*= (k1-k2*math.log(-math.log(1-p)))
     return retval
 
