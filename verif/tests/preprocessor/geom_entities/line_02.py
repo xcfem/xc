@@ -40,11 +40,9 @@ pt= points.newPntIDPos3d(2,geom.Pos3d(CooMax,CooMax,CooMax))
 
 
 lines= preprocessor.getMultiBlockTopology.getLines
-lines.defaultTag= 1
-l= lines.newLine(1,2)
-l.nDiv= NumDiv
+l1= lines.newLine(1,2)
+l1.nDiv= NumDiv
 
-l1= preprocessor.getSets.getSet("l1")
 l1.genMesh(xc.meshDir.I)
 
 mesh= feProblem.getDomain.getMesh
