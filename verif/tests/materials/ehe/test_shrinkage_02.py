@@ -20,8 +20,8 @@ fckHA30= 30e6 # Concrete characteristic compressive strength HA-30.
 Hrel= 0.8 # Relative humidity of the air.
 Ec= 2e5*9.81/1e-4 # Concrete Young modulus (Pa).
 nuC= 0.2 # Concrete Poisson's ratio EHE-08.
-hLosa= 0.2 # Thickness.
-densLosa= 2500*hLosa # Deck density kg/m2.
+deckThk= 0.2 # Thickness.
+densLosa= 2500*deckThk # Deck density kg/m2.
 t0= 28 # Concrete age at loading
 tFin= 10000 # Service life.
 arido= "cuarcita"
@@ -69,13 +69,13 @@ nod12= nodes.newNodeXYZ(3,2,0)
 
 # Materials definition
 
-hLosa= typical_materials.defElasticMembranePlateSection(preprocessor, "hLosa",Ec,nuC,densLosa,hLosa)
+deckMat= typical_materials.defElasticMembranePlateSection(preprocessor, "deckMat",Ec,nuC,densLosa,deckThk)
 
 prestressingSteel= typical_materials.defSteel02(preprocessor, "prestressingSteel",Ep,fy,0.001,tInic)
 
 elements= preprocessor.getElementHandler
 # Reinforced concrete deck
-elements.defaultMaterial= hLosa.name
+elements.defaultMaterial= deckMat.name
 elements.defaultTag= 1
 elem= elements.newElement("ShellMITC4",xc.ID([1,2,6,5]))
 
