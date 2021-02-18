@@ -60,3 +60,6 @@ class_<XC::NodePtrsWithIDs, bases<XC::NodePtrs>, boost::noncopyable >("NodePtrsW
   .add_property("getExternalNodes",make_function(&XC::NodePtrsWithIDs::getExternalNodes, return_internal_reference<>() ),"Return tags of external nodes.")
   ;
 
+#include "physical_properties/python_interface.tcc"
+#include "fvectors/python_interface.tcc"
+#include "gauss_models/python_interface.tcc"

@@ -66,7 +66,8 @@ class ParticlePos3d
     inline const double &t_coordinate(void) const
       { return t; }
     inline void set_t_coordinate(const double &t_coord)
-      { r= t_coord; }
+      { t= t_coord; }
+    bool operator==(const ParticlePos3d &) const;
     void Print(std::ostream &) const;
   };
 

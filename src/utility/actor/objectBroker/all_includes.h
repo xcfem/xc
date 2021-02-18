@@ -165,6 +165,7 @@
 #include "domain/mesh/element/ElementIter.h"
 #include "domain/mesh/element/utils/ParticlePos3d.h"
 #include "domain/mesh/element/utils/gauss_models/GaussPoint.h"
+#include "domain/mesh/element/utils/gauss_models/GaussModel.h"
 #include "domain/mesh/element/truss_beam_column/beam2d/beam2d02.h"
 #include "domain/mesh/element/truss_beam_column/beam2d/beam2d03.h"
 #include "domain/mesh/element/truss_beam_column/beam2d/beam2d04.h"

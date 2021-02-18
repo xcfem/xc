@@ -25,9 +25,7 @@
 
 //class_<XC::ElemPos, bases<KDTreePos>, boost::noncopyable >("ElemPos", no_init);
 
-#include "utils/fvectors/python_interface.tcc"
-#include "utils/physical_properties/python_interface.tcc"
-#include "domain/mesh/element/utils/python_interface.tcc"
+#include "utils/python_interface.tcc"
 
 Pos2d (XC::Element::*getProjection2D)(const Pos2d &,bool) const= &XC::Element::getProjection;
 Pos3d (XC::Element::*getProjection3D)(const Pos3d &,bool) const= &XC::Element::getProjection;
@@ -90,6 +88,7 @@ class_<XC::Element, XC::Element *,bases<XC::MeshComponent>, boost::noncopyable >
   .def("getIVector3d",&XC::Element::getIVector3d,"Return a 3D vector in the direction of the local axis 1.")
   .def("getJVector3d",&XC::Element::getJVector3d,"Return a 3D vector in the direction of the local axis 2.")
   .def("getKVector3d",&XC::Element::getKVector3d,"Return a 3D vector in the direction of the local axis 3.")
+  .def("getGaussModel",make_function(&XC::Element::getGaussModel, return_internal_reference<>() ),"Return the element Gauss quadrature.")
   .def("getCoordinateSystem",&XC::Element::getCooSys,"Return the element coordinate system.")
   .def("getValuesAtNodes",&XC::Element::getValuesAtNodes,"getValuesAtNodes(string, silent): return the value of the argument at the element nodes. If silent==True don't complain about non-existent property.")
   .def("createInertiaLoad", &XC::Element::createInertiaLoad,"Create the inertia load for the given acceleration vector.")

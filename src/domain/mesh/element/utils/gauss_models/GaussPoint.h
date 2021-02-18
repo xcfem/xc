@@ -35,7 +35,7 @@ namespace XC {
 //! @ingroup FEMisc
 //
 //! @brief 3D position of Gauss points.
-  class GaussPoint: public ParticlePos3d
+class GaussPoint: public ParticlePos3d
   {
   protected:
     double rw;
@@ -61,7 +61,13 @@ namespace XC {
       { return sw; }
     inline const double &t_weight() const    
       { return tw; }
-
+    inline void set_r_weight(const double &r_weight)
+      { rw= r_weight; }
+    inline void set_s_weight(const double &s_weight)
+      { sw= s_weight; }
+    inline void set_t_weight(const double &t_weight)
+      { tw= t_weight; }
+    bool operator==(const GaussPoint &) const;
   };
 } // end of XC namespace
 

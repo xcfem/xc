@@ -57,7 +57,14 @@ void XC::GaussPoint::set_weights(const double &r_weight, const double &s_weight,
     tw = t_weight;
   }
 
-
+//! @brief Equal operator.
+bool XC::GaussPoint::operator==(const GaussPoint &other) const
+  {
+    bool retval= ParticlePos3d::operator==(other);
+    if(retval)
+      { retval= ((rw==other.rw) && (sw==other.rw) && (tw==other.tw)); }
+    return retval;
+  }
 
 
 

@@ -61,6 +61,11 @@ void XC::ParticlePos3d::set_coordinates(const Pos3d &p)
 void XC::ParticlePos3d::set_coordinates(const Pos2d &p)
   { set_coordinates(p.x(),p.y());}
 
+//! @brief Equal operator.
+bool XC::ParticlePos3d::operator==(const ParticlePos3d &other) const
+  { return ((r==other.r) && (s==other.r) && (t==other.t)); }
+
+//! @brief Print stuff.
 void XC::ParticlePos3d::Print(std::ostream &os) const
   {
     os << "r= " << r
@@ -69,6 +74,7 @@ void XC::ParticlePos3d::Print(std::ostream &os) const
   }
 
 
+//! @brief Output operator.
 std::ostream &XC::operator<<(std::ostream &os, const ParticlePos3d &p)
   {
     p.Print(os);

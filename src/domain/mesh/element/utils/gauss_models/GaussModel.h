@@ -75,6 +75,14 @@ const GaussModel gauss_model_tria3(Pos2d(0,0),Pos2d(1,0),Pos2d(0,1),
                                    GaussPoint(Pos2d(0.2,0.2),0.3334),
                                    GaussPoint(Pos2d(0.8,0.1),0.3334),
                                    GaussPoint(Pos2d(0.1,0.8),0.3334));
+//Gauss model for nine node quads.
+//
+//  3---------2
+//  |         |
+//  |         |
+//  |         |
+//  0---------1
+//
 const double root3= sqrt(3.0);
 const double one_over_root3= 1.0/root3;
 const GaussModel gauss_model_quad4(Pos2d(-1,-1),Pos2d(1,-1),Pos2d(1,1),Pos2d(-1,1),
