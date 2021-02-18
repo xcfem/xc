@@ -21,7 +21,7 @@
 //----------------------------------------------------------------------------
 //python_interface.tcc
 
-class_<XC::GaussPoint, boost::noncopyable >("GaussPoint", no_init)
+class_<XC::GaussPoint, bases<XC::ParticlePos3d>, boost::noncopyable >("GaussPoint", no_init)
   .add_property("r_weight", make_function( &XC::GaussPoint::r_weight, return_value_policy<return_by_value>()), &XC::GaussPoint::set_r_weight, "r weight.")
   .add_property("s_weight", make_function( &XC::GaussPoint::s_weight, return_value_policy<return_by_value>()), &XC::GaussPoint::set_s_weight, "s weight.")
   .add_property("t_weight", make_function( &XC::GaussPoint::t_weight, return_value_policy<return_by_value>()), &XC::GaussPoint::set_t_weight, "t weight.")

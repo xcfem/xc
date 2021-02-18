@@ -38,6 +38,7 @@ class_<XC::Shell4NBase, bases<QuadBase4N_SFD>, boost::noncopyable >("Shell4NBase
     .add_property("getCoordTransf", make_function( getCoordTransfRef, return_internal_reference<>() ))
     .def("getLocalCoordinatesOfNode", &XC::ShellMITC4Base::getLocalCoordinatesOfNode,"Returns local coordinates of node i.")
     .def("getNaturalCoordinates", &XC::ShellMITC4Base::getNaturalCoordinates,"Returns natural coordinates of point.")
+    .def("getCartesianCoordinates", &XC::ShellMITC4Base::getCartesianCoordinates,"Returns cartesial coordinates of point.")
     .def("getMeanInternalForce",&XC::ShellMITC4Base::getMeanInternalForce)
     .def("getMeanInternalDeformation",&XC::ShellMITC4Base::getMeanInternalDeformation)
     .def("getPos3dInterpolationFactors",getPos3dInterpolationFactors)

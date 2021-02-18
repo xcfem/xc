@@ -598,7 +598,7 @@ int XC::Shell4NBase::revertToStart(void)
     return retval;
   }
 
-//! @brief Returns interpolattion factors for a material point.
+//! @brief Returns interpolation factors for a material point.
 XC::Vector XC::Shell4NBase::getInterpolationFactors(const ParticlePos3d &pos) const
   {
     static const int numberNodes= 4;
@@ -617,11 +617,43 @@ XC::Vector XC::Shell4NBase::getInterpolationFactors(const ParticlePos3d &pos) co
     double sx[2][2]; //inverse jacobian matrix.
     shape2d(pos.r_coordinate(), pos.s_coordinate(), xl, shp, xsj, sx);
 
-    //node loop to compute displacements
+    //node loop to compute factors
     retval.Zero( );
     for(int j= 0; j < numberNodes; j++ )
       retval[j]= shp[massIndex][j];
 
+    return retval;
+  }
+
+//! @brief Return the cartesian coordinates of the argument.
+//!
+//! @param p: position in natural coordinates.
+Pos3d XC::Shell4NBase::getCartesianCoordinates(const ParticlePos3d &p, bool initialGeometry) const
+  {
+    Pos3d retval;
+    //Values of the shape functions.
+    static const int numberNodes= 4;
+    static const int nShape= 3;
+    double xsj;  // determinant of the jacobian matrix
+    double sx[2][2]; //inverse jacobian matrix.
+    static double shp[nShape][numberNodes];  //shape functions at point p
+    shape2d(p.r_coordinate(), p.s_coordinate(), xl, shp, xsj, sx);
+    const double N1= shp[nShape-1][0];
+    const double N2= shp[nShape-1][1];
+    const double N3= shp[nShape-1][2];
+    const double N4= shp[nShape-1][3];
+    //Node positions
+    double factor= 1.0;
+    if(initialGeometry)
+      factor= 0.0;
+    const Pos3d n1Pos= theNodes[0]->getCurrentPosition3d(factor);
+    const Pos3d n2Pos= theNodes[1]->getCurrentPosition3d(factor);
+    const Pos3d n3Pos= theNodes[2]->getCurrentPosition3d(factor);
+    const Pos3d n4Pos= theNodes[3]->getCurrentPosition3d(factor);
+    const double x= N1*n1Pos.x()+N2*n2Pos.x()+N3*n3Pos.x()+N4*n4Pos.x();
+    const double y= N1*n1Pos.y()+N2*n2Pos.y()+N3*n3Pos.y()+N4*n4Pos.y();
+    const double z= N1*n1Pos.z()+N2*n2Pos.z()+N3*n3Pos.z()+N4*n4Pos.z();
+    retval= Pos3d(x,y,z);
     return retval;
   }
 

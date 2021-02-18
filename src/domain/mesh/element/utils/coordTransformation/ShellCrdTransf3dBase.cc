@@ -162,7 +162,7 @@ XC::ParticlePos3d XC::ShellCrdTransf3dBase::getNaturalCoordinates(const Pos3d &p
     retval.set_r_coordinate(2*cChi/(-sqrt(bChi*bChi-2*J1*cChi)-bChi ));
     retval.set_s_coordinate(2*cEta/( sqrt(bEta*bEta+2*J2*cEta)-bEta));
     return retval;
-  }   
+  }
 
 
 //! @brief Return the transformation matrix.

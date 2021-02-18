@@ -170,6 +170,7 @@ python tests/elements/shell/test_shell_mitc9_03.py
 python tests/elements/shell/test_tributary_area_01.py
 python tests/elements/shell/test_shell_mitc4_natural_coordinates_01.py
 python tests/elements/shell/test_transformInternalForces.py
+python tests/elements/shell/test_gauss_points_cartesian_coordinates.py
 
 echo "$BLEU" "  Solid elements tests." "$NORMAL"
 python tests/elements/volume/test_brick_00.py
