@@ -52,12 +52,12 @@ elem= seedElemHandler.newElement("ShellMITC4",xc.ID([0,0,0,0]))
 
 
 points= preprocessor.getMultiBlockTopology.getPoints
-pt= points.newPntIDPos3d(1,geom.Pos3d(0.0,0.0,0.0))
-pt= points.newPntIDPos3d(2,geom.Pos3d(CooMaxX,0.0,0.0))
-pt= points.newPntIDPos3d(3,geom.Pos3d(CooMaxX,CooMaxY,0.0))
-pt= points.newPntIDPos3d(4,geom.Pos3d(0.0,CooMaxY,0.0))
+pt1= points.newPntFromPos3d(geom.Pos3d(0.0,0.0,0.0))
+pt2= points.newPntFromPos3d(geom.Pos3d(CooMaxX,0.0,0.0))
+pt3= points.newPntFromPos3d(geom.Pos3d(CooMaxX,CooMaxY,0.0))
+pt4= points.newPntFromPos3d(geom.Pos3d(0.0,CooMaxY,0.0))
 surfaces= preprocessor.getMultiBlockTopology.getSurfaces
-s= surfaces.newQuadSurfacePts(1,2,3,4)
+s= surfaces.newQuadSurfacePts(pt1.tag,pt2.tag,pt3.tag,pt4.tag)
 s.nDivI= NumDivI
 s.nDivJ= NumDivJ
 

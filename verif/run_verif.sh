@@ -31,7 +31,8 @@ python tests/actions/wind/test_wind_beam_truss.py
 python tests/actions/wind/test_cte_wind_load.py
 python tests/actions/wind/test_iap_hiding_ratio.py
 echo "$BLEU" "  Thermal action tests." "$NORMAL"
-python tests/actions/thermal/test_thermal_grad_shell.py 
+python tests/actions/thermal/test_thermal_grad_shell_01.py 
+python tests/actions/thermal/test_thermal_grad_shell_02.py 
 python tests/actions/thermal/test_iap_thermal.py 
 
 #Combinations tests.
