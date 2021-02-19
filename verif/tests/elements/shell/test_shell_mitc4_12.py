@@ -65,8 +65,8 @@ s.genMesh(xc.meshDir.I)
 sides= s.getSides
 # Edge iterator
 for l in sides:
-  for i in l.getEdge.getNodeTags():
-    modelSpace.fixNode000_FFF(i)
+    for i in l.getEdge.getNodeTags():
+        modelSpace.fixNode000_FFF(i)
 
 # Load definition.
 lp0= modelSpace.newLoadPattern(name= '0')
@@ -78,9 +78,9 @@ capa1= s.getNodeLayers.getLayer(0)
 nf= capa1.nRow
 nc= capa1.nCol
 for i in range(2,nf):
-  for j in range(2,nc):
-    node= capa1.getNode(i,j)
-    lp0.newNodalLoad(node.tag,xc.Vector([0,0,-nLoad,0,0,0])) # Concentrated load
+    for j in range(2,nc):
+        node= capa1.getNode(i,j)
+        lp0.newNodalLoad(node.tag,xc.Vector([0,0,-nLoad,0,0,0])) # Concentrated load
 
 nElems= s.getNumElements
 # We add the load case to domain.
@@ -115,6 +115,6 @@ import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (abs(ratio1)<5e-3) & (abs(ratio2)<1e-9):
-  print('test '+fname+': ok.')
+    print('test '+fname+': ok.')
 else:
-  lmsg.error(fname+' ERROR.')
+    lmsg.error(fname+' ERROR.')
