@@ -360,6 +360,7 @@ python tests/preprocessor/import_export/test_dxf_groups.py
 python tests/preprocessor/import_export/test_dxf_surfaces.py
 python tests/preprocessor/import_export/test_dxf_export_01.py
 python tests/preprocessor/import_export/test_ifc_points.py
+python tests/preprocessor/import_export/test_ifc_lines.py
 python tests/preprocessor/import_export/test_ifc_surface.py
 
 #Tests about constraints.
