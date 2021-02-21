@@ -156,32 +156,33 @@ class FreeCADImport(reader_base.ReaderBase):
         for obj in self.document.Objects:
             if(hasattr(obj,'Shape')):
                 shapeType= obj.Shape.ShapeType
-                lineName= obj.Name
                 labelName= obj.Label
                 if((shapeType=='Wire') and (labelName in self.groupsToImport)):
-                    vertices= [-1,-1]
-                    v0= obj.Shape.Vertexes[0]
-                    v1= obj.Shape.Vertexes[1]
-                    p1= self.getRelativeCoo([float(v0.X), float(v0.Y), float(v0.Z)])
-                    p2= self.getRelativeCoo([float(v1.X), float(v1.Y), float(v1.Z)])
-                    length= cdist([p1],[p2])[0][0]
-                    # Try to have all lines with the
-                    # same orientation.
-                    idx0, idx1= self.getOrientation(p1, p2, length/1e4)
-                    # end orientation.
-                    vertices[0]= idx0
-                    vertices[1]= idx1
-                    if(vertices[0]==vertices[1]):
-                        lmsg.error(f'Error in line {lineName} vertices are equal: {vertices}')
-                    if(length>self.threshold):
-                        self.lines[lineName]= vertices
-                        objLabels= [labelName]
-                        # # groups
-                        # if(lineName in self.entitiesGroups):
-                        #     objLabels.extend(self.entitiesGroups[lineName])
-                        self.propertyDict[lineName]= bte.BlockProperties(labels= objLabels, attributes= get_ifc_attributes(obj))
-                    else:
-                        lmsg.error(f'line too short: {p1},{p2}, {length}')
+                    for i, e in enumerate(obj.Shape.Edges):
+                        lineName= f"{obj.Name}{i}"
+                        vertices= [-1,-1]
+                        v0= e.Vertexes[0]
+                        v1= e.Vertexes[1]
+                        p1= self.getRelativeCoo([float(v0.X), float(v0.Y), float(v0.Z)])
+                        p2= self.getRelativeCoo([float(v1.X), float(v1.Y), float(v1.Z)])
+                        length= cdist([p1],[p2])[0][0]
+                        # Try to have all lines with the
+                        # same orientation.
+                        idx0, idx1= self.getOrientation(p1, p2, length/1e4)
+                        # end orientation.
+                        vertices[0]= idx0
+                        vertices[1]= idx1
+                        if(vertices[0]==vertices[1]):
+                            lmsg.error(f'Error in line {lineName} vertices are equal: {vertices}')
+                        if(length>self.threshold):
+                            self.lines[lineName]= vertices
+                            objLabels= [labelName]
+                            # # groups
+                            # if(lineName in self.entitiesGroups):
+                            #     objLabels.extend(self.entitiesGroups[lineName])
+                            self.propertyDict[lineName]= bte.BlockProperties(labels= objLabels, attributes= get_ifc_attributes(obj))
+                        else:
+                            lmsg.error(f'line too short: {p1},{p2}, {length}')
 
                         
     def importFaces(self):
