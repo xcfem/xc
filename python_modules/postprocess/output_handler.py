@@ -543,7 +543,7 @@ class OutputHandler(object):
         elLoadScaleF= self.outputStyle.loadDiagramsScaleFactor
         diagram= lld.LinearLoadDiagram(setToDisp=setToDisplay,scale=elLoadScaleF,fUnitConv= unitConversionFactor,component=elLoadComp)
         maxAbs= diagram.getMaxAbsComp(preprocessor)
-        if(maxAbs>0):
+        if(maxAbs>0.0):
             elLoadScaleF*= LrefModSize/maxAbs*100.0
             diagram.scaleFactor= elLoadScaleF
             #Linear loads

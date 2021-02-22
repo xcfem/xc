@@ -115,18 +115,20 @@ class LinearLoadDiagram(cd.ColoredDiagram):
             lmsg.warning('No active load patterns.')
         actLP=[lp.data() for lp in activeLoadPatterns]
         if not self.dictActLoadVectors:
-            self.dictActLoadVectors=self.sumElementalLoads(actLP)
+            self.dictActLoadVectors= self.sumElementalLoads(actLP)
         eTags=[tag for tag in self.dictActLoadVectors.keys()]
-        if(self.component=='axialComponent'):
-            retval=max([abs(self.dictActLoadVectors[tag].x) for tag in eTags])
-        elif(self.component in ['transComponent','transYComponent']):  # transComponent only for 2D models
-            retval=max([abs(self.dictActLoadVectors[tag].y) for tag in eTags])
-        elif(self.component=='transZComponent'):  
-            retval=max([abs(self.dictActLoadVectors[tag].z) for tag in eTags])
-        elif(self.component=='xyzComponents'):
-            retval=max([abs(self.dictActLoadVectors[tag].getModulus()) for tag in eTags])
-        else:
-            lmsg.error("LinearLoadDiagram :'"+self.component+"' unknown.")
+        retval= 0.0
+        if(len(eTags)>0):
+            if(self.component=='axialComponent'):
+                retval=max([abs(self.dictActLoadVectors[tag].x) for tag in eTags])
+            elif(self.component in ['transComponent','transYComponent']):  # transComponent only for 2D models
+                retval=max([abs(self.dictActLoadVectors[tag].y) for tag in eTags])
+            elif(self.component=='transZComponent'):  
+                retval=max([abs(self.dictActLoadVectors[tag].z) for tag in eTags])
+            elif(self.component=='xyzComponents'):
+                retval=max([abs(self.dictActLoadVectors[tag].getModulus()) for tag in eTags])
+            else:
+                lmsg.error("LinearLoadDiagram :'"+self.component+"' unknown.")
         return retval
 
     def dumpLoads(self, preprocessor, indxDiagram):
