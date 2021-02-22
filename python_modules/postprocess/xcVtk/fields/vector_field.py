@@ -63,11 +63,11 @@ class VectorField(fb.FieldBase):
         '''
         nTuples= self.data.getNumberOfTuples()
         if(nTuples>0):
-          self.setupActor()
-          recordDisplay.renderer.AddActor(self.actor)
-          self.creaColorScaleBar(orientation,title)
-          # mapper2D= vtk.vtkPolyDataMapper2D()
-          # self.scalarBar.SetMapper(mapper2D)
-          recordDisplay.renderer.AddActor2D(self.scalarBar)
+            self.setupActor()
+            recordDisplay.renderer.AddActor(self.actor)
+            self.creaColorScaleBar(orientation,title)
+            # mapper2D= vtk.vtkPolyDataMapper2D()
+            # self.scalarBar.SetMapper(mapper2D)
+            recordDisplay.renderer.AddActor2D(self.scalarBar)
         else:
-          lmsg.warning('vector field: no vectors to display. Command ignored.')
+            lmsg.warning('vector field: no vectors to display. Command ignored.')
