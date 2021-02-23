@@ -74,8 +74,8 @@ namespace XC {
 //! for performing a transient analysis using the alternative
 //! form of the Central Differenceintegration scheme, 
 //! which is an explicit direct integration scheme as
-//! outlined in the book 'Concepts
-//! and Applications of Finite Element Analysis' by Cook, Malkus & Plesha.
+//! outlined in the book 'Concepts and Applications of Finite
+//! Element Analysis' by Cook, Malkus & Plesha.
 class CentralDifferenceAlternative: public CentralDifferenceBase
   {
   private:

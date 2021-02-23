@@ -35,9 +35,13 @@
 
 namespace XC {
 
+//! @brief Approximates velocity and acceleration by centered
+//! finite differences of displacement.
 //! @ingroup TransientIntegrator
-//
-//! @brief Approximates velocity and acceleration by centered finite differences of displacement.
+//!
+//! The central difference method is an explicit integrator
+//! that forms a linear combination of the mass and damping
+//! matrices to advance the solution to the next time step.
 class CentralDifferenceBase: public TransientIntegrator
   {
   protected:
