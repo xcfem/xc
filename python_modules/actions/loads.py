@@ -242,7 +242,7 @@ class UnifLoadSurfNodesDistributed(BaseVectorLoad):
             if len(lstNodes) > 0:
                 for n in lstNodes: auxNodSet.nodes.append(n)
                 surfLoadVect=s.getArea()*self.loadVector
-                slv=SlindingVectorLoad('slv',auxNodSet,s.getCentroid(),surfLoadVect)
+                slv=SlidingVectorLoad('slv',auxNodSet,s.getCentroid(),surfLoadVect)
                 slv.appendLoadToCurrentLoadPattern()
             prep.getSets.removeSet('auxNodSet')
             
@@ -623,21 +623,28 @@ class WindLoadOnTrusses(BaseVectorLoad):
         return maxValue
 
 
-class SlindingVectorLoad(BaseVectorLoad):
+class SlidingVectorLoad(BaseVectorLoad):
     '''Distribute load expressed as a sliding vector over the nodes in 
     a set.
 
-    :ivar name:       name identifying the load
-    :ivar xcSet:      set that contains the nodes
-    :ivar pntCoord:    (x,y,z) coordinates of a point of the sliding vector
+    :ivar name: name identifying the load
+    :ivar xcSet: set that contains the nodes to distribute the load on.
+    :ivar pntCoord: (x,y,z) coordinates of a point of the sliding vector.
     :ivar loadVector:  xc.Vector(Fx,Fy,Fz,Mx,My,Mz) components of the force sliding vector
     '''
     def __init__(self,name, xcSet, pntCoord,loadVector):
-        super(SlindingVectorLoad,self).__init__(name,loadVector)
+        ''' Constructor.
+        :param name: name identifying the load
+        :param xcSet: set that contains the nodes to distribute the load on.
+        :param pntCoord: (x,y,z) coordinates of a point of the sliding vector.
+        :param loadVector: xc.Vector(Fx,Fy,Fz,Mx,My,Mz) components of the force sliding vector.
+        '''
+        super(SlidingVectorLoad,self).__init__(name,loadVector)
         self.xcSet=xcSet
         self.pntCoord=pntCoord
         
     def appendLoadToCurrentLoadPattern(self):
+        ''' Append the loads to the current load pattern.'''
         O=geom.Pos3d(self.pntCoord[0],self.pntCoord[1],self.pntCoord[2])
         force=geom.Vector3d(self.loadVector[0],self.loadVector[1],self.loadVector[2])
         moment=geom.Vector3d(self.loadVector[3],self.loadVector[4],self.loadVector[5])
