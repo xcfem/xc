@@ -449,7 +449,7 @@ def VtkDibujaIdsNodes(recordGrid, renderer):
 def VtkDibujaIdsElementos(ids):
     '''Dibuja las etiquetas de los elementos. Not implemented yet.'''
     cc= vtk.vtkCellCenters()
-    vtk.SetInput(ids) #  Centroides de las celdas. 
+    vtk.SetInput(ids) # Cell centroids. 
 
     visCells= vtk.vtkSelectVisiblePoints()
     visCells.SetInput(cc)
