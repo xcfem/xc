@@ -292,7 +292,7 @@ def createHolesOnMemberBlocks(templateHoles, memberBlocks, boltProperties, mater
                 nearestFace= memberBlocks.getNearest(pos)
                 boltProperties.appendAttribute('ownerId','f'+str(nearestFace.id)) # Hole owner
                 nearestFacePlane= nearestFace.getGeomObject(memberBlocks.points).getPlane()
-                posInFlange= nearestFacePlane.getPos3dProjection(pos)
+                posInFlange= nearestFacePlane.getProjection(pos)
                 refSys= geom.Ref3d3d(posInFlange, nearestFacePlane.getBase1(), nearestFacePlane.getBase2())
                 bolt= matModule.BoltFastener(diameter= boltDiameter, steelType= boltMaterial, pos3d= geom.Pos3d(0,0,0))
                 boltBlk= bolt.getBoltBlock(refSys, boltProperties)
