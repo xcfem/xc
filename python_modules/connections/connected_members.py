@@ -40,7 +40,7 @@ def getSegmentOrientation(origin, sg):
     d1= origin.dist2(sg.getToPoint())
     if(d0>d1):
         retval= -1.0
-    
+    return retval
 
 class ConnectedMemberMetaData(object):
     ''' Data of a connected member.
