@@ -260,11 +260,12 @@ class RectangularBasePlate(object):
             return computePlateThickness(self.steelShape, self.N, self.B, Pu, Pp, self.steel.fy)
         else: # rods in tension
             T_rod= Pu/self.anchorGroup.getNumberOfBolts() # Tensile load per anchor
+            
             tw= self.steelShape.get('tw') # Web thickness
             anchorLeverArm= self.getAnchorLeverArm()
             M= T_rod*anchorLeverArm-tw/2.0
             b_eff= (anchorLeverArm-tw/2.0)*2
-            return math.sqrt(M*4.0/(b_eff*0.9*self.steel.fy))
+            return math.sqrt(abs(M)*4.0/(b_eff*0.9*self.steel.fy))
 
     def getThicknessEfficiency(self, Pu):
         ''' Return the thickness efficiency.'''
