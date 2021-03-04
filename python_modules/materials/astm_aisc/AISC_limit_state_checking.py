@@ -139,9 +139,9 @@ class Member(buckling_base.MemberBase):
         '''
         return self.shape.getDesignCompressiveStrength(effectiveLengthX= self.getEffectiveLengthX(), effectiveLengthY= self.getEffectiveLengthY(), effectiveLengthZ= self.getEffectiveLengthZ(), sectionClassif= self.sectionClassif)
 
-    def getCompressiveStrengthReductionFactor(self):
-        ''' Return the reduction factor of the compressive strength 
-            of the member with respect to the reference compressive strength
+    def getFlexuralStrengthReductionFactor(self):
+        ''' Return the reduction factor of the flexural strength 
+            of the member with respect to the reference flexural strength
             of its section.
         '''
         return self.getDesignFlexuralStrength()/self.shape.getReferenceFlexuralStrength()
