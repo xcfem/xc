@@ -266,7 +266,7 @@ def getUIWebPlateShearBucklingCoefficient(shape, a= 1e6):
         return 5.34
     else:
         denom= (a/h)**2
-        return 5.0(1.0+1.0/denom)
+        return 5.0*(1.0+1.0/denom)
     
 def getG22WebShearBucklingStrengthCoefficient(shape, kv, majorAxis= True):
     ''' Return the web shear stress coefficient Cv2 according
