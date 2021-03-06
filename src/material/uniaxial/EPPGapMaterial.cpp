@@ -59,20 +59,16 @@
 //
 // What: "@(#) EPPGapMaterial.C, revA"
 
-#include <cstdlib>
-
 #include <material/uniaxial/EPPGapMaterial.h>
 #include <utility/matrix/Vector.h>
-
-#include <cmath>
-#include <cfloat>
-
-
+#include <domain/mesh/element/utils/Information.h>
+#include "domain/component/Parameter.h"
 
 //! @brief Constructor.
 XC::EPPGapMaterial::EPPGapMaterial(int tag, double e, double fyl, double gap0, double eta0, int accum)
   : EPPBaseMaterial(tag,MAT_TAG_EPPGap,e), fy(fyl),
-    gap(gap0), eta(eta0),minElasticYieldStrain(gap0),damage(accum)
+    gap(gap0), eta(eta0),minElasticYieldStrain(gap0),damage(accum),
+    parameterID(0), SHVs()
   {
     if(E == 0.0)
       {
@@ -111,7 +107,8 @@ XC::EPPGapMaterial::EPPGapMaterial(int tag, double e, double fyl, double gap0, d
 XC::EPPGapMaterial::EPPGapMaterial(int tag)
   :EPPBaseMaterial(tag,MAT_TAG_EPPGap), fy(0.0),
    gap(0.0), eta(0.0), maxElasticYieldStrain(0.0),
-   minElasticYieldStrain(0.0), damage(0) {}
+   minElasticYieldStrain(0.0), damage(0),
+   parameterID(0), SHVs() {}
 
 int XC::EPPGapMaterial::setTrialStrain(double strain, double strainRate)
   {
@@ -158,9 +155,7 @@ int XC::EPPGapMaterial::setTrialStrain(double strain, double strainRate)
     return 0;
   }
 
-double XC::EPPGapMaterial::getStrain(void) const
-  { return trialStrain; }
-
+//! @brief Return the initial stiffness.
 double XC::EPPGapMaterial::getInitialTangent(void) const
   {
     if ((fy >= 0.0 && gap > 0.0) || (fy < 0.0 && gap < 0.0)) 
@@ -197,14 +192,19 @@ int XC::EPPGapMaterial::commitState(void)
             minElasticYieldStrain = trialStrain;
           }
       }
+    //added by SAJalali for energy recorder
+    EnergyP+= 0.5*(commitStress + trialStress)*(trialStrain - commitStrain);
+
     commitStrain= trialStrain;
+    commitStress = trialStress;	//added by SAJalali
     return 0;
   }
 
 
 int XC::EPPGapMaterial::revertToLastCommit(void)
   {
-    trialStrain = commitStrain;
+    trialStrain= commitStrain;
+    trialStress= commitStress;	//added by SAJalali
     return 0;
   }
 
@@ -215,6 +215,14 @@ int XC::EPPGapMaterial::revertToStart(void)
     trialStrain= 0.0;
     maxElasticYieldStrain = fy/E+gap;
     minElasticYieldStrain = gap;
+    //added by SAJalali
+    commitStress = 0;
+
+// AddingSensitivity:BEGIN /////////////////////////////////
+    if(!SHVs.isEmpty()) 
+      SHVs.Zero();
+// AddingSensitivity:END //////////////////////////////////
+
     return 0;
   }
 
@@ -283,3 +291,152 @@ void XC::EPPGapMaterial::Print(std::ostream &s, int flag) const
         s << "  damage accumulation specified" << std::endl;
   }
 
+int XC::EPPGapMaterial::setParameter(const std::vector<std::string> &argv, Parameter &param)
+  {
+    if(argv[0]=="E")
+      {
+        param.setValue(E);
+        return param.addObject(1, this);
+      }
+    if((argv[0]=="Fy") || (argv[0]=="fy"))
+      {
+        param.setValue(fy);
+        return param.addObject(2, this);
+      }
+    if(argv[0]=="gap")
+      {
+        param.setValue(gap);
+        return param.addObject(3, this);
+      }
+    return 0;
+  }
+
+int XC::EPPGapMaterial::updateParameter(int parameterID, Information &info)
+  {
+    switch (parameterID)
+      {
+      case 1:
+	E = info.theDouble;
+	break;
+      case 2:
+	fy = info.theDouble;
+	break;
+      case 3:
+	gap = info.theDouble;
+	break;
+      default:
+	return -1;
+      }
+
+    return 0;
+  }
+
+int XC::EPPGapMaterial::activateParameter(int passedParameterID)
+  {
+    parameterID = passedParameterID;
+    return 0;
+  }
+
+double XC::EPPGapMaterial::getStressSensitivity(int gradIndex, bool conditional)
+  {
+    double dsdh = 0.0;
+
+    double dEdh = 0.0;
+    double dfydh = 0.0;
+    double dgapdh = 0.0;
+
+    if (parameterID == 1)
+      dEdh = 1.0;
+    if (parameterID == 2)
+      dfydh = 1.0;
+    if (parameterID == 3)
+      dgapdh = 1.0;
+
+    double depsyMindh = 0.0;
+    if (!SHVs.isEmpty())
+      { depsyMindh = SHVs(0,gradIndex); }
+
+    if (fy >= 0)
+      {
+      if (trialStrain > maxElasticYieldStrain) {
+	dsdh = dfydh + (-dgapdh-dfydh/E+fy/(E*E)*dEdh)*eta*E + (trialStrain-gap-fy/E)*eta*dEdh;
+      } else if (trialStrain < minElasticYieldStrain) {
+	dsdh = 0.0;
+      } else {
+	dsdh = dEdh*(trialStrain-minElasticYieldStrain) - E*depsyMindh;
+      }
+    } else {
+      if (trialStrain < maxElasticYieldStrain) {
+	dsdh = dfydh + (-dgapdh-dfydh/E+fy/(E*E)*dEdh)*eta*E + (trialStrain-gap-fy/E)*eta*dEdh;
+      } else if (trialStrain > minElasticYieldStrain) {
+	dsdh = 0.0;
+      } else {
+	dsdh = dEdh*(trialStrain-minElasticYieldStrain) - E*depsyMindh;
+      }
+    }
+
+    return dsdh;
+  }
+
+double XC::EPPGapMaterial::getTangentSensitivity(int gradIndex)
+  { return 0.0; }
+
+double XC::EPPGapMaterial::getInitialTangentSensitivity(int gradIndex)
+  {
+    if(parameterID == 1)
+      return 1.0;
+    else
+      return 0.0;
+  }
+
+int XC::EPPGapMaterial::commitSensitivity(double dedh, int gradIndex, int numGrads)
+  {
+    if(SHVs.isEmpty())
+      { SHVs= Matrix(1,numGrads); }
+
+    //return 0;
+
+    if (gradIndex >= SHVs.noCols())
+      {
+        //std::cerr << gradIndex << ' ' << SHVs.noCols() << endln;
+        return 0;
+      }
+
+    double dEdh = 0.0;
+    double dfydh = 0.0;
+    double dgapdh = 0.0;
+
+    if(parameterID == 1)
+      dEdh = 1.0;
+    if(parameterID == 2)
+      dfydh = 1.0;
+    if(parameterID == 3)
+      dgapdh = 1.0;
+
+   double depsyMindh = SHVs(0,gradIndex);
+
+    if (fy >= 0)
+      {
+        if (trialStrain > maxElasticYieldStrain)
+	  {
+	    double dsdh = this->getStressSensitivity(gradIndex, true);
+	    dsdh += eta*E*dedh; // unconditional
+	    depsyMindh = dedh - (-trialStress)/(E*E)*dEdh - dsdh/E;
+          }
+        else if(trialStrain < minElasticYieldStrain && trialStrain > gap && damage == 0)
+	  depsyMindh = dedh;
+      }
+    else
+      {
+        if(trialStrain < maxElasticYieldStrain)
+	  {
+	    double dsdh = this->getStressSensitivity(gradIndex, true);
+	    dsdh += eta*E*dedh; // unconditional
+	    depsyMindh = dedh - (-trialStress)/(E*E)*dEdh - dsdh/E;
+	  }
+      else if(trialStrain > minElasticYieldStrain && trialStrain < gap && damage == 0)
+	depsyMindh = dedh;
+      }
+    SHVs(0,gradIndex) = depsyMindh;
+    return 0;
+  }

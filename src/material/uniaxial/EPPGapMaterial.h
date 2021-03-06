@@ -77,7 +77,8 @@
 #ifndef EPPGapMaterial_h
 #define EPPGapMaterial_h
 
-#include <material/uniaxial/EPPBaseMaterial.h>
+#include "material/uniaxial/EPPBaseMaterial.h"
+#include "utility/matrix/Matrix.h"
 
 namespace XC {
 //! @ingroup MatUnx
@@ -89,6 +90,16 @@ namespace XC {
 //! For compression only behavior, enter negative gap and ep
 //! Damage can accumulate through specification of damage = 1 switch,
 //! otherwise damage = 0
+//
+//                  gap ep
+//                  |<>|>|
+//          stress  |    +-----+ fy
+//                  |   /E    /
+//         ---------+--+-+---+----strain
+//                  |       
+//                  |   
+//                  |      
+//
 class EPPGapMaterial: public EPPBaseMaterial
   {
   private:
@@ -98,6 +109,15 @@ class EPPGapMaterial: public EPPBaseMaterial
     double maxElasticYieldStrain;
     double minElasticYieldStrain;
     int damage;
+    //added by SAJalali
+    double commitStress;      // prev. trial stress
+    double Energy, EnergyP;
+    
+    // AddingSensitivity:BEGIN //////////////////////////////////////////
+    int parameterID;
+    Matrix SHVs;
+    // AddingSensitivity:END ///////////////////////////////////////////
+
   protected:
     int sendData(Communicator &);
     int recvData(const Communicator &);    
@@ -106,7 +126,6 @@ class EPPGapMaterial: public EPPBaseMaterial
     EPPGapMaterial(int tag, double E, double fy, double gap, double eta, int damage = 0);
 
     int setTrialStrain(double strain, double strainRate = 0.0); 
-    double getStrain(void) const;          
     double getInitialTangent(void) const;
 
     int commitState(void);
@@ -118,8 +137,20 @@ class EPPGapMaterial: public EPPBaseMaterial
     int sendSelf(Communicator &);  
     int recvSelf(const Communicator &);
     
+    //by SAJalali
+    virtual double getEnergy(void)
+      { return Energy; }
     void Print(std::ostream &s, int flag =0) const;
-
+    
+    // AddingSensitivity:BEGIN //////////////////////////////////////////
+    int setParameter(const std::vector<std::string> &, Parameter &);
+    int    updateParameter(int parameterID, Information &info);
+    int    activateParameter(int parameterID);
+    double getStressSensitivity(int gradIndex, bool conditional);
+    double getTangentSensitivity(int gradIndex);
+    double getInitialTangentSensitivity(int gradIndex);
+    int    commitSensitivity(double strainGradient, int gradIndex, int numGrads);
+    // AddingSensitivity:END ///////////////////////////////////////////
   };
 } // end of XC namespace
 
