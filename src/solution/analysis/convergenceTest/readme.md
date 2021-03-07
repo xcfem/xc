@@ -6,3 +6,5 @@ Accepting the current state of the domain as being on the converged solution pat
     - Norm Unbalance -- Specifies a tolerance on the norm of the unbalanced load at the current iteration
     - Norm Displacement Increment -- Specifies a tolerance on the norm of the displacement increments at the current iteration
     - Energy Increment -- Specifies a tolerance on the inner product of the unbalanced load and displacement increments at the current iteration
+
+[Norms and tolerance](https://portwooddigital.com/2021/02/28/norms-and-tolerance/)
