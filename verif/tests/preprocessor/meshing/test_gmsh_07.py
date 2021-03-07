@@ -101,7 +101,7 @@ nNodes= len(xcTotalSet.nodes)
 nElements= len(xcTotalSet.elements)
 
 nNodesRef= [442, 459] # Different Gmsh versions give different results
-nElementsRef= [405, 422]
+nElementsRef= [405, 407, 422]
 
 nNodesOk= False
 if nNodes in nNodesRef:
