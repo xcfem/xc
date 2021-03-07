@@ -19,6 +19,7 @@ Don't worry, if you have a decent *nix system the installation is straightforwar
 <li> <a href="http://www.vtk.org" target="_new">Visualization ToolKit (VTK).</a> </li>
 <li> <a href="http://www.boost.org" target="_new">Boost c++ libraries.</a> </li>
 <li> <a href="http://www.cgal.org" target="_new">Computational geometry algorithms library (CGAL).</a> </li>
+<li> <a href="https://gmsh.info" target="_new">Gmsh.</a> </li>
 <li> <a href="http://www.numpy.org/" target="_new">NumPy.</a> </li>
 <li> <a href="http://www.scipy.org/" target="_new">SciPy.</a> </li>
 <li> <a href="http://www.latex-project.org/" target="_new">LaTeX.</a> </li>
