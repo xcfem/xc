@@ -194,7 +194,7 @@ class SolutionProcedure(object):
         if(calculateNodalReactions):
             preprocessor= self.feProblem.getPreprocessor
             preprocessor.getNodeHandler.calculateNodalReactions(includeInertia,1e-7)
-            return result
+        return result
 
     def resetLoadCase(self):
         ''' Remove previous load from the domain.'''
