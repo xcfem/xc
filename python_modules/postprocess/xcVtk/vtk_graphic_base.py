@@ -254,13 +254,14 @@ class DisplaySettings(object):
         # axes.SetXAxisLabelText("test")
         self.renderer.AddActor(axes)
 
-    def setupWindow(self,caption= ''):
+    def setupWindow(self, caption= 'XC window'):
         '''sets the rendering window. A rendering window is a window in a
            graphical user interface where renderers draw their images.
         '''
         self.renWin= vtk.vtkRenderWindow()
         self.renWin.SetSize(self.windowWidth,self.windowHeight)
         self.renWin.AddRenderer(self.renderer)
+        self.renWin.SetWindowName(caption)
         #Axes
         self.setupAxes()
 
@@ -281,6 +282,15 @@ class DisplaySettings(object):
         iren.Initialize()
         return iren
 
+    def closeWindow(self, iren):
+        ''' Close the current render window.'''
+        iren.SetRenderWindow(None)
+        self.renWin.ShowWindowOff()
+        self.renWin.Finalize()
+        iren.TerminateApp()
+        del self.renWin, iren
+        
+
     def displayScene(self,caption= '', fileName= None):
         ''' Displaying scene
 
@@ -293,7 +303,8 @@ class DisplaySettings(object):
             self.plot(fileName)
         else:
             iren= self.setupWindowInteractor() 
-            iren.Start()   
+            iren.Start()
+            self.closeWindow(iren)
 
     def muestraEscena(self):
         lmsg.warning('muestraEscena is deprecated. Use displayScene')
