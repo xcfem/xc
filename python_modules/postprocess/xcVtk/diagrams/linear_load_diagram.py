@@ -50,17 +50,18 @@ class LinearLoadDiagram(cd.ColoredDiagram):
             eLoad= lIter.next()
             eTagsSet= self.setToDisp.getElements.getTags()
             while(eLoad):
-                tags= eLoad.elementTags
-                for i in range(0,len(tags)):
-                    eTag= tags[i]
-                    if eTag in eTagsSet:
-                        elem= preprocessor.getElementHandler.getElement(eTag)
-                        dim= elem.getDimension
-                        if(dim==1):
-                            if eTag in retval:
-                                retval[eTag]+=eLoad.getVector3dLocalForce()
-                            else:
-                                retval[eTag]=eLoad.getVector3dLocalForce()
+                if(hasattr(eLoad,'getVector3dLocalForce')):
+                    tags= eLoad.elementTags
+                    for i in range(0,len(tags)):
+                        eTag= tags[i]
+                        if eTag in eTagsSet:
+                            elem= preprocessor.getElementHandler.getElement(eTag)
+                            dim= elem.getDimension
+                            if(dim==1):
+                                if eTag in retval:
+                                    retval[eTag]+= eLoad.getVector3dLocalForce()
+                                else:
+                                    retval[eTag]= eLoad.getVector3dLocalForce()
                 eLoad= lIter.next()
         return retval
        
