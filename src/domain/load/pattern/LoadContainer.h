@@ -121,8 +121,7 @@ class LoadContainer: public CommandEntity, public MovableObject
 
     // methods to apply loads
     virtual void applyLoad(const double &);
-
-
+    
     // methods for o/p
     virtual int sendSelf(Communicator &);
     virtual int recvSelf(const Communicator &);

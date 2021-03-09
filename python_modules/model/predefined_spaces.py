@@ -195,7 +195,7 @@ class PredefinedSpace(object):
         lPatterns= self.getLoadHandler().getLoadPatterns
         if(lPatterns.currentTimeSeries=='nil'):
             self.newTimeSeries()
-        lp= lPatterns.newLoadPattern(lpType,name)
+        lp= lPatterns.newLoadPattern(lpType, name)
         return lp
         
     def getCurrentLoadPatternName(self):
@@ -494,6 +494,22 @@ class PredefinedSpace(object):
     def removeAllLoadPatternsFromDomain(self):
         ''' Remove all load patterns from domain.'''
         self.preprocessor.getDomain.removeAllLoadPatterns()
+
+    def getActiveLoadPatterns(self):
+        ''' Return a list of the active load patterns.'''
+        activeLoadPatterns= self.preprocessor.getDomain.getConstraints.getLoadPatterns
+        retval= list()
+        for al in activeLoadPatterns:
+            retval.append(al.data())
+        return retval
+    
+    def getActiveLoadPatternNames(self):
+        ''' Return a list of the active load patterns.'''
+        activeLoadPatterns= self.getActiveLoadPatterns()
+        retval= list()
+        for lp in activeLoadPatterns:
+            retval.append(lp.name)
+        return retval
         
     def revertToStart(self):
         ''' Revert the domain to its initial state..'''

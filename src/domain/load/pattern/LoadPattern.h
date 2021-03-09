@@ -167,7 +167,6 @@ class LoadPattern: public NodeLocker
     inline bool getIsConstant(void) const
       { return isConstant; }
 
-
     const MapLoadPatterns *getMapLoadPatterns(void) const;
     MapLoadPatterns *getMapLoadPatterns(void);    
     const std::string &getName(void) const;

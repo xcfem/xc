@@ -737,8 +737,6 @@ void XC::ConstrContainer::applyLoad(double timeStep)
         i!= activeNodeLockers.end();i++)
       i->second->applyLoad();
 
-
-
     // now loop over load patterns, invoking applyLoad on them
     for(MapActiveLoadPatterns<LoadPattern>::iterator i= activeLoadPatterns.begin();
         i!= activeLoadPatterns.end();i++)

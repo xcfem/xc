@@ -257,15 +257,23 @@ XC::TimeSeries *XC::MapLoadPatterns::newTimeSeries(const std::string &type, cons
 //! name being passed as parameters.
 XC::LoadPattern *XC::MapLoadPatterns::newLoadPattern(const std::string &type,const std::string &cod_lp)
   {
-    LoadPattern *retval= nullptr;
-    if(type == "load_pattern" || type == "default" )
-      retval=  create_load_pattern<LoadPattern>(cod_lp);
-    else if(type == "uniform_excitation")
-      retval= create_load_pattern<UniformExcitation>(cod_lp);
-    else if(type == "multi_support_pattern")
-      retval= create_load_pattern<MultiSupportPattern>(cod_lp);
-    else if(type == "pbowl_loading")
-      retval= create_load_pattern<PBowlLoading>(cod_lp);
+    LoadPattern *retval= buscaLoadPattern(cod_lp);
+    if(!retval)
+      {
+	if(type == "load_pattern" || type == "default" )
+	  retval=  create_load_pattern<LoadPattern>(cod_lp);
+	else if(type == "uniform_excitation")
+	  retval= create_load_pattern<UniformExcitation>(cod_lp);
+	else if(type == "multi_support_pattern")
+	  retval= create_load_pattern<MultiSupportPattern>(cod_lp);
+	else if(type == "pbowl_loading")
+	  retval= create_load_pattern<PBowlLoading>(cod_lp);
+      }
+    else
+      std::cerr << getClassName() << "::" << __FUNCTION__
+	        << "; load pattern: '" << cod_lp
+	        << "' already defined. Command ignored."
+	        << std::endl;
     return retval;
   }
 

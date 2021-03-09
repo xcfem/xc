@@ -81,16 +81,19 @@ class_<XC::MRMFreedom_ConstraintIter, boost::noncopyable >("MRMFreedom_Constrain
 
 class_<XC::GlueNodeToElement, bases<XC::MRMFreedom_Constraint>, boost::noncopyable >("GlueNodeToElement", no_init);
 
-//class_<XC::MapActiveLoadPatterns, bases<CommandEntity>, boost::noncopyable >("MapActiveLoadPatterns", no_init);
+
+typedef std::map<int,XC::NodeLocker *> map_node_locker;
+class_<map_node_locker, boost::noncopyable>("map_node_locker")
+  .def(XC::mapptr_indexing_suite<map_node_locker>() )
+  ;
 
 typedef std::map<int,XC::LoadPattern *> map_load_patterns;
 class_<map_load_patterns, boost::noncopyable>("map_load_patterns")
   .def(XC::mapptr_indexing_suite<map_load_patterns>() )
   ;
 
-typedef std::map<int,XC::NodeLocker *> map_node_locker;
-class_<map_node_locker, boost::noncopyable>("map_node_locker")
-  .def(XC::mapptr_indexing_suite<map_node_locker>() )
+typedef XC::MapActiveLoadPatterns<XC::LoadPattern *> map_active_load_patterns;
+class_<map_active_load_patterns, bases<CommandEntity, map_load_patterns>, boost::noncopyable >("MapActiveLoadPatterns", no_init)
   ;
 
 map_load_patterns &(XC::ConstrContainer::*getLoadPatternsPtr)(void)= &XC::ConstrContainer::getLoadPatterns;
