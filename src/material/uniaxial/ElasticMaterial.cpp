@@ -118,9 +118,10 @@ int XC::ElasticMaterial::revertToLastCommit(void)
   { return 0; }
 
 
+//! @brief Revert the material to its initial state.
 int XC::ElasticMaterial::revertToStart(void)
   {
-    trialStrain      = 0.0;
+    ElasticBaseMaterial::revertToStart();
     trialStrainRate  = 0.0;
     return 0;
   }

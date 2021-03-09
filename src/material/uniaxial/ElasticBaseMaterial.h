@@ -55,18 +55,18 @@ class ElasticBaseMaterial: public UniaxialMaterial
     inline void setE(const double &e)
       {E= e;}
 
+    int revertToStart(void);
+    
     int setInitialStrain(double strain);
     inline double getStrain(void) const
-      {return trialStrain;}
+      { return trialStrain; }
     inline double getInitialStrain(void) const
-      {return ezero;}
+      { return ezero; }
     inline double getInitialTangent(void) const
-      {return E;}
+      { return E; }
 
     int sendSelf(Communicator &);  
     int recvSelf(const Communicator &);
-
-
   };
 } // end of XC namespace
 

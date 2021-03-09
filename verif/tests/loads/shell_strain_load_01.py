@@ -40,7 +40,6 @@ nod2= nodes.newNodeXYZ(L,0.0,0.0)
 nod3= nodes.newNodeXYZ(L,h,0.0)
 nod4= nodes.newNodeXYZ(0,h,0.0)
 
-
 # Materials definition
 memb1= typical_materials.defElasticMembranePlateSection(preprocessor, "memb1",E,0.3,0.0,h)
 
@@ -53,7 +52,6 @@ elem1= elements.newElement("ShellMITC4",xc.ID([nod1.tag,nod2.tag,nod3.tag,nod4.t
 
 # Constraints
 constraints= preprocessor.getBoundaryCondHandler
-
 spc= constraints.newSPConstraint(nod1.tag,0,0.0)
 spc= constraints.newSPConstraint(nod2.tag,0,0.0)
 spc= constraints.newSPConstraint(nod3.tag,0,0.0)
@@ -91,14 +89,21 @@ strain= mat.getGeneralizedStrain()[0]
 ratio1= abs(strain+initialStrain)/refInitialStrain
 
 elem1.getResistingForce()
-n1Medio= elem1.getMeanInternalForce("n1")
-n2Medio= elem1.getMeanInternalForce("n2")
-axil1= (n1Medio*h)
-axil2= n2Medio
+avgN1= elem1.getMeanInternalForce("n1")
+avgN2= elem1.getMeanInternalForce("n2")
+N1= (avgN1*h)
+N2= avgN2
 
 N= (-A*E*refInitialStrain)
-ratio2= abs((axil1-N)/N)
-ratio3= abs(axil2)
+ratio2= abs((N1-N)/N)
+ratio3= abs(N2)
+
+# Remove the load case from domain.
+modelSpace.removeLoadCaseFromDomain(lp0.name)
+result= analysis.analyze(1)
+initialStrain2= mat.initialSectionDeformation[0]
+elem1.getResistingForce()
+ratio4= abs(elem1.getMeanInternalForce("n1"))
 
 ''' 
 print('initial strain: ', initialStrain)
@@ -107,16 +112,19 @@ print("ratio0= ",ratio0)
 print('strain: ', strain)
 print("ratio1= ",ratio1)
 print("N= ",N)
-print("axil1= ",axil1)
-print("axil2= ",axil2)
+print("N1= ",N1)
+print("N2= ",N2)
 print("ratio2= ",ratio2)
 print("ratio3= ",ratio3)
-   '''
+print('initial strain 2: ', initialStrain2)
+print('ratio4: ', ratio4)
+'''
+
 
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
-if((ratio0<1e-12) & (ratio1<1e-10) & (ratio2<1e-7) & (ratio3<1e-10)):
+if((ratio0<1e-12) & (ratio1<1e-10) & (ratio2<1e-7) & (ratio3<1e-10) & (abs(initialStrain2)<1e-7) &(ratio4<1e-7)):
   print('test '+fname+': ok.')
 else:
   lmsg.error(fname+' ERROR.')

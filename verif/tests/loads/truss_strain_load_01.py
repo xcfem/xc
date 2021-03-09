@@ -51,8 +51,6 @@ truss.sectionArea= A
     
 # Constraints
 constraints= preprocessor.getBoundaryCondHandler
-
-#
 spc1= constraints.newSPConstraint(nod1.tag,0,0.0)
 spc2= constraints.newSPConstraint(nod1.tag,1,0.0)
 spc3= constraints.newSPConstraint(nod2.tag,0,0.0)
@@ -67,22 +65,35 @@ eleLoad.eps1= alpha*AT
 eleLoad.eps2= alpha*AT
 # We add the load case to domain.
 modelSpace.addLoadCaseToDomain(lp0.name)
-
 result= modelSpace.analyze(calculateNodalReactions= False)
-
-
-elements= preprocessor.getElementHandler
 
 truss.getResistingForce()
 N= (-E*A*alpha*AT)
-ratio= ((truss.getN()-N)/N)
+ratio1= ((truss.getN()-N)/N)
+initStrain1= truss.getMaterial().initialStrain
+ratio2= abs(initStrain1-alpha*AT)/(alpha*AT)
 
-# print("ratio= ",ratio)
+# Remove load case from domain.
+modelSpace.removeLoadCaseFromDomain(lp0.name)
+result= modelSpace.analyze(calculateNodalReactions= False)
+truss.getResistingForce()
+ratio3= truss.getN()
+initStrain3= truss.getMaterial().initialStrain
+ratio4= abs(initStrain3)
+
+'''
+print("ratio1= ",ratio1)
+print("initial strain 1: ", initStrain1)
+print("ratio2= ",ratio2)
+print("ratio3= ",ratio3)
+print("initial strain 3: ", initStrain3)
+print("ratio4= ",ratio4)
+'''
 
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
-if abs(ratio)<1e-5:
+if(abs(ratio1)<1e-5 and (abs(ratio2)<1e-5) and (abs(ratio3)<1e-5) and (abs(ratio4)<1e-5)):
   print('test '+fname+': ok.')
 else:
   lmsg.error(fname+' ERROR.')

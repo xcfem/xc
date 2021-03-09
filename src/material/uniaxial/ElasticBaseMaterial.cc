@@ -42,6 +42,14 @@ int XC::ElasticBaseMaterial::setInitialStrain(double strain)
     return 0;
   }
 
+//! @brief Revert the material to its initial state.
+int XC::ElasticBaseMaterial::revertToStart(void)
+  {
+    trialStrain= 0.0;
+    ezero= 0.0;
+    return 0;
+  }
+
 //! @brief Send object members through the communicator argument.
 int XC::ElasticBaseMaterial::sendData(Communicator &comm)
   {

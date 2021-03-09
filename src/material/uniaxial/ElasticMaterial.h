@@ -108,7 +108,6 @@ class ElasticMaterial: public ElasticBaseMaterial
     
     int sendSelf(Communicator &);  
     int recvSelf(const Communicator &);
-    
 
     void Print(std::ostream &s, int flag =0) const;
     

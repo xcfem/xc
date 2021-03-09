@@ -86,7 +86,8 @@ int XC::TrussStrainLoad::recvSelf(const Communicator &comm)
 
 void XC::TrussStrainLoad::Print(std::ostream &s, int flag) const
   {
-    s << "TrussStrainLoad - reference load : " << e1 << " strain at node 1 : " << e1 << " strain at node 1\n";
+    s << "TrussStrainLoad - reference load : " << e1
+      << " strain at node 1 : " << e1 << " strain at node 1\n";
     s <<  e2 << " strain at node 2\n";
     ElementBodyLoad::Print(s,flag);
   }

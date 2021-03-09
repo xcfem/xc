@@ -35,16 +35,15 @@
 namespace XC {
 //! @ingroup ElemLoads
 //
-//! @brief Load due to restricted material expansion or contraction on truss elements.
+//! @brief Load due to restricted material expansion or contraction
+//! on truss elements.
 class TrussStrainLoad: public ElementBodyLoad
   {
   private:
     double e1; //!< Restricted strain in node 1	
     double e2; //!< Restricted strain in node 2
-  protected:
-
   public:
-  // Constructors based on 2 temperature changes given
+    // Constructors based on 2 temperature changes given
     TrussStrainLoad(int tag, const double &e1, const double &e2, const ID &theElementTags);
     TrussStrainLoad(int tag, const double &e_uniform, const ID &theElementTags);
     TrussStrainLoad(int tag, const ID &theElementTags);

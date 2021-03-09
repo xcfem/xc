@@ -59,7 +59,7 @@ int XC::ElasticPlateBase::commitState(void)
 int XC::ElasticPlateBase::revertToLastCommit(void)
   { return 0 ; }
 
-//! @brief revert to start
+//! @brief revert the material to its initial state.
 int XC::ElasticPlateBase::revertToStart(void)
   { return 0; }
 

@@ -126,7 +126,7 @@ const XC::Vector &XC::ElasticPlateProto<SZ>::getSectionDeformation(void) const
     return retval;
   }
 
-//@ brief revert to start
+//@ brief Revert the material to its initial state.
 template <int SZ>
 int XC::ElasticPlateProto<SZ>::revertToStart(void)
   {
