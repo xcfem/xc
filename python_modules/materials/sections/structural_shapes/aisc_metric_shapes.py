@@ -25,6 +25,7 @@ import math
 from materials.sections.structural_shapes import aisc_shapes_dictionaries as shapes
 from materials.sections.structural_shapes import aisc_shapes_labels as labels
 from materials.sections import structural_steel
+from materials.sections import section_properties
 from misc_utils import log_messages as lmsg
 import xc_base
 import geom
@@ -1020,6 +1021,88 @@ class WShape(structural_steel.IShape):
         else: # moderately ductile
             retval/= self.getLambdaMDWeb(N, M, momentFrameType)            
         return retval
+
+
+class IShape(WShape, structural_steel.IShape):
+    '''I shape double symmetry
+
+    :ivar steel: steel material.
+    :ivar name: shape name (i.e. W40X431).
+    '''
+    def __init__(self, bf, tf, tw, hw, steel= None, name= ''):
+        ''' Constructor.
+
+        :ivar bf: Flange width
+        :ivar tf: Flange thickness
+        :ivar tw: Web thickess
+        :ivar hw: Web height
+        '''
+        isection = section_properties.ISection(name, bf, tf, tw, hw, bf, tf)
+        idict = isection.getDict()
+        idict['name'] = idict['sectionName']
+        idict['E'] = steel.E
+        idict['nu'] = steel.nu
+        steel_class = f"{type(steel).__module__}.{type(steel).__name__}"
+        idict['steelTypeClassName'] = steel_class
+        idict['A'] = isection.A()
+        idict['Iy'] = isection.Iy()
+        idict['iy'] = isection.iy()
+        idict['Wyel'] = isection.Wyel()
+        idict['Iz'] = isection.Iz()
+        idict['iz'] = isection.iz()
+        idict['Wzel'] = isection.Wzel()
+        idict['hi'] = hw
+        idict['h'] = hw + 2 * tf
+        idict['ho'] = hw + tf
+        idict['b'] = bf
+        idict['tf'] = tf
+        idict['tw'] = tw
+        idict['k1'] = 0
+        idict['bSlendernessRatio'] = bf / 2 / tf
+        idict['hSlendernessRatio'] = hw / tw
+        idict['Cw'] = isection.getWarpingMoment()
+        idict['Avy']= idict['h'] * tw # depth of the section* web thickness
+        idict['Avz']= 2 / 3.0 * bf * tf # 2/3 * combined area of the flanges. 
+        idict['alpha']= idict['Avy']/idict['A']
+        idict['G']= idict['E']/(2*(1+idict['nu']))
+        idict['AreaQz']= 2*idict['b']*idict['tf'] 
+        idict['AreaQy']= idict['A']-idict['AreaQz']
+        # idict['It'] = (bf * tf ** 3) * (16/3-3.36*tf/bf*(1-tf**4/(12*bf**4))) * 2 + hw*tw**3 * (16/3-3.36*tw/hw*(1-tw**4/(12*hw**4)))
+        idict['It'] = (2*bf*tf**3 + idict['ho']*tw**3) / 3
+        idict['Wypl'] = (bf * tf) / 2 * bf + hw * tw **2 / 4
+        idict['Wzpl'] = (bf * tf) * idict['ho'] + hw ** 2 * tw / 4
+
+
+        structural_steel.IShape.__init__(self, steel,name,{name: idict})
+
+    def getKc(self):
+        kc = 4 / math.sqrt(self.get('hi') / self.get('tw'))
+        if kc < 0.35:
+            kc = 0.35
+        elif kc > .76:
+            kc = .76
+        return kc
+    
+    def getFl(self):
+        return 0.7 * self.steelType.fy
+
+    def getLambdaRFlangeBending(self):
+        '''Return he limiting slenderness for a noncompact flange, 
+           defined in Table B4.1b of AISC-360-16. row 11'''
+        kc = self.getKc()
+        Fl = self.getFl()
+        E = self.get('E')
+        return 0.95 * math.sqrt(kc * E / Fl)
+
+    def getLambdaRFlangeCompression(self):
+        ''' Return the limiting Width-to-Thickness Ratio 
+        between nonslender and slender flanges according to 
+        table B4.1a of AISC-360-16 case 2.
+        '''
+        kc = self.getKc()
+        Fy = self.steelType.fy
+        E = self.get('E')
+        return 0.64 * math.sqrt(kc * E / Fy)
  
 # *************************************************************************
 # AISC C profiles.
