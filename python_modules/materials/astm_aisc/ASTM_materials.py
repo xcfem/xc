@@ -1429,6 +1429,37 @@ class WShape(ASTMShape,aisc_metric_shapes.WShape):
         ASTMShape.setFromDict(self, dct)
         aisc_metric_shapes.WShape.setFromDict(self, dct)
 
+
+class IShape(ASTMShape, aisc_metric_shapes.IShape):
+    """I shape with ASTM/AISC verification routines.
+
+    :ivar steel: steel material (i.e. A36).
+    :ivar name: shape name
+    """
+
+    def __init__(self, bf, tf, tw, hw, steel=None, name=''):
+        ''' Constructor.
+
+        :ivar bf: Flange width
+        :ivar tf: Flange thickness
+        :ivar tw: Web thickess
+        :ivar hw: Web height
+        '''
+        ASTMShape.__init__(self, name)
+        aisc_metric_shapes.IShape.__init__(self, bf, tf, tw, hw, steel, name)
+
+    def getDict(self):
+        ''' Put member values in a dictionary.'''
+        retval = ASTMShape.getDict(self)
+        retval.update(aisc_metric_shapes.IShape.getDict(self))
+        return retval
+
+    def setFromDict(self, dct):
+        ''' Read member values from a dictionary.'''
+        ASTMShape.setFromDict(self, dct)
+        aisc_metric_shapes.IShape.setFromDict(self, dct)
+
+
 class CShape(ASTMShape,aisc_metric_shapes.CShape):
     """C shape with ASTM 3 verification routines.
 
