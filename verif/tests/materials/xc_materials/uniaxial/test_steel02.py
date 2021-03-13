@@ -36,7 +36,6 @@ nodes= preprocessor.getNodeHandler
 # Problem type
 modelSpace= predefined_spaces.SolidMechanics2D(nodes)
 
-
 nodes.defaultTag= 1 #First node number.
 nod= nodes.newNodeXY(0,0)
 nod= nodes.newNodeXY(l,0.0)

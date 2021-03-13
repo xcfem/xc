@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
+'''Home made test: elastic no-tension material.''' 
+
 from __future__ import print_function
-# Home made test
 
 E= 2.1e6 # Young modulus of the material.
 Nsteps= 10 # number of analysis steps.
@@ -69,6 +70,6 @@ import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (ratio1 < 1e-15) & (ratio2 < 1e-15):
-  print('test '+fname+': ok.')
+    print('test '+fname+': ok.')
 else:
-  lmsg.error(fname+' ERROR.')
+    lmsg.error(fname+' ERROR.')

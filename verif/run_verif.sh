@@ -480,7 +480,7 @@ python tests/materials/xc_materials/uniaxial/test_cable_material04.py
 python tests/materials/xc_materials/uniaxial/test_cable_material05.py
 python tests/materials/xc_materials/uniaxial/test_cable_material06.py
 python tests/materials/xc_materials/uniaxial/test_cable_material07.py
-python tests/materials/xc_materials/uniaxial/test_material_elast_no_traccion.py
+python tests/materials/xc_materials/uniaxial/test_elast_no-tension_material.py
 echo "$BLEU" "      PY materials." "$NORMAL"
 python tests/materials/xc_materials/uniaxial/py_simple1_test.py
 #nD Materials
