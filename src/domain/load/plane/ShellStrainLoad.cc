@@ -30,9 +30,6 @@
 #include "utility/matrix/Vector.h"
 #include "utility/matrix/ID.h"
 
-
-
-
 //! @brief Constructor.
 XC::ShellStrainLoad::ShellStrainLoad(int tag, const ID &theElementTags)
   :BidimStrainLoad(tag,4,Vector(8), theElementTags) {}
