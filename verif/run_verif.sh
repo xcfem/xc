@@ -410,6 +410,7 @@ python tests/loads/truss_strain_load_01.py
 python tests/loads/truss_strain_load_02.py
 python tests/loads/truss_strain_load_03.py
 python tests/loads/truss_strain_load_04.py
+python tests/loads/truss_strain_load_05.py
 python tests/loads/beam_strain_load_01.py
 python tests/loads/beam_strain_load_02.py
 python tests/loads/beam_strain_load_03.py
@@ -738,7 +739,7 @@ python tests/materials/test_elastomeric_bearing_stiffness.py
 
 #Database tests
 echo "$BLEU" "Database tests (MySQL, Berkeley db, sqlite,...)." "$NORMAL"
-# XXX sqlitepp is toooooo slooooow. Seek another solution.
+# XXX sqlitepp is toooooo slooooow. Seek for another solution.
 # python tests/database/test_database_01.py
 # python tests/database/test_database_02.py
 # python tests/database/test_database_03.py
