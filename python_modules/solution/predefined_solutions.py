@@ -296,7 +296,7 @@ class PlainNewtonRaphson(SolutionProcedure):
     ''' Newton-Raphson solution algorithm with a 
         plain constraint handler.
     '''
-    def __init__(self, prb, name= None, maxNumIter= 10, convergenceTestTol= 1e-9, printFlag= 0, numSteps= 1):
+    def __init__(self, prb, name= None, maxNumIter= 10, convergenceTestTol= 1e-9, printFlag= 0, numSteps= 1, convTestType= 'norm_unbalance_conv_test'):
         ''' Constructor.
 
         :param prb: XC finite element problem.
@@ -305,11 +305,12 @@ class PlainNewtonRaphson(SolutionProcedure):
         :param convergenceTestTol: convergence tolerance (defaults to 1e-9)
         :param printFlag: if not zero print convergence results on each step.
         :param numSteps: number of steps to use in the analysis (useful only when loads are variable in time).
+        :param convTestType: convergence test for non linear analysis (norm unbalance,...).
         '''
         super(PlainNewtonRaphson,self).__init__(name, maxNumIter, convergenceTestTol, printFlag, numSteps)
         modelWrapperName= self.defineModelWrapper(prb, numberingMethod= 'rcm')
         self.defineConstraintHandler('plain')
-        self.defineSolutionAlgorithm(solAlgType= 'newton_raphson_soln_algo', integratorType= 'load_control_integrator', convTestType= 'norm_unbalance_conv_test')
+        self.defineSolutionAlgorithm(solAlgType= 'newton_raphson_soln_algo', integratorType= 'load_control_integrator', convTestType= convTestType)
         self.defineSysOfEq(soeType= 'sparse_gen_col_lin_soe', solverType= 'super_lu_solver')
         self.defineAnalysis('static_analysis')
 
@@ -323,7 +324,7 @@ class PlainNewtonRaphsonBandGen(SolutionProcedure):
         plain constraint handler and a band general
         SOE solver.
     '''
-    def __init__(self, prb, name= None, maxNumIter= 10, convergenceTestTol= 1e-9, printFlag= 0, numSteps= 1):
+    def __init__(self, prb, name= None, maxNumIter= 10, convergenceTestTol= 1e-9, printFlag= 0, numSteps= 1, convTestType= 'norm_unbalance_conv_test'):
         ''' Constructor.
 
         :param prb: XC finite element problem.
@@ -332,11 +333,12 @@ class PlainNewtonRaphsonBandGen(SolutionProcedure):
         :param convergenceTestTol: convergence tolerance (defaults to 1e-9)
         :param printFlag: if not zero print convergence results on each step.
         :param numSteps: number of steps to use in the analysis (useful only when loads are variable in time).
+        :param convTestType: convergence test for non linear analysis (norm unbalance,...).
         '''
         super(PlainNewtonRaphsonBandGen,self).__init__(name, maxNumIter, convergenceTestTol, printFlag, numSteps)
         modelWrapperName= self.defineModelWrapper(prb, numberingMethod= 'simple')
         self.defineConstraintHandler('plain')
-        self.defineSolutionAlgorithm(solAlgType= 'newton_raphson_soln_algo', integratorType= 'load_control_integrator', convTestType= 'norm_unbalance_conv_test')
+        self.defineSolutionAlgorithm(solAlgType= 'newton_raphson_soln_algo', integratorType= 'load_control_integrator', convTestType= convTestType)
         self.defineSysOfEq(soeType= 'band_gen_lin_soe', solverType= 'band_gen_lin_lapack_solver')
         self.defineAnalysis('static_analysis')
 
@@ -345,10 +347,9 @@ def plain_newton_raphson_band_gen(prb, mxNumIter= 10):
     solProc= PlainNewtonRaphsonBandGen(prb, maxNumIter= mxNumIter)
     return solProc.analysis
 
-class PenaltyNewtonRaphson(SolutionProcedure):
-    ''' Return a static solution procedure with a Newton Raphson algorithm
-        and a penalty constraint handler.'''
-    def __init__(self, prb, name= None, maxNumIter= 10, convergenceTestTol= 1e-9, printFlag= 0, numSteps= 1):
+class PenaltyNewtonRaphsonBase(SolutionProcedure):
+    ''' Base class for penalty modified Newton solution aggregation.'''
+    def __init__(self, prb, name, maxNumIter, convergenceTestTol, printFlag, numSteps, numberingMethod, convTestType):
         ''' Constructor.
 
         :param prb: XC finite element problem.
@@ -357,11 +358,28 @@ class PenaltyNewtonRaphson(SolutionProcedure):
         :param convergenceTestTol: convergence tolerance (defaults to 1e-9)
         :param printFlag: if not zero print convergence results on each step.
         :param numSteps: number of steps to use in the analysis (useful only when loads are variable in time).
+        :param convTestType: convergence test for non linear analysis (norm unbalance,...).
         '''
-        super(PenaltyNewtonRaphson,self).__init__(name, maxNumIter, convergenceTestTol, printFlag, numSteps)
-        modelWrapperName= self.defineModelWrapper(prb, numberingMethod= 'rcm')
+        super(PenaltyNewtonRaphsonBase,self).__init__(name, maxNumIter, convergenceTestTol, printFlag, numSteps)
+        modelWrapperName= self.defineModelWrapper(prb, numberingMethod= numberingMethod)
         self.defineConstraintHandler('penalty')
-        self.defineSolutionAlgorithm(solAlgType= 'newton_raphson_soln_algo', integratorType= 'load_control_integrator', convTestType= 'norm_unbalance_conv_test')
+        self.defineSolutionAlgorithm(solAlgType= 'newton_raphson_soln_algo', integratorType= 'load_control_integrator', convTestType= convTestType)
+
+class PenaltyNewtonRaphson(PenaltyNewtonRaphsonBase):
+    ''' Return a static solution procedure with a Newton Raphson algorithm
+        and a penalty constraint handler.'''
+    def __init__(self, prb, name= None, maxNumIter= 10, convergenceTestTol= 1e-9, printFlag= 0, numSteps= 1, numberingMethod= 'rcm', convTestType= 'norm_unbalance_conv_test'):
+        ''' Constructor.
+
+        :param prb: XC finite element problem.
+        :param name: identifier for the solution procedure.
+        :param maxNumIter: maximum number of iterations (defauts to 10)
+        :param convergenceTestTol: convergence tolerance (defaults to 1e-9)
+        :param printFlag: if not zero print convergence results on each step.
+        :param numSteps: number of steps to use in the analysis (useful only when loads are variable in time).
+        :param convTestType: convergence test for non linear analysis (norm unbalance,...).
+        '''
+        super(PenaltyNewtonRaphson,self).__init__(prb, name, maxNumIter, convergenceTestTol, printFlag, numSteps, numberingMethod, convTestType)
         self.defineSysOfEq(soeType= 'band_gen_lin_soe', solverType= 'band_gen_lin_lapack_solver')
         self.defineAnalysis('static_analysis')
 
@@ -375,6 +393,25 @@ def penalty_newton_raphson(prb, mxNumIter= 10, convergenceTestTol= 1e-4, printFl
     '''
     solProc= PenaltyNewtonRaphson(prb, maxNumIter= mxNumIter, convergenceTestTol= convergenceTestTol, printFlag= printFlag)
     return solProc.analysis
+
+class PenaltyNewtonRaphsonUMF(PenaltyNewtonRaphsonBase):
+    ''' Static solution procedure with a Newton algorithm,
+        a penalty constraint handler and a UMF
+        (Unsimmetric multi-frontal method) solver.'''
+    def __init__(self, prb, name= None, maxNumIter= 150, convergenceTestTol= 1e-9, printFlag= 0, numSteps= 1, numberingMethod= 'rcm', convTestType= 'norm_unbalance_conv_test'):
+        ''' Constructor.
+
+        :param prb: XC finite element problem.
+        :param name: identifier for the solution procedure.
+        :param maxNumIter: maximum number of iterations (defauts to 10)
+        :param convergenceTestTol: convergence tolerance (defaults to 1e-9)
+        :param printFlag: if not zero print convergence results on each step.
+        :param numSteps: number of steps to use in the analysis (useful only when loads are variable in time).
+        :param convTestType: convergence test for non linear analysis (norm unbalance,...).
+        '''
+        super(PenaltyNewtonRaphsonUMF,self).__init__(prb, name, maxNumIter, convergenceTestTol, printFlag, numSteps, numberingMethod, convTestType)
+        self.defineSysOfEq(soeType= 'umfpack_gen_lin_soe', solverType= 'umfpack_gen_lin_solver')
+        self.defineAnalysis('static_analysis')
 
 class PlainStaticModifiedNewton(SolutionProcedure):
     ''' Static solution procedure with a modified Newton
@@ -410,7 +447,7 @@ def plain_static_modified_newton(prb, mxNumIter= 10, convergenceTestTol= .01):
 
 class PenaltyModifiedNewtonBase(SolutionProcedure):
     ''' Base class for penalty modified Newton solution aggregation.'''
-    def __init__(self, prb, name, maxNumIter, convergenceTestTol, printFlag, numSteps, numberingMethod):
+    def __init__(self, prb, name, maxNumIter, convergenceTestTol, printFlag, numSteps, numberingMethod, convTestType= 'relative_total_norm_disp_incr_conv_test'):
         ''' Constructor.
 
         :param prb: XC finite element problem.
@@ -423,12 +460,12 @@ class PenaltyModifiedNewtonBase(SolutionProcedure):
         super(PenaltyModifiedNewtonBase,self).__init__(name, maxNumIter, convergenceTestTol, printFlag, numSteps)
         modelWrapperName= self.defineModelWrapper(prb, numberingMethod= numberingMethod)
         self.defineConstraintHandler('penalty')
-        self.defineSolutionAlgorithm(solAlgType= 'modified_newton_soln_algo', integratorType= 'load_control_integrator', convTestType= 'relative_total_norm_disp_incr_conv_test')
+        self.defineSolutionAlgorithm(solAlgType= 'modified_newton_soln_algo', integratorType= 'load_control_integrator', convTestType= convTestType)
         
 class PenaltyModifiedNewton(PenaltyModifiedNewtonBase):
     ''' Static solution procedure with a modified Newton algorithm
         and a penalty constraint handler.'''
-    def __init__(self, prb, name= None, maxNumIter= 150, convergenceTestTol= 1e-9, printFlag= 0, numSteps= 1, numberingMethod= 'rcm'):
+    def __init__(self, prb, name= None, maxNumIter= 150, convergenceTestTol= 1e-9, printFlag= 0, numSteps= 1, numberingMethod= 'rcm', convTestType= 'relative_total_norm_disp_incr_conv_test'):
         ''' Constructor.
 
         :param prb: XC finite element problem.
@@ -438,7 +475,7 @@ class PenaltyModifiedNewton(PenaltyModifiedNewtonBase):
         :param printFlag: if not zero print convergence results on each step.
         :param numSteps: number of steps to use in the analysis (useful only when loads are variable in time).
         '''
-        super(PenaltyModifiedNewton,self).__init__(prb, name, maxNumIter, convergenceTestTol, printFlag, numSteps, numberingMethod)
+        super(PenaltyModifiedNewton,self).__init__(prb, name, maxNumIter, convergenceTestTol, printFlag, numSteps, numberingMethod, convTestType)
         self.defineSysOfEq(soeType= 'sparse_gen_col_lin_soe', solverType= 'super_lu_solver')
         self.defineAnalysis('static_analysis')
 
@@ -456,7 +493,7 @@ class PenaltyModifiedNewtonUMF(PenaltyModifiedNewtonBase):
     ''' Static solution procedure with a modified Newton algorithm,
         a penalty constraint handler and a UMF
         (Unsimmetric multi-frontal method) solver.'''
-    def __init__(self, prb, name= None, maxNumIter= 150, convergenceTestTol= 1e-9, printFlag= 0, numSteps= 1, numberingMethod= 'rcm'):
+    def __init__(self, prb, name= None, maxNumIter= 150, convergenceTestTol= 1e-9, printFlag= 0, numSteps= 1, numberingMethod= 'rcm', convTestType= 'relative_total_norm_disp_incr_conv_test'):
         ''' Constructor.
 
         :param prb: XC finite element problem.
@@ -466,7 +503,7 @@ class PenaltyModifiedNewtonUMF(PenaltyModifiedNewtonBase):
         :param printFlag: if not zero print convergence results on each step.
         :param numSteps: number of steps to use in the analysis (useful only when loads are variable in time).
         '''
-        super(PenaltyModifiedNewtonUMF,self).__init__(prb, name, maxNumIter, convergenceTestTol, printFlag, numSteps, numberingMethod)
+        super(PenaltyModifiedNewtonUMF,self).__init__(prb, name, maxNumIter, convergenceTestTol, printFlag, numSteps, numberingMethod, convTestType)
         self.defineSysOfEq(soeType= 'umfpack_gen_lin_soe', solverType= 'umfpack_gen_lin_solver')
         self.defineAnalysis('static_analysis')
 
