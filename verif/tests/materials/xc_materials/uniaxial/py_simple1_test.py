@@ -15,7 +15,6 @@ import geom
 import xc
 import math
 import numpy as np
-import matplotlib.pyplot as plt
 from misc_utils import log_messages as lmsg
 
 feProblem= xc.FEProblem()
@@ -77,5 +76,6 @@ else:
   lmsg.error(fname+' ERROR.')
 
 ###   FIGURES & REPORTS
+#import matplotlib.pyplot as plt
 #plt.plot(strains,stresses)
 #plt.show()
