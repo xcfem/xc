@@ -46,15 +46,21 @@ class SteelBase: public UniaxialMaterial
     double a2;  //!< coefficient for isotropic hardening in compression
     double a3;  //!< coefficient for isotropic hardening in tension
     double a4;  //!< coefficient for isotropic hardening in tension
+    double ezero; //!< Initial strain.
 
     int sendData(Communicator &);
     int recvData(const Communicator &);
 
     virtual int setup_parameters(void)= 0;    
   public:
-    SteelBase(int tag,int classTag,const double &fy,const double &e0,const double &b,const double &a1,const double &a2,const double &a3,const double &a4);
+    SteelBase(int tag,int classTag,const double &fy,const double &e0,const double &b,const double &a1,const double &a2,const double &a3,const double &a4, const double &initialStrain= 0.0);
     SteelBase(int tag,int classTag);
 
+    int setInitialStrain(const double &);
+    int incrementInitialStrain(const double &);
+    void zeroInitialStrain(void);
+    inline double getInitialStrain(void) const
+      { return ezero; }
     void setInitialTangent(const double &);
     double getInitialTangent(void) const;
     void setFy(const double &);
@@ -68,6 +74,9 @@ class SteelBase: public UniaxialMaterial
       { return b*E0; }
     inline double getEpsy(void) const
       { return fy/E0; }
+    
+    int revertToStart(void);
+    
 // AddingSensitivity:BEGIN //////////////////////////////////////////
     int    setParameter(const std::vector<std::string> &argv, Parameter &param);
     int    updateParameter(int parameterID, Information &info);

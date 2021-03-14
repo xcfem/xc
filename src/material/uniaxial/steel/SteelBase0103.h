@@ -75,6 +75,8 @@ class SteelBase0103: public SteelBase
     int Tloading;
 
     virtual void determineTrialState(double dStrain)= 0;
+    virtual double get_total_strain(void) const
+      { return Tstrain-ezero; }
 
   protected:
     int sendData(Communicator &);

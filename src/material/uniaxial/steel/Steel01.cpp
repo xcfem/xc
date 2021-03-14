@@ -108,13 +108,6 @@ XC::Steel01::Steel01(int tag, double FY, double E, double B,double A1, double A2
 XC::Steel01::Steel01(int tag)
   :SteelBase0103(tag,MAT_TAG_Steel01), parameterID(0), SHVs() {}
 
-//! @brief Constructor.
-XC::Steel01::Steel01(void)
-  :SteelBase0103(MAT_TAG_Steel01), parameterID(0), SHVs() {}
-
-XC::Steel01::~Steel01(void)
-  {}
-
 //! @brief Calculates the trial state variables based on the trial strain
 void XC::Steel01::determineTrialState(double dStrain)
   {
@@ -229,13 +222,14 @@ void XC::Steel01::detectLoadReversal(double dStrain)
      }
   }
 
+//! @brief Revert the material to its initial state.
 int XC::Steel01::revertToStart(void)
   {
-    SteelBase0103::revertToStart();
+    int retval= SteelBase0103::revertToStart();
 // AddingSensitivity:BEGIN /////////////////////////////////
     if(!SHVs.isEmpty()) SHVs.Zero();
 // AddingSensitivity:END //////////////////////////////////
-    return 0;
+    return retval;
   }
 
 //! @brief Virtual constructor.

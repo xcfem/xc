@@ -33,11 +33,31 @@
 #include <domain/mesh/element/utils/Information.h>
 
 //! @brief Constructor.
-XC::SteelBase::SteelBase(int tag,int classTag,const double &Fy,const double &e0,const double &B,const double &A1,const double &A2,const double &A3,const double &A4)
-  : UniaxialMaterial(tag,classTag), fy(Fy),E0(e0),b(B),a1(A1),a2(A2),a3(A3),a4(A4) {}
+XC::SteelBase::SteelBase(int tag,int classTag,const double &Fy,const double &e0,const double &B,const double &A1,const double &A2,const double &A3,const double &A4, const double &initialStrain)
+  : UniaxialMaterial(tag,classTag), fy(Fy),E0(e0),b(B),a1(A1),a2(A2),a3(A3),a4(A4), ezero(initialStrain) {}
 
 XC::SteelBase::SteelBase(int tag,int classTag)
-  :UniaxialMaterial(tag,classTag), fy(0.0),E0(0.0),b(0.0),a1(0.0), a2(0.0), a3(0.0), a4(0.0) {}
+  :UniaxialMaterial(tag,classTag), fy(0.0),E0(0.0),b(0.0),a1(0.0), a2(0.0), a3(0.0), a4(0.0), ezero(0.0) {}
+
+//! @brief Sets initial strain.
+//! @param strain: strain value.
+int XC::SteelBase::setInitialStrain(const double &strain)
+  {
+    ezero= strain;
+    return 0;
+  }
+
+//! @brief Increments initial strain.
+//! @param strainIncrement: value of the strain increment.
+int XC::SteelBase::incrementInitialStrain(const double &strainIncrement)
+  {
+    ezero+= strainIncrement;
+    return 0;
+  }
+
+//! @brief Zeroes the initial strain.
+void XC::SteelBase::zeroInitialStrain(void)
+  { ezero= 0.0; }
 
 //! @brief Assigns initial Young's modulus.
 void XC::SteelBase::setInitialTangent(const double &d)
@@ -61,12 +81,18 @@ void XC::SteelBase::setFy(const double &d)
 double XC::SteelBase::getFy(void) const
   { return fy; }
 
+//! @brief Revert the material to its initial state.
+int XC::SteelBase::revertToStart(void)
+  {
+    ezero= 0.0;
+    return 0;
+  }
 
 //! @brief Send object members through the communicator argument.
 int XC::SteelBase::sendData(Communicator &comm)
   {
     int res= UniaxialMaterial::sendData(comm);
-    res+= comm.sendDoubles(fy,E0,b,getDbTagData(),CommMetaData(2));
+    res+= comm.sendDoubles(fy,E0,b,ezero,getDbTagData(),CommMetaData(2));
     res+= comm.sendDoubles(a1,a2,a3,a4,getDbTagData(),CommMetaData(3));
     return res;
   }
@@ -75,7 +101,7 @@ int XC::SteelBase::sendData(Communicator &comm)
 int XC::SteelBase::recvData(const Communicator &comm)
   {
     int res= UniaxialMaterial::recvData(comm);
-    res+= comm.receiveDoubles(fy,E0,b,getDbTagData(),CommMetaData(2));
+    res+= comm.receiveDoubles(fy,E0,b,ezero,getDbTagData(),CommMetaData(2));
     res+= comm.receiveDoubles(a1,a2,a3,a4,getDbTagData(),CommMetaData(3));
     return res;
   }

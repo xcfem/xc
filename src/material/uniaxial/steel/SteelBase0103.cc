@@ -77,8 +77,13 @@ XC::SteelBase0103::SteelBase0103(int classTag)
 int XC::SteelBase0103::setTrialStrain(double strain, double strainRate)
   {
     if(fabs(strain)>fabs(10.0*getEpsy()))
-      std::clog << "Warning: the strain in material SteelBase0103 is very big: "
+      std::clog << getClassName() << "::" << __FUNCTION__
+	        << "; Warning: the strain is very big: "
                 << strain << std::endl;
+    if(ezero!=0.0)
+      std::cerr << getClassName() << "::" << __FUNCTION__
+	        << "; ERROR: initial strain not supported yet."
+                << " Initial strain: " << ezero << std::endl;
     // Reset history variables to last converged state
     TminStrain= CminStrain;
     TmaxStrain= CmaxStrain;
@@ -155,9 +160,10 @@ int XC::SteelBase0103::revertToLastCommit(void)
 
 int XC::SteelBase0103::revertToStart(void)
   {
+    int retval= SteelBase::revertToStart();
     // History variables
     setup_parameters();
-    return 0;
+    return retval;
   }
 
 //! @brief Send object members through the communicator argument.

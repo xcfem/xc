@@ -76,7 +76,7 @@ namespace XC {
 class Steel02: public SteelBase
   {
   private:
-    double sigini; //!< Initial strees.
+    double sigini; //!< Initial stress.
     // matpar : STEEL FIXED PROPERTIES
     double R0;  //!<  = matpar(4)  : exp transition elastic-plastic
     double cR1; //!<  = matpar(5)  : coefficient for changing R0 to R
@@ -102,7 +102,7 @@ class Steel02: public SteelBase
     double sigs0;
     double epsr;
     double sigr;
-    int kon;
+    int kon; //!< index for loading/unloading
     double sig;
     double e;
     double eps;   //!< strain at current step
@@ -113,15 +113,14 @@ class Steel02: public SteelBase
     int recvData(const Communicator &);
 
   public:
+    Steel02(int tag= 0);
     Steel02(int tag, double fy, double E0, double b,
             double R0, double cR1, double cR2,
-            double a1, double a2, double a3, double a4, double sigInit =0.0);
+            double a1, double a2, double a3, double a4, const double &sigInit =0.0, const double &epsInit= 0.0);
     Steel02(int tag, double fy, double E0, double b,double R0, double cR1, double cR2);
     // Constructor for no isotropic hardening
     // Also provides default values for R0, cR1, and cR2
     Steel02(int tag, double fy, double E0, double b);
-    Steel02(int tag);
-    Steel02(void);
 
     UniaxialMaterial *getCopy(void) const;
 
@@ -134,6 +133,9 @@ class Steel02: public SteelBase
     int revertToLastCommit(void);
     int revertToStart(void);
 
+    int setInitialStrain(const double &);
+    int incrementInitialStrain(const double &);
+    void zeroInitialStrain(void);
     void setInitialStress(const double &);
     inline double getInitialStress(void) const
       { return sigini; }
