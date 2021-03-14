@@ -221,8 +221,8 @@ int XC::NLBeamColumn2d::commitState(void)
 
 
 int XC::NLBeamColumn2d::revertToLastCommit()
-{
-   int err;
+  {
+   int err= NLForceBeamColumn2dBase::revertToLastCommit();
    size_t i = 0;
 
    const size_t nSections= getNumSections();
@@ -257,9 +257,9 @@ int XC::NLBeamColumn2d::revertToLastCommit()
 
 
 int XC::NLBeamColumn2d::revertToStart()
-{
+  {
    // revert the sections state to start
-   int err;
+   int err= NLForceBeamColumn2dBase::revertToStart();
    size_t i = 0;
    const size_t nSections= getNumSections();
    do {

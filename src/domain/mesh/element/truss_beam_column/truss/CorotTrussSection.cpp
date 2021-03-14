@@ -80,7 +80,7 @@ XC::CorotTrussSection::CorotTrussSection(int tag, int dim,int Nd1, int Nd2, Sect
 
 //! @brief Constructor.
 XC::CorotTrussSection::CorotTrussSection(int tag,int dim,const Material *ptr_mat)
-  :CorotTrussBase(tag,ELE_TAG_CorotTrussSection,dim,0,0), physicalProperties(1,ptr_mat)
+  : CorotTrussBase(tag,ELE_TAG_CorotTrussSection,dim,0,0), physicalProperties(1,ptr_mat)
   {}
 
 // constructor:
@@ -211,15 +211,21 @@ int XC::CorotTrussSection::commitState(void)
 //! @brief Revert the element to its last committed state.
 int XC::CorotTrussSection::revertToLastCommit()
   {
+    // DON'T call Element::revertToLastCommit() because
+    // is a pure virtual method.
+    //  int retval= CorotTrussBase::revertToLastCommit();
     // Revert the material
-    return physicalProperties.revertToLastCommit();
+    int retval= physicalProperties.revertToLastCommit();
+    return retval;
   }
 
 //! @brief Revert the element to its initial state.
 int XC::CorotTrussSection::revertToStart()
   {
+    int retval= CorotTrussBase::revertToStart();
     // Revert the material to start
-    return physicalProperties.revertToStart();
+    retval+= physicalProperties.revertToStart();
+    return retval;
   }
 
 //! @brief Update element state.

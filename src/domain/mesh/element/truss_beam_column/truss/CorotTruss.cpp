@@ -251,13 +251,19 @@ int XC::CorotTruss::commitState(void)
 //! @brief Revert to the last committed state.
 int XC::CorotTruss::revertToLastCommit()
   {
-    return theMaterial->revertToLastCommit();
+    // DON'T call Element::revertToLastCommit() because
+    // is a pure virtual method.
+    // int retval= CorotTrussBase::revertToLastCommit();
+    int retval= theMaterial->revertToLastCommit();
+    return retval;
   }
 
 //! @brief Revert the element to its initial state.
 int XC::CorotTruss::revertToStart()
   {
-    return theMaterial->revertToStart();
+    int retval= CorotTrussBase::revertToStart();
+    retval+= theMaterial->revertToStart();
+    return retval;
   }
 
 //! @brief Update element state.

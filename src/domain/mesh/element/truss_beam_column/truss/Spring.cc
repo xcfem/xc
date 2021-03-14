@@ -265,11 +265,21 @@ int XC::Spring::commitState(void)
 
 //! @brief Returns to the last committed state.
 int XC::Spring::revertToLastCommit(void)
-  { return theMaterial->revertToLastCommit(); }
+  {
+    // DON'T call Element::revertToLastCommit() because
+    // is a pure virtual method.
+    // int retval= ProtoTruss::revertToLastCommit();
+    int retval= theMaterial->revertToLastCommit();
+    return retval;
+  }
 
 //! @brief Returns to the initial state.
 int XC::Spring::revertToStart(void)
-  { return theMaterial->revertToStart(); }
+  {
+    int retval= ProtoTruss::revertToStart();
+    retval+= theMaterial->revertToStart();
+    return retval;
+  }
 
 //! @brief Computes current trial strain from trial displacements at the nodes.
 int XC::Spring::update(void)

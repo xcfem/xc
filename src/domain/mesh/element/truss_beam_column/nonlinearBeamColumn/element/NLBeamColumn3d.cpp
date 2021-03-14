@@ -191,12 +191,13 @@ int XC::NLBeamColumn3d::commitState(void)
 
 int XC::NLBeamColumn3d::revertToLastCommit(void)
   {
-    int err;
+    int err= NLForceBeamColumn3dBase::revertToLastCommit();
 
     // call element revertToLastCommit to do any base class stuff
-    if((err = this->NLForceBeamColumn3dBase::revertToLastCommit()) != 0)
+    if(err != 0)
       {
-        std::cerr << "XC::NLBeamColumn3d::revertToLastCommit() - failed in base class";
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; failed in base class";
         return err;
       }
 
@@ -232,11 +233,12 @@ int XC::NLBeamColumn3d::revertToLastCommit(void)
 int XC::NLBeamColumn3d::revertToStart(void)
   {
     // revert the sections state to start
-    int err;
+    int err= NLForceBeamColumn3dBase::revertToStart();
 
-    if((err = this->NLForceBeamColumn3dBase::revertToStart()) != 0)
+    if(err != 0)
       {
-        std::cerr << "XC::NLBeamColumn3d::revertToLastCommit() - failed in base class";
+        std::cerr << getClassName() << "::" << __FUNCTION__
+	          << "; failed in base class";
         return err;
       }
 

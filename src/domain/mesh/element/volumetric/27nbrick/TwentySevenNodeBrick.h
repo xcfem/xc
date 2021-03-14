@@ -121,9 +121,9 @@ class TwentySevenNodeBrick: public ElementBase<27>
     void setDomain(Domain *theDomain);
 
     // public methods to set the state of the element
-    int commitState ();
-    int revertToLastCommit ();
-    int revertToStart ();
+    int commitState(void);
+    int revertToLastCommit(void);
+    int revertToStart(void);
 
     // update, Guanzhou added Apr. 2004 to update incremental strain in the domain
     int update(void);

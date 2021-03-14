@@ -223,14 +223,14 @@ int XC::ForceBeamColumn3d::commitState(void)
 //! @brief Returns to the last committed state.
 int XC::ForceBeamColumn3d::revertToLastCommit(void)
   {
-    int err;
+    int err= NLForceBeamColumn3dBase::revertToLastCommit();
     size_t i = 0;
 
     const size_t numSections= getNumSections();
     do
       {
         vs[i]= vscommit[i];
-        err= theSections[i]->revertToLastCommit();
+        err+= theSections[i]->revertToLastCommit();
 
         theSections[i]->setTrialSectionDeformation(vs[i]);
         Ssr[i]= theSections[i]->getStressResultant();
@@ -259,8 +259,8 @@ int XC::ForceBeamColumn3d::revertToLastCommit(void)
 int XC::ForceBeamColumn3d::revertToStart(void)
   {
     // revert the sections state to start
-    int err;
-    size_t i = 0;
+    int err= NLForceBeamColumn3dBase::revertToStart();
+    size_t i= 0;
 
     const size_t numSections= getNumSections();
     do
@@ -268,7 +268,7 @@ int XC::ForceBeamColumn3d::revertToStart(void)
         fs[i].Zero();
         vs[i].Zero();
         Ssr[i].Zero();
-        err= theSections[i++]->revertToStart();
+        err+= theSections[i++]->revertToStart();
       }
     while(err == 0 && i<numSections);
 

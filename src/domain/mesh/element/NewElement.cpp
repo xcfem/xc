@@ -110,7 +110,7 @@ int XC::NewElement::commitState()
   int retVal = 0;
 
   // call the base class method
-  retVal = this->XC::Element::commitState();
+  retVal = this->Element::commitState();
   if(retVal < 0) {
     std::cerr << "XC::NewElement::commitState() - failed in base class\n";
     return retVal;
@@ -120,14 +120,14 @@ int XC::NewElement::commitState()
 }
 
 int XC::NewElement::revertToLastCommit()
-{
-  return 0;
-}
+  {
+    // DON'T call Element::revertToLastCommit() because
+    // is a pure virtual method.
+    return 0;
+  }
 
 int XC::NewElement::revertToStart()
-{
-  return 0;
-}
+  { return Element::revertToStart(); }
 
 int XC::NewElement::update(void)
 {

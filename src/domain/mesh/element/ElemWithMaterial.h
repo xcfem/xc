@@ -101,6 +101,8 @@ int ElemWithMaterial<NNODOS, PhysProp>::commitState(void)
 template <int NNODOS,class PhysProp>
 int ElemWithMaterial<NNODOS, PhysProp>::revertToLastCommit(void)
   {
+    // DON'T call Element::revertToLastCommit() because
+    // it's a pure virtual method.
     int retval= physicalProperties.revertToLastCommit();
     return retval;
   }

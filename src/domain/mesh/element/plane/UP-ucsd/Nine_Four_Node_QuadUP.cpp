@@ -606,8 +606,7 @@ const XC::Matrix &XC::NineFourNodeQuadUP::getMass() const
 
 }
 
-
-
+//! @brief Makes zero the loads on the element.
 void XC::NineFourNodeQuadUP::zeroLoad(void)
   {
     ElemWithMaterial<9,SolidMech2D>::zeroLoad();

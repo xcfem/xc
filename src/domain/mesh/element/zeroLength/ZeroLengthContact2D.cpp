@@ -159,6 +159,9 @@ int XC::ZeroLengthContact2D::commitState(void)
 
 int XC::ZeroLengthContact2D::revertToLastCommit(void)
   {
+    // DON'T call Element::revertToLastCommit() because
+    // is a pure virtual method.
+    // int retval= ZeroLengthContact::revertToLastCommit();
 
     ///////////////////////////////////////////
     // need to revert the stickPoint??
@@ -175,7 +178,7 @@ int XC::ZeroLengthContact2D::revertToLastCommit(void)
 
 int XC::ZeroLengthContact2D::revertToStart(void)
   {
-
+    int retval= ZeroLengthContact::revertToStart();
     // need to rezero stickPoint??
     //int code=0;
     // revert to start for 1d materials
@@ -184,7 +187,7 @@ int XC::ZeroLengthContact2D::revertToStart(void)
     // zero stickPt
 
     stickPt=0;
-    return 0;
+    return retval;
   }
 
 

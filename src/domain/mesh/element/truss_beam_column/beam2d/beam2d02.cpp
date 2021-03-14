@@ -171,10 +171,18 @@ int XC::beam2d02::commitState()
   }
 
 int XC::beam2d02::revertToLastCommit()
-  { return theCoordTransf->revertToLastCommit(); }
+  {
+    int retval= beam2d::revertToLastCommit();
+    retval+= theCoordTransf->revertToLastCommit();
+    return retval;
+  }
 
 int XC::beam2d02::revertToStart(void)
-  { return theCoordTransf->revertToStart(); }
+  {
+    int retval= beam2d::revertToStart();
+    retval+= theCoordTransf->revertToStart();
+    return retval;
+  }
 
 const XC::Matrix &XC::beam2d02::getTangentStiff(void) const
   { return getStiff(); }

@@ -106,19 +106,6 @@ void XC::ShellMITC9::setDomain(Domain *theDomain )
 int XC::ShellMITC9::getNumDOF(void) const
   { return 54; }
 
-//! @brief revert to last commit 
-int XC::ShellMITC9::revertToLastCommit(void) 
-  {
-    return QuadBase9N<SectionFDPhysicalProperties>::revertToLastCommit();
-  }
-
-//! @brief revert to start 
-int XC::ShellMITC9::revertToStart(void) 
-  {
-    zeroLoad();
-    return QuadBase9N<SectionFDPhysicalProperties>::revertToStart();
-  }
-
 //! @brief return stiffness matrix 
 const XC::Matrix &XC::ShellMITC9::getTangentStiff(void) const
   {

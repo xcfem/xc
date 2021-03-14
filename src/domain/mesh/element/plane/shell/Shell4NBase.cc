@@ -592,7 +592,6 @@ int XC::Shell4NBase::revertToLastCommit(void)
 //! @brief Return the initial state.
 int XC::Shell4NBase::revertToStart(void)
   {
-    zeroLoad();
     int retval= theCoordTransf->revertToStart();
     retval+= QuadBase4N<SectionFDPhysicalProperties>::revertToStart();
     return retval;

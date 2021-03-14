@@ -85,7 +85,6 @@ class PlaneElement: public ElemWithMaterial<NNODES, PhysProp>
     Pos3d getProjection(const Pos3d &p,bool initialGeometry= true) const;
 
     size_t getDimension(void) const;
-
   };
 
 //! @brief Constructor.

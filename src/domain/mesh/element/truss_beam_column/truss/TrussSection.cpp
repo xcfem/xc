@@ -195,14 +195,23 @@ int XC::TrussSection::commitState(void)
     return retVal;
   }
 
+//! @brief Reverts the element to its last committed state.
 int XC::TrussSection::revertToLastCommit()
-  { return physicalProperties.revertToLastCommit(); }
+  {
+    // DON'T call Element::revertToLastCommit() because
+    // is a pure virtual method.
+    // int retval= TrussBase::revertToLastCommit();
+    int retval= physicalProperties.revertToLastCommit();
+    return retval;
+  }
 
+//! @brief Reverts the element to its initial state.
 int XC::TrussSection::revertToStart()
-  { return physicalProperties.revertToStart(); }
-
-
-
+  {
+    int retval= TrussBase::revertToStart();
+    retval+= physicalProperties.revertToStart();
+    return retval;
+  }
 
 int XC::TrussSection::update(void)
   {

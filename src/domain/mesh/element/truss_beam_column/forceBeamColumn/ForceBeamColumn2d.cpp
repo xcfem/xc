@@ -256,7 +256,7 @@ int XC::ForceBeamColumn2d::commitState(void)
 
 int XC::ForceBeamColumn2d::revertToLastCommit(void)
   {
-    int err;
+    int err= NLForceBeamColumn2dBase::revertToLastCommit();
     const size_t numSections= getNumSections();
     size_t i= 0;
     do
@@ -290,7 +290,7 @@ int XC::ForceBeamColumn2d::revertToLastCommit(void)
 int XC::ForceBeamColumn2d::revertToStart(void)
   {
     // revert the sections state to start
-    int err;
+    int err= NLForceBeamColumn2dBase::revertToStart();
 
     const size_t numSections= getNumSections();
     size_t i= 0;
@@ -299,7 +299,7 @@ int XC::ForceBeamColumn2d::revertToStart(void)
         fs[i].Zero();
         vs[i].Zero();
         Ssr[i].Zero();
-        err = theSections[i++]->revertToStart();
+        err+= theSections[i++]->revertToStart();
       }
     while(err == 0 && i < numSections);
 

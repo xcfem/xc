@@ -138,7 +138,10 @@ int XC::Element::update(void)
 //! the analysis started. To return 0 if successful, a negative number
 //! if not. 
 int XC::Element::revertToStart(void)
-  { return 0; }
+  {
+    zeroLoad();
+    return 0;
+  }
 
 //! @brief Set Rayleigh damping factors.
 int XC::Element::setRayleighDampingFactors(const RayleighDampingFactors &rF) const

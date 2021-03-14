@@ -118,6 +118,8 @@ int XC::FlatSliderSimple2d::commitState()
 
 int XC::FlatSliderSimple2d::revertToLastCommit()
   {
+    // DON'T call Element::revertToLastCommit() because
+    // is a pure virtual method.
     int errCode = 0;
     
     errCode += theFrnMdl->revertToLastCommit();// revert friction model    
@@ -127,8 +129,8 @@ int XC::FlatSliderSimple2d::revertToLastCommit()
 
 
 int XC::FlatSliderSimple2d::revertToStart()
-{     
-    int errCode = 0;
+  {     
+    int errCode= FrictionElementBase::revertToStart();
     
     // reset trial history variables
     ub.Zero();

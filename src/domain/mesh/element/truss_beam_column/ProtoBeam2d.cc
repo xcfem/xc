@@ -185,12 +185,14 @@ int XC::ProtoBeam2d::commitState(void)
 //! @brief Revert the element to the its last commited state.
 int XC::ProtoBeam2d::revertToLastCommit()
   {
+    // DON'T call Element::revertToLastCommit() because
+    // is a pure virtual method.
     //int retval= Element1D::revertToLastCommit(); // pure virtual.
     int retval= physicalProperties.revertToLastCommit();
     return retval;
   }
 
-//! @brief Revert the the element to the its start state.
+//! @brief Revert the the element to the its initial state.
 int XC::ProtoBeam2d::revertToStart()
   {
     int retval= Element1D::revertToStart();

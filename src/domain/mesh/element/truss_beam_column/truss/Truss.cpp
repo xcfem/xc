@@ -285,12 +285,13 @@ int XC::Truss::commitState()
 //! on it's base class an on it's associated UniaxialMaterial object.
 int XC::Truss::revertToLastCommit()
   {
-    int retVal= 0;
-    // DON'T call element revertToLastCommit because is a pure virtual method.
-    // if((retVal = this->TrussBase::revertToLastCommit()) != 0)
+    // DON'T call Element::revertToLastCommit() because
+    // is a pure virtual method.
+    // int retVal= TrussBase::revertToLastCommit();
+    // if(retVal != 0)
     //   std::cerr << getClassName() << "::" << __FUNCTION__
     // 		<< "; failed in base class";
-    retVal = theMaterial->revertToLastCommit();
+    int retVal= theMaterial->revertToLastCommit();
     return retVal;
   }
 
@@ -300,12 +301,11 @@ int XC::Truss::revertToLastCommit()
 //! on it's base class an on it's associated UniaxialMaterial object.
 int XC::Truss::revertToStart()
   {
-    int retVal= 0;
-    // call element revertToLastCommit to do any base class stuff
-    if((retVal = this->TrussBase::revertToStart()) != 0)
+    int retVal= TrussBase::revertToStart();
+    if(retVal != 0)
       std::cerr << getClassName() << "::" << __FUNCTION__
 		<< "; failed in base class";
-    retVal = theMaterial->revertToStart();
+    retVal+= theMaterial->revertToStart();
     return retVal;
   }
 

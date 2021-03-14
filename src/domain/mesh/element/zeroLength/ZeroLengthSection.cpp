@@ -311,16 +311,23 @@ int XC::ZeroLengthSection::commitState()
 //! state of the section. Return 0 if successful, !0 otherwise.
 int XC::ZeroLengthSection::revertToLastCommit()
   {
+    // DON'T call Element::revertToLastCommit() because
+    // is a pure virtual method.
+    // int retval= Element0D::revertToLastCommit();
+    
     // Revert the section
-    return theSection->revertToLastCommit();
+    int retval= theSection->revertToLastCommit();
+    return retval;
   }
 
 //! @brief Revert state of element to initial state by reverting to initial state
 //! of the section. Return 0 if successful, !0 otherwise.
 int XC::ZeroLengthSection::revertToStart()
   {
+    int retval= Element0D::revertToStart();
     // Revert the section to start
-    return theSection->revertToStart();
+    retval+= theSection->revertToStart();
+    return retval;
   }
 
 const XC::Matrix &XC::ZeroLengthSection::getTangentStiff(void) const

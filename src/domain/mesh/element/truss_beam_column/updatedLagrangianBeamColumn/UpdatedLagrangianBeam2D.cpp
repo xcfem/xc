@@ -234,13 +234,13 @@ void XC::UpdatedLagrangianBeam2D::updateState(void) const
 
 
 int XC::UpdatedLagrangianBeam2D::revertToLastCommit()
-{
+  {
         cs = cs_hist;
         sn = sn_hist;
         L = L_hist;
         eleForce = eleForce_hist;
         return 0;
-}
+  }
 
 //////////////////////////////////////////////////////////////////////
 // protected methods for local stiffness and force formulation
