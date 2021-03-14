@@ -158,17 +158,19 @@ int XC::DrainMaterial::revertToLastCommit(void)
         return 0;
   }
 
+//! @brief Revert the material to its initial state.
 int XC::DrainMaterial::revertToStart(void)
   {
-        // Set all trial and committed values to zero
-        for (int i = 0; i < 2*numHstv; i++)
-                hstv[i] = 0.0;
+    int retval= UniaxialMaterial::revertToStart();
+    // Set all trial and committed values to zero
+    for(int i = 0; i < 2*numHstv; i++)
+      hstv[i] = 0.0;
 
-        epsilonP = 0.0;
-        sigmaP   = 0.0;
-        tangentP = 0.0;
+    epsilonP = 0.0;
+    sigmaP   = 0.0;
+    tangentP = 0.0;
 
-        return 0;
+    return retval;
   }
 
 // WARNING -- if you wish to override any method in this base class, you must

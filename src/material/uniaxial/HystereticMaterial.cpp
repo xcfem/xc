@@ -394,8 +394,10 @@ int XC::HystereticMaterial::revertToLastCommit(void)
     return 0;
   }
 
+//! @brief Revert the material to its initial state.
 int XC::HystereticMaterial::revertToStart(void)
   {
+    int retval= UniaxialMaterial::revertToStart();
     CrotMax = 0.0;
     CrotMin = 0.0;
     CrotPu = 0.0;
@@ -405,7 +407,7 @@ int XC::HystereticMaterial::revertToStart(void)
 
     converged.revertToStart(E1p);
     trial.revertToStart(E1p);
-    return 0;
+    return retval;
   }
 
 XC::UniaxialMaterial *XC::HystereticMaterial::getCopy(void) const

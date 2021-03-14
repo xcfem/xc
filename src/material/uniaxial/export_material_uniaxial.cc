@@ -36,11 +36,11 @@ class_<vectorUniaxialMaterial,boost::noncopyable>("vectorUniaxialMaterial")
   ;
 
 class_<material_vector_UMat,bases<vectorUniaxialMaterial,CommandEntity>,boost::noncopyable>("MaterialVectorUMat", no_init)
-        .def("commitState", &material_vector_UMat::commitState,"Commits materials state.")
-        .def("revertToLastCommit", &material_vector_UMat::revertToLastCommit,"Returns the material to its last committed state.")
-        .def("revertToStart", &material_vector_UMat::revertToStart,"Returns the material to its initial state.")
-        .def("getNames",&material_vector_UMat::getNamesPy,"Returns the names of the materials.")
-      ;
+  .def("commitState", &material_vector_UMat::commitState,"Commits materials state.")
+  .def("revertToLastCommit", &material_vector_UMat::revertToLastCommit,"Returns the material to its last committed state.")
+  .def("revertToStart", &material_vector_UMat::revertToStart,"Returns the material to its initial state.")
+  .def("getNames",&material_vector_UMat::getNamesPy,"Returns the names of the materials.")
+  ;
 
   }
 

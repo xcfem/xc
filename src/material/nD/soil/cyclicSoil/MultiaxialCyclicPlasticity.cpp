@@ -162,7 +162,7 @@ void XC::MultiaxialCyclicPlasticity::initialize( )
 
 //null constructor
 XC::MultiaxialCyclicPlasticity::MultiaxialCyclicPlasticity(int tag,int classtag)
-  : XC::NDMaterial(tag,classtag), strain(3,3), stress(3,3), backs(3,3), so(3,3),
+  : NDMaterial(tag,classtag), strain(3,3), stress(3,3), backs(3,3), so(3,3),
   strain_n(3,3), stress_n(3,3), backs_n(3,3), so_n(3,3)
 { 
   bulk        = 0.0;
@@ -232,8 +232,8 @@ XC::MultiaxialCyclicPlasticity::MultiaxialCyclicPlasticity(int tag,int classtag)
 
 
 //null constructor
- XC::MultiaxialCyclicPlasticity:: MultiaxialCyclicPlasticity( ) : 
-XC::NDMaterial( ), strain(3,3), stress(3,3), backs(3,3), so(3,3),
+ XC::MultiaxialCyclicPlasticity::MultiaxialCyclicPlasticity(void)
+   : NDMaterial(), strain(3,3), stress(3,3), backs(3,3), so(3,3),
  strain_n(3,3), stress_n(3,3), backs_n(3,3), so_n(3,3)
 { 
   bulk        = 0.0;
@@ -741,10 +741,12 @@ int XC::MultiaxialCyclicPlasticity::revertToLastCommit( )
   { return 0; }
 
 
+//! @brief Revert the material to its initial state.
 int XC::MultiaxialCyclicPlasticity::revertToStart( )
   {
+    int retval= NDMaterial::revertToStart();
     this->initialize( );
-    return 0;
+    return retval;
   }
 
 //! @brief Send object members through the communicator argument.

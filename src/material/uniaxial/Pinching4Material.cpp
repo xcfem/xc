@@ -369,38 +369,40 @@ int XC::Pinching4Material::revertToLastCommit(void)
         TnCycle = CnCycle;
 
         return 0;
-}
+  }
 
+//! @brief Revert the material to its initial state.
 int XC::Pinching4Material::revertToStart(void)
-{
+  {
+    int retval= UniaxialMaterial::revertToStart();
     Cstate = 0;
-        Cstrain = 0.0;
-        Cstress = 0.0;
-        CstrainRate = 0.0;
-        lowCstateStrain = envlpNegStrain(0);
-        lowCstateStress = envlpNegStress(0);
-        hghCstateStrain = envlpPosStrain(0);
-        hghCstateStress = envlpPosStress(0);
-        CminStrainDmnd = envlpNegStrain(1);
-        CmaxStrainDmnd = envlpPosStrain(1);
-        Cenergy = 0.0;
-        CgammaK = 0.0;
-        CgammaD = 0.0;
-        CgammaF = 0.0;
-        CnCycle = 0.0;
+    Cstrain = 0.0;
+    Cstress = 0.0;
+    CstrainRate = 0.0;
+    lowCstateStrain = envlpNegStrain(0);
+    lowCstateStress = envlpNegStress(0);
+    hghCstateStrain = envlpPosStrain(0);
+    hghCstateStress = envlpPosStress(0);
+    CminStrainDmnd = envlpNegStrain(1);
+    CmaxStrainDmnd = envlpPosStrain(1);
+    Cenergy = 0.0;
+    CgammaK = 0.0;
+    CgammaD = 0.0;
+    CgammaF = 0.0;
+    CnCycle = 0.0;
 
-        Ttangent = envlpPosStress(0)/envlpPosStrain(0);
-        dstrain = 0.0;
-        gammaKUsed = 0.0;
-        gammaFUsed = 0.0;
-        
-        kElasticPosDamgd = kElasticPos;
-        kElasticNegDamgd = kElasticNeg;
-        uMaxDamgd = CmaxStrainDmnd;
-        uMinDamgd = CminStrainDmnd;
+    Ttangent = envlpPosStress(0)/envlpPosStrain(0);
+    dstrain = 0.0;
+    gammaKUsed = 0.0;
+    gammaFUsed = 0.0;
 
-        return 0;
-}
+    kElasticPosDamgd = kElasticPos;
+    kElasticNegDamgd = kElasticNeg;
+    uMaxDamgd = CmaxStrainDmnd;
+    uMinDamgd = CminStrainDmnd;
+
+    return retval;
+  }
 
 XC::UniaxialMaterial* XC::Pinching4Material::getCopy(void) const
 {

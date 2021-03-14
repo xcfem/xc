@@ -153,11 +153,14 @@ int XC::ParallelMaterial::revertToLastCommit(void)
     return theModels.revertToLastCommit();
   }
 
+//! @brief Revert the material to its initial state.
 int XC::ParallelMaterial::revertToStart(void)
   {
+    int retval= ConnectedMaterial::revertToStart();
     trialStrain = 0.0;
     trialStrainRate = 0.0;
-    return theModels.revertToStart();
+    retval+= theModels.revertToStart();
+    return retval;
   }
 
 

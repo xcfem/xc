@@ -474,7 +474,7 @@ const XC::Matrix &XC::Truss::getMass(void) const
 void XC::Truss::zeroLoad(void)
   {
     TrussBase::zeroLoad();
-    theMaterial->setInitialStrain(0.0); //Removes initial strains.
+    theMaterial->zeroInitialStrain(); //Removes initial strains.
     return;
   }
 

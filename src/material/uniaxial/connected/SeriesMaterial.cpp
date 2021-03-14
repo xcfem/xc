@@ -222,13 +222,14 @@ int XC::SeriesMaterial::revertToLastCommit(void)
     return err;
   }
 
-
+//! @brief Revert the material to its initial state.
 int XC::SeriesMaterial::revertToStart(void)
   {
+    int err= ConnectedMaterial::revertToStart();
     Cstrain = 0.0;
     Cstress = 0.0;
     Ctangent = 0.0;
-    int err= theModels.revertToStart();
+    err+= theModels.revertToStart();
     const size_t numMaterials= theModels.size();
     for(size_t i = 0; i < numMaterials; i++)
       {

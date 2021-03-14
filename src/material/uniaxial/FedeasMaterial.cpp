@@ -183,13 +183,14 @@ int XC::FedeasMaterial::revertToLastCommit(void)
 
 int XC::FedeasMaterial::revertToStart(void)
   {
+    int retval= UniaxialMaterial::revertToStart();
     // Set all trial and committed values to zero
     for(int i = 0; i < 2*numHstv; i++)
       hstv[i] = 0.0;
   
-    converged.revertToStart(this->getInitialTangent());
-    trial.revertToStart(this->getInitialTangent());
-    return 0;
+    retval+= converged.revertToStart(this->getInitialTangent());
+    retval+= trial.revertToStart(this->getInitialTangent());
+    return retval;
   }
 
 //! @brief Send object members through the communicator argument.

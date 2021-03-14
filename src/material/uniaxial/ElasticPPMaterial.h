@@ -90,8 +90,8 @@ class ElasticPPMaterial: public EPPBaseMaterial
           return (-sigtrial + fyn);
       }
   protected:
-    inline double def_total(void) 
-      { return EPPBaseMaterial::def_total()-commitStrain; }
+    inline double get_total_strain(void) 
+      { return EPPBaseMaterial::get_total_strain()-commitStrain; }
     int sendData(Communicator &);
     int recvData(const Communicator &);
 

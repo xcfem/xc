@@ -289,13 +289,10 @@ int XC::MatPoint3D::revertToLastCommit(void)
         return err;
 }
 
-//================================================================================
+
+//! @brief Revert the material to its initial state.
 int XC::MatPoint3D::revertToStart(void)
-{
-        int err;
-        err = matmodel->revertToStart();
-        return err;
-}
+  { return matmodel->revertToStart(); }
 
 //=============================================================================
 void XC::MatPoint3D::report(const std::string &msg) const

@@ -137,9 +137,11 @@ int XC::MinMaxMaterial::revertToLastCommit(void)
 
 int XC::MinMaxMaterial::revertToStart(void)
   {
+    int retval= EncapsulatedMaterial::revertToStart();
     Cfailed = false;
     Tfailed = false;
-    return theMaterial->revertToStart();
+    retval+= theMaterial->revertToStart();
+    return retval;
   }
 
 XC::UniaxialMaterial *XC::MinMaxMaterial::getCopy(void) const

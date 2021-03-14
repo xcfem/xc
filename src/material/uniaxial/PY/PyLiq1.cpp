@@ -244,32 +244,32 @@ XC::PyLiq1::revertToLastCommit(void)
         return 0;
 }
 
-/////////////////////////////////////////////////////////////////////
+//! @brief Revert the material to its initial state.
 int XC::PyLiq1::revertToStart(void)
   {
-        // Call the XC::PySimple1 base function to take care of most details.
-        //
-        XC::PySimple1::revertToStart();
-        Ty = 0.0;
-        Tp = 0.0;
-        maxTangent = (matCapacity/v50);
-        
-        // Excess pore pressure ratio and pointers
-        //
-        Tru = 0.0;
-        Hru = 0.0;
-        meanConsolStress = -matCapacity;
-        lastLoadStage = 0;
-        loadStage = 0;
-        if(pRes <= 0.0) pRes = 0.01*matCapacity;
-        if(pRes > matCapacity) pRes = matCapacity;
-        elemFlag.assign("NONE");
+    // Call the PySimple1 base method to take care of most details.
+    //
+    int retval= PySimple1::revertToStart();
+    Ty = 0.0;
+    Tp = 0.0;
+    maxTangent = (matCapacity/v50);
 
-        // Now get all the committed variables initiated
-        //
-        commitState();
+    // Excess pore pressure ratio and pointers
+    //
+    Tru = 0.0;
+    Hru = 0.0;
+    meanConsolStress = -matCapacity;
+    lastLoadStage = 0;
+    loadStage = 0;
+    if(pRes <= 0.0) pRes = 0.01*matCapacity;
+    if(pRes > matCapacity) pRes = matCapacity;
+    elemFlag.assign("NONE");
 
-    return 0;
+    // Now get all the committed variables initiated
+    //
+    commitState();
+
+    return retval;
   }
 
 /////////////////////////////////////////////////////////////////////

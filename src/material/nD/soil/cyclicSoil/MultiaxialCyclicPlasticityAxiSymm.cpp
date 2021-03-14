@@ -64,12 +64,12 @@ XC::Vector XC::MultiaxialCyclicPlasticityAxiSymm::stress_vec(4) ;
 XC::Matrix XC::MultiaxialCyclicPlasticityAxiSymm::tangent_matrix(4,4) ;
 
 XC::MultiaxialCyclicPlasticityAxiSymm::MultiaxialCyclicPlasticityAxiSymm(int tag)
-  : XC::MultiaxialCyclicPlasticity(tag, ND_TAG_MultiaxialCyclicPlasticityAxiSymm) 
+  : MultiaxialCyclicPlasticity(tag, ND_TAG_MultiaxialCyclicPlasticityAxiSymm) 
   {}
 
 //null constructor
-XC::MultiaxialCyclicPlasticityAxiSymm::MultiaxialCyclicPlasticityAxiSymm( ) : 
- XC::MultiaxialCyclicPlasticity( ) 
+XC::MultiaxialCyclicPlasticityAxiSymm::MultiaxialCyclicPlasticityAxiSymm( )
+  : MultiaxialCyclicPlasticity( ) 
   {}
 
 
@@ -331,8 +331,9 @@ int XC::MultiaxialCyclicPlasticityAxiSymm::revertToLastCommit( )
 int XC::MultiaxialCyclicPlasticityAxiSymm::revertToStart( ) 
 
 {  
+  int retval= MultiaxialCyclicPlasticity::revertToStart();
   this->zero( ) ;
-  return 0 ;
+  return retval;
 }
 
  

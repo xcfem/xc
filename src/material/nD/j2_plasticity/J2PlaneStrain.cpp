@@ -105,8 +105,8 @@ XC::J2PlaneStrain::J2PlaneStrain(int tag)
                  double yield_infty,
                  double d,
                  double H,
-                 double viscosity ) : 
- XC::J2Plasticity( tag, ND_TAG_J2PlaneStrain, 
+                 double viscosity )
+   : J2Plasticity( tag, ND_TAG_J2PlaneStrain, 
              K, G, yield0, yield_infty, d, H, viscosity )
 { 
 
@@ -116,8 +116,8 @@ XC::J2PlaneStrain::J2PlaneStrain(int tag)
 //! @brief elastic constructor
  XC::J2PlaneStrain::J2PlaneStrain(   int    tag, 
                  double K, 
-                 double G ) :
- XC::J2Plasticity( tag, ND_TAG_J2PlaneStrain, K, G )
+                 double G )
+   : J2Plasticity( tag, ND_TAG_J2PlaneStrain, K, G )
 { 
 
 }
@@ -266,10 +266,12 @@ int XC::J2PlaneStrain::revertToLastCommit( )
   { return 0; }
 
 
+//! @brief Revert the material to its initial state.
 int XC::J2PlaneStrain::revertToStart( ) 
   {
+    int retval= J2Plasticity::revertToStart();
     this->zero();
-    return 0;
+    return retval;
   }
 
 

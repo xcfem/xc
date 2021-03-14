@@ -1357,33 +1357,33 @@ int XC::EPState::revertToLastCommit () {
 
 }
 
-//================================================================================
-int XC::EPState::revertToStart () {
+//! @brief Revert the material to its initial state.
+int XC::EPState::revertToStart(void)
+  {
+    int err = 0;
+    // revert the variables state to the initials
+    CurrentStress   = Stress_init;
+    CurrentStrain   = Strain_init;
+    Eep = Eep_init;
 
-      int err = 0;
-      // revert the variables state to the initials
-      CurrentStress   = Stress_init;
-      CurrentStrain   = Strain_init;
-      Eep = Eep_init;
+    Stress_commit   = Stress_init;
+    Strain_commit   = Strain_init;
+    Eep_commit = Eep_init;
+    //ElasticStrain_commit = Strain0;
 
-      Stress_commit   = Stress_init;
-      Strain_commit   = Strain_init;
-      Eep_commit = Eep_init;
-      //ElasticStrain_commit = Strain0;
+  int i;
+    for (i = 0; i < NScalarVar; i++) {
+	ScalarVar[i] = ScalarVar_init[i];
+	ScalarVar_commit[i] = ScalarVar_init[i];
+    }
 
-    int i;
-      for (i = 0; i < NScalarVar; i++) {
-          ScalarVar[i] = ScalarVar_init[i];
-          ScalarVar_commit[i] = ScalarVar_init[i];
-      }
+    for (i = 0; i < NTensorVar; i++) {
+       TensorVar[i] = TensorVar_init[i];
+       TensorVar_commit[i] = TensorVar_init[i];
+    }
 
-      for (i = 0; i < NTensorVar; i++) {
-         TensorVar[i] = TensorVar_init[i];
-         TensorVar_commit[i] = TensorVar_init[i];
-      }
-
-      return err;
-}
+    return err;
+  }
 
 
 

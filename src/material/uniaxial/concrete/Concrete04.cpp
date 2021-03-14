@@ -317,14 +317,15 @@ int XC::Concrete04::revertToLastCommit(void)
 
 int XC::Concrete04::revertToStart(void)
   {
+    int retval= ConcreteBase::revertToStart();
     // History variables
     convergedHistory.revertToStart(Ec0); // History variables
     CmaxStrain= 0.0;   
     CUtenSlope= Ec0;
     // State variables
-    convergedState.revertToStart(Ec0);
+    retval+= convergedState.revertToStart(Ec0);
     revertToLastCommit();
-    return 0;
+    return retval;
   }
 
 XC::UniaxialMaterial *XC::Concrete04::getCopy(void) const

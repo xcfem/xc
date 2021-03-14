@@ -351,10 +351,13 @@ int XC::FluidSolidPorousMaterial::revertToLastCommit(void)
     return theSoilMaterial->revertToLastCommit();
 }
 
+//! @brief Revert the material to its initial state.
 int XC::FluidSolidPorousMaterial::revertToStart(void)
-{
-    return theSoilMaterial->revertToStart();
-}
+  {
+    int retval= NDMaterial::revertToStart();
+    retval+= theSoilMaterial->revertToStart();
+    return retval;
+  }
 
 //! @brief Virtual constructor.
 XC::NDMaterial * XC::FluidSolidPorousMaterial::getCopy(void) const

@@ -300,8 +300,10 @@ int XC::DruckerPrager::revertToLastCommit (void)
     return 0;
 }
 
+//! @brief Revert the material to its initial state.
 int XC::DruckerPrager::revertToStart(void)
   {
+    int retval= NDMaterial::revertToStart();
     // if(ops_InitialStateAnalysis)
     //   {
     // 		// do nothing, keep state variables from last step
@@ -311,7 +313,7 @@ int XC::DruckerPrager::revertToStart(void)
 	// normal call for revertToStart (not initialStateAnalysis)
     	this->initialize();
       // }
-    return 0;
+    return retval;
   }
 
 XC::NDMaterial *XC::DruckerPrager::getCopy(void) const

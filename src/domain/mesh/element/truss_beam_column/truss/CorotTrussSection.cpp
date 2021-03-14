@@ -438,7 +438,7 @@ int XC::CorotTrussSection::addLoad(ElementalLoad *theLoad, double loadFactor)
             const double e2= trsLoad->E2()*loadFactor;
             Vector ezero(1);
 	    ezero[0]= (e2+e1)/2;
-            physicalProperties[0]->addInitialSectionDeformation(ezero);
+            physicalProperties[0]->incrementInitialSectionDeformation(ezero);
           }
         else
           {

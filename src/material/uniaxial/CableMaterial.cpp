@@ -191,10 +191,12 @@ int XC::CableMaterial::commitState(void)
 int XC::CableMaterial::revertToLastCommit(void)
   { return 0; }
 
+//! @brief Revert the material to its initial state.
 int XC::CableMaterial::revertToStart(void)
   {
+    int retval= ElasticBaseMaterial::revertToStart();
     trialStrain = 0.0;
-    return 0;
+    return retval;
   }
 
 //! @brief Virtual constructor.

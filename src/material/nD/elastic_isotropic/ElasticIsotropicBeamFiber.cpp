@@ -62,8 +62,8 @@
 XC::Vector XC::ElasticIsotropicBeamFiber::sigma(3);
 XC::Matrix XC::ElasticIsotropicBeamFiber::D(3,3);
 
-XC::ElasticIsotropicBeamFiber::ElasticIsotropicBeamFiber(int tag, double E, double nu, double rho) :
-  ElasticIsotropicMaterial(tag, ND_TAG_ElasticIsotropicBeamFiber,3, E, nu, rho)
+XC::ElasticIsotropicBeamFiber::ElasticIsotropicBeamFiber(int tag, double E, double nu, double rho)
+  : ElasticIsotropicMaterial(tag, ND_TAG_ElasticIsotropicBeamFiber,3, E, nu, rho)
   {}
 
 XC::ElasticIsotropicBeamFiber::ElasticIsotropicBeamFiber(int tag)
@@ -133,7 +133,7 @@ int XC::ElasticIsotropicBeamFiber::revertToLastCommit(void)
   { return 0; }
 
 int XC::ElasticIsotropicBeamFiber::revertToStart(void)
-  { return 0; }
+  { return ElasticIsotropicMaterial::revertToStart(); }
 
 XC::NDMaterial *XC::ElasticIsotropicBeamFiber::getCopy(void) const
   { return new ElasticIsotropicBeamFiber(*this); }

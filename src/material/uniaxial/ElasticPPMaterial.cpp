@@ -132,7 +132,7 @@ int XC::ElasticPPMaterial::setTrialStrain(double strain, double strainRate)
     trialStrain = strain;
 
     // compute trial stress
-    const double sigtrial= E * def_total(); // trial stress
+    const double sigtrial= E * get_total_strain(); // trial stress
 
     const double f= yield_function(sigtrial); //yield function
 
@@ -160,7 +160,7 @@ int XC::ElasticPPMaterial::commitState(void)
   {
 
     // compute trial stress
-    const double sigtrial= E * def_total(); // trial stress
+    const double sigtrial= E * get_total_strain(); // trial stress
 
     const double f= yield_function(sigtrial); //yield function
 
@@ -184,8 +184,9 @@ int XC::ElasticPPMaterial::revertToLastCommit(void)
 //! @brief Returns the material to its initial state.
 int XC::ElasticPPMaterial::revertToStart(void)
   {
+    int retval= EPPBaseMaterial::revertToStart();
     commitStrain= 0.0;
-    return 0;
+    return retval;
   }
 
 

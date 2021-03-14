@@ -123,7 +123,9 @@ class ElasticIsotropicMaterial: public NDMaterial
       { v= nu; }
 
     
-    virtual int setInitialStrain(const Vector &v);
+    int setInitialStrain(const Vector &v);
+    int incrementInitialStrain(const Vector &);
+    void zeroInitialStrain(void);
     virtual const Vector &getInitialStrain(void) const;
     virtual int setTrialStrain(const Vector &v);
     virtual int setTrialStrain(const Vector &v, const Vector &r);

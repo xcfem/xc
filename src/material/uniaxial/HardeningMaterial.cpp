@@ -212,12 +212,14 @@ int XC::HardeningMaterial::commitState(void)
 int XC::HardeningMaterial::revertToLastCommit(void)
   { return 0; }
 
+//! @brief Revert the material to its initial state.
 int XC::HardeningMaterial::revertToStart(void)
   {
     std::clog << getClassName() << "::" << __FUNCTION__
               << " this material probably needs to be rebased"
               << " from OpenSees. There are significant changes"
               << " in the implementation." << std::endl;
+    int retval= UniaxialMaterial::revertToStart();
     // Reset committed history variables
     CplasticStrain = 0.0;
     CbackStress = 0.0;
@@ -238,7 +240,7 @@ int XC::HardeningMaterial::revertToStart(void)
                 SHVs->Zero();
 // AddingSensitivity:END //////////////////////////////////
 
-    return 0;
+    return retval;
   }
 
 XC::UniaxialMaterial *XC::HardeningMaterial::getCopy(void) const

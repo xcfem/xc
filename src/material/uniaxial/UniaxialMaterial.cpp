@@ -186,17 +186,41 @@ XC::UniaxialMaterial* XC::UniaxialMaterial::getCopy(SectionForceDeformation *s) 
   { return getCopy(); }
 
 //! @brief Sets the initial strain value.
-int XC::UniaxialMaterial::setInitialStrain(double strain)
+//! @param strain: strain value.
+int XC::UniaxialMaterial::setInitialStrain(const double &strain)
   {
     if(strain!=0.0)
-      std::clog << "Material: " << getClassName() << "::" << __FUNCTION__ 
+      std::cerr << getClassName() << "::" << __FUNCTION__ 
                 << " not implemented yet." << std::endl;
     return 0;
   }
 
+//! @brief Increments the initial strain.
+//! @param strainIncrement: value of the strain increment.
+int XC::UniaxialMaterial::incrementInitialStrain(const double &initStrainIncrement)
+  {
+    if(initStrainIncrement!=0.0)
+      std::cerr << getClassName() << "::" << __FUNCTION__ 
+                << " not implemented yet." << std::endl;
+    return 0;
+  }
+
+//! @brief Zeroes the initial strain.
+void XC::UniaxialMaterial::zeroInitialStrain(void)
+  {}
+
+
 //! @brief Sets the initial generalized strain to the value being passed as parameter.
 void XC::UniaxialMaterial::setInitialGeneralizedStrain(const Vector &iS)
   { setInitialStrain(iS[0]); }
+
+//! @brief Revert the material to its initial state.
+int XC::UniaxialMaterial::revertToStart(void)
+  {
+    zeroInitialStrain();
+    return 0;
+  }
+
 
 XC::Response *XC::UniaxialMaterial::setResponse(const std::vector<std::string> &argv, Information &matInfo)
   {

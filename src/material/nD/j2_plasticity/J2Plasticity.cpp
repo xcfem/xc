@@ -553,10 +553,11 @@ int XC::J2Plasticity::revertToLastCommit(void)
   { return 0; }
 
 //! @brief Revert to start.
-int XC::J2Plasticity::revertToStart( )
+int XC::J2Plasticity::revertToStart(void)
   {
+    int retval= NDMaterial::revertToStart();
     this->zero();
-    return 0;
+    return retval;
   }
 
 //! @brief Send object members through the communicator argument.

@@ -102,8 +102,13 @@ int XC::PathIndependentMaterial::commitState(void)
 int XC::PathIndependentMaterial::revertToLastCommit(void)
   { return 0; }
 
+//! @brief Revert the material to its initial state.
 int XC::PathIndependentMaterial::revertToStart(void)
-  { return theMaterial->revertToStart(); }
+  {
+    int retval= EncapsulatedMaterial::revertToStart();
+    retval+= theMaterial->revertToStart();
+    return retval;
+  }
 
 XC::UniaxialMaterial *XC::PathIndependentMaterial::getCopy(void) const
   { return new PathIndependentMaterial(*this); }

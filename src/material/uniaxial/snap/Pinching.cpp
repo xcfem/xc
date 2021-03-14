@@ -188,51 +188,54 @@ XC::Pinching::~Pinching()
 }
 
 
-int XC::Pinching::revertToStart()
-{
-        dyieldPos = fyieldPos / elstk;
-        dyieldNeg = fyieldNeg / elstk;
+//! @brief Revert the material to its initial state.
+int XC::Pinching::revertToStart(void)
+  {
+    int retval= UniaxialMaterial::revertToStart();
+    dyieldPos = fyieldPos / elstk;
+    dyieldNeg = fyieldNeg / elstk;
 
-        Enrgts = fyieldPos * dyieldPos * ecaps;
-        Enrgta = fyieldPos * dyieldPos * ecapa;
-        Enrgtk = fyieldPos * dyieldPos * ecapk;
-        Enrgtd = fyieldPos * dyieldPos * ecapd;
-        
-        double ekhard = elstk * alpha;
+    Enrgts = fyieldPos * dyieldPos * ecaps;
+    Enrgta = fyieldPos * dyieldPos * ecapa;
+    Enrgtk = fyieldPos * dyieldPos * ecapk;
+    Enrgtd = fyieldPos * dyieldPos * ecapd;
 
-        double fPeakPos = fyieldPos + ekhard * ( capDispPos - dyieldPos );
-        double fPeakNeg = fyieldNeg + ekhard * ( capDispNeg - dyieldNeg );
-        
-        hsTrial[0] = 0.0;                        // d
-        hsTrial[1] = 0.0;                        // f
-        hsTrial[2] = elstk;                // ek
-        hsTrial[3] = elstk;                // ekunload
-        hsTrial[4] = elstk;                // ekexcurs
-        hsTrial[5] = 0.0;                        // Enrgtot
-        hsTrial[6] = 0.0;                        // Enrgc
-        hsTrial[7] = 0.0;                        // sp
-        hsTrial[8] = 0.0;                        // sn
-        hsTrial[9] = 0.0;                        // kon
-        hsTrial[10] = dyieldPos;        // dmax
-        hsTrial[11] = dyieldNeg;        // dmin
-        hsTrial[12] = fyieldPos;        // fyPos
-        hsTrial[13] = fyieldNeg;        // fyNeg
-        hsTrial[14] = capDispPos;        // cpPos
-        hsTrial[15] = capDispNeg;        // cpNeg
-        hsTrial[16] = fyieldPos;        // fmax
-        hsTrial[17] = fyieldNeg;        // fmin
-        hsTrial[18] = alpha;                // alphaPos
-        hsTrial[19] = alpha;                // alphaNeg
-        hsTrial[20] = -capSlope * elstk * capDispPos + fPeakPos;        // fCapRefPos
-        hsTrial[21] = -capSlope * elstk * capDispNeg + fPeakNeg;        // fCapRefNeg
-        
-        for( int i=0 ; i<22; i++) {
-                hsCommit[i] = hsTrial[i];
-                hsLastCommit[i] = hsTrial[i];
-        }
-        
-        return 0;
-}
+    double ekhard = elstk * alpha;
+
+    double fPeakPos = fyieldPos + ekhard * ( capDispPos - dyieldPos );
+    double fPeakNeg = fyieldNeg + ekhard * ( capDispNeg - dyieldNeg );
+
+    hsTrial[0] = 0.0;                        // d
+    hsTrial[1] = 0.0;                        // f
+    hsTrial[2] = elstk;                // ek
+    hsTrial[3] = elstk;                // ekunload
+    hsTrial[4] = elstk;                // ekexcurs
+    hsTrial[5] = 0.0;                        // Enrgtot
+    hsTrial[6] = 0.0;                        // Enrgc
+    hsTrial[7] = 0.0;                        // sp
+    hsTrial[8] = 0.0;                        // sn
+    hsTrial[9] = 0.0;                        // kon
+    hsTrial[10] = dyieldPos;        // dmax
+    hsTrial[11] = dyieldNeg;        // dmin
+    hsTrial[12] = fyieldPos;        // fyPos
+    hsTrial[13] = fyieldNeg;        // fyNeg
+    hsTrial[14] = capDispPos;        // cpPos
+    hsTrial[15] = capDispNeg;        // cpNeg
+    hsTrial[16] = fyieldPos;        // fmax
+    hsTrial[17] = fyieldNeg;        // fmin
+    hsTrial[18] = alpha;                // alphaPos
+    hsTrial[19] = alpha;                // alphaNeg
+    hsTrial[20] = -capSlope * elstk * capDispPos + fPeakPos;        // fCapRefPos
+    hsTrial[21] = -capSlope * elstk * capDispNeg + fPeakNeg;        // fCapRefNeg
+
+    for(int i=0 ; i<22; i++)
+      {
+	hsCommit[i] = hsTrial[i];
+	hsLastCommit[i] = hsTrial[i];
+      }
+
+    return retval;
+  }
 
 
 void XC::Pinching::Print(std::ostream &s, int flag) const

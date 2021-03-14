@@ -644,6 +644,7 @@ int XC::FatigueMaterial::revertToLastCommit(void)
 //! @brief Return element to its initial state.
 int XC::FatigueMaterial::revertToStart(void)
   {
+    int retval= UniaxialMaterial::revertToStart();
     Cfailed = false;
     DI  = 0; //Damage index
     X   = 0; //Range in consideration
@@ -672,7 +673,9 @@ int XC::FatigueMaterial::revertToStart(void)
     SR3 = 0;
     NC3 = 0;
 
-    return theMaterial->revertToStart();
+    retval+= theMaterial->revertToStart();
+
+    return retval;
   }
 
 

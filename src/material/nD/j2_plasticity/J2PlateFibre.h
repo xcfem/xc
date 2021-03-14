@@ -125,7 +125,9 @@ class J2PlateFibre: public NDMaterial
     double getHkin(void) const;
     void setHkin(const double &);
     
-    int setInitialStrain(const Vector &v);
+    int setInitialStrain(const Vector &);
+    int incrementInitialStrain(const Vector &);
+    void zeroInitialStrain(void);
     const Vector &getInitialStrain(void) const;
     int setTrialStrain(const Vector &v);
     int setTrialStrain(const Vector &v, const Vector &r);

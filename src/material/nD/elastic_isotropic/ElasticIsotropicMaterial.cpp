@@ -91,17 +91,17 @@
 //! @param nu: material Poisson coefficient.
 //! @param r: material density.
 XC::ElasticIsotropicMaterial::ElasticIsotropicMaterial(int tag, int classTag, int eps_size, double e, double nu, double r)
-  :XC::NDMaterial(tag, classTag), E(e), v(nu), rho(r),
+  : NDMaterial(tag, classTag), E(e), v(nu), rho(r),
   epsilon(eps_size), epsilon0(eps_size) {}
 
 //! @brief Constructor.
 XC::ElasticIsotropicMaterial::ElasticIsotropicMaterial(int tag, int eps_size)
-  :XC::NDMaterial(tag, ND_TAG_ElasticIsotropic), E(0.0), v(0.0), rho(0.0),
+  : NDMaterial(tag, ND_TAG_ElasticIsotropic), E(0.0), v(0.0), rho(0.0),
   epsilon(eps_size), epsilon0(eps_size) {}
 
 //! @brief Constructor.
 XC::ElasticIsotropicMaterial::ElasticIsotropicMaterial(int tag, int eps_size, double e, double nu, double r)
-  :XC::NDMaterial(tag, ND_TAG_ElasticIsotropic), E(e), v(nu), rho(r),
+  : NDMaterial(tag, ND_TAG_ElasticIsotropic), E(e), v(nu), rho(r),
   epsilon(eps_size), epsilon0(eps_size) {}
 
 // Boris Jeremic (@ucdavis.edu) 19June2002
@@ -195,11 +195,24 @@ XC::NDMaterial *XC::ElasticIsotropicMaterial::getCopy(const std::string &type) c
   }
 
 //! @brief Sets the initial strain value.
+//! @param eps: strain value.
 int XC::ElasticIsotropicMaterial::setInitialStrain(const Vector &eps)
   {
     epsilon0= eps;
     return 0;
   }
+
+//! @brief Increments initial strain.
+//! @param epsInc: value of the strain increment.
+int XC::ElasticIsotropicMaterial::incrementInitialStrain(const Vector &epsInc)
+  {
+    epsilon0+= epsInc;
+    return 0;
+  }
+
+//! @brief Zeroes the initial strain.
+void XC::ElasticIsotropicMaterial::zeroInitialStrain(void)
+  { epsilon0.Zero(); }
 
 //! @brief Returns the value of the initial strain.
 const XC::Vector &XC::ElasticIsotropicMaterial::getInitialStrain(void) const
@@ -314,8 +327,9 @@ int XC::ElasticIsotropicMaterial::revertToLastCommit(void)
 //! number if not.
 int XC::ElasticIsotropicMaterial::revertToStart(void)
   {
+    int retval= NDMaterial::revertToStart();
     epsilon.Zero();
-    return 0;
+    return retval;
   }
 
 //! @brief Virtual constructor. Create a copy of material parameters

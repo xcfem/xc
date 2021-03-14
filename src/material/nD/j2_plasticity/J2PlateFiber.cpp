@@ -326,12 +326,13 @@ int XC::J2PlateFiber::revertToLastCommit( )
    return 0;
  }
 
-
+//! @brief Revert the material to its initial state.
 int XC::J2PlateFiber::revertToStart( )
   {
+    int retval= J2Plasticity::revertToStart();
     commitEps22 = 0.0;
     this->zero( );
-    return 0;
+    return retval;
   }
 
 //! @brief Send object members through the communicator argument.

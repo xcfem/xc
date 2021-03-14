@@ -97,7 +97,7 @@ XC::FDEPState *XC::FDEPState::getCopy(void)
   { return new FDEPState(*this); }
 
 //------------------------------------------------------------------------------
-XC::FDEPState::FDEPState( const XC::FDEPState& fds )
+XC::FDEPState::FDEPState( const FDEPState& fds )
 {
 	setFpInVar(fds.getFpInVar());
 	setStressLikeInVar(fds.getStressLikeInVar());
@@ -258,26 +258,26 @@ int XC::FDEPState::revertToLastCommit(void)
 	return 0;
 }
 
-//----------------------------------------------------------------------
+//! @brief Revert the material to its initial state.
 int XC::FDEPState::revertToStart(void)
-{
-	BJtensor tI2("I", 2, def_dim_2);
-	BJtensor t00(2, def_dim_2, 0.0);
+  {
+    BJtensor tI2("I", 2, def_dim_2);
+    BJtensor t00(2, def_dim_2, 0.0);
 
-	FpInVar = tI2;
-	StressLikeInVar = 0.0;
-	StrainLikeInVar = 0.0;
-	StressLikeKiVar = t00;
-	StrainLikeKiVar = t00;
+    FpInVar = tI2;
+    StressLikeInVar = 0.0;
+    StrainLikeInVar = 0.0;
+    StressLikeKiVar = t00;
+    StrainLikeKiVar = t00;
 
-	CommittedFpInVar = tI2;
-	CommittedStressLikeInVar = 0.0;
-	CommittedStrainLikeInVar = 0.0;
-	CommittedStressLikeKiVar = t00;
-	CommittedStrainLikeKiVar = t00;
+    CommittedFpInVar = tI2;
+    CommittedStressLikeInVar = 0.0;
+    CommittedStrainLikeInVar = 0.0;
+    CommittedStressLikeKiVar = t00;
+    CommittedStrainLikeKiVar = t00;
 
-	return 0;
-}
+    return 0;
+  }
 
 # endif
 

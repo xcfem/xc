@@ -100,7 +100,14 @@ class UniaxialMaterial: public Material
   public:
     UniaxialMaterial(int tag, int classTag);
         
-    virtual int setInitialStrain(double strain);
+    //! @brief Virtual constructor.
+    virtual UniaxialMaterial *getCopy(void) const=0;
+    virtual UniaxialMaterial *getCopy(SectionForceDeformation *s) const;
+
+    virtual int setInitialStrain(const double &);
+    virtual int incrementInitialStrain(const double &);
+    virtual void zeroInitialStrain(void);
+    
     //! @brief Sets the value of the trial strain.
     //!
     //! Sets the value of the trial strain
@@ -129,10 +136,8 @@ class UniaxialMaterial: public Material
     virtual double getRho(void) const;
     void setRho(const double &);
 
-    //! @brief Virtual constructor.
-    virtual UniaxialMaterial *getCopy(void) const=0;
-    virtual UniaxialMaterial *getCopy(SectionForceDeformation *s) const;
-	
+    int revertToStart(void);
+    
     virtual Response *setResponse(const std::vector<std::string> &argv, Information &matInformation);
     virtual int getResponse(int responseID, Information &matInformation);    
 

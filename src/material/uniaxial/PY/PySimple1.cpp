@@ -481,7 +481,7 @@ int XC::PySimple1::revertToLastCommit(void)
 /////////////////////////////////////////////////////////////////////
 int XC::PySimple1::revertToStart(void)
   {
-
+    int retval= PQyzBase::revertToStart();
     // If soilType = 0, then it is entering with the default constructor.
     // To avoid division by zero, set small nonzero values for terms.
     //
@@ -539,9 +539,10 @@ int XC::PySimple1::revertToStart(void)
       }
     else
       {
-        std::cerr << "WARNING -- only accepts soilType of 1 or 2" << std::endl;
-        std::cerr << "PyLiq1: " << std::endl;
-        std::cerr << "soilType: " << soilType << std::endl;
+        std::cerr << getClassName() << "::" << __FUNCTION__
+	          << "; WARNING only accepts soilType of 1 or 2" << std::endl
+	          << "PyLiq1: " << std::endl
+		  << "soilType: " << soilType << std::endl;
         exit(-1);
       }
 
@@ -577,7 +578,7 @@ int XC::PySimple1::revertToStart(void)
     //
     this->commitState();
 
-    return 0;
+    return retval;
   }
 
 //! @brief Set the variable that sets the drag resistance within a

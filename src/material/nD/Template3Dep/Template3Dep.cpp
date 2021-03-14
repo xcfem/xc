@@ -1016,14 +1016,15 @@ int XC::Template3Dep::revertToLastCommit(void)
   err = EPS->revertToLastCommit();
   return err;
 }
-//================================================================================
+
+//! @brief Revert the material to its initial state.
 int XC::Template3Dep::revertToStart(void)
-{
-  int err;
-  theElasticMat->revertToStart();
-  err = EPS->revertToStart();
-  return err;
-}
+  {
+    int err= NDMaterial::revertToStart();
+    err+= theElasticMat->revertToStart();
+    err+= EPS->revertToStart();
+    return err;
+  }
 
 //! @brief Virtual constructor.
 XC::NDMaterial * XC::Template3Dep::getCopy(void) const

@@ -69,12 +69,12 @@ XC::Matrix  XC::PlaneStressMaterial::tangent(3,3) ;
 
 //! @brief Constructor.
 XC::PlaneStressMaterial::PlaneStressMaterial(int tag)
-  :XC::NDAdaptorMaterial(ND_TAG_PlaneStressMaterial,tag,3) {}
+  :NDAdaptorMaterial(ND_TAG_PlaneStressMaterial,tag,3) {}
 
 
 //! @brief Constructor.
 XC::PlaneStressMaterial::PlaneStressMaterial(int tag, XC::NDMaterial &the3DMaterial )
-  : XC::NDAdaptorMaterial(ND_TAG_PlaneStressMaterial,tag,the3DMaterial,3)
+  : NDAdaptorMaterial(ND_TAG_PlaneStressMaterial,tag,the3DMaterial,3)
   {
     Tgamma02 = 0.0;
     Tgamma12 = 0.0;
@@ -123,11 +123,12 @@ int XC::PlaneStressMaterial::revertToLastCommit(void)
 //! @brief Revert the material to its initial state.
 int XC::PlaneStressMaterial::revertToStart(void)
   {
+    int retval= NDAdaptorMaterial::revertToStart();
     Tgamma12  = 0.0;
     Tgamma02  = 0.0;
     Cgamma12  = 0.0;
     Cgamma02  = 0.0;
-    return NDAdaptorMaterial::revertToStart();
+    return retval;
   }
 
 

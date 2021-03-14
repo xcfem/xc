@@ -427,7 +427,7 @@ const XC::Matrix &XC::CorotTruss::getMass(void) const
 //! @brief Zeroes loads on element.
 void XC::CorotTruss::zeroLoad(void)
   {
-    theMaterial->setInitialStrain(0.0); //Removes initial strains.
+    theMaterial->zeroInitialStrain(); //Removes initial strains.
     return;
   }
 

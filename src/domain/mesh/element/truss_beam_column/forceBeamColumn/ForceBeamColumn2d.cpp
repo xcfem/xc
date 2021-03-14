@@ -845,7 +845,7 @@ int XC::ForceBeamColumn2d::addLoad(ElementalLoad *theLoad, double loadFactor)
           {
             const size_t numSections= getNumSections();
             const Matrix &xi= beamIntegr->getIntegrPointCoords(numSections,L);
-            theSections.addInitialSectionDeformations(*strainLoad,loadFactor,xi,L);
+            theSections.incrementInitialSectionDeformations(*strainLoad,loadFactor,xi,L);
           }
         else
           {

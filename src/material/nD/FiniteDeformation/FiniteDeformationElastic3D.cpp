@@ -200,11 +200,12 @@ int XC::FiniteDeformationElastic3D::revertToLastCommit(void)
 }
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 int XC::FiniteDeformationElastic3D::revertToStart(void)
-{
-   std::cerr << "FiniteDeformationElastic3D-- subclass responsibility\n";
-   exit(-1);
-   return -1;
-}
+  {
+    std::cerr << getClassName() << "::" << __FUNCTION__
+              << "; subclass responsibility\n";
+    exit(-1);
+    return -1;
+  }
 
 //! @brief Virtual constructor.
 XC::NDMaterial * XC::FiniteDeformationElastic3D::getCopy(void) const
