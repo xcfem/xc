@@ -731,6 +731,7 @@ python tests/materials/prestressing/test_strand_data_01.py
 python tests/materials/prestressing/test_straight_pre_tension_strand.py
 python tests/materials/prestressing/test_prestressing_01.py
 python tests/materials/prestressing/test_prestressing_02.py
+python tests/materials/prestressing/test_prestressing_03.py
 
 echo "$BLEU" "  EOTA TR-29." "$NORMAL"
 python tests/materials/eota_tr_29/test_anchor_bolt01.py
