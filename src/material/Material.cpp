@@ -155,7 +155,7 @@ void XC::Material::update(void)
 
 //! @brief Increments generalized strain
 //! @param incS: strain increment.
-void XC::Material::addInitialGeneralizedStrain(const Vector &incS)
+void XC::Material::incrementInitialGeneralizedStrain(const Vector &incS)
   {
     setInitialGeneralizedStrain(getInitialGeneralizedStrain()+incS);
   }

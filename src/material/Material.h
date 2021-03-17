@@ -116,7 +116,7 @@ class Material: public TaggedObject, public MovableObject
     virtual const Vector &getInitialGeneralizedStrain(void) const= 0;
 
     virtual void setInitialGeneralizedStrain(const Vector &)= 0;
-    virtual void addInitialGeneralizedStrain(const Vector &);
+    virtual void incrementInitialGeneralizedStrain(const Vector &);
     virtual void zeroInitialGeneralizedStrain(void);
 
     virtual int commitState(void) = 0;

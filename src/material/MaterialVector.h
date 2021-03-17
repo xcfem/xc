@@ -78,7 +78,7 @@ class MaterialVector: public std::vector<MAT *>, public CommandEntity, public Mo
     int revertToStart(void);
 
     void setInitialGeneralizedStrains(const std::vector<Vector> &);
-    void addInitialGeneralizedStrains(const std::vector<Vector> &);
+    void incrementInitialGeneralizedStrains(const std::vector<Vector> &);
     void zeroInitialGeneralizedStrains(void);
 
     size_t getGeneralizedStressSize(void) const;
@@ -487,7 +487,7 @@ void MaterialVector<MAT>::setInitialGeneralizedStrains(const std::vector<Vector>
 
 //! \brief Adds to the materials initial strains the values being passed as parameters.
 template <class MAT>
-void MaterialVector<MAT>::addInitialGeneralizedStrains(const std::vector<Vector> &iS)
+void MaterialVector<MAT>::incrementInitialGeneralizedStrains(const std::vector<Vector> &iS)
   {
     const size_t nMat= this->size();
     const size_t sz= std::min(nMat,iS.size());
@@ -497,7 +497,7 @@ void MaterialVector<MAT>::addInitialGeneralizedStrains(const std::vector<Vector>
                 << iS.size() << " generalized strain vectors, expected: "
                 << nMat << ".\n";
     for(size_t i= 0;i<sz;i++)
-      (*this)[i]->addInitialGeneralizedStrain(iS[i]);
+      (*this)[i]->incrementInitialGeneralizedStrain(iS[i]);
   }
 
 //! \brief Initialize initial strains.
