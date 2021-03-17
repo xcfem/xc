@@ -185,8 +185,8 @@ XC::Node::Node(int tag, int ndof, double Crd1)
 XC::Node::Node(int tag, int ndof, double Crd1, double Crd2)
   :MeshComponent(tag,NOD_TAG_Node),numberDOF(ndof), theDOF_GroupPtr(nullptr),
    Crd(2), disp(), vel(), accel(),
-   mass(ndof,ndof), unbalLoad(numberDOF), unbalLoadWithInertia(numberDOF), reaction(numberDOF),
-   alphaM(0.0), tributary(0.0)
+   mass(ndof,ndof), unbalLoad(numberDOF), unbalLoadWithInertia(numberDOF),
+   reaction(numberDOF), alphaM(0.0), tributary(0.0)
   {
     defaultTag= tag+1;
     // AddingSensitivity:BEGIN /////////////////////////////////////////
@@ -219,8 +219,8 @@ XC::Node::Node(int tag, int ndof, double Crd1, double Crd2)
 XC::Node::Node(int tag, int ndof, double Crd1, double Crd2, double Crd3)
   :MeshComponent(tag,NOD_TAG_Node), numberDOF(ndof), theDOF_GroupPtr(nullptr),
    Crd(3), disp(), vel(), accel(),
-   mass(ndof,ndof), unbalLoad(numberDOF), unbalLoadWithInertia(numberDOF), reaction(numberDOF),
-   alphaM(0.0), tributary(0.0)
+   mass(ndof,ndof), unbalLoad(numberDOF), unbalLoadWithInertia(numberDOF),
+   reaction(numberDOF), alphaM(0.0), tributary(0.0)
   {
     defaultTag= tag+1;
     // AddingSensitivity:BEGIN /////////////////////////////////////////
@@ -243,8 +243,8 @@ XC::Node::Node(int tag, int ndof, const Vector &crds)
   :MeshComponent(tag,NOD_TAG_Node),
    numberDOF(ndof), theDOF_GroupPtr(nullptr),
    Crd(crds), disp(), vel(), accel(),
-   mass(ndof,ndof), unbalLoad(numberDOF), unbalLoadWithInertia(numberDOF), reaction(numberDOF),
-    alphaM(0.0), tributary(0.0)
+   mass(ndof,ndof), unbalLoad(numberDOF), unbalLoadWithInertia(numberDOF),
+   reaction(numberDOF), alphaM(0.0), tributary(0.0)
   {
     defaultTag= tag+1;
     // AddingSensitivity:BEGIN /////////////////////////////////////////
@@ -2308,11 +2308,10 @@ int XC::Node::addReactionForce(const Vector &add, double factor)
 
     if(factor == 1.0)
       reaction+= add;
+    else if(factor == -1.0)
+      reaction-= add;
     else
-     if(factor == -1.0)
-       reaction-= add;
-     else
-       reaction+= add*factor;
+      reaction+= add*factor;
     return 0;
   }
 
@@ -2337,6 +2336,7 @@ bool XC::Node::checkReactionForce(const double &tol) const
 			  << " and norm: " << sqrt(norm2)
 			  << " it seems that the solution method"
 			  << " is not well suited to the problem."
+			  << " (tol= " << tol << ")."
 			  << std::endl;
 		retval= false;
 	      }
@@ -2360,7 +2360,8 @@ bool XC::Node::checkReactionForce(const double &tol) const
 				      << "that the solution method and/or "
 				      << "tolerances are not well suited"
 				      << " to the problem."
-				      << " (tol= " << tol << std::endl;
+				      << " (tol= " << tol << ")."
+				      << std::endl;
 			  }
 			retval= false;
 		      }
