@@ -53,6 +53,9 @@
 
 #include "utility/actor/actor/MovableVector.h"
 
+
+const double XC::Mesh::reactionValueThreshold= 1.0e-6; //Reactions with norm under this value can be considered zero.
+
 //! @brief Frees memory occupied by mesh components.
 //! this calls delete on all components of the model,
 //! i.e. calls delete on all that is added to the model.
@@ -1154,21 +1157,25 @@ bool XC::Mesh::checkNodalReactions(const double &tol)
   {
     bool retval= true;
     const Node *theNode= nullptr;
-    double max_norm_reac= 0.1; //Small enough.
+    double max_reaction_norm= -1.0; //Small enough.
     NodeIter &theNodes = this->getNodes();
     while((theNode = theNodes()) != 0)
       if(theNode->getTag()!=tagNodeCheckReactionException)
-        max_norm_reac= std::max(max_norm_reac,theNode->getReaction().Norm2()); 
+        max_reaction_norm= std::max(max_reaction_norm,theNode->getReaction().Norm2()); 
 
-    theNode= nullptr;
-    NodeIter &theNodes2 = this->getNodes();
-    while((theNode = theNodes2()) != 0)
-      if(theNode->getTag()!=tagNodeCheckReactionException)
-        {
-	  const bool tmp= theNode->checkReactionForce(max_norm_reac*tol);
-	  if(retval) //if it's already false there is no need to check.
-	    retval= tmp;
-	}
+    max_reaction_norm= sqrt(max_reaction_norm);
+    if(max_reaction_norm>reactionValueThreshold) //If reactions are not extremely small.
+      {
+	theNode= nullptr;
+	NodeIter &theNodes2 = this->getNodes();
+	while((theNode = theNodes2()) != 0)
+	  if(theNode->getTag()!=tagNodeCheckReactionException)
+	    {
+	      const bool tmp= theNode->checkReactionForce(max_reaction_norm*tol);
+	      if(retval) //if it's already false there is no need to check.
+		retval= tmp;
+	    }
+      }
     return retval;
   }
 

@@ -65,6 +65,7 @@ class RayleighDampingFactors;
 class Mesh: public MeshComponentContainer
   {
   private:
+    static const double reactionValueThreshold; //!< Reactions with norm under this value can be considered zero.
     bool eleGraphBuiltFlag;
     bool nodeGraphBuiltFlag;
 
