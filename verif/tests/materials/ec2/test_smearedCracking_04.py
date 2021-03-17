@@ -145,7 +145,7 @@ lp0.newNodalLoad(2,pointLoad)    # applies the point load on node 2
 modelSpace.addLoadCaseToDomain(lp0.name)           # reads load pattern "0" and adds it to the domain
 
 # Solve
-solProc= predefined_solutions.PlainStaticModifiedNewton(problem, convergenceTestTol= 1e-2)
+solProc= predefined_solutions.PlainStaticModifiedNewton(problem, convergenceTestTol= 1e-8)
 analOk= solProc.analysis.analyze(1)
 
 
@@ -278,16 +278,15 @@ eps_sm=epsSMax
 w_k=srmax*(eps_sm-eps_cm)
 # print('crack withs: ',w_k*1e3, ' mm')
 
-xComp= -0.164127019628
-epsCMinComp= -0.0006645052299
-sgCMinComp= 0.0
-epsSMaxComp= 0.00119586550604
-sgSMaxComp= 239173101.207
-hceffComp= 0.111957660124
-roseffComp= 0.0474286439544
-srmaxComp= 0.256023964841
+xComp= -0.15899240709999138
+epsCMinComp= -0.000677387534344379
+epsSMaxComp= 0.001285519718131271
+sgSMaxComp= 257103943.626254
+hceffComp= 0.1136691976333362
+roseffComp= 0.04671450235030704
+srmaxComp= 0.2573390445092301
 eps_cmComp= 4.67648930823e-05
-w_kComp= 0.00029419729493
+w_kComp= 0.00031877998305930566
 
 ratio1=(xComp-x)/xComp
 ratio2=(epsCMinComp- epsCMin)/epsCMinComp
@@ -298,6 +297,36 @@ ratio7=(roseffComp-roseff)/roseffComp
 ratio8=(srmaxComp-srmax)/srmaxComp
 ratio9=(eps_cmComp-eps_cm)/eps_cmComp
 ratio10=(w_kComp-w_k)/w_kComp
+
+'''
+print('x= ', x)
+print('xComp= ', xComp)
+print('ratio1= ', ratio1)
+print('epsCMin= ', epsCMin)
+print('epsCMinComp= ', epsCMinComp)
+print('ratio2= ', ratio2)
+print('epsSMax= ', epsSMax)
+print('epsSMaxComp= ', epsSMaxComp)
+print('ratio4= ', ratio4)
+print('sgSMax= ', sgSMax)
+print('sgSMaxComp= ', sgSMaxComp)
+print('ratio5= ', ratio5)
+print('hceff= ', hceff)
+print('hceffComp= ', hceffComp)
+print('ratio6= ', ratio6)
+print('roseff= ', roseff)
+print('roseffComp= ', roseffComp)
+print('ratio7= ', ratio7)
+print('srmax= ', srmax)
+print('srmaxComp= ', srmaxComp)
+print('ratio8= ', ratio8)
+print('eps_cm= ', eps_cm)
+print('eps_cmComp= ', eps_cmComp)
+print('ratio9= ', ratio9)
+print('w_k= ', w_k)
+print('w_kComp= ', w_kComp)
+print('ratio10= ', ratio10)
+'''
 
 import os
 from misc_utils import log_messages as lmsg

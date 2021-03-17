@@ -151,16 +151,16 @@ pointLoad=xc.Vector([0,0,0,0,M_y,0])
 lp0.newNodalLoad(2,pointLoad)    # applies the point load on node 2 
 
 # We add the load case to domain.
-modelSpace.addLoadCaseToDomain(lp0.name)           # reads load pattern "0" and adds it to the domain
+modelSpace.addLoadCaseToDomain(lp0.name) # reads load pattern "0" and adds it to the domain
 
 # Solve
-solProc= predefined_solutions.PlainStaticModifiedNewton(problem, convergenceTestTol= 1e-3)
+solProc= predefined_solutions.PlainStaticModifiedNewton(problem, convergenceTestTol= 1e-8)
 analOk= solProc.analysis.analyze(1)
 
 
 # printing results
 nodes= preprocessor.getNodeHandler
-nodes.calculateNodalReactions(True,1e-7)
+nodes.calculateNodalReactions(True,1e-6)
 
 '''
 RN1= nodes.getNode(1).getReaction[0]   # Axial FX reaction (constrained DOF: ux) at node 1
@@ -286,16 +286,16 @@ eps_sm=epsSMax
 w_k=srmax*(eps_sm-eps_cm)
 # print('crack widths: ',w_k*1e3, ' mm')
 
-xComp= -0.206563714084
-epsCMinComp= -0.000534072629205
-sgCMinComp= -13882927.0767
-epsSMaxComp= 0.000951911878497
+xComp= -0.20590984200810822
+epsCMinComp= -0.0005346317226149066
+sgCMinComp= -13895218.58725083
+epsSMaxComp= 0.0009580032571031238
 sgSMaxComp= 190382375.699
 hceffComp= 0.13
 roseffComp= 0.052153846153
 srmaxComp= 0.214230088496
 eps_cmComp= 4.82744692303e-05
-w_kComp= 0.000193586322155 # 22-04-2018 to Ana to look: 0.000184426020443
+w_kComp= 0.00019489127873297142 # 22-04-2018 to Ana to look: 0.000184426020443
 
 ratio1=(xComp-x)/xComp
 ratio2=(epsCMinComp- epsCMin)/epsCMinComp

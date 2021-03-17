@@ -140,7 +140,7 @@ lp0.newNodalLoad(2,pointLoad)    # applies the point load on node 2
 modelSpace.addLoadCaseToDomain(lp0.name)           # reads load pattern "0" and adds it to the domain
 
 # Solve
-solProc= predefined_solutions.PlainStaticModifiedNewton(problem, convergenceTestTol= 1e-2)
+solProc= predefined_solutions.PlainStaticModifiedNewton(problem, convergenceTestTol= 1e-8)
 analOk= solProc.analysis.analyze(1)
 
 # printing results
@@ -272,8 +272,8 @@ eps_sm=epsSMax
 w_k=srmax*(eps_sm-eps_cm)
 # print('crack withs: ',w_k*1e3, ' mm')
 
-xComp= -0.178266877222
-epsCMinComp= -0.0006080494122
+xComp= -0.17421081201024446
+epsCMinComp= -0.0006162773810145948
 # LCPT 20201207
 # The value of sgCMinComp has changed from 930543.821563
 # to -17.0154068793e6 as a result of adding the update
@@ -281,14 +281,14 @@ epsCMinComp= -0.0006080494122
 # The previous value was certainly erroneous because it
 # doesn't corresponds to a negative strain (epsCMinComp= -0.0006080494122)
 # so I changed it.
-sgCMinComp= -17.0154068793e6
-epsSMaxComp= 0.000949058858185
-sgSMaxComp= 189811771.637
-hceffComp= 0.107244374259
-roseffComp= 0.0643670127005
-srmaxComp= 0.23866871421493
+sgCMinComp= -17.203821638092414e6
+epsSMaxComp= 0.0010014854945074323
+sgSMaxComp= 200297098.90148646
+hceffComp= 0.10859639599658517
+roseffComp= 0.06356564540334346
+srmaxComp= 0.23953441551570426
 eps_cmComp= 4.67648930823e-05
-w_kComp= 0.00021534934049485558
+w_kComp= 0.0002286884412431753
 
 ratio1=(xComp-x)/xComp
 ratio2=(epsCMinComp-epsCMin)/epsCMinComp
@@ -302,18 +302,36 @@ ratio9=(eps_cmComp-eps_cm)/eps_cmComp
 ratio10=(w_kComp-w_k)/w_kComp
 
 '''
+print('x= ', x)
+print('xComp= ', xComp)
 print('ratio1= ', ratio1)
+print('epsCMin= ', epsCMin)
+print('epsCMinComp= ', epsCMinComp)
 print('ratio2= ', ratio2)
 print('sgCMinComp= ', sgCMinComp/1e6, 'MPa')
 print('sgCMin= ', sgCMin/1e6, 'MPa')
 print('sgCMax= ', sgCMax/1e6, 'MPa')
 print('ratio3= ', ratio3)
+print('epsSMax= ', epsSMax)
+print('epsSMaxComp= ', epsSMaxComp)
 print('ratio4= ', ratio4)
+print('sgSMax= ', sgSMax)
+print('sgSMaxComp= ', sgSMaxComp)
 print('ratio5= ', ratio5)
+print('hceff= ', hceff)
+print('hceffComp= ', hceffComp)
 print('ratio6= ', ratio6)
+print('roseff= ', roseff)
+print('roseffComp= ', roseffComp)
 print('ratio7= ', ratio7)
+print('srmax= ', srmax)
+print('srmaxComp= ', srmaxComp)
 print('ratio8= ', ratio8)
+print('eps_cm= ', eps_cm)
+print('eps_cmComp= ', eps_cmComp)
 print('ratio9= ', ratio9)
+print('w_k= ', w_k)
+print('w_kComp= ', w_kComp)
 print('ratio10= ', ratio10)
 '''
 

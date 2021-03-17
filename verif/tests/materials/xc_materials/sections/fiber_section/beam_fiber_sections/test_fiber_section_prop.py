@@ -170,7 +170,7 @@ lp0.newNodalLoad(nodB.tag,pointLoad)    # applies the point load on node B
 modelSpace.addLoadCaseToDomain(lp0.name)           # reads load pattern "0" and adds it to the domain
 
 # Solve
-solProc= predefined_solutions.PlainStaticModifiedNewton(problem, convergenceTestTol= 1e-7)
+solProc= predefined_solutions.PlainStaticModifiedNewton(problem, convergenceTestTol= 1e-8)
 analOk= solProc.analysis.analyze(1)
 
 
