@@ -182,18 +182,19 @@ class SolutionProcedure(object):
         '''
         self.analysis= self.solu.newAnalysis(analysisType, self.getSolutionStrategyName(),"")
 
-    def solve(self, calculateNodalReactions= False, includeInertia= False):
+    def solve(self, calculateNodalReactions= False, includeInertia= False, reactionCheckTolerance= 1e-12):
         ''' Compute the solution (run the analysis).
 
         :param calculateNodalReactions: if true calculate reactions at
                                         nodes.
         :param includeInertia: if true calculate reactions including inertia
                                effects.
+        :param reactionCheckTolerance: tolerance when checking reaction values.
         '''
         result= self.analysis.analyze(self.numSteps)
         if(calculateNodalReactions):
-            preprocessor= self.feProblem.getPreprocessor
-            preprocessor.getNodeHandler.calculateNodalReactions(includeInertia,1e-7)
+            nodeHandler= self.feProblem.getPreprocessor.getNodeHandler
+            nodeHandler.calculateNodalReactions(includeInertia,reactionCheckTolerance)
         return result
 
     def resetLoadCase(self):
@@ -202,7 +203,7 @@ class SolutionProcedure(object):
         preprocessor.resetLoadCase() # Remove previous loads.
         preprocessor.getDomain.revertToStart() # Revert to initial state.
         
-    def solveComb(self,combName, calculateNodalReactions= False, includeInertia= False):
+    def solveComb(self,combName, calculateNodalReactions= False, includeInertia= False, reactionCheckTolerance= 1e-12):
         ''' Obtains the solution for the combination argument.
 
         :param combName: name of the combination to obtain the response for.
@@ -210,11 +211,12 @@ class SolutionProcedure(object):
                                         nodes.
         :param includeInertia: if true calculate reactions including inertia
                                effects.
+        :param reactionCheckTolerance: tolerance when checking reaction values.
         '''
         self.resetLoadCase() # Remove previous loads.
         preprocessor= self.feProblem.getPreprocessor
         preprocessor.getLoadHandler.addToDomain(combName) # Add comb. loads.
-        analOk= self.solve(calculateNodalReactions, includeInertia)
+        analOk= self.solve(calculateNodalReactions, includeInertia, reactionCheckTolerance)
         preprocessor.getLoadHandler.removeFromDomain(combName) # Remove comb.
         # lmsg.info("Combination: ",combName," solved.\n")
         return analOk
@@ -506,7 +508,62 @@ class PenaltyModifiedNewtonUMF(PenaltyModifiedNewtonBase):
         super(PenaltyModifiedNewtonUMF,self).__init__(prb, name, maxNumIter, convergenceTestTol, printFlag, numSteps, numberingMethod, convTestType)
         self.defineSysOfEq(soeType= 'umfpack_gen_lin_soe', solverType= 'umfpack_gen_lin_solver')
         self.defineAnalysis('static_analysis')
+        
+class PenaltyNewtonLineSearchBase(SolutionProcedure):
+    ''' Base class for penalty Newton line search solution aggregation.'''
+    def __init__(self, prb, name, maxNumIter, convergenceTestTol, printFlag, numSteps, numberingMethod, convTestType, lineSearchMethod):
+        ''' Constructor.
 
+        :param prb: XC finite element problem.
+        :param name: identifier for the solution procedure.
+        :param maxNumIter: maximum number of iterations (defauts to 10)
+        :param convergenceTestTol: convergence tolerance (defaults to 1e-9)
+        :param printFlag: if not zero print convergence results on each step.
+        :param numSteps: number of steps to use in the analysis (useful only when loads are variable in time).
+        :param convTestType: convergence test for non linear analysis (norm unbalance,...).
+        :param lineSearchMethod: line search method to use (bisection_line_search, initial_interpolated_line_search, regula_falsi_line_search, secant_line_search).
+        '''
+        super(PenaltyNewtonLineSearchBase,self).__init__(name, maxNumIter, convergenceTestTol, printFlag, numSteps)
+        modelWrapperName= self.defineModelWrapper(prb, numberingMethod= numberingMethod)
+        self.defineConstraintHandler('penalty')
+        self.defineSolutionAlgorithm(solAlgType= 'newton_line_search_soln_algo', integratorType= 'load_control_integrator', convTestType= convTestType)
+        self.solAlgo.setLineSearchMethod(lineSearchMethod)
+
+class PenaltyNewtonLineSearch(PenaltyNewtonLineSearchBase):
+    ''' Static solution procedure with a Newton line search algorithm
+        and a penalty constraint handler.'''
+    def __init__(self, prb, name= None, maxNumIter= 150, convergenceTestTol= 1e-9, printFlag= 0, numSteps= 1, numberingMethod= 'rcm', convTestType= 'relative_total_norm_disp_incr_conv_test', lineSearchMethod= 'regula_falsi_line_search'):
+        ''' Constructor.
+
+        :param prb: XC finite element problem.
+        :param name: identifier for the solution procedure.
+        :param maxNumIter: maximum number of iterations (defauts to 10)
+        :param convergenceTestTol: convergence tolerance (defaults to 1e-9)
+        :param printFlag: if not zero print convergence results on each step.
+        :param numSteps: number of steps to use in the analysis (useful only when loads are variable in time).
+        '''
+        super(PenaltyNewtonLineSearch,self).__init__(prb, name, maxNumIter, convergenceTestTol, printFlag, numSteps, numberingMethod, convTestType, lineSearchMethod)
+        self.defineSysOfEq(soeType= 'sparse_gen_col_lin_soe', solverType= 'super_lu_solver')
+        self.defineAnalysis('static_analysis')
+
+class PenaltyNewtonLineSearchUMF(PenaltyNewtonLineSearchBase):
+    ''' Static solution procedure with a Newton line search algorithm,
+        a penalty constraint handler and a UMF
+        (Unsimmetric multi-frontal method) solver.'''
+    def __init__(self, prb, name= None, maxNumIter= 150, convergenceTestTol= 1e-9, printFlag= 0, numSteps= 1, numberingMethod= 'rcm', convTestType= 'relative_total_norm_disp_incr_conv_test', lineSearchMethod= 'regula_falsi_line_search'):
+        ''' Constructor.
+
+        :param prb: XC finite element problem.
+        :param name: identifier for the solution procedure.
+        :param maxNumIter: maximum number of iterations (defauts to 10)
+        :param convergenceTestTol: convergence tolerance (defaults to 1e-9)
+        :param printFlag: if not zero print convergence results on each step.
+        :param numSteps: number of steps to use in the analysis (useful only when loads are variable in time).
+        '''
+        super(PenaltyNewtonLineSearchUMF,self).__init__(prb, name, maxNumIter, convergenceTestTol, printFlag, numSteps, numberingMethod, convTestType, lineSearchMethod)
+        self.defineSysOfEq(soeType= 'umfpack_gen_lin_soe', solverType= 'umfpack_gen_lin_solver')
+        self.defineAnalysis('static_analysis')
+        
 class PlainKrylovNewton(SolutionProcedure):
     ''' KrylovNewton algorithm object which uses a Krylov subspace 
         accelerator to accelerate the convergence of the modified 
