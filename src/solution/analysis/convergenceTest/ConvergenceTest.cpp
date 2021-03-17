@@ -296,7 +296,8 @@ std::string XC::ConvergenceTest::getDeltaXRMessage(void) const
 std::string XC::ConvergenceTest::getDeltaXRNormsMessage(void) const
   {
     std::ostringstream retval; 
-    retval << "\tNorm deltaX: " << calculatedNormX << "\tNorm deltaR: " << calculatedNormB;
+    retval << "\tNorm deltaX: " << calculatedNormX
+	   << "\tNorm deltaR: " << calculatedNormB;
     return retval.str();    
   }
 
