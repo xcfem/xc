@@ -104,7 +104,8 @@ class NewtonLineSearch: public EquiSolnAlgo
     void copy(LineSearch *);
   public:
     int solveCurrentStep(void);
-    
+
+    bool setLineSearchMethod(const std::string &);
     virtual int sendSelf(Communicator &);
     virtual int recvSelf(const Communicator &);
 
