@@ -64,8 +64,8 @@ lp1.newNodalLoad(nod2.tag,xc.Vector([0,F/2.0,0]))
 modelSpace.addLoadCaseToDomain(lp1.name)
 
 # Solution procedure
-#analysis= predefined_solutions.plain_static_modified_newton(test)
 solProc= predefined_solutions.PenaltyModifiedNewton(test, maxNumIter= 10, convergenceTestTol= 1e-2, printFlag= 0)
+solProc.setup()
 modelSpace.analysis= solProc.analysis
 
 

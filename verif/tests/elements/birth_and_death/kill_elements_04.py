@@ -16,6 +16,8 @@ import geom
 import xc
 from model import predefined_spaces
 from materials import typical_materials
+from solution import predefined_solutions
+from misc_utils import log_messages as lmsg
 
 A= 1.0 # Cross-section area (in2)
 E= 30e6 # Young modulus (psi)
@@ -59,7 +61,11 @@ lp0.newNodalLoad(n2.tag,xc.Vector([F,0]))
 modelSpace.addLoadCaseToDomain(lp0.name)
 
 # Solution
-result= modelSpace.analyze(calculateNodalReactions= True)
+solProc= predefined_solutions.PenaltyNewtonLineSearch(feProblem, printFlag= 0, convergenceTestTol= 1e-8, maxNumIter= 6, convTestType= 'norm_unbalance_conv_test')
+analOk= solProc.solve(calculateNodalReactions= True)
+if(analOk!=0):
+    lmsg.error('Failed to solve for: '+lp0.name)
+    quit()
 
 # Results
 ux_I= n2.getDisp[0]
@@ -81,7 +87,10 @@ toKill.getElements.append(trussB)
 modelSpace.deactivateElements(toKill)
 
 # Solve with dead element.
-result= modelSpace.analyze(calculateNodalReactions= True)
+analOk= solProc.solve(calculateNodalReactions= True)
+if(analOk!=0):
+    lmsg.error('Failed to solve with dead element.')
+    quit()
 
 ux_II= n2.getDisp[0]
 ux_refII=2.0*ux_refI # Only one active element

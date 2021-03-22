@@ -29,6 +29,7 @@ from materials.sections.fiber_section import fiber_sets
 from materials.sections.fiber_section import section_report 
 import numpy as np
 from materials.ec2 import EC2_limit_state_checking
+from misc_utils import log_messages as lmsg
 
 # Data from the experiment
 width=0.4     # width (cross-section coordinate Y)
@@ -155,8 +156,10 @@ modelSpace.addLoadCaseToDomain(lp0.name) # reads load pattern "0" and adds it to
 
 # Solve
 solProc= predefined_solutions.PlainStaticModifiedNewton(problem, convergenceTestTol= 1e-8)
-analOk= solProc.analysis.analyze(1)
-
+analOk= solProc.solve()
+if(analOk!=0):
+    lmsg.error('Failed to solve for: '+lp0.name)
+    quit()
 
 # printing results
 nodes= preprocessor.getNodeHandler
@@ -342,7 +345,6 @@ print('ratio10= ', ratio10)
 '''
 
 import os
-from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (abs(ratio1)<1e-5) & (abs(ratio2)<1e-5) & (abs(ratio3)<1e-5) & (abs(ratio4)<1e-3) & (abs(ratio5)<1e-2) & (abs(ratio6)<1e-3) & (abs(ratio7)<1e-2) & (abs(ratio8)<1e-3) & (abs(ratio9)<1e-3) & (abs(ratio10)<1e-5):
   print('test '+fname+': ok.')

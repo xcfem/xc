@@ -44,6 +44,7 @@ from materials.sections.fiber_section import fiber_sets
 from materials.sections.fiber_section import section_report 
 import matplotlib.pyplot as plt
 from materials.ec2 import EC2_limit_state_checking
+from misc_utils import log_messages as lmsg
 
 # Data from the experiment
 width=0.4     # width (cross-section coordinate Y)
@@ -170,13 +171,12 @@ lp0.newNodalLoad(nodB.tag,pointLoad)    # applies the point load on node B
 modelSpace.addLoadCaseToDomain(lp0.name)           # reads load pattern "0" and adds it to the domain
 
 # Solve
-solProc= predefined_solutions.PlainStaticModifiedNewton(problem, convergenceTestTol= 1e-8)
-analOk= solProc.analysis.analyze(1)
+solProc= predefined_solutions.PlainStaticModifiedNewton(problem, printFlag= 0)
+analOk= solProc.solve(True, reactionCheckTolerance= 1e-7)
+if(analOk!=0):
+    lmsg.error('Failed to solve for: '+lp0.name)
+    quit()
 
-
-nodes= preprocessor.getNodeHandler
-nodes.calculateNodalReactions(True,1e-7)
-# nodB.checkReactionForce(0.5)
 
 # section of element 1: it's the copy of the material section 'sctFibers' assigned
 # to element 1 and specific of this element. It has the tensional state of the element
@@ -274,7 +274,6 @@ print('ratio13= ', ratio13)
 # use 'pickle' with XC
 # classes: https://www.boost.org/doc/libs/1_46_1/libs/python/doc/v2/pickle.html
 import os
-from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if((abs(ratio0)<1e-7) & (abs(ratio1)<1e-1) & (abs(slopeBP)>1e15) & (abs(ratio3)<1e-5) & (abs(ratio4)<1e-5) & (abs(ratio5)<1e-5) & (abs(ratio6)<1e-5) & (abs(ratio7)<1e-5) & (abs(ratio8)<1e-5) & (abs(ratio9)<1e-5) & (abs(ratio10)<1e-5) & (abs(ratio11)<1e-5) & (abs(ratio12)<1e-5)  & (abs(ratio13)<1e-5)  )  :
   print('test '+fname+': ok.')

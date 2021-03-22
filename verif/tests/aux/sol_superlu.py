@@ -17,13 +17,19 @@ class SuperLU(predefined_solutions.SolutionProcedure):
         :param printFlag: if not zero print convergence results on each step.
         :param numSteps: number of steps to use in the analysis (useful only when loads are variable in time).
         '''
-        super(SuperLU,self).__init__(name, maxNumIter, convergenceTestTol, printFlag, numSteps)
         # Sparse solver doesn't need renumbering.
-        modelWrapperName= self.defineModelWrapper(prb, numberingMethod= 'simple')
-        self.defineConstraintHandler('penalty')
-        self.defineSolutionAlgorithm(solAlgType= 'linear_soln_algo', integratorType= 'load_control_integrator', convTestType= None)
-        self.defineSysOfEq(soeType= 'sparse_gen_col_lin_soe', solverType= 'super_lu_solver')
-        self.defineAnalysis('static_analysis')
+        super(SuperLU,self).__init__(name, 'penalty', maxNumIter, convergenceTestTol, printFlag, numSteps, 'simple')
+        self.feProblem= prb
+        self.setPenaltyFactors()
+        
+    def setup(self):
+        ''' Defines the solution procedure in the finite element 
+            problem object.
+        '''
+        super(SuperLU,self).setup()
+        self.solutionAlgorithmSetup(solAlgType= 'linear_soln_algo', integratorType= 'load_control_integrator')
+        self.sysOfEqnSetup(soeType= 'sparse_gen_col_lin_soe', solverType= 'super_lu_solver')
+        self.analysisSetup('static_analysis')
 
 solProc= SuperLU(feProblem)
 result= solProc.solve()

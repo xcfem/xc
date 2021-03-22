@@ -72,9 +72,10 @@ modelSpace.addLoadCaseToDomain(lp0.name)
 
 # Solution
 solProc= predefined_solutions.SimpleTransformationStaticLinear(feProblem)
-result= solProc.analysis.analyze(1)
-
-nodes.calculateNodalReactions(False,1e-7)
+analOk= solProc.solve(True, reactionCheckTolerance= 1e-7)
+if(analOk!=0):
+    lmsg.error('Failed to solve for: ', lp0.name)
+    quit()
 
 reactionNode10= n10.getReaction
 ratio1= reactionNode10.Norm()
@@ -99,7 +100,7 @@ ratio3= svdResid.getMoment().getModulus()/actionNode10Norm
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
-if (abs(ratio1)<1e-10) & (abs(ratio2)<1e-9) & (abs(ratio3)<1e-9) & (result==0):
+if (abs(ratio1)<1e-10) & (abs(ratio2)<1e-9) & (abs(ratio3)<1e-9) & (analOk==0):
   print('test '+fname+': ok.')
 else:
   lmsg.error(fname+' ERROR.')

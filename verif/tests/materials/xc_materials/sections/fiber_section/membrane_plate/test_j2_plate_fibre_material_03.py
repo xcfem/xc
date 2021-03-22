@@ -114,7 +114,7 @@ Fdata=list() ; sigma_Pa=list() ; eps=list() ; xDisp_m=list()
 lstGamma=[0.1,0.6,0.7]
 for gamma in lstGamma:
     lp0.gammaF= gamma
-    analOK= modelSpace.analyze(calculateNodalReactions= True)
+    analOK= modelSpace.analyze(calculateNodalReactions= True, reactionCheckTolerance= 1e-6)
     dispX=0
     for n in l23.nodes:
         dispX+=n.getDisp[0]

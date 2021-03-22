@@ -146,8 +146,10 @@ modelSpace.addLoadCaseToDomain(lp0.name)           # reads load pattern "0" and 
 
 # Solve
 solProc= predefined_solutions.PlainStaticModifiedNewton(problem, convergenceTestTol= 1e-8)
-analOk= solProc.analysis.analyze(1)
-
+analOk= solProc.solve()
+if(analOk!=0):
+    lmsg.error('Failed to solve for: '+lp0.name)
+    quit()
 
 # printing results
 nodes= preprocessor.getNodeHandler

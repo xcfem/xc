@@ -80,9 +80,8 @@ modelSpace.addLoadCaseToDomain(lp0.name)
 
 # Solution procedure
 solProc= predefined_solutions.SimpleLagrangeStaticLinear(feProblem)
-result= solProc.analysis.analyze(1)
+solProc.solve(True, reactionCheckTolerance= 1e-7)
 
-nodes.calculateNodalReactions(True,1e-7)
 R1= nodes.getNode(4).getReaction[1] 
 R2= nodes.getNode(1).getReaction[1] 
 
