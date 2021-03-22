@@ -73,7 +73,7 @@ class NodeHandler: public PrepHandler
     void setDefaultTag(const int &tag);
     void clearAll(void);
 
-    void calculateNodalReactions(bool inclInertia, const double &tol);
+    int calculateNodalReactions(bool inclInertia, const double &tol);
 
   };
 

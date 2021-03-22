@@ -1153,7 +1153,8 @@ void XC::Mesh::setNodeReactionException(const int &n)
   { tagNodeCheckReactionException= n; }
 
 //! @brief Checks that all free nodes have zero reactions.
-bool XC::Mesh::checkNodalReactions(const double &tol)
+//! @param relTol: relative tolerance with respect to the maximum reaction norm.
+bool XC::Mesh::checkNodalReactions(const double &relTol)
   {
     bool retval= true;
     const Node *theNode= nullptr;
@@ -1164,6 +1165,7 @@ bool XC::Mesh::checkNodalReactions(const double &tol)
         max_reaction_norm= std::max(max_reaction_norm,theNode->getReaction().Norm2()); 
 
     max_reaction_norm= sqrt(max_reaction_norm);
+    const double tol= relTol*max_reaction_norm;
     if(max_reaction_norm>reactionValueThreshold) //If reactions are not extremely small.
       {
 	theNode= nullptr;
@@ -1171,7 +1173,7 @@ bool XC::Mesh::checkNodalReactions(const double &tol)
 	while((theNode = theNodes2()) != 0)
 	  if(theNode->getTag()!=tagNodeCheckReactionException)
 	    {
-	      const bool tmp= theNode->checkReactionForce(max_reaction_norm*tol);
+	      const bool tmp= theNode->checkReactionForce(tol);
 	      if(retval) //if it's already false there is no need to check.
 		retval= tmp;
 	    }
@@ -1194,9 +1196,12 @@ int XC::Mesh::calculateNodalReactions(bool inclInertia, const double &tol)
     while((theElement = theElements()) != 0)
       theElement->addResistingForceToNodalReaction(inclInertia);
 
-    checkNodalReactions(tol);
+    int retval= 0;
+    bool ok= checkNodalReactions(tol);
+    if(!ok)
+      retval= -1;
 
-    return 0;
+    return retval;
   }
 
 //! @brief Normalize the node eigenvectors for

@@ -2321,8 +2321,8 @@ bool XC::Node::checkReactionForce(const double &tol) const
   {
     bool retval= true;
     const ConstrContainer &cc= getDomain()->getConstraints();
-    const double norm2= reaction.Norm2();
-    if(norm2>tol)
+    const double norm= reaction.Norm();
+    if(norm>tol)
       {
 	const std::string errHeader= getClassName() + "::" + __FUNCTION__;
 	if(!isFrozen())
@@ -2333,7 +2333,7 @@ bool XC::Node::checkReactionForce(const double &tol) const
 		std::cerr << errHeader << "; the node: " << getTag()
 			  << " has not constraints and however"
 			  << " it has a reaction with value: " << reaction 
-			  << " and norm: " << sqrt(norm2)
+			  << " and norm: " << norm
 			  << " it seems that the solution method"
 			  << " is not well suited to the problem."
 			  << " (tol= " << tol << ")."
@@ -2362,10 +2362,10 @@ bool XC::Node::checkReactionForce(const double &tol) const
 				      << " to the problem."
 				      << " (tol= " << tol << ")."
 				      << std::endl;
+			    retval= false;
 			  }
-			retval= false;
 		      }
-		  }// for
+		  }// for nDOF
 	      }
 	  }
       }
