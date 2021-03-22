@@ -74,6 +74,11 @@ class_<XC::Vector, bases<CommandEntity> >("Vector")
 implicitly_convertible<XC::Vector,boost::python::list>();
 implicitly_convertible<boost::python::list,XC::Vector>();
 
+typedef std::vector<XC::Vector, std::allocator<XC::Vector> > std_vector_xc_vector;
+class_<std_vector_xc_vector>("std_vector_xc_vector")
+  .def(vector_indexing_suite<std_vector_xc_vector>() )
+  ;
+
 double &(XC::Matrix::*at)(int,int)= &XC::Matrix::operator();
 class_<XC::Matrix, bases<CommandEntity> >("Matrix")
   .def(init<boost::python::list>())
