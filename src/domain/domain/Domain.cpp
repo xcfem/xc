@@ -1374,8 +1374,8 @@ void XC::Domain::setNodeReactionException(const int &n)
   { mesh.setNodeReactionException(n); }
 
 //! @brief Check that al free nodes have zero reaction.
-bool XC::Domain::checkNodalReactions(const double &tol)
-  { return mesh.checkNodalReactions(tol); }
+bool XC::Domain::checkNodalReactions(const double &relTol)
+  { return mesh.checkNodalReactions(relTol); }
 
 //! @brief Calculate nodal reaction forces and moments.
 int XC::Domain::calculateNodalReactions(bool inclInertia,const double &tol)
