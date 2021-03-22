@@ -46,6 +46,17 @@ XC::TrussStrainLoad::TrussStrainLoad(int tag)
 XC::TrussStrainLoad::TrussStrainLoad(void)
   :ElementBodyLoad(LOAD_TAG_TrussStrainLoad), e1(0.0), e2(0.0) {}
 
+std::vector<XC::Vector> XC::TrussStrainLoad::getStrains(void) const
+  {
+    std::vector<Vector> retval(2);
+    Vector tmp(1);
+    tmp[0]= e1;
+    retval[0]= tmp;
+    tmp[1]= e2;
+    retval[1]= tmp;
+    return retval;
+  }
+
 const XC::Vector &XC::TrussStrainLoad::getData(int &type, const double &loadFactor) const
   {
     type = getClassTag();
