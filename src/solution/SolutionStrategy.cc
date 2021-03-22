@@ -56,7 +56,7 @@
 #include <utility/actor/objectBroker/FEM_ObjectBroker.h>
 #include "utility/matrix/ID.h"
 
-#include "boost/any.hpp"
+#include "SolutionStrategyMap.h"
 
 void XC::SolutionStrategy::free_soln_algo(void)
   {
@@ -546,31 +546,29 @@ void XC::SolutionStrategy::free_conv_test(void)
       }
   }
 
-bool XC::SolutionStrategy::alloc_conv_test(const std::string &nmb)
+bool XC::SolutionStrategy::alloc_conv_test(const std::string &convTestType)
   {
     free_conv_test();
-    if(nmb== "energy_inc_conv_test")
+    if(convTestType== "energy_incr_conv_test")
       theTest= new CTestEnergyIncr(this);
-    else if(nmb== "fixed_num_iter_conv_test")
+    else if(convTestType== "fixed_num_iter_conv_test")
       theTest= new CTestFixedNumIter(this);
-    else if(nmb== "norm_disp_incr_conv_test")
+    else if(convTestType== "norm_disp_incr_conv_test")
       theTest= new CTestNormDispIncr(this);
-    else if(nmb== "norm_unbalance_conv_test")
+    else if(convTestType== "norm_unbalance_conv_test")
       theTest= new CTestNormUnbalance(this);
-    else if(nmb== "relative_energy_incr_conv_test")
+    else if(convTestType== "relative_energy_incr_conv_test")
       theTest= new CTestRelativeEnergyIncr(this);
-    else if(nmb== "relative_norm_disp_incr_conv_test")
+    else if(convTestType== "relative_norm_disp_incr_conv_test")
       theTest= new CTestRelativeNormDispIncr(this);
-    else if(nmb== "relative_norm_unbalance_conv_test")
+    else if(convTestType== "relative_norm_unbalance_conv_test")
       theTest= new CTestRelativeNormUnbalance(this);
-    else if(nmb== "relative_total_norm_disp_incr_conv_test")
+    else if(convTestType== "relative_total_norm_disp_incr_conv_test")
       theTest= new CTestRelativeTotalNormDispIncr(this);
     else
       std::cerr << getClassName() << "::" << __FUNCTION__
 		<< "; convergence test type: '"
-                << nmb << "' unknown." << std::endl;
-    if(theTest)
-      theTest->set_owner(this);
+                << convTestType << "' unknown." << std::endl;
     return (theTest!=nullptr);
   }
 
@@ -588,9 +586,14 @@ void XC::SolutionStrategy::copy_conv_test(ConvergenceTest *ptr)
   }
 
 //! @brief Set convergence test to be used.
-XC::ConvergenceTest &XC::SolutionStrategy::newConvergenceTest(const std::string &cmd)
+XC::ConvergenceTest &XC::SolutionStrategy::newConvergenceTest(const std::string &convTestType)
   {
-    alloc_conv_test(cmd);
+    if(alloc_conv_test(convTestType))
+      theTest->set_owner(this);
+    else
+      std::cerr << getClassName() << "::" << __FUNCTION__
+	        << "; allocation of convergence test failed."
+	        << std::endl;
     assert(theTest);
     return *theTest;
   }
@@ -643,10 +646,46 @@ XC::SolutionStrategy &XC::SolutionStrategy::operator=(const SolutionStrategy &ot
     return *this;
   }
 
-
 //! @brief Destructor.
 XC::SolutionStrategy::~SolutionStrategy(void)
   { free_mem(); }
+
+//! @brief Returns a pointer to the material handler (if possible).
+const XC::SolutionStrategyMap *XC::SolutionStrategy::getSolutionStrategyMap(void) const
+  {
+    const SolutionStrategyMap *retval= dynamic_cast<const SolutionStrategyMap *>(Owner());
+    if(!retval)
+      std::cerr << getClassName() << "::" << __FUNCTION__
+	        << "; container not defined." << std::endl;
+    return retval;
+  }
+
+//! @brief Return the name of this object in its container.
+std::string XC::SolutionStrategy::getName(void) const
+  {
+    std::string retval= "";
+    const SolutionStrategyMap *smap= getSolutionStrategyMap();
+    if(smap)
+      {
+	SolutionStrategyMap::const_iterator i= smap->begin();
+	for(; i!=smap->end();i++)
+	  {
+	    const SolutionStrategy *tmp= &((*i).second);
+	    if(tmp==this)
+	      {
+	        retval= (*i).first;
+		break;
+	      }
+	  }
+	if(i==(smap->end())) // pointer not found.
+	  std::cerr << getClassName() << "::" << __FUNCTION__
+		    << "; solution strategy not found." << std::endl;
+      }
+    else
+      std::cerr << getClassName() << "::" << __FUNCTION__
+	        << "; container not defined." << std::endl;
+    return retval;
+  }
 
 void XC::SolutionStrategy::clearAll(void)
   { free_mem(); }
