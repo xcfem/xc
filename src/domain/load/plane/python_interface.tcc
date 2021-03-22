@@ -62,6 +62,7 @@ class_<XC::ShellRawLoad, bases<XC::ShellMecLoad>, boost::noncopyable >("ShellRaw
 
 class_<XC::BidimStrainLoad, bases<XC::BidimLoad>, boost::noncopyable >("BidimStrainLoad", no_init)
   .def("getStrain",make_function(&XC::BidimStrainLoad::getStrain, return_internal_reference<>() ))
+  .def("getStrains",make_function(&XC::BidimStrainLoad::getStrains, return_internal_reference<>() ))
   .def("setStrainComp",&XC::BidimStrainLoad::setStrainComp)
   ;
 
