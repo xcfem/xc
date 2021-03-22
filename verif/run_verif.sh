@@ -411,6 +411,7 @@ python tests/loads/truss_strain_load_02.py
 python tests/loads/truss_strain_load_03.py
 python tests/loads/truss_strain_load_04.py
 python tests/loads/truss_strain_load_05.py
+python tests/loads/truss_strain_load_06.py
 python tests/loads/beam_strain_load_01.py
 python tests/loads/beam_strain_load_02.py
 python tests/loads/beam_strain_load_03.py
