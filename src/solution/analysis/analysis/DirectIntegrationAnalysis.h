@@ -92,7 +92,7 @@ class DirectIntegrationAnalysis: public TransientAnalysis
 #endif
     // AddingSensitivity:END ///////////////////////////////
   protected:
-    friend class ProcSolu;
+    friend class SolutionProcedure;
     DirectIntegrationAnalysis(SolutionStrategy *analysis_aggregation);
     Analysis *getCopy(void) const;
   public:

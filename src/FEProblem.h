@@ -33,7 +33,7 @@
 #include "xc_utils/src/kernel/CommandEntity.h"
 #include "version.h"
 #include "preprocessor/Preprocessor.h"
-#include "solution/ProcSolu.h"
+#include "solution/SolutionProcedure.h"
 #include "utility/handler/DataOutputHandler.h"
 
 //! @brief Open source finite element program for structural analysis
@@ -82,7 +82,7 @@ class FEProblem: public CommandEntity
   {
     mutable DataOutputHandler::map_output_handlers output_handlers; //Manejadores para salida de resultados.
     Preprocessor preprocessor; //!< Object that manages the model.
-    ProcSolu proc_solu; //!< Solution procedure.
+    SolutionProcedure proc_solu; //!< Solution procedure.
     FE_Datastore *dataBase; //!< database to save states in.
     static FEM_ObjectBroker theBroker;
 
@@ -106,9 +106,9 @@ class FEProblem: public CommandEntity
       { return preprocessor.getDomain(); }
     inline const Domain *getDomain(void) const
       { return preprocessor.getDomain(); }
-    inline const ProcSolu &getSoluProc(void) const
+    inline const SolutionProcedure &getSoluProc(void) const
       { return proc_solu; }
-    inline ProcSolu &getSoluProc(void)
+    inline SolutionProcedure &getSoluProc(void)
       { return proc_solu; }
     inline DataOutputHandler::map_output_handlers *getOutputHandlers(void) const
       { return &output_handlers; }

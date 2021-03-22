@@ -64,7 +64,7 @@
 #include <solution/analysis/analysis/Analysis.h>
 #include "solution/analysis/ModelWrapper.h"
 #include "solution/SolutionStrategy.h"
-#include "solution/ProcSolu.h"
+#include "solution/SolutionProcedure.h"
 #include "solution/analysis/model/AnalysisModel.h"
 
 
@@ -80,17 +80,17 @@ XC::Analysis::Analysis(SolutionStrategy *s)
 int XC::Analysis::newStepDomain(AnalysisModel *theModel,const double &dT)
   { return theModel->newStepDomain(dT); }
 
-XC::ProcSolu *XC::Analysis::getProcSolu(void)
-  { return dynamic_cast<ProcSolu *>(Owner()); }
+XC::SolutionProcedure *XC::Analysis::getSolutionProcedure(void)
+  { return dynamic_cast<SolutionProcedure *>(Owner()); }
 
-const XC::ProcSolu *XC::Analysis::getProcSolu(void) const
-  { return dynamic_cast<const ProcSolu *>(Owner()); }
+const XC::SolutionProcedure *XC::Analysis::getSolutionProcedure(void) const
+  { return dynamic_cast<const SolutionProcedure *>(Owner()); }
 
 
 //! @brief Returns a pointer to the domain.
 XC::Domain *XC::Analysis::getDomainPtr(void)
   {
-    ProcSolu *ps= getProcSolu();
+    SolutionProcedure *ps= getSolutionProcedure();
     assert(ps);
     return ps->getDomainPtr();
   }
@@ -98,7 +98,7 @@ XC::Domain *XC::Analysis::getDomainPtr(void)
 //! @brief Returns a pointer to the domain.
 const XC::Domain *XC::Analysis::getDomainPtr(void) const
   {
-    const ProcSolu *ps= getProcSolu();
+    const SolutionProcedure *ps= getSolutionProcedure();
     assert(ps);
     return ps->getDomainPtr();
   }

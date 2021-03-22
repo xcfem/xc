@@ -111,7 +111,7 @@ class DomainDecompositionAnalysis: public Analysis, public MovableObject
 
     void set_all_links(void);
 
-    friend class ProcSolu;
+    friend class SolutionProcedure;
     friend class FEM_ObjectBroker;
     DomainDecompositionAnalysis(Subdomain &theDomain,SolutionStrategy *s= nullptr);
     DomainDecompositionAnalysis(Subdomain &theDomain,DomainSolver &theSolver,SolutionStrategy *s= nullptr);

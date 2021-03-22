@@ -35,7 +35,7 @@
 
 namespace XC {
 
-class ProcSoluControl;
+class SolutionProcedureControl;
 class ModelWrapper;
 class Domain;
 
@@ -54,7 +54,7 @@ class MapModelWrapper: public CommandEntity
   protected:
 
   public:
-    MapModelWrapper(ProcSoluControl *owr);
+    MapModelWrapper(SolutionProcedureControl *owr);
 
     inline iterator begin()
       { return solu_models.begin(); }

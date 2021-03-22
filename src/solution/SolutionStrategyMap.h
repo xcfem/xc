@@ -36,7 +36,7 @@
 
 namespace XC {
 
-class ProcSoluControl;
+class SolutionProcedureControl;
 class ModelWrapper;
 
 //!  @ingroup Solu
@@ -44,14 +44,15 @@ class ModelWrapper;
 //! @brief Solution strategies container.
 class SolutionStrategyMap: public CommandEntity
   {
-  private:
+  public:
     typedef std::map<std::string,SolutionStrategy> map_solu_method;
     typedef map_solu_method::iterator iterator;
     typedef map_solu_method::const_iterator const_iterator;
 
+  private:
     map_solu_method solu_methods; //!< Solution strategies container.
   public:
-    SolutionStrategyMap(ProcSoluControl *owr);
+    SolutionStrategyMap(SolutionProcedureControl *owr);
 
     inline iterator begin()
       { return solu_methods.begin(); }

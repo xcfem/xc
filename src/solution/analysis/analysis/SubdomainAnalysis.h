@@ -100,7 +100,7 @@ class SubdomainAnalysis: public Analysis, public MovableObject
   protected: 
     Subdomain *getSubdomainPtr(void) const;
     DomainSolver        *getDomainSolverPtr(void) const;
-    friend class ProcSolu;
+    friend class SolutionProcedure;
     SubdomainAnalysis(Subdomain &theDomain);
 
     SubdomainAnalysis(int classTag, Subdomain &theDomain);    

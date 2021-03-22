@@ -60,7 +60,7 @@ class LinearBucklingAnalysis: public StaticAnalysis
     int numModes;
     int linear_buckling_analysis_step; //!Step in which the linear buckling analysis is started.
   protected:
-    friend class ProcSolu;
+    friend class SolutionProcedure;
     LinearBucklingAnalysis(SolutionStrategy *analysis_aggregation,SolutionStrategy *eigen_solu);
     Analysis *getCopy(void) const;
   public:

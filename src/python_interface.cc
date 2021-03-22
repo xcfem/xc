@@ -80,7 +80,7 @@ BOOST_PYTHON_MODULE(xc)
 
     XC::Domain *(XC::FEProblem::*getDomainRef)(void)= &XC::FEProblem::getDomain;
     XC::Preprocessor &(XC::FEProblem::*getPreprocessorRef)(void)= &XC::FEProblem::getPreprocessor;
-    XC::ProcSolu &(XC::FEProblem::*getSoluProcRef)(void)= &XC::FEProblem::getSoluProc;
+    XC::SolutionProcedure &(XC::FEProblem::*getSoluProcRef)(void)= &XC::FEProblem::getSoluProc;
     class_<XC::FEProblem, bases<CommandEntity>, boost::noncopyable>("FEProblem")
       .def("getXCVersion",  make_function(&XC::FEProblem::getXCVersion,return_value_policy<copy_const_reference>()),"Return XC program version string.").staticmethod("getXCVersion")
       .def("getXCVersionShort",  make_function(&XC::FEProblem::getXCVersionShort,return_value_policy<copy_const_reference>()),"Return XC program (short) version string.").staticmethod("getXCVersionShort")

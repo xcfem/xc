@@ -78,7 +78,7 @@ class Subdomain;
 //! constructor ensures that a SubstructuringSolver is given for the Solver.
 class SubstructuringAnalysis: public DomainDecompositionAnalysis
   {
-    friend class ProcSolu;
+    friend class SolutionProcedure;
     SubstructuringAnalysis(Subdomain &theDomain,DomainSolver &theSolver,SolutionStrategy *s= nullptr);
     Analysis *getCopy(void) const;
   public:
