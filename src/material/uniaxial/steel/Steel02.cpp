@@ -149,7 +149,7 @@ XC::UniaxialMaterial *XC::Steel02::getCopy(void) const
   { return new Steel02(*this); }
 
 int XC::Steel02::setTrialStrain(double trialStrain, double strainRate)
-  {    
+  {
     const double Esh= b*E0;
     const double epsy= fy/E0;
 
@@ -163,12 +163,12 @@ int XC::Steel02::setTrialStrain(double trialStrain, double strainRate)
         eps= trialStrain;
     // modified C-P. Lamarche 2006
 
-    double deps= eps - epsP;
+    const double deps= eps - epsP;
 
     epsmax= epsmaxP;
     epsmin= epsminP;
     epspl= epsplP;
-    epss0= epss0P;  
+    epss0= epss0P;
     sigs0= sigs0P;
     epsr= epssrP;  
     sigr= sigsrP;  
@@ -207,7 +207,7 @@ int XC::Steel02::setTrialStrain(double trialStrain, double strainRate)
       }
     if(epss0 == 0.0) //Set epps0 after setup_parameters
       {
-        if(kon == 2 && deps<0.0)
+        if(kon == 2 && deps<=0.0)
 	  {
 	    const double d1= (epsmax - epsmin) / (2.0*(a2 * epsy));
 	    const double shft= 1.0 + a1 * pow(d1, 0.8);
@@ -215,7 +215,7 @@ int XC::Steel02::setTrialStrain(double trialStrain, double strainRate)
 	    sigs0= -fy * shft + Esh * (epss0 + epsy * shft);
 	    epspl= epsmin;
 	  }
-	else if(kon == 1 && deps>0.0)
+	else if(kon == 1 && deps>=0.0)
 	  {
 	    const double d1= (epsmax - epsmin) / (2.0*(a4 * epsy));
 	    const double shft= 1.0 + a3 * pow(d1, 0.8);
@@ -278,13 +278,15 @@ int XC::Steel02::setTrialStrain(double trialStrain, double strainRate)
     const double epsdif= (epss0-epsr);
     const double epsrat= (eps-epsr)/epsdif;
     const double dum1= 1.0 + pow(fabs(epsrat),R);
-    const double dum2= pow(dum1,(1/R));
+    const double dum2= pow(dum1,(1.0/R));
 
     sig= b*epsrat +(1.0-b)*epsrat/dum2;
     sig= sig*(sigs0-sigr)+sigr;
 
     e= b + (1.0-b)/(dum1*dum2);
-    e= e*(sigs0-sigr)/epsdif;
+    const double factor= (sigs0-sigr)/epsdif;
+    if(!std::isnan(factor))
+      e*= factor;
     return 0;
   }
 

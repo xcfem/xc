@@ -157,7 +157,9 @@ void XC::Material::update(void)
 //! @param incS: strain increment.
 void XC::Material::incrementInitialGeneralizedStrain(const Vector &incS)
   {
-    setInitialGeneralizedStrain(getInitialGeneralizedStrain()+incS);
+    Vector initStrain= getInitialGeneralizedStrain();
+    initStrain+= incS;
+    setInitialGeneralizedStrain(initStrain);
   }
 
 //! @brief zeroes initial generalized strain

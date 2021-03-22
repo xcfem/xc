@@ -491,9 +491,8 @@ int XC::Truss::addLoad(ElementalLoad *theLoad, double loadFactor)
           {
             const double &e1= trsLoad->E1()*loadFactor;
             const double &e2= trsLoad->E2()*loadFactor;
-            double ezero= theMaterial->getInitialStrain();
-            ezero+= (e2+e1)/2;
-            theMaterial->setInitialStrain(ezero);
+	    const double strainIncrement= (e2+e1)/2.0;
+            theMaterial->incrementInitialStrain(strainIncrement);
           }
         else
           {
@@ -806,17 +805,18 @@ double XC::Truss::getInitialStrain(void) const
     return theMaterial->getInitialStrain();
   }
 
+//! @brief Compute current strain (dL/L).
 double XC::Truss::computeCurrentStrain(void) const
   {
     // NOTE method will not be called if L == 0
 
     // determine the strain
-    const Vector &disp1 = theNodes[0]->getTrialDisp();
-    const Vector &disp2 = theNodes[1]->getTrialDisp();
-
+    const Vector &disp1= theNodes[0]->getTrialDisp();
+    const Vector &disp2= theNodes[1]->getTrialDisp();
+    
     double dLength = 0.0;
     for(int i = 0; i < getNumDIM(); i++)
-      dLength += (disp2(i)-disp1(i))*cosX[i];
+      { dLength+= (disp2(i)-disp1(i))*cosX[i]; }
 
     // this method should never be called with L == 0
     return dLength/L;
