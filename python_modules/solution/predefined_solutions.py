@@ -813,7 +813,8 @@ class PlainLinearNewmark(SolutionProcedure):
                                effects.
         :param reactionCheckTolerance: tolerance when checking reaction values.
         '''
-        self.setup()
+        if(not self.analysis):
+            self.setup()
         result= self.analysis.analyze(self.numSteps, self.timeStep)
         if(calculateNodalReactions and (result==0)):
             nodeHandler= self.feProblem.getPreprocessor.getNodeHandler
