@@ -174,14 +174,23 @@ class RectangularBasePlate(object):
         self.B= dct['B']
         self.offsetB= dct['offsetB']
         self.t= dct['t']
-        steelShapeClassName= dct['steelShapeClassName']+'()'
+        steelClassName= dct['steelClassName']+'()'
+        self.steel= eval(steelClassName)
+        self.steel.setFromDict(dct['steel'])
+        if dct['steelShapeClassName'] == "materials.astm_aisc.ASTM_materials.IShape":
+            shape = dct['steelShape']['shape']
+            bf = shape['b']
+            tf = shape['tf']
+            tw = shape['tw']
+            hw = shape['hi']
+            name = shape['name']
+            steelShapeClassName = f"{dct['steelShapeClassName']}({bf}, {tf}, {tw}, {hw}, steel=self.steel, name='{name}')"
+        else:
+            steelShapeClassName= dct['steelShapeClassName']+'()'
         self.steelShape= eval(steelShapeClassName)
         self.steelShape.setFromDict(dct['steelShape'])
         self.anchorGroup= ASTM_materials.AnchorGroup(steel= None, diameter= 0.0, positions= [])
         self.anchorGroup.setFromDict(dct['anchorGroup'])
-        steelClassName= dct['steelClassName']+'()'
-        self.steel= eval(steelClassName)
-        self.steel.setFromDict(dct['steel'])
         xyz= dct['origin']
         self.origin= geom.Pos3d(xyz[0],xyz[1],xyz[2])
         self.fc= dct['fc']
