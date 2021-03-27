@@ -96,7 +96,7 @@ std::string XC::CTestEnergyIncr::getStatusMsg(const int &flag) const
     retval+= getEnergyProductMessage();
     if(flag >= 4)
       {
-        retval+= '\n'+getDeltaXRNormsMessage() + '\n'+getDeltaXRMessage();
+        retval+= '\n'+getDeltaXRNormsMessage()+'\n'+getDeltaXRMessage();
       }
     return retval;
   }

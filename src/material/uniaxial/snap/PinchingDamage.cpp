@@ -214,52 +214,54 @@ XC::PinchingDamage::~PinchingDamage()
         if ( CapDamage != 0 ) delete CapDamage;
 }
 
-
+//! @brief Revert the material to its initial state.
 int XC::PinchingDamage::revertToStart()
-{
-        dyieldPos = fyieldPos / elstk;
-        dyieldNeg = fyieldNeg / elstk;
-        
-        double ekhard = elstk * alpha;
+  {
+    int retval= UniaxialMaterial::revertToStart();
+    dyieldPos = fyieldPos / elstk;
+    dyieldNeg = fyieldNeg / elstk;
 
-        double fPeakPos = fyieldPos + ekhard * ( capDispPos - dyieldPos );
-        double fPeakNeg = fyieldNeg + ekhard * ( capDispNeg - dyieldNeg );
-        
-        hsCommit[0] = 0.0;                        // d
-        hsCommit[1] = 0.0;                        // f
-        hsCommit[2] = elstk;                // ek
-        hsCommit[3] = elstk;                // ekunload
-        hsCommit[4] = elstk;                // ekexcurs
-        hsCommit[5] = 0.0;                        // Enrgtot
-        hsCommit[6] = 0.0;                        // Enrgc
-        hsCommit[7] = 0.0;                        // sp
-        hsCommit[8] = 0.0;                        // sn
-        hsCommit[9] = 0.0;                        // kon
-        hsCommit[10] = dyieldPos;        // dmax
-        hsCommit[11] = dyieldNeg;        // dmin
-        hsCommit[12] = fyieldPos;        // fyPos
-        hsCommit[13] = fyieldNeg;        // fyNeg
-        hsCommit[14] = capDispPos;        // cpPos
-        hsCommit[15] = capDispNeg;        // cpNeg
-        hsCommit[16] = fyieldPos;        // fmax
-        hsCommit[17] = fyieldNeg;        // fmin
-        hsCommit[18] = alpha;                // alphaPos
-        hsCommit[19] = alpha;                // alphaNeg
-        hsCommit[20] = -capSlope * elstk * capDispPos + fPeakPos;        // fCapRefPos
-        hsCommit[21] = -capSlope * elstk * capDispNeg + fPeakNeg;        // fCapRefNeg
-        hsCommit[22] = dyieldPos;        // dmaxDeg
-        hsCommit[23] = dyieldNeg;        // dminDeg
-        for( int i=0 ; i<24; i++) {
-                hsTrial[i]                = hsCommit[i];
-                hsLastCommit[i] = hsCommit[i];
-        }
-        if ( StrDamage != nullptr ) StrDamage->revertToStart();
-        if ( StfDamage != nullptr ) StfDamage->revertToStart();
-        if ( AccDamage != nullptr ) AccDamage->revertToStart();
-        if ( CapDamage != nullptr ) CapDamage->revertToStart();
-        
-        return 0;
-}
+    double ekhard = elstk * alpha;
+
+    double fPeakPos = fyieldPos + ekhard * ( capDispPos - dyieldPos );
+    double fPeakNeg = fyieldNeg + ekhard * ( capDispNeg - dyieldNeg );
+
+    hsCommit[0] = 0.0;                        // d
+    hsCommit[1] = 0.0;                        // f
+    hsCommit[2] = elstk;                // ek
+    hsCommit[3] = elstk;                // ekunload
+    hsCommit[4] = elstk;                // ekexcurs
+    hsCommit[5] = 0.0;                        // Enrgtot
+    hsCommit[6] = 0.0;                        // Enrgc
+    hsCommit[7] = 0.0;                        // sp
+    hsCommit[8] = 0.0;                        // sn
+    hsCommit[9] = 0.0;                        // kon
+    hsCommit[10] = dyieldPos;        // dmax
+    hsCommit[11] = dyieldNeg;        // dmin
+    hsCommit[12] = fyieldPos;        // fyPos
+    hsCommit[13] = fyieldNeg;        // fyNeg
+    hsCommit[14] = capDispPos;        // cpPos
+    hsCommit[15] = capDispNeg;        // cpNeg
+    hsCommit[16] = fyieldPos;        // fmax
+    hsCommit[17] = fyieldNeg;        // fmin
+    hsCommit[18] = alpha;                // alphaPos
+    hsCommit[19] = alpha;                // alphaNeg
+    hsCommit[20] = -capSlope * elstk * capDispPos + fPeakPos;        // fCapRefPos
+    hsCommit[21] = -capSlope * elstk * capDispNeg + fPeakNeg;        // fCapRefNeg
+    hsCommit[22] = dyieldPos;        // dmaxDeg
+    hsCommit[23] = dyieldNeg;        // dminDeg
+    for( int i=0 ; i<24; i++)
+      {
+	hsTrial[i]= hsCommit[i];
+	hsLastCommit[i]= hsCommit[i];
+      }
+    if ( StrDamage != nullptr ) StrDamage->revertToStart();
+    if ( StfDamage != nullptr ) StfDamage->revertToStart();
+    if ( AccDamage != nullptr ) AccDamage->revertToStart();
+    if ( CapDamage != nullptr ) CapDamage->revertToStart();
+
+    return retval;
+  }
 
 
 void XC::PinchingDamage::Print(std::ostream &s, int flag) const

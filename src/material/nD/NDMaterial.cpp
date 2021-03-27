@@ -224,12 +224,26 @@ const XC::Vector &XC::NDMaterial::getInitialGeneralizedStrain(void) const
   }
 
 //! @brief Set initial strain value.
+//! @param strain: strain value.
 int XC::NDMaterial::setInitialStrain(const Vector &v)
   {
     std::cerr << getClassName() << "::" << __FUNCTION__
               << "; subclass responsibility.\n";
     return -1;    
   }
+
+//! @brief Increments initial strain.
+//! @param strainIncrement: value of the strain increment.
+int XC::NDMaterial::incrementInitialStrain(const Vector &)
+  {
+    std::cerr << getClassName() << "::" << __FUNCTION__
+              << "; subclass responsibility.\n";
+    return -1;
+  }
+
+//! @brief Zeroes the initial strain.
+void XC::NDMaterial::zeroInitialStrain(void)
+  {}
 
 //! @brief Return the value of the initial strain.
 const XC::Vector &XC::NDMaterial::getInitialStrain(void) const
@@ -300,6 +314,7 @@ const XC::Tensor &XC::NDMaterial::getTangentTensor(void) const
     static Tensor errTensor;    
     return errTensor;    
   }
+
 XC::Response* XC::NDMaterial::setResponse(const std::vector<std::string> &argv, Information &matInfo)
   {
     if(argv[0] == "stress" || argv[0] == "stresses")
@@ -349,6 +364,13 @@ XC::Matrix XC::NDMaterial::getValues(const std::string &cod, bool silent) const
     else
       retval= Material::getValues(cod, silent);
     return retval;
+  }
+
+//! @brief Revert the material to its initial state.
+int XC::NDMaterial::revertToStart(void)
+  {
+    zeroInitialStrain();
+    return 0;
   }
 
 //! @brief Send object members through the communicator argument.

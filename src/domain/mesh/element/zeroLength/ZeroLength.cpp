@@ -372,16 +372,26 @@ int XC::ZeroLength::commitState(void)
 //! Revert state of element to last commit by reverting to last committed
 //! state of materials. Return 0 if successful, !0 otherwise.
 int XC::ZeroLength::revertToLastCommit(void)
-  { return theMaterial1d.revertToLastCommit(); }
+  {
+    // DON'T call Element::revertToLastCommit() because
+    // is a pure virtual method.
+    // int retval= Element0D::revertToLastCommit();
+    int retval= theMaterial1d.revertToLastCommit();
+    return retval;
+  }
 
 //! Revert state of element to initial.
 //! 
 //! Revert state of element to initial state by reverting to initial state
 //! its materials. Return 0 if successful, !0 otherwise.
 int XC::ZeroLength::revertToStart(void)
-  { return theMaterial1d.revertToStart(); }
+  {
+    int retval= Element0D::revertToStart();
+    retval= theMaterial1d.revertToStart();
+    return retval;
+  }
 
-
+//! @brief Update element state.
 int XC::ZeroLength::update(void)
   {
     // get trial displacements and take difference

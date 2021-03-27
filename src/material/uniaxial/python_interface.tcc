@@ -23,7 +23,9 @@
 
 class_<XC::UniaxialMaterial,XC::UniaxialMaterial *, bases<XC::Material>, boost::noncopyable >("UniaxialMaterial", no_init)
   .add_property("rho", &XC::UniaxialMaterial::getRho, &XC::UniaxialMaterial::setRho,"Material density.")
-  .add_property("initialStrain", &XC::UniaxialMaterial::getInitialStrain, &XC::UniaxialMaterial::setInitialStrain)
+  .add_property("initialStrain", &XC::UniaxialMaterial::getInitialStrain, &XC::UniaxialMaterial::setInitialStrain,"Value of the initial strain.")
+  .def("incrementInitialStrain", &XC::UniaxialMaterial::incrementInitialStrain, "Increments initial strain.")
+  .def("zeroInitialStrain", &XC::UniaxialMaterial::zeroInitialStrain, "Zeroes initial strain.")
   .def("setTrialStrain", &XC::UniaxialMaterial::setTrialStrain,"Assigns trial strain.")
   .def("getStrain", &XC::UniaxialMaterial::getStrain,"Returns material strain.")
   .def("getStress", &XC::UniaxialMaterial::getStress,"Returns material stress.")

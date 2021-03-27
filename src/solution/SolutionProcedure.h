@@ -25,13 +25,13 @@
 // along with this program.
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
-//ProcSolu.h
+//SolutionProcedure.h
 
 #ifndef PROCSOLU_H
 #define PROCSOLU_H
 
 #include "xc_utils/src/kernel/CommandEntity.h"
-#include "ProcSoluControl.h"
+#include "SolutionProcedureControl.h"
 
 
 namespace XC {
@@ -46,7 +46,6 @@ class FEProblem;
 
 //!  @defgroup Solu Solution of the finite element analysis problem.
 
-//!  @ingroup Solu
 //! 
 //! @brief Solution procedure for the finite element problem.
 //!
@@ -54,10 +53,11 @@ class FEProblem;
 //! specifying:.
 //! - The type of analysis: static, dynamic, eigenvalues,...
 //! - The parameters that control the solution procedure.
-class ProcSolu: public CommandEntity
+//!  @ingroup Solu
+class SolutionProcedure: public CommandEntity
   {
   private:
-    ProcSoluControl solu_control;//!< Control of the solution procedure.
+    SolutionProcedureControl solu_control;//!< Control of the solution procedure.
     Analysis *theAnalysis; //! Analysis type (static, dynamic, eigenvalues,...).
   protected:
     friend class FEProblem;
@@ -72,11 +72,11 @@ class ProcSolu: public CommandEntity
     FEProblem *getFEProblem(void);
     const FEProblem *getFEProblem(void) const;
 
-    ProcSolu(FEProblem *owr);
-    ProcSolu(const ProcSolu &);
-    ProcSolu &operator=(const ProcSolu &);
+    SolutionProcedure(FEProblem *owr);
+    SolutionProcedure(const SolutionProcedure &);
+    SolutionProcedure &operator=(const SolutionProcedure &);
   public:
-    ~ProcSolu(void);
+    ~SolutionProcedure(void);
     void clearAll(void);
 
     Domain *getDomainPtr(void);
@@ -87,8 +87,8 @@ class ProcSolu: public CommandEntity
     DomainSolver *getDomainSolverPtr(void);
     const Subdomain *getSubdomainPtr(void) const;
     Subdomain *getSubdomainPtr(void);
-    ProcSoluControl &getSoluControl(void);
-    const ProcSoluControl &getSoluControl(void) const;
+    SolutionProcedureControl &getSoluControl(void);
+    const SolutionProcedureControl &getSoluControl(void) const;
     Analysis *getAnalysisPtr(void);
     const Analysis *getAnalysisPtr(void) const;
     Analysis &getAnalysis(void);

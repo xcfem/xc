@@ -208,9 +208,10 @@ int XC::EPPGapMaterial::revertToLastCommit(void)
     return 0;
   }
 
-
+//! @brief Revert the material to its initial state.
 int XC::EPPGapMaterial::revertToStart(void)
   {
+    int retval= EPPBaseMaterial::revertToStart();
     commitStrain= 0.0;
     trialStrain= 0.0;
     maxElasticYieldStrain = fy/E+gap;
@@ -223,7 +224,7 @@ int XC::EPPGapMaterial::revertToStart(void)
       SHVs.Zero();
 // AddingSensitivity:END //////////////////////////////////
 
-    return 0;
+    return retval;
   }
 
 

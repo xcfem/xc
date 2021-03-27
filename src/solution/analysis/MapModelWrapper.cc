@@ -28,7 +28,7 @@
 
 #include "MapModelWrapper.h"
 #include "domain/domain/Domain.h"
-#include "solution/ProcSolu.h"
+#include "solution/SolutionProcedure.h"
 
 #include "solution/analysis/ModelWrapper.h"
 
@@ -36,7 +36,7 @@
 
 
 //! @brief Default constructor.
-XC::MapModelWrapper::MapModelWrapper(ProcSoluControl *owr)
+XC::MapModelWrapper::MapModelWrapper(SolutionProcedureControl *owr)
   : CommandEntity(owr) {}
 
 //! @brief Return true if the method whose name is

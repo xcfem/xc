@@ -89,7 +89,7 @@ XC::Matrix XC::J2PlaneStress::tangent_matrix(3,3);
 
 //! @brief Default constructor.
 XC::J2PlaneStress::J2PlaneStress(int tag)
-  : XC::J2Plasticity(tag, ND_TAG_J2PlaneStress) 
+  : J2Plasticity(tag, ND_TAG_J2PlaneStress) 
   {}
 
 //! @brief full constructor
@@ -100,8 +100,8 @@ XC::J2PlaneStress::J2PlaneStress(int tag)
                  double yield_infty,
                  double d,
                  double H,
-                 double viscosity ) : 
- XC::J2Plasticity(tag, ND_TAG_J2PlaneStress, 
+                 double viscosity )
+   : J2Plasticity(tag, ND_TAG_J2PlaneStress, 
              K, G, yield0, yield_infty, d, H, viscosity )
 { 
 
@@ -312,12 +312,13 @@ int XC::J2PlaneStress::revertToLastCommit( )
    return 0;
   }
 
-
+//! @brief Revert the material to its initial state.
 int XC::J2PlaneStress::revertToStart( )
   {
+    int retval= J2Plasticity::revertToStart();
     commitEps22= 0.0;
     this->zero( );
-    return 0;
+    return retval;
   }
 
 //! @brief ! @brief Send object members through the communicator argument.

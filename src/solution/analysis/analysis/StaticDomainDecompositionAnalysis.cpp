@@ -126,7 +126,8 @@ int XC::StaticDomainDecompositionAnalysis::analyze(double dT)
         result = this->domainChanged();
         if(result < 0)
           {
-            std::cerr << "StaticDomainDecompositionAnalysis::analyze() - domainChanged failed";
+            std::cerr << getClassName() << "::" << __FUNCTION__
+                      << "; domainChanged failed";
             return -1;
           }
       }
@@ -134,9 +135,11 @@ int XC::StaticDomainDecompositionAnalysis::analyze(double dT)
     // result =newStepDomain(theAnalysisModel);
     if(result < 0)
       {
-        std::cerr << "StaticDomainDecompositionAnalysis::analyze() - the XC::AnalysisModel failed";
-        std::cerr << " with domain at load factor ";
-        std::cerr << the_Domain->getTimeTracker().getCurrentTime() << std::endl;
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; the AnalysisModel failed"
+		  << " with domain at load factor "
+		  << the_Domain->getTimeTracker().getCurrentTime()
+		  << std::endl;
         the_Domain->revertToLastCommit();
     
         return -2;
@@ -147,9 +150,11 @@ int XC::StaticDomainDecompositionAnalysis::analyze(double dT)
     result = getStaticIntegratorPtr()->newStep();
     if(result < 0)
       {
-        std::cerr << "XC::StaticDomainDecompositionAnalysis::analyze() - the Integrator failed";
-        std::cerr << " with domain at load factor ";
-        std::cerr << the_Domain->getTimeTracker().getCurrentTime() << std::endl;
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; the Integrator failed"
+		  << " with domain at load factor "
+		  << the_Domain->getTimeTracker().getCurrentTime()
+		  << std::endl;
         the_Domain->revertToLastCommit();
     
         return -2;
@@ -158,9 +163,11 @@ int XC::StaticDomainDecompositionAnalysis::analyze(double dT)
     result = getEquiSolutionAlgorithmPtr()->solveCurrentStep();
     if(result < 0)
       {
-        std::cerr << "XC::StaticDomainDecompositionAnalysis::analyze() - the Algorithm failed";
-        std::cerr << " with domain at load factor ";
-        std::cerr << the_Domain->getTimeTracker().getCurrentTime() << std::endl;
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << ";  the Algorithm failed"
+		  << " with domain at load factor "
+		  << the_Domain->getTimeTracker().getCurrentTime()
+		  << std::endl;
         the_Domain->revertToLastCommit();	    
         getStaticIntegratorPtr()->revertToLastStep();
     
@@ -172,10 +179,11 @@ int XC::StaticDomainDecompositionAnalysis::analyze(double dT)
     result = getStaticIntegratorPtr()->commit();
     if(result < 0)
       {
-        std::cerr << "XC::StaticDomainDecompositionAnalysis::analyze() - ";
-        std::cerr << "the Integrator failed to commit";
-        std::cerr << " with domain at load factor ";
-        std::cerr << the_Domain->getTimeTracker().getCurrentTime() << std::endl;
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "- the Integrator failed to commit"
+		  << " with domain at load factor "
+		  << the_Domain->getTimeTracker().getCurrentTime()
+		  << std::endl;
         the_Domain->revertToLastCommit();	    
         getStaticIntegratorPtr()->revertToLastStep();
     

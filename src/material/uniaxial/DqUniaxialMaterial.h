@@ -87,8 +87,9 @@ class DqUniaxialMaterial: public CommandEntity, public MovableObject, public std
     int revertToLastCommit(void);    
     int revertToStart(void);
 
-    int zeroInitialStrain(void);
-    int setInitialStrain(const Vector &def,const size_t &offset);
+    int setInitialStrain(const Vector &,const size_t &offset);
+    int incrementInitialStrain(const Vector &,const size_t &offset);
+    void zeroInitialStrain(void);
     int setTrialStrain(const Vector &def,const size_t &offset);
     int setTrialStrain(const double &strain,const double &strainRate);
     void getStrain(Vector &,const size_t &offset) const;

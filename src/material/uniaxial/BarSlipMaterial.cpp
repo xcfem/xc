@@ -817,6 +817,7 @@ int XC::BarSlipMaterial::revertToLastCommit(void)
 
 int XC::BarSlipMaterial::revertToStart(void)
   {
+    int retval= UniaxialMaterial::revertToStart();
     Cstate = 0;
     Cstrain = 0.0;
     Cstress = 0.0;
@@ -842,7 +843,7 @@ int XC::BarSlipMaterial::revertToStart(void)
     uMaxDamgd = CmaxStrainDmnd;
     uMinDamgd = CminStrainDmnd;
 
-    return 0;
+    return retval;
   }
 
 void XC::BarSlipMaterial::getstate(double u,double du)

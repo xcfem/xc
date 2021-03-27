@@ -28,7 +28,7 @@
 
 #include "SolutionStrategyMap.h"
 #include "domain/domain/Domain.h"
-#include "ProcSolu.h"
+#include "SolutionProcedure.h"
 
 #include "solution/analysis/ModelWrapper.h"
 #include "solution/SolutionStrategy.h"
@@ -37,7 +37,7 @@
 
 
 //! @brief Default constructor.
-XC::SolutionStrategyMap::SolutionStrategyMap(ProcSoluControl *owr)
+XC::SolutionStrategyMap::SolutionStrategyMap(SolutionProcedureControl *owr)
   : CommandEntity(owr) {}
 
 //! @brief Return true if the solution method exists
@@ -74,15 +74,18 @@ XC::SolutionStrategy &XC::SolutionStrategyMap::createSolutionStrategy(const std:
     SolutionStrategy *retval= nullptr;
     if(SolutionStrategyExists(cod))
       retval= getSolutionStrategy(cod);
-    else 
-      retval= &(solu_methods[cod]= SolutionStrategy(nullptr,sm));
+    else
+      {
+        retval= &(solu_methods[cod]= SolutionStrategy(nullptr,sm));
+	retval->set_owner(this);
+      }
     return *retval;
   }
 
 //! @brief Creates a new solution method with the code being passed as parameter.
 XC::SolutionStrategy &XC::SolutionStrategyMap::newSolutionStrategy(const std::string &cod_solu_method,const std::string &cod_solu_model)
   {
-    ProcSoluControl *sc= dynamic_cast<ProcSoluControl *>(Owner());
+    SolutionProcedureControl *sc= dynamic_cast<SolutionProcedureControl *>(Owner());
     ModelWrapper *mdl= sc->getModelWrapper(cod_solu_model);
     SolutionStrategy &retval= createSolutionStrategy(cod_solu_method,mdl);
     return retval;

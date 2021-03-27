@@ -118,7 +118,9 @@ class NDMaterial: public Material
     virtual double getpsi(void) const;
 
 
-    virtual int setInitialStrain(const Vector &v);
+    virtual int setInitialStrain(const Vector &);
+    int incrementInitialStrain(const Vector &);
+    void zeroInitialStrain(void);
     virtual const Vector &getInitialStrain(void) const;
     virtual int setTrialStrain(const Vector &v);
     virtual int setTrialStrain(const Vector &v, const Vector &r);
@@ -163,6 +165,8 @@ class NDMaterial: public Material
     Matrix getValues(const std::string &, bool silent= false) const;
     virtual Response *setResponse(const std::vector<std::string> &argv, Information &matInformation);
     virtual int getResponse (int responseID, Information &matInformation);
+
+    int revertToStart(void);    
 
 // AddingSensitivity:BEGIN //////////////////////////////////////////
     virtual int setParameter(const std::vector<std::string> &argv, Parameter &param);

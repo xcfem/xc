@@ -120,8 +120,9 @@ int XC::ViscousMaterial::revertToLastCommit(void)
 
 int XC::ViscousMaterial::revertToStart(void)
   {
+    int retval= UniaxialMaterial::revertToStart();
     trialRate = 0.0;
-    return 0;
+    return retval;
   }
 
 XC::UniaxialMaterial *XC::ViscousMaterial::getCopy(void) const

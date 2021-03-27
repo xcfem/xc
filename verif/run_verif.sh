@@ -410,6 +410,8 @@ python tests/loads/truss_strain_load_01.py
 python tests/loads/truss_strain_load_02.py
 python tests/loads/truss_strain_load_03.py
 python tests/loads/truss_strain_load_04.py
+python tests/loads/truss_strain_load_05.py
+python tests/loads/truss_strain_load_06.py
 python tests/loads/beam_strain_load_01.py
 python tests/loads/beam_strain_load_02.py
 python tests/loads/beam_strain_load_03.py
@@ -480,7 +482,7 @@ python tests/materials/xc_materials/uniaxial/test_cable_material04.py
 python tests/materials/xc_materials/uniaxial/test_cable_material05.py
 python tests/materials/xc_materials/uniaxial/test_cable_material06.py
 python tests/materials/xc_materials/uniaxial/test_cable_material07.py
-python tests/materials/xc_materials/uniaxial/test_material_elast_no_traccion.py
+python tests/materials/xc_materials/uniaxial/test_elast_no-tension_material.py
 echo "$BLEU" "      PY materials." "$NORMAL"
 python tests/materials/xc_materials/uniaxial/py_simple1_test.py
 #nD Materials
@@ -728,6 +730,11 @@ python tests/materials/prestressing/test_short_term_loss_prestress_01.py
 python tests/materials/prestressing/test_short_term_loss_prestress_02.py
 python tests/materials/prestressing/test_strand_data_01.py
 python tests/materials/prestressing/test_straight_pre_tension_strand.py
+python tests/materials/prestressing/test_prestressing_01.py
+python tests/materials/prestressing/test_prestressing_02.py
+python tests/materials/prestressing/test_prestressing_03.py
+python tests/materials/prestressing/test_prestressing_04.py
+python tests/materials/prestressing/test_prestressing_05.py
 
 echo "$BLEU" "  EOTA TR-29." "$NORMAL"
 python tests/materials/eota_tr_29/test_anchor_bolt01.py
@@ -738,7 +745,7 @@ python tests/materials/test_elastomeric_bearing_stiffness.py
 
 #Database tests
 echo "$BLEU" "Database tests (MySQL, Berkeley db, sqlite,...)." "$NORMAL"
-# XXX sqlitepp is toooooo slooooow. Seek another solution.
+# XXX sqlitepp is toooooo slooooow. Seek for another solution.
 # python tests/database/test_database_01.py
 # python tests/database/test_database_02.py
 # python tests/database/test_database_03.py

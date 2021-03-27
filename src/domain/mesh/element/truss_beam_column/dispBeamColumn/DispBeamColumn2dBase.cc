@@ -228,9 +228,9 @@ int XC::DispBeamColumn2dBase::commitState()
 //! @brief Revert the state of the element to the last committed one.
 int XC::DispBeamColumn2dBase::revertToLastCommit()
   {
-    int retVal = 0;
+    int retVal= BeamColumnWithSectionFDTrf2d::revertToLastCommit();
 
-  const size_t numSections= getNumSections();
+    const size_t numSections= getNumSections();
     // Loop over the integration points and revert to last committed state
     for(size_t i = 0; i < numSections; i++)
          retVal += theSections[i]->revertToLastCommit();
@@ -240,11 +240,12 @@ int XC::DispBeamColumn2dBase::revertToLastCommit()
     return retVal;
   }
 
+//! @brief Revert the element to its initial state.
 int XC::DispBeamColumn2dBase::revertToStart()
-{
-    int retVal = 0;
+  {
+    int retVal= BeamColumnWithSectionFDTrf2d::revertToStart();
 
-  const size_t numSections= getNumSections();
+    const size_t numSections= getNumSections();
     // Loop over the integration points and revert states to start
     for(size_t i= 0;i<numSections; i++)
       retVal += theSections[i]->revertToStart();
@@ -252,7 +253,7 @@ int XC::DispBeamColumn2dBase::revertToStart()
     retVal += theCoordTransf->revertToStart();
 
     return retVal;
-}
+  }
 
 
 const XC::Matrix&XC::DispBeamColumn2dBase::getMass(void) const

@@ -45,7 +45,7 @@ class LinearBucklingEigenAnalysis: public EigenAnalysis
   {
   protected:
 
-    friend class ProcSolu;
+    friend class SolutionProcedure;
     friend class LinearBucklingAnalysis;
     LinearBucklingEigenAnalysis(SolutionStrategy *analysis_aggregation);
     Analysis *getCopy(void) const;

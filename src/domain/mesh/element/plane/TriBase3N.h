@@ -188,7 +188,7 @@ int XC::TriBase3N<PhysProp>::addLoad(ElementalLoad *theLoad, double loadFactor)
             initStrains= strainLoad->getStrains();
             for(std::vector<Vector>::iterator i= initStrains.begin();i!=initStrains.end();i++)
               (*i)*= loadFactor;
-            this->physicalProperties.getMaterialsVector().addInitialGeneralizedStrains(initStrains);
+            this->physicalProperties.getMaterialsVector().incrementInitialGeneralizedStrains(initStrains);
           }
         else
           {

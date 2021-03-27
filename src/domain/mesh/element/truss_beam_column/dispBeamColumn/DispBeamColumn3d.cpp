@@ -192,7 +192,7 @@ int XC::DispBeamColumn3d::commitState(void)
 
 int XC::DispBeamColumn3d::revertToLastCommit(void)
   {
-    int retVal = 0;
+    int retVal= BeamColumnWithSectionFDTrf3d::revertToLastCommit();
 
     // Loop over the integration points and revert to last committed state
   const size_t numSections= getNumSections();
@@ -204,7 +204,7 @@ int XC::DispBeamColumn3d::revertToLastCommit(void)
 
 int XC::DispBeamColumn3d::revertToStart(void)
   {
-    int retVal = 0;
+    int retVal= BeamColumnWithSectionFDTrf3d::revertToStart();
 
     // Loop over the integration points and revert states to start
     const size_t numSections= getNumSections();

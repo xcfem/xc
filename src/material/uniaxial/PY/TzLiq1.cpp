@@ -232,7 +232,7 @@ XC::TzLiq1::revertToLastCommit(void)
 {
         // reset to committed values
     //
-        XC::TzSimple1::revertToLastCommit();
+        TzSimple1::revertToLastCommit();
         Tz = Cz;
         Tt = Ct;
         Hru= Cru;
@@ -240,32 +240,32 @@ XC::TzLiq1::revertToLastCommit(void)
         return 0;
 }
 
-/////////////////////////////////////////////////////////////////////
-int 
-XC::TzLiq1::revertToStart(void)
-{
-        // Call the XC::TzSimple1 base function to take care of most details.
-        //
-        XC::TzSimple1::revertToStart();
-        Tz = 0.0;
-        Tt = 0.0;
-        maxTangent = (matCapacity/v50);
+//! @brief Revert the material to its initial state.
+int XC::TzLiq1::revertToStart(void)
+  {
+    int retval= TzSimple1::revertToStart();
+    // Call the XC::TzSimple1 base function to take care of most details.
+    //
+    XC::TzSimple1::revertToStart();
+    Tz = 0.0;
+    Tt = 0.0;
+    maxTangent = (matCapacity/v50);
 
-        // Excess pore pressure ratio and pointers
-        //
-        Tru = 0.0;
-        Hru = 0.0;
-        meanConsolStress = -matCapacity;
-        lastLoadStage = 0;
-        loadStage = 0;
-        elemFlag.assign("NONE");
+    // Excess pore pressure ratio and pointers
+    //
+    Tru = 0.0;
+    Hru = 0.0;
+    meanConsolStress = -matCapacity;
+    lastLoadStage = 0;
+    loadStage = 0;
+    elemFlag.assign("NONE");
 
-        // Now get all the committed variables initiated
-        //
-        commitState();
+    // Now get all the committed variables initiated
+    //
+    commitState();
 
-    return 0;
-}
+    return retval;
+  }
 
 /////////////////////////////////////////////////////////////////////
 double 

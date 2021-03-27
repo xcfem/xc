@@ -41,7 +41,7 @@
 #include "solution/analysis/integrator/eigen/LinearBucklingIntegrator.h"
 #include "domain/domain/Domain.h"
 #include "solution/SolutionStrategy.h"
-#include "solution/ProcSolu.h"
+#include "solution/SolutionProcedure.h"
 
 
 //! @brief Constructor.
@@ -70,7 +70,7 @@ int XC::LinearBucklingAnalysis::analyze(int numSteps)
     assert(eigen_solu);
     CommandEntity *oldE= eigen_solu->Owner();
     eigen_solu->set_owner(this);
-    linearBucklingEigenAnalysis.set_owner(getProcSolu());
+    linearBucklingEigenAnalysis.set_owner(getSolutionProcedure());
 
     int result = 0;
 

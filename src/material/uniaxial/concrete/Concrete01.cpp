@@ -356,9 +356,10 @@ int XC::Concrete01::revertToLastCommit(void)
     return 0;
   }
 
-//! @brief Returns to the initial state.
+//! @brief Returns the material to its initial state.
 int XC::Concrete01::revertToStart(void)
   {
+    int retval= ConcreteBase::revertToStart();
     const double Ec0= 2.0*fpc/epsc0;
     convergedHistory.revertToStart(Ec0); // History variables
     convergedState.revertToStart(Ec0);// State variables
@@ -366,7 +367,7 @@ int XC::Concrete01::revertToStart(void)
     // Reset trial variables and state
     revertToLastCommit();
 
-    return 0;
+    return retval;
   }
 
 //! @brief Returns a material copy.

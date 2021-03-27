@@ -112,7 +112,7 @@ int XC::NewUniaxialMaterial::revertToLastCommit(void)
 
 //! @brief Returns the material to its initial state.
 int XC::NewUniaxialMaterial::revertToStart(void)
-  { return 0; }
+  { return UniaxialMaterial::revertToStart(); }
 
 //! @brief Virtual constructor.
 XC::UniaxialMaterial *XC::NewUniaxialMaterial::getCopy(void) const

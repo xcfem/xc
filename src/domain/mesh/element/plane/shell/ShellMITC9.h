@@ -87,9 +87,6 @@ class ShellMITC9: public QuadBase9N<SectionFDPhysicalProperties>
 
     void setDomain(Domain *theDomain);
 
-    int revertToLastCommit(void);
-    int revertToStart(void);
-
     //print out element data
     void Print(std::ostream &, int flag) const;
 	

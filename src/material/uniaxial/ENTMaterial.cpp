@@ -107,7 +107,7 @@ int XC::ENTMaterial::revertToLastCommit(void)
   { return 0; }
 
 int XC::ENTMaterial::revertToStart(void)
-  { return 0; }
+  { return ElasticBaseMaterial::revertToStart(); }
 
 XC::UniaxialMaterial *XC::ENTMaterial::getCopy(void) const
   { return new ENTMaterial(*this); }

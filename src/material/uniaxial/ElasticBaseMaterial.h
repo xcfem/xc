@@ -41,12 +41,12 @@ class ElasticBaseMaterial: public UniaxialMaterial
   protected:
     double trialStrain; //! Material trial strain.
     double E; //!< Elastic modulus.
-    double ezero; //!< Initial deformation.
+    double ezero; //!< Initial strain.
   protected:
     int sendData(Communicator &);
     int recvData(const Communicator &);
 
-    inline virtual double def_total(void) const { return trialStrain-ezero; }
+    inline virtual double get_total_strain(void) const { return trialStrain-ezero; }
   public:
     ElasticBaseMaterial(int tag= 0, int classtag= 0, double E= 0.0, double e0= 0.0);    
 
@@ -57,7 +57,9 @@ class ElasticBaseMaterial: public UniaxialMaterial
 
     int revertToStart(void);
     
-    int setInitialStrain(double strain);
+    int setInitialStrain(const double &);
+    int incrementInitialStrain(const double &);
+    void zeroInitialStrain(void);
     inline double getStrain(void) const
       { return trialStrain; }
     inline double getInitialStrain(void) const

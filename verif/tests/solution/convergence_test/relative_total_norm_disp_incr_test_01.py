@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-''' Controls that SuperLU solver doesn't fails when
-    called for analysis of consecutive load patterns.'''
+''' Controls that the relative total norm displacement increment
+    doesn't crash when when the relative increment is almost zero.'''
 
 from __future__ import print_function
 from __future__ import division
@@ -64,8 +64,8 @@ lp1.newNodalLoad(nod2.tag,xc.Vector([0,F/2.0,0]))
 modelSpace.addLoadCaseToDomain(lp1.name)
 
 # Solution procedure
-#analysis= predefined_solutions.plain_static_modified_newton(test)
 solProc= predefined_solutions.PenaltyModifiedNewton(test, maxNumIter= 10, convergenceTestTol= 1e-2, printFlag= 0)
+solProc.setup()
 modelSpace.analysis= solProc.analysis
 
 

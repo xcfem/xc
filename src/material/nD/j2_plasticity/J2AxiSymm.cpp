@@ -86,7 +86,7 @@ XC::Matrix XC::J2AxiSymm::tangent_matrix(4,4);
 
 //! @brief Default constructor
 XC::J2AxiSymm::J2AxiSymm(int tag)
-  : XC::J2Plasticity(tag, ND_TAG_J2AxiSymm)
+  : J2Plasticity(tag, ND_TAG_J2AxiSymm)
   {}
 
 //! @brief full constructor
@@ -103,7 +103,7 @@ XC::J2AxiSymm::J2AxiSymm(   int    tag,
 
 //! @brief elastic constructor
 XC::J2AxiSymm::J2AxiSymm(int tag, double K, double G )
-  : XC::J2Plasticity( tag, ND_TAG_J2AxiSymm, K, G )
+  : J2Plasticity( tag, ND_TAG_J2AxiSymm, K, G )
   {}
 
 //! @brief make a clone of this material
@@ -257,11 +257,12 @@ int XC::J2AxiSymm::revertToLastCommit( )
   return 0;
 } 
 
-//! @brief revert to start
+//! @brief Revert the material to its initial state.
 int XC::J2AxiSymm::revertToStart( ) 
-  {  
+  { 
+    int retval= J2Plasticity::revertToStart();
     this->zero( );
-    return 0;
+    return retval;
   }
 
 //! @brief Send object members through the communicator argument.

@@ -206,7 +206,7 @@ int XC::BeamWithHinges2d::commitState(void)
 //! the result of these invocations.
 int XC::BeamWithHinges2d::revertToLastCommit(void)
   {
-    int err = 0;
+    int err = BeamColumnWithSectionFDTrf2d::revertToLastCommit();
 
     // Revert the sections and then get their last committed
     // deformations, stress resultants, and flexibilities
@@ -238,7 +238,7 @@ int XC::BeamWithHinges2d::revertToLastCommit(void)
 //! result of these invocations.
 int XC::BeamWithHinges2d::revertToStart(void)
   {
-    int err = 0;
+    int err= BeamColumnWithSectionFDTrf2d::revertToStart();
 
     for(int i = 0; i < 2; i++)
       {

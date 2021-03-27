@@ -704,6 +704,15 @@ class Concrete(matWDKD.MaterialWithDKDiagrams):
         materialModelName= self.materialName + 'ElasticMaterialData'
         return typical_materials.MaterialData(name= materialModelName,E=self.getEcm(),nu=self.nuc,rho=self.density())
 
+    def defElasticMaterial(self, preprocessor, name= None):
+        '''Constructs an elastic uniaxial material appropiate 
+         for analysis of trusses.
+
+         :param preprocessor: preprocessor object.
+        '''
+        if(name==None):
+            name= self.materialName+'_uniaxial'
+        return typical_materials.defElasticMaterial(preprocessor, name, E= self.getEcm())
         
     def defElasticSection2d(self, preprocessor, sectionProperties):
         '''Constructs an elastic section material appropiate 

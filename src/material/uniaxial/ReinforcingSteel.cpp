@@ -330,67 +330,70 @@ int XC::ReinforcingSteel::revertToLastCommit(void)
     return 0;
   }
 
+//! @brief Revert the material to its initial state.
 int XC::ReinforcingSteel::revertToStart(void)
-{
-  theBarFailed= 0;
+  {
+    int retval= UniaxialMaterial::revertToStart();
+    theBarFailed= 0;
 
-  THardFact= 1.0;
-  CHardFact= 1.0;
-  updateHardeningLoactionParams();
+    THardFact= 1.0;
+    CHardFact= 1.0;
+    updateHardeningLoactionParams();
 
-  CFatDamage= TFatDamage;
-  for(int i=0; i<vSize; i++) {
-    C_ePlastic[i]= 0.0;
-    T_ePlastic[i]= 0.0;
-          CR[i]= 0.0;
-          Cfch[i]= 0.0;
-          CQ[i]= 0.0;
-          CEsec[i]= 0.0;
-          Cea[i]= 0.0;
-          Cfa[i]= 0.0;
-          CEa[i]= 0.0;
-          Ceb[i]= 0.0;
-          Cfb[i]= 0.0;
-          CEb[i]= 0.0;
+    CFatDamage= TFatDamage;
+    for(int i=0; i<vSize; i++)
+      {
+        C_ePlastic[i]= 0.0;
+        T_ePlastic[i]= 0.0;
+	CR[i]= 0.0;
+	Cfch[i]= 0.0;
+	CQ[i]= 0.0;
+	CEsec[i]= 0.0;
+	Cea[i]= 0.0;
+	Cfa[i]= 0.0;
+	CEa[i]= 0.0;
+	Ceb[i]= 0.0;
+	Cfb[i]= 0.0;
+	CEb[i]= 0.0;
+      }
+    TR= 0.0;
+    Tfch= 0.0;
+    TQ= 0.0;
+    TEsec= 0.0;
+    Tea= 0.0;
+    Tfa= 0.0;
+    TEa= 0.0;
+    Teb= 0.0;
+    Tfb= 0.0;
+    TEb= 0.0;
+
+    // reset trial history variables
+    CBranchNum= 0;
+    TBranchNum= 0;
+    Ceo_p= 0.0;
+    Teo_p= 0.0;
+    Ceo_n= 0.0;
+    Teo_n= 0.0;
+    Cemax= 0.0;
+    Temax= 0.0;
+    Cemin= 0.0;
+    Temin= 0.0;
+    CeAbsMax= 0.0;
+    TeAbsMax= 0.0;
+    CeAbsMin= 0.0;
+    TeAbsMin= 0.0;
+    TeCumPlastic= 0.0;
+    CeCumPlastic= 0.0;
+
+    // reset state variables
+    trial.revertToStart(Esp);
+    converged.revertToStart(Esp);
+
+    CFatDamage= 0.0;
+    TFatDamage= 0.0;
+
+    return retval;
   }
-  TR= 0.0;
-  Tfch= 0.0;
-  TQ= 0.0;
-  TEsec= 0.0;
-  Tea= 0.0;
-  Tfa= 0.0;
-  TEa= 0.0;
-  Teb= 0.0;
-  Tfb= 0.0;
-  TEb= 0.0;
-
-  // reset trial history variables
-  CBranchNum= 0;
-  TBranchNum= 0;
-  Ceo_p= 0.0;
-  Teo_p= 0.0;
-  Ceo_n= 0.0;
-  Teo_n= 0.0;
-  Cemax= 0.0;
-  Temax= 0.0;
-  Cemin= 0.0;
-  Temin= 0.0;
-  CeAbsMax= 0.0;
-  TeAbsMax= 0.0;
-  CeAbsMin= 0.0;
-  TeAbsMin= 0.0;
-  TeCumPlastic= 0.0;
-  CeCumPlastic= 0.0;
-
-  // reset state variables
-  trial.revertToStart(Esp);
-  converged.revertToStart(Esp);
-
-  CFatDamage= 0.0;
-  TFatDamage= 0.0;
-
-  return 0;
-}
 
 //! @brief Virtual constructor.
 XC::UniaxialMaterial * XC::ReinforcingSteel::getCopy(void) const

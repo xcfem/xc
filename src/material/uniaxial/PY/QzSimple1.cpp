@@ -506,7 +506,7 @@ int XC::QzSimple1::revertToLastCommit(void)
 /////////////////////////////////////////////////////////////////////
 int XC::QzSimple1::revertToStart(void)
   {
-
+    int retval= PQyzBase::revertToStart();
     // Reset gap "suction" if zero (or negative) or exceeds max value of 0.1
     //
     if(suction <= QZtolerance) suction= QZtolerance;
@@ -550,7 +550,8 @@ int XC::QzSimple1::revertToStart(void)
       }
     else
       {
-        std::cerr << "XC::QzSimple1::QzSimple1 -- only accepts QzType of 1 or 2\n";
+        std::cerr << getClassName() << "::" << __FUNCTION__
+	          << "; only accepts QzType of 1 or 2\n";
         exit(-1);
       }
 
@@ -581,7 +582,7 @@ int XC::QzSimple1::revertToStart(void)
     // Now get all the committed variables initiated
     this->commitState();
 
-    return 0;
+    return retval;
   }
 
 /////////////////////////////////////////////////////////////////////

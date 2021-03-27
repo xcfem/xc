@@ -314,7 +314,7 @@ int XC::TzSimple1::revertToLastCommit(void)
 /////////////////////////////////////////////////////////////////////
 int XC::TzSimple1::revertToStart(void)
   {
-
+    int retval= PYBase::revertToStart();
     // If tzType= 0, then it is entering with the default constructor.
     // To avoid division by zero, set small nonzero values for terms.
     //
@@ -333,8 +333,8 @@ int XC::TzSimple1::revertToStart(void)
     if(matCapacity <= 0.0 || v50 <= 0.0)
       {
         std::cerr << "WARNING -- only accepts positive nonzero tult and z50" << std::endl;
-        std::cerr << "TzLiq1: " << std::endl;
-        std::cerr << "tzType: " << soilType << std::endl;
+        std::cerr << "TzLiq1: " << std::endl
+		  << "tzType: " << soilType << std::endl;
         exit(-1);
       }
             
@@ -381,7 +381,7 @@ int XC::TzSimple1::revertToStart(void)
     // Now get all the committed variables initiated
     this->commitState();
 
-    return 0;
+    return retval;
   }
 
 /////////////////////////////////////////////////////////////////////

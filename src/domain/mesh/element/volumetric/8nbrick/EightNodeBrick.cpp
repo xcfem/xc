@@ -2561,11 +2561,14 @@ int XC::EightNodeBrick::commitState(void)
 }
 
 //=============================================================================
-int XC::EightNodeBrick::revertToLastCommit ()
-{
-  //  int order= theQuadRule->getOrder();  // Commented by Xiaoyan
-    int i;
+int XC::EightNodeBrick::revertToLastCommit(void)
+  {
+    // int order= theQuadRule->getOrder();  // Commented by Xiaoyan
+
     //int j, k;     // Xiaoyan added k for three dimension
+    // DON'T call Element::revertToLastCommit() because
+    // is a pure virtual method.
+    // int retVal= ElementBase<8>::revertToLastCommit();
     int retVal= 0;
 
     // Loop over the integration points and revert to last committed material states
@@ -2576,29 +2579,28 @@ int XC::EightNodeBrick::revertToLastCommit ()
                        // added t_integration_order,
       //retVal += (theMaterial[i][j][k]).revertToLastCommit();
 
-    for(i= 0; i < count; i++)
-       retVal += matpoint[i].revertToLastCommit();
+    for(int i= 0; i < count; i++)
+       retVal+= matpoint[i].revertToLastCommit();
 
 
     return retVal;
 }
 
 //=============================================================================
-int XC::EightNodeBrick::revertToStart ()
-{
-    int i;     // Xiaoyan added k for three dimension
-    int retVal= 0;
+int XC::EightNodeBrick::revertToStart(void)
+  {
+    int retVal= ElementBase<8>::revertToStart();
 
     // Loop over the integration points and revert to last committed material states
     //for(i= 0; i < r_integration_order; i++)       // Xiaoyan changed order to
     //  for(j= 0; j < s_integration_order; j++)     // r_integration_order,
     //      for(k= 0; k < t_integration_order; k++)     // s_integration_order, and
                  // added t_integration_order,
-    //      retVal += (theMaterial[i][j][k]).revertToLastCommit();
+    //      retVal += (theMaterial[i][j][k]).revertToStart();
 
     int count= r_integration_order* s_integration_order * t_integration_order;
 
-    for(i= 0; i < count; i++)
+    for(int i= 0; i < count; i++)
        retVal += matpoint[i].revertToStart();
 
 

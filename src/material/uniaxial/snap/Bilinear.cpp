@@ -256,45 +256,49 @@ XC::Bilinear::~Bilinear(void)
 }
 
 
+//! @brief Revert the material to its initial state.
 int XC::Bilinear::revertToStart()
+  {
+    int retval= UniaxialMaterial::revertToStart();
+    
+    if ( DEBG ==1 ) fprintf( OutputFile , "Revert to start\n" );                // debugging
+
+    hsLastCommit[0] =  0.0;                                                                                                        // dP
+    hsLastCommit[1] =  0.0;                                                                                                        // fP
+    hsLastCommit[2] =  elstk;                                                                                                // ekP
+    hsLastCommit[3] =  elstk;                                                                                                // ekexcurs
+    hsLastCommit[4] =  fyieldPos;                                                                                        // fyPos
+    hsLastCommit[5] =  fyieldNeg;                                                                                        // fyNeg
+    hsLastCommit[6] =  alfa*elstk;                                                                                        // ekhard
+    hsLastCommit[7] =  capDispPos;                                                                                        // cpPos
+    hsLastCommit[8] =  capDispNeg;                                                                                        // cpNeg
+    hsLastCommit[9] =  alfaCap*elstk;                                                                                // ekcap
+    hsLastCommit[10]=  0.0;                                                                                                        // dmax
+    hsLastCommit[11]=  0.0;                                                                                                        // dmin
+    hsLastCommit[12]=  fyieldPos+alfa*elstk*(capDispPos-fyieldPos/elstk);        // fuPos
+    hsLastCommit[13]=  fyieldNeg+alfa*elstk*(capDispNeg-fyieldNeg/elstk);        // fuNeg
+    hsLastCommit[14]=  0.0;                                                                                                        // Enrgtot
+    hsLastCommit[15]=  0.0;                                                                                                        // Enrgc
+    hsLastCommit[16]=  0.0;                                                                                                        // reserved
+
+    for( int i=0 ; i<17 ; i++)
+      {
+	hsCommit[i] = hsLastCommit[i];
+	hsTrial[i] = hsLastCommit[i];
+      }
+    if ( StrDamage != nullptr ) StrDamage->revertToStart();
+    if ( StfDamage != nullptr ) StfDamage->revertToStart();
+    if ( CapDamage != nullptr ) CapDamage->revertToStart();
+
+    if ( DEBG == 1 || DEBG == 2 )
 {
-        if ( DEBG ==1 ) fprintf( OutputFile , "Revert to start\n" );                // debugging
-
-        hsLastCommit[0] =  0.0;                                                                                                        // dP
-        hsLastCommit[1] =  0.0;                                                                                                        // fP
-        hsLastCommit[2] =  elstk;                                                                                                // ekP
-        hsLastCommit[3] =  elstk;                                                                                                // ekexcurs
-        hsLastCommit[4] =  fyieldPos;                                                                                        // fyPos
-        hsLastCommit[5] =  fyieldNeg;                                                                                        // fyNeg
-        hsLastCommit[6] =  alfa*elstk;                                                                                        // ekhard
-        hsLastCommit[7] =  capDispPos;                                                                                        // cpPos
-        hsLastCommit[8] =  capDispNeg;                                                                                        // cpNeg
-        hsLastCommit[9] =  alfaCap*elstk;                                                                                // ekcap
-        hsLastCommit[10]=  0.0;                                                                                                        // dmax
-        hsLastCommit[11]=  0.0;                                                                                                        // dmin
-        hsLastCommit[12]=  fyieldPos+alfa*elstk*(capDispPos-fyieldPos/elstk);        // fuPos
-        hsLastCommit[13]=  fyieldNeg+alfa*elstk*(capDispNeg-fyieldNeg/elstk);        // fuNeg
-        hsLastCommit[14]=  0.0;                                                                                                        // Enrgtot
-        hsLastCommit[15]=  0.0;                                                                                                        // Enrgc
-        hsLastCommit[16]=  0.0;                                                                                                        // reserved
-
-        for( int i=0 ; i<17 ; i++) {
-                hsCommit[i] = hsLastCommit[i];
-                hsTrial[i] = hsLastCommit[i];
-        }
-        if ( StrDamage != nullptr ) StrDamage->revertToStart();
-        if ( StfDamage != nullptr ) StfDamage->revertToStart();
-        if ( CapDamage != nullptr ) CapDamage->revertToStart();
-        
-        if ( DEBG == 1 || DEBG == 2 )
-    {
-        if ( StrDamage != nullptr ) fprintf( OutputFile , "%g" ,StrDamage->getDamage() );                // debugging
-        if ( StfDamage != nullptr ) fprintf( OutputFile , "\t%g" , StfDamage->getDamage() );                // debugging
-        if ( CapDamage != nullptr ) fprintf( OutputFile , "\t%g\n" , CapDamage->getDamage() );                // debugging
-    }
-
-        return 0;
+    if ( StrDamage != nullptr ) fprintf( OutputFile , "%g" ,StrDamage->getDamage() );                // debugging
+    if ( StfDamage != nullptr ) fprintf( OutputFile , "\t%g" , StfDamage->getDamage() );                // debugging
+    if ( CapDamage != nullptr ) fprintf( OutputFile , "\t%g\n" , CapDamage->getDamage() );                // debugging
 }
+
+    return retval;
+  }
 
 
 void XC::Bilinear::Print(std::ostream &s, int flag) const

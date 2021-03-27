@@ -63,12 +63,11 @@ XC::Vector XC::MultiaxialCyclicPlasticityPlaneStrain::stress_vec(3) ;
 XC::Matrix XC::MultiaxialCyclicPlasticityPlaneStrain::tangent_matrix(3,3) ;
 
 XC::MultiaxialCyclicPlasticityPlaneStrain::MultiaxialCyclicPlasticityPlaneStrain(int tag)
- :XC::MultiaxialCyclicPlasticity(tag, ND_TAG_MultiaxialCyclicPlasticityPlaneStrain) 
+ : MultiaxialCyclicPlasticity(tag, ND_TAG_MultiaxialCyclicPlasticityPlaneStrain) 
   {}
 
 //null constructor
-XC::MultiaxialCyclicPlasticityPlaneStrain::MultiaxialCyclicPlasticityPlaneStrain( ) : 
- XC::MultiaxialCyclicPlasticity( ) 
+XC::MultiaxialCyclicPlasticityPlaneStrain::MultiaxialCyclicPlasticityPlaneStrain( ) : MultiaxialCyclicPlasticity( ) 
   {}
 
 
@@ -291,13 +290,13 @@ XC::MultiaxialCyclicPlasticityPlaneStrain::revertToLastCommit( ) {
   return 0;
 }
 
-
-int 
-XC::MultiaxialCyclicPlasticityPlaneStrain::revertToStart( ) 
+//! @brief Revert the material to its initial state.
+int XC::MultiaxialCyclicPlasticityPlaneStrain::revertToStart( ) 
 {
+  int retval= MultiaxialCyclicPlasticity::revertToStart();
   this->zero( ) ;
 
-  return 0;
+  return retval;
 }
  
 

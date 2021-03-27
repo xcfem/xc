@@ -287,12 +287,14 @@ XC::FeapMaterial::revertToLastCommit(void)
   return 0;
 }
 
+//! @brief Revert the material to its initial state.
 int XC::FeapMaterial::revertToStart(void)
   {
+    int retval= NDMaterial::revertToStart();
     // Set all trial and committed values to zero
     for(int i = 0; i < 2*numHV; i++)
       hstv[i] = 0.0;
-    return 0;
+    return retval;
   }
 
 XC::NDMaterial *XC::FeapMaterial::getCopy(void) const

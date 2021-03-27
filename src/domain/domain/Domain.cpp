@@ -625,17 +625,17 @@ bool XC::Domain::removeLoadPattern(LoadPattern *lp)
 //! @brief Remove from all load pattenrs from domain.
 bool XC::Domain::removeAllLoadPatterns(void)
   {
-    bool retval= true;
-    std::map<int,LoadPattern *> &activeLoadPatterns= constraints.getLoadPatterns();
-    for(std::map<int,LoadPattern *>::iterator it= activeLoadPatterns.begin();
+    // Get the tags of the load patterns to remove.
+    std::set<int> tags_to_remove;
+    const std::map<int,LoadPattern *> &activeLoadPatterns= constraints.getLoadPatterns();
+    for(std::map<int,LoadPattern *>::const_iterator it= activeLoadPatterns.begin();
 	it!=activeLoadPatterns.end();it++)
-      {
-        retval*= removeLoadPattern(it->second);
-	//In some circumstances the iterator moves past
-	//the end of the container:
-	if(activeLoadPatterns.empty())
-	  break;
-      }
+      { tags_to_remove.insert(it->second->getTag()); }
+    // Remove the load patterns.
+    bool retval= true;
+    for(std::set<int>::iterator it= tags_to_remove.begin();
+	it!=tags_to_remove.end();it++)
+      { retval*= removeLoadPattern(*it); }
     return retval;
   }
 
@@ -1374,8 +1374,8 @@ void XC::Domain::setNodeReactionException(const int &n)
   { mesh.setNodeReactionException(n); }
 
 //! @brief Check that al free nodes have zero reaction.
-bool XC::Domain::checkNodalReactions(const double &tol)
-  { return mesh.checkNodalReactions(tol); }
+bool XC::Domain::checkNodalReactions(const double &relTol)
+  { return mesh.checkNodalReactions(relTol); }
 
 //! @brief Calculate nodal reaction forces and moments.
 int XC::Domain::calculateNodalReactions(bool inclInertia,const double &tol)

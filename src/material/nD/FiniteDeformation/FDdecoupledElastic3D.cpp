@@ -427,31 +427,33 @@ int XC::FDdecoupledElastic3D::commitState(void)
 //! @brief 
 int XC::FDdecoupledElastic3D::revertToLastCommit(void)
   { return 0; }
-//! @brief 
+
+//! @brief Revert the material to its initial state.
 int XC::FDdecoupledElastic3D::revertToStart(void)
-{
-   XC::Tensor F0("I", 2, def_dim_2);
-   F = F0;
-   C = F0;
-   Cinv = F0;
+  {
+    int retval= FiniteDeformationElastic3D::revertToStart();
+    Tensor F0("I", 2, def_dim_2);
+    F = F0;
+    C = F0;
+    Cinv = F0;
 
-   XC::Tensor ss_zero(2,def_dim_2,0.0);
-   thisPK2Stress = ss_zero;
-   thisGreenStrain = ss_zero;
-   Stiffness = getInitialTangentTensor();
+    XC::Tensor ss_zero(2,def_dim_2,0.0);
+    thisPK2Stress = ss_zero;
+    thisGreenStrain = ss_zero;
+    Stiffness = getInitialTangentTensor();
 
-   J = 1.0;
-   lambda1 = 1.0;
-   lambda2 = 1.0;
-   lambda3 = 1.0;
-   lambda_wave1 = 1.0;
-   lambda_wave2 = 1.0;
-   lambda_wave3 = 1.0;
+    J = 1.0;
+    lambda1 = 1.0;
+    lambda2 = 1.0;
+    lambda3 = 1.0;
+    lambda_wave1 = 1.0;
+    lambda_wave2 = 1.0;
+    lambda_wave3 = 1.0;
 
-   caseIndex = 0;
+    caseIndex = 0;
 
-   return 0;
-}
+    return retval;
+  }
 
 //! @brief Virtual constructor.
 XC::NDMaterial *XC::FDdecoupledElastic3D::getCopy(void) const

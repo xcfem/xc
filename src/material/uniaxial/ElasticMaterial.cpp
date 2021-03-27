@@ -107,13 +107,13 @@ int XC::ElasticMaterial::setTrial(double strain, double &stress, double &tangent
 //! @brief Returns the product of \f$E * \epsilon\f$, where \f$\epsilon\f$ is
 //! the current trial strain.
 double XC::ElasticMaterial::getStress(void) const
-  { return E*def_total() + eta*trialStrainRate; }
+  { return E*get_total_strain() + eta*trialStrainRate; }
 
-
+//! @brief Commit the matarial state.
 int XC::ElasticMaterial::commitState(void)
   { return 0; }
 
-
+//! @brief Revert the material to its last commited state.
 int XC::ElasticMaterial::revertToLastCommit(void)
   { return 0; }
 
@@ -121,9 +121,9 @@ int XC::ElasticMaterial::revertToLastCommit(void)
 //! @brief Revert the material to its initial state.
 int XC::ElasticMaterial::revertToStart(void)
   {
-    ElasticBaseMaterial::revertToStart();
+    int retval= ElasticBaseMaterial::revertToStart();
     trialStrainRate  = 0.0;
-    return 0;
+    return retval;
   }
 
 //! @brief Virtual constructor.
@@ -189,7 +189,7 @@ int XC::ElasticMaterial::recvSelf(const Communicator &comm)
     return res;
   }
 
-//! Prints to the stream \p s the objects \p tag and \f$E\f$ values.
+//! @brief Prints to the stream \p s the objects \p tag and \f$E\f$ values.
 void XC::ElasticMaterial::Print(std::ostream &s, int flag) const
   {
     s << "Elastic tag: " << this->getTag() << std::endl;
@@ -208,17 +208,18 @@ int XC::ElasticMaterial::setParameter(const std::vector<std::string>  &argv, Par
 
 int XC::ElasticMaterial::updateParameter(int parameterID, Information &info)
   {
-        switch(parameterID) {
-        case -1:
-                return -1;
-        case 1:
-                E = info.theDouble;
-                return 0;
-        case 2:
-                eta = info.theDouble;
-                return 0;
-        default:
-                return -1;
-        }
+    switch(parameterID)
+      {
+      case -1:
+	      return -1;
+      case 1:
+	      E = info.theDouble;
+	      return 0;
+      case 2:
+	      eta = info.theDouble;
+	      return 0;
+      default:
+	      return -1;
+      }
   }
 

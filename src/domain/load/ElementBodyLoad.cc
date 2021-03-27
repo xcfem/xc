@@ -52,7 +52,8 @@ XC::ElementBodyLoad::ElementBodyLoad(int tag, int classTag, const ID &theEleTags
   :ElementalLoad(tag, classTag,theEleTags), theElements() {}
 
 
-
+//! @brief Set the domain for the load (assigns the pointers
+//! to the elements.
 void XC::ElementBodyLoad::setDomain(Domain *theDomain)
   {
     ElementalLoad::setDomain(theDomain);

@@ -69,7 +69,7 @@
 namespace XC {
 
 class SolutionStrategy;
-class ProcSolu;
+class SolutionProcedure;
 
 class Domain;
 class AnalysisModel;
@@ -121,10 +121,10 @@ class Analysis: public CommandEntity
     SolutionStrategy *solution_strategy; //!< Solution strategy.
 
     int newStepDomain(AnalysisModel *theModel,const double &dT =0.0);
-    ProcSolu *getProcSolu(void);
-    const ProcSolu *getProcSolu(void) const;    
+    SolutionProcedure *getSolutionProcedure(void);
+    const SolutionProcedure *getSolutionProcedure(void) const;    
 
-    friend class ProcSolu;
+    friend class SolutionProcedure;
     Analysis(SolutionStrategy *analysis_aggregation);
     //! @brief Virtual constructor.
     virtual Analysis *getCopy(void) const= 0;

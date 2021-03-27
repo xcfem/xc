@@ -252,10 +252,12 @@ int XC::Concrete02::revertToLastCommit(void)
     return 0;
   }
 
+//! @brief Revert the material to its initial state.
 int XC::Concrete02::revertToStart(void)
   {
+    int retval= RawConcrete::revertToStart();
     setup_parameters();
-    return 0;
+    return retval;
   }
 
 //! @brief Send object members through the communicator argument.

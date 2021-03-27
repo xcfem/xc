@@ -191,7 +191,7 @@ int XC::DirectIntegrationAnalysis::analyze(int numSteps, double dT)
         if(solution_strategy->getTransientIntegratorPtr()->newStep(dT) < 0)
           {
 	    std::cerr << getClassName() << "::" << __FUNCTION__
-		      << "; the XC::Integrator failed at time "
+		      << "; the integrator failed at time "
 		      << the_Domain->getTimeTracker().getCurrentTime()
 		      << std::endl;
 	    the_Domain->revertToLastCommit();
@@ -202,7 +202,7 @@ int XC::DirectIntegrationAnalysis::analyze(int numSteps, double dT)
         if(result < 0)
           {
 	    std::cerr << getClassName() << "::" << __FUNCTION__
-		      << "; the Algorithm failed at time "
+		      << "; the algorithm failed at time "
 		      << the_Domain->getTimeTracker().getCurrentTime()
 		      << std::endl;
 	    the_Domain->revertToLastCommit();	    

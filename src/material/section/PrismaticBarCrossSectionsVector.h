@@ -75,7 +75,7 @@ class PrismaticBarCrossSectionsVector: public CommandEntity, public std::vector<
     bool setSections(const std::vector<PrismaticBarCrossSection *> &sectionPtrs);
     void zeroInitialSectionDeformations(void);
     void setInitialSectionDeformations(const std::vector<Vector> &vs);
-    void addInitialSectionDeformations(const BeamStrainLoad &,const double &,const Matrix &, const double &L);
+    void incrementInitialSectionDeformations(const BeamStrainLoad &,const double &,const Matrix &, const double &L);
     void setTrialSectionDeformations(const std::vector<Vector> &vs);
 
     int commitState(void);

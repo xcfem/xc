@@ -188,7 +188,7 @@ int XC::DqUniaxialMaterial::revertToLastCommit(void)
     return err;
   }
 
-//! @brief Returns to the initial state.
+//! @brief Returns the materials to its initial state.
 int XC::DqUniaxialMaterial::revertToStart(void)
   {
     int err = 0;
@@ -206,25 +206,39 @@ int XC::DqUniaxialMaterial::revertToStart(void)
     return err;
   }
 
-//! @brief Zeroes initial strains.
-int XC::DqUniaxialMaterial::zeroInitialStrain(void)
-  {
-    int err= 0;
-    for( iterator i= begin();i!=end(); i++)
-      err+= (*i)->setInitialStrain(0.0);
-    return err;
-  }
-
-//! @brief Sets initial strain.
-int XC::DqUniaxialMaterial::setInitialStrain(const Vector &def,const size_t &offset)
+//! @brief Sets initial strains.
+//! @param strains: initial strains.
+//! @param offset: offset for the strains index.
+int XC::DqUniaxialMaterial::setInitialStrain(const Vector &strains,const size_t &offset)
   {
     int err= 0;
     size_t j= offset;
-    assert(static_cast<size_t>(def.Size()) >= (size()+offset));
+    assert(static_cast<size_t>(strains.Size()) >= (size()+offset));
     for( iterator i= begin();i!=end(); i++,j++)
-      err+= (*i)->setInitialStrain(def(j));
+      err+= (*i)->setInitialStrain(strains(j));
     return err;
   }
+
+//! @brief Increment initial strains.
+//! @param strains: initial strains.
+//! @param offset: offset for the strains index.
+int XC::DqUniaxialMaterial::incrementInitialStrain(const Vector &strainInc,const size_t &offset)
+  {
+    int err= 0;
+    size_t j= offset;
+    assert(static_cast<size_t>(strains.Size()) >= (size()+offset));
+    for( iterator i= begin();i!=end(); i++,j++)
+      err+= (*i)->incrementInitialStrain(strainInc(j));
+    return err;
+  }
+
+//! @brief Zeroes initial strains.
+void XC::DqUniaxialMaterial::zeroInitialStrain(void)
+  {
+    for( iterator i= begin();i!=end(); i++)
+      (*i)->zeroInitialStrain();
+  }
+
 
 //! @brief Sets trial strain.
 int XC::DqUniaxialMaterial::setTrialStrain(const Vector &def,const size_t &offset)

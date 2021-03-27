@@ -113,6 +113,7 @@ XC::DrainBilinearMaterial::DrainBilinearMaterial(void)
 
 int XC::DrainBilinearMaterial::revertToStart(void)
   {
+    int retval= DrainMaterial::revertToStart();
     hstv[0]  = 0.0;
     hstv[1]  = 0.0;
     hstv[2]  = matParams[1];		// fyp
@@ -134,7 +135,7 @@ int XC::DrainBilinearMaterial::revertToStart(void)
     // Set trial history variables to committed values
     for(int i = 0; i < numHistoryVariables; i++)
       hstv[i+numHistoryVariables] = hstv[i];
-    return 0;
+    return retval;
   }
 
 //! @brief Virtual constructor.

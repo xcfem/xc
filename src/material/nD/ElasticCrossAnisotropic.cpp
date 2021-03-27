@@ -238,17 +238,18 @@ int XC::ElasticCrossAnisotropic::commitState(void)
         return 0;
 }
 
-int
-XC::ElasticCrossAnisotropic::revertToLastCommit(void)
+int XC::ElasticCrossAnisotropic::revertToLastCommit(void)
 {
   Tepsilon = Cepsilon;
   return 0;
 }
 
+//! @brief Revert the material to its initial state.
 int XC::ElasticCrossAnisotropic::revertToStart(void)
   {
+    int retval= NDMaterial::revertToStart();
     Cepsilon.Zero();
-    return 0;
+    return retval;
   }
 
 XC::NDMaterial *XC::ElasticCrossAnisotropic::getCopy(void) const

@@ -42,7 +42,8 @@ XC::ShellUniformLoad::ShellUniformLoad(int tag, const Vector &Fxyz, const ID &th
    Trans(Fxyz[2]), Axial1(Fxyz[0]), Axial2(Fxyz[1]) {}
 
 XC::ShellUniformLoad::ShellUniformLoad(int tag)
-  :ShellMecLoad(tag, LOAD_TAG_ShellUniformLoad) {}
+  :ShellMecLoad(tag, LOAD_TAG_ShellUniformLoad),
+   Trans(0.0), Axial1(0.0), Axial2(0.0){}
 
 std::string XC::ShellUniformLoad::Category(void) const
   { return "uniform"; }

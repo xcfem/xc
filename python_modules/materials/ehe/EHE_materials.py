@@ -584,6 +584,11 @@ class PrestressingSteel(concrete_base.PrestressingSteel):
         ROFINAL= 2.9e-2*self.getRelaxationT(1000/24.0)
         return initialStress*ROFINAL
 
+    def getInitialStressLimit(self):
+        ''' Return the limit of the initial stress according to
+            clause 20.2.2 of EHE.'''
+        return min(0.9*self.fpk, 0.75*self.fmax)
+
 Y1860S7= PrestressingSteel(steelName= "Y1860S7",fpk= 1171e6,fmax= 1860e6)
 
 def get_losses_wedge_penetration_short_straight_tendon(a, L, Ep):

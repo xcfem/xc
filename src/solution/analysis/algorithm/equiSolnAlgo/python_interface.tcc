@@ -41,7 +41,9 @@ class_<XC::NewtonBased, bases<XC::EquiSolnAlgo>, boost::noncopyable >("NewtonBas
 
 class_<XC::ModifiedNewton, bases<XC::NewtonBased>, boost::noncopyable >("ModifiedNewton", no_init);
 
-class_<XC::NewtonLineSearch, bases<XC::EquiSolnAlgo>, boost::noncopyable >("NewtonLineSearch", no_init);
+class_<XC::NewtonLineSearch, bases<XC::EquiSolnAlgo>, boost::noncopyable >("NewtonLineSearch", no_init)
+  .def("setLineSearchMethod", &XC::NewtonLineSearch::setLineSearchMethod, "set the line search method to use (bisection_line_search, initial_interpolated_line_search, regula_falsi_line_search, secant_line_search)")
+  ;
 
 class_<XC::NewtonRaphson, bases<XC::NewtonBased>, boost::noncopyable >("NewtonRaphson", no_init);
 

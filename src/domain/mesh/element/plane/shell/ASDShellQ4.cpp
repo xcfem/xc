@@ -804,7 +804,7 @@ int XC::ASDShellQ4::revertToLastCommit(void)
     return success;
   }
 
-int  XC::ASDShellQ4::revertToStart(void)
+int XC::ASDShellQ4::revertToStart(void)
   {
     // transformation
     m_transformation->revertToStart();

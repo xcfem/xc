@@ -740,7 +740,10 @@ void XC::ConstrContainer::applyLoad(double timeStep)
     // now loop over load patterns, invoking applyLoad on them
     for(MapActiveLoadPatterns<LoadPattern>::iterator i= activeLoadPatterns.begin();
         i!= activeLoadPatterns.end();i++)
-      i->second->applyLoad(timeStep);
+      {
+	LoadPattern *lp= i->second;
+        lp->applyLoad(timeStep);
+      }
 
     //
     // finally loop over the MFreedom_Constraints and SFreedom_Constraints of the domain

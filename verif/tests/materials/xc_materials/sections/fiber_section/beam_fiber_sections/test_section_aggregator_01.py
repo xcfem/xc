@@ -87,7 +87,10 @@ modelSpace.addLoadCaseToDomain(lp0.name)
 
 # Solution procedure
 solProc= predefined_solutions.PlainNewtonRaphson(feProblem, convergenceTestTol= 1e-8)
-analOk= solProc.analysis.analyze(1)
+analOk= solProc.solve(True)
+if(analOk!=0):
+    lmsg.error('Failed to solve for: '+lp0.name)
+    quit()
 
 nodes= preprocessor.getNodeHandler
 nodes.calculateNodalReactions(True,1e-7)

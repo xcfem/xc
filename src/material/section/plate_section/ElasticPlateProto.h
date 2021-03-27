@@ -67,7 +67,7 @@ class ElasticPlateProto: public ElasticPlateBase
       { initialStrain.Zero(); }
     inline const Vector &getInitialSectionDeformation(void) const
       { return initialStrain; }
-    const Vector& getSectionDeformation(void) const;
+    const Vector &getSectionDeformation(void) const;
 
     int revertToStart(void);
   };

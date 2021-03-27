@@ -110,11 +110,12 @@ int XC::BeamFiberMaterial::revertToLastCommit(void)
 
 int XC::BeamFiberMaterial::revertToStart()
   {
+    int retval= NDAdaptorMaterial::revertToStart();
     Tstrain33 = 0.0;
     Tgamma23  = 0.0;
     Cstrain33 = 0.0;
     Cgamma23  = 0.0;
-    return NDAdaptorMaterial::revertToStart();
+    return retval;
   }
 
 //! @brief Set trial strain

@@ -94,7 +94,9 @@ loadPatterns.addToDomain(lp0.getName()) # Append load pattern to domain.
 
 ## Static analysis.
 solProc= predefined_solutions.SimpleStaticLinear(FEcase)
-result= solProc.analysis.analyze(1)
+if(solProc.solve()!=0):
+    lmsg.error('Failed to solve for: '+lp0.name)
+    quit()
 
 prep.getDomain.setLoadConstant()
 prep.getDomain.setTime(0.0)
@@ -114,7 +116,9 @@ recRBase.callbackSetup= "self.getDomain.calculateNodalReactions(True,1e-4)"
 ### Eigen analysis.
 solProc.clear()
 solProc= predefined_solutions.FrequencyAnalysis(FEcase,systemPrefix='full_gen')
-result= solProc.analysis.analyze(1)
+if(solProc.solve()!=0):
+    lmsg.error('Eigen analysis failed.')
+    quit()
 eig1= solProc.analysis.getEigenvalue(1)
 freq= math.sqrt(eig1)
 
@@ -142,11 +146,12 @@ loadPatterns.addToDomain(gm.getName()) # Append load pattern to domain.
 
 ### Dynamic analysis.
 solProc.clear()
-solProc= predefined_solutions.PlainLinearNewmark(FEcase)
 dT= 0.01
 numberOfSteps= int(duration/dT)
-result= solProc.analysis.analyze(numberOfSteps,dT)
-
+solProc= predefined_solutions.PlainLinearNewmark(FEcase, numSteps= numberOfSteps, timeStep= dT)
+if(solProc.solve()!=0):
+    lmsg.error('Dynamic analysis failed.')
+    quit()
 
 ratio0= (eig1-25.02037)/25.02037
 ratio1= (freq-5.002)/5.002

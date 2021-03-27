@@ -166,6 +166,9 @@ int XC::ZeroLengthContact3D::commitState(void)
 
 int XC::ZeroLengthContact3D::revertToLastCommit(void)
   {
+    // DON'T call Element::revertToLastCommit() because
+    // is a pure virtual method.
+    // int retval= ZeroLengthContact::revertToLastCommit();
     ///////////////////////////////////////////
     // need to revert the stickPoint??
     xi=stickPt;
@@ -175,9 +178,10 @@ int XC::ZeroLengthContact3D::revertToLastCommit(void)
 
 int XC::ZeroLengthContact3D::revertToStart(void)
   {
+    int retval= ZeroLengthContact::revertToStart();
     // need to rezero stickPoint??
     stickPt.Zero();  
-    return 0;
+    return retval;
   }
 
 

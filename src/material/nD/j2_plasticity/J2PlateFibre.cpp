@@ -129,11 +129,24 @@ void XC::J2PlateFibre::setHkin(const double &hkin)
   { Hkin= hkin; }
 
 //! @brief Sets the initial strain value.
+//! @param eps: strain value.
 int XC::J2PlateFibre::setInitialStrain(const Vector &eps)
   {
     Tepsilon0= eps;
     return 0;
   }
+
+//! @brief Increments initial strain.
+//! @param epsInc: value of the strain increment.
+int XC::J2PlateFibre::incrementInitialStrain(const Vector &epsInc)
+  {
+    Tepsilon0+= epsInc;
+    return 0;
+  }
+
+//! @brief Zeroes the initial strain.
+void XC::J2PlateFibre::zeroInitialStrain(void)
+  { Tepsilon0.Zero(); }
 
 //! @brief Returns the value of the initial strain.
 const XC::Vector &XC::J2PlateFibre::getInitialStrain(void) const
@@ -523,13 +536,15 @@ int XC::J2PlateFibre::revertToLastCommit(void)
     return 0;
   }
 
+//! @brief Revert the material to its initial state.
 int XC::J2PlateFibre::revertToStart(void)
   {
+    int retval= NDMaterial::revertToStart();
     Tepsilon.Zero();
     init();
     dg_n1= 0.0;
     SHVs.Zero();
-    return 0;
+    return retval;
   }
 
 XC::NDMaterial *XC::J2PlateFibre::getCopy(void) const

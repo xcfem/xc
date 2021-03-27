@@ -79,6 +79,7 @@ solAlgo= solutionStrategy.newSolutionAlgorithm("newton_raphson_soln_algo")
 convTest= solutionStrategy.newConvergenceTest("norm_unbalance_conv_test")
 convTest.tol=1.0e-9
 convTest.maxNumIter= 10
+convTest.printFlag= 0
 integ= solutionStrategy.newIntegrator("load_control_integrator",xc.Vector([]))
 soe= solutionStrategy.newSystemOfEqn("band_gen_lin_soe")
 solver= soe.newSolver("band_gen_lin_lapack_solver")
@@ -93,7 +94,6 @@ db= feProblem.newDatabase("BerkeleyDB","/tmp/test10.db")
 db.save(100)
 feProblem.clearAll()
 db.restore(100)
-
 
 solu= feProblem.getSoluProc
 solCtrl= solu.getSoluControl
@@ -115,10 +115,10 @@ solAlgo= solutionStrategy.newSolutionAlgorithm("newton_raphson_soln_algo")
 convTest= solutionStrategy.newConvergenceTest("norm_unbalance_conv_test")
 convTest.tol=1.0e-9
 convTest.maxNumIter= 10
+convTest.printFlag= 0
 integ= solutionStrategy.newIntegrator("load_control_integrator",xc.Vector([]))
 soe= solutionStrategy.newSystemOfEqn("band_gen_lin_soe")
 solver= soe.newSolver("band_gen_lin_lapack_solver")
-
 
 analysis= solu.newAnalysis("static_analysis","solutionStrategy","")
 result= analysis.analyze(1)
@@ -131,7 +131,7 @@ elem1.getResistingForce()
 ratio= (tInic*A-elem1.getN())/(tInic*A)
 
 '''
-print{"force= ",getN()
+print("force= ",getN())
 print("prestressing force= ",(tInic*A))
 print("strain= ",getStrain)
 print("ratio= ",ratio)
@@ -139,8 +139,8 @@ print("ratio= ",ratio)
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if abs(ratio)<0.02:
-  print('test '+fname+': ok.')
+    print('test '+fname+': ok.')
 else:
-  lmsg.error(fname+' ERROR.')
+    lmsg.error(fname+' ERROR.')
 
 os.system("rm -rf /tmp/test10.db") # Your garbage you clean it

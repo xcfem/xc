@@ -103,9 +103,7 @@ class Steel01: public SteelBase0103
     Steel01(int tag, double fy, double E0, double b,
        double a1 = STEEL_0103_DEFAULT_A1, double a2 = STEEL_0103_DEFAULT_A2,
        double a3 = STEEL_0103_DEFAULT_A3, double a4 = STEEL_0103_DEFAULT_A4);
-    Steel01(int tag);
-    Steel01(void);
-    ~Steel01(void);
+    Steel01(int tag= 0);
 
     UniaxialMaterial *getCopy(void) const;
 

@@ -199,54 +199,56 @@ XC::CloughDamage::~CloughDamage()
         if ( CapDamage != 0 ) delete CapDamage;
 }
 
+//! @brief Revert the material to its initial state.
+int XC::CloughDamage::revertToStart(void)
+  {
+    int retval= UniaxialMaterial::revertToStart();
+    if ( DEBG ==1 ) fprintf( OutputFile , "Revert to start\n" );                // debugging
 
-int XC::CloughDamage::revertToStart()
-{
-        if ( DEBG ==1 ) fprintf( OutputFile , "Revert to start\n" );                // debugging
+    dyieldPos = fyieldPos/elstk;
+    dyieldNeg = fyieldNeg/elstk;
 
-        dyieldPos = fyieldPos/elstk;
-        dyieldNeg = fyieldNeg/elstk;
-        
-        double ekhard = elstk*alpha;
-        double fPeakPos = fyieldPos+ekhard*(capDispPos-dyieldPos);
-        double fPeakNeg = fyieldNeg+ekhard*(capDispNeg-dyieldNeg);        
+    double ekhard = elstk*alpha;
+    double fPeakPos = fyieldPos+ekhard*(capDispPos-dyieldPos);
+    double fPeakNeg = fyieldNeg+ekhard*(capDispNeg-dyieldNeg);        
 
-        hsTrial[0] = 0.0;                                                                        // d
-        hsTrial[1] = 0.0;                                                                        // f
-        hsTrial[2]  = elstk;                                                                // ek
-        hsTrial[3]  = elstk;                                                                // ekunload
-        hsTrial[4]  = elstk;                                                                // ekexcurs
-        hsTrial[5]  = 0.0;                                                                        // Enrgtot
-        hsTrial[6]  = 0.0;                                                                        // Enrgc
-        hsTrial[7]  = 0.0;                                                                        // sp
-        hsTrial[8]  = 0.0;                                                                        // sn
-        hsTrial[9]  = 0.0;                                                                        // kon
-        hsTrial[10] = dyieldPos;                                                        // dmax
-        hsTrial[11] = dyieldNeg;                                                        // dmin
-        hsTrial[12] = fyieldPos;                                                        // fyPos
-        hsTrial[13] = fyieldNeg;                                                        // fyNeg
-        hsTrial[14] = capDispPos;                                                        // cpPos
-        hsTrial[15] = capDispNeg;                                                        // cpNeg
-        hsTrial[16] = 0.0;                                                                        // dlstPos
-        hsTrial[17] = 0.0;                                                                        // flstPos
-        hsTrial[18] = 0.0;                                                                        // dlstNeg
-        hsTrial[19] = 0.0;                                                                        // flstNeg
-        hsTrial[20] = alpha;                                                                // alphaPos
-        hsTrial[21] = alpha;                                                                // alphaNeg
-        hsTrial[22] = -capSlope*elstk*capDispPos+fPeakPos;        // fCapRefPos
-        hsTrial[23] = -capSlope*elstk*capDispNeg+fPeakNeg;        // fCapRefNeg : indicates cap reference point
-                
-        for( int i=0 ; i<24; i++) {
-                hsCommit[i]                = hsTrial[i];
-                hsLastCommit[i] = hsTrial[i];
-        }
-        if ( StrDamage != nullptr ) StrDamage->revertToStart();
-        if ( StfDamage != nullptr ) StfDamage->revertToStart();
-        if ( AccDamage != nullptr ) AccDamage->revertToStart();
-        if ( CapDamage != nullptr ) CapDamage->revertToStart();
+    hsTrial[0] = 0.0;                                                                        // d
+    hsTrial[1] = 0.0;                                                                        // f
+    hsTrial[2]  = elstk;                                                                // ek
+    hsTrial[3]  = elstk;                                                                // ekunload
+    hsTrial[4]  = elstk;                                                                // ekexcurs
+    hsTrial[5]  = 0.0;                                                                        // Enrgtot
+    hsTrial[6]  = 0.0;                                                                        // Enrgc
+    hsTrial[7]  = 0.0;                                                                        // sp
+    hsTrial[8]  = 0.0;                                                                        // sn
+    hsTrial[9]  = 0.0;                                                                        // kon
+    hsTrial[10] = dyieldPos;                                                        // dmax
+    hsTrial[11] = dyieldNeg;                                                        // dmin
+    hsTrial[12] = fyieldPos;                                                        // fyPos
+    hsTrial[13] = fyieldNeg;                                                        // fyNeg
+    hsTrial[14] = capDispPos;                                                        // cpPos
+    hsTrial[15] = capDispNeg;                                                        // cpNeg
+    hsTrial[16] = 0.0;                                                                        // dlstPos
+    hsTrial[17] = 0.0;                                                                        // flstPos
+    hsTrial[18] = 0.0;                                                                        // dlstNeg
+    hsTrial[19] = 0.0;                                                                        // flstNeg
+    hsTrial[20] = alpha;                                                                // alphaPos
+    hsTrial[21] = alpha;                                                                // alphaNeg
+    hsTrial[22] = -capSlope*elstk*capDispPos+fPeakPos;        // fCapRefPos
+    hsTrial[23] = -capSlope*elstk*capDispNeg+fPeakNeg;        // fCapRefNeg : indicates cap reference point
 
-        return 0;
-}
+    for( int i=0 ; i<24; i++)
+      {
+	hsCommit[i]= hsTrial[i];
+	hsLastCommit[i]= hsTrial[i];
+      }
+    if ( StrDamage != nullptr ) StrDamage->revertToStart();
+    if ( StfDamage != nullptr ) StfDamage->revertToStart();
+    if ( AccDamage != nullptr ) AccDamage->revertToStart();
+    if ( CapDamage != nullptr ) CapDamage->revertToStart();
+
+    return retval;
+  }
 
 void XC::CloughDamage::Print(std::ostream &s, int flag) const
 {

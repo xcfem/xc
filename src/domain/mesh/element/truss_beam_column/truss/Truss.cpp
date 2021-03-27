@@ -285,12 +285,13 @@ int XC::Truss::commitState()
 //! on it's base class an on it's associated UniaxialMaterial object.
 int XC::Truss::revertToLastCommit()
   {
-    int retVal= 0;
-    // DON'T call element revertToLastCommit because is a pure virtual method.
-    // if((retVal = this->TrussBase::revertToLastCommit()) != 0)
+    // DON'T call Element::revertToLastCommit() because
+    // is a pure virtual method.
+    // int retVal= TrussBase::revertToLastCommit();
+    // if(retVal != 0)
     //   std::cerr << getClassName() << "::" << __FUNCTION__
     // 		<< "; failed in base class";
-    retVal = theMaterial->revertToLastCommit();
+    int retVal= theMaterial->revertToLastCommit();
     return retVal;
   }
 
@@ -300,12 +301,11 @@ int XC::Truss::revertToLastCommit()
 //! on it's base class an on it's associated UniaxialMaterial object.
 int XC::Truss::revertToStart()
   {
-    int retVal= 0;
-    // call element revertToLastCommit to do any base class stuff
-    if((retVal = this->TrussBase::revertToStart()) != 0)
+    int retVal= TrussBase::revertToStart();
+    if(retVal != 0)
       std::cerr << getClassName() << "::" << __FUNCTION__
 		<< "; failed in base class";
-    retVal = theMaterial->revertToStart();
+    retVal+= theMaterial->revertToStart();
     return retVal;
   }
 
@@ -474,7 +474,7 @@ const XC::Matrix &XC::Truss::getMass(void) const
 void XC::Truss::zeroLoad(void)
   {
     TrussBase::zeroLoad();
-    theMaterial->setInitialStrain(0.0); //Removes initial strains.
+    theMaterial->zeroInitialStrain(); //Removes initial strains.
     return;
   }
 
@@ -491,9 +491,8 @@ int XC::Truss::addLoad(ElementalLoad *theLoad, double loadFactor)
           {
             const double &e1= trsLoad->E1()*loadFactor;
             const double &e2= trsLoad->E2()*loadFactor;
-            double ezero= theMaterial->getInitialStrain();
-            ezero+= (e2+e1)/2;
-            theMaterial->setInitialStrain(ezero);
+	    const double strainIncrement= (e2+e1)/2.0;
+            theMaterial->incrementInitialStrain(strainIncrement);
           }
         else
           {
@@ -806,17 +805,18 @@ double XC::Truss::getInitialStrain(void) const
     return theMaterial->getInitialStrain();
   }
 
+//! @brief Compute current strain (dL/L).
 double XC::Truss::computeCurrentStrain(void) const
   {
     // NOTE method will not be called if L == 0
 
     // determine the strain
-    const Vector &disp1 = theNodes[0]->getTrialDisp();
-    const Vector &disp2 = theNodes[1]->getTrialDisp();
-
+    const Vector &disp1= theNodes[0]->getTrialDisp();
+    const Vector &disp2= theNodes[1]->getTrialDisp();
+    
     double dLength = 0.0;
     for(int i = 0; i < getNumDIM(); i++)
-      dLength += (disp2(i)-disp1(i))*cosX[i];
+      { dLength+= (disp2(i)-disp1(i))*cosX[i]; }
 
     // this method should never be called with L == 0
     return dLength/L;

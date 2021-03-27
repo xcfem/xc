@@ -72,12 +72,17 @@ int XC::BeamColumnWithSectionFD::commitState(void)
     return retVal;
   }
 
+//! @brief Revert the state of element to its last commit.
 int XC::BeamColumnWithSectionFD::revertToLastCommit(void)
   {
+    // DON'T call Element::revertToLastCommit() because
+    // is a pure virtual method.
+    // int retval= Element1D::revertToLastCommit();
     int retval= theSections.revertToLastCommit();
     return retval;
   }
 
+//! @brief Revert the state of element to initial.
 int XC::BeamColumnWithSectionFD::revertToStart(void)
   {
     int retval= Element1D::revertToStart();

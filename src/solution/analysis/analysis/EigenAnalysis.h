@@ -81,7 +81,7 @@ class EigenAnalysis: public Analysis
   protected:
     int domainStamp;
 
-    friend class ProcSolu;
+    friend class SolutionProcedure;
     EigenAnalysis(SolutionStrategy *analysis_aggregation);
     Analysis *getCopy(void) const;
   public:     

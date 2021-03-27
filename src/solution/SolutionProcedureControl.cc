@@ -24,11 +24,11 @@
 // along with this program.
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
-//ProcSoluControl.cc
+//SolutionProcedureControl.cc
 
-#include "ProcSoluControl.h"
+#include "SolutionProcedureControl.h"
 #include "domain/domain/Domain.h"
-#include "ProcSolu.h"
+#include "SolutionProcedure.h"
 
 #include "solution/analysis/ModelWrapper.h"
 #include "solution/SolutionStrategy.h"
@@ -37,85 +37,85 @@
 
 
 //! @brief Default constructor.
-XC::ProcSoluControl::ProcSoluControl(ProcSolu *owr)
+XC::SolutionProcedureControl::SolutionProcedureControl(SolutionProcedure *owr)
   : CommandEntity(owr), solu_models(this), solu_methods(this) {}
 
 
-XC::ProcSolu *XC::ProcSoluControl::getProcSolu(void)
-  { return dynamic_cast<ProcSolu *>(Owner()); }
+XC::SolutionProcedure *XC::SolutionProcedureControl::getSolutionProcedure(void)
+  { return dynamic_cast<SolutionProcedure *>(Owner()); }
 
-const XC::ProcSolu *XC::ProcSoluControl::getProcSolu(void) const
-  { return dynamic_cast<const ProcSolu *>(Owner()); }
+const XC::SolutionProcedure *XC::SolutionProcedureControl::getSolutionProcedure(void) const
+  { return dynamic_cast<const SolutionProcedure *>(Owner()); }
 
 //! @brief Return a pointer to the domain on which
 //! the solution algorithm operates.
-XC::Domain *XC::ProcSoluControl::getDomain(void)
+XC::Domain *XC::SolutionProcedureControl::getDomain(void)
   {
-    ProcSolu *ps= getProcSolu();
+    SolutionProcedure *ps= getSolutionProcedure();
     assert(ps); 
     return ps->getDomainPtr();
   }
 
 //! @brief Return a pointer to the domain on which
 //! the solution algorithm operates.
-const XC::Domain *XC::ProcSoluControl::getDomain(void) const
+const XC::Domain *XC::SolutionProcedureControl::getDomain(void) const
   {
-    const ProcSolu *ps= getProcSolu();
+    const SolutionProcedure *ps= getSolutionProcedure();
     assert(ps); 
     return ps->getDomainPtr();
   }
 
 //! @brief Return a pointer to the integrator.
-XC::Integrator *XC::ProcSoluControl::getIntegratorPtr(void)
+XC::Integrator *XC::SolutionProcedureControl::getIntegratorPtr(void)
   {
-    ProcSolu *ps= getProcSolu();
+    SolutionProcedure *ps= getSolutionProcedure();
     assert(ps);
     return ps->getIntegratorPtr();
   }
 
 //! @brief Return a const pointer to the integrator.
-const XC::Integrator *XC::ProcSoluControl::getIntegratorPtr(void) const
+const XC::Integrator *XC::SolutionProcedureControl::getIntegratorPtr(void) const
   {
-    const ProcSolu *ps= getProcSolu();
+    const SolutionProcedure *ps= getSolutionProcedure();
     assert(ps);
     return ps->getIntegratorPtr();
   }
 
 //! @bried Return a reference to the model wrapper container.
-XC::MapModelWrapper &XC::ProcSoluControl::getModelWrapperContainer(void)
+XC::MapModelWrapper &XC::SolutionProcedureControl::getModelWrapperContainer(void)
   { return solu_models; }
 
 //! @bried Return a reference to the solution procedures container.
-XC::SolutionStrategyMap &XC::ProcSoluControl::getSolutionStrategyContainer(void)
+XC::SolutionStrategyMap &XC::SolutionProcedureControl::getSolutionStrategyContainer(void)
   { return solu_methods; }
 
 //! @brief Return a pointer to the model wrapper with the identifier
 //! being passed as parameter.
-const XC::ModelWrapper *XC::ProcSoluControl::getModelWrapper(const std::string &cod) const
+const XC::ModelWrapper *XC::SolutionProcedureControl::getModelWrapper(const std::string &cod) const
   { return solu_models.getModelWrapper(cod); }
 
 //! @brief Return a pointer to the model wrapper with the identifier
 //! passed as parameter.
-XC::ModelWrapper *XC::ProcSoluControl::getModelWrapper(const std::string &cod)
+XC::ModelWrapper *XC::SolutionProcedureControl::getModelWrapper(const std::string &cod)
   { return solu_models.getModelWrapper(cod); }
 
 //! @brief Return a const pointer to the solution method.
-const XC::SolutionStrategy *XC::ProcSoluControl::getSolutionStrategy(const std::string &cod) const
+const XC::SolutionStrategy *XC::SolutionProcedureControl::getSolutionStrategy(const std::string &cod) const
   { return solu_methods.getSolutionStrategy(cod); }
 
 //! @brief Return a const pointer to the solution method.
-XC::SolutionStrategy *XC::ProcSoluControl::getSolutionStrategy(const std::string &cod)
+XC::SolutionStrategy *XC::SolutionProcedureControl::getSolutionStrategy(const std::string &cod)
   { return solu_methods.getSolutionStrategy(cod); }
 
 //! @brief Revert to the initial state.
-void XC::ProcSoluControl::revertToStart(void)
+void XC::SolutionProcedureControl::revertToStart(void)
   {
     getDomain()->revertToStart();
     solu_methods.revertToStart();
   }
 
 //! @brief Clear all.
-void XC::ProcSoluControl::clearAll(void)
+void XC::SolutionProcedureControl::clearAll(void)
   {
     solu_models.clearAll();
     solu_methods.clearAll();

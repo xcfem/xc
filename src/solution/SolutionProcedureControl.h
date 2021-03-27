@@ -25,7 +25,7 @@
 // along with this program.
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
-//ProcSoluControl.h
+//SolutionProcedureControl.h
 
 #ifndef PROCSOLUCONTROL_H
 #define PROCSOLUCONTROL_H
@@ -36,24 +36,22 @@
 
 namespace XC {
 
-class ProcSolu;
+class SolutionProcedure;
 class Domain;
 
 //!  @ingroup Solu
 //! 
 //! @brief Container for the objects that control the solution procedure.
-class ProcSoluControl: public CommandEntity
+class SolutionProcedureControl: public CommandEntity
   {
   private:
     MapModelWrapper solu_models; //!< Wrapper for the finite element model
     SolutionStrategyMap solu_methods; //!< Solution methods.
 
-    ProcSolu *getProcSolu(void);
-    const ProcSolu *getProcSolu(void) const;
-  protected:
-
+    SolutionProcedure *getSolutionProcedure(void);
+    const SolutionProcedure *getSolutionProcedure(void) const;
   public:
-    ProcSoluControl(ProcSolu *owr);
+    SolutionProcedureControl(SolutionProcedure *owr);
 
     Domain *getDomain(void);
     const Domain *getDomain(void) const;

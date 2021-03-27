@@ -36,7 +36,6 @@ nodes= preprocessor.getNodeHandler
 # Problem type
 modelSpace= predefined_spaces.SolidMechanics2D(nodes)
 
-
 nodes.defaultTag= 1 #First node number.
 nod= nodes.newNodeXY(0,0)
 nod= nodes.newNodeXY(l,0.0)
@@ -113,7 +112,7 @@ cHandler= sm.newConstraintHandler("transformation_constraint_handler")
 solutionStrategies= solCtrl.getSolutionStrategyContainer
 solutionStrategy= solutionStrategies.newSolutionStrategy("ldctrl","sm")
 solAlgo= solutionStrategy.newSolutionAlgorithm("newton_raphson_soln_algo")
-ctest= solutionStrategy.newConvergenceTest("energy_inc_conv_test")
+ctest= solutionStrategy.newConvergenceTest("energy_incr_conv_test")
 ctest.tol= 1e-9
 ctest.maxNumIter= 10 # Convergence Test: maximum number of iterations that will be performed before "failure to converge" is returned
 ctest.printFlag= 0 # Convergence Test: flag used to print(information on convergence (optional))
@@ -145,25 +144,32 @@ diff_y= map(subtract,y,y_modelo)
 ratio1= 0
 for d in diff_x:
   ratio1= ratio1+d**2
-ratio3= math.sqrt(ratio1)
+ratio1= math.sqrt(ratio1)
 ratio2= 0
 for d in diff_y:
   ratio2= ratio2+d**2
-ratio4= math.sqrt(ratio2)
+ratio2= math.sqrt(ratio2)
 
-#print("x= ",x)
-#print("diff_x= ",diff_x)
-#print("ratio3= ",ratio3)
-#print("y= ",y)
-#print("y_modelo= ",y_modelo)
-#print("diff_y= ",diff_y)
-#print("ratio4= ",ratio4)
-
+'''
+print("ratio1= ",ratio1)
+print("x= ",x)
+print("diff_x= ",diff_x)
+print("ratio2= ",ratio2)
+print("y= ",y)
+print("y_modelo= ",y_modelo)
+print("diff_y= ",diff_y)
+'''
 
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
-if((ratio1<1e-17) & (ratio2<1e-7)):
+if((ratio1<1e-16) & (ratio2<1e-7)):
   print('test '+fname+': ok.')
 else:
   lmsg.error(fname+' ERROR.')
+
+#   FIGURES & REPORTS
+# import matplotlib.pyplot as plt
+# plt.plot(x,y)
+# plt.plot(x,y_modelo)
+# plt.show()

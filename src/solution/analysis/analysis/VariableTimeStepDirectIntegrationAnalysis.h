@@ -81,7 +81,7 @@ class VariableTimeStepDirectIntegrationAnalysis: public DirectIntegrationAnalysi
   protected:
     virtual double determineDt(double dT, double dtMin, double dtMax, int Jd,ConvergenceTest *theTest);
 
-    friend class ProcSolu;
+    friend class SolutionProcedure;
     VariableTimeStepDirectIntegrationAnalysis(SolutionStrategy *analysis_aggregation);
     Analysis *getCopy(void) const;
   public:

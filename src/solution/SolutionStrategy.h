@@ -65,9 +65,11 @@ class Analysis;
 class FEM_ObjectBroker;
 class ID;
 
-//!  @ingroup Solu
+class SolutionStrategyMap;
+
+//! @brief Solution strategy for the finite element problem.
 //! 
-//! @brief Solution strategy for the finite element problem. The
+//! Solution strategy for the finite element problem. The
 //! solution strategy is defined by specifying:
 //! - Wrapper for the finite element model. Container for the finite
 //!   element model "as seen" from the solver.
@@ -87,6 +89,7 @@ class ID;
 //!   form \f$Ax = b\f$, where \f$A\f$ is a matrix and \f$x\f$
 //!   and \f$b\f$ are vectors.
 //! - Convergence test.
+//! @ingroup Solu
 class SolutionStrategy: public CommandEntity
   {
     ModelWrapper *base; //!< Wrapper for the finite element model.
@@ -123,6 +126,9 @@ class SolutionStrategy: public CommandEntity
     SolutionStrategy(const SolutionStrategy &);
     SolutionStrategy &operator=(const SolutionStrategy &);
     ~SolutionStrategy(void);
+
+    const SolutionStrategyMap *getSolutionStrategyMap(void) const;
+    std::string getName(void) const;
 
     inline ModelWrapper *getModelWrapperPtr(void)
       { return base; }

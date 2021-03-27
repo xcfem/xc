@@ -2637,12 +2637,14 @@ int XC::TwentyNodeBrick::commitState(void)
 }
 
 //=============================================================================
-int XC::TwentyNodeBrick::revertToLastCommit ()
-{
-  //  int order = theQuadRule->getOrder(); // Commented by Xiaoyan
-    int i;
-    //int j, k;     // Xiaoyan added k for three dimension
-    int retVal = 0;
+int XC::TwentyNodeBrick::revertToLastCommit(void)
+  {
+    //  int order = theQuadRule->getOrder(); // Commented by Xiaoyan
+    
+    // DON'T call Element::revertToLastCommit() because
+    // is a pure virtual method.
+    // int retVal= ElementBase<20>::revertToLastCommit();
+    int retVal= 0;
 
     // Loop over the integration points and revert to last committed material states
     int count  = r_integration_order* s_integration_order * t_integration_order;
@@ -2652,7 +2654,7 @@ int XC::TwentyNodeBrick::revertToLastCommit ()
                 // added t_integration_order,
      //retVal += (theMaterial[i][j][k]).revertToLastCommit();
 
-    for(i = 0; i < count; i++)
+    for(int i = 0; i < count; i++)
        retVal += matpoint[i]->revertToLastCommit();
 
 
@@ -2660,28 +2662,28 @@ int XC::TwentyNodeBrick::revertToLastCommit ()
 }
 
 //=============================================================================
-int XC::TwentyNodeBrick::revertToStart ()
-{
+int XC::TwentyNodeBrick::revertToStart()
+  {
+    int retVal= ElementBase<20>::revertToStart();
     int i;     // Xiaoyan added k for three dimension
-    int retVal = 0;
 
     // Loop over the integration points and revert to last committed material states
     //for(i = 0; i < r_integration_order; i++)     // Xiaoyan changed order to
     // for(j = 0; j < s_integration_order; j++)    // r_integration_order,
     //     for(k = 0; k < t_integration_order; k++)    // s_integration_order, and
           // added t_integration_order,
-    //     retVal += (theMaterial[i][j][k]).revertToLastCommit();
+    //     retVal += (theMaterial[i][j][k]).revertToStart();
 
     int count  = r_integration_order* s_integration_order * t_integration_order;
 
     for(i = 0; i < count; i++)
-       retVal += matpoint[i]->revertToStart();
+       retVal+= matpoint[i]->revertToStart();
 
 
     return retVal;
 
     // Loop over the integration points and revert to initial material states
-   }
+  }
 
 
 //=============================================================================

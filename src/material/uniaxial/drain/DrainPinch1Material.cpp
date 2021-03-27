@@ -113,34 +113,35 @@ XC::DrainPinch1Material::DrainPinch1Material(void):
 	// Does nothing
 }
 
-int
-XC::DrainPinch1Material::revertToStart(void)
-{
-	double dyp = matParams[1]/matParams[0];	// fyp/E
-	double dyn = matParams[2]/matParams[0];	// fyn/E
+//! @brief Revert the material to its initial state.
+int XC::DrainPinch1Material::revertToStart(void)
+  {
+    int retval= DrainMaterial::revertToStart();
+    double dyp = matParams[1]/matParams[0];	// fyp/E
+    double dyn = matParams[2]/matParams[0];	// fyn/E
 
-	hstv[0]  = matParams[0];		// E
-	hstv[1]  = matParams[0];		// E
-	hstv[2]  = dyp;
-	hstv[3]  = dyn; 
-	hstv[4]  = 0.0;
-	hstv[5]  = dyp;
-	hstv[6]  = dyn;
-	hstv[7]  = matParams[1];		// fyp
-	hstv[8]  = matParams[2];		// fyn
-	hstv[9]  = matParams[13];	// capDispP
-	hstv[10] = matParams[14];	// capDispN
-	hstv[11] = 0.0;
-	hstv[12] = 0.0;
-	hstv[13] = 0.0;
-	hstv[14] = matParams[0];		// E
+    hstv[0]  = matParams[0];		// E
+    hstv[1]  = matParams[0];		// E
+    hstv[2]  = dyp;
+    hstv[3]  = dyn; 
+    hstv[4]  = 0.0;
+    hstv[5]  = dyp;
+    hstv[6]  = dyn;
+    hstv[7]  = matParams[1];		// fyp
+    hstv[8]  = matParams[2];		// fyn
+    hstv[9]  = matParams[13];	// capDispP
+    hstv[10] = matParams[14];	// capDispN
+    hstv[11] = 0.0;
+    hstv[12] = 0.0;
+    hstv[13] = 0.0;
+    hstv[14] = matParams[0];		// E
 
-	// Set trial history variables to committed values
-	for (int i = 0; i < 15; i++)
-		hstv[i+15] = hstv[i];
+    // Set trial history variables to committed values
+    for(int i = 0; i < 15; i++)
+	    hstv[i+15] = hstv[i];
 
-	return 0;
-}
+    return retval;
+  }
 
 XC::UniaxialMaterial* XC::DrainPinch1Material::getCopy(void) const
   { return new DrainPinch1Material(*this); }

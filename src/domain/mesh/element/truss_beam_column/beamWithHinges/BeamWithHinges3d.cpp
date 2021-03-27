@@ -197,8 +197,7 @@ int XC::BeamWithHinges3d::commitState(void)
 
 int XC::BeamWithHinges3d::revertToLastCommit(void)
   {
-    int err = 0;
-
+    int err = BeamColumnWithSectionFDTrf3d::revertToLastCommit();
     // Revert the sections and then get their last committed
     // deformations, stress resultants, and flexibilities
     for(int i = 0; i < 2; i++)
@@ -226,7 +225,7 @@ int XC::BeamWithHinges3d::revertToLastCommit(void)
 
 int XC::BeamWithHinges3d::revertToStart(void)
   {
-    int err = 0;
+    int err = BeamColumnWithSectionFDTrf3d::revertToStart();
 
     for(int i = 0; i < 2; i++)
       {

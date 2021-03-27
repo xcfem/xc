@@ -145,8 +145,8 @@ const XC::stresstensor &XC::NeoHookeanCompressible3D::getStressTensor(void) cons
 //-------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 const XC::stresstensor XC::NeoHookeanCompressible3D::getPK1StressTensor(void) const
   {
-    XC::stresstensor thisSPKStress;
-    XC::stresstensor thisFPKStress;
+    stresstensor thisSPKStress;
+    stresstensor thisFPKStress;
 
     if( FromForC == 0 )
       {
@@ -193,23 +193,24 @@ int XC::NeoHookeanCompressible3D::revertToLastCommit(void)
    return 0;
 }
 
-//---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//! @brief Revert the material to its initial state.
 int XC::NeoHookeanCompressible3D::revertToStart(void)
-{
-   BJtensor F0("I", 2, def_dim_2);
-   F = F0;
-   C = F0;
-   Cinv = F0;
-   J = 1.0;
+  {
+    int retval= FiniteDeformationElastic3D::revertToStart();
+    BJtensor F0("I", 2, def_dim_2);
+    F = F0;
+    C = F0;
+    Cinv = F0;
+    J = 1.0;
 
-   BJtensor ss_zero(2,def_dim_2,0.0);
-   thisPK2Stress = ss_zero;
-   thisGreenStrain = ss_zero;
-   
-   Stiffness = getInitialTangentTensor();
+    BJtensor ss_zero(2,def_dim_2,0.0);
+    thisPK2Stress = ss_zero;
+    thisGreenStrain = ss_zero;
 
-   return 0;
-}
+    Stiffness = getInitialTangentTensor();
+
+    return retval;
+  }
 
 //! @brief Virtual constructor.
 XC::NDMaterial * XC::NeoHookeanCompressible3D::getCopy(void) const

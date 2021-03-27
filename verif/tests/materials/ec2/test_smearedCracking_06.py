@@ -139,7 +139,7 @@ modelSpace.addLoadCaseToDomain(lp0.name)           # reads load pattern "0" and 
 
 # Solve
 # analysis= predefined_solutions.plain_newton_raphson(problem)
-analysis= predefined_solutions.plain_static_modified_newton(problem)
+analysis= predefined_solutions.plain_static_modified_newton(problem, convergenceTestTol= 1e-8)
 analOk= analysis.analyze(1)
 
 
@@ -272,16 +272,16 @@ eps_sm=epsSMax
 w_k=srmax*(eps_sm-eps_cm)
 # print('crack withs: ',w_k*1e3, ' mm')
 
-xComp= -0.205402339504
-epsCMinComp= -0.000523063653924
-sgCMinComp= -15003936.9945
-epsSMaxComp= 0.000627987814199
-sgSMaxComp= 125597562.84
-hceffComp= 0.0981992201653
-roseffComp= 0.113554873259
-srmaxComp= 0.205929765786
+xComp= -0.20277719076152492
+epsCMinComp= -0.000527020745676934
+sgCMinComp= -15.100239959754383e6
+epsSMaxComp= 0.0006487392371380719
+sgSMaxComp= 129747847.42761439
+hceffComp= 0.09907426974615836
+roseffComp= 0.11255192724175878
+srmaxComp= 0.20624993458562696
 eps_cmComp= 4.67648930823e-05
-w_kComp= 0.000119691100015
+w_kComp= 0.00012415716908373262
 
 ratio1=(xComp-x)/xComp
 ratio2=(epsCMinComp- epsCMin)/epsCMinComp
@@ -293,6 +293,40 @@ ratio7=(roseffComp-roseff)/roseffComp
 ratio8=(srmaxComp-srmax)/srmaxComp
 ratio9=(eps_cmComp-eps_cm)/eps_cmComp
 ratio10=(w_kComp-w_k)/w_kComp
+
+'''
+print('x= ', x)
+print('xComp= ', xComp)
+print('ratio1= ', ratio1)
+print('epsCMin= ', epsCMin)
+print('epsCMinComp= ', epsCMinComp)
+print('ratio2= ', ratio2)
+print('sgCMinComp= ', sgCMinComp/1e6, 'MPa')
+print('sgCMin= ', sgCMin/1e6, 'MPa')
+print('sgCMax= ', sgCMax/1e6, 'MPa')
+print('ratio3= ', ratio3)
+print('epsSMax= ', epsSMax)
+print('epsSMaxComp= ', epsSMaxComp)
+print('ratio4= ', ratio4)
+print('sgSMax= ', sgSMax)
+print('sgSMaxComp= ', sgSMaxComp)
+print('ratio5= ', ratio5)
+print('hceff= ', hceff)
+print('hceffComp= ', hceffComp)
+print('ratio6= ', ratio6)
+print('roseff= ', roseff)
+print('roseffComp= ', roseffComp)
+print('ratio7= ', ratio7)
+print('srmax= ', srmax)
+print('srmaxComp= ', srmaxComp)
+print('ratio8= ', ratio8)
+print('eps_cm= ', eps_cm)
+print('eps_cmComp= ', eps_cmComp)
+print('ratio9= ', ratio9)
+print('w_k= ', w_k)
+print('w_kComp= ', w_kComp)
+print('ratio10= ', ratio10)
+'''
 
 import os
 from misc_utils import log_messages as lmsg

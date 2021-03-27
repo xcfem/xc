@@ -102,12 +102,15 @@ int XC::NDAdaptorMaterial::revertToLastCommit(void)
     return theMaterial->revertToLastCommit();
   }
 
+//! @brief Revert the material to its initial state.
 int XC::NDAdaptorMaterial::revertToStart()
   {
+    int retval= NDMaterial::revertToStart();
     Tstrain22 = 0.0;
     Cstrain22 = 0.0;
     strain.Zero();
-    return theMaterial->revertToStart();
+    retval= theMaterial->revertToStart();
+    return retval;
   }
 
 double XC::NDAdaptorMaterial::getRho(void) const

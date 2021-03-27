@@ -340,11 +340,13 @@ int XC::FiniteDeformationEP3D::revertToLastCommit(void)
     return fdeps->revertToLastCommit();
 }
 
-//----------------------------------------------------------------------
+//! @brief Revert the material to its initial state.
 int XC::FiniteDeformationEP3D::revertToStart(void)
-{
-    return fdeps->revertToStart();
-}
+  {
+    int retval= FiniteDeformationMaterial::revertToStart();
+    retval+= fdeps->revertToStart();
+    return retval;
+  }
 
 //@ brief Virtual constructor.
 XC::NDMaterial* XC::FiniteDeformationEP3D::getCopy(void) const
@@ -448,8 +450,8 @@ int XC::FiniteDeformationEP3D::ImplicitAlgorithm()
     double d_gamma  = 0.0;              // increment of consistency parameter /delta_{gamma}
     int         iter_counter = 0;
 
-    XC::straintensor res_Ee = tensorZ2;     // residual of intermediate Ee
-    XC::straintensor res_eta = tensorZ2;    // norm of residual of eta
+    straintensor res_Ee = tensorZ2;     // residual of intermediate Ee
+    straintensor res_eta = tensorZ2;    // norm of residual of eta
 
     double  res_xi = 0.0;                // residual of strain like internal variable
     double  res_norm_eta = 0.0;         // norm of residual of eta

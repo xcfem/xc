@@ -43,15 +43,11 @@ class Matrix;
 //! @brief Mechanical load (forces) over bidimensional elements.
 class BidimMecLoad: public BidimLoad
   {
-  protected:
-
   public:
     BidimMecLoad(int tag, int classTag, const ID &theElementTags);
     BidimMecLoad(int tag, int classTag);
 
     virtual SlidingVectorsSystem3d getResultant(const Pos3d &p= Pos3d(), bool initialGeometry= true) const;
-
-
   };
 } // end of XC namespace
 

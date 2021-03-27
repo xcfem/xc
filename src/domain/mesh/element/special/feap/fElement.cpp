@@ -363,22 +363,20 @@ int XC::fElement::commitState()
   return retVal;
 }
 
-int
-XC::fElement::revertToLastCommit()
-{
+int XC::fElement::revertToLastCommit()
+  {
+    // DON'T call Element::revertToLastCommit() because
+    // is a pure virtual method.
+    // retval= Element::revertToLastCommit();
     if(nh1 != 0)
         for(int i=0; i<nh1; i++)
             h[i+nh1] = h[i];
-
     nrCount = 0;
     return 0;
-}
+  }
 
 int XC::fElement::revertToStart()
-  {
-    // does nothing
-    return 0;
-  }
+  { return Element::revertToStart(); }
 
 
 const XC::Matrix &XC::fElement::getTangentStiff(void) const

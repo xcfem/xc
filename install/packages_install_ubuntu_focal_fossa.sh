@@ -35,8 +35,6 @@ packages_lib="\
     libf2c2-dev                 \
     libglib2.0-dev              \
     libgmp3-dev                 \
-    libgmsh-dev                 \
-    libgmsh4                    \
     libgtk2.0-dev               \
     libgtkgl2.0-dev             \
     libgtkglextmm-x11-1.2-dev   \
@@ -54,6 +52,18 @@ packages_lib="\
     libx11-dev                  \
     libmetis-dev"
 sudo apt-get install -y $packages_lib
+
+gmshLib="/usr/local/lib/gmsh.py"
+if [ ! -f "$gmshLib" ]
+then
+    echo "$0: gmshLib '${gmshLib}' not already installed."
+    packages_gmsh="\
+	libgmsh-dev                 \
+	libgmsh4"
+    sudo apt-get install -y $packages_gmsh
+else
+    echo "$0: gmshLib '${gmshLib}' already installed. Skipping."    
+fi
 
 packages_dev="\
     cimg-dev  \

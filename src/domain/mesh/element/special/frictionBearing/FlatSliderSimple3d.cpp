@@ -118,6 +118,8 @@ int XC::FlatSliderSimple3d::commitState()
 
 int XC::FlatSliderSimple3d::revertToLastCommit()
   {
+    // DON'T call Element::revertToLastCommit() because
+    // is a pure virtual method.
     int errCode = 0;
     
     
@@ -129,7 +131,7 @@ int XC::FlatSliderSimple3d::revertToLastCommit()
 
 int XC::FlatSliderSimple3d::revertToStart()
   {   
-    int errCode=0;
+    int errCode= FrictionElementBase::revertToStart();
     
     // reset trial history variables
     ub.Zero();
@@ -142,7 +144,7 @@ int XC::FlatSliderSimple3d::revertToStart()
     // reset stiffness matrix in basic system
     kb = kbInit;
     
-    errCode += theFrnMdl->revertToStart();// revert friction model
+    errCode+= theFrnMdl->revertToStart();// revert friction model
     
     errCode+= physicalProperties.revertToStart(); // revert material models  
     return errCode;

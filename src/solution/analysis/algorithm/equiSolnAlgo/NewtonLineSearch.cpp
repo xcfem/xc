@@ -101,13 +101,13 @@ bool XC::NewtonLineSearch::alloc(const std::string &nmb)
   {
     free_mem();
     if(nmb=="bisection_line_search")
-      theLineSearch=new BisectionLineSearch();
+      theLineSearch= new BisectionLineSearch();
     else if(nmb=="initial_interpolated_line_search")
-      theLineSearch=new InitialInterpolatedLineSearch();
+      theLineSearch= new InitialInterpolatedLineSearch();
     else if(nmb=="regula_falsi_line_search")
-      theLineSearch=new RegulaFalsiLineSearch();
+      theLineSearch= new RegulaFalsiLineSearch();
     else if(nmb=="secant_line_search")
-      theLineSearch=new SecantLineSearch();
+      theLineSearch= new SecantLineSearch();
     if(theLineSearch)
       theLineSearch->set_owner(this);
     return (theLineSearch!=nullptr);
@@ -122,7 +122,7 @@ void XC::NewtonLineSearch::copy(LineSearch *ptr)
         theLineSearch->set_owner(this);
       }
     else
-     std::cerr << "NewtonLineSearch::copy; pointer to line search is null." << std::endl;
+      std::cerr << "NewtonLineSearch::copy; pointer to line search is null." << std::endl;
   }
 
 XC::NewtonLineSearch::~NewtonLineSearch(void)
@@ -132,7 +132,20 @@ XC::NewtonLineSearch::~NewtonLineSearch(void)
 XC::SolutionAlgorithm *XC::NewtonLineSearch::getCopy(void) const
   { return new NewtonLineSearch(*this); }
 
-//! @brief resuelve el paso actual.
+//! @brief Sets the line search method to use.
+//! @param lineSearchMethod: string identifying the method.
+bool XC::NewtonLineSearch::setLineSearchMethod(const std::string &lineSearchMethod)
+  {
+    bool retval= alloc(lineSearchMethod);
+    if(!retval)
+      std::cerr << getClassName() << "::" << __FUNCTION__
+	        << "; can't set the line search method: '"
+	        << lineSearchMethod << "'"
+	        << std::endl;
+    return retval;
+  }
+
+//! @brief Solve current step.
 int XC::NewtonLineSearch::solveCurrentStep(void)
   {
     // set up some pointers tond check they are valid
@@ -247,7 +260,7 @@ void XC::NewtonLineSearch::Print(std::ostream &s, int flag) const
   {
     if(flag == 0)
       s << "NewtonLineSearch\n";
-    if(theLineSearch != 0)
+    if(theLineSearch)
       theLineSearch->Print(s, flag);
   }
 

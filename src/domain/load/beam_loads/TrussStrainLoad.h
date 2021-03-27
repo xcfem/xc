@@ -59,6 +59,7 @@ class TrussStrainLoad: public ElementBodyLoad
     inline void setE2(const double &d)
       { e2= d; }
     const Vector &getData(int &type, const double &loadFactor) const;
+    std::vector<XC::Vector> getStrains(void) const;
 
     int sendSelf(Communicator &);  
     int recvSelf(const Communicator &);

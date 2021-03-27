@@ -209,6 +209,8 @@ int XC::ProtoBeam3d::commitState(void)
 //! @brief Revert the element to the its last commited state.
 int XC::ProtoBeam3d::revertToLastCommit()
   {
+    // DON'T call Element::revertToLastCommit() because
+    // is a pure virtual method.
     //int retval= Element1D::revertToLastCommit(); // pure virtual.
     int retval= physicalProperties.revertToLastCommit();
     return retval;
