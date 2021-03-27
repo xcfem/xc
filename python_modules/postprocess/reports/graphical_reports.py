@@ -335,8 +335,8 @@ class LoadCaseDispParameters(RecordDisp):
             capt= self.getCaptionText(setDescr= st.description, unitsDescr= self.unitsLoads)
             labl= getLabelText(capt)
             jpegFileName= fullgrfname+'.jpg'
-            #outputHandler.displayLoads(setToDisplay=st,caption= capt,fileName= jpegFileName)  # changed 22/06/2020
-            outputHandler.displayLoadVectors(setToDisplay=st,caption= capt,fileName=jpegFileName)
+            outputHandler.displayLoads(setToDisplay=st,caption= capt,fileName= jpegFileName)  # changed 22/06/2020
+            #outputHandler.displayLoadVectors(setToDisplay=st,caption= capt,fileName=jpegFileName)
             oh.insertGrInTex(texFile=texFile,grFileNm=rltvgrfname,grWdt=cfg.grWidth,capText=capt,labl=labl)
         for st in self.setsToDispBeamLoads:
             fullgrfname= fullPath+self.loadCaseName+st.name
