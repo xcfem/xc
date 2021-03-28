@@ -377,7 +377,7 @@ def plain_newton_raphson(prb, mxNumIter= 10):
     return solProc.analysis
 
 class PlainNewtonRaphsonBandGen(SolutionProcedure):
-    ''' Newton-Raphson solution algorithm with a 
+    ''' Newton-Raphson solution algorithm with a s
         plain constraint handler and a band general
         SOE solver.
     '''
@@ -833,7 +833,7 @@ class PenaltyNewmarkNewtonRapshon(SolutionProcedure):
         :param convergenceTestTol: convergence tolerance (defaults to 1e-9)
         :param printFlag: if not zero print convergence results on each step.
         :param numSteps: number of steps to use in the analysis (useful only when loads are variable in time).
-        :param numberingMethod: numbering method (plain or reverse Cuthill-McKee or alterntive minimum degree).
+        :param numberingMethod: numbering method (plain or reverse Cuthill-McKee or alternative minimum degree).
         :param convTestType: convergence test for non linear analysis (norm unbalance,...).
         '''
         super(PenaltyNewmarkNewtonRapshon,self).__init__(name, 'penalty', maxNumIter, convergenceTestTol, printFlag, numSteps, numberingMethod, convTestType)
