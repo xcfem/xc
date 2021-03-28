@@ -245,6 +245,13 @@ int XC::MRMFreedom_Constraint::addResistingForceToNodalReaction(bool inclInertia
     return 0;
   }
 
+//! @brief Returns a vector to store the dbTags
+//! of the class members.
+XC::DbTagData &XC::MRMFreedom_Constraint::getDbTagData(void) const
+  {
+    static DbTagData retval(10);
+    return retval;
+  }
 
 //! @brief Send data through the communicator argument.
 int XC::MRMFreedom_Constraint::sendData(Communicator &comm)

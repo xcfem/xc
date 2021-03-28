@@ -84,10 +84,9 @@ class ElasticMaterial: public ElasticBaseMaterial
     double trialStrainRate;
     double eta; //!< Damping tangent.
   protected:
+    DbTagData &getDbTagData(void) const;
     int sendData(Communicator &);
     int recvData(const Communicator &);
-
-
   public:
     ElasticMaterial(int tag, double E, double eta = 0.0);    
     ElasticMaterial(int tag, int classtag= MAT_TAG_ElasticMaterial);    

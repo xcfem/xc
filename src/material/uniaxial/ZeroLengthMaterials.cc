@@ -180,49 +180,84 @@ XC::Matrix XC::ZeroLengthMaterials::getGeneralizedStrains(void) const
     return retval;
   }
 
-//! @brief Sends the materials through the communicator argument.
+//! @brief Returns a vector to store the dbTags
+//! of the class members.
+XC::DbTagData &XC::ZeroLengthMaterials::getDbTagData(void) const
+  {
+    static DbTagData retval(3);
+    return retval;
+  }
+
+//! @brief Send object members through the communicator argument.
+int XC::ZeroLengthMaterials::sendData(Communicator &comm)
+  {
+    int res= DqUniaxialMaterial::sendData(comm);
+    // Send directions.
+    const size_t sz= directions.size();
+    ID dir(sz);
+    for(size_t i= 0;i<sz;i++)
+      dir[i]= directions[i];
+    res+= comm.sendID(dir,getDbTagData(),CommMetaData(2));
+    return res;
+  }
+
+//! @brief Receives object members through the communicator argument.
+int XC::ZeroLengthMaterials::recvData(const Communicator &comm)
+  {
+    int res= DqUniaxialMaterial::recvData(comm);
+    // Receive directions.
+    ID dir;
+    res+= comm.receiveID(dir,getDbTagData(),CommMetaData(2));
+    const size_t sz= dir.Size();
+    for(size_t i= 0;i<sz;i++)
+      directions.push_back(dir[i]);
+    return res;
+  }
+
+//! @brief Send the object through the communicator.
+//! 
+//! Sends the object through the communicator. Returns 0 if successful, a
+//! warning message is printed, \p tag and \f$E\f$ are set to \f$0.0\f$, and a
+//! negative number is returned if the Channel object fails to receive
+//! the object.
 int XC::ZeroLengthMaterials::sendSelf(Communicator &comm)
   {
     setDbTag(comm);
     const int dataTag= getDbTag();
-    inicComm(3); 
-    const size_t sz= size();
-
+    inicComm(3);
     int res= sendData(comm);
-    ID direction(sz);
-    for(size_t i= 0;i<sz;i++)
-      direction[i]= directions[i];
-    res+= comm.sendID(direction,getDbTagData(),CommMetaData(2));
-
     res+= comm.sendIdData(getDbTagData(),dataTag);
-    if(res<0)
+    if(res < 0)
       std::cerr << getClassName() << "::" << __FUNCTION__
-	        << "; failed to send.\n";
+	        << "; failed to send data\n";
     return res;
   }
 
+//! @brief Receive the object through the communicator.
+//! 
+//! Receives the object through the communicator. Returns 0 if successful, a
+//! warning message is printed, \p tag and \f$E\f$ are set to \f$0.0\f$, and a
+//! negative number is returned if the Channel object fails to receive
+//! the object.
 int XC::ZeroLengthMaterials::recvSelf(const Communicator &comm)
   {
     inicComm(3);
     const int dataTag= getDbTag();
     int res= comm.receiveIdData(getDbTagData(),dataTag);
-    if(res < 0)
+    if(res<0)
       std::cerr << getClassName() << "::" << __FUNCTION__
-	        << "; failed to receive.\n";
+		<< "; failed to receive ids.\n";
     else
       {
-        res+= recvData(comm);
-        ID direction;
-        res+= comm.receiveID(direction,getDbTagData(),CommMetaData(2));
-        const size_t sz= direction.Size();
-        directions.resize(sz);
-        for(size_t i= 0;i<sz;i++)
-          directions[i]= direction(i);
+        res= recvData(comm);
+        if(res < 0)
+          std::cerr << getClassName() << "::" << __FUNCTION__
+	            << "; - failed to receive data\n";
       }
     return res;
   }
 
-
+//! @brief Pring stuff
 void XC::ZeroLengthMaterials::Print(std::ostream &s, int flag) const
   {
     for(size_t j = 0; j < size(); j++)

@@ -215,8 +215,6 @@ void XC::Beam3dUniformLoad::addElasticDeformations(const double &L,const CrossSe
       }
   }
 
-
-
 //! @brief Returns a vector to store the dbTags
 //! of the class members.
 XC::DbTagData &XC::Beam3dUniformLoad::getDbTagData(void) const
@@ -248,7 +246,8 @@ int XC::Beam3dUniformLoad::sendSelf(Communicator &comm)
     const int dbTag= getDbTag();
     result+= comm.sendIdData(getDbTagData(),dbTag);
     if(result < 0)
-      std::cerr << "Beam3dUniformLoad::sendSelf() - failed to send extra data\n";
+      std::cerr << getClassName() << "::" << __FUNCTION__
+	        << "; - failed to send extra data\n";
     return result;
   }
 
@@ -258,7 +257,8 @@ int XC::Beam3dUniformLoad::recvSelf(const Communicator &comm)
     const int dataTag= getDbTag();
     int res= comm.receiveIdData(getDbTagData(),dataTag);
     if(res<0)
-      std::cerr << "Beam3dUniformLoad::recvSelf() - data could not be received\n" ;
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; data could not be received\n" ;
     else
       res+= recvData(comm);
     return res;

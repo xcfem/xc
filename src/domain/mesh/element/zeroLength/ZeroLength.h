@@ -130,6 +130,7 @@ class ZeroLength: public Element0D
   protected:
     void setUpType(const size_t &);
 
+    DbTagData &getDbTagData(void) const;
     int sendData(Communicator &);
     int recvData(const Communicator &);
 

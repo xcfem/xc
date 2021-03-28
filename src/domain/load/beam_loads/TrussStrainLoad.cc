@@ -66,32 +66,52 @@ const XC::Vector &XC::TrussStrainLoad::getData(int &type, const double &loadFact
     return data;
   }
 
+//! @brief Returns a vector to store the dbTags
+//! of the class members.
+XC::DbTagData &XC::TrussStrainLoad::getDbTagData(void) const
+  {
+    static DbTagData retval(4);
+    return retval;
+  }
+
+//! @brief Send data through the communicator argument.
+int XC::TrussStrainLoad::sendData(Communicator &comm)
+  {
+    int res= ElementBodyLoad::sendData(comm);
+    res+= comm.sendDoubles(e1,e2,getDbTagData(),CommMetaData(3));
+    return res;
+  }
+
+//! @brief Receive data through the communicator argument.
+int XC::TrussStrainLoad::recvData(const Communicator &comm)
+  {
+    int res= ElementBodyLoad::recvData(comm);
+    res+= comm.receiveDoubles(e1,e2,getDbTagData(),CommMetaData(3));
+    return res;
+  }
+
 int XC::TrussStrainLoad::sendSelf(Communicator &comm)
   {
-    static ID data(2);
-    int res= sendData(comm);
-    res+= comm.sendDoubles(e1,e2,getDbTagData(),CommMetaData(1));
-    const int dataTag= getDbTag();
-    res+= comm.sendIdData(getDbTagData(),dataTag);
-    if(res<0)
+    inicComm(4);
+    int result= sendData(comm);
+    const int dbTag= getDbTag();
+    result+= comm.sendIdData(getDbTagData(),dbTag);
+    if(result < 0)
       std::cerr << getClassName() << "::" << __FUNCTION__
-		<< "; failed to send extra data\n";    
-    return res;
+	        << "; - failed to send extra data\n";
+    return result;
   }
 
 int XC::TrussStrainLoad::recvSelf(const Communicator &comm)
   {
-    static ID data(2);
+    inicComm(4);
     const int dataTag= getDbTag();
     int res= comm.receiveIdData(getDbTagData(),dataTag);
     if(res<0)
       std::cerr << getClassName() << "::" << __FUNCTION__
 		<< "; data could not be received\n" ;
     else
-      {
-        res+= recvData(comm);
-        res+= comm.receiveDoubles(e1,e2,getDbTagData(),CommMetaData(1));
-      }
+      res+= recvData(comm);
     return res;
   }
 

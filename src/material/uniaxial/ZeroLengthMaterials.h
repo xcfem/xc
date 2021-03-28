@@ -63,6 +63,9 @@ class ZeroLengthMaterials: public DqUniaxialMaterial
   protected:
     MaterialHandler *get_material_handler(void);
 
+    DbTagData &getDbTagData(void) const;
+    int sendData(Communicator &);
+    int recvData(const Communicator &);
   public:
     // Constructor for a single 1d material model
     ZeroLengthMaterials(ZeroLength *owner,UniaxialMaterial &theMaterial,int direction);
