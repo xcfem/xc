@@ -197,6 +197,7 @@ int XC::ZeroLengthMaterials::sendData(Communicator &comm)
     ID dir(sz);
     for(size_t i= 0;i<sz;i++)
       dir[i]= directions[i];
+    // Compute next position.
     res+= comm.sendID(dir,getDbTagData(),CommMetaData(2));
     return res;
   }

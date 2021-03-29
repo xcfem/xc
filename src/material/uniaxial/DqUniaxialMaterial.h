@@ -54,6 +54,7 @@ class DqUniaxialMaterial: public CommandEntity, public MovableObject, public std
     typedef lst_ptr::size_type size_type;
   protected:
     void copy_list(const DqUniaxialMaterial &,SectionForceDeformation *s= nullptr);
+    DbTagData &getDbTagData(void) const;
     int sendData(Communicator &);  
     int recvData(const Communicator &);
 

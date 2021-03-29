@@ -161,8 +161,9 @@ int XC::DqUniaxialMaterial::commitState(void)
         int tmp= (*i)->commitState();
         if(tmp!=0)
           {
-	    std::cerr << "WARNING XC::DqUniaxialMaterial::commitState() ";
-	    std::cerr << "MaterialModel failed to commitState():" ;
+	    std::cerr << getClassName() << "::" << __FUNCTION__
+		      << "; MaterialModel failed to commitState():"
+	              << std::endl;
 	    (*i)->Print(std::cerr);
 	  }
         err+= tmp;
@@ -179,8 +180,9 @@ int XC::DqUniaxialMaterial::revertToLastCommit(void)
         int tmp= (*i)->revertToLastCommit();
         if(tmp!=0)
           {
-	    std::cerr << "WARNING XC::DqUniaxialMaterial::revertToLastCommit() ";
-	    std::cerr << "MaterialModel failed to revertToLastCommit():" ;
+	    std::cerr << getClassName() << "::" << __FUNCTION__
+		      << "; MaterialModel failed to revertToLastCommit():"
+	              << std::endl;
 	    (*i)->Print(std::cerr);
 	  }
         err+= tmp;
@@ -197,8 +199,9 @@ int XC::DqUniaxialMaterial::revertToStart(void)
         int tmp= (*i)->revertToStart();
         if(tmp!=0)
           {
-	    std::cerr << "WARNING XC::DqUniaxialMaterial::revertToStart() ";
-	    std::cerr << "MaterialModel failed to revertToStart():" ;
+	    std::cerr << getClassName() << "::" << __FUNCTION__
+		      << "; MaterialModel failed to revertToStart():"
+	              << std::endl;
 	    (*i)->Print(std::cerr);
 	  }
         err+= tmp;
@@ -327,7 +330,8 @@ void XC::DqUniaxialMaterial::getStress(Vector &s,const size_t &offset) const
 void XC::DqUniaxialMaterial::push_back(const UniaxialMaterial *t,SectionForceDeformation *s)
   {
     if(!t)
-      std::cerr << "DqUniaxialMaterial::push_back; pointer to material is null." << std::endl;
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; pointer to material is null." << std::endl;
     else
       {
         UniaxialMaterial *tmp= nullptr;
@@ -338,7 +342,8 @@ void XC::DqUniaxialMaterial::push_back(const UniaxialMaterial *t,SectionForceDef
         if(tmp)
           lst_ptr::push_back(tmp);
         else
-          std::cerr << "DqUniaxialMaterial::push_back; can't create an UniaxialMaterial" << std::endl;
+          std::cerr << getClassName() << "::" << __FUNCTION__
+		    << "; can't create an UniaxialMaterial" << std::endl;
       }
   }
 
@@ -346,7 +351,8 @@ void XC::DqUniaxialMaterial::push_front(const UniaxialMaterial *t,SectionForceDe
   {
     UniaxialMaterial *tmp= nullptr;
     if(!t)
-      std::cerr << "DqUniaxialMaterial::push_back; pointer to material is null." << std::endl;
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; pointer to material is null." << std::endl;
     else
       {
         if(s)
@@ -356,8 +362,17 @@ void XC::DqUniaxialMaterial::push_front(const UniaxialMaterial *t,SectionForceDe
         if(tmp)
           lst_ptr::push_front(tmp);
         else
-          std::cerr << "DqUniaxialMaterial::push_front; can't create UniaxialMaterial" << std::endl;
+          std::cerr << getClassName() << "::" << __FUNCTION__
+		    << "; can't create UniaxialMaterial" << std::endl;
       }
+  }
+
+//! @brief Returns a vector to store the dbTags
+//! of the class members.
+XC::DbTagData &XC::DqUniaxialMaterial::getDbTagData(void) const
+  {
+    static DbTagData retval(2);
+    return retval;
   }
 
 //! @brief Sends object through the communicator argument.
@@ -366,7 +381,6 @@ int XC::DqUniaxialMaterial::sendData(Communicator &comm)
     const size_t sz= size();
     setDbTagDataPos(0,sz);
     DbTagData cpMat(sz*2);
-    inicComm(sz*2);
     int res= 0;
     for(size_t i= 0;i<sz;i++)
       res+= comm.sendBrokedPtr((*this)[i],cpMat,BrokedPtrCommMetaData(i,0,i+sz));
@@ -379,7 +393,6 @@ int XC::DqUniaxialMaterial::recvData(const Communicator &comm)
   {
     const size_t sz= getDbTagDataPos(0);
     DbTagData cpMat(sz*2);
-    inicComm(sz*2);
     int res= cpMat.receive(getDbTagData(),comm,CommMetaData(1));
 
     for(size_t i= 0;i<sz;i++)
@@ -387,8 +400,9 @@ int XC::DqUniaxialMaterial::recvData(const Communicator &comm)
         // Receive the material
         (*this)[i]= comm.getBrokedMaterial((*this)[i],cpMat,BrokedPtrCommMetaData(i,0,i+sz));
         if(!(*this)[i])
-          std::cerr << "MaterialVector::recvSelf() - material "
-                    << i << "failed to recv itself\n";
+          std::cerr << getClassName() << "::" << __FUNCTION__
+	            << "; material " << i
+		    << "failed to recv itself.\n";
       }
     return res;
   }
@@ -399,11 +413,12 @@ int XC::DqUniaxialMaterial::sendSelf(Communicator &comm)
     setDbTag(comm);
     const int dataTag= getDbTag();
     int res= sendData(comm);
-
-    res+= comm.sendIdData(getDbTagData(),dataTag);
+    const DbTagData &dbTagData= getDbTagData();
+    inicComm(dbTagData.Size());
+    res+= comm.sendIdData(dbTagData,dataTag);
     if(res < 0)
-      std::cerr << "WARNING DqUniaxialMaterial::sendSelf() - " 
-                << dataTag << " failed to send.";
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; " << dataTag << " failed to send.";
     return res;
   }
 
@@ -411,13 +426,19 @@ int XC::DqUniaxialMaterial::sendSelf(Communicator &comm)
 int XC::DqUniaxialMaterial::recvSelf(const Communicator &comm)
   {
     const int dataTag= getDbTag();
-    int res= comm.receiveIdData(getDbTagData(),dataTag);
-
+    DbTagData dbTagData= getDbTagData();
+    inicComm(dbTagData.Size());
+    int res= comm.receiveIdData(dbTagData,dataTag);
     if(res<0)
-      std::cerr << "WARNING DqUniaxialMaterial::recvSelf() - "
-                << dataTag << " failed to receive ID\n";
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; " << dataTag << " failed to receive ID\n";
     else
-      res+= recvData(comm);
+      {
+        res+= recvData(comm);
+        if(res < 0)
+          std::cerr << getClassName() << "::" << __FUNCTION__
+	            << "; - failed to receive data\n";
+      }
     return res;
   }
 

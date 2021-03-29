@@ -665,13 +665,11 @@ void XC::SetMeshComp::sel_constraints_from_list(const ID &tags)
         if(preprocessor)
           for(size_t i= 0;i<sz;i++)
             {
-              if((tmp= preprocessor->getDomain()->getConstraints().getSFreedom_Constraint(tags(i))))
-                constraints.push_back(tmp);
-              else if((tmp=preprocessor->getDomain()->getConstraints().getMFreedom_Constraint(tags(i))))
+              if((tmp= preprocessor->getDomain()->getConstraints().getConstraint(tags(i))))
                 constraints.push_back(tmp);
               else
 		std::cerr << getClassName() << "::" << __FUNCTION__
-		          << "; constraint idenfified by: "
+		          << "; constraint identified by: "
                           << tags(i) << " not found." << std::endl;
             }
 
