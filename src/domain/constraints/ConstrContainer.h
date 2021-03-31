@@ -36,6 +36,7 @@
 #include <set>
 
 namespace XC {
+class Constraint;
 class SFreedom_Constraint;
 class MFreedom_Constraint;
 class MRMFreedom_Constraint;
@@ -133,6 +134,7 @@ class ConstrContainer: public MeshComponentContainer
     virtual SFreedom_Constraint *getSFreedom_Constraint(int tag);
     virtual MFreedom_Constraint *getMFreedom_Constraint(int tag);
     virtual MRMFreedom_Constraint *getMRMFreedom_Constraint(int tag);
+    virtual Constraint *getConstraint(int tag);
     LoadPattern *getLoadPattern(const int &);
     const LoadPattern *getLoadPattern(const int &) const;
     NodeLocker *getNodeLocker(const int &);

@@ -248,7 +248,7 @@ int XC::FE_Datastore::save(const int &commitTag)
     const int retval= commitState(commitTag);
     if(retval < 0)
       std::cerr << getClassName() << "::" << __FUNCTION__
-		<< "; WARNING - database failed to commitState.\n";
+		<< "; WARNING - database failed to commit state.\n";
     return retval;
   }
 
@@ -257,7 +257,7 @@ int XC::FE_Datastore::restore(const int &commitTag)
     const int retval= restoreState(commitTag);
     if(retval < 0)
       std::cerr << getClassName() << "::" << __FUNCTION__
-		<< "; WARNING - database failed to commitState.\n";
+		<< "; WARNING - database failed to commit state.\n";
     return retval;
   }
 

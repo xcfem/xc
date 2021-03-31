@@ -130,6 +130,14 @@ int XC::ElasticMaterial::revertToStart(void)
 XC::UniaxialMaterial *XC::ElasticMaterial::getCopy(void) const
   { return new ElasticMaterial(*this); }
 
+//! @brief Returns a vector to store the dbTags
+//! of the class members.
+XC::DbTagData &XC::ElasticMaterial::getDbTagData(void) const
+  {
+    static DbTagData retval(4);
+    return retval;
+  }
+
 //! @brief Send object members through the communicator argument.
 int XC::ElasticMaterial::sendData(Communicator &comm)
   {

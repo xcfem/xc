@@ -625,6 +625,20 @@ XC::MRMFreedom_Constraint *XC::ConstrContainer::getMRMFreedom_Constraint(int tag
     return result;
   }
 
+//! @brief Returns a pointer to the constraint whose identifier is
+//! being passed as parameter.
+//!
+//! @param tag: constraint identifier.
+XC::Constraint *XC::ConstrContainer::getConstraint(int tag)
+  {
+    Constraint *retval= getSFreedom_Constraint(tag);
+    if(!retval)
+      retval= getMFreedom_Constraint(tag);
+    if(!retval)
+      retval= getMRMFreedom_Constraint(tag);
+    return retval;
+  }
+
 //! @brief Returns a pointer to the load pattern identified by
 //! the argument.
 //!

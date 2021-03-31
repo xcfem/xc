@@ -619,7 +619,6 @@ XC::Matrix XC::ZeroLength::getExtrapolatedValues(const Matrix &values) const
     const size_t sz= values.noRows();
     Matrix retval(2,sz); // Two nodes and sz values per node.
     const Matrix &e_matrix= getExtrapolationMatrix();
-    std::cout << "values: " << values << std::endl;
     for(size_t i= 0;i<sz;i++)
       {
 	retval(0,i)= e_matrix(0,0)*values(i,0);
@@ -666,6 +665,14 @@ boost::python::list XC::ZeroLength::getValuesAtNodes(const std::string &code, bo
     return retval;
   }
 
+//! @brief Returns a vector to store the dbTags
+//! of the class members.
+XC::DbTagData &XC::ZeroLength::getDbTagData(void) const
+  {
+    static DbTagData retval(19);
+    return retval;
+  }
+
 //! @brief Send members through the communicator argument.
 int XC::ZeroLength::sendData(Communicator &comm)
   {
@@ -695,7 +702,7 @@ int XC::ZeroLength::recvData(const Communicator &comm)
 //! @brief Sends object through the communicator argument.
 int XC::ZeroLength::sendSelf(Communicator &comm)
   {
-    inicComm(22);
+    inicComm(19);
 
     int res= sendData(comm);
 
@@ -710,7 +717,7 @@ int XC::ZeroLength::sendSelf(Communicator &comm)
 //! @brief Receives object through the communicator argument.
 int XC::ZeroLength::recvSelf(const Communicator &comm)
   {
-    inicComm(22);
+    inicComm(19);
 
     const int dataTag= getDbTag();
     int res= comm.receiveIdData(getDbTagData(),dataTag);

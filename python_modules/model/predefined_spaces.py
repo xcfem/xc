@@ -28,6 +28,7 @@ class PredefinedSpace(object):
     :ivar numDOFs: number of degrees of freedom for each node (1, 2, 3 or 6).
     :ivar solProcType: type of the solution procedure.
     :ivar fixedNodesTags: tags of the constrained nodes.
+    :ivar dBase: current database.
     '''
     def __init__(self, nodes, dimSpace, numDOFs, solProcType: predefined_solutions.SolutionProcedure = defaultSolutionProcedureType):
         '''Defines the dimension of the space and the number 
@@ -49,6 +50,31 @@ class PredefinedSpace(object):
         ''' Return the XC finite element problem object.
         '''
         return self.preprocessor.getProblem
+
+    def getNewDatabase(self, fName, dbType= 'BerkeleyDB'):
+        ''' Defines a new database.
+
+        :param fName: file name.
+        :param dbType: database type (defaults as BerkeleyDB).
+        '''
+        self.dBase= self.getProblem().newDatabase(dbType,fName)
+        return self.dBase
+
+    def save(self, flag: int):
+        ''' Saves the current state on the current database.
+
+        :param flag: integer indentifier for the current state
+                     in the database.
+        '''
+        return self.dBase.save(flag)
+        
+    def restore(self, flag: int):
+        ''' Restore the current state from the current database.
+
+        :param flag: integer indentifier for the state to restore
+                     in the database.
+        '''
+        return self.dBase.restore(flag)
 
     def getSurfaceHandler(self):
         ''' Return the surface handler for this model.'''

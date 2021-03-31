@@ -57,6 +57,8 @@ class DbTagData
 
     inline int Size(void) const
       { return data.Size(); }
+    inline int resize(const int &newSize)
+      { return data.resize(newSize); }
     const int &getDbTagDataPos(const size_t &i) const;
     void setDbTagDataPos(const size_t &i,const int &v);
     int send(DbTagData &,Communicator &, const CommMetaData &) const;

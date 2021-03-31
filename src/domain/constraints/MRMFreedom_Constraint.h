@@ -62,6 +62,7 @@ class MRMFreedom_Constraint: public MFreedom_ConstraintBase
     ID retainedNodeTags; //!< Retained nodes tags.
 
   protected:
+    DbTagData &getDbTagData(void) const;
     int sendData(Communicator &comm);
     int recvData(const Communicator &comm);
   public:

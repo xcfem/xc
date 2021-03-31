@@ -42,6 +42,10 @@ class TrussStrainLoad: public ElementBodyLoad
   private:
     double e1; //!< Restricted strain in node 1	
     double e2; //!< Restricted strain in node 2
+  protected:
+    DbTagData &getDbTagData(void) const;
+    int sendData(Communicator &comm);
+    int recvData(const Communicator &comm);
   public:
     // Constructors based on 2 temperature changes given
     TrussStrainLoad(int tag, const double &e1, const double &e2, const ID &theElementTags);
