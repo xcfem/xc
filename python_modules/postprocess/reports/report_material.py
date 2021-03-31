@@ -74,7 +74,7 @@ def report_concrete02(concrDiag,paramTensStiffening,grTitle,grFileName,texFileNa
     '''
     grph= graph_material.UniaxialMaterialDiagramGraphic(epsMin=concrDiag.epscu,epsMax=paramTensStiffening.eps_y,title=grTitle)
     grph.setupGraphic(plt,concrDiag)
-    grph.savefig(plt,grFileName+'.jpeg')
+    grph.savefig(plt,grFileName+'.png')
     grph.savefig(plt,grFileName+'.eps')
     concrRep= ConcreteReport(concrDiag)
     grFileNameNoPath=grFileName.split('/')[grFileName.count('/')]

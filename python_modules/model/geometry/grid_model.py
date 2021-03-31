@@ -450,7 +450,24 @@ class GridModel(object):
           p.getPos.z+= slopeX*(p.getPos.x-xZeroSlope)+slopeY*(p.getPos.y-yZeroSlope)
         sPtMove.clear()
 
+    def slopePointsXYZrange(self,XYZrange,slopeX=0,xZeroSlope=0,slopeY=0,yZeroSlope=0):
+        '''Applies one or two slopes (in X and Y directions) 
+        to points in a 3D grid-region limited by an
+        xyzRange=((xmin,ymin,zmin),(xmax,ymax,zmax))
+        Only Z coordinate of points is modified.
 
+        :param XYZrange: range for the search.
+        :param slopeX: slope in X direction, expressed as deltaZ/deltaX 
+                       (defaults to 0 = no slope applied)
+        :param xZeroSlope: coordinate X of the "rotation axis".
+        :param slopeY: slope in Y direction, expressed as deltaZ/deltaY)
+                       (defaults to 0 = no slope applied)
+        :param yZeroSlope: coordinate Y of the "rotation axis".
+        '''
+
+        ijkRange=self.getIJKrangeFromXYZrange(XYZrange)
+        return self.slopePointsRange(ijkRange,slopeX,xZeroSlope,slopeY,yZeroSlope)
+        
     def rotPntsZAxis(self,ijkRange,angle,xyRotCent):
         '''Rotates points in ijkRange around a Z axis passing by xyRotCent.
 
@@ -770,8 +787,6 @@ class GridModel(object):
     def genLinOneXYZRegion(self,xyzRange,setName): 
         '''generate the lines limited by a region defined by the coordinates
         defined in range xyzRange=((xmin,ymin,zmin),(xmax,ymax,zmax))
-        ijkRange.ijkMin=(indXmin,indYmin,indZmin) and
-        ijkRange.ijkMax=(indXmax,indYmax,indZmax). 
         Return a set with the lines generated.
         Add those lines to the dictionary dicLin.
         '''
