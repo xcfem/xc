@@ -590,6 +590,15 @@ class PredefinedSpace(object):
         '''
         self.solutionProcedureType= solutionProcedureType
 
+    def calculateNodalReactions(self, includeInertia= False, reactionCheckTolerance= 1e-7):
+        ''' Compute reactions at nodes.
+        :param includeInertia: if true calculate reactions including inertia
+                               effects.
+        :param reactionCheckTolerance: tolerance when checking reaction values.
+        '''
+        result= self.preprocessor.getNodeHandler.calculateNodalReactions(includeInertia, reactionCheckTolerance)
+        return result
+        
     def analyze(self, numSteps= 1, calculateNodalReactions= False, includeInertia= False, reactionCheckTolerance= 1e-7):
         ''' Triggers the analysis of the model with a simple static linear
             solution.
@@ -609,7 +618,7 @@ class PredefinedSpace(object):
             self.analysis= solProc.analysis
         result= self.analysis.analyze(numSteps)
         if(calculateNodalReactions):
-            self.preprocessor.getNodeHandler.calculateNodalReactions(includeInertia, reactionCheckTolerance)
+            self.calculateNodalReactions(includeInertia, reactionCheckTolerance)
         return result
 
     def zeroEnergyModes(self, numModes= 1):
