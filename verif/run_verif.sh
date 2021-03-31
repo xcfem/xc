@@ -749,7 +749,7 @@ echo "$BLEU" "Database tests (MySQL, Berkeley db, sqlite,...)." "$NORMAL"
 # XXX sqlitepp is toooooo slooooow. Seek for another solution.
 # python tests/database/test_database_01.py
 # python tests/database/test_database_02.py
-# python tests/database/test_database_03.py
+python tests/database/test_database_03.py
 # python tests/database/test_database_04.py
 # python tests/database/test_database_05.py
 # python tests/database/test_database_06.py
