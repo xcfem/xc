@@ -696,7 +696,7 @@ class Concrete(matWDKD.MaterialWithDKDiagrams):
             retval= graph_material.UniaxialMaterialDiagramGraphic(epsMin=self.epsilonU(),epsMax=20*self.fctd()/self.E0(),title=self.materialName + ' design stress-strain diagram')
         retval.setupGraphic(plt,self.materialDiagramD)
         fileName= path+self.materialName+'_design_stress_strain_diagram'
-        retval.savefig(plt,fileName+'.jpeg')
+        retval.savefig(plt,fileName+'.png')
         return retval
     
     def getElasticMaterialData(self):
@@ -1013,7 +1013,7 @@ class ReinforcingSteel(matWDKD.MaterialWithDKDiagrams):
       retval= mg.UniaxialMaterialDiagramGraphic(-0.016,0.016, self.materialName + ' design stress-strain diagram')
       retval.setupGraphic(plt,self.materialDiagramD)
       fileName= path+self.materialName+'_design_stress_strain_diagram'
-      retval.savefig(plt,fileName+'.jpeg')
+      retval.savefig(plt,fileName+'.png')
       retval.savefig(plt,fileName+'.eps')
       return retval
 

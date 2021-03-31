@@ -334,8 +334,8 @@ class LoadCaseDispParameters(RecordDisp):
             rltvgrfname= rltvPath+self.loadCaseName+st.name
             capt= self.getCaptionText(setDescr= st.description, unitsDescr= self.unitsLoads)
             labl= getLabelText(capt)
-            jpegFileName= fullgrfname+'.jpg'
-            outputHandler.displayLoads(setToDisplay=st,caption= capt,fileName= jpegFileName)  # changed 22/06/2020
+            grFileName= fullgrfname+'.png'
+            outputHandler.displayLoads(setToDisplay=st,caption= capt,fileName= grFileName)  # changed 22/06/2020
             #outputHandler.displayLoadVectors(setToDisplay=st,caption= capt,fileName=jpegFileName)
             oh.insertGrInTex(texFile=texFile,grFileNm=rltvgrfname,grWdt=cfg.grWidth,capText=capt,labl=labl)
         for st in self.setsToDispBeamLoads:
@@ -343,8 +343,8 @@ class LoadCaseDispParameters(RecordDisp):
             rltvgrfname= rltvPath+self.loadCaseName+st.name
             capt= self.getCaptionText(setDescr= st.description, unitsDescr= self.unitsLoads)
             labl= getLabelText(capt)
-            jpegFileName= fullgrfname+'.jpg'
-            outputHandler.displayLoads(setToDisplay=st,caption= capt,fileName= jpegFileName)  # changed 22/06/2020
+            grFileName= fullgrfname+'.png'
+            outputHandler.displayLoads(setToDisplay=st,caption= capt,fileName= grFileName)  # changed 22/06/2020
             oh.insertGrInTex(texFile=texFile,grFileNm=rltvgrfname,grWdt=cfg.grWidth,capText=capt,labl=labl)
 
     def loadReports(self,FEcase,texFile,cfg):
@@ -387,8 +387,8 @@ class LoadCaseDispParameters(RecordDisp):
             for arg in self.listDspRot:
                 fullgrfname=fullPath+self.loadCaseName+st.name+arg
                 rltvgrfname=rltvPath+self.loadCaseName+st.name+arg
-                jpegFileName= fullgrfname+'.jpg'
-                outputHandler.displayDispRot(itemToDisp=arg,setToDisplay=st,fileName= jpegFileName)
+                grFileName= fullgrfname+'.png'
+                outputHandler.displayDispRot(itemToDisp=arg,setToDisplay=st,fileName= grFileName)
   #              unitConversionFactor, unDesc= cfg.outputStyle.getUnitParameters(arg)
                 unitConversionFactor, unDesc= cfg.getUnitParameters(arg)
                  # if 'u' in arg:
@@ -406,8 +406,8 @@ class LoadCaseDispParameters(RecordDisp):
             for arg in self.listIntForc:
                 fullgrfname=fullPath+self.loadCaseName+st.name+arg
                 rltvgrfname=rltvPath+self.loadCaseName+st.name+arg
-                jpegFileName= fullgrfname+'.jpg'
-                outputHandler.displayIntForc(itemToDisp=arg,setToDisplay=st,fileName= jpegFileName,orientScbar=1,titleScbar=None)
+                grFileName= fullgrfname+'.png'
+                outputHandler.displayIntForc(itemToDisp=arg,setToDisplay=st,fileName= grFileName,orientScbar=1,titleScbar=None)
                 capt= self.getCaptionText(setDescr= st.description, captTexts= cfg.capTexts[arg], unitsDescr= cfg.getForceUnitsDescription())
                 oh.insertGrInTex(texFile=texFile,grFileNm=rltvgrfname,grWdt=cfg.grWidth,capText=capt)
         #Internal forces displays on sets of «beam» elements
@@ -415,8 +415,8 @@ class LoadCaseDispParameters(RecordDisp):
             for arg in self.listBeamIntForc:
                 fullgrfname=fullPath+self.loadCaseName+st.name+arg
                 rltvgrfname=rltvPath+self.loadCaseName+st.name+arg
-                jpegFileName= fullgrfname+'.jpg'
-                outputHandler.displayIntForcDiag(itemToDisp=arg,setToDisplay=st,fileName= jpegFileName,orientScbar=1,titleScbar=None)
+                grFileName= fullgrfname+'.png'
+                outputHandler.displayIntForcDiag(itemToDisp=arg,setToDisplay=st,fileName= grFileName,orientScbar=1,titleScbar=None)
                 capt= self.getCaptionText(setDescr= st.description, captTexts= cfg.capTexts[arg], unitsDescr= cfg.getForceUnitsDescription())
                 oh.insertGrInTex(texFile=texFile,grFileNm=rltvgrfname,grWdt=cfg.grWidth,capText=capt)
         texFile.write('\\cleardoublepage\n')
