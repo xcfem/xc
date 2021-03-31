@@ -541,6 +541,13 @@ class PredefinedSpace(object):
         ''' Revert the domain to its initial state..'''
         self.preprocessor.getDomain.revertToStart()
 
+    def dumpCombinations(self, combContainer):
+        ''' Dump combination definitions into XC.
+
+        :param combContainer: combination container (see combinations module).
+        '''
+        combContainer.dumpCombinations(self.preprocessor)
+
     def addLoadCaseToDomain(self, loadCaseName: str):
         '''Add the load case argument (load pattern or
            combination) to the domain.
