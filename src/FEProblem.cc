@@ -73,11 +73,14 @@ XC::FE_Datastore *XC::FEProblem::defineDatabase(const std::string &type, const s
       dataBase= new SQLiteDatastore(name, preprocessor, theBroker);
     else
       {  
-        std::cerr << "WARNING No database type exists ";
-        std::cerr << "for database of type:" << type << "valid database type File\n";
+        std::cerr << getClassName() << "::" << __FUNCTION__
+	          << "; WARNING No database type exists "
+		  << "for database of type:" << type
+		  << "valid database type File\n";
       }
     if(!dataBase)
-      std::cerr << "WARNING ran out of memory - database File " << name << std::endl;
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; ran out of memory - database File " << name << std::endl;
     return dataBase; 
   }
 
