@@ -89,8 +89,9 @@ class SectionInfo(object):
     :ivar G,A,I: match center of gravity, area and inertia tensor, respectively
     :ivar B,H: match gross and homogenized sections, respectively
     :ivar cover: refers to effective cover
+    :ivar sectGrWth: with of the section graphic (defaults to '80mm')
     '''
-    def __init__(self,preprocessor,sectName,sectDescr,concrete,rfSteel,concrDiag,rfStDiag,geomSection,width,depth):
+    def __init__(self,preprocessor,sectName,sectDescr,concrete,rfSteel,concrDiag,rfStDiag,geomSection,width,depth,sectGrWth='80mm'):
         self.concrete=concrete
         self.rfSteel=rfSteel
         self.geomSection= geomSection
@@ -129,6 +130,7 @@ class SectionInfo(object):
         self.IyH= self.geomSection.getIyHomogenizedSection(self.tangConcr) # Inertia tensor of homogenized section.
         self.IzH=  self.geomSection.getIzHomogenizedSection(self.tangConcr)
         self.PyzH= self.geomSection.getPyzHomogenizedSection(self.tangConcr)
+        self.sectGrWth=sectGrWth
 
     def writeReport(self,archTex, pathFigure,rltvPathFigure):
         if(self.geomSection):
@@ -156,7 +158,7 @@ class SectionInfo(object):
         fileHandler.write('\\begin{center}\n')
         #  name without extension to allow pdfLatex process the file
         nameWOExt= os.path.splitext(rltvPathFigure)[0]
-        fileHandler.write('\\includegraphics[width=80mm]{'+nameWOExt+'}\n')
+        fileHandler.write('\\includegraphics[width='+self.sectGrWth+']{'+nameWOExt+'}\n')
         # name without extension and without path
         # nameWOExt= os.path.splitext(pathFigura)[0]
         # fileHandler.write('\\includegraphics[width=80mm]{'+self.sectName[4:]+'}\n')
@@ -225,8 +227,9 @@ class SectionInfoHASimple(SectionInfo):
 
     :ivar preprocessor: preprocessor
     :ivar sectHASimple: fiber section defined as a HASimple
+    :ivar sectGrWth: with of the section graphic (defaults to '80mm')
     '''
-    def __init__(self,preprocessor,sectHASimple):
+    def __init__(self,preprocessor,sectHASimple,sectGrWth='80mm'):
         self.scc= sectHASimple
         sectName=sectHASimple.gmSectionName()
         sectDescr=sectHASimple.sectionDescr
@@ -237,6 +240,6 @@ class SectionInfoHASimple(SectionInfo):
         geomSection= preprocessor.getMaterialHandler.getSectionGeometry(sectName)
         width=sectHASimple.b
         depth=sectHASimple.h
-        super(SectionInfoHASimple,self).__init__(preprocessor,sectName,sectDescr,concrete,rfSteel,concrDiag,rfStDiag,geomSection,width,depth)
+        super(SectionInfoHASimple,self).__init__(preprocessor,sectName,sectDescr,concrete,rfSteel,concrDiag,rfStDiag,geomSection,width,depth,sectGrWth)
         self.shReinfZ= sectHASimple.getShearReinfZ()
         self.shReinfY= sectHASimple.getShearReinfY()
