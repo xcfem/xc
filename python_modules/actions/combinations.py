@@ -12,57 +12,82 @@ from postprocess.reports import graphical_reports
 
 
 class CombinationRecord(object):
-   '''Combination name and expression (i.e. ELS01= 1.0*G+1.0*Q)'''
-   def __init__(self,name,expr):
-       self.name= name
-       self.expr= expr
-       
-   def createCombination(self,xcCombHandler):
-       '''Create combination and insert it into the XC combination handler.'''
-       xcCombHandler.newLoadCombination(self.name,self.expr)
-       
-   def exportToLatex(self, outputFile):
-        '''Creates LaTeX tables and put the combinations in them.'''
-        outputFile.write(self.name.replace('_','\\_'))
-        outputFile.write(' & ')
-        outputFile.write(self.expr.replace('*',' '))
-        outputFile.write('\\\\\n')
-            
-   def getLoadCaseDispParameters(self,setsToDispLoads,setsToDispDspRot,setsToDispIntForc, unitsScaleForc= 1e-3, unitsScaleMom= 1e-3, unitsScaleDisp= 1e3, unitsDispl= '[mm]'):
-       '''Return a suitable LoadCaseDispParameters for the combination.
+    '''Combination name and expression (i.e. ELS01= 1.0*G+1.0*Q)
 
-       :param setsToDispLoads: ordered list of sets of elements to display 
-                               loads.
-       :param setsToDispDspRot: ordered list of sets of elements to display 
-                               displacements. 
-       :param setsToDispIntForc: ordered list of sets of elements to display 
-                                internal forces.
-       :param unitsScaleForc: factor to apply to internal forces if we want to 
+    :ivar name: combination name (i.e. "ELS01").
+    :ivar expr: expresion of the load combination (i.e. 1.0*G+1.0*Q).
+    '''
+    def __init__(self,name,expr):
+        ''' Constructor.
+
+        :param name: combination name (i.e. "ELS01").
+        :param expr: expresion of the load combination (i.e. 1.0*G+1.0*Q).
+        '''
+        self.name= name
+        self.expr= expr
+
+    def createCombination(self,xcCombHandler):
+        '''Create combination and insert it into the XC combination handler.'''
+        xcCombHandler.newLoadCombination(self.name,self.expr)
+
+    def exportToLatex(self, outputFile):
+         '''Creates LaTeX tables and put the combinations in them.
+
+         :param outputFile: file to write into.
+         '''
+         outputFile.write(self.name.replace('_','\\_'))
+         outputFile.write(' & ')
+         outputFile.write(self.expr.replace('*',' '))
+         outputFile.write('\\\\\n')
+
+    def getLoadCaseDispParameters(self,setsToDispLoads,setsToDispDspRot,setsToDispIntForc, unitsScaleForc= 1e-3, unitsScaleMom= 1e-3, unitsScaleDisp= 1e3, unitsDispl= '[mm]'):
+        '''Return a suitable LoadCaseDispParameters for the combination.
+
+        :param setsToDispLoads: ordered list of sets of elements to display 
+                                loads.
+        :param setsToDispDspRot: ordered list of sets of elements to display 
+                                displacements. 
+        :param setsToDispIntForc: ordered list of sets of elements to display 
+                                 internal forces.
+        :param unitsScaleForc: factor to apply to internal forces if we want to 
+                               change the units (defaults to 1e-3).
+        :param unitsScaleMom: factor to apply to internal moments if we want to
                               change the units (defaults to 1e-3).
-       :param unitsScaleMom: factor to apply to internal moments if we want to
-                             change the units (defaults to 1e-3).
-       :param unitsScaleDispl: factor to apply to displacements if we want to 
-                               change the units (defaults to 1e3).
-       :param unitsDispl: text to especify the units in which displacements are 
-                          represented (defaults to '[mm]'
-       '''
-       retval= graphical_reports.LoadCaseDispParameters(self.name,self.expr,self.expr,setsToDispLoads,setsToDispDspRot,setsToDispIntForc)
-       retval.unitsScaleForc= unitsScaleForc
-       retval.unitsScaleMom= unitsScaleMom
-       retval.unitsScaleDispl= unitsScaleDisp
-       retval.unitsDispl= unitsDispl    
-       return retval
+        :param unitsScaleDispl: factor to apply to displacements if we want to 
+                                change the units (defaults to 1e3).
+        :param unitsDispl: text to especify the units in which displacements are 
+                           represented (defaults to '[mm]'
+        '''
+        retval= graphical_reports.LoadCaseDispParameters(self.name,self.expr,self.expr,setsToDispLoads,setsToDispDspRot,setsToDispIntForc)
+        retval.unitsScaleForc= unitsScaleForc
+        retval.unitsScaleMom= unitsScaleMom
+        retval.unitsScaleDispl= unitsScaleDisp
+        retval.unitsDispl= unitsDispl    
+        return retval
     
 
 class SituationCombs(dict):
-    '''Combinations for a situation (frequent, rare, persistent,...).'''
-    def __init__(self, desc):
+    '''Dictionary of combinations for a situation (frequent, rare, 
+       persistent,...).
+
+    :ivar description: short description of the situation.
+    '''
+    def __init__(self, desc: str):
+        ''' Constructor.
+        :para desc: short description of the situation.
+        '''
         self.description= desc
     def add(self,name,expr):
+        ''' Add a combination to the dictionary.
+
+        :param name: combination name (i.e. "ELS01").
+        :param expr: expresion of the load combination (i.e. 1.0*G+1.0*Q).
+        '''
         self[name]= CombinationRecord(name,expr)
     def getNames(self):
         '''returns a list of the combination names.'''
         return self.keys()
+     
     def getNeutralFormat(self, counter, typ, mapLoadCases):
         retval= dict()
         for key in self:
@@ -77,7 +102,10 @@ class SituationCombs(dict):
             self[key].createCombination(xcCombHandler)
             
     def exportToLatex(self, outputFile):
-        '''Creates LaTeX tables and put the combinations in them.'''
+        '''Creates LaTeX tables and put the combinations in them.
+
+        :param outputFile: file to write into.
+        '''
         if(len(self)>0):
             outputFile.write('\\begin{center}\n')
             outputFile.write('\\begin{longtable}{|l|p{10cm}|}\n')
@@ -126,9 +154,14 @@ class SituationsSet(object):
     :ivar name:        name to identify the situation set
     :ivar situations:  set of situations
     '''
-    def __init__(self,name):
+    def __init__(self,name: str):
+        '''Constructor.
+
+        :ivar name: name to identify the situation set.
+        '''
         self.name= name
         self.situations= None
+        
     def getNames(self):
         '''returns a list of the combination names.'''
         retval= list()
@@ -172,12 +205,14 @@ class SLSCombinations(SituationsSet):
     :ivar earthquake:  combination for a earthquake design situation
     '''
     def __init__(self):
+        ''' Constructor.'''
         super(SLSCombinations,self).__init__("Serviceability limit states.")
         self.rare= SituationCombs('Rare situations.')
         self.freq= SituationCombs('Frequent situations.')
         self.qp= SituationCombs('Quasi-permanent situations.')
         self.earthquake= SituationCombs('Earthquake situations for SLS.')
         self.situations= [self.rare,self.freq,self.qp,self.earthquake]
+        
     def getNeutralFormat(self, counter, mapLoadCases):
         retval= self.rare.getNeutralFormat(counter,'SLSR', mapLoadCases)
         retval.update(self.freq.getNeutralFormat(counter+len(retval),'SLSF', mapLoadCases))
@@ -195,12 +230,14 @@ class ULSCombinations(SituationsSet):
     :ivar earthquake:  combination for a seismic design situation
     '''
     def __init__(self):
+        ''' Constructor.'''
         super(ULSCombinations,self).__init__("Ultimate limit states.")
         self.perm= SituationCombs('Persistent or transient situations.')
         self.acc= SituationCombs('Exceptional (accidental) situations.')
         self.fatigue= SituationCombs('Fatigue situations.')
         self.earthquake= SituationCombs('Earthquake situations for ULS.')
         self.situations= [self.perm,self.acc,self.fatigue,self.earthquake]
+        
     def getNeutralFormat(self, counter, mapLoadCases):
         retval= self.perm.getNeutralFormat(counter,'ULST2', mapLoadCases)
         retval.update(self.acc.getNeutralFormat(counter+len(retval),'ULST2A', mapLoadCases))
@@ -209,25 +246,30 @@ class ULSCombinations(SituationsSet):
         return retval
 
 class CombContainer(object):
-    '''Container of load combinations
+    '''Container of load combinations.
+
     :ivar SLS: serviceability limit state combination
     :ivar ULS: ultimate limit state combination
     '''
     def __init__(self):
+        ''' Constructor.'''
         self.SLS= SLSCombinations()
         self.ULS= ULSCombinations()
         self.limitStates= [self.SLS, self.ULS]
+        
     def getNames(self):
         '''returns a list of the combination names.'''
         retval= list()
         for ls in self.limitStates:
             retval.extend(ls.getNames())
         return retval
+     
     def getNeutralFormat(self, mapLoadCases):
         counter= 1
         retval= self.SLS.getNeutralFormat(counter, mapLoadCases)
         retval.update(self.ULS.getNeutralFormat(counter+len(retval), mapLoadCases))
         return retval
+     
     def dumpCombinations(self,preprocessor):
         '''Introduces the combinations into the XC combination handler.'''
         xcCombHandler= preprocessor.getLoadHandler.getLoadCombinations

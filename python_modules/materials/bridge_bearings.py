@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Classes for modelling bridge bearings.
+'''Classes for modelling bridge bearings.
 
 This module provides some classes that allow modelling elastomeric and pot type
 bridge bearings. For now they are modelized as linear joints that connect
@@ -28,7 +28,7 @@ Args:
 Todo:
     * Extend the module to cover other bearing types.
 
-"""
+'''
 
 from __future__ import division
 
@@ -47,9 +47,12 @@ import xc
 
 
 class Bearing(object):
-    """Bearings base class.
+    '''Bearings base class.
 
-    """
+    :ivar materials: material list (one material for each degree of freedom).
+    :ivar materialHandler: XC material handler.
+    :ivar id: object identifier (auto).
+    '''
     _ids = count(0) #Object counter.
     def __init__(self):
       self.materials= list()
@@ -81,10 +84,10 @@ class Bearing(object):
       return predefinedSpace.setBearing(iNodA,self.materials, orientation)
     
 class ElastomericBearing(Bearing):
-    """Rectangular elastomeric bearing.
+    '''Rectangular elastomeric bearing.
 
     Reference:
-        :"Puentes": book from Javier Manterola Armisén page 591 and 592.
+        :"Puentes": book from Javier Manterola Armisén pagea 591 and 592.
 
     Class-wide members:
 
@@ -95,12 +98,11 @@ class ElastomericBearing(Bearing):
 
     Attributes:
 
-        G: (float) Elastomer shear modulus.
-        a: (float) Width of the bearing (parallel to bridge axis).
-        b: (float) Length of the bearing (parallel to lintel axis).
-        e: (float) Net thickness of the bearing (without steel plates).
-
-    """
+    :ivar G: (float) Elastomer shear modulus.
+    :ivar a: (float) Width of the bearing (parallel to bridge axis).
+    :ivar b: (float) Length of the bearing (parallel to lintel axis).
+    :ivar e: (float) Net thickness of the bearing (without steel plates).
+    '''
     # ENHANCE (FOR ALL THE INTERPOLATIONS): it will be great
     # if we can store the interpolation in a file to avoid repeating
     # computations every time the module is loaded.
@@ -130,10 +132,14 @@ class ElastomericBearing(Bearing):
     yBeta= [0.14,0.171,0.196,0.229,0.263,0.281,0.299,0.313,1/3.0]
     betaTable= scipy.interpolate.interp1d(xBeta,yBeta)
 
-    def __init__(self,G,a,b,e):
-        """Class constructor.
+    def __init__(self,G: float,a: float,b: float ,e: float):
+        '''Class constructor.
 
-        """
+        :ivar G: elastomer shear modulus.
+        :ivar a: width of the bearing (parallel to bridge axis).
+        :ivar b: length of the bearing (parallel to lintel axis).
+        :ivar e: net thickness of the bearing (without steel plates).
+        '''
         super(ElastomericBearing,self).__init__()
         self.G= G
         self.a= a
@@ -162,19 +168,23 @@ class ElastomericBearing(Bearing):
     def getKvert(self):
         ''' Return the vertical stiffness.'''
         return self.getEbearing()*self.a*self.b/self.e
+    
     def getV4(self):
         ''' Return the v4 shape factor of the bearing.'''
         return self.v4table(self.b/self.a)
+    
     def getKrotationLintelAxis(self):
         ''' Stiffness with respect to the rotation around an axis
             parallel to the lintel by the center of the bearing.
         '''
         return self.G*self.a*pow(self.b,5.0)/(self.getV4()*pow(self.e,3.0))
+    
     def getKrotationBridgeAxis(self):
         ''' Stiffness with respect to the rotation around an axis
             parallel to the bridge by the center of the bearing.
         '''
         return self.G*self.b*pow(self.a,5.0)/(self.getV4()*pow(self.e,3.0))
+    
     def getBeta(self):
         ''' Return the value of the beta factor.'''
         retval= 0.0
@@ -183,9 +193,11 @@ class ElastomericBearing(Bearing):
         else:
             retval= self.betaTable(self.a/self.b)
         return retval
+    
     def getKrotationVerticalAxis(self):
         ''' Stiffness  with respect to the rotation around a vertical axis.'''
         return self.getBeta()*self.G*self.a*pow(self.b,3.0)/self.e
+    
     def defineMaterials(self,preprocessor):
         '''Define the materials to modelize the elastomeric bearing.
 
@@ -230,19 +242,19 @@ yT= [0.08,0.06,0.04,0.03,0.025,0.024]
 
 
 class PTFEPotBearing(Bearing):
-    """PTFE slide bearing.
+    '''PTFE slide bearing.
 
         Attibutes:
             :d: (float) Pot diameter.
 
-    """
+    '''
     teflonMuTable= scipy.interpolate.interp1d(xT,yT)
 
     def __init__(self,d):
-        """Class constructor.
+        '''Class constructor.
 
 
-        """
+        '''
         super(PTFEPotBearing,self).__init__()
         self.d= d
     def getHorizontalStiffness(self):
@@ -261,8 +273,6 @@ class PTFEPotBearing(Bearing):
         '''Define the materials to modelize the pot (Teflon).
 
             :param preprocessor: (:obj:'Preprocessor') preprocessor to use.
-            :param matKX: (str) name for the uniaxial material in direction X.
-            :param matKY: (str) name for the uniaxial material in direction Y.
         '''
         self.materialHandler= preprocessor.getMaterialHandler
         # Material names.
