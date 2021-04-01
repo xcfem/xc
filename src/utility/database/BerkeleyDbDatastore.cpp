@@ -68,8 +68,9 @@ int XC::BerkeleyDbDatastore::createDB(void)
     int retval= db_create(&dbMatrix, dbenv, 0);
     if(retval!= 0)
       {
-        std::cerr << "BerkeleyDbDatastore::BerkeleyDbDatastore - failed to init dbMatrix";
-        std::cerr << db_strerror(retval) << std::endl;
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; failed to init dbMatrix"
+		  << db_strerror(retval) << std::endl;
         connection = false;
         return retval;
       }
@@ -77,16 +78,18 @@ int XC::BerkeleyDbDatastore::createDB(void)
     retval= db_create(&dbVector, dbenv, 0);
     if(retval!=0)
         {
-          std::cerr << "BerkeleyDbDatastore::BerkeleyDbDatastore - failed to init dbVector";
-          std::cerr << db_strerror(retval) << std::endl;
+          std::cerr << getClassName() << "::" << __FUNCTION__
+		    << "; failed to init dbVector"
+		    << db_strerror(retval) << std::endl;
           connection = false;
           return retval;
         }
     retval= db_create(&dbID, dbenv, 0);
     if(retval!= 0)
       {
-        std::cerr << "BerkeleyDbDatastore::BerkeleyDbDatastore - failed to init dbID";
-        std::cerr << db_strerror(retval) << std::endl;
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; failed to init dbID"
+		  << db_strerror(retval) << std::endl;
         connection = false;
         return retval;
       }
@@ -104,8 +107,9 @@ int XC::BerkeleyDbDatastore::open(const DBTYPE &type)
         retval = dbMatrix->open(dbMatrix, nullptr, "Matrices.db", nullptr, type, DB_CREATE, 0664);
         if(retval!=0)
           {
-            std::cerr << "BerkeleyDbDatastore::BerkeleyDbDatastore - failed to open dbMatrix\n";
-            std::cerr << db_strerror(retval) << std::endl;
+            std::cerr << getClassName() << "::" << __FUNCTION__
+		      << ";  failed to open dbMatrix\n"
+		      << db_strerror(retval) << std::endl;
             connection = false;     
             return retval;
           }
@@ -117,7 +121,8 @@ int XC::BerkeleyDbDatastore::open(const DBTYPE &type)
         retval = dbVector->open(dbVector, nullptr, "Vectors.db", nullptr, type, DB_CREATE, 0664);
         if(retval!=0)
           {
-            std::cerr << "BerkeleyDbDatastore::BerkeleyDbDatastore - failed to open dbVector\n";
+            std::cerr << getClassName() << "::" << __FUNCTION__
+		      << "; failed to open dbVector\n";
             std::cerr << db_strerror(retval) << std::endl;
             connection = false;     
             return retval;
@@ -131,8 +136,9 @@ int XC::BerkeleyDbDatastore::open(const DBTYPE &type)
         retval = dbID->open(dbID, nullptr, "IDs.db", nullptr, IDtype, 0, 0664);
         if(retval!=0)
           {
-            std::cerr << "BerkeleyDbDatastore::BerkeleyDbDatastore - failed to open dbID\n";
-            std::cerr << db_strerror(retval) << std::endl;
+            std::cerr << getClassName() << "::" << __FUNCTION__
+		      << "; failed to open dbID\n"
+		      << db_strerror(retval) << std::endl;
             connection = false;     
             return retval;
           }
@@ -188,8 +194,9 @@ bool XC::BerkeleyDbDatastore::create_aux_entities(void)
         // Create the directory, read/write/access owner only.
         if(mkdir(project.c_str(), S_IRWXU) != 0)
           {
-            std::cerr << "BerkeleyDbDatastore::BerkeleyDbDatastore - failed mkdir: ";
-            std::cerr << project << " " << strerror(errno);
+            std::cerr << getClassName() << "::" << __FUNCTION__
+		      << "; failed mkdir: "
+		      << project << " " << strerror(errno);
             connection = false;
             return false;
           }
@@ -199,8 +206,9 @@ bool XC::BerkeleyDbDatastore::create_aux_entities(void)
     int ret = db_env_create(&dbenv, 0);
     if(ret!=0)
       {
-        std::cerr << "BerkeleyDbDatastore::BerkeleyDbDatastore - failed db_env_create: ";
-        std::cerr << db_strerror(ret) << std::endl;
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; failed db_env_create: "
+		  << db_strerror(ret) << std::endl;
         connection = false;
       }
 
@@ -219,8 +227,9 @@ bool XC::BerkeleyDbDatastore::create_aux_entities(void)
             ret= dbenv->set_cachesize(dbenv,0,nBytes,0);
             if(ret!= 0)
               {
-                std::cerr << "BerkeleyDbDatastore::BerkeleyDbDatastore - failed set_cachesize: ";
-                std::cerr << db_strerror(ret) << std::endl;
+                std::cerr << getClassName() << "::" << __FUNCTION__
+			  << "; failed set_cachesize: "
+			  << db_strerror(ret) << std::endl;
                 connection = false;
                 return false;
               }
@@ -231,8 +240,9 @@ bool XC::BerkeleyDbDatastore::create_aux_entities(void)
     ret= dbenv->open(dbenv, project.c_str(),DB_CREATE | DB_INIT_LOG | DB_PRIVATE | DB_INIT_MPOOL, S_IRUSR | S_IWUSR);
     if(ret!= 0)
       {
-        std::cerr << "BerkeleyDbDatastore::BerkeleyDbDatastore - failed db_env_create: ";
-        std::cerr << db_strerror(ret) << std::endl;
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; failed db_env_create: "
+		  << db_strerror(ret) << std::endl;
         connection = false;
         return false;
       }
@@ -255,7 +265,8 @@ XC::BerkeleyDbDatastore::BerkeleyDbDatastore(const std::string &projectName, Pre
 
 XC::BerkeleyDbDatastore::~BerkeleyDbDatastore(void)
   {
-    std::cerr << "CLOSING DATABASE\n";
+    std::cerr << getClassName() << "::" << __FUNCTION__
+	      << "; CLOSING DATABASE\n";
     close();
   }
 
@@ -269,13 +280,15 @@ int XC::BerkeleyDbDatastore::getDbTag(void) const
 
 int XC::BerkeleyDbDatastore::sendMsg(int dbTag, int commitTag, const Message &, ChannelAddress *theAddress)
   {
-    std::cerr << "BerkeleyDbDatastore::sendMsg() - not yet implemented\n";
+    std::cerr << getClassName() << "::" << __FUNCTION__
+	      << "; not yet implemented\n";
     return -1;
   }		       
 
 int XC::BerkeleyDbDatastore::recvMsg(int dbTag, int commitTag, Message &, ChannelAddress *theAddress)
   {
-    std::cerr << "BerkeleyDbDatastore::recvMsg() - not yet implemented\n";
+    std::cerr << getClassName() << "::" << __FUNCTION__
+	      << "; not yet implemented\n";
     return -1;
   }		       
 
@@ -283,7 +296,8 @@ int XC::BerkeleyDbDatastore::recvMsg(int dbTag, int commitTag, Message &, Channe
 void XC::BerkeleyDbDatastore::setup_key(const int &dbTag,const int &commitTag,const int &sz)
   {
     if(!checkDbTag(dbTag))
-      std::cerr << "Error en BerkeleyDbDatastore::setup_key." << std::endl;
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; Error." << std::endl;
     static char q[128];
     sprintf(q,"%d-%d-%d", commitTag, dbTag, sz);
     key.data = q;
@@ -321,7 +335,8 @@ int XC::BerkeleyDbDatastore::sendMatrix(int dbTag, int commitTag, const Matrix &
         int ret;
         if((ret = dbMatrix->put(dbMatrix, nullptr, &key, &data, 0)) != 0)
           {
-            std::cerr << "BerkeleyDbDatastore::sendMatrix() - failed to send the Matrix to database\n";
+            std::cerr << getClassName() << "::" << __FUNCTION__
+		      << "; failed to send the Matrix to database\n";
             dbMatrix->err(dbMatrix, ret, "DB->put");
             return -2;      
           }
@@ -343,7 +358,8 @@ int XC::BerkeleyDbDatastore::recvMatrix(int dbTag, int commitTag, Matrix &theMat
         int ret;
         if((ret = dbMatrix->get(dbMatrix, nullptr, &key, &data, 0)) != 0)
           {
-            std::cerr << "BerkeleyDbDatastore::recvMatrix() - failed to get the XC::Matrix from database\n";
+            std::cerr << getClassName() << "::" << __FUNCTION__
+		      << "; failed to get the matrix from database.\n";
             dbMatrix->err(dbMatrix, ret, "DB->get");
             return -2;      
           }
@@ -365,7 +381,8 @@ int XC::BerkeleyDbDatastore::sendVector(int dbTag, int commitTag, const Vector &
         int ret;
         if((ret = dbVector->put(dbVector, nullptr, &key, &data, 0)) != 0)
           {
-            std::cerr << "BerkeleyDbDatastore::sendVector() - failed to send the Vector to database\n";
+            std::cerr << getClassName() << "::" << __FUNCTION__
+		      << "; failed to send the Vector to database\n";
             dbVector->err(dbVector, ret, "DB->put");
             return -2;      
           }
@@ -387,7 +404,8 @@ int XC::BerkeleyDbDatastore::recvVector(int dbTag, int commitTag, Vector &theVec
         int ret;
         if((ret = dbVector->get(dbVector, nullptr, &key, &data, 0)) != 0)
           {
-            std::cerr << "BerkeleyDbDatastore::recvVector() - failed to get the XC::Vector from database\n";
+            std::cerr << getClassName() << "::" << __FUNCTION__
+		      << "; failed to get the vector from database\n";
             dbVector->err(dbVector, ret, "DB->get");
             return -2;      
           }
@@ -407,7 +425,8 @@ int XC::BerkeleyDbDatastore::sendID(int dbTag, int commitTag, const ID &theID, C
         int ret;
         if((ret = dbID->put(dbID, 0, &key, &data, 0)) != 0)
           {
-            std::cerr << "BerkeleyDbDatastore::sendID() - failed to send the XC::ID to database\n";
+            std::cerr << getClassName() << "::" << __FUNCTION__
+		      << "; failed to send the ID to database\n";
             dbID->err(dbID, ret, "DB->put");
             return -2;      
           }
@@ -428,7 +447,8 @@ int XC::BerkeleyDbDatastore::recvID(int dbTag, int commitTag, ID &theID,ChannelA
         int ret;
         if((ret = dbID->get(dbID, nullptr, &key, &data, 0)) != 0)
           {
-            std::cerr << "BerkeleyDbDatastore::recvID() - failed to get the ID from database\n";
+            std::cerr << getClassName() << "::" << __FUNCTION__
+		      << "; failed to get the ID from database.\n";
             dbID->err(dbID, ret, "DB->get");
             return -2;      
           }

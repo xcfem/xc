@@ -206,6 +206,10 @@ int XC::FE_Datastore::restoreState(int commitTag)
               lastDbTag = maxlastDbTag(0);
           }
       }
+    else
+      std::cerr << getClassName() << "::" << __FUNCTION__
+	        << " commit with tag: " << commitTag
+		<< " not saved. Command ignored." << std::endl;
     return res;
   }
 
