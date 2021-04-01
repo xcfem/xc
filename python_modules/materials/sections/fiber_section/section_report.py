@@ -61,7 +61,8 @@ def writeMainReinforcement(listaFamMainReinforcement, areaHorm, archTex):
 
 def writeShearReinforcement(recordShearReinf, archTex, width):
     archTex.write("\\hline\n")
-    archTex.write(recordShearReinf.familyName+' & '+str(recordShearReinf.nShReinfBranches))
+#    archTex.write(recordShearReinf.familyName+' & '+str(recordShearReinf.nShReinfBranches))  #04/01/21 commented out to avoid writing  nonsense family names
+    archTex.write(' & '+str(recordShearReinf.nShReinfBranches))
     areaShReinfBranchs= recordShearReinf.getAs()
     diamRamas= math.sqrt(4*areaShReinfBranchs/math.pi)
     archTex.write(' & '+str(round(diamRamas*1e3)))
