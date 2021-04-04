@@ -555,7 +555,7 @@ class Concrete(matWDKD.MaterialWithDKDiagrams):
                   - Ac= cross sectional area
                   - u = perimeter of the member in contact with the atmosphere
         '''
-        fitt0=self.getCreepFi0(t0,RH,h0)*self.getCreepBetactt0(t,t0,RH,h0)
+        fitt0= self.getCreepFi0(t0,RH,h0)*self.getCreepBetactt0(t,t0,RH,h0)
         return fitt0
 
     def getCreepAlfa1(self):

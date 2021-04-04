@@ -317,7 +317,8 @@ class EHEConcrete(concrete_base.Concrete):
     #       return 0.0 
     def getCreepDeformation(self, t,t0,RH,h0, sigmaT0):
         '''
-        return the creep deformation between t0 and t
+        return the creep deformation between t0 and t according
+        to clause 39.8 of EHE-08.
         
         :param t:   age of concrete in days at the moment considered
         :param t0:  age of concrete in days at loading

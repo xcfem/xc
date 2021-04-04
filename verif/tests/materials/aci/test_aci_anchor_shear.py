@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 # Verification test according to ACI 349.2 R-07.
-# Guide to the Concrete Capacity Design (CCD) Method—Embedment Design Examples
-# Example A2. Single stud, shear only
+# -*- coding: utf-8 -*-
+'''Guide to the Concrete Capacity Design (CCD) Method—Embedment Design Examples
+Example A2. Single stud, shear only.'''
 
 from __future__ import division
 from __future__ import print_function

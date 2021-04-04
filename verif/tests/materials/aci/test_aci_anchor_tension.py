@@ -32,13 +32,13 @@ Nua= 8*kip2N
 stud= ACI_limit_state_checking.AnchorBolt(ca1= 12*in2m,ca2= 12*in2m,ha= 18*in2m, concrete= ACI_materials.c4000, steel= ACI_materials.A108, diam= 0.5*in2m, hef= 4.69*in2m, cast_in= True)
 ### where:
 #### ca1: distance from the center of an anchor shaft to the edge of concrete in one direction. If shear is applied to anchor, ca1 is taken in the direction of the applied shear. If the tension is applied to the anchor, ca1 is the minimum edge distance.
-### ca2: distance from center of an anchor shaft to the edge of concrete in the direction orthogonal to ca1.
-### ha: thickness  of  member  in  which  an  anchor  is located, measured parallel to anchor axis.
-### concrete: concrete material.
-### steel: anchor steel.
-### diam: anchor diameter.
-### hef: effective embedment depth of anchor.
-### cast_in: true if cast-in anchor false for post-installed anchors.
+#### ca2: distance from center of an anchor shaft to the edge of concrete in the direction orthogonal to ca1.
+#### ha: thickness  of  member  in  which  an  anchor  is located, measured parallel to anchor axis.
+#### concrete: concrete material.
+#### steel: anchor steel.
+#### diam: anchor diameter.
+#### hef: effective embedment depth of anchor.
+#### cast_in: true if cast-in anchor false for post-installed anchors.
  
 # End data
 
