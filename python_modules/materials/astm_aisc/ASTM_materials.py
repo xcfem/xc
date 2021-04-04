@@ -783,7 +783,6 @@ class AnchorBolt(bolts.AnchorBase):
 
     :ivar name: bolt identifier
     :ivar steel: steel material.
-    :ivar diameter: bolt diameter.
     '''
 
     # See table 3.2 of the design guide:

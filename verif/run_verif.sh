@@ -665,6 +665,7 @@ echo "$BLEU" "    EAE tests." "$NORMAL"
 python tests/materials/eae/test_steel_corbel_weld.py
 python tests/materials/eae/test_simple_shear_welded_web.py
 python tests/materials/eae/test_weld_bead_strength.py
+python tests/materials/eae/bolt_test_01.py
 echo "$BLEU" "    SIA 263 tests." "$NORMAL"
 python tests/materials/sia263/test_coefs_fatique_SIA263.py
 echo "$BLEU" "    ASTM/AISC tests." "$NORMAL"

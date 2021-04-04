@@ -30,6 +30,17 @@ class EC3Steel(steel_base.BasicSteel):
       :ivar gammaM2: Partial factor for cross-sections in tension to fracture.
     '''
     def __init__(self, fy, fy16, fy40, fy63, fy80, fy100, fy125, fu, gammaM, gammaM1= 1.0, gammaM2= 1.1):
+        ''' Constructor.
+          :param fy16: 0<t<16mm
+          :param fy40: 16<t<40mm
+          :param fy63: 40<t<63mm
+          :param fy80: 63<t<80mm
+          :param fy100: 80<t<100mm
+          :param fy125: 80<t<125mm
+          :param gammaM1: Partial factor for buckling resistance.
+          :param gammaM2: Partial factor for cross-sections in tension to fracture.
+        '''
+
         super(EC3Steel,self).__init__(210000e6,0.3,fy,fu,gammaM)
         self.fy16= fy16
         self.fy40= fy40
