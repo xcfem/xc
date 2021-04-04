@@ -160,3 +160,15 @@ class BoltFastener(bolts.BoltBase):
         if(dieStock):
             retval*= 0.85
         return retval
+
+    def getShearTensileEfficiency(self, Fv, Ft, numberOfShearPlanes= 1, threadsExcluded= False, dieStock= False):
+        ''' Return the efficiency of the bolt under the load arguments
+
+        :param Fv: shear force acting on the bolt.
+        :param Ft: tensile force acting on the bolt. 
+        :param numberOfShearPlanes: number of shear planes.
+        :param threadsExcluded: true if threads and transition area of 
+                                shank are excluded from the shear plane.
+        :param dieStock: threads created with a die stock or a similar tool.
+        '''
+        return Fv/self.getDesignShearStrength(numberOfShearPlanes,threadsExcluded)+Ft/(1.4*self.getDesignTensileStrength(dieStock))
