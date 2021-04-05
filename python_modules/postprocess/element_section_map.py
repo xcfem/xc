@@ -15,9 +15,9 @@ __version__= "3.0"
 __email__= "l.pereztato@ciccp.es" "ana.Ortega@ciccp.es"
 
 class ElementSections(object):
-    '''This class defines the list of reinforced concrete sections that are going 
-    to be associated to a set of elements in order to carry out the verifications 
-    of the limit states.
+    '''This class defines the list of reinforced concrete sections that are 
+       going to be associated to a set of elements in order to carry out the 
+       verifications of the limit states.
 
     :ivar name:       name given to the list of reinforced concrete sections
     :ivar directions: list of the directions to consider for each integration
@@ -59,8 +59,12 @@ class ElementSections(object):
         self.lstRCSects= list()
         self.elemSet= elemSet
 
-    def append_section(self,RCSimplSect):
-        self.lstRCSects.append(RCSimplSect)
+    def append_section(self,RCSect):
+        ''' Append the section argument to the container.
+
+        :param RCSect: reinforced concrete section to append.
+        '''
+        self.lstRCSects.append(RCSect)
         return
 
     def createSections(self, templateSections):
@@ -109,7 +113,8 @@ class ElementSections(object):
     
 class setRCSections2SetElVerif(ElementSections):
     '''This class is an specialization of ElemenSections for rectangular
-       sections. The items of the list are instances of the object *RCRectangularSection*
+       sections. The items of the list are instances of the 
+       object *RCRectangularSection*
     ''' 
     def __init__(self,name, directions, gaussPoints, elemSet):
         '''Constructor.
@@ -440,7 +445,8 @@ class RCSlabBeamSection(setRCSections2SetElVerif):
 
 class RCMemberSection(ElementSections):
     '''This class is an specialization of ElemenSections for rectangular
-       sections. The items of the list are instances of the object *RCRectangularSection*
+       sections. The items of the list are instances of the object 
+       *RCRectangularSection*
     ''' 
     def __init__(self,name, templateSections, directions= [1], gaussPoints=[1,2], elemSet= None):
         '''Constructor.
@@ -496,10 +502,10 @@ class ElementSectionMap(dict):
        the structure.'''
     propName= 'sectionName'
     def assign(self,elemSet,setRCSects):
-        '''Assigns the sections names: setRCSectsName+'1', setRCSectsName+'2', ...
-           to the elements of the set.
+        '''Assigns the sections names to the elements of the set.
 
-           :param elemSet: set of elements that receive the section name property.
+           :param elemSet: set of elements that receive the section names 
+                           property.
            :param setRCSects: RC section definition, name, concrete type,
                               rebar positions,...
         '''

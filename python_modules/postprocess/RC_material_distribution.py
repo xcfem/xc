@@ -30,6 +30,15 @@ class RCMaterialDistribution(object):
     one for each main direction; in the case of beam elements the most 
     common way is to define RC sections in the front and back ends 
     of the elements)
+
+    :ivar sectionDefinition: Container with the section definitions
+                             (see RC_sections_container module).
+    :ivar sectionDistribution: dictionary that stores a section name(s)
+                               for each element number. This way it defines
+                               a spatial distribution of the sections over
+                               the elements.
+
+    :ivar elementSetNames: list of element sets with an assigned section.
     '''
     mapSectionsFileName= './mapSectionsReinforcement.pkl'
 
@@ -37,19 +46,12 @@ class RCMaterialDistribution(object):
         '''Constructor.
 
         '''
-        # sectionDefinition: Container with the section definitions 
-        #                   (see RC_sections_container module).
         self.sectionDefinition= sc.SectionContainer()
-        # sectionDistribution: dictionary that stores a section name(s)
-        #                      for each element number. This way it defines
-        #                      a spatial distribution of the sections over
-        #                      the structure.
         self.sectionDistribution= element_section_map.ElementSectionMap()
         self.elementSetNames= list() #Elements sets with an assigned section.
 
     def assign(self,elemSet,setRCSects):
-        '''Assigns the sections names: setRCSectsName+'1', setRCSectsName+'2', ...
-           to the elements of the set.
+        '''Assigns the sections names to the elements of the set.
 
            :param elemSet: set of elements that receive the section name property.
            :param setRCSects: RC section definition, name, concrete type,

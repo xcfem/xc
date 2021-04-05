@@ -16,15 +16,20 @@ from misc_utils import log_messages as lmsg
 # write them in a file to use them as needed.
 
 class SectionContainer(object):
+    ''' Section container.
 
+    :ivar sections: List with the section definitions.
+    :ivar mapSections: Dictionary with pairs (sectionName, reference to
+                       section definition.
+    :ivar mapInteractionDiagrams:  file containing a dictionary such that
+                                   associates each element with the two 
+                                   interactions diagrams of materials 
+                                   to be used in the verification.
+    '''
     def __init__(self):
         ''' Container for the reinforced concrete definitions (name, concrete
         type, rebar positions,...).
 
-        :ivar   mapInteractionDiagrams:  file containing a dictionary such that
-                                         associates each element with the two 
-                                         interactions diagrams of materials 
-                                         to be used in the verification
         '''
         self.sections= [] # List with the section definitions.
         self.mapSections= {} # Dictionary with pairs (sectionName, reference to
@@ -54,6 +59,7 @@ class SectionContainer(object):
         uses a concrete02 model, that initializes the material in order to
         check the cracking limit state (tension stiffening models).
 
+        :param preprocessor: XC preprocessor for the finite element model.
         :param matDiagType: type of stress-strain diagram (="k" for characteristic diagram, ="d" for design diagram)
         '''
         for s in self.sections:
@@ -64,8 +70,8 @@ class SectionContainer(object):
     def calcInteractionDiagrams(self,preprocessor,matDiagType, diagramType= 'NMyMz'):
         '''Calculates 3D interaction diagrams for each section.
 
-        :param preprocessor:    FEA problem preprocessor
-        :param matDiagType:     'k' for characteristic, 'd' for design
+        :param preprocessor:   XC preprocessor for the finite element model.
+        :param matDiagType:    'k' for characteristic, 'd' for design
         :param diagramType:    three dimensional diagram: NMyMz
                                bi-dimensional diagram: NMy
                                bi-dimensional diagram: NMz

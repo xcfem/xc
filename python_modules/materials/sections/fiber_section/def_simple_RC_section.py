@@ -24,20 +24,36 @@ from misc_utils import log_messages as lmsg
 
 class ShearReinforcement(object):
     ''' Definition of the variables that make up a family of shear 
-    reinforcing bars
+    reinforcing bars.
 
-    :ivar familyName:        name identifying the family of shear reinforcing bars
-    :ivar nShReinfBranches:  number of effective branches 
+    :ivar familyName: name identifying the family of shear reinforcing bars.
+    :ivar nShReinfBranches:  number of effective branches. 
     :ivar areaShReinfBranch: area of the shear reinforcing bar [in the unit of 
-                             area of the model] 
-    :ivar shReinfSpacing:    longitudinal distance between transverse 
-                             reinforcements [in the unit of length of the model] 
-    :ivar angAlphaShReinf:   angle between the shear reinforcing bars and the 
-                             axis of the member
+                             area of the model]. 
+    :ivar shReinfSpacing: longitudinal distance between transverse 
+                          reinforcements [in the unit of length of the model] 
+    :ivar angAlphaShReinf: angle between the shear reinforcing bars and the 
+                           axis of the member expressed in radians.
     :ivar angThetaConcrStruts: angle between the concrete's compression struts 
-                             and the axis of the member
+                             and the axis of the member expressed in radians.
     '''
     def __init__(self,familyName= None,nShReinfBranches= 0.0,areaShReinfBranch= 0.0,shReinfSpacing= 0.2,angAlphaShReinf= math.pi/2.0,angThetaConcrStruts= math.pi/4.0):
+        '''
+        :param familyName: name identifying the family of shear reinforcing bars.
+        :param nShReinfBranches:  number of effective branches. 
+        :param areaShReinfBranch: area of the shear reinforcing bar [in 
+                                  the unit of area of the model]. 
+        :param shReinfSpacing: longitudinal distance between transverse 
+                               reinforcements [in the unit of length 
+                               of the model] 
+        :param angAlphaShReinf: angle between the shear reinforcing bars 
+                                and the axis of the member expressed in
+                                radians.
+        :param angThetaConcrStruts: angle between the concrete's compression 
+                                    struts and the axis of the member
+                                    expressed in radians.
+        '''
+ 
         # If no name provided, generate it.
         if(not familyName):
             familyName= str(uuid.uuid1())
@@ -49,7 +65,8 @@ class ShearReinforcement(object):
         self.angThetaConcrStruts= angThetaConcrStruts # angle between the concrete's compression struts and the axis of the member
 
     def getAs(self):
-        '''returns the area per unit length of the family of shear reinforcements
+        '''returns the area per unit length of the family of shear 
+           reinforcements.
         '''
         return self.nShReinfBranches*self.areaShReinfBranch/self.shReinfSpacing
 
@@ -58,24 +75,24 @@ class ReinfRow(object):
     ''' Definition of the variables that make up a family (row) of main 
     (longitudinal) reinforcing bars.
 
-    :ivar rebarsDiam:    diameter of the bars (if omitted, the diameter is calculated from the rebar area) 
-    :ivar areaRebar:     cross-sectional area of the bar (if omitted, the area is calculated from the rebar diameter)
+    :ivar rebarsDiam: diameter of the bars (if omitted, the diameter is calculated from the rebar area) 
+    :ivar areaRebar: cross-sectional area of the bar (if omitted, the area is calculated from the rebar diameter)
     :ivar rebarsSpacing: spacing between bars (not considered if nRebars is defined)
-    :ivar nRebars:  number of rebars to be placed in the row (>1)
+    :ivar nRebars: number of rebars to be placed in the row (>1)
     :ivar width: width of the cross-section (defautls to 1m)
-    :ivar nominalCover:  nominal cover (defaults to 0.03m)
+    :ivar nominalCover: nominal cover (defaults to 0.03m)
     :ivar nominalLatCover: nominal lateral cover (only considered if nRebars is defined, defaults to 0.03)
     '''
     def __init__(self, rebarsDiam=None, areaRebar= None, rebarsSpacing= None, nRebars= None, width= 1.0, nominalCover= 0.03, nominalLatCover= 0.03):
         ''' Constructor.
 
-            :param rebarsDiam:    diameter of the bars (if omitted, the diameter is calculated from the rebar area) 
-            :param areaRebar:     cross-sectional area of the bar (if omitted, the area is calculated from the rebar diameter)
-            :param rebarsSpacing: spacing between bars (not considered if nRebars is defined)
-            :param nRebars:  number of rebars to be placed in the row (>1)
-            :param width: width of the cross-section (defautls to 1 m)
-            :param nominalCover:  nominal cover (defaults to 0.03m)
-            :param nominalLatCover: nominal lateral cover (only considered if nRebars is defined, defaults to 0.03)
+        :param rebarsDiam: diameter of the bars (if omitted, the diameter is calculated from the rebar area) 
+        :param areaRebar: cross-sectional area of the bar (if omitted, the area is calculated from the rebar diameter)
+        :param rebarsSpacing: spacing between bars (not considered if nRebars is defined)
+        :param nRebars: number of rebars to be placed in the row (>1)
+        :param width: width of the cross-section (defautls to 1 m)
+        :param nominalCover: nominal cover (defaults to 0.03m)
+        :param nominalLatCover: nominal lateral cover (only considered if nRebars is defined, defaults to 0.03)
         '''
         if rebarsDiam:
             self.rebarsDiam= rebarsDiam
@@ -114,8 +131,8 @@ class ReinfRow(object):
         self.coverLat= (width-(self.nRebars-1)*self.rebarsSpacing)/2.0
 
     def defStraightLayer(self,reinforcement,code,diagramName,p1,p2):
-        '''Definition of a straight reinforcement layer in the XC section geometry object 
-        between the 2d positions p1 and p2.
+        '''Definition of a straight reinforcement layer in the XC section 
+           geometry object between the 2d positions p1 and p2.
 
         :param reinforcement: XC section geometry reinforcement.
         :param code: identifier for the layer.
@@ -134,8 +151,8 @@ class ReinfRow(object):
             return self.reinfLayer
         
     def defCircularLayer(self,reinforcement, code, diagramName, extRad, initAngle= 0.0, finalAngle= 2*math.pi):
-        '''Definition of a circular reinforcement layer in the XC section geometry object 
-        between the angle arguments.
+        '''Definition of a circular reinforcement layer in the XC section 
+           geometry object between the angle arguments.
 
         :param reinforcement: XC section geometry reinforcement.
         :param code: identifier for the layer.
@@ -582,7 +599,7 @@ class BasicRectangularRCSection(RCSectionBase, section_properties.RectangularSec
         '''elastic section appropiate for 3D beam analysis, including shear 
            deformations
 
-        :param preprocessor: preprocessor object.
+        :param preprocessor: XC preprocessor for the finite element problem.
          '''
         mat= self.fiberSectionParameters.concrType.getElasticMaterialData()
         return super(BasicRectangularRCSection, self).defElasticShearSection3d(preprocessor, mat)
@@ -590,7 +607,7 @@ class BasicRectangularRCSection(RCSectionBase, section_properties.RectangularSec
     def defElasticSection2d(self, preprocessor, majorAxis= True):
         ''' Return an elastic section appropiate for 2D beam analysis
 
-        :param preprocessor: preprocessor object.
+        :param preprocessor: XC preprocessor for the finite element problem.
         :param majorAxis: true if bending occurs in the section major axis.
         '''
         mat= self.fiberSectionParameters.concrType.getElasticMaterialData()
@@ -599,7 +616,7 @@ class BasicRectangularRCSection(RCSectionBase, section_properties.RectangularSec
     def defElasticShearSection2d(self, preprocessor, material, majorAxis= True):
         '''elastic section appropiate for 2D beam analysis, including shear deformations
 
-        :param  preprocessor: preprocessor object.
+        :param preprocessor: XC preprocessor for the finite element problem.
         :param majorAxis: true if bending occurs in the section major axis.
         '''
         mat= self.fiberSectionParameters.concrType.getElasticMaterialData()
