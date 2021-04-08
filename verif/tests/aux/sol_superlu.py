@@ -18,7 +18,7 @@ class SuperLU(predefined_solutions.SolutionProcedure):
         :param numSteps: number of steps to use in the analysis (useful only when loads are variable in time).
         '''
         # Sparse solver doesn't need renumbering.
-        super(SuperLU,self).__init__(name, 'penalty', maxNumIter, convergenceTestTol, printFlag, numSteps, 'simple')
+        super(SuperLU,self).__init__(name, 'penalty', maxNumIter, convergenceTestTol, printFlag, numSteps, 'simple', soeType= 'sparse_gen_col_lin_soe', solverType= 'super_lu_solver')
         self.feProblem= prb
         self.setPenaltyFactors()
         
@@ -28,7 +28,7 @@ class SuperLU(predefined_solutions.SolutionProcedure):
         '''
         super(SuperLU,self).setup()
         self.solutionAlgorithmSetup(solAlgType= 'linear_soln_algo', integratorType= 'load_control_integrator')
-        self.sysOfEqnSetup(soeType= 'sparse_gen_col_lin_soe', solverType= 'super_lu_solver')
+        self.sysOfEqnSetup()
         self.analysisSetup('static_analysis')
 
 solProc= SuperLU(feProblem)
