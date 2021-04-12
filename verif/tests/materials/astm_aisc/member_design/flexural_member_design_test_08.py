@@ -81,13 +81,13 @@ loadCaseManager.defineSimpleLoadCases(loadCaseNames)
 deadLoad= xc.Vector([0.0,-0.145e3*kip2kN/foot2meter, 0.0])
 cLC= loadCaseManager.setCurrentLoadCase('deadLoad')
 for e in xcTotalSet.elements:
-  e.vector2dUniformLoadGlobal(deadLoad)
+    e.vector2dUniformLoadGlobal(deadLoad)
   
 ## Live load.
 liveLoad= xc.Vector([0.0,-0.435e3*kip2kN/foot2meter, 0.0])
 cLC= loadCaseManager.setCurrentLoadCase('liveLoad')
 for e in xcTotalSet.elements:
-  e.vector2dUniformLoadGlobal(liveLoad)
+    e.vector2dUniformLoadGlobal(liveLoad)
 
 ## Load combinations
 combContainer= combs.CombContainer()
@@ -160,6 +160,6 @@ import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if(ratio1<6e-2 and ratio2<1e-7 and ratio3<1e-2):
-  print('test '+fname+': ok.')
+    print('test '+fname+': ok.')
 else:
-  lmsg.error(fname+' ERROR.')
+    lmsg.error(fname+' ERROR.')
