@@ -759,6 +759,40 @@ class PredefinedSpace(object):
         else:
             retval= surfaceHandler.newPolygonalFacePts(pntTags)
         return retval
+
+    def meshIFCStructuralSurfaces(self, elementType: str, elemSize: float, materialDict, xcSet= None):
+        ''' Generate the finite element mesh for the surfaces of the set.
+        The surfaces are imported from an IFC file.
+
+        :param elementType: element type (ShellMIC4,...).
+        :param elemSize: element size.
+        :param materialDict: material dictionary.
+        :param xcSet: set containing the surfaces to mesh.
+        '''
+        if(not xcSet):
+            xcSet= getTotalSet()
+        # Get structural surfaces
+        structuralSurfaces= list()
+        for face in xcSet.surfaces:
+            ifcType= face.getProp('attributes')['IfcType']
+            if(ifcType=='Structural Surface Member'):
+                structuralSurfaces.append(face)
+        # Define materials
+        for face in structuralSurfaces:
+            matId= face.getProp('attributes')['matId']
+            concrete= materialDict[matId]
+            thickness= face.getProp('attributes')['Thickness']
+            membranePlateSectionName= face.name+'_'+concrete.materialName
+            membranePlateSection= concrete.defElasticMembranePlateSection(self.preprocessor, membranePlateSectionName, thickness)
+            face.setProp('materialName', membranePlateSectionName)
+        # Generate mesh
+        seedElementHandler= self.preprocessor.getElementHandler.seedElemHandler
+        for face in structuralSurfaces:
+            seedElementHandler.defaultMaterial= face.getProp('materialName')
+            seedElem= seedElementHandler.newElement(elementType,xc.ID([0,0,0,0]))
+            face.setElemSizeIJ(elemSize,elemSize)
+            face.genMesh(xc.meshDir.I)
+       
         
 def getModelSpace(preprocessor: xc.Preprocessor):
       '''Return a PredefinedSpace from the dimension of the space 
