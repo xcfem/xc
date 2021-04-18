@@ -11,15 +11,23 @@ __email__= "l.pereztato@gmail.com ana.Ortega.Ort@gmail.com"
 class MaterialWithDKDiagrams(object):
     """Base class for materials with characteristic (K) and design (D) diagrams 
 
-      :ivar materialName: name of material
-      :ivar nmbDiagK: name of the characteristic diagram
-      :ivar matTagK:  tag of the uni-axial material in the characteristic diagram
-      :ivar nmbDiagD: name of the design diagram
+      :ivar materialName: name of the material.
+      :ivar nmbDiagK: name of the characteristic diagram.
+      :ivar matTagK:  tag of the uni-axial material in the characteristic diagram.
+      :ivar nmbDiagD: name of the design diagram.
     """
     def __init__(self,matName):
+        ''' Constructor.
+
+        :param matName: material name.
+        '''
         self.setupName(matName)
 
     def setupName(self,matName):
+        ''' Material setup.
+
+        :param matName: material name.
+        '''
         self.materialName= matName # Name identifying the material.
         self.nmbDiagK= "dgK"+self.materialName # Name identifying the characteristic stress-strain diagram.
         self.matTagK= -1 # Tag of the uniaxial material with the characteristic stress-strain diagram.

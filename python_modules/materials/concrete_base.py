@@ -158,6 +158,12 @@ class Concrete(matWDKD.MaterialWithDKDiagrams):
     
     # Definition of «derived» properties of the material.
     def __init__(self,nmbConcrete, fck, gammaC):
+        ''' Constructor.
+
+        :param nmbConcrete: material name.
+        :param fck: characteristic (5%) cylinder strength of the concrete.
+        :param gammaC: partial safety factor for concrete.
+        '''
         super(Concrete,self).__init__(nmbConcrete)
         self.fck= fck #** characteristic (5%) cylinder strength of the concrete [Pa]
         self.gmmC= gammaC #** Partial safety factor for concrete
@@ -756,7 +762,7 @@ class Concrete(matWDKD.MaterialWithDKDiagrams):
         '''Constructs an elastic isotropic section material appropiate 
            for elastic analysis of plate elements.
 
-        :param  preprocessor: preprocessor name
+        :param  preprocessor: preprocessor object.
         :param  name: name identifying the section
         :param  thickness: section thickness.
         '''
@@ -773,7 +779,7 @@ class Concrete(matWDKD.MaterialWithDKDiagrams):
         '''Constructs an elastic isotropic section material appropiate 
            for elastic analysis of plate and shell elements
 
-        :param  preprocessor: preprocessor name
+        :param  preprocessor: preprocessor object.
         :param  name: name identifying the section
         :param  thickness: section thickness.
         '''
