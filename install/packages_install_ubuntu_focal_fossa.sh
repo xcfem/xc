@@ -56,7 +56,7 @@ sudo apt-get install -y $packages_lib
 gmshLib="/usr/local/lib/gmsh.py"
 if [ ! -f "$gmshLib" ]
 then
-    echo "$0: gmshLib '${gmshLib}' not already installed."
+    echo "$0: gmshLib '${gmshLib}' will be installed from Ubuntu repositories."
     packages_gmsh="\
 	libgmsh-dev                 \
 	libgmsh4"
