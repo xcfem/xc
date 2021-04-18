@@ -30,22 +30,36 @@ except ModuleNotFoundError as err:
     lmsg.log(err)
     quit()
 
+ifcStringAttributes= ['IfcType', 'PredefinedType', 'IfcProperties', 'SteelGrade']
+
+ifcLengthAttributes= ['Thickness', 'LongitudinalBarNominalDiameter', 'LongitudinalBarSpacing', 'TransverseBarNominalDiameter', 'TransverseBarSpacing']
+
+ifcAreaAttributes= ['LongitudinalBarCrossSectionArea', 'TransverseBarCrossSectionArea']
+
+    
 def get_ifc_attributes(obj):
     ''' Return the ifc attributes of the argument.
 
     :param obj: object to get the IFC attributes from.
     '''
     retval= dict()
-    if hasattr(obj,'IfcType'):
-        retval['IfcType']= obj.IfcType
-    if hasattr(obj,'PredefinedType'):
-        retval['PredefinedType']= obj.PredefinedType
-    if hasattr(obj,'Thickness'):
-        retval['Thickness']= obj.Thickness.getValueAs("m") # meter
+    # Read "regular" attributes
+    for attrName in ifcStringAttributes:
+        if hasattr(obj,attrName):
+            retval[attrName]= getattr(obj,attrName)
+    # Read attributes that correspond to a lenght measurement.
+    for attrName in ifcLengthAttributes:
+        if hasattr(obj,attrName):
+            retval[attrName]= getattr(obj,attrName).getValueAs('m') # meter
+    # Read attributes that correspond to an area measurement.
+    for attrName in ifcAreaAttributes:
+        if hasattr(obj,attrName):
+            retval[attrName]= getattr(obj,attrName) # square meter
+    # Read attributes that have a somewhat "special" treatment in XC.
     if hasattr(obj,'Material') and obj.Material:
         retval['Material']= obj.Material.Label
-    if hasattr(obj,'IfcProperties'):
-        retval['IfcProperties']= obj.IfcProperties
+    if hasattr(obj,'Description'):
+        retval['IfcDescription']= obj.Description
     return retval
 
 class FreeCADImport(reader_base.ReaderBase):
