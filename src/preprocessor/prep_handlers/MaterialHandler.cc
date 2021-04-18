@@ -856,12 +856,12 @@ XC::InteractionDiagram &XC::MaterialHandler::getInteractionDiagram(const std::st
   }
 
 //! @brief True if material exists.
-bool XC::MaterialHandler::existeMaterial(const std::string &nmb) const
+bool XC::MaterialHandler::materialExists(const std::string &nmb) const
   { return (materials.find(nmb)!=materials.end()); }
 
 //! @brief Returns true if the section geometry identified by
 //! the string being passed as parameter exists.
-bool XC::MaterialHandler::existeGeomSection(const std::string &nmb) const
+bool XC::MaterialHandler::sectionGeometryExists(const std::string &nmb) const
   { return (sections_geometry.find(nmb)!=sections_geometry.end()); }
 
 //! @brief Returns true if the 3D interaction diagram identified by
