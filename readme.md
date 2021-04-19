@@ -34,13 +34,7 @@ See <a href="https://github.com/xcfem/xc/blob/master/install/install.txt" target
 
 You can also find <a href="https://hub.docker.com/repository/docker/antonsurv/xcfem" target="_new">Docker images</a> created by Anton Surviyanto. The source code of the Dockerfile is <a href="https://github.com/antonsurv/docker-antonsurv-xcfem" target="_new">here</a>
 
-## Where to start
-The programs lacks of a user manual (would you help us with that?). Anyway you can start with some simple examples you'll find <a href= "https://github.com/xcfem/xc_examples" target="_new"> here</a>.
-
-## Links
-You can take a look to the project <a href="https://sites.google.com/site/xcfemanalysis/" target="_new">home</a>, to the <a href="https://xcfem.github.io/XCmanual/" target="_new">Python documentation</a> or the <a href="https://codedocs.xyz/xcfem/xc/index.html" target="_new">C++ API documentation</a> or to our <a href="http://www.xcengineering.xyz/html_files/software.html" target="_new"> XC page in the company site.</a> (all of them are work in progress ;-). 
-
-## Dependencies
+### Dependencies
 Don't worry, if you have a decent *nix system the installation is straightforward. The program is based on:
 <ul>
 <li> <a href="http://www.python.org/" target="_new">Python.</a> </li>
@@ -67,6 +61,14 @@ Don't worry, if you have a decent *nix system the installation is straightforwar
 <li> <a href="http://rene.ma.utexas.edu/CNA/ITPACK/" target="_new"> ITPACK</a> (collection of subroutines for solving large sparse linear systems by adaptive accelerated iterative algorithms).</li>
 <li> <a href="https://github.com/xcfem/xc_utils" target="_new"> xc_utils</a> Basic routines and utilities for XC.</li>
 </ul>
+
+
+## Where to start
+The programs lacks of a user manual (would you help us with that?). Anyway you can start with some simple examples you'll find <a href= "https://github.com/xcfem/xc_examples" target="_new"> here</a>.
+
+## Links
+You can take a look to the project <a href="https://sites.google.com/site/xcfemanalysis/" target="_new">home</a>, to the <a href="https://xcfem.github.io/XCmanual/" target="_new">Python documentation</a> or the <a href="https://codedocs.xyz/xcfem/xc/index.html" target="_new">C++ API documentation</a> or to our <a href="http://www.xcengineering.xyz/html_files/software.html" target="_new"> XC page in the company site.</a> (all of them are work in progress ;-). 
+
 
 
 
