@@ -1,5 +1,4 @@
-Analysis components
-===================
+# Analysis components
 
 The Analysis object is responsible for performing the analysis. In XC (as in OpenSees) each Analysis object is composed of several component objects, which define how the analysis is performed. The component classes consist of the following: 
 
@@ -12,3 +11,7 @@ The components of the analysis are:
 - Convergence tests: accepting the current state of the domain as being on the converged solution path is accomplished by the convergence tests.
 - DOF numberer: This object determines the mapping between equation numbers and degrees-of-freedom -- how degrees-of-freedom are numbered.
 - System of equations/solver:  within the solution algorithm, it specifies how to store and solve the system of equations in the analysis.
+
+
+## References
+[Its power and its problem](https://portwooddigital.com/2021/04/18/its-power-and-its-problem/)
