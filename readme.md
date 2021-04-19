@@ -1,4 +1,4 @@
-[![XC](https://github.com/xcfem/xc/blob/master/doc/logo/xc_logo_100x80.jpeg)](https://sites.google.com/site/xcfemanalysis)
+![XC](./doc/logo/xc_logo_100x80.jpeg)
 
 Open source finite element analysis program.
 ============================================
@@ -7,6 +7,7 @@ Open source finite element analysis program.
 You can see some screenshots <a href="https://github.com/xcfem/xc/tree/master/doc/screenshots" target="_new">here</a>.
 
 The objective is to develop a robust structural analysis tool, which is owned by the community, and allows the users to improve and adapt it for their own needs. Open-source software (or, even better, free software) is the natural evolution of the tools structural engineers have been using forever.
+
 
 It's all about developing tools that allow us to keep going forward (much in the sense of <a href="https://youtu.be/QhGUtJFl0HM" target="_new">designing for strength, economy and beauty</a>) instead of repeating the same old solutions but in a faster way.
 
@@ -54,7 +55,9 @@ The main capabilities of the program:
 	- Wood structures and masonry structures (in progress...).
 - Interface with Industry Foundation Classes through <a href="http://ifcquery.com/" target="_new"> IFC++</a> (in progress...).
 - Interface with SCIA Engineering (in progress...).
+- Component-based finite element method (CBFEM) for analysis and design of steel conections (in progress...).
 
+![CBFEM: connection capacity factor](./doc/screenshots/connection_capacity_factor.png)
 
 ## Installation
 See <a href="https://github.com/xcfem/xc/blob/master/install/install.txt" target="_new">install</a>
