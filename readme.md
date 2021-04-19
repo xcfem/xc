@@ -1,4 +1,4 @@
-![XC](./doc/logo/xc_logo_alpha_channel_100x100.jpeg)
+![XC](./doc/logo/xc_logo_alpha_channel_100x100.png)
 
 Open source finite element analysis program.
 ============================================
