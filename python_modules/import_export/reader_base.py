@@ -134,18 +134,21 @@ class ReaderBase(object):
         '''Selects the k-points to be used in the model. All the points that
            are closer than the threshold distance are melted into one k-point.
         '''
-        points, layers= self.extractPoints()
+        points, properties= self.extractPoints()
         indexDict= None
-        if(len(points)>0):
-            self.kPoints= [points[0]]
-            pointName= layers[0][0]
-            objProperties= layers[0][1]
+        keys= list(points.keys())
+        if(len(keys)>0):
+            # Append first point
+            pointName= keys[0]
+            self.kPoints= [points[pointName]]
+            objProperties= properties[pointName]
             self.propertyDict[pointName]= objProperties
             indexDict= dict()
             indexDict[0]= pointName
-            for p, l in zip(points, layers):
-                pointName= l[0]
-                objProperties= l[1]
+            # Iterate through the rest of the points
+            for pointName in keys[1:]:
+                p= points[pointName]
+                objProperties= properties[pointName]
                 indexNearestPoint= self.getIndexNearestPoint(p)
                 nearestPoint= self.kPoints[indexNearestPoint]
                 dist= cdist([p],[nearestPoint])[0][0]

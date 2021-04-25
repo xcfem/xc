@@ -106,14 +106,14 @@ class FreeCADImport(reader_base.ReaderBase):
     
     def extractPoints(self):
         '''Extract the points from the entities argument.'''
-        retval_pos= []
-        retval_properties= []
+        retval_pos= dict()
+        retval_properties= dict()
         def append_point(pt, groupName, pointName, objProperties):
             '''Append the point to the lists.'''
-            retval_pos.append(self.getRelativeCoo(pt))
+            retval_pos[pointName]= self.getRelativeCoo(pt)
             # group name as label.
             objProperties.extendLabels([groupName])
-            retval_properties.append((pointName, objProperties))
+            retval_properties[pointName]= objProperties
         def append_points(vertexes, objName, groupName, objProperties):
             '''Append the points to the list.'''
             if(len(vertexes)>1):

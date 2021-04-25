@@ -356,6 +356,7 @@ python tests/preprocessor/grid_model/test_grid_model_02.py
 python tests/preprocessor/grid_model/test_elliptical_coord_01.py
 echo "$BLEU" "  Import/export tests." "$NORMAL"
 python tests/preprocessor/import_export/test_split_lines.py
+python tests/preprocessor/import_export/test_dxf_import_01.py
 python tests/preprocessor/import_export/test_dxf_groups.py
 python tests/preprocessor/import_export/test_dxf_surfaces.py
 python tests/preprocessor/import_export/test_dxf_export_01.py

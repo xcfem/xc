@@ -48,7 +48,7 @@ class BlockProperties(object):
         '''
         retval= None
         if(blockProperties):
-            retval= BlockProperties(blockProperties.labels, copy.deepcopy(blockProperties.attributes))
+            retval= BlockProperties(copy.deepcopy(blockProperties.labels), copy.deepcopy(blockProperties.attributes))
         else:
             retval= BlockProperties()
         return retval
