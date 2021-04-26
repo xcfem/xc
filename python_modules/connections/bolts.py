@@ -198,7 +198,7 @@ class BoltBase(object):
     
     def report(self, outputFile):
         ''' Reports bolt design values.'''
-        outputFile.write('      diameter: '+str(self.diameter*1000)+' mm\n')
+        outputFile.write('     diameter: '+str(self.diameter*1000)+' mm\n')
 
 class AnchorBase(BoltBase):
     ''' Base class for anchor bolts.
