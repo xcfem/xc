@@ -1053,7 +1053,7 @@ class AnchorGroup(object):
 
     def getMinimumSpacing(self, rodEfficiency= 1.0):
         ''' Return the minimum spacing according to clause 17.7.1
-            of ACI 318-14.
+            and 17.7.4 of ACI 318-14.
         '''
         diameter= self.anchors[0].diameter*math.sqrt(rodEfficiency)
         retval= 4.0*diameter
