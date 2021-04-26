@@ -20,6 +20,7 @@ import scipy.interpolate
 import xc_base
 import geom
 import materials
+from geom_utils import closest_pair_of_points as cpp
 from materials import steel_base
 from misc_utils import log_messages as lmsg
 from materials import buckling_base
@@ -1013,19 +1014,26 @@ class AnchorGroup(object):
     :ivar anchors: anchor list.
     '''
     
-    def __init__(self, steel, diameter, positions, plateWasher= None):
+    def __init__(self, steel, diameter, positions, plateWasher= None, postInstalled= False, torqued= False):
         ''' Creates an anchor group in the positions argument.
 
         :param steel: steel material.
         :param diameter: bolt diameter.
         :param positions: bolt positions.
         :param plateWasher: washer plate for the bolts (if any)
+        :param postInstalled: true for post-installed anchors.
+        :param torqued: true if anchors are put in tension to be sure
+                        that they will never go above that tensile stress, 
+                        and the baseplate always has pressure on the concrete. 
+                        No stress reversal, therefore, less fatigue.
         '''
         self.anchors= list()
         count= 0
         for p in positions:
             self.anchors.append(AnchorBolt(name= str(count), steel= steel, diameter= diameter, pos3d= p, plateWasher= plateWasher))
             count+= 1
+        self.postInstalled= postInstalled
+        self.torqued= torqued
 
     def setPositions(self, positions):
         ''' Set the anchors positions.
@@ -1034,7 +1042,25 @@ class AnchorGroup(object):
         '''
         for anchor, pos in zip(self.anchors, positions):
             anchor.pos3d= pos
-            
+
+    def getSpacing(self):
+        ''' Return the spacing between anchors.'''
+        points= list()
+        for anchor in self.anchors:
+            pos= anchor.pos3d
+            points.append(geom.Pos2d(pos.x, pos.y))
+        return cpp.closest_pair_of_points(points, len(points))
+
+    def getMinimumSpacing(self, rodEfficiency= 1.0):
+        ''' Return the minimum spacing according to clause 17.7.1
+            of ACI 318-14.
+        '''
+        diameter= self.anchors[0].diameter*math.sqrt(rodEfficiency)
+        retval= 4.0*diameter
+        if(self.torqued or self.postInstalled):
+            retval= 6.0*diameter
+        return retval
+        
     def getDict(self):
         ''' Put member values in a dictionary.'''
         retval= dict()
@@ -1118,7 +1144,10 @@ class AnchorGroup(object):
     def report(self, outputFile):
         ''' Writes anchor group specification.'''
         outputFile.write('   anchors: \n')
+        outputFile.write('     post-installed: '+str(self.postInstalled)+'\n')
+        outputFile.write('     torqued: '+str(self.postInstalled)+'\n')
         outputFile.write('     number of anchors: '+ str(len(self.anchors))+ ' x '+self.anchors[0].getName()+'\n')
+        outputFile.write('     minimum spacing: '+str(self.getSpacing())+' m\n')
         self.anchors[0].report(outputFile)
         
 
