@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+''' Check that support points are correctly imported.'''
 from __future__ import division
 from __future__ import print_function
 
