@@ -31,6 +31,12 @@ class BasicSteel(typical_materials.BasicElasticMaterial):
     def fyd(self):
         return self.fy/self.gammaM
 
+    def fmaxk(self):
+      ''' Characteristic ultimate strength. This method is added for
+          compatibility with ReinforcingSteel material as defined
+          in concrete base.'''
+      return self.fu
+  
     def getDict(self):
         ''' Returns a dictionary whith the values of the internal forces.
             Makes easier export it to json.'''
