@@ -1150,6 +1150,23 @@ class AnchorGroup(object):
         outputFile.write('     minimum spacing: '+str(self.getSpacing())+' m\n')
         self.anchors[0].report(outputFile)
         
+def getSquareAnchorGroup(steel, diameter, squareSide, xCenter= 0.0, yCenter= 0.0):
+    ''' Return four anchors in the corners of the square.
+
+    :param steel: steel material.
+    :param diameter: bolt diameter.
+    :param squareSide: side of the square.
+    :param xCenter: x coordinate of the square center.
+    :param yCenter: y coordinate of the square center.
+    '''
+    delta= squareSide/2.0
+    origin= geom.Pos3d(xCenter, yCenter, 0.0)
+    positions= list()
+    positions.append(origin+geom.Vector3d(delta,delta,0.0))
+    positions.append(origin+geom.Vector3d(-delta,delta,0.0))
+    positions.append(origin+geom.Vector3d(-delta,-delta,0.0))
+    positions.append(origin+geom.Vector3d(delta,-delta,0.0))
+    return AnchorGroup(steel, diameter, positions)
 
 class ASTMShape(object):
     """Steel shape with ASTM/AISC verification routines."""
