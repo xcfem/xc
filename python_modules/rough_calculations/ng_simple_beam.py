@@ -30,7 +30,7 @@ class SimpleBeam(bm.Beam):
 
         :param q: value of the uniform load.
         '''
-        return self.getShearUnderUniformLoad(self,q= q,x= 0.0)
+        return self.getShearUnderUniformLoad(q= q,x= 0.0)
       
     def getBendingMomentUnderUniformLoad(self,q,x):
         ''' Return the bending moment under uniform load.
