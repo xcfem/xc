@@ -629,6 +629,7 @@ class AnchorBolt(object):
     def getAnchorArea(self):
         ''' Return the anchor area.'''
         return math.pi*(self.diam/2.0)**2
+    
     def getNominalSteelStrengthTension(self):
         ''' Return the nominal steel strength of the anchor
             according to section D.3.6.1.'''
