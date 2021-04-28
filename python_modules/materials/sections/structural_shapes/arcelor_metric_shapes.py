@@ -1257,8 +1257,6 @@ import xc_base
 import geom
 from materials.sections import structural_steel
 
-
-
 class IPNShape(structural_steel.IShape):
     def __init__(self,steel,name):
         super(IPNShape,self).__init__(steel,name,IPN)

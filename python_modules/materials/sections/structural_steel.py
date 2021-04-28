@@ -56,6 +56,14 @@ class SteelShape(sp.SectionProperties):
     :ivar name:     name identifying the section in the table
     '''
     def __init__(self,steel,name,table):
+        ''' Constructor.
+
+        :param steel: steel object (e.g. S275JR)
+        :param name: name identifying the section in the table
+        :param table: module containing a dictionary with mechanical 
+                      characteristics of a series of shapes 
+                      (e.g. materials.sections.structural_shapes.arcelor_metric_shapes.IPE)
+        '''
         self.steelType= steel
         if(name!=''):
             self.shape= table[name]
