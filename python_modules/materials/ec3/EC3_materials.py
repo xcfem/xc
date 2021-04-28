@@ -116,16 +116,20 @@ S355JR= EC3Steel(fy= 355e6, fy16= 355e6, fy40= 345e6, fy63= 335e6, fy80= 325e6, 
 S450J0= EC3Steel(fy= 450e6, fy16= 450e6, fy40= 430e6, fy63= 410e6, fy80= 390e6, fy100= 380e6, fy125= 380e6, fu= 360e6, gammaM= 1.1)
 
 class EC3Shape(object):
-    """Steel shape with Eurocode 3 verification routines."""
+    '''Steel shape with Eurocode 3 verification routines.
+
+    :ivar name: steel shape name.
+    :ivar typo: 'rolled' or 'welded' shape
+    '''
     def __init__(self,name, typo= 'rolled'):
-      '''
-        Constructor.
+        '''
+          Constructor.
 
         :param name: steel shape name.
         :param typo: 'rolled' or 'welded' shape
-      '''
-      self.name=name
-      self.typo= typo
+        '''
+        self.name=name
+        self.typo= typo
 
     def getClassInternalPartInCompression(self,steel,ratioCT=None):
         '''Return the cross-section classification of internal part 
@@ -458,7 +462,7 @@ class IPNShape(EC3Shape,arcelor_metric_shapes.IPNShape):
 
 
 class IPEShape(EC3Shape,arcelor_metric_shapes.IPEShape):
-    """IPE shape with Eurocode 3 verification routines."""
+    '''IPE shape with Eurocode 3 verification routines.'''
     def __init__(self,steel,name):
         ''' Constructor.
 
