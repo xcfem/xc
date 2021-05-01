@@ -21,6 +21,7 @@ from misc_utils import log_messages as lmsg
 from materials.astm_aisc import ASTM_materials
 import materials
 from import_export import block_topology_entities as bte
+import ezdxf # See https://ezdxf.readthedocs.io
 
 # Base plates under concentric axial compressive loads.
 
@@ -436,6 +437,13 @@ class RectangularBasePlate(object):
         maxWebThickness= self.getWebLegMaxSize()
         return minWebThickness+factor*(maxWebThickness-minWebThickness)
     
+    def getNominalHoleDiameter(self):
+        ''' Return the hole diameter.'''
+        retval= 0.0
+        if(len(self.anchorGroup.anchors)>0):
+            retval= self.anchorGroup.anchors[0].getNominalHoleDiameter()
+        return retval
+
     def report(self, outputFile):
         ''' Writes base plate specification.'''
         outputFile.write('  Base plate: \n')
@@ -447,5 +455,153 @@ class RectangularBasePlate(object):
         outputFile.write('    base plate - column welds:\n')
         outputFile.write('      with the flange(s): 2 x '+str(math.floor(self.getFlangeWeldLegSize(0.3)*1000))+' mm (fillet weld leg size)\n')
         outputFile.write('      with the web: 2 x '+str(math.floor(self.getWebWeldLegSize()*1000))+' mm (fillet weld leg size)\n')
+        #outputFile.write('fc= ', fc/1e6,' MPa')
         #outputFile.write('   area: '+ self.getArea()+ ' m2')
+        holeDiameter= self.getNominalHoleDiameter()
+        outputFile.write('     hole diameter: '+ str(holeDiameter*1e3)+ ' mm\n')
         self.anchorGroup.report(outputFile)
+        
+    def writeDXFShapeContour(self, modelSpace, layerName):
+        ''' Writes the shape contour in the model
+            space argument.
+
+        :param modelSpace: ezdxf model space to write into.
+        :param layerName: DXF layer name.
+        '''
+        plg= self.steelShape.getContour()
+        posVec3d= self.origin.getPositionVector()
+        posVec2d= geom.Vector2d(posVec3d.x, posVec3d.y)
+        plg.move(posVec2d)
+        vtx= plg.getVertices()
+        vtx.append(vtx[0])
+        v0= vtx[0]
+        for v in vtx[1:]:
+            modelSpace.add_line((v0.x, v0.y), (v.x, v.y), dxfattribs={'layer': layerName})
+            v0= v
+
+    def writeDXFBasePlateContour(self, modelSpace, layerName):
+        ''' Write the base plate contour in the model
+            space argument
+
+        :param modelSpace: ezdxf model space to write into.
+        :param layerName: DXF layer name.
+        '''
+        deltaX= self.B/2.0
+        deltaY= self.N/2.0
+        positions= self.getContour().getVertexList()
+        modelSpace.add_line((positions[0].x, positions[0].y), (positions[1].x, positions[1].y), dxfattribs={'layer': layerName})
+        modelSpace.add_line((positions[1].x, positions[1].y), (positions[2].x, positions[2].y), dxfattribs={'layer': layerName})
+        modelSpace.add_line((positions[2].x, positions[2].y), (positions[3].x, positions[3].y), dxfattribs={'layer': layerName})
+        modelSpace.add_line((positions[3].x, positions[3].y), (positions[0].x, positions[0].y), dxfattribs={'layer': layerName})
+        
+    def writeDXFAnchorRodHoles(self, modelSpace, layerName):
+        ''' Draw anchor rod holes in the model
+            space argument
+
+        :param modelSpace: ezdxf model space to write into.
+        :param layerName: DXF layer name.
+        '''
+        boltDiameter= self.anchorGroup.anchors[0].diameter
+        self.holeDiameter= self.getNominalHoleDiameter()
+        origin2d= geom.Pos2d(self.origin.x, self.origin.y)
+        for anchor in self.anchorGroup.anchors:
+            center= origin2d+geom.Vector2d(anchor.pos3d.x, anchor.pos3d.y)
+            modelSpace.add_circle((center.x, center.y), self.holeDiameter/2.0, dxfattribs={'layer': layerName})
+
+    def writeDXF(self, modelSpace, steelShapeLayerName, basePlateLayerName, anchorHolesLayerName):
+        ''' Draw the base plate in the model
+            space argument
+
+        :param modelSpace: ezdxf model space to write into.
+        :param steelShapeLayerName: DXF layer name for steel shape contour.
+        :param basePlateLayerName: DXF layer name for the base plate contour.
+        :param anchorHolesLayerName: DXF layer name for the anchor rod holes.
+        '''
+        # Draw steel shape
+        self.writeDXFShapeContour(modelSpace, steelShapeLayerName)
+        # Draw base plate
+        self.writeDXFBasePlateContour(modelSpace, basePlateLayerName)
+        # Draw anchor holes
+        self.writeDXFAnchorRodHoles(modelSpace, anchorHolesLayerName)
+
+class BasePlateGroup(object):
+    ''' Group of similar base plates.
+
+    :ivar basePlates: base plate container (dictionary).
+    '''
+            
+    def __init__(self):
+        ''' Constructor.
+
+        '''
+        self.basePlates= dict()
+        
+    def getDict(self):
+        ''' Put member values in a dictionary.'''
+        retval= dict()
+        for key in self.basePlates:
+            retval[key]= self.basePlates[key].getDict()
+        if(hasattr(self,'h_ef')):
+           retval.update({'h_ef':self.h_ef})
+        return retval
+
+    def setFromDict(self,dct):
+        ''' Read member values from a dictionary.'''
+        if('h_ef' in dct):
+           self.h_ef= dct['h_ef']
+        dct.pop('h_ef', None) # Remove already used key
+        for key in dct:
+            self.basePlates[key]=  CustomBasePlate(B= 0, N= 0, t= 0, steelShape= None, anchorGroup= None, steel= None, fc= 0.0, origin= None)
+        for key in dct:
+            self.basePlates[key].setFromDict(dct[key])
+
+    def jsonRead(self, inputFileName):
+        ''' Read object from JSON file.'''
+        with open(inputFileName) as json_file:
+            basePlateGroupDict= json.load(json_file)
+        self.setFromDict(basePlateGroupDict)
+        json_file.close()
+        
+    def getBlocks(self, blockProperties):
+        ''' Return the block decomposition of the base plates.
+
+        :param blockProperties: labels and attributes to assign to the newly created blocks.
+        '''
+        retval= bte.BlockData()
+        for key in self.basePlates:
+            basePlate= self.basePlates[key]
+            retval.extend(basePlate.getBlocks(blockProperties))
+        return retval
+        
+    def writeDXF(self, modelSpace, steelShapeLayerName, basePlateLayerName, anchorHolesLayerName):
+        ''' Draw the base plate in the model
+            space argument
+
+        :param modelSpace: ezdxf model space to write into.
+        :param steelShapeLayerName: DXF layer name for steel shape contour.
+        :param basePlateLayerName: DXF layer name for the base plate contour.
+        :param anchorHolesLayerName: DXF layer name for the anchor rod holes.
+        '''
+        for key in self.basePlates:
+            basePlate= self.basePlates[key]
+            basePlate.writeDXF(modelSpace, steelShapeLayerName, basePlateLayerName, anchorHolesLayerName)
+
+    def getNumberOfBolts(self):
+        ''' Return the total number of bolts.'''
+        retval= 0
+        for key in self.basePlates:
+            basePlate= self.basePlates[key]
+            retval+= basePlate.anchorGroup.getNumberOfBolts()
+        return retval
+        
+    def report(self, outputFile):
+        numberOfBolts= 0
+        numberOfPlates= len(self.basePlates)
+        outputFile.write(str(numberOfPlates)+' x ')
+        firstKey= list(self.basePlates.keys())[0]
+        basePlate= self.basePlates[firstKey]
+        basePlate.report(outputFile)
+        numberOfBolts= self.getNumberOfBolts()
+        outputFile.write('total number of anchors: '+str(numberOfBolts)+'\n')
+        outputFile.write('depth of embedment: '+ str(self.h_ef)+ ' m\n')
+        #outputFile.write('number of base plates: '+str(len(self.basePlates)))
