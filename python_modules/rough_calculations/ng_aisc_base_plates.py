@@ -535,13 +535,16 @@ class RectangularBasePlate(object):
 class BasePlateGroup(object):
     ''' Group of similar base plates.
 
+    :ivar name: name of the base plates group.
     :ivar basePlates: base plate container (dictionary).
     '''
             
-    def __init__(self):
+    def __init__(self, name: str):
         ''' Constructor.
 
+        :param name: name of the base plate group.
         '''
+        self.name= name
         self.basePlates= dict()
         
     def getDict(self):
@@ -606,24 +609,22 @@ class BasePlateGroup(object):
             basePlate= self.basePlates[key]
             basePlate.writeDXF(modelSpace, steelShapeLayerName, basePlateLayerName, anchorHolesLayerName)
 
-    def writeDXFFile(self, baseName):
-        ''' Draw the base plate group in a DXF file
-
-        :param baseName: basic string to compose the file name.
+    def writeDXFFile(self):
+        ''' Draw the base plate group in a DXF file.
         '''
         doc= ezdxf.new('R2010')
         doc.header['$MEASUREMENT'] = 1 # Metric
         doc.header['$LUNITS'] = 2 # Decimal units.
         doc.header['$INSUNITS'] = 6 # # Default drawing units.
-        steelShapesLayerName= 'xc_'+baseName+'_steel_shapes'
+        steelShapesLayerName= 'xc_'+self.name+'_steel_shapes'
         doc.layers.new(name= steelShapesLayerName, dxfattribs={'color': 4})
-        basePlatesLayerName= 'xc_'+baseName+'_base_plates'
+        basePlatesLayerName= 'xc_'+self.name+'_base_plates'
         doc.layers.new(name= basePlatesLayerName, dxfattribs={'color': 4})
-        anchorHolesLayerName= 'xc_'+baseName+'_anchor_bolts'
+        anchorHolesLayerName= 'xc_'+self.name+'_anchor_bolts'
         doc.layers.new(name= anchorHolesLayerName, dxfattribs={'color': 2})
         msp = doc.modelspace()  # add new entities to the modelspace
         self.writeDXF(msp, steelShapesLayerName, basePlatesLayerName, anchorHolesLayerName)
-        fileName= baseName+'_base_plates.dxf'
+        fileName= self.name+'_base_plates.dxf'
         doc.saveas(fileName)
         
     def getNumberOfBolts(self):
@@ -726,21 +727,23 @@ class CapacityFactors(object):
             json.dump(self.getDict(), outfile)
         outfile.close()
         
-    def compute(self, fileName, h_ef):
+    def compute(self, reactions, h_ef):
         ''' Compute capacity factors.
 
-        :param fileName: comma separated values file containing forces 
-                         acting on baseplate.
+        :param reactions: reaction values acting on baseplates.
         :param h_ef: anchor rods embedment.
         '''
-        with open(fileName) as csvfile:
-            readCSV = csv.reader(csvfile, delimiter=',')
-            for row in readCSV:
-                Pu= -float(row[7]) # axial load
-                Vu= math.sqrt(float(row[5])**2+float(row[6])**2) # shear
-                pointId= str(row[1]) # base plate identifier.
-                basePlate= self.basePlateGroup.basePlates[pointId]
-                basePlate.h_ef= h_ef
+        for pointId in reactions:
+            # Base plate corresponding to the point identifier.
+            basePlate= self.basePlateGroup.basePlates[pointId]
+            basePlate.h_ef= h_ef
+            # Base plate reactions
+            basePlateReactions= reactions[pointId]
+            for comb in basePlateReactions:
+                values= basePlateReactions[comb]
+                Pu= values['Rz'] # vertical load
+                Rx= values['Rx']; Ry= values['Ry']
+                Vu= math.sqrt(Rx**2+Ry**2) # shear
                 self.shearCF= max(self.shearCF,basePlate.getShearEfficiency(Pu, Vu))
                 self.concreteStrengthCF= max(self.concreteStrengthCF,basePlate.getConcreteStrengthEfficiency(Pu))
                 self.tCF= max(self.tCF,basePlate.getThicknessEfficiency(Pu))
@@ -777,6 +780,7 @@ class CapacityFactors(object):
             outputFile.write(Fore.GREEN+'OK'+Style.RESET_ALL+', but supplementary reinforcement needed (breakoutCF>1).')            
         else:
             outputFile.write(Fore.RED+'KO'+Style.RESET_ALL)
+        outputFile.write('\nh_ef= '+str(self.basePlateGroup.h_ef)+ 'm\n')
 
     def output(self, outputFileName, reportFile= sys.stdout):
         ''' Generate output: report+dxf file.
