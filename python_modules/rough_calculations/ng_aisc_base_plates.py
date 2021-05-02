@@ -15,6 +15,7 @@ __email__= "l.pereztato@gmail.com"
 
 import sys
 import math
+import json
 import xc_base
 import geom
 from postprocess.reports import common_formats as fmt
@@ -23,6 +24,9 @@ from materials.astm_aisc import ASTM_materials
 import materials
 from import_export import block_topology_entities as bte
 import ezdxf # See https://ezdxf.readthedocs.io
+import csv
+from colorama import Fore
+from colorama import Style
 
 # Base plates under concentric axial compressive loads.
 
@@ -569,6 +573,15 @@ class BasePlateGroup(object):
         self.setFromDict(basePlateGroupDict)
         json_file.close()
         
+    def jsonWrite(self, outputFileName):
+        ''' Write object to JSON file.
+
+        :param outputFileName: name of the output file.
+        '''
+        with open(outputFileName, 'w') as outfile:
+            json.dump(self.getDict(), outfile)
+        outfile.close()
+        
     def getBlocks(self, blockProperties):
         ''' Return the block decomposition of the base plates.
 
@@ -749,15 +762,15 @@ class CapacityFactors(object):
         '''        
         #outputFile.write('fc= ', fc/1e6,' MPa')
         self.basePlateGroup.report(outputFile)
-        outputFile.write('concreteStrengthCF= ', self.concreteStrengthCF)
-        outputFile.write('thickness efficiency tCF= ', self.tCF)
-        outputFile.write('rodCF= ', self.rodCF)
-        outputFile.write('spacingCF= ', self.spacingCF)
-        outputFile.write('webStressCF= ', self.webStressCF)
-        outputFile.write('pulloutCF= ', self.pulloutCF)
-        outputFile.write('breakoutCF= ', self.breakoutCF)
-        outputFile.write('shearCF= ', self.shearCF)
-        outputFile.write('shearTensileInteractionCF= ', self.shearTensileInteractionCF)
+        outputFile.write('concreteStrengthCF= '+str(self.concreteStrengthCF)+'\n')
+        outputFile.write('thickness efficiency tCF= '+str(self.tCF)+'\n')
+        outputFile.write('rodCF= '+str(self.rodCF)+'\n')
+        outputFile.write('spacingCF= '+str(self.spacingCF)+'\n')
+        outputFile.write('webStressCF= '+str(self.webStressCF)+'\n')
+        outputFile.write('pulloutCF= '+str(self.pulloutCF)+'\n')
+        outputFile.write('breakoutCF= '+str(self.breakoutCF)+'\n')
+        outputFile.write('shearCF= '+str(self.shearCF)+'\n')
+        outputFile.write('shearTensileInteractionCF= '+str(self.shearTensileInteractionCF)+'\n')
         if(self.maxCF<= 1.0):
             outputFile.write(Fore.GREEN+'OK'+Style.RESET_ALL)
         elif(self.breakoutCF>1.0 and (max([self.tCF, self.rodCF, self.webStressCF, self.concreteStrengthCF, self.pulloutCF,self.shearCF])<=1.0)):
