@@ -13,6 +13,7 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
+import sys
 import math
 import xc_base
 import geom
@@ -445,7 +446,10 @@ class RectangularBasePlate(object):
         return retval
 
     def report(self, outputFile):
-        ''' Writes base plate specification.'''
+        ''' Writes base plate specification.
+
+        :param outputFile: output file.
+        '''
         outputFile.write('  Base plate: \n')
         outputFile.write('    length: '+str(self.N*1000)+ ' mm\n')
         outputFile.write('    length offset: '+str(self.offsetN*1000)+ ' mm\n')
@@ -556,7 +560,10 @@ class BasePlateGroup(object):
             self.basePlates[key].setFromDict(dct[key])
 
     def jsonRead(self, inputFileName):
-        ''' Read object from JSON file.'''
+        ''' Read object from JSON file.
+
+        :param inputFileName: name of the input file.
+        '''
         with open(inputFileName) as json_file:
             basePlateGroupDict= json.load(json_file)
         self.setFromDict(basePlateGroupDict)
@@ -586,6 +593,26 @@ class BasePlateGroup(object):
             basePlate= self.basePlates[key]
             basePlate.writeDXF(modelSpace, steelShapeLayerName, basePlateLayerName, anchorHolesLayerName)
 
+    def writeDXFFile(self, baseName):
+        ''' Draw the base plate group in a DXF file
+
+        :param baseName: basic string to compose the file name.
+        '''
+        doc= ezdxf.new('R2010')
+        doc.header['$MEASUREMENT'] = 1 # Metric
+        doc.header['$LUNITS'] = 2 # Decimal units.
+        doc.header['$INSUNITS'] = 6 # # Default drawing units.
+        steelShapesLayerName= 'xc_'+baseName+'_steel_shapes'
+        doc.layers.new(name= steelShapesLayerName, dxfattribs={'color': 4})
+        basePlatesLayerName= 'xc_'+baseName+'_base_plates'
+        doc.layers.new(name= basePlatesLayerName, dxfattribs={'color': 4})
+        anchorHolesLayerName= 'xc_'+baseName+'_anchor_bolts'
+        doc.layers.new(name= anchorHolesLayerName, dxfattribs={'color': 2})
+        msp = doc.modelspace()  # add new entities to the modelspace
+        self.writeDXF(msp, steelShapesLayerName, basePlatesLayerName, anchorHolesLayerName)
+        fileName= baseName+'_base_plates.dxf'
+        doc.saveas(fileName)
+        
     def getNumberOfBolts(self):
         ''' Return the total number of bolts.'''
         retval= 0
@@ -595,6 +622,10 @@ class BasePlateGroup(object):
         return retval
         
     def report(self, outputFile):
+        ''' Writes base plate specification.
+
+        :param outputFile: output file.
+        '''        
         numberOfBolts= 0
         numberOfPlates= len(self.basePlates)
         outputFile.write(str(numberOfPlates)+' x ')
@@ -605,3 +636,143 @@ class BasePlateGroup(object):
         outputFile.write('total number of anchors: '+str(numberOfBolts)+'\n')
         outputFile.write('depth of embedment: '+ str(self.h_ef)+ ' m\n')
         #outputFile.write('number of base plates: '+str(len(self.basePlates)))
+
+def readBasePlateGroupFromJSONFile(inputFileName):
+    ''' Read base plate group object from a JSON file.
+
+    :python inputFileName: name of the input file.
+    '''
+    retval= BasePlateGroup(N= 0.0, B= 0.0, t= 0.0, steelShape= None, anchorGroup= None, fc= 0.0, steel= None, pointMap= {})
+    retval.jsonRead(inputFileName)
+    return retval
+
+class CapacityFactors(object):
+    ''' Capacity factors computed for a base plate group.
+
+    :ivar basePlateGroup: group of base plates to check.
+    :ivar spacingCF: anchor spacing capacity factor (result of checking 
+                     distance between anchor rods [spacingCF<1.0 => OK].
+    :ivar tCF: base plate thickness capacity factor (<1.0 => OK).
+    :ivar rodCF: anchor rod capacity factor (<1.0 => OK).
+    :ivar webStressCF: shaft web stress capacity factor (<1.0 => OK).
+    :ivar concreteStrengthCF: concrete strength capacity factor (<1.0 => OK).
+    :ivar pullOutCF: concrete pull out capacity factor (<1.0 => OK).
+    :ivar breakOutCF: concrete break out capacity factor (<1.0 => OK).
+    :ivar shearCF: anchor rods shear capacity factor (<1.0 => OK).
+    '''
+    def __init__(self, basePlateGroup):
+        ''' Constructor.
+
+        :param basePlateGroup: group of base plates to check.
+        '''
+        self.basePlateGroup= basePlateGroup
+        self.spacingCF= 0.0
+        self.tCF= 0.0
+        self.rodCF= 0.0
+        self.webStressCF= 0.0
+        self.concreteStrengthCF= 0.0
+        self.pulloutCF= 0.0
+        self.breakoutCF= 0.0
+        self.shearCF= 0.0
+        
+    def getDict(self):
+        ''' Put member values in a dictionary.'''
+        retval= dict()
+        retval['basePlateGroup']= self.basePlateGroup.getDict()
+        retval.update({'spacingCF':self.spacingCF, 'tCF': self.tCF, 'rodCF':self.rodCF, 'webStressCF': self.webStressCF, 'concreteStrengthCF':self.concreteStrengthCF, 'pulloutCF': self.pulloutCF, 'breakoutCF':self.breakoutCF, 'shearCF':self.shearCF})
+        return retval
+
+    def setFromDict(self,dct):
+        ''' Read member values from a dictionary.'''
+        self.basePlateGroup.setFromDict(dct['basePlateGroup'])
+        self.spacingCF= dct['spacingCF']
+        self.tCF= dct['tCF']
+        self.rodCF= dct['rodCF']
+        self.webStressCF= dct['webStressCF']
+        self.concreteStrengthCF= dct['concreteStrengthCF']
+        self.pulloutCF= dct['pulloutCF']
+        self.breakoutCF= dct['breakoutCF']
+        self.shearCF= dct['shearCF']
+                
+    def jsonRead(self, inputFileName):
+        ''' Read object from JSON file.
+
+        :param inputFileName: name of the input file.
+        '''
+        with open(inputFileName) as json_file:
+            dct= json.load(json_file)
+        self.setFromDict(dct)
+        json_file.close()
+
+    def jsonWrite(self, outputFileName):
+        ''' Write object to JSON file.
+
+        :param outputFileName: name of the output file.
+        '''
+        with open(outputFileName, 'w') as outfile:
+            json.dump(self.getDict(), outfile)
+        outfile.close()
+        
+    def compute(self, fileName, h_ef):
+        ''' Compute capacity factors.
+
+        :param fileName: comma separated values file containing forces 
+                         acting on baseplate.
+        :param h_ef: anchor rods embedment.
+        '''
+        with open(fileName) as csvfile:
+            readCSV = csv.reader(csvfile, delimiter=',')
+            for row in readCSV:
+                Pu= -float(row[7]) # axial load
+                Vu= math.sqrt(float(row[5])**2+float(row[6])**2) # shear
+                pointId= str(row[1]) # base plate identifier.
+                basePlate= self.basePlateGroup.basePlates[pointId]
+                basePlate.h_ef= h_ef
+                self.shearCF= max(self.shearCF,basePlate.getShearEfficiency(Pu, Vu))
+                self.concreteStrengthCF= max(self.concreteStrengthCF,basePlate.getConcreteStrengthEfficiency(Pu))
+                self.tCF= max(self.tCF,basePlate.getThicknessEfficiency(Pu))
+                self.pulloutCF= max(self.pulloutCF,basePlate.getPulloutEfficiency(Pu))
+                self.breakoutCF= max(self.breakoutCF,basePlate.getBreakoutEfficiency(h_ef,Pu))
+                self.webStressCF= max(self.webStressCF,basePlate.getWebStressEfficiency(Pu))
+                self.rodCF= max(self.rodCF, basePlate.getRodTensileStrengthEfficiency(Pu))
+                self.shearTensileInteractionCF= math.sqrt(self.rodCF**2+self.shearCF**2)
+                self.spacingCF=  max(self.spacingCF,basePlate.anchorGroup.getMinimumSpacing(self.shearTensileInteractionCF)/basePlate.anchorGroup.getSpacing())
+        self.maxCF= max([self.spacingCF, self.tCF, self.rodCF, self.webStressCF, self.concreteStrengthCF, self.pulloutCF, self.breakoutCF, self.shearCF, self.shearTensileInteractionCF])
+
+        if(self.maxCF<= 1.0):
+            self.basePlateGroup.h_ef= h_ef
+
+    def report(self, outputFile):
+        ''' Writes base plate specification.
+
+        :param outputFile: output file.
+        '''        
+        #outputFile.write('fc= ', fc/1e6,' MPa')
+        self.basePlateGroup.report(outputFile)
+        outputFile.write('concreteStrengthCF= ', self.concreteStrengthCF)
+        outputFile.write('thickness efficiency tCF= ', self.tCF)
+        outputFile.write('rodCF= ', self.rodCF)
+        outputFile.write('spacingCF= ', self.spacingCF)
+        outputFile.write('webStressCF= ', self.webStressCF)
+        outputFile.write('pulloutCF= ', self.pulloutCF)
+        outputFile.write('breakoutCF= ', self.breakoutCF)
+        outputFile.write('shearCF= ', self.shearCF)
+        outputFile.write('shearTensileInteractionCF= ', self.shearTensileInteractionCF)
+        if(self.maxCF<= 1.0):
+            outputFile.write(Fore.GREEN+'OK'+Style.RESET_ALL)
+        elif(self.breakoutCF>1.0 and (max([self.tCF, self.rodCF, self.webStressCF, self.concreteStrengthCF, self.pulloutCF,self.shearCF])<=1.0)):
+            outputFile.write(Fore.GREEN+'OK'+Style.RESET_ALL+', but supplementary reinforcement needed (breakoutCF>1).')            
+        else:
+            outputFile.write(Fore.RED+'KO'+Style.RESET_ALL)
+
+    def output(self, outputFileName, reportFile= sys.stdout):
+        ''' Generate output: report+dxf file.
+
+        :param outputFileName: name of the file for the DXF and JSON output.
+        :param reportFile: output file for the report.
+        '''
+        self.report(reportFile)
+        #print('h_ef= ', self.h_ef, 'm')
+        self.basePlateGroup.writeDXFFile(outputFileName)
+        basePlatesOutputFileName= './'+outputFileName+'_base_plates.json'
+        self.jsonWrite(basePlatesOutputFileName)
