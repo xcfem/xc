@@ -546,7 +546,14 @@ class BasePlateGroup(object):
         '''
         self.name= name
         self.basePlates= dict()
-        
+
+    def allRodsWorkInShear(self):
+        ''' All anchor rods contribute to shear strength.
+        '''
+        for key in self.basePlates:
+            bp= self.basePlates[key]
+            bp.nShearBolts= bp.anchorGroup.getNumberOfBolts() # Use welded washers
+
     def getDict(self):
         ''' Put member values in a dictionary.'''
         retval= dict()
