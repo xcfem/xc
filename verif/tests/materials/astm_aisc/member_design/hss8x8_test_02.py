@@ -22,7 +22,7 @@ m2Toin2= 1.0/in2m**2
 steel= ASTM_materials.A500
 hss= ASTM_materials.HSSShape(steel,'HSS8X8X3/16')
 connection= ASTM_materials.MemberConnection(L= 3.5052)
-member= ASTM_materials.ConnectedMember(hss,connection)
+member= ASTM_materials.MemberWithEndConnections(hss,connection)
 
 Pd= -258.9561299844e3
 k= member.connection.getEffectiveBucklingLengthCoefficientRecommended()

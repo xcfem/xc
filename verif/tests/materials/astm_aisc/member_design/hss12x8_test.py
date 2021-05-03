@@ -21,7 +21,7 @@ m2Toin2= 1.0/in2m**2
 steel= ASTM_materials.A500
 hss= ASTM_materials.HSSShape(steel,'HSS12X8X3/16')
 connection= ASTM_materials.MemberConnection(L= 30*0.3048,rotI='fixed',transI='fixed',rotJ= 'free',transJ= 'fixed')
-member= ASTM_materials.ConnectedMember(hss,connection)
+member= ASTM_materials.MemberWithEndConnections(hss,connection)
 
 k= member.connection.getEffectiveBucklingLengthCoefficientRecommended()
 lambda_r= member.shape.getLambdaRCompression()

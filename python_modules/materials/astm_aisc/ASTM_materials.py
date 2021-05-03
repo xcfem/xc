@@ -29,6 +29,7 @@ from import_export import block_topology_entities as bte
 from connections import bolts
 from connections import square_plate_washer as swp
 from connections import bolted_plate as bp
+from connections import connected_members
 
 # Units
 in2m= 25.4e-3
@@ -891,10 +892,16 @@ class AnchorBolt(bolts.AnchorBase):
             to the table 3.2 of the design guide.'''
         return self.fBearingArea(self.diameter)
     
-    def getNominalHoleDiameter(self):
+    def getNominalHoleDiameter(self, rounded= False):
         ''' Return the hole diameter for the anchor according
-            to the table 2.3 of the design guide.'''
-        return self.fHoleDiameter(self.diameter)
+            to the table 2.3 of the design guide.
+
+        :param rounded: if true return the rounded value.
+        '''
+        retval= self.fHoleDiameter(self.diameter)
+        if(rounded):
+            retval= round(.05 * round(float(retval)/.05),2)
+        return retval
     
     def getNominalPulloutStrength(self, fc, psi4= 1.0):
         ''' Return the nominal pullout strength of the anchor 
@@ -1610,7 +1617,7 @@ class MemberConnection(buckling_base.MemberConnection):
         else:
             return bendingState.getLateralTorsionalBucklingModificationFactor()
 
-class ConnectedMember(object):
+class MemberWithEndConnections(object):
     '''Steel member with end connections with ASTM 3 verification routines.'''
     def __init__(self,shape,connection):
         ''' Constructor.
@@ -1739,3 +1746,28 @@ class ConnectedMember(object):
 
         else:
             lmsg.error('Capacity factor not implemented for tension.')
+
+class ConnectedMember(connected_members.ConnectedMemberMetaData):
+    ''' Connected member.'''
+    def getFlangeBoltedPlate(self, column, boltSteel, plateSteel):
+        ''' Return a suitable bolted plate for the beam flange.
+
+        :param column: column to which the beam is attached to. 
+        :param boltSteel: steel type of the bolts that connect the plate with
+                          the flange.
+        :param plateSteel: steel type of the bolted plate.
+        '''
+        flangeStrength= self.shape.getFlangeYieldStrength()
+        bolt= self.shape.getFlangeMaximumBolt(steelType= boltSteel)
+        numberOfBolts= bolt.getNumberOfBoltsForShear(flangeStrength, numberOfRows= 2, threadsExcluded= True)
+        spacing= self.shape.getFlangeWidth()/2.0
+        boltArray= ASTM_materials.BoltArray(bolt, nRows= 2, nCols= int(numberOfBolts/2), dist= spacing)
+        thicknessRatio= max(self.shape.steelType.fy/plateSteel.fy, self.shape.steelType.fu/plateSteel.fu)
+        plateThickness= round(thicknessRatio*self.shape.getFlangeThickness()*1000,0)/1000
+        plateWidth= self.shape.getFlangeWidth()
+        plateLength= boltArray.getStandardPlateLength()
+        if(self.connectedTo=='web'):
+            plateWidth= column.shape.h()-column.shape.getFlangeThickness()
+            plateLength+= column.shape.getFlangeWidth()/2.0
+        retval= ASTM_materials.BoltedPlate(boltArray, width= plateWidth, length= plateLength, thickness= plateThickness, steelType= plateSteel)
+        return retval

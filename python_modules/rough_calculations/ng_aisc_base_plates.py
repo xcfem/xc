@@ -6,7 +6,6 @@
 from __future__ import division
 from __future__ import print_function
 
-
 __author__= "Luis C. Pérez Tato (LCPT)"
 __copyright__= "Copyright 2020, LCPT"
 __license__= "GPL"
@@ -16,6 +15,7 @@ __email__= "l.pereztato@gmail.com"
 import sys
 import math
 import json
+import copy
 import xc_base
 import geom
 from postprocess.reports import common_formats as fmt
@@ -116,8 +116,6 @@ def computePlateThickness(steelShape, N, B, Pu, Pp, Fy, phi= 0.9):
     return retval
 
 # Design for shear
-
-
   
 class RectangularBasePlate(object):
     ''' Rectangular base plate.
@@ -138,7 +136,7 @@ class RectangularBasePlate(object):
     :ivar nShearBolts: number of bolts that take shear force
                        (defaults to 2).
     '''
-    def __init__(self, N, B, t, steelShape, anchorGroup, fc, steel= ASTM_materials.A36, origin= geom.Pos3d()):
+    def __init__(self, N= 0.0, B= 0.0, t= 0.0, steelShape= None, anchorGroup= None, fc= 0.0, steel= None, origin= geom.Pos3d()):
         ''' Constructor.
 
         :param N: dimension parallel to the web of the shaft.
@@ -202,6 +200,12 @@ class RectangularBasePlate(object):
         self.fc= dct['fc']
         self.nShearBolts= dct['nShearBolts']
 
+    def getCopy(self):
+        ''' Return a deep copy of this object.'''
+        retval= RectangularBasePlate()
+        retval.setFromDict(self.getDict())
+        return retval
+
     def getLocalRefSys(self):
         ''' Return the local reference system.'''
         return geom.Ref3d3d(self.origin)
@@ -247,6 +251,21 @@ class RectangularBasePlate(object):
         blk.holes= self.anchorGroup.getHoleBlocks(self.getLocalRefSys(), blockProperties= holeProperties, ownerId= ownerId)
         retval.extend(blk.holes)
         return retval
+
+    def centerAnchors(self, columnShape):
+        ''' Center anchors with respect to the column steel shape.'''
+        nAnchors= self.anchorGroup.getNumberOfBolts()
+        if(nAnchors<=4):
+            flangeThickness= columnShape.get('tf')
+            delta= (columnShape.get('h')-flangeThickness)/4.0
+            positions= list()
+            positions.append(geom.Vector3d(delta,delta,0.0))
+            positions.append(geom.Vector3d(-delta,delta,0.0))
+            positions.append(geom.Vector3d(-delta,-delta,0.0))
+            positions.append(geom.Vector3d(delta,-delta,0.0))
+            self.anchorGroup.setPositions(positions)
+        else:
+            lmsg.warning('Number of anchors is not 4. Cannot center them.')
 
     def getConcreteStrength(self):
         ''' Return the strenght of the concrete surface.'''
@@ -446,7 +465,7 @@ class RectangularBasePlate(object):
         ''' Return the hole diameter.'''
         retval= 0.0
         if(len(self.anchorGroup.anchors)>0):
-            retval= self.anchorGroup.anchors[0].getNominalHoleDiameter()
+            retval= self.anchorGroup.anchors[0].getNominalHoleDiameter(rounded= True)
         return retval
 
     def report(self, outputFile):
@@ -547,6 +566,32 @@ class BasePlateGroup(object):
         self.name= name
         self.basePlates= dict()
 
+    def populateFromPointMap(self, templateBasePlate, pointMap):
+        '''
+        Populates the base plate dictionary with copies
+        of the base plate argument.
+
+        :param templateBasePlate: template base plate.
+        :param pointMap: indentifiers and coordinates of the 
+                       base plate centers.
+        '''
+        for key in pointMap:
+            p= pointMap[key]
+            self.basePlates[key]= templateBasePlate.getCopy()
+            self.basePlates[key].origin= p
+
+    def populate(self,constructorDict):
+        '''
+        Populates the base plate dictionary with the 
+        object created by the constructors int the dictionary argument.
+
+        :param constructorDict: constructors for each member.
+        '''
+        for key in constructorDict:
+            constructor= constructorDict[key]
+            print(constructor)
+            self.basePlates[key]= eval(constructor)
+
     def allRodsWorkInShear(self):
         ''' All anchor rods contribute to shear strength.
         '''
@@ -554,11 +599,37 @@ class BasePlateGroup(object):
             bp= self.basePlates[key]
             bp.nShearBolts= bp.anchorGroup.getNumberOfBolts() # Use welded washers
 
+    def setRotatedAnchors(self, offset, anchorGroupRight, allRodsWorkInShear= True):
+        ''' Set the anchor groups on the right.
+
+        :param offset: displacement of the plate in the direction of the
+                       flange. 
+        :param allRodsWorkInShear: if true all anchor rods contribute
+                                   to shear strength.
+        '''
+        for key in self.basePlates:
+            bp= self.basePlates[key]
+            bp.nShearBolts= bp.anchorGroup.getNumberOfBolts() # Use welded washers
+            if(bp.origin.x>0.5):
+                bp.offsetB= -offset
+                if(anchorGroupRight):
+                    bp.anchorGroup= anchorGroupRight
+            else:
+                bp.offsetB= offset
+
     def getDict(self):
         ''' Put member values in a dictionary.'''
         retval= dict()
+        constructors= dict()
+        objects= dict()
         for key in self.basePlates:
-            retval[key]= self.basePlates[key].getDict()
+            print('key: ', key)
+            basePlateClassName= str(self.basePlates[key].__class__)[8:-2].split('.')[-1]
+            classModule= self.basePlates[key].__module__
+            constructors[key]= basePlateClassName+'()'
+            objects[key]= self.basePlates[key].getDict()
+        retval['constructors']= constructors # Store constructors.
+        retval['objects']= objects # Store objects.
         if(hasattr(self,'h_ef')):
            retval.update({'h_ef':self.h_ef})
         return retval
@@ -568,10 +639,11 @@ class BasePlateGroup(object):
         if('h_ef' in dct):
            self.h_ef= dct['h_ef']
         dct.pop('h_ef', None) # Remove already used key
-        for key in dct:
-            self.basePlates[key]=  CustomBasePlate(B= 0, N= 0, t= 0, steelShape= None, anchorGroup= None, steel= None, fc= 0.0, origin= None)
-        for key in dct:
-            self.basePlates[key].setFromDict(dct[key])
+        constructors= dct['constructors'] # Class dictionary
+        self.populate(constructors) # Create object types.
+        objects= dct['objects'] # Read objects.
+        for key in objects:
+            self.basePlates[key].setFromDict(objects[key])
 
     def jsonRead(self, inputFileName):
         ''' Read object from JSON file.
@@ -663,7 +735,7 @@ def readBasePlateGroupFromJSONFile(inputFileName):
 
     :python inputFileName: name of the input file.
     '''
-    retval= BasePlateGroup(N= 0.0, B= 0.0, t= 0.0, steelShape= None, anchorGroup= None, fc= 0.0, steel= None, pointMap= {})
+    retval= BasePlateGroup(name= '')
     retval.jsonRead(inputFileName)
     return retval
 
