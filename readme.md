@@ -30,7 +30,7 @@ The main capabilities of the program:
 ![CBFEM: connection capacity factor](./doc/screenshots/connection_capacity_factor.png)
 
 ## Installation
-See <a href="https://github.com/xcfem/xc/blob/master/install/install.txt" target="_new">install</a>
+See <a href="https://github.com/xcfem/xc/blob/master/install/install.md" target="_new">install</a>
 
 You can also find <a href="https://hub.docker.com/repository/docker/antonsurv/xcfem" target="_new">Docker images</a> created by Anton Surviyanto. The source code of the Dockerfile is <a href="https://github.com/antonsurv/docker-antonsurv-xcfem" target="_new">here</a>
 
