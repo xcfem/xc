@@ -23,6 +23,14 @@ class BasicSteel(typical_materials.BasicElasticMaterial):
     alpha= 1.2e-5 # coefficient of thermal expansion (1/ºC)
     
     def __init__(self, E, nu, fy, fu, gammaM):
+        ''' Constructor.
+
+        :param E:  elastic modulus.
+        :param nu:  Poisson's ratio.
+        :param fy:  yield stress.
+        :param fu: ultimate stress.
+        :param gammaM: material partial safety factor.
+        '''
         super(BasicSteel,self).__init__(E,nu,rho=7850)
         self.fy= fy
         self.fu= fu
