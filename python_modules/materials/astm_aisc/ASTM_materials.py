@@ -76,7 +76,7 @@ class ASTMSteel(steel_base.BasicSteel):
         name= None
         if(self.name):
             name= self.name
-        retval.update({'name': name})
+        retval.update({'name': name, 'Rt':Rt, 'Ry':Ry})
         return retval
 
     def setFromDict(self,dct):
@@ -85,6 +85,8 @@ class ASTMSteel(steel_base.BasicSteel):
         if('name' in dct):
             name= dct['name']
             if(name): self.name= name
+        Rt= dct['Rt']
+        Ry= dct['Ry']
 
     def getPeakConnectionStrengthFactor(self):
         ''' Return the factor to account for peak connection strength, 
