@@ -148,7 +148,7 @@ class FreeCADImport(reader_base.ReaderBase):
         return retval_pos, retval_properties
     
     def importPoints(self):
-        ''' Import points from FreeCAD.'''
+        ''' Import points from FreeCAD file.'''
         self.points= dict()
         for obj in self.document.Objects:
             if(hasattr(obj,'Shape')):
@@ -166,7 +166,7 @@ class FreeCADImport(reader_base.ReaderBase):
                     
     def importLines(self):
         ''' Import lines from FreeCAD file.'''
-        self.lines= {}
+        self.lines= dict()
         for obj in self.document.Objects:
             if(hasattr(obj,'Shape')):
                 shapeType= obj.Shape.ShapeType

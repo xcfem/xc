@@ -9,7 +9,6 @@ __version__= "3.0"
 __email__= "l.pereztato@gmail.com" "ana.ortega.ort@gmail.com"
 
 import ezdxf
-import copy
 import xc_base
 import geom
 from import_export import basic_entities as be
@@ -28,15 +27,13 @@ class BlockProperties(object):
 
         :param labels: string list that helps to identify the role of the block in the model.
         :param attributes: block attributes stored in a dictionary.
-        '''    
+        '''
+        self.labels= list()
         if(labels):
-            self.labels= labels
-        else:
-            self.labels= list()
+            self.labels.extend(labels)
+        self.attributes= dict()
         if(attributes):
-            self.attributes= attributes
-        else:
-            self.attributes= dict()
+            self.attributes.update(attributes)
 
     @staticmethod
     def copyFrom(blockProperties):
@@ -48,7 +45,7 @@ class BlockProperties(object):
         '''
         retval= None
         if(blockProperties):
-            retval= BlockProperties(copy.deepcopy(blockProperties.labels), copy.deepcopy(blockProperties.attributes))
+            retval= BlockProperties(blockProperties.labels, blockProperties.attributes)
         else:
             retval= BlockProperties()
         return retval
@@ -109,13 +106,10 @@ class BlockProperties(object):
  
         :param strId: identifier of the object.
         '''
-        retval= ''
-        if(self.labels):
-            retval+= strId+'.setProp("labels",'+str(self.labels)+')'
-        if(self.attributes):
-            if(len(retval)>0):
-                retval+= '; '
-            retval+= strId+'.setProp("attributes",'+str(self.attributes)+')'
+        retval= strId+'.setProp("labels",'+str(self.labels)+')'
+        if(len(retval)>0):
+            retval+= '; '
+        retval+= strId+'.setProp("attributes",'+str(self.attributes)+')'
         return retval
 
     def __str__(self):
@@ -140,8 +134,11 @@ class PointRecord(me.NodeRecord):
         else:
             self.blockProperties= BlockProperties()
             
-    def getStrXCCommand(self,pointHandlerName):
-        ''' Return the XC command that creates the point.''' 
+    def getStrXCCommand(self, pointHandlerName: str):
+        ''' Return the XC command that creates the point.
+  
+        :param pointHandlerName: name of the point handler
+        '''
         strId= str(self.id)
         strCommand= '.newPntIDPos3d(' + strId + ',geom.Pos3d(' + str(self.coords[0]) + ',' + str(self.coords[1]) +','+ str(self.coords[2])+'))'
         propCommand= self.blockProperties.getStrXCCommand('pt'+strId)

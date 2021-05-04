@@ -83,7 +83,13 @@ class ReaderBase(object):
         if(self.kPoints):
             for p in self.kPoints:
                 key= self.kPointsNames[counter]
-                bp= self.propertyDict[key]
+                bp= bte.BlockProperties()
+                bp.copyFrom(self.propertyDict[key])
+                # Add labels and attributes of points
+                for k in self.points:
+                    pp= self.points[k][0]
+                    if(pp==counter):
+                        bp.extend(self.propertyDict[k])
                 retval.appendPoint(id= counter,x= p[0],y= p[1],z= p[2], pointProperties= bp)
                 counter+= 1
 
