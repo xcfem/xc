@@ -894,7 +894,7 @@ class AnchorBolt(bolts.AnchorBase):
             to the table 3.2 of the design guide.'''
         return self.fBearingArea(self.diameter)
     
-    def getNominalHoleDiameter(self, rounded= False):
+    def getNominalHoleDiameter(self, rounded= False, prec=3, base=.005):
         ''' Return the hole diameter for the anchor according
             to the table 2.3 of the design guide.
 
@@ -902,7 +902,7 @@ class AnchorBolt(bolts.AnchorBase):
         '''
         retval= self.fHoleDiameter(self.diameter)
         if(rounded):
-            retval= round(.05 * round(float(retval)/.05),2)
+            retval= round(base * round(float(retval)/base),prec)
         return retval
     
     def getNominalPulloutStrength(self, fc, psi4= 1.0):
