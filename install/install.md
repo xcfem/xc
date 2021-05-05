@@ -14,7 +14,7 @@ For linux see file https://github.com/xcfem/xc/blob/master/install/install.linux
 
 ## OSX
 
-- Install Ubuntu on Mac OS using VirtualBox: You can install Ubuntu on Mac OS using [VirtualBox](https://www.virtualbox.org/). There is a tutorial on how to do this [here](https://codingwithmanny.medium.com/installing-ubuntu-18-04-on-mac-os-with-virtualbox-ac3b39678602).
+- Install Ubuntu on Mac OS using [VirtualBox](https://www.virtualbox.org/): there is a tutorial on how to do this [here](https://codingwithmanny.medium.com/installing-ubuntu-18-04-on-mac-os-with-virtualbox-ac3b39678602).
 
 - Install a XWindow server: [XQuartz](https://www.xquartz.org/) is an open source project to develop a version of the  [X Window System](https://en.wikipedia.org/wiki/X_Window_System) that runs on MacOS. 
 
