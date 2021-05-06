@@ -106,7 +106,7 @@ combContainer.dumpCombinations(preprocessor)
 ## Linear static analysis.
 analysis= predefined_solutions.simple_static_linear(steelBeam)
 
-## Deflection linit
+## Deflection limit
 preprocessor.getLoadHandler.addToDomain('combSLS01')
 result= analysis.analyze(1)
 midSpan1= span/2

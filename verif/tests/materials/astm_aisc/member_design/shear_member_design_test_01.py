@@ -121,7 +121,7 @@ for e in xcTotalSet.elements:
 VMaxRef= -(1.2*deadLoad+1.6*liveLoad)*span/2.0
 ratio1= abs((VMax-VMaxRef)/VMaxRef)
 
-member= aisc.Member('member', shape,unbracedLengthX= span)
+member= aisc.Member('member', shape, unbracedLengthX= span)
 
 Aw= member.shape.getAw()
 AwRef= 10.2*inch2meter**2
