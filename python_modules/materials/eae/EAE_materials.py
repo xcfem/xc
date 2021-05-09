@@ -12,9 +12,9 @@ __email__= "l.pereztato@ciccp.es, ana.ortega@ciccp.es "
 import scipy.interpolate
 from materials import steel_base
 from misc_utils import log_messages as lmsg
-from connections import bolts
-from connections import square_plate_washer as swp
-from connections import bolted_plate as bp
+from connections.steel_connections import bolts 
+from connections.steel_connections import square_plate_washer as swp
+from connections.steel_connections import bolted_plate as bp
 from materials.ec3 import EC3_materials
 
 class EAESteel(EC3_materials.EC3Steel):

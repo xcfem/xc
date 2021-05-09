@@ -26,10 +26,10 @@ from misc_utils import log_messages as lmsg
 from materials import buckling_base
 from materials.astm_aisc import AISC_limit_state_checking as aisc
 from import_export import block_topology_entities as bte
-from connections import bolts
-from connections import square_plate_washer as swp
-from connections import bolted_plate as bp
-from connections import connected_members
+from connections.steel_connections import bolts
+from connections.steel_connections import square_plate_washer as swp
+from connections.steel_connections import bolted_plate as bp
+from connections.steel_connections import connected_members
 
 # Units
 in2m= 25.4e-3
@@ -76,7 +76,7 @@ class ASTMSteel(steel_base.BasicSteel):
         name= None
         if(self.name):
             name= self.name
-        retval.update({'name': name, 'Rt':Rt, 'Ry':Ry})
+        retval.update({'name': name, 'Rt':self.Rt, 'Ry':self.Ry})
         return retval
 
     def setFromDict(self,dct):
