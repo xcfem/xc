@@ -16,7 +16,6 @@ from misc_utils import data_struct_utils as dsu
 from materials.sections import section_properties as sectpr
 from misc_utils import log_messages as lmsg
 from materials.astm_aisc import ASTM_materials
-from materials.aisi import AISI_materials
 from postprocess import output_handler
 from solution import predefined_solutions
 from model import predefined_spaces
@@ -207,11 +206,6 @@ class Bolt(object):
 
     
 #Welding classes
-AISI_304L= AISI_materials.AISI_304L # it's a stainless steel 
-E7018=ASTM_materials.ASTMSteel(name='E7018', fy= 400e6, fu= 490e6, gammaM= 1.0) #filler metal used for weldings (see properties in AWS D1.1/D1, (It's not an ASTM steel, change the definition in a next revision)
-AWS_E308L_15=ASTM_materials.ASTMSteel(name='AWS-E308L-15',fy=430e6,fu=520e6, gammaM=1.0)  # filler metal used for weldings in stainless steel
-AWS_E308L_15.E=200e9
-AWS_E308L_15.nu=0.3
 
 class WeldTyp(object):
     '''Define the basic parameters of a weld, that will be used to

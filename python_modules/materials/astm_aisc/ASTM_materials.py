@@ -125,6 +125,13 @@ F1554gr36=ASTMSteel('F1554gr36', fy=248e6, fu= 400e6, gammaM= 1.0)  #steel for a
 F1554gr55=ASTMSteel('F1554gr55', fy=380e6, fu= 517e6, gammaM= 1.0)  #steel for anchor bolts
 F1554gr105=ASTMSteel('F1554gr105', fy=724e6, fu= 862e6, gammaM= 1.0)  #steel for anchor bolts
 
+# Welding materials
+E7018=ASTMSteel(name='E7018', fy= 400e6, fu= 490e6, gammaM= 1.0) #filler metal used for weldings (see properties in AWS D1.1/D1, (It's not an ASTM steel, change the definition in a next revision)
+AWS_E308L_15=ASTMSteel(name='AWS-E308L-15',fy=430e6,fu=520e6, gammaM=1.0)  # filler metal used for weldings in stainless steel
+AWS_E308L_15.E=200e9
+AWS_E308L_15.nu=0.3
+
+
 def getFilletWeldMinimumLeg(t):
     '''
     Return the minimum leg size for a fillet bead that welds a sheet 
