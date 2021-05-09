@@ -20,6 +20,60 @@ import uuid
 
 defaultSolutionProcedureType= predefined_solutions.SimpleStaticLinear
 
+def getSuitableXZVector(iNode, jNode):
+    ''' Return a vector that can be used to define
+        a coordinate transformation for an element
+        between the node arguments.
+
+    :param iNode: first node.
+    :param jNode: second node.
+    '''
+    p1= iNode.getInitialPos3d
+    p2= jNode.getInitialPos3d
+    sg= geom.Line3d(p1,p2)
+    v3d= sg.getKVector
+    return xc.Vector([v3d.x, v3d.y, v3d.z])
+
+def setBearingBetweenNodes(prep,iNodA,iNodB,bearingMaterialNames,orientation= None):
+    '''Modelize a bearing between the nodes
+
+     :param prep: preprocessor
+     :param iNodA: (int) first node identifier (tag).
+     :param iNodB: (int) second node identifier (tag).
+     :param bearingMaterialNames: (list) material names for the zero 
+        length element [mat1,mat2,mat3,mat4,mat5,mat6], where:
+        mat1,mat2,mat3 correspond to translations along local x,y,z 
+        axes, respectively,
+        mat3,mat4,mat5 correspond to rotation about local x,y,z 
+        axes, respectively.
+     :param orientation: (list) of two vectors [x,yp] used to orient 
+        the zero length element, where: 
+        x: are the vector components in global coordinates defining 
+           local x-axis (optional)
+        yp: vector components in global coordinates defining a  vector
+             that lies in the local x-y plane of the element(optional).
+      If the optional orientation vector are not specified, the local
+      element axes coincide with the global axes. Otherwise, the local
+      z-axis is defined by the cross product between the vectors x 
+      and yp specified in the command line.
+      :return: newly created zero length element that represents the bearing.
+
+    '''
+    # Element definition
+    elems= prep.getElementHandler
+    elems.dimElem= prep.getNodeHandler.dimSpace # space dimension.
+    elems.defaultMaterial= next((item for item in bearingMaterialNames if item is not None), 'All are Nones')
+    zl= elems.newElement("ZeroLength",xc.ID([iNodA,iNodB]))
+    zl.clearMaterials()
+    if(orientation): #Orient element.
+        zl.setupVectors(orientation[0],orientation[1])
+    numMats= len(bearingMaterialNames)
+    for i in range(0,numMats):
+        material= bearingMaterialNames[i]
+        if(material!=None):
+            zl.setMaterial(i,material)
+    return zl
+
 class PredefinedSpace(object):
     ''' Convenience class that sets the space dimension and
         the number of degrees of freedom for a XC finite element
@@ -338,20 +392,7 @@ class PredefinedSpace(object):
           :return: newly created zero length element that represents the 
                    bearing.
         '''
-        # Element definition
-        elems= self.getElementHandler()
-        elems.dimElem= self.preprocessor.getNodeHandler.dimSpace # space dimension.
-        elems.defaultMaterial= next((item for item in bearingMaterialNames if item is not None), 'All are Nones')
-        zl= elems.newElement("ZeroLength",xc.ID([iNodA,iNodB]))
-        zl.clearMaterials()
-        if(orientation): #Orient element.
-            zl.setupVectors(orientation[0],orientation[1])
-        numMats= len(bearingMaterialNames)
-        for i in range(0,numMats):
-            material= bearingMaterialNames[i]
-            if(material!=None):
-                zl.setMaterial(i,material)
-        return zl
+        return setBearingBetweenNodes(self.preprocessor,iNodA, iNodB, bearingMaterialNames, orientation)
 
     def setBearing(self, iNod: int, bearingMaterialNames: Sequence[str], orientation= None):
         '''Modelize a bearing on X, XY or XYZ directions.
@@ -984,11 +1025,7 @@ class StructuralMechanics(PredefinedSpace):
         :param iNode: first node.
         :param jNode: second node.
         '''
-        p1= iNode.getInitialPos3d
-        p2= jNode.getInitialPos3d
-        sg= geom.Line3d(p1,p2)
-        v3d= sg.getKVector
-        return xc.Vector([v3d.x, v3d.y, v3d.z])
+        return getSuitableXZVector(iNode, jNode)
 
     def createElasticBeams(self, xcSet, crossSection, trf, xzVector= None, nDiv= 4):
         ''' Meshes the lines of the set argument with ElasticBeam3d
