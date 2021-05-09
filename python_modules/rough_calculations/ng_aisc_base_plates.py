@@ -589,7 +589,6 @@ class BasePlateGroup(object):
         '''
         for key in constructorDict:
             constructor= constructorDict[key]
-            print(constructor)
             self.basePlates[key]= eval(constructor)
 
     def allRodsWorkInShear(self):
@@ -623,7 +622,6 @@ class BasePlateGroup(object):
         constructors= dict()
         objects= dict()
         for key in self.basePlates:
-            print('key: ', key)
             basePlateClassName= str(self.basePlates[key].__class__)[8:-2].split('.')[-1]
             classModule= self.basePlates[key].__module__
             constructors[key]= basePlateClassName+'()'
@@ -660,8 +658,9 @@ class BasePlateGroup(object):
 
         :param outputFileName: name of the output file.
         '''
+        outputDict= self.getDict()
         with open(outputFileName, 'w') as outfile:
-            json.dump(self.getDict(), outfile)
+            json.dump(outputDict, outfile)
         outfile.close()
         
     def getBlocks(self, blockProperties):
@@ -868,7 +867,6 @@ class CapacityFactors(object):
         :param reportFile: output file for the report.
         '''
         self.report(reportFile)
-        #print('h_ef= ', self.h_ef, 'm')
         self.basePlateGroup.writeDXFFile(outputFileName)
         basePlatesOutputFileName= './'+outputFileName+'_base_plates.json'
         self.jsonWrite(basePlatesOutputFileName)
