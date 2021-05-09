@@ -8,19 +8,12 @@ import geom
 import uuid
 import xc
 import math
-from model.geometry import grid_model as gm
 from materials import typical_materials as tm
-from model.mesh import finit_el_model as fem
-from model.sets import sets_mng as sets
 from misc_utils import data_struct_utils as dsu
 from materials.sections import section_properties as sectpr
 from misc_utils import log_messages as lmsg
 from materials.astm_aisc import ASTM_materials
-from postprocess import output_handler
-from solution import predefined_solutions
 from model import predefined_spaces
-#import steel_connection_reports as scr
-#import von_mises_nl_solution as nls
 
 '''References:
 [1] Steel connection analysis, by Paolo Rugarli
@@ -680,180 +673,7 @@ class MultiFilletWeld(object):
         return max(lstCF)
     
 
-# Functions to check bolts and welds according to AISC-16
-    
-def aisc_check_bolts_welds(modelSpace,ULSs,boltSets2Check=[],welds2Check=[],baseMetal=None,meanShearProc=True,resFile=None,linear=True,warningsFile=None,Phi=0.75):
-    '''Verification of bolts and welds according to AISC-16
-    Checking of bolts uses the capacity factor # formula proposed by Rugarli
-    https://www.steelchecks.com/CONNECTIONS-GUIDE/index.html?check_welds.htm
-    Parasitic moments in the bolt shafts are neglected.
-
-    :param ULSs: list of pairs (ULS name, ULS expression) with the name
-          and expression of the ultimate limit states to be analyzed
-    :param boltSets2Check: list of pairs (bolt set, bolt type) with the
-          set of bolts and bolt material (instance of class
-          astm.BoltFastener) to be analyzed. (Defaults to [])
-    :param welds2Check: welds (instances of classes FilletWeld or multiFilletWeld) to check
-    :param baseMetal: steel of the plate (only used when welds are checked). Defaults to None
-    :paran meanShearProc: if True, each bolt is verified using the mean shear of 
-                          the set of bolts (defaults to True)
-    :param resFile: file to which dump the results (path and name without extension)
-                    (if None-> print to terminal)
-    :param linear: if linear analysis (default) = True, else nonlinear analysis.
-    :param warningsFile: name of the file of warnings (defaults to None)
-    :param Phi: resistance factor (defaults to 0.75)
-    '''
-    #Initialize properties
-    init_prop_checking_bolts(boltSets2Check)
-    singlWelds=init_prop_checking_welds(welds2Check)
-    # Calculation and checking
-    if linear:
-        #modelSpace.analysis= predefined_solutions.simple_static_linear(modelSpace.getProblem())
-        modelSpace.solutionProcedureType=  predefined_solutions.SimpleStaticLinear
-    else:
-        #modelSpace.analysis=  predefined_solutions.penalty_modified_newton(modelSpace.getProblem(), mxNumIter=50, convergenceTestTol= 5.0e-3, printFlag= 2)
-        modelSpace.solutionProcedureType=  predefined_solutions.PenaltyModifiedNewton(modelSpace.getProblem(), maxNumIter=25, convergenceTestTol= 5.0e-2, printFlag= 2)
-    for ULS in ULSs:
-        ULS=str(ULS)
-        modelSpace.removeAllLoadPatternsFromDomain()
-        modelSpace.revertToStart()
-        modelSpace.addLoadCaseToDomain(ULS)
-        result= modelSpace.analyze(calculateNodalReactions= True, reactionCheckTolerance= 1e-4)
-        oh= output_handler.OutputHandler(modelSpace)
-        #bolts checking
-        set_bolt_check_resprop_current_LC(ULS,boltSets2Check,meanShearProc)
-        #welds checking
-        set_welds_check_resprop_current_LC(ULS,singlWelds,baseMetal,Phi)
-    #print results of bolt checking
-    if len(boltSets2Check)>0:
-        Lres=print_bolt_results(boltSets2Check)
-        if resFile:
-            f=open(resFile+'_bolts.tex','w')
-            f.writelines(Lres)
-            f.close()
-        else:
-            for l in Lres: print(l)
-    #print results of weld checking
-    if len(welds2Check)>0:
-        Lres=print_weld_results(singlWelds)
-        if resFile:
-            f=open(resFile+'_welds.tex','w')
-            f.writelines(Lres)
-            f.close()
-        else:
-           for l in Lres: print(l)
-    if warningsFile:
-        write_check_warnings(warningsFile,boltSets2Check,singlWelds)
-
-def print_bolt_results(boltSets2Check):
-    '''return a list with the results
-
-    :param singlWelds: list of welds and results generated during 
-          weld checking
-    '''
-    retval=list()
-    for checkIt in  boltSets2Check:
-        bset=checkIt[0]
-        btype=checkIt[1] 
-        CFmax=0
-        for e in bset.elements:
-            CF=e.getProp('CF')
-            if CF>CFmax: CFmax=CF
-        retval.append('Bolt set: ' + bset.description + ' diameter=' + str(round(btype.diameter,3)) + ' CF=' + str(round(CFmax,2))+'\n')
-    return retval
-
-def print_weld_results(singlWelds):
-    '''return a list with the results
-
-    :param singlWelds: list of welds and results generated during 
-          weld checking
-    '''
-    retval=list()
-    for w in  singlWelds:
-        weld=w[0]
-        par=w[1]
-        retval.append('Weld: ' + weld.descr+ ' minSz=' + str(round(weld.minSz*1e3,1)) + ' maxSz=' + str(round(weld.maxSz*1e3,1))  + ' size='+ str(round(weld.weldSz*1e3,1)) + ' CF=' + str(round(par[1],2)) + '\n')
-    return retval
-        
-def write_check_warnings(warningsFile,boltSets2Check,singlWelds):
-    f=open(warningsFile,'w')
-    for checkIt in  boltSets2Check:
-        bset=checkIt[0]
-        CFmax=0
-        for e in bset.elements:
-            CF=e.getProp('CF')
-            if CF>CFmax: CFmax=CF
-        if CFmax >1:
-            btype=checkIt[1] 
-            f.write('Bolt set: '  + bset.description + ' with diameter=' + str(round(btype.diameter,3)) + ' has a CF=' + str(round(CFmax,2))  + ' > 1 \n \n') 
-    for sw in singlWelds:
-        w=sw[0]
-        par=sw[1]
-        txtW='Weld: '+ w.descr + ' between plates with t1= ' + str(w.tWS1) + ' and t2=' + str(w.tWS2) + ' szMin='+ str(w.minSz) + ' szMax=' + str(w.maxSz)
-        if w.weldSz < w.minSz:
-            f.write(txtW + ' has a size=' + str(w.weldSz) + ' less than minimum=' + str(w.minSz) +'\n \n')
-        if w.weldSz > w.maxSz:
-            f.write(txtW + ' has a size=' + str(w.weldSz) + ' greater than maximum=' + str(round(w.maxSz,3)) +'\n \n')
-        if par[1] > 1:
-            f.write(txtW + ' with size=' + str(w.weldSz) + ' has a CF=' +  str(round(par[1],2)) +' > 1 minSZ=' + str(round(w.minSz,3)) +' maxSz=' + str(round(w.maxSz,4)) +'\n \n')
-    f.close()
-                      
-        
-    
-def init_prop_checking_bolts(boltSets2Check):
-    '''Initialize properties of bolt elements for checking''' 
-    for checkIt in  boltSets2Check:
-        bset=checkIt[0]
-        for e in bset.elements:
-            e.setProp('CF',0.0);e.setProp('LS','');e.setProp('N',0.0);e.setProp('V',0.0)
-    
-def init_prop_checking_welds(welds2Check):
-    '''Initialize properties of weld elements for checking
-    Return a list of single welds
-    ''' 
-    singlWelds=list()
-    for checkW in welds2Check:
-        LS='' ; CF=0
-        if not hasattr(checkW,'lstWelds'):
-            singlWelds.append([checkW,[CF]])
-        else:
-            for w in checkW.lstWelds: singlWelds.append([w,[LS,CF]])
-    return singlWelds
-
-def set_bolt_check_resprop_current_LC(ULS,boltSets2Check,meanShearProc):
-    '''Set, for each bolt,  the capacity factor, and internal forces resulting
-    for the current ULS
-    '''
-    for checkIt in  boltSets2Check:
-        bset=checkIt[0]
-        btyp=checkIt[1]
-        Fdt=btyp.getDesignTensileStrength()
-        Fdv=btyp.getDesignShearStrength()
-        # mean of shear internal forces in the set of bolts
-        if meanShearProc:
-            Vmean=0
-            for e in bset.elements:
-                Vmean+=math.sqrt((e.getVy())**2+(e.getVz())**2)
-            Vmean=Vmean/bset.elements.size
-        for e in bset.elements:
-            N=e.getN()
-            V=Vmean if meanShearProc else math.sqrt((e.getVy())**2+(e.getVz())**2)
-            eN=max(N/Fdt,0)
-            eV=V/Fdv
-            CF=math.sqrt((2*eN**4+4*eN**2*eV**2+2*eV**4)/(2*eV**2+2*eN**2))
-            if CF>e.getProp('CF'):
-                e.setProp('CF',CF);e.setProp('LS',ULS);e.setProp('N',N);e.setProp('V',V)
-
-def set_welds_check_resprop_current_LC(ULS,singlWelds,baseMetal,Phi=0.75):
-    for i in range(len(singlWelds)):
-        weld=singlWelds[i][0]
-        CFinit=singlWelds[i][1][-1]
-        CF=weld.getCF_AISCverif(baseMetal,Phi)
-        if CF>CFinit:
-            LS=ULS
-#            Rd=0.75*weld.getWeldDesignStrength(Fpar,Fperp)
-            singlWelds[i][1]=[LS,CF]
-
+# Functions to generate welds and bolts from XC connection models.
 def gen_bolts_xc_conn_model(modelSpace,matchedBolts):
     '''Generate the bolts from the data elaborated in an  XC-connection-model.
     Return the dictionary 'boltSets2Check' with the created sets of bolts
@@ -951,7 +771,7 @@ def gen_bolts_and_weld_elements(modelSpace, matchedBolts,  weldMetal,welds,weldS
     return boltSets2Check, welds2Check
 
             
-                                 
+# Miscellaneous functions                            
 def change_weld_size(xcWelds,welds2change):
     '''Change the size of the welds in xcWelds that match 
     the properties defined in welds2change.
