@@ -263,3 +263,37 @@ class Connection(connected_members.ConnectionMetaData):
         outputFile.write('      with the flange(s): 2 x '+str(math.floor(self.getFlangeLegSize()*1000))+' mm (fillet weld leg size)\n')
         outputFile.write('      with the web: 2 x '+str(math.floor(self.getWebLegSize()*1000))+' mm (fillet weld leg size)\n')
         outputFile.write('      with the plate 2 x '+str(math.floor(self.getHorizontalWeldLegSize()*1000))+' mm (fillet weld leg size)\n')
+
+class WorstCase(object):
+    ''' Connection design worst case.
+
+    :ivar CF: efficiency.
+    :ivar eTag: element tag.
+    :ivar combName: combination name.
+    :ivar forces: forces corresponding to the combination.
+    '''
+    def __init__(self, CF= 0.0, eTag= -1, forces= None):
+        ''' Constructor.
+
+        :param CF: efficiency.
+        :param eTag: element tag.
+        :param forces: forces corresponding to the combination.
+        '''
+        self.CF= CF
+        self.eTag= eTag
+        self.forces= forces
+
+    def update(self, CF, eTag, forces):
+        ''' Constructor.
+
+        :param CF: efficiency.
+        :param eTag: element tag.
+        :param forces: forces corresponding to the combination.
+        '''
+        if(self.CF<CF):
+            self.CF= CF
+            self.eTag= eTag
+            self.forces= forces
+
+    def __str__(self):
+        return 'CF= '+str(self.CF)+' element tag: '+str(self.eTag)+ ' load combination: ' + str(self.forces.idComb)+ ' forces: ' + str(self.forces)
