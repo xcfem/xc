@@ -4,7 +4,7 @@ Open source finite element analysis program.
 ============================================
 
 ## Purpose
-The purpose of XC is simple: **master the software instead of being mastered by software**.
+The purpose of XC is simple: **master the analysis software instead of being mastered by the analysis software**.
 
 ## Overview
 You can see some screenshots <a href="https://github.com/xcfem/xc/tree/master/doc/screenshots" target="_new">here</a>.
