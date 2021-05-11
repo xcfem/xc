@@ -1770,7 +1770,7 @@ class ConnectedMember(connected_members.ConnectedMemberMetaData):
         bolt= self.shape.getFlangeMaximumBolt(steelType= boltSteel)
         numberOfBolts= bolt.getNumberOfBoltsForShear(flangeStrength, numberOfRows= 2, threadsExcluded= True)
         spacing= self.shape.getFlangeWidth()/2.0
-        boltArray= ASTM_materials.BoltArray(bolt, nRows= 2, nCols= int(numberOfBolts/2), dist= spacing)
+        boltArray= BoltArray(bolt, nRows= 2, nCols= int(numberOfBolts/2), dist= spacing)
         thicknessRatio= max(self.shape.steelType.fy/plateSteel.fy, self.shape.steelType.fu/plateSteel.fu)
         plateThickness= round(thicknessRatio*self.shape.getFlangeThickness()*1000,0)/1000
         plateWidth= self.shape.getFlangeWidth()
@@ -1778,5 +1778,5 @@ class ConnectedMember(connected_members.ConnectedMemberMetaData):
         if(self.connectedTo=='web'):
             plateWidth= column.shape.h()-column.shape.getFlangeThickness()
             plateLength+= column.shape.getFlangeWidth()/2.0
-        retval= ASTM_materials.BoltedPlate(boltArray, width= plateWidth, length= plateLength, thickness= plateThickness, steelType= plateSteel)
+        retval= BoltedPlate(boltArray, width= plateWidth, length= plateLength, thickness= plateThickness, steelType= plateSteel)
         return retval
