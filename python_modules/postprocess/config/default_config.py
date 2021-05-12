@@ -97,7 +97,7 @@ class ProjectDirTree(object):
     def getFullConnectionsResultsPath(self):
         ''' Return the relative path for the fatigue verification
             graphics files.'''
-        return self.getFullResultsPath()+'/'+self.getRltvConnectionsResultsPath()
+        return self.getFullResultsPath()+'connections/'
         
     def getRltvReactionsResultsPath(self):
         ''' Return the relative path for the fatigue verification
