@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
-from __future__ import print_function
 '''Limit state controller for shear. Home made test.'''
+
+from __future__ import print_function
+from __future__ import division
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AO_O)"
 __copyright__= "Copyright 2015, LCPT and AO_O"
