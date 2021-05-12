@@ -75,7 +75,7 @@ fname= os.path.basename(__file__)
 
 #Checking normal stresses.
 lsd.normalStressesResistance.controller= SIA262_limit_state_checking.BiaxialBendingNormalStressController('ULS_normalStress')
-cfg=default_config.EnvConfig(language='en',intForcPath= 'results/internalForces/',verifPath= 'results/verifications/',reportPath='./',resultsPath= 'annex/',grWidth='120mm')
+cfg=default_config.EnvConfig(language='en',intForcPath= 'results/internalForces/',verifPath= 'results/verifications/',reportPath='./',reportResultsPath= 'annex/',grWidth='120mm')
 cfg.projectDirTree.workingDirectory= '/tmp/'+os.path.splitext(fname)[0]
 cfg.projectDirTree.createTree() # To allow copying existing internal force data into.
 lsd.LimitStateData.envConfig= cfg

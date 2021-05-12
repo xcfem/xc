@@ -42,10 +42,10 @@ class ProjectDirTree(object):
                      limit state  verifications are placed
        :ivar reportPath: relative path of the directory where calculation report 
                      files are placed
-       :ivar resultsPath : relative path from reportPath of the directory where to place  
+       :ivar reportResultsPath : relative path from reportPath of the directory where to place  
                      graphic and text files to be included in the report
     '''
-    def __init__(self,intForcPath,verifPath,reportPath,resultsPath, fNameMark= 'env_config.py'):
+    def __init__(self,intForcPath, verifPath, reportPath, reportResultsPath, fNameMark= 'env_config.py'):
         '''
         Constructor.
 
@@ -55,7 +55,7 @@ class ProjectDirTree(object):
                      limit state  verifications are placed
        :param reportPath: relative path of the directory where calculation report 
                      files are placed
-       :param resultsPath : relative path from reportPath of the directory where to place  
+       :param reportResultsPath : relative path from reportPath of the directory where to place  
                      graphic and text files to be included in the report
                             
         '''
@@ -65,7 +65,7 @@ class ProjectDirTree(object):
         self.intForcPath= intForcPath
         self.verifPath= verifPath
         self.reportPath= reportPath
-        self.resultsPath=resultsPath
+        self.reportResultsPath= reportResultsPath
 
     def getInternalForcesResultsPath(self):
         ''' Return the path for the files that contains
@@ -73,15 +73,36 @@ class ProjectDirTree(object):
         return self.workingDirectory+'/'+self.intForcPath
     
     def getFullVerifPath(self):
-        ''' Return the path for the limit state checking files.'''
+        ''' Return the full path for the limit state checking files.'''
         return self.workingDirectory+'/'+self.verifPath
+    
+    def getRltvConnectionsResultsPath(self):
+        ''' Return the relative path for the fatigue verification
+            graphics files.'''
+        return self.reportResultsPath+'connections/'
+
+    def getFullConnectionsResultsPath(self):
+        ''' Return the relative path for the fatigue verification
+            graphics files.'''
+        return self.workingDirectory+'/'+self.getRltvConnectionsResultsPath()
+        
+    def getRltvReactionsResultsPath(self):
+        ''' Return the relative path for the fatigue verification
+            graphics files.'''
+        return self.reportResultsPath+'reactions/'
+
+    def getFullReactionsResultsPath(self):
+        ''' Return the relative path for the fatigue verification
+            graphics files.'''
+        return self.workingDirectory+'/'+self.getRltvReactionsResultsPath()
+        
+    def getRltvReportPath(self):
+        ''' Return the relative path for the report files.'''  
+        return self.reportResultsPath+'text/'
     
     def getFullReportPath(self):
         ''' Return the full path for the report files.'''        
-        return self.workingDirectory+'/'+self.reportPath+self.resultsPath+'text/'
-    def getRltvReportPath(self):
-        ''' Return the relative path for the report files.'''  
-        return self.resultsPath+'text/'
+        return self.workingDirectory+'/'+self.reportPath+self.getRltvReportPath()
     
     def getFullGraphicsPath(self):
         ''' Return the full path for the graphic files.'''        
@@ -349,6 +370,8 @@ class ProjectDirTree(object):
         retval.append(self.getReportCrackQpermGrPath())
         retval.append(self.getReportFatigueGrPath())
         retval.append(self.getReportSimplLCGrPath())
+        retval.append(self.getFullConnectionsResultsPath())
+        retval.append(self.getFullReactionsResultsPath())
         return retval
         
     def createTree(self):
@@ -358,14 +381,12 @@ class ProjectDirTree(object):
             if(not os.path.exists(pth)):
                 os.makedirs(pth)
 
-
-
 class EnvConfig(output_styles.OutputStyle):
     '''Generic configuration of XC environment variables.
 
        :ivar grWidth: size of the graphics to be included in the annex          
     '''
-    def __init__(self,language= 'english',intForcPath= 'results/internalForces/',verifPath= 'results/verifications/',reportPath='./',resultsPath= 'annex/', grWidth='\\linewidth', fNameMark= 'env_config.py'):
+    def __init__(self,language= 'english',intForcPath= 'results/internalForces/',verifPath= 'results/verifications/',reportPath='./',reportResultsPath= 'annex/', grWidth='\\linewidth', fNameMark= 'env_config.py'):
         '''
         Constructor.
 
@@ -376,7 +397,7 @@ class EnvConfig(output_styles.OutputStyle):
                       limit state  verifications are placed
         :param reportPath: relative path of the directory where calculation report 
                      files are placed
-        :param resultsPath : relative path from reportPath of the directory where to place  
+        :param reportResultsPath : relative path from reportPath of the directory where to place  
                      graphic and text files to be included in the report
         :param grWidth: size of the graphics to be included in the annex
         :param fNameMark: name of the file that marks the working directory
@@ -385,7 +406,7 @@ class EnvConfig(output_styles.OutputStyle):
         super(EnvConfig,self).__init__(language= language)
         #default names of files with data for FE model generation, results of
         #limit state verifications, ..
-        self.projectDirTree= ProjectDirTree(intForcPath= intForcPath,verifPath= verifPath,reportPath=reportPath,resultsPath=resultsPath)
+        self.projectDirTree= ProjectDirTree(intForcPath= intForcPath,verifPath= verifPath,reportPath=reportPath,reportResultsPath= reportResultsPath)
 
         lsd.LimitStateData.internal_forces_results_directory= intForcPath
         lsd.LimitStateData.check_results_directory= verifPath

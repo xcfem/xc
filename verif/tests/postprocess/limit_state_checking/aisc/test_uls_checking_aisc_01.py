@@ -108,7 +108,7 @@ xcTotalSet= modelSpace.getTotalSet()
 
 ## Setup working directory.
 fname= os.path.basename(__file__)
-cfg= default_config.EnvConfig(language='en',intForcPath= 'results/internalForces/',verifPath= 'results/verifications/',reportPath='./',resultsPath= 'annex/',grWidth='120mm')
+cfg= default_config.EnvConfig(language='en',intForcPath= 'results/internalForces/',verifPath= 'results/verifications/',reportPath='./',reportResultsPath= 'annex/',grWidth='120mm')
 cfg.projectDirTree.workingDirectory= '/tmp/'+os.path.splitext(fname)[0]
 lsd.LimitStateData.envConfig= cfg
 
