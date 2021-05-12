@@ -45,13 +45,15 @@ class ProjectDirTree(object):
        :ivar reportResultsPath : relative path from reportPath of the directory where to place  
                      graphic and text files to be included in the report
     '''
-    def __init__(self,intForcPath, verifPath, reportPath, reportResultsPath, fNameMark= 'env_config.py'):
+    def __init__(self, resultsPath, intForcPath, verifPath, reportPath, reportResultsPath, fNameMark= 'env_config.py'):
         '''
         Constructor.
 
-       :param intForcPath: relative path from the model path of the directory where results 
+       :param resultsPath: relative path from the model path of the directory where results 
+                     are placed.
+       :param intForcPath: relative path from the results path of the directory where results 
                      of internal forces are placed.
-       :param verifPath: relative path from the model path of the directory where results of 
+       :param verifPath: relative path from the results path of the directory where results of 
                      limit state  verifications are placed
        :param reportPath: relative path of the directory where calculation report 
                      files are placed
@@ -62,29 +64,40 @@ class ProjectDirTree(object):
         #default names of files with data for FE model generation, results of
         #limit state verifications, ..
         self.workingDirectory= findWorkingDirectory(fNameMark)
+        self.resultsPath= resultsPath
         self.intForcPath= intForcPath
         self.verifPath= verifPath
         self.reportPath= reportPath
         self.reportResultsPath= reportResultsPath
 
+    def getRltvResultsPath(self):
+        ''' Return the relative path for the files that contains
+            results.'''
+        return self.resultsPath
+
+    def getFullResultsPath(self):
+        ''' Return the full path for the files that contains
+            results.'''
+        return self.workingDirectory+'/'+self.getRltvResultsPath()
+
     def getInternalForcesResultsPath(self):
         ''' Return the path for the files that contains
             the internal forces.'''
-        return self.workingDirectory+'/'+self.intForcPath
+        return self.getFullResultsPath()+'/'+self.intForcPath
     
     def getFullVerifPath(self):
         ''' Return the full path for the limit state checking files.'''
-        return self.workingDirectory+'/'+self.verifPath
+        return self.getFullResultsPath()+'/'+self.verifPath
     
     def getRltvConnectionsResultsPath(self):
         ''' Return the relative path for the fatigue verification
             graphics files.'''
-        return self.reportResultsPath+'connections/'
+        return self.getRltvResultsPath()+'/connections/'
 
     def getFullConnectionsResultsPath(self):
         ''' Return the relative path for the fatigue verification
             graphics files.'''
-        return self.workingDirectory+'/'+self.getRltvConnectionsResultsPath()
+        return self.getFullResultsPath()+'/'+self.getRltvConnectionsResultsPath()
         
     def getRltvReactionsResultsPath(self):
         ''' Return the relative path for the fatigue verification
@@ -94,7 +107,7 @@ class ProjectDirTree(object):
     def getFullReactionsResultsPath(self):
         ''' Return the relative path for the fatigue verification
             graphics files.'''
-        return self.workingDirectory+'/'+self.getRltvReactionsResultsPath()
+        return self.getFullResultsPath()+'/'+self.getRltvReactionsResultsPath()
         
     def getRltvReportPath(self):
         ''' Return the relative path for the report files.'''  
@@ -386,7 +399,7 @@ class EnvConfig(output_styles.OutputStyle):
 
        :ivar grWidth: size of the graphics to be included in the annex          
     '''
-    def __init__(self,language= 'english',intForcPath= 'results/internalForces/',verifPath= 'results/verifications/',reportPath='./',reportResultsPath= 'annex/', grWidth='\\linewidth', fNameMark= 'env_config.py'):
+    def __init__(self,language= 'english', resultsPath='results/', intForcPath= 'internalForces/',verifPath= 'verifications/',reportPath='./',reportResultsPath= 'annex/', grWidth='\\linewidth', fNameMark= 'env_config.py'):
         '''
         Constructor.
 
@@ -406,7 +419,7 @@ class EnvConfig(output_styles.OutputStyle):
         super(EnvConfig,self).__init__(language= language)
         #default names of files with data for FE model generation, results of
         #limit state verifications, ..
-        self.projectDirTree= ProjectDirTree(intForcPath= intForcPath,verifPath= verifPath,reportPath=reportPath,reportResultsPath= reportResultsPath)
+        self.projectDirTree= ProjectDirTree(resultsPath= resultsPath, intForcPath= intForcPath,verifPath= verifPath,reportPath=reportPath,reportResultsPath= reportResultsPath)
 
         lsd.LimitStateData.internal_forces_results_directory= intForcPath
         lsd.LimitStateData.check_results_directory= verifPath

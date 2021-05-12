@@ -211,7 +211,7 @@ lcZbeam.newNodalLoad(3,xc.Vector([F/math.sqrt(2),-F/math.sqrt(2),0,M/math.sqrt(2
 combContainer= combs.CombContainer()
 combContainer.ULS.perm.add('allLoads', '1.0*lcXbeam+1.0*lcYbeam+1.0*lcZbeam')
 totalSet= preprocessor.getSets.getSet('total')
-cfg=default_config.EnvConfig(language='en',intForcPath= '',verifPath= '',reportPath='./',reportResultsPath= 'annex/',grWidth='120mm')
+cfg=default_config.EnvConfig(language='en',resultsPath= '', intForcPath= '',verifPath= '',reportPath='./',reportResultsPath= 'annex/',grWidth='120mm')
 cfg.projectDirTree.workingDirectory= '/tmp/'
 lsd.LimitStateData.envConfig= cfg
 lsd.normalStressesResistance.saveAll(combContainer,totalSet) 
