@@ -687,7 +687,7 @@ class BasePlateGroup(object):
             basePlate= self.basePlates[key]
             basePlate.writeDXF(modelSpace, steelShapeLayerName, basePlateLayerName, anchorHolesLayerName)
 
-    def writeDXFFile(self):
+    def writeDXFFile(self, fileName):
         ''' Draw the base plate group in a DXF file.
         '''
         doc= ezdxf.new('R2010')
@@ -702,7 +702,6 @@ class BasePlateGroup(object):
         doc.layers.new(name= anchorHolesLayerName, dxfattribs={'color': 2})
         msp = doc.modelspace()  # add new entities to the modelspace
         self.writeDXF(msp, steelShapesLayerName, basePlatesLayerName, anchorHolesLayerName)
-        fileName= self.name+'_base_plates.dxf'
         doc.saveas(fileName)
         
     def getNumberOfBolts(self):
@@ -728,7 +727,18 @@ class BasePlateGroup(object):
         outputFile.write('total number of anchors: '+str(numberOfBolts)+'\n')
         outputFile.write('depth of embedment: '+ str(self.h_ef)+ ' m\n')
         #outputFile.write('number of base plates: '+str(len(self.basePlates)))
+        
+    def output(self, outputPath= './', reportFile= sys.stdout):
+        ''' Generate output: report+dxf file.
 
+        :param outputPath: output path for the DXF and JSON output.
+        :param reportFile: output file for the report.
+        '''
+        dxfFileName= outputPath+self.name+'_base_plates.dxf'
+        self.writeDXFFile(dxfFileName)
+        jsonFileName= outputPath+self.name+'_base_plates.json'
+        self.jsonWrite(jsonFileName)
+        
 def readBasePlateGroupFromJSONFile(inputFileName):
     ''' Read base plate group object from a JSON file.
 
@@ -860,13 +870,22 @@ class CapacityFactors(object):
             outputFile.write(Fore.RED+'KO'+Style.RESET_ALL)
         outputFile.write('\nh_ef= '+str(self.basePlateGroup.h_ef)+ 'm\n')
 
-    def output(self, outputFileName, reportFile= sys.stdout):
+    def output(self, outputPath= './', reportFile= sys.stdout):
         ''' Generate output: report+dxf file.
 
-        :param outputFileName: name of the file for the DXF and JSON output.
+        :param outputPath: output path for the DXF and JSON output.
         :param reportFile: output file for the report.
         '''
         self.report(reportFile)
-        self.basePlateGroup.writeDXFFile(outputFileName)
-        basePlatesOutputFileName= './'+outputFileName+'_base_plates.json'
-        self.jsonWrite(basePlatesOutputFileName)
+        self.basePlateGroup.output(outputPath)
+
+def computeCapacityFactors(basePlateGroup, ulsReactions, h_ef):
+    ''' Extract the reactions values from the reactions file.
+
+    :param basePlateGroup: group of base plates to check.
+    :param ulsReactions: reactions corresponding to ultimate limit states.
+    :param h_ef: anchor rods embedment.
+    '''
+    capacityFactors= CapacityFactors(basePlateGroup)
+    capacityFactors.compute(ulsReactions, h_ef)
+    return capacityFactors
