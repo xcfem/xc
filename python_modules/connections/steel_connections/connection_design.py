@@ -614,7 +614,7 @@ class ConnectionGroup(object):
         # for c in self.connections:
         #     c.report(outputFile)
 
-    def output(self):
+    def output(self, outputPath= './'):
         ''' Write output: report + dxf file. '''
         blocks= self.getBlocks()
 
@@ -622,16 +622,17 @@ class ConnectionGroup(object):
         
         xcImportExportData= nmd.XCImportExportData()
         xcImportExportData.problemName= outputFileNameBase+'_FEPrb'
-        xcImportExportData.outputFileName= outputFileNameBase+'_blocks'
+        xcImportExportData.outputFileName= outputPath+outputFileNameBase+'_blocks'
         xcImportExportData.xcFileName= outputFileNameBase+'.py'
         xcImportExportData.blockData= blocks
         # Write XC file.
         xcImportExportData.writeToXCFile()
         # Write DXF file.
-        xcImportExportData.writeDxfFile(outputFileNameBase+'.dxf')
+        dxfFileName= outputPath+outputFileNameBase+'.dxf'
+        xcImportExportData.writeDxfFile(dxfFileName)
         # Write TXT file.
-        outputFileName= outputFileNameBase+'.txt'
-        outputFile= open(outputFileName, 'w')
+        txtFileName= outputPath+outputFileNameBase+'.txt'
+        outputFile= open(txtFileName, 'w')
         self.report(outputFile)
         outputFile.close()
         return blocks
