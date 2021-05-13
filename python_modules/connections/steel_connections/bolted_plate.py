@@ -554,6 +554,16 @@ class BoltedPlateBase(object):
         contour= geom.Polygon2d(self.getContour2d())
         return self.boltArray.getMinimumCoverInDir(contour, direction)
 
+    def jsonWrite(self, outputFileName):
+        ''' Write object to JSON file.
+
+        :param outputFileName: name of the output file.
+        '''
+        outputDict= self.getDict()
+        with open(outputFileName, 'w') as outfile:
+            json.dump(outputDict, outfile)
+        outfile.close()
+
 
 def getBoltedPointBlocks(gussetPlateBlocks, boltedPlateBlocks, distBetweenPlates):
     ''' Return the points linked by bolts between the two pieces.
