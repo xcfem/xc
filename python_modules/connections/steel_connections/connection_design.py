@@ -580,8 +580,8 @@ class ConnectionGroup(object):
         return retval
 
     def getLoadData(self,inputFileName):
-        ''' Extracts the internal forces for each member from the
-            argument.
+        ''' Extracts the internal forces for each connection member
+            from the loads contained in the argument file.
 
         :param inputFileName: data file containing the internal forces.
         '''
@@ -591,6 +591,19 @@ class ConnectionGroup(object):
             for c in self.connections:
                 retval.update(c.getLoadData(data))
         return retval
+
+    def writeLoadData(self, inputFileName, outputFileName):
+        ''' Extracts the internal forces for each connection member
+            from the loads contained in the argument file and writes
+            them to a file.
+
+        :param inputFileName: data file containing the internal forces.
+        :param outputFileName: name for the output file.
+        '''
+        loadData= self.getLoadData(inputFileName)
+        with open(outputFileName, 'w') as outfile:
+            json.dump(loadData, outfile)
+
 
     def report(self, outputFile):
         ''' Reports connection design values.'''
