@@ -3,6 +3,9 @@
 import os
 from import_export import mesh_entities as me
 from import_export import block_topology_entities as bte
+import xc_base
+import geom
+import xc
 
 
 class GroupRecord(object):
@@ -130,7 +133,12 @@ class XCImportExportData(object):
         self.blockData.writeDxfFile(fileName)
 
     def writeToXCFile(self):
+        ''' Write the model to a XC file.'''
         self.outputFile= open(self.getXCFileName(),"w")
+        strCommand= 'problemName= \'' + self.problemName+'\''
+        self.outputFile.write(strCommand+'\n')
+        strCommand= self.problemName + '= xc.FEProblem()'
+        self.outputFile.write(strCommand+'\n')
         strCommand= 'preprocessor= ' + self.problemName + '.getPreprocessor'
         self.outputFile.write(strCommand+'\n')
         strCommand= self.nodeHandlerName + '= preprocessor.getNodeHandler'
@@ -152,7 +160,7 @@ class XCImportExportData(object):
         if(self.meshDesc):
             self.meshDesc.writeToXCFile(self)
         self.outputFile.close()
-
+        
 class MEDMeshData(me.MeshData):
     meshDimension= None
     spaceDimension= None
