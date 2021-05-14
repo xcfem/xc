@@ -197,7 +197,7 @@ print("Allow. press. ratio: ",sr.FadmPressure)
 print("error.: ",err)
 '''
 
-pth= "/tmp/results/"
+pth= "/tmp/tmp_results/"
 if not os.path.exists(pth):
     os.makedirs(pth)
 wall.writeResult(pth)

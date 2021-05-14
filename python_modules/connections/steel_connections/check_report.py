@@ -428,7 +428,7 @@ from postprocess.xcVtk import vtk_graphic_base
 from postprocess import limit_state_data as lsd
 from postprocess.control_vars import VonMisesControlVars
 
-def gen_baseplates_vonmises_results(sets2disp,modelSpace,genDescr,specDescr,reportPath,rltvResPath,grWidth,texfileNm,resVMfile='./results/verifications/verifRsl_VonMisesStressULS.py'):
+def gen_baseplates_vonmises_results(sets2disp,modelSpace,genDescr,specDescr,reportPath,rltvResPath,grWidth,texfileNm,resVMfile='./tmp_results/verifications/verifRsl_VonMisesStressULS.py'):
     '''Generates the graphics corresponding to loads and displacements for each load case,
     together with the tex file to include them in a report.
 
@@ -440,7 +440,7 @@ def gen_baseplates_vonmises_results(sets2disp,modelSpace,genDescr,specDescr,repo
     :param grWidth: with to insert the graphics
     :param texfileNm: name of the tex file.
     :param resVMfile: file containing results from Von Mises verification (defaults 
-                      to './results/verifications/verifRsl_VonMisesStressULS.py')
+                      to './tmp_results/verifications/verifRsl_VonMisesStressULS.py')
     '''
     preprocessor=modelSpace.preprocessor
     limitState= lsd.vonMisesStressResistance

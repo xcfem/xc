@@ -94,7 +94,7 @@ fname= os.path.basename(__file__)
 limit_state_data.shearResistance.controller= EHE_limit_state_checking.ShearController(limitStateLabel= limit_state_data.shearResistance.label)
 limit_state_data.shearResistance.controller.verbose= False # Don't display log messages.
 limit_state_data.shearResistance.controller.solutionProcedureType= CustomNewtonRaphson
-cfg=default_config.EnvConfig(language='en',intForcPath= 'results/internalForces/',verifPath= 'results/verifications/',reportPath='./',reportResultsPath= 'annex/',grWidth='120mm')
+cfg=default_config.EnvConfig(language='en', resultsPath= 'tmp_results/', intForcPath= 'internalForces/',verifPath= 'verifications/',reportPath='./',reportResultsPath= 'annex/',grWidth='120mm')
 cfg.projectDirTree.workingDirectory= '/tmp/'+os.path.splitext(fname)[0]
 cfg.projectDirTree.createTree() # To allow copying existing internal force data into.
 limit_state_data.LimitStateData.envConfig= cfg
