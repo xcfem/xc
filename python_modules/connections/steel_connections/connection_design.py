@@ -23,7 +23,7 @@ from connections.steel_connections import connected_members
 from connections.steel_connections import bolts
 from materials import limit_state_checking_base as lsc
 from postprocess import limit_state_data
-
+from inspect import getmodule
 
 class Connection(connected_members.ConnectionMetaData):
     ''' Naive connection model.
@@ -43,12 +43,8 @@ class Connection(connected_members.ConnectionMetaData):
                                  with its member axis.
     :ivar webGussetBottomLegSlope: definition of the slope of the 
                                    gusset bottom leg.
-    :ivar boltSteel: steel for the connection bolts.
-    :ivar shapesSteel: material for the steel shapes.
-    :ivar materialModule: material module used to instantiate some 
-                          connection elements (ASTM_materials, EC3_materials, ...)  
     '''
-    def __init__(self, connectionMetaData, columnLengthFactor, beamLengthFactor, gussetLengthFactor, boltedPlateTemplate, boltSteel, shapesSteel, materialModule):
+    def __init__(self, connectionMetaData, columnLengthFactor, beamLengthFactor, gussetLengthFactor, boltedPlateTemplate):
         ''' Constructor.
 
         :param connectionMetaData: connection origin node and members 
@@ -64,22 +60,29 @@ class Connection(connected_members.ConnectionMetaData):
                                    plate.
         :param boltedPlateTemplate: bolted plate dimensions and bolt type and 
                                     arrangement.
-        :param boltSteel: steel for the connection bolts.
-        :param shapesSteel: material for the steel shapes.
-        :param materialModule: material module used to instantiate some 
-                               connection elements (ASTM_materials, EC3_materials, ...)  
         '''
         super(Connection,self).__init__(connectionMetaData.originNode, connectionMetaData.column, connectionMetaData.beams, connectionMetaData.diagonals)
-        self.boltSteel= boltSteel
-        self.shapesSteel= shapesSteel
         self.columnLengthFactor= columnLengthFactor
         self.beamLengthFactor= beamLengthFactor
         self.gussetLengthFactor= gussetLengthFactor
         self.boltedPlateTemplate= boltedPlateTemplate
         self.flangeGussetLegsSlope= math.tan(math.radians(30))
         self.webGussetBottomLegSlope= 'vertical'
-        self.materialModule= materialModule
-                    
+
+    def getBoltSteel(self):
+        ''' Return the steel for the connection bolts.'''
+        return self.boltedPlateTemplate.boltArray.bolt.steelType
+
+    def getBoltedPlatesSteel(self):
+        ''' Return the steel for the bolted plates.'''
+        return getself.boltedPlateTemplate.steelType
+
+    def getMaterialModule(self):
+        ''' material module used to instantiate some 
+            connection elements (ASTM_materials, EC3_materials, ...)
+        '''
+        return getmodule(self.boltedPlateTemplate.__class__)
+    
     def getBasePlateIntersectionPoint(self, sg):
         ''' Get the intersection of the segment with the baseplate.
 
@@ -152,7 +155,7 @@ class Connection(connected_members.ConnectionMetaData):
             bolted to the gusset plate.
         '''
         # Create bolted plate according to the material module.
-        boltedPlate= self.materialModule.BoltedPlate()
+        boltedPlate= self.getMaterialModule().BoltedPlate()
         # Assign parameters obtained from the template.
         boltedPlate.setFromDict(self.boltedPlateTemplate.getDict())
         boltedPlate.eccentricity= geom.Vector2d(.025,0.0)
@@ -220,7 +223,7 @@ class Connection(connected_members.ConnectionMetaData):
         plateProperties.appendAttribute('objType', 'flange_plate')
         # Flange plates.
         for b in self.beams:
-            flangePlate= b.getFlangeBoltedPlate(column= self.column, boltSteel= self.boltSteel, plateSteel= self.shapesSteel)
+            flangePlate= b.getFlangeBoltedPlate(column= self.column, boltSteel= self.getBoltSteel(), plateSteel= self.getBoltedPlatesSteel())
             origin= self.getOrigin()
             print('origin: ', origin, ' beam origin: ', b.memberOrigin)
             print('connected to: ', b.connectedTo)
@@ -250,7 +253,7 @@ class Connection(connected_members.ConnectionMetaData):
             topFlangeBoltGroup+= '_top' # top side
             boltProperties.appendAttribute('boltGroup', topFlangeBoltGroup)
             ## Create holes.
-            boltBlocks= bolts.createHolesOnMemberBlocks(holesList, beamBlocks, boltProperties, self.materialModule.__name__)
+            boltBlocks= bolts.createHolesOnMemberBlocks(holesList, beamBlocks, boltProperties, self.getMaterialModule().__name__)
             retval.extend(boltBlocks)
             # Bottom plate
             bottomPlateCenter= b.memberOrigin - halfHPlate*baseVectors[1] + halfD*baseVectors[0]
@@ -270,7 +273,7 @@ class Connection(connected_members.ConnectionMetaData):
             bottomFlangeBoltGroup+= '_bottom' # bottom side
             boltProperties.appendAttribute('boltGroup', bottomFlangeBoltGroup)
             ## Create holes.
-            boltBlocks= bolts.createHolesOnMemberBlocks(holesList, beamBlocks, boltProperties, self.materialModule.__name__)
+            boltBlocks= bolts.createHolesOnMemberBlocks(holesList, beamBlocks, boltProperties, self.getMaterialModule().__name__)
             retval.extend(boltBlocks)
         return retval
 
@@ -364,7 +367,7 @@ class Connection(connected_members.ConnectionMetaData):
 class DiagonalConnection(Connection):
     ''' Connection that has one or more diagonals.'''
     
-    def __init__(self, connectionMetaData, columnLengthFactor, beamLengthFactor, gussetLengthFactor, boltedPlateTemplate, boltSteel, shapesSteel, materialModule):
+    def __init__(self, connectionMetaData, columnLengthFactor, beamLengthFactor, gussetLengthFactor, boltedPlateTemplate):
         ''' Constructor.
 
         :param connectionMetaData: connection origin node and members 
@@ -380,12 +383,8 @@ class DiagonalConnection(Connection):
                                    plate.
         :param boltedPlateTemplate: bolted plate dimensions and bolt type and 
                                     arrangement.
-        :param boltSteel: steel for the connection bolts.
-        :param shapesSteel: material for the steel shapes.
-        :param materialModule: material module used to instantiate some 
-                               connection elements (ASTM_materials, EC3_materials, ...)  
         '''
-        super(DiagonalConnection,self).__init__(connectionMetaData, columnLengthFactor, beamLengthFactor, gussetLengthFactor, boltedPlateTemplate, boltSteel, shapesSteel, materialModule)
+        super(DiagonalConnection,self).__init__(connectionMetaData, columnLengthFactor, beamLengthFactor, gussetLengthFactor, boltedPlateTemplate)
         
     def getHorizontalWeldLegSize(self):
         ''' Return the size of the weld that connects the 
@@ -397,7 +396,7 @@ class DiagonalConnection(Connection):
 class BasePlateConnection(Connection):
     ''' Base plate connection.'''
     
-    def __init__(self, connectionMetaData, columnLengthFactor, beamLengthFactor, gussetLengthFactor, boltedPlateTemplate, boltSteel, shapesSteel, materialModule):
+    def __init__(self, connectionMetaData, columnLengthFactor, beamLengthFactor, gussetLengthFactor, boltedPlateTemplate):
         ''' Constructor.
 
         :param connectionMetaData: connection origin node and members 
@@ -413,12 +412,8 @@ class BasePlateConnection(Connection):
                                    plate.
         :param boltedPlateTemplate: bolted plate dimensions and bolt type and 
                                     arrangement.
-        :param boltSteel: steel for the connection bolts.
-        :param shapesSteel: material for the steel shapes.
-        :param materialModule: material module used to instantiate some 
-                               connection elements (ASTM_materials, EC3_materials, ...)  
         '''
-        super(BasePlateConnection,self).__init__(connectionMetaData, columnLengthFactor, beamLengthFactor, gussetLengthFactor, boltedPlateTemplate, boltSteel, shapesSteel, materialModule)
+        super(BasePlateConnection,self).__init__(connectionMetaData, columnLengthFactor, beamLengthFactor, gussetLengthFactor, boltedPlateTemplate)
         
     def centerAnchors(self):
         ''' Center anchors with respect to the column steel shape.'''
@@ -506,7 +501,7 @@ class ConnectionGroup(object):
                                 arrangement.
     :ivar connections: list of connections of the group
     '''
-    def __init__(self, name, connectionData, columnLengthFactor, beamLengthFactor, gussetLengthFactor, boltedPlateTemplate, ConnectionType, boltSteel, shapesSteel, materialModule):
+    def __init__(self, name, connectionData, columnLengthFactor, beamLengthFactor, gussetLengthFactor, boltedPlateTemplate, ConnectionType):
         ''' Constructor.
 
         :param name: name for the group of connections.
@@ -525,10 +520,6 @@ class ConnectionGroup(object):
         :param boltedPlateTemplate: bolted plate dimensions and bolt type and 
                                     arrangement.
         :param ConnectionType: class representing the connection type.
-        :param boltSteel: steel for the connection bolts.
-        :param shapesSteel: material for the steel shapes.
-        :param materialModule: material module used to instantiate some 
-                               connection elements (ASTM_materials, EC3_materials, ...)  
         '''
         self.name= name
         self.connectionData= connectionData
@@ -537,7 +528,7 @@ class ConnectionGroup(object):
         self.connections= list()
         for nTag in self.connectionData:
             cData= self.connectionData[nTag]
-            connect= ConnectionType(cData, columnLengthFactor, beamLengthFactor, self.gussetLengthFactor, self.boltedPlateTemplate, boltSteel, shapesSteel, materialModule)
+            connect= ConnectionType(cData, columnLengthFactor, beamLengthFactor, self.gussetLengthFactor, self.boltedPlateTemplate)
             self.connections.append(connect)
 
     def joinBasePlates(self, basePlateGroup, tol= 1e-2):
@@ -640,7 +631,7 @@ class ConnectionGroup(object):
 class DiagonalConnectionGroup(ConnectionGroup):
     ''' Connection group with one or more diagonals. '''
     
-    def __init__(self, name, columnLengthFactor, beamLengthFactor, gussetLengthFactor, xcSet, boltSteel, shapesSteel, materialModule, diagonalBoltedPlate, ConnectionType= DiagonalConnection):
+    def __init__(self, name, columnLengthFactor, beamLengthFactor, gussetLengthFactor, xcSet, diagonalBoltedPlate, ConnectionType= DiagonalConnection):
         ''' Constructor.
 
         :param name: name for the group of connections.
@@ -654,23 +645,20 @@ class DiagonalConnectionGroup(ConnectionGroup):
                                    length to obtain the lenght of the gusset
                                    plate.
         :param xcSet: set containing the joint nodes.
-        :param boltSteel: steel for the connection bolts.
-        :param shapesSteel: material for the steel shapes.
-        :param materialModule: material module used to instantiate some 
-                               connection elements (ASTM_materials, EC3_materials, ...)
         :param diagonalBoltedPlate: bolted plate attaching diagonal.
         '''
         
         # Get members connected to the joint
         # from the model of the whole structure.
+        materialModule= getmodule(diagonalBoltedPlate.__class__)
         jointMembers= connected_members.getConnectedMembers(xcSet, ConnectedMemberType= materialModule.ConnectedMember)
 
-        super(DiagonalConnectionGroup, self).__init__(name= name, connectionData= jointMembers, columnLengthFactor= columnLengthFactor, beamLengthFactor= beamLengthFactor, gussetLengthFactor= gussetLengthFactor, boltedPlateTemplate= diagonalBoltedPlate, ConnectionType= ConnectionType, boltSteel= boltSteel, shapesSteel= shapesSteel, materialModule= materialModule)
+        super(DiagonalConnectionGroup, self).__init__(name= name, connectionData= jointMembers, columnLengthFactor= columnLengthFactor, beamLengthFactor= beamLengthFactor, gussetLengthFactor= gussetLengthFactor, boltedPlateTemplate= diagonalBoltedPlate, ConnectionType= ConnectionType)
         
 class BasePlateConnectionGroup(DiagonalConnectionGroup):
     ''' Base plate connection group. '''
     
-    def __init__(self, name, columnLengthFactor, beamLengthFactor, gussetLengthFactor, xcSet, boltSteel, shapesSteel, materialModule, diagonalBoltedPlate, basePlateGroup):
+    def __init__(self, name, columnLengthFactor, beamLengthFactor, gussetLengthFactor, xcSet, diagonalBoltedPlate, basePlateGroup):
         ''' Constructor.
 
         :param name: name for the group of connections.
@@ -684,14 +672,10 @@ class BasePlateConnectionGroup(DiagonalConnectionGroup):
                                    length to obtain the lenght of the gusset
                                    plate.
         :param xcSet: set containing the base plate nodes.
-        :param boltSteel: steel for the connection bolts.
-        :param shapesSteel: material for the steel shapes.
-        :param materialModule: material module used to instantiate some 
-                               connection elements (ASTM_materials, EC3_materials, ...)  
         :param diagonalBoltedPlate: bolted plate attaching diagonal.
         :param basePlateGroup: group of base plates.
         '''
-        super(BasePlateConnectionGroup, self).__init__(name= name, columnLengthFactor= columnLengthFactor, beamLengthFactor= beamLengthFactor, gussetLengthFactor= gussetLengthFactor, xcSet= xcSet, boltSteel= boltSteel, shapesSteel= shapesSteel, materialModule= materialModule, diagonalBoltedPlate= diagonalBoltedPlate, ConnectionType= BasePlateConnection)
+        super(BasePlateConnectionGroup, self).__init__(name= name, columnLengthFactor= columnLengthFactor, beamLengthFactor= beamLengthFactor, gussetLengthFactor= gussetLengthFactor, xcSet= xcSet, diagonalBoltedPlate= diagonalBoltedPlate, ConnectionType= BasePlateConnection)
 
         self.joinBasePlates(basePlateGroup)
 
