@@ -298,6 +298,7 @@ class ConnectionMetaData(object):
     :ivar column: column member.
     :iver beams: beam members.
     :ivar diagonals: diagonal members.
+    :ivar boltSteel: steel type for bolts.
     '''
     def __init__(self, originNode, column, beams, diagonals, boltSteel= None):
         ''' Constructor.
