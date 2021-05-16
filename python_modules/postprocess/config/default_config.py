@@ -419,7 +419,7 @@ class EnvConfig(output_styles.OutputStyle):
         super(EnvConfig,self).__init__(language= language)
         #default names of files with data for FE model generation, results of
         #limit state verifications, ..
-        self.projectDirTree= ProjectDirTree(resultsPath= resultsPath, intForcPath= intForcPath,verifPath= verifPath,reportPath=reportPath,reportResultsPath= reportResultsPath)
+        self.projectDirTree= ProjectDirTree(resultsPath= resultsPath, intForcPath= intForcPath,verifPath= verifPath,reportPath=reportPath,reportResultsPath= reportResultsPath, fNameMark= fNameMark)
 
         lsd.LimitStateData.internal_forces_results_directory= intForcPath
         lsd.LimitStateData.check_results_directory= verifPath
