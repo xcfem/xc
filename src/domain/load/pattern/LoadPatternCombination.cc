@@ -192,7 +192,8 @@ void XC::LoadPatternCombination::interpreta_descomp(const std::string &str_desco
         dq_string str_prod= separa_cadena(str_sum_i,"*");
         const size_t sz= str_prod.size();
         if(sz!=2)
-	  std::cerr << "Term: " << str_sum_i << " is incorrect." << std::endl;
+	  std::cerr << getClassName() << "::" << __FUNCTION__
+		    << "Term: " << str_sum_i << " is incorrect." << std::endl;
         else
           {
             const float factor= boost::lexical_cast<float>(q_blancos(str_prod[0]));
@@ -203,9 +204,12 @@ void XC::LoadPatternCombination::interpreta_descomp(const std::string &str_desco
                 if(lp)
                   add_component(summand(factor,lp));
                 else
-	          std::cerr << getClassName() << "::" << __FUNCTION__
-		            << " load case identified by: '" 
-                            << hypothesis_name << "' not found.\n";
+		  {
+	            std::cerr << getClassName() << "::" << __FUNCTION__
+		              << " load case identified by: '" 
+                              << hypothesis_name << "' not found.\n";
+		    exit(EXIT_FAILURE);
+		  }
               }
             else
 	      std::cerr << getClassName() << "::" << __FUNCTION__
