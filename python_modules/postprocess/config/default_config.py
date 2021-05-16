@@ -394,6 +394,27 @@ class ProjectDirTree(object):
             if(not os.path.exists(pth)):
                 os.makedirs(pth)
 
+    def open(self, fileName, mode='r', buffering=-1, encoding=None, errors=None, newline=None, closefd=True, opener=None):
+        ''' Open file and return a corresponding file object..
+
+        :param fileName: the path and name of the file.
+        :param mode: see Python documentation for open built-in function.
+        :param bufferting: see Python documentation for open built-in function.
+        :param encoding: see Python documentation for open built-in function.
+        :param errors: see Python documentation for open built-in function.
+        :param newline: see Python documentation for open built-in function.
+        :param closefd: see Python documentation for open built-in function.
+        :param opener: see Python documentation for open built-in function.
+        '''
+        pth= os.path.dirname(fileName)
+        if(not os.path.exists(pth)):
+            try:
+                os.makedirs(pth)
+            except OSError as exc: # Guard against race condition
+                if exc.errno != errno.EEXIST:
+                    raise
+        return open(fileName, mode, buffering, encoding, errors, newline, closefd, opener)
+
 class EnvConfig(output_styles.OutputStyle):
     '''Generic configuration of XC environment variables.
 
@@ -432,6 +453,19 @@ class EnvConfig(output_styles.OutputStyle):
         self.colors=setBasicColors
         self.grWidth=grWidth
 
+    def open(self, fileName, mode='r', buffering=-1, encoding=None, errors=None, newline=None, closefd=True, opener=None):
+        ''' Open file and return a corresponding file object..
+
+        :param fileName: the path and name of the file.
+        :param mode: see Python documentation for open built-in function.
+        :param bufferting: see Python documentation for open built-in function.
+        :param encoding: see Python documentation for open built-in function.
+        :param errors: see Python documentation for open built-in function.
+        :param newline: see Python documentation for open built-in function.
+        :param closefd: see Python documentation for open built-in function.
+        :param opener: see Python documentation for open built-in function.
+        '''
+        return self.projectDirTree.open(fileName, mode, buffering, encoding, errors, newline, closefd, opener)
 
 
 #Predefined colors for sets (progressing from light to dark)
