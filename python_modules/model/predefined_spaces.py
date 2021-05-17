@@ -1059,6 +1059,7 @@ class StructuralMechanics(PredefinedSpace):
             else:
                 v3d= l.getKVector
                 trf.xzVector= xc.Vector([v3d.x, v3d.y, v3d.z])
+            seedElemHandler.defaultTransformation= trf.name
             elem= seedElemHandler.newElement(elementType,xc.ID([0,0]))
             l.genMesh(xc.meshDir.I)
             if(crossSection):
