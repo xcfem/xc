@@ -7,6 +7,7 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@ciccp.es, ana.Ortega@ciccp.es "
 
+import math
 from typing import Sequence
 import xc
 import numpy as np
@@ -73,6 +74,53 @@ def setBearingBetweenNodes(prep,iNodA,iNodB,bearingMaterialNames,orientation= No
         if(material!=None):
             zl.setMaterial(i,material)
     return zl
+
+# Imperfections
+def setImperfectionsXY(nodeSet, slopeX= 1.0/500.0, slopeY= 1.0/500.0):
+    '''Set the initial imperfection of the model.
+
+    :param nodeSet: set which nodes will be moved.
+    :param slopeX: out of plumbness on x axis.
+    :param slopeY: out of plumbness on y axis.
+    '''
+    if(abs(slopeX)<1.0/500.0):
+        lmsg.warning('small imperfection on X.')
+    if(abs(slopeY)<1.0/500):
+        lmsg.warning('small imperfection on Y.')
+    maxValue= 0.0
+    if(len(nodeSet.nodes)>0):
+        pos= nodeSet.nodes[0].getInitialPos3d
+        zMin= pos.z
+        zMax= pos.z
+        for n in nodeSet.nodes:
+            pos= n.getInitialPos3d
+            zMin= min(zMin,pos.z)
+            zMax= max(zMax,pos.z)
+        for n in nodeSet.nodes:
+            pos= n.getInitialPos3d
+            h= pos.z-zMin
+            deltaX= h*slopeX
+            deltaY= h*slopeY
+            maxValue= max(maxValue, deltaX**2+deltaY**2)
+            newPos= pos+geom.Vector3d(deltaX,deltaY,0.0)
+            n.setPos(newPos)
+    return math.sqrt(maxValue)
+
+def setImperfectionsX(nodeSet, slopeX= 1.0/500.0):
+    '''Set the initial imperfection of the model.
+
+    :param nodeSet: set which nodes will be moved.
+    :param slopeX: out of plumbness on x axis.
+    '''
+    setImperfectionsXY(nodeSet, slopeX, 0.0)
+
+def setImperfectionsY(nodeSet, slopeY= 1.0/500.0):
+    '''Set the initial imperfection of the model.
+
+    :param nodeSet: set which nodes will be moved.
+    :param slopeY: out of plumbness on y axis.
+    '''
+    setImperfectionsXY(nodeSet, 0.0, slopeY)
 
 class PredefinedSpace(object):
     ''' Convenience class that sets the space dimension and
@@ -833,8 +881,32 @@ class PredefinedSpace(object):
             seedElem= seedElementHandler.newElement(elementType,xc.ID([0,0,0,0]))
             face.setElemSizeIJ(elemSize,elemSize)
             face.genMesh(xc.meshDir.I)
-       
+            
+    def setImperfectionsXY(self, nodeSet, slopeX= 1.0/500.0, slopeY= 1.0/500.0):
+        '''Set the initial imperfection of the model.
+
+        :param nodeSet: set which nodes will be moved.
+        :param slopeX: out of plumbness on x axis.
+        :param slopeY: out of plumbness on y axis.
+        '''
+        setImperfectionsXY(nodeSet, slopeX, slopeY)
         
+    def setImperfectionsX(nodeSet, slopeX= 1.0/500.0):
+        '''Set the initial imperfection of the model.
+
+        :param nodeSet: set which nodes will be moved.
+        :param slopeX: out of plumbness on x axis.
+        '''
+        setImperfectionsXY(nodeSet, slopeX, 0.0)
+
+    def setImperfectionsY(nodeSet, slopeY= 1.0/500.0):
+        '''Set the initial imperfection of the model.
+
+        :param nodeSet: set which nodes will be moved.
+        :param slopeY: out of plumbness on y axis.
+        '''
+        setImperfectionsXY(nodeSet, 0.0, slopeY)
+                
 def getModelSpace(preprocessor: xc.Preprocessor):
       '''Return a PredefinedSpace from the dimension of the space 
        and the number of DOFs for each node obtained from the preprocessor.
