@@ -416,3 +416,79 @@ crossSection= self.getProp('crossSection')
 crossSection.checkUniaxialBendingForElement(self,nmbComb)
 crossSection.checkYShearForElement(self,nmbComb)'''
 
+# Model softening
+
+def backupStiffness(elementSet):
+    ''' Stores the original value of the Young modulus in a property
+        to retrieve it in subsequent calls to softenElements.
+
+    :param elementSet: elements to process.
+    '''
+    for e in elementSet.elements:
+        Ebackup= 0.0
+        if(hasattr(e,"getMaterial")): # Trusses
+            Ebackup= e.getMaterial().E
+        else: # Beam elements.
+            mat= e.getPhysicalProperties.getVectorMaterials[0]
+            Ebackup= mat.sectionProperties.E
+            if(mat.sectionProperties.dimension==2): # 2D section
+                e.setProp('IzBackup', mat.sectionProperties.I)
+            else:
+                e.setProp('IyBackup', mat.sectionProperties.Iy)
+                e.setProp('IzBackup', mat.sectionProperties.Iz)
+        e.setProp('Ebackup',Ebackup)
+        
+def softenElements(elementSet):
+    ''' Adjust the stiffnes of the elements according to 
+        clause C2.3 of AISC 360-16.
+
+    :param elementSet: elements to soften.
+    '''
+    for e in elementSet.elements:
+        Ebackup= e.getProp('Ebackup')
+        if(e.isAlive):
+            Pr= e.getN()
+            if(hasattr(e,"getMaterial")): # Trusses
+                mat= e.getMaterial()
+                mat.E= 0.8*Ebackup
+            else: # Beam elements.
+                mat= e.getPhysicalProperties.getVectorMaterials[0]
+ #               print('mat= ',mat.name)
+                mat.sectionProperties.E= .8*Ebackup # Axial stiffness
+                #print('properties: ', e.getPropNames())
+                crossSection= e.getProp('crossSection')
+                slenderness= crossSection.compressionSlendernessCheck()
+                sClassif= SectionClassif.noncompact
+                if(slenderness>=1.0):
+                    sClassif= SectionClassif.slender
+                # C2.3 (b) clause (flexural stiffness): 
+                Pns= crossSection.getReferenceCompressiveStrength(sectionClassif= sClassif)
+                ratio= abs(Pr)/Pns
+                tau= 1.0
+                if(ratio>0.5):
+                    lmsg.info('Pr= ', Pr/1e3, ' kN, Pns= ', Pns/1e3,' kN, ratio= ', ratio)
+                    tau= 4*ratio*(1-ratio)
+                    if(e.hasProp('IyBackup')):
+                        mat.sectionProperties.Iy= tau*e.getProp('IyBackup')
+                    mat.sectionProperties.Iz= tau*e.getProp('IzBackup')
+
+def restoreStiffness(elementSet):
+    ''' Restore the original Young modulus value in a property
+        to retrieve it in subsequent calls to softenElements.
+
+    :param elementSet: elements to process.
+    '''
+    for e in elementSet.elements:
+        Ebackup= e.getProp('Ebackup')
+        if(hasattr(e,"getMaterial")): # Trusses
+            e.getMaterial().E= Ebackup
+        else: # Beam elements.
+            mat= e.getPhysicalProperties.getVectorMaterials[0]
+            mat.sectionProperties.E= Ebackup
+            IzBackup= e.getProp('IzBackup')
+            if(mat.sectionProperties.dimension==2): # 2D section
+                mat.sectionProperties.I= IzBackup
+            else:
+                mat.sectionProperties.Iz= IzBackup
+                IyBackup= e.getProp('IyBackup')
+                mat.sectionProperties.Iy= IyBackup
