@@ -64,7 +64,10 @@ class CrossSectionProperties1d: public CommandEntity, public MovableObject
     CrossSectionProperties1d(double E, double A, double rho= 0.0);
     CrossSectionProperties1d(double EA);
     CrossSectionProperties1d(const SectionForceDeformation &);
-    CrossSectionProperties1d(void); 
+    CrossSectionProperties1d(void);
+
+    inline virtual int getDimension(void)
+      { return 1; }
     bool check_values(void);
     inline double &E(void)
       { return e; }

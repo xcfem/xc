@@ -69,6 +69,8 @@ class CrossSectionProperties2d: public CrossSectionProperties1d
     CrossSectionProperties2d(const SectionForceDeformation &);
     CrossSectionProperties2d(void); 
     bool check_values(void);
+    inline int getDimension(void)
+      { return 2; }
     inline double &G(void)
       { return g; }
     inline const double &G(void) const

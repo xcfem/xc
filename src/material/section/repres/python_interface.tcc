@@ -24,6 +24,7 @@
 const double &(XC::CrossSectionProperties1d::*getE)(void) const= &XC::CrossSectionProperties1d::E;
 const double &(XC::CrossSectionProperties1d::*getA)(void) const= &XC::CrossSectionProperties1d::A;
 class_<XC::CrossSectionProperties1d, bases<CommandEntity> >("CrossSectionProperties1d")
+  .add_property("dimension", &XC::CrossSectionProperties1d::getDimension,"Section dimension (1, 2 or 3).")
   .add_property("E", make_function( getE, return_value_policy<return_by_value>() ), &XC::CrossSectionProperties1d::setE,"Elastic modulus.")
   .add_property("A", make_function( getA, return_value_policy<return_by_value>() ), &XC::CrossSectionProperties1d::setA,"Area.")
   .add_property("rho", &XC::CrossSectionProperties1d::getRho, &XC::CrossSectionProperties1d::setRho,"Material density.")

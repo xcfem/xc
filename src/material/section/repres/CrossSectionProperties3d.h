@@ -57,6 +57,8 @@ class CrossSectionProperties3d: public CrossSectionProperties2d
     CrossSectionProperties3d(void);
 
     bool check_values(void);
+    inline int getDimension(void)
+      { return 3; }
     inline double &Iz(void)
       { return CrossSectionProperties2d::I(); }
     inline const double &Iz(void) const
