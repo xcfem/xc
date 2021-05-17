@@ -13,7 +13,21 @@ echo ""
 
 START=$(date +%s.%N)
 
-#Tests about actions.
+# Misc. tests
+echo "$BLEU" "Misc. tests." "$NORMAL"
+
+## Soil mechanics
+echo "$BLEU" "  Soil mechanics." "$NORMAL"
+python tests/utility/soil_mechanics/test_mononobe_okabe.py
+python tests/utility/soil_mechanics/test_coulomb.py
+python tests/utility/soil_mechanics/test_janssen_limited_backfill_widht.py
+python tests/utility/soil_mechanics/test_rankine.py
+python tests/utility/soil_mechanics/test_brinch_hansen01.py
+python tests/utility/soil_mechanics/test_brinch_hansen02.py
+python tests/utility/soil_mechanics/test_stratified_soil.py
+python tests/utility/soil_mechanics/test_boussinesq.py
+
+# Tests about actions.
 echo "$BLEU" "Actions tests." "$NORMAL"
 python tests/actions/test_snowSIA.py
 python tests/actions/test_derailment_SIA.py
