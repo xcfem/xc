@@ -21,6 +21,20 @@ def getInternalForcesDict(nmbComb, elems, vonMisesStressId= 'max_von_mises_stres
     :param vonMisesStressId: identifier of the Von Mises stress to read
                             (see NDMaterial and MembranePlateFiberSection).
     '''
+    def getChiLTChiN(element):
+        '''Return the values of the chiLT and chiN properties
+           of an element.
+
+        :param element: element to get the properties from.
+        '''
+        chiLT= None
+        if e.hasProp('chiLT'): # steel beam
+            chiLT= e.getProp('chiLT')
+        chiN= None
+        if e.hasProp('chiN'): # steel beam
+            chiN= e.getProp('chiN')
+        return chiLT, chiN
+           
     combInternalForcesDict= dict()
     outDict= dict()
     combInternalForcesDict[nmbComb]= outDict
@@ -74,6 +88,15 @@ def getInternalForcesDict(nmbComb, elems, vonMisesStressId= 'max_von_mises_stres
             internalForcesDict[0]= internalForces.getDict()
             internalForces= internal_forces.CrossSectionInternalForces(N2,V2,0.0,0.0,0.0,M2) # Internal forces at the end of the bar.
             internalForcesDict[1]= internalForces.getDict()
+            chiLT, chiN= getChiLTChiN(e)
+            if(chiLT): # steel beam
+                internalForcesDict[0]['chiLT']= chiLT
+            if(chiN): # steel beam
+                internalForcesDict[0]['chiN']= chiN
+            if(chiLT): # steel beam
+                internalForcesDict[1]['chiLT']= chiLT
+            if(chiN): # steel beam
+                internalForcesDict[1]['chiN']= chiN
             elemDict['internalForces']= internalForcesDict
         elif('Beam' in elementType):
             e.getResistingForce()
@@ -106,16 +129,17 @@ def getInternalForcesDict(nmbComb, elems, vonMisesStressId= 'max_von_mises_stres
                 Mz2= bendingZ[1]
             internalForces= internal_forces.CrossSectionInternalForces(N1,Vy1,Vz1,T1,My1,Mz1) # Internal forces at the origin of the bar.
             internalForcesDict[0]= internalForces.getDict()
-            if e.hasProp('chiLT'):   #steel beam
-                internalForcesDict[0]['chiLT']= e.getProp('chiLT')
-            if e.hasProp('chiN'):   #steel beam
-                internalForcesDict[0]['chiN']= e.getProp('chiN')
             internalForces= internal_forces.CrossSectionInternalForces(N2,Vy2,Vz2,T2,My2,Mz2) # Internal forces at the end of the bar.
             internalForcesDict[1]= internalForces.getDict()
-            if e.hasProp('chiLT'):
-                internalForcesDict[1]['chiLT']= e.getProp('chiLT')
-            if e.hasProp('chiN'):
-                internalForcesDict[1]['chiN']= e.getProp('chiN')
+            chiLT, chiN= getChiLTChiN(e)
+            if(chiLT): # steel beam
+                internalForcesDict[0]['chiLT']= chiLT
+            if(chiN): # steel beam
+                internalForcesDict[0]['chiN']= chiN
+            if(chiLT): # steel beam
+                internalForcesDict[1]['chiLT']= chiLT
+            if(chiN): # steel beam
+                internalForcesDict[1]['chiN']= chiN
             elemDict['internalForces']= internalForcesDict
         elif('Truss' in elementType):
             e.getResistingForce()
