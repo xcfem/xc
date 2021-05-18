@@ -16,8 +16,8 @@ START=$(date +%s.%N)
 # Misc. tests
 echo "$BLEU" "Misc. tests." "$NORMAL"
 
-## Soil mechanics
-echo "$BLEU" "  Soil mechanics." "$NORMAL"
+## Soil mechanics (basic utilities)
+echo "$BLEU" "  Soil mechanics (basic utilities)." "$NORMAL"
 python tests/utility/soil_mechanics/test_mononobe_okabe.py
 python tests/utility/soil_mechanics/test_coulomb.py
 python tests/utility/soil_mechanics/test_janssen_limited_backfill_widht.py
@@ -49,8 +49,14 @@ python tests/actions/thermal/test_thermal_grad_shell_01.py
 python tests/actions/thermal/test_thermal_grad_shell_02.py 
 python tests/actions/thermal/test_iap_thermal.py 
 
-#Combinations tests.
+# Load combinations tests.
 echo "$BLEU" "Load combination tests." "$NORMAL"
+echo "$BLEU" "  Forming load combination tests." "$NORMAL"
+#python tests/actions/loadCombinations/testLoadCombinations.py
+python tests/actions/loadCombinations/test_esclavas_00.py
+python tests/actions/loadCombinations/test_accidentales.py
+python tests/actions/loadCombinations/test_iap11.py
+echo "$BLEU" "  Computing load combination tests." "$NORMAL"
 python tests/combinations/add_loads_01.py
 python tests/combinations/test_add_load_cases.py
 python tests/combinations/test_combination01.py
