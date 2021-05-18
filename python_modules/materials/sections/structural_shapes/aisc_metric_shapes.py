@@ -1456,6 +1456,10 @@ class HSSShape(structural_steel.QHShape):
         '''
         super(HSSShape,self).__init__(steel,name,HSS)
 
+    def t(self):
+        '''Return thickess'''
+        return self.get('t')
+
     def getMetricName(self):
         '''Return the metric label from the US customary one.'''
         return getMetricLabel(self.name)
@@ -1466,6 +1470,7 @@ class HSSShape(structural_steel.QHShape):
         according to case 6 of table B4.1a of AISC-360-16.
         '''
         return 1.4*math.sqrt(self.steelType.E/self.steelType.fy)
+    
 
     def getBClassification(self):
         ''' Return the classification for local buckling of the

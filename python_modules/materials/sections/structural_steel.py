@@ -644,23 +644,28 @@ class QHShape(SteelShape):
         '''Return shape height.'''
         return self.get('h')
       
-    def t(self):
-        '''Return thickess'''
-        return self.get('e')
-      
     def hw(self):
         '''Return web height'''
         return self.h()-2*self.t()
       
     def getRho(self):
-        ''' Returns mass per unit length. '''
+        ''' Return mass per unit length. '''
         return self.get('P')
+
+    def getOutsideRadius(self):
+        ''' Return the outside radius as two times the wall thickness of 
+        HS shape. (AISC Steel Construction Manual (1989 ASD) Tubing Dimensions 
+        and Properties on pages 1-94 - 1-103 says: Properties are based upon a 
+        nominal OUTISIDE corner radius equal to two times the wall thickness.)
+        (This value is also used in example K.1 of AISC Design Examples V14.1)
+        '''
+        return 2*self.t()
 
     def widthToThicknessWeb(self):
         '''return the ratio width-to-thickness  for classification
         in web (table 5.2 EC3-1-1)
         '''
-        c=self.h()-2*self.t()-2*self.get('e')
+        c=self.h()-2*self.t()-2*self.t()
         t=self.t()
         return c/t
 
@@ -668,7 +673,7 @@ class QHShape(SteelShape):
         '''return the internal ratio width-to-thickness  for classification
         in horizontal sup. and inf. plates (table 5.2 EC3-1-1)
         '''
-        c=self.b()-2*self.t()-2*self.get('e')
+        c=self.b()-2*self.t()-2*self.t()
         t=self.t()
         return c/t
 
