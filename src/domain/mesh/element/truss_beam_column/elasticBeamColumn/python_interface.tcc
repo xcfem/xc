@@ -33,6 +33,7 @@ class_<XC::ElasticBeam2d, bases<XC::ProtoBeam2d>, boost::noncopyable >("ElasticB
   .add_property("getVy2", &XC::ElasticBeam2d::getV2, "Internal shear force at front end.") 
   .add_property("getN1", &XC::ElasticBeam2d::getN1, "Internal axial force at front end.")
   .add_property("getN2", &XC::ElasticBeam2d::getN2, "Internal axial force at back end.")
+  .def("getN", &XC::ElasticBeam2d::getN,"Average axial force (call 'calc_resisting_force' before).")
   .add_property("getM1", &XC::ElasticBeam2d::getM1, "Internal bending moment at back end.")
   .add_property("getM2", &XC::ElasticBeam2d::getM2, "Internal bending moment at front end.")
   .add_property("getMz1", &XC::ElasticBeam2d::getM1, "Internal bending moment at back end.")

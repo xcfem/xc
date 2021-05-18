@@ -165,6 +165,12 @@ class ElasticBeam2d: public ProtoBeam2d
     //! @brief Internal axial force at the front end.   
     inline double getN2(void) const
       { return q(0); }
+    //! @brief Internal axial force at the middle of the element.
+    //! Warning! call "calc_resisting_force" before calling this method.
+    inline double getN(void) const //Average axial force.
+      {
+        return (getN1()+getN2())/2.0;
+      }
     //! @brief Internal bending moment at the back end.   
     inline double getM1(void) const
       { return -q(1); }
