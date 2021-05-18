@@ -1283,10 +1283,20 @@ class RHSShape(structural_steel.QHShape):
     def __init__(self,steel,name):
         super(RHSShape,self).__init__(steel,name,RHS)
 
+    def t(self):
+        '''Return the thickness'''
+        return self.get('e')
+
         
 class SHSShape(structural_steel.QHShape):
     def __init__(self,steel,name):
         super(SHSShape,self).__init__(steel,name,SHS)
+        
+    def t(self):
+        '''Return the thickness'''
+        return self.get('e')
+
+    
 
 class UPNShape(structural_steel.UShape):
     def __init__(self,steel,name):
