@@ -1367,26 +1367,61 @@ class ASTMShape(object):
     def getYShearEfficiency(self, sectionClass, Vy):
         '''Return major axis shear efficiency according to AISC-360-16.
 
-           :param sectionClass: dummy argument used for compatibility.
+        :param sectionClass: dummy argument used for compatibility.
+        :param Vy: required shear strength (major axis)
         '''
         return abs(Vy)/self.getDesignShearStrength(majorAxis= True)
     
     def getZShearEfficiency(self, sectionClass, Vz):
         '''Return major axis shear efficiency according to AISC-360-16.
 
-           :param sectionClass: dummy argument used for compatibility.
+        :param sectionClass: dummy argument used for compatibility.
+        :param Vz: required shear strength (minor axis)
         '''
         return Vz/self.getDesignShearStrength(majorAxis= False)
         
 
+    def getZBendingEfficiency(self, sectionClassif, Nd, Mzd, Vyd= 0.0, chiN=1.0, chiLT= 1.0):
+        '''Return major axis bending efficiency according to section H1
+           of AISC-360-16.
+
+        :param sectionClass: section classification (1,2,3 or 4)
+        :param Nd: required axial strength.
+        :param Mzd: required bending strength (major axis).
+        :param Vyd: required shear strength (major axis)
+        :param chiN: axial load reduction reduction factor (default= 1.0).
+        :param chiLT: lateral buckling reduction factor (default= 1.0).
+        '''
+        ratioN= 0.0
+        if(Nd<0): # compression
+            NcRd= chiN*self.getReferenceCompressiveStrength(sectionClassif) # available compressive strength.
+            ratioN=  abs(Nd)/NcRd
+        else:
+            NcRd= self.getDesignTensileStrength() # available axial strength.
+            ratioN= Nd/NcRd
+        McRdz= self.getReferenceFlexuralStrength() # reference flexural strength major axis.
+        # MvRdz= self.getMvRdz(sectionClass,Vyd)
+        MvRdz= McRdz
+        MbRdz= chiLT*MvRdz # available flexural strength major axis.
+        ratioMz= abs(Mzd)/MbRdz
+        if(ratioN>=0.2):
+            CF= ratioN+8.0/9.0*(ratioMz) # equation H1-1a
+        else:
+            CF= ratioN/2.0+(ratioMz) # equation H1-1b
+        return (CF,NcRd,McRdz,MvRdz,MbRdz)
+
+    
     # Combined internal forces
     def getBiaxialBendingEfficiency(self,sectionClassif,Nd,Myd,Mzd,Vyd= 0.0, chiN=1.0, chiLT=1.0):
         '''Return biaxial bending efficiency according to section H1
            of AISC-360-16.
 
-           :param sectionClassif: section classification compact, noncompact, slender or too slender.
-           :param chiN: axial load reduction reduction factor (default= 1.0).
-           :param chiLT: lateral buckling reduction factor (default= 1.0).
+        :param sectionClassif: section classification compact, noncompact, slender or too slender.
+        :param Nd: required axial strength.
+        :param Mzd: required bending strength (major axis).
+        :param Vyd: required shear strength (major axis)
+        :param chiN: axial load reduction reduction factor (default= 1.0).
+        :param chiLT: lateral buckling reduction factor (default= 1.0).
         '''
         ratioN= 0.0
         if(Nd<0): # compression
