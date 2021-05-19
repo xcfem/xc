@@ -1457,8 +1457,14 @@ class HSSShape(structural_steel.QHShape):
         super(HSSShape,self).__init__(steel,name,HSS)
 
     def t(self):
-        '''Return thickess'''
-        return self.get('t')
+        '''Return HSS nominal wall thickess'''
+        # HSS shapes have two values of thickness:
+        # tnom: according to the readme of AISC Shapes Database v15.0
+        # is the HSS or pipe nominal wall thickness; this value matches
+        # the thickness that the shape name expresses
+        # t: according to the readme of AISC Shapes Database v15.0 is
+        # the thickness of angle leg.
+        return self.get('tnom')
 
     def getMetricName(self):
         '''Return the metric label from the US customary one.'''
