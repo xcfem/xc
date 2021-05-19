@@ -350,6 +350,7 @@ class SteelShape(sp.SectionProperties):
         elem.getResistingForce()
         sectionClass= elem.getProp('sectionClass')
         chiLT= elem.getProp('chiLT')
+        chiN= elem.getProp('chiN')
         N1= 0.0; M1= 0.0; V1= 0.0
         N2= 0.0; M2= 0.0; V2= 0.0
         axialForces= elem.getValuesAtNodes('N', False)
@@ -364,8 +365,8 @@ class SteelShape(sp.SectionProperties):
         if(len(shear)>1): # 'V' found.
             V1= shear[0]
             V2= shear[1]
-        FCTN1= self.getZBendingEfficiency(sectionClass,M1,V1,chiLT)
-        FCTN2= self.getZBendingEfficiency(sectionClass,M2,V2,chiLT)
+        FCTN1= self.getZBendingEfficiency(sectionClassif= sectionClass, Nd= N1, Mzd= M1, Vyd= V1,chiN= chiN, chiLT= chiLT)[0]
+        FCTN2= self.getZBendingEfficiency(sectionClassif= sectionClass, Nd= N2, Mzd= M2, Vyd= V2,chiN= chiN, chiLT= chiLT)[0]
         fctn= elem.getProp("FCTNCP")
         if(FCTN1 > fctn[0]):
             fctn[0]= FCTN1
@@ -386,6 +387,7 @@ class SteelShape(sp.SectionProperties):
         elem.getResistingForce()
         sectionClass= elem.getProp('sectionClass')
         chiLT= elem.getProp('chiLT')
+        chiN= elem.getProp('chiN')
         N1= 0.0; My1= 0.0; Mz1= 0.0; Vy1= 0.0;
         N2= 0.0; My2= 0.0; Mz2= 0.0; Vy2= 0.0;
         axialForces= elem.getValuesAtNodes('N', False)
@@ -404,8 +406,8 @@ class SteelShape(sp.SectionProperties):
         if(len(shearY)>1): # 'Vy' found.
             Vy1= shearY[0]
             Vy2= shearY[1]
-        FCTN1= self.getBiaxialBendingEfficiency(sectionClass,N1,My1,Mz1,Vy1,chiLT)[0]
-        FCTN2= self.getBiaxialBendingEfficiency(sectionClass,N2,My2,Mz2,Vy2,chiLT)[0]
+        FCTN1= self.getBiaxialBendingEfficiency(sectionClassif= sectionClass, Nd= N1, Myd= My1, Mzd= Mz1, Vyd= Vy1, chiN= chiN, chiLT= chiLT)[0]
+        FCTN2= self.getBiaxialBendingEfficiency(sectionClassif= sectionClass, Nd= N2, Myd= My2, Mzd= Mz2, Vyd= Vy2, chiN= chiN, chiLT= chiLT)[0]
         fctn= elem.getProp("FCTNCP")
         if(FCTN1 > fctn[0]):
             fctn[0]= FCTN1
