@@ -16,9 +16,9 @@ START=$(date +%s.%N)
 # Misc. tests
 echo "$BLEU" "Misc. tests." "$NORMAL"
 
-echo "$BLEU" "Geometry tests." "$NORMAL"
-echo "$BLEU" "  Points." "$NORMAL"
-python ./python_tests/geom/closest_pair_of_points.py
+echo "$BLEU" "  Geometry tests." "$NORMAL"
+echo "$BLEU" "    Points." "$NORMAL"
+python tests/utility/geom/closest_pair_of_points.py
 
 ## Soil mechanics (basic utilities)
 echo "$BLEU" "  Soil mechanics (basic utilities)." "$NORMAL"
