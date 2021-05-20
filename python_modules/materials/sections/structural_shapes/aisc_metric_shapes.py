@@ -247,6 +247,7 @@ def getUIShapeNominalFlexuralStrength(shape, lateralUnbracedLength, Cb, majorAxi
                     Mn= 0.9*shape.get('E')*kc*Sz/lmbd**2 # equation F3-2
             else: # web is not compact. To implement from sections F4 and F5
                 lmsg.error(__name__+': nominal flexural strength for noncompact web sections not implemented yet.')
+                Mn= 1e-9
     return Mn
 
 def getUIAw(shape, majorAxis= True):
@@ -660,7 +661,7 @@ class WShape(structural_steel.IShape):
         return getUIShapeLambdaRFlangeBending(self)
 
     def bendingCompactFlangeRatio(self, majorAxis= True):
-        ''' If flanges are compact according to table 4.1b of 
+        ''' If flanges are compact according to table B4.1b of 
             AISC-360-16 return a value less than one.
 
         :param majorAxis: true if flexure about the major axis.
@@ -2000,6 +2001,16 @@ class CHSSShape(structural_steel.CHShape):
         ''' Constructor.
         '''
         super(CHSSShape,self).__init__(steel,name,CHSS)
+        
+    def t(self):
+        '''Return HSS nominal wall thickess'''
+        # HSS shapes have two values of thickness:
+        # tnom: according to the readme of AISC Shapes Database v15.0
+        # is the HSS or pipe nominal wall thickness; this value matches
+        # the thickness that the shape name expresses
+        # t: according to the readme of AISC Shapes Database v15.0 is
+        # the thickness of angle leg.
+        return self.get('tnom')
 
     def getMetricName(self):
         '''Return the metric label from the US customary one.'''
@@ -2113,6 +2124,50 @@ class CHSSShape(structural_steel.CHShape):
         '''
         return getShapePlasticMoment(self)
 
+    def getCriticalStressF(self):
+        '''Return the critical stress for the limit state 
+           of lateral-torsional buckling according to
+           equation F8-4 of  AISC-360-16.
+        '''
+        D_t= self.getOutsideDiameter()/self.t()
+        E= shape.get('E')
+        return 0.33*E/D_t
+
+    def getLambdaPFlangeBending(self):
+        '''Return he limiting slenderness for a compact flange, 
+           defined in Table B4.1b of AISC-360-16.'''
+        E= self.get('E')
+        Fy= self.steelType.fy
+        return 0.07*math.sqrt(E/Fy)
+
+    def getLambdaRFlangeBending(self):
+        '''Return he limiting slenderness for a noncompact flange, 
+           defined in Table B4.1b of AISC-360-16.'''
+        E= self.get('E')
+        Fy= self.steelType.fy
+        return 0.31*math.sqrt(E/Fy)
+        
+    def bendingCompactFlangeRatio(self, majorAxis= True):
+        ''' If flanges are compact according to table B4.1b of 
+            AISC-360-16 return a value less than one.
+
+        :param majorAxis: true if flexure about the major axis.
+        '''
+        lambda_p= self.getLambdaPFlangeBending()
+        slendernessRatio= self.getOutsideDiameter()/self.t()
+        return slendernessRatio/lambda_p # if <1 then flanges are compact.
+    
+    def bendingSlenderFlangeRatio(self, majorAxis= True):
+        ''' If flanges are noncompact according to table 4.1b of 
+            AISC-360-16 return a value less than one otherwise
+            they are slender.
+
+        :param majorAxis: true if flexure about the major axis.
+        '''
+        lambda_r= self.getLambdaRFlangeBending()
+        slendernessRatio= self.getOutsideDiameter()/self.t()
+        return slendernessRatio/lambda_r # if <1 then flanges are noncompact.
+
     def getNominalFlexuralStrength(self, lateralUnbracedLength, Cb, majorAxis= True):
         ''' Return the nominal flexural strength of the member
             according to equations F7-1 to F7-13 and F8-1 to F8-4 
@@ -2125,8 +2180,26 @@ class CHSSShape(structural_steel.CHShape):
         :param Cb: lateral-torsional buckling modification factor.
         :param majorAxis: true if flexure about the major axis.
         '''
-        Mn= 0.0
-        lmsg.error(__name__+'; nominal flexural strength for circular HSS sections not implemented yet.')
+        D_t= self.getOutsideDiameter()/self.t()
+        E= self.get('E')
+        Fy= self.steelType.fy
+        threshold= 0.45*E/Fy
+        Mn= 1e-9
+        Mp= self.getPlasticMoment() # plastic moment.
+        if(D_t<threshold):
+            compactFlanges= self.bendingCompactFlangeRatio(majorAxis)
+            if(compactFlanges<=1.0): # "flanges" are compact.
+                Mn= Mp # equation F8-1
+            else: 
+                slenderFlanges= self.bendingSlenderFlangeRatio(majorAxis)
+                S= self.get('Wyel') # Elastic section modulus about minor axis.
+                if(slenderFlanges<=1.0): # flanges are noncompact -> equation F8-2 applies.
+                    Mn= (0.021*E/D_t+Fy)*S
+                else: # slender flanges.
+                    Fcr= self.getCriticalStressF()
+                    Mn= Fcr*S # equation F6-3
+        else:
+            lmsg.error(__name__+'; AISC F8 section not applicable (HSS wall too thin).')
         return Mn
     
     def getDesignFlexuralStrength(self, lateralUnbracedLength, Cb, majorAxis= True):
