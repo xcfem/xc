@@ -2129,9 +2129,9 @@ class CHSSShape(structural_steel.CHShape):
            of lateral-torsional buckling according to
            equation F8-4 of  AISC-360-16.
         '''
-        D_t= self.getOutsideDiameter()/self.t()
+        slendernessRatio= self.get('slendernessRatio')
         E= shape.get('E')
-        return 0.33*E/D_t
+        return 0.33*E/slendernessRatio
 
     def getLambdaPFlangeBending(self):
         '''Return he limiting slenderness for a compact flange, 
@@ -2180,13 +2180,13 @@ class CHSSShape(structural_steel.CHShape):
         :param Cb: lateral-torsional buckling modification factor.
         :param majorAxis: true if flexure about the major axis.
         '''
-        D_t= self.getOutsideDiameter()/self.t()
+        slendernessRatio= self.get('slendernessRatio')
         E= self.get('E')
         Fy= self.steelType.fy
         threshold= 0.45*E/Fy
         Mn= 1e-9
         Mp= self.getPlasticMoment() # plastic moment.
-        if(D_t<threshold):
+        if(slendernessRatio<threshold):
             compactFlanges= self.bendingCompactFlangeRatio(majorAxis)
             if(compactFlanges<=1.0): # "flanges" are compact.
                 Mn= Mp # equation F8-1
@@ -2194,7 +2194,7 @@ class CHSSShape(structural_steel.CHShape):
                 slenderFlanges= self.bendingSlenderFlangeRatio(majorAxis)
                 S= self.get('Wyel') # Elastic section modulus about minor axis.
                 if(slenderFlanges<=1.0): # flanges are noncompact -> equation F8-2 applies.
-                    Mn= (0.021*E/D_t+Fy)*S
+                    Mn= (0.021*E/slendernessRatio+Fy)*S
                 else: # slender flanges.
                     Fcr= self.getCriticalStressF()
                     Mn= Fcr*S # equation F6-3
