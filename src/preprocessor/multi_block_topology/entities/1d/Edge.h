@@ -31,7 +31,7 @@
 #define EDGE_H
 
 #include "preprocessor/multi_block_topology/entities/EntMdlr.h"
-#include "xc_utils/src/geom/d1/Segment3d.h"
+#include "utility/geom/d1/Segment3d.h"
 
 
 class BND3d;

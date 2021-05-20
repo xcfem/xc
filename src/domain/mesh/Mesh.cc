@@ -49,7 +49,7 @@
 
 #include "domain/mesh/element/utils/NodePtrsWithIDs.h"
 #include <climits>
-#include "xc_utils/src/geom/pos_vec/Pos3d.h"
+#include "utility/geom/pos_vec/Pos3d.h"
 
 #include "utility/actor/actor/MovableVector.h"
 

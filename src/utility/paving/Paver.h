@@ -30,8 +30,8 @@
 #ifndef PAVER_H
 #define PAVER_H
 
-#include "xc_utils/src/kernel/CommandEntity.h"
-#include "xc_utils/src/geom/d2/Polygon3d.h"
+#include "utility/kernel/CommandEntity.h"
+#include "utility/geom/d2/Polygon3d.h"
 
 extern "C" {
 #include "paving.h"

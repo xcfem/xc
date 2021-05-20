@@ -45,7 +45,7 @@
 #include <solution/analysis/integrator/Integrator.h>
 #include <cstring>
 #include "utility/matrix/Vector.h"
-#include "xc_utils/src/utils/misc_utils/mchne_eps.h"
+#include "utility/utils/misc_utils/mchne_eps.h"
 
 //! @brief Constructor.
 XC::BandArpackSolver::BandArpackSolver(int numE)

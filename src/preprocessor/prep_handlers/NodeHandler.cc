@@ -31,8 +31,8 @@
 #include "domain/domain/Domain.h"
 #include "domain/mesh/node/Node.h"
 #include "preprocessor/Preprocessor.h"
-#include "xc_utils/src/geom/pos_vec/Pos3d.h"
-#include "xc_utils/src/geom/pos_vec/Pos2d.h"
+#include "utility/geom/pos_vec/Pos3d.h"
+#include "utility/geom/pos_vec/Pos2d.h"
 
 #include "boost/any.hpp"
 

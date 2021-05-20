@@ -30,7 +30,7 @@
 #ifndef PROCSOLU_H
 #define PROCSOLU_H
 
-#include "xc_utils/src/kernel/CommandEntity.h"
+#include "utility/kernel/CommandEntity.h"
 #include "SolutionProcedureControl.h"
 
 

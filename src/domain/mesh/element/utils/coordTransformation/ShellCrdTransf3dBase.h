@@ -30,7 +30,7 @@
 #ifndef ShellCrdTransf3dBase_h
 #define ShellCrdTransf3dBase_h
 
-#include "xc_utils/src/kernel/CommandEntity.h"
+#include "utility/kernel/CommandEntity.h"
 #include "utility/actor/actor/MovableObject.h"
 #include "utility/matrix/Vector.h"
 #include "domain/mesh/element/utils/ParticlePos3d.h"

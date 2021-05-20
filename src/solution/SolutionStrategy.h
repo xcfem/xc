@@ -30,7 +30,7 @@
 #ifndef ANALYSISAGGREGATION_H
 #define ANALYSISAGGREGATION_H
 
-#include "xc_utils/src/kernel/CommandEntity.h"
+#include "utility/kernel/CommandEntity.h"
 #include "utility/handler/DataOutputHandler.h"
 
 namespace XC {

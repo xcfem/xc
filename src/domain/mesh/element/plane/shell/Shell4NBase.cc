@@ -67,7 +67,7 @@
 #include "utility/actor/actor/MovableVectors.h"
 
 
-#include "xc_utils/src/geom/d2/Polygon3d.h"
+#include "utility/geom/d2/Polygon3d.h"
 #include "domain/load/plane/ShellRawLoad.h"
 #include "domain/load/plane/ShellUniformLoad.h"
 #include "domain/load/plane/ShellStrainLoad.h"

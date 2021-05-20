@@ -31,7 +31,7 @@
 #include "preprocessor/multi_block_topology/matrices/ElemPtrArray3d.h"
 #include "domain/mesh/node/Node.h"
 #include "vtkCellType.h"
-#include "xc_utils/src/geom/d3/3d_polyhedrons/Tetrahedron3d.h"
+#include "utility/geom/d3/3d_polyhedrons/Tetrahedron3d.h"
 #include "domain/mesh/element/utils/ParticlePos3d.h"
 
 const int XC::BrickBase::numberNodes; //!< Number of nodes.

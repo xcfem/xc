@@ -29,8 +29,8 @@
 #include "LoadCombination.h"
 #include "LoadPattern.h"
 #include "domain/domain/Domain.h"
-#include "xc_utils/src/utils/text/text_string.h"
-#include "xc_utils/src/utils/text/StringFormatter.h"
+#include "utility/utils/text/text_string.h"
+#include "utility/utils/text/StringFormatter.h"
 #include "preprocessor/prep_handlers/LoadHandler.h"
 #include "boost/lexical_cast.hpp"
 

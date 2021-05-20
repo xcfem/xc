@@ -32,7 +32,7 @@
 #ifndef DQPTRS_H
 #define DQPTRS_H
 
-#include "xc_utils/src/kernel/CommandEntity.h"
+#include "utility/kernel/CommandEntity.h"
 #include <deque>
 #include <set>
 #include "utility/actor/actor/MovableID.h"

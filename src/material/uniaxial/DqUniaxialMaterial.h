@@ -32,7 +32,7 @@
 #ifndef DQUNIAXIALMATERIAL_H
 #define DQUNIAXIALMATERIAL_H
 
-#include "xc_utils/src/kernel/CommandEntity.h"
+#include "utility/kernel/CommandEntity.h"
 #include <deque>
 #include <material/uniaxial/UniaxialMaterial.h>
 

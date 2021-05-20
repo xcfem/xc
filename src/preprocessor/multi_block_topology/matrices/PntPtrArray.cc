@@ -33,14 +33,14 @@
 #include "domain/constraints/SFreedom_Constraint.h"
 
 
-#include "xc_utils/src/geom/pos_vec/Pos3d.h"
-#include "xc_utils/src/geom/pos_vec/Vector3d.h"
-#include "xc_utils/src/geom/d2/Polygon3d.h"
+#include "utility/geom/pos_vec/Pos3d.h"
+#include "utility/geom/pos_vec/Vector3d.h"
+#include "utility/geom/d2/Polygon3d.h"
 
 #include "domain/mesh/element/Element.h"
 #include "domain/mesh/node/Node.h"
 #include "preprocessor/multi_block_topology/MultiBlockTopology.h"
-#include "xc_utils/src/matrices/MatrixRange.h"
+#include "utility/matrices/MatrixRange.h"
 
 
 

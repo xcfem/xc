@@ -27,14 +27,14 @@
 //DeformationPlane.cc
 
 #include "DeformationPlane.h"
-#include "xc_utils/src/geom/pos_vec/Pos3d.h"
-#include "xc_utils/src/geom/pos_vec/Pos2d.h"
-#include "xc_utils/src/geom/d2/GeneralEquationOfPlane.h"
+#include "utility/geom/pos_vec/Pos3d.h"
+#include "utility/geom/pos_vec/Pos2d.h"
+#include "utility/geom/d2/GeneralEquationOfPlane.h"
 #include "utility/matrix/Vector.h"
 #include "material/section/ResponseId.h"
-#include "xc_utils/src/geom/d1/Line3d.h"
-#include "xc_utils/src/geom/d1/Line2d.h"
-#include "xc_utils/src/geom/d2/HalfPlane2d.h"
+#include "utility/geom/d1/Line3d.h"
+#include "utility/geom/d1/Line2d.h"
+#include "utility/geom/d2/HalfPlane2d.h"
 #include "utility/actor/actor/MovableVector.h"
 
 bool XC::DeformationPlane::check_positions(const Pos3d &pA,const Pos3d &pB, const Pos3d &pC)

@@ -27,7 +27,7 @@
 //CrossSectionProperties1d.cc
 
 #include <material/section/repres/CrossSectionProperties1d.h>
-#include "xc_utils/src/utils/misc_utils/inertia.h"
+#include "utility/utils/misc_utils/inertia.h"
 #include "domain/mesh/element/utils/Information.h"
 #include "material/section/ResponseId.h"
 

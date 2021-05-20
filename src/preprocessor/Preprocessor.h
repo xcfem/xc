@@ -30,7 +30,7 @@
 #ifndef PREPROCESSOR_H
 #define PREPROCESSOR_H
 
-#include "xc_utils/src/kernel/CommandEntity.h"
+#include "utility/kernel/CommandEntity.h"
 #include "utility/actor/actor/MovableObject.h"
 #include "prep_handlers/MaterialHandler.h"
 #include "prep_handlers/BeamIntegratorHandler.h"

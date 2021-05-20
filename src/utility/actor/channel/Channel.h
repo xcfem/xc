@@ -65,7 +65,7 @@
 // What: "@(#) Channel.h, revA"
 
 
-#include "xc_utils/src/kernel/CommandEntity.h"
+#include "utility/kernel/CommandEntity.h"
 #include <set>
 
 namespace XC {

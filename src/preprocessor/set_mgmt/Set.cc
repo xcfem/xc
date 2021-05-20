@@ -40,10 +40,10 @@
 #include "preprocessor/multi_block_topology/trf/TrfGeom.h"
 #include "utility/matrix/ID.h"
 
-#include "xc_utils/src/geom/pos_vec/SlidingVectorsSystem3d.h"
-#include "xc_utils/src/geom/d2/Plane.h"
-#include "xc_utils/src/geom/d3/HalfSpace3d.h"
-#include "xc_utils/src/geom/d3/BND3d.h"
+#include "utility/geom/pos_vec/SlidingVectorsSystem3d.h"
+#include "utility/geom/d2/Plane.h"
+#include "utility/geom/d3/HalfSpace3d.h"
+#include "utility/geom/d3/BND3d.h"
 
 
 //! @brief Constructor.

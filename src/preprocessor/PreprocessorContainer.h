@@ -30,7 +30,7 @@
 #ifndef PREPROCESSORCONTAINER_H
 #define PREPROCESSORCONTAINER_H
 
-#include "xc_utils/src/kernel/CommandEntity.h"
+#include "utility/kernel/CommandEntity.h"
 
 namespace XC {
 class Domain;

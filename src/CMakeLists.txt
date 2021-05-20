@@ -138,6 +138,69 @@ MESSAGE(STATUS "**** linker flags ${CMAKE_EXE_LINKER_FLAGS}")
 set_source_files_properties(solution/system_of_eqn/eigenSOE/BandArpackppSolver.cc PROPERTIES COMPILE_FLAGS -fpermissive)
 
 # Source files.
+
+## Utility
+SET(text_utils utility/utils/text/text_string utility/utils/text/LabelContainer utility/utils/text/en_letra utility/utils/text/StrTok utility/utils/text/tab_cod utility/utils/text/latex utility/utils/text/StringFormatter utility/utils/text/FixedWidthReader)
+
+SET(stream_utils utility/utils/streams/imanip utility/utils/streams/prep)
+
+SET(misc_utils utility/utils/misc_utils/cmd_args utility/utils/misc_utils/memoria utility/utils/misc_utils/inertia utility/utils/misc_utils/print_trace)
+
+SET(SQLITE utility/sqlite/SqLiteObject utility/sqlite/SqLiteQuery utility/sqlite/SqLiteDatabase)
+
+SET(sqlitepp_utils utility/utils/sqlitepp/Database utility/utils/sqlitepp/Query utility/utils/sqlitepp/StderrLog utility/utils/sqlitepp/SysLog)
+
+SET(matrices utility/matrices/MMatrix utility/matrices/vcolM utility/matrices/RangoIndice utility/matrices/MatrixRange utility/matrices/BoxConstRef utility/matrices/ExpressionMatrix utility/matrices/MExpressionMatrix utility/matrices/PolynomialMatrix utility/matrices/m_double utility/matrices/m_bool utility/matrices/m_double utility/matrices/m_int utility/matrices/m_sizet utility/matrices/m_string utility/matrices/giros utility/matrices/op_tensor utility/matrices/solvers/solver utility/matrices/IndicesMatrix)
+
+SET(three_d_arrays utility/matrices/3d_arrays/Array3dBase utility/matrices/3d_arrays/Array3dBoxRefBase utility/matrices/3d_arrays/Array3dRange utility/matrices/3d_arrays/BoolArray3d utility/matrices/3d_arrays/Indices3dArray)
+
+SET(skypack utility/skypack/skypri.f utility/skypack/skypds.f utility/skypack/skyscf.f utility/skypack/skyssb.f utility/skypack/mtrxys.f utility/skypack/skyssf.f utility/skypack/skypsb.f utility/skypack/skypdc.f utility/skypack/skypf1.f utility/skypack/skysdc.f utility/skypack/skypsp.f utility/skypack/skypcf.f utility/skypack/skymef.f utility/skypack/skyssd.f utility/skypack/skyss.f utility/skypack/skysf1.f utility/skypack/skypf2.f utility/skypack/mtrxy.f utility/skypack/mtrxyd.f utility/skypack/skysf2.f utility/skypack/skypci.f)
+
+SET(itpack utility/itpack/dsrc2c.f utility/itpack/jcg.f utility/itpack/jsi.f utility/itpack/rscg.f utility/itpack/rssi.f utility/itpack/sor.f utility/itpack/ssorcg.f utility/itpack/ssorsi.f)
+
+SET(umfpack utility/umfpack/umd2fb.f utility/umfpack/umd2co.f utility/umfpack/umd2fa.f utility/umfpack/umd2f0.f utility/umfpack/umd2f1.f utility/umfpack/umd2f2.f utility/umfpack/umd2fg.f utility/umfpack/umd2in.f utility/umfpack/umd2of.f utility/umfpack/umd2s2.f utility/umfpack/umd2sl.f utility/umfpack/umd2so.f utility/umfpack/umd2su.f utility/umfpack/umd2er.f utility/umfpack/umd2p1.f utility/umfpack/umd2p2.f utility/umfpack/umd2lt.f utility/umfpack/umd2ut.f utility/umfpack/umd2rf.f utility/umfpack/umd2ra.f utility/umfpack/umd2r0.f utility/umfpack/umd2r2.f utility/umfpack/umd2rg.f utility/umfpack/umd21i.f utility/umfpack/mc21b.f utility/umfpack/mc13e.f)
+
+SET(algebra utility/functions/algebra/TablaLiterales utility/functions/algebra/ExprBase utility/functions/algebra/ArbolExpr utility/functions/algebra/ExprAlgebra utility/functions/algebra/Expresion utility/functions/algebra/ExprInfija utility/functions/algebra/ExprPostfija utility/functions/algebra/LexAlgebra utility/functions/algebra/Lexico utility/functions/algebra/Literal utility/functions/algebra/OpBinario utility/functions/algebra/OpComparacion utility/functions/algebra/OpBooleano utility/functions/algebra/Macaulay utility/functions/algebra/Operando utility/functions/algebra/OpUnario utility/functions/algebra/ProtoExpr utility/functions/algebra/Rama utility/functions/algebra/Variable utility/functions/algebra/Operador utility/functions/algebra/Segnal utility/functions/algebra/ExprFunctor utility/functions/algebra/NamedOperand utility/functions/algebra/OpTrigonometricas utility/functions/algebra/ConjVariables utility/functions/algebra/MapValores utility/functions/algebra/num_integration)
+
+SET(functions_misc utility/functions/statistics/statlib utility/functions/statistics/Sample utility/functions/statistics/combinatorics utility/functions/max_min/max_min utility/functions/macaulay/Macaulay utility/functions/polynomials/Polynomial utility/functions/polynomials/IndPol utility/functions/polynomials/NmbVars utility/functions/roots/NewtonRaphson utility/functions/roots/root utility/functions/shape_functions/ShapeFunction utility/functions/shape_functions/IntegrationPoints)
+
+SET(functions ${algebra} ${functions_misc})
+
+SET(KERNEL utility/kernel/EntityWithProperties utility/kernel/CommandEntity utility/kernel/NamedEntity utility/kernel/EntityWithOwner utility/kernel/ErrLogFiles utility/kernel/python_utils.cc)
+
+#SET(VtkAux vtk_aux/vtkShStrArray vtk_aux/vtkLabeledShStrMapper vtk_aux/vtkTakePhotoDefs vtk_aux/vtkTakePhoto vtk_aux/vtkXOpenGLOffScreenRenderWindow vtk_aux/vtkDoubleHeadedArrowSource vtk_aux/vtkArcSource)
+
+### Geometry
+SET(geomTrfs utility/geom/trf/Trf utility/geom/trf/Trf2d utility/geom/trf/Rotation2d utility/geom/trf/Trf3d utility/geom/trf/Translation2d utility/geom/trf/Scaling3d utility/geom/trf/Scaling2d utility/geom/trf/Identity2d utility/geom/trf/Identity3d utility/geom/trf/Translation3d utility/geom/trf/Reflection2d utility/geom/trf/Rotation3d utility/geom/trf/Reflection3d utility/geom/trf/Revolution3d)
+
+SET(geomRefCooSys utility/geom/coo_sys/CooSys utility/geom/coo_sys/Rect1d3dCooSys utility/geom/coo_sys/Rect2d3dCooSys utility/geom/coo_sys/Rect3d3dCooSys utility/geom/coo_sys/Rect1d2dCooSys utility/geom/coo_sys/Rect2d2dCooSys utility/geom/coo_sys/Xd3dCooSys utility/geom/coo_sys/Xd2dCooSys utility/geom/ utility/geom/ref_sys/Ref1d2d utility/geom/ref_sys/Ref3d3d utility/geom/ref_sys/Ref2d2d utility/geom/ref_sys/Ref1d3d utility/geom/ref_sys/Ref2d3d utility/geom/ref_sys/PrincipalAxesOfInertia2D)
+
+SET(geomD0 utility/geom/d0/Point3d utility/geom/d0/Point2d)
+
+SET(geomD1 utility/geom/d1/Line3d utility/geom/d1/Line2d utility/geom/d1/Ray3d utility/geom/d1/Segment2d utility/geom/d1/Ray2d utility/geom/d1/Segment3d utility/geom/d1/Polyline2d utility/geom/d1/Polyline3d)
+
+SET(geomD2 utility/geom/d2/GeomGroup2d utility/geom/d2/Surface2d utility/geom/d2/Surface3d utility/geom/d2/Plane utility/geom/d2/BND2d utility/geom/d2/Circle2d utility/geom/d2/CircularSector2d utility/geom/d2/CircularSector3d utility/geom/d2/AnnulusSector2d utility/geom/d2/GeomObj2d utility/geom/d2/Polygon3d utility/geom/d2/2d_polygons/Polygon2d utility/geom/d2/2d_polygons/PolygonWithHoles2d utility/geom/d2/2d_polygons/PolygonalSurface2d utility/geom/d2/2d_polygons/Triangle2d utility/geom/d2/2d_polygons/carsten_steger utility/geom/d2/2d_polygons/LineSegmentArrangement utility/geom/d2/2d_polygons/plane_sweep utility/geom/d2/2d_polygons/mark_bayazit utility/geom/d2/2d_polygons/polygon2d_bool_op utility/geom/d2/2d_polygons/Quadrilateral2d utility/geom/d2/2d_polygons/Rectangle2d utility/geom/d2/2d_polygons/Square2d utility/geom/d2/HalfPlane2d utility/geom/d2/Triangle3d utility/geom/d2/Circle3d utility/geom/d2/D2to3d utility/geom/d2/Trihedron utility/geom/d2/Triang3dMesh utility/geom/d2/ConvexHull2d utility/geom/d2/BasicAlphaShape2d utility/geom/d2/GeneralEquationOfPlane utility/geom/d2/Grid2d)
+
+SET(geomD3 utility/geom/d3/BND3d utility/geom/d3/GeomObj3d utility/geom/d3/BspTree3d utility/geom/d3/Cylinder utility/geom/d3/GeomGroup3d utility/geom/d3/3d_polyhedrons/VertexMap utility/geom/d3/3d_polyhedrons/PolyhedronBase utility/geom/d3/3d_polyhedrons/Polyhedron3d utility/geom/d3/3d_polyhedrons/PolygonMap utility/geom/d3/3d_polyhedrons/modifier_quad_triangle utility/geom/d3/3d_polyhedrons/enriched_polyhedron utility/geom/d3/3d_polyhedrons/Tetrahedron3d utility/geom/d3/3d_polyhedrons/Hexahedron3d utility/geom/d3/3d_polyhedrons/BlockPyramid utility/geom/d3/3d_polyhedrons/polyhedron3d_bool_op utility/geom/d3/HalfSpace3d utility/geom/d3/ConvexHull3d utility/geom/d3/Solid3d utility/geom/d3/3d_prisms/TriangularPrism3d)
+
+SET(funcFromPoints utility/geom/d1/function_from_points/FunctionFromPointsR_R utility/geom/d1/function_from_points/FunctionFromPointsR2_R)
+
+SET(geom utility/geom/pos_vec/SlidingVector3d utility/geom/pos_vec/FixedVector3d utility/geom/pos_vec/Vector2d utility/geom/pos_vec/Vector3d utility/geom/pos_vec/Pos2d utility/geom/pos_vec/Pos2dList utility/geom/pos_vec/Pos3d utility/geom/pos_vec/KDTreePos utility/geom/pos_vec/Pos3dList utility/geom/pos_vec/Dir3d utility/geom/pos_vec/Dir2d utility/geom/pos_vec/SlidingVector2d utility/geom/pos_vec/FixedVector2d utility/geom/pos_vec/SlidingVectorsSystem3d utility/geom/pos_vec/SlidingVectorsSystem2d utility/geom/pos_vec/Pos2dArray utility/geom/pos_vec/Pos2dArray3d utility/geom/pos_vec/Pos3dArray utility/geom/pos_vec/Pos3dArray3d utility/geom/lists/ThreePoints3d utility/geom/lists/utils_list_pos2d utility/geom/lists/utils_list_pos3d utility/geom/Wm3/Wm3Math utility/geom/Wm3/Wm3Distance utility/geom/Wm3/Wm3DistVector3Triangle3 ${geomD0} ${geomD1} ${geomD2} ${geomD3} ${geomRefCooSys} ${geomTrfs} ${funcFromPoints} utility/geom/cgal_types utility/geom/GeomObj utility/geom/FT_matrix utility/geom/ProtoGeom)
+
+### GNU GTS
+SET(GnuGts utility/gnu_gts/GTSSurface utility/gnu_gts/GTSVertex utility/gnu_gts/GTSEdge utility/gnu_gts/GTSFace utility/gnu_gts/GTSSplit utility/gnu_gts/GTSSurfaceTraverse utility/gnu_gts/GTSSurfaceIntersection utility/gnu_gts/GTSBBoxTree utility/gnu_gts/GTSGraph utility/gnu_gts/TriangleMap)
+
+### Gauss quadrature.
+SET(cuadGauss utility/gauss_quadrature/GaussQuadrature2D utility/gauss_quadrature/GaussQuadrature3D utility/gauss_quadrature/gssleg utility/gauss_quadrature/GaussPoints utility/gauss_quadrature/GaussWeights1d utility/gauss_quadrature/GaussWeights2d utility/gauss_quadrature/GaussWeights3d)
+
+### Load combinations.
+SET(ca_factors utility/loadCombinations/factors/PartialSafetyFactors utility/loadCombinations/factors/PartialSafetyFactorsMap utility/loadCombinations/factors/CombinationFactors utility/loadCombinations/factors/CombinationFactorsMap utility/loadCombinations/factors/Factors)
+
+SET(ca_actions utility/loadCombinations/actions/LeadingActionInfo utility/loadCombinations/actions/Action utility/loadCombinations/actions/ActionRelationships utility/loadCombinations/actions/ActionRValue utility/loadCombinations/actions/ActionRValueList utility/loadCombinations/actions/ActionsFamily utility/loadCombinations/actions/ActionContainer utility/loadCombinations/actions/ActionsAndFactors)
+
+SET(ca_combinations utility/loadCombinations/comb_analysis/Variation utility/loadCombinations/comb_analysis/Variations utility/loadCombinations/comb_analysis/LoadCombinationVector utility/loadCombinations/comb_analysis/LoadCombinations utility/loadCombinations/comb_analysis/ActionWeightingMap utility/loadCombinations/comb_analysis/LoadCombinationGenerator)
+
+### Actor
 SET(actor utility/actor/actor/Actor utility/actor/actor/DistributedBase utility/actor/actor/DistributedObj utility/actor/actor/MovableObject utility/actor/actor/CommMetaData utility/actor/actor/PtrCommMetaData utility/actor/actor/BrokedPtrCommMetaData utility/actor/actor/ArrayCommMetaData utility/actor/actor/MatrixCommMetaData utility/actor/actor/TensorCommMetaData utility/actor/actor/DbTagData utility/actor/actor/Communicator utility/actor/actor/MovableMap utility/actor/actor/MovableDeque utility/actor/actor/MovableVector utility/actor/actor/MovableBJTensor utility/actor/actor/MovableString utility/actor/actor/MovableVectors utility/actor/actor/MovableMatrix utility/actor/actor/MovableID utility/actor/actor/MovableMatrices utility/actor/actor/MovableContainer utility/actor/actor/MovableStrings utility/actor/address/ChannelAddress utility/actor/address/SocketAddress utility/actor/channel/ChannelQueue utility/actor/channel/Channel utility/actor/channel/TCP_Socket utility/actor/channel/UDP_Socket utility/actor/channel/mySocket utility/actor/machineBroker/MachineBroker utility/actor/message/Message utility/actor/objectBroker/FEM_ObjectBroker utility/actor/objectBroker/ObjectBroker utility/actor/ObjectWithObjBroker utility/actor/ShadowActorBase utility/actor/shadow/Shadow utility/xc_python_utils)
 
 SET(mpi utility/actor/address/MPI_ChannelAddress utility/actor/channel/MPI_Channel utility/actor/machineBroker/MPI_MachineBroker)
@@ -349,19 +412,40 @@ SET(preprocessor preprocessor/EntMdlrBase preprocessor/MeshingParams ${preproces
 
 SET(solution solution/analysis/ModelWrapper solution/SolutionStrategy solution/SolutionStrategyMap solution/analysis/MapModelWrapper solution/SolutionProcedureControl solution/SolutionProcedure)
 
-# Build our library
+# Build our libraries
+add_library(xc_basic_utils ${text_utils} ${stream_utils} ${misc_utils} ${sqlitepp_utils} ${matrices} ${three_d_arrays} ${skypack} ${itpack} ${umfpack} ${functions})
+install(TARGETS xc_basic_utils DESTINATION lib)
+
+add_library(xc_utils SHARED ${SQLITE} ${cuadGauss} ${geom} ${GnuGts} ${KERNEL}  ${VtkAux} ${ca_factors} ${ca_actions} ${ca_combinations})
+
+
 add_library(XcBib SHARED ${utility} ${material} ${siseq} ${analysis} ${convergenceTest} ${coordTransformation} ${damage} ${domain} ${gauss_models} ${cyclic_model} ${element} ${graph} ${modelbuilder} ${reliability} ${unitest} ${preprocessor} ${solution} version FEProblem)
 
 #Python interface
-TARGET_LINK_LIBRARIES(XcBib xc_utils xc_basic_utils OpenMP::OpenMP_CXX ${VTK_BIB} CGAL::CGAL CGAL::CGAL_Core ${Plot_LIBRARY} ${MPFR_LIBRARIES} ${GMP_LIBRARY} ${MYSQL_LIBRARY} ${MySQLpp_LIBRARIES} ${SQLITE3_LIBRARY} ${GNUGTS_LIBRARIES} ${BerkeleyDB_LIBRARIES} ${ARPACK_LIB} ${ARPACKPP_LIB} ${LAPACK_LIBRARIES} ${SUPERLU_LIBRARIES} ${BLAS_LIBRARIES} ${PETSC_LIB_PETSC} ${METIS_LIBRARIES} ${TCL_LIBRARY} ${XC_UTILS_BOOST_LIBRARIES} ${PYTHON_LIBRARIES} ${F2C_LIBRARY} ${GMSH_LIBRARIES} ${SUITESPARSE_LIBRARIES})
+link_libraries(xc_utils xc_basic_utils OpenMP::OpenMP_CXX ${VTK_BIB} ${Plot_LIBRARY} ${MPFR_LIBRARIES} ${GMP_LIBRARY} ${SQLITE3_LIBRARY} ${GNUGTS_LIBRARIES} ${XC_UTILS_BOOST_LIBRARIES} ${PYTHON_LIBRARIES} )
+target_link_libraries(xc_utils CGAL::CGAL CGAL::CGAL_Core) # CGAL stuff
 add_definitions(-fno-strict-aliasing)
-# Define the wrapper library that wraps our library
+add_library(xc_base SHARED utility/kernel/python_interface.cc)
+#ADD_LIBRARY(vtk_aux SHARED vtk_aux/python_interface.cc)
+
+INSTALL(TARGETS xc_basic_utils xc_utils DESTINATION lib)
+
+target_link_libraries(XcBib xc_utils xc_basic_utils OpenMP::OpenMP_CXX ${VTK_BIB} CGAL::CGAL CGAL::CGAL_Core ${Plot_LIBRARY} ${MPFR_LIBRARIES} ${GMP_LIBRARY} ${MYSQL_LIBRARY} ${MySQLpp_LIBRARIES} ${SQLITE3_LIBRARY} ${GNUGTS_LIBRARIES} ${BerkeleyDB_LIBRARIES} ${ARPACK_LIB} ${ARPACKPP_LIB} ${LAPACK_LIBRARIES} ${SUPERLU_LIBRARIES} ${BLAS_LIBRARIES} ${PETSC_LIB_PETSC} ${METIS_LIBRARIES} ${TCL_LIBRARY} ${XC_UTILS_BOOST_LIBRARIES} ${PYTHON_LIBRARIES} ${F2C_LIBRARY} ${GMSH_LIBRARIES} ${SUITESPARSE_LIBRARIES})
+add_definitions(-fno-strict-aliasing)
+
+## Define the wrapper libraries
+add_library(geom SHARED utility/geom/d0/export_d0_entities.cc utility/geom/d1/export_d1_entities.cc utility/geom/d2/export_d2_entities.cc utility/geom/d3/export_d3_entities.cc utility/geom/export_sys_trf.cc utility/geom/python_interface.cc)
+
+add_library(xcGnuGts SHARED utility/gnu_gts/python_interface.cc)
+
+add_library(loadCombinations SHARED utility/loadCombinations/python_interface.cc)
+
 add_library(xc SHARED utility/export_utility material/export_material_base material/uniaxial/export_material_uniaxial material/nD/export_material_nD material/section/export_material_section material/section/export_material_fiber_section  material/damage/export_material_damage domain/export_domain domain/mesh/export_domain_mesh preprocessor/export_preprocessor_handlers preprocessor/export_preprocessor_build_model  preprocessor/export_preprocessor_sets preprocessor/export_preprocessor_main solution/export_solution python_interface)
 target_link_libraries(xc ${Boost_LIBRARIES} XcBib)
 # don't prepend wrapper library name with lib
 set_target_properties(xc PROPERTIES PREFIX "" )
 
 
-INSTALL(TARGETS XcBib DESTINATION lib)
+INSTALL(TARGETS geom loadCombinations XcBib DESTINATION lib)
 #INSTALL(DIRECTORY ${DIR_FUENTES_XC}/macros/ DESTINATION lib/macros_xc)
 

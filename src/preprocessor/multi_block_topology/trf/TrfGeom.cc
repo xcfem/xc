@@ -27,8 +27,8 @@
 //TrfGeom.cc
 
 #include "TrfGeom.h"
-#include "xc_utils/src/geom/pos_vec/Pos3dArray.h"
-#include "xc_utils/src/geom/pos_vec/Pos3dArray3d.h"
+#include "utility/geom/pos_vec/Pos3dArray.h"
+#include "utility/geom/pos_vec/Pos3dArray3d.h"
 
 const Pos3dArray &XC::TrfGeom::Transform(const Pos3dArray &m) const
   {

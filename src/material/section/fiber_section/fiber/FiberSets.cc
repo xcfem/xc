@@ -28,7 +28,7 @@
 
 #include "FiberSets.h"
 #include "utility/actor/actor/MovableMap.h"
-#include "xc_utils/src/geom/d2/2d_polygons/Polygon2d.h"
+#include "utility/geom/d2/2d_polygons/Polygon2d.h"
 
 //! @brief Constructor.
 XC::FiberSets::FiberSets(void)

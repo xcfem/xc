@@ -68,8 +68,8 @@
 #include <cmath>
 
 
-#include "xc_utils/src/geom/pos_vec/Vector2d.h"
-#include "xc_utils/src/geom/pos_vec/Vector3d.h"
+#include "utility/geom/pos_vec/Vector2d.h"
+#include "utility/geom/pos_vec/Vector3d.h"
 
 double XC::Vector::VECTOR_NOT_VALID_ENTRY =0.0;
 

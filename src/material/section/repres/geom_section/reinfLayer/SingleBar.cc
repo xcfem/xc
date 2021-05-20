@@ -32,7 +32,7 @@
 #include <material/section/repres/geom_section/reinfLayer/SingleBar.h>
 #include <material/section/repres/geom_section/reinfBar/ReinfBar.h>
 
-#include "xc_utils/src/utils/text/text_string.h"
+#include "utility/utils/text/text_string.h"
 
 
 //! @brief Constructor.

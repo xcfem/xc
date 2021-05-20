@@ -28,7 +28,7 @@
 
 #include "ComputePivots.h"
 #include "material/section/fiber_section/fiber/FiberContainer.h"
-#include "xc_utils/src/geom/d1/Segment3d.h"
+#include "utility/geom/d1/Segment3d.h"
 #include "material/section/fiber_section/fiber/Fiber.h"
 #include "PivotsUltimateStrains.h"
 #include "utility/matrix/Vector.h"

@@ -41,9 +41,9 @@
 #include <material/section/repres/section/FiberSectionRepr.h>
 
 
-#include "xc_utils/src/geom/pos_vec/Pos2d.h"
-#include "xc_utils/src/geom/d2/HalfPlane2d.h"
-#include "xc_utils/src/geom/d2/2d_polygons/Polygon2d.h"
+#include "utility/geom/pos_vec/Pos2d.h"
+#include "utility/geom/d2/HalfPlane2d.h"
+#include "utility/geom/d2/2d_polygons/Polygon2d.h"
 
 //! @brief Constructor.
 XC::FiberSection3dBase::FiberSection3dBase(int tag, int classTag, int dim, const fiber_list &fiberList,XC::MaterialHandler *mat_ldr)

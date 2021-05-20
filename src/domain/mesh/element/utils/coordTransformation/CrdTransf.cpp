@@ -66,7 +66,7 @@
 #include <utility/matrix/Matrix.h>
 
 
-#include "xc_utils/src/geom/pos_vec/Pos3dArray.h"
+#include "utility/geom/pos_vec/Pos3dArray.h"
 #include "utility/matrix/ID.h"
 #include "utility/actor/actor/MovableVector.h"
 #include "utility/actor/actor/CommMetaData.h"

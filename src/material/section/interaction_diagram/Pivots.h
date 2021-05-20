@@ -32,8 +32,8 @@
 #ifndef PIVOTS_H
 #define PIVOTS_H
 
-#include "xc_utils/src/geom/pos_vec/Pos3d.h"
-#include "xc_utils/src/geom/pos_vec/Pos2d.h"
+#include "utility/geom/pos_vec/Pos3d.h"
+#include "utility/geom/pos_vec/Pos2d.h"
 
 namespace XC {
 

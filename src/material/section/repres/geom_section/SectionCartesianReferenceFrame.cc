@@ -28,7 +28,7 @@
 
 #include "SectionCartesianReferenceFrame.h"
 #include "Spot.h"
-#include "xc_utils/src/geom/pos_vec/Vector2d.h"
+#include "utility/geom/pos_vec/Vector2d.h"
 
 
 //! @brief Return the i-th axis unit vector expressed in global coordinates

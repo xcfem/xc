@@ -31,7 +31,7 @@
 #define ROTATION_H
 
 #include "TrfGeom.h"
-#include "xc_utils/src/geom/trf/Rotation3d.h"
+#include "utility/geom/trf/Rotation3d.h"
 
 namespace XC {
 

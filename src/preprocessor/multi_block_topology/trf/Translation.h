@@ -31,7 +31,7 @@
 #define TRANSLATION_H
 
 #include "TrfGeom.h"
-#include "xc_utils/src/geom/trf/Translation3d.h"
+#include "utility/geom/trf/Translation3d.h"
 
 namespace XC {
 

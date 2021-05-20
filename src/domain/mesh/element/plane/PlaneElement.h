@@ -31,10 +31,10 @@
 #define PlaneElement_h
                                                                         
 #include <domain/mesh/element/ElemWithMaterial.h>
-#include "xc_utils/src/geom/d2/Polygon3d.h"
-#include "xc_utils/src/geom/d1/Segment3d.h"
-#include "xc_utils/src/geom/pos_vec/Pos3d.h"
-#include "xc_utils/src/geom/lists/utils_list_pos3d.h"
+#include "utility/geom/d2/Polygon3d.h"
+#include "utility/geom/d1/Segment3d.h"
+#include "utility/geom/pos_vec/Pos3d.h"
+#include "utility/geom/lists/utils_list_pos3d.h"
 #include "preprocessor/Preprocessor.h"
 
 #include "domain/mesh/node/Node.h"

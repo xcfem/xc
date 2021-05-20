@@ -28,7 +28,7 @@
 
 #include "DbTagData.h"
 #include "Communicator.h"
-#include "xc_utils/src/utils/misc_utils/print_trace.h"
+#include "utility/utils/misc_utils/print_trace.h"
 
 //! @brief Constructor.
 XC::DbTagData::DbTagData(const int &sz)

@@ -37,6 +37,7 @@ packages_lib="\
     libcgal-qt5-dev             \
     libdb-dev                   \
     libf2c2-dev                 \
+    libqt5svg5-dev              \
     libglib2.0-dev              \
     libgmp3-dev                 \
     libgmsh-dev                 \
@@ -44,6 +45,7 @@ packages_lib="\
     libgtk2.0-dev               \
     libgtkgl2.0-dev             \
     libgtkglextmm-x11-1.2-dev   \
+    libgtkglext1-dev            \
     libgtkmm-2.4-dev            \
     libgts-bin                  \
     libgts-dev                  \
@@ -56,10 +58,12 @@ packages_lib="\
     libsuitesparse-dev          \
     libvtk6-dev                 \
     libx11-dev                  \
+    libX11-dev                  \
     libmetis-dev"
 apt-get install -y $packages_lib
 
 packages_dev="\
+    python-dev          \
     cimg-dev  \
     petsc-dev \
     tcl-dev"
@@ -68,6 +72,7 @@ apt-get install -y $packages_dev
 packages_python="\
     python-vtk6         \
     python-scipy        \
+    python-numpy        \
     python-sympy        \
     python-matplotlib   \
     python-pandas       \
@@ -94,3 +99,5 @@ sudo -H pip install ezdxf
 sudo -H pip install pyexcel
 sudo -H pip install pyexcel-ods
 sudo -H pip install dxfwrite # To replace with ezdxf
+# cairo installation. 
+sudo -H pip install pycairo

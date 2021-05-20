@@ -64,9 +64,9 @@
 #include "utility/actor/actor/MovableMatrix.h"
 #include <material/section/SectionForceDeformation.h>
 #include <utility/recorder/response/ElementResponse.h>
-#include "xc_utils/src/geom/pos_vec/Vector2d.h"
-#include "xc_utils/src/geom/pos_vec/Vector3d.h"
-#include "xc_utils/src/geom/coo_sys/Rect3d3dCooSys.h"
+#include "utility/geom/pos_vec/Vector2d.h"
+#include "utility/geom/pos_vec/Vector3d.h"
+#include "utility/geom/coo_sys/Rect3d3dCooSys.h"
 
 #include "material/section/ResponseId.h"
 #include "utility/matrix/Matrix.h"

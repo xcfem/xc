@@ -31,7 +31,7 @@
 #define REFLECTION_H
 
 #include "TrfGeom.h"
-#include "xc_utils/src/geom/trf/Reflection3d.h"
+#include "utility/geom/trf/Reflection3d.h"
 
 namespace XC {
 

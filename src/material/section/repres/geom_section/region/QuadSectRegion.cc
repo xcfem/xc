@@ -33,10 +33,10 @@
 #include <material/section/repres/geom_section/region/QuadSectRegion.h>
 #include <material/section/repres/cell/QuadCell.h>
 
-#include "xc_utils/src/utils/text/text_string.h"
-#include "xc_utils/src/geom/d1/Segment2d.h"
-#include "xc_utils/src/geom/d2/Grid2d.h"
-#include "xc_utils/src/geom/d2/2d_polygons/Quadrilateral2d.h"
+#include "utility/utils/text/text_string.h"
+#include "utility/geom/d1/Segment2d.h"
+#include "utility/geom/d2/Grid2d.h"
+#include "utility/geom/d2/2d_polygons/Quadrilateral2d.h"
 #include <utility/matrix/Matrix.h>
 
 // L +-----------------------+ K

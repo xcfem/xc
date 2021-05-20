@@ -30,7 +30,7 @@
 #ifndef NODELOCKERS_H
 #define NODELOCKERS_H
 
-#include "xc_utils/src/kernel/CommandEntity.h"
+#include "utility/kernel/CommandEntity.h"
 #include "domain/load/pattern/NodeLocker.h"
 #include <map>
 

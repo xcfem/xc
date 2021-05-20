@@ -30,8 +30,8 @@
 #ifndef ENTMDLRBASE_H
 #define ENTMDLRBASE_H
 
-#include "xc_utils/src/kernel/NamedEntity.h"
-#include "xc_utils/src/utils/text/LabelContainer.h"
+#include "utility/kernel/NamedEntity.h"
+#include "utility/utils/text/LabelContainer.h"
 #include "utility/actor/actor/MovableObject.h"
 
 namespace XC {

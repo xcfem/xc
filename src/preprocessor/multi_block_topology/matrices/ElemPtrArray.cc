@@ -30,7 +30,7 @@
 #include "domain/mesh/element/Element.h"
 
 
-#include "xc_utils/src/geom/pos_vec/Pos3d.h"
+#include "utility/geom/pos_vec/Pos3d.h"
 
 #include "boost/lexical_cast.hpp"
 

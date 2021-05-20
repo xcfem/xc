@@ -31,7 +31,7 @@
 #include "material/section/PrismaticBarCrossSection.h"
 
 
-#include "xc_utils/src/geom/pos_vec/Vector2d.h"
+#include "utility/geom/pos_vec/Vector2d.h"
 
 
 void XC::BeamColumnWithSectionFDTrf3d::set_transf(const CrdTransf *trf)

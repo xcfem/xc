@@ -33,9 +33,9 @@
 #define DQPTRSENTITIES_H
 
 #include "DqPtrs.h"
-#include "xc_utils/src/geom/pos_vec/Pos3d.h"
-#include "xc_utils/src/geom/pos_vec/Vector3d.h"
-#include "xc_utils/src/geom/d3/BND3d.h"
+#include "utility/geom/pos_vec/Pos3d.h"
+#include "utility/geom/pos_vec/Vector3d.h"
+#include "utility/geom/d3/BND3d.h"
 
 class GeomObj3d;
 class BND3d;

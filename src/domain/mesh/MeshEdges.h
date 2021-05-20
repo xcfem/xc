@@ -30,7 +30,7 @@
 #ifndef MeshEdges_h
 #define MeshEdges_h
 
-#include "xc_utils/src/kernel/CommandEntity.h"
+#include "utility/kernel/CommandEntity.h"
 #include "domain/mesh/MeshEdge.h"
 
 class Polyline3d;

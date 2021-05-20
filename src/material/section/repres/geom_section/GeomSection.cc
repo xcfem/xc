@@ -43,13 +43,13 @@
 
 #include "utility/matrix/Vector.h"
 #include "utility/matrix/Matrix.h"
-#include "xc_utils/src/geom/pos_vec/Dir2d.h"
-#include "xc_utils/src/geom/pos_vec/Vector2d.h"
-#include "xc_utils/src/geom/pos_vec/Pos2d.h"
-#include "xc_utils/src/geom/ref_sys/Ref2d2d.h"
-#include "xc_utils/src/geom/d2/2d_polygons/Polygon2d.h"
-#include "xc_utils/src/geom/d2/HalfPlane2d.h"
-#include "xc_utils/src/geom/d1/Segment2d.h"
+#include "utility/geom/pos_vec/Dir2d.h"
+#include "utility/geom/pos_vec/Vector2d.h"
+#include "utility/geom/pos_vec/Pos2d.h"
+#include "utility/geom/ref_sys/Ref2d2d.h"
+#include "utility/geom/d2/2d_polygons/Polygon2d.h"
+#include "utility/geom/d2/HalfPlane2d.h"
+#include "utility/geom/d1/Segment2d.h"
 
 #include "boost/lexical_cast.hpp"
 

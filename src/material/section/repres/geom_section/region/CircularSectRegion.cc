@@ -33,10 +33,10 @@
 #include <material/section/repres/geom_section/region/CircularSectRegion.h>
 #include <material/section/repres/cell/QuadCell.h>
 
-#include "xc_utils/src/utils/text/text_string.h"
-#include "xc_utils/src/geom/d2/2d_polygons/Polygon2d.h"
-#include "xc_utils/src/geom/d2/AnnulusSector2d.h"
-#include "xc_utils/src/geom/d2/Grid2d.h"
+#include "utility/utils/text/text_string.h"
+#include "utility/geom/d2/2d_polygons/Polygon2d.h"
+#include "utility/geom/d2/AnnulusSector2d.h"
+#include "utility/geom/d2/Grid2d.h"
 
 const int I= 0, J=1, K= 2, L= 3; //Index of vertices.
 const int Y= 0, Z=1; //Index of Y and Z components.

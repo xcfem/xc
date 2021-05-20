@@ -59,8 +59,8 @@
 #include <material/section/repres/geom_section/reinfLayer/StraightReinfLayer.h>
 #include <material/section/repres/geom_section/reinfBar/ReinfBar.h>
 
-#include "xc_utils/src/utils/text/text_string.h"
-#include "xc_utils/src/geom/d1/Segment2d.h"
+#include "utility/utils/text/text_string.h"
+#include "utility/geom/d1/Segment2d.h"
 
 
 XC::StraightReinfLayer::StraightReinfLayer(ListReinfLayer *owr,Material *mat)

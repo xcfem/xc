@@ -30,7 +30,7 @@
 #ifndef RayleighDampingFactors_h
 #define RayleighDampingFactors_h
 
-#include "xc_utils/src/kernel/CommandEntity.h"
+#include "utility/kernel/CommandEntity.h"
 #include "utility/actor/actor/MovableObject.h"
 
 class Pos3dArray3d;

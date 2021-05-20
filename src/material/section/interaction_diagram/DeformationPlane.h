@@ -31,7 +31,7 @@
 #define DEFORMATION_PLANE_H
 
 #include <iostream>
-#include "xc_utils/src/geom/d2/Plane.h"
+#include "utility/geom/d2/Plane.h"
 #include "utility/actor/actor/MovableObject.h"
 
 class Pos2d;

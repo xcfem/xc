@@ -27,7 +27,7 @@
 //ReferenceFrame.cc
 
 #include "ReferenceFrame.h"
-#include "xc_utils/src/geom/pos_vec/Vector3d.h"
+#include "utility/geom/pos_vec/Vector3d.h"
 
 
 //! @brief Return the $\vec{i}$ unit vector expressed in the global coordinate

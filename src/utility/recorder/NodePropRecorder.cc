@@ -30,7 +30,7 @@
 #include <domain/domain/Domain.h>
 #include <domain/mesh/node/Node.h>
 #include <domain/mesh/element/Element.h>
-#include "xc_utils/src/kernel/python_utils.h"
+#include "utility/kernel/python_utils.h"
 #include <boost/algorithm/string/predicate.hpp>
 
 //! @brief Constructor.

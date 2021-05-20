@@ -66,8 +66,8 @@
 //
 // What: "@(#) Matrix.h, revA"
 
-#include "xc_utils/src/kernel/CommandEntity.h"
-#include "xc_utils/src/matrices/m_double.h"
+#include "utility/kernel/CommandEntity.h"
+#include "utility/matrices/m_double.h"
 #include "Vector.h"
 
 namespace XC {

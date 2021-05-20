@@ -30,12 +30,12 @@
 
 #include "SectRegion.h"
 #include "PolygonSectRegion.h"
-#include "xc_utils/src/geom/d2/2d_polygons/Polygon2d.h"
-#include "xc_utils/src/geom/pos_vec/Dir2d.h"
+#include "utility/geom/d2/2d_polygons/Polygon2d.h"
+#include "utility/geom/pos_vec/Dir2d.h"
 
 #include <utility/matrix/Vector.h>
 #include <utility/matrix/Matrix.h>
-#include "xc_utils/src/geom/FT_matrix.h"
+#include "utility/geom/FT_matrix.h"
 
 //! @brief Constructor.
 XC::SectRegion::SectRegion(Material *mat)

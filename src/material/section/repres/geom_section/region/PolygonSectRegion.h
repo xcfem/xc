@@ -32,7 +32,7 @@
 
 #include <material/section/repres/geom_section/region/QuadCellRegion.h>
 #include "utility/matrix/Matrix.h"
-#include "xc_utils/src/geom/d2/2d_polygons/Polygon2d.h"
+#include "utility/geom/d2/2d_polygons/Polygon2d.h"
 
 class Polygon2d;
 

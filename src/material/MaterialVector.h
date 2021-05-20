@@ -31,7 +31,7 @@
 #define MaterialVector_h
 
 #include <vector>
-#include "xc_utils/src/kernel/CommandEntity.h"
+#include "utility/kernel/CommandEntity.h"
 #include "material/section/ResponseId.h"
 #include "utility/actor/actor/MovableID.h"
 #include "utility/matrix/Vector.h"

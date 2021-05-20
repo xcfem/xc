@@ -31,7 +31,7 @@
 #define DiscretBase_h 
 
 
-#include "xc_utils/src/kernel/NamedEntity.h"
+#include "utility/kernel/NamedEntity.h"
 
 namespace XC {
   class Material;

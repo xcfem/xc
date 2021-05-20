@@ -59,14 +59,14 @@
 #include "material/section/repres/geom_section/reinfBar/ReinfBar.h"
 
 
-#include "xc_utils/src/matrices/m_double.h"
+#include "utility/matrices/m_double.h"
 #include "utility/matrix/Vector.h"
 #include "utility/matrix/Matrix.h"
 #include "ListReinfLayer.h"
 #include "SingleBar.h"
-#include "xc_utils/src/geom/pos_vec/Pos2d.h"
-#include "xc_utils/src/geom/d2/2d_polygons/Polygon2d.h"
-#include "xc_utils/src/geom/d2/HalfPlane2d.h"
+#include "utility/geom/pos_vec/Pos2d.h"
+#include "utility/geom/d2/2d_polygons/Polygon2d.h"
+#include "utility/geom/d2/HalfPlane2d.h"
 
 
 #include "material/section/repres/geom_section/GeomSection.h"

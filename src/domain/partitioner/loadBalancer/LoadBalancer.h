@@ -64,7 +64,7 @@
 #ifndef LoadBalancer_h
 #define LoadBalancer_h
 
-#include "xc_utils/src/kernel/CommandEntity.h"
+#include "utility/kernel/CommandEntity.h"
 
 namespace XC {
 class Vector;

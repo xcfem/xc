@@ -30,7 +30,7 @@
 #ifndef CrossSectionProperties1d_h
 #define CrossSectionProperties1d_h
 
-#include "xc_utils/src/kernel/CommandEntity.h"
+#include "utility/kernel/CommandEntity.h"
 #include "utility/actor/actor/MovableObject.h"
 
 namespace XC {

@@ -27,8 +27,8 @@
 //CrossSectionProperties2d.cc
 
 #include <material/section/repres/CrossSectionProperties2d.h>
-#include "xc_utils/src/utils/misc_utils/inertia.h"
-#include "xc_utils/src/geom/ref_sys/PrincipalAxesOfInertia2D.h"
+#include "utility/utils/misc_utils/inertia.h"
+#include "utility/geom/ref_sys/PrincipalAxesOfInertia2D.h"
 #include "domain/mesh/element/utils/Information.h"
 #include "material/section/ResponseId.h"
 

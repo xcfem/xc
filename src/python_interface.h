@@ -37,20 +37,20 @@
 #include <boost/python/docstring_options.hpp>
 #include <boost/python/implicit.hpp>
 #include "utility/actor/objectBroker/all_includes.h"
-#include "xc_utils/src/geom/d1/Line2d.h"
-#include "xc_utils/src/geom/d2/HalfPlane2d.h"
-#include "xc_utils/src/geom/d2/Grid2d.h"
-#include "xc_utils/src/geom/d2/BND2d.h"
-#include "xc_utils/src/geom/d2/2d_polygons/Quadrilateral2d.h"
-#include "xc_utils/src/geom/d1/Segment2d.h"
-#include "xc_utils/src/geom/d1/Polyline3d.h"
-#include "xc_utils/src/geom/pos_vec/SlidingVectorsSystem3d.h"
-#include "xc_utils/src/geom/pos_vec/Pos3dArray3d.h"
-#include "xc_utils/src/gnu_gts/TriangleMap.h"
+#include "utility/geom/d1/Line2d.h"
+#include "utility/geom/d2/HalfPlane2d.h"
+#include "utility/geom/d2/Grid2d.h"
+#include "utility/geom/d2/BND2d.h"
+#include "utility/geom/d2/2d_polygons/Quadrilateral2d.h"
+#include "utility/geom/d1/Segment2d.h"
+#include "utility/geom/d1/Polyline3d.h"
+#include "utility/geom/pos_vec/SlidingVectorsSystem3d.h"
+#include "utility/geom/pos_vec/Pos3dArray3d.h"
+#include "utility/gnu_gts/TriangleMap.h"
 
 #include "domain/domain/single/SingleDomNodIter.h"
 
-#include "xc_utils/src/geom/pos_vec/Vector3d.h"
+#include "utility/geom/pos_vec/Vector3d.h"
 
 //Physical properties.
 typedef XC::PhysicalProperties<XC::UniaxialMaterial> PhysicalProperties_UMat;

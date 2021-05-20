@@ -29,11 +29,11 @@
 #include "domain/mesh/element/Element.h"
 #include "domain/mesh/element/utils/NodePtrsWithIDs.h"
 #include "preprocessor/multi_block_topology/trf/TrfGeom.h"
-#include "xc_utils/src/geom/d1/Polyline3d.h"
+#include "utility/geom/d1/Polyline3d.h"
 #include "domain/mesh/node/Node.h"
 #include "domain/mesh/MeshEdges.h"
 #include <boost/algorithm/string/find.hpp>
-#include "xc_utils/src/geom/d3/BND3d.h"
+#include "utility/geom/d3/BND3d.h"
 
 //! @brief Constructor.
 XC::DqPtrsElem::DqPtrsElem(CommandEntity *owr)

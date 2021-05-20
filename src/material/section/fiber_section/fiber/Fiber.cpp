@@ -65,7 +65,7 @@
 #include "boost/any.hpp"
 #include "material/uniaxial/UniaxialMaterial.h"
 
-#include "xc_utils/src/geom/pos_vec/Pos2d.h"
+#include "utility/geom/pos_vec/Pos2d.h"
 
 //! @brief Constructor.
 XC::Fiber::Fiber(int tag, int classTag)

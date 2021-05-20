@@ -30,7 +30,7 @@
 #ifndef INTERACTION_DIAGRAM_H
 #define INTERACTION_DIAGRAM_H
 
-#include "xc_utils/src/geom/d2/Trihedron.h"
+#include "utility/geom/d2/Trihedron.h"
 #include <set>
 #include <deque>
 #include "ClosedTriangleMesh.h"

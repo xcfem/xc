@@ -15,10 +15,95 @@ START=$(date +%s.%N)
 
 # Misc. tests
 echo "$BLEU" "Misc. tests." "$NORMAL"
-
+python tests/test_evalPy.py
+python tests/test_execPy.py
+python tests/utility/miscUtils/testStairCaseFunction.py
+python tests/utility/miscUtils/test_linear_interpolation.py
+python tests/utility/miscUtils/test_remove_accents.py
 echo "$BLEU" "  Geometry tests." "$NORMAL"
+echo "$BLEU" "    Vectors." "$NORMAL"
+python tests/utility/geom/vector2d_test_01.py
+python tests/utility/geom/vector2d_test_02.py
+python tests/utility/geom/vector3d_test_01.py
+python tests/utility/geom/vector3d_test_02.py
+python tests/utility/geom/vector3d_angle_test_01.py
 echo "$BLEU" "    Points." "$NORMAL"
+python tests/utility/geom/pos2d_test_01.py
+python tests/utility/geom/pos3d_test_01.py
+python tests/utility/geom/pos3d_list_test_01.py
 python tests/utility/geom/closest_pair_of_points.py
+echo "$BLEU" "    Lines, rays and segments." "$NORMAL"
+python tests/utility/geom/line2d_test_01.py
+python tests/utility/geom/line3d_test_01.py
+python tests/utility/geom/line2d_intersection_test.py
+python tests/utility/geom/segment2d_test_01.py
+python tests/utility/geom/segment2d_test_02.py
+python tests/utility/geom/line_segment_intersection_test.py
+python tests/utility/geom/segment3d_test_01.py
+python tests/utility/geom/segment3d_test_02.py
+python tests/utility/geom/ray2d_test.py
+echo "$BLEU" "    Polylines." "$NORMAL"
+python tests/utility/geom/pos2d_list_test_01.py
+python tests/utility/geom/polyline2d_test_01.py
+python tests/utility/geom/polyline2d_test_02.py
+python tests/utility/geom/polyline3d_test_01.py
+python tests/utility/geom/polyline3d_test_02.py
+echo "$BLEU" "    Polygons." "$NORMAL"
+python tests/utility/geom/polygon2D_test_2d_01.py
+python tests/utility/geom/polygon2D_test_2d_02.py
+python tests/utility/geom/polygon2D_test_2d_03.py
+python tests/utility/geom/polygon2D_test_2d_04.py
+python tests/utility/geom/polygon2D_test_2d_05.py
+python tests/utility/geom/polygon2D_test_2d_06.py
+python tests/utility/geom/polygon2D_test_2d_07.py
+python tests/utility/geom/polygon2D_test_2d_08.py
+python tests/utility/geom/polygon2D_test_2d_09.py
+python tests/utility/geom/polygon2D_test_2d_10.py
+python tests/utility/geom/polygon2D_test_2d_11.py
+python tests/utility/geom/polygon3D_test_01.py
+python tests/utility/geom/polygon3D_test_02.py
+python tests/utility/geom/polygon3D_test_03.py
+python tests/utility/geom/polygon3D_test_04.py
+echo "$BLEU" "    Alpha shapes." "$NORMAL"
+python tests/utility/geom/basic_alpha_shape2d_test.py
+echo "$BLEU" "    Circles." "$NORMAL"
+python tests/utility/geom/circle2d_test_01.py
+python tests/utility/geom/circle2d_test_02.py
+echo "$BLEU" "    Sliding vectors." "$NORMAL"
+python tests/utility/geom/sliding_vector_3d_test_01.py
+python tests/utility/geom/sliding_vector_3d_test_02.py
+python tests/utility/geom/sliding_vector_3d_test_03.py
+python tests/utility/geom/sliding_vectors_system_2d_test_01.py
+python tests/utility/geom/sliding_vectors_system_2d_test_02.py
+python tests/utility/geom/sliding_vectors_system_2d_test_03.py
+python tests/utility/geom/sliding_vectors_system_2d_test_04.py
+python tests/utility/geom/sliding_vectors_system_2d_test_05.py
+python tests/utility/geom/sliding_vectors_system_3d_test_01.py
+python tests/utility/geom/sliding_vectors_system_3d_test_02.py
+python tests/utility/geom/sliding_vectors_system_3d_test_03.py
+python tests/utility/geom/sliding_vectors_system_3d_test_04.py
+python tests/utility/geom/sliding_vectors_system_3d_test_05.py
+echo "$BLEU" "    Planes." "$NORMAL"
+python tests/utility/geom/plane_test_01.py
+python tests/utility/geom/plane_test_02.py
+python tests/utility/geom/plane_test_03.py
+#python tests/utility/geom/plane_test_04.py
+python tests/utility/geom/plane_test_05.py
+# echo "$BLEU" "  3D half spaces." "$NORMAL"
+# python tests/utility/geom/halfspace3d_test_01.py
+# python tests/utility/geom/halfspace3d_test_02.py
+# python tests/utility/geom/halfspace3d_test_03.py
+# python tests/utility/geom/halfspace3d_test_04.py
+echo "$BLEU" "    Reference systems." "$NORMAL"
+python tests/utility/geom/coosys_test_01.py
+python tests/utility/geom/refsys3d3d_test_01.py
+python tests/utility/geom/refsys2d3d_test_01.py
+echo "$BLEU" "    Transformations." "$NORMAL"
+python tests/utility/geom/rotation2d_test_01.py
+echo "$BLEU" "    Mechanical properties." "$NORMAL"
+python tests/utility/geom/principal_axes_of_inertia_2d_test_01.py
+echo "$BLEU" "    DXF reading." "$NORMAL"
+python tests/utility/geom/ezdxf_test_01.py
 
 ## Soil mechanics (basic utilities)
 echo "$BLEU" "  Soil mechanics (basic utilities)." "$NORMAL"

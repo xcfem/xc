@@ -31,8 +31,8 @@
 #ifndef NODEPTRARRAY3D_H
 #define NODEPTRARRAY3D_H
 
-#include "xc_utils/src/kernel/CommandEntity.h"
-#include "xc_utils/src/functions/algebra/ExprAlgebra.h"
+#include "utility/kernel/CommandEntity.h"
+#include "utility/functions/algebra/ExprAlgebra.h"
 #include "NodePtrArray.h"
 #include "PtrArray3dBase.h"
 #include "utility/matrix/Vector.h"

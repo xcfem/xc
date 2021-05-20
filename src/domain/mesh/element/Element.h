@@ -69,7 +69,7 @@
 #include "domain/mesh/element/utils/RayleighDampingFactors.h"
 #include "utility/matrix/Matrix.h"
 #include "domain/mesh/node/NodeTopology.h"
-#include "xc_utils/src/matrices/3d_arrays/BoolArray3d.h"
+#include "utility/matrices/3d_arrays/BoolArray3d.h"
 
 class Pos3dArray3d;
 class Pos2d;

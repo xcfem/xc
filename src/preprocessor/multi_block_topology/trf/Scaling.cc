@@ -29,9 +29,9 @@
 #include "Scaling.h"
 #include "preprocessor/multi_block_topology/MultiBlockTopology.h"
 #include "preprocessor/multi_block_topology/entities/0d/Pnt.h"
-#include "xc_utils/src/geom/pos_vec/Pos3d.h"
-#include "xc_utils/src/geom/pos_vec/Vector3d.h"
-#include "xc_utils/src/geom/d1/Line3d.h"
+#include "utility/geom/pos_vec/Pos3d.h"
+#include "utility/geom/pos_vec/Vector3d.h"
+#include "utility/geom/d1/Line3d.h"
 #include "domain/mesh/node/Node.h"
 #include "domain/mesh/element/Element.h"
 

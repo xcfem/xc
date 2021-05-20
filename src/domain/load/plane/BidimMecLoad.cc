@@ -34,7 +34,7 @@
 #include "domain/mesh/element/utils/coordTransformation/CrdTransf.h"
 #include "utility/actor/actor/MovableVector.h"
 #include "domain/mesh/node/Node.h"
-#include "xc_utils/src/geom/pos_vec/SlidingVectorsSystem3d.h"
+#include "utility/geom/pos_vec/SlidingVectorsSystem3d.h"
 
 XC::BidimMecLoad::BidimMecLoad(int tag, int classTag, const ID &theElementTags)
   :BidimLoad(tag, classTag, theElementTags) {}

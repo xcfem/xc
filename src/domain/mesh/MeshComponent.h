@@ -31,7 +31,7 @@
 #define MeshComponent_h
 
 #include "domain/component/ContinuaReprComponent.h"
-#include "xc_utils/src/utils/text/LabelContainer.h"
+#include "utility/utils/text/LabelContainer.h"
 
 class Pos3d;
 

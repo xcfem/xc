@@ -29,7 +29,7 @@
 #include "Segment.h"
 #include "GeomSection.h"
 #include "Spot.h"
-#include "xc_utils/src/geom/d2/BND2d.h"
+#include "utility/geom/d2/BND2d.h"
 
 #include "vtkCellType.h"
 

@@ -29,11 +29,11 @@
 #include "QuadSurface.h"
 #include "preprocessor/multi_block_topology/entities/0d/Pnt.h"
 #include "preprocessor/multi_block_topology/MultiBlockTopology.h"
-#include "xc_utils/src/geom/pos_vec/Vector3d.h"
-#include "xc_utils/src/geom/pos_vec/Pos3dArray.h"
+#include "utility/geom/pos_vec/Vector3d.h"
+#include "utility/geom/pos_vec/Pos3dArray.h"
 #include "domain/mesh/node/Node.h"
 #include "domain/mesh/element/Element.h"
-#include "xc_utils/src/matrices/TMatrix.h"
+#include "utility/matrices/TMatrix.h"
 #include "preprocessor/Preprocessor.h"
 
 //! @brief Constructor.

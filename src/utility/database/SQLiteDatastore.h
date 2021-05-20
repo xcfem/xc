@@ -31,7 +31,7 @@
 #define SQLiteDatastore_h
 
 #include "DBDatastore.h"
-#include "xc_utils/src/sqlite/SqLiteDatabase.h"
+#include "utility/sqlite/SqLiteDatabase.h"
 
 namespace XC {
 //! @ingroup Utils

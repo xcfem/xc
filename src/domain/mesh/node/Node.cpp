@@ -71,12 +71,12 @@
 #include "domain/constraints/SFreedom_Constraint.h"
 
 
-#include "xc_utils/src/geom/pos_vec/Pos2d.h"
-#include "xc_utils/src/geom/pos_vec/Pos3d.h"
-#include "xc_utils/src/geom/pos_vec/Vector3d.h"
-#include "xc_utils/src/geom/pos_vec/SlidingVectorsSystem3d.h"
-#include "xc_utils/src/geom/d2/GeomObj2d.h"
-#include "xc_utils/src/geom/d3/GeomObj3d.h"
+#include "utility/geom/pos_vec/Pos2d.h"
+#include "utility/geom/pos_vec/Pos3d.h"
+#include "utility/geom/pos_vec/Vector3d.h"
+#include "utility/geom/pos_vec/SlidingVectorsSystem3d.h"
+#include "utility/geom/d2/GeomObj2d.h"
+#include "utility/geom/d3/GeomObj3d.h"
 #include "preprocessor/multi_block_topology/trf/TrfGeom.h"
 #include "preprocessor/Preprocessor.h"
 #include "preprocessor/prep_handlers/LoadHandler.h"
@@ -89,7 +89,7 @@
 #include "domain/mesh/element/Element.h"
 #include "domain/mesh/element/ElementIter.h"
 
-#include "xc_utils/src/kernel/python_utils.h"
+#include "utility/kernel/python_utils.h"
 #include "utility/actor/actor/CommMetaData.h"
 
 #include "utility/tagged/DefaultTag.h"

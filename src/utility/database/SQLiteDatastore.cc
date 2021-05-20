@@ -27,7 +27,7 @@
 // SQLiteDatastore.cpp
 
 #include <utility/database/SQLiteDatastore.h>
-#include "xc_utils/src/sqlite/SqLiteQuery.h"
+#include "utility/sqlite/SqLiteQuery.h"
 #include <utility/matrix/Vector.h>
 #include <utility/matrix/Matrix.h>
 #include <utility/matrix/ID.h>

@@ -39,13 +39,13 @@
 #include "material/section/ResponseId.h"
 #include "preprocessor/prep_handlers/MaterialHandler.h"
 #include "material/section/interaction_diagram/InteractionDiagram.h"
-#include "xc_utils/src/geom/d1/Line3d.h"
-#include "xc_utils/src/geom/d1/Line2d.h"
-#include "xc_utils/src/geom/d2/HalfPlane2d.h"
+#include "utility/geom/d1/Line3d.h"
+#include "utility/geom/d1/Line2d.h"
+#include "utility/geom/d2/HalfPlane2d.h"
 #include "utility/actor/actor/MovableMatrix.h"
 #include "utility/actor/actor/MatrixCommMetaData.h"
-#include "xc_utils/src/geom/ref_sys/PrincipalAxesOfInertia2D.h"
-#include "xc_utils/src/utils/misc_utils/inertia.h"
+#include "utility/geom/ref_sys/PrincipalAxesOfInertia2D.h"
+#include "utility/utils/misc_utils/inertia.h"
 
 //! @brief Constructor.
 XC::PrismaticBarCrossSection::PrismaticBarCrossSection(int tag, int classTag,MaterialHandler *mat_ldr)

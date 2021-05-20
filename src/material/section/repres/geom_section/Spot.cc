@@ -29,8 +29,8 @@
 #include "Spot.h"
 #include "Axis.h"
 #include "SectionReferenceFrame.h"
-#include "xc_utils/src/geom/pos_vec/Vector2d.h"
-#include "xc_utils/src/geom/d2/BND2d.h"
+#include "utility/geom/pos_vec/Vector2d.h"
+#include "utility/geom/d2/BND2d.h"
 
 
 

@@ -27,15 +27,15 @@
 //ClosedTriangleMesh.cc
 
 #include "ClosedTriangleMesh.h"
-#include "xc_utils/src/geom/d2/Triang3dMesh.h"
-#include "xc_utils/src/geom/d2/Plane.h"
-#include "xc_utils/src/geom/d2/Triangle3d.h"
-#include "xc_utils/src/utils/misc_utils/mchne_eps.h"
-#include "xc_utils/src/geom/d3/BND3d.h"
-#include "xc_utils/src/geom/d1/Segment3d.h"
+#include "utility/geom/d2/Triang3dMesh.h"
+#include "utility/geom/d2/Plane.h"
+#include "utility/geom/d2/Triangle3d.h"
+#include "utility/utils/misc_utils/mchne_eps.h"
+#include "utility/geom/d3/BND3d.h"
+#include "utility/geom/d1/Segment3d.h"
 #include "utility/matrix/Vector.h"
 #include "utility/matrix/Matrix.h"
-#include "xc_utils/src/gnu_gts/TriangleMap.h"
+#include "utility/gnu_gts/TriangleMap.h"
 
 XC::ClosedTriangleMesh::iterator XC::ClosedTriangleMesh::begin(void) { return trihedrons.begin(); }
 XC::ClosedTriangleMesh::iterator XC::ClosedTriangleMesh::end(void) { return trihedrons.end(); }

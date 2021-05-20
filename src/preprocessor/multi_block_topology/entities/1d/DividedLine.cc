@@ -28,8 +28,8 @@
 
 #include "DividedLine.h"
 #include "preprocessor/multi_block_topology/entities/0d/Pnt.h"
-#include "xc_utils/src/geom/d3/BND3d.h"
-#include "xc_utils/src/geom/pos_vec/Pos3dArray.h"
+#include "utility/geom/d3/BND3d.h"
+#include "utility/geom/pos_vec/Pos3dArray.h"
 
 #include "domain/mesh/node/Node.h"
 #include "domain/mesh/element/Element.h"

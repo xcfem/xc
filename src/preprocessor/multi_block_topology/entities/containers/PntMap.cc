@@ -28,9 +28,9 @@
 
 #include "PntMap.h"
 #include "preprocessor/Preprocessor.h"
-#include "xc_utils/src/geom/pos_vec/Vector3d.h"
-#include "xc_utils/src/geom/d2/Plane.h"
-#include "xc_utils/src/geom/d1/Line3d.h"
+#include "utility/geom/pos_vec/Vector3d.h"
+#include "utility/geom/d2/Plane.h"
+#include "utility/geom/d1/Line3d.h"
 #include "domain/mesh/node/Node.h"
 #include "domain/mesh/element/Element.h"
 

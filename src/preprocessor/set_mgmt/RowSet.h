@@ -31,7 +31,7 @@
 #define ROWSET_H
 
 #include "SetEstruct.h"
-#include "xc_utils/src/matrices/3d_arrays/Array3dRange.h"
+#include "utility/matrices/3d_arrays/Array3dRange.h"
 
 namespace XC {
 

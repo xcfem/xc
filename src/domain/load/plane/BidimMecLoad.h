@@ -32,7 +32,7 @@
 
 
 #include "BidimLoad.h"
-#include "xc_utils/src/geom/pos_vec/Pos3d.h"
+#include "utility/geom/pos_vec/Pos3d.h"
 class SlidingVectorsSystem3d;
 
 namespace XC {

@@ -31,7 +31,7 @@
 #define SPOT_H
 
 #include "EntGeomSection.h"
-#include "xc_utils/src/geom/pos_vec/Pos2d.h"
+#include "utility/geom/pos_vec/Pos2d.h"
 
 class BND2d;
 

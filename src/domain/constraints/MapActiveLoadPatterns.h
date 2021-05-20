@@ -31,7 +31,7 @@
 #ifndef MapActiveLoadPatterns_h
 #define MapActiveLoadPatterns_h
 
-#include "xc_utils/src/kernel/CommandEntity.h"
+#include "utility/kernel/CommandEntity.h"
 #include <map>
 
 

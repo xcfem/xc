@@ -31,12 +31,12 @@
 #include "preprocessor/multi_block_topology/entities/1d/Line.h"
 #include "CircularArc.h"
 #include "preprocessor/Preprocessor.h"
-#include "xc_utils/src/geom/d3/BND3d.h"
-#include "xc_utils/src/geom/d1/Segment3d.h"
-#include "xc_utils/src/geom/d1/Polyline3d.h"
+#include "utility/geom/d3/BND3d.h"
+#include "utility/geom/d1/Segment3d.h"
+#include "utility/geom/d1/Polyline3d.h"
 
-#include "xc_utils/src/geom/pos_vec/Pos3dArray.h"
-#include "xc_utils/src/utils/text/text_string.h"
+#include "utility/geom/pos_vec/Pos3dArray.h"
+#include "utility/utils/text/text_string.h"
 #include "domain/mesh/node/Node.h"
 #include "domain/mesh/element/Element.h"
 

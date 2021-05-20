@@ -33,7 +33,7 @@
 #include <material/section/PrismaticBarCrossSection.h>
 #include "material/section/fiber_section/fiber/FiberContainer.h"
 #include "material/section/fiber_section/fiber/FiberSets.h"
-#include "xc_utils/src/geom/GeomObj.h"
+#include "utility/geom/GeomObj.h"
 #include <material/section/CrossSectionKR.h>
 
 class Polygon2d;

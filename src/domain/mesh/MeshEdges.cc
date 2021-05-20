@@ -27,7 +27,7 @@
 //MeshEdges.cpp
 
 #include "MeshEdges.h"
-#include "xc_utils/src/geom/d1/Polyline3d.h"
+#include "utility/geom/d1/Polyline3d.h"
 #include "domain/mesh/node/Node.h"
 #include <set>
 

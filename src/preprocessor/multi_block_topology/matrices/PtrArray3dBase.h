@@ -31,8 +31,8 @@
 #ifndef PTRARRAY3DBASE_H
 #define PTRARRAY3DBASE_H
 
-#include "xc_utils/src/matrices/3d_arrays/Array3dBase.h"
-#include "xc_utils/src/kernel/CommandEntity.h"
+#include "utility/matrices/3d_arrays/Array3dBase.h"
+#include "utility/kernel/CommandEntity.h"
 
 namespace XC{
 

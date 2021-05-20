@@ -28,8 +28,8 @@
 
 #include "BeamUniformLoad.h"
 #include "domain/mesh/element/Element1D.h"
-#include "xc_utils/src/geom/pos_vec/SlidingVectorsSystem3d.h"
-#include "xc_utils/src/geom/pos_vec/SlidingVector3d.h"
+#include "utility/geom/pos_vec/SlidingVectorsSystem3d.h"
+#include "utility/geom/pos_vec/SlidingVector3d.h"
 #include "domain/mesh/element/utils/coordTransformation/CrdTransf.h"
 
 //! @brief Constructor.

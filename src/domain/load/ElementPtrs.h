@@ -30,7 +30,7 @@
 #ifndef ElementPtrs_h
 #define ElementPtrs_h
 
-#include "xc_utils/src/kernel/CommandEntity.h"
+#include "utility/kernel/CommandEntity.h"
 #include <vector>
 
 namespace XC {

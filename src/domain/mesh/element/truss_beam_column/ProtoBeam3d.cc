@@ -29,7 +29,7 @@
 #include "ProtoBeam3d.h"
 
 #include "material/section/elastic_section/BaseElasticSection3d.h"
-#include "xc_utils/src/geom/pos_vec/Vector2d.h"
+#include "utility/geom/pos_vec/Vector2d.h"
 #include "material/section/repres/CrossSectionProperties3d.h"
 
 //! @brief Set values to section mass properties.

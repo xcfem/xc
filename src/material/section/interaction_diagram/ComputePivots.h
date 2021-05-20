@@ -32,7 +32,7 @@
 #ifndef COMPUTEPIVOTS_H
 #define COMPUTEPIVOTS_H
 
-#include "xc_utils/src/geom/ref_sys/Ref3d3d.h"
+#include "utility/geom/ref_sys/Ref3d3d.h"
 
 namespace XC {
 

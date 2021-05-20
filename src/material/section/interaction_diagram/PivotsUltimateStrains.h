@@ -30,7 +30,7 @@
 #ifndef PIVOTSULTIMATESTRAINS_H
 #define PIVOTSULTIMATESTRAINS_H
 
-#include "xc_utils/src/kernel/CommandEntity.h"
+#include "utility/kernel/CommandEntity.h"
 
 namespace XC {
 

@@ -30,8 +30,8 @@
 #ifndef FiberPtrDeque_h
 #define FiberPtrDeque_h
 
-#include "xc_utils/src/kernel/CommandEntity.h"
-#include "xc_utils/src/geom/GeomObj.h"
+#include "utility/kernel/CommandEntity.h"
+#include "utility/geom/GeomObj.h"
 #include "utility/actor/actor/MovableObject.h"
 #include <deque>
 

@@ -31,7 +31,7 @@
 #define PropRecorder_h
 
 #include <utility/recorder/DomainRecorderBase.h>
-#include "xc_utils/src/kernel/python_utils.h"
+#include "utility/kernel/python_utils.h"
 
 namespace XC {
 

@@ -33,7 +33,7 @@
 #include <string>
 #include <vector>
 
-#include "xc_utils/src/kernel/CommandEntity.h"
+#include "utility/kernel/CommandEntity.h"
 
 namespace XC {
 //! @ingroup PYMat

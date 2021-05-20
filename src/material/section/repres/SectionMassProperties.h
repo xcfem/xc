@@ -30,7 +30,7 @@
 #ifndef SectionMassProperties_h 
 #define SectionMassProperties_h 
 
-#include "xc_utils/src/kernel/CommandEntity.h"
+#include "utility/kernel/CommandEntity.h"
 
 class Pos2d;
 class Line2d;

@@ -64,12 +64,12 @@
 #include <utility/matrix/Vector.h>
 #include <domain/mesh/node/Node.h>
 
-#include "xc_utils/src/geom/pos_vec/Pos3dArray.h"
-#include "xc_utils/src/geom/pos_vec/Vector2d.h"
-#include "xc_utils/src/geom/pos_vec/Vector3d.h"
-#include "xc_utils/src/geom/ref_sys/Ref3d3d.h"
+#include "utility/geom/pos_vec/Pos3dArray.h"
+#include "utility/geom/pos_vec/Vector2d.h"
+#include "utility/geom/pos_vec/Vector3d.h"
+#include "utility/geom/ref_sys/Ref3d3d.h"
 #include "utility/actor/actor/MovableMatrix.h"
-#include "xc_utils/src/matrices/giros.h"
+#include "utility/matrices/giros.h"
 
 XC::Vector XC::CrdTransf3d::vectorI(3);
 XC::Vector XC::CrdTransf3d::vectorJ(3);

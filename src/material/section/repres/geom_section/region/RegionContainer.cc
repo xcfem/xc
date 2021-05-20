@@ -33,16 +33,16 @@
 #include "material/uniaxial/UniaxialMaterial.h" 
 #include "preprocessor/prep_handlers/MaterialHandler.h"
 #include "utility/matrix/Vector.h"
-#include "xc_utils/src/geom/pos_vec/Dir2d.h"
-#include "xc_utils/src/geom/pos_vec/Vector2d.h"
-#include "xc_utils/src/geom/pos_vec/Pos2d.h"
-#include "xc_utils/src/geom/ref_sys/Ref2d2d.h"
+#include "utility/geom/pos_vec/Dir2d.h"
+#include "utility/geom/pos_vec/Vector2d.h"
+#include "utility/geom/pos_vec/Pos2d.h"
+#include "utility/geom/ref_sys/Ref2d2d.h"
 
 
 
-#include "xc_utils/src/geom/d2/BND2d.h"
-#include "xc_utils/src/geom/d2/2d_polygons/Polygon2d.h"
-#include "xc_utils/src/geom/d2/2d_polygons/polygon2d_bool_op.h"
+#include "utility/geom/d2/BND2d.h"
+#include "utility/geom/d2/2d_polygons/Polygon2d.h"
+#include "utility/geom/d2/2d_polygons/polygon2d_bool_op.h"
 
 //! @brief Liberta todas las pociciones.
 void XC::RegionContainer::free_mem(void)

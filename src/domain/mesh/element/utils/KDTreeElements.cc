@@ -28,7 +28,7 @@
 
 #include "KDTreeElements.h"
 #include "domain/mesh/element/Element.h"
-#include "xc_utils/src/geom/pos_vec/Pos3d.h"
+#include "utility/geom/pos_vec/Pos3d.h"
 
 //! @brief Constructor.
 XC::ElemPos::ElemPos(const Element &e)

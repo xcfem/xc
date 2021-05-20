@@ -30,7 +30,7 @@
 #ifndef MAPSOLUMETHOD_H
 #define MAPSOLUMETHOD_H
 
-#include "xc_utils/src/kernel/CommandEntity.h"
+#include "utility/kernel/CommandEntity.h"
 #include "utility/handler/DataOutputHandler.h"
 #include "SolutionStrategy.h"
 

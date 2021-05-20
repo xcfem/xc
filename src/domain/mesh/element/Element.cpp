@@ -75,9 +75,9 @@
 #include "boost/any.hpp"
 
 
-#include "xc_utils/src/geom/pos_vec/Pos3dArray3d.h"
-#include "xc_utils/src/geom/pos_vec/Vector3d.h"
-#include "xc_utils/src/geom/coo_sys/Rect3d3dCooSys.h"
+#include "utility/geom/pos_vec/Pos3dArray3d.h"
+#include "utility/geom/pos_vec/Vector3d.h"
+#include "utility/geom/coo_sys/Rect3d3dCooSys.h"
 #include "material/Material.h"
 #include "utility/matrix/DqMatrices.h"
 #include "utility/matrix/DqVectors.h"

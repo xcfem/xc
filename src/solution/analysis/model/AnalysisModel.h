@@ -67,7 +67,7 @@
 // What: "@(#) AnalysisModel.h, revA"
 
 #include <utility/actor/actor/MovableObject.h>
-#include "xc_utils/src/kernel/CommandEntity.h"
+#include "utility/kernel/CommandEntity.h"
 #include "solution/graph/graph/DOF_Graph.h"
 #include "solution/graph/graph/DOF_GroupGraph.h"
 #include "utility/tagged/storage/ArrayOfTaggedObjects.h"

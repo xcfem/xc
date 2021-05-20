@@ -64,7 +64,7 @@
 #include "utility/actor/actor/MovableVectors.h"
 
 
-#include "xc_utils/src/geom/d2/Polygon3d.h"
+#include "utility/geom/d2/Polygon3d.h"
 #include "preprocessor/Preprocessor.h"
 #include "preprocessor/prep_handlers/LoadHandler.h"
 #include "utility/actor/actor/MatrixCommMetaData.h"

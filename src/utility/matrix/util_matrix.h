@@ -29,7 +29,7 @@
 #ifndef UTIL_MATRIX_H
 #define UTIL_MATRIX_H
 
-#include "xc_utils/src/matrices/m_double.h"
+#include "utility/matrices/m_double.h"
 
 namespace XC {
 

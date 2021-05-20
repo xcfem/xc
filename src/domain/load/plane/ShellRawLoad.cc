@@ -33,8 +33,8 @@
 #include "domain/mesh/element/plane/shell/ShellMITC4Base.h"
 #include "utility/matrix/Matrix.h"
 #include "utility/matrix/ID.h"
-#include "xc_utils/src/geom/pos_vec/SlidingVectorsSystem3d.h"
-#include "xc_utils/src/geom/pos_vec/SlidingVector3d.h"
+#include "utility/geom/pos_vec/SlidingVectorsSystem3d.h"
+#include "utility/geom/pos_vec/SlidingVector3d.h"
 
 //! @brief Default constructor.
 XC::ShellRawLoad::ShellRawLoad(int tag)

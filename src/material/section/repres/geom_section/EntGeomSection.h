@@ -30,7 +30,7 @@
 #ifndef ENTGEOMSECTION_H
 #define ENTGEOMSECTION_H
 
-#include "xc_utils/src/kernel/NamedEntity.h"
+#include "utility/kernel/NamedEntity.h"
 
 namespace XC {
 class GeomSection;

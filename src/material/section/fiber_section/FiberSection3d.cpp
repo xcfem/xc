@@ -66,7 +66,7 @@
 #include <material/section/repres/section/FiberSectionRepr.h>
 
 #include "material/section/ResponseId.h"
-#include "xc_utils/src/geom/d2/2d_polygons/Polygon2d.h"
+#include "utility/geom/d2/2d_polygons/Polygon2d.h"
 
 //! @brief Constructor (it's used in FiberSectionShear3d).
 XC::FiberSection3d::FiberSection3d(int tag,int classTag,MaterialHandler *mat_ldr)

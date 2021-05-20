@@ -32,7 +32,7 @@
 
 
 #include "utility/actor/actor/DistributedObj.h"
-#include "xc_utils/src/kernel/CommandEntity.h"
+#include "utility/kernel/CommandEntity.h"
 #include <vector>
 
 namespace XC {

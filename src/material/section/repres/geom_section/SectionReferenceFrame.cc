@@ -27,7 +27,7 @@
 //SectionReferenceFrame.cc
 
 #include "SectionReferenceFrame.h"
-#include "xc_utils/src/geom/pos_vec/Vector2d.h"
+#include "utility/geom/pos_vec/Vector2d.h"
 
 
 //! @brief Returns the $\vec{i}$ unit vector expressed in global coordinates

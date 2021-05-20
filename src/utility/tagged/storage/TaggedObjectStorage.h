@@ -61,7 +61,7 @@
 //
 // What: "@(#) TaggedObjectStorage.h, revA"
 
-#include "xc_utils/src/kernel/CommandEntity.h"
+#include "utility/kernel/CommandEntity.h"
 #include "utility/matrix/ID.h"
 #include "utility/actor/actor/MovableObject.h"
 

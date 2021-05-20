@@ -64,9 +64,9 @@
 #include "domain/mesh/node/Node.h"
 #include "utility/matrix/Matrix.h"
 
-#include "xc_utils/src/geom/pos_vec/Pos3dArray.h"
-#include "xc_utils/src/geom/pos_vec/Vector3d.h"
-#include "xc_utils/src/geom/ref_sys/Ref2d2d.h"
+#include "utility/geom/pos_vec/Pos3dArray.h"
+#include "utility/geom/pos_vec/Vector3d.h"
+#include "utility/geom/ref_sys/Ref2d2d.h"
 #include "utility/actor/actor/MovableVector.h"
 
 //! @brief constructor:

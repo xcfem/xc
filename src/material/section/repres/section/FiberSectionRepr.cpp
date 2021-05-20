@@ -63,7 +63,7 @@
 #include "material/section/fiber_section/FiberSectionGJ.h"
 
 
-#include "xc_utils/src/geom/d2/2d_polygons/Polygon2d.h"
+#include "utility/geom/d2/2d_polygons/Polygon2d.h"
 
 void XC::FiberSectionRepr::clear_fibers(void)
   {

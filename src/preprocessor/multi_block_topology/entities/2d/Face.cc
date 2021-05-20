@@ -27,12 +27,12 @@
 //Face.cc
 
 #include "Face.h"
-#include "xc_utils/src/geom/pos_vec/Vector3d.h"
-#include "xc_utils/src/geom/ref_sys/Ref2d3d.h"
-#include "xc_utils/src/geom/d3/BND3d.h"
-#include "xc_utils/src/geom/d1/Polyline3d.h"
-#include "xc_utils/src/geom/d2/Triangle3d.h"
-#include "xc_utils/src/geom/d2/Polygon3d.h"
+#include "utility/geom/pos_vec/Vector3d.h"
+#include "utility/geom/ref_sys/Ref2d3d.h"
+#include "utility/geom/d3/BND3d.h"
+#include "utility/geom/d1/Polyline3d.h"
+#include "utility/geom/d2/Triangle3d.h"
+#include "utility/geom/d2/Polygon3d.h"
 
 #include "domain/mesh/node/Node.h"
 #include "domain/mesh/element/Element.h"

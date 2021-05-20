@@ -30,7 +30,7 @@
 #ifndef MAPSOLUMODEL_H
 #define MAPSOLUMODEL_H
 
-#include "xc_utils/src/kernel/CommandEntity.h"
+#include "utility/kernel/CommandEntity.h"
 #include "ModelWrapper.h"
 
 namespace XC {

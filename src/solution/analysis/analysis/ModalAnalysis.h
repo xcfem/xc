@@ -32,7 +32,7 @@
 #define ModalAnalysis_h
 
 #include "EigenAnalysis.h"
-#include "xc_utils/src/geom/d1/function_from_points/FunctionFromPointsR_R.h"
+#include "utility/geom/d1/function_from_points/FunctionFromPointsR_R.h"
 
 namespace XC {
 class Matrix;

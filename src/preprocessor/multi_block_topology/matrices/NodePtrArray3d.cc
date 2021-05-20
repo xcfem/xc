@@ -29,15 +29,15 @@
 #include "NodePtrArray3d.h"
 #include "domain/mesh/node/Node.h"
 #include "domain/mesh/element/plane/PlaneElement.h"
-#include "xc_utils/src/functions/algebra/num_integration.h"
+#include "utility/functions/algebra/num_integration.h"
 
 #include "domain/domain/Domain.h"
 #include "domain/constraints/SFreedom_Constraint.h"
 
 
-#include "xc_utils/src/geom/pos_vec/Pos3d.h"
-#include "xc_utils/src/geom/pos_vec/Vector3d.h"
-#include "xc_utils/src/geom/d2/Polygon3d.h"
+#include "utility/geom/pos_vec/Pos3d.h"
+#include "utility/geom/pos_vec/Vector3d.h"
+#include "utility/geom/d2/Polygon3d.h"
 
 #include "boost/lexical_cast.hpp"
 

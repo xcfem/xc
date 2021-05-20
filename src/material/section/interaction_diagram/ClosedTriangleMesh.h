@@ -30,7 +30,7 @@
 #ifndef CLOSEDTRIANGLEMESH_H
 #define CLOSEDTRIANGLEMESH_H
 
-#include "xc_utils/src/geom/d2/Trihedron.h"
+#include "utility/geom/d2/Trihedron.h"
 #include <set>
 #include <deque>
 #include "utility/actor/actor/MovableObject.h"

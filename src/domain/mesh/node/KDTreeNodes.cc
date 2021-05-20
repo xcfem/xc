@@ -28,7 +28,7 @@
 
 #include "KDTreeNodes.h"
 #include "Node.h"
-#include "xc_utils/src/geom/pos_vec/Pos3d.h"
+#include "utility/geom/pos_vec/Pos3d.h"
 
 //! @brief Constructor.
 XC::NodePos::NodePos(const Node &n)

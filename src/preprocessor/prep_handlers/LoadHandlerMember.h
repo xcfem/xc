@@ -30,7 +30,7 @@
 #ifndef LOADLOADERMEMBER_H
 #define LOADLOADERMEMBER_H
 
-#include "xc_utils/src/kernel/CommandEntity.h"
+#include "utility/kernel/CommandEntity.h"
 #include "utility/actor/actor/MovableObject.h"
 
 namespace XC {

@@ -30,7 +30,7 @@
 #ifndef ElementEdges_h
 #define ElementEdges_h
 
-#include "xc_utils/src/kernel/CommandEntity.h"
+#include "utility/kernel/CommandEntity.h"
 #include "domain/mesh/element/utils/ElementEdge.h"
 
 namespace XC {

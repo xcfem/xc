@@ -67,7 +67,7 @@
 #include <utility/actor/objectBroker/FEM_ObjectBroker.h>
 #include <boost/any.hpp>
 
-#include "xc_utils/src/matrices/m_int.h"
+#include "utility/matrices/m_int.h"
 #include "domain/domain/Domain.h"
 #include "domain/mesh/node/Node.h"
 #include "utility/actor/actor/CommMetaData.h"

@@ -31,7 +31,7 @@
 #define CrossSectionProperties2d_h
 
 #include "CrossSectionProperties1d.h"
-#include "xc_utils/src/kernel/CommandEntity.h"
+#include "utility/kernel/CommandEntity.h"
 #include "utility/actor/actor/MovableObject.h"
 
 class PrincipalAxesOfInertia2D;

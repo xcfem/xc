@@ -32,11 +32,11 @@
 #include "preprocessor/multi_block_topology/matrices/ElemPtrArray3d.h"
 #include "preprocessor/set_mgmt/SetEstruct.h"
 
-#include "xc_utils/src/geom/pos_vec/Pos2d.h"
-#include "xc_utils/src/geom/pos_vec/Vector2d.h"
-#include "xc_utils/src/geom/pos_vec/Pos3d.h"
-#include "xc_utils/src/geom/pos_vec/Vector3d.h"
-#include "xc_utils/src/geom/coo_sys/Rect3d3dCooSys.h"
+#include "utility/geom/pos_vec/Pos2d.h"
+#include "utility/geom/pos_vec/Vector2d.h"
+#include "utility/geom/pos_vec/Pos3d.h"
+#include "utility/geom/pos_vec/Vector3d.h"
+#include "utility/geom/coo_sys/Rect3d3dCooSys.h"
 #include "utility/actor/actor/MovableMatrix.h"
 #include "vtkCellType.h"
 

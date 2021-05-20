@@ -30,7 +30,7 @@
 #ifndef INTERACTION_DIAGRAM2D_H
 #define INTERACTION_DIAGRAM2D_H
 
-#include "xc_utils/src/geom/d2/2d_polygons/Polygon2d.h"
+#include "utility/geom/d2/2d_polygons/Polygon2d.h"
 
 namespace XC {
 

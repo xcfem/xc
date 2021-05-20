@@ -27,16 +27,16 @@
 //SectionMassProperties.cpp
 
 #include "SectionMassProperties.h"
-#include "xc_utils/src/utils/misc_utils/inertia.h"
+#include "utility/utils/misc_utils/inertia.h"
 #include "utility/matrix/Vector.h"
 #include "utility/matrix/Matrix.h"
-#include "xc_utils/src/geom/pos_vec/Pos2d.h"
-#include "xc_utils/src/geom/ref_sys/Ref2d2d.h"
-#include "xc_utils/src/geom/ref_sys/PrincipalAxesOfInertia2D.h"
+#include "utility/geom/pos_vec/Pos2d.h"
+#include "utility/geom/ref_sys/Ref2d2d.h"
+#include "utility/geom/ref_sys/PrincipalAxesOfInertia2D.h"
 #include "material/section/repres/CrossSectionProperties3d.h"
 #include "material/section/repres/CrossSectionProperties2d.h"
 #include "material/section/repres/CrossSectionProperties1d.h"
-#include "xc_utils/src/geom/d1/Segment2d.h"
+#include "utility/geom/d1/Segment2d.h"
 
 //! @brief Constructor.
 XC::SectionMassProperties::SectionMassProperties(CommandEntity *owr)

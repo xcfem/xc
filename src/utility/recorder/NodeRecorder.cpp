@@ -71,7 +71,7 @@
 #include <cstdlib>
 #include <cstdio>
 #include <deque>
-#include "xc_utils/src/utils/text/text_string.h"
+#include "utility/utils/text/text_string.h"
 #include "boost/lexical_cast.hpp"
 #include "domain/component/Parameter.h"
 

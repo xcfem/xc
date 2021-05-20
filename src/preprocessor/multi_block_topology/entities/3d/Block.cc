@@ -29,15 +29,15 @@
 #include "Block.h"
 #include "preprocessor/multi_block_topology/entities/0d/Pnt.h"
 #include "preprocessor/multi_block_topology/entities/2d/QuadSurface.h"
-#include "xc_utils/src/matrices/m_int.h"
-#include "xc_utils/src/geom/d3/BND3d.h"
+#include "utility/matrices/m_int.h"
+#include "utility/geom/d3/BND3d.h"
 #include "domain/mesh/node/Node.h"
 #include "domain/mesh/element/Element.h"
 
 #include "preprocessor/Preprocessor.h"
 #include "preprocessor/set_mgmt/Set.h"
-#include "xc_utils/src/geom/pos_vec/Pos3dArray.h"
-#include "xc_utils/src/geom/pos_vec/Pos3dArray3d.h"
+#include "utility/geom/pos_vec/Pos3dArray.h"
+#include "utility/geom/pos_vec/Pos3dArray3d.h"
 #include "vtkCellType.h"
 
 // Numbering of vertices:

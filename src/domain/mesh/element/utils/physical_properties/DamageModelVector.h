@@ -33,7 +33,7 @@
 #include "DamageModels.h"
 #include "material/MaterialVector.h"
 #include "material/uniaxial/UniaxialMaterial.h"
-#include "xc_utils/src/kernel/CommandEntity.h"
+#include "utility/kernel/CommandEntity.h"
 #include "utility/actor/actor/MovableID.h"
 
 

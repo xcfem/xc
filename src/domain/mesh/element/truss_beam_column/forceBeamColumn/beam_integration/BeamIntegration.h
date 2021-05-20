@@ -53,7 +53,7 @@
 #define BeamIntegration_h
 
 #include <utility/actor/actor/MovableObject.h>
-#include "xc_utils/src/kernel/CommandEntity.h"
+#include "utility/kernel/CommandEntity.h"
 
 class ExprAlgebra;
 

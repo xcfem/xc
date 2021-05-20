@@ -33,12 +33,12 @@
 #include "domain/mesh/node/Node.h"
 #include "domain/domain/Domain.h"
 
-#include "xc_utils/src/geom/pos_vec/Pos3d.h"
-#include "xc_utils/src/geom/pos_vec/Vector3d.h"
-#include "xc_utils/src/geom/d3/BND3d.h"
+#include "utility/geom/pos_vec/Pos3d.h"
+#include "utility/geom/pos_vec/Vector3d.h"
+#include "utility/geom/d3/BND3d.h"
 
-#include "xc_utils/src/geom/d2/Plane.h"
-#include "xc_utils/src/geom/d3/HalfSpace3d.h"
+#include "utility/geom/d2/Plane.h"
+#include "utility/geom/d3/HalfSpace3d.h"
 
 
 //! @brief Constructor.

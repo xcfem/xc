@@ -27,7 +27,7 @@
 
 #include <boost/python/list.hpp>
 #include <vector>
-#include "xc_utils/src/matrices/m_double.h"
+#include "utility/matrices/m_double.h"
 #include <boost/python/suite/indexing/map_indexing_suite.hpp>
 
 namespace XC {

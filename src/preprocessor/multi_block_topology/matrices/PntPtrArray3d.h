@@ -31,11 +31,11 @@
 #ifndef PNTPTRARRAY3d_H
 #define PNTPTRARRAY3d_H
 
-#include "xc_utils/src/kernel/CommandEntity.h"
+#include "utility/kernel/CommandEntity.h"
 #include "PntPtrArray.h"
 #include "PtrArray3dBase.h"
 #include "utility/matrix/Vector.h"
-#include "xc_utils/src/matrices/3d_arrays/Indices3dArray.h"
+#include "utility/matrices/3d_arrays/Indices3dArray.h"
 
 class ExprAlgebra;
 class Intervalo1D;

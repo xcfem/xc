@@ -31,7 +31,7 @@
 #define SCALING_H
 
 #include "TrfGeom.h"
-#include "xc_utils/src/geom/trf/Scaling3d.h"
+#include "utility/geom/trf/Scaling3d.h"
 
 namespace XC {
 

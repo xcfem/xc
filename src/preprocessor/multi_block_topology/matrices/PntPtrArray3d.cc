@@ -28,21 +28,21 @@
 
 #include "PntPtrArray3d.h"
 #include "preprocessor/multi_block_topology/entities/0d/Pnt.h"
-#include "xc_utils/src/functions/algebra/num_integration.h"
+#include "utility/functions/algebra/num_integration.h"
 
 #include "domain/domain/Domain.h"
 #include "domain/constraints/SFreedom_Constraint.h"
 
 
-#include "xc_utils/src/geom/pos_vec/Pos3d.h"
-#include "xc_utils/src/geom/pos_vec/Vector3d.h"
-#include "xc_utils/src/geom/d2/Polygon3d.h"
+#include "utility/geom/pos_vec/Pos3d.h"
+#include "utility/geom/pos_vec/Vector3d.h"
+#include "utility/geom/d2/Polygon3d.h"
 #include "boost/lexical_cast.hpp"
 #include "domain/mesh/element/Element.h"
 #include "domain/mesh/node/Node.h"
 #include "preprocessor/multi_block_topology/MultiBlockTopology.h"
-#include "xc_utils/src/matrices/3d_arrays/Array3dRange.h"
-#include "xc_utils/src/matrices/MatrixRange.h"
+#include "utility/matrices/3d_arrays/Array3dRange.h"
+#include "utility/matrices/MatrixRange.h"
 
 
 //! @brief Default constructor.

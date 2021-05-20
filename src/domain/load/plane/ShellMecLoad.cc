@@ -36,8 +36,8 @@
 #include "domain/mesh/element/plane/shell/ShellNLDKGQ.h"
 #include "domain/mesh/element/utils/coordTransformation/CrdTransf.h"
 #include "domain/mesh/node/Node.h"
-#include "xc_utils/src/geom/pos_vec/SlidingVectorsSystem3d.h"
-#include "xc_utils/src/geom/pos_vec/SlidingVector3d.h"
+#include "utility/geom/pos_vec/SlidingVectorsSystem3d.h"
+#include "utility/geom/pos_vec/SlidingVector3d.h"
 
 XC::ShellMecLoad::ShellMecLoad(int tag,int classTag,const ID &theElementTags)
   :BidimMecLoad(tag, classTag, theElementTags) {}

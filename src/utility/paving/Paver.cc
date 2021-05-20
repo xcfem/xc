@@ -28,7 +28,7 @@
 //Paver.cc
 
 #include "Paver.h"
-#include "xc_utils/src/geom/pos_vec/Vector3d.h"
+#include "utility/geom/pos_vec/Vector3d.h"
 
 void report_ivector(std::ostream &os, const std::string &name, const std::vector<integer> &v)
   {

@@ -35,7 +35,7 @@
 #include "domain/mesh/element/utils/coordTransformation/CrdTransf.h"
 #include "utility/actor/actor/MovableID.h"
 #include "utility/actor/actor/MovableVector.h"
-#include "xc_utils/src/geom/pos_vec/SlidingVectorsSystem3d.h"
+#include "utility/geom/pos_vec/SlidingVectorsSystem3d.h"
 
 XC::BeamMecLoad::BeamMecLoad(int tag,int classTag,const double &wt,const double &wa,const ID &theElementTags)
   :BeamLoad(tag, classTag, theElementTags), Trans(wt), Axial(wa) {}

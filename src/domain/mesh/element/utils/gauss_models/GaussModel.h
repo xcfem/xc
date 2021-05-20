@@ -29,8 +29,8 @@
 #define GAUSSMODEL_H
 
 #include "GaussPoint.h"
-#include "xc_utils/src/geom/pos_vec/Pos2d.h"
-#include "xc_utils/src/geom/pos_vec/Pos3d.h"
+#include "utility/geom/pos_vec/Pos2d.h"
+#include "utility/geom/pos_vec/Pos3d.h"
 #include <deque>
 
 namespace XC {

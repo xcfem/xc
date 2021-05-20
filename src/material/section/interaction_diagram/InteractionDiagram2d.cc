@@ -27,7 +27,7 @@
 //InteractionDiagram2d.cc
 
 #include "InteractionDiagram2d.h"
-#include "xc_utils/src/geom/d1/Segment2d.h"
+#include "utility/geom/d1/Segment2d.h"
 #include "utility/matrix/Vector.h"
 
 #include "material/section/fiber_section/FiberSectionBase.h"

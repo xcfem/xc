@@ -72,7 +72,7 @@
 
 #include <utility/actor/message/Message.h>
 #include <utility/actor/objectBroker/FEM_ObjectBroker.h>
-#include "xc_utils/src/utils/text/text_string.h"
+#include "utility/utils/text/text_string.h"
 #include "boost/lexical_cast.hpp"
 #include "utility/actor/actor/MatrixCommMetaData.h"
 

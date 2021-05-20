@@ -59,7 +59,7 @@
 
 #include <material/section/repres/geom_section/reinfBar/ReinfBar.h>
 #include <material/section/repres/geom_section/reinfLayer/CircReinfLayer.h>
-#include "xc_utils/src/utils/misc_utils/matem.h"
+#include "utility/utils/misc_utils/matem.h"
 
 
 //! @brief Constructor.

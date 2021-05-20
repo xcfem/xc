@@ -28,10 +28,10 @@
 #include "DqPtrsNode.h"
 #include "domain/mesh/node/Node.h"
 #include "preprocessor/multi_block_topology/trf/TrfGeom.h"
-#include "xc_utils/src/functions/algebra/ExprAlgebra.h"
-#include "xc_utils/src/geom/pos_vec/Pos3d.h"
-#include "xc_utils/src/geom/pos_vec/Vector3d.h"
-#include "xc_utils/src/geom/d3/BND3d.h"
+#include "utility/functions/algebra/ExprAlgebra.h"
+#include "utility/geom/pos_vec/Pos3d.h"
+#include "utility/geom/pos_vec/Vector3d.h"
+#include "utility/geom/d3/BND3d.h"
 
 //! @brief Constructor.
 XC::DqPtrsNode::DqPtrsNode(CommandEntity *owr)

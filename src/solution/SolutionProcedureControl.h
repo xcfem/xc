@@ -30,7 +30,7 @@
 #ifndef PROCSOLUCONTROL_H
 #define PROCSOLUCONTROL_H
 
-#include "xc_utils/src/kernel/CommandEntity.h"
+#include "utility/kernel/CommandEntity.h"
 #include "analysis/MapModelWrapper.h"
 #include "SolutionStrategyMap.h"
 

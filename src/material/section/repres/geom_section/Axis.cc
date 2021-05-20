@@ -28,8 +28,8 @@
 
 #include "Axis.h"
 #include "Spot.h"
-#include "xc_utils/src/matrices/m_int.h"
-#include "xc_utils/src/geom/d2/BND2d.h"
+#include "utility/matrices/m_int.h"
+#include "utility/geom/d2/BND2d.h"
 
 
 #include "boost/any.hpp"

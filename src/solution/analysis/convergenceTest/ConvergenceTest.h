@@ -62,7 +62,7 @@
 // to test the convergence of an algorithm. 
 
 #include <utility/actor/actor/MovableObject.h>
-#include "xc_utils/src/kernel/EntityWithOwner.h"
+#include "utility/kernel/EntityWithOwner.h"
 #include "utility/matrix/Vector.h"
 #include "solution/system_of_eqn/linearSOE/LinearSOE.h"
 

@@ -29,7 +29,7 @@
 #ifndef IntPtrWrapper_h
 #define IntPtrWrapper_h
 
-#include "xc_utils/src/kernel/CommandEntity.h"
+#include "utility/kernel/CommandEntity.h"
 #include <boost/python/list.hpp>
 #include <vector>
 

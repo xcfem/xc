@@ -30,7 +30,7 @@
 #ifndef FEPROBLEM_H
 #define FEPROBLEM_H
 
-#include "xc_utils/src/kernel/CommandEntity.h"
+#include "utility/kernel/CommandEntity.h"
 #include "version.h"
 #include "preprocessor/Preprocessor.h"
 #include "solution/SolutionProcedure.h"

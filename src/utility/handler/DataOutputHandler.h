@@ -53,7 +53,7 @@
 #define _DataOutputHandler
 
 #include "utility/actor/actor/MovableObject.h"
-#include "xc_utils/src/kernel/CommandEntity.h"
+#include "utility/kernel/CommandEntity.h"
 #include <map>
 
 namespace XC {
