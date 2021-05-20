@@ -1,0 +1,123 @@
+\c{Archivo para la generación de combinaciones}
+\path{"/usr/local/lib/macros_lcmd"}
+\path{"/usr/local/lib/macros_xc"}
+\incluye{"listados/listado_hipotesis.xcm"}
+
+\comb_acciones
+  {
+    \incluye{"comb_acciones/iapf/gammaf_iapf.cmbm"}
+    \pond_acciones
+      {
+        \IAPF
+          {
+            \permanentes
+              {
+                \acciones
+                  {
+                    \accion
+                      {
+                        \nombre{"G1"} \descripcion{"Carga permanente"}
+                      }
+                  }
+              }
+            \permanentes_nc
+              {
+                \Terr
+                  {
+                    \acciones
+                      {
+                        \accion
+                          {
+                            \nombre{"ETIER"} \descripcion{"Empuje del terreno"}
+                          }
+                      }
+                  }
+              }
+            \variables
+              {
+                \acciones
+                  {
+                    \accion
+                      {
+                        \nombre{"TC1V1"} \descripcion{"Tren de cargas 1 en vía 1"}
+                        \relaciones{\incompatibles{"TC.*V1"}}
+                      }
+                    \accion
+                      {
+                        \nombre{"TC1V2"} \descripcion{"Tren de cargas 1 en vía 2"}
+                        \relaciones{\incompatibles{"TC.*V2"}}
+                      }
+                    \accion
+                      {
+                        \nombre{"TC2V1"} \descripcion{"Tren de cargas 2 en vía 1"}
+                        \relaciones{\incompatibles{"TC.*V1"}}
+                      }
+                    \accion
+                      {
+                        \nombre{"TC2V2"} \descripcion{"Tren de cargas 2 en vía 2"}
+                        \relaciones{\incompatibles{"TC.*V2"}}
+                      }
+                    \accion
+                      {
+                        \nombre{"TC3V1"} \descripcion{"Tren de cargas 3 en vía 1"}
+                        \relaciones{\incompatibles{"TC.*V1"}}
+                      }
+                    \accion
+                      {
+                        \nombre{"TC3V2"} \descripcion{"Tren de cargas 3 en vía 2"}
+                        \relaciones{\incompatibles{"TC.*V2"}}
+                      }
+                    \accion
+                      {
+                        \nombre{"FV1"} \descripcion{"Frenado en vía 1"}
+                        \relaciones{\maestras{"TC2V1"} \incompatibles{"ARRV1"}}
+                      }
+                    \accion
+                      {
+                        \nombre{"FV2"} \descripcion{"Frenado en vía 2"}
+                        \relaciones{\maestras{"TC2V2"} \incompatibles{"ARRV2"}}
+                      }
+                    \accion
+                      {
+                        \nombre{"ARRV1"} \descripcion{"Arranque en vía 1"}
+                        \relaciones{\maestras{"TC2V1"} \incompatibles{"FV1"}}
+                      }
+                    \accion
+                      {
+                        \nombre{"ARRV2"} \descripcion{"Arranque en vía 2"}
+                        \relaciones{\maestras{"TC2V2"} \incompatibles{"FV2"}}
+                      }
+                    \accion
+                      {
+                        \nombre{"LZV1"} \descripcion{"Efecto de lazo en vía 1"}
+                        \relaciones{\maestras{"TC.*V1"} \incompatibles{"ARR.*"}\incompatibles{"F.*"}}
+                      }
+                    \accion
+                      {
+                        \nombre{"LZV2"} \descripcion{"Efecto de lazo en vía 2"}
+                        \relaciones{\maestras{"TC.*V2"} \incompatibles{"ARR.*"}\incompatibles{"F.*"} }
+                      }
+                    \accion
+                      {
+                        \nombre{"VTRSV"} \descripcion{"Viento transversal"}
+                        \relaciones{ \incompatibles{"V.*"} }
+                      }
+                    \accion
+                      {
+                        \nombre{"VLONG"} \descripcion{"Viento longitudinal"}
+                        \relaciones{ \incompatibles{"V.*"} }
+                      }
+                    \accion
+                      {
+                        \nombre{"NV"} \descripcion{"Nieve"}
+                      }
+                  }
+              }
+        }
+      }
+    
+    \genera_combinaciones{}
+
+    \incluye{"comb_acciones/listados/trata_comb_elu.xci"}
+
+  }

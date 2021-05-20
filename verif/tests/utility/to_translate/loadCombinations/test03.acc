@@ -1,0 +1,75 @@
+\c{Archivo para la generación de combinaciones}
+\path{"/usr/local/lib/macros_lcmd"}
+\comb_acciones
+  {
+    \incluye{"comb_acciones/ehe/gammaf_ehe_ctrl_intenso.cmbm"}
+    \pond_acciones
+      {
+        \EHEIntenso
+          {
+            \permanentes
+              {
+                \acciones
+                  {
+                    \accion
+                      {
+                        \nombre{"G"} \descripcion{"Peso propio y carga permanente"}
+                      }
+                  }
+              }
+            \variables
+              {
+                \acciones
+                  {
+                    \accion
+                      {
+                        \nombre{"VTD"} \descripcion{"Viento derecho"}
+                        \setCoefsPsi{"ehe_viento"}
+                        \relaciones{\incompatibles{"VT.*"}}
+                      }
+                    \accion
+                      {
+                        \nombre{"VTI"} \descripcion{"Viento izquierdo"}
+                        \setCoefsPsi{"ehe_viento"}
+                        \relaciones{\incompatibles{"VT.*"}}
+                      }
+        
+                    \accion
+                      {
+                        \nombre{"NV"} \descripcion{"Nieve"}
+                        \setCoefsPsi{"ehe_nieve"}
+                      }
+                  }
+              }
+          }
+      }
+    \genera_combinaciones{}
+    
+    def_prop["coeficientes","m_double"]{}
+    def_prop["coeficientesRef","m_double"]{[[1,0,0,0],[1.35,0,0,0],[1,1.5,0,0],[1,1.5,0,0.9],[1,0,1.5,0],[1,0,1.5,0.9],[1,0,0,1.5],[1,0,0.9,1.5],[1,0.9,0,1.5],[1.35,1.5,0,0],[1.35,1.5,0,0.9],[1.35,0,1.5,0],[1.35,0,1.5,0.9],[1.35,0,0,1.5],[1.35,0,0.9,1.5],[1.35,0.9,0,1.5]]}
+    def_prop["resta","m_double"]{}
+    ratio= 
+    \combinaciones
+      {
+        \comb_elu_persistentes
+          {
+            coeficientes= @getCoeficientes(["G","VTD","VTI","NV"])
+            resta= @coeficientes-@coeficientesRef
+            ratio= @abs(@resta)
+          }
+      }
+
+\c{
+    print "coeficientes= ",@coeficientes,"\n"
+    print "coeficientesRef= ",@coeficientesRef,"\n"
+    print "resta= ",@resta,"\n"
+    print "ratio= ",@ratio,"\n"
+  }
+    
+    \if(@ratio<1e-6)
+      {
+        \then{print "test 03: ok.\n"}
+        \else{print "test 03: ERROR.\n"}
+      }
+    
+  }

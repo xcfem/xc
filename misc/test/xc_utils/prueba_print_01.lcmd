@@ -1,0 +1,22 @@
+\print{"hola\n"}
+\print{4*4}
+\print{"\n"}
+\print{(3+2)*5+5*(3+2)," \n"}
+\print{5*5.5," \n"}
+\print{4*4,", ",5*5,"\n"}
+\print{"Tipo: ",@tipo,"\n"}
+\print{@str2int("422"),"\n"}
+\print{@strlen("abcde"),"\n"}
+\print{@format(336,"/%d/\n"),@format(336,"/%2d/\n"),@format(336,"/%10d/\n"),@format(336,"/%-10d/\n")}
+\print{[1,2,3,4],"\n"}
+\print{["hola",@tipo],"\n"}
+\print{[[1,2,3,4],[5,6,7,8]],"\n"}
+\print{'2*x^2+3*x+4',"\n"}
+\print{"aaa"<"bbb","\n"}
+\print{"bbb">"aaa","\n"}
+\print{"bbb"=="aaa","\n"}
+\print{"ccc"=="ccc","\n"}
+\print{@abs(-422),"\n"}
+\print{@abs(-422)>421,"\n"}
+\expr{pp= 1977}
+\print{"Preceding with blanks: ",@format(pp,"%10d \n")}

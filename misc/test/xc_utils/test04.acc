@@ -1,0 +1,75 @@
+\c{Archivo para la generación de combinaciones}
+\path{"/usr/local/lib/macros_lcmd"}
+\comb_acciones
+  {
+    \incluye{"comb_acciones/ehe/gammaf_ehe_ctrl_intenso.cmbm"}
+    \pond_acciones
+      {
+        \EHEIntenso
+          {
+            \permanentes
+              {
+                \acciones
+                  {
+                    \accion
+                      {
+                        \nombre{"G1"} \descripcion{"Peso propio"}
+                      }
+                  }
+              }
+            \permanentes_nc
+              {
+                \defFamiliaAcciones["EmpTrr"]{}
+                \EmpTrr
+                   {
+                     \c{Coeficientes de ponderación de prueba acciones permanentes de valor no constante.}
+                     \gammaf
+                       {
+                         \gammaf_elu
+                            {
+                              \c{En situaciones persitentes o transitorias:}
+                              \favorable{0.9} \desfavorable{1.05}
+                              \c{En situaciones accidentales:}
+                              \favorable_accidental{1} \desfavorable_accidental{1}
+                            }
+                         \gammaf_els
+                            { \favorable{0} \desfavorable{1} }
+                       }
+                     \acciones
+                       {
+                         \accion
+                           {
+                             \nombre{"ET"} \descripcion{"Empuje de tierras"}
+                           }
+                       }
+                   }
+              }
+          }
+      }
+    \genera_combinaciones{}
+    \nverborrea{0}
+    
+    \nuevo_archivo_salida["test04_hip_elu"]{"test04_hip_elu"}
+    \combinaciones
+      {
+        \comb_elu_persistentes
+          {
+            \expr{conta= 1}
+            \for_each
+              {
+                \print["test04_hip_elu"]{@nombre,"\n"}
+                \expr{conta= @tonum(conta+1)}
+              }
+          }
+      }
+    \cierra_archivo_salida{"test04_hip_elu"}
+    
+    \if
+      {
+        \def_prop["iguales","expr"]{@fcmp("./verif/comb_acciones/test04_hip_elu.verif","./verif/comb_acciones/test04_hip_elu")}
+        \cond{@iguales}
+        \then{\print{"test 04: pasa.\n"}}
+        \else{\print{"test 04: falla.\n"}}
+      }
+    
+  }

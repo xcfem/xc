@@ -1,0 +1,34 @@
+\nverborrea{0}
+
+\def_prop["dibujaFlecha","sub"](string actor,vector color,vector posicion,double escala)
+  {
+    \define["vtkActor",@actor]
+      {
+        \set_mapper{"flechaMapper"}
+        \set_position{@posicion[0],@posicion[1],@posicion[2]}
+        \set_scale{@escala,@escala/2,@escala/2}
+        \property{\set_color{@color[0],@color[1],@color[2]}}
+      }
+  }
+
+\vtk
+  {
+    \define["vtkArrowSource","flecha"]
+      {
+        \altura_punta{0.35}
+        \radio_punta{0.1}
+        \resol_punta{10}
+        \radio_astil{0.03}
+        \resol_astil{10}
+      }
+    \define["vtkPolyDataMapper","flechaMapper"] { \set_input{"flecha"} }
+    \define["vtkActor","flechaActor"] { \set_mapper{"flechaMapper"} }
+    \dibujaFlecha("flechaActor2",[1,0,0],[0,0,2],2){}
+    \define["vtkRenderer","ren1"] { \add_actor{"flechaActor"} \add_actor{"flechaActor2"} \set_background{0.1,0.2,0.4} }
+    \define["vtkRenderWindow","renWin"] { \add_renderer{"ren1"} \set_size{300,300} }
+    \define["vtkRenderWindowInteractor","iren"] { \set_render_window{"renWin"} }
+    \define["vtkInteractorStyleTrackballCamera","style"] {}
+    \iren{\set_interactor_style{"style"}}
+    \iren{\initialize{} \start{}}
+  }
+\fin{}

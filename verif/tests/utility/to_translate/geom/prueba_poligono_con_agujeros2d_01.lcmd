@@ -1,0 +1,42 @@
+
+pol1= geom.Polygon2d()
+pol2= geom.Polygon2d()
+\pol1
+  {
+    \addVertice{ \x{0.0} \y{0.0} }
+    \addVertice{ \x{1.0} \y{0.0} }
+    \addVertice{ \x{1.0} \y{1.0} }
+    \addVertice{ \x{0.0} \y{1.0} }
+  }
+\pol2
+  {
+    \addVertice{ \x{0.25} \y{0.25} }
+    \addVertice{ \x{0.75} \y{0.25} }
+    \addVertice{ \x{0.75} \y{0.75} }
+    \addVertice{ \x{0.25} \y{0.75} }
+  }
+area= 
+def_prop["pol3","poligono_con_agujeros2d"]{@pol1}
+\pol3
+  {
+    \add_hole{@pol2}
+    area= @getArea
+  }
+areaTeor= 1-@sqr(0.5)
+
+ratio1= (@area-@areaTeor)/@areaTeor
+
+\c{
+print "pol1= ",@pol1,"\n"
+print "pol2= ",@pol2,"\n"
+print "pol3= ",@pol3,"\n"
+print "area= ",@area,"\n"
+print "area teórica: ",@areaTeor,"\n"
+print "ratio1= ",ratio1,"\n"
+  }
+
+\if(@abs(ratio1)<1e-10)
+  {
+    \then{print "test poligono_con_agujeros2d 01: ok.\n"}
+    \else{print "test poligono_con_agujeros2d 01: ERROR.\n"}
+  }

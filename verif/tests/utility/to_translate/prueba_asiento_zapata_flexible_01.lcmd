@@ -1,0 +1,33 @@
+\c{ Comprobación de la función que calcula el asiento de 
+una cimentación superficial flexible rectangular de
+acuerdo con el apartado 4.8.1 de la Guia de
+cimentaciones en obras de carretera, figura 4.10 de la página 113} 
+
+\path{"/usr/local/lib/macros_lcmd"}
+\incluye{"geotecnia/cimientos/asientos.lcmdm"}
+
+lado= @sqrt(1.5)} \c{Lado de la zapata
+p= 5*9.81/1e-4} \c{Presión en el plano de cimentación.
+E= 50000*9810} \c{Módulo elástico del macizo.
+nu= 0.2} \c{Módulo elástico del macizo.
+
+s= @asientoZapRectangularFlexible(@lado,@lado,@p,@E,@nu)
+
+ratio1= (@s-1.31943e-3)/1.31943e-3
+
+\c{
+print "lado= ",@lado,"\n"
+print "p= ",@p,"\n"
+print "nu= ",@nu,"\n"
+print "asinh= ",@asinh(@lado/@lado),"\n"
+print "R= ",@coefRAsientoZapRectangularFlexible(@lado,@lado),"\n"
+print "s= ",@s,"\n"
+print "ratio1= ",ratio1,"\n"
+  }
+
+\if
+  {
+    \cond{(@abs(ratio1)<1e-3)}
+    \then{print "test asiento zapata flexible 01: ok.\n"}
+    \else{print "test asiento zapata flexible 01: ERROR.\n"}
+  }

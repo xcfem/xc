@@ -1,0 +1,21 @@
+- Tener en cuenta el campo "no_determinante" en las acciones.
+- Arreglar listados de acciones en el generador de combinaciones.
+
+- Eliminar la necesidad de usar variables de ambiente para indicar a
+  CMake la dirección del código fuente.
+
+- Mejorar los mensajes de error en EntProp.cc indicando el nombre de
+  la clase en la que se produce el error (ver por ejemplo el método
+  intepretaUno).
+
+- Dotar a los bloques de código de un identificador que permita indicar
+  adecuadamente donde se ha producido un error.
+
+- Evitar la necesidad de releer el archivo para contar las lineas hasta
+  la posición de un error. Para ello bastaría actualizar un contador tras
+  la ejecución de get_line y get_char.
+
+- Modificar los test "débiles" para que no lo sean.
+
+- Investigar el motivo por el que las rutinas de «sqlite» son tan lentas.
+

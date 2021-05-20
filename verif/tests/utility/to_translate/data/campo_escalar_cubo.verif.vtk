@@ -1,0 +1,18 @@
+# vtk DataFile Version 3.0
+vtk output
+ASCII
+DATASET UNSTRUCTURED_GRID
+POINTS 8 float
+0 0 0 100 0 0 0 100 0 
+0 0 100 100 100 0 100 0 100 
+0 100 100 100 100 100 
+CELLS 1 9
+8 0 1 4 2 3 5 7 6 
+
+CELL_TYPES 1
+12
+
+POINT_DATA 8
+SCALARS scalars double
+LOOKUP_TABLE default
+0 0 0 1 0 1 1 1 

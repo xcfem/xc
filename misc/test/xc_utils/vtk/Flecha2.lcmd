@@ -1,0 +1,36 @@
+\nverborrea{0}
+
+\path{"/usr/local/lib/macros_lcmd"}
+\incluye{"vtk/utilsVtk.lcmm"}
+
+\vtk
+  {
+    \define["vtkRenderer","ren1"]
+      {
+        \set_background{0.1,0.2,0.4}
+      }
+  }
+
+    \dibujaFlecha("flechaActorX","ren1",[1,0,0],[0,0,0],[1,0,0],2){}
+    \dibujaFlecha("flechaActorY","ren1",[0,1,0],[0,0,0],[0,1,0],2){}
+    \dibujaFlecha("flechaActorZ","ren1",[0,0,1],[0,0,0],[0,0,1],2){}
+
+    \dibujaFlecha("flecha1C","ren1",[.5,.5,.5],[1,1,1],[1,1,1],1){}
+    \dibujaFlecha("flecha2C","ren1",[.5,0,.5],[1,-1,1],[1,-1,1],1){}
+    \dibujaFlecha("flecha3C","ren1",[.5,0,0],[1,-1,-1],[1,-1,-1],1){}
+    \dibujaFlecha("flecha4C","ren1",[.5,.5,0],[1,1,-1],[1,1,-1],1){}
+
+    \dibujaFlecha("flecha5C","ren1",[0,.7,.7],[-1,1,1],[-1,1,1],1){}
+    \dibujaFlecha("flecha6C","ren1",[0,0,.7],[-1,-1,1],[-1,-1,1],1){}
+    \dibujaFlecha("flecha7C","ren1",[.1,.1,.1],[-1,-1,-1],[-1,-1,-1],1){}
+    \dibujaFlecha("flecha8C","ren1",[0,.7,0],[-1,1,-1],[-1,1,-1],1){}
+
+
+\vtk
+  {
+    \define["vtkRenderWindow","renWin"] { \add_renderer{"ren1"} \set_size{300,300} }
+    \define["vtkRenderWindowInteractor","iren"] { \set_render_window{"renWin"} }
+    \define["vtkInteractorStyleTrackballCamera","style"] {}
+    \iren{\set_interactor_style{"style"}}
+    \iren{\initialize{} \start{}}
+  }

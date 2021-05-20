@@ -1,0 +1,23 @@
+\path{"/usr/local/lib/macros_lcmd"}
+\incluye{"geotecnia/cimientos/long_elastica_pilote.lcmm"}
+Ep= 3.19E+010} \c{Módulo elástico del hormigón del pilote.
+Ip= 1/12*0.27^4} \c{Módulo elástico del hormigón del pilote.
+Et= 4.41E+006} \c{Módulo elástico del terreno.
+
+Le= @longElasticaPiloteArcillas(@Ep,@Ip,@Et,25)
+Lp= @longEmpotramientoPiloteArcillas(@Ep,@Ip,@Et,25)
+
+ratio1= (@Le-1.76065)/1.76065
+ratio2= (@Lp-2.11278)/2.11278
+
+\c{
+print "Le= ",@Le,"\n"
+print "ratio1= ",ratio1,"\n"
+print "ratio2= ",ratio2,"\n"
+  }
+\if
+  {
+    \cond{(@abs(ratio1)<1e-4) & (@abs(ratio2)<1e-4)}
+    \then{print "test longitud elastica pilote 01: ok.\n"}
+    \else{print "test longitud elastica pilote 01: ERROR.\n"}
+  }

@@ -1,0 +1,3 @@
+- Agregadas las funciones lcm (mínimo común múltiplo) y gcd (máximo común divisor) basadas en las homónimas de la biblioteca boost.
+- Se ha agregado una sintaxis más sencilla para el comando for: \for(i=1;@i<=@numCiclos;i=@i+1)
+  el contador debe estar definido previamente.

@@ -1,0 +1,5 @@
+\locale
+  {
+    \print{"locale: ",@name,"\n"}
+    \print{"eñe\n"}
+  }

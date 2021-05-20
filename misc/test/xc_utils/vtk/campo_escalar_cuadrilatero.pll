@@ -1,0 +1,30 @@
+
+\vtk{
+\incluye{"coo_cubo.lcmdi"}
+\incluye{"escalares_cubo.lcmdi"}
+\define["vtkUnstructuredGrid","ugrid"]{}
+\ugrid
+   {
+     \set_points{"points"}
+     \point_data{ \set_scalars{"escalares"} } 
+     \insert_next_cell["quad4"]{[0,1,7,6]}
+  }
+
+\c{Dibuja}
+\define["vtkRenderer","renderer"]{}
+\define["vtkRenderWindow","renWin"]{ \add_renderer{"renderer"} }
+\define["vtkRenderWindowInteractor","iren"]{ \set_render_window{"renWin"} }
+
+\define["vtkDataSetMapper","ugridMapper"]{ \set_input{"ugrid"} }
+
+\define["vtkActor","ugridActor"] 
+  { \set_mapper{"ugridMapper"} \property{\set_color{.8,.1,.1}} \add_position{0,0.001,0} }
+\define["vtkActor","wireActor"] 
+  { \set_mapper{"ugridMapper"} \property{\set_color{0,0,0} \set_representation_to_wireframe{}} }
+
+\renderer{ \add_actor{"ugridActor"} \add_actor{"wireActor"} \set_background{1,1,1}}
+
+\renWin{ \set_size{450,450} }
+\iren{ \initialize{} }
+\iren{ \start{} }
+}

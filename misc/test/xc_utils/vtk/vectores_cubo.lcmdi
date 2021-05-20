@@ -1,0 +1,14 @@
+\define["vtkDoubleArray","vectores"]{}
+\vectores
+  {
+    \set_number_of_components{3}
+    \set_number_of_tuples{8}
+    \insert_tuple{0,1,1,1}
+    \insert_tuple{1,-1,-1,-1}
+    \insert_tuple{2,1,1,1}
+    \insert_tuple{3,10,1,1}
+    \insert_tuple{4,1,1,1}
+    \insert_tuple{5,1,1,1}
+    \insert_tuple{6,1,1,1}
+    \insert_tuple{7,1,1,1}
+  }

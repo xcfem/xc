@@ -1,0 +1,9 @@
+Para que funcione hay que instalar:
+
+-CGAL 3.1
+-Coin
+-libplot (GNU).
+-libgts
+-libglib Para que funcione libgts.
+
+

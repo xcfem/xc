@@ -1,0 +1,79 @@
+\c{Archivo para la generación de combinaciones}
+\path{"/usr/local/lib/macros_lcmd"}
+
+\comb_acciones
+  {
+    \incluye{"comb_acciones/ehe/gammaf_ehe_ctrl_intenso.cmbm"}
+    \pond_acciones
+      {
+        \EHEIntenso
+          {
+            \permanentes
+              {
+                \acciones
+                  {
+                    \accion
+                      {
+                        \nombre{"PP1"} \descripcion{"Peso propio"}
+                      }
+                  }
+              }
+            \variables
+              {
+                \acciones
+                  {
+                    \accion
+                      {
+                        \nombre{"SC1"} \descripcion{"Puente grúa posición 2"}
+                        \setCoefsPsi{"ehe_azotea_solo_conserv"}
+                        \relaciones{\incompatibles{"SC.*"}}
+                      }
+                    \accion
+                      {
+                        \nombre{"SC2"} \descripcion{"Sobrecarga de uso cubierta"}
+                        \setCoefsPsi{"ehe_azotea_solo_conserv"}
+                        \relaciones{\incompatibles{"SC.*"}}
+                      }
+                    \accion
+                      {
+                        \nombre{"(SC1+F1)"} \descripcion{"Frenado puente grúa posición 1"}
+                        \setCoefsPsi{"ehe_azotea_solo_conserv"}
+                        \relaciones{\incompatibles{"SC1"}}
+                        \c{\relaciones{\maestras{"SC1.*"}}}
+                      }
+                  }
+              }
+          }
+      }
+    \genera_combinaciones{}
+    
+    def_prop["coeficientes_elu_persistentes","m_double"]{}
+    def_prop["coeficientesRef_elu_persistentes","m_double"]{[[1,0,0,0],[1.35,0,0,0],[1,1.5,0,0],[1,0,1.5,0],[1,1.5,0,1.5],[1.35,1.5,0,0],[1.35,0,1.5,0],[1.35,1.5,0,1.5]]}
+    def_prop["resta_elu_persistentes","m_double"]{}
+    ratio_elu_persistentes= 
+
+    \combinaciones
+      {
+        \comb_elu_persistentes
+          {
+            coeficientes_elu_persistentes= @getCoeficientes(["PP1","SC1","SC2","F1"])
+            resta_elu_persistentes= @coeficientes_elu_persistentes-@coeficientesRef_elu_persistentes
+            ratio_elu_persistentes= @abs(@resta_elu_persistentes)
+          }
+      }
+    
+    
+\c{
+    print "coeficientes_elu_persistentes= ",@coeficientes_elu_persistentes,"\n"
+    print "coeficientesRef_elu_persistentes= ",@coeficientesRef_elu_persistentes,"\n"
+    print "resta_elu_persistentes= ",@resta_elu_persistentes,"\n"
+    print "ratio_elu_persistentes= ",@ratio_elu_persistentes,"\n"
+  }
+
+    \if(@ratio_elu_persistentes<1e-6)
+      {
+        \then{print "test esclavas 01: ok.\n"}
+        \else{print "test esclavas 01: ERROR.\n"}
+      }
+    
+  }

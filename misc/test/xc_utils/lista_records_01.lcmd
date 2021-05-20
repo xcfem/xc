@@ -1,0 +1,16 @@
+\def_prop["RecSet","record"]
+  {
+    \def_prop["espesor","double"]{2}
+  }
+
+\def_prop["listaSets","list"]{}
+
+\listaSets{ \inserta{@RecSet} }
+
+\RecSet
+  {
+    \set{espesor= 1.4}
+  }
+\let{RecSet= @listaSets[0]}
+
+

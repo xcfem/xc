@@ -1,0 +1,113 @@
+\c{Archivo para la generación de combinaciones}
+\path{"/usr/local/lib/macros_lcmd"}
+\comb_acciones
+  {
+    \incluye{"comb_acciones/ehe/gammaf_ehe_ctrl_intenso.cmbm"}
+    \pond_acciones
+      {
+        \EHEIntenso
+          {
+            \permanentes
+              {
+                \acciones
+                  {
+                    \accion
+                      {
+                        \nombre{"G1"} \descripcion{"Peso propio"}
+                      }
+                  }
+              }
+            \permanentes_nc
+              {
+                \defFamiliaAcciones["Pret1"]{}
+                \defFamiliaAcciones["EmpTrr"]{}
+                \Pret1
+                   {
+                     \c{Coeficientes de ponderación de prueba acciones permanentes de valor no constante.}
+                     \gammaf
+                       {
+                         \gammaf_elu
+                            {
+                              \c{En situaciones persitentes o transitorias:}
+                              \favorable{0} \desfavorable{1.05}
+                              \c{En situaciones accidentales:}
+                              \favorable_accidental{1} \desfavorable_accidental{1}
+                            }
+                         \gammaf_els
+                            { \favorable{0} \desfavorable{1} }
+                       }
+                     \acciones
+                       {
+                         \accion
+                           {
+                             \nombre{"GP1"} \descripcion{"Pretensado 1"}
+                           }
+                       }
+                   }
+                \EmpTrr
+                   {
+                     \c{Coeficientes de ponderación de prueba acciones permanentes de valor no constante.}
+                     \gammaf
+                       {
+                         \gammaf_elu
+                            {
+                              \c{En situaciones persitentes o transitorias:}
+                              \favorable{0.9} \desfavorable{1.05}
+                              \c{En situaciones accidentales:}
+                              \favorable_accidental{1} \desfavorable_accidental{1}
+                            }
+                         \gammaf_els
+                            { \favorable{0} \desfavorable{1} }
+                       }
+                     \acciones
+                       {
+                         \accion
+                           {
+                             \nombre{"ET"} \descripcion{"Empuje de tierras"}
+                           }
+                       }
+                   }
+              }
+            \variables
+              {
+                \acciones
+                  {
+                    \accion
+                      {
+                        \nombre{"V"} \descripcion{"Viento"}
+                        \setCoefsPsi{"ehe_viento"}
+                        \relaciones{\incompatibles{"GP.*"}}
+                      }
+                  }
+              }
+          }
+      }
+    \genera_combinaciones{}
+    \nverborrea{0}
+    
+    def_prop["coeficientes","m_double"]{}
+    def_prop["coeficientesRef","m_double"]{[[1.00,0.90,0,0],[1,0.90,1.05,0],[1,1.05,0,0],[1.00,1.05,1.05,0],[1.35,0.90,0,0],[1.35,0.90,1.05,0],[1.35,1.05,0,0],[1.35,1.05,1.05,0],[1.00,0.90,0,1.50],[1,1.05,0,1.50],[1.35,0.90,0,1.50],[1.35,1.05,0,1.50]]}
+    def_prop["resta","m_double"]{}
+    ratio= 
+    \combinaciones
+      {
+        \comb_elu_persistentes
+          {
+            coeficientes= @getCoeficientes(["G1","ET","GP1","V"])
+            resta= @coeficientes-@coeficientesRef
+            ratio= @abs(@resta)
+          }
+      }
+\c{
+    print "coeficientes= ",@coeficientes,"\n"
+    print "resta= ",@resta,"\n"
+    print "ratio= ",@ratio,"\n"
+  }
+    
+    \if(@ratio<1e-6)
+      {
+        \then{print "test 04: ok.\n"}
+        \else{print "test 04: ERROR.\n"}
+      }
+    
+  }

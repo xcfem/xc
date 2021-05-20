@@ -1,0 +1,9 @@
+
+\def_prop["r","double"]{2}
+\def_prop["rr","double"]{2/3@r}
+\print{@rr,"\n"}
+\fin{}
+\expr{a= 2}
+\expr{b= 2/3a}
+\print{@tonum(b),"\n"}
+

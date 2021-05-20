@@ -1,0 +1,74 @@
+\vtk{
+
+\c{Creamos los ejes y el mapper y actor asociados.}
+\define["vtkAxes","axes"]{ \origen{0,0,0} }
+\define["vtkPolyDataMapper","axesMapper"]{ \set_input{"axes"} }
+\define["vtkActor","axesActor"]{ \set_mapper{"axesMapper"} }
+
+\define["vtkArcSource","mast1"]
+  {
+    \number_of_sides{20}
+    \centro{0,0,20}
+    \normal{0,1,0}
+    \ejeX{1,0,0}
+    \set_generate_polyline{1}
+    \set_generate_polygon{0}
+    \radio{33}
+    \initAng{@deg2rad(-0.58)}
+    \finalAng{@deg2rad(.58+12.19+3.99+3.82+1.65)}
+  }
+\define["vtkPolyDataMapper","mast1Mapper"] { \set_input{"mast1"} }
+\define["vtkActor","mast1Actor"] { \set_mapper{"mast1Mapper"} }
+
+\define["vtkArcSource","mast2"]
+  {
+    \number_of_sides{20}
+    \centro{67.1504,0,19.4466}
+    \normal{0,1,0}
+    \ejeX{1,0,0}
+    \set_generate_polyline{1}
+    \set_generate_polygon{0}
+    \radio{33}
+    \initAng{@PI-@deg2rad(.53+12.19+9.46+8.68+0.87)}
+    \finalAng{@PI-@deg2rad(0.42)}
+  }
+\define["vtkPolyDataMapper","mast2Mapper"] { \set_input{"mast2"} }
+\define["vtkActor","mast2Actor"] { \set_mapper{"mast2Mapper"} }
+
+\c{Create the 3D text and the associated mapper and follower (a type of
+ actor).  Position the text so it is displayed over the origin of the
+ axes.}
+
+\define["vtkVectorText","atext"]{ \texto{"Origen"} }
+\define["vtkPolyDataMapper","textMapper"]{ \set_input{"atext"} }
+\define["vtkFollower","textActor"]
+  {
+    \set_mapper{"textMapper"}
+    \set_scale{0.2,0.2,0.2}
+    \add_position{0,-0.1,0}
+  }
+
+\define["vtkRenderer","ren"]
+  {
+    \add_actor{"axesActor"}
+    \add_actor{"textActor"}
+    \add_actor{"mast1Actor"}
+    \add_actor{"mast2Actor"}
+    \set_background{0.1,0.2,0.4}
+  }
+\define["vtkRenderWindow","renWin"]
+  { \add_renderer{"ren"} \set_size{300,300} }
+\define["vtkRenderWindowInteractor","iren"]
+  { \set_render_window{"renWin"} }
+\ren
+  {
+    \reset_camera{}
+    \active_camera{ \zoom{1.6} }
+    \reset_camera_clipping_range{}
+  }
+\textActor
+  { \set_camera{"ren"} }
+\define["vtkInteractorStyleTrackballCamera","style"]{}
+\iren{\set_interactor_style{"style"}}
+\iren{\initialize{} \start{}}
+}

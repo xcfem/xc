@@ -1,0 +1,87 @@
+\c{Comprobación del cálculo de la presión radial ficticia según el
+   método de Panet y Guenot.}
+\path{"/usr/local/lib/macros_lcmd"}
+\incluye{"interpolacion.lcmdm"}
+\incluye{"geotecnia/tuneles/tension_ficticia_tunel.lcmdm"}
+
+N1= @calcNumeroEstabFromRp(2.75,2.75*1)
+N2= @calcNumeroEstabFromRp(2.75,2.75*1.45)
+N3= @calcNumeroEstabFromRp(2.75,2.75*2.15)
+
+ratio1= @sqr((@N1-1)/1)
+ratio1= @sqr((@N2-2)/2)+ratio1
+ratio1= @sqr((@N3-3)/3)+ratio1
+
+rp1= @calcRadioPlastificacion(1,1)
+rp2= @calcRadioPlastificacion(1,2)
+rp3= @calcRadioPlastificacion(1,3)
+
+ratio2= @sqr((@rp1-1)/1)
+ratio2= @sqr((@rp2-1.45)/1.45)+ratio2
+ratio2= @sqr((@rp3-2.15)/2.15)+ratio2
+
+m1= @calcM(0.84*2.15,1,2.15)
+m2= @calcM(1.38629436112*0.7,1,1)
+m3= @calcM((0.84*2.15+1.38629436112*0.7)/2,1,1.45)
+
+ratio3= @sqr((@m1-0.75)/0.75)
+ratio3= @sqr((@m2-0.75)/0.75)+ratio3
+ratio3= @sqr((@m3-0.821976)/0.821976)+ratio3
+
+l01= @calcLambda0(1,2.15)
+l02= @calcLambda0(1,1)
+l03= @calcLambda0(1,1.45)
+
+ratio4= @sqr((@l01-0.58)/0.58)
+ratio4= @sqr((@l02-0.265)/0.265)+ratio4
+ratio4= @sqr((@l03-(0.58+0.265)/2)/((0.58+0.265)/2))+ratio4
+
+l1= @calcLambda(0.84*2.15,1,2.15)
+l2= @calcLambda(1.38629436112*0.7,1,1)
+l3= @calcLambda((0.84*2.15+1.38629436112*0.7)/2,1,1.45)
+
+ratio5= @sqr((@l1-(@l01+(1-@l01)*@m1))/(@l01+(1-@l01)*@m1))
+ratio5= @sqr((@l2-(@l02+(1-@l02)*@m2))/(@l02+(1-@l02)*@m2))+ratio5
+ratio5= @sqr((@l3-(@l03+(1-@l03)*@m3))/(@l03+(1-@l03)*@m3))+ratio5
+
+sg1= @sigmaRPanetGuenot(2,0.84*2.15,1,2.15)
+sg2= @sigmaRPanetGuenot(2,1.38629436112*0.7,1,1)
+sg3= @sigmaRPanetGuenot(2,(0.84*2.15+1.38629436112*0.7)/2,1,1.45)
+
+ratio6= @sqr((@sg1-(1-@l1)*2)/(1-@l1)*2)
+ratio6= @sqr((@sg2-(1-@l2)*2))/(1-@l2)*2+ratio6
+ratio6= @sqr((@sg3-(1-@l3)*2))/(1-@l3)*2+ratio6
+
+\c{
+print "N1= ",@N1,"\n"
+print "N2= ",@N2,"\n"
+print "N3= ",@N3,"\n"
+print "ratio1= ",ratio1,"\n"
+print "rp1= ",@rp1,"\n"
+print "rp2= ",@rp2,"\n"
+print "rp3= ",@rp3,"\n"
+print "ratio2= ",ratio2,"\n"
+print "m1= ",@m1,"\n"
+print "m2= ",@m2,"\n"
+print "m3= ",@m3,"\n"
+print "ratio3= ",ratio3,"\n"
+print "l01= ",@l01,"\n"
+print "l02= ",@l02,"\n"
+print "l03= ",@l03,"\n"
+print "ratio4= ",ratio4,"\n"
+print "l1= ",@l1,"\n"
+print "l2= ",@l2,"\n"
+print "l3= ",@l3,"\n"
+print "ratio5= ",ratio5,"\n"
+print "sg1= ",@sg1,"\n"
+print "sg2= ",@sg2,"\n"
+print "sg3= ",@sg3,"\n"
+print "ratio6= ",ratio6,"\n"
+  }
+
+\if
+  {
+    \cond{(@abs(ratio1)<1e-6) & (@abs(ratio2)<1e-6) & (@abs(ratio3)<1e-6) & (@abs(ratio4)<1e-6) & (@abs(ratio5)<1e-6) & (@abs(ratio6)<1e-6)}
+    \then{print "test Panet 01: ok.\n"}
+    \else{print "test Panet 01: ERROR.\n"}
+  }

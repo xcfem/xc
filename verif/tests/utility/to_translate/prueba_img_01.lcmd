@@ -1,0 +1,14 @@
+ratio1= @compara_imagenes("test_verif/data/brain.png","test_verif/data/brain.png")
+ratio2= 1.0/@compara_imagenes("test_verif/data/brain.png","test_verif/data/cdrom.png")
+
+\c{
+print "ratio1= ",ratio1,"\n"
+print "ratio2= ",ratio2,"\n"
+  }
+
+\if
+  {
+    \cond{(@abs(ratio1)<1e-10) & (@abs(ratio2)<1e-10) }
+    \then{print "test img 01: ok.\n"}
+    \else{print "test img 01: ERROR.\n"}
+  }

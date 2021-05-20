@@ -1,0 +1,2 @@
+\expr{pp= 1977}
+\print{"Preceding with blanks: ",@format(@int(pp),"%10d \n")}

@@ -1,0 +1,30 @@
+\def_prop["fNameIn","string"]{"./test/pp.lst"}
+\nuevo_archivo_entrada["pp"]{@fNameIn}
+\def_prop["str1","string"]{}
+\fixedWidthReader
+  {
+    \setVectorIndices{0,8,9,20,21,32,33,44,45,56,57,68,69,80,81,92,93,104}
+    \print{"vector: ",@getIndicesString,"\n"}
+  }
+\while
+  {
+    \cond{@good("pp")}
+    \bucle
+      {
+        \set{str1= @readln("pp")}
+        \if
+          {
+            \cond{@strlen(@str1)>0}
+            \then
+              {
+                \print{"str1: ",@str1,"\n"}
+                \def_prop["csv","string"]{@fixedWidth2Csv(@str1)}
+                \print{"csv: ",@csv,"\n"}
+                \print{"lista: ",@csv2list(@csv),"\n"}
+                \print{"num valores lista: ",@csv2list(@csv).size,"\n"}
+              }
+          }
+      }
+  }
+\cierra_archivo_entrada{"pp"}
+

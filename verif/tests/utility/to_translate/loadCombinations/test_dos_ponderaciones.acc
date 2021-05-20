@@ -1,0 +1,152 @@
+\c{Archivo para la generación de combinaciones}
+\path{"/usr/local/lib/macros_lcmd"}
+\path{"/usr/local/lib/macros_lcmd"}
+\comb_acciones
+  {
+    \incluye{"sqlite/macros_sqlite.lcmm"}
+    \incluye{"comb_acciones/sqlite/sqlite_comb.cmbm"}
+    
+    \incluye{"comb_acciones/iapf/gammaf_iapf.cmbm"}
+    \pond_acciones
+      {
+        \IAPF
+          {
+            \permanentes
+              {
+                \acciones
+                  {
+                    \accion{ \nombre{"G1"} \descripcion{"Peso propio"} }
+                  }
+              }
+            \permanentes_nc
+              {
+                \CMBalasto
+                   {
+                     \acciones
+                       {
+                         \accion
+                           {
+                             \nombre{"G2a"} \descripcion{"Carga muerta en servicio"}
+                             \relaciones{\incompatibles{"G2.*"}}
+                           }
+                         \accion
+                           {
+                             \nombre{"G2b"} \descripcion{"Carga muerta desbalastado 1"}
+                             \relaciones{\incompatibles{"G2.*"}}
+                           }
+                         \accion
+                           {
+                             \nombre{"G2c"} \descripcion{"Carga muerta desbalastado 2"}
+                             \relaciones{\incompatibles{"G2.*"}}
+                           }
+                        }
+                    }
+                 \Terr
+                    {
+                      \acciones
+                        {
+                          \accion
+                            {
+                              \nombre{"G3"} \descripcion{"Empuje del terreno"}
+                            }
+                        }
+                    }
+               }
+             \variables
+               {
+                 \acciones
+                   {
+                     \accion
+                       {
+                         \nombre{"Q1a"} \descripcion{"Tren de cargas posición 1"}
+                         \relaciones{\incompatibles{"Q1.*"}}
+                       }
+                     \accion
+                       {
+                         \nombre{"Q1b"} \descripcion{"Tren de cargas posición 2"}
+                         \relaciones{\incompatibles{"Q1.*"}}
+                       }
+                     \accion
+                       {
+                         \nombre{"Q1c"} \descripcion{"Tren de cargas posición 3"}
+                         \relaciones{\incompatibles{"Q1.*"}}
+                       }
+                     \accion
+                       {
+                         \nombre{"Q2a"} \descripcion{"Empuje hidrostático"}
+                       }
+                   }
+               }
+             \accidentales
+               {
+                 \acciones
+                   {
+                     \accion
+                       {
+                         \nombre{"A1a"} \descripcion{"Descarrilamiento situación 1"}
+                         \relaciones{\incompatibles{"A.*"}}
+                       }
+                     \accion
+                       {
+                         \nombre{"A1b"} \descripcion{"Descarrilamiento situación 2"}
+                         \relaciones{\incompatibles{"A.*"}}
+                       }
+                   }
+               }
+         }
+      }
+    \incluye{"comb_acciones/4.2IC/gammaf_4.2IC.cmbm"}
+    \pond_acciones
+      {
+        \42IC
+          {
+            \permanentes
+              {
+                \acciones
+                  {
+                    \accion{ \nombre{"CG"} \descripcion{"Peso propio (construcción)"} }
+                  }
+              }
+            \permanentes_nc
+              {
+                 \Terr
+                    {
+                      \acciones
+                        {
+                          \accion
+                            {
+                              \nombre{"CG3"} \descripcion{"Empuje del terreno (construcción)"}
+                            }
+                        }
+                    }
+               }
+          }
+      }
+    \genera_combinaciones{}
+    
+    def_prop["nmbDBase","string"]{"iapf.db"}
+    def_prop["nmbTablaCombELU","string"]{"comb_elu"}
+    def_prop["nmbTablaCombELSCP","string"]{"comb_els_cuasi_permanentes"}
+    \c{
+    \SQLTcreaDBase(@nmbDatabase){}
+    cont= @SQLTtablaCombsELU(@nmbDBase,@nmbTablaCombELU,1)
+    cont= @SQLTtablaCombsELSCP(@nmbDBase,@nmbTablaCombELSCP,1)
+      }
+    nELU= @combinaciones.getNumCombELU
+    nELS= @combinaciones.getNumCombELS
+    
+    ratio1= nELU-260
+    ratio2= nELS-24
+    
+    \c{
+    print "nELU= ",nELU,"\n"
+    print "nELS= ",nELS,"\n"
+      }
+    
+    \if
+      {
+        \cond{(ratio1 < 1e-12) & (ratio2 < 1e-12)}
+        \then{print "test_dos_ponderaciones: ok.\n"}
+        \else{print "test_dos_ponderaciones: ERROR.\n"}
+      }
+  }

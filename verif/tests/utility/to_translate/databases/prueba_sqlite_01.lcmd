@@ -1,0 +1,58 @@
+e1= 0
+e2= 1
+
+def_prop["dbName","string"]{"/tmp/prueba.db"}
+\borra_archivo_si_existe{@dbName}
+
+\sqlite
+  {
+    \newDB{@dbName}
+    \@dbName
+      {
+        \newQuery{"q"}
+        \q
+          {
+            \execute_sql{"create table test3 ( num integer, name string )"}
+            \execute_sql{"insert into test3 values(1, 'Anders')"}
+            \execute_sql{"insert into test3 values(2, 'Grymse')"}
+            \execute_sql{"insert into test3 values(3, 'Sánchez')"}
+            \get_result{"select * from test3"}
+            ratio1= (@num_rows-1)
+            i=1
+            def_var["id","double"]{0.0}
+            def_var["nmb","string"]{}
+            \while
+              {
+                \cond{@fetch_row}
+                \bucle
+                  {
+                    id= @getInt("num")
+                    nmb= @getStr("name")
+                    \c{print "i= ",i," num= ",@id," name: ",@nmb,"\n"}
+                    i=i+1
+                    \if
+                      {
+                        \cond{@id == 3}
+                        \then{ratio2= (@nmb == "Sánchez")}
+                      }
+                  }
+              }
+            \free_result{}
+          }
+        e1= @existeTabla("test3")
+        e2= @existeTabla("pepita")
+      }
+  }
+\sys{"rm -f " + @dbName}
+
+\c{print "e1= ",@e1,"\n"
+print "e2= ",@e2,"\n"
+print "ratio3= ",ratio3,"\n"
+print "ratio4= ",ratio4,"\n"}
+
+\if
+  {
+    \cond{(@abs(ratio1)<1e-10) & (@abs(ratio2-1)<1e-10) & @e1 & (!@e2)}
+    \then{print "prueba sqlite 01: ok.\n"}
+    \else{print "prueba sqlite 01: ERROR.\n"}
+  }

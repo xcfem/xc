@@ -1,0 +1,166 @@
+\c{Archivo para la generación de combinaciones}
+\path{"/usr/local/lib/macros_lcmd"}
+\path{"/usr/local/lib/macros_lcmd"}
+\comb_acciones
+  {
+    \incluye{"sqlite/macros_sqlite.lcmm"}
+    \incluye{"comb_acciones/sqlite/sqlite_comb.cmbm"}
+    
+    def_prop["dbName","string"]{"/tmp/test05.db"}
+    def_prop["tbName","string"]{"combinaciones"}
+    \incluye{"comb_acciones/ehe/gammaf_ehe_ctrl_intenso.cmbm"}
+    \pond_acciones
+      {
+        \EHEIntenso
+          {
+            \permanentes
+              {
+                \acciones
+                  {
+                    \accion
+                      {
+                        \nombre{"G1"} \descripcion{"Peso propio"}
+                      }
+                  }
+              }
+            \permanentes_nc
+              {
+                \defFamiliaAcciones["Pret1"]{}
+                \defFamiliaAcciones["EmpTrr"]{}
+                \Pret1
+                   {
+                     \c{Coeficientes de ponderación de prueba acciones permanentes de valor no constante.}
+                     \gammaf
+                       {
+                         \gammaf_elu
+                            {
+                              \c{En situaciones persitentes o transitorias:}
+                              \favorable{0} \desfavorable{1.05}
+                              \c{En situaciones accidentales:}
+                              \favorable_accidental{1} \desfavorable_accidental{1}
+                            }
+                         \gammaf_els
+                            { \favorable{0} \desfavorable{1} }
+                       }
+                     \acciones
+                       {
+                         \accion
+                           {
+                             \nombre{"GP1"} \descripcion{"Pretensado 1"}
+                           }
+                       }
+                   }
+                \EmpTrr
+                   {
+                     \c{Coeficientes de ponderación de prueba acciones permanentes de valor no constante.}
+                     \gammaf
+                       {
+                         \gammaf_elu
+                            {
+                              \c{En situaciones persitentes o transitorias:}
+                              \favorable{0.9} \desfavorable{1.05}
+                              \c{En situaciones accidentales:}
+                              \favorable_accidental{1} \desfavorable_accidental{1}
+                            }
+                         \gammaf_els
+                            { \favorable{0} \desfavorable{1} }
+                       }
+                     \acciones
+                       {
+                         \accion
+                           {
+                             \nombre{"ET"} \descripcion{"Empuje de tierras"}
+                           }
+                       }
+                   }
+              }
+            \variables
+              {
+                \acciones
+                  {
+                    \accion
+                      {
+                        \nombre{"V"} \descripcion{"Viento"}
+                        \setCoefsPsi{"ehe_viento"}
+                        \relaciones{\incompatibles{"GP.*"}}
+                      }
+                  }
+              }
+        }
+      }
+    
+    \borra_archivo_si_existe{@dbName}
+    \SQLTcreaDBase(@dbName){}
+    \SQLTcreaTablaComb(@dbName,@tbName){}
+    \genera_combinaciones{}
+    
+    
+    \combinaciones
+      {
+        \comb_elu_persistentes
+          {
+            \SQLTinsertaCombs(@dbName,@tbName){}
+          }
+      }
+    
+    
+    sumG1= 0.0
+    g1= 0.0
+    sumET= 0.0
+    eT= 0.0
+    sumGP1= 0.0
+    gP1= 0.0
+    sumV= 0.0
+    v= 0.0
+    \sqlite
+      {
+        \@dbName
+          {
+            \defaultQuery
+              {
+                \get_result{"select * from " + @tbName}
+                \while
+                  {
+                    \cond{@fetch_row}
+                    \bucle
+                      {
+                        g1=@getDouble("G1")
+                        eT=@getDouble("ET")
+                        gP1=@getDouble("GP1")
+                        v=@getDouble("V")
+                        sumG1= @sumG1+@g1
+                        sumET= @sumET+@eT
+                        sumGP1= @sumGP1+@gP1
+                        sumV= @sumV+@v
+                      }
+                  }
+                \free_result{}
+              }
+          }
+      }
+    
+    sumG1Teor= 6*(1+1.35)
+    sumETTeor= 6*(0.9+1.05)
+    sumGP1Teor= 4*1.05
+    sumVTeor= 4*1.5
+    
+    ratio1=  @abs(@sumG1-sumG1Teor)/sumG1Teor
+    ratio2= @abs(@sumET-sumETTeor)/sumETTeor
+    ratio3= @abs(@sumGP1-sumGP1Teor)/sumGP1Teor
+    ratio4= @abs(@sumV-sumVTeor)/sumVTeor
+    
+    \c{
+    print "ratio1= ",ratio1,"\n"
+    print "ratio2= ",ratio2,"\n"
+    print "ratio3= ",ratio3,"\n"
+    print "ratio4= ",ratio4,"\n"
+      }
+    
+    \borra_archivo_si_existe{@dbName}
+    \if
+      {
+        \cond{(@abs(ratio1)<1e-7) & (@abs(ratio2)<1e-7) & (@abs(ratio3)<1e-7) & (@abs(ratio4)<1e-10)}
+        \then{print "test 05: ok.\n"}
+        \else{print "test 05: ERROR.\n"}
+      }
+  }

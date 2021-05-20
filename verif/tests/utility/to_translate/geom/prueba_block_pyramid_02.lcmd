@@ -1,0 +1,46 @@
+\c{«block pyramid» creado por la intersección de cuatro planos (semiespacios).
+Ejemplo 1.9 de la tesis «La teoría de bloque aplicada a la dinámica
+de rocas» de Juan Carlos Ayes Zamudio}
+\path{"/usr/local/lib/macros_lcmd"}
+\incluye{"geotecnia/tuneles/teoria_bloques.lcmdm"}
+
+alpha1= math.radians(30)
+beta1= math.radians(90)
+alpha2= math.radians(40)
+beta2= math.radians(320)
+alpha3= math.radians(50)
+beta3= math.radians(190)
+alpha4= math.radians(10)
+beta4= math.radians(80)
+def_prop["p","pos3d"]{[0,0,0]}
+
+def_prop["P1","semiEspacio3d"]{}
+\P1{\setPlano{@calcPlanoBuzamiento(@alpha1,@beta1,@p)}}
+def_prop["P2","semiEspacio3d"]{}
+\P2{\setPlano{@calcPlanoBuzamiento(@alpha2,@beta2,@p)}}
+def_prop["P3","semiEspacio3d"]{}
+\P3{\setPlano{@calcPlanoBuzamiento(@alpha3,@beta3,@p)}}
+def_prop["P4","semiEspacio3d"]{}
+\P4{\setPlano{@calcPlanoBuzamiento(@alpha4,@beta4,@p)} \swap{}}
+
+def_prop["BP","blockPyramid"]{}
+vacio= 
+
+\BP
+  {
+    \semiespacios{@P1,@P2,@P3,@P4}
+    vacio= @Vacio
+  }
+
+
+
+\c{
+print "vacio= ",@vacio,"\n"
+  }
+
+\if
+  {
+    \cond{(@abs(@vacio-1)<1e-16)}
+    \then{print "test block pyramid 02: ok.\n"}
+    \else{print "test block pyramid 02: ERROR.\n"}
+  }

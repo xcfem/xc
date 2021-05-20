@@ -1,0 +1,61 @@
+\nverborrea{0}
+\archivo_log{"log"}
+\vtk{
+\incluye{"coo_puntos.lcmdi"}
+\incluye{"escalar_puntos.lcmdi"}
+
+\define["vtkUnstructuredGrid","ugrid"]{}
+\ugrid{ \set_points{"points"} }
+\ugrid{ \point_data{ \set_scalars{"escalares"} } }
+
+\define["vtkIdFilter","ids"]
+  {
+    \set_input{"ugrid"}
+    \point_ids_on{}
+  }
+
+\define["vtkRenderer","renderer"]{}
+
+\c{Creamos las etiquetas para los puntos}
+\define["vtkSelectVisiblePoints","visPts"]
+  {
+    \set_input{"ids"}
+    \set_renderer{"renderer"}
+    \selection_window_off{}
+    \set_selection{0,0,800,600}
+  }
+
+\c{Create the mapper to display the point ids.  Specify the format to
+   use for the labels.  Also create the associated actor.}
+\define["vtkLabeledDataMapper","ldm"]
+  {
+    \set_input{"visPts"}
+    \set_label_format{"%g"}
+    \set_label_mode_to_label_ids{}
+  }
+\define["vtkActor2D","pointLabels"]
+  { \set_mapper{"ldm"} }
+
+\c{Dibujamos los puntos}
+\define["vtkSphereSource","sphereSource"]
+  { \radio{2.0} \resol_theta{5} \resol_phi{5} }
+
+\define["vtkGlyph3D","markPoints"]
+  {
+    \set_input{"ugrid"} \set_source{"sphereSource"}
+    \scaling_off{} \orient_off{}
+  }
+\define["vtkPolyDataMapper","mappPoints"]{ \set_input{"markPoints"} }
+\define["vtkActor","visPoints"]
+  { \set_mapper{"mappPoints"} }
+
+\define["vtkRenderWindow","renWin"]{ \add_renderer{"renderer"} }
+\define["vtkRenderWindowInteractor","iren"]{ \set_render_window{"renWin"} }
+
+\renderer{ \add_actor{"visPoints"} \add_actor2D{"pointLabels"} \set_background{.0, .1, .2} }
+
+\renWin{ \set_size{750, 400} }
+
+\iren{\initialize{} \start{}}
+}
+\fin{}

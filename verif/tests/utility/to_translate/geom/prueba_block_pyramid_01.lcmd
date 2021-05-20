@@ -1,0 +1,65 @@
+\c{«block pyramid» creado por la intersección de cuatro planos (semiespacios).
+Ejemplo 1.9 de la tesis «La teoría de bloque aplicada a la dinámica
+de rocas» de Juan Carlos Ayes Zamudio}
+\path{"/usr/local/lib/macros_lcmd"}
+\incluye{"geotecnia/tuneles/teoria_bloques.lcmdm"}
+
+alpha1= math.radians(30)
+beta1= math.radians(90)
+alpha2= math.radians(40)
+beta2= math.radians(320)
+alpha3= math.radians(50)
+beta3= math.radians(190)
+alpha4= math.radians(10)
+beta4= math.radians(80)
+def_prop["p","pos3d"]{[0,0,0]}
+
+def_prop["P1","semiEspacio3d"]{}
+\P1{\setPlano{@calcPlanoBuzamiento(@alpha1,@beta1,@p)} \swap{}}
+def_prop["P2","semiEspacio3d"]{}
+\P2{\setPlano{@calcPlanoBuzamiento(@alpha2,@beta2,@p)}}
+def_prop["P3","semiEspacio3d"]{}
+\P3{\setPlano{@calcPlanoBuzamiento(@alpha3,@beta3,@p)}}
+def_prop["P4","semiEspacio3d"]{}
+\P4{\setPlano{@calcPlanoBuzamiento(@alpha4,@beta4,@p)} \swap{}}
+
+def_prop["BP","blockPyramid"]{}
+def_prop["Is","m_double"]{}
+
+\BP
+  {
+    \semiespacios{@P1,@P2,@P3,@P4}
+    Is= @getVectoresBorde
+  }
+def_prop["I1","vector3d"]{[@Is[0],@Is[1],@Is[2]]}
+def_prop["I2","vector3d"]{[@Is[3],@Is[4],@Is[5]]}
+def_prop["I3","vector3d"]{[@Is[6],@Is[7],@Is[8]]}
+
+
+def_prop["I1Teor","vector3d"]{[0.89442,0.163683,0.377203]}
+def_prop["I2Teor","vector3d"]{[0.461824,0.5379,-0.0966648]}
+def_prop["I3Teor","vector3d"]{[0.762328,-0.240924,-0.125]}
+
+ratio1= @abs(@I1Teor-@I1)
+ratio2= @abs(@I2Teor-@I2)
+ratio3= @abs(@I3Teor-@I3)
+
+\c{
+print "Is= ",@Is,"\n"
+print "I1= ",@I1,"\n"
+print "I2= ",@I2,"\n"
+print "I3= ",@I3,"\n"
+print "I1Teor= ",@I1Teor,"\n"
+print "I2Teor= ",@I2Teor,"\n"
+print "I3Teor= ",@I3Teor,"\n"
+print "ratio1= ",ratio1,"\n"
+print "ratio2= ",ratio2,"\n"
+print "ratio3= ",ratio3,"\n"
+  }
+
+\if
+  {
+    \cond{(@abs(ratio1)<1e-6) & (@abs(ratio2)<1e-6) & (@abs(ratio3)<1e-6)}
+    \then{print "test block pyramid 01: ok.\n"}
+    \else{print "test block pyramid 01: ERROR.\n"}
+  }

@@ -1,0 +1,12 @@
+def_prop["conex","mySqlConn"]{1}
+\conex
+  {
+    en= @errnum
+  }
+\c{print "errnum= ",en,"\n"}
+\if
+  {
+    \cond{'en==0.0'}
+    \then{print "test conexión mysql: ok.\n"}
+    \else{print "testc onexión mysql: ERROR.\n"}
+  }

@@ -1,0 +1,33 @@
+\def_prop["e1","double"]{0}
+\def_prop["e2","double"]{1}
+\sqlite
+  {
+    \def_prop["dbName","string"]{"/tmp/prueba.db"}
+    \sys{"rm -f " + @dbName}
+    \newDB{@dbName}
+    \@dbName
+      {
+        \newQuery{"q"}
+        \q
+          {
+            \execute_sql{"create table test3 ( num integer, name string )"}
+            \execute_sql{"create table test4 ( id integer, pos string )"}
+          }
+        \set{e1= @existeTabla("test3")}
+        \set{e2= @existeTabla("test4")}
+        \set{e3= @existeTabla("pepita")}
+      }
+  }
+\sys{"rm -f " + @dbName}
+
+\c{\print{"e1= ",@e1,"\n"}
+\print{"e2= ",@e2,"\n"}
+\print{"ratio3= ",ratio3,"\n"}
+\print{"ratio4= ",ratio4,"\n"}}
+
+\if
+  {
+    \cond{@e1 & @e2 & (!@e3)}
+    \then{\print{"prueba sqlite 03: pasa.\n"}}
+    \else{\print{"prueba sqlite 03: falla.\n"}}
+  }

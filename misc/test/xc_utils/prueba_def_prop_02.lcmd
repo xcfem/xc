@@ -1,0 +1,7 @@
+\def_prop["list1","list"]{"a1","a2","a3"}
+\def_prop["str1","string"]{"hola"}
+\list1
+  {
+    \print{"str1= ",@str1,"\n"}
+    \print{"mala=",@mala,"\n"}
+  }

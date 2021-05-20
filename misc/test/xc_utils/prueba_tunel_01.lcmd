@@ -1,0 +1,46 @@
+\c{Ejmplo basado en el apéndice B de la
+ tesis «La teoría de bloque aplicada a la dinámica
+de rocas» de Juan Carlos Ayes Zamudio}
+\path{"/usr/local/lib/macros_lcmd"}
+\incluye{"geotecnia/tuneles/teoria_bloques.lcmdm"}
+
+\def_prop["alpha1","double"]{@deg2rad(64)}
+\def_prop["beta1","double"]{@deg2rad(59)}
+\def_prop["alpha2","double"]{@deg2rad(79)}
+\def_prop["beta2","double"]{@deg2rad(138)}
+\def_prop["alpha3","double"]{@deg2rad(057)}
+\def_prop["beta3","double"]{@deg2rad(348)}
+\def_prop["alpha4","double"]{@deg2rad(46)}
+\def_prop["beta4","double"]{@deg2rad(235)}
+\def_prop["p","pos3d"]{[0,0,0]}
+
+\def_prop["P1","plano3d"]{}
+\set{P1= @calcPlanoBuzamiento(@alpha1,@beta1,@p)}
+\def_prop["P2","plano3d"]{}
+\set{P2= @calcPlanoBuzamiento(@alpha2,@beta2,@p)}
+\def_prop["P3","plano3d"]{}
+\set{P3= @calcPlanoBuzamiento(@alpha3,@beta3,@p)}
+\def_prop["P4","plano3d"]{}
+\set{P4= @calcPlanoBuzamiento(@alpha4,@beta4,@p)}
+
+\c{Eje del túnel}
+\def_prop["betaEje","double"]{@deg2rad(69)}
+\def_prop["vectorEjeTunel","vector3d"]{[@sin(@betaEje),@cos(@betaEje),0]}
+\def_prop["vectorITunel","vector3d"]{@cross([0,0,1],@vectorEjeTunel)}
+\def_prop["vectorJTunel","vector3d"]{@cross(@vectorEjeTunel,@vectorITunel)}
+\def_prop["ejesTunel","ref2d3d"]{}
+\ejesTunel
+  {
+    \setOrg{@p}
+    \ejes{\setVectoresIJ{[@vectorITunel,@vectorJTunel]}}
+  }
+\def_prop["seccionTunel","poligono2d"]{}
+\seccionTunel{\incluye{"vertices_seccion_tunel.lcmdi"}}
+
+\incluye{"geotecnia/tuneles/define_semiespacios_4planos.lcmdi"}
+\incluye{"geotecnia/tuneles/define_jps_4planos.lcmdi"}
+\incluye{"geotecnia/tuneles/def_params_jps.lcmdi"}
+
+
+\print{"Eje del túnel: ",@vectorEjeTunel,"\n"}
+\incluye{"geotecnia/tuneles/print_result_jps.lcmdi"}

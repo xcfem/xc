@@ -1,0 +1,13 @@
+\def_prop["list1","list"]{1,2,3,4}
+\c{\print{"lista: ",@list1,"\n"}}
+\def_prop["list2","list"]{"A","B"}
+
+\def_prop["list3","list"]{}
+
+\list3
+  { \inserta{@list1,@list2} }
+
+
+\print{"size list3= ",@list3.size,"\n"}
+\print{"list3[0]= ",@list3[0],"\n"}
+\print{"list3[1]= ",@list3[1],"\n"}

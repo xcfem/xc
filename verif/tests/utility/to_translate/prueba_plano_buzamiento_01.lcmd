@@ -1,0 +1,53 @@
+\path{"/usr/local/lib/macros_lcmd"}
+\incluye{"geotecnia/tuneles/teoria_bloques.lcmdm"}
+
+alpha= math.radians(30)
+beta= math.radians(320)
+def_prop["p","pos3d"]{}
+\p{\x{1} \y{2} \z{1}}
+
+
+def_prop["plano","plano3d"]{}
+
+ plano= @calcPlanoBuzamiento(@alpha,@beta,@p)
+
+A= math.sin(@alpha)*math.sin(@beta)
+B= math.sin(@alpha)*math.cos(@beta)
+C= math.cos(@alpha)
+D= -(@A*@p.x+@B*@p.y+@C*@p.z)
+
+def_prop["v","vector3d"]{[@A,@B,@C]}
+def_prop["n","vector3d"]{}
+d= 
+\plano
+  {
+    n= @getNormal
+    d= @getDist(@p)
+  }
+def_prop["resta","vector3d"]{@v-@n}
+
+ratio1= (@A+0.32139)/-0.32139
+ratio2= (@B-0.38302)/0.38302
+ratio3= (@C-0.86607)/0.86607
+ratio4= (@D+1.31068)/1.31068
+ratio5= @abs(@resta)
+ratio6= @abs(@d)
+
+\c{
+print "resta= ",@resta,"\n"
+print "ratio1= ",ratio1,"\n"
+print "ratio2= ",ratio2,"\n"
+print "ratio3= ",ratio3,"\n"
+print "ratio4= ",ratio4,"\n"
+print "ratio5= ",ratio5,"\n"
+print "ratio6= ",ratio6,"\n"
+  }
+
+\if
+  {
+    \cond{(@abs(ratio1)<1e-4) & (@abs(ratio2)<1e-4) &
+          (@abs(ratio3)<1e-4) & (@abs(ratio4)<1e-4) &
+          (@abs(ratio5)<1e-10) & (@abs(ratio6)<1e-10)}
+    \then{print "test plano buzamiento 01: ok.\n"}
+    \else{print "test plano buzamiento 01: ERROR.\n"}
+  }

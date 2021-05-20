@@ -1,0 +1,52 @@
+\path{"/usr/local/lib/macros_lcmd"}
+
+\comb_acciones
+  {
+    \incluye{"comb_acciones/eae/gammaf_eae.cmbm"}
+    
+    \pond_acciones
+      {
+        \EAE
+          {
+            \permanentes
+              {
+                \acciones
+                  {
+                    \accion
+                      {
+                        \nombre{"G1"} \descripcion{"Peso propio y carga muerta"}
+                      }
+                  }
+              }
+          }
+      }
+    
+    \genera_combinaciones{}
+    nCP= (@combinaciones.comb_elu_persistentes).num_combinaciones
+    nCA= (@combinaciones.comb_elu_accidentales).num_combinaciones
+    nCS= (@combinaciones.comb_elu_sismicas).num_combinaciones
+    nCPF= (@combinaciones.comb_els_poco_frecuentes).num_combinaciones
+    nCF= (@combinaciones.comb_els_frecuentes).num_combinaciones
+    nCCP= (@combinaciones.comb_els_cuasi_permanentes).num_combinaciones
+    
+    ratio1= nCP-2
+    ratio2= nCPF-1
+    ratio3= nCF-1
+    ratio4= nCCP-1
+    
+    \c{
+    print "No. comb. persistentes: ",nCP,"\n"
+    print "No. comb. accidentales: ",nCA,"\n"
+    print "No. comb. sísmicas: ",nCS,"\n"
+    print "No. comb. poco frecuentes: ",nCPF,"\n"
+    print "No. comb. frecuentes: ",nCF,"\n"
+    print "No. comb. cuasi permanentes: ",nCCP,"\n"
+    }
+    
+    \if
+      {
+        \cond{(ratio1 < 1e-12) & (nCA < 1e-12) & (nCS < 1e-12) & (ratio2 < 1e-12) & (ratio3 < 1e-12) & (ratio4 < 1e-12)}
+        \then{print "test_01: ok.\n"}
+        \else{print "test_01: ERROR.\n"}
+      }
+  }

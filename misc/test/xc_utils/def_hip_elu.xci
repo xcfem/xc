@@ -1,0 +1,1656 @@
+\combinacion["ELU001"]{ \descomp{"1.00*G1 + 1.00*ETIER"}}
+\combinacion["ELU002"]{ \descomp{"1.00*G1 + 1.50*ETIER"}}
+\combinacion["ELU003"]{ \descomp{"1.35*G1 + 1.00*ETIER"}}
+\combinacion["ELU004"]{ \descomp{"1.35*G1 + 1.50*ETIER"}}
+\combinacion["ELU005"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC1V1"}}
+\combinacion["ELU006"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC1V1 + 1.50*NV"}}
+\combinacion["ELU007"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC1V1 + 1.50*VLONG"}}
+\combinacion["ELU008"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC1V1 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU009"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC1V1 + 1.50*VTRSV"}}
+\combinacion["ELU010"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC1V1 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU011"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC1V1 + 1.50*LZV1"}}
+\combinacion["ELU012"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC1V1 + 1.50*LZV1 + 1.50*NV"}}
+\combinacion["ELU013"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC1V1 + 1.50*LZV1 + 1.50*VLONG"}}
+\combinacion["ELU014"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC1V1 + 1.50*LZV1 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU015"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC1V1 + 1.50*LZV1 + 1.50*VTRSV"}}
+\combinacion["ELU016"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC1V1 + 1.50*LZV1 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU017"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC1V1 + 1.50*TC3V2"}}
+\combinacion["ELU018"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC1V1 + 1.50*TC3V2 + 1.50*NV"}}
+\combinacion["ELU019"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC1V1 + 1.50*TC3V2 + 1.50*VLONG"}}
+\combinacion["ELU020"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC1V1 + 1.50*TC3V2 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU021"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC1V1 + 1.50*TC3V2 + 1.50*VTRSV"}}
+\combinacion["ELU022"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC1V1 + 1.50*TC3V2 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU023"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC1V1 + 1.50*TC3V2 + 1.50*LZV2"}}
+\combinacion["ELU024"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC1V1 + 1.50*TC3V2 + 1.50*LZV2 + 1.50*NV"}}
+\combinacion["ELU025"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC1V1 + 1.50*TC3V2 + 1.50*LZV2 + 1.50*VLONG"}}
+\combinacion["ELU026"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC1V1 + 1.50*TC3V2 + 1.50*LZV2 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU027"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC1V1 + 1.50*TC3V2 + 1.50*LZV2 + 1.50*VTRSV"}}
+\combinacion["ELU028"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC1V1 + 1.50*TC3V2 + 1.50*LZV2 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU029"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC1V1 + 1.50*TC3V2 + 1.50*LZV1"}}
+\combinacion["ELU030"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC1V1 + 1.50*TC3V2 + 1.50*LZV1 + 1.50*NV"}}
+\combinacion["ELU031"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC1V1 + 1.50*TC3V2 + 1.50*LZV1 + 1.50*VLONG"}}
+\combinacion["ELU032"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC1V1 + 1.50*TC3V2 + 1.50*LZV1 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU033"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC1V1 + 1.50*TC3V2 + 1.50*LZV1 + 1.50*VTRSV"}}
+\combinacion["ELU034"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC1V1 + 1.50*TC3V2 + 1.50*LZV1 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU035"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC1V1 + 1.50*TC3V2 + 1.50*LZV1 + 1.50*LZV2"}}
+\combinacion["ELU036"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC1V1 + 1.50*TC3V2 + 1.50*LZV1 + 1.50*LZV2 + 1.50*NV"}}
+\combinacion["ELU037"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC1V1 + 1.50*TC3V2 + 1.50*LZV1 + 1.50*LZV2 + 1.50*VLONG"}}
+\combinacion["ELU038"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC1V1 + 1.50*TC3V2 + 1.50*LZV1 + 1.50*LZV2 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU039"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC1V1 + 1.50*TC3V2 + 1.50*LZV1 + 1.50*LZV2 + 1.50*VTRSV"}}
+\combinacion["ELU040"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC1V1 + 1.50*TC3V2 + 1.50*LZV1 + 1.50*LZV2 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU041"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC1V1 + 1.50*TC2V2"}}
+\combinacion["ELU042"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC1V1 + 1.50*TC2V2 + 1.50*NV"}}
+\combinacion["ELU043"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC1V1 + 1.50*TC2V2 + 1.50*VLONG"}}
+\combinacion["ELU044"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC1V1 + 1.50*TC2V2 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU045"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC1V1 + 1.50*TC2V2 + 1.50*VTRSV"}}
+\combinacion["ELU046"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC1V1 + 1.50*TC2V2 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU047"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC1V1 + 1.50*TC2V2 + 1.50*LZV2"}}
+\combinacion["ELU048"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC1V1 + 1.50*TC2V2 + 1.50*LZV2 + 1.50*NV"}}
+\combinacion["ELU049"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC1V1 + 1.50*TC2V2 + 1.50*LZV2 + 1.50*VLONG"}}
+\combinacion["ELU050"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC1V1 + 1.50*TC2V2 + 1.50*LZV2 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU051"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC1V1 + 1.50*TC2V2 + 1.50*LZV2 + 1.50*VTRSV"}}
+\combinacion["ELU052"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC1V1 + 1.50*TC2V2 + 1.50*LZV2 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU053"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC1V1 + 1.50*TC2V2 + 1.50*LZV1"}}
+\combinacion["ELU054"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC1V1 + 1.50*TC2V2 + 1.50*LZV1 + 1.50*NV"}}
+\combinacion["ELU055"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC1V1 + 1.50*TC2V2 + 1.50*LZV1 + 1.50*VLONG"}}
+\combinacion["ELU056"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC1V1 + 1.50*TC2V2 + 1.50*LZV1 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU057"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC1V1 + 1.50*TC2V2 + 1.50*LZV1 + 1.50*VTRSV"}}
+\combinacion["ELU058"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC1V1 + 1.50*TC2V2 + 1.50*LZV1 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU059"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC1V1 + 1.50*TC2V2 + 1.50*LZV1 + 1.50*LZV2"}}
+\combinacion["ELU060"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC1V1 + 1.50*TC2V2 + 1.50*LZV1 + 1.50*LZV2 + 1.50*NV"}}
+\combinacion["ELU061"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC1V1 + 1.50*TC2V2 + 1.50*LZV1 + 1.50*LZV2 + 1.50*VLONG"}}
+\combinacion["ELU062"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC1V1 + 1.50*TC2V2 + 1.50*LZV1 + 1.50*LZV2 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU063"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC1V1 + 1.50*TC2V2 + 1.50*LZV1 + 1.50*LZV2 + 1.50*VTRSV"}}
+\combinacion["ELU064"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC1V1 + 1.50*TC2V2 + 1.50*LZV1 + 1.50*LZV2 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU065"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC1V1 + 1.50*TC2V2 + 1.50*ARRV2"}}
+\combinacion["ELU066"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC1V1 + 1.50*TC2V2 + 1.50*ARRV2 + 1.50*NV"}}
+\combinacion["ELU067"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC1V1 + 1.50*TC2V2 + 1.50*ARRV2 + 1.50*VLONG"}}
+\combinacion["ELU068"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC1V1 + 1.50*TC2V2 + 1.50*ARRV2 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU069"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC1V1 + 1.50*TC2V2 + 1.50*ARRV2 + 1.50*VTRSV"}}
+\combinacion["ELU070"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC1V1 + 1.50*TC2V2 + 1.50*ARRV2 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU071"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC1V1 + 1.50*TC2V2 + 1.50*FV2"}}
+\combinacion["ELU072"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC1V1 + 1.50*TC2V2 + 1.50*FV2 + 1.50*NV"}}
+\combinacion["ELU073"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC1V1 + 1.50*TC2V2 + 1.50*FV2 + 1.50*VLONG"}}
+\combinacion["ELU074"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC1V1 + 1.50*TC2V2 + 1.50*FV2 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU075"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC1V1 + 1.50*TC2V2 + 1.50*FV2 + 1.50*VTRSV"}}
+\combinacion["ELU076"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC1V1 + 1.50*TC2V2 + 1.50*FV2 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU077"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC1V1 + 1.50*TC1V2"}}
+\combinacion["ELU078"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC1V1 + 1.50*TC1V2 + 1.50*NV"}}
+\combinacion["ELU079"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC1V1 + 1.50*TC1V2 + 1.50*VLONG"}}
+\combinacion["ELU080"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC1V1 + 1.50*TC1V2 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU081"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC1V1 + 1.50*TC1V2 + 1.50*VTRSV"}}
+\combinacion["ELU082"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC1V1 + 1.50*TC1V2 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU083"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC1V1 + 1.50*TC1V2 + 1.50*LZV2"}}
+\combinacion["ELU084"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC1V1 + 1.50*TC1V2 + 1.50*LZV2 + 1.50*NV"}}
+\combinacion["ELU085"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC1V1 + 1.50*TC1V2 + 1.50*LZV2 + 1.50*VLONG"}}
+\combinacion["ELU086"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC1V1 + 1.50*TC1V2 + 1.50*LZV2 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU087"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC1V1 + 1.50*TC1V2 + 1.50*LZV2 + 1.50*VTRSV"}}
+\combinacion["ELU088"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC1V1 + 1.50*TC1V2 + 1.50*LZV2 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU089"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC1V1 + 1.50*TC1V2 + 1.50*LZV1"}}
+\combinacion["ELU090"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC1V1 + 1.50*TC1V2 + 1.50*LZV1 + 1.50*NV"}}
+\combinacion["ELU091"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC1V1 + 1.50*TC1V2 + 1.50*LZV1 + 1.50*VLONG"}}
+\combinacion["ELU092"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC1V1 + 1.50*TC1V2 + 1.50*LZV1 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU093"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC1V1 + 1.50*TC1V2 + 1.50*LZV1 + 1.50*VTRSV"}}
+\combinacion["ELU094"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC1V1 + 1.50*TC1V2 + 1.50*LZV1 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU095"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC1V1 + 1.50*TC1V2 + 1.50*LZV1 + 1.50*LZV2"}}
+\combinacion["ELU096"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC1V1 + 1.50*TC1V2 + 1.50*LZV1 + 1.50*LZV2 + 1.50*NV"}}
+\combinacion["ELU097"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC1V1 + 1.50*TC1V2 + 1.50*LZV1 + 1.50*LZV2 + 1.50*VLONG"}}
+\combinacion["ELU098"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC1V1 + 1.50*TC1V2 + 1.50*LZV1 + 1.50*LZV2 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU099"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC1V1 + 1.50*TC1V2 + 1.50*LZV1 + 1.50*LZV2 + 1.50*VTRSV"}}
+\combinacion["ELU100"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC1V1 + 1.50*TC1V2 + 1.50*LZV1 + 1.50*LZV2 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU101"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC1V2"}}
+\combinacion["ELU102"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC1V2 + 1.50*NV"}}
+\combinacion["ELU103"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC1V2 + 1.50*VLONG"}}
+\combinacion["ELU104"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC1V2 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU105"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC1V2 + 1.50*VTRSV"}}
+\combinacion["ELU106"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC1V2 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU107"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC1V2 + 1.50*LZV2"}}
+\combinacion["ELU108"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC1V2 + 1.50*LZV2 + 1.50*NV"}}
+\combinacion["ELU109"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC1V2 + 1.50*LZV2 + 1.50*VLONG"}}
+\combinacion["ELU110"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC1V2 + 1.50*LZV2 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU111"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC1V2 + 1.50*LZV2 + 1.50*VTRSV"}}
+\combinacion["ELU112"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC1V2 + 1.50*LZV2 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU113"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC1V2 + 1.50*TC3V1"}}
+\combinacion["ELU114"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC1V2 + 1.50*TC3V1 + 1.50*NV"}}
+\combinacion["ELU115"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC1V2 + 1.50*TC3V1 + 1.50*VLONG"}}
+\combinacion["ELU116"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC1V2 + 1.50*TC3V1 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU117"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC1V2 + 1.50*TC3V1 + 1.50*VTRSV"}}
+\combinacion["ELU118"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC1V2 + 1.50*TC3V1 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU119"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC1V2 + 1.50*TC3V1 + 1.50*LZV2"}}
+\combinacion["ELU120"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC1V2 + 1.50*TC3V1 + 1.50*LZV2 + 1.50*NV"}}
+\combinacion["ELU121"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC1V2 + 1.50*TC3V1 + 1.50*LZV2 + 1.50*VLONG"}}
+\combinacion["ELU122"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC1V2 + 1.50*TC3V1 + 1.50*LZV2 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU123"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC1V2 + 1.50*TC3V1 + 1.50*LZV2 + 1.50*VTRSV"}}
+\combinacion["ELU124"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC1V2 + 1.50*TC3V1 + 1.50*LZV2 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU125"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC1V2 + 1.50*TC3V1 + 1.50*LZV1"}}
+\combinacion["ELU126"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC1V2 + 1.50*TC3V1 + 1.50*LZV1 + 1.50*NV"}}
+\combinacion["ELU127"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC1V2 + 1.50*TC3V1 + 1.50*LZV1 + 1.50*VLONG"}}
+\combinacion["ELU128"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC1V2 + 1.50*TC3V1 + 1.50*LZV1 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU129"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC1V2 + 1.50*TC3V1 + 1.50*LZV1 + 1.50*VTRSV"}}
+\combinacion["ELU130"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC1V2 + 1.50*TC3V1 + 1.50*LZV1 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU131"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC1V2 + 1.50*TC3V1 + 1.50*LZV1 + 1.50*LZV2"}}
+\combinacion["ELU132"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC1V2 + 1.50*TC3V1 + 1.50*LZV1 + 1.50*LZV2 + 1.50*NV"}}
+\combinacion["ELU133"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC1V2 + 1.50*TC3V1 + 1.50*LZV1 + 1.50*LZV2 + 1.50*VLONG"}}
+\combinacion["ELU134"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC1V2 + 1.50*TC3V1 + 1.50*LZV1 + 1.50*LZV2 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU135"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC1V2 + 1.50*TC3V1 + 1.50*LZV1 + 1.50*LZV2 + 1.50*VTRSV"}}
+\combinacion["ELU136"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC1V2 + 1.50*TC3V1 + 1.50*LZV1 + 1.50*LZV2 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU137"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC1V2 + 1.50*TC2V1"}}
+\combinacion["ELU138"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC1V2 + 1.50*TC2V1 + 1.50*NV"}}
+\combinacion["ELU139"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC1V2 + 1.50*TC2V1 + 1.50*VLONG"}}
+\combinacion["ELU140"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC1V2 + 1.50*TC2V1 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU141"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC1V2 + 1.50*TC2V1 + 1.50*VTRSV"}}
+\combinacion["ELU142"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC1V2 + 1.50*TC2V1 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU143"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC1V2 + 1.50*TC2V1 + 1.50*LZV2"}}
+\combinacion["ELU144"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC1V2 + 1.50*TC2V1 + 1.50*LZV2 + 1.50*NV"}}
+\combinacion["ELU145"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC1V2 + 1.50*TC2V1 + 1.50*LZV2 + 1.50*VLONG"}}
+\combinacion["ELU146"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC1V2 + 1.50*TC2V1 + 1.50*LZV2 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU147"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC1V2 + 1.50*TC2V1 + 1.50*LZV2 + 1.50*VTRSV"}}
+\combinacion["ELU148"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC1V2 + 1.50*TC2V1 + 1.50*LZV2 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU149"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC1V2 + 1.50*TC2V1 + 1.50*LZV1"}}
+\combinacion["ELU150"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC1V2 + 1.50*TC2V1 + 1.50*LZV1 + 1.50*NV"}}
+\combinacion["ELU151"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC1V2 + 1.50*TC2V1 + 1.50*LZV1 + 1.50*VLONG"}}
+\combinacion["ELU152"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC1V2 + 1.50*TC2V1 + 1.50*LZV1 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU153"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC1V2 + 1.50*TC2V1 + 1.50*LZV1 + 1.50*VTRSV"}}
+\combinacion["ELU154"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC1V2 + 1.50*TC2V1 + 1.50*LZV1 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU155"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC1V2 + 1.50*TC2V1 + 1.50*LZV1 + 1.50*LZV2"}}
+\combinacion["ELU156"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC1V2 + 1.50*TC2V1 + 1.50*LZV1 + 1.50*LZV2 + 1.50*NV"}}
+\combinacion["ELU157"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC1V2 + 1.50*TC2V1 + 1.50*LZV1 + 1.50*LZV2 + 1.50*VLONG"}}
+\combinacion["ELU158"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC1V2 + 1.50*TC2V1 + 1.50*LZV1 + 1.50*LZV2 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU159"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC1V2 + 1.50*TC2V1 + 1.50*LZV1 + 1.50*LZV2 + 1.50*VTRSV"}}
+\combinacion["ELU160"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC1V2 + 1.50*TC2V1 + 1.50*LZV1 + 1.50*LZV2 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU161"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC1V2 + 1.50*TC2V1 + 1.50*ARRV1"}}
+\combinacion["ELU162"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC1V2 + 1.50*TC2V1 + 1.50*ARRV1 + 1.50*NV"}}
+\combinacion["ELU163"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC1V2 + 1.50*TC2V1 + 1.50*ARRV1 + 1.50*VLONG"}}
+\combinacion["ELU164"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC1V2 + 1.50*TC2V1 + 1.50*ARRV1 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU165"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC1V2 + 1.50*TC2V1 + 1.50*ARRV1 + 1.50*VTRSV"}}
+\combinacion["ELU166"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC1V2 + 1.50*TC2V1 + 1.50*ARRV1 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU167"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC1V2 + 1.50*TC2V1 + 1.50*FV1"}}
+\combinacion["ELU168"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC1V2 + 1.50*TC2V1 + 1.50*FV1 + 1.50*NV"}}
+\combinacion["ELU169"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC1V2 + 1.50*TC2V1 + 1.50*FV1 + 1.50*VLONG"}}
+\combinacion["ELU170"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC1V2 + 1.50*TC2V1 + 1.50*FV1 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU171"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC1V2 + 1.50*TC2V1 + 1.50*FV1 + 1.50*VTRSV"}}
+\combinacion["ELU172"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC1V2 + 1.50*TC2V1 + 1.50*FV1 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU173"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC2V1"}}
+\combinacion["ELU174"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*NV"}}
+\combinacion["ELU175"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*VLONG"}}
+\combinacion["ELU176"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU177"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*VTRSV"}}
+\combinacion["ELU178"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU179"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*LZV1"}}
+\combinacion["ELU180"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*LZV1 + 1.50*NV"}}
+\combinacion["ELU181"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*LZV1 + 1.50*VLONG"}}
+\combinacion["ELU182"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*LZV1 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU183"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*LZV1 + 1.50*VTRSV"}}
+\combinacion["ELU184"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*LZV1 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU185"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*ARRV1"}}
+\combinacion["ELU186"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*ARRV1 + 1.50*NV"}}
+\combinacion["ELU187"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*ARRV1 + 1.50*VLONG"}}
+\combinacion["ELU188"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*ARRV1 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU189"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*ARRV1 + 1.50*VTRSV"}}
+\combinacion["ELU190"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*ARRV1 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU191"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*FV1"}}
+\combinacion["ELU192"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*FV1 + 1.50*NV"}}
+\combinacion["ELU193"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*FV1 + 1.50*VLONG"}}
+\combinacion["ELU194"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*FV1 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU195"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*FV1 + 1.50*VTRSV"}}
+\combinacion["ELU196"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*FV1 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU197"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC3V2"}}
+\combinacion["ELU198"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC3V2 + 1.50*NV"}}
+\combinacion["ELU199"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC3V2 + 1.50*VLONG"}}
+\combinacion["ELU200"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC3V2 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU201"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC3V2 + 1.50*VTRSV"}}
+\combinacion["ELU202"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC3V2 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU203"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC3V2 + 1.50*LZV2"}}
+\combinacion["ELU204"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC3V2 + 1.50*LZV2 + 1.50*NV"}}
+\combinacion["ELU205"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC3V2 + 1.50*LZV2 + 1.50*VLONG"}}
+\combinacion["ELU206"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC3V2 + 1.50*LZV2 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU207"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC3V2 + 1.50*LZV2 + 1.50*VTRSV"}}
+\combinacion["ELU208"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC3V2 + 1.50*LZV2 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU209"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC3V2 + 1.50*LZV1"}}
+\combinacion["ELU210"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC3V2 + 1.50*LZV1 + 1.50*NV"}}
+\combinacion["ELU211"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC3V2 + 1.50*LZV1 + 1.50*VLONG"}}
+\combinacion["ELU212"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC3V2 + 1.50*LZV1 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU213"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC3V2 + 1.50*LZV1 + 1.50*VTRSV"}}
+\combinacion["ELU214"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC3V2 + 1.50*LZV1 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU215"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC3V2 + 1.50*LZV1 + 1.50*LZV2"}}
+\combinacion["ELU216"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC3V2 + 1.50*LZV1 + 1.50*LZV2 + 1.50*NV"}}
+\combinacion["ELU217"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC3V2 + 1.50*LZV1 + 1.50*LZV2 + 1.50*VLONG"}}
+\combinacion["ELU218"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC3V2 + 1.50*LZV1 + 1.50*LZV2 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU219"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC3V2 + 1.50*LZV1 + 1.50*LZV2 + 1.50*VTRSV"}}
+\combinacion["ELU220"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC3V2 + 1.50*LZV1 + 1.50*LZV2 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU221"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC3V2 + 1.50*ARRV1"}}
+\combinacion["ELU222"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC3V2 + 1.50*ARRV1 + 1.50*NV"}}
+\combinacion["ELU223"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC3V2 + 1.50*ARRV1 + 1.50*VLONG"}}
+\combinacion["ELU224"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC3V2 + 1.50*ARRV1 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU225"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC3V2 + 1.50*ARRV1 + 1.50*VTRSV"}}
+\combinacion["ELU226"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC3V2 + 1.50*ARRV1 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU227"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC3V2 + 1.50*FV1"}}
+\combinacion["ELU228"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC3V2 + 1.50*FV1 + 1.50*NV"}}
+\combinacion["ELU229"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC3V2 + 1.50*FV1 + 1.50*VLONG"}}
+\combinacion["ELU230"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC3V2 + 1.50*FV1 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU231"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC3V2 + 1.50*FV1 + 1.50*VTRSV"}}
+\combinacion["ELU232"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC3V2 + 1.50*FV1 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU233"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC2V2"}}
+\combinacion["ELU234"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*NV"}}
+\combinacion["ELU235"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*VLONG"}}
+\combinacion["ELU236"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU237"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*VTRSV"}}
+\combinacion["ELU238"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU239"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*LZV2"}}
+\combinacion["ELU240"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*LZV2 + 1.50*NV"}}
+\combinacion["ELU241"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*LZV2 + 1.50*VLONG"}}
+\combinacion["ELU242"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*LZV2 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU243"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*LZV2 + 1.50*VTRSV"}}
+\combinacion["ELU244"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*LZV2 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU245"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*LZV1"}}
+\combinacion["ELU246"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*LZV1 + 1.50*NV"}}
+\combinacion["ELU247"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*LZV1 + 1.50*VLONG"}}
+\combinacion["ELU248"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*LZV1 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU249"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*LZV1 + 1.50*VTRSV"}}
+\combinacion["ELU250"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*LZV1 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU251"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*LZV1 + 1.50*LZV2"}}
+\combinacion["ELU252"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*LZV1 + 1.50*LZV2 + 1.50*NV"}}
+\combinacion["ELU253"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*LZV1 + 1.50*LZV2 + 1.50*VLONG"}}
+\combinacion["ELU254"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*LZV1 + 1.50*LZV2 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU255"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*LZV1 + 1.50*LZV2 + 1.50*VTRSV"}}
+\combinacion["ELU256"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*LZV1 + 1.50*LZV2 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU257"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*ARRV2"}}
+\combinacion["ELU258"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*ARRV2 + 1.50*NV"}}
+\combinacion["ELU259"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*ARRV2 + 1.50*VLONG"}}
+\combinacion["ELU260"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*ARRV2 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU261"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*ARRV2 + 1.50*VTRSV"}}
+\combinacion["ELU262"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*ARRV2 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU263"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*ARRV1"}}
+\combinacion["ELU264"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*ARRV1 + 1.50*NV"}}
+\combinacion["ELU265"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*ARRV1 + 1.50*VLONG"}}
+\combinacion["ELU266"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*ARRV1 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU267"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*ARRV1 + 1.50*VTRSV"}}
+\combinacion["ELU268"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*ARRV1 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU269"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*ARRV1 + 1.50*ARRV2"}}
+\combinacion["ELU270"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*ARRV1 + 1.50*ARRV2 + 1.50*NV"}}
+\combinacion["ELU271"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*ARRV1 + 1.50*ARRV2 + 1.50*VLONG"}}
+\combinacion["ELU272"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*ARRV1 + 1.50*ARRV2 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU273"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*ARRV1 + 1.50*ARRV2 + 1.50*VTRSV"}}
+\combinacion["ELU274"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*ARRV1 + 1.50*ARRV2 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU275"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*FV2"}}
+\combinacion["ELU276"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*FV2 + 1.50*NV"}}
+\combinacion["ELU277"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*FV2 + 1.50*VLONG"}}
+\combinacion["ELU278"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*FV2 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU279"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*FV2 + 1.50*VTRSV"}}
+\combinacion["ELU280"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*FV2 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU281"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*FV2 + 1.50*ARRV1"}}
+\combinacion["ELU282"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*FV2 + 1.50*ARRV1 + 1.50*NV"}}
+\combinacion["ELU283"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*FV2 + 1.50*ARRV1 + 1.50*VLONG"}}
+\combinacion["ELU284"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*FV2 + 1.50*ARRV1 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU285"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*FV2 + 1.50*ARRV1 + 1.50*VTRSV"}}
+\combinacion["ELU286"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*FV2 + 1.50*ARRV1 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU287"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*FV1"}}
+\combinacion["ELU288"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*FV1 + 1.50*NV"}}
+\combinacion["ELU289"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*FV1 + 1.50*VLONG"}}
+\combinacion["ELU290"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*FV1 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU291"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*FV1 + 1.50*VTRSV"}}
+\combinacion["ELU292"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*FV1 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU293"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*FV1 + 1.50*ARRV2"}}
+\combinacion["ELU294"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*FV1 + 1.50*ARRV2 + 1.50*NV"}}
+\combinacion["ELU295"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*FV1 + 1.50*ARRV2 + 1.50*VLONG"}}
+\combinacion["ELU296"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*FV1 + 1.50*ARRV2 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU297"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*FV1 + 1.50*ARRV2 + 1.50*VTRSV"}}
+\combinacion["ELU298"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*FV1 + 1.50*ARRV2 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU299"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*FV1 + 1.50*FV2"}}
+\combinacion["ELU300"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*FV1 + 1.50*FV2 + 1.50*NV"}}
+\combinacion["ELU301"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*FV1 + 1.50*FV2 + 1.50*VLONG"}}
+\combinacion["ELU302"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*FV1 + 1.50*FV2 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU303"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*FV1 + 1.50*FV2 + 1.50*VTRSV"}}
+\combinacion["ELU304"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*FV1 + 1.50*FV2 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU305"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC2V2"}}
+\combinacion["ELU306"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC2V2 + 1.50*NV"}}
+\combinacion["ELU307"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC2V2 + 1.50*VLONG"}}
+\combinacion["ELU308"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC2V2 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU309"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC2V2 + 1.50*VTRSV"}}
+\combinacion["ELU310"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC2V2 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU311"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC2V2 + 1.50*LZV2"}}
+\combinacion["ELU312"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC2V2 + 1.50*LZV2 + 1.50*NV"}}
+\combinacion["ELU313"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC2V2 + 1.50*LZV2 + 1.50*VLONG"}}
+\combinacion["ELU314"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC2V2 + 1.50*LZV2 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU315"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC2V2 + 1.50*LZV2 + 1.50*VTRSV"}}
+\combinacion["ELU316"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC2V2 + 1.50*LZV2 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU317"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC2V2 + 1.50*ARRV2"}}
+\combinacion["ELU318"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC2V2 + 1.50*ARRV2 + 1.50*NV"}}
+\combinacion["ELU319"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC2V2 + 1.50*ARRV2 + 1.50*VLONG"}}
+\combinacion["ELU320"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC2V2 + 1.50*ARRV2 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU321"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC2V2 + 1.50*ARRV2 + 1.50*VTRSV"}}
+\combinacion["ELU322"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC2V2 + 1.50*ARRV2 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU323"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC2V2 + 1.50*FV2"}}
+\combinacion["ELU324"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC2V2 + 1.50*FV2 + 1.50*NV"}}
+\combinacion["ELU325"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC2V2 + 1.50*FV2 + 1.50*VLONG"}}
+\combinacion["ELU326"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC2V2 + 1.50*FV2 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU327"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC2V2 + 1.50*FV2 + 1.50*VTRSV"}}
+\combinacion["ELU328"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC2V2 + 1.50*FV2 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU329"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC2V2 + 1.50*TC3V1"}}
+\combinacion["ELU330"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC2V2 + 1.50*TC3V1 + 1.50*NV"}}
+\combinacion["ELU331"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC2V2 + 1.50*TC3V1 + 1.50*VLONG"}}
+\combinacion["ELU332"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC2V2 + 1.50*TC3V1 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU333"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC2V2 + 1.50*TC3V1 + 1.50*VTRSV"}}
+\combinacion["ELU334"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC2V2 + 1.50*TC3V1 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU335"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC2V2 + 1.50*TC3V1 + 1.50*LZV2"}}
+\combinacion["ELU336"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC2V2 + 1.50*TC3V1 + 1.50*LZV2 + 1.50*NV"}}
+\combinacion["ELU337"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC2V2 + 1.50*TC3V1 + 1.50*LZV2 + 1.50*VLONG"}}
+\combinacion["ELU338"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC2V2 + 1.50*TC3V1 + 1.50*LZV2 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU339"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC2V2 + 1.50*TC3V1 + 1.50*LZV2 + 1.50*VTRSV"}}
+\combinacion["ELU340"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC2V2 + 1.50*TC3V1 + 1.50*LZV2 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU341"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC2V2 + 1.50*TC3V1 + 1.50*LZV1"}}
+\combinacion["ELU342"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC2V2 + 1.50*TC3V1 + 1.50*LZV1 + 1.50*NV"}}
+\combinacion["ELU343"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC2V2 + 1.50*TC3V1 + 1.50*LZV1 + 1.50*VLONG"}}
+\combinacion["ELU344"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC2V2 + 1.50*TC3V1 + 1.50*LZV1 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU345"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC2V2 + 1.50*TC3V1 + 1.50*LZV1 + 1.50*VTRSV"}}
+\combinacion["ELU346"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC2V2 + 1.50*TC3V1 + 1.50*LZV1 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU347"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC2V2 + 1.50*TC3V1 + 1.50*LZV1 + 1.50*LZV2"}}
+\combinacion["ELU348"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC2V2 + 1.50*TC3V1 + 1.50*LZV1 + 1.50*LZV2 + 1.50*NV"}}
+\combinacion["ELU349"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC2V2 + 1.50*TC3V1 + 1.50*LZV1 + 1.50*LZV2 + 1.50*VLONG"}}
+\combinacion["ELU350"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC2V2 + 1.50*TC3V1 + 1.50*LZV1 + 1.50*LZV2 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU351"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC2V2 + 1.50*TC3V1 + 1.50*LZV1 + 1.50*LZV2 + 1.50*VTRSV"}}
+\combinacion["ELU352"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC2V2 + 1.50*TC3V1 + 1.50*LZV1 + 1.50*LZV2 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU353"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC2V2 + 1.50*TC3V1 + 1.50*ARRV2"}}
+\combinacion["ELU354"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC2V2 + 1.50*TC3V1 + 1.50*ARRV2 + 1.50*NV"}}
+\combinacion["ELU355"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC2V2 + 1.50*TC3V1 + 1.50*ARRV2 + 1.50*VLONG"}}
+\combinacion["ELU356"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC2V2 + 1.50*TC3V1 + 1.50*ARRV2 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU357"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC2V2 + 1.50*TC3V1 + 1.50*ARRV2 + 1.50*VTRSV"}}
+\combinacion["ELU358"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC2V2 + 1.50*TC3V1 + 1.50*ARRV2 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU359"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC2V2 + 1.50*TC3V1 + 1.50*FV2"}}
+\combinacion["ELU360"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC2V2 + 1.50*TC3V1 + 1.50*FV2 + 1.50*NV"}}
+\combinacion["ELU361"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC2V2 + 1.50*TC3V1 + 1.50*FV2 + 1.50*VLONG"}}
+\combinacion["ELU362"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC2V2 + 1.50*TC3V1 + 1.50*FV2 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU363"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC2V2 + 1.50*TC3V1 + 1.50*FV2 + 1.50*VTRSV"}}
+\combinacion["ELU364"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC2V2 + 1.50*TC3V1 + 1.50*FV2 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU365"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC3V1"}}
+\combinacion["ELU366"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC3V1 + 1.50*NV"}}
+\combinacion["ELU367"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC3V1 + 1.50*VLONG"}}
+\combinacion["ELU368"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC3V1 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU369"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC3V1 + 1.50*VTRSV"}}
+\combinacion["ELU370"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC3V1 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU371"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC3V1 + 1.50*LZV1"}}
+\combinacion["ELU372"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC3V1 + 1.50*LZV1 + 1.50*NV"}}
+\combinacion["ELU373"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC3V1 + 1.50*LZV1 + 1.50*VLONG"}}
+\combinacion["ELU374"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC3V1 + 1.50*LZV1 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU375"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC3V1 + 1.50*LZV1 + 1.50*VTRSV"}}
+\combinacion["ELU376"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC3V1 + 1.50*LZV1 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU377"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC3V1 + 1.50*TC3V2"}}
+\combinacion["ELU378"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC3V1 + 1.50*TC3V2 + 1.50*NV"}}
+\combinacion["ELU379"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC3V1 + 1.50*TC3V2 + 1.50*VLONG"}}
+\combinacion["ELU380"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC3V1 + 1.50*TC3V2 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU381"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC3V1 + 1.50*TC3V2 + 1.50*VTRSV"}}
+\combinacion["ELU382"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC3V1 + 1.50*TC3V2 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU383"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC3V1 + 1.50*TC3V2 + 1.50*LZV2"}}
+\combinacion["ELU384"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC3V1 + 1.50*TC3V2 + 1.50*LZV2 + 1.50*NV"}}
+\combinacion["ELU385"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC3V1 + 1.50*TC3V2 + 1.50*LZV2 + 1.50*VLONG"}}
+\combinacion["ELU386"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC3V1 + 1.50*TC3V2 + 1.50*LZV2 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU387"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC3V1 + 1.50*TC3V2 + 1.50*LZV2 + 1.50*VTRSV"}}
+\combinacion["ELU388"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC3V1 + 1.50*TC3V2 + 1.50*LZV2 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU389"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC3V1 + 1.50*TC3V2 + 1.50*LZV1"}}
+\combinacion["ELU390"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC3V1 + 1.50*TC3V2 + 1.50*LZV1 + 1.50*NV"}}
+\combinacion["ELU391"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC3V1 + 1.50*TC3V2 + 1.50*LZV1 + 1.50*VLONG"}}
+\combinacion["ELU392"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC3V1 + 1.50*TC3V2 + 1.50*LZV1 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU393"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC3V1 + 1.50*TC3V2 + 1.50*LZV1 + 1.50*VTRSV"}}
+\combinacion["ELU394"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC3V1 + 1.50*TC3V2 + 1.50*LZV1 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU395"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC3V1 + 1.50*TC3V2 + 1.50*LZV1 + 1.50*LZV2"}}
+\combinacion["ELU396"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC3V1 + 1.50*TC3V2 + 1.50*LZV1 + 1.50*LZV2 + 1.50*NV"}}
+\combinacion["ELU397"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC3V1 + 1.50*TC3V2 + 1.50*LZV1 + 1.50*LZV2 + 1.50*VLONG"}}
+\combinacion["ELU398"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC3V1 + 1.50*TC3V2 + 1.50*LZV1 + 1.50*LZV2 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU399"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC3V1 + 1.50*TC3V2 + 1.50*LZV1 + 1.50*LZV2 + 1.50*VTRSV"}}
+\combinacion["ELU400"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC3V1 + 1.50*TC3V2 + 1.50*LZV1 + 1.50*LZV2 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU401"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC3V2"}}
+\combinacion["ELU402"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC3V2 + 1.50*NV"}}
+\combinacion["ELU403"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC3V2 + 1.50*VLONG"}}
+\combinacion["ELU404"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC3V2 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU405"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC3V2 + 1.50*VTRSV"}}
+\combinacion["ELU406"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC3V2 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU407"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC3V2 + 1.50*LZV2"}}
+\combinacion["ELU408"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC3V2 + 1.50*LZV2 + 1.50*NV"}}
+\combinacion["ELU409"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC3V2 + 1.50*LZV2 + 1.50*VLONG"}}
+\combinacion["ELU410"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC3V2 + 1.50*LZV2 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU411"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC3V2 + 1.50*LZV2 + 1.50*VTRSV"}}
+\combinacion["ELU412"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*TC3V2 + 1.50*LZV2 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU413"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*VTRSV"}}
+\combinacion["ELU414"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU415"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*VLONG"}}
+\combinacion["ELU416"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU417"]{ \descomp{"1.00*G1 + 1.00*ETIER + 1.50*NV"}}
+\combinacion["ELU418"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC1V1"}}
+\combinacion["ELU419"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC1V1 + 1.50*NV"}}
+\combinacion["ELU420"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC1V1 + 1.50*VLONG"}}
+\combinacion["ELU421"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC1V1 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU422"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC1V1 + 1.50*VTRSV"}}
+\combinacion["ELU423"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC1V1 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU424"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC1V1 + 1.50*LZV1"}}
+\combinacion["ELU425"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC1V1 + 1.50*LZV1 + 1.50*NV"}}
+\combinacion["ELU426"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC1V1 + 1.50*LZV1 + 1.50*VLONG"}}
+\combinacion["ELU427"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC1V1 + 1.50*LZV1 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU428"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC1V1 + 1.50*LZV1 + 1.50*VTRSV"}}
+\combinacion["ELU429"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC1V1 + 1.50*LZV1 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU430"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC1V1 + 1.50*TC3V2"}}
+\combinacion["ELU431"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC1V1 + 1.50*TC3V2 + 1.50*NV"}}
+\combinacion["ELU432"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC1V1 + 1.50*TC3V2 + 1.50*VLONG"}}
+\combinacion["ELU433"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC1V1 + 1.50*TC3V2 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU434"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC1V1 + 1.50*TC3V2 + 1.50*VTRSV"}}
+\combinacion["ELU435"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC1V1 + 1.50*TC3V2 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU436"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC1V1 + 1.50*TC3V2 + 1.50*LZV2"}}
+\combinacion["ELU437"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC1V1 + 1.50*TC3V2 + 1.50*LZV2 + 1.50*NV"}}
+\combinacion["ELU438"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC1V1 + 1.50*TC3V2 + 1.50*LZV2 + 1.50*VLONG"}}
+\combinacion["ELU439"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC1V1 + 1.50*TC3V2 + 1.50*LZV2 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU440"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC1V1 + 1.50*TC3V2 + 1.50*LZV2 + 1.50*VTRSV"}}
+\combinacion["ELU441"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC1V1 + 1.50*TC3V2 + 1.50*LZV2 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU442"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC1V1 + 1.50*TC3V2 + 1.50*LZV1"}}
+\combinacion["ELU443"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC1V1 + 1.50*TC3V2 + 1.50*LZV1 + 1.50*NV"}}
+\combinacion["ELU444"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC1V1 + 1.50*TC3V2 + 1.50*LZV1 + 1.50*VLONG"}}
+\combinacion["ELU445"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC1V1 + 1.50*TC3V2 + 1.50*LZV1 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU446"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC1V1 + 1.50*TC3V2 + 1.50*LZV1 + 1.50*VTRSV"}}
+\combinacion["ELU447"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC1V1 + 1.50*TC3V2 + 1.50*LZV1 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU448"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC1V1 + 1.50*TC3V2 + 1.50*LZV1 + 1.50*LZV2"}}
+\combinacion["ELU449"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC1V1 + 1.50*TC3V2 + 1.50*LZV1 + 1.50*LZV2 + 1.50*NV"}}
+\combinacion["ELU450"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC1V1 + 1.50*TC3V2 + 1.50*LZV1 + 1.50*LZV2 + 1.50*VLONG"}}
+\combinacion["ELU451"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC1V1 + 1.50*TC3V2 + 1.50*LZV1 + 1.50*LZV2 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU452"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC1V1 + 1.50*TC3V2 + 1.50*LZV1 + 1.50*LZV2 + 1.50*VTRSV"}}
+\combinacion["ELU453"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC1V1 + 1.50*TC3V2 + 1.50*LZV1 + 1.50*LZV2 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU454"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC1V1 + 1.50*TC2V2"}}
+\combinacion["ELU455"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC1V1 + 1.50*TC2V2 + 1.50*NV"}}
+\combinacion["ELU456"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC1V1 + 1.50*TC2V2 + 1.50*VLONG"}}
+\combinacion["ELU457"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC1V1 + 1.50*TC2V2 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU458"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC1V1 + 1.50*TC2V2 + 1.50*VTRSV"}}
+\combinacion["ELU459"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC1V1 + 1.50*TC2V2 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU460"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC1V1 + 1.50*TC2V2 + 1.50*LZV2"}}
+\combinacion["ELU461"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC1V1 + 1.50*TC2V2 + 1.50*LZV2 + 1.50*NV"}}
+\combinacion["ELU462"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC1V1 + 1.50*TC2V2 + 1.50*LZV2 + 1.50*VLONG"}}
+\combinacion["ELU463"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC1V1 + 1.50*TC2V2 + 1.50*LZV2 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU464"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC1V1 + 1.50*TC2V2 + 1.50*LZV2 + 1.50*VTRSV"}}
+\combinacion["ELU465"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC1V1 + 1.50*TC2V2 + 1.50*LZV2 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU466"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC1V1 + 1.50*TC2V2 + 1.50*LZV1"}}
+\combinacion["ELU467"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC1V1 + 1.50*TC2V2 + 1.50*LZV1 + 1.50*NV"}}
+\combinacion["ELU468"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC1V1 + 1.50*TC2V2 + 1.50*LZV1 + 1.50*VLONG"}}
+\combinacion["ELU469"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC1V1 + 1.50*TC2V2 + 1.50*LZV1 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU470"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC1V1 + 1.50*TC2V2 + 1.50*LZV1 + 1.50*VTRSV"}}
+\combinacion["ELU471"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC1V1 + 1.50*TC2V2 + 1.50*LZV1 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU472"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC1V1 + 1.50*TC2V2 + 1.50*LZV1 + 1.50*LZV2"}}
+\combinacion["ELU473"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC1V1 + 1.50*TC2V2 + 1.50*LZV1 + 1.50*LZV2 + 1.50*NV"}}
+\combinacion["ELU474"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC1V1 + 1.50*TC2V2 + 1.50*LZV1 + 1.50*LZV2 + 1.50*VLONG"}}
+\combinacion["ELU475"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC1V1 + 1.50*TC2V2 + 1.50*LZV1 + 1.50*LZV2 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU476"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC1V1 + 1.50*TC2V2 + 1.50*LZV1 + 1.50*LZV2 + 1.50*VTRSV"}}
+\combinacion["ELU477"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC1V1 + 1.50*TC2V2 + 1.50*LZV1 + 1.50*LZV2 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU478"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC1V1 + 1.50*TC2V2 + 1.50*ARRV2"}}
+\combinacion["ELU479"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC1V1 + 1.50*TC2V2 + 1.50*ARRV2 + 1.50*NV"}}
+\combinacion["ELU480"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC1V1 + 1.50*TC2V2 + 1.50*ARRV2 + 1.50*VLONG"}}
+\combinacion["ELU481"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC1V1 + 1.50*TC2V2 + 1.50*ARRV2 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU482"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC1V1 + 1.50*TC2V2 + 1.50*ARRV2 + 1.50*VTRSV"}}
+\combinacion["ELU483"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC1V1 + 1.50*TC2V2 + 1.50*ARRV2 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU484"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC1V1 + 1.50*TC2V2 + 1.50*FV2"}}
+\combinacion["ELU485"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC1V1 + 1.50*TC2V2 + 1.50*FV2 + 1.50*NV"}}
+\combinacion["ELU486"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC1V1 + 1.50*TC2V2 + 1.50*FV2 + 1.50*VLONG"}}
+\combinacion["ELU487"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC1V1 + 1.50*TC2V2 + 1.50*FV2 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU488"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC1V1 + 1.50*TC2V2 + 1.50*FV2 + 1.50*VTRSV"}}
+\combinacion["ELU489"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC1V1 + 1.50*TC2V2 + 1.50*FV2 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU490"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC1V1 + 1.50*TC1V2"}}
+\combinacion["ELU491"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC1V1 + 1.50*TC1V2 + 1.50*NV"}}
+\combinacion["ELU492"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC1V1 + 1.50*TC1V2 + 1.50*VLONG"}}
+\combinacion["ELU493"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC1V1 + 1.50*TC1V2 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU494"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC1V1 + 1.50*TC1V2 + 1.50*VTRSV"}}
+\combinacion["ELU495"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC1V1 + 1.50*TC1V2 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU496"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC1V1 + 1.50*TC1V2 + 1.50*LZV2"}}
+\combinacion["ELU497"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC1V1 + 1.50*TC1V2 + 1.50*LZV2 + 1.50*NV"}}
+\combinacion["ELU498"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC1V1 + 1.50*TC1V2 + 1.50*LZV2 + 1.50*VLONG"}}
+\combinacion["ELU499"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC1V1 + 1.50*TC1V2 + 1.50*LZV2 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU500"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC1V1 + 1.50*TC1V2 + 1.50*LZV2 + 1.50*VTRSV"}}
+\combinacion["ELU501"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC1V1 + 1.50*TC1V2 + 1.50*LZV2 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU502"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC1V1 + 1.50*TC1V2 + 1.50*LZV1"}}
+\combinacion["ELU503"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC1V1 + 1.50*TC1V2 + 1.50*LZV1 + 1.50*NV"}}
+\combinacion["ELU504"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC1V1 + 1.50*TC1V2 + 1.50*LZV1 + 1.50*VLONG"}}
+\combinacion["ELU505"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC1V1 + 1.50*TC1V2 + 1.50*LZV1 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU506"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC1V1 + 1.50*TC1V2 + 1.50*LZV1 + 1.50*VTRSV"}}
+\combinacion["ELU507"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC1V1 + 1.50*TC1V2 + 1.50*LZV1 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU508"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC1V1 + 1.50*TC1V2 + 1.50*LZV1 + 1.50*LZV2"}}
+\combinacion["ELU509"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC1V1 + 1.50*TC1V2 + 1.50*LZV1 + 1.50*LZV2 + 1.50*NV"}}
+\combinacion["ELU510"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC1V1 + 1.50*TC1V2 + 1.50*LZV1 + 1.50*LZV2 + 1.50*VLONG"}}
+\combinacion["ELU511"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC1V1 + 1.50*TC1V2 + 1.50*LZV1 + 1.50*LZV2 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU512"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC1V1 + 1.50*TC1V2 + 1.50*LZV1 + 1.50*LZV2 + 1.50*VTRSV"}}
+\combinacion["ELU513"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC1V1 + 1.50*TC1V2 + 1.50*LZV1 + 1.50*LZV2 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU514"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC1V2"}}
+\combinacion["ELU515"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC1V2 + 1.50*NV"}}
+\combinacion["ELU516"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC1V2 + 1.50*VLONG"}}
+\combinacion["ELU517"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC1V2 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU518"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC1V2 + 1.50*VTRSV"}}
+\combinacion["ELU519"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC1V2 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU520"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC1V2 + 1.50*LZV2"}}
+\combinacion["ELU521"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC1V2 + 1.50*LZV2 + 1.50*NV"}}
+\combinacion["ELU522"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC1V2 + 1.50*LZV2 + 1.50*VLONG"}}
+\combinacion["ELU523"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC1V2 + 1.50*LZV2 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU524"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC1V2 + 1.50*LZV2 + 1.50*VTRSV"}}
+\combinacion["ELU525"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC1V2 + 1.50*LZV2 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU526"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC1V2 + 1.50*TC3V1"}}
+\combinacion["ELU527"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC1V2 + 1.50*TC3V1 + 1.50*NV"}}
+\combinacion["ELU528"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC1V2 + 1.50*TC3V1 + 1.50*VLONG"}}
+\combinacion["ELU529"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC1V2 + 1.50*TC3V1 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU530"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC1V2 + 1.50*TC3V1 + 1.50*VTRSV"}}
+\combinacion["ELU531"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC1V2 + 1.50*TC3V1 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU532"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC1V2 + 1.50*TC3V1 + 1.50*LZV2"}}
+\combinacion["ELU533"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC1V2 + 1.50*TC3V1 + 1.50*LZV2 + 1.50*NV"}}
+\combinacion["ELU534"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC1V2 + 1.50*TC3V1 + 1.50*LZV2 + 1.50*VLONG"}}
+\combinacion["ELU535"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC1V2 + 1.50*TC3V1 + 1.50*LZV2 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU536"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC1V2 + 1.50*TC3V1 + 1.50*LZV2 + 1.50*VTRSV"}}
+\combinacion["ELU537"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC1V2 + 1.50*TC3V1 + 1.50*LZV2 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU538"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC1V2 + 1.50*TC3V1 + 1.50*LZV1"}}
+\combinacion["ELU539"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC1V2 + 1.50*TC3V1 + 1.50*LZV1 + 1.50*NV"}}
+\combinacion["ELU540"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC1V2 + 1.50*TC3V1 + 1.50*LZV1 + 1.50*VLONG"}}
+\combinacion["ELU541"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC1V2 + 1.50*TC3V1 + 1.50*LZV1 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU542"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC1V2 + 1.50*TC3V1 + 1.50*LZV1 + 1.50*VTRSV"}}
+\combinacion["ELU543"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC1V2 + 1.50*TC3V1 + 1.50*LZV1 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU544"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC1V2 + 1.50*TC3V1 + 1.50*LZV1 + 1.50*LZV2"}}
+\combinacion["ELU545"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC1V2 + 1.50*TC3V1 + 1.50*LZV1 + 1.50*LZV2 + 1.50*NV"}}
+\combinacion["ELU546"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC1V2 + 1.50*TC3V1 + 1.50*LZV1 + 1.50*LZV2 + 1.50*VLONG"}}
+\combinacion["ELU547"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC1V2 + 1.50*TC3V1 + 1.50*LZV1 + 1.50*LZV2 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU548"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC1V2 + 1.50*TC3V1 + 1.50*LZV1 + 1.50*LZV2 + 1.50*VTRSV"}}
+\combinacion["ELU549"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC1V2 + 1.50*TC3V1 + 1.50*LZV1 + 1.50*LZV2 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU550"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC1V2 + 1.50*TC2V1"}}
+\combinacion["ELU551"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC1V2 + 1.50*TC2V1 + 1.50*NV"}}
+\combinacion["ELU552"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC1V2 + 1.50*TC2V1 + 1.50*VLONG"}}
+\combinacion["ELU553"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC1V2 + 1.50*TC2V1 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU554"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC1V2 + 1.50*TC2V1 + 1.50*VTRSV"}}
+\combinacion["ELU555"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC1V2 + 1.50*TC2V1 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU556"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC1V2 + 1.50*TC2V1 + 1.50*LZV2"}}
+\combinacion["ELU557"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC1V2 + 1.50*TC2V1 + 1.50*LZV2 + 1.50*NV"}}
+\combinacion["ELU558"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC1V2 + 1.50*TC2V1 + 1.50*LZV2 + 1.50*VLONG"}}
+\combinacion["ELU559"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC1V2 + 1.50*TC2V1 + 1.50*LZV2 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU560"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC1V2 + 1.50*TC2V1 + 1.50*LZV2 + 1.50*VTRSV"}}
+\combinacion["ELU561"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC1V2 + 1.50*TC2V1 + 1.50*LZV2 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU562"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC1V2 + 1.50*TC2V1 + 1.50*LZV1"}}
+\combinacion["ELU563"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC1V2 + 1.50*TC2V1 + 1.50*LZV1 + 1.50*NV"}}
+\combinacion["ELU564"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC1V2 + 1.50*TC2V1 + 1.50*LZV1 + 1.50*VLONG"}}
+\combinacion["ELU565"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC1V2 + 1.50*TC2V1 + 1.50*LZV1 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU566"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC1V2 + 1.50*TC2V1 + 1.50*LZV1 + 1.50*VTRSV"}}
+\combinacion["ELU567"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC1V2 + 1.50*TC2V1 + 1.50*LZV1 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU568"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC1V2 + 1.50*TC2V1 + 1.50*LZV1 + 1.50*LZV2"}}
+\combinacion["ELU569"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC1V2 + 1.50*TC2V1 + 1.50*LZV1 + 1.50*LZV2 + 1.50*NV"}}
+\combinacion["ELU570"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC1V2 + 1.50*TC2V1 + 1.50*LZV1 + 1.50*LZV2 + 1.50*VLONG"}}
+\combinacion["ELU571"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC1V2 + 1.50*TC2V1 + 1.50*LZV1 + 1.50*LZV2 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU572"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC1V2 + 1.50*TC2V1 + 1.50*LZV1 + 1.50*LZV2 + 1.50*VTRSV"}}
+\combinacion["ELU573"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC1V2 + 1.50*TC2V1 + 1.50*LZV1 + 1.50*LZV2 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU574"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC1V2 + 1.50*TC2V1 + 1.50*ARRV1"}}
+\combinacion["ELU575"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC1V2 + 1.50*TC2V1 + 1.50*ARRV1 + 1.50*NV"}}
+\combinacion["ELU576"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC1V2 + 1.50*TC2V1 + 1.50*ARRV1 + 1.50*VLONG"}}
+\combinacion["ELU577"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC1V2 + 1.50*TC2V1 + 1.50*ARRV1 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU578"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC1V2 + 1.50*TC2V1 + 1.50*ARRV1 + 1.50*VTRSV"}}
+\combinacion["ELU579"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC1V2 + 1.50*TC2V1 + 1.50*ARRV1 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU580"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC1V2 + 1.50*TC2V1 + 1.50*FV1"}}
+\combinacion["ELU581"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC1V2 + 1.50*TC2V1 + 1.50*FV1 + 1.50*NV"}}
+\combinacion["ELU582"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC1V2 + 1.50*TC2V1 + 1.50*FV1 + 1.50*VLONG"}}
+\combinacion["ELU583"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC1V2 + 1.50*TC2V1 + 1.50*FV1 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU584"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC1V2 + 1.50*TC2V1 + 1.50*FV1 + 1.50*VTRSV"}}
+\combinacion["ELU585"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC1V2 + 1.50*TC2V1 + 1.50*FV1 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU586"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC2V1"}}
+\combinacion["ELU587"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*NV"}}
+\combinacion["ELU588"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*VLONG"}}
+\combinacion["ELU589"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU590"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*VTRSV"}}
+\combinacion["ELU591"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU592"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*LZV1"}}
+\combinacion["ELU593"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*LZV1 + 1.50*NV"}}
+\combinacion["ELU594"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*LZV1 + 1.50*VLONG"}}
+\combinacion["ELU595"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*LZV1 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU596"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*LZV1 + 1.50*VTRSV"}}
+\combinacion["ELU597"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*LZV1 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU598"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*ARRV1"}}
+\combinacion["ELU599"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*ARRV1 + 1.50*NV"}}
+\combinacion["ELU600"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*ARRV1 + 1.50*VLONG"}}
+\combinacion["ELU601"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*ARRV1 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU602"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*ARRV1 + 1.50*VTRSV"}}
+\combinacion["ELU603"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*ARRV1 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU604"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*FV1"}}
+\combinacion["ELU605"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*FV1 + 1.50*NV"}}
+\combinacion["ELU606"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*FV1 + 1.50*VLONG"}}
+\combinacion["ELU607"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*FV1 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU608"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*FV1 + 1.50*VTRSV"}}
+\combinacion["ELU609"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*FV1 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU610"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC3V2"}}
+\combinacion["ELU611"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC3V2 + 1.50*NV"}}
+\combinacion["ELU612"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC3V2 + 1.50*VLONG"}}
+\combinacion["ELU613"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC3V2 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU614"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC3V2 + 1.50*VTRSV"}}
+\combinacion["ELU615"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC3V2 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU616"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC3V2 + 1.50*LZV2"}}
+\combinacion["ELU617"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC3V2 + 1.50*LZV2 + 1.50*NV"}}
+\combinacion["ELU618"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC3V2 + 1.50*LZV2 + 1.50*VLONG"}}
+\combinacion["ELU619"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC3V2 + 1.50*LZV2 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU620"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC3V2 + 1.50*LZV2 + 1.50*VTRSV"}}
+\combinacion["ELU621"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC3V2 + 1.50*LZV2 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU622"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC3V2 + 1.50*LZV1"}}
+\combinacion["ELU623"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC3V2 + 1.50*LZV1 + 1.50*NV"}}
+\combinacion["ELU624"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC3V2 + 1.50*LZV1 + 1.50*VLONG"}}
+\combinacion["ELU625"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC3V2 + 1.50*LZV1 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU626"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC3V2 + 1.50*LZV1 + 1.50*VTRSV"}}
+\combinacion["ELU627"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC3V2 + 1.50*LZV1 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU628"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC3V2 + 1.50*LZV1 + 1.50*LZV2"}}
+\combinacion["ELU629"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC3V2 + 1.50*LZV1 + 1.50*LZV2 + 1.50*NV"}}
+\combinacion["ELU630"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC3V2 + 1.50*LZV1 + 1.50*LZV2 + 1.50*VLONG"}}
+\combinacion["ELU631"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC3V2 + 1.50*LZV1 + 1.50*LZV2 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU632"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC3V2 + 1.50*LZV1 + 1.50*LZV2 + 1.50*VTRSV"}}
+\combinacion["ELU633"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC3V2 + 1.50*LZV1 + 1.50*LZV2 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU634"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC3V2 + 1.50*ARRV1"}}
+\combinacion["ELU635"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC3V2 + 1.50*ARRV1 + 1.50*NV"}}
+\combinacion["ELU636"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC3V2 + 1.50*ARRV1 + 1.50*VLONG"}}
+\combinacion["ELU637"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC3V2 + 1.50*ARRV1 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU638"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC3V2 + 1.50*ARRV1 + 1.50*VTRSV"}}
+\combinacion["ELU639"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC3V2 + 1.50*ARRV1 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU640"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC3V2 + 1.50*FV1"}}
+\combinacion["ELU641"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC3V2 + 1.50*FV1 + 1.50*NV"}}
+\combinacion["ELU642"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC3V2 + 1.50*FV1 + 1.50*VLONG"}}
+\combinacion["ELU643"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC3V2 + 1.50*FV1 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU644"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC3V2 + 1.50*FV1 + 1.50*VTRSV"}}
+\combinacion["ELU645"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC3V2 + 1.50*FV1 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU646"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC2V2"}}
+\combinacion["ELU647"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*NV"}}
+\combinacion["ELU648"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*VLONG"}}
+\combinacion["ELU649"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU650"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*VTRSV"}}
+\combinacion["ELU651"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU652"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*LZV2"}}
+\combinacion["ELU653"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*LZV2 + 1.50*NV"}}
+\combinacion["ELU654"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*LZV2 + 1.50*VLONG"}}
+\combinacion["ELU655"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*LZV2 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU656"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*LZV2 + 1.50*VTRSV"}}
+\combinacion["ELU657"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*LZV2 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU658"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*LZV1"}}
+\combinacion["ELU659"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*LZV1 + 1.50*NV"}}
+\combinacion["ELU660"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*LZV1 + 1.50*VLONG"}}
+\combinacion["ELU661"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*LZV1 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU662"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*LZV1 + 1.50*VTRSV"}}
+\combinacion["ELU663"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*LZV1 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU664"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*LZV1 + 1.50*LZV2"}}
+\combinacion["ELU665"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*LZV1 + 1.50*LZV2 + 1.50*NV"}}
+\combinacion["ELU666"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*LZV1 + 1.50*LZV2 + 1.50*VLONG"}}
+\combinacion["ELU667"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*LZV1 + 1.50*LZV2 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU668"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*LZV1 + 1.50*LZV2 + 1.50*VTRSV"}}
+\combinacion["ELU669"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*LZV1 + 1.50*LZV2 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU670"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*ARRV2"}}
+\combinacion["ELU671"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*ARRV2 + 1.50*NV"}}
+\combinacion["ELU672"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*ARRV2 + 1.50*VLONG"}}
+\combinacion["ELU673"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*ARRV2 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU674"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*ARRV2 + 1.50*VTRSV"}}
+\combinacion["ELU675"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*ARRV2 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU676"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*ARRV1"}}
+\combinacion["ELU677"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*ARRV1 + 1.50*NV"}}
+\combinacion["ELU678"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*ARRV1 + 1.50*VLONG"}}
+\combinacion["ELU679"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*ARRV1 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU680"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*ARRV1 + 1.50*VTRSV"}}
+\combinacion["ELU681"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*ARRV1 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU682"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*ARRV1 + 1.50*ARRV2"}}
+\combinacion["ELU683"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*ARRV1 + 1.50*ARRV2 + 1.50*NV"}}
+\combinacion["ELU684"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*ARRV1 + 1.50*ARRV2 + 1.50*VLONG"}}
+\combinacion["ELU685"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*ARRV1 + 1.50*ARRV2 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU686"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*ARRV1 + 1.50*ARRV2 + 1.50*VTRSV"}}
+\combinacion["ELU687"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*ARRV1 + 1.50*ARRV2 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU688"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*FV2"}}
+\combinacion["ELU689"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*FV2 + 1.50*NV"}}
+\combinacion["ELU690"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*FV2 + 1.50*VLONG"}}
+\combinacion["ELU691"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*FV2 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU692"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*FV2 + 1.50*VTRSV"}}
+\combinacion["ELU693"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*FV2 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU694"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*FV2 + 1.50*ARRV1"}}
+\combinacion["ELU695"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*FV2 + 1.50*ARRV1 + 1.50*NV"}}
+\combinacion["ELU696"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*FV2 + 1.50*ARRV1 + 1.50*VLONG"}}
+\combinacion["ELU697"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*FV2 + 1.50*ARRV1 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU698"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*FV2 + 1.50*ARRV1 + 1.50*VTRSV"}}
+\combinacion["ELU699"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*FV2 + 1.50*ARRV1 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU700"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*FV1"}}
+\combinacion["ELU701"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*FV1 + 1.50*NV"}}
+\combinacion["ELU702"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*FV1 + 1.50*VLONG"}}
+\combinacion["ELU703"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*FV1 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU704"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*FV1 + 1.50*VTRSV"}}
+\combinacion["ELU705"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*FV1 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU706"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*FV1 + 1.50*ARRV2"}}
+\combinacion["ELU707"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*FV1 + 1.50*ARRV2 + 1.50*NV"}}
+\combinacion["ELU708"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*FV1 + 1.50*ARRV2 + 1.50*VLONG"}}
+\combinacion["ELU709"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*FV1 + 1.50*ARRV2 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU710"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*FV1 + 1.50*ARRV2 + 1.50*VTRSV"}}
+\combinacion["ELU711"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*FV1 + 1.50*ARRV2 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU712"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*FV1 + 1.50*FV2"}}
+\combinacion["ELU713"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*FV1 + 1.50*FV2 + 1.50*NV"}}
+\combinacion["ELU714"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*FV1 + 1.50*FV2 + 1.50*VLONG"}}
+\combinacion["ELU715"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*FV1 + 1.50*FV2 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU716"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*FV1 + 1.50*FV2 + 1.50*VTRSV"}}
+\combinacion["ELU717"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*FV1 + 1.50*FV2 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU718"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC2V2"}}
+\combinacion["ELU719"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC2V2 + 1.50*NV"}}
+\combinacion["ELU720"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC2V2 + 1.50*VLONG"}}
+\combinacion["ELU721"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC2V2 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU722"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC2V2 + 1.50*VTRSV"}}
+\combinacion["ELU723"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC2V2 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU724"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC2V2 + 1.50*LZV2"}}
+\combinacion["ELU725"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC2V2 + 1.50*LZV2 + 1.50*NV"}}
+\combinacion["ELU726"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC2V2 + 1.50*LZV2 + 1.50*VLONG"}}
+\combinacion["ELU727"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC2V2 + 1.50*LZV2 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU728"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC2V2 + 1.50*LZV2 + 1.50*VTRSV"}}
+\combinacion["ELU729"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC2V2 + 1.50*LZV2 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU730"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC2V2 + 1.50*ARRV2"}}
+\combinacion["ELU731"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC2V2 + 1.50*ARRV2 + 1.50*NV"}}
+\combinacion["ELU732"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC2V2 + 1.50*ARRV2 + 1.50*VLONG"}}
+\combinacion["ELU733"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC2V2 + 1.50*ARRV2 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU734"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC2V2 + 1.50*ARRV2 + 1.50*VTRSV"}}
+\combinacion["ELU735"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC2V2 + 1.50*ARRV2 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU736"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC2V2 + 1.50*FV2"}}
+\combinacion["ELU737"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC2V2 + 1.50*FV2 + 1.50*NV"}}
+\combinacion["ELU738"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC2V2 + 1.50*FV2 + 1.50*VLONG"}}
+\combinacion["ELU739"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC2V2 + 1.50*FV2 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU740"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC2V2 + 1.50*FV2 + 1.50*VTRSV"}}
+\combinacion["ELU741"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC2V2 + 1.50*FV2 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU742"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC2V2 + 1.50*TC3V1"}}
+\combinacion["ELU743"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC2V2 + 1.50*TC3V1 + 1.50*NV"}}
+\combinacion["ELU744"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC2V2 + 1.50*TC3V1 + 1.50*VLONG"}}
+\combinacion["ELU745"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC2V2 + 1.50*TC3V1 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU746"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC2V2 + 1.50*TC3V1 + 1.50*VTRSV"}}
+\combinacion["ELU747"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC2V2 + 1.50*TC3V1 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU748"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC2V2 + 1.50*TC3V1 + 1.50*LZV2"}}
+\combinacion["ELU749"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC2V2 + 1.50*TC3V1 + 1.50*LZV2 + 1.50*NV"}}
+\combinacion["ELU750"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC2V2 + 1.50*TC3V1 + 1.50*LZV2 + 1.50*VLONG"}}
+\combinacion["ELU751"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC2V2 + 1.50*TC3V1 + 1.50*LZV2 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU752"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC2V2 + 1.50*TC3V1 + 1.50*LZV2 + 1.50*VTRSV"}}
+\combinacion["ELU753"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC2V2 + 1.50*TC3V1 + 1.50*LZV2 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU754"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC2V2 + 1.50*TC3V1 + 1.50*LZV1"}}
+\combinacion["ELU755"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC2V2 + 1.50*TC3V1 + 1.50*LZV1 + 1.50*NV"}}
+\combinacion["ELU756"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC2V2 + 1.50*TC3V1 + 1.50*LZV1 + 1.50*VLONG"}}
+\combinacion["ELU757"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC2V2 + 1.50*TC3V1 + 1.50*LZV1 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU758"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC2V2 + 1.50*TC3V1 + 1.50*LZV1 + 1.50*VTRSV"}}
+\combinacion["ELU759"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC2V2 + 1.50*TC3V1 + 1.50*LZV1 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU760"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC2V2 + 1.50*TC3V1 + 1.50*LZV1 + 1.50*LZV2"}}
+\combinacion["ELU761"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC2V2 + 1.50*TC3V1 + 1.50*LZV1 + 1.50*LZV2 + 1.50*NV"}}
+\combinacion["ELU762"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC2V2 + 1.50*TC3V1 + 1.50*LZV1 + 1.50*LZV2 + 1.50*VLONG"}}
+\combinacion["ELU763"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC2V2 + 1.50*TC3V1 + 1.50*LZV1 + 1.50*LZV2 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU764"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC2V2 + 1.50*TC3V1 + 1.50*LZV1 + 1.50*LZV2 + 1.50*VTRSV"}}
+\combinacion["ELU765"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC2V2 + 1.50*TC3V1 + 1.50*LZV1 + 1.50*LZV2 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU766"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC2V2 + 1.50*TC3V1 + 1.50*ARRV2"}}
+\combinacion["ELU767"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC2V2 + 1.50*TC3V1 + 1.50*ARRV2 + 1.50*NV"}}
+\combinacion["ELU768"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC2V2 + 1.50*TC3V1 + 1.50*ARRV2 + 1.50*VLONG"}}
+\combinacion["ELU769"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC2V2 + 1.50*TC3V1 + 1.50*ARRV2 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU770"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC2V2 + 1.50*TC3V1 + 1.50*ARRV2 + 1.50*VTRSV"}}
+\combinacion["ELU771"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC2V2 + 1.50*TC3V1 + 1.50*ARRV2 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU772"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC2V2 + 1.50*TC3V1 + 1.50*FV2"}}
+\combinacion["ELU773"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC2V2 + 1.50*TC3V1 + 1.50*FV2 + 1.50*NV"}}
+\combinacion["ELU774"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC2V2 + 1.50*TC3V1 + 1.50*FV2 + 1.50*VLONG"}}
+\combinacion["ELU775"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC2V2 + 1.50*TC3V1 + 1.50*FV2 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU776"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC2V2 + 1.50*TC3V1 + 1.50*FV2 + 1.50*VTRSV"}}
+\combinacion["ELU777"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC2V2 + 1.50*TC3V1 + 1.50*FV2 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU778"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC3V1"}}
+\combinacion["ELU779"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC3V1 + 1.50*NV"}}
+\combinacion["ELU780"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC3V1 + 1.50*VLONG"}}
+\combinacion["ELU781"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC3V1 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU782"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC3V1 + 1.50*VTRSV"}}
+\combinacion["ELU783"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC3V1 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU784"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC3V1 + 1.50*LZV1"}}
+\combinacion["ELU785"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC3V1 + 1.50*LZV1 + 1.50*NV"}}
+\combinacion["ELU786"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC3V1 + 1.50*LZV1 + 1.50*VLONG"}}
+\combinacion["ELU787"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC3V1 + 1.50*LZV1 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU788"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC3V1 + 1.50*LZV1 + 1.50*VTRSV"}}
+\combinacion["ELU789"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC3V1 + 1.50*LZV1 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU790"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC3V1 + 1.50*TC3V2"}}
+\combinacion["ELU791"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC3V1 + 1.50*TC3V2 + 1.50*NV"}}
+\combinacion["ELU792"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC3V1 + 1.50*TC3V2 + 1.50*VLONG"}}
+\combinacion["ELU793"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC3V1 + 1.50*TC3V2 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU794"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC3V1 + 1.50*TC3V2 + 1.50*VTRSV"}}
+\combinacion["ELU795"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC3V1 + 1.50*TC3V2 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU796"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC3V1 + 1.50*TC3V2 + 1.50*LZV2"}}
+\combinacion["ELU797"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC3V1 + 1.50*TC3V2 + 1.50*LZV2 + 1.50*NV"}}
+\combinacion["ELU798"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC3V1 + 1.50*TC3V2 + 1.50*LZV2 + 1.50*VLONG"}}
+\combinacion["ELU799"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC3V1 + 1.50*TC3V2 + 1.50*LZV2 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU800"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC3V1 + 1.50*TC3V2 + 1.50*LZV2 + 1.50*VTRSV"}}
+\combinacion["ELU801"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC3V1 + 1.50*TC3V2 + 1.50*LZV2 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU802"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC3V1 + 1.50*TC3V2 + 1.50*LZV1"}}
+\combinacion["ELU803"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC3V1 + 1.50*TC3V2 + 1.50*LZV1 + 1.50*NV"}}
+\combinacion["ELU804"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC3V1 + 1.50*TC3V2 + 1.50*LZV1 + 1.50*VLONG"}}
+\combinacion["ELU805"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC3V1 + 1.50*TC3V2 + 1.50*LZV1 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU806"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC3V1 + 1.50*TC3V2 + 1.50*LZV1 + 1.50*VTRSV"}}
+\combinacion["ELU807"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC3V1 + 1.50*TC3V2 + 1.50*LZV1 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU808"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC3V1 + 1.50*TC3V2 + 1.50*LZV1 + 1.50*LZV2"}}
+\combinacion["ELU809"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC3V1 + 1.50*TC3V2 + 1.50*LZV1 + 1.50*LZV2 + 1.50*NV"}}
+\combinacion["ELU810"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC3V1 + 1.50*TC3V2 + 1.50*LZV1 + 1.50*LZV2 + 1.50*VLONG"}}
+\combinacion["ELU811"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC3V1 + 1.50*TC3V2 + 1.50*LZV1 + 1.50*LZV2 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU812"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC3V1 + 1.50*TC3V2 + 1.50*LZV1 + 1.50*LZV2 + 1.50*VTRSV"}}
+\combinacion["ELU813"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC3V1 + 1.50*TC3V2 + 1.50*LZV1 + 1.50*LZV2 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU814"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC3V2"}}
+\combinacion["ELU815"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC3V2 + 1.50*NV"}}
+\combinacion["ELU816"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC3V2 + 1.50*VLONG"}}
+\combinacion["ELU817"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC3V2 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU818"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC3V2 + 1.50*VTRSV"}}
+\combinacion["ELU819"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC3V2 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU820"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC3V2 + 1.50*LZV2"}}
+\combinacion["ELU821"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC3V2 + 1.50*LZV2 + 1.50*NV"}}
+\combinacion["ELU822"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC3V2 + 1.50*LZV2 + 1.50*VLONG"}}
+\combinacion["ELU823"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC3V2 + 1.50*LZV2 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU824"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC3V2 + 1.50*LZV2 + 1.50*VTRSV"}}
+\combinacion["ELU825"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*TC3V2 + 1.50*LZV2 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU826"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*VTRSV"}}
+\combinacion["ELU827"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU828"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*VLONG"}}
+\combinacion["ELU829"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU830"]{ \descomp{"1.00*G1 + 1.50*ETIER + 1.50*NV"}}
+\combinacion["ELU831"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC1V1"}}
+\combinacion["ELU832"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC1V1 + 1.50*NV"}}
+\combinacion["ELU833"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC1V1 + 1.50*VLONG"}}
+\combinacion["ELU834"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC1V1 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU835"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC1V1 + 1.50*VTRSV"}}
+\combinacion["ELU836"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC1V1 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU837"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC1V1 + 1.50*LZV1"}}
+\combinacion["ELU838"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC1V1 + 1.50*LZV1 + 1.50*NV"}}
+\combinacion["ELU839"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC1V1 + 1.50*LZV1 + 1.50*VLONG"}}
+\combinacion["ELU840"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC1V1 + 1.50*LZV1 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU841"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC1V1 + 1.50*LZV1 + 1.50*VTRSV"}}
+\combinacion["ELU842"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC1V1 + 1.50*LZV1 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU843"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC1V1 + 1.50*TC3V2"}}
+\combinacion["ELU844"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC1V1 + 1.50*TC3V2 + 1.50*NV"}}
+\combinacion["ELU845"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC1V1 + 1.50*TC3V2 + 1.50*VLONG"}}
+\combinacion["ELU846"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC1V1 + 1.50*TC3V2 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU847"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC1V1 + 1.50*TC3V2 + 1.50*VTRSV"}}
+\combinacion["ELU848"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC1V1 + 1.50*TC3V2 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU849"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC1V1 + 1.50*TC3V2 + 1.50*LZV2"}}
+\combinacion["ELU850"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC1V1 + 1.50*TC3V2 + 1.50*LZV2 + 1.50*NV"}}
+\combinacion["ELU851"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC1V1 + 1.50*TC3V2 + 1.50*LZV2 + 1.50*VLONG"}}
+\combinacion["ELU852"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC1V1 + 1.50*TC3V2 + 1.50*LZV2 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU853"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC1V1 + 1.50*TC3V2 + 1.50*LZV2 + 1.50*VTRSV"}}
+\combinacion["ELU854"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC1V1 + 1.50*TC3V2 + 1.50*LZV2 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU855"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC1V1 + 1.50*TC3V2 + 1.50*LZV1"}}
+\combinacion["ELU856"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC1V1 + 1.50*TC3V2 + 1.50*LZV1 + 1.50*NV"}}
+\combinacion["ELU857"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC1V1 + 1.50*TC3V2 + 1.50*LZV1 + 1.50*VLONG"}}
+\combinacion["ELU858"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC1V1 + 1.50*TC3V2 + 1.50*LZV1 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU859"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC1V1 + 1.50*TC3V2 + 1.50*LZV1 + 1.50*VTRSV"}}
+\combinacion["ELU860"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC1V1 + 1.50*TC3V2 + 1.50*LZV1 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU861"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC1V1 + 1.50*TC3V2 + 1.50*LZV1 + 1.50*LZV2"}}
+\combinacion["ELU862"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC1V1 + 1.50*TC3V2 + 1.50*LZV1 + 1.50*LZV2 + 1.50*NV"}}
+\combinacion["ELU863"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC1V1 + 1.50*TC3V2 + 1.50*LZV1 + 1.50*LZV2 + 1.50*VLONG"}}
+\combinacion["ELU864"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC1V1 + 1.50*TC3V2 + 1.50*LZV1 + 1.50*LZV2 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU865"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC1V1 + 1.50*TC3V2 + 1.50*LZV1 + 1.50*LZV2 + 1.50*VTRSV"}}
+\combinacion["ELU866"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC1V1 + 1.50*TC3V2 + 1.50*LZV1 + 1.50*LZV2 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU867"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC1V1 + 1.50*TC2V2"}}
+\combinacion["ELU868"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC1V1 + 1.50*TC2V2 + 1.50*NV"}}
+\combinacion["ELU869"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC1V1 + 1.50*TC2V2 + 1.50*VLONG"}}
+\combinacion["ELU870"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC1V1 + 1.50*TC2V2 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU871"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC1V1 + 1.50*TC2V2 + 1.50*VTRSV"}}
+\combinacion["ELU872"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC1V1 + 1.50*TC2V2 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU873"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC1V1 + 1.50*TC2V2 + 1.50*LZV2"}}
+\combinacion["ELU874"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC1V1 + 1.50*TC2V2 + 1.50*LZV2 + 1.50*NV"}}
+\combinacion["ELU875"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC1V1 + 1.50*TC2V2 + 1.50*LZV2 + 1.50*VLONG"}}
+\combinacion["ELU876"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC1V1 + 1.50*TC2V2 + 1.50*LZV2 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU877"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC1V1 + 1.50*TC2V2 + 1.50*LZV2 + 1.50*VTRSV"}}
+\combinacion["ELU878"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC1V1 + 1.50*TC2V2 + 1.50*LZV2 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU879"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC1V1 + 1.50*TC2V2 + 1.50*LZV1"}}
+\combinacion["ELU880"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC1V1 + 1.50*TC2V2 + 1.50*LZV1 + 1.50*NV"}}
+\combinacion["ELU881"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC1V1 + 1.50*TC2V2 + 1.50*LZV1 + 1.50*VLONG"}}
+\combinacion["ELU882"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC1V1 + 1.50*TC2V2 + 1.50*LZV1 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU883"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC1V1 + 1.50*TC2V2 + 1.50*LZV1 + 1.50*VTRSV"}}
+\combinacion["ELU884"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC1V1 + 1.50*TC2V2 + 1.50*LZV1 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU885"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC1V1 + 1.50*TC2V2 + 1.50*LZV1 + 1.50*LZV2"}}
+\combinacion["ELU886"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC1V1 + 1.50*TC2V2 + 1.50*LZV1 + 1.50*LZV2 + 1.50*NV"}}
+\combinacion["ELU887"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC1V1 + 1.50*TC2V2 + 1.50*LZV1 + 1.50*LZV2 + 1.50*VLONG"}}
+\combinacion["ELU888"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC1V1 + 1.50*TC2V2 + 1.50*LZV1 + 1.50*LZV2 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU889"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC1V1 + 1.50*TC2V2 + 1.50*LZV1 + 1.50*LZV2 + 1.50*VTRSV"}}
+\combinacion["ELU890"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC1V1 + 1.50*TC2V2 + 1.50*LZV1 + 1.50*LZV2 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU891"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC1V1 + 1.50*TC2V2 + 1.50*ARRV2"}}
+\combinacion["ELU892"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC1V1 + 1.50*TC2V2 + 1.50*ARRV2 + 1.50*NV"}}
+\combinacion["ELU893"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC1V1 + 1.50*TC2V2 + 1.50*ARRV2 + 1.50*VLONG"}}
+\combinacion["ELU894"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC1V1 + 1.50*TC2V2 + 1.50*ARRV2 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU895"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC1V1 + 1.50*TC2V2 + 1.50*ARRV2 + 1.50*VTRSV"}}
+\combinacion["ELU896"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC1V1 + 1.50*TC2V2 + 1.50*ARRV2 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU897"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC1V1 + 1.50*TC2V2 + 1.50*FV2"}}
+\combinacion["ELU898"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC1V1 + 1.50*TC2V2 + 1.50*FV2 + 1.50*NV"}}
+\combinacion["ELU899"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC1V1 + 1.50*TC2V2 + 1.50*FV2 + 1.50*VLONG"}}
+\combinacion["ELU900"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC1V1 + 1.50*TC2V2 + 1.50*FV2 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU901"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC1V1 + 1.50*TC2V2 + 1.50*FV2 + 1.50*VTRSV"}}
+\combinacion["ELU902"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC1V1 + 1.50*TC2V2 + 1.50*FV2 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU903"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC1V1 + 1.50*TC1V2"}}
+\combinacion["ELU904"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC1V1 + 1.50*TC1V2 + 1.50*NV"}}
+\combinacion["ELU905"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC1V1 + 1.50*TC1V2 + 1.50*VLONG"}}
+\combinacion["ELU906"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC1V1 + 1.50*TC1V2 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU907"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC1V1 + 1.50*TC1V2 + 1.50*VTRSV"}}
+\combinacion["ELU908"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC1V1 + 1.50*TC1V2 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU909"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC1V1 + 1.50*TC1V2 + 1.50*LZV2"}}
+\combinacion["ELU910"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC1V1 + 1.50*TC1V2 + 1.50*LZV2 + 1.50*NV"}}
+\combinacion["ELU911"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC1V1 + 1.50*TC1V2 + 1.50*LZV2 + 1.50*VLONG"}}
+\combinacion["ELU912"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC1V1 + 1.50*TC1V2 + 1.50*LZV2 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU913"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC1V1 + 1.50*TC1V2 + 1.50*LZV2 + 1.50*VTRSV"}}
+\combinacion["ELU914"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC1V1 + 1.50*TC1V2 + 1.50*LZV2 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU915"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC1V1 + 1.50*TC1V2 + 1.50*LZV1"}}
+\combinacion["ELU916"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC1V1 + 1.50*TC1V2 + 1.50*LZV1 + 1.50*NV"}}
+\combinacion["ELU917"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC1V1 + 1.50*TC1V2 + 1.50*LZV1 + 1.50*VLONG"}}
+\combinacion["ELU918"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC1V1 + 1.50*TC1V2 + 1.50*LZV1 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU919"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC1V1 + 1.50*TC1V2 + 1.50*LZV1 + 1.50*VTRSV"}}
+\combinacion["ELU920"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC1V1 + 1.50*TC1V2 + 1.50*LZV1 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU921"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC1V1 + 1.50*TC1V2 + 1.50*LZV1 + 1.50*LZV2"}}
+\combinacion["ELU922"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC1V1 + 1.50*TC1V2 + 1.50*LZV1 + 1.50*LZV2 + 1.50*NV"}}
+\combinacion["ELU923"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC1V1 + 1.50*TC1V2 + 1.50*LZV1 + 1.50*LZV2 + 1.50*VLONG"}}
+\combinacion["ELU924"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC1V1 + 1.50*TC1V2 + 1.50*LZV1 + 1.50*LZV2 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU925"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC1V1 + 1.50*TC1V2 + 1.50*LZV1 + 1.50*LZV2 + 1.50*VTRSV"}}
+\combinacion["ELU926"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC1V1 + 1.50*TC1V2 + 1.50*LZV1 + 1.50*LZV2 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU927"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC1V2"}}
+\combinacion["ELU928"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC1V2 + 1.50*NV"}}
+\combinacion["ELU929"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC1V2 + 1.50*VLONG"}}
+\combinacion["ELU930"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC1V2 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU931"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC1V2 + 1.50*VTRSV"}}
+\combinacion["ELU932"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC1V2 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU933"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC1V2 + 1.50*LZV2"}}
+\combinacion["ELU934"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC1V2 + 1.50*LZV2 + 1.50*NV"}}
+\combinacion["ELU935"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC1V2 + 1.50*LZV2 + 1.50*VLONG"}}
+\combinacion["ELU936"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC1V2 + 1.50*LZV2 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU937"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC1V2 + 1.50*LZV2 + 1.50*VTRSV"}}
+\combinacion["ELU938"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC1V2 + 1.50*LZV2 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU939"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC1V2 + 1.50*TC3V1"}}
+\combinacion["ELU940"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC1V2 + 1.50*TC3V1 + 1.50*NV"}}
+\combinacion["ELU941"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC1V2 + 1.50*TC3V1 + 1.50*VLONG"}}
+\combinacion["ELU942"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC1V2 + 1.50*TC3V1 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU943"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC1V2 + 1.50*TC3V1 + 1.50*VTRSV"}}
+\combinacion["ELU944"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC1V2 + 1.50*TC3V1 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU945"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC1V2 + 1.50*TC3V1 + 1.50*LZV2"}}
+\combinacion["ELU946"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC1V2 + 1.50*TC3V1 + 1.50*LZV2 + 1.50*NV"}}
+\combinacion["ELU947"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC1V2 + 1.50*TC3V1 + 1.50*LZV2 + 1.50*VLONG"}}
+\combinacion["ELU948"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC1V2 + 1.50*TC3V1 + 1.50*LZV2 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU949"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC1V2 + 1.50*TC3V1 + 1.50*LZV2 + 1.50*VTRSV"}}
+\combinacion["ELU950"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC1V2 + 1.50*TC3V1 + 1.50*LZV2 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU951"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC1V2 + 1.50*TC3V1 + 1.50*LZV1"}}
+\combinacion["ELU952"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC1V2 + 1.50*TC3V1 + 1.50*LZV1 + 1.50*NV"}}
+\combinacion["ELU953"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC1V2 + 1.50*TC3V1 + 1.50*LZV1 + 1.50*VLONG"}}
+\combinacion["ELU954"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC1V2 + 1.50*TC3V1 + 1.50*LZV1 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU955"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC1V2 + 1.50*TC3V1 + 1.50*LZV1 + 1.50*VTRSV"}}
+\combinacion["ELU956"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC1V2 + 1.50*TC3V1 + 1.50*LZV1 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU957"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC1V2 + 1.50*TC3V1 + 1.50*LZV1 + 1.50*LZV2"}}
+\combinacion["ELU958"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC1V2 + 1.50*TC3V1 + 1.50*LZV1 + 1.50*LZV2 + 1.50*NV"}}
+\combinacion["ELU959"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC1V2 + 1.50*TC3V1 + 1.50*LZV1 + 1.50*LZV2 + 1.50*VLONG"}}
+\combinacion["ELU960"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC1V2 + 1.50*TC3V1 + 1.50*LZV1 + 1.50*LZV2 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU961"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC1V2 + 1.50*TC3V1 + 1.50*LZV1 + 1.50*LZV2 + 1.50*VTRSV"}}
+\combinacion["ELU962"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC1V2 + 1.50*TC3V1 + 1.50*LZV1 + 1.50*LZV2 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU963"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC1V2 + 1.50*TC2V1"}}
+\combinacion["ELU964"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC1V2 + 1.50*TC2V1 + 1.50*NV"}}
+\combinacion["ELU965"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC1V2 + 1.50*TC2V1 + 1.50*VLONG"}}
+\combinacion["ELU966"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC1V2 + 1.50*TC2V1 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU967"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC1V2 + 1.50*TC2V1 + 1.50*VTRSV"}}
+\combinacion["ELU968"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC1V2 + 1.50*TC2V1 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU969"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC1V2 + 1.50*TC2V1 + 1.50*LZV2"}}
+\combinacion["ELU970"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC1V2 + 1.50*TC2V1 + 1.50*LZV2 + 1.50*NV"}}
+\combinacion["ELU971"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC1V2 + 1.50*TC2V1 + 1.50*LZV2 + 1.50*VLONG"}}
+\combinacion["ELU972"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC1V2 + 1.50*TC2V1 + 1.50*LZV2 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU973"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC1V2 + 1.50*TC2V1 + 1.50*LZV2 + 1.50*VTRSV"}}
+\combinacion["ELU974"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC1V2 + 1.50*TC2V1 + 1.50*LZV2 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU975"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC1V2 + 1.50*TC2V1 + 1.50*LZV1"}}
+\combinacion["ELU976"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC1V2 + 1.50*TC2V1 + 1.50*LZV1 + 1.50*NV"}}
+\combinacion["ELU977"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC1V2 + 1.50*TC2V1 + 1.50*LZV1 + 1.50*VLONG"}}
+\combinacion["ELU978"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC1V2 + 1.50*TC2V1 + 1.50*LZV1 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU979"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC1V2 + 1.50*TC2V1 + 1.50*LZV1 + 1.50*VTRSV"}}
+\combinacion["ELU980"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC1V2 + 1.50*TC2V1 + 1.50*LZV1 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU981"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC1V2 + 1.50*TC2V1 + 1.50*LZV1 + 1.50*LZV2"}}
+\combinacion["ELU982"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC1V2 + 1.50*TC2V1 + 1.50*LZV1 + 1.50*LZV2 + 1.50*NV"}}
+\combinacion["ELU983"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC1V2 + 1.50*TC2V1 + 1.50*LZV1 + 1.50*LZV2 + 1.50*VLONG"}}
+\combinacion["ELU984"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC1V2 + 1.50*TC2V1 + 1.50*LZV1 + 1.50*LZV2 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU985"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC1V2 + 1.50*TC2V1 + 1.50*LZV1 + 1.50*LZV2 + 1.50*VTRSV"}}
+\combinacion["ELU986"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC1V2 + 1.50*TC2V1 + 1.50*LZV1 + 1.50*LZV2 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU987"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC1V2 + 1.50*TC2V1 + 1.50*ARRV1"}}
+\combinacion["ELU988"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC1V2 + 1.50*TC2V1 + 1.50*ARRV1 + 1.50*NV"}}
+\combinacion["ELU989"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC1V2 + 1.50*TC2V1 + 1.50*ARRV1 + 1.50*VLONG"}}
+\combinacion["ELU990"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC1V2 + 1.50*TC2V1 + 1.50*ARRV1 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU991"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC1V2 + 1.50*TC2V1 + 1.50*ARRV1 + 1.50*VTRSV"}}
+\combinacion["ELU992"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC1V2 + 1.50*TC2V1 + 1.50*ARRV1 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU993"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC1V2 + 1.50*TC2V1 + 1.50*FV1"}}
+\combinacion["ELU994"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC1V2 + 1.50*TC2V1 + 1.50*FV1 + 1.50*NV"}}
+\combinacion["ELU995"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC1V2 + 1.50*TC2V1 + 1.50*FV1 + 1.50*VLONG"}}
+\combinacion["ELU996"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC1V2 + 1.50*TC2V1 + 1.50*FV1 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU997"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC1V2 + 1.50*TC2V1 + 1.50*FV1 + 1.50*VTRSV"}}
+\combinacion["ELU998"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC1V2 + 1.50*TC2V1 + 1.50*FV1 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU999"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC2V1"}}
+\combinacion["ELU1000"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*NV"}}
+\combinacion["ELU1001"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*VLONG"}}
+\combinacion["ELU1002"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU1003"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*VTRSV"}}
+\combinacion["ELU1004"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU1005"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*LZV1"}}
+\combinacion["ELU1006"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*LZV1 + 1.50*NV"}}
+\combinacion["ELU1007"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*LZV1 + 1.50*VLONG"}}
+\combinacion["ELU1008"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*LZV1 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU1009"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*LZV1 + 1.50*VTRSV"}}
+\combinacion["ELU1010"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*LZV1 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU1011"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*ARRV1"}}
+\combinacion["ELU1012"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*ARRV1 + 1.50*NV"}}
+\combinacion["ELU1013"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*ARRV1 + 1.50*VLONG"}}
+\combinacion["ELU1014"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*ARRV1 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU1015"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*ARRV1 + 1.50*VTRSV"}}
+\combinacion["ELU1016"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*ARRV1 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU1017"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*FV1"}}
+\combinacion["ELU1018"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*FV1 + 1.50*NV"}}
+\combinacion["ELU1019"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*FV1 + 1.50*VLONG"}}
+\combinacion["ELU1020"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*FV1 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU1021"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*FV1 + 1.50*VTRSV"}}
+\combinacion["ELU1022"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*FV1 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU1023"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC3V2"}}
+\combinacion["ELU1024"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC3V2 + 1.50*NV"}}
+\combinacion["ELU1025"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC3V2 + 1.50*VLONG"}}
+\combinacion["ELU1026"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC3V2 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU1027"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC3V2 + 1.50*VTRSV"}}
+\combinacion["ELU1028"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC3V2 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU1029"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC3V2 + 1.50*LZV2"}}
+\combinacion["ELU1030"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC3V2 + 1.50*LZV2 + 1.50*NV"}}
+\combinacion["ELU1031"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC3V2 + 1.50*LZV2 + 1.50*VLONG"}}
+\combinacion["ELU1032"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC3V2 + 1.50*LZV2 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU1033"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC3V2 + 1.50*LZV2 + 1.50*VTRSV"}}
+\combinacion["ELU1034"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC3V2 + 1.50*LZV2 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU1035"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC3V2 + 1.50*LZV1"}}
+\combinacion["ELU1036"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC3V2 + 1.50*LZV1 + 1.50*NV"}}
+\combinacion["ELU1037"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC3V2 + 1.50*LZV1 + 1.50*VLONG"}}
+\combinacion["ELU1038"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC3V2 + 1.50*LZV1 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU1039"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC3V2 + 1.50*LZV1 + 1.50*VTRSV"}}
+\combinacion["ELU1040"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC3V2 + 1.50*LZV1 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU1041"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC3V2 + 1.50*LZV1 + 1.50*LZV2"}}
+\combinacion["ELU1042"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC3V2 + 1.50*LZV1 + 1.50*LZV2 + 1.50*NV"}}
+\combinacion["ELU1043"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC3V2 + 1.50*LZV1 + 1.50*LZV2 + 1.50*VLONG"}}
+\combinacion["ELU1044"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC3V2 + 1.50*LZV1 + 1.50*LZV2 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU1045"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC3V2 + 1.50*LZV1 + 1.50*LZV2 + 1.50*VTRSV"}}
+\combinacion["ELU1046"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC3V2 + 1.50*LZV1 + 1.50*LZV2 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU1047"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC3V2 + 1.50*ARRV1"}}
+\combinacion["ELU1048"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC3V2 + 1.50*ARRV1 + 1.50*NV"}}
+\combinacion["ELU1049"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC3V2 + 1.50*ARRV1 + 1.50*VLONG"}}
+\combinacion["ELU1050"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC3V2 + 1.50*ARRV1 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU1051"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC3V2 + 1.50*ARRV1 + 1.50*VTRSV"}}
+\combinacion["ELU1052"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC3V2 + 1.50*ARRV1 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU1053"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC3V2 + 1.50*FV1"}}
+\combinacion["ELU1054"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC3V2 + 1.50*FV1 + 1.50*NV"}}
+\combinacion["ELU1055"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC3V2 + 1.50*FV1 + 1.50*VLONG"}}
+\combinacion["ELU1056"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC3V2 + 1.50*FV1 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU1057"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC3V2 + 1.50*FV1 + 1.50*VTRSV"}}
+\combinacion["ELU1058"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC3V2 + 1.50*FV1 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU1059"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC2V2"}}
+\combinacion["ELU1060"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*NV"}}
+\combinacion["ELU1061"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*VLONG"}}
+\combinacion["ELU1062"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU1063"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*VTRSV"}}
+\combinacion["ELU1064"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU1065"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*LZV2"}}
+\combinacion["ELU1066"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*LZV2 + 1.50*NV"}}
+\combinacion["ELU1067"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*LZV2 + 1.50*VLONG"}}
+\combinacion["ELU1068"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*LZV2 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU1069"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*LZV2 + 1.50*VTRSV"}}
+\combinacion["ELU1070"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*LZV2 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU1071"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*LZV1"}}
+\combinacion["ELU1072"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*LZV1 + 1.50*NV"}}
+\combinacion["ELU1073"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*LZV1 + 1.50*VLONG"}}
+\combinacion["ELU1074"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*LZV1 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU1075"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*LZV1 + 1.50*VTRSV"}}
+\combinacion["ELU1076"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*LZV1 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU1077"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*LZV1 + 1.50*LZV2"}}
+\combinacion["ELU1078"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*LZV1 + 1.50*LZV2 + 1.50*NV"}}
+\combinacion["ELU1079"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*LZV1 + 1.50*LZV2 + 1.50*VLONG"}}
+\combinacion["ELU1080"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*LZV1 + 1.50*LZV2 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU1081"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*LZV1 + 1.50*LZV2 + 1.50*VTRSV"}}
+\combinacion["ELU1082"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*LZV1 + 1.50*LZV2 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU1083"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*ARRV2"}}
+\combinacion["ELU1084"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*ARRV2 + 1.50*NV"}}
+\combinacion["ELU1085"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*ARRV2 + 1.50*VLONG"}}
+\combinacion["ELU1086"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*ARRV2 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU1087"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*ARRV2 + 1.50*VTRSV"}}
+\combinacion["ELU1088"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*ARRV2 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU1089"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*ARRV1"}}
+\combinacion["ELU1090"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*ARRV1 + 1.50*NV"}}
+\combinacion["ELU1091"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*ARRV1 + 1.50*VLONG"}}
+\combinacion["ELU1092"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*ARRV1 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU1093"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*ARRV1 + 1.50*VTRSV"}}
+\combinacion["ELU1094"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*ARRV1 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU1095"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*ARRV1 + 1.50*ARRV2"}}
+\combinacion["ELU1096"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*ARRV1 + 1.50*ARRV2 + 1.50*NV"}}
+\combinacion["ELU1097"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*ARRV1 + 1.50*ARRV2 + 1.50*VLONG"}}
+\combinacion["ELU1098"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*ARRV1 + 1.50*ARRV2 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU1099"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*ARRV1 + 1.50*ARRV2 + 1.50*VTRSV"}}
+\combinacion["ELU1100"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*ARRV1 + 1.50*ARRV2 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU1101"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*FV2"}}
+\combinacion["ELU1102"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*FV2 + 1.50*NV"}}
+\combinacion["ELU1103"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*FV2 + 1.50*VLONG"}}
+\combinacion["ELU1104"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*FV2 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU1105"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*FV2 + 1.50*VTRSV"}}
+\combinacion["ELU1106"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*FV2 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU1107"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*FV2 + 1.50*ARRV1"}}
+\combinacion["ELU1108"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*FV2 + 1.50*ARRV1 + 1.50*NV"}}
+\combinacion["ELU1109"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*FV2 + 1.50*ARRV1 + 1.50*VLONG"}}
+\combinacion["ELU1110"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*FV2 + 1.50*ARRV1 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU1111"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*FV2 + 1.50*ARRV1 + 1.50*VTRSV"}}
+\combinacion["ELU1112"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*FV2 + 1.50*ARRV1 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU1113"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*FV1"}}
+\combinacion["ELU1114"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*FV1 + 1.50*NV"}}
+\combinacion["ELU1115"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*FV1 + 1.50*VLONG"}}
+\combinacion["ELU1116"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*FV1 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU1117"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*FV1 + 1.50*VTRSV"}}
+\combinacion["ELU1118"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*FV1 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU1119"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*FV1 + 1.50*ARRV2"}}
+\combinacion["ELU1120"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*FV1 + 1.50*ARRV2 + 1.50*NV"}}
+\combinacion["ELU1121"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*FV1 + 1.50*ARRV2 + 1.50*VLONG"}}
+\combinacion["ELU1122"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*FV1 + 1.50*ARRV2 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU1123"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*FV1 + 1.50*ARRV2 + 1.50*VTRSV"}}
+\combinacion["ELU1124"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*FV1 + 1.50*ARRV2 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU1125"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*FV1 + 1.50*FV2"}}
+\combinacion["ELU1126"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*FV1 + 1.50*FV2 + 1.50*NV"}}
+\combinacion["ELU1127"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*FV1 + 1.50*FV2 + 1.50*VLONG"}}
+\combinacion["ELU1128"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*FV1 + 1.50*FV2 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU1129"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*FV1 + 1.50*FV2 + 1.50*VTRSV"}}
+\combinacion["ELU1130"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*FV1 + 1.50*FV2 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU1131"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC2V2"}}
+\combinacion["ELU1132"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC2V2 + 1.50*NV"}}
+\combinacion["ELU1133"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC2V2 + 1.50*VLONG"}}
+\combinacion["ELU1134"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC2V2 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU1135"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC2V2 + 1.50*VTRSV"}}
+\combinacion["ELU1136"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC2V2 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU1137"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC2V2 + 1.50*LZV2"}}
+\combinacion["ELU1138"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC2V2 + 1.50*LZV2 + 1.50*NV"}}
+\combinacion["ELU1139"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC2V2 + 1.50*LZV2 + 1.50*VLONG"}}
+\combinacion["ELU1140"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC2V2 + 1.50*LZV2 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU1141"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC2V2 + 1.50*LZV2 + 1.50*VTRSV"}}
+\combinacion["ELU1142"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC2V2 + 1.50*LZV2 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU1143"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC2V2 + 1.50*ARRV2"}}
+\combinacion["ELU1144"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC2V2 + 1.50*ARRV2 + 1.50*NV"}}
+\combinacion["ELU1145"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC2V2 + 1.50*ARRV2 + 1.50*VLONG"}}
+\combinacion["ELU1146"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC2V2 + 1.50*ARRV2 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU1147"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC2V2 + 1.50*ARRV2 + 1.50*VTRSV"}}
+\combinacion["ELU1148"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC2V2 + 1.50*ARRV2 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU1149"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC2V2 + 1.50*FV2"}}
+\combinacion["ELU1150"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC2V2 + 1.50*FV2 + 1.50*NV"}}
+\combinacion["ELU1151"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC2V2 + 1.50*FV2 + 1.50*VLONG"}}
+\combinacion["ELU1152"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC2V2 + 1.50*FV2 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU1153"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC2V2 + 1.50*FV2 + 1.50*VTRSV"}}
+\combinacion["ELU1154"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC2V2 + 1.50*FV2 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU1155"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC2V2 + 1.50*TC3V1"}}
+\combinacion["ELU1156"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC2V2 + 1.50*TC3V1 + 1.50*NV"}}
+\combinacion["ELU1157"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC2V2 + 1.50*TC3V1 + 1.50*VLONG"}}
+\combinacion["ELU1158"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC2V2 + 1.50*TC3V1 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU1159"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC2V2 + 1.50*TC3V1 + 1.50*VTRSV"}}
+\combinacion["ELU1160"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC2V2 + 1.50*TC3V1 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU1161"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC2V2 + 1.50*TC3V1 + 1.50*LZV2"}}
+\combinacion["ELU1162"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC2V2 + 1.50*TC3V1 + 1.50*LZV2 + 1.50*NV"}}
+\combinacion["ELU1163"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC2V2 + 1.50*TC3V1 + 1.50*LZV2 + 1.50*VLONG"}}
+\combinacion["ELU1164"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC2V2 + 1.50*TC3V1 + 1.50*LZV2 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU1165"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC2V2 + 1.50*TC3V1 + 1.50*LZV2 + 1.50*VTRSV"}}
+\combinacion["ELU1166"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC2V2 + 1.50*TC3V1 + 1.50*LZV2 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU1167"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC2V2 + 1.50*TC3V1 + 1.50*LZV1"}}
+\combinacion["ELU1168"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC2V2 + 1.50*TC3V1 + 1.50*LZV1 + 1.50*NV"}}
+\combinacion["ELU1169"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC2V2 + 1.50*TC3V1 + 1.50*LZV1 + 1.50*VLONG"}}
+\combinacion["ELU1170"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC2V2 + 1.50*TC3V1 + 1.50*LZV1 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU1171"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC2V2 + 1.50*TC3V1 + 1.50*LZV1 + 1.50*VTRSV"}}
+\combinacion["ELU1172"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC2V2 + 1.50*TC3V1 + 1.50*LZV1 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU1173"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC2V2 + 1.50*TC3V1 + 1.50*LZV1 + 1.50*LZV2"}}
+\combinacion["ELU1174"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC2V2 + 1.50*TC3V1 + 1.50*LZV1 + 1.50*LZV2 + 1.50*NV"}}
+\combinacion["ELU1175"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC2V2 + 1.50*TC3V1 + 1.50*LZV1 + 1.50*LZV2 + 1.50*VLONG"}}
+\combinacion["ELU1176"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC2V2 + 1.50*TC3V1 + 1.50*LZV1 + 1.50*LZV2 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU1177"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC2V2 + 1.50*TC3V1 + 1.50*LZV1 + 1.50*LZV2 + 1.50*VTRSV"}}
+\combinacion["ELU1178"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC2V2 + 1.50*TC3V1 + 1.50*LZV1 + 1.50*LZV2 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU1179"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC2V2 + 1.50*TC3V1 + 1.50*ARRV2"}}
+\combinacion["ELU1180"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC2V2 + 1.50*TC3V1 + 1.50*ARRV2 + 1.50*NV"}}
+\combinacion["ELU1181"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC2V2 + 1.50*TC3V1 + 1.50*ARRV2 + 1.50*VLONG"}}
+\combinacion["ELU1182"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC2V2 + 1.50*TC3V1 + 1.50*ARRV2 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU1183"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC2V2 + 1.50*TC3V1 + 1.50*ARRV2 + 1.50*VTRSV"}}
+\combinacion["ELU1184"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC2V2 + 1.50*TC3V1 + 1.50*ARRV2 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU1185"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC2V2 + 1.50*TC3V1 + 1.50*FV2"}}
+\combinacion["ELU1186"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC2V2 + 1.50*TC3V1 + 1.50*FV2 + 1.50*NV"}}
+\combinacion["ELU1187"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC2V2 + 1.50*TC3V1 + 1.50*FV2 + 1.50*VLONG"}}
+\combinacion["ELU1188"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC2V2 + 1.50*TC3V1 + 1.50*FV2 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU1189"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC2V2 + 1.50*TC3V1 + 1.50*FV2 + 1.50*VTRSV"}}
+\combinacion["ELU1190"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC2V2 + 1.50*TC3V1 + 1.50*FV2 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU1191"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC3V1"}}
+\combinacion["ELU1192"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC3V1 + 1.50*NV"}}
+\combinacion["ELU1193"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC3V1 + 1.50*VLONG"}}
+\combinacion["ELU1194"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC3V1 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU1195"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC3V1 + 1.50*VTRSV"}}
+\combinacion["ELU1196"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC3V1 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU1197"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC3V1 + 1.50*LZV1"}}
+\combinacion["ELU1198"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC3V1 + 1.50*LZV1 + 1.50*NV"}}
+\combinacion["ELU1199"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC3V1 + 1.50*LZV1 + 1.50*VLONG"}}
+\combinacion["ELU1200"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC3V1 + 1.50*LZV1 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU1201"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC3V1 + 1.50*LZV1 + 1.50*VTRSV"}}
+\combinacion["ELU1202"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC3V1 + 1.50*LZV1 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU1203"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC3V1 + 1.50*TC3V2"}}
+\combinacion["ELU1204"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC3V1 + 1.50*TC3V2 + 1.50*NV"}}
+\combinacion["ELU1205"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC3V1 + 1.50*TC3V2 + 1.50*VLONG"}}
+\combinacion["ELU1206"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC3V1 + 1.50*TC3V2 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU1207"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC3V1 + 1.50*TC3V2 + 1.50*VTRSV"}}
+\combinacion["ELU1208"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC3V1 + 1.50*TC3V2 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU1209"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC3V1 + 1.50*TC3V2 + 1.50*LZV2"}}
+\combinacion["ELU1210"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC3V1 + 1.50*TC3V2 + 1.50*LZV2 + 1.50*NV"}}
+\combinacion["ELU1211"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC3V1 + 1.50*TC3V2 + 1.50*LZV2 + 1.50*VLONG"}}
+\combinacion["ELU1212"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC3V1 + 1.50*TC3V2 + 1.50*LZV2 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU1213"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC3V1 + 1.50*TC3V2 + 1.50*LZV2 + 1.50*VTRSV"}}
+\combinacion["ELU1214"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC3V1 + 1.50*TC3V2 + 1.50*LZV2 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU1215"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC3V1 + 1.50*TC3V2 + 1.50*LZV1"}}
+\combinacion["ELU1216"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC3V1 + 1.50*TC3V2 + 1.50*LZV1 + 1.50*NV"}}
+\combinacion["ELU1217"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC3V1 + 1.50*TC3V2 + 1.50*LZV1 + 1.50*VLONG"}}
+\combinacion["ELU1218"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC3V1 + 1.50*TC3V2 + 1.50*LZV1 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU1219"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC3V1 + 1.50*TC3V2 + 1.50*LZV1 + 1.50*VTRSV"}}
+\combinacion["ELU1220"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC3V1 + 1.50*TC3V2 + 1.50*LZV1 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU1221"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC3V1 + 1.50*TC3V2 + 1.50*LZV1 + 1.50*LZV2"}}
+\combinacion["ELU1222"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC3V1 + 1.50*TC3V2 + 1.50*LZV1 + 1.50*LZV2 + 1.50*NV"}}
+\combinacion["ELU1223"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC3V1 + 1.50*TC3V2 + 1.50*LZV1 + 1.50*LZV2 + 1.50*VLONG"}}
+\combinacion["ELU1224"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC3V1 + 1.50*TC3V2 + 1.50*LZV1 + 1.50*LZV2 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU1225"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC3V1 + 1.50*TC3V2 + 1.50*LZV1 + 1.50*LZV2 + 1.50*VTRSV"}}
+\combinacion["ELU1226"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC3V1 + 1.50*TC3V2 + 1.50*LZV1 + 1.50*LZV2 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU1227"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC3V2"}}
+\combinacion["ELU1228"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC3V2 + 1.50*NV"}}
+\combinacion["ELU1229"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC3V2 + 1.50*VLONG"}}
+\combinacion["ELU1230"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC3V2 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU1231"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC3V2 + 1.50*VTRSV"}}
+\combinacion["ELU1232"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC3V2 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU1233"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC3V2 + 1.50*LZV2"}}
+\combinacion["ELU1234"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC3V2 + 1.50*LZV2 + 1.50*NV"}}
+\combinacion["ELU1235"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC3V2 + 1.50*LZV2 + 1.50*VLONG"}}
+\combinacion["ELU1236"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC3V2 + 1.50*LZV2 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU1237"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC3V2 + 1.50*LZV2 + 1.50*VTRSV"}}
+\combinacion["ELU1238"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*TC3V2 + 1.50*LZV2 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU1239"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*VTRSV"}}
+\combinacion["ELU1240"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU1241"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*VLONG"}}
+\combinacion["ELU1242"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU1243"]{ \descomp{"1.35*G1 + 1.00*ETIER + 1.50*NV"}}
+\combinacion["ELU1244"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC1V1"}}
+\combinacion["ELU1245"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC1V1 + 1.50*NV"}}
+\combinacion["ELU1246"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC1V1 + 1.50*VLONG"}}
+\combinacion["ELU1247"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC1V1 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU1248"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC1V1 + 1.50*VTRSV"}}
+\combinacion["ELU1249"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC1V1 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU1250"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC1V1 + 1.50*LZV1"}}
+\combinacion["ELU1251"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC1V1 + 1.50*LZV1 + 1.50*NV"}}
+\combinacion["ELU1252"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC1V1 + 1.50*LZV1 + 1.50*VLONG"}}
+\combinacion["ELU1253"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC1V1 + 1.50*LZV1 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU1254"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC1V1 + 1.50*LZV1 + 1.50*VTRSV"}}
+\combinacion["ELU1255"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC1V1 + 1.50*LZV1 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU1256"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC1V1 + 1.50*TC3V2"}}
+\combinacion["ELU1257"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC1V1 + 1.50*TC3V2 + 1.50*NV"}}
+\combinacion["ELU1258"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC1V1 + 1.50*TC3V2 + 1.50*VLONG"}}
+\combinacion["ELU1259"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC1V1 + 1.50*TC3V2 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU1260"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC1V1 + 1.50*TC3V2 + 1.50*VTRSV"}}
+\combinacion["ELU1261"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC1V1 + 1.50*TC3V2 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU1262"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC1V1 + 1.50*TC3V2 + 1.50*LZV2"}}
+\combinacion["ELU1263"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC1V1 + 1.50*TC3V2 + 1.50*LZV2 + 1.50*NV"}}
+\combinacion["ELU1264"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC1V1 + 1.50*TC3V2 + 1.50*LZV2 + 1.50*VLONG"}}
+\combinacion["ELU1265"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC1V1 + 1.50*TC3V2 + 1.50*LZV2 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU1266"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC1V1 + 1.50*TC3V2 + 1.50*LZV2 + 1.50*VTRSV"}}
+\combinacion["ELU1267"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC1V1 + 1.50*TC3V2 + 1.50*LZV2 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU1268"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC1V1 + 1.50*TC3V2 + 1.50*LZV1"}}
+\combinacion["ELU1269"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC1V1 + 1.50*TC3V2 + 1.50*LZV1 + 1.50*NV"}}
+\combinacion["ELU1270"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC1V1 + 1.50*TC3V2 + 1.50*LZV1 + 1.50*VLONG"}}
+\combinacion["ELU1271"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC1V1 + 1.50*TC3V2 + 1.50*LZV1 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU1272"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC1V1 + 1.50*TC3V2 + 1.50*LZV1 + 1.50*VTRSV"}}
+\combinacion["ELU1273"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC1V1 + 1.50*TC3V2 + 1.50*LZV1 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU1274"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC1V1 + 1.50*TC3V2 + 1.50*LZV1 + 1.50*LZV2"}}
+\combinacion["ELU1275"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC1V1 + 1.50*TC3V2 + 1.50*LZV1 + 1.50*LZV2 + 1.50*NV"}}
+\combinacion["ELU1276"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC1V1 + 1.50*TC3V2 + 1.50*LZV1 + 1.50*LZV2 + 1.50*VLONG"}}
+\combinacion["ELU1277"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC1V1 + 1.50*TC3V2 + 1.50*LZV1 + 1.50*LZV2 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU1278"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC1V1 + 1.50*TC3V2 + 1.50*LZV1 + 1.50*LZV2 + 1.50*VTRSV"}}
+\combinacion["ELU1279"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC1V1 + 1.50*TC3V2 + 1.50*LZV1 + 1.50*LZV2 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU1280"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC1V1 + 1.50*TC2V2"}}
+\combinacion["ELU1281"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC1V1 + 1.50*TC2V2 + 1.50*NV"}}
+\combinacion["ELU1282"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC1V1 + 1.50*TC2V2 + 1.50*VLONG"}}
+\combinacion["ELU1283"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC1V1 + 1.50*TC2V2 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU1284"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC1V1 + 1.50*TC2V2 + 1.50*VTRSV"}}
+\combinacion["ELU1285"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC1V1 + 1.50*TC2V2 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU1286"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC1V1 + 1.50*TC2V2 + 1.50*LZV2"}}
+\combinacion["ELU1287"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC1V1 + 1.50*TC2V2 + 1.50*LZV2 + 1.50*NV"}}
+\combinacion["ELU1288"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC1V1 + 1.50*TC2V2 + 1.50*LZV2 + 1.50*VLONG"}}
+\combinacion["ELU1289"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC1V1 + 1.50*TC2V2 + 1.50*LZV2 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU1290"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC1V1 + 1.50*TC2V2 + 1.50*LZV2 + 1.50*VTRSV"}}
+\combinacion["ELU1291"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC1V1 + 1.50*TC2V2 + 1.50*LZV2 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU1292"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC1V1 + 1.50*TC2V2 + 1.50*LZV1"}}
+\combinacion["ELU1293"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC1V1 + 1.50*TC2V2 + 1.50*LZV1 + 1.50*NV"}}
+\combinacion["ELU1294"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC1V1 + 1.50*TC2V2 + 1.50*LZV1 + 1.50*VLONG"}}
+\combinacion["ELU1295"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC1V1 + 1.50*TC2V2 + 1.50*LZV1 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU1296"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC1V1 + 1.50*TC2V2 + 1.50*LZV1 + 1.50*VTRSV"}}
+\combinacion["ELU1297"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC1V1 + 1.50*TC2V2 + 1.50*LZV1 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU1298"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC1V1 + 1.50*TC2V2 + 1.50*LZV1 + 1.50*LZV2"}}
+\combinacion["ELU1299"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC1V1 + 1.50*TC2V2 + 1.50*LZV1 + 1.50*LZV2 + 1.50*NV"}}
+\combinacion["ELU1300"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC1V1 + 1.50*TC2V2 + 1.50*LZV1 + 1.50*LZV2 + 1.50*VLONG"}}
+\combinacion["ELU1301"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC1V1 + 1.50*TC2V2 + 1.50*LZV1 + 1.50*LZV2 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU1302"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC1V1 + 1.50*TC2V2 + 1.50*LZV1 + 1.50*LZV2 + 1.50*VTRSV"}}
+\combinacion["ELU1303"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC1V1 + 1.50*TC2V2 + 1.50*LZV1 + 1.50*LZV2 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU1304"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC1V1 + 1.50*TC2V2 + 1.50*ARRV2"}}
+\combinacion["ELU1305"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC1V1 + 1.50*TC2V2 + 1.50*ARRV2 + 1.50*NV"}}
+\combinacion["ELU1306"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC1V1 + 1.50*TC2V2 + 1.50*ARRV2 + 1.50*VLONG"}}
+\combinacion["ELU1307"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC1V1 + 1.50*TC2V2 + 1.50*ARRV2 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU1308"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC1V1 + 1.50*TC2V2 + 1.50*ARRV2 + 1.50*VTRSV"}}
+\combinacion["ELU1309"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC1V1 + 1.50*TC2V2 + 1.50*ARRV2 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU1310"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC1V1 + 1.50*TC2V2 + 1.50*FV2"}}
+\combinacion["ELU1311"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC1V1 + 1.50*TC2V2 + 1.50*FV2 + 1.50*NV"}}
+\combinacion["ELU1312"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC1V1 + 1.50*TC2V2 + 1.50*FV2 + 1.50*VLONG"}}
+\combinacion["ELU1313"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC1V1 + 1.50*TC2V2 + 1.50*FV2 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU1314"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC1V1 + 1.50*TC2V2 + 1.50*FV2 + 1.50*VTRSV"}}
+\combinacion["ELU1315"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC1V1 + 1.50*TC2V2 + 1.50*FV2 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU1316"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC1V1 + 1.50*TC1V2"}}
+\combinacion["ELU1317"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC1V1 + 1.50*TC1V2 + 1.50*NV"}}
+\combinacion["ELU1318"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC1V1 + 1.50*TC1V2 + 1.50*VLONG"}}
+\combinacion["ELU1319"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC1V1 + 1.50*TC1V2 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU1320"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC1V1 + 1.50*TC1V2 + 1.50*VTRSV"}}
+\combinacion["ELU1321"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC1V1 + 1.50*TC1V2 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU1322"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC1V1 + 1.50*TC1V2 + 1.50*LZV2"}}
+\combinacion["ELU1323"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC1V1 + 1.50*TC1V2 + 1.50*LZV2 + 1.50*NV"}}
+\combinacion["ELU1324"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC1V1 + 1.50*TC1V2 + 1.50*LZV2 + 1.50*VLONG"}}
+\combinacion["ELU1325"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC1V1 + 1.50*TC1V2 + 1.50*LZV2 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU1326"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC1V1 + 1.50*TC1V2 + 1.50*LZV2 + 1.50*VTRSV"}}
+\combinacion["ELU1327"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC1V1 + 1.50*TC1V2 + 1.50*LZV2 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU1328"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC1V1 + 1.50*TC1V2 + 1.50*LZV1"}}
+\combinacion["ELU1329"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC1V1 + 1.50*TC1V2 + 1.50*LZV1 + 1.50*NV"}}
+\combinacion["ELU1330"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC1V1 + 1.50*TC1V2 + 1.50*LZV1 + 1.50*VLONG"}}
+\combinacion["ELU1331"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC1V1 + 1.50*TC1V2 + 1.50*LZV1 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU1332"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC1V1 + 1.50*TC1V2 + 1.50*LZV1 + 1.50*VTRSV"}}
+\combinacion["ELU1333"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC1V1 + 1.50*TC1V2 + 1.50*LZV1 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU1334"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC1V1 + 1.50*TC1V2 + 1.50*LZV1 + 1.50*LZV2"}}
+\combinacion["ELU1335"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC1V1 + 1.50*TC1V2 + 1.50*LZV1 + 1.50*LZV2 + 1.50*NV"}}
+\combinacion["ELU1336"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC1V1 + 1.50*TC1V2 + 1.50*LZV1 + 1.50*LZV2 + 1.50*VLONG"}}
+\combinacion["ELU1337"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC1V1 + 1.50*TC1V2 + 1.50*LZV1 + 1.50*LZV2 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU1338"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC1V1 + 1.50*TC1V2 + 1.50*LZV1 + 1.50*LZV2 + 1.50*VTRSV"}}
+\combinacion["ELU1339"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC1V1 + 1.50*TC1V2 + 1.50*LZV1 + 1.50*LZV2 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU1340"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC1V2"}}
+\combinacion["ELU1341"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC1V2 + 1.50*NV"}}
+\combinacion["ELU1342"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC1V2 + 1.50*VLONG"}}
+\combinacion["ELU1343"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC1V2 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU1344"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC1V2 + 1.50*VTRSV"}}
+\combinacion["ELU1345"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC1V2 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU1346"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC1V2 + 1.50*LZV2"}}
+\combinacion["ELU1347"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC1V2 + 1.50*LZV2 + 1.50*NV"}}
+\combinacion["ELU1348"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC1V2 + 1.50*LZV2 + 1.50*VLONG"}}
+\combinacion["ELU1349"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC1V2 + 1.50*LZV2 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU1350"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC1V2 + 1.50*LZV2 + 1.50*VTRSV"}}
+\combinacion["ELU1351"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC1V2 + 1.50*LZV2 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU1352"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC1V2 + 1.50*TC3V1"}}
+\combinacion["ELU1353"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC1V2 + 1.50*TC3V1 + 1.50*NV"}}
+\combinacion["ELU1354"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC1V2 + 1.50*TC3V1 + 1.50*VLONG"}}
+\combinacion["ELU1355"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC1V2 + 1.50*TC3V1 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU1356"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC1V2 + 1.50*TC3V1 + 1.50*VTRSV"}}
+\combinacion["ELU1357"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC1V2 + 1.50*TC3V1 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU1358"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC1V2 + 1.50*TC3V1 + 1.50*LZV2"}}
+\combinacion["ELU1359"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC1V2 + 1.50*TC3V1 + 1.50*LZV2 + 1.50*NV"}}
+\combinacion["ELU1360"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC1V2 + 1.50*TC3V1 + 1.50*LZV2 + 1.50*VLONG"}}
+\combinacion["ELU1361"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC1V2 + 1.50*TC3V1 + 1.50*LZV2 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU1362"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC1V2 + 1.50*TC3V1 + 1.50*LZV2 + 1.50*VTRSV"}}
+\combinacion["ELU1363"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC1V2 + 1.50*TC3V1 + 1.50*LZV2 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU1364"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC1V2 + 1.50*TC3V1 + 1.50*LZV1"}}
+\combinacion["ELU1365"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC1V2 + 1.50*TC3V1 + 1.50*LZV1 + 1.50*NV"}}
+\combinacion["ELU1366"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC1V2 + 1.50*TC3V1 + 1.50*LZV1 + 1.50*VLONG"}}
+\combinacion["ELU1367"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC1V2 + 1.50*TC3V1 + 1.50*LZV1 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU1368"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC1V2 + 1.50*TC3V1 + 1.50*LZV1 + 1.50*VTRSV"}}
+\combinacion["ELU1369"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC1V2 + 1.50*TC3V1 + 1.50*LZV1 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU1370"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC1V2 + 1.50*TC3V1 + 1.50*LZV1 + 1.50*LZV2"}}
+\combinacion["ELU1371"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC1V2 + 1.50*TC3V1 + 1.50*LZV1 + 1.50*LZV2 + 1.50*NV"}}
+\combinacion["ELU1372"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC1V2 + 1.50*TC3V1 + 1.50*LZV1 + 1.50*LZV2 + 1.50*VLONG"}}
+\combinacion["ELU1373"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC1V2 + 1.50*TC3V1 + 1.50*LZV1 + 1.50*LZV2 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU1374"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC1V2 + 1.50*TC3V1 + 1.50*LZV1 + 1.50*LZV2 + 1.50*VTRSV"}}
+\combinacion["ELU1375"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC1V2 + 1.50*TC3V1 + 1.50*LZV1 + 1.50*LZV2 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU1376"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC1V2 + 1.50*TC2V1"}}
+\combinacion["ELU1377"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC1V2 + 1.50*TC2V1 + 1.50*NV"}}
+\combinacion["ELU1378"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC1V2 + 1.50*TC2V1 + 1.50*VLONG"}}
+\combinacion["ELU1379"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC1V2 + 1.50*TC2V1 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU1380"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC1V2 + 1.50*TC2V1 + 1.50*VTRSV"}}
+\combinacion["ELU1381"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC1V2 + 1.50*TC2V1 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU1382"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC1V2 + 1.50*TC2V1 + 1.50*LZV2"}}
+\combinacion["ELU1383"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC1V2 + 1.50*TC2V1 + 1.50*LZV2 + 1.50*NV"}}
+\combinacion["ELU1384"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC1V2 + 1.50*TC2V1 + 1.50*LZV2 + 1.50*VLONG"}}
+\combinacion["ELU1385"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC1V2 + 1.50*TC2V1 + 1.50*LZV2 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU1386"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC1V2 + 1.50*TC2V1 + 1.50*LZV2 + 1.50*VTRSV"}}
+\combinacion["ELU1387"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC1V2 + 1.50*TC2V1 + 1.50*LZV2 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU1388"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC1V2 + 1.50*TC2V1 + 1.50*LZV1"}}
+\combinacion["ELU1389"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC1V2 + 1.50*TC2V1 + 1.50*LZV1 + 1.50*NV"}}
+\combinacion["ELU1390"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC1V2 + 1.50*TC2V1 + 1.50*LZV1 + 1.50*VLONG"}}
+\combinacion["ELU1391"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC1V2 + 1.50*TC2V1 + 1.50*LZV1 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU1392"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC1V2 + 1.50*TC2V1 + 1.50*LZV1 + 1.50*VTRSV"}}
+\combinacion["ELU1393"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC1V2 + 1.50*TC2V1 + 1.50*LZV1 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU1394"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC1V2 + 1.50*TC2V1 + 1.50*LZV1 + 1.50*LZV2"}}
+\combinacion["ELU1395"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC1V2 + 1.50*TC2V1 + 1.50*LZV1 + 1.50*LZV2 + 1.50*NV"}}
+\combinacion["ELU1396"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC1V2 + 1.50*TC2V1 + 1.50*LZV1 + 1.50*LZV2 + 1.50*VLONG"}}
+\combinacion["ELU1397"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC1V2 + 1.50*TC2V1 + 1.50*LZV1 + 1.50*LZV2 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU1398"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC1V2 + 1.50*TC2V1 + 1.50*LZV1 + 1.50*LZV2 + 1.50*VTRSV"}}
+\combinacion["ELU1399"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC1V2 + 1.50*TC2V1 + 1.50*LZV1 + 1.50*LZV2 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU1400"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC1V2 + 1.50*TC2V1 + 1.50*ARRV1"}}
+\combinacion["ELU1401"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC1V2 + 1.50*TC2V1 + 1.50*ARRV1 + 1.50*NV"}}
+\combinacion["ELU1402"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC1V2 + 1.50*TC2V1 + 1.50*ARRV1 + 1.50*VLONG"}}
+\combinacion["ELU1403"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC1V2 + 1.50*TC2V1 + 1.50*ARRV1 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU1404"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC1V2 + 1.50*TC2V1 + 1.50*ARRV1 + 1.50*VTRSV"}}
+\combinacion["ELU1405"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC1V2 + 1.50*TC2V1 + 1.50*ARRV1 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU1406"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC1V2 + 1.50*TC2V1 + 1.50*FV1"}}
+\combinacion["ELU1407"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC1V2 + 1.50*TC2V1 + 1.50*FV1 + 1.50*NV"}}
+\combinacion["ELU1408"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC1V2 + 1.50*TC2V1 + 1.50*FV1 + 1.50*VLONG"}}
+\combinacion["ELU1409"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC1V2 + 1.50*TC2V1 + 1.50*FV1 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU1410"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC1V2 + 1.50*TC2V1 + 1.50*FV1 + 1.50*VTRSV"}}
+\combinacion["ELU1411"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC1V2 + 1.50*TC2V1 + 1.50*FV1 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU1412"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC2V1"}}
+\combinacion["ELU1413"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*NV"}}
+\combinacion["ELU1414"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*VLONG"}}
+\combinacion["ELU1415"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU1416"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*VTRSV"}}
+\combinacion["ELU1417"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU1418"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*LZV1"}}
+\combinacion["ELU1419"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*LZV1 + 1.50*NV"}}
+\combinacion["ELU1420"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*LZV1 + 1.50*VLONG"}}
+\combinacion["ELU1421"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*LZV1 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU1422"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*LZV1 + 1.50*VTRSV"}}
+\combinacion["ELU1423"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*LZV1 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU1424"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*ARRV1"}}
+\combinacion["ELU1425"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*ARRV1 + 1.50*NV"}}
+\combinacion["ELU1426"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*ARRV1 + 1.50*VLONG"}}
+\combinacion["ELU1427"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*ARRV1 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU1428"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*ARRV1 + 1.50*VTRSV"}}
+\combinacion["ELU1429"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*ARRV1 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU1430"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*FV1"}}
+\combinacion["ELU1431"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*FV1 + 1.50*NV"}}
+\combinacion["ELU1432"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*FV1 + 1.50*VLONG"}}
+\combinacion["ELU1433"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*FV1 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU1434"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*FV1 + 1.50*VTRSV"}}
+\combinacion["ELU1435"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*FV1 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU1436"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC3V2"}}
+\combinacion["ELU1437"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC3V2 + 1.50*NV"}}
+\combinacion["ELU1438"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC3V2 + 1.50*VLONG"}}
+\combinacion["ELU1439"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC3V2 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU1440"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC3V2 + 1.50*VTRSV"}}
+\combinacion["ELU1441"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC3V2 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU1442"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC3V2 + 1.50*LZV2"}}
+\combinacion["ELU1443"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC3V2 + 1.50*LZV2 + 1.50*NV"}}
+\combinacion["ELU1444"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC3V2 + 1.50*LZV2 + 1.50*VLONG"}}
+\combinacion["ELU1445"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC3V2 + 1.50*LZV2 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU1446"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC3V2 + 1.50*LZV2 + 1.50*VTRSV"}}
+\combinacion["ELU1447"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC3V2 + 1.50*LZV2 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU1448"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC3V2 + 1.50*LZV1"}}
+\combinacion["ELU1449"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC3V2 + 1.50*LZV1 + 1.50*NV"}}
+\combinacion["ELU1450"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC3V2 + 1.50*LZV1 + 1.50*VLONG"}}
+\combinacion["ELU1451"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC3V2 + 1.50*LZV1 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU1452"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC3V2 + 1.50*LZV1 + 1.50*VTRSV"}}
+\combinacion["ELU1453"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC3V2 + 1.50*LZV1 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU1454"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC3V2 + 1.50*LZV1 + 1.50*LZV2"}}
+\combinacion["ELU1455"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC3V2 + 1.50*LZV1 + 1.50*LZV2 + 1.50*NV"}}
+\combinacion["ELU1456"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC3V2 + 1.50*LZV1 + 1.50*LZV2 + 1.50*VLONG"}}
+\combinacion["ELU1457"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC3V2 + 1.50*LZV1 + 1.50*LZV2 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU1458"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC3V2 + 1.50*LZV1 + 1.50*LZV2 + 1.50*VTRSV"}}
+\combinacion["ELU1459"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC3V2 + 1.50*LZV1 + 1.50*LZV2 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU1460"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC3V2 + 1.50*ARRV1"}}
+\combinacion["ELU1461"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC3V2 + 1.50*ARRV1 + 1.50*NV"}}
+\combinacion["ELU1462"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC3V2 + 1.50*ARRV1 + 1.50*VLONG"}}
+\combinacion["ELU1463"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC3V2 + 1.50*ARRV1 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU1464"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC3V2 + 1.50*ARRV1 + 1.50*VTRSV"}}
+\combinacion["ELU1465"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC3V2 + 1.50*ARRV1 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU1466"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC3V2 + 1.50*FV1"}}
+\combinacion["ELU1467"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC3V2 + 1.50*FV1 + 1.50*NV"}}
+\combinacion["ELU1468"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC3V2 + 1.50*FV1 + 1.50*VLONG"}}
+\combinacion["ELU1469"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC3V2 + 1.50*FV1 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU1470"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC3V2 + 1.50*FV1 + 1.50*VTRSV"}}
+\combinacion["ELU1471"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC3V2 + 1.50*FV1 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU1472"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC2V2"}}
+\combinacion["ELU1473"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*NV"}}
+\combinacion["ELU1474"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*VLONG"}}
+\combinacion["ELU1475"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU1476"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*VTRSV"}}
+\combinacion["ELU1477"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU1478"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*LZV2"}}
+\combinacion["ELU1479"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*LZV2 + 1.50*NV"}}
+\combinacion["ELU1480"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*LZV2 + 1.50*VLONG"}}
+\combinacion["ELU1481"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*LZV2 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU1482"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*LZV2 + 1.50*VTRSV"}}
+\combinacion["ELU1483"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*LZV2 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU1484"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*LZV1"}}
+\combinacion["ELU1485"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*LZV1 + 1.50*NV"}}
+\combinacion["ELU1486"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*LZV1 + 1.50*VLONG"}}
+\combinacion["ELU1487"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*LZV1 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU1488"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*LZV1 + 1.50*VTRSV"}}
+\combinacion["ELU1489"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*LZV1 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU1490"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*LZV1 + 1.50*LZV2"}}
+\combinacion["ELU1491"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*LZV1 + 1.50*LZV2 + 1.50*NV"}}
+\combinacion["ELU1492"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*LZV1 + 1.50*LZV2 + 1.50*VLONG"}}
+\combinacion["ELU1493"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*LZV1 + 1.50*LZV2 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU1494"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*LZV1 + 1.50*LZV2 + 1.50*VTRSV"}}
+\combinacion["ELU1495"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*LZV1 + 1.50*LZV2 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU1496"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*ARRV2"}}
+\combinacion["ELU1497"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*ARRV2 + 1.50*NV"}}
+\combinacion["ELU1498"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*ARRV2 + 1.50*VLONG"}}
+\combinacion["ELU1499"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*ARRV2 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU1500"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*ARRV2 + 1.50*VTRSV"}}
+\combinacion["ELU1501"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*ARRV2 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU1502"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*ARRV1"}}
+\combinacion["ELU1503"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*ARRV1 + 1.50*NV"}}
+\combinacion["ELU1504"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*ARRV1 + 1.50*VLONG"}}
+\combinacion["ELU1505"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*ARRV1 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU1506"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*ARRV1 + 1.50*VTRSV"}}
+\combinacion["ELU1507"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*ARRV1 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU1508"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*ARRV1 + 1.50*ARRV2"}}
+\combinacion["ELU1509"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*ARRV1 + 1.50*ARRV2 + 1.50*NV"}}
+\combinacion["ELU1510"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*ARRV1 + 1.50*ARRV2 + 1.50*VLONG"}}
+\combinacion["ELU1511"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*ARRV1 + 1.50*ARRV2 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU1512"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*ARRV1 + 1.50*ARRV2 + 1.50*VTRSV"}}
+\combinacion["ELU1513"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*ARRV1 + 1.50*ARRV2 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU1514"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*FV2"}}
+\combinacion["ELU1515"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*FV2 + 1.50*NV"}}
+\combinacion["ELU1516"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*FV2 + 1.50*VLONG"}}
+\combinacion["ELU1517"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*FV2 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU1518"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*FV2 + 1.50*VTRSV"}}
+\combinacion["ELU1519"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*FV2 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU1520"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*FV2 + 1.50*ARRV1"}}
+\combinacion["ELU1521"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*FV2 + 1.50*ARRV1 + 1.50*NV"}}
+\combinacion["ELU1522"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*FV2 + 1.50*ARRV1 + 1.50*VLONG"}}
+\combinacion["ELU1523"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*FV2 + 1.50*ARRV1 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU1524"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*FV2 + 1.50*ARRV1 + 1.50*VTRSV"}}
+\combinacion["ELU1525"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*FV2 + 1.50*ARRV1 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU1526"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*FV1"}}
+\combinacion["ELU1527"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*FV1 + 1.50*NV"}}
+\combinacion["ELU1528"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*FV1 + 1.50*VLONG"}}
+\combinacion["ELU1529"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*FV1 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU1530"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*FV1 + 1.50*VTRSV"}}
+\combinacion["ELU1531"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*FV1 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU1532"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*FV1 + 1.50*ARRV2"}}
+\combinacion["ELU1533"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*FV1 + 1.50*ARRV2 + 1.50*NV"}}
+\combinacion["ELU1534"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*FV1 + 1.50*ARRV2 + 1.50*VLONG"}}
+\combinacion["ELU1535"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*FV1 + 1.50*ARRV2 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU1536"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*FV1 + 1.50*ARRV2 + 1.50*VTRSV"}}
+\combinacion["ELU1537"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*FV1 + 1.50*ARRV2 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU1538"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*FV1 + 1.50*FV2"}}
+\combinacion["ELU1539"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*FV1 + 1.50*FV2 + 1.50*NV"}}
+\combinacion["ELU1540"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*FV1 + 1.50*FV2 + 1.50*VLONG"}}
+\combinacion["ELU1541"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*FV1 + 1.50*FV2 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU1542"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*FV1 + 1.50*FV2 + 1.50*VTRSV"}}
+\combinacion["ELU1543"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC2V1 + 1.50*TC2V2 + 1.50*FV1 + 1.50*FV2 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU1544"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC2V2"}}
+\combinacion["ELU1545"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC2V2 + 1.50*NV"}}
+\combinacion["ELU1546"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC2V2 + 1.50*VLONG"}}
+\combinacion["ELU1547"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC2V2 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU1548"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC2V2 + 1.50*VTRSV"}}
+\combinacion["ELU1549"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC2V2 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU1550"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC2V2 + 1.50*LZV2"}}
+\combinacion["ELU1551"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC2V2 + 1.50*LZV2 + 1.50*NV"}}
+\combinacion["ELU1552"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC2V2 + 1.50*LZV2 + 1.50*VLONG"}}
+\combinacion["ELU1553"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC2V2 + 1.50*LZV2 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU1554"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC2V2 + 1.50*LZV2 + 1.50*VTRSV"}}
+\combinacion["ELU1555"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC2V2 + 1.50*LZV2 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU1556"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC2V2 + 1.50*ARRV2"}}
+\combinacion["ELU1557"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC2V2 + 1.50*ARRV2 + 1.50*NV"}}
+\combinacion["ELU1558"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC2V2 + 1.50*ARRV2 + 1.50*VLONG"}}
+\combinacion["ELU1559"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC2V2 + 1.50*ARRV2 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU1560"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC2V2 + 1.50*ARRV2 + 1.50*VTRSV"}}
+\combinacion["ELU1561"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC2V2 + 1.50*ARRV2 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU1562"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC2V2 + 1.50*FV2"}}
+\combinacion["ELU1563"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC2V2 + 1.50*FV2 + 1.50*NV"}}
+\combinacion["ELU1564"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC2V2 + 1.50*FV2 + 1.50*VLONG"}}
+\combinacion["ELU1565"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC2V2 + 1.50*FV2 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU1566"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC2V2 + 1.50*FV2 + 1.50*VTRSV"}}
+\combinacion["ELU1567"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC2V2 + 1.50*FV2 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU1568"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC2V2 + 1.50*TC3V1"}}
+\combinacion["ELU1569"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC2V2 + 1.50*TC3V1 + 1.50*NV"}}
+\combinacion["ELU1570"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC2V2 + 1.50*TC3V1 + 1.50*VLONG"}}
+\combinacion["ELU1571"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC2V2 + 1.50*TC3V1 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU1572"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC2V2 + 1.50*TC3V1 + 1.50*VTRSV"}}
+\combinacion["ELU1573"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC2V2 + 1.50*TC3V1 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU1574"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC2V2 + 1.50*TC3V1 + 1.50*LZV2"}}
+\combinacion["ELU1575"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC2V2 + 1.50*TC3V1 + 1.50*LZV2 + 1.50*NV"}}
+\combinacion["ELU1576"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC2V2 + 1.50*TC3V1 + 1.50*LZV2 + 1.50*VLONG"}}
+\combinacion["ELU1577"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC2V2 + 1.50*TC3V1 + 1.50*LZV2 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU1578"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC2V2 + 1.50*TC3V1 + 1.50*LZV2 + 1.50*VTRSV"}}
+\combinacion["ELU1579"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC2V2 + 1.50*TC3V1 + 1.50*LZV2 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU1580"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC2V2 + 1.50*TC3V1 + 1.50*LZV1"}}
+\combinacion["ELU1581"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC2V2 + 1.50*TC3V1 + 1.50*LZV1 + 1.50*NV"}}
+\combinacion["ELU1582"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC2V2 + 1.50*TC3V1 + 1.50*LZV1 + 1.50*VLONG"}}
+\combinacion["ELU1583"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC2V2 + 1.50*TC3V1 + 1.50*LZV1 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU1584"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC2V2 + 1.50*TC3V1 + 1.50*LZV1 + 1.50*VTRSV"}}
+\combinacion["ELU1585"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC2V2 + 1.50*TC3V1 + 1.50*LZV1 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU1586"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC2V2 + 1.50*TC3V1 + 1.50*LZV1 + 1.50*LZV2"}}
+\combinacion["ELU1587"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC2V2 + 1.50*TC3V1 + 1.50*LZV1 + 1.50*LZV2 + 1.50*NV"}}
+\combinacion["ELU1588"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC2V2 + 1.50*TC3V1 + 1.50*LZV1 + 1.50*LZV2 + 1.50*VLONG"}}
+\combinacion["ELU1589"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC2V2 + 1.50*TC3V1 + 1.50*LZV1 + 1.50*LZV2 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU1590"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC2V2 + 1.50*TC3V1 + 1.50*LZV1 + 1.50*LZV2 + 1.50*VTRSV"}}
+\combinacion["ELU1591"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC2V2 + 1.50*TC3V1 + 1.50*LZV1 + 1.50*LZV2 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU1592"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC2V2 + 1.50*TC3V1 + 1.50*ARRV2"}}
+\combinacion["ELU1593"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC2V2 + 1.50*TC3V1 + 1.50*ARRV2 + 1.50*NV"}}
+\combinacion["ELU1594"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC2V2 + 1.50*TC3V1 + 1.50*ARRV2 + 1.50*VLONG"}}
+\combinacion["ELU1595"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC2V2 + 1.50*TC3V1 + 1.50*ARRV2 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU1596"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC2V2 + 1.50*TC3V1 + 1.50*ARRV2 + 1.50*VTRSV"}}
+\combinacion["ELU1597"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC2V2 + 1.50*TC3V1 + 1.50*ARRV2 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU1598"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC2V2 + 1.50*TC3V1 + 1.50*FV2"}}
+\combinacion["ELU1599"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC2V2 + 1.50*TC3V1 + 1.50*FV2 + 1.50*NV"}}
+\combinacion["ELU1600"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC2V2 + 1.50*TC3V1 + 1.50*FV2 + 1.50*VLONG"}}
+\combinacion["ELU1601"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC2V2 + 1.50*TC3V1 + 1.50*FV2 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU1602"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC2V2 + 1.50*TC3V1 + 1.50*FV2 + 1.50*VTRSV"}}
+\combinacion["ELU1603"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC2V2 + 1.50*TC3V1 + 1.50*FV2 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU1604"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC3V1"}}
+\combinacion["ELU1605"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC3V1 + 1.50*NV"}}
+\combinacion["ELU1606"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC3V1 + 1.50*VLONG"}}
+\combinacion["ELU1607"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC3V1 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU1608"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC3V1 + 1.50*VTRSV"}}
+\combinacion["ELU1609"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC3V1 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU1610"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC3V1 + 1.50*LZV1"}}
+\combinacion["ELU1611"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC3V1 + 1.50*LZV1 + 1.50*NV"}}
+\combinacion["ELU1612"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC3V1 + 1.50*LZV1 + 1.50*VLONG"}}
+\combinacion["ELU1613"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC3V1 + 1.50*LZV1 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU1614"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC3V1 + 1.50*LZV1 + 1.50*VTRSV"}}
+\combinacion["ELU1615"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC3V1 + 1.50*LZV1 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU1616"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC3V1 + 1.50*TC3V2"}}
+\combinacion["ELU1617"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC3V1 + 1.50*TC3V2 + 1.50*NV"}}
+\combinacion["ELU1618"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC3V1 + 1.50*TC3V2 + 1.50*VLONG"}}
+\combinacion["ELU1619"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC3V1 + 1.50*TC3V2 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU1620"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC3V1 + 1.50*TC3V2 + 1.50*VTRSV"}}
+\combinacion["ELU1621"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC3V1 + 1.50*TC3V2 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU1622"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC3V1 + 1.50*TC3V2 + 1.50*LZV2"}}
+\combinacion["ELU1623"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC3V1 + 1.50*TC3V2 + 1.50*LZV2 + 1.50*NV"}}
+\combinacion["ELU1624"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC3V1 + 1.50*TC3V2 + 1.50*LZV2 + 1.50*VLONG"}}
+\combinacion["ELU1625"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC3V1 + 1.50*TC3V2 + 1.50*LZV2 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU1626"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC3V1 + 1.50*TC3V2 + 1.50*LZV2 + 1.50*VTRSV"}}
+\combinacion["ELU1627"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC3V1 + 1.50*TC3V2 + 1.50*LZV2 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU1628"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC3V1 + 1.50*TC3V2 + 1.50*LZV1"}}
+\combinacion["ELU1629"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC3V1 + 1.50*TC3V2 + 1.50*LZV1 + 1.50*NV"}}
+\combinacion["ELU1630"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC3V1 + 1.50*TC3V2 + 1.50*LZV1 + 1.50*VLONG"}}
+\combinacion["ELU1631"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC3V1 + 1.50*TC3V2 + 1.50*LZV1 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU1632"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC3V1 + 1.50*TC3V2 + 1.50*LZV1 + 1.50*VTRSV"}}
+\combinacion["ELU1633"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC3V1 + 1.50*TC3V2 + 1.50*LZV1 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU1634"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC3V1 + 1.50*TC3V2 + 1.50*LZV1 + 1.50*LZV2"}}
+\combinacion["ELU1635"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC3V1 + 1.50*TC3V2 + 1.50*LZV1 + 1.50*LZV2 + 1.50*NV"}}
+\combinacion["ELU1636"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC3V1 + 1.50*TC3V2 + 1.50*LZV1 + 1.50*LZV2 + 1.50*VLONG"}}
+\combinacion["ELU1637"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC3V1 + 1.50*TC3V2 + 1.50*LZV1 + 1.50*LZV2 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU1638"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC3V1 + 1.50*TC3V2 + 1.50*LZV1 + 1.50*LZV2 + 1.50*VTRSV"}}
+\combinacion["ELU1639"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC3V1 + 1.50*TC3V2 + 1.50*LZV1 + 1.50*LZV2 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU1640"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC3V2"}}
+\combinacion["ELU1641"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC3V2 + 1.50*NV"}}
+\combinacion["ELU1642"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC3V2 + 1.50*VLONG"}}
+\combinacion["ELU1643"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC3V2 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU1644"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC3V2 + 1.50*VTRSV"}}
+\combinacion["ELU1645"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC3V2 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU1646"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC3V2 + 1.50*LZV2"}}
+\combinacion["ELU1647"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC3V2 + 1.50*LZV2 + 1.50*NV"}}
+\combinacion["ELU1648"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC3V2 + 1.50*LZV2 + 1.50*VLONG"}}
+\combinacion["ELU1649"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC3V2 + 1.50*LZV2 + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU1650"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC3V2 + 1.50*LZV2 + 1.50*VTRSV"}}
+\combinacion["ELU1651"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*TC3V2 + 1.50*LZV2 + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU1652"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*VTRSV"}}
+\combinacion["ELU1653"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*VTRSV + 1.50*NV"}}
+\combinacion["ELU1654"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*VLONG"}}
+\combinacion["ELU1655"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*VLONG + 1.50*NV"}}
+\combinacion["ELU1656"]{ \descomp{"1.35*G1 + 1.50*ETIER + 1.50*NV"}}

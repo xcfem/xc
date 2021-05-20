@@ -1,0 +1,35 @@
+e1= 0
+e2= 1
+e3= 0
+
+def_prop["dbName","string"]{"/tmp/prueba.db"}
+\borra_archivo_si_existe{@dbName}
+\sqlite
+  {
+    \newDB{@dbName}
+    \@dbName
+      {
+        \newQuery{"q"}
+        \q
+          {
+            \execute_sql{"create table test3 ( num integer, name string )"}
+            \execute_sql{"create table test4 ( id integer, pos string )"}
+          }
+        e1= @existeTabla("test3")
+        e2= @existeTabla("test4")
+        e3= @existeTabla("pepita")
+      }
+  }
+\borra_archivo_si_existe{@dbName}
+
+\c{print "e1= ",@e1,"\n"
+print "e2= ",@e2,"\n"
+print "ratio3= ",ratio3,"\n"
+print "ratio4= ",ratio4,"\n"}
+
+\if
+  {
+    \cond{@e1 & @e2}
+    \then{print "prueba sqlite 02: ok.\n"}
+    \else{print "prueba sqlite 02: ERROR.\n"}
+  }

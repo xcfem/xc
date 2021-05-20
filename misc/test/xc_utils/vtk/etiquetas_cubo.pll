@@ -1,0 +1,63 @@
+\nverborrea{0}
+
+\vtk{
+\incluye{"coo_cubo.lcmdi"}
+\incluye{"escalares_cubo.lcmdi"}
+\define["vtkUnstructuredGrid","ugrid"]{}
+\ugrid
+   {
+     \set_points{"points"}
+     \point_data{ \set_scalars{"escalares"} } 
+     \insert_next_cell["hexaedro8"]{[0, 1, 4, 2, 3, 5, 7, 6]}
+  }
+
+\c{"Dibuja"}
+\define["vtkRenderer","renderer"]{}
+\define["vtkRenderWindow","renWin"]{ \add_renderer{"renderer"} }
+\define["vtkRenderWindowInteractor","iren"]{ \set_render_window{"renWin"} }
+
+\define["vtkDataSetMapper","ugridMapper"]
+  {
+    \set_input{"ugrid"}
+    \set_color_mode_to_map_scalars{}
+  }
+
+\define["vtkActor","wireActor"] 
+  { \set_mapper{"ugridMapper"} \property{\set_color{0,0,0} \set_representation_to_wireframe{}} }
+
+\define["vtkIdFilter","ids"]
+  {
+    \set_input{"ugrid"}
+    \point_ids_on{}
+  }
+
+\c{Creamos las etiquetas para los puntos}
+\define["vtkSelectVisiblePoints","visPts"]
+  {
+    \set_input{"ids"}
+    \set_renderer{"renderer"}
+    \selection_window_off{}
+  }
+\c{Create the mapper to display the point ids.  Specify the format to
+   use for the labels.  Also create the associated actor.}
+\define["vtkLabeledDataMapper","ldm"]
+  {
+    \set_input{"visPts"}
+    \set_label_format{"%g"}
+    \set_label_mode_to_label_ids{}
+  }
+\define["vtkActor2D","pointLabels"]
+  { \set_mapper{"ldm"} }
+
+\renderer
+  { 
+    \add_actor{"wireActor"}
+    \add_actor2D{"pointLabels"}
+    \set_background{0,.1,.2}
+  }
+
+\renWin{ \set_size{800,600} }
+\iren{ \initialize{} }
+\iren{ \start{} }
+
+}

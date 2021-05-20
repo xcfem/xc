@@ -1,0 +1,52 @@
+e1= 0
+e2= 1
+
+def_prop["dbName","string"]{"/tmp/prueba.db"}
+\borra_archivo_si_existe{@dbName}
+
+\sqlite
+  {
+    \newDB{@dbName}
+    \@dbName
+      {
+        \newQuery{"q"}
+        \q
+          {
+            \execute_sql{"create table test3 ( num integer, name string )"}
+            \execute_sql{"insert into test3 values(1, 'Anders')"}
+            \execute_sql{"insert into test3 values(2, 'Grymse')"}
+            \execute_sql{"insert into test3 values(3, 'Sánchez')"}
+            \get_result{"select * from test3"}
+            ratio1= (@num_rows-1)
+            \free_result{}
+          }
+        \newQuery{"q"} //No debe volver a crear la consulta.
+        \q
+          {
+            \get_result{"select * from test3 where name = 'Anders';"}
+            ratio2= (@num_rows-1)
+            \free_result{}
+          }
+        \newQuery{"q"} //No debe volver a crear la consulta.
+        \q
+          {
+            \get_result{"select * from test3 where name = 'Rodrigo';"}
+            ratio3= @num_rows
+            \free_result{}
+          }
+      }
+  }
+\borra_archivo_si_existe{@dbName}
+
+\c{
+print "ratio1= ",ratio1,"\n"
+print "ratio2= ",ratio2,"\n"
+print "ratio3= ",ratio3,"\n"
+}
+
+\if
+  {
+    \cond{(@abs(ratio1)<1e-10) & (@abs(ratio2)<1e-10) & (@abs(ratio3)<1e-10)}
+    \then{print "prueba sqlite 03: ok.\n"}
+    \else{print "prueba sqlite 03: ERROR.\n"}
+  }

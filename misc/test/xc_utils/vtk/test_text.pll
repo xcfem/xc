@@ -1,0 +1,43 @@
+\nverborrea{0}
+\vtk{
+\define["vtkSphereSource","sphere"]{}
+\define["vtkPolyDataMapper","sphereMapper"]{ \set_input{"sphere"} }
+\define["vtkActor","sphereActor"]{ \set_mapper{"sphereMapper"} }
+
+\define["vtkTextActor","textActor"]
+  {
+    \scaled_text_on{}
+    \set_display_position{90, 50}
+    \set_input{"This is a sphere"}
+    \get_position2_coordinate
+       {
+         \set_coordinate_system_to_normalized_viewport{}
+         \set_value{0.6, 0.1}
+       }
+    \text_property
+       {
+         \set_font_size{18}
+         \set_font_family_to_arial{}
+         \set_justification_to_centered{}
+         \bold_on{}
+         \italic_on{}
+         \shadow_on{}
+         \set_color{0, 0, 1}
+       }
+  }
+\define["vtkRenderer","ren"]{}
+\define["vtkRenderWindow","renWin"]{ \add_renderer{"ren"} }
+\define["vtkRenderWindowInteractor","iren"]{ \set_render_window{"renWin"} }
+
+\ren
+  { 
+    \add_actor2D{"textActor"} \add_actor{"sphereActor"}
+    \set_background{1,1,1}
+  }
+\renWin{ \set_size{250, 125} }
+\ren{ \reset_camera{} \active_camera{ \zoom{1.5}} }
+
+\iren{ \initialize{} }
+\renWin { \render{} }
+\iren{ \start{} }
+}

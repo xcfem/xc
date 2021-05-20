@@ -1,0 +1,17 @@
+\def_prop["pp","record"]
+  {
+   \def_prop["qq","double"]{3.141592}
+  }
+
+\sqlite
+  {
+    \def_prop["rr","record"]
+      {
+        \def_prop["ss","double"]{1.41}
+      }
+    \rr
+      {
+        \print{"qq=",@pp.qq,"\n"}
+      }
+  }
+

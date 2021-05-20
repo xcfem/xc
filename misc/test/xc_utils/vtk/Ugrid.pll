@@ -1,0 +1,58 @@
+\nverborrea{0}
+
+\vtk{
+\define["vtkRenderer","renderer"]{}
+
+\define["vtkRenderWindow","renWin"]{ \add_renderer{"renderer"} }
+
+
+\define["vtkRenderWindowInteractor","iren"]{ \set_render_window{"renWin"} }
+
+\define["vtkPoints","points"]{}
+\points{ \insert_point{0,0,0,0} }
+\points{ \insert_point{1,1,0,0} }
+\points{ \insert_point{2,2,0,0} }
+\points{ \insert_point{3,0,1,0} }
+\points{ \insert_point{4,1,1,0} }
+\points{ \insert_point{5,2,1,0} }
+\points{ \insert_point{6,0,0,1} }
+\points{ \insert_point{7,1,0,1} }
+\points{ \insert_point{8,2,0,1} }
+\points{ \insert_point{9,0,1,1} }
+\points{ \insert_point{10,1,1,1} }
+\points{ \insert_point{11,2,1,1} }
+\points{ \insert_point{12,0,1,2} }
+\points{ \insert_point{13,1,1,2} }
+\points{ \insert_point{14,2,1,2} }
+\points{ \insert_point{15,0,1,3} }
+\points{ \insert_point{16,1,1,3} }
+\points{ \insert_point{17,2,1,3} }
+\points{ \insert_point{18,0,1,4} }
+\points{ \insert_point{19,1,1,4} }
+\points{ \insert_point{20,2,1,4} }
+\points{ \insert_point{21,0,1,5} }
+\points{ \insert_point{22,1,1,5} }
+\points{ \insert_point{23,2,1,5} }
+\points{ \insert_point{24,0,1,6} }
+\points{ \insert_point{25,1,1,6} }
+\points{ \insert_point{26,2,1,6} }
+
+\define["vtkUnstructuredGrid","ugrid"]{ \allocate{100} }
+\ugrid{ \set_points{"points"} }
+\ugrid{ \insert_next_cell["hexaedro8"]{[0, 1, 4, 3, 6, 7, 10, 9]} }
+
+\define["vtkDataSetMapper","ugridMapper"]{ \set_input{"ugrid"} }
+
+\define["vtkActor","ugridActor"] 
+  { \set_mapper{"ugridMapper"} \property{\set_color{.8,.1,.1}} \add_position{0,0.001,0} }
+\define["vtkActor","wireActor"] 
+  { \set_mapper{"ugridMapper"} \property{\set_color{0,0,0} \set_representation_to_wireframe{}} }
+
+\renderer{ \add_actor{"ugridActor"} \add_actor{"wireActor"} \set_background{1,1,1}}
+
+\renWin{ \set_size{450,450} }
+\iren{ \initialize{} }
+\iren{ \start{} }
+}
+\fin{}
+

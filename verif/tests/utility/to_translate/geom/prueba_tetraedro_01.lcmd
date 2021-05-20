@@ -1,0 +1,22 @@
+\c{Cálculo del volumen de un tetraedro}
+
+def_prop["T","tetraedro3d"]{}
+V= 
+
+\T
+  {
+    V= @getVolumen
+  }
+ratio1= @abs(@V-1/6)
+
+\c{
+print "V= ",@V,"\n"
+print "ratio1= ",ratio1,"\n"
+  }
+
+\if
+  {
+    \cond{(@abs(ratio1)<1e-15)}
+    \then{print "test tetraedro 01: ok.\n"}
+    \else{print "test tetraedro 01: ERROR.\n"}
+  }
