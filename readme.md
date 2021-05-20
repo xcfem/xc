@@ -62,7 +62,6 @@ Don't worry, if you have a decent *nix system the installation is straightforwar
 <li> <a href="http://www.mcs.anl.gov/petsc/petsc-as" target="_new"> PETSC</a> (Portable, Extensible Toolkit for Scientific Computation).</li>
 <li> <a href="http://crd-legacy.lbl.gov/~osni/#Software" target="_new"> Skypack</a> (SKYline PACKage).</li>
 <li> <a href="http://rene.ma.utexas.edu/CNA/ITPACK/" target="_new"> ITPACK</a> (collection of subroutines for solving large sparse linear systems by adaptive accelerated iterative algorithms).</li>
-<li> <a href="https://github.com/xcfem/xc_utils" target="_new"> xc_utils</a> Basic routines and utilities for XC.</li>
 </ul>
 
 

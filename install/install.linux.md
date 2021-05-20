@@ -52,11 +52,6 @@ Some dependencies needed are:
 - Suitesparse (collection of libraries for computations for sparse matrices)
 
 
-## More dependencies ... xc_utils
-XC has another depency which will not be available as package. This is xc_utils.
-It need to be compiled and installed before XC. We will gone do this in conjunction with XC
-
-
 ## Get the source code
 First make a directroy in your home directroy and go inside. Following the commands for all needed steps.
 foo@bar is common used term. You normally see your username and the name of the computer you sit at.
@@ -72,43 +67,14 @@ foo@bar:~$  cd build_xc
 foo@bar:~/build_xc$
 ```
 
-It is time to get the source code now. Git will clone the source code of xc_utils and xc in the current directory
+It is time to get the source code now. Git will clone the source code of xc in the current directory
 ```console
-foo@bar:~/build_xc$  git clone https://github.com/xcfem/xc_utils/ xc_utils
 foo@bar:~/build_xc$  git clone https://github.com/xcfem/xc/ xc
 ```
 
 
-## Build and install xc_utils
-As said before we need to build and install xc_utils before. This is very straight forward.
-See the commands needed for this below
-
-### xc_utils
-```console
-foo@bar:~/build_xc$
-foo@bar:~/build_xc$  mkdir build-xc_utils
-foo@bar:~/build_xc$  cd build-xc_utils
-foo@bar:~/build_xc/build-xc_utils$
-foo@bar:~/build_xc/build-xc_utils$  cmake ../xc_utils/src
-foo@bar:~/build_xc/build-xc_utils$  make -j 4  # depending on the core count of your machine put in more
-foo@bar:~/build_xc/build-xc_utils$  sudo make install
-foo@bar:~/build_xc/build-xc_utils$  cd ../..
-foo@bar:~/build_xc$
-```
-
-We still need to install the Python modules from xc_utils.
-```console
-foo@bar:~/build_xc$
-foo@bar:~/build_xc$  cd xc_utils/python_modules
-foo@bar:~/build_xc/xc_utils/python_modules$
-foo@bar:~/build_xc/xc_utils/python_modules$  sudo sh local_install.sh
-foo@bar:~/build_xc/xc_utils/python_modules$  cd ../..
-foo@bar:~/build_xc$
-```
-
-
 ## Build and install XC
-Building and installing XC works the same way as xc_utils before.
+Building and installing XC works the same way as any other program that uses cmake:
 
 ```console
 foo@bar:~/build_xc$
@@ -122,7 +88,7 @@ foo@bar:~/build_xc/build-xc$  cd ../..
 foo@bar:~/build_xc$
 ```
 
-XC needs to install some Python modules too.
+XC needs to install some Python modules:
 ```console
 foo@bar:~/build_xc$
 foo@bar:~/build_xc$  cd xc/python_modules
@@ -137,15 +103,6 @@ everything works as aspected.
 
 
 ## Run verification tests
-### xc_utils
-```console
-foo@bar:~/build_xc$
-foo@bar:~/build_xc$  cd xc_utils/verif
-foo@bar:~/build_xc/xc_utils/verif$
-foo@bar:~/build_xc/xc_utils/verif$  sh run_verif.sh
-foo@bar:~/build_xc/xc_utils/verif$  cd ../..
-foo@bar:~/build_xc$
-```
 
 ### xc
 ```console
