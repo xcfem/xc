@@ -692,6 +692,10 @@ class CHShape(SteelShape):
     def getRho(self):
         ''' Returns mass per unit length. '''
         return self.get('P')
+    
+    def getOutsideDiameter(self):
+        ''' Returns the outside diameter. '''
+        return self.get('OD')
 
     
 class UShape(SteelShape):
