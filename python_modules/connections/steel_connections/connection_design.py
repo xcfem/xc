@@ -75,7 +75,7 @@ class Connection(connected_members.ConnectionMetaData):
 
     def getBoltedPlatesSteel(self):
         ''' Return the steel for the bolted plates.'''
-        return getself.boltedPlateTemplate.steelType
+        return self.boltedPlateTemplate.steelType
 
     def getMaterialModule(self):
         ''' material module used to instantiate some 
