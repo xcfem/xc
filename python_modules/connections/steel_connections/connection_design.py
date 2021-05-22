@@ -123,7 +123,7 @@ class Connection(connected_members.ConnectionMetaData):
 
     def getWebGussetPlate(self, baseVectors, diagSegment, gussetLength, halfChamfer, bottomLegSlope):
         ''' Return the GussetPlate object for the gusset attached to the
-            flange.
+            web.
 
         :param baseVectors: unary vectors of the gusset plate reference system.
         :param diagSegment: 3D segment on the diagonal axis.
@@ -211,10 +211,11 @@ class Connection(connected_members.ConnectionMetaData):
     def getBeamShapeBlocks(self, factor, blockProperties= None):
         ''' Return the faces of the beams.
 
-        :param factor: factor multiplies the unary direction vector
-                       of the member to define its extrusion 
+        :param factor: factor that multiplies the unary direction vector
+                       of the member to define its extrusion,
                        direction and lenght.
-        :param blockProperties: labels and attributes to assign to the newly created blocks.
+        :param blockProperties: labels and attributes to assign to the newly 
+                                created blocks.
         '''
         retval= bte.BlockData()
         beamBlocks= super(Connection,self).getBeamShapeBlocks(factor)
@@ -229,6 +230,7 @@ class Connection(connected_members.ConnectionMetaData):
             print('connected to: ', b.connectedTo)
             baseVectors= b.getDirection(origin)
             flangeThickness= b.shape.getFlangeThickness()
+            print('flangeThickness',flangeThickness)
             platesThickness= flangeThickness+flangePlate.thickness
             halfHFlange= (b.shape.h()-flangeThickness)/2.0
             halfHPlate= halfHFlange+platesThickness/2.0
@@ -757,4 +759,3 @@ class BoltedPlateController(lsc.LimitStateControllerBase):
                 worstCase.update(CFtmp, e.tag, lf)
         return worstCase
         
-    

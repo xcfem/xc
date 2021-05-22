@@ -12,6 +12,7 @@ __email__= "l.pereztato@ciccp.es, ana.ortega@ciccp.es "
 
 import math
 import json
+import importlib
 import xc_base
 import geom
 from import_export import block_topology_entities as bte
@@ -134,10 +135,17 @@ class BoltArrayBase(object):
         return ' number of rows: '+str(self.nRows)+' number of columns: '+str(self.nCols)+' distance between centers: '+str(self.dist)+ ' bolts: '+str(self.bolt) 
     def getDict(self):
         ''' Put member values in a dictionary.'''
-        return {'bolt':self.bolt.getDict(), 'nRows':self.nRows, 'nCols':self.nCols, 'dist':self.dist}    
+        boltClassName= str(self.bolt.__class__)[8:-2]
+        return {'boltClassName':boltClassName,'bolt':self.bolt.getDict(), 'nRows':self.nRows, 'nCols':self.nCols, 'dist':self.dist}    
 
     def setFromDict(self,dct):
         ''' Read member values from a dictionary.'''
+        tmp= dct['boltClassName'].rsplit('.', 1)
+        boltClassName= tmp[1]
+        moduleName= tmp[0]
+        module= importlib.import_module(moduleName)
+        cls= getattr(module, boltClassName)
+        self.bolt= cls(diameter= 0.004)
         self.bolt.setFromDict(dct['bolt'])
         self.nRows= dct['nRows']
         self.nCols= dct['nCols']
@@ -465,6 +473,7 @@ class BoltedPlateBase(object):
 
     def jsonRead(self, inputFileName):
         ''' Read object from JSON file.'''
+
         with open(inputFileName) as json_file:
             boltedPlateDict= json.load(json_file)
         self.setFromDict(boltedPlateDict)

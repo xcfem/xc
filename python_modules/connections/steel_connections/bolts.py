@@ -135,7 +135,7 @@ class BoltBase(object):
         retval.update({'pos3d': xyz})
         return retval
 
-    def setFromDict(self,dct):
+    def setFromDict(self, dct):
         ''' Read member values from a dictionary.'''
         self.diameter= dct['diameter']
         self.pos3d= None
