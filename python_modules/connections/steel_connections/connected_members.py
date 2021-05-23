@@ -379,6 +379,8 @@ class ConnectionMetaData(object):
         retval= bte.BlockData()
         beamShapeProperties= bte.BlockProperties.copyFrom(blockProperties)
         beamShapeProperties.appendAttribute('objType', 'beam')
+        originNodeTag= str(self.originNode.tag)
+        beamShapeProperties.appendAttribute('jointId', originNodeTag)
         for b in self.beams:
             webPlane= self.getColumnWebMidPlane()
             angleWithWeb= webPlane.getAngleWithVector3d(b.iVector)
