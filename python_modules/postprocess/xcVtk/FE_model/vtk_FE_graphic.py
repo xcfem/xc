@@ -167,9 +167,9 @@ class DisplaySettingsFE(vtk_graphic_base.DisplaySettings):
 
         #Implement labels.
         # if(self.gridRecord.entToLabel=="elementos"):
-        #   VtkDibujaIdsElementos(self.renderer)
+        #   VtkDisplayIdsElements(self.renderer)
         # elif(self.gridRecord.entToLabel=="nodes"):
-        #   vtk_define_mesh_nodes.VtkDibujaIdsNodes(self.renderer)
+        #   vtk_define_mesh_nodes.VtkDisplayIdsNodes(self.renderer)
         # else:
         #   print("Entity: ", self.gridRecord.entToLabel, " unknown.")
 
@@ -419,19 +419,19 @@ class DisplaySettingsFE(vtk_graphic_base.DisplaySettings):
             sp= spIter.next()
         return
                     
-def VtkCargaIdsNodes(recordGrid):
-    '''Not yet implemented.'''
+def VtkLoadIdsNodes(recordGrid):
+    '''Load node labels. Not yet implemented.'''
     VtkCreaStrArraySetData(recordGrid.setName,"nodes","etiqNod","tag")()
     nmbUGrid.GetPointData().SetStrings(etiqNod)
 
-def VtkDibujaIdsNodes(recordGrid, renderer):
+def VtkDisplayIdsNodes(recordGrid, renderer):
     '''Display node labels (not implemented yet)'''
     ids= vtk.vtkIdFilter()
     ids.SetInput(recordGrid.uGrid)
     ids.CellIdsOff()
     ids.PointIdsOff()
 
-    VtkCargaIdsNodes(recordGrid)
+    VtkLoadIdsNodes(recordGrid)
 
     visPts= vtk.vtkSelectVisiblePoints()
     visPts.SetInput("ids")
@@ -446,8 +446,8 @@ def VtkDibujaIdsNodes(recordGrid, renderer):
     nodeLabels= vtk.vtkActor2D().SetMapper(ldm)
     renderer.AddActor2D(nodeLabels)
 
-def VtkDibujaIdsElementos(ids):
-    '''Dibuja las etiquetas de los elementos. Not implemented yet.'''
+def VtkDisplayIdsElements(ids):
+    '''Display element labels. Not implemented yet.'''
     cc= vtk.vtkCellCenters()
     vtk.SetInput(ids) # Cell centroids. 
 
