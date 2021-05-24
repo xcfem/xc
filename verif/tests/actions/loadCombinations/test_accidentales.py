@@ -22,7 +22,7 @@ import os
 os.system("rm -f "+dbName)
 
 import sqlite3 as sqlite
-from sqlite_utils import sqlite_macros
+from misc.sqlite_utils import sqlite_macros
 
 
 sqlite_macros.SQLTcreaDBase(dbName)
