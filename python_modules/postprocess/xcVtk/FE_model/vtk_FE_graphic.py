@@ -15,7 +15,7 @@ import sys
 import vtk
 from misc_utils import log_messages as lmsg
 import xc_base
-from vtk_utils import utils_vtk
+from misc.vtk_utils import utils_vtk
 from postprocess.xcVtk import vtk_graphic_base
 from postprocess.xcVtk.fields import fields
 from postprocess.xcVtk.fields import local_axes_vector_field as lavf
