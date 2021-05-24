@@ -14,9 +14,9 @@ from model.mesh import finit_el_model as fem
 from actions import loads
 from actions import load_cases as lcases
 
-# Default configuration of environment variables.
-from postprocess import output_styles as outSty
-from postprocess import output_handler as outHndl
+# Uncomment the following lines to make graphics output work.
+# from postprocess import output_styles as outSty
+# from postprocess import output_handler as outHndl
 
 __author__= "Ana Ortega (AO_O)  Luis C. Pérez Tato (LCPT)"
 __copyright__= "Copyright 2019, AO_O  LCPT"
@@ -29,8 +29,6 @@ __email__= "ana.ortega@ciccp.es l.pereztato@gmail.com"
 Lsquare=1.0 # square side
 qUnif=5e3   # unif load on surfaces 
 
-sty=outSty.OutputStyle() 
-
 FEcase= xc.FEProblem()
 prep=FEcase.getPreprocessor
 nodes= prep.getNodeHandler
@@ -40,7 +38,11 @@ elements.dimElem= 3
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes) #Defines the
 # dimension of the space: nodes by three coordinates (x,y,z) and 
 # six DOF for each node (Ux,Uy,Uz,thetaX,thetaY,thetaZ)
-out=outHndl.OutputHandler(modelSpace,sty)
+
+# Uncomment the following two lines to make graphics output work.
+# sty= outSty.OutputStyle() 
+# out= outHndl.OutputHandler(modelSpace,sty)
+
 xList=[0,Lsquare/5,Lsquare]
 yList=[0,Lsquare/3,Lsquare]
 zList=[1]
@@ -83,7 +85,9 @@ while(nLoad):
     nLoad= lIter.next()
 
 totalCompLoad=Lsquare*Lsquare*qUnif
-#out.displayLoads()
+
+# Uncomment the following line to display the loads.
+# out.displayLoads()
 
 ratio0=(totalLoad-totalCompLoad)/totalCompLoad
 import os
