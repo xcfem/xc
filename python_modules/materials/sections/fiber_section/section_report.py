@@ -11,7 +11,7 @@ __email__= "l.pereztato@ciccp.es" "ana.Ortega@ciccp.es"
 import sys
 import math
 import os
-from latex import latex_utils
+from misc.latex import latex_utils
 from postprocess.reports import graph_material as mg
 from materials.sections.fiber_section import plot_fiber_section as pfs
 from materials.sections import section_properties as prmRect

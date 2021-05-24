@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from sqlite_utils import sqlite_macros
+from misc.sqlite_utils import sqlite_macros
 
 def ansysToEsfBarra(nmbArch,nmbDBase,nmbTabla):
   '''Importa el listado de esfuerzos en barras de ansys que se pasa como parámetro

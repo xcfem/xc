@@ -2,7 +2,7 @@
 from __future__ import print_function
 
 import sqlite3 as sqlite
-from sqlite_utils import sqlite_macros
+from misc.sqlite_utils import sqlite_macros
 from misc import import_Ansys_beam_intforces
 
 __author__= "Luis C. Pérez Tato (LCPT)"

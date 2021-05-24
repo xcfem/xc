@@ -2,7 +2,7 @@
 # THIS MODULE IS OBSOLETE, IT WILL BE DEPRECATED SOON. LCPT 30/05/2020
 import struct
 import sqlite3 as sqlite
-from sqlite_utils import sqlite_macros
+from misc.sqlite_utils import sqlite_macros
 import re #regular expresions
 import tempfile
 
