@@ -1,6 +1,6 @@
 # How to start
 
-Some links you can find useful if you want to help us to develop XC. Feel free  making suggestions to enhance this document.
+Some links you can find useful if you want to start using XC. Feel free  making suggestions to enhance this document.
 
 ## XC tutorials and examples
 
@@ -8,12 +8,18 @@ Some links you can find useful if you want to help us to develop XC. Feel free  
 - [XC examples](https://github.com/xcfem/xc_examples)
 
 ### Tutorials
-- [Getting started with XC. Axial force in a bar subjectedto a uniform temperature increase.](https://github.com/xcfem/xc_examples/blob/master/XC_tutorial_001/tutorial001_truss_temp.pdf)
+- [Getting started with XC. Axial force in a bar subjected to a uniform temperature increase.](https://github.com/xcfem/xc_examples/blob/master/XC_tutorial_001/tutorial001_truss_temp.pdf)
 - [Analysis of a vibrating string under tension.](https://raw.githubusercontent.com/xcfem/xc_examples/master/XC_tutorial_002/tutorial002_eigen_vibr_string.pdf)
-- [Properties of a reinforced concrete sectionobtained from a fiber-section model](https://raw.githubusercontent.com/xcfem/xc_examples/master/XC_tutorial_003/tutorial003_fiber_section.pdf)
+- [Properties of a reinforced concrete section obtained from a fiber-section model](https://raw.githubusercontent.com/xcfem/xc_examples/master/XC_tutorial_003/tutorial003_fiber_section.pdf)
 
 ### Verification tests
 - [XC verification tests](https://github.com/xcfem/xc/tree/master/verif/tests)
+
+
+## XC API documentation
+
+- [C++ API documentation](https://codedocs.xyz/xcfem/xc/index.html)
+- [Python API documentation](https://xcfem.github.io/XCmanual/)
 
 ## Git
 
