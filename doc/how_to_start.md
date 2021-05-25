@@ -2,6 +2,10 @@
 
 Some links you can find useful if you want to start using XC. Feel free  making suggestions to enhance this document.
 
+## XC installation
+
+See [here](https://github.com/xcfem/xc/blob/master/install/install.md)
+
 ## XC tutorials and examples
 
 ### Examples
