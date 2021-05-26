@@ -319,6 +319,7 @@ class LoadCaseDispParameters(RecordDisp):
         :param cfg:        instance of EnvConfig class with config parameters
         '''
         fullPath=cfg.projectDirTree.getReportLoadsGrPath()
+        cfg.makedirs(fullPath) # Create directory if needed.
         rltvPath=cfg.projectDirTree.getRltvReportLoadsGrPath()
         description= self.getDescription()
         FEcase= modelSpace.getProblem()
@@ -380,7 +381,7 @@ class LoadCaseDispParameters(RecordDisp):
         :param cfg:        instance of EnvConfig class with config parameters
         '''
         fullPath= cfg.projectDirTree.getReportSimplLCGrPath()
-        cfg.makedirs(fullPath)
+        cfg.makedirs(fullPath) # Create directory if needed.
         rltvPath= cfg.projectDirTree.getRltvReportSimplLCGrPath()
         outputHandler= output_handler.OutputHandler(modelSpace)
         #Displacements and rotations displays
