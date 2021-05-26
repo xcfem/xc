@@ -43,10 +43,11 @@ class ReportGenerator(oh.OutputHandler):
         :param argsBmElScale: Ordered list of arguments to be included in the 
                       report for beam elements
         '''
-        cfg=self.getEnvConfig()
+        cfg= self.getEnvConfig()
         texReportFile= cfg.projectDirTree.getReportFile(limitStateLabel)
-        report=open(texReportFile,'w')    #report latex file
+        report= open(texReportFile,'w') # report latex file
         fullPath= cfg.projectDirTree.getReportGrPath(limitStateLabel)
+        cfg.makedirs(fullPath)
         rltvPath= cfg.projectDirTree.getReportRltvGrPath(limitStateLabel)
         for st in setsShEl:
             for arg in argsShEl:

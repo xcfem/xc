@@ -379,14 +379,15 @@ class LoadCaseDispParameters(RecordDisp):
                            (e.g.:'text/report_loads.tex')
         :param cfg:        instance of EnvConfig class with config parameters
         '''
-        fullPath=cfg.projectDirTree.getReportSimplLCGrPath()
-        rltvPath=cfg.projectDirTree.getRltvReportSimplLCGrPath()
+        fullPath= cfg.projectDirTree.getReportSimplLCGrPath()
+        cfg.makedirs(fullPath)
+        rltvPath= cfg.projectDirTree.getRltvReportSimplLCGrPath()
         outputHandler= output_handler.OutputHandler(modelSpace)
         #Displacements and rotations displays
         for st in self.setsToDispDspRot:
             for arg in self.listDspRot:
-                fullgrfname=fullPath+self.loadCaseName+st.name+arg
-                rltvgrfname=rltvPath+self.loadCaseName+st.name+arg
+                fullgrfname= fullPath+self.loadCaseName+st.name+arg
+                rltvgrfname= rltvPath+self.loadCaseName+st.name+arg
                 grFileName= fullgrfname+'.png'
                 outputHandler.displayDispRot(itemToDisp=arg,setToDisplay=st,fileName= grFileName)
   #              unitConversionFactor, unDesc= cfg.outputStyle.getUnitParameters(arg)

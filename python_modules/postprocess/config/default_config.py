@@ -9,12 +9,12 @@ import xc
 from postprocess import output_styles
 from postprocess import limit_state_data as lsd
 
-def findWorkingDirectory(fNameMark= 'env_config.py'):
+def findDirectoryUpwards(fNameMark: str):
     '''Search upwards to find the directory where the file
        argument is.
 
-    :param fNameMark: name of the file that marks the working directory
-                      of the project.
+    :param fNameMark: name of the file that marks the directory
+                      we are searching for.
     '''
     current_working_dir= os.getcwd()
     working_dir= current_working_dir
@@ -32,6 +32,22 @@ def findWorkingDirectory(fNameMark= 'env_config.py'):
     if(not working_dir):
         working_dir= current_working_dir
     return working_dir
+
+def findWorkingDirectory(fNameMark= 'env_config.py'):
+    '''Search upwards to find the directory where the file
+       argument is.
+
+    :param fNameMark: name of the file that marks the working directory.
+    '''
+    return findDirectoryUpwards(fNameMark)
+
+def findProjectDirectory(fNameMark= '.git'):
+    '''Search upwards to find the directory where the file
+       argument is.
+
+    :param fNameMark: name of the file that marks the working directory.
+    '''
+    return findDirectoryUpwards(fNameMark)
 
 class ProjectDirTree(object):
     ''' Paths to project directories.
@@ -115,7 +131,7 @@ class ProjectDirTree(object):
     
     def getFullReportPath(self):
         ''' Return the full path for the report files.'''        
-        return self.workingDirectory+'/'+self.reportPath+self.getRltvReportPath()
+        return self.reportPath+self.getRltvReportPath()
     
     def getFullGraphicsPath(self):
         ''' Return the full path for the graphic files.'''        
@@ -394,6 +410,20 @@ class ProjectDirTree(object):
             if(not os.path.exists(pth)):
                 os.makedirs(pth)
 
+    def makedirs(self, pth):
+        ''' Recursive directory creation function. Like mkdir(), but 
+            makes all intermediate-level directories needed to contain 
+           the leaf directory.
+
+        :param path: the path to create.
+        '''
+        if(not os.path.exists(pth)):
+            try:
+                os.makedirs(pth)
+            except OSError as exc: # Guard against race condition
+                if exc.errno != errno.EEXIST:
+                    raise
+
     def open(self, fileName, mode='r', buffering=-1, encoding=None, errors=None, newline=None, closefd=True, opener=None):
         ''' Open file and return a corresponding file object..
 
@@ -407,12 +437,7 @@ class ProjectDirTree(object):
         :param opener: see Python documentation for open built-in function.
         '''
         pth= os.path.dirname(fileName)
-        if(not os.path.exists(pth)):
-            try:
-                os.makedirs(pth)
-            except OSError as exc: # Guard against race condition
-                if exc.errno != errno.EEXIST:
-                    raise
+        self.makedirs(pth)
         return open(fileName, mode, buffering, encoding, errors, newline, closefd, opener)
 
 class EnvConfig(output_styles.OutputStyle):
@@ -452,6 +477,15 @@ class EnvConfig(output_styles.OutputStyle):
         self.capTexts= self.getCaptionTextsDict()
         self.colors=setBasicColors
         self.grWidth=grWidth
+        
+    def makedirs(self, pth):
+        ''' Recursive directory creation function. Like mkdir(), but 
+            makes all intermediate-level directories needed to contain 
+           the leaf directory.
+
+        :param path: the path to create.
+        '''
+        return self.projectDirTree.makedirs(pth)
 
     def open(self, fileName, mode='r', buffering=-1, encoding=None, errors=None, newline=None, closefd=True, opener=None):
         ''' Open file and return a corresponding file object..
