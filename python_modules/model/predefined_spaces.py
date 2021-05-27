@@ -706,6 +706,9 @@ class PredefinedSpace(object):
                                effects.
         :param reactionCheckTolerance: tolerance when checking reaction values.
         '''
+        if(numSteps<1):
+            numSteps= 1
+            lmsg.error('Number of steps must be greater than zero. Setting numSteps= '+str(numSteps))
         result= 0
         problem= self.getProblem()
         if(not self.analysis):
