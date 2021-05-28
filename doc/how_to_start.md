@@ -6,7 +6,7 @@ Some links you can find useful if you want to start using XC. Feel free  making 
 
 This is all about cooperation. If you're new to open source projects you can take a look to [this article](https://www.freecodecamp.org/news/how-to-contribute-to-open-source-projects-beginners-guide/).
 
-![cooperation](https://commons.wikimedia.org/wiki/File:Concurs_de_castells_Tarragona_2008_42._Castellers_de_Sants_4de8.jpg)
+![cooperation](<img src="https://upload.wikimedia.org/wikipedia/commons/6/6d/Concurs_de_castells_Tarragona_2008_42._Castellers_de_Sants_4de8.jpg"  width="100" />)
 
 ## XC installation
 
