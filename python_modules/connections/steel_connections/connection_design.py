@@ -209,7 +209,7 @@ class Connection(connected_members.ConnectionMetaData):
         return retval
 
     def getBeamShapeBlocks(self, factor, blockProperties= None):
-        ''' Return the faces of the beams.
+        ''' Return the blocks corresponding to the faces of the beams.
 
         :param factor: factor that multiplies the unary direction vector
                        of the member to define its extrusion,
@@ -225,58 +225,58 @@ class Connection(connected_members.ConnectionMetaData):
         # Flange plates.
         for b in self.beams:
             flangePlate= b.getFlangeBoltedPlate(column= self.column, boltSteel= self.getBoltSteel(), plateSteel= self.getBoltedPlatesSteel())
-            origin= self.getOrigin()
-            print('origin: ', origin, ' beam origin: ', b.memberOrigin)
-            print('connected to: ', b.connectedTo)
-            baseVectors= b.getDirection(origin)
-            flangeThickness= b.shape.getFlangeThickness()
-            print('flangeThickness',flangeThickness)
-            platesThickness= flangeThickness+flangePlate.thickness
-            halfHFlange= (b.shape.h()-flangeThickness)/2.0
-            halfHPlate= halfHFlange+platesThickness/2.0
-            halfD= flangePlate.length/2.0
-            # Top plate
-            topPlateCenter= b.memberOrigin + halfHPlate*baseVectors[1] + halfD*baseVectors[0]
-            if(b.connectedTo=='web'):
-                eccentricity= self.column.shape.getFlangeWidth()/2*baseVectors[0]
-                topPlateCenter-= eccentricity
-                #flangePlate.eccentricity= eccentricity
-            topPlateRefSys= geom.Ref3d3d(topPlateCenter, baseVectors[0], baseVectors[2])
-            topPlateBlocks= flangePlate.getBlocks(refSys= topPlateRefSys, blockProperties= plateProperties)
-            retval.extend(topPlateBlocks)
-            # Holes in top flange
-            holesList= topPlateBlocks.getHoles()
-            ## Name for bolt group
-            boltProperties= bte.BlockProperties.copyFrom(plateProperties)
-            boltGroup= 'joint_'+plateProperties.getAttribute('jointId') # Joint id.
-            boltGroup+= '_'+plateProperties.getAttribute('objType')
-            boltGroup+= '_'+str(b.eTag) # Beam identifier.
-            topFlangeBoltGroup= boltGroup+'_top_flange' # flange identifier.
-            topFlangeBoltGroup+= '_top' # top side
-            boltProperties.appendAttribute('boltGroup', topFlangeBoltGroup)
-            ## Create holes.
-            boltBlocks= bolts.createHolesOnMemberBlocks(holesList, beamBlocks, boltProperties, self.getMaterialModule().__name__)
-            retval.extend(boltBlocks)
-            # Bottom plate
-            bottomPlateCenter= b.memberOrigin - halfHPlate*baseVectors[1] + halfD*baseVectors[0]
-            if(b.connectedTo=='web'):
-                bottomPlateCenter-= self.column.shape.getFlangeWidth()/2*baseVectors[0]
-            bottomPlateRefSys= geom.Ref3d3d(bottomPlateCenter, baseVectors[0], baseVectors[2])
-            bottomPlateBlocks= flangePlate.getBlocks(refSys= bottomPlateRefSys, blockProperties= plateProperties)
-            retval.extend(bottomPlateBlocks)
-            # Holes in bottom flange
-            holesList= bottomPlateBlocks.getHoles()
-            ## Name for bolt group
-            boltProperties= bte.BlockProperties.copyFrom(plateProperties)
-            boltGroup= 'joint_'+plateProperties.getAttribute('jointId') # Joint id.
-            boltGroup+= '_'+plateProperties.getAttribute('objType')
-            boltGroup+= '_'+str(b.eTag) # Beam identifier.
-            bottomFlangeBoltGroup= boltGroup+'_bottom_flange' # flange identifier.
-            bottomFlangeBoltGroup+= '_bottom' # bottom side
-            boltProperties.appendAttribute('boltGroup', bottomFlangeBoltGroup)
-            ## Create holes.
-            boltBlocks= bolts.createHolesOnMemberBlocks(holesList, beamBlocks, boltProperties, self.getMaterialModule().__name__)
-            retval.extend(boltBlocks)
+        #     origin= self.getOrigin()
+        #     print('origin: ', origin, ' beam origin: ', b.memberOrigin)
+        #     print('connected to: ', b.connectedTo)
+        #     baseVectors= b.getDirection(origin)
+        #     flangeThickness= b.shape.getFlangeThickness()
+        #     print('flangeThickness',flangeThickness)
+        #     platesThickness= flangeThickness+flangePlate.thickness
+        #     halfHFlange= (b.shape.h()-flangeThickness)/2.0
+        #     halfHPlate= halfHFlange+platesThickness/2.0
+        #     halfD= flangePlate.length/2.0
+        #     # Top plate
+        #     topPlateCenter= b.memberOrigin + halfHPlate*baseVectors[1] + halfD*baseVectors[0]
+        #     if(b.connectedTo=='web'):
+        #         eccentricity= self.column.shape.getFlangeWidth()/2*baseVectors[0]
+        #         topPlateCenter-= eccentricity
+        #         #flangePlate.eccentricity= eccentricity
+        #     topPlateRefSys= geom.Ref3d3d(topPlateCenter, baseVectors[0], baseVectors[2])
+        #     topPlateBlocks= flangePlate.getBlocks(refSys= topPlateRefSys, blockProperties= plateProperties)
+        #     retval.extend(topPlateBlocks)
+        #     # Holes in top flange
+        #     holesList= topPlateBlocks.getHoles()
+        #     ## Name for bolt group
+        #     boltProperties= bte.BlockProperties.copyFrom(plateProperties)
+        #     boltGroup= 'joint_'+plateProperties.getAttribute('jointId') # Joint id.
+        #     boltGroup+= '_'+plateProperties.getAttribute('objType')
+        #     boltGroup+= '_'+str(b.eTag) # Beam identifier.
+        #     topFlangeBoltGroup= boltGroup+'_top_flange' # flange identifier.
+        #     topFlangeBoltGroup+= '_top' # top side
+        #     boltProperties.appendAttribute('boltGroup', topFlangeBoltGroup)
+        #     ## Create holes.
+        #     boltBlocks= bolts.createHolesOnMemberBlocks(holesList, beamBlocks, boltProperties, self.getMaterialModule().__name__)
+        #     retval.extend(boltBlocks)
+        #     # Bottom plate
+        #     bottomPlateCenter= b.memberOrigin - halfHPlate*baseVectors[1] + halfD*baseVectors[0]
+        #     if(b.connectedTo=='web'):
+        #         bottomPlateCenter-= self.column.shape.getFlangeWidth()/2*baseVectors[0]
+        #     bottomPlateRefSys= geom.Ref3d3d(bottomPlateCenter, baseVectors[0], baseVectors[2])
+        #     bottomPlateBlocks= flangePlate.getBlocks(refSys= bottomPlateRefSys, blockProperties= plateProperties)
+        #     retval.extend(bottomPlateBlocks)
+        #     # Holes in bottom flange
+        #     holesList= bottomPlateBlocks.getHoles()
+        #     ## Name for bolt group
+        #     boltProperties= bte.BlockProperties.copyFrom(plateProperties)
+        #     boltGroup= 'joint_'+plateProperties.getAttribute('jointId') # Joint id.
+        #     boltGroup+= '_'+plateProperties.getAttribute('objType')
+        #     boltGroup+= '_'+str(b.eTag) # Beam identifier.
+        #     bottomFlangeBoltGroup= boltGroup+'_bottom_flange' # flange identifier.
+        #     bottomFlangeBoltGroup+= '_bottom' # bottom side
+        #     boltProperties.appendAttribute('boltGroup', bottomFlangeBoltGroup)
+        #     ## Create holes.
+        #     boltBlocks= bolts.createHolesOnMemberBlocks(holesList, beamBlocks, boltProperties, self.getMaterialModule().__name__)
+        #     retval.extend(boltBlocks)
         return retval
 
     def getBlocks(self, blockProperties= None):
@@ -648,6 +648,7 @@ class DiagonalConnectionGroup(ConnectionGroup):
                                    plate.
         :param xcSet: set containing the joint nodes.
         :param diagonalBoltedPlate: bolted plate attaching diagonal.
+        :param ConnectionType: type of the connection (defaults do DiagonalConnection).
         '''
         
         # Get members connected to the joint

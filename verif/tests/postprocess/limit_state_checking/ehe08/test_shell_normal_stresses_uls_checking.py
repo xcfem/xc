@@ -12,12 +12,12 @@ __email__= "l.pereztato@gmail.com ana.ortega@ciccp.es"
 import xc_base
 import geom
 import xc
-from materials.sia262 import SIA262_materials
+from materials.ehe import EHE_materials
 from materials.sections.fiber_section import def_simple_RC_section
 from postprocess import element_section_map
 from postprocess import RC_material_distribution
 from materials.sections import RC_sections_container as sc
-from materials.sia262 import SIA262_limit_state_checking
+from materials.ehe import EHE_limit_state_checking
 from postprocess import limit_state_data as lsd
 from postprocess.config import default_config
 import shutil
@@ -30,7 +30,7 @@ rootLogger = logging.getLogger()
 rootLogger.setLevel(logging.ERROR)
 
 feProblem= xc.FEProblem()
-feProblem.logFileName= "/tmp/erase.log" # Don't print warnings
+feProblem.logFileName= "/tmp/erase.log" # Don't pring warnings
 feProblem.errFileName= "/tmp/erase.err" # Ignore warning messagess about maximum error in computation of the interaction diagram.
 
 
@@ -42,10 +42,10 @@ for eTag in elementTags:
     reinfConcreteSections.sectionDistribution[eTag]= ["deck2","deck1"]
 
 # deck.
-concrete= SIA262_materials.c30_37
+concrete= EHE_materials.HA30
 concrete.alfacc= 0.85  #f_maxd= 0.85*fcd concrete long term compressive strength factor (normally alfacc=1)
-reinfSteel= SIA262_materials.B500B
-areaFi8= 0.50e-4 #XXX Rebar area expressed in square meters.
+reinfSteel= EHE_materials.B500S
+areaFi8= 0.50e-4 # Rebar area expressed in square meters.
 areaFi10= 0.785e-4
 areaFi12= 1.13e-4 
 areaFi16= 2.01e-4
@@ -74,7 +74,7 @@ if(not pth):
 fname= os.path.basename(__file__)
 
 #Checking normal stresses.
-lsd.normalStressesResistance.controller= SIA262_limit_state_checking.BiaxialBendingNormalStressController('ULS_normalStress')
+lsd.normalStressesResistance.controller= EHE_limit_state_checking.BiaxialBendingNormalStressController('ULS_normalStress')
 cfg=default_config.EnvConfig(language='en', resultsPath= 'tmp_results/', intForcPath= 'internalForces/',verifPath= 'verifications/',reportPath='./',reportResultsPath= 'annex/',grWidth='120mm')
 cfg.projectDirTree.workingDirectory= '/tmp/'+os.path.splitext(fname)[0]
 cfg.projectDirTree.createTree() # To allow copying existing internal force data into.
@@ -92,9 +92,9 @@ meanFCs= reinfConcreteSections.internalForcesVerification3D(lsd.normalStressesRe
 
 #print("mean FCs: ", meanFCs)
 
-meanFC0Teor= 0.6467847191964301
+meanFC0Teor= 0.64702580108264973
 ratio1= abs(meanFCs[0]-meanFC0Teor)/meanFC0Teor
-meanFC1Teor= 0.8366279701238778
+meanFC1Teor= 0.84660274501497856
 ratio2= abs(meanFCs[1]-meanFC1Teor)/meanFC1Teor
 
 '''

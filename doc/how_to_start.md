@@ -2,6 +2,14 @@
 
 Some links you can find useful if you want to start using XC. Feel free  making suggestions to enhance this document.
 
+## How to contribute to open source projects
+
+This is all about cooperation. If you're new to open source projects you can take a look to [this article](https://www.freecodecamp.org/news/how-to-contribute-to-open-source-projects-beginners-guide/).
+
+<!-- ![cooperation](https://upload.wikimedia.org/wikipedia/commons/6/6d/Concurs_de_castells_Tarragona_2008_42._Castellers_de_Sants_4de8.jpg "Cooperation") -->
+
+<img align="right" src="https://upload.wikimedia.org/wikipedia/commons/6/6d/Concurs_de_castells_Tarragona_2008_42._Castellers_de_Sants_4de8.jpg" width="250" />
+
 ## XC installation
 
 See [here](https://github.com/xcfem/xc/blob/master/install/install.md)

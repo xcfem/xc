@@ -375,11 +375,7 @@ class BoltFastener(bolts.BoltBase):
         '''
         designShear= self.getDesignShearStrength(threadsExcluded)
         n= shearForce/designShear
-        retval= 0
-        if(numberOfRows!=1):
-            retval= math.ceil(n/numberOfRows)*numberOfRows
-        else:
-            retval= math.ceil(n)
+        retval= math.ceil(n/numberOfRows)*numberOfRows
         return retval
 
     def __str__(self):
@@ -416,20 +412,21 @@ M42= BoltFastener(42e-3)
 # Standard bolt diameters
 standardBolts= [M16, M20, M22, M24, M27, M30, M36]
 
-def getBoltForHole(holeDiameter, steelType= A307,tol= 0.5e-3):
+def getBoltForHole(holeDiameter, boltSteelType= A307, tol= 0.5e-3):
     ''' Return the bolt that fits in the hole diameter
         argument.
 
     :param holeDiamter: diameter of the hole.
     :param tol: tolerance (defaults to 0.5 mm).
     '''
-    retval= None
+    tmp= None
     threshold= holeDiameter+tol
     for b in standardBolts[::-1]:
         holeDiameter= b.getNominalHoleDiameter()
         if(holeDiameter<threshold):
-            retval= b
+            tmp= b
             break
+    retval= BoltFastener(diameter= b.diameter, steelType= boltSteelType)
     return retval
      
 
@@ -1484,11 +1481,14 @@ class ASTMShape(object):
         db= self.getFlangeMaximumBoltDiameter()
         return db+BoltFastener.diameterIncrement
 
-    def getFlangeMaximumBolt(self, steelType= A307):
+    def getFlangeMaximumBolt(self, boltSteelType= A307):
         ''' Return the maximum bolt to prevent beam flange 
             tensile rupture according to equation 7.6-2M
-            of AISC 358-16.'''
-        return getBoltForHole(self.getFlangeMaximumBoltDiameter(), steelType)
+            of AISC 358-16.
+
+        :param boltSteelType: bolt steel type. 
+        '''
+        return getBoltForHole(self.getFlangeMaximumBoltDiameter(), boltSteelType)
 
     def getFlangeGrossArea(self):
         ''' Return the gross area of the flange.'''
@@ -1793,6 +1793,7 @@ class MemberWithEndConnections(object):
 
 class ConnectedMember(connected_members.ConnectedMemberMetaData):
     ''' Connected member.'''
+    
     def getFlangeBoltedPlate(self, column, boltSteel, plateSteel):
         ''' Return a suitable bolted plate for the beam flange.
 
@@ -1802,7 +1803,7 @@ class ConnectedMember(connected_members.ConnectedMemberMetaData):
         :param plateSteel: steel type of the bolted plate.
         '''
         flangeStrength= self.shape.getFlangeYieldStrength()
-        bolt= self.shape.getFlangeMaximumBolt(steelType= boltSteel)
+        bolt= self.shape.getFlangeMaximumBolt(boltSteelType= boltSteel)
         numberOfBolts= bolt.getNumberOfBoltsForShear(flangeStrength, numberOfRows= 2, threadsExcluded= True)
         spacing= self.shape.getFlangeWidth()/2.0
         boltArray= BoltArray(bolt, nRows= 2, nCols= int(numberOfBolts/2), dist= spacing)

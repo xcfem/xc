@@ -382,22 +382,25 @@ class ConnectionMetaData(object):
         originNodeTag= str(self.originNode.tag)
         beamShapeProperties.appendAttribute('jointId', originNodeTag)
         for b in self.beams:
-            webPlane= self.getColumnWebMidPlane()
-            angleWithWeb= webPlane.getAngleWithVector3d(b.iVector)
+            # Angle of the beam axis with the column web.
+            columnWebPlane= self.getColumnWebMidPlane()
+            angleWithColumnWeb= columnWebPlane.getAngleWithVector3d(b.iVector)
+            # Column dimensions.
             columnShape= self.getColumnShape()
             columnHalfB= columnShape.getFlangeWidth()/2.0
             columnHalfH= columnShape.h()/2.0
             origin= self.getOrigin()
             beamOrientation= b.getOrientation(origin)
-            if(abs(angleWithWeb)<1e-3): # beam parallel to web => flange beam.
-                beam_label= 'flange_beam'
-                b.connectedTo= 'flange'
+            lbl= None
+            if(abs(angleWithColumnWeb)<1e-3): # beam parallel to web => flange beam.
+                lbl= 'flange'
                 tf= columnShape.getFlangeThickness()
-                offset= (25e-3+columnHalfH-tf/2.0)*beamOrientation
+                offset= (25e-3+columnHalfH-tf/2.0)*beamOrientation # 25 mm gap from flange mid-plane
             else: # beam normal to web  => web beam
-                beam_label= 'web_beam'
-                b.connectedTo= 'web'
-                offset= (20e-3+columnHalfB)*beamOrientation
+                lbl= 'web'
+                offset= (20e-3+columnHalfB)*beamOrientation # 20 mm gap from column "envelope"
+            beam_label= lbl+'_beam'
+            b.connectedTo= lbl
             beamShapeProperties.appendAttribute('beamLabel', beam_label)
             beamOrigin= origin+offset*b.iVector # beam direction
             retval.extend(b.getMemberBlocks(origin, beamOrigin, factor, beamShapeProperties))
