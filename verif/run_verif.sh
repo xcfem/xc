@@ -819,6 +819,7 @@ python tests/materials/astm_aisc/connection_design/single_plate_connection_01.py
 python tests/materials/astm_aisc/connection_design/single_plate_connection_02.py
 python tests/materials/astm_aisc/connection_design/
 python tests/materials/astm_aisc/connection_design/test_end_plate_connection.py
+python tests/materials/astm_aisc/connection_design/test_end_tee_connection.py
 
 echo "$BLEU" "  Wood sections test." "$NORMAL"
 echo "$BLEU" "    AWC NDS tests." "$NORMAL"
