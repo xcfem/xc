@@ -16,49 +16,49 @@ __version__= '3.0'
 __email__= 'l.pereztato@gmail.com ana.Ortega.Ort@gmail.com'
 
 class ConcreteSIA262(ec2.EC2Concrete):
-  def nufc(self):
-    return min(math.pow(30e6/-self.fck,1/3.0),1.0)
-  def eta_fc(self):
-    ''' Factor that reduces concrete design strength (SIA 262:2013 4.2.1.2.'''
-    return min(pow((-30e6/self.fck),(1.0/3.0)),1.0)
-  def fcd(self):
-    '''concrete design strength [Pa][-]
-    '''
-    return self.eta_fc()*super(ConcreteSIA262,self).fcd()
-  def fctd(self,t,favourable):
-    '''SIA 262 sections 4.4.1.3 et 4.4.1.4'''
-    kt= 1.0/(1.0+0.5*t) #(99)
-    retval= 0.0
-    if favourable:
-      retval= kt*self.fctm() #(98)
-    else:
-      retval= kt*self.getFctk095() #(99)
-    return retval
-  def fctk0_05(self):
-    '''SIA 262 sections 3.1.2.2.5 expr (7)'''
-    return 0.7*self.getFctm()
-  def fctk0_95(self):
-    '''SIA 262 sections 3.1.2.2.5 expr (8)'''
-    return 1.3*self.getFctm()
-  def taucd(self):
-    '''Design value of shear strength.'''
-    return 0.3*math.sqrt(-self.fck/1e6)*1e6/self.gmmC
-  def kDmax(self):
-    return 48/(self.Dmax*1e3+16)
-  def getEpsc1d(self):
-    '''Design value of concrete strain when f_cd
-       is reached; SIA 262 section 4.2.1.4 table 8.'''
-    return self.getEpsc2()
-  def getEpscu2(self):
-    '''
-    epscu2: nominal ultimate strain [-] at parabola-rectangle diagram 
-    SIA 262 section 4.2.1.4 table 8.'''
-    return -3e-3
-  
-  def getEpsc2d(self):
-    '''Design value of concrete ultimate strain;
-       SIA 262 section 4.2.1.4 table 8.'''
-    return self.getEpscu2()
+    def nufc(self):
+        return min(math.pow(30e6/-self.fck,1/3.0),1.0)
+    def eta_fc(self):
+        ''' Factor that reduces concrete design strength (SIA 262:2013 4.2.1.2.'''
+        return min(pow((-30e6/self.fck),(1.0/3.0)),1.0)
+    def fcd(self):
+        '''concrete design strength [Pa][-]
+        '''
+        return self.eta_fc()*super(ConcreteSIA262,self).fcd()
+    def fctd(self,t,favourable):
+        '''SIA 262 sections 4.4.1.3 et 4.4.1.4'''
+        kt= 1.0/(1.0+0.5*t) #(99)
+        retval= 0.0
+        if favourable:
+            retval= kt*self.fctm() #(98)
+        else:
+            retval= kt*self.getFctk095() #(99)
+        return retval
+    def fctk0_05(self):
+        '''SIA 262 sections 3.1.2.2.5 expr (7)'''
+        return 0.7*self.getFctm()
+    def fctk0_95(self):
+        '''SIA 262 sections 3.1.2.2.5 expr (8)'''
+        return 1.3*self.getFctm()
+    def taucd(self):
+        '''Design value of shear strength.'''
+        return 0.3*math.sqrt(-self.fck/1e6)*1e6/self.gmmC
+    def kDmax(self):
+        return 48/(self.Dmax*1e3+16)
+    def getEpsc1d(self):
+        '''Design value of concrete strain when f_cd
+           is reached; SIA 262 section 4.2.1.4 table 8.'''
+        return self.getEpsc2()
+    def getEpscu2(self):
+        '''
+        epscu2: nominal ultimate strain [-] at parabola-rectangle diagram 
+        SIA 262 section 4.2.1.4 table 8.'''
+        return -3e-3
+
+    def getEpsc2d(self):
+        '''Design value of concrete ultimate strain;
+           SIA 262 section 4.2.1.4 table 8.'''
+        return self.getEpscu2()
   
 
 c12_15= ConcreteSIA262('C12-15',-12e6,1.5)
@@ -74,7 +74,7 @@ c55_67= ConcreteSIA262('C55-67',-55e6,1.5)
 c60_75= ConcreteSIA262('C60-75',-60e6,1.5)
 
 def reductionFactorKT(t):
-  return 1/(1+0.5*t)
+    return 1/(1+0.5*t)
 
 # Reinforcing steel material.
 
@@ -112,27 +112,27 @@ courbeC= scipy.interpolate.interp1d(x,y)
 
 
 def stressLimits(exigence,s):
-  if(exigence=='A'):
-    return courbeA(s)
-  elif (exigence=='B'):
-    return courbeB(s)
-  elif (exigence=='C'):
-    return courbeC(s)
-  else:
-    print("Value for exigence: '",exigence,"' unknown.")
+    if(exigence=='A'):
+        return courbeA(s)
+    elif (exigence=='B'):
+        return courbeB(s)
+    elif (exigence=='C'):
+        return courbeC(s)
+    else:
+        print("Value for exigence: '",exigence,"' unknown.")
 
 diametres= [6e-3,8e-3,10e-3,12e-3,14e-3,16e-3,18e-3,20e-3,22e-3,26e-3,30e-3,34e-3,40e-3]
 
 section_barres_courantes={}
 
 for d in diametres:
-  section_barres_courantes[d]= math.pi*(d/2.0)**2
+    section_barres_courantes[d]= math.pi*(d/2.0)**2
 
 def numBars(AsNec):
-  retval= []
-  for d in diametres:
-    a= math.pi*(d/2.0)**2
-    n= math.ceil(AsNec/a)
-    retval.append((d,n))
-  return retval
+    retval= []
+    for d in diametres:
+        a= math.pi*(d/2.0)**2
+        n= math.ceil(AsNec/a)
+        retval.append((d,n))
+    return retval
 

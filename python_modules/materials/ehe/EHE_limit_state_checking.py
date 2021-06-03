@@ -879,6 +879,21 @@ def getVuEHE08SiAt(fck,fcv,fcd,fyd,gammaC,Ncd,Ac,b0,d,z,AsPas,AsAct,AsTrsv, alph
     '''
     return  min(getVu2EHE08(fcv,fcd,fyd,gammaC,Ncd,Ac,b0,d,z,AsPas,AsAct,AsTrsv,alpha,theta,Nd,Md,Vd,Td,Es,Ep,Fp,Ae,ue),getVu1EHE08(fck,fcd,Ncd,Ac,b0,d,alpha,theta))
   
+#Check normal stresses limit state.
+
+class BiaxialBendingNormalStressController(lscb.BiaxialBendingNormalStressControllerBase):
+    '''Object that controls normal stresses limit state.'''
+
+    def __init__(self,limitStateLabel):
+      super(BiaxialBendingNormalStressController,self).__init__(limitStateLabel)
+
+class UniaxialBendingNormalStressController(lscb.UniaxialBendingNormalStressControllerBase):
+    '''Object that controls normal stresses limit state (uniaxial bending).'''
+
+    def __init__(self,limitStateLabel):
+      super(UniaxialBendingNormalStressController,self).__init__(limitStateLabel)
+
+# Shear checking.
 
 class ShearController(lscb.ShearControllerBase):
     '''Shear control according to EHE-08.'''
