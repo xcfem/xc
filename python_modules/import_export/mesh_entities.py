@@ -325,16 +325,32 @@ class MeshData(object):
         self.nodes.readFromXCSet(xcSet)
         self.cells.readFromXCSet(xcSet)
         self.nodeSupports.readFromXCDomain(xcSet.getPreprocessor.getDomain)
+        
     def writeDxf(self,drawing):
         '''Write mesh in a DXF file.'''
         self.nodes.writeDxf(drawing)
         self.cells.writeDxf(self.nodes,drawing)
         #groups have no representation in DXF files.
-    def writeDxfFile(self,fileName):
-        '''Write mesh in a DXF file.'''
+        
+    def writeDxfFile(self,fileName, silent= True):
+        '''Write mesh in a DXF file.
+
+        :param fileName: name of the DXF file to write.
+        :param silent: if true instruct ezdxf not to write
+                       regular info messages (only warning
+                       or error messages).
+        '''
+        oldLoggingLevel= None # Previous logging level.
+        if(silent): # Avoid logging info messages.
+            logger= logging.getLogger('ezdxf')
+            oldLoggingLevel= logger.getEffectiveLevel()
+            logger.setLevel(level=logging.WARNING) 
         drawing= ezdxf.new()
         self.writeDxf(drawing)
-        drawing.saveas(fileName)    
+        drawing.saveas(fileName)
+        if(silent): # Restore logging level.
+            logger.setLevel(level= oldLoggingLevel)
+        
     def writeToXCFile(self,xcImportExportData):
         '''Write the XC commands that define the mesh.'''
         f= xcImportExportData.outputFile
