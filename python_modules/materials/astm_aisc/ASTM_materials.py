@@ -175,7 +175,7 @@ def getFilletWeldMinimumLegSheets(t1, t2):
 def getFilletWeldMaximumLegSheets(t1, t2):
     '''
     Return the maximum leg size which can be used to weld two sheets
-    according to ection J2.2b of AISC 360.
+    according to section J2.2b of AISC 360.
 
     :param t1: Thickness of sheet 1.
     :param t2: Thickness of sheet 2.
@@ -1816,3 +1816,146 @@ class ConnectedMember(connected_members.ConnectedMemberMetaData):
             plateLength+= column.shape.getFlangeWidth()/2.0
         retval= BoltedPlate(boltArray, width= plateWidth, length= plateLength, thickness= plateThickness, steelType= plateSteel)
         return retval
+
+
+class FilletWeld(object):
+    '''Fillet weld according to chapter J, section J2, of AISC 360-16, 
+
+    :ivar legSize: weld size (leg dimension or actual throat) (t)
+    :ivar fillerMetal: weld metal (defaults to E7018)
+    :ivar throat: weld throat thickness (a) (= shortest distance from the root
+                   to the face of the diagrammatic weld)
+                   (defaults to None, in which case it's calculated for 90º)
+    :ivar endLoaded: True if the load is trasferred at the end of the weld 
+                   (e.g. lap joints with longitudinal welds, as do bearing 
+                    stiffeners. Welds subject to shear loading due to 
+                    bending forces are not included in end-loaded applications)
+                    Defaults to False
+    :ivar lapJoint: True if lap joint (defaults to False)
+    '''
+    def __init__(self,legSize,length,fillerMetal=E7018,throat=None,endLoaded=False,lapJoint=False):
+        self.legSize=legSize
+        self.fillerMetal=fillerMetal
+        self.length=length
+        if not throat:
+            self.throat=self.legSize/math.sqrt(2)
+        else:
+            self.throat=throat
+        self.endLoaded=endLoaded
+        self.lapJoint=lapJoint
+
+    def getMinLength(self):
+        '''Return the minimum length of the fillet weld (Sect. J2.2b.(c) of AISC-360)
+        '''
+        minL=4*self.legSize
+        return minL
+
+    def getMinimumSize(self,t1,t2):
+        '''Return the minimum leg size of the fillet weld that can be used to weld 
+        two sheets of thicknesses t1 and t2 (Sect. J2.4 of AISC-360)
+        '''
+        return getFilletWeldMinimumLegSheets(t1, t2)
+
+    def getMaximumSize(self,t1,t2):
+        '''Return the maximum leg size of the fillet weld that can be used to weld 
+        two sheets of thicknesses t1 and t2 (Sect. J2.2b of AISC 360)
+        '''
+        return getFilletWeldMaximumLegSheets(t1, t2)
+    
+
+    def checkWeldDimensions(self,t1,t2):
+        '''Perform the AISC verifications of the weld dimensions and 
+        return its strength
+
+        :param t1, t2: thicknesses of the two steel sheets to weld
+        '''
+        if self.length < self.getMinLength():
+            lmsg.error('The weld length = '+str(round(self.length*1e3,0) ) +' mm is less than the minimum length = '+ str(round(self.getMinLength()*1e3,0))+' mm')
+        if self.legSize < self.getMinimumSize(t1,t2):
+            lmsg.error('The weld size = '+str(round(self.legSize*1e3,1) ) +' mm is less than the minimum size = '+ str(round(self.getMinimumSize(t1,t2)*1e3,1))+' mm')
+        if self.legSize > self.getMaximumSize(t1,t2):
+            lmsg.warning('The weld size = '+str(round(self.legSize*1e3,0) ) +' mm is greater than the maximum size = '+ str(round(self.getMaximumSize(t1,t2)*1e3,0))+' mm')
+        if self.lapJoint and self.length <max(25e-3,5*min(t1,t2)):
+            lmsg.error('The amount of lap= '+ str(round(self.length*1e3,0)) + ' mm is less than the minimum =' + str(max(25,5*min(t1,t2)*1e3)))
+                                              
+
+    def getEffectiveLength(self):
+        '''Return the effective length of the weld (Sect J2.2.2b.(d) of AISC-360)
+        '''
+        effL=self.length
+        if self.endLoaded and effL>100*self.legSize:
+            beta=min(1.0,1.2-0.002*effL/self.legSize)
+            effL=beta*effL
+        if effL>300*self.legSize: effL=180*self.legSize
+        return effL
+
+    def getEffectiveArea(self):
+        '''Return the effective area of the weld (Sect. J2.2.2a of AISC-360)
+        '''
+        effArea=self.throat*self.getEffectiveLength()
+        return effArea
+        
+
+    def getNominalStrength(self,Fpar=None,Fperp=None,theta=0):
+        '''Return the nominal strength of the weld (sect. J2.4 of AISC-360)
+        If acting forces parallel and perpendicular to the weld longitudinal
+        axis are defined, the angle between the the line of action of the 
+        required force and the weld longitudinal axis is calculated based on
+        those forces. Otherwise, angle theta (degrees) is used.
+
+        :param Fpar: required force in direction parallel to the weld 
+                      longitudinal axis
+        :param Fperp: required force in direction perpendicular to the weld 
+                      longitudinal axis
+        :param theta: angle between the line of action of the required force and
+                      the weld longitudinal axis (in degrees) (defaults to 0º)
+        '''
+        if Fpar and Fperp:
+            theta=math.atan(abs(Fperp)/abs(Fpar))
+        factor=1.5 if theta==90 else (1.0+0.5*math.sin(math.radians(theta))**1.5)
+        Fnw=0.6*self.fillerMetal.fu*factor
+        Rn=Fnw*self.getEffectiveArea()
+        return Rn
+
+    def getDesignStrength(self,Fpar=None,Fperp=None,theta=0):
+        '''Return the design strength of the weld (sect. J2.4 of AISC-360)
+        If acting forces parallel and perpendicular to the weld longitudinal
+        axis are defined, the angle between the the line of action of the 
+        required force and the weld longitudinal axis is calculated based on
+        those forces. Otherwise, angle theta (degrees) is used.
+
+        :param Fpar: required force in direction parallel to the weld 
+                      longitudinal axis
+        :param Fperp: required force in direction perpendicular to the weld 
+                      longitudinal axis
+        :param theta: angle between the line of action of the required force and
+                      the weld longitudinal axis (in degrees) (defaults to 0º)
+        '''
+        fi=0.75
+        Rn=self.getNominalStrength(Fpar,Fperp,theta)
+        Rnd=fi*Rn
+        return Rnd
+
+    def getCapacityFactor(self,Fpar_d,Fperp_d,t1=None,t2=None):
+        '''Return the weld capacity factor. If the thicknesses of the
+        plates to be welded are provided, the dimensions of the weld are
+        also checked.
+
+        :param Fpar_d: design required force in direction parallel to the weld 
+                      longitudinal axis
+        :param Fperp_d: design required force in direction perpendicular to the weld 
+                      longitudinal axis
+        :param t1, t2: thickness of the two steel sheets to be welded
+      
+        '''
+        if (t1 and t2): self.checkWeldDimensions(t1,t2)
+        F=math.sqrt(Fpar_d**2+Fperp_d**2)
+        R=self.getDesignStrength(Fpar_d,Fperp_d)
+        CF=F/R
+        return CF
+    
+        
+    
+
+    
+    
