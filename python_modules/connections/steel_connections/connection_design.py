@@ -225,25 +225,25 @@ class Connection(connected_members.ConnectionMetaData):
         # Flange plates.
         for b in self.beams:
             flangePlate= b.getFlangeBoltedPlate(column= self.column, boltSteel= self.getBoltSteel(), plateSteel= self.getBoltedPlatesSteel())
-        #     origin= self.getOrigin()
-        #     print('origin: ', origin, ' beam origin: ', b.memberOrigin)
-        #     print('connected to: ', b.connectedTo)
-        #     baseVectors= b.getDirection(origin)
-        #     flangeThickness= b.shape.getFlangeThickness()
-        #     print('flangeThickness',flangeThickness)
-        #     platesThickness= flangeThickness+flangePlate.thickness
-        #     halfHFlange= (b.shape.h()-flangeThickness)/2.0
-        #     halfHPlate= halfHFlange+platesThickness/2.0
-        #     halfD= flangePlate.length/2.0
-        #     # Top plate
-        #     topPlateCenter= b.memberOrigin + halfHPlate*baseVectors[1] + halfD*baseVectors[0]
-        #     if(b.connectedTo=='web'):
-        #         eccentricity= self.column.shape.getFlangeWidth()/2*baseVectors[0]
-        #         topPlateCenter-= eccentricity
-        #         #flangePlate.eccentricity= eccentricity
-        #     topPlateRefSys= geom.Ref3d3d(topPlateCenter, baseVectors[0], baseVectors[2])
-        #     topPlateBlocks= flangePlate.getBlocks(refSys= topPlateRefSys, blockProperties= plateProperties)
-        #     retval.extend(topPlateBlocks)
+            origin= self.getOrigin()
+            print('origin: ', origin, ' beam origin: ', b.memberOrigin)
+            print('connected to: ', b.connectedTo)
+            baseVectors= b.getDirection(origin)
+            flangeThickness= b.shape.getFlangeThickness()
+            print('flangeThickness',flangeThickness)
+            platesThickness= flangeThickness+flangePlate.thickness
+            halfHFlange= (b.shape.h()-flangeThickness)/2.0
+            halfHPlate= halfHFlange+platesThickness/2.0
+            halfD= flangePlate.length/2.0
+            # Top plate
+            topPlateCenter= b.memberOrigin + halfHPlate*baseVectors[1] + halfD*baseVectors[0]
+            if(b.connectedTo=='web'):
+                eccentricity= self.column.shape.getFlangeWidth()/2*baseVectors[0]
+                topPlateCenter-= eccentricity
+                #flangePlate.eccentricity= eccentricity
+            topPlateRefSys= geom.Ref3d3d(topPlateCenter, baseVectors[0], baseVectors[2])
+            topPlateBlocks= flangePlate.getBlocks(refSys= topPlateRefSys, blockProperties= plateProperties)
+            retval.extend(topPlateBlocks)
         #     # Holes in top flange
         #     holesList= topPlateBlocks.getHoles()
         #     ## Name for bolt group
