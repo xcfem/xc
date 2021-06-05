@@ -31,6 +31,7 @@ class_<ref_Rect1d2dCooSys, bases<ProtoGeom>, boost::noncopyable >("ref_CooSysRec
   .def("getPosLocal",&ref_Rect1d2dCooSys::GetPosLocal, "Return the corresponding local position.")
   .def("getCooLocales",&ref_Rect1d2dCooSys::GetCooLocales,"Return local coordinates of the argument.")
   .def("getOrg",make_function(getOrg1d2d,return_internal_reference<>()))
+  .def("move", &ref_Rect1d2dCooSys::move,"Move the reference system origin.")
   .def("getCoordTransformation",make_function(getCoordTransformation1d2d,return_internal_reference<>()))
   ;
 
@@ -55,6 +56,7 @@ class_<ref_Rect1d3dCooSys, bases<ProtoGeom>, boost::noncopyable >("ref_CooSysRec
   .def("getPosLocal",&ref_Rect1d3dCooSys::GetPosLocal)
 .def("getCooLocales",&ref_Rect1d3dCooSys::GetCooLocales, "Return local coordinates of the argument.")
   .def("getOrg",make_function(getOrg1d3d,return_internal_reference<>()))
+  .def("move", &ref_Rect1d3dCooSys::move,"Move the reference system origin.")
   .def("getCoordTransformation",make_function(getCoordTransformation1d3d,return_internal_reference<>()))
   ;
 
@@ -79,6 +81,7 @@ class_<ref_Rect2d2dCooSys, bases<ProtoGeom>, boost::noncopyable >("ref_CooSysRec
   .def("getPosLocal",&ref_Rect2d2dCooSys::GetPosLocal)
   .def("getCooLocales",&ref_Rect2d2dCooSys::GetCooLocales, "Return local coordinates of the argument.")
   .def("getOrg",make_function(getOrg2d2d,return_internal_reference<>()))
+  .def("move", &ref_Rect2d2dCooSys::move,"Move the reference system origin.")
   .def("getCoordTransformation",make_function(getCoordTransformation2d2d,return_internal_reference<>()))
   ;
 
@@ -104,6 +107,7 @@ class_<ref_Rect2d3dCooSys, bases<ProtoGeom>, boost::noncopyable >("ref_CooSysRec
   .def("getPosLocal",&ref_Rect2d3dCooSys::GetPosLocal)
   .def("getCooLocales",&ref_Rect2d3dCooSys::GetCooLocales, "Return local coordinates of the argument.")
   .def("getOrg",make_function(getOrg2d3d,return_internal_reference<>()))
+  .def("move", &ref_Rect2d3dCooSys::move,"Move the reference system origin.")
   .def("getCoordTransformation",make_function(getCoordTransformation2d3d,return_internal_reference<>()))
   ;
 
@@ -115,6 +119,7 @@ class_<Ref2d3d , bases<ref_Rect2d3dCooSys> >("Ref2d3d")
   .def(init<const Pos3d &,const Vector3d &,const Vector3d &>())
   .def("getIVector",&Ref2d3d::getIVector, "Return unary vector i")
   .def("getJVector",&Ref2d3d::getJVector, "Return unary vector j")
+  .def("getXYPlane", &Ref2d3d::getXYPlane,"Return the XY plane.")
   ;
 
 typedef Ref<Rect3d3dCooSys> ref_Rect3d3dCooSys;
@@ -129,6 +134,7 @@ class_<ref_Rect3d3dCooSys, bases<ProtoGeom>, boost::noncopyable >("ref_CooSysRec
   .def("getPosLocal",&ref_Rect3d3dCooSys::GetPosLocal)
   .def("getCooLocales",&ref_Rect3d3dCooSys::GetCooLocales, "Return local coordinates of the argument.")
   .def("getOrg",make_function(getOrg3d3d,return_internal_reference<>()))
+  .def("move", &ref_Rect3d3dCooSys::move,"Move the reference system origin.")
   .def("getCoordTransformation",make_function(getCoordTransformation3d3d,return_internal_reference<>()))
   ;
 
@@ -143,6 +149,9 @@ class_<Ref3d3d , bases<ref_Rect3d3dCooSys> >("Ref3d3d")
   .def("getIVector",&Ref3d3d::getIVector, "Return unary vector i.")
   .def("getJVector",&Ref3d3d::getJVector, "Return unary vector j.")
   .def("getKVector",&Ref3d3d::getKVector, "Return unary vector k.")
+  .def("getXYPlane", &Ref3d3d::getXYPlane,"Return the XY plane.")
+  .def("getXZPlane", &Ref3d3d::getXZPlane,"Return the XZ plane.")
+  .def("getYZPlane", &Ref3d3d::getYZPlane,"Return the YZ plane.")
  ;
 
 class_<PrincipalAxesOfInertia2D>("PrincipalAxesOfInertia2D",init<const Pos2d &,const GEOM_FT &,const GEOM_FT &,const GEOM_FT &>())

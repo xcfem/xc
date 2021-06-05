@@ -26,14 +26,38 @@
 #include "../pos_vec/Vector3d.h"
 #include "../pos_vec/Pos3d.h"
 
+//! @brief Default constructor.
+Ray3d::Ray3d(void)
+  : Linear3d(),cgsr(CGPoint_3(0,0,0),CGPoint_3(1,0,0)) {}
+
+//! @brief Constructor from CGAL object.
+Ray3d::Ray3d(const CGRay_3 &r)
+  : Linear3d(), cgsr(r) {}
+
+//! @brief Constructor.
+//! @param p1: ray origing.
+//! @param p2: point in the ray direction.
 Ray3d::Ray3d(const Pos3d &p1,const Pos3d &p2)
   : Linear3d(), cgsr(p1.ToCGAL(),p2.ToCGAL())
   {
     if(isDegenerated())
       {
         std::clog << getClassName() << "::" << __FUNCTION__
-		  << "; degenerate line, the points: "
+		  << "; degenerate ray, the points: "
              << p1 << " and " << p2 << " are the same." << std::endl;
+      }
+  }
+
+//! @brief Constructor.
+//! @param p: ray origing.
+//! @param v: ray direction.
+Ray3d::Ray3d(const Pos3d &p,const Vector3d &v)
+  : Linear3d(), cgsr(p.ToCGAL(),v.ToCGAL())
+  {
+    if(isDegenerated())
+      {
+        std::clog << getClassName() << "::" << __FUNCTION__
+		  << "; degenerate ray." << std::endl;
       }
   }
 
@@ -61,6 +85,7 @@ void Ray3d::TwoPoints(const Pos3d &p1,const Pos3d &p2)
 
 Dir3d Ray3d::GetDir(void) const
   { return Dir3d(cgsr.direction()); }
+
 Vector3d Ray3d::VDir(void) const
   { return GetDir().GetVector(); }
 

@@ -44,6 +44,7 @@ class HalfSpace3d : public GeomObj3d
     Plane lim; 
   public:
     HalfSpace3d(const Plane &p= Plane());
+    HalfSpace3d(const Plane &, const Pos3d &);
     virtual bool operator==(const HalfSpace3d &) const;
     
     const Plane &getBoundaryPlane(void) const;
@@ -53,12 +54,7 @@ class HalfSpace3d : public GeomObj3d
       { return new HalfSpace3d(*this); }
     inline void swap(void)
       { lim.swap(); }
-    HalfSpace3d getSwap(void) const
-      {
-        HalfSpace3d retval(*this);
-        retval.swap();
-        return retval;
-      }
+    HalfSpace3d getSwap(void) const;
     virtual GEOM_FT GetMax(unsigned short int) const
       { return NAN; }
     virtual GEOM_FT GetMin(unsigned short int) const
@@ -68,7 +64,13 @@ class HalfSpace3d : public GeomObj3d
     inline const Plane &getPlane(void) const
       { return lim; }
 
-    virtual bool In(const Pos3d &p, const double &tol= 0.0) const;
+    virtual bool In(const Pos3d &, const double &tol= 0.0) const;
+    virtual bool In(const Line3d &, const double &tol= 0.0) const;
+    virtual bool In(const Ray3d &, const double &tol= 0.0) const;
+    virtual bool In(const Segment3d &, const double &tol= 0.0) const;
+    bool intersects(const Line3d &) const;
+    bool intersects(const Ray3d &) const;
+    bool intersects(const Segment3d &) const;
     GEOM_FT distSigno(const Pos3d &) const;
     GEOM_FT distSigno2(const Pos3d &p) const;
     virtual GEOM_FT dist(const Pos3d &p) const;
@@ -89,6 +91,11 @@ class HalfSpace3d : public GeomObj3d
     virtual GEOM_FT Iy(void) const;
     virtual GEOM_FT Pxy(void) const;
     virtual GEOM_FT Iz(void) const;
+
+    Ray3d clip(const Line3d &) const;
+    Ray3d clip(const Ray3d &) const;
+    Segment3d clip(const Segment3d &) const;
+    
     void Print(std::ostream &os) const;
   };
 
