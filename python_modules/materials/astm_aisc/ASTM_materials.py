@@ -1793,7 +1793,90 @@ class MemberWithEndConnections(object):
 
 class ConnectedMember(connected_members.ConnectedMemberMetaData):
     ''' Connected member.'''
+
+    def getFlangeBoltArray(self, boltSteel):
+        ''' Return a suitable bolted array for the beam flange.
+
+        :param boltSteel: steel type of the bolts that connect the plate with
+                          the flange.
+        '''
+        flangeStrength= self.shape.getFlangeYieldStrength()
+        bolt= self.shape.getFlangeMaximumBolt(boltSteelType= boltSteel)
+        numberOfBolts= bolt.getNumberOfBoltsForShear(flangeStrength, numberOfRows= 2, threadsExcluded= True)
+        spacing= self.shape.getFlangeWidth()/2.0
+        return BoltArray(bolt, nRows= 2, nCols= int(numberOfBolts/2), dist= spacing)
+        
     
+    def getFlangeBoltedPlateCore(self, boltSteel, plateSteel):
+        ''' Return a minimal bolted plate for the beam flange. The
+        length of the plate is just enough to accomodate the bolts
+        and its width is chosen as the maximum of the flange width
+        and the bolted plate minimum width.
+
+        :param boltSteel: steel type of the bolts that connect the plate with
+                          the flange.
+        :param plateSteel: steel type of the bolted plate.
+        '''
+        # Compute bolt arrangement.
+        boltArray= self.getFlangeBoltArray(boltSteel)
+        # Compute bolted plate dimensions.
+        thicknessRatio= max(self.shape.steelType.fy/plateSteel.fy, self.shape.steelType.fu/plateSteel.fu)
+        plateThickness= round(thicknessRatio*self.shape.getFlangeThickness()*1000,0)/1000
+        plateWidth= max(self.shape.getFlangeWidth(), boltArray.getMinPlateWidth())
+        plateLength= boltArray.getStandardPlateLength()
+        return BoltedPlate(boltArray, width= plateWidth, length= plateLength, thickness= plateThickness, steelType= plateSteel)
+
+    def getTopFlangeBoltedPlateRefSys(self, connectionOrigin, topFlangeBoltedPlate):
+        ''' Return the position of the center for the top flange
+            bolted plate.
+
+        :param connectionOrigin: origin for the connection.
+        :param topFlangeBoltedPlate: top flange bolted plate.
+        '''
+        baseVectors= self.getDirection(connectionOrigin)
+        flangeThickness= self.shape.getFlangeThickness()
+        platesThickness= flangeThickness+topFlangeBoltedPlate.thickness
+        halfHFlange= (self.shape.h()-flangeThickness)/2.0
+        halfHPlate= halfHFlange+platesThickness/2.0
+        halfD= topFlangeBoltedPlate.length/2.0
+        ## Compute position of the top plate center.
+        topPlateCenter= self.memberOrigin + halfHPlate*baseVectors[1] + halfD*baseVectors[0]
+        return geom.Ref3d3d(topPlateCenter, baseVectors[0], baseVectors[2])
+
+    def getColumnConnectionLines(self, column, plateRefSys):
+        ''' Return the lines of the column that will be
+            connected with the bolted plate represented
+            by the reference system argument.
+
+        :param column: column to which the beam is attached to.
+        :param plateRefSys: coordinate reference system of the plate
+                            to connect.
+        '''
+        retval= list()
+        fr= 10.0
+        plateOrigin= plateRefSys.getOrg()
+        plane= plateRefSys.getXYPlane()
+        topFlangeMidPlane= column.getTopFlangeMidPlane(column.memberOrigin, factor= fr)
+        topFlangeLine= topFlangeMidPlane.getIntersection(plane)
+        bottomFlangeMidPlane= column.getBottomFlangeMidPlane(column.memberOrigin, factor= fr)
+        bottomFlangeLine= bottomFlangeMidPlane.getIntersection(plane)
+        if(self.connectedTo=='web'): # plate connected to the web
+            webMidPlane= column.getWebMidPlane(origin= column.memberOrigin, factor= fr)
+            webLine= webMidPlane.getIntersection(plane)
+            plateHalfSpace= geom.HalfSpace3d(webMidPlane, plateOrigin)
+            halfTopFlange= plateHalfSpace.clip(topFlangeLine)
+            halfBottomFlange= plateHalfSpace.clip(bottomFlangeLine)
+            retval.extend([halfBottomFlange, webLine, halfTopFlange])
+        else: # plate connected to one flange
+            dTop= topFlangeLine.dist(plateOrigin)
+            dBottom= bottomFlangeLine.dist(plateOrigin)
+            if(dBottom<dTop):
+                retval.append(bottomFlangeLine)
+            else:
+                retval.append(topFlangeLine)
+        print(' column connection lines: ', retval)
+        return retval
+         
     def getFlangeBoltedPlate(self, column, boltSteel, plateSteel):
         ''' Return a suitable bolted plate for the beam flange.
 
@@ -1802,21 +1885,34 @@ class ConnectedMember(connected_members.ConnectedMemberMetaData):
                           the flange.
         :param plateSteel: steel type of the bolted plate.
         '''
-        flangeStrength= self.shape.getFlangeYieldStrength()
-        bolt= self.shape.getFlangeMaximumBolt(boltSteelType= boltSteel)
-        numberOfBolts= bolt.getNumberOfBoltsForShear(flangeStrength, numberOfRows= 2, threadsExcluded= True)
-        spacing= self.shape.getFlangeWidth()/2.0
-        boltArray= BoltArray(bolt, nRows= 2, nCols= int(numberOfBolts/2), dist= spacing)
-        thicknessRatio= max(self.shape.steelType.fy/plateSteel.fy, self.shape.steelType.fu/plateSteel.fu)
-        plateThickness= round(thicknessRatio*self.shape.getFlangeThickness()*1000,0)/1000
-        plateWidth= self.shape.getFlangeWidth()
-        plateLength= boltArray.getStandardPlateLength()
+        retval= self.getFlangeBoltedPlateCore(boltSteel, plateSteel)
         if(self.connectedTo=='web'):
-            plateWidth= column.shape.h()-column.shape.getFlangeThickness()
-            plateLength+= column.shape.getFlangeWidth()/2.0
-        retval= BoltedPlate(boltArray, width= plateWidth, length= plateLength, thickness= plateThickness, steelType= plateSteel)
+           retval.setWidth(column.shape.h()-column.shape.getFlangeThickness())
+           retval.setLength(retval.getLength()+column.shape.getFlangeWidth()/2.0)        
         return retval
+    
+    def getTopFlangeBoltedPlateBlocks(self, connectionOrigin, column, boltSteel, plateSteel, blockProperties):
+        ''' Return the blocks corresponding to the top flange bolted plate.
 
+        :param connectionOrigin: origin for the connection.
+        :param column: column to which the beam is attached to. 
+        :param boltSteel: steel type of the bolts that connect the plate with
+                          the flange.
+        :param plateSteel: steel type of the bolted plate.
+        :param blockProperties: labels and attributes to assign to the newly 
+                                created blocks.
+        '''
+        topFlangePlate= self.getFlangeBoltedPlate(column= column, boltSteel= boltSteel, plateSteel= plateSteel)
+        # Top plate
+        ## Compute top plate reference system.
+        topPlateRefSys= self.getTopFlangeBoltedPlateRefSys(connectionOrigin, topFlangePlate)
+        ## Compute connection lines
+        columnConnectionLines= self.getColumnConnectionLines(column, topPlateRefSys)
+        if(self.connectedTo=='web'):
+            eccentricity= column.shape.getFlangeWidth()/2*topPlateRefSys.getIVector()
+            topPlateRefSys.move(-eccentricity)
+            #topFlangePlate.eccentricity= eccentricity
+        return topFlangePlate.getBlocks(refSys= topPlateRefSys, blockProperties= blockProperties)
 
 class FilletWeld(object):
     '''Fillet weld according to chapter J, section J2, of AISC 360-16, 
