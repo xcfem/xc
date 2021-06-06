@@ -42,6 +42,9 @@ class ProtoGeom: public CommandEntity
       { exts= e; }
     bool exists(void) const
       { return exts; }
+    
+    boost::python::dict getPyDict(void) const;
+    void setPyDict(const boost::python::dict &);
   };
 
 #endif

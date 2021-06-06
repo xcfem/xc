@@ -27,11 +27,14 @@
 
 class Polygon2d;
 
+//! @ingroup GEOM
+//
+//! @brief Return the «convex hull» of the point set argument.
+Polygon2d get_convex_hull2d(const GeomObj::list_Pos2d &);
 
 //! @ingroup GEOM
 //
-//! @brief Return el «convex hull» of the point set argument.
-Polygon2d get_convex_hull2d(const GeomObj::list_Pos2d &lp);
-
+//! @brief Return the «convex hull» of the point set argument.
+Polygon2d get_convex_hull2d(const boost::python::list &);
 
 #endif

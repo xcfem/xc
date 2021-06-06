@@ -347,6 +347,24 @@ GeomObj3d::list_Pos3d Line3d::getIntersection(const Line3d &r2,const double &tol
 GEOM_FT Line3d::dist(const Pos3d &p) const
   { return sqrt_FT(dist2(p)); }
 
+//! @brief Return a Python dictionary with the object members values.
+boost::python::dict Line3d::getPyDict(void) const
+  {
+    boost::python::dict retval= Linear3d::getPyDict();
+    retval["from"]= Point(0);
+    retval["to"]= Point(100);
+    return retval;
+  }
+
+//! @brief Set the values of the object members from a Python dictionary.
+void Line3d::setPyDict(const boost::python::dict &d)
+  {
+    Linear3d::setPyDict(d);
+    const Pos3d from= boost::python::extract<Pos3d>(d["from"]);
+    const Pos3d to= boost::python::extract<Pos3d>(d["to"]);
+    Put(from,to);
+  }
+
 //! @brier Print stuff.
 void Line3d::Print(std::ostream &os) const
   { os << PtoParametricas(0.0) << " " << PtoParametricas(100.0); }

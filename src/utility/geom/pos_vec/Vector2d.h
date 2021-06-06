@@ -114,6 +114,10 @@ class Vector2d: public ProtoGeom
     //Vector2d GetGirado(const double &ang_rad) const;
     Vector2d Perpendicular(const Orientacion &o) const;
     Vector2d Perpendicular(const Vector2d &v) const;
+    
+    boost::python::dict getPyDict(void) const;
+    void setPyDict(const boost::python::dict &);
+    
     void Print(std::ostream &stream) const;
     void Plot(Plotter &psos) const;
     friend std::ostream &operator<<(std::ostream &stream,const Vector2d &n);

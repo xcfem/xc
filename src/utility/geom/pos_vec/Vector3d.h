@@ -102,6 +102,9 @@ class Vector3d: public ProtoGeom
       { return cross(v1,v2); }
     friend FT_matrix operator*(const FT_matrix &m,const Vector3d &v);
     friend std::ostream &operator<<(std::ostream &stream,const Vector3d &n);
+    
+    boost::python::dict getPyDict(void) const;
+    void setPyDict(const boost::python::dict &);
 
     inline virtual ~Vector3d(void) {}
   };

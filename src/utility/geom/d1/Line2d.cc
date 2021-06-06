@@ -516,6 +516,24 @@ void Line2d::Transform(const Trf2d &trf2d)
     (*this)= Line2d(p1,p2);
   }
 
+//! @brief Return a Python dictionary with the object members values.
+boost::python::dict Line2d::getPyDict(void) const
+  {
+    boost::python::dict retval= Linear2d::getPyDict();
+    retval["from"]= Point(0);
+    retval["to"]= Point(100);
+    return retval;
+  }
+
+//! @brief Set the values of the object members from a Python dictionary.
+void Line2d::setPyDict(const boost::python::dict &d)
+  {
+    Linear2d::setPyDict(d);
+    const Pos2d from= boost::python::extract<Pos2d>(d["from"]);
+    const Pos2d to= boost::python::extract<Pos2d>(d["to"]);
+    Put(from,to);
+  }
+
 void Line2d::Print(std::ostream &os) const
   { os << PtoParametricas(0.0) << " " << PtoParametricas(100.0); }
 

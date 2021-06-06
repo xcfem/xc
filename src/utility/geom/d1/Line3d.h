@@ -157,6 +157,10 @@ class Line3d : public Linear3d
     //! passing through the center of mass.
     inline virtual GEOM_FT Iz(void) const
       { return NAN; }
+    
+    boost::python::dict getPyDict(void) const;
+    void setPyDict(const boost::python::dict &);
+    
     void Print(std::ostream &os) const;
   };
 

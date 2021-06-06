@@ -70,7 +70,10 @@ class_<Circle2d, bases<Surface2d> >("Circle2d")
 
 #include "2d_polygons/python_interface.tcc"
 
-def("get_convex_hull2d",get_convex_hull2d);
+Polygon2d (*get_convex_hull2d_cpplist)(const GeomObj::list_Pos2d &)= get_convex_hull2d;
+def("get_convex_hull2d",get_convex_hull2d_cpplist);
+Polygon2d (*get_convex_hull2d_pylist)(const boost::python::list &)= get_convex_hull2d;
+def("get_convex_hull2d",get_convex_hull2d_pylist);
 def("get_basic_alpha_shape2d",get_basic_alpha_shape2d);
 
 class_<GeomGroup2d, bases<GeomObj2d> >("GeomGroup2d")
@@ -89,11 +92,24 @@ class_<Surface3d, bases<GeomObj3d>, boost::noncopyable  >("Surface3d", no_init)
   .def("dist",&Surface3d::dist,"Return the distance from point to this surface.")
   ;
 
+Pos3d (D2to3d::*to_3dp)(const Pos2d &) const= &D2to3d::to_3d;
+Line3d (D2to3d::*to_3dln)(const Line2d &) const= &D2to3d::to_3d;
+Segment3d (D2to3d::*to_3dsg)(const Segment2d &) const= &D2to3d::to_3d;
+Pos3dArray (D2to3d::*to_3dpt_array)(const Pos2dArray &) const= &D2to3d::to_3d;
+Pos2d (D2to3d::*to_2dp)(const Pos3d &) const= &D2to3d::to_2d;
+Line2d (D2to3d::*to_2dln)(const Line3d &) const= &D2to3d::to_2d;
+Segment2d (D2to3d::*to_2dsg)(const Segment3d &) const= &D2to3d::to_2d;
 class_<D2to3d, bases<Surface3d>, boost::noncopyable  >("D2to3d", no_init)
   .def("getPlane",&D2to3d::getPlane)
   .def("getIVector",&D2to3d::getIVector, "Return unary vector i.")
   .def("getJVector",&D2to3d::getJVector, "Return unary vector j.")
   .def("getKVector",&D2to3d::getKVector, "Return unary vector k.")  
+  .def("to_3d",to_3dp, "Return the corresponding 3D point.")
+  .def("to_3d",to_3dln, "Return the corresponding 3D line.")
+  .def("to_3d",to_3dsg, "Return the corresponding 3D segment.")
+  .def("to_2d",to_2dp, "Return the corresponding 2D point.")
+  .def("to_2d",to_2dln, "Return the corresponding 2D line.")
+  .def("to_2d",to_2dsg, "Return the corresponding 2D segment.")
   ;
 
 class_<GeneralEquationOfPlane, boost::noncopyable>("GeneralEquationOfPlane", no_init)
@@ -108,6 +124,7 @@ Line3d (Plane::*IntersPlane)(const Plane &) const= &Plane::getIntersection;
 Pos3d (Plane::*IntersLine3d)(const Line3d &) const= &Plane::getIntersection;
 Pos3d (Plane::*IntersRay3d)(const Ray3d &) const= &Plane::getIntersection;
 Pos3d (Plane::*IntersSegment3d)(const Segment3d &) const= &Plane::getIntersection;
+Segment3d (Plane::*IntersPolygon3d)(const Polygon3d &) const= &Plane::getIntersection;
 double (Plane::*linearLeastSquaresFittingPtr)(const GeomObj3d::list_Pos3d &)= &Plane::linearLeastSquaresFitting;
 class_<Plane, bases<Surface3d> >("Plane3d")
   .def(init<Pos3d,Pos3d,Pos3d>())
@@ -134,6 +151,7 @@ class_<Plane, bases<Surface3d> >("Plane3d")
   .def("getIntersection",IntersLine3d,"return the intersection with the line argument.")
   .def("getIntersection",IntersRay3d,"return the intersection with the ray argument.")
   .def("getIntersection",IntersSegment3d,"return the intersection with the segment argument.")
+  .def("getIntersection",IntersPolygon3d,"return the intersection with the polygon argument.")
   .def("getNormal", &Plane::Normal,"return the plane normal.")
   .def("getBase1", &Plane::Base1)
   .def("getBase2", &Plane::Base2)
@@ -142,6 +160,7 @@ class_<Plane, bases<Surface3d> >("Plane3d")
   .def("negativeSide", &Plane::negativeSide, " return true if the point is on the negative side of the plane (local coordinate z<0).")
   ;
 
+Segment3d (Polygon3d::*IntersPlgPlane)(const Plane &) const= &Polygon3d::getIntersection;
 class_<Polygon3d, bases<D2to3d> >("Polygon3d")
   .def(init<Pos3d,Pos3d,Pos3d>())
   .def(init<const Ref2d3d &,const Polygon2d &>())
@@ -157,6 +176,7 @@ class_<Polygon3d, bases<D2to3d> >("Polygon3d")
   .def("getVertexList",&Polygon3d::getVertexListPy,"Return a Python list containing the positions of the polygon vertices.")
   .def("dist",&Polygon3d::dist,"Return the distance from point to this polygon.")
   .def("getCenterOfMass", &Polygon3d::getCenterOfMass, " return the center of mass.")
+  .def("getIntersection",IntersPlgPlane,"return the intersection with the plane argument.")
   ;
 
 class_<Circle3d, bases<D2to3d> >("Circle3d")

@@ -149,6 +149,9 @@ class Polygon2d: public PolygonalSurface2d
     bool Overlap(const Polyline2d &) const;
     bool Overlap(const Polygon2d &) const;
     bool Overlap(const std::list<Polygon2d> &) const;
+    template <class T>
+    bool intersects(const T &t) const
+      { return Overlap(t); }
     //! @brief Return the position of the i-th vertex.
     inline Pos2d Vertice(unsigned int i) const
       { return Vertice0(i-1); }
@@ -173,6 +176,9 @@ class Polygon2d: public PolygonalSurface2d
     std::list<Polygon2d> Clip(const BND2d &bnd) const;
     std::list<Polygon2d> Clip(const Polygon2d &) const;
 
+    Segment2d getIntersection(const Line2d &l) const;
+    Segment2d getIntersection(const Ray2d &r) const;
+    Segment2d getIntersection(const Segment2d &s) const;
     std::list<Polygon2d> getIntersection(const HalfPlane2d &sp) const;
 
     std::list<Polygon2d> getBayazitDecomposition(void) const;

@@ -34,12 +34,19 @@
 GEOM_FT Abs(const FT_matrix &m)
   { return m.Abs(); }
 
+//! @brief Constructor
 FT_matrix::FT_matrix(void)
   : ZMatrix<GEOM_FT>(1,1) {}
+
+//! @brief Constructor
 FT_matrix::FT_matrix(size_type rows,size_type cols)
   : ZMatrix<GEOM_FT>(rows,cols) {}
+
+//! @brief Constructor
 FT_matrix::FT_matrix(size_type rows,size_type cols,GEOM_FT val)
   : ZMatrix<GEOM_FT>(rows,cols,val) {}
+
+//! @brief Constructor
 FT_matrix::FT_matrix(const FT_matrix &orig,size_t f1, size_t c1, size_t f2, size_t c2)
   : ZMatrix<GEOM_FT>(f2-f1+1,c2-c1+1)
   {

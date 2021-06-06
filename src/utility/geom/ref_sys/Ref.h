@@ -85,6 +85,8 @@ class Ref : public ProtoGeom
       }
     virtual ~Ref(void)
       {}
+    boost::python::dict getPyDict(void) const;
+    void setPyDict(const boost::python::dict &);
   };
 
 //! @brief Return the global coordinates of the position vector of the point.
@@ -134,6 +136,27 @@ bool Ref<SC>::operator==(const Ref<SC> &other) const
           retval= ((org==other.org) && (trf==other.trf));
        }
     return retval;
+  }
+
+//! @brief Return a Python dictionary with the object members values.
+template<class SC>
+boost::python::dict Ref<SC>::getPyDict(void) const
+  {
+    boost::python::dict retval= ProtoGeom::getPyDict();
+    retval["org"]= org;
+    retval["trf"]= trf;
+    return retval;
+  }
+
+//! @brief Set the values of the object members from a Python dictionary.
+template<class SC>
+void Ref<SC>::setPyDict(const boost::python::dict &d)
+  {
+    ProtoGeom::setPyDict(d);
+    const boost::python::dict orgDict= boost::python::extract<boost::python::dict>(d["org"]);
+    org.setPyDict(orgDict);
+    const boost::python::dict trfDict= boost::python::extract<boost::python::dict>(d["trf"]);
+    trf.setPyDict(trfDict);
   }
 
 #endif

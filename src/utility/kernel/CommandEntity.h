@@ -31,6 +31,7 @@
 #include "utility/utils/text/text_string.h"
 #include "utility/kernel/ErrLogFiles.h"
 #include <boost/python.hpp>
+#include <boost/python/dict.hpp>
 
 namespace boost
   {
@@ -44,14 +45,13 @@ typedef enum{FALLO,CONTINUA,COMPLETADO} resul_lectura;
 //! @brief Objet that can execute python scripts.
 class CommandEntity: public EntityWithProperties
   {
+    static inline const std::string py_prop_prefix= "py_prop";
     typedef std::map<std::string, boost::python::object> PythonDict;
   private:
     static ErrLogFiles err_log_files; //!< Streams para errores y avisos.
     PythonDict python_dict; //!< Python variables.
   protected:
-
     static CommandEntity *entcmd_cast(boost::any &data);
-
 
     template <class T>
     void string_to(T &,const std::string &) const;
@@ -76,6 +76,8 @@ class CommandEntity: public EntityWithProperties
     boost::python::object evalPy(boost::python::object dict,const std::string &);
     boost::python::object execPy(boost::python::object dict,const std::string &);
     boost::python::object execFilePy(boost::python::object dict,const std::string &);
+    virtual boost::python::dict getPyDict(void) const;
+    virtual void setPyDict(const boost::python::dict &);
   };
 
 #endif

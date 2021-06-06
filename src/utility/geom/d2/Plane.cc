@@ -294,13 +294,39 @@ GEOM_FT Plane::z(const Pos2d &p) const
 void Plane::GeneralEquation(const GeneralEquationOfPlane &eq)
   { operator=(Plane(eq)); }
 
-//! @brief Returns true if intesection exists.
+//! @brief Returns true if intersection exists.
 bool Plane::intersects(const Plane &p) const
   { return do_intersect(ToCGAL(),p.ToCGAL()); }
 
 //! @brief Returns (if exists) the intersection with the plane argument.
 Line3d Plane::getIntersection(const Plane &p) const
   { return intersection_line(*this,p); }
+
+//! @brief Returns true if intersection exists.
+bool Plane::intersects(const Polygon3d &plg) const
+  {
+    bool retval= false;
+    Plane plgPlane= plg.getPlane();
+    if(intersects(plgPlane))
+      {
+	Line3d intLine3d= getIntersection(plgPlane);
+	retval= plg.intersects(intLine3d);
+      }
+    return retval;
+  }
+
+//! @brief Returns (if exists) the intersection with the plane argument.
+Segment3d Plane::getIntersection(const Polygon3d &plg) const
+  {
+    Segment3d retval;
+    Plane plgPlane= plg.getPlane();
+    if(intersects(plgPlane))
+      {
+	Line3d intLine3d= getIntersection(plgPlane);
+	retval= plg.getIntersection(intLine3d);
+      }
+    return retval;
+  }
 
 // //! @brief Return (if exists) teh intersection with the plane argument.
 // Line3d Plane::getIntersection(const Plane &p) const

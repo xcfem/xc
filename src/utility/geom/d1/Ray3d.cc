@@ -190,3 +190,21 @@ Vector3d Ray3d::Projection(const Vector3d &v) const
     return l.Projection(v);
   }
 
+
+//! @brief Return a Python dictionary with the object members values.
+boost::python::dict Ray3d::getPyDict(void) const
+  {
+    boost::python::dict retval= Linear3d::getPyDict();
+    retval["from"]= getFromPoint();
+    retval["to"]= Point(100);
+    return retval;
+  }
+
+//! @brief Set the values of the object members from a Python dictionary.
+void Ray3d::setPyDict(const boost::python::dict &d)
+  {
+    Linear3d::setPyDict(d);
+    const Pos3d from= boost::python::extract<Pos3d>(d["from"]);
+    const Pos3d to= boost::python::extract<Pos3d>(d["to"]);
+    Put(from,to);
+  }

@@ -145,6 +145,8 @@ class Plane : public Surface3d
     Pos3d getIntersection(const Ray3d &p) const;
     bool intersects(const Segment3d &p) const;
     Pos3d getIntersection(const Segment3d &p) const;
+    bool intersects(const Polygon3d &p) const;
+    Segment3d getIntersection(const Polygon3d &p) const;
 
     GEOM_FT getAngle(const Plane &p) const;
     GEOM_FT getAngle(const Vector3d &) const;

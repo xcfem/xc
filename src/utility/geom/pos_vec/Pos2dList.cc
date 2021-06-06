@@ -38,6 +38,15 @@ Pos2dList::Pos2dList(void)
 Pos2dList::Pos2dList(const GeomObj::list_Pos2d &l)
   : GeomObj2d(), lista_ptos(l) {}
 
+//! @brief Constructor.
+Pos2dList::Pos2dList(const boost::python::list &l)
+  : GeomObj2d(), lista_ptos()
+  {
+    const size_t sz= len(l);
+    for(size_t i=0; i<sz; i++)
+      lista_ptos.push_back(boost::python::extract<Pos2d>(l[i]));
+  }
+
 //! @brief Appends the point to the list.
 const Pos2d *Pos2dList::appendPoint(const Pos2d &p)
   {

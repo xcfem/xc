@@ -104,6 +104,10 @@ class Ray3d : public Linear3d
     //Moment of inertia with respect to the center of mass in local coordinates.
     inline virtual GEOM_FT Iz(void) const
       { return NAN; }
+    
+    boost::python::dict getPyDict(void) const;
+    void setPyDict(const boost::python::dict &);
+    
     inline void Print(std::ostream &os) const
       { os << PtoParametricas(0.0) << " " << PtoParametricas(100.0); }
   };

@@ -128,6 +128,9 @@ class Ray2d : public Linear2d
       { return NAN; }
 
     void Transform(const Trf2d &trf2d);
+    
+    boost::python::dict getPyDict(void) const;
+    void setPyDict(const boost::python::dict &);
 
     void Print(std::ostream &os) const;
     void Plot(Plotter &psos) const;

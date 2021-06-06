@@ -174,6 +174,23 @@ void Pos2d::Plot(Plotter &plotter) const
     plotter.fmarker(x(),y(),5,4.0); //Dibuja una cruz (5).
   }
 
+//! @brief Return a Python dictionary with the object members values.
+boost::python::dict Pos2d::getPyDict(void) const
+  {
+    boost::python::dict retval= ProtoGeom::getPyDict();
+    retval["x"]= x();
+    retval["y"]= y();
+    return retval;
+  }
+
+//! @brief Set the values of the object members from a Python dictionary.
+void Pos2d::setPyDict(const boost::python::dict &d)
+  {
+    ProtoGeom::setPyDict(d);
+    SetX(boost::python::extract<GEOM_FT>(d["x"]));
+    SetY(boost::python::extract<GEOM_FT>(d["y"]));
+  }
+
 std::ostream &operator<<(std::ostream &stream,const Pos2d &n)
   {
     n.Print(stream);

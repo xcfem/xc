@@ -129,6 +129,9 @@ class Pos3d : public ProtoGeom
     friend bool colineales(const Pos3d &p1,const Pos3d &p2,const Pos3d &p3);
     friend bool coplanarios(const Pos3d &p1,const Pos3d &p2,const Pos3d &p3,const Pos3d &p4);
     friend std::ostream &operator<<(std::ostream &stream,const Pos3d &n);
+    
+    boost::python::dict getPyDict(void) const;
+    void setPyDict(const boost::python::dict &);
   };
 
 Pos3d To3dXY2d(const Pos2d &p,const GEOM_FT &z= 0);

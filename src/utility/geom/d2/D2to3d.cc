@@ -94,10 +94,15 @@ Vector3d D2to3d::getJVector(void) const
 Vector3d D2to3d::getKVector(void) const
   { return ref.getKVector(); }
 
-
+//! @brief Return the 3D point corresponding to the 2D point argument.
 Pos3d D2to3d::to_3d(const Pos2d &p2d) const
   { return ref.GetPosGlobal(p2d); }
 
+//! @brief Return the 3D line corresponding to the 2D line argument.
+Line3d D2to3d::to_3d(const Line2d &l2d) const
+  { return Line3d(to_3d(l2d.Point(0)),to_3d(l2d.Point(100))); }
+
+//! @brief Return the 3D segment corresponding to the 2D segment argument.
 Segment3d D2to3d::to_3d(const Segment2d &sg2d) const
   { return Segment3d(to_3d(sg2d.getFromPoint()),to_3d(sg2d.getToPoint())); }
 
@@ -113,8 +118,25 @@ Pos3dArray D2to3d::to_3d(const Pos2dArray &p2d) const
   }
 
 
+//! @brief Return the 2D point corresponding to the 3D point argument.
 Pos2d D2to3d::to_2d(const Pos3d &p3d) const
   { return ref.GetPosLocal(p3d); }
+
+//! @brief Return the 2D line corresponding to the 3D line argument.
+Line2d D2to3d::to_2d(const Line3d &l3d) const
+  {
+    Pos2d p0= to_2d(l3d.Point(0));
+    Pos2d p1= to_2d(l3d.Point(100));
+    return Line2d(p0,p1);
+  }
+
+//! @brief Return the 2D segment corresponding to the 3D segment argument.
+Segment2d D2to3d::to_2d(const Segment3d &sg3d) const
+  {
+    Pos2d p0= to_2d(sg3d.getFromPoint());
+    Pos2d p1= to_2d(sg3d.getToPoint());
+    return Segment2d(p0,p1);
+  }
 
 void D2to3d::ThreePoints(const Pos3d &p1,const Pos3d &p2,const Pos3d &p3)
   {

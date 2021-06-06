@@ -63,10 +63,23 @@ Polygon2d get_convex_hull2d(InputIterator first,InputIterator last)
       retval.push_back(Pos2d(Point_to_Pos2d(*i)));
     return retval;
   }
+
 Polygon2d get_convex_hull2d(const GeomObj::list_Pos2d &lp)
   {
     std::vector<Point_2> input;
     for(GeomObj::list_Pos2d::const_iterator i= lp.begin();i!=lp.end();i++)
       input.push_back(Pos2d_to_Point_2(*i));
+    return get_convex_hull2d(input.begin(),input.end());
+ }
+
+Polygon2d get_convex_hull2d(const boost::python::list &lp)
+  {
+    std::vector<Point_2> input;
+    const size_t sz= len(lp);
+    for(size_t i=0; i<sz; i++)
+      {
+	Pos2d p= boost::python::extract<Pos2d>(lp[i]);
+        input.push_back(Pos2d_to_Point_2(p));
+      }
     return get_convex_hull2d(input.begin(),input.end());
  }

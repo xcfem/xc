@@ -31,7 +31,22 @@
 
 //! @brief Constructor.
 ProtoGeom::ProtoGeom(void)
-  :exts(true) {}
+  : exts(true) {}
 
 void ProtoGeom::Print(std::ostream &os) const
   { os << "nil_geom_obj"; }
+
+//! @brief Return a Python dictionary with the object members values.
+boost::python::dict ProtoGeom::getPyDict(void) const
+  {
+    boost::python::dict retval= CommandEntity::getPyDict();
+    retval["exts"]= exts;
+    return retval;
+  }
+
+//! @brief Set the values of the object members from a Python dictionary.
+void ProtoGeom::setPyDict(const boost::python::dict &d)
+  {
+    CommandEntity::setPyDict(d);
+    exts= boost::python::extract<bool>(d["exts"]);
+  }

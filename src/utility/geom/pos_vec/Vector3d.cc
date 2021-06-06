@@ -278,6 +278,25 @@ std::ostream &operator<<(std::ostream &stream,const Vector3d &n)
            << n.z() << "]]";
     return stream;
   }
+    
+//! @brief Return a Python dictionary with the object members values.
+boost::python::dict Vector3d::getPyDict(void) const
+  {
+    boost::python::dict retval= ProtoGeom::getPyDict();
+    retval["x"]= x();
+    retval["y"]= y();
+    retval["z"]= z();
+    return retval;
+  }
+
+//! @brief Set the values of the object members from a Python dictionary.
+void Vector3d::setPyDict(const boost::python::dict &d)
+  {
+    ProtoGeom::setPyDict(d);
+    SetX(boost::python::extract<GEOM_FT>(d["x"]));
+    SetY(boost::python::extract<GEOM_FT>(d["y"]));
+    SetZ(boost::python::extract<GEOM_FT>(d["z"]));
+  }
 
 GEOM_FT signedAngle(const Vector3d &v1,const Vector3d &v2)
   { return v1.getSignedAngle(v2); }

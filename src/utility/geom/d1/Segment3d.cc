@@ -115,6 +115,10 @@ Dir3d Segment3d::GetDir(void) const
 Vector3d Segment3d::VDir(void) const
   { return GetDir().GetVector(); }
 
+//! @brief Set the extremities of the segment.
+void Segment3d::Put(const Pos3d &p1,const Pos3d &p2)
+  { TwoPoints(p1,p2); }
+
 //! @brief Returns a vector in the direction of the local
 //! X axis.
 Vector3d Segment3d::getIVector(void) const
@@ -339,6 +343,25 @@ boost::python::list Segment3d::DividePy(int num_partes) const
       retval.append(*i);
     return retval;
   }
+
+//! @brief Return a Python dictionary with the object members values.
+boost::python::dict Segment3d::getPyDict(void) const
+  {
+    boost::python::dict retval= Linear3d::getPyDict();
+    retval["from"]= getFromPoint();
+    retval["to"]= getToPoint();
+    return retval;
+  }
+
+//! @brief Set the values of the object members from a Python dictionary.
+void Segment3d::setPyDict(const boost::python::dict &d)
+  {
+    Linear3d::setPyDict(d);
+    const Pos3d from= boost::python::extract<Pos3d>(d["from"]);
+    const Pos3d to= boost::python::extract<Pos3d>(d["to"]);
+    Put(from,to);
+  }
+
 
 void Segment3d::Print(std::ostream &os) const
   { os << getFromPoint() << " " << getToPoint(); }

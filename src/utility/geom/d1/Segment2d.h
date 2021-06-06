@@ -142,6 +142,9 @@ class Segment2d : public Linear2d
     
     VectorPos2d Divide(int num_partes) const;
     boost::python::list DividePy(int num_partes) const;
+    
+    boost::python::dict getPyDict(void) const;
+    void setPyDict(const boost::python::dict &);
 
     void Transform(const Trf2d &trf2d);
 

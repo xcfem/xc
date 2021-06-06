@@ -466,6 +466,24 @@ boost::python::list Segment2d::DividePy(int num_partes) const
     return retval;
   }
 
+//! @brief Return a Python dictionary with the object members values.
+boost::python::dict Segment2d::getPyDict(void) const
+  {
+    boost::python::dict retval= Linear2d::getPyDict();
+    retval["from"]= getFromPoint();
+    retval["to"]= getToPoint();
+    return retval;
+  }
+
+//! @brief Set the values of the object members from a Python dictionary.
+void Segment2d::setPyDict(const boost::python::dict &d)
+  {
+    Linear2d::setPyDict(d);
+    const Pos2d from= boost::python::extract<Pos2d>(d["from"]);
+    const Pos2d to= boost::python::extract<Pos2d>(d["to"]);
+    Put(from,to);
+  }
+
 //! @brief Applies to the segment the transformation argument.
 void Segment2d::Transform(const Trf2d &trf2d)
   {

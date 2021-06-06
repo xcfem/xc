@@ -245,6 +245,29 @@ GEOM_FT Polygon3d::dist(const Pos3d &p) const
     return (retval >= 0 ? retval : 0);
   }
 
+//! @brief Return true if the line intersects the polygon.
+bool Polygon3d::intersects(const Line3d &r) const
+  {
+    const Line2d r2d= to_2d(r);
+    return plg2d.intersects(r2d);
+  }
+
+//! @brief Return the intersection with the line argument.
+Segment3d Polygon3d::getIntersection(const Line3d &r) const
+  {
+    const Line2d r2d= to_2d(r);
+    const Segment2d sg2d= plg2d.getIntersection(r2d);
+    return to_3d(sg2d);
+  }
+
+//! @brief Return true if the plane intersects the polygon.
+bool Polygon3d::intersects(const Plane &p) const
+  { return p.intersects(*this); }
+
+//! @brief Return the intersection with the plane argument.
+Segment3d Polygon3d::getIntersection(const Plane &p) const
+  { return p.getIntersection(*this); }
+
 //! @brief Return the polygons that result form cutting the polygon
 //! with the argument plane.
 std::list<Polygon3d> Polygon3d::Corta(const Plane &pl) const
@@ -256,11 +279,8 @@ std::list<Polygon3d> Polygon3d::Corta(const Plane &pl) const
 
     GeomGroup3d gint= intersection(polygonPlane,pl);
     GeomObj3d *ptr=(*gint.begin());
-    const Line3d r= *((Line3d *)ptr);
-
-    const Pos2d p2dA= to_2d(r.Point());
-    const Pos2d p2dB= to_2d(r.Point(100));
-    const Line2d r2d(p2dA,p2dB);
+    const Line3d r3d= *((Line3d *)ptr);
+    const Line2d r2d= to_2d(r3d);
 
     std::list<Polygon2d> inter= corta(plg2d,r2d);
     for(std::list<Polygon2d>::const_iterator i= inter.begin(); i!=inter.end();i++)

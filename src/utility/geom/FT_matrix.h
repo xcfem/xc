@@ -43,6 +43,8 @@ class FT_matrix: public ZMatrix<GEOM_FT>
     FT_matrix(void);
     FT_matrix(size_type rows,size_type cols);
     FT_matrix(size_type rows,size_type cols,GEOM_FT val);
+    template <class InputIterator>
+    FT_matrix(const size_t &,const size_t &,InputIterator ,InputIterator );
     FT_matrix getBox(size_t f1, size_t c1, size_t f2, size_t c2) const;
     FT_matrix getRow(size_t iRow) const;
     FT_matrix getColumn(size_t col) const;
@@ -75,6 +77,11 @@ FT_matrix operator-(const FT_matrix &m);
 
 ZMatrix<double> to_double(const FT_matrix &m);
 FT_matrix from_double(const ZMatrix<double> &m);
+
+//! @brief Constructor
+template <class InputIterator>
+FT_matrix::FT_matrix(const size_t &n_rows,const size_t &n_columns,InputIterator b,InputIterator e)
+  : ZMatrix<GEOM_FT>(n_rows,n_columns,b,e) {}
 
 namespace boost
   {

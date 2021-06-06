@@ -191,6 +191,33 @@ FT_matrix CooSys::GetCooLocales(const FT_matrix &v) const
 void CooSys::Print(std::ostream &os) const
   { os << rot; }
 
+//! @brief Return a Python dictionary with the object members values.
+boost::python::dict CooSys::getPyDict(void) const
+  {
+    boost::python::dict retval= ProtoGeom::getPyDict();
+    retval["nr"]= rot.getNumberOfRows();
+    retval["nc"]= rot.getNumberOfColumns();
+    boost::python::list values;
+    for(FT_matrix::const_iterator i= rot.begin();i!=rot.end(); i++)
+      values.append(*i);
+    retval["values"]= values;
+    return retval;
+  }
+
+//! @brief Set the values of the object members from a Python dictionary.
+void CooSys::setPyDict(const boost::python::dict &d)
+  {
+    ProtoGeom::setPyDict(d);
+    const size_t nr= boost::python::extract<size_t>(d["nr"]);
+    const size_t nc= boost::python::extract<size_t>(d["nc"]);
+    const boost::python::list values= boost::python::extract<boost::python::list>(d["values"]);
+    const size_t sz= nr*nc;
+    std::vector<FT_matrix::value_type> v(sz);
+    for(size_t i= 0;i<sz;i++)
+      v[i]= boost::python::extract<FT_matrix::value_type>(values[i]);
+    rot= FT_matrix(nr, nc, v.begin(), v.end());
+  }
+
 std::ostream &operator<<(std::ostream &os,const CooSys &sc)
   {
     sc.Print(os);

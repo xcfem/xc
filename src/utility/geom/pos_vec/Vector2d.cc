@@ -27,9 +27,6 @@
 #include "utility/matrices/giros.h"
 #include "utility/geom/FT_matrix.h"
 
-
-
-
 // Vector2d::Vector2d(const double &x,const double &y)
 //   : ProtoGeom(), cgvct(Vector_2_from_doubles(x,y)) {}
 Vector2d::Vector2d(const GEOM_FT &x,const GEOM_FT &y)
@@ -227,6 +224,24 @@ Vector2d Vector2d::Perpendicular(const Vector2d &v) const
         }
     return retval;
   }
+    
+//! @brief Return a Python dictionary with the object members values.
+boost::python::dict Vector2d::getPyDict(void) const
+  {
+    boost::python::dict retval= ProtoGeom::getPyDict();
+    retval["x"]= x();
+    retval["y"]= y();
+    return retval;
+  }
+
+//! @brief Set the values of the object members from a Python dictionary.
+void Vector2d::setPyDict(const boost::python::dict &d)
+  {
+    ProtoGeom::setPyDict(d);
+    SetX(boost::python::extract<GEOM_FT>(d["x"]));
+    SetY(boost::python::extract<GEOM_FT>(d["y"]));
+  }    
+
 void Vector2d::Print(std::ostream &stream) const
   {
     stream << "[[" << x() << "]["

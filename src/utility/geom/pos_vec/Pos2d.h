@@ -96,6 +96,9 @@ class Pos2d: public ProtoGeom
 
     void Print(std::ostream &os) const;
     void Plot(Plotter &psos) const;
+    
+    boost::python::dict getPyDict(void) const;
+    void setPyDict(const boost::python::dict &);
   };
 
 std::ostream &operator << (std::ostream &stream,const Pos2d &n);

@@ -80,6 +80,8 @@ class CooSys: public ProtoGeom
     FT_matrix GetCooGlobales(const FT_matrix &v) const;
     FT_matrix GetCooLocales(const FT_matrix &v) const;
 
+    boost::python::dict getPyDict(void) const;
+    void setPyDict(const boost::python::dict &);
     virtual void Print(std::ostream &os) const;
     friend std::ostream &operator<<(std::ostream &os,const CooSys &sc);
   };

@@ -280,11 +280,32 @@ Pos3d To3d(const Pos2d &p,const size_t &coo,const GEOM_FT &u)
     return To3dYZ2d(p,u);
   }
 
+//! @brief Return true if the points are collinear.
 bool colineales(const Pos3d &p1,const Pos3d &p2,const Pos3d &p3)
-  { return collinear(p1.cgpt,p2.cgpt,p3.cgpt); } 
+  { return collinear(p1.cgpt,p2.cgpt,p3.cgpt); }
+
+//! @brief Return true if the points are coplanar.
 bool coplanarios(const Pos3d &p1,const Pos3d &p2,const Pos3d &p3,const Pos3d &p4)
   { return coplanar(p1.cgpt,p2.cgpt,p3.cgpt,p4.cgpt); } 
 
+//! @brief Return a Python dictionary with the object members values.
+boost::python::dict Pos3d::getPyDict(void) const
+  {
+    boost::python::dict retval= ProtoGeom::getPyDict();
+    retval["x"]= x();
+    retval["y"]= y();
+    retval["z"]= z();
+    return retval;
+  }
+
+//! @brief Set the values of the object members from a Python dictionary.
+void Pos3d::setPyDict(const boost::python::dict &d)
+  {
+    ProtoGeom::setPyDict(d);
+    SetX(boost::python::extract<GEOM_FT>(d["x"]));
+    SetY(boost::python::extract<GEOM_FT>(d["y"]));
+    SetZ(boost::python::extract<GEOM_FT>(d["z"]));
+  }
 
 
 

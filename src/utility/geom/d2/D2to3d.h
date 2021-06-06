@@ -28,7 +28,9 @@
 #include "../cgal_types.h"
 
 class Plane;
+class Line2d;
 class Segment2d;
+class Line3d;
 class Segment3d;
 class Pos3dArray;
 class Pos2dArray;
@@ -63,10 +65,13 @@ class D2to3d: public Surface3d
     Vector3d getJVector(void) const; //J unary vector.
     Vector3d getKVector(void) const; //K unary vector.
 
-    Pos3d to_3d(const Pos2d &p2d) const;
-    Segment3d to_3d(const Segment2d &sg2d) const;
-    Pos3dArray to_3d(const Pos2dArray &p2d) const;
-    Pos2d to_2d(const Pos3d &p3d) const;
+    Pos3d to_3d(const Pos2d &) const;
+    Line3d to_3d(const Line2d &) const;
+    Segment3d to_3d(const Segment2d &) const;
+    Pos3dArray to_3d(const Pos2dArray &) const;
+    Pos2d to_2d(const Pos3d &) const;
+    Line2d to_2d(const Line3d &) const;
+    Segment2d to_2d(const Segment3d &) const;
     const Ref2d3d &getRef(void) const
       { return ref; }
     Plane getPlane(void) const;

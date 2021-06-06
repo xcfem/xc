@@ -147,10 +147,12 @@ class Line2d : public Linear2d
     virtual GEOM_FT Iz(void) const;
 
     void Transform(const Trf2d &trf2d);
+    
+    boost::python::dict getPyDict(void) const;
+    void setPyDict(const boost::python::dict &);
 
     void Print(std::ostream &os) const;
-    void Plot(Plotter &psos) const;
-    
+    void Plot(Plotter &psos) const;  
   };
 
 double angle(const Line2d &r,const Vector2d &v);

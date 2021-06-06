@@ -145,6 +145,38 @@ boost::python::list CommandEntity::getPropNames(void) const
       retval.append((*i).first);
     return retval;
   }
+
+//! @brief Return a Python dictionary containing the object members values.
+boost::python::dict CommandEntity::getPyDict(void) const
+  {
+    boost::python::dict retval;
+    // Store properties.
+    for(PythonDict::const_iterator i= python_dict.begin();i!= python_dict.end();i++)
+      {
+	const std::string key= py_prop_prefix+(*i).first;
+        retval[key]= (*i).second;
+      }
+    return retval;
+  }
+
+//! @brief Set the values of the object members from a Python dictionary.
+void CommandEntity::setPyDict(const boost::python::dict &d)
+  {
+    auto items = d.attr("items")(); // just plain d.items or d.iteritems for Python 2!
+    for(auto it = boost::python::stl_input_iterator<boost::python::tuple>(items); it != boost::python::stl_input_iterator<boost::python::tuple>(); ++it)
+      {
+	boost::python::tuple kv = *it;
+	std::string key= boost::python::extract<std::string>(kv[0]);
+	if(key.rfind(py_prop_prefix, 0) == 0) // it's a property.
+	  {
+	    const int sz= py_prop_prefix.size();
+	    key.erase(0,sz); // remove prefix
+            auto value= kv[1];
+	    setPyProp(key, value);
+          }    
+      }
+  }
+
 //! @brief Return the Python object that results from evaluating the argument.
 boost::python::object CommandEntity::evalPy(boost::python::object dict,const std::string &str)
    {

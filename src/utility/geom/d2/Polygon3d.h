@@ -99,6 +99,10 @@ class Polygon3d: public D2to3d
     GEOM_FT distSigno2(const Pos3d &p) const;
     GEOM_FT dist2(const Pos3d &p) const;
 
+    bool intersects(const Line3d &) const;
+    Segment3d getIntersection(const Line3d &) const;
+    bool intersects(const Plane &) const;
+    Segment3d getIntersection(const Plane &) const;
     std::list<Polygon3d> Corta(const Plane &p) const;
 
     void Print(std::ostream &os) const;

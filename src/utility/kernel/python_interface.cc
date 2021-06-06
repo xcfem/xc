@@ -79,6 +79,8 @@ BOOST_PYTHON_MODULE(xc_base)
       .def("evalPy", &CommandEntity_eval,"Evaluates expresion.")
       .def("execPy", &CommandEntity_exec,"Executes code block.")
       .def("execFilePy", &CommandEntity_exec_file,"Executes code block.")
+      .def("getDict", &CommandEntity::getPyDict,"Return a Python dictionary containing the object members values.")
+      .def("setFromDict", &CommandEntity::setPyDict,"Set the values of the object members from a Python dictionary.")
       .def("tipo", &CommandEntity::getClassName,"DEPRECATED Return the class name.")
       .def("type", &CommandEntity::getClassName,"Returns class name.")
   ;

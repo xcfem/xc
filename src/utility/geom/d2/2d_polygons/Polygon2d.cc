@@ -400,6 +400,14 @@ std::list<Polygon2d> Polygon2d::Clip(const Polygon2d &other) const
 void Polygon2d::clipBy(const Polygon2d &plg)
   { (*this)= Polygon2d(Clip(plg)); }
 
+Segment2d Polygon2d::getIntersection(const Line2d &l) const
+  { return Clip(l); }
+Segment2d Polygon2d::getIntersection(const Ray2d &r) const
+  { return Clip(r); }
+Segment2d Polygon2d::getIntersection(const Segment2d &s) const
+  { return Clip(s); }
+
+
 //! @brief 
 std::list<Polygon2d> Polygon2d::getBayazitDecomposition(void) const
   {
