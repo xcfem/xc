@@ -190,12 +190,12 @@ class BoltFastener(bolts.BoltBase):
     :ivar group: 
     '''
     # See table J3.4 M of AISC 360-16.
-    bf_diams= [16e-3, 20e-3, 22e-3, 24e-3, 27e-3, 30e-3, 36e-3]
-    tabJ3_4M= [22e-3, 26e-3, 28e-3, 30e-3, 34e-3, 38e-3, 46e-3]
+    bf_diams= [12e-3,14e-3,16e-3, 20e-3, 22e-3, 24e-3, 27e-3, 30e-3, 36e-3]
+    tabJ3_4M= [16e-3,18e-3,22e-3, 26e-3, 28e-3, 30e-3, 34e-3, 38e-3, 46e-3]
     fTabJ3_4M= scipy.interpolate.interp1d(bf_diams,tabJ3_4M)
     # See table J3.3 M of AISC 360-16.
-    standardHoleDia= [18e-3, 22e-3, 24e-3, 27e-3, 30e-3, 33e-3]
-    oversizeHoleDia= [20e-3, 24e-3, 28e-3, 30e-3, 35e-3, 38e-3]
+    standardHoleDia= [14e-3,16e-3,18e-3, 22e-3, 24e-3, 27e-3, 30e-3, 33e-3]
+    oversizeHoleDia= [16e-3,18e-3,20e-3, 24e-3, 28e-3, 30e-3, 35e-3, 38e-3]
     fStandardHoleDia= scipy.interpolate.interp1d(bf_diams[:-1], standardHoleDia)
     fOversizeHoleDia= scipy.interpolate.interp1d(bf_diams[:-1], oversizeHoleDia)
     groupA= ['A325', 'A325M', 'A354BC']
@@ -242,7 +242,10 @@ class BoltFastener(bolts.BoltBase):
             hole to edge of connected part according to toble
             J3.4M of AISC 360-16.'''
         if(self.diameter<=36e-3):
-            return self.fTabJ3_4M(self.diameter)
+            if self.diameter<BoltFastener.bf_diams[0]:
+                lmsg.error('Bolt diameter = '+ str(round(self.diameter*1e3,1)) +' mm is less than minimum coded = '+ str(round(BoltFastener.bf_diams[0]*1e3,1)) + 'mm.')
+            else:
+                return self.fTabJ3_4M(self.diameter)
         else:
             return 1.25*self.diameter
 
@@ -257,12 +260,18 @@ class BoltFastener(bolts.BoltBase):
             if(self.diameter>=36e-3):
                 return self.diameter+8e-3
             else:
-                return float(self.fOversizeHoleDia(self.diameter))
+                if self.diameter < BoltFastener.bf_diams[0]:
+                    lmsg.error('Bolt diameter = '+ str(round(self.diameter*1e3,1)) +' mm is less than minimum coded = '+ str(round(BoltFastener.bf_diams[0]*1e3,1)) + 'mm.')
+                else:
+                    return float(self.fOversizeHoleDia(self.diameter))
         else:
             if(self.diameter>=36e-3):
                 return self.diameter+3e-3
             else:
-                return float(self.fStandardHoleDia(self.diameter))
+                if self.diameter<BoltFastener.bf_diams[0]:
+                    lmsg.error('Bolt diameter = '+ str(round(self.diameter*1e3,1)) +' mm is less than minimum coded = '+ str(round(BoltFastener.bf_diams[0]*1e3,1)) + 'mm.')
+                else:
+                    return float(self.fStandardHoleDia(self.diameter))
 
     def getDesignHoleDiameter(self):
         ''' Return the hole diameter to use in net area calculations.'''
@@ -400,6 +409,8 @@ class BoltFastener(bolts.BoltBase):
         super(BoltFastener,self).report(outputFile)
         outputFile.write('      steel: '+self.steelType.name+'\n')
 
+M12= BoltFastener(12e-3)
+M14= BoltFastener(14e-3)
 M16= BoltFastener(16e-3)
 M20= BoltFastener(20e-3)
 M22= BoltFastener(22e-3)
