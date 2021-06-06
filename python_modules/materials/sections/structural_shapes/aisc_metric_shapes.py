@@ -437,8 +437,8 @@ class WShape(structural_steel.IShape):
         s4= geom.Segment2d(geom.Pos2d(0.0,top), geom.Pos2d(halfB,top))
         return [s0,s1,s2,s3,s4]
 
-    def getWebMidPlane(self, org, extrusionVDir, weakAxisVDir):
-        ''' Return the mid plane of the web.
+    def getWebMidPlaneContourPoints(self, org, extrusionVDir, weakAxisVDir):
+        ''' Return the contour points at mid plane of the web.
 
         :param org: origin point.
         :param extrusionVDir: extrusion direction vector.
@@ -448,11 +448,22 @@ class WShape(structural_steel.IShape):
         v= halfH*weakAxisVDir
         p0= org-v
         p1= org+v
-        p2= p0+extrusionVDir
-        return geom.Plane3d(p0,p1,p2)
+        p2= p1+extrusionVDir
+        p3= p0+extrusionVDir
+        return [p0,p1,p2,p3]
 
-    def getBottomFlangeMidPlane(self, org, extrusionVDir, weakAxisVDir):
-        ''' Return the mid plane of the bottom flange.
+    def getWebMidPlane(self, org, extrusionVDir, weakAxisVDir):
+        ''' Return the mid plane of the web.
+
+        :param org: origin point.
+        :param extrusionVDir: extrusion direction vector.
+        :param weakAxisVDir: direction of the weak axis.
+        '''
+        contourPoints= self.getWebMidPlaneContourPoints(org, extrusionVDir, weakAxisVDir)
+        return geom.Plane3d(contourPoints[0],contourPoints[1],contourPoints[3])
+
+    def getBottomFlangeMidPlaneContourPoints(self, org, extrusionVDir, weakAxisVDir):
+        ''' Return the bottom flange contour points at its mid plane.
 
         :param org: origin point.
         :param extrusionVDir: extrusion direction vector.
@@ -464,13 +475,24 @@ class WShape(structural_steel.IShape):
         strongAxisVDir= extrusionVDir.cross(weakAxisVDir)
         v= bottom*weakAxisVDir-halfB*strongAxisVDir
         p0= org+v
+        p3= p0+extrusionVDir
         v= bottom*weakAxisVDir+halfB*strongAxisVDir
         p1= org+v
-        p2= p0+extrusionVDir
-        return geom.Plane3d(p0,p1,p2)
-
-    def getTopFlangeMidPlane(self, org, extrusionVDir, weakAxisVDir):
+        p2= p1+extrusionVDir
+        return [p0,p1,p2,p3]
+    
+    def getBottomFlangeMidPlane(self, org, extrusionVDir, weakAxisVDir):
         ''' Return the mid plane of the bottom flange.
+
+        :param org: origin point.
+        :param extrusionVDir: extrusion direction vector.
+        :param weakAxisVDir: direction of the weak axis.
+        '''
+        contourPoints= self.getBottomFlangeMidPlaneContourPoints(org, extrusionVDir, weakAxisVDir)
+        return geom.Plane3d(contourPoints[0],contourPoints[1],contourPoints[3])
+
+    def getTopFlangeMidPlaneContourPoints(self, org, extrusionVDir, weakAxisVDir):
+        ''' Return the top flange contour points at its mid plane.
 
         :param org: origin point.
         :param extrusionVDir: extrusion direction vector.
@@ -482,11 +504,22 @@ class WShape(structural_steel.IShape):
         strongAxisVDir= extrusionVDir.cross(weakAxisVDir)
         v= top*weakAxisVDir-halfB*strongAxisVDir
         p0= org+v
+        p3= p0+extrusionVDir
         v= top*weakAxisVDir+halfB*strongAxisVDir
         p1= org+v
-        p2= p0+extrusionVDir
-        return geom.Plane3d(p0,p1,p2)
+        p2= p1+extrusionVDir
+        return [p0,p1,p2,p3]
 
+    def getTopFlangeMidPlane(self, org, extrusionVDir, weakAxisVDir):
+        ''' Return the mid plane of the top flange.
+
+        :param org: origin point.
+        :param extrusionVDir: extrusion direction vector.
+        :param weakAxisVDir: direction of the weak axis.
+        '''
+        contourPoints= self.getTopFlangeMidPlaneContourPoints(org, extrusionVDir, weakAxisVDir)
+        return geom.Plane3d(contourPoints[0],contourPoints[1],contourPoints[3])
+    
     def getMidPoints(self):
         ''' Return the point at the middle of the web
             and the flange in local coordinates.

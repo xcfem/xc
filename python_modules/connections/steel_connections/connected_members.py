@@ -148,6 +148,17 @@ class ConnectedMemberMetaData(object):
         ''' Return the direction of the member web.'''
         return self.jVector
 
+    def getWebMidPlaneContourPoints(self, origin, factor):
+        ''' Return the contour points at the mid-plane of the member web.
+
+        :param origin: connection origin.
+        :param factor: factor that multiplies the unary direction vector
+                       of the member to define its extrusion 
+                       direction and lenght.
+        '''
+        extrusionVector= self.getExtrusionVector(factor)
+        return self.shape.getWebMidPlaneContourPoints(org= origin, extrusionVDir= extrusionVector, weakAxisVDir= self.jVector)
+    
     def getWebMidPlane(self, origin, factor):
         ''' Return the mid-plane of the member web.
 
@@ -159,6 +170,17 @@ class ConnectedMemberMetaData(object):
         extrusionVector= self.getExtrusionVector(factor)
         return self.shape.getWebMidPlane(org= origin, extrusionVDir= extrusionVector, weakAxisVDir= self.jVector)
     
+    def getBottomFlangeMidPlaneContourPoints(self, origin, factor):
+        ''' Return the contour points at the mid-plane of the bottom flange.
+
+        :param origin: connection origin.
+        :param factor: factor that multiplies the unary direction vector
+                       of the member to define its extrusion 
+                       direction and lenght.
+        '''
+        extrusionVector= self.getExtrusionVector(factor)
+        return self.shape.getBottomFlangeMidPlaneContourPoints(org= origin, extrusionVDir= extrusionVector, weakAxisVDir= self.jVector)
+
     def getBottomFlangeMidPlane(self, origin, factor):
         ''' Return the mid-plane of the bottom flange.
 
@@ -170,6 +192,17 @@ class ConnectedMemberMetaData(object):
         extrusionVector= self.getExtrusionVector(factor)
         return self.shape.getBottomFlangeMidPlane(org= origin, extrusionVDir= extrusionVector, weakAxisVDir= self.jVector)
 
+    def getTopFlangeMidPlaneContourPoints(self, origin, factor):
+        ''' Return the contour points at the mid-plane of the top flange.
+
+        :param origin: connection origin.
+        :param factor: factor that multiplies the unary direction vector
+                       of the member to define its extrusion 
+                       direction and lenght.
+        '''
+        extrusionVector= self.getExtrusionVector(factor)
+        return self.shape.getTopFlangeMidPlaneContourPoints(org= origin, extrusionVDir= extrusionVector, weakAxisVDir= self.jVector)
+    
     def getTopFlangeMidPlane(self, origin, factor):
         ''' Return the mid-plane of the top flange.
 

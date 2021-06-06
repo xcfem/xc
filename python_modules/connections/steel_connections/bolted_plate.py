@@ -330,6 +330,8 @@ class BoltedPlateBase(object):
         self.steelType= steelType
         self.eccentricity= eccentricity
         self.doublePlate= doublePlate
+        self.refSys= None
+        self.weldLines= None 
 
     def setWidth(self, w):
         ''' Set the plate width.
@@ -485,7 +487,16 @@ class BoltedPlateBase(object):
     
     def getDict(self):
         ''' Put member values in a dictionary.'''
-        return {'boltArray':self.boltArray.getDict(), 'width':self.width, 'length':self.length, 'thickness':self.thickness, 'steelType':self.steelType.getDict()}
+        retval= {'boltArray':self.boltArray.getDict(), 'width':self.width, 'length':self.length, 'thickness':self.thickness, 'steelType':self.steelType.getDict(), 'doublePlate':self.doublePlate, 'refSys':self.refSys}
+        if(self.weldLines):
+            wlDict= dict()
+            for key in self.weldLines.keys:
+                wl= self.weldLines[key]
+                wlDict[key]= wl.getDict()
+            retval['weldLines']= wlDict
+        else:
+            retval['weldLines']= None
+        return retval
 
     def setFromDict(self,dct):
         ''' Read member values from a dictionary.'''
@@ -495,6 +506,18 @@ class BoltedPlateBase(object):
         self.computeDimensions()
         self.thickness= dct['thickness']
         self.steelType.setFromDict(dct['steelType'])
+        self.doublePlate= dct['doublePlate']
+        tmp= dct['refSys']
+        if(tmp):
+            self.refSys= geom.Ref3d3d()
+            self.refSys.setFromDict(dct['refSys'])
+        wlDict= dct['weldLines']
+        if(wlDict):
+            self.weldLines= dict()
+            for key in wlDict:
+                wl= geom.Segment3d()
+                wl.setFromDict(wlDict[key])
+                self.weldLines[key]= wl
 
     def jsonRead(self, inputFileName):
         ''' Read object from JSON file.'''
@@ -512,31 +535,78 @@ class BoltedPlateBase(object):
         outputFile.write('    steel type: '+str(self.steelType.name)+'\n')
         self.boltArray.report(outputFile)
 
-    def getContour2d(self):
-        ''' Return the contour points of the plate in local coordinates.'''
+    def getCoreContour2d(self):
+        ''' Return the contour points of the plate core 
+            in local coordinates.'''
         l2= self.length/2.0
         w2= self.width/2.0
         return [geom.Pos2d(-l2+self.eccentricity.x,-w2+self.eccentricity.y), geom.Pos2d(l2+self.eccentricity.x,-w2+self.eccentricity.y), geom.Pos2d(l2+self.eccentricity.x,w2+self.eccentricity.y), geom.Pos2d(-l2+self.eccentricity.x,w2+self.eccentricity.y)]
-        
-    def getContour(self, refSys):
+
+    def getCoreContour3d(self):
+        ''' Return the contour points of the plate core.
+
+        :param refSys: 3D reference system used to perform local
+                       to global coordinate transformation.
+        '''
+        localPos= self.getCoreContour2d()
+        retval= list()
+        for p in localPos:
+            p3d= geom.Pos3d(p.x,p.y,0.0)
+            retval.append(self.refSys.getPosGlobal(p3d))
+        return retval
+    
+    def setRefSys(self, refSys):
+        ''' Set the 3D reference system used to perform local
+                       to global coordinate transformation.
+
+        :param refSys: 3D reference system.
+        '''
+        self.refSys= refSys
+
+    def setWeldLines(self, weldLines):
+        ''' Set the lines that weld the plate to the structure.
+
+        :param weldLines: weld lines dictionary {partName:line,...}
+        '''
+        self.weldLines= weldLines
+
+    def getWeldLinesCenter(self):
+        ''' Return the center of mass of the weld lines.'''
+        v= geom.Vector3d()
+        for key in self.weldLines:
+            wl= self.weldLines[key]
+            center= wl.getCenterOfMass()
+            v+= wl.getLength()*center.getPositionVector()
+        v*= (1.0/len(self.weldLines))
+        return geom.Pos3d(v.x,v.y,v.z)
+
+    def getWeldLinesVertices2d(self):
+        ''' Return the vertices of the weld lines expressed
+            in local coordinates.'''
+        retval= list() 
+        for key in self.weldLines:
+            wl= self.weldLines[key]
+            retval.append(self.refSys.to_2d(wl.getFromPoint()))
+            retval.append(self.refSys.to_2d(wl.getToPoint()))
+        return retval
+    
+    def getContour(self):
         ''' Return the contour points of the plate.
 
         :param refSys: 3D reference system used to perform local
                        to global coordinate transformation.
         '''
-        localPos= self.getContour2d()
-        retval= list()
-        for p in localPos:
-            p3d= geom.Pos3d(p.x,p.y,0.0)
-            retval.append(refSys.getPosGlobal(p3d))
-        return retval
+        contourVertices3d= self.getCoreContour3d()
+        contourVertices2d= self.getCoreContour2d()
+        contourVertices2d.extend(self.getWeldLinesVertices2d())
+        print('contour vertices 2D: ', contourVertices2d)
+        convexHull2d= geom.get_convex_hull2d(contourVertices2d)
+        return contourVertices3d
 
-    def getBlocks(self, refSys= geom.Ref3d3d(), blockProperties= None, loadTag= None, loadDirI= None, loadDirJ= None, loadDirK= None):
+    def getBlocks(self, blockProperties= None, loadTag= None, loadDirI= None, loadDirJ= None, loadDirK= None):
         ''' Return the blocks that define the plate for the
             diagonal argument.
 
-        :param refSys: 3D reference system used to perform local
-                       to global coordinate transformation.
         :param blockProperties: labels and attributes to assign to the newly created blocks.
         :param loadTag: tag of the applied loads in the internal forces file.
         :param loadDirI: I vector of the original element. Vector that 
@@ -553,13 +623,13 @@ class BoltedPlateBase(object):
             plateProperties.appendAttribute('loadDirJ', [loadDirJ.x, loadDirJ.y, loadDirJ.z])
             plateProperties.appendAttribute('loadDirK', [loadDirK.x, loadDirK.y, loadDirK.z])
         # Get the plate contour
-        contourVertices= self.getContour(refSys)
+        contourVertices= self.getContour()
         blk= retval.blockFromPoints(contourVertices, plateProperties, thickness= self.thickness, matId= self.steelType.name)
         # Get the hole blocks for the new plate
         holeProperties= bte.BlockProperties.copyFrom(blockProperties)
         holeProperties.appendAttribute('objType', 'hole')
         holeProperties.appendAttribute('ownerId', 'f'+str(blk.id))
-        blk.holes= self.boltArray.getHoleBlocks(refSys,holeProperties)
+        blk.holes= self.boltArray.getHoleBlocks(self.refSys,holeProperties)
         retval.extend(blk.holes)
         return retval
 
@@ -570,7 +640,7 @@ class BoltedPlateBase(object):
         :param loadDirection: direction of the load.
         '''
         retval= list()
-        contour= geom.Polygon2d(self.getContour2d())
+        contour= geom.Polygon2d(self.getCoreContour2d())
         retval= self.boltArray.getClearDistances(contour, loadDirection)
         return retval
     
@@ -580,7 +650,7 @@ class BoltedPlateBase(object):
 
         :param loadDirection: direction of the load.
         '''
-        contour= geom.Polygon2d(self.getContour2d())
+        contour= geom.Polygon2d(self.getCoreContour2d())
         return self.boltArray.getMinimumCover(contour)
 
     def getMinimumCoverInDir(self, direction):
@@ -590,7 +660,7 @@ class BoltedPlateBase(object):
 
         :param direction: direction of the rays.
         '''
-        contour= geom.Polygon2d(self.getContour2d())
+        contour= geom.Polygon2d(self.getCoreContour2d())
         return self.boltArray.getMinimumCoverInDir(contour, direction)
 
     def jsonWrite(self, outputFileName):
