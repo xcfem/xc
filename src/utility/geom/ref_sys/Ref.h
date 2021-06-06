@@ -64,6 +64,8 @@ class Ref : public ProtoGeom
       { return org; }
     void setOrg(const PGlobal &p)
       { org= p; }
+    void move(const VGlobal &v)
+      { org+= v; }
     SC &Trf(void)
       { return trf; }
     const SC &Trf(void) const

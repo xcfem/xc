@@ -9,6 +9,7 @@ __version__= "3.0"
 __email__= "l.pereztato@gmail.com" "ana.ortega.ort@gmail.com"
 
 import ezdxf
+import logging
 import xc_base
 import geom
 from import_export import basic_entities as be
@@ -516,7 +517,7 @@ class BlockData(object):
         '''Write the blocks (point, lines, surfaces, volumes,...) 
            in a DXF file.
 
-           :param drawing: ezdxf drawing object.
+        :param drawing: ezdxf drawing object.
         '''
         layerName= 'points'
         drawing.layers.new(name= layerName)
@@ -524,14 +525,24 @@ class BlockData(object):
             self.points[key].writeDxf(drawing,layerName)
         self.blocks.writeDxf(self.name, self.points,drawing)
 
-    def writeDxfFile(self,fileName):
-        '''Write mesh in a DXF file.
+    def writeDxfFile(self, fileName, silent= True):
+        '''Write block topology in a DXF file.
 
         :param fileName: name of the DXF file to write.
+        :param silent: if true instruct ezdxf not to write
+                       regular info messages (only warning
+                       or error messages).
         '''
+        oldLoggingLevel= None # Previous logging level.
+        if(silent): # Avoid logging info messages.
+            logger= logging.getLogger('ezdxf')
+            oldLoggingLevel= logger.getEffectiveLevel()
+            logger.setLevel(level=logging.WARNING) 
         drawing= ezdxf.new()
         self.writeDxf(drawing)
-        drawing.saveas(fileName)    
+        drawing.saveas(fileName)
+        if(silent): # Restore logging level.
+            logger.setLevel(level=oldLoggingLevel)
 
     def writeToXCFile(self,xcImportExportData):
         ''' Write a Python file with XC commands.'''

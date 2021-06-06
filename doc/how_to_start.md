@@ -46,6 +46,12 @@ See [here](https://github.com/xcfem/xc/blob/master/install/install.md)
 - [Bifurcar un repositorio](https://docs.github.com/es/github/getting-started-with-github/quickstart/fork-a-repo)
 
 
+## Visualization toolkit (VTK)
+
+- [The Visualization Toolkit](https://vtk.org/vtk-textbook/)
+- [VTK User's Guide](https://vtk.org/documentation/)
+- [VTK Examples](https://kitware.github.io/vtk-examples/site/)
+
 ## Python
 
 - [Python for beginners](https://www.python.org/about/gettingstarted/)

@@ -87,7 +87,10 @@ class BoltArrayBase(object):
         return retval
 
     def getStandardPlateLength(self):
-        ''' Assigns the bolt arrangement.'''
+        ''' Return the standard plate length as the
+            searching in self.distances for a length
+            greater or equal to the minimum length
+            imposed by the bolt arrangement.'''
         minLength= self.getMinPlateLength()
         retval= minLength
         for d in self.distances:
@@ -275,7 +278,7 @@ class BoltArrayBase(object):
     def getPositions(self, refSys= geom.Ref3d3d()):
         ''' Return the global coordinates of the bolts.
 
-        :param refSys: reference system.
+        :param refSys: 3D reference system.
         '''
         localPos= self.getLocalPositions()
         retval= list()
@@ -327,7 +330,29 @@ class BoltedPlateBase(object):
         self.steelType= steelType
         self.eccentricity= eccentricity
         self.doublePlate= doublePlate
-            
+
+    def setWidth(self, w):
+        ''' Set the plate width.
+
+        :param w: new width.
+        '''
+        self.width= w
+        
+    def getWidth(self):
+        ''' Return the plate width.'''
+        return self.width
+        
+    def setLength(self, l):
+        ''' Set the plate length.
+
+        :param l: new length.
+        '''
+        self.length= l
+        
+    def getLength(self):
+        ''' Return the plate length.'''
+        return self.length
+    
     def getMinWidth(self):
         ''' Return the minimum plate width.'''
         return self.boltArray.getMinPlateWidth()
@@ -493,20 +518,25 @@ class BoltedPlateBase(object):
         w2= self.width/2.0
         return [geom.Pos2d(-l2+self.eccentricity.x,-w2+self.eccentricity.y), geom.Pos2d(l2+self.eccentricity.x,-w2+self.eccentricity.y), geom.Pos2d(l2+self.eccentricity.x,w2+self.eccentricity.y), geom.Pos2d(-l2+self.eccentricity.x,w2+self.eccentricity.y)]
         
-
     def getContour(self, refSys):
-        ''' Return the contour points of the plate.'''
+        ''' Return the contour points of the plate.
+
+        :param refSys: 3D reference system used to perform local
+                       to global coordinate transformation.
+        '''
         localPos= self.getContour2d()
         retval= list()
         for p in localPos:
             p3d= geom.Pos3d(p.x,p.y,0.0)
-            retval.append(refSys.getPosGlobal(p3d))        
+            retval.append(refSys.getPosGlobal(p3d))
         return retval
 
     def getBlocks(self, refSys= geom.Ref3d3d(), blockProperties= None, loadTag= None, loadDirI= None, loadDirJ= None, loadDirK= None):
         ''' Return the blocks that define the plate for the
             diagonal argument.
 
+        :param refSys: 3D reference system used to perform local
+                       to global coordinate transformation.
         :param blockProperties: labels and attributes to assign to the newly created blocks.
         :param loadTag: tag of the applied loads in the internal forces file.
         :param loadDirI: I vector of the original element. Vector that 

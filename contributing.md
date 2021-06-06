@@ -9,4 +9,9 @@ If you can read Spanish and write English you can help us with the translation o
  z
 Here you can find an excellent post about writing git commit messages: https://chris.beams.io/posts/git-commit/ (I'll stick to the 7 rules myself :wink:).
 
+
+## How to start
+You can find [here](https://github.com/xcfem/xc/blob/master/doc/how_to_start.md) some useful links if you want to start using XC.
+
+
 Work in progress...

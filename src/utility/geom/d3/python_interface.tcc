@@ -23,9 +23,12 @@
 double (HalfSpace3d::*getAngleWithHalfSpace3d)(const HalfSpace3d &) const= &HalfSpace3d::getAngle;
 double (HalfSpace3d::*getAngleWithPlane)(const Plane &) const= &HalfSpace3d::getAngle;
 double (HalfSpace3d::*getAngleWithVector3d)(const Vector3d &) const= &HalfSpace3d::getAngle;
-
+Ray3d (HalfSpace3d::*clipLine)(const Line3d &) const= &HalfSpace3d::clip;
+Ray3d (HalfSpace3d::*clipRay)(const Ray3d &) const= &HalfSpace3d::clip;
+Segment3d (HalfSpace3d::*clipSegment)(const Segment3d &) const= &HalfSpace3d::clip;
 class_<HalfSpace3d, bases<GeomObj3d> >("HalfSpace3d")
   .def(init<Plane>())
+  .def(init<Plane, Pos3d>())
   .def(init<HalfSpace3d>())
   .def("getAngleWithHalfSpace3d", getAngleWithHalfSpace3d)
   .def("getAngleWithPlane", getAngleWithPlane)
@@ -33,7 +36,11 @@ class_<HalfSpace3d, bases<GeomObj3d> >("HalfSpace3d")
   .def("getLima", &HalfSpace3d::getLima)
   .def("getNormalExterior", &HalfSpace3d::NormalExterior)
   .def("getNormalInterior", &HalfSpace3d::NormalInterior)
-  .def("getBoundaryPlane", &HalfSpace3d::getBoundaryPlane,return_internal_reference<>() );
+  .def("getBoundaryPlane", &HalfSpace3d::getBoundaryPlane,return_internal_reference<>() )
+  .def("clip", clipLine, "Returns the part of the object that is inside the half-space.")
+  .def("clip", clipRay, "Returns the part of the object that is inside the half-space.")
+  .def("clip", clipSegment, "Returns the part of the object that is inside the half-space.")
+ ;
 
 class_<BND3d, bases<GeomObj3d> >("BND3d")
   .def(init<>())

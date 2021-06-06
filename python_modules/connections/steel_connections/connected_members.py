@@ -13,7 +13,6 @@ __email__= "l.pereztato@ciccp.es, ana.ortega@ciccp.es "
 
 import enum
 import math
-import ezdxf
 import json
 from import_export import block_topology_entities as bte
 import xc_base

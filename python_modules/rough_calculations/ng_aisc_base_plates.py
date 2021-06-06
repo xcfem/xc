@@ -687,9 +687,19 @@ class BasePlateGroup(object):
             basePlate= self.basePlates[key]
             basePlate.writeDXF(modelSpace, steelShapeLayerName, basePlateLayerName, anchorHolesLayerName)
 
-    def writeDXFFile(self, fileName):
+    def writeDXFFile(self, fileName, silent= True):
         ''' Draw the base plate group in a DXF file.
+
+        :param fileName: name of the DXF file to write.
+        :param silent: if true instruct ezdxf not to write
+                       regular info messages (only warning
+                       or error messages).
         '''
+        oldLoggingLevel= None # Previous logging level.
+        if(silent): # Avoid logging info messages.
+            logger= logging.getLogger('ezdxf')
+            oldLoggingLevel= logger.getEffectiveLevel()
+            logger.setLevel(level=logging.WARNING) 
         doc= ezdxf.new('R2010')
         doc.header['$MEASUREMENT'] = 1 # Metric
         doc.header['$LUNITS'] = 2 # Decimal units.
@@ -703,6 +713,8 @@ class BasePlateGroup(object):
         msp = doc.modelspace()  # add new entities to the modelspace
         self.writeDXF(msp, steelShapesLayerName, basePlatesLayerName, anchorHolesLayerName)
         doc.saveas(fileName)
+        if(silent): # Restore logging level.
+            logger.setLevel(level=oldLoggingLevel)
         
     def getNumberOfBolts(self):
         ''' Return the total number of bolts.'''

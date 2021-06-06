@@ -37,10 +37,10 @@ class Ray3d : public Linear3d
   {
     CGRay_3 cgsr;
   public:
-    Ray3d(void): Linear3d(),cgsr(CGPoint_3(0,0,0),CGPoint_3(1,0,0)) {}
-    Ray3d(const CGRay_3 &r)
-      : Linear3d(), cgsr(r) {}
-    Ray3d(const Pos3d &p1,const Pos3d &p2);
+    Ray3d(void);
+    explicit Ray3d(const CGRay_3 &);
+    Ray3d(const Pos3d &,const Pos3d &);
+    Ray3d(const Pos3d &,const Vector3d &);
     virtual GeomObj *clon(void) const
       { return new Ray3d(*this); }
     void swap(void);
@@ -58,7 +58,7 @@ class Ray3d : public Linear3d
       { return Pos3d(cgsr.source()); }
     inline GEOM_FT getSlope(void) const
       { return getSupportLine().getSlope(); }
-    const Pos3d Point(const int &i) const
+    const Pos3d Point(const int &i= 0) const
       { return Pos3d(cgsr.point(i)); }
     //! @brief Return a point of the line at a distance lambda from its origin.
     Pos3d PtoParametricas(const GEOM_FT &lambda) const

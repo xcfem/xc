@@ -21,16 +21,25 @@
 //HalfSpace3d.cc
 
 #include "HalfSpace3d.h"
-
-
-
 #include "utility/geom/pos_vec/Vector3d.h"
 #include "utility/geom/d1/Line3d.h"
+#include "utility/geom/d1/Segment3d.h"
 
 
 //! @brief Default constructor.
 HalfSpace3d::HalfSpace3d(const Plane &p)
   : GeomObj3d(), lim(p) {}
+
+//! @brief Constructor.
+//!
+//! @param pl: plane that limits the half-space
+//! @param pt: point contained in the half-space.
+HalfSpace3d::HalfSpace3d(const Plane &pl, const Pos3d &pt)
+  : GeomObj3d(), lim(pl)
+  {
+    if(not In(pt))
+      swap();
+  }
 
 //! @brief Comparison operator.
 bool HalfSpace3d::operator==(const HalfSpace3d &other) const
@@ -47,6 +56,14 @@ bool HalfSpace3d::operator==(const HalfSpace3d &other) const
     return retval;
   }
 
+//! @brief Returns the complementary half space.
+HalfSpace3d HalfSpace3d::getSwap(void) const
+  {
+    HalfSpace3d retval(*this);
+    retval.swap();
+    return retval;
+  }
+
 //! @brief Return the plane that defined de half space boudary.
 const Plane &HalfSpace3d::getBoundaryPlane(void) const
   { return lim; }
@@ -54,8 +71,8 @@ const Plane &HalfSpace3d::getBoundaryPlane(void) const
 void HalfSpace3d::setBoundaryPlane(const Plane &p)
   { lim= p; }
 
-//! @brief Return true if the point is inside the half-plane.
-//! The points of the edge line belong to the half-plane.
+//! @brief Return true if the point is inside the half-space.
+//! The points of the edge plane belong to the half-plane.
 bool HalfSpace3d::In(const Pos3d &p, const double &tol) const
   {
     bool retval= false;
@@ -63,6 +80,149 @@ bool HalfSpace3d::In(const Pos3d &p, const double &tol) const
       retval= true;
     else if(lim.In(p,tol))
       retval= true;
+    return retval;
+  }
+
+//! @brief Return true if the line is inside the half-space.
+bool HalfSpace3d::In(const Line3d &l, const double &tol) const
+  {
+    bool retval= false;
+    if(!lim.intersects(l))
+      retval= In(l.Point());
+    return retval;
+  }
+
+//! @brief Return true if the ray is inside the half-space.
+bool HalfSpace3d::In(const Ray3d &r, const double &tol) const
+  {
+    bool retval= false;
+    if(!lim.intersects(r))
+      retval= In(r.Point());
+    return retval;
+  }
+
+//! @brief Return true if the segment is inside the half-space.
+bool HalfSpace3d::In(const Segment3d &sg, const double &tol) const
+  {
+    bool retval= false;
+    if(In(sg.getFromPoint()) && In(sg.getToPoint()))
+      retval= true;
+    return retval;
+  }
+
+//! @brief Return true if part of the line is inside
+//! the half-space.
+bool HalfSpace3d::intersects(const Line3d &l) const
+  {
+    bool retval= false;
+    if(lim.intersects(l))
+      retval= true;
+    else // line parallel to the limit plane.
+      retval= In(l.Point());
+    return retval;
+  }
+
+//! @brief Return true if part of the ray is inside
+//! the half-space.
+bool HalfSpace3d::intersects(const Ray3d &r) const
+  {
+    bool retval= false;
+    if(lim.intersects(r))
+      retval= true;
+    else // ray parallel to the limit plane.
+      retval= In(r.Point());
+    return retval;
+  }
+
+//! @brief Return true if part of the segment is inside
+//! the half-space.
+bool HalfSpace3d::intersects(const Segment3d &sg) const
+  {
+    bool retval= false;
+    if(lim.intersects(sg))
+      retval= true;
+    else // ray parallel to the limit plane.
+      retval= (In(sg.getFromPoint()) || In(sg.getToPoint()));
+    return retval;
+  }
+
+//! @brief Returns the part of the line that is inside the half-space.
+Ray3d HalfSpace3d::clip(const Line3d &l) const
+  {
+    Ray3d retval;
+    if(intersects(l))
+      {
+	if(In(l))
+	  std::cerr << getClassName() << "::" << __FUNCTION__
+	 	    << "; the line is inside the half-space."
+		    << " Can't do the clipping." << std::endl;
+	else
+	  {
+            Pos3d pt= lim.getIntersection(l);
+            retval= Ray3d(pt,l.VDir());
+	  }
+      }
+    else
+      {
+	 std::cerr << getClassName() << "::" << __FUNCTION__
+		   << "; the line is outside the half-space."
+		   << " Can't do the clipping." << std::endl;
+      }
+    return retval;
+  }
+      
+//! @brief Returns the part of the ray that is inside the half-space.
+Ray3d HalfSpace3d::clip(const Ray3d &r) const
+  {
+    Ray3d retval;
+    if(intersects(r))
+      {
+	if(In(r))
+	  std::cerr << getClassName() << "::" << __FUNCTION__
+	 	    << "; the ray is inside the half-space."
+		    << " Can't do the clipping." << std::endl;
+	else
+	  {
+            Pos3d pt= lim.getIntersection(r);
+            retval= Ray3d(pt,r.VDir());
+	  }
+      }
+    else
+      {
+	 std::cerr << getClassName() << "::" << __FUNCTION__
+		   << "; the ray is outside the half-space."
+		   << " Can't do the clipping." << std::endl;
+      }
+    return retval;
+  }
+
+//! @brief Returns the part of the segment that is inside the half-space.
+Segment3d HalfSpace3d::clip(const Segment3d &sg) const
+  {
+    Segment3d retval;
+    if(In(sg))
+      retval= sg;
+    else
+      {
+	Pos3d p0= sg.getFromPoint();
+	Pos3d p1= sg.getToPoint();
+	if(In(p0))
+	  {
+            Pos3d pt= lim.getIntersection(sg);
+            return Segment3d(p0,pt);
+	  }
+	else if(In(p1))
+	  {
+            Pos3d pt= lim.getIntersection(sg);
+            return Segment3d(p1,pt);
+	  }
+	else
+	  {
+	    std::cerr << getClassName() << "::" << __FUNCTION__
+	              << "; the segment is outside the half-space."
+	              << " Can't do the clipping." << std::endl;
+	  }
+      }
     return retval;
   }
 
