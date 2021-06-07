@@ -9,10 +9,10 @@ ref= geom.Ref3d3d(p1,p2)
 
 
 v= geom.Vector3d(1,1,1)
-vTrf= ref.getCooLocales(v)
+vTrf= ref.getLocalCoordinates(v)
 vTrfTeor= geom.Vector3d(math.sqrt(3.0),0,0)
 ratio= (vTrf-vTrfTeor).getModulus()
-p0= ref.getPosGlobal(geom.Pos3d(0.0,0.0,0.0))
+p0= ref.getGlobalPosition(geom.Pos3d(0.0,0.0,0.0))
 ratio2= (p1-p0).getModulus()
 
 p0= geom.Pos3d(0,0,0)

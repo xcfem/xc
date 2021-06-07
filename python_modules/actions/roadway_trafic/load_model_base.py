@@ -212,7 +212,7 @@ class VehicleLoad(object):
         '''Return the corresponding global positions.'''
         retval= list()
         for p in localPositions:
-            p3D= self.refSys.getPosGlobal(p)
+            p3D= self.refSys.getGlobalPosition(p)
             retval.append(p3D)
         return retval
 

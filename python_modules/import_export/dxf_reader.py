@@ -41,7 +41,7 @@ def get_candidate_2Dquads(sisRef, points, tol):
     x_i= FloatList(tol)
     y_i= FloatList(tol)
     for p in points:
-        pRel= sisRef.getPosLocal(geom.Pos3d(p[0],p[1],p[2]))
+        pRel= sisRef.getLocalPosition(geom.Pos3d(p[0],p[1],p[2]))
         x_i.append(pRel[0])
         y_i.append(pRel[1])
     x_i.sort()
@@ -75,7 +75,7 @@ def quads2d_to_global_coordinates(sisRef, selected_quads):
         vList= list()
         vertices= face.getVertices()
         for v in vertices:
-            vList.append(sisRef.getPosGlobal(geom.Pos3d(v.x,v.y,0.0)))
+            vList.append(sisRef.getGlobalPosition(geom.Pos3d(v.x,v.y,0.0)))
         retval.append(vList)
     return retval
     
@@ -111,7 +111,7 @@ def decompose_polyline(polyline, tol= .01):
         # Create polygon in local coordinates.
         polygon= geom.Polygon2d()
         for pt in polyline:
-            ptLocal= sisRef.getPosLocal(geom.Pos3d(pt[0],pt[1],pt[2]))
+            ptLocal= sisRef.getLocalPosition(geom.Pos3d(pt[0],pt[1],pt[2]))
             polygon.appendVertex(geom.Pos2d(ptLocal.x,ptLocal.y))
 
         # Select surfaces inside polygon.
@@ -162,7 +162,7 @@ def decompose_polyface(polyface, tol= .01):
         polygon= geom.Polygon2d()
         for v in face[0:3]:
             pt= v.dxf.location
-            ptLocal= sisRef.getPosLocal(geom.Pos3d(pt[0],pt[1],pt[2]))
+            ptLocal= sisRef.getLocalPosition(geom.Pos3d(pt[0],pt[1],pt[2]))
             polygon.appendVertex(geom.Pos2d(ptLocal.x,ptLocal.y))
         polyfaces2d.append(polygon)
     # Select surfaces inside polyface.

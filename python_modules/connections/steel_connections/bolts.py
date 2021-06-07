@@ -191,7 +191,7 @@ class BoltBase(object):
         blk= retval.blockFromPoints(octagon, holeProperties)
         # Hole center.
         centerProperties= self.getHoleCenterBlockProperties(blockProperties, blk.id)
-        center3d= refSys.getPosGlobal(self.pos3d)
+        center3d= refSys.getGlobalPosition(self.pos3d)
         pA= retval.appendPoint(-1, center3d.x, center3d.y, center3d.z, pointProperties= centerProperties)
         retval.topPoint= retval.points[pA]
         return retval

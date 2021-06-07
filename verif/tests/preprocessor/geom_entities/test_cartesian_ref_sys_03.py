@@ -24,7 +24,7 @@ pt3= points.newPntIDPos3d(3,geom.Pos3d(0,1,0))
 
 rs= geom.Ref3d3d(pt1.getPos,pt2.getPos,pt3.getPos)
 
-p= rs.getPosGlobal(geom.Pos3d(7, 0, 0))
+p= rs.getGlobalPosition(geom.Pos3d(7, 0, 0))
 
 nodes= preprocessor.getNodeHandler
 nod1= nodes.newNodeXYZ(p.x,p.y,p.z)

@@ -544,10 +544,10 @@ class WShape(structural_steel.IShape):
         localBottomFlange, localTopFlange= self.getMidPoints()
         bottomFlange= list()
         for p in localBottomFlange:
-            bottomFlange.append(refSys.getPosGlobal(p))
+            bottomFlange.append(refSys.getGlobalPosition(p))
         topFlange= list()
         for p in localTopFlange:
-            topFlange.append(refSys.getPosGlobal(p))
+            topFlange.append(refSys.getGlobalPosition(p))
         return bottomFlange, topFlange
 
     def getMidPlanesPoints(self, org, extrusionVDir, weakAxisVDir):
@@ -565,10 +565,10 @@ class WShape(structural_steel.IShape):
         localBottomFlange, localTopFlange= self.getMidPoints()
         bottomFlangeDown= list()
         for p in localBottomFlange:
-            bottomFlangeDown.append(ref.getPosGlobal(p))
+            bottomFlangeDown.append(ref.getGlobalPosition(p))
         topFlangeDown= list()
         for p in localTopFlange:
-            topFlangeDown.append(ref.getPosGlobal(p))
+            topFlangeDown.append(ref.getGlobalPosition(p))
         # Extruded points (Up)
         bottomFlangeUp= list()
         for p in bottomFlangeDown:

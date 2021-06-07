@@ -262,7 +262,7 @@ class BoltArrayBase(object):
             holeVertices= list()
             for v in h[1]:
                 p3d= geom.Pos3d(v.x,v.y,0.0)
-                holeVertices.append(refSys.getPosGlobal(p3d))
+                holeVertices.append(refSys.getGlobalPosition(p3d))
             blk= retval.blockFromPoints(holeVertices, blockProperties)
             # Hole center.
             centerProperties= bte.BlockProperties.copyFrom(blockProperties)
@@ -271,7 +271,7 @@ class BoltArrayBase(object):
             centerProperties.appendAttribute('diameter', self.bolt.diameter)
             centerProperties.appendAttribute('boltMaterial', self.bolt.steelType.name)
             center= h[0]
-            center3d= refSys.getPosGlobal(geom.Pos3d(center.x, center.y, 0.0))
+            center3d= refSys.getGlobalPosition(geom.Pos3d(center.x, center.y, 0.0))
             retval.appendPoint(-1, center3d.x, center3d.y, center3d.z, pointProperties= centerProperties)
         return retval
                     
@@ -284,7 +284,7 @@ class BoltArrayBase(object):
         retval= list()
         for pLocal in localPos:
             p3d= geom.Pos3d(pLocal.x,pLocal.y, 0.0)
-            retval.append(refSys.getPosGlobal(p3d))
+            retval.append(refSys.getGlobalPosition(p3d))
         return retval
     
     def report(self, outputFile):
@@ -552,7 +552,7 @@ class BoltedPlateBase(object):
         retval= list()
         for p in localPos:
             p3d= geom.Pos3d(p.x,p.y,0.0)
-            retval.append(self.refSys.getPosGlobal(p3d))
+            retval.append(self.refSys.getGlobalPosition(p3d))
         return retval
     
     def setRefSys(self, refSys):
@@ -601,6 +601,7 @@ class BoltedPlateBase(object):
         contourVertices2d.extend(self.getWeldLinesVertices2d())
         print('contour vertices 2D: ', contourVertices2d)
         convexHull2d= geom.get_convex_hull2d(contourVertices2d)
+        print('convex hull: ', convexHull2d)
         return contourVertices3d
 
     def getBlocks(self, blockProperties= None, loadTag= None, loadDirI= None, loadDirJ= None, loadDirK= None):

@@ -375,7 +375,7 @@ class ConnectionMetaData(object):
             bottomFlangePts, topFlangePts= b.getMidPoints(origin)
             beamPoints= bottomFlangePts+topFlangePts
             for p in beamPoints:
-                lp= ref.getPosLocal(p)
+                lp= ref.getLocalPosition(p)
                 retval= max(retval,lp.z)
         return retval
                     
