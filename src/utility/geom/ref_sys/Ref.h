@@ -74,10 +74,10 @@ class Ref : public ProtoGeom
       { trf= t; }
     VGlobal getAxisVDir(const size_t &i) const
       { return trf.getAxisVDir(i); }
-    PGlobal GetPosGlobal(const PLocal &p) const;
-    VGlobal GetCooGlobales(const VLocal &v) const;
-    PLocal GetPosLocal(const PGlobal &p) const;
-    VLocal GetCooLocales(const VGlobal &v) const;
+    PGlobal getGlobalPosition(const PLocal &p) const;
+    VGlobal getGlobalCoordinates(const VLocal &v) const;
+    PLocal getLocalPosition(const PGlobal &p) const;
+    VLocal getLocalCoordinates(const VGlobal &v) const;
     friend std::ostream &operator<<(std::ostream &os,const Ref<SC> &r)
       {
         os << "origen= " << r.org << " transformación= " << r.trf;
@@ -93,9 +93,9 @@ class Ref : public ProtoGeom
 //!
 //! @param p: local coordinates of the point.
 template<class SC>
-typename Ref<SC>::PGlobal Ref<SC>::GetPosGlobal(const PLocal &p) const
+typename Ref<SC>::PGlobal Ref<SC>::getGlobalPosition(const PLocal &p) const
   {
-    PGlobal retval= org + GetCooGlobales(p-PLocal());
+    PGlobal retval= org + getGlobalCoordinates(p-PLocal());
     return retval;
   }
 
@@ -103,15 +103,15 @@ typename Ref<SC>::PGlobal Ref<SC>::GetPosGlobal(const PLocal &p) const
 //!
 //! @param v: local coordinates of the vector.
 template<class SC>
-typename Ref<SC>::VGlobal Ref<SC>::GetCooGlobales(const VLocal &v) const
-  { return trf.GetCooGlobales(v); }
+typename Ref<SC>::VGlobal Ref<SC>::getGlobalCoordinates(const VLocal &v) const
+  { return trf.getGlobalCoordinates(v); }
 
 //! @brief Return the position of the point p (expressed in global coordinates)
 //! expresssed in local coordinates.
 template<class SC>
-typename Ref<SC>::PLocal Ref<SC>::GetPosLocal(const PGlobal &p) const
+typename Ref<SC>::PLocal Ref<SC>::getLocalPosition(const PGlobal &p) const
   {
-    VLocal v= GetCooLocales(p-org);
+    VLocal v= getLocalCoordinates(p-org);
     return PLocal(PLocal()+v);
   }
 
@@ -119,8 +119,8 @@ typename Ref<SC>::PLocal Ref<SC>::GetPosLocal(const PGlobal &p) const
 //!
 //! @param v: global coordinates of the vector.
 template<class SC>
-typename Ref<SC>::VLocal Ref<SC>::GetCooLocales(const VGlobal &v) const
-  { return trf.GetCooLocales(v); }
+typename Ref<SC>::VLocal Ref<SC>::getLocalCoordinates(const VGlobal &v) const
+  { return trf.getLocalCoordinates(v); }
 
 //! @brief Comparison operator.
 template<class SC>

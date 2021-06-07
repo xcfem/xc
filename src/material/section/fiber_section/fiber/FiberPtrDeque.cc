@@ -2273,13 +2273,13 @@ size_t XC::FiberPtrDeque::getFiberWithMaxCoord(const Ref3d3d &r,const size_t &iC
     size_t i= 0;
     retval= i;
     Pos3d p(0.0,(*this)[i]->getLocY(),(*this)[i]->getLocZ());
-    double v_max= r.GetPosLocal(p)(iCoo);
+    double v_max= r.getLocalPosition(p)(iCoo);
     double v= v_max;
     i++;
     for(;i<nf;i++)
       {
         p= Pos3d(0.0,(*this)[i]->getLocY(),(*this)[i]->getLocZ());
-        v= r.GetPosLocal(p)(iCoo);
+        v= r.getLocalPosition(p)(iCoo);
         if(v>v_max)
           {
             v_max= v;
@@ -2304,13 +2304,13 @@ size_t XC::FiberPtrDeque::getFiberWithMinCoord(const Ref3d3d &r,const size_t &iC
     size_t i= 0;
     retval= i;
     Pos3d p(0.0,(*this)[i]->getLocY(),(*this)[i]->getLocZ());
-    double v_min= r.GetPosLocal(p)(iCoo);
+    double v_min= r.getLocalPosition(p)(iCoo);
     double v= v_min;
     i++;
     for(;i<nf;i++)
       {
         p= Pos3d(0.0,(*this)[i]->getLocY(),(*this)[i]->getLocZ());
-        v= r.GetPosLocal(p)(iCoo);
+        v= r.getLocalPosition(p)(iCoo);
         if(v<v_min)
           {
             v_min= v;

@@ -366,7 +366,7 @@ Ref3d3d XC::CrdTransf3d::getLocalReference(void) const
 XC::Vector XC::CrdTransf3d::getPointLocalCoordFromGlobal(const Vector &xg) const
   {
     Ref3d3d ref= getLocalReference();
-    Pos3d pl= ref.GetPosLocal(Pos3d(xg[0],xg[1],xg[2]));
+    Pos3d pl= ref.getLocalPosition(Pos3d(xg[0],xg[1],xg[2]));
     Vector retval(3);
     retval[0]= pl.x(); retval[1]= pl.y(); retval[2]= pl.z();
     return retval;  

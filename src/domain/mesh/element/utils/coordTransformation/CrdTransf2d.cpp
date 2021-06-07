@@ -544,7 +544,7 @@ Ref2d2d XC::CrdTransf2d::getLocalReference(void) const
 XC::Vector XC::CrdTransf2d::getPointLocalCoordFromGlobal(const Vector &xg) const
   {
     Ref2d2d ref= getLocalReference();
-    Pos2d pl= ref.GetPosLocal(Pos2d(xg[0],xg[1]));
+    Pos2d pl= ref.getLocalPosition(Pos2d(xg[0],xg[1]));
     Vector retval(2);
     retval[0]= pl.x(); retval[1]= pl.y();
     return retval;  

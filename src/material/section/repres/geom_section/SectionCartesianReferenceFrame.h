@@ -54,10 +54,10 @@ class SectionCartesianReferenceFrame: public SectionReferenceFrame
     Vector2d getAxisVDir(const size_t &,const Pos2d &) const;
 
 
-    Pos2d GetPosGlobal(const Pos2d &p) const;
-    Vector2d GetCooGlobales(const Vector2d &v) const;
-    Pos2d GetPosLocal(const Pos2d &p) const;
-    Vector2d GetCooLocales(const Vector2d &v) const;
+    Pos2d getGlobalPosition(const Pos2d &p) const;
+    Vector2d getGlobalCoordinates(const Vector2d &v) const;
+    Pos2d getLocalPosition(const Pos2d &p) const;
+    Vector2d getLocalCoordinates(const Vector2d &v) const;
 
 
   };

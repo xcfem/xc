@@ -41,16 +41,16 @@ class_<Rect1d2dCooSys, bases<Xd2dCooSys>, boost::noncopyable >("CooSysRect1d2d",
   .def(init<const Pos2d &,const Pos2d &>())
   .def(init<const Vector2d &>())
   .def("getIVector",&Rect1d2dCooSys::getIVector, "Unary vector i.")
-  .def("getCooGlobales",&Rect1d2dCooSys::GetCooGlobales)
-  .def("getCooLocales",&Rect1d2dCooSys::GetCooLocales)
+  .def("getGlobalCoordinates",&Rect1d2dCooSys::getGlobalCoordinates)
+  .def("getLocalCoordinates",&Rect1d2dCooSys::getLocalCoordinates)
   ;
 
 class_<Rect1d3dCooSys, bases<Xd3dCooSys> >("CooSysRect1d3d")
   .def(init<const Pos3d &,const Pos3d &>())
   .def(init<const Vector3d &>())
   .def("getIVector",&Rect1d3dCooSys::getIVector, "Unary vector i.")
-  .def("getCooGlobales",&Rect1d2dCooSys::GetCooGlobales)
-  .def("getCooLocales",&Rect1d3dCooSys::GetCooLocales)
+  .def("getGlobalCoordinates",&Rect1d2dCooSys::getGlobalCoordinates)
+  .def("getLocalCoordinates",&Rect1d3dCooSys::getLocalCoordinates)
   ;
 
 class_<Rect2d2dCooSys, bases<Xd2dCooSys> >("CooSysRect2d2d")
@@ -58,8 +58,8 @@ class_<Rect2d2dCooSys, bases<Xd2dCooSys> >("CooSysRect2d2d")
   .def(init<const Vector2d &>())
   .def("getIVector",&Rect2d2dCooSys::getIVector, "Unary vector i.")
   .def("getJVector",&Rect2d2dCooSys::getJVector, "Unary vector j.")
-  .def("getCooGlobales",&Rect2d2dCooSys::GetCooGlobales)
-  .def("getCooLocales",&Rect2d2dCooSys::GetCooLocales)
+  .def("getGlobalCoordinates",&Rect2d2dCooSys::getGlobalCoordinates)
+  .def("getLocalCoordinates",&Rect2d2dCooSys::getLocalCoordinates)
   ;
 
 class_<Rect2d3dCooSys, bases<Xd3dCooSys> >("CooSysRect2d3d")
@@ -69,8 +69,8 @@ class_<Rect2d3dCooSys, bases<Xd3dCooSys> >("CooSysRect2d3d")
   .def("getIVector",&Rect2d3dCooSys::getIVector, "Unary vector i.")
   .def("getJVector",&Rect2d3dCooSys::getJVector, "Unary vector j.")
   .def("getKVector",&Rect2d3dCooSys::getKVector, "Unary vector k.")
-  .def("getCooGlobales",&Rect2d3dCooSys::GetCooGlobales)
-  .def("getCooLocales",&Rect2d3dCooSys::GetCooLocales)
+  .def("getGlobalCoordinates",&Rect2d3dCooSys::getGlobalCoordinates)
+  .def("getLocalCoordinates",&Rect2d3dCooSys::getLocalCoordinates)
   ;
 
 class_<Rect3d3dCooSys, bases<Xd3dCooSys> >("CooSysRect3d3d")
@@ -81,8 +81,8 @@ class_<Rect3d3dCooSys, bases<Xd3dCooSys> >("CooSysRect3d3d")
   .def("getIVector",&Rect3d3dCooSys::getIVector, "Unary vector i.")
   .def("getJVector",&Rect3d3dCooSys::getJVector, "Unary vector j.")
   .def("getKVector",&Rect3d3dCooSys::getKVector, "Unary vector k.")
-  .def("getCooGlobales",&Rect3d3dCooSys::GetCooGlobales)
-  .def("getCooLocales",&Rect3d3dCooSys::GetCooLocales)
+  .def("getGlobalCoordinates",&Rect3d3dCooSys::getGlobalCoordinates)
+  .def("getLocalCoordinates",&Rect3d3dCooSys::getLocalCoordinates)
   ;
 
 

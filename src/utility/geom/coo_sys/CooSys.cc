@@ -178,13 +178,13 @@ FT_matrix CooSys::GetTransA(const CooSys &dest) const
 //! @brief Return the global coordinates of the vector.
 //!
 //! @param v: vector in local coordinates.
-FT_matrix CooSys::GetCooGlobales(const FT_matrix &v) const
+FT_matrix CooSys::getGlobalCoordinates(const FT_matrix &v) const
   { return TransAGlobal()*v; }
 
 //! @brief Return the local coordinates of the vector.
 //!
 //! @param v: vector in global coordinates.
-FT_matrix CooSys::GetCooLocales(const FT_matrix &v) const
+FT_matrix CooSys::getLocalCoordinates(const FT_matrix &v) const
   { return TransDeGlobal()*v; }
 
 //! @brief Prints the matrix.

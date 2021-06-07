@@ -55,8 +55,8 @@ class Xd2dCooSys: public CooSys
     virtual DGlobal getAxisDir(const size_t &axis) const;
     //Return the dirección of the axis que se pasa como parámetro.
 
-    VGlobal GetCooGlobales(const FT_matrix &v) const;
-    FT_matrix GetCooLocales(const VGlobal &v) const;
+    VGlobal getGlobalCoordinates(const FT_matrix &v) const;
+    FT_matrix getLocalCoordinates(const VGlobal &v) const;
   };
 
 #endif

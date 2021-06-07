@@ -38,17 +38,17 @@ Vector2d XC::SectionCartesianReferenceFrame::getAxisVDir(const size_t &i,const P
 
 //! @brief Return the position of point p expressed in local coordinates
 //! expresada en global coordinates.
-Pos2d XC::SectionCartesianReferenceFrame::GetPosGlobal(const Pos2d &p) const
-  { return ref.GetPosGlobal(p); }
+Pos2d XC::SectionCartesianReferenceFrame::getGlobalPosition(const Pos2d &p) const
+  { return ref.getGlobalPosition(p); }
 //! @brief Return the vector v expressed in local coordinates
 //! expressed in global coordinates.
-Vector2d XC::SectionCartesianReferenceFrame::GetCooGlobales(const Vector2d &v) const
-  { return ref.GetCooGlobales(v); }
+Vector2d XC::SectionCartesianReferenceFrame::getGlobalCoordinates(const Vector2d &v) const
+  { return ref.getGlobalCoordinates(v); }
 //! @brief Return the position of point p expressed in global coordinates
 //! expresada en local coordinates.
-Pos2d XC::SectionCartesianReferenceFrame::GetPosLocal(const Pos2d &p) const
-  { return ref.GetPosLocal(p); }
+Pos2d XC::SectionCartesianReferenceFrame::getLocalPosition(const Pos2d &p) const
+  { return ref.getLocalPosition(p); }
 //! @brief Return the vector v expressed in global coordinates
 //! expressed in local coordinates.
-Vector2d XC::SectionCartesianReferenceFrame::GetCooLocales(const Vector2d &v) const
-  { return ref.GetCooLocales(v); }
+Vector2d XC::SectionCartesianReferenceFrame::getLocalCoordinates(const Vector2d &v) const
+  { return ref.getLocalCoordinates(v); }

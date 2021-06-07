@@ -69,15 +69,15 @@ void Rect2d2dCooSys::PutJ(const VGlobal &j)
 //! @brief Return the global coordinates of the vector.
 //!
 //! @param v: local coordinates of the vector.
-Rect2d2dCooSys::VGlobal Rect2d2dCooSys::GetCooGlobales(const VLocal &v) const
-  { return Xd2dCooSys::GetCooGlobales(v.getMatrix()); }
+Rect2d2dCooSys::VGlobal Rect2d2dCooSys::getGlobalCoordinates(const VLocal &v) const
+  { return Xd2dCooSys::getGlobalCoordinates(v.getMatrix()); }
 
 //! @brief Return the local coordinates of the vector.
 //!
 //! @param v: global coordinates of the vector.
-Rect2d2dCooSys::VLocal Rect2d2dCooSys::GetCooLocales(const VGlobal &v) const
+Rect2d2dCooSys::VLocal Rect2d2dCooSys::getLocalCoordinates(const VGlobal &v) const
   {
-    const FT_matrix tmp= Xd2dCooSys::GetCooLocales(v);
+    const FT_matrix tmp= Xd2dCooSys::getLocalCoordinates(v);
     return VLocal(tmp(1),tmp(2)); 
   }
 

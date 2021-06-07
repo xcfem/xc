@@ -50,8 +50,8 @@ class Rect3d3dCooSys: public Xd3dCooSys
     VGlobal getJVector(void) const; //Return unary vector J in global coordinates.
     VGlobal getKVector(void) const; //Return unary vector K in global coordinates.
 
-    VGlobal GetCooGlobales(const VLocal &v) const;
-    VLocal GetCooLocales(const VGlobal &v) const;
+    VGlobal getGlobalCoordinates(const VLocal &v) const;
+    VLocal getLocalCoordinates(const VGlobal &v) const;
     virtual ~Rect3d3dCooSys(void)
       {}
   };

@@ -146,7 +146,7 @@ GEOM_FT GeomObj2d::I(const unsigned short int i,const unsigned short int j,const
     if(hasCenterOfMass())
       {
         Ref2d2d axis(getCenterOfMass()); //
-        Pos2d pos_local= axis.GetPosLocal(o);
+        Pos2d pos_local= axis.getLocalPosition(o);
         return Iij + IArea() * pos_local(i) * pos_local(j);
       }
     else

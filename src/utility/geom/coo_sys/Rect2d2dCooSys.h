@@ -49,8 +49,8 @@ class Rect2d2dCooSys: public Xd2dCooSys
     void PutJ(const VGlobal &);
 
     //Conversión vectores.
-    VGlobal GetCooGlobales(const VLocal &v) const;
-    VLocal GetCooLocales(const VGlobal &v) const;
+    VGlobal getGlobalCoordinates(const VLocal &v) const;
+    VLocal getLocalCoordinates(const VGlobal &v) const;
 
     virtual ~Rect2d2dCooSys(void) {}
   };

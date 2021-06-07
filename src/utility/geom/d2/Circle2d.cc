@@ -71,7 +71,7 @@ Circle2d Circle2dRTT(const GEOM_FT &radius,const Line2d &p,const Line2d &l,const
             else //Círculo C4 de la figura.
               k= -radius/costheta; //y coordinate of the center expressed in the local system.
           }
-        const Pos2d centro= ref.GetPosGlobal(Pos2d(h,k)); //Centro del círculo.
+        const Pos2d centro= ref.getGlobalPosition(Pos2d(h,k)); //Centro del círculo.
         return Circle2d(centro,radius);
       }
   }

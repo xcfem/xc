@@ -44,8 +44,8 @@ class Rect1d2dCooSys: public Xd2dCooSys
 
     VGlobal getIVector(void) const; //Return global coordinates of unit vector I.
 
-    VGlobal GetCooGlobales(const VLocal &v) const;
-    VLocal GetCooLocales(const VGlobal &v) const;
+    VGlobal getGlobalCoordinates(const VLocal &v) const;
+    VLocal getLocalCoordinates(const VGlobal &v) const;
     virtual ~Rect1d2dCooSys(void)
       {}
   };

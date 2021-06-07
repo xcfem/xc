@@ -164,7 +164,7 @@ double XC::SectionMassProperties::getIHomogenizedSection(const double &E0,const 
 
     Pos2d pp(center_of_mass[0],center_of_mass[1]);
     Ref2d2d axes(pp);
-    Pos2d pos_local= axes.GetPosLocal(o);
+    Pos2d pos_local= axes.getLocalPosition(o);
     return Iij + getAreaHomogenizedSection(E0) * pos_local(i) * pos_local(j);
   }
 
@@ -344,7 +344,7 @@ double XC::SectionMassProperties::getIGrossSection(const unsigned short int &i,c
 
     Pos2d pp(center_of_mass[0],center_of_mass[1]);
     Ref2d2d axes(pp);
-    Pos2d pos_local= axes.GetPosLocal(o);
+    Pos2d pos_local= axes.getLocalPosition(o);
     return Iij + getAreaGrossSection() * pos_local(i) * pos_local(j);
   }
 

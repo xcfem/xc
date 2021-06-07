@@ -79,17 +79,17 @@ Xd3dCooSys::VGlobal Xd3dCooSys::getAxisVDir(const size_t &axis) const
 //! @brief Return the global coordinates of the vector.
 //!
 //! @param v: local coordinates of the vector.
-Xd3dCooSys::VGlobal Xd3dCooSys::GetCooGlobales(const FT_matrix &v) const
+Xd3dCooSys::VGlobal Xd3dCooSys::getGlobalCoordinates(const FT_matrix &v) const
   {
-    const FT_matrix tmp= CooSys::GetCooGlobales(v);
+    const FT_matrix tmp= CooSys::getGlobalCoordinates(v);
     return VGlobal(tmp(1),tmp(2),tmp(3)); 
   }
 
 //! @brief Return the local coordinates of the vector.
 //!
 //! @param v: global coordinates of the vector.
-FT_matrix Xd3dCooSys::GetCooLocales(const Xd3dCooSys::VGlobal &v) const
-  { return CooSys::GetCooLocales(v.getMatrix()); }
+FT_matrix Xd3dCooSys::getLocalCoordinates(const Xd3dCooSys::VGlobal &v) const
+  { return CooSys::getLocalCoordinates(v.getMatrix()); }
 
 //! Makes the system of coordinates have the following unit vectors:
 //! - The versor corresponding to vector i_, being passed as parameter.

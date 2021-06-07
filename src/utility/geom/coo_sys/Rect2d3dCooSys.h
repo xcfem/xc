@@ -55,8 +55,8 @@ class Rect2d3dCooSys: public Xd3dCooSys
     VGlobal getJVector(void) const;
     VGlobal getKVector(void) const;
 
-    VGlobal GetCooGlobales(const VLocal &v) const;
-    VLocal GetCooLocales(const VGlobal &v) const;
+    VGlobal getGlobalCoordinates(const VLocal &v) const;
+    VLocal getLocalCoordinates(const VGlobal &v) const;
 
     virtual ~Rect2d3dCooSys(void)
       {}

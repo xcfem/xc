@@ -123,7 +123,7 @@ int XC::Paver::call_paving(const Ref2d3d &ref,const Polygon3d &extContour, const
 	int nv= ext.GetNumVertices();
 	for(int i= 1; i<=nv; i++, vertexCounter++)
 	  {
-	    const Pos2d p= ref.GetPosLocal(ext.Vertice(i));
+	    const Pos2d p= ref.getLocalPosition(ext.Vertice(i));
 	    x[vertexCounter-1]= p.x();
 	    y[vertexCounter-1]= p.y();
 	    z[vertexCounter-1]= 0.0;
@@ -139,7 +139,7 @@ int XC::Paver::call_paving(const Ref2d3d &ref,const Polygon3d &extContour, const
 	    numper[plgCounter]= nv;
 	    for(int j= 1; j<=nv; j++, vertexCounter++)
 	      {
-		Pos2d p= ref.GetPosLocal(tmp.Vertice(j));
+		Pos2d p= ref.getLocalPosition(tmp.Vertice(j));
 		x[vertexCounter-1]= p.x();
 		y[vertexCounter-1]= p.y();
 		z[vertexCounter-1]= 0.0;
@@ -260,7 +260,7 @@ int XC::Paver::extract_mesh(const Ref2d3d &ref)
     for(int i= 0;i<nnn; i++)
       {
 	const Pos2d pLocal(x[i], y[i]);
-        nodePos[i]= ref.GetPosGlobal(pLocal);
+        nodePos[i]= ref.getGlobalPosition(pLocal);
       }
     elemEdges= std::vector<std::vector<int> >(kkk);
     elemNodes= std::deque<std::vector<int> >();

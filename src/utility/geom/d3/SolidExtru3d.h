@@ -97,9 +97,9 @@ class SolidExtru3d : public Solid3d
 /*     //base (z=+l/2). */
 /*       {  */
 /*         if(i) */
-/*           return scc.GetPosGlobal(Pos3d(0,0,l/2.0)); */
+/*           return scc.getGlobalPosition(Pos3d(0,0,l/2.0)); */
 /*         else */
-/*           return scc.GetPosGlobal(Pos3d(0,0,-l/2.0)); */
+/*           return scc.getGlobalPosition(Pos3d(0,0,-l/2.0)); */
 /*       } */
 /*     inline Pos3d getCenterOfMassOfTop(void) const */
 /*       { return getCenterOfMassOfBase(1); } */

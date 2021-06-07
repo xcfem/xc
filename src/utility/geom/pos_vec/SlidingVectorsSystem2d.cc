@@ -53,7 +53,7 @@ void SlidingVectorsSystem2d::PrintLtx(std::ostream &os,const std::string &ud_lon
        << "Moment: " << mom*f_f << ud_f << ud_long << "\\\\" << std::endl;
   }
 Vector2d SlidingVectorsSystem2d::getResultant(const Ref2d2d &ref) const
-  { return ref.GetCooLocales(getResultant()); } 
+  { return ref.getLocalCoordinates(getResultant()); } 
 
 SlidingVectorsSystem2d SlidingVectorsSystem2d::reduceTo(const Pos2d &Q) const
   { return SlidingVectorsSystem2d(Q,getResultant(),getMoment(Q)); }

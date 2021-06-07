@@ -52,14 +52,14 @@ Vector3d XC::CartesianReferenceFrame3d::getAxisVDir(const size_t &i,const Pos3d 
   { return ref.getAxisVDir(i); }
 
 //! @brief Return the global coordinates of point p. 
-Pos3d XC::CartesianReferenceFrame3d::GetPosGlobal(const Pos3d &p) const
-  { return ref.GetPosGlobal(p); }
+Pos3d XC::CartesianReferenceFrame3d::getGlobalPosition(const Pos3d &p) const
+  { return ref.getGlobalPosition(p); }
 //! @brief Return the global coordinates of vector v.
-Vector3d XC::CartesianReferenceFrame3d::GetCooGlobales(const Vector3d &v) const
-  { return ref.GetCooGlobales(v); }
+Vector3d XC::CartesianReferenceFrame3d::getGlobalCoordinates(const Vector3d &v) const
+  { return ref.getGlobalCoordinates(v); }
 //! @brief Return the local coordinates of point p.
-Pos3d XC::CartesianReferenceFrame3d::GetPosLocal(const Pos3d &p) const
-  { return ref.GetPosLocal(p); }
+Pos3d XC::CartesianReferenceFrame3d::getLocalPosition(const Pos3d &p) const
+  { return ref.getLocalPosition(p); }
 //! @brief Return the local coordinates of vector v.
-Vector3d XC::CartesianReferenceFrame3d::GetCooLocales(const Vector3d &v) const
-  { return ref.GetCooLocales(v); }
+Vector3d XC::CartesianReferenceFrame3d::getLocalCoordinates(const Vector3d &v) const
+  { return ref.getLocalCoordinates(v); }

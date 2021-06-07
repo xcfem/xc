@@ -42,16 +42,16 @@ Rect1d2dCooSys::VGlobal Rect1d2dCooSys::getIVector(void) const
 //! the local ones.
 //!
 //! @param v: local coordinates of the vector.
-Rect1d2dCooSys::VGlobal Rect1d2dCooSys::GetCooGlobales(const VLocal &v) const
-  { return Xd2dCooSys::GetCooGlobales(FT_matrix(1,1,v)); }
+Rect1d2dCooSys::VGlobal Rect1d2dCooSys::getGlobalCoordinates(const VLocal &v) const
+  { return Xd2dCooSys::getGlobalCoordinates(FT_matrix(1,1,v)); }
 
 //! @brief Return the local coordinates of the vector from the
 //! global ones.
 //!
 //! @param v: local coordinates of the vector.
-Rect1d2dCooSys::VLocal Rect1d2dCooSys::GetCooLocales(const Rect1d2dCooSys::VGlobal &v) const
+Rect1d2dCooSys::VLocal Rect1d2dCooSys::getLocalCoordinates(const Rect1d2dCooSys::VGlobal &v) const
   {
-    const FT_matrix tmp= Xd2dCooSys::GetCooLocales(v);
+    const FT_matrix tmp= Xd2dCooSys::getLocalCoordinates(v);
     return tmp(1,1);
   }
 

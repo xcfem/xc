@@ -472,7 +472,7 @@ const XC::Vector &XC::ZeroLengthSection::getVDirStrongAxisGlobalCoord(bool initi
   {
     const Rect3d3dCooSys coo_sys= getCooSys(initialGeometry);
     const Vector eF= getVDirStrongAxisLocalCoord();
-    const Vector3d v= coo_sys.GetCooGlobales(Vector3d(eF[0],eF[1],eF[2]));
+    const Vector3d v= coo_sys.getGlobalCoordinates(Vector3d(eF[0],eF[1],eF[2]));
     static Vector retval(3);
     retval[0]= v.x(); retval[1]= v.y(); retval[2]= v.z();
     return retval;
@@ -484,7 +484,7 @@ const XC::Vector &XC::ZeroLengthSection::getVDirWeakAxisGlobalCoord(bool initial
   {
     const Rect3d3dCooSys coo_sys= getCooSys(initialGeometry);
     const Vector eD= getVDirWeakAxisLocalCoord();
-    const Vector3d v= coo_sys.GetCooGlobales(Vector3d(eD[0],eD[1],eD[2]));
+    const Vector3d v= coo_sys.getGlobalCoordinates(Vector3d(eD[0],eD[1],eD[2]));
     static Vector retval(3);
     retval[0]= v.x(); retval[1]= v.y(); retval[2]= v.z();
     return retval;

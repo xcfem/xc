@@ -46,8 +46,8 @@ class Rect1d3dCooSys: public Xd3dCooSys
       { return new Rect1d3dCooSys(*this); }
     void XAxisVector(const VGlobal &vX);
     VGlobal getIVector(void) const; //Return the global coordinates of unit vector I.
-    VGlobal GetCooGlobales(const VLocal &v) const;
-    VLocal GetCooLocales(const VGlobal &v) const;
+    VGlobal getGlobalCoordinates(const VLocal &v) const;
+    VLocal getLocalCoordinates(const VGlobal &v) const;
     virtual ~Rect1d3dCooSys(void)
       {}
   };

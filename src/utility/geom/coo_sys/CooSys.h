@@ -77,8 +77,8 @@ class CooSys: public ProtoGeom
       // en globales al mismo vector expresado en locales.
     FT_matrix GetTransA(const CooSys &dest) const;
       //Return the transformation matrix of this coordinates system to dest.
-    FT_matrix GetCooGlobales(const FT_matrix &v) const;
-    FT_matrix GetCooLocales(const FT_matrix &v) const;
+    FT_matrix getGlobalCoordinates(const FT_matrix &v) const;
+    FT_matrix getLocalCoordinates(const FT_matrix &v) const;
 
     boost::python::dict getPyDict(void) const;
     void setPyDict(const boost::python::dict &);

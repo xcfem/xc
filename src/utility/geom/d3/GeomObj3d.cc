@@ -141,7 +141,7 @@ GEOM_FT GeomObj3d::I( const unsigned short int i,
     if(hasCenterOfMass())
       {
         Ref3d3d axis(getCenterOfMass()); //
-        Pos3d pos_local= axis.GetPosLocal(o);
+        Pos3d pos_local= axis.getLocalPosition(o);
         return Iij + IArea() * pos_local(i) * pos_local(j);
       }
     else

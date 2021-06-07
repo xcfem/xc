@@ -193,7 +193,7 @@ XC::Spot *XC::GeomSection::newSpot(const Pos2d &p)
       {
         SectionReferenceFrame *sr= get_reference_system(tag_ref_sys);
         if(sr)
-          trfP= sr->GetPosGlobal(p); //Pass to global coordinates.
+          trfP= sr->getGlobalPosition(p); //Pass to global coordinates.
         else
 	  std::cerr << getClassName() << "::" << __FUNCTION__
 		    << "; reference system with identifier: "

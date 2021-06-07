@@ -40,15 +40,15 @@ Rect1d3dCooSys::VGlobal Rect1d3dCooSys::getIVector(void) const
 //! @brief Return the global coordinates of the vector.
 //!
 //! @param v: local coordinates of the vector.
-Rect1d3dCooSys::VGlobal Rect1d3dCooSys::GetCooGlobales(const VLocal &v) const
-  { return Xd3dCooSys::GetCooGlobales(FT_matrix(1,1,v)); }
+Rect1d3dCooSys::VGlobal Rect1d3dCooSys::getGlobalCoordinates(const VLocal &v) const
+  { return Xd3dCooSys::getGlobalCoordinates(FT_matrix(1,1,v)); }
 
 //! @brief Return the local coordinates of the vector.
 //!
 //! @param v: global coordinates of the vector.
-Rect1d3dCooSys::VLocal Rect1d3dCooSys::GetCooLocales(const Rect1d3dCooSys::VGlobal &v) const
+Rect1d3dCooSys::VLocal Rect1d3dCooSys::getLocalCoordinates(const Rect1d3dCooSys::VGlobal &v) const
   {
-    const FT_matrix tmp= Xd3dCooSys::GetCooLocales(v);
+    const FT_matrix tmp= Xd3dCooSys::getLocalCoordinates(v);
     return VLocal(tmp(1));
   }
 

@@ -60,15 +60,15 @@ Rect2d3dCooSys::VGlobal Rect2d3dCooSys::getKVector(void) const
 //! @brief Return the global coordinates of the vector.
 //!
 //! @param v: local coordinates of the vector.
-Rect2d3dCooSys::VGlobal Rect2d3dCooSys::GetCooGlobales(const VLocal &v) const
-  { return Xd3dCooSys::GetCooGlobales(v.getMatrix()); }
+Rect2d3dCooSys::VGlobal Rect2d3dCooSys::getGlobalCoordinates(const VLocal &v) const
+  { return Xd3dCooSys::getGlobalCoordinates(v.getMatrix()); }
 
 //! @brief Return the local coordinates of the vector.
 //!
 //! @param v: global coordinates of the vector.
-Rect2d3dCooSys::VLocal Rect2d3dCooSys::GetCooLocales(const VGlobal &v) const
+Rect2d3dCooSys::VLocal Rect2d3dCooSys::getLocalCoordinates(const VGlobal &v) const
   {
-    const FT_matrix tmp= Xd3dCooSys::GetCooLocales(v);
+    const FT_matrix tmp= Xd3dCooSys::getLocalCoordinates(v);
     return VLocal(tmp(1),tmp(2));
   }
 

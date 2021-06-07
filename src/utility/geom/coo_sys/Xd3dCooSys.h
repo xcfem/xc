@@ -63,8 +63,8 @@ class Xd3dCooSys: public CooSys
     //Return the direction vector of the axis.
     virtual DGlobal getAxisDir(const size_t &axis) const;
 
-    VGlobal GetCooGlobales(const FT_matrix &v) const;
-    FT_matrix GetCooLocales(const VGlobal &v) const;
+    VGlobal getGlobalCoordinates(const FT_matrix &v) const;
+    FT_matrix getLocalCoordinates(const VGlobal &v) const;
   };
 
 #endif

@@ -105,13 +105,13 @@ GEOM_FT SlidingVectorsSystem3d::getMoment(const Line3d &e) const
 Vector3d SlidingVectorsSystem3d::getMoment(const Ref3d3d &ref) const
   {
     SlidingVector3d m= getMoment(ref.Org());
-    return ref.GetCooLocales(m);
+    return ref.getLocalCoordinates(m);
   }
 
 //! @brief Return the resultant vector expressed in the
 //! reference frame argument.
 Vector3d SlidingVectorsSystem3d::getResultant(const Ref3d3d &ref) const
-  { return ref.GetCooLocales(getResultant()); } 
+  { return ref.getLocalCoordinates(getResultant()); } 
 
 bool SlidingVectorsSystem3d::Nulo(void) const
   {

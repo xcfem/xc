@@ -60,16 +60,16 @@ class SectionReferenceFrame: public EntGeomSection
 
     //! @brief Return the position of point p expressed in local coordinates
     //! expresada en global coordinates.
-    virtual Pos2d GetPosGlobal(const Pos2d &p) const= 0;
+    virtual Pos2d getGlobalPosition(const Pos2d &p) const= 0;
     //! @brief Return the vector v expressed in local coordinates
     //! expressed in global coordinates.
-    virtual Vector2d GetCooGlobales(const Vector2d &v) const= 0;
+    virtual Vector2d getGlobalCoordinates(const Vector2d &v) const= 0;
     //! @brief Return the position of point p expressed in global coordinates
     //! expresada en local coordinates.
-    virtual Pos2d GetPosLocal(const Pos2d &p) const= 0;
+    virtual Pos2d getLocalPosition(const Pos2d &p) const= 0;
     //! @brief Return the vector v expressed in global coordinates
     //! expressed in local coordinates.
-    virtual Vector2d GetCooLocales(const Vector2d &v) const= 0;
+    virtual Vector2d getLocalCoordinates(const Vector2d &v) const= 0;
 
 
   };

@@ -65,13 +65,13 @@ class ReferenceFrame: public EntMdlrBase
     Vector3d getKVector(const Pos3d &) const;
 
     //! @brief Return the global coordinates of point p.
-    virtual Pos3d GetPosGlobal(const Pos3d &p) const= 0;
+    virtual Pos3d getGlobalPosition(const Pos3d &p) const= 0;
     //! @brief Return the global coordinates of vector v.
-    virtual Vector3d GetCooGlobales(const Vector3d &v) const= 0;
+    virtual Vector3d getGlobalCoordinates(const Vector3d &v) const= 0;
     //! @brief Return the local coordinates of point p.
-    virtual Pos3d GetPosLocal(const Pos3d &p) const= 0;
+    virtual Pos3d getLocalPosition(const Pos3d &p) const= 0;
     //! @brief Return the local coordinates of vector v.
-    virtual Vector3d GetCooLocales(const Vector3d &v) const= 0;
+    virtual Vector3d getLocalCoordinates(const Vector3d &v) const= 0;
 
 
   };

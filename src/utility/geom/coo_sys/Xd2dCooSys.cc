@@ -56,17 +56,17 @@ Xd2dCooSys::VGlobal Xd2dCooSys::getAxisVDir(const size_t &axis) const
 //! @brief Return the global coordinates of the vector.
 //!
 //! @param v: Local coordinates of the vector.
-Xd2dCooSys::VGlobal Xd2dCooSys::GetCooGlobales(const FT_matrix &v) const
+Xd2dCooSys::VGlobal Xd2dCooSys::getGlobalCoordinates(const FT_matrix &v) const
   {
-    const FT_matrix tmp= CooSys::GetCooGlobales(v);
+    const FT_matrix tmp= CooSys::getGlobalCoordinates(v);
     return VGlobal(tmp(1),tmp(2)); 
   }
 
 //! @brief Return the local coordinates of the vector.
 //!
 //! @param v: Global coordinates of the vector.
-FT_matrix Xd2dCooSys::GetCooLocales(const Xd2dCooSys::VGlobal &v) const
-  { return CooSys::GetCooLocales(v.getMatrix()); }
+FT_matrix Xd2dCooSys::getLocalCoordinates(const Xd2dCooSys::VGlobal &v) const
+  { return CooSys::getLocalCoordinates(v.getMatrix()); }
 
 //! @brief Hace que el vector básico 1 tenga la dirección
 //! y sentido del being passed as parameter. If the system has
