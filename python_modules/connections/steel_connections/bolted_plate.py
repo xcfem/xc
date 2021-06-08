@@ -586,8 +586,10 @@ class BoltedPlateBase(object):
         retval= list() 
         for key in self.weldLines:
             wl= self.weldLines[key]
-            retval.append(self.refSys.to_2d(wl.getFromPoint()))
-            retval.append(self.refSys.to_2d(wl.getToPoint()))
+            pA= self.refSys.getLocalPosition(wl.getFromPoint())
+            retval.append(geom.Pos2d(pA.x, pA.y))
+            pB= self.refSys.getLocalPosition(wl.getToPoint())
+            retval.append(geom.Pos2d(pB.x, pB.y))
         return retval
     
     def getContour(self):
@@ -597,11 +599,15 @@ class BoltedPlateBase(object):
                        to global coordinate transformation.
         '''
         contourVertices3d= self.getCoreContour3d()
-        contourVertices2d= self.getCoreContour2d()
-        contourVertices2d.extend(self.getWeldLinesVertices2d())
-        print('contour vertices 2D: ', contourVertices2d)
-        convexHull2d= geom.get_convex_hull2d(contourVertices2d)
-        print('convex hull: ', convexHull2d)
+        # contourVertices2d= self.getCoreContour2d()
+        # contourVertices2d.extend(self.getWeldLinesVertices2d())
+        # print('contour vertices 2D: ', contourVertices2d)
+        # convexHull2d= geom.get_convex_hull2d(contourVertices2d)
+        # print('convex hull: ', convexHull2d)
+        # contourVertices3d= list()
+        # for p in convexHull2d.getVertices():
+        #     p3d= geom.Pos3d(p.x, p.y, 0.0)
+        #     contourVertices3d.append(self.refSys.getGlobalPosition(p3d))
         return contourVertices3d
 
     def getBlocks(self, blockProperties= None, loadTag= None, loadDirI= None, loadDirJ= None, loadDirK= None):
