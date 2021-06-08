@@ -101,6 +101,11 @@ class ProjectDirTree(object):
             the internal forces.'''
         return self.getFullResultsPath()+'/'+self.intForcPath
     
+    def getReactionsResultsPath(self):
+        ''' Return the path for the files that contains
+            the reactions.'''
+        return self.getFullResultsPath()+'/reactions/'
+    
     def getFullVerifPath(self):
         ''' Return the full path for the limit state checking files.'''
         return self.getFullResultsPath()+'/'+self.verifPath
@@ -386,6 +391,7 @@ class ProjectDirTree(object):
         ''' Create the project directory tree.'''
         retval= list()
         retval.append(self.getInternalForcesResultsPath())
+        retval.append(self.getReactionsResultsPath())
         retval.append(self.getFullVerifPath())
         retval.append(self.getFullReportPath())
         retval.append(self.getFullGraphicsPath())

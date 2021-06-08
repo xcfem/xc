@@ -14,6 +14,7 @@ import pickle
 import os
 from solution import predefined_solutions
 from postprocess.reports import export_internal_forces as eif
+from postprocess.reports import export_reactions as er
 from misc_utils import log_messages as lmsg
 from materials.sections import internal_forces
 from collections import defaultdict
@@ -82,9 +83,12 @@ class LimitStateData(object):
         self.controller= None
         
     def getInternalForcesFileName(self):
-        '''Return the file name to read: combination name, element number and 
-        internal forces.'''
+        '''Return the name of the file where internal forces are stored.'''
         return self.envConfig.projectDirTree.getInternalForcesResultsPath()+'intForce_'+ self.label +'.json'
+    
+    def getReactionsFileName(self):
+        '''Return the name of the file where reactions are stored.'''
+        return self.envConfig.projectDirTree.getReactionsResultsPath()+'reactions_'+ self.label +'.json'
         
     def readInternalForces(self, setCalc):
         ''' Read the internal forces for the elements in the set argument.
@@ -92,6 +96,13 @@ class LimitStateData(object):
         :param setCalc: elements to read internal forces for.
         '''
         return readIntForcesFile(self.getInternalForcesFileName(), setCalc)
+    
+    def readReactions(self, nodeSet):
+        ''' Read the reactions for the nodes in the set argument.
+
+        :param nodeSet: nodes to read reactions for.
+        '''
+        return readReactionsFile(self.getReactionsFileName(), nodeSet)
 
     def getInternalForcesDict(self, nmbComb, elems):
         '''Creates a dictionary with the element's internal forces.
@@ -100,6 +111,14 @@ class LimitStateData(object):
          :param elems: element set.
         '''
         return eif.getInternalForcesDict(nmbComb,elems)
+    
+    def getReactionsDict(self, nmbComb, constrainedNodes):
+        '''Creates a dictionary with the element's internal forces.
+
+         :param nmbComb: combination name.
+         :param constrainedNodes: constrainedNodes.
+        '''
+        return er.getReactionsDict(nmbComb, constrainedNodes)
     
     def getDisplacementsFileName(self):
         '''Return the file name to read: combination name, node number and 
@@ -132,8 +151,10 @@ class LimitStateData(object):
         ''' Create the internal forces and displacement output files.'''
         self.envConfig.projectDirTree.createTree()
         self.fNameIntForc= self.getInternalForcesFileName()
+        self.fNameReactions= self.getReactionsFileName()
         self.fNameDispl= self.getDisplacementsFileName()
         os.system("rm -f " + self.fNameIntForc) #Clear obsolete files.
+        os.system("rm -f " + self.fNameReactions)
         os.system("rm -f " + self.fNameDispl)
         fDisp= open(self.fNameDispl,"w")
         fDisp.write('Comb., Node, uX, uY, uZ, rotX, rotY , rotZ\n')
@@ -153,12 +174,24 @@ class LimitStateData(object):
         fDisp.close()
 
     def writeInternalForces(self, internalForcesDict):
-        '''Write the internal forces results.'''
+        '''Write the internal forces results.
+
+        :param internalForcesDict: dictionary containing the internal forces.
+        '''
         with open(self.fNameIntForc, 'w') as outfile:
             json.dump(internalForcesDict, outfile)
         outfile.close()
         
-    def saveAll(self, combContainer, setCalc, solutionProcedureType= defaultSolutionProcedureType, lstSteelBeams=None):
+    def writeReactions(self, reactionsDict):
+        '''Write the reactions.
+
+        :param reactionsDict: dictionary containing the reactions.
+        '''
+        with open(self.fNameReactions, 'w') as outfile:
+            json.dump(reactionsDict, outfile)
+        outfile.close()
+        
+    def saveAll(self, combContainer, setCalc, solutionProcedureType= defaultSolutionProcedureType, lstSteelBeams=None, constrainedNodeSet= None):
         '''Write internal forces, displacements, .., for each combination
 
         :param setCalc: set of entities for which the verification is 
@@ -166,6 +199,7 @@ class LimitStateData(object):
         :param solutionProcedureType: type of the solution strategy to solve
                                       the finite element problem.
         :param lstSteelBeams: list of steel beams to analyze (defaults to None)
+        :param constrainedNodeSet: constrained nodes (defaults to None)
         '''
         preprocessor= setCalc.getPreprocessor
         feProblem= preprocessor.getProblem
@@ -178,6 +212,7 @@ class LimitStateData(object):
         nodSet= setCalc.nodes
         self.createOutputFiles()
         internalForcesDict= dict()
+        reactionsDict= dict()
         for key in loadCombinations.getKeys():
             comb= loadCombinations[key]
             preprocessor.resetLoadCase()
@@ -190,9 +225,11 @@ class LimitStateData(object):
                     sb.updateReductionFactors()
             #Writing results.
             internalForcesDict.update(self.getInternalForcesDict(comb.getName,elemSet))
+            reactionsDict.update(self.getReactionsDict(comb.getName,constrainedNodeSet))
             self.writeDisplacements(comb.getName,nodSet)
             comb.removeFromDomain() #Remove combination from the model.
         self.writeInternalForces(internalForcesDict)
+        self.writeReactions(reactionsDict)
 #20181117
     def runChecking(self,outputCfg, sections= ['Sect1', 'Sect2']):
         '''This method reads, for the elements in setCalc,  the internal 
@@ -415,6 +452,7 @@ class VonMisesStressLimitStateData(LimitStateData):
         :param elems: element set.
         '''
         return eif.getInternalForcesDict(nmbComb,elems, vonMisesStressId= self.vonMisesStressId)
+    
     def readInternalForces(self, setCalc):
         ''' Read the internal forces for the elements in the set argument.
 

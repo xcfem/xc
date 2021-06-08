@@ -8,6 +8,7 @@ from __future__ import division
 from __future__ import print_function
 
 from postprocess.reports import export_internal_forces as eif
+from postprocess.reports import export_reactions as er
 from colorama import Fore
 from colorama import Style
 from misc_utils import log_messages as lmsg
@@ -20,27 +21,23 @@ class AnalysisContextBase(object):
 
         :ivar modelSpace: model space of the problem.
         :ivar calcSet: element set to compute internal forces on.
-        :ivar reactionNodes: nodes attached to the foundation.
-        :ivar reactionWriter: comma separated values writer to use for 
-                              writing reactions.
         :ivar reactionCheckTolerance: tolerance when checking reaction values.
         :ivar deactivationCandidates: set of elements that could be deactivated
                                       under certain circumstances (i.e. 
                                       no compression elements...).
         :ivar internalForcesDict: dictionary containing the internal forces for each element and each combination.
+        :ivar reactionsDict: dictionary containing the reactionsfor each restrained node and each combination.
         :ivar failedCombinations: list with the names of the combinations that have failed to solve.
         :ivar preloadPatterns: names of the load patterns that are introduced 
                                during the preload phase (normally self weight 
                                and dead loads).
     '''
-    def __init__(self, modelSpace, calcSet, reactionNodes, reactionWriter, reactionCheckTolerance, deactivationCandidates):
+    def __init__(self, modelSpace, calcSet, reactionNodeSet, reactionCheckTolerance, deactivationCandidates):
         ''' Constructor.
 
         :param modelSpace: model space of the problem.
         :param calcSet: element set to compute internal forces on.
-        :param reactionNodes: nodes attached to the foundation.
-        :param reactionWriter: comma separated values writer to use for 
-                       writing reactions.
+        :param reactionNodeSet: node set to compute reactions on.
         :param reactionCheckTolerance: tolerance when checking reaction values.
         :param deactivationCandidates: set of elements that could be deactivated
                                       under certain circumstances (i.e. 
@@ -48,8 +45,7 @@ class AnalysisContextBase(object):
         '''
         self.modelSpace= modelSpace
         self.calcSet= calcSet
-        self.reactionNodes= reactionNodes
-        self.reactionWriter= reactionWriter
+        self.reactionNodeSet= reactionNodeSet
         self.reactionCheckTolerance= reactionCheckTolerance
         self.deactivationCandidates= deactivationCandidates
         self.preloadPatterns= None
@@ -151,5 +147,6 @@ class AnalysisContextBase(object):
         lmsg.log('updating results for: '+comb.name)
         # Update internal forces.
         self.internalForcesDict.update(eif.getInternalForcesDict(comb.getName,self.calcSet.elements))
+        self.reactionsDict.update(er.getReactionsDict(comb.getName,self.reactionNodeSet.nodes))
         # Write displacements.
         limitState.writeDisplacements(comb.getName,self.calcSet.nodes)

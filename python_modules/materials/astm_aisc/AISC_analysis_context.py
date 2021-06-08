@@ -18,14 +18,12 @@ class AISCAnalysisContext(analysis_context.AnalysisContextBase):
         :ivar softSteelMembers: steel members to be "softened" according to 
                                 clause C2.3 of AISC 360-16.
     '''
-    def __init__(self, modelSpace, calcSet, reactionNodes, reactionWriter, reactionCheckTolerance, deactivationCandidates, lstSteelBeams, softSteelMembers):
+    def __init__(self, modelSpace, calcSet, reactionNodeSet, reactionCheckTolerance, deactivationCandidates, lstSteelBeams, softSteelMembers):
         ''' Constructor.
 
         :param modelSpace: model space of the problem.
         :param calcSet: element set to compute internal forces on.
-        :param reactionNodes: nodes attached to the foundation.
-        :param reactionWriter: comma separated values writer to use for 
-                       writing reactions.
+        :param reactionNodeSet: node set to compute reactions on.
         :param reactionCheckTolerance: tolerance when checking reaction values.
         :param deactivationCandidates: set of elements that could be deactivated
                                       under certain circumstances (i.e. 
@@ -35,7 +33,7 @@ class AISCAnalysisContext(analysis_context.AnalysisContextBase):
         :param softSteelMembers: steel members to be "softened" according to 
                                  clause C2.3 of AISC 360-16.
         '''
-        super(AISCAnalysisContext,self).__init__(modelSpace, calcSet, reactionNodes, reactionWriter, reactionCheckTolerance, deactivationCandidates)
+        super(AISCAnalysisContext,self).__init__(modelSpace, calcSet, reactionNodeSet, reactionCheckTolerance, deactivationCandidates)
         self.lstSteelBeams= lstSteelBeams
         self.softSteelMembers= softSteelMembers
 
@@ -149,9 +147,11 @@ class AISCAnalysisContext(analysis_context.AnalysisContextBase):
         # Non linear analysis
         limitState.createOutputFiles()
         self.internalForcesDict= dict()
+        self.reactionsDict= dict()
         self.failedCombinations= list()
         for key in loadCombinations.getKeys():
             comb= loadCombinations[key]
             self.eluSolutionSteps(comb, limitState)
         limitState.writeInternalForces(self.internalForcesDict)
+        limitState.writeReactions(self.reactionsDict)
         self.failedCombinationsMessage(loadCombinations, limitState)
