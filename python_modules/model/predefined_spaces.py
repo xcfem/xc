@@ -717,7 +717,7 @@ class PredefinedSpace(object):
             self.analysis= solProc.analysis
         result= self.analysis.analyze(numSteps)
         if(calculateNodalReactions):
-            self.calculateNodalReactions(includeInertia, reactionCheckTolerance)
+            result= self.calculateNodalReactions(includeInertia, reactionCheckTolerance)
         return result
 
     def zeroEnergyModes(self, numModes= 1):
