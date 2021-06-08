@@ -64,6 +64,10 @@ See [here](https://github.com/xcfem/xc/blob/master/install/install.md)
 - [C++ Pocket Reference 1st Edition](https://geni.us/w3tnB9).
 
 
+## Analysis of structures
+
+- [Dynamics of structures](https://www.pearson.com/us/higher-education/product/Chopra-Dynamics-of-Structures-3rd-Edition/9780131561748.html)
+
 ## Finite element analysis
 
 - [The Finite Element Method: Its Basis and Fundamentals](https://www.elsevier.com/books/the-finite-element-method-its-basis-and-fundamentals/zienkiewicz/978-1-85617-633-0)
