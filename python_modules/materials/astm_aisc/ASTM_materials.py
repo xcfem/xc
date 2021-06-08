@@ -1854,20 +1854,22 @@ class ConnectedMember(connected_members.ConnectedMemberMetaData):
         topPlateCenter= self.memberOrigin + halfHPlate*baseVectors[1] + halfD*baseVectors[0]
         return geom.Ref3d3d(topPlateCenter, baseVectors[0], baseVectors[2])
 
-    def getColumnWeldLines(self, column, plateRefSys):
+    def getColumnWeldLines(self, column, plate):
         ''' Return the lines of the column that will be
             welded with the bolted plate represented
             by the reference system argument.
 
         :param column: column to which the beam is attached to.
-        :param plateRefSys: coordinate reference system of the plate
-                            to connect.
+        :param plate: plate to connect.
         '''
         retval= dict()
         fr= 10.0
-        plateOrigin= plateRefSys.getOrg()
-        platePlane= plateRefSys.getXYPlane()
+        plateOrigin= plate.refSys.getOrg()
+        print('plate origin: ', plateOrigin)
+        platePlane= plate.refSys.getXYPlane()
         topFlangeContour= geom.Polygon3d(column.getTopFlangeMidPlaneContourPoints(column.memberOrigin, factor= fr))
+        print('top flange contour: ', topFlangeContour)
+        quit()
         topFlangeLine= topFlangeContour.getIntersection(platePlane)
         bottomFlangeContour= geom.Polygon3d(column.getBottomFlangeMidPlaneContourPoints(column.memberOrigin, factor= fr))
         bottomFlangeLine= bottomFlangeContour.getIntersection(platePlane)
@@ -1876,8 +1878,11 @@ class ConnectedMember(connected_members.ConnectedMemberMetaData):
             webMidPlane= webContour.getPlane()
             webLine= webContour.getIntersection(platePlane)
             plateHalfSpace= geom.HalfSpace3d(webMidPlane, plateOrigin)
+            print('clip top flange')
             halfTopFlange= plateHalfSpace.clip(topFlangeLine)
+            print('clip bottom flange')
             halfBottomFlange= plateHalfSpace.clip(bottomFlangeLine)
+            print('clipped.')
             retval['bottomFlangeWeld']= halfBottomFlange
             retval['webWeld']= webLine
             retval['topFlangeWeld']= halfTopFlange
@@ -1919,13 +1924,13 @@ class ConnectedMember(connected_members.ConnectedMemberMetaData):
         topFlangePlate= self.getFlangeBoltedPlate(column= column, boltSteel= boltSteel, plateSteel= plateSteel)
         # Top plate
         ## Compute top plate reference system.
-        topPlateRefSys= self.getTopFlangeBoltedPlateRefSys(connectionOrigin, topFlangePlate)
-        topFlangePlate.setRefSys(topPlateRefSys)
+        topFlangePlateRefSys= self.getTopFlangeBoltedPlateRefSys(connectionOrigin, topFlangePlate)
+        topFlangePlate.setRefSys(topFlangePlateRefSys)
         ## Compute connection lines
-        topFlangePlate.setWeldLines(self.getColumnWeldLines(column, topPlateRefSys))
+        topFlangePlate.setWeldLines(self.getColumnWeldLines(column, topFlangePlate))
         if(self.connectedTo=='web'):
-            eccentricity= column.shape.getFlangeWidth()/2*topPlateRefSys.getIVector()
-            topPlateRefSys.move(-eccentricity)
+            eccentricity= column.shape.getFlangeWidth()/2*topFlangePlateRefSys.getIVector()
+            topFlangePlateRefSys.move(-eccentricity)
             #topFlangePlate.eccentricity= eccentricity
         return topFlangePlate.getBlocks(blockProperties= blockProperties)
 

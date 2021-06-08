@@ -1255,6 +1255,7 @@ int XC::PartitionedDomain::addRecorder(Recorder &theRecorder)
     return 0;
   }
 
+//! @brief Remove recorders from the domain.
 int XC::PartitionedDomain::removeRecorders(void)
   {
     if(this->XC::Domain::removeRecorders() < 0)
@@ -1278,6 +1279,9 @@ int XC::PartitionedDomain::removeRecorders(void)
               }
           }
       }
+#ifdef _PARALLEL_PROCESSING
+    this->barrierCheck(1.0);
+#endif
     return 0;
   }
 
