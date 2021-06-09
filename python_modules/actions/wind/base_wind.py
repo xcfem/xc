@@ -12,6 +12,8 @@ __email__= "ana.Ortega.Ort@gmail.com"
 import math
 from enum import Enum
 from misc_utils import log_messages as lmsg
+import xc_base
+import geom
 
 class windSurfaceOrientation(Enum):
     windward= 0
