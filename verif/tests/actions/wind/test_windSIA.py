@@ -12,12 +12,6 @@ __license__= "GPL"
 __version__= "1.0"
 __email__= "l.pereztato@gmail.com  ana.Ortega.Ort@gmail.com"
 
-E= 30e6 # Young modulus (psi)
-nu= 0.33 # Poisson's ratio
-rho= 1.5 # Density
-
-
-
 z= 10
 catTerrain= "III"
 qp0= 1.1

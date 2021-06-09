@@ -9,11 +9,14 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "ana.Ortega.Ort@gmail.com"
 
-import xc_base
-import geom
-import xc
 import math
+from enum import Enum
 from misc_utils import log_messages as lmsg
+
+class windSurfaceOrientation(Enum):
+    windward= 0
+    side= 1
+    leeward= 2
 
 class windParams(object):
     '''Basic wind parameters to define wind load.
