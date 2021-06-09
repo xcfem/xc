@@ -359,6 +359,24 @@ class PredefinedSpace(object):
         self.constraints.newSPConstraint(nodeTag,dof,prescribedDisp)
         self.fixedNodesTags.add(nodeTag)
 
+    def fixNode(self, DOFpattern, nodeTag, restrainedNodeId: str= None):
+        '''Restrain DOF of a node according to the DOFpattern, which is a given
+         string of type '0FF' that matches the DOFs (uX,uY,uZ)
+         where 'F' means FREE and '0' means constrained with value=0
+         Note: DOFpaterns '0FF','0_FF', ... are equivalent
+
+         :param nodeTag: node identifier.
+         :param restrainedNodeId: identifier of the node to display with
+                                  the reaction values.
+        '''
+        if(restrainedNodeId):
+            nod= self.preprocessor.getNodeHandler.getNode(nodeTag)
+            nod.setProp('restrainedNodeId', restrainedNodeId)
+        DOFpatclean= DOFpattern.replace('_','')
+        DOFtoConstr= [i for i in range(len(DOFpatclean)) if DOFpatclean[i]=='0']
+        for nc in DOFtoConstr:
+            self.newSPConstraint(nodeTag,nc,0.0)
+            
     def setPrescribedDisplacements(self, nodeTag: int, prescDisplacements: Sequence[float]):
         '''Prescribe displacement for node DOFs.
 
@@ -1020,27 +1038,32 @@ class SolidMechanics2D(PredefinedSpace):
         disp= nod.getDisp
         return xc.Vector([disp[self.Ux],disp[self.Uy]])
     
-    def fixNode00(self, nodeTag: int):
+    def fixNode00(self, nodeTag: int, restrainedNodeId: str= None):
         '''Restrain both node DOFs (i. e. make them zero).
 
          :param nodeTag: node identifier.
+         :param restrainedNodeId: identifier of the node to display with
+                                  the reaction values.
         '''
-        self.newSPConstraint(nodeTag,0,0.0) # nodeTag, DOF, constrValue
-        self.newSPConstraint(nodeTag,1,0.0)
+        self.fixNode('00', nodeTag, restrainedNodeId)
 
-    def fixNode0F(self, nodeTag: int):
+    def fixNode0F(self, nodeTag: int, restrainedNodeId: str= None):
         '''Restrain only displacement DOFs (i. e. Ux= 0 and Uy= 0).
 
          :param nodeTag: node identifier.
+         :param restrainedNodeId: identifier of the node to display with
+                                  the reaction values.
         '''
-        self.newSPConstraint(nodeTag,0,0.0) # nodeTag, DOF, constrValue
+        self.fixNode('0F', nodeTag, restrainedNodeId)
         
-    def fixNodeF0(self, nodeTag: int):
+    def fixNodeF0(self, nodeTag: int, restrainedNodeId: str= None):
         '''Restrain only displacement DOFs (i. e. Ux= 0 and Uy= 0).
 
          :param nodeTag: node identifier.
+         :param restrainedNodeId: identifier of the node to display with
+                                  the reaction values.
         '''
-        self.newSPConstraint(nodeTag,1,0.0) # nodeTag, DOF, constrValue
+        self.fixNode('F0', nodeTag, restrainedNodeId)
 
 def gdls_elasticidad2D(nodes):
     '''Defines the dimension of the space: nodes by two coordinates (x,y) and two DOF for each node (Ux,Uy)
@@ -1279,59 +1302,72 @@ class StructuralMechanics2D(StructuralMechanics):
         else:
             lmsg.error('Unknown transformation type: \''+trfType+'\'')
         return retval
-
-    def fixNode000(self, nodeTag):
+    
+    def fixNode000(self, nodeTag, restrainedNodeId: str= None):
         '''Restrain all three node DOFs (i. e. make them zero).
 
          :param nodeTag: node identifier.
+         :param restrainedNodeId: identifier of the node to display with
+                                  the reaction values.
         '''
-        self.newSPConstraint(nodeTag,0,0.0) # nodeTag, DOF, constrValue
-        self.newSPConstraint(nodeTag,1,0.0)
-        self.newSPConstraint(nodeTag,2,0.0)
+        self.fixNode('000', nodeTag, restrainedNodeId)
 
-    def fixNode00F(self, nodeTag):
+    def fixNode00F(self, nodeTag, restrainedNodeId: str= None):
         '''Restrain only displacement DOFs (i. e. Ux= 0 and Uy= 0).
 
          :param nodeTag: node identifier.
+         :param restrainedNodeId: identifier of the node to display with
+                                  the reaction values.
         '''
-        self.newSPConstraint(nodeTag,0,0.0) # nodeTag, DOF, constrValue
-        self.newSPConstraint(nodeTag,1,0.0)
+        self.fixNode('00F', nodeTag, restrainedNodeId)
 
-    def fixNode0F0(self, nodeTag):
+    def fixNode0F0(self, nodeTag, restrainedNodeId: str= None):
         '''Restrain all three node DOFs (i. e. make them zero).
 
          :param nodeTag: node identifier.
+         :param restrainedNodeId: identifier of the node to display with
+                                  the reaction values.
         '''
-        self.newSPConstraint(nodeTag,0,0.0) # nodeTag, DOF, constrValue
-        self.newSPConstraint(nodeTag,2,0.0)
+        self.fixNode('0F0', nodeTag, restrainedNodeId)
 
-    def fixNode0FF(self, nodeTag):
+    def fixNode0FF(self, nodeTag, restrainedNodeId: str= None):
         '''Restrain only X displacement DOF (i. e. Ux= 0).
 
          :param nodeTag: node identifier.
+         :param restrainedNodeId: identifier of the node to display with
+                                  the reaction values.
         '''
-        self.newSPConstraint(nodeTag,0,0.0) 
+        self.fixNode('0FF', nodeTag, restrainedNodeId)
 
-    def fixNodeF0F(self, nodeTag):
+    def fixNodeF0F(self, nodeTag, restrainedNodeId: str= None):
         '''Restrain only Y displacement DOF (i. e. Uy= 0).
 
          :param nodeTag: node identifier.
+         :param restrainedNodeId: identifier of the node to display with
+                                  the reaction values.
         '''
-        self.newSPConstraint(nodeTag,1,0.0) 
+        self.fixNode('F0F', nodeTag, restrainedNodeId)
 
-    def fixNodeFF0(self, nodeTag):
+    def fixNodeFF0(self, nodeTag, restrainedNodeId: str= None):
         '''Restrain only rotation DOF (i. e. Theta= 0).
 
          :param nodeTag: node identifier.
+         :param restrainedNodeId: identifier of the node to display with
+                                  the reaction values.
         '''
-        self.newSPConstraint(nodeTag,2,0.0)
+        self.fixNode('FF0', nodeTag, restrainedNodeId)
 
-    def fixNodesLine(self, line):
-        '''Restrain all DOFs of the line nodes.'''  
+    def fixNodesLine(self, line, restrainedNodeId: str= None):
+        '''Restrain all DOFs of the line nodes.
+        
+        :param line: line whose nodes will be restrained.
+        :param restrainedNodeId: identifier of the node to display with
+                                 the reaction values.
+        '''  
         nn= line.getNumNodes
         for i in range(1,nn+1):
             nodeTag= line.getNodeI(i).tag
-            self.fixNode000(nodeTag)
+            self.fixNode000(nodeTag, restrainedNodeId)
             
 
 def getStructuralMechanics2DSpace(preprocessor: xc.Preprocessor):
@@ -1468,27 +1504,15 @@ class SolidMechanics3D(PredefinedSpace):
         disp= nod.getDisp
         return xc.Vector([disp[self.Ux],disp[self.Uy],disp[self.Uz]])
 
-    def fixNode000(self, nodeTag):
+    def fixNode000(self, nodeTag, restrainedNodeId: str= None):
         '''Restrain all three node DOFs (i. e. make them zero).
 
-          :param nodeTag: node identifier.
-        '''
-        self.newSPConstraint(nodeTag,0,0.0) # nodeTag, DOF, constrValue
-        self.newSPConstraint(nodeTag,1,0.0)
-        self.newSPConstraint(nodeTag,2,0.0)
-        
-    def fixNode(self,DOFpattern,nodeTag):
-        '''Restrain DOF of a node according to the DOFpattern, which is a given
-         string of type '0FF' that matches the DOFs (uX,uY,uZ)
-         where 'F' means FREE and '0' means constrained with value=0
-         Note: DOFpaterns '0FF','0_FF', ... are equivalent
-
          :param nodeTag: node identifier.
+         :param restrainedNodeId: identifier of the node to display with
+                                  the reaction values.
         '''
-        DOFpatclean=DOFpattern.replace('_','')
-        DOFtoConstr=[i for i in range(len(DOFpatclean)) if DOFpatclean[i]=='0']
-        for nc in DOFtoConstr:
-            self.newSPConstraint(nodeTag,nc,0.0)
+        self.fixNode('000', nodeTag, restrainedNodeId)
+        
 
 def gdls_elasticidad3D(nodes):
     '''Defines the dimension of the space: nodes by three coordinates (x,y,z) 
@@ -1631,7 +1655,7 @@ class StructuralMechanics3D(StructuralMechanics):
         ''' Return a vector with the rotational components of the node 
             motion.
 
-          :param nodeTag: node identifier.
+         :param nodeTag: node identifier.
         '''
         nod= self.preprocessor.getNodeHandler.getNode(nodeTag)
         disp= nod.getDisp
@@ -1688,179 +1712,208 @@ class StructuralMechanics3D(StructuralMechanics):
             lmsg.error('Unknown transformation type: \''+trfType+'\'')
         return retval
 
-    def fixNode(self,DOFpattern,nodeTag):
-        '''Restrain DOF of a node according to the DOFpattern, which is a given
-         string of type '0FF_00F' that matches the DOFs (uX,uY,uZ,rotX,rotY,rotZ)
-         where 'F' means FREE and '0' means constrained with value=0
-         Note: DOFpaterns '0FF_00F','0FF00F','0_FF_0_0F', ... are equivalent
-
-         :param nodeTag: node identifier.
-        '''
-        DOFpatclean=DOFpattern.replace('_','')
-        DOFtoConstr=[i for i in range(len(DOFpatclean)) if DOFpatclean[i]=='0']
-        for nc in DOFtoConstr:
-            self.newSPConstraint(nodeTag,nc,0.0)
-
-    def fixNode000_000(self, nodeTag):
+    def fixNode000_000(self, nodeTag, restrainedNodeId: str= None):
         '''Restrain all six node DOFs (i. e. make them zero).
 
          :param nodeTag: node identifier.
+         :param restrainedNodeId: identifier of the node to display with
+                                  the reaction values.
         '''
-        self.fixNode("000_000",nodeTag)
+        self.fixNode("000_000", nodeTag, restrainedNodeId)
 
-    def fixNode000_FFF(self, nodeTag):
+    def fixNode000_FFF(self, nodeTag, restrainedNodeId: str= None):
         '''Restrain only displacement DOFs (i. e. Ux= 0, Uy= 0 and Uz= 0).
 
          :param nodeTag: node identifier.
+         :param restrainedNodeId: identifier of the node to display with
+                                  the reaction values.
         '''
-        self.fixNode('000_FFF', nodeTag)
+        self.fixNode('000_FFF', nodeTag, restrainedNodeId)
 
-    def fixNode000_0FF(self, nodeTag):
+    def fixNode000_0FF(self, nodeTag, restrainedNodeId: str= None):
         '''Restrain the displacements (Ux,Uy and Uz) and
          the rotation about X axis.
 
          :param nodeTag: node identifier.
+         :param restrainedNodeId: identifier of the node to display with
+                                  the reaction values.
         '''
-        self.fixNode('000_0FF', nodeTag)
+        self.fixNode('000_0FF', nodeTag, restrainedNodeId)
 
-    def fixNode000_F0F(self, nodeTag):
+    def fixNode000_F0F(self, nodeTag, restrainedNodeId: str= None):
         '''Restrain the displacements (Ux,Uy and Uz) and
          the rotation about Y axis.
 
          :param nodeTag: node identifier.
+         :param restrainedNodeId: identifier of the node to display with
+                                  the reaction values.
         '''
-        self.fixNode('000_F0F', nodeTag)
+        self.fixNode('000_F0F', nodeTag, restrainedNodeId)
 
-    def fixNode000_FF0(self, nodeTag):
+    def fixNode000_FF0(self, nodeTag, restrainedNodeId: str= None):
         '''Restrain the displacements (Ux,Uy and Uz) and
          the rotation about Z axis.
 
          :param nodeTag: node identifier.
+         :param restrainedNodeId: identifier of the node to display with
+                                  the reaction values.
         '''
-        self.fixNode('000_FF0', nodeTag)
+        self.fixNode('000_FF0', nodeTag, restrainedNodeId)
 
 
-    def fixNode000_F00(self, nodeTag):
+    def fixNode000_F00(self, nodeTag, restrainedNodeId: str= None):
         '''Restrain all DOFs except for the rotation about X axis.
 
          :param nodeTag: node identifier.
+         :param restrainedNodeId: identifier of the node to display with
+                                  the reaction values.
         '''
-        self.fixNode('000_F00', nodeTag)
+        self.fixNode('000_F00', nodeTag, restrainedNodeId)
 
-    def fixNode000_0F0(self, nodeTag):
+    def fixNode000_0F0(self, nodeTag, restrainedNodeId: str= None):
         '''Restrain all DOFs except for the rotation about Y axis.
 
          :param nodeTag: node identifier.
+         :param restrainedNodeId: identifier of the node to display with
+                                  the reaction values.
         '''
-        self.fixNode('000_0F0', nodeTag)
+        self.fixNode('000_0F0', nodeTag, restrainedNodeId)
 
-    def fixNode000_00F(self, nodeTag):
+    def fixNode000_00F(self, nodeTag, restrainedNodeId: str= None):
         '''Restrain all DOFs except for the rotation about Z axis.
 
          :param nodeTag: node identifier.
+         :param restrainedNodeId: identifier of the node to display with
+                                  the reaction values.
         '''
-        self.fixNode('000_00F', nodeTag)
+        self.fixNode('000_00F', nodeTag, restrainedNodeId)
 
-    def fixNodeF00_F00(self, nodeTag):
+    def fixNodeF00_F00(self, nodeTag, restrainedNodeId: str= None):
         '''Restrain all DOFs except for X displacement and the
          rotation about X axis.
 
          :param nodeTag: node identifier.
+         :param restrainedNodeId: identifier of the node to display with
+                                  the reaction values.
         '''
-        self.fixNode('F00_F00', nodeTag)
+        self.fixNode('F00_F00', nodeTag, restrainedNodeId)
 
-    def fixNodeF00_0F0(self, nodeTag):
+    def fixNodeF00_0F0(self, nodeTag, restrainedNodeId: str= None):
         '''Restrain all DOFs except for X displacement and the
          rotation about Y axis.
 
          :param nodeTag: node identifier.
+         :param restrainedNodeId: identifier of the node to display with
+                                  the reaction values.
         '''
-        self.fixNode('F00_0F0', nodeTag)
+        self.fixNode('F00_0F0', nodeTag, restrainedNodeId)
 
-    def fixNodeF00_00F(self, nodeTag):
+    def fixNodeF00_00F(self, nodeTag, restrainedNodeId: str= None):
         '''Restrain all DOFs except for X displacement and the
          rotation about Z axis.
 
          :param nodeTag: node identifier.
+         :param restrainedNodeId: identifier of the node to display with
+                                  the reaction values.
         '''
-        self.fixNode('F00_00F', nodeTag)
+        self.fixNode('F00_00F', nodeTag, restrainedNodeId)
 
-    def fixNodeF00_0FF(self, nodeTag):
+    def fixNodeF00_0FF(self, nodeTag, restrainedNodeId: str= None):
         '''Restrain all DOFs except for X displacement and the
          rotations about Y and Z axis.
 
          :param nodeTag: node identifier.
+         :param restrainedNodeId: identifier of the node to display with
+                                  the reaction values.
         '''
-        self.fixNode('F00_0FF', nodeTag)
+        self.fixNode('F00_0FF', nodeTag, restrainedNodeId)
 
-    def fixNodeF00_FFF(self, nodeTag):
+    def fixNodeF00_FFF(self, nodeTag, restrainedNodeId: str= None):
         '''Restrain all DOFs except for X displacement and the
          rotations about Y and Z axis.
 
          :param nodeTag: node identifier.
+         :param restrainedNodeId: identifier of the node to display with
+                                  the reaction values.
         '''
-        self.fixNode('F00_FFF', nodeTag)
+        self.fixNode('F00_FFF', nodeTag, restrainedNodeId)
 
-    def fixNode0F0_F00(self, nodeTag):
+    def fixNode0F0_F00(self, nodeTag, restrainedNodeId: str= None):
         '''Restrain all DOFs except for Y displacement and the
          rotation about X axis.
 
          :param nodeTag: node identifier.
+         :param restrainedNodeId: identifier of the node to display with
+                                  the reaction values.
         '''
-        self.fixNode('0F0_F00', nodeTag)
+        self.fixNode('0F0_F00', nodeTag, restrainedNodeId)
 
-    def fixNode0F0_0F0(self, nodeTag):
+    def fixNode0F0_0F0(self, nodeTag, restrainedNodeId: str= None):
         '''Restrain all DOFs except for Y displacement and the
          rotation about Y axis.
 
          :param nodeTag: node identifier.
+         :param restrainedNodeId: identifier of the node to display with
+                                  the reaction values.
         '''
-        self.fixNode('0F0_0F0', nodeTag)
+        self.fixNode('0F0_0F0', nodeTag, restrainedNodeId)
 
-    def fixNode0F0_00F(self, nodeTag):
+    def fixNode0F0_00F(self, nodeTag, restrainedNodeId: str= None):
         '''Restrain all DOFs except for Y displacement and the
          rotation about Z axis.
 
          :param nodeTag: node identifier.
+         :param restrainedNodeId: identifier of the node to display with
+                                  the reaction values.
         '''
-        self.fixNode('0F0_00F', nodeTag)
+        self.fixNode('0F0_00F', nodeTag, restrainedNodeId)
 
-    def fixNode0F0_0FF(self, nodeTag):
+    def fixNode0F0_0FF(self, nodeTag, restrainedNodeId: str= None):
         '''Restrain all DOFs except for Y displacement and the
          rotations about Y and Z axis.
 
          :param nodeTag: node identifier.
+         :param restrainedNodeId: identifier of the node to display with
+                                  the reaction values.
         '''
-        self.fixNode('0F0_0FF', nodeTag)
+        self.fixNode('0F0_0FF', nodeTag, restrainedNodeId)
 
-    def fixNode0F0_FFF(self, nodeTag):
+    def fixNode0F0_FFF(self, nodeTag, restrainedNodeId: str= None):
         '''Restrain all DOFs except for Y displacement and the
          rotations about Y and Z axis.
 
          :param nodeTag: node identifier.
+         :param restrainedNodeId: identifier of the node to display with
+                                  the reaction values.
         '''
-        self.fixNode('0F0_FFF', nodeTag)
+        self.fixNode('0F0_FFF', nodeTag, restrainedNodeId)
 
-    def fixNodeFFF_000(self, nodeTag):
+    def fixNodeFFF_000(self, nodeTag, restrainedNodeId: str= None):
         '''Restrain only rotations (i. e. ThetaX= 0, ThetaY= 0 and ThetaZ= 0).
 
          :param nodeTag: node identifier.
+         :param restrainedNodeId: identifier of the node to display with
+                                  the reaction values.
         '''
-        self.fixNode('FFF_000', nodeTag)
+        self.fixNode('FFF_000', nodeTag, restrainedNodeId)
 
-    def fixNodeFFF_0F0(self, nodeTag):
+    def fixNodeFFF_0F0(self, nodeTag, restrainedNodeId: str= None):
         '''Restrain only X and Z rotations (i. e. ThetaX= 0, and ThetaZ= 0).
 
          :param nodeTag: node identifier.
+         :param restrainedNodeId: identifier of the node to display with
+                                  the reaction values.
         '''
-        self.fixNode('FFF_0F0', nodeTag)
+        self.fixNode('FFF_0F0', nodeTag, restrainedNodeId)
 
-    def fixNode0FF_FFF(self, nodeTag):
+    def fixNode0FF_FFF(self, nodeTag, restrainedNodeId: str= None):
         '''Restrain only X displacement DOF (i. e. Ux= 0).
 
          :param nodeTag: node identifier.
+         :param restrainedNodeId: identifier of the node to display with
+                                  the reaction values.
         '''
-        self.fixNode('0FF_FFF', nodeTag)
+        self.fixNode('0FF_FFF', nodeTag, restrainedNodeId)
 
     def LstNodes6DOFConstr(self,lstNodes,constrCond):
         '''Constraint the nodes in the list passed as parameter 
