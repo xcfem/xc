@@ -444,7 +444,7 @@ class WShape(structural_steel.IShape):
         :param extrusionVDir: extrusion direction vector.
         :param weakAxisVDir: direction of the weak axis.
         '''
-        halfH= self.h()/2.0
+        halfH= (self.h()-self.getFlangeThickness())/2.0
         v= halfH*weakAxisVDir
         p0= org-v
         p1= org+v
@@ -470,8 +470,8 @@ class WShape(structural_steel.IShape):
         :param weakAxisVDir: direction of the weak axis.
         '''
         halfB= self.getFlangeWidth()/2.0
-        halfH= self.h()/2.0
-        bottom= -halfH+self.getFlangeThickness()/2.0
+        halfH= (self.h()-self.getFlangeThickness())/2.0
+        bottom= -halfH
         strongAxisVDir= extrusionVDir.cross(weakAxisVDir)
         v= bottom*weakAxisVDir-halfB*strongAxisVDir
         p0= org+v
@@ -499,9 +499,9 @@ class WShape(structural_steel.IShape):
         :param weakAxisVDir: direction of the weak axis.
         '''
         halfB= self.getFlangeWidth()/2.0
-        halfH= self.h()/2.0
-        top= halfH-self.getFlangeThickness()/2.0
-        strongAxisVDir= extrusionVDir.cross(weakAxisVDir)
+        halfH= (self.h()-self.getFlangeThickness())/2.0
+        top= halfH
+        strongAxisVDir= extrusionVDir.cross(weakAxisVDir).normalized()
         v= top*weakAxisVDir-halfB*strongAxisVDir
         p0= org+v
         p3= p0+extrusionVDir

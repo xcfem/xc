@@ -1863,26 +1863,19 @@ class ConnectedMember(connected_members.ConnectedMemberMetaData):
         :param plate: plate to connect.
         '''
         retval= dict()
-        fr= 10.0
         plateOrigin= plate.refSys.getOrg()
-        print('plate origin: ', plateOrigin)
         platePlane= plate.refSys.getXYPlane()
-        topFlangeContour= geom.Polygon3d(column.getTopFlangeMidPlaneContourPoints(column.memberOrigin, factor= fr))
-        print('top flange contour: ', topFlangeContour)
-        quit()
+        topFlangeContour= geom.Polygon3d(column.getTopFlangeMidPlaneContourPoints())
         topFlangeLine= topFlangeContour.getIntersection(platePlane)
-        bottomFlangeContour= geom.Polygon3d(column.getBottomFlangeMidPlaneContourPoints(column.memberOrigin, factor= fr))
+        bottomFlangeContour= geom.Polygon3d(column.getBottomFlangeMidPlaneContourPoints())
         bottomFlangeLine= bottomFlangeContour.getIntersection(platePlane)
         if(self.connectedTo=='web'): # plate connected to the web
-            webContour= geom.Polygon3d(column.getWebMidPlaneContourPoints(origin= column.memberOrigin, factor= fr))
+            webContour= geom.Polygon3d(column.getWebMidPlaneContourPoints())
             webMidPlane= webContour.getPlane()
             webLine= webContour.getIntersection(platePlane)
             plateHalfSpace= geom.HalfSpace3d(webMidPlane, plateOrigin)
-            print('clip top flange')
             halfTopFlange= plateHalfSpace.clip(topFlangeLine)
-            print('clip bottom flange')
             halfBottomFlange= plateHalfSpace.clip(bottomFlangeLine)
-            print('clipped.')
             retval['bottomFlangeWeld']= halfBottomFlange
             retval['webWeld']= webLine
             retval['topFlangeWeld']= halfTopFlange
@@ -1891,9 +1884,10 @@ class ConnectedMember(connected_members.ConnectedMemberMetaData):
             dBottom= bottomFlangeLine.dist(plateOrigin)
             if(dBottom<dTop):
                 retval['bottomFlangeWeld']= bottomFlangeLine
+                print('bottom flange weld length: ', bottomFlangeLine.getLength())
             else:
                 retval['topFlangeWeld']= topFlangeLine
-        print(' column connection lines: ', retval)
+                print('top flange weld length: ', topFlangeLine.getLength())
         return retval
          
     def getFlangeBoltedPlate(self, column, boltSteel, plateSteel):
@@ -1928,10 +1922,6 @@ class ConnectedMember(connected_members.ConnectedMemberMetaData):
         topFlangePlate.setRefSys(topFlangePlateRefSys)
         ## Compute connection lines
         topFlangePlate.setWeldLines(self.getColumnWeldLines(column, topFlangePlate))
-        if(self.connectedTo=='web'):
-            eccentricity= column.shape.getFlangeWidth()/2*topFlangePlateRefSys.getIVector()
-            topFlangePlateRefSys.move(-eccentricity)
-            #topFlangePlate.eccentricity= eccentricity
         return topFlangePlate.getBlocks(blockProperties= blockProperties)
 
 class FilletWeld(object):

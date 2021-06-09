@@ -598,16 +598,16 @@ class BoltedPlateBase(object):
         :param refSys: 3D reference system used to perform local
                        to global coordinate transformation.
         '''
-        contourVertices3d= self.getCoreContour3d()
-        # contourVertices2d= self.getCoreContour2d()
-        # contourVertices2d.extend(self.getWeldLinesVertices2d())
-        # print('contour vertices 2D: ', contourVertices2d)
-        # convexHull2d= geom.get_convex_hull2d(contourVertices2d)
-        # print('convex hull: ', convexHull2d)
-        # contourVertices3d= list()
-        # for p in convexHull2d.getVertices():
-        #     p3d= geom.Pos3d(p.x, p.y, 0.0)
-        #     contourVertices3d.append(self.refSys.getGlobalPosition(p3d))
+        #contourVertices3d= self.getCoreContour3d()
+        contourVertices2d= self.getCoreContour2d()
+        contourVertices2d.extend(self.getWeldLinesVertices2d())
+        print('contour vertices 2D: ', contourVertices2d)
+        convexHull2d= geom.get_convex_hull2d(contourVertices2d)
+        print('convex hull: ', convexHull2d)
+        contourVertices3d= list()
+        for p in convexHull2d.getVertices():
+            p3d= geom.Pos3d(p.x, p.y, 0.0)
+            contourVertices3d.append(self.refSys.getGlobalPosition(p3d))
         return contourVertices3d
 
     def getBlocks(self, blockProperties= None, loadTag= None, loadDirI= None, loadDirJ= None, loadDirK= None):

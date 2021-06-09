@@ -148,71 +148,30 @@ class ConnectedMemberMetaData(object):
         ''' Return the direction of the member web.'''
         return self.jVector
 
-    def getWebMidPlaneContourPoints(self, origin, factor):
-        ''' Return the contour points at the mid-plane of the member web.
-
-        :param origin: connection origin.
-        :param factor: factor that multiplies the unary direction vector
-                       of the member to define its extrusion 
-                       direction and lenght.
-        '''
-        extrusionVector= self.getExtrusionVector(factor)
-        return self.shape.getWebMidPlaneContourPoints(org= origin, extrusionVDir= extrusionVector, weakAxisVDir= self.jVector)
+    def getWebMidPlaneContourPoints(self):
+        ''' Return the contour points at the mid-plane of the member web.'''
+        return self.shape.getWebMidPlaneContourPoints(org= self.memberOrigin, extrusionVDir= self.extrusionVector, weakAxisVDir= self.getWebDirection())
     
-    def getWebMidPlane(self, origin, factor):
-        ''' Return the mid-plane of the member web.
-
-        :param origin: connection origin.
-        :param factor: factor that multiplies the unary direction vector
-                       of the member to define its extrusion 
-                       direction and lenght.
-        '''
-        extrusionVector= self.getExtrusionVector(factor)
-        return self.shape.getWebMidPlane(org= origin, extrusionVDir= extrusionVector, weakAxisVDir= self.jVector)
+    def getWebMidPlane(self):
+        ''' Return the mid-plane of the member web. '''
+        return self.shape.getWebMidPlane(org= self.memberOrigin, extrusionVDir= self.extrusionVector, weakAxisVDir= self.getWebDirection())
     
-    def getBottomFlangeMidPlaneContourPoints(self, origin, factor):
-        ''' Return the contour points at the mid-plane of the bottom flange.
+    def getBottomFlangeMidPlaneContourPoints(self):
+        ''' Return the contour points at the mid-plane of the bottom flange.'''
+        return self.shape.getBottomFlangeMidPlaneContourPoints(org= self.memberOrigin, extrusionVDir= self.extrusionVector, weakAxisVDir= self.getWebDirection())
 
-        :param origin: connection origin.
-        :param factor: factor that multiplies the unary direction vector
-                       of the member to define its extrusion 
-                       direction and lenght.
-        '''
-        extrusionVector= self.getExtrusionVector(factor)
-        return self.shape.getBottomFlangeMidPlaneContourPoints(org= origin, extrusionVDir= extrusionVector, weakAxisVDir= self.jVector)
+    def getBottomFlangeMidPlane(self):
+        ''' Return the mid-plane of the bottom flange.'''
+        return self.shape.getBottomFlangeMidPlane(org= self.memberOrigin, extrusionVDir= self.extrusionVector, weakAxisVDir= self.getWebDirection())
 
-    def getBottomFlangeMidPlane(self, origin, factor):
-        ''' Return the mid-plane of the bottom flange.
-
-        :param origin: connection origin.
-        :param factor: factor that multiplies the unary direction vector
-                       of the member to define its extrusion 
-                       direction and lenght.
-        '''
-        extrusionVector= self.getExtrusionVector(factor)
-        return self.shape.getBottomFlangeMidPlane(org= origin, extrusionVDir= extrusionVector, weakAxisVDir= self.jVector)
-
-    def getTopFlangeMidPlaneContourPoints(self, origin, factor):
+    def getTopFlangeMidPlaneContourPoints(self):
         ''' Return the contour points at the mid-plane of the top flange.
-
-        :param origin: connection origin.
-        :param factor: factor that multiplies the unary direction vector
-                       of the member to define its extrusion 
-                       direction and lenght.
         '''
-        extrusionVector= self.getExtrusionVector(factor)
-        return self.shape.getTopFlangeMidPlaneContourPoints(org= origin, extrusionVDir= extrusionVector, weakAxisVDir= self.jVector)
+        return self.shape.getTopFlangeMidPlaneContourPoints(org= self.memberOrigin, extrusionVDir= self.extrusionVector, weakAxisVDir= self.getWebDirection())
     
-    def getTopFlangeMidPlane(self, origin, factor):
-        ''' Return the mid-plane of the top flange.
-
-        :param origin: connection origin.
-        :param factor: factor that multiplies the unary direction vector
-                       of the member to define its extrusion 
-                       direction and lenght.
-        '''
-        extrusionVector= self.getExtrusionVector(factor)
-        return self.shape.getTopFlangeMidPlane(org= origin, extrusionVDir= extrusionVector, weakAxisVDir= self.jVector)
+    def getTopFlangeMidPlane(self):
+        ''' Return the mid-plane of the top flange.'''
+        return self.shape.getTopFlangeMidPlane(org= self.memberOrigin, extrusionVDir= self.extrusionVector, weakAxisVDir= self.jVector)
     
     def getIntersectionPoint(self, origin, factor, sg):
         ''' Get the intersection of the segment with the member
@@ -281,8 +240,8 @@ class ConnectedMemberMetaData(object):
         memberProperties.appendAttribute('objType', self.getMemberType())
         memberProperties.extendAttributes(self.getMemberLoadAttributes())
         f= factor*self.getOrientation(connectionOrigin)
-        extrusionVector= self.getExtrusionVector(f)
-        return self.shape.getBlockData(org= self.memberOrigin, extrusionVDir= extrusionVector, weakAxisVDir= self.jVector, blockProperties= memberProperties)
+        self.extrusionVector= self.getExtrusionVector(f)
+        return self.shape.getBlockData(org= self.memberOrigin, extrusionVDir= self.extrusionVector, weakAxisVDir= self.jVector, blockProperties= memberProperties)
     
     def getFrontalWeldBlocks(self, flangeWeldLegSize, webWeldLegSize, blockProperties= None):
         ''' Return the lines corresponding to weld beads with a frontal plate.
@@ -444,7 +403,7 @@ class ConnectionMetaData(object):
 
     def getColumnWebMidPlane(self):
         ''' Return the mid-plane of the column web.'''
-        return self.column.getWebMidPlane(origin= self.getOrigin(), factor= self.columnLengthFactor)
+        return self.column.getWebMidPlane()
 
     def getColumnBottomFlangeMidPlane(self):
         ''' Return the mid-plane of the column bottom flange.'''
