@@ -12,6 +12,7 @@ from postprocess.reports import export_reactions as er
 from colorama import Fore
 from colorama import Style
 from misc_utils import log_messages as lmsg
+from postprocess import output_styles
 
 class AnalysisContextBase(object):
     ''' Base class for analysis contexts: those are used to mix the 
@@ -150,3 +151,10 @@ class AnalysisContextBase(object):
         self.reactionsDict.update(er.getReactionsDict(comb.getName,self.reactionNodeSet.nodes))
         # Write displacements.
         limitState.writeDisplacements(comb.getName,self.calcSet.nodes)
+
+    def exportReactions(self, fName, outputStyle= output_styles.defaultOutputStyle):
+        '''Writes a comma separated values file with the nodes reactions.
+
+        :param fName: name of the output file.
+        '''
+        er.exportReactions(self.reactionsDict, fName, outputStyle)
