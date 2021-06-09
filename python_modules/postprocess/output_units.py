@@ -58,9 +58,22 @@ class DynamicsUnits(object):
         self.forceUnit= forceUnit
         self.lengthUnit= lengthUnit
         self.pressureUnit= pressureUnit
+
+    def getForceUnitSymbol(self):
+        ''' Return the symbol for the force units.'''
+        return self.forceUnit.symbol
+    
+    def getLengthUnitSymbol(self):
+        ''' Return the symbol for the force units.'''
+        return self.lengthUnit.symbol
+
+    def getMomentUnitSymbol(self):
+        ''' Return the symbol for the moment units.'''
+        return self.getForceUnitSymbol()+'.'+self.getLengthUnitSymbol()
         
     def getDecoratedForceUnitsText(self):
         return 'units:['+self.lengthUnit.symbol+', '+self.forceUnit.symbol+']'
+    
     def getDecoratedPressureUnitsText(self):
         return 'units:['+self.pressureUnit.symbol+']'
         
@@ -112,20 +125,32 @@ class OutputUnits(object):
         return self.displacementUnits.lengthUnit.getDecoratedSymbol()
     
     def getRotationUnitsScaleFactor(self):
-        ''' Return the scale factor for the displacement units.'''
+        ''' Return the scale factor for the rotation units.'''
         return self.displacementUnits.planeAngleUnit.scaleFactor
     
     def getRotationUnitsDescription(self):
-        ''' Return the description for the displacement units.'''
+        ''' Return the description for the rotation units.'''
         return self.displacementUnits.planeAngleUnit.getDecoratedSymbol()
     
     def getForceUnitsScaleFactor(self):
-        ''' Return the scale factor for the displacement units.'''
+        ''' Return the scale factor for the force units.'''
         return self.dynamicUnits.forceUnit.scaleFactor
     
     def getForceUnitsDescription(self):
-        ''' Return the description for the displacement units.'''
+        ''' Return the description for the force units.'''
         return self.dynamicUnits.getDecoratedForceUnitsText()
+    
+    def getLengthUnitSymbol(self):
+        ''' Return the symbol for the length unit.'''
+        return self.dynamicUnits.getLengthUnitSymbol()
+    
+    def getForceUnitSymbol(self):
+        ''' Return the symbol for the force unit.'''
+        return self.dynamicUnits.getForceUnitSymbol()
+    
+    def getMomentUnitSymbol(self):
+        ''' Return the symbol for the moment unit.'''
+        return self.dynamicUnits.getMomentUnitSymbol()
     
     def getPressureUnitsScaleFactor(self):
         ''' Return the scale factor for the displacement units.'''

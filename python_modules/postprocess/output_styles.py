@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+''' Parameters used in the output routines.'''
 
 from __future__ import print_function
 __author__= "Luis C. Pérez Tato (LCPT) , Ana Ortega (AO_O) "
@@ -96,7 +97,19 @@ class OutputStyle(object):
     def getForceUnitsDescription(self):
         ''' Return the description for the displacement units.'''
         return self.outputUnits.getForceUnitsDescription()
-
+    
+    def getLengthUnitSymbol(self):
+        ''' Return the symbol for the length units.'''
+        return self.outputUnits.getLengthUnitSymbol()
+    
+    def getForceUnitSymbol(self):
+        ''' Return the symbol for the force units.'''
+        return self.outputUnits.getForceUnitSymbol()
+    
+    def getMomentUnitSymbol(self):
+        ''' Return the symbol for the moment units.'''
+        return self.outputUnits.getMomentUnitSymbol()
+    
     def getPressureUnitsScaleFactor(self):
         ''' Return the scale factor for the displacement units.'''
         return self.outputUnits.getPressureUnitsScaleFactor()
