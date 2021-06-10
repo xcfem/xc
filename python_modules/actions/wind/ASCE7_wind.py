@@ -4,8 +4,15 @@
 from __future__ import division
 from __future__ import print_function
 
+__author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
+__copyright__= "Copyright 2021, AOO and LCPT"
+__license__= "GPL"
+__version__= "1.0"
+__email__= "l.pereztato@gmail.com  ana.Ortega.Ort@gmail.com"
+
 import math
 import scipy.interpolate
+from actions.wind import base_wind
 
 xk1= [0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5]
 k12DRidge= [0.29, 0.36, 0.43, 0.51, 0.58, 0.65, 0.72]
@@ -71,7 +78,9 @@ def Kzt(siteCondition: str, H: float, Lh: float, x: float, upWindOfCrest: bool, 
 
 def Ke(zg):
     ''' Ground elevation factor Ke according to expression note 2 of 
-        table 26.9-1 of ASCE 7-16.
+        table 26.9-1 of ASCE 7-16. The ground elevation factor, Ke, is 
+        introduced in ASCE 7-16 to consider the variation in the air 
+        density based on ground elevation above mean sea level. 
 
     :param zg: ground elevation above sea level.
     '''
@@ -109,7 +118,9 @@ def zgConstant(exposure: str):
 
 def Kz(exposure: str, z: float):
     ''' Return velocity pressure coefficient Kz and Kh according
-        to note 1 of table 26.10-1 of ASCE 7-16.
+        to note 1 of table 26.10-1 of ASCE 7-16. This parameter depends 
+        on the height above ground level of the point where the wind 
+        pressure is considered, and the exposure category. 
 
     :param exposure: 'B', 'C' or 'D'
     :param z: Height above ground surface at the site of the building or 
@@ -136,3 +147,95 @@ def qz(z, Kz, Kzt, Kd, zg, V):
                section 26.5 of ASCE 7-16.
     '''
     return 0.613*Kz*Kzt*Kd*Ke(zg)*V**2 
+
+leewardWall_x= [0.0,1.0,2.0,4.0,1.0e6]
+leewardWall_y= [-0.5,-0.5,-0.3,-0.2,-0.2]
+leewardWallPressureCoefs= scipy.interpolate.interp1d(leewardWall_x,leewardWall_y)
+def wallExternalPressureCoefficient(orientation: base_wind.windSurfaceOrientation, L: float, B: float):
+    ''' Return the external pressure coefficient for a wall according to 
+        figure 27.3-1 of ASCE 7-16. Windward values must be used with
+        qz (eave height) and leeward and side values must be used with
+        qh (mean roof height).
+
+    :param orientation: orientation of the wall surface with respect to the 
+                        wind: windward, side or leeward.
+    :param L: length of the building (parallel to the wind direction).
+    :param B: width of the building (normal to the wind direction).
+    '''
+    retval= 0.8
+    if(orientation == base_wind.windSurfaceOrientation.side):
+        retval= -0.7
+    elif(orientation == base_wind.windSurfaceOrientation.leeward):
+        retval= leewardWallPressureCoefs(L/B)
+    return retval
+
+roofAngles_x=      [ 10.0,  15.0,  20.0, 25.0, 30.0, 35.0, 45.0, 60.0, 90.0]
+roofWindwardThGEQ10025A_y= [ -0.7,  -0.5,  -0.3, -0.2, -0.2,  0.0,  0.0,  0.0,  0.0]
+roofWindwardThGEQ10025B_y= [-0.18,   0.0,   0.2,  0.3,  0.3,  0.4,  0.4,  0.01, 0.01]
+roofWindwardThGEQ10025A= scipy.interpolate.interp1d(roofAngles_x,roofWindwardThGEQ10025A_y)
+roofWindwardThGEQ10025B= scipy.interpolate.interp1d(roofAngles_x,roofWindwardThGEQ10025B_y)
+
+roofWindwardThGEQ1005A_y=  [ -0.9,  -0.7,  -0.4, -0.3, -0.2, -0.2,  0.0,  0.0,  0.0] 
+roofWindwardThGEQ1005B_y=  [-0.18, -0.18,   0.0,  0.2,  0.2,  0.3,  0.4,  0.01, 0.01]
+roofWindwardThGEQ1005A= scipy.interpolate.interp1d(roofAngles_x,roofWindwardThGEQ1005A_y)
+roofWindwardThGEQ1005B= scipy.interpolate.interp1d(roofAngles_x,roofWindwardThGEQ1005B_y)
+
+roofWindwardThGEQ1010A_y=  [ -1.3,  -1.0,  -0.7, -0.5, -0.3, -0.2,  0.0,  0.0,  0.0] 
+roofWindwardThGEQ1010B_y=  [-0.18, -0.18, -0.18,  0.0,  0.2,  0.2,  0.3,  0.01, 0.01] 
+roofWindwardThGEQ1010A= scipy.interpolate.interp1d(roofAngles_x,roofWindwardThGEQ1010A_y)
+roofWindwardThGEQ1010B= scipy.interpolate.interp1d(roofAngles_x,roofWindwardThGEQ1010B_y)
+
+# Leeward 
+roofLeewardAngles_x=     [ 10.0,  15.0,  20.0, 90.0]
+roofLeewardThGEQ10025_y= [ -0.3,  -0.5,  -0.6, -0.6]
+roofLeewardThGEQ10025= scipy.interpolate.interp1d(roofLeewardAngles_x, roofLeewardThGEQ10025_y)
+
+roofLeewardThGEQ1005_y=  [ -0.5,  -0.5,  -0.6, -0.6] 
+roofLeewardThGEQ1005= scipy.interpolate.interp1d(roofLeewardAngles_x,roofLeewardThGEQ1005_y)
+
+roofLeewardThGEQ1010_y=  [ -0.7,  -0.6,  -0.6, -0.6] 
+roofLeewardThGEQ1010= scipy.interpolate.interp1d(roofLeewardAngles_x,roofLeewardThGEQ1010_y)
+
+def roofExternalPressureCoefficient(orientation: base_wind.windSurfaceOrientation, L: float, h: float, theta: float):
+    ''' Return the external pressure coefficient for a wall according to 
+        figure 27.3-1 of ASCE 7-16. Windward values must be used with
+        qz (eave height) and leeward and side values must be used with
+        qh (mean roof height).
+
+    :param orientation: orientation of the wall surface with respect to the 
+                        wind: windward, side or leeward.
+    :param L: length of the building (parallel to the wind direction).
+    :param h: mean height of the roof.
+    :param theta: angle of plane of roof from horizontal, in degrees.
+    :param windRidgeAngle: angle of the wind direction with the direction
+                           of the ridge.
+    '''
+    retval= [1.3]
+    if(theta>=10.0):
+        h_L_x= [0.0, 0.25, 0.5, 1.0, 1e6]
+        h_L= h/L
+        if(orientation == base_wind.windSurfaceOrientation.windward):
+            value025A= roofWindwardThGEQ10025A(theta)
+            value025B= roofWindwardThGEQ10025B(theta)
+            value05A= roofWindwardThGEQ1005A(theta)
+            value05B= roofWindwardThGEQ1005B(theta)
+            value10A= roofWindwardThGEQ1010A(theta)
+            value10B= roofWindwardThGEQ1010B(theta)
+            CpA_y= [value025A, value025A, value05A, value10A, value10A]
+            CpB_y= [value025B, value025B, value05B, value10B, value10B]
+            CpA= scipy.interpolate.interp1d(h_L_x, CpA_y)
+            CpB= scipy.interpolate.interp1d(h_L_x, CpB_y)
+            retval= [CpA(h_L), CpB(h_L)]
+        elif(orientation == base_wind.windSurfaceOrientation.leeward):
+            value025= roofLeewardThGEQ10025A(theta)
+            value05= roofLeewardThGEQ1005A(theta)
+            value10= roofLeewardThGEQ1010A(theta)
+            Cp_y= [value025, value025, value05, value10, value10]
+            Cp= scipy.interpolate.interp1d(h_L_x, Cp_y)
+            retval= [Cp(h_L)]
+        else: # side
+            lmsg.error('not implemented yet.')
+            retval= [None]
+    else: # (theta < 10.0)
+        lmsg.error('not implemented yet.')
+        retval= [None]
