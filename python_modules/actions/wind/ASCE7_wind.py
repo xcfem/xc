@@ -169,21 +169,42 @@ def wallExternalPressureCoefficient(orientation: base_wind.windSurfaceOrientatio
         retval= leewardWallPressureCoefs(L/B)
     return retval
 
-roofAngles_x=      [ 10.0,  15.0,  20.0, 25.0, 30.0, 35.0, 45.0, 60.0, 90.0]
+roofAngles_x=              [ 10.0,  15.0,  20.0, 25.0, 30.0, 35.0, 45.0, 60.0, 90.0]
 roofWindwardThGEQ10025A_y= [ -0.7,  -0.5,  -0.3, -0.2, -0.2,  0.0,  0.0,  0.0,  0.0]
-roofWindwardThGEQ10025B_y= [-0.18,   0.0,   0.2,  0.3,  0.3,  0.4,  0.4,  0.01, 0.01]
 roofWindwardThGEQ10025A= scipy.interpolate.interp1d(roofAngles_x,roofWindwardThGEQ10025A_y)
-roofWindwardThGEQ10025B= scipy.interpolate.interp1d(roofAngles_x,roofWindwardThGEQ10025B_y)
+
+def roofWindwardThGEQ10025B(theta: float):
+    ''' Return the value corresponding to the first row of the roof
+        pressure coefficients table according to figure 27.3-1 of ASCE 7-16.
+
+    :param theta: angle of plane of roof from horizontal, in degrees.
+    '''
+    y= [-0.18,   0.0,   0.2,  0.3,  0.3,  0.4,  0.4,  0.01*theta, 0.01*theta]
+    return float(scipy.interpolate.interp1d(roofAngles_x,y)(theta))
 
 roofWindwardThGEQ1005A_y=  [ -0.9,  -0.7,  -0.4, -0.3, -0.2, -0.2,  0.0,  0.0,  0.0] 
-roofWindwardThGEQ1005B_y=  [-0.18, -0.18,   0.0,  0.2,  0.2,  0.3,  0.4,  0.01, 0.01]
 roofWindwardThGEQ1005A= scipy.interpolate.interp1d(roofAngles_x,roofWindwardThGEQ1005A_y)
-roofWindwardThGEQ1005B= scipy.interpolate.interp1d(roofAngles_x,roofWindwardThGEQ1005B_y)
+
+def roofWindwardThGEQ1005B(theta: float):
+    ''' Return the value corresponding to the second row of the roof
+        pressure coefficients table according to figure 27.3-1 of ASCE 7-16.
+
+    :param theta: angle of plane of roof from horizontal, in degrees.
+    '''
+    y=  [-0.18, -0.18,   0.0,  0.2,  0.2,  0.3,  0.4,  0.01*theta, 0.01*theta]
+    return float(scipy.interpolate.interp1d(roofAngles_x,y)(theta))
 
 roofWindwardThGEQ1010A_y=  [ -1.3,  -1.0,  -0.7, -0.5, -0.3, -0.2,  0.0,  0.0,  0.0] 
-roofWindwardThGEQ1010B_y=  [-0.18, -0.18, -0.18,  0.0,  0.2,  0.2,  0.3,  0.01, 0.01] 
 roofWindwardThGEQ1010A= scipy.interpolate.interp1d(roofAngles_x,roofWindwardThGEQ1010A_y)
-roofWindwardThGEQ1010B= scipy.interpolate.interp1d(roofAngles_x,roofWindwardThGEQ1010B_y)
+
+def roofWindwardThGEQ1010B(theta: float):
+    ''' Return the value corresponding to the thrid row of the roof
+        pressure coefficients table according to figure 27.3-1 of ASCE 7-16.
+
+    :param theta: angle of plane of roof from horizontal, in degrees.
+    '''
+    y=  [-0.18, -0.18, -0.18,  0.0,  0.2,  0.2,  0.3,  0.01*theta, 0.01*theta] 
+    return float(scipy.interpolate.interp1d(roofAngles_x,y)(theta))
 
 # Leeward 
 roofLeewardAngles_x=     [ 10.0,  15.0,  20.0, 90.0]
@@ -196,7 +217,7 @@ roofLeewardThGEQ1005= scipy.interpolate.interp1d(roofLeewardAngles_x,roofLeeward
 roofLeewardThGEQ1010_y=  [ -0.7,  -0.6,  -0.6, -0.6] 
 roofLeewardThGEQ1010= scipy.interpolate.interp1d(roofLeewardAngles_x,roofLeewardThGEQ1010_y)
 
-def roofExternalPressureCoefficient(orientation: base_wind.windSurfaceOrientation, L: float, h: float, theta: float):
+def roofExternalPressureCoefficient(orientation: base_wind.windSurfaceOrientation, L: float, h: float, theta: float, hDistFromWindwardEdge= 0.0):
     ''' Return the external pressure coefficient for a wall according to 
         figure 27.3-1 of ASCE 7-16. Windward values must be used with
         qz (eave height) and leeward and side values must be used with
@@ -207,13 +228,14 @@ def roofExternalPressureCoefficient(orientation: base_wind.windSurfaceOrientatio
     :param L: length of the building (parallel to the wind direction).
     :param h: mean height of the roof.
     :param theta: angle of plane of roof from horizontal, in degrees.
-    :param windRidgeAngle: angle of the wind direction with the direction
-                           of the ridge.
+    :param hDistFromWindwardEdge: for roof surfaces, horizontal distance 
+                                  from windward edge (defaults to 0).
     '''
     retval= [1.3]
-    if(theta>=10.0):
-        h_L_x= [0.0, 0.25, 0.5, 1.0, 1e6]
-        h_L= h/L
+    h_L= h/L
+    windParallelToRidge= (orientation == base_wind.windSurfaceOrientation.side)
+    if(not windParallelToRidge and (theta>=10.0)):
+        h_L_x= [0.0, 0.25, 0.5, 1.0, 1e6] # (h/L) abscissae
         if(orientation == base_wind.windSurfaceOrientation.windward):
             value025A= roofWindwardThGEQ10025A(theta)
             value025B= roofWindwardThGEQ10025B(theta)
@@ -223,19 +245,26 @@ def roofExternalPressureCoefficient(orientation: base_wind.windSurfaceOrientatio
             value10B= roofWindwardThGEQ1010B(theta)
             CpA_y= [value025A, value025A, value05A, value10A, value10A]
             CpB_y= [value025B, value025B, value05B, value10B, value10B]
-            CpA= scipy.interpolate.interp1d(h_L_x, CpA_y)
-            CpB= scipy.interpolate.interp1d(h_L_x, CpB_y)
-            retval= [CpA(h_L), CpB(h_L)]
+            CpA= float(scipy.interpolate.interp1d(h_L_x, CpA_y)(h_L))
+            CpB= float(scipy.interpolate.interp1d(h_L_x, CpB_y)(h_L))
+            retval= [CpA, CpB]
         elif(orientation == base_wind.windSurfaceOrientation.leeward):
-            value025= roofLeewardThGEQ10025A(theta)
-            value05= roofLeewardThGEQ1005A(theta)
-            value10= roofLeewardThGEQ1010A(theta)
+            value025= roofLeewardThGEQ10025(theta)
+            value05= roofLeewardThGEQ1005(theta)
+            value10= roofLeewardThGEQ1010(theta)
             Cp_y= [value025, value025, value05, value10, value10]
-            Cp= scipy.interpolate.interp1d(h_L_x, Cp_y)
-            retval= [Cp(h_L)]
-        else: # side
-            lmsg.error('not implemented yet.')
-            retval= [None]
-    else: # (theta < 10.0)
-        lmsg.error('not implemented yet.')
-        retval= [None]
+            Cp= float(scipy.interpolate.interp1d(h_L_x, Cp_y)(h_L))
+            retval= [Cp]
+    else: # (theta < 10.0 or wind parallel to ridge)
+        dists05=   [  0.0,     h, 1.01*h, 2.0*h, 2.01*h,   1e6]
+        values05A= [ -0.9,  -0.9,   -0.5,  -0.5,   -0.3,  -0.3]
+        Cp05A= float(scipy.interpolate.interp1d(dists05, values05A)(hDistFromWindwardEdge))
+        dists10=   [  0.0, 0.5*h, 0.51*h,  1e6]
+        values10A=  [ -1.3,  -1.3,   -0.7, -0.7]
+        Cp10A= float(scipy.interpolate.interp1d(dists10, values10A)(hDistFromWindwardEdge))
+        h_L_x=    [  0.0,   0.5,   1.0,  1.01,   1e6] # (h/L) abscissae
+        valuesCp= [Cp05A, Cp05A, Cp10A, Cp10A, Cp10A]
+        CpA= float(scipy.interpolate.interp1d(h_L_x, valuesCp)(h_L))
+        CpB= -0.18
+        retval= [CpA, CpB]
+    return retval
