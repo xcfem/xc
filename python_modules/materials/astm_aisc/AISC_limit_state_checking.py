@@ -466,7 +466,7 @@ def softenElements(elementSet):
                 ratio= abs(Pr)/Pns
                 tau= 1.0
                 if(ratio>0.5):
-                    lmsg.info('Pr= ', Pr/1e3, ' kN, Pns= ', Pns/1e3,' kN, ratio= ', ratio)
+                    lmsg.log('Pr= '+ str(Pr/1e3)+' kN, Pns= '+str(Pns/1e3)+' kN, ratio= '+str(ratio))
                     tau= 4*ratio*(1-ratio)
                     if(e.hasProp('IyBackup')):
                         mat.sectionProperties.Iy= tau*e.getProp('IyBackup')
