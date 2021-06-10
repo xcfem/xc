@@ -155,12 +155,14 @@ def wallExternalPressureCoefficient(orientation: base_wind.windSurfaceOrientatio
     ''' Return the external pressure coefficient for a wall according to 
         figure 27.3-1 of ASCE 7-16. Windward values must be used with
         qz (eave height) and leeward and side values must be used with
-        qh (mean roof height).
+        qh (mean roof height). Plus and minus signs signify pressures 
+        acting toward(+) and away(-) from the surfaces, respectively.
+
 
     :param orientation: orientation of the wall surface with respect to the 
                         wind: windward, side or leeward.
-    :param L: length of the building (parallel to the wind direction).
-    :param B: width of the building (normal to the wind direction).
+    :param L: Horizontal dimension of building, measured parallel to wind direction.
+    :param B: Horizontal dimension of building, measured normal to wind direction.
     '''
     retval= 0.8
     if(orientation == base_wind.windSurfaceOrientation.side):
@@ -218,10 +220,11 @@ roofLeewardThGEQ1010_y=  [ -0.7,  -0.6,  -0.6, -0.6]
 roofLeewardThGEQ1010= scipy.interpolate.interp1d(roofLeewardAngles_x,roofLeewardThGEQ1010_y)
 
 def roofExternalPressureCoefficient(orientation: base_wind.windSurfaceOrientation, L: float, h: float, theta: float, hDistFromWindwardEdge= 0.0):
-    ''' Return the external pressure coefficient for a wall according to 
+    ''' Return the external pressure coefficient for a roof according to 
         figure 27.3-1 of ASCE 7-16. Windward values must be used with
         qz (eave height) and leeward and side values must be used with
-        qh (mean roof height).
+        qh (mean roof height). Plus and minus signs signify pressures 
+        acting toward(+) and away(-) from the surfaces, respectively.
 
     :param orientation: orientation of the wall surface with respect to the 
                         wind: windward, side or leeward.

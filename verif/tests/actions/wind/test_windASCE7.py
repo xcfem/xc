@@ -74,15 +74,16 @@ pi_plus= GCpi*meanRoofHeight_qz
 pi_minus= -pi_plus
 
 # External pressure coefficient.
-
+L= 24 # Horizontal dimension of building, measured parallel to wind direction.
+B= 28 # Horizontal dimension of building, measured normal to wind direction.
 ## Wall external pressure coefficients.
-windwardWallCp= ASCE7_wind.wallExternalPressureCoefficient(orientation= base_wind.windSurfaceOrientation.windward,L= 24, B= 28)
+windwardWallCp= ASCE7_wind.wallExternalPressureCoefficient(orientation= base_wind.windSurfaceOrientation.windward,L= L, B= 28)
 windwardWallCpRef= 0.8
 ratio6= abs(windwardWallCp-windwardWallCpRef)/windwardWallCpRef
-leewardWallCp= ASCE7_wind.wallExternalPressureCoefficient(orientation= base_wind.windSurfaceOrientation.leeward,L= 24, B= 28)
+leewardWallCp= ASCE7_wind.wallExternalPressureCoefficient(orientation= base_wind.windSurfaceOrientation.leeward,L= L, B= 28)
 leewardWallCpRef= -0.5
 ratio7= abs(leewardWallCp-leewardWallCpRef)/-leewardWallCpRef
-sideWallsCp= ASCE7_wind.wallExternalPressureCoefficient(orientation= base_wind.windSurfaceOrientation.side,L= 24, B= 28)
+sideWallsCp= ASCE7_wind.wallExternalPressureCoefficient(orientation= base_wind.windSurfaceOrientation.side,L= L, B= 28)
 sideWallsCpRef= -0.7
 ratio8= abs(sideWallsCp-sideWallsCpRef)/-sideWallsCpRef
 
@@ -90,20 +91,20 @@ ratio8= abs(sideWallsCp-sideWallsCpRef)/-sideWallsCpRef
 tht= 36.87 # Angle of plane of roof from horizontal, in degrees.
 
 ### Wind normal to ridge.
-windwardRoofCp= ASCE7_wind.roofExternalPressureCoefficient(orientation= base_wind.windSurfaceOrientation.windward, L= 24, h= meanRoofHeight, theta= tht)[1]
+windwardRoofCp= ASCE7_wind.roofExternalPressureCoefficient(orientation= base_wind.windSurfaceOrientation.windward, L= L, h= meanRoofHeight, theta= tht)[1]
 windwardRoofCpRef= 0.39322500000000005
 ratio12= abs(windwardRoofCp-windwardRoofCpRef)/windwardRoofCpRef
-leewardRoofCp= ASCE7_wind.roofExternalPressureCoefficient(orientation= base_wind.windSurfaceOrientation.leeward, L= 24, h= meanRoofHeight, theta= tht)[0]
+leewardRoofCp= ASCE7_wind.roofExternalPressureCoefficient(orientation= base_wind.windSurfaceOrientation.leeward, L= L, h= meanRoofHeight, theta= tht)[0]
 leewardRoofCpRef= -0.6
 ratio13= abs(leewardRoofCp-leewardRoofCpRef)/-leewardRoofCpRef
 ### Wind parallel to ridge
-pllRoofCp05h= ASCE7_wind.roofExternalPressureCoefficient(orientation= base_wind.windSurfaceOrientation.side, L= 24, h= meanRoofHeight, theta= tht, hDistFromWindwardEdge= 0.5*meanRoofHeight)
+pllRoofCp05h= ASCE7_wind.roofExternalPressureCoefficient(orientation= base_wind.windSurfaceOrientation.side, L= L, h= meanRoofHeight, theta= tht, hDistFromWindwardEdge= 0.5*meanRoofHeight)
 pllRoofCp05hRef= [-0.9, -0.18]
 ratio14= math.sqrt((abs(pllRoofCp05h[0]-pllRoofCp05hRef[0])/-pllRoofCp05hRef[1])**2+(abs(pllRoofCp05h[1]-pllRoofCp05hRef[1])/-pllRoofCp05hRef[1])**2)
-pllRoofCp1_5h= ASCE7_wind.roofExternalPressureCoefficient(orientation= base_wind.windSurfaceOrientation.side, L= 24, h= meanRoofHeight, theta= tht, hDistFromWindwardEdge= 1.5*meanRoofHeight)
+pllRoofCp1_5h= ASCE7_wind.roofExternalPressureCoefficient(orientation= base_wind.windSurfaceOrientation.side, L= L, h= meanRoofHeight, theta= tht, hDistFromWindwardEdge= 1.5*meanRoofHeight)
 pllRoofCp1_5hRef= [-0.5, -0.18]
 ratio15= math.sqrt((abs(pllRoofCp1_5h[0]-pllRoofCp1_5hRef[0])/-pllRoofCp1_5hRef[1])**2+(abs(pllRoofCp1_5h[1]-pllRoofCp1_5hRef[1])/-pllRoofCp1_5hRef[1])**2)
-pllRoofCp3h= ASCE7_wind.roofExternalPressureCoefficient(orientation= base_wind.windSurfaceOrientation.side, L= 24, h= meanRoofHeight, theta= tht, hDistFromWindwardEdge= 3.0*meanRoofHeight)
+pllRoofCp3h= ASCE7_wind.roofExternalPressureCoefficient(orientation= base_wind.windSurfaceOrientation.side, L= L, h= meanRoofHeight, theta= tht, hDistFromWindwardEdge= 3.0*meanRoofHeight)
 pllRoofCp3hRef= [-0.3, -0.18]
 ratio16= math.sqrt((abs(pllRoofCp3h[0]-pllRoofCp3hRef[0])/-pllRoofCp3hRef[1])**2+(abs(pllRoofCp3h[1]-pllRoofCp3hRef[1])/-pllRoofCp3hRef[1])**2)
 
@@ -143,7 +144,7 @@ ratio21= math.sqrt((abs(pllRoofPe3h[0]-pllRoofPe3hRef[0])/-pllRoofPe3hRef[1])**2
 externalPressures= [['windward wall', [windwardWallPe] ],
                     ['leeward wall', [leewardWallPe] ],
                     ['side wall', [sideWallsPe] ],
-                    ['winward roof', [windwardRoofPe] ],
+                    ['windward roof', [windwardRoofPe] ],
                     ['leeward roof', [leewardRoofPe] ],
                     ['flat (along ridge) 0 to h', pllRoofPe05h ],
                     ['flat (along ridge) h to 2h', pllRoofPe1_5h ],
@@ -160,7 +161,7 @@ for row in externalPressures:
         pressureRow.append(bottom)
     combinedPressures.append([surface, pressureRow])
 
-combinedPressuresRef= [['windward wall', [1517.1446967232455, 118.80654546445987]], ['leeward wall', [158.9020626430439, -1239.4360886157415]], ['side wall', [-57.204742551495656, -1455.5428938102812]], ['winward roof', [1124.0620679925069, -274.2760832662786]], ['leeward roof', [50.84866004577407, -1347.4894912130114]], ['flat (along ridge) 0 to h', [-273.3115477460352, -1671.6496990048208, 504.6729509543071, -893.6652003044784]], ['flat (along ridge) h to 2h', [158.9020626430439, -1239.4360886157415, 504.6729509543071, -893.6652003044784]], ['flat (along ridge) >2h', [375.0088678375834, -1023.329283421202, 504.6729509543071, -893.6652003044784]]]
+combinedPressuresRef= [['windward wall', [1517.1446967232455, 118.80654546445987]], ['leeward wall', [158.9020626430439, -1239.4360886157415]], ['side wall', [-57.204742551495656, -1455.5428938102812]], ['windward roof', [1124.0620679925069, -274.2760832662786]], ['leeward roof', [50.84866004577407, -1347.4894912130114]], ['flat (along ridge) 0 to h', [-273.3115477460352, -1671.6496990048208, 504.6729509543071, -893.6652003044784]], ['flat (along ridge) h to 2h', [158.9020626430439, -1239.4360886157415, 504.6729509543071, -893.6652003044784]], ['flat (along ridge) >2h', [375.0088678375834, -1023.329283421202, 504.6729509543071, -893.6652003044784]]]
 
 ratio22= 0.0
 for r1,r2 in zip(combinedPressures, combinedPressuresRef):
