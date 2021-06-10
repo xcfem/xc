@@ -104,7 +104,7 @@ class ProjectDirTree(object):
     def getReactionsResultsPath(self):
         ''' Return the path for the files that contains
             the reactions.'''
-        return self.getFullResultsPath()+'/reactions/'
+        return self.getFullResultsPath()+'reactions/'
     
     def getFullVerifPath(self):
         ''' Return the full path for the limit state checking files.'''
