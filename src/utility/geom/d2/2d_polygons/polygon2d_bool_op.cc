@@ -56,7 +56,7 @@ Point convert_point(const CGPoint_2 &p)
 Polygon2d return_polygon(const Polygon2d &p)
   {
     Polygon2d retval;
-    const size_t num_vertices= p.GetNumVertices();
+    const size_t num_vertices= p.getNumVertices();
     for(size_t i=1;i<=num_vertices;i++)
       {
         const Pos2d &pto= p.Vertice(i);

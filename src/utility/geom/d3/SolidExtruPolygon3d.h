@@ -34,20 +34,20 @@ class SolidExtruPolygon3d : public SolidExtru3d<PG>
   public:
     typedef SolidExtru3d<PG> solid_extru_pg;
     inline unsigned int get_num_vertices_plgno(void) const
-      { return this->scc.GetNumVertices(); }
+      { return this->scc.getNumVertices(); }
   public:
     SolidExtruPolygon3d(void) {}
     SolidExtruPolygon3d(const PG &secc,const GEOM_FT &lng): solid_extru_pg(secc,lng) {}
 
     virtual GeomObj *clon(void) const
       { return new SolidExtruPolygon3d<PG>(*this); }
-    virtual unsigned int GetNumVertices(void) const
+    virtual unsigned int getNumVertices(void) const
       { return 2*get_num_vertices_plgno(); }
-    virtual unsigned int GetNumVerticesFaceta(unsigned int faceta) const;
+    virtual unsigned int getNumVerticesFaceta(unsigned int faceta) const;
     inline virtual unsigned int getNumEdges(void) const
-      { return 3*this->scc.GetNumLados(); }
+      { return 3*this->scc.getNumEdges(); }
     inline virtual unsigned int GetNumFacetas(void) const
-      { return 2+this->scc.GetNumLados(); }
+      { return 2+this->scc.getNumEdges(); }
     Pos3d Vertice(unsigned int i) const;
 /*     virtual Polyhedron::v_ind_vertices IndVerticesArista(unsigned int arista) const; */
 /*     virtual Polyhedron::v_ind_vertices IndVerticesFaceta(unsigned int faceta) const; */
@@ -62,7 +62,7 @@ class SolidExtruPolygon3d : public SolidExtru3d<PG>
   };
 
 template <class PG>
-unsigned int SolidExtruPolygon3d<PG>::GetNumVerticesFaceta(unsigned int faceta) const
+unsigned int SolidExtruPolygon3d<PG>::getNumVerticesFaceta(unsigned int faceta) const
   {
     unsigned int retval= 4;
     unsigned int nf= GetNumFacetas();
@@ -115,7 +115,7 @@ Pos3d SolidExtruPolygon3d<PG>::Vertice(unsigned int i) const
 /*   { */
 /*     const unsigned int num_facetas= GetNumFacetas(); */
 /*     const unsigned int num_vert_plgno= get_num_vertices_plgno(); */
-/*     const unsigned int nv= GetNumVertices(); */
+/*     const unsigned int nv= getNumVertices(); */
 /*     const unsigned int ifac= faceta%num_facetas; */
 /*     if(ifac == 0) //Es la base. */
 /*       { */

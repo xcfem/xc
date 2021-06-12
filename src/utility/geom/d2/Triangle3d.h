@@ -44,7 +44,7 @@ class Triangle3d: public Polygon3d
     virtual GeomObj *clon(void) const
       { return new Triangle3d(*this); }
 
-    inline virtual unsigned int GetNumVertices(void) const
+    inline virtual unsigned int getNumVertices(void) const
       { return 3; }
     GEOM_FT dist(const Pos3d &p) const;
     GEOM_FT dist2(const Pos3d &p) const;

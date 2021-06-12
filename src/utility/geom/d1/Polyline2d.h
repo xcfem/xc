@@ -45,7 +45,7 @@ class Polyline2d : public Linear2d, public GeomObj::list_Pos2d
       { return new Polyline2d(*this); }
     const GeomObj::list_Pos2d &getVertices(void) const
       { return *this; }
-    inline size_t GetNumVertices(void) const
+    inline size_t getNumVertices(void) const
       { return GeomObj::list_Pos2d::size(); }
     size_t getNumSegments(void) const;
     inline const_iterator vertices_begin(void) const

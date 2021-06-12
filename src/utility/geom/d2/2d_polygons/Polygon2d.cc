@@ -40,7 +40,7 @@
 
 Pos2d at(const Polygon2d &p, int i)
   {
-    const int s= int(p.GetNumVertices());
+    const int s= int(p.getNumVertices());
     return p.Vertice0(i < 0 ? s - 1 - ((-i - 1) % s) : i % s);
   }
 
@@ -198,7 +198,7 @@ bool Polygon2d::Overlap(const Polygon2d &p) const
       retval= p.Overlap(vertices_begin(),vertices_end());
     else if(!retval)
       {
-        const unsigned int nl= p.GetNumLados();
+        const unsigned int nl= p.getNumEdges();
         for(unsigned int i= 1; i<=nl;i++)
           if(Overlap(p.Lado(i)))
             {
@@ -208,7 +208,7 @@ bool Polygon2d::Overlap(const Polygon2d &p) const
       }
     else if(!retval)
       {
-        const unsigned int nl= GetNumLados();
+        const unsigned int nl= getNumEdges();
         for(unsigned int i= 1; i<=nl;i++)
           if(p.Overlap(Lado(i)))
             {
@@ -237,7 +237,7 @@ bool Polygon2d::Overlap(const std::list<Polygon2d> &l) const
 //! @brief Return the maximum value of the i-th coordinate.
 GEOM_FT Polygon2d::GetMax(unsigned short int i) const
   {
-    if (GetNumVertices() < 1) return 0.0;
+    if (getNumVertices() < 1) return 0.0;
     GEOM_FT retval;
     const size_t j= (i-1)%2+1;
     if(j==1)
@@ -250,7 +250,7 @@ GEOM_FT Polygon2d::GetMax(unsigned short int i) const
 //! @brief Return the minimum value of the i-th coordinate.
 GEOM_FT Polygon2d::GetMin(unsigned short int i) const
   {
-    if (GetNumVertices() < 1) return 0.0;
+    if (getNumVertices() < 1) return 0.0;
     GEOM_FT retval;
     const size_t j= (i-1)%2+1;
     if(j==1)
@@ -263,7 +263,7 @@ GEOM_FT Polygon2d::GetMin(unsigned short int i) const
 GeomObj::list_Pos2d Polygon2d::getVertexList(void) const
   {
     GeomObj::list_Pos2d lv;
-    if(GetNumVertices() > 0)
+    if(getNumVertices() > 0)
       for(CGPolygon_2::Vertex_iterator j=cgpol.vertices_begin(); j != cgpol.vertices_end();j++)
         lv.push_back(Pos2d(*j));
     return lv;
@@ -309,10 +309,10 @@ GEOM_FT Polygon2d::getArea(void) const
 //! @brief Return the polygons that form the tributary area of each vertex.
 std::vector<Polygon2d> Polygon2d::getTributaryPolygons(void) const
   {
-    const size_t nv= GetNumVertices();
+    const size_t nv= getNumVertices();
     const Pos2d center_of_mass=getCenterOfMass();
     const Polygon2d pMed= append_mid_points(*this);
-    const size_t nvPMed= pMed.GetNumVertices();
+    const size_t nvPMed= pMed.getNumVertices();
     std::vector<Polygon2d> retval(nv);
     for(size_t i=0;i<nv;i++)
       {
@@ -337,7 +337,7 @@ std::vector<Polygon2d> Polygon2d::getTributaryPolygons(void) const
 //! @brief Return the areas of the tributary polygons (one for each vertex).
 std::vector<double> Polygon2d::getTributaryAreas(void) const
   {
-    const size_t nv= GetNumVertices();
+    const size_t nv= getNumVertices();
     std::vector<double> retval(nv,0.0);
     std::vector<Polygon2d> plgs= getTributaryPolygons();
     for(size_t i=0;i<nv;i++)
@@ -354,7 +354,7 @@ std::deque<GEOM_FT> &Polygon2d::getCovers(const Pos2dList &l) const
 Polygon2d append_mid_points(const Polygon2d &plg)
   {
     Polygon2d retval;
-    const size_t num_vertices= plg.GetNumVertices();
+    const size_t num_vertices= plg.getNumVertices();
     if(num_vertices>1)
       {
         Pos2d p1= plg.Vertice(1);

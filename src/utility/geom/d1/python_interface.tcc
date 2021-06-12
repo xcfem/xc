@@ -29,8 +29,10 @@ GeomObj::list_Pos2d (Line2d::*intersectionWithR2D)(const Line2d &) const= &Line2
 Pos2d (Line2d::*Pos2dProj)(const Pos2d &) const= &Line2d::Projection;
 Vector2d (Line2d::*Vector2dProj)(const Vector2d &) const= &Line2d::Projection;
 class_<Line2d, bases<Linear2d> >("Line2d")
-  .def(init<Pos2d, Pos2d>())
-  .def(init<Line2d>())
+  .def(init<Pos2d, Pos2d>()) //Constructs the line from two points.
+  .def(init<Pos2d, Dir2d>()) //Constructs the line from a point and a direction.
+  .def(init<Pos2d, Vector2d>()) //Constructs the line from a point and a vector.
+  .def(init<Line2d>()) //Copy constructor.
   .def("OffsetVector",OffsetVector,"returns a parallel line obtained by adding the vector to the points that define this line.")
   .def("OffsetDouble",OffsetDouble,"returns a parallel line.")
   .def("getParamA",&Line2d::GetParamA,"returns line slope; 'a' parameter from equation (y= a*x+b).")
@@ -92,9 +94,10 @@ Pos3d (Line3d::*Pos3dProj)(const Pos3d &) const= &Line3d::Projection;
 Vector3d (Line3d::*Vector3dProj)(const Vector3d &) const= &Line3d::Projection;
 
 class_<Line3d, bases<Linear3d> >("Line3d")
-  .def(init<Pos3d, Pos3d>())
-  .def(init<Pos3d, Dir3d>())
-  .def(init<Line3d>())
+  .def(init<Pos3d, Pos3d>()) //Constructs the line from two points.
+  .def(init<Pos3d, Dir3d>()) //Constructs the line from a point and a direction.
+  .def(init<Pos3d, Vector3d>()) //Constructs the line from a point and a vector.
+  .def(init<Line3d>()) //Copy constructor.
   .def("getPos3dProj",Pos3dProj,"return the projection of a point onto the line.")
   .def("getVector3dProj",Vector3dProj,"return the projection of a vector onto the line.")
   .def("getVDir",&Line3d::VDir,"return the line direction vector.")
@@ -159,7 +162,7 @@ class_<Polyline2d, bases<Linear2d, polyPos2d> >("Polyline2d")
   .def(init<Pos2dList>())
   .def(init<Polyline2d>())
   .def("appendVertex", &Polyline2d::AgregaVertice,return_internal_reference<>() )
-  .def("getNumVertices", &Polyline2d::GetNumVertices)
+  .def("getNumVertices", &Polyline2d::getNumVertices)
   .def("getNumSegments", &Polyline2d::getNumSegments)
   .def("getIx", &Polyline2d::Ix)
   .def("getIy", &Polyline2d::Iy)
@@ -186,7 +189,7 @@ class_<Polyline3d, bases<Linear3d, polyPos3d> >("Polyline3d")
 //.def(init<Pos3dList>())
   .def(init<Polyline3d>())
   .def("appendVertex", &Polyline3d::AgregaVertice,return_internal_reference<>() )
-  .def("getNumVertices", &Polyline3d::GetNumVertices)
+  .def("getNumVertices", &Polyline3d::getNumVertices)
   .def("getNumSegments", &Polyline3d::getNumSegments)
   .def("getLength", &Polyline3d::getLength,"Return the length of the polyline.")
   .def("getIntersection", &Polyline3d::getIntersection, "Return the intersection with the plane argument.")

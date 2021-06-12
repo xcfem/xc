@@ -50,7 +50,7 @@ const Pos2d *Polyline2d::AgregaVertice(const Pos2d &p)
 
 size_t Polyline2d::getNumSegments(void) const
   {
-    size_t retval= GetNumVertices();
+    size_t retval= getNumVertices();
     if(retval>0)
       retval-=1;
     return retval;

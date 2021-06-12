@@ -105,7 +105,7 @@ class Polyhedron3d: public PolyhedronBase
 
     GEOM_FT GetMax(unsigned short int i) const;
     GEOM_FT GetMin(unsigned short int i) const;
-    size_t GetNumVertices(void) const
+    size_t getNumVertices(void) const
       { return cgpolyhedron.size_of_vertices(); }
     size_t getNumEdges(void) const
       { return cgpolyhedron.size_of_halfedges(); }

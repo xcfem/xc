@@ -90,7 +90,7 @@ void decompose_poly(const Polygon2d &plg, std::list<Polygon2d> &result)
     unsigned int upperIndex= 0, lowerIndex= 0, closestIndex= 0;
     Polygon2d lowerPoly, upperPoly;
     std::vector<Pos2d> steinerPoints, reflexVertices;
-    const unsigned int polygon_size= poly.GetNumVertices();
+    const unsigned int polygon_size= poly.getNumVertices();
 
     for(unsigned int i= 0; i < polygon_size; ++i)
       {
@@ -185,7 +185,7 @@ void decompose_poly(const Polygon2d &plg, std::list<Polygon2d> &result)
             }
 
             // solve smallest poly first
-            if(lowerPoly.GetNumVertices() < upperPoly.GetNumVertices())
+            if(lowerPoly.getNumVertices() < upperPoly.getNumVertices())
 	      {
                 decompose_poly(lowerPoly, result);
                 decompose_poly(upperPoly, result);

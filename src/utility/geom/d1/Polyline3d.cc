@@ -46,7 +46,7 @@ const Pos3d *Polyline3d::AgregaVertice(const Pos3d &p)
 
 size_t Polyline3d::getNumSegments(void) const
   {
-    size_t retval= GetNumVertices();
+    size_t retval= getNumVertices();
     if(retval>0)
       retval-=1;
     return retval;

@@ -46,7 +46,7 @@ class Triangle2d : public PolygonalSurface2d
 
     virtual PolygonalSurface2d *clon(void) const
       { return new Triangle2d(*this); }
-    inline virtual unsigned int GetNumVertices(void) const
+    inline virtual unsigned int getNumVertices(void) const
       { return 3; }
     bool isDegenerated(void) const
       { return cgtriang.is_degenerate(); }

@@ -254,7 +254,7 @@ Triang3dMesh Polyhedron3d::Triangula(void) const
 //! to each of the planes that limit the tetrahedron.
 GEOM_FT Polyhedron3d::PseudoDist(const Pos3d &p) const
   {
-    const size_t nv= GetNumVertices();
+    const size_t nv= getNumVertices();
     assert(nv>0);
     Polyhedron3d::Vertex_const_iterator pVertex0= vertices_begin();
     if(nv==1) return p.dist(Pos3d(pVertex0->point()));

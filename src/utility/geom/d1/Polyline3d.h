@@ -41,7 +41,7 @@ class Polyline3d : public Linear3d, public GeomObj::list_Pos3d
     virtual void Move(const Vector3d &);
     const GeomObj::list_Pos3d &getVertices(void) const
       { return *this; }
-    inline size_t GetNumVertices(void) const
+    inline size_t getNumVertices(void) const
       { return GeomObj::list_Pos3d::size(); }
     size_t getNumSegments(void) const;
 
