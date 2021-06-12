@@ -14,6 +14,7 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@ciccp.es, ana.ortega@ciccp.es "
 
+import inspect
 import math
 import json
 import scipy.interpolate
@@ -237,17 +238,23 @@ class BoltFastener(bolts.BoltBase):
             AISC 360-16.'''
         return 3.0*self.diameter
 
-    def getMinimumEdgeDistance(self):
+    def getMinimumEdgeDistance(self, oversized= False):
         ''' Return the minimum edge distance from center of standard 
             hole to edge of connected part according to toble
-            J3.4M of AISC 360-16.'''
+            J3.4M of AISC 360-16.
+
+        :param oversized: true if hole is oversized.
+        '''
+        if(oversized):
+            this_function_name = inspect.currentframe().f_code.co_name
+            lmsg.error(this_function_name+' for oversized holes not implemented yet.')        
+        retval= 1.25*self.diameter
         if(self.diameter<=36e-3):
-            if self.diameter<BoltFastener.bf_diams[0]:
+            if(self.diameter<BoltFastener.bf_diams[0]):
                 lmsg.error('Bolt diameter = '+ str(round(self.diameter*1e3,1)) +' mm is less than minimum coded = '+ str(round(BoltFastener.bf_diams[0]*1e3,1)) + 'mm.')
             else:
-                return self.fTabJ3_4M(self.diameter)
-        else:
-            return 1.25*self.diameter
+                retval= self.fTabJ3_4M(self.diameter)
+        return retval
 
     def getNominalHoleDiameter(self, oversized= False):
         ''' Return the minimum distance between centers of standard, 
@@ -1898,11 +1905,7 @@ class ConnectedMember(connected_members.ConnectedMemberMetaData):
                           the flange.
         :param plateSteel: steel type of the bolted plate.
         '''
-        retval= self.getFlangeBoltedPlateCore(boltSteel, plateSteel)
-        if(self.connectedTo=='web'):
-           retval.setWidth(column.shape.h()-column.shape.getFlangeThickness())
-           retval.setLength(retval.getLength()+column.shape.getFlangeWidth()/2.0)        
-        return retval
+        return self.getFlangeBoltedPlateCore(boltSteel, plateSteel)
     
     def getTopFlangeBoltedPlateBlocks(self, connectionOrigin, column, boltSteel, plateSteel, blockProperties):
         ''' Return the blocks corresponding to the top flange bolted plate.
@@ -1920,6 +1923,10 @@ class ConnectedMember(connected_members.ConnectedMemberMetaData):
         ## Compute top plate reference system.
         topFlangePlateRefSys= self.getTopFlangeBoltedPlateRefSys(connectionOrigin, topFlangePlate)
         topFlangePlate.setRefSys(topFlangePlateRefSys)
+        ## Compute the intersection of the column axis with the flange plate
+        ## midplane.
+        columnCenter= topFlangePlateRefSys.getXYPlane().getIntersection(column.getAxis())
+        topFlangePlate.attachedMemberCenter= columnCenter        
         ## Compute connection lines
         topFlangePlate.setWeldLines(self.getColumnWeldLines(column, topFlangePlate))
         return topFlangePlate.getBlocks(blockProperties= blockProperties)
