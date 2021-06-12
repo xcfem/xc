@@ -58,6 +58,9 @@ class Polyline3d : public Linear3d, public GeomObj::list_Pos3d
     virtual GEOM_FT Iy(void) const;
     virtual GEOM_FT Iz(void) const;
 
+    std::pair<int,int> connected(const Segment3d &, const GEOM_FT &tol= 0.0) const;
+    bool connect(const Segment3d &, const GEOM_FT &tol= 0.0);
+
     //! @brief Return the length of the object.
     virtual GEOM_FT getLength(void) const
       { return GeomObj::list_Pos3d::getLength(); }

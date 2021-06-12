@@ -94,6 +94,7 @@ class Segment2d : public Linear2d
     GeomObj2d::list_Pos2d getIntersection(const Line2d &r) const;
     GeomObj2d::list_Pos2d getIntersection(const Ray2d &sr) const;
     GeomObj2d::list_Pos2d getIntersection(const Segment2d &sg2) const;
+    std::pair<int,int> connected(const Segment2d &, const GEOM_FT &tol) const;
 
 
     Pos2d Projection(const Pos2d &) const;

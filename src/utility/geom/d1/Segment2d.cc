@@ -428,6 +428,41 @@ GeomObj2d::list_Pos2d Segment2d::getIntersection(const Segment2d &r2) const
     return retval;
   }
 
+//! @brief If the segment argument is not connected to this segment, return
+//! (-1,-1) if it's connected at its first point, return (0,0) or (0,1)
+//! or else return (1,0) or (1,1).
+std::pair<int,int> Segment2d::connected(const Segment2d &s, const GEOM_FT &tol= 0.0) const
+  {
+    std::pair<int,int> retval(-1,-1);
+    const Pos2d p00= getFromPoint();
+    const Pos2d p01= getToPoint();
+    const Pos2d p10= s.getFromPoint();
+    const Pos2d p11= s.getToPoint();
+    const GEOM_FT tol2= tol*tol;
+    const bool connected00= (p00.dist2(p10)<tol2);
+    const bool connected01= (p00.dist2(p11)<tol2);
+    const bool connected10= (p10.dist2(p10)<tol2);
+    const bool connected11= (p01.dist2(p11)<tol2);
+    if(connected00) // connected (0,0)
+      {
+	retval= std::pair<int,int>(0,0);
+	if(connected11) // connected (1,1) too
+	  {
+	    std::cerr << getClassName() << "::" << __FUNCTION__
+		      << "; error: both segments are the same."
+		      << std::endl;
+	    retval= std::pair<int,int>(-1,-1);
+	  }
+      }
+    else if(connected01) // connected (0,1)
+      { retval= std::pair<int,int>(0,1); }
+    else if(connected10) // connected (1,0)
+      { retval= std::pair<int,int>(1,0); }
+    else if(connected11) // connected (1,1)
+      { retval= std::pair<int,int>(1,1); }
+    return retval;
+  }
+
 //! @brief Return the orthogonal projection onto the line.
 //! @param p: point to project.
 Pos2d Segment2d::Projection(const Pos2d &p) const

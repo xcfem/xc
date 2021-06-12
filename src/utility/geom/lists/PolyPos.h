@@ -46,7 +46,13 @@ class PolyPos : public std::deque<pos>
     typedef typename pos::vector vector;
 
     PolyPos(void): deque_pos() {}
-
+    
+    pos getFromPoint(void) const
+      { return this->front(); }
+    
+    pos getToPoint(void) const
+      { return this->back(); }
+    
     bool operator==(const PolyPos<pos> &other) const
       {
         return ( (const deque_pos &) (*this) == (const deque_pos &) other );
