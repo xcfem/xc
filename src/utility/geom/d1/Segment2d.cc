@@ -28,6 +28,10 @@
 #include "../pos_vec/Pos2d.h"
 #include "utility/geom/pos_vec/VectorPos2d.h"
 #include "utility/geom/trf/Trf2d.h"
+#include <boost/graph/transitive_closure.hpp>
+#include <boost/graph/graphviz.hpp>
+#include <boost/graph/graph_utility.hpp>
+#include "utility/geom/d1/Polyline2d.h"
 
 const double quiet_nan= std::numeric_limits<double>::quiet_NaN();
 
@@ -428,38 +432,20 @@ GeomObj2d::list_Pos2d Segment2d::getIntersection(const Segment2d &r2) const
     return retval;
   }
 
-//! @brief If the segment argument is not connected to this segment, return
-//! (-1,-1) if it's connected at its first point, return (0,0) or (0,1)
-//! or else return (1,0) or (1,1).
-std::pair<int,int> Segment2d::connected(const Segment2d &s, const GEOM_FT &tol= 0.0) const
+//! @brief Return true if the segment is connected to the argument point
+//! (i. e.) the distance to one of its ends is less or equal than the tolerance.
+//! @param p: point
+//! @param tol: tolerance
+bool Segment2d::connected(const Pos2d &p, const GEOM_FT &tol) const
   {
-    std::pair<int,int> retval(-1,-1);
-    const Pos2d p00= getFromPoint();
-    const Pos2d p01= getToPoint();
-    const Pos2d p10= s.getFromPoint();
-    const Pos2d p11= s.getToPoint();
+    bool retval= false;
+    const Pos2d p0= getFromPoint();
+    const Pos2d p1= getToPoint();
     const GEOM_FT tol2= tol*tol;
-    const bool connected00= (p00.dist2(p10)<tol2);
-    const bool connected01= (p00.dist2(p11)<tol2);
-    const bool connected10= (p10.dist2(p10)<tol2);
-    const bool connected11= (p01.dist2(p11)<tol2);
-    if(connected00) // connected (0,0)
-      {
-	retval= std::pair<int,int>(0,0);
-	if(connected11) // connected (1,1) too
-	  {
-	    std::cerr << getClassName() << "::" << __FUNCTION__
-		      << "; error: both segments are the same."
-		      << std::endl;
-	    retval= std::pair<int,int>(-1,-1);
-	  }
-      }
-    else if(connected01) // connected (0,1)
-      { retval= std::pair<int,int>(0,1); }
-    else if(connected10) // connected (1,0)
-      { retval= std::pair<int,int>(1,0); }
-    else if(connected11) // connected (1,1)
-      { retval= std::pair<int,int>(1,1); }
+    if(p.dist2(p0)<tol2)
+      retval= true;
+    else if(p.dist2(p1)<tol2)
+      retval= true;
     return retval;
   }
 
@@ -568,3 +554,115 @@ std::list<Segment2d> without_degenerated(const std::list<Segment2d> &lista)
   }
 
 
+std::list<Polyline2d> get_polylines(const std::list<Segment2d> &segments, const GEOM_FT &tol)
+  {
+    std::list<Polyline2d> retval;
+    GeomObj::list_Pos2d positions;
+    if(!segments.empty())
+      {
+	// Inserts first point.
+	const Segment2d &fs= *segments.begin();
+        const Pos2d fp= fs.getFromPoint();
+	positions.push_back(fp);
+	// Insert following points
+	const GEOM_FT tol2= tol*tol;
+	typedef GeomObj::list_Pos2d::const_iterator pos_iterator;
+	typedef std::pair<pos_iterator, pos_iterator> edge_pair;
+	typedef std::list<edge_pair> edge_pair_list;
+	edge_pair_list edge_pairs;
+	for(std::list<Segment2d>::const_iterator i= segments.begin();i!=segments.end();i++)
+	  {
+	    const Segment2d &s= *i;
+	    const Pos2d p0= s.getFromPoint();
+	    pos_iterator npIterA= positions.getNearestPoint(p0);
+	    GEOM_FT d2= p0.dist2(*npIterA);
+	    if(d2>tol2)
+	      {
+		positions.push_back(p0);
+	        npIterA= (++positions.rbegin()).base();
+	      }
+	    const Pos2d p1= s.getToPoint();
+	    pos_iterator npIterB= positions.getNearestPoint(p1);
+	    d2= p1.dist2(*npIterB);
+	    if(d2>tol2)
+	      {
+		positions.push_back(p1);
+	        npIterB= (++positions.rbegin()).base();
+	      }
+	    edge_pairs.push_back(edge_pair(npIterA, npIterB));
+	  }
+        struct VertexProps { int idx; char name; };
+        typedef boost::adjacency_list < boost::listS, boost::listS, boost::undirectedS, VertexProps > graph_t;
+	typedef boost::graph_traits < graph_t >::vertex_descriptor vertex_t;
+	graph_t G;
+	// Create and populate vertex container.
+	const int nv= positions.size();
+	std::vector<vertex_t> verts(nv);
+	for(int i= 0;i<nv;i++)
+	  {
+	    VertexProps p;
+	    p.idx= i;
+	    p.name= 'a' + i;
+	    verts[i] = add_vertex(p, G);
+	  }
+	// Populate edges.
+	const pos_iterator p0= positions.begin();
+	for(edge_pair_list::const_iterator i= edge_pairs.begin();i!=edge_pairs.end();i++)
+	  {
+	    const pos_iterator pA= (*i).first;
+	    const int iA= pA-p0;
+	    const pos_iterator pB= (*i).second;
+	    const int iB= pB-p0;
+	    add_edge(verts[iA], verts[iB], G);
+	  }
+	// Extract polylines.
+	graph_t::vertex_iterator v, vend;
+	std::set<int> visited;
+	for(boost::tie(v, vend) = vertices(G); v != vend; ++v)
+	  {
+	    const int degree= out_degree(*v,G);
+	    if(degree==1) // polyline starts.
+	      {
+	        Polyline2d tmp;
+	        const VertexProps prop= G[*v];
+		const int idx= prop.idx;
+		if(visited.find(idx)==visited.end()) // not already visited.
+		  {
+  		    const Pos2d pos= positions[idx];
+		    tmp.push_back(pos);
+		    visited.insert(idx);
+		    typename boost::graph_traits< graph_t >::out_edge_iterator ei, ei_end;
+		    for(boost::tie(ei, ei_end) = out_edges(*v, G); ei != ei_end; ++ei)
+		      {
+			const VertexProps nextProps= G[target(*ei, G)];
+			if(visited.find(nextProps.idx)==visited.end()) // not already visited.
+			  {
+			    const Pos2d nextPos= positions[nextProps.idx];
+			    tmp.push_back(nextPos);
+			    visited.insert(nextProps.idx);
+			  }
+		      }
+		    retval.push_back(tmp);
+		  }
+	      }
+          }
+      }
+    return retval;
+  }
+
+boost::python::list py_get_polylines(const boost::python::list &l, const GEOM_FT &tol)
+  {
+    std::list<Segment2d> segments;
+    const int sz= len(l);
+    // copy the components
+    for(int i=0; i<sz; i++)
+      {
+	Segment2d s= boost::python::extract<Segment2d>(l[i]);
+        segments.push_back(s);
+      }
+    const std::list<Polyline2d> polylines= get_polylines(segments, tol);
+    boost::python::list retval;
+    for(std::list<Polyline2d>::const_iterator i= polylines.begin();i!= polylines.end();i++)
+      retval.append(*i);
+    return retval;    
+  }

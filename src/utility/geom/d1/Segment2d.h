@@ -30,6 +30,7 @@
 
 class Dir2d;
 class VectorPos2d;
+class Polyline2d;
 
 //! @ingroup GEOM
 //
@@ -94,8 +95,7 @@ class Segment2d : public Linear2d
     GeomObj2d::list_Pos2d getIntersection(const Line2d &r) const;
     GeomObj2d::list_Pos2d getIntersection(const Ray2d &sr) const;
     GeomObj2d::list_Pos2d getIntersection(const Segment2d &sg2) const;
-    std::pair<int,int> connected(const Segment2d &, const GEOM_FT &tol) const;
-
+    bool connected(const Pos2d &, const GEOM_FT &tol= 0.0) const;
 
     Pos2d Projection(const Pos2d &) const;
     Vector2d Projection(const Vector2d &) const;
@@ -215,5 +215,8 @@ inline Line2d perpendicular_bisector(const Segment2d &sg)
 
 std::list<Segment2d> without_degenerated(const std::list<Segment2d> &);
 
+
+std::list<Polyline2d> get_polylines(const std::list<Segment2d> &, const GEOM_FT &tol);
+boost::python::list py_get_polylines(const boost::python::list &, const GEOM_FT &tol);
 
 #endif

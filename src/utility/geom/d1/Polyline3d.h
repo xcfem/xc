@@ -28,13 +28,18 @@
 #include "Linear3d.h"
 #include "Segment3d.h"
 
+class Pos3dList;
+
 //! @ingroup GEOM
 //
 //! @brief Polyline in a three-dimensional space.
 class Polyline3d : public Linear3d, public GeomObj::list_Pos3d
   {
   public:
-    Polyline3d(void): Linear3d(), GeomObj::list_Pos3d() {}
+    Polyline3d(void);
+    explicit Polyline3d(const Pos3dList &);
+    explicit Polyline3d(const boost::python::list &);
+    
     virtual bool operator==(const Polyline3d &) const;
     virtual GeomObj *clon(void) const
       { return new Polyline3d(*this); }
@@ -57,9 +62,6 @@ class Polyline3d : public Linear3d, public GeomObj::list_Pos3d
     virtual GEOM_FT Ix(void) const;
     virtual GEOM_FT Iy(void) const;
     virtual GEOM_FT Iz(void) const;
-
-    std::pair<int,int> connected(const Segment3d &, const GEOM_FT &tol= 0.0) const;
-    bool connect(const Segment3d &, const GEOM_FT &tol= 0.0);
 
     //! @brief Return the length of the object.
     virtual GEOM_FT getLength(void) const

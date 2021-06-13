@@ -284,38 +284,20 @@ GeomObj3d::list_Pos3d Segment3d::getIntersection(const Segment3d &sg2) const
     return retval;
   }
 
-//! @brief If the segment argument is not connected to this segment, return
-//! (-1,-1) if it's connected at its first point, return (0,0) or (0,1)
-//! or else return (1,0) or (1,1).
-std::pair<int,int> Segment3d::connected(const Segment3d &s, const GEOM_FT &tol= 0.0) const
+//! @brief Return true if the segment is connected to the argument point
+//! (i. e.) the distance to one of its ends is less or equal than the tolerance.
+//! @param p: point
+//! @param tol: tolerance
+bool Segment3d::connected(const Pos3d &p, const GEOM_FT &tol) const
   {
-    std::pair<int,int> retval(-1,-1);
-    const Pos3d p00= getFromPoint();
-    const Pos3d p01= getToPoint();
-    const Pos3d p10= s.getFromPoint();
-    const Pos3d p11= s.getToPoint();
+    bool retval= false;
+    const Pos3d p0= getFromPoint();
+    const Pos3d p1= getToPoint();
     const GEOM_FT tol2= tol*tol;
-    const bool connected00= (p00.dist2(p10)<tol2);
-    const bool connected01= (p00.dist2(p11)<tol2);
-    const bool connected10= (p10.dist2(p10)<tol2);
-    const bool connected11= (p01.dist2(p11)<tol2);
-    if(connected00) // connected (0,0)
-      {
-	retval= std::pair<int,int>(0,0);
-	if(connected11) // connected (1,1) too
-	  {
-	    std::cerr << getClassName() << "::" << __FUNCTION__
-		      << "; error: both segments are the same."
-		      << std::endl;
-	    retval= std::pair<int,int>(-1,-1);
-	  }
-      }
-    else if(connected01) // connected (0,1)
-      { retval= std::pair<int,int>(0,1); }
-    else if(connected10) // connected (1,0)
-      { retval= std::pair<int,int>(1,0); }
-    else if(connected11) // connected (1,1)
-      { retval= std::pair<int,int>(1,1); }
+    if(p.dist2(p0)<tol2)
+      retval= true;
+    else if(p.dist2(p1)<tol2)
+      retval= true;
     return retval;
   }
 

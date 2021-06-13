@@ -23,6 +23,23 @@
 #include "Polyline3d.h"
 #include "utility/geom/d2/Plane.h"
 
+//! @brief Default constructor.
+Polyline3d::Polyline3d(void)
+  : Linear3d(), GeomObj::list_Pos3d() {}
+
+//! @brief Constructor.
+Polyline3d::Polyline3d(const Pos3dList &l)
+  : Linear3d(), GeomObj::list_Pos3d(l.getPoints()){}
+
+//! @brief Constructor (Python interface).
+Polyline3d::Polyline3d(const boost::python::list &l)
+  {
+    const int sz= len(l);
+    // copy the components
+    for(int i=0; i<sz; i++)
+      push_back(boost::python::extract<Pos3d>(l[i]));
+  }
+
 //! @brief Comparison operator.
 bool Polyline3d::operator==(const Polyline3d &other) const
   {
@@ -218,74 +235,6 @@ Polyline3d Polyline3d::Separa(const Pos3d &p,const short int &sgn) const
     else
       copy(i,end(),back_inserter(result));
     return result;
-  }
-
-//! @brief If the segment argument is not connected to this segment, return
-//! (-1,-1) if it's connected at its first point, return (0,0) or (0,1)
-//! or else return (1,0) or (1,1).
-std::pair<int,int> Polyline3d::connected(const Segment3d &s, const GEOM_FT &tol) const
-  {
-    std::pair<int,int> retval(-1,-1);
-    const Pos3d p00= getFromPoint();
-    const Pos3d p01= getToPoint();
-    const Pos3d p10= s.getFromPoint();
-    const Pos3d p11= s.getToPoint();
-    const GEOM_FT tol2= tol*tol;
-    const bool connected00= (p00.dist2(p10)<tol2);
-    const bool connected01= (p00.dist2(p11)<tol2);
-    const bool connected10= (p10.dist2(p10)<tol2);
-    const bool connected11= (p01.dist2(p11)<tol2);
-    if(connected00) // connected (0,0)
-      {
-	retval= std::pair<int,int>(0,0);
-	if(connected11) // connected (1,1) too
-	  {
-	    std::cerr << getClassName() << "::" << __FUNCTION__
-		      << "; error: both segments are the same."
-		      << std::endl;
-	    retval= std::pair<int,int>(-1,-1);
-	  }
-      }
-    else if(connected01) // connected (0,1)
-      { retval= std::pair<int,int>(0,1); }
-    else if(connected10) // connected (1,0)
-      { retval= std::pair<int,int>(1,0); }
-    else if(connected11) // connected (1,1)
-      { retval= std::pair<int,int>(1,1); }
-    return retval;
-  }
-
-//! @brief Connect the segment to the polyline if they are connected
-//! (they share an end vertex).
-bool Polyline3d::connect(const Segment3d &s, const GEOM_FT &tol)
-  {
-    bool retval= false;
-    std::pair<int,int> conn= connected(s);
-    if(conn == std::pair<int,int>(0,0)) // connected (from, from)
-      {
-	const Pos3d newPoint= s.getToPoint();
-	push_front(newPoint);
-	retval= true;
-      }
-    else if(conn == std::pair<int,int>(0,1)) // connected (from, to)
-      {
-	const Pos3d newPoint= s.getFromPoint();
-	push_front(newPoint);
-	retval= true;
-      }
-    else if(conn == std::pair<int,int>(1,0)) // connected (to, from)
-      {
-	const Pos3d newPoint= s.getToPoint();
-	push_back(newPoint);
-	retval= true;
-      }
-    else if(conn == std::pair<int,int>(1,1)) // connected (to, to)
-      {
-	const Pos3d newPoint= s.getFromPoint();
-	push_back(newPoint);
-	retval= true;
-      }
-    return retval;
   }
 
 /**

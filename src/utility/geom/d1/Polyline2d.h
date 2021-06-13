@@ -40,6 +40,7 @@ class Polyline2d : public Linear2d, public GeomObj::list_Pos2d
     Polyline2d(void);
     explicit Polyline2d(const GeomObj::list_Pos2d &);
     explicit Polyline2d(const Pos2dList &);
+    explicit Polyline2d(const boost::python::list &);
 
     virtual GeomObj *clon(void) const
       { return new Polyline2d(*this); }
@@ -72,9 +73,6 @@ class Polyline2d : public Linear2d, public GeomObj::list_Pos2d
     virtual GEOM_FT Iy(void) const;
     virtual GEOM_FT Iz(void) const;
     
-    std::pair<int,int> connected(const Segment2d &, const GEOM_FT &tol= 0.0) const;
-    bool connect(const Segment2d &, const GEOM_FT &tol= 0.0);
-
     //! @brief Inertia product.
     inline virtual GEOM_FT Pxy(void) const
       { return NAN; }

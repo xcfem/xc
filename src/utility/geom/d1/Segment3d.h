@@ -76,7 +76,7 @@ class Segment3d : public Linear3d
     GeomObj3d::list_Pos3d getIntersection(const Line3d &r) const;
     GeomObj3d::list_Pos3d getIntersection(const Ray3d &sr) const;
     GeomObj3d::list_Pos3d getIntersection(const Segment3d &sg) const;
-    std::pair<int,int> connected(const Segment3d &, const GEOM_FT &tol) const;
+    bool connected(const Pos3d &, const GEOM_FT &tol= 0.0) const;
 
     Pos3d Projection(const Pos3d &) const;
     Vector3d Projection(const Vector3d &) const;
