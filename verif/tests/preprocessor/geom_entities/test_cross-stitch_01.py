@@ -106,7 +106,7 @@ nCargasNod= lp0.getNumNodalLoads
 ''' 
 nodalLoads= lp0.getNodalLoads
 for nl in nodalLoads:
-  print("node: ",numNod)
+    print("node: ",numNod)
 '''
 
 
@@ -166,6 +166,6 @@ import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (abs(ratio1) < 1e-15) & (abs(ratio2) < 1e-15) & (abs(ratio3) < 1e-15) & (abs(ratio4) < 1e-15) & (abs(ratio5) < 1e-11) & (analOk == 0.0) :
-  print('test '+fname+': ok.')
+    print('test '+fname+': ok.')
 else:
-  lmsg.error(fname+' ERROR.')
+    lmsg.error(fname+' ERROR.')

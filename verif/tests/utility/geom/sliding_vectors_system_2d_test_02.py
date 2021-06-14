@@ -27,9 +27,10 @@ ratio= result.getModulus()+ math.sqrt(mom**2)
 # print('ratio= ', ratio)
 
 import os
+from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if(ratio<1e-13):
-  print("test ",fname,": ok.")
+    print('test: '+fname+': ok.')
 else:
-  print("test ",fname,": ERROR.")
+    lmsg.error('test: '+fname+' ERROR.')
 

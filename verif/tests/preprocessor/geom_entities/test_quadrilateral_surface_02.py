@@ -88,7 +88,7 @@ print("number of nodes: ",nnod)
 nodes= preprocessor.getNodeHandler
 
 for_each
-  print("  node: ",tag," x= ",coord[0],", y= ",coord[1])
+    print("  node: ",tag," x= ",coord[0],", y= ",coord[1])
 
 '''
 nelemDom= mesh.getNumElements()
@@ -127,6 +127,6 @@ import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (ratio1<=1e-10) & (ratio2<=1e-10) & (ratio3<=1e-10) & (ratio4<=1e-10) & (ratio5<=1e-10):
-  print('test '+fname+': ok.')
+    print('test '+fname+': ok.')
 else:
-  lmsg.error(fname+' ERROR.')
+    lmsg.error(fname+' ERROR.')

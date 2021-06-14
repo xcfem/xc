@@ -11,11 +11,12 @@ vdir= r1.getVDir()
 tp=r1.tipo()
 
 import os
+from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if vdir.x==10. and vdir.y==10. and vdir.z==10.:
-  print("test ",fname,": ok.")
+    print('test: '+fname+': ok.')
 else:
-  print("test ",fname,": ERROR.")
+    lmsg.error('test: '+fname+' ERROR.')
 
 
 

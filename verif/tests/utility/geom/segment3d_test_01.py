@@ -54,12 +54,13 @@ print('p1: '+str(p1))
 print('p2: '+str(p2)) 
 print('ratio2: '+str(ratio2)) 
 for p in pairList:
-  print(p.first, p.second)
+    print(p.first, p.second)
 '''
 
 import os
+from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if(math.fabs(ratio1)<1e-10 and math.fabs(ratio2)<1e-15):
-  print("test ",fname,": ok.")
+    print('test: '+fname+': ok.')
 else:
-  print("test ",fname,": ERROR.")
+    lmsg.error('test: '+fname+' ERROR.')

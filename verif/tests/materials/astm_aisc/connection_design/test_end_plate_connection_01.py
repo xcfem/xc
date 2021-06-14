@@ -101,9 +101,10 @@ CF_weld=weld.getCapacityFactor(Vd/2,Nd/2)
 
 
 import os
+from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if abs(ratio0)<5e-4 and abs(ratio1)<8e-4 and abs(ratio2)<2e-3 and abs(ratio3)<2e-1 and abs(ratio4)<4e-2 and abs(ratio5)<6e-4 and abs(ratio6)<3e-2:
-    print("test ",fname,": ok.")
+    print('test: '+fname+': ok.')
 else:
-    print("test ",fname,": ERROR.")
+    lmsg.error('test: '+fname+' ERROR.')
     

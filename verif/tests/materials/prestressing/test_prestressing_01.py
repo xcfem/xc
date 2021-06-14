@@ -166,9 +166,9 @@ import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if ratio01<1e-6 and ratio02<1e-6 and ratio11<1e-6 and ratio12<1e-6 and ratio21<1e-6and ratio22<1e-6 and ratio23<1e-6 and ratio31<1e-6and ratio32<1e-6 and ratio33<1e-6:
-  print('test '+fname+': ok.')
+    print('test '+fname+': ok.')
 else:
-  lmsg.error(fname+' ERROR.')
+    lmsg.error(fname+' ERROR.')
 
 
 

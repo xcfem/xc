@@ -51,7 +51,7 @@ setTotal.genMesh(xc.meshDir.I)
 print("number of nodes: ",nnod)
 nodes= preprocessor.getNodeHandler
 for_each
-  print("  node: ",tag," x= ",coord[0],", y= ",coord[1],", z= ",coord[2])
+    print("  node: ",tag," x= ",coord[0],", y= ",coord[1],", z= ",coord[2])
 
 print("number of elements: ",nelem)
 '''
@@ -70,6 +70,6 @@ import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if cumple:
-  print('test '+fname+': ok.')
+    print('test '+fname+': ok.')
 else:
-  lmsg.error(fname+' ERROR.')
+    lmsg.error(fname+' ERROR.')

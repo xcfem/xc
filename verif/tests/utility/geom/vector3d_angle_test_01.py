@@ -15,11 +15,12 @@ ratio1=math.fabs(angleTeor-angle)#/angleTeor
 #print("angle= ", math.degrees(angle))
 
 import os
+from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if math.fabs(ratio1)<1e-4:
-  print("test ",fname,": ok.")
+    print('test: '+fname+': ok.')
 else:
-  print("test ",fname,": ERROR.")
+    lmsg.error('test: '+fname+' ERROR.')
 
 
 

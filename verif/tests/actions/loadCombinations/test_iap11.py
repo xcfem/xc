@@ -34,25 +34,25 @@ sz= len(coeficientes_elu_persistentes)
 import os
 fname= os.path.basename(__file__)
 if(szRef!=sz):
-  lmsg.error('different sizes: '+str(szRef)+', '+str(sz))
-  lmsg.error(fname+' ERROR.')
-  error= 100
+    lmsg.error('different sizes: '+str(szRef)+', '+str(sz))
+    lmsg.error(fname+' ERROR.')
+    error= 100
 else:
-  for i in range(0,szRef):
-    vR= coeficientesRef_elu_persistentes[i]
-    v= coeficientes_elu_persistentes[i]
-    #print("vR", vR, " v= ", v)
-    resta= numpy.subtract(vR,v)
-    norm= numpy.linalg.norm(resta)**2
-    # if(norm>0.1):
-    #    print('i= ', i)
-    #    print('vR= ', vR)
-    #    print('v= ', v)
-    #    print('diff: ', resta)
-    #    print('error= ', norm)
-    error+= norm
-    #print(resta)
-    #print("error= ", error)
+    for i in range(0,szRef):
+        vR= coeficientesRef_elu_persistentes[i]
+        v= coeficientes_elu_persistentes[i]
+        #print("vR", vR, " v= ", v)
+        resta= numpy.subtract(vR,v)
+        norm= numpy.linalg.norm(resta)**2
+        # if(norm>0.1):
+        #    print('i= ', i)
+        #    print('vR= ', vR)
+        #    print('v= ', v)
+        #    print('diff: ', resta)
+        #    print('error= ', norm)
+        error+= norm
+        #print(resta)
+        #print("error= ", error)
 
 import math
 error= math.sqrt(error)
@@ -69,7 +69,7 @@ for c in comb:
     print(c.descripcion)
 '''
 if (abs(error)<1e-6):
-  print("test ",fname,": ok.")
+    print('test: '+fname+': ok.')
 else:
-  print("test ",fname,": ERROR.")
+    lmsg.error('test: '+fname+' ERROR.')
 

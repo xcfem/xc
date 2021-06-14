@@ -11,11 +11,12 @@ zV=vec1.z
 tp=vec1.tipo()
 
 import os
+from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if xV==1 and yV==2 and zV==3:
-  print("test ",fname,": ok.")
+    print('test: '+fname+': ok.')
 else:
-  print("test ",fname,": ERROR.")
+    lmsg.error('test: '+fname+' ERROR.')
 
 
 

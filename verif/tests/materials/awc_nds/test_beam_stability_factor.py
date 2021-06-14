@@ -108,8 +108,9 @@ print('ratio15= ',ratio15)
 '''
 
 import os
+from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if(check):
-  print("test "+fname+": ok.")
+    print("test "+fname+": ok.")
 else:
-  print("test "+fname+": ERROR.")
+    print("test "+fname+": ERROR.")

@@ -17,10 +17,11 @@ fuerza=vec1.y
 mTeor=fuerza*brazo
 
 import os
+from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if m.x==0 and m.y==0and m.z==mTeor:
-  print("test ",fname,": ok.")
+    print('test: '+fname+': ok.')
 else:
-  print("test ",fname,": ERROR.")
+    lmsg.error('test: '+fname+' ERROR.')
 
 

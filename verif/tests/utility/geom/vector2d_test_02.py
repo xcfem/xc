@@ -23,11 +23,12 @@ ratio2=math.degrees(alpha)-45
 
 
 import os
+from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if math.fabs(ratio1)<1e-10 and math.fabs(ratio2)<1e-10:
-  print("test ",fname,": ok.")
+    print('test: '+fname+': ok.')
 else:
-  print("test ",fname,": ERROR.")
+    lmsg.error('test: '+fname+' ERROR.')
 
 
 

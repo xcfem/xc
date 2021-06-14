@@ -61,7 +61,7 @@ l4.nDiv= NumDiv
 ''' 
 for_each_side
 
-  print("name: ",edge.name," directo:",edge.directo)
+    print("name: ",edge.name," directo:",edge.directo)
   edge{print(" p1:",p1.name," p2:",p2.name )
 
 '''
@@ -81,7 +81,7 @@ print("number of nodes: ",nnod)
 nodes= preprocessor.getNodeHandler
 
 for_each
-  print("  node: ",tag," x= ",coord[0],", y= ",coord[1],", z= ",coord[2])
+    print("  node: ",tag," x= ",coord[0],", y= ",coord[1],", z= ",coord[2])
                
 
 print("number of elements: ",nelem)
@@ -111,6 +111,6 @@ import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (ratio1<1e-10) & (ratio4<1e-10) & (ratio2<=1e-10) & (ratio3<=1e-10):
-  print('test '+fname+': ok.')
+    print('test '+fname+': ok.')
 else:
-  lmsg.error(fname+' ERROR.')
+    lmsg.error(fname+' ERROR.')

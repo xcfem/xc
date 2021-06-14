@@ -43,8 +43,9 @@ ratio3= (equivalentPhi-equivalentPhiTeor)/equivalentPhiTeor
 # print('equivalentPhiTeor= ', math.degrees(equivalentPhiTeor))
 
 import os
+from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (ratio1<1e-3) & (ratio2<1e-3) & (ratio3<1e-3):# & (ratio4<3e-2):
-  print("test ",fname,": ok.")
+    print('test: '+fname+': ok.')
 else:
-  print("test ",fname,": ERROR.")
+    lmsg.error('test: '+fname+' ERROR.')

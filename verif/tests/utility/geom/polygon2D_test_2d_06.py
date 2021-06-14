@@ -32,8 +32,9 @@ p2=list1[1]
 ratio2=(p2.getPerimeter()-referencePerimeter)/referencePerimeter
 
 import os
+from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if abs(ratio1)<1e-10 and abs(ratio2)<1e-10:
-  print("test ",fname,": ok.")
+    print('test: '+fname+': ok.')
 else:
-  print("test ",fname,": ERROR.")
+    lmsg.error('test: '+fname+' ERROR.')

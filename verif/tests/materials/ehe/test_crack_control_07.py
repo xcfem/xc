@@ -113,9 +113,9 @@ secHAParamsFis.printParams()
 '''
 
 if (abs(ratio1)<1e-10):
-  print('test '+fname+': ok.')
+    print('test '+fname+': ok.')
 else:
-  lmsg.error(fname+' ERROR.')
+    lmsg.error(fname+' ERROR.')
 
 # Graphic stuff
 # fibers= scc.getFibers()

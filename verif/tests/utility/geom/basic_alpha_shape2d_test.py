@@ -22,9 +22,10 @@ print('areaPlg= ', areaPlg, areaRef)
 print('ratio1= ', ratio1)
 '''
 import os
+from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if abs(ratio1)<1e-5:
-  print("test ",fname,": ok.")
+    print('test: '+fname+': ok.')
 else:
-  print("test ",fname,": ERROR.")
+    lmsg.error('test: '+fname+' ERROR.')
 

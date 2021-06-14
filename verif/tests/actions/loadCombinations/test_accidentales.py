@@ -37,13 +37,13 @@ ratio1= abs(cont-6.0)/6.0
 
 '''    
 for comb in combAcc:
-  print(comb.name)
+    print(comb.name)
 print("cont= ", cont)
 print("ratio1= ", ratio1)
 '''   
 
 fname= os.path.basename(__file__)
 if (abs(ratio1)<1e-15):
-  print("test ",fname,": ok.")
+    print('test: '+fname+': ok.')
 else:
-  print("test ",fname,": ERROR.")
+    lmsg.error('test: '+fname+' ERROR.')
