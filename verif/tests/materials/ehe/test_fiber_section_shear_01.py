@@ -105,7 +105,7 @@ loadHandler= preprocessor.getLoadHandler.addToDomain("1") # Add the other one.
 analOk= analysis.analyze(10)
 if(analOk!=0):
     print("Error!; failed to converge.")
-  exit()
+    exit()
 
 
 concreteSectionShearParams.calcVuEHE08(scc,"",EHE_materials.HA25,EHE_materials.B500S, 0,0,0,0)
@@ -121,7 +121,7 @@ loadHandler= preprocessor.getLoadHandler.addToDomain("2") # Add another one.
 analOk= analysis.analyze(10)
 if(analOk!=0):
     print("Error!; failed to converge.")
-  exit()
+    exit()
 
 
 concreteSectionShearParams.calcVuEHE08(scc,"",EHE_materials.HA25,EHE_materials.B500S, 0,0,0,0)
