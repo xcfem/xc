@@ -106,6 +106,26 @@ class TieBar(object):
         '''
         return self.getNominalTensileStrength()/self.steelType.gammaF
     
+    def getBiaxialBendingEfficiency(self, Nd:float, Myd:float, Mzd:float):
+        '''Return biaxial bending efficiency.
+
+           Nd: axial design load (required axial strength).
+           Myd: bending moment about weak axis (required flexural strength).
+           Mzd: bending moment about strong axis (required flexural strength).
+        '''
+        retval= 0.0
+        # No flexural strength.
+        if(abs(Myd)>0.0):
+            retval+= abs(Myd)/1e-6
+        if(abs(Mzd)>0.0):
+            retval+= abs(Mzd)/1e-6
+        # Axial strength.
+        if(Nd<0): # No compressive strength
+            retval+= abs(Nd)/1e-6
+        else:
+            retval+= Nd/self.getDesignTensileStrength()
+        return retval
+   
     def __str__(self):
         return self.getName()
     
@@ -126,6 +146,14 @@ class TieBar(object):
         steelTypeClassName= dct['steelTypeClassName']+'()'
         self.steelType= eval(steelTypeClassName)
         self.steelType.setFromDict(dct['steelType'])
+        
+    def setupULSControlVars(self, elems):
+        '''For each element creates the variables
+           needed to check ultimate limit state criterion to be satisfied.
+
+        '''
+        for e in elems:
+            e.setProp('crossSection',self)
 
 M12= TieBar(12e-3, stressArea= 84e-6, steelType= SBS355)
 M16= TieBar(16e-3, stressArea= 157e-6, steelType= SBS520)
