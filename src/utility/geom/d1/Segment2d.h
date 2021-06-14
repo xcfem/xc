@@ -217,6 +217,6 @@ std::list<Segment2d> without_degenerated(const std::list<Segment2d> &);
 
 
 std::list<Polyline2d> get_polylines(const std::list<Segment2d> &, const GEOM_FT &tol);
-boost::python::list py_get_polylines(const boost::python::list &, const GEOM_FT &tol);
+boost::python::list py_get_2d_polylines(const boost::python::list &, const GEOM_FT &tol);
 
 #endif

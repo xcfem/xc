@@ -218,6 +218,7 @@ class_<int_pair_deque>("int_pair_deque")
   ;
 
 def("getSegmentIntersections",getIntersections, "Return the intersection between the segments.");
-def("get_polylines",py_get_polylines, "Return the polylines obtained by connection the segments.");
+def("get_2d_polylines",py_get_2d_polylines, "Return the polylines obtained by connection the 2D segments.");
+def("get_3d_polylines",py_get_3d_polylines, "Return the polylines obtained by connection the 3D segments.");
 
 #include "function_from_points/python_interface.tcc"

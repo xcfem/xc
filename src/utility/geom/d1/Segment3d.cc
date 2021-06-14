@@ -29,6 +29,9 @@
 #include <CGAL/AABB_tree.h>
 #include <CGAL/AABB_traits.h>
 #include <CGAL/AABB_segment_primitive.h>
+#include <boost/graph/graphviz.hpp>
+#include <boost/graph/graph_utility.hpp>
+#include "utility/geom/d1/Polyline3d.h"
 
 //! @brief Constructor.
 Segment3d::Segment3d(void): Linear3d(),cgseg(CGPoint_3(0,0,0),CGPoint_3(1,0,0)) {}
@@ -481,4 +484,127 @@ int_pair_deque getIntersections(const std::deque<Segment3d> &segments)
 	retval.push_back(int_pair(first,second));
       }
     return retval;
+  }
+
+std::list<Polyline3d> get_polylines(const std::list<Segment3d> &segments, const GEOM_FT &tol)
+  {
+    std::list<Polyline3d> retval;
+    GeomObj::list_Pos3d positions;
+    if(!segments.empty())
+      {
+	// Inserts first point.
+	const Segment3d &fs= *segments.begin();
+        const Pos3d fp= fs.getFromPoint();
+	positions.push_back(fp);
+	// Insert following points
+	const GEOM_FT tol2= tol*tol;
+	typedef GeomObj::list_Pos3d::const_iterator pos_iterator;
+	typedef std::pair<pos_iterator, pos_iterator> edge_pair;
+	typedef std::list<edge_pair> edge_pair_list;
+	edge_pair_list edge_pairs;
+	for(std::list<Segment3d>::const_iterator i= segments.begin();i!=segments.end();i++)
+	  {
+	    const Segment3d &s= *i;
+	    const Pos3d p0= s.getFromPoint();
+	    pos_iterator npIterA= positions.getNearestPoint(p0);
+	    GEOM_FT d2= p0.dist2(*npIterA);
+	    if(d2>tol2)
+	      {
+		positions.push_back(p0);
+	        npIterA= (++positions.rbegin()).base();
+	      }
+	    const Pos3d p1= s.getToPoint();
+	    pos_iterator npIterB= positions.getNearestPoint(p1);
+	    d2= p1.dist2(*npIterB);
+	    if(d2>tol2)
+	      {
+		positions.push_back(p1);
+	        npIterB= (++positions.rbegin()).base();
+	      }
+	    edge_pairs.push_back(edge_pair(npIterA, npIterB));
+	  }
+	// Create Graph
+        struct VertexProps { int idx; char name; };
+        typedef boost::adjacency_list < boost::listS, boost::listS, boost::undirectedS, VertexProps > graph_t;
+	typedef boost::graph_traits < graph_t >::vertex_descriptor vertex_t;
+        typedef boost::graph_traits< graph_t >::out_edge_iterator edge_iterator;
+	graph_t G;
+	// Create and populate vertex container.
+	const int nv= positions.size();
+	std::vector<vertex_t> verts(nv);
+	for(int i= 0;i<nv;i++)
+	  {
+	    VertexProps p;
+	    p.idx= i;
+	    p.name= 'a' + i;
+	    verts[i] = add_vertex(p, G);
+	  }
+	// Populate edges.
+	const pos_iterator p0= positions.begin();
+	for(edge_pair_list::const_iterator i= edge_pairs.begin();i!=edge_pairs.end();i++)
+	  {
+	    const pos_iterator pA= (*i).first;
+	    const int iA= pA-p0;
+	    const pos_iterator pB= (*i).second;
+	    const int iB= pB-p0;
+	    add_edge(verts[iA], verts[iB], G);
+	  }
+	// Extract polylines.
+	graph_t::vertex_iterator v, vend;
+	std::set<int> visited;
+	for(boost::tie(v, vend) = vertices(G); v != vend; ++v)
+	  {
+	    int degree= out_degree(*v,G);
+	    if(degree==1) // polyline starts.
+	      {
+	        Polyline3d tmp;
+		bool stop= false;
+		vertex_t nv= *v;
+                int nextVertexIdx= G[nv].idx;
+		do
+		  {
+		    if(visited.find(nextVertexIdx)==visited.end()) // not already visited.
+		      {
+			const Pos3d pos= positions[nextVertexIdx];
+			tmp.push_back(pos);
+			visited.insert(nextVertexIdx);
+			// Get the next vertex id.
+ 		        edge_iterator ei, ei_end;
+			boost::tie(ei, ei_end) = out_edges(nv, G);
+			for(; ei != ei_end; ++ei)
+			  {
+			    nv= target(*ei, G);
+			    nextVertexIdx= G[nv].idx;
+			    degree= out_degree(nv,G);
+			    if(visited.find(nextVertexIdx)==visited.end()) // not already visited.
+			      break;
+			  }
+		      }
+		    else // already visited.
+		      stop= true;
+		  }
+		while(!stop);
+		if(!tmp.empty())
+                    retval.push_back(tmp);
+	      }
+          }
+      }
+    return retval;
+  }
+
+boost::python::list py_get_3d_polylines(const boost::python::list &l, const GEOM_FT &tol)
+  {
+    std::list<Segment3d> segments;
+    const int sz= len(l);
+    // copy the components
+    for(int i=0; i<sz; i++)
+      {
+	Segment3d s= boost::python::extract<Segment3d>(l[i]);
+        segments.push_back(s);
+      }
+    const std::list<Polyline3d> polylines= get_polylines(segments, tol);
+    boost::python::list retval;
+    for(std::list<Polyline3d>::const_iterator i= polylines.begin();i!= polylines.end();i++)
+      retval.append(*i);
+    return retval;    
   }

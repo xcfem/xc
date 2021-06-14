@@ -28,7 +28,6 @@
 #include "../pos_vec/Pos2d.h"
 #include "utility/geom/pos_vec/VectorPos2d.h"
 #include "utility/geom/trf/Trf2d.h"
-#include <boost/graph/transitive_closure.hpp>
 #include <boost/graph/graphviz.hpp>
 #include <boost/graph/graph_utility.hpp>
 #include "utility/geom/d1/Polyline2d.h"
@@ -553,7 +552,6 @@ std::list<Segment2d> without_degenerated(const std::list<Segment2d> &lista)
     return retval;
   }
 
-
 std::list<Polyline2d> get_polylines(const std::list<Segment2d> &segments, const GEOM_FT &tol)
   {
     std::list<Polyline2d> retval;
@@ -591,9 +589,11 @@ std::list<Polyline2d> get_polylines(const std::list<Segment2d> &segments, const 
 	      }
 	    edge_pairs.push_back(edge_pair(npIterA, npIterB));
 	  }
+	// Create Graph
         struct VertexProps { int idx; char name; };
         typedef boost::adjacency_list < boost::listS, boost::listS, boost::undirectedS, VertexProps > graph_t;
 	typedef boost::graph_traits < graph_t >::vertex_descriptor vertex_t;
+        typedef boost::graph_traits< graph_t >::out_edge_iterator edge_iterator;
 	graph_t G;
 	// Create and populate vertex container.
 	const int nv= positions.size();
@@ -620,37 +620,45 @@ std::list<Polyline2d> get_polylines(const std::list<Segment2d> &segments, const 
 	std::set<int> visited;
 	for(boost::tie(v, vend) = vertices(G); v != vend; ++v)
 	  {
-	    const int degree= out_degree(*v,G);
+	    int degree= out_degree(*v,G);
 	    if(degree==1) // polyline starts.
 	      {
 	        Polyline2d tmp;
-	        const VertexProps prop= G[*v];
-		const int idx= prop.idx;
-		if(visited.find(idx)==visited.end()) // not already visited.
+		bool stop= false;
+		vertex_t nv= *v;
+                int nextVertexIdx= G[nv].idx;
+		do
 		  {
-  		    const Pos2d pos= positions[idx];
-		    tmp.push_back(pos);
-		    visited.insert(idx);
-		    typename boost::graph_traits< graph_t >::out_edge_iterator ei, ei_end;
-		    for(boost::tie(ei, ei_end) = out_edges(*v, G); ei != ei_end; ++ei)
+		    if(visited.find(nextVertexIdx)==visited.end()) // not already visited.
 		      {
-			const VertexProps nextProps= G[target(*ei, G)];
-			if(visited.find(nextProps.idx)==visited.end()) // not already visited.
+			const Pos2d pos= positions[nextVertexIdx];
+			tmp.push_back(pos);
+			visited.insert(nextVertexIdx);
+			// Get the next vertex id.
+ 		        edge_iterator ei, ei_end;
+			boost::tie(ei, ei_end) = out_edges(nv, G);
+			for(; ei != ei_end; ++ei)
 			  {
-			    const Pos2d nextPos= positions[nextProps.idx];
-			    tmp.push_back(nextPos);
-			    visited.insert(nextProps.idx);
+			    nv= target(*ei, G);
+			    nextVertexIdx= G[nv].idx;
+			    degree= out_degree(nv,G);
+			    if(visited.find(nextVertexIdx)==visited.end()) // not already visited.
+			      break;
 			  }
 		      }
-		    retval.push_back(tmp);
+		    else // already visited.
+		      stop= true;
 		  }
+		while(!stop);
+		if(!tmp.empty())
+                    retval.push_back(tmp);
 	      }
           }
       }
     return retval;
   }
 
-boost::python::list py_get_polylines(const boost::python::list &l, const GEOM_FT &tol)
+boost::python::list py_get_2d_polylines(const boost::python::list &l, const GEOM_FT &tol)
   {
     std::list<Segment2d> segments;
     const int sz= len(l);

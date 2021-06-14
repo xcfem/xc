@@ -30,6 +30,7 @@
 
 class Dir3d;
 class VectorPos3d;
+class Polyline3d;
 
 typedef std::pair<int,int> int_pair;
 typedef std::deque<int_pair> int_pair_deque;
@@ -147,5 +148,7 @@ inline GeomObj3d::list_Pos3d intersection(const Segment3d &sg1,const Segment3d &
 
 int_pair_deque getIntersections(const std::deque<Segment3d> &);
 
+std::list<Polyline3d> get_polylines(const std::list<Segment3d> &, const GEOM_FT &tol);
+boost::python::list py_get_3d_polylines(const boost::python::list &, const GEOM_FT &tol);
 
 #endif
