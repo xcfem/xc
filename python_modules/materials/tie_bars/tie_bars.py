@@ -76,7 +76,7 @@ class TieBar(object):
         '''
         return math.pi*(self.diameter/2.0)**2
     
-    def getArea(self):
+    def A(self):
         ''' Return the stress area of the bar.
         '''
         return self.stressArea
@@ -87,7 +87,7 @@ class TieBar(object):
     def getNominalYieldStrength(self):
         ''' Return the nominal yield strength of the bar.
         '''
-        return self.getArea()*self.steelType.fy
+        return self.A()*self.steelType.fy
             
     def getDesignYieldStrength(self):
         ''' Return the design yield strength of the bar according
@@ -98,7 +98,7 @@ class TieBar(object):
     def getNominalTensileStrength(self):
         ''' Return the nominal strength of the bar.
         '''
-        return self.getArea()*self.steelType.fu
+        return self.A()*self.steelType.fu
             
     def getDesignTensileStrength(self):
         ''' Return the design tensile strength of the bar according
