@@ -825,6 +825,9 @@ python tests/materials/astm_aisc/connection_design/test_end_tee_connection_01.py
 python tests/materials/astm_aisc/connection_design/test_weld_01.py
 python tests/materials/astm_aisc/connection_design/test_weld_02.py
 
+echo "$BLEU" "      Tie bar tests." "$NORMAL"
+python tests/materials/tie_bars/test_tie_bars_01.py
+
 echo "$BLEU" "  Wood sections test." "$NORMAL"
 echo "$BLEU" "    AWC NDS tests." "$NORMAL"
 python tests/materials/awc_nds/awc_nds2018_test01.py

@@ -39,9 +39,6 @@ class ASTMSteel(steel_base.BasicSteel):
     '''ASTM structural steel.
 
     :ivar name: steel identifier.
-    :ivar fy: yield stress (defaults to 250e6 Pa)
-    :ivar fu: ultimate tensile strength (defaults to 400e6 Pa)
-    :ivar gammaM: partial factor (defaults to 1.0)
     :ivar Rt: Ratio of the expected tensile strength to the 
               specified minimum tensile strength, Fu.
               See table A3.1 of AISC 341 seismic provisions.
@@ -188,7 +185,7 @@ def getFilletWeldMaximumLegSheets(t1, t2):
 class BoltFastener(bolts.BoltBase):
     ''' ASTM bolt according to chapter J of AISC 360-16.
 
-    :ivar group: 
+    :ivar steelType: type of the bolt steel. 
     '''
     # See table J3.4 M of AISC 360-16.
     bf_diams= [12e-3,14e-3,16e-3, 20e-3, 22e-3, 24e-3, 27e-3, 30e-3, 36e-3]
