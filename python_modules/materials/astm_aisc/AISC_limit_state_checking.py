@@ -4,11 +4,11 @@
 from __future__ import print_function
 from __future__ import division
 
-__author__= "Luis C. Pérez Tato (LCPT) Ana Ortega (AO_O)"
-__copyright__= "Copyright 2016 LCPT"
+__author__= "Ana Ortega (AO_O) Luis C. Pérez Tato (LCPT)"
+__copyright__= "Copyright 2020 LCPT"
 __license__= "GPL"
 __version__= "3.0"
-__email__= "l.pereztato@gmail.com ana.ortega@ciccp.es"
+__email__= "ana.ortega@ciccp.es, l.pereztato@gmail.com"
 
 import enum
 import math
@@ -218,8 +218,13 @@ class Member(buckling_base.MemberBase):
              e.setProp('chiLT',chiLT) # flexural strength reduction factor.
              e.setProp('chiN',chiN) # compressive strength reduction factor.
 
-    def installULSControlRecorder(self,recorderType, chiN= 1.0, chiLT=1.0):
-        '''Install recorder for verification of ULS criterion.'''
+    def installULSControlRecorder(self,recorderType, chiN: float= 1.0, chiLT: float= 1.0):
+        '''Install recorder for verification of ULS criterion.
+
+        :param recorderType: type of the recorder to install.
+        :param chiN: compressive strength reduction factor.
+        :param chiLT: flexural strength reduction factor.
+        '''
         prep= self.getPreprocessor()
         nodes= prep.getNodeHandler
         domain= prep.getDomain

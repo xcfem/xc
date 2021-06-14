@@ -1455,7 +1455,7 @@ class ASTMShape(object):
             CF= ratioN/2.0+(ratioMz+ratioMy) # equation H1-1b
         return (CF,NcRd,McRdy,McRdz,MvRdz,MbRdz)
 
-    def setupULSControlVars(self,elems,sectionClass= 1, chiN=1.0, chiLT=1.0):
+    def setupULSControlVars(self, elems, sectionClass= 1, chiN=1.0, chiLT=1.0):
         '''For each element creates the variables
            needed to check ultimate limit state criterion to be satisfied.
 

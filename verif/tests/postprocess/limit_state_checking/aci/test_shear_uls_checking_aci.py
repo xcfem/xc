@@ -128,11 +128,11 @@ sections.append(beamRCsect)
 reinfConcreteSectionDistribution.assign(elemSet=totalSet.getElements,setRCSects=beamRCsect)
 
 #Checking shear.
-lsd.shearResistance.controller= ACI_limit_state_checking.ShearController(limitStateLabel= lsd.shearResistance.label)
-lsd.shearResistance.controller.analysisToPerform= predefined_solutions.plain_newton_raphson
 lsd.normalStressesResistance.outputDataBaseFileName= 'resVerif'
 
 outCfg= lsd.VerifOutVars(listFile='N',calcMeanCF='Y')
+outCfg.controller= ACI_limit_state_checking.ShearController(limitStateLabel= lsd.shearResistance.label)
+outCfg.controller.analysisToPerform= predefined_solutions.plain_newton_raphson
 
 (FEcheckedModel,meanFCs)= reinfConcreteSectionDistribution.runChecking(lsd.shearResistance, matDiagType="d",threeDim= True,outputCfg=outCfg)  
 

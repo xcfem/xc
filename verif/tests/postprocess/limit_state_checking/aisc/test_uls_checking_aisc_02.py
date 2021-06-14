@@ -143,7 +143,7 @@ for ls in limitStates:
 
 outCfg= lsd.VerifOutVars(setCalc=xcTotalSet, appendToResFile='Y', listFile='N', calcMeanCF='Y')
 limitState=lsd.normalStressesResistance
-limitState.controller= aisc.BiaxialBendingNormalStressController(limitState.label)
+outCfg.controller= aisc.BiaxialBendingNormalStressController(limitState.label)
 average= limitState.runChecking(outCfg)
 
 ratio= ((average[0]-0.72538261095588463)/0.72538261095588463)**2

@@ -143,7 +143,7 @@ for ls in limitStates:
 ### Check material resistance.
 outCfg= lsd.VerifOutVars(setCalc=xcTotalSet, appendToResFile='Y', listFile='N', calcMeanCF='Y')
 limitState= lsd.vonMisesStressResistance
-limitState.controller= aisc.VonMisesStressController(limitState.label)
+outCfg.controller= aisc.VonMisesStressController(limitState.label)
 average= limitState.runChecking(outCfg)
 ratio= ((average[0]-0.27083778356986787)/0.27083778356986787)**2
 

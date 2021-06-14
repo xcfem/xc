@@ -91,9 +91,6 @@ if(not pth):
   pth= "."
 fname= os.path.basename(__file__)
 
-limit_state_data.shearResistance.controller= EHE_limit_state_checking.ShearController(limitStateLabel= limit_state_data.shearResistance.label)
-limit_state_data.shearResistance.controller.verbose= False # Don't display log messages.
-limit_state_data.shearResistance.controller.solutionProcedureType= CustomNewtonRaphson
 cfg=default_config.EnvConfig(language='en', resultsPath= 'tmp_results/', intForcPath= 'internalForces/',verifPath= 'verifications/',reportPath='./',reportResultsPath= 'annex/',grWidth='120mm')
 cfg.projectDirTree.workingDirectory= '/tmp/'+os.path.splitext(fname)[0]
 cfg.projectDirTree.createTree() # To allow copying existing internal force data into.
@@ -105,6 +102,9 @@ shutil.copy(pth+'/intForce_ULS_shearResistance.csv',limit_state_data.shearResist
 
 
 outCfg= limit_state_data.VerifOutVars(listFile='N',calcMeanCF='Y')
+outCfg.controller= EHE_limit_state_checking.ShearController(limitStateLabel= limit_state_data.shearResistance.label)
+outCfg.controller.verbose= False # Don't display log messages.
+outCfg.controller.solutionProcedureType= CustomNewtonRaphson
 
 (FEcheckedModel,meanFCs)= reinfConcreteSectionDistribution.runChecking(limit_state_data.shearResistance, matDiagType="d",threeDim= True,outputCfg=outCfg)  
 

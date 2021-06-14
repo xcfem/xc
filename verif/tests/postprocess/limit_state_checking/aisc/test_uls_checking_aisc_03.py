@@ -142,7 +142,7 @@ for ls in limitStates:
 ## Check limit state
 outCfg= lsd.VerifOutVars(setCalc=xcTotalSet, appendToResFile='Y', listFile='N', calcMeanCF='Y')
 limitState=lsd.shearResistance
-limitState.controller= aisc.ShearController(limitState.label)
+outCfg.controller= aisc.ShearController(limitState.label)
 average= limitState.runChecking(outCfg)
 
 ratio= ((average[0]-0.47421897657321965)/0.47421897657321965)**2

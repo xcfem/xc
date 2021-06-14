@@ -134,10 +134,49 @@ class ControlVarsBase(object):
         return retval
 
   
-class NMy(ControlVarsBase):
-    '''Uniaxial bending. Internal forces [N,My] for a combination.
+class N(ControlVarsBase):
+    '''Uniaxial tension or compression. Internal force [N] for a combination.
 
     :ivar N:        axial force (defaults to 0.0)
+    '''
+    def __init__(self,combName= 'nil', NN= 0.0):
+        '''
+        Constructor.
+
+        :param combName: name of the load combinations to deal with
+        :param NN:        axial force (defaults to 0.0)
+        '''
+        super(N,self).__init__(combName)
+        self.N= NN # Axial force.
+
+    def getLaTeXFields(self,factor= 1e-3):
+      ''' Returns a string with the intermediate fields of the LaTeX string.
+
+      :param factor: factor for units (default 1e-3 -> kN)'''
+      retval= super(N,self).getLaTeXFields(factor)
+      retval+= " & "+fmt.Esf.format(self.N*factor)
+      return retval
+
+    def getAnsysStrings(self, eTag, axis, factor= 1e-3):
+      ''' Returns a string to represent fields in ANSYS (R).
+
+      :param eTag: element identifier.
+      :param axis: section 1 or 2
+      :param factor: factor for units (default 1e-3 -> kN)
+      '''
+      retval= super(N,self).getAnsysStrings(eTag,axis,factor)
+      retval.append("detab,"+str(eTag)+",N" +axis+","+str(self.N*factor)+"\n")
+      return retval
+
+    def getStrArguments(self):
+      '''Returns a string for a 'copy' (kind of) constructor.'''
+      retval= super(N,self).getStrArguments()
+      retval+= ',N= ' + str(self.N) 
+      return retval
+  
+class NMy(N):
+    '''Uniaxial bending. Internal forces [N,My] for a combination.
+
     :ivar My:       bending moment about Y axis (defaults to 0.0)
     '''
     def __init__(self,combName= 'nil',N= 0.0,My= 0.0):
@@ -148,17 +187,16 @@ class NMy(ControlVarsBase):
         :param N:        axial force (defaults to 0.0)
         :param My:       bending moment about Y axis (defaults to 0.0)
         '''
-        super(NMy,self).__init__(combName)
-        self.N= N # Axial force.
+        super(NMy,self).__init__(combName, N)
         self.My= My # Bending moment about y axis.
 
     def getLaTeXFields(self,factor= 1e-3):
-      ''' Returns a string with the intermediate fields of the LaTeX string.
+        ''' Returns a string with the intermediate fields of the LaTeX string.
 
-      :param factor: factor for units (default 1e-3 -> kN)'''
-      retval= super(NMy,self).getLaTeXFields(factor)
-      retval+= " & "+fmt.Esf.format(self.N*factor)+" & "+fmt.Esf.format(self.My*factor)
-      return retval
+        :param factor: factor for units (default 1e-3 -> kN)'''
+        retval= super(NMy,self).getLaTeXFields(factor)
+        retval+= " & "+fmt.Esf.format(self.My*factor)
+        return retval
 
     def getAnsysStrings(self,eTag,axis, factor= 1e-3):
       ''' Returns a string to represent fields in ANSYS (R).
@@ -167,14 +205,12 @@ class NMy(ControlVarsBase):
       :param axis: section 1 or 2
       :param factor: factor for units (default 1e-3 -> kN)'''
       retval= super(NMy,self).getAnsysStrings(eTag,axis,factor)
-      retval.append("detab,"+str(eTag)+",N" +axis+","+str(self.N*factor)+"\n")
       retval.append("detab,"+str(eTag)+",My" +axis+","+str(self.My*factor)+"\n")
       return retval
 
     def getStrArguments(self):
       '''Returns a string for a 'copy' (kind of) constructor.'''
       retval= super(NMy,self).getStrArguments()
-      retval+= ',N= ' + str(self.N) 
       retval+= ',My= ' + str(self.My)
       return retval
 
@@ -219,6 +255,25 @@ class NMyMz(NMy):
       retval+= ',Mz= ' + str(self.Mz)
       return retval
 
+class CFN(N):
+    '''Uniaxial tension or compression. Normal stresses limit state variables.
+
+    :ivar CF: capacity factor (efficiency) (defaults to -1.0; CF<1.0 -> Ok; CF>1.0 -> KO)
+    '''
+    def __init__(self,combName= 'nil',CF= -1.0,N= 0.0):
+        '''
+        Constructor.
+
+        :param combName: name of the load combinations to deal with
+        :param CF:       capacity factor (efficiency) (defaults to -1.0; CF<1.0 -> Ok; CF>1.0 -> KO)
+        :param N:        axial force (defaults to 0.0)
+        '''
+        super(CFN,self).__init__(combName,N)
+        self.CF= CF # Capacity factor or efficiency
+
+    def getCF(self):
+        ''' Return the capacity factor.'''
+        return self.CF
 
 class CFNMy(NMy):
     '''Uniaxial bending. Normal stresses limit state variables.
@@ -406,11 +461,10 @@ class CFNMyMz(CFNMy):
         retval+= ',Mz= ' + str(self.Mz)
         return retval
 
-class AxialForceControlVars(ControlVarsBase):
+class AxialForceControlVars(CFN):
     '''Axial force. Internal forces [N] for a combination.
 
     :ivar idSection: section identifier
-    :ivar N:        axial force (defaults to 0.0)
     '''
     def __init__(self,idSection= 'nil',combName= 'nil',N= 0.0):
         '''
@@ -420,9 +474,8 @@ class AxialForceControlVars(ControlVarsBase):
         :param combName: name of the load combinations to deal with
         :param N:        axial force (defaults to 0.0)
         '''
-        super(AxialForceControlVars,self).__init__(combName)
+        super(AxialForceControlVars,self).__init__(combName, N)
         self.idSection= idSection # Section identifier.
-        self.N= N # Axial force.
 
     def getLaTeXFields(self,factor= 1e-3):
       ''' Returns a string with the intermediate fields of the LaTeX string.
@@ -430,7 +483,6 @@ class AxialForceControlVars(ControlVarsBase):
       :param factor: factor for units (default 1e-3 -> kN)'''
       retval= self.idSection+" & "
       retval+= super(AxialForceControlVars,self).getLaTeXFields(factor)
-      retval+= " & "+fmt.Esf.format(self.N*factor)
       return retval
 
     def getAnsysStrings(self,eTag,axis, factor= 1e-3):
@@ -441,14 +493,12 @@ class AxialForceControlVars(ControlVarsBase):
       :param factor: factor for units (default 1e-3 -> kN)'''
       retval= 'idSection= "' + self.idSection +'", ' 
       retval+= super(AxialForceControlVars,self).getAnsysStrings(eTag,axis,factor)
-      retval.append("detab,"+str(eTag)+",N" +axis+","+str(self.N*factor)+"\n")
       return retval
 
     def getStrArguments(self):
       '''Returns a string for a 'copy' (kind of) constructor.'''
       retval= 'idSection= "' + self.idSection +'", ' 
       retval+= super(AxialForceControlVars,self).getStrArguments()
-      retval+= ',N= ' + str(self.N) 
       return retval
 
         
@@ -958,12 +1008,10 @@ class VonMisesControlVars(ControlVarsBase):
         ''' Return the capacity factor.'''
         return self.CF
 
-def writeControlVarsFromPhantomElements(controlVarName,preprocessor,outputFileName,outputCfg):
+def writeControlVarsFromPhantomElements(preprocessor,outputFileName,outputCfg):
     '''Writes in file 'outputFileName' the control-variable values calculated for
      the RC elements in the phantom model.
 
-
-    :param controlVarName: name of the control var. 
     :param preprocessor:   preprocessor from FEA model.
     :param outputFileName: name to the files (.py and .tex)
     :param outputCfg: instance of class 'VerifOutVars' which defines the 
@@ -971,6 +1019,7 @@ def writeControlVarsFromPhantomElements(controlVarName,preprocessor,outputFileNa
            the results to a file, generation or not of lists, ...)
     '''
     elems= preprocessor.getSets['total'].elements
+    controlVarName= outputCfg.controller.limitStateLabel
     if outputCfg.appendToResFile.lower()[0]=='y':
         xcOutput= open(outputFileName+".py","a+")
     else:
@@ -1021,10 +1070,9 @@ def writeControlVarsFromPhantomElements(controlVarName,preprocessor,outputFileNa
         retval= [scipy.mean(fcs1),scipy.mean(fcs2)]
     return retval
 
-def getControlVarImportModuleStr(controlVarName, preprocessor, outputCfg, sections):
+def getControlVarImportModuleStr(preprocessor, outputCfg, sections):
     '''Return the string to import the module where the control var is defined.
 
-    :param controlVarName: name of the control var (e.g. 'ULS_normalStressesResistance' )
     :param preprocessor:    preprocessor from FEA model.
     :param outputCfg: instance of class 'VerifOutVars' which defines the 
            variables that control the output of the checking (set of 
@@ -1035,6 +1083,7 @@ def getControlVarImportModuleStr(controlVarName, preprocessor, outputCfg, sectio
     '''
     retval= None
     elems= outputCfg.getCalcSetElements(preprocessor) # elements in set 'setCalc'
+    controlVarName= outputCfg.controller.limitStateLabel
     if(len(elems)>0):
         e0= elems[0]
         s= sections[0]
@@ -1043,10 +1092,9 @@ def getControlVarImportModuleStr(controlVarName, preprocessor, outputCfg, sectio
         retval= controlVar.getModuleImportString()
     return retval
 
-def writeControlVarsFromElements(controlVarName, preprocessor, outputFileName, outputCfg, sections):
+def writeControlVarsFromElements(preprocessor, outputFileName, outputCfg, sections):
     '''Writes in file 'outputFileName' the control-variable values calculated for elements in set 'setCalc'. 
 
-    :param controlVarName: name of the control var (e.g. 'ULS_normalStressesResistance' )
     :param preprocessor:    preprocessor from FEA model.
     :param outputFileName: name of the files to write (.py and .tex)
     :param outputCfg: instance of class 'VerifOutVars' which defines the 
@@ -1057,11 +1105,12 @@ def writeControlVarsFromElements(controlVarName, preprocessor, outputFileName, o
     :param sections: names of the sections to write the output for.
     '''
     elems= outputCfg.getCalcSetElements(preprocessor) # elements in set 'setCalc'
+    controlVarName= outputCfg.controller.limitStateLabel
     if outputCfg.appendToResFile.lower()[0]=='y':
         xcOutput= open(outputFileName+".py","a+")
     else:
         xcOutput= open(outputFileName+".py","w+")
-    importString= getControlVarImportModuleStr(controlVarName, preprocessor, outputCfg, sections)
+    importString= getControlVarImportModuleStr(preprocessor, outputCfg, sections)
     xcOutput.write(importString+'\n')
     for e in elems:
         for s in sections:
@@ -1095,12 +1144,13 @@ def writeControlVarsFromElements(controlVarName, preprocessor, outputFileName, o
     return retval
 
 
-def writeControlVarsFromElementsForAnsys(controlVarName,preprocessor,outputFileName, sectionName1, sectionName2):
+def writeControlVarsFromElementsForAnsys(preprocessor,outputFileName, sectionName1, sectionName2):
     '''
     :param   preprocessor:    preprocessor name
     :param   outputFileName:  name of the output file containing tue results of the 
                        verification 
     '''
+    controlVarName= outputCfg.controller.limitStateLabel
     texOutput1= open("/tmp/texOutput1.tmp","w")
     texOutput1.write("Section 1\n")
     texOutput2= open("/tmp/texOutput2.tmp","w")
