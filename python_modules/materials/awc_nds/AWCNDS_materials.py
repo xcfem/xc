@@ -12,7 +12,7 @@ import scipy.interpolate
 from misc_utils import log_messages as lmsg
 from materials.sections import section_properties as sp
 from materials import typical_materials
-from materials import buckling_base
+from materials import steel_member_base
 import pickle
 from misc_utils import pickle_utils
 import os
@@ -326,7 +326,7 @@ class MemberBase(object):
     ''' Base class for beam and column members according to chapter 
         3 of NDS-2018.
     '''
-    def __init__(self, unbracedLength, section, connection= buckling_base.MemberConnection()):
+    def __init__(self, unbracedLength, section, connection= steel_member_base.MemberConnection()):
         ''' Constructor. '''
         self.unbracedLength= unbracedLength
         self.section= section
@@ -334,7 +334,7 @@ class MemberBase(object):
         
 class BeamMember(MemberBase):
     ''' Beam member according to chapter 3.3 of NDS-2018.'''
-    def __init__(self, unbracedLength, section, connection= buckling_base.MemberConnection()):
+    def __init__(self, unbracedLength, section, connection= steel_member_base.MemberConnection()):
         ''' Constructor. '''
         super(BeamMember,self).__init__(unbracedLength, section, connection)
     def getEffectiveLength(self,numberOfConcentratedLoads= 0, lateralSupport= False, cantilever= False):
@@ -447,7 +447,7 @@ class BeamMember(MemberBase):
 
 class ColumnMember(MemberBase):
     ''' Column member according to chapter 3.7 and 3.9 of NDS-2018.'''
-    def __init__(self, unbracedLengthB, unbracedLengthH, section, connection= buckling_base.MemberConnection()):
+    def __init__(self, unbracedLengthB, unbracedLengthH, section, connection= steel_member_base.MemberConnection()):
         ''' Constructor. '''
         super(ColumnMember,self).__init__(unbracedLengthB, section, connection)
         self.unbracedLengthH= unbracedLengthH

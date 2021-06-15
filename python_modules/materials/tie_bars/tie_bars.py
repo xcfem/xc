@@ -14,6 +14,7 @@ __version__= "3.0"
 __email__= "ana.ortega@ciccp.es, l.pereztato@ciccp.es"
 
 from materials import steel_base
+from postprocess import def_vars_control as vc
 
 class TieBarSteel(steel_base.BasicSteel):
     '''ASTM structural steel.
@@ -104,14 +105,14 @@ class TieBar(object):
         ''' Return the design tensile strength of the bar according
             to section J3.6 of of AISC 360-16.
         '''
-        return self.getNominalTensileStrength()/self.steelType.gammaF
+        return self.getNominalTensileStrength()/self.steelType.gammaM
     
-    def getBiaxialBendingEfficiency(self, Nd:float, Myd:float, Mzd:float):
+    def getBiaxialBendingEfficiency(self, Nd:float, Myd:float= 0.0, Mzd:float=0.0):
         '''Return biaxial bending efficiency.
 
-           Nd: axial design load (required axial strength).
-           Myd: bending moment about weak axis (required flexural strength).
-           Mzd: bending moment about strong axis (required flexural strength).
+        :param Nd: axial design load (required axial strength).
+        :param Myd: bending moment about weak axis (required flexural strength).
+        :param Mzd: bending moment about strong axis (required flexural strength).
         '''
         retval= 0.0
         # No flexural strength.
@@ -120,10 +121,11 @@ class TieBar(object):
         if(abs(Mzd)>0.0):
             retval+= abs(Mzd)/1e-6
         # Axial strength.
+        strength= self.getDesignTensileStrength()
         if(Nd<0): # No compressive strength
-            retval+= abs(Nd)/1e-6
+            retval+= abs(Nd)/(strength*1e-4)
         else:
-            retval+= Nd/self.getDesignTensileStrength()
+            retval+= Nd/strength
         return retval
    
     def __str__(self):
@@ -152,8 +154,61 @@ class TieBar(object):
            needed to check ultimate limit state criterion to be satisfied.
 
         '''
+        vc.defVarsEnvelopeInternalForcesTrussElems(elems)
         for e in elems:
             e.setProp('crossSection',self)
+            e.setProp('FCTNCP',[-1.0,-1.0]) #Normal stresses efficiency.
+            
+    def checkUniaxialBendingForElement(self, elem, nmbComb):
+        '''Called in every commit to check uniaxial bending criterion (bars in 2D problems).
+
+        :param elem: finite element to check.
+        :param nmbComb: name of the load combination.
+        '''
+        elem.getResistingForce()
+        N1= 0.0; M1= 0.0; V1= 0.0
+        N2= 0.0; M2= 0.0; V2= 0.0
+        axialForces= elem.getValuesAtNodes('N', False)
+        if(len(axialForces)>1): # 'N' found.
+            N1= axialForces[0]
+            N2= axialForces[1]
+        FCTN1= self.getBiaxialBendingEfficiency(Nd= N1)
+        FCTN2= self.getBiaxialBendingEfficiency(Nd= N2)
+        fctn= elem.getProp("FCTNCP")
+        if(FCTN1 > fctn[0]):
+            fctn[0]= FCTN1
+            elem.setProp("HIPCPTN1",nmbComb)
+        if(FCTN2 > fctn[1]):
+            fctn[1]= FCTN2
+            elem.setProp("HIPCPTN2",nmbComb)
+        elem.setProp("FCTNCP",fctn)
+        vc.updateEnvelopeInternalForcesTruss(elem)
+
+    def checkBiaxialBendingForElement(self,elem,nmbComb):
+        '''Called in every commit to check biaxial bending criterion 
+            (bars in 3D problems).
+
+        :param elem: finite element to check.
+        :param nmbComb: name of the load combination.
+        '''
+        elem.getResistingForce()
+        N1= 0.0; My1= 0.0; Mz1= 0.0; Vy1= 0.0;
+        N2= 0.0; My2= 0.0; Mz2= 0.0; Vy2= 0.0;
+        axialForces= elem.getValuesAtNodes('N', False)
+        if(len(axialForces)>1): # 'N' found.
+            N1= axialForces[0]
+            N2= axialForces[1]
+        FCTN1= self.getBiaxialBendingEfficiency(Nd= N1)
+        FCTN2= self.getBiaxialBendingEfficiency(Nd= N2)
+        fctn= elem.getProp("FCTNCP")
+        if(FCTN1 > fctn[0]):
+            fctn[0]= FCTN1
+            elem.setProp("HIPCPTN1",nmbComb)
+        if(FCTN2 > fctn[1]):
+            fctn[1]= FCTN2
+            elem.setProp("HIPCPTN2",nmbComb)
+        elem.setProp("FCTNCP",fctn)
+        vc.updateEnvelopeInternalForcesTruss(elem)
 
 M12= TieBar(12e-3, stressArea= 84e-6, steelType= SBS355)
 M16= TieBar(16e-3, stressArea= 157e-6, steelType= SBS520)

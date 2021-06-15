@@ -13,7 +13,7 @@ __email__= "ana.ortega@ciccp.es, l.pereztato@gmail.com"
 import enum
 import math
 from misc_utils import log_messages as lmsg
-from materials import buckling_base
+from materials import steel_member_base
 from materials import limit_state_checking_base as lsc
 from postprocess import control_vars as cv
 from postprocess import limit_state_data as lsd
@@ -63,7 +63,7 @@ class LateralTorsionalBucklingModificationFactor(object):
             retval= 12.5*mMax/denom
         return retval
 
-class Member(buckling_base.MemberBase):
+class Member(steel_member_base.BucklingMember):
     ''' Beam and column members according to ANSI AISC 360-16.
 
     :ivar unbracedLengthX: unbraced length for torsional buckling 
@@ -158,7 +158,8 @@ class Member(buckling_base.MemberBase):
             according to equation F1-1 of ANSI AISC 360-16.'''
         Mi= self.getBendingMomentsAtControlPoints()
         mf= LateralTorsionalBucklingModificationFactor(Mi)
-        return mf.getLateralTorsionalBucklingModificationFactor()
+        retval= mf.getLateralTorsionalBucklingModificationFactor()
+        return retval
 
     def getNominalFlexuralStrength(self, majorAxis= True):
         ''' Return the nominal compressive strength of the member

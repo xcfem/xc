@@ -411,7 +411,7 @@ class EC3Shape(object):
         recorder= domain.newRecorder(recorderType,None)
         recorder.setElements(elems.getTags())
         for e in elems:
-            e.setProp('ULSControlRecorder',recorder)
+            e.setProp('ULSControlRecorder', recorder)
         self.setupULSControlVars(elems,sectionClass,chiLT)
         if(nodes.numDOFs==3):
             recorder.callbackRecord= EC3lsc.controlULSCriterion2D()

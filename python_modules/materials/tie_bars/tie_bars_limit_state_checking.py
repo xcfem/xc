@@ -11,37 +11,28 @@ __version__= "3.0"
 __email__= "ana.ortega@ciccp.es, l.pereztato@gmail.com"
 
 from postprocess import control_vars as cv
+from materials import steel_member_base
 from materials import limit_state_checking_base as lsc
+from postprocess import limit_state_data as lsd
+import xc
 
-class Member(object):
-    ''' Tie bar members
-
-    '''
-    def __init__(self, name, shape):
-        ''' Constructor. 
-
-        :param name: object name.
-        :param shape: cross-section shape.
-        '''
-        self.name= name
-        self.shape= shape
-        
-    def getPreprocessor(self):
-        ''' Return the XC preprocessor.'''
-        retval= None
-        return retval
+class TieBarMember(steel_member_base.Member):
+    ''' Tie bar members.'''
     
-    def installULSControlRecorder(self,recorderType):
+    def installULSControlRecorder(self, recorderType, prep):
         '''Install recorder for verification of ULS criterion.
 
         :param recorderType: type of the recorder to install.
+        :param prep: pre-processor for the finite element problem.
         '''
-        prep= self.getPreprocessor()
+        self.prep= prep
         nodes= prep.getNodeHandler
         domain= prep.getDomain
         recorder= domain.newRecorder(recorderType,None)
         if(not self.elemSet):
             self.createElementSet()
+        if(len(self.elemSet)==0):
+            lmsg.warning('Element set is empty.')
         eleTags= list()
         for e in self.elemSet:
             eleTags.append(e.tag)
@@ -101,7 +92,7 @@ class BiaxialBendingNormalStressController(lsc.LimitStateControllerBase):
             if(len(elIntForc)==0):
                 lmsg.warning('No internal forces for element: '+str(e.tag)+' of type: '+e.type())
             for lf in elIntForc:
-                CFtmp= sh.getBiaxialBendingEfficiency(sc,lf.N,lf.My,lf.Mz)
+                CFtmp= sh.getBiaxialBendingEfficiency(lf.N,lf.My,lf.Mz)
                 if lf.idSection == 0:
                     label= self.limitStateLabel+'Sect1'
                     if(CFtmp>e.getProp(label).CF):
@@ -110,3 +101,17 @@ class BiaxialBendingNormalStressController(lsc.LimitStateControllerBase):
                     label= self.limitStateLabel+'Sect2'
                     if(CFtmp>e.getProp(label).CF):
                         e.setProp(label,BiaxialBendingControlVars('Sect2',lf.idComb,CFtmp,lf.N,lf.My,lf.Mz))
+
+def controlULSCriterion():
+    return '''recorder= self.getProp('ULSControlRecorder')
+nmbComb= recorder.getCurrentCombinationName
+self.getResistingForce()
+crossSection= self.getProp('crossSection')
+crossSection.checkBiaxialBendingForElement(self,nmbComb)'''
+
+def controlULSCriterion2D():
+    return '''recorder= self.getProp('ULSControlRecorder')
+nmbComb= recorder.getCurrentCombinationName
+self.getResistingForce()
+crossSection= self.getProp('crossSection')
+crossSection.checkUniaxialBendingForElement(self,nmbComb)'''

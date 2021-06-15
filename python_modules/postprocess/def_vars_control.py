@@ -15,6 +15,7 @@ __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
 from misc_utils import log_messages as lmsg
+from typing import Iterable
 import xc_base
 import geom
 import xc
@@ -22,102 +23,116 @@ import xc
 
 
 def defVarControlMov(obj, code):
-  if(not obj.hasProp('span')):
-    lmsg.warning('span property not defined for: '+str(obj.tag) + ' object.')
-  obj.setProp(code+'Max',0.0)
-  obj.setProp('Comb'+code+'Max',"")
-  obj.setProp(code+'Min',0.0)
-  obj.setProp('Comb'+code+'Min',"")
+    ''' Define variables for movement control.
 
-def defVarsControlMovs(nodes,flags):
-  tags= []
-  for n in nodes:
-    tags.append(n.tag)
-    for f in flags:
-      defVarControlMov(n,f)
-  return tags
+    :param obj: obj whose movement will be controlled.
+    :param code: movement identifier.
+    '''
+    if(not obj.hasProp('span')):
+        lmsg.warning('span property not defined for: '+str(obj.tag) + ' object.')
+    obj.setProp(code+'Max',0.0)
+    obj.setProp('Comb'+code+'Max',"")
+    obj.setProp(code+'Min',0.0)
+    obj.setProp('Comb'+code+'Min',"")
 
-# Deprecated.
-# def defVarsControlMovU(nodes):
-#   return defVarsControlMovs(nodes,{'U'})
+def defVarsControlMovs(nodes: Iterable, flags: Iterable):
+    ''' Define variables for movement control.
 
-# def defVarsControlMovV(nodes):
-#   return defVarsControlMovs(nodes,{'V'})
+    :param nodes: nodes whose movement will be controlled.
+    :param flags: movement identifiers.
+    '''
+    tags= []
+    for n in nodes:
+        tags.append(n.tag)
+        for f in flags:
+            defVarControlMov(n,f)
+    return tags
 
-# def defVarsControlMovW(nodes):
-#   return defVarsControlMovs(nodes,{'W'})
+def defVarsControlMovModulus(nodes: Iterable):
+    ''' Define variables for control of the movement modulus.
 
-# def defVarsControlMovUV(nodes):
-#   return defVarsControlMovs(nodes,{'U','V'})
-# def defVarsControlMovUVW(nodes):
-#   return defVarsControlMovs(nodes,{'U','V','W'})
+    :param nodes: nodes whose movement will be controlled.
+    '''
+    tags= []
+    for n in nodes:
+        if(not n.hasProp('span')):
+            lmsg.warning('span property not defined for node: '+str(n.tag) + '.')
+        tags.append(n.tag)
+        n.setProp("dispMax",0.0)
+        n.setProp("CombDispMax","")
+    return tags
 
-# def defVarsControlMovUVWRXRYRZ(nodes):
-#   return defVarsControlMovs(nodes,{'U','V','W','RX','RY','RZ'})
+def defVarsGeneralizedStressControl(elems, varDef: Iterable):
+    ''' Define variables for generalizez stress control.
 
-def defVarsControlMovModulus(nodes):
-  tags= []
-  for n in nodes:
-    if(not n.hasProp('span')):
-      lmsg.warning('span property not defined for node: '+str(n.tag) + '.')
-    tags.append(n.tag)
-    n.setProp("dispMax",0.0)
-    n.setProp("CombDispMax","")
-  return tags
+    :param elems: elements whose generalized stresses will be controlled.
+    :param varDef: list of pairs of variable names and initial values to
+                   define as property on each element. 
+    '''
+    for e in elems:
+        for vd in varDef:
+            e.setProp(vd[0],vd[1])
 
 
 def defVarsControlTensRegElastico2d(elems):
-  for e in elems:
-    e.setProp("Sg",0)
-    e.setProp("SgMax",0)
-    e.setProp("SgMin",0)
-    e.setProp("NCP",0)
-    e.setProp("MzCP",0)
-    e.setProp("FCTN",0)
-    e.setProp("FCTNCP",0)
-    e.setProp("HIPCPTN","")
-    e.setProp("Tau",0)
-    e.setProp("TauMax",0)
-    e.setProp("VyCP",0)
-    e.setProp("FCV",0)
-    e.setProp("FCVCP",0)
-    e.setProp("HIPCPV","")
+    ''' Define variables for stress control in 2D elasticity problems.'''
+    varNames= [("Sg",0.0), ("SgMax", 0.0), ("SgMin", 0.0), ("NCP", 0.0), ("MzCP", 0.0), ("FCTN", 0.0), ("FCTNCP", 0.0), ("HIPCPTN", ""), ("Tau", 0.0), ("TauMax", 0.0), ("VyCP", 0.0), ("FCV", 0.0), ("FCVCP", 0.0), ("HIPCPV", "")]
+    defVarsGeneralizedStressControl(elems,varNames) 
 
 def defVarsControlTensRegElastico3d(elems):
-  for e in elems:
-    e.setProp("Sg",0)
-    e.setProp("SgMax",0)
-    e.setProp("SgMin",0)
-    e.setProp("NCP",0)
-    e.setProp("MyCP",0)
-    e.setProp("MzCP",0)
-    e.setProp("FCTN",0)
-    e.setProp("FCTNCP",0)
-    e.setProp("HIPCPTN","")
-    e.setProp("Tau",0)
-    e.setProp("TauMax",0)
-    e.setProp("VyCP",0)
-    e.setProp("VzCP",0)
-    e.setProp("FCV",0)
-    e.setProp("FCVCP",0)
-    e.setProp("HIPCPV","")
+    varNames= [("Sg", 0.0), ("SgMax", 0.0), ("SgMin", 0.0), ("NCP", 0.0), ("MyCP", 0.0), ("MzCP", 0.0), ("FCTN", 0.0), ("FCTNCP", 0.0), ("HIPCPTN", ""), ("Tau", 0.0), ("TauMax", 0.0), ("VyCP", 0.0), ("VzCP", 0.0), ("FCV", 0.0), ("FCVCP", 0.0), ("HIPCPV","")]
+    defVarsGeneralizedStressControl(elems,varNames) 
 
+def defEnvelopeVars(elems: Iterable, varNames: Iterable, initV= 6.023e23):
+    ''' Define variables for generalizez stress control.
+
+    :param elems: nodes whose generalized stresses will be controlled.
+    :param varNames: variable names.
+    '''
+    for e in elems:
+        for vn in varNames:
+            # [back node value, front node value]
+            e.setProp(vn+'+',[-initV,-initV]) #Positive value of envelope
+            e.setProp(vn+'-',[initV,initV]) # Negative value of envelope
+    
+def defVarsEnvelopeInternalForcesTrussElems(elems):
+    '''Defines properties to store extreme values of internal forces.
+
+    :param elems: nodes whose generalized stresses will be controlled.
+    '''
+    defEnvelopeVars(elems, ['N'])
+        
 def defVarsEnvelopeInternalForcesBeamElems(elems):
-  '''Defines properties to store extreme values of internal forces.'''
-  for e in elems:
-    # [back node value, front node value]
-    e.setProp('N+',[-6.023e23,-6.023e23]) #Positive axial force envelope
-    e.setProp('N-',[6.023e23,6.023e23]) #Negative axial force envelope
-    e.setProp('Mz+',[-6.023e23,-6.023e23]) #Positive bending moment envelope
-    e.setProp('Mz-',[6.023e23,6.023e23]) #Negative bending moment envelope
-    e.setProp('My+',[-6.023e23,-6.023e23]) #Positive bending moment envelope
-    e.setProp('My-',[6.023e23,6.023e23]) #Negative bending moment envelope
-    e.setProp('Vy+',[-6.023e23,-6.023e23]) #Positive y shear envelope
-    e.setProp('Vy-',[6.023e23,6.023e23]) #Negative y shear  envelope
-    e.setProp('Vz+',[-6.023e23,-6.023e23]) #Positive y shear envelope
-    e.setProp('Vz-',[6.023e23,6.023e23]) #Negative y shear  envelope
-    e.setProp('T+',[-6.023e23,-6.023e23]) #Positive torque envelope
-    e.setProp('T-',[6.023e23,6.023e23]) #Negative torque envelope
+    '''Defines properties to store extreme values of internal forces.
+
+    :param elems: nodes whose generalized stresses will be controlled.
+    '''
+    defEnvelopeVars(elems, ['N', 'Mz', 'My', 'T', 'Vy','Vz'])
+
+def updateEnvelopeInternalForcesTruss(trussElem):
+    '''Update values for extreme values of internal forces in 2D elements.
+
+    :param trussElem: finite element to update internal forces.
+    '''
+    trussElem.getResistingForce()
+    N1= 0.0;
+    N2= 0.0;
+    axialForces= trussElem.getValuesAtNodes('N', False)
+    if(len(axialForces)>1): # 'N' found.
+        N1= axialForces[0]
+        N2= axialForces[1]
+    maxN= trussElem.getProp('N+') # [back node value, front node value]
+    minN= trussElem.getProp('N-')
+    if(N1>maxN[0]):
+      maxN[0]= N1
+    if(N1<minN[0]):
+      minN[0]= N1
+    if(N2>maxN[1]):
+      maxN[1]= N2
+    if(N2<minN[1]):
+      minN[1]= N2
+    trussElem.setProp('N+',maxN)
+    trussElem.setProp('N-',minN)
 
 def updateEnvelopeInternalForcesBeamElem2D(beamElem2D):
     '''Update values for extreme values of internal forces in 2D elements.

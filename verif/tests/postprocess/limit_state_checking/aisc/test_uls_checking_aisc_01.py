@@ -69,7 +69,7 @@ seedElemHandler.defaultMaterial= xcSection.name
 seedElemHandler.defaultTransformation= lin.name
 elem= seedElemHandler.newElement("ElasticBeam3d",xc.ID([0,0]))
 
-xcTotalSet= preprocessor.getSets.getSet('total')
+xcTotalSet= modelSpace.getTotalSet()
 mesh= xcTotalSet.genMesh(xc.meshDir.I)
 
 # Constraints
@@ -102,8 +102,6 @@ combContainer.ULS.perm.add('combULS01','1.2*deadLoad+1.6*liveLoad')
 ### Dump combination definition into XC.
 combContainer.dumpCombinations(preprocessor)
 
-xcTotalSet= modelSpace.getTotalSet()
-
 # Compute internal forces.
 
 ## Setup working directory.
@@ -135,7 +133,7 @@ for ls in limitStates:
     ls.saveAll(combContainer,xcTotalSet,lstSteelBeams=aiscMembers)
 
 outCfg= lsd.VerifOutVars(setCalc=xcTotalSet, appendToResFile='Y', listFile='N', calcMeanCF='Y')
-limitState=lsd.normalStressesResistance
+limitState= lsd.normalStressesResistance
 outCfg.controller= aisc.BiaxialBendingNormalStressController(limitState.label)
 average= limitState.runChecking(outCfg)
 

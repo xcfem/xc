@@ -1090,6 +1090,8 @@ def getControlVarImportModuleStr(preprocessor, outputCfg, sections):
         propName= controlVarName+s
         controlVar= e0.getProp(propName)
         retval= controlVar.getModuleImportString()
+    else:
+        lmsg.error('element set is empty.')
     return retval
 
 def writeControlVarsFromElements(preprocessor, outputFileName, outputCfg, sections):

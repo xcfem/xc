@@ -27,6 +27,7 @@ class MemberConnection(object):
         self.transI= transI
         self.rotJ= rotJ
         self.transJ= transJ
+
     def getEffectiveBucklingLengthCoefficientRecommended(self):
         '''Return the effective length factor
            according to table C-A-7.1 or AISC specification
@@ -56,50 +57,104 @@ class MemberConnection(object):
         return retval
 
 
-class MemberBase(object):
+class Member(object):
     '''Base class for steel members.
     
     :ivar name: object name.
     :ivar shape: cross-section shape (e.g. IPNShape, IPEShape, ...)
-    :ivar lstLines: ordered list of lines that make up the beam 
+    :ivar lstLines: ordered list of lines that make up the member 
           (defaults to None).
-    :ivar lstPoints: ordered list of points that make up the beam. Ignored if 
-          lstLines is given (defaults to None) 
-    :ivar contrPnt: control points along the beam.
-    :ivar elemSet: elements along the beam.
+    :ivar elemSet: elements along the member.
     '''
-    def __init__(self,name,shape, lstLines=None, lstPoints=None):
+    def __init__(self,name,shape, lstLines=None):
         '''Constructor.
 
         :param name: object name.
         :param shape: cross-section shape
-        :param lstLines: ordered list of lines that make up the beam 
+        :param lstLines: ordered list of lines that make up the member 
                         (defaults to None).
-        :param lstPoints: ordered list of points that make up the beam. 
-                          Ignored if lstLines is given (defaults to None)
         '''
         self.name= name
         self.shape= shape
         self.lstLines= lstLines
-        self.lstPoints= lstPoints
-        self.contrPnt= None # control points along the beam.
-        self.elemSet= None # elements of the beam.
+        self.elemSet= None # elements along the member.
         
     def getPreprocessor(self):
         ''' Return the XC preprocessor.'''
         retval= None
         if self.lstLines:
             retval=self.lstLines[0].getPreprocessor
-        elif self.lstPoints:
-            retval=self.lstPoints[0].getPreprocessor
         else:
+            lmsg.error('No lines.')
+        return retval
+
+    def getMemberGeometry(self):
+        ''' Return the lines and points along the member.'''
+        lstLn= None
+        lstP3d= None
+        if(self.lstLines):
+            lstLn= self.lstLines
+            lstP3d= gu.lstP3d_from_lstLns(lstLn)
+        else:
+            lmsg.warning('Incomplete member definition: list of lines required')
+        return lstLn, lstP3d
+
+    def getLength(self):
+        ''' Return the member length.'''
+        return self.pline.getLength()
+    
+    def createElementSet(self):
+        '''Create the attributes 'length' and 'elemSet' that 
+        represent the length of the member and the set of elements 
+        included in it.'''
+        lstLn, lstP3d= self.getMemberGeometry()
+        
+        prep= self.getPreprocessor()
+        # set of elements included in the member
+        setName= self.name+'Set'
+        if(prep.getSets.exists(setName)):
+            lmsg.error('set: '+setName+ ' already exists.')
+        s= prep.getSets.defSet(setName)
+        self.elemSet= s.elements
+        for l in lstLn:
+            for e in l.elements:
+                self.elemSet.append(e)
+
+class BucklingMember(Member):
+    '''Base class for steel members that could buckle.
+    
+    :ivar lstPoints: ordered list of points that make up the member. Ignored if 
+          lstLines is given (defaults to None) 
+    :ivar contrPnt: control points along the member.
+    '''
+    def __init__(self,name,shape, lstLines=None, lstPoints=None):
+        '''Constructor.
+
+        :param name: object name.
+        :param shape: cross-section shape
+        :param lstLines: ordered list of lines that make up the member 
+                        (defaults to None).
+        :param lstPoints: ordered list of points that make up the member. 
+                          Ignored if lstLines is given (defaults to None)
+        '''
+        super(BucklingMember,self).__init__(name, shape, lstLines)
+        self.lstPoints= lstPoints
+        self.contrPnt= None # control points along the member.
+        self.pline= None # member axis.
+        
+    def getPreprocessor(self):
+        ''' Return the XC preprocessor.'''
+        retval= super(BucklingMember,self).getPreprocessor()
+        if((not retval) and self.lstPoints):
+            retval= self.lstPoints[0].getPreprocessor
+        if(not retval):
             lmsg.error('No lines nor points set.')
         return retval
 
-    def createElementSet(self):
-        '''Create the attributes 'length' and 'elemSet' that 
-        represent the length of the beam and the set of elements included in it.'''
-        prep=self.getPreprocessor()
+    def getMemberGeometry(self):
+        ''' Return the lines and points along the member.'''
+        lstLn= None
+        lstP3d= None
         if self.lstLines:
             lstLn= self.lstLines
             lstP3d= gu.lstP3d_from_lstLns(lstLn)
@@ -107,35 +162,32 @@ class MemberBase(object):
             lstP3d= [p.getPos for p in self.lstPoints]
             lstLn= gu.lstLns_from_lstPnts(self.lstPoints)
         else:
-            lmsg.warning('Incomplete member definition: list of lines or points  required' )
-        #set of elements included in the member
-        s= prep.getSets.defSet(self.name+'Set')
-        self.elemSet= s.elements
-        for l in lstLn:
-            for e in l.elements:
-                self.elemSet.append(e)
-        pol=geom.Polyline3d()
+            lmsg.warning('Incomplete member definition: list of lines or points  required')
+        # member representation
+        pol= geom.Polyline3d()
         for p in lstP3d:
             pol.append(p)
-        self.length= pol.getLength()
-        return pol
-            
+        self.pline= pol
+        return lstLn, lstP3d
+                     
     def setControlPoints(self):
-        '''Set the five equally spaced points in the beam where the moment Mz 
+        '''Set the five equally spaced points in the member where the moment Mz 
         will be evaluated in order to obtain the moment gradient factor 
         involved in the calculation of the lateral-torsional buckling reduction 
         factor. 
 
         An attribute of member is created, named 'contrPnt' that contains 
         a list of five tuples (elem,relativDist), each of which contains the
-        element of the beam nearest to one control-point and the relative 
+        element of the member nearest to one control-point and the relative 
         distance from this control point to the first node of the element.
         The method also creates the attributes 'length' and 'elemSet' that 
-        represent the length of the beam and the set of elements included in it.
+        represent the length of the member and the set of elements included 
+        in it.
         '''
-        pol= self.createElementSet()
+        if(not self.elemSet):
+            self.createElementSet()
         
-        lstEqPos3d= gu.lstEquPnts_from_polyline(pol,nDiv=4) #(five points equally spaced)
+        lstEqPos3d= gu.lstEquPnts_from_polyline(self.pline, nDiv=4) #(five points equally spaced)
         lstEqElem= [self.elemSet.getNearestElement(p) for p in lstEqPos3d]
         self.contrPnt= list()
         for i in range(5):

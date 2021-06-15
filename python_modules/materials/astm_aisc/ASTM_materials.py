@@ -24,7 +24,7 @@ import materials
 from geom_utils import closest_pair_of_points as cpp
 from materials import steel_base
 from misc_utils import log_messages as lmsg
-from materials import buckling_base
+from materials import steel_member_base
 from materials.astm_aisc import AISC_limit_state_checking as aisc
 from import_export import block_topology_entities as bte
 from connections.steel_connections import bolts
@@ -1639,7 +1639,7 @@ class BendingState(object):
         '''
         return 12.5*self.Mmax/(2.5*self.Mmax+3*self.Ma+4*self.Mb+3*self.Mc)
 
-class MemberConnection(buckling_base.MemberConnection):
+class MemberConnection(steel_member_base.MemberConnection):
     '''Member length and connections
 
        :ivar L: member length.
