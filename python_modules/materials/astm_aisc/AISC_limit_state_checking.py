@@ -399,6 +399,7 @@ class VonMisesStressController(lsc.LimitStateControllerBase):
             if(len(elIntForc)==0):
                 lmsg.warning('No internal forces for element: '+str(e.tag)+' of type: '+e.type())
             for lf in elIntForc:
+                print(lf)
                 CFtmp= lf.vonMisesStress/factoredYieldStress
                 # Both sections will have the same Von Mises stress so this is redundant.
                 if(CFtmp>e.getProp(self.limitStateLabel).CF):
