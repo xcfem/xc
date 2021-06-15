@@ -89,10 +89,6 @@ class ENTMaterial: public ElasticBaseMaterial
     double getStress(void) const;
     double getTangent(void) const;
 
-    int commitState(void);
-    int revertToLastCommit(void);    
-    int revertToStart(void);        
-
     UniaxialMaterial *getCopy(void) const;
         
     int setParameter(const std::vector<std::string> &argv, Parameter &param);

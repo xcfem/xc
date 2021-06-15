@@ -33,7 +33,7 @@
 
 //! @brief Constructor.
 XC::ElasticBaseMaterial::ElasticBaseMaterial(int tag, int classtag, double e,double e0)
-  : UniaxialMaterial(tag,classtag), trialStrain(0.0), E(e), ezero(e0) {}
+  : UniaxialMaterial(tag,classtag), trialStrain(0.0), commitStrain(0.0), E(e), ezero(e0) {}
 
 //! @brief Sets initial stress.
 int XC::ElasticBaseMaterial::setInitialStrain(const double &strain)
@@ -53,11 +53,24 @@ int XC::ElasticBaseMaterial::incrementInitialStrain(const double &initStrainIncr
 void XC::ElasticBaseMaterial::zeroInitialStrain(void)
   { ezero= 0.0; }
 
+int XC::ElasticBaseMaterial::commitState(void)
+  {
+    commitStrain= trialStrain;
+    return 0;
+  }
+
+int XC::ElasticBaseMaterial::revertToLastCommit(void)
+  {
+    trialStrain = commitStrain;
+    return 0;
+  }
+
 //! @brief Revert the material to its initial state.
 int XC::ElasticBaseMaterial::revertToStart(void)
   {
     UniaxialMaterial::revertToStart();
     trialStrain= 0.0;
+    commitStrain= 0.0;
     return 0;
   }
 
@@ -65,7 +78,7 @@ int XC::ElasticBaseMaterial::revertToStart(void)
 int XC::ElasticBaseMaterial::sendData(Communicator &comm)
   {
     int res= UniaxialMaterial::sendData(comm);
-    res+= comm.sendDoubles(trialStrain,E,ezero,getDbTagData(),CommMetaData(2));
+    res+= comm.sendDoubles(trialStrain, commitStrain, E, ezero,getDbTagData(),CommMetaData(2));
     return res;
   }
 
@@ -73,7 +86,7 @@ int XC::ElasticBaseMaterial::sendData(Communicator &comm)
 int XC::ElasticBaseMaterial::recvData(const Communicator &comm)
   {
     int res= UniaxialMaterial::recvData(comm);
-    res+= comm.receiveDoubles(trialStrain,E,ezero,getDbTagData(),CommMetaData(2));
+    res+= comm.receiveDoubles(trialStrain, commitStrain, E, ezero, getDbTagData(),CommMetaData(2));
     return res;
   }
 

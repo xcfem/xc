@@ -41,7 +41,6 @@ class EPPBaseMaterial: public ElasticBaseMaterial
   protected:
     double trialStress; //!< current trial stress
     double trialTangent; //!< current trial tangent
-    double commitStrain; //!< plastic strain at last commit
     int sendData(Communicator &);
     int recvData(const Communicator &);
 

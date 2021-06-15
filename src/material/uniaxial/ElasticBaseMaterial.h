@@ -39,7 +39,8 @@ namespace XC {
 class ElasticBaseMaterial: public UniaxialMaterial
   {
   protected:
-    double trialStrain; //! Material trial strain.
+    double trialStrain; //!< Material trial strain.
+    double commitStrain; //!< plastic strain at last commit
     double E; //!< Elastic modulus.
     double ezero; //!< Initial strain.
   protected:
@@ -55,6 +56,8 @@ class ElasticBaseMaterial: public UniaxialMaterial
     inline void setE(const double &e)
       {E= e;}
 
+    int commitState(void);
+    int revertToLastCommit(void);    
     int revertToStart(void);
     
     int setInitialStrain(const double &);
@@ -67,6 +70,7 @@ class ElasticBaseMaterial: public UniaxialMaterial
     inline double getInitialTangent(void) const
       { return E; }
 
+    
     int sendSelf(Communicator &);  
     int recvSelf(const Communicator &);
   };

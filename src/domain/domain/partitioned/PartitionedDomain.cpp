@@ -1219,10 +1219,13 @@ int XC::PartitionedDomain::revertToStart(void)
                 return res;
             }
         }
-    }
+#ifdef _PARALLEL_PROCESSING
+    this->barrierCheck(result);
+#endif
+      }
 
     return 0;
-}
+  }
 
 //! @brief Add the recorder to the partitioned domain.
 int XC::PartitionedDomain::addRecorder(Recorder &theRecorder)

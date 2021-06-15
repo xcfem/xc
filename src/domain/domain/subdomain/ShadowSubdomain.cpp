@@ -942,11 +942,17 @@ int XC::ShadowSubdomain::revertToLastCommit(void)
 
 int XC::ShadowSubdomain::revertToStart(void)
   {
-  msgData(0) = ShadowActorSubdomain_revertToStart;
-  this->sendID(msgData);
-  return 0;
+    msgData(0) = ShadowActorSubdomain_revertToStart;
+    this->sendID(msgData);
+    #ifdef _PARALLEL_PROCESSING
+    // CYPE Software: revertToStart() invokes update on ActorSubdomain which asks for barrierCheck.
+      {
+	  int res = this->barrierCheckIN();
+	  this->barrierCheckOUT(res);
+      }
+    #endif
+    return 0;
   }
-
 
 void XC::ShadowSubdomain::wipeAnalysis(void)
   {

@@ -186,10 +186,10 @@ double XC::CableMaterial::getTangent(void) const
   { return trialTangent; }
 
 int XC::CableMaterial::commitState(void)
-  { return 0; }
+  { return ElasticBaseMaterial::commitState(); }
 
 int XC::CableMaterial::revertToLastCommit(void)
-  { return 0; }
+  { return ElasticBaseMaterial::revertToLastCommit(); }
 
 //! @brief Revert the material to its initial state.
 int XC::CableMaterial::revertToStart(void)
