@@ -208,6 +208,12 @@ class SetEntities: public PreprocessorContainer, public MovableObject
     virtual int sendSelf(Communicator &);
     virtual int recvSelf(const Communicator &);
 
+    void extend(const lst_ptr_points &);
+    void extend(const lst_line_pointers &);
+    void extend(const lst_surface_ptrs &);
+    void extend(const lst_body_pointers &);
+    void extend(const lst_ptr_uniform_grids &);
+    
     SetEntities &operator+=(const SetEntities &);
     SetEntities &operator-=(const SetEntities &);
     SetEntities &operator*=(const SetEntities &);
