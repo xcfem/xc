@@ -174,6 +174,12 @@ class Set: public SetMeshComp
     virtual int sendSelf(Communicator &);
     virtual int recvSelf(const Communicator &);
 
+    void extend(const SetEntities::lst_ptr_points &);
+    void extend(const SetEntities::lst_line_pointers &);
+    void extend(const SetEntities::lst_surface_ptrs &);
+    void extend(const SetEntities::lst_body_pointers &);
+    void extend(const SetEntities::lst_ptr_uniform_grids &);
+    void extend(const Set &);
     Set &operator+=(const Set &);
     Set &operator-=(const Set &);
     Set &operator*=(const Set &);

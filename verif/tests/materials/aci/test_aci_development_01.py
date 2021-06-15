@@ -41,6 +41,6 @@ print('ratio2= ', ratio2)
 
 fname= os.path.basename(__file__)
 if((ratio1<1e-15) and (ratio2<1e-3)):
-  print('test '+fname+': ok.')
+    print('test '+fname+': ok.')
 else:
-  lmsg.error(fname+' ERROR.')
+    lmsg.error(fname+' ERROR.')

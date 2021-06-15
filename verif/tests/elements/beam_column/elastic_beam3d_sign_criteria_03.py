@@ -23,29 +23,29 @@ from model import predefined_spaces
 from materials import typical_materials
 
 def getInternalForcesBeginNode(elemTag):
-  ''':return: internal forces on the element's first node.''' 
-  elem= elements.getElement(elemTag)
-  return (elem.getN1,elem.getVy1,elem.getVz1,elem.getT1,elem.getMy1,elem.getMz1)
+    ''':return: internal forces on the element's first node.''' 
+    elem= elements.getElement(elemTag)
+    return (elem.getN1,elem.getVy1,elem.getVz1,elem.getT1,elem.getMy1,elem.getMz1)
 
 def getInternalForcesEndNode(elemTag):
-  ''':return: internal forces on the element's last node.''' 
-  elem= elements.getElement(elemTag)
-  return (elem.getN2,elem.getVy2,elem.getVz2,elem.getT2,elem.getMy2,elem.getMz2)
+    ''':return: internal forces on the element's last node.''' 
+    elem= elements.getElement(elemTag)
+    return (elem.getN2,elem.getVy2,elem.getVz2,elem.getT2,elem.getMy2,elem.getMz2)
 
 def printResults(N1,Vy1,Vz1,T1,My1,Mz1,N2,Vy2,Vz2,T2,My2,Mz2,phaseRatios,phase):
-  ratioMsg= 'ratio'+str(phase)
-  print('N1= ', N1, ' N2= ', N2 )
-  print(ratioMsg+'0= ', phaseRatios[0])
-  print('Vy1= ',Vy1, 'Vy2= ',Vy2 )
-  print(ratioMsg+'1= ', phaseRatios[1])
-  print('Vz1= ',Vz1, 'Vz2= ',Vz2)
-  print(ratioMsg+'2= ', phaseRatios[2])
-  print('T1= ',T1, 'T2= ', T2)
-  print(ratioMsg+'3= ', phaseRatios[3])
-  print('My1= ',My1, 'My2= ', My2)
-  print(ratioMsg+'4= ', phaseRatios[4])
-  print('Mz1= ',Mz1, 'Mz2= ', Mz2)
-  print(ratioMsg+'5= ', phaseRatios[5])
+    ratioMsg= 'ratio'+str(phase)
+    print('N1= ', N1, ' N2= ', N2 )
+    print(ratioMsg+'0= ', phaseRatios[0])
+    print('Vy1= ',Vy1, 'Vy2= ',Vy2 )
+    print(ratioMsg+'1= ', phaseRatios[1])
+    print('Vz1= ',Vz1, 'Vz2= ',Vz2)
+    print(ratioMsg+'2= ', phaseRatios[2])
+    print('T1= ',T1, 'T2= ', T2)
+    print(ratioMsg+'3= ', phaseRatios[3])
+    print('My1= ',My1, 'My2= ', My2)
+    print(ratioMsg+'4= ', phaseRatios[4])
+    print('Mz1= ',Mz1, 'Mz2= ', Mz2)
+    print(ratioMsg+'5= ', phaseRatios[5])
                      
 # Material properties
 E= 2.1e6*9.81/1e-4 # Elastic modulus (Pa)
@@ -221,6 +221,6 @@ import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (result<1e-10):
-  print('test '+fname+': ok.')
+    print('test '+fname+': ok.')
 else:
-  lmsg.error(fname+' ERROR.')
+    lmsg.error(fname+' ERROR.')

@@ -105,6 +105,11 @@ class SetMeshComp: public SetBase
     SetMeshComp &operator-=(const SetMeshComp &);
     SetMeshComp &operator*=(const SetMeshComp &);
 
+    void extend(const DqPtrsNode &);
+    void extend(const DqPtrsElem &);
+    void extend(const lst_ptr_constraints &);
+    void extend(const SetMeshComp &);
+    
     std::string getStrName(void) const;
     void newName(const std::string &);
     void rename(const std::string &);

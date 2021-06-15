@@ -104,7 +104,7 @@ import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (abs(max(ratios))<0.05 and abs(min(ratios))<0.05):
-  print('test '+fname+': ok.')
+    print('test '+fname+': ok.')
 else:
-  print(ratios)
-  lmsg.error(fname+' ERROR.')
+    print(ratios)
+    lmsg.error(fname+' ERROR.')

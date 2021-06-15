@@ -27,7 +27,7 @@ defaultSolutionProcedureType=  predefined_solutions.SimpleStaticLinear
 class VerifOutVars(object):
     '''Variables that control the output of limit state verifications.
 
-    :param setCalc: set of elements to be analyzed (defaults to 'None' which 
+    :param setCalc: set of elements to be checked (defaults to 'None' which 
            means that all the elements in the file of internal forces
            results are analyzed) 
     :param appendToResFile:  'Yes','Y','y',.., if results are appended to 
@@ -36,12 +36,14 @@ class VerifOutVars(object):
            is desired to be generated (defaults to 'N')
     :param calcMeanCF: 'Yes','Y','y',.., if average capacity factor is
            meant to be calculated (defaults to 'N')
+    :param controller: object that controls the limit state checking.
     '''
-    def __init__(self,setCalc=None,appendToResFile='N',listFile='N',calcMeanCF='N'):
+    def __init__(self,setCalc=None,appendToResFile='N',listFile='N',calcMeanCF='N', controller= None):
         self.setCalc= setCalc
         self.appendToResFile= appendToResFile
         self.listFile= listFile
         self.calcMeanCF= calcMeanCF
+        self.controller= controller
 
     def getCalcSetElements(self, preprocessor):
         ''' Return the set of elements to be analyzed.
@@ -53,6 +55,22 @@ class VerifOutVars(object):
             retval= self.setCalc.elements
         else:
             retval= preprocessor.getSets['total'].elements
+        return retval
+
+    def runChecking(self, intForcCombFileName, outputDataBaseFileName, sections):
+        '''Launch checking.
+
+        :param intForcCombFileName: name of the file to read the internal force results.
+        :param sections: names of the sections to write the output for.
+        '''
+        retval=None
+        if(self.setCalc):
+            self.controller.initControlVars(self.setCalc)
+            self.controller.checkSetFromIntForcFile(intForcCombFileName,self.setCalc)
+            prep= self.setCalc.getPreprocessor
+            retval= cv.writeControlVarsFromElements(prep,outputDataBaseFileName,self, sections)
+        else:
+            lmsg.error("Result file hasn't been created, you must specify a valid set of elements")
         return retval
         
 
@@ -80,7 +98,6 @@ class LimitStateData(object):
         '''
         self.label= limitStateLabel
         self.outputDataBaseFileName= outputDataBaseFileName
-        self.controller= None
         
     def getInternalForcesFileName(self):
         '''Return the name of the file where internal forces are stored.'''
@@ -231,7 +248,7 @@ class LimitStateData(object):
         self.writeInternalForces(internalForcesDict)
         self.writeReactions(reactionsDict)
 #20181117
-    def runChecking(self,outputCfg, sections= ['Sect1', 'Sect2']):
+    def runChecking(self, outputCfg, sections= ['Sect1', 'Sect2']):
         '''This method reads, for the elements in setCalc,  the internal 
         forces previously calculated and saved in the corresponding file.
         Using the 'initControlVars' and 'checkSetFromIntForcFile' methods of 
@@ -246,16 +263,8 @@ class LimitStateData(object):
                of list file [defatults to 'N', ...)
         :param sections: names of the sections to write the output for.
         '''
-        retval=None
-        if outputCfg.setCalc:
-            prep= outputCfg.setCalc.getPreprocessor
-            intForcCombFileName= self.getInternalForcesFileName()
-            self.controller.initControlVars(outputCfg.setCalc)
-            self.controller.checkSetFromIntForcFile(intForcCombFileName,outputCfg.setCalc)
-            retval= cv.writeControlVarsFromElements(self.controller.limitStateLabel,prep,self.getOutputDataBaseFileName(),outputCfg, sections)
-        else:
-            lmsg.error("Result file hasn't been created, you must specify a valid set of elements")
-        return retval
+        intForcCombFileName= self.getInternalForcesFileName()
+        return outputCfg.runChecking(intForcCombFileName, self.getOutputDataBaseFileName(), sections)
 
 #20181117 end
 
@@ -498,7 +507,7 @@ class VonMisesStressLimitStateData(LimitStateData):
                result file [defatults to 'N'], generation or not
                of list file [defatults to 'N', ...)
         '''
-        self.controller.vonMisesStressId= self.vonMisesStressId
+        outputCfg.controller.vonMisesStressId= self.vonMisesStressId
         retval= super(VonMisesStressLimitStateData,self).runChecking(outputCfg, sections= [''])
         return retval
 

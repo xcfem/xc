@@ -39,7 +39,7 @@ class Build_polyhedron: public CGAL::Modifier_base<HDS>
       {
         const size_t num_facetas= sf.GetNumCaras();
         const size_t num_edges= sf.getNumEdges();
-        const size_t num_vertices= sf.GetNumVertices();
+        const size_t num_vertices= sf.getNumVertices();
         TriangleMap mt= sf.GetTriangleMap();
         // Postcondition: `hds' is a valid polyhedral surface.
         CGAL::Polyhedron_incremental_builder_3<HDS> B( hds, true);

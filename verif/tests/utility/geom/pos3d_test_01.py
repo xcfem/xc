@@ -12,8 +12,9 @@ zPt= pos1.z
 #print("pos1.x= ",pos1.x," pos1.y= ",pos1.y," pos1.z= ",pos1.z)
 
 import os
+from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if(xPt==1. and yPt==2. and zPt==3.):
-  print("test ",fname,": ok.")
+    print('test: '+fname+': ok.')
 else:
-  print("test ",fname,": ERROR.")
+    lmsg.error('test: '+fname+' ERROR.')

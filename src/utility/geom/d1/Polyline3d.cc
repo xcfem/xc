@@ -23,6 +23,23 @@
 #include "Polyline3d.h"
 #include "utility/geom/d2/Plane.h"
 
+//! @brief Default constructor.
+Polyline3d::Polyline3d(void)
+  : Linear3d(), GeomObj::list_Pos3d() {}
+
+//! @brief Constructor.
+Polyline3d::Polyline3d(const Pos3dList &l)
+  : Linear3d(), GeomObj::list_Pos3d(l.getPoints()){}
+
+//! @brief Constructor (Python interface).
+Polyline3d::Polyline3d(const boost::python::list &l)
+  {
+    const int sz= len(l);
+    // copy the components
+    for(int i=0; i<sz; i++)
+      push_back(boost::python::extract<Pos3d>(l[i]));
+  }
+
 //! @brief Comparison operator.
 bool Polyline3d::operator==(const Polyline3d &other) const
   {
@@ -46,7 +63,7 @@ const Pos3d *Polyline3d::AgregaVertice(const Pos3d &p)
 
 size_t Polyline3d::getNumSegments(void) const
   {
-    size_t retval= GetNumVertices();
+    size_t retval= getNumVertices();
     if(retval>0)
       retval-=1;
     return retval;
@@ -219,7 +236,6 @@ Polyline3d Polyline3d::Separa(const Pos3d &p,const short int &sgn) const
       copy(i,end(),back_inserter(result));
     return result;
   }
-
 
 /**
    * @param i1 iterator to the first point.

@@ -132,7 +132,7 @@ void GTSSurface::Merge(const GTSSurface &other)
 //Añade a esta todas las caras de 'other' que no estén ya en esta.
   { gts_surface_merge(s,other.s); }
 
-guint GTSSurface::GetNumVertices(void) const
+guint GTSSurface::getNumVertices(void) const
   { return gts_surface_vertex_number(s); }
 guint GTSSurface::getNumEdges(void) const
   { return gts_surface_edge_number(s); }

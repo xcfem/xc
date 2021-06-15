@@ -4,16 +4,16 @@
 from __future__ import print_function
 from __future__ import division
 
-__author__= "Luis C. Pérez Tato (LCPT) Ana Ortega (AO_O)"
-__copyright__= "Copyright 2016 LCPT"
+__author__= "Ana Ortega (AO_O) Luis C. Pérez Tato (LCPT)"
+__copyright__= "Copyright 2020 LCPT"
 __license__= "GPL"
 __version__= "3.0"
-__email__= "l.pereztato@gmail.com ana.ortega@ciccp.es"
+__email__= "ana.ortega@ciccp.es, l.pereztato@gmail.com"
 
 import enum
 import math
 from misc_utils import log_messages as lmsg
-from materials import buckling_base
+from materials import steel_member_base
 from materials import limit_state_checking_base as lsc
 from postprocess import control_vars as cv
 from postprocess import limit_state_data as lsd
@@ -63,7 +63,7 @@ class LateralTorsionalBucklingModificationFactor(object):
             retval= 12.5*mMax/denom
         return retval
 
-class Member(buckling_base.MemberBase):
+class Member(steel_member_base.BucklingMember):
     ''' Beam and column members according to ANSI AISC 360-16.
 
     :ivar unbracedLengthX: unbraced length for torsional buckling 
@@ -158,7 +158,8 @@ class Member(buckling_base.MemberBase):
             according to equation F1-1 of ANSI AISC 360-16.'''
         Mi= self.getBendingMomentsAtControlPoints()
         mf= LateralTorsionalBucklingModificationFactor(Mi)
-        return mf.getLateralTorsionalBucklingModificationFactor()
+        retval= mf.getLateralTorsionalBucklingModificationFactor()
+        return retval
 
     def getNominalFlexuralStrength(self, majorAxis= True):
         ''' Return the nominal compressive strength of the member
@@ -218,8 +219,13 @@ class Member(buckling_base.MemberBase):
              e.setProp('chiLT',chiLT) # flexural strength reduction factor.
              e.setProp('chiN',chiN) # compressive strength reduction factor.
 
-    def installULSControlRecorder(self,recorderType, chiN= 1.0, chiLT=1.0):
-        '''Install recorder for verification of ULS criterion.'''
+    def installULSControlRecorder(self,recorderType, chiN: float= 1.0, chiLT: float= 1.0):
+        '''Install recorder for verification of ULS criterion.
+
+        :param recorderType: type of the recorder to install.
+        :param chiN: compressive strength reduction factor.
+        :param chiLT: flexural strength reduction factor.
+        '''
         prep= self.getPreprocessor()
         nodes= prep.getNodeHandler
         domain= prep.getDomain
@@ -467,7 +473,7 @@ def softenElements(elementSet):
                 ratio= abs(Pr)/Pns
                 tau= 1.0
                 if(ratio>0.5):
-                    lmsg.info('Pr= ', Pr/1e3, ' kN, Pns= ', Pns/1e3,' kN, ratio= ', ratio)
+                    lmsg.log('Pr= '+ str(Pr/1e3)+' kN, Pns= '+str(Pns/1e3)+' kN, ratio= '+str(ratio))
                     tau= 4*ratio*(1-ratio)
                     if(e.hasProp('IyBackup')):
                         mat.sectionProperties.Iy= tau*e.getProp('IyBackup')

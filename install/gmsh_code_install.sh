@@ -4,6 +4,9 @@
 # script for compiling gmsh on linux operating system
 # it should run on any linux which has all needed packages installed
 
+# Install dependencies
+sudo apt-get install libfltk1.3-dev
+
 
 ##########################################################
 # get current directory and create a new for building xc

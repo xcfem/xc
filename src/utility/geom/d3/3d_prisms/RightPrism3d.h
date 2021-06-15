@@ -37,7 +37,7 @@ class RightPrism3d : public Prism3d
     SolidExtruPolygon3d<PG> extru;
   protected:
     inline unsigned int get_num_vertices_plgno(void) const
-      { return extru.GetNumVertices(); }
+      { return extru.getNumVertices(); }
   public:
     RightPrism3d(void) {}
     RightPrism3d(const PG &secc,const GEOM_FT &lng): Prism3d(), extru(secc,lng) {}
@@ -78,10 +78,10 @@ class RightPrism3d : public Prism3d
     //! @brief Return the minimum value of the i-th coordinate.
     inline virtual GEOM_FT GetMin(unsigned short int i) const
       { return extru.GetMin(i); }
-    inline virtual unsigned int GetNumVertices(void) const
-      { return extru.GetNumVertices(); }
-    inline virtual unsigned int GetNumVerticesFaceta(unsigned int faceta) const
-      { return extru.GetNumVerticesFaceta(faceta); }
+    inline virtual unsigned int getNumVertices(void) const
+      { return extru.getNumVertices(); }
+    inline virtual unsigned int getNumVerticesFaceta(unsigned int faceta) const
+      { return extru.getNumVerticesFaceta(faceta); }
     inline virtual unsigned int getNumEdges(void) const
       { return extru.getNumEdges(); }
     inline virtual unsigned int GetNumFacetas(void) const

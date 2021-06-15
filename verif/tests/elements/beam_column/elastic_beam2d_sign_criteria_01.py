@@ -20,23 +20,23 @@ from model import predefined_spaces
 from materials import typical_materials
 
 def getInternalForcesBeginNode(elemTag):
-  ''':return: internal forces on the element's first node.''' 
-  elem= elements.getElement(elemTag)
-  return (elem.getN1,elem.getV1,elem.getM1)
+    ''':return: internal forces on the element's first node.''' 
+    elem= elements.getElement(elemTag)
+    return (elem.getN1,elem.getV1,elem.getM1)
 
 def getInternalForcesEndNode(elemTag):
-  ''':return: internal forces on the element's last node.''' 
-  elem= elements.getElement(elemTag)
-  return (elem.getN2,elem.getV2,elem.getM2)
+    ''':return: internal forces on the element's last node.''' 
+    elem= elements.getElement(elemTag)
+    return (elem.getN2,elem.getV2,elem.getM2)
 
 def printResults(N1,V1,M1,N2,V2,M2,phaseRatios,phase):
-  ratioMsg= 'ratio'+str(phase)
-  print('N1= ', N1, ' N2= ', N2 )
-  print(ratioMsg+'0= ', phaseRatios[0])
-  print('V1= ',V1, 'V2= ',V2 )
-  print(ratioMsg+'1= ', phaseRatios[1])
-  print('M1= ',M1, 'M2= ', M2)
-  print(ratioMsg+'2= ', phaseRatios[2])
+    ratioMsg= 'ratio'+str(phase)
+    print('N1= ', N1, ' N2= ', N2 )
+    print(ratioMsg+'0= ', phaseRatios[0])
+    print('V1= ',V1, 'V2= ',V2 )
+    print(ratioMsg+'1= ', phaseRatios[1])
+    print('M1= ',M1, 'M2= ', M2)
+    print(ratioMsg+'2= ', phaseRatios[2])
 
                      
 # Material properties
@@ -166,6 +166,6 @@ import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (result<1e-10):
-  print('test '+fname+': ok.')
+    print('test '+fname+': ok.')
 else:
-  lmsg.error(fname+' ERROR.')
+    lmsg.error(fname+' ERROR.')

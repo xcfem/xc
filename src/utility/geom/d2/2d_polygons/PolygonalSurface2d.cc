@@ -34,7 +34,7 @@
 //! @brief Return los vertices of the polygon.
 GeomObj::list_Pos2d PolygonalSurface2d::getVertices(void) const
   {
-    unsigned int nv= GetNumVertices();
+    unsigned int nv= getNumVertices();
     GeomObj::list_Pos2d lv;
     for(size_t i= 1; i <= nv; i++) lv.push_back(Vertice(i));
     return lv;
@@ -48,7 +48,7 @@ Vector2d PolygonalSurface2d::getLado0Normal(const size_t i) const
 //! @brief Return la normal en el vértice of the polygon.
 Vector2d PolygonalSurface2d::getVertex0Normal(const size_t i) const
   {
-    const size_t nv= GetNumVertices();
+    const size_t nv= getNumVertices();
     size_t I= i-1;size_t J= i;
     if(i==0)
       I= nv-1;
@@ -62,7 +62,7 @@ Vector2d PolygonalSurface2d::getVertex0Normal(const size_t i) const
 Polyline2d PolygonalSurface2d::getPolyline(void) const
   {
     Polyline2d retval;
-    unsigned int nv= GetNumVertices();
+    unsigned int nv= getNumVertices();
     for(size_t i= 1; i <= nv; i++) retval.AgregaVertice(Vertice(i));
     retval.AgregaVertice(Vertice(1)); //Close the polyline.
     return retval;
@@ -71,24 +71,107 @@ Polyline2d PolygonalSurface2d::getPolyline(void) const
 
 Segment2d PolygonalSurface2d::Lado0(unsigned int i, unsigned int j) const
   { return Segment2d(Vertice0(i),Vertice0(j)); }
+
 Segment2d PolygonalSurface2d::Lado0(unsigned int i) const
   {
-    const size_t nl= GetNumLados();
+    const size_t nl= getNumEdges();
     unsigned int i1= i%nl;
     unsigned int i2= (i+1)%nl;
     return Lado0(i1,i2);
   }
+
+//! @brief Return the i-th edge.
 Segment2d PolygonalSurface2d::Lado(unsigned int i) const
   { return Lado0(i-1); }
 
 //! @brief Return the perimeter of the surface.
 GEOM_FT PolygonalSurface2d::getLength(void) const
   {
-    unsigned int nl= GetNumLados();
+    const unsigned int nl= getNumEdges();
     GEOM_FT temp = 0;
     for(unsigned int i= 1; i<=nl;i++)
       temp += Lado(i).getLength();
     return temp;
+  }
+
+//! @brief Return the distal edge with respect to the point argument.
+//! @para p: 2D point.
+int PolygonalSurface2d::getIndexOfDistalEdge(const Pos2d &p) const
+  {
+    const unsigned int nl= getNumEdges();
+    int retval= 1;
+    GEOM_FT d2= Lado(1).dist2(p);
+    GEOM_FT maxDist2= d2;
+    for(unsigned int i= 2; i<=nl;i++)
+      {
+        d2= Lado(i).dist2(p);
+	if(d2>maxDist2)
+	  {
+	    retval= i;
+	    maxDist2= d2;
+	  }
+      }
+    return retval;
+  }
+
+//! @brief Return the proximal edge with respect to the point argument.
+//! @param p: 2D point.
+int PolygonalSurface2d::getIndexOfProximalEdge(const Pos2d &p) const
+  {
+    const unsigned int nl= getNumEdges();
+    int retval= 1;
+    GEOM_FT d2= Lado(1).dist2(p);
+    GEOM_FT minDist2= d2;
+    for(unsigned int i= 2; i<=nl;i++)
+      {
+        d2= Lado(i).dist2(p);
+	if(d2<minDist2)
+	  {
+	    retval= i;
+	    minDist2= d2;
+	  }
+      }
+    return retval;
+  }
+
+//! @brief Return the distal vertex with respect to the point argument.
+//! @param p: 2D point.
+int PolygonalSurface2d::getIndexOfDistalVertex(const Pos2d &p) const
+  {
+    const unsigned int nl= getNumVertices();
+    int retval= 1;
+    GEOM_FT d2= Vertice(1).dist2(p);
+    GEOM_FT maxDist2= d2;
+    for(unsigned int i= 2; i<=nl;i++)
+      {
+        d2= Vertice(i).dist2(p);
+	if(d2>maxDist2)
+	  {
+	    retval= i;
+	    maxDist2= d2;
+	  }
+      }
+    return retval;
+  }
+    
+//! @brief Return the proximal vertex with respect to the point argument.
+//! @param p: 2D point.
+int PolygonalSurface2d::getIndexOfProximalVertex(const Pos2d &p) const
+  {
+    const unsigned int nl= getNumVertices();
+    int retval= 1;
+    GEOM_FT d2= Vertice(1).dist2(p);
+    GEOM_FT minDist2= d2;
+    for(unsigned int i= 2; i<=nl;i++)
+      {
+        d2= Vertice(i).dist2(p);
+	if(d2<minDist2)
+	  {
+	    retval= i;
+	    minDist2= d2;
+	  }
+      }
+    return retval;
   }
 
 //! @brief Return the object area.
@@ -99,7 +182,7 @@ GEOM_FT PolygonalSurface2d::getArea(void) const
 GEOM_FT PolygonalSurface2d::GetMax(unsigned short int i) const
   { 
     GEOM_FT mx= Vertice(0)(i);
-    unsigned int nv= GetNumVertices();
+    unsigned int nv= getNumVertices();
     for(unsigned short int j= 0;j < nv;j++)
       mx= max(Vertice(j)(i),mx);
     return mx;
@@ -109,7 +192,7 @@ GEOM_FT PolygonalSurface2d::GetMax(unsigned short int i) const
 GEOM_FT PolygonalSurface2d::GetMin(unsigned short int i) const
   {
     GEOM_FT mn= Vertice(0)(i);
-    unsigned int nv= GetNumVertices();
+    unsigned int nv= getNumVertices();
     for(unsigned short int j= 0;j < nv;j++)
       mn= min(Vertice(j)(i),mn);
     return mn;
@@ -188,7 +271,7 @@ GEOM_FT PolygonalSurface2d::Pxy(void) const
 // XXX Posiblemente falle con polígonos no convexos.
 GeomObj::list_Pos2d PolygonalSurface2d::getApproxTangentPositions(const Vector2d &v) const
   {
-    const size_t sz= GetNumLados();
+    const size_t sz= getNumEdges();
     std::vector<double> tangsEnVertices(sz+1);
     Segment2d li= Lado0(sz-1);
     Segment2d lj= Lado0(0);
@@ -239,7 +322,7 @@ GeomObj::list_Pos2d PolygonalSurface2d::getApproxTangentPositions(const Vector2d
 GEOM_FT PolygonalSurface2d::DistSigno(const Pos2d &p,const bool &clockwise) const
   {
      const short int signo= (clockwise ? 1 : -1);
-     const size_t nv= GetNumVertices();
+     const size_t nv= getNumVertices();
      GEOM_FT retval= NAN;
      if(nv>0)
        {
@@ -317,7 +400,7 @@ GEOM_FT PolygonalSurface2d::getCover(const Pos2d &p, const Vector2d &vdir) const
 
 void PolygonalSurface2d::Print(std::ostream &os) const
   {
-    unsigned int nv= GetNumVertices();
+    unsigned int nv= getNumVertices();
     if(nv<1) return;
     os << Vertice(1);
     for(unsigned int i= 2; i <= nv; i++)
@@ -325,7 +408,7 @@ void PolygonalSurface2d::Print(std::ostream &os) const
   }
 void PolygonalSurface2d::Plot(Plotter &plotter) const
   {
-    unsigned int nv= GetNumVertices();
+    unsigned int nv= getNumVertices();
     if(nv<2) return;
     Pos2d p1= Vertice(1);
     for(unsigned int i= 2; i <= nv; i++)
@@ -437,7 +520,7 @@ Segment2d PolygonalSurface2d::Clip(const Segment2d &sg) const
 list<Segment2d> intersection(const PolygonalSurface2d &pg,const Line2d &r)
   {
     list<Segment2d> retval;
-    if(pg.GetNumVertices()>0)
+    if(pg.getNumVertices()>0)
       {
         Polyline2d pl= pg.getPolyline();
         GeomObj::list_Pos2d ptos= intersection(r,pl);
@@ -468,7 +551,7 @@ list<Segment2d> intersection(const PolygonalSurface2d &pg,const Ray2d &sr)
   {
     
     list<Segment2d> retval;
-    if(!pg.GetNumVertices()) return retval;
+    if(!pg.getNumVertices()) return retval;
 
     Polyline2d pl= pg.getPolyline();
     
@@ -500,7 +583,7 @@ list<Segment2d> intersection(const PolygonalSurface2d &pg,const Segment2d &sg)
   {
     
     list<Segment2d> retval;
-    if(!pg.GetNumVertices()) return retval;
+    if(!pg.getNumVertices()) return retval;
 
     Polyline2d pl= pg.getPolyline();
     

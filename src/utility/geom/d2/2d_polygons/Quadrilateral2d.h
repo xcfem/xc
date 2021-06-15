@@ -56,7 +56,7 @@ class Quadrilateral2d: public Polygon2d
       { return new Quadrilateral2d(*this); }
     inline void push_back(const Pos2d &p)
       {
-        if(GetNumVertices()<5)
+        if(getNumVertices()<5)
 	  Polygon2d::push_back(p);
       }
     Triangle2d getFirstTriangle(void) const;

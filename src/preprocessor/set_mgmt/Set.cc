@@ -50,6 +50,33 @@
 XC::Set::Set(const std::string &nmb,Preprocessor *prep)
   : SetMeshComp(nmb,prep), entities(prep) {}
 
+//! @brief Extend this set with the points of the argument.
+void XC::Set::extend(const SetEntities::lst_ptr_points &pts)
+  { entities.extend(pts); }
+
+//! @brief Extend this set with the lines of the argument.
+void XC::Set::extend(const SetEntities::lst_line_pointers &lns)
+  { entities.extend(lns); }
+
+//! @brief Extend this set with the surfaces of the argument.
+void XC::Set::extend(const SetEntities::lst_surface_ptrs &sfs)
+  { entities.extend(sfs); }
+
+//! @brief Extend this set with the bodies of the argument.
+void XC::Set::extend(const SetEntities::lst_body_pointers &bds)
+  { entities.extend(bds); }
+
+//! @brief Extend this set with the uniform grids of the argument.
+void XC::Set::extend(const SetEntities::lst_ptr_uniform_grids &ugrids)
+  { entities.extend(ugrids); }
+
+//! @brief Extend the set with the elements from the argument set.
+//!
+//! extend the lists with the objects from the argument.
+void XC::Set::extend(const Set &other)
+  { entities+= other.entities; }
+
+
 //! @brief Addition assignment operator.
 //!
 //! Concatenates the name and description of the argument and

@@ -128,11 +128,11 @@ sections.append(beamRCsect)
 reinfConcreteSectionDistribution.assign(elemSet=totalSet.getElements,setRCSects=beamRCsect)
 
 #Checking shear.
-lsd.shearResistance.controller= ACI_limit_state_checking.ShearController(limitStateLabel= lsd.shearResistance.label)
-lsd.shearResistance.controller.analysisToPerform= predefined_solutions.plain_newton_raphson
 lsd.normalStressesResistance.outputDataBaseFileName= 'resVerif'
 
 outCfg= lsd.VerifOutVars(listFile='N',calcMeanCF='Y')
+outCfg.controller= ACI_limit_state_checking.ShearController(limitStateLabel= lsd.shearResistance.label)
+outCfg.controller.analysisToPerform= predefined_solutions.plain_newton_raphson
 
 (FEcheckedModel,meanFCs)= reinfConcreteSectionDistribution.runChecking(lsd.shearResistance, matDiagType="d",threeDim= True,outputCfg=outCfg)  
 
@@ -155,6 +155,6 @@ print("ratio2= ",ratio2)
 import os
 fname= os.path.basename(__file__)
 if((ratio1<0.01) and (ratio2<0.01)):
-  print('test '+fname+': ok.')
+    print('test '+fname+': ok.')
 else:
-  lmsg.error(fname+' ERROR.')
+    lmsg.error(fname+' ERROR.')

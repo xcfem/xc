@@ -28,10 +28,11 @@ for i in range(0,len(retvals)):
 error= math.sqrt(error)
 
 import os
+from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (error<1e-15):
-  print("test ",fname,": ok.")
+    print('test: '+fname+': ok.')
 else:
-  print("test ",fname,": ERROR.")
+    lmsg.error('test: '+fname+' ERROR.')
 
   

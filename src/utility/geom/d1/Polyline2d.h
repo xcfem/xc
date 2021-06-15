@@ -40,12 +40,13 @@ class Polyline2d : public Linear2d, public GeomObj::list_Pos2d
     Polyline2d(void);
     explicit Polyline2d(const GeomObj::list_Pos2d &);
     explicit Polyline2d(const Pos2dList &);
+    explicit Polyline2d(const boost::python::list &);
 
     virtual GeomObj *clon(void) const
       { return new Polyline2d(*this); }
     const GeomObj::list_Pos2d &getVertices(void) const
       { return *this; }
-    inline size_t GetNumVertices(void) const
+    inline size_t getNumVertices(void) const
       { return GeomObj::list_Pos2d::size(); }
     size_t getNumSegments(void) const;
     inline const_iterator vertices_begin(void) const
@@ -71,7 +72,7 @@ class Polyline2d : public Linear2d, public GeomObj::list_Pos2d
     virtual GEOM_FT Ix(void) const;
     virtual GEOM_FT Iy(void) const;
     virtual GEOM_FT Iz(void) const;
-
+    
     //! @brief Inertia product.
     inline virtual GEOM_FT Pxy(void) const
       { return NAN; }

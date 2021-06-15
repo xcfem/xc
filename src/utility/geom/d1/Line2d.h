@@ -67,9 +67,9 @@ class Line2d : public Linear2d
   public:
     Line2d(void);
     explicit Line2d(const CGLine_2 &r);
-    Line2d(const Pos2d &p1,const Pos2d &p2);
-    Line2d(const Pos2d &p,const Dir2d &dir);
-    Line2d(const Pos2d &p,const Vector2d &vdir);
+    Line2d(const Pos2d &,const Pos2d &);
+    Line2d(const Pos2d &,const Dir2d &);
+    Line2d(const Pos2d &,const Vector2d &);
     explicit Line2d(const Line2dParametricForm &param);
     
     virtual bool operator==(const Line2d &) const;

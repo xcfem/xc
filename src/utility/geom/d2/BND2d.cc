@@ -221,7 +221,7 @@ bool BND2d::Overlap(const Polygon2d &p) const
       retval= p.Overlap(getPolygon());
     if(!retval)
       {
-        const unsigned int nl= p.GetNumLados();
+        const unsigned int nl= p.getNumEdges();
         for(unsigned int i= 1; i<=nl;i++)
           if(Overlap(p.Lado(i)))
             {

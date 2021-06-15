@@ -83,6 +83,26 @@ void XC::SetEntities::copy_lists(const SetEntities &other)
     uniform_grids.set_owner(this);
   }
 
+//! @brief Extend this set with the points of the argument.
+void XC::SetEntities::extend(const lst_ptr_points &pts)
+  { points.extend(pts);  }
+  
+//! @brief Extend this set with the lines of the argument.
+void XC::SetEntities::extend(const lst_line_pointers &lns)
+  { lines.extend(lns); }
+  
+//! @brief Extend this set with the surfaces of the argument.
+void XC::SetEntities::extend(const lst_surface_ptrs &sfs)
+  { surfaces.extend(sfs);  }
+
+//! @brief Extend this set with the bodies of the argument.
+void XC::SetEntities::extend(const lst_body_pointers &bds)
+  { bodies.extend(bds); }
+  
+//! @brief Extend this set with the uniform grids of the argument.
+void XC::SetEntities::extend(const lst_ptr_uniform_grids &ugrids)
+  { uniform_grids.extend(ugrids); }
+
 //! @brief Extend this set with the objects of the set
 //! being passed as parameter.
 void XC::SetEntities::extend_lists(const SetEntities &other)

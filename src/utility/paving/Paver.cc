@@ -82,7 +82,7 @@ int XC::Paver::call_paving(const Ref2d3d &ref,const Polygon3d &extContour, const
     nprm= 1;
     if(ext.clockwise(vPoint))
       ext.swap();
-    nbnode= extContour.GetNumVertices();
+    nbnode= extContour.getNumVertices();
     if(nbnode==0)
       {
 	  std::clog << getClassName() << "::" << __FUNCTION__
@@ -97,7 +97,7 @@ int XC::Paver::call_paving(const Ref2d3d &ref,const Polygon3d &extContour, const
 	    Polygon3d tmp= *i;
 	    if(tmp.counterclockwise(vPoint))
 	      { tmp.swap(); }
-	    const int nv= (*i).GetNumVertices();
+	    const int nv= (*i).getNumVertices();
 	    if(nv>0)
 	      {
 		nbnode+= nv; // number of contour nodes.
@@ -120,7 +120,7 @@ int XC::Paver::call_paving(const Ref2d3d &ref,const Polygon3d &extContour, const
         // Insert contours.
 	int vertexCounter= 1; // Vertex counter.
 	int plgCounter= 1; // Contour counter.
-	int nv= ext.GetNumVertices();
+	int nv= ext.getNumVertices();
 	for(int i= 1; i<=nv; i++, vertexCounter++)
 	  {
 	    const Pos2d p= ref.getLocalPosition(ext.Vertice(i));
@@ -135,7 +135,7 @@ int XC::Paver::call_paving(const Ref2d3d &ref,const Polygon3d &extContour, const
 	  {
 	    Polygon3d tmp= *i;
 	    iptper[plgCounter]= vertexCounter;
-	    nv= tmp.GetNumVertices();
+	    nv= tmp.getNumVertices();
 	    numper[plgCounter]= nv;
 	    for(int j= 1; j<=nv; j++, vertexCounter++)
 	      {

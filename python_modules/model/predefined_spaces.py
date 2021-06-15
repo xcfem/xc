@@ -556,6 +556,10 @@ class PredefinedSpace(object):
             supportNodes.append(n)
         return get_reactions.Reactions(self.preprocessor, supportNodes)
 
+    def getSetsNames(self):
+        ''' Returns the names of the currently defined sets.'''
+        return self.preprocessor.getSets.getSetsNames()
+    
     def getSet(self, setName: str):
         '''Return the set with the name argument.
 

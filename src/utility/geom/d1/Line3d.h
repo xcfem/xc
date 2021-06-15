@@ -67,9 +67,10 @@ class Line3d : public Linear3d
   public:
     Line3d(void);
     explicit Line3d(const CGLine_3 &r);
-    Line3d(const Pos3d &p1,const Pos3d &p2);
-    Line3d(const Pos3d &p,const Dir3d &dir);
-    Line3d(const Plane &p1,const Plane &p2);
+    Line3d(const Pos3d &,const Pos3d &);
+    Line3d(const Pos3d &,const Dir3d &);
+    Line3d(const Pos3d &,const Vector3d &);
+    Line3d(const Plane &,const Plane &);
     explicit Line3d(const Line3dParametricForm &param);
     virtual GeomObj *clon(void) const
       { return new Line3d(*this); }

@@ -276,9 +276,9 @@ print('ratio13= ', ratio13)
 import os
 fname= os.path.basename(__file__)
 if((abs(ratio0)<1e-7) & (abs(ratio1)<1e-1) & (abs(slopeBP)>1e15) & (abs(ratio3)<1e-5) & (abs(ratio4)<1e-5) & (abs(ratio5)<1e-5) & (abs(ratio6)<1e-5) & (abs(ratio7)<1e-5) & (abs(ratio8)<1e-5) & (abs(ratio9)<1e-5) & (abs(ratio10)<1e-5) & (abs(ratio11)<1e-5) & (abs(ratio12)<1e-5)  & (abs(ratio13)<1e-5)  )  :
-  print('test '+fname+': ok.')
+    print('test '+fname+': ok.')
 else:
-  lmsg.error(fname+' ERROR.')
+    lmsg.error(fname+' ERROR.')
 
 '''
 from materials.sections.fiber_section import plot_fiber_section as pfs

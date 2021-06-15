@@ -221,12 +221,11 @@ reinfConcreteSectionDistribution.assign(elemSet=totalSet.getElements,setRCSects=
 
 #Checking normal stresses.
 limitStateLabel= lsd.normalStressesResistance.label
-lsd.normalStressesResistance.controller= SIA262_limit_state_checking.BiaxialBendingNormalStressController(limitStateLabel)
 lsd.normalStressesResistance.outputDataBaseFileName= 'resVerif'
 
 # Using runChecking method we create the phantom model and run the checking on it. Unlike other check methods that also creates the phantom model this one doesn't clear the model after carrying out the verification. This method returns a tuple with the FE model (phantom model) and the result of verification
-
-(FEcheckedModel,checkResult)=reinfConcreteSectionDistribution.runChecking(lsd.normalStressesResistance, matDiagType="d",threeDim= True)  
+outputCfg= lsd.VerifOutVars(controller= SIA262_limit_state_checking.BiaxialBendingNormalStressController(limitStateLabel))
+(FEcheckedModel,checkResult)= reinfConcreteSectionDistribution.runChecking(lsd.normalStressesResistance, matDiagType="d",threeDim= True, outputCfg= outputCfg)  
 
 #Set with all the elements in the phantom model 
 elements= FEcheckedModel.getPreprocessor.getSets.getSet('total').getElements
@@ -337,6 +336,6 @@ import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (result<1e-10):
-  print('test '+fname+': ok.')
+    print('test '+fname+': ok.')
 else:
-  lmsg.error(fname+' ERROR.')
+    lmsg.error(fname+' ERROR.')

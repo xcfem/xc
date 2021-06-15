@@ -217,6 +217,7 @@ class Connection(connected_members.ConnectionMetaData):
         :param blockProperties: labels and attributes to assign to the newly 
                                 created blocks.
         '''
+        print('XXXXXXXXXX this method is being debbuged. XXXXXXXXXX')
         retval= bte.BlockData()
         beamBlocks= super(Connection,self).getBeamShapeBlocks(factor)
         retval.extend(beamBlocks)
@@ -225,15 +226,6 @@ class Connection(connected_members.ConnectionMetaData):
         # Flange plates.
         for b in self.beams:
             topPlateBlocks= b.getTopFlangeBoltedPlateBlocks(connectionOrigin= self.getOrigin(), column= self.column, boltSteel= self.getBoltSteel(), plateSteel= self.getBoltedPlatesSteel(), blockProperties= plateProperties)
-            # # Top plate
-            # ## Compute position of the top plate center.
-            # # topPlateCenter= b.memberOrigin + halfHPlate*baseVectors[1] + halfD*baseVectors[0]
-            # topPlateRefSys= b.getTopFlangeBoltedPlateRefSys(self.getOrigin(), flangePlate)
-            # if(b.connectedTo=='web'):
-            #     eccentricity= self.column.shape.getFlangeWidth()/2*topPlateRefSys.getIVector()
-            #     topPlateRefSys.move(-eccentricity)
-            #     #flangePlate.eccentricity= eccentricity
-            # topPlateBlocks= flangePlate.getBlocks(refSys= topPlateRefSys, blockProperties= plateProperties)
             retval.extend(topPlateBlocks)
         #     # Holes in top flange
         #     holesList= topPlateBlocks.getHoles()

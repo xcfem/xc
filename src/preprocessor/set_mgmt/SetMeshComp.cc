@@ -139,8 +139,23 @@ void XC::SetMeshComp::copy_lists(const SetMeshComp &other)
     constraints.set_owner(this);
   }
 
-//! @brief Appends to this set the objects from the set
-//! being passed as parameter.
+//! @brief Appends to this set the nodes from the argument.
+void XC::SetMeshComp::extend(const DqPtrsNode &nds)
+  { nodes.extend(nds); }
+
+//! @brief Appends to this set the elements from the argument.
+void XC::SetMeshComp::extend(const DqPtrsElem &elems)
+  { elements.extend(elems); }
+      
+//! @brief Appends to this set the constraints from the argument.
+void XC::SetMeshComp::extend(const lst_ptr_constraints &cs)
+  { constraints.extend(cs); }
+       
+//! @brief Appends to this set the objects from the argument set.
+void XC::SetMeshComp::extend(const SetMeshComp &other)
+  { extend_lists(other); }
+
+//! @brief Appends to this set the objects from the argument set.
 void XC::SetMeshComp::extend_lists(const SetMeshComp &other)
   {
     nodes.extend(other.nodes);

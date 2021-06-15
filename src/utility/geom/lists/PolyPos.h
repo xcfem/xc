@@ -26,7 +26,7 @@
 #include <deque>
 #include "../cgal_types.h"
 #include "utility/utils/misc_utils/matem.h"
-
+#include "utility/geom/proximity.h"
 
 //! @ingroup GEOM
 //
@@ -46,7 +46,13 @@ class PolyPos : public std::deque<pos>
     typedef typename pos::vector vector;
 
     PolyPos(void): deque_pos() {}
-
+    
+    pos getFromPoint(void) const
+      { return this->front(); }
+    
+    pos getToPoint(void) const
+      { return this->back(); }
+    
     bool operator==(const PolyPos<pos> &other) const
       {
         return ( (const deque_pos &) (*this) == (const deque_pos &) other );
@@ -58,6 +64,14 @@ class PolyPos : public std::deque<pos>
       }
     inline void Agrega(const PolyPos<pos> &p)
       { Cat(p); }
+    //! @brief Append the vertices between [first,last) to thebefore
+    //! end of the list.
+    template <class InputIterator>
+    void extend(InputIterator first, InputIterator last)
+      {
+	for(InputIterator i= first;i!=last; i++)
+	  Agrega(*i);
+      }
     void AgregaSiNuevo(const pos &);
     const_iterator find(const pos &p) const
       { return std::find(this->begin(),this->end(),p); }
@@ -78,6 +92,7 @@ class PolyPos : public std::deque<pos>
     std::deque<GEOM_FT> &GetSeparaciones(void) const;
     GEOM_FT GetSeparacionMedia(void) const;
 
+    iterator getNearestPoint(const pos &);
     iterator getFarthestPoint(const pos &);
     virtual iterator getFarthestPointFromSegment(iterator it1, iterator it2, GEOM_FT &pMaxDist);
     void simplify(GEOM_FT epsilon, iterator it1, iterator it2);
@@ -284,6 +299,11 @@ PolyPos<pos> PolyPos<pos>::GetMenores(unsigned short int i,const GEOM_FT &d) con
       if ((*j)(i) < d) retval.push_back(*j);
     return retval;
   }
+
+//! @brief Returns the farthest point from those of the list.
+template <class pos>
+typename PolyPos<pos>::iterator PolyPos<pos>::getNearestPoint(const pos &p)
+  { return nearest(this->begin(), this->end(),p); }
 
 //! @brief Returns the farthest point from those of the list.
 template <class pos>

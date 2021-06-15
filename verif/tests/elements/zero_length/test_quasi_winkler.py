@@ -123,8 +123,8 @@ yAdimMaxima= -1e6
 for n in l2.nodes:
   yAdimMaxima= max(yAdimMaxima,n.getDisp[1]/EIbeta3)
   ''' 
-  print("  node: ",n.tag," x= ",(n.get3dCoo[0]-Lmedios)/L)
-  print(" dy= ",n.getDisp[1]/EIbeta3)
+    print("  node: ",n.tag," x= ",(n.get3dCoo[0]-Lmedios)/L)
+    print(" dy= ",n.getDisp[1]/EIbeta3)
   '''
 
 
@@ -156,6 +156,6 @@ import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if((ratio1<1e-15) & (ratio2<1e-15) & (ratio3<0.03) & (ratio4<0.09)):
-  print('test '+fname+': ok.')
+    print('test '+fname+': ok.')
 else:
-  lmsg.error(fname+' ERROR.')
+    lmsg.error(fname+' ERROR.')

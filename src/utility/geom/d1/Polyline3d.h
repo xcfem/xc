@@ -28,20 +28,25 @@
 #include "Linear3d.h"
 #include "Segment3d.h"
 
+class Pos3dList;
+
 //! @ingroup GEOM
 //
 //! @brief Polyline in a three-dimensional space.
 class Polyline3d : public Linear3d, public GeomObj::list_Pos3d
   {
   public:
-    Polyline3d(void): Linear3d(), GeomObj::list_Pos3d() {}
+    Polyline3d(void);
+    explicit Polyline3d(const Pos3dList &);
+    explicit Polyline3d(const boost::python::list &);
+    
     virtual bool operator==(const Polyline3d &) const;
     virtual GeomObj *clon(void) const
       { return new Polyline3d(*this); }
     virtual void Move(const Vector3d &);
     const GeomObj::list_Pos3d &getVertices(void) const
       { return *this; }
-    inline size_t GetNumVertices(void) const
+    inline size_t getNumVertices(void) const
       { return GeomObj::list_Pos3d::size(); }
     size_t getNumSegments(void) const;
 

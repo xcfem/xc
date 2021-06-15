@@ -103,6 +103,86 @@ Segment3d Polygon3d::Lado0(unsigned int i) const
     return to_3d(sg2d);
   }
 
+//! @brief Return the distal edge with respect to the point argument.
+//! @para p: 2D point.
+int Polygon3d::getIndexOfDistalEdge(const Pos3d &p) const
+  {
+    const unsigned int nl= getNumEdges();
+    int retval= 1;
+    GEOM_FT d2= Lado(1).dist2(p);
+    GEOM_FT maxDist2= d2;
+    for(unsigned int i= 2; i<=nl;i++)
+      {
+        d2= Lado(i).dist2(p);
+	if(d2>maxDist2)
+	  {
+	    retval= i;
+	    maxDist2= d2;
+	  }
+      }
+    return retval;
+  }
+
+//! @brief Return the proximal edge with respect to the point argument.
+//! @param p: 2D point.
+int Polygon3d::getIndexOfProximalEdge(const Pos3d &p) const
+  {
+    const unsigned int nl= getNumEdges();
+    int retval= 1;
+    GEOM_FT d2= Lado(1).dist2(p);
+    GEOM_FT minDist2= d2;
+    for(unsigned int i= 2; i<=nl;i++)
+      {
+        d2= Lado(i).dist2(p);
+	if(d2<minDist2)
+	  {
+	    retval= i;
+	    minDist2= d2;
+	  }
+      }
+    return retval;
+  }
+
+//! @brief Return the distal vertex with respect to the point argument.
+//! @param p: 2D point.
+int Polygon3d::getIndexOfDistalVertex(const Pos3d &p) const
+  {
+    const unsigned int nl= getNumVertices();
+    int retval= 1;
+    GEOM_FT d2= Vertice(1).dist2(p);
+    GEOM_FT maxDist2= d2;
+    for(unsigned int i= 2; i<=nl;i++)
+      {
+        d2= Vertice(i).dist2(p);
+	if(d2>maxDist2)
+	  {
+	    retval= i;
+	    maxDist2= d2;
+	  }
+      }
+    return retval;
+  }
+    
+//! @brief Return the proximal vertex with respect to the point argument.
+//! @param p: 2D point.
+int Polygon3d::getIndexOfProximalVertex(const Pos3d &p) const
+  {
+    const unsigned int nl= getNumVertices();
+    int retval= 1;
+    GEOM_FT d2= Vertice(1).dist2(p);
+    GEOM_FT minDist2= d2;
+    for(unsigned int i= 2; i<=nl;i++)
+      {
+        d2= Vertice(i).dist2(p);
+	if(d2<minDist2)
+	  {
+	    retval= i;
+	    minDist2= d2;
+	  }
+      }
+    return retval;
+  }
+
 Plane Polygon3d::getPlaneFromSide(unsigned int i) const
   {
     Segment3d lado= Lado(i);
@@ -180,7 +260,7 @@ GEOM_FT Polygon3d::GetMin(unsigned short int i) const
 
 void Polygon3d::Print(std::ostream &os) const
   {
-    unsigned int nv= GetNumVertices();
+    unsigned int nv= getNumVertices();
     if(nv<1) return;
     os << Vertice(1);
     for(unsigned int i= 2; i <= nv; i++)
@@ -201,8 +281,8 @@ void Polygon3d::Print(std::ostream &os) const
 GEOM_FT Polygon3d::distSigno2(const Pos3d &p) const
   {
     const short int signo= (this->plg2d.clockwise() ? 1 : -1);
-    const size_t nv= GetNumVertices();
-    const size_t nl= GetNumLados();
+    const size_t nv= getNumVertices();
+    const size_t nl= getNumEdges();
     if(nv==0) return NAN;
     if(nv==1) return p.dist2(Vertice(1));
      

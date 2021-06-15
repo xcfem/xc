@@ -111,6 +111,10 @@ XC::DqPtrsConstraint &(XC::SetMeshComp::*GetConstraintsRef)(void)= &XC::SetMeshC
 XC::Node *(XC::SetMeshComp::*getNearestNodeSetMeshComp)(const Pos3d &)= &XC::SetMeshComp::getNearestNode;
 XC::Element *(XC::SetMeshComp::*getNearestElementSetMeshComp)(const Pos3d &)= &XC::SetMeshComp::getNearestElement;
 void (XC::SetMeshComp::*transforms)(const XC::TrfGeom &)= &XC::SetMeshComp::Transform;
+void (XC::SetMeshComp::*extend_nodes)(const XC::DqPtrsNode &)= &XC::SetMeshComp::extend;
+void (XC::SetMeshComp::*extend_elements)(const XC::DqPtrsElem &)= &XC::SetMeshComp::extend;
+void (XC::SetMeshComp::*extend_constraints)(const XC::SetMeshComp::lst_ptr_constraints &)= &XC::SetMeshComp::extend;
+void (XC::SetMeshComp::*extend_mesh_comp)(const XC::SetMeshComp &)= &XC::SetMeshComp::extend;
 class_<XC::SetMeshComp, XC::SetMeshComp *, bases<XC::SetBase>>("SetMeshComp",no_init)
   .add_property("name", &XC::SetMeshComp::getStrName, &XC::SetMeshComp::newName,"get object name.")
   .def("rename",&XC::SetMeshComp::rename,"Change the name of the set.")
@@ -149,6 +153,10 @@ class_<XC::SetMeshComp, XC::SetMeshComp *, bases<XC::SetBase>>("SetMeshComp",no_
   .def(self += self)
   .def(self -= self)
   .def(self *= self)
+  .def("extend", extend_nodes, "Appends the nodes in the argument to the set.")
+  .def("extend", extend_elements, "Appends the elements in the argument to the set.")
+  .def("extend", extend_constraints, "Appends the constraints in the argument to the set.")
+  .def("extend", extend_mesh_comp, "Appends the argument components to the set.")
   // The following operators return copies of the object stored in MapSet
   // and then the operations in those objects are lost. For now we'll
   // leave them aside.
@@ -255,6 +263,12 @@ XC::SetEntities::lst_ptr_points &(XC::Set::*getPoints)(void)= &XC::Set::getPoint
 XC::SetEntities::lst_line_pointers &(XC::Set::*getLines)(void)= &XC::Set::getLines;
 XC::SetEntities::lst_surface_ptrs &(XC::Set::*getSurfaces)(void)= &XC::Set::getSurfaces;
 XC::SetEntities::lst_body_pointers &(XC::Set::*getBodies)(void)= &XC::Set::getBodies;
+void (XC::Set::*extend_points)(const XC::SetEntities::lst_ptr_points &)= &XC::Set::extend;
+void (XC::Set::*extend_lines)(const XC::SetEntities::lst_line_pointers &)= &XC::Set::extend;
+void (XC::Set::*extend_surfaces)(const XC::SetEntities::lst_surface_ptrs &)= &XC::Set::extend;
+void (XC::Set::*extend_bodies)(const XC::SetEntities::lst_body_pointers &)= &XC::Set::extend;
+void (XC::Set::*extend_ugrids)(const XC::SetEntities::lst_ptr_uniform_grids &)= &XC::Set::extend;
+void (XC::Set::*extend_set)(const XC::Set &)= &XC::Set::extend;
 class_<XC::Set, XC::Set *,bases<XC::SetMeshComp> >("Set")
   .add_property("description", make_function( &XC::Set::getDescription, return_value_policy<copy_const_reference>() ), &XC::Set::setDescription,"Description (string) of the set.")
   .add_property("getEntities", make_function(getEntities, return_internal_reference<>() ),"return the entities (points, lines, surfaces,...) of the set.")
@@ -275,6 +289,15 @@ class_<XC::Set, XC::Set *,bases<XC::SetMeshComp> >("Set")
   .def("numerate", &XC::Set::numera,"Numerate entities (VTK).")
   .def("clear",&XC::Set::clear,"Removes all items.")
   .def("getBnd", &XC::Set::Bnd, "Returns set boundary.")
+  .def("extend", extend_nodes, "Appends the nodes in the argument to the set.")
+  .def("extend", extend_elements, "Appends the elements in the argument to the set.")
+  .def("extend", extend_constraints, "Appends the constraints in the argument to the set.")
+  .def("extend", extend_points, "Appends the points in the argument to the set.")
+  .def("extend", extend_lines, "Appends the lines in the argument to the set.")
+  .def("extend", extend_surfaces, "Appends the surfaces in the argument to the set.")
+  .def("extend", extend_bodies, "Appends the bodies in the argument to the set.")
+  .def("extend", extend_ugrids, "Appends the uniform grids in the argument to the set.")
+  .def("extend", extend_set, "Appends the argument components to the set.")
   .def(self += self)
   .def(self -= self)
   .def(self *= self)

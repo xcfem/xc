@@ -76,7 +76,7 @@ class GTSSurface
     void removeFace(GTSFace &f);
     void Merge(const GTSSurface &);
 
-    guint GetNumVertices(void) const;
+    guint getNumVertices(void) const;
     guint getNumEdges(void) const;
     guint GetNumCaras(void) const;
     GTSSurfaceTraverse Begin(void) const;

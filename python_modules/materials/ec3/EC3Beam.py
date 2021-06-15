@@ -14,11 +14,11 @@ import math
 import xc_base
 import geom
 import xc
-from materials import buckling_base
+from materials import steel_member_base
 from materials.ec3 import EC3_limit_state_checking as EC3lsc
 from misc_utils import log_messages as lmsg
 
-class EC3Beam(buckling_base.MemberBase):
+class EC3Beam(steel_member_base.BucklingMember):
     '''Steel beam defined by an arbitrary name, a cross-section shape, 
     its section class, the coefficients of supports and the type  
     

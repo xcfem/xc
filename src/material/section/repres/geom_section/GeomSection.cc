@@ -278,7 +278,7 @@ double XC::GeomSection::getLeverArm(const Line2d &PFtrace) const
     Polygon2d contour= getRegionsContour();
     Pos2d C= contour.getCenterOfMass();
     HalfPlane2d sp(PFtrace.Perpendicular(C));
-    const size_t num_vertices= contour.GetNumVertices();
+    const size_t num_vertices= contour.getNumVertices();
     double d= 0.0,dpos= 0.0,dneg=0.0;    
     for( size_t i=1;i<=num_vertices;i++)
       {
@@ -296,7 +296,7 @@ double XC::GeomSection::getLeverArm(const Line2d &PFtrace) const
 double XC::GeomSection::getCompressedZoneDepth(const HalfPlane2d &sp_compressions) const
   {    
     Polygon2d contour= getRegionsContour();
-    const size_t num_vertices= contour.GetNumVertices();
+    const size_t num_vertices= contour.getNumVertices();
     double d= 0.0,dneg= 0.0;    
     for( size_t i=1;i<=num_vertices;i++)
       {
@@ -312,7 +312,7 @@ double XC::GeomSection::getCompressedZoneDepth(const HalfPlane2d &sp_compression
 double XC::GeomSection::getTensionedZoneDepth(const HalfPlane2d &sp_compressions) const
   {
     Polygon2d contour= getRegionsContour();
-    const size_t num_vertices= contour.GetNumVertices();
+    const size_t num_vertices= contour.getNumVertices();
     double d= 0.0,dpos=0.0;    
     for( size_t i=1;i<=num_vertices;i++)
       {
@@ -361,7 +361,7 @@ std::vector<double> XC::GeomSection::getCutLengths(const std::list<Line2d> &lr) 
 double XC::GeomSection::getAnchoMecanico(const Line2d &bending_plane_trace) const
   {
     const Polygon2d contour= append_mid_points(getRegionsContour());
-    const size_t num_vertices= contour.GetNumVertices();
+    const size_t num_vertices= contour.getNumVertices();
     double d= 0.0,dmax= 0.0;
     Line2d perp;
     Segment2d ancho;
@@ -382,7 +382,7 @@ double XC::GeomSection::getAnchoMecanico(const Line2d &bending_plane_trace) cons
 double XC::GeomSection::getCompressedStrutWidth(const Segment2d &lever_arm) const
   {
     const Polygon2d contour= append_mid_points(getRegionsContour());
-    const size_t num_vertices= contour.GetNumVertices();
+    const size_t num_vertices= contour.getNumVertices();
     Line2d perp= lever_arm.getPerpendicularBisector();
     Segment2d ancho= contour.Clip(perp);
     Pos2d p= intersection_point(ancho,lever_arm);

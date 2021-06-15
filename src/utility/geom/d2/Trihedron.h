@@ -50,9 +50,9 @@ class Trihedron: public GeomObj3d
     void Put( const Pos3d &p0, const Pos3d &p1,
               const Pos3d &p2, const Pos3d &p3);
     void Put(const Pos3d &p0, const Triangle3d &tr);
-    inline virtual unsigned int GetNumVertices(void) const
+    inline virtual unsigned int getNumVertices(void) const
       { return 4; }
-    inline virtual unsigned int GetNumVerticesFaceta(unsigned int faceta) const
+    inline virtual unsigned int getNumVerticesFaceta(unsigned int faceta) const
       { return 3; }
     inline virtual unsigned int getNumEdges(void) const
       { return 3; }

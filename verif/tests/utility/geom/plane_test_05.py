@@ -27,8 +27,9 @@ print('dB= ', dB)
 '''
 
 import os
+from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if(dA<1e-6 and dB<1e-6):
-  print("test ",fname,": ok.")
+    print('test: '+fname+': ok.')
 else:
-  print("test ",fname,": ERROR.")
+    lmsg.error('test: '+fname+' ERROR.')

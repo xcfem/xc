@@ -62,7 +62,7 @@ class Polygon2d: public PolygonalSurface2d
     const CGPolygon_2 &ToCGAL(void) const
       { return cgpol; }
 
-    inline virtual unsigned int GetNumVertices(void) const
+    inline virtual unsigned int getNumVertices(void) const
       { return cgpol.size(); }
     inline void push_back(const Pos2d &p)
       { cgpol.push_back(p.ToCGAL()); }
@@ -156,7 +156,7 @@ class Polygon2d: public PolygonalSurface2d
     inline Pos2d Vertice(unsigned int i) const
       { return Vertice0(i-1); }
     //! @brief Return the position of the i-th vertex
-    //! (0 based: j=0..GetNumVertices()-1).
+    //! (0 based: j=0..getNumVertices()-1).
     inline Pos2d Vertice0(unsigned int j) const
       { return Pos2d(cgpol.vertex(j)); }
     GeomObj::list_Pos2d getVertexList(void) const;

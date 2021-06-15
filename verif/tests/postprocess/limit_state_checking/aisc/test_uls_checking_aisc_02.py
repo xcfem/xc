@@ -143,7 +143,7 @@ for ls in limitStates:
 
 outCfg= lsd.VerifOutVars(setCalc=xcTotalSet, appendToResFile='Y', listFile='N', calcMeanCF='Y')
 limitState=lsd.normalStressesResistance
-limitState.controller= aisc.BiaxialBendingNormalStressController(limitState.label)
+outCfg.controller= aisc.BiaxialBendingNormalStressController(limitState.label)
 average= limitState.runChecking(outCfg)
 
 ratio= ((average[0]-0.72538261095588463)/0.72538261095588463)**2
@@ -158,9 +158,9 @@ print('ratio= ', ratio)
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if(ratio<1e-8):
-  print('test '+fname+': ok.')
+    print('test '+fname+': ok.')
 else:
-  lmsg.error(fname+' ERROR.')
+    lmsg.error(fname+' ERROR.')
 
 # #########################################################
 # # Graphic stuff.

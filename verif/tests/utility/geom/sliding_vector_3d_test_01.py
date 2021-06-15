@@ -10,10 +10,11 @@ vectorDir=geom.Vector3d(1,2,3)
 vec1=geom.SlidingVector3d(pto,vectorDir)
 
 import os
+from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if vec1.x==1 and vec1.y==2 and vec1.z==3:
-  print("test ",fname,": ok.")
+    print('test: '+fname+': ok.')
 else:
-  print("test ",fname,": ERROR.")
+    lmsg.error('test: '+fname+' ERROR.')
 
 

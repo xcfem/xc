@@ -42,6 +42,15 @@ Polyline2d::Polyline2d(const GeomObj::list_Pos2d &l)
 Polyline2d::Polyline2d(const Pos2dList &l)
   : Linear2d(), GeomObj::list_Pos2d(l.getPoints()){}
 
+//! @brief Constructor (Python interface).
+Polyline2d::Polyline2d(const boost::python::list &l)
+  {
+    const int sz= len(l);
+    // copy the components
+    for(int i=0; i<sz; i++)
+      push_back(boost::python::extract<Pos2d>(l[i]));
+  }
+
 const Pos2d *Polyline2d::AgregaVertice(const Pos2d &p)
   {
     GeomObj::list_Pos2d::push_back(p);
@@ -50,7 +59,7 @@ const Pos2d *Polyline2d::AgregaVertice(const Pos2d &p)
 
 size_t Polyline2d::getNumSegments(void) const
   {
-    size_t retval= GetNumVertices();
+    size_t retval= getNumVertices();
     if(retval>0)
       retval-=1;
     return retval;

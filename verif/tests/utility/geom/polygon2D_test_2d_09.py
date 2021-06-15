@@ -17,8 +17,9 @@ pList.append(pol3)
 ratio= len(pList)-3
 
 import os
+from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if(abs(ratio)<1e-10):
-  print("test ",fname,": ok.")
+    print('test: '+fname+': ok.')
 else:
-  print("test ",fname,": ERROR.")
+    lmsg.error('test: '+fname+' ERROR.')

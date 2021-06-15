@@ -11,9 +11,10 @@ base2=plane.getBase2()
 tp=plane.tipo()
 
 import os
+from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if normal.x==0 and normal.y==0 and normal.z==1:
-  print("test ",fname,": ok.")
+    print('test: '+fname+': ok.')
 else:
-  print("test ",fname,": ERROR.")
+    lmsg.error('test: '+fname+' ERROR.')
 

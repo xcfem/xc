@@ -54,7 +54,7 @@ double sumatorio_k_l(const double &xi,const double &xi_1,
 double sumatorio_i_p_q(const PolygonalSurface2d &sp,const int &p, const int &q)
   {
     double retval= 0;
-    const size_t num_vertices= sp.GetNumVertices();
+    const size_t num_vertices= sp.getNumVertices();
     for(size_t i=1;i<=num_vertices;i++)
       {
         

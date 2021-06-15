@@ -43,7 +43,7 @@ class PolygonVertexStorage
 
   public:
     PolygonVertexStorage(const size_t &sz,const size_t &V);
-    inline size_t GetNumVertices(void) const
+    inline size_t getNumVertices(void) const
       { return ind_vertices.size(); }
     inline const size_t &Vertice(const size_t &i) const
       { return ind_vertices[(i-1)]; }
@@ -223,7 +223,7 @@ void Build_tdest_polyhedron<TPOLORG,HDS,CVPOS>::operator()(HDS& hds)
     for(cconst_iter j= mt.CarasBegin();j!=mt.CarasEnd();j++)
       {
         B.begin_facet();
-        const size_t nv= (*j).GetNumVertices();
+        const size_t nv= (*j).getNumVertices();
         for(size_t i=0;i<nv;i++)
           B.add_vertex_to_facet((*j).Vertice(i+1));
         B.end_facet();

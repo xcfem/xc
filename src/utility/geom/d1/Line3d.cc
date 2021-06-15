@@ -31,11 +31,18 @@ const Pos3d Line3d::defaultOrg= Pos3d(0,0,0);
 const Pos3d Line3d::defaultDest= Pos3d(1,0,0);
 const Vector3d defaultVDir= Vector3d(1,0,0);
 
+//! @brief Default constructor.
 Line3d::Line3d(void)
   : Linear3d(), cgr(defaultOrg.ToCGAL(),defaultDest.ToCGAL()){}
+
+//! @brief Constructor.
+//! @param r: CGAL line_3.
 Line3d::Line3d(const CGLine_3 &r)
   : Linear3d(),cgr(r) {}
 
+//! @brief Constructor.
+//! @param p1: 3D point.
+//! @param p2: 3D point.
 Line3d::Line3d(const Pos3d &p1,const Pos3d &p2)
   : Linear3d(), cgr(p1.ToCGAL(),p2.ToCGAL())
   {
@@ -53,8 +60,17 @@ Line3d::Line3d(const Pos3d &p1,const Pos3d &p2)
                 << d << ".\n";
   }
 
+//! @brief Constructor.
+//! @param p1: 3D point.
+//! @param dir: 3D direction.
 Line3d::Line3d(const Pos3d &p,const Dir3d &dir)
   : Linear3d(), cgr(p.ToCGAL(),dir.ToCGAL()) {}
+
+//! @brief Constructor.
+//! @param p1: 3D point.
+//! @param vdir: 3D vector.
+Line3d::Line3d(const Pos3d &p,const Vector3d &vdir)
+  : Linear3d(), cgr(p.ToCGAL(),vdir.ToCGAL()) {}
 
 Line3d::Line3d(const Plane &p1,const Plane &p2)
   : Linear3d(), cgr()

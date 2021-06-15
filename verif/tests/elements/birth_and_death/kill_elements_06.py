@@ -141,8 +141,8 @@ print("error= ",error)
 import os
 fname= os.path.basename(__file__)
 if error<1e-5:
-  print('test '+fname+': ok.')
+    print('test '+fname+': ok.')
 else:
-  lmsg.error(fname+' ERROR.')
+    lmsg.error(fname+' ERROR.')
 
 

@@ -78,9 +78,18 @@ class ConnectedMemberMetaData(object):
             origin= self.memberOrigin
         return geom.Ref2d3d(origin, self.kVector, -self.jVector) # right-handed
 
+    def getAxis(self, origin= None):
+        ''' Return the member axis.
+
+        :param origin: member origin.
+        '''
+        if(not origin):
+            origin= self.memberOrigin
+        return geom.Line3d(origin, self.iVector)
+    
     def getMidPoints(self, origin= None):
         ''' Return the position expressed in global coordinates
-            of the pointsat the middle of the shape.
+            of the points at the middle of the shape.
 
         :param origin: member origin.
         '''

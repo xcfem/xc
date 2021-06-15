@@ -47,16 +47,16 @@ class PolygonalSurface2d: public Surface2d
     PolygonalSurface2d(void): Surface2d(){}
 
     virtual GeomObj *clon(void) const= 0;
-    inline virtual unsigned int GetNumVertices(void) const
+    inline virtual unsigned int getNumVertices(void) const
       { return 0; }
-    inline virtual unsigned int GetNumLados(void) const
-      { return GetNumVertices(); }
+    inline virtual unsigned int getNumEdges(void) const
+      { return getNumVertices(); }
     inline bool empty(void) const
-      { return (GetNumVertices()<1); }
+      { return (getNumVertices()<1); }
     virtual Pos2d Vertice(unsigned int i) const= 0;
-    //Return el vértice de indice i (i=1..GetNumVertices())
+    //Return el vértice de indice i (i=1..getNumVertices())
     virtual Pos2d Vertice0(unsigned int j) const= 0;
-    //Return el vértice de indice j (j=0..GetNumVertices()-1)
+    //Return el vértice de indice j (j=0..getNumVertices()-1)
     inline const Pos2d operator()(const size_t &i) const //Offset 1.
       { return Vertice(i); }
     inline const Pos2d operator[](const size_t &j) const //Offset 0.
@@ -66,6 +66,10 @@ class PolygonalSurface2d: public Surface2d
     GeomObj::list_Pos2d getVertices(void) const;
     Vector2d getLado0Normal(const size_t i) const;
     Vector2d getVertex0Normal(const size_t i) const;
+    int getIndexOfDistalEdge(const Pos2d &) const;
+    int getIndexOfProximalEdge(const Pos2d &) const;
+    int getIndexOfDistalVertex(const Pos2d &) const;
+    int getIndexOfProximalVertex(const Pos2d &) const;
     Polyline2d getPolyline(void) const;
     virtual GEOM_FT getLength(void) const;
     inline GEOM_FT getPerimeter(void) const

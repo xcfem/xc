@@ -72,6 +72,6 @@ import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (abs(ratio1)<1e-15) & (abs(ratio2)<1e-15) & (abs(ratio3)<1e-15) & (abs(ratio4)<1e-7) & (abs(ratio5)<1e-7) & (abs(ratio6)<1e-17) :
-  print("test_geom_caract_mec_02: ok.")
+    print("test_geom_caract_mec_02: ok.")
 else:
-  print("test_geom_caract_mec_02: ERROR.")
+    print("test_geom_caract_mec_02: ERROR.")

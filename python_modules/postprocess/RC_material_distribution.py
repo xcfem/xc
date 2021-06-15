@@ -111,7 +111,7 @@ class RCMaterialDistribution(object):
             self.sectionDefinition= pickle.load(f)
         f.close()
 
-    def runChecking(self,limitStateData,matDiagType,threeDim= True,outputCfg= lsd.VerifOutVars()):
+    def runChecking(self,limitStateData, matDiagType, threeDim= True, outputCfg= lsd.VerifOutVars()):
         '''Creates the phantom model and runs the verification on it.
 
         :param limitStateData: object that contains the name of the file
@@ -130,7 +130,7 @@ class RCMaterialDistribution(object):
         '''
         feProblem= xc.FEProblem()
         preprocessor= feProblem.getPreprocessor
-        if 'straight' in str(limitStateData.controller).lower():
+        if 'straight' in str(outputCfg.controller).lower():
              for s in self.sectionDefinition.sections:
                  s.fiberSectionParameters.concrType.initTensStiff='Y'
         self.sectionDefinition.createRCsections(preprocessor,matDiagType) #creates
@@ -140,7 +140,7 @@ class RCMaterialDistribution(object):
             self.sectionDefinition.calcInteractionDiagrams(preprocessor,matDiagType)
         else:
             self.sectionDefinition.calcInteractionDiagrams(preprocessor,matDiagType,'NMy')
-        limitStateData.controller.solutionProcedure= limitStateData.controller.solutionProcedureType(feProblem)
+        outputCfg.controller.solutionProcedure= outputCfg.controller.solutionProcedureType(feProblem)
         phantomModel= phm.PhantomModel(preprocessor,self)
         result= phantomModel.runChecking(limitStateData,outputCfg)
         return (feProblem, result)
@@ -159,11 +159,11 @@ class RCMaterialDistribution(object):
                    elements to be analyzed, append or not the results to a file,
                    generation or not of lists, ...)
         '''
-        (tmp, retval)= self.runChecking(limitStateData, matDiagType,True,outputCfg)
+        (tmp, retval)= self.runChecking(limitStateData, matDiagType, True, outputCfg)
         tmp.clearAll() #Free memory.
         return retval
 
-    def internalForcesVerification2D(self,limitStateData, matDiagType,setCalc=None):
+    def internalForcesVerification2D(self,limitStateData, matDiagType, setCalc=None):
         '''Limit state verification based on internal force (Fx,Fy,Mz) values.
 
         :param limitStateData: object that contains the name of the file

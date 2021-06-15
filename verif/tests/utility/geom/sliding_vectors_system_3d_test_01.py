@@ -35,9 +35,10 @@ Mom= svd1.getMoment()
 #print('Res= ', Res)
 
 import os
+from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if Res.x == 0 and Res.y == 0 and Res.z == 4 and Mom.x == 0 and Mom.y == 0 and Mom.z == 0: 
-  print("test ",fname,": ok.")
+    print('test: '+fname+': ok.')
 else:
-  print("test ",fname,": ERROR.")
+    lmsg.error('test: '+fname+' ERROR.')
 

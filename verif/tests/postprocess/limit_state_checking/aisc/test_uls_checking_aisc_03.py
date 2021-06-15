@@ -142,7 +142,7 @@ for ls in limitStates:
 ## Check limit state
 outCfg= lsd.VerifOutVars(setCalc=xcTotalSet, appendToResFile='Y', listFile='N', calcMeanCF='Y')
 limitState=lsd.shearResistance
-limitState.controller= aisc.ShearController(limitState.label)
+outCfg.controller= aisc.ShearController(limitState.label)
 average= limitState.runChecking(outCfg)
 
 ratio= ((average[0]-0.47421897657321965)/0.47421897657321965)**2
@@ -157,9 +157,9 @@ print('ratio= ', ratio)
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if(ratio<1e-8):
-  print('test '+fname+': ok.')
+    print('test '+fname+': ok.')
 else:
-  lmsg.error(fname+' ERROR.')
+    lmsg.error(fname+' ERROR.')
 
 # #########################################################
 # # Graphic stuff.

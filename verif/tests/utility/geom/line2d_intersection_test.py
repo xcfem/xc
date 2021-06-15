@@ -22,11 +22,12 @@ print('ratio2= ', ratio2)
 '''
 
 import os
+from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if ratio1<1e-20 and ratio2<1e-20 :
-  print("test ",fname,": ok.")
+    print('test: '+fname+': ok.')
 else:
-  print("test ",fname,": ERROR.")
+    lmsg.error('test: '+fname+' ERROR.')
 
 
 

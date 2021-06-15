@@ -109,7 +109,7 @@ print("ratio4= ",ratio4)
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (ratio1 < 1e-12) & (ratio2 < 1e-12) & (ratio3 < 1e-12) & (ratio4 < 1e-12):
-  print('test '+fname+': ok.')
+    print('test '+fname+': ok.')
 else:
-  lmsg.error(fname+' ERROR.')
+    lmsg.error(fname+' ERROR.')
 os.system("rm -f /tmp/test07.db") # Your garbage you clean it

@@ -137,9 +137,9 @@ if ((abs(ratio1-1.0)<1e-5) & (abs(ratio2-1.0)<1e-5) &
               (abs(ratio3-1.0)<1e-5) & (abs(ratio4-1.0)<1e-5) & 
               (abs(ratio5-1.0)<1e-5) & (abs(ratio6-1.0)<1e-5) & 
               (abs(ratio7-1.0)<1e-5) & (abs(ratio8-1.0)<1e-5)) :
-  print('test '+fname+': ok.')
+    print('test '+fname+': ok.')
 else:
-  lmsg.error(fname+' ERROR.')
+    lmsg.error(fname+' ERROR.')
 
 
 

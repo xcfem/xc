@@ -30,6 +30,7 @@
 
 class Dir3d;
 class VectorPos3d;
+class Polyline3d;
 
 typedef std::pair<int,int> int_pair;
 typedef std::deque<int_pair> int_pair_deque;
@@ -76,6 +77,7 @@ class Segment3d : public Linear3d
     GeomObj3d::list_Pos3d getIntersection(const Line3d &r) const;
     GeomObj3d::list_Pos3d getIntersection(const Ray3d &sr) const;
     GeomObj3d::list_Pos3d getIntersection(const Segment3d &sg) const;
+    bool connected(const Pos3d &, const GEOM_FT &tol= 0.0) const;
 
     Pos3d Projection(const Pos3d &) const;
     Vector3d Projection(const Vector3d &) const;
@@ -146,5 +148,7 @@ inline GeomObj3d::list_Pos3d intersection(const Segment3d &sg1,const Segment3d &
 
 int_pair_deque getIntersections(const std::deque<Segment3d> &);
 
+std::list<Polyline3d> get_polylines(const std::list<Segment3d> &, const GEOM_FT &tol);
+boost::python::list py_get_3d_polylines(const boost::python::list &, const GEOM_FT &tol);
 
 #endif

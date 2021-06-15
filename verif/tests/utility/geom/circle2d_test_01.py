@@ -24,11 +24,12 @@ ratio6=(IyCirc-(math.pi/4.))/(math.pi/4.)
 ratio7=PxyCirc
 
 import os
+from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if math.fabs(ratio1)<1e-10 and math.fabs(ratio2)<1e-10 and math.fabs(ratio3)<1e-10 and math.fabs(ratio4)<1e-10  and math.fabs(ratio5)<1e-10 and math.fabs(ratio6)<1e-10 and math.fabs(ratio7)<1e-10:
-  print("test ",fname,": ok.")
+    print('test: '+fname+': ok.')
 else:
-  print("test ",fname,": ERROR.")
+    lmsg.error('test: '+fname+' ERROR.')
 
 
 

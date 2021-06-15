@@ -78,7 +78,7 @@ class Nut(object):
 class BoltBase(object):
     ''' Base class for bolts.
 
-    :ivar diameter: bolt diameter
+    :ivar diameter: bolt diameter.
     :ivar pos3d: bolt position.
     '''
     def __init__(self, diameter, pos3d= None):
@@ -136,7 +136,10 @@ class BoltBase(object):
         return retval
 
     def setFromDict(self, dct):
-        ''' Read member values from a dictionary.'''
+        ''' Read member values from a dictionary.
+
+        :param dct: dictionary to read the values from.
+        '''
         self.diameter= dct['diameter']
         self.pos3d= None
         if('pos3d' in dct):

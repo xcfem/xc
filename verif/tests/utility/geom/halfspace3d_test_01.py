@@ -27,8 +27,9 @@ deltaTeor=math.acos(0.1968/0.8907/0.99)
 
 ratio1= math.fabs(deltaTeor-delta)/deltaTeor
 import os
+from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if math.fabs(ratio1)<0.021:
-  print("test ",fname,": ok.")
+    print('test: '+fname+': ok.')
 else:
-  print("test ",fname,": ERROR.")
+    lmsg.error('test: '+fname+' ERROR.')

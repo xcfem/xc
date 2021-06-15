@@ -92,9 +92,10 @@ class BoltArrayBase(object):
             greater or equal to the minimum length
             imposed by the bolt arrangement.'''
         minLength= self.getMinPlateLength()
-        retval= minLength
+        stdLength= max(minLength,self.getLength()+self.dist)
+        retval= stdLength
         for d in self.distances:
-            if(d>= minLength):
+            if(d>= stdLength):
                 retval= d
                 break
         return retval
@@ -331,7 +332,8 @@ class BoltedPlateBase(object):
         self.eccentricity= eccentricity
         self.doublePlate= doublePlate
         self.refSys= None
-        self.weldLines= None 
+        self.weldLines= None
+        self.attachedMemberCenter= None
 
     def setWidth(self, w):
         ''' Set the plate width.
@@ -486,7 +488,7 @@ class BoltedPlateBase(object):
         return 'width: '+ str(self.width) + ' length: '+ str(self.length) + ' thickness: '+ str(self.thickness) + ' double plate: '+ str(self.doublePlate) + ' bolts: ' + str(self.boltArray)
     
     def getDict(self):
-        ''' Put member values in a dictionary.'''
+        ''' Returns a dictionary populated with the member values.'''
         retval= {'boltArray':self.boltArray.getDict(), 'width':self.width, 'length':self.length, 'thickness':self.thickness, 'steelType':self.steelType.getDict(), 'doublePlate':self.doublePlate, 'refSys':self.refSys}
         if(self.weldLines):
             wlDict= dict()
@@ -496,10 +498,17 @@ class BoltedPlateBase(object):
             retval['weldLines']= wlDict
         else:
             retval['weldLines']= None
+        if(self.attachedMemberCenter):
+            retval['attachedMemberCenter']= attachedMemberCenter.getDict()
+        else:
+            retval['attachedMemberCenter']= None
         return retval
 
     def setFromDict(self,dct):
-        ''' Read member values from a dictionary.'''
+        ''' Read member values from a dictionary.
+
+        :param dct: dictionary to read values from.
+        '''
         self.boltArray.setFromDict(dct['boltArray'])
         self.width= dct['width']
         self.length= dct['length']
@@ -518,6 +527,10 @@ class BoltedPlateBase(object):
                 wl= geom.Segment3d()
                 wl.setFromDict(wlDict[key])
                 self.weldLines[key]= wl
+        cDict= dct['attachedMemberCenter']
+        if(cDict):
+            self.attachedMemberCenter= geom.Pos3d()
+            self.attachedMemberCenter.setFromDict(cDict)
 
     def jsonRead(self, inputFileName):
         ''' Read object from JSON file.'''
@@ -580,35 +593,65 @@ class BoltedPlateBase(object):
         v*= (1.0/len(self.weldLines))
         return geom.Pos3d(v.x,v.y,v.z)
 
-    def getWeldLinesVertices2d(self):
-        ''' Return the vertices of the weld lines expressed
-            in local coordinates.'''
+    def getWeldLinesVertices(self):
+        ''' Return the vertices of the weld lines.'''
         retval= list() 
         for key in self.weldLines:
             wl= self.weldLines[key]
-            pA= self.refSys.getLocalPosition(wl.getFromPoint())
-            retval.append(geom.Pos2d(pA.x, pA.y))
-            pB= self.refSys.getLocalPosition(wl.getToPoint())
-            retval.append(geom.Pos2d(pB.x, pB.y))
+            pA= wl.getFromPoint()
+            pB= wl.getToPoint()
+            retval.extend([pA,pB])
         return retval
     
+    def getWeldLinesVertices2d(self):
+        ''' Return the vertices of the weld lines expressed
+            in local coordinates.'''
+        retval= list()
+        ptList= self.getWeldLinesVertices(self)
+        for p in ptList:
+            retval.append(geom.Pos2d(p.x, p.y))
+        return retval
+
     def getContour(self):
         ''' Return the contour points of the plate.
 
         :param refSys: 3D reference system used to perform local
                        to global coordinate transformation.
         '''
-        #contourVertices3d= self.getCoreContour3d()
-        contourVertices2d= self.getCoreContour2d()
-        contourVertices2d.extend(self.getWeldLinesVertices2d())
-        print('contour vertices 2D: ', contourVertices2d)
-        convexHull2d= geom.get_convex_hull2d(contourVertices2d)
-        print('convex hull: ', convexHull2d)
-        contourVertices3d= list()
-        for p in convexHull2d.getVertices():
-            p3d= geom.Pos3d(p.x, p.y, 0.0)
-            contourVertices3d.append(self.refSys.getGlobalPosition(p3d))
-        return contourVertices3d
+        coreContour3d= self.getCoreContour3d()
+        contourPlg= geom.Polygon3d(coreContour3d)
+        distalEdgeIndex= contourPlg.getIndexOfDistalEdge(self.attachedMemberCenter)
+        distalEdge= contourPlg.getEdge(distalEdgeIndex)
+        retval= list()
+        fromPoint= distalEdge.getFromPoint()
+        retval.append(fromPoint)
+        numWeldLines= len(self.weldLines)
+        if(numWeldLines==1):
+            key= list(self.weldLines.keys())[0]
+            wl= self.weldLines[key]
+            p1= wl.getFromPoint()
+            p2= wl.getToPoint()
+            d1= fromPoint.dist2(p1)
+            d2= fromPoint.dist2(p2)
+            if(d1<d2):
+                retval.extend([p1,p2])
+            else:
+                retval.extend([p2,p1])
+            retval.append(distalEdge.getToPoint()) # contour closed.
+        else:
+            print('XXXXX implementation pending.')
+            
+        print(self.weldLines)
+        # contourVertices2d= self.getCoreContour2d()
+        # contourVertices2d.extend(self.getWeldLinesVertices2d())
+        # print('contour vertices 2D: ', contourVertices2d)
+        # convexHull2d= geom.get_convex_hull2d(contourVertices2d)
+        # print('convex hull: ', convexHull2d)
+        # contourVertices3d= list()
+        # for p in convexHull2d.getVertices():
+        #     p3d= geom.Pos3d(p.x, p.y, 0.0)
+        #     contourVertices3d.append(self.refSys.getGlobalPosition(p3d))
+        return coreContour3d #contourVertices3d
 
     def getBlocks(self, blockProperties= None, loadTag= None, loadDirI= None, loadDirJ= None, loadDirK= None):
         ''' Return the blocks that define the plate for the

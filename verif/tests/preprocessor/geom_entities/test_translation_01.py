@@ -30,7 +30,7 @@ ptTrfB= pts.newPntIDPos3d(11,transl.getTrfPos(ptB.getPos))
 ''' 
 for p in pts:
   pos= p.getPos
-  print("id: ",p.getName," x= ",pos.x,," y= ",pos.y,," z= ",pos.z)
+    print("id: ",p.getName," x= ",pos.x,," y= ",pos.y,," z= ",pos.z)
  ''' 
   
 
@@ -45,6 +45,6 @@ import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (abs(dist110-1.0)<1e-12) & (abs(dist211-1.0)<1e-12):
-  print('test '+fname+': ok.')
+    print('test '+fname+': ok.')
 else:
-  lmsg.error(fname+' ERROR.')
+    lmsg.error(fname+' ERROR.')

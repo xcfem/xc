@@ -84,8 +84,8 @@ modelSpace.addLoadCaseToDomain(lp0.name)
 analysis= predefined_solutions.plain_newton_raphson(feProblem)
 analOk= analysis.analyze(1)
 if(analOk!=0):
-  print("Error!; failed to converge.")
-  exit()
+    print("Error!; failed to converge.")
+    exit()
 
 nodes= preprocessor.getNodeHandler
 nodes.calculateNodalReactions(True,1e-7)
@@ -151,6 +151,6 @@ import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if((abs(ratio1)<1e-15) & (abs(ratio2)<1e-15) & (abs(ratio3)<1e-12)):
-  print('test '+fname+': ok.')
+    print('test '+fname+': ok.')
 else:
-  lmsg.error(fname+' ERROR.')
+    lmsg.error(fname+' ERROR.')

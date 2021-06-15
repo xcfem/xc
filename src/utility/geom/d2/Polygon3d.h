@@ -51,10 +51,10 @@ class Polygon3d: public D2to3d
     inline void push_back(const Pos3d &p)
       { plg2d.push_back(to_2d(p)); }
 
-    inline virtual unsigned int GetNumVertices(void) const
-      { return plg2d.GetNumVertices(); }
-    inline virtual unsigned int GetNumLados(void) const
-      { return plg2d.GetNumLados(); }
+    inline virtual unsigned int getNumVertices(void) const
+      { return plg2d.getNumVertices(); }
+    inline virtual unsigned int getNumEdges(void) const
+      { return plg2d.getNumEdges(); }
     //! @brief Return the length of the object.
     inline GEOM_FT getLength(void) const
       { return plg2d.getLength(); }
@@ -68,13 +68,17 @@ class Polygon3d: public D2to3d
     inline Pos3d Vertice(unsigned int i) const
       { return to_3d(plg2d.Vertice(i)); }
     //! @brief Return the position of the i-th vertex
-    //! (0 based: j=0..GetNumVertices()-1)
+    //! (0 based: j=0..getNumVertices()-1)
     inline Pos3d Vertice0(unsigned int j) const
       { return to_3d(plg2d.Vertice0(j)); }
     GeomObj::list_Pos3d getVertexList(void) const;
     boost::python::list getVertexListPy(void) const;
     Segment3d Lado0(unsigned int i) const;
     Segment3d Lado(unsigned int i) const;
+    int getIndexOfDistalEdge(const Pos3d &) const;
+    int getIndexOfProximalEdge(const Pos3d &) const;
+    int getIndexOfDistalVertex(const Pos3d &) const;
+    int getIndexOfProximalVertex(const Pos3d &) const;
 
     bool clockwise(const Pos3d &) const;
     bool counterclockwise(const Pos3d &) const;

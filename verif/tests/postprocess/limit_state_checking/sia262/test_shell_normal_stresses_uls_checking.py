@@ -74,7 +74,6 @@ if(not pth):
 fname= os.path.basename(__file__)
 
 #Checking normal stresses.
-lsd.normalStressesResistance.controller= SIA262_limit_state_checking.BiaxialBendingNormalStressController('ULS_normalStress')
 cfg=default_config.EnvConfig(language='en', resultsPath= 'tmp_results/', intForcPath= 'internalForces/',verifPath= 'verifications/',reportPath='./',reportResultsPath= 'annex/',grWidth='120mm')
 cfg.projectDirTree.workingDirectory= '/tmp/'+os.path.splitext(fname)[0]
 cfg.projectDirTree.createTree() # To allow copying existing internal force data into.
@@ -86,6 +85,7 @@ shutil.copy(pth+'/intForce_ULS_normalStressesResistance.csv',lsd.normalStressesR
 #intForceFileName= lsd.normalStressesResistance.getInternalForcesFileName()
 
 outCfg= lsd.VerifOutVars(listFile='N',calcMeanCF='Y')
+outCfg.controller= SIA262_limit_state_checking.BiaxialBendingNormalStressController('ULS_normalStress')
 
 meanFCs= reinfConcreteSections.internalForcesVerification3D(lsd.normalStressesResistance,"d",outCfg)
 
@@ -108,6 +108,6 @@ feProblem.errFileName= "cerr" # Display errors if any.
 import os
 from misc_utils import log_messages as lmsg
 if (ratio1<0.01) & (ratio2<0.01):
-  print('test '+fname+': ok.')
+    print('test '+fname+': ok.')
 else:
-  lmsg.error(fname+' ERROR.')
+    lmsg.error(fname+' ERROR.')

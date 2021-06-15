@@ -143,6 +143,6 @@ print("ratio3= ",ratio4)
 
 
 if ((abs(ratio1)<0.1) & (abs(ratio2)<0.1) & (abs(ratio3)<0.01)):
-  print('test '+fname+': ok.')
+    print('test '+fname+': ok.')
 else:
-  lmsg.error(fname+' ERROR.')
+    lmsg.error(fname+' ERROR.')

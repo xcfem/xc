@@ -220,7 +220,7 @@ void XC::PolygonalFace::create_nodes_from_paving(Paver &paver)
 		  }
 	      }
 	    Polygon3d holePlg= Polygon3d(holePositions);
-	    nHolePositions+= holePlg.GetNumVertices();
+	    nHolePositions+= holePlg.getNumVertices();
 	    holePolygons.push_back(holePlg);
 	  }
 	const double elemSizeRatio= minElemSize/maxElemSize;

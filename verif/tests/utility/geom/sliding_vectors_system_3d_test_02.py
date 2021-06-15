@@ -39,10 +39,11 @@ MomR=svd1.getMomentLine3d(r1) #devuelve el valor con signo (en función del sent
 ##print("MomP.y =", MomP.y)
 
 import os
+from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if Res.x == 0 and Res.y == 0 and Res.z == 4 and Mom.x == 0 and Mom.y == 0 and Mom.z == 0 and MomR == -4 and MomP.x == -4 and MomP.y == -4:
-  print("test ",fname,": ok.")
+    print('test: '+fname+': ok.')
 else:
-  print("test ",fname,": ERROR.")
+    lmsg.error('test: '+fname+' ERROR.')
 
 

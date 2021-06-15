@@ -46,6 +46,10 @@ GEOM_FT Line2dParametricForm::Parametro(const Pos2d &p) const
 //! @brief Default constructor.
 Line2d::Line2d(void): Linear2d(),cgr(CGPoint_2(0,0),CGPoint_2(1,0))
   {}
+
+//! @brief Constructor.
+//! @param p1: 2D point.
+//! @param p2: 2D point.
 Line2d::Line2d(const Pos2d &p1,const Pos2d &p2)
   : Linear2d(), cgr(p1.ToCGAL(),p2.ToCGAL())
   {
@@ -60,16 +64,27 @@ Line2d::Line2d(const Pos2d &p1,const Pos2d &p2)
 		<< "; bad definition for line, the points: "
              << p1 << " and " << p2 << " are too close." << endl;
   }
+
+//! @brief Constructor.
+//! @param p1: 2D point.
+//! @param dir: 2D direction.
 Line2d::Line2d(const Pos2d &p,const Dir2d &dir)
   : Linear2d(), cgr(p.ToCGAL(),dir.ToCGAL()) {}
+
+
+//! @brief Constructor.
+//! @param p1: 2D point.
+//! @param vdir: 2D vector.
 Line2d::Line2d(const Pos2d &p,const Vector2d &vdir)
   : Linear2d(), cgr(p.ToCGAL(),vdir.ToCGAL()) {}
 
+//! @brief Copy constructor.
 Line2d::Line2d(const CGLine_2 &r)
   : Linear2d(), cgr(r) {}
 
 //! @brief Constructs the line from its parametric equation.
-Line2d::Line2d(const Line2dParametricForm &param): Linear2d(),cgr(CGPoint_2(0,0),CGPoint_2(1,0))
+Line2d::Line2d(const Line2dParametricForm &param)
+  : Linear2d(),cgr(CGPoint_2(0,0),CGPoint_2(1,0))
   { Parametricas(param); }
 
 //! @brief Comparison operator.
