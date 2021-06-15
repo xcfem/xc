@@ -24,8 +24,7 @@ def aisc_check_bolts_welds(modelSpace,ULSs,boltSets2Check=[],welds2Check=[],base
     https://www.steelchecks.com/CONNECTIONS-GUIDE/index.html?check_welds.htm
     Parasitic moments in the bolt shafts are neglected.
 
-    :param ULSs: list of pairs (ULS name, ULS expression) with the name
-          and expression of the ultimate limit states to be analyzed
+    :param ULSs: list of names of existing load cases to be analyzed
     :param boltSets2Check: list of pairs (bolt set, bolt type) with the
           set of bolts and bolt material (instance of class
           astm.BoltFastener) to be analyzed. (Defaults to [])

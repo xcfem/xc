@@ -506,6 +506,22 @@ class GridModel(object):
             p.getPos.x= xOrig+scale*(xpt-xOrig)
         sPtXscale.clear()
 
+    def scaleCoorXPointsXYZRange(self,XYZrange,xOrig,scale):
+        '''Applies a scale in X with origin xOrig (fixed axis: X=xOrig) 
+        to the points in a 3D grid-region limited by
+        one XYZrange defined as ((xmin,ymin,zmin),(xmax,ymax,zmax))
+        Only X coordinate of points is modified in the following way:
+        x_scaled=xOrig+scale*(x_inic-xOrig)
+
+        :param XYZrange:((xmin,ymin,zmin),(xmax,ymax,zmax)) range for the search.
+        :param xOrig: origin X to apply scale (point in axis X=xOrig)
+                      are not affected by the transformation 
+        :param scale: scale to apply to X coordinate
+
+        '''
+        IJKrange=self.getIJKrangeFromXYZrange(XYZrange)
+        self.scaleCoorXPointsRange(IJKrange,xOrig,scale)
+        
     def scaleCoorYPointsRange(self,ijkRange,yOrig,scale):
         '''Applies a scale in Y with origin yOrig (fixed axis: y=yOrig) 
         to the points in a 3D grid-region limited by 
@@ -525,6 +541,21 @@ class GridModel(object):
             p.getPos.y= yOrig+scale*(ypt-yOrig)
         sPtYscale.clear()
 
+    def scaleCoorYPointsXYZrange(self,XYZrange,yOrig,scale):
+        '''Applies a scale in Y with origin yOrig (fixed axis: y=yOrig) 
+        to the points in a 3D grid-region limited by 
+        an XYZrange defined as ((xmin,ymin,zmin),(xmax,ymax,zmax))
+        Only Y coordinate of points is modified in the following way:
+        y_scaled=yOrig+scale*(y_inic-yOrig)
+
+        :param XYZrange:((xmin,ymin,zmin),(xmax,ymax,zmax)) range for the search.
+        :param yOrig: origin Y to apply scale (point in axis Y=yOrig)
+                      are not affected by the transformation 
+        :param scale: scale to apply to Y coordinate
+        '''
+        IJKrange=self.getIJKrangeFromXYZrange(XYZrange)
+        self.scaleCoorYPointsRange(IJKrange,yOrig,scale)
+        
     def scaleCoorZPointsRange(self,ijkRange,zOrig,scale):
         '''Applies a scale in Z with origin zOrig (fixed axis: z=zOrig) 
         to the points in a 3D grid-region limited by 
@@ -544,6 +575,21 @@ class GridModel(object):
             p.getPos.z= zOrig+scale*(zpt-zOrig)
         sPtZscale.clear()
 
+    def scaleCoorZPointsXYZrange(self,XYZrange,zOrig,scale):
+        '''Applies a scale in Z with origin zOrig (fixed axis: z=zOrig) 
+        to the points in a 3D grid-region limited by 
+        one XYZrange defined as ((xmin,ymin,zmin),(xmax,ymax,zmax))
+        Only Z coordinate of points is modified in the following way:
+        z_scaled=zOrig+scale*(z_inic-zOrig)
+
+        :param XYZrange:((xmin,ymin,zmin),(xmax,ymax,zmax)) range for the search.
+        :param zOrig: origin Z to apply scale (point in axis Z=zOrig)
+                      are not affected by the transformation 
+        :param scale: scale to apply to Z coordinate
+        '''
+        IJKrange=self.getIJKrangeFromXYZrange(XYZrange)
+        self.scaleCoorZPointsRange(IJKrange,zOrig,scale)
+        
     def moveCylPointsRadius(self,ijkRange,radius):
         '''Move points in a 3D grid-region limited by the ijkRange 
         in the cylindrical coordinate system to radius coordinate 
