@@ -11,7 +11,14 @@ from materials.awc_nds import AWCNDS_materials as mat
 from misc_utils import log_messages as lmsg
 
 class DowelFastener(object):
-    ''' Dowel-Type fastener as defined in chapter 12 of NDS-2018.'''
+    ''' Dowel-Type fastener as defined in chapter 12 of NDS-2018.
+
+    :ivar diameter: fastener diameter.
+    :ivar length: fastener length.
+    :ivar tip: fastener tapered tip length.
+    :ivar bendingYieldStrength: fastener bending yield strength (see
+                                 table I1 NDS-2018).
+    '''
     def __init__(self, diameter, length, tip, bendingYieldStrength):
         ''' Constructor.
  
@@ -187,11 +194,17 @@ class DowelFastener(object):
 
     
 class Nail(DowelFastener):
-    ''' Nail as defined in NDS-2018.'''
+    ''' Nail as defined in NDS-2018.
+
+    '''
     def __init__(self, diameter, length, hardenedSteel= False):
         ''' Constructor.
  
-        :param rootDiameter: root diameter.
+        :param diameter: fastener diameter.
+        :param length: fastener length.
+        :param hardenedSteel: if the fastener is made of hardened steel
+                              according to ASTM F 1667 set this variable
+                              to True.
         '''
         Fyb= 100e3*mat.psi2Pa
         if(not hardenedSteel):
@@ -269,11 +282,19 @@ Nail_40D= Nail(diameter= 0.238*mat.in2meter, length= 5*mat.in2meter)
 Nail_60D= Nail(diameter= 0.238*mat.in2meter, length= 6*mat.in2meter)
     
 class Screw(DowelFastener):
-    ''' Screw as defined in NDS-2018.'''
+    ''' Screw as defined in NDS-2018.
+ 
+    :ivar rootDiameter: root diameter.
+    '''
     def __init__(self, diameter, length, tip, rootDiameter, bendingYieldStrength= 45e3*mat.psi2Pa):
         ''' Constructor.
  
+        :param diameter: fastener diameter.
+        :param length: fastener length.
+        :param tip: fastener tapered tip length.
         :param rootDiameter: root diameter.
+        :param bendingYieldStrength: fastener bending yield strength (see
+                                     table I1 NDS-2018).
         '''
         super(Screw,self).__init__(diameter, length, tip, bendingYieldStrength)
         self.rootDiameter= rootDiameter
@@ -281,7 +302,15 @@ class Screw(DowelFastener):
 class LagScrew(Screw):
     ''' Lag screw as defined in NDS-2018.'''
     def __init__(self, diameter, length, tip, rootDiameter, bendingYieldStrength= 45e3*mat.psi2Pa):
-        ''' Constructor. '''
+        ''' Constructor. 
+ 
+        :param diameter: fastener diameter.
+        :param length: fastener length.
+        :param tip: fastener tapered tip length.
+        :param rootDiameter: root diameter.
+        :param bendingYieldStrength: fastener bending yield strength (see
+                                     table I1 NDS-2018).
+        '''
         super(LagScrew,self).__init__(diameter, length, tip, rootDiameter, bendingYieldStrength)
     def getReferenceWithdrawal(self, G):
         ''' Return reference withdrawal design value according
@@ -313,7 +342,11 @@ class LagScrew(Screw):
         return 4.0*self.D
         
 class WoodScrew(Screw):
-    ''' Wood screw as defined in NDS-2018.'''
+    ''' Wood screw as defined in NDS-2018.
+
+    :ivar headDiameter: head diameter.
+    :ivar threadLength: thread length.
+    '''
     def __init__(self, diameter, length, headDiameter, rootDiameter, threadLength= None, bendingYieldStrength= 45e3*mat.psi2Pa):
         ''' Constructor.
 
@@ -321,6 +354,8 @@ class WoodScrew(Screw):
         :param headDiameter: head diameter.
         :param rootDiameter: root diameter.
         :param threadLength: thread length.
+        :param bendingYieldStrength: fastener bending yield strength (see
+                                     table I1 NDS-2018).
         '''
         super(WoodScrew,self).__init__(diameter= diameter, length= length, tip= 2*diameter, rootDiameter= rootDiameter, bendingYieldStrength= bendingYieldStrength)
         self.headDiameter= headDiameter
@@ -329,7 +364,7 @@ class WoodScrew(Screw):
         else:
             self.threadLength= None
     def getMinPenetration(self):
-        ''' Return the inimum length of wood screw pentration, p_min,
+        ''' Return the minimum length of wood screw pentration, p_min,
             including the length of the tapered tip where part of the 
             penetration into the main member for single shear connections
             and the side members for double shear connection according
