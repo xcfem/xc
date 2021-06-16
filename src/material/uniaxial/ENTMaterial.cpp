@@ -100,15 +100,6 @@ double XC::ENTMaterial::getTangent(void) const
       }
   }
 
-int XC::ENTMaterial::commitState(void)
-  { return 0; }
-
-int XC::ENTMaterial::revertToLastCommit(void)
-  { return 0; }
-
-int XC::ENTMaterial::revertToStart(void)
-  { return ElasticBaseMaterial::revertToStart(); }
-
 XC::UniaxialMaterial *XC::ENTMaterial::getCopy(void) const
   { return new ENTMaterial(*this); }
 

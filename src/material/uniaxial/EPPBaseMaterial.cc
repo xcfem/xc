@@ -32,13 +32,13 @@
 //! @brief Constructor.
 XC::EPPBaseMaterial::EPPBaseMaterial(int tag, int classtag, double e,double e0)
   :ElasticBaseMaterial(tag,classtag,e,e0), trialStress(0.0),
-   trialTangent(e), commitStrain(0.0) {}
+   trialTangent(e) {}
 
 //! @brief Send object members through the communicator argument.
 int XC::EPPBaseMaterial::sendData(Communicator &comm)
   {
     int res= ElasticBaseMaterial::sendData(comm);
-    res+= comm.sendDoubles(trialStress,trialTangent,commitStrain,getDbTagData(),CommMetaData(3));
+    res+= comm.sendDoubles(trialStress,trialTangent,getDbTagData(),CommMetaData(3));
     return res;
   }
 
@@ -46,6 +46,6 @@ int XC::EPPBaseMaterial::sendData(Communicator &comm)
 int XC::EPPBaseMaterial::recvData(const Communicator &comm)
   {
     int res= ElasticBaseMaterial::recvData(comm);
-    res+= comm.receiveDoubles(trialStress,trialTangent,commitStrain,getDbTagData(),CommMetaData(3));
+    res+= comm.receiveDoubles(trialStress,trialTangent,getDbTagData(),CommMetaData(3));
     return res;
   }
