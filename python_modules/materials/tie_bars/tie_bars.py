@@ -17,7 +17,7 @@ from materials import steel_base
 from postprocess import def_vars_control as vc
 
 class TieBarSteel(steel_base.BasicSteel):
-    '''ASTM structural steel.
+    '''SBS steel according to https://www.s3i.co.uk/carbon-steel-tie-bar.php.
 
     :ivar name: steel identifier.
     '''

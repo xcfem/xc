@@ -106,15 +106,19 @@ class ASTMSteel(steel_base.BasicSteel):
         return retval
 
 A36= ASTMSteel('A36', fy= 250e6, fu=400e6, gammaM= 1.0, Rt= 1.2, Ry= 1.5)
-A529= ASTMSteel('A529', fy= 290e6, fu= 414e6, gammaM= 1.0, Rt= 1.2, Ry= 1.2)
-A572= ASTMSteel('A572', fy= 345e6, fu= 450e6, gammaM= 1.0, Rt= 1.1, Ry= 1.1)
 A53= ASTMSteel('A53', fy= 240e6, fu= 414e6, gammaM= 1.0, Rt= 1.2, Ry= 1.5)
-A992= ASTMSteel('A992', fy= 345e6, fu= 450e6, gammaM= 1.0, Rt= 1.1, Ry= 1.1)
-A500= ASTMSteel('A500', fy= 315e6, fu= 400e6, gammaM= 1.0, Rt= 1.3, Ry= 1.4)
+# ASTM A193M steel mechanical properties
+ksi= 6.89475908677537e6
+A193B7le2_5= ASTMSteel('A193B7le2_5', fy= 105*ksi, fu= 125*ksi, gammaM= 1.0) # Diameter <=2.5 inches
+A193B7gt2_5le4= ASTMSteel('A193B7gt2_5le4', fy= 95*ksi, fu= 115*ksi, gammaM= 1.0) # 2.5 < Diameter <= 4.0 inches
+A193B7gt4le7= ASTMSteel('A193B7gt4le7', fy= 75*ksi, fu= 100*ksi, gammaM= 1.0) # 4.0 < Diameter <= 7.0 inches
 A307= ASTMSteel('A307', fy= 245e6, fu= 390e6, gammaM= 1.0)
 A325= ASTMSteel('A325', fy= 660e6, fu= 830e6, gammaM= 1.0)
+A500= ASTMSteel('A500', fy= 315e6, fu= 400e6, gammaM= 1.0, Rt= 1.3, Ry= 1.4)
+A529= ASTMSteel('A529', fy= 290e6, fu= 414e6, gammaM= 1.0, Rt= 1.2, Ry= 1.2)
+A572= ASTMSteel('A572', fy= 345e6, fu= 450e6, gammaM= 1.0, Rt= 1.1, Ry= 1.1)
+A992= ASTMSteel('A992', fy= 345e6, fu= 450e6, gammaM= 1.0, Rt= 1.1, Ry= 1.1)
 
-ksi= 6.89475908677537e6
 A354BC= ASTMSteel('A354BC', fy=109*ksi, fu= 125*ksi, gammaM= 1.0)
 A354BD= ASTMSteel('A354BD', fy=115*ksi, fu= 140*ksi, gammaM= 1.0) # Higher values for bolts under 2.5 in.
 A490= ASTMSteel('A490', fy=940e6, fu= 1040e6, gammaM= 1.0)
