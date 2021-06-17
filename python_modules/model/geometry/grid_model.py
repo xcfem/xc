@@ -430,6 +430,30 @@ class GridModel(object):
           p.getPos.z+= vDisp[2]
         sPtMove.clear()
 
+    def movePointsXYZRange(self,XYZrange,vDisp):
+        '''Move points  in a 3D grid-region limited by an
+        xyzRange=((xmin,ymin,zmin),(xmax,ymax,zmax))
+        to a new position by applying a 3D displacement.
+
+        :param ijkRange: range for the search
+        :param vDisp: xc vector displacement
+        '''
+        ijkRange=self.getIJKrangeFromXYZrange(XYZrange)
+        return self.movePointsRange(ijkRange,vDisp)
+
+    def movePointXYZ(self,xyz,vDisp):
+        '''Move the nearest point in grid xyz=(x,y,z) coordinates
+        to a new position by applying a 3D displacement.
+
+        :param xyz: grid (x,y,z) coordinates of the point
+        :param vDisp: xc vector displacement xc.Vector([vx,vy,vz])
+        '''
+        p=self.getPntXYZ(xyz)
+        p.getPos.x+= vDisp[0]
+        p.getPos.y+= vDisp[1]
+        p.getPos.z+= vDisp[2]
+        
+
     def slopePointsRange(self,ijkRange,slopeX=0,xZeroSlope=0,slopeY=0,yZeroSlope=0):
         '''Applies one or two slopes (in X and Y directions) 
         to points in a 3D grid-region limited by 
