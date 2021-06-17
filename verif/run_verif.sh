@@ -66,6 +66,7 @@ python tests/utility/geom/polygon3D_test_01.py
 python tests/utility/geom/polygon3D_test_02.py
 python tests/utility/geom/polygon3D_test_03.py
 python tests/utility/geom/polygon3D_test_04.py
+python tests/utility/geom/polygon3D_test_05.py
 echo "$BLEU" "    Alpha shapes." "$NORMAL"
 python tests/utility/geom/basic_alpha_shape2d_test.py
 echo "$BLEU" "    Circles." "$NORMAL"

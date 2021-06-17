@@ -109,11 +109,11 @@ int Polygon3d::getIndexOfDistalEdge(const Pos3d &p) const
   {
     const unsigned int nl= getNumEdges();
     int retval= 1;
-    GEOM_FT d2= Lado(1).dist2(p);
+    GEOM_FT d2= Lado0(1).dist2(p);
     GEOM_FT maxDist2= d2;
     for(unsigned int i= 2; i<=nl;i++)
       {
-        d2= Lado(i).dist2(p);
+        d2= Lado0(i).dist2(p);
 	if(d2>maxDist2)
 	  {
 	    retval= i;
@@ -129,11 +129,11 @@ int Polygon3d::getIndexOfProximalEdge(const Pos3d &p) const
   {
     const unsigned int nl= getNumEdges();
     int retval= 1;
-    GEOM_FT d2= Lado(1).dist2(p);
+    GEOM_FT d2= Lado0(1).dist2(p);
     GEOM_FT minDist2= d2;
     for(unsigned int i= 2; i<=nl;i++)
       {
-        d2= Lado(i).dist2(p);
+        d2= Lado0(i).dist2(p);
 	if(d2<minDist2)
 	  {
 	    retval= i;
@@ -149,11 +149,11 @@ int Polygon3d::getIndexOfDistalVertex(const Pos3d &p) const
   {
     const unsigned int nl= getNumVertices();
     int retval= 1;
-    GEOM_FT d2= Vertice(1).dist2(p);
+    GEOM_FT d2= Vertice0(1).dist2(p);
     GEOM_FT maxDist2= d2;
     for(unsigned int i= 2; i<=nl;i++)
       {
-        d2= Vertice(i).dist2(p);
+        d2= Vertice0(i).dist2(p);
 	if(d2>maxDist2)
 	  {
 	    retval= i;
@@ -169,11 +169,11 @@ int Polygon3d::getIndexOfProximalVertex(const Pos3d &p) const
   {
     const unsigned int nl= getNumVertices();
     int retval= 1;
-    GEOM_FT d2= Vertice(1).dist2(p);
+    GEOM_FT d2= Vertice0(1).dist2(p);
     GEOM_FT minDist2= d2;
     for(unsigned int i= 2; i<=nl;i++)
       {
-        d2= Vertice(i).dist2(p);
+        d2= Vertice0(i).dist2(p);
 	if(d2<minDist2)
 	  {
 	    retval= i;

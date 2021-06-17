@@ -630,15 +630,18 @@ class BoltedPlateBase(object):
             key= list(self.weldLines.keys())[0]
             wl= self.weldLines[key]
             p1= wl.getFromPoint()
-            p2= wl.getToPoint()
             d1= fromPoint.dist2(p1)
+            p2= wl.getToPoint()
             d2= fromPoint.dist2(p2)
-            if(d1<d2):
+            if(d1<d2): # p1 is closer.
+                print('p1 is closer')
                 retval.extend([p1,p2])
-            else:
+            else: # p2 is closer.
+                print('p2 is closer')
                 retval.extend([p2,p1])
             retval.append(distalEdge.getToPoint()) # contour closed.
         else:
+            retval= coreContour3d
             print('XXXXX implementation pending.')
             
         print(self.weldLines)
@@ -651,7 +654,7 @@ class BoltedPlateBase(object):
         # for p in convexHull2d.getVertices():
         #     p3d= geom.Pos3d(p.x, p.y, 0.0)
         #     contourVertices3d.append(self.refSys.getGlobalPosition(p3d))
-        return coreContour3d #contourVertices3d
+        return retval #contourVertices3d
 
     def getBlocks(self, blockProperties= None, loadTag= None, loadDirI= None, loadDirJ= None, loadDirK= None):
         ''' Return the blocks that define the plate for the
