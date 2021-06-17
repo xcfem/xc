@@ -614,16 +614,14 @@ class BoltedPlateBase(object):
 
     def getContour(self):
         ''' Return the contour points of the plate.
-
-        :param refSys: 3D reference system used to perform local
-                       to global coordinate transformation.
         '''
         coreContour3d= self.getCoreContour3d()
         contourPlg= geom.Polygon3d(coreContour3d)
         distalEdgeIndex= contourPlg.getIndexOfDistalEdge(self.attachedMemberCenter)
         distalEdge= contourPlg.getEdge(distalEdgeIndex)
         retval= list()
-        fromPoint= distalEdge.getFromPoint()
+        fromPoint= distalEdge.getFromPoint() # contour first point.
+        toPoint= distalEdge.getToPoint() # contour last point.
         retval.append(fromPoint)
         numWeldLines= len(self.weldLines)
         if(numWeldLines==1):
@@ -634,27 +632,29 @@ class BoltedPlateBase(object):
             p2= wl.getToPoint()
             d2= fromPoint.dist2(p2)
             if(d1<d2): # p1 is closer.
-                print('p1 is closer')
-                retval.extend([p1,p2])
+                p1New= wl.getProjection(fromPoint)
+                p2New= wl.getProjection(toPoint)
+                retval.extend([p1New,p2New]) # set contour.
+                # Modify weld line.
+                self.weldLines[key]= geom.Segment3d(p1New,p2New)
             else: # p2 is closer.
-                print('p2 is closer')
-                retval.extend([p2,p1])
-            retval.append(distalEdge.getToPoint()) # contour closed.
+                p2New= wl.getProjection(fromPoint)
+                p1New= wl.getProjection(toPoint)
+                retval.extend([p2New,p1New]) # set contour.
+                # Modify weld line.
+                self.weldLines[key]= geom.Segment3d(p2New,p1New)
         else:
-            retval= coreContour3d
-            print('XXXXX implementation pending.')
-            
-        print(self.weldLines)
-        # contourVertices2d= self.getCoreContour2d()
-        # contourVertices2d.extend(self.getWeldLinesVertices2d())
-        # print('contour vertices 2D: ', contourVertices2d)
-        # convexHull2d= geom.get_convex_hull2d(contourVertices2d)
-        # print('convex hull: ', convexHull2d)
-        # contourVertices3d= list()
-        # for p in convexHull2d.getVertices():
-        #     p3d= geom.Pos3d(p.x, p.y, 0.0)
-        #     contourVertices3d.append(self.refSys.getGlobalPosition(p3d))
-        return retval #contourVertices3d
+            weldPline= geom.get_3d_polylines(list(self.weldLines.values()),1e-3)[0]
+            weldVertices= weldPline.getVertexList()
+            p1= weldVertices[0]
+            d1= fromPoint.dist2(p1)
+            p2= weldVertices[-1]
+            d2= fromPoint.dist2(p2)
+            if(d1<d2): # p1 is closer.
+                weldVertices.reverse()
+            retval.extend(weldVertices) # set contour.
+        retval.append(toPoint) # close contour.            
+        return retval
 
     def getBlocks(self, blockProperties= None, loadTag= None, loadDirI= None, loadDirJ= None, loadDirK= None):
         ''' Return the blocks that define the plate for the

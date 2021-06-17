@@ -396,6 +396,11 @@ class WShape(structural_steel.IShape):
     def getWebThickness(self):
         ''' Return the thickness of the web.'''
         return self.get('tw')
+
+    def getDistanceBetweenWebToes(self):
+        ''' Return the distance between web toes of fillets at top 
+            and bottom of web.'''
+        return self.get('T')
     
     def getMetricName(self):
         '''Return the metric label from the US customary one.'''
