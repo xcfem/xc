@@ -55,6 +55,31 @@ bool Polyline3d::operator==(const Polyline3d &other) const
     return retval;
   }
 
+//! @brief Return the list of the vertices.
+const GeomObj::list_Pos3d &Polyline3d::getVertices(void) const
+  {
+    std::cerr << getClassName() << "::" << __FUNCTION__
+              << " is deprecated. Use getVertexList."
+              << std::endl;
+    return *this;
+  }
+
+//! @brief Return the list of the vertices.
+const GeomObj::list_Pos3d &Polyline3d::getVertexList(void) const
+  { return *this; }
+
+//! @brief Return a Python list containing the positions
+//! of the polygon vertices.
+boost::python::list Polyline3d::getVertexListPy(void) const
+  {
+    boost::python::list retval;
+    GeomObj::list_Pos3d lst= getVertexList();
+    GeomObj::list_Pos3d::const_iterator i= lst.begin();
+    for(;i!=lst.end();i++)
+      retval.append(*i);
+    return retval;
+  }
+
 const Pos3d *Polyline3d::AgregaVertice(const Pos3d &p)
   {
     GeomObj::list_Pos3d::push_back(p);

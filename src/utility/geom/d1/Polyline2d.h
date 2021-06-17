@@ -44,8 +44,9 @@ class Polyline2d : public Linear2d, public GeomObj::list_Pos2d
 
     virtual GeomObj *clon(void) const
       { return new Polyline2d(*this); }
-    const GeomObj::list_Pos2d &getVertices(void) const
-      { return *this; }
+    const GeomObj::list_Pos2d &getVertices(void) const;
+    const GeomObj::list_Pos2d &getVertexList(void) const;
+    boost::python::list getVertexListPy(void) const;
     inline size_t getNumVertices(void) const
       { return GeomObj::list_Pos2d::size(); }
     size_t getNumSegments(void) const;

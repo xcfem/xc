@@ -65,6 +65,31 @@ size_t Polyline2d::getNumSegments(void) const
     return retval;
   }
 
+//! @brief Return the list of the vertices.
+const GeomObj::list_Pos2d &Polyline2d::getVertices(void) const
+  {
+    std::cerr << getClassName() << "::" << __FUNCTION__
+              << " is deprecated. Use getVertexList."
+              << std::endl;
+    return *this;
+  }
+
+//! @brief Return the list of the vertices.
+const GeomObj::list_Pos2d &Polyline2d::getVertexList(void) const
+  { return *this; }
+
+//! @brief Return a Python list containing the positions
+//! of the polygon vertices.
+boost::python::list Polyline2d::getVertexListPy(void) const
+  {
+    boost::python::list retval;
+    GeomObj::list_Pos2d lst= getVertexList();
+    GeomObj::list_Pos2d::const_iterator i= lst.begin();
+    for(;i!=lst.end();i++)
+      retval.append(*i);
+    return retval;
+  }
+
 //! @brief Applies the transformation to the points que se pasa como parámetro.
 void Polyline2d::Transform(const Trf2d &trf2d)
   { trf2d.Transform(begin(),end()); }
