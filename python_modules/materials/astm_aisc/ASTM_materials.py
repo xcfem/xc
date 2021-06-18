@@ -1509,6 +1509,16 @@ class ASTMShape(object):
         '''
         return getBoltForHole(self.getFlangeMaximumBoltDiameter(), boltSteelType)
 
+    def getWebSuitableBolt(self, ratio= 2.5, boltSteelType= A307):
+        ''' Return the a suitable bolt to be used in the profile web
+            based on the web thickness.
+
+        :param ratio: bolt diameter / web thickness ratio. 
+        :param boltSteelType: bolt steel type. 
+        '''
+        return getBoltForHole(ratio*self.getWebThickness(), boltSteelType)
+
+        
     def getFlangeGrossArea(self):
         ''' Return the gross area of the flange.'''
         return self.getFlangeWidth()*self.getFlangeThickness()
@@ -1824,18 +1834,6 @@ class ConnectedMember(connected_members.ConnectedMemberMetaData):
         numberOfBolts= bolt.getNumberOfBoltsForShear(flangeStrength, numberOfRows= 2, threadsExcluded= True)
         spacing= self.shape.getFlangeWidth()/2.0
         return BoltArray(bolt, nRows= 2, nCols= int(numberOfBolts/2), dist= spacing)
-
-    def getShearTabBoltArray(self, shearEfficiency= 1.0):
-        ''' Return a suitable bolted array for the shear tab.
-
-        :param shearEfficiency: ratio between the design shear and 
-                                the shear strength.
-        '''
-        # Compute the shear to resist.
-        shear= shearEfficiency*self.shape.getDesighShearStrength(majorAxis= True)
-        # Compute the number of bolts.
-        ## YYYYYY 20210617 continue here.
-        T= self.shape.getDistanceBetweenWebToes()
     
     def getFlangeBoltedPlateCore(self, boltSteel, plateSteel):
         ''' Return a minimal bolted plate for the beam flange. The
@@ -1856,6 +1854,27 @@ class ConnectedMember(connected_members.ConnectedMemberMetaData):
         plateLength= boltArray.getStandardPlateLength()
         return BoltedPlate(boltArray, width= plateWidth, length= plateLength, thickness= plateThickness, steelType= plateSteel)
 
+    def getFlangeBoltedPlateRefSys(self, connectionOrigin, flangeBoltedPlate, topFlange):
+        ''' Return the position of the center for the top flange
+            bolted plate.
+
+        :param connectionOrigin: origin for the connection.
+        :param flangeBoltedPlate: bolted plate attached to flange.
+        :param topFlange: true if it's the top flange.
+        '''
+        baseVectors= self.getDirection(connectionOrigin)
+        flangeThickness= self.shape.getFlangeThickness()
+        platesThickness= flangeThickness+flangeBoltedPlate.thickness
+        halfHFlange= (self.shape.h()-flangeThickness)/2.0
+        halfHPlate= halfHFlange+platesThickness/2.0
+        halfD= flangeBoltedPlate.length/2.0
+        ## Compute position of the plate center.
+        if(topFlange): # Top flange reference system
+            plateCenter= self.memberOrigin + halfHPlate*baseVectors[1] + halfD*baseVectors[0]
+        else: # Bottom flange reference system
+            plateCenter= self.memberOrigin - halfHPlate*baseVectors[1] + halfD*baseVectors[0]
+        return geom.Ref3d3d(plateCenter, baseVectors[0], baseVectors[2])
+
     def getTopFlangeBoltedPlateRefSys(self, connectionOrigin, topFlangeBoltedPlate):
         ''' Return the position of the center for the top flange
             bolted plate.
@@ -1863,15 +1882,7 @@ class ConnectedMember(connected_members.ConnectedMemberMetaData):
         :param connectionOrigin: origin for the connection.
         :param topFlangeBoltedPlate: top flange bolted plate.
         '''
-        baseVectors= self.getDirection(connectionOrigin)
-        flangeThickness= self.shape.getFlangeThickness()
-        platesThickness= flangeThickness+topFlangeBoltedPlate.thickness
-        halfHFlange= (self.shape.h()-flangeThickness)/2.0
-        halfHPlate= halfHFlange+platesThickness/2.0
-        halfD= topFlangeBoltedPlate.length/2.0
-        ## Compute position of the top plate center.
-        topPlateCenter= self.memberOrigin + halfHPlate*baseVectors[1] + halfD*baseVectors[0]
-        return geom.Ref3d3d(topPlateCenter, baseVectors[0], baseVectors[2])
+        return self.getFlangeBoltedPlateRefSys(connectionOrigin, topFlangeBoltedPlate, topFlange= True)
     
     def getBottomFlangeBoltedPlateRefSys(self, connectionOrigin, bottomFlangeBoltedPlate):
         ''' Return the position of the center for the bottom flange
@@ -1880,16 +1891,75 @@ class ConnectedMember(connected_members.ConnectedMemberMetaData):
         :param connectionOrigin: origin for the connection.
         :param bottomFlangeBoltedPlate: bottom flange bolted plate.
         '''
-        baseVectors= self.getDirection(connectionOrigin)
-        flangeThickness= self.shape.getFlangeThickness()
-        platesThickness= flangeThickness+bottomFlangeBoltedPlate.thickness
-        halfHFlange= (self.shape.h()-flangeThickness)/2.0
-        halfHPlate= halfHFlange+platesThickness/2.0
-        halfD= bottomFlangeBoltedPlate.length/2.0
-        ## Compute position of the bottom plate center.
-        bottomPlateCenter= self.memberOrigin - halfHPlate*baseVectors[1] + halfD*baseVectors[0]
-        return geom.Ref3d3d(bottomPlateCenter, baseVectors[0], baseVectors[2])
+        return self.getFlangeBoltedPlateRefSys(connectionOrigin, bottomFlangeBoltedPlate, topFlange= False)
 
+    def getShearTabBoltArray(self, shearEfficiency, boltSteelType= A307, threadsExcluded= False):
+        ''' Return a suitable bolted array for the shear tab.
+
+        :param shearEfficiency: ratio between the design shear and 
+                                the shear strength.
+        :param boltSteelType: bolt steel type. 
+        '''
+        # Compute the shear to resist.
+        shear= shearEfficiency*self.shape.getDesignShearStrength(majorAxis= True)
+        # Get a suitable bolt.
+        bolt= self.shape.getWebSuitableBolt(boltSteelType= A307)
+        # Compute the number of bolts needed.
+        numberOfBolts= bolt.getNumberOfBoltsForShear(shear, numberOfRows= 1, threadsExcluded= threadsExcluded)
+        # check number of bolts.
+        if(numberOfBolts<2):
+            numberOfBolts= 2
+        elif(numberOfBolts>7):
+            lmsg.warning('too many bolts: '+str(numberOfBolts))
+        spacing= 75e-3 # about 3 inches. See General Requirements in Design of Single Plate Shear Connections
+                       #                 Abolhassan Astaneh, Steven M. Call and Kurt M. McMullin
+        # check spacing.
+        distBetweenToes= self.shape.getDistanceBetweenWebToes()
+        if(distBetweenToes<numberOfBolts*spacing):
+            lmsg.warning('not enough distance between toes.')
+        return BoltArray(bolt, nRows= 1, nCols= numberOfBolts, dist= spacing)
+    
+    def getShearTabCore(self, boltSteel, plateSteel, shearEfficiency):
+        ''' Return a minimal shear tab. The
+        length of the plate is just enough to accomodate the bolts
+        and its width is chosen as three inches.
+
+        :param boltSteel: steel type of the bolts that connect the plate with
+                          the flange.
+        :param plateSteel: steel type of the bolted plate.
+        :param shearEfficiency: ratio between the design shear and 
+                                the shear strength.
+        '''
+        # Compute bolt arangement.
+        boltArray= self.getShearTabBoltArray(shearEfficiency, boltSteel)
+        # Compute bolted plate dimensions.
+        boltDiameter= boltArray.bolt.diameter
+        plateThickness= round((0.5*boltDiameter+1.6e-3)*1000,0)/1000 # See General Requirements in Design of Single Plate Shear Connections
+                                                                     # Abolhassan Astaneh, Steven M. Call and Kurt M. McMullin
+        plateWidth= max(75e-3, boltArray.getMinPlateWidth())
+        plateLength= boltArray.getStandardPlateLength()
+        return BoltedPlate(boltArray, width= plateWidth, length= plateLength, thickness= plateThickness, steelType= plateSteel)
+    
+    def getShearTabRefSys(self, connectionOrigin, shearTab, positiveSide):
+        ''' Return the position of the center for the top flange
+            bolted plate.
+
+        :param connectionOrigin: origin for the connection.
+        :param shearTab: shear tab attached to flange.
+        :param positiveSide: true if it's the positive side of the web.
+        '''
+        baseVectors= self.getDirection(connectionOrigin)
+        webThickness= self.shape.getWebThickness()
+        platesThickness= webThickness+shearTab.thickness
+        halfWPlate= platesThickness/2.0
+        halfD= shearTab.width/2.0
+        ## Compute position of the plate center.
+        if(positiveSide): # positive side of the web
+            plateCenter= self.memberOrigin + halfWPlate*baseVectors[2] + halfD*baseVectors[0]
+        else: # negative side of the web
+            plateCenter= self.memberOrigin - halfWPlate*baseVectors[1] + halfD*baseVectors[0]
+        return geom.Ref3d3d(plateCenter, baseVectors[0], baseVectors[1])
+    
     def getColumnWeldLines(self, column, plate):
         ''' Return the lines of the column that will be
             welded with the bolted plate represented
@@ -1926,10 +1996,9 @@ class ConnectedMember(connected_members.ConnectedMemberMetaData):
                 print('top flange weld length: ', topFlangeLine.getLength())
         return retval
          
-    def getFlangeBoltedPlate(self, column, boltSteel, plateSteel):
+    def getFlangeBoltedPlate(self, boltSteel, plateSteel):
         ''' Return a suitable bolted plate for the beam flange.
 
-        :param column: column to which the beam is attached to. 
         :param boltSteel: steel type of the bolts that connect the plate with
                           the flange.
         :param plateSteel: steel type of the bolted plate.
@@ -1947,7 +2016,7 @@ class ConnectedMember(connected_members.ConnectedMemberMetaData):
         :param blockProperties: labels and attributes to assign to the newly 
                                 created blocks.
         '''
-        topFlangePlate= self.getFlangeBoltedPlate(column= column, boltSteel= boltSteel, plateSteel= plateSteel)
+        topFlangePlate= self.getFlangeBoltedPlate(boltSteel= boltSteel, plateSteel= plateSteel)
         # Top plate
         ## Compute top plate reference system.
         topFlangePlateRefSys= self.getTopFlangeBoltedPlateRefSys(connectionOrigin, topFlangePlate)
@@ -1971,7 +2040,7 @@ class ConnectedMember(connected_members.ConnectedMemberMetaData):
         :param blockProperties: labels and attributes to assign to the newly 
                                 created blocks.
         '''
-        bottomFlangePlate= self.getFlangeBoltedPlate(column= column, boltSteel= boltSteel, plateSteel= plateSteel)
+        bottomFlangePlate= self.getFlangeBoltedPlate(boltSteel= boltSteel, plateSteel= plateSteel)
         # Bottom plate
         ## Compute bottom plate reference system.
         bottomFlangePlateRefSys= self.getBottomFlangeBoltedPlateRefSys(connectionOrigin, bottomFlangePlate)
@@ -1983,6 +2052,32 @@ class ConnectedMember(connected_members.ConnectedMemberMetaData):
         ## Compute connection lines
         bottomFlangePlate.setWeldLines(self.getColumnWeldLines(column, bottomFlangePlate))
         return bottomFlangePlate.getBlocks(blockProperties= blockProperties)
+    
+    def getShearTabBlocks(self, connectionOrigin, column, boltSteel, plateSteel, blockProperties, shearEfficiency):
+        ''' Return the blocks corresponding to the top flange bolted plate.
+
+        :param connectionOrigin: origin for the connection.
+        :param column: column to which the shear tab is attached to. 
+        :param boltSteel: steel type of the bolts that connect the plate with
+                          the beam web.
+        :param plateSteel: steel type of the shear tab.
+        :param blockProperties: labels and attributes to assign to the newly 
+                                created blocks.
+        :param shearEfficiency: ratio between the design shear and 
+                                the shear strength.
+        '''
+        shearTab= self.getShearTabCore(boltSteel= boltSteel, plateSteel= plateSteel, shearEfficiency= shearEfficiency)
+        # Top plate
+        ## Compute top plate reference system.
+        shearTabRefSys= self.getShearTabRefSys(connectionOrigin, shearTab, positiveSide= True)
+        shearTab.setRefSys(shearTabRefSys)
+        ## Compute the intersection of the column axis with the shear tab
+        ## equatorial.
+        columnCenter= shearTabRefSys.getXZPlane().getIntersection(column.getAxis())
+        shearTab.attachedMemberCenter= columnCenter
+        ## Compute connection lines
+        shearTab.setWeldLines(self.getColumnWeldLines(column, shearTab))
+        return shearTab.getBlocks(blockProperties= blockProperties)
 
 class FilletWeld(object):
     '''Fillet weld according to chapter J, section J2, of AISC 360-16, 

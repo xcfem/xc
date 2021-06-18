@@ -221,19 +221,20 @@ class Connection(connected_members.ConnectionMetaData):
         retval= bte.BlockData()
         beamBlocks= super(Connection,self).getBeamShapeBlocks(factor)
         retval.extend(beamBlocks)
-        plateProperties= bte.BlockProperties.copyFrom(blockProperties)
-        plateProperties.appendAttribute('objType', 'flange_plate')
-        # Flange plates.
+        flangePlateProperties= bte.BlockProperties.copyFrom(blockProperties)
+        flangePlateProperties.appendAttribute('objType', 'flange_plate')
+        shearTabProperties= bte.BlockProperties.copyFrom(blockProperties)
+        shearTabProperties.appendAttribute('objType', 'shear_tab')
         for b in self.beams:
             # Top plate
-            topPlateBlocks= b.getTopFlangeBoltedPlateBlocks(connectionOrigin= self.getOrigin(), column= self.column, boltSteel= self.getBoltSteel(), plateSteel= self.getBoltedPlatesSteel(), blockProperties= plateProperties)
+            topPlateBlocks= b.getTopFlangeBoltedPlateBlocks(connectionOrigin= self.getOrigin(), column= self.column, boltSteel= self.getBoltSteel(), plateSteel= self.getBoltedPlatesSteel(), blockProperties= flangePlateProperties)
             retval.extend(topPlateBlocks)
             # Holes in top flange
             holesList= topPlateBlocks.getHoles()
             ## Name for bolt group
-            boltProperties= bte.BlockProperties.copyFrom(plateProperties)
-            boltGroup= 'joint_'+plateProperties.getAttribute('jointId') # Joint id.
-            boltGroup+= '_'+plateProperties.getAttribute('objType')
+            boltProperties= bte.BlockProperties.copyFrom(flangePlateProperties)
+            boltGroup= 'joint_'+flangePlateProperties.getAttribute('jointId') # Joint id.
+            boltGroup+= '_'+flangePlateProperties.getAttribute('objType')
             boltGroup+= '_'+str(b.eTag) # Beam identifier.
             topFlangeBoltGroup= boltGroup+'_top_flange' # flange identifier.
             topFlangeBoltGroup+= '_top' # top side
@@ -242,14 +243,14 @@ class Connection(connected_members.ConnectionMetaData):
             boltBlocks= bolts.createHolesOnMemberBlocks(holesList, beamBlocks, boltProperties, self.getMaterialModule().__name__)
             retval.extend(boltBlocks)
             # Bottom plate
-            bottomPlateBlocks= b.getBottomFlangeBoltedPlateBlocks(connectionOrigin= self.getOrigin(), column= self.column, boltSteel= self.getBoltSteel(), plateSteel= self.getBoltedPlatesSteel(), blockProperties= plateProperties)
+            bottomPlateBlocks= b.getBottomFlangeBoltedPlateBlocks(connectionOrigin= self.getOrigin(), column= self.column, boltSteel= self.getBoltSteel(), plateSteel= self.getBoltedPlatesSteel(), blockProperties= flangePlateProperties)
             retval.extend(bottomPlateBlocks)
             # Holes in bottom flange
             holesList= bottomPlateBlocks.getHoles()
             ## Name for bolt group
-            boltProperties= bte.BlockProperties.copyFrom(plateProperties)
-            boltGroup= 'joint_'+plateProperties.getAttribute('jointId') # Joint id.
-            boltGroup+= '_'+plateProperties.getAttribute('objType')
+            boltProperties= bte.BlockProperties.copyFrom(flangePlateProperties)
+            boltGroup= 'joint_'+flangePlateProperties.getAttribute('jointId') # Joint id.
+            boltGroup+= '_'+flangePlateProperties.getAttribute('objType')
             boltGroup+= '_'+str(b.eTag) # Beam identifier.
             bottomFlangeBoltGroup= boltGroup+'_bottom_flange' # flange identifier.
             bottomFlangeBoltGroup+= '_bottom' # bottom side
@@ -257,6 +258,9 @@ class Connection(connected_members.ConnectionMetaData):
             ## Create holes.
             boltBlocks= bolts.createHolesOnMemberBlocks(holesList, beamBlocks, boltProperties, self.getMaterialModule().__name__)
             retval.extend(boltBlocks)
+            # Shear tab
+            shearTabBlocks= b.getShearTabBlocks(connectionOrigin= self.getOrigin(), column= self.column, boltSteel= self.getBoltSteel(), plateSteel= self.getBoltedPlatesSteel(), blockProperties= shearTabProperties, shearEfficiency= 1.0)
+            retval.extend(shearTabBlocks)    
         return retval
 
     def getBlocks(self, blockProperties= None):
