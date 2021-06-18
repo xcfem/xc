@@ -1,5 +1,4 @@
-Static integrators
-==================
+# Static integrators
 
 Static integrators are incremental integrators provided to implement the
 common methods among integrator classes used in performing a static
@@ -11,3 +10,7 @@ Determing the next time step for an analysis can be done by one of the following
 - Displacement Control -- Specifies the incremental displacement at a specified DOF in the domain
 - Minimum Unbalanced Displacement Norm -- Specifies the incremental load factor such that the residual displacement norm in minimized
 - Arc Length -- Specifies the incremental arc-length of the load-displacement path
+
+
+## References
+[Direct displacement control](https://www.eurocode.us/finite-element-method/direct-displacement-control.html)
