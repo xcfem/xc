@@ -1941,11 +1941,10 @@ class ConnectedMember(connected_members.ConnectedMemberMetaData):
         return BoltedPlate(boltArray, width= plateWidth, length= plateLength, thickness= plateThickness, steelType= plateSteel)
     
     def getShearTabRefSys(self, connectionOrigin, shearTab, positiveSide):
-        ''' Return the position of the center for the top flange
-            bolted plate.
+        ''' Return the position of the center for the shear tab.
 
         :param connectionOrigin: origin for the connection.
-        :param shearTab: shear tab attached to flange.
+        :param shearTab: shear tab attached to web.
         :param positiveSide: true if it's the positive side of the web.
         '''
         baseVectors= self.getDirection(connectionOrigin)
@@ -1957,8 +1956,8 @@ class ConnectedMember(connected_members.ConnectedMemberMetaData):
         if(positiveSide): # positive side of the web
             plateCenter= self.memberOrigin + halfWPlate*baseVectors[2] + halfD*baseVectors[0]
         else: # negative side of the web
-            plateCenter= self.memberOrigin - halfWPlate*baseVectors[1] + halfD*baseVectors[0]
-        return geom.Ref3d3d(plateCenter, baseVectors[0], baseVectors[1])
+            plateCenter= self.memberOrigin - halfWPlate*baseVectors[2] + halfD*baseVectors[0]
+        return geom.Ref3d3d(plateCenter, baseVectors[1], baseVectors[0])
     
     def getColumnWeldLines(self, column, plate):
         ''' Return the lines of the column that will be
@@ -1971,6 +1970,10 @@ class ConnectedMember(connected_members.ConnectedMemberMetaData):
         retval= dict()
         plateOrigin= plate.refSys.getOrg()
         platePlane= plate.refSys.getXYPlane()
+        angle= platePlane.getAngle(column.getIVector())
+        # YYYYY Continue here 2021.06.18
+        print(angle)
+        # Compute contours for the column flanges.
         topFlangeContour= geom.Polygon3d(column.getTopFlangeMidPlaneContourPoints())
         topFlangeLine= topFlangeContour.getIntersection(platePlane)
         bottomFlangeContour= geom.Polygon3d(column.getBottomFlangeMidPlaneContourPoints())
@@ -2073,7 +2076,7 @@ class ConnectedMember(connected_members.ConnectedMemberMetaData):
         shearTab.setRefSys(shearTabRefSys)
         ## Compute the intersection of the column axis with the shear tab
         ## equatorial.
-        columnCenter= shearTabRefSys.getXZPlane().getIntersection(column.getAxis())
+        columnCenter= shearTabRefSys.getYZPlane().getIntersection(column.getAxis())
         shearTab.attachedMemberCenter= columnCenter
         ## Compute connection lines
         shearTab.setWeldLines(self.getColumnWeldLines(column, shearTab))
