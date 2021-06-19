@@ -193,7 +193,7 @@ class ConnectedMemberMetaData(object):
         :param sg: segment to intersect.
         '''
         webPlane= self.getWebMidPlane(origin, factor)
-        angleWithWeb= webPlane.getAngleWithVector3d(sg.getVDir())
+        angleWithWeb= webPlane.getAngle(sg.getVDir())
         orientation= getSegmentOrientation(origin, sg)
         if(orientation<0.0):
             sg.swap()
@@ -384,7 +384,7 @@ class ConnectionMetaData(object):
         for b in self.beams:
             # Angle of the beam axis with the column web.
             columnWebPlane= self.getColumnWebMidPlane()
-            angleWithColumnWeb= columnWebPlane.getAngleWithVector3d(b.iVector)
+            angleWithColumnWeb= columnWebPlane.getAngle(b.iVector)
             # Column dimensions.
             columnShape= self.getColumnShape()
             columnHalfB= columnShape.getFlangeWidth()/2.0

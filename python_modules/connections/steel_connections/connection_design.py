@@ -191,7 +191,7 @@ class Connection(connected_members.ConnectionMetaData):
         extrusionLength= self.columnLengthFactor
         p1= origin+extrusionLength*baseVectors[0]
         webPlane= self.getColumnWebMidPlane()
-        angleWithWeb= webPlane.getAngleWithVector3d(baseVectors[0])
+        angleWithWeb= webPlane.getAngle(baseVectors[0])
         dgSegment= geom.Segment3d(origin,p1)
         gussetLength= self.gussetLengthFactor*self.boltedPlateTemplate.length
         halfChamferVector= getHalfChamferVector(diagonal)

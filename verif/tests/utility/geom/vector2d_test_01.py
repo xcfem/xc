@@ -7,30 +7,30 @@ import math
 
 u=geom.Vector2d(1,0)
 v=geom.Vector2d(1,1)
-alpha=v.getAngle(u)
+alpha= v.getAngle(u)
 
 ratio1=math.degrees(alpha)-45
 
 v.x=0
-alpha=v.getAngle(u)
+alpha= v.getAngle(u)
 ratio2=math.degrees(alpha)-90
 v.x=-1
-alpha=v.getAngle(u)
+alpha= v.getAngle(u)
 ratio3=math.degrees(alpha)-135
 v.y=0
-alpha=v.getAngle(u)
+alpha= v.getAngle(u)
 ratio4=math.degrees(alpha)-180
 v.y=-1
-alpha=v.getAngle(u)
+alpha= v.getAngle(u)
 ratio5=math.degrees(alpha)-225
 v.x=0 
-alpha=v.getAngle(u)
+alpha= v.getAngle(u)
 ratio6=math.degrees(alpha)-270
 v.x=1 
-alpha=v.getAngle(u)
+alpha= v.getAngle(u)
 ratio7=math.degrees(alpha)-315
 v.y=0 
-alpha=v.getAngle(u)
+alpha= v.getAngle(u)
 ratio8=math.degrees(alpha)
 
 import os

@@ -7,11 +7,11 @@ import xc_base
 import geom
 import math
 
-vec1=geom.Vector3d(9,8,7)
-vec2=geom.Vector3d(1,2,1)
-delta=vec1.getAngle(vec2)
-deltaTeor=math.acos(32/2.4495/13.9284)
-ratio1=math.fabs(deltaTeor-delta)/deltaTeor
+vec1= geom.Vector3d(9,8,7)
+vec2= geom.Vector3d(1,2,1)
+delta= vec1.getAngle(vec2)
+deltaTeor= math.acos(32/2.4495/13.9284)
+ratio1= math.fabs(deltaTeor-delta)/deltaTeor
 
 import os
 from misc_utils import log_messages as lmsg

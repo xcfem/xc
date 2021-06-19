@@ -22,7 +22,7 @@ P1=geom.HalfSpace3d(plBuz1)
 plBuz2=teoria_bloques.computeDipPlane(alpha2,beta2,p)
 P2=geom.HalfSpace3d(plBuz2)
 
-delta=P1.getAngleWithHalfSpace3d(P2)
+delta= P1.getAngle(P2)
 deltaTeor=math.acos(0.1968/0.8907/0.99)
 
 ratio1= math.fabs(deltaTeor-delta)/deltaTeor

@@ -15,7 +15,7 @@ def getAngle(vt1,vt2):
 u=geom.Vector2d(1,0)
 v=geom.Vector2d(1,1)
 modulus=getAbs(u)
-alpha=getAngle(v,u)
+alpha= getAngle(v,u)
 
 ratio1= modulus-1
 ratio2=math.degrees(alpha)-45

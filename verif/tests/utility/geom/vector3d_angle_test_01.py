@@ -2,15 +2,17 @@
 # Angle between two vectors.
 
 from __future__ import print_function
+from __future__ import division
+
 import xc_base
 import geom
 import math
 
-vec1=geom.Vector3d(1,7.19412e-10,-2.08017e-05)
-vec2=geom.Vector3d(1,0,-2.08017e-05)
-angle=vec1.getAngle(vec2)
-angleTeor=0.0
-ratio1=math.fabs(angleTeor-angle)#/angleTeor
+vec1= geom.Vector3d(1,7.19412e-10,-2.08017e-05)
+vec2= geom.Vector3d(1,0,-2.08017e-05)
+angle= vec1.getAngle(vec2)
+angleTeor= 0.0
+ratio1= math.fabs(angleTeor-angle)#/angleTeor
 
 #print("angle= ", math.degrees(angle))
 
