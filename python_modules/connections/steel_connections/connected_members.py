@@ -392,12 +392,12 @@ class ConnectionMetaData(object):
             origin= self.getOrigin()
             beamOrientation= b.getOrientation(origin)
             lbl= None
-            if(abs(angleWithColumnWeb)<1e-3): # beam parallel to web => flange beam.
-                lbl= 'flange'
+            if(abs(angleWithColumnWeb)<1e-3): # beam parallel to column web => flange beam.
+                lbl= 'column_flange'
                 tf= columnShape.getFlangeThickness()
                 offset= (25e-3+columnHalfH-tf/2.0)*beamOrientation # 25 mm gap from flange mid-plane
-            else: # beam normal to web  => web beam
-                lbl= 'web'
+            else: # beam normal to column web  => web beam
+                lbl= 'column_web'
                 offset= (20e-3+columnHalfB)*beamOrientation # 20 mm gap from column "envelope"
             beam_label= lbl+'_beam'
             b.connectedTo= lbl
