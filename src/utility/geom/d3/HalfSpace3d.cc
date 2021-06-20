@@ -184,7 +184,13 @@ Ray3d HalfSpace3d::clip(const Ray3d &r) const
 	else
 	  {
             Pos3d pt= lim.getIntersection(r);
-            retval= Ray3d(pt,r.VDir());
+	    Pos3d fromPoint= r.getFromPoint();
+	    if(In(fromPoint))
+	      std::cerr << getClassName() << "::" << __FUNCTION__
+		        << "; the result of the clipping is a segment."
+		        << " Can't deal with this case yet." << std::endl;
+	    else
+              retval= Ray3d(pt,r.VDir());
 	  }
       }
     else
