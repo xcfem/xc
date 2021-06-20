@@ -467,6 +467,71 @@ class WShape(structural_steel.IShape):
         contourPoints= self.getWebMidPlaneContourPoints(org, extrusionVDir, weakAxisVDir)
         return geom.Plane3d(contourPoints[0],contourPoints[1],contourPoints[3])
 
+    def getClosingPlatePositiveSideContourPoints(self, org, extrusionVDir, weakAxisVDir):
+        ''' Return the contour points of the plate that closes the shape
+            connection the borders of the top and bottom flanges
+            at the "positive" side of the web.
+
+        :param org: origin point.
+        :param extrusionVDir: extrusion direction vector.
+        :param weakAxisVDir: direction of the weak axis.
+        '''
+        tmp= self.getWebMidPlaneContourPoints(org, extrusionVDir, weakAxisVDir)
+        halfB= self.getFlangeWidth()/2.0
+        print('halfB= ', halfB)
+        strongAxisVDir= extrusionVDir.cross(weakAxisVDir).normalized()
+        v= -halfB*strongAxisVDir # positive side -> minus sign here
+        retval= list()
+        for p in tmp:
+            retval.append(p+v)
+        return retval
+    
+    def getClosingPlatePositiveSideMidPlane(self, org, extrusionVDir, weakAxisVDir):
+        ''' Return the mid plane of the plate that closes the shape
+            connection the borders of the top and bottom flanges
+            at the "positive" side of the web.
+
+        :param org: origin point.
+        :param extrusionVDir: extrusion direction vector.
+        :param weakAxisVDir: direction of the weak axis.
+        '''
+        contourPoints= self.getClosingPlatePositiveSideContourPoints(org, extrusionVDir, weakAxisVDir)
+        return geom.Plane3d(contourPoints[0],contourPoints[1],contourPoints[3])
+    
+    def getClosingPlateNegativeSideContourPoints(self, org, extrusionVDir, weakAxisVDir):
+        ''' Return the contour points of the plate that closes the shape
+            connection the borders of the top and bottom flanges
+            at the "negative" side of the web.
+
+        :param org: origin point.
+        :param extrusionVDir: extrusion direction vector.
+        :param weakAxisVDir: direction of the weak axis.
+        '''
+        tmp= self.getWebMidPlaneContourPoints(org, extrusionVDir, weakAxisVDir)
+        halfB= self.getFlangeWidth()/2.0
+        strongAxisVDir= extrusionVDir.cross(weakAxisVDir).normalized()
+        v= halfB*strongAxisVDir # negative side -> plus sign here
+        retval= list()
+        for p in tmp:
+            retval.append(p+v)
+        # Check negative side
+        webMidPlane= self.getWebMidPlane(org, extrusionVDir, weakAxisVDir)
+        for p in retval:
+            print('negative side: ', webMidPlane.negativeSide(p))
+        return retval
+    
+    def getClosingPlateNegativeSideMidPlane(self, org, extrusionVDir, weakAxisVDir):
+        ''' Return the mid plane of the plate that closes the shape
+            connection the borders of the top and bottom flanges
+            at the "negative" side of the web.
+
+        :param org: origin point.
+        :param extrusionVDir: extrusion direction vector.
+        :param weakAxisVDir: direction of the weak axis.
+        '''
+        contourPoints= self.getClosingPlateNegativeSideContourPoints(org, extrusionVDir, weakAxisVDir)
+        return geom.Plane3d(contourPoints[0],contourPoints[1],contourPoints[3])
+    
     def getBottomFlangeMidPlaneContourPoints(self, org, extrusionVDir, weakAxisVDir):
         ''' Return the bottom flange contour points at its mid plane.
 

@@ -1958,63 +1958,117 @@ class ConnectedMember(connected_members.ConnectedMemberMetaData):
         else: # negative side of the web
             plateCenter= self.memberOrigin - halfWPlate*baseVectors[2] + halfD*baseVectors[0]
         return geom.Ref3d3d(plateCenter, baseVectors[1], baseVectors[0])
-    
-    def getColumnWeldLines(self, column, plate):
-        ''' Return the lines of the column that will be
-            welded with the bolted plate represented
-            by the reference system argument.
+
+    def computeWeldLines(self, column, plate):
+        ''' Return the lines of the plate that will be welded with the column and
+            refines the "connectedTo" property of the plate by specifying the side
+            of the web or the flage (top or bottom) to which the plate is attached.
 
         :param column: column to which the beam is attached to.
         :param plate: plate to connect.
         '''
-        print('**** plate location: ', plate.connectedTo, plate.location)
-        retval= dict()
+        weldDict= dict()
         plateOrigin= plate.refSys.getOrg()
         platePlane= plate.refSys.getXYPlane()
         angle= platePlane.getAngle(column.iVector)
-        # Compute contours of the column flanges.
-        topFlangeContour= geom.Polygon3d(column.getTopFlangeMidPlaneContourPoints())
-        bottomFlangeContour= geom.Polygon3d(column.getBottomFlangeMidPlaneContourPoints())
-        if((abs(angle)<1e-6) or (abs(angle-math.pi)<1e-6)): # shear tab plate
+        # Compute contours of the column flanges and web.
+        columnTopFlangeContour= geom.Polygon3d(column.getTopFlangeMidPlaneContourPoints())
+        columnBottomFlangeContour= geom.Polygon3d(column.getBottomFlangeMidPlaneContourPoints())
+        columnWebContour= geom.Polygon3d(column.getWebMidPlaneContourPoints())
+        if((abs(angle)<.01) or (abs(angle-math.pi)<.01)): # beam shear tab plate
             if(plate.connectedTo=='column_web'): # plate connected to the column web
-                print('YYYY continue here. Shear tab weld lines for web not implemented yet.')
+                columnWebMidPlane= columnWebContour.getPlane()
+                # Compute the side of the column web to which
+                # the shear tab will be attached.
+                positiveSide= columnWebMidPlane.positiveSide(plateOrigin)
+                if(positiveSide):
+                    plate.connectedTo= 'column_web+'
+                else:
+                    plate.connectedTo= 'column_web-'
+                # Get the beam flange plates.
+                beamTopPlate= column.connectedPlates[plate.connectedTo+','+'beam_top_flange']
+                beamBottomFlangeKey= plate.connectedTo+','+'beam_bottom_flange'
+                beamBottomPlate= column.connectedPlates[plate.connectedTo+','+'beam_top_flange']
+                # Compute intersections with the column web
+                # and the flange plates.
+                ## Web.
+                columnWebLine= columnWebContour.getIntersection(platePlane)
+                ## Top plate.
+                topPlatePlane= beamTopPlate.refSys.getXYPlane()
+                plateHalfSpace= geom.HalfSpace3d(topPlatePlane, plateOrigin)
+                columnWebLine= plateHalfSpace.clip(columnWebLine)
+                ## Bottom plate.
+                bottomPlatePlane= beamBottomPlate.refSys.getXYPlane()
+                plateHalfSpace= geom.HalfSpace3d(bottomPlatePlane, plateOrigin)
+                columnWebLine= plateHalfSpace.clip(columnWebLine)
+                # Compute intersections with the top and bottom plates.
+                topPlateLine= platePlane.getIntersection(topPlatePlane)
+                print('top plate line: ', type(topPlateLine), topPlateLine)
+                bottomPlateLine= platePlane.getIntersection(bottomPlatePlane)
+                ## Clip by the plane of the column web.
+                topPlateLineFromPoint= columnWebMidPlane.getIntersection(topPlateLine)
+                print('column web clip top plate line: ', topPlateLineFromPoint)
+                bottomPlateLine= plateHalfSpace.clip(bottomPlateLine)
+                ## Clip by the virtual "closing" plate.
+                if(positiveSide):
+                    closingPlateMidPlane= column.getClosingPlatePositiveSideMidPlane()
+                else:
+                    closingPlateMidPlane= column.getClosingPlateNegativeSideMidPlane()
+                columnWebLineCenter= columnWebLine.getCenterOfMass()
+                topPlateLineToPoint= closingPlateMidPlane.getIntersection(topPlateLine)
+                topPlateLine= geom.Segment3d(topPlateLineFromPoint, topPlateLineToPoint)
+                print('closing plate clip top plate line: ', type(topPlateLine), topPlateLine)
+                bottomPlateLine= plateHalfSpace.clip(bottomPlateLine)
+                weldDict['topPlateWeld']= topPlateLine
+                weldDict['columnWebWeld']= columnWebLine
+                weldDict['bottomPlateWeld']= bottomPlateLine
+                print('top plate line: ', type(topPlateLine), topPlateLine)
+                #print('bottom plate line: ', type(bottomPlateLine), bottomPlateLine)
+                #print('column web line: ', type(columnWebLine), columnWebLine)
                 quit()
             else: # plate connected to one flange
-                topFlangeLine= topFlangeContour.getIntersection(platePlane)
-                dTop= topFlangeLine.dist(plateOrigin)
-                bottomFlangeLine= bottomFlangeContour.getIntersection(platePlane)
-                dBottom= bottomFlangeLine.dist(plateOrigin)
-                if(dBottom<dTop):
+                columnTopFlangeLine= columnTopFlangeContour.getIntersection(platePlane)
+                dTop= columnTopFlangeLine.dist(plateOrigin)
+                columnBottomFlangeLine= columnBottomFlangeContour.getIntersection(platePlane)
+                dBottom= columnBottomFlangeLine.dist(plateOrigin)
+                if(dBottom<dTop): # column bottom flange is closer.
                     plate.connectedTo= 'column_bottom_flange' 
-                    retval['bottomFlangeWeld']= bottomFlangeLine
-                else:
+                    weldDict['columnBottomFlangeWeld']= columnBottomFlangeLine
+                else: # column top flage is closer.
                     plate.connectedTo= 'column_top_flange' 
-                    retval['topFlangeWeld']= topFlangeLine
-        else: # flange plate
+                    weldDict['columnTopFlangeWeld']= columnTopFlangeLine
+        else: # beam flange plate
             # Compute contours for the column flanges.
-            topFlangeLine= topFlangeContour.getIntersection(platePlane)
-            bottomFlangeLine= bottomFlangeContour.getIntersection(platePlane)
+            columnTopFlangeLine= columnTopFlangeContour.getIntersection(platePlane)
+            columnBottomFlangeLine= columnBottomFlangeContour.getIntersection(platePlane)
             if(plate.connectedTo=='column_web'): # plate connected to the column web
-                webContour= geom.Polygon3d(column.getWebMidPlaneContourPoints())
-                webMidPlane= webContour.getPlane()
-                webLine= webContour.getIntersection(platePlane)
-                plateHalfSpace= geom.HalfSpace3d(webMidPlane, plateOrigin)
-                halfTopFlange= plateHalfSpace.clip(topFlangeLine)
-                halfBottomFlange= plateHalfSpace.clip(bottomFlangeLine)
-                retval['bottomFlangeWeld']= halfBottomFlange
-                retval['webWeld']= webLine
-                retval['topFlangeWeld']= halfTopFlange
+                columnWebMidPlane= columnWebContour.getPlane()
+                if(columnWebMidPlane.positiveSide(plateOrigin)):
+                    plate.connectedTo= 'column_web+'
+                else:
+                    plate.connectedTo= 'column_web-'                
+                columnWebLine= columnWebContour.getIntersection(platePlane)
+                plateHalfSpace= geom.HalfSpace3d(columnWebMidPlane, plateOrigin)
+                halfTopFlange= plateHalfSpace.clip(columnTopFlangeLine)
+                halfBottomFlange= plateHalfSpace.clip(columnBottomFlangeLine)
+                weldDict['columnBottomFlangeWeld']= halfBottomFlange
+                weldDict['columnWebWeld']= columnWebLine
+                weldDict['columnTopFlangeWeld']= halfTopFlange
             else: # plate connected to one flange
-                dTop= topFlangeLine.dist(plateOrigin)
-                dBottom= bottomFlangeLine.dist(plateOrigin)
+                dTop= columnTopFlangeLine.dist(plateOrigin)
+                dBottom= columnBottomFlangeLine.dist(plateOrigin)
                 if(dBottom<dTop):
                     plate.connectedTo= 'column_bottom_flange' 
-                    retval['bottomFlangeWeld']= bottomFlangeLine
+                    weldDict['columnBottomFlangeWeld']= columnBottomFlangeLine
                 else:
                     plate.connectedTo= 'column_top_flange' 
-                    retval['topFlangeWeld']= topFlangeLine
-        print('**** plate location: ', plate.connectedTo, plate.location)
-        return retval
+                    weldDict['columnTopFlangeWeld']= columnTopFlangeLine
+        # Update the plates connected to the column
+        if(not hasattr(column,'connectedPlates')):
+            column.connectedPlates= dict()
+        key= plate.connectedTo +','+plate.location
+        column.connectedPlates[key]= plate
+        plate.setWeldLines(weldDict)
          
     def getFlangeBoltedPlate(self, boltSteel, plateSteel):
         ''' Return a suitable bolted plate for the beam flange.
@@ -2036,21 +2090,21 @@ class ConnectedMember(connected_members.ConnectedMemberMetaData):
         :param blockProperties: labels and attributes to assign to the newly 
                                 created blocks.
         '''
-        topFlangePlate= self.getFlangeBoltedPlate(boltSteel= boltSteel, plateSteel= plateSteel)
+        beamTopFlangePlate= self.getFlangeBoltedPlate(boltSteel= boltSteel, plateSteel= plateSteel)
         # Top plate
         ## Compute top plate reference system.
-        topFlangePlateRefSys= self.getTopFlangeBoltedPlateRefSys(connectionOrigin, topFlangePlate)
-        topFlangePlate.setRefSys(topFlangePlateRefSys)
+        beamTopFlangePlateRefSys= self.getTopFlangeBoltedPlateRefSys(connectionOrigin, beamTopFlangePlate)
+        beamTopFlangePlate.setRefSys(beamTopFlangePlateRefSys)
         ## Compute the intersection of the column axis with the flange plate
         ## midplane.
-        columnCenter= topFlangePlateRefSys.getXYPlane().getIntersection(column.getAxis())
-        topFlangePlate.attachedMemberCenter= columnCenter        
+        columnCenter= beamTopFlangePlateRefSys.getXYPlane().getIntersection(column.getAxis())
+        beamTopFlangePlate.attachedMemberCenter= columnCenter        
         ## Set location properties of the plate.
-        topFlangePlate.connectedTo= self.connectedTo
-        topFlangePlate.location= 'beam_top_flange'
+        beamTopFlangePlate.connectedTo= self.connectedTo
+        beamTopFlangePlate.location= 'beam_top_flange'
         ## Compute connection lines
-        topFlangePlate.setWeldLines(self.getColumnWeldLines(column, topFlangePlate))
-        return topFlangePlate.getBlocks(blockProperties= blockProperties)
+        self.computeWeldLines(column, beamTopFlangePlate)
+        return beamTopFlangePlate.getBlocks(blockProperties= blockProperties)
     
     def getBottomFlangeBoltedPlateBlocks(self, connectionOrigin, column, boltSteel, plateSteel, blockProperties):
         ''' Return the blocks corresponding to the bottom flange bolted plate.
@@ -2063,21 +2117,21 @@ class ConnectedMember(connected_members.ConnectedMemberMetaData):
         :param blockProperties: labels and attributes to assign to the newly 
                                 created blocks.
         '''
-        bottomFlangePlate= self.getFlangeBoltedPlate(boltSteel= boltSteel, plateSteel= plateSteel)
+        beamBottomFlangePlate= self.getFlangeBoltedPlate(boltSteel= boltSteel, plateSteel= plateSteel)
         # Bottom plate
         ## Compute bottom plate reference system.
-        bottomFlangePlateRefSys= self.getBottomFlangeBoltedPlateRefSys(connectionOrigin, bottomFlangePlate)
-        bottomFlangePlate.setRefSys(bottomFlangePlateRefSys)
+        beamBottomFlangePlateRefSys= self.getBottomFlangeBoltedPlateRefSys(connectionOrigin, beamBottomFlangePlate)
+        beamBottomFlangePlate.setRefSys(beamBottomFlangePlateRefSys)
         ## Compute the intersection of the column axis with the flange plate
         ## midplane.
-        columnCenter= bottomFlangePlateRefSys.getXYPlane().getIntersection(column.getAxis())
-        bottomFlangePlate.attachedMemberCenter= columnCenter        
+        columnCenter= beamBottomFlangePlateRefSys.getXYPlane().getIntersection(column.getAxis())
+        beamBottomFlangePlate.attachedMemberCenter= columnCenter        
         ## Set location properties of the plate.
-        bottomFlangePlate.connectedTo= self.connectedTo
-        bottomFlangePlate.location= 'beam_bottom_flange'
+        beamBottomFlangePlate.connectedTo= self.connectedTo
+        beamBottomFlangePlate.location= 'beam_bottom_flange'
         ## Compute connection lines
-        bottomFlangePlate.setWeldLines(self.getColumnWeldLines(column, bottomFlangePlate))
-        return bottomFlangePlate.getBlocks(blockProperties= blockProperties)
+        self.computeWeldLines(column, beamBottomFlangePlate)
+        return beamBottomFlangePlate.getBlocks(blockProperties= blockProperties)
     
     def getShearTabBlocks(self, connectionOrigin, column, boltSteel, plateSteel, blockProperties, shearEfficiency):
         ''' Return the blocks corresponding to the top flange bolted plate.
@@ -2105,7 +2159,7 @@ class ConnectedMember(connected_members.ConnectedMemberMetaData):
         shearTab.connectedTo= self.connectedTo
         shearTab.location= 'beam_web'
         ## Compute connection lines
-        shearTab.setWeldLines(self.getColumnWeldLines(column, shearTab))
+        self.computeWeldLines(column, shearTab)
         return shearTab.getBlocks(blockProperties= blockProperties)
 
 class FilletWeld(object):

@@ -165,6 +165,34 @@ class ConnectedMemberMetaData(object):
         ''' Return the mid-plane of the member web. '''
         return self.shape.getWebMidPlane(org= self.memberOrigin, extrusionVDir= self.extrusionVector, weakAxisVDir= self.getWebDirection())
     
+    def getClosingPlatePositiveSideContourPoints(self):
+        ''' Return the contour points of the plate that closes the shape
+            connection the borders of the top and bottom flanges
+            at the "positive" side of the web.
+        '''
+        return self.shape.getClosingPlatePositiveSideContourPoints(org= self.memberOrigin, extrusionVDir= self.extrusionVector, weakAxisVDir= self.getWebDirection())
+    
+    def getClosingPlatePositiveSideMidPlane(self):
+        ''' Return the mid plane of the plate that closes the shape
+            connection the borders of the top and bottom flanges
+            at the "positive" side of the web.
+        '''
+        return self.shape.getClosingPlatePositiveSideMidPlane(org= self.memberOrigin, extrusionVDir= self.extrusionVector, weakAxisVDir= self.getWebDirection())
+    
+    def getClosingPlateNegativeSideContourPoints(self):
+        ''' Return the contour points of the plate that closes the shape
+            connection the borders of the top and bottom flanges
+            at the "negative" side of the web.
+        '''
+        return self.shape.getClosingPlateNegativeSideContourPoints(org= self.memberOrigin, extrusionVDir= self.extrusionVector, weakAxisVDir= self.getWebDirection())
+    
+    def getClosingPlateNegativeSideMidPlane(self):
+        ''' Return the mid plane of the plate that closes the shape
+            connection the borders of the top and bottom flanges
+            at the "negative" side of the web.
+        '''
+        return self.shape.getClosingPlateNegativeSideMidPlane(org= self.memberOrigin, extrusionVDir= self.extrusionVector, weakAxisVDir= self.getWebDirection())
+    
     def getBottomFlangeMidPlaneContourPoints(self):
         ''' Return the contour points at the mid-plane of the bottom flange.'''
         return self.shape.getBottomFlangeMidPlaneContourPoints(org= self.memberOrigin, extrusionVDir= self.extrusionVector, weakAxisVDir= self.getWebDirection())
