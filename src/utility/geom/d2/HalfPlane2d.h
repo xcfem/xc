@@ -69,14 +69,12 @@ class HalfPlane2d : public Surface2d
       { return lim.isDegenerated(); }
     inline const Line2d &getBorde(void) const
       { return lim; }
-    //! @brief Return true if the point is inside the half-plane.
-    //! The points of the edge line belong to the half-plane.
-    virtual bool In(const Pos2d &p, const double &tol= 0.0) const
-      { 
-        if(lim.In(p,tol)) return true;
-        if(lim.LadoDerecho(p)) return true;
-        return false;
-      }
+    
+    virtual bool In(const Pos2d &p, const double &tol= 0.0) const;
+    virtual bool In(const Line2d &, const double &tol= 0.0) const;
+    virtual bool In(const Ray2d &, const double &tol= 0.0) const;
+    virtual bool In(const Segment2d &, const double &tol= 0.0) const;
+
     //! @brief Return the signed distance from the point to the half-plane.
     GEOM_FT DistSigno(const Pos2d &p) const
       {
@@ -117,6 +115,10 @@ class HalfPlane2d : public Surface2d
     //Moment of inertia with respect to the center of mass in local coordinates.
     inline virtual GEOM_FT Iz(void) const
       { return NAN; }
+    
+    Ray2d clip(const Line2d &) const;
+    Ray2d clip(const Ray2d &) const;
+    Segment2d clip(const Segment2d &) const;
 
     void Transform(const Trf2d &trf2d);
 

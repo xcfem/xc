@@ -76,6 +76,45 @@ HalfPlane2d HalfPlane2d::getSwap(void) const
     return retval;
   }
 
+//! @brief Return true if the point is inside the half-space.
+//! The points of the edge plane belong to the half-plane.
+bool HalfPlane2d::In(const Pos2d &p, const double &tol) const
+  {
+    bool retval= false;
+    if(lim.negativeSide(p))
+      retval= true;
+    else if(lim.In(p,tol))
+      retval= true;
+    return retval;
+  }
+
+//! @brief Return true if the line is inside the half-space.
+bool HalfPlane2d::In(const Line2d &l, const double &tol) const
+  {
+    bool retval= false;
+    if(!lim.intersects(l))
+      retval= In(l.Point());
+    return retval;
+  }
+
+//! @brief Return true if the ray is inside the half-space.
+bool HalfPlane2d::In(const Ray2d &r, const double &tol) const
+  {
+    bool retval= false;
+    if(!lim.intersects(r))
+      retval= In(r.getFromPoint());
+    return retval;
+  }
+
+//! @brief Return true if the segment is inside the half-space.
+bool HalfPlane2d::In(const Segment2d &sg, const double &tol) const
+  {
+    bool retval= false;
+    if(In(sg.getFromPoint()) && In(sg.getToPoint()))
+      retval= true;
+    return retval;
+  }
+
 GeomGroup2d HalfPlane2d::getIntersection(const Line2d &r) const
   {
     GeomGroup2d retval;
@@ -116,6 +155,93 @@ GeomGroup2d HalfPlane2d::getIntersection(const Segment2d &sg) const
       retval.push_back(Segment2d(pint,p1));
     else
       retval.push_back(Segment2d(pint,p2));
+    return retval;
+  }
+
+//! @brief Returns the part of the line that is inside the half-space.
+Ray2d HalfPlane2d::clip(const Line2d &l) const
+  {
+    Ray2d retval;
+    if(intersects(l))
+      {
+	if(In(l))
+	  std::cerr << getClassName() << "::" << __FUNCTION__
+	 	    << "; the line is inside the half-space."
+		    << " Can't do the clipping." << std::endl;
+	else
+	  {
+	    GeomObj2d::list_Pos2d lst= lim.getIntersection(l);
+	    Pos2d pt= *lst.begin();
+            retval= Ray2d(pt,l.VDir());
+	  }
+      }
+    else
+      {
+	 std::cerr << getClassName() << "::" << __FUNCTION__
+		   << "; the line is outside the half-space."
+		   << " Can't do the clipping." << std::endl;
+      }
+    return retval;
+  }
+      
+//! @brief Returns the part of the ray that is inside the half-space.
+Ray2d HalfPlane2d::clip(const Ray2d &r) const
+  {
+    Ray2d retval;
+    if(intersects(r))
+      {
+	if(In(r))
+	  std::cerr << getClassName() << "::" << __FUNCTION__
+	 	    << "; the ray is inside the half-space."
+		    << " Can't do the clipping." << std::endl;
+	else
+	  {
+            Pos2d pt= lim.getIntersection(r);
+	    Pos2d fromPoint= r.getFromPoint();
+	    if(In(fromPoint))
+	      std::cerr << getClassName() << "::" << __FUNCTION__
+		        << "; the result of the clipping is a segment."
+		        << " Can't deal with this case yet." << std::endl;
+	    else
+              retval= Ray2d(pt,r.VDir());
+	  }
+      }
+    else
+      {
+	 std::cerr << getClassName() << "::" << __FUNCTION__
+		   << "; the ray is outside the half-space."
+		   << " Can't do the clipping." << std::endl;
+      }
+    return retval;
+  }
+
+//! @brief Returns the part of the segment that is inside the half-space.
+Segment2d HalfPlane2d::clip(const Segment2d &sg) const
+  {
+    Segment2d retval;
+    if(In(sg))
+      retval= sg;
+    else
+      {
+	Pos2d p0= sg.getFromPoint();
+	Pos2d p1= sg.getToPoint();
+	if(In(p0))
+	  {
+            Pos2d pt= lim.getIntersection(sg);
+            return Segment2d(p0,pt);
+	  }
+	else if(In(p1))
+	  {
+            Pos2d pt= lim.getIntersection(sg);
+            return Segment2d(p1,pt);
+	  }
+	else
+	  {
+	    std::cerr << getClassName() << "::" << __FUNCTION__
+	              << "; the segment is outside the half-space."
+	              << " Can't do the clipping." << std::endl;
+	  }
+      }
     return retval;
   }
 
