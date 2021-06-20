@@ -330,25 +330,6 @@ void Line2d::Put(const Pos2d &p1,const Pos2d &p2)
 bool Line2d::intersects(const Line2d &r2) const
   { return do_intersect(cgr,r2.cgr); }
 
-//! @brief Return the intersection of the line with the plane
-//! defined by the equation coord_i= d.
-GeomObj2d::list_Pos2d Line2d::getIntersection(unsigned short int i, const double &d) const
-  {
-    GeomObj::list_Pos2d lp;
-    unsigned short int j=i;
-    j++;
-    if(j>2) j=1;
-    Pos2d p;
-    p.Set(i,d);
-    const Vector2d i_= VDir();
-    const Pos2d org(Point(0));
-    if (fabs(i_(i))<1.0E-12) return lp;
-    const double l= getLambda(i,d,i_);
-    p.Set(j,org(j)+l*i_(j));
-    lp.push_back(p);
-    return lp;
-  }
-
 //! @brief Return the point intersection of both lines, if doesn't exists
 //! it returns an empty list.
 GeomObj2d::list_Pos2d Line2d::getIntersection(const Line2d &r2) const
@@ -394,6 +375,59 @@ GeomObj2d::list_Pos2d Line2d::getIntersection(const Line2d &r2) const
       }
     return retval;
   }
+
+//! @brief Return verdadero if exists the intersection with the line argument.
+bool Line2d::intersects(const Ray2d &sr) const
+  { return do_intersect(ToCGAL(),sr.ToCGAL()); }
+
+//! @brief Return (if exists) the intersection with the ray argument.
+Pos2d Line2d::getIntersection(const Ray2d &sr) const
+  {
+    Pos2d retval(quiet_nan, quiet_nan,quiet_nan);
+    GeomObj2d::list_Pos2d tmp= intersection(*this, sr);
+    if(!tmp.empty())
+      retval= *tmp.begin();
+    else
+      retval.setExists(false);
+    return retval;
+  }
+
+//! @brief Return true if the intersection with the
+//! segment argument exists.
+bool Line2d::intersects(const Segment2d &sg) const
+  { return do_intersect(ToCGAL(),sg.ToCGAL()); }
+
+//! @brief Return (if exists) the intersection with the segment argument.
+Pos2d Line2d::getIntersection(const Segment2d &sg) const
+  {
+    Pos2d retval(quiet_nan, quiet_nan, quiet_nan);
+    GeomObj2d::list_Pos2d tmp= intersection(*this, sg);
+    if(!tmp.empty())
+      retval= *tmp.begin();
+    else
+      retval.setExists(false);
+    return retval;
+  }
+
+//! @brief Return the intersection of the line with the plane
+//! defined by the equation coord_i= d.
+GeomObj2d::list_Pos2d Line2d::getIntersection(unsigned short int i, const double &d) const
+  {
+    GeomObj::list_Pos2d lp;
+    unsigned short int j=i;
+    j++;
+    if(j>2) j=1;
+    Pos2d p;
+    p.Set(i,d);
+    const Vector2d i_= VDir();
+    const Pos2d org(Point(0));
+    if (fabs(i_(i))<1.0E-12) return lp;
+    const double l= getLambda(i,d,i_);
+    p.Set(j,org(j)+l*i_(j));
+    lp.push_back(p);
+    return lp;
+  }
+
 
 //! @brief Return an arbitrary point of the line.
 //! Si i==j, se cumple que Point(i) == Point(j).
@@ -455,11 +489,11 @@ bool Line2d::In(const Pos2d &p, const double &tol) const
   { return cgr.has_on(p.ToCGAL()); }
 
 //! @brief Return true if the point is on the right side of the line.
-bool Line2d::LadoDerecho(const Pos2d &p) const
+bool Line2d::negativeSide(const Pos2d &p) const
   { return cgr.has_on_negative_side(p.ToCGAL()); }
 
 //! @brief Return true if the point is on the left side of the line.
-bool Line2d::LadoIzquierdo(const Pos2d &p) const
+bool Line2d::positiveSide(const Pos2d &p) const
   { return cgr.has_on_positive_side(p.ToCGAL()); }
 
 //! @brief Return the squared distance from the point to the line.

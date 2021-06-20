@@ -107,8 +107,8 @@ class Line2d : public Linear2d
     bool EsVertical(void) const;
     bool isDegenerated(void) const;
     bool In(const Pos2d &p, const double &tol= 0.0) const;
-    bool LadoDerecho(const Pos2d &p) const;
-    bool LadoIzquierdo(const Pos2d &p) const;
+    bool negativeSide(const Pos2d &p) const;
+    bool positiveSide(const Pos2d &p) const;
 
     GEOM_FT dist2(const Pos2d &p) const;
     virtual GEOM_FT dist(const Pos2d &p) const;
@@ -120,8 +120,12 @@ class Line2d : public Linear2d
     void Put(const Pos2d &p1,const Pos2d &p2);
 
     bool intersects(const Line2d &r2) const;
-    GeomObj2d::list_Pos2d getIntersection(unsigned short int i, const double &d) const;
     GeomObj2d::list_Pos2d getIntersection(const Line2d &r2) const;
+    bool intersects(const Ray2d &p) const;
+    Pos2d getIntersection(const Ray2d &p) const;
+    bool intersects(const Segment2d &p) const;
+    Pos2d getIntersection(const Segment2d &p) const;
+    GeomObj2d::list_Pos2d getIntersection(unsigned short int i, const double &d) const;
 
     bool isParallel(const Line2d &r) const;
 
