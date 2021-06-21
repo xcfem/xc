@@ -258,7 +258,6 @@ class Connection(connected_members.ConnectionMetaData):
         :param blockProperties: labels and attributes to assign to the newly 
                                 created blocks.
         '''
-        print('XXXXXXXXXX work in progress. XXXXXXXXXX')
         retval= bte.BlockData()
         beamBlocks= super(Connection,self).getBeamShapeBlocks(self.beamLengthFactor)
         retval.extend(beamBlocks)
@@ -293,6 +292,38 @@ class Connection(connected_members.ConnectionMetaData):
             retval.extend(boltBlocks)
         return retval
 
+    def getStiffenerBlocks(self, blockProperties= None):
+        ''' Return the blocks corresponding to the faces of the beams.
+
+        :param blockProperties: labels and attributes to assign to the newly 
+                                created blocks.
+        '''
+        retval= bte.BlockData()
+        print('XXXXXXXXXX work in progress. XXXXXXXXXX')
+        missingStiffeners= ['top_column_web+', 'bottom_column_web+', 'top_column_web-', 'bottom_column_web-']
+        topPlane= None
+        bottomPlane= None
+        for key in self.column.connectedPlates:
+            plateKeys= key.split(',')
+            plate= self.column.connectedPlates[key]
+            if(plateKeys[0]=='column_web+'):
+                if('_top_' in plateKeys[1]):
+                    missingStiffeners.remove('top_column_web+')
+                    topPlane= plate.refSys.getXYPlane()
+                elif('_bottom_' in plateKeys[1]):
+                    missingStiffeners.remove('bottom_column_web+')
+                    bottomPlane= plate.refSys.getXYPlane()
+            elif(plateKeys[0]=='column_web-'):
+                if('_top_' in plateKeys[1]):
+                    missingStiffeners.remove('top_column_web-')
+                    topPlane= plate.refSys.getXYPlane()
+                elif('_bottom_' in plateKeys[1]):
+                    missingStiffeners.remove('bottom_column_web-')
+                    bottomPlane= plate.refSys.getXYPlane()
+        for stiffener in missingStiffeners:
+            print(stiffener)
+        return retval
+    
     def getBlocks(self, blockProperties= None):
         ''' Creates the block data for later meshing.
 
@@ -309,6 +340,9 @@ class Connection(connected_members.ConnectionMetaData):
         # Beam blocks.
         beamShapeBlocks= self.getBeamShapeBlocks(blockProperties= properties)
         retval.extend(beamShapeBlocks)
+        # Stiffeners.
+        stiffenerBlocks= self.getStiffenerBlocks(blockProperties= properties)
+        retval.extend(stiffenerBlocks)            
         # Diagonal blocks.
         for e in self.diagonals:
             retval.extend(self.getGussetBlocksForDiagonal(e, blockProperties= properties))

@@ -295,42 +295,27 @@ class BoltArrayBase(object):
         outputFile.write('      spacing: '+str(self.dist*1000)+' mm\n')
         self.bolt.report(outputFile)
         
+class Plate(object):
+    ''' Base class for plates. This class must be code agnostic
+        i.e. no AISC, EC3, EAE clauses here.
 
-class BoltedPlateBase(object):
-    ''' Base class for bolted plates. This class must be code agnostic
-        i.e. no AISC, EC3, EAE clauses here. There is certainly some
-        work to do in that sense (LP 09/2020).
-
-    :ivar boltArray: bolt array.
     :ivar width: plate width.
     :ivar length: plate length.
     :ivar thickness: plate thickness.
     :ivar steelType: steel type.
-    :ivar eccentricity: eccentricity of the plate with respect the center
-                        of the bolt array.
-    :ivar doublePlate: if true there is one plate on each side
-                       of the main member.
     '''
-    def __init__(self, boltArray, width= None, length= None, thickness= 10e-3, steelType= None, eccentricity= geom.Vector2d(0.0,0.0), doublePlate= False):
+    def __init__(self, width, length, thickness= 10e-3, steelType= None):
         ''' Constructor.
 
-        :param boltArray: bolt array.
-        :param width: plate width (if None it will be computed from the bolt arrangement.)
-        :param length: plate length (if None it will be computed from the bolt arrangement.)
+        :param width: plate width.
+        :param length: plate length.
         :param thickness: plate thickness.
         :param steelType: steel type.
-        :param eccentricity: eccentricity of the plate with respect the center
-                             of the bolt array.
-        :param doublePlate: if true there is one plate on each side
-                            of the main member.
         '''
         self.width= width
         self.length= length
-        self.setBoltArray(boltArray)
         self.thickness= thickness
         self.steelType= steelType
-        self.eccentricity= eccentricity
-        self.doublePlate= doublePlate
         self.refSys= None
         self.weldLines= None
         self.attachedMemberCenter= None
@@ -357,85 +342,6 @@ class BoltedPlateBase(object):
         ''' Return the plate length.'''
         return self.length
     
-    def getMinWidth(self):
-        ''' Return the minimum plate width.'''
-        return self.boltArray.getMinPlateWidth()
-
-    def getMinLength(self):
-        ''' Return the minimum plate length.'''
-        return self.boltArray.getMinPlateLength()
-
-    def checkWidth(self):
-        ''' Return true if the plate width is enough with respect to
-            the bolt arrangement.'''
-        return (self.width>self.getMinWidth())
-
-    def checkLength(self):
-        ''' Return true if the plate length is enough with respect to
-            the bolt arrangement.'''
-        return (self.length>self.getMinLength())
-    
-    def checkDimensions(self):
-        ''' Check the plate dimensions with respect to the bolt
-            arrangement.'''
-        minWidth= self.getMinWidth()
-        minLength= self.getMinLength()
-        return ((self.width>=minWidth) and (self.length>=minLength))
-        
-    def computeWidth(self):
-        ''' Compute the plate width from the bolt
-            arrangement.'''
-        minWidth= self.getMinWidth()
-        for d in self.boltArray.distances:
-            if(d>= minWidth):
-                self.width= d
-                break
-            
-    def computeLength(self):
-        ''' Assigns the bolt arrangement.'''
-        minLength= self.getMinLength()
-        for d in self.boltArray.distances:
-            if(d>= minLength):
-                self.length= d
-                break
-        
-    def computeDimensions(self):
-        ''' Compute the plate dimensions from the bolt
-            arrangement.'''
-        if(not self.width):
-            self.computeWidth()
-        else:
-            self.checkWidth()
-        if(not self.length):
-            self.computeLength()
-        else:
-            self.checkLength()
-                    
-    def setBoltArray(self, boltArray):
-        ''' Assigns the bolt arrangement.'''
-        self.boltArray= boltArray
-        ok= True
-        if(self.width and self.length):
-            ok= self.checkDimensions()
-        elif(self.width):
-            self.computeLength()
-            ok= self.checkWidth()            
-        elif(self.length):
-            self.computeWidth()
-            ok= self.checkLength()
-        else:
-            self.computeDimensions()
-        if(not ok):
-            lmsg.error('Plate too small for the bolt arrangement. Length= '+str(self.length)+', min. length: '+str(self.getMinLength()))
- 
-    def getNetWidth(self):
-        ''' Return the net width due to the bolt holes.'''
-        return self.boltArray.getNetWidth(self.width)
-
-    def getNetArea(self):
-        ''' Return the net area due to the bolt holes.'''
-        return self.getNetWidth(self.width)*self.thickness
-    
     def getGrossArea(self):
         ''' Return the gross area of the plate.'''
         return self.width*self.thickness
@@ -445,115 +351,15 @@ class BoltedPlateBase(object):
             plate in a tuple.'''
         return (self.width, self.length, self.thickness)
 
-    def checkThickness(self, Pd):
-        ''' Check plate thickness; return a number < 1 if the 
-            thickness is ok.
-
-        :param Pd: design value of the force to resist.
-        '''
-        return self.getMinThickness(Pd)/self.thickness
-    
-    def getStrengthEfficiency(self, Pd):
-        ''' Return the value of efficiency with respect
-            to the strength of the bolted plate.
-
-        :param Pd: design value of the force to resist.
-        '''
-        retval= self.boltArray.getStrengthEfficiency(Pd, doubleShear= self.doublePlate)
-        retval= max(retval, self.checkThickness(Pd))
-        return retval
-
-    def getEfficiency(self, internalForces):
-        '''Return efficiency according to section 
-
-        :param internalForces: internal forces.
-        '''
-        CF= 0.0
-        if(internalForces.N<0): # compression
-            CF= self.getStrengthEfficiency(-internalForces.N)
-        else:
-            CF= self.getStrengthEfficiency(internalForces.N)
-        if(abs(internalForces.My)>1e-3):
-            lmsg.error('bending not implemented yet.')
-        if(abs(internalForces.Mz)>1e-3):
-            lmsg.error('bending not implemented yet.')
-        if(abs(internalForces.Vy)>1e-3):
-            lmsg.error('shear not implemented yet.')
-        if(abs(internalForces.Vz)>1e-3):
-            lmsg.error('shear not implemented yet.')
-        return CF
-
-
     def __str__(self):
-        return 'width: '+ str(self.width) + ' length: '+ str(self.length) + ' thickness: '+ str(self.thickness) + ' double plate: '+ str(self.doublePlate) + ' bolts: ' + str(self.boltArray)
+        return 'width: '+ str(self.width) + ' length: '+ str(self.length) + ' thickness: '+ str(self.thickness)
     
-    def getDict(self):
-        ''' Returns a dictionary populated with the member values.'''
-        retval= {'boltArray':self.boltArray.getDict(), 'width':self.width, 'length':self.length, 'thickness':self.thickness, 'steelType':self.steelType.getDict(), 'doublePlate':self.doublePlate, 'refSys':self.refSys}
-        if(self.weldLines):
-            wlDict= dict()
-            for key in self.weldLines.keys:
-                wl= self.weldLines[key]
-                wlDict[key]= wl.getDict()
-            retval['weldLines']= wlDict
-        else:
-            retval['weldLines']= None
-        if(self.attachedMemberCenter):
-            retval['attachedMemberCenter']= attachedMemberCenter.getDict()
-        else:
-            retval['attachedMemberCenter']= None
-        return retval
-
-    def setFromDict(self,dct):
-        ''' Read member values from a dictionary.
-
-        :param dct: dictionary to read values from.
-        '''
-        self.boltArray.setFromDict(dct['boltArray'])
-        self.width= dct['width']
-        self.length= dct['length']
-        self.computeDimensions()
-        self.thickness= dct['thickness']
-        self.steelType.setFromDict(dct['steelType'])
-        self.doublePlate= dct['doublePlate']
-        tmp= dct['refSys']
-        if(tmp):
-            self.refSys= geom.Ref3d3d()
-            self.refSys.setFromDict(dct['refSys'])
-        wlDict= dct['weldLines']
-        if(wlDict):
-            self.weldLines= dict()
-            for key in wlDict:
-                wl= geom.Segment3d()
-                wl.setFromDict(wlDict[key])
-                self.weldLines[key]= wl
-        cDict= dct['attachedMemberCenter']
-        if(cDict):
-            self.attachedMemberCenter= geom.Pos3d()
-            self.attachedMemberCenter.setFromDict(cDict)
-
-    def jsonRead(self, inputFileName):
-        ''' Read object from JSON file.'''
-
-        with open(inputFileName) as json_file:
-            boltedPlateDict= json.load(json_file)
-        self.setFromDict(boltedPlateDict)
-        json_file.close()
-
-    def report(self, outputFile):
-        ''' Reports connection design values.'''
-        outputFile.write('  gusset plates:\n')
-        outputFile.write('    chamfer width: '+str(self.width*1000)+' mm\n')
-        outputFile.write('    plate thickness: '+str(self.thickness*1000)+' mm\n')
-        outputFile.write('    steel type: '+str(self.steelType.name)+'\n')
-        self.boltArray.report(outputFile)
-
     def getCoreContour2d(self):
         ''' Return the contour points of the plate core 
             in local coordinates.'''
         l2= self.length/2.0
         w2= self.width/2.0
-        return [geom.Pos2d(-l2+self.eccentricity.x,-w2+self.eccentricity.y), geom.Pos2d(l2+self.eccentricity.x,-w2+self.eccentricity.y), geom.Pos2d(l2+self.eccentricity.x,w2+self.eccentricity.y), geom.Pos2d(-l2+self.eccentricity.x,w2+self.eccentricity.y)]
+        return [geom.Pos2d(-l2,-w2), geom.Pos2d(l2,-w2), geom.Pos2d(l2,w2), geom.Pos2d(-l2,w2)]
 
     def getCoreContour3d(self):
         ''' Return the contour points of the plate core.
@@ -655,6 +461,271 @@ class BoltedPlateBase(object):
             retval.extend(weldVertices) # set contour.
         retval.append(toPoint) # close contour.            
         return retval
+
+    def getBlocks(self, blockProperties= None, loadTag= None, loadDirI= None, loadDirJ= None, loadDirK= None):
+        ''' Return the blocks that define the plate for the
+            diagonal argument.
+
+        :param blockProperties: labels and attributes to assign to the newly created blocks.
+        :param loadTag: tag of the applied loads in the internal forces file.
+        :param loadDirI: I vector of the original element. Vector that 
+                         points to the loaded side of the plate.
+        :param loadDirJ: J vector of the of the original element.
+        :param loadDirK: K vector of the of the original element.
+        '''
+        retval= bte.BlockData()
+        plateProperties= bte.BlockProperties.copyFrom(blockProperties)
+        plateProperties.appendAttribute('objType', 'plate')
+        if(loadTag):
+            plateProperties.appendAttribute('loadTag', loadTag)
+            plateProperties.appendAttribute('loadDirI', [loadDirI.x, loadDirI.y, loadDirI.z])
+            plateProperties.appendAttribute('loadDirJ', [loadDirJ.x, loadDirJ.y, loadDirJ.z])
+            plateProperties.appendAttribute('loadDirK', [loadDirK.x, loadDirK.y, loadDirK.z])
+        # Get the plate contour
+        contourVertices= self.getContour()
+        blk= retval.blockFromPoints(contourVertices, plateProperties, thickness= self.thickness, matId= self.steelType.name)
+        return retval
+    
+    def getDict(self):
+        ''' Returns a dictionary populated with the member values.'''
+        retval= {'width':self.width, 'length':self.length, 'thickness':self.thickness, 'steelType':self.steelType.getDict(), 'refSys':self.refSys}
+        if(self.weldLines):
+            wlDict= dict()
+            for key in self.weldLines.keys:
+                wl= self.weldLines[key]
+                wlDict[key]= wl.getDict()
+            retval['weldLines']= wlDict
+        else:
+            retval['weldLines']= None
+        if(self.attachedMemberCenter):
+            retval['attachedMemberCenter']= attachedMemberCenter.getDict()
+        else:
+            retval['attachedMemberCenter']= None
+        return retval
+
+    def setFromDict(self,dct):
+        ''' Read member values from a dictionary.
+
+        :param dct: dictionary to read values from.
+        '''
+        self.width= dct['width']
+        self.length= dct['length']
+        self.thickness= dct['thickness']
+        self.steelType.setFromDict(dct['steelType'])
+        tmp= dct['refSys']
+        if(tmp):
+            self.refSys= geom.Ref3d3d()
+            self.refSys.setFromDict(dct['refSys'])
+        wlDict= dct['weldLines']
+        if(wlDict):
+            self.weldLines= dict()
+            for key in wlDict:
+                wl= geom.Segment3d()
+                wl.setFromDict(wlDict[key])
+                self.weldLines[key]= wl
+        cDict= dct['attachedMemberCenter']
+        if(cDict):
+            self.attachedMemberCenter= geom.Pos3d()
+            self.attachedMemberCenter.setFromDict(cDict)
+            
+    def jsonRead(self, inputFileName):
+        ''' Read object from JSON file.'''
+
+        with open(inputFileName) as json_file:
+            plateDict= json.load(json_file)
+        self.setFromDict(plateDict)
+        json_file.close()
+
+    def jsonWrite(self, outputFileName):
+        ''' Write object to JSON file.
+
+        :param outputFileName: name of the output file.
+        '''
+        outputDict= self.getDict()
+        with open(outputFileName, 'w') as outfile:
+            json.dump(outputDict, outfile)
+        outfile.close()
+        
+class BoltedPlateBase(Plate):
+    ''' Base class for bolted plates. This class must be code agnostic
+        i.e. no AISC, EC3, EAE clauses here. There is certainly some
+        work to do in that sense (LP 09/2020).
+
+    :ivar boltArray: bolt array.
+    :ivar eccentricity: eccentricity of the plate with respect the center
+                        of the bolt array.
+    :ivar doublePlate: if true there is one plate on each side
+                       of the main member.
+    '''
+    def __init__(self, boltArray, width= None, length= None, thickness= 10e-3, steelType= None, eccentricity= geom.Vector2d(0.0,0.0), doublePlate= False):
+        ''' Constructor.
+
+        :param boltArray: bolt array.
+        :param width: plate width (if None it will be computed from the bolt arrangement.)
+        :param length: plate length (if None it will be computed from the bolt arrangement.)
+        :param thickness: plate thickness.
+        :param steelType: steel type.
+        :param eccentricity: eccentricity of the plate with respect the center
+                             of the bolt array.
+        :param doublePlate: if true there is one plate on each side
+                            of the main member.
+        '''
+        super(BoltedPlateBase,self).__init__(width= width, length= length, thickness= thickness, steelType= steelType)
+        self.setBoltArray(boltArray)
+        self.eccentricity= eccentricity
+        self.doublePlate= doublePlate
+
+    def getMinWidth(self):
+        ''' Return the minimum plate width.'''
+        return self.boltArray.getMinPlateWidth()
+
+    def getMinLength(self):
+        ''' Return the minimum plate length.'''
+        return self.boltArray.getMinPlateLength()
+
+    def checkWidth(self):
+        ''' Return true if the plate width is enough with respect to
+            the bolt arrangement.'''
+        return (self.width>self.getMinWidth())
+
+    def checkLength(self):
+        ''' Return true if the plate length is enough with respect to
+            the bolt arrangement.'''
+        return (self.length>self.getMinLength())
+    
+    def checkDimensions(self):
+        ''' Check the plate dimensions with respect to the bolt
+            arrangement.'''
+        minWidth= self.getMinWidth()
+        minLength= self.getMinLength()
+        return ((self.width>=minWidth) and (self.length>=minLength))
+        
+    def computeWidth(self):
+        ''' Compute the plate width from the bolt
+            arrangement.'''
+        minWidth= self.getMinWidth()
+        for d in self.boltArray.distances:
+            if(d>= minWidth):
+                self.width= d
+                break
+            
+    def computeLength(self):
+        ''' Assigns the bolt arrangement.'''
+        minLength= self.getMinLength()
+        for d in self.boltArray.distances:
+            if(d>= minLength):
+                self.length= d
+                break
+        
+    def computeDimensions(self):
+        ''' Compute the plate dimensions from the bolt
+            arrangement.'''
+        if(not self.width):
+            self.computeWidth()
+        else:
+            self.checkWidth()
+        if(not self.length):
+            self.computeLength()
+        else:
+            self.checkLength()
+                    
+    def setBoltArray(self, boltArray):
+        ''' Assigns the bolt arrangement.'''
+        self.boltArray= boltArray
+        ok= True
+        if(self.width and self.length):
+            ok= self.checkDimensions()
+        elif(self.width):
+            self.computeLength()
+            ok= self.checkWidth()            
+        elif(self.length):
+            self.computeWidth()
+            ok= self.checkLength()
+        else:
+            self.computeDimensions()
+        if(not ok):
+            lmsg.error('Plate too small for the bolt arrangement. Length= '+str(self.length)+', min. length: '+str(self.getMinLength()))
+ 
+    def getNetWidth(self):
+        ''' Return the net width due to the bolt holes.'''
+        return self.boltArray.getNetWidth(self.width)
+
+    def getNetArea(self):
+        ''' Return the net area due to the bolt holes.'''
+        return self.getNetWidth(self.width)*self.thickness
+    
+    def checkThickness(self, Pd):
+        ''' Check plate thickness; return a number < 1 if the 
+            thickness is ok.
+
+        :param Pd: design value of the force to resist.
+        '''
+        return self.getMinThickness(Pd)/self.thickness
+    
+    def getStrengthEfficiency(self, Pd):
+        ''' Return the value of efficiency with respect
+            to the strength of the bolted plate.
+
+        :param Pd: design value of the force to resist.
+        '''
+        retval= self.boltArray.getStrengthEfficiency(Pd, doubleShear= self.doublePlate)
+        retval= max(retval, self.checkThickness(Pd))
+        return retval
+
+    def getEfficiency(self, internalForces):
+        '''Return efficiency according to section 
+
+        :param internalForces: internal forces.
+        '''
+        CF= 0.0
+        if(internalForces.N<0): # compression
+            CF= self.getStrengthEfficiency(-internalForces.N)
+        else:
+            CF= self.getStrengthEfficiency(internalForces.N)
+        if(abs(internalForces.My)>1e-3):
+            lmsg.error('bending not implemented yet.')
+        if(abs(internalForces.Mz)>1e-3):
+            lmsg.error('bending not implemented yet.')
+        if(abs(internalForces.Vy)>1e-3):
+            lmsg.error('shear not implemented yet.')
+        if(abs(internalForces.Vz)>1e-3):
+            lmsg.error('shear not implemented yet.')
+        return CF
+
+    def __str__(self):
+        tmp= super(BoltedPlateBase,self).__str__()
+        return tmp + ' double plate: '+ str(self.doublePlate) + ' bolts: ' + str(self.boltArray)
+    
+    def getDict(self):
+        ''' Returns a dictionary populated with the member values.'''
+        retval= super(BoltedPlateBase,self).getDict()
+        retval.extend({'boltArray':self.boltArray.getDict(), 'doublePlate':self.doublePlate})
+        return retval
+
+    def setFromDict(self,dct):
+        ''' Read member values from a dictionary.
+
+        :param dct: dictionary to read values from.
+        '''
+        super(BoltedPlateBase,self).setFromDict(dct)
+        self.boltArray.setFromDict(dct['boltArray'])
+        self.computeDimensions()
+        self.doublePlate= dct['doublePlate']
+
+    def report(self, outputFile):
+        ''' Reports connection design values.'''
+        outputFile.write('  gusset plates:\n')
+        outputFile.write('    chamfer width: '+str(self.width*1000)+' mm\n')
+        outputFile.write('    plate thickness: '+str(self.thickness*1000)+' mm\n')
+        outputFile.write('    steel type: '+str(self.steelType.name)+'\n')
+        self.boltArray.report(outputFile)
+
+    def getCoreContour2d(self):
+        ''' Return the contour points of the plate core 
+            in local coordinates.'''
+        l2= self.length/2.0
+        w2= self.width/2.0
+        return [geom.Pos2d(-l2+self.eccentricity.x,-w2+self.eccentricity.y), geom.Pos2d(l2+self.eccentricity.x,-w2+self.eccentricity.y), geom.Pos2d(l2+self.eccentricity.x,w2+self.eccentricity.y), geom.Pos2d(-l2+self.eccentricity.x,w2+self.eccentricity.y)]
 
     def getBlocks(self, blockProperties= None, loadTag= None, loadDirI= None, loadDirJ= None, loadDirK= None):
         ''' Return the blocks that define the plate for the
