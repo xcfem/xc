@@ -221,6 +221,36 @@ class Connection(connected_members.ConnectionMetaData):
         :param blockProperties: labels and attributes to assign to the newly created blocks.
         '''
         return super(Connection,self).getColumnShapeBlocks(self.columnLengthFactor)
+
+    def getBoltGroupName(self, beam, plateProperties):
+        ''' Return a name for the bolt group that attaches the beam to the 
+            plate.
+
+        :param beam: beam to wich the plate is attached.
+        :param plateProperties: properties of the plate.
+        '''
+        retval= 'joint_'+plateProperties.getAttribute('jointId') # Joint id.
+        retval+= '_beam_'+str(beam.eTag) # Beam identifier.
+        retval+= '_'+plateProperties.getAttribute('objType')
+        retval+= '_'+plateProperties.getAttribute('location') # flange location.
+        return retval
+
+    def getHolesOnBeamBlocks(self, beam, holesList, beamBlocks, plateProperties):
+        ''' Return the blocks corresponding to the holes in the beam web or flanges.
+
+        :param beam: beam to wich the plate is attached.
+        :param holesList: holes that will be projected on the
+                          beam surfaces (web or flanges).
+        :param beamBlocks: surfaces corresponding to the member plates:
+                          flanges, web, etc.
+        :param plateProperties: properties of the plate.
+        '''
+        # Setup bolt properties.
+        flangeBoltGroupName= self.getBoltGroupName(beam, plateProperties)
+        boltProperties= bte.BlockProperties.copyFrom(plateProperties)
+        boltProperties.appendAttribute('boltGroup', flangeBoltGroupName)
+        ## Create holes.
+        return bolts.createHolesOnMemberBlocks(holesList, beamBlocks, boltProperties, self.getMaterialModule().__name__)
     
     def getBeamShapeBlocks(self, blockProperties= None):
         ''' Return the blocks corresponding to the faces of the beams.
@@ -238,40 +268,29 @@ class Connection(connected_members.ConnectionMetaData):
         shearTabProperties.appendAttribute('objType', 'shear_tab')
         for b in self.beams:
             # Top plate
+            flangePlateProperties.appendAttribute('location', 'top_flange')
             topPlateBlocks= b.getTopFlangeBoltedPlateBlocks(connectionOrigin= self.getOrigin(), column= self.column, boltSteel= self.getBoltSteel(), plateSteel= self.getBoltedPlatesSteel(), blockProperties= flangePlateProperties)
             retval.extend(topPlateBlocks)
-            # Holes in top flange
+            ## Holes in beam top flange
             holesList= topPlateBlocks.getHoles()
-            ## Name for bolt group
-            boltProperties= bte.BlockProperties.copyFrom(flangePlateProperties)
-            boltGroup= 'joint_'+flangePlateProperties.getAttribute('jointId') # Joint id.
-            boltGroup+= '_'+flangePlateProperties.getAttribute('objType')
-            boltGroup+= '_'+str(b.eTag) # Beam identifier.
-            topFlangeBoltGroup= boltGroup+'_top_flange' # flange identifier.
-            topFlangeBoltGroup+= '_top' # top side
-            boltProperties.appendAttribute('boltGroup', topFlangeBoltGroup)
-            ## Create holes.
-            boltBlocks= bolts.createHolesOnMemberBlocks(holesList, beamBlocks, boltProperties, self.getMaterialModule().__name__)
+            boltBlocks= self.getHolesOnBeamBlocks(b, holesList, beamBlocks, flangePlateProperties)
             retval.extend(boltBlocks)
             # Bottom plate
+            flangePlateProperties.appendAttribute('location', 'bottom_flange')
             bottomPlateBlocks= b.getBottomFlangeBoltedPlateBlocks(connectionOrigin= self.getOrigin(), column= self.column, boltSteel= self.getBoltSteel(), plateSteel= self.getBoltedPlatesSteel(), blockProperties= flangePlateProperties)
             retval.extend(bottomPlateBlocks)
-            # Holes in bottom flange
+            ## Holes in beam bottom flange
             holesList= bottomPlateBlocks.getHoles()
-            ## Name for bolt group
-            boltProperties= bte.BlockProperties.copyFrom(flangePlateProperties)
-            boltGroup= 'joint_'+flangePlateProperties.getAttribute('jointId') # Joint id.
-            boltGroup+= '_'+flangePlateProperties.getAttribute('objType')
-            boltGroup+= '_'+str(b.eTag) # Beam identifier.
-            bottomFlangeBoltGroup= boltGroup+'_bottom_flange' # flange identifier.
-            bottomFlangeBoltGroup+= '_bottom' # bottom side
-            boltProperties.appendAttribute('boltGroup', bottomFlangeBoltGroup)
-            ## Create holes.
-            boltBlocks= bolts.createHolesOnMemberBlocks(holesList, beamBlocks, boltProperties, self.getMaterialModule().__name__)
+            boltBlocks= self.getHolesOnBeamBlocks(b, holesList, beamBlocks, flangePlateProperties)
             retval.extend(boltBlocks)
             # Shear tab
+            shearTabProperties.appendAttribute('location', 'web')
             shearTabBlocks= b.getShearTabBlocks(connectionOrigin= self.getOrigin(), column= self.column, boltSteel= self.getBoltSteel(), plateSteel= self.getBoltedPlatesSteel(), blockProperties= shearTabProperties, shearEfficiency= self.beamsShearEfficiency)
             retval.extend(shearTabBlocks)    
+            ## Holes in beam web
+            holesList= shearTabBlocks.getHoles()
+            boltBlocks= self.getHolesOnBeamBlocks(b, holesList, beamBlocks, shearTabProperties)
+            retval.extend(boltBlocks)
         return retval
 
     def getBlocks(self, blockProperties= None):
@@ -393,7 +412,7 @@ class DiagonalConnection(Connection):
         ''' Return the size of the weld that connects the 
             gusset plate with horizontal plate.
         '''
-        print('Not implemented yet.')
+        lmsg.error('Not implemented yet.')
         return 0.0
 
 class BasePlateConnection(Connection):

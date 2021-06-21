@@ -478,7 +478,6 @@ class WShape(structural_steel.IShape):
         '''
         tmp= self.getWebMidPlaneContourPoints(org, extrusionVDir, weakAxisVDir)
         halfB= self.getFlangeWidth()/2.0
-        print('halfB= ', halfB)
         strongAxisVDir= extrusionVDir.cross(weakAxisVDir).normalized()
         v= -halfB*strongAxisVDir # positive side -> minus sign here
         retval= list()
@@ -542,7 +541,7 @@ class WShape(structural_steel.IShape):
         halfB= self.getFlangeWidth()/2.0
         halfH= (self.h()-self.getFlangeThickness())/2.0
         bottom= -halfH
-        strongAxisVDir= extrusionVDir.cross(weakAxisVDir)
+        strongAxisVDir= extrusionVDir.cross(weakAxisVDir).normalized()
         v= bottom*weakAxisVDir-halfB*strongAxisVDir
         p0= org+v
         p3= p0+extrusionVDir
@@ -629,7 +628,7 @@ class WShape(structural_steel.IShape):
         :param weakAxisVDir: direction of the weak axis.
         '''
         # Reference system
-        strongAxisVDir= extrusionVDir.cross(weakAxisVDir)
+        strongAxisVDir= extrusionVDir.cross(weakAxisVDir).normalized()
         ref= geom.Ref2d3d(org, strongAxisVDir, weakAxisVDir)
         # Base points (Down)
         localBottomFlange, localTopFlange= self.getMidPoints()

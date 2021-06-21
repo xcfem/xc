@@ -650,7 +650,7 @@ class BoltedPlateBase(object):
             d1= fromPoint.dist2(p1)
             p2= weldVertices[-1]
             d2= fromPoint.dist2(p2)
-            if(d1<d2): # p1 is closer.
+            if(d2<d1): # p2 is closer, so reverse the polyline.
                 weldVertices.reverse()
             retval.extend(weldVertices) # set contour.
         retval.append(toPoint) # close contour.            
