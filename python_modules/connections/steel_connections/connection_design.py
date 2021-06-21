@@ -21,7 +21,7 @@ import geom
 from connections.steel_connections import gusset_plate as gp
 from connections.steel_connections import connected_members
 from connections.steel_connections import bolts
-from connections.steel_connections import plates
+from connections.steel_connections import stiffeners
 from materials import limit_state_checking_base as lsc
 from postprocess import limit_state_data
 from inspect import getmodule
@@ -326,12 +326,21 @@ class Connection(connected_members.ConnectionMetaData):
                 plate= topPlate
             elif('bottom_' in stiffener):
                 plate= bottomPlate
-            stiffenerPlate= plates.Plate(width= None, length= None, thickness= plate.thickness, steelType= plate.steelType)
+            stiffenerPlate= stiffeners.Stiffener(width= None, length= None, thickness= plate.thickness, steelType= plate.steelType)
             positiveSide= (stiffener[-1]=='+')
             platePlane= plate.refSys.getXYPlane()
-            halfTopFlange= 
-            columnShapeBlocks= self.getColumnShapeBlocks()
-            print(stiffener, positiveSide)
+            columnHalfBottomFlangeContour= geom.Polygon3d(self.column.getHalfBottomFlangeMidPlaneContourPoints(positiveSide))
+            columnWebContour= geom.Polygon3d(self.column.getWebMidPlaneContourPoints())
+            columnHalfTopFlangeContour= geom.Polygon3d(self.column.getHalfTopFlangeMidPlaneContourPoints(positiveSide))
+            bottomFlangeLine= columnHalfBottomFlangeContour.getIntersection(platePlane)
+            webLine= columnWebContour.getIntersection(platePlane)
+            topFlangeLine= columnHalfTopFlangeContour.getIntersection(platePlane)
+            weldDict= dict()
+            weldDict['columnBottomFlangeWeld']= bottomFlangeLine
+            weldDict['columnWebWeld']= webLine
+            weldDict['columnTopFlangeWeld']= topFlangeLine
+            stiffenerPlate.setWeldLines(weldDict)
+            retval.extend(stiffenerPlate.getBlocks(blockProperties))
         return retval
     
     def getBlocks(self, blockProperties= None):

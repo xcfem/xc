@@ -185,6 +185,10 @@ class Plate(object):
         retval.append(toPoint) # close contour.            
         return retval
 
+    def getObjectTypeAttr(self):
+        ''' Return the object type attribute (used in getBlocks).'''
+        return 'plate'
+
     def getBlocks(self, blockProperties= None, loadTag= None, loadDirI= None, loadDirJ= None, loadDirK= None):
         ''' Return the blocks that define the plate for the
             diagonal argument.
@@ -198,7 +202,7 @@ class Plate(object):
         '''
         retval= bte.BlockData()
         plateProperties= bte.BlockProperties.copyFrom(blockProperties)
-        plateProperties.appendAttribute('objType', 'plate')
+        plateProperties.appendAttribute('objType', self.getObjectTypeAttr())
         if(loadTag):
             plateProperties.appendAttribute('loadTag', loadTag)
             plateProperties.appendAttribute('loadDirI', [loadDirI.x, loadDirI.y, loadDirI.z])
