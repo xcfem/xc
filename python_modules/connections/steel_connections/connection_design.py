@@ -300,7 +300,6 @@ class Connection(connected_members.ConnectionMetaData):
                                 created blocks.
         '''
         retval= bte.BlockData()
-        print('XXXXXXXXXX work in progress. XXXXXXXXXX')
         missingStiffeners= ['top_column_web+', 'bottom_column_web+', 'top_column_web-', 'bottom_column_web-']
         topPlate= None
         bottomPlate= None

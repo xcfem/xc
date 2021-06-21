@@ -483,7 +483,7 @@ class BoltedPlate(bp.BoltedPlateBase):
                     (see J3-6a and J3-6b).
     :ivar longSlottedHoles: true if the holes are of the log slotted type.
     '''
-    def __init__(self, boltArray= BoltArray(), width= None, length= None, thickness= 10e-3, steelType= A36, eccentricity= geom.Vector2d(0.0,0.0), doublePlate= False):
+    def __init__(self, boltArray= BoltArray(), width= None, length= None, thickness= 10e-3, steelType= A36, notched= False, eccentricity= geom.Vector2d(0.0,0.0), doublePlate= False):
         ''' Constructor.
 
         :param boltArray: bolt array.
@@ -491,12 +491,13 @@ class BoltedPlate(bp.BoltedPlateBase):
         :param length: plate length (if None it will be computed from the bolt arrangement.)
         :param thickness: plate thickness.
         :param steelType: steel type.
+        :param notched: if true use notchs when appropriate.
         :param eccentricity: eccentricity of the plate with respect the center
                              of the bolt array.
         :param doublePlate: if true there is one plate on each side
                             of the main member.
         '''
-        super(BoltedPlate, self).__init__(boltArray, width, length, thickness, steelType, eccentricity, doublePlate)
+        super(BoltedPlate, self).__init__(boltArray= boltArray, width= width, length= length, thickness= thickness, steelType= steelType, notched= notched, eccentricity= eccentricity, doublePlate= doublePlate)
         self.Cbearing= 2.4
         self.longSlottedHoles= False
 
@@ -606,7 +607,7 @@ class BoltedPlate(bp.BoltedPlateBase):
 
 class FinPlate(BoltedPlate):
     ''' Fin plate the AISC/ASTM way.'''
-    def __init__(self, boltArray, width= None, length= None, thickness= 10e-3, steelType= None, eccentricity= geom.Vector2d(0.0,0.0)):
+    def __init__(self, boltArray, width= None, length= None, thickness= 10e-3, steelType= None, notched= False, eccentricity= geom.Vector2d(0.0,0.0)):
         ''' Constructor.
 
         :param boltArray: bolt array.
@@ -616,8 +617,9 @@ class FinPlate(BoltedPlate):
         :param steelType: steel type.
         :param eccentricity: eccentricity of the plate with respect the center
                              of the bolt array.
+        :param notched: if true use notchs when appropriate.
         '''
-        super(FinPlate, self).__init__(boltArray, width, length, thickness, steelType, eccentricity, doublePlate= False)
+        super(FinPlate, self).__init__(boltArray= boltArray, width= width, length= length, thickness= thickness, steelType= steelType, eccentricity= eccentricity, doublePlate= False)
         
     def getFilletWeldLegSize(self):
         ''' Return the conventional leg size for two fillet
@@ -1938,7 +1940,7 @@ class ConnectedMember(connected_members.ConnectedMemberMetaData):
                                                                      # Abolhassan Astaneh, Steven M. Call and Kurt M. McMullin
         plateWidth= max(75e-3, boltArray.getMinPlateWidth())
         plateLength= boltArray.getStandardPlateLength()
-        return BoltedPlate(boltArray, width= plateWidth, length= plateLength, thickness= plateThickness, steelType= plateSteel)
+        return BoltedPlate(boltArray, width= plateWidth, length= plateLength, thickness= plateThickness, steelType= plateSteel, notched= True)
     
     def getShearTabRefSys(self, connectionOrigin, shearTab, positiveSide):
         ''' Return the position of the center for the shear tab.

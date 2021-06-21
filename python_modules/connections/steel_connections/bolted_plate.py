@@ -308,7 +308,7 @@ class BoltedPlateBase(plates.Plate):
     :ivar doublePlate: if true there is one plate on each side
                        of the main member.
     '''
-    def __init__(self, boltArray, width= None, length= None, thickness= 10e-3, steelType= None, eccentricity= geom.Vector2d(0.0,0.0), doublePlate= False):
+    def __init__(self, boltArray, width= None, length= None, thickness= 10e-3, steelType= None, notched= False, eccentricity= geom.Vector2d(0.0,0.0), doublePlate= False):
         ''' Constructor.
 
         :param boltArray: bolt array.
@@ -316,12 +316,13 @@ class BoltedPlateBase(plates.Plate):
         :param length: plate length (if None it will be computed from the bolt arrangement.)
         :param thickness: plate thickness.
         :param steelType: steel type.
+        :param notched: if true use notchs when appropriate.
         :param eccentricity: eccentricity of the plate with respect the center
                              of the bolt array.
         :param doublePlate: if true there is one plate on each side
                             of the main member.
         '''
-        super(BoltedPlateBase,self).__init__(width= width, length= length, thickness= thickness, steelType= steelType)
+        super(BoltedPlateBase,self).__init__(width= width, length= length, thickness= thickness, steelType= steelType, notched= notched)
         self.setBoltArray(boltArray)
         self.eccentricity= eccentricity
         self.doublePlate= doublePlate

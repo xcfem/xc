@@ -26,14 +26,17 @@ class Plate(object):
     :ivar length: plate length.
     :ivar thickness: plate thickness.
     :ivar steelType: steel type.
+    :ivar notched:  if true use notchs when appropriate.  
+
     '''
-    def __init__(self, width, length, thickness= 10e-3, steelType= None):
+    def __init__(self, width, length, thickness= 10e-3, steelType= None, notched= False):
         ''' Constructor.
 
         :param width: plate width.
         :param length: plate length.
         :param thickness: plate thickness.
         :param steelType: steel type.
+        :param notched: if true use notchs when appropriate.
         '''
         self.width= width
         self.length= length
@@ -42,6 +45,7 @@ class Plate(object):
         self.refSys= None
         self.weldLines= None
         self.attachedMemberCenter= None
+        self.notched= notched
 
     def setWidth(self, w):
         ''' Set the plate width.
@@ -181,7 +185,22 @@ class Plate(object):
             d2= fromPoint.dist2(p2)
             if(d2<d1): # p2 is closer, so reverse the polyline.
                 weldVertices.reverse()
-            retval.extend(weldVertices) # set contour.
+            if(self.notched): # use notches
+                limitLine= geom.Line3d(weldVertices[0],weldVertices[-1])
+                p1New= limitLine.getProjection(fromPoint)
+                p2New= limitLine.getProjection(toPoint)
+                chamfer= 20e-3
+                chamferDir1= (fromPoint-p1New).normalized()
+                chamferDir2= limitLine.getVDir().normalized()
+                p1NewA= p1New+chamfer*chamferDir1
+                p1NewB= p1New-chamfer*chamferDir2
+                retval.extend([p1NewA, p1NewB]) # chamfer
+                retval.extend(weldVertices) # welded contour.
+                p2NewB= p2New+chamfer*chamferDir2
+                p2NewA= p2New+chamfer*chamferDir1
+                retval.extend([p2NewB, p2NewA]) # chamfer      
+            else:    
+                retval.extend(weldVertices) # welded contour.
         retval.append(toPoint) # close contour.            
         return retval
 
