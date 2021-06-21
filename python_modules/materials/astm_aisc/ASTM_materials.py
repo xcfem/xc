@@ -1964,7 +1964,7 @@ class ConnectedMember(connected_members.ConnectedMemberMetaData):
             refines the "connectedTo" property of the plate by specifying the side
             of the web or the flage (top or bottom) to which the plate is attached.
 
-        :param column: column to which the beam is attached to.
+        :param column: column to which thish member is attached to.
         :param plate: plate to connect.
         '''
         weldDict= dict()
@@ -2007,10 +2007,7 @@ class ConnectedMember(connected_members.ConnectedMemberMetaData):
                 topPlateLineFromPoint= columnWebMidPlane.getIntersection(topPlateLine)
                 bottomPlateLineFromPoint= columnWebMidPlane.getIntersection(bottomPlateLine)
                 ## Clip by the virtual "closing" plate.
-                if(positiveSide):
-                    closingPlateMidPlane= column.getClosingPlatePositiveSideMidPlane()
-                else:
-                    closingPlateMidPlane= column.getClosingPlateNegativeSideMidPlane()
+                closingPlateMidPlane= column.getClosingPlateMidPlane(positiveSide)
                 topPlateLineToPoint= closingPlateMidPlane.getIntersection(topPlateLine)
                 topPlateLine= geom.Segment3d(topPlateLineFromPoint, topPlateLineToPoint)
                 bottomPlateLineToPoint= closingPlateMidPlane.getIntersection(bottomPlateLine)

@@ -21,6 +21,7 @@ import geom
 from connections.steel_connections import gusset_plate as gp
 from connections.steel_connections import connected_members
 from connections.steel_connections import bolts
+from connections.steel_connections import plates
 from materials import limit_state_checking_base as lsc
 from postprocess import limit_state_data
 from inspect import getmodule
@@ -301,27 +302,36 @@ class Connection(connected_members.ConnectionMetaData):
         retval= bte.BlockData()
         print('XXXXXXXXXX work in progress. XXXXXXXXXX')
         missingStiffeners= ['top_column_web+', 'bottom_column_web+', 'top_column_web-', 'bottom_column_web-']
-        topPlane= None
-        bottomPlane= None
+        topPlate= None
+        bottomPlate= None
         for key in self.column.connectedPlates:
             plateKeys= key.split(',')
             plate= self.column.connectedPlates[key]
             if(plateKeys[0]=='column_web+'):
                 if('_top_' in plateKeys[1]):
                     missingStiffeners.remove('top_column_web+')
-                    topPlane= plate.refSys.getXYPlane()
+                    topPlate= plate
                 elif('_bottom_' in plateKeys[1]):
                     missingStiffeners.remove('bottom_column_web+')
-                    bottomPlane= plate.refSys.getXYPlane()
+                    bottomPlate= plate
             elif(plateKeys[0]=='column_web-'):
                 if('_top_' in plateKeys[1]):
                     missingStiffeners.remove('top_column_web-')
-                    topPlane= plate.refSys.getXYPlane()
+                    topPlate= plate
                 elif('_bottom_' in plateKeys[1]):
                     missingStiffeners.remove('bottom_column_web-')
-                    bottomPlane= plate.refSys.getXYPlane()
+                    bottomPlate= plate
         for stiffener in missingStiffeners:
-            print(stiffener)
+            if('top_' in stiffener):
+                plate= topPlate
+            elif('bottom_' in stiffener):
+                plate= bottomPlate
+            stiffenerPlate= plates.Plate(width= None, length= None, thickness= plate.thickness, steelType= plate.steelType)
+            positiveSide= (stiffener[-1]=='+')
+            platePlane= plate.refSys.getXYPlane()
+            halfTopFlange= 
+            columnShapeBlocks= self.getColumnShapeBlocks()
+            print(stiffener, positiveSide)
         return retval
     
     def getBlocks(self, blockProperties= None):
