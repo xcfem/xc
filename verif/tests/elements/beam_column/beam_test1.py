@@ -10,7 +10,7 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@ciccp.es ana.ortega@ciccp.es"
 
-# Reference:  Strength of Material, Part I, Elementary Theory and Problems, pg. 98, problem 4
+# Reference:  Strength of Materials, Part I, Elementary Theory and Problems, pg. 98, problem 4
 import xc_base
 import geom
 import xc
@@ -33,13 +33,11 @@ nodes= preprocessor.getNodeHandler
 # Problem type
 modelSpace= predefined_spaces.StructuralMechanics2D(nodes)
 
-
-nodes.defaultTag= 1 # First node number.
-nod= nodes.newNodeXY(0,0)
-nod= nodes.newNodeXY(a,0.0)
-nod= nodes.newNodeXY(a+(l/2),0.0)
-nod= nodes.newNodeXY(a+l,0.0)
-nod= nodes.newNodeXY(2*a+l,0.0)
+n1= nodes.newNodeXY(0,0)
+n2= nodes.newNodeXY(a,0.0)
+n3= nodes.newNodeXY(a+(l/2),0.0)
+n4= nodes.newNodeXY(a+l,0.0)
+n5= nodes.newNodeXY(2*a+l,0.0)
 
 # Geometric transformations
 lin= modelSpace.newLinearCrdTransf("lin")
@@ -52,33 +50,33 @@ scc= typical_materials.defElasticSection2d(preprocessor, "scc",A,E,I)
 elements= preprocessor.getElementHandler
 elements.defaultTransformation= lin.name
 elements.defaultMaterial= scc.name
-#  sintaxis: beam2d_02[<tag>] 
-elements.defaultTag= 1 # Tag for next element.
-beam2d= elements.newElement("ElasticBeam2d",xc.ID([1,2]))
-beam2d.h= h
+#  syntax: beam2d_02[<tag>] 
+
+beam2dA= elements.newElement("ElasticBeam2d",xc.ID([n1.tag,n2.tag]))
+beam2dA.h= h
         
-beam2d= elements.newElement("ElasticBeam2d",xc.ID([2,3]))
-beam2d.h= h
+beam2dB= elements.newElement("ElasticBeam2d",xc.ID([n2.tag,n3.tag]))
+beam2dB.h= h
         
-beam2d= elements.newElement("ElasticBeam2d",xc.ID([3,4]))
-beam2d.h= h
+beam2dC= elements.newElement("ElasticBeam2d",xc.ID([n3.tag,n4.tag]))
+beam2dC.h= h
         
-beam2d= elements.newElement("ElasticBeam2d",xc.ID([4,5]))
-beam2d.h= h
+beam2dD= elements.newElement("ElasticBeam2d",xc.ID([n4.tag,n5.tag]))
+beam2dD.h= h
     
 # Constraints
 constraints= preprocessor.getBoundaryCondHandler
 #
-spc= constraints.newSPConstraint(2,0,0.0) # Node 2
-spc= constraints.newSPConstraint(2,1,0.0)
-spc= constraints.newSPConstraint(4,1,0.0) # Node 4
+spc= constraints.newSPConstraint(n2.tag,0,0.0) # Node 2
+spc= constraints.newSPConstraint(n2.tag,1,0.0)
+spc= constraints.newSPConstraint(n4.tag,1,0.0) # Node 4
 
 
 # Load definition.
 lp0= modelSpace.newLoadPattern(name= '0')
 
 eleLoad= lp0.newElementalLoad("beam2d_uniform_load")
-eleLoad.elementTags= xc.ID([1,4]) 
+eleLoad.elementTags= xc.ID([beam2dA.tag,beam2dD.tag]) 
 eleLoad.transComponent= -w
 # We add the load case to domain.
 modelSpace.addLoadCaseToDomain(lp0.name)
@@ -88,16 +86,13 @@ analysis= predefined_solutions.simple_static_linear(feProblem)
 result= analysis.analyze(1)
     
 
-nodes= preprocessor.getNodeHandler
-nod3= nodes.getNode(3)
-delta= nod3.getDisp[1] 
+delta= n3.getDisp[1] 
 deltaRef=.182
 
 elements= preprocessor.getElementHandler
 
-elem2= elements.getElement(2)
-elem2.getResistingForce()
-sigma= elem2.getN2/elem2.sectionProperties.A+elem2.getM2/elem2.sectionProperties.I*elem2.h/2.0
+beam2dB.getResistingForce()
+sigma= beam2dB.getN2/beam2dB.sectionProperties.A+beam2dB.getM2/beam2dB.sectionProperties.I*beam2dB.h/2.0
 sigmaRef= -11400
 
 
