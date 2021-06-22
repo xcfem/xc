@@ -42,6 +42,8 @@
 #include "preprocessor/set_mgmt/Set.h"
 #include "vtkCellType.h"
 
+#include <gmsh.h>
+
 //! @brief Constructor.
 XC::Face::Face(void)
   : CmbEdge(nullptr,0), ndivj(0) {}
@@ -508,6 +510,32 @@ boost::python::list XC::Face::getHoles(void) const
 	retval.append(pyObj);
       }
     return retval;
+  }
+
+//! @brief Create a Gmsh curve loop from its sides.
+int XC::Face::create_gmsh_loop(void) const
+  {
+    const size_t numSides= getNumberOfEdges();
+    std::vector<int> gmshTags(numSides);
+    for(size_t i= 0;i<numSides; i++)
+      {
+	const Side &side= lines[i];
+	const int gmshLineTag= side.getTag()+1; // Gmsh tags must be strictly positive.
+	gmshTags[i]= gmshLineTag;
+      }
+    const int gmshLoopTag= getTag()+1; // Gmsh tags must be strictly positive.
+    return gmsh::model::geo::addCurveLoop(gmshTags,gmshLoopTag);
+  }
+
+//! @brief Return a list of the face holes.
+std::vector<int> XC::Face::create_gmsh_loops_for_holes(void) const
+  {
+    const size_t sz= holes.size();
+    std::vector<int> retval(sz);
+    size_t count= 0;
+    for(std::deque<PolygonalFace *>::const_iterator i= holes.begin(); i!= holes.end(); i++, count++)
+      { retval[count]= (*i)->create_gmsh_loop(); }
+    return retval;    
   }
 
 //! @brief Return a pointer to the side at the position

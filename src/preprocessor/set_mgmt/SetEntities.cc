@@ -44,6 +44,7 @@
 #include "utility/geom/d2/Plane.h"
 #include "utility/geom/d3/HalfSpace3d.h"
 
+#include <gmsh.h>
 
 //! @brief Constructor.
 XC::SetEntities::SetEntities(Preprocessor *md)
@@ -383,6 +384,19 @@ void XC::SetEntities::conciliaNDivs(void)
     conciliate_divisions(surfaces, lines);
   }
 
+//! @brief Create Gmsh points from the points of this object.
+void XC::SetEntities::create_gmsh_points(void) const
+  {
+    for(lst_ptr_points::const_iterator i= points.begin();i!=points.end();i++)
+      {
+	const Pnt *pnt= *i;
+	const double elemSize= pnt->getAverageElementSize();
+	const int gmshTag= pnt->getTag()+1; // Gmsh tags must be strictly positive.
+	const Pos3d pos= pnt->GetPos();
+	gmsh::model::geo::addPoint(pos.x(), pos.y(), pos.z(), elemSize, gmshTag);
+      }
+  }
+
 //! @brief Create nodes and, where appropriate, elements on set points.
 void XC::SetEntities::point_meshing(meshing_dir dm)
   {
@@ -394,6 +408,19 @@ void XC::SetEntities::point_meshing(meshing_dir dm)
       std::clog << "done." << std::endl;
   }
 
+//! @brief Create a gmsh lines from the edges.
+void XC::SetEntities::create_gmsh_lines(void) const
+  {
+    for(lst_line_pointers::const_iterator i= lines.begin();i!=lines.end();i++)
+      {
+	const Edge *edge= *i;
+	const int gmshLineTag= edge->getTag()+1; // Gmsh tags must be strictly positive.
+	const int p1GmshTag= edge->P1()->getTag()+1;
+	const int p2GmshTag= edge->P2()->getTag()+1;
+	gmsh::model::geo::addLine(p1GmshTag, p2GmshTag, gmshLineTag);
+      }
+  }
+
 //! @brief Create nodes and, where appropriate, elements on set lines.
 void XC::SetEntities::line_meshing(meshing_dir dm)
   {
@@ -403,6 +430,27 @@ void XC::SetEntities::line_meshing(meshing_dir dm)
       (*i)->genMesh(dm);
     if(verbosity>2)
       std::clog << "done." << std::endl;
+  }
+
+//! @brief Create a gmsh lines from the edges.
+void XC::SetEntities::create_gmsh_loops(void) const
+  {
+    for(lst_surface_ptrs::const_iterator i= surfaces.begin();i!=surfaces.end();i++)
+      {
+	const Face *face= *i;
+	const size_t numSides= face->getNumberOfEdges();
+	std::vector<int> gmshTags(numSides);
+	const std::deque<Face::Side> &sides= face->getSides();
+	for(size_t i= 0;i<numSides; i++)
+	  {
+	    const Face::Side &side= sides[i];
+	    const int gmshLineTag= side.getTag()+1; // Gmsh tags must be strictly positive.
+	    gmshTags[i]= gmshLineTag;
+	  }
+	const int gmshLoopTag= face->getTag()+1; // Gmsh tags must be strictly positive.
+	gmsh::model::geo::addCurveLoop(gmshTags,gmshLoopTag);
+	face->create_gmsh_loops_for_holes();
+      }
   }
 
 //! @brief Create nodes and, where appropriate, elements on surfaces.

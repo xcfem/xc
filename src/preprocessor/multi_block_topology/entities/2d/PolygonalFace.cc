@@ -332,15 +332,14 @@ void XC::PolygonalFace::create_gmsh_points(const double &elemSize) const
 	  }
 	else
 	  std::cerr << getClassName() << "::" << __FUNCTION__
-              << "; null vertex pointer." << std::endl;
+                    << "; null vertex pointer." << std::endl;
       }
   }
 
 //! @brief Create a Gmsh curve loop from its sides.
-int XC::PolygonalFace::create_gmsh_loop(void) const
+void XC::PolygonalFace::create_gmsh_lines(void) const
   {
     const size_t numSides= getNumberOfEdges();
-    std::vector<int> gmshTags(numSides);
     for(size_t i= 0;i<numSides; i++)
       {
 	const Side &side= lines[i];
@@ -348,10 +347,9 @@ int XC::PolygonalFace::create_gmsh_loop(void) const
 	const int p1GmshTag= side.P1()->getTag()+1;
 	const int p2GmshTag= side.P2()->getTag()+1;
 	gmsh::model::geo::addLine(p1GmshTag, p2GmshTag, gmshLineTag);
-	gmshTags[i]= gmshLineTag;
       }
-    const int gmshLoopTag= getTag()+1; // Gmsh tags must be strictly positive.
-    return gmsh::model::geo::addCurveLoop(gmshTags,gmshLoopTag);
+    for(hole_const_iterator i= holes.begin(); i!= holes.end(); i++)
+      { (*i)->create_gmsh_lines(); }
   }
 
 //! @brief Create the nodes on this surface from the positions
@@ -567,6 +565,9 @@ void XC::PolygonalFace::gen_mesh_gmsh(meshing_dir dm)
     for(std::deque<PolygonalFace *>::iterator i= holes.begin(); i!= holes.end(); i++)
       { (*i)->create_gmsh_points(lc); }
 
+    // Create gmsh lines.
+    create_gmsh_lines();
+    
     // Create gmsh loops.
     const size_t num_loops= holes.size()+1;
     std::vector<int> loopTags(num_loops);
@@ -574,9 +575,10 @@ void XC::PolygonalFace::gen_mesh_gmsh(meshing_dir dm)
     size_t count= 0;
     loopTags[0]= create_gmsh_loop();
     count++;
-    //// Hole lines.
-    for(std::deque<PolygonalFace *>::iterator i= holes.begin(); i!= holes.end(); i++, count++)
-      {	loopTags[count]= (*i)->create_gmsh_loop(); }
+    //// Hole loops.
+    std::vector<int> holeTags= create_gmsh_loops_for_holes();
+    for(std::vector<int>::const_iterator i= holeTags.begin(); i!= holeTags.end(); i++, count++)
+      {	loopTags[count]= *i; }
     const int pl= gmsh::model::geo::addPlaneSurface(loopTags);
     
     gmsh::model::geo::synchronize();

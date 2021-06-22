@@ -34,6 +34,8 @@ class_<XC::Face, XC::Face *,bases<XC::CmbEdge>, boost::noncopyable >("Face", no_
   .def("setElemSize",&XC::Face::SetElemSize,"setElementSizeJ(sz, mustBeEven) set the element size on the sides of the surface; if mustBeEven is true the number of divisions in each side is forced to the next even number.")
   .def("getPlane",&XC::Face::getPlane,"Return the plane containing the face.")
   .def("getPolygon",&XC::Face::getPolygon,"Return the contour as a 3D polygon.")
+  .def("addHole", &XC::Face::addHole, "Add a hole to the face.")
+  .def("getHoles", &XC::Face::getHoles, "Return a list with the face holes in it.")
    ;
 
 class_<XC::QuadSurface, XC::QuadSurface *, bases<XC::Face>, boost::noncopyable >("QuadSurface", no_init)
@@ -45,8 +47,6 @@ class_<XC::QuadSurface, XC::QuadSurface *, bases<XC::Face>, boost::noncopyable >
    ;
 
 class_<XC::PolygonalFace, XC::PolygonalFace *, bases<XC::Face>, boost::noncopyable >("PolygonalFace", no_init)
-  .def("addHole", &XC::PolygonalFace::addHole, "Add a hole to the face.")
-  .def("getHoles", &XC::PolygonalFace::getHoles, "Return a list with the face holes in it.")
   .def("genMesh", &XC::PolygonalFace::genMesh, "Generate mesh.")
    ;
 

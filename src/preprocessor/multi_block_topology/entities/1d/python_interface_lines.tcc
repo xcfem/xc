@@ -97,11 +97,11 @@ class_<dq_sides, boost::noncopyable >("DqEdges", no_init)
   .add_property("size", &dq_sides::size)
    ;
 
-
+std::deque<XC::CmbEdge::Side> &(XC::CmbEdge::*getSidesCmbEdge)(void)= &XC::CmbEdge::getSides;
 class_<XC::CmbEdge, bases<XC::Edge>, boost::noncopyable >("CmbEdge","Compound line",no_init)
   .add_property("getNumVertices", &XC::CmbEdge::getNumberOfVertices,"Return the number of vertices.")
   .add_property("getNumEdges", &XC::CmbEdge::getNumberOfEdges,"Return the number of edges.")
-  .add_property("getSides", make_function( &XC::CmbEdge::getSides, return_internal_reference<>()),"Return the sides of the compound edge.")
+  .add_property("getSides", make_function( getSidesCmbEdge, return_internal_reference<>()),"Return the sides of the compound edge.")
   .add_property("getEdges", &XC::CmbEdge::getEdgesPy,"Return the edges of the compound edge.")
   .def("addLines",&XC::CmbEdge::addLines, return_internal_reference<>(),"Add lines to the sequence.")
   .def("addPoints",&XC::CmbEdge::addPoints, return_internal_reference<>(),"Add points to the sequence.")

@@ -94,6 +94,27 @@ void XC::Pnt::update_topology(void)
 BND3d XC::Pnt::Bnd(void) const
   { return BND3d(p,p);  }
 
+//! @brief Returnt the average of the elements sizes of the
+//! lines connected to the point.
+double XC::Pnt::getAverageElementSize(void) const
+  {
+    double retval= 0.0;
+    int count= 0;
+    if(!lines_pt.empty())
+      {
+        std::set<const Edge *>::const_iterator i= lines_pt.begin();
+        for(;i!=lines_pt.end();i++)
+          {
+            const Edge *l= *i;
+	    retval+= l->getElemSize();
+	    count++;
+          }
+      }
+    retval/= count;
+    return retval;
+  }
+
+//! @brief Return the identifiers of the connected edges.
 boost::python::list XC::Pnt::getConnectedEdgesTags(void) const
   {
     boost::python::list retval;
@@ -109,6 +130,7 @@ boost::python::list XC::Pnt::getConnectedEdgesTags(void) const
     return retval;
   }
 
+//! @brief Return the connected edges.
 boost::python::list XC::Pnt::getConnectedEdgesPy(void)
   {
     boost::python::list retval;

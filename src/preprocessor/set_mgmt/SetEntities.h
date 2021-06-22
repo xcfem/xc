@@ -114,8 +114,11 @@ class SetEntities: public PreprocessorContainer, public MovableObject
     int recvData(const Communicator &);
 
     //Mesh generation.
+    void create_gmsh_points(void) const;
     void point_meshing(meshing_dir dm);
+    void create_gmsh_lines(void) const;
     void line_meshing(meshing_dir dm);
+    void create_gmsh_loops(void) const;
     void surface_meshing(meshing_dir dm);
     void body_meshing(meshing_dir dm);
     void uniform_grid_meshing(meshing_dir dm);

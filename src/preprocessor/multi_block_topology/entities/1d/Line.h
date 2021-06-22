@@ -48,7 +48,7 @@ class Line: public LineBase
     Line(Preprocessor *m,const size_t &ndiv= 4);
     Line(const std::string &name= "",Preprocessor *m= nullptr,const size_t &ndiv= 4);
     virtual SetEstruct *getCopy(void) const;
-
+    
     // Geometry.
     double getLength(void) const;
     Pos3d getCentroid(void) const;

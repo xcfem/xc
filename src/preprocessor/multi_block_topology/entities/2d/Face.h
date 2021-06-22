@@ -46,6 +46,7 @@ class Face: public CmbEdge
   {
     friend class Edge;
     friend class Body;
+    friend class SetEntities;
     std::set<const Body *> bodies_surf; //!< Bodies that touch this surface (neighbors).
 
     void insert_body(Body *b);
@@ -67,6 +68,8 @@ class Face: public CmbEdge
     void set_ndiv_j(const size_t &);
     
     void create_line_nodes(void);
+    int create_gmsh_loop(void) const;
+    std::vector<int> create_gmsh_loops_for_holes(void) const;
   public:
     Face(void);
     Face(Preprocessor *m,const size_t &ndivI= 4, const size_t &ndivJ= 4);

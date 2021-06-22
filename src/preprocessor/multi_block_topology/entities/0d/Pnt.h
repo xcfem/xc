@@ -83,6 +83,8 @@ class Pnt: public EntMdlr
       { p= pos; }
     bool In(const GeomObj3d &, const double &tol= 0.0) const;
     bool Out(const GeomObj3d &, const double &tol= 0.0) const;
+    
+    double getAverageElementSize(void) const;
 
     Vector3d VectorPos(void) const;
 

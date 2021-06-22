@@ -147,6 +147,8 @@ class CmbEdge: public Edge
       { return lines.size(); }
     inline std::deque<Side> &getSides(void)
       { return lines; }
+    inline const std::deque<Side> &getSides(void) const
+      { return lines; }
     CmbEdge getReversed(void) const;
     virtual void reverse(void);
     bool In(const GeomObj3d &, const double &tol= 0.0) const;
