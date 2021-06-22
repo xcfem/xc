@@ -27,6 +27,7 @@
 //Face.cc
 
 #include "Face.h"
+#include "PolygonalFace.h"
 #include "utility/geom/pos_vec/Vector3d.h"
 #include "utility/geom/ref_sys/Ref2d3d.h"
 #include "utility/geom/d3/BND3d.h"
@@ -439,6 +440,121 @@ void XC::Face::SetElemSizeIJ(const double &szI,const double &szJ)
 	SetElemSize(szI);
       }
   }
+
+//! @brief Return an iterator to the hole corresponding to the argument
+//! return holes.end() if not found.
+XC::Face::hole_iterator XC::Face::findHole(PolygonalFace *pFace)
+  {
+    hole_iterator retval= holes.end();
+    for(hole_iterator i= holes.begin(); i!= holes.end(); i++)
+      if(*i==pFace)
+	{
+	  retval= i;
+	  break;
+	}
+    return retval;
+  }
+
+//! @brief Return an iterator to the hole corresponding to the argument
+//! return holes.end() if not found.
+XC::Face::hole_const_iterator XC::Face::findHole(PolygonalFace *pFace) const
+  {
+    Face *this_no_const= const_cast<Face *>(this);
+    return this_no_const->findHole(pFace);
+  }
+
+//! @brief Return a pointer to the hole corresponding to the argument
+//! return nullptr if not found.
+XC::PolygonalFace *XC::Face::findHolePtr(PolygonalFace *pFace)
+  {
+    PolygonalFace *retval= nullptr;
+    hole_iterator i= findHole(pFace);    
+    if(i!=holes.end())
+      retval= *i;
+    return retval;
+  }
+
+//! @brief Return a pointer to the hole corresponding to the argument
+//! return nullptr if not found.
+const XC::PolygonalFace *XC::Face::findHolePtr(PolygonalFace *pFace) const
+  {
+    Face *this_no_const= const_cast<Face *>(this);
+    return this_no_const->findHolePtr(pFace);
+  }
+
+//! @brief Add a hole to the face.
+//!
+//! @param pFace: hole to add.
+void XC::Face::addHole(PolygonalFace *pFace)
+  {
+    // Check if hole is already added
+    if(findHolePtr(pFace))
+      std::cerr << getClassName() << "::" << __FUNCTION__
+	        << "; hole: " << pFace->getName()
+		<< " is already added. Doing nothing."
+	        << std::endl;
+    else
+      holes.push_back(pFace);
+  }
+
+//! @brief Return a list of the face holes.
+boost::python::list XC::Face::getHoles(void) const
+  {
+    boost::python::list retval;
+    for(hole_const_iterator i= holes.begin(); i!= holes.end(); i++)
+      {
+	PolygonalFace *pFace= *i;	
+        boost::python::object pyObj(boost::ref(*pFace));
+	retval.append(pyObj);
+      }
+    return retval;
+  }
+
+//! @brief Return a pointer to the side at the position
+//! argument. If not found returns nullptr.
+//! @param pos: 3D position argument.
+std::deque<XC::Face::Side *> XC::Face::findSides(const Pos3d &pos)
+  {
+    std::deque<Side *> retval= CmbEdge::findSides(pos);
+    // Search on holes.
+    for(hole_const_iterator i= holes.begin(); i!= holes.end(); i++)
+      {
+	std::deque<Side *> tmp= (*i)->findSides(pos);
+	retval.insert(retval.end(), tmp.begin(), tmp.end());
+      }
+    return retval;
+  }
+
+//! @brief Return a pointer to the vertex at the position
+//! argument. If not found returns nullptr.
+//! @param pos: 3D position argument.
+XC::Pnt *XC::Face::findVertex(const Pos3d &pos)
+  {
+    XC::Pnt *retval= CmbEdge::findVertex(pos);
+    if(!retval)
+      {
+	 // Search on holes.
+	 for(hole_const_iterator i= holes.begin(); i!= holes.end(); i++)
+	   {
+	     retval= (*i)->findVertex(pos);
+	     if(retval)
+	       break;
+	   }
+      }
+    return retval;
+  }
+
+//! @brief Triggers node creation on the edges.
+void XC::Face::create_line_nodes(void)
+  {
+    // Create nodes on face contour.
+    CmbEdge::create_line_nodes();
+    
+    // Create nodes on holes.
+    for(hole_const_iterator i= holes.begin(); i!= holes.end(); i++)
+      (*i)->create_line_nodes();
+  }
+
 
 //! @brief Inserts the body being passed as parameter neighbors
 //! container of this surface.

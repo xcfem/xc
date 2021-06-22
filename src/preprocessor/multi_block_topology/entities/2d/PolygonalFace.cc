@@ -46,74 +46,6 @@ XC::PolygonalFace::PolygonalFace(Preprocessor *m)
 XC::SetEstruct *XC::PolygonalFace::getCopy(void) const
   { return new PolygonalFace(*this); }
 
-//! @brief Return an iterator to the hole corresponding to the argument
-//! return holes.end() if not found.
-XC::PolygonalFace::hole_iterator XC::PolygonalFace::findHole(PolygonalFace *pFace)
-  {
-    hole_iterator retval= holes.end();
-    for(hole_iterator i= holes.begin(); i!= holes.end(); i++)
-      if(*i==pFace)
-	{
-	  retval= i;
-	  break;
-	}
-    return retval;
-  }
-
-//! @brief Return an iterator to the hole corresponding to the argument
-//! return holes.end() if not found.
-XC::PolygonalFace::hole_const_iterator XC::PolygonalFace::findHole(PolygonalFace *pFace) const
-  {
-    PolygonalFace *this_no_const= const_cast<PolygonalFace *>(this);
-    return this_no_const->findHole(pFace);
-  }
-
-//! @brief Return a pointer to the hole corresponding to the argument
-//! return nullptr if not found.
-XC::PolygonalFace *XC::PolygonalFace::findHolePtr(PolygonalFace *pFace)
-  {
-    PolygonalFace *retval= nullptr;
-    hole_iterator i= findHole(pFace);    
-    if(i!=holes.end())
-      retval= *i;
-    return retval;
-  }
-
-//! @brief Return a pointer to the hole corresponding to the argument
-//! return nullptr if not found.
-const XC::PolygonalFace *XC::PolygonalFace::findHolePtr(PolygonalFace *pFace) const
-  {
-    PolygonalFace *this_no_const= const_cast<PolygonalFace *>(this);
-    return this_no_const->findHolePtr(pFace);
-  }
-
-//! @brief Add a hole to the face.
-//!
-//! @param pFace: hole to add.
-void XC::PolygonalFace::addHole(PolygonalFace *pFace)
-  {
-    // Check if hole is already added
-    if(findHolePtr(pFace))
-      std::cerr << getClassName() << "::" << __FUNCTION__
-	        << "; hole: " << pFace->getName()
-		<< " is already added. Doing nothing."
-	        << std::endl;
-    else
-      holes.push_back(pFace);
-  }
-
-//! @brief Return a list of the face holes.
-boost::python::list XC::PolygonalFace::getHoles(void) const
-  {
-    boost::python::list retval;
-    for(hole_const_iterator i= holes.begin(); i!= holes.end(); i++)
-      {
-	PolygonalFace *pFace= *i;	
-        boost::python::object pyObj(boost::ref(*pFace));
-	retval.append(pyObj);
-      }
-    return retval;
-  }
 
 //! @brief Creates and inserts the lines from the points identified
 //! by the indexes being passed as parameter.
@@ -151,17 +83,6 @@ Vector3d XC::PolygonalFace::getIVector(void) const
 //! Y axis.
 Vector3d XC::PolygonalFace::getJVector(void) const
   { return ref.getJVector(); }
-
-//! @brief Triggers node creation on the edges.
-void XC::PolygonalFace::create_line_nodes(void)
-  {
-    // Create nodes on face contour.
-    Face::create_line_nodes();
-    
-    // Create nodes on holes.
-    for(std::deque<PolygonalFace *>::const_iterator i= holes.begin(); i!= holes.end(); i++)
-      (*i)->create_line_nodes();
-  }
 
 //! @brief Creates surface nodes.
 void XC::PolygonalFace::create_nodes_from_paving(Paver &paver)
@@ -433,38 +354,6 @@ int XC::PolygonalFace::create_gmsh_loop(void) const
     return gmsh::model::geo::addCurveLoop(gmshTags,gmshLoopTag);
   }
 
-//! @brief Return a pointer to the side at the position
-//! argument. If not found returns nullptr.
-std::deque<XC::PolygonalFace::Side *> XC::PolygonalFace::findSides(const Pos3d &pos)
-  {
-    std::deque<Side *> retval= Face::findSides(pos);
-    // Search on holes.
-    for(std::deque<PolygonalFace *>::const_iterator i= holes.begin(); i!= holes.end(); i++)
-      {
-	std::deque<Side *> tmp= (*i)->findSides(pos);
-	retval.insert(retval.end(), tmp.begin(), tmp.end());
-      }
-    return retval;
-  }
-
-//! @brief Return a pointer to the vertex at the position
-//! argument. If not found returns nullptr.
-XC::Pnt *XC::PolygonalFace::findVertex(const Pos3d &pos)
-  {
-    XC::Pnt *retval= Face::findVertex(pos);
-    if(!retval)
-      {
-	 // Search on holes.
-	 for(std::deque<PolygonalFace *>::const_iterator i= holes.begin(); i!= holes.end(); i++)
-	   {
-	     retval= (*i)->findVertex(pos);
-	     if(retval)
-	       break;
-	   }
-      }
-    return retval;
-  }
-
 //! @brief Create the nodes on this surface from the positions
 //! computed by Gmsh.
 std::map<int, const XC::Node *> XC::PolygonalFace::create_nodes_from_gmsh(void)
@@ -577,7 +466,7 @@ std::map<int, const XC::Node *> XC::PolygonalFace::create_nodes_from_gmsh(void)
 	    else
 	      std::cerr << getClassName() << "::" << __FUNCTION__
 		        << "; line with tag: " << xcTag
-		        << " not found." << std::endl;	      
+		        << " not found." << std::endl;
 	  }
 	// Put nodes in the interior.
 	for(DqInteriorNodes::const_iterator i= dqInteriorNodes.begin();i!= dqInteriorNodes.end();i++)
@@ -664,7 +553,7 @@ void XC::PolygonalFace::gen_mesh_gmsh(meshing_dir dm)
     else
       gmsh::option::setNumber("General.Terminal", 0);
     
-    // We now add a new model, named "t1". If gmsh::model::add() is not called, a
+    // We now add a new model, named "gmsh_<surfaceName>". If gmsh::model::add() is not called, a
     // new default (unnamed) model will be created on the fly, if necessary.
     gmsh::model::add("gmsh_"+getName());
 

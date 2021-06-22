@@ -40,17 +40,11 @@ class Paver; // wrapper of the paving algorithm.
   
 //! @ingroup MultiBlockTopologyEnt
 //!
-//! @brief Quadrangle defined by its four vertices.
+//! @brief Polygonal face defined by an arbitrary number of vertices.
 class PolygonalFace: public Face
   {
-  public:
-    typedef std::deque<PolygonalFace *> dq_holes;
-    typedef dq_holes::iterator hole_iterator;
-    typedef dq_holes::const_iterator hole_const_iterator;
   protected:
     Ref2d3d ref; //!< local reference system.
-    dq_holes holes;
-    void create_line_nodes(void);
     int create_elements_from_quads(const std::deque<std::vector<int> > &);
     void create_nodes_from_paving(Paver &paver);
     int create_elements_from_paving(const Paver &paver);
@@ -66,15 +60,7 @@ class PolygonalFace: public Face
 
     // Surface geometry.
     void setPoints(const ID &);
-    Pnt *findVertex(const Pos3d &);
     
-    void addHole(PolygonalFace *);
-    hole_iterator findHole(PolygonalFace *);
-    hole_const_iterator findHole(PolygonalFace *) const;
-    const PolygonalFace *findHolePtr(PolygonalFace *) const;
-    PolygonalFace *findHolePtr(PolygonalFace *);
-    boost::python::list getHoles(void) const;
-    std::deque<Side *> findSides(const Pos3d &);
 
     // Surface orientation.
     Vector3d getIVector(void) const;

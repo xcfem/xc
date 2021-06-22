@@ -37,6 +37,7 @@ class Polygon3d;
 class Ref2d3d;
 namespace XC {
 class Body;
+class PolygonalFace;
 
 //! @ingroup MultiBlockTopologyEnt
 //!
@@ -50,8 +51,13 @@ class Face: public CmbEdge
     void insert_body(Body *b);
     Node *getNode(const size_t &i);
     const Node *getNode(const size_t &i) const;
+  public:
+    typedef std::deque<PolygonalFace *> dq_holes;
+    typedef dq_holes::iterator hole_iterator;
+    typedef dq_holes::const_iterator hole_const_iterator;
   protected:
     size_t ndivj; //!< number of divisions in the j axis.
+    dq_holes holes; //!< holes in this surface.
     int get_index_opposite_side(const int &) const;
     virtual const Edge *get_opposite_side(const Edge *l) const;
     Edge *get_opposite_side(const Edge *l);
@@ -59,6 +65,8 @@ class Face: public CmbEdge
     void set_ndiv_opposite_sides(const size_t &, const size_t &);
     void set_ndiv_i(const size_t &);
     void set_ndiv_j(const size_t &);
+    
+    void create_line_nodes(void);
   public:
     Face(void);
     Face(Preprocessor *m,const size_t &ndivI= 4, const size_t &ndivJ= 4);
@@ -90,11 +98,20 @@ class Face: public CmbEdge
     virtual void SetElemSizeJ(const double &sz);
     virtual void SetElemSizeIJ(const double &,const double &);
     virtual void SetElemSize(const double &sz, bool mustBeEven= true);
-    
+
+    void addHole(PolygonalFace *);
+    hole_iterator findHole(PolygonalFace *);
+    hole_const_iterator findHole(PolygonalFace *) const;
+    const PolygonalFace *findHolePtr(PolygonalFace *) const;
+    PolygonalFace *findHolePtr(PolygonalFace *);
+    boost::python::list getHoles(void) const;
+    std::deque<Side *> findSides(const Pos3d &);
+
     //! @brief Returns the number of vertices.
     size_t getNumberOfVertices(void) const
       { return getNumberOfEdges(); }
     virtual const Pnt *getVertex(const size_t &i) const;
+    Pnt *findVertex(const Pos3d &);
     Pos3d getCentroid(void) const;
     Plane getPlane(void) const;
     Polyline3d getContour(void) const;
