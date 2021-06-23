@@ -430,6 +430,15 @@ class GridModel(object):
           p.getPos.z+= vDisp[2]
         sPtMove.clear()
 
+    def moveAllPoints(self,vDisp):
+        '''Move all points in the grid to a new position
+        by pplying a 3D displacement.
+
+        :param vDisp: xc vector displacement
+        '''
+        ijkRange=IJKRange([0,0,0],[self.lastXIndex(),self.lastYIndex(),self.lastZIndex()])
+        self.movePointsRange(ijkRange,vDisp)
+
     def movePointsXYZRange(self,XYZrange,vDisp):
         '''Move points  in a 3D grid-region limited by an
         xyzRange=((xmin,ymin,zmin),(xmax,ymax,zmax))
@@ -509,6 +518,16 @@ class GridModel(object):
             p.getPos.x= xyRotCent[0]+cosTheta*(xp-xyRotCent[0])-sinTheta*(yp-xyRotCent[1])
             p.getPos.y= xyRotCent[1]+sinTheta*(xp-xyRotCent[0])+cosTheta*(yp-xyRotCent[1])
         sPtMove.clear()
+
+    def rotAllPntsZAxis(self,angle,xyRotCent):
+        '''Rotates all points in the grid around a Z axis passing by xyRotCent.
+
+        :param angle: rotation angle (degrees)
+        :param xyRotCent: coordinates [x,y] of the axis Z of rotation
+        '''
+        ijkRange=IJKRange([0,0,0],[self.lastXIndex(),self.lastYIndex(),self.lastZIndex()])
+        self.rotPntsZAxis(ijkRange,angle,xyRotCent)
+    
         
     def scaleCoorXPointsRange(self,ijkRange,xOrig,scale):
         '''Applies a scale in X with origin xOrig (fixed axis: X=xOrig) 
