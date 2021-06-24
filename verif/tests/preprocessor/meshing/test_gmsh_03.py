@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
-'''Home cooked test.'''
+'''Mesh polygonal face with holes using Gmsh. Home cooked test.'''
 
 from __future__ import division
 from __future__ import print_function
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
-__copyright__= "Copyright 2015, LCPT and AOO"
+__copyright__= "Copyright 2020, LCPT and AOO"
 __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
