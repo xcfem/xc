@@ -392,7 +392,7 @@ void XC::SetEntities::create_gmsh_points(void) const
 	const Pnt *pnt= *i;
 	const double elemSize= pnt->getAverageElementSize();
 	const int gmshTag= pnt->getTag()+1; // Gmsh tags must be strictly positive.
-	const Pos3d pos= pnt->GetPos();
+	const Pos3d pos= pnt->getPos();
 	gmsh::model::geo::addPoint(pos.x(), pos.y(), pos.z(), elemSize, gmshTag);
       }
   }
@@ -443,13 +443,17 @@ void XC::SetEntities::create_gmsh_loops(void) const
   }
 
 //! @brief Create a gmsh lines from the edges.
-void XC::SetEntities::create_gmsh_surfaces(void) const
+std::vector<int> XC::SetEntities::create_gmsh_surfaces(void) const
   {
-    for(lst_surface_ptrs::const_iterator i= surfaces.begin();i!=surfaces.end();i++)
+    const size_t numSurfaces= surfaces.size();
+    std::vector<int> retval(numSurfaces);
+    size_t count= 0;
+    for(lst_surface_ptrs::const_iterator i= surfaces.begin();i!=surfaces.end();i++, count++)
       {
 	const Face *face= *i;
-        face->create_gmsh_surface();
+        retval[count]= face->create_gmsh_surface();
       }
+    return retval;
   }
 
 //! @brief Create nodes and, where appropriate, elements on surfaces.
@@ -483,6 +487,91 @@ void XC::SetEntities::uniform_grid_meshing(meshing_dir dm)
       (*i)->genMesh(dm);
     if(verbosity>2)
       std::clog << "done." << std::endl;
+  }
+//! @brief Create the nodes from the positions computed by Gmsh.
+std::map<int, const XC::Node *> XC::SetEntities::create_nodes_from_gmsh(void)
+  {
+    std::map<int, const Node *> mapNodeTags;
+    std::vector<std::size_t> nodeTags;
+    std::vector<double> nodeCoord;
+    std::vector<double> nodeParametricCoord;
+    // Nodes on points.
+    for(lst_ptr_points::iterator i= points.begin();i!=points.end();i++)
+      {
+	Pnt *pnt= *i;
+	const int gmshTag= pnt->getTag()+1; // Gmsh tag for the point.
+	//nodeTags.clear(); nodeCoord.clear(); nodeParametricCoord.clear();
+	gmsh::model::mesh::getNodes(nodeTags, nodeCoord, nodeParametricCoord, 0, gmshTag);
+	const double x= nodeCoord[0];
+	const double y= nodeCoord[1];
+	const double z= nodeCoord[2];
+	const Pos3d gmshPos(x,y,z);
+	if(gmshPos.dist2(pnt->getPos())>1e-6)
+	  std::cerr << getClassName() << "::" << __FUNCTION__
+                    << "; error reading node for point: " << gmshTag-1
+		    << std::endl;
+	pnt->genMesh(); // Create the node.
+      }
+
+    return mapNodeTags;
+  }
+
+//! @brief Create the elements from the mesh computed by Gmsh.
+int XC::SetEntities::create_elements_from_gmsh(const std::map<int, const XC::Node *> &nodeMap)
+  {
+    int retval= 0;
+    std::cerr << getClassName() << "::" << __FUNCTION__
+              << "; not implemented yet." << std::endl;    
+    return retval;
+  }
+
+//! @brief Asks Gmsh to create the mesh.
+//!
+//! @param modelName: string identifier for the gmsh model.
+void XC::SetEntities::gen_mesh_gmsh(const std::string &modelName)
+  {
+    // Before using any functions in the C++ API, Gmsh must be initialized:
+    gmsh::initialize();
+    // By default Gmsh will not print out any messages: in order to output
+    // messages on the terminal, just set the "General.Terminal" option to 1:
+    if(verbosity>1)
+      gmsh::option::setNumber("General.Terminal", 1);
+    else
+      gmsh::option::setNumber("General.Terminal", 0);
+    
+    // We now add a new model, named "gmsh_<surfaceName>". If
+    // gmsh::model::add() is not called, a new default (unnamed) model
+    // will be created on the fly, if necessary.
+    gmsh::model::add(modelName);
+
+    // Create gmsh points.
+    create_gmsh_points();
+    // Create gmsh lines.
+    create_gmsh_lines();
+  
+    // Create gmsh loops.
+    const std::vector<int> surfaceTags= create_gmsh_surfaces();
+    
+    gmsh::model::geo::synchronize();
+
+    // To generate quadrangles instead of triangles, we can simply add
+    for(std::vector<int>::const_iterator i= surfaceTags.begin(); i!= surfaceTags.end(); i++)
+      {
+        gmsh::model::mesh::setRecombine(2, *i);
+      }
+
+    // We can then generate a 2D mesh...
+    gmsh::model::mesh::generate(2);
+    if(verbosity>1)
+      gmsh::fltk::run(); // Display mesh for debugging.
+
+    // Extract mesh data.
+    const std::map<int, const Node *> mapNodes= create_nodes_from_gmsh();
+    const int numElements= create_elements_from_gmsh(mapNodes);
+    
+    // This should be called when you are done using the Gmsh C++ API:
+    gmsh::finalize();
+
   }
 
 //!  @brief Triggers mesh generation from set components.
@@ -675,7 +764,7 @@ void XC::SetEntities::splitLinesAtIntersections(const double &tol)
     for(pnt_iterator i=points.begin();i!=points.end();i++)
       {
 	Pnt *pnt= *i;
-	const Pos3d pos= pnt->GetPos();
+	const Pos3d pos= pnt->getPos();
         std::set<const Edge *> conn= getConnectedLines(*pnt);
         const double tol2= tol*tol;
         for(lin_iterator j= lines.begin();j!=lines.end();j++)
