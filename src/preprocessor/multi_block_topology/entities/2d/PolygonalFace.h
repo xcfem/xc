@@ -45,7 +45,6 @@ class PolygonalFace: public Face
   {
   protected:
     Ref2d3d ref; //!< local reference system.
-    int create_elements_from_quads(const std::deque<std::vector<int> > &);
     void create_nodes_from_paving(Paver &paver);
     int create_elements_from_paving(const Paver &paver);
     void gen_mesh_paving(meshing_dir dm);

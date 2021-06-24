@@ -199,42 +199,6 @@ void XC::PolygonalFace::create_nodes_from_paving(Paver &paver)
 		  << "' already exist." << std::endl; 
   }
 
-//! @brief Create nodes from quad tags (i.e. [tagI, tagJ, tagK, tagL].
-int XC::PolygonalFace::create_elements_from_quads(const std::deque<std::vector<int> > &quads)
-  {
-    int retval= 0;
-    const Element *seed= getPreprocessor()->getElementHandler().get_seed_element();
-    if(seed)
-      {
-	const size_t numElements= quads.size();
-	ttzElements= ElemPtrArray3d(1,1,numElements);
-	for(size_t i= 0;i<numElements;i++)
-	  {
-	    std::vector<int> quad= quads[i];
-	    const size_t nNodes= quad.size();
-	    if(nNodes>0)
-	      {
-		ID nTags(nNodes);
-		for(size_t j= 0; j<nNodes; j++)
-		  { nTags[j]= quad[j]; }
-		Element *tmp= seed->getCopy();
-		tmp->setIdNodes(nTags);
-		ttzElements(1,1,i+1)= tmp;
-	      }
-	    else
-	      std::cerr << getClassName() << "::" << __FUNCTION__
-			<< "; empty quad at position: " << i
-			<< std::endl;
-	  }
-	add_elements_to_handler(ttzElements);
-	retval= numElements;
-      }
-    else if(verbosity>0)
-      std::clog << getClassName() << "::" << __FUNCTION__
-		<< "; seed element not set." << std::endl;
-    return retval;
-  }
-
 //! @brief Creates elements on the nodes created
 //! in create_nodes_from_paving.
 int XC::PolygonalFace::create_elements_from_paving(const Paver &paver)

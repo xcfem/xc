@@ -99,7 +99,8 @@ class SetEntities: public PreprocessorContainer, public MovableObject
     lst_line_pointers lines; //!< line set.
     lst_surface_ptrs surfaces; //!< surface set.
     lst_body_pointers bodies; //!< body set.
-    lst_ptr_uniform_grids uniform_grids; //! Uniform mesh set.
+    lst_ptr_uniform_grids uniform_grids; //!< Uniform mesh set.
+    bool useGmsh; //!< if true use Gmsh for mesh generation.
 
     friend class Set;
     void clearAll(void);
@@ -210,6 +211,8 @@ class SetEntities: public PreprocessorContainer, public MovableObject
     void Transform(const TrfGeom &trf);
 
     void conciliaNDivs(void);
+    void setUseGmsh(const bool &);
+    bool getUseGmsh(void) const;
     void genMesh(const std::string &, meshing_dir dm);
 
     virtual int sendSelf(Communicator &);

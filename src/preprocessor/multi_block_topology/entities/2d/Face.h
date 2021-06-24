@@ -67,6 +67,8 @@ class Face: public CmbEdge
     void set_ndiv_i(const size_t &);
     void set_ndiv_j(const size_t &);
     
+    std::vector<XC::Node *> create_interior_nodes(const std::vector<Pos3d> &);
+    int create_elements_from_quads(const std::deque<std::vector<int> > &);
     void create_line_nodes(void);
     int create_gmsh_loop(void) const;
     std::vector<int> create_gmsh_loops_for_holes(void) const;

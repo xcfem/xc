@@ -163,6 +163,8 @@ class Set: public SetMeshComp
     Set pickEntitiesInside(const std::string &, const GeomObj3d &, const double &tol= 0.0);
     
     void conciliaNDivs(void);
+    void setUseGmsh(const bool &);
+    bool getUseGmsh(void) const;
     void genMesh(meshing_dir dm);
 
 

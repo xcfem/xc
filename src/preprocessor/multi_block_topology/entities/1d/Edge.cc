@@ -602,12 +602,39 @@ void XC::Edge::create_nodes_on_endpoints(void)
     Node *node_p2= P2()->getNode();
     assert(node_p2);
     const size_t n_rows= ttzNodes.getNumberOfRows();
-    const size_t cols= ttzNodes.getNumberOfColumns();
-    ttzNodes(1,n_rows,cols)= node_p2; //Node of the end point.
+    const size_t n_cols= ttzNodes.getNumberOfColumns();
+    ttzNodes(1,n_rows,n_cols)= node_p2; //Node of the end point.
 
     if(verbosity>4)
       std::cerr << getClassName() << "::" << __FUNCTION__
 	        << "; created." << std::endl;
+  }
+
+//! @brief Creates interior nodes at the positions being passed as parameters.
+std::vector<XC::Node *> XC::Edge::create_interior_nodes(const std::vector<Pos3d> &positions)
+  {
+    const size_t sz= positions.size();
+    std::vector<XC::Node *> retval(sz,nullptr);
+    if(ttzNodes.Null())
+      {
+	ttzNodes= NodePtrArray3d(1,1,sz+2); //interior nodes + 2 end points.
+	if(getPreprocessor())
+	  {
+            create_nodes_on_endpoints();
+	    for(size_t i=0;i<sz;i++)
+	      retval[i]= create_node(positions[i],1,1,i+2);
+	    if(verbosity>5)
+	      std::cerr << getClassName() << "::" << __FUNCTION__
+			<< "; created " << ttzNodes.NumPtrs() << " node(s)."
+			<< std::endl;
+	  }
+      }
+    else
+      if(verbosity>2)
+	std::clog << getClassName() << "::" << __FUNCTION__
+		  << "; nodes from entity: '" << getName()
+		  << "' already exist." << std::endl;
+    return retval;
   }
 
 //! @brief Create nodes on the positions argument.
@@ -629,7 +656,6 @@ void XC::Edge::create_nodes(const Pos3dArray &positions)
             ttzNodes= NodePtrArray3d(1,n_rows,n_cols);
 
             create_nodes_on_endpoints();
-
 
             if((n_rows*n_cols)>2) //If it has intermediate nodes...
               {

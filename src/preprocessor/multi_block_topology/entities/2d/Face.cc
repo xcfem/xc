@@ -34,6 +34,7 @@
 #include "utility/geom/d1/Polyline3d.h"
 #include "utility/geom/d2/Triangle3d.h"
 #include "utility/geom/d2/Polygon3d.h"
+#include "utility/geom/pos_vec/Pos3dArray.h"
 
 #include "domain/mesh/node/Node.h"
 #include "domain/mesh/element/Element.h"
@@ -557,6 +558,8 @@ std::vector<int> XC::Face::create_gmsh_loops(void) const
     return retval;
   }
 
+//! @brief Ask Gmsh to create the surface corresponding to this
+//! face.
 int XC::Face::create_gmsh_surface(void) const
   {
     // Create gmsh loops.
@@ -564,7 +567,6 @@ int XC::Face::create_gmsh_surface(void) const
     // Create gmsh surface.
     return gmsh::model::geo::addPlaneSurface(loopTags);
   }
-
 
 //! @brief Return a pointer to the side at the position
 //! argument. If not found returns nullptr.
@@ -597,6 +599,68 @@ XC::Pnt *XC::Face::findVertex(const Pos3d &pos)
 	       break;
 	   }
       }
+    return retval;
+  }
+
+//! @brief Creates interior nodes at the positions being passed as parameters.
+std::vector<XC::Node *> XC::Face::create_interior_nodes(const std::vector<Pos3d> &positions)
+  {
+    const size_t sz= positions.size();
+    std::vector<XC::Node *> retval(sz,nullptr);
+    if(ttzNodes.Null())
+      {
+	ttzNodes= NodePtrArray3d(1,1,sz);
+	if(getPreprocessor())
+	  {
+	    for(size_t i=0;i<sz;i++)
+	      retval[i]= create_node(positions[i],1,1,i+1);
+	    if(verbosity>5)
+	      std::cerr << getClassName() << "::" << __FUNCTION__
+			<< "; created " << ttzNodes.NumPtrs() << " node(s)."
+			<< std::endl;
+	  }
+      }
+    else
+      if(verbosity>2)
+	std::clog << getClassName() << "::" << __FUNCTION__
+		  << "; nodes from entity: '" << getName()
+		  << "' already exist." << std::endl;
+    return retval;
+  }
+
+//! @brief Create nodes from quad tags (i.e. [tagI, tagJ, tagK, tagL].
+int XC::Face::create_elements_from_quads(const std::deque<std::vector<int> > &quads)
+  {
+    int retval= 0;
+    const Element *seed= getPreprocessor()->getElementHandler().get_seed_element();
+    if(seed)
+      {
+	const size_t numElements= quads.size();
+	ttzElements= ElemPtrArray3d(1,1,numElements);
+	for(size_t i= 0;i<numElements;i++)
+	  {
+	    std::vector<int> quad= quads[i];
+	    const size_t nNodes= quad.size();
+	    if(nNodes>0)
+	      {
+		ID nTags(nNodes);
+		for(size_t j= 0; j<nNodes; j++)
+		  { nTags[j]= quad[j]; }
+		Element *tmp= seed->getCopy();
+		tmp->setIdNodes(nTags);
+		ttzElements(1,1,i+1)= tmp;
+	      }
+	    else
+	      std::cerr << getClassName() << "::" << __FUNCTION__
+			<< "; empty quad at position: " << i
+			<< std::endl;
+	  }
+	add_elements_to_handler(ttzElements);
+	retval= numElements;
+      }
+    else if(verbosity>0)
+      std::clog << getClassName() << "::" << __FUNCTION__
+		<< "; seed element not set." << std::endl;
     return retval;
   }
 

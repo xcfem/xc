@@ -49,12 +49,14 @@ class Edge: public EntMdlr
   {
     friend class CmbEdge;
     friend class Face;
+    friend class SetEntities;
   private:
     size_t ndiv; //!< number of divisions
     std::set<const Face *> surfaces_line; //!< Surface neighbors (topology).
   protected:
     void insert_surf(Face *s);
     void create_nodes_on_endpoints(void);
+    std::vector<Node *> create_interior_nodes(const std::vector<Pos3d> &positions);
   public:
     Edge(Preprocessor *m,const size_t &nd= 4);
     Edge(const std::string &name= "",Preprocessor *m= nullptr,const size_t &nd= 4);
@@ -100,7 +102,7 @@ class Edge: public EntMdlr
       { return ndiv; }
     void SetElemSize(const double &sz);
     double getElemSize(void) const;
-    virtual void create_nodes(const Pos3dArray &positions);
+    virtual void create_nodes(const Pos3dArray &);
     virtual void create_nodes(void);
     virtual void genMesh(meshing_dir dm);
     virtual Node *getNode(const size_t &i1,const size_t &j,const size_t &k=1);

@@ -309,7 +309,7 @@ XC::Node *XC::EntMdlr::create_node(const Pos3d &pos,size_t i,size_t j, size_t k)
     ttzNodes(i,j,k)= retval;
     return retval;
   }
-
+  
 //! @brief Creates nodes at the positions being passed as parameters.
 void XC::EntMdlr::create_nodes(const Pos3dArray3d &positions)
   {
