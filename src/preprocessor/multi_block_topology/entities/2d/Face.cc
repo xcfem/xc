@@ -512,7 +512,7 @@ boost::python::list XC::Face::getHoles(void) const
     return retval;
   }
 
-//! @brief Create a Gmsh curve loop from its sides.
+//! @brief Create a Gmsh curve loop from the face sides.
 int XC::Face::create_gmsh_loop(void) const
   {
     const size_t numSides= getNumberOfEdges();
@@ -520,14 +520,16 @@ int XC::Face::create_gmsh_loop(void) const
     for(size_t i= 0;i<numSides; i++)
       {
 	const Side &side= lines[i];
-	const int gmshLineTag= side.getTag()+1; // Gmsh tags must be strictly positive.
+	int gmshLineTag= side.getTag()+1; // Gmsh tags must be strictly positive.
+	if(not side.isDirect()) //Change sign when needed.
+	  gmshLineTag= -gmshLineTag;
 	gmshTags[i]= gmshLineTag;
       }
     const int gmshLoopTag= getTag()+1; // Gmsh tags must be strictly positive.
     return gmsh::model::geo::addCurveLoop(gmshTags,gmshLoopTag);
   }
 
-//! @brief Return a list of the face holes.
+//! @brief Create the curve loops of the face holes.
 std::vector<int> XC::Face::create_gmsh_loops_for_holes(void) const
   {
     const size_t sz= holes.size();
@@ -537,6 +539,32 @@ std::vector<int> XC::Face::create_gmsh_loops_for_holes(void) const
       { retval[count]= (*i)->create_gmsh_loop(); }
     return retval;    
   }
+
+//! @brief Create the curve loops for the outer face and the holes.
+std::vector<int> XC::Face::create_gmsh_loops(void) const
+  {
+    const size_t num_loops= holes.size()+1;
+    std::vector<int> retval(num_loops);
+    //// Contour loop.
+    size_t count= 0;
+    retval[0]= create_gmsh_loop();
+    count++;
+    //// Hole loops.
+    std::vector<int> holeTags= create_gmsh_loops_for_holes();
+    for(std::vector<int>::const_iterator i= holeTags.begin(); i!= holeTags.end(); i++, count++)
+      {	retval[count]= *i; }
+
+    return retval;
+  }
+
+int XC::Face::create_gmsh_surface(void) const
+  {
+    // Create gmsh loops.
+    std::vector<int> loopTags= create_gmsh_loops();
+    // Create gmsh surface.
+    return gmsh::model::geo::addPlaneSurface(loopTags);
+  }
+
 
 //! @brief Return a pointer to the side at the position
 //! argument. If not found returns nullptr.

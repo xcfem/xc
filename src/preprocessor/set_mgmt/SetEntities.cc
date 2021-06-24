@@ -438,18 +438,17 @@ void XC::SetEntities::create_gmsh_loops(void) const
     for(lst_surface_ptrs::const_iterator i= surfaces.begin();i!=surfaces.end();i++)
       {
 	const Face *face= *i;
-	const size_t numSides= face->getNumberOfEdges();
-	std::vector<int> gmshTags(numSides);
-	const std::deque<Face::Side> &sides= face->getSides();
-	for(size_t i= 0;i<numSides; i++)
-	  {
-	    const Face::Side &side= sides[i];
-	    const int gmshLineTag= side.getTag()+1; // Gmsh tags must be strictly positive.
-	    gmshTags[i]= gmshLineTag;
-	  }
-	const int gmshLoopTag= face->getTag()+1; // Gmsh tags must be strictly positive.
-	gmsh::model::geo::addCurveLoop(gmshTags,gmshLoopTag);
-	face->create_gmsh_loops_for_holes();
+	face->create_gmsh_loops();
+      }
+  }
+
+//! @brief Create a gmsh lines from the edges.
+void XC::SetEntities::create_gmsh_surfaces(void) const
+  {
+    for(lst_surface_ptrs::const_iterator i= surfaces.begin();i!=surfaces.end();i++)
+      {
+	const Face *face= *i;
+        face->create_gmsh_surface();
       }
   }
 

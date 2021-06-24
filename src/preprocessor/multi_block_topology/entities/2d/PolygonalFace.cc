@@ -569,17 +569,7 @@ void XC::PolygonalFace::gen_mesh_gmsh(meshing_dir dm)
     create_gmsh_lines();
     
     // Create gmsh loops.
-    const size_t num_loops= holes.size()+1;
-    std::vector<int> loopTags(num_loops);
-    //// Contour lines.
-    size_t count= 0;
-    loopTags[0]= create_gmsh_loop();
-    count++;
-    //// Hole loops.
-    std::vector<int> holeTags= create_gmsh_loops_for_holes();
-    for(std::vector<int>::const_iterator i= holeTags.begin(); i!= holeTags.end(); i++, count++)
-      {	loopTags[count]= *i; }
-    const int pl= gmsh::model::geo::addPlaneSurface(loopTags);
+    const int pl= create_gmsh_surface();
     
     gmsh::model::geo::synchronize();
 

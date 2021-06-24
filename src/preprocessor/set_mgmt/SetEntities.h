@@ -119,6 +119,7 @@ class SetEntities: public PreprocessorContainer, public MovableObject
     void create_gmsh_lines(void) const;
     void line_meshing(meshing_dir dm);
     void create_gmsh_loops(void) const;
+    void create_gmsh_surfaces(void) const;
     void surface_meshing(meshing_dir dm);
     void body_meshing(meshing_dir dm);
     void uniform_grid_meshing(meshing_dir dm);

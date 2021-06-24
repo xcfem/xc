@@ -70,6 +70,8 @@ class Face: public CmbEdge
     void create_line_nodes(void);
     int create_gmsh_loop(void) const;
     std::vector<int> create_gmsh_loops_for_holes(void) const;
+    std::vector<int> create_gmsh_loops(void) const;
+    int create_gmsh_surface(void) const;
   public:
     Face(void);
     Face(Preprocessor *m,const size_t &ndivI= 4, const size_t &ndivJ= 4);
