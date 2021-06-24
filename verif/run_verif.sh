@@ -445,6 +445,7 @@ python tests/preprocessor/meshing/test_gmsh_04.py
 python tests/preprocessor/meshing/test_gmsh_05.py
 python tests/preprocessor/meshing/test_gmsh_06.py
 python tests/preprocessor/meshing/test_gmsh_07.py
+python tests/preprocessor/meshing/test_gmsh_08.py
 
 echo "$BLEU" "  Sets handling tests." "$NORMAL"
 python tests/preprocessor/sets/test_exist_set.py
