@@ -74,7 +74,7 @@ Pos3dArray XC::DividedLine::get_positions(void) const
 	std::vector<GEOM_FT> tmp(NDiv(),0);
         for(size_t i= 0;i<NDiv();i++)
           tmp[i]= double_to_FT(lengths[i]);
-        retval= Pos3dArray(P1()->GetPos(),P2()->GetPos(),tmp);
+        retval= Pos3dArray(P1()->getPos(),P2()->getPos(),tmp);
       }
     else
       std::cerr << getClassName() << __FUNCTION__

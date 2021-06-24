@@ -413,7 +413,7 @@ XC::Pnt *XC::EntMdlr::create_point_if_needed(const Pos3d &pos, const double &tol
     if(!points.empty()) //There is at least one point.
        {
          retval= points.getNearest(pos);
-         const double d2= dist2(pos,retval->GetPos());
+         const double d2= dist2(pos,retval->getPos());
          if(d2>tol*tol) // Create new point.
            { retval= create_point(pos); }
        }

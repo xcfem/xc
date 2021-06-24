@@ -227,19 +227,19 @@ double XC::Pnt::getSquaredDistanceTo(const Pos3d &pt) const
 //! @brief Returns true if the point lies inside the
 //! geometric object.
 bool XC::Pnt::In(const GeomObj3d &geomObj, const double &tol) const
-  { return geomObj.In(GetPos(),tol); }
+  { return geomObj.In(getPos(),tol); }
 
 //! @brief Returns true if the point lies outside the
 //! geometric object.
 bool XC::Pnt::Out(const GeomObj3d &geomObj, const double &tol) const
-  { return !geomObj.In(GetPos(),tol); }
+  { return !geomObj.In(getPos(),tol); }
 
 //! @brief Creates nodes.
 void XC::Pnt::create_nodes(void)
   {
     if(getGenMesh() && (getNumberOfNodes()==0))
       {
-        Pos3dArray tmp(1,1,GetPos());
+        Pos3dArray tmp(1,1,getPos());
         Pos3dArray3d ptos(1,tmp);
         EntMdlr::create_nodes(ptos);
       }
@@ -338,8 +338,8 @@ void XC::Pnt::Transform(const TrfGeom &trf)
 XC::Vector &XC::operator-(const Pnt &b,const Pnt &a)
   {
     static Vector retval(3);
-    const Pos3d A= a.GetPos();
-    const Pos3d B= b.GetPos();
+    const Pos3d A= a.getPos();
+    const Pos3d B= b.getPos();
     retval[0]= B.x()-A.x();
     retval[1]= B.y()-A.y();
     retval[2]= B.z()-A.z();

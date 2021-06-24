@@ -739,8 +739,8 @@ std::deque<Segment3d> XC::Edge::getSegments(void) const
       {
         for(size_t i=0;i<ns;i++)
 	  {
-	    const Pos3d &p0= getVertex(i)->GetPos();
-	    const Pos3d &p1= getVertex(i+1)->GetPos();
+	    const Pos3d &p0= getVertex(i)->getPos();
+	    const Pos3d &p1= getVertex(i+1)->getPos();
 	    Segment3d s(p0,p1);
 	    s.set_owner(this_no_const);
 	    retval[i]= s;

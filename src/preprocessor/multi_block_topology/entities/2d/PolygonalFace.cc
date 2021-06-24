@@ -327,7 +327,7 @@ void XC::PolygonalFace::create_gmsh_points(const double &elemSize) const
 	if(pnt)
 	  {
 	    const int gmshTag= pnt->getTag()+1; // Gmsh tags must be strictly positive.
-	    const Pos3d pos= pnt->GetPos();
+	    const Pos3d pos= pnt->getPos();
             gmsh::model::geo::addPoint(pos.x(), pos.y(), pos.z(), elemSize, gmshTag);
 	  }
 	else
@@ -442,9 +442,9 @@ std::map<int, const XC::Node *> XC::PolygonalFace::create_nodes_from_gmsh(void)
 		    bool interior= true;
 		    const LineBase *cl= l;
 		    const Pnt *p1= cl->P1();
-		    interior= (interior && (dist2(gmshPos,p1->GetPos())>elemSize/1e6));
+		    interior= (interior && (dist2(gmshPos,p1->getPos())>elemSize/1e6));
 		    const Pnt *p2= cl->P2();
-		    interior= (interior && (dist2(gmshPos,p2->GetPos())>elemSize/1e6));
+		    interior= (interior && (dist2(gmshPos,p2->getPos())>elemSize/1e6));
 		    if(interior) // is an interior (to the edge) node.
 		      {		    
 			 Node *nodePtr= l->getNearestNode(gmshPos);
@@ -568,7 +568,7 @@ void XC::PolygonalFace::gen_mesh_gmsh(meshing_dir dm)
     // Create gmsh lines.
     create_gmsh_lines();
     
-    // Create gmsh loops.
+    // Create gmsh surface.
     const int pl= create_gmsh_surface();
     
     gmsh::model::geo::synchronize();

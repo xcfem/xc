@@ -73,7 +73,7 @@ class Pnt: public EntMdlr
     virtual void genMesh(meshing_dir dm= dirm_i);
 
     //! @brief Returns the object position.
-    const Pos3d &GetPos(void) const
+    const Pos3d &getPos(void) const
       { return p; }
     //! @brief Returns the object position.
     Pos3d &Pos(void)

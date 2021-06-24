@@ -221,7 +221,7 @@ Pos3d XC::PntPtrArray::getCentroid(void) const
           const Pnt *ptr= operator()(j,k);
           if(ptr)
             {
-              const Pos3d &p= ptr->GetPos();
+              const Pos3d &p= ptr->getPos();
               x+= p.x();
               y+= p.y();
               z+= p.z();

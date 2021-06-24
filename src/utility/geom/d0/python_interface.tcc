@@ -23,11 +23,11 @@
 class_<Point2d, bases<GeomObj2d> >("Point2d")
   .def(init<Point2d>())
   .def(init<double, double>())
-  .def("getPos2d", &Point2d::GetPos,"Return the position of the point.")  
+  .def("getPos2d", &Point2d::getPos,"Return the position of the point.")  
   ;
 
 class_<Point3d, bases<GeomObj3d> >("Point3d")
   .def(init<Point3d>())
 .def(init<double, double, double>())
-  .def("getPos3d", &Point3d::GetPos,"Return the position of the point.")  
+  .def("getPos3d", &Point3d::getPos,"Return the position of the point.")  
   ;
