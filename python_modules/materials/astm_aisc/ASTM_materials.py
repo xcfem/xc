@@ -1969,17 +1969,7 @@ class ConnectedMember(connected_members.ConnectedMemberMetaData):
         :param column: column to which thish member is attached to.
         :param plate: plate to connect.
         '''
-        def getWeldLegSize(thickness, factor= 0.75):
-            ''' Return the leg size of the welds that connect the gusset plate
-                to the flange.
-
-            :param thickness: column member (web, flange,...) thickness.
-            :param factor: ratio between the minimum and the maximum thicknesses.
-            '''
-            minFlangeThickness= plate.getFilletMinimumLeg(thickness)
-            maxFlangeThickness= plate.getFilletMaximumLeg(thickness)
-            return minFlangeThickness+factor*(maxFlangeThickness-minFlangeThickness)
-        weldDict= dict()
+        weldDict= dict() # Weld line container.
         weldLegSize= 0.0 # Weld size.
         plateOrigin= plate.refSys.getOrg()
         platePlane= plate.refSys.getXYPlane()
@@ -2029,9 +2019,9 @@ class ConnectedMember(connected_members.ConnectedMemberMetaData):
                 weldDict['columnWebWeld']= columnWebLine
                 weldDict['bottomPlateWeld']= bottomPlateLine
                 ## Compute weld size.
-                wls1= getWeldLegSize(column.shape.getWebThickness())
-                wls2= getWeldLegSize(beamTopPlate.thickness)
-                wls3= getWeldLegSize(beamBottomPlate.thickness)
+                wls1= plate.getFilletWeldLegSize(otherThickness= column.shape.getWebThickness())
+                wls2= plate.getFilletWeldLegSize(otherThickness= beamTopPlate.thickness)
+                wls3= plate.getFilletWeldLegSize(otherThickness= beamBottomPlate.thickness)
                 weldLegSize= (wls1+wls2+wls3)/3.0
             else: # plate connected to one flange
                 columnTopFlangeLine= columnTopFlangeContour.getIntersection(platePlane)
@@ -2045,7 +2035,7 @@ class ConnectedMember(connected_members.ConnectedMemberMetaData):
                     plate.connectedTo= 'column_top_flange' 
                     weldDict['columnTopFlangeWeld']= columnTopFlangeLine
                 ## Compute weld size.
-                weldLegSize= getWeldLegSize(thickness= column.shape.getFlangeThickness())
+                weldLegSize= plate.getFilletWeldLegSize(otherThickness= column.shape.getFlangeThickness())
         else: # beam flange plate
             # Compute contours for the column flanges.
             columnTopFlangeLine= columnTopFlangeContour.getIntersection(platePlane)
@@ -2064,7 +2054,7 @@ class ConnectedMember(connected_members.ConnectedMemberMetaData):
                 weldDict['columnWebWeld']= columnWebLine
                 weldDict['columnTopFlangeWeld']= halfTopFlange
                 ## Compute weld size.
-                weldLegSize= (getWeldLegSize(column.shape.getWebThickness())+getWeldLegSize(column.shape.getFlangeThickness()))/2.0
+                weldLegSize= (plate.getFilletWeldLegSize(otherThickness= column.shape.getWebThickness())+2*plate.getFilletWeldLegSize(otherThickness= column.shape.getFlangeThickness()))/3.0
             else: # plate connected to one flange
                 dTop= columnTopFlangeLine.dist(plateOrigin)
                 dBottom= columnBottomFlangeLine.dist(plateOrigin)
@@ -2075,7 +2065,7 @@ class ConnectedMember(connected_members.ConnectedMemberMetaData):
                     plate.connectedTo= 'column_top_flange' 
                     weldDict['columnTopFlangeWeld']= columnTopFlangeLine
                 ## Compute weld size.
-                weldLegSize= getWeldLegSize(thickness= column.shape.getFlangeThickness())
+                weldLegSize= plate.getFilletWeldLegSize(otherThickness= column.shape.getFlangeThickness())
         # Update the plates connected to the column
         if(not hasattr(column,'connectedPlates')):
             column.connectedPlates= dict()

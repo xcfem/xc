@@ -334,11 +334,15 @@ class Connection(connected_members.ConnectionMetaData):
             bottomFlangeLine= columnHalfBottomFlangeContour.getIntersection(platePlane)
             webLine= columnWebContour.getIntersection(platePlane)
             topFlangeLine= columnHalfTopFlangeContour.getIntersection(platePlane)
-            weldDict= dict()
+            weldDict= dict() # Weld line container.
+            weldLegSize= 0.0 # Weld size.
             weldDict['columnBottomFlangeWeld']= bottomFlangeLine
             weldDict['columnWebWeld']= webLine
             weldDict['columnTopFlangeWeld']= topFlangeLine
+            ## Compute weld size.
+            weldLegSize= (plate.getFilletWeldLegSize(otherThickness= self.column.shape.getWebThickness())+2*plate.getFilletWeldLegSize(otherThickness= self.column.shape.getFlangeThickness()))/3.0
             stiffenerPlate.setWeldLines(weldDict)
+            stiffenerPlate.weldLegSize= weldLegSize
             retval.extend(stiffenerPlate.getBlocks(blockProperties))
         return retval
     

@@ -478,26 +478,10 @@ class BoltedPlateBase(plates.Plate):
         l2= self.length/2.0
         w2= self.width/2.0
         return [geom.Pos2d(-l2+self.eccentricity.x,-w2+self.eccentricity.y), geom.Pos2d(l2+self.eccentricity.x,-w2+self.eccentricity.y), geom.Pos2d(l2+self.eccentricity.x,w2+self.eccentricity.y), geom.Pos2d(-l2+self.eccentricity.x,w2+self.eccentricity.y)]
-
-    def getWeldBlocks(self, ownerId, blockProperties= None):
-        ''' Return the blocks representing the welds.
-
-        :param ownerId: identifier of the plate to be welded.
-        :param weldLegSize: leg size of the weld.
-        :param blockProperties: labels and attributes to assign to the 
-                                newly created blocks.
-        '''
-        retval= bte.BlockData()
-        weldProperties= bte.BlockProperties.copyFrom(blockProperties)
-        weldProperties.appendAttribute('objType', 'weld')
-        weldProperties.appendAttribute('ownerId', ownerId) # Weld owner id.
-        weldProperties.appendAttribute('legSize', self.weldLegSize) # Weld size.
-        for key in self.weldLines:
-            wl= self.weldLines[key]
-            pA= wl.getFromPoint()
-            pB= wl.getToPoint()
-            weldBlk= retval.blockFromPoints(points= [pA, pB], blockProperties= weldProperties, thickness= None)
-        return retval
+    
+    def getObjectTypeAttr(self):
+        ''' Return the object type attribute (used in getBlocks).'''
+        return 'bolted_plate'
 
     def getBlocks(self, blockProperties= None, loadTag= None, loadDirI= None, loadDirJ= None, loadDirK= None):
         ''' Return the blocks that define the plate.
@@ -511,7 +495,7 @@ class BoltedPlateBase(plates.Plate):
         '''
         retval= bte.BlockData()
         plateProperties= bte.BlockProperties.copyFrom(blockProperties)
-        plateProperties.appendAttribute('objType', 'bolted_plate')
+        plateProperties.appendAttribute('objType', self.getObjectTypeAttr())
         if(loadTag):
             plateProperties.appendAttribute('loadTag', loadTag)
             plateProperties.appendAttribute('loadDirI', [loadDirI.x, loadDirI.y, loadDirI.z])
