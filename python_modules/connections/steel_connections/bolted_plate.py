@@ -479,9 +479,28 @@ class BoltedPlateBase(plates.Plate):
         w2= self.width/2.0
         return [geom.Pos2d(-l2+self.eccentricity.x,-w2+self.eccentricity.y), geom.Pos2d(l2+self.eccentricity.x,-w2+self.eccentricity.y), geom.Pos2d(l2+self.eccentricity.x,w2+self.eccentricity.y), geom.Pos2d(-l2+self.eccentricity.x,w2+self.eccentricity.y)]
 
+    def getWeldBlocks(self, ownerId, blockProperties= None):
+        ''' Return the blocks representing the welds.
+
+        :param ownerId: identifier of the plate to be welded.
+        :param weldLegSize: leg size of the weld.
+        :param blockProperties: labels and attributes to assign to the 
+                                newly created blocks.
+        '''
+        retval= bte.BlockData()
+        weldProperties= bte.BlockProperties.copyFrom(blockProperties)
+        weldProperties.appendAttribute('objType', 'weld')
+        weldProperties.appendAttribute('ownerId', ownerId) # Weld owner id.
+        weldProperties.appendAttribute('legSize', self.weldLegSize) # Weld size.
+        for key in self.weldLines:
+            wl= self.weldLines[key]
+            pA= wl.getFromPoint()
+            pB= wl.getToPoint()
+            weldBlk= retval.blockFromPoints(points= [pA, pB], blockProperties= weldProperties, thickness= None)
+        return retval
+
     def getBlocks(self, blockProperties= None, loadTag= None, loadDirI= None, loadDirJ= None, loadDirK= None):
-        ''' Return the blocks that define the plate for the
-            diagonal argument.
+        ''' Return the blocks that define the plate.
 
         :param blockProperties: labels and attributes to assign to the newly created blocks.
         :param loadTag: tag of the applied loads in the internal forces file.
@@ -501,12 +520,16 @@ class BoltedPlateBase(plates.Plate):
         # Get the plate contour
         contourVertices= self.getContour()
         blk= retval.blockFromPoints(contourVertices, plateProperties, thickness= self.thickness, matId= self.steelType.name)
+        ownerId= 'f'+str(blk.id)
         # Get the hole blocks for the new plate
         holeProperties= bte.BlockProperties.copyFrom(blockProperties)
         holeProperties.appendAttribute('objType', 'hole')
-        holeProperties.appendAttribute('ownerId', 'f'+str(blk.id))
+        holeProperties.appendAttribute('ownerId', ownerId)
         blk.holes= self.boltArray.getHoleBlocks(self.refSys,holeProperties)
         retval.extend(blk.holes)
+        # Get the weld blocks for the new plate
+        blk.weldBlocks= self.getWeldBlocks(ownerId, blockProperties) # Get the weld blocks for the new plate
+        retval.extend(blk.weldBlocks)
         return retval
 
     def getClearDistances(self, loadDirection):

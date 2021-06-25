@@ -1969,7 +1969,18 @@ class ConnectedMember(connected_members.ConnectedMemberMetaData):
         :param column: column to which thish member is attached to.
         :param plate: plate to connect.
         '''
+        def getWeldLegSize(thickness, factor= 0.75):
+            ''' Return the leg size of the welds that connect the gusset plate
+                to the flange.
+
+            :param thickness: column member (web, flange,...) thickness.
+            :param factor: ratio between the minimum and the maximum thicknesses.
+            '''
+            minFlangeThickness= plate.getFilletMinimumLeg(thickness)
+            maxFlangeThickness= plate.getFilletMaximumLeg(thickness)
+            return minFlangeThickness+factor*(maxFlangeThickness-minFlangeThickness)
         weldDict= dict()
+        weldLegSize= 0.0 # Weld size.
         plateOrigin= plate.refSys.getOrg()
         platePlane= plate.refSys.getXYPlane()
         angle= platePlane.getAngle(column.iVector)
@@ -2017,6 +2028,11 @@ class ConnectedMember(connected_members.ConnectedMemberMetaData):
                 weldDict['topPlateWeld']= topPlateLine
                 weldDict['columnWebWeld']= columnWebLine
                 weldDict['bottomPlateWeld']= bottomPlateLine
+                ## Compute weld size.
+                wls1= getWeldLegSize(column.shape.getWebThickness())
+                wls2= getWeldLegSize(beamTopPlate.thickness)
+                wls3= getWeldLegSize(beamBottomPlate.thickness)
+                weldLegSize= (wls1+wls2+wls3)/3.0
             else: # plate connected to one flange
                 columnTopFlangeLine= columnTopFlangeContour.getIntersection(platePlane)
                 dTop= columnTopFlangeLine.dist(plateOrigin)
@@ -2028,6 +2044,8 @@ class ConnectedMember(connected_members.ConnectedMemberMetaData):
                 else: # column top flage is closer.
                     plate.connectedTo= 'column_top_flange' 
                     weldDict['columnTopFlangeWeld']= columnTopFlangeLine
+                ## Compute weld size.
+                weldLegSize= getWeldLegSize(thickness= column.shape.getFlangeThickness())
         else: # beam flange plate
             # Compute contours for the column flanges.
             columnTopFlangeLine= columnTopFlangeContour.getIntersection(platePlane)
@@ -2045,6 +2063,8 @@ class ConnectedMember(connected_members.ConnectedMemberMetaData):
                 weldDict['columnBottomFlangeWeld']= halfBottomFlange
                 weldDict['columnWebWeld']= columnWebLine
                 weldDict['columnTopFlangeWeld']= halfTopFlange
+                ## Compute weld size.
+                weldLegSize= (getWeldLegSize(column.shape.getWebThickness())+getWeldLegSize(column.shape.getFlangeThickness()))/2.0
             else: # plate connected to one flange
                 dTop= columnTopFlangeLine.dist(plateOrigin)
                 dBottom= columnBottomFlangeLine.dist(plateOrigin)
@@ -2054,12 +2074,15 @@ class ConnectedMember(connected_members.ConnectedMemberMetaData):
                 else:
                     plate.connectedTo= 'column_top_flange' 
                     weldDict['columnTopFlangeWeld']= columnTopFlangeLine
+                ## Compute weld size.
+                weldLegSize= getWeldLegSize(thickness= column.shape.getFlangeThickness())
         # Update the plates connected to the column
         if(not hasattr(column,'connectedPlates')):
             column.connectedPlates= dict()
         key= plate.connectedTo +','+plate.location
         column.connectedPlates[key]= plate
         plate.setWeldLines(weldDict)
+        plate.weldLegSize= weldLegSize
          
     def getTopFlangeBoltedPlateBlocks(self, connectionOrigin, column, boltSteel, plateSteel, blockProperties):
         ''' Return the blocks corresponding to the top flange bolted plate.
@@ -2080,7 +2103,7 @@ class ConnectedMember(connected_members.ConnectedMemberMetaData):
         ## Compute the intersection of the column axis with the flange plate
         ## midplane.
         columnCenter= beamTopFlangePlateRefSys.getXYPlane().getIntersection(column.getAxis())
-        beamTopFlangePlate.attachedMemberCenter= columnCenter        
+        beamTopFlangePlate.attachedMemberCenter= columnCenter 
         ## Set location properties of the plate.
         beamTopFlangePlate.connectedTo= self.connectedTo
         beamTopFlangePlate.location= 'beam_top_flange'
