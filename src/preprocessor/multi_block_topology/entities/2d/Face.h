@@ -57,6 +57,7 @@ class Face: public CmbEdge
     typedef dq_holes::iterator hole_iterator;
     typedef dq_holes::const_iterator hole_const_iterator;
   protected:
+    bool hole; //!< true if the face is a hole.
     size_t ndivj; //!< number of divisions in the j axis.
     dq_holes holes; //!< holes in this surface.
     int get_index_opposite_side(const int &) const;
@@ -106,6 +107,8 @@ class Face: public CmbEdge
     virtual void SetElemSizeIJ(const double &,const double &);
     virtual void SetElemSize(const double &sz, bool mustBeEven= true);
 
+    bool isHole(void) const;
+    void setHole(const bool &);
     void addHole(PolygonalFace *);
     hole_iterator findHole(PolygonalFace *);
     hole_const_iterator findHole(PolygonalFace *) const;

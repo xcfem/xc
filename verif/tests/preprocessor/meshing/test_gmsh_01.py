@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-'''Mesh polygonal face with holes using Gmsh. Home cooked test.'''
+'''Mesh polygonal face using Gmsh. Home cooked test.'''
 
 from __future__ import division
 from __future__ import print_function

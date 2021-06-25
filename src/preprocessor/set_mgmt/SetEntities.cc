@@ -500,6 +500,7 @@ void XC::SetEntities::uniform_grid_meshing(meshing_dir dm)
     if(verbosity>2)
       std::clog << "done." << std::endl;
   }
+
 //! @brief Create the nodes from the positions computed by Gmsh.
 std::map<int, const XC::Node *> XC::SetEntities::create_nodes_from_gmsh(void)
   {
@@ -555,26 +556,29 @@ std::map<int, const XC::Node *> XC::SetEntities::create_nodes_from_gmsh(void)
     for(lst_surface_ptrs::iterator i= surfaces.begin();i!=surfaces.end();i++)
       {
 	Face *face= *i;
-	const int gmshTag= face->getTag()+1; // Gmsh tag for the face.
-	gmsh::model::mesh::getNodes(nodeTags, nodeCoord, nodeParametricCoord, 2, gmshTag);
-	const size_t nNodes= nodeTags.size();
-	std::vector<Pos3d> positions(nNodes);
-	for(size_t i= 0;i<nNodes; i++)
+	if(!face->isHole())
 	  {
-	    const size_t j= i*3;
-	    const double x= nodeCoord[j];
-	    const double y= nodeCoord[j+1];
-	    const double z= nodeCoord[j+2];
-	    positions[i]= Pos3d(x,y,z);
-	    //const size_t k= i*2;
-	    //const double u= nodeParametricCoord[k];
-	    //const double v= nodeParametricCoord[k+1];
-	  }
-	std::vector<Node *> nodePtrs= face->create_interior_nodes(positions);
-	for(size_t i= 0;i<nNodes; i++) // populate node map.
-	  {
-            const size_t gmshNodeTag= nodeTags[i];
-	    mapNodeTags[gmshNodeTag]= nodePtrs[i];
+	    const int gmshTag= face->getTag()+1; // Gmsh tag for the face.
+	    gmsh::model::mesh::getNodes(nodeTags, nodeCoord, nodeParametricCoord, 2, gmshTag);
+	    const size_t nNodes= nodeTags.size();
+	    std::vector<Pos3d> positions(nNodes);
+	    for(size_t i= 0;i<nNodes; i++)
+	      {
+		const size_t j= i*3;
+		const double x= nodeCoord[j];
+		const double y= nodeCoord[j+1];
+		const double z= nodeCoord[j+2];
+		positions[i]= Pos3d(x,y,z);
+		//const size_t k= i*2;
+		//const double u= nodeParametricCoord[k];
+		//const double v= nodeParametricCoord[k+1];
+	      }
+	    std::vector<Node *> nodePtrs= face->create_interior_nodes(positions);
+	    for(size_t i= 0;i<nNodes; i++) // populate node map.
+	      {
+		const size_t gmshNodeTag= nodeTags[i];
+		mapNodeTags[gmshNodeTag]= nodePtrs[i];
+	      }
 	  }
       }
     return mapNodeTags;
@@ -593,49 +597,52 @@ int XC::SetEntities::create_elements_from_gmsh(const std::map<int, const XC::Nod
 	for(lst_surface_ptrs::iterator i= surfaces.begin();i!=surfaces.end();i++)
 	  {
 	    Face *face= *i;
-	    const int gmshTag= face->getTag()+1; // Gmsh tag for the face.
-	    gmsh::model::mesh::getElements(elementTypes, elementTags, elementNodeTags, 2, gmshTag);
-	    const size_t numTypes= elementTypes.size();
-	    std::deque<std::vector<int> > quads;
-	    for(size_t i= 0;i<numTypes;i++)
+	    if(!face->isHole())
 	      {
-		std::vector<std::size_t> eTags= elementTags[i];
-		const size_t numElemOfType= eTags.size();
-		std::string elementName= "";
-		int dim= 0;
-		int order= 0;
-		int numNodes= 0;
-		std::vector<double> localNodeCoord;
-#if GMSH_API_VERSION_MINOR < 5	    
-		gmsh::model::mesh::getElementProperties(elementTypes[i], elementName, dim, order, numNodes, localNodeCoord);
-#else
-		int numPrimaryNodes= 0;
-		gmsh::model::mesh::getElementProperties(elementTypes[i], elementName, dim, order, numNodes, localNodeCoord, numPrimaryNodes);
-#endif
-
-		if(numNodes>2) // Quads and triangles.
+	        const int gmshTag= face->getTag()+1; // Gmsh tag for the face.
+		gmsh::model::mesh::getElements(elementTypes, elementTags, elementNodeTags, 2, gmshTag);
+		const size_t numTypes= elementTypes.size();
+		std::deque<std::vector<int> > quads;
+		for(size_t i= 0;i<numTypes;i++)
 		  {
-		    if(verbosity>4)
-		      std::clog << "Creating elements of entity: '"
-				<< face->getName() << "'...";   
-		    for(size_t j= 0;j<numElemOfType;j++)
+		    std::vector<std::size_t> eTags= elementTags[i];
+		    const size_t numElemOfType= eTags.size();
+		    std::string elementName= "";
+		    int dim= 0;
+		    int order= 0;
+		    int numNodes= 0;
+		    std::vector<double> localNodeCoord;
+    #if GMSH_API_VERSION_MINOR < 5	    
+		    gmsh::model::mesh::getElementProperties(elementTypes[i], elementName, dim, order, numNodes, localNodeCoord);
+    #else
+		    int numPrimaryNodes= 0;
+		    gmsh::model::mesh::getElementProperties(elementTypes[i], elementName, dim, order, numNodes, localNodeCoord, numPrimaryNodes);
+    #endif
+
+		    if(numNodes>2) // Quads and triangles.
 		      {
-			std::vector<std::size_t> eNodeTags= elementNodeTags[i];
-			size_t k= j*numNodes;
-			std::vector<int> quad(4);
-			for(int l= 0;l<numNodes;l++)
+			if(verbosity>4)
+			  std::clog << "Creating elements of entity: '"
+				    << face->getName() << "'...";   
+			for(size_t j= 0;j<numElemOfType;j++)
 			  {
-			    const int gmshTag= eNodeTags[k+l];
-			    const Node *nPtr= nodeMap.at(gmshTag);
-			    quad[l]= nPtr->getTag();
+			    std::vector<std::size_t> eNodeTags= elementNodeTags[i];
+			    size_t k= j*numNodes;
+			    std::vector<int> quad(4);
+			    for(int l= 0;l<numNodes;l++)
+			      {
+				const int gmshTag= eNodeTags[k+l];
+				const Node *nPtr= nodeMap.at(gmshTag);
+				quad[l]= nPtr->getTag();
+			      }
+			    if(numNodes==3)
+			      quad[3]= quad[2];
+			    quads.push_back(quad);
 			  }
-			if(numNodes==3)
-			  quad[3]= quad[2];
-			quads.push_back(quad);
 		      }
 		  }
+		retval+= face->create_elements_from_quads(quads);
 	      }
-  	    retval+= face->create_elements_from_quads(quads);
 	  }
 	if(verbosity>4)
 	  std::clog << "created." << std::endl;
@@ -662,6 +669,8 @@ void XC::SetEntities::gen_mesh_gmsh(const std::string &modelName)
     // will be created on the fly, if necessary.
     gmsh::model::add(modelName);
 
+    // Make the lines and points part of the set.
+    fillDownwards();
     // Create gmsh points.
     create_gmsh_points();
     // Create gmsh lines.
@@ -675,7 +684,9 @@ void XC::SetEntities::gen_mesh_gmsh(const std::string &modelName)
     // To generate quadrangles instead of triangles, we can simply add
     for(std::vector<int>::const_iterator i= surfaceTags.begin(); i!= surfaceTags.end(); i++)
       {
-        gmsh::model::mesh::setRecombine(2, *i);
+	const int sTag= *i;
+	if(sTag>0) // surface is not a hole.
+          gmsh::model::mesh::setRecombine(2, *i);
       }
 
     // We can then generate a 2D mesh...

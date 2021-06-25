@@ -47,14 +47,14 @@
 
 //! @brief Constructor.
 XC::Face::Face(void)
-  : CmbEdge(nullptr,0), ndivj(0) {}
+  : CmbEdge(nullptr,0), hole(false), ndivj(0) {}
 
 //! @brief Constructor.
 //!
 //! @param ndivI: number of divisions for direction I.
 //! @param ndivJ: number of divisions for direction J.
 XC::Face::Face(Preprocessor *m,const size_t &ndivI, const size_t &ndivJ)
-  : CmbEdge(m,ndivI), ndivj(ndivJ) {}
+  : CmbEdge(m,ndivI), hole(false), ndivj(ndivJ) {}
 
 //! @brief Constructor.
 //! @param name: Object identifier.
@@ -62,7 +62,7 @@ XC::Face::Face(Preprocessor *m,const size_t &ndivI, const size_t &ndivJ)
 //! @param ndivI: number of divisions for direction I.
 //! @param ndivJ: number of divisions for direction J.
 XC::Face::Face(const std::string &name,Preprocessor *m,const size_t &ndivI, const size_t &ndivJ)
-  : CmbEdge(name,m,ndivI), ndivj(ndivJ) {}
+  : CmbEdge(name,m,ndivI), hole(false), ndivj(ndivJ) {}
 
 //! @brief Comparison operator.
 bool XC::Face::operator==(const Face &other) const
@@ -73,6 +73,8 @@ bool XC::Face::operator==(const Face &other) const
     else
       {
         retval= CmbEdge::operator==(other);
+	if(retval)
+	  retval= (hole==other.hole);
         if(retval)
           retval= (ndivj==other.ndivj);
        }
@@ -485,6 +487,14 @@ const XC::PolygonalFace *XC::Face::findHolePtr(PolygonalFace *pFace) const
     return this_no_const->findHolePtr(pFace);
   }
 
+//! @brief Return true if the face corresponds to a hole.
+bool XC::Face::isHole(void) const
+  { return hole; }
+
+//! @brief Return true if the face corresponds to a hole.
+void XC::Face::setHole(const bool &b)
+  { hole= b; }
+
 //! @brief Add a hole to the face.
 //!
 //! @param pFace: hole to add.
@@ -497,7 +507,10 @@ void XC::Face::addHole(PolygonalFace *pFace)
 		<< " is already added. Doing nothing."
 	        << std::endl;
     else
-      holes.push_back(pFace);
+      {
+	pFace->setHole(true);
+        holes.push_back(pFace);
+      }
   }
 
 //! @brief Return a list of the face holes.
@@ -517,17 +530,18 @@ boost::python::list XC::Face::getHoles(void) const
 int XC::Face::create_gmsh_loop(void) const
   {
     const size_t numSides= getNumberOfEdges();
-    std::vector<int> gmshTags(numSides);
+    std::vector<int> gmshContourTags(numSides);
     for(size_t i= 0;i<numSides; i++)
       {
 	const Side &side= lines[i];
 	int gmshLineTag= side.getTag()+1; // Gmsh tags must be strictly positive.
 	if(not side.isDirect()) //Change sign when needed.
 	  gmshLineTag= -gmshLineTag;
-	gmshTags[i]= gmshLineTag;
+	gmshContourTags[i]= gmshLineTag;
       }
     const int gmshLoopTag= getTag()+1; // Gmsh tags must be strictly positive.
-    return gmsh::model::geo::addCurveLoop(gmshTags,gmshLoopTag);
+    int retval= gmsh::model::geo::addCurveLoop(gmshContourTags,gmshLoopTag);
+    return retval;
   }
 
 //! @brief Create the curve loops of the face holes.
@@ -546,15 +560,14 @@ std::vector<int> XC::Face::create_gmsh_loops(void) const
   {
     const size_t num_loops= holes.size()+1;
     std::vector<int> retval(num_loops);
-    //// Contour loop.
     size_t count= 0;
-    retval[0]= create_gmsh_loop();
+    //// Contour loop.
+    retval[count]= create_gmsh_loop();
     count++;
     //// Hole loops.
     std::vector<int> holeTags= create_gmsh_loops_for_holes();
     for(std::vector<int>::const_iterator i= holeTags.begin(); i!= holeTags.end(); i++, count++)
       {	retval[count]= *i; }
-
     return retval;
   }
 
@@ -562,10 +575,16 @@ std::vector<int> XC::Face::create_gmsh_loops(void) const
 //! face.
 int XC::Face::create_gmsh_surface(void) const
   {
-    // Create gmsh loops.
-    std::vector<int> loopTags= create_gmsh_loops();
-    // Create gmsh surface.
-    return gmsh::model::geo::addPlaneSurface(loopTags);
+    int retval= -1;
+    if(!isHole())
+      {
+	// Create gmsh loops.
+	std::vector<int> loopTags= create_gmsh_loops();
+	// Create gmsh surface.
+	const int gmshTag= getTag()+1;
+	retval= gmsh::model::geo::addPlaneSurface(loopTags, gmshTag);
+      }
+    return retval;
   }
 
 //! @brief Return a pointer to the side at the position
