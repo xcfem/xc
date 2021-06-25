@@ -51,8 +51,6 @@ def createTemporarySet(setsToMesh):
                 retval.getSurfaces.append(s)
         retval.fillDownwards()
     return retval
-    
-    
             
 def genRegularMesh(setsToMesh, xc_materials, seedElemHandler):
     ''' Generate mesh for the plates in the argument.
