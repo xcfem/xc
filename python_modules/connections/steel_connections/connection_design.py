@@ -221,7 +221,7 @@ class Connection(connected_members.ConnectionMetaData):
 
         :param blockProperties: labels and attributes to assign to the newly created blocks.
         '''
-        return super(Connection,self).getColumnShapeBlocks(self.columnLengthFactor)
+        return super(Connection,self).getColumnShapeBlocks(self.columnLengthFactor, blockProperties= blockProperties)
 
     def getBoltGroupName(self, beam, plateProperties):
         ''' Return a name for the bolt group that attaches the beam to the 

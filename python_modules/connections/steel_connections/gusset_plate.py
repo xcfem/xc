@@ -169,7 +169,7 @@ class GussetPlate(object):
     def getWeldBlocks(self, ownerId, kPointIds, verticalWeldLegSize, horizontalWeldLegSize, blockProperties= None):
         ''' Return the blocks representing the welds.
 
-        :param ownerId: identifier of the face with the welds.
+        :param ownerId: identifier of the face to be welded.
         :param kPointIds: identifiers of the points at weld ends.
         :param verticalWeldLegSize: leg size for the vertical welds.
         :param horizontalWeldLegSize: leg size for the horizontal welds.
