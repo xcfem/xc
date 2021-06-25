@@ -15,16 +15,21 @@ import geom
 import xc
 from model import predefined_spaces
 from materials import typical_materials
-#from postprocess import output_handler
+# from postprocess import output_handler
 
-A= 10.0
+A= 1.0
+B= 1.0
 
-pos1= geom.Pos3d(0,0,0)
-pos2= geom.Pos3d(A,0,0)
-pos3= geom.Pos3d(A,A,0)
-pos4= geom.Pos3d(0,A,0)
+pos1= geom.Pos3d(0, 0, 0)
+pos2= geom.Pos3d(A, 0, 0)
+pos3= geom.Pos3d(A, 0, B)
+pos4= geom.Pos3d(0, 0, B)
 
-nDiv= 10
+# Hole
+pos11= geom.Pos3d(0.25, 0, 0.25)
+pos12= geom.Pos3d(0.25, 0, 0.75)
+pos13= geom.Pos3d(0.75, 0, 0.75)
+pos14= geom.Pos3d(0.75, 0, 0.25)
 
 ## Problem type
 feProblem= xc.FEProblem()
@@ -40,10 +45,15 @@ pt1= points.newPntFromPos3d(pos1)
 pt2= points.newPntFromPos3d(pos2)
 pt3= points.newPntFromPos3d(pos3)
 pt4= points.newPntFromPos3d(pos4)
+pt11= points.newPntFromPos3d(pos11)
+pt12= points.newPntFromPos3d(pos12)
+pt13= points.newPntFromPos3d(pos13)
+pt14= points.newPntFromPos3d(pos14)
 
 ### Define polygonal surface
 surfaces= modelSpace.getSurfaceHandler()
-face= surfaces.newQuadSurfacePts(pt1.tag, pt2.tag, pt3.tag, pt4.tag)
+hole= surfaces.newPolygonalFacePts([pt11.tag, pt12.tag, pt13.tag, pt14.tag])
+s1= surfaces.newQuadSurfacePts(pt1.tag, pt2.tag, pt3.tag, pt4.tag)
 
 ### Define material
 mat= typical_materials.defElasticMembranePlateSection(preprocessor, "mat",E=2.1e9,nu=0.3,rho= 7850,h= 0.015)
@@ -54,16 +64,20 @@ seedElemHandler.defaultMaterial= mat.name
 elem= seedElemHandler.newElement("ShellMITC4",xc.ID([0,0,0,0]))
 
 ### Generate mesh.
-face.setNDiv(nDiv)
+nDiv= 6
+s1.setNDiv(nDiv)
+hole.setNDiv(int(nDiv/2))
+s1.addHole(hole)
 xcTotalSet= modelSpace.getTotalSet()
 xcTotalSet.useGmsh= True
+#xcTotalSet.setVerbosityLevel(10) # Avoid warning about set element tag
 xcTotalSet.genMesh(xc.meshDir.I)
 
 nNodes= len(xcTotalSet.nodes)
 nElements= len(xcTotalSet.elements)
 
-nNodesRef= [144] # Different Gmsh versions give different results
-nElementsRef= [121]
+nNodesRef= [60] # Different Gmsh versions give different results
+nElementsRef= [40]
 
 nNodesOk= False
 if nNodes in nNodesRef:

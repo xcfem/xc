@@ -204,6 +204,10 @@ class SetEntities: public PreprocessorContainer, public MovableObject
     double getAverageSize(void) const;
     SetEntities pickEntitiesInside(const GeomObj3d &, const double &tol= 0.0) const;
 
+    double getMaxElementSize(void) const;
+    double getMinElementSize(void) const;
+    double getAverageElementSize(void) const;
+
     void fillUpwards(const SetMeshComp &);
     void fillDownwards(void);
     void fillDownwards(SetMeshComp &);

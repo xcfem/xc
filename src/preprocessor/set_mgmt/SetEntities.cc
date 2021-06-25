@@ -684,11 +684,16 @@ void XC::SetEntities::gen_mesh_gmsh(const std::string &modelName)
     // To generate quadrangles instead of triangles, we can simply add
     for(std::vector<int>::const_iterator i= surfaceTags.begin(); i!= surfaceTags.end(); i++)
       {
-	const int sTag= *i;
-	if(sTag>0) // surface is not a hole.
+    	const int sTag= *i;
+    	if(sTag>0) // surface is not a hole.
           gmsh::model::mesh::setRecombine(2, *i);
       }
 
+    // Transfinite automatic.
+    gmsh::option::setNumber("Mesh.MeshSizeMin", getMinElementSize()) ;
+    gmsh::option::setNumber("Mesh.MeshSizeMax", getMaxElementSize()); 
+    gmsh::model::mesh::setTransfiniteAutomatic();
+    
     // We can then generate a 2D mesh...
     gmsh::model::mesh::generate(2);
     //gmsh::model::mesh::refine();
@@ -1008,6 +1013,59 @@ double XC::SetEntities::getAverageSize(void) const
       }
     retval/=(numEdges+numFaces+numBodies);
     return retval;
+  }
+
+//! @brief Return the maximum element size according to the
+//! number of divisions of the lines.
+double XC::SetEntities::getMaxElementSize(void) const
+  {
+    double retval= 0.0;
+    if(lines.empty())
+      std::clog << getClassName() << "::" << __FUNCTION__
+	        << "; WARNING, set has no lines." << std::endl;
+    else
+	for(lst_line_pointers::const_iterator i= lines.begin();i!=lines.end();i++)
+	  {
+	    const Edge &line= **i;
+	    retval= std::max(retval, line.getElemSize());
+	  }
+    return retval;
+  }
+
+//! @brief Return the minimum element size according to the
+//! number of divisions of the lines.
+double XC::SetEntities::getMinElementSize(void) const
+  {
+    double retval= 6.023e23;
+    if(lines.empty())
+      std::clog << getClassName() << "::" << __FUNCTION__
+	        << "; WARNING, set has no lines." << std::endl;
+    else
+      for(lst_line_pointers::const_iterator i= lines.begin();i!=lines.end();i++)
+	{
+	  const Edge &line= **i;
+	  retval= std::min(retval, line.getElemSize());
+	}
+    return retval;
+  }
+  
+//! @brief Return the minimum element size according to the
+//! number of divisions of the lines.
+double XC::SetEntities::getAverageElementSize(void) const
+  {
+    double totalLength= 0.0;
+    double totalNDiv= 0.0;
+    if(lines.empty())
+      std::clog << getClassName() << "::" << __FUNCTION__
+	        << "; WARNING, set has no lines." << std::endl;
+    else
+      for(lst_line_pointers::const_iterator i= lines.begin();i!=lines.end();i++)
+	{
+	  const Edge &line= **i;
+	  totalLength+= line.getLength();
+	  totalNDiv+= line.NDiv();
+	}
+    return totalLength/totalNDiv;
   }
 
 //! @brief Return a new set that contains the bodies that lie insiof the
