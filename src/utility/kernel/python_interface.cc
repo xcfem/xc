@@ -65,8 +65,8 @@ BOOST_PYTHON_MODULE(xc_base)
       .add_property("owner", make_function( getOwner, return_internal_reference<>() ), "returns object's owner (container).")
       .def("setVerbosityLevel", &EntityWithProperties::setVerbosityLevel,"Set verbosity level.")
         .staticmethod("setVerbosityLevel")
-      // .def("getVerbosityLevel", make_function(&EntityWithProperties::getVerbosityLevel, return_internal_reference<>() ),"Get verbosity level.")
-      //   .staticmethod("getVerbosityLevel")
+      .def("getVerbosityLevel", &EntityWithProperties::getVerbosityLevel,"Get verbosity level.")
+        .staticmethod("getVerbosityLevel")
       ;
 
     class_<CommandEntity, bases<EntityWithProperties> >("CommandEntity")
