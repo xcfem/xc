@@ -97,6 +97,49 @@ def genConnectionMesh(regularShapesSet, plateSetsToMesh, xc_materials, seedElemH
     genRegularMesh(regularShapesSet, xc_materials, seedElemHandler)
     genPlatesMesh(plateSetsToMesh, xc_materials, seedElemHandler)
 
+def genGmshMesh(setsToMesh, xc_materials, seedElemHandler):
+    ''' Generate mesh using the Gmsh. This algorithm allow
+        meshing surfaces that are not quadrilateral and/or surfaces
+        with holes in them.
+
+    :param setsToMesh: XC sets containing regular quadrilateral
+                       surfaces to be meshed using structured 
+                       meshing algorithm.
+    :param xc_materials: Python dictionary containing the materials to use
+                         when meshing.
+    :param seedElemHanlder: XC seed element handler.
+    '''
+    preprocessor= seedElemHandler.getPreprocessor
+    xcTmpSet= createTemporarySet(setsToMesh) # Create temporary set
+    xcTmpSet.conciliaNDivs() # Make the number of divisions compatible
+    # Get the first material and create the mesh with it.
+    matId= setsToMesh[0].surfaces[0].getProp('matId')
+    thk= setsToMesh[0].surfaces[0].getProp('thickness')
+    xcMat= xc_materials[matId]
+    xcMat.h= thk # set thickness.
+    ## Create seed element.
+    seedElemHandler.defaultMaterial= xcMat.name
+    seedElem= seedElemHandler.newElement("ShellMITC4",xc.ID([0,0,0,0]))
+    ## Generate mesh.
+    xcTmpSet.useGmsh= True # use Gmsh for meshing.
+    xcTmpSet.setVerbosityLevel(2)
+    xcTmpSet.genMesh(xc.meshDir.I)
+    xcTmpSet.setVerbosityLevel(0)
+    # Change the materials as needed.
+    for faceSet in setsToMesh:
+        for s in faceSet.surfaces:
+            matId= s.getProp('matId')
+            if(matId in xc_materials):
+                xcMat= xc_materials[matId]
+            else:
+                lmsg.error("Unknown material: '"+str(matId)+"'")
+            xcMat.h= s.getProp('thickness') # set thickness
+            print(s, s.name, len(s.elements))
+            for e in s.elements:
+                e.setMaterial(xcMat.name)
+    # Remove temporary set
+    preprocessor.getSets.removeSet(xcTmpSet.name)
+
 def createLoadPatterns(modelSpace, loadCaseNames):
     ''' Create load patterns.'''
     lPatterns= dict()
