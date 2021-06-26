@@ -48,6 +48,7 @@ template <class MAT>
 class PhysicalProperties: public CommandEntity, public MovableObject
   {
   public:
+    typedef MAT material_type;
     typedef MaterialVector<MAT> material_vector;
   protected:
     material_vector theMaterial; //!< pointers to the material objects
@@ -122,6 +123,10 @@ void PhysicalProperties<MAT>::setMaterial(const MAT *matModel)
 template <class MAT>
 void PhysicalProperties<MAT>::setMaterial(const MAT *matModel, const std::string &type)
   { theMaterial.setMaterial(matModel,type); }
+
+template <class MAT>
+void PhysicalProperties<MAT>::setMaterial(size_t i,const MAT *matModel)
+  { theMaterial.setMaterial(i,matModel); }
 
 //! @brief Returns a vector to store the dbTags
 //! of the class members.

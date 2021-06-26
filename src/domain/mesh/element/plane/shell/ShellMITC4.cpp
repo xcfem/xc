@@ -80,17 +80,20 @@
 
 XC::ShellLinearCrdTransf3d XC::ShellMITC4::linear_trf;
 
-//! @brief Constructor
+//! @brief Default constructor
 XC::ShellMITC4::ShellMITC4(void)
   : ShellMITC4Base(ELE_TAG_ShellMITC4,&linear_trf) {}
 
 //! @brief Constructor
-XC::ShellMITC4::ShellMITC4(int tag,const SectionForceDeformation *ptr_mat)
-  : ShellMITC4Base(tag,ELE_TAG_ShellMITC4,ptr_mat,&linear_trf) {}
+//!
+//! @param tag: element identifier.
+//! @param ptr_mat: pointer to the material object.
+XC::ShellMITC4::ShellMITC4(int tag, const SectionForceDeformation *ptr_mat)
+  : ShellMITC4Base(tag, ELE_TAG_ShellMITC4, ptr_mat,&linear_trf) {}
 
 //! @brief Constructor
 XC::ShellMITC4::ShellMITC4(int tag,int node1,int node2,int node3,int node4,const SectionForceDeformation &theMaterial )
-  : ShellMITC4Base(tag,ELE_TAG_ShellMITC4,&theMaterial,&linear_trf) {}
+  : ShellMITC4Base(tag, ELE_TAG_ShellMITC4, &theMaterial,&linear_trf) {}
 
 //! @brief Virtual constructor.
 XC::Element* XC::ShellMITC4::getCopy(void) const

@@ -115,7 +115,12 @@ XC::Shell4NBase::Shell4NBase(int classTag, const ShellCrdTransf3dBase *crdTransf
     zeroInitDisp();
   }
 
-//! @brief Constructor
+//! @brief Constructor.
+//!
+//! @param tag: element identifier.
+//! @param classTag: class identifier.
+//! @param ptr_mat: pointer to the material object.
+//! @param crdTransf: coordinate transformation.
 XC::Shell4NBase::Shell4NBase(int tag, int classTag,const SectionForceDeformation *ptr_mat, const ShellCrdTransf3dBase *crdTransf)
   : QuadBase4N<SectionFDPhysicalProperties>(tag,classTag,SectionFDPhysicalProperties(4,ptr_mat)),
   theCoordTransf(nullptr), applyLoad(0), initDisp(4,Vector(6)), p0()

@@ -28,9 +28,7 @@ def genPlatesMesh(plateSetsToMesh, xc_materials, seedElemHandler):
             xcMat.h= s.getProp('thickness') # set thickness
             seedElemHandler.defaultMaterial= xcMat.name
             seedElem= seedElemHandler.newElement("ShellMITC4",xc.ID([0,0,0,0]))
-            #limeSiloBasePlate.setVerbosityLevel(2)
             s.genMesh(xc.meshDir.I, False)
-            #limeSiloBasePlate.setVerbosityLevel(1)
 
 def createTemporarySet(setsToMesh):
     ''' Create a temporary set that includes all the surfaces
@@ -53,7 +51,11 @@ def createTemporarySet(setsToMesh):
     return retval
             
 def genRegularMesh(setsToMesh, xc_materials, seedElemHandler):
-    ''' Generate mesh for the plates in the argument.
+    ''' Generate mesh using the built-in mesh generation algorithm
+        for the plates in the argument. This algorithm doesn't work
+        for surfaces that are not quadrilateral or if the surface
+        has holes in it. To mesh this kind of surfaces you can use
+        Gmsh.
 
     :param setsToMesh: XC sets containing regular quadrilateral
                        surfaces to be meshed using structured 
@@ -62,9 +64,8 @@ def genRegularMesh(setsToMesh, xc_materials, seedElemHandler):
                          when meshing.
     :param seedElemHanlder: XC seed element handler.
     '''
-    # Create temporal set
     preprocessor= seedElemHandler.getPreprocessor
-    xcTmpSet= createTemporarySet(setsToMesh)
+    xcTmpSet= createTemporarySet(setsToMesh) # Create temporary set
     xcTmpSet.conciliaNDivs() # Make the number of divisions compatible
     for faceSet in setsToMesh:
         for s in faceSet.surfaces:
@@ -77,17 +78,18 @@ def genRegularMesh(setsToMesh, xc_materials, seedElemHandler):
             seedElemHandler.defaultMaterial= xcMat.name
             seedElem= seedElemHandler.newElement("ShellMITC4",xc.ID([0,0,0,0]))
             s.genMesh(xc.meshDir.I)
-    # Remove temporal set
+    # Remove temporary set
     preprocessor.getSets.removeSet(xcTmpSet.name)
 
 def genConnectionMesh(regularShapesSet, plateSetsToMesh, xc_materials, seedElemHandler):
-    ''' Generate mesh for the plates in the argument.
+    ''' Generate mesh for a steel connection.
 
     :param regularShapesSet: XC sets containing regular quadrilateral
                              surfaces to be meshed using structured 
-                             meshing algorithm.
+                             meshing algorithm (built-in meshing algo).
     :param plateSetsToMesh: XC sets containing the surfaces to mesh using
-                            gmsh algorithm.
+                            gmsh algorithm (not quadrilateral or surfaces
+                            with holes in them).
     :param xc_materials: Python dictionary containing the materials to use
                          when meshing.
     :param seedElemHanlder: XC seed element handler.

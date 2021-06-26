@@ -81,6 +81,11 @@ XC::ShellMITC4Base::ShellMITC4Base(int classTag, const ShellCrdTransf3dBase *crd
   { }
 
 //! @brief Constructor
+//!
+//! @param tag: element identifier.
+//! @param classTag: class identifier.
+//! @param ptr_mat: pointer to the material object.
+//! @param crdTransf: coordinate transformation.
 XC::ShellMITC4Base::ShellMITC4Base(int tag, int classTag,const SectionForceDeformation *ptr_mat, const ShellCrdTransf3dBase *crdTransf)
   : Shell4NBase(tag,classTag,ptr_mat,crdTransf), Ktt(0.0)
   { }

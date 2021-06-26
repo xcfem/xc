@@ -26,7 +26,8 @@ class_<element_base_8n, bases<XC::Element>, boost::noncopyable >("element_base_8
 typedef XC::ElemWithMaterial<8,XC::NDMaterialPhysicalProperties> brick_base_8n;
 class_<brick_base_8n, bases<element_base_8n>, boost::noncopyable >("brick_base_8n", no_init)
   .add_property("extrapolationMatrix",make_function(&brick_base_8n::getExtrapolationMatrix,return_internal_reference<>() ),"Returns the element extrapolation matrix.")
-  .def("getExtrapolatedValues", &brick_base_8n::getExtrapolatedValues,"Return the values at nodes from the values at the Gauss points")
+  .def("getExtrapolatedValues", &brick_base_8n::getExtrapolatedValues,"Return the values at nodes from the values at the Gauss points.")
+  .def("setMaterial", &brick_base_8n::setMaterial,"Set the element material.")
   ;
 
 XC::NDMaterialPhysicalProperties &(XC::BrickBase::*getBrickPhysicalPropertiesPtr)(void) = &brick_base_8n::getPhysicalProperties;
@@ -38,7 +39,9 @@ typedef XC::ElementBase<20> element_base_20n;
 class_<element_base_20n, bases<XC::Element>, boost::noncopyable >("element_base_20n", no_init);
 
 typedef XC::ElemWithMaterial<20,XC::NDMaterialPhysicalProperties> twenty_node_brick_elem;
-class_<twenty_node_brick_elem, bases<element_base_20n>, boost::noncopyable >("twenty_node_brick_elem", no_init);
+class_<twenty_node_brick_elem, bases<element_base_20n>, boost::noncopyable >("twenty_node_brick_elem", no_init)
+  .def("setMaterial", &twenty_node_brick_elem::setMaterial,"Set the element material.")
+  ;
 
 typedef XC::ElementBase<27> element_base_27n;
 class_<element_base_27n, bases<XC::Element>, boost::noncopyable >("element_base_27n", no_init);
