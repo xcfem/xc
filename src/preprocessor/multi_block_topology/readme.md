@@ -10,4 +10,5 @@ This directory contains the classes used to define multi-block topology as follo
 
 ## References
 
+- [Mesh generation](https://en.wikipedia.org/wiki/Mesh_generation)
 - [Transfinite interpolation](https://en.wikipedia.org/wiki/Transfinite_interpolation)
