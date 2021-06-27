@@ -34,6 +34,7 @@
 #include "preprocessor/multi_block_topology/entities/0d/Pnt.h"
 #include "preprocessor/multi_block_topology/entities/1d/Edge.h"
 #include "preprocessor/multi_block_topology/entities/2d/Face.h"
+#include "preprocessor/multi_block_topology/entities/2d/PolygonalFace.h"
 #include "preprocessor/multi_block_topology/entities/3d/Body.h"
 #include "preprocessor/multi_block_topology/entities/3d/UniformGrid.h"
 #include "preprocessor/multi_block_topology/matrices/ElemPtrArray3d.h"
@@ -44,7 +45,6 @@
 #include "utility/geom/d1/Segment3d.h"
 #include "utility/geom/d2/Plane.h"
 #include "utility/geom/d3/HalfSpace3d.h"
-
 
 #include <gmsh.h>
 
@@ -225,6 +225,14 @@ void XC::SetEntities::fillDownwards(void)
 //         lst_surfaces ss= (*i)->getSurfaces();
 //         surfaces.insert_unique(surfaces.end(),ss.begin(),ss.end());
 //       }
+    
+    // Surface holes.
+    for(sup_iterator i=surfaces.begin();i!=surfaces.end();i++)
+      {
+	std::deque<PolygonalFace *> holes= (*i)->getHoles();
+	surfaces.insert_unique(surfaces.end(), holes.begin(), holes.end());
+      }
+    
     // Surfaces
     for(sup_iterator i=surfaces.begin();i!=surfaces.end();i++)
       {
@@ -426,10 +434,7 @@ void XC::SetEntities::create_gmsh_lines(void) const
     for(lst_line_pointers::const_iterator i= lines.begin();i!=lines.end();i++)
       {
 	const Edge *edge= *i;
-	const int gmshLineTag= edge->getTag()+1; // Gmsh tags must be strictly positive.
-	const int p1GmshTag= edge->P1()->getTag()+1;
-	const int p2GmshTag= edge->P2()->getTag()+1;
-	gmsh::model::geo::addLine(p1GmshTag, p2GmshTag, gmshLineTag);
+	edge->create_gmsh_line();
       }
   }
 

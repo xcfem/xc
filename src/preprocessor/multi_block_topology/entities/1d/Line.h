@@ -44,6 +44,8 @@ class Line: public LineBase
   protected:
     Pos3dArray get_positions(void) const;
     Edge *split_at(Pnt *,const double &,const double &);
+    
+    int create_gmsh_line(void) const;
   public:
     Line(Preprocessor *m,const size_t &ndiv= 4);
     Line(const std::string &name= "",Preprocessor *m= nullptr,const size_t &ndiv= 4);

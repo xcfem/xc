@@ -514,7 +514,11 @@ void XC::Face::addHole(PolygonalFace *pFace)
   }
 
 //! @brief Return a list of the face holes.
-boost::python::list XC::Face::getHoles(void) const
+const std::deque<XC::PolygonalFace *> &XC::Face::getHoles(void) const
+  { return holes; }
+
+//! @brief Return a list of the face holes.
+boost::python::list XC::Face::getPyHoles(void) const
   {
     boost::python::list retval;
     for(hole_const_iterator i= holes.begin(); i!= holes.end(); i++)
@@ -552,7 +556,7 @@ std::vector<int> XC::Face::create_gmsh_loops_for_holes(void) const
     size_t count= 0;
     for(std::deque<PolygonalFace *>::const_iterator i= holes.begin(); i!= holes.end(); i++, count++)
       { retval[count]= (*i)->create_gmsh_loop(); }
-    return retval;    
+    return retval;
   }
 
 //! @brief Create the curve loops for the outer face and the holes.

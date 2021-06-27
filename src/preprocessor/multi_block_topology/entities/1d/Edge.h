@@ -57,6 +57,7 @@ class Edge: public EntMdlr
     void insert_surf(Face *s);
     void create_nodes_on_endpoints(void);
     std::vector<Node *> create_interior_nodes(const std::vector<Pos3d> &positions);
+    virtual int create_gmsh_line(void) const;
   public:
     Edge(Preprocessor *m,const size_t &nd= 4);
     Edge(const std::string &name= "",Preprocessor *m= nullptr,const size_t &nd= 4);

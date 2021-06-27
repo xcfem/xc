@@ -38,6 +38,8 @@
 #include "domain/mesh/element/Element.h"
 #include "vtkCellType.h"
 
+#include <gmsh.h>
+
 //! @brief Constructor.
 XC::Line::Line(Preprocessor *m,const size_t &nd)
   : LineBase(m,nd) {}
@@ -270,6 +272,18 @@ const XC::Vector &XC::Line::getTang(const double &s) const
     static Vector retval(3);
     retval= getVector();
     retval.Normalize();
+    return retval;
+  }
+
+//! @brief Ask Gmsh to create the line corresponding to this
+//! one.
+int XC::Line::create_gmsh_line(void) const
+  {
+    int retval= -1;
+    const int gmshLineTag= getTag()+1; // Gmsh tags must be strictly positive.
+    const int p1GmshTag= P1()->getTag()+1;
+    const int p2GmshTag= P2()->getTag()+1;
+    gmsh::model::geo::addLine(p1GmshTag, p2GmshTag, gmshLineTag);
     return retval;
   }
 

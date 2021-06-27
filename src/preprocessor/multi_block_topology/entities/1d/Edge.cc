@@ -706,6 +706,16 @@ void XC::Edge::genMesh(meshing_dir dm)
       std::clog << "done." << std::endl;
   }
 
+//! @brief Ask Gmsh to create the line corresponding to this
+//! edge.
+int XC::Edge::create_gmsh_line(void) const
+  {
+    int retval= -1;
+    std::cerr << getClassName() << "::" << __FUNCTION__
+	      << "; not implemented." << std::endl;
+    return retval;
+  }
+
 //! @brief Return a vector tangent to the line in point at parameter s.
 const XC::Vector &XC::Edge::getTang(const double &s) const
   {

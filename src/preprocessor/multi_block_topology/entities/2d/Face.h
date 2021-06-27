@@ -114,7 +114,8 @@ class Face: public CmbEdge
     hole_const_iterator findHole(PolygonalFace *) const;
     const PolygonalFace *findHolePtr(PolygonalFace *) const;
     PolygonalFace *findHolePtr(PolygonalFace *);
-    boost::python::list getHoles(void) const;
+    const std::deque<PolygonalFace *> &getHoles(void) const;
+    boost::python::list getPyHoles(void) const;
     std::deque<Side *> findSides(const Pos3d &);
 
     //! @brief Returns the number of vertices.
