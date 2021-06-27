@@ -319,7 +319,6 @@ def extractWelds(xcSet, blockDict):
 def populateSets(setsFromLabels, xcSet):
     ''' Populate the sets based on the object labels.
 
-
     :param setsFromLabelsDict: dictionary containing the sets to popùlate. The
                                objects (points, lines, surfaces,...) which 
                                have a label that correspond to a dictionary 
@@ -564,6 +563,7 @@ def matchHoles(holes, blockDict):
         holeDiameter= 2.0*math.sqrt(h.getArea()/math.pi)
         owner.addHole(h)
         owner.setProp('holeDiameter', holeDiameter)
+        print(owner.name, 'holes: ', len(owner.getHoles()))
 
 def getLoadCaseNames(loadData):
     ''' Return the load names implicitly defined

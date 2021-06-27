@@ -12,7 +12,12 @@ from connections.steel_connections import import_connection
 from misc_utils import log_messages as lmsg
 
 def genPlatesMesh(plateSetsToMesh, xc_materials, seedElemHandler):
-    ''' Generate mesh for the plates in the argument.
+    ''' Generate mesh for the plates in the argument. This routine
+    is used to mesh plates with irregular shapes (not quadrilateral)
+    and/or with holes in them. The meshing is done for each face so
+    the nodes at its borders are not shared with neighbors faces
+    (non-conformal mesh). The contact of the plate with the rest
+    of the connection is made by a weld model.    
 
     :param plateSetsToMesh: XC sets containing the surfaces to mesh.
     :param xc_materials: Python dictionary containing the materials to use
@@ -122,9 +127,7 @@ def genGmshMesh(setsToMesh, xc_materials, seedElemHandler):
     seedElem= seedElemHandler.newElement("ShellMITC4",xc.ID([0,0,0,0]))
     ## Generate mesh.
     xcTmpSet.useGmsh= True # use Gmsh for meshing.
-    xcTmpSet.setVerbosityLevel(2)
     xcTmpSet.genMesh(xc.meshDir.I)
-    xcTmpSet.setVerbosityLevel(0)
     # Change the materials as needed.
     for faceSet in setsToMesh:
         for s in faceSet.surfaces:
@@ -134,7 +137,6 @@ def genGmshMesh(setsToMesh, xc_materials, seedElemHandler):
             else:
                 lmsg.error("Unknown material: '"+str(matId)+"'")
             xcMat.h= s.getProp('thickness') # set thickness
-            print(s, s.name, len(s.elements))
             for e in s.elements:
                 e.setMaterial(xcMat.name)
     # Remove temporary set
