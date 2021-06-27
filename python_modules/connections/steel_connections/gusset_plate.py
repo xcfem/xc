@@ -267,11 +267,11 @@ class GussetPlate(object):
         retval.extend(gussetPlateBlocks)
         distBetweenPlates1, attachedPlateBlocks1= self.getBoltedPlateBlocks(boltedPlate, diagonal, origin, blockProperties, side= 1) # bolted plate at positive side.
         retval.extend(attachedPlateBlocks1)
-        boltBlocks1= bolted_plate.getBoltedPointBlocks(gussetPlateBlocks, attachedPlateBlocks1, abs(distBetweenPlates1)) # points linked by bolts.
+        boltBlocks1= bolted_plate.getBoltedPointBlocks(gussetPlateBlocks, attachedPlateBlocks1, abs(distBetweenPlates1), blockProperties) # points linked by bolts.
         retval.extend(boltBlocks1)
         if(self.boltedPlateTemplate.doublePlate):
             distBetweenPlates2, attachedPlateBlocks2= self.getBoltedPlateBlocks(boltedPlate, diagonal, origin, blockProperties, side= -1) # bolted plate at negative side.
             retval.extend(attachedPlateBlocks2)
-            boltBlocks2= bolted_plate.getBoltedPointBlocks(gussetPlateBlocks, attachedPlateBlocks2, abs(distBetweenPlates2)) # points linked by bolts.
+            boltBlocks2= bolted_plate.getBoltedPointBlocks(gussetPlateBlocks, attachedPlateBlocks2, abs(distBetweenPlates2), blockProperties) # points linked by bolts.
             retval.extend(boltBlocks2)            
         return retval

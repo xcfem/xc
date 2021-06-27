@@ -557,29 +557,36 @@ class BoltedPlateBase(plates.Plate):
         outfile.close()
 
 
-def getBoltedPointBlocks(gussetPlateBlocks, boltedPlateBlocks, distBetweenPlates):
-    ''' Return the points linked by bolts between the two pieces.
+def getBoltedPointBlocks(gussetPlateBlocks, boltedPlateBlocks, distBetweenPlates, blockProperties):
+    ''' Return the lines corresponding to the bolts between the two pieces.
 
     :param gussetPlateBlocks: blocks of the gusset plate.
     :param boltedPlateBlocks: plate bolted to the gusset plate.
     :param distBetweenPlates: distance between plates.
+    :param blockProperties: labels and attributes to assign to the newly created blocks.
     '''
     retval= bte.BlockData()
+    # Hole centers in the gusset plate.
     gussetPlateBoltCenters= list()
     for key in gussetPlateBlocks.points:
         p= gussetPlateBlocks.points[key]
         if(p.getAttribute('objType')=='hole_center'):
             gussetPlateBoltCenters.append(p)
+    # Hole center in the bolted plate.
     boltedPlateBoltCenters= list()
     for key in boltedPlateBlocks.points:
         p= boltedPlateBlocks.points[key]
         if(p.getAttribute('objType')=='hole_center'):
             boltedPlateBoltCenters.append(p)
     tol= distBetweenPlates/100.0
+    # Bolt properties.
+    boltProperties= bte.BlockProperties.copyFrom(blockProperties)
+    boltProperties.appendAttribute('objType', 'bolt_axis')
+    boltProperties.appendAttribute('ownerId', None) # Has no owner.
     for pA in gussetPlateBoltCenters:
         for pB in boltedPlateBoltCenters:
             dist= math.sqrt((pA.coords[0]-pB.coords[0])**2+(pA.coords[1]-pB.coords[1])**2+(pA.coords[2]-pB.coords[2])**2)
             if(abs(dist-distBetweenPlates)<tol):
-                boltBlk= bte.BlockRecord(id= -1, typ= 'line', kPoints= [pA.id, pB.id])
+                boltBlk= bte.BlockRecord(id= -1, typ= 'line', kPoints= [pA.id, pB.id], blockProperties= boltProperties)
                 id= retval.appendBlock(boltBlk)
     return retval

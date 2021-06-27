@@ -19,6 +19,7 @@ from import_export import neutral_mesh_description as nmd
 import xc_base
 import geom
 from connections.steel_connections import gusset_plate as gp
+from connections.steel_connections import bolted_plate
 from connections.steel_connections import connected_members
 from connections.steel_connections import bolts
 from connections.steel_connections import stiffeners
@@ -269,27 +270,39 @@ class Connection(connected_members.ConnectionMetaData):
         for b in self.beams:
             # Top plate
             flangePlateProperties.appendAttribute('location', 'top_flange')
-            topPlateBlocks= b.getTopFlangeBoltedPlateBlocks(connectionOrigin= self.getOrigin(), column= self.column, boltSteel= self.getBoltSteel(), plateSteel= self.getBoltedPlatesSteel(), blockProperties= flangePlateProperties)
+            topPlate= b.getTopFlangeBoltedPlate(connectionOrigin= self.getOrigin(), column= self.column, boltSteel= self.getBoltSteel(), plateSteel= self.getBoltedPlatesSteel())
+            topPlateBlocks= topPlate.getBlocks(blockProperties= flangePlateProperties)
             retval.extend(topPlateBlocks)
             ## Holes in beam top flange
             holesList= topPlateBlocks.getHoles()
-            boltBlocks= self.getHolesOnBeamBlocks(b, holesList, beamBlocks, flangePlateProperties)
+            holeBlocks= self.getHolesOnBeamBlocks(b, holesList, beamBlocks, flangePlateProperties)
+            retval.extend(holeBlocks)
+            ## Bolts between beam top flange and top plate.
+            boltBlocks= bolted_plate.getBoltedPointBlocks(topPlateBlocks, holeBlocks, abs(topPlate.distBetweenPlates), blockProperties) # points linked by bolts.
             retval.extend(boltBlocks)
             # Bottom plate
             flangePlateProperties.appendAttribute('location', 'bottom_flange')
-            bottomPlateBlocks= b.getBottomFlangeBoltedPlateBlocks(connectionOrigin= self.getOrigin(), column= self.column, boltSteel= self.getBoltSteel(), plateSteel= self.getBoltedPlatesSteel(), blockProperties= flangePlateProperties)
+            bottomPlate= b.getBottomFlangeBoltedPlate(connectionOrigin= self.getOrigin(), column= self.column, boltSteel= self.getBoltSteel(), plateSteel= self.getBoltedPlatesSteel())
+            bottomPlateBlocks= bottomPlate.getBlocks(blockProperties= flangePlateProperties)
             retval.extend(bottomPlateBlocks)
             ## Holes in beam bottom flange
             holesList= bottomPlateBlocks.getHoles()
-            boltBlocks= self.getHolesOnBeamBlocks(b, holesList, beamBlocks, flangePlateProperties)
+            holeBlocks= self.getHolesOnBeamBlocks(b, holesList, beamBlocks, flangePlateProperties)
+            retval.extend(holeBlocks)
+            ## Bolts between beam bottom flange and bottom plate.
+            boltBlocks= bolted_plate.getBoltedPointBlocks(bottomPlateBlocks, holeBlocks, abs(bottomPlate.distBetweenPlates), blockProperties) # points linked by bolts.
             retval.extend(boltBlocks)
             # Shear tab
             shearTabProperties.appendAttribute('location', 'web')
-            shearTabBlocks= b.getShearTabBlocks(connectionOrigin= self.getOrigin(), column= self.column, boltSteel= self.getBoltSteel(), plateSteel= self.getBoltedPlatesSteel(), blockProperties= shearTabProperties, shearEfficiency= self.beamsShearEfficiency)
+            shearTab= b.getShearTab(connectionOrigin= self.getOrigin(), column= self.column, boltSteel= self.getBoltSteel(), plateSteel= self.getBoltedPlatesSteel(), shearEfficiency= self.beamsShearEfficiency)
+            shearTabBlocks= shearTab.getBlocks(blockProperties= shearTabProperties)
             retval.extend(shearTabBlocks)    
             ## Holes in beam web
             holesList= shearTabBlocks.getHoles()
-            boltBlocks= self.getHolesOnBeamBlocks(b, holesList, beamBlocks, shearTabProperties)
+            holeBlocks= self.getHolesOnBeamBlocks(b, holesList, beamBlocks, shearTabProperties)
+            retval.extend(holeBlocks)
+            ## Bolts between beam web and shear tab.
+            boltBlocks= bolted_plate.getBoltedPointBlocks(shearTabBlocks, holeBlocks, abs(shearTab.distBetweenPlates), blockProperties) # points linked by bolts.
             retval.extend(boltBlocks)
         return retval
 

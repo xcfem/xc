@@ -524,6 +524,7 @@ def matchHoleCenters(xcSet, blockDict):
         the same bolt.
 
     :param xcSet: set to pick the hole centers from.
+    :param blockDict: dictionary of imported XC blocks (lines, surfaces,...)
     '''
     holeCentersDict= pickHoleCenters(xcSet, blockDict)
     trios= list()
@@ -563,7 +564,6 @@ def matchHoles(holes, blockDict):
         holeDiameter= 2.0*math.sqrt(h.getArea()/math.pi)
         owner.addHole(h)
         owner.setProp('holeDiameter', holeDiameter)
-        print(owner.name, 'holes: ', len(owner.getHoles()))
 
 def getLoadCaseNames(loadData):
     ''' Return the load names implicitly defined

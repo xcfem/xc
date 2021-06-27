@@ -675,50 +675,58 @@ class MultiFilletWeld(object):
 
 # Functions to generate welds and bolts from XC connection models.
 def gen_bolts_xc_conn_model(modelSpace,matchedBolts):
-    '''Generate the bolts from the data elaborated in an  XC-connection-model.
+    '''Generate the bolts from the data elaborated in an XC-connection-model.
     Return the dictionary 'boltSets2Check' with the created sets of bolts
     to check.
     '''
-    preprocessor=matchedBolts[0].line.getPreprocessor
     # Bolt sets dictionary
     boltSets2Check=dict()
-    for blt in matchedBolts:
-        grpName= blt.getBoltGroupName() # Name of the bolt group.
-        if grpName not in boltSets2Check.keys():
-            D=blt.getDiameter()
-            mat=blt.getMaterial()
-            boltSets2Check[grpName]={'boltSet': None, 'boltCheckTyp': None, 'boltSeed': None}
-            boltSets2Check[grpName]['boltSet']=preprocessor.getSets.defSet(grpName)
-#            boltSets2Check[grpName]['boltSet'].description=blt.getSetDescription()
-            boltSets2Check[grpName]['boltSet'].description=grpName.replace('_',' ')
-            boltSets2Check[grpName]['boltCheckTyp']=ASTM_materials.BoltFastener(diameter=D, steelType=mat)
-            boltSets2Check[grpName]['boltSeed']=Bolt(diam=D,mat=mat)
-        bltSeed=boltSets2Check[grpName]['boltSeed']
-        pntA=blt.endA.kPoint
-        pntB=blt.endB.kPoint
-        bltSeed.createBolt([pntA,pntB],grpName)  #bolt generation and addition to set
-        #raddi end A
-        if blt.endA.hole:
-            pntHoleLst=blt.endA.hole.getVertices
-            plateTh=blt.endA.getPlateThickness()
-            bltSeed.generateRadii(plateTh,pntA,pntHoleLst)
-        else:
-            n=pntA.getNode()
-            modelSpace.fixNode000_000(n.tag)
-        #raddi end B
-        if blt.endB.hole:
-            pntHoleLst=blt.endB.hole.getVertices
-            plateTh=blt.endB.getPlateThickness()
-            bltSeed.generateRadii(plateTh,pntB,pntHoleLst)
-        else:
-            n=pntB.getNode()
-            modelSpace.fixNode000_000(n.tag)
+    if(len(matchedBolts)>0):
+        preprocessor= matchedBolts[0].line.getPreprocessor
+        for blt in matchedBolts:
+            grpName= blt.getBoltGroupName() # Name of the bolt group.
+            if grpName not in boltSets2Check.keys():
+                D=blt.getDiameter()
+                mat=blt.getMaterial()
+                boltSets2Check[grpName]={'boltSet': None, 'boltCheckTyp': None, 'boltSeed': None}
+                boltSets2Check[grpName]['boltSet']=preprocessor.getSets.defSet(grpName)
+    #            boltSets2Check[grpName]['boltSet'].description=blt.getSetDescription()
+                boltSets2Check[grpName]['boltSet'].description=grpName.replace('_',' ')
+                boltSets2Check[grpName]['boltCheckTyp']=ASTM_materials.BoltFastener(diameter=D, steelType=mat)
+                boltSets2Check[grpName]['boltSeed']=Bolt(diam=D,mat=mat)
+            bltSeed=boltSets2Check[grpName]['boltSeed']
+            pntA=blt.endA.kPoint
+            pntB=blt.endB.kPoint
+            bltSeed.createBolt([pntA,pntB],grpName)  #bolt generation and addition to set
+            #raddi end A
+            if blt.endA.hole:
+                pntHoleLst=blt.endA.hole.getVertices
+                plateTh=blt.endA.getPlateThickness()
+                bltSeed.generateRadii(plateTh,pntA,pntHoleLst)
+            else:
+                n=pntA.getNode()
+                modelSpace.fixNode000_000(n.tag)
+            #raddi end B
+            if blt.endB.hole:
+                pntHoleLst=blt.endB.hole.getVertices
+                plateTh=blt.endB.getPlateThickness()
+                bltSeed.generateRadii(plateTh,pntB,pntHoleLst)
+            else:
+                n=pntB.getNode()
+                modelSpace.fixNode000_000(n.tag)
+    else:
+        lmsg.warning('matched bolts is empty.')
     return boltSets2Check
     
-def gen_welds_xc_conn_model(welds,weldMetal,wEldSzFactor=None,avlbWeldSz=None):
+def gen_welds_xc_conn_model(welds , weldMetal, weldSzFactor=None, avlbWeldSz=None):
     '''Generate the welds from the data elaborated in an XC-connection-model.
     Return the dictionary 'welds2Check' with the created sets of welds
     to check.
+
+    :param welds: list of WeldMetaData objects representing the welds in the connection.
+    :param weldMetal: type of weld metal.
+    :param weldSizeFactor: weld size factor (0 => minimum size, 1 => maximum size.)
+    :param avlbWeldSz: available weld sizes.
     '''
     if avlbWeldSz: avlbWeldTyp=[WeldTyp(t,weldMetal) for t in avlbWeldSz]  #available weld types
     welds2Check=list()
@@ -728,10 +736,13 @@ def gen_welds_xc_conn_model(welds,weldMetal,wEldSzFactor=None,avlbWeldSz=None):
         # check if the orientation of the surface is the same as its elements
         # if yes, correction factor for its orientation is equal to 1,
         # otherwise this correction factor = -1 (the orientation is changed)
-        vWS1= w.memberToWeld.getKVector 
+        vWS1= w.memberToWeld.getKVector
+        if(len(w.memberToWeld.elements)<1):
+            lmsg.error('attached member has no elements.')
+            print(l.name)
         vWS1el= w.memberToWeld.elements[0].getKVector3d(True)
         WS1_corrfact= 1 if ((vWS1-vWS1el).getModulus()<1e-2) else -1
-        tWS1=w.memberToWeld.elements[0].getPhysicalProperties.getVectorMaterials[0].h  #thickness of member to weld
+        tWS1= w.memberToWeld.elements[0].getPhysicalProperties.getVectorMaterials[0].h  #thickness of member to weld
         for fk in w.faceWelds.keys():
             f= w.faceWelds[fk]
             WS1= f.memberToWeld
@@ -741,7 +752,7 @@ def gen_welds_xc_conn_model(welds,weldMetal,wEldSzFactor=None,avlbWeldSz=None):
                 tWS2=WS2.elements[0].getPhysicalProperties.getVectorMaterials[0].h
                 minSz=ASTM_materials.getFilletWeldMinimumLegSheets(tWS1,tWS2)
                 maxSz=ASTM_materials.getFilletWeldMaximumLegSheets(tWS1,tWS2)
-                weightedSz=minSz+wEldSzFactor*(maxSz-minSz)
+                weightedSz=minSz+weldSzFactor*(maxSz-minSz)
                 weldTyp=avlbWeldTyp[dsu.get_index_closest_inlist(avlbWeldSz,weightedSz)]
             else:
                 weldTyp=WeldTyp(w.legSize,weldMetal)
