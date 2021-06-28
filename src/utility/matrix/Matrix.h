@@ -78,34 +78,36 @@ class AuxMatrix;
 
 #define MATRIX_VERY_LARGE_VALUE 1.0e213
 
-//! @ingroup Matrix
-//!
-//! @brief Matrix of floats.
-//!
-//! The Matrix class provides the matrix abstraction. A matrix of
-//! order numRows X numCols is an ordered 2d array of numbers arranged in
-//! numRows rows and numCols columns. For example, a matrix \f$A\f$ of order 2
-//! X 3:
-//! \f$\f$ A =
-//! \left[
-//! \begin{array}{ccc}
-//! a_{0,0} & a_{0,1}  & a_{0,2}
-//! a_{1,0} & a_{1,1} & a_{1,2}
-//! \end{array}
-//! \right]
-//! \f$\f$
-//!
-//! The Matrix class provides the implementation of a general unsymmetric
-//! matrix. The data for the matrix is stored in a 1d double array of size
-//! numRows*numCols with the data for \f$a_{i,j}\f$ located at j*numRows + i
-//! in the 1d array. This is similar to the ordering of a Fortran 2d array
-//! and will permit calls to numerical Fortran libraries, e.g. BLAS, for
-//! certain method calls at a future stage. At present no subclassing is
-//! permitted (THIS MAY CHANGE), the reason for this is that the Matrix
-//! objects are envisioned to be small scale matrices primarily used for
-//! the passing of data between objects in the system. To allow subclassing
-//! could reduce the efficiency of the program due to the manner in which
-//! virtual functions are implemented.
+/**
+ @ingroup Matrix
+
+ @brief Matrix of floats.
+
+ The Matrix class provides the matrix abstraction. A matrix of
+ order numRows X numCols is an ordered 2d array of numbers arranged in
+ numRows rows and numCols columns. For example, a matrix \f$A\f$ of order 2
+ X 3:
+ \f$ A =
+ \left[
+ \begin{array}{ccc}
+ a_{0,0} & a_{0,1}  & a_{0,2}\\
+ a_{1,0} & a_{1,1} & a_{1,2}
+ \end{array}
+ \right]
+ \f$
+
+ The Matrix class provides the implementation of a general unsymmetric
+ matrix. The data for the matrix is stored in a 1d double array of size
+ numRows*numCols with the data for \f$a_{i,j}\f$ located at j*numRows + i
+ in the 1d array. This is similar to the ordering of a Fortran 2d array
+ and will permit calls to numerical Fortran libraries, e.g. BLAS, for
+ certain method calls at a future stage. At present no subclassing is
+ permitted (THIS MAY CHANGE), the reason for this is that the Matrix
+ objects are envisioned to be small scale matrices primarily used for
+ the passing of data between objects in the system. To allow subclassing
+ could reduce the efficiency of the program due to the manner in which
+ virtual functions are implemented.
+*/
 class Matrix: public CommandEntity
   {
   private:

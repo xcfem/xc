@@ -140,27 +140,27 @@ class LinearSOE: public SystemOfEqn
     //! not.
     virtual int setB(const Vector &V, const double &fact= 1.0) =0;        
 
-    //! @brief To zero the matrix $A$, i.e. set all the components
-    //! of $A$ to $0$.
+    //! @brief To zero the matrix \f$A\f$, i.e. set all the components
+    //! of \f$A\f$ to \f$0\f$.
     virtual void zeroA(void) =0;
-    //! @brief To zero the vector $b$, i.e. set all the components
-    //! of $b$ to $0$.
+    //! @brief To zero the vector \f$b\f$, i.e. set all the components
+    //! of \f$b\f$ to \f$0\f$.
     virtual void zeroB(void) =0;
 
-    //! @brief Return a const reference to the vector $x$.
+    //! @brief Return a const reference to the vector \f$x\f$.
     virtual const Vector &getX(void) const= 0;
-    //! @brief Return a const reference to the vector $b$.
+    //! @brief Return a const reference to the vector \f$b\f$.
     virtual const Vector &getB(void) const= 0;    
     virtual double getDeterminant(void);
     virtual double getRCond(const char &norm= '1');
-    //! @brief Return the 2-norm of the vector $x$.
+    //! @brief Return the 2-norm of the vector \f$x\f$.
     virtual double normRHS(void) const= 0;
 
-    //! The LinearSOE object is responsible for setting $x(loc) = value$. This
+    //! The LinearSOE object is responsible for setting \f$x(loc) = value\f$. This
     //! is needed in domain decomposition methods and could be useful in
     //! iterative solution strategies when an initial approximation is known.
     virtual void setX(int loc, double value) =0;
-    //! @brief Sets the vector $x$.
+    //! @brief Sets the vector \f$x\f$.
     virtual void setX(const Vector &X) =0;
     
     LinearSOESolver *getSolver(void);

@@ -71,43 +71,45 @@
 namespace XC {
 class ID;
 
-//! @ingroup CContMP
-//
-//! @brief Multi-freedom constraint.
-//! 
-//! Objects of this class store the information for a multifreedom constraint.
-//! A multifreedom constraint imposes a relationship between the displacement
-//! for certain dof at two nodes in the model, typically called the \p retained
-//! node and the \p constrained node: \f$U_c = C_{cr} U_r\f$
-//!
-//! The MFreedom_Constraint class assumes time invariant constraints, i.e. the
-//! constraint matrix does not change over time. All the methods are declared
-//! as pure virtual, which will allow subclasses for time varying constraints.
-//!
-//! An MFreedom\_Constraint is responsible for providing information on the
-//! relationship between the dof, this is in the form of a constraint
-//! Matrix, \f$C_{cr}\f$, and two ID objects, \p retainedID and {\em
-//! constrainedID} indicating the dof's at the nodes 
-//! represented by \f$C_{cr}\f$. For example, for the following constraint
-//! imposing a relationship between the displacements at node \f$1\f$, the 
-//! constrained node, with the displacements at node \f$2\f$, the retained
-//! node in a problem where the x,y,z components are identified as the
-//! 0,1,2 degrees-of-freedom:
-//! 
-//! \f$\f$ u_{1,x} = 2 u_{2,x} + u_{2,z} \f$\f$
-//! \f$\f$ u_{1,y} = 3 u_{2,z}\f$\f$
-//! 
-//! the constraint matrix is:
-//! \f$\f$ C_{cr} =
-//! \left[
-//! \begin{array}{cc}
-//! 2 & 1
-//! 0 & 3
-//! \end{array}
-//! \right] 
-//! \f$\f$
-//! 
-//! \p constrainedID = \f$[0\f$ \f$1]\f$ and \p retainedID \f$= [0\f$ \f$2]\f$.
+/**
+ @ingroup CContMP
+
+ @brief Multi-freedom constraint.
+ 
+ Objects of this class store the information for a multifreedom constraint.
+ A multifreedom constraint imposes a relationship between the displacement
+ for certain dof at two nodes in the model, typically called the \p retained
+ node and the \p constrained node: \f$U_c = C_{cr} U_r\f$
+
+ The MFreedom_Constraint class assumes time invariant constraints, i.e. the
+ constraint matrix does not change over time. All the methods are declared
+ as pure virtual, which will allow subclasses for time varying constraints.
+
+ An MFreedom\_Constraint is responsible for providing information on the
+ relationship between the dof, this is in the form of a constraint
+ Matrix, \f$C_{cr}\f$, and two ID objects, \p retainedID and {\em
+ constrainedID} indicating the dof's at the nodes 
+ represented by \f$C_{cr}\f$. For example, for the following constraint
+ imposing a relationship between the displacements at node \f$1\f$, the 
+ constrained node, with the displacements at node \f$2\f$, the retained
+ node in a problem where the x,y,z components are identified as the
+ 0,1,2 degrees-of-freedom:
+ 
+ \f$ u_{1,x} = 2 u_{2,x} + u_{2,z} \f$
+ \f$ u_{1,y} = 3 u_{2,z}\f$
+ 
+ the constraint matrix is:
+ \f$ C_{cr} =
+ \left[
+ \begin{array}{cc}
+ 2 & 1\\
+ 0 & 3
+ \end{array}
+ \right] 
+ \f$
+ 
+ \p constrainedID = \f$[0 1]\f$ and \p retainedID= \f$ [0 2]\f$.
+*/
 class MFreedom_Constraint: public MFreedom_ConstraintBase
   {
   protected:

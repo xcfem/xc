@@ -70,25 +70,25 @@ int XC::BaseElasticSection::setInitialSectionDeformation(const Vector &def)
     return 0;
   }
 
-//! @brief Set the trial (generalized) deformation of the section.
-//! Sets the value of the section deformation vector, \f$esec\f$ to be {\em
-//! def}. The section deformation vector, \f$esec\f$, is defined by
-//!
-//! \f[
-//! \begin{equation}
-//! esec := \left[
-//!    \begin{array}{c}
-//!        \epsilon_a
-//!        \kappa_z
-//!        \gamma_y
-//!    \end{array} 
-//!  \right]
-//! \end{equation}
-//! \f]
-//!
-//! where \f$\epsilon_a\f$ is the axial strain, \f$\kappa_z\f$ is
-//! the curvature about the local z-axis, and \f$\gamma_y\f$ is the
-//! shear strain along the local y-axis.
+/**
+ @brief Set the trial (generalized) deformation of the section.
+ Sets the value of the section deformation vector, \f$esec\f$ to be {\em
+ def}. The section deformation vector, \f$esec\f$, is defined by
+
+ \f[
+ esec := \left[
+    \begin{array}{c}
+        \epsilon_a\\
+        \kappa_z\\
+        \gamma_y
+    \end{array} 
+  \right]
+ \f]
+
+ where \f$\epsilon_a\f$ is the axial strain, \f$\kappa_z\f$ is
+ the curvature about the local z-axis, and \f$\gamma_y\f$ is the
+ shear strain along the local y-axis.
+*/
 int XC::BaseElasticSection::setTrialSectionDeformation(const Vector &def)
   {
     eTrial= def;

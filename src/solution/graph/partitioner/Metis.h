@@ -92,10 +92,10 @@ namespace XC {
 // \begin{displaymath}
 // A = \left[
 //   \begin{array}{ccccc}
-//   1 & 0 & 1 & 1 & 0
-//   1 & 1 & 0 & 0 & 0
-//   0 & 1 & 1 & 0 & 0
-//   0 & 0 & 0 & 1 & 1
+//   1 & 0 & 1 & 1 & 0\\
+//   1 & 1 & 0 & 0 & 0\\
+//   0 & 1 & 1 & 0 & 0\\
+//   0 & 0 & 0 & 1 & 1\\
 //   1 & 1 & 0 & 0 & 1
 //   \end{array}
 // \right] 
@@ -106,14 +106,14 @@ namespace XC {
 // 
 // \f[
 // \begin{displaymath}
-// \f$\f$
+// \f$
 //  xadj =
 // \left[
 // \begin{array}{cccccccccccccc}
 // 0 & 2 & 3 & 4 & 5 & 7
 // \end{array}
 // \right] 
-// \f$\f$
+// \f$
 // \end{displaymath}
 // \f]
 // 
@@ -121,14 +121,14 @@ namespace XC {
 // 
 // \f[
 // \begin{displaymath}
-// \f$\f$
+// \f$
 //  adjncy =
 // \left[
 // \begin{array}{cccccccccccccc}
 // 2 & 3 & 0 & 1 & 4 & 0 & 1
 // \end{array}
 // \right] 
-// \f$\f$
+// \f$
 // \end{displaymath}
 // \f]
 //

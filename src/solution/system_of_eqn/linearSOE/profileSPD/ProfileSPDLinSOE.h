@@ -69,53 +69,54 @@
 namespace XC {
 class ProfileSPDLinSolver;
 
-//! @ingroup SOE
-//
-//! @brief Profile matrix system of equations.
-//!
-//! ProfileSPDLinSOE is class which is used to store a symmetric
-//! system of equations using a profile storage scheme. The upper
-//! triangular part of \f$A\f$ is stored in a 1d double array with the
-//! diagonals of \f$A\f$ located at positions given by an integer array
-//! \f$iLoc\f$. For example when \f$n=5\f$ and \f$A\f$ as shown below:
-//! 
-//! \f$\f$
-//! \left[
-//! \begin{array}{ccccc}
-//! a_{0,0} & a_{0,1}  & 0 & 0 & a_{0,4}
-//! a_{1,0} & a_{1,1} & a_{1,2} & a_{1,3} & 0
-//! a_{2,0} & a_{2,1} & a_{2,2} & a_{2,3} & a_{2,4}
-//! 0 & a_{3,1} & a_{3,2} & a_{3,3} & a_{3,4}
-//! 0 & 0 & a_{4,2} & a_{4,3} & a_{4,4}
-//! \end{array}
-//! \right] 
-//! \f$\f$
-//! 
-//! this is stored using:
-//! 
-//! 
-//! \f$\f$ A =
-//! \left[
-//! \begin{array}{cccccccccccccccccccc}
-//! a_{0,0} & a_{0,1}  & a_{1,1} & a_{1,2} & a_{2,2} & a_{1,3} &
-//! a_{2,3} & a_{3,3} & a_{0,4} & 0 & a_{2,4} & a_{3,4} & a_{4,4}
-//! \end{array}
-//! \right] 
-//! \f$\f$
-//! 
-//! and 
-//! 
-//! \f$\f$ iLoc =
-//! \left[
-//! \begin{array}{cccccccccccccccccccc}
-//! 1 & 3 & 5 & 8 & 13
-//! \end{array}
-//! \right] 
-//! \f$\f$
-//! Note \f$iLoc\f$ stores the diagonal locations using Fortran indexing. This
-//! is to facilitate calls to Fortran libraries, e.g. Digital's DXML.
-//! The \f$x\f$ and \f$b\f$ vectors are stored in 1d double arrays of
-//! length \f$N\f$.
+/**
+ @brief Profile matrix system of equations.
+
+ ProfileSPDLinSOE is class which is used to store a symmetric
+ system of equations using a profile storage scheme. The upper
+ triangular part of \f$A\f$ is stored in a 1d double array with the
+ diagonals of \f$A\f$ located at positions given by an integer array
+ \f$iLoc\f$. For example when \f$n=5\f$ and \f$A\f$ as shown below:
+ @ingroup SOE
+ 
+ \f$
+ \left[
+ \begin{array}{ccccc}
+ a_{0,0} & a_{0,1}  & 0 & 0 & a_{0,4}\\
+ a_{1,0} & a_{1,1} & a_{1,2} & a_{1,3} & 0\\
+ a_{2,0} & a_{2,1} & a_{2,2} & a_{2,3} & a_{2,4}\\
+ 0 & a_{3,1} & a_{3,2} & a_{3,3} & a_{3,4}\\
+ 0 & 0 & a_{4,2} & a_{4,3} & a_{4,4}
+ \end{array}
+ \right] 
+ \f$
+ 
+ this is stored using:
+ 
+ 
+ \f$ A =
+ \left[
+ \begin{array}{cccccccccccccccccccc}
+ a_{0,0} & a_{0,1}  & a_{1,1} & a_{1,2} & a_{2,2} & a_{1,3} &
+ a_{2,3} & a_{3,3} & a_{0,4} & 0 & a_{2,4} & a_{3,4} & a_{4,4}
+ \end{array}
+ \right] 
+ \f$
+ 
+ and 
+ 
+ \f$ iLoc =
+ \left[
+ \begin{array}{cccccccccccccccccccc}
+ 1 & 3 & 5 & 8 & 13
+ \end{array}
+ \right] 
+ \f$
+ Note \f$iLoc\f$ stores the diagonal locations using Fortran indexing. This
+ is to facilitate calls to Fortran libraries, e.g. Digital's DXML.
+ The \f$x\f$ and \f$b\f$ vectors are stored in 1d double arrays of
+ length \f$N\f$.
+*/
 class ProfileSPDLinSOE: public FactoredSOEBase
   {
   protected:

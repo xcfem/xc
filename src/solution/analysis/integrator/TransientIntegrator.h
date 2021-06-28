@@ -149,12 +149,12 @@ class Vector;
 //! \left( U_{t} - U_{t}^{(i)} \right) 
 //! \end{equation}
 //! 
-//! \f$\f$
+//! \f$
 //! R(U_{t}) = 
 //!  P (t) 
 //!  - \f_{I} \left( \ddot U_{t}^{(i)} \right) -
 //! \f_{R} \left( \dot U_{t}^{(i)}, U_{t}^{(i)} \right)
-//! \f$\f$
+//! \f$
 //! \begin{equation} 
 //! - \left[
 //!    M^{(i)} {I}_2'

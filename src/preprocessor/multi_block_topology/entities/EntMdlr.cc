@@ -40,7 +40,6 @@
 #include "preprocessor/set_mgmt/KRowSet.h"
 #include "preprocessor/multi_block_topology/entities/0d/Pnt.h"
 
-
 #include "vtkCellType.h"
 
 //! @brief Constructor.

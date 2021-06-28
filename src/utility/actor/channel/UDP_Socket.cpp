@@ -166,9 +166,10 @@ XC::UDP_Socket::~UDP_Socket(void)
 int XC::UDP_Socket::setUpConnection(void)
   {
   if (connectType == 1) {
-    if (shadow_inetAddr == 0) {
-	std::cerr << "XC::FATAL::XC::UDP_Socket::setUpActor() -";
-	std::cerr << "incorrect choice of UDP_Socket constructor for actor.\n";
+    if (shadow_inetAddr == 0)
+      {
+	std::cerr << "XC::FATAL::XC::UDP_Socket::setUpActor() -"
+		  << " incorrect choice of UDP_Socket constructor for actor.\n";
 	exit(-1);
     }
 

@@ -93,9 +93,10 @@ XC::Node *XC::NodePtrArray::getNearestNode(const Pos3d &p)
     const size_t numberOfRows= getNumberOfRows();
     const size_t numberOfColumns= getNumberOfColumns();
     if(numberOfRows*numberOfColumns>500)
-      std::clog << "Node matrix has "
-                << numberOfRows*numberOfColumns << " elements "
-                << " better to look by coordinates in the associated set."
+      std::clog << getClassName() << "::" << __FUNCTION__
+		<< "; node matrix has "
+                << numberOfRows*numberOfColumns << " elements. "
+                << "It is better to look by coordinates in the associated set."
                 << std::endl;
     for(size_t j= 1;j<=numberOfRows;j++)
       for(size_t k= 1;k<=numberOfColumns;k++)
