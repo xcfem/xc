@@ -174,6 +174,9 @@ doc/sphinxDoc/build/
 _templates
 _build
 
+#doxygen
+doc/reference_manual
+
 #install log for python_modules
 python_modules/installed_files_history.txt
 
