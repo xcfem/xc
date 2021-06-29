@@ -567,7 +567,10 @@ def matchHoles(holes, blockDict):
 
 def getLoadCaseNames(loadData):
     ''' Return the load names implicitly defined
-        in the load data argument.'''
+        in the load data argument.
+
+    :param loadData: dictionary containing the information about internal loads.
+    '''
     retval= list()
     for key in loadData:
         loads= loadData[key]
@@ -586,6 +589,9 @@ def getLoadedSides(xcSet):
             loadDirI= s.getProp('load_dir_i')
             loadDirJ= s.getProp('load_dir_j')
             loadDirK= s.getProp('load_dir_k')
+            member= None
+            if(s.hasProp('member')):
+                member= s.getProp('member')
             ## Get the lines pointed by the load direction: loaded sides.
             faceCenter= s.getCentroid()
             sideList= list()
@@ -599,5 +605,5 @@ def getLoadedSides(xcSet):
                     sideList.append(side)
             if(len(sideList)==0):
                 lmsg.warning('side list empty for load tag: '+str(loadTag))
-            retval[loadTag]= {'I':loadDirI,'J':loadDirJ,'K':loadDirK, 'sideList':sideList}
+            retval[loadTag]= {'member':member, 'I':loadDirI,'J':loadDirJ,'K':loadDirK, 'sideList':sideList}
     return retval

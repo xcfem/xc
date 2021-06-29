@@ -141,44 +141,99 @@ def genGmshMesh(setsToMesh, xc_materials, seedElemHandler):
                 e.setMaterial(xcMat.name)
     # Remove temporary set
     preprocessor.getSets.removeSet(xcTmpSet.name)
-
-def createLoadPatterns(modelSpace, loadCaseNames):
-    ''' Create load patterns.'''
-    lPatterns= dict()
-    for name in loadCaseNames:
-        lPattern= modelSpace.newLoadPattern(str(name))
-        lPatterns[name]= lPattern
-    return lPatterns
+        
     
-def genLoads(modelSpace, loadedSides, internalForcesData):
-    ''' Create the loads at the end of the connection members.'''
-    for key in loadedSides:
-        # Get nodes on loaded sides.
-        sideData= loadedSides[key]
-        loadDirI= sideData['I']
-        loadDirJ= sideData['J']
-        loadDirK= sideData['K']
-        sideList= sideData['sideList']
-        nodeSet= modelSpace.defSet('nodes'+str(key))
-        for side in sideList:
-            for n in side.getEdge.nodes:
-                nodeSet.nodes.append(n)
-        centroid= nodeSet.nodes.getCentroid(0.0)
-        # Put rigid beams between the centroid nodes
-        # and the rest of them.
-        centroidNode= nodeSet.getNearestNode(centroid)
-        centroidNodePos= centroidNode.getInitialPos3d
-        internalForces= internalForcesData[str(key)]
-        for name in internalForces:
-            originLst= internalForces[name][0]
-            origin= geom.Pos3d(originLst[0],originLst[1],originLst[2])
-            internalForceValue= internalForces[name][1]
-            force= internalForceValue['N']*loadDirI+internalForceValue['Vy']*loadDirJ+internalForceValue['Vz']*loadDirK
-            moment= internalForceValue['T']*loadDirI+internalForceValue['My']*loadDirJ+internalForceValue['Mz']*loadDirK
-            svs= geom.SlidingVectorsSystem3d(origin,force,moment)
-            # Apply the loads.
-            currentLP= modelSpace.getLoadPattern(str(name))
-            modelSpace.distributeLoadOnNodes(svs, nodeSet, currentLP)
+class BoundaryConditions(object):
+    ''' Steel connection boundary conditions.
+
+    :ivar modelSpace: PredefinedSpace object used to create the FE model.
+    :ivar internalForcesData: dictionary containing the information about 
+                              internal loads.
+    :ivar loadedSides: sides of the model surfaces that receive loads.
+    :ivar loadCaseNames: names of the load cases.
+    '''
+    def __init__(self, modelSpace, fileName):
+        ''' Constructor.
+
+        :param modelSpace: PredefinedSpace object used to create the FE model.
+        :param fileName: file name containing the load definition.
+        '''
+        self.modelSpace= modelSpace
+        with open(fileName, 'r') as inputFile:
+            self.internalForcesData= json.load(inputFile)
+            inputFile.close()
+
+    def genLoads(self):
+        ''' Create the loads at the end of the connection members.'''
+        for key in self.loadedSides:
+            # Get nodes on loaded sides.
+            sideData= self.loadedSides[key]
+            loadDirI= sideData['I']
+            loadDirJ= sideData['J']
+            loadDirK= sideData['K']
+            sideList= sideData['sideList']
+            nodeSet= self.modelSpace.defSet('loaded_nodes'+str(key))
+            for side in sideList:
+                for n in side.getEdge.nodes:
+                    nodeSet.nodes.append(n)
+            centroid= nodeSet.nodes.getCentroid(0.0)
+            # Distribute the loads over the nodes.
+            centroidNode= nodeSet.getNearestNode(centroid)
+            centroidNodePos= centroidNode.getInitialPos3d
+            internalForces= self.internalForcesData[str(key)]
+            for name in internalForces:
+                originLst= internalForces[name][0]
+                origin= geom.Pos3d(originLst[0],originLst[1],originLst[2])
+                internalForceValue= internalForces[name][1]
+                force= internalForceValue['N']*loadDirI+internalForceValue['Vy']*loadDirJ+internalForceValue['Vz']*loadDirK
+                moment= internalForceValue['T']*loadDirI+internalForceValue['My']*loadDirJ+internalForceValue['Mz']*loadDirK
+                svs= geom.SlidingVectorsSystem3d(origin,force,moment)
+                # Apply the loads.
+                currentLP= self.modelSpace.getLoadPattern(str(name))
+                self.modelSpace.distributeLoadOnNodes(svs, nodeSet, currentLP)
+                
+    def createConstraints(self, constrainedMember, constraintType= '000_FFF'):
+        ''' Create the loads at the end of the connection members.
+
+        :param constrainedMember: member which will be constrained.
+        :param constraintType: string defining the type of the constraint
+                               (see predefined_spaces module).
+        '''
+        for key in self.loadedSides:
+            # Get nodes on loaded sides.
+            sideData= self.loadedSides[key]
+            member= sideData['member']
+            if(member==constrainedMember):
+                sideList= sideData['sideList']
+                for side in sideList:
+                    for n in side.getEdge.nodes:
+                        self.modelSpace.fixNode(constraintType, n.tag)
+            
+    def createLoadPatterns(self):
+        ''' Create load patterns corresponding to the internal forces on 
+            members.
+        '''
+        self.loadCaseNames= import_connection.getLoadCaseNames(self.internalForcesData)
+        lPatterns= dict()
+        for name in self.loadCaseNames:
+            lPattern= self.modelSpace.newLoadPattern(str(name))
+            lPatterns[name]= lPattern
+        return lPatterns
+    
+    def createLoads(self):
+        ''' Create the loads corresponding to the internal forces on members.
+        '''
+
+        # Create load patterns.
+        lPatterns= self.createLoadPatterns()
+
+        # Get loaded sides.
+        xcTotalSet= self.modelSpace.getTotalSet()
+        self.loadedSides= import_connection.getLoadedSides(xcTotalSet)
+        
+        # Create loads.
+        self.genLoads()
+        return self.loadCaseNames
     
 def createLoadsFromFile(modelSpace, fileName):
     ''' Create the loads whose values are defined in the file argument.
@@ -186,20 +241,7 @@ def createLoadsFromFile(modelSpace, fileName):
     :param modelSpace: PredefinedSpace object used to create the FE model.
     :param fileName: file name containing the load definition.
     '''
-    with open(fileName, 'r') as inputFile:
-        internalForcesData= json.load(inputFile)
-        inputFile.close()
-
-    # Create load patterns.
-    loadCaseNames= import_connection.getLoadCaseNames(internalForcesData)
-    lPatterns= createLoadPatterns(modelSpace,loadCaseNames)
-
-    # Get total set.
-    xcTotalSet= modelSpace.getTotalSet()
-
-    # Get loaded sides.
-    loadedSides= import_connection.getLoadedSides(xcTotalSet)
-    genLoads(modelSpace, loadedSides, internalForcesData)
+    lmsg.warning('createLoadsFromFile DEPRECATED; use BoundaryConditions instead.')
+    bc= BoundaryConditions(modelSpace, fileName)
+    loadCaseNames= bc.createLoads()
     return loadCaseNames
-    
-    
