@@ -473,7 +473,12 @@ class ConnectionMetaData(object):
         :param internalForces: internal forces of the connected elements.
         '''
         retval= dict()
+        # Column internal forces.
         retval[self.column.eTag]= self.column.getLoadData(internalForces, self.originNode)
+        # Beam internal forces.
+        for b in self.beams:
+            retval[b.eTag]= b.getLoadData(internalForces, self.originNode)
+        # Diagonal internal forces.
         for d in self.diagonals:
             retval[d.eTag]= d.getLoadData(internalForces, self.originNode)
         return retval
