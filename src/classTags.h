@@ -478,6 +478,8 @@
 #define LinSOE_TAGS_SparseGenRowLinSOE		20
 #define LinSOE_TAGS_DistributedSparseGenRowLinSOE       21
 #define LinSOE_TAGS_DistributedDiagonalSOE 22
+#define LinSOE_TAGS_MumpsSOE 23
+#define LinSOE_TAGS_MumpsParallelSOE 24
 
 #define SOLVER_TAGS_FullGenLinLapackSolver  	1
 #define SOLVER_TAGS_BandGenLinLapackSolver  	2
@@ -501,6 +503,8 @@
 #define SOLVER_TAGS_DiagonalDirectSolver 20
 #define SOLVER_TAGS_PetscSparseSeqSolver 21
 #define SOLVER_TAGS_DistributedDiagonalSolver 22
+#define SOLVER_TAGS_MumpsSolver			      	23
+#define SOLVER_TAGS_MumpsParallelSolver			24
 
 
 #define RECORDER_TAGS_ElementRecorder		1

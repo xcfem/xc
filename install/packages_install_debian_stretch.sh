@@ -50,6 +50,7 @@ packages_lib="\
     libgts-bin                  \
     libgts-dev                  \
     liblapack-dev               \
+    libmumps-dev                \
     libmpfr-dev                 \
     libmysql++-dev              \
     libplot-dev                 \
