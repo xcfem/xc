@@ -259,15 +259,21 @@ class ConnectedMemberMetaData(object):
             p0= webPlane.getIntersection(sg)
         return p0
     
-    def getMemberLoadAttributes(self):
-        ''' Return the attirbutes with the loading data
+    def getMemberLoadAttributes(self, connectionOrigin):
+        ''' Return the attributes with the loading data
             for this member.
+
+        :param connectionOrigin: connection origin.
         '''
+        orientation= self.getOrientation(connectionOrigin)
+        loadDirI= orientation*self.iVector
+        loadDirJ= orientation*self.jVector
+        loadDirK= orientation*self.kVector
         retval= dict()
         retval['loadTag']= self.eTag
-        retval['loadDirI']= [self.iVector.x, self.iVector.y, self.iVector.z]
-        retval['loadDirJ']= [self.jVector.x, self.jVector.y, self.jVector.z]
-        retval['loadDirK']= [self.kVector.x, self.kVector.y, self.kVector.z]
+        retval['loadDirI']= [loadDirI.x, loadDirI.y, loadDirI.z]
+        retval['loadDirJ']= [loadDirJ.x, loadDirJ.y, loadDirJ.z]
+        retval['loadDirK']= [loadDirK.x, loadDirK.y, loadDirK.z]
         return retval
     
     def getMemberBlocks(self, connectionOrigin, memberOrigin, factor, blockProperties= None):
@@ -283,7 +289,7 @@ class ConnectedMemberMetaData(object):
         self.memberOrigin= memberOrigin
         memberProperties= bte.BlockProperties.copyFrom(blockProperties)
         memberProperties.appendAttribute('objType', self.getMemberType())
-        memberProperties.extendAttributes(self.getMemberLoadAttributes())
+        memberProperties.extendAttributes(self.getMemberLoadAttributes(connectionOrigin))
         f= factor*self.getOrientation(connectionOrigin)
         self.extrusionVector= self.getExtrusionVector(f)
         return self.shape.getBlockData(org= self.memberOrigin, extrusionVDir= self.extrusionVector, weakAxisVDir= self.jVector, blockProperties= memberProperties)

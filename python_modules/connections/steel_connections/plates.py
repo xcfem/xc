@@ -248,8 +248,8 @@ class Plate(object):
         :param loadTag: tag of the applied loads in the internal forces file.
         :param loadDirI: I vector of the original element. Vector that 
                          points to the loaded side of the plate.
-        :param loadDirJ: J vector of the of the original element.
-        :param loadDirK: K vector of the of the original element.
+        :param loadDirJ: J vector of the original element.
+        :param loadDirK: K vector of the original element.
         '''
         retval= bte.BlockData()
         plateProperties= bte.BlockProperties.copyFrom(blockProperties)

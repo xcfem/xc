@@ -183,6 +183,7 @@ def genLoads(modelSpace, loadedSides, internalForcesData):
 def createLoadsFromFile(modelSpace, fileName):
     ''' Create the loads whose values are defined in the file argument.
 
+    :param modelSpace: PredefinedSpace object used to create the FE model.
     :param fileName: file name containing the load definition.
     '''
     with open(fileName, 'r') as inputFile:
