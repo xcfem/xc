@@ -173,7 +173,7 @@ class Bolt(object):
         vz=vz.Normalized()
         vy=cross(vx,vz)
         linname= str(uuid.uuid1())
-        lin=prep.getTransfCooHandler.newLinearCrdTransf3d(linname)
+        lin= prep.getTransfCooHandler.newLinearCrdTransf3d(linname)
         lin.xzVector=vz
         elements.defaultTransformation= lin.name
         elements.defaultMaterial=radMat.name
@@ -283,6 +283,8 @@ class BaseWeld(object):
         pnts=prep.getMultiBlockTopology.getPoints
         nodes= prep.getNodeHandler
         elements= prep.getElementHandler
+
+        # Compute the weld extremities.
         if len(self.weldExtrPoints)>1:
             if self.weldExtrPoints[0].type()=='XC::Pnt': 
                 self.weldP1=self.weldExtrPoints[0].getPos
@@ -301,22 +303,40 @@ class BaseWeld(object):
                 self.weldP2=self.weldLine.getToPoint()
         else:
             lmsg.error('Missing geometric definition of weld '+ self.descr + ' two points or one line is needed')
-        self.length=self.weldP1.dist(self.weldP2)
-        if not nDiv: nDiv=int(round(self.length/(self.weldSz)))
-        distWeldEl=self.length/nDiv
+        self.length= self.weldP1.dist(self.weldP2)
+        if not nDiv: nDiv= int(round(self.length/(self.weldSz)))
+        distWeldEl= self.length/nDiv
+        # slightly trim the weld at its ends
+        p1p2Dir= (self.weldP2-self.weldP1).normalized()
+        self.weldP1+= 0.5*distWeldEl*p1p2Dir
+        self.weldP2-= 0.5*distWeldEl*p1p2Dir
+        
         if not self.setName: self.setName=str(uuid.uuid1())
         if prep.getSets.exists(self.setName):
             lmsg.warning('Set ',self.setName, ' already defined, check if weld elements should be in a new set')
-        self.weldSet=prep.getSets.defSet(self.setName)
+        self.weldSet= prep.getSets.defSet(self.setName)
 
         # surfaces thickness
         self.tWS1= self.setWS1.getElements[0].getPhysicalProperties.getVectorMaterials[0].h   # thickness of surface 1 is taken from its first element (constant thickness is assumed).
         self.tWS2= self.setWS2.getElements[0].getPhysicalProperties.getVectorMaterials[0].h   # thickness of surface 2 is taken from its first element (constant thickness is assumed).
         self.minSz= ASTM_materials.getFilletWeldMinimumLegSheets(self.tWS1,self.tWS2)
         self.maxSz= ASTM_materials.getFilletWeldMaximumLegSheets(self.tWS1,self.tWS2)
+        # select the elements of WS1 and WS2 near to the weld
+        weldLine= geom.Segment3d(self.weldP1, self.weldP2)
+        thresholdDist2= (10.0*self.maxSz)**2
+        WS1Subset= prep.getSets.defSet(self.setWS1.name+'_subset')
+        for e in self.setWS1.elements:
+            center= e.getPosCentroid(False)
+            if(weldLine.dist2(center)<thresholdDist2):
+                WS1Subset.elements.append(e)
+        WS2Subset= prep.getSets.defSet(self.setWS2.name+'_subset')
+        for e in self.setWS2.elements:
+            center= e.getPosCentroid(False)
+            if(weldLine.dist2(center)<thresholdDist2):
+                WS2Subset.elements.append(e)
         # elements on surfaces
-        e1= self.setWS1.getNearestElement(self.weldP1)
-        e2= self.setWS2.getNearestElement(self.weldP1)
+        e1= WS1Subset.getNearestElement(self.weldP1)
+        e2= WS2Subset.getNearestElement(self.weldP1)
         # vectors perpendicular to welding surfaces
         WS1sign= WS1sign/abs(WS1sign)
         WS2sign= WS2sign/abs(WS2sign)
@@ -411,15 +431,18 @@ class BaseWeld(object):
         gluedDOFs=[0,1,2,3,4,5]
         for n in nod_lWS1:
             nodePos= n.getInitialPos3d
-            e= self.setWS1.getNearestElement(nodePos)
+            e= WS1Subset.getNearestElement(nodePos)
             dist= e.getDist(nodePos, True)
             glue= prep.getBoundaryCondHandler.newGlueNodeToElement(n,e,xc.ID(gluedDOFs))
         for n in nod_lWS2:
             nodePos= n.getInitialPos3d
-            e= self.setWS2.getNearestElement(nodePos)
+            e= WS2Subset.getNearestElement(nodePos)
             dist= e.getDist(nodePos, True)
             glue= prep.getBoundaryCondHandler.newGlueNodeToElement(n,e,xc.ID(gluedDOFs))
         self.weldSet.fillDownwards()
+        # remove temporary sets.
+        prep.getSets.removeSet(WS1Subset.name)
+        prep.getSets.removeSet(WS2Subset.name)
         
     def getTotalIntForc(self):
         '''Return the total forces in directions parallel and perpendiculars to
