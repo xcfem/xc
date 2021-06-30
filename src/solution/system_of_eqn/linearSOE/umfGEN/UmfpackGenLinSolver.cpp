@@ -63,102 +63,122 @@
 
 #include <solution/system_of_eqn/linearSOE/umfGEN/UmfpackGenLinSOE.h>
 #include <solution/system_of_eqn/linearSOE/umfGEN/UmfpackGenLinSolver.h>
-#include <f2c.h>
 
-extern "C" int umd21i_(int *keep, double *cntl, int *icntl);
-
+void XC::UmfpackGenLinSolver::free_symbolic(void)
+  {
+    if(Symbolic)
+      {
+	umfpack_di_free_symbolic(&Symbolic);
+	Symbolic= nullptr;
+      }
+  }
 
 XC::UmfpackGenLinSolver::UmfpackGenLinSolver()
-:LinearSOESolver(SOLVER_TAGS_UmfpackGenLinSolver),
- copyIndex(0), lIndex(0), work(0), theSOE(nullptr)
-  {
-    // perform the initialisation needed in UMFpack
-    umd21i_(keep, cntl, icntl);
-  }
+ : LinearSOESolver(SOLVER_TAGS_UmfpackGenLinSolver),
+   Symbolic(nullptr), theSOE(nullptr)
+  {}
 
 XC::LinearSOESolver *XC::UmfpackGenLinSolver::getCopy(void) const
    { return new UmfpackGenLinSolver(*this); }
 
-extern "C" int umd2fa_(const int *n, int *ne, int *job, logical *transa,
-		       int *lvalue, int *lindex, double *value,
-		       int *index, int *keep, double *cntl, int *icntl,
-		       int *info, double *rinfo);
-
-extern "C" int umd2so_(const int *n, int *job, logical *transa,
-		       int *lvalue, int *lindex, double *value,
-		       int *index, int *keep, double *b, double *x, 
-		       double *w, double *cntl, int *icntl,
-		       int *info, double *rinfo);
+//! @brief Destructor.
+XC::UmfpackGenLinSolver::~UmfpackGenLinSolver()
+  { free_symbolic(); }
 
 int XC::UmfpackGenLinSolver::solve(void)
   {
-    if(!theSOE)
+    const int n = theSOE->X.Size();
+    const int nnz = static_cast<int>(theSOE->Ai.size());
+    if(n == 0 || nnz==0)
+      return 0;
+    
+    int *Ap= &(theSOE->Ap[0]);
+    int *Ai= &(theSOE->Ai[0]);
+    double *Ax = &(theSOE->Ax[0]);
+    double *X = theSOE->X.getDataPtr();
+    double *B = theSOE->B.getDataPtr();
+
+    // check if symbolic is done
+    if(!Symbolic)
       {
 	std::cerr << getClassName() << "::" << __FUNCTION__
-		  << "; WARNING no LinearSOE object has been set"
-	          << std::endl;
+		  << "; WARNING: setSize has not been called.\n";
 	return -1;
       }
     
-    const int n = theSOE->size;
-    int ne = theSOE->nnz;
-    int lValue = theSOE->lValue;
+    // numerical analysis
+    void *Numeric= nullptr;
+    int status = umfpack_di_numeric(Ap,Ai,Ax,Symbolic,&Numeric,Control,Info);
 
-    // check for quick return
-    if (n == 0)
-	return 0;
-
-    // first copy B into X
-    double *Xptr = theSOE->getPtrX();
-    double *Bptr = theSOE->getPtrB();
-    double *Aptr = theSOE->A.getDataPtr();
-
-    int job =0; // set to 1 if wish to do iterative refinement
-    logical trans = FALSE_;
-
-    if(theSOE->factored == false)
+    // check error
+    if(status!=UMFPACK_OK)
       {
-        // make a copy of index
-        for(int i=0; i<2*ne; i++)
-          { copyIndex[i] = theSOE->index[i]; }
-
-      // factor the matrix
-      umd2fa_(&n, &ne, &job, &trans, &lValue, &lIndex, Aptr,
-	      copyIndex.getDataPtr(), keep, cntl, icntl, info, rinfo);
-      
-      if (info[0] != 0) {	
-	std::cerr << "WARNING UmfpackGenLinSolver::solve(void)- ";
-	std::cerr << info[0] << " returned in factorization UMD2FA()\n";
-	return -info[0];
+	std::cerr  << getClassName() << "::" << __FUNCTION__
+		   <<"; WARNING: numeric analysis returns "<< status
+		   << std::endl;
+	if(status==UMFPACK_WARNING_singular_matrix)
+	  std::cerr << " Singular matrix. Numeric factorization was successful, but the matrix is singular." << std::endl;
+	if(status==UMFPACK_ERROR_out_of_memory)
+	  std::cerr << " Insufficient memory to complete the numeric factorization." << std::endl;
+	if(status==UMFPACK_ERROR_argument_missing)
+	  std::cerr << " One or more required arguments are missing." << std::endl;
+	if(status==UMFPACK_ERROR_invalid_Symbolic_object)
+	  std::cerr << " Symbolic object provided as input is invalid." << std::endl;
+	if(status==UMFPACK_ERROR_different_pattern)
+	  std::cerr << " Different pattern." << std::endl;
+	return -1;
       }
-      theSOE->factored = true;
-    }	
 
-    // do forward and backward substitution
-    umd2so_(&n, &job, &trans, &lValue, &lIndex, Aptr, copyIndex.getDataPtr(), 
-	    keep, Bptr, Xptr, work.getDataPtr(), cntl, icntl, info, rinfo);
+    // solve
+    status= umfpack_di_solve(UMFPACK_A,Ap,Ai,Ax,X,B,Numeric,Control,Info);
 
-    if (info[0] != 0) {	
-       std::cerr << "WARNING UmfpackGenLinSolver::solve(void)- ";
-       std::cerr << info[0] << " returned in substitution dgstrs()\n";
-       return -info[0];
-    }
+    // delete Numeric
+    if(Numeric)
+      { umfpack_di_free_numeric(&Numeric); }
+    
+    // check error
+    if(status!=UMFPACK_OK)
+      {
+	std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; WARNING: solving returns "<< status
+		  << std::endl;
+	return -1;
+      }
 
     return 0;
-}
+  }
 
 
 int XC::UmfpackGenLinSolver::setSize()
   {
-    int n = theSOE->size;
-    int ne = theSOE->nnz;
-    if(n > 0)
-      {
-        work.resize(4*n);
+    // set default control parameters
+    umfpack_di_defaults(Control);
+    Control[UMFPACK_PIVOT_TOLERANCE] = 1.0;
+    Control[UMFPACK_STRATEGY] = UMFPACK_STRATEGY_SYMMETRIC;
 
-        lIndex = 37*n + 4*ne + 10;
-        copyIndex= ID(lIndex);
-      }	
+    const int n = theSOE->X.Size();
+    const int nnz = static_cast<int>(theSOE->Ai.size());
+    if (n == 0 || nnz==0) return 0;
+    
+    int *Ap= &(theSOE->Ap[0]);
+    int *Ai= &(theSOE->Ai[0]);
+    double *Ax= &(theSOE->Ax[0]);
+
+    // symbolic analysis
+    if(Symbolic)
+      { free_symbolic(); }
+    int status = umfpack_di_symbolic(n,n,Ap,Ai,Ax,&Symbolic,Control,Info);
+
+    // check error
+    if (status!=UMFPACK_OK)
+      {
+	std::cerr  << getClassName() << "::" << __FUNCTION__
+		   << "; WARNING: symbolic analysis returns "
+		   << status
+		   << std::endl;
+	Symbolic= nullptr;
+	return -1;
+      }
     return 0;
   }
 
@@ -173,7 +193,9 @@ bool XC::UmfpackGenLinSolver::setLinearSOE(LinearSOE *soe)
         retval= true;
       }
     else
-      std::cerr << getClassName() << "::setLinearSOE: not a suitable system of equations" << std::endl;
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< " not a suitable system of equations"
+		<< std::endl;
     return retval;
   }
 

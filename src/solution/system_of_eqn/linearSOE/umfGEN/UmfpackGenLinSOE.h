@@ -66,7 +66,7 @@
 #ifndef UmfpackGenLinSOE_h
 #define UmfpackGenLinSOE_h
 
-#include <solution/system_of_eqn/linearSOE/FactoredSOEBase.h>
+#include "solution/system_of_eqn/linearSOE/LinearSOEData.h"
 #include "utility/matrix/Vector.h"
 
 namespace XC {
@@ -75,15 +75,11 @@ class UmfpackGenLinSolver;
 //! @brief System of equations that can be used with the UMFPACK routines
 //! (Unsymmetric MultiFrontal Method). See <a href="http://faculty.cse.tamu.edu/davis/research.html" target="_new"> SuiteSparse</a>.
 //! @ingroup SOE
-class UmfpackGenLinSOE: public FactoredSOEBase
+class UmfpackGenLinSOE: public LinearSOEData
   {
   private:
-    int nnz; //!< number of non-zeros in A
-    Vector A; //!< 1d array containing coefficients of A.
-    ID colA;
-    ID rowStartA; // int arrays containing info about coeff's in A
-    int lValue;
-    ID index;   // keep only for UMFpack
+    std::vector<double> Ax;
+    std::vector<int> Ap, Ai;
   protected:
     bool setSolver(LinearSOESolver *);
 

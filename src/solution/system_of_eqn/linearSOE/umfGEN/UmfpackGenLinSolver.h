@@ -66,6 +66,7 @@
 #define UmfpackGenLinSolver_h
 
 #include <solution/system_of_eqn/linearSOE/LinearSOESolver.h>
+#include "suitesparse/umfpack.h"
 
 namespace XC {
 class UmfpackGenLinSOE;
@@ -76,15 +77,10 @@ class UmfpackGenLinSOE;
 class UmfpackGenLinSolver: public LinearSOESolver
   {
   private:
-    int icntl[20];
-    int keep[20];
-    double cntl[10];
-    int info[40];
-    double rinfo[20];
-    
-    ID copyIndex;
-    int lIndex;
-    Vector work;
+    void *Symbolic;
+    double Control[UMFPACK_CONTROL], Info[UMFPACK_INFO];
+    void free_symbolic(void);
+
   protected:    
     UmfpackGenLinSOE *theSOE;
 
@@ -94,6 +90,8 @@ class UmfpackGenLinSolver: public LinearSOESolver
     virtual LinearSOESolver *getCopy(void) const;
     virtual bool setLinearSOE(LinearSOE *theSOE);
   public:
+    
+    ~UmfpackGenLinSolver(void);
 
     int solve(void);
     int setSize(void);
