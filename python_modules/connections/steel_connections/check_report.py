@@ -44,10 +44,10 @@ def aisc_check_bolts_welds(modelSpace,ULSs,boltSets2Check=[],welds2Check=[],base
     # Calculation and checking
     if linear:
         #modelSpace.analysis= predefined_solutions.simple_static_linear(modelSpace.getProblem())
-        modelSpace.solutionProcedureType=  predefined_solutions.SimpleStaticLinear
+        modelSpace.solutionProcedureType=  predefined_solutions.SimpleStaticLinearUMF
     else:
         #modelSpace.analysis=  predefined_solutions.penalty_modified_newton(modelSpace.getProblem(), mxNumIter=50, convergenceTestTol= 5.0e-3, printFlag= 2)
-        modelSpace.solutionProcedureType=  predefined_solutions.PenaltyModifiedNewton(modelSpace.getProblem(), maxNumIter=25, convergenceTestTol= 5.0e-2, printFlag= 2)
+        modelSpace.solutionProcedureType=  predefined_solutions.PenaltyModifiedNewtonUMF(modelSpace.getProblem(), maxNumIter=25, convergenceTestTol= 5.0e-2, printFlag= 2)
     for ULS in ULSs:
         ULS=str(ULS)
         modelSpace.removeAllLoadPatternsFromDomain()
@@ -173,9 +173,13 @@ def set_bolt_check_resprop_current_LC(ULS,boltSets2Check,meanShearProc):
         for e in bset.elements:
             N=e.getN()
             V=Vmean if meanShearProc else math.sqrt((e.getVy())**2+(e.getVz())**2)
-            eN=max(N/Fdt,0)
-            eV=V/Fdv
-            CF=math.sqrt((2*eN**4+4*eN**2*eV**2+2*eV**4)/(2*eV**2+2*eN**2))
+            eN= max(N/Fdt,0)
+            eV= V/Fdv
+            eMax= max(abs(eN),abs(eV))
+            if(eMax<1e-6):
+                CF= eMax
+            else:
+                CF=math.sqrt((2*eN**4+4*eN**2*eV**2+2*eV**4)/(2*eV**2+2*eN**2))
             if CF>e.getProp('CF'):
                 e.setProp('CF',CF);e.setProp('LS',ULS);e.setProp('N',N);e.setProp('V',V)
 
@@ -230,9 +234,9 @@ def gen_report_files(modelSpace,genDescr,specDescr,loadCaseNames,reportPath,rltv
     cont=0
     if linear:
 #        modelSpace.solutionProcedureType= predefined_solutions.simple_static_linear(modelSpace.getProblem())
-        modelSpace.solutionProcedureType=  predefined_solutions.SimpleStaticLinear
+        modelSpace.solutionProcedureType=  predefined_solutions.SimpleStaticLinearUMF
     else:
-        modelSpace.solutionProcedureType=  predefined_solutions.PenaltyModifiedNewton(modelSpace.getProblem(), maxNumIter=25, convergenceTestTol= 5.0e-2, printFlag= 2)
+        modelSpace.solutionProcedureType=  predefined_solutions.PenaltyModifiedNewtonUMF(modelSpace.getProblem(), maxNumIter=25, convergenceTestTol= 5.0e-2, printFlag= 2)
     for ULS in lcNm:
         txtDescr=genDescr+' '+specDescr+' '+ULS + ': '
         modelSpace.removeAllLoadPatternsFromDomain()
