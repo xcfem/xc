@@ -82,26 +82,26 @@ int XC::FrequencyAlgo::solveCurrentStep(int nModes)
 
     if((theModel == 0) || (theIntegrator == 0) || (theSOE == 0))
       {
-        std::cerr << "WARNING FrequencyAlgo::solverCurrentStep() - ";
-        std::cerr << " domain, model or integrator not assigned.\n";
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "WARNING; domain, model or integrator not assigned.\n";
         return -1;
       }
     if(theIntegrator->formK()<0) //Builds tangent stiffness matrix.
       {
-        std::cerr << "WARNING FrequencyAlgo::solverCurrentStep() - ";
-        std::cerr << "the Integrator failed in formK().\n";
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "WARNING ;the Integrator failed in formK().\n";
         return -2;
       }
     if(theIntegrator->formM()<0) //Form the mass matrix.
       {
-        std::cerr << "WARNING FrequencyAlgo::solverCurrentStep() - ";
-        std::cerr << "the Integrator failed in formM().\n";
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "WARNING; the Integrator failed in formM().\n";
         return -3;
       }
     if(theSOE->solve(nModes) < 0) //Computes eigenmodes.
       {
-        std::cerr << "Warning XC::FrequencyAlgo::solveCurrentStep() - ";
-        std::cerr << "the XC::EigenSOE failed in solve().\n";
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "WARNING; the XC::EigenSOE failed in solve().\n";
         return -4;
       }
     eigen_to_model(nModes); //Sends eigenvectors and eigenvalues to the model.

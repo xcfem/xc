@@ -113,31 +113,31 @@ int XC::Broyden::solveCurrentStep(void)
         //form the initial tangent
         if(theIntegrator->formTangent(tangent) < 0)
           {
-            std::cerr << "WARNING XC::Broyden::solveCurrentStep() -";
-            std::cerr << "the Integrator failed in formTangent()\n";
+            std::cerr << getClassName() << "::" << __FUNCTION__
+		      << "; WARNING the Integrator failed in formTangent().\n";
             return -1;
           }
 
         //form the initial residual
         if(theIntegrator->formUnbalance() < 0)
           {
-            std::cerr << "WARNING XC::Broyden::solveCurrentStep() -";
-            std::cerr << "the Integrator failed in formUnbalance()\n";
+            std::cerr << getClassName() << "::" << __FUNCTION__
+		      << "; WARNING the Integrator failed in formUnbalance()\n";
           }
 
         //solve
         if(theSysOfEqn->solve() < 0)
           {
-            std::cerr << "WARNING XC::Broyden::solveCurrentStep() -";
-            std::cerr << "the LinearSysOfEqn failed in solve()\n";
+            std::cerr << getClassName() << "::" << __FUNCTION__
+		      << "; WARNING the LinearSysOfEqn failed in solve()\n";
             return -3;
           }
 
         //update
         if( theIntegrator->update(theSysOfEqn->getX() ) < 0)
           {
-            std::cerr << "WARNING XC::Broyden::solveCurrentStep() -";
-            std::cerr << "the XC::Integrator failed in update()\n";
+            std::cerr << getClassName() << "::" << __FUNCTION__
+		      << "; WARNING the Integrator failed in update()\n";
             return -4;
           }
 
@@ -159,8 +159,8 @@ int XC::Broyden::solveCurrentStep(void)
         //form the residual again
         if(theIntegrator->formUnbalance() < 0)
           {
-            std::cerr << "WARNING XC::Broyden::solveCurrentStep() -";
-            std::cerr << "the XC::Integrator failed in formUnbalance()\n";
+            std::cerr << getClassName() << "::" << __FUNCTION__
+		      << "; WARNING the Integrator failed in formUnbalance()\n";
           }
 
 
@@ -177,8 +177,8 @@ int XC::Broyden::solveCurrentStep(void)
             //solve
             if(theSysOfEqn->solve() < 0)
               {
-                std::cerr << "WARNING XC::Broyden::solveCurrentStep() -";
-                std::cerr << "the LinearSysOfEqn failed in solve()\n";
+                std::cerr << getClassName() << "::" << __FUNCTION__
+			  << "; WARNING the LinearSysOfEqn failed in solve()\n";
                 return -3;
               }
 
@@ -190,8 +190,8 @@ int XC::Broyden::solveCurrentStep(void)
 
             if(theIntegrator->update(du) < 0 )
               {
-                std::cerr << "WARNING Broyden::solveCurrentStep() -";
-                std::cerr << "the Integrator failed in update()\n";
+                std::cerr << getClassName() << "::" << __FUNCTION__
+			  << "; WARNING the Integrator failed in update()\n";
                 return -4;
               }
 
@@ -239,7 +239,6 @@ int XC::Broyden::solveCurrentStep(void)
   }
 
 
-
 void  XC::Broyden::BroydenUpdate( IncrementalIntegrator *theIntegrator, LinearSOE *theSOE, Vector &du, int nBroyden )
   {
 
@@ -253,8 +252,8 @@ void  XC::Broyden::BroydenUpdate( IncrementalIntegrator *theIntegrator, LinearSO
     theSOE->setB(temp);
 
     if(theSOE->solve() < 0)
-      std::cerr << "WARNING Broyden::solveCurrentStep() -"
-                << "the LinearSysOfEqn failed in solve()\n";
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; WARNING the LinearSysOfEqn failed in solve().\n";
  
     z[nBroyden]= theSOE->getX();
     z[nBroyden]*= (-1.0);

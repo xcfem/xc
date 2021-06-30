@@ -137,7 +137,7 @@ int XC::SparseGenRowLinSOE::setSize(Graph &theGraph)
 	    // now we have to place the entries in the XC::ID into order in colA
 	    for(std::set<int>::const_iterator i=theAdjacency.begin(); i!=theAdjacency.end(); i++)
 	      {
-		int row = *i;
+		const int row= *i;
 		bool foundPlace = false;
 		// find a place in colA for current col
 		for (int j=startLoc; j<lastLoc; j++)

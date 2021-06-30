@@ -59,22 +59,22 @@ int XC::LinearBucklingAlgo::solveCurrentStep(int numModes)
     EigenSOE *theSOE = getEigenSOEPtr();
     if((theModel == 0) || (theIntegrator == 0) || (theSOE == 0))
       {
-        std::cerr << "WARNING LinearBucklingAlgo::solverCurrentStep() - ";
-        std::cerr << " domain, model or integrator not assigned.\n";
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "WARNING; domain, model or integrator not assigned.\n";
         return -1;
       }
 
     if(theIntegrator->formKtplusDt()<0) //Builds stiffness matrix.
       {
-        std::cerr << "WARNING LinearBucklingAlgo::solverCurrentStep() - ";
-        std::cerr << "the Integrator failed in formKtplusDt().\n";
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "WARNING; the Integrator failed in formKtplusDt().\n";
         return -3;
       }
 
     if(theSOE->solve(numModes) < 0) //Computes eigenmodes.
       {
-        std::cerr << "Warning LinearBucklingAlgo::solveCurrentStep() - ";
-        std::cerr << "the EigenSOE failed in solve().\n";
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "WARNING; the EigenSOE failed in solve().\n";
         return -4;
       }
 
