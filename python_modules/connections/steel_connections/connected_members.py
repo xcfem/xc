@@ -375,10 +375,10 @@ class ConnectionMetaData(object):
             retval.append(b.shape)
         return retval
 
-    def getBeamsTop(self):
-        ''' Return the maximum local z coordinate of the beams in the
-            connection.'''
-        retval= 0 # if no beams, no top.
+    def getBeamsTopBottom(self):
+        ''' Return the maximum and minimum local z coordinate of the beams
+            in the connection.'''
+        top= 0; bottom= 0; # if no beams, no top, no bottom.
         origin= self.getOrigin()
         ref= self.getReferenceSystem()
         for b in self.beams:
@@ -386,8 +386,9 @@ class ConnectionMetaData(object):
             beamPoints= bottomFlangePts+topFlangePts
             for p in beamPoints:
                 lp= ref.getLocalPosition(p)
-                retval= max(retval,lp.z)
-        return retval
+                top= max(top,lp.z)
+                bottom= min(bottom, lp.z)
+        return top, bottom
                     
     def getDiagonalShapes(self):
         ''' Return the shapes of the diagonals.'''
@@ -396,19 +397,32 @@ class ConnectionMetaData(object):
             retval.append(d.shape)
         return retval
     
-    def getColumnShapeBlocks(self, factor, blockProperties= None):
+    def getColumnShapeBlocks(self, factor, intermediateJoint, blockProperties= None):
         ''' Return the faces of the column shaft.
 
         :param factor: factor multiplies the unary direction vector
                        of the member to define its extrusion 
-                       direction and lenght.
-        :param blockProperties: labels and attributes to assign to the newly created blocks.
+                       direction and length.
+        :param intermediateJoint: true if the joint doesn't correspond
+                                  to an extremity of the column (i.e.
+                                  a base plate or the top end of the column).
+        :param blockProperties: labels and attributes to assign to the newly 
+                                created blocks.
         '''
-        beamsTop= self.getBeamsTop()
-        ref= self.getReferenceSystem()
-        origin= self.getOrigin()
-        columnOrigin= origin+1.25*beamsTop*self.column.iVector
-        return self.column.getMemberBlocks(origin,columnOrigin,factor, blockProperties)
+        beamsTop, beamsBottom= self.getBeamsTopBottom()
+        # Compute the position of the column origin to be sure
+        # that the element connections are "covered".
+        connectionOrigin= self.getOrigin()
+        columnOrientation= self.column.getOrientation(connectionOrigin)
+        if(intermediateJoint):
+            ff= 6.0
+        else:
+            ff= 1.25
+        if(columnOrientation<0):
+            columnOrigin= connectionOrigin+ff*beamsTop*self.column.iVector
+        else:
+            columnOrigin= connectionOrigin+ff*beamsBottom*self.column.iVector
+        return self.column.getMemberBlocks(connectionOrigin, columnOrigin, factor, blockProperties)
 
     def getBeamShapeBlocks(self, factor, blockProperties= None):
         ''' Return the faces of the beams.

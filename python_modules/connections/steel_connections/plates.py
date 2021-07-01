@@ -169,51 +169,54 @@ class Plate(object):
         fromPoint= distalEdge.getFromPoint() # contour first point.
         toPoint= distalEdge.getToPoint() # contour last point.
         retval.append(fromPoint)
-        numWeldLines= len(self.weldLines)
-        if(numWeldLines==1):
-            key= list(self.weldLines.keys())[0]
-            wl= self.weldLines[key]
-            p1= wl.getFromPoint()
-            d1= fromPoint.dist2(p1)
-            p2= wl.getToPoint()
-            d2= fromPoint.dist2(p2)
-            if(d1<d2): # p1 is closer.
-                p1New= wl.getProjection(fromPoint)
-                p2New= wl.getProjection(toPoint)
-                retval.extend([p1New,p2New]) # set contour.
-                # Modify weld line.
-                self.weldLines[key]= geom.Segment3d(p1New,p2New)
-            else: # p2 is closer.
-                p2New= wl.getProjection(fromPoint)
-                p1New= wl.getProjection(toPoint)
-                retval.extend([p2New,p1New]) # set contour.
-                # Modify weld line.
-                self.weldLines[key]= geom.Segment3d(p2New,p1New)
+        if(self.weldLines):
+            numWeldLines= len(self.weldLines)
+            if(numWeldLines==1):
+                key= list(self.weldLines.keys())[0]
+                wl= self.weldLines[key]
+                p1= wl.getFromPoint()
+                d1= fromPoint.dist2(p1)
+                p2= wl.getToPoint()
+                d2= fromPoint.dist2(p2)
+                if(d1<d2): # p1 is closer.
+                    p1New= wl.getProjection(fromPoint)
+                    p2New= wl.getProjection(toPoint)
+                    retval.extend([p1New,p2New]) # set contour.
+                    # Modify weld line.
+                    self.weldLines[key]= geom.Segment3d(p1New,p2New)
+                else: # p2 is closer.
+                    p2New= wl.getProjection(fromPoint)
+                    p1New= wl.getProjection(toPoint)
+                    retval.extend([p2New,p1New]) # set contour.
+                    # Modify weld line.
+                    self.weldLines[key]= geom.Segment3d(p2New,p1New)
+            else:
+                weldPline= geom.get_3d_polylines(list(self.weldLines.values()),1e-3)[0]
+                weldVertices= weldPline.getVertexList()
+                p1= weldVertices[0]
+                d1= fromPoint.dist2(p1)
+                p2= weldVertices[-1]
+                d2= fromPoint.dist2(p2)
+                if(d2<d1): # p2 is closer, so reverse the polyline.
+                    weldVertices.reverse()
+                if(self.notched): # use notches
+                    limitLine= geom.Line3d(weldVertices[0],weldVertices[-1])
+                    p1New= limitLine.getProjection(fromPoint)
+                    p2New= limitLine.getProjection(toPoint)
+                    chamfer= 20e-3
+                    chamferDir1= (fromPoint-p1New).normalized()
+                    chamferDir2= limitLine.getVDir().normalized()
+                    p1NewA= p1New+chamfer*chamferDir1
+                    p1NewB= p1New-chamfer*chamferDir2
+                    retval.extend([p1NewA, p1NewB]) # chamfer
+                    retval.extend(weldVertices) # welded contour.
+                    p2NewB= p2New+chamfer*chamferDir2
+                    p2NewA= p2New+chamfer*chamferDir1
+                    retval.extend([p2NewB, p2NewA]) # chamfer      
+                else:    
+                    retval.extend(weldVertices) # welded contour.
         else:
-            weldPline= geom.get_3d_polylines(list(self.weldLines.values()),1e-3)[0]
-            weldVertices= weldPline.getVertexList()
-            p1= weldVertices[0]
-            d1= fromPoint.dist2(p1)
-            p2= weldVertices[-1]
-            d2= fromPoint.dist2(p2)
-            if(d2<d1): # p2 is closer, so reverse the polyline.
-                weldVertices.reverse()
-            if(self.notched): # use notches
-                limitLine= geom.Line3d(weldVertices[0],weldVertices[-1])
-                p1New= limitLine.getProjection(fromPoint)
-                p2New= limitLine.getProjection(toPoint)
-                chamfer= 20e-3
-                chamferDir1= (fromPoint-p1New).normalized()
-                chamferDir2= limitLine.getVDir().normalized()
-                p1NewA= p1New+chamfer*chamferDir1
-                p1NewB= p1New-chamfer*chamferDir2
-                retval.extend([p1NewA, p1NewB]) # chamfer
-                retval.extend(weldVertices) # welded contour.
-                p2NewB= p2New+chamfer*chamferDir2
-                p2NewA= p2New+chamfer*chamferDir1
-                retval.extend([p2NewB, p2NewA]) # chamfer      
-            else:    
-                retval.extend(weldVertices) # welded contour.
+            lmsg.error("undefined weld lines, can't compute contour")
         retval.append(toPoint) # close contour.            
         return retval
 
@@ -327,3 +330,17 @@ class Plate(object):
         with open(outputFileName, 'w') as outfile:
             json.dump(outputDict, outfile)
         outfile.close()
+
+    def report(self, outputFile):
+        ''' Reports connection design values.'''
+        # plate dimensions and material.
+        outputFile.write(' steel plate:\n')
+        if(self.width):
+            outputFile.write('      chamfer width: '+str(self.width*1000)+' mm\n')
+        outputFile.write('      plate thickness: '+str(self.thickness*1000)+' mm\n')
+        outputFile.write('      steel type: '+str(self.steelType.name)+'\n')
+        # report welds
+        if(hasattr(self, 'weldLegSize')):
+            outputFile.write('      weld leg size: '+str(int(self.weldLegSize*1e3))+' mm\n')
+            outputFile.write('      weld segments: '+str(len(self.weldLines))+'\n')
+        

@@ -1918,7 +1918,8 @@ class ConnectedMember(connected_members.ConnectedMemberMetaData):
         # check spacing.
         distBetweenToes= self.shape.getDistanceBetweenWebToes()
         if(distBetweenToes<numberOfBolts*spacing):
-            lmsg.warning('not enough distance between toes.')
+            lmsg.warning('not enough distance between toes; spacing will be reduced.')
+            spacing= distBetweenToes/numberOfBolts
         return BoltArray(bolt, nRows= 1, nCols= numberOfBolts, dist= spacing)
     
     def getShearTabCore(self, boltSteel, plateSteel, shearEfficiency):
@@ -1966,7 +1967,7 @@ class ConnectedMember(connected_members.ConnectedMemberMetaData):
             refines the "connectedTo" property of the plate by specifying the side
             of the web or the flage (top or bottom) to which the plate is attached.
 
-        :param column: column to which thish member is attached to.
+        :param column: column to which this member is attached to.
         :param plate: plate to connect.
         '''
         weldDict= dict() # Weld line container.
@@ -1978,9 +1979,9 @@ class ConnectedMember(connected_members.ConnectedMemberMetaData):
         columnTopFlangeContour= geom.Polygon3d(column.getTopFlangeMidPlaneContourPoints())
         columnBottomFlangeContour= geom.Polygon3d(column.getBottomFlangeMidPlaneContourPoints())
         columnWebContour= geom.Polygon3d(column.getWebMidPlaneContourPoints())
+        columnWebMidPlane= columnWebContour.getPlane()
         if((abs(angle)<.01) or (abs(angle-math.pi)<.01)): # beam shear tab plate
             if(plate.connectedTo=='column_web'): # plate connected to the column web
-                columnWebMidPlane= columnWebContour.getPlane()
                 # Compute the side of the column web to which
                 # the shear tab will be attached.
                 positiveSide= columnWebMidPlane.positiveSide(plateOrigin)
@@ -2010,7 +2011,14 @@ class ConnectedMember(connected_members.ConnectedMemberMetaData):
                 topPlateLineFromPoint= columnWebMidPlane.getIntersection(topPlateLine)
                 bottomPlateLineFromPoint= columnWebMidPlane.getIntersection(bottomPlateLine)
                 ## Clip by the virtual "closing" plate.
-                closingPlateMidPlane= column.getClosingPlateMidPlane(positiveSide)
+                closingPlateMidPlanePlus= column.getClosingPlateMidPlane(True)
+                distPlus2= closingPlateMidPlanePlus.dist2(plateOrigin)
+                closingPlateMidPlaneMinus= column.getClosingPlateMidPlane(False)
+                distMinus2= closingPlateMidPlaneMinus.dist2(plateOrigin)
+                if(distPlus2<distMinus2):
+                    closingPlateMidPlane= closingPlateMidPlanePlus
+                else:
+                    closingPlateMidPlane= closingPlateMidPlaneMinus                    
                 topPlateLineToPoint= closingPlateMidPlane.getIntersection(topPlateLine)
                 topPlateLine= geom.Segment3d(topPlateLineFromPoint, topPlateLineToPoint)
                 bottomPlateLineToPoint= closingPlateMidPlane.getIntersection(bottomPlateLine)
@@ -2041,11 +2049,10 @@ class ConnectedMember(connected_members.ConnectedMemberMetaData):
             columnTopFlangeLine= columnTopFlangeContour.getIntersection(platePlane)
             columnBottomFlangeLine= columnBottomFlangeContour.getIntersection(platePlane)
             if(plate.connectedTo=='column_web'): # plate connected to the column web
-                columnWebMidPlane= columnWebContour.getPlane()
                 if(columnWebMidPlane.positiveSide(plateOrigin)):
                     plate.connectedTo= 'column_web+'
                 else:
-                    plate.connectedTo= 'column_web-'                
+                    plate.connectedTo= 'column_web-'
                 columnWebLine= columnWebContour.getIntersection(platePlane)
                 plateHalfSpace= geom.HalfSpace3d(columnWebMidPlane, plateOrigin)
                 halfTopFlange= plateHalfSpace.clip(columnTopFlangeLine)
@@ -2066,13 +2073,14 @@ class ConnectedMember(connected_members.ConnectedMemberMetaData):
                     weldDict['columnTopFlangeWeld']= columnTopFlangeLine
                 ## Compute weld size.
                 weldLegSize= plate.getFilletWeldLegSize(otherThickness= column.shape.getFlangeThickness())
+        # Define welds to the connected member.
+        plate.setWeldLines(weldDict)
+        plate.weldLegSize= weldLegSize
         # Update the plates connected to the column
         if(not hasattr(column,'connectedPlates')):
             column.connectedPlates= dict()
         key= plate.connectedTo +','+plate.location
         column.connectedPlates[key]= plate
-        plate.setWeldLines(weldDict)
-        plate.weldLegSize= weldLegSize
          
     def getTopFlangeBoltedPlate(self, connectionOrigin, column, boltSteel, plateSteel):
         ''' Return the top flange bolted plate.
@@ -2127,7 +2135,7 @@ class ConnectedMember(connected_members.ConnectedMemberMetaData):
         return beamBottomFlangePlate
     
     def getShearTab(self, connectionOrigin, column, boltSteel, plateSteel, shearEfficiency):
-        ''' Return the blocks corresponding to the top flange bolted plate.
+        ''' Return the blocks corresponding to the shear tab.
 
         :param connectionOrigin: origin for the connection.
         :param column: column to which the shear tab is attached to. 
@@ -2139,7 +2147,7 @@ class ConnectedMember(connected_members.ConnectedMemberMetaData):
         '''
         shearTab= self.getShearTabCore(boltSteel= boltSteel, plateSteel= plateSteel, shearEfficiency= shearEfficiency)
         # Top plate
-        ## Compute top plate reference system.
+        ## Compute shear tab reference system.
         shearTabRefSys= self.getShearTabRefSys(connectionOrigin, shearTab, positiveSide= True)
         shearTab.setRefSys(shearTabRefSys)
         ## Compute the intersection of the column axis with the shear tab

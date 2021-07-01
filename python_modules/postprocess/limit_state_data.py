@@ -565,7 +565,7 @@ def readIntForcesDict(intForcCombFileName,setCalc=None, vonMisesStressId= 'max_v
                         crossSectionInternalForces.vonMisesStress= forces[vonMisesStressId]
                     internalForcesValues[tagElem].append(crossSectionInternalForces)
     else:
-        setElTags= set(setCalc.getElementTags()) # We construct a set to accelerate searching.
+        setElTags= frozenset(setCalc.getElementTags()) # We construct a frozen set to accelerate searching.
         for idComb in combInternalForcesDict.keys():
             idCombs.add(idComb)
             elements= combInternalForcesDict[idComb]
@@ -624,7 +624,7 @@ def oldReadIntForcesFile(intForcCombFileName,setCalc=None):
                 crossSectionInternalForces.idSection= idSection
                 internalForcesValues[tagElem].append(crossSectionInternalForces)
     else:
-        setElTags= set(setCalc.getElementTags()) # We construct a set to accelerate searching.
+        setElTags= frozenset(setCalc.getElementTags()) # We construct a frozen set to accelerate searching.
         for lst in internalForcesListing:
             if(len(lst)>0):
                 tagElem= eval(lst[1])

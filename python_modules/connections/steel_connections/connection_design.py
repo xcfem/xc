@@ -48,13 +48,16 @@ class Connection(connected_members.ConnectionMetaData):
                                  with its member axis.
     :ivar webGussetBottomLegSlope: definition of the slope of the 
                                    gusset bottom leg.
+    :ivar intermediateJoint: true if the joint doesn't correspond
+                             to an extremity of the column (i.e.
+                             a base plate or the top end of the column).
     '''
-    def __init__(self, connectionMetaData, columnLengthFactor, beamLengthFactor, gussetLengthFactor, beamsShearEfficiency, boltedPlateTemplate):
+    def __init__(self, connectionMetaData, columnLengthFactor, beamLengthFactor, gussetLengthFactor, beamsShearEfficiency, boltedPlateTemplate, intermediateJoint= False):
         ''' Constructor.
 
         :param connectionMetaData: connection origin node and members 
                                    connected to it.
-        :param columnLengthFactor: vector that multiplies the column unary
+        :param columnLengthFactor: factor that multiplies the column unary
                                    direction vector to obtain the length
                                    of the column.
         :param beamLengthFactor: factor that multiplies the beam unary
@@ -68,6 +71,11 @@ class Connection(connected_members.ConnectionMetaData):
                                     this connection.
         :param boltedPlateTemplate: bolted plate dimensions and bolt type and 
                                     arrangement.
+        :param intermediateJoint: true if the joint doesn't correspond
+                                  to an extremity of the column (i.e.
+                                  a base plate or the top end of the column).
+                                  Defaults to false for backward compatibility
+                                  reasons.
         '''
         super(Connection,self).__init__(connectionMetaData.originNode, connectionMetaData.column, connectionMetaData.beams, connectionMetaData.diagonals)
         self.columnLengthFactor= columnLengthFactor
@@ -75,6 +83,7 @@ class Connection(connected_members.ConnectionMetaData):
         self.gussetLengthFactor= gussetLengthFactor
         self.beamsShearEfficiency= beamsShearEfficiency
         self.boltedPlateTemplate= boltedPlateTemplate
+        self.intermediateJoint= intermediateJoint
         self.flangeGussetLegsSlope= math.tan(math.radians(30))
         self.webGussetBottomLegSlope= 'vertical'
 
@@ -222,7 +231,7 @@ class Connection(connected_members.ConnectionMetaData):
 
         :param blockProperties: labels and attributes to assign to the newly created blocks.
         '''
-        return super(Connection,self).getColumnShapeBlocks(self.columnLengthFactor, blockProperties= blockProperties)
+        return super(Connection,self).getColumnShapeBlocks(self.columnLengthFactor, intermediateJoint= self.intermediateJoint, blockProperties= blockProperties)
 
     def getBoltGroupName(self, beam, plateProperties):
         ''' Return a name for the bolt group that attaches the beam to the 
@@ -306,13 +315,14 @@ class Connection(connected_members.ConnectionMetaData):
             retval.extend(boltBlocks)
         return retval
 
-    def getStiffenerBlocks(self, blockProperties= None):
-        ''' Return the blocks corresponding to the faces of the beams.
+    def getStiffeners(self):
+        ''' Return the stiffeners needed in the faces where there is
+            no plate.
 
         :param blockProperties: labels and attributes to assign to the newly 
                                 created blocks.
         '''
-        retval= bte.BlockData()
+        # Detect missing plates.
         missingStiffeners= ['top_column_web+', 'bottom_column_web+', 'top_column_web-', 'bottom_column_web-']
         topPlate= None
         bottomPlate= None
@@ -333,30 +343,61 @@ class Connection(connected_members.ConnectionMetaData):
                 elif('_bottom_' in plateKeys[1]):
                     missingStiffeners.remove('bottom_column_web-')
                     bottomPlate= plate
+        # Create stiffeners where needed.
+        retval= list()
         for stiffener in missingStiffeners:
             if('top_' in stiffener):
                 plate= topPlate
+                location= 'top_stiffener'
             elif('bottom_' in stiffener):
                 plate= bottomPlate
+                location= 'bottom_stiffener'
             stiffenerPlate= stiffeners.Stiffener(width= None, length= None, thickness= plate.thickness, steelType= plate.steelType)
             positiveSide= (stiffener[-1]=='+')
+            if(positiveSide):
+                stiffenerPlate.connectedTo= 'column_web+'
+            else:
+                stiffenerPlate.connectedTo= 'column_web-'
+            stiffenerPlate.location= location
             platePlane= plate.refSys.getXYPlane()
-            columnHalfBottomFlangeContour= geom.Polygon3d(self.column.getHalfBottomFlangeMidPlaneContourPoints(positiveSide))
+            plateOrigin= plate.refSys.getOrg()
             columnWebContour= geom.Polygon3d(self.column.getWebMidPlaneContourPoints())
-            columnHalfTopFlangeContour= geom.Polygon3d(self.column.getHalfTopFlangeMidPlaneContourPoints(positiveSide))
-            bottomFlangeLine= columnHalfBottomFlangeContour.getIntersection(platePlane)
-            webLine= columnWebContour.getIntersection(platePlane)
-            topFlangeLine= columnHalfTopFlangeContour.getIntersection(platePlane)
+            columnWebMidPlane= columnWebContour.getPlane()
+            columnWebLine= columnWebContour.getIntersection(platePlane)
+            stiffenerHalfSpace= geom.HalfSpace3d(columnWebMidPlane, plateOrigin).getSwapped() # stiffener at the opposite side of the plate.
+            columnTopFlangeContour= geom.Polygon3d(self.column.getTopFlangeMidPlaneContourPoints())
+            columnTopFlangeLine= columnTopFlangeContour.getIntersection(platePlane)
+            columnBottomFlangeContour= geom.Polygon3d(self.column.getBottomFlangeMidPlaneContourPoints())
+            columnBottomFlangeLine= columnBottomFlangeContour.getIntersection(platePlane)
+            halfTopFlange= stiffenerHalfSpace.clip(columnTopFlangeLine)
+            halfBottomFlange= stiffenerHalfSpace.clip(columnBottomFlangeLine)
             weldDict= dict() # Weld line container.
             weldLegSize= 0.0 # Weld size.
-            weldDict['columnBottomFlangeWeld']= bottomFlangeLine
-            weldDict['columnWebWeld']= webLine
-            weldDict['columnTopFlangeWeld']= topFlangeLine
+            weldDict['columnBottomFlangeWeld']= halfBottomFlange
+            weldDict['columnWebWeld']= columnWebLine
+            weldDict['columnTopFlangeWeld']= halfTopFlange
             ## Compute weld size.
             weldLegSize= (plate.getFilletWeldLegSize(otherThickness= self.column.shape.getWebThickness())+2*plate.getFilletWeldLegSize(otherThickness= self.column.shape.getFlangeThickness()))/3.0
             stiffenerPlate.setWeldLines(weldDict)
             stiffenerPlate.weldLegSize= weldLegSize
-            retval.extend(stiffenerPlate.getBlocks(blockProperties))
+            # Update the plates connected to the column
+            if(not hasattr(self.column,'connectedPlates')):
+                self.column.connectedPlates= dict()
+            key= stiffenerPlate.connectedTo +','+stiffenerPlate.location
+            self.column.connectedPlates[key]= stiffenerPlate
+            retval.append(stiffenerPlate)
+        return retval
+    
+    def getStiffenerBlocks(self, blockProperties= None):
+        ''' Return the blocks corresponding to the faces of the beams.
+
+        :param blockProperties: labels and attributes to assign to the newly 
+                                created blocks.
+        '''
+        retval= bte.BlockData()
+        stiffeners= self.getStiffeners()
+        for stiffener in stiffeners:
+            retval.extend(stiffener.getBlocks(blockProperties))
         return retval
     
     def getBlocks(self, blockProperties= None):
@@ -439,28 +480,42 @@ class Connection(connected_members.ConnectionMetaData):
         :param outputFile: output file.
         '''
         outputFile.write('Connection ID: '+str(self.originNode.tag)+'\n')
+        # report column shape.
         columnShape= self.getColumnShape()
         outputFile.write('  column steel shape: '+columnShape.getMetricName()+' (US: '+columnShape.name+')\n')
-        diagonalShapes= self.getDiagonalShapes()
-        outputFile.write('  diagonal shapes: ')
-        for ds in diagonalShapes:
-            outputFile.write(ds.getMetricName()+' (US: '+ds.name+') ')
+        # report beam shapes.
+        if(len(self.beams)):
+            outputFile.write('  beam shapes: ')
+            for b in self.beams:
+                outputFile.write(str(b.eTag)+' '+b.shape.getMetricName()+' (US: '+b.shape.name+') ')
+        if(len(self.getDiagonalShapes())>0):
+            diagonalShapes= self.getDiagonalShapes()
+            outputFile.write('  diagonal shapes: ')
+            for ds in diagonalShapes:
+                outputFile.write(str(ds.eTag)+' '+ds.getMetricName()+' (US: '+ds.name+') ')
         outputFile.write('\n')
-        self.boltedPlateTemplate.report(outputFile)
-        outputFile.write('    gusset plate - column welds:\n')
-        outputFile.write('      with the flange(s): 2 x '+str(math.floor(self.getFlangeLegSize()*1000))+' mm (fillet weld leg size)\n')
-        outputFile.write('      with the web: 2 x '+str(math.floor(self.getWebLegSize()*1000))+' mm (fillet weld leg size)\n')
-        outputFile.write('      with the plate 2 x '+str(math.floor(self.getHorizontalWeldLegSize()*1000))+' mm (fillet weld leg size)\n')
+        # report connection plates.
+        for key in self.column.connectedPlates:
+            plateKeys= key.split(',')
+            plate= self.column.connectedPlates[key]
+            outputFile.write('    plate: ('+plateKeys[1]+' -> '+plateKeys[0]+')')
+            plate.report(outputFile)
+                    
+        # self.boltedPlateTemplate.report(outputFile)
+        # outputFile.write('    gusset plate - column welds:\n')
+        # outputFile.write('      with the flange(s): 2 x '+str(math.floor(self.getFlangeLegSize()*1000))+' mm (fillet weld leg size)\n')
+        # outputFile.write('      with the web: 2 x '+str(math.floor(self.getWebLegSize()*1000))+' mm (fillet weld leg size)\n')
+        # outputFile.write('      with the plate 2 x '+str(math.floor(self.getHorizontalWeldLegSize()*1000))+' mm (fillet weld leg size)\n')
 
 class DiagonalConnection(Connection):
     ''' Connection that has one or more diagonals.'''
     
-    def __init__(self, connectionMetaData, columnLengthFactor, beamLengthFactor, gussetLengthFactor, beamsShearEfficiency, boltedPlateTemplate):
+    def __init__(self, connectionMetaData, columnLengthFactor, beamLengthFactor, gussetLengthFactor, beamsShearEfficiency, boltedPlateTemplate, intermediateJoint):
         ''' Constructor.
 
         :param connectionMetaData: connection origin node and members 
                                    connected to it.
-        :param columnLengthFactor: vector that multiplies the column unary
+        :param columnLengthFactor: factor that multiplies the column unary
                                    direction vector to obtain the length
                                    of the column.
         :param beamLengthFactor: factor that multiplies the beam unary
@@ -474,8 +529,13 @@ class DiagonalConnection(Connection):
                                     this connection.
         :param boltedPlateTemplate: bolted plate dimensions and bolt type and 
                                     arrangement.
+        :param intermediateJoint: true if the joint doesn't correspond
+                                  to an extremity of the column (i.e.
+                                  a base plate or the top end of the column).
+                                  Defaults to false for backward compatibility
+                                  reasons.
         '''
-        super(DiagonalConnection,self).__init__(connectionMetaData, columnLengthFactor, beamLengthFactor, gussetLengthFactor, beamsShearEfficiency, boltedPlateTemplate)
+        super(DiagonalConnection,self).__init__(connectionMetaData, columnLengthFactor, beamLengthFactor, gussetLengthFactor, beamsShearEfficiency, boltedPlateTemplate, intermediateJoint)
         
     def getHorizontalWeldLegSize(self):
         ''' Return the size of the weld that connects the 
@@ -592,7 +652,7 @@ class ConnectionGroup(object):
                                 arrangement.
     :ivar connections: list of connections of the group
     '''
-    def __init__(self, name, connectionData, columnLengthFactor, beamLengthFactor, gussetLengthFactor, beamsShearEfficiency, boltedPlateTemplate, ConnectionType):
+    def __init__(self, name, connectionData, columnLengthFactor, beamLengthFactor, gussetLengthFactor, beamsShearEfficiency, boltedPlateTemplate, intermediateJoints, ConnectionType):
         ''' Constructor.
 
         :param name: name for the group of connections.
@@ -612,6 +672,9 @@ class ConnectionGroup(object):
                                      the shear strength.
         :param boltedPlateTemplate: bolted plate dimensions and bolt type and 
                                     arrangement.
+        :param intermediateJoints: true if the joints doesn't correspond
+                                   to an extremity of the column (i.e.
+                                   a base plate or the top end of the column).
         :param ConnectionType: class representing the connection type.
         '''
         self.name= name
@@ -621,7 +684,7 @@ class ConnectionGroup(object):
         self.connections= list()
         for nTag in self.connectionData:
             cData= self.connectionData[nTag]
-            connect= ConnectionType(cData, columnLengthFactor, beamLengthFactor, self.gussetLengthFactor, beamsShearEfficiency, self.boltedPlateTemplate)
+            connect= ConnectionType(cData, columnLengthFactor, beamLengthFactor, self.gussetLengthFactor, beamsShearEfficiency, self.boltedPlateTemplate, intermediateJoints)
             self.connections.append(connect)
 
     def joinBasePlates(self, basePlateGroup, tol= 1e-2):
@@ -724,7 +787,7 @@ class ConnectionGroup(object):
 class DiagonalConnectionGroup(ConnectionGroup):
     ''' Connection group with one or more diagonals. '''
     
-    def __init__(self, name, columnLengthFactor, beamLengthFactor, gussetLengthFactor, beamsShearEfficiency, xcSet, diagonalBoltedPlate, ConnectionType= DiagonalConnection):
+    def __init__(self, name, columnLengthFactor, beamLengthFactor, gussetLengthFactor, beamsShearEfficiency, xcSet, diagonalBoltedPlate, intermediateJoints= False, ConnectionType= DiagonalConnection):
         ''' Constructor.
 
         :param name: name for the group of connections.
@@ -741,6 +804,11 @@ class DiagonalConnectionGroup(ConnectionGroup):
                                      the shear strength.
         :param xcSet: set containing the joint nodes.
         :param diagonalBoltedPlate: bolted plate attaching diagonal.
+        :param intermediateJoints: true if the joints doesn't correspond
+                                  to an extremity of the column (i.e.
+                                  a base plate or the top end of the column).
+                                  Defaults to false for backward compatibility
+                                  reasons.
         :param ConnectionType: type of the connection (defaults to DiagonalConnection).
         '''
         
@@ -749,7 +817,7 @@ class DiagonalConnectionGroup(ConnectionGroup):
         materialModule= getmodule(diagonalBoltedPlate.__class__)
         jointMembers= connected_members.getConnectedMembers(xcSet, ConnectedMemberType= materialModule.ConnectedMember)
 
-        super(DiagonalConnectionGroup, self).__init__(name= name, connectionData= jointMembers, columnLengthFactor= columnLengthFactor, beamLengthFactor= beamLengthFactor, gussetLengthFactor= gussetLengthFactor, beamsShearEfficiency= beamsShearEfficiency, boltedPlateTemplate= diagonalBoltedPlate, ConnectionType= ConnectionType)
+        super(DiagonalConnectionGroup, self).__init__(name= name, connectionData= jointMembers, columnLengthFactor= columnLengthFactor, beamLengthFactor= beamLengthFactor, gussetLengthFactor= gussetLengthFactor, beamsShearEfficiency= beamsShearEfficiency, boltedPlateTemplate= diagonalBoltedPlate, intermediateJoints= intermediateJoints, ConnectionType= ConnectionType)
         
 class BasePlateConnectionGroup(DiagonalConnectionGroup):
     ''' Base plate connection group. '''

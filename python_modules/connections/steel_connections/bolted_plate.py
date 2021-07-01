@@ -292,9 +292,9 @@ class BoltArrayBase(object):
     
     def report(self, outputFile):
         ''' Reports connection design values.'''
-        outputFile.write('    bolts:\n')
-        outputFile.write('      number of bolts: '+str(self.getNumberOfBolts())+' x '+self.bolt.getName()+'\n')
-        outputFile.write('      spacing: '+str(self.dist*1000)+' mm\n')
+        outputFile.write('      bolts:\n')
+        outputFile.write('        number of bolts: '+str(self.getNumberOfBolts())+' x '+self.bolt.getName()+'\n')
+        outputFile.write('        spacing: '+str(self.dist*1000)+' mm\n')
         self.bolt.report(outputFile)
         
 class BoltedPlateBase(plates.Plate):
@@ -466,10 +466,8 @@ class BoltedPlateBase(plates.Plate):
 
     def report(self, outputFile):
         ''' Reports connection design values.'''
-        outputFile.write('  gusset plates:\n')
-        outputFile.write('    chamfer width: '+str(self.width*1000)+' mm\n')
-        outputFile.write('    plate thickness: '+str(self.thickness*1000)+' mm\n')
-        outputFile.write('    steel type: '+str(self.steelType.name)+'\n')
+        super(BoltedPlateBase, self).report(outputFile)
+        # report bolts
         self.boltArray.report(outputFile)
 
     def getCoreContour2d(self):

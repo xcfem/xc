@@ -36,3 +36,11 @@ GEOM_FT Surface3d::dist(const Pos3d &p) const
               << "; not implemented." << std::endl;
     return NAN;
   }
+
+//! @brief Return the squared distance from the point to this surface.
+GEOM_FT Surface3d::dist2(const Pos3d &p) const
+  {
+    std::cout << getClassName() << "::" << __FUNCTION__
+              << "; not implemented." << std::endl;
+    return NAN;
+  }

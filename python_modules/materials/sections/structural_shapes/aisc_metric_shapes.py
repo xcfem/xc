@@ -484,7 +484,7 @@ class WShape(structural_steel.IShape):
         if(positiveSide):
             v= -halfB*strongAxisVDir # positive side -> minus sign here
         else:
-            v= halfB*strongAxisVDir # negative side -> plus sign here            
+            v= halfB*strongAxisVDir # negative side -> plus sign here           
         retval= list()
         for p in tmp:
             retval.append(p+v)

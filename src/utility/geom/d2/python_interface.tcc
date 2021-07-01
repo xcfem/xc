@@ -90,6 +90,7 @@ class_<GeomGroup2d, bases<GeomObj2d> >("GeomGroup2d")
 
 class_<Surface3d, bases<GeomObj3d>, boost::noncopyable  >("Surface3d", no_init)
   .def("dist",&Surface3d::dist,"Return the distance from point to this surface.")
+  .def("dist2",&Surface3d::dist2,"Return the squared distance from point to this surface.")
   ;
 
 Pos3d (D2to3d::*to_3dp)(const Pos2d &) const= &D2to3d::to_3d;
