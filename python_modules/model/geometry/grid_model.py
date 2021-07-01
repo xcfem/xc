@@ -528,7 +528,33 @@ class GridModel(object):
         ijkRange=IJKRange([0,0,0],[self.lastXIndex(),self.lastYIndex(),self.lastZIndex()])
         self.rotPntsZAxis(ijkRange,angle,xyRotCent)
     
-        
+    def rotPntsXAxis(self,ijkRange,angle,yzRotCent):
+        '''Rotates points in ijkRange around a X axis passing by yzRotCent.
+
+        :param ijkRange: range for the search.
+        :param angle: rotation angle (degrees)
+        :param yzRotCent: coordinates [y,z] of the axis X of rotation
+        '''
+        theta=math.radians(angle)
+        sinTheta=math.sin(theta)
+        cosTheta=math.cos(theta)
+        sPtMove=self.getSetPntRange(ijkRange,'sPtMove')
+        for p in sPtMove.getPoints:
+            yp=p.getPos.y
+            zp=p.getPos.z
+            p.getPos.y= yzRotCent[0]+cosTheta*(yp-yzRotCent[0])-sinTheta*(zp-yzRotCent[1])
+            p.getPos.z= yzRotCent[1]+sinTheta*(yp-yzRotCent[0])+cosTheta*(zp-yzRotCent[1])
+        sPtMove.clear()
+
+    def rotAllPntsXAxis(self,angle,yzRotCent):
+        '''Rotates all points in the grid around a X axis passing by yzRotCent.
+
+        :param angle: rotation angle (degrees)
+        :param yyRotCent: coordinates [y,z] of the axis X of rotation
+        '''
+        ijkRange=IJKRange([0,0,0],[self.lastXIndex(),self.lastYIndex(),self.lastZIndex()])
+        self.rotPntsXAxis(ijkRange,angle,yzRotCent)
+    
     def scaleCoorXPointsRange(self,ijkRange,xOrig,scale):
         '''Applies a scale in X with origin xOrig (fixed axis: X=xOrig) 
         to the points in a 3D grid-region limited by 
