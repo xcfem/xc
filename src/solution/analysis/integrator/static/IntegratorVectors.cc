@@ -77,7 +77,9 @@ void XC::IntegratorVectors::distribDetermineUhat(const int &pID,LinearSOE &theLi
     else
       theLinSOE.zeroB();
 
-    theLinSOE.solve();
+    if(theLinSOE.solve() < 0)
+      std::cerr << "XC::IntegratorVectors::" << __FUNCTION__
+	        << "; failed in solver." << std::endl;
     deltaUhat= theLinSOE.getX();
   }
 
@@ -87,7 +89,8 @@ void XC::IntegratorVectors::determineUhat(LinearSOE &theLinSOE)
     // determine dUhat    
     theLinSOE.setB(phat);
     if(theLinSOE.solve() < 0)
-      std::cerr << "IntegratorVectors::determineUhat - failed in solver\n";
+      std::cerr << "XC::IntegratorVectors::" << __FUNCTION__
+	        << "; failed in solver." << std::endl;
     deltaUhat= theLinSOE.getX();
   }
 

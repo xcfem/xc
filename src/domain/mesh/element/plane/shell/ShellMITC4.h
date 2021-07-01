@@ -73,10 +73,9 @@ class ShellMITC4: public ShellMITC4Base
 
   public:
     ShellMITC4(void);
-    ShellMITC4(int tag,const SectionForceDeformation *ptr_mat); 
+    ShellMITC4(int tag, const SectionForceDeformation *ptr_mat); 
     ShellMITC4(int tag, int node1, int node2, int node3, int node4, const SectionForceDeformation &);
     Element *getCopy(void) const;
-
 
     int sendSelf(Communicator &);
     int recvSelf(const Communicator &);

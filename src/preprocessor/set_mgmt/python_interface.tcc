@@ -249,12 +249,16 @@ class_<XC::SetEntities::lst_body_pointers, bases<dq_body_ptrs> >("lstBodies",no_
 void (XC::SetEntities::*fillDownwardsMesh)(XC::SetMeshComp &)= &XC::SetEntities::fillDownwards;
 XC::Pnt *(XC::SetEntities::*getNearestPoint)(const Pos3d &)= &XC::SetEntities::getNearestPoint;
 class_<XC::SetEntities, bases<XC::PreprocessorContainer> >("SetEntities",no_init)
+  .add_property("useGmsh", &XC::SetEntities::getUseGmsh, &XC::SetEntities::setUseGmsh, "Get/set the useGmsh member value.")
   .def("getBnd", &XC::SetEntities::Bnd, "return entities boundary.")
   .def("fillUpwards", &XC::SetEntities::fillUpwards,"add entities upwards.")
   .def("fillDownwards", fillDownwardsMesh,"add entities downwards.")
   .def("splitLinesAtIntersections",&XC::SetEntities::splitLinesAtIntersections,"divide the lines of the set at intersection points.")
   .def("getAverageSize",&XC::SetEntities::getAverageSize,"Return the average length of the entities.")
   .def("getNearestPoint",make_function(getNearestPoint, return_internal_reference<>() ),"Return the nearest point to the position argument.")
+  .def("getMaxElementSize",&XC::SetEntities::getMaxElementSize,"Return the maximum size of the elements according to the number of divisions of the lines.")
+  .def("getMinElementSize",&XC::SetEntities::getMinElementSize,"Return the minimum size of the elements according to the number of divisions of the lines.")
+  .def("getAverageElementSize",&XC::SetEntities::getAverageElementSize,"Return the average size of the elements according to the number of divisions of the lines.")
   ;
 
 XC::SetEntities &(XC::Set::*getEntities)(void)= &XC::Set::getEntities;
@@ -271,6 +275,7 @@ void (XC::Set::*extend_ugrids)(const XC::SetEntities::lst_ptr_uniform_grids &)= 
 void (XC::Set::*extend_set)(const XC::Set &)= &XC::Set::extend;
 class_<XC::Set, XC::Set *,bases<XC::SetMeshComp> >("Set")
   .add_property("description", make_function( &XC::Set::getDescription, return_value_policy<copy_const_reference>() ), &XC::Set::setDescription,"Description (string) of the set.")
+  .add_property("useGmsh", &XC::Set::getUseGmsh, &XC::Set::setUseGmsh, "Get/set the useGmsh member value.")
   .add_property("getEntities", make_function(getEntities, return_internal_reference<>() ),"return the entities (points, lines, surfaces,...) of the set.")
   .add_property("getMeshComponents", make_function(getMeshComponents, return_internal_reference<>() ),"return the mesh components (nodes, elements,...) of the set.")
   .add_property("getPoints", make_function(getPoints, return_internal_reference<>() ),"return the points of the set.")

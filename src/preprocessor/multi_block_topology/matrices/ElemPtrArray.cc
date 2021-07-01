@@ -91,9 +91,10 @@ XC::Element *XC::ElemPtrArray::getNearestElement(const Pos3d &p)
     const size_t numberOfRows= getNumberOfRows();
     const size_t numberOfColumns= getNumberOfColumns();
     if(numberOfRows*numberOfColumns>1000)
-      std::clog << "The element matrix has "
-                << numberOfRows*numberOfColumns << " components "
-                << " is better to search by coordinates in the associated set."
+      std::clog << getClassName() << "::" << __FUNCTION__
+		<< "; the element matrix has "
+                << numberOfRows*numberOfColumns << " components. "
+                << " It is better to search by coordinates in the associated set."
                 << std::endl;
     for(size_t j= 1;j<=numberOfRows;j++)
       for(size_t k= 1;k<=numberOfColumns;k++)

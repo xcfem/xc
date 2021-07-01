@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
+'''Taken from page 114 of the article Development of Membrane, 
+   Plate and Flat Shell Elements in Java.'''
+
 from __future__ import print_function
-# Taken from page 114 of the article Development of Membrane, Plate and
-# Flat Shell Elements in Java
+from __future__ import division
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
 __copyright__= "Copyright 2015, LCPT and AOO"
@@ -71,11 +73,10 @@ modelSpace.addLoadCaseToDomain(lp0.name)
 # Solution
 analOk= modelSpace.analyze(calculateNodalReactions= True)
  
-# print("reac node 1: ",reac)
 Fx= n1.getReaction[0]
 Fy= n1.getReaction[1]
-# \print{"Fx= ",Fx
-# print("Fy= ",Fy})
+# print("Fx= ",Fx)
+# print("Fy= ",Fy)
 
 disp= n3.getDisp
 UX3= disp[0] # Node 3 xAxis displacement

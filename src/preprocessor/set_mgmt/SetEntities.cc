@@ -28,11 +28,13 @@
 
 #include "SetEntities.h"
 #include "domain/domain/Domain.h"
+#include "domain/mesh/node/Node.h"
 #include "preprocessor/Preprocessor.h"
 #include "preprocessor/multi_block_topology/MultiBlockTopology.h"
 #include "preprocessor/multi_block_topology/entities/0d/Pnt.h"
 #include "preprocessor/multi_block_topology/entities/1d/Edge.h"
 #include "preprocessor/multi_block_topology/entities/2d/Face.h"
+#include "preprocessor/multi_block_topology/entities/2d/PolygonalFace.h"
 #include "preprocessor/multi_block_topology/entities/3d/Body.h"
 #include "preprocessor/multi_block_topology/entities/3d/UniformGrid.h"
 #include "preprocessor/multi_block_topology/matrices/ElemPtrArray3d.h"
@@ -48,12 +50,13 @@
 
 //! @brief Constructor.
 XC::SetEntities::SetEntities(Preprocessor *md)
-  : PreprocessorContainer(md), MovableObject(0), points(this), lines(this), surfaces(this),
-    bodies(this), uniform_grids(this) {}
+  : PreprocessorContainer(md), MovableObject(0), points(this),
+    lines(this), surfaces(this), bodies(this), uniform_grids(this),
+    useGmsh(false) {}
 
 //! @brief Copy constructor.
 XC::SetEntities::SetEntities(const SetEntities &other)
-  : PreprocessorContainer(other), MovableObject(other)
+  : PreprocessorContainer(other), MovableObject(other), useGmsh(other.useGmsh)
   {
     copy_lists(other);
   }
@@ -64,6 +67,7 @@ XC::SetEntities &XC::SetEntities::operator=(const SetEntities &other)
     PreprocessorContainer::operator=(other);
     MovableObject::operator=(other);
     copy_lists(other);
+    useGmsh= other.useGmsh;
     return *this;
   }
 
@@ -221,6 +225,14 @@ void XC::SetEntities::fillDownwards(void)
 //         lst_surfaces ss= (*i)->getSurfaces();
 //         surfaces.insert_unique(surfaces.end(),ss.begin(),ss.end());
 //       }
+    
+    // Surface holes.
+    for(sup_iterator i=surfaces.begin();i!=surfaces.end();i++)
+      {
+	std::deque<PolygonalFace *> holes= (*i)->getHoles();
+	surfaces.insert_unique(surfaces.end(), holes.begin(), holes.end());
+      }
+    
     // Surfaces
     for(sup_iterator i=surfaces.begin();i!=surfaces.end();i++)
       {
@@ -384,6 +396,14 @@ void XC::SetEntities::conciliaNDivs(void)
     conciliate_divisions(surfaces, lines);
   }
 
+//! @brief Set the value of the useGmsh member.
+void XC::SetEntities::setUseGmsh(const bool &b)
+  { useGmsh= b; }
+
+//! @brief Get the value of the useGmsh member.
+bool XC::SetEntities::getUseGmsh(void) const
+  { return useGmsh; }
+
 //! @brief Create Gmsh points from the points of this object.
 void XC::SetEntities::create_gmsh_points(void) const
   {
@@ -392,7 +412,7 @@ void XC::SetEntities::create_gmsh_points(void) const
 	const Pnt *pnt= *i;
 	const double elemSize= pnt->getAverageElementSize();
 	const int gmshTag= pnt->getTag()+1; // Gmsh tags must be strictly positive.
-	const Pos3d pos= pnt->GetPos();
+	const Pos3d pos= pnt->getPos();
 	gmsh::model::geo::addPoint(pos.x(), pos.y(), pos.z(), elemSize, gmshTag);
       }
   }
@@ -414,10 +434,7 @@ void XC::SetEntities::create_gmsh_lines(void) const
     for(lst_line_pointers::const_iterator i= lines.begin();i!=lines.end();i++)
       {
 	const Edge *edge= *i;
-	const int gmshLineTag= edge->getTag()+1; // Gmsh tags must be strictly positive.
-	const int p1GmshTag= edge->P1()->getTag()+1;
-	const int p2GmshTag= edge->P2()->getTag()+1;
-	gmsh::model::geo::addLine(p1GmshTag, p2GmshTag, gmshLineTag);
+	edge->create_gmsh_line();
       }
   }
 
@@ -438,19 +455,22 @@ void XC::SetEntities::create_gmsh_loops(void) const
     for(lst_surface_ptrs::const_iterator i= surfaces.begin();i!=surfaces.end();i++)
       {
 	const Face *face= *i;
-	const size_t numSides= face->getNumberOfEdges();
-	std::vector<int> gmshTags(numSides);
-	const std::deque<Face::Side> &sides= face->getSides();
-	for(size_t i= 0;i<numSides; i++)
-	  {
-	    const Face::Side &side= sides[i];
-	    const int gmshLineTag= side.getTag()+1; // Gmsh tags must be strictly positive.
-	    gmshTags[i]= gmshLineTag;
-	  }
-	const int gmshLoopTag= face->getTag()+1; // Gmsh tags must be strictly positive.
-	gmsh::model::geo::addCurveLoop(gmshTags,gmshLoopTag);
-	face->create_gmsh_loops_for_holes();
+	face->create_gmsh_loops();
       }
+  }
+
+//! @brief Create a gmsh lines from the edges.
+std::vector<int> XC::SetEntities::create_gmsh_surfaces(void) const
+  {
+    const size_t numSurfaces= surfaces.size();
+    std::vector<int> retval(numSurfaces);
+    size_t count= 0;
+    for(lst_surface_ptrs::const_iterator i= surfaces.begin();i!=surfaces.end();i++, count++)
+      {
+	const Face *face= *i;
+        retval[count]= face->create_gmsh_surface();
+      }
+    return retval;
   }
 
 //! @brief Create nodes and, where appropriate, elements on surfaces.
@@ -486,6 +506,214 @@ void XC::SetEntities::uniform_grid_meshing(meshing_dir dm)
       std::clog << "done." << std::endl;
   }
 
+//! @brief Create the nodes from the positions computed by Gmsh.
+std::map<int, const XC::Node *> XC::SetEntities::create_nodes_from_gmsh(void)
+  {
+    std::map<int, const Node *> mapNodeTags;
+    std::vector<std::size_t> nodeTags;
+    std::vector<double> nodeCoord;
+    std::vector<double> nodeParametricCoord;
+    // Nodes on points.
+    for(lst_ptr_points::iterator i= points.begin();i!=points.end();i++)
+      {
+	Pnt *pnt= *i;
+	const int gmshTag= pnt->getTag()+1; // Gmsh tag for the point.
+	//nodeTags.clear(); nodeCoord.clear(); nodeParametricCoord.clear();
+	gmsh::model::mesh::getNodes(nodeTags, nodeCoord, nodeParametricCoord, 0, gmshTag);
+        const size_t gmshNodeTag= nodeTags[0];
+	const double x= nodeCoord[0];
+	const double y= nodeCoord[1];
+	const double z= nodeCoord[2];
+	const Pos3d gmshPos(x,y,z);
+	if(gmshPos.dist2(pnt->getPos())>1e-6)
+	  std::cerr << getClassName() << "::" << __FUNCTION__
+                    << "; error reading node for point: " << gmshTag-1
+		    << std::endl;
+	pnt->genMesh(); // Create the node.
+	mapNodeTags[gmshNodeTag]= pnt->getNode();
+      }
+    // Nodes on edges.
+    for(lst_line_pointers::iterator i= lines.begin();i!=lines.end();i++)
+      {
+	Edge *edge= *i;
+	const int gmshTag= edge->getTag()+1; // Gmsh tag for the line.
+	//nodeTags.clear(); nodeCoord.clear(); nodeParametricCoord.clear();
+	gmsh::model::mesh::getNodes(nodeTags, nodeCoord, nodeParametricCoord, 1, gmshTag);
+	const size_t nNodes= nodeTags.size();
+	std::vector<Pos3d> positions(nNodes);
+	for(size_t i= 0;i<nNodes; i++)
+	  {
+	    const size_t j= i*3;
+	    const double x= nodeCoord[j];
+	    const double y= nodeCoord[j+1];
+	    const double z= nodeCoord[j+2];
+	    positions[i]= Pos3d(x,y,z);
+	    //const double u= nodeParametricCoord[i];
+	  }
+	std::vector<Node *> nodePtrs= edge->create_interior_nodes(positions); // create the edge nodes.
+	for(size_t i= 0;i<nNodes; i++) // populate node map.
+	  {
+            const size_t gmshNodeTag= nodeTags[i];
+	    mapNodeTags[gmshNodeTag]= nodePtrs[i];
+	  }
+      }
+    // Nodes on surfaces.
+    for(lst_surface_ptrs::iterator i= surfaces.begin();i!=surfaces.end();i++)
+      {
+	Face *face= *i;
+	if(!face->isHole())
+	  {
+	    const int gmshTag= face->getTag()+1; // Gmsh tag for the face.
+	    gmsh::model::mesh::getNodes(nodeTags, nodeCoord, nodeParametricCoord, 2, gmshTag);
+	    const size_t nNodes= nodeTags.size();
+	    std::vector<Pos3d> positions(nNodes);
+	    for(size_t i= 0;i<nNodes; i++)
+	      {
+		const size_t j= i*3;
+		const double x= nodeCoord[j];
+		const double y= nodeCoord[j+1];
+		const double z= nodeCoord[j+2];
+		positions[i]= Pos3d(x,y,z);
+		//const size_t k= i*2;
+		//const double u= nodeParametricCoord[k];
+		//const double v= nodeParametricCoord[k+1];
+	      }
+	    std::vector<Node *> nodePtrs= face->create_interior_nodes(positions);
+	    for(size_t i= 0;i<nNodes; i++) // populate node map.
+	      {
+		const size_t gmshNodeTag= nodeTags[i];
+		mapNodeTags[gmshNodeTag]= nodePtrs[i];
+	      }
+	  }
+      }
+    return mapNodeTags;
+  }
+
+//! @brief Create the elements from the mesh computed by Gmsh.
+int XC::SetEntities::create_elements_from_gmsh(const std::map<int, const XC::Node *> &nodeMap)
+  {
+    int retval= 0;
+    if(!nodeMap.empty())
+      {
+	std::vector<int> elementTypes;
+	std::vector<std::vector<std::size_t> > elementTags;
+	std::vector<std::vector<std::size_t> > elementNodeTags;
+	// Elements on surfaces.
+	for(lst_surface_ptrs::iterator i= surfaces.begin();i!=surfaces.end();i++)
+	  {
+	    Face *face= *i;
+	    if(!face->isHole())
+	      {
+	        const int gmshTag= face->getTag()+1; // Gmsh tag for the face.
+		gmsh::model::mesh::getElements(elementTypes, elementTags, elementNodeTags, 2, gmshTag);
+		const size_t numTypes= elementTypes.size();
+		std::deque<std::vector<int> > quads;
+		for(size_t i= 0;i<numTypes;i++)
+		  {
+		    std::vector<std::size_t> eTags= elementTags[i];
+		    const size_t numElemOfType= eTags.size();
+		    std::string elementName= "";
+		    int dim= 0;
+		    int order= 0;
+		    int numNodes= 0;
+		    std::vector<double> localNodeCoord;
+    #if GMSH_API_VERSION_MINOR < 5	    
+		    gmsh::model::mesh::getElementProperties(elementTypes[i], elementName, dim, order, numNodes, localNodeCoord);
+    #else
+		    int numPrimaryNodes= 0;
+		    gmsh::model::mesh::getElementProperties(elementTypes[i], elementName, dim, order, numNodes, localNodeCoord, numPrimaryNodes);
+    #endif
+
+		    if(numNodes>2) // Quads and triangles.
+		      {
+			if(verbosity>4)
+			  std::clog << "Creating elements of entity: '"
+				    << face->getName() << "'...";   
+			for(size_t j= 0;j<numElemOfType;j++)
+			  {
+			    std::vector<std::size_t> eNodeTags= elementNodeTags[i];
+			    size_t k= j*numNodes;
+			    std::vector<int> quad(4);
+			    for(int l= 0;l<numNodes;l++)
+			      {
+				const int gmshTag= eNodeTags[k+l];
+				const Node *nPtr= nodeMap.at(gmshTag);
+				quad[l]= nPtr->getTag();
+			      }
+			    if(numNodes==3)
+			      quad[3]= quad[2];
+			    quads.push_back(quad);
+			  }
+		      }
+		  }
+		retval+= face->create_elements_from_quads(quads);
+	      }
+	  }
+	if(verbosity>4)
+	  std::clog << "created." << std::endl;
+      }
+    return retval;
+  }
+
+//! @brief Asks Gmsh to create the mesh.
+//!
+//! @param modelName: string identifier for the gmsh model.
+void XC::SetEntities::gen_mesh_gmsh(const std::string &modelName)
+  {
+    // Before using any functions in the C++ API, Gmsh must be initialized:
+    gmsh::initialize();
+    // By default Gmsh will not print out any messages: in order to output
+    // messages on the terminal, just set the "General.Terminal" option to 1:
+    if(verbosity>1)
+      gmsh::option::setNumber("General.Terminal", 1);
+    else
+      gmsh::option::setNumber("General.Terminal", 0);
+    
+    // We now add a new model, named "gmsh_<surfaceName>". If
+    // gmsh::model::add() is not called, a new default (unnamed) model
+    // will be created on the fly, if necessary.
+    gmsh::model::add(modelName);
+
+    // Make the lines and points part of the set.
+    fillDownwards();
+    // Create gmsh points.
+    create_gmsh_points();
+    // Create gmsh lines.
+    create_gmsh_lines();
+  
+    // Create gmsh loops.
+    const std::vector<int> surfaceTags= create_gmsh_surfaces();
+    
+    gmsh::model::geo::synchronize();
+
+    // To generate quadrangles instead of triangles, we can simply add
+    for(std::vector<int>::const_iterator i= surfaceTags.begin(); i!= surfaceTags.end(); i++)
+      {
+    	const int sTag= *i;
+    	if(sTag>0) // surface is not a hole.
+          gmsh::model::mesh::setRecombine(2, *i);
+      }
+
+    // Transfinite automatic.
+    gmsh::option::setNumber("Mesh.MeshSizeMin", getMinElementSize()) ;
+    gmsh::option::setNumber("Mesh.MeshSizeMax", getMaxElementSize()); 
+    gmsh::model::mesh::setTransfiniteAutomatic();
+    
+    // We can then generate a 2D mesh...
+    gmsh::model::mesh::generate(2);
+    //gmsh::model::mesh::refine();
+
+    if(verbosity>1)
+      gmsh::fltk::run(); // Display mesh for debugging.
+
+    // Extract mesh data.
+    const std::map<int, const Node *> mapNodes= create_nodes_from_gmsh();
+    const int numElements= create_elements_from_gmsh(mapNodes);
+
+    // This should be called when you are done using the Gmsh C++ API:
+    gmsh::finalize();
+  }
+
 //!  @brief Triggers mesh generation from set components.
 //!
 //! @param dm: Meshing direction.
@@ -498,12 +726,16 @@ void XC::SetEntities::genMesh(const std::string &setName, meshing_dir dm)
     if(verbosity>1)
       std::clog << "Meshing set: " << setName << " ...";
 
-    body_meshing(dm);
-    surface_meshing(dm);
-    line_meshing(dm);
-    point_meshing(dm);
-    uniform_grid_meshing(dm);
-
+    if(useGmsh)
+      gen_mesh_gmsh("gmsh_"+setName);
+    else
+      {
+	body_meshing(dm);
+	surface_meshing(dm);
+	line_meshing(dm);
+	point_meshing(dm);
+	uniform_grid_meshing(dm);
+      }
     prep->get_sets().cierra_set(setName); //Cerramos.
 
     if(verbosity>1)
@@ -676,7 +908,7 @@ void XC::SetEntities::splitLinesAtIntersections(const double &tol)
     for(pnt_iterator i=points.begin();i!=points.end();i++)
       {
 	Pnt *pnt= *i;
-	const Pos3d pos= pnt->GetPos();
+	const Pos3d pos= pnt->getPos();
         std::set<const Edge *> conn= getConnectedLines(*pnt);
         const double tol2= tol*tol;
         for(lin_iterator j= lines.begin();j!=lines.end();j++)
@@ -786,6 +1018,59 @@ double XC::SetEntities::getAverageSize(void) const
       }
     retval/=(numEdges+numFaces+numBodies);
     return retval;
+  }
+
+//! @brief Return the maximum element size according to the
+//! number of divisions of the lines.
+double XC::SetEntities::getMaxElementSize(void) const
+  {
+    double retval= 0.0;
+    if(lines.empty())
+      std::clog << getClassName() << "::" << __FUNCTION__
+	        << "; WARNING, set has no lines." << std::endl;
+    else
+	for(lst_line_pointers::const_iterator i= lines.begin();i!=lines.end();i++)
+	  {
+	    const Edge &line= **i;
+	    retval= std::max(retval, line.getElemSize());
+	  }
+    return retval;
+  }
+
+//! @brief Return the minimum element size according to the
+//! number of divisions of the lines.
+double XC::SetEntities::getMinElementSize(void) const
+  {
+    double retval= 6.023e23;
+    if(lines.empty())
+      std::clog << getClassName() << "::" << __FUNCTION__
+	        << "; WARNING, set has no lines." << std::endl;
+    else
+      for(lst_line_pointers::const_iterator i= lines.begin();i!=lines.end();i++)
+	{
+	  const Edge &line= **i;
+	  retval= std::min(retval, line.getElemSize());
+	}
+    return retval;
+  }
+  
+//! @brief Return the minimum element size according to the
+//! number of divisions of the lines.
+double XC::SetEntities::getAverageElementSize(void) const
+  {
+    double totalLength= 0.0;
+    double totalNDiv= 0.0;
+    if(lines.empty())
+      std::clog << getClassName() << "::" << __FUNCTION__
+	        << "; WARNING, set has no lines." << std::endl;
+    else
+      for(lst_line_pointers::const_iterator i= lines.begin();i!=lines.end();i++)
+	{
+	  const Edge &line= **i;
+	  totalLength+= line.getLength();
+	  totalNDiv+= line.NDiv();
+	}
+    return totalLength/totalNDiv;
   }
 
 //! @brief Return a new set that contains the bodies that lie insiof the

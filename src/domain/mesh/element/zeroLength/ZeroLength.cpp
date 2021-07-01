@@ -155,40 +155,53 @@ XC::ZeroLength::ZeroLength(void)
   :Element0D(0,ELE_TAG_ZeroLength,0,0,0),theMatrix(nullptr), theVector(nullptr),
    theMaterial1d(this) {}
 
-void XC::ZeroLength::setMaterial(const int &dir,const std::string &nmbMat)
+//! @brief Return a pointer to the material that corresponds to the name.
+//!
+//! @param matName: name of the material.
+const XC::Material *XC::ZeroLength::get_material_ptr(const std::string &matName) const
   {
-    Preprocessor *preprocessor= getPreprocessor();
+    const Material *retval= nullptr; 
+    const Preprocessor *preprocessor= getPreprocessor();
     if(preprocessor)
       {
-        const MaterialHandler &material_handler= getPreprocessor()->getMaterialHandler();
-        const Material *ptr_mat= material_handler.find_ptr(nmbMat);
-        if(ptr_mat)
-          {
-            const UniaxialMaterial *tmp= dynamic_cast<const UniaxialMaterial *>(ptr_mat);
-            if(tmp)
-              theMaterial1d.push_back(dir,tmp);
-            else
-	      std::cerr << getClassName() << "::" << __FUNCTION__ << "; "
-                        << "material identified by: '" << nmbMat
-                        << "' is not an uniaxial material.\n";
-          }
-        else
-          std::cerr << getClassName() << "::" << __FUNCTION__ << "; "
-                    << "material identified by: '" << nmbMat
-                    << "' not found.\n";
-        if(theMaterial1d.size() > 0 )
-          setTran1d(elemType, theMaterial1d.size());
+        const MaterialHandler &material_handler= preprocessor->getMaterialHandler();
+        retval= material_handler.find_ptr(matName);
       }
     else
       {
 	std::cerr << getClassName() << "::" << __FUNCTION__
 		  << "; null pointer to preprocessor." << std::endl;
       }
+    if(!retval)
+      std::cerr << getClassName() << "::" << __FUNCTION__ << "; "
+		<< "material identified by: '" << matName
+		<< "' not found.\n";      
+    return retval;
   }
 
-void XC::ZeroLength::setMaterials(const std::deque<int> &dirs,const std::vector<std::string> &nmbMats)
+//! @brief Set the material for the direction argument.
+//!
+//! @param dir: direction 
+void XC::ZeroLength::setMaterial(const int &dir,const std::string &matName)
   {
-    const size_t n= nmbMats.size();
+    const Material *ptr_mat= get_material_ptr(matName);
+    if(ptr_mat)
+      {
+	const UniaxialMaterial *tmp= dynamic_cast<const UniaxialMaterial *>(ptr_mat);
+	if(tmp)
+	  theMaterial1d.push_back(dir,tmp);
+	else
+	  std::cerr << getClassName() << "::" << __FUNCTION__ << "; "
+		    << "material identified by: '" << matName
+		    << "' is not an uniaxial material.\n";
+      }
+    if(theMaterial1d.size() > 0 )
+      setTran1d(elemType, theMaterial1d.size());
+  }
+
+void XC::ZeroLength::setMaterials(const std::deque<int> &dirs,const std::vector<std::string> &matNames)
+  {
+    const size_t n= matNames.size();
     if(n!= dirs.size())
     std::cerr << getClassName() << "::" << __FUNCTION__
 	      << "; error in number of materials; number of directions: "
@@ -200,7 +213,7 @@ void XC::ZeroLength::setMaterials(const std::deque<int> &dirs,const std::vector<
         const MaterialHandler &material_handler= getPreprocessor()->getMaterialHandler();
         for(size_t i= 0;i<n;i++)
           {
-            const Material *ptr_mat= material_handler.find_ptr(nmbMats[i]);
+            const Material *ptr_mat= material_handler.find_ptr(matNames[i]);
             if(ptr_mat)
               {
                 const UniaxialMaterial *tmp= dynamic_cast<const UniaxialMaterial *>(ptr_mat);
@@ -208,12 +221,12 @@ void XC::ZeroLength::setMaterials(const std::deque<int> &dirs,const std::vector<
                   theMaterial1d.push_back(dirs[i],tmp);
                 else
 	      std::cerr << getClassName() << "::" << __FUNCTION__ << "; "
-                            << "el material de code: '" << nmbMats[i]
+                            << "el material de code: '" << matNames[i]
                             << "' no corresponde a un material uniaxial.\n";
               }
             else
               std::cerr << getClassName() << "::" << __FUNCTION__ << "; "
-                        << "material identified by : '" << nmbMats[i]
+                        << "material identified by : '" << matNames[i]
                         << "' not found.\n";
           }
         if(theMaterial1d.size() > 0 )

@@ -445,6 +445,9 @@ python tests/preprocessor/meshing/test_gmsh_04.py
 python tests/preprocessor/meshing/test_gmsh_05.py
 python tests/preprocessor/meshing/test_gmsh_06.py
 python tests/preprocessor/meshing/test_gmsh_07.py
+python tests/preprocessor/meshing/test_gmsh_08.py
+python tests/preprocessor/meshing/test_gmsh_09.py
+python tests/preprocessor/meshing/test_gmsh_10.py
 
 echo "$BLEU" "  Sets handling tests." "$NORMAL"
 python tests/preprocessor/sets/test_exist_set.py
@@ -568,6 +571,7 @@ python tests/loads/element_load_on_already_active_pattern.py
 echo "$BLEU" "Materials tests." "$NORMAL"
 python tests/materials/test_get_material_names.py
 echo "$BLEU" "  XC materials tests." "$NORMAL"
+python tests/materials/xc_materials/test_change_element_material.py
 echo "$BLEU" "    Uniaxial materials tests." "$NORMAL"
 python tests/materials/xc_materials/uniaxial/test_elasticpp_material_01.py
 python tests/materials/xc_materials/uniaxial/test_steel01.py

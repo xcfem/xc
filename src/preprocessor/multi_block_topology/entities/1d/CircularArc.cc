@@ -113,7 +113,7 @@ const CircularSector3d XC::CircularArc::get_sector_circular3d(void) const
   {
     CircularSector3d retval;
     if(check_points())
-      retval= CircularSector3d(p1->GetPos(),p3->GetPos(),p2->GetPos());
+      retval= CircularSector3d(p1->getPos(),p3->getPos(),p2->getPos());
     return retval;
   }
 

@@ -34,6 +34,7 @@
 #include "utility/geom/d1/Polyline3d.h"
 #include "utility/geom/d2/Triangle3d.h"
 #include "utility/geom/d2/Polygon3d.h"
+#include "utility/geom/pos_vec/Pos3dArray.h"
 
 #include "domain/mesh/node/Node.h"
 #include "domain/mesh/element/Element.h"
@@ -46,14 +47,14 @@
 
 //! @brief Constructor.
 XC::Face::Face(void)
-  : CmbEdge(nullptr,0), ndivj(0) {}
+  : CmbEdge(nullptr,0), hole(false), ndivj(0) {}
 
 //! @brief Constructor.
 //!
 //! @param ndivI: number of divisions for direction I.
 //! @param ndivJ: number of divisions for direction J.
 XC::Face::Face(Preprocessor *m,const size_t &ndivI, const size_t &ndivJ)
-  : CmbEdge(m,ndivI), ndivj(ndivJ) {}
+  : CmbEdge(m,ndivI), hole(false), ndivj(ndivJ) {}
 
 //! @brief Constructor.
 //! @param name: Object identifier.
@@ -61,7 +62,7 @@ XC::Face::Face(Preprocessor *m,const size_t &ndivI, const size_t &ndivJ)
 //! @param ndivI: number of divisions for direction I.
 //! @param ndivJ: number of divisions for direction J.
 XC::Face::Face(const std::string &name,Preprocessor *m,const size_t &ndivI, const size_t &ndivJ)
-  : CmbEdge(name,m,ndivI), ndivj(ndivJ) {}
+  : CmbEdge(name,m,ndivI), hole(false), ndivj(ndivJ) {}
 
 //! @brief Comparison operator.
 bool XC::Face::operator==(const Face &other) const
@@ -72,6 +73,8 @@ bool XC::Face::operator==(const Face &other) const
     else
       {
         retval= CmbEdge::operator==(other);
+	if(retval)
+	  retval= (hole==other.hole);
         if(retval)
           retval= (ndivj==other.ndivj);
        }
@@ -484,6 +487,14 @@ const XC::PolygonalFace *XC::Face::findHolePtr(PolygonalFace *pFace) const
     return this_no_const->findHolePtr(pFace);
   }
 
+//! @brief Return true if the face corresponds to a hole.
+bool XC::Face::isHole(void) const
+  { return hole; }
+
+//! @brief Return true if the face corresponds to a hole.
+void XC::Face::setHole(const bool &b)
+  { hole= b; }
+
 //! @brief Add a hole to the face.
 //!
 //! @param pFace: hole to add.
@@ -496,11 +507,18 @@ void XC::Face::addHole(PolygonalFace *pFace)
 		<< " is already added. Doing nothing."
 	        << std::endl;
     else
-      holes.push_back(pFace);
+      {
+	pFace->setHole(true);
+        holes.push_back(pFace);
+      }
   }
 
 //! @brief Return a list of the face holes.
-boost::python::list XC::Face::getHoles(void) const
+const std::deque<XC::PolygonalFace *> &XC::Face::getHoles(void) const
+  { return holes; }
+
+//! @brief Return a list of the face holes.
+boost::python::list XC::Face::getPyHoles(void) const
   {
     boost::python::list retval;
     for(hole_const_iterator i= holes.begin(); i!= holes.end(); i++)
@@ -512,22 +530,25 @@ boost::python::list XC::Face::getHoles(void) const
     return retval;
   }
 
-//! @brief Create a Gmsh curve loop from its sides.
+//! @brief Create a Gmsh curve loop from the face sides.
 int XC::Face::create_gmsh_loop(void) const
   {
     const size_t numSides= getNumberOfEdges();
-    std::vector<int> gmshTags(numSides);
+    std::vector<int> gmshContourTags(numSides);
     for(size_t i= 0;i<numSides; i++)
       {
 	const Side &side= lines[i];
-	const int gmshLineTag= side.getTag()+1; // Gmsh tags must be strictly positive.
-	gmshTags[i]= gmshLineTag;
+	int gmshLineTag= side.getTag()+1; // Gmsh tags must be strictly positive.
+	if(not side.isDirect()) //Change sign when needed.
+	  gmshLineTag= -gmshLineTag;
+	gmshContourTags[i]= gmshLineTag;
       }
     const int gmshLoopTag= getTag()+1; // Gmsh tags must be strictly positive.
-    return gmsh::model::geo::addCurveLoop(gmshTags,gmshLoopTag);
+    int retval= gmsh::model::geo::addCurveLoop(gmshContourTags,gmshLoopTag);
+    return retval;
   }
 
-//! @brief Return a list of the face holes.
+//! @brief Create the curve loops of the face holes.
 std::vector<int> XC::Face::create_gmsh_loops_for_holes(void) const
   {
     const size_t sz= holes.size();
@@ -535,7 +556,39 @@ std::vector<int> XC::Face::create_gmsh_loops_for_holes(void) const
     size_t count= 0;
     for(std::deque<PolygonalFace *>::const_iterator i= holes.begin(); i!= holes.end(); i++, count++)
       { retval[count]= (*i)->create_gmsh_loop(); }
-    return retval;    
+    return retval;
+  }
+
+//! @brief Create the curve loops for the outer face and the holes.
+std::vector<int> XC::Face::create_gmsh_loops(void) const
+  {
+    const size_t num_loops= holes.size()+1;
+    std::vector<int> retval(num_loops);
+    size_t count= 0;
+    //// Contour loop.
+    retval[count]= create_gmsh_loop();
+    count++;
+    //// Hole loops.
+    std::vector<int> holeTags= create_gmsh_loops_for_holes();
+    for(std::vector<int>::const_iterator i= holeTags.begin(); i!= holeTags.end(); i++, count++)
+      {	retval[count]= *i; }
+    return retval;
+  }
+
+//! @brief Ask Gmsh to create the surface corresponding to this
+//! face.
+int XC::Face::create_gmsh_surface(void) const
+  {
+    int retval= -1;
+    if(!isHole())
+      {
+	// Create gmsh loops.
+	std::vector<int> loopTags= create_gmsh_loops();
+	// Create gmsh surface.
+	const int gmshTag= getTag()+1;
+	retval= gmsh::model::geo::addPlaneSurface(loopTags, gmshTag);
+      }
+    return retval;
   }
 
 //! @brief Return a pointer to the side at the position
@@ -569,6 +622,68 @@ XC::Pnt *XC::Face::findVertex(const Pos3d &pos)
 	       break;
 	   }
       }
+    return retval;
+  }
+
+//! @brief Creates interior nodes at the positions being passed as parameters.
+std::vector<XC::Node *> XC::Face::create_interior_nodes(const std::vector<Pos3d> &positions)
+  {
+    const size_t sz= positions.size();
+    std::vector<XC::Node *> retval(sz,nullptr);
+    if(ttzNodes.Null())
+      {
+	ttzNodes= NodePtrArray3d(1,1,sz);
+	if(getPreprocessor())
+	  {
+	    for(size_t i=0;i<sz;i++)
+	      retval[i]= create_node(positions[i],1,1,i+1);
+	    if(verbosity>5)
+	      std::cerr << getClassName() << "::" << __FUNCTION__
+			<< "; created " << ttzNodes.NumPtrs() << " node(s)."
+			<< std::endl;
+	  }
+      }
+    else
+      if(verbosity>2)
+	std::clog << getClassName() << "::" << __FUNCTION__
+		  << "; nodes from entity: '" << getName()
+		  << "' already exist." << std::endl;
+    return retval;
+  }
+
+//! @brief Create nodes from quad tags (i.e. [tagI, tagJ, tagK, tagL].
+int XC::Face::create_elements_from_quads(const std::deque<std::vector<int> > &quads)
+  {
+    int retval= 0;
+    const Element *seed= getPreprocessor()->getElementHandler().get_seed_element();
+    if(seed)
+      {
+	const size_t numElements= quads.size();
+	ttzElements= ElemPtrArray3d(1,1,numElements);
+	for(size_t i= 0;i<numElements;i++)
+	  {
+	    std::vector<int> quad= quads[i];
+	    const size_t nNodes= quad.size();
+	    if(nNodes>0)
+	      {
+		ID nTags(nNodes);
+		for(size_t j= 0; j<nNodes; j++)
+		  { nTags[j]= quad[j]; }
+		Element *tmp= seed->getCopy();
+		tmp->setIdNodes(nTags);
+		ttzElements(1,1,i+1)= tmp;
+	      }
+	    else
+	      std::cerr << getClassName() << "::" << __FUNCTION__
+			<< "; empty quad at position: " << i
+			<< std::endl;
+	  }
+	add_elements_to_handler(ttzElements);
+	retval= numElements;
+      }
+    else if(verbosity>0)
+      std::clog << getClassName() << "::" << __FUNCTION__
+		<< "; seed element not set." << std::endl;
     return retval;
   }
 

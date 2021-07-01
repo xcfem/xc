@@ -69,73 +69,74 @@
 namespace XC {
 class SparseGenColLinSolver;
 
-//! @ingroup SOE
-//
-//! @brief Sparse nonsymmetric matrix linear system of equations.
-//!
-//! SparseGenColLinSOE is class which is used to store the matrix
-//! equation \f$Ax=b\f$ of order \f$size\f$ using a sparse column-compacted
-//! storage scheme for \f$A\f$. The \f$A\f$ matrix is stored in a 1d double
-//! array with \f$nnz\f$ elements, where \f$nnz\f$ is the number of non-zeroes
-//! in the matrix \f$A\f$. Two additional 1d integer arrays \f$rowA\f$
-//! and \f$colStartA\f$ are used to store information about the location of
-//! the coefficients, with \f$colStartA(i)\f$ storing the location in the 1d
-//! double array of the start of column \f$i\f$ and \f$rowA(j)\f$ identifying
-//! the row in \f$A\f$ to which the \f$j'th\f$ component in the 1d double
-//! array. \f$colStartA\f$ is of dimension \f$size+1\f$ and \f$rowA\f$ of
-//! dimension \f$nnz\f$. For example
-//! 
-//! \f$\f$
-//! \left[
-//! \begin{array}{ccccc}
-//! a_{0,0} & 0 & a_{0,2}  & a_{0,3} & 0
-//! a_{1,0} & a_{1,1} & 0 & 0 & 0
-//! 0 & a_{2,1} & a_{2,2} & 0 & 0
-//! 0 & 0 & 0 & a_{3,3} & a_{3,4}
-//! a_{4,0} & a_{4,1} & 0 & 0 & a_{4,4}
-//! \end{array}
-//! \right] 
-//! \f$\f$
-//! 
-//! is stored in:
-//! 
-//! \f$\f$
-//! \left[
-//! \begin{array}{cccccccccccccc}
-//! a_{0,0} & a_{1,0}  & a_{4,0} & a_{1,1} & a_{2,1} & a_{4,1} &
-//! a_{0,2} & a_{2,2} & a_{0,3} & a_{3,3} & a_{3,4} & a_{4,4}
-//! \end{array}
-//! \right] 
-//! \f$\f$
-//! 
-//! with
-//! 
-//! \f$\f$
-//! colStartA =
-//! \left[
-//! \begin{array}{cccccccccccccc}
-//! 0 & 3 & 6 & 8 & 10 & 12
-//! \end{array}
-//! \right] 
-//! \f$\f$
-//! 
-//! and
-//! 
-//! \f$\f$
-//! rowA =
-//! \left[
-//! \begin{array}{cccccccccccccc}
-//! 0 & 1 & 4 & 1 & 2 & 4 & 0 & 2 & 0 & 3 & 3 & 4 
-//! \end{array}
-//! \right] 
-//! \f$\f$
-//! The \f$x\f$ and \f$b\f$ vectors are stored in 1d double arrays of
-//! length \f$n\f$.
+/**
+ @brief Sparse nonsymmetric matrix linear system of equations.
+ @ingroup SOE
+
+ SparseGenColLinSOE is class which is used to store the matrix
+ equation \f$Ax=b\f$ of order \f$size\f$ using a sparse column-compacted
+ storage scheme for \f$A\f$. The \f$A\f$ matrix is stored in a 1d double
+ array with \f$nnz\f$ elements, where \f$nnz\f$ is the number of non-zeroes
+ in the matrix \f$A\f$. Two additional 1d integer arrays \f$rowA\f$
+ and \f$colStartA\f$ are used to store information about the location of
+ the coefficients, with \f$colStartA(i)\f$ storing the location in the 1d
+ double array of the start of column \f$i\f$ and \f$rowA(j)\f$ identifying
+ the row in \f$A\f$ to which the \f$j'th\f$ component in the 1d double
+ array. \f$colStartA\f$ is of dimension \f$size+1\f$ and \f$rowA\f$ of
+ dimension \f$nnz\f$. For example
+ 
+ \f$
+ \left[
+ \begin{array}{ccccc}
+ a_{0,0} & 0 & a_{0,2}  & a_{0,3} & 0\\
+ a_{1,0} & a_{1,1} & 0 & 0 & 0\\
+ 0 & a_{2,1} & a_{2,2} & 0 & 0\\
+ 0 & 0 & 0 & a_{3,3} & a_{3,4}\\
+ a_{4,0} & a_{4,1} & 0 & 0 & a_{4,4}
+ \end{array}
+ \right] 
+ \f$
+ 
+ is stored in:
+ 
+ \f$
+ \left[
+ \begin{array}{cccccccccccccc}
+ a_{0,0} & a_{1,0}  & a_{4,0} & a_{1,1} & a_{2,1} & a_{4,1} &
+ a_{0,2} & a_{2,2} & a_{0,3} & a_{3,3} & a_{3,4} & a_{4,4}
+ \end{array}
+ \right] 
+ \f$
+ 
+ with
+ 
+ \f$
+ colStartA =
+ \left[
+ \begin{array}{cccccccccccccc}
+ 0 & 3 & 6 & 8 & 10 & 12
+ \end{array}
+ \right] 
+ \f$
+ 
+ and
+ 
+ \f$
+ rowA =
+ \left[
+ \begin{array}{cccccccccccccc}
+ 0 & 1 & 4 & 1 & 2 & 4 & 0 & 2 & 0 & 3 & 3 & 4 
+ \end{array}
+ \right] 
+ \f$
+ The \f$x\f$ and \f$b\f$ vectors are stored in 1d double arrays of
+ length \f$n\f$.
+*/
 class SparseGenColLinSOE: public SparseGenSOEBase
   {
   protected:
     ID rowA;
-    ID colStartA;//!< int arrays containing info about coeficientss in A
+    ID colStartA; //!< int arrays containing info about coeficientss in A
   protected:
     virtual bool setSolver(LinearSOESolver *);
 

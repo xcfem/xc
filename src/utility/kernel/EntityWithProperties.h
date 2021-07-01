@@ -41,7 +41,7 @@ class EntityWithProperties
     virtual bool operator==(const EntityWithProperties &) const;
     //! @brief Virtual destructor
     virtual ~EntityWithProperties(void) {}
-    static const int &getVerbosityLevel(void);
+    static int getVerbosityLevel(void);
     static void setVerbosityLevel(const int &);
     virtual std::string getClassName(void) const;
     void set_owner(EntityWithProperties *owr);

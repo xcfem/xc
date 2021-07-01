@@ -57,6 +57,7 @@ class Face: public CmbEdge
     typedef dq_holes::iterator hole_iterator;
     typedef dq_holes::const_iterator hole_const_iterator;
   protected:
+    bool hole; //!< true if the face is a hole.
     size_t ndivj; //!< number of divisions in the j axis.
     dq_holes holes; //!< holes in this surface.
     int get_index_opposite_side(const int &) const;
@@ -67,9 +68,13 @@ class Face: public CmbEdge
     void set_ndiv_i(const size_t &);
     void set_ndiv_j(const size_t &);
     
+    std::vector<XC::Node *> create_interior_nodes(const std::vector<Pos3d> &);
+    int create_elements_from_quads(const std::deque<std::vector<int> > &);
     void create_line_nodes(void);
     int create_gmsh_loop(void) const;
     std::vector<int> create_gmsh_loops_for_holes(void) const;
+    std::vector<int> create_gmsh_loops(void) const;
+    int create_gmsh_surface(void) const;
   public:
     Face(void);
     Face(Preprocessor *m,const size_t &ndivI= 4, const size_t &ndivJ= 4);
@@ -102,12 +107,15 @@ class Face: public CmbEdge
     virtual void SetElemSizeIJ(const double &,const double &);
     virtual void SetElemSize(const double &sz, bool mustBeEven= true);
 
+    bool isHole(void) const;
+    void setHole(const bool &);
     void addHole(PolygonalFace *);
     hole_iterator findHole(PolygonalFace *);
     hole_const_iterator findHole(PolygonalFace *) const;
     const PolygonalFace *findHolePtr(PolygonalFace *) const;
     PolygonalFace *findHolePtr(PolygonalFace *);
-    boost::python::list getHoles(void) const;
+    const std::deque<PolygonalFace *> &getHoles(void) const;
+    boost::python::list getPyHoles(void) const;
     std::deque<Side *> findSides(const Pos3d &);
 
     //! @brief Returns the number of vertices.

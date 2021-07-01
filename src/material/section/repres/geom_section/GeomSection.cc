@@ -232,7 +232,7 @@ double XC::GeomSection::DistSpots(const size_t &i,const size_t &j) const
       std::cerr << getClassName() << "::" << __FUNCTION__
 	        << "; point: " << j << " not found. " << std::endl;
     else
-      retval= pA->getDistanceTo(pB->GetPos());
+      retval= pA->getDistanceTo(pB->getPos());
     return retval;
   }
 

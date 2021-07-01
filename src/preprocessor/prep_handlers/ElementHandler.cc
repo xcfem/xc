@@ -87,7 +87,9 @@ int XC::ElementHandler::SeedElemHandler::getDefaultTag(void) const
     if(ldr)
       retval= ldr->getDefaultTag();
     else
-      std::cerr << "Error en SeedElemHandler::getTagElem." << std::endl;
+      std::cerr << getClassName() << "::" << __FUNCTION__
+	        << "; error: pointer to element handler is null."
+		<< std::endl;
     return retval;
   }
 

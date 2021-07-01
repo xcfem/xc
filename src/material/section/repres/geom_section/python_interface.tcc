@@ -38,7 +38,7 @@ class_<XC::Axis, bases<XC::EntGeomSection>, boost::noncopyable >("Axis", no_init
   .add_property("numVertices",&XC::Axis::getNumberOfVertices)
   ;
 
-const Pos2d &(XC::Spot::*getPosSpot)(void) const= &XC::Spot::GetPos;
+const Pos2d &(XC::Spot::*getPosSpot)(void) const= &XC::Spot::getPos;
 class_<XC::Spot, bases<XC::EntGeomSection>, boost::noncopyable >("Spot", no_init)
   .add_property("pos",make_function(getPosSpot,return_internal_reference<>()),&XC::Spot::setPos)
   .add_property("numLines",&XC::Spot::nLines)

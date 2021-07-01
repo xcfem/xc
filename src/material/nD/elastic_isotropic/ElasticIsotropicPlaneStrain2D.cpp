@@ -75,19 +75,19 @@ XC::ElasticIsotropicPlaneStrain2D::ElasticIsotropicPlaneStrain2D(int tag, double
 XC::ElasticIsotropicPlaneStrain2D::ElasticIsotropicPlaneStrain2D(int tag)
   : ElasticIsotropic2D(tag, ND_TAG_ElasticIsotropicPlaneStrain2d, 0.0, 0.0, 0.0) {}
 
-//! @brief Returns the material tangent stiffness matrix, \f$D\f$.
-//!
-//! \f[
-//! \begin{displaymath}
-//! D := \frac{E}{(1+\nu)(1-2\nu)} \left[
-//!    \begin{array}{ccc}
-//!          1-\nu &     \nu &      0
-//!            \nu &   1-\nu &      0
-//!              0 &       0 & 1-2\nu
-//!    \end{array} 
-//!  \right]
-//! \end{displaymath}
-//! \f]
+/**
+ @brief Returns the material tangent stiffness matrix, \f$D\f$.
+
+ \f[
+ D := \frac{E}{(1+\nu)(1-2\nu)} \left[
+    \begin{array}{ccc}
+          1-\nu &     \nu &      0\\
+            \nu &   1-\nu &      0\\
+              0 &       0 & 1-2\nu
+    \end{array} 
+  \right]
+ \f]
+*/
 const XC::Matrix &XC::ElasticIsotropicPlaneStrain2D::getTangent(void) const
   {
     const double mu2= E/(1.0+v);
@@ -115,20 +115,20 @@ const XC::Matrix &XC::ElasticIsotropicPlaneStrain2D::getInitialTangent(void) con
     return D;
   }
 
-//! @brief Returns the material stress vector, \f$\mysigma\f$, for the current
-//! trial strain.
-//!
-//! \f[
-//! \begin{displaymath}
-//! \mysigma := \left[
-//!    \begin{array}{c}
-//!        \sigma_{xx}
-//!        \sigma_{yy}
-//!        \tau_{xy}   
-//!    \end{array}
-//!  \right]
-//! \end{displaymath}
-//! \f]
+/**
+ @brief Returns the material stress vector, \f$\sigma\f$, for the current
+ trial strain.
+
+ \f[
+ \sigma := \left[
+    \begin{array}{c}
+        \sigma_{xx}\\
+        \sigma_{yy}\\
+        \tau_{xy}
+    \end{array}
+  \right]
+ \f]
+*/
 const XC::Vector &XC::ElasticIsotropicPlaneStrain2D::getStress(void) const
   {
     double mu2 = E/(1.0+v);

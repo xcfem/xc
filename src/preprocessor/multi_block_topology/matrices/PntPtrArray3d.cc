@@ -402,7 +402,7 @@ std::vector<size_t> XC::getIdPointsQuad(const PntPtrArray3d::constant_i_layer_co
           std::cerr << "PntPtrArray3d::" << __FUNCTION__
 		    << "; error when obtaining the point identifier ("
 		    << j << ',' << k << ").\n";
-        p1= ptr->GetPos();
+        p1= ptr->getPos();
       }
 
     Pos3d p2;
@@ -414,7 +414,7 @@ std::vector<size_t> XC::getIdPointsQuad(const PntPtrArray3d::constant_i_layer_co
           std::cerr << "PntPtrArray3d::" << __FUNCTION__
 		    << "; error when obtaining the point identifier ("
 		    << j << ',' << k+1 << ").\n";
-        p2= ptr->GetPos();
+        p2= ptr->getPos();
       }
 
     Pos3d p3;
@@ -426,7 +426,7 @@ std::vector<size_t> XC::getIdPointsQuad(const PntPtrArray3d::constant_i_layer_co
           std::cerr << "PntPtrArray3d::" << __FUNCTION__
 		    << "; error when obtaining the point identifier ("
 		    << j+1 << ',' << k+1 << ").\n";
-        p3= ptr->GetPos();
+        p3= ptr->getPos();
       }
 
     Pos3d p4;
@@ -438,7 +438,7 @@ std::vector<size_t> XC::getIdPointsQuad(const PntPtrArray3d::constant_i_layer_co
           std::cerr << "PntPtrArray3d::" << __FUNCTION__
 		    << "; error when obtaining the point identifier ("
 		    << j+1 << ',' << k << ").\n";
-        p4= ptr->GetPos();
+        p4= ptr->getPos();
       }
 
 //     const Vector3d v2= p2-p1;

@@ -41,11 +41,12 @@ packages_lib="\
     libgtk2.0-dev               \
     libgtkgl2.0-dev             \
     libgtkglextmm-x11-1.2-dev   \
-    libgtkglext1-dev          \
+    libgtkglext1-dev            \
     libgtkmm-2.4-dev            \
     libgts-bin                  \
     libgts-dev                  \
     liblapack-dev               \
+    libmumps-dev                \
     libmpfr-dev                 \
     libmysql++-dev              \
     libplot-dev                 \

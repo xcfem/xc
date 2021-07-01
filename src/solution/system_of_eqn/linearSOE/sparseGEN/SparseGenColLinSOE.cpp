@@ -68,7 +68,7 @@
 //!
 //! @param owr: analysis aggregation that owns this object.
 XC::SparseGenColLinSOE::SparseGenColLinSOE(SolutionStrategy *owr)
-  :SparseGenSOEBase(owr,LinSOE_TAGS_SparseGenColLinSOE) {}
+  : SparseGenSOEBase(owr,LinSOE_TAGS_SparseGenColLinSOE) {}
 
 //! @brief Constructor.
 //!

@@ -38,6 +38,8 @@
 #include "domain/mesh/element/Element.h"
 #include "vtkCellType.h"
 
+#include <gmsh.h>
+
 //! @brief Constructor.
 XC::Line::Line(Preprocessor *m,const size_t &nd)
   : LineBase(m,nd) {}
@@ -55,7 +57,7 @@ double XC::Line::getLength(void) const
   {
     double retval= 0;
     if(check_points())
-      retval= dist(p1->GetPos(),p2->GetPos());
+      retval= dist(p1->getPos(),p2->getPos());
     return retval;
   }
 
@@ -72,8 +74,8 @@ Pos3d XC::Line::getCentroid(void) const
 //! X axis.
 Vector3d XC::Line::getIVector(void) const
   {
-    const Pos3d pt1= p1->GetPos();
-    const Pos3d pt2= p2->GetPos();
+    const Pos3d pt1= p1->getPos();
+    const Pos3d pt2= p2->getPos();
     Vector3d retval= pt2-pt1;
     retval.Normalize();
     return retval;
@@ -110,7 +112,7 @@ Segment3d XC::Line::getLineSegment(void) const
   {
     Segment3d retval;
     if(check_points())
-      retval= Segment3d(p1->GetPos(),p2->GetPos());
+      retval= Segment3d(p1->getPos(),p2->getPos());
     return retval;
   }
 
@@ -166,7 +168,7 @@ XC::Edge *XC::Line::splitAtPoint(Pnt *p)
 		      << std::endl;
 	if(p)
 	  {
-	    const Pos3d pN= p->GetPos();
+	    const Pos3d pN= p->getPos();
 	    const Segment3d s= getLineSegment();
 	    const double lambda= s.getLambda(pN);
 	    const double l= s.getLength();
@@ -233,13 +235,13 @@ BND3d XC::Line::Bnd(void) const
     BND3d retval;
     if(check_points())
       {
-        retval= BND3d(p1->GetPos(),p1->GetPos());
-	retval+= p2->GetPos();
+        retval= BND3d(p1->getPos(),p1->getPos());
+	retval+= p2->getPos();
       }
     else
       {
-        if(p1) retval+= BND3d(p1->GetPos(),p1->GetPos());
-        if(p2) retval+= BND3d(p2->GetPos(),p2->GetPos());
+        if(p1) retval+= BND3d(p1->getPos(),p1->getPos());
+        if(p2) retval+= BND3d(p2->getPos(),p2->getPos());
       }
     return retval;
   }
@@ -249,7 +251,7 @@ Pos3dArray XC::Line::get_positions(void) const
   {
     Pos3dArray retval;
     if(check_points())
-      retval= Pos3dArray(p1->GetPos(),p2->GetPos(),NDiv());
+      retval= Pos3dArray(p1->getPos(),p2->getPos(),NDiv());
     return retval;
   }
 
@@ -270,6 +272,18 @@ const XC::Vector &XC::Line::getTang(const double &s) const
     static Vector retval(3);
     retval= getVector();
     retval.Normalize();
+    return retval;
+  }
+
+//! @brief Ask Gmsh to create the line corresponding to this
+//! one.
+int XC::Line::create_gmsh_line(void) const
+  {
+    int retval= -1;
+    const int gmshLineTag= getTag()+1; // Gmsh tags must be strictly positive.
+    const int p1GmshTag= P1()->getTag()+1;
+    const int p2GmshTag= P2()->getTag()+1;
+    gmsh::model::geo::addLine(p1GmshTag, p2GmshTag, gmshLineTag);
     return retval;
   }
 

@@ -101,24 +101,24 @@ XC::ElasticSection2d::ElasticSection2d(int tag, double EA, double EI)
   :BaseElasticSection2d(tag, SEC_TAG_Elastic2d,2,1,EA,EI,0.0,0.0)
   {}
 
-//! @brief Returns the cross-section stress resultant.
-//!
-//! Returns the section stress resultants, \f$ssec\f$, the product of the 
-//! section stiffness matrix, \f$ksec\f$, and the section deformation 
-//! vector, \f$esec\f$,
-//! \f[
-//! \begin{equation}
-//! ssec = ksec esec = \left[
-//!    \begin{array}{c}
-//!        P
-//!        M_z
-//!        V_y
-//!    \end{array} 
-//!  \right]
-//! \end{equation}
-//! \f]
-//! where \f$P\f$ is the axial force, \f$M_z\f$ is the bending moment about the
-//! local z-axis, and \f$V_y\f$ is the shear force along the local y-axis.
+/**
+ @brief Returns the cross-section stress resultant.
+
+ Returns the section stress resultants, \f$ssec\f$, the product of the 
+ section stiffness matrix, \f$ksec\f$, and the section deformation 
+ vector, \f$esec\f$,
+ \f[
+ ssec = ksec esec = \left[
+    \begin{array}{c}
+        P\\
+        M_z\\
+        V_y
+    \end{array} 
+  \right]
+ \f]
+ where \f$P\f$ is the axial force, \f$M_z\f$ is the bending moment about the
+ local z-axis, and \f$V_y\f$ is the shear force along the local y-axis.
+*/
 const XC::Vector &XC::ElasticSection2d::getStressResultant(void) const
   {
     const Vector &e= getSectionDeformation();
@@ -127,19 +127,19 @@ const XC::Vector &XC::ElasticSection2d::getStressResultant(void) const
     return s;
   }
 
-//! @brief Returns the tangent stiffness matrix.
-//!
-//! \f[
-//! \begin{equation}
-//! fsec = \left[
-//!    \begin{array}{ccc}
-//!        EA &  0 &  0
-//!         0 & EI &  0
-//!         0 &  0 & \alpha GA
-//!    \end{array} 
-//!  \right]
-//! \end{equation}
-//! \f]
+/**
+ @brief Returns the tangent stiffness matrix.
+
+ \f[
+ fsec = \left[
+    \begin{array}{ccc}
+        EA &  0 &  0\\
+         0 & EI &  0\\
+         0 &  0 & \alpha GA
+    \end{array} 
+  \right]
+ \f]
+*/
 const XC::Matrix &XC::ElasticSection2d::getSectionTangent(void) const
   { return ctes_scc.getSectionTangent2x2(); }
 
@@ -148,19 +148,19 @@ const XC::Matrix &XC::ElasticSection2d::getSectionTangent(void) const
 const XC::Matrix &XC::ElasticSection2d::getInitialTangent(void) const
   { return getSectionTangent(); }
 
-//! @brief Returns the flexibility matrix.
-//!
-//! \f[
-//! \begin{equation}
-//! fsec = \left[
-//!    \begin{array}{ccc}
-//!        \frac{1}{EA} &            0 &                  0
-//!                   0 & \frac{1}{EI} &                  0
-//!                   0 &            0 & \frac{1}{\alpha GA}
-//!    \end{array} 
-//!  \right]
-//! \end{equation}
-//! \f]
+/**
+ @brief Returns the flexibility matrix.
+
+ \f[
+ fsec = \left[
+    \begin{array}{ccc}
+        \frac{1}{EA} &            0 &                  0\\
+                   0 & \frac{1}{EI} &                  0\\
+                   0 &            0 & \frac{1}{\alpha GA}
+    \end{array} 
+  \right]
+ \f]
+*/
 const XC::Matrix &XC::ElasticSection2d::getSectionFlexibility(void) const
   { return ctes_scc.getSectionFlexibility2x2(); }
 
@@ -172,21 +172,23 @@ const XC::Matrix &XC::ElasticSection2d::getInitialFlexibility(void) const
 XC::SectionForceDeformation *XC::ElasticSection2d::getCopy(void) const
   { return new ElasticSection2d(*this); }
 
-//! @brief Section stiffness contribution response identifiers.
-//!
-//! Returns the section ID code that indicates the ordering of
-//! section response quantities. For this section, axial response is the
-//! first quantity, bending about the local z-axis is the second, and
-//! shear along the local y-axis is third.
-//! \f[
-//! code := \left[
-//!   \begin{array}{c}
-//!       2
-//!       1
-//!       3
-//!   \end{array} 
-//! \right]
-//! \f]
+/**
+ @brief Section stiffness contribution response identifiers.
+
+ Returns the section ID code that indicates the ordering of
+ section response quantities. For this section, axial response is the
+ first quantity, bending about the local z-axis is the second, and
+ shear along the local y-axis is third.
+ \f[
+ code := \left[
+   \begin{array}{c}
+       2\\
+       1\\
+       3
+   \end{array} 
+ \right]
+ \f]
+*/
 const XC::ResponseId &XC::ElasticSection2d::getType(void) const
   { return RespElasticSection2d; }
 

@@ -220,6 +220,15 @@ void XC::Set::create_copy(const std::string &name,const Vector3d &v= Vector3d())
 void XC::Set::conciliaNDivs(void)
   { entities.conciliaNDivs(); }
 
+//! @brief Set the value of the useGmsh member.
+void XC::Set::setUseGmsh(const bool &b)
+  { entities.setUseGmsh(b); }
+
+//! @brief Get the value of the useGmsh member.
+bool XC::Set::getUseGmsh(void) const
+  { return entities.getUseGmsh(); }
+
+
 //!  @brief Triggers mesh generation from set components.
 //!
 //! @param dm: Meshing direction.

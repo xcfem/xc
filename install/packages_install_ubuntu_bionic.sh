@@ -45,10 +45,11 @@ packages_lib="\
     libgtkgl2.0-dev             \
     libgtkglextmm-x11-1.2-dev   \
     libgtkmm-2.4-dev            \
-    libgtkglext1-dev          \
+    libgtkglext1-dev            \
     libgts-bin                  \
     libgts-dev                  \
     liblapack-dev               \
+    libmumps-dev                \
     libmpfr-dev                 \
     libmysql++-dev              \
     libplot-dev                 \

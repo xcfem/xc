@@ -197,8 +197,8 @@ int XC::NewtonLineSearch::solveCurrentStep(void)
         //solve
         if(theSOE->solve() < 0)
           {
-            std::cerr << getClassName() << "::" << __FUNCTION__ << "; ";
-            std::cerr << "the LinearSysOfEqn failed in solve()\n";
+            std::cerr << getClassName() << "::" << __FUNCTION__
+		      << "; the LinearSysOfEqn failed in solve()\n";
             return -3;
           }
 

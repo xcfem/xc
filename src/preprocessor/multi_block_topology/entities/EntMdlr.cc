@@ -40,7 +40,6 @@
 #include "preprocessor/set_mgmt/KRowSet.h"
 #include "preprocessor/multi_block_topology/entities/0d/Pnt.h"
 
-
 #include "vtkCellType.h"
 
 //! @brief Constructor.
@@ -309,7 +308,7 @@ XC::Node *XC::EntMdlr::create_node(const Pos3d &pos,size_t i,size_t j, size_t k)
     ttzNodes(i,j,k)= retval;
     return retval;
   }
-
+  
 //! @brief Creates nodes at the positions being passed as parameters.
 void XC::EntMdlr::create_nodes(const Pos3dArray3d &positions)
   {
@@ -413,7 +412,7 @@ XC::Pnt *XC::EntMdlr::create_point_if_needed(const Pos3d &pos, const double &tol
     if(!points.empty()) //There is at least one point.
        {
          retval= points.getNearest(pos);
-         const double d2= dist2(pos,retval->GetPos());
+         const double d2= dist2(pos,retval->getPos());
          if(d2>tol*tol) // Create new point.
            { retval= create_point(pos); }
        }

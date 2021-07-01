@@ -40,7 +40,7 @@ class Point2d : public GeomObj2d
     operator const Pos2d &()
       { return org; }
     //! @brief Return the position in the global coordinates.
-    inline Pos2d GetPos(void) const
+    inline Pos2d getPos(void) const
       { return org; }
     virtual GeomObj2d *clon(void) const
       { return new Point2d(*this); }

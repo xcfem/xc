@@ -236,7 +236,7 @@ BND3d XC::Body::Bnd(void) const
       }
     else
       {
-        retval= BND3d(getVertex(1)->GetPos(),getVertex(1)->GetPos());
+        retval= BND3d(getVertex(1)->getPos(),getVertex(1)->getPos());
 	if(nv<2)
 	  {
 	    std::cerr << getClassName() << "::" << __FUNCTION__
@@ -245,7 +245,7 @@ BND3d XC::Body::Bnd(void) const
 	else
 	  {
 	    for(size_t i=2;i<=nv;i++)
-	      retval+= getVertex(i)->GetPos();
+	      retval+= getVertex(i)->getPos();
 	  }
       }
     return retval;
@@ -273,12 +273,12 @@ bool XC::Body::In(const GeomObj3d &geomObj, const double &tol) const
       {
 	std::cerr << getClassName() << "::" << __FUNCTION__
 		  << "; body has only one point." << std::endl;
-	retval= geomObj.In(getVertex(1)->GetPos(),tol);
+	retval= geomObj.In(getVertex(1)->getPos(),tol);
       }
     else
       for(size_t i=1;i<=nv;i++)
 	{
-	  Pos3d pos(getVertex(i)->GetPos());
+	  Pos3d pos(getVertex(i)->getPos());
           if(!geomObj.In(pos,tol))
             { retval= false; break; }
 	}

@@ -72,7 +72,7 @@
 
 
 XC::UmfpackGenLinSOE::UmfpackGenLinSOE(SolutionStrategy *owr)
-  :FactoredSOEBase(owr,LinSOE_TAGS_UmfpackGenLinSOE), nnz(0)
+  :LinearSOEData(owr,LinSOE_TAGS_UmfpackGenLinSOE), Ax(), Ap(), Ai()
   {}
 
 XC::SystemOfEqn *XC::UmfpackGenLinSOE::UmfpackGenLinSOE::getCopy(void) const
@@ -83,7 +83,19 @@ bool XC::UmfpackGenLinSOE::setSolver(LinearSOESolver *newSolver)
     bool retval= false;
     UmfpackGenLinSolver *tmp= dynamic_cast<UmfpackGenLinSolver *>(newSolver);
     if(tmp)
-      { retval= FactoredSOEBase::setSolver(tmp); }
+      {
+	retval= LinearSOEData::setSolver(tmp);
+	if(X.Size()!=0)
+	  {
+	    int solverOK= newSolver->setSize();
+	    if(solverOK < 0)
+	      {
+		std::cerr << getClassName() << "::" << __FUNCTION__
+			  << "; WARNING: the new solver could not setSize().\n";
+		return -1;
+	    }
+	}	
+      }
     else
       std::cerr << getClassName() << "::" << __FUNCTION__
 	        << "; solver not compatible with this system of equations."
@@ -94,173 +106,154 @@ bool XC::UmfpackGenLinSOE::setSolver(LinearSOESolver *newSolver)
 //! @brief Sets the size of the system from the number of vertices in the graph.
 int XC::UmfpackGenLinSOE::setSize(Graph &theGraph)
   {
-    int result = 0;
     size= checkSize(theGraph);
+    if(size < 0)
+      {
+	std::cerr << getClassName() << "::" << __FUNCTION__
+	          <<"; size of soe < 0\n";
+	return -1;
+      }
 
     // fist iterate through the vertices of the graph to get nnz
     Vertex *theVertex;
-    int newNNZ = 0;
+    int nnz= 0;
     VertexIter &theVertices = theGraph.getVertices();
     while ((theVertex = theVertices()) != 0)
       {
 	const std::set<int> &theAdjacency = theVertex->getAdjacency();
-	newNNZ += theAdjacency.size() +1; // the +1 is for the diag entry
+	nnz += theAdjacency.size() +1; // the +1 is for the diag entry
       }
-    nnz = newNNZ;
-    lValue = 20*nnz; // 20 because 3 (10 also) was not working for some instances
 
-    if(lValue > A.Size())
-      { // we have to get more space for A and colA
-        A= Vector(lValue); // 3 if job =1, otherie 2 will do
-        colA= ID(newNNZ);
-        index= ID(2*nnz);
-      }
-    A.Zero();
-    factored = false;
+    // resize A, B, X
+    Ap.reserve(size+1);
+    Ai.reserve(nnz);
+    Ax.resize(nnz,0.0);
+    B.resize(size);
+    B.Zero();
+    X.resize(size);
+    X.Zero();
     
-    if(size > B.Size())
-      { // we have to get space for the vectors
-	
-        inic(size);	
-	rowStartA= ID(size+1);	
-      }
-
-    // fill in rowStartA and colA
-    if(size != 0)
+    // fill in Ai and Ap
+    Ap.push_back(0);
+    for(int a=0; a<size; a++)
       {
-        rowStartA(0) = 0;
-      int startLoc = 0;
-      int lastLoc = 0;
-      for (int a=0; a<size; a++) {
 
 	theVertex = theGraph.getVertexPtr(a);
-	if(theVertex == 0)
-          {
-	    std::cerr << "WARNING:XC::UmfpackGenLinSOE::setSize :";
-	    std::cerr << " vertex " << a << " not in graph! - size set to 0\n";
+	if (theVertex == 0)
+	  {
+	    std::cerr << getClassName() << "::" << __FUNCTION__
+		      << "; WARNING: vertex " << a
+		      << " not in graph! - size set to 0.\n";
 	    size = 0;
 	    return -1;
 	  }
 
-	colA(lastLoc++) = theVertex->getTag(); // place diag in first
 	const std::set<int> &theAdjacency = theVertex->getAdjacency();
-	
-	// now we have to place the entries in the XC::ID into order in colA
+	std::set<int> col;
+
+	// diagonal
+	col.insert(theVertex->getTag());
+
+	// now we have to place the entries in the ID into order in Ai
         for(std::set<int>::const_iterator i=theAdjacency.begin(); i!=theAdjacency.end(); i++)
-          {
+	  {
 	    const int row= *i;
-	  bool foundPlace = false;
-	  // find a place in colA for current col
-	  for (int j=startLoc; j<lastLoc; j++)
-	    if(colA[j] > row) { 
-	      // move the entries already there one further on
-	      // and place col in current location
-	      for (int k=lastLoc; k>j; k--)
-		
-		colA[k] = colA[k-1];
-	      colA[j] = row;
-	      foundPlace = true;
-	      j = lastLoc;
-	    }
-	  if(foundPlace == false) // put in at the end
-	    colA[lastLoc] = row;
+	    col.insert(row);
+	  }
 
-	  lastLoc++;
-	}
-	rowStartA[a+1] = lastLoc;;	    
-	startLoc = lastLoc;
+	// copy to Ai
+	for(std::set<int>::const_iterator i=col.begin(); i!=col.end(); i++)
+	  { Ai.push_back(*i); }
+
+	// set Ap
+	Ap.push_back(Ap[a]+col.size());
       }
-    }
-    
 
-    // fill out index
-    int *indexRowPtr = &index[0];
-    int *indexColPtr = &index[nnz];
-    for (int ii=0; ii<size; ii++) {
-      int rowBegin = rowStartA[ii];
-      int rowEnd = rowStartA[ii+1] -1;
-      for (int j=rowBegin; j<=rowEnd; j++) {
-	int row = ii+1;  // + 1 for fortarn indexing
-	int col = colA[j] +1; // +1 for fortran indexing
-	*indexRowPtr++ = row;
-	*indexColPtr++ = col;
-      }
-    }
-
-    // invoke setSize() on the XC::Solver    
+    // invoke setSize() on the Solver
     LinearSOESolver *the_Solver = this->getSolver();
     int solverOK = the_Solver->setSize();
-    if(solverOK < 0) {
-	std::cerr << "WARNING:XC::UmfpackGenLinSOE::setSize :";
-	std::cerr << " solver failed setSize()\n";
+    if (solverOK < 0)
+      {
+	std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; WARNING: solver failed setSize().\n";
 	return solverOK;
-    }    
-    return result;
-}
+      }
+    return 0;
+  }
 
-int XC::UmfpackGenLinSOE::addA(const XC::Matrix &m, const XC::ID &id, double fact)
-{
+
+int XC::UmfpackGenLinSOE::addA(const Matrix &m, const ID &id, double fact)
+  {
     // check for a quick return 
     if(fact == 0.0)  
 	return 0;
 
-    int idSize = id.Size();
-    
-    // check that m and id are of similar size
-    if(idSize != m.noRows() && idSize != m.noCols()) {
-	std::cerr << "XC::UmfpackGenLinSOE::addA() ";
-	std::cerr << " - Matrix and XC::ID not of similar sizes\n";
-	return -1;
-    }
-    
-    if(fact == 1.0) { // do not need to multiply 
-	for (int i=0; i<idSize; i++) {
-	    int row = id(i);
-	    if(row < size && row >= 0) {
-		int startRowLoc = rowStartA[row];
-		int endRowLoc = rowStartA[row+1];
-		for (int j=0; j<idSize; j++) {
-		    int col = id(j);
-		    if(col <size && col >= 0) {
-			// find place in A using colA
-			for (int k=startRowLoc; k<endRowLoc; k++)
-			    if(colA[k] == col) {
-				A[k] += m(i,j);
-				k = endRowLoc;
-			    }
-		     }
-		}  // for j		
-	    } 
-	}  // for i
-    } else {
-	for (int i=0; i<idSize; i++) {
-	    int row = id(i);
-	    if(row < size && row >= 0) {
-		int startRowLoc = rowStartA[row];
-		int endRowLoc = rowStartA[row+1];
-		for (int j=0; j<idSize; j++) {
-		    int col = id(j);
-		    if(col <size && col >= 0) {
-			// find place in A using colA
-			for (int k=startRowLoc; k<endRowLoc; k++)
-			    if(colA[k] == col) {
-				A[k] += fact * m(i,j);
-				k = endRowLoc;
-			    }
-		     }
-		}  // for j		
-	    } 
-	}  // for i
-    }
+    const int idSize = id.Size();
 
+    // check that m and id are of similar size
+    if(idSize != m.noRows() && idSize != m.noCols())
+      {
+	std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; Matrix and ID not of similar sizes\n";
+	return -1;
+      }
+    
+    if(fact == 1.0) // do not need to multiply 
+      { 
+	for (int j=0; j<idSize; j++)
+	  {
+	    const int col = id(j);
+	    if (col<0 || col>=size)
+	      { continue; }
+	    for (int i=0; i<idSize; i++)
+	      {
+		const int row = id(i);
+		if (row<0 || row>=size)
+		  { continue; }
+
+		// find place in A
+		for (int k=Ap[col]; k<Ap[col+1]; k++)
+		  {
+		    if(Ai[k] == row)
+		      {
+			Ax[k] += m(i,j);
+			break;
+		      }
+		  }
+	      }
+	  }
+      }
+    else
+      {
+	for(int j=0; j<idSize; j++)
+	  {
+	    const int col = id(j);
+	    if (col<0 || col>=X.Size())
+	      { continue; }
+	    for(int i=0; i<idSize; i++)
+	      {
+		const int row = id(i);
+		if (row<0 || row>=X.Size())
+		  { continue; }
+		// find place in A
+		for (int k=Ap[col]; k<Ap[col+1]; k++)
+		  {
+		    if(Ai[k] == row)
+		      {
+			Ax[k] += fact*m(i,j);
+			break;
+		      }
+		  }
+	      }
+	  }
+      }
     return 0;
-}
+  }
 
     
 void XC::UmfpackGenLinSOE::zeroA(void)
   {
-    A.Zero();
-    factored = false;
+    Ax.assign(Ax.size(),0.0);
   }
 
 int XC::UmfpackGenLinSOE::sendSelf(Communicator &comm)

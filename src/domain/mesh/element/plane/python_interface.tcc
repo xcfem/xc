@@ -28,6 +28,7 @@ class_<ElemWithMaterial4N_Mech2D, bases<XC::ElementBase<4> >, boost::noncopyable
   .add_property("getPhysicalProperties", make_function(getMech2DPhysicalProp, return_internal_reference<>() ),"Returns materials at integration points (gauss points).")
   .add_property("extrapolationMatrix",make_function(&ElemWithMaterial4N_Mech2D::getExtrapolationMatrix,return_internal_reference<>() ),"Returns the element extrapolation matrix.")
   .def("getExtrapolatedValues", &ElemWithMaterial4N_Mech2D::getExtrapolatedValues,"Return the values at nodes from the values at the Gauss points.")
+  .def("setMaterial", &ElemWithMaterial4N_Mech2D::setMaterial,"Set the element material.")
    ;
 
 class_<PlaneElement4N_Mech2D, bases<ElemWithMaterial4N_Mech2D>, boost::noncopyable >("PlaneElement4N_Mech2D", no_init)
@@ -35,6 +36,7 @@ class_<PlaneElement4N_Mech2D, bases<ElemWithMaterial4N_Mech2D>, boost::noncopyab
   .def("getArea", &PlaneElement4N_Mech2D::getArea, "getArea(initialGeometry): return element's area. If initialGeometry is True the returned area corresponds to its undeformed geometry.")
   .def("getMaximumCornerAngle", &PlaneElement4N_Mech2D::getMaximumCornerAngle, "getMaximumCornerAngle(initialGeometry): return the maximum corner angle quality parameter. If intialGeometry is True the returned value corresponds to its undeformed geometry.")
   .def("orientation", &PlaneElement4N_Mech2D::orientation, "orientation(initialGeometry) return the orientation of the element.")
+  .def("setMaterial", &PlaneElement4N_Mech2D::setMaterial,"Set the element material.")
    ;
 
 class_<QuadBase4N_Mech2D, bases<PlaneElement4N_Mech2D>, boost::noncopyable >("QuadBase4N_Mech2D", no_init)
@@ -47,6 +49,7 @@ class_<QuadBase4N_Mech2D, bases<PlaneElement4N_Mech2D>, boost::noncopyable >("Qu
 XC::SolidMech2D &(ElemWithMaterial3N_Mech2D::*getMech2D3NPhysicalProp)(void)= &ElemWithMaterial3N_Mech2D::getPhysicalProperties;
 class_<ElemWithMaterial3N_Mech2D, bases<XC::ElementBase<3> >, boost::noncopyable >("ElemWithMaterial3N_Mech2D", no_init)
   .add_property("getPhysicalProperties", make_function(getMech2D3NPhysicalProp, return_internal_reference<>() ),"returns materials at integration points (gauss points).")
+  .def("setMaterial", &ElemWithMaterial3N_Mech2D::setMaterial,"Set the element material.")
    ;
 
 class_<PlaneElement3N_Mech2D, bases<ElemWithMaterial3N_Mech2D>, boost::noncopyable >("PlaneElement3N_Mech2D", no_init)
@@ -64,6 +67,7 @@ class_<TriBase3N_Mech2D, bases<PlaneElement3N_Mech2D>, boost::noncopyable >("Tri
 XC::SectionFDPhysicalProperties &(ElemWithMaterial4N_SFD::*getSectionFDPhysicalProp)(void)= &ElemWithMaterial4N_SFD::getPhysicalProperties;
 class_<ElemWithMaterial4N_SFD, bases<XC::ElementBase<4> >, boost::noncopyable >("ElemWithMaterial4N_SFD", no_init)
   .add_property("getPhysicalProperties", make_function(getSectionFDPhysicalProp, return_internal_reference<>() ),"returns materials at integration points (gauss points).")
+  .def("setMaterial", &ElemWithMaterial4N_SFD::setMaterial,"Set the element material.")
    ;
 
 class_<PlaneElement4N_SFD, bases<ElemWithMaterial4N_SFD>, boost::noncopyable >("PlaneElement4N_SFD", no_init)
@@ -75,6 +79,7 @@ class_<PlaneElement4N_SFD, bases<ElemWithMaterial4N_SFD>, boost::noncopyable >("
 
 class_<ElemWithMaterial9N_SFD, bases<XC::ElementBase<9> >, boost::noncopyable >("ElemWithMaterial9N_SFD", no_init)
   .add_property("getPhysicalProperties", make_function(getSectionFDPhysicalProp, return_internal_reference<>() ),"returns materials at integration points (gauss points).")
+  .def("setMaterial", &ElemWithMaterial9N_SFD::setMaterial,"Set the element material.")
    ;
 
 class_<PlaneElement9N_SFD, bases<ElemWithMaterial9N_SFD>, boost::noncopyable >("PlaneElement9N_SFD", no_init)

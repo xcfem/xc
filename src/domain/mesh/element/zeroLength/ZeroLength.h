@@ -133,6 +133,8 @@ class ZeroLength: public Element0D
     DbTagData &getDbTagData(void) const;
     int sendData(Communicator &);
     int recvData(const Communicator &);
+    
+    const Material *get_material_ptr(const std::string &) const;
 
   public:
     // Constructor for a single 1d material model

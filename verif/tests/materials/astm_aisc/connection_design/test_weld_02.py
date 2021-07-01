@@ -1,4 +1,10 @@
 # -*- coding: utf-8 -*-
+''' Design examples V14.0 - American Institute of Steel Construction.
+Weld test- AISC verification. Example J.2 "Fillet weld loaded at an angle".
+
+This is the same test as the one callet test_weld_01.py but using MultiFilletWeld instead of FilletWeld.
+'''
+
 from __future__ import division 
 from __future__ import print_function
 
@@ -111,17 +117,16 @@ modelSpace.addLoadCaseToDomain('LC1')
 result= modelSpace.analyze(calculateNodalReactions= True)
 
 Vytot=0
-for e in  W1.weldSet.elements:
+for e in W1.weldSet.elements:
     Vytot+=e.getVy()
 ratio1=(abs(Vytot)-Pu/2)/Pu
 Vytot=0
-for e in  W2.weldSet.elements:
+for e in W2.weldSet.elements:
     Vytot+=e.getVy()
 ratio2=(abs(Vytot)-Pu/2)/Pu
 #capacity factor
 CF0=W1.getCF_AISCverif(plateSteel)
-ratio3=(CF0-0.99125)/CF0
-
+ratio3=(CF0-1.0059110796832564)/CF0
 
 modelSpace.removeAllLoadPatternsFromDomain()
 modelSpace.addLoadCaseToDomain('LC2')
@@ -129,19 +134,33 @@ result= modelSpace.analyze(calculateNodalReactions= True)
 Fpar=W1.getTotalIntForc()[0]
 ratio4=(abs(Fpar)-Pu/2*math.cos(math.radians(ang1)))/Pu
 Vytot=0
-for e in  W1.weldSet.elements:
+for e in W1.weldSet.elements:
     Vytot+=e.getVy()
 ratio5=(abs(Vytot)-Pu/2*math.sin(math.radians(ang1)))/Pu
 Fpar=W2.getTotalIntForc()[0]
 ratio6=(abs(Fpar)-Pu/2*math.cos(math.radians(ang1)))/Pu
 Vytot=0
-for e in  W2.weldSet.elements:
+for e in W2.weldSet.elements:
     Vytot+=e.getVy()
 ratio7=(abs(Vytot)-Pu/2*math.sin(math.radians(ang1)))/Pu
 # Weld design strenght (per unit lentgth)
 #capacity factor
 CF60=W1.getCF_AISCverif(plateSteel)
-ratio8=(CF60-1.035)/CF60
+ratio8=(CF60-1.0501509802325004)/CF60
+
+'''
+print('ratio0= ', ratio0)
+print('ratio1= ', ratio1)
+print('ratio2= ', ratio2)
+print('CF0= ', CF0)
+print('ratio3= ', ratio3)
+print('ratio4= ', ratio4)
+print('ratio5= ', ratio5)
+print('ratio6= ', ratio6)
+print('ratio7= ', ratio7)
+print('CF60= ', CF60)
+print('ratio8= ', ratio8)
+'''
 
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)

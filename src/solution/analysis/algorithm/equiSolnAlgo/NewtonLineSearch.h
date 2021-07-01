@@ -77,7 +77,7 @@ class LineSearch;
 //
 //! In optimization, the line search strategy is one of two basic iterative
 //! approaches to find a local minimum \f$\mathbf{x}^*\f$ of an objective
-//! function \f$f:\mathbb {R} ^{n}\to \mathbb {R}\f$. The other approach is
+//! function \f$f:\mathbf {R} ^{n}\to \mathbf {R}\f$. The other approach is
 //! trust region.
 //!
 //! The line search approach first finds a descent direction along which

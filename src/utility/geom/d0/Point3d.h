@@ -50,7 +50,7 @@ class Point3d : public GeomObj3d
     operator const Pos3d &(void)
       { return org; }
     //! @brief Return the position of the point in global coordinates.
-    inline Pos3d GetPos(void) const
+    inline Pos3d getPos(void) const
       { return org; }
     virtual GeomObj3d *clon(void) const
       { return new Point3d(*this); }

@@ -103,13 +103,13 @@ BND2d XC::Segment::Bnd(void) const
     BND2d retval;
     if(p1 && p2)
       {
-        retval= BND2d(p1->GetPos(),p1->GetPos());
-	retval+= p2->GetPos();
+        retval= BND2d(p1->getPos(),p1->getPos());
+	retval+= p2->getPos();
       }
     else
       {
-        if(p1) retval= BND2d(p1->GetPos(),p1->GetPos());
-        if(p2) retval= BND2d(p2->GetPos(),p2->GetPos());
+        if(p1) retval= BND2d(p1->getPos(),p1->getPos());
+        if(p2) retval= BND2d(p2->getPos(),p2->getPos());
       }
     return retval;
   }
@@ -123,7 +123,7 @@ double XC::Segment::getLength(void) const
   {
     double retval= -1;
     if(p1 && p2)
-      retval= dist(p1->GetPos(),p2->GetPos());
+      retval= dist(p1->getPos(),p2->getPos());
     else
       std::cerr << getClassName() << "::" << __FUNCTION__
 		<< "; endpoint not defined in line: '" << getName()

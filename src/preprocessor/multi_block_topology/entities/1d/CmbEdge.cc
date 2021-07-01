@@ -528,7 +528,7 @@ Pos3dArray XC::CmbEdge::get_positions(void) const
                 cont++;
               }
           }
-        retval(npos)= last_point()->GetPos();
+        retval(npos)= last_point()->getPos();
       }
     return retval;
   }
@@ -829,8 +829,8 @@ std::deque<XC::CmbEdge::Side *> XC::CmbEdge::findSides(const Pos3d &pos)
     for(std::deque<Side>::iterator i=lines.begin();i!=lines.end();i++)
       {
 	Side *s= &(*i);
-	const Pos3d p1= s->P1()->GetPos();
-	const Pos3d p2= s->P2()->GetPos();
+	const Pos3d p1= s->P1()->getPos();
+	const Pos3d p2= s->P2()->getPos();
 	const double d= dist(Segment3d(p1,p2), pos);
         if(d<elemSize/1e4)
 	  { retval.push_back(s); }
@@ -894,7 +894,7 @@ XC::Pnt *XC::CmbEdge::findVertex(const Pos3d &pos)
     for(std::deque<Pnt *>::iterator i= vertices.begin();i!=vertices.end();i++)
       {
 	Pnt *p= *i;
-        const double d2= dist2(p->GetPos(), pos);
+        const double d2= dist2(p->getPos(), pos);
         if(d2<elemSize/1e6)
 	  {
 	    retval= p;
@@ -918,9 +918,9 @@ XC::ID XC::CmbEdge::getKPoints(void) const
 Polyline3d XC::CmbEdge::getPolyline(void) const
   {
     Polyline3d retval;
-    retval.push_back(P1()->GetPos());
+    retval.push_back(P1()->getPos());
     for(std::deque<Side>::const_iterator i=lines.begin();i!=lines.end();i++)
-      retval.push_back((*i).P2()->GetPos());
+      retval.push_back((*i).P2()->getPos());
     return retval;
   }
 
@@ -938,7 +938,7 @@ BND3d XC::CmbEdge::Bnd(void) const
       }
     else
       {
-        retval= BND3d(getVertex(1)->GetPos(),getVertex(1)->GetPos());
+        retval= BND3d(getVertex(1)->getPos(),getVertex(1)->getPos());
 	if(nv<2)
 	  {
 	    std::cerr << getClassName() << "::" << __FUNCTION__
@@ -947,7 +947,7 @@ BND3d XC::CmbEdge::Bnd(void) const
 	else
 	  {
   	    for(size_t i=2;i<=nv;i++)
-	      retval+= getVertex(i)->GetPos();
+	      retval+= getVertex(i)->getPos();
 	  }
       }
     return retval;

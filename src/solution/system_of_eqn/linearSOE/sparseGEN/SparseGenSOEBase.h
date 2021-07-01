@@ -42,7 +42,7 @@ namespace XC {
 class SparseGenSOEBase: public SparseSOEBase
   {
   protected:
-    Vector A; //! 1d array containing coefficient of A
+    Vector A; //!< 1d array containing coefficient of A
     SparseGenSOEBase(SolutionStrategy *,int classTag,int N= 0, int NNZ= 0);
 
   public:

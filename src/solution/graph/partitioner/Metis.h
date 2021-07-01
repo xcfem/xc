@@ -69,71 +69,74 @@
 #include "solution/graph/numberer/GraphNumberer.h"
 
 namespace XC {
-//! @ingroup Graph
-//
-//! @brief Metis is a type of GraphPartitioner which uses METIS library.
-//!
-//! The Metis graph partitioner calls procedures defined in the METIS
-//! library to partition the graph. METIS is currently being developed by
-//! G.~Karypis and V.~Kumar at the University of Minnesota. At the present
-//! time the Graph to be partitioned MUST have the vertices
-//! labeled \f$0\f$ through \f$numVertex-1\f$.
 
-//! The METIS library uses two integer arrays to represent the graph, {\em
-//! xadj} and \p adjncy. \f$xadj(i)\f$ stores the location in \p adjncy
-//! of the start of the \f$i\f$'th Vertices adjacent Vertices. \p adjncy
-//! contains the tags of all the adjacent vertices. For example, the graph
-//! which is represented by the following matrix \f$A\f$:
-//! 'METIS - Unstructured Graph Partitioning And Sparse Matrix Ordering
-//! System', developed by G. Karypis and V. Kumar at the University of
-//! Minnesota. The metis files are found in metis-2.0 which were downloaded.
-//!
-// \f[
-// \begin{displaymath}
-// A = \left[
-//   \begin{array}{ccccc}
-//   1 & 0 & 1 & 1 & 0
-//   1 & 1 & 0 & 0 & 0
-//   0 & 1 & 1 & 0 & 0
-//   0 & 0 & 0 & 1 & 1
-//   1 & 1 & 0 & 0 & 1
-//   \end{array}
-// \right] 
-// \end{displaymath}
-// \f]
-// 
-//  is represented by:
-// 
-// \f[
-// \begin{displaymath}
-// \f$\f$
-//  xadj =
-// \left[
-// \begin{array}{cccccccccccccc}
-// 0 & 2 & 3 & 4 & 5 & 7
-// \end{array}
-// \right] 
-// \f$\f$
-// \end{displaymath}
-// \f]
-// 
-//  and
-// 
-// \f[
-// \begin{displaymath}
-// \f$\f$
-//  adjncy =
-// \left[
-// \begin{array}{cccccccccccccc}
-// 2 & 3 & 0 & 1 & 4 & 0 & 1
-// \end{array}
-// \right] 
-// \f$\f$
-// \end{displaymath}
-// \f]
-//
-// \noindent note that there is no space allocated for the diagonal
-// components.
+/**
+
+ @brief Metis is a type of GraphPartitioner which uses METIS library.
+ @ingroup Graph
+
+ The Metis graph partitioner calls procedures defined in the METIS
+ library to partition the graph. METIS is currently being developed by
+ G.~Karypis and V.~Kumar at the University of Minnesota. At the present
+ time the Graph to be partitioned MUST have the vertices
+ labeled \f$0\f$ through \f$numVertex-1\f$.
+
+ The METIS library uses two integer arrays to represent the graph, {\em
+ xadj} and \p adjncy. \f$xadj(i)\f$ stores the location in \p adjncy
+ of the start of the \f$i\f$'th Vertices adjacent Vertices. \p adjncy
+ contains the tags of all the adjacent vertices. For example, the graph
+ which is represented by the following matrix \f$A\f$:
+ 'METIS - Unstructured Graph Partitioning And Sparse Matrix Ordering
+ System', developed by G. Karypis and V. Kumar at the University of
+ Minnesota. The metis files are found in metis-2.0 which were downloaded.
+
+ \f[
+ \begin{displaymath}
+ A = \left[
+   \begin{array}{ccccc}
+   1 & 0 & 1 & 1 & 0\\
+   1 & 1 & 0 & 0 & 0\\
+   0 & 1 & 1 & 0 & 0\\
+   0 & 0 & 0 & 1 & 1\\
+   1 & 1 & 0 & 0 & 1
+   \end{array}
+ \right] 
+ \end{displaymath}
+ \f]
+ 
+  is represented by:
+ 
+ \f[
+ \begin{displaymath}
+ \f$
+  xadj =
+ \left[
+ \begin{array}{cccccccccccccc}
+ 0 & 2 & 3 & 4 & 5 & 7
+ \end{array}
+ \right] 
+ \f$
+ \end{displaymath}
+ \f]
+ 
+  and
+ 
+ \f[
+ \begin{displaymath}
+ \f$
+  adjncy =
+ \left[
+ \begin{array}{cccccccccccccc}
+ 2 & 3 & 0 & 1 & 4 & 0 & 1
+ \end{array}
+ \right] 
+ \f$
+ \end{displaymath}
+ \f]
+
+ \noindent note that there is no space allocated for the diagonal
+ components.
+*/
 class Metis: public GraphPartitioner, public GraphNumberer
   {
   private:

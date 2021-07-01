@@ -70,18 +70,18 @@ Pos3d XC::PntMap::getCentroid(void) const
 	const_iterator bg= this->begin();
 	if(sz<2)
 	  {
-	    const Pos3d pos= (*bg).second->GetPos();
+	    const Pos3d pos= (*bg).second->getPos();
 	    retval= pos;
 	  }
         else
 	  {
 	    const_iterator i= bg;
-	    const Pos3d pos= (*i).second->GetPos();
+	    const Pos3d pos= (*i).second->getPos();
             Vector3d vpos_center_of_mass(pos.VectorPos());
             i++;
             for(; i != this->end(); i++)
 	      {
-   	        const Pos3d pos= (*i).second->GetPos();
+   	        const Pos3d pos= (*i).second->getPos();
                 vpos_center_of_mass= vpos_center_of_mass + pos.VectorPos();
 	      }
             vpos_center_of_mass= vpos_center_of_mass * (1.0/sz);
@@ -107,7 +107,7 @@ Vector3d XC::PntMap::getVector(const Indice &i,const Indice &j) const
       std::cerr << getClassName() << "::" << __FUNCTION__ << "; point: " << j 
 		<< " not found." << std::endl;
     else
-      retval= Vector3d(pA->GetPos(),pB->GetPos());
+      retval= Vector3d(pA->getPos(),pB->getPos());
     return retval;
   }
 
@@ -124,7 +124,7 @@ Line3d XC::PntMap::getRecta(const Indice &i,const Indice &j) const
       std::cerr << getClassName() << "::" << __FUNCTION__ << "; point: " << j 
 		<< " not found." << std::endl;
     else
-      retval= Line3d(pA->GetPos(),pB->GetPos());
+      retval= Line3d(pA->getPos(),pB->getPos());
     return retval;
   }
 
@@ -145,7 +145,7 @@ Plane XC::PntMap::getPlane(const Indice &i,const Indice &j,const Indice &k) cons
       std::cerr << getClassName() << "::" << __FUNCTION__ << "; point: " << k 
 		<< " not found." << std::endl;
     else
-      retval= Plane(pA->GetPos(),pB->GetPos(),pC->GetPos());
+      retval= Plane(pA->getPos(),pB->getPos(),pC->getPos());
     return retval;
   }
 
@@ -171,7 +171,7 @@ bool XC::PntMap::checkPosition(const Pos3d &newPos)
 	const Pnt *tmp= getNearest(newPos);
 	if(tmp)
 	  {
-	    const Pos3d pos= tmp->GetPos();
+	    const Pos3d pos= tmp->getPos();
 	    const double d2= dist2(pos,newPos);
 	    if(d2<(tol*tol))
 	      {
@@ -253,7 +253,7 @@ XC::Pnt *XC::PntMap::Copy(const Pnt *p,const Vector3d &v= Vector3d())
                 << getTag() << " already exists, no changes made." << std::endl;
     else //The point is new.
       {
-	checkPosition(p->GetPos()+v);
+	checkPosition(p->getPos()+v);
         retval= new Pnt(*p);
         if(retval)
           {
@@ -320,6 +320,6 @@ double XC::PntMap::Dist(const Indice &i,const Indice &j) const
 	        << "; point identified by: " 
                 << j << " not found." << std::endl;
     else
-      retval= pA->getDistanceTo(pB->GetPos());
+      retval= pA->getDistanceTo(pB->getPos());
     return retval;
   }

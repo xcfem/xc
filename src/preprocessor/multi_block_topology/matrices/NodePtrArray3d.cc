@@ -84,8 +84,8 @@ XC::Node *XC::NodePtrArray3d::getNearestNode(const Pos3d &p)
     if(numberOfLayers>100)
       std::clog << getClassName() << "::" << __FUNCTION__
 	        << "Node pointers array has "
-                << numberOfLayers << " layers "
-                << " is better to search by coordinates in the associated set."
+                << numberOfLayers << " layers. "
+                << "It is better to search by coordinates in the associated set."
                 << std::endl;
     for(size_t i=1;i<=numberOfLayers;i++)
       {

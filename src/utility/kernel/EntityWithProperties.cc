@@ -94,7 +94,7 @@ std::string EntityWithProperties::getClassName(void) const
   }
 
 //! @brief Get the value of the verbosity level.
-const int &EntityWithProperties::getVerbosityLevel(void)
+int EntityWithProperties::getVerbosityLevel(void)
   { return verbosity; }
 
 //! @brief Set the value of the verbosity level.

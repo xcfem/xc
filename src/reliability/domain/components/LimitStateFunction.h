@@ -71,7 +71,7 @@ namespace XC {
 //! @brief Function that defines the failure of the structure.
 //!
 //! The limit state function for estimating the failure probability
-//! may be defined as \f$g(X)= R(X) − L(X)\f$ where R is the structure
+//! may be defined as \f$g(X)= R(X) - L(X)\f$ where R is the structure
 //! strength and L(X) is the total load over the structure. The limit
 //! state function \f$g(X)\f$ defines a failure criterion that is
 //! a function of all random variables X. 

@@ -217,10 +217,10 @@ Pos3dArray XC::QuadSurface::get_positions(void) const
 //! X axis.
 Vector3d XC::QuadSurface::getIVector(void) const
   {
-    const Pos3d p1= getVertex(1)->GetPos();
-    const Pos3d p2= getVertex(2)->GetPos();
-    const Pos3d p3= getVertex(3)->GetPos();
-    const Pos3d p4= getVertex(4)->GetPos();
+    const Pos3d p1= getVertex(1)->getPos();
+    const Pos3d p2= getVertex(2)->getPos();
+    const Pos3d p3= getVertex(3)->getPos();
+    const Pos3d p4= getVertex(4)->getPos();
     Vector3d retval= 0.5*((p2-p1)+(p3-p4));
     retval.Normalize();
     return retval;
@@ -230,10 +230,10 @@ Vector3d XC::QuadSurface::getIVector(void) const
 //! Y axis.
 Vector3d XC::QuadSurface::getJVector(void) const
   {
-    const Pos3d p1= getVertex(1)->GetPos();
-    const Pos3d p2= getVertex(2)->GetPos();
-    const Pos3d p3= getVertex(3)->GetPos();
-    const Pos3d p4= getVertex(4)->GetPos();
+    const Pos3d p1= getVertex(1)->getPos();
+    const Pos3d p2= getVertex(2)->getPos();
+    const Pos3d p3= getVertex(3)->getPos();
+    const Pos3d p4= getVertex(4)->getPos();
     Vector3d i= 0.5*((p2-p1)+(p3-p4));
     i.Normalize();
     Vector3d j= 0.5*((p4-p1)+(p3-p2));

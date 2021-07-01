@@ -199,42 +199,6 @@ void XC::PolygonalFace::create_nodes_from_paving(Paver &paver)
 		  << "' already exist." << std::endl; 
   }
 
-//! @brief Create nodes from quad tags (i.e. [tagI, tagJ, tagK, tagL].
-int XC::PolygonalFace::create_elements_from_quads(const std::deque<std::vector<int> > &quads)
-  {
-    int retval= 0;
-    const Element *seed= getPreprocessor()->getElementHandler().get_seed_element();
-    if(seed)
-      {
-	const size_t numElements= quads.size();
-	ttzElements= ElemPtrArray3d(1,1,numElements);
-	for(size_t i= 0;i<numElements;i++)
-	  {
-	    std::vector<int> quad= quads[i];
-	    const size_t nNodes= quad.size();
-	    if(nNodes>0)
-	      {
-		ID nTags(nNodes);
-		for(size_t j= 0; j<nNodes; j++)
-		  { nTags[j]= quad[j]; }
-		Element *tmp= seed->getCopy();
-		tmp->setIdNodes(nTags);
-		ttzElements(1,1,i+1)= tmp;
-	      }
-	    else
-	      std::cerr << getClassName() << "::" << __FUNCTION__
-			<< "; empty quad at position: " << i
-			<< std::endl;
-	  }
-	add_elements_to_handler(ttzElements);
-	retval= numElements;
-      }
-    else if(verbosity>0)
-      std::clog << getClassName() << "::" << __FUNCTION__
-		<< "; seed element not set." << std::endl;
-    return retval;
-  }
-
 //! @brief Creates elements on the nodes created
 //! in create_nodes_from_paving.
 int XC::PolygonalFace::create_elements_from_paving(const Paver &paver)
@@ -327,7 +291,7 @@ void XC::PolygonalFace::create_gmsh_points(const double &elemSize) const
 	if(pnt)
 	  {
 	    const int gmshTag= pnt->getTag()+1; // Gmsh tags must be strictly positive.
-	    const Pos3d pos= pnt->GetPos();
+	    const Pos3d pos= pnt->getPos();
             gmsh::model::geo::addPoint(pos.x(), pos.y(), pos.z(), elemSize, gmshTag);
 	  }
 	else
@@ -442,9 +406,9 @@ std::map<int, const XC::Node *> XC::PolygonalFace::create_nodes_from_gmsh(void)
 		    bool interior= true;
 		    const LineBase *cl= l;
 		    const Pnt *p1= cl->P1();
-		    interior= (interior && (dist2(gmshPos,p1->GetPos())>elemSize/1e6));
+		    interior= (interior && (dist2(gmshPos,p1->getPos())>elemSize/1e6));
 		    const Pnt *p2= cl->P2();
-		    interior= (interior && (dist2(gmshPos,p2->GetPos())>elemSize/1e6));
+		    interior= (interior && (dist2(gmshPos,p2->getPos())>elemSize/1e6));
 		    if(interior) // is an interior (to the edge) node.
 		      {		    
 			 Node *nodePtr= l->getNearestNode(gmshPos);
@@ -568,18 +532,8 @@ void XC::PolygonalFace::gen_mesh_gmsh(meshing_dir dm)
     // Create gmsh lines.
     create_gmsh_lines();
     
-    // Create gmsh loops.
-    const size_t num_loops= holes.size()+1;
-    std::vector<int> loopTags(num_loops);
-    //// Contour lines.
-    size_t count= 0;
-    loopTags[0]= create_gmsh_loop();
-    count++;
-    //// Hole loops.
-    std::vector<int> holeTags= create_gmsh_loops_for_holes();
-    for(std::vector<int>::const_iterator i= holeTags.begin(); i!= holeTags.end(); i++, count++)
-      {	loopTags[count]= *i; }
-    const int pl= gmsh::model::geo::addPlaneSurface(loopTags);
+    // Create gmsh surface.
+    const int pl= create_gmsh_surface();
     
     gmsh::model::geo::synchronize();
 

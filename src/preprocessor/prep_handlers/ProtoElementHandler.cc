@@ -114,8 +114,9 @@ const XC::Material *XC::ProtoElementHandler::get_ptr_material(void) const
     if(imat!= get_material_handler().end())
       retval= imat->second;
     else 
-      std::cerr << "ProtoElementHandler - material: '" 
-                << material_name << "' not found.\n";
+      std::cerr << getClassName() << "::" << __FUNCTION__
+	        << "; material: " << material_name
+		<< "' not found.\n";
     return retval;
   }
 

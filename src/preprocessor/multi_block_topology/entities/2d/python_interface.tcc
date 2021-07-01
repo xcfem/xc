@@ -35,7 +35,7 @@ class_<XC::Face, XC::Face *,bases<XC::CmbEdge>, boost::noncopyable >("Face", no_
   .def("getPlane",&XC::Face::getPlane,"Return the plane containing the face.")
   .def("getPolygon",&XC::Face::getPolygon,"Return the contour as a 3D polygon.")
   .def("addHole", &XC::Face::addHole, "Add a hole to the face.")
-  .def("getHoles", &XC::Face::getHoles, "Return a list with the face holes in it.")
+  .def("getHoles", &XC::Face::getPyHoles, "Return a list with the face holes in it.")
    ;
 
 class_<XC::QuadSurface, XC::QuadSurface *, bases<XC::Face>, boost::noncopyable >("QuadSurface", no_init)

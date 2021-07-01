@@ -96,9 +96,12 @@ void XC::LinearSOEData::setX(const Vector &x)
 //! @param fact: factor that multiplies v.
 int XC::LinearSOEData::setB(const Vector &v,const double &fact)
   {
-    // check for a quick return
+    // check for a quick return 
     if(fact == 0.0)
-      return 0; //! ??? LCPT (must not set B to 0?).
+      {
+	B.Zero();
+	return 0;
+      }
 
     if(v.Size() != size)
       {
@@ -196,7 +199,7 @@ int XC::LinearSOEData::addB(const Vector &v, const ID &id,const double &fact)
       { // do not need to multiply if fact == 1.0
         for(int i=0; i<idSize; i++)
           {
-            int pos = id(i);
+            const int pos= id(i);
             if(pos <size && pos >= 0)
               B(pos) += v(i);
           }
@@ -205,7 +208,7 @@ int XC::LinearSOEData::addB(const Vector &v, const ID &id,const double &fact)
       {
         for(int i=0; i<idSize; i++)
           {
-            int pos= id(i);
+            const int pos= id(i);
             if(pos <size && pos >= 0)
 	      B(pos)-= v(i);
           }
@@ -214,7 +217,7 @@ int XC::LinearSOEData::addB(const Vector &v, const ID &id,const double &fact)
       {
         for(int i=0; i<idSize; i++)
           {
-            int pos = id(i);
+            const int pos = id(i);
             if(pos <size && pos >= 0)
               B(pos)+= v(i) * fact;
           }

@@ -124,22 +124,22 @@ int XC::PeriodicNewton::solveCurrentStep(void)
       {
         if(theSOE->solve() < 0)
           {
-            std::cerr << "WARNING XC::PeriodicNewton::solveCurrentStep() -";
-            std::cerr << "the LinearSysOfEqn failed in solve()\n";
+            std::cerr << getClassName() << "::" << __FUNCTION__
+		      << "; WARNING the LinearSysOfEqn failed in solve()\n";
             return -3;
           }
 
         if(theIncIntegratorr->update(theSOE->getX()) < 0)
           {
-            std::cerr << "WARNING XC::PeriodicNewton::solveCurrentStep() -";
-            std::cerr << "the XC::Integrator failed in update()\n";
+            std::cerr << getClassName() << "::" << __FUNCTION__
+		      << "; WARNING the Integrator failed in update()\n";
             return -4;
           }
 
         if(theIncIntegratorr->formUnbalance() < 0)
           {
-            std::cerr << "WARNING XC::PeriodicNewton::solveCurrentStep() -";
-            std::cerr << "the XC::Integrator failed in formUnbalance()\n";
+            std::cerr << getClassName() << "::" << __FUNCTION__
+		      << "; WARNING the Integrator failed in formUnbalance()\n";
             return -2;
           }
 
@@ -151,8 +151,8 @@ int XC::PeriodicNewton::solveCurrentStep(void)
           {
             if(theIncIntegratorr->formTangent(tangent) < 0)
               {
-                std::cerr << "WARNING PeriodicNewton::solveCurrentStep() -"
-                          << "the XC::Integrator failed in formTangent()\n";
+                std::cerr << getClassName() << "::" << __FUNCTION__
+			  << "; WARNING the Integrator failed in formTangent()\n";
                 return -1;
               }
             iter = 0;
@@ -162,8 +162,8 @@ int XC::PeriodicNewton::solveCurrentStep(void)
 
     if(result == -2)
       {
-        std::cerr << "PeriodicNewton::solveCurrentStep() -"
-                  << "the ConvergenceTest object failed in test() at iter: "
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; the ConvergenceTest object failed in test() at iter: "
 	          << iter << std::endl
                   << "convergence test message: "
 		  << theTest->getStatusMsg(1) << std::endl;

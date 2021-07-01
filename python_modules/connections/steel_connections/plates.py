@@ -109,6 +109,19 @@ class Plate(object):
         '''
         self.refSys= refSys
 
+    def getFilletWeldLegSize(self, otherThickness, factor= 0.75):
+        ''' Return the leg size of the fillet welds that connect the gusset plate
+            to the flange.
+
+        :param otherThickness: column member (web, flange,...) thickness.
+        :param factor: ratio between the minimum and the maximum thicknesses.
+        :return: linear interpolation between the minimum and maximum values:
+                        minThickness+factor*(maxThickness-minThickness)
+        '''
+        minThickness= self.getFilletMinimumLeg(otherThickness)
+        maxThickness= self.getFilletMaximumLeg(otherThickness)
+        return minThickness+factor*(maxThickness-minThickness)
+        
     def setWeldLines(self, weldLines):
         ''' Set the lines that weld the plate to the structure.
 
@@ -207,6 +220,25 @@ class Plate(object):
     def getObjectTypeAttr(self):
         ''' Return the object type attribute (used in getBlocks).'''
         return 'plate'
+    
+    def getWeldBlocks(self, ownerId, blockProperties= None):
+        ''' Return the blocks representing the welds.
+
+        :param ownerId: identifier of the plate to be welded.
+        :param blockProperties: labels and attributes to assign to the 
+                                newly created blocks.
+        '''
+        retval= bte.BlockData()
+        weldProperties= bte.BlockProperties.copyFrom(blockProperties)
+        weldProperties.appendAttribute('objType', 'weld')
+        weldProperties.appendAttribute('ownerId', ownerId) # Weld owner id.
+        weldProperties.appendAttribute('legSize', self.weldLegSize) # Weld size.
+        for key in self.weldLines:
+            wl= self.weldLines[key]
+            pA= wl.getFromPoint()
+            pB= wl.getToPoint()
+            weldBlk= retval.blockFromPoints(points= [pA, pB], blockProperties= weldProperties, thickness= None)
+        return retval
 
     def getBlocks(self, blockProperties= None, loadTag= None, loadDirI= None, loadDirJ= None, loadDirK= None):
         ''' Return the blocks that define the plate for the
@@ -216,8 +248,8 @@ class Plate(object):
         :param loadTag: tag of the applied loads in the internal forces file.
         :param loadDirI: I vector of the original element. Vector that 
                          points to the loaded side of the plate.
-        :param loadDirJ: J vector of the of the original element.
-        :param loadDirK: K vector of the of the original element.
+        :param loadDirJ: J vector of the original element.
+        :param loadDirK: K vector of the original element.
         '''
         retval= bte.BlockData()
         plateProperties= bte.BlockProperties.copyFrom(blockProperties)
@@ -230,6 +262,10 @@ class Plate(object):
         # Get the plate contour
         contourVertices= self.getContour()
         blk= retval.blockFromPoints(contourVertices, plateProperties, thickness= self.thickness, matId= self.steelType.name)
+        ownerId= 'f'+str(blk.id)
+        # Get the weld blocks for the new plate
+        blk.weldBlocks= self.getWeldBlocks(ownerId, blockProperties) # Get the weld blocks for the new plate
+        retval.extend(blk.weldBlocks)
         return retval
     
     def getDict(self):

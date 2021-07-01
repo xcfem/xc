@@ -261,80 +261,81 @@ int XC::BeamWithHinges2d::revertToStart(void)
     return err;
   }
 
+/**
+ @brief Computes the element flexibility matrix, then returns its inverse.
 
-//! @brief Computes the element flexibility matrix, then returns its inverse.
-//!
-//! Computes the element flexibility matrix, then returns its inverse, the
-//! element stiffness matrix. The element flexibility is the sum of the hinge
-//! flexibilities,
-//! \f$\mathbf{f}_I\f$ and \f$\mathbf{f}_J\f$, and the elastic flexibility of
-//! the beam interior, \f$\mathbf{f}_{mid}\f$.
-//!
-//! \begin{equation}
-//! \label{eq:fele}
-//! \fbas := \int_{0}^{L}{bint^T fsec bint \: dx} = \mathbf{f}_I + \mathbf{f}_{mid} + \mathbf{f}_J
-//! \end{equation}
-//! 
-//! The flexibility of the beam interior is obtained in closed form,
-//! 
-//! \begin{equation}
-//! \mathbf{f}_{mid} = \int_{l_I}^{L-l_J}{bint^T fsec_{mid} bint \: dx}
-//! \end{equation}
-//! 
-//! where \f$bint\f$ is the force interpolation matrix,
-//! 
-//! \begin{equation}
-//! bint := \left[
-//!    \begin{array}{c c c}
-//!       1 &           0 &               0
-//!       0 & \frac{x}{L} & \frac{x}{L} - 1
-//!       0 & \frac{1}{L} &     \frac{1}{L}
-//!    \end{array} 
-//!  \right]
-//! \end{equation}
-//! 
-//! //! and \f$fsec\f$ is the elastic section flexibility of the beam interior.
-//! 
-//! \begin{equation}
-//! fsec_{mid} = \left[
-//!    \begin{array}{c c c}
-//!       \frac{1}{EA} &            0 &                   0
-//!                  0 & \frac{1}{EI} &                   0
-//!                  0 &            0 & \frac{1}{\alpha GA}
-//!    \end{array}
-//!  \right]
-//! \end{equation}
-//! 
-//! The hinge flexibilities, \f$\mathbf{f}_I\f$ and \f$\mathbf{f}_J\f$, are
-//! obtained by the midpoint integration rule,
-//! 
-//! \begin{equation}
-//! {\mathbf{f}}_i = bint(x_i)^T fsec_i bint(x_i) * l_i, \:\: i=I,J
-//! \end{equation}
-//! 
-//! where \f$x_i\f$ is the midpoint of hinge \f$i\f$, measured along the length
-//! of the beam, and is the point at which the force interpolation matrix,
-//! \f$bint\f$ is evaluated.  The flexiblity, \f$fsec_i\f$, is obtained from
-//! the constitutive relation for section \f$i\f$.
-//! 
-//! The element stiffness is then obtained by inversion of the element
-//! flexibility, given by Equation \ref{eq:fele}.
-//! 
-//! \begin{equation}
-//! \label{eq:kele}
-//! kbas = \fbas^{-1}
-//! \end{equation}
-//! 
-//! The element then obtains the matrix, \f$\mathbf{A}\f$, which transforms
-//! the element basic
-//! stiffness from its corotating frame to the global frame of reference.  The
-//! transformed
-//! stiffness matrix, \f$kele\f$, is then assembled into the structural system
-//! of equations.
-//! 
-//! \begin{equation}
-//! kele = \mathbf{A}^T kbas \mathbf{A}
-//! \end{equation}
+ Computes the element flexibility matrix, then returns its inverse, the
+ element stiffness matrix. The element flexibility is the sum of the hinge
+ flexibilities,
+ \f$\mathbf{f}_I\f$ and \f$\mathbf{f}_J\f$, and the elastic flexibility of
+ the beam interior, \f$\mathbf{f}_{mid}\f$.
+
+ \begin{equation}
+ \label{eq:fele}
+ \fbas := \int_{0}^{L}{bint^T fsec bint \: dx} = \mathbf{f}_I + \mathbf{f}_{mid} + \mathbf{f}_J
+ \end{equation}
+ 
+ The flexibility of the beam interior is obtained in closed form,
+ 
+ \begin{equation}
+ \mathbf{f}_{mid} = \int_{l_I}^{L-l_J}{bint^T fsec_{mid} bint \: dx}
+ \end{equation}
+ 
+ where \f$bint\f$ is the force interpolation matrix,
+ 
+ \begin{equation}
+ bint := \left[
+    \begin{array}{c c c}
+       1 &           0 &               0\\
+       0 & \frac{x}{L} & \frac{x}{L} - 1\\
+       0 & \frac{1}{L} &     \frac{1}{L}
+    \end{array} 
+  \right]
+ \end{equation}
+ 
+  and \f$fsec\f$ is the elastic section flexibility of the beam interior.
+ 
+ \begin{equation}
+ fsec_{mid} = \left[
+    \begin{array}{c c c}
+       \frac{1}{EA} &            0 &                   0\\
+                  0 & \frac{1}{EI} &                   0\\
+                  0 &            0 & \frac{1}{\alpha GA}
+    \end{array}
+  \right]
+ \end{equation}
+ 
+ The hinge flexibilities, \f$\mathbf{f}_I\f$ and \f$\mathbf{f}_J\f$, are
+ obtained by the midpoint integration rule,
+ 
+ \begin{equation}
+ {\mathbf{f}}_i = bint(x_i)^T fsec_i bint(x_i) * l_i, \:\: i=I,J
+ \end{equation}
+ 
+ where \f$x_i\f$ is the midpoint of hinge \f$i\f$, measured along the length
+ of the beam, and is the point at which the force interpolation matrix,
+ \f$bint\f$ is evaluated.  The flexiblity, \f$fsec_i\f$, is obtained from
+ the constitutive relation for section \f$i\f$.
+ 
+ The element stiffness is then obtained by inversion of the element
+ flexibility, given by Equation \ref{eq:fele}.
+ 
+ \begin{equation}
+ \label{eq:kele}
+ kbas = \fbas^{-1}
+ \end{equation}
+ 
+ The element then obtains the matrix, \f$\mathbf{A}\f$, which transforms
+ the element basic
+ stiffness from its corotating frame to the global frame of reference.  The
+ transformed
+ stiffness matrix, \f$kele\f$, is then assembled into the structural system
+ of equations.
+ 
+ \begin{equation}
+ kele = \mathbf{A}^T kbas \mathbf{A}
+ \end{equation}
+*/
 const XC::Matrix &XC::BeamWithHinges2d::getTangentStiff(void) const
   {
     static Matrix K;
@@ -500,25 +501,27 @@ const XC::Matrix &XC::BeamWithHinges2d::getInitialStiff(void) const
     return K;
   }
 
-//! @brief Return the element lumped mass matrix.
-//!
-//! Returns the element lumped mass matrix, \f$mele\f$. It is assumed that the
-//! mass density per unit length, \f$\rho\f$, is constant along the entire
-//! element, including the hinge regions.
-//! 
-//! \begin{equation}
-//! \label{eq:mele}
-//! mele = \left[
-//!    \begin{array}{c c c c c c}
-//!       \frac{\rho L}{2} & 0 & 0 & 0 & 0 & 0
-//!       0 & \frac{\rho L}{2} & 0 & 0 & 0 & 0
-//!       0 & 0 & 0 & 0 & 0 & 0
-//!       0 & 0 & 0 & \frac{\rho L}{2} & 0 & 0
-//!       0 & 0 & 0 & 0 & \frac{\rho L}{2} & 0
-//!       0 & 0 & 0 & 0 & 0 & 0
-//!    \end{array}
-//!  \right]
-//! \end{equation}
+/**
+ @brief Return the element lumped mass matrix.
+
+ Returns the element lumped mass matrix, \f$mele\f$. It is assumed that the
+ mass density per unit length, \f$\rho\f$, is constant along the entire
+ element, including the hinge regions.
+ 
+ \begin{equation}
+ \label{eq:mele}
+ mele = \left[
+    \begin{array}{c c c c c c}
+       \frac{\rho L}{2} & 0 & 0 & 0 & 0 & 0\\
+       0 & \frac{\rho L}{2} & 0 & 0 & 0 & 0\\
+       0 & 0 & 0 & 0 & 0 & 0\\
+       0 & 0 & 0 & \frac{\rho L}{2} & 0 & 0\\
+       0 & 0 & 0 & 0 & \frac{\rho L}{2} & 0\\
+       0 & 0 & 0 & 0 & 0 & 0
+    \end{array}
+  \right]
+ \end{equation}
+*/
 const XC::Matrix &XC::BeamWithHinges2d::getMass(void) const
   {
     theMatrix.Zero();

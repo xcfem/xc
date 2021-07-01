@@ -242,10 +242,10 @@ class TrussBase(TrussGeometry):
             :param rho: material density
             :param grav: gravity acceleration (vector).
         '''
-        self.upperChordSet.createInertiaLoads(-grav)
-        self.lowerChordSet.createInertiaLoads(-grav)
-        self.postsSet.createInertiaLoads(-grav)
-        self.diagonalSet.createInertiaLoads(-grav)
+        self.upperChordSet.createInertiaLoads(grav)
+        self.lowerChordSet.createInertiaLoads(grav)
+        self.postsSet.createInertiaLoads(grav)
+        self.diagonalSet.createInertiaLoads(grav)
 
 # Warren truss web style ascii art:
 #     +---+-------+-------+---+  Upper chord.

@@ -85,9 +85,9 @@ XC::Element *XC::ElemPtrArray3d::getNearestElement(const Pos3d &p)
     double tmp;
     if(numberOfLayers>100)
       std::clog << getClassName() << "::" << __FUNCTION__
-	        << "The element pointer array has"
-                << numberOfLayers << " layers "
-                << " is better to search by coordinates in the associated set."
+	        << "; the element pointer array has"
+                << numberOfLayers << " layers. "
+                << " It is better to search by coordinates in the associated set."
                 << std::endl;
     for(size_t i=1;i<=numberOfLayers;i++)
       {

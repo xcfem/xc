@@ -478,10 +478,13 @@ class BoltedPlateBase(plates.Plate):
         l2= self.length/2.0
         w2= self.width/2.0
         return [geom.Pos2d(-l2+self.eccentricity.x,-w2+self.eccentricity.y), geom.Pos2d(l2+self.eccentricity.x,-w2+self.eccentricity.y), geom.Pos2d(l2+self.eccentricity.x,w2+self.eccentricity.y), geom.Pos2d(-l2+self.eccentricity.x,w2+self.eccentricity.y)]
+    
+    def getObjectTypeAttr(self):
+        ''' Return the object type attribute (used in getBlocks).'''
+        return 'bolted_plate'
 
     def getBlocks(self, blockProperties= None, loadTag= None, loadDirI= None, loadDirJ= None, loadDirK= None):
-        ''' Return the blocks that define the plate for the
-            diagonal argument.
+        ''' Return the blocks that define the plate.
 
         :param blockProperties: labels and attributes to assign to the newly created blocks.
         :param loadTag: tag of the applied loads in the internal forces file.
@@ -492,7 +495,7 @@ class BoltedPlateBase(plates.Plate):
         '''
         retval= bte.BlockData()
         plateProperties= bte.BlockProperties.copyFrom(blockProperties)
-        plateProperties.appendAttribute('objType', 'bolted_plate')
+        plateProperties.appendAttribute('objType', self.getObjectTypeAttr())
         if(loadTag):
             plateProperties.appendAttribute('loadTag', loadTag)
             plateProperties.appendAttribute('loadDirI', [loadDirI.x, loadDirI.y, loadDirI.z])
@@ -501,12 +504,16 @@ class BoltedPlateBase(plates.Plate):
         # Get the plate contour
         contourVertices= self.getContour()
         blk= retval.blockFromPoints(contourVertices, plateProperties, thickness= self.thickness, matId= self.steelType.name)
+        ownerId= 'f'+str(blk.id)
         # Get the hole blocks for the new plate
         holeProperties= bte.BlockProperties.copyFrom(blockProperties)
         holeProperties.appendAttribute('objType', 'hole')
-        holeProperties.appendAttribute('ownerId', 'f'+str(blk.id))
+        holeProperties.appendAttribute('ownerId', ownerId)
         blk.holes= self.boltArray.getHoleBlocks(self.refSys,holeProperties)
         retval.extend(blk.holes)
+        # Get the weld blocks for the new plate
+        blk.weldBlocks= self.getWeldBlocks(ownerId, blockProperties) # Get the weld blocks for the new plate
+        retval.extend(blk.weldBlocks)
         return retval
 
     def getClearDistances(self, loadDirection):
@@ -550,29 +557,36 @@ class BoltedPlateBase(plates.Plate):
         outfile.close()
 
 
-def getBoltedPointBlocks(gussetPlateBlocks, boltedPlateBlocks, distBetweenPlates):
-    ''' Return the points linked by bolts between the two pieces.
+def getBoltedPointBlocks(gussetPlateBlocks, boltedPlateBlocks, distBetweenPlates, blockProperties):
+    ''' Return the lines corresponding to the bolts between the two pieces.
 
     :param gussetPlateBlocks: blocks of the gusset plate.
     :param boltedPlateBlocks: plate bolted to the gusset plate.
     :param distBetweenPlates: distance between plates.
+    :param blockProperties: labels and attributes to assign to the newly created blocks.
     '''
     retval= bte.BlockData()
+    # Hole centers in the gusset plate.
     gussetPlateBoltCenters= list()
     for key in gussetPlateBlocks.points:
         p= gussetPlateBlocks.points[key]
         if(p.getAttribute('objType')=='hole_center'):
             gussetPlateBoltCenters.append(p)
+    # Hole center in the bolted plate.
     boltedPlateBoltCenters= list()
     for key in boltedPlateBlocks.points:
         p= boltedPlateBlocks.points[key]
         if(p.getAttribute('objType')=='hole_center'):
             boltedPlateBoltCenters.append(p)
     tol= distBetweenPlates/100.0
+    # Bolt properties.
+    boltProperties= bte.BlockProperties.copyFrom(blockProperties)
+    boltProperties.appendAttribute('objType', 'bolt_axis')
+    boltProperties.appendAttribute('ownerId', None) # Has no owner.
     for pA in gussetPlateBoltCenters:
         for pB in boltedPlateBoltCenters:
             dist= math.sqrt((pA.coords[0]-pB.coords[0])**2+(pA.coords[1]-pB.coords[1])**2+(pA.coords[2]-pB.coords[2])**2)
             if(abs(dist-distBetweenPlates)<tol):
-                boltBlk= bte.BlockRecord(id= -1, typ= 'line', kPoints= [pA.id, pB.id])
+                boltBlk= bte.BlockRecord(id= -1, typ= 'line', kPoints= [pA.id, pB.id], blockProperties= boltProperties)
                 id= retval.appendBlock(boltBlk)
     return retval

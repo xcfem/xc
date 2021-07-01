@@ -99,7 +99,8 @@ class SetEntities: public PreprocessorContainer, public MovableObject
     lst_line_pointers lines; //!< line set.
     lst_surface_ptrs surfaces; //!< surface set.
     lst_body_pointers bodies; //!< body set.
-    lst_ptr_uniform_grids uniform_grids; //! Uniform mesh set.
+    lst_ptr_uniform_grids uniform_grids; //!< Uniform mesh set.
+    bool useGmsh; //!< if true use Gmsh for mesh generation.
 
     friend class Set;
     void clearAll(void);
@@ -119,9 +120,13 @@ class SetEntities: public PreprocessorContainer, public MovableObject
     void create_gmsh_lines(void) const;
     void line_meshing(meshing_dir dm);
     void create_gmsh_loops(void) const;
+    std::vector<int> create_gmsh_surfaces(void) const;
     void surface_meshing(meshing_dir dm);
     void body_meshing(meshing_dir dm);
     void uniform_grid_meshing(meshing_dir dm);
+    std::map<int, const Node *> create_nodes_from_gmsh(void);
+    int create_elements_from_gmsh(const std::map<int, const Node *> &);
+    void gen_mesh_gmsh(const std::string &modelName);
 
     void move(const Vector3d &);
   public:
@@ -199,6 +204,10 @@ class SetEntities: public PreprocessorContainer, public MovableObject
     double getAverageSize(void) const;
     SetEntities pickEntitiesInside(const GeomObj3d &, const double &tol= 0.0) const;
 
+    double getMaxElementSize(void) const;
+    double getMinElementSize(void) const;
+    double getAverageElementSize(void) const;
+
     void fillUpwards(const SetMeshComp &);
     void fillDownwards(void);
     void fillDownwards(SetMeshComp &);
@@ -206,6 +215,8 @@ class SetEntities: public PreprocessorContainer, public MovableObject
     void Transform(const TrfGeom &trf);
 
     void conciliaNDivs(void);
+    void setUseGmsh(const bool &);
+    bool getUseGmsh(void) const;
     void genMesh(const std::string &, meshing_dir dm);
 
     virtual int sendSelf(Communicator &);

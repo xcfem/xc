@@ -72,40 +72,42 @@
 namespace XC {
 class FullGenLinSolver;
 
-//! @ingroup SOE
+/**
+ @ingroup SOE
 //
-//! @brief Base class for dense unsymmetric matrix systems of equations.
-//!
-//! FullGenLinSOE is class which is used to store a full general
-//! system. The \f$A\f$ matrix is stored in a 1d double array with \f$n*n\f$
-//! elements, where \f$n\f$ is the size of the system. \f$A_{i,j}\f$ is stored
-//! at location \f$(i + j*(n)\f$, where \f$i\f$ and \f$j\f$ range
-//! from \f$0\f$ to \f$n-1\f$, i.e. C notation. For example when \f$n=3\f$: 
-//! 
-//! \f$\f$
-//! \left[
-//! \begin{array}{ccc}
-//! a_{0,0} & a_{0,1}  & a_{0,2}
-//! a_{1,0} & a_{1,1} & a_{1,2}
-//! a_{2,0} & a_{2,1} & a_{2,2}
-//! \end{array}
-//! \right] 
-//! \f$\f$
-//! 
-//! is stored in:
-//! 
-//! \f$\f$
-//! \left[
-//! \begin{array}{cccccccccccccccccccc}
-//! a_{0,0} & a_{1,0}  & a_{2,0} & a_{0,1} & a_{1,1} & a_{2,1} &
-//! a_{0,2} & a_{1,2} & a_{2,2}
-//! \end{array}
-//! \right] 
-//! \f$\f$
-//! 
-//! The \f$x\f$ and \f$b\f$ vectors are stored in 1d double arrays of length
-//! \f$n\f$. To allow the solvers access to this data, the solvers that use
-//! this class are all declared as friend classes.
+ @brief Base class for dense unsymmetric matrix systems of equations.
+
+ FullGenLinSOE is class which is used to store a full general
+ system. The \f$A\f$ matrix is stored in a 1d double array with \f$n*n\f$
+ elements, where \f$n\f$ is the size of the system. \f$A_{i,j}\f$ is stored
+ at location \f$(i + j*(n)\f$, where \f$i\f$ and \f$j\f$ range
+ from \f$0\f$ to \f$n-1\f$, i.e. C notation. For example when \f$n=3\f$: 
+ 
+ \f$
+ \left[
+ \begin{array}{ccc}
+ a_{0,0} & a_{0,1}  & a_{0,2}\\
+ a_{1,0} & a_{1,1} & a_{1,2}\\
+ a_{2,0} & a_{2,1} & a_{2,2}
+ \end{array}
+ \right] 
+ \f$
+ 
+ is stored in:
+ 
+ \f$
+ \left[
+ \begin{array}{cccccccccccccccccccc}
+ a_{0,0} & a_{1,0}  & a_{2,0} & a_{0,1} & a_{1,1} & a_{2,1} &
+ a_{0,2} & a_{1,2} & a_{2,2}
+ \end{array}
+ \right] 
+ \f$
+ 
+ The \f$x\f$ and \f$b\f$ vectors are stored in 1d double arrays of length
+ \f$n\f$. To allow the solvers access to this data, the solvers that use
+ this class are all declared as friend classes.
+*/
 class FullGenLinSOE: public FactoredSOEBase
   {
   private:

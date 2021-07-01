@@ -63,22 +63,22 @@ double XC::ElasticSection1d::getStress(void) const
     return ctes_scc.E()*e(0);
   }
 
-//! @brief Returns the cross-section stress resultant.
-//!
-//! Returns the section stress resultants, \f$ssec\f$, the product of the 
-//! section stiffness matrix, \f$ksec\f$, and the section deformation 
-//! vector, \f$esec\f$,
-//! \f[
-//! \begin{equation}
-//! ssec = ksec esec = \left[
-//!    \begin{array}{c}
-//!        P
-//!    \end{array} 
-//!  \right]
-//! \end{equation}
-//! \f]
-//! where \f$P\f$ is the axial force, \f$M_z\f$ is the bending moment about the
-//! local z-axis, and \f$V_y\f$ is the shear force along the local y-axis.
+/**
+ @brief Returns the cross-section stress resultant.
+
+ Returns the section stress resultants, \f$ssec\f$, the product of the 
+ section stiffness matrix, \f$ksec\f$, and the section deformation 
+ vector, \f$esec\f$,
+ \f[
+ ssec = ksec esec = \left[
+    \begin{array}{c}
+        P
+    \end{array} 
+  \right]
+ \f]
+ where \f$P\f$ is the axial force, \f$M_z\f$ is the bending moment about the
+ local z-axis, and \f$V_y\f$ is the shear force along the local y-axis.
+*/
 const XC::Vector &XC::ElasticSection1d::getStressResultant(void) const
   {
     const Vector &e= getSectionDeformation();
@@ -86,17 +86,17 @@ const XC::Vector &XC::ElasticSection1d::getStressResultant(void) const
     return s;
   }
 
-//! @brief Returns the tangent stiffness matrix.
-//!
-//! \f[
-//! \begin{equation}
-//! fsec = \left[
-//!    \begin{array}{c}
-//!        EA 
-//!    \end{array} 
-//!  \right]
-//! \end{equation}
-//! \f]
+/**
+ @brief Returns the tangent stiffness matrix.
+
+ \f[
+ fsec = \left[
+    \begin{array}{c}
+        EA 
+    \end{array} 
+  \right]
+ \f]
+*/
 const XC::Matrix &XC::ElasticSection1d::getSectionTangent(void) const
   { return ctes_scc.getSectionTangent1x1(); }
 
@@ -105,17 +105,17 @@ const XC::Matrix &XC::ElasticSection1d::getSectionTangent(void) const
 const XC::Matrix &XC::ElasticSection1d::getInitialTangent(void) const
   { return getSectionTangent(); }
 
-//! @brief Returns the flexibility matrix.
-//!
-//! \f[
-//! \begin{equation}
-//! fsec = \left[
-//!    \begin{array}{c}
-//!        \frac{1}{EA}
-//!    \end{array} 
-//!  \right]
-//! \end{equation}
-//! \f]
+/**
+ @brief Returns the flexibility matrix.
+
+ \f[
+ fsec = \left[
+    \begin{array}{c}
+        \frac{1}{EA}
+    \end{array} 
+  \right]
+ \f]
+*/
 const XC::Matrix &XC::ElasticSection1d::getSectionFlexibility(void) const
   { return ctes_scc.getSectionFlexibility1x1(); }
 

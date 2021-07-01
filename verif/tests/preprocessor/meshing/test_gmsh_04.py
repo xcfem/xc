@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-'''Base plate mesh generation using paving algorithm. Home cooked test.'''
+'''Base plate mesh generation using Gmsh. Home cooked test.'''
 
 from __future__ import division
 from __future__ import print_function

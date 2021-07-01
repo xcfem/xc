@@ -126,6 +126,7 @@ class PredefinedSpace(object):
     ''' Convenience class that sets the space dimension and
         the number of degrees of freedom for a XC finite element
         problem.
+
     :ivar dimSpace: dimension of the space (1, 2 or 3).
     :ivar numDOFs: number of degrees of freedom for each node (1, 2, 3 or 6).
     :ivar solProcType: type of the solution procedure.
@@ -152,6 +153,20 @@ class PredefinedSpace(object):
         ''' Return the XC finite element problem object.
         '''
         return self.preprocessor.getProblem
+
+    def setVerbosityLevel(self, level):
+        ''' Set the verbosity level (0 to 1000). A higher verbosity
+            level means more info printed out.
+
+        :param level: verbosity level.
+        '''
+        self.preprocessor.setVerbosityLevel(level)
+        
+    def getVerbosityLevel(self):
+        ''' Return the current verbosity level.. A higher verbosity
+            level means more info printed out.
+        '''
+        return self.preprocessor.getVerbosityLevel()
 
     def getNewDatabase(self, fName, dbType= 'BerkeleyDB'):
         ''' Defines a new database.
@@ -738,8 +753,11 @@ class PredefinedSpace(object):
             solProc.setup()
             self.analysis= solProc.analysis
         result= self.analysis.analyze(numSteps)
-        if(calculateNodalReactions):
-            result= self.calculateNodalReactions(includeInertia, reactionCheckTolerance)
+        if(result!=0):
+            lmsg.error("Error in analysis")
+        else:
+            if(calculateNodalReactions):
+                result= self.calculateNodalReactions(includeInertia, reactionCheckTolerance)
         return result
 
     def zeroEnergyModes(self, numModes= 1):

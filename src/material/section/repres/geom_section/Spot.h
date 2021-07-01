@@ -70,10 +70,10 @@ class Spot: public EntGeomSection
     BND2d Bnd(void) const;
 
     //! @brief Return the object position.
-    const Pos2d &GetPos(void) const
+    const Pos2d &getPos(void) const
       { return p; }
     //! @brief Return the object position.
-    Pos2d &GetPos(void)
+    Pos2d &getPos(void)
       { return p; }
     inline void setPos(const Pos2d &pos)
       { p= pos; }
