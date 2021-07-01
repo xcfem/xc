@@ -565,13 +565,13 @@ def readIntForcesDict(intForcCombFileName,setCalc=None, vonMisesStressId= 'max_v
                         crossSectionInternalForces.vonMisesStress= forces[vonMisesStressId]
                     internalForcesValues[tagElem].append(crossSectionInternalForces)
     else:
-        setElTags=setCalc.getElementTags()
+        setElTags= set(setCalc.getElementTags()) # We construct a set to accelerate searching.
         for idComb in combInternalForcesDict.keys():
             idCombs.add(idComb)
             elements= combInternalForcesDict[idComb]
             for elemId in elements.keys():
                 tagElem= eval(elemId)
-                if(tagElem in setElTags):
+                if(tagElem in setElTags): # search element tag
                     elementData= elements[elemId]
                     elementType= elementData['type']
                     internalForces= elementData['internalForces']
@@ -608,9 +608,9 @@ def oldReadIntForcesFile(intForcCombFileName,setCalc=None):
     f= open(intForcCombFileName,"r")
     internalForcesValues= defaultdict(list)
     internalForcesListing= csv.reader(f)
-    next(internalForcesListing)    #skip first line (head)
+    next(internalForcesListing) # skip first line (head)
     if setCalc==None:
-        for lst in internalForcesListing:    #lst: list of internal forces for each combination and element
+        for lst in internalForcesListing: # lst: list of internal forces for each combination and element
             if(len(lst)>0):
                 idComb= lst[0]
                 idCombs.add(idComb)
@@ -624,11 +624,11 @@ def oldReadIntForcesFile(intForcCombFileName,setCalc=None):
                 crossSectionInternalForces.idSection= idSection
                 internalForcesValues[tagElem].append(crossSectionInternalForces)
     else:
-        setElTags=setCalc.getElementTags()
+        setElTags= set(setCalc.getElementTags()) # We construct a set to accelerate searching.
         for lst in internalForcesListing:
             if(len(lst)>0):
                 tagElem= eval(lst[1])
-                if tagElem in setElTags:
+                if tagElem in setElTags: # search element tag
                     idComb= lst[0]
                     idCombs.add(idComb)
                     tagElem= eval(lst[1])
