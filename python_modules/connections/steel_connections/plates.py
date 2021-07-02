@@ -170,37 +170,45 @@ class Plate(object):
         toPoint= distalEdge.getToPoint() # contour last point.
         retval.append(fromPoint)
         if(self.weldLines):
-            numWeldLines= len(self.weldLines)
-            if(numWeldLines==1):
-                key= list(self.weldLines.keys())[0]
-                wl= self.weldLines[key]
-                p1= wl.getFromPoint()
+            weldPline= geom.get_3d_polylines(list(self.weldLines.values()),1e-3)[0]
+            weldVertices= weldPline.getVertexList()
+            print('number of vertices: ', weldPline.getNumVertices())
+            weldPline.simplify(0.01)
+            contourVertices= weldPline.getVertexList() # Vertices after simplification.
+            print('number of vertices: ', weldPline.getNumVertices())
+            numContourLines= len(contourVertices)-1
+            if(numContourLines==1):
+                p1= contourVertices[0]
                 d1= fromPoint.dist2(p1)
-                p2= wl.getToPoint()
+                p2= contourVertices[1]
                 d2= fromPoint.dist2(p2)
+                wl= geom.Segment3d(p1,p2)
                 if(d1<d2): # p1 is closer.
                     p1New= wl.getProjection(fromPoint)
                     p2New= wl.getProjection(toPoint)
                     retval.extend([p1New,p2New]) # set contour.
-                    # Modify weld line.
-                    self.weldLines[key]= geom.Segment3d(p1New,p2New)
+                    # New weld vertices.
+                    newWeldVertices= [p1New, weldVertices[1], p2New]
                 else: # p2 is closer.
                     p2New= wl.getProjection(fromPoint)
                     p1New= wl.getProjection(toPoint)
                     retval.extend([p2New,p1New]) # set contour.
-                    # Modify weld line.
-                    self.weldLines[key]= geom.Segment3d(p2New,p1New)
+                    # New weld vertices.
+                    newWeldVertices= [p2New, weldVertices[1], p1New]                    
+                # Update weld lines.
+                vertexCount= 0
+                for key in self.weldLines.keys():
+                    self.weldLines[key]= geom.Segment3d(newWeldVertices[vertexCount],newWeldVertices[vertexCount+1])
+                    vertexCount+= 1
             else:
-                weldPline= geom.get_3d_polylines(list(self.weldLines.values()),1e-3)[0]
-                weldVertices= weldPline.getVertexList()
-                p1= weldVertices[0]
+                p1= contourVertices[0]
                 d1= fromPoint.dist2(p1)
-                p2= weldVertices[-1]
+                p2= contourVertices[-1]
                 d2= fromPoint.dist2(p2)
                 if(d2<d1): # p2 is closer, so reverse the polyline.
-                    weldVertices.reverse()
+                    contourVertices.reverse()
                 if(self.notched): # use notches
-                    limitLine= geom.Line3d(weldVertices[0],weldVertices[-1])
+                    limitLine= geom.Line3d(contourVertices[0],contourVertices[-1])
                     p1New= limitLine.getProjection(fromPoint)
                     p2New= limitLine.getProjection(toPoint)
                     chamfer= 20e-3
@@ -209,12 +217,12 @@ class Plate(object):
                     p1NewA= p1New+chamfer*chamferDir1
                     p1NewB= p1New-chamfer*chamferDir2
                     retval.extend([p1NewA, p1NewB]) # chamfer
-                    retval.extend(weldVertices) # welded contour.
+                    retval.extend(contourVertices) # welded contour.
                     p2NewB= p2New+chamfer*chamferDir2
                     p2NewA= p2New+chamfer*chamferDir1
                     retval.extend([p2NewB, p2NewA]) # chamfer      
                 else:    
-                    retval.extend(weldVertices) # welded contour.
+                    retval.extend(contourVertices) # welded contour.
         else:
             lmsg.error("undefined weld lines, can't compute contour")
         retval.append(toPoint) # close contour.            
@@ -231,6 +239,11 @@ class Plate(object):
         :param blockProperties: labels and attributes to assign to the 
                                 newly created blocks.
         '''
+        print('GET weld blocks.')
+        print('  plate connected to: ', self.connectedTo)
+        print('  plate location: ', self.location)
+        print('  weld line segments: ', len(self.weldLines))
+        print('  ownerId= ', ownerId)
         retval= bte.BlockData()
         weldProperties= bte.BlockProperties.copyFrom(blockProperties)
         weldProperties.appendAttribute('objType', 'weld')

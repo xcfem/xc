@@ -217,8 +217,8 @@ class WeldMetaData(ConnectionMeanMetaData):
         self.legSize= legSize
 
     def extractDataFromProperties(self, blockDict):
-        ''' Determine if the weld correspond to a flange gusset
-            (gusset plate welded to the member flange) to a
+        ''' Determine if the weld correspond to a flange plate
+            (plate welded to the member flange) to a
             web gusset (welded to the member web)
 
             and the weld "memberToWeld" (the plate being welded to
@@ -232,7 +232,7 @@ class WeldMetaData(ConnectionMeanMetaData):
             memberToWeld= self.getAttribute('ownerId')
             memberToWeldId= int(memberToWeld[1:])
             self.setMemberToWeld(blockDict[memberToWeldId])
-            self.description=blockDict[memberToWeldId].getProp("attributes")['objType']
+            self.description= blockDict[memberToWeldId].getProp("attributes")['objType']
             if 'part' in blockDict[memberToWeldId].getProp("attributes"):
                   self.description+=' ' +blockDict[memberToWeldId].getProp("attributes")['part']
             self.description+=', joint '+self.getAttribute('jointId')
@@ -261,6 +261,8 @@ class WeldMetaData(ConnectionMeanMetaData):
                 d= max(d1,d2)
                 if(d<tol):
                     self.faceWelds[s.tag]= FaceWeldMetaData(face= s, memberToWeld= self.memberToWeld)
+        if(len(self.faceWelds)==0):
+            lmsg.error('weld line from face: '+self.memberToWeld.name+' is not connected to any surface.')
         
     def computeAnglesAndOrientation(self):
         '''Compute the angles of those faces with
@@ -297,9 +299,9 @@ def extractWelds(xcSet, blockDict):
                     wmd= WeldMetaData(line)
                     retval.append(wmd)
 
-    # Determine if the weld correspond to a flange gusset
-    # (gusset plate welded to the member flange) to a
-    # web gusset (welded to the member web)
+    # Determine if the weld correspond to a flange plate
+    # (plate welded to the member flange) to a
+    # web plate (welded to the member web)
     # and the weld "memberToWeld" (the plate being welded to
     # a connection member)
     for w in retval:

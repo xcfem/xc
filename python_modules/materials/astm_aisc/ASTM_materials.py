@@ -2037,7 +2037,7 @@ class ConnectedMember(connected_members.ConnectedMemberMetaData):
                 columnBottomFlangeLine= columnBottomFlangeContour.getIntersection(platePlane)
                 dBottom= columnBottomFlangeLine.dist(plateOrigin)
                 if(dBottom<dTop): # column bottom flange is closer.
-                    plate.connectedTo= 'column_bottom_flange' 
+                    plate.connectedTo= 'column_bottom_flange'
                     weldDict['columnBottomFlangeWeld']= columnBottomFlangeLine
                 else: # column top flage is closer.
                     plate.connectedTo= 'column_top_flange' 
@@ -2066,11 +2066,23 @@ class ConnectedMember(connected_members.ConnectedMemberMetaData):
                 dTop= columnTopFlangeLine.dist(plateOrigin)
                 dBottom= columnBottomFlangeLine.dist(plateOrigin)
                 if(dBottom<dTop):
-                    plate.connectedTo= 'column_bottom_flange' 
-                    weldDict['columnBottomFlangeWeld']= columnBottomFlangeLine
+                    plate.connectedTo= 'column_bottom_flange'
+                    # Split the line by the web plane to make two weld segments
+                    # that lie on each half of the flange.
+                    pInt= columnWebMidPlane.getIntersection(columnBottomFlangeLine)
+                    columnBottomFlangeLineA= geom.Segment3d(columnBottomFlangeLine.getFromPoint(), pInt)
+                    columnBottomFlangeLineB= geom.Segment3d(pInt, columnBottomFlangeLine.getToPoint())
+                    weldDict['columnBottomFlangeWeldA']= columnBottomFlangeLineA
+                    weldDict['columnBottomFlangeWeldB']= columnBottomFlangeLineB
                 else:
                     plate.connectedTo= 'column_top_flange' 
-                    weldDict['columnTopFlangeWeld']= columnTopFlangeLine
+                    # Split the line by the web plane to make two weld segments
+                    # that lie on each half of the flange.
+                    pInt= columnWebMidPlane.getIntersection(columnTopFlangeLine)
+                    columnTopFlangeLineA= geom.Segment3d(columnTopFlangeLine.getFromPoint(), pInt)
+                    columnTopFlangeLineB= geom.Segment3d(pInt, columnTopFlangeLine.getToPoint())
+                    weldDict['columnTopFlangeWeldA']= columnTopFlangeLineA
+                    weldDict['columnTopFlangeWeldB']= columnTopFlangeLineB
                 ## Compute weld size.
                 weldLegSize= plate.getFilletWeldLegSize(otherThickness= column.shape.getFlangeThickness())
         # Define welds to the connected member.

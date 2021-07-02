@@ -37,6 +37,9 @@ class Stiffener(plates.Plate):
         ''' Return the contour points of the plate.
         '''
         weldPline= geom.get_3d_polylines(list(self.weldLines.values()),1e-3)[0]
+        print('number of vertices: ', weldPline.getNumVertices())
+        weldPline.simplify(0.01)
+        print('number of vertices: ', weldPline.getNumVertices())
         return weldPline.getVertexList()
     
     def getObjectTypeAttr(self):
