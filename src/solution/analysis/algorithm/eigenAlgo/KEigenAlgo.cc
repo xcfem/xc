@@ -184,10 +184,20 @@ int XC::KEigenAlgo::solveCurrentStep(int numModes)
 	eigen_to_model();
       }
     else
-      std::clog << getClassName() << "::" << __FUNCTION__
-	        << "; condition number: " << (1.0/rcond)
-	        << " is good enough. No eigenvalues computed."
-	        << std::endl;
+      if(isnan(rcond))
+	{
+	  std::clog << getClassName() << "::" << __FUNCTION__
+		    << "; reciprocal condition number: " << rcond
+		    << " is undefined. No eigenvalues computed."
+		    << std::endl;
+	}
+      else
+	{
+          std::clog << getClassName() << "::" << __FUNCTION__
+	            << "; condition number: " << (1.0/rcond)
+	            << " is good enough. No eigenvalues computed."
+	            << std::endl;
+	}
     return 0;
   }
 
