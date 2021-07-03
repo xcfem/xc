@@ -218,7 +218,7 @@ Line2d Line3d::YZ2DProjection(void) const
     return retval;
   }
 
-//! @brief Return the angle with respecto to XY plane.
+//! @brief Return the angle or the line with respect to XY plane.
 GEOM_FT Line3d::getSlope(void) const
   { return angle(*this,XYPlane3d); }
 

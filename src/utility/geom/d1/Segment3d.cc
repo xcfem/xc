@@ -84,6 +84,8 @@ Pos3d Segment3d::getFromPoint(void) const
   { return Pos3d(cgseg.source()); }
 Pos3d Segment3d::getToPoint(void) const
   { return Pos3d(cgseg.target()); }
+
+//! @brief Return the angle or the line with respect to XY plane.
 GEOM_FT Segment3d::getSlope(void) const
   { return getSupportLine().getSlope(); }
 const Pos3d Segment3d::Point(const int &i) const
