@@ -27,7 +27,7 @@ class Plate(object):
     :ivar thickness: plate thickness.
     :ivar steelType: steel type.
     :ivar notched:  if true use notchs when appropriate.  
-
+    :ivar contour: list of vertices that form the contour of the plate.
     '''
     def __init__(self, width, length, thickness= 10e-3, steelType= None, notched= False):
         ''' Constructor.
@@ -46,6 +46,7 @@ class Plate(object):
         self.weldLines= None
         self.attachedMemberCenter= None
         self.notched= notched
+        self.contour= None
 
     def setWidth(self, w):
         ''' Set the plate width.
@@ -158,24 +159,21 @@ class Plate(object):
             retval.append(geom.Pos2d(p.x, p.y))
         return retval
 
-    def getContour(self):
-        ''' Return the contour points of the plate.
-        '''
+    def computeContour(self):
+        ''' Compute the contour points of the plate. '''
         coreContour3d= self.getCoreContour3d()
         contourPlg= geom.Polygon3d(coreContour3d)
         distalEdgeIndex= contourPlg.getIndexOfDistalEdge(self.attachedMemberCenter)
         distalEdge= contourPlg.getEdge(distalEdgeIndex)
-        retval= list()
+        self.contour= list()
         fromPoint= distalEdge.getFromPoint() # contour first point.
         toPoint= distalEdge.getToPoint() # contour last point.
-        retval.append(fromPoint)
+        self.contour.append(fromPoint)
         if(self.weldLines):
             weldPline= geom.get_3d_polylines(list(self.weldLines.values()),1e-3)[0]
             weldVertices= weldPline.getVertexList()
-            print('number of vertices: ', weldPline.getNumVertices())
             weldPline.simplify(0.01)
             contourVertices= weldPline.getVertexList() # Vertices after simplification.
-            print('number of vertices: ', weldPline.getNumVertices())
             numContourLines= len(contourVertices)-1
             if(numContourLines==1):
                 p1= contourVertices[0]
@@ -186,13 +184,13 @@ class Plate(object):
                 if(d1<d2): # p1 is closer.
                     p1New= wl.getProjection(fromPoint)
                     p2New= wl.getProjection(toPoint)
-                    retval.extend([p1New,p2New]) # set contour.
+                    self.contour.extend([p1New,p2New]) # set contour.
                     # New weld vertices.
                     newWeldVertices= [p1New, weldVertices[1], p2New]
                 else: # p2 is closer.
                     p2New= wl.getProjection(fromPoint)
                     p1New= wl.getProjection(toPoint)
-                    retval.extend([p2New,p1New]) # set contour.
+                    self.contour.extend([p2New,p1New]) # set contour.
                     # New weld vertices.
                     newWeldVertices= [p2New, weldVertices[1], p1New]                    
                 # Update weld lines.
@@ -216,17 +214,27 @@ class Plate(object):
                     chamferDir2= limitLine.getVDir().normalized()
                     p1NewA= p1New+chamfer*chamferDir1
                     p1NewB= p1New-chamfer*chamferDir2
-                    retval.extend([p1NewA, p1NewB]) # chamfer
-                    retval.extend(contourVertices) # welded contour.
+                    self.contour.extend([p1NewA, p1NewB]) # chamfer
+                    self.contour.extend(contourVertices) # welded contour.
                     p2NewB= p2New+chamfer*chamferDir2
                     p2NewA= p2New+chamfer*chamferDir1
-                    retval.extend([p2NewB, p2NewA]) # chamfer      
+                    self.contour.extend([p2NewB, p2NewA]) # chamfer      
                 else:    
-                    retval.extend(contourVertices) # welded contour.
+                    self.contour.extend(contourVertices) # welded contour.
         else:
             lmsg.error("undefined weld lines, can't compute contour")
-        retval.append(toPoint) # close contour.            
-        return retval
+        self.contour.append(toPoint) # close contour.            
+
+    def getContour(self):
+        ''' Return the contour points of the plate. '''
+        if(not self.contour): # Contour not computed yet.
+            self.computeContour()
+        return self.contour
+
+    def getMidPlane(self):
+        ''' Return the mid-plane of the plate.'''
+        contourPoints= self.getContour()
+        return geom.Plane3d(contourPoints[0],contourPoints[1],contourPoints[3])
 
     def getObjectTypeAttr(self):
         ''' Return the object type attribute (used in getBlocks).'''
@@ -239,11 +247,6 @@ class Plate(object):
         :param blockProperties: labels and attributes to assign to the 
                                 newly created blocks.
         '''
-        print('GET weld blocks.')
-        print('  plate connected to: ', self.connectedTo)
-        print('  plate location: ', self.location)
-        print('  weld line segments: ', len(self.weldLines))
-        print('  ownerId= ', ownerId)
         retval= bte.BlockData()
         weldProperties= bte.BlockProperties.copyFrom(blockProperties)
         weldProperties.appendAttribute('objType', 'weld')

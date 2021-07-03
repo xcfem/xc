@@ -451,7 +451,7 @@ class BoltedPlateBase(plates.Plate):
     def getDict(self):
         ''' Returns a dictionary populated with the member values.'''
         retval= super(BoltedPlateBase,self).getDict()
-        retval.extend({'boltArray':self.boltArray.getDict(), 'doublePlate':self.doublePlate})
+        retval.update({'boltArray':self.boltArray.getDict(), 'doublePlate':self.doublePlate})
         return retval
 
     def setFromDict(self,dct):
@@ -501,6 +501,7 @@ class BoltedPlateBase(plates.Plate):
             plateProperties.appendAttribute('loadDirK', [loadDirK.x, loadDirK.y, loadDirK.z])
         # Get the plate contour
         contourVertices= self.getContour()
+        print('*** contour vertices: ', contourVertices)
         blk= retval.blockFromPoints(contourVertices, plateProperties, thickness= self.thickness, matId= self.steelType.name)
         ownerId= 'f'+str(blk.id)
         # Get the hole blocks for the new plate

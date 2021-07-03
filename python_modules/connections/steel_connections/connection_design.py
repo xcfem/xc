@@ -100,18 +100,7 @@ class Connection(connected_members.ConnectionMetaData):
             connection elements (ASTM_materials, EC3_materials, ...)
         '''
         return getmodule(self.boltedPlateTemplate.__class__)
-    
-    def getBasePlateIntersectionPoint(self, sg):
-        ''' Get the intersection of the segment with the baseplate.
-
-        :param sg: segment to intersect.
-        '''
-        basePlatePlane= self.basePlate.getMidPlane()
-        retval= basePlatePlane.getIntersection(sg)
-        if(math.isnan(retval.x) or math.isnan(retval.y) or math.isnan(retval.z)):
-            lmsg.warning('No intersection with base plate.')
-        return retval
-    
+        
     def getFlangeGussetPlate(self, baseVectors, diagSegment, gussetLength, halfChamfer, slope):
         ''' Return the GussetPlate object for the gusset attached to the
             flange.
@@ -139,6 +128,28 @@ class Connection(connected_members.ConnectionMetaData):
             retval.setContour([p1, p2, p0, p4, p3])
         return retval;
 
+    def getConnectedPlatesIntersectionPoint(self, sg: geom.Segment3d):
+        ''' Get the intersection of the segment with the nearest of the
+            plates connected to the column.
+
+        :param sg: segment to intersect. The distances are computes with
+                   respect to the first point of the segment.
+        '''
+        retval= geom.Pos3d(math.nan, math.nan, math.nan)
+        fromPoint= sg.getFromPoint()
+        dist2= 6.023e23
+        for key in self.column.connectedPlates:
+            plate= self.column.connectedPlates[key]
+            midPlane= plate.getMidPlane()
+            tmp= midPlane.getIntersection(sg)
+            d2= fromPoint.dist2(tmp)
+            if(d2<dist2):
+                retval= tmp
+                d2= dist2
+        if(math.isnan(retval.x) or math.isnan(retval.y) or math.isnan(retval.z)):
+            lmsg.warning('No intersection with base plate.')
+        return retval
+        
     def getWebGussetPlate(self, baseVectors, diagSegment, gussetLength, halfChamfer, bottomLegSlope):
         ''' Return the GussetPlate object for the gusset attached to the
             web.
@@ -164,7 +175,7 @@ class Connection(connected_members.ConnectionMetaData):
         else:
             p3, p4= retval.getSlopedBottomLeg(bottomLegSlope, gussetLength)
         bottomLegSegment= geom.Segment3d(p3,p4)
-        p4= self.getBasePlateIntersectionPoint(bottomLegSegment) # intersection with the base plate
+        p4= self.getConnectedPlatesIntersectionPoint(bottomLegSegment) # intersection with the base plate
         retval.setContour([p1, p2, origin, p4, p3])
         return retval
 
@@ -565,7 +576,29 @@ class BasePlateConnection(Connection):
                                     arrangement.
         '''
         super(BasePlateConnection,self).__init__(connectionMetaData, columnLengthFactor, beamLengthFactor, gussetLengthFactor, beamsShearEfficiency= 1.0, boltedPlateTemplate= boltedPlateTemplate)
+
+    def setBasePlate(self, basePlate):
+        ''' Set the base plate for this connection.
+
+        :param basePlate: base plate.
+        '''
+        self.basePlate= basePlate
+        # Update the plates connected to the column
+        if(not hasattr(self.column,'connectedPlates')):
+            self.column.connectedPlates= dict()
+        self.column.connectedPlates['base_plate']= basePlate
         
+    def getBasePlateIntersectionPoint(self, sg):
+        ''' Get the intersection of the segment with the baseplate.
+
+        :param sg: segment to intersect.
+        '''
+        basePlatePlane= self.basePlate.getMidPlane()
+        retval= basePlatePlane.getIntersection(sg)
+        if(math.isnan(retval.x) or math.isnan(retval.y) or math.isnan(retval.z)):
+            lmsg.warning('No intersection with base plate.')
+        return retval
+    
     def centerAnchors(self):
         ''' Center anchors with respect to the column steel shape.'''
         columnShape= self.getColumnShape()
@@ -701,7 +734,7 @@ class ConnectionGroup(object):
                 cOrg= c.getOrigin()
                 dist= cOrg.dist(bpOrg)
                 if(dist<tol):
-                    c.basePlate= bp
+                    c.setBasePlate(bp)
 
     def setFlangeGussetLegsSlope(self, flangeGussetLegsSlope):
         ''' Set the slope for the gusset flange legs.'''
