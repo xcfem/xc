@@ -13,6 +13,7 @@ __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
 import sys
+import logging
 import math
 import json
 import copy
