@@ -11,6 +11,7 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@ciccp.es, ana.ortega@ciccp.es "
 
+import sys
 import math
 import json
 from misc_utils import log_messages as lmsg
@@ -132,7 +133,7 @@ class Connection(connected_members.ConnectionMetaData):
         ''' Get the intersection of the segment with the nearest of the
             plates connected to the column.
 
-        :param sg: segment to intersect. The distances are computes with
+        :param sg: segment to intersect. The distances are computed with
                    respect to the first point of the segment.
         '''
         retval= geom.Pos3d(math.nan, math.nan, math.nan)
@@ -551,7 +552,9 @@ class DiagonalConnection(Connection):
         ''' Return the size of the weld that connects the 
             gusset plate with horizontal plate.
         '''
-        lmsg.error('Not implemented yet.')
+        className= type(self).__name__
+        methodName= sys._getframe(0).f_code.co_name
+        lmsg.error(className+'.'+methodName+': not implemented yet.')
         return 0.0
 
 class BasePlateConnection(Connection):
