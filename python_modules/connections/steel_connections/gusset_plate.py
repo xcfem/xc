@@ -13,9 +13,10 @@ __email__= "l.pereztato@ciccp.es, ana.ortega@ciccp.es "
 import xc_base
 import geom
 from import_export import block_topology_entities as bte
+from connections.steel_connections import plates
 from connections.steel_connections import bolted_plate
 
-class GussetPlate(object):
+class GussetPlate(plates.SteelPanel):
     ''' Naive gusset plate model.
 
     :ivar gussetTip: intersection of the gusset plate with the
@@ -36,6 +37,7 @@ class GussetPlate(object):
         :param halfChamfer: half portion of the chamfer.
         :param ijkVectors: unary vectors of the local reference system.
         '''
+        super(GussetPlate, self).__init__(thickness= boltedPlateTemplate.thickness, steelType= boltedPlateTemplate.steelType)
         self.gussetTip= gussetTip
         self.halfChamfer= halfChamfer
         self.iVector= ijkVectors[0]
@@ -59,37 +61,33 @@ class GussetPlate(object):
             retval= -1.0
         return retval
     
-    def getThickness(self):
-        ''' Return the plate thickess.'''
-        return self.boltedPlateTemplate.thickness
-    
-    def getHorizontalTopLeg(self, origin):
-        '''Return the points of an horizontal top leg.
-
-        :param origin: connection origin.
-        '''
-        p1= self.gussetTip+self.halfChamfer
-        p2= geom.Pos3d(origin.x,origin.y,p1.z) # Horizontal leg.
-        return p1, p2
-        
-    def getSlopedTopLeg(self, slope, legLength):
-        '''Return the points of a sloped top leg.
+    def getSloppedTopLeg(self, slope, legLength):
+        '''Return the points of a slopped top leg.
 
         :param legLength: length of the returned leg.
         '''
         p1= self.gussetTip+self.halfChamfer
         halfChamferVector= self.halfChamfer.normalized()
-        p2= p1-legLength*(self.iVector-slope*halfChamferVector).normalized() # Sloped leg.
+        p2= p1-legLength*(self.iVector-slope*halfChamferVector).normalized() # Slopped leg.
         return p1, p2
 
-    def getSlopedBottomLeg(self, slope, legLength):
-        '''Return the points of a sloped top leg.
+    def getSloppedBottomLeg(self, slope, legLength):
+        '''Return the points of a slopped top leg.
 
         :param legLength: length of the returned leg.
         '''
         p1= self.gussetTip-self.halfChamfer
         halfChamferVector= self.halfChamfer.normalized()
-        p2= p1-legLength*(self.iVector+slope*halfChamferVector).normalized() # Sloped leg.
+        p2= p1-legLength*(self.iVector+slope*halfChamferVector).normalized() # Slopped leg.
+        return p1, p2
+    
+    def getVerticalTopLeg(self, origin):
+        '''Return the points of a verticol bottom leg.
+
+        :param origin: connection origin.
+        '''
+        p1= self.gussetTip+self.halfChamfer
+        p2= geom.Pos3d(p1.x,p1.y,origin.z) # Vertical leg.
         return p1, p2
     
     def getVerticalBottomLeg(self, origin):
@@ -99,6 +97,24 @@ class GussetPlate(object):
         '''
         p1= self.gussetTip-self.halfChamfer
         p2= geom.Pos3d(p1.x,p1.y,origin.z) # Vertical leg.
+        return p1, p2
+    
+    def getHorizontalTopLeg(self, origin):
+        '''Return the points of an horizontal top leg.
+
+        :param origin: connection origin.
+        '''
+        p1= self.gussetTip+self.halfChamfer
+        p2= geom.Pos3d(origin.x,origin.y,p1.z) # Horizontal leg.
+        return p1, p2
+    
+    def getHorizontalBottomLeg(self, origin):
+        '''Return the points of an horizontal bottom leg.
+
+        :param origin: connection origin.
+        '''
+        p1= self.gussetTip-self.halfChamfer
+        p2= geom.Pos3d(origin.x,origin.y,p1.z) # Horizontal leg.
         return p1, p2
     
     def getToColumnBottomLeg(self, p0, cutKnifePoint= 1.0):
@@ -142,18 +158,6 @@ class GussetPlate(object):
         boltRefSys= self.getBoltRefSys()
         return self.boltedPlateTemplate.boltArray.getPositions(boltRefSys)
 
-    def getWeldLinesIndexes(self, verticalWeldLegSize, horizontalWeldLegSize):
-        ''' Return the indexes of the points in the contour
-            that define the lines that must be welded to the structure.
-
-        :param verticalWeldLegSize: leg size for the vertical welds.
-        :param horizontalWeldLegSize: leg size for the horizontal welds.
-        '''
-        retval= list()
-        retval.append((1, 2, verticalWeldLegSize)) # vertical weld
-        retval.append((2, 3, horizontalWeldLegSize)) # horizontal weld.
-        return retval
-
     def getHoleBlocks(self, ownerId, blockProperties= None):
         ''' Return the blocks representing the holes for the bolts.
 
@@ -165,35 +169,10 @@ class GussetPlate(object):
         holeProperties.appendAttribute('ownerId', ownerId) # Hole owner id.
         boltRefSys= self.getBoltRefSys()
         return self.boltedPlateTemplate.boltArray.getHoleBlocks(boltRefSys,holeProperties)
-    
-    def getWeldBlocks(self, ownerId, kPointIds, verticalWeldLegSize, horizontalWeldLegSize, blockProperties= None):
-        ''' Return the blocks representing the welds.
-
-        :param ownerId: identifier of the face to be welded.
-        :param kPointIds: identifiers of the points at weld ends.
-        :param verticalWeldLegSize: leg size for the vertical welds.
-        :param horizontalWeldLegSize: leg size for the horizontal welds.
-        :param blockProperties: labels and attributes to assign to the newly created blocks.
-        '''
-        retval= bte.BlockData()
-        weldProperties= bte.BlockProperties.copyFrom(blockProperties)
-        weldProperties.appendAttribute('objType', 'weld')
-        weldProperties.appendAttribute('ownerId', ownerId) # Weld owner id.
-        weldLinesIndexes= self.getWeldLinesIndexes(verticalWeldLegSize, horizontalWeldLegSize)
-        for l in weldLinesIndexes:
-            pA= kPointIds[l[0]]
-            pB= kPointIds[l[1]]
-            weldLegSize= l[2]
-            weldProperties.appendAttribute('legSize', weldLegSize)
-            weldBlk= bte.BlockRecord(id= -1, typ= 'line', kPoints= [pA, pB], blockProperties= weldProperties, thk= None)
-            retval.appendBlock(weldBlk)
-        return retval
-        
-    def getGussetBlocks(self, verticalWeldLegSize, horizontalWeldLegSize, blockProperties= None):
+            
+    def getGussetBlocks(self, blockProperties= None):
         ''' Return the blocks that define the gusset.
 
-        :param verticalWeldLegSize: leg size for the vertical welds.
-        :param horizontalWeldLegSize: leg size for the horizontal welds.
         :param blockProperties: labels and attributes to assign to the newly created blocks.
         '''
         retval= bte.BlockData()
@@ -205,7 +184,7 @@ class GussetPlate(object):
         blk.holes= self.getHoleBlocks(ownerId, blockProperties= holeProperties) # Get the hole blocks for the new plate
         retval.extend(blk.holes)
         kPointIds= blk.getKPointIds()
-        blk.weldBlocks= self.getWeldBlocks(ownerId, kPointIds, verticalWeldLegSize, horizontalWeldLegSize, blockProperties) # Get the weld blocks for the new plate
+        blk.weldBlocks= self.getWeldBlocks(ownerId, blockProperties) # Get the weld blocks for the new plate
         retval.extend(blk.weldBlocks)
         return retval
 
@@ -248,13 +227,11 @@ class GussetPlate(object):
         boltedPlate.setRefSys(boltedPlateRefSys) # Set the reference system.
         return distBetweenPlates, boltedPlate.getBlocks(plateProperties, loadTag, loadDirI, loadDirJ, loadDirK)
 
-    def getBlocks(self, verticalWeldLegSize, horizontalWeldLegSize, boltedPlate, diagonal, origin, blockProperties):
+    def getBlocks(self, boltedPlate, diagonal, origin, blockProperties):
         ''' Return the blocks corresponding to the gusset plate connection
             and the single or double plates bolted to it.
 
 
-        :param verticalWeldLegSize: leg size for the vertical welds.
-        :param horizontalWeldLegSize: leg size for the horizontal welds.
         :param boltedPlate: bolted plate that will be attached 
                             to this one.
         :param diagonal: element that provide the internal forces in the
@@ -264,7 +241,7 @@ class GussetPlate(object):
         :return: return the blocks corresponding to the connection.
         '''
         retval= bte.BlockData()
-        gussetPlateBlocks= self.getGussetBlocks(verticalWeldLegSize, horizontalWeldLegSize, blockProperties)
+        gussetPlateBlocks= self.getGussetBlocks(blockProperties)
         retval.extend(gussetPlateBlocks)
         distBetweenPlates1, attachedPlateBlocks1= self.getBoltedPlateBlocks(boltedPlate, diagonal, origin, blockProperties, side= 1) # bolted plate at positive side.
         retval.extend(attachedPlateBlocks1)

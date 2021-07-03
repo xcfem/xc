@@ -218,6 +218,17 @@ class ConnectedMemberMetaData(object):
     def getTopFlangeMidPlane(self):
         ''' Return the mid-plane of the top flange.'''
         return self.shape.getTopFlangeMidPlane(org= self.memberOrigin, extrusionVDir= self.extrusionVector, weakAxisVDir= self.jVector)
+
+    def getWebIntersectionPoint(self,sg: geom.Segment3d):
+        ''' Get the intersection of the segment with the member
+            mid planes.
+
+        :param sg: segment to intersect.
+        '''
+        webPlane= self.getWebMidPlane()
+        ray= geom.Ray3d(sg.getFromPoint(), sg.getToPoint())
+        retval= webPlane.getIntersection(ray)
+        return retval
     
     def getIntersectionPoint(self, sg: geom.Segment3d):
         ''' Get the intersection of the segment with the member
@@ -232,6 +243,7 @@ class ConnectedMemberMetaData(object):
             sg.swap()
         p1= sg.getToPoint() # Farthest point from self.memberOrigin.
         p0= sg.getFromPoint()
+        retval= None
         ray= geom.Ray3d(p0, p1)
         if(abs(angleWithWeb)<1e-3): # segment parallel to web.
             bottomFlangeMidPlane= self.getBottomFlangeMidPlane()
@@ -239,29 +251,29 @@ class ConnectedMemberMetaData(object):
             topFlangeMidPlane= self.getTopFlangeMidPlane()
             pIntB= topFlangeMidPlane.getIntersection(ray)
             if(pIntA.exists): # segment intersects bottom flange.
-                if(pIntB.exists): # segment intersects top flange.
-                    dA= p1.dist2(pIntA)
-                    dB= p1.dist2(pIntB)
+                if(pIntB.exists): # segment intersects both flanges.
+                    dA= p0.dist2(pIntA)
+                    dB= p0.dist2(pIntB)
                     if(dA<dB):
-                        p0= pIntA
+                        retval= pIntA
                     else:
-                        p0= pIntB
+                        retval= pIntB
                 else: # pIntB doesn't exists.
-                    p0= pIntA
+                    retval= pIntA
             else:
                 if(pIntB.exists): # segment intersects top flange.
-                    p0= pIntB
-                else:
-                    className= type(self).__name__
-                    methodName= sys._getframe(0).f_code.co_name
-                    lmsg.error(className+'.'+methodName+': intersection point not found for segment: '+str(sg))
-            if(p1.dist2(p0)>sg.getLength()):
-                className= type(self).__name__
-                methodName= sys._getframe(0).f_code.co_name
-                lmsg.warning(className+'.'+methodName+': intersection point outside the segment: '+str(sg))
+                    retval= pIntB
+                # else: # no intersection.
+                #     className= type(self).__name__
+                #     methodName= sys._getframe(0).f_code.co_name
+                #     lmsg.error(className+'.'+methodName+': intersection point not found for segment: '+str(sg))
+            # if(p1.dist2(retval)>sg.getLength()):
+            #     className= type(self).__name__
+            #     methodName= sys._getframe(0).f_code.co_name
+            #     lmsg.warning(className+'.'+methodName+': intersection point outside the segment: '+str(sg))
         else: # segment normal to web
-            p0= webPlane.getIntersection(sg)
-        return p0
+            retval= webPlane.getIntersection(sg)
+        return retval
     
     def getMemberLoadAttributes(self, connectionOrigin):
         ''' Return the attributes with the loading data

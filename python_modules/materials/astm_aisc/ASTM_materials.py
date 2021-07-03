@@ -30,6 +30,7 @@ from import_export import block_topology_entities as bte
 from connections.steel_connections import bolts
 from connections.steel_connections import square_plate_washer as swp
 from connections.steel_connections import bolted_plate as bp
+from connections.steel_connections import gusset_plate as gp
 from connections.steel_connections import connected_members
 
 # Units
@@ -604,7 +605,37 @@ class BoltedPlate(bp.BoltedPlateBase):
         load= loadVector.getModulus()
         return load/self.getDesignTearoutStrength(loadVector)
         
+class GussetPlate(gp.GussetPlate):
+    ''' Gusset plates according to AISC 360-16.'''
+    def __init__(self, boltedPlateTemplate, gussetTip, halfChamfer, ijkVectors):
+        ''' Constructor.
 
+        :param boltedPlateTemplate: bolted plate dimensions and bolt type and 
+                                    arrangement.
+        :param gussetTip: intersection of the gusset plate with the
+                          axis of its attached member.
+        :param halfChamfer: half portion of the chamfer.
+        :param ijkVectors: unary vectors of the local reference system.
+        '''
+        super(GussetPlate, self).__init__(boltedPlateTemplate= boltedPlateTemplate, gussetTip= gussetTip, halfChamfer= halfChamfer, ijkVectors= ijkVectors)
+        
+    def getFilletMinimumLeg(self, otherThickness):
+        '''
+        Return the minimum leg size for a fillet bead 
+        according to table J2.4 of AISC 360.
+
+        :param otherThickness: thickness of the other part to weld.
+        '''
+        return getFilletWeldMinimumLegSheets(self.thickness, otherThickness)
+        
+    def getFilletMaximumLeg(self, otherThickness):
+        '''
+        Return the minimum leg size for a fillet bead 
+        according to table J2.4 of AISC 360.
+
+        :param otherThickness: thickness of the other part to weld.
+        '''
+        return getFilletWeldMaximumLegSheets(self.thickness, otherThickness)            
 class FinPlate(BoltedPlate):
     ''' Fin plate the AISC/ASTM way.'''
     def __init__(self, boltArray, width= None, length= None, thickness= 10e-3, steelType= None, notched= False, eccentricity= geom.Vector2d(0.0,0.0)):

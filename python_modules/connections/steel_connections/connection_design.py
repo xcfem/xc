@@ -19,7 +19,6 @@ from import_export import block_topology_entities as bte
 from import_export import neutral_mesh_description as nmd
 import xc_base
 import geom
-from connections.steel_connections import gusset_plate as gp
 from connections.steel_connections import bolted_plate
 from connections.steel_connections import connected_members
 from connections.steel_connections import bolts
@@ -116,17 +115,50 @@ class Connection(connected_members.ConnectionMetaData):
         '''
         p0= self.getColumnIntersectionPoint(diagSegment) # intersection with the column
         gussetTip= p0-gussetLength*diagSegment.getVDir().normalized()
-        retval= gp.GussetPlate(self.boltedPlateTemplate, gussetTip, halfChamfer, ijkVectors= baseVectors)
+        retval= self.getMaterialModule().GussetPlate(self.boltedPlateTemplate, gussetTip, halfChamfer, ijkVectors= baseVectors)
         # Top leg
-        p1, p2= retval.getSlopedTopLeg(slope, gussetLength)
+        p1, p2= retval.getSloppedTopLeg(slope, gussetLength)
+        ## Clip top leg
         topLegSegment= geom.Segment3d(p1,p2)
-        p2= self.getColumnIntersectionPoint(topLegSegment) # intersection with the column
+        p2= self.getNearestIntersectionPoint(topLegSegment) # intersection with the nearest member
+        p0= geom.Pos3d(p0.x, p0.y, p2.z)
         # Bottom leg.
-        p3, p4, p5= retval.getToColumnBottomLeg(p0, cutKnifePoint= 0.6)
+        ## Orientation: upwards or downwards:
+        diagonalSlope= diagSegment.getSlope()
+        if(diagonalSlope<0): # downwards
+            p3, p4, p5= retval.getToColumnBottomLeg(p0, cutKnifePoint= 0.6)
+        else:
+            p3, p4= retval.getSloppedBottomLeg(slope, gussetLength)
+            bottomLegSegment= geom.Segment3d(p3,p4)
+            p4= self.getNearestIntersectionPoint(bottomLegSegment) # intersection with the nearest member
+            p5= None
         if(p5): # knife point not cutted
             retval.setContour([p1, p2, p0, p5, p4, p3])
+            topLegWeld= geom.Segment3d(p2, p0)
+            bottomLegWeld= geom.Segment3d(p5, p0)
         else:
             retval.setContour([p1, p2, p0, p4, p3])
+            topLegWeld= geom.Segment3d(p2, p0)
+            bottomLegWeld= geom.Segment3d(p4, p0)
+        # Weld definition.
+        weldDict= dict() # Weld line container.
+        ## Compute weld size.
+        weldLegSize= retval.getFilletWeldLegSize(otherThickness= self.column.shape.getFlangeThickness()) # Weld size.
+        retval.weldLegSize= weldLegSize
+        ## Weld lines.
+        weldDict['topLegWeld']= topLegWeld
+        weldDict['bottomLegWeld']= bottomLegWeld
+        retval.setWeldLines(weldDict)
+        # Update the plates connected to the column
+        if(not hasattr(self.column,'connectedPlates')):
+            self.column.connectedPlates= dict()
+        retval.connectedTo= 'column_flange'
+        if(diagonalSlope>0):
+           retval.location= 'upwards_gusset_plate'
+        else:
+           retval.location= 'downwards_gusset_plate'
+        key= retval.connectedTo +','+retval.location
+        self.column.connectedPlates[key]= retval
         return retval;
 
     def getConnectedPlatesIntersectionPoint(self, sg: geom.Segment3d):
@@ -136,19 +168,79 @@ class Connection(connected_members.ConnectionMetaData):
         :param sg: segment to intersect. The distances are computed with
                    respect to the first point of the segment.
         '''
-        retval= geom.Pos3d(math.nan, math.nan, math.nan)
+        retval= None
         fromPoint= sg.getFromPoint()
         dist2= 6.023e23
         for key in self.column.connectedPlates:
             plate= self.column.connectedPlates[key]
-            midPlane= plate.getMidPlane()
-            tmp= midPlane.getIntersection(sg)
+            if(not 'gusset_plate' in key): # Ignore gusset plates.
+                midPlane= plate.getMidPlane()
+                tmp= midPlane.getIntersection(sg)
+                d2= fromPoint.dist2(tmp)
+                if(d2<dist2):
+                    retval= tmp
+                    dist2= d2
+        if(retval):        
+            if(math.isnan(retval.x) or math.isnan(retval.y) or math.isnan(retval.z)):
+                className= type(self).__name__
+                methodName= sys._getframe(0).f_code.co_name
+                lmsg.warning(className+'.'+methodName+': error computing intersection with connected plates.')
+        return retval
+    
+    def getBeamsIntersectionPoint(self, sg: geom.Segment3d):
+        ''' Get the intersection of the segment with the nearest of the
+            beams connected to the column.
+
+        :param sg: segment to intersect. The distances are computed with
+                   respect to the first point of the segment.
+        '''
+        retval= None
+        fromPoint= sg.getFromPoint()
+        dist2= 6.023e23
+        for b in self.beams:
+            tmp= b.getIntersectionPoint(sg)
+            if(tmp): # if intersection exists.
+                d2= fromPoint.dist2(tmp)
+                if(d2<dist2):
+                    retval= tmp
+                    dist2= d2
+        if(retval):            
+            if(math.isnan(retval.x) or math.isnan(retval.y) or math.isnan(retval.z)):
+                className= type(self).__name__
+                methodName= sys._getframe(0).f_code.co_name
+                lmsg.warning(className+'.'+methodName+': error intersecting with connected plates.')
+        return retval
+
+    def getNearestIntersectionPoint(self, sg: geom.Segment3d):
+        ''' Get the intersection of the segment with the nearest of the
+            plates connected to the column.
+
+        :param sg: segment to intersect. The distances are computed with
+                   respect to the first point of the segment.
+        '''
+        fromPoint= sg.getFromPoint()
+        # intersection with connected plates.
+        retval= self.getConnectedPlatesIntersectionPoint(sg)
+        dist2= fromPoint.dist2(retval)
+        # intersection with the column.
+        tmp= self.getColumnIntersectionPoint(sg)
+        if(tmp): # if intersection exists.
             d2= fromPoint.dist2(tmp)
-            if(d2<dist2):
+            if(d2<dist2): # new intersection point is closer.
                 retval= tmp
-                d2= dist2
-        if(math.isnan(retval.x) or math.isnan(retval.y) or math.isnan(retval.z)):
-            lmsg.warning('No intersection with base plate.')
+                dist2= d2
+        # intersection with the beams.
+        tmp= self.getBeamsIntersectionPoint(sg)
+        if(tmp): # if intersection exists.
+            d2= fromPoint.dist2(tmp)
+            if(d2<dist2): # new intersection point is closer.
+                retval= tmp
+                dist2= d2
+        if(retval):
+            if(math.isnan(retval.x) or math.isnan(retval.y) or math.isnan(retval.z)):
+                className= type(self).__name__
+                methodName= sys._getframe(0).f_code.co_name
+                lmsg.warning(className+'.'+methodName+': error computing intersection with connected plates or members.')
         return retval
         
     def getWebGussetPlate(self, baseVectors, diagSegment, gussetLength, halfChamfer, bottomLegSlope):
@@ -166,18 +258,50 @@ class Connection(connected_members.ConnectionMetaData):
         '''
         origin= diagSegment.getFromPoint()
         gussetTip= origin+gussetLength*diagSegment.getVDir().normalized()
-        retval= gp.GussetPlate(self.boltedPlateTemplate, gussetTip, halfChamfer, ijkVectors= baseVectors)
+        retval= self.getMaterialModule().GussetPlate(self.boltedPlateTemplate, gussetTip, halfChamfer, ijkVectors= baseVectors)
+        # Diagonal orientation downwards or upwards.
+        diagonalSlope= diagSegment.getSlope()
         # Top leg.
-        p1, p2= retval.getHorizontalTopLeg(origin)
+        if(diagonalSlope<0): # Downwards diagonal
+            p1, p2= retval.getHorizontalTopLeg(origin)
+        else:
+            p1, p2= retval.getVerticalTopLeg(origin)
+        ## Clip top leg.
+        topLegSegment= geom.Segment3d(p1,p2)
+        p2= self.getNearestIntersectionPoint(topLegSegment) # intersection with the nearest member
         # Bottom leg.
         p3= None; p4= None
         if(bottomLegSlope=='vertical'):
-            p3, p4= retval.getVerticalBottomLeg(origin)
+            if(diagonalSlope<0):
+                p3, p4= retval.getVerticalBottomLeg(origin)
+            else:
+                p3, p4= retval.getHorizontalBottomLeg(origin)
         else:
-            p3, p4= retval.getSlopedBottomLeg(bottomLegSlope, gussetLength)
+            p3, p4= retval.getSloppedBottomLeg(bottomLegSlope, gussetLength)
+        ## Clip bottom leg.
         bottomLegSegment= geom.Segment3d(p3,p4)
-        p4= self.getConnectedPlatesIntersectionPoint(bottomLegSegment) # intersection with the base plate
-        retval.setContour([p1, p2, origin, p4, p3])
+        p4= self.column.getWebIntersectionPoint(bottomLegSegment) # intersection with the column web
+        corner= geom.Pos3d(p4.x, p4.y, p2.z)
+        retval.setContour([p1, p2, corner, p4, p3])
+        # Weld definition.
+        weldDict= dict() # Weld line container.
+        ## Compute weld size.
+        weldLegSize= retval.getFilletWeldLegSize(otherThickness= self.column.shape.getWebThickness()) # Weld size.
+        retval.weldLegSize= weldLegSize
+        ## Weld lines.
+        weldDict['topLegWeld']= geom.Segment3d(p2, corner)
+        weldDict['bottomLegWeld']= geom.Segment3d(p4, corner)
+        retval.setWeldLines(weldDict)
+        # Update the plates connected to the column
+        if(not hasattr(self.column,'connectedPlates')):
+            self.column.connectedPlates= dict()
+        retval.connectedTo= 'column_web'
+        if(diagonalSlope>0):
+           retval.location= 'upwards_gusset_plate'
+        else:
+           retval.location= 'downwards_gusset_plate'
+        key= retval.connectedTo +','+retval.location
+        self.column.connectedPlates[key]= retval
         return retval
 
     def getBoltedPlateTemplate(self):
@@ -219,14 +343,10 @@ class Connection(connected_members.ConnectionMetaData):
         gussetLength= self.gussetLengthFactor*self.boltedPlateTemplate.length
         halfChamferVector= getHalfChamferVector(diagonal)
         halfChamfer= self.boltedPlateTemplate.width/2.0*halfChamferVector
-        verticalWeldLegSize= 0.0 # leg size for the vertical welds.
-        horizontalWeldLegSize= math.floor(self.getHorizontalWeldLegSize()*1e3)/1e3 # leg size for the horizontal welds.      
         if(abs(angleWithWeb)<1e-3): # diagonal parallel to web => flange gusset.
-            verticalWeldLegSize= math.floor(self.getFlangeLegSize()*1e3)/1e3
             objType= 'flange_gusset'
             gussetPlate= self.getFlangeGussetPlate(baseVectors= baseVectors, diagSegment= dgSegment, gussetLength= gussetLength, halfChamfer= halfChamfer, slope= self.flangeGussetLegsSlope)
         else: # diagonal normal to web  => web gusset
-            verticalWeldLegSize= math.floor(self.getWebLegSize()*1e3)/1e3
             objType= 'web_gusset'
             gussetPlate= self.getWebGussetPlate(baseVectors= baseVectors, diagSegment= dgSegment, gussetLength= gussetLength, halfChamfer= halfChamfer, bottomLegSlope= self.webGussetBottomLegSlope)
         # Attached plate.
@@ -234,7 +354,7 @@ class Connection(connected_members.ConnectionMetaData):
         gussetPlateProperties= bte.BlockProperties.copyFrom(blockProperties)
         gussetPlateProperties.appendAttribute('objType', objType)
         
-        gussetPlateBlocks= gussetPlate.getBlocks(verticalWeldLegSize, horizontalWeldLegSize, boltedPlate, diagonal, self.getOrigin(), blockProperties= gussetPlateProperties)
+        gussetPlateBlocks= gussetPlate.getBlocks(boltedPlate, diagonal, self.getOrigin(), blockProperties= gussetPlateProperties)
         retval.extend(gussetPlateBlocks)
         return retval
 
@@ -383,13 +503,14 @@ class Connection(connected_members.ConnectionMetaData):
             columnBottomFlangeLine= columnBottomFlangeContour.getIntersection(platePlane)
             halfTopFlange= stiffenerHalfSpace.clip(columnTopFlangeLine)
             halfBottomFlange= stiffenerHalfSpace.clip(columnBottomFlangeLine)
+            # Weld definition.
+            ## Compute weld size.
+            weldLegSize= (plate.getFilletWeldLegSize(otherThickness= self.column.shape.getWebThickness())+2*plate.getFilletWeldLegSize(otherThickness= self.column.shape.getFlangeThickness()))/3.0
+            ## Weld lines.
             weldDict= dict() # Weld line container.
-            weldLegSize= 0.0 # Weld size.
             weldDict['columnBottomFlangeWeld']= halfBottomFlange
             weldDict['columnWebWeld']= columnWebLine
             weldDict['columnTopFlangeWeld']= halfTopFlange
-            ## Compute weld size.
-            weldLegSize= (plate.getFilletWeldLegSize(otherThickness= self.column.shape.getWebThickness())+2*plate.getFilletWeldLegSize(otherThickness= self.column.shape.getFlangeThickness()))/3.0
             stiffenerPlate.setWeldLines(weldDict)
             stiffenerPlate.weldLegSize= weldLegSize
             # Update the plates connected to the column
@@ -454,7 +575,7 @@ class Connection(connected_members.ConnectionMetaData):
         flangeThickness= self.getColumnShape().get('tf')
         return self.boltedPlateTemplate.getFilletMaximumLeg(flangeThickness)
     
-    def getFlangeLegSize(self, factor= 0.75):
+    def getFlangeWeldLegSize(self, factor= 0.75):
         ''' Return the weld leg size of the gusset plate
             with the flange.
 
@@ -514,7 +635,7 @@ class Connection(connected_members.ConnectionMetaData):
                     
         # self.boltedPlateTemplate.report(outputFile)
         # outputFile.write('    gusset plate - column welds:\n')
-        # outputFile.write('      with the flange(s): 2 x '+str(math.floor(self.getFlangeLegSize()*1000))+' mm (fillet weld leg size)\n')
+        # outputFile.write('      with the flange(s): 2 x '+str(math.floor(self.getFlangeWeldLegSize()*1000))+' mm (fillet weld leg size)\n')
         # outputFile.write('      with the web: 2 x '+str(math.floor(self.getWebLegSize()*1000))+' mm (fillet weld leg size)\n')
         # outputFile.write('      with the plate 2 x '+str(math.floor(self.getHorizontalWeldLegSize()*1000))+' mm (fillet weld leg size)\n')
 
@@ -656,9 +777,9 @@ class BasePlateConnection(Connection):
         properties= bte.BlockProperties.copyFrom(blockProperties)
         retval= bte.BlockData()
         retval.extend(self.basePlate.getBlocks(blockProperties= properties))
-        flangeLegSize= math.floor(self.basePlate.getFlangeWeldLegSize(0.3)*1e3)/1e3 # Arbitrary factor: temporary solution. LP 29/09/2020
-        webLegSize= math.floor(self.basePlate.getWebWeldLegSize()*1e3)/1e3 # Default factor: temporary solution. LP 29/09/2020
-        columnBasePlateWeldBlocks= self.getColumnBaseplateWeldBlocks(flangeLegSize, webLegSize, properties)
+        flangeWeldLegSize= math.floor(self.basePlate.getFlangeWeldLegSize(0.3)*1e3)/1e3 # Arbitrary factor: temporary solution. LP 29/09/2020
+        webWeldLegSize= math.floor(self.basePlate.getWebWeldLegSize()*1e3)/1e3 # Default factor: temporary solution. LP 29/09/2020
+        columnBasePlateWeldBlocks= self.getColumnBaseplateWeldBlocks(flangeWeldLegSize, webWeldLegSize, properties)
         for face, weld in zip(columnShapeBlocks.faceBlocks, columnBasePlateWeldBlocks.weldBlocks):
             weldProperties= bte.BlockProperties.copyFrom(properties)
             weldProperties.appendAttribute('ownerId', 'f'+str(face.id)) # owner identifier.

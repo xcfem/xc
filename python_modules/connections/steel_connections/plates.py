@@ -18,14 +18,165 @@ import geom
 from import_export import block_topology_entities as bte
 from misc_utils import log_messages as lmsg
   
-class Plate(object):
+class SteelPanel(object):
+    ''' Steel panel. This class must be code agnostic
+        i.e. no AISC, EC3, EAE clauses here.
+
+    :ivar thickness: plate thickness.
+    :ivar steelType: steel type.
+    :ivar weldLines: dictionary containing weld lines.
+    '''
+    def __init__(self, thickness= 10e-3, steelType= None):
+        ''' Constructor.
+
+        :param thickness: plate thickness.
+        :param steelType: steel type.
+        '''
+        self.thickness= thickness
+        self.steelType= steelType
+        self.weldLines= None
+
+    def getThickness(self):
+        ''' Return the panel thickness.'''
+        return self.thickness
+    
+    def getFilletWeldLegSize(self, otherThickness, factor= 0.75):
+        ''' Return the leg size of the fillet welds that connect the gusset plate
+            to the flange.
+
+        :param otherThickness: column member (web, flange,...) thickness.
+        :param factor: ratio between the minimum and the maximum thicknesses.
+        :return: linear interpolation between the minimum and maximum values:
+                        minThickness+factor*(maxThickness-minThickness)
+        '''
+        minThickness= self.getFilletMinimumLeg(otherThickness)
+        maxThickness= self.getFilletMaximumLeg(otherThickness)
+        return minThickness+factor*(maxThickness-minThickness)
+        
+    def setWeldLines(self, weldLines):
+        ''' Set the lines that weld the plate to the structure.
+
+        :param weldLines: weld lines dictionary {partName:line,...}
+        '''
+        self.weldLines= weldLines
+
+    def getWeldLinesCenter(self):
+        ''' Return the center of mass of the weld lines.'''
+        v= geom.Vector3d()
+        for key in self.weldLines:
+            wl= self.weldLines[key]
+            center= wl.getCenterOfMass()
+            v+= wl.getLength()*center.getPositionVector()
+        v*= (1.0/len(self.weldLines))
+        return geom.Pos3d(v.x,v.y,v.z)
+
+    def getWeldLinesVertices(self):
+        ''' Return the vertices of the weld lines.'''
+        retval= list() 
+        for key in self.weldLines:
+            wl= self.weldLines[key]
+            pA= wl.getFromPoint()
+            pB= wl.getToPoint()
+            retval.extend([pA,pB])
+        return retval
+    
+    def getWeldLinesVertices2d(self):
+        ''' Return the vertices of the weld lines expressed
+            in local coordinates.'''
+        retval= list()
+        ptList= self.getWeldLinesVertices(self)
+        for p in ptList:
+            retval.append(geom.Pos2d(p.x, p.y))
+        return retval
+
+    def getObjectTypeAttr(self):
+        ''' Return the object type attribute (used in getBlocks).'''
+        return 'steel_panel'
+    
+    def getWeldBlocks(self, ownerId, blockProperties= None):
+        ''' Return the blocks representing the welds.
+
+        :param ownerId: identifier of the plate to be welded.
+        :param blockProperties: labels and attributes to assign to the 
+                                newly created blocks.
+        '''
+        retval= None
+        if(self.weldLines): # it's a welded plate
+            retval= bte.BlockData()
+            weldProperties= bte.BlockProperties.copyFrom(blockProperties)
+            weldProperties.appendAttribute('objType', 'weld')
+            weldProperties.appendAttribute('ownerId', ownerId) # Weld owner id.
+            weldProperties.appendAttribute('legSize', self.weldLegSize) # Weld size.
+            for key in self.weldLines:
+                wl= self.weldLines[key]
+                pA= wl.getFromPoint()
+                pB= wl.getToPoint()
+                weldBlk= retval.blockFromPoints(points= [pA, pB], blockProperties= weldProperties, thickness= None)
+        return retval
+
+    def getDict(self):
+        ''' Returns a dictionary populated with the member values.'''
+        retval= {'thickness':self.thickness, 'steelType':self.steelType.getDict()}
+        if(self.weldLines):
+            wlDict= dict()
+            for key in self.weldLines.keys:
+                wl= self.weldLines[key]
+                wlDict[key]= wl.getDict()
+            retval['weldLines']= wlDict
+        else:
+            retval['weldLines']= None
+        return retval
+
+    def setFromDict(self,dct):
+        ''' Read member values from a dictionary.
+
+        :param dct: dictionary to read values from.
+        '''
+        self.thickness= dct['thickness']
+        self.steelType.setFromDict(dct['steelType'])
+        wlDict= dct['weldLines']
+        if(wlDict):
+            self.weldLines= dict()
+            for key in wlDict:
+                wl= geom.Segment3d()
+                wl.setFromDict(wlDict[key])
+                self.weldLines[key]= wl
+            
+    def jsonRead(self, inputFileName):
+        ''' Read object from JSON file.'''
+
+        with open(inputFileName) as json_file:
+            steelPanelDict= json.load(json_file)
+        self.setFromDict(steelPanelDict)
+        json_file.close()
+
+    def jsonWrite(self, outputFileName):
+        ''' Write object to JSON file.
+
+        :param outputFileName: name of the output file.
+        '''
+        outputDict= self.getDict()
+        with open(outputFileName, 'w') as outfile:
+            json.dump(outputDict, outfile)
+        outfile.close()
+
+    def report(self, outputFile):
+        ''' Reports connection design values.'''
+        # plate dimensions and material.
+        outputFile.write(' steel panel:\n')
+        outputFile.write('      plate thickness: '+str(self.thickness*1000)+' mm\n')
+        outputFile.write('      steel type: '+str(self.steelType.name)+'\n')
+        # report welds
+        if(hasattr(self, 'weldLegSize')):
+            outputFile.write('      weld leg size: '+str(int(self.weldLegSize*1e3))+' mm\n')
+            outputFile.write('      weld segments: '+str(len(self.weldLines))+'\n')
+        
+class Plate(SteelPanel):
     ''' Base class for plates. This class must be code agnostic
         i.e. no AISC, EC3, EAE clauses here.
 
     :ivar width: plate width.
     :ivar length: plate length.
-    :ivar thickness: plate thickness.
-    :ivar steelType: steel type.
     :ivar notched:  if true use notchs when appropriate.  
     :ivar contour: list of vertices that form the contour of the plate.
     '''
@@ -38,12 +189,10 @@ class Plate(object):
         :param steelType: steel type.
         :param notched: if true use notchs when appropriate.
         '''
+        super(Plate, self).__init__(thickness, steelType)
         self.width= width
         self.length= length
-        self.thickness= thickness
-        self.steelType= steelType
         self.refSys= None
-        self.weldLines= None
         self.attachedMemberCenter= None
         self.notched= notched
         self.contour= None
@@ -109,55 +258,6 @@ class Plate(object):
         :param refSys: 3D reference system.
         '''
         self.refSys= refSys
-
-    def getFilletWeldLegSize(self, otherThickness, factor= 0.75):
-        ''' Return the leg size of the fillet welds that connect the gusset plate
-            to the flange.
-
-        :param otherThickness: column member (web, flange,...) thickness.
-        :param factor: ratio between the minimum and the maximum thicknesses.
-        :return: linear interpolation between the minimum and maximum values:
-                        minThickness+factor*(maxThickness-minThickness)
-        '''
-        minThickness= self.getFilletMinimumLeg(otherThickness)
-        maxThickness= self.getFilletMaximumLeg(otherThickness)
-        return minThickness+factor*(maxThickness-minThickness)
-        
-    def setWeldLines(self, weldLines):
-        ''' Set the lines that weld the plate to the structure.
-
-        :param weldLines: weld lines dictionary {partName:line,...}
-        '''
-        self.weldLines= weldLines
-
-    def getWeldLinesCenter(self):
-        ''' Return the center of mass of the weld lines.'''
-        v= geom.Vector3d()
-        for key in self.weldLines:
-            wl= self.weldLines[key]
-            center= wl.getCenterOfMass()
-            v+= wl.getLength()*center.getPositionVector()
-        v*= (1.0/len(self.weldLines))
-        return geom.Pos3d(v.x,v.y,v.z)
-
-    def getWeldLinesVertices(self):
-        ''' Return the vertices of the weld lines.'''
-        retval= list() 
-        for key in self.weldLines:
-            wl= self.weldLines[key]
-            pA= wl.getFromPoint()
-            pB= wl.getToPoint()
-            retval.extend([pA,pB])
-        return retval
-    
-    def getWeldLinesVertices2d(self):
-        ''' Return the vertices of the weld lines expressed
-            in local coordinates.'''
-        retval= list()
-        ptList= self.getWeldLinesVertices(self)
-        for p in ptList:
-            retval.append(geom.Pos2d(p.x, p.y))
-        return retval
 
     def computeContour(self):
         ''' Compute the contour points of the plate. '''
@@ -243,27 +343,6 @@ class Plate(object):
         ''' Return the object type attribute (used in getBlocks).'''
         return 'plate'
     
-    def getWeldBlocks(self, ownerId, blockProperties= None):
-        ''' Return the blocks representing the welds.
-
-        :param ownerId: identifier of the plate to be welded.
-        :param blockProperties: labels and attributes to assign to the 
-                                newly created blocks.
-        '''
-        retval= None
-        if(self.weldLines): # it's a welded plate
-            retval= bte.BlockData()
-            weldProperties= bte.BlockProperties.copyFrom(blockProperties)
-            weldProperties.appendAttribute('objType', 'weld')
-            weldProperties.appendAttribute('ownerId', ownerId) # Weld owner id.
-            weldProperties.appendAttribute('legSize', self.weldLegSize) # Weld size.
-            for key in self.weldLines:
-                wl= self.weldLines[key]
-                pA= wl.getFromPoint()
-                pB= wl.getToPoint()
-                weldBlk= retval.blockFromPoints(points= [pA, pB], blockProperties= weldProperties, thickness= None)
-        return retval
-
     def getBlocks(self, blockProperties= None, loadTag= None, loadDirI= None, loadDirJ= None, loadDirK= None):
         ''' Return the blocks that define the plate for the
             diagonal argument.
@@ -296,15 +375,8 @@ class Plate(object):
     
     def getDict(self):
         ''' Returns a dictionary populated with the member values.'''
-        retval= {'width':self.width, 'length':self.length, 'thickness':self.thickness, 'steelType':self.steelType.getDict(), 'refSys':self.refSys}
-        if(self.weldLines):
-            wlDict= dict()
-            for key in self.weldLines.keys:
-                wl= self.weldLines[key]
-                wlDict[key]= wl.getDict()
-            retval['weldLines']= wlDict
-        else:
-            retval['weldLines']= None
+        retval= super(Plate, self).getDict()
+        retval.update({'width':self.width, 'length':self.length, 'refSys':self.refSys})
         if(self.attachedMemberCenter):
             retval['attachedMemberCenter']= attachedMemberCenter.getDict()
         else:
@@ -316,44 +388,18 @@ class Plate(object):
 
         :param dct: dictionary to read values from.
         '''
+        super(Plate, self).setFromDict(dct) 
         self.width= dct['width']
         self.length= dct['length']
-        self.thickness= dct['thickness']
-        self.steelType.setFromDict(dct['steelType'])
         tmp= dct['refSys']
         if(tmp):
             self.refSys= geom.Ref3d3d()
             self.refSys.setFromDict(dct['refSys'])
-        wlDict= dct['weldLines']
-        if(wlDict):
-            self.weldLines= dict()
-            for key in wlDict:
-                wl= geom.Segment3d()
-                wl.setFromDict(wlDict[key])
-                self.weldLines[key]= wl
         cDict= dct['attachedMemberCenter']
         if(cDict):
             self.attachedMemberCenter= geom.Pos3d()
             self.attachedMemberCenter.setFromDict(cDict)
             
-    def jsonRead(self, inputFileName):
-        ''' Read object from JSON file.'''
-
-        with open(inputFileName) as json_file:
-            plateDict= json.load(json_file)
-        self.setFromDict(plateDict)
-        json_file.close()
-
-    def jsonWrite(self, outputFileName):
-        ''' Write object to JSON file.
-
-        :param outputFileName: name of the output file.
-        '''
-        outputDict= self.getDict()
-        with open(outputFileName, 'w') as outfile:
-            json.dump(outputDict, outfile)
-        outfile.close()
-
     def report(self, outputFile):
         ''' Reports connection design values.'''
         # plate dimensions and material.
@@ -366,4 +412,3 @@ class Plate(object):
         if(hasattr(self, 'weldLegSize')):
             outputFile.write('      weld leg size: '+str(int(self.weldLegSize*1e3))+' mm\n')
             outputFile.write('      weld segments: '+str(len(self.weldLines))+'\n')
-        
