@@ -501,7 +501,6 @@ class BoltedPlateBase(plates.Plate):
             plateProperties.appendAttribute('loadDirK', [loadDirK.x, loadDirK.y, loadDirK.z])
         # Get the plate contour
         contourVertices= self.getContour()
-        print('*** contour vertices: ', contourVertices)
         blk= retval.blockFromPoints(contourVertices, plateProperties, thickness= self.thickness, matId= self.steelType.name)
         ownerId= 'f'+str(blk.id)
         # Get the hole blocks for the new plate
@@ -510,9 +509,11 @@ class BoltedPlateBase(plates.Plate):
         holeProperties.appendAttribute('ownerId', ownerId)
         blk.holes= self.boltArray.getHoleBlocks(self.refSys,holeProperties)
         retval.extend(blk.holes)
-        # Get the weld blocks for the new plate
-        blk.weldBlocks= self.getWeldBlocks(ownerId, blockProperties) # Get the weld blocks for the new plate
-        retval.extend(blk.weldBlocks)
+        # Get the weld blocks for the plate
+        wBlocks= self.getWeldBlocks(ownerId, blockProperties) # Get the weld blocks for the plate
+        if(wBlocks):
+            blk.weldBlocks= wBlocks 
+            retval.extend(blk.weldBlocks)
         return retval
 
     def getClearDistances(self, loadDirection):

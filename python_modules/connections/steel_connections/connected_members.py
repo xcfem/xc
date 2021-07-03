@@ -228,7 +228,7 @@ class ConnectedMemberMetaData(object):
                        direction and lenght.
         :param sg: segment to intersect.
         '''
-        webPlane= self.getWebMidPlane(origin, factor)
+        webPlane= self.getWebMidPlane()
         angleWithWeb= webPlane.getAngle(sg.getVDir())
         orientation= getSegmentOrientation(origin, sg)
         if(orientation<0.0):
@@ -236,9 +236,9 @@ class ConnectedMemberMetaData(object):
         p1= sg.getToPoint() # Farthest point from origin.
         p0= sg.getFromPoint()
         if(abs(angleWithWeb)<1e-3): # segment parallel to web.
-            bottomFlangeMidPlane= self.getBottomFlangeMidPlane(origin, factor)
+            bottomFlangeMidPlane= self.getBottomFlangeMidPlane()
             pIntA= bottomFlangeMidPlane.getIntersection(sg)
-            topFlangeMidPlane= self.getTopFlangeMidPlane(origin, factor)
+            topFlangeMidPlane= self.getTopFlangeMidPlane()
             pIntB= topFlangeMidPlane.getIntersection(sg)
             if(pIntA.exists): # segment intersects bottom flange.
                 if(pIntB.exists): # segment intersects top flange.
@@ -254,7 +254,7 @@ class ConnectedMemberMetaData(object):
                 if(pIntB.exists): # segment intersects top flange.
                     p0= pIntB
                 else:
-                    lmsg.error('Intersection point not found.')
+                    lmsg.error('Intersection point not found for segment: '+str(sg))
         else: # segment normal to web
             p0= webPlane.getIntersection(sg)
         return p0

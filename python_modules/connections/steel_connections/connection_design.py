@@ -499,11 +499,10 @@ class Connection(connected_members.ConnectionMetaData):
             outputFile.write('  beam shapes: ')
             for b in self.beams:
                 outputFile.write(str(b.eTag)+' '+b.shape.getMetricName()+' (US: '+b.shape.name+') ')
-        if(len(self.getDiagonalShapes())>0):
-            diagonalShapes= self.getDiagonalShapes()
+        if(len(self.diagonals)):
             outputFile.write('  diagonal shapes: ')
-            for ds in diagonalShapes:
-                outputFile.write(str(ds.eTag)+' '+ds.getMetricName()+' (US: '+ds.name+') ')
+            for d in self.diagonals:
+                outputFile.write(str(d.eTag)+' '+d.shape.getMetricName()+' (US: '+d.shape.name+') ')
         outputFile.write('\n')
         # report connection plates.
         for key in self.column.connectedPlates:

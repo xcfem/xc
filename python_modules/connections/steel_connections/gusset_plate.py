@@ -245,7 +245,8 @@ class GussetPlate(object):
         boltGroup+= '_'+str(side) # side
         plateProperties.appendAttribute('boltGroup', boltGroup)
         # Create blocks.
-        return distBetweenPlates, boltedPlate.getBlocks(boltedPlateRefSys, plateProperties, loadTag, loadDirI, loadDirJ, loadDirK)
+        boltedPlate.setRefSys(boltedPlateRefSys) # Set the reference system.
+        return distBetweenPlates, boltedPlate.getBlocks(plateProperties, loadTag, loadDirI, loadDirJ, loadDirK)
 
     def getBlocks(self, verticalWeldLegSize, horizontalWeldLegSize, boltedPlate, diagonal, origin, blockProperties):
         ''' Return the blocks corresponding to the gusset plate connection
