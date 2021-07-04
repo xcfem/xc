@@ -47,7 +47,7 @@ class Segment2d : public Linear2d
     virtual bool operator==(const Segment2d &) const;
     const CGSegment_2 &ToCGAL(void) const
       { return cgseg; }
-    virtual GeomObj *clon(void) const;
+    virtual GeomObj *getCopy(void) const;
     void swap(void);
     void TwoPoints(const Pos2d &p1,const Pos2d &p2);
     virtual GEOM_FT GetMax(unsigned short int i) const
@@ -60,8 +60,9 @@ class Segment2d : public Linear2d
       { return Pos2d(cgseg.source()); }
     Pos2d getToPoint(void) const
       { return Pos2d(cgseg.target()); }
-    inline GEOM_FT getSlope(void) const
-      { return getSupportLine().getSlope(); }
+    GEOM_FT getSlope(void) const;
+    bool upwards(void) const;
+    bool downwards(void) const;
     const Pos2d Point(const int &i) const
       { return Pos2d(cgseg.point(i)); }
     Pos2d PtoParametricas(const GEOM_FT &) const;

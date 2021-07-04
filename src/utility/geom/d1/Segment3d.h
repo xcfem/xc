@@ -49,7 +49,7 @@ class Segment3d : public Linear3d
 
     const CGSegment_3 &ToCGAL(void) const
       { return cgseg; }
-    virtual GeomObj *clon(void) const;
+    virtual GeomObj *getCopy(void) const;
     void swap(void);
     void TwoPoints(const Pos3d &p1,const Pos3d &p2);
     virtual GEOM_FT GetMax(unsigned short int i) const;
@@ -58,6 +58,8 @@ class Segment3d : public Linear3d
     Pos3d getFromPoint(void) const;
     Pos3d getToPoint(void) const;
     GEOM_FT getSlope(void) const;
+    bool upwards(void) const;
+    bool downwards(void) const;
     const Pos3d Point(const int &i) const;
     Pos3d PtoParametricas(const GEOM_FT &lambda) const;
     double getParamNaturalCoord(const GEOM_FT &) const;

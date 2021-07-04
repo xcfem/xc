@@ -89,6 +89,14 @@ Dir3d Ray3d::GetDir(void) const
 Vector3d Ray3d::VDir(void) const
   { return GetDir().GetVector(); }
 
+//! @brief Return true if the ray goes up.
+bool Ray3d::upwards(void) const
+  { return (getFromPoint()(3)<Point(10)(3)); }
+
+//! @brief Return true if the ray goes down.
+bool Ray3d::downwards(void) const
+  { return (getFromPoint()(3)>Point(10)(3)); }
+
 //! @brief Returns a vector in the direction of the local
 //! X axis.
 Vector3d Ray3d::getIVector(void) const

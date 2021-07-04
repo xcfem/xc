@@ -47,7 +47,7 @@ class Ray2d : public Linear2d
     virtual bool operator==(const Ray2d &) const;
     const CGRay_2 &ToCGAL(void) const
       { return cgsr; }
-    virtual GeomObj *clon(void) const
+    virtual GeomObj *getCopy(void) const
       { return new Ray2d(*this); }
     void swap(void);
     void TwoPoints(const Pos2d &p1,const Pos2d &p2);
@@ -61,6 +61,8 @@ class Ray2d : public Linear2d
       { return Pos2d(cgsr.source()); }
     inline GEOM_FT getSlope(void) const
       { return getSupportLine().getSlope(); }
+    bool upwards(void) const;
+    bool downwards(void) const;
     const Pos2d Point(const int &i) const
       { return Pos2d(cgsr.point(i)); }
     //@brief Return a point of the line at a distance lambda from its origin.

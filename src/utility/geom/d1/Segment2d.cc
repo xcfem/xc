@@ -68,8 +68,20 @@ void Segment2d::swap(void)
 void Segment2d::TwoPoints(const Pos2d &p1,const Pos2d &p2)
   { (*this)= Segment2d(p1,p2); }
 
-GeomObj *Segment2d::clon(void) const
+GeomObj *Segment2d::getCopy(void) const
   { return new Segment2d(*this); }
+
+//! @brief Return the angle or the line with respect to XY plane.
+GEOM_FT Segment2d::getSlope(void) const
+  { return getSupportLine().getSlope(); }
+
+//! @brief Return true if the segment goes up.
+bool Segment2d::upwards(void) const
+  { return (getFromPoint()(2)<getToPoint()(2)); }
+
+//! @brief Return true if the segment goes down.
+bool Segment2d::downwards(void) const
+  { return (getFromPoint()(2)>getToPoint()(2)); }
 
 //! @brief Return the direction of the segment.
 Dir2d Segment2d::GetDir(void) const

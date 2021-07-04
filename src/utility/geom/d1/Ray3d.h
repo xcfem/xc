@@ -41,7 +41,7 @@ class Ray3d : public Linear3d
     explicit Ray3d(const CGRay_3 &);
     Ray3d(const Pos3d &,const Pos3d &);
     Ray3d(const Pos3d &,const Vector3d &);
-    virtual GeomObj *clon(void) const
+    virtual GeomObj *getCopy(void) const
       { return new Ray3d(*this); }
     void swap(void);
     virtual bool operator==(const Ray3d &) const;
@@ -58,6 +58,8 @@ class Ray3d : public Linear3d
       { return Pos3d(cgsr.source()); }
     inline GEOM_FT getSlope(void) const
       { return getSupportLine().getSlope(); }
+    bool upwards(void) const;
+    bool downwards(void) const;
     const Pos3d Point(const int &i= 0) const
       { return Pos3d(cgsr.point(i)); }
     //! @brief Return a point of the line at a distance lambda from its origin.

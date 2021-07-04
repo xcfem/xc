@@ -72,6 +72,14 @@ Vector2d Ray2d::VDir(void) const
 Vector2d Ray2d::Normal(void) const
   { return VDir().Normal(); }
 
+//! @brief Return true if the ray goes up.
+bool Ray2d::upwards(void) const
+  { return (getFromPoint()(2)<Point(10)(2)); }
+
+//! @brief Return true if the ray goes down.
+bool Ray2d::downwards(void) const
+  { return (getFromPoint()(2)>Point(10)(2)); }
+
 //! @brief Returns a vector in the direction of the local
 //! X axis.
 Vector2d Ray2d::getIVector(void) const

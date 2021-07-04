@@ -67,10 +67,11 @@ bool Segment3d::operator==(const Segment3d &other) const
     return retval;
   }
 
-GeomObj *Segment3d::clon(void) const
+//! @brief Virtual constructor.
+GeomObj *Segment3d::getCopy(void) const
   { return new Segment3d(*this); }
 
-//! @ brief Swaps the ray orientation.
+//! @ brief Swaps the segment orientation.
 void Segment3d::swap(void)
   { cgseg= cgseg.opposite(); }
 
@@ -88,6 +89,15 @@ Pos3d Segment3d::getToPoint(void) const
 //! @brief Return the angle or the line with respect to XY plane.
 GEOM_FT Segment3d::getSlope(void) const
   { return getSupportLine().getSlope(); }
+
+//! @brief Return true if the segment goes up.
+bool Segment3d::upwards(void) const
+  { return (getFromPoint()(3)<getToPoint()(3)); }
+
+//! @brief Return true if the segment goes down.
+bool Segment3d::downwards(void) const
+  { return (getFromPoint()(3)>getToPoint()(3)); }
+
 const Pos3d Segment3d::Point(const int &i) const
   { return Pos3d(cgseg.point(i)); }
 
