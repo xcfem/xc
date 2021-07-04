@@ -59,7 +59,7 @@ bool HalfPlane2d::operator==(const HalfPlane2d &other) const
     return retval;
   }
 
-GeomObj *HalfPlane2d::clon(void) const
+GeomObj *HalfPlane2d::getCopy(void) const
   { return new HalfPlane2d(*this); }
 void HalfPlane2d::swap(void)
   { lim.swap(); }

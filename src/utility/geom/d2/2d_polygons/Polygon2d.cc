@@ -92,7 +92,7 @@ Polygon2d::Polygon2d(const std::list<Polygon2d> &lp)
   }
 
 //! @brief Constructor virtual.
-GeomObj *Polygon2d::clon(void) const
+GeomObj *Polygon2d::getCopy(void) const
   { return new Polygon2d(*this); }
 
 //! @brief Return a polygon parallel to this one at the distance

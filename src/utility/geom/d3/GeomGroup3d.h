@@ -44,7 +44,7 @@ class GeomGroup3d : public GeomGroup<GeomObj3d>
 
     GeomGroup3d(void) : GeomGroup<GeomObj3d>() {}
 
-    virtual GeomObj3d *clon(void) const
+    virtual GeomObj3d *getCopy(void) const
       { return new GeomGroup3d(*this); }
 
     virtual Pos3d getCenterOfMass(void) const;

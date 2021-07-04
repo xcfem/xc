@@ -49,7 +49,7 @@ class BND2d: public GeomObj2d
   public:
     BND2d(void);
     BND2d(const Pos2d &p_min,const Pos2d &p_max);
-    virtual GeomObj *clon(void) const
+    virtual GeomObj *getCopy(void) const
       { return new BND2d(*this); }
     inline bool isUndefined(void) const
       { return undefined; }

@@ -52,7 +52,7 @@ class Quadrilateral2d: public Polygon2d
       }
     Quadrilateral2d(const Pos2d &p1,const Pos2d &p2,const Pos2d &p3,const Pos2d &p4);
 
-    virtual GeomObj *clon(void) const
+    virtual GeomObj *getCopy(void) const
       { return new Quadrilateral2d(*this); }
     inline void push_back(const Pos2d &p)
       {

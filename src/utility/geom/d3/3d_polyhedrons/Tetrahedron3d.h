@@ -40,7 +40,7 @@ class Tetrahedron3d: public PolyhedronBase
     Tetrahedron3d(void);
     Tetrahedron3d(const Pos3d &p0, const Pos3d &p1,const Pos3d &p2, const Pos3d &p3);
     Tetrahedron3d(const HalfSpace3d &, const HalfSpace3d &,const HalfSpace3d &, const HalfSpace3d &);
-    GeomObj *clon(void) const
+    GeomObj *getCopy(void) const
       { return new Tetrahedron3d(*this); }
     Polyhedron3d getPolyhedron3d(void) const;
     GEOM_FT getArea(void) const;

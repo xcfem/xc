@@ -60,7 +60,7 @@ LineSegmentArrangement::LineSegmentArrangement(const std::list<Segment2d> &segme
   }
 
 //! @brief Virtual constructor.
-GeomObj *LineSegmentArrangement::clon(void) const
+GeomObj *LineSegmentArrangement::getCopy(void) const
   { return new LineSegmentArrangement(*this); }
 
 //! @brief Return the number of vertices.

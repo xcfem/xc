@@ -46,7 +46,7 @@ class Circle2d : public Surface2d
     Circle2d(const GEOM_FT &rad2,const Pos2d &centro);
     Circle2d(const Pos2d &p1,const Pos2d &p2,const Pos2d &p3);
     
-    virtual Surface2d *clon(void) const
+    virtual Surface2d *getCopy(void) const
       { return new Circle2d(*this); }
     Pos2d Centro(void) const;
     virtual Pos2d getCenterOfMass(void) const;

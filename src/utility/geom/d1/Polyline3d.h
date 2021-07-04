@@ -41,7 +41,7 @@ class Polyline3d : public Linear3d, public GeomObj::list_Pos3d
     explicit Polyline3d(const boost::python::list &);
     
     virtual bool operator==(const Polyline3d &) const;
-    virtual GeomObj *clon(void) const
+    virtual GeomObj *getCopy(void) const
       { return new Polyline3d(*this); }
     virtual void Move(const Vector3d &);
     const GeomObj::list_Pos3d &getVertices(void) const;

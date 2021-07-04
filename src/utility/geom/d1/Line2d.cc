@@ -106,7 +106,7 @@ const CGLine_2 &Line2d::ToCGAL(void) const
   { return cgr; }
 
 //! @brief Constructor virtual.
-GeomObj *Line2d::clon(void) const
+GeomObj *Line2d::getCopy(void) const
   { return new Line2d(*this); }
 
 //! @ brief Swaps the line orientation.

@@ -45,7 +45,7 @@ class Polygon3d: public D2to3d
     explicit Polygon3d(const GeomObj::list_Pos3d &);
     explicit Polygon3d(const boost::python::list &);
 
-    virtual GeomObj *clon(void) const
+    virtual GeomObj *getCopy(void) const
       { return new Polygon3d(*this); }
 
     inline void push_back(const Pos3d &p)

@@ -42,7 +42,7 @@ class Polyline2d : public Linear2d, public GeomObj::list_Pos2d
     explicit Polyline2d(const Pos2dList &);
     explicit Polyline2d(const boost::python::list &);
 
-    virtual GeomObj *clon(void) const
+    virtual GeomObj *getCopy(void) const
       { return new Polyline2d(*this); }
     const GeomObj::list_Pos2d &getVertices(void) const;
     const GeomObj::list_Pos2d &getVertexList(void) const;

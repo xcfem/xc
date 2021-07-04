@@ -45,7 +45,7 @@ class BlockPyramid: public GeomObj3d
   public:
     BlockPyramid(void);
     explicit BlockPyramid(const std::deque<HalfSpace3d> &);
-    virtual GeomObj *clon(void) const
+    virtual GeomObj *getCopy(void) const
       { return new BlockPyramid(*this); }
     inline unsigned short int Dimension(void) const
       { return 3; }

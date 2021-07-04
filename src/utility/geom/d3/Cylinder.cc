@@ -30,7 +30,7 @@ Cylinder::Cylinder(const Circle3d &secc,const GEOM_FT &lng)
   : SolidExtru3d<Circle3d>(secc,lng) {}
 
 //! @brief Constructor virtual.
-GeomObj *Cylinder::clon(void) const
+GeomObj *Cylinder::getCopy(void) const
   { return new Cylinder(*this); }
 
 //! @Return la extension del objeto.

@@ -70,7 +70,7 @@ class ClosedTriangleMesh: public GeomObj3d, public MovableObject
     ClosedTriangleMesh(const Pos3d &org,const Triang3dMesh &mll);
     ClosedTriangleMesh(const ClosedTriangleMesh &);
     ClosedTriangleMesh &operator=(const ClosedTriangleMesh &);
-    virtual ClosedTriangleMesh *clon(void) const;
+    virtual ClosedTriangleMesh *getCopy(void) const;
 
     virtual double GetMax(short unsigned int i) const;
     virtual double GetMin(short unsigned int i) const;

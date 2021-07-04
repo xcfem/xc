@@ -46,7 +46,7 @@ class LineSegmentArrangement: public Surface2d
   public:
     LineSegmentArrangement(void);
     LineSegmentArrangement(const std::list<Segment2d> &);
-    virtual GeomObj *clon(void) const;
+    virtual GeomObj *getCopy(void) const;
 
     size_t getNumberOfVertices(void) const;
     size_t getNumberOfEdges(void) const;

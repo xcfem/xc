@@ -58,7 +58,7 @@ class Polygon2d: public PolygonalSurface2d
     explicit Polygon2d(const std::list<Polygon2d> &lp);
     explicit Polygon2d(const Polyline2d &);
     explicit Polygon2d(const boost::python::list &);
-    virtual GeomObj *clon(void) const;
+    virtual GeomObj *getCopy(void) const;
     const CGPolygon_2 &ToCGAL(void) const
       { return cgpol; }
 

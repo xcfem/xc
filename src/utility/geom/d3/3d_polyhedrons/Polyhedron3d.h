@@ -76,7 +76,7 @@ class Polyhedron3d: public PolyhedronBase
     Polyhedron3d(const Polyhedron3d &);
     Polyhedron3d(const EPolyhedron &e);
     Polyhedron3d &operator=(const Polyhedron3d &);
-    virtual GeomObj *clon(void) const;
+    virtual GeomObj *getCopy(void) const;
 
     Point_iterator points_begin(void)
       { return cgpolyhedron.points_begin(); }

@@ -44,7 +44,7 @@ class Triangle2d : public PolygonalSurface2d
      : PolygonalSurface2d(), cgtriang(p1.ToCGAL(),p2.ToCGAL(),p3.ToCGAL())
       {}
 
-    virtual PolygonalSurface2d *clon(void) const
+    virtual PolygonalSurface2d *getCopy(void) const
       { return new Triangle2d(*this); }
     inline virtual unsigned int getNumVertices(void) const
       { return 3; }

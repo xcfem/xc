@@ -52,7 +52,7 @@ class Point3d : public GeomObj3d
     //! @brief Return the position of the point in global coordinates.
     inline Pos3d getPos(void) const
       { return org; }
-    virtual GeomObj3d *clon(void) const
+    virtual GeomObj3d *getCopy(void) const
       { return new Point3d(*this); }
     virtual Pos3d getCenterOfMass(void) const
       { return org; }

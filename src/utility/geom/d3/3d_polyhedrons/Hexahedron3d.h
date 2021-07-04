@@ -37,7 +37,7 @@ class Hexahedron3d: public Polyhedron3d
   public:
     Hexahedron3d(void);
     Hexahedron3d(const Pos3d &p0, const Pos3d &p1,const Pos3d &p2, const Pos3d &p3, const Pos3d &p4, const Pos3d &p5,const Pos3d &p6, const Pos3d &p7);
-    GeomObj *clon(void) const
+    GeomObj *getCopy(void) const
       { return new Hexahedron3d(*this); }
     GEOM_FT getVolumeWithSign(void) const;
     GEOM_FT getVolume(void) const;

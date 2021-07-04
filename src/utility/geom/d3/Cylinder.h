@@ -39,7 +39,7 @@ class Cylinder : public SolidExtru3d<Circle3d>
     Cylinder(void);
     Cylinder(const Circle3d &secc,const GEOM_FT &lng);
 
-    virtual GeomObj *clon(void) const;
+    virtual GeomObj *getCopy(void) const;
 
     BND3d Bnd(void) const;
     FT_matrix I(void) const;

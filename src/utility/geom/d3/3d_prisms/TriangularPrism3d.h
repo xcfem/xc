@@ -36,7 +36,7 @@ class TriangularPrism3d : public RightPrism3d<Triangle3d>
     typedef RightPrism3d<Triangle3d> triangular_prism;
   public:
     TriangularPrism3d(const Triangle3d &tr= Triangle3d(),const double &h=1.0);
-    virtual GeomObj *clon(void) const;
+    virtual GeomObj *getCopy(void) const;
     
   };
 #endif

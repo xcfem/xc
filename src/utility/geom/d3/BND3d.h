@@ -41,7 +41,7 @@ class BND3d: public GeomObj3d
   public:
     BND3d(void);
     BND3d(const Pos3d &p_min,const Pos3d &p_max);
-    virtual GeomObj *clon(void) const
+    virtual GeomObj *getCopy(void) const
       { return new BND3d(*this); }
     //! @brief Return the dimension of the object 0, 1, 2 or 3.
     inline virtual unsigned short int Dimension(void) const

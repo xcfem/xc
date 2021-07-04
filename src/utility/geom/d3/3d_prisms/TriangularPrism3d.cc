@@ -27,6 +27,6 @@
 TriangularPrism3d::TriangularPrism3d(const Triangle3d &tr,const double &h)
   : triangular_prism(Triangle3d(tr),h) {}
 
-GeomObj *TriangularPrism3d::clon(void) const
+GeomObj *TriangularPrism3d::getCopy(void) const
   { return new TriangularPrism3d(*this); }
 

@@ -35,7 +35,7 @@ PolygonWithHoles2d::PolygonWithHoles2d(const Polygon2d &p)
   : Surface2d(), cgpol(p.ToCGAL()) {}
 
 //! @brief Constructor virtual.
-GeomObj *PolygonWithHoles2d::clon(void) const
+GeomObj *PolygonWithHoles2d::getCopy(void) const
   { return new PolygonWithHoles2d(*this); }
 
 void PolygonWithHoles2d::contour(const Polygon2d &plg)

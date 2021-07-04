@@ -52,7 +52,7 @@ class SolidExtru3d : public Solid3d
         l= se.l;
         return *this;
       }
-    virtual GeomObj *clon(void) const
+    virtual GeomObj *getCopy(void) const
       { return new SolidExtru3d<S>(*this); }
     void Offset(const GEOM_FT &offset)
       //Similar al offset de AutoCad.

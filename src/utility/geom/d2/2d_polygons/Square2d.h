@@ -38,7 +38,7 @@ class Square2d : public Quadrilateral2d
     //Square2d(const Ref2d &ref,const GEOM_FT &l= 1.0): PolygonalSurface(ref), lado(l) {}
     ~Square2d(void) {}
 
-    virtual GeomObj *clon(void) const
+    virtual GeomObj *getCopy(void) const
       { return new Square2d(*this); }
 /*     void Offset(const GEOM_FT &offset) */
 /*       { lado+=2*offset; } */

@@ -43,7 +43,7 @@ class PolygonWithHoles2d: public Surface2d
  
     PolygonWithHoles2d(void);
     explicit PolygonWithHoles2d(const Polygon2d &);
-    virtual GeomObj *clon(void) const;
+    virtual GeomObj *getCopy(void) const;
 
     bool In(const Pos2d &p, const double &tol) const;
     GEOM_FT getLength(void) const;

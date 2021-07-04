@@ -42,7 +42,7 @@ class PStream : public _IO_istream_withassign
         return *this;
       }
     void Registra(const String &str,const T *p)
-      { mapa[str]= p->clon(); }
+      { mapa[str]= p->getCopy(); }
     T *ClaseDato(void)
       {
         String str;

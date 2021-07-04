@@ -47,7 +47,7 @@ class Rectangle2d: public Quadrilateral2d
       }
       //Rectangle2d(const Ref2d &ref, const double &b=1.0,const double &h=1.0) : Quadrilateral2d(ref,b),height(h) {}
 
-    virtual GeomObj *clon(void) const
+    virtual GeomObj *getCopy(void) const
       { return new Rectangle2d(*this); }
 /*     void Offset(const double &offset) */
 /*       { */

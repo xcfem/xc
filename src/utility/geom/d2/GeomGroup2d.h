@@ -43,7 +43,7 @@ class GeomGroup2d : public GeomGroup<GeomObj2d>
 
     GeomGroup2d(void) : GeomGroup<GeomObj2d>() {}
 
-    virtual GeomObj2d *clon(void) const
+    virtual GeomObj2d *getCopy(void) const
       { return new GeomGroup2d(*this); }
 
     //! @brief Return the volume of the object.

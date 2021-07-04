@@ -46,7 +46,7 @@ class PolygonalSurface2d: public Surface2d
   public:
     PolygonalSurface2d(void): Surface2d(){}
 
-    virtual GeomObj *clon(void) const= 0;
+    virtual GeomObj *getCopy(void) const= 0;
     inline virtual unsigned int getNumVertices(void) const
       { return 0; }
     inline virtual unsigned int getNumEdges(void) const

@@ -45,7 +45,7 @@ class GeomObj: public ProtoGeom
 
     GeomObj(void);
     virtual ~GeomObj(void) {}
-    virtual GeomObj *clon(void) const=0;
+    virtual GeomObj *getCopy(void) const=0;
     //! @brief Return the dimension of the object 0, 1, 2 or 3.
     virtual unsigned short int Dimension(void) const= 0;
     //! @brief Return the length of the object.

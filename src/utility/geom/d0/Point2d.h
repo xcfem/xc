@@ -42,7 +42,7 @@ class Point2d : public GeomObj2d
     //! @brief Return the position in the global coordinates.
     inline Pos2d getPos(void) const
       { return org; }
-    virtual GeomObj2d *clon(void) const
+    virtual GeomObj2d *getCopy(void) const
       { return new Point2d(*this); }
     virtual Pos2d getCenterOfMass(void) const
       { return org; }

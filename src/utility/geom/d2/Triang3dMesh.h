@@ -67,7 +67,7 @@ class Triang3dMesh: public Polyhedron3d
       : Polyhedron3d(p) {}
     Triang3dMesh(const GTSSurface &gts_surf);
 
-    virtual GeomObj *clon(void) const
+    virtual GeomObj *getCopy(void) const
       { return new Triang3dMesh(*this); }
 
     Triangle3d getFaceTriangle(const Facet_const_iterator &f) const;

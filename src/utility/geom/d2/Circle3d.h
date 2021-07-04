@@ -43,7 +43,7 @@ class Circle3d : public D2to3d
     Circle3d(const Ref2d3d &,const Circle2d &);
     Circle3d(const Ref3d3d &,const Circle2d &);
 
-    virtual D2to3d *clon(void) const
+    virtual D2to3d *getCopy(void) const
       { return new Circle3d(*this); }
     Pos3d Centro(void) const;
     virtual Pos3d getCenterOfMass(void) const;

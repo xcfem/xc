@@ -75,7 +75,7 @@ Polyhedron3d &Polyhedron3d::operator=(const Polyhedron3d &other)
   }
 
 //! @brief Constructor virtual.
-GeomObj *Polyhedron3d::clon(void) const
+GeomObj *Polyhedron3d::getCopy(void) const
   { return new Polyhedron3d(*this); }
 
 void Polyhedron3d::make_tetrahedron(const Pos3d &p0, const Pos3d &p1,const Pos3d &p2, const Pos3d &p3)

@@ -72,7 +72,7 @@ class Line3d : public Linear3d
     Line3d(const Pos3d &,const Vector3d &);
     Line3d(const Plane &,const Plane &);
     explicit Line3d(const Line3dParametricForm &param);
-    virtual GeomObj *clon(void) const
+    virtual GeomObj *getCopy(void) const
       { return new Line3d(*this); }
     void swap(void);
     void TwoPoints(const Pos3d &p1,const Pos3d &p2);

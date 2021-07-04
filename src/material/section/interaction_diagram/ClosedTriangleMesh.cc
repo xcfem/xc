@@ -116,7 +116,7 @@ void XC::ClosedTriangleMesh::readFrom(const std::string &fName)
   
 
 //! @brief Virtual constructor.
-XC::ClosedTriangleMesh *XC::ClosedTriangleMesh::clon(void) const
+XC::ClosedTriangleMesh *XC::ClosedTriangleMesh::getCopy(void) const
   { return new ClosedTriangleMesh(*this); }
 
 double XC::ClosedTriangleMesh::GetMax(short unsigned int i) const

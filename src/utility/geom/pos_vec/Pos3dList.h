@@ -48,7 +48,7 @@ class Pos3dList: public GeomObj3d
     explicit Pos3dList(const boost::python::list &);
     template <typename InputIterator>
     explicit Pos3dList(InputIterator first,InputIterator last);
-    virtual GeomObj *clon(void) const
+    virtual GeomObj *getCopy(void) const
       { return new Pos3dList(*this); }
     inline size_t getNumberOfPoints(void) const
       { return point_lst.size(); }

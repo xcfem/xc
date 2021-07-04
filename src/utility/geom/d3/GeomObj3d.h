@@ -49,7 +49,7 @@ class GeomObj3d: public GeomObj
 
     GeomObj3d(void) {}
     virtual ~GeomObj3d(void) {}
-    virtual GeomObj *clon(void) const=0;
+    virtual GeomObj *getCopy(void) const=0;
     //! @brief Return the maximum value of the i-th coordinate.
     virtual GEOM_FT GetMax(unsigned short int i) const= 0;
     //! @brief Return the minimum value of the i-th coordinate.

@@ -83,7 +83,7 @@ Plane::Plane(const Polygon3d &pg3d)
 Plane::Plane(const GeneralEquationOfPlane &eg)
   : Surface3d(), cgp(eg.a(),eg.b(),eg.c(),eg.d()) {}
 
-GeomObj *Plane::clon(void) const
+GeomObj *Plane::getCopy(void) const
   { return new Plane(*this); }
 
 //! @brief Comparison operator.

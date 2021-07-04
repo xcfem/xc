@@ -45,7 +45,7 @@ class HalfPlane2d : public Surface2d
     HalfPlane2d(const Pos2d &p1,const Pos2d &p2);
 
     virtual bool operator==(const HalfPlane2d &) const;
-    virtual GeomObj *clon(void) const;
+    virtual GeomObj *getCopy(void) const;
     inline void swap(void);
     HalfPlane2d getSwap(void) const;
 

@@ -65,7 +65,7 @@ class GeomGroup : public GO
     size_t size(void) const
       { return objetos.size(); }
     void push_back(const GO &obj)
-      { objetos.push_back(downcast(obj.clon())); }
+      { objetos.push_back(downcast(obj.getCopy())); }
     virtual GEOM_FT getLength(void) const;
     virtual GEOM_FT getArea(void) const;
     virtual GEOM_FT getVolume(void) const;
@@ -76,7 +76,7 @@ template <typename GO>
 void GeomGroup<GO>::copia_objetos(const pdeque_geom_obj &objs)
   {
     for(const_iterator i= objs.begin();i!=objs.end();i++)
-      objetos.push_back(downcast((*i)->clon()));
+      objetos.push_back(downcast((*i)->getCopy()));
   }
 
 //! @brief Return true if all objects have the same dimension.

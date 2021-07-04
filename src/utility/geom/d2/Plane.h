@@ -71,7 +71,7 @@ class Plane : public Surface3d
     
     virtual bool operator==(const Plane &) const;
 
-    virtual GeomObj *clon(void) const;
+    virtual GeomObj *getCopy(void) const;
     const CGPlane_3 &ToCGAL(void) const
       { return cgp; }
     void ThreePoints(const Pos3d &p1,const Pos3d &p2,const Pos3d &p3);

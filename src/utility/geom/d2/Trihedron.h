@@ -44,7 +44,7 @@ class Trihedron: public GeomObj3d
     Trihedron(void);
     Trihedron(const Pos3d &p0, const Pos3d &p1,const Pos3d &p2, const Pos3d &p3);
     Trihedron(const Pos3d &p0, const Triangle3d &tr);
-    virtual GeomObj *clon(void) const
+    virtual GeomObj *getCopy(void) const
       { return new Trihedron(*this); }
     ~Trihedron(void) {}
     void Put( const Pos3d &p0, const Pos3d &p1,

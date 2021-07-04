@@ -31,7 +31,7 @@
 #include "utility/geom/pos_vec/Vector3d.h"
 
 //! @brief Constructor virtual.
-D2to3d *CircularSector3d::clon(void) const
+D2to3d *CircularSector3d::getCopy(void) const
   { return new CircularSector3d(*this); }
 
 //! @brief Constructor.

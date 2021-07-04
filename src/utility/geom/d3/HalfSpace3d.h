@@ -50,7 +50,7 @@ class HalfSpace3d : public GeomObj3d
     const Plane &getBoundaryPlane(void) const;
     void setBoundaryPlane(const Plane &);
     
-    virtual GeomObj *clon(void) const
+    virtual GeomObj *getCopy(void) const
       { return new HalfSpace3d(*this); }
     inline void swap(void)
       { lim.swap(); }

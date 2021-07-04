@@ -80,7 +80,7 @@ XC::InteractionDiagram &XC::InteractionDiagram::operator=(const InteractionDiagr
   }
 
 //! @brief Virtual constructor.
-XC::InteractionDiagram *XC::InteractionDiagram::clon(void) const
+XC::InteractionDiagram *XC::InteractionDiagram::getCopy(void) const
   { return new InteractionDiagram(*this); }
 
 //! @brief Search for the trihedron that contains the point being passed as parameter.

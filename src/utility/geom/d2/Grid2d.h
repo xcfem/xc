@@ -38,7 +38,7 @@ class Grid2d: public Surface2d
     explicit Grid2d(const Pos2dArray &m)
       : Surface2d(), points(m) {}
     virtual ~Grid2d(void);
-    virtual GeomObj *clon(void) const
+    virtual GeomObj *getCopy(void) const
       { return new Grid2d(*this); }
 
     inline const Pos2d &operator()(const size_t &i,const size_t &j) const

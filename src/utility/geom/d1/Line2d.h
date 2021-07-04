@@ -74,7 +74,7 @@ class Line2d : public Linear2d
     
     virtual bool operator==(const Line2d &) const;
     const CGLine_2 &ToCGAL(void) const;
-    virtual GeomObj *clon(void) const;
+    virtual GeomObj *getCopy(void) const;
     void swap(void);
 
     void TwoPoints(const Pos2d &p1,const Pos2d &p2);

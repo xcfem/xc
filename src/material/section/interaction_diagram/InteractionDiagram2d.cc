@@ -58,7 +58,7 @@ XC::InteractionDiagram2d::InteractionDiagram2d(const Polygon2d &pts)
   { }
 
 //! @brief Virtual constructor.
-XC::InteractionDiagram2d *XC::InteractionDiagram2d::clon(void) const
+XC::InteractionDiagram2d *XC::InteractionDiagram2d::getCopy(void) const
   { return new InteractionDiagram2d(*this); }
 
 //! @brief Return the intersection of the half-line that links

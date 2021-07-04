@@ -49,7 +49,7 @@ class InteractionDiagram2d: public Polygon2d
   public:
     InteractionDiagram2d(void);
     InteractionDiagram2d(const Polygon2d &);
-    virtual InteractionDiagram2d *clon(void) const;
+    virtual InteractionDiagram2d *getCopy(void) const;
 
     void Simplify(void);
     Pos2d getIntersection(const Pos2d &) const;

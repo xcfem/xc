@@ -79,7 +79,7 @@ bool CircularSector2d::operator==(const CircularSector2d &other) const
   }
 
 //! @brief Constructor virtual.
-Surface2d *CircularSector2d::clon(void) const
+Surface2d *CircularSector2d::getCopy(void) const
   { return new CircularSector2d(*this); }
 
 

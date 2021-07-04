@@ -43,7 +43,7 @@ class Pos2dList: public GeomObj2d
     Pos2dList(void);
     explicit Pos2dList(const GeomObj::list_Pos2d &l);
     explicit Pos2dList(const boost::python::list &);
-    virtual GeomObj *clon(void) const
+    virtual GeomObj *getCopy(void) const
       { return new Pos2dList(*this); }
     inline size_t getNumberOfPoints(void) const
       { return lista_ptos.size(); }
