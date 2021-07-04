@@ -106,11 +106,12 @@ class Connection(connected_members.ConnectionMetaData):
 
         :param sg: 3D segment.
         '''
-        segmentSlope= sg.getSlope()
-        orientation= orientation= connected_members.getSegmentOrientation(self.getOrigin(), sg)
-        return orientation*segmentSlope
+        orientation= connected_members.getSegmentOrientation(self.getOrigin(), sg)
+        if(sg.downwards()):
+            orientation= -orientation
+        return orientation
         
-    def getFlangeGussetPlate(self, baseVectors, diagSegment, gussetLength, halfChamfer, slope):
+    def getFlangeGussetPlate(self, baseVectors, diagSegment: geom.Segment3d, gussetLength, halfChamfer, slope):
         ''' Return the GussetPlate object for the gusset attached to the
             flange.
 
@@ -133,9 +134,15 @@ class Connection(connected_members.ConnectionMetaData):
         p0= geom.Pos3d(p0.x, p0.y, p2.z)
         # Bottom leg.
         ## Orientation: upwards or downwards:
-        diagonalSlope= diagSegment.getSlope()
-        if(diagonalSlope<0): # downwards
+        diagonalOrientation= self.getSegmentOrientation(diagSegment)
+        print('diagonal orientation: ', diagonalOrientation)
+        if(diagonalOrientation<0): # downwards
             p3, p4, p5= retval.getToColumnBottomLeg(p0, cutKnifePoint= 0.6)
+            bottomLegSegment= geom.Segment3d(p3,p4)
+            p4a= self.getConnectedPlatesIntersectionPoint(bottomLegSegment)
+            if(p4a.z>p4.z): # The leg intersects a plate.
+                p4= p4a
+                p5= None
         else:
             p3, p4= retval.getSloppedBottomLeg(slope, gussetLength)
             bottomLegSegment= geom.Segment3d(p3,p4)
@@ -162,7 +169,7 @@ class Connection(connected_members.ConnectionMetaData):
         if(not hasattr(self.column,'connectedPlates')):
             self.column.connectedPlates= dict()
         retval.connectedTo= 'column_flange'
-        if(diagonalSlope>0):
+        if(diagonalOrientation>0):
            retval.location= 'upwards_gusset_plate'
         else:
            retval.location= 'downwards_gusset_plate'
@@ -252,7 +259,7 @@ class Connection(connected_members.ConnectionMetaData):
                 lmsg.warning(className+'.'+methodName+': error computing intersection with connected plates or members.')
         return retval
         
-    def getWebGussetPlate(self, baseVectors, diagSegment, gussetLength, halfChamfer, bottomLegSlope):
+    def getWebGussetPlate(self, baseVectors, diagSegment: geom.Segment3d, gussetLength, halfChamfer, bottomLegSlope):
         ''' Return the GussetPlate object for the gusset attached to the
             web.
 
@@ -283,7 +290,6 @@ class Connection(connected_members.ConnectionMetaData):
         if(bottomLegSlope=='vertical'):
             if(diagonalOrientation<0): # Downwards diagonal
                 p3, p4= retval.getVerticalBottomLeg(origin)
-                print('p3= ', p3, 'p4= ', p4)
                 ## Clip bottom leg segment.
                 p4= self.getConnectedPlatesIntersectionPoint(geom.Segment3d(p3,p4)) # intersection with the connected plates.
                 corner= geom.Pos3d(p2.x, p2.y, p4.z)
@@ -295,7 +301,6 @@ class Connection(connected_members.ConnectionMetaData):
             bottomLegSegment= geom.Segment3d(p3,p4)
             p4= self.column.getWebIntersectionPoint(bottomLegSegment) # intersection with the column web
             corner= geom.Pos3d(p4.x, p4.y, p2.z)
-        print('corner= ', corner)
         retval.setContour([p1, p2, corner, p4, p3])
         # Weld definition.
         weldDict= dict() # Weld line container.
