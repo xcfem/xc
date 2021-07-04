@@ -131,31 +131,31 @@ class Connection(connected_members.ConnectionMetaData):
         ## Clip top leg
         topLegSegment= geom.Segment3d(p1,p2)
         p2= self.getNearestIntersectionPoint(topLegSegment) # intersection with the nearest member
-        p0= geom.Pos3d(p0.x, p0.y, p2.z)
+        corner= geom.Pos3d(p0.x, p0.y, p2.z)
         # Bottom leg.
         ## Orientation: upwards or downwards:
         diagonalOrientation= self.getSegmentOrientation(diagSegment)
-        print('diagonal orientation: ', diagonalOrientation)
         if(diagonalOrientation<0): # downwards
-            p3, p4, p5= retval.getToColumnBottomLeg(p0, cutKnifePoint= 0.6)
+            p3, p4, p5= retval.getToColumnBottomLeg(corner, cutKnifePoint= 0.6)
             bottomLegSegment= geom.Segment3d(p3,p4)
             p4a= self.getConnectedPlatesIntersectionPoint(bottomLegSegment)
             if(p4a.z>p4.z): # The leg intersects a plate.
                 p4= p4a
                 p5= None
+                corner= geom.Pos3d(corner.x, corner.y, p4.z)
         else:
             p3, p4= retval.getSloppedBottomLeg(slope, gussetLength)
             bottomLegSegment= geom.Segment3d(p3,p4)
             p4= self.getNearestIntersectionPoint(bottomLegSegment) # intersection with the nearest member
             p5= None
         if(p5): # knife point not cutted
-            retval.setContour([p1, p2, p0, p5, p4, p3])
-            topLegWeld= geom.Segment3d(p2, p0)
-            bottomLegWeld= geom.Segment3d(p5, p0)
+            retval.setContour([p1, p2, corner, p5, p4, p3])
+            topLegWeld= geom.Segment3d(p2, corner)
+            bottomLegWeld= geom.Segment3d(p5, corner)
         else:
-            retval.setContour([p1, p2, p0, p4, p3])
-            topLegWeld= geom.Segment3d(p2, p0)
-            bottomLegWeld= geom.Segment3d(p4, p0)
+            retval.setContour([p1, p2, corner, p4, p3])
+            topLegWeld= geom.Segment3d(p2, corner)
+            bottomLegWeld= geom.Segment3d(p4, corner)
         # Weld definition.
         weldDict= dict() # Weld line container.
         ## Compute weld size.
