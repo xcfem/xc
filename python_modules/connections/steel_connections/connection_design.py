@@ -244,9 +244,11 @@ class Connection(connected_members.ConnectionMetaData):
                    respect to the first point of the segment.
         '''
         fromPoint= sg.getFromPoint()
+        dist2= 6.023e23
         # intersection with the column.
-        retval= self.getColumnIntersectionPoint(sg) 
-        dist2= fromPoint.dist2(retval)
+        retval= self.getColumnIntersectionPoint(sg)
+        if(retval):
+            dist2= fromPoint.dist2(retval)
         # intersection with the connected plates.
         tmp= self.getConnectedPlatesIntersectionPoint(sg)
         if(tmp): # if intersection exists.
@@ -266,6 +268,7 @@ class Connection(connected_members.ConnectionMetaData):
                 className= type(self).__name__
                 methodName= sys._getframe(0).f_code.co_name
                 lmsg.warning(className+'.'+methodName+': error computing intersection with connected plates or members.')
+                retval= None
         return retval
         
     def getWebGussetPlate(self, baseVectors, diagSegment: geom.Segment3d, gussetLength, halfChamfer, bottomLegSlope):
@@ -289,21 +292,23 @@ class Connection(connected_members.ConnectionMetaData):
         # Top leg.
         if(diagonalOrientation<0): # Downwards diagonal
             p1, p2= retval.getHorizontalTopLeg(origin)
+            # Clip top leg with the column web.
+            p2= self.column.getWebIntersectionPoint(geom.Segment3d(p1, p2))
         else:
             p1, p2= retval.getVerticalTopLeg(origin)
-        ## Clip top leg.
-        topLegSegment= geom.Segment3d(p1,p2)
-        p2= self.getNearestIntersectionPoint(topLegSegment) # intersection with the nearest member
+            ## Clip top leg with the neares member.
+            p2= self.getNearestIntersectionPoint(geom.Segment3d(p1,p2)) # intersection with the nearest member.
         # Bottom leg.
         p3= None; p4= None
         if(bottomLegSlope=='vertical'):
-            if(diagonalOrientation<0): # Downwards diagonal
+            if(diagonalOrientation<0): # downwards diagonal
                 p3, p4= retval.getVerticalBottomLeg(origin)
                 ## Clip bottom leg segment.
                 p4= self.getConnectedPlatesIntersectionPoint(geom.Segment3d(p3,p4)) # intersection with the connected plates.
                 corner= geom.Pos3d(p2.x, p2.y, p4.z)
-            else:
+            else: # upwards diagonal
                 p3, p4= retval.getHorizontalBottomLeg(origin)
+                corner= geom.Pos3d(p4.x, p4.y, p2.z)
         else:
             p3, p4= retval.getSloppedBottomLeg(bottomLegSlope, gussetLength)
             ## Clip bottom leg segment.
