@@ -19,3 +19,6 @@ If you prefer to get rid of the 'ok' messages you can type:
 Of course you can also learn how to work with XC by examining those tests.
 
 
+## References
+
+- [Minimal working example](https://portwooddigital.com/2021/07/01/minimal-working-example/)
