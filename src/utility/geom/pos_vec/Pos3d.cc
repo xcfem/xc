@@ -34,14 +34,19 @@
 #include "utility/geom/d3/HalfSpace3d.h"
 #include "utility/geom/d3/Solid3d.h"
 
-//! @brief Suma de un vector.
+//! @brief return true if one of the coordinate components is not a number.
+bool Pos3d::notAPoint(void) const
+  { return (std::isnan(x()) || std::isnan(y()) || std::isnan(z()) ); }
+
+
+//! @brief Adds a vector.
 Pos3d &Pos3d::operator+=(const Vector3d &v)
   {
     operator=((*this)+v);
     return *this;
   }
 
-//! @brief Resta de un vector.
+//! @brief Substracts a vector.
 Pos3d &Pos3d::operator-=(const Vector3d &v)
   {
     operator=((*this)-v);
@@ -114,7 +119,8 @@ void Pos3d::Set(unsigned short int i,const GEOM_FT &v)
         SetZ(v);
         break;
       default:
-	std::cerr << "Se esperaba que el índice fuera 1, 2 ó 3." << std::endl;
+	std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; index " << i << " out of range: [1,3]." << std::endl;
         break;
       }
   }

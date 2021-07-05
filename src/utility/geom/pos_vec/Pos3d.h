@@ -57,6 +57,7 @@ class Pos3d : public ProtoGeom
 /*     Pos3d(const double &Ax,const double &Ay,const double &Az) */
 /*       : ProtoGeom(), cgpt(Point_3_from_doubles(Ax,Ay,Az)) {} */
 
+    bool notAPoint(void) const;
     Pos3d &operator+=(const Vector3d &);
     Pos3d &operator-=(const Vector3d &);
     Vector3d operator-(const Pos3d &) const;

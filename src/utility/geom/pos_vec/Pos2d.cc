@@ -47,14 +47,18 @@ Pos2d::Pos2d(const GEOM_FT &Ax,const GEOM_FT &Ay)
 Pos2d::Pos2d(const GEOM_RT &x,const GEOM_RT &y,const GEOM_RT &h)
   : ProtoGeom(), cgpt(x,y,h) {}
 
-//! @brief Suma de un vector.
+//! @brief return true if one of the coordinate components is not a number.
+bool Pos2d::notAPoint(void) const
+  { return (std::isnan(x()) || std::isnan(y()) ); }
+
+//! @brief Adds a vector.
 Pos2d &Pos2d::operator+=(const Vector2d &v)
   {
     operator=((*this)+v);
     return *this;
   }
 
-//! @brie Resta de un vector.
+//! @brie Substracts a vector.
 Pos2d &Pos2d::operator-=(const Vector2d &v)
   {
     operator=((*this)-v);

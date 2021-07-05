@@ -206,13 +206,14 @@ bool Plane::negativeSide(const Pos3d &p) const
   { return cgp.has_on_negative_side(p.ToCGAL()); }
 
 //! @brief Return true if the point is in the plane.
+//!
+//! @param tol: tolerance.
 bool Plane::In(const Pos3d &p, const GEOM_FT &tol) const
   { 
-    bool retval= false;
-    if(cgp.has_on(p.ToCGAL()))
-      retval= true;
-    else if(dist(p)<=tol)
-      retval= true;
+    auto cgpt= p.ToCGAL();
+    bool retval= cgp.has_on(cgpt); // lies exactly in the plane.
+    if(!retval)
+      retval= (dist(p)<=tol); // it's close enough to the plane.
     return retval;
   }
 

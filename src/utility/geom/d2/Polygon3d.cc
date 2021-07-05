@@ -198,9 +198,17 @@ Plane Polygon3d::getPlaneFromSide0(unsigned int i) const
 //! than the tolerance argument).
 bool Polygon3d::In(const Pos3d &p,const double &tol) const
   {
-    if(!getPlane().In(p,tol)) return false;
-    const Pos2d p2d(to_2d(p));
-    return plg2d.In(p2d,tol);
+    bool retval= false;
+    const Plane plane= getPlane();
+    if(!plane.In(p,tol))
+      { retval= false; }
+    else
+      {
+	const Pos3d prj= plane.Projection(p);
+        const Pos2d p2d(to_2d(prj));
+        retval= plg2d.In(p2d,tol);
+      }
+    return retval;
   }
 
 //! @brief Return the center of mass of the polygon.
