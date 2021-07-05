@@ -190,14 +190,23 @@ class Connection(connected_members.ConnectionMetaData):
         for key in self.column.connectedPlates:
             plate= self.column.connectedPlates[key]
             if(not 'gusset_plate' in key): # Ignore gusset plates.
-                midPlane= plate.getMidPlane()
+                midPlane= plate.getMidPlane()                
                 tmp= midPlane.getIntersection(sg)
-                d2= fromPoint.dist2(tmp)
-                if(d2<dist2):
-                    retval= tmp
-                    dist2= d2
+                if(tmp.notAPoint()): #intersection not found
+                    continue
+                else:
+                    d2= fromPoint.dist2(tmp)
+                    if(d2<dist2):
+                        if(plate.contour): # plate has a contour.
+                            contour= geom.Polygon3d(plate.contour)
+                            if(contour.In(tmp, .05)): # point inside plate.
+                                retval= tmp
+                                dist2= d2
+                        else: # undefined contour
+                            retval= tmp
+                            dist2= d2
         if(retval):        
-            if(math.isnan(retval.x) or math.isnan(retval.y) or math.isnan(retval.z)):
+            if(retval.notAPoint()):
                 className= type(self).__name__
                 methodName= sys._getframe(0).f_code.co_name
                 lmsg.warning(className+'.'+methodName+': error computing intersection with connected plates.')
@@ -235,11 +244,11 @@ class Connection(connected_members.ConnectionMetaData):
                    respect to the first point of the segment.
         '''
         fromPoint= sg.getFromPoint()
-        # intersection with connected plates.
-        retval= self.getConnectedPlatesIntersectionPoint(sg)
-        dist2= fromPoint.dist2(retval)
         # intersection with the column.
-        tmp= self.getColumnIntersectionPoint(sg)
+        retval= self.getColumnIntersectionPoint(sg) 
+        dist2= fromPoint.dist2(retval)
+        # intersection with the connected plates.
+        tmp= self.getConnectedPlatesIntersectionPoint(sg)
         if(tmp): # if intersection exists.
             d2= fromPoint.dist2(tmp)
             if(d2<dist2): # new intersection point is closer.
@@ -253,7 +262,7 @@ class Connection(connected_members.ConnectionMetaData):
                 retval= tmp
                 dist2= d2
         if(retval):
-            if(math.isnan(retval.x) or math.isnan(retval.y) or math.isnan(retval.z)):
+            if(retval.notAPoint()):
                 className= type(self).__name__
                 methodName= sys._getframe(0).f_code.co_name
                 lmsg.warning(className+'.'+methodName+': error computing intersection with connected plates or members.')
