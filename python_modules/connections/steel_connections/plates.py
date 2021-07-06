@@ -274,40 +274,49 @@ class Plate(SteelPanel):
                 weldPline= geom.get_3d_polylines(list(self.weldLines.values()),1e-3)[0]
                 weldVertices= weldPline.getVertexList()
                 weldPline.simplify(0.01)
-                contourVertices= weldPline.getVertexList() # Vertices after simplification.
-                numContourLines= len(contourVertices)-1
-                if(numContourLines==1):
-                    p1= contourVertices[0]
+                weldPlineVertices= weldPline.getVertexList() # Vertices after simplification.
+                numWeldLines= len(weldPlineVertices)-1
+                if(numWeldLines==1): # only one weld line.
+                    # compute the vertex that is closer to fromPoint
+                    p1= weldPlineVertices[0]
                     d1= fromPoint.dist2(p1)
-                    p2= contourVertices[1]
+                    p2= weldPlineVertices[1]
                     d2= fromPoint.dist2(p2)
-                    wl= geom.Segment3d(p1,p2)
+                    wl= geom.Segment3d(p1,p2) # weld segment.
                     if(d1<d2): # p1 is closer.
+                        # Clip the weld segments.
                         p1New= wl.getProjection(fromPoint)
                         p2New= wl.getProjection(toPoint)
                         self.contour.extend([p1New,p2New]) # set contour.
                         # New weld vertices.
-                        newWeldVertices= [p1New, weldVertices[1], p2New]
+                        if(len(weldVertices)>2): # two weld segments.
+                            newWeldVertices= [p1New, weldVertices[1], p2New]
+                        else: # one weld segment.
+                            newWeldVertices= [p1New, p2New]
                     else: # p2 is closer.
+                        # Clip the weld segments.
                         p2New= wl.getProjection(fromPoint)
                         p1New= wl.getProjection(toPoint)
                         self.contour.extend([p2New,p1New]) # set contour.
                         # New weld vertices.
-                        newWeldVertices= [p2New, weldVertices[1], p1New]                    
+                        if(len(weldVertices)>2): # two weld segments.
+                            newWeldVertices= [p2New, weldVertices[1], p1New]                    
+                        else: # one weld segment.
+                            newWeldVertices= [p2New, p1New]
                     # Update weld lines.
                     vertexCount= 0
                     for key in self.weldLines.keys():
                         self.weldLines[key]= geom.Segment3d(newWeldVertices[vertexCount],newWeldVertices[vertexCount+1])
                         vertexCount+= 1
                 else:
-                    p1= contourVertices[0]
+                    p1= weldPlineVertices[0]
                     d1= fromPoint.dist2(p1)
-                    p2= contourVertices[-1]
+                    p2= weldPlineVertices[-1]
                     d2= fromPoint.dist2(p2)
                     if(d2<d1): # p2 is closer, so reverse the polyline.
-                        contourVertices.reverse()
+                        weldPlineVertices.reverse()
                     if(self.notched): # use notches
-                        limitLine= geom.Line3d(contourVertices[0],contourVertices[-1])
+                        limitLine= geom.Line3d(weldPlineVertices[0],weldPlineVertices[-1])
                         p1New= limitLine.getProjection(fromPoint)
                         p2New= limitLine.getProjection(toPoint)
                         chamfer= 20e-3
@@ -316,12 +325,12 @@ class Plate(SteelPanel):
                         p1NewA= p1New+chamfer*chamferDir1
                         p1NewB= p1New-chamfer*chamferDir2
                         self.contour.extend([p1NewA, p1NewB]) # chamfer
-                        self.contour.extend(contourVertices) # welded contour.
+                        self.contour.extend(weldPlineVertices) # welded contour.
                         p2NewB= p2New+chamfer*chamferDir2
                         p2NewA= p2New+chamfer*chamferDir1
                         self.contour.extend([p2NewB, p2NewA]) # chamfer      
                     else:    
-                        self.contour.extend(contourVertices) # welded contour.
+                        self.contour.extend(weldPlineVertices) # welded contour.
             else:
                 lmsg.error("undefined weld lines, can't compute contour")
             self.contour.append(toPoint) # close contour.            
