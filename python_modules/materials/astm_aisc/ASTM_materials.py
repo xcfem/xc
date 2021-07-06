@@ -1887,7 +1887,6 @@ class ConnectedMember(connected_members.ConnectedMemberMetaData):
         plateLength= boltArray.getStandardPlateLength()
         return BoltedPlate(boltArray, width= plateWidth, length= plateLength, thickness= plateThickness, steelType= plateSteel)
 
-
     def getShearTabBoltArray(self, shearEfficiency, boltSteelType= A307, threadsExcluded= False):
         ''' Return a suitable bolted array for the shear tab.
 
