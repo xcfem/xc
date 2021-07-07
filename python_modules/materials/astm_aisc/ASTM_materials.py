@@ -418,6 +418,25 @@ class BoltFastener(bolts.BoltBase):
         super(BoltFastener,self).report(outputFile)
         outputFile.write('      steel: '+self.steelType.name+'\n')
 
+def getBoltForShear(shearForce, numberOfBolts, threadsExcluded= False):
+    ''' Estimate the diameter of the bolts required for resisting the
+        shear force.
+
+    :param shearForce: shear force to be resisted by the bolts.
+    :param numberOfBolts: number of bolts in the bolt array.
+    :param threadsExcluded: true if threads and transition area of 
+                            shank are excluded from the shear plane.
+    '''
+    retval= standardBolts[-1] # pessimistic assumption
+    for sb in standardBolts:
+        shearStrength= numberOfBolts*sb.getDesignShearStrength(threadsExcluded)
+        if(shearStrength>=abs(shearForce)):
+            retval= sb
+            break
+    if(shearStrength<shearForce):
+        lmsg.warning('shear capacity exceeded; increase the number of bolts')
+    return retval
+        
 M12= BoltFastener(12e-3)
 M14= BoltFastener(14e-3)
 M16= BoltFastener(16e-3)
@@ -448,7 +467,6 @@ def getBoltForHole(holeDiameter, boltSteelType= A307, tol= 0.5e-3):
             break
     retval= BoltFastener(diameter= b.diameter, steelType= boltSteelType)
     return retval
-     
 
 class BoltArray(bp.BoltArrayBase):
     ''' Bolt array the AISC/ASTM way.'''
@@ -1910,8 +1928,21 @@ class ConnectedMember(connected_members.ConnectedMemberMetaData):
         # check spacing.
         distBetweenToes= self.shape.getDistanceBetweenWebToes()
         if(distBetweenToes<numberOfBolts*spacing):
-            lmsg.warning('not enough distance between toes; spacing will be reduced.')
-            spacing= distBetweenToes/numberOfBolts
+            fmt= '{:.2f}'
+            oldSpacing= spacing
+            newSpacing= distBetweenToes/numberOfBolts
+            incrementFraction= (newSpacing-oldSpacing)/oldSpacing
+            if(incrementFraction>-0.2): # reduce spacing
+                lmsg.warning('not enough distance between toes; spacing will be reduced from: '+fmt.format(oldSpacing*1e3)+' mm to: '+fmt.format(spacing*1e3)+' mm ('+fmt.format(incrementFraction*100.0)+') %.')
+                spacing= newSpacing
+            else: # reduce number of bolts and increment bolt diameter
+                oldBoltName= str(bolt)
+                oldNumberOfBolts= numberOfBolts
+                newNumberOfBolts= int(distBetweenToes/spacing)
+                bolt= getBoltForShear(shearForce= shear, numberOfBolts= newNumberOfBolts)
+                lmsg.warning('not enough distance between toes; bolt diameter will be augmented from '+oldBoltName+' to '+str(bolt)+' mm and number of bolts will be reduced fron '+str(oldNumberOfBolts)+' to '+str(newNumberOfBolts)+'.')
+                numberOfBolts= newNumberOfBolts
+                
         return BoltArray(bolt, nRows= 1, nCols= numberOfBolts, dist= spacing)
     
     def getShearTabCore(self, boltSteel, plateSteel, shearEfficiency):
