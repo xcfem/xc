@@ -34,7 +34,7 @@ def aisc_check_bolts_welds(modelSpace,ULSs,boltSets2Check=[],welds2Check=[],base
                           the set of bolts (defaults to True)
     :param resFile: file to which dump the results (path and name without extension)
                     (if None-> print to terminal)
-    :param solutioProcedureType: solution procedure type (defaults to SimpleStaticLinearUMF).
+    :param solutionProcedureType: solution procedure type (defaults to SimpleStaticLinearUMF).
     :param warningsFile: name of the file of warnings (defaults to None)
     :param Phi: resistance factor (defaults to 0.75)
     '''
@@ -189,7 +189,7 @@ def set_welds_check_resprop_current_LC(ULS,singlWelds,baseMetal,Phi=0.75):
             singlWelds[i][1]=[LS,CF]
 
 # Funtions to generate weld and bolt calculation-reports
-def gen_report_files(modelSpace,genDescr,specDescr,loadCaseNames,reportPath,rltvResPath,grWidth,texfileNm,boltSets2Check=[],welds2Check=[],baseMetal=None,meanShearProc=True,genGrULSs=True,linear=True,warningsFile=None,Phi=0.75):
+def gen_report_files(modelSpace,genDescr,specDescr,loadCaseNames,reportPath,rltvResPath,grWidth,texfileNm,boltSets2Check=[],welds2Check=[],baseMetal=None,meanShearProc=True,genGrULSs=True, solutionProcedureType= predefined_solutions.SimpleStaticLinearUMF,warningsFile=None,Phi=0.75):
     '''Generates the graphics corresponding to loads and displacements for each load case,
     together with the tex file to include them in a report.
 
@@ -209,7 +209,7 @@ def gen_report_files(modelSpace,genDescr,specDescr,loadCaseNames,reportPath,rltv
                           the set of bolts (defaults to True)
     :param genGrULSs: generate graphics of loads and displacements for all
                       the load cases. (Defaults to True)
-    :param linear: if linear analysis (default) = True, else nonlinear analysis.
+    :param solutionProcedureType: solution procedure type (defaults to SimpleStaticLinearUMF)..
     :param warningsFile: name of the file of warnings (defaults to None)
     :param Phi: resistance factor (defaults to 0.75)
     '''
@@ -227,11 +227,7 @@ def gen_report_files(modelSpace,genDescr,specDescr,loadCaseNames,reportPath,rltv
     lcNm.sort()
     if genGrULSs: f=open(texPath+texfileNm+'_load_disp.tex','w')
     cont=0
-    if linear:
-#        modelSpace.solutionProcedureType= predefined_solutions.simple_static_linear(modelSpace.getProblem())
-        modelSpace.solutionProcedureType=  predefined_solutions.SimpleStaticLinearUMF
-    else:
-        modelSpace.solutionProcedureType=  predefined_solutions.PenaltyModifiedNewtonUMF(modelSpace.getProblem(), maxNumIter=25, convergenceTestTol= 5.0e-2, printFlag= 2)
+    modelSpace.solutionProcedureType=  solutionProcedureType
     for ULS in lcNm:
         txtDescr=genDescr+' '+specDescr+' '+ULS + ': '
         modelSpace.removeAllLoadPatternsFromDomain()
