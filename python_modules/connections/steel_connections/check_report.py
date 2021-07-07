@@ -18,7 +18,7 @@ __version__= "3.0"
 __email__= "ana.ortega@ciccp.es l.pereztato@gmail.com"
 
 # Functions to check bolts and welds according to AISC-16
-def aisc_check_bolts_welds(modelSpace,ULSs,boltSets2Check=[],welds2Check=[],baseMetal=None,meanShearProc=True,resFile=None,linear=True,warningsFile=None,Phi=0.75):
+def aisc_check_bolts_welds(modelSpace,ULSs,boltSets2Check=[],welds2Check=[],baseMetal=None,meanShearProc=True,resFile=None, solutionProcedureType= predefined_solutions.SimpleStaticLinearUMF,warningsFile=None,Phi=0.75):
     '''Verification of bolts and welds according to AISC-16
     Checking of bolts uses the capacity factor # formula proposed by Rugarli
     https://www.steelchecks.com/CONNECTIONS-GUIDE/index.html?check_welds.htm
@@ -34,7 +34,7 @@ def aisc_check_bolts_welds(modelSpace,ULSs,boltSets2Check=[],welds2Check=[],base
                           the set of bolts (defaults to True)
     :param resFile: file to which dump the results (path and name without extension)
                     (if None-> print to terminal)
-    :param linear: if linear analysis (default) = True, else nonlinear analysis.
+    :param solutioProcedureType: solution procedure type (defaults to SimpleStaticLinearUMF).
     :param warningsFile: name of the file of warnings (defaults to None)
     :param Phi: resistance factor (defaults to 0.75)
     '''
@@ -42,12 +42,7 @@ def aisc_check_bolts_welds(modelSpace,ULSs,boltSets2Check=[],welds2Check=[],base
     init_prop_checking_bolts(boltSets2Check)
     singlWelds=init_prop_checking_welds(welds2Check)
     # Calculation and checking
-    if linear:
-        #modelSpace.analysis= predefined_solutions.simple_static_linear(modelSpace.getProblem())
-        modelSpace.solutionProcedureType=  predefined_solutions.SimpleStaticLinearUMF
-    else:
-        #modelSpace.analysis=  predefined_solutions.penalty_modified_newton(modelSpace.getProblem(), mxNumIter=50, convergenceTestTol= 5.0e-3, printFlag= 2)
-        modelSpace.solutionProcedureType=  predefined_solutions.PenaltyModifiedNewtonUMF(modelSpace.getProblem(), maxNumIter=25, convergenceTestTol= 5.0e-2, printFlag= 2)
+    modelSpace.solutionProcedureType=  solutionProcedureType
     for ULS in ULSs:
         ULS=str(ULS)
         modelSpace.removeAllLoadPatternsFromDomain()
