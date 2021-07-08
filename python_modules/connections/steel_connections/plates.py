@@ -283,26 +283,22 @@ class Plate(SteelPanel):
                     p2= weldPlineVertices[1]
                     d2= fromPoint.dist2(p2)
                     wl= geom.Segment3d(p1,p2) # weld segment.
-                    if(d1<d2): # p1 is closer.
-                        # Clip the weld segments.
-                        p1New= wl.getProjection(fromPoint)
-                        p2New= wl.getProjection(toPoint)
-                        self.contour.extend([p1New,p2New]) # set contour.
-                        # New weld vertices.
-                        if(len(weldVertices)>2): # two weld segments.
-                            newWeldVertices= [p1New, weldVertices[1], p2New]
-                        else: # one weld segment.
-                            newWeldVertices= [p1New, p2New]
-                    else: # p2 is closer.
-                        # Clip the weld segments.
-                        p2New= wl.getProjection(fromPoint)
-                        p1New= wl.getProjection(toPoint)
-                        self.contour.extend([p2New,p1New]) # set contour.
-                        # New weld vertices.
-                        if(len(weldVertices)>2): # two weld segments.
-                            newWeldVertices= [p2New, weldVertices[1], p1New]                    
-                        else: # one weld segment.
-                            newWeldVertices= [p2New, p1New]
+                    # Clip the weld segments.
+                    p1New= wl.getProjection(fromPoint)
+                    p2New= wl.getProjection(toPoint)
+                    newLength= p2New.dist(p1New)
+                    if(newLength<1e-3):
+                        lmsg.warning('weld line normal to distal edge. No changes made.')
+                        p1New= wl.getFromPoint()
+                        p2New= wl.getToPoint()
+                    if(d1>d2): # p2 is closer.
+                        p1New, p2New= p2New, p1New
+                    self.contour.extend([p2New,p1New]) # set contour.
+                    # New weld vertices.
+                    if(len(weldVertices)>2): # two weld segments.
+                        newWeldVertices= [p2New, weldVertices[1], p1New]                    
+                    else: # one weld segment.
+                        newWeldVertices= [p2New, p1New]
                     # Update weld lines.
                     vertexCount= 0
                     for key in self.weldLines.keys():

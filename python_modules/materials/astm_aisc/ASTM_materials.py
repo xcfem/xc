@@ -1932,9 +1932,9 @@ class ConnectedMember(connected_members.ConnectedMemberMetaData):
             oldSpacing= spacing
             newSpacing= distBetweenToes/numberOfBolts
             incrementFraction= (newSpacing-oldSpacing)/oldSpacing
-            warningMessage= 'This steel shape has not enough distance between toes;'
+            warningMessage= 'This steel shape has not enough distance between toes to accomodate '+str(numberOfBolts)+' bolts; '
             if(incrementFraction>-0.15): # reduce spacing
-                warningMessage+= ' spacing will be reduced from: '+fmt.format(oldSpacing*1e3)+' mm to: '+fmt.format(spacing*1e3)+' mm ('+fmt.format(incrementFraction*100.0)+') %.'
+                warningMessage+= ' spacing will be reduced from: '+fmt.format(oldSpacing*1e3)+' mm to: '+fmt.format(newSpacing*1e3)+' mm ('+fmt.format(incrementFraction*100.0)+') %.'
                 lmsg.warning(warningMessage)
                 spacing= newSpacing
             else: # reduce number of bolts and increment bolt diameter
@@ -1943,9 +1943,9 @@ class ConnectedMember(connected_members.ConnectedMemberMetaData):
                 newNumberOfBolts= max(int(distBetweenToes/spacing), 2) # two bolts minimum
                 newSpacing= distBetweenToes/newNumberOfBolts # new spacing value.
                 bolt= getBoltForShear(shearForce= shear, numberOfBolts= newNumberOfBolts)
+                warningMessage+= 'bolt diameter will be augmented from '+oldBoltName+' to '+str(bolt)+' mm and number of bolts will be reduced from '+str(oldNumberOfBolts)+' to '+str(newNumberOfBolts)+'. '
                 if(newSpacing<spacing): # this can be a problem.
-                    warningMessage+= ' bolt diameter will be augmented from '+oldBoltName+' to '+str(bolt)+' mm and number of bolts will be reduced from '+str(oldNumberOfBolts)+' to '+str(newNumberOfBolts)+'.'
-                    warningMessage+= ' Even with less bolts ('+str(numberOfBolts)+' to '+str(newNumberOfBolts)+') spacing will be reduced from '+str(spacing*1e3)+' mm to '+str(newSpacing*1e3)+' mm.'
+                    warningMessage+= 'Even with less bolts ('+str(newNumberOfBolts)+') spacing will be reduced from '+str(spacing*1e3)+' mm to '+str(newSpacing*1e3)+' mm.'
                     lmsg.warning(warningMessage)
                 numberOfBolts= newNumberOfBolts
                 spacing= newSpacing
