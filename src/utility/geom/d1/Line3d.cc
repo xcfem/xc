@@ -38,7 +38,16 @@ Line3d::Line3d(void)
 //! @brief Constructor.
 //! @param r: CGAL line_3.
 Line3d::Line3d(const CGLine_3 &r)
-  : Linear3d(),cgr(r) {}
+  : Linear3d(),cgr(r)
+  {
+    if(cgr.is_degenerate())
+      {
+        std::clog << getClassName() << "::" << __FUNCTION__
+	          << ": degenerated line." << std::endl;
+      }
+    else
+      regularize();
+  }
 
 //! @brief Constructor.
 //! @param p1: 3D point.
@@ -64,14 +73,17 @@ Line3d::Line3d(const Pos3d &p1,const Pos3d &p2)
 //! @param p1: 3D point.
 //! @param dir: 3D direction.
 Line3d::Line3d(const Pos3d &p,const Dir3d &dir)
-  : Linear3d(), cgr(p.ToCGAL(),dir.ToCGAL()) {}
+  : Linear3d(), cgr(p.ToCGAL(),dir.ToCGAL())
+  { regularize(); }
 
 //! @brief Constructor.
 //! @param p1: 3D point.
 //! @param vdir: 3D vector.
 Line3d::Line3d(const Pos3d &p,const Vector3d &vdir)
-  : Linear3d(), cgr(p.ToCGAL(),vdir.ToCGAL()) {}
+  : Linear3d(), cgr(p.ToCGAL(),vdir.ToCGAL())
+  { regularize(); }
 
+//! @brief Constructor.
 Line3d::Line3d(const Plane &p1,const Plane &p2)
   : Linear3d(), cgr()
   {
@@ -221,6 +233,64 @@ Line2d Line3d::YZ2DProjection(void) const
 //! @brief Return the angle or the line with respect to XY plane.
 GEOM_FT Line3d::getSlope(void) const
   { return angle(*this,XYPlane3d); }
+
+//! @brief Returns the parametric equations of the line as:
+//!   v[0]: point in the line.
+//!   v[1]: dir vector for the line.
+Line3dParametricForm Line3d::GetParametricas(void) const
+  { return Line3dParametricForm(Point(0),VDir()); }
+
+//! @brief If the line origin has very large coordinates (>1e6) replace it
+//! with the intersection of the line with one of the coordinate planes.
+//! Otherwise the behaviour of the line gets dominated by the large values
+//! of those coordinates which results in an erratic one.
+void Line3d::regularize(void)
+  {
+    const Pos3d p0= Point(0);
+    const GEOM_FT x= p0.x();
+    const GEOM_FT y= p0.y();
+    const GEOM_FT z= p0.z();
+    const GEOM_FT threshold= 1.0e6;
+    if((fabs(x)>threshold) || (fabs(y)>threshold) || (fabs(z)>threshold))
+      {
+	GeomObj3d::list_Pos3d tmp;
+	Pos3d newP0;
+	tmp= getIntersection(1, 0.0);
+	if(!tmp.empty())
+	  { newP0= *tmp.begin(); }
+	else
+	  {
+	    tmp= getIntersection(2, 0.0);
+	    if(!tmp.empty())
+	      { newP0= *tmp.begin(); }	    
+	    else
+	      {
+		tmp= getIntersection(3, 0.0);
+		if(!tmp.empty())
+		  { newP0= *tmp.begin();}	     
+		else
+		  std::cerr << getClassName() << "::" << __FUNCTION__
+			    << "; intersection with coordinate planes not found."
+			    << std::endl;
+	      }
+	  }
+	const Pos3d newP1= newP0+1.0e3*getIVector();
+	TwoPoints(newP0, newP1);
+      }
+  }
+
+//! @brief Return a point at a distance lambda from its origin.
+Pos3d Line3d::PtoParametricas(const GEOM_FT &lambda) const
+  {
+    Pos3d retval= Point(0);
+    if(fabs(lambda)>0.0)
+      { retval+= lambda*getIVector(); }
+    return retval;
+  }
+
+//! @brief Defines the line from its parametric equation.
+void Line3d::Parametricas(const Line3dParametricForm &param)
+  { TwoPoints(param.getPoint(0.0),param.getPoint(100.0)); }
 
 //! @brief Compute the line that best suits the point cloud.
 GEOM_FT Line3d::linearLeastSquaresFitting(const GeomObj3d::list_Pos3d &lp)

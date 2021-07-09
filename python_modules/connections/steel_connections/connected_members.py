@@ -393,12 +393,13 @@ class ConnectedMemberMetaData(object):
         plateOrigin= plate.refSys.getOrg()
         platePlane= plate.refSys.getXYPlane()
         angle= platePlane.getAngle(column.iVector)
+        angleTol= math.radians(1) # one degrees
         # Compute contours of the column flanges and web.
         columnTopFlangeContour= geom.Polygon3d(column.getTopFlangeMidPlaneContourPoints())
         columnBottomFlangeContour= geom.Polygon3d(column.getBottomFlangeMidPlaneContourPoints())
         columnWebContour= geom.Polygon3d(column.getWebMidPlaneContourPoints())
         columnWebMidPlane= columnWebContour.getPlane()
-        if((abs(angle)<.01) or (abs(angle-math.pi)<.01)): # beam shear tab plate
+        if((abs(angle)<angleTol) or (abs(angle-math.pi)<angleTol)): # beam shear tab plate
             if(plate.connectedTo=='column_web'): # plate connected to the column web
                 # Compute the side of the column web to which
                 # the shear tab will be attached.
@@ -488,6 +489,8 @@ class ConnectedMemberMetaData(object):
                     # Split the line by the web plane to make two weld segments
                     # that lie on each half of the flange.
                     pInt= columnWebMidPlane.getIntersection(columnBottomFlangeLine)
+                    if pInt.notAPoint():
+                        lmsg.error('intersection point not found.')
                     columnBottomFlangeLineA= geom.Segment3d(columnBottomFlangeLine.getFromPoint(), pInt)
                     columnBottomFlangeLineB= geom.Segment3d(pInt, columnBottomFlangeLine.getToPoint())
                     weldDict['columnBottomFlangeWeldA']= columnBottomFlangeLineA
@@ -497,6 +500,8 @@ class ConnectedMemberMetaData(object):
                     # Split the line by the web plane to make two weld segments
                     # that lie on each half of the flange.
                     pInt= columnWebMidPlane.getIntersection(columnTopFlangeLine)
+                    if pInt.notAPoint():
+                        lmsg.error('intersection point not found.')
                     columnTopFlangeLineA= geom.Segment3d(columnTopFlangeLine.getFromPoint(), pInt)
                     columnTopFlangeLineB= geom.Segment3d(pInt, columnTopFlangeLine.getToPoint())
                     weldDict['columnTopFlangeWeldA']= columnTopFlangeLineA

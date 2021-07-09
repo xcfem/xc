@@ -64,6 +64,8 @@ class Line3d : public Linear3d
     CGLine_3 cgr;
     static const Pos3d defaultOrg;
     static const Pos3d defaultDest;
+  protected:
+    void regularize(void);
   public:
     Line3d(void);
     explicit Line3d(const CGLine_3 &r);
@@ -98,17 +100,9 @@ class Line3d : public Linear3d
     Line2d YZ2DProjection(void) const;
 
     GEOM_FT getSlope(void) const;
-    //! @brief Returns the parametric equations of the line as:
-    //!   v[0]: point in the line.
-    //!   v[1]: dir vector for the line.
-    Line3dParametricForm GetParametricas(void) const
-      { return Line3dParametricForm(Point(0),VDir()); }
-    //! @brief Return a point at a distance lambda from its origin.
-    Pos3d PtoParametricas(const GEOM_FT &lambda) const
-      { return Point(0)+lambda*VDir(); }
-    //! @brief Defines the line from its parametric equation.
-    void Parametricas(const Line3dParametricForm &param)
-      { TwoPoints(param.getPoint(0.0),param.getPoint(100.0)); }
+    Line3dParametricForm GetParametricas(void) const;
+    Pos3d PtoParametricas(const GEOM_FT &) const;
+    void Parametricas(const Line3dParametricForm &);
     //! @brief Return true if the point is on the line.
     virtual bool In(const Pos3d &p, const double &tol= 0.0) const
       { return cgr.has_on(p.ToCGAL()); }

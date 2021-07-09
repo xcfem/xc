@@ -64,6 +64,8 @@ class Line2d : public Linear2d
 
     friend class Ray2d;
     friend class Segment2d;
+  protected:
+    void regularize(void);
   public:
     Line2d(void);
     explicit Line2d(const CGLine_2 &r);

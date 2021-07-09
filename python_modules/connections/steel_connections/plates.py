@@ -297,12 +297,16 @@ class Plate(SteelPanel):
                     # New weld vertices.
                     if(len(weldVertices)>2): # two weld segments.
                         newWeldVertices= [p2New, weldVertices[1], p1New]                    
-                    else: # one weld segment.
+                    else: # one weld segment.0.0198
                         newWeldVertices= [p2New, p1New]
                     # Update weld lines.
                     vertexCount= 0
+                    numNewWeldVertices= len(newWeldVertices)
                     for key in self.weldLines.keys():
-                        self.weldLines[key]= geom.Segment3d(newWeldVertices[vertexCount],newWeldVertices[vertexCount+1])
+                        if(vertexCount<numNewWeldVertices-1):
+                            self.weldLines[key]= geom.Segment3d(newWeldVertices[vertexCount],newWeldVertices[vertexCount+1])
+                        else:
+                            lmsg.error('not enough vertices for '+str(len(self.weldLines))+' weld lines.')
                         vertexCount+= 1
                 else:
                     p1= weldPlineVertices[0]

@@ -69,18 +69,29 @@ Line2d::Line2d(const Pos2d &p1,const Pos2d &p2)
 //! @param p1: 2D point.
 //! @param dir: 2D direction.
 Line2d::Line2d(const Pos2d &p,const Dir2d &dir)
-  : Linear2d(), cgr(p.ToCGAL(),dir.ToCGAL()) {}
+  : Linear2d(), cgr(p.ToCGAL(),dir.ToCGAL())
+  { regularize(); }
 
 
 //! @brief Constructor.
 //! @param p1: 2D point.
 //! @param vdir: 2D vector.
 Line2d::Line2d(const Pos2d &p,const Vector2d &vdir)
-  : Linear2d(), cgr(p.ToCGAL(),vdir.ToCGAL()) {}
+  : Linear2d(), cgr(p.ToCGAL(),vdir.ToCGAL())
+  { regularize(); }
 
 //! @brief Copy constructor.
 Line2d::Line2d(const CGLine_2 &r)
-  : Linear2d(), cgr(r) {}
+  : Linear2d(), cgr(r)
+  {
+    if(cgr.is_degenerate())
+      {
+        std::clog << getClassName() << "::" << __FUNCTION__
+	          << ": degenerated line." << std::endl;
+      }
+    else
+      regularize();
+  }
 
 //! @brief Constructs the line from its parametric equation.
 Line2d::Line2d(const Line2dParametricForm &param)
@@ -248,10 +259,47 @@ GEOM_FT Line2d::Parametro(const Pos2d &p) const
 Line2dParametricForm Line2d::GetParametricas(void) const
   { return Line2dParametricForm(Point(0),VDir()); }
 
+//! @brief If the line origin has very large coordinates (>1e6) replace it
+//! with the intersection of the line with one of the coordinate planes.
+//! Otherwise the behaviour of the line gets dominated by the large values
+//! of those coordinates which results in an erratic one.
+void Line2d::regularize(void)
+  {
+    const Pos2d p0= Point(0);
+    const GEOM_FT x= p0.x();
+    const GEOM_FT y= p0.y();
+    const GEOM_FT threshold= 1.0e6;
+    if((fabs(x)>threshold) || (fabs(y)>threshold))
+      {
+	GeomObj2d::list_Pos2d tmp;
+	Pos2d newP0;
+	tmp= getIntersection(1, 0.0);
+	if(!tmp.empty())
+	  { newP0= *tmp.begin(); }
+	else
+	  {
+	    tmp= getIntersection(2, 0.0);
+	    if(!tmp.empty())
+	      { newP0= *tmp.begin(); }	    
+	    else
+	      std::cerr << getClassName() << "::" << __FUNCTION__
+			<< "; intersection with coordinate axes not found."
+			<< std::endl;
+	  }
+	const Pos2d newP1= newP0+1.0e3*getIVector();
+	TwoPoints(newP0, newP1);
+      }
+  }
+
 //! @brief Return a point of the line at a distance delta
 //! from its origin.
 Pos2d Line2d::PtoParametricas(const GEOM_FT &lambda) const
-  { return Point(0)+lambda*VDir(); }
+  {
+    Pos2d retval= Point(0);
+    if(fabs(lambda)>0.0)
+      { retval+= lambda*getIVector(); }
+    return retval;
+  }
 
 //! @brief Line redefined from a parametric equation.
 void Line2d::Parametricas(const Line2dParametricForm &param)

@@ -265,8 +265,7 @@ Plane FromCGAL(const CGPlane_3 &p)
 void Plane::Print(std::ostream &os) const
   {
     os << "point: " << Point()
-       << " normal: " << Normal()
-       << std::endl;
+       << " normal: " << Normal();
   }
 
 //! @brief Return the x coordinate of the point of the plane
@@ -537,6 +536,9 @@ GeomGroup3d intersection(const Plane &p1, const Plane &p2)
         if(const CGLine_3 *ri= CGAL::object_cast<CGLine_3 >(&result))
 	  {
 	    const Line3d r3d(*ri);
+ 	    const Vector3d lineDir= r3d.getIVector();
+	    const Pos3d pt1= r3d.Point(0);
+	    const Pos3d pt2= r3d.PtoParametricas(100.0);
             retval.push_back(r3d);
 	  }
         else
