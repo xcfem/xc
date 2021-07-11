@@ -124,13 +124,21 @@ class Connection(connected_members.ConnectionMetaData):
         :param slope: tangent of the angle of the gusset leg with its member axis.
         '''
         p0= self.getColumnIntersectionPoint(diagSegment) # intersection with the column
-        gussetTip= p0-gussetLength*diagSegment.getVDir().normalized()
+        # Compute diagonal length occupied by the column.
+        diagonalVDir= diagSegment.getVDir().normalized()
+        columnVDir= self.column.iVector
+        diagonalColumnAngle= diagonalVDir.getAngle(columnVDir)
+        columnDepth= self.column.shape.h()
+        # Remove this length from the gusset length.
+        gussetLength-= columnDepth/2.0/math.tan(diagonalColumnAngle)
+        # Compute gusset tip position.
+        gussetTip= p0-gussetLength*diagonalVDir
         retval= self.getMaterialModule().GussetPlate(self.boltedPlateTemplate, gussetTip, halfChamfer, ijkVectors= baseVectors)
         # Top leg
         p1, p2= retval.getSloppedTopLeg(slope, gussetLength)
         ## Clip top leg
         topLegSegment= geom.Segment3d(p1,p2)
-        tmp= self.getNearestIntersectionPoint(topLegSegment) # intersection with the nearest member
+        tmp= self.getNearestIntersectionPoint(topLegSegment) # intersection with the nearest member.
         if(tmp):
             p2= tmp
         corner= geom.Pos3d(p0.x, p0.y, p2.z)
