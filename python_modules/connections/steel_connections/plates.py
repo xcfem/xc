@@ -282,6 +282,9 @@ class Plate(SteelPanel):
                     d1= fromPoint.dist2(p1)
                     p2= weldPlineVertices[1]
                     d2= fromPoint.dist2(p2)
+                    if(d1>d2): # p2 is closer.
+                        p1, p2= p2, p1
+                        d1, d2= d2, d1
                     wl= geom.Segment3d(p1,p2) # weld segment.
                     # Clip the weld segments.
                     p1New= wl.getProjection(fromPoint)
@@ -291,14 +294,12 @@ class Plate(SteelPanel):
                         lmsg.warning('weld line normal to distal edge. No changes made.')
                         p1New= wl.getFromPoint()
                         p2New= wl.getToPoint()
-                    if(d1>d2): # p2 is closer.
-                        p1New, p2New= p2New, p1New
-                    self.contour.extend([p2New,p1New]) # set contour.
+                    self.contour.extend([p1New,p2New]) # set contour.
                     # New weld vertices.
                     if(len(weldVertices)>2): # two weld segments.
-                        newWeldVertices= [p2New, weldVertices[1], p1New]                    
+                        newWeldVertices= [p1New, weldVertices[1], p2New]                    
                     else: # one weld segment.0.0198
-                        newWeldVertices= [p2New, p1New]
+                        newWeldVertices= [p1New, p2New]
                     # Update weld lines.
                     vertexCount= 0
                     numNewWeldVertices= len(newWeldVertices)
