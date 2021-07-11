@@ -123,14 +123,19 @@ class Connection(connected_members.ConnectionMetaData):
                             to the end of the chamfer.
         :param slope: tangent of the angle of the gusset leg with its member axis.
         '''
+        print('**** here getFlangeGussetPlate.')
         p0= self.getColumnIntersectionPoint(diagSegment) # intersection with the column
         gussetTip= p0-gussetLength*diagSegment.getVDir().normalized()
         retval= self.getMaterialModule().GussetPlate(self.boltedPlateTemplate, gussetTip, halfChamfer, ijkVectors= baseVectors)
         # Top leg
         p1, p2= retval.getSloppedTopLeg(slope, gussetLength)
+        print('top leg: ', p1, p2)
         ## Clip top leg
         topLegSegment= geom.Segment3d(p1,p2)
-        p2= self.getNearestIntersectionPoint(topLegSegment) # intersection with the nearest member
+        tmp= self.getNearestIntersectionPoint(topLegSegment) # intersection with the nearest member
+        if(tmp):
+            p2= tmp
+        print('intersection: ', p2)
         corner= geom.Pos3d(p0.x, p0.y, p2.z)
         # Bottom leg.
         ## Orientation: upwards or downwards:
@@ -284,6 +289,7 @@ class Connection(connected_members.ConnectionMetaData):
         :param bottomLegSlope: if not 'vertical' tangent of the angle of the 
                                gusset bottom leg with its  member axis.
         '''
+        print('**** here getWebGussetPlate.')
         origin= diagSegment.getFromPoint()
         gussetTip= origin+gussetLength*diagSegment.getVDir().normalized()
         retval= self.getMaterialModule().GussetPlate(self.boltedPlateTemplate, gussetTip, halfChamfer, ijkVectors= baseVectors)
@@ -364,7 +370,7 @@ class Connection(connected_members.ConnectionMetaData):
             # of iVector on the horizontal plane.
             perpHoriz= geom.Vector3d(-iVector.y, iVector.x, 0.0)
             return iVector.cross(perpHoriz).normalized()
-        
+        print('here getGussetBlocksForDiagonal.')
         retval= bte.BlockData()
         origin= self.getOrigin()
         baseVectors= diagonal.getDirection(origin)
@@ -376,7 +382,8 @@ class Connection(connected_members.ConnectionMetaData):
         gussetLength= self.gussetLengthFactor*self.boltedPlateTemplate.length
         halfChamferVector= getHalfChamferVector(diagonal)
         halfChamfer= self.boltedPlateTemplate.width/2.0*halfChamferVector
-        if(abs(angleWithWeb)<1e-3): # diagonal parallel to web => flange gusset.
+        angleTolerance= math.pi/180.0 # tolerance: 1 degree.
+        if(abs(angleWithWeb)<angleTolerance): # diagonal parallel to web => flange gusset.
             objType= 'flange_gusset'
             gussetPlate= self.getFlangeGussetPlate(baseVectors= baseVectors, diagSegment= dgSegment, gussetLength= gussetLength, halfChamfer= halfChamfer, slope= self.flangeGussetLegsSlope)
         else: # diagonal normal to web  => web gusset
