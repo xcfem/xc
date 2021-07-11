@@ -309,7 +309,7 @@ class Plate(SteelPanel):
                         else:
                             lmsg.error('not enough vertices for '+str(len(self.weldLines))+' weld lines.')
                         vertexCount+= 1
-                else:
+                else: # three weld lines.
                     p1= weldPlineVertices[0]
                     d1= fromPoint.dist2(p1)
                     p2= weldPlineVertices[-1]
@@ -317,18 +317,26 @@ class Plate(SteelPanel):
                     if(d2<d1): # p2 is closer, so reverse the polyline.
                         weldPlineVertices.reverse()
                     if(self.notched): # use notches
-                        limitLine= geom.Line3d(weldPlineVertices[0],weldPlineVertices[-1])
+                        plateHeight= fromPoint.dist(toPoint)
+                        limitLineHeight= weldPlineVertices[-1].dist(weldPlineVertices[0])
+                        # Compute corner positions.
+                        limitLine= geom.Line3d(weldPlineVertices[0],weldPlineVertices[-1])                    
                         p1New= limitLine.getProjection(fromPoint)
                         p2New= limitLine.getProjection(toPoint)
+                        # Compute chamfers
                         chamfer= 20e-3
-                        chamferDir1= (fromPoint-p1New).normalized()
-                        chamferDir2= limitLine.getVDir().normalized()
-                        p1NewA= p1New+chamfer*chamferDir1
-                        p1NewB= p1New-chamfer*chamferDir2
+                        chamferDir1= chamfer*(fromPoint-p1New).normalized()
+                        if(limitLineHeight>(2*chamfer+plateHeight)):
+                            chamferDir2= chamfer*limitLine.getVDir().normalized()
+                        else:
+                            cD2= (limitLineHeight-plateHeight)/2.0
+                            chamferDir2= cD2*limitLine.getVDir().normalized()
+                        p1NewA= p1New+chamferDir1
+                        p1NewB= p1New-chamferDir2
                         self.contour.extend([p1NewA, p1NewB]) # chamfer
                         self.contour.extend(weldPlineVertices) # welded contour.
-                        p2NewB= p2New+chamfer*chamferDir2
-                        p2NewA= p2New+chamfer*chamferDir1
+                        p2NewB= p2New+chamferDir2
+                        p2NewA= p2New+chamferDir1
                         self.contour.extend([p2NewB, p2NewA]) # chamfer      
                     else:    
                         self.contour.extend(weldPlineVertices) # welded contour.
