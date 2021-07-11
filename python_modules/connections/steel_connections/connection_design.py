@@ -130,7 +130,7 @@ class Connection(connected_members.ConnectionMetaData):
         diagonalColumnAngle= diagonalVDir.getAngle(columnVDir)
         columnDepth= self.column.shape.h()
         # Remove this length from the gusset length.
-        gussetLength-= columnDepth/2.0/math.tan(diagonalColumnAngle)
+        gussetLength-= abs(columnDepth/2.0/math.tan(diagonalColumnAngle))
         # Compute gusset tip position.
         gussetTip= p0-gussetLength*diagonalVDir
         retval= self.getMaterialModule().GussetPlate(self.boltedPlateTemplate, gussetTip, halfChamfer, ijkVectors= baseVectors)
@@ -187,9 +187,8 @@ class Connection(connected_members.ConnectionMetaData):
         self.column.connectedPlates[key]= retval
         return retval;
 
-    def getConnectedPlatesIntersectionPoint(self, sg: geom.Segment3d):
-        ''' Get the intersection of the segment with the nearest of the
-            plates connected to the column.
+    def getNearestPlate(self, sg: geom.Segment3d):
+        ''' Get the nearest of the plates that intersect the segment argument.
 
         :param sg: segment to intersect. The distances are computed with
                    respect to the first point of the segment.
@@ -207,19 +206,33 @@ class Connection(connected_members.ConnectionMetaData):
                 else:
                     d2= fromPoint.dist2(tmp)
                     if(d2<dist2):
-                        if(plate.contour): # plate has a contour.
-                            contour= geom.Polygon3d(plate.contour)
-                            if(contour.In(tmp, .05)): # point inside plate.
-                                retval= tmp
-                                dist2= d2
-                        else: # undefined contour
-                            retval= tmp
-                            dist2= d2
-        if(retval):        
-            if(retval.notAPoint()):
-                className= type(self).__name__
-                methodName= sys._getframe(0).f_code.co_name
-                lmsg.warning(className+'.'+methodName+': error computing intersection with connected plates.')
+                        retval= plate
+                        dist2= d2
+        return retval
+    
+    def getConnectedPlatesIntersectionPoint(self, sg: geom.Segment3d):
+        ''' Get the intersection of the segment with the nearest of the
+            plates connected to the column.
+
+        :param sg: segment to intersect. The distances are computed with
+                   respect to the first point of the segment.
+        '''
+        retval= None
+        plate= self.getNearestPlate(sg)
+        if(plate):
+            midPlane= plate.getMidPlane()
+            tmp= midPlane.getIntersection(sg)
+            if(plate.contour): # plate has a contour.
+                contour= geom.Polygon3d(plate.contour)
+                if(contour.In(tmp, .05)): # point inside plate.
+                    retval= tmp
+            else: # undefined contour
+                retval= tmp
+            if(retval):        
+                if(retval.notAPoint()):
+                    className= type(self).__name__
+                    methodName= sys._getframe(0).f_code.co_name
+                    lmsg.warning(className+'.'+methodName+': error computing intersection with connected plates.')
         return retval
     
     def getBeamsIntersectionPoint(self, sg: geom.Segment3d):
@@ -314,7 +327,9 @@ class Connection(connected_members.ConnectionMetaData):
             if(diagonalOrientation<0): # downwards diagonal
                 p3, p4= retval.getVerticalBottomLeg(origin)
                 ## Clip bottom leg segment.
-                p4= self.getConnectedPlatesIntersectionPoint(geom.Segment3d(p3,p4)) # intersection with the connected plates.
+                p4a= self.getConnectedPlatesIntersectionPoint(geom.Segment3d(p3,p4)) # intersection with the connected plates.
+                if(p4a):
+                    p4= p4a
                 corner= geom.Pos3d(p2.x, p2.y, p4.z)
             else: # upwards diagonal
                 p3, p4= retval.getHorizontalBottomLeg(origin)
