@@ -200,7 +200,7 @@ void XC::SetMeshComp::appendFromGeomEntity(const SetBase &s)
       elements.push_back(dom->getElement(*i));
   }
 
-//!  @brief Clears all the objects of the lists.
+//! @brief Clears all the objects of the lists.
 void XC::SetMeshComp::clear(void)
   {
     //SetBase::clear();
@@ -208,6 +208,11 @@ void XC::SetMeshComp::clear(void)
     constraints.clear();
     elements.clear();
   }
+
+//! @brief Return true if the set is empty.
+bool XC::SetMeshComp::empty(void) const
+  { return ( nodes.empty() && elements.empty() && constraints.empty() ); }
+
 
 //!  @brief Clears all objects from the set.
 void XC::SetMeshComp::clearAll(void)

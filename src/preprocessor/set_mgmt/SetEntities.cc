@@ -204,6 +204,11 @@ void XC::SetEntities::clear(void)
     uniform_grids.clear();
   }
 
+//! @brief Return true if the set is empty.
+bool XC::SetEntities::empty(void) const
+  {
+    return ( points.empty() && lines.empty() && surfaces.empty() && bodies.empty() && uniform_grids.empty() );
+  }
 //!  @brief Clears all the objects of the set.
 void XC::SetEntities::clearAll(void)
   {

@@ -83,6 +83,7 @@ class Set: public SetMeshComp
       { return description; }
 
     void clear(void);
+    bool empty(void) const;    
 
     Set getEntitiesSet(void) const;
     Set getMeshComponentsSet(void) const;

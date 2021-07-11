@@ -151,6 +151,15 @@ void XC::Set::clear(void)
     entities.clear();
   }
 
+//! @brief Return true if the set is empty.
+bool XC::Set::empty(void) const
+  {
+    bool retval= SetMeshComp::empty();
+    if(retval)
+      retval= (retval && entities.empty());
+    return retval;
+  }
+
 //!  @brief Clears all the objects of the set.
 void XC::Set::clearAll(void)
   {

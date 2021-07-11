@@ -183,6 +183,7 @@ class SetMeshComp: public SetBase
     void appendFromGeomEntity(const SetBase &);
 
     void clear(void);
+    bool empty(void) const;    
 
     void fix(const SFreedom_Constraint &);
 

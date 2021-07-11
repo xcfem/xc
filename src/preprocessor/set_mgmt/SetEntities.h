@@ -135,6 +135,7 @@ class SetEntities: public PreprocessorContainer, public MovableObject
     SetEntities &operator=(const SetEntities &);
 
     void clear(void);
+    bool empty(void) const;    
 
     //! @brief Returns a const reference to the point container.
     virtual const lst_ptr_points &getPoints(void) const
