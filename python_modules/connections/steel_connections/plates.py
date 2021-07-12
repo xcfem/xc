@@ -329,7 +329,6 @@ class Plate(SteelPanel):
                         weldPlineVertices.reverse()
                     if(self.notched): # use notches
                         plateHeight= fromPoint.dist(toPoint)
-                        print('plate height= ', plateHeight)
                         limitLineHeight= weldPlineVertices[-1].dist(weldPlineVertices[0])
                         # Compute corner positions.
                         limitLine= geom.Line3d(weldPlineVertices[0],weldPlineVertices[-1])                    

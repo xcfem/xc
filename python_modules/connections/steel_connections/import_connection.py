@@ -200,6 +200,11 @@ class WeldMetaData(ConnectionMeanMetaData):
     def __init__(self, line, memberToWeld= None, faceWelds= None):
         ''' Constructor. Attributes are obtained from the
             point argument properties.
+
+        :param line: line corresponding to the weld position.
+        :param memberToWeld: the plate being welded.
+        :param faceWelds: position of the weld with respect to the
+                         connected faces.
         '''
         super(WeldMetaData,self).__init__(line)
         self.line= line # line representing the welded connection.
@@ -259,8 +264,17 @@ class WeldMetaData(ConnectionMeanMetaData):
                 d1= plg.dist(p1)
                 d2= plg.dist(p2)
                 d= max(d1,d2)
-                if(d<tol):
+                if(d<tol): # whole line inside the surface.
                     self.faceWelds[s.tag]= FaceWeldMetaData(face= s, memberToWeld= self.memberToWeld)
+                elif((d1<tol) or (d2<tol)): # line touchs the surface
+                    sg= geom.Segment3d(p1, p2)
+                    facePlane= s.getPlane()
+                    angle= facePlane.getAngle(sg)
+                    angleTol= 1/180.0*math.pi # one degree
+                    d3= plg.dist(sg.getMidPoint())
+                    if(abs(angle)<angleTol and d3<tol): # line contained in the face plane.
+                        self.faceWelds[s.tag]= FaceWeldMetaData(face= s, memberToWeld= self.memberToWeld)
+                    
         if(len(self.faceWelds)==0):
             lmsg.error('weld line from face: '+self.memberToWeld.name+' is not connected to any surface.')
         

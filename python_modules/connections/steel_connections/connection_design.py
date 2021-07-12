@@ -134,18 +134,25 @@ class Connection(connected_members.ConnectionMetaData):
         # Compute gusset tip position.
         gussetTip= p0-gussetLength*diagonalVDir
         retval= self.getMaterialModule().GussetPlate(self.boltedPlateTemplate, gussetTip, halfChamfer, ijkVectors= baseVectors)
+        # Orientation: upwards or downwards:
+        diagonalOrientation= self.getSegmentOrientation(diagSegment)
         # Top leg
         p1, p2= retval.getSloppedTopLeg(slope, gussetLength)
         ## Clip top leg
         topLegSegment= geom.Segment3d(p1,p2)
-        tmp= self.getNearestIntersectionPoint(topLegSegment) # intersection with the nearest member.
-        if(tmp):
-            p2= tmp
+        if(diagonalOrientation<0): # downwards diagonal
+            tmp= self.getNearestIntersectionPoint(topLegSegment) # intersection with the nearest member.
+            if(tmp):
+                p2= tmp
+        else: # upwards diagonal
+            tmp= self.getConnectedPlatesIntersectionPoint(topLegSegment)
+            if(tmp):
+                p2= tmp
+            else:
+                lmsg.error(' no intersected plate.')
         corner= geom.Pos3d(p0.x, p0.y, p2.z)
         # Bottom leg.
-        ## Orientation: upwards or downwards:
-        diagonalOrientation= self.getSegmentOrientation(diagSegment)
-        if(diagonalOrientation<0): # downwards
+        if(diagonalOrientation<0): # downwards diagonal
             p3, p4, p5= retval.getToColumnBottomLeg(corner, cutKnifePoint= 0.6)
             bottomLegSegment= geom.Segment3d(p3,p4)
             p4a= self.getConnectedPlatesIntersectionPoint(bottomLegSegment)
@@ -153,7 +160,7 @@ class Connection(connected_members.ConnectionMetaData):
                 p4= p4a
                 p5= None
                 corner= geom.Pos3d(corner.x, corner.y, p4.z)
-        else:
+        else: # upwards diagonal 
             p3, p4= retval.getSloppedBottomLeg(slope, gussetLength)
             bottomLegSegment= geom.Segment3d(p3,p4)
             p4= self.getNearestIntersectionPoint(bottomLegSegment) # intersection with the nearest member
@@ -187,26 +194,55 @@ class Connection(connected_members.ConnectionMetaData):
         self.column.connectedPlates[key]= retval
         return retval;
 
-    def getNearestPlate(self, sg: geom.Segment3d):
-        ''' Get the nearest of the plates that intersect the segment argument.
+    def getNearestPlate(self, fromPoint: geom.Pos3d):
+        ''' Get the plate nearest to the point argument.
 
-        :param sg: segment to intersect. The distances are computed with
-                   respect to the first point of the segment.
+        :param fromPoint: position in 3D space.
         '''
         retval= None
-        fromPoint= sg.getFromPoint()
+        intersectionPoint= None
+        keyNearestPlate= None
         dist2= 6.023e23
         for key in self.column.connectedPlates:
             plate= self.column.connectedPlates[key]
             if(not 'gusset_plate' in key): # Ignore gusset plates.
-                midPlane= plate.getMidPlane()                
-                tmp= midPlane.getIntersection(sg)
-                if(tmp.notAPoint()): #intersection not found
-                    continue
-                else:
-                    d2= fromPoint.dist2(tmp)
+                if(plate.contour): # plate has a contour.
+                    contourPlg= geom.Polygon3d(plate.contour)
+                    d2= contourPlg.dist2(fromPoint)
                     if(d2<dist2):
                         retval= plate
+                        dist2= d2
+                        keyNearestPlate= key
+                # midPlane= plate.getMidPlane()                
+                # tmp= midPlane.getIntersection(sg)
+                # if(tmp.notAPoint()): #intersection not found
+                #     continue
+                # else:
+                #     d2= fromPoint.dist2(tmp)
+                #     if(d2<dist2):
+                #         retval= plate
+                #         keyNearestPlate= key
+                #         intersectionPoint= tmp
+                #         dist2= d2
+        return retval
+    
+    def getConnectedPlatesNearestSide(self, fromPoint: geom.Pos3d):
+        ''' Get the nearest of the sides to the point argument.
+
+        :param fromPoint: position in 3D space.
+        '''
+        retval= None
+        dist2= 6.023e23
+        for key in self.column.connectedPlates:
+            plate= self.column.connectedPlates[key]
+            if(not 'gusset_plate' in key): # Ignore gusset plates.
+                if(plate.contour): # plate has a contour.
+                    contourPlg= geom.Polygon3d(plate.contour)
+                    proximalEdgeIndex= contourPlg.getIndexOfProximalEdge(fromPoint)
+                    proximalEdge= contourPlg.getEdge(proximalEdgeIndex)
+                    d2= fromPoint.dist2(proximalEdge)
+                    if(d2<dist2):
+                        retval= proximalEdge
                         dist2= d2
         return retval
     
@@ -218,11 +254,11 @@ class Connection(connected_members.ConnectionMetaData):
                    respect to the first point of the segment.
         '''
         retval= None
-        plate= self.getNearestPlate(sg)
+        plate= self.getNearestPlate(sg.getFromPoint())
         if(plate):
             midPlane= plate.getMidPlane()
             tmp= midPlane.getIntersection(sg)
-            if(plate.contour): # plate has a contour.
+            if(plate.contour and (not tmp.notAPoint())): # plate has a contour and the point exists.
                 contour= geom.Polygon3d(plate.contour)
                 if(contour.In(tmp, .05)): # point inside plate.
                     retval= tmp
@@ -230,9 +266,10 @@ class Connection(connected_members.ConnectionMetaData):
                 retval= tmp
             if(retval):        
                 if(retval.notAPoint()):
-                    className= type(self).__name__
-                    methodName= sys._getframe(0).f_code.co_name
-                    lmsg.warning(className+'.'+methodName+': error computing intersection with connected plates.')
+                    #className= type(self).__name__
+                    #methodName= sys._getframe(0).f_code.co_name
+                    #lmsg.warning(className+'.'+methodName+': error computing intersection with connected plates.')
+                    retval= None
         return retval
     
     def getBeamsIntersectionPoint(self, sg: geom.Segment3d):
@@ -317,10 +354,19 @@ class Connection(connected_members.ConnectionMetaData):
             p1, p2= retval.getHorizontalTopLeg(origin)
             # Clip top leg with the column web.
             p2= self.column.getWebIntersectionPoint(geom.Segment3d(p1, p2))
-        else:
+        else: # upwards diagonal
             p1, p2= retval.getVerticalTopLeg(origin)
-            ## Clip top leg with the neares member.
-            p2= self.getNearestIntersectionPoint(geom.Segment3d(p1,p2)) # intersection with the nearest member.
+            ## Clip top leg segment.
+            # p2a= self.getNearestIntersectionPoint(geom.Segment3d(p1,p2)) # intersection with the nearest member.
+            p2a= self.getConnectedPlatesIntersectionPoint(geom.Segment3d(p1,p2)) # intersection with the connected plates.
+            if(not p2a): # there is no intersection,
+                         # search for the nearest side between the plates.
+                nearestSide= self.getConnectedPlatesNearestSide(p1)
+                p2a= nearestSide.getMidPoint()
+            if(p2a):
+                p2= p2a
+            else:
+                lmsg.warning('no plate found.')
         # Bottom leg.
         p3= None; p4= None
         if(bottomLegSlope=='vertical'):
@@ -328,8 +374,14 @@ class Connection(connected_members.ConnectionMetaData):
                 p3, p4= retval.getVerticalBottomLeg(origin)
                 ## Clip bottom leg segment.
                 p4a= self.getConnectedPlatesIntersectionPoint(geom.Segment3d(p3,p4)) # intersection with the connected plates.
+                if(not p4a): # there is no intersection,
+                             # search for the nearest side between the plates.
+                    nearestSide= self.getConnectedPlatesNearestSide(p3)
+                    p4a= nearestSide.getMidPoint()
                 if(p4a):
                     p4= p4a
+                else:
+                    lmsg.warning('no plate found.')
                 corner= geom.Pos3d(p2.x, p2.y, p4.z)
             else: # upwards diagonal
                 p3, p4= retval.getHorizontalBottomLeg(origin)

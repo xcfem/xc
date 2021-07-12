@@ -1923,13 +1923,12 @@ class ConnectedMember(connected_members.ConnectedMemberMetaData):
             numberOfBolts= 2
         elif(numberOfBolts>7):
             lmsg.warning('too many bolts: '+str(numberOfBolts))
-        spacing= 75e-3 # about 3 inches. See General Requirements in Design of Single Plate Shear Connections
-                       #                 Abolhassan Astaneh, Steven M. Call and Kurt M. McMullin
+        defaultSpacing= 75e-3 # about 3 inches. See General Requirements in Design of Single Plate Shear Connections
+                              #                 Abolhassan Astaneh, Steven M. Call and Kurt M. McMullin
+        spacing= defaultSpacing
         # check spacing.
         distBetweenToes= self.shape.getDistanceBetweenWebToes()
         depth= self.shape.h()
-        print('distance between toes: ', distBetweenToes)
-        print('depth: ', depth)
         if(distBetweenToes<numberOfBolts*spacing):
             fmt= '{:.2f}'
             oldSpacing= spacing
@@ -1944,7 +1943,7 @@ class ConnectedMember(connected_members.ConnectedMemberMetaData):
                 oldBoltName= str(bolt)
                 oldNumberOfBolts= numberOfBolts
                 newNumberOfBolts= max(int(distBetweenToes/spacing), 2) # two bolts minimum
-                newSpacing= distBetweenToes/newNumberOfBolts # new spacing value.
+                newSpacing= min(distBetweenToes/newNumberOfBolts, defaultSpacing) # new spacing value.
                 bolt= getBoltForShear(shearForce= shear, numberOfBolts= newNumberOfBolts)
                 warningMessage+= 'bolt diameter will be augmented from '+oldBoltName+' to '+str(bolt)+' mm and number of bolts will be reduced from '+str(oldNumberOfBolts)+' to '+str(newNumberOfBolts)+'. '
                 if(newSpacing<spacing): # this can be a problem.
@@ -1952,8 +1951,6 @@ class ConnectedMember(connected_members.ConnectedMemberMetaData):
                     lmsg.warning(warningMessage)
                 numberOfBolts= newNumberOfBolts
                 spacing= newSpacing
-                
-                
         return BoltArray(bolt, nRows= 1, nCols= numberOfBolts, dist= spacing)
     
     def getShearTabCore(self, boltSteel, plateSteel, shearEfficiency):
@@ -2170,7 +2167,7 @@ class FilletWeld(object):
         :param theta: angle between the line of action of the required force and
                       the weld longitudinal axis (in degrees) (defaults to 0º)
         '''
-        fi=0.75
+        fi= 0.75
         Rn=self.getNominalStrength(Fpar,Fperp,theta)
         Rnd=fi*Rn
         return Rnd
