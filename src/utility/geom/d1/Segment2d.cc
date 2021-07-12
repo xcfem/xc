@@ -121,6 +121,14 @@ Vector2d Segment2d::GetVector(void) const
 GEOM_FT Segment2d::getAngle(const Vector2d &v) const
   { return angle(VDir(),v); }
 
+//! @brief Returns the angle with the line argument.
+GEOM_FT Segment2d::getAngle(const Line2d &r) const
+  { return getAngle(r.VDir()); }
+
+//! @brief Returns the angle with the ray argument.
+GEOM_FT Segment2d::getAngle(const Ray2d &sr) const
+  { return getAngle(sr.VDir()); }
+
 //! @brief Return the angle of the segment with the vector (-PI->0->PI).
 GEOM_FT Segment2d::getSignedAngle(const Vector2d &v) const
   { return signedAngle(VDir(),v); }

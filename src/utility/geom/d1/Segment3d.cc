@@ -332,12 +332,22 @@ Vector3d Segment3d::Projection(const Vector3d &v) const
     return l.Projection(v);
   }
 
+//! @brief Returns the distance from the point to the segment.
 GEOM_FT dist(const Pos3d &p,const Segment3d &r)
   { return sqrt_FT(dist2(r,p)); }
 
-//! @brief Returns angle with vector.
+//! @brief Returns the angle with the vector argument.
 GEOM_FT Segment3d::getAngle(const Vector3d &v) const
   { return angle(VDir(),v); }
+
+//! @brief Returns the angle with the line argument.
+GEOM_FT Segment3d::getAngle(const Line3d &r) const
+  { return getAngle(r.VDir()); }
+
+//! @brief Returns the angle with the ray argument.
+GEOM_FT Segment3d::getAngle(const Ray3d &sr) const
+  { return getAngle(sr.VDir()); }
+
 //! @brief Returns angle with another line segment.
 GEOM_FT Segment3d::getAngle(const Segment3d &s) const
   { return getAngle(s.VDir()); }

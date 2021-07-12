@@ -68,10 +68,11 @@ Polyline2d PolygonalSurface2d::getPolyline(void) const
     return retval;
   }
 
-
+//! @brief Return the segments between vertices i and j (0->n).
 Segment2d PolygonalSurface2d::Lado0(unsigned int i, unsigned int j) const
   { return Segment2d(Vertice0(i),Vertice0(j)); }
 
+//! @brief Return the i-th side (i between 0 and num_sides-1).
 Segment2d PolygonalSurface2d::Lado0(unsigned int i) const
   {
     const size_t nl= getNumEdges();
@@ -80,7 +81,7 @@ Segment2d PolygonalSurface2d::Lado0(unsigned int i) const
     return Lado0(i1,i2);
   }
 
-//! @brief Return the i-th edge.
+//! @brief Return the i-th edge (i between 1 and num_sides).
 Segment2d PolygonalSurface2d::Lado(unsigned int i) const
   { return Lado0(i-1); }
 

@@ -91,20 +91,23 @@ boost::python::list Polygon3d::getVertexListPy(void) const
     return retval;
   }
 
+//! @brief Return the i-th edge (i between 1 and num_sides).
 Segment3d Polygon3d::Lado(unsigned int i) const
   {
     Segment2d sg2d= plg2d.Lado(i);
     return to_3d(sg2d);
   }
 
+//! @brief Return the i-th side (i between 0 and num_sides-1).
 Segment3d Polygon3d::Lado0(unsigned int i) const
   {
     Segment2d sg2d= plg2d.Lado0(i);
     return to_3d(sg2d);
   }
 
-//! @brief Return the distal edge with respect to the point argument.
-//! @para p: 2D point.
+//! @brief Return the index of the distal edge with respect to the point
+//! argument.
+//! @param p: 2D point.
 int Polygon3d::getIndexOfDistalEdge(const Pos3d &p) const
   {
     const unsigned int nl= getNumEdges();

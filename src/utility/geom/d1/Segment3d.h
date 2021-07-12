@@ -92,6 +92,8 @@ class Segment3d : public Linear3d
     virtual Vector3d getJVector(void) const;
     virtual Vector3d getKVector(void) const;
     GEOM_FT getAngle(const Vector3d &v) const;
+    GEOM_FT getAngle(const Line3d &r) const;
+    GEOM_FT getAngle(const Ray3d &sr) const;
     GEOM_FT getAngle(const Segment3d &v) const;
     friend GEOM_FT angle(const Segment3d &r,const Vector3d &v);
     virtual GEOM_FT Ix(void) const;

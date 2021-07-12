@@ -64,8 +64,10 @@ class_<Ray2d, bases<Linear2d> >("Ray2d")
   .add_property("getJVector", &Ray2d::getJVector,"Return the local y vector.")
   ;
 
-GEOM_FT (Segment2d::*AngleVector)(const Vector2d &v) const= &Segment2d::getAngle;
-GEOM_FT (Segment2d::*AngleSegment)(const Segment2d &v) const= &Segment2d::getAngle;
+GEOM_FT (Segment2d::*AngleVector2D)(const Vector2d &v) const= &Segment2d::getAngle;
+GEOM_FT (Segment3d::*AngleLine2D)(const Line3d &) const= &Segment3d::getAngle;
+GEOM_FT (Segment3d::*AngleRay2D)(const Ray3d &) const= &Segment3d::getAngle;
+GEOM_FT (Segment2d::*AngleSegment2D)(const Segment2d &v) const= &Segment2d::getAngle;
 
 Segment2d (Segment2d::*OffsetSegmentVector)(const Vector2d &v) const= &Segment2d::Offset;
 Segment2d (Segment2d::*OffsetSegmentDouble)(const GEOM_FT &d) const= &Segment2d::Offset;
@@ -87,8 +89,12 @@ class_<Segment2d, bases<Linear2d> >("Segment2d")
   .def("dist2", &Segment2d::dist2,"return the squared distance to the point.")
   .def("getLength", &Segment2d::getLength,"Return the length of the segment.")
   .def("getCenterOfMass", &Segment2d::getCenterOfMass, "Return the position of the center of mass.")
-  .def("angleVector",AngleVector)
-  .def("angleSegment",AngleSegment)
+  .def("getAngle",AngleVector2D,"Returns the angle between the line segment and the vector.")
+  .def("getAngle",AngleLine2D,"Returns the angle between the line segment and the line.")
+  .def("getAngle",AngleRay2D,"Returns the angle between the line segment and the ray.")
+  .def("getAngle",AngleSegment2D,"Returns the angle between both line segments.")
+  .def("angleVector",AngleVector2D,"DEPRECATED use getAngle; returns the angle between the line segment and the vector.")
+  .def("angleSegment",AngleSegment2D,"DEPRECATED use getAngle; returns the angle between the line segments.")
   .def("offsetVector",OffsetSegmentVector)
   .def("offsetDouble",OffsetSegmentDouble)
   .def("getIntersectionWithLine", segment2dIntersectionWithLine, "Return the intersection with the line argument.")
@@ -142,6 +148,8 @@ class_<Ray3d, bases<Linear3d> >("Ray3d")
   ;
 
 GEOM_FT (Segment3d::*AngleVector3D)(const Vector3d &v) const= &Segment3d::getAngle;
+GEOM_FT (Segment3d::*AngleLine3D)(const Line3d &) const= &Segment3d::getAngle;
+GEOM_FT (Segment3d::*AngleRay3D)(const Ray3d &) const= &Segment3d::getAngle;
 GEOM_FT (Segment3d::*AngleSegment3D)(const Segment3d &v) const= &Segment3d::getAngle;
 GeomObj::list_Pos3d (Segment3d::*segment3dIntersectionWithLine)(const Line3d &) const= &Segment3d::getIntersection;
 GeomObj::list_Pos3d (Segment3d::*segment3dIntersectionWithRay)(const Ray3d &) const= &Segment3d::getIntersection;
@@ -160,6 +168,8 @@ class_<Segment3d, bases<Linear3d> >("Segment3d")
   .def("getCenterOfMass", &Segment3d::getCenterOfMass)
   .def("getPoint",&Segment3d::PtoParametricas,"return a point on the segment.")
   .def("getAngle",AngleVector3D,"Returns the angle between the line segment and the vector.")
+  .def("getAngle",AngleLine3D,"Returns the angle between the line segment and the line.")
+  .def("getAngle",AngleRay3D,"Returns the angle between the line segment and the ray.")
   .def("getAngle",AngleSegment3D,"Returns the angle between both line segments.")
   .def("getIntersectionWithLine", segment3dIntersectionWithLine, "Return the intersection with the line argument.")
   .def("getIntersectionWithRay", segment3dIntersectionWithRay, "Return the intersection with the ray argument.")

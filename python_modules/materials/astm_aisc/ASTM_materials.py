@@ -1927,13 +1927,16 @@ class ConnectedMember(connected_members.ConnectedMemberMetaData):
                        #                 Abolhassan Astaneh, Steven M. Call and Kurt M. McMullin
         # check spacing.
         distBetweenToes= self.shape.getDistanceBetweenWebToes()
+        depth= self.shape.h()
+        print('distance between toes: ', distBetweenToes)
+        print('depth: ', depth)
         if(distBetweenToes<numberOfBolts*spacing):
             fmt= '{:.2f}'
             oldSpacing= spacing
             newSpacing= distBetweenToes/numberOfBolts
             incrementFraction= (newSpacing-oldSpacing)/oldSpacing
             warningMessage= 'This steel shape has not enough distance between toes to accomodate '+str(numberOfBolts)+' bolts; '
-            if(incrementFraction>-0.15): # reduce spacing
+            if(incrementFraction>-0.05): # reduce spacing
                 warningMessage+= ' spacing will be reduced from: '+fmt.format(oldSpacing*1e3)+' mm to: '+fmt.format(newSpacing*1e3)+' mm ('+fmt.format(incrementFraction*100.0)+') %.'
                 lmsg.warning(warningMessage)
                 spacing= newSpacing

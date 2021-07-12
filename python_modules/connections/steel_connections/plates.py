@@ -264,8 +264,19 @@ class Plate(SteelPanel):
         coreContour3d= self.getCoreContour3d()
         if(self.attachedMemberCenter): # there is an attached member.
             contourPlg= geom.Polygon3d(coreContour3d)
+            # Get distal edge.
             distalEdgeIndex= contourPlg.getIndexOfDistalEdge(self.attachedMemberCenter)
             distalEdge= contourPlg.getEdge(distalEdgeIndex)
+            centroid= contourPlg.getCenterOfMass()
+            distalEdgeAngle= distalEdge.getAngle(geom.Line3d(self.attachedMemberCenter, centroid))
+            angleTol= 5/180.0*math.pi # five degrees.
+            if((abs(distalEdgeAngle)<angleTol) or (abs(distalEdgeAngle-math.pi)<angleTol)):
+                # Distal side is almost parallel to the forces in the connection;
+                # we take the next one.
+                distalEdgeIndex-= 1
+                distalEdge= contourPlg.getEdge(distalEdgeIndex)
+                distalEdgeAngle= distalEdge.getAngle(geom.Line3d(self.attachedMemberCenter, centroid))
+                
             self.contour= list()
             fromPoint= distalEdge.getFromPoint() # contour first point.
             toPoint= distalEdge.getToPoint() # contour last point.
@@ -318,6 +329,7 @@ class Plate(SteelPanel):
                         weldPlineVertices.reverse()
                     if(self.notched): # use notches
                         plateHeight= fromPoint.dist(toPoint)
+                        print('plate height= ', plateHeight)
                         limitLineHeight= weldPlineVertices[-1].dist(weldPlineVertices[0])
                         # Compute corner positions.
                         limitLine= geom.Line3d(weldPlineVertices[0],weldPlineVertices[-1])                    

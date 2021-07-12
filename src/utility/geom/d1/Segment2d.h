@@ -122,6 +122,8 @@ class Segment2d : public Linear2d
     virtual Vector2d getJVector(void) const;
     GEOM_FT getAngle(const Vector2d &v) const;
     GEOM_FT getSignedAngle(const Vector2d &v) const;
+    GEOM_FT getAngle(const Line2d &r) const;
+    GEOM_FT getAngle(const Ray2d &sr) const;
     GEOM_FT getAngle(const Segment2d &v) const;
     GEOM_FT getSignedAngle(const Segment2d &v) const;
     GEOM_FT XAxisAngle(void) const;
