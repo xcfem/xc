@@ -102,6 +102,10 @@ class Polygon3d: public D2to3d
     GEOM_FT dist(const Pos3d &p) const;
     GEOM_FT distSigno2(const Pos3d &p) const;
     GEOM_FT dist2(const Pos3d &p) const;
+    
+    Segment3d Clip(const Line3d &) const;
+    Segment3d Clip(const Ray3d &) const;
+    Segment3d Clip(const Segment3d &) const;
 
     bool intersects(const Line3d &) const;
     Segment3d getIntersection(const Line3d &) const;

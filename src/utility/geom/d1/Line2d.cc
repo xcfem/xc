@@ -323,9 +323,22 @@ GeomObj::list_Pos2d Line2d::Ordena(const GeomObj::list_Pos2d &ptos) const
       tmp.push_back(Pos3d((*i).x(),(*i).y(),rp.Parametro(*i)));
 
     sort(tmp.begin(),tmp.end(),menor_param);
-
-    for(GeomObj::list_Pos3d::const_iterator i= tmp.begin();i!=tmp.end();i++)
-      retval.push_back(Pos2d((*i).x(),(*i).y()));
+    if(!tmp.empty())
+      {
+        GeomObj::list_Pos3d::const_iterator i= tmp.begin();
+	Pos2d lastPoint= Pos2d((*i).x(),(*i).y());
+	retval.push_back(lastPoint);
+	i++;
+        for(;i!=tmp.end();i++)
+	  {
+	    const Pos2d pt((*i).x(),(*i).y());
+	    if(pt.dist2(lastPoint)>1e-6)
+	      {
+                retval.push_back(Pos2d((*i).x(),(*i).y()));
+	        lastPoint= pt;
+	      }
+	  }
+      }
     return retval;
   }
 

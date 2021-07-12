@@ -336,6 +336,78 @@ GEOM_FT Polygon3d::dist(const Pos3d &p) const
     return (retval >= 0 ? retval : 0);
   }
 
+//! @brief Return the intersection of the polygon with the line.
+Segment3d Polygon3d::Clip(const Line3d &r) const
+  {
+    Segment3d retval;
+    const GEOM_FT angle= getPlane().getAngle(r);
+    const GEOM_FT angleTol= 1/180.0*M_PI; // one degree
+    if(angle>angleTol)
+      {
+        std::cerr << getClassName() << "::" << __FUNCTION__
+	          << "; line: " << r
+	  	  << " is not contained in the polygon plane."
+	          << std::endl;
+	retval.setExists(false);
+      }
+    else
+      {
+	Line2d l2d= to_2d(r);
+	Segment2d s2d= plg2d.Clip(l2d);
+	retval= to_3d(s2d);
+      }	
+    return retval;
+  }
+
+//! @brief Return the intersection of the polygon and the ray.
+Segment3d Polygon3d::Clip(const Ray3d &sr) const
+  {
+    Segment3d retval;
+    const GEOM_FT angle= getPlane().getAngle(sr);
+    const GEOM_FT angleTol= 1/180.0*M_PI; // one degree
+    if(angle>angleTol)
+      {
+        std::cerr << getClassName() << "::" << __FUNCTION__
+	          << "; ray: " << sr
+	  	  << " is not contained in the polygon plane."
+	          << std::endl;
+	retval.setExists(false);
+      }
+    else
+      {
+	Ray2d r2d= to_2d(sr);
+	Segment2d s2d= plg2d.Clip(r2d);
+	retval= to_3d(s2d);
+      }	
+    return retval;
+  }
+
+//! @brief Return the intersection of the polygon and the segment.
+Segment3d Polygon3d::Clip(const Segment3d &sg) const
+  {
+    Segment3d retval;
+    const GEOM_FT angle= getPlane().getAngle(sg);
+    const GEOM_FT angleTol= 1/180.0*M_PI; // one degree
+    if(angle>angleTol)
+      {
+        std::cerr << getClassName() << "::" << __FUNCTION__
+	          << "; segment: " << sg
+	  	  << " is not contained in the polygon plane."
+	          << std::endl;
+	retval.setExists(false);
+      }
+    else
+      {
+	Segment2d sg2d= to_2d(sg);
+        Segment2d s2d= plg2d.Clip(sg2d);
+	if(s2d.exists())
+	  { retval= to_3d(s2d); }
+	else
+	  retval.setExists(false);
+      }	
+    return retval;
+  }
+
 //! @brief Return true if the line intersects the polygon.
 bool Polygon3d::intersects(const Line3d &r) const
   {

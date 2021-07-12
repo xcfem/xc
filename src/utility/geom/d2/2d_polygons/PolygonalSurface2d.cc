@@ -514,6 +514,8 @@ Segment2d PolygonalSurface2d::Clip(const Segment2d &sg) const
 	            << "; the polygon clips the segment on "
                     << sg_list.size() << " segments." << std::endl;
       }
+    else
+      { retval.setExists(false); }
     return retval;
   }
 
@@ -595,6 +597,8 @@ list<Segment2d> intersection(const PolygonalSurface2d &pg,const Segment2d &sg)
     const Pos2d dest= sg.getToPoint();
     if(pg.In(org))
       ptos.push_back(dest);
+    if(ptos.size()<2)
+      return retval;
 
     GeomObj::list_Pos2d ordenados= sg.Ordena(ptos);
 

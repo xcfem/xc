@@ -355,6 +355,7 @@ GEOM_FT Segment3d::getAngle(const Ray3d &sr) const
 //! @brief Returns angle with another line segment.
 GEOM_FT Segment3d::getAngle(const Segment3d &s) const
   { return getAngle(s.VDir()); }
+
 GEOM_FT angle(const Segment3d &r,const Vector3d &v)
   { return r.getAngle(v); }
 

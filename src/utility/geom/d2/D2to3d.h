@@ -29,8 +29,10 @@
 
 class Plane;
 class Line2d;
+class Ray2d;
 class Segment2d;
 class Line3d;
+class Ray3d;
 class Segment3d;
 class Pos3dArray;
 class Pos2dArray;
@@ -67,10 +69,12 @@ class D2to3d: public Surface3d
 
     Pos3d to_3d(const Pos2d &) const;
     Line3d to_3d(const Line2d &) const;
+    Ray3d to_3d(const Ray2d &) const;
     Segment3d to_3d(const Segment2d &) const;
     Pos3dArray to_3d(const Pos2dArray &) const;
     Pos2d to_2d(const Pos3d &) const;
     Line2d to_2d(const Line3d &) const;
+    Ray2d to_2d(const Ray3d &) const;
     Segment2d to_2d(const Segment3d &) const;
     const Ref2d3d &getRef(void) const
       { return ref; }

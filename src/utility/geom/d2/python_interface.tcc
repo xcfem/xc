@@ -118,9 +118,14 @@ class_<GeneralEquationOfPlane, boost::noncopyable>("GeneralEquationOfPlane", no_
 
 double (Plane::*PlaneAngle)(const Plane &p) const= &Plane::getAngle;
 double (Plane::*getAngleWithVector3d)(const Vector3d &) const= &Plane::getAngle;
+double (Plane::*getAngleWithLine3d)(const Line3d &) const= &Plane::getAngle;
+double (Plane::*getAngleWithRay3d)(const Ray3d &) const= &Plane::getAngle;
+double (Plane::*getAngleWithSegment3d)(const Segment3d &) const= &Plane::getAngle;
 Pos3d (Plane::*Pos3dProjection)(const Pos3d &) const= &Plane::Projection;
 Vector3d (Plane::*Vector3dProjection)(const Vector3d &) const= &Plane::Projection;
 Line3d (Plane::*Line3dProjection)(const Line3d &) const= &Plane::Projection;
+Ray3d (Plane::*Ray3dProjection)(const Ray3d &) const= &Plane::Projection;
+Segment3d (Plane::*Segment3dProjection)(const Segment3d &) const= &Plane::Projection;
 Line3d (Plane::*IntersPlane)(const Plane &) const= &Plane::getIntersection;
 Pos3d (Plane::*IntersLine3d)(const Line3d &) const= &Plane::getIntersection;
 Pos3d (Plane::*IntersRay3d)(const Ray3d &) const= &Plane::getIntersection;
@@ -134,11 +139,16 @@ class_<Plane, bases<Surface3d> >("Plane3d")
   .def(init<Line3d,Pos3d>()) 
   .def(init<GeneralEquationOfPlane>()) 
   .def(init<Plane>())
-  .def("getAngle",PlaneAngle)
-  .def("getAngle",getAngleWithVector3d)
+  .def("getAngle",PlaneAngle, "Return the angle between the planes.")
+  .def("getAngle",getAngleWithVector3d, "Return the angle with the vector.")
+  .def("getAngle",getAngleWithLine3d, "Return the angle with the line.")
+  .def("getAngle",getAngleWithRay3d, "Return the angle with the ray.")
+  .def("getAngle",getAngleWithSegment3d, "Return the angle with the segment.")
   .def("getProjection",Pos3dProjection, "Return the projection of the point.")
   .def("getProjection",Vector3dProjection, "Return the projection of the vector.")
   .def("getProjection",Line3dProjection, "Return the projection of the line.")
+  .def("getProjection",Ray3dProjection, "Return the projection of the ray.")
+  .def("getProjection",Segment3dProjection, "Return the projection of the segment.")
   .def("getXYTrace",&Plane::XYTrace,"return the trace on the XY plane.")
   .def("getXZTrace",&Plane::XZTrace,"return the trace on the XZ plane.")
   .def("getYZTrace",&Plane::YZTrace,"return the trace on the YZ plane.")
@@ -161,6 +171,9 @@ class_<Plane, bases<Surface3d> >("Plane3d")
   .def("negativeSide", &Plane::negativeSide, " return true if the point is on the negative side of the plane (local coordinate z<0).")
   ;
 
+Segment3d (Polygon3d::*clipLine3d)(const Line3d &) const=&Polygon3d::Clip;
+Segment3d (Polygon3d::*clipRay3d)(const Ray3d &) const=&Polygon3d::Clip;
+Segment3d (Polygon3d::*clipSegment3d)(const Segment3d &) const=&Polygon3d::Clip;
 Segment3d (Polygon3d::*IntersPlgPlane)(const Plane &) const= &Polygon3d::getIntersection;
 class_<Polygon3d, bases<D2to3d> >("Polygon3d")
   .def(init<Pos3d,Pos3d,Pos3d>())
@@ -179,6 +192,9 @@ class_<Polygon3d, bases<D2to3d> >("Polygon3d")
   .def("getVertexList",&Polygon3d::getVertexListPy,"Return a Python list containing the positions of the polygon vertices.")
   .def("dist",&Polygon3d::dist,"Return the distance from point to this polygon.")
   .def("getCenterOfMass", &Polygon3d::getCenterOfMass, " return the center of mass.")
+  .def("clip",clipLine3d, "Clips the line by the polygonal surface.")
+  .def("clip",clipRay3d, "Clips the ray by the polygonal surface.")
+  .def("clip",clipSegment3d, "Clips the segment by the polygonal surface.")
   .def("getIntersection",IntersPlgPlane,"return the intersection with the plane argument.")
   .def("getIndexOfDistalEdge", &Polygon3d::getIndexOfDistalEdge,"Return the index of the distal edge with respect to the point argument.")
   .def("getIndexOfProximalEdge", &Polygon3d::getIndexOfProximalEdge,"Return the index of the proximal edge with respect to the point argument.")

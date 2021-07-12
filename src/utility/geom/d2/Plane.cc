@@ -186,6 +186,34 @@ Line3d Plane::Projection(const Line3d &r) const
     return retval;
   }
 
+//! @brief Return the projection of the ray on the plane.
+Ray3d Plane::Projection(const Ray3d &sr) const
+  {
+    Ray3d retval;
+    const Pos3d p0= Projection(sr.Point(0));
+    const Pos3d p1= Projection(sr.Point(100));
+    const double d= p0.dist(p1);
+    if(d>mchne_eps_dbl)
+      retval= Ray3d(p0,p1);
+    else
+      retval.setExists(false);
+    return retval;
+  }
+
+//! @brief Return the projection of the ray on the plane.
+Segment3d Plane::Projection(const Segment3d &s) const
+  {
+    Segment3d retval;
+    const Pos3d p0= Projection(s.getFromPoint());
+    const Pos3d p1= Projection(s.getToPoint());
+    const double d= p0.dist(p1);
+    if(d>mchne_eps_dbl)
+      retval= Segment3d(p0,p1);
+    else
+      retval.setExists(false);
+    return retval;
+  }
+
 GeomObj3d::list_Pos3d Plane::Projection(const GeomObj3d::list_Pos3d &ptos) const
   {
     GeomObj3d::list_Pos3d retval;
@@ -471,6 +499,18 @@ GEOM_FT Plane::getAngle(const Plane &p) const
 //! @brief Return the angle between this plane and the argument.
 GEOM_FT Plane::getAngle(const Vector3d &v) const
   { return angle(*this,v); }
+
+//! @brief Returns the angle with the line argument.
+GEOM_FT Plane::getAngle(const Line3d &r) const
+  { return getAngle(r.VDir()); }
+
+//! @brief Returns the angle with the ray argument.
+GEOM_FT Plane::getAngle(const Ray3d &sr) const
+  { return getAngle(sr.VDir()); }
+
+//! @brief Returns angle with another line segment.
+GEOM_FT Plane::getAngle(const Segment3d &s) const
+  { return getAngle(s.VDir()); }
 
 //! @brief Returns the slope angle with respect to the XY plane
 GEOM_FT Plane::getSlopeAngleXY(void) const

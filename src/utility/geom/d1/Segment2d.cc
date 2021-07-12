@@ -420,10 +420,10 @@ GeomObj2d::list_Pos2d Segment2d::getIntersection(const Ray2d &sr) const
 
 //! @brief Return the intersection of the segments, if
 //! the intersection doesn't exists returns an empty list.
-GeomObj2d::list_Pos2d Segment2d::getIntersection(const Segment2d &r2) const
+GeomObj2d::list_Pos2d Segment2d::getIntersection(const Segment2d &sg2) const
   {
     GeomObj2d::list_Pos2d retval;
-    if(*this == r2)
+    if(*this == sg2)
       {
         cerr << getClassName() << "::" << __FUNCTION__
 	     << "; segments are de same, all its points belong to the"
@@ -431,14 +431,14 @@ GeomObj2d::list_Pos2d Segment2d::getIntersection(const Segment2d &r2) const
         retval.push_back(getCenterOfMass()); //Return the segment center.
         return retval;
       }
-    if(intersects(r2))
+    if(intersects(sg2))
       {
         CGAL::Object result;
         CGPoint_2 ptoi;
         CGSegment_2 segi;
-        result = CGAL::intersection(cgseg,r2.cgseg);
+        result = CGAL::intersection(cgseg,sg2.cgseg);
         if(CGAL::assign(ptoi, result))
-          retval.push_back(Pos2d(ptoi));
+	  { retval.push_back(Pos2d(ptoi)); }
         else if(CGAL::assign(segi, result))
 	  {
 	    const Segment2d tmp(segi);
@@ -449,7 +449,7 @@ GeomObj2d::list_Pos2d Segment2d::getIntersection(const Segment2d &r2) const
             cerr << getClassName() << "::" << __FUNCTION__
 		 << "; unknown error." << endl
                  << "s: " << *this << endl
-                 << "s2: " << r2 << endl;
+                 << "s2: " << sg2 << endl;
           }
       }
     return retval;

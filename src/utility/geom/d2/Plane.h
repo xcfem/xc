@@ -82,6 +82,8 @@ class Plane : public Surface3d
     Pos3d Projection(const Pos3d &) const;
     Vector3d Projection(const Vector3d &) const;
     Line3d Projection(const Line3d &) const;
+    Ray3d Projection(const Ray3d &) const;
+    Segment3d Projection(const Segment3d &) const;
     GeomObj3d::list_Pos3d Projection(const GeomObj3d::list_Pos3d &) const;
     //Polygon3d Projection(const Polygon3d &) const;
 
@@ -150,6 +152,9 @@ class Plane : public Surface3d
 
     GEOM_FT getAngle(const Plane &p) const;
     GEOM_FT getAngle(const Vector3d &) const;
+    GEOM_FT getAngle(const Line3d &) const;
+    GEOM_FT getAngle(const Ray3d &) const;
+    GEOM_FT getAngle(const Segment3d &) const;
     GEOM_FT getSlopeAngleXY(void) const;
     GEOM_FT getSlopeAngleXZ(void) const;
     GEOM_FT getSlopeAngleYZ(void) const;

@@ -23,9 +23,11 @@
 #include "D2to3d.h"
 #include "utility/geom/d2/Plane.h"
 #include "utility/geom/d1/Line2d.h"
+#include "utility/geom/d1/Ray2d.h"
 #include "utility/geom/d1/Segment2d.h"
 #include "utility/geom/d1/Segment3d.h"
 #include "utility/geom/d1/Line3d.h"
+#include "utility/geom/d1/Ray3d.h"
 #include "utility/geom/d3/GeomGroup3d.h"
 #include "utility/geom/d3/HalfSpace3d.h"
 #include "utility/geom/lists/auxiliary.h"
@@ -102,6 +104,10 @@ Pos3d D2to3d::to_3d(const Pos2d &p2d) const
 Line3d D2to3d::to_3d(const Line2d &l2d) const
   { return Line3d(to_3d(l2d.Point(0)),to_3d(l2d.Point(100))); }
 
+//! @brief Return the 3D ray corresponding to the 2D ray argument.
+Ray3d D2to3d::to_3d(const Ray2d &r2d) const
+  { return Ray3d(to_3d(r2d.getFromPoint()),to_3d(r2d.Point(100))); }
+
 //! @brief Return the 3D segment corresponding to the 2D segment argument.
 Segment3d D2to3d::to_3d(const Segment2d &sg2d) const
   { return Segment3d(to_3d(sg2d.getFromPoint()),to_3d(sg2d.getToPoint())); }
@@ -128,6 +134,14 @@ Line2d D2to3d::to_2d(const Line3d &l3d) const
     Pos2d p0= to_2d(l3d.Point(0));
     Pos2d p1= to_2d(l3d.Point(100));
     return Line2d(p0,p1);
+  }
+
+//! @brief Return the 2D ray corresponding to the 3D ray argument.
+Ray2d D2to3d::to_2d(const Ray3d &r3d) const
+  {
+    Pos2d p0= to_2d(r3d.getFromPoint());
+    Pos2d p1= to_2d(r3d.Point(100));
+    return Ray2d(p0,p1);
   }
 
 //! @brief Return the 2D segment corresponding to the 3D segment argument.
