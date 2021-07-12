@@ -62,6 +62,7 @@ class Segment3d : public Linear3d
     bool downwards(void) const;
     const Pos3d Point(const int &i) const;
     Pos3d PtoParametricas(const GEOM_FT &lambda) const;
+    Pos3d getMidPoint(void) const;
     double getParamNaturalCoord(const GEOM_FT &) const;
     Pos3d getPointNaturalCoord(const GEOM_FT &chi) const;
     GEOM_FT getLambda(const Pos3d &p) const;

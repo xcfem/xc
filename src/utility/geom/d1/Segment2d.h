@@ -66,6 +66,7 @@ class Segment2d : public Linear2d
     const Pos2d Point(const int &i) const
       { return Pos2d(cgseg.point(i)); }
     Pos2d PtoParametricas(const GEOM_FT &) const;
+    Pos2d getMidPoint(void) const;
     double getParamNaturalCoord(const GEOM_FT &) const;
     Pos2d getPointNaturalCoord(const GEOM_FT &) const;
     inline bool EsVertical(void) const

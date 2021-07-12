@@ -105,6 +105,10 @@ const Pos3d Segment3d::Point(const int &i) const
 Pos3d Segment3d::PtoParametricas(const GEOM_FT &lambda) const
   { return Point(0)+lambda*VDir(); }
 
+//! @brief Return the mid point of the segment.
+Pos3d Segment3d::getMidPoint(void) const
+  { return PtoParametricas(0.5); }
+
 //! @brief Return the parametric coordinate that corresponds
 //! to the natural coordinate being passed as parameter.
 double Segment3d::getParamNaturalCoord(const GEOM_FT &chi) const

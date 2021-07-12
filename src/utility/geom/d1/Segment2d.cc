@@ -260,6 +260,10 @@ GEOM_FT Segment2d::dist(const Pos2d &p) const
 Pos2d Segment2d::PtoParametricas(const GEOM_FT &lambda) const
   { return getFromPoint()+lambda*VDir().getNormalized(); }
 
+//! @brief Return the mid point of the segment.
+Pos2d Segment2d::getMidPoint(void) const
+  { return PtoParametricas(0.5); }
+
 //! @brief Return the parametric coordinate that corresponds to the
 //! natural coordinate argument.
 double Segment2d::getParamNaturalCoord(const GEOM_FT &chi) const
