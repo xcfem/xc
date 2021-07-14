@@ -322,6 +322,7 @@ echo "$BLEU" "Solver tests." "$NORMAL"
 python tests/solution/superlu_solver_test_01.py
 python tests/solution/superlu_solver_test_02.py
 python tests/solution/umf_solver_test_01.py
+python tests/solution/mumps_solver_test_01.py
 python tests/solution/ill_conditioning_01.py
 
 ## Constraint handlers tests.

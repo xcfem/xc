@@ -405,7 +405,7 @@ int XC::DistributedSparseGenRowLinSOE::setSize(Graph &theGraph)
 	
     factored = false;
     
-    if(n > Bsize) { // we have to get space for the vectors
+    if(n > B.Size()) { // we have to get space for the vectors
 	
 	// delete the old	
 	if(B != 0) delete [] B;
@@ -420,11 +420,9 @@ int XC::DistributedSparseGenRowLinSOE::setSize(Graph &theGraph)
             std::cerr << "WARNING XC::DistributedSparseGenRowLinSOE::DistributedSparseGenRowLinSOE :";
 	    std::cerr << " ran out of memory for vectors (size) (";
 	    std::cerr << size << ") \n";
-	    size = 0; Bsize = 0;
+	    size = 0; 
 	    result =  -1;
         }
-	else
-	    Bsize = n;
     }
 
     // zero the vectors

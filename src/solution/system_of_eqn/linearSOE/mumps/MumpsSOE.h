@@ -76,8 +76,7 @@ class LinearSOESolver;
 class MumpsSOE : public SparseGenSOEBase
   {
   protected:
-    ID colA, rowA, rowB, colStartA; //!< int arrays containing info about coeficientss in A
-    int Asize;    // size of the 1d array holding A
+    ID colA, rowA, colStartA; //!< int arrays containing info about coeficientss in A
     int matType;
 
   public:
@@ -87,6 +86,9 @@ class MumpsSOE : public SparseGenSOEBase
     //MumpsSOE(SolutionStrategy *, MumpsSolver &theSolver, int matType=0);        
     //MumpsSOE(SolutionStrategy *, LinearSOESolver &theSolver, int classTag, int matType = 0);        
     virtual ~MumpsSOE(void);
+
+    void fortranIndexing(void);
+    void cppIndexing(void);
 
     virtual int setSize(Graph &theGraph);
     virtual int addA(const Matrix &, const ID &, double fact = 1.0);

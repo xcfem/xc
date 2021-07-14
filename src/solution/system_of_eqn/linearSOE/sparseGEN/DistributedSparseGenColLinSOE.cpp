@@ -131,7 +131,7 @@ int XC::DistributedSparseGenColLinSOE::setSize(Graph &theGraph)
            workArea.resize(nnz);
          }
 
-       if(size > Bsize)
+       if(size > B.Size())
          { // we have to get space for the vectors
            colStartA.resize(size+1);
          }

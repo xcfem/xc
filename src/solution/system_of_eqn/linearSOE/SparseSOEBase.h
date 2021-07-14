@@ -42,7 +42,6 @@ class SparseSOEBase: public FactoredSOEBase
   {
   protected:
     int nnz; //! number of non-zeros in A
-    int Bsize;
 
     SparseSOEBase(SolutionStrategy *,int classTag,int N= 0, int NNZ= 0);
   };

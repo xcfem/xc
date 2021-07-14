@@ -36,7 +36,7 @@ extern "C" {
 
 namespace XC {
 
-class MumpsSolverBase : public LinearSOESolver
+class MumpsSolverBase: public LinearSOESolver
   {
   private:
     static bool MPIInitialized(void);
@@ -44,16 +44,18 @@ class MumpsSolverBase : public LinearSOESolver
     static int finalizeMPI(void);
   protected:
     DMUMPS_STRUC_C id;
-    bool init;
+    bool mumps_init;
     int icntl14;
     int icntl7;
     bool needsSetSize;
 
+    int terminateMumps(void);
     virtual int initializeMumps(void)= 0;
     virtual int solveAfterInitialization(void)= 0;
     
     int sendData(Communicator &);
     int recvData(const Communicator &);
+    std::string getMUMPSErrorMessage(void);
   public:
     MumpsSolverBase(int classTag, int ICNTL7=7, int ICNTL14=20);
     virtual ~MumpsSolverBase(void);

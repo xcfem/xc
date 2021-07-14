@@ -66,17 +66,17 @@
 
 XC::MumpsSOE::MumpsSOE(SolutionStrategy *owr)
   :SparseGenSOEBase(owr, LinSOE_TAGS_MumpsSOE),
-  Asize(0), matType(0)
+  matType(0)
   {}
 
 XC::MumpsSOE::MumpsSOE(SolutionStrategy *owr, int classTag)
   : SparseGenSOEBase(owr, classTag),
-  Asize(0), matType(0)
+  matType(0)
   {}
 
 // XC::MumpsSOE::MumpsSOE(SolutionStrategy *owr, MumpsSolver &the_Solver, int _matType)
 //   : SparseGenSOEBase(owr, the_Solver, LinSOE_TAGS_MumpsSOE),
-//     Asize(0), matType(_matType)
+//     matType(_matType)
 //   {
 //     the_Solver.setSparseGenSOEBase(*this);
 //   }
@@ -85,7 +85,7 @@ XC::MumpsSOE::MumpsSOE(SolutionStrategy *owr, int classTag)
 
 // XC::MumpsSOE::MumpsSOE(SolutionStrategy *owr, LinearSOESolver &the_Solver, int classTag, int _matType)
 //   :SparseGenSOEBase(owr, the_Solver, classTag),
-//    Asize(0), matType(_matType)
+//    matType(_matType)
 //   {}
 
 //! @brief Virtual constructor.
@@ -98,6 +98,26 @@ XC::MumpsSOE::~MumpsSOE(void)
 int XC::MumpsSOE::setMumpsSolver(MumpsSolver &newSolver)
   {
     return this->setSolver(&newSolver);
+  }
+
+//! @brief Increment row and col A values by 1 for mumps fortran indexing
+void XC::MumpsSOE::fortranIndexing(void)
+  {
+    for(int i = 0; i < nnz; i++)
+      {
+	rowA[i]++;
+	colA[i]++;
+      }
+  }
+
+//! @brief Decrement row and col A values by 1 to return to C++ indexing
+void XC::MumpsSOE::cppIndexing(void)
+  {
+    for(int i = 0; i < nnz; i++)
+      {
+	rowA[i]--;
+	colA[i]--;
+      }
   }
 
 int XC::MumpsSOE::setSize(Graph &theGraph)
@@ -115,21 +135,20 @@ int XC::MumpsSOE::setSize(Graph &theGraph)
         newNNZ += theAdjacency.size()+1; // the +1 is for the diag entry
       }
 
-    if (matType !=  0) {
-      newNNZ -= size;
-      newNNZ /= 2;
-      newNNZ += size;
-    }
+    if(matType !=  0)
+      {
+        newNNZ -= size;
+        newNNZ /= 2;
+        newNNZ += size;
+      }
 
     nnz = newNNZ;
 
-    if (newNNZ > Asize)
+    if(newNNZ > A.Size())
       { // we have to get more space for A and rowA
 	 A.resize(newNNZ);
 	 rowA.resize(newNNZ);
 	 colA.resize(newNNZ);
-
-         Asize = newNNZ;
       }
 
     // zero the matrix
@@ -137,14 +156,13 @@ int XC::MumpsSOE::setSize(Graph &theGraph)
 
     factored = false;
 
-    if (size > Bsize)
+    if(size > B.Size())
       { // we have to get space for the vectors
 
       // resize
 	B.resize(size);
         X.resize(size);
         colStartA.resize(size+1); 
-	Bsize = size;
       }
 
     // zero the vectors
@@ -154,114 +172,121 @@ int XC::MumpsSOE::setSize(Graph &theGraph)
     // fill in colStartA and rowA
     if(size != 0)
       {
-      colStartA[0] = 0;
-      int startLoc = 0;
-      int lastLoc = 0;
-      for (int a=0; a<size; a++) {
-
-	theVertex = theGraph.getVertexPtr(a);
-	if (theVertex == 0) {
-	  std::cerr << getClassName() << "::" << __FUNCTION__
-	            << "; WARNING vertex " << a
-		    << " not in graph! - size set to 0\n";
-	  size = 0;
-	  return -1;
-	}
-
-	int vertexTag = theVertex->getTag();
-	rowA[lastLoc++] = vertexTag; // place diag in first
-	const std::set<int> &theAdjacency = theVertex->getAdjacency();
-
-	// now we have to place the entries in the ID into order in rowA
-
-	if (matType != 0) {
-
-      for(std::set<int>::const_iterator i=theAdjacency.begin(); i!=theAdjacency.end(); i++)
-	{
-	    int row= *i;
-	    if (row > vertexTag) {
-	      bool foundPlace = false;
-	      // find a place in rowA for current col
-	      for (int j=startLoc; j<lastLoc; j++)
-		if (rowA[j] > row) { 
-		  // move the entries already there one further on
-		  // and place col in current location
-		  for (int k=lastLoc; k>j; k--)
-		    rowA[k] = rowA[k-1];
-		  rowA[j] = row;
-		  foundPlace = true;
-		  j = lastLoc;
-		}
-
-	      if (foundPlace == false) // put in at the end
-		rowA[lastLoc] = row;
-	      lastLoc++;
-	    }
-	  }
-
-	} else {
-
-      for(std::set<int>::const_iterator i=theAdjacency.begin(); i!=theAdjacency.end(); i++)
+	colStartA[0] = 0;
+	int startLoc = 0;
+	int lastLoc = 0;
+	for(int a=0; a<size; a++)
 	  {
-	    int row = *i;
-	    bool foundPlace = false;
-	    // find a place in rowA for current col
-	    for (int j=startLoc; j<lastLoc; j++)
-	      if (rowA[j] > row) { 
-		// move the entries already there one further on
-		// and place col in current location
-		for (int k=lastLoc; k>j; k--)
-		  rowA[k] = rowA[k-1];
-		rowA[j] = row;
-		foundPlace = true;
-		j = lastLoc;
+	    theVertex = theGraph.getVertexPtr(a);
+	    if(theVertex == 0)
+	      {
+		std::cerr << getClassName() << "::" << __FUNCTION__
+			  << "; WARNING vertex " << a
+			  << " not in graph! - size set to 0\n";
+		size = 0;
+		return -1;
 	      }
-	    if (foundPlace == false) // put in at the end
-	      rowA[lastLoc] = row;
 
-	    lastLoc++;
+	    int vertexTag = theVertex->getTag();
+	    rowA[lastLoc++] = vertexTag; // place diag in first
+	    const std::set<int> &theAdjacency = theVertex->getAdjacency();
+
+	    // now we have to place the entries in the ID into order in rowA
+
+	    if(matType != 0)
+	      {
+		for(std::set<int>::const_iterator i=theAdjacency.begin(); i!=theAdjacency.end(); i++)
+		  {
+		    const int row= *i;
+		    if(row > vertexTag)
+		      {
+			bool foundPlace = false;
+			// find a place in rowA for current col
+			for(int j=startLoc; j<lastLoc; j++)
+			  if(rowA[j] > row)
+			    { 
+			      // move the entries already there one further on
+			      // and place col in current location
+			      for (int k=lastLoc; k>j; k--)
+				rowA[k] = rowA[k-1];
+			      rowA[j] = row;
+			      foundPlace = true;
+			      j = lastLoc;
+			    }
+
+			if(foundPlace == false) // put in at the end
+			  rowA[lastLoc] = row;
+			lastLoc++;
+		      }
+		  }
+
+	      }
+	    else
+	      {
+
+		for(std::set<int>::const_iterator i=theAdjacency.begin(); i!=theAdjacency.end(); i++)
+		    {
+		      const int row = *i;
+		      bool foundPlace = false;
+		      // find a place in rowA for current col
+		      for(int j=startLoc; j<lastLoc; j++)
+			if(rowA[j] > row)
+			  { 
+			    // move the entries already there one further on
+			    // and place col in current location
+			    for (int k=lastLoc; k>j; k--)
+			      rowA[k] = rowA[k-1];
+			    rowA[j] = row;
+			    foundPlace = true;
+			    j = lastLoc;
+			  }
+		      if(foundPlace == false) // put in at the end
+			rowA[lastLoc] = row;
+
+		      lastLoc++;
+		    }
+	      }
+	    colStartA[a+1] = lastLoc;;	    
+	    startLoc = lastLoc;
 	  }
-	}
-
-	colStartA[a+1] = lastLoc;;	    
-	startLoc = lastLoc;
       }
-    }
 
     // fill in colA
     int count = 0;
-    for (int i=0; i<size; i++)
-      for (int k=colStartA[i]; k<colStartA[i+1]; k++)
+    for(int i=0; i<size; i++)
+      for(int k=colStartA[i]; k<colStartA[i+1]; k++)
 	colA[count++] = i;
 
     // invoke setSize() on the Solver    
     LinearSOESolver *the_Solver = this->getSolver();
-    int solverOK = the_Solver->setSize();
-    if (solverOK < 0) {
-      std::cerr << getClassName() << "::" << __FUNCTION__
-		<< "WARNING solver failed setSize()\n";
-      return solverOK;
-    }    
-
+    int solverOK= the_Solver->setSize();
+    if(solverOK < 0)
+      {
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "WARNING solver failed setSize()\n";
+        return solverOK;
+      }
     return result;
   }
 
 int XC::MumpsSOE::addA(const Matrix &m, const ID &id, double fact)
   {
     // check for a quick return 
-    if (fact == 0.0)  
-	return 0;
+    if(fact == 0.0)  
+      return 0;
 
     int idSize = id.Size();
     
     // check that m and id are of similar size
-    if (idSize != m.noRows() && idSize != m.noCols()) {
+    if(idSize != m.noRows() && idSize != m.noCols())
+      {
 	std::cerr << getClassName() << "::" << __FUNCTION__
 		  << "; Matrix and ID not of similar sizes\n";
 	return -1;
-    }
+      }
 
-    if (matType != 0) {
+    if(matType != 0)
+      {
 
       if (fact == 1.0) { // do not need to multiply 
 	for (int i=0; i<idSize; i++) {

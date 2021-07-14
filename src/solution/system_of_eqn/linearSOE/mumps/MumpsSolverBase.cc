@@ -31,6 +31,7 @@
 #define ICNTL(I) icntl[(I)-1] /* macro s.t. indices match documentation */
 
 #include <mpi/mpi.h>
+#include <sstream>      // std::ostringstream
 
 XC::MumpsSolverBase::MumpsSolverBase(int classTag, int ICNTL7, int ICNTL14)
   : LinearSOESolver(classTag)
@@ -38,15 +39,23 @@ XC::MumpsSolverBase::MumpsSolverBase(int classTag, int ICNTL7, int ICNTL14)
     memset(&id, 0, sizeof(id));
     icntl7 = ICNTL7;
     icntl14 = ICNTL14;
-    init = false;
+    mumps_init= false;
     needsSetSize = false;
   }
 
 XC::MumpsSolverBase::~MumpsSolverBase(void)
+  { terminateMumps(); }
+
+//! @brief Terminate MUMPS.
+int XC::MumpsSolverBase::terminateMumps(void)
   {
-    id.job=-2; 
-    if(init == true)
+    if(mumps_init == true)
+      {
+        id.job=-2; 
         dmumps_c(&id); /* Terminate instance */
+	mumps_init= false;
+      }
+    return 0;
   }
 
 //! @brief Returns true if MPI is initialized.
@@ -90,6 +99,49 @@ int XC::MumpsSolverBase::finalizeMPI(void)
     return retval;
   }
 
+//! @brief Return a message explaining the mumps error (if any).
+std::string XC::MumpsSolverBase::getMUMPSErrorMessage(void)
+  {
+    std::string retval;
+    const int info= id.infog[0];
+    std::ostringstream oss;
+    if(info != 0)
+      {	
+        const int info2= id.infog[1];
+	switch(info)
+	  {
+          case -2:
+	    oss << "nz " << info2 << " out of range";
+	    break;
+	  case -5:
+	    oss << " out of memory allocation error";
+	    break;
+	  case -6:  
+	    oss << " cause: Matrix is Singular in Structure: check your model";
+	    break;
+	  case -7:
+	    oss << " out of memory allocation error";
+	    break;
+	  case -8:
+	    oss << "Work array too small; use -ICNTL14 option, the default is -ICNTL 20 make 20 larger";
+	    break;
+	  case -9:
+	    oss << "Work array too small; use -ICNTL14 option, the default is -ICNTL 20 make 20 larger";
+	    break;
+	  case -10:  
+	    oss << " cause: Matrix is Singular Numerically";
+	    break;
+          case -13:
+	    oss << " out of memory wanted " << info2 << " (if < 0 mult absolute by 1 million)";
+	    break;
+	  default:
+	    oss << " error not catched in switch."  ;
+	  }
+	retval= oss.str();
+      }
+    return retval;
+  }
+
 int XC::MumpsSolverBase::solve(void)
   {
     int retval= initializeMPI();
@@ -129,7 +181,8 @@ int XC::MumpsSolverBase::sendSelf(Communicator &comm)
     res+= comm.sendIdData(getDbTagData(),dataTag);
     if(res<0)
       std::cerr << getClassName() << "::" << __FUNCTION__
-              << "; communicator failed to send data.\n";
+                << "; communicator failed to send data."
+		<< std::endl;
     return res;
   }
 

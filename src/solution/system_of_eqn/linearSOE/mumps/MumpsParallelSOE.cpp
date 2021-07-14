@@ -156,13 +156,11 @@ int XC::MumpsParallelSOE::setSize(Graph &theGraph)
     
     size+=1; // vertices numbered 0 through n-1
 
-    if(nnz > Asize)
+    if(nnz > A.Size())
       { // we have to get more space for A and rowA
-	 A.resize(newNNZ);
-	 rowA.resize(newNNZ);
-	 colA.resize(newNNZ);
-
-         Asize= nnz;
+	A.resize(nnz);
+	rowA.resize(nnz);
+	colA.resize(nnz);
       }
 
     // zero the matrix
@@ -172,7 +170,7 @@ int XC::MumpsParallelSOE::setSize(Graph &theGraph)
 
     factored = false;
 
-    if(size > Bsize)
+    if(size > B.Size())
       { // we have to get space for the vectors
 
       // resize
@@ -181,8 +179,6 @@ int XC::MumpsParallelSOE::setSize(Graph &theGraph)
 	myB.resize(size);
 	workArea.resize(size);
         colStartA.resize(size+1);
-	
-	Bsize = size;
       }
 
     // zero the vectors

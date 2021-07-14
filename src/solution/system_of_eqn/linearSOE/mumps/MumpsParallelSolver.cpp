@@ -84,14 +84,7 @@ int XC::MumpsParallelSolver::initializeMumps(void)
       { return 0; }
     else
       {
-
-        if(init == true)
-	  {
-	    id.job=-2; 
-	    dmumps_c(&id); /* Terminate instance */
-	    init = false;
-	  } 
-
+	terminateMumps(); // If MUMPS already running terminate it.
 	id.job = -1;
 
 	id.par = 1; // host involved in calcs
@@ -106,7 +99,7 @@ int XC::MumpsParallelSolver::initializeMumps(void)
 	MPI_Comm_rank(MPI_COMM_WORLD, &rank);
 	MPI_Comm_size(MPI_COMM_WORLD, &np);
 
-	init = true;
+	mumps_init = true;
 
 	// parallel solver; distributed i/p matrix A
 	id.ICNTL(5) = 0; id.ICNTL(18) = 3;
@@ -119,16 +112,8 @@ int XC::MumpsParallelSolver::initializeMumps(void)
 	id.ICNTL(14) = icntl14;
 	id.ICNTL(7) = icntl7;
 
-	int nnz = theMumpsSOE->nnz;
-	int *colA = theMumpsSOE->colA.getDataPtr();
-	int *rowA = theMumpsSOE->rowA.getDataPtr();
-
 	// increment row and col A values by 1 for mumps fortran indexing
-	for(int i = 0; i < nnz; i++)
-	  {
-	    rowA[i]++;
-	    colA[i]++;
-	  }
+	theMumpsSOE->fortranIndexing();
 
 	// analyze the matrix
 	id.n = theMumpsSOE->size;
@@ -142,11 +127,7 @@ int XC::MumpsParallelSolver::initializeMumps(void)
 	dmumps_c(&id);
 
 	// decrement row and col A values by 1 to return to C++ indexing
-	for(int i = 0; i < nnz; i++)
-	  {
-	    rowA[i]--;
-	    colA[i]--;
-	  }
+	theMumpsSOE->cppIndexing();
 
 	int info = id.infog[0];
 	if(info != 0)
@@ -183,10 +164,7 @@ int XC::MumpsParallelSolver::solveAfterInitialization(void)
     id.ICNTL(7)=icntl7; 
 
     // increment row and col A values by 1 for mumps fortran indexing
-    for (int i=0; i<nnz; i++) {
-      rowA[i]++;
-      colA[i]++;
-    }
+    theMumpsSOE->fortranIndexing();
 
     if (rank == 0) {
       id.n   = n; 
@@ -217,48 +195,17 @@ int XC::MumpsParallelSolver::solveAfterInitialization(void)
     }	
 
     int info = id.infog[0];
-    int info2   = id.infog[1];
-    if (info != 0) {	
-      std::cerr << "WARNING MumpsParallelSolver::solve(void)- ";
-      std::cerr << " Error " << info << " returned in substitution dmumps()\n";
-	  switch(info) {
-	    case -2:
-		  std::cerr << "nz " << info2 << " out of range\n";
-	      break;
-	    case -5:
-		  std::cerr << " out of memory allocation error\n";
-		  break;
-	case -6:  
-		  std::cerr << " cause: Matrix is Singular in Structure: check your model\n";
-		  break;
-	    case -7:
-		  std::cerr << " out of memory allocation error\n";
-		  break;
-	    case -8:
-		  std::cerr << "Work array too small; use -ICNTL14 option, the default is -ICNTL 20 make 20 larger\n";
-		  break;
-	    case -9:
-		  std::cerr << "Work array too small; use -ICNTL14 option, the default is -ICNTL 20 make 20 larger\n";
-		  break;
-	    case -10:  
-		  std::cerr << " cause: Matrix is Singular Numerically\n";
-		  break;
-	    case -13:
-		    std::cerr << " out of memory wanted " << info2 << " (if < 0 mult absolute by 1 million)\n";
-		    break;
-	    default:
-		    ;
-	  }
+    if(info != 0)
+      {	
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; error " << info
+		  << " returned in substitution dmumps()\n"
+		  << getMUMPSErrorMessage() << std::endl;
       return info;
     }
 
     // decrement row and col A values by 1 to return to C++ indexing
-    for (int i=0; i<nnz; i++)
-      {
-      rowA[i]--;
-      colA[i]--;
-    }
-
+    theMumpsSOE->cppIndexing();
     return 0;
 
   }
