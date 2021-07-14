@@ -83,6 +83,7 @@ class MumpsSOE : public SparseGenSOEBase
   public:
     MumpsSOE(SolutionStrategy *);       
     MumpsSOE(SolutionStrategy *, int classTag);        
+    SystemOfEqn *getCopy(void) const;
     //MumpsSOE(SolutionStrategy *, MumpsSolver &theSolver, int matType=0);        
     //MumpsSOE(SolutionStrategy *, LinearSOESolver &theSolver, int classTag, int matType = 0);        
     virtual ~MumpsSOE(void);

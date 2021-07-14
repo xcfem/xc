@@ -98,7 +98,9 @@
 
 #include "utility/matrix/Vector.h"
 
-#include <solution/system_of_eqn/linearSOE/umfGEN/UmfpackGenLinSolver.h>
+#include "solution/system_of_eqn/linearSOE/umfGEN/UmfpackGenLinSolver.h"
+#include "solution/system_of_eqn/linearSOE/mumps/MumpsSolver.h"
+#include "solution/system_of_eqn/linearSOE/mumps/MumpsParallelSolver.h"
 
 //! @brief Constructor.
 //!
@@ -196,6 +198,10 @@ XC::LinearSOESolver &XC::LinearSOE::newSolver(const std::string &type)
       setSolver(new SymSparseLinSolver());
     else if(type=="umfpack_gen_lin_solver")
       setSolver(new UmfpackGenLinSolver());
+    else if(type=="mumps_solver")
+      setSolver(new MumpsSolver());
+    else if(type=="mumps_parallel_solver")
+      setSolver(new MumpsParallelSolver());
     else
       std::cerr << getClassName() << "::" << __FUNCTION__
 	        << "; solver of type: '"

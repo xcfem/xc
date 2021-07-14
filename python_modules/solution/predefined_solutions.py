@@ -321,6 +321,23 @@ class SimpleStaticLinearUMF(PenaltyStaticLinearBase):
         super(SimpleStaticLinearUMF,self).__init__(name, printFlag= printFlag, numSteps= numSteps, numberingMethod= numberingMethod, soeType= soeType, solverType= solverType)
         self.feProblem= prb
         self.setPenaltyFactors()
+        
+class SimpleStaticLinearMUMPS(PenaltyStaticLinearBase):
+    ''' Return a linear static solution algorithm
+        with a penalty constraint handler.
+    '''
+    def __init__(self, prb, name= None, printFlag= 0, numSteps= 1, numberingMethod= 'rcm', soeType= 'mumps_soe', solverType= 'mumps_solver'):
+        ''' Constructor.
+
+        :param prb: XC finite element problem.
+        :param name: identifier for the solution procedure.
+        :param printFlag: if not zero print convergence results on each step.
+        :param numSteps: number of steps to use in the analysis (useful only when loads are variable in time).
+        :param numberingMethod: numbering method (plain or reverse Cuthill-McKee or alterntive minimum degree).
+        '''
+        super(SimpleStaticLinearMUMPS,self).__init__(name, printFlag= printFlag, numSteps= numSteps, numberingMethod= numberingMethod, soeType= soeType, solverType= solverType)
+        self.feProblem= prb
+        self.setPenaltyFactors()
 
 ### Convenience function.
 def simple_static_linear(prb):
@@ -542,6 +559,32 @@ class PenaltyNewtonRaphsonUMF(PenaltyNewtonRaphsonBase):
         super(PenaltyNewtonRaphsonUMF,self).setup()
         self.sysOfEqnSetup()
         self.analysisSetup('static_analysis')
+        
+class PenaltyNewtonRaphsonMUMPS(PenaltyNewtonRaphsonBase):
+    ''' Static solution procedure with a Newton algorithm,
+        a penalty constraint handler and a MUMPS
+        (parallel sparse direct solver) solver.'''
+    def __init__(self, prb, name= None, maxNumIter= 150, convergenceTestTol= 1e-9, printFlag= 0, numSteps= 1, numberingMethod= 'rcm', convTestType= 'norm_unbalance_conv_test'):
+        ''' Constructor.
+
+        :param prb: XC finite element problem.
+        :param name: identifier for the solution procedure.
+        :param maxNumIter: maximum number of iterations (defauts to 10)
+        :param convergenceTestTol: convergence tolerance (defaults to 1e-9)
+        :param printFlag: if not zero print convergence results on each step.
+        :param numSteps: number of steps to use in the analysis (useful only when loads are variable in time).
+        :param numberingMethod: numbering method (plain or reverse Cuthill-McKee or alterntive minimum degree).
+        :param convTestType: convergence test for non linear analysis (norm unbalance,...).
+        '''
+        super(PenaltyNewtonRaphsonMUMPS,self).__init__(prb, name, maxNumIter, convergenceTestTol, printFlag, numSteps, numberingMethod, convTestType, soeType= 'mumps_soe', solverType= 'mumps_solver')
+
+    def setup(self):
+        ''' Defines the solution procedure in the finite element 
+            problem object.
+        '''
+        super(PenaltyNewtonRaphsonMUMPS,self).setup()
+        self.sysOfEqnSetup()
+        self.analysisSetup('static_analysis')
 
 class PlainStaticModifiedNewton(SolutionProcedure):
     ''' Static solution procedure with a modified Newton
@@ -671,6 +714,32 @@ class PenaltyModifiedNewtonUMF(PenaltyModifiedNewtonBase):
         super(PenaltyModifiedNewtonUMF,self).setup()
         self.sysOfEqnSetup()
         self.analysisSetup('static_analysis')
+        
+class PenaltyModifiedNewtonMUMPS(PenaltyModifiedNewtonBase):
+    ''' Static solution procedure with a modified Newton algorithm,
+        a penalty constraint handler and a MUMPS
+        (parallel sparse direct solver) solver.'''
+    def __init__(self, prb, name= None, maxNumIter= 150, convergenceTestTol= 1e-9, printFlag= 0, numSteps= 1, numberingMethod= 'rcm', convTestType= 'relative_total_norm_disp_incr_conv_test'):
+        ''' Constructor.
+
+        :param prb: XC finite element problem.
+        :param name: identifier for the solution procedure.
+        :param maxNumIter: maximum number of iterations (defauts to 10)
+        :param convergenceTestTol: convergence tolerance (defaults to 1e-9)
+        :param printFlag: if not zero print convergence results on each step.
+        :param numSteps: number of steps to use in the analysis (useful only when loads are variable in time).
+        :param numberingMethod: numbering method (plain or reverse Cuthill-McKee or alterntive minimum degree).
+        :param convTestType: convergence test for non linear analysis (norm unbalance,...).
+        '''
+        super(PenaltyModifiedNewtonMUMPS,self).__init__(prb, name, maxNumIter, convergenceTestTol, printFlag, numSteps, numberingMethod, convTestType, soeType= 'mumps_soe', solverType= 'mumps_solver')
+        
+    def setup(self):
+        ''' Defines the solution procedure in the finite element 
+            problem object.
+        '''
+        super(PenaltyModifiedNewtonMUMPS,self).setup()
+        self.sysOfEqnSetup()
+        self.analysisSetup('static_analysis')
 
 class LineSearchBase(SolutionProcedure):
     ''' Base class for line search solution aggregations.'''
@@ -771,6 +840,33 @@ class PenaltyNewtonLineSearchUMF(PenaltyNewtonLineSearchBase):
             problem object.
         '''
         super(PenaltyNewtonLineSearchUMF,self).setup()
+        self.sysOfEqnSetup()
+        self.analysisSetup('static_analysis')
+        
+class PenaltyNewtonLineSearchMUMPS(PenaltyNewtonLineSearchBase):
+    ''' Static solution procedure with a Newton line search algorithm,
+        a penalty constraint handler and a MUMPS
+        (parallel sparse direct solver) solver.'''
+    def __init__(self, prb, name= None, maxNumIter= 150, convergenceTestTol= 1e-9, printFlag= 0, numSteps= 1, numberingMethod= 'rcm', convTestType= 'relative_total_norm_disp_incr_conv_test', lineSearchMethod= 'regula_falsi_line_search'):
+        ''' Constructor.
+
+        :param prb: XC finite element problem.
+        :param name: identifier for the solution procedure.
+        :param maxNumIter: maximum number of iterations (defauts to 10)
+        :param convergenceTestTol: convergence tolerance (defaults to 1e-9)
+        :param printFlag: if not zero print convergence results on each step.
+        :param numSteps: number of steps to use in the analysis (useful only when loads are variable in time).
+        :param numberingMethod: numbering method (plain or reverse Cuthill-McKee or alterntive minimum degree).
+        :param convTestType: convergence test for non linear analysis (norm unbalance,...).
+        :param lineSearchMethod: line search method to use (bisection_line_search, initial_interpolated_line_search, regula_falsi_line_search, secant_line_search).
+        '''
+        super(PenaltyNewtonLineSearchMUMPS,self).__init__(prb, name, maxNumIter, convergenceTestTol, printFlag, numSteps, numberingMethod, convTestType, lineSearchMethod, soeType= 'mumps_soe', solverType= 'mumps_solver')
+        
+    def setup(self):
+        ''' Defines the solution procedure in the finite element 
+            problem object.
+        '''
+        super(PenaltyNewtonLineSearchMUMPS,self).setup()
         self.sysOfEqnSetup()
         self.analysisSetup('static_analysis')
         

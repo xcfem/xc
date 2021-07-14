@@ -78,6 +78,10 @@ XC::MumpsParallelSOE::MumpsParallelSOE(SolutionStrategy *owr)
 //     the_Solver.setMumpsSOE(*this);
 //   }
 
+//! @brief Virtual constructor.
+XC::SystemOfEqn *XC::MumpsParallelSOE::getCopy(void) const
+  { return new MumpsParallelSOE(*this); }
+
 XC::MumpsParallelSOE::~MumpsParallelSOE()
   {
     theChannels.clear();

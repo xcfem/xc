@@ -493,6 +493,10 @@ bool XC::SolutionStrategy::alloc_system_of_equations(const std::string &nmb,Anal
       theSOE= new SymSparseLinSOE(this);
     else if(nmb=="umfpack_gen_lin_soe")
       theSOE= new UmfpackGenLinSOE(this);
+    else if(nmb=="mumps_soe")
+      theSOE= new MumpsSOE(this);
+    else if(nmb=="mumps_parallel_soe")
+      theSOE= new MumpsParallelSOE(this);
     else
       std::cerr << getClassName() << "::" << __FUNCTION__
 		<< "; system of equations: '"

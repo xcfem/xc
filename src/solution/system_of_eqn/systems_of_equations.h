@@ -100,12 +100,11 @@
 #include "solution/system_of_eqn/linearSOE/petsc/PetscSparseSeqSolver.h"
 #endif
 
-#ifdef _MUMPS
-#include <MumpsSOE.h>
-#ifdef _PARALLEL_PROCESSING
-#include <MumpsParallelSOE.h>
-#endif
-#endif
+#include "solution/system_of_eqn/linearSOE/mumps/MumpsSOE.h"
+#include "solution/system_of_eqn/linearSOE/mumps/MumpsSolver.h"
+#include "solution/system_of_eqn/linearSOE/mumps/MumpsParallelSOE.h"
+#include "solution/system_of_eqn/linearSOE/mumps/MumpsParallelSolver.h"
+
 #include <solution/system_of_eqn/linearSOE/sparseSYM/SymSparseLinSOE.h>
 #include <solution/system_of_eqn/linearSOE/sparseSYM/SymSparseLinSolver.h>
 

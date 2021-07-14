@@ -22,7 +22,7 @@
 //python_interface.tcc
 
 class_<XC::LinearSOE, bases<XC::SystemOfEqn>, boost::noncopyable >("LinearSOE", no_init)
-  .def("newSolver", &XC::LinearSOE::newSolver,return_internal_reference<>()," \n""newSolver(type)""Define the solver to be used.""Parameters: \n""type: type of solver. Available types: 'band_gen_lin_lapack_solver', 'band_spd_lin_lapack_solver', 'diagonal_direct_solver', 'distributed_diagonal_solver', 'full_gen_lin_lapack_solver', 'profile_spd_lin_direct_solver', 'profile_spd_lin_direct_block_solver', 'super_lu_solver', 'sym_sparse_lin_solver'" )
+  .def("newSolver", &XC::LinearSOE::newSolver,return_internal_reference<>()," \n""newSolver(type)""Define the solver to be used.""Parameters: \n""type: type of solver. Available types: 'band_gen_lin_lapack_solver', 'band_spd_lin_lapack_solver', 'diagonal_direct_solver', 'distributed_diagonal_solver', 'full_gen_lin_lapack_solver', 'profile_spd_lin_direct_solver', 'profile_spd_lin_direct_block_solver', 'super_lu_solver', 'sym_sparse_lin_solver', 'umfpack_gen_lin_solver', 'mumps_solver'" )
   .add_property("numEqn", &XC::LinearSOE::getNumEqn, "Return the number of equations.")
   ;
 
@@ -40,8 +40,6 @@ class_<XC::BandSPDLinSOE, bases<XC::FactoredSOEBase>, boost::noncopyable >("Band
 
 class_<XC::DiagonalSOE, bases<XC::FactoredSOEBase>, boost::noncopyable >("DiagonalSOE", no_init)
     ;
-
-
 
 class_<XC::FullGenLinSOE, bases<XC::FactoredSOEBase>, boost::noncopyable >("FullGenLinSOE", no_init)
     ;
@@ -102,6 +100,11 @@ class_<XC::SymSparseLinSOE, bases<XC::SparseSOEBase>, boost::noncopyable >("SymS
 class_<XC::UmfpackGenLinSOE, bases<XC::FactoredSOEBase>, boost::noncopyable >("UmfpackGenLinSOE", no_init)
   ;
 
+class_<XC::MumpsSOE, bases<XC::SparseGenSOEBase>, boost::noncopyable >("MumpsSOE", no_init)
+  ;
+class_<XC::MumpsParallelSOE, bases<XC::MumpsSOE>, boost::noncopyable >("MumpsParallelSOE", no_init)
+  ;
+
 class_<XC::LinearSOESolver, bases<XC::Solver>, boost::noncopyable >("LinearSOESolver", no_init)
   ;
 
@@ -156,5 +159,10 @@ class_<XC::SymSparseLinSolver, bases<XC::LinearSOESolver>, boost::noncopyable >(
 class_<XC::UmfpackGenLinSolver, bases<XC::LinearSOESolver>, boost::noncopyable >("UmfpackGenLinSolver", no_init)
   ;
 
+class_<XC::MumpsSolver, bases<XC::LinearSOESolver>, boost::noncopyable >("MumpsSolver", no_init)
+  ;
+
+class_<XC::MumpsParallelSolver, bases<XC::LinearSOESolver>, boost::noncopyable >("MumpsParallelSolver", no_init)
+  ;
 
 

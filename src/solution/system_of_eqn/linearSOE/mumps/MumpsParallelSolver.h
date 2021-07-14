@@ -71,44 +71,29 @@
 
 // What: "@(#) Mumps.h, revA"
 
-#include <solution/system_of_eqn/linearSOE/LinearSOESolver.h>
-extern "C" {
-#include <dmumps_c.h>
-}
+#include "MumpsSolverBase.h"
 
 namespace XC {
 class MumpsParallelSOE;
 
-class MumpsParallelSolver : public LinearSOESolver
+class MumpsParallelSolver: public MumpsSolverBase
   {
   private:
     int initializeMumps(void);
     int solveAfterInitialization(void);
 
-    DMUMPS_STRUC_C id;
     MumpsParallelSOE *theMumpsSOE;
-    bool init;
-    int icntl14;
-    int icntl7;
-    bool needsSetSize;
     int rank;
     int np;
-  protected:
-    int sendData(Communicator &);
-    int recvData(const Communicator &);
   public:
     MumpsParallelSolver(int ICNTL7=7, int ICNTL14=20);
     MumpsParallelSolver(int MPI_COMM, int ICNTL7, int ICNTL14);
     LinearSOESolver *getCopy(void) const;
     virtual ~MumpsParallelSolver(void);
 
-    int solve(void);
-    int setSize(void);
     bool setLinearSOE(LinearSOE *theSOE); 
 
-    virtual int sendSelf(Communicator &);
-    virtual int recvSelf(const Communicator &);
-};
+  };
 } // end of XC namespace
 
 #endif

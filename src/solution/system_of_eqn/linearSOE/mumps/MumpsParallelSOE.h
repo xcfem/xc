@@ -84,6 +84,7 @@ class MumpsParallelSOE : public MumpsSOE
   public:
     MumpsParallelSOE(SolutionStrategy *owr= nullptr);
     //MumpsParallelSOE(MumpsParallelSolver &theSolver, int matType=0);
+    SystemOfEqn *getCopy(void) const;
     
     ~MumpsParallelSOE();
 

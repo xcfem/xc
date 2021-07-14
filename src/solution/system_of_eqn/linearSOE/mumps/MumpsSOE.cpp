@@ -88,6 +88,9 @@ XC::MumpsSOE::MumpsSOE(SolutionStrategy *owr, int classTag)
 //    Asize(0), matType(_matType)
 //   {}
 
+//! @brief Virtual constructor.
+XC::SystemOfEqn *XC::MumpsSOE::getCopy(void) const
+  { return new MumpsSOE(*this); }
 
 XC::MumpsSOE::~MumpsSOE(void)
   {}
@@ -100,7 +103,6 @@ int XC::MumpsSOE::setMumpsSolver(MumpsSolver &newSolver)
 int XC::MumpsSOE::setSize(Graph &theGraph)
   {
     int result = 0;
-    int oldSize = size;
     size = theGraph.getNumVertex();
 
     // fist itearte through the vertices of the graph to get nnz
