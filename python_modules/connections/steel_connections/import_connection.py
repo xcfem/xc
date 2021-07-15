@@ -618,7 +618,7 @@ def getLoadedSides(xcSet):
                 sideDir= sideCenter-faceCenter
                 angle= loadDirI.getAngle(sideDir)
                 if(abs(angle)<1e-3):
-                    sideList.append(side)
+                    sideList.append((side, s))
             if(len(sideList)==0):
                 lmsg.warning('side list empty for load tag: '+str(loadTag))
             retval[loadTag]= {'member':member, 'I':loadDirI,'J':loadDirJ,'K':loadDirK, 'sideList':sideList}

@@ -173,7 +173,8 @@ class BoundaryConditions(object):
             loadDirK= sideData['K']
             sideList= sideData['sideList']
             nodeSet= self.modelSpace.defSet('loaded_nodes'+str(key))
-            for side in sideList:
+            for pair in sideList:
+                side= pair[0]
                 for n in side.getEdge.nodes:
                     nodeSet.nodes.append(n)
             centroid= nodeSet.nodes.getCentroid(0.0)
@@ -193,7 +194,7 @@ class BoundaryConditions(object):
                 self.modelSpace.distributeLoadOnNodes(svs, nodeSet, currentLP)
                 
     def createConstraints(self, constrainedMember, constraintType= '000_FFF'):
-        ''' Create the loads at the end of the connection members.
+        ''' Create the constraints at the end of the constrained members.
 
         :param constrainedMember: member which will be constrained.
         :param constraintType: string defining the type of the constraint
@@ -205,8 +206,13 @@ class BoundaryConditions(object):
             member= sideData['member']
             if(member==constrainedMember):
                 sideList= sideData['sideList']
-                for side in sideList:
-                    for n in side.getEdge.nodes:
+                for pair in sideList:
+                    side= pair[0]
+                    surface= pair[1]
+                    # this trick of the opposite side could not
+                    # work in the general case.
+                    oppositeEdge= surface.getOppositeEdge(side.getEdge)
+                    for n in oppositeEdge.nodes:
                         self.modelSpace.fixNode(constraintType, n.tag)
             
     def createLoadPatterns(self):
