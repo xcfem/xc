@@ -22,6 +22,7 @@
 //python_interface.tcc
 
 
+XC::Edge *(XC::Face::*getFaceOppositeEdge)(const XC::Edge &)= &XC::Face::getOppositeEdge;
 class_<XC::Face, XC::Face *,bases<XC::CmbEdge>, boost::noncopyable >("Face", no_init)
   .add_property("nDivI", &XC::Face::NDivI, &XC::Face::setNDivI,"get/set the number of divisions of the even sides of the surface.")
   .add_property("nDivJ", &XC::Face::NDivJ, &XC::Face::setNDivJ,"get/set the number of divisions of the odd sides of the surface.")
@@ -36,6 +37,7 @@ class_<XC::Face, XC::Face *,bases<XC::CmbEdge>, boost::noncopyable >("Face", no_
   .def("getPolygon",&XC::Face::getPolygon,"Return the contour as a 3D polygon.")
   .def("addHole", &XC::Face::addHole, "Add a hole to the face.")
   .def("getHoles", &XC::Face::getPyHoles, "Return a list with the face holes in it.")
+  .def("getOppositeEdge", make_function(getFaceOppositeEdge, return_internal_reference<>()), "Return the opposite side with respect to the one being passed as parameter.")
    ;
 
 class_<XC::QuadSurface, XC::QuadSurface *, bases<XC::Face>, boost::noncopyable >("QuadSurface", no_init)

@@ -86,6 +86,8 @@ class Face: public CmbEdge
 
     // Topology
     void update_topology(void);
+    const Edge *getOppositeEdge(const Edge &) const;
+    Edge *getOppositeEdge(const Edge &);
     std::deque<std::pair<const Edge *, const Edge *> > getOppositeEdges(void) const;
 
     // Surface orientation.

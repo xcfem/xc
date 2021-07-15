@@ -711,6 +711,16 @@ void XC::Face::update_topology(void)
       (*i).getEdge()->insert_surf(this);
   }
 
+//! @brief Return the opposite side with respect to the one
+//! being passed as parameter.
+const XC::Edge *XC::Face::getOppositeEdge(const Edge &e) const
+  { return get_opposite_side(&e); }
+
+//! @brief Return the opposite side with respect to the one
+//! being passed as parameter.
+XC::Edge *XC::Face::getOppositeEdge(const Edge &e)
+  { return get_opposite_side(&e); }
+
 //! @brief Return a deque of opposite edge pairs.
 std::deque<std::pair<const XC::Edge *, const XC::Edge *> > XC::Face::getOppositeEdges(void) const
   {
