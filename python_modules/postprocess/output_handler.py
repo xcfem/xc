@@ -507,7 +507,7 @@ class OutputHandler(object):
         displaySettings.displayScene(caption,fileName)
         return displaySettings
         
-    def displayLoads(self,  setToDisplay=None,elLoadComp='xyzComponents',fUnitConv=1,caption= None,fileName=None,defFScale=0.0):
+    def displayLoads(self,  setToDisplay=None,elLoadComp='xyzComponents',fUnitConv=1,caption= None,fileName=None,defFScale=0.0, scaleConstr= 0.2):
         '''Display the loads applied on beam elements and nodes for a given load case
 
         :param setToDisplay: set of beam elements to be represented (defaults to TotalSet)
@@ -525,6 +525,7 @@ class OutputHandler(object):
                   the initial position plus its displacement multiplied
                   by this factor. (Defaults to 0.0, i.e. display of 
                   initial/undeformed shape)
+        :param scaleConstr: scale of SPConstraints symbols (defaults to 0.2)
         '''
         if(setToDisplay==None):
             setToDisplay= self.modelSpace.getTotalSet()
@@ -577,6 +578,7 @@ class OutputHandler(object):
             scOrient+=1
         if(not caption):
           caption= 'load case: ' + loadCaseName +' '+elLoadComp + ', set: ' + setToDisplay.name + ', '  + unitDescription
+        displaySettings.displaySPconstraints(setToDisplay= setToDisplay, scale= scaleConstr)
         displaySettings.displayScene(caption=caption,fileName=fileName)
         
     def displayNodeValueDiagram(self, itemToDisp, setToDisplay=None,caption= None,fileName=None,defFScale=0.0):
