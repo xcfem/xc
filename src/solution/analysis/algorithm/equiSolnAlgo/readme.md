@@ -13,3 +13,4 @@ Iteration from the last time step to the current is done by the following method
 
 [Variations on Modified Newton](https://portwooddigital.com/2020/11/06/modified-newton/)
 [Better than Ideal Conditions](https://portwooddigital.com/2020/02/08/better-than-ideal-conditions/)
+[Off the Hooke](https://portwooddigital.com/2021/07/15/off-the-hooke/)
