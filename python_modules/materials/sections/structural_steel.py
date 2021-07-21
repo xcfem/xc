@@ -512,6 +512,13 @@ class SteelShape(sp.SectionProperties):
 
 class IShape(SteelShape):
     def __init__(self,steel,name,table):
+        ''' Constructor.
+
+        :param steel: steel object (e.g. S275JR)
+        :param name: name identifying the section in the table
+        :param table: module containing a dictionary with mechanical 
+                      characteristics of a series of shapes.
+        '''
         super(IShape,self).__init__(steel,name,table)
         self.tileSize= 0.01 #Size of tiles
         self.updateQuantities()
@@ -630,6 +637,13 @@ class IShape(SteelShape):
 class QHShape(SteelShape):
     '''Quadrilateral hollow shape''' 
     def __init__(self,steel,name,table):
+        ''' Constructor.
+
+        :param steel: steel object (e.g. S275JR)
+        :param name: name identifying the section in the table
+        :param table: module containing a dictionary with mechanical 
+                      characteristics of a series of shapes.
+        '''
         super(QHShape,self).__init__(steel,name,table)
         self.bHalf= self.get('b')/2.0 #Half section width
         self.hHalf= self.get('h')/2.0 #Half section height
@@ -682,6 +696,13 @@ class QHShape(SteelShape):
 class CHShape(SteelShape):
     '''Circular hollow shape''' 
     def __init__(self,steel,name,table):
+        ''' Constructor.
+
+        :param steel: steel object (e.g. S275JR)
+        :param name: name identifying the section in the table
+        :param table: module containing a dictionary with mechanical 
+                      characteristics of a series of shapes.
+        '''
         super(CHShape,self).__init__(steel,name,table)
 
     def getSymmetry(self):
@@ -700,6 +721,13 @@ class CHShape(SteelShape):
     
 class UShape(SteelShape):
     def __init__(self,steel,name,table):
+        ''' Constructor.
+
+        :param steel: steel object (e.g. S275JR)
+        :param name: name identifying the section in the table
+        :param table: module containing a dictionary with mechanical 
+                      characteristics of a series of shapes.
+        '''
         super(UShape,self).__init__(steel,name,table)
 
     def getSymmetry(self):
@@ -755,4 +783,22 @@ class UShape(SteelShape):
         t=self.tf()
         return c/t
 
-      
+class LShape(SteelShape):
+    ''' Single angle steel shape.
+
+    '''
+    def __init__(self,steel,name,table):
+        ''' Constructor.
+
+        :param steel: steel object (e.g. S275JR)
+        :param name: name identifying the section in the table
+        :param table: module containing a dictionary with mechanical 
+                      characteristics of a series of shapes.
+        '''
+        super(LShape,self).__init__(steel,name,table)
+
+    def getSymmetry(self):
+        ''' Returns the symmetry of the shape: 
+            'double', 'simple' or 'none'.'''
+        return 'none'
+

@@ -813,6 +813,7 @@ python tests/materials/astm_aisc/member_design/flexural_member_design_test_08.py
 python tests/materials/astm_aisc/member_design/flexural_member_design_test_09.py
 python tests/materials/astm_aisc/member_design/flexural_member_design_test_10.py
 python tests/materials/astm_aisc/member_design/flexural_member_design_IShape_test_11.py
+python tests/materials/astm_aisc/member_design/flexural_member_design_test_12.py
 python tests/materials/astm_aisc/member_design/compression_member_design_test_01.py
 python tests/materials/astm_aisc/member_design/compression_member_design_test_02.py
 python tests/materials/astm_aisc/member_design/compression_member_design_test_03.py
@@ -822,6 +823,8 @@ python tests/materials/astm_aisc/member_design/shear_member_design_test_03.py
 python tests/materials/astm_aisc/member_design/shear_member_design_test_04.py
 python tests/materials/astm_aisc/member_design/shear_member_design_test_05.py
 python tests/materials/astm_aisc/member_design/shear_member_design_test_06.py
+python tests/materials/astm_aisc/member_design/shear_member_design_test_07.py
+
 echo "$BLEU" "      ASTM/AISC connection design tests." "$NORMAL"
 python tests/materials/astm_aisc/connection_design/anchor_bolt_design_test_01.py
 python tests/materials/astm_aisc/connection_design/bolt_fastener_design_test_01.py

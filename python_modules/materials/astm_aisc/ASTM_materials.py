@@ -1637,7 +1637,7 @@ class IShape(ASTMShape, aisc_metric_shapes.IShape):
 
 
 class CShape(ASTMShape,aisc_metric_shapes.CShape):
-    """C shape with ASTM 3 verification routines.
+    """C shape with ASTM/AISC verification routines.
 
     :ivar steel: steel material (i.e. A36).
     :ivar name: shape name  (i.e. C380X74).
@@ -1652,6 +1652,19 @@ class CShape(ASTMShape,aisc_metric_shapes.CShape):
         ''' Return the yield strength of the flange.'''
         grossArea= self.getFlangeWidth()*self.getFlangeThickness()
         return self.steelType.getYt()*self.steelType.fy*grossArea
+    
+class LShape(ASTMShape, aisc_metric_shapes.LShape):
+    """Single angle shape with ASTM/AISC verification routines.
+
+    :ivar steel: steel material (i.e. A36).
+    :ivar name: shape name  (i.e. L4X4X1/4).
+    """
+    def __init__(self,steel,name):
+        ''' Constructor.
+        '''
+        ASTMShape.__init__(self, name)
+        aisc_metric_shapes.LShape.__init__(self,steel,name)
+        
 
 class HSSShape(ASTMShape,aisc_metric_shapes.HSSShape):
     """Rectangular HSS shape with ASTM/AISC verification routines.
@@ -1742,7 +1755,7 @@ class MemberConnection(steel_member_base.MemberConnection):
             return bendingState.getLateralTorsionalBucklingModificationFactor()
 
 class MemberWithEndConnections(object):
-    '''Steel member with end connections with ASTM 3 verification routines.'''
+    '''Steel member with end connections with ASTM/AISC verification routines.'''
     def __init__(self,shape,connection):
         ''' Constructor.
 

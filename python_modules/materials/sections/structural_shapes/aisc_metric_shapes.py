@@ -21,6 +21,7 @@ from __future__ import division
 # (strong axis parallel to z axis) in other words: values for Y and Z axis 
 # are swapped with respect to those in the catalog.
 
+import sys
 import math
 from materials.sections.structural_shapes import aisc_shapes_dictionaries as shapes
 from materials.sections.structural_shapes import aisc_shapes_labels as labels
@@ -269,6 +270,29 @@ def getUIWebPlateShearBucklingCoefficient(shape, a= 1e6):
     else:
         denom= (a/h)**2
         return 5.0*(1.0+1.0/denom)
+
+def getG22ShearBucklingStrengthCoefficient(slendernessRatio, E, Fy, kv, majorAxis= True):
+    ''' Return the shear stress coefficient Cv2 according
+        to section G2.2 of AISC-360-16.
+
+    :param slendernessRatio: slenderness ratio (h/tw).
+    :param E: steel elastic modulus.
+    :param Fy: specified minimum yield stress.
+    :param kv: web plate shear buckling coefficient.
+    :param majorAxis: true if flexure about the major axis.
+    '''
+    Cv2= 1.0
+    sqrtkvE_Fy= math.sqrt(kv*E/Fy)
+    slendernessRatio_threshold= 1.10*sqrtkvE_Fy
+    if(slendernessRatio<=slendernessRatio_threshold):
+        Cv2= 1.0 # equation G2-9
+    else:
+        slendernessRatio_threshold2= 1.37*sqrtkvE_Fy
+        if(slendernessRatio<=slendernessRatio_threshold2):
+            Cv2= slendernessRatio_threshold2/slendernessRatio # equation G2-10
+        else:
+            Cv2= 1.51*kv*E/slendernessRatio**2/Fy  # equation G2-11
+    return Cv2
     
 def getG22WebShearBucklingStrengthCoefficient(shape, kv, majorAxis= True):
     ''' Return the web shear stress coefficient Cv2 according
@@ -277,23 +301,13 @@ def getG22WebShearBucklingStrengthCoefficient(shape, kv, majorAxis= True):
     :param kv: web plate shear buckling coefficient.
     :param majorAxis: true if flexure about the major axis.
     '''
-    Cv2= 1.0
     h_t= shape.get('hSlendernessRatio')
     if(not majorAxis):
         h_t= shape.get('bSlendernessRatio')
     E= shape.get('E')
     Fy= shape.steelType.fy
-    sqrtkvE_Fy= math.sqrt(kv*E/Fy)
-    h_t_threshold= 1.10*sqrtkvE_Fy
-    if(h_t<=h_t_threshold):
-        Cv2= 1.0 # equation G2-9
-    else:
-        h_t_threshold2= 1.37*sqrtkvE_Fy
-        if(h_t<=h_t_threshold2):
-            Cv2= h_t_threshold2/h_t # equation G2-10
-        else:
-            Cv2= 1.51*kv*E/h_t**2/Fy  # equation G2-11
-    return Cv2
+    return getG22ShearBucklingStrengthCoefficient(h_t, E, Fy, kv, majorAxis)
+
     
 def getUINominalShearStrengthWithoutTensionFieldAction(shape, a= 1e6, majorAxis= True):
     ''' Return the nominal shear strength according to equation
@@ -940,10 +954,11 @@ class WShape(structural_steel.IShape):
         return retval
 
     def getDesignShearStrengthWithoutTensionFieldAction(self, a= 1e6, majorAxis= True):
-        ''' Return the design shear strength according to equation
-            section G1 of AISC-360-16.
+        ''' Return the design shear strength according to section G1 
+            of AISC-360-16.
 
         :param a: clear distance between transverse stiffeners.
+        :param majorAxis: true if bending around the major axis.
         '''
 
         rf= 0.9
@@ -956,6 +971,7 @@ class WShape(structural_steel.IShape):
             section G1 of AISC-360-16.
 
         :param a: clear distance between transverse stiffeners.
+        :param majorAxis: true if bending around the major axis.
         '''
         return self.getDesignShearStrengthWithoutTensionFieldAction(a,majorAxis)
 
@@ -1387,8 +1403,8 @@ class CShape(structural_steel.UShape):
         return getUINominalShearStrengthWithoutTensionFieldAction(self,a, majorAxis)
     
     def getDesignShearStrengthWithoutTensionFieldAction(self, a= 1e6, majorAxis= True):
-        ''' Return the design shear strength according to equation
-            section G1 of AISC-360-16.
+        ''' Return the design shear strength according to section G1 
+            of AISC-360-16.
 
         :param a: clear distance between transverse stiffeners.
         :param majorAxis: true if flexure about the major axis.
@@ -1397,10 +1413,11 @@ class CShape(structural_steel.UShape):
         return 0.9*self.getNominalShearStrengthWithoutTensionFieldAction(a, majorAxis)
     
     def getDesignShearStrength(self, a= 1e6, majorAxis= True):
-        ''' Return the design shear strength according to equation
-            section G1 of AISC-360-16.
+        ''' Return the design shear strength according to section G1 
+            of AISC-360-16.
 
         :param a: clear distance between transverse stiffeners.
+        :param majorAxis: true if flexure about the major axis.
         '''
         return self.getDesignShearStrengthWithoutTensionFieldAction(a,majorAxis)
 
@@ -1558,6 +1575,233 @@ class CShape(structural_steel.UShape):
            web of a highly ductile member according to table D1.1 
            of AISC 341-16.'''
         return getUIShapeLambdaHDWeb(self)
+    
+# *************************************************************************
+# AISC single angle profiles.
+# *************************************************************************
+
+for item in shapes.L:
+    shape= shapes.L[item]
+    shape['G']= shape['E']/(2*(1+shape['nu']))
+    shape['Avy']= (shape['b_flat']-shape['t']/2.0)*shape['t'] # depth of the section x thickness.
+    shape['Avz']= (shape['h']-shape['t']/2.0)*shape['t'] # width of the section x thickness. 
+L= shapes.L
+
+class LShape(structural_steel.LShape):
+    '''L shape.
+
+    :ivar steel: steel material.
+    :ivar name: shape name (i.e. L15X50).
+    '''
+    def __init__(self,steel,name):
+        ''' Constructor.
+
+        '''
+        super(LShape,self).__init__(steel,name,L)
+
+    def getMetricName(self):
+        '''Return the metric label from the US customary one.'''
+        return getMetricLabel(self.name)
+
+    def isEqualLeg(self):
+        ''' Return true if the angle legs are equal.'''
+        return (self.get('b_flat')==self.get('h'))
+
+    def getSlendernessRatio(self, majorAxis= True):
+        ''' Return the slenderness ratio shear strength calculation.'''
+        t= self.get('t')
+        if(majorAxis):
+            return self.get('b_flat')/t
+        else:
+            return self.get('h')/t
+    
+    def getAw(self, majorAxis= True):
+        ''' Return area for shear strength calculation.'''
+        t= self.get('t')
+        if(majorAxis):
+            return self.get('b_flat')*t
+        else:
+            return self.get('h')*t
+        
+    def getLegShearBucklingStrengthCoefficient(self, kv, majorAxis= True):
+        ''' Return the leg shear stress coefficient Cv2 according
+            to section G2.2 of AISC-360-16.
+
+        :param kv: leg plate shear buckling coefficient.
+        :param majorAxis: true if flexure about the major axis.
+        '''
+        h_t= self.getSlendernessRatio()
+        E= self.get('E')
+        Fy= self.steelType.fy
+        return getG22ShearBucklingStrengthCoefficient(h_t, E, Fy, kv, majorAxis)
+
+    def getNominalShearStrength(self, Lv= 1e6, majorAxis= True):
+        ''' Return the nominal shear strength according to equation
+            G3-1 of AISC-360-16.
+
+        :param majorAxis: true if flexure about the major axis.
+        '''
+        Cv2= self.getLegShearBucklingStrengthCoefficient(kv= 1.2, majorAxis= majorAxis)
+        return 0.6*self.steelType.fy*self.getAw(majorAxis)*Cv2 # equation G3-1
+
+    def getDesignShearStrength(self, majorAxis= True):
+        ''' Return the design shear strength according to section G1 
+            of AISC-360-16.
+
+        :param majorAxis: true if flexure about the major axis.
+        '''
+
+        return 0.9*self.getNominalShearStrength(majorAxis)
+    
+    def getYieldMoment(self, majorAxis= True):
+        ''' Return the yield moment of the shape according to
+        section F10.2 of AISC 360-16.
+
+        :param majorAxis: true if flexure about the major axis.
+        '''
+        retval= 0.8*self.steelType.fy
+        if(majorAxis):
+            retval*= self.get('Wzel') 
+        else:
+            retval*= self.get('Wyel')
+        return retval
+    
+    def getPlasticMoment(self, majorAxis= True):
+        ''' Return the plastic moment of the shape according to equation
+            F10-1 of AISC 360-16.
+
+        :param majorAxis: true if flexure about the major axis.
+        '''
+        return 1.5*self.getYieldMoment(majorAxis)
+    
+    def getElasticLateralTorsionalBucklingMoment(self, Lb, Cb, majorAxis= True):
+        ''' Return the elastic lateral-torsional buckling moment 
+        according to equations F10-5a and F10-5b of AISC 360-16
+        and assuming no lateral-torsional restraint.
+
+        :param Lb: laterally unbraced length of member
+        :param Cb: lateral-torsional buckling modification factor Cb
+                   for non uniform moment diagrams when both ends of the 
+                   segment are braced according to expression 
+                   F1-1 of AISC 360-16.
+        :param majorAxis: true if bending aroun the major GEOMETRIC axis.
+        '''
+        t= self.get('t')
+        if(majorAxis):
+            b= self.get('b_flat')
+        else:
+            b= self.get('h')
+        E= self.get('E')
+        retval= 0.58*E*b**4*t*Cb/(Lb**2)
+        rr= math.sqrt(1+0.88*(Lb*t/b**2)**2)
+        factorA= rr-1
+        factorB= rr+1
+        retval*= min(factorA,factorB)
+        return retval
+
+    def getLateralTorsionalBucklingLimit(self, Lb, Cb, majorAxis= True):
+        ''' Return the maximum flexural strength due to lateral-torsional 
+        buckling according to expressions F10-2 and F10-3 of AISC 360-16
+
+        :param Lb: Length between points that are either braced 
+                   against lateral displacement of compression 
+                   flange or braced against twist of the cross section.
+        :param Cb: lateral-torsional buckling modification factor Cb
+                   for non uniform moment diagrams when both ends of the 
+                   segment are braced according to expression 
+                   F1-1 of AISC 360-16.
+        :param majorAxis: true if bending aroun the major GEOMETRIC axis.
+        '''
+        My= self.getYieldMoment(majorAxis)
+        Mcr= self.getElasticLateralTorsionalBucklingMoment(Lb, Cb, majorAxis)
+        if(My/Mcr<=1.0):
+            retval= min(1.5, (1.92-1.17*math.sqrt(My/Mcr)))*My
+        else:
+            retval= (0.92-0.17*Mcr/My)*Mcr
+        return retval
+
+    def getLambdaPLegBending(self):
+        ''' Return the limiting Width-to-Thickness Ratio (compact/noncompact)
+            according to table B4.1b of AISC 360-16.
+        '''
+        return 0.54*math.sqrt(self.steelType.E/self.steelType.fy) # Case 12
+    
+    def getLambdaRLegBending(self):
+        ''' Return the limiting Width-to-Thickness Ratio (compact/noncompact)
+            according to table B4.1b of AISC 360-16.
+        '''
+        return 0.91*math.sqrt(self.steelType.E/self.steelType.fy) # Case 12
+    
+    def getFlexureClassification(self, majorAxis= True):
+        ''' Return the classification for local buckling of the
+            leg of the section according to table B4.1b
+            of AISC 360-16.
+
+        :param majorAxis: true if bending aroun the major GEOMETRIC axis.
+        '''
+        retval= 'compact'
+        slendernessRatio= self.getSlendernessRatio(majorAxis)
+        lambda_P= self.getLambdaPLegBending()
+        lambda_R= self.getLambdaRLegBending()
+        if(slendernessRatio>lambda_P):
+            retval= 'noncompact'
+        elif(slendernessRatio>lambda_R):
+            retval= 'slender'
+        return retval
+
+    def getLegLocalBucklingLimit(self, Lb, Cb, majorAxis= True):
+        ''' Return the maximum flexural strength due to leg local 
+        buckling according to expressions F10-6 to F10-8 of AISC 360-16
+
+        :param Lb: Length between points that are either braced 
+                   against lateral displacement of compression 
+                   flange or braced against twist of the cross section.
+        :param Cb: lateral-torsional buckling modification factor Cb
+                   for non uniform moment diagrams when both ends of the 
+                   segment are braced according to expression 
+                   F1-1 of AISC 360-16.
+        '''
+        classif= self.getFlexureClassification(majorAxis)
+        if(classif=='compact'):
+            retval= 1000*self.getYieldMoment(majorAxis)
+        elif(classif=='noncompact'): # non-compact legs.
+            equalLeg= self.isEqualLeg()
+            if(equalLeg):
+                b= self.get('b_flat')
+                E= self.get('E')
+                t= self.get('t')
+                Fy= self.steelType.fy
+                Sc= 0.8*self.get('Wzel')
+                retval= Fy*Sc*(2.43-1.72*(b/t)*math.sqrt(Fy/E))
+            else: # legs are not equal.
+                className= type(self).__name__
+                methodName= sys._getframe(0).f_code.co_name
+                lmsg.error(className+'.'+methodName+': implemented only for angles with equal legs.')
+                retval= 1e-3*self.getYieldMoment(majorAxis)
+        else: # slender legs.
+            Fcr= 0.71*E/(b/t)**2 # equation F10-8
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.error(className+'.'+methodName+': not implemented for slender sections.')
+            retval= 1e-3*self.getYieldMoment(majorAxis)
+        return retval
+    
+    def getNominalFlexuralStrength(self, lateralUnbracedLength, Cb, majorAxis= True):
+        ''' Return the nominal flexural strength of the member
+            according to equations F10-1 to F10-8 of AISC-360-16.
+
+        :param lateralUnbracedLength: length between points that are either 
+                                      braced against lateral displacement of
+                                      the compression flange or braced against 
+                                      twist of the cross section.
+        :param Cb: lateral-torsional buckling modification factor.
+        :param majorAxis: true if flexure about the major axis.
+        '''
+        Mn= self.getPlasticMoment(majorAxis)
+        Mn= min(Mn, self.getLateralTorsionalBucklingLimit(lateralUnbracedLength, Cb, majorAxis))
+        Mn= min(Mn, self.getLegLocalBucklingLimit(lateralUnbracedLength, Cb, majorAxis))
+        return Mn
+            
 
 # *************************************************************************
 # AISC Hollow Structural Sections.
@@ -1809,10 +2053,10 @@ class HSSShape(structural_steel.QHShape):
 
 
     def getDesignShearStrength(self, majorAxis= True):
-        ''' Return the design shear strength according to equation
-            section G1 of AISC-360-16.
+        ''' Return the design shear strength according to section G1 
+            of AISC-360-16.
 
-        :param a: clear distance between transverse stiffeners.
+        :param majorAxis: true if flexure about the major axis.
         '''
 
         return 0.9*self.getNominalShearStrength(majorAxis)
@@ -2019,9 +2263,8 @@ class HSSShape(structural_steel.QHShape):
         return retval
     
     def getLateralTorsionalBucklingLimit(self, Lb, Cb, majorAxis= True):
-        ''' Return the maximum flexural strength
-        due to lateral-torsional buckling according to
-        expressions F7-10 to F7-11 of AISC 360-16
+        ''' Return the maximum flexural strength due to lateral-torsional 
+        buckling according to expressions F7-10 to F7-11 of AISC 360-16
 
         :param Lb: Length between points that are either braced 
                    against lateral displacement of compression 
@@ -2217,8 +2460,8 @@ class CHSSShape(structural_steel.CHShape):
         return Fcr*self.getAw()/2.0
 
     def getDesignShearStrength(self, majorAxis= True):
-        ''' Return the design shear strength according to equation
-            section G1 of AISC-360-16.
+        ''' Return the design shear strength according to section G1 
+            of AISC-360-16.
 
         :param majorAxis: dummy argument needed for compatibility with
                           the other shapes.
