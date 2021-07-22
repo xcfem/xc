@@ -1579,17 +1579,18 @@ class CShape(structural_steel.UShape):
 # *************************************************************************
 # AISC single angle profiles.
 # *************************************************************************
-# Section axis:
-
-#      AISC            XC                 Principal axes:
-
-#         ^ Y           ^ Y                    
-#         |             |                 Z-axis
-#                                           \  |       W-axis
-#       |             |                      \ |     /
-#       | -> X        | -> Z                  \|   /
-#       |             |                        | +
-#       -------       -------                  ----------
+#         Section axis:         *                *
+#      AISC            XC       *    Points:     *    Principal axes:
+#                               *                *
+#         ^ Y           ^ Y     *                *   
+#         |             |       *                *    Z-axis
+#                               *     A          *       \  |       W-axis
+#       |             |         *      |         *        \ |     /
+#       | -> X        | -> Z    *      |         *         \|   /
+#       |             |         *      |         *          | +
+#       -------       -------   *     B-------C  *          ----------
+#
+# *************************************************************************
 
 # The axis used in AISC catalogue are different from those used in XC
 # (strong axis parallel to z axis) in other words: values for Y and Z axis 
@@ -1640,8 +1641,21 @@ class LShape(structural_steel.LShape):
         c= math.cos(pAxesAngle)
         s= math.sin(pAxesAngle)
         MW= Mz*c+My*s # W: axis between legs (bisection) 
-        MZ= -Mz*s+My*z # Z: axis normal to W
-        return (MW, MZ)
+        MZ= -Mz*s+My*c # Z: axis normal to W
+        return MW, MZ
+    
+    def getGeometricAxesMoments(self, MW, MZ):
+        ''' Return the moments with respect ot the principal axes.
+
+        :param MW: moment around the principal axis W.
+        :param MZ: moment around the principal axis z.
+        '''
+        pAxesAngle= self.getPrincipalAxesAngle()
+        c= math.cos(pAxesAngle)
+        s= math.sin(pAxesAngle)
+        Mz= MW*c-MZ*s # W: axis between legs (bisection) 
+        My= MW*s+MZ*c # Z: axis normal to W
+        return Mz, My
     
     def getSlendernessRatio(self):
         ''' Return the slenderness ratio.'''
@@ -1654,6 +1668,15 @@ class LShape(structural_steel.LShape):
             return self.get('b_flat')*t
         else:
             return self.get('h')*t
+        
+    def compressionSlendernessCheck(self):
+        ''' Verify that the section doesn't contains slender elements
+            according to table B4.1a of AISC-360-16.'''
+        E= self.get('E')
+        Fy= self.steelType.fy
+        lambda_r= 0.56*math.sqrt(E/Fy) # Case 3
+        slendernessRatio= self.get('bSlendernessRatio')
+        return slendernessRatio/lambda_r # OK if < 1.0
         
     def getLegShearBucklingStrengthCoefficient(self, kv, majorAxis= True):
         ''' Return the leg shear stress coefficient Cv2 according
@@ -1992,7 +2015,7 @@ class LShape(structural_steel.LShape):
         retval= min(retval, self.getWAxisLegLocalBucklingLimit(MW))
         return retval
         
-    def getNominalFlexuralStrength(self, lateralUnbracedLength, Cb, majorAxis= True):
+    def getGeometricNominalFlexuralStrength(self, lateralUnbracedLength, Cb, majorAxis= True):
         ''' Return the nominal flexural strength of the member
             according to equations F10-1 to F10-8 of AISC-360-16.
 
@@ -2007,7 +2030,39 @@ class LShape(structural_steel.LShape):
         Mn= min(Mn, self.getLateralTorsionalBucklingLimit(lateralUnbracedLength, Cb, majorAxis))
         Mn= min(Mn, self.getLegLocalBucklingLimit(lateralUnbracedLength, Cb, majorAxis))
         return Mn
-            
+
+    def getNominalFlexuralStrength(self, lateralUnbracedLength, Cb, majorAxis= True):
+        ''' Return the nominal flexural strength of the member
+            according to equations F10-1 to F10-8 of AISC-360-16.
+
+        :param lateralUnbracedLength: length between points that are either 
+                                      braced against lateral displacement of
+                                      the compression flange or braced against 
+                                      twist of the cross section.
+        :param Cb: lateral-torsional buckling modification factor.
+        :param majorAxis: true if flexure about the major axis.
+        '''
+        # The problem is that we need the moment about the W principal axis
+        # to compute the nominal flexural strength for angles with sides that
+        # are not equal.
+        if(not self.isEqualLeg()):
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.error(className+'.'+methodName+': implemented only for angles with equal legs.')
+        return self.getWAxisNominalFlexuralStrength(lateralUnbracedLength, Cb, MW=0.0)
+    
+    def getDesignFlexuralStrength(self, lateralUnbracedLength, Cb, majorAxis= True):
+        ''' Return the design flexural strength of the section
+            according to section F1 of AISC-360-16.
+
+        :param lateralUnbracedLength: length between points that are either 
+                                      braced against lateral displacement of
+                                      the compression flange or braced against 
+                                      twist of the cross section.
+        :param Cb: lateral-torsional buckling modification factor.
+        :param majorAxis: true if flexure about the major axis.
+        '''
+        return 0.9*self.getNominalFlexuralStrength(lateralUnbracedLength, Cb)
 
 # *************************************************************************
 # AISC Hollow Structural Sections.

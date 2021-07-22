@@ -199,9 +199,9 @@ class Member(steel_member_base.BucklingMember):
         '''Return biaxial bending efficiency according to section H1
            of AISC-360-16.
 
-           Nd: axial design load (required axial strength).
-           Myd: bending moment about weak axis (required flexural strength).
-           Mzd: bending moment about strong axis (required flexural strength).
+           :param Nd: axial design load (required axial strength).
+           :param Myd: bending moment about weak axis (required flexural strength).
+           :param Mzd: bending moment about strong axis (required flexural strength).
         '''
         # Compute axial load reduction factor.
         lrfN= self.getCompressiveStrengthReductionFactor()

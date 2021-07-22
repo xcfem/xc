@@ -1500,7 +1500,7 @@ class ASTMShape(object):
         McRdy= self.getDesignFlexuralStrength(None, None, majorAxis= False) # available flexural strength minor axis.
         McRdz= self.getReferenceFlexuralStrength() # reference flexural strength major axis.
         # MvRdz= self.getMvRdz(sectionClass,Vyd)
-        MvRdz= McRdz
+        MvRdz= McRdz # available flexural strength due to shear interaction.
         MbRdz= chiLT*MvRdz # available flexural strength major axis.
         ratioMz= abs(Mzd)/MbRdz
         ratioMy= abs(Myd)/McRdy
@@ -1652,7 +1652,22 @@ class CShape(ASTMShape,aisc_metric_shapes.CShape):
         ''' Return the yield strength of the flange.'''
         grossArea= self.getFlangeWidth()*self.getFlangeThickness()
         return self.steelType.getYt()*self.steelType.fy*grossArea
-    
+
+# *************************************************************************
+# AISC single angle profiles.
+# *************************************************************************
+#         Section axis:         *                *
+#      AISC            XC       *    Points:     *    Principal axes:
+#                               *                *
+#         ^ Y           ^ Y     *                *   
+#         |             |       *                *    Z-axis
+#                               *     A          *       \  |       W-axis
+#       |             |         *      |         *        \ |     /
+#       | -> X        | -> Z    *      |         *         \|   /
+#       |             |         *      |         *          | +
+#       -------       -------   *     B-------C  *          ----------
+#
+# *************************************************************************
 class LShape(ASTMShape, aisc_metric_shapes.LShape):
     """Single angle shape with ASTM/AISC verification routines.
 
@@ -1665,6 +1680,41 @@ class LShape(ASTMShape, aisc_metric_shapes.LShape):
         ASTMShape.__init__(self, name)
         aisc_metric_shapes.LShape.__init__(self,steel,name)
         
+    def getBiaxialBendingEfficiency(self,sectionClassif,Nd,Myd,Mzd,Vyd= 0.0, chiN=1.0, chiLT=1.0):
+        '''Return biaxial bending efficiency according to section H2
+           of AISC-360-16.
+
+        :param sectionClassif: section classification compact, noncompact, slender or too slender.
+        :param Nd: required axial strength.
+        :param Mzd: required bending strength (major axis).
+        :param Vyd: required shear strength (major axis)
+        :param chiN: axial load reduction reduction factor (default= 1.0).
+        :param chiLT: lateral buckling reduction factor (default= 1.0).
+        '''
+        if(Nd!=0.0):
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.error(className+'.'+methodName+': for compressed sections not implemented yet.')
+        # Moments about principal axes (signs inverted).
+        MW, MZ= self.getPrincipalAxesMoments(Mz= -Mzd, My= -Myd)
+        # Flexural strength.
+        MnZ= 0.9*self.getZAxisNominalFlexuralStrength(MZ= MZ) # available flexural strength minor axis.
+        MnW= chiLT*0.9*self.getWAxisNominalFlexuralStrength(lateralUnbracedLength= 0.1, Cb= 1.0, MW= MW) # available flexural strength major axis.
+        ratioN= 0.0 # To implement.
+        ratioZ= MZ/MnZ
+        ratioW= MW/MnW
+        # At point B (MZ>0 causes tension=>substract).
+        CFB= abs(ratioN-ratioZ)
+        # At point C (MW>0 causes compression=>sum and MZ>0 causes compression=>sum)
+        CFC= abs(ratioN+ratioW+ratioZ)
+        # At point A (MW>0 causes tension=>substract and MZ>0 causes compression=>sum)
+        CFA= abs(ratioN-ratioW+ratioZ)
+        CF= max(CFA,CFB,CFC)
+        MbRdz, McRdy= self.getGeometricAxesMoments(MW= MnW, MZ= MnZ)
+        McRdz= MbRdz/chiLT
+        NcRd= 0.0 # available compressive strength.
+        MvRdz= McRdz # available flexural strength due to shear interaction.
+        return (CF,NcRd,McRdy,McRdz,MvRdz,MbRdz)
 
 class HSSShape(ASTMShape,aisc_metric_shapes.HSSShape):
     """Rectangular HSS shape with ASTM/AISC verification routines.
