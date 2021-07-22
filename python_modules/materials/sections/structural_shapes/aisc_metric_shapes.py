@@ -1579,6 +1579,24 @@ class CShape(structural_steel.UShape):
 # *************************************************************************
 # AISC single angle profiles.
 # *************************************************************************
+# Section axis:
+
+#      AISC            XC                 Principal axes:
+
+#         ^ Y           ^ Y                    
+#         |             |                 Z-axis
+#                                           \  |       W-axis
+#       |             |                      \ |     /
+#       | -> X        | -> Z                  \|   /
+#       |             |                        | +
+#       -------       -------                  ----------
+
+# The axis used in AISC catalogue are different from those used in XC
+# (strong axis parallel to z axis) in other words: values for Y and Z axis 
+# are swapped with respect to those in the catalog.
+#
+# GEOMETRIC axes: axes parallel to the angle legs.
+# PRINCIPAL axes: principal axes of inertia of the angle.
 
 for item in shapes.L:
     shape= shapes.L[item]
@@ -1607,13 +1625,27 @@ class LShape(structural_steel.LShape):
         ''' Return true if the angle legs are equal.'''
         return (self.get('b_flat')==self.get('h'))
 
-    def getSlendernessRatio(self, majorAxis= True):
-        ''' Return the slenderness ratio shear strength calculation.'''
-        t= self.get('t')
-        if(majorAxis):
-            return self.get('b_flat')/t
-        else:
-            return self.get('h')/t
+    def getPrincipalAxesAngle(self):
+        ''' Return the angle between the principal axes of inertia
+            and the GEOMETRIC axes.'''
+        return math.atan(self.get('tan(α)'))
+
+    def getPrincipalAxesMoments(self, Mz, My):
+        ''' Return the moments with respect ot the principal axes.
+
+        :param Mz: moment around the GEOMETRIC axis z.
+        :param My: moment around the GEOMETRIC axis z.
+        '''
+        pAxesAngle= self.getPrincipalAxesAngle()
+        c= math.cos(pAxesAngle)
+        s= math.sin(pAxesAngle)
+        MW= Mz*c+My*s # W: axis between legs (bisection) 
+        MZ= -Mz*s+My*z # Z: axis normal to W
+        return (MW, MZ)
+    
+    def getSlendernessRatio(self):
+        ''' Return the slenderness ratio.'''
+        return self.get('bSlendernessRatio')
     
     def getAw(self, majorAxis= True):
         ''' Return area for shear strength calculation.'''
@@ -1653,7 +1685,7 @@ class LShape(structural_steel.LShape):
 
         return 0.9*self.getNominalShearStrength(majorAxis)
     
-    def getYieldMoment(self, majorAxis= True):
+    def getGeometricYieldMoment(self, majorAxis= True):
         ''' Return the yield moment of the shape according to
         section F10.2 of AISC 360-16.
 
@@ -1665,14 +1697,157 @@ class LShape(structural_steel.LShape):
         else:
             retval*= self.get('Wyel')
         return retval
+
+    def getZAxisYieldMoment(self):
+        ''' Return the yield moment about the Z principal axis.'''
+        fy= self.steelType.fy
+        SzB= self.get('SzB') # Elastic section modulus about the z-axis at point B.
+        return fy*SzB
     
-    def getPlasticMoment(self, majorAxis= True):
+    def getWAxisYieldMoment(self):
+        ''' Return the yield moment about the W principal axis.'''
+        fy= self.steelType.fy
+        SwC= self.get('SwC') # Elastic section modulus about the w-axis at point B.
+        return fy*SwC
+        
+    def getZAxisPlasticMoment(self):
+        ''' Return the plastic moment around the Z principal axis of the shape
+            according to equation F10-1 of AISC 360-16.
+        '''
+        return 1.5*self.getZAxisYieldMoment()
+    
+    def getWAxisPlasticMoment(self):
+        ''' Return the plastic moment around the W principal axis of the shape
+            according to equation F10-1 of AISC 360-16.
+        '''
+        return 1.5*self.getWAxisYieldMoment()
+    
+    def getZAxisElasticLateralTorsionalBucklingMoment(self):
+        ''' Return the elastic lateral-torsional buckling moment 
+        for bending around the Z principal axis.
+        '''
+        # From the User Note in AISC Specification Section F10, the limit
+        # state of lateral-torsional buckling does not apply for bending
+        # about the minor axis.
+        return self.getZAxisPlasticMoment() # So we return the plastic moment.
+    
+    def getWAxisElasticLateralTorsionalBucklingMoment(self, Lb, Cb):
+        ''' Return the elastic lateral-torsional buckling moment 
+        for bending around the W principal axis acocrding to
+        equation F10-4 of AISC 360-16.
+
+        :param Lb: laterally unbraced length of member
+        :param Cb: lateral-torsional buckling modification factor Cb
+                   for non uniform moment diagrams when both ends of the 
+                   segment are braced according to expression 
+                   F1-1 of AISC 360-16.
+        '''
+        E= self.get('E')
+        rz= self.get('ix') # Radius of gyration about the z-axis
+        t= self.get('t') # thickness
+        A= self.get('A') # area
+        if(self.isEqualLeg()):
+            retval= 9*E*A*rz*t*Cb/8/Lb
+        else:
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.error(className+'.'+methodName+': implemented only for angles with equal legs.')
+            retval= 1e-3*self.getZAxisPlasticMoment()
+        return retval
+    
+    def getWAxisLateralTorsionalBucklingLimit(self, Lb, Cb):
+        ''' Return the maximum flexural strength about W principal
+        axis due to lateral-torsional buckling according to 
+        expressions F10-2 and F10-3 of AISC 360-16.
+
+        :param Lb: Length between points that are either braced 
+                   against lateral displacement of compression 
+                   flange or braced against twist of the cross section.
+        :param Cb: lateral-torsional buckling modification factor Cb
+                   for non uniform moment diagrams when both ends of the 
+                   segment are braced according to expression 
+                   F1-1 of AISC 360-16.
+        '''
+        My= self.getWAxisYieldMoment()
+        Mcr= self.getWAxisElasticLateralTorsionalBucklingMoment(Lb, Cb)
+        if(My/Mcr<=1.0):
+            retval= min(1.5, (1.92-1.17*math.sqrt(My/Mcr)))*My
+        else:
+            retval= (0.92-0.17*Mcr/My)*Mcr
+        return retval
+    
+    def getZAxisLegLocalBucklingLimit(self, MZ):
+        ''' Return the maximum flexural strength due to leg local 
+        buckling according to expressions F10-6 to F10-8 of AISC 360-16.
+
+        :param MZ: moment around the Z principal axis.
+        '''
+        if(MZ<=0): # Toes in tension => no leg buckling.
+            retval= self.getZAxisYieldMoment()
+        else:
+            classif= self.getFlexureClassification()
+            equalLeg= self.isEqualLeg()
+            if(classif=='compact'):
+                retval= self.getZAxisYieldMoment(majorAxis)
+            elif(classif=='noncompact'): # non-compact legs.
+                b= self.get('b_flat')
+                E= self.get('E')
+                t= self.get('t')
+                Fy= self.steelType.fy
+                if(equalLeg):
+                    Sc= self.get('SzC') # Toes in compression.
+                else: # legs are not equal.
+                    Sc= min(self.get('SzA'), self.get('SzC')) # Toes in compression.
+                retval= Fy*Sc*(2.43-1.72*(b/t)*math.sqrt(Fy/E))
+            else: # slender legs.
+                b= self.get('b_flat')
+                E= self.get('E')
+                t= self.get('t')
+                Fcr= 0.71*E/(b/t)**2 # equation F10-8
+                if(equalLeg):
+                    Sc= self.get('SzC') # Toes in compression.
+                else: # legs are not equal.
+                    Sc= min(self.get('SzA'), self.get('SzC')) # Toes in compression.
+                retval= Fcr*Sc
+        return retval
+    
+    def getWAxisLegLocalBucklingLimit(self, MW):
+        ''' Return the maximum flexural strength due to leg local 
+        buckling according to expressions F10-6 to F10-8 of AISC 360-16.
+
+        :param MW: moment around the W principal axis.
+        '''
+        Sc= 0.0
+        if(MW>0): # Toe C in compression
+            Sc= self.get('SwC')
+        else: # Toe A in compression
+            Sc= self.get('SwA')
+
+        classif= self.getFlexureClassification()
+        equalLeg= self.isEqualLeg()
+        if(classif=='compact'):
+            retval= self.getWAxisYieldMoment()
+        elif(classif=='noncompact'): # non-compact legs.
+            b= self.get('b_flat')
+            E= self.get('E')
+            t= self.get('t')
+            Fy= self.steelType.fy
+            retval= Fy*Sc*(2.43-1.72*(b/t)*math.sqrt(Fy/E))
+        else: # slender legs.
+            b= self.get('b_flat')
+            E= self.get('E')
+            t= self.get('t')
+            Fcr= 0.71*E/(b/t)**2 # equation F10-8
+            retval= Fcr*Sc
+        return retval
+    
+    def getGeometricPlasticMoment(self, majorAxis= True):
         ''' Return the plastic moment of the shape according to equation
             F10-1 of AISC 360-16.
 
         :param majorAxis: true if flexure about the major axis.
         '''
-        return 1.5*self.getYieldMoment(majorAxis)
+        return 1.5*self.getGeometricYieldMoment(majorAxis)
     
     def getElasticLateralTorsionalBucklingMoment(self, Lb, Cb, majorAxis= True):
         ''' Return the elastic lateral-torsional buckling moment 
@@ -1684,7 +1859,7 @@ class LShape(structural_steel.LShape):
                    for non uniform moment diagrams when both ends of the 
                    segment are braced according to expression 
                    F1-1 of AISC 360-16.
-        :param majorAxis: true if bending aroun the major GEOMETRIC axis.
+        :param majorAxis: true if bending around the major GEOMETRIC axis.
         '''
         t= self.get('t')
         if(majorAxis):
@@ -1712,7 +1887,7 @@ class LShape(structural_steel.LShape):
                    F1-1 of AISC 360-16.
         :param majorAxis: true if bending aroun the major GEOMETRIC axis.
         '''
-        My= self.getYieldMoment(majorAxis)
+        My= self.getGeometricYieldMoment(majorAxis)
         Mcr= self.getElasticLateralTorsionalBucklingMoment(Lb, Cb, majorAxis)
         if(My/Mcr<=1.0):
             retval= min(1.5, (1.92-1.17*math.sqrt(My/Mcr)))*My
@@ -1732,15 +1907,13 @@ class LShape(structural_steel.LShape):
         '''
         return 0.91*math.sqrt(self.steelType.E/self.steelType.fy) # Case 12
     
-    def getFlexureClassification(self, majorAxis= True):
+    def getFlexureClassification(self):
         ''' Return the classification for local buckling of the
             leg of the section according to table B4.1b
             of AISC 360-16.
-
-        :param majorAxis: true if bending aroun the major GEOMETRIC axis.
         '''
         retval= 'compact'
-        slendernessRatio= self.getSlendernessRatio(majorAxis)
+        slendernessRatio= self.getSlendernessRatio()
         lambda_P= self.getLambdaPLegBending()
         lambda_R= self.getLambdaRLegBending()
         if(slendernessRatio>lambda_P):
@@ -1761,9 +1934,9 @@ class LShape(structural_steel.LShape):
                    segment are braced according to expression 
                    F1-1 of AISC 360-16.
         '''
-        classif= self.getFlexureClassification(majorAxis)
+        classif= self.getFlexureClassification()
         if(classif=='compact'):
-            retval= 1000*self.getYieldMoment(majorAxis)
+            retval= 1000*self.getGeometricYieldMoment(majorAxis)
         elif(classif=='noncompact'): # non-compact legs.
             equalLeg= self.isEqualLeg()
             if(equalLeg):
@@ -1777,15 +1950,48 @@ class LShape(structural_steel.LShape):
                 className= type(self).__name__
                 methodName= sys._getframe(0).f_code.co_name
                 lmsg.error(className+'.'+methodName+': implemented only for angles with equal legs.')
-                retval= 1e-3*self.getYieldMoment(majorAxis)
+                retval= 1e-3*self.getGeometricYieldMoment(majorAxis)
         else: # slender legs.
             Fcr= 0.71*E/(b/t)**2 # equation F10-8
             className= type(self).__name__
             methodName= sys._getframe(0).f_code.co_name
             lmsg.error(className+'.'+methodName+': not implemented for slender sections.')
-            retval= 1e-3*self.getYieldMoment(majorAxis)
+            retval= 1e-3*self.getGeometricYieldMoment(majorAxis)
+        return retval
+
+    def getZAxisNominalFlexuralStrength(self, MZ):
+        ''' Return the nominal flexural strength of the member
+            around its principal Z axis according to equations F10-1 
+            to F10-8 of AISC-360-16.
+
+        :param MZ: moment around the Z principal axis.
+        '''
+        retval= self.getZAxisPlasticMoment()
+        # From the User Note in AISC Specification Section F10, the limit
+        # state of lateral-torsional buckling does not apply for bending
+        # about the minor axis.
+        #retval= min(retval, self.getZAxisLateralTorsionalBucklingMoment())
+        retval= min(retval, self.getZAxisLegLocalBucklingLimit(MZ))
         return retval
     
+    def getWAxisNominalFlexuralStrength(self, lateralUnbracedLength, Cb, MW):
+        ''' Return the nominal flexural strength of the member
+            around its principal W axis according to equations F10-1 
+            to F10-8 of AISC-360-16.
+
+        :param lateralUnbracedLength: length between points that are either 
+                                      braced against lateral displacement of
+                                      the compression flange or braced against 
+                                      twist of the cross section.
+        :param Cb: lateral-torsional buckling modification factor.
+
+        :param MW: moment around the W principal axis.
+        '''
+        retval= self.getWAxisPlasticMoment()
+        retval= min(retval, self.getWAxisLateralTorsionalBucklingLimit(lateralUnbracedLength, Cb))
+        retval= min(retval, self.getWAxisLegLocalBucklingLimit(MW))
+        return retval
+        
     def getNominalFlexuralStrength(self, lateralUnbracedLength, Cb, majorAxis= True):
         ''' Return the nominal flexural strength of the member
             according to equations F10-1 to F10-8 of AISC-360-16.
@@ -1797,7 +2003,7 @@ class LShape(structural_steel.LShape):
         :param Cb: lateral-torsional buckling modification factor.
         :param majorAxis: true if flexure about the major axis.
         '''
-        Mn= self.getPlasticMoment(majorAxis)
+        Mn= self.getGeometricPlasticMoment(majorAxis)
         Mn= min(Mn, self.getLateralTorsionalBucklingLimit(lateralUnbracedLength, Cb, majorAxis))
         Mn= min(Mn, self.getLegLocalBucklingLimit(lateralUnbracedLength, Cb, majorAxis))
         return Mn
