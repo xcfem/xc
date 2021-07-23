@@ -40,7 +40,7 @@ nodes= preprocessor.getNodeHandler
 steel= ASTM_materials.A36
 steel.gammaM= 1.00
 ## Profile geometry
-shape= ASTM_materials.LShape(steel,'L4X4X1/4')
+shape= ASTM_materials.SimpleLShape(steel,'L4X4X1/4')
 xcSection= shape.defElasticShearSection2d(preprocessor)
 
 # Model geometry

@@ -1668,6 +1668,18 @@ class CShape(ASTMShape,aisc_metric_shapes.CShape):
 #       -------       -------   *     B-------C  *          ----------
 #
 # *************************************************************************
+class SimpleLShape(ASTMShape, aisc_metric_shapes.SimpleLShape):
+    """Single angle shape with simplified ASTM/AISC verification routines.
+
+    :ivar steel: steel material (i.e. A36).
+    :ivar name: shape name  (i.e. L4X4X1/4).
+    """
+    def __init__(self,steel,name):
+        ''' Constructor.
+        '''
+        ASTMShape.__init__(self, name)
+        aisc_metric_shapes.SimpleLShape.__init__(self,steel,name)
+
 class LShape(ASTMShape, aisc_metric_shapes.LShape):
     """Single angle shape with ASTM/AISC verification routines.
 

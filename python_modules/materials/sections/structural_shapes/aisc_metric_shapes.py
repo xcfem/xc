@@ -387,6 +387,9 @@ class WShape(structural_steel.IShape):
     '''
     def __init__(self,steel= None, name= ''):
         ''' Constructor.
+
+        :param steel: steel material.
+        :param name: shape name (i.e. W40X431).
         '''
         super(WShape,self).__init__(steel,name,W)
 
@@ -1182,10 +1185,10 @@ class IShape(WShape, structural_steel.IShape):
     def __init__(self, bf, tf, tw, hw, steel= None, name= ''):
         ''' Constructor.
 
-        :ivar bf: Flange width
-        :ivar tf: Flange thickness
-        :ivar tw: Web thickess
-        :ivar hw: Web height
+        :param bf: Flange width
+        :param tf: Flange thickness
+        :param tw: Web thickess
+        :param hw: Web height
         '''
         isection = section_properties.ISection(name, bf, tf, tw, hw, bf, tf)
         idict = isection.getDict()
@@ -1277,6 +1280,8 @@ class CShape(structural_steel.UShape):
     def __init__(self,steel,name):
         ''' Constructor.
 
+        :param steel: steel material.
+        :param name: shape name (i.e. C15X50).
         '''
         super(CShape,self).__init__(steel,name,C)
 
@@ -1610,11 +1615,13 @@ class LShape(structural_steel.LShape):
     '''L shape.
 
     :ivar steel: steel material.
-    :ivar name: shape name (i.e. L15X50).
+    :ivar name: shape name (i.e. L4X4X1/4).
     '''
     def __init__(self,steel,name):
         ''' Constructor.
 
+        :param steel: steel material.
+        :param name: shape name (i.e. L4X4X1/4).
         '''
         super(LShape,self).__init__(steel,name,L)
 
@@ -1708,19 +1715,6 @@ class LShape(structural_steel.LShape):
 
         return 0.9*self.getNominalShearStrength(majorAxis)
     
-    def getGeometricYieldMoment(self, majorAxis= True):
-        ''' Return the yield moment of the shape according to
-        section F10.2 of AISC 360-16.
-
-        :param majorAxis: true if flexure about the major axis.
-        '''
-        retval= 0.8*self.steelType.fy
-        if(majorAxis):
-            retval*= self.get('Wzel') 
-        else:
-            retval*= self.get('Wyel')
-        return retval
-
     def getZAxisYieldMoment(self):
         ''' Return the yield moment about the Z principal axis.'''
         fy= self.steelType.fy
@@ -1863,15 +1857,7 @@ class LShape(structural_steel.LShape):
             Fcr= 0.71*E/(b/t)**2 # equation F10-8
             retval= Fcr*Sc
         return retval
-    
-    def getGeometricPlasticMoment(self, majorAxis= True):
-        ''' Return the plastic moment of the shape according to equation
-            F10-1 of AISC 360-16.
-
-        :param majorAxis: true if flexure about the major axis.
-        '''
-        return 1.5*self.getGeometricYieldMoment(majorAxis)
-    
+        
     def getElasticLateralTorsionalBucklingMoment(self, Lb, Cb, majorAxis= True):
         ''' Return the elastic lateral-torsional buckling moment 
         according to equations F10-5a and F10-5b of AISC 360-16
@@ -1895,27 +1881,6 @@ class LShape(structural_steel.LShape):
         factorA= rr-1
         factorB= rr+1
         retval*= min(factorA,factorB)
-        return retval
-
-    def getLateralTorsionalBucklingLimit(self, Lb, Cb, majorAxis= True):
-        ''' Return the maximum flexural strength due to lateral-torsional 
-        buckling according to expressions F10-2 and F10-3 of AISC 360-16
-
-        :param Lb: Length between points that are either braced 
-                   against lateral displacement of compression 
-                   flange or braced against twist of the cross section.
-        :param Cb: lateral-torsional buckling modification factor Cb
-                   for non uniform moment diagrams when both ends of the 
-                   segment are braced according to expression 
-                   F1-1 of AISC 360-16.
-        :param majorAxis: true if bending aroun the major GEOMETRIC axis.
-        '''
-        My= self.getGeometricYieldMoment(majorAxis)
-        Mcr= self.getElasticLateralTorsionalBucklingMoment(Lb, Cb, majorAxis)
-        if(My/Mcr<=1.0):
-            retval= min(1.5, (1.92-1.17*math.sqrt(My/Mcr)))*My
-        else:
-            retval= (0.92-0.17*Mcr/My)*Mcr
         return retval
 
     def getLambdaPLegBending(self):
@@ -2014,23 +1979,7 @@ class LShape(structural_steel.LShape):
         retval= min(retval, self.getWAxisLateralTorsionalBucklingLimit(lateralUnbracedLength, Cb))
         retval= min(retval, self.getWAxisLegLocalBucklingLimit(MW))
         return retval
-        
-    def getGeometricNominalFlexuralStrength(self, lateralUnbracedLength, Cb, majorAxis= True):
-        ''' Return the nominal flexural strength of the member
-            according to equations F10-1 to F10-8 of AISC-360-16.
-
-        :param lateralUnbracedLength: length between points that are either 
-                                      braced against lateral displacement of
-                                      the compression flange or braced against 
-                                      twist of the cross section.
-        :param Cb: lateral-torsional buckling modification factor.
-        :param majorAxis: true if flexure about the major axis.
-        '''
-        Mn= self.getGeometricPlasticMoment(majorAxis)
-        Mn= min(Mn, self.getLateralTorsionalBucklingLimit(lateralUnbracedLength, Cb, majorAxis))
-        Mn= min(Mn, self.getLegLocalBucklingLimit(lateralUnbracedLength, Cb, majorAxis))
-        return Mn
-
+            
     def getNominalFlexuralStrength(self, lateralUnbracedLength, Cb, majorAxis= True):
         ''' Return the nominal flexural strength of the member
             according to equations F10-1 to F10-8 of AISC-360-16.
@@ -2064,6 +2013,91 @@ class LShape(structural_steel.LShape):
         '''
         return 0.9*self.getNominalFlexuralStrength(lateralUnbracedLength, Cb)
 
+class SimpleLShape(LShape):
+    '''L shape with simplified limit state checking.
+
+    :ivar steel: steel material.
+    :ivar name: shape name (i.e. L15X50).
+    '''
+    def __init__(self,steel,name):
+        ''' Constructor.
+
+        :param steel: steel material.
+        :param name: shape name (i.e. L4X4X1/4).
+        '''
+        super(SimpleLShape,self).__init__(steel,name)
+        
+    def getGeometricYieldMoment(self, majorAxis= True):
+        ''' Return the yield moment of the shape according to
+        section F10.2 of AISC 360-16.
+
+        :param majorAxis: true if flexure about the major axis.
+        '''
+        retval= 0.8*self.steelType.fy
+        if(majorAxis):
+            retval*= self.get('Wzel') 
+        else:
+            retval*= self.get('Wyel')
+        return retval
+    
+    def getGeometricPlasticMoment(self, majorAxis= True):
+        ''' Return the plastic moment of the shape according to equation
+            F10-1 of AISC 360-16.
+
+        :param majorAxis: true if flexure about the major axis.
+        '''
+        return 1.5*self.getGeometricYieldMoment(majorAxis)
+        
+    def getLateralTorsionalBucklingLimit(self, Lb, Cb, majorAxis= True):
+        ''' Return the maximum flexural strength due to lateral-torsional 
+        buckling according to expressions F10-2 and F10-3 of AISC 360-16
+
+        :param Lb: Length between points that are either braced 
+                   against lateral displacement of compression 
+                   flange or braced against twist of the cross section.
+        :param Cb: lateral-torsional buckling modification factor Cb
+                   for non uniform moment diagrams when both ends of the 
+                   segment are braced according to expression 
+                   F1-1 of AISC 360-16.
+        :param majorAxis: true if bending aroun the major GEOMETRIC axis.
+        '''
+        My= self.getGeometricYieldMoment(majorAxis)
+        Mcr= self.getElasticLateralTorsionalBucklingMoment(Lb, Cb, majorAxis)
+        if(My/Mcr<=1.0):
+            retval= min(1.5, (1.92-1.17*math.sqrt(My/Mcr)))*My
+        else:
+            retval= (0.92-0.17*Mcr/My)*Mcr
+        return retval
+    
+    def getNominalFlexuralStrength(self, lateralUnbracedLength, Cb, majorAxis= True):
+        ''' Return the nominal flexural strength of the member
+            according to equations F10-1 to F10-8 of AISC-360-16.
+
+        :param lateralUnbracedLength: length between points that are either 
+                                      braced against lateral displacement of
+                                      the compression flange or braced against 
+                                      twist of the cross section.
+        :param Cb: lateral-torsional buckling modification factor.
+        :param majorAxis: true if flexure about the major axis.
+        '''
+        Mn= self.getGeometricPlasticMoment(majorAxis)
+        Mn= min(Mn, self.getLateralTorsionalBucklingLimit(lateralUnbracedLength, Cb, majorAxis))
+        Mn= min(Mn, self.getLegLocalBucklingLimit(lateralUnbracedLength, Cb, majorAxis))
+        return Mn
+        
+    def getDesignFlexuralStrength(self, lateralUnbracedLength, Cb, majorAxis= True):
+        ''' Return the design flexural strength of the section
+            according to section F1 of AISC-360-16.
+
+        :param lateralUnbracedLength: length between points that are either 
+                                      braced against lateral displacement of
+                                      the compression flange or braced against 
+                                      twist of the cross section.
+        :param Cb: lateral-torsional buckling modification factor.
+        :param majorAxis: true if flexure about the major axis.
+        '''
+        return 0.9*self.getGeometricNominalFlexuralStrength(lateralUnbracedLength, Cb, majorAxis)
+    
 # *************************************************************************
 # AISC Hollow Structural Sections.
 # *************************************************************************
@@ -2092,6 +2126,9 @@ class HSSShape(structural_steel.QHShape):
     '''
     def __init__(self,steel,name):
         ''' Constructor.
+
+        :param steel: steel material.
+        :param name: shape name (i.e. HSS2X2X_250).
         '''
         super(HSSShape,self).__init__(steel,name,HSS)
 
@@ -2636,6 +2673,9 @@ class CHSSShape(structural_steel.CHShape):
     '''
     def __init__(self,steel,name):
         ''' Constructor.
+
+        :param steel: steel material.
+        :param name: shape name (i.e. HSS16.000X0.375).
         '''
         super(CHSSShape,self).__init__(steel,name,CHSS)
         
