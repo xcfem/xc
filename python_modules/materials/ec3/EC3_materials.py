@@ -341,12 +341,20 @@ class EC3Shape(object):
         '''
         return abs(Vyd/self.getVcRdy())
 
-    def getZBendingEfficiency(self,sectionClass,Mzd,Vyd= 0.0, chiLT= 1.0):
+    def getZBendingEfficiency(self, Nd, Mzd, Vyd= 0.0, chiN=1.0, chiLT= 1.0,sectionClass= None):
         '''Return major axis bending efficiency
 
-        :param sectionClass: section classification (1,2,3 or 4)
+        :param Nd: required axial strength.
+        :param Mzd: required bending strength (major axis).
+        :param Vyd: required shear strength (major axis)
+        :param chiN: axial strength reduction factor (default= 1.0).
         :param chiLT: lateral buckling reduction factor (default= 1.0).
+        :param sectionClass: section classification (1,2,3 or 4)
         '''
+        if(Nd!=0.0):
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.error(className+'.'+methodName+': for compressed sections not implemented yet.')
         MvRdz= self.getMvRdz(sectionClass,Vyd)
         MbRdz= chiLT*MvRdz #Lateral buckling reduction.
         return abs(Mzd)/MbRdz

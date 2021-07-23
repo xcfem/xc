@@ -365,8 +365,8 @@ class SteelShape(sp.SectionProperties):
         if(len(shear)>1): # 'V' found.
             V1= shear[0]
             V2= shear[1]
-        FCTN1= self.getZBendingEfficiency(sectionClassif= sectionClass, Nd= N1, Mzd= M1, Vyd= V1,chiN= chiN, chiLT= chiLT)[0]
-        FCTN2= self.getZBendingEfficiency(sectionClassif= sectionClass, Nd= N2, Mzd= M2, Vyd= V2,chiN= chiN, chiLT= chiLT)[0]
+        FCTN1= self.getZBendingEfficiency(Nd= N1, Mzd= M1, Vyd= V1,chiN= chiN, chiLT= chiLT, sectionClassif= sectionClass,)[0]
+        FCTN2= self.getZBendingEfficiency(Nd= N2, Mzd= M2, Vyd= V2,chiN= chiN, chiLT= chiLT, sectionClassif= sectionClass)[0]
         fctn= elem.getProp("FCTNCP")
         if(FCTN1 > fctn[0]):
             fctn[0]= FCTN1
@@ -406,8 +406,8 @@ class SteelShape(sp.SectionProperties):
         if(len(shearY)>1): # 'Vy' found.
             Vy1= shearY[0]
             Vy2= shearY[1]
-        FCTN1= self.getBiaxialBendingEfficiency(sectionClassif= sectionClass, Nd= N1, Myd= My1, Mzd= Mz1, Vyd= Vy1, chiN= chiN, chiLT= chiLT)[0]
-        FCTN2= self.getBiaxialBendingEfficiency(sectionClassif= sectionClass, Nd= N2, Myd= My2, Mzd= Mz2, Vyd= Vy2, chiN= chiN, chiLT= chiLT)[0]
+        FCTN1= self.getBiaxialBendingEfficiency(Nd= N1, Myd= My1, Mzd= Mz1, Vyd= Vy1, chiN= chiN, chiLT= chiLT)[0]
+        FCTN2= self.getBiaxialBendingEfficiency(Nd= N2, Myd= My2, Mzd= Mz2, Vyd= Vy2, chiN= chiN, chiLT= chiLT)[0]
         fctn= elem.getProp("FCTNCP")
         if(FCTN1 > fctn[0]):
             fctn[0]= FCTN1

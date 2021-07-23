@@ -798,7 +798,80 @@ class WShape(structural_steel.IShape):
         web= bte.BlockRecord(-1, 'line', [self.bottomFlangeAId[1],self.topFlangeAId[1]], blockProperties= webWeldProperties, thk= None, matId= self.steelType.name)
         retval.weldBlocks= [bottomFlange1, bottomFlange2, topFlange1, topFlange2, web] # Dirty solution, I know (LCPT).
         retval.appendBlock(web)
-        return retval        
+        return retval
+    
+    def getCompressiveBucklingReductionLimitWeb(self, Fcr):
+        ''' Return the compressive buckling reduction limit for the web
+            used in equations E7-2 and E7-3 of AISC 360-16.
+
+        :param Fcr: compressive critical stress of the member.
+         '''
+        Fy= self.steelType.fy
+        lambda_r= self.getLambdaRWebBending()
+        return lambda_r*math.sqrt(Fy/Fcr)
+    
+    def getCompressiveBucklingReductionLimitFlange(self, Fcr):
+        ''' Return the compressive buckling reduction limit for the flange
+            used in equations E7-2 and E7-3 of AISC 360-16.
+
+        :param Fcr: compressive critical stress of the member.
+         '''
+        Fy= self.steelType.fy
+        lambda_r= self.getLambdaRWebBending()
+        return lambda_r*math.sqrt(Fy/Fcr)
+    
+    def getReducedEffectiveH(self, Fcr):
+        '''Return the reduced effective width corresponding to the web 
+           of the shape according to clause E7.1 of AISC 360-16.
+
+        :param Fcr: compressive critical stress of the member.
+        '''
+        reductionLimit= self.getCompressiveBucklingReductionLimitWeb(Fcr)
+        lambda_h= self.get('hSlendernessRatio')
+        retval= self.get('h')
+        if(lambda_h>reductionLimit):
+            c1= 0.2; c2= 1.38 # table E7.1 case (b)
+            lambda_r= self.getLambdaRCompression()
+            Fel= (c2*lambda_r/lambda_h)**2*self.steelType.fy
+            sqroot= math.sqrt(Fel/Fcr)
+            retval*= (1-c1*sqroot)*sqroot
+        return retval
+    
+    def getReducedEffectiveB(self, Fcr):
+        '''Return the reduced effective width corresponding to the "b" 
+           walls of the shape according to clause E7.1 of AISC 360-16.
+
+        :param Fcr: compressive critical stress of the member.
+        '''
+        reductionLimit= self.getCompressiveBucklingReductionLimitFlange(Fcr)
+        lambda_b= self.get('bSlendernessRatio')
+        retval= self.get('b')
+        if(lambda_b>reductionLimit):
+            c1= 0.2; c2= 1.38 # table E7.1 case (b)
+            lambda_r= self.getLambdaRCompression()
+            Fel= (c2*lambda_r/lambda_b)**2*self.steelType.fy
+            sqroot= math.sqrt(Fel/Fcr)
+            retval*= (1-c1*sqroot)*sqroot
+        return retval
+    
+    def getCompressionEffectiveArea(self, Fcr):
+        '''Return the effective area of the shape according to the "b" 
+           walls of the shape according to clause E7.1 of AISC 360-16.
+
+        :param Fcr: compressive critical stress of the member.
+        '''
+        retval= self.get('A')
+        slendernessCheck= self.compressionSlendernessCheck()
+        if(slendernessCheck>1.0):
+            # Web 
+            tw= self.get('tw')
+            h_ineff= self.get('h')-self.getReducedEffectiveH(Fcr)
+            retval-= h_ineff*tw
+            # Flanges
+            tf= self.get('tf')
+            b_ineff= self.get('b')-self.getReducedEffectiveB(Fcr)
+            retval-= 2.0*b_ineff*tf
+        return retval
 
     def getLambdaPFlangeBending(self):
         '''Return he limiting slenderness for a compact flange, 
@@ -890,9 +963,15 @@ class WShape(structural_steel.IShape):
             according to table B4.1a of AISC-360-16.'''
         E= self.get('E')
         Fy= self.steelType.fy
-        lambda_r= self.getLambdaRFlangeCompression()
-        slendernessRatio= self.get('bSlendernessRatio')
-        return slendernessRatio/lambda_r # OK if < 1.0
+        # check flanges (case 1)
+        flangeLambda_r= self.getLambdaRFlangeCompression()
+        flangeSlendernessRatio= self.get('bSlendernessRatio')
+        retval= flangeSlendernessRatio/flangeLambda_r # OK if < 1.0
+        # check web (case 5)
+        webLambda_r= 1.49*math.sqrt(E/Fy)
+        webSlendernessRatio= self.get('hSlendernessRatio')
+        retval= max(retval, webSlendernessRatio/webLambda_r) # OK if < 1.0
+        return retval # OK if < 1.0
 
     def getAw(self, majorAxis= True):
         ''' Return area for shear strength calculation.'''
@@ -1256,7 +1335,7 @@ class IShape(WShape, structural_steel.IShape):
         Fy = self.steelType.fy
         E = self.get('E')
         return 0.64 * math.sqrt(kc * E / Fy)
- 
+    
 # *************************************************************************
 # AISC C profiles.
 # *************************************************************************
@@ -1298,7 +1377,7 @@ class CShape(structural_steel.UShape):
         '''Return he limiting slenderness for a noncompact flange, 
            defined in Table B4.1b of AISC-360-16.'''
         return getUIShapeLambdaRFlangeBending(self)
-
+    
     def getLambdaPWebBending(self):
         '''Return he limiting slenderness for a compact flange, 
            defined in Table B4.1b of AISC-360-16.'''
@@ -1436,9 +1515,17 @@ class CShape(structural_steel.UShape):
     def compressionSlendernessCheck(self):
         ''' Verify that the section doesn't contains slender elements
             according to table B4.1a of AISC-360-16.'''
-        lambda_r= self.getLambdaRFlangeCompression()
-        slendernessRatio= self.get('bSlendernessRatio')
-        return slendernessRatio/lambda_r # OK if < 1.0
+        E= self.get('E')
+        Fy= self.steelType.fy
+        # check flanges (case 1)
+        flangeLambda_r= self.getLambdaRFlangeCompression()
+        flangeSlendernessRatio= self.get('bSlendernessRatio')
+        retval= flangeSlendernessRatio/flangeLambda_r # OK if < 1.0
+        # check web (case 5)
+        webLambda_r= 1.49*math.sqrt(E/Fy)
+        webSlendernessRatio= self.get('hSlendernessRatio')
+        retval= max(retval, webSlendernessRatio/webLambda_r) # OK if < 1.0
+        return retval # OK if < 1.0
     
     def getTorsionalElasticBucklingStress(self, Lc):
         ''' Return the torsional or flexural-torsional elastic buckling stress
@@ -1587,11 +1674,11 @@ class CShape(structural_steel.UShape):
 #         Section axis:         *                *
 #      AISC            XC       *    Points:     *    Principal axes:
 #                               *                *
-#         ^ Y           ^ Y     *                *   
+#         ^ Y           ^ y     *                *   
 #         |             |       *                *    Z-axis
 #                               *     A          *       \  |       W-axis
 #       |             |         *      |         *        \ |     /
-#       | -> X        | -> Z    *      |         *         \|   /
+#       | -> X        | -> z    *      |         *         \|   /
 #       |             |         *      |         *          | +
 #       -------       -------   *     B-------C  *          ----------
 #
@@ -1667,6 +1754,57 @@ class LShape(structural_steel.LShape):
     def getSlendernessRatio(self):
         ''' Return the slenderness ratio.'''
         return self.get('bSlendernessRatio')
+
+    def getLegsSlendernessRatios(self):
+        ''' Return the slenderness ratio of each leg. '''
+        t= self.get('t')
+        b= self.get('b_flat')
+        d= self.get('h')
+        return (b/t, d/t)
+    
+    def getLegsCompressionClassification(self):
+        ''' Return the classification for local buckling of the
+            legs of the section according to table B4.1a
+            of AISC 360-16.
+        '''
+        retval0= 'nonslender'; retval1= 'nonslender'
+        slendernessRatios= self.getLegsSlendernessRatios()
+        lambda_R= self.getLambdaRCompression() # Case 3
+        if(slendernessRatios[0]>lambda_R):
+            retval0= 'slender'
+        if(slendernessRatios[1]>lambda_R):
+            retval1= 'slender'
+        return (retval0, retval1)
+
+    def getCriticalStressE(self, effectiveLength):
+        '''Return the critical stress for the limit state 
+           of flexural buckling according to sections E3
+           and E4 of AISC-360-16.
+
+        :param effectiveLength: effective length of member.
+        '''
+        E= self.get('E') # Elastic modulus.
+        Fy= self.steelType.fy # steel specified minimum yield stress.
+        sqroot= math.sqrt(self.steelType.E/self.steelType.fy)
+        slendernessRatios= self.getLegsSlendernessRatios()
+        e4threshold= 0.71*sqroot
+        if(max(slendernessRatios[0], slendernessRatios[1])>e4threshold):
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.error(className+'.'+methodName+': torsional and flexural torsional buckling of single angles (section E4 of AISC 360-16) not implemented yet.')
+            retval= 1e-6*Fy
+        else:            
+            rz= self.get('ix') # Radius of gyration about the principal z-axis
+            Lc_r= effectiveLength/rz
+            # Elastic buckling stress.
+            Fe= math.pi**2*E/(Lc_r)**2
+            Fy_Fe= Fy/Fe
+            threshold= 4.71*sqroot
+            if(Lc_r<=threshold or Fy_Fe<=2.25):
+                retval= math.pow(0.658, Fy_Fe)*Fy # Equation E3-2
+            else:
+                retval= 0.877*Fe # Equation E3-3
+        return retval
     
     def getAw(self, majorAxis= True):
         ''' Return area for shear strength calculation.'''
@@ -1675,15 +1813,85 @@ class LShape(structural_steel.LShape):
             return self.get('b_flat')*t
         else:
             return self.get('h')*t
+
+    def getLambdaRCompression(self):
+        ''' Return the limiting width-to-thickness ratio
+        between nonslender and slender elements
+        according to case 3 of table B4.1a of AISC-360-16.
+        '''
+        E= self.get('E')
+        Fy= self.steelType.fy
+        return 0.45*math.sqrt(E/Fy) # Case 3
         
     def compressionSlendernessCheck(self):
         ''' Verify that the section doesn't contains slender elements
             according to table B4.1a of AISC-360-16.'''
-        E= self.get('E')
-        Fy= self.steelType.fy
-        lambda_r= 0.56*math.sqrt(E/Fy) # Case 3
+        lambda_r= self.getLambdaRCompression()
         slendernessRatio= self.get('bSlendernessRatio')
         return slendernessRatio/lambda_r # OK if < 1.0
+    
+    def getCompressiveBucklingReductionLimit(self, Fcr):
+        ''' Return the compressive buckling reduction limit for the web
+            used in equations E7-2 and E7-3 of AISC 360-16.
+
+        :param Fcr: compressive critical stress of the member.
+         '''
+        Fy= self.steelType.fy
+        lambda_r= self.getLambdaRCompression()
+        return lambda_r*math.sqrt(Fy/Fcr)
+    
+    def getReducedEffectiveH(self, reductionLimit, Fcr):
+        '''Return the reduced effective width corresponding to the web 
+           of the shape according to clause E7.1 of AISC 360-16.
+
+        :param Fcr: compressive critical stress of the member.
+        '''
+        h= self.get('h')
+        retval= h
+        t= self.get('t')
+        lambda_h= h/t
+        if(lambda_h>reductionLimit):
+            c1= 0.2; c2= 1.38 # table E7.1 case (b)
+            lambda_r= self.getLambdaRCompression()
+            Fel= (c2*lambda_r/lambda_h)**2*self.steelType.fy
+            sqroot= math.sqrt(Fel/Fcr)
+            retval*= (1-c1*sqroot)*sqroot
+        return retval
+    
+    def getReducedEffectiveB(self, reductionLimit, Fcr):
+        '''Return the reduced effective width corresponding to the "b" 
+           walls of the shape according to clause E7.1 of AISC 360-16.
+
+        :param Fcr: compressive critical stress of the member.
+        '''
+        lambda_b= self.get('bSlendernessRatio')
+        retval= self.get('b_flat')
+        if(lambda_b>reductionLimit):
+            c1= 0.2; c2= 1.38 # table E7.1 case (b)
+            lambda_r= self.getLambdaRCompression()
+            Fel= (c2*lambda_r/lambda_b)**2*self.steelType.fy
+            sqroot= math.sqrt(Fel/Fcr)
+            retval*= (1-c1*sqroot)*sqroot
+        return retval
+    
+    def getCompressionEffectiveArea(self, Fcr):
+        '''Return the effective area of the shape according to the "b" 
+           walls of the shape according to clause E7.1 of AISC 360-16.
+
+        :param Fcr: compressive critical stress of the member.
+        '''
+        retval= self.get('A')
+        slendernessCheck= self.compressionSlendernessCheck()
+        if(slendernessCheck>1.0):
+            reductionLimit= self.getCompressiveBucklingReductionLimit(Fcr)
+            t= self.get('t')
+            # H
+            h_ineff= self.get('h')-self.getReducedEffectiveH(reductionLimit, Fcr)
+            retval-= h_ineff*t
+            # B
+            b_ineff= self.get('b_flat')-self.getReducedEffectiveB(reductionLimit, Fcr)
+            retval-= b_ineff*t
+        return retval
         
     def getLegShearBucklingStrengthCoefficient(self, kv, majorAxis= True):
         ''' Return the leg shear stress coefficient Cv2 according
@@ -1760,7 +1968,7 @@ class LShape(structural_steel.LShape):
                    F1-1 of AISC 360-16.
         '''
         E= self.get('E')
-        rz= self.get('ix') # Radius of gyration about the z-axis
+        rz= self.get('ix') # Radius of gyration about the principal z-axis
         t= self.get('t') # thickness
         A= self.get('A') # area
         if(self.isEqualLeg()):
@@ -1802,7 +2010,7 @@ class LShape(structural_steel.LShape):
         if(MZ<=0): # Toes in tension => no leg buckling.
             retval= self.getZAxisYieldMoment()
         else:
-            classif= self.getFlexureClassification()
+            classif= self.getFlexureLegsClassification()
             equalLeg= self.isEqualLeg()
             if(classif=='compact'):
                 retval= self.getZAxisYieldMoment(majorAxis)
@@ -1840,7 +2048,7 @@ class LShape(structural_steel.LShape):
         else: # Toe A in compression
             Sc= self.get('SwA')
 
-        classif= self.getFlexureClassification()
+        classif= self.getFlexureLegsClassification()
         equalLeg= self.isEqualLeg()
         if(classif=='compact'):
             retval= self.getWAxisYieldMoment()
@@ -1895,9 +2103,9 @@ class LShape(structural_steel.LShape):
         '''
         return 0.91*math.sqrt(self.steelType.E/self.steelType.fy) # Case 12
     
-    def getFlexureClassification(self):
+    def getFlexureLegsClassification(self):
         ''' Return the classification for local buckling of the
-            leg of the section according to table B4.1b
+            legs of the section according to table B4.1b
             of AISC 360-16.
         '''
         retval= 'compact'
@@ -1922,7 +2130,7 @@ class LShape(structural_steel.LShape):
                    segment are braced according to expression 
                    F1-1 of AISC 360-16.
         '''
-        classif= self.getFlexureClassification()
+        classif= self.getFlexureLegsClassification()
         if(classif=='compact'):
             retval= 1000*self.getGeometricYieldMoment(majorAxis)
         elif(classif=='noncompact'): # non-compact legs.
@@ -2147,12 +2355,11 @@ class HSSShape(structural_steel.QHShape):
         return getMetricLabel(self.name)
 
     def getLambdaRCompression(self):
-        ''' Return the Limiting Width-to-Thickness Ratio
+        ''' Return the limiting width-to-thickness ratio
         between nonslender and slender elements
         according to case 6 of table B4.1a of AISC-360-16.
         '''
         return 1.4*math.sqrt(self.steelType.E/self.steelType.fy)
-    
 
     def getBClassification(self):
         ''' Return the classification for local buckling of the
@@ -2228,7 +2435,7 @@ class HSSShape(structural_steel.QHShape):
     
     def getHFlexureClassification(self):
         ''' Return the classification for local buckling of the
-            "h" wall of the section according to table B4.1b
+            "h" wall of the section according to case 19 of table B4.1b
             of AISC 360-16.
         '''
         retval= 'compact'
@@ -2392,35 +2599,66 @@ class HSSShape(structural_steel.QHShape):
         '''
         return getShapePlasticMoment(self,majorAxis)
 
-    def getReducedEffectiveH(self):
-        '''Return the reduced effective width corresponding
-           to the "h" walls of the shape.'''
-        rt= math.sqrt(self.steelType.E/self.steelType.fy) #Simplification
-        h_t= self.get('hSlendernessRatio')
-        t= self.get('t')
-        retval= 1.92*t*rt*(1.0-0.38/h_t*rt)
-        retval= min(retval,self.get('h'))
+    def getReducedEffectiveH(self, reductionLimit, Fcr):
+        '''Return the reduced effective width corresponding to the "h" 
+           walls of the shape according to clause E7.1 of AISC 360-16.
+
+        :param reductionLimit: compressive buckling reduction limit used in
+                               equations E7-2 and E7-3 of AISC 360-16.
+        :param Fcr: compressive critical stress of the member.
+        '''
+        lambda_h= self.get('hSlendernessRatio')
+        retval= self.get('h_flat')
+        if(lambda_h>reductionLimit):
+            c1= 0.2; c2= 1.38 # table E7.1 case (b)
+            lambda_r= self.getLambdaRCompression()
+            Fel= (c2*lambda_r/lambda_h)**2*self.steelType.fy
+            sqroot= math.sqrt(Fel/Fcr)
+            retval*= (1-c1*sqroot)*sqroot
         return retval
     
-    def getReducedEffectiveB(self):
-        '''Return the reduced effective width corresponding
-           to the "b" walls of the shape.'''
-        rt= math.sqrt(self.steelType.E/self.steelType.fy) #Simplification
-        b_t= self.get('bSlendernessRatio')
-        t= self.get('t')
-        retval= 1.92*t*rt*(1.0-0.38/b_t*rt)
-        retval= min(retval,self.get('b'))
+    def getReducedEffectiveB(self, reductionLimit, Fcr):
+        '''Return the reduced effective width corresponding to the "b" 
+           walls of the shape according to clause E7.1 of AISC 360-16.
+
+        :param reductionLimit: compressive buckling reduction limit used in
+                               equations E7-2 and E7-3 of AISC 360-16.
+        :param Fcr: compressive critical stress of the member.
+        '''
+        lambda_b= self.get('bSlendernessRatio')
+        retval= self.get('b_flat')
+        if(lambda_b>reductionLimit):
+            c1= 0.2; c2= 1.38 # table E7.1 case (b)
+            lambda_r= self.getLambdaRCompression()
+            Fel= (c2*lambda_r/lambda_b)**2*self.steelType.fy
+            sqroot= math.sqrt(Fel/Fcr)
+            retval*= (1-c1*sqroot)*sqroot
         return retval
     
-    def getEffectiveArea(self):
-        '''Return the effective area.'''
+    def getCompressiveBucklingReductionLimit(self, Fcr):
+        ''' Return the compressive buckling reduction limit used in
+            equations E7-2 and E7-3 of AISC 360-16.
+
+        :param Fcr: compressive critical stress of the member.
+         '''
+        Fy= self.steelType.fy
+        lambda_r= self.getLambdaRCompression()
+        return lambda_r*math.sqrt(Fy/Fcr)
+    
+    def getCompressionEffectiveArea(self, Fcr):
+        '''Return the effective area of the shape according to the "b" 
+           walls of the shape according to clause E7.1 of AISC 360-16.
+
+        :param Fcr: compressive critical stress of the member.
+        '''
         retval= self.get('A')
         classif= self.getClassification()
+        reductionLimit= self.getCompressiveBucklingReductionLimit(Fcr)
         if(classif == 'slender'):
             t= self.get('t')
-            h_ineff= self.get('h_flat')-self.getReducedEffectiveH()
+            h_ineff= self.get('h_flat')-self.getReducedEffectiveH(reductionLimit, Fcr)
             retval-= 2.0*h_ineff*t
-            b_ineff= self.get('b_flat')-self.getReducedEffectiveB()
+            b_ineff= self.get('b_flat')-self.getReducedEffectiveB(reductionLimit, Fcr)
             retval-= 2.0*b_ineff*t
         return retval
 
@@ -2735,7 +2973,7 @@ class CHSSShape(structural_steel.CHShape):
         slendernessRatio= self.get('slendernessRatio')
         lambda_r= self.getLambdaRBending()
         retval= slendernessRatio/lambda_r
-        return retval # if <1 then flanges are compact.
+        return retval # if <1 then wall is compact.
     
     def getAw(self):
         ''' Return area for shear strength calculation.'''
@@ -2810,40 +3048,40 @@ class CHSSShape(structural_steel.CHShape):
         E= shape.get('E')
         return 0.33*E/slendernessRatio
 
-    def getLambdaPFlangeBending(self):
-        '''Return he limiting slenderness for a compact flange, 
+    def getLambdaPWallBending(self):
+        '''Return he limiting slenderness for a compact wall, 
            defined in Table B4.1b of AISC-360-16.'''
         E= self.get('E')
         Fy= self.steelType.fy
         return 0.07*math.sqrt(E/Fy)
 
-    def getLambdaRFlangeBending(self):
-        '''Return he limiting slenderness for a noncompact flange, 
+    def getLambdaRWallBending(self):
+        '''Return he limiting slenderness for a noncompact wall, 
            defined in Table B4.1b of AISC-360-16.'''
         E= self.get('E')
         Fy= self.steelType.fy
         return 0.31*math.sqrt(E/Fy)
         
-    def bendingCompactFlangeRatio(self, majorAxis= True):
-        ''' If flanges are compact according to table B4.1b of 
+    def bendingCompactWallRatio(self, majorAxis= True):
+        ''' If wall is compact according to table B4.1b of 
             AISC-360-16 return a value less than one.
 
         :param majorAxis: true if flexure about the major axis.
         '''
-        lambda_p= self.getLambdaPFlangeBending()
+        lambda_p= self.getLambdaPWallBending()
         slendernessRatio= self.getOutsideDiameter()/self.t()
-        return slendernessRatio/lambda_p # if <1 then flanges are compact.
+        return slendernessRatio/lambda_p # if <1 then wall is compact.
     
-    def bendingSlenderFlangeRatio(self, majorAxis= True):
-        ''' If flanges are noncompact according to table 4.1b of 
+    def bendingSlenderWallRatio(self, majorAxis= True):
+        ''' If wall is noncompact according to table 4.1b of 
             AISC-360-16 return a value less than one otherwise
             they are slender.
 
         :param majorAxis: true if flexure about the major axis.
         '''
-        lambda_r= self.getLambdaRFlangeBending()
+        lambda_r= self.getLambdaRWallBending()
         slendernessRatio= self.getOutsideDiameter()/self.t()
-        return slendernessRatio/lambda_r # if <1 then flanges are noncompact.
+        return slendernessRatio/lambda_r # if <1 then wall is noncompact.
 
     def getNominalFlexuralStrength(self, lateralUnbracedLength, Cb, majorAxis= True):
         ''' Return the nominal flexural strength of the member
@@ -2852,7 +3090,7 @@ class CHSSShape(structural_steel.CHShape):
 
         :param lateralUnbracedLength: length between points that are either 
                                       braced against lateral displacement of
-                                      the compression flange or braced against 
+                                      the compression wall or braced against 
                                       twist of the cross section.
         :param Cb: lateral-torsional buckling modification factor.
         :param majorAxis: true if flexure about the major axis.
@@ -2864,15 +3102,15 @@ class CHSSShape(structural_steel.CHShape):
         Mn= 1e-9
         Mp= self.getPlasticMoment() # plastic moment.
         if(slendernessRatio<threshold):
-            compactFlanges= self.bendingCompactFlangeRatio(majorAxis)
-            if(compactFlanges<=1.0): # "flanges" are compact.
+            compactWall= self.bendingCompactWallRatio(majorAxis)
+            if(compactWall<=1.0): # wall is compact.
                 Mn= Mp # equation F8-1
             else: 
-                slenderFlanges= self.bendingSlenderFlangeRatio(majorAxis)
+                slenderWall= self.bendingSlenderWallRatio(majorAxis)
                 S= self.get('Wyel') # Elastic section modulus about minor axis.
-                if(slenderFlanges<=1.0): # flanges are noncompact -> equation F8-2 applies.
+                if(slenderWall<=1.0): # wall is noncompact -> equation F8-2 applies.
                     Mn= (0.021*E/slendernessRatio+Fy)*S
-                else: # slender flanges.
+                else: # slender wall.
                     Fcr= self.getCriticalStressF()
                     Mn= Fcr*S # equation F6-3
         else:
@@ -2885,7 +3123,7 @@ class CHSSShape(structural_steel.CHShape):
 
         :param lateralUnbracedLength: length between points that are either 
                                       braced against lateral displacement of
-                                      the compression flange or braced against 
+                                      the compression wall or braced against 
                                       twist of the cross section.
         :param Cb: lateral-torsional buckling modification factor.
         :param majorAxis: true if flexure about the major axis.

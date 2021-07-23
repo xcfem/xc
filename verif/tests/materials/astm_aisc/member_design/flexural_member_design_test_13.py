@@ -37,21 +37,27 @@ preprocessor= steelBeam.getPreprocessor
 nodes= preprocessor.getNodeHandler
 
 #Materials
+
 ## Steel material
 steel= ASTM_materials.A36
 steel.gammaM= 1.00
+
 ## Profile geometry
-# Section axis:
-
-#      AISC            XC
-
-#         ^ Y           ^ Y                    
-#         |             |
+# *************************************************************************
+# AISC single angle profiles.
+# *************************************************************************
+#         Section axis:         *                *
+#      AISC            XC       *    Points:     *    Principal axes:
+#                               *                *
+#         ^ Y           ^ y     *                *   
+#         |             |       *                *    Z-axis
+#                               *     A          *       \  |       W-axis
+#       |             |         *      |         *        \ |     /
+#       | -> X        | -> z    *      |         *         \|   /
+#       |             |         *      |         *          | +
+#       -------       -------   *     B-------C  *          ----------
 #
-#       |             | 
-#       | -> X        | -> Z
-#       |             |
-#       -------       -------
+# *************************************************************************
 
 # The axis used in AISC catalogue are different from those used in XC
 # (strong axis parallel to z axis) in other words: values for Y and Z axis 

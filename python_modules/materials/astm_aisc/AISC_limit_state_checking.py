@@ -78,10 +78,8 @@ class Member(steel_member_base.BucklingMember):
               about y-axis.
     :ivar Kz: effective length factor for flexural buckling 
               about z-axis.
-    :ivar sectionClassif: classification of the section for local
-                          buckling (defaults to compact).
     '''
-    def __init__(self, name, section, unbracedLengthX, unbracedLengthY= None, unbracedLengthZ= None, kx= 1.0, ky= 1.0, kz= 1.0, sectionClassif= SectionClassif.compact, Cb= None, lstLines=None, lstPoints=None):
+    def __init__(self, name, section, unbracedLengthX, unbracedLengthY= None, unbracedLengthZ= None, kx= 1.0, ky= 1.0, kz= 1.0, Cb= None, lstLines=None, lstPoints=None):
         ''' Constructor. 
 
         :param name: object name.
@@ -106,7 +104,6 @@ class Member(steel_member_base.BucklingMember):
         self.Kx= kx
         self.Ky= ky
         self.Kz= kz
-        self.sectionClassif= sectionClassif
         self.Cb= Cb
         if(self.Cb):
             if(lstLines or lstPoints):
@@ -131,13 +128,13 @@ class Member(steel_member_base.BucklingMember):
         ''' Return the nominal compressive strength of the member
             according to equation E3-1 of AISC-360-16.
         '''
-        return self.shape.getNominalCompressiveStrength(effectiveLengthX= self.getEffectiveLengthX(), effectiveLengthY= self.getEffectiveLengthY(), effectiveLengthZ= self.getEffectiveLengthZ(), sectionClassif= self.sectionClassif)
+        return self.shape.getNominalCompressiveStrength(effectiveLengthX= self.getEffectiveLengthX(), effectiveLengthY= self.getEffectiveLengthY(), effectiveLengthZ= self.getEffectiveLengthZ())
 
     def getDesignCompressiveStrength(self):
         ''' Return the design compressive strength of the member
             according to section E1 of AISC-360-16.
         '''
-        return self.shape.getDesignCompressiveStrength(effectiveLengthX= self.getEffectiveLengthX(), effectiveLengthY= self.getEffectiveLengthY(), effectiveLengthZ= self.getEffectiveLengthZ(), sectionClassif= self.sectionClassif)
+        return self.shape.getDesignCompressiveStrength(effectiveLengthX= self.getEffectiveLengthX(), effectiveLengthY= self.getEffectiveLengthY(), effectiveLengthZ= self.getEffectiveLengthZ())
 
     def getFlexuralStrengthReductionFactor(self):
         ''' Return the reduction factor of the flexural strength 
@@ -151,7 +148,7 @@ class Member(steel_member_base.BucklingMember):
             of the member with respect to the plastic axial load of
             its section.
         '''
-        return self.getDesignCompressiveStrength()/self.shape.getReferenceCompressiveStrength(sectionClassif= self.sectionClassif)
+        return self.getDesignCompressiveStrength()/self.shape.getReferenceCompressiveStrength()
 
     def getLateralTorsionalBucklingModificationFactor(self):
         ''' Return the lateral-torsional buckling modification factor
@@ -209,7 +206,7 @@ class Member(steel_member_base.BucklingMember):
         # Compute lateral buckling reduction factor.
         lrfLT= self.getFlexuralStrengthReductionFactor()
 
-        return self.shape.getBiaxialBendingEfficiency(sectionClassif= self.sectionClassif, Nd= Nd, Myd= Myd, Mzd= Mzd, Vyd= 0.0, chiN= lrfN, chiLT= lrfLT)
+        return self.shape.getBiaxialBendingEfficiency(Nd= Nd, Myd= Myd, Mzd= Mzd, Vyd= 0.0, chiN= lrfN, chiLT= lrfLT)
     
     def updateReductionFactors(self):
         '''Update the value of the appropriate reduction factors.'''
@@ -238,7 +235,8 @@ class Member(steel_member_base.BucklingMember):
             e.setProp('ULSControlRecorder',recorder)
         idEleTags= xc.ID(eleTags)
         recorder.setElements(idEleTags)
-        self.shape.setupULSControlVars(self.elemSet,self.sectionClassif,chiN= chiN, chiLT= chiLT)
+        sectionClassif= 1 # dummy argument usef for compatibility
+        self.shape.setupULSControlVars(self.elemSet, sectionClassif,chiN= chiN, chiLT= chiLT)
         if(nodes.numDOFs==3):
             recorder.callbackRecord= controlULSCriterion2D()
         else:
@@ -317,7 +315,7 @@ class BiaxialBendingNormalStressController(lsc.LimitStateControllerBase):
             if(len(elIntForc)==0):
                 lmsg.warning('No internal forces for element: '+str(e.tag)+' of type: '+e.type())
             for lf in elIntForc:
-                CFtmp,NcRdtmp,McRdytmp,McRdztmp,MvRdztmp,MbRdztmp= sh.getBiaxialBendingEfficiency(sc,lf.N,lf.My,lf.Mz,lf.Vy,lf.chiN, lf.chiLT)
+                CFtmp,NcRdtmp,McRdytmp,McRdztmp,MvRdztmp,MbRdztmp= sh.getBiaxialBendingEfficiency(Nd= lf.N,Myd= lf.My,Mzd= lf.Mz,Vyd= lf.Vy,chiN= lf.chiN, chiLT= lf.chiLT)
                 if lf.idSection == 0:
                     label= self.limitStateLabel+'Sect1'
                     if(CFtmp>e.getProp(label).CF):
@@ -459,16 +457,12 @@ def softenElements(elementSet):
                 mat.E= 0.8*Ebackup
             else: # Beam elements.
                 mat= e.getPhysicalProperties.getVectorMaterials[0]
- #               print('mat= ',mat.name)
+                # print('mat= ',mat.name)
                 mat.sectionProperties.E= .8*Ebackup # Axial stiffness
                 #print('properties: ', e.getPropNames())
                 crossSection= e.getProp('crossSection')
-                slenderness= crossSection.compressionSlendernessCheck()
-                sClassif= SectionClassif.noncompact
-                if(slenderness>=1.0):
-                    sClassif= SectionClassif.slender
                 # C2.3 (b) clause (flexural stiffness): 
-                Pns= crossSection.getReferenceCompressiveStrength(sectionClassif= sClassif)
+                Pns= crossSection.getReferenceCompressiveStrength()
                 ratio= abs(Pr)/Pns
                 tau= 1.0
                 if(ratio>0.5):
