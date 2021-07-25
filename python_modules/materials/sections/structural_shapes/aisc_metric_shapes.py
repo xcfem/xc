@@ -31,6 +31,7 @@ from misc_utils import log_messages as lmsg
 import xc_base
 import geom
 from import_export import block_topology_entities as bte
+from scipy.interpolate import griddata
 
 # Shear areas.
 
@@ -1704,6 +1705,8 @@ class LShape(structural_steel.LShape):
     :ivar steel: steel material.
     :ivar name: shape name (i.e. L4X4X1/4).
     '''
+    beta_w_points= [(64e-3,38e-3), (64e-3,51e-3), (76e-3, 51e-3), (76e-3, 64e-3), (89e-3, 64e-3), (89e-3, 76e-3), (102e-3,  76e-3), (102e-3,  89e-3), (127e-3, 76e-3), (127e-3, 89e-3), (152e-3, 89e-3), (152e-3, 102e-3), (178e-3, 102e-3), (203e-3, 102e-3), (203e-3, 152e-3)]
+    beta_w_values= [37.8e-3, 21.6e-3, 39.6e-3, 21.8e-3, 41.1e-3, 22.1e-3, 41.9e-3, 22.1e-3, 75.9e-3, 61.0e-3, 93.7e-3, 79.8e-3, 111e-3, 139e-3, 84.1e-3] 
     def __init__(self,steel,name):
         ''' Constructor.
 
@@ -1974,6 +1977,21 @@ class LShape(structural_steel.LShape):
         # state of lateral-torsional buckling does not apply for bending
         # about the minor axis.
         return self.getZAxisPlasticMoment() # So we return the plastic moment.
+
+    def getBetaW(self):
+        ''' Return the value of :math:`\\beta_w` according to table C-F10.1
+            of AISC 360-16.'''
+        retval= None
+        if(self.isEqualLeg()):
+            retval= 0.0
+        else:
+            b= self.get('b_flat')
+            h= self.get('h')
+            if(b<h):
+                b, h= h, b # swap
+            retval= float(griddata(self.beta_w_points, self.beta_w_values, ([b],[h]), method='linear'))
+        return retval 
+                    
     
     def getWAxisElasticLateralTorsionalBucklingMoment(self, Lb, Cb):
         ''' Return the elastic lateral-torsional buckling moment 
@@ -2033,26 +2051,24 @@ class LShape(structural_steel.LShape):
             equalLeg= self.isEqualLeg()
             if(classif=='compact'):
                 retval= self.getZAxisYieldMoment(majorAxis)
-            elif(classif=='noncompact'): # non-compact legs.
+            else:
                 b= self.get('b_flat')
                 E= self.get('E')
                 t= self.get('t')
-                Fy= self.steelType.fy
-                if(equalLeg):
-                    Sc= self.get('SzC') # Toes in compression.
-                else: # legs are not equal.
-                    Sc= min(self.get('SzA'), self.get('SzC')) # Toes in compression.
-                retval= Fy*Sc*(2.43-1.72*(b/t)*math.sqrt(Fy/E))
-            else: # slender legs.
-                b= self.get('b_flat')
-                E= self.get('E')
-                t= self.get('t')
-                Fcr= 0.71*E/(b/t)**2 # equation F10-8
-                if(equalLeg):
-                    Sc= self.get('SzC') # Toes in compression.
-                else: # legs are not equal.
-                    Sc= min(self.get('SzA'), self.get('SzC')) # Toes in compression.
-                retval= Fcr*Sc
+                if(classif=='noncompact'): # non-compact legs.
+                    Fy= self.steelType.fy
+                    if(equalLeg):
+                        Sc= self.get('SzC') # Toes in compression.
+                    else: # legs are not equal.
+                        Sc= min(self.get('SzA'), self.get('SzC')) # Toes in compression.
+                    retval= Fy*Sc*(2.43-1.72*(b/t)*math.sqrt(Fy/E))
+                else: # slender legs.
+                    Fcr= 0.71*E/(b/t)**2 # equation F10-8
+                    if(equalLeg):
+                        Sc= self.get('SzC') # Toes in compression.
+                    else: # legs are not equal.
+                        Sc= min(self.get('SzA'), self.get('SzC')) # Toes in compression.
+                    retval= Fcr*Sc
         return retval
     
     def getWAxisLegLocalBucklingLimit(self, MW):
