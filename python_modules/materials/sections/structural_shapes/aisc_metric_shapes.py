@@ -1725,11 +1725,30 @@ class LShape(structural_steel.LShape):
             and the GEOMETRIC axes.'''
         return math.atan(self.get('tan(α)'))
 
+    def getCentroid(self):
+        ''' Return the position of the shape centroid.'''
+        return geom.Pos2d(self.get('x'), self.get('y'))
+
+    def getPrincipalAxesDirections(self):
+        ''' Return the direction vectors of the W and Z principal axis.'''
+        pAxesAngle= self.getPrincipalAxesAngle()
+        c= math.cos(pAxesAngle)
+        s= math.sin(pAxesAngle)
+        return geom.Vector2d(c,s), geom.Vector2d(-s,c)
+        
+    def getPrincipalRefSys(self):
+        ''' Return the reference system with origin on the shape
+            centroid and axes coincident with the principal axes.'''
+        pAxesAngle= self.getPrincipalAxesAngle()
+        c= math.cos(pAxesAngle)
+        s= math.sin(pAxesAngle)
+        return geom.Ref2d2d(self.getCentroid(), geom.Vector2d(c,s))
+
     def getPrincipalAxesMoments(self, Mz, My):
         ''' Return the moments with respect ot the principal axes.
 
         :param Mz: moment around the GEOMETRIC axis z.
-        :param My: moment around the GEOMETRIC axis z.
+        :param My: moment around the GEOMETRIC axis y.
         '''
         pAxesAngle= self.getPrincipalAxesAngle()
         c= math.cos(pAxesAngle)

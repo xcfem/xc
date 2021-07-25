@@ -1363,8 +1363,8 @@ class ASTMShape(object):
         :param effectiveLengthY: effective length of member (minor axis).
         :param effectiveLengthZ: effective length of member (major axis).
         '''
-        Fe= self.getFlexuralElasticBucklingStress(effectiveLengthY, effectiveLengthZ)
-        return self.getCriticalStressE(effectiveLengthY, effectiveLengthZ, Fe= Fe)
+        Fe_flexural= self.getFlexuralElasticBucklingStress(effectiveLengthY, effectiveLengthZ)
+        return self.getCriticalStressE(effectiveLengthY, effectiveLengthZ, Fe= Fe_flexural)
     
     def getTorsionalElasticBucklingStress(self, effectiveLengthX):
         ''' Return the torsional or flexural-torsional elastic buckling stress
@@ -1383,8 +1383,8 @@ class ASTMShape(object):
         :param effectiveLengthY: effective length of member (minor axis).
         :param effectiveLengthZ: effective length of member (major axis).
         '''
-        Fe= self.getTorsionalElasticBucklingStress(effectiveLengthX)
-        return self.getCriticalStressE(effectiveLengthY= effectiveLengthY, effectiveLengthZ= effectiveLengthZ, Fe= Fe)
+        Fe_torsional= self.getTorsionalElasticBucklingStress(effectiveLengthX)
+        return self.getCriticalStressE(effectiveLengthY= effectiveLengthY, effectiveLengthZ= effectiveLengthZ, Fe= Fe_torsional)
 
     def getCompressiveCriticalStress(self, effectiveLengthX, effectiveLengthY, effectiveLengthZ):
         ''' Return the compressive critical stress of the member
