@@ -820,6 +820,7 @@ python tests/materials/astm_aisc/member_design/flexural_member_design_test_13.py
 python tests/materials/astm_aisc/member_design/compression_member_design_test_01.py
 python tests/materials/astm_aisc/member_design/compression_member_design_test_02.py
 python tests/materials/astm_aisc/member_design/compression_member_design_test_03.py
+python tests/materials/astm_aisc/member_design/compression_member_design_test_04.py
 python tests/materials/astm_aisc/member_design/shear_member_design_test_01.py
 python tests/materials/astm_aisc/member_design/shear_member_design_test_02.py
 python tests/materials/astm_aisc/member_design/shear_member_design_test_03.py

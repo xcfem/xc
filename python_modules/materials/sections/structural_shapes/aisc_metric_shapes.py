@@ -1772,7 +1772,29 @@ class LShape(structural_steel.LShape):
         Mz= MW*c-MZ*s # W: axis between legs (bisection) 
         My= MW*s+MZ*c # Z: axis normal to W
         return Mz, My
-    
+
+    def getGeometricABCPositions(self):
+        ''' Return the positions of the points A, B and C according to the
+            figure 3 of the AISC shapes database version 15.0.'''
+        t= self.get('t')
+        b= self.get('b_flat')
+        h= self.get('h')
+        posA= geom.Pos2d(h, t/2.0)
+        posB= geom.Pos2d(0.0, 0.0)
+        posC= geom.Pos2d(t/2, b)
+        return posA, posB, posC
+        
+    def getPrincipalAxesABCPositions(self):
+        ''' Return the positions of the points A, B and C according to the
+            figure 3 of the AISC shapes database version 15.0.'''
+        posA, posB, posC= self.getGeometricABCPositions()
+        # Principal axes reference system.
+        principalAxesRefSys= self.getPrincipalRefSys()
+        p_a= principalAxesRefSys.getLocalPosition(posA)
+        p_b= principalAxesRefSys.getLocalPosition(posB)
+        p_c= principalAxesRefSys.getLocalPosition(posC)
+        return p_a, p_b, p_c
+
     def getSlendernessRatio(self):
         ''' Return the slenderness ratio.'''
         return self.get('bSlendernessRatio')
@@ -1990,13 +2012,12 @@ class LShape(structural_steel.LShape):
             if(b<h):
                 b, h= h, b # swap
             retval= float(griddata(self.beta_w_points, self.beta_w_values, ([b],[h]), method='linear'))
-        return retval 
-                    
+        return retval
     
     def getWAxisElasticLateralTorsionalBucklingMoment(self, Lb, Cb):
         ''' Return the elastic lateral-torsional buckling moment 
         for bending around the W principal axis acocrding to
-        equation F10-4 of AISC 360-16.
+        equation F10-4 of AlISC 360-16.
 
         :param Lb: laterally unbraced length of member
         :param Cb: lateral-torsional buckling modification factor Cb
@@ -2008,13 +2029,19 @@ class LShape(structural_steel.LShape):
         rz= self.get('ix') # Radius of gyration about the principal z-axis
         t= self.get('t') # thickness
         A= self.get('A') # area
-        if(self.isEqualLeg()):
-            retval= 9*E*A*rz*t*Cb/8/Lb
-        else:
-            className= type(self).__name__
-            methodName= sys._getframe(0).f_code.co_name
-            lmsg.error(className+'.'+methodName+': implemented only for angles with equal legs.')
-            retval= 1e-3*self.getZAxisPlasticMoment()
+        retval= 9*E*A*rz*t*Cb/8/Lb
+        if(not self.isEqualLeg()):
+            beta_w= self.getBetaW()
+            if(beta_w):
+                quot= 4.4*beta_w*rz/Lb/t
+                factor_plus= (math.sqrt(1+quot**2)+quot) # beta_w > 0
+                factor_minus= (math.sqrt(1+quot**2)-quot) # beta_w < 0
+                retval= (retval*factor_plus, retval*factor_minus)
+            else:
+                className= type(self).__name__
+                methodName= sys._getframe(0).f_code.co_name
+                lmsg.error(className+'.'+methodName+': can\'t compute :math:`\\beta_w` value for: '+ self.name+ ' shape.')
+                retval= 1e-3*self.getZAxisPlasticMoment()
         return retval
     
     def getWAxisLateralTorsionalBucklingLimit(self, Lb, Cb):
@@ -2030,12 +2057,26 @@ class LShape(structural_steel.LShape):
                    segment are braced according to expression 
                    F1-1 of AISC 360-16.
         '''
+        def computeMn(My: float, Mcr: float):
+            ''' Compute lateral-torsional buckling limit value according
+                to equations F10-2 and F10-3 of AISC 360-16.'''
+            Mn= 0.0
+            if(My/Mcr<=1.0):
+                Mn= min(1.5, (1.92-1.17*math.sqrt(My/Mcr)))*My
+            else:
+                Mn= (0.92-0.17*Mcr/My)*Mcr
+            return Mn
         My= self.getWAxisYieldMoment()
         Mcr= self.getWAxisElasticLateralTorsionalBucklingMoment(Lb, Cb)
-        if(My/Mcr<=1.0):
-            retval= min(1.5, (1.92-1.17*math.sqrt(My/Mcr)))*My
+        if(isinstance(Mcr, tuple)):
+            Mcr_plus= Mcr[0] # positive beta_w
+            retval_plus= computeMn(My, Mcr_plus)
+            Mcr_minus= Mcr[1] # negative beta_w
+            retval_minus= computeMn(My, Mcr_minus)
+            retval= (retval_plus, retval_minus)
         else:
-            retval= (0.92-0.17*Mcr/My)*Mcr
+            tmp= computeMn(My, Mcr)
+            retval= (tmp, tmp)
         return retval
     
     def getZAxisLegLocalBucklingLimit(self, MZ):
@@ -2071,34 +2112,26 @@ class LShape(structural_steel.LShape):
                     retval= Fcr*Sc
         return retval
     
-    def getWAxisLegLocalBucklingLimit(self, MW):
+    def getWAxisLegLocalBucklingLimit(self):
         ''' Return the maximum flexural strength due to leg local 
         buckling according to expressions F10-6 to F10-8 of AISC 360-16.
-
-        :param MW: moment around the W principal axis.
         '''
-        Sc= 0.0
-        if(MW>0): # Toe C in compression
-            Sc= self.get('SwC')
-        else: # Toe A in compression
-            Sc= self.get('SwA')
-
         classif= self.getFlexureLegsClassification()
-        equalLeg= self.isEqualLeg()
         if(classif=='compact'):
             retval= self.getWAxisYieldMoment()
-        elif(classif=='noncompact'): # non-compact legs.
+        else:
             b= self.get('b_flat')
             E= self.get('E')
             t= self.get('t')
-            Fy= self.steelType.fy
-            retval= Fy*Sc*(2.43-1.72*(b/t)*math.sqrt(Fy/E))
-        else: # slender legs.
-            b= self.get('b_flat')
-            E= self.get('E')
-            t= self.get('t')
-            Fcr= 0.71*E/(b/t)**2 # equation F10-8
-            retval= Fcr*Sc
+            SwC= self.get('SwC') # MW>0 => toe C in compression
+            SwA= self.get('SwA') # MW<0 => toe A in compression   
+            if(classif=='noncompact'): # non-compact legs.
+                Fy= self.steelType.fy
+                factor= Fy*(2.43-1.72*(b/t)*math.sqrt(Fy/E))
+                retval= (factor*SwC, factor*SwA)
+            else: # slender legs.
+                Fcr= 0.71*E/(b/t)**2 # equation F10-8
+                retval= (Fcr*SwC, Fcr*SwA)
         return retval
         
     def getElasticLateralTorsionalBucklingMoment(self, Lb, Cb, majorAxis= True):
@@ -2219,8 +2252,15 @@ class LShape(structural_steel.LShape):
         :param MW: moment around the W principal axis.
         '''
         retval= self.getWAxisPlasticMoment()
-        retval= min(retval, self.getWAxisLateralTorsionalBucklingLimit(lateralUnbracedLength, Cb))
-        retval= min(retval, self.getWAxisLegLocalBucklingLimit(MW))
+        Mn_ltb= self.getWAxisLateralTorsionalBucklingLimit(lateralUnbracedLength, Cb)
+        # Leg local buckling.
+        Mn_llb= self.getWAxisLegLocalBucklingLimit()
+        if(MW>0): # MW>0 => toe A in compression
+            retval= min(retval, Mn_ltb[0]) # beta_w positive.
+            retval= min(retval, Mn_llb[0]) # MW positive.
+        else: # MW<0 => toe A in compression
+            retval= min(retval, Mn_ltb[1]) # beta_w negative.
+            retval= min(retval, Mn_llb[1]) # MW negative.
         return retval
             
     def getNominalFlexuralStrength(self, lateralUnbracedLength, Cb, majorAxis= True):

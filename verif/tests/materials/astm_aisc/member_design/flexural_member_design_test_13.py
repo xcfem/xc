@@ -148,17 +148,21 @@ ratio2= abs((MMinY-MMinYRef)/MMinYRef)
 
 beam= aisc.Member(l1.name, shape, unbracedLengthX= span, unbracedLengthY= span, unbracedLengthZ= span, lstLines= [l1])
 CF= beam.getBiaxialBendingEfficiency(Nd= 0.0, Myd=MMinY,Mzd= MMaxZ)[0]
-ratio1= abs(CF-0.37675810756810074)/0.37675810756810074
+ratio3= abs(CF-0.37675810756810074)/0.37675810756810074
 
 '''
-print('CF= ',CF)
+print('MMaxZ= ',MMaxZ/1e3,' kN m (',MMaxZ/1e3*kN2kips/foot2meter,' kip-ft or', MMaxZ/1e3*kN2kips/inch2meter,' kip-in)')
 print('ratio1= ',ratio1)
+print('MMinY= ',MMinY/1e3,' kN m (',MMinY/1e3*kN2kips/foot2meter,' kip-ft or', MMinY/1e3*kN2kips/inch2meter,' kip-in)')
+print('ratio2= ',ratio2)
+print('CF= ',CF)
+print('ratio3= ',ratio3)
 '''
 
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
-if(ratio1<5e-6):
+if(ratio1<1e-6 and ratio2<1e-6 and ratio3<1e-6):
     print('test '+fname+': ok.')
 else:
     lmsg.error(fname+' ERROR.')

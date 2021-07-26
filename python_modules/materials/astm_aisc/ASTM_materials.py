@@ -1709,6 +1709,77 @@ class LShape(ASTMShape, aisc_metric_shapes.LShape):
         '''
         return aisc_metric_shapes.LShape.getCriticalStressE(self, effectiveLengthY)
         
+    def getBiaxialBendingEfficiencyPrincipalAxes(self,Nd, MZ, MW, chiN=1.0, chiLT=1.0):
+        '''Return biaxial bending efficiency according to section H2
+           of AISC-360-16.
+
+        :param Nd: required axial strength.
+        :param MZ: required shear strength (minor axis)
+        :param MW: required bending strength (major axis).
+        :param chiN: axial load reduction reduction factor (default= 1.0).
+        :param chiLT: lateral buckling reduction factor (default= 1.0).
+        '''
+        if(Nd<0):
+            Pn= chiN*0.9*self.getReferenceCompressiveStrength()
+            ratioN= -Nd/Pn
+        elif(Nd==0):
+            ratioN= 0.0
+        else:
+            NcRd= self.getDesignTensileStrength() # available axial strength.
+            ratioN= Nd/NcRd
+        # Flexural strength.
+        MnZ= 0.9*self.getZAxisNominalFlexuralStrength(MZ= MZ) # available flexural strength minor axis.
+        MnW= chiLT*0.9*self.getWAxisNominalFlexuralStrength(lateralUnbracedLength= 0.1, Cb= 1.0, MW= MW) # available flexural strength major axis.
+        ratioZ= MZ/MnZ
+        ratioW= MW/MnW
+        # Positions relative to principal axes.
+        pA, pB, pC= self.getPrincipalAxesABCPositions()
+        # At point B
+        cfb_value= ratioN
+        if(abs(pB.x)>1e-3):
+            if(pB.x<0):
+                cfb_value-= ratioZ
+            elif(pB.x>0):
+                cfb_value+= ratioZ
+        if(abs(pB.y)>1e-3):
+            if(pB.y<0):
+                cfb_value-= ratioW
+            elif(pB.y>0):
+                cfb_value+= ratioW
+        CFB= abs(cfb_value)
+        # At point C
+        cfc_value= ratioN
+        if(abs(pC.x)>1e-3):
+            if(pC.x<0):
+                cfc_value-= ratioZ
+            elif(pC.x>0):
+                cfc_value+= ratioZ
+        if(abs(pC.y)>1e-3):
+            if(pC.y<0):
+                cfc_value+= ratioW
+            elif(pC.y>0):
+                cfc_value-= ratioW
+        CFC= abs(cfc_value)
+        # At point A
+        cfa_value= ratioN
+        if(abs(pA.x)>1e-3):
+            if(pA.x<0):
+                cfa_value-= ratioZ
+            elif(pA.x>0):
+                cfa_value+= ratioZ
+        if(abs(pA.y)>1e-3):
+            if(pA.y<0):
+                cfa_value-= ratioW
+            elif(pA.y>0):
+                cfa_value+= ratioW
+        CFA= abs(cfa_value)
+        CF= max(CFA,CFB,CFC)
+        MbRdz, McRdy= self.getGeometricAxesMoments(MW= MnW, MZ= MnZ)
+        McRdz= MbRdz/chiLT
+        NcRd= 0.0 # available compressive strength.
+        MvRdz= McRdz # available flexural strength due to shear interaction.
+        return (CF,NcRd,McRdy,McRdz,MvRdz,MbRdz)
+    
     def getBiaxialBendingEfficiency(self,Nd,Myd,Mzd,Vyd= 0.0, chiN=1.0, chiLT=1.0):
         '''Return biaxial bending efficiency according to section H2
            of AISC-360-16.
@@ -1719,30 +1790,9 @@ class LShape(ASTMShape, aisc_metric_shapes.LShape):
         :param chiN: axial load reduction reduction factor (default= 1.0).
         :param chiLT: lateral buckling reduction factor (default= 1.0).
         '''
-        if(Nd!=0.0):
-            className= type(self).__name__
-            methodName= sys._getframe(0).f_code.co_name
-            lmsg.error(className+'.'+methodName+': for compressed sections not implemented yet.')
         # Moments about principal axes (signs inverted).
         MW, MZ= self.getPrincipalAxesMoments(Mz= -Mzd, My= -Myd)
-        # Flexural strength.
-        MnZ= 0.9*self.getZAxisNominalFlexuralStrength(MZ= MZ) # available flexural strength minor axis.
-        MnW= chiLT*0.9*self.getWAxisNominalFlexuralStrength(lateralUnbracedLength= 0.1, Cb= 1.0, MW= MW) # available flexural strength major axis.
-        ratioN= 0.0 # To implement.
-        ratioZ= MZ/MnZ
-        ratioW= MW/MnW
-        # At point B (MZ>0 causes tension=>substract).
-        CFB= abs(ratioN-ratioZ)
-        # At point C (MW>0 causes compression=>sum and MZ>0 causes compression=>sum)
-        CFC= abs(ratioN+ratioW+ratioZ)
-        # At point A (MW>0 causes tension=>substract and MZ>0 causes compression=>sum)
-        CFA= abs(ratioN-ratioW+ratioZ)
-        CF= max(CFA,CFB,CFC)
-        MbRdz, McRdy= self.getGeometricAxesMoments(MW= MnW, MZ= MnZ)
-        McRdz= MbRdz/chiLT
-        NcRd= 0.0 # available compressive strength.
-        MvRdz= McRdz # available flexural strength due to shear interaction.
-        return (CF,NcRd,McRdy,McRdz,MvRdz,MbRdz)
+        return self.getBiaxialBendingEfficiencyPrincipalAxes(Nd= Nd, MZ= MZ, MW= MW, chiN= chiN, chiLT= chiLT)
 
 class HSSShape(ASTMShape,aisc_metric_shapes.HSSShape):
     """Rectangular HSS shape with ASTM/AISC verification routines.

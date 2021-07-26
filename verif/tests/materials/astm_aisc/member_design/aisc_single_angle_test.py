@@ -72,10 +72,10 @@ ratio5= abs(wAxisPlasticMoment-wAxisPlasticMomentRef)/wAxisPlasticMomentRef
 wAxisElasticLateralTorsionalBucklingMoment= shape.getWAxisElasticLateralTorsionalBucklingMoment(Lb= 6*foot2meter, Cb= 1.14)
 wAxisElasticLateralTorsionalBucklingMomentRef= 23.262011718749992e3
 ratio6= abs(wAxisElasticLateralTorsionalBucklingMoment-wAxisElasticLateralTorsionalBucklingMomentRef)/wAxisElasticLateralTorsionalBucklingMomentRef
-wAxisLateralTorsionalBucklingLimit= shape.getWAxisLateralTorsionalBucklingLimit(Lb= 6*foot2meter, Cb= 1.14)
+wAxisLateralTorsionalBucklingLimit= shape.getWAxisLateralTorsionalBucklingLimit(Lb= 6*foot2meter, Cb= 1.14)[0]
 wAxisLateralTorsionalBucklingLimitRef= 9.137366729071001e3
 ratio7= abs(wAxisLateralTorsionalBucklingLimit-wAxisLateralTorsionalBucklingLimitRef)/wAxisLateralTorsionalBucklingLimitRef
-wAxisLegLocalBucklingLimit= shape.getWAxisLegLocalBucklingLimit(MW= 1.0)
+wAxisLegLocalBucklingLimit= shape.getWAxisLegLocalBucklingLimit()[0]
 wAxisLegLocalBucklingLimitRef= 10.632466673516829e3
 ratio8= abs(wAxisLegLocalBucklingLimit-wAxisLegLocalBucklingLimitRef)/wAxisLegLocalBucklingLimitRef
 wAxisNominalFlexuralStrength= shape.getWAxisNominalFlexuralStrength(lateralUnbracedLength= 6*foot2meter, Cb= 1.14, MW= 1.0)
