@@ -56,7 +56,7 @@ class LateralTorsionalBucklingModificationFactor(object):
     def getLateralTorsionalBucklingModificationFactor(self):
         ''' Return the lateral-torsional buckling modification factor
             according to equation F1-1 of ANSI AISC 360-16.'''
-        retval= 0.0
+        retval= 1.0 # Conservative value.
         mMax= max(self.Mi)
         if(mMax>0.0):
             denom= 2.5*mMax+3.0*self.Mi[1]+4.0*self.Mi[2]+3.0*self.Mi[3]
@@ -177,14 +177,29 @@ class Member(steel_member_base.BucklingMember):
         ''' Return the design flexural strength of the member
             according to section F of AISC-360-16.
         '''
-        return 0.9*self.getNominalFlexuralStrength(majorAxis)
+        nominalValue= self.getNominalFlexuralStrength(majorAxis)
+        if(isinstance(nominalValue, tuple)):
+            retval_MWpositive= 0.9*nominalValue[0]
+            retval_MWnegative= 0.9*nominalValue[1]
+            retval= (retval_MWpositive, retval_MWnegative)
+        else:
+            retval= 0.9*nominalValue
+        return retval
         
     def getFlexuralStrengthReductionFactor(self):
         ''' Return the reduction factor of the flexural strength 
             of the member with respect to the reference flexural strength 
             of its section.
         '''
-        return self.getDesignFlexuralStrength()/self.shape.getReferenceFlexuralStrength()
+        num= self.getDesignFlexuralStrength()
+        denom= self.shape.getReferenceFlexuralStrength()
+        if(isinstance(num, tuple)):
+            retval_MWpositive= num[0]/denom[0]
+            retval_MWnegative= num[1]/denom[1]
+            retval= min(retval_MWpositive, retval_MWnegative)
+        else:
+            retval= num/denom
+        return retval
 
     def getDesignShearStrength(self, majorAxis= True):
         ''' Return the design shear strength of the member

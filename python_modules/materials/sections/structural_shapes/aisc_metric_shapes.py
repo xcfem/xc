@@ -2029,7 +2029,7 @@ class LShape(structural_steel.LShape):
         rz= self.get('ix') # Radius of gyration about the principal z-axis
         t= self.get('t') # thickness
         A= self.get('A') # area
-        retval= 9*E*A*rz*t*Cb/8/Lb
+        retval= 9*E*A*rz*t*Cb/8.0/Lb
         if(not self.isEqualLeg()):
             beta_w= self.getBetaW()
             if(beta_w):
@@ -2200,21 +2200,20 @@ class LShape(structural_steel.LShape):
         '''
         classif= self.getFlexureLegsClassification()
         if(classif=='compact'):
-            retval= 1000*self.getGeometricYieldMoment(majorAxis)
+            # For compact sections, the limit state
+            # of leg local buckling does not apply.
+            retval= 10*self.getGeometricYieldMoment(majorAxis)
         elif(classif=='noncompact'): # non-compact legs.
             equalLeg= self.isEqualLeg()
+            b= self.get('b_flat')
+            E= self.get('E')
+            t= self.get('t')
+            Fy= self.steelType.fy
             if(equalLeg):
-                b= self.get('b_flat')
-                E= self.get('E')
-                t= self.get('t')
-                Fy= self.steelType.fy
                 Sc= 0.8*self.get('Wzel')
-                retval= Fy*Sc*(2.43-1.72*(b/t)*math.sqrt(Fy/E))
             else: # legs are not equal.
-                className= type(self).__name__
-                methodName= sys._getframe(0).f_code.co_name
-                lmsg.error(className+'.'+methodName+': implemented only for angles with equal legs.')
-                retval= 1e-3*self.getGeometricYieldMoment(majorAxis)
+                Sc= min(self.get('SzA'), self.get('SzC')) # Toes in compression.
+            retval= Fy*Sc*(2.43-1.72*(b/t)*math.sqrt(Fy/E))
         else: # slender legs.
             Fcr= 0.71*E/(b/t)**2 # equation F10-8
             className= type(self).__name__
@@ -2277,11 +2276,13 @@ class LShape(structural_steel.LShape):
         # The problem is that we need the moment about the W principal axis
         # to compute the nominal flexural strength for angles with sides that
         # are not equal.
-        if(not self.isEqualLeg()):
-            className= type(self).__name__
-            methodName= sys._getframe(0).f_code.co_name
-            lmsg.error(className+'.'+methodName+': implemented only for angles with equal legs.')
-        return self.getWAxisNominalFlexuralStrength(lateralUnbracedLength, Cb, MW=0.0)
+        if(self.isEqualLeg()):
+            retval= self.getWAxisNominalFlexuralStrength(lateralUnbracedLength, Cb, MW=0.0)
+        else:
+            retval_MWpositive= self.getWAxisNominalFlexuralStrength(lateralUnbracedLength, Cb, MW= 1.0)
+            retval_MWnegative= self.getWAxisNominalFlexuralStrength(lateralUnbracedLength, Cb, MW= -1.0)
+            retval= (retval_MWpositive, retval_MWnegative)
+        return retval
     
     def getDesignFlexuralStrength(self, lateralUnbracedLength, Cb, majorAxis= True):
         ''' Return the design flexural strength of the section
@@ -2294,7 +2295,14 @@ class LShape(structural_steel.LShape):
         :param Cb: lateral-torsional buckling modification factor.
         :param majorAxis: true if flexure about the major axis.
         '''
-        return 0.9*self.getNominalFlexuralStrength(lateralUnbracedLength, Cb)
+        nominalValue= self.getNominalFlexuralStrength(lateralUnbracedLength, Cb)
+        if(isinstance(nominalValue, tuple)):
+            retval_MWpositive= 0.9*nominalValue[0]
+            retval_MWnegative= 0.9*nominalValue[1]
+            retval= (retval_MWpositive, retval_MWnegative)
+        else:
+            retval= 0.9*nominalValue
+        return retval
 
 class SimpleLShape(LShape):
     '''L shape with simplified limit state checking.

@@ -1364,7 +1364,8 @@ class ASTMShape(object):
         :param effectiveLengthZ: effective length of member (major axis).
         '''
         Fe_flexural= self.getFlexuralElasticBucklingStress(effectiveLengthY, effectiveLengthZ)
-        return self.getCriticalStressE(effectiveLengthY, effectiveLengthZ, Fe= Fe_flexural)
+        retval= self.getCriticalStressE(effectiveLengthY, effectiveLengthZ, Fe= Fe_flexural)
+        return retval
     
     def getTorsionalElasticBucklingStress(self, effectiveLengthX):
         ''' Return the torsional or flexural-torsional elastic buckling stress
@@ -1395,10 +1396,12 @@ class ASTMShape(object):
         :param effectiveLengthZ: effective length of member (major axis).
         '''
         retval= 0.0
-        if(effectiveLengthX<= max(effectiveLengthY,effectiveLengthZ)):
-            retval= self.getFlexuralBucklingCriticalStress(effectiveLengthY, effectiveLengthZ)
-        else:
-            retval= self.getTorsionalBucklingCriticalStress(effectiveLengthX, effectiveLengthY, effectiveLengthZ)
+        retval= self.getFlexuralBucklingCriticalStress(effectiveLengthY, effectiveLengthZ)
+        if(effectiveLengthX>max(effectiveLengthY,effectiveLengthZ)):
+            # When the torsional effective length is larger than the lateral
+            # effective length, Section E4 may control the design of
+            # wide-flange and similarly shaped members.
+            retval= min(retval, self.getTorsionalBucklingCriticalStress(effectiveLengthX, effectiveLengthY, effectiveLengthZ))
         return retval
 
     def getNominalCompressiveStrength(self, effectiveLengthX, effectiveLengthY, effectiveLengthZ):
