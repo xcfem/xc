@@ -2091,7 +2091,7 @@ class LShape(structural_steel.LShape):
             classif= self.getFlexureLegsClassification()
             equalLeg= self.isEqualLeg()
             if(classif=='compact'):
-                retval= self.getZAxisYieldMoment(majorAxis)
+                retval= self.getZAxisYieldMoment()
             else:
                 b= self.get('b_flat')
                 E= self.get('E')
@@ -2118,7 +2118,8 @@ class LShape(structural_steel.LShape):
         '''
         classif= self.getFlexureLegsClassification()
         if(classif=='compact'):
-            retval= self.getWAxisYieldMoment()
+            tmp= self.getWAxisYieldMoment()
+            retval= (tmp, tmp)
         else:
             b= self.get('b_flat')
             E= self.get('E')
