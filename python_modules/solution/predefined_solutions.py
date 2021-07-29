@@ -616,13 +616,14 @@ class PlainStaticModifiedNewton(SolutionProcedure):
         self.analysisSetup('static_analysis')
     
 ### Convenience function
-def plain_static_modified_newton(prb, mxNumIter= 10, convergenceTestTol= .01):
+def plain_static_modified_newton(prb, mxNumIter= 10, convergenceTestTol= .01, printFlag= 0):
     ''' Return a simple static modified Newton solution procedure.
 
-    :ivar maxNumIter: maximum number of iterations (defauts to 10)
-    :ivar convergenceTestTol: convergence tolerance (defaults to 1e-9)
+    :param maxNumIter: maximum number of iterations (defauts to 10)
+    :param convergenceTestTol: convergence tolerance (defaults to 1e-9)
+    :param printFlag: print message on each iteration
     '''
-    solProc= PlainStaticModifiedNewton(prb, maxNumIter= mxNumIter, convergenceTestTol= convergenceTestTol)
+    solProc= PlainStaticModifiedNewton(prb, maxNumIter= mxNumIter, convergenceTestTol= convergenceTestTol, printFlag= printFlag)
     solProc.setup()
     return solProc.analysis
 
@@ -684,6 +685,7 @@ def penalty_modified_newton(prb, mxNumIter= 10, convergenceTestTol= 1e-4, printF
 
     :param maxNumIter: maximum number of iterations (defauts to 10)
     :param convergenceTestTol: convergence tolerance (defaults to 1e-9)
+    :param printFlag: print message on each iteration
     '''
     solProc= PenaltyModifiedNewton(prb,maxNumIter= mxNumIter, convergenceTestTol= convergenceTestTol, printFlag= printFlag)
     solProc.setup()
