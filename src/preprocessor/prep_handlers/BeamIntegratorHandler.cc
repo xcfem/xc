@@ -32,6 +32,7 @@
 #include "domain/mesh/element/truss_beam_column/forceBeamColumn/beam_integration/BeamIntegration.h"
 #include "domain/mesh/element/truss_beam_column/forceBeamColumn/beam_integration/LobattoBeamIntegration.h"
 #include "domain/mesh/element/truss_beam_column/forceBeamColumn/beam_integration/TrapezoidalBeamIntegration.h"
+#include "domain/mesh/element/truss_beam_column/forceBeamColumn/beam_integration/ChebyshevBeamIntegration.h"
 #include "domain/mesh/element/truss_beam_column/forceBeamColumn/beam_integration/CompositeSimpsonBeamIntegration.h"
 #include "domain/mesh/element/truss_beam_column/forceBeamColumn/beam_integration/FixedLocationBeamIntegration.h"
 #include "domain/mesh/element/truss_beam_column/forceBeamColumn/beam_integration/LowOrderBeamIntegration.h"
@@ -143,6 +144,8 @@ XC::BeamIntegration *load_beam_integration(const std::string &cmd)
       retval= new XC::NewtonCotesBeamIntegration();
     else if(cmd == "Trapezoidal")
       retval= new XC::TrapezoidalBeamIntegration();
+    else if(cmd == "Chebyshev")
+      retval= new XC::ChebyshevBeamIntegration();
     else if(cmd == "CompositeSimpson")
       retval= new XC::CompositeSimpsonBeamIntegration();
     else if(cmd == "UserDefined")
