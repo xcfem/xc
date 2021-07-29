@@ -77,7 +77,7 @@ class AnalysisContextBase(object):
             comb.addToDomain(self.preloadPatterns) # Add the first part of the combination.
             retval= self.solutionStep(currentCombination= comb)
         else:
-            lmsg.error('no pre-load patterns specified.')
+            lmsg.warning('no pre-load patterns specified.')
         return retval
     
     def loadPhase(self, comb):
@@ -99,10 +99,12 @@ class AnalysisContextBase(object):
 
         :param comb: combination to analyze.
         '''
-        lmsg.log('deactivate elements for: '+comb.name)
-        if self.deactivationCandidates:
+        retval= 0
+        if(self.deactivationCandidates):
+            lmsg.log('deactivate elements for: '+comb.name)
             self.deactivateElements('deactivatedElements')
-        return self.solutionStep(currentCombination= comb, calculateNodalReactions= calculateNodalReactions)
+            retval= self.solutionStep(currentCombination= comb, calculateNodalReactions= calculateNodalReactions)
+        return retval
 
     def resetPhase(self, comb):
         ''' Revert the model to its initial state.
@@ -110,7 +112,8 @@ class AnalysisContextBase(object):
         :param comb: combination to analyze.
         '''
         lmsg.log('revert model to initial state for: '+comb.name)
-        self.resetDeactivatedElements('deactivatedElements')
+        if(self.deactivationCandidates):
+            self.resetDeactivatedElements('deactivatedElements')
         self.modelSpace.preprocessor.resetLoadCase()
         self.modelSpace.preprocessor.getDomain.revertToStart()
         
@@ -118,6 +121,7 @@ class AnalysisContextBase(object):
         ''' Put back compressed diagonals (at the end of the
             calculation loop).'''
         if self.modelSpace.preprocessor.getSets.exists(setName):
+            lmsg.log('  reset deactivated elements.')
             deactivatedElements= self.modelSpace.preprocessor.getSets.getSet(setName)
             self.modelSpace.activateElements(deactivatedElements)
             self.modelSpace.preprocessor.getSets.removeSet(setName)
@@ -125,7 +129,8 @@ class AnalysisContextBase(object):
     def deactivateElements(self, setName):
         ''' Deactivate elements returned by getElementsToDeactivate method.'''
         elements= self.getElementsToDeactivate(setName)
-        self.modelSpace.deactivateElements(elements)
+        if(elements):
+            self.modelSpace.deactivateElements(elements)
         
     def failedCombinationsMessage(self, loadCombinations, limitState):
         ''' Writes a message informing if there are combinations that cause
