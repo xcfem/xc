@@ -9,6 +9,7 @@ from colorama import Style
 from misc_utils import log_messages as lmsg
 from solution import analysis_context
 from materials.astm_aisc import AISC_limit_state_checking as aisc
+from solution import predefined_solutions
 
 class AISCAnalysisContext(analysis_context.AnalysisContextBase):
     ''' Base class for analysis contexts of AISC steel structures.
@@ -155,3 +156,37 @@ class AISCAnalysisContext(analysis_context.AnalysisContextBase):
         limitState.writeInternalForces(self.internalForcesDict)
         limitState.writeReactions(self.reactionsDict)
         self.failedCombinationsMessage(loadCombinations, limitState)
+
+class SimpleAISCAnalysisContext(AISCAnalysisContext):
+    ''' Simple analysis context with no elements to deactivate.
+
+    '''
+    def __init__(self, modelSpace, calcSet, reactionNodes, reactionCheckTolerance, lstSteelBeams, softSteelMembers):
+        ''' Constructor.
+
+        :param modelSpace: model space of the problem.
+        :param calcSet: element set to compute internal forces on.
+        :param reactionNodes: nodes attached to the foundation.
+        :param reactionCheckTolerance: tolerance when checking reaction values.
+        :param lstSteelBeams: list of members that need to update their 
+                              lateral buckling reduction factors.
+        :param softSteelMembers: steel members to be "softened" according to 
+                                 clause C2.3 of AISC 360-16.
+        '''
+        super(SimpleAISCAnalysisContext,self).__init__(modelSpace= modelSpace, calcSet= calcSet, reactionNodeSet= reactionNodes, reactionCheckTolerance= reactionCheckTolerance, deactivationCandidates= None, lstSteelBeams= lstSteelBeams, softSteelMembers= softSteelMembers)
+
+    def getElementsToDeactivate(self, setName):
+        ''' Return the elements that will be deactivated in the next phase of
+            the analysis.
+
+        :param setName: dummy argument used for compatibility.
+        '''
+        return None
+
+    def defineSolver(self, mxNumIter, convergenceTestTol, printFlag= 0):
+        ''' Define the solver to use.
+
+        :param mxNumIter: maximum number of iterations (defauts to 10)
+        :param convergenceTestTol: convergence tolerance (defaults to 1e-9)
+        '''
+        self.modelSpace.analysis= predefined_solutions.penalty_modified_newton(self.modelSpace.preprocessor.getProblem, mxNumIter= mxNumIter, convergenceTestTol= convergenceTestTol, printFlag= printFlag)
