@@ -365,8 +365,8 @@ class SteelShape(sp.SectionProperties):
         if(len(shear)>1): # 'V' found.
             V1= shear[0]
             V2= shear[1]
-        FCTN1= self.getZBendingEfficiency(Nd= N1, Mzd= M1, Vyd= V1,chiN= chiN, chiLT= chiLT, sectionClassif= sectionClass,)[0]
-        FCTN2= self.getZBendingEfficiency(Nd= N2, Mzd= M2, Vyd= V2,chiN= chiN, chiLT= chiLT, sectionClassif= sectionClass)[0]
+        FCTN1= self.getZBendingEfficiency(Nd= N1, Mzd= M1, Vyd= V1,chiN= chiN, chiLT= chiLT, sectionClass= sectionClass)[0]
+        FCTN2= self.getZBendingEfficiency(Nd= N2, Mzd= M2, Vyd= V2,chiN= chiN, chiLT= chiLT, sectionClass= sectionClass)[0]
         fctn= elem.getProp("FCTNCP")
         if(FCTN1 > fctn[0]):
             fctn[0]= FCTN1
