@@ -59,7 +59,7 @@ class AISCAnalysisContext(analysis_context.AnalysisContextBase):
         :param limitState: limit state to compute displacements for.
         '''
         # Revert the model to its initial state.
-        self.resetPhase(comb)
+        self.resetPhase(comb, resetStiffness= False)
         # Pre-load
         result= self.preloadPhase(comb)
         # Load
@@ -98,14 +98,16 @@ class AISCAnalysisContext(analysis_context.AnalysisContextBase):
         if(self.softSteelMembers):
             aisc.softenElements(self.softSteelMembers)
 
-    def resetPhase(self, comb):
+    def resetPhase(self, comb, resetStiffness= True):
         ''' Revert the model to its initial state.
 
         :param comb: combination to analyze.
+        :param resetStiffness: if true reset the stiffness of the elements.
         '''
         super(AISCAnalysisContext,self).resetPhase(comb)
         lmsg.log('  restore stiffness for: '+comb.name)
-        self.restoreStiffness()
+        if(resetStiffness):
+            self.restoreStiffness()
         
     def softeningPhase(self, comb):
         ''' Reduces the stiffness of the columns
@@ -126,7 +128,7 @@ class AISCAnalysisContext(analysis_context.AnalysisContextBase):
         :param limitState: limit state to compute internal forces for.
         '''
         # Elements to deal with
-        self.resetPhase(comb)
+        self.resetPhase(comb, resetStiffness= True)
         # Pre-load
         result= self.preloadPhase(comb)
         # Load
