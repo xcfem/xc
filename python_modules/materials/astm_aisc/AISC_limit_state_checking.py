@@ -10,6 +10,7 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "ana.ortega@ciccp.es, l.pereztato@gmail.com"
 
+import sys
 import enum
 import math
 from misc_utils import log_messages as lmsg
@@ -25,6 +26,100 @@ class SectionClassif(enum.IntEnum):
     noncompact= 1
     slender= 2
     too_slender= 3
+
+class MemberModel(object):
+    ''' Representation of an AISC steel member (beam, column,...) in
+        the XC model.
+
+    :ivar name: object name.
+    :ivar memberType: type of the member (beam, column, diagonal,...)
+    :ivar lineList: list of lines (xc.Line) objects that represent
+                    the member in the finite element model.
+    '''
+    def __init__(self,name, memberType, lineList, overrideUnbracedLength= None):
+        ''' Constructor.
+
+        :param name: object name.
+        :param memberType: type of the member (beam, column, diagonal,...)
+        :param lineList: list of lines (xc.Line) objects that represent
+                        the member in the finite element model.
+        :param overrideUnbracedLength: length to replace the true length of the
+                                       member.
+        '''
+        self.name= name
+        self.memberType= memberType
+        self.lineList= lineList
+        self.overrideUnbracedLength= overrideUnbracedLength
+
+    def getMemberLength(self):
+        ''' Return the length of the member.'''
+        retval= 0.0
+        if(self.overrideUnbracedLength):
+            retval= overrideUnbracedLength
+        else:
+            for l in self.lineList:
+                retval+= l.getLength()
+        return retval
+
+    def getCrossSection(self):
+        ''' Return the member cross section.'''
+        retval= None
+        element= self.lineList[0].getElements[0]
+        if(element.hasProp('crossSection')):
+            retval= element.getProp('crossSection')
+        else:
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.error(className+'.'+methodName+': you need to define "crossSection" property for the elements. Returning None')
+        return retval
+
+    def createMember(self):
+        ''' Create the AISC member object corresponding to this member model.
+        '''
+        return Member(name= self.name, section= self.getCrossSection(),unbracedLengthX= self.getMemberLength(), lstLines= self.lineList)
+
+
+class MemberModels(list):
+    ''' List of MemberModel objects with some convenience methods.'''
+
+    def createMembers(self, aiscMemberSet: xc.Set):
+        ''' Create the AISC member objects corresponding to the objects 
+        in the collection.
+
+        :param aiscMemberSet: set to populate with the finite elements that
+                              belong to the AISC members for later code
+                              checking.
+        '''
+        self.members= list()
+        self.beamMembers= list()
+        self.columnMembers= list()
+        # Create AISC member objects.
+        for mm in self: # for each member model.
+            memberLength= mm.getMemberLength()
+            member= mm.createMember()
+            if(mm.memberType=='beam'):
+                self.beamMembers.append(member)
+            elif(mm.memberType=='column'):
+                self.columnMembers.append(member)
+            self.members.append(member)
+        # Install recorder and populate AISC member set.
+        for am in self.members:
+            am.installULSControlRecorder(recorderType="element_prop_recorder")
+            aiscMemberSet.extend(am.elemSet)
+            
+    def populateColumnSet(self, columnSet):
+        ''' Populate the argument set with the finite elements belonging to
+            the columns.
+
+        :param columnSet: set to put the finite elements in.
+        '''
+        for mm in self:
+            if(mm.memberType=='column'):
+                for l in mm.lineList:
+                    columnSet.lines.append(l)
+        columnSet.fillDownwards()
+
+
 
 # Unbraced segment ascii art:
 #
@@ -494,16 +589,21 @@ def restoreStiffness(elementSet):
     :param elementSet: elements to process.
     '''
     for e in elementSet.elements:
-        Ebackup= e.getProp('Ebackup')
-        if(hasattr(e,"getMaterial")): # Trusses
-            e.getMaterial().E= Ebackup
-        else: # Beam elements.
-            mat= e.getPhysicalProperties.getVectorMaterials[0]
-            mat.sectionProperties.E= Ebackup
-            IzBackup= e.getProp('IzBackup')
-            if(mat.sectionProperties.dimension==2): # 2D section
-                mat.sectionProperties.I= IzBackup
-            else:
-                mat.sectionProperties.Iz= IzBackup
-                IyBackup= e.getProp('IyBackup')
-                mat.sectionProperties.Iy= IyBackup
+        if(e.hasProp('Ebackup')):
+            Ebackup= e.getProp('Ebackup')
+            if(hasattr(e,"getMaterial")): # Trusses
+                e.getMaterial().E= Ebackup
+            else: # Beam elements.
+                mat= e.getPhysicalProperties.getVectorMaterials[0]
+                mat.sectionProperties.E= Ebackup
+                IzBackup= e.getProp('IzBackup')
+                if(mat.sectionProperties.dimension==2): # 2D section
+                    mat.sectionProperties.I= IzBackup
+                else:
+                    mat.sectionProperties.Iz= IzBackup
+                    IyBackup= e.getProp('IyBackup')
+                    mat.sectionProperties.Iy= IyBackup
+        else:
+            funcName= sys._getframe(0).f_code.co_name
+            lmsg.error(funcName+': Ebackup property not found. You need to call backupStiffness prior to analysis run.')
+
