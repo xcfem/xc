@@ -1434,12 +1434,19 @@ class ASTMShape(object):
             take in to account the lateral buckling effect.
 
         '''
-        return self.getDesignCompressiveStrength(effectiveLengthX= 0.1, effectiveLengthY= 0.1, effectiveLengthZ= 0.1)
+        # Store result to avoid repeating the same calculation many times.
+        if(not hasattr(self, 'referenceCompressiveStrength')):
+            self.referenceCompressiveStrength= self.getDesignCompressiveStrength(effectiveLengthX= 0.1, effectiveLengthY= 0.1, effectiveLengthZ= 0.1)
+        return self.referenceCompressiveStrength
+    
     # Bending 
     def getReferenceFlexuralStrength(self):
         ''' Return the flexural strength of the section without
             take in to account the lateral buckling effect.'''
-        return self.getDesignFlexuralStrength(lateralUnbracedLength= 0.1, Cb= 1.0, majorAxis= True)
+        # Store result to avoid repeating the same calculation many times.
+        if(not hasattr(self, 'referenceFlexuralStrength')):
+            self.referenceFlexuralStrength= self.getDesignFlexuralStrength(lateralUnbracedLength= 0.1, Cb= 1.0, majorAxis= True)
+        return self.referenceFlexuralStrength
 
     # Shear
     def getYShearEfficiency(self, sectionClass, Vy):
