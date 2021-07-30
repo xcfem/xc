@@ -6,6 +6,8 @@ This directory contains the classes that define the domain components (nodes, el
 
 ## Contents
 
-
-         - constraints: the SFreedom_Constraint and MFreedom_Constraint classes.
-         - partitioner: the DomainPartitioner class.
+         - component: abstract base classes for the domain components.
+         - constraints: classes that represent the problem constraints.
+		 - load: classes that represent the problem loads.
+		 - mesh: finite elements mesh (nodes and elements).
+         - partitioner: object that can partition and load balance a PartitionedDomain.
