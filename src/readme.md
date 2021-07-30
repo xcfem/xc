@@ -1,4 +1,4 @@
-# XC C++ source code
+# C++ source code
 
 there is a bit of fluff in what i have given you and it needs to be
 cleaned out. NEXT TIME.
