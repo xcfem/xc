@@ -7,17 +7,23 @@ cleaned out. NEXT TIME.
 As to the organisation: for every class there will eventually be 2 files, a class.h, and a class.cc. all files are in the following subdirectories:
 
 ### Documentation
-doc: - contains some files concerning documentation, model.tex a latex
+doc: contains some files concerning documentation, model.tex a latex
 file and model.ps the postscript (every class does not yet have an upto
 date class file .. prof. fenves is deciding on the format the
 documentation will have .. the .ps file is around 200 pages if you want
-to look at it and give your own comments) 
+to look at it and give your own comments)
 
 ### Domain
 contains the classes for the domain. all in subdirectores:
 
 ### Material
 Classes that represent the materials abstraction.
+
+### Preprocessor
+Classes used to build the finite element model.
+
+### Reliability
+Code that deal with realiability analysis.
 
 ### Solution
 contains the code that deals with the solution of the finite element problem.
