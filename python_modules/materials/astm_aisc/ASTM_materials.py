@@ -1661,6 +1661,9 @@ class CShape(ASTMShape,aisc_metric_shapes.CShape):
     """
     def __init__(self,steel,name):
         ''' Constructor.
+
+        :param steel: steel material (i.e. A36).
+        :param name: shape name  (i.e. C380X74).
         '''
         ASTMShape.__init__(self, name)
         aisc_metric_shapes.CShape.__init__(self,steel,name)
@@ -1693,6 +1696,9 @@ class SimpleLShape(ASTMShape, aisc_metric_shapes.SimpleLShape):
     """
     def __init__(self,steel,name):
         ''' Constructor.
+
+        :param steel: steel material (i.e. A36).
+        :param name: shape name.
         '''
         ASTMShape.__init__(self, name)
         aisc_metric_shapes.SimpleLShape.__init__(self,steel,name)
@@ -1705,6 +1711,9 @@ class LShape(ASTMShape, aisc_metric_shapes.LShape):
     """
     def __init__(self,steel,name):
         ''' Constructor.
+
+        :param steel: steel material (i.e. A36).
+        :param name: shape name  (i.e. L6x6x1/2).
         '''
         ASTMShape.__init__(self, name)
         aisc_metric_shapes.LShape.__init__(self,steel,name)
@@ -1828,6 +1837,35 @@ class CHSSShape(ASTMShape,aisc_metric_shapes.CHSSShape):
         ASTMShape.__init__(self, name)
         aisc_metric_shapes.CHSSShape.__init__(self,steel,name)
 
+def getCrossSections(steelShapes, steel_W= A992, steel_C= A36, steel_L= A36, steel_HSS= A500):
+    ''' Return a dictionary containing the cross section definition for each
+        of the structural shapes in the steelShapes arguments.
+
+       :param steelShapes: string identifiers of the steel shapes.
+       :param steel_W: steel for the wide flange steel shapes (defaults to A992).
+       :param steel_C: steel for the channel steel shapes (defaults to A36).
+       :param steel_L: steel for the single-angle steel shapes (defaults to A36).
+       :param steel_HSS: steel for the hollow structural steel shapes (defaults to A500).
+    '''
+    retval= dict()
+    crossSection= None
+    for ss in steelShapes:
+        if(ss.startswith('W')):
+            crossSection= WShape(steel_W,ss)
+        elif(ss.startswith('C')):
+            crossSection= CShape(steel_C,ss)
+        elif(ss.startswith('L')):
+            crossSection= LShape(steel_L,ss)
+        elif(ss.startswith('HSS')):
+            crossSection= HSSShape(steel_HSS,ss)
+        else:
+            funcName= sys._getframe(0).f_code.co_name
+            lmsg.error(funcName+': '+ss+'shape not implemented yet. Returning None.')
+            crossSection= None
+        retval[ss]= crossSection
+    return retval
+ 
+        
  
 class BendingState(object):
     ''' Bending moments along the member.
