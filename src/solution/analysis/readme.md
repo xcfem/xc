@@ -12,6 +12,19 @@ The components of the analysis are:
 - DOF numberer: This object determines the mapping between equation numbers and degrees-of-freedom -- how degrees-of-freedom are numbered.
 - System of equations/solver:  within the solution algorithm, it specifies how to store and solve the system of equations in the analysis.
 
+## Contents
+
+        - algorithm: SolutionAlgorithm class and 2 subdirectories:
+                equiSolnAlgo: Linear, NewtonRaphson and ModifiedNewton
+                domainDecompAlgo: DomainDecompAlgo
+        - analysis: the Analysis, StaticAnalysis, and some others
+        - handler: ConstraintHandler, PenaltyConstraintHandler and
+                PlainHandler
+        - integrator: Integrator, IncrementalIntegrator, LoadControl,
+                ArcLength, StaticIntegrator, TransientIntegrator and
+                Newmark
+        - model: AnalysisModel and its iterators.
+        - numberer: DOF_Numberer
 
 ## References
 

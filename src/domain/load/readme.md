@@ -2,6 +2,11 @@
 
 Loads on nodes and elements.
 
+## Contents
+
+        - pattern: the abstact classes LoadPattern and TimeSeries and some concrete classes.
+
+
 ## How to add a new load type
 
 The path to do this is as follows:

@@ -20,3 +20,8 @@ Multi-freedom may be used to model:
 - rigid-body behavior, in which joints translate and rotate together.
 - equal-displacement behavior, in which displacements along certain degrees of freedom are equal
 
+
+## References
+[Support and Connection Types](https://web.mit.edu/4.441/1_lectures/1_lecture13/1_lecture13.html)
+[Handling of Constraints in Finite-Element Response Sensitivity Analysis](http://jaguar.ucsd.edu/sensitivity/Gu_2009_b.pdf)
+

@@ -1,5 +1,5 @@
-Constraint handlers
-===================
+# Constraint handlers
+
 
 The ConstraintHandler object determines how the constraint equations are enforced in the analysis. Constraint equations enforce a specified value for a DOF, or a relationship between DOFs.
 
@@ -14,3 +14,4 @@ The available constraint handlers are:
 	    - If a node is fixed, constrain it with the fix command and not equalDOF or other type of constraint.
 		- If multiple nodes are constrained, make sure that the retained node is not constrained in any other constraint.
 	* And remember if a node is constrained to multiple nodes in your model it probably means you have messed up. 
+
