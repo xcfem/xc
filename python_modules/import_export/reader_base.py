@@ -169,3 +169,51 @@ class ReaderBase(object):
         else:
             lmsg.warning('No points in :'+self.fileName+' file.')
         return indexDict
+
+
+def populateSetsFromEntitiesLabels(labelSetPairs, xcSet):
+    ''' Populate the sets in the labelSetPairs arguments according to
+        the labels of the entities in the xcSet argument.
+
+    :param labelSetPairs: list of pairs formed for a regular expression and
+                          a set to populate with the entities whose labels
+                          match the regular expression.
+    :param xcSet: set of the entities that will be classified according to
+                  its labels.
+    '''
+    for p in xcSet.points: # for each point in the set.
+        labels= p.getProp('labels') # point labels.
+        for pair in labelSetPairs:
+            regEx= re.compile(pair[0]) # regular expression
+            setToPopulate= pair[1] # set to populate
+            for lbl in labels:
+                if(regEx.match(lbl)): # if the label match the regular expr.
+                    setToPopulate.getPoints.append(p) # put the point in the set
+
+    for l in xcSet.lines: # for each line in the set.
+        labels= l.getProp('labels') # line labels.
+        for pair in labelSetPairs:
+            regEx= re.compile(pair[0]) # regular expression
+            setToPopulate= pair[1] # set to populate
+            for lbl in labels:
+                if(regEx.match(lbl)): # if the label match the regular expr
+                    setToPopulate.getLines.append(l) # put the line in the set
+                    
+    for s in xcSet.surfaces: # for each line in the set.
+        labels= s.getProp('labels') # surface labels.
+        for pair in labelSetPairs:
+            regEx= re.compile(pair[0]) # regular expression
+            setToPopulate= pair[1] # set to populate
+            for lbl in labels:
+                if(regEx.match(lbl)): # if the label match the regular expr
+                    setToPopulate.getSurfaces.append(s) # put the surface in the set
+                    
+    for b in xcSet.bodies: # for each line in the set.
+        labels= b.getProp('labels') # body labels.
+        for pair in labelSetPairs:
+            regEx= re.compile(pair[0]) # regular expression
+            setToPopulate= pair[1] # set to populate
+            for lbl in labels:
+                if(regEx.match(lbl)): # if the label match the regular expr
+                    setToPopulate.getBodies.append(b) # put the body in the set
+
