@@ -14,7 +14,7 @@ def getRelativeCoo(pt):
 
 pth= os.path.dirname(__file__)
 if(not pth):
-  pth= "."
+    pth= "."
 dxfFilePath= pth+'/../../aux/dxf/dxf_group_test.dxf' 
 logger= logging.getLogger('ezdxf')
 logger.setLevel(level=logging.WARNING) #Avoid logging info messages.

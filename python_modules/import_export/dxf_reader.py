@@ -277,7 +277,11 @@ class DXFImport(reader_base.ReaderBase):
                 objProperties.extendLabels(get_extended_data(obj))
             # groups
             if(objName in self.entitiesGroups):
-                objProperties.extendLabels(self.entitiesGroups[objName])
+                groupName= self.entitiesGroups[objName]
+                if('belongsTo' in objProperties.attributes):
+                    objProperties.attributes['belongsTo'].extend(groupName)
+                else:
+                    objProperties.attributes['belongsTo']= groupName
             if(layerName in self.layersToImport):
                 if(type == 'POINT'):
                     count= append_point(count, obj.dxf.location, layerName, objName, objProperties)
@@ -351,8 +355,11 @@ class DXFImport(reader_base.ReaderBase):
                             objProperties.extendLabels(get_extended_data(obj))
                         # groups
                         if(lineName in self.entitiesGroups):
-                            lineLabels= self.entitiesGroups[lineName]
-                            objProperties.extendLabels(lineLabels)
+                            groupNames= self.entitiesGroups[lineName]
+                            if('belongsTo' in objProperties.attributes):
+                                objProperties.attributes['belongsTo'].extend(groupNames)
+                            else:
+                                objProperties.attributes['belongsTo']= groupNames
                         self.propertyDict[lineName]= objProperties
                     else:
                         lmsg.error('line too short: '+str(p1)+','+str(p2)+str(length))
@@ -375,7 +382,11 @@ class DXFImport(reader_base.ReaderBase):
                                     objProperties.extendLabels(get_extended_data(obj))
                                 # groups
                                 if(lineName in self.entitiesGroups):
-                                    objProperties.extendLabels(self.entitiesGroups[lineName])
+                                    groupNames= self.entitiesGroups[lineName]
+                                    if('belongsTo' in objProperties.attributes):
+                                        objProperties.attributes['belongsTo'].extend(groupNames)
+                                    else:
+                                        objProperties.attributes['belongsTo']= groupNames
                                 self.propertyDict[name]= objProperties
                             v1= v2
 

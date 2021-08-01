@@ -607,3 +607,28 @@ def restoreStiffness(elementSet):
             funcName= sys._getframe(0).f_code.co_name
             lmsg.error(funcName+': Ebackup property not found. You need to call backupStiffness prior to analysis run.')
 
+def getBeamColumnGroups(xcSet):
+    ''' Return the lines of the set arguments grouped according to its
+        'belongsTo' property (groups to wich the line belongs). If the
+        line doesn't belong to any group it will be returned as a group
+        by itself (with one item only).
+
+    :param xcSet: set of the entities that will be classified according to
+                  its group.
+    '''
+    retval= dict() # group name: key/group member: value
+    for ln in xcSet.getLines:
+        attributes= ln.getProp('attributes')
+        groups= list()
+        if('belongsTo' in attributes):
+            groups= attributes['belongsTo']
+        if(len(groups)>0): # line belongs to a group
+            for grp in groups:
+                key= str(grp) # group name.
+                if(key in retval): # group already exists.
+                    retval[key].append(ln)
+                else:
+                    retval[key]= [ln] # new group.
+        else: # line stands by itself.
+            retval[ln.name]= [ln]
+    return retval

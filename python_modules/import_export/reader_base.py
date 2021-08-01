@@ -169,8 +169,7 @@ class ReaderBase(object):
         else:
             lmsg.warning('No points in :'+self.fileName+' file.')
         return indexDict
-
-
+        
 def populateSetsFromEntitiesLabels(labelSetPairs, xcSet):
     ''' Populate the sets in the labelSetPairs arguments according to
         the labels of the entities in the xcSet argument.
