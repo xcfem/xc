@@ -80,6 +80,7 @@ class FreeCADImport(reader_base.ReaderBase):
         super(FreeCADImport, self).__init__(fileName, getRelativeCoo, threshold, importLines, importSurfaces)
         self.document= FreeCAD.openDocument(self.fileName)
         self.groupsToImport= self.getObjectsToImport(groupsToImport)
+        self.compounds= dict() # Stack for compound names.
         if(len(self.groupsToImport)):
             self.kPointsNames= self.selectKPoints()
             self.importPoints()
@@ -254,6 +255,25 @@ class FreeCADImport(reader_base.ReaderBase):
                 if(labelName in self.groupsToImport):
                     facesDict= self.facesTree[labelName]
                     import_shape(obj.Shape, objName, labelName)
+                    # Store compound components.
+                    if(shapeType=='Compound'):
+                        for lnk in obj.Links:
+                            componentLabel= lnk.Label
+                            if(componentLabel in self.compounds):
+                                self.compounds[componentLabel].add({labelName})
+                            else:
+                                self.compounds[componentLabel]= {labelName}
+        # Define belongsTo attribute for compounds components. 
+        for key in self.propertyDict:
+            pDict= self.propertyDict[key]
+            for label in pDict.labels:
+                if label in self.compounds:
+                    compound= list(self.compounds[label])
+                    if('belongsTo' in pDict.attributes):
+                        pDict.attributes['belongsTo'].extend(compound)
+                    else:
+                        pDict.attributes['belongsTo']= compound
+                        
 
               
     def getNamesToImport(self):
