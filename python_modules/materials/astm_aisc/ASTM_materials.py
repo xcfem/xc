@@ -370,7 +370,8 @@ class BoltFastener(bolts.BoltBase):
         Fnt= self.getNominalTensileStrength()/A
         Fnv= self.getNominalShearStrength(threadsExcluded)/A
         frv= V/A
-        return min(1.3*Fnt-Fnt/(0.75*Fnv)*frv, Fnt)*A
+        retval= min(1.3*Fnt-Fnt/(0.75*Fnv)*frv, Fnt)*A
+        return max(retval, 1e-6) # Don't return negative strength value.
 
     def getDesignCombinedStrength(self, V, threadsExcluded= False):
         ''' Return the design tensile stress modified to include the 

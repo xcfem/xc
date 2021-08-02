@@ -128,9 +128,9 @@ class BoltArrayBase(object):
         '''
         return Pd/self.getDesignShearStrength(doubleShear)
 
-    def getStrengthEfficiency(self, Pd, doubleShear= False):
+    def getShearStrengthEfficiency(self, Pd, doubleShear= False):
         ''' Return the value of efficiency with respect to
-            the strength.
+            the shear strength.
 
         :param Pd: design value of the force to resist.
         :param doubleShear: true if double shear action.
@@ -414,13 +414,13 @@ class BoltedPlateBase(plates.Plate):
         '''
         return self.getMinThickness(Pd)/self.thickness
     
-    def getStrengthEfficiency(self, Pd):
+    def getShearStrengthEfficiency(self, Pd):
         ''' Return the value of efficiency with respect
             to the strength of the bolted plate.
 
         :param Pd: design value of the force to resist.
         '''
-        retval= self.boltArray.getStrengthEfficiency(Pd, doubleShear= self.doublePlate)
+        retval= self.boltArray.getShearStrengthEfficiency(Pd, doubleShear= self.doublePlate)
         retval= max(retval, self.checkThickness(Pd))
         return retval
 
@@ -431,9 +431,9 @@ class BoltedPlateBase(plates.Plate):
         '''
         CF= 0.0
         if(internalForces.N<0): # compression
-            CF= self.getStrengthEfficiency(-internalForces.N)
+            CF= self.getShearStrengthEfficiency(-internalForces.N)
         else:
-            CF= self.getStrengthEfficiency(internalForces.N)
+            CF= self.getShearStrengthEfficiency(internalForces.N)
         if(abs(internalForces.My)>1e-3):
             lmsg.error('bending not implemented yet.')
         if(abs(internalForces.Mz)>1e-3):
