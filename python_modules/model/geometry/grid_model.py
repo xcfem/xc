@@ -550,10 +550,37 @@ class GridModel(object):
         '''Rotates all points in the grid around a X axis passing by yzRotCent.
 
         :param angle: rotation angle (degrees)
-        :param yyRotCent: coordinates [y,z] of the axis X of rotation
+        :param yzRotCent: coordinates [y,z] of the axis X of rotation
         '''
         ijkRange=IJKRange([0,0,0],[self.lastXIndex(),self.lastYIndex(),self.lastZIndex()])
         self.rotPntsXAxis(ijkRange,angle,yzRotCent)
+    
+    def rotPntsYAxis(self,ijkRange,angle,xzRotCent):
+        '''Rotates points in ijkRange around a Y axis passing by xzRotCent.
+
+        :param ijkRange: range for the search.
+        :param angle: rotation angle (degrees)
+        :param xzRotCent: coordinates [x,z] of the axis Y of rotation
+        '''
+        theta=math.radians(angle)
+        sinTheta=math.sin(theta)
+        cosTheta=math.cos(theta)
+        sPtMove=self.getSetPntRange(ijkRange,'sPtMove')
+        for p in sPtMove.getPoints:
+            xp=p.getPos.x
+            zp=p.getPos.z
+            p.getPos.x= xzRotCent[0]+cosTheta*(xp-xzRotCent[0])-sinTheta*(zp-xzRotCent[1])
+            p.getPos.z= xzRotCent[1]+sinTheta*(xp-xzRotCent[0])+cosTheta*(zp-xzRotCent[1])
+        sPtMove.clear()
+
+    def rotAllPntsYAxis(self,angle,xzRotCent):
+        '''Rotates all points in the grid around a X axis passing by yzRotCent.
+
+        :param angle: rotation angle (degrees)
+        :param xzRotCent: coordinates [z,z] of the axis Y of rotation
+        '''
+        ijkRange=IJKRange([0,0,0],[self.lastXIndex(),self.lastYIndex(),self.lastZIndex()])
+        self.rotPntsYAxis(ijkRange,angle,xzRotCent)
     
     def scaleCoorXPointsRange(self,ijkRange,xOrig,scale):
         '''Applies a scale in X with origin xOrig (fixed axis: X=xOrig) 
