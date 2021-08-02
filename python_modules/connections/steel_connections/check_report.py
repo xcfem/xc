@@ -294,7 +294,7 @@ def gen_report_files(modelSpace,genDescr,specDescr,loadCaseNames,reportPath,rltv
         write_check_warnings(warningsFile,boltSets2Check,singlWelds)
 
 def addGraph2Tex(texFile,graph2add,caption,grWidth):
-    lhead=['\\begin{figure} \n','\\begin{center} \n']
+    lhead=['\\begin{figure}[h] \n','\\begin{center} \n']
     texFile.writelines(lhead)
     texFile.write('\\includegraphics[width='+grWidth+']{'+graph2add+'} \n')
     texFile.write('\\caption{'+caption+'} \n')
@@ -422,7 +422,7 @@ from postprocess.xcVtk import vtk_graphic_base
 from postprocess import limit_state_data as lsd
 from postprocess.control_vars import VonMisesControlVars
 
-def gen_baseplates_vonmises_results(sets2disp,modelSpace,genDescr,specDescr,reportPath,rltvResPath,grWidth,texfileNm,resVMfile='./tmp_results/verifications/verifRsl_VonMisesStressULS.py'):
+def gen_vonmises_results(sets2disp,modelSpace,genDescr,specDescr,reportPath,rltvResPath,grWidth,texfileNm,resVMfile='./tmp_results/verifications/verifRsl_VonMisesStressULS.py'):
     '''Generates the graphics corresponding to loads and displacements for each load case,
     together with the tex file to include them in a report.
 
