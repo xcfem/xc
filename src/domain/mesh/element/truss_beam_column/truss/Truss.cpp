@@ -857,7 +857,7 @@ XC::Response *XC::Truss::setResponse(const std::vector<std::string> &argv, Infor
       return new ElementResponse(this, 3, *theMatrix);
     // a material quantity
     else if(argv[0] == "material" || argv[0] == "-material")
-      return  setMaterialResponse(theMaterial,argv,1,eleInfo);
+      return setMaterialResponse(theMaterial,argv,1,eleInfo);
     else
       return 0;
   }
