@@ -1369,6 +1369,10 @@ class CShape(structural_steel.UShape):
         '''Return the metric label from the US customary one.'''
         return getMetricLabel(self.name)
         
+    def getFlangeWidth(self):
+        ''' Return the width of the flange.'''
+        return self.get('b')
+    
     def getLambdaPFlangeBending(self):
         '''Return he limiting slenderness for a compact flange, 
            defined in Table B4.1b of AISC-360-16.'''
