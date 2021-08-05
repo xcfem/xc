@@ -106,6 +106,13 @@ class ASTMSteel(steel_base.BasicSteel):
         if(tmp>=0.8):
             retval= 1.1
         return retval
+    
+    def getEquation7_6_2Factor(self):
+        ''' Return the the factor that multiplies the flange width
+            in equation 7.6-2M of AISC 358-16.'''
+        tmp= self.fy*self.Ry
+        tmp/= (self.Rt*self.fu)
+        return (1-tmp)
 
 A36= ASTMSteel('A36', fy= 250e6, fu=400e6, gammaM= 1.0, Rt= 1.2, Ry= 1.5)
 A53= ASTMSteel('A53', fy= 240e6, fu= 414e6, gammaM= 1.0, Rt= 1.2, Ry= 1.5)
@@ -370,7 +377,8 @@ class BoltFastener(bolts.BoltBase):
         Fnt= self.getNominalTensileStrength()/A
         Fnv= self.getNominalShearStrength(threadsExcluded)/A
         frv= V/A
-        return min(1.3*Fnt-Fnt/(0.75*Fnv)*frv, Fnt)*A
+        retval= min(1.3*Fnt-Fnt/(0.75*Fnv)*frv, Fnt)*A
+        return max(retval, 1e-6) # Don't return negative strength value.
 
     def getDesignCombinedStrength(self, V, threadsExcluded= False):
         ''' Return the design tensile stress modified to include the 
@@ -456,17 +464,22 @@ def getBoltForHole(holeDiameter, boltSteelType= A307, tol= 0.5e-3):
     ''' Return the bolt that fits in the hole diameter
         argument.
 
-    :param holeDiamter: diameter of the hole.
+    :param holeDiameter: diameter of the hole.
     :param tol: tolerance (defaults to 0.5 mm).
     '''
     tmp= None
     threshold= holeDiameter+tol
     for b in standardBolts[::-1]:
-        holeDiameter= b.getNominalHoleDiameter()
-        if(holeDiameter<threshold):
+        boltHoleDiameter= b.getNominalHoleDiameter()
+        if(boltHoleDiameter<threshold):
             tmp= b
             break
-    retval= BoltFastener(diameter= b.diameter, steelType= boltSteelType)
+    if(tmp):
+        retval= BoltFastener(diameter= tmp.diameter, steelType= boltSteelType)
+    else:
+        funcName= sys._getframe(0).f_code.co_name
+        lmsg.error(funcName+': no standard bolt found for '+str(holeDiameter*1e3)+' mm hole.')
+        retval= None
     return retval
 
 class BoltArray(bp.BoltArrayBase):
@@ -1555,18 +1568,15 @@ class ASTMShape(object):
             tensile rupture according to equation 7.6-2M
             of AISC 358-16.'''
         bf_2= self.getFlangeWidth()/2.0
-        Fy= self.steelType.fy
-        Ry= self.steelType.Ry
-        Rt= self.steelType.Rt
-        Fu= self.steelType.fu
-        return bf_2*(1-Ry*Fy/(Rt*Fu))-3e-3
+        factor= self.steelType.getEquation7_6_2Factor()
+        return bf_2*factor-3e-3
 
     def getFlangeMaximumHoleDiameter(self):
         ''' Return the maximum hole diameter to prevent beam flange 
             tensile rupture according to equation 7.6-2M
             of AISC 358-16.'''
-        db= self.getFlangeMaximumBoltDiameter()
-        return db+BoltFastener.diameterIncrement
+        bd= self.getFlangeMaximumBoltDiameter()
+        return bd+BoltFastener.diameterIncrement
 
     def getFlangeMaximumBolt(self, boltSteelType= A307):
         ''' Return the maximum bolt to prevent beam flange 
@@ -1672,6 +1682,14 @@ class CShape(ASTMShape,aisc_metric_shapes.CShape):
         ''' Return the yield strength of the flange.'''
         grossArea= self.getFlangeWidth()*self.getFlangeThickness()
         return self.steelType.getYt()*self.steelType.fy*grossArea
+    
+    def getFlangeMaximumBoltDiameter(self):
+        ''' Return the maximum bolt diameter to prevent beam flange 
+            tensile rupture according to equation 7.6-2M
+            of AISC 358-16.'''
+        bf= self.getFlangeWidth() # Only one bolt per row.
+        factor= self.steelType.getEquation7_6_2Factor()
+        return bf*factor-3e-3
 
 # *************************************************************************
 # AISC single angle profiles.
