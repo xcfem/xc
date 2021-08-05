@@ -422,13 +422,15 @@ from postprocess.xcVtk import vtk_graphic_base
 from postprocess import limit_state_data as lsd
 from postprocess.control_vars import VonMisesControlVars
 
-def gen_vonmises_results(sets2disp,modelSpace,genDescr,specDescr,reportPath,rltvResPath,grWidth,texfileNm,resVMfile='./tmp_results/verifications/verifRsl_VonMisesStressULS.py'):
-    '''Generates the graphics corresponding to loads and displacements for each load case,
+def gen_vonmises_results(sets2disp,outphand,genDescr,specDescr,reportPath,rltvResPath,grWidth,texfileNm,resVMfile='./tmp_results/verifications/verifRsl_VonMisesStressULS.py'):
+    '''Generates the graphics corresponding to results of vonmises verification
+    (efficiency and vonmises stresses)
     together with the tex file to include them in a report.
-
+    
+    :param sets2disp: sets of elements to display successively
+    :param outphand: output-handler
     :param genDescr: general description
     :param specDescr: specific description
-    :param loadCaseNames: list of load case names
     :param reportPath: directory where report is to be generated
     :param rltvResPath: directory where to place the text file relative to reportPath
     :param grWidth: with to insert the graphics
@@ -436,7 +438,48 @@ def gen_vonmises_results(sets2disp,modelSpace,genDescr,specDescr,reportPath,rltv
     :param resVMfile: file containing results from Von Mises verification (defaults 
                       to './tmp_results/verifications/verifRsl_VonMisesStressULS.py')
     '''
-    preprocessor=modelSpace.preprocessor
+    preprocessor=outphand.modelSpace.preprocessor
+    limitState= lsd.vonMisesStressResistance
+    exec(open(resVMfile).read())
+    resPath=reportPath+rltvResPath
+    if not os.path.isdir(resPath): os.mkdir(resPath)
+    grPath=resPath+'graphics/'
+    if not os.path.isdir(grPath): os.mkdir(grPath)
+    texPath=reportPath+rltvResPath ; grPath=texPath+'graphics/'; rltvGrPath=rltvResPath+'graphics/'
+    f=open(texPath+texfileNm+'_vonmises.tex','w')
+    txtDescr='ULS Von Mises stress check. ' + genDescr+' '+specDescr + ' '
+    for st in sets2disp:
+        if len(st.description)>0:
+            setdescr=st.description
+        else:
+             setdescr='Set: '+st.name
+        setdescr=setdescr.capitalize()
+        graphNm=texfileNm+'_vonmisesStress'+st.name
+        captTxt=txtDescr+ setdescr + '. Envelope of Von Misses stress (MPa)'
+        outphand.displayField(limitStateLabel= limitState.label, section= None, argument='vm_stress', component= None, setToDisplay= st, fileName= grPath+graphNm+'.jpg')
+        addGraph2Tex(f,rltvGrPath+graphNm,captTxt,grWidth)
+        graphNm=texfileNm+'_vonmisesCF'+st.name
+        captTxt=txtDescr+ setdescr + '. Efficiency'
+        outphand.displayField(limitStateLabel= limitState.label, section= None, argument='CF', component= None, setToDisplay= st, fileName= grPath+graphNm+'.jpg')
+        addGraph2Tex(f,rltvGrPath+graphNm,captTxt,grWidth)
+
+def gen_vonmises_results_baseplates(sets2disp,modelSpace,genDescr,specDescr,reportPath,rltvResPath,grWidth,texfileNm,resVMfile='./tmp_results/verifications/verifRsl_VonMisesStressULS.py'):
+    '''Generates the graphics corresponding to results of vonmises verification
+    (efficiency and vonmises stresses) in baseplates,
+    together with the tex file to include them in a report.
+
+    :param sets2disp: sets of elements to display successively
+    :param modelSpace: model-space
+    :param genDescr: general description
+    :param specDescr: specific description
+    :param reportPath: directory where report is to be generated
+    :param rltvResPath: directory where to place the text file relative to reportPath
+    :param grWidth: with to insert the graphics
+    :param texfileNm: name of the tex file.
+    :param resVMfile: file containing results from Von Mises verification (defaults 
+                      to './tmp_results/verifications/verifRsl_VonMisesStressULS.py')
+    '''
+#    preprocessor=modelSpace.preprocessor
     limitState= lsd.vonMisesStressResistance
     exec(open(resVMfile).read())
     oh= output_handler.OutputHandler(modelSpace)
