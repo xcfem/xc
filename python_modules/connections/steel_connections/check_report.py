@@ -450,8 +450,11 @@ def gen_vonmises_results(sets2disp,modelSpace,genDescr,specDescr,reportPath,rltv
     camD3=vtk_graphic_base.CameraParameters('-X-Y+Z')   #camera dihedral 3
     txtDescr='ULS Von Mises stress check. ' + genDescr+' '+specDescr + ' '
     for st in sets2disp:
-        setdescr=st.name.replace('Set',' ')
-        setdescr=setdescr.replace('Gusset',' '+ 'gusset')
+        if len(st.description)>0:
+            setdescr=st.description
+        else:
+            setdescr=st.name.replace('Set',' ')
+            setdescr=setdescr.replace('Gusset',' '+ 'gusset')
         setdescr=setdescr.capitalize()
         oh.setCameraParameters(camD1)
         graphNm=texfileNm+'_vonmisesStress'+st.name
