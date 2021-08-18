@@ -20,7 +20,7 @@ from postprocess import prop_statistics as ps
 class EC5TimberRectCrossSection(section_properties.RectangularSection):
     '''Timber section with Eurocode 5 verification routines.'''
     def __init__(self,name,b,h,E,nu,fyd,taud):
-        super(EC3TimberRectCrossSection,self).__init__(name,b,h,E,nu)
+        super(EC5TimberRectCrossSection,self).__init__(name,b,h,E,nu)
         self.fyd= fyd
         self.taud= taud
 
