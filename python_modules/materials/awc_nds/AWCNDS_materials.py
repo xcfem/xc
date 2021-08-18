@@ -10,6 +10,7 @@ from __future__ import print_function
 import math
 import scipy.interpolate
 from misc_utils import log_messages as lmsg
+from materials import wood_base
 from materials.sections import section_properties as sp
 from materials import typical_materials
 from materials import steel_member_base
@@ -212,26 +213,18 @@ def getFireDesignAdjustementFactor(refValue):
         retval= 2.03
     return retval
 
-class Wood(object):
+class Wood(wood_base.Wood):
     '''Base class for wood materials according
-       to AWC-NDS2018.
-    
-    :ivar name: wood name.
-    :ivar specificGravity: specific gravity of the wood
-                            member.   
+       to AWC-NDS2018.    
     '''
     def __init__(self, name, specificGravity= None):
         '''Constructor.
 
         :param name: wood name.
-        :param specificGravity: specific gravity of the wood
-                                member.   
+        :param specificGravity: specific gravity of the wood.   
         '''
-        self.name= name
-        if(specificGravity):
-            self.specificGravity= specificGravity
-        else:
-            self.specificGravity= None
+        super(Wood,self).__init__(name, specificGravity)
+        
     def getDowelBearingStrength(self, diameter, theta, endGrain= False):
         ''' Return the dowel bearing strength for Dowel-Type
             Fasteners in Wood Members according to Eq.
