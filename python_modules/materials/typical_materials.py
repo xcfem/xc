@@ -188,7 +188,7 @@ def defConcrete01(preprocessor,name,epsc0,fpc,fpcu,epscu):
 
 
 #Concrete 02.
-def defConcrete02(preprocessor,name,epsc0,fpc,fpcu,epscu,ratioSlope,ft,Ets):
+def defConcrete02(preprocessor,name,epsc0,fpc,fpcu,epscu,ratioSlope= 0.1, ft= None, Ets= None):
     ''''Constructs an uniaxial concrete material with linear tension
     softening. Compressive concrete parameters should be input as negative values.
     The initial slope for this model is (2*fpc/epsc0) 
@@ -199,9 +199,9 @@ def defConcrete02(preprocessor,name,epsc0,fpc,fpcu,epscu,ratioSlope,ft,Ets):
     :param fpc:          concrete compressive strength at 28 days (compression is negative)
     :param fpcu:         concrete crushing strength 
     :param epscu:        concrete strain at crushing strength 
-    :param ratioSlope:   ratio between unloading slope at epscu and initial slope 
-    :param ft:           tensile strength
-    :param Ets:          tension softening stiffness (absolute value) (slope of the linear tension softening branch) 
+    :param ratioSlope:   ratio between unloading slope at epscu and initial slope (defaults to 0.1).
+    :param ft:           tensile strength (defaults to None in which case the value is set to -0.1*fpc)
+    :param Ets:          tension softening stiffness (absolute value) (slope of the linear tension softening branch) (defaults to None in which case the value is set to 0.1*fpc/epsc0)
 
     '''
     materialHandler= preprocessor.getMaterialHandler
@@ -210,11 +210,17 @@ def defConcrete02(preprocessor,name,epsc0,fpc,fpcu,epscu,ratioSlope,ft,Ets):
     retval.fpc= fpc
     retval.fpcu= fpcu
     retval.epscu= epscu
-    retval.ratioSlope=ratioSlope
-    retval.ft=ft
-    retval.Ets=Ets
-    if fpc==fpcu:
-      lmsg.warning("concrete02 compressive strength fpc is equal to crushing strength fpcu => the solver can return wrong stresses or have convergence problems ")
+    retval.ratioSlope= ratioSlope
+    if(ft):
+        retval.ft= ft
+    else:
+        retval.ft= -0.1*fpc
+    if(Ets):
+        retval.Ets= Ets
+    else:
+        retval.Ets= 0.1*fpc/epsc0
+    if(fpc==fpcu):
+        lmsg.warning("concrete02 compressive strength fpc is equal to crushing strength fpcu => the solver can return wrong stresses or have convergence problems ")
     return retval
 
 #Elastic section 1d.

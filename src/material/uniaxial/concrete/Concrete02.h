@@ -131,10 +131,10 @@ class Concrete02: public RawConcrete
   private:
 
     // matpar : Concrete FIXED PROPERTIES
-    double fpcu;   //!< stress at ultimate (crushing) strain    : mp(3)
-    double rat;   //!< ratio between unloading slope at epscu and original slope : mp(5)
-    double ft;    //!< concrete tensile strength               : mp(6)
-    double Ets;   //!< tension stiffening slope                : mp(7)
+    double fpcu; //!< stress at ultimate (crushing) strain.
+    double rat; //!< ratio between unloading slope at epscu and original slope.
+    double ft; //!< concrete tensile strength.
+    double Ets; //!< tension stiffening slope.
 
     // hstvP : Concrete HISTORY VARIABLES last committed step
     Conc02HistoryVars hstvP; //!< = values at previous converged step

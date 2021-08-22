@@ -75,6 +75,15 @@ void XC::Concrete02::setup_parameters(void)
     hstv.setup_parameters(initTang);
   }
 
+//! @brief Constructor.
+//! @param tag: material identifier.
+//! @param _fpc: concrete compressive strength at 28 days (compression is negative).
+//! @param _epsc0: concrete strain at maximum strength.
+//! @param _fpcu: concrete crushing strength.
+//! @param _epsU: concrete strain at crushing strength.
+//! @param _lambda: ratio between unloading slope at epscu and initial slope.
+//! @param _ft : tensile strength.
+//! @param _Ets : tension softening stiffness (absolute value) (slope of the linear tension softening branch).
 XC::Concrete02::Concrete02(int tag, double _fpc, double _epsc0, double _fpcu,
                        double _epscu, double _rat, double _ft, double _Ets)
   :  RawConcrete(tag, MAT_TAG_Concrete02,_fpc,_epsc0,_epscu),
@@ -100,7 +109,9 @@ void XC::Concrete02::setFpcu(const double &d)
     if(fpcu > 0.0)
       {
         fpcu= -fpcu;
-        std::clog << "Warning!, compressive strength must be negative." << std::endl;
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; Warning!, compressive strength must be negative."
+		  << std::endl;
       }
   }
 
@@ -115,7 +126,9 @@ void XC::Concrete02::setFt(const double &d)
     if(ft < 0.0)
       {
         ft= -ft;
-        std::clog << "Warning!, tensile strength must be positive." << std::endl;
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; Warning!, tensile strength must be positive."
+		  << std::endl;
       }
   }
 
@@ -131,7 +144,9 @@ void XC::Concrete02::setEts(const double &d)
     if(Ets < 0.0)
       {
         Ets= -Ets;
-        std::clog << "Warning!, tensile softening stiffness must be positive (absolute value)." << std::endl;
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; warning!, tensile softening stiffness must be positive (absolute value)."
+		  << std::endl;
       }
   }
 
@@ -139,7 +154,7 @@ void XC::Concrete02::setEts(const double &d)
 double XC::Concrete02::getEts(void) const
   { return Ets; }
 
-//! @brief ratio between unloading slope at $epscu and initial slope
+//! @brief ratio between unloading slope at epscu and initial slope
 void XC::Concrete02::setLambda(const double &d)
   { rat= d; }
 
@@ -291,7 +306,8 @@ int XC::Concrete02::sendSelf(Communicator &comm)
 
     res+= comm.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
-      std::cerr << getClassName() << "sendSelf() - failed to send data\n";
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; failed to send data\n";
     return res;
   }
 
@@ -302,13 +318,15 @@ int XC::Concrete02::recvSelf(const Communicator &comm)
     int res= comm.receiveIdData(getDbTagData(),dataTag);
 
     if(res<0)
-      std::cerr << getClassName() << "::recvSelf - failed to receive ids.\n";
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; failed to receive ids.\n";
     else
       {
         //setTag(getDbTagDataPos(0));
         res+= recvData(comm);
         if(res<0)
-          std::cerr << getClassName() << "::recvSelf - failed to receive data.\n";
+          std::cerr << getClassName() << "::" << __FUNCTION__
+		    << "; failed to receive data.\n";
       }
     return res;
   }
