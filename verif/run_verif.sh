@@ -845,7 +845,7 @@ python tests/materials/astm_aisc/connection_design/test_weld_02.py
 echo "$BLEU" "      Tie bar tests." "$NORMAL"
 python tests/materials/tie_bars/test_tie_bars_01.py
 
-echo "$BLEU" "  Wood sections test." "$NORMAL"
+echo "$BLEU" "  Wood sections tests." "$NORMAL"
 echo "$BLEU" "    AWC NDS tests." "$NORMAL"
 python tests/materials/awc_nds/awc_nds2018_test01.py
 python tests/materials/awc_nds/rsdg_exemple_5_1.py
@@ -857,6 +857,9 @@ python tests/materials/awc_nds/withdrawal_design_value_test_02.py
 python tests/materials/awc_nds/lateral_design_value_test_01.py
 python tests/materials/awc_nds/lateral_design_value_test_02.py
 python tests/materials/awc_nds/test_beam_stability_factor.py
+echo "$BLEU" "    EC5 tests." "$NORMAL"
+python tests/materials/ec5/test_EC5Wood_01.py
+python tests/materials/ec5/test_EC5Wood_02.py
 
 echo "$BLEU" "  Prestressing." "$NORMAL"
 python tests/materials/prestressing/test_layout2D_frictLoss_prestress_tendon.py
