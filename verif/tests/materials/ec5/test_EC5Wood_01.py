@@ -26,18 +26,27 @@ ratio3= (gammaM-1.3)/1.3
 fm_d= C24.getDesignBendingStrength(loadDurationClass= 'medium_term', serviceClass= 1)
 ratio4= (fm_d-14769230.769230768)/14769230.769230768
 
+fc_0_k= C24.getCharacteristicCompressiveStrength()
+ratio5= (fc_0_k-21e6)/21e6
+
+fc_0_d= C24.getDesignCompressiveStrength(loadDurationClass= 'short_term', serviceClass= 2)
+ratio6= (fc_0_d-14538461.538461538)/14538461.538461538
+
 '''
 print('ratio1= ', ratio1)
 print('ratio2= ', ratio2)
 print('ratio3= ', ratio3)
 print('fm_d= ', fm_d)
 print('ratio4= ', ratio4)
+print('ratio5= ', ratio5)
+print('fc_0_d= ', fc_0_d)
+print('ratio6= ', ratio6)
 '''
 
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
-if (abs(ratio1)<1e-12 and abs(ratio2)<1e-12 and abs(ratio3)<1e-12 and abs(ratio4)<1e-15):
+if (abs(ratio1)<1e-12 and abs(ratio2)<1e-12 and abs(ratio3)<1e-12 and abs(ratio4)<1e-12 and abs(ratio5)<1e-12 and abs(ratio6)<1e-12):
     print('test '+fname+': ok.')
 else:
     lmsg.error(fname+' ERROR.')

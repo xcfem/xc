@@ -89,11 +89,19 @@ class Wood(wood_base.Wood):
         ''' return the characteristic compressive strength.'''
         return self.fc_0_k
     
+    def getDesignCompressiveStrength(self, loadDurationClass:str, serviceClass:int):
+        ''' return the value of the characteristic bending strength.'''
+        return self.getCharacteristicCompressiveStrength()*self.getKmod(loadDurationClass, serviceClass)/self.gammaM()
+    
     def getCharacteristicCompressiveStrengthPerpendicularToTheGrain(self):
         ''' return the characteristic compressive strength perpendicular 
             to the grain.
         '''
         return self.fc_90_k
+    
+    def getDesignCompressiveStrengthPerpendicularToTheGrain(self, loadDurationClass:str, serviceClass:int):
+        ''' return the value of the characteristic bending strength.'''
+        return self.getCharacteristicCompressiveStrengthPerpendicularToTheGrain()*self.getKmod(loadDurationClass, serviceClass)/self.gammaM()
     
     def getCharacteristicShearStrength(self):
         ''' return the characteristic shear strength.'''
