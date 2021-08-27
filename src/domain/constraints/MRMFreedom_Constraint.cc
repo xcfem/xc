@@ -28,9 +28,8 @@
 //
 // Written: lcpt 
 // Created: 03/2015
-// Revision: A
 //
-// Purpose: This file contains the implementation of class XC::MRMFreedom_Constraint.
+// Purpose: This file contains the implementation of class MRMFreedom_Constraint.
 
 #include <domain/constraints/MRMFreedom_Constraint.h>
 
@@ -89,6 +88,11 @@ XC::MRMFreedom_Constraint::MRMFreedom_Constraint(int tag, const ID &retainedNode
 XC::MRMFreedom_Constraint::MRMFreedom_Constraint(int tag, const ID &retainedNodes, int nodeConstr, const Matrix &constr,const ID &constrainedDOF)
   : MFreedom_ConstraintBase(tag, nodeConstr, constr, constrainedDOF, CNSTRNT_TAG_MRMFreedom_Constraint), retainedNodeTags(retainedNodes) {}
 
+//! Constructor.
+//! @param tag: tag for the constraint.
+//! @param elem: elem to which we'll glue the node.
+//! @param node: node to glue to the element.
+//! @param constrainedDOF: identifiers of the constrained degrees of freedom.
 XC::MRMFreedom_Constraint::MRMFreedom_Constraint(int tag,const Element &elem, const Node &node, const ID &constrainedDOF)
   : MFreedom_ConstraintBase(tag, node.getTag(), constrainedDOF, CNSTRNT_TAG_MRMFreedom_Constraint)
   {

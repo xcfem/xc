@@ -31,9 +31,9 @@
 
 // File: ~/domain/constraints/MRMFreedom_Constraint.h
 //
-// Written: fmk 
-// Created: 11/96
-// Revision: A
+//
+// Written: lcpt 
+// Created: 03/2015
 //
 // Purpose: This file contains the class definition for MRMFreedom_Constraint.
 // MRMFreedom_Constraint is a class which stores the information for a multiple
