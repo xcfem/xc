@@ -55,7 +55,9 @@ class SectionForceDeformation;
 class CrossSectionProperties2d: public CrossSectionProperties1d
   {
   private:
-    double g, i, alpha;
+    double g; //!< shear modulus
+    double i; //!< moment of inertia about local z axis
+    double alpha;
     static Matrix ks2;
     static Matrix ks3;
   protected:
