@@ -208,7 +208,9 @@
 
 #define ELE_TAG_Subdomain     	1
 #define ELE_TAG_ElasticBeam2d   2000
+#define ELE_TAG_ElasticTimoshenkoBeam2d   2145
 #define ELE_TAG_ElasticBeam3d   3000
+#define ELE_TAG_ElasticTimoshenkoBeam3d   3146
 #define ELE_TAG_Beam2d    	2001
 #define ELE_TAG_beam2d02    	2002
 #define ELE_TAG_beam2d03    	2003

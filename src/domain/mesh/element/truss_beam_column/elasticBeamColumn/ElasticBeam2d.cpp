@@ -60,17 +60,17 @@
 
 #include <domain/mesh/element/truss_beam_column/elasticBeamColumn/ElasticBeam2d.h>
 #include "domain/component/Parameter.h"
-#include <domain/load/ElementalLoad.h>
+#include "domain/load/ElementalLoad.h"
 #include "domain/load/beam_loads/BeamMecLoad.h"
 #include "domain/load/beam_loads/BeamStrainLoad.h"
 
 #include <domain/domain/Domain.h>
 #include <utility/actor/objectBroker/FEM_ObjectBroker.h>
 
-#include <domain/mesh/element/utils/coordTransformation/CrdTransf2d.h>
+#include "domain/mesh/element/utils/coordTransformation/CrdTransf2d.h"
 #include <domain/mesh/element/utils/Information.h>
 #include <utility/recorder/response/ElementResponse.h>
-#include <domain/mesh/node/Node.h>
+#include "domain/mesh/node/Node.h"
 
 #include "material/section/repres/CrossSectionProperties2d.h"
 #include "material/section/ResponseId.h"
@@ -81,33 +81,6 @@ XC::Vector XC::ElasticBeam2d::P(6);
 XC::Matrix XC::ElasticBeam2d::kb(3,3);
 
 
-//! @brief Set the coordinate transformation for the element.
-void XC::ElasticBeam2d::set_transf(const CrdTransf *trf)
-  {
-    if(theCoordTransf)
-      {
-        delete theCoordTransf;
-        theCoordTransf= nullptr;
-      }
-    if(trf)
-      {
-        const CrdTransf2d *tmp= dynamic_cast<const CrdTransf2d *>(trf);
-        if(tmp)
-          theCoordTransf= tmp->getCopy();
-        else
-          {
-            std::cerr << getClassName() << "::" << __FUNCTION__
-		      << "; failed to get a copy of coordinate transformation."
-	              << std::endl;
-            exit(-1);
-          }
-      }
-    else
-      std::cerr << getClassName() << "::" << __FUNCTION__
-		<< "; pointer to coordinate transformation is null."
-		<< std::endl;
-  }
-
 //! @brief Initizalize values.
 void XC::ElasticBeam2d::init(void)
   {
@@ -116,16 +89,15 @@ void XC::ElasticBeam2d::init(void)
     p0.zero();
   }
 
-//! @brief Constructor.
+//! @brief Default constructor.
 XC::ElasticBeam2d::ElasticBeam2d(int tag)
-  :ProtoBeam2d(tag,ELE_TAG_ElasticBeam2d), d(0.0),
-   q(3), theCoordTransf(nullptr), release(0)
+  :ElasticBeam2dBase(tag, ELE_TAG_ElasticBeam2d), d(0.0),
+   q(3), release(0)
   { init(); }
 
 //! @brief Constructor.
 XC::ElasticBeam2d::ElasticBeam2d(int tag,const Material *m,const CrdTransf *trf)
-  :ProtoBeam2d(tag,ELE_TAG_ElasticBeam2d,m), d(0.0),
-   q(3), theCoordTransf(nullptr), release(0)
+  :ElasticBeam2dBase(tag, ELE_TAG_ElasticBeam2d,m,trf), d(0.0), q(3), release(0)
   {
     init();
     set_transf(trf);
@@ -133,101 +105,15 @@ XC::ElasticBeam2d::ElasticBeam2d(int tag,const Material *m,const CrdTransf *trf)
 
 //! @brief Constructor.
 XC::ElasticBeam2d::ElasticBeam2d(int tag, double a, double e, double i, int Nd1, int Nd2, CrdTransf2d &coordTransf, double depth, double r, int rel)
-  : ProtoBeam2d(tag,ELE_TAG_ElasticBeam2d,a,e,i,Nd1,Nd2), 
-    d(depth), q(3), theCoordTransf(nullptr), release(rel)
+  : ElasticBeam2dBase(tag,ELE_TAG_ElasticBeam2d,a,e,i,Nd1,Nd2, coordTransf, r), 
+    d(depth), q(3), release(rel)
   {
-    setRho(r);
     init();
-    set_transf(&coordTransf);
-  }
-
-//! @brief Copy constructor.
-XC::ElasticBeam2d::ElasticBeam2d(const ElasticBeam2d &other)
-  :ProtoBeam2d(other), d(other.d),
-   q(other.q), theCoordTransf(nullptr), release(other.release)
-  {
-    set_transf(other.theCoordTransf);
-
-    q0= other.q0;
-    p0= other.p0;
-  }
-
-//! @brief Assignment operator.
-XC::ElasticBeam2d &XC::ElasticBeam2d::operator=(const ElasticBeam2d &other)
-  {
-    ProtoBeam2d::operator=(other);
-    d= other.d;
-    q= other.q;
-    set_transf(other.theCoordTransf);
-    release= other.release;
-
-    q0= other.q0;
-    p0= other.p0;
-    return *this;
   }
 
 //! @brief Virtual constructor.
 XC::Element* XC::ElasticBeam2d::getCopy(void) const
   { return new ElasticBeam2d(*this); }
-
-//! brief Destructor.
-XC::ElasticBeam2d::~ElasticBeam2d(void)
-  { if(theCoordTransf) delete theCoordTransf; }
-
-//! @brief Returns (if possible) a pointer to the coordinate transformation.
-XC::CrdTransf *XC::ElasticBeam2d::getCoordTransf(void)
-  { return theCoordTransf; }
-
-//! @brief Returns (if possible) a pointer to the coordinate transformation.
-const XC::CrdTransf *XC::ElasticBeam2d::getCoordTransf(void) const
-  { return theCoordTransf; }
-
-
-void XC::ElasticBeam2d::setDomain(Domain *theDomain)
-  {
-    ProtoBeam2d::setDomain(theDomain);
-
-
-    const int dofNd1= theNodes[0]->getNumberDOF();
-    if(dofNd1 != 3)
-      {
-        std::cerr << getClassName() << "::" << __FUNCTION__
-		  << "; Node 1: " << theNodes.getTagNode(0)
-                  << " has incorrect number of DOF: "
-	          << dofNd1 << " instead of 3.\n";
-        exit(-1);
-      }
-
-    const int dofNd2= theNodes[1]->getNumberDOF();
-    if(dofNd2 != 3)
-      {
-        std::cerr << getClassName() << "::" << __FUNCTION__
-		  << "; Node 2: " << theNodes.getTagNode(1)
-                  << " has incorrect number of DOF: "
-	          << dofNd2 << " instead of 3.\n";
-        exit(-1);
-      }
-    if(theCoordTransf)
-      {
-        if(theCoordTransf->initialize(theNodes[0], theNodes[1]) != 0)
-          {
-            std::cerr << getClassName() << "::" << __FUNCTION__
-		      << "; error initializing coordinate transformation\n";
-            exit(-1);
-          }
-        double L= theCoordTransf->getInitialLength();
-        if(L==0.0)
-          {
-            std::cerr << getClassName() << "::" << __FUNCTION__
-		      << "; element has zero length\n";
-            exit(-1);
-          }
-      }
-    else
-      std::cerr << getClassName() << "::" << __FUNCTION__
-	        << "; the element has not coordinate transformation."
-		<< std::endl;
-   }
 
 //! @brief Compute the current strain.
 const XC::Vector &XC::ElasticBeam2d::computeCurrentStrain(void) const
@@ -242,7 +128,7 @@ const XC::Vector &XC::ElasticBeam2d::computeCurrentStrain(void) const
 //! @brief Update element state.
 int XC::ElasticBeam2d::update(void)
   {
-    int retval= ProtoBeam2d::update();
+    int retval= ElasticBeam2dBase::update();
     retval+= theCoordTransf->update();
     return retval;
   }
@@ -250,7 +136,7 @@ int XC::ElasticBeam2d::update(void)
 //! @brief Commit the element state.
 int XC::ElasticBeam2d::commitState(void)
   {
-    int retVal= ProtoBeam2d::commitState();
+    int retVal= ElasticBeam2dBase::commitState();
     // call element commitState to do any base class stuff
     if(retVal!=0)
       std::cerr << getClassName() << "::" << __FUNCTION__
@@ -262,7 +148,7 @@ int XC::ElasticBeam2d::commitState(void)
 //! @brief Revert the element to its last commited state.
 int XC::ElasticBeam2d::revertToLastCommit(void)
   {
-    int retval= ProtoBeam2d::revertToLastCommit();
+    int retval= ElasticBeam2dBase::revertToLastCommit();
     retval+= theCoordTransf->revertToLastCommit();
     return retval;
   }
@@ -270,52 +156,9 @@ int XC::ElasticBeam2d::revertToLastCommit(void)
 //! @brief Revert the element state to the start.
 int XC::ElasticBeam2d::revertToStart()
   {
-    int retval= ProtoBeam2d::revertToStart();
+    int retval= ElasticBeam2dBase::revertToStart();
     retval+= theCoordTransf->revertToStart();
     return retval;
-  }
-
-
-//! @brief Returns the direction vector of element strong axis
-//! expressed in the global coordinate system.
-const XC::Vector &XC::ElasticBeam2d::getVDirStrongAxisGlobalCoord(bool initialGeometry) const
-  {
-    if(!initialGeometry)
-      std::cerr << getClassName() << "::" << __FUNCTION__
-                << "; not implemented for deformed geometry." << std::endl;
-    if(theCoordTransf)
-      {
-        const Vector eF= getVDirStrongAxisLocalCoord();
-        return theCoordTransf->getVectorGlobalCoordFromLocal(eF);
-      }
-    else
-      {
-        std::cerr << getClassName() << "::" << __FUNCTION__
-	          << "; coordinate transformation not defined."
-                  << std::endl;
-        return P;
-      }
-  }
-
-//! @brief Returns the direction vector of element weak axis
-//! expressed in the global coordinate system.
-const XC::Vector &XC::ElasticBeam2d::getVDirWeakAxisGlobalCoord(bool initialGeometry) const
-  {
-    if(!initialGeometry)
-      std::cerr << getClassName() << "::" << __FUNCTION__
-                << "; not implemented for deformed geometry." << std::endl;
-    if(theCoordTransf)
-      {
-        const Vector eD= getVDirWeakAxisLocalCoord();
-        return theCoordTransf->getVectorGlobalCoordFromLocal(eD);
-      }
-    else
-      {
-        std::cerr << getClassName() << "::" << __FUNCTION__
-	          << "; coordinate transformation not defined."
-                  << std::endl;
-        return P;
-      }
   }
 
 //! @brief getTangent stiffness matrix.
@@ -445,8 +288,8 @@ const XC::Matrix &XC::ElasticBeam2d::getMass(void) const
 //! @brief Make the load null.
 void XC::ElasticBeam2d::zeroLoad(void)
   {
-    ProtoBeam2d::zeroLoad();
-a    q0.zero();
+    ElasticBeam2dBase::zeroLoad();
+    q0.zero();
     p0.zero();
   }
 
@@ -618,8 +461,7 @@ XC::DbTagData &XC::ElasticBeam2d::getDbTagData(void) const
 //! @brief Send members through the communicator argument.
 int XC::ElasticBeam2d::sendData(Communicator &comm)
   {
-    int res= ProtoBeam2d::sendData(comm);
-    res+= sendCoordTransf(8,9,10,comm);
+    int res= ElasticBeam2dBase::sendData(comm);
     //res+= comm.sendVector(eInit,getDbTagData(),CommMetaData(11));
     res+= comm.sendInt(release,getDbTagData(),CommMetaData(12));
     return res;
@@ -628,8 +470,7 @@ int XC::ElasticBeam2d::sendData(Communicator &comm)
 //! @brief Receives members through the communicator argument.
 int XC::ElasticBeam2d::recvData(const Communicator &comm)
   {
-    int res= ProtoBeam2d::recvData(comm);
-    theCoordTransf= recvCoordTransf2d(8,9,10,comm);
+    int res= ElasticBeam2dBase::recvData(comm);
     //res+= comm.receiveVector(eInit,getDbTagData(),CommMetaData(11));
     res+= comm.receiveInt(release,getDbTagData(),CommMetaData(12));
     return res;
@@ -819,6 +660,6 @@ boost::python::list XC::ElasticBeam2d::getValuesAtNodes(const std::string &code,
 	retval.append(getV2());
       }
     else
-      retval= ProtoBeam2d::getValuesAtNodes(code, silent); 
+      retval= ElasticBeam2dBase::getValuesAtNodes(code, silent); 
     return retval;
   }

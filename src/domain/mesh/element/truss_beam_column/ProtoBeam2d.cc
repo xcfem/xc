@@ -60,14 +60,26 @@ XC::ProtoBeam2d::ProtoBeam2d(int tag,int class_tag,const Material *m)
   { set_material(m); }
 
 //! @brief Constructor.
+//! @param a: section area.
+//! @param e: elastic modulus.
+//! @param i: moment of inertia.
+//! @param Nd1: identifier of the first node.
+//! @parma Nd2: idenfifier of the second node.
 XC::ProtoBeam2d::ProtoBeam2d(int tag, int class_tag, double a, double e, double i, int Nd1, int Nd2)
   :Element1D(tag,class_tag,Nd1,Nd2), physicalProperties(1)
   { setSectionProperties(CrossSectionProperties2d(e,a,i)); }
 
 //! @brief Constructor.
-XC::ProtoBeam2d::ProtoBeam2d(int tag, int class_tag, double a, double e, double g, double i, int Nd1, int Nd2)
+//! @param a: section area.
+//! @param alpha: ratio between section area and section shear area.
+//! @param e: elastic modulus.
+//! @param g: shear modulus.
+//! @param i: moment of inertia.
+//! @param Nd1: identifier of the first node.
+//! @param Nd2: idenfifier of the second node.
+XC::ProtoBeam2d::ProtoBeam2d(int tag, int class_tag, double a, double alpha, double e, double g, double i, int Nd1, int Nd2)
   :Element1D(tag,class_tag,Nd1,Nd2), physicalProperties(1)
-  { setSectionProperties(CrossSectionProperties2d(e,a,i,g)); }
+{ setSectionProperties(CrossSectionProperties2d(e,a,i,g,alpha)); }
 
 //! @brief Return the number of degrees of freedom of the element.
 int XC::ProtoBeam2d::getNumDOF(void) const

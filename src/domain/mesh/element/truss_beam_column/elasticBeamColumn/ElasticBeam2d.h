@@ -61,9 +61,7 @@
 #ifndef ElasticBeam2d_h
 #define ElasticBeam2d_h
 
-#include <domain/mesh/element/truss_beam_column/ProtoBeam2d.h>
-#include <utility/matrix/Matrix.h>
-#include <utility/matrix/Vector.h>
+#include "domain/mesh/element/truss_beam_column/elasticBeamColumn/ElasticBeam2dBase.h"
 #include "domain/mesh/element/utils/fvectors/FVectorBeamColumn2d.h"
 #include "domain/mesh/element/utils/coordTransformation/CrdTransf2d.h"
 
@@ -75,7 +73,7 @@ class CrossSectionProperties3d;
 
 //! @brief 2D elastic beam element.
 //! @ingroup BeamColumnElemGrp
-class ElasticBeam2d: public ProtoBeam2d
+class ElasticBeam2d: public ElasticBeam2dBase
   {
   private:
     double d; //!< Section depth.
@@ -88,10 +86,8 @@ class ElasticBeam2d: public ProtoBeam2d
     FVectorBeamColumn2d q0;  // Fixed end forces in basic system
     FVectorBeamColumn2d p0;  // Reactions in basic system
     
-    CrdTransf2d *theCoordTransf; //!< Coordinate transformation.
     int release; //< moment release 0=none, 1=I, 2=J, 3=I,J
 
-    void set_transf(const CrdTransf *trf);
     void init(void);
   protected:
     DbTagData &getDbTagData(void) const;
@@ -104,17 +100,10 @@ class ElasticBeam2d: public ProtoBeam2d
     ElasticBeam2d(int tag, double A, double E, double I, 
 		  int Nd1, int Nd2, CrdTransf2d &theTransf, 
 		  double d = 0.0, double rho = 0.0, int release= 0);
-    ElasticBeam2d(const ElasticBeam2d &);
-    ElasticBeam2d &operator=(const ElasticBeam2d &);
     Element *getCopy(void) const;
-    ~ElasticBeam2d(void);
 
     const Vector &computeCurrentStrain(void) const;
     
-    void setDomain(Domain *theDomain);
-    
-    virtual CrdTransf *getCoordTransf(void);
-    virtual const CrdTransf *getCoordTransf(void) const;
     inline int getReleaseCode(void) const
       { return release; }
     inline void setReleaseCode(const int &rc)
@@ -137,9 +126,6 @@ class ElasticBeam2d: public ProtoBeam2d
     void zeroLoad(void);	
     int addLoad(ElementalLoad *, double loadFactor);
     int addInertiaLoadToUnbalance(const Vector &accel);
-
-    const Vector &getVDirStrongAxisGlobalCoord(bool initialGeometry) const;
-    const Vector &getVDirWeakAxisGlobalCoord(bool initialGeometry) const;
 
     const Vector &getResistingForce(void) const;
     const Vector &getResistingForceIncInertia(void) const;            

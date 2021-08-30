@@ -85,6 +85,12 @@ class CrossSectionProperties2d: public CrossSectionProperties1d
       { return alpha; }
     inline void setAlpha(const double &al)
       { alpha= al; }
+    //! @brief get shear area.
+    inline double getAvy(void) const
+      { return alpha*A(); }
+    //! @brief set shear area.
+    void setAvy(const double &avy)
+      { alpha= avy/A(); }
     inline double &I(void)
       { return i; }
     inline const double &I(void) const
@@ -96,7 +102,7 @@ class CrossSectionProperties2d: public CrossSectionProperties1d
       { return E()*i; }
     //! @brief Returns shear stiffness.
     inline double GAAlpha(void) const
-    { return g*A()*alpha; }
+      { return g*getAvy(); }
 
     virtual double getTheta(void) const;
     virtual double getI1(void) const;
