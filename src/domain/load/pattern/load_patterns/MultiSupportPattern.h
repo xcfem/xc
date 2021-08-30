@@ -65,11 +65,10 @@ namespace XC {
 class GroundMotion;
 class Vector;
 
-//! @ingroup LPatterns
-//
 //! @brief The Multi-Support pattern allows similar or
 //! different prescribed ground motions to be input at
 //! various supports in the structure.
+//! @ingroup LPatterns
 class MultiSupportPattern: public EQBasePattern
   {
   private:

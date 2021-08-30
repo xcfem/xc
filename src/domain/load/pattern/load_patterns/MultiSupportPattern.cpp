@@ -63,22 +63,26 @@
 #include <domain/constraints/SFreedom_ConstraintIter.h>
 #include <cstdlib>
 
+//! @brief Constructor.
+//! @param tag: pattern identifier.
+//! @param _classTag: class identifier.
 XC::MultiSupportPattern::MultiSupportPattern(int tag, int _classTag)
   :EQBasePattern(tag, _classTag), theMotionTags(0,16), dbMotions(0)
   {}
 
-
+//! @brief Constructor.
+//! @param tag: pattern identifier.
 XC::MultiSupportPattern::MultiSupportPattern(int tag)
   :EQBasePattern(tag, PATTERN_TAG_MultiSupportPattern), theMotionTags(0,16), dbMotions(0)
   {}
 
-
+//! @brief Default constructor.
 XC::MultiSupportPattern::MultiSupportPattern(void)
   :EQBasePattern(0, PATTERN_TAG_MultiSupportPattern), theMotionTags(0,16), dbMotions(0)
   {}
 
-
-void  XC::MultiSupportPattern::applyLoad(double time)
+//! @brief Apply load
+void XC::MultiSupportPattern::applyLoad(double time)
   {
     SFreedom_Constraint *sp;
     SFreedom_ConstraintIter &theIter = this->getSPs();
@@ -86,13 +90,16 @@ void  XC::MultiSupportPattern::applyLoad(double time)
       sp->applyConstraint(time);
   }
     
-
+//! @brief Add motion.
+//! @param theMotion: ground motion definition.
+//! @param tag: motion identifier.
 int XC::MultiSupportPattern::addMotion(GroundMotion &theMotion, int tag)
   {
     // ensure no motion with given tag already added
     if(theMotionTags.getLocation(tag) >= 0)
       {
-        std::cerr << "XC::MultiSupportPattern::addMotion - could not add new, motion with same tag exists\n";
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; could not add new, motion with same tag exists\n";
         return -1;
       }
 
@@ -101,7 +108,8 @@ int XC::MultiSupportPattern::addMotion(GroundMotion &theMotion, int tag)
   }
 
 
-
+//! @brief Return the motion identified by the tag argument.
+//! @param tag: motion identifier.
 XC::GroundMotion *XC::MultiSupportPattern::getMotion(int tag)
   {
     int loc = theMotionTags.getLocation(tag);
@@ -111,16 +119,19 @@ XC::GroundMotion *XC::MultiSupportPattern::getMotion(int tag)
       return theMotions[loc];
   }
 
-
+//! @brief Add nodal load to pattern.
 bool XC::MultiSupportPattern::addNodalLoad(NodalLoad *)
   {
-    std::cerr << "XC::MultiSupportPattern::addNodalLoad() - cannot add XC::NodalLoad to EQ pattern\n";  
+    std::cerr << getClassName() << "::" << __FUNCTION__
+	      << "; cannot add NodalLoad to earthquake pattern\n";  
     return false;
   }
 
+//! @brief Add elemental load to pattern.
 bool XC::MultiSupportPattern::addElementalLoad(ElementalLoad *)
   {
-    std::cerr << "XC::MultiSupportPattern::addElementalLoad() - cannot add XC::ElementalLoad to EQ pattern\n";    
+    std::cerr << getClassName() << "::" << __FUNCTION__
+	      << "; cannot add ElementalLoad to earthquake pattern\n";    
     return false;
   }
 
@@ -152,7 +163,8 @@ int XC::MultiSupportPattern::sendSelf(Communicator &comm)
 
     res+= comm.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
-      std::cerr << getClassName() << "sendSelf() - failed to send data\n";
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; failed to send data\n";
     return res;
   }
 
@@ -164,23 +176,28 @@ int XC::MultiSupportPattern::recvSelf(const Communicator &comm)
     int res= comm.receiveIdData(getDbTagData(),dataTag);
 
     if(res<0)
-      std::cerr << getClassName() << "::recvSelf - failed to receive ids.\n";
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; failed to receive ids.\n";
     else
       {
         setTag(getDbTagDataPos(0));
         res+= recvData(comm);
         if(res<0)
-          std::cerr << getClassName() << "::recvSelf - failed to receive data.\n";
+          std::cerr << getClassName() << "::" << __FUNCTION__
+		    << "; failed to receive data.\n";
       }
     return res;
   }
 
+//! @brief Print stuff.
+//! @param s: output stream.
+//! @param flag: verbosity flag.
 void XC::MultiSupportPattern::Print(std::ostream &s, int flag) const
   {
     s << "MultiSupportPattern  tag: " << this->getTag() << std::endl;
-    SFreedom_Constraint *sp;
+    const SFreedom_Constraint *sp= nullptr;
     MultiSupportPattern *this_no_const= const_cast<MultiSupportPattern *>(this);
     SFreedom_ConstraintIter &theIter = this_no_const->getSPs();
-    while ((sp = theIter()) != 0)
+    while ((sp = theIter()) != nullptr)
       sp->Print(s, flag);
   }
