@@ -61,7 +61,7 @@ class beam3dBase: public ProtoBeam3d
 
     int revertToLastCommit(void);        
     
-    int addLoad(ElementalLoad *theLoad, double loadFactor);
+    int addLoad(ElementalLoad *, double loadFactor);
     int addInertiaLoadToUnbalance(const Vector &accel);
 
     const Matrix &getTangentStiff(void) const;

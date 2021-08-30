@@ -94,7 +94,7 @@ class beam2d03: public beam2d
     const Matrix &getTangentStiff(void) const;
     const Matrix &getInitialStiff(void) const;
 
-    int addLoad(ElementalLoad *theLoad, double loadFactor);
+    int addLoad(ElementalLoad *, double loadFactor);
     int addInertiaLoadToUnbalance(const Vector &accel);
 
     const Vector &getResistingForce(void) const;

@@ -99,7 +99,7 @@ class CorotTrussSection: public CorotTrussBase
     const Matrix &getMass(void) const;
 
     void zeroLoad(void);
-    int addLoad(ElementalLoad *theLoad, double loadFactor);
+    int addLoad(ElementalLoad *, double loadFactor);
     int addInertiaLoadToUnbalance(const Vector &accel);
 
     double getAxialForce(void) const;

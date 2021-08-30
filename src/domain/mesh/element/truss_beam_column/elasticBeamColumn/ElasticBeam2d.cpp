@@ -118,13 +118,13 @@ void XC::ElasticBeam2d::init(void)
 
 //! @brief Constructor.
 XC::ElasticBeam2d::ElasticBeam2d(int tag)
-  :ProtoBeam2d(tag,ELE_TAG_ElasticBeam2d), alpha(0.0), d(0.0),
+  :ProtoBeam2d(tag,ELE_TAG_ElasticBeam2d), d(0.0),
    q(3), theCoordTransf(nullptr), release(0)
   { init(); }
 
 //! @brief Constructor.
 XC::ElasticBeam2d::ElasticBeam2d(int tag,const Material *m,const CrdTransf *trf)
-  :ProtoBeam2d(tag,ELE_TAG_ElasticBeam2d,m), alpha(0.0), d(0.0),
+  :ProtoBeam2d(tag,ELE_TAG_ElasticBeam2d,m), d(0.0),
    q(3), theCoordTransf(nullptr), release(0)
   {
     init();
@@ -132,8 +132,8 @@ XC::ElasticBeam2d::ElasticBeam2d(int tag,const Material *m,const CrdTransf *trf)
   }
 
 //! @brief Constructor.
-XC::ElasticBeam2d::ElasticBeam2d(int tag, double a, double e, double i, int Nd1, int Nd2, CrdTransf2d &coordTransf, double Alpha, double depth, double r, int rel)
-  : ProtoBeam2d(tag,ELE_TAG_ElasticBeam2d,a,e,i,Nd1,Nd2), alpha(Alpha),
+XC::ElasticBeam2d::ElasticBeam2d(int tag, double a, double e, double i, int Nd1, int Nd2, CrdTransf2d &coordTransf, double depth, double r, int rel)
+  : ProtoBeam2d(tag,ELE_TAG_ElasticBeam2d,a,e,i,Nd1,Nd2), 
     d(depth), q(3), theCoordTransf(nullptr), release(rel)
   {
     setRho(r);
@@ -143,7 +143,7 @@ XC::ElasticBeam2d::ElasticBeam2d(int tag, double a, double e, double i, int Nd1,
 
 //! @brief Copy constructor.
 XC::ElasticBeam2d::ElasticBeam2d(const ElasticBeam2d &other)
-  :ProtoBeam2d(other), alpha(other.alpha), d(other.d),
+  :ProtoBeam2d(other), d(other.d),
    q(other.q), theCoordTransf(nullptr), release(other.release)
   {
     set_transf(other.theCoordTransf);
@@ -156,7 +156,6 @@ XC::ElasticBeam2d::ElasticBeam2d(const ElasticBeam2d &other)
 XC::ElasticBeam2d &XC::ElasticBeam2d::operator=(const ElasticBeam2d &other)
   {
     ProtoBeam2d::operator=(other);
-    alpha= other.alpha;
     d= other.d;
     q= other.q;
     set_transf(other.theCoordTransf);
@@ -447,7 +446,7 @@ const XC::Matrix &XC::ElasticBeam2d::getMass(void) const
 void XC::ElasticBeam2d::zeroLoad(void)
   {
     ProtoBeam2d::zeroLoad();
-    q0.zero();
+a    q0.zero();
     p0.zero();
   }
 

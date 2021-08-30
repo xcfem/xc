@@ -73,8 +73,7 @@ class UserDefinedHingeIntegration2d: public UserDefinedHingeIntegrationBase
     void getSectionLocations(int numSections, double L, double *xi) const;
     void getSectionWeights(int numSections, double L, double *wt) const;
   
-    void addElasticDeformations(ElementalLoad *theLoad, double loadFactor,
-  			      double L, double *v0);
+    void addElasticDeformations(ElementalLoad *, double loadFactor, double L, double *v0);
     int addElasticFlexibility(double L, Matrix &fe);
   
     BeamIntegration *getCopy(void) const;

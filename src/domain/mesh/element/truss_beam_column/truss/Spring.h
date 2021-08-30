@@ -115,7 +115,7 @@ class Spring: public ProtoTruss
     const Matrix &getDamp(void) const;    
     const Matrix &getMass(void) const;    
 
-    int addLoad(ElementalLoad *theLoad, double loadFactor);
+    int addLoad(ElementalLoad *, double loadFactor);
     int addInertiaLoadToUnbalance(const Vector &accel);
 
     double getAxialForce(void) const;

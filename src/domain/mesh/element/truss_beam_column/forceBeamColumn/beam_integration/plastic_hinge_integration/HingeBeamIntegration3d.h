@@ -51,7 +51,7 @@ class HingeBeamIntegration3d: public PlasticLengthsBeamIntegration
     HingeBeamIntegration3d(int classTag, double E, double A, double Iz,double Iy, double G, double J,double lpI, double lpJ);
     HingeBeamIntegration3d(int classTag, const CrossSectionProperties3d &cts= CrossSectionProperties3d(),const double &lpi=0.0,const double &lpj=0.0);
   
-    void addElasticDeformations(ElementalLoad *theLoad,double loadFactor,double L,FVector &v0);
+    void addElasticDeformations(ElementalLoad *,double loadFactor,double L,FVector &v0);
 
     int setParameter(const std::vector<std::string> &argv, Parameter &param);
     int updateParameter(int parameterID, Information &info);

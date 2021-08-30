@@ -73,13 +73,11 @@ class Information;
 class Response;
 class CrossSectionProperties3d;
 
-//! @ingroup BeamColumnElemGrp
-//
 //! @brief 2D elastic beam element.
+//! @ingroup BeamColumnElemGrp
 class ElasticBeam2d: public ProtoBeam2d
   {
   private:
-    double alpha;
     double d; //!< Section depth.
 
     static Matrix K;
@@ -105,7 +103,7 @@ class ElasticBeam2d: public ProtoBeam2d
     ElasticBeam2d(int tag,const Material *m,const CrdTransf *trf);
     ElasticBeam2d(int tag, double A, double E, double I, 
 		  int Nd1, int Nd2, CrdTransf2d &theTransf, 
-		  double alpha = 0.0, double d = 0.0, double rho = 0.0, int release= 0);
+		  double d = 0.0, double rho = 0.0, int release= 0);
     ElasticBeam2d(const ElasticBeam2d &);
     ElasticBeam2d &operator=(const ElasticBeam2d &);
     Element *getCopy(void) const;
@@ -137,7 +135,7 @@ class ElasticBeam2d: public ProtoBeam2d
     const Matrix &getMass(void) const;
 
     void zeroLoad(void);	
-    int addLoad(ElementalLoad *theLoad, double loadFactor);
+    int addLoad(ElementalLoad *, double loadFactor);
     int addInertiaLoadToUnbalance(const Vector &accel);
 
     const Vector &getVDirStrongAxisGlobalCoord(bool initialGeometry) const;

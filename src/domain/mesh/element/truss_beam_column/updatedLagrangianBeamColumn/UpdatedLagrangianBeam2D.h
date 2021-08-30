@@ -165,7 +165,7 @@ class UpdatedLagrangianBeam2D: public Element1D
     // methods for returning and applying loads
     virtual Vector &getUVLoadVector(double q1, double q2);
     int addLoad(const Vector &load);
-    int addLoad(ElementalLoad *theLoad, double loadFactor)
+    int addLoad(ElementalLoad *, double loadFactor)
       { return -1;}
     int     addInertiaLoadToUnbalance(const Vector &accel)
       { return -1;}

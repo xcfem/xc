@@ -64,6 +64,11 @@ XC::ProtoBeam2d::ProtoBeam2d(int tag, int class_tag, double a, double e, double 
   :Element1D(tag,class_tag,Nd1,Nd2), physicalProperties(1)
   { setSectionProperties(CrossSectionProperties2d(e,a,i)); }
 
+//! @brief Constructor.
+XC::ProtoBeam2d::ProtoBeam2d(int tag, int class_tag, double a, double e, double g, double i, int Nd1, int Nd2)
+  :Element1D(tag,class_tag,Nd1,Nd2), physicalProperties(1)
+  { setSectionProperties(CrossSectionProperties2d(e,a,i,g)); }
+
 //! @brief Return the number of degrees of freedom of the element.
 int XC::ProtoBeam2d::getNumDOF(void) const
   { return 6; }

@@ -99,7 +99,7 @@ class BeamIntegration: public MovableObject, public CommandEntity
     const Vector &evalInIntegrPoints(const ExprAlgebra &expr,int nIP,const CrdTransf &trf) const;
     double getIntegral(const ExprAlgebra &expr,int nIP,const CrdTransf &trf) const;
 
-    virtual void addElasticDeformations(ElementalLoad *theLoad,double loadFactor,double L,FVector &v0) {return;}
+    virtual void addElasticDeformations(ElementalLoad *,double loadFactor,double L,FVector &v0) {return;}
     // Return 0 if there is no elastic interior, -1 otherwise
     virtual int addElasticFlexibility(double L, Matrix &fe) {return 0;}
 

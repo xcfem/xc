@@ -143,7 +143,7 @@ class BeamWithHinges3d: public BeamColumnWithSectionFDTrf3d
     const Matrix &getMass(void) const;
     
     void zeroLoad(void);
-    int addLoad(ElementalLoad *theLoad, double loadFactor);
+    int addLoad(ElementalLoad *, double loadFactor);
     int addInertiaLoadToUnbalance(const Vector &accel);
     const Vector &getResistingForce(void) const;
     const Vector &getResistingForceIncInertia(void) const;

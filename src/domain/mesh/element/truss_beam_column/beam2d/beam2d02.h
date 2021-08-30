@@ -112,7 +112,7 @@ class beam2d02: public beam2d
     const Matrix &getInitialStiff(void) const;
     const Matrix &getMass(void) const;
 
-    int addLoad(ElementalLoad *theLoad, double loadFactor);
+    int addLoad(ElementalLoad *, double loadFactor);
     int addInertiaLoadToUnbalance(const Vector &accel);
 
     const Vector &getResistingForce(void) const;

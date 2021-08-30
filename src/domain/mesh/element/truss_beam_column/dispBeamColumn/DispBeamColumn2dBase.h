@@ -121,7 +121,7 @@ class DispBeamColumn2dBase: public BeamColumnWithSectionFDTrf2d
     const Matrix &getMass(void) const;
 
     void zeroLoad();
-    int addLoad(ElementalLoad *theLoad, double loadFactor);
+    int addLoad(ElementalLoad *, double loadFactor);
     int addInertiaLoadToUnbalance(const Vector &accel);
 
     const Vector &getResistingForceIncInertia(void) const;            
