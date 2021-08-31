@@ -39,13 +39,11 @@ truss= seedElemHandler.newElement("Truss",xc.ID([1,2]))
 truss.sectionArea= 10
 
 points= preprocessor.getMultiBlockTopology.getPoints
-points.defaultTag= 1
-pt= points.newPntFromPos3d(geom.Pos3d(0,0,0))
-pt= points.newPntFromPos3d(geom.Pos3d(CooMax,CooMax,CooMax))
+pt1= points.newPntFromPos3d(geom.Pos3d(0,0,0))
+pt2= points.newPntFromPos3d(geom.Pos3d(CooMax,CooMax,CooMax))
 
 lines= preprocessor.getMultiBlockTopology.getLines
-lines.defaultTag= 1
-l= lines.newLine(1,2)
+l= lines.newLine(pt1.tag,pt2.tag)
 l.nDiv= NumDiv
 
 testEqualOperator= (l==l)
