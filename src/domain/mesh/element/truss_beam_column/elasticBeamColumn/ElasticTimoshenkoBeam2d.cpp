@@ -51,6 +51,7 @@ XC::Matrix XC::ElasticTimoshenkoBeam2d::theMatrix(6,6);
 XC::Vector XC::ElasticTimoshenkoBeam2d::theVector(6);
 
 //! @brief Default constructor.
+//! @param tag: element identifier.
 XC::ElasticTimoshenkoBeam2d::ElasticTimoshenkoBeam2d(int tag)
     : ElasticBeam2dBase(tag, ELE_TAG_ElasticTimoshenkoBeam2d),
       cMass(0), nlGeo(0), phi(0.0), L(0.0),
@@ -60,8 +61,21 @@ XC::ElasticTimoshenkoBeam2d::ElasticTimoshenkoBeam2d(int tag)
     // zero fixed end forces vector
     ql0.Zero();
   }
+//! @brief Constructor.
+//! @param tag: element identifier.
+//! @param m: element material.
+//! @param trf: element coordinate transformation.
+XC::ElasticTimoshenkoBeam2d::ElasticTimoshenkoBeam2d(int tag,const Material *m,const CrdTransf *trf)
+  : ElasticBeam2dBase(tag, ELE_TAG_ElasticBeam2d,m,trf),
+    cMass(0), nlGeo(0), phi(0.0), L(0.0),
+    ul(6), ql(6), ql0(6), kl(6,6), klgeo(6,6), Tgl(6,6), Ki(6,6), M(6,6),
+    theLoad(6)
+  {
+    ql0.Zero();
+  }
 
 //! @brief Constructor.
+//! @param tag: element identifier.
 //! @param a: section area.
 //! @param e: elastic modulus.
 //! @param g: shear modulus.
@@ -95,6 +109,10 @@ XC::ElasticTimoshenkoBeam2d::ElasticTimoshenkoBeam2d(int tag,
     // zero fixed end forces vector
     ql0.Zero();
   }
+
+//! @brief Virtual constructor.
+XC::Element* XC::ElasticTimoshenkoBeam2d::getCopy(void) const
+  { return new ElasticTimoshenkoBeam2d(*this); }
 
 //! @brief Set the element domain.
 void XC::ElasticTimoshenkoBeam2d::setDomain(Domain *theDomain)

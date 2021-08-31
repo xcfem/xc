@@ -86,7 +86,7 @@ class ElasticBeam2d: public ElasticBeam2dBase
     FVectorBeamColumn2d q0;  // Fixed end forces in basic system
     FVectorBeamColumn2d p0;  // Reactions in basic system
     
-    int release; //< moment release 0=none, 1=I, 2=J, 3=I,J
+    int release; //!< moment release 0=none, 1=I, 2=J, 3=I,J
 
     void init(void);
   protected:

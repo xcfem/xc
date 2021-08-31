@@ -194,6 +194,7 @@
 #include "domain/mesh/element/plane/shell/ASDShellQ4.h"
 
 #include "domain/mesh/element/truss_beam_column/elasticBeamColumn/ElasticBeam2d.h"
+#include "domain/mesh/element/truss_beam_column/elasticBeamColumn/ElasticTimoshenkoBeam2d.h"
 #include "domain/mesh/element/truss_beam_column/elasticBeamColumn/ElasticBeam3d.h"
 #include "domain/mesh/element/truss_beam_column/beamWithHinges/BeamWithHinges2d.h"
 #include "domain/mesh/element/truss_beam_column/beamWithHinges/BeamWithHinges3d.h"

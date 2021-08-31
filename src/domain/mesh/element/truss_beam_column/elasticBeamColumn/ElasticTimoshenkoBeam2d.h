@@ -78,11 +78,12 @@ class ElasticTimoshenkoBeam2d: public ElasticBeam2dBase
   public:
     // constructor
     ElasticTimoshenkoBeam2d(int tag= 0);
+    ElasticTimoshenkoBeam2d(int tag,const Material *m,const CrdTransf *trf);
     ElasticTimoshenkoBeam2d(int tag, double A, double E, double G, double Iz,
 			    double Avy,
 			    int Nd1, int Nd2, CrdTransf2d &theTransf,
 			    double rho = 0.0, int cMass = 0);
-    ~ElasticTimoshenkoBeam2d(void);
+    Element *getCopy(void) const;
     
     void setDomain(Domain *theDomain);
     

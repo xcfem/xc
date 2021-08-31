@@ -90,20 +90,32 @@ void XC::ElasticBeam2d::init(void)
   }
 
 //! @brief Default constructor.
+//! @param tag: element identifier.
 XC::ElasticBeam2d::ElasticBeam2d(int tag)
   :ElasticBeam2dBase(tag, ELE_TAG_ElasticBeam2d), d(0.0),
    q(3), release(0)
   { init(); }
 
 //! @brief Constructor.
+//! @param tag: element identifier.
+//! @param m: element material.
+//! @param trf: element coordinate transformation.
 XC::ElasticBeam2d::ElasticBeam2d(int tag,const Material *m,const CrdTransf *trf)
   :ElasticBeam2dBase(tag, ELE_TAG_ElasticBeam2d,m,trf), d(0.0), q(3), release(0)
   {
     init();
-    set_transf(trf);
   }
 
 //! @brief Constructor.
+//! @param tag: element identifier.
+//! @param a: section area.
+//! @param e: elastic modulus.
+//! @param i: moment of inertia.
+//! @param Nd1: identifier of the first node.
+//! @param Nd2: idenfifier of the second node.
+//! @param coordTransf: element coordinate transformation.
+//! @param depth: element section depth.
+//! @param rel: moment release 0=none, 1=I, 2=J, 3=I,J.
 XC::ElasticBeam2d::ElasticBeam2d(int tag, double a, double e, double i, int Nd1, int Nd2, CrdTransf2d &coordTransf, double depth, double r, int rel)
   : ElasticBeam2dBase(tag,ELE_TAG_ElasticBeam2d,a,e,i,Nd1,Nd2, coordTransf, r), 
     d(depth), q(3), release(rel)

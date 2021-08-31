@@ -21,7 +21,10 @@
 //----------------------------------------------------------------------------
 //python_interface.tcc
 
-class_<XC::ElasticBeam2d, bases<XC::ProtoBeam2d>, boost::noncopyable >("ElasticBeam2d", no_init)
+class_<XC::ElasticBeam2dBase, bases<XC::ProtoBeam2d>, boost::noncopyable >("ElasticBeam2dBase", no_init)
+  ;
+
+class_<XC::ElasticBeam2d, bases<XC::ElasticBeam2dBase>, boost::noncopyable >("ElasticBeam2d", no_init)
   .add_property("rho", &XC::ElasticBeam2d::getRho,&XC::ElasticBeam2d::setRho, "element density.")
   .add_property("h", &XC::ElasticBeam2d::getDepth,&XC::ElasticBeam2d::setDepth, "element section depth.")
   .add_property("initialStrain", make_function(&XC::ElasticBeam2d::getInitialStrain, return_value_policy<copy_const_reference>()),&XC::ElasticBeam2d::setInitialStrain, "initial strain")
@@ -41,6 +44,9 @@ class_<XC::ElasticBeam2d, bases<XC::ProtoBeam2d>, boost::noncopyable >("ElasticB
   .def("getVDirStrongAxisGlobalCoord",make_function(&XC::ElasticBeam2d::getVDirStrongAxisGlobalCoord, return_value_policy<copy_const_reference>()),"Returns the direction vector of element strong axis expressed in the global coordinate system.")
   .def("getVDirWeakAxisGlobalCoord",make_function(&XC::ElasticBeam2d::getVDirWeakAxisGlobalCoord, return_value_policy<copy_const_reference>()),"Returns the direction vector of element weak axis expressed in the global coordinate system.")
    ;
+
+class_<XC::ElasticTimoshenkoBeam2d, bases<XC::ElasticBeam2dBase>, boost::noncopyable >("ElasticTimoshenkoBeam2d", no_init)
+  ;
 
 class_<XC::ElasticBeam3d, bases<XC::ProtoBeam3d>, boost::noncopyable >("ElasticBeam3d", no_init)
   .add_property("rho", &XC::ElasticBeam3d::getRho,&XC::ElasticBeam3d::setRho, "element material density")

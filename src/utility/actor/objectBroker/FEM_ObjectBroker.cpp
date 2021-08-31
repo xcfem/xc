@@ -190,7 +190,9 @@ XC::Element *XC::FEM_ObjectBroker::getNewElement(int classTag)
         case ELE_TAG_FourNodeQuad:
              return new FourNodeQuad();
         case ELE_TAG_ElasticBeam2d:
-                return new ElasticBeam2d();
+             return new ElasticBeam2d();
+        case ELE_TAG_ElasticTimoshenkoBeam2d:
+             return new ElasticTimoshenkoBeam2d();
         case ELE_TAG_ElasticBeam3d:
                 return new ElasticBeam3d();
         case ELE_TAG_BeamWithHinges2d:
