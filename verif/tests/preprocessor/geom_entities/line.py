@@ -31,13 +31,7 @@ modelSpace= predefined_spaces.SolidMechanics3D(nodes)
 elast= typical_materials.defElasticMaterial(preprocessor, "elast",3000)
 
 
-seedElemHandler= preprocessor.getElementHandler.seedElemHandler
-seedElemHandler.dimElem= 3 #Bars defined in a three dimensional space.
-seedElemHandler.defaultMaterial= elast.name
-seedElemHandler.defaultTag= 1 #Number for the next element will be 1.
-truss= seedElemHandler.newElement("Truss",xc.ID([1,2]))
-truss.sectionArea= 10
-
+# Problem geometry
 points= preprocessor.getMultiBlockTopology.getPoints
 pt1= points.newPntFromPos3d(geom.Pos3d(0,0,0))
 pt2= points.newPntFromPos3d(geom.Pos3d(CooMax,CooMax,CooMax))
@@ -47,6 +41,14 @@ l= lines.newLine(pt1.tag,pt2.tag)
 l.nDiv= NumDiv
 
 testEqualOperator= (l==l)
+
+# Mesh generation
+seedElemHandler= preprocessor.getElementHandler.seedElemHandler
+seedElemHandler.dimElem= 3 #Bars defined in a three dimensional space.
+seedElemHandler.defaultMaterial= elast.name
+seedElemHandler.defaultTag= 1 #Number for the next element will be 1.
+truss= seedElemHandler.newElement("Truss",xc.ID([1,2]))
+truss.sectionArea= 10
 
 setTotal= preprocessor.getSets.getSet("total")
 setTotal.genMesh(xc.meshDir.I)
@@ -72,10 +74,10 @@ testOK= True
 eIter= mesh.getElementIter
 elem= eIter.next()
 while not(elem is None):
-#  print(elem.tag," nod. I: ",elem.getNodes[0].tag," nod. J: ",elem.getNodes[1].tag," L= ",elem.getLength(True))
-  ratio1= (lteor - elem.getLength(True))/lteor
-  testOK= testOK and (ratio1<1e-12)
-  elem= eIter.next()
+#   print(elem.tag," nod. I: ",elem.getNodes[0].tag," nod. J: ",elem.getNodes[1].tag," L= ",elem.getLength(True))
+    ratio1= (lteor - elem.getLength(True))/lteor
+    testOK= testOK and (ratio1<1e-12)
+    elem= eIter.next()
 
 #print("number of nodes: ",nnod)
 #print("number of elements: ",nelem)
