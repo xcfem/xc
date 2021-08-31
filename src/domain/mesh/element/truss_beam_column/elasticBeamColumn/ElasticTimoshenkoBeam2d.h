@@ -85,6 +85,8 @@ class ElasticTimoshenkoBeam2d: public ElasticBeam2dBase
 			    double rho = 0.0, int cMass = 0);
     Element *getCopy(void) const;
     
+    const Vector &computeCurrentStrain(void) const;
+    
     void setDomain(Domain *theDomain);
     
     int commitState(void);

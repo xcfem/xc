@@ -24,6 +24,7 @@
 class_<XC::BaseElasticSection, bases<XC::PrismaticBarCrossSection>, boost::noncopyable >("BaseElasticSection", no_init)
   .add_property("rho", &XC::BaseElasticSection::getRho, &XC::BaseElasticSection::setRho,"Material density.")
   .def("sectionGeometry",&XC::BaseElasticSection::sectionGeometry)
+  .def(self_ns::str(self_ns::self))
   ;
 
 const XC::CrossSectionProperties1d &(XC::BaseElasticSection1d::*getCrossSectionProperties1d)(void)const= &XC::BaseElasticSection1d::getCrossSectionProperties;

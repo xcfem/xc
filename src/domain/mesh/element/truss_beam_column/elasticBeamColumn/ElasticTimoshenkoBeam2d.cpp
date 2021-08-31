@@ -114,6 +114,15 @@ XC::ElasticTimoshenkoBeam2d::ElasticTimoshenkoBeam2d(int tag,
 XC::Element* XC::ElasticTimoshenkoBeam2d::getCopy(void) const
   { return new ElasticTimoshenkoBeam2d(*this); }
 
+//! @brief Compute the current strain.
+const XC::Vector &XC::ElasticTimoshenkoBeam2d::computeCurrentStrain(void) const
+  {
+    static Vector retval(3);
+    theCoordTransf->update();
+    retval= theCoordTransf->getBasicTrialDisp()/L;
+    return retval;
+  }
+
 //! @brief Set the element domain.
 void XC::ElasticTimoshenkoBeam2d::setDomain(Domain *theDomain)
   {
