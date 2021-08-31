@@ -55,11 +55,16 @@ void XC::ProtoBeam2d::set_material(const Material *m)
   }
 
 //! @brief Default constructor.
+//! @param tag: element identifier.
+//! @param class_tag: element class identifier.
+//! @param m: element material.
 XC::ProtoBeam2d::ProtoBeam2d(int tag,int class_tag,const Material *m)
   :Element1D(tag,class_tag,0,0), physicalProperties(1)
   { set_material(m); }
 
 //! @brief Constructor.
+//! @param tag: element identifier.
+//! @param class_tag: element class identifier.
 //! @param a: section area.
 //! @param e: elastic modulus.
 //! @param i: moment of inertia.
@@ -70,6 +75,8 @@ XC::ProtoBeam2d::ProtoBeam2d(int tag, int class_tag, double a, double e, double 
   { setSectionProperties(CrossSectionProperties2d(e,a,i)); }
 
 //! @brief Constructor.
+//! @param tag: element identifier.
+//! @param class_tag: element class identifier.
 //! @param a: section area.
 //! @param alpha: ratio between section area and section shear area.
 //! @param e: elastic modulus.

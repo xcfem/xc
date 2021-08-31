@@ -43,6 +43,7 @@ class CrossSectionProperties3d: public CrossSectionProperties2d
   {
   private:
     double iy, iyz, j;
+    double alpha_z;
     static Matrix ks4;
     static Matrix ks6;
   protected:
@@ -51,7 +52,7 @@ class CrossSectionProperties3d: public CrossSectionProperties2d
     int recvData(const Communicator &);
 
   public:
-    CrossSectionProperties3d(double E, double A, double Iz, double Iy, double G, double J);
+    CrossSectionProperties3d(double E, double A, double Iz, double Iy, double G, double J, double alpha_y= 0.0, double alpha_z= 0.0, double rho= 0.0);
     CrossSectionProperties3d(double EA, double EIz, double EIy, double GJ);
     CrossSectionProperties3d(const SectionForceDeformation &);
     CrossSectionProperties3d(void);
@@ -59,6 +60,24 @@ class CrossSectionProperties3d: public CrossSectionProperties2d
     bool check_values(void);
     inline int getDimension(void)
       { return 3; }
+    inline double &AlphaY(void)
+      { return Alpha(); }
+    inline const double &AlphaY(void) const
+      { return Alpha(); }
+    inline void setAlphaY(const double &al)
+      { setAlpha(al); }
+    inline double &AlphaZ(void)
+      { return alpha_z; }
+    inline const double &AlphaZ(void) const
+      { return alpha_z; }
+    inline void setAlphaZ(const double &al)
+      { alpha_z= al; }
+    //! @brief get shear area.
+    inline double getAvz(void) const
+      { return alpha_z*A(); }
+    //! @brief set shear area.
+    void setAvz(const double &avz)
+      { alpha_z= avz/A(); }
     inline double &Iz(void)
       { return CrossSectionProperties2d::I(); }
     inline const double &Iz(void) const
@@ -96,6 +115,12 @@ class CrossSectionProperties3d: public CrossSectionProperties2d
     //! @brief Returns the torsional stiffness.
     inline double GJ(void) const
       { return G()*j; }
+    //! @brief Returns shear stiffness along y axis.
+    inline double GAAlphaY(void) const
+      { return GAAlpha(); }
+    //! @brief Returns shear stiffness along z axis.
+    inline double GAAlphaZ(void) const
+      { return G()*getAvz(); }
 
     double getTheta(void) const;
     double getI1(void) const;

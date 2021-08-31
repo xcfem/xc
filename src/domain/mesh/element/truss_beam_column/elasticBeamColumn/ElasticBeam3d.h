@@ -61,7 +61,7 @@
 #ifndef ElasticBeam3d_h
 #define ElasticBeam3d_h
 
-#include <domain/mesh/element/truss_beam_column/ProtoBeam3d.h>
+#include "domain/mesh/element/truss_beam_column/elasticBeamColumn/ElasticBeam3dBase.h"
 #include "utility/matrix/Matrix.h"
 #include "domain/mesh/element/truss_beam_column/EsfBeamColumn3d.h"
 #include "domain/mesh/element/utils/fvectors/FVectorBeamColumn3d.h"
@@ -76,7 +76,7 @@ class SectionForceDeformation;
 //! @ingroup BeamColumnElemGrp
 //
 //! @brief 3D elastic beam element.
-class ElasticBeam3d: public ProtoBeam3d
+class ElasticBeam3d: public ElasticBeam3dBase
   {
   private:
     int releasez; //!< moment release for bending about z-axis 0=none, 1=I, 2=J, 3=I,J
@@ -85,35 +85,24 @@ class ElasticBeam3d: public ProtoBeam3d
     FVectorBeamColumn3d q0;  //!< Fixed end forces in basic system (no torsion)
     FVectorBeamColumn3d p0;  //!< Reactions in basic system (no torsion)
  
-    CrdTransf3d *theCoordTransf; //!< Coordinate transformation.
-
     static Matrix K;
     static Vector P;
     
     static Matrix kb;
 
-    void set_transf(const CrdTransf *trf);
   protected:
     DbTagData &getDbTagData(void) const;
     int sendData(Communicator &comm);
     int recvData(const Communicator &comm);
   public:
     ElasticBeam3d(int tag= 0);
-    ElasticBeam3d(int tag,const Material *m,const CrdTransf *trf);
+    ElasticBeam3d(int tag, const Material *m,const CrdTransf *trf);
     ElasticBeam3d(int tag, double A, double E, double G, double Jx, double Iy, double Iz, int Nd1, int Nd2, CrdTransf3d &theTransf, double rho = 0.0, int releasez= 0, int releasey= 0);
 
     ElasticBeam3d(int tag, int Nd1, int Nd2, SectionForceDeformation *section, CrdTransf3d &theTransf, double rho = 0.0, int relz= 0, int rely= 0);
-    ElasticBeam3d(const ElasticBeam3d &);
-    ElasticBeam3d &operator=(const ElasticBeam3d &);
     Element *getCopy(void) const;
-    ~ElasticBeam3d(void);
 
     const Vector &computeCurrentStrain(void) const;
-
-    void setDomain(Domain *theDomain);
-    
-    virtual CrdTransf *getCoordTransf(void);
-    virtual const CrdTransf *getCoordTransf(void) const;
 
     virtual int update(void);
     int commitState(void);
@@ -130,9 +119,6 @@ class ElasticBeam3d: public ProtoBeam3d
 
     const Vector &getResistingForce(void) const;
     const Vector &getResistingForceIncInertia(void) const;
-
-    const Vector &getVDirStrongAxisGlobalCoord(bool initialGeometry) const;
-    const Vector &getVDirWeakAxisGlobalCoord(bool initialGeometry) const;
     
     int sendSelf(Communicator &);
     int recvSelf(const Communicator &);

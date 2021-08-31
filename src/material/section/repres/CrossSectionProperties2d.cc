@@ -200,7 +200,7 @@ int XC::CrossSectionProperties2d::setParameter(const std::vector<std::string> &a
         param.setValue(G());
         return param.addObject(4,scc);
       }
-    else if(argv[0] == "alpha")
+    else if((argv[0] == "alpha") || (argv[0] == "alpha_y"))
       {
         param.setValue(Alpha());
         return param.addObject(5,scc);

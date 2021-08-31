@@ -59,6 +59,13 @@ bool XC::CrossSectionProperties3d::check_values(void)
         j= 1.0;
         retval= false;
       }
+    if(alpha_z <= 0.0)
+      {
+        std::clog << getClassName() << "::" << __FUNCTION__
+		  << "; Input alpha_z <= 0.0 ... setting alpha_z to 1.0\n";
+        alpha_z= 1.0;
+        retval= false;
+      }
     if(retval) //it's ok so far.
       retval= CrossSectionProperties2d::check_values();
     return retval;
@@ -66,21 +73,22 @@ bool XC::CrossSectionProperties3d::check_values(void)
 
 //! @brief Constructor.
 XC::CrossSectionProperties3d::CrossSectionProperties3d(void)
-  :CrossSectionProperties2d(), iy(0), iyz(0), j(0) {}
+  :CrossSectionProperties2d(), iy(0), iyz(0), j(0), alpha_z(0) {}
 
 //! @brief Constructor.
-XC::CrossSectionProperties3d::CrossSectionProperties3d(double E_in, double A_in, double Iz_in, double Iy_in, double G_in, double J_in)
-  : CrossSectionProperties2d(E_in,A_in,Iz_in,G_in), iy(Iy_in), iyz(0), j(J_in)
+XC::CrossSectionProperties3d::CrossSectionProperties3d(double E_in, double A_in, double Iz_in, double Iy_in, double G_in, double J_in, double ay, double az, double r)
+  : CrossSectionProperties2d(E_in,A_in,Iz_in,G_in, ay, r), iy(Iy_in),
+    iyz(0), j(J_in), alpha_z(az)
   { check_values(); }
 
 //! @brief Constructor.
 XC::CrossSectionProperties3d::CrossSectionProperties3d(double EA_in, double EIz_in, double EIy_in, double GJ_in)
-  : CrossSectionProperties2d(EA_in,EIz_in), iy(EIy_in), iyz(0), j(GJ_in)
+  : CrossSectionProperties2d(EA_in,EIz_in), iy(EIy_in), iyz(0), j(GJ_in), alpha_z(0)
   { check_values(); }
 
 //! @brief Constructor.
 XC::CrossSectionProperties3d::CrossSectionProperties3d(const SectionForceDeformation &section)
-  : CrossSectionProperties2d(section), iy(0.0), iyz(0.0), j(0.0)
+  : CrossSectionProperties2d(section), iy(0.0), iyz(0.0), j(0.0), alpha_z(0)
   {
     const Matrix &sectTangent= section.getInitialTangent();
     const ResponseId &sectCode= section.getType();
@@ -187,9 +195,10 @@ const XC::Matrix &XC::CrossSectionProperties3d::getSectionTangent6x6(void) const
     ks6(3,3) = EIy(); //y bending stiffness.
     ks6(5,5) = GJ(); //Torsional stiffness.
 
-    const double GA = GAAlpha();
-    ks6(2,2)= GA;
-    ks6(4,4)= GA;
+    const double GAY = GAAlphaY(); // Shear stiffness.
+    ks6(2,2)= GAY;
+    const double GAZ = GAAlphaZ(); // Shear stiffness.
+    ks6(4,4)= GAZ;
     return ks6;
   }
 
@@ -202,16 +211,17 @@ const XC::Matrix &XC::CrossSectionProperties3d::getSectionFlexibility6x6(void) c
   {
     const double eiyz= EIyz();
     const double eimax= std::max(EIz(),EIy());
-    if(std::abs(eiyz/eimax)<1e-5) //product of inertia nulo.
+    if(std::abs(eiyz/eimax)<1e-5) // null product of inertia.
       {
         ks6(0,0)= 1.0/(EA());
         ks6(1,1)= 1.0/EIz();
         ks6(3,3)= 1.0/(EIy());
         ks6(5,5)= 1.0/(GJ());
   
-        const double GA= 1.0/GAAlpha();
-        ks6(2,2)= 1/GA;
-        ks6(4,4)= 1/GA;
+        const double GAY= 1.0/GAAlphaY();
+        ks6(2,2)= 1/GAY;
+        const double GAZ= 1.0/GAAlphaZ();
+        ks6(4,4)= 1/GAZ;
       }
     else //product of inertia NO nulo.
       {
@@ -271,6 +281,11 @@ int XC::CrossSectionProperties3d::setParameter(const std::vector<std::string> &a
         param.setValue(J());
         return param.addObject(6,scc);
       }
+    else if(argv[0] == "alpha_z")
+      {
+        param.setValue(AlphaZ());
+        return param.addObject(7,scc);
+      }
     else 
       return CrossSectionProperties2d::setParameter(argv,param,scc);
   }
@@ -284,6 +299,9 @@ int XC::CrossSectionProperties3d::updateParameter(int parameterID, Information &
         return 0;
       case 6:
         j= info.theDouble;
+        return 0;
+      case 7:
+        alpha_z= info.theDouble;
         return 0;
       default:
         return CrossSectionProperties2d::updateParameter(parameterID,info);
@@ -302,7 +320,7 @@ XC::DbTagData &XC::CrossSectionProperties3d::getDbTagData(void) const
 int XC::CrossSectionProperties3d::sendData(Communicator &comm)
   {
     int res= CrossSectionProperties2d::sendData(comm);
-    res+= comm.sendDoubles(iy,iyz,j,getDbTagData(),CommMetaData(2));
+    res+= comm.sendDoubles(iy,iyz,j,alpha_z,getDbTagData(),CommMetaData(2));
     return res;
   }
 
@@ -310,7 +328,7 @@ int XC::CrossSectionProperties3d::sendData(Communicator &comm)
 int XC::CrossSectionProperties3d::recvData(const Communicator &comm)
   {
     int res= CrossSectionProperties2d::recvData(comm); 
-    res+= comm.receiveDoubles(iy,iyz,j,getDbTagData(),CommMetaData(2));
+    res+= comm.receiveDoubles(iy,iyz,j,alpha_z,getDbTagData(),CommMetaData(2));
     return res;
   }
 

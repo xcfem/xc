@@ -195,6 +195,8 @@ XC::Element *XC::FEM_ObjectBroker::getNewElement(int classTag)
              return new ElasticTimoshenkoBeam2d();
         case ELE_TAG_ElasticBeam3d:
                 return new ElasticBeam3d();
+        case ELE_TAG_ElasticTimoshenkoBeam3d:
+             return new ElasticTimoshenkoBeam3d();
         case ELE_TAG_BeamWithHinges2d:
              return new BeamWithHinges2d();
         case ELE_TAG_BeamWithHinges3d:

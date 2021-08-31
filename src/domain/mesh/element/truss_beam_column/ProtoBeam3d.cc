@@ -53,6 +53,9 @@ void XC::ProtoBeam3d::set_material(const Material *m)
   }
 
 //! @brief Default constructor.
+//! @param tag: element identifier.
+//! @param class_tag: element class identifier.
+//! @param m: element material.
 XC::ProtoBeam3d::ProtoBeam3d(int tag,int class_tag,const Material *m)
   : Element1D(tag,class_tag,0,0), physicalProperties(1)
   {
@@ -61,6 +64,10 @@ XC::ProtoBeam3d::ProtoBeam3d(int tag,int class_tag,const Material *m)
   }
 
 //! @brief Constructor.
+//! @param tag: element identifier.
+//! @param class_tag: element class identifier.
+//! @param Nd1: identifier of the first node.
+//! @parma Nd2: idenfifier of the second node.
 XC::ProtoBeam3d::ProtoBeam3d(int tag, int class_tag, int Nd1, int Nd2)
   :Element1D(tag,class_tag,Nd1,Nd2), physicalProperties(1)
   {
@@ -68,9 +75,36 @@ XC::ProtoBeam3d::ProtoBeam3d(int tag, int class_tag, int Nd1, int Nd2)
   }
 
 //! @brief Constructor.
+//! @param tag: element identifier.
+//! @param class_tag: element class identifier.
+//! @param a: area of the element cross section.
+//! @param e: elastic modulus of the element material.
+//! @param g: shear modulus of the element material.
+//! @param jx: torsional section modulus of the element section.
+//! @param iy: modulus of inertia the element section around the y axis.
+//! @param iz: modulus of inertia the element section around the z axis.
+//! @param Nd1: tag of the element I node.
+//! @param Nd2: tag of the element J node.
 XC::ProtoBeam3d::ProtoBeam3d(int tag, int class_tag, double a, double e, double g, double jx, double iy, double iz,int Nd1, int Nd2)
   :Element1D(tag,class_tag,Nd1,Nd2), physicalProperties(1)
   { setSectionProperties(CrossSectionProperties3d(e,a,iz,iy,g,jx)); }
+
+//! @brief Constructor.
+//! @param tag: element identifier.
+//! @param class_tag: element class identifier.
+//! @param a: area of the element cross section.
+//! @param alpha_y: ratio between section area and section shear area on y axis.
+//! @param alpha_z: ratio between section area and section shear area on z axis.
+//! @param e: elastic modulus of the element material.
+//! @param g: shear modulus of the element material.
+//! @param jx: torsional section modulus of the element section.
+//! @param iy: modulus of inertia the element section around the y axis.
+//! @param iz: modulus of inertia the element section around the z axis.
+//! @param Nd1: tag of the element I node.
+//! @param Nd2: tag of the element J node.
+XC::ProtoBeam3d::ProtoBeam3d(int tag, int class_tag, double a, double alpha_y, double alpha_z, double e, double g, double jx, double iy, double iz,int Nd1, int Nd2)
+  :Element1D(tag,class_tag,Nd1,Nd2), physicalProperties(1)
+  { setSectionProperties(CrossSectionProperties3d(e,a,iz,iy,g,jx, alpha_y, alpha_z)); }
 
 int XC::ProtoBeam3d::getNumDOF(void) const
   { return 12; }

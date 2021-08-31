@@ -61,6 +61,7 @@ XC::ElasticTimoshenkoBeam2d::ElasticTimoshenkoBeam2d(int tag)
     // zero fixed end forces vector
     ql0.Zero();
   }
+
 //! @brief Constructor.
 //! @param tag: element identifier.
 //! @param m: element material.
@@ -71,7 +72,8 @@ XC::ElasticTimoshenkoBeam2d::ElasticTimoshenkoBeam2d(int tag,const Material *m,c
     ul(6), ql(6), ql0(6), kl(6,6), klgeo(6,6), Tgl(6,6), Ki(6,6), M(6,6),
     theLoad(6)
   {
-    ql0.Zero();
+    // zero fixed end forces vector
+     ql0.Zero();
   }
 
 //! @brief Constructor.
@@ -83,6 +85,8 @@ XC::ElasticTimoshenkoBeam2d::ElasticTimoshenkoBeam2d(int tag,const Material *m,c
 //! @param avy: shear area.
 //! @param Nd1: identifier of the first node.
 //! @param Nd2: idenfifier of the second node.
+//! @param coordTransf: coordinate transformation for the element.
+//! @param r: density of the element material.
 XC::ElasticTimoshenkoBeam2d::ElasticTimoshenkoBeam2d(int tag,
     double a, double e, double g, double iz, double avy,
     int Nd1, int Nd2, CrdTransf2d &coordTransf,
@@ -440,7 +444,7 @@ XC::Response *XC::ElasticTimoshenkoBeam2d::setResponse(const std::vector<std::st
         theResponse =  new ElementResponse(this, 1, theVector);
       }
     // local forces
-    else if ((argv[0]=="localForce") || (argv[0]=="localForces"))
+    else if((argv[0]=="localForce") || (argv[0]=="localForces"))
       {
         // output.tag("ResponseType","N_1");
         // output.tag("ResponseType","V_1");

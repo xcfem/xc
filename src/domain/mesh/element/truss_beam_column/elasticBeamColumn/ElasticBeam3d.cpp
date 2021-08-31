@@ -78,53 +78,41 @@ XC::Matrix XC::ElasticBeam3d::K(12,12);
 XC::Vector XC::ElasticBeam3d::P(12);
 XC::Matrix XC::ElasticBeam3d::kb(6,6);
 
-void XC::ElasticBeam3d::set_transf(const CrdTransf *trf)
-  {
-    if(theCoordTransf)
-      {
-        delete theCoordTransf;
-        theCoordTransf= nullptr;
-      }
-    if(trf)
-      {
-        const CrdTransf3d *tmp= dynamic_cast<const CrdTransf3d *>(trf);
-        if(tmp)
-          theCoordTransf = tmp->getCopy();
-        else
-          {
-            std::cerr << getClassName() << "::" << __FUNCTION__
-	              << "; failed to get copy of coordinate transformation.\n";
-            exit(-1);
-          }
-      }
-    else
-      std::cerr << getClassName() << "::" << __FUNCTION__
-		<< "ElasticBeam3d::set_transf; pointer to coordinate transformation is null." << std::endl;
-  }
-
 //! @brief Default constructor.
+//! @param tag: element identifier.
 XC::ElasticBeam3d::ElasticBeam3d(int tag)
-  :ProtoBeam3d(tag,ELE_TAG_ElasticBeam3d), releasez(0), releasey(0),
-   q(), q0(), p0(), theCoordTransf(nullptr)
+  :ElasticBeam3dBase(tag,ELE_TAG_ElasticBeam3d), releasez(0), releasey(0),
+   q(), q0(), p0()
   { load.reset(12); }
 
 //! @brief Constructor.
+//! @param tag: element identifier.
+//! @param m: element material.
+//! @param trf: coordinate transformation for the element.
 XC::ElasticBeam3d::ElasticBeam3d(int tag,const Material *m,const CrdTransf *trf)
-  : ProtoBeam3d(tag,ELE_TAG_ElasticBeam3d,m), releasez(0), releasey(0),
-   q(), q0(), p0(), theCoordTransf(nullptr)
-  { load.reset(12); set_transf(trf); }
+  : ElasticBeam3dBase(tag,ELE_TAG_ElasticBeam3d, m, trf),
+    releasez(0), releasey(0), q(), q0(), p0()
+  { load.reset(12); }
 
 //! @brief Constructor.
+//! @param tag: element identifier.
+//! @param a: area of the element cross section.
+//! @param e: elastic modulus of the element material.
+//! @param g: shear modulus of the element material.
+//! @param jx: torsional section modulus of the element section.
+//! @param iy: modulus of inertia the element section around the y axis.
+//! @param iz: modulus of inertia the element section around the z axis.
+//! @param Nd1: tag of the element I node.
+//! @param Nd2: tag of the element J node.
+//! @param coordTransf: coordinate transformation for the element.
+//! @param r: density of the element material.
 XC::ElasticBeam3d::ElasticBeam3d(int tag, double a, double e, double g,
                              double jx, double iy, double iz, int Nd1, int Nd2,
 				 CrdTransf3d &coordTransf, double r, int relz, int rely)
-  :ProtoBeam3d(tag,ELE_TAG_ElasticBeam3d,a,e,g,jx,iy,iz,Nd1,Nd2),
-   releasez(relz), releasey(rely),
-   q(), q0(), p0(), theCoordTransf(nullptr)
+  :ElasticBeam3dBase(tag,ELE_TAG_ElasticBeam3d,a,e,g,jx,iy,iz,Nd1,Nd2,coordTransf, r),
+   releasez(relz), releasey(rely), q(), q0(), p0()
   {
-    setRho(r);
     load.reset(12);
-    set_transf(&coordTransf);
     // Make no release if input not 0, 1, 2, or 3
     if(releasez < 0 || releasez > 3)
       releasez = 0;
@@ -133,28 +121,17 @@ XC::ElasticBeam3d::ElasticBeam3d(int tag, double a, double e, double g,
   }
 
 //! @brief Constructor.
+//! @param tag: element identifier.
+//! @param Nd1: tag of the element I node.
+//! @param Nd2: tag of the element J node.
+//! @param section: SectionForceDeformation object to copy mechanical properties from.
+//! @param coordTransf: coordinate transformation for the element.
+//! @param r: density of the element material.
 XC::ElasticBeam3d::ElasticBeam3d(int tag, int Nd1, int Nd2, SectionForceDeformation *section,CrdTransf3d &coordTransf, double r, int relz, int rely)
-  :ProtoBeam3d(tag,ELE_TAG_ElasticBeam3d,Nd1,Nd2),
-   releasez(relz), releasey(rely),
-   q(), theCoordTransf(nullptr)
+  :ElasticBeam3dBase(tag,ELE_TAG_ElasticBeam3d,Nd1,Nd2, section, coordTransf, r),
+   releasez(relz), releasey(rely), q()
   {
     load.reset(12);
-    if(section)
-      {
-        //sectionTag= section->getTag();
-	setSectionProperties(CrossSectionProperties3d(*section));
-        setRho(r);
-      }
-
-    CrossSectionProperties3d &sprop= getSectionProperties();
-    if(sprop.J()==0.0)
-      {
-        std::cerr << getClassName() << "::" << __FUNCTION__
-		  << "; no torsion in section -- setting GJ = 1.0e10\n";
-        sprop.J() = 1.0e10;
-      }
-
-    set_transf(&coordTransf);
     
     // Make no release if input not 0, 1, 2, or 3
     if(releasez < 0 || releasez > 3)
@@ -166,86 +143,10 @@ XC::ElasticBeam3d::ElasticBeam3d(int tag, int Nd1, int Nd2, SectionForceDeformat
     p0.zero();
   }
 
-//! @brief Copy constructor.
-XC::ElasticBeam3d::ElasticBeam3d(const XC::ElasticBeam3d &other)
-  :ProtoBeam3d(other), releasez(other.releasez), releasey(other.releasey), q(other.q), theCoordTransf(nullptr)
-  {
-    set_transf(other.theCoordTransf);
-
-    q0= other.q0;
-    p0= other.p0;
-  }
-
-//! @brief Assignment operator.
-XC::ElasticBeam3d &XC::ElasticBeam3d::operator=(const XC::ElasticBeam3d &other)
-  {
-    ProtoBeam3d::operator=(other);
-    releasez= other.releasez;
-    releasey= other.releasey;
-    //sectionTag= other.sectionTag;
-    q= other.q;
-    set_transf(other.theCoordTransf);
-
-    q0= other.q0;
-    p0= other.p0;
-    return *this;
-  }
-
 //! @brief Virtual constructor.
 XC::Element* XC::ElasticBeam3d::getCopy(void) const
   { return new ElasticBeam3d(*this); }
 
-//! @brief Constructor.
-XC::ElasticBeam3d::~ElasticBeam3d(void)
-  { if(theCoordTransf) delete theCoordTransf;  }
-
-//! @brief Returns (if possible) a pointer to the coordinate transformation.
-XC::CrdTransf *XC::ElasticBeam3d::getCoordTransf(void)
-  { return theCoordTransf; }
-
-//! @brief Returns (if possible) a pointer to the coordinate transformation.
-const XC::CrdTransf *XC::ElasticBeam3d::getCoordTransf(void) const
-  { return theCoordTransf; }
-
-void XC::ElasticBeam3d::setDomain(Domain *theDomain)
-  {
-    ProtoBeam3d::setDomain(theDomain);
-
-    const int dofNd1 = theNodes[0]->getNumberDOF();
-    if(dofNd1 != 6)
-      {
-        std::cerr << getClassName() << "::" << __FUNCTION__
-	          << "; Node 1: " << theNodes.getTagNode(0)
-                  << " has incorrect number of DOF: "
-	          << dofNd1 << " instead of 6.\n";
-        exit(-1);
-      }
-    const int dofNd2 = theNodes[1]->getNumberDOF();
-    if(dofNd2 != 6)
-      {
-        std::cerr << getClassName() << "::" << __FUNCTION__
-	          << "; Node 1: " << theNodes.getTagNode(1)
-                  << " has incorrect number of DOF: "
-	          << dofNd2 << " instead of 6.\n";
-        exit(-1);
-      }
-
-    if(theCoordTransf->initialize(theNodes[0], theNodes[1]) != 0)
-      {
-        std::cerr << getClassName() << "::" << __FUNCTION__
-		  << "; error initializing coordinate transformation\n";
-        exit(-1);
-      }
-
-    const double L = theCoordTransf->getInitialLength();
-
-    if(L == 0.0)
-      {
-        std::cerr << getClassName() << "::" << __FUNCTION__
-		  << "; element has zero length\n";
-        exit(-1);
-      }
-  }
 
 //! @brief Compute the current strain.
 const XC::Vector &XC::ElasticBeam3d::computeCurrentStrain(void) const
@@ -260,7 +161,7 @@ const XC::Vector &XC::ElasticBeam3d::computeCurrentStrain(void) const
 //! @brief Update element state.
 int XC::ElasticBeam3d::update(void)
   {
-    int retval= ProtoBeam3d::update();
+    int retval= ElasticBeam3dBase::update();
     retval+= theCoordTransf->update();
     return retval;
   }
@@ -270,7 +171,7 @@ int XC::ElasticBeam3d::commitState(void)
   {
     int retVal = 0;
     // call element commitState to do any base class stuff
-    if((retVal = this->ProtoBeam3d::commitState()) != 0)
+    if((retVal = this->ElasticBeam3dBase::commitState()) != 0)
       { std::cerr << getClassName() << "::" << __FUNCTION__
 		  << "; failed in base class."; }
     retVal += theCoordTransf->commitState();
@@ -280,7 +181,7 @@ int XC::ElasticBeam3d::commitState(void)
 //! @brief Revert the element to the its last commited state.
 int XC::ElasticBeam3d::revertToLastCommit()
   {
-    int retval= ProtoBeam3d::revertToLastCommit();
+    int retval= ElasticBeam3dBase::revertToLastCommit();
     retval+= theCoordTransf->revertToLastCommit();
     return retval;
   }
@@ -288,7 +189,7 @@ int XC::ElasticBeam3d::revertToLastCommit()
 //! @brief Revert the the element to the its start state.
 int XC::ElasticBeam3d::revertToStart()
   {
-    int retval= ProtoBeam3d::revertToStart();
+    int retval= ElasticBeam3dBase::revertToStart();
     retval+= theCoordTransf->revertToStart();
     return retval;
   }
@@ -359,7 +260,7 @@ const XC::Matrix &XC::ElasticBeam3d::getTangentStiff(void) const
     return retval;
   }
 
-
+//! @brief Return the initial stiffness matrix.
 const XC::Matrix &XC::ElasticBeam3d::getInitialStiff(void) const
   {
     //Ignore sections with product moment
@@ -439,7 +340,7 @@ const XC::Matrix &XC::ElasticBeam3d::getMass(void) const
 
 void XC::ElasticBeam3d::zeroLoad(void)
   {
-    ProtoBeam3d::zeroLoad();
+    ElasticBeam3dBase::zeroLoad();
     q0.zero();
     p0.zero();
     return;
@@ -606,48 +507,6 @@ const XC::Vector &XC::ElasticBeam3d::getResistingForce(void) const
   }
 
 
-//! @brief Returns the direction vector of element strong axis
-//! expressed in the global coordinate system.
-const XC::Vector &XC::ElasticBeam3d::getVDirStrongAxisGlobalCoord(bool initialGeometry) const
-  {
-    if(!initialGeometry)
-      std::cerr << getClassName() << "::" << __FUNCTION__
-                << "; not implemented for deformed geometry." << std::endl;
-    if(theCoordTransf)
-      {
-        const Vector eF= getVDirStrongAxisLocalCoord();
-        return theCoordTransf->getVectorGlobalCoordFromLocal(eF);
-      }
-    else
-      {
-        std::cerr << getClassName() << "::" << __FUNCTION__
-		  << "; coordinate transformation not defined."
-                  << std::endl;
-        return P;
-      }
-  }
-
-//! @brief Returns the direction vector of element weak axis
-//! expressed in the global coordinate system.
-const XC::Vector &XC::ElasticBeam3d::getVDirWeakAxisGlobalCoord(bool initialGeometry) const
-  {
-    if(!initialGeometry)
-      std::cerr << getClassName() << "::" << __FUNCTION__
-                << "; not implemented for deformed geometry." << std::endl;
-    if(theCoordTransf)
-      {
-        const Vector eD= getVDirWeakAxisLocalCoord();
-        return theCoordTransf->getVectorGlobalCoordFromLocal(eD);
-      }
-    else
-      {
-        std::cerr << getClassName() << "::" << __FUNCTION__
-		  << "; coordinate transformation not defined."
-                  << std::endl;
-        return P;
-      }
-  }
-
 //! @brief Returns a vector to store the dbTags
 //! of the class members.
 XC::DbTagData &XC::ElasticBeam3d::getDbTagData(void) const
@@ -660,8 +519,7 @@ XC::DbTagData &XC::ElasticBeam3d::getDbTagData(void) const
 int XC::ElasticBeam3d::sendData(Communicator &comm)
   {
     DbTagData &dt= getDbTagData();
-    int res= ProtoBeam3d::sendData(comm);
-    res+= sendCoordTransf(8,9,10,comm);
+    int res= ElasticBeam3dBase::sendData(comm);
     //res+= comm.sendVector(eInic,dt,CommMetaData(11));
     res+= comm.sendInts(releasez,releasey,dt,CommMetaData(12));
     res+= sendEsfBeamColumn3d(q,13,dt,comm);
@@ -674,8 +532,7 @@ int XC::ElasticBeam3d::sendData(Communicator &comm)
 int XC::ElasticBeam3d::recvData(const Communicator &comm)
   {
     DbTagData &dt= getDbTagData();
-    int res= ProtoBeam3d::recvData(comm);
-    theCoordTransf= recvCoordTransf3d(8,9,10,comm);
+    int res= ElasticBeam3dBase::recvData(comm);
     //res+= comm.receiveVector(eInic,dt,CommMetaData(11));
     res+= comm.receiveInts(releasez, releasey,dt,CommMetaData(12));
     res+= receiveEsfBeamColumn3d(q,13,dt,comm);
@@ -741,9 +598,9 @@ void XC::ElasticBeam3d::Print(std::ostream &s, int flag) const
          }
        else if(flag == 2)
          {
-           static XC::Vector xAxis(3);
-           static XC::Vector yAxis(3);
-           static XC::Vector zAxis(3);
+           static Vector xAxis(3);
+           static Vector yAxis(3);
+           static Vector zAxis(3);
 
            theCoordTransf->getLocalAxes(xAxis, yAxis, zAxis);
 
@@ -752,10 +609,10 @@ void XC::ElasticBeam3d::Print(std::ostream &s, int flag) const
            s << " " << yAxis(0) << " " << yAxis(1) << " " << yAxis(2) << " ";
            s << zAxis(0) << " " << zAxis(1) << " " << zAxis(2) << std::endl;
 
-           const XC::Vector &node1Crd = theNodes[0]->getCrds();
-           const XC::Vector &node2Crd = theNodes[1]->getCrds();
-           const XC::Vector &node1Disp = theNodes[0]->getDisp();
-           const XC::Vector &node2Disp = theNodes[1]->getDisp();
+           const Vector &node1Crd = theNodes[0]->getCrds();
+           const Vector &node2Crd = theNodes[1]->getCrds();
+           const Vector &node1Disp = theNodes[0]->getDisp();
+           const Vector &node2Disp = theNodes[1]->getDisp();
 
            s << "#NODE " << node1Crd(0) << " " << node1Crd(1) << " " << node1Crd(2)
              << " " << node1Disp(0) << " " << node1Disp(1) << " " << node1Disp(2)
@@ -887,6 +744,6 @@ boost::python::list XC::ElasticBeam3d::getValuesAtNodes(const std::string &code,
 	retval.append(getMz2());
       }
     else
-      retval= ProtoBeam3d::getValuesAtNodes(code, silent); 
+      retval= ElasticBeam3dBase::getValuesAtNodes(code, silent); 
     return retval;
   }

@@ -48,7 +48,10 @@ class_<XC::ElasticBeam2d, bases<XC::ElasticBeam2dBase>, boost::noncopyable >("El
 class_<XC::ElasticTimoshenkoBeam2d, bases<XC::ElasticBeam2dBase>, boost::noncopyable >("ElasticTimoshenkoBeam2d", no_init)
   ;
 
-class_<XC::ElasticBeam3d, bases<XC::ProtoBeam3d>, boost::noncopyable >("ElasticBeam3d", no_init)
+class_<XC::ElasticBeam3dBase, bases<XC::ProtoBeam3d>, boost::noncopyable >("ElasticBeam3dBase", no_init)
+  ;
+
+class_<XC::ElasticBeam3d, bases<XC::ElasticBeam3dBase>, boost::noncopyable >("ElasticBeam3d", no_init)
   .add_property("rho", &XC::ElasticBeam3d::getRho,&XC::ElasticBeam3d::setRho, "element material density")
   .add_property("initialStrain", make_function(&XC::ElasticBeam3d::getInitialStrain, return_value_policy<copy_const_reference>()),&XC::ElasticBeam3d::setInitialStrain,"initial strain")
   .add_property("getAN2", &XC::ElasticBeam3d::getAN2,"Axial force which acts over the front end of the element (call 'calc_resisting_force' before).")
@@ -78,3 +81,6 @@ class_<XC::ElasticBeam3d, bases<XC::ProtoBeam3d>, boost::noncopyable >("ElasticB
   .def("getVDirStrongAxisGlobalCoord",make_function(&XC::ElasticBeam3d::getVDirStrongAxisGlobalCoord, return_value_policy<copy_const_reference>()),"Returns the direction vector of element strong axis expressed in the global coordinate system.")
   .def("getVDirWeakAxisGlobalCoord",make_function(&XC::ElasticBeam3d::getVDirWeakAxisGlobalCoord, return_value_policy<copy_const_reference>()),"Returns the direction vector of element weak axis expressed in the global coordinate system.")
    ;
+
+class_<XC::ElasticTimoshenkoBeam3d, bases<XC::ElasticBeam3dBase>, boost::noncopyable >("ElasticTimoshenkoBeam3d", no_init)
+  ;

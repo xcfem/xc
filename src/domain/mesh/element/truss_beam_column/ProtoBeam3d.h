@@ -51,6 +51,7 @@ class ProtoBeam3d: public Element1D
     ProtoBeam3d(int tag, int class_tag,const Material *m= nullptr);
     ProtoBeam3d(int tag, int class_tag, int Nd1, int Nd2);
     ProtoBeam3d(int tag, int class_tag, double A, double E, double G, double Jx, double Iy, double Iz, int Nd1, int Nd2);
+    ProtoBeam3d(int tag, int class_tag, double A, double alpha_y, double alpha_z, double E, double G, double Jx, double Iy, double Iz, int Nd1, int Nd2);
     int getNumDOF(void) const;
     
     const CrossSectionProperties3d &getSectionProperties(void) const;

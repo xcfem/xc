@@ -45,6 +45,7 @@
 #include "domain/mesh/element/truss_beam_column/elasticBeamColumn/ElasticBeam2d.h"
 #include "domain/mesh/element/truss_beam_column/elasticBeamColumn/ElasticTimoshenkoBeam2d.h"
 #include "domain/mesh/element/truss_beam_column/elasticBeamColumn/ElasticBeam3d.h"
+#include "domain/mesh/element/truss_beam_column/elasticBeamColumn/ElasticTimoshenkoBeam3d.h"
 #include "domain/mesh/element/truss_beam_column/forceBeamColumn/ForceBeamColumn2d.h"
 #include "domain/mesh/element/truss_beam_column/forceBeamColumn/ForceBeamColumn3d.h"
 #include "domain/mesh/element/truss_beam_column/dispBeamColumn/DispBeamColumn2d.h"
@@ -207,6 +208,7 @@ void materialNotSuitableMsg(const std::string &errHeader, const std::string &mat
 //! - ElasticBeam2d: Defines a beam-column element (ElasticBeam2d) for plane problems.
 //! - ElasticTimoshenkoBeam2d: Defines a timoshenko beam-column element (ElasticTimoshenkoBeam2d) for plane problems.
 //! - ElasticBeam3d: Defines a beam-column element (ElasticBeam3d) for 3D problems.
+//! - ElasticTimoshenkoBeam3d: Defines a timoshenko beam-column element (ElasticTimoshenkoBeam3d) for plane problems.
 //! - ForceBeamColumn_2d: Defines a beam-column element (ForceBeamColumn2d) no lineal,
 //!   for plane problems.
 //! - ForceBeamColumn_3d: Defines a beam-column element (ForceBeamColumn3d) no lineal,
@@ -303,6 +305,10 @@ XC::Element *XC::ProtoElementHandler::create_element(const std::string &cmd,int 
 	if(cmd=="elastic_beam_3d")
 	  deprecatedElementNameMsg(errHeader,cmd,"ElasticBeam3d");
         retval=  new_element_mat_crd<ElasticBeam3d>(tag_elem, get_ptr_material(), get_ptr_transf_coo());
+      }
+    else if(cmd == "ElasticTimoshenkoBeam3d")
+      {
+        retval=  new_element_mat_crd<ElasticTimoshenkoBeam3d>(tag_elem, get_ptr_material(), get_ptr_transf_coo());
       }
     else if((cmd == "beam_with_hinges_2d")||(cmd == "BeamWithHinges2d"))
       {
@@ -448,7 +454,7 @@ XC::Element *XC::ProtoElementHandler::create_element(const std::string &cmd,int 
   }
 
 //! @brief Create a new element.
-//! @param type: type of element. Available types:'Truss','TrussSection','CorotTruss','CorotTrussSection','Spring', 'Beam2d02', 'Beam2d03',  'Beam2d04', 'Beam3d01', 'Beam3d02', 'ElasticBeam2d', 'ElasticTimoshenkoBeam2d', 'ElasticBeam3d', 'BeamWithHinges2d', 'BeamWithHinges3d', 'NlBeamColumn2d', 'NlBeamColumn3d','ForceBeamColumn2d', 'ForceBeamColumn3d', 'ShellMitc4', ' shellNl', 'Quad4n', 'Tri31', 'Brick', 'ZeroLength', 'ZeroLengthContact2d', 'ZeroLengthContact3d', 'ZeroLengthSection'.
+//! @param type: type of element. Available types:'Truss','TrussSection','CorotTruss','CorotTrussSection','Spring', 'Beam2d02', 'Beam2d03',  'Beam2d04', 'Beam3d01', 'Beam3d02', 'ElasticBeam2d', 'ElasticTimoshenkoBeam2d', 'ElasticBeam3d', 'ElasticTimoshenkoBeam3d', 'BeamWithHinges2d', 'BeamWithHinges3d', 'NlBeamColumn2d', 'NlBeamColumn3d','ForceBeamColumn2d', 'ForceBeamColumn3d', 'ShellMitc4', ' shellNl', 'Quad4n', 'Tri31', 'Brick', 'ZeroLength', 'ZeroLengthContact2d', 'ZeroLengthContact3d', 'ZeroLengthSection'.
 //! @param iNodes: nodes ID, e.g. xc.ID([1,2]) to create a linear element from node 1 to node 2.
 XC::Element *XC::ProtoElementHandler::newElement(const std::string &type,const ID &iNodes)
   {
