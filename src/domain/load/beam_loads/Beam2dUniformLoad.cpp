@@ -178,7 +178,7 @@ void XC::Beam2dUniformLoad::addReactionsInBasicSystem(const std::vector<double> 
 //! @param loadFactor Load factor.
 //! @param q0 Consistent load vector.
 //! @param release Moment release: 0=none, 1=I, 2=J, 3=I,J
-void XC::Beam2dUniformLoad::addFixedEndForcesInBasicSystem(const std::vector<double> &Li,const double &loadFactor,FVector &q0, int release) const
+void XC::Beam2dUniformLoad::addFixedEndForcesInBasicSystem(const std::vector<double> &Li,const double &loadFactor, FVector &q0, int release) const
   {
     const double wy = WTrans()*loadFactor;  // Transverse
     const double wx = WAxial()*loadFactor;  // Axial (+ve from node I to J)

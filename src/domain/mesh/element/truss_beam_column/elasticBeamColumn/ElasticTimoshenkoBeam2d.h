@@ -61,6 +61,7 @@
 // and rotational inertia effects into account.
 
 #include "domain/mesh/element/truss_beam_column/elasticBeamColumn/ElasticBeam2dBase.h"
+#include "domain/mesh/element/utils/fvectors/FVectorBeamColumn2d.h"
 
 namespace XC {
   class Matrix;

@@ -45,6 +45,8 @@
 #include "domain/mesh/node/Node.h"
 #include "domain/component/Parameter.h"
 #include "domain/load/ElementalLoad.h"
+#include "domain/load/beam_loads/BeamMecLoad.h"
+#include "domain/load/beam_loads/BeamStrainLoad.h"
 
 // initialize the class wide variables
 XC::Matrix XC::ElasticTimoshenkoBeam2d::theMatrix(6,6);
@@ -192,16 +194,34 @@ const XC::Matrix &XC::ElasticTimoshenkoBeam2d::getTangentStiff(void) const
         // transform from local to global system
         theMatrix.addMatrixTripleProduct(0.0, Tgl, klTot, 1.0);
       }
+    if(isDead())
+      theMatrix*=dead_srf;
     return theMatrix;
   }
 
 
 const XC::Matrix &XC::ElasticTimoshenkoBeam2d::getInitialStiff(void) const
-  { return Ki; }
+  {
+    if(isDead())
+      {
+        theMatrix= Ki*dead_srf;
+        return theMatrix;
+      }
+    else
+      return Ki;
+  }
 
 
 const XC::Matrix &XC::ElasticTimoshenkoBeam2d::getMass(void) const
-  { return M; }
+  {
+    if(isDead())
+      {
+        theMatrix= M*dead_srf;
+        return theMatrix;
+      }
+    else
+      return M;
+  }
 
 
 void XC::ElasticTimoshenkoBeam2d::zeroLoad(void)
@@ -215,32 +235,40 @@ void XC::ElasticTimoshenkoBeam2d::zeroLoad(void)
 
 int XC::ElasticTimoshenkoBeam2d::addLoad(ElementalLoad *load, double loadFactor)
   {
-    int type;
-    const Vector &data = load->getData(type, loadFactor);
-    
-    if(type == LOAD_TAG_Beam2dUniformLoad)
-      {
-        double wt = data(0)*loadFactor;  // Transverse (+ve upward)
-        double wa = data(1)*loadFactor;  // Axial (+ve from node I to J)
-        
-        double V = 0.5*wt*L;
-        double M = V*L/6.0;  // wt*L*L/12
-        double P = 0.5*wa*L;
-        
-        // fixed end forces in local system
-        ql0(0) -= P;
-        ql0(1) -= V;
-        ql0(2) -= M;
-        ql0(3) -= P;
-        ql0(4) -= V;
-        ql0(5) += M;
-      }
+    if(isDead())
+      std::cerr << getClassName() << "::" << __FUNCTION__ 
+                << "; load over inactive element: "
+                << getTag()  
+                << std::endl;
     else
       {
-        std::cerr << getClassName() << "::" << __FUNCTION__
-		  <<"; load type unknown for element: "
-		  << this->getTag() << ".\n";
-        return -1;
+	int type;
+	const Vector &data = load->getData(type, loadFactor);
+
+	if(type == LOAD_TAG_Beam2dUniformLoad)
+	  {
+	    double wt = data(0)*loadFactor;  // Transverse (+ve upward)
+	    double wa = data(1)*loadFactor;  // Axial (+ve from node I to J)
+
+	    double V = 0.5*wt*L;
+	    double M = V*L/6.0;  // wt*L*L/12
+	    double P = 0.5*wa*L;
+
+	    // fixed end forces in local system
+	    ql0(0) -= P;
+	    ql0(1) -= V;
+	    ql0(2) -= M;
+	    ql0(3) -= P;
+	    ql0(4) -= V;
+	    ql0(5) += M;
+	  }
+	else
+	  {
+	    std::cerr << getClassName() << "::" << __FUNCTION__
+		      <<"; load type unknown for element: "
+		      << this->getTag() << ".\n";
+	    return -1;
+	  }
       }
     return 0;
   }
@@ -298,9 +326,15 @@ const XC::Vector &XC::ElasticTimoshenkoBeam2d::getResistingForce(void) const
     // add effects of element loads, ql = ql(ul) + ql0
     ql.addVector(1.0, ql0, 1.0);
     
+    if(isDead()) //Set internal forces to zero when element is dead.
+      ql*= dead_srf;
+    
     // determine resisting forces in global system
     theVector.addMatrixTransposeVector(0.0, Tgl, ql, 1.0);
     
+    if(isDead())
+      theVector*=dead_srf;
+
     return theVector;
   }
 
@@ -332,6 +366,9 @@ const XC::Vector &XC::ElasticTimoshenkoBeam2d::getResistingForceIncInertia(void)
         accel(i+3) = accel2(i);
       }
     theVector.addMatrixVector(1.0, M, accel, 1.0);
+    
+    if(isDead())
+      theVector*=dead_srf;
     
     return theVector;
   }
