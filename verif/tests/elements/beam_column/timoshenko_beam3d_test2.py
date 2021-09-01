@@ -107,8 +107,6 @@ v1= 5.0*p*l**4/(384.0*E*I)
 v2= l*l*p*srz/(8.0*A*G)
 deltaRef=-(v1+v2)
 
-elements= preprocessor.getElementHandler
-
 ratio1= abs(delta-deltaRef)/deltaRef
 
 '''
