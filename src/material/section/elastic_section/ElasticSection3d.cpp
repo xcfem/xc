@@ -256,7 +256,7 @@ void XC::ElasticSection3d::Print(std::ostream &s, int flag) const
       {}
     else
       {
-        s << "ElasticSection3d, tag: " << this->getTag() << std::endl;
+        s << getClassName() << ", tag: " << this->getTag() << std::endl;
         ctes_scc.Print(s);
       }
   }

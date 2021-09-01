@@ -151,7 +151,7 @@ JElem= beamRCsect.lstRCSects[0].getJTorsion()
 # Iy:           second moment of area about the local y-axis 
 # J:            torsional moment of inertia of the section
 
-scc= typical_materials.defElasticSection3d(preprocessor=preprocessor, name="scc",A=beamRCsect.lstRCSects[0].getAc(),E=beamRCsect.lstRCSects[0].fiberSectionParameters.concrType.Ecm(),G=beamRCsect.lstRCSects[0].fiberSectionParameters.concrType.Gcm(),Iz=IzElem,Iy=IyElem,J=JElem)
+scc= typical_materials.defElasticSection3d(preprocessor=preprocessor, name= "scc", A= beamRCsect.lstRCSects[0].getAc(),E= beamRCsect.lstRCSects[0].fiberSectionParameters.concrType.Ecm(),G= beamRCsect.lstRCSects[0].fiberSectionParameters.concrType.Gcm(),Iz= IzElem,Iy= IyElem,J= JElem)
 
 
 # Elements definition
@@ -301,12 +301,12 @@ ratio1=(Rsec1beamX-Rsec1beamY).sum()+(Rsec1beamX-Rsec1beamZ).sum()+(Rsec1beamY-R
 
 # Internal forces (expressed in local axes) must give the same
 # values for the RC section 2 in all the three beams
-elsec2x=FMeBx[1]
-Rsec2beamX=matrix_utils.vectorToNumpyArray(elsec2x.getResistingForce())
-elsec2y=FMeBy[1]
-Rsec2beamY=matrix_utils.vectorToNumpyArray(elsec2y.getResistingForce())
-elsec2z=FMeBz[1]
-Rsec2beamZ=matrix_utils.vectorToNumpyArray(elsec2z.getResistingForce())
+elsec2x= FMeBx[1]
+Rsec2beamX= matrix_utils.vectorToNumpyArray(elsec2x.getResistingForce())
+elsec2y= FMeBy[1]
+Rsec2beamY= matrix_utils.vectorToNumpyArray(elsec2y.getResistingForce())
+elsec2z= FMeBz[1]
+Rsec2beamZ= matrix_utils.vectorToNumpyArray(elsec2z.getResistingForce())
 
 ratio2=(Rsec2beamX-Rsec2beamY).sum()+(Rsec2beamX-Rsec2beamZ).sum()+(Rsec2beamY-Rsec2beamZ).sum()
 
@@ -329,7 +329,7 @@ ratios=[ratio1_0,ratio1_1,ratio2_0,ratio2_1,ratio3_0,ratio3_1,ratio1,ratio2,rati
 
 result= 0.0
 for r in ratios:
-  result+= r*r
+    result+= r*r
 result= math.sqrt(result)
 feProblem.errFileName= "cerr" # Display errors if any.
 import os

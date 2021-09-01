@@ -47,7 +47,7 @@ nod= nodes.newNodeXYZ(L,0.0,0.0)
 
 lin= modelSpace.newLinearCrdTransf("lin",xc.Vector([0,1,0]))
 # Materials definition
-section= typical_materials.defElasticShearSection3d(preprocessor, "section",A,E,G,Iz,Iy,J,1.0)
+section= typical_materials.defElasticShearSection3d(preprocessor, "section",A,E,G,Iz,Iy,J, alpha_y= 1, alpha_z= 1)
 
 # Elements definition
 elements= preprocessor.getElementHandler

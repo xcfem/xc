@@ -49,11 +49,15 @@ const double &(XC::CrossSectionProperties3d::*getIz)(void) const= &XC::CrossSect
 const double &(XC::CrossSectionProperties3d::*getIy)(void) const= &XC::CrossSectionProperties3d::Iy;
 const double &(XC::CrossSectionProperties3d::*getIyz)(void) const= &XC::CrossSectionProperties3d::Iyz;
 const double &(XC::CrossSectionProperties3d::*getJ)(void) const= &XC::CrossSectionProperties3d::J;
+const double &(XC::CrossSectionProperties3d::*getAlphaY)(void) const= &XC::CrossSectionProperties3d::AlphaY;
+const double &(XC::CrossSectionProperties3d::*getAlphaZ)(void) const= &XC::CrossSectionProperties3d::AlphaZ;
 class_<XC::CrossSectionProperties3d, bases<XC::CrossSectionProperties2d> >("CrossSectionProperties3d")
   .add_property("Iz", make_function( getIz, return_value_policy<return_by_value>() ), &XC::CrossSectionProperties3d::setIz)
   .add_property("Iy", make_function( getIy, return_value_policy<return_by_value>() ), &XC::CrossSectionProperties3d::setIy)
   .add_property("Iyz", make_function( getIyz, return_value_policy<return_by_value>() ), &XC::CrossSectionProperties3d::setIyz)
   .add_property("J", make_function( getJ, return_value_policy<return_by_value>() ), &XC::CrossSectionProperties3d::setJ)
+  .add_property("AlphaY", make_function( getAlphaY, return_value_policy<return_by_value>() ), &XC::CrossSectionProperties3d::setAlphaY,"Shear reduction factor on y axis.")
+  .add_property("AlphaZ", make_function( getAlphaZ, return_value_policy<return_by_value>() ), &XC::CrossSectionProperties3d::setAlphaZ,"Shear reduction factor on y axis.")
   .def("EA", &XC::CrossSectionProperties3d::EA, "Tensional stiffness.")
   .def("EIz", &XC::CrossSectionProperties3d::EIz, "Flexural stiffness around z axis.")
   .def("EIy", &XC::CrossSectionProperties3d::EIy, "Flexural stiffness around y axis.")

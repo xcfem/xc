@@ -28,7 +28,7 @@ matscc10x20=typical_materials.MaterialData(name='mtrectang',E=2.1e6,nu=0.3,rho=2
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
 # Materials definition
-matPoteau= scc10x20.defElasticShearSection3d(preprocessor,matscc10x20) 
+matPoteau= scc10x20.defElasticShearSection3d(preprocessor,matscc10x20)
 elemZLS= scc3d_testing_bench.sectionModel(preprocessor, scc10x20.sectionName)
 
 # Constraints
@@ -43,7 +43,6 @@ lp0.newNodalLoad(2,xc.Vector([0,0,0,0,0,loadMz]))
 
 # We add the load case to domain.
 modelSpace.addLoadCaseToDomain(lp0.name)
-
 
 # Solution
 result= modelSpace.analyze(calculateNodalReactions= True)
@@ -61,7 +60,7 @@ ratio2= (esfMz-loadMz)/loadMz
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
-if (abs(ratio1)<1e-5) & (abs(ratio2)<1e-5) :
+if(abs(ratio1)<1e-5) & (abs(ratio2)<1e-5) :
     print('test '+fname+': ok.')
 else:
     lmsg.error(fname+' ERROR.')

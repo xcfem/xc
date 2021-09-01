@@ -342,7 +342,7 @@ def defElasticSectionFromMechProp3d(preprocessor,name,mechProp3d):
     return defElasticSection3d(preprocessor,name,mechProp3d.A,mechProp3d.E,mechProp3d.G,mechProp3d.Iz,mechProp3d.Iy,mechProp3d.J,linearRho= mechProp3d.linearRho)
 
 #Elastic shear section 3d.
-def defElasticShearSection3d(preprocessor,name,A,E,G,Iz,Iy,J,alpha, linearRho= 0.0):
+def defElasticShearSection3d(preprocessor, name, A, E, G, Iz, Iy, J, alpha_y, alpha_z, linearRho= 0.0):
     '''Constructs an elastic section appropiate for 3D beam analysis, 
     including shear deformations.
 
@@ -354,7 +354,8 @@ def defElasticShearSection3d(preprocessor,name,A,E,G,Iz,Iy,J,alpha, linearRho= 0
     :param Iz:           second moment of area about the local z-axis
     :param Iy:           second moment of area about the local y-axis
     :param J:            torsional moment of inertia of the section
-    :param alpha:        shear shape factor
+    :param alpha_y:      shear shape factor on y axis.
+    :param alpha_z:      shear shape factor on z axis.
     '''
     materialHandler= preprocessor.getMaterialHandler
     retval= materialHandler.newMaterial("elasticShearSection3d",name)
@@ -364,7 +365,8 @@ def defElasticShearSection3d(preprocessor,name,A,E,G,Iz,Iy,J,alpha, linearRho= 0
     retval.sectionProperties.Iz= Iz
     retval.sectionProperties.Iy= Iy
     retval.sectionProperties.J= J
-    retval.sectionProperties.Alpha= alpha
+    retval.sectionProperties.AlphaY= alpha_y
+    retval.sectionProperties.AlphaZ= alpha_z
     retval.sectionProperties.linearRho= linearRho
     return retval
 
@@ -579,7 +581,7 @@ class BeamMaterialData(MaterialData):
                 lmsg.warning("Section: "+self.name+" already defined.")
                 self.xc_material= materialHandler.getMaterial(self.name)
             else:
-                self.xc_material= defElasticShearSection3d(preprocessor,self.name,self.section.A(),self.material.E,self.material.G(),self.section.Iz(),self.section.Iy(),self.section.J(),self.section.alphaZ())
+                self.xc_material= defElasticShearSection3d(preprocessor,name= self.name, A= self.section.A(), E= self.material.E, G= self.material.G(), Iz= self.section.Iz(), Iy= self.section.Iy(), J= self.section.J(), alpha_y= self.section.alphaY(), alpha_z= self.section.alphaZ())
         else:
             lmsg.warning('Material: ', self.name, ' already defined.')
         return self.xc_material
