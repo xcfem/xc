@@ -317,8 +317,8 @@ class SectionProperties(object):
 class RectangularSection(SectionProperties):
     '''Rectangular section geometric parameters
 
-    :ivar b:            cross-section width (parallel to local z-axis)
-    :ivar h:            cross-section depth (parallel to local y-axis)
+    :ivar b: cross-section width (parallel to local z-axis)
+    :ivar h: cross-section depth (parallel to local y-axis)
     '''
     # Points that define alpha value as a function of h/b
     #   see book "hormigón" Jiménez Montoya 14th edition page 405
@@ -333,6 +333,12 @@ class RectangularSection(SectionProperties):
     betaTable= scipy.interpolate.interp1d(xBeta,yBeta)
 
     def __init__(self,name,b,h):
+        ''' Constructor.
+
+        :param name: section name.
+        :param b: cross-section width (parallel to local z-axis)
+        :param h: cross-section depth (parallel to local y-axis)
+        ''' 
         super(RectangularSection,self).__init__(name)
         self.b= b
         self.h= h

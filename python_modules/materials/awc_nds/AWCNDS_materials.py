@@ -565,7 +565,7 @@ class ColumnMember(MemberBase):
         return max(val393,val394)
 
 class WoodPanelSection(sp.RectangularSection):
-    ''' Plywood structural panel.'''
+    ''' Wood structural panel.'''
     def __init__(self, name, b, h, shear_constant):
         super(WoodPanelSection,self).__init__(name, b, h)
         self.shearConstant= shear_constant
