@@ -177,11 +177,14 @@ const XC::Matrix &XC::ElasticTimoshenkoBeam3d::getTangentStiff() const
     // zero the matrix
     theMatrix.Zero();
     
-    if (nlGeo == 0)  {
+    if (nlGeo == 0)
+      {
         // transform from local to global system
         theMatrix.addMatrixTripleProduct(0.0, Tgl, kl, 1.0);
         
-    } else  {
+      }
+    else
+      {
         // initialize local stiffness matrix
         static Matrix klTot(12,12);
         klTot.addMatrix(0.0, kl, 1.0);
@@ -190,10 +193,11 @@ const XC::Matrix &XC::ElasticTimoshenkoBeam3d::getTangentStiff() const
         const Vector &dsp1 = theNodes[0]->getTrialDisp();
         const Vector &dsp2 = theNodes[1]->getTrialDisp();
         static Vector ug(12);
-        for (int i=0; i<6; i++)  {
+        for(int i=0; i<6; i++)
+	  {
             ug(i)   = dsp1(i);
             ug(i+6) = dsp2(i);
-        }
+          }
         
         // transform response from the global to the local system
         ul.addMatrixVector(0.0, Tgl, ug, 1.0);
@@ -207,65 +211,87 @@ const XC::Matrix &XC::ElasticTimoshenkoBeam3d::getTangentStiff() const
         
         // transform from local to global system
         theMatrix.addMatrixTripleProduct(0.0, Tgl, klTot, 1.0);
-    }
-    
+      }
+    if(isDead())
+      theMatrix*=dead_srf;    
     return theMatrix;
-}
+  }
 
 
 const XC::Matrix &XC::ElasticTimoshenkoBeam3d::getInitialStiff() const
-  { return Ki; }
+  {
+    if(isDead())
+      {
+        theMatrix= Ki*dead_srf;
+        return theMatrix;
+      }
+    else
+      return Ki;
+  }
 
 
 const XC::Matrix &XC::ElasticTimoshenkoBeam3d::getMass(void) const
-  { return M; }
+  {
+    if(isDead())
+      {
+        theMatrix= M*dead_srf;
+        return theMatrix;
+      }
+    else
+      return M;
+  }
 
-
+//! @brief Zero the loads on the element.
 void XC::ElasticTimoshenkoBeam3d::zeroLoad(void)
   {
     theLoad.Zero();
     ql0.Zero();
-    
-    return;
   }
 
 
 int XC::ElasticTimoshenkoBeam3d::addLoad(ElementalLoad *theLoad, double loadFactor)
-{
-    int type;
-    const Vector &data = theLoad->getData(type, loadFactor);
-    
-    if (type == LOAD_TAG_Beam3dUniformLoad) {
-        double wy = data(0)*loadFactor;  // Transverse
-        double wz = data(1)*loadFactor;  // Transverse
-        double wx = data(2)*loadFactor;  // Axial (+ve from node I to J)
-        
-        double Vy = 0.5*wy*L;
-        double Mz = Vy*L/6.0; // wy*L*L/12
-        double Vz = 0.5*wz*L;
-        double My = Vz*L/6.0; // wz*L*L/12
-        double P  = 0.5*wx*L;
-        
-        // fixed end forces in local system
-        ql0(0)  -= P;
-        ql0(1)  -= Vy;
-        ql0(2)  -= Vz;
-        ql0(4)  += My;
-        ql0(5)  -= Mz;
-        ql0(6)  -= P;
-        ql0(7)  -= Vy;
-        ql0(8)  -= Vz;
-        ql0(10) -= My;
-        ql0(11) += Mz;
-    }
-    
-    else {
-        std::cerr << getClassName() << "::" << __FUNCTION__
-		  << "; load type unknown for element: " 
-                   << this->getTag() << ".\n";
-        return -1;
-    }
-    
+  {
+    if(isDead())
+      std::cerr << getClassName() << "::" << __FUNCTION__ 
+                << "; load over inactive element: "
+                << getTag()  
+                << std::endl;
+    else
+      {
+	int type;
+	const Vector &data = theLoad->getData(type, loadFactor);
+	if(type == LOAD_TAG_Beam3dUniformLoad)
+	  {
+	    double wy = data(0)*loadFactor;  // Transverse
+	    double wz = data(1)*loadFactor;  // Transverse
+	    double wx = data(2)*loadFactor;  // Axial (+ve from node I to J)
+
+	    double Vy = 0.5*wy*L;
+	    double Mz = Vy*L/6.0; // wy*L*L/12
+	    double Vz = 0.5*wz*L;
+	    double My = Vz*L/6.0; // wz*L*L/12
+	    double P  = 0.5*wx*L;
+
+	    // fixed end forces in local system
+	    ql0(0)  -= P;
+	    ql0(1)  -= Vy;
+	    ql0(2)  -= Vz;
+	    ql0(4)  += My;
+	    ql0(5)  -= Mz;
+	    ql0(6)  -= P;
+	    ql0(7)  -= Vy;
+	    ql0(8)  -= Vz;
+	    ql0(10) -= My;
+	    ql0(11) += Mz;
+	  }
+	else
+	  {
+	    std::cerr << getClassName() << "::" << __FUNCTION__
+		      << "; load type unknown for element: " 
+		       << this->getTag() << ".\n";
+	    return -1;
+	  }
+      }
     return 0;
   }
 
@@ -320,15 +346,21 @@ const XC::Vector& XC::ElasticTimoshenkoBeam3d::getResistingForce(void) const
     // add effects of element loads, ql = ql(ul) + ql0
     ql.addVector(1.0, ql0, 1.0);
     
+    if(isDead()) //Set internal forces to zero when element is dead.
+      ql*= dead_srf;
+    
     // determine resisting forces in global system
     theVector.addMatrixTransposeVector(0.0, Tgl, ql, 1.0);
     
+    if(isDead())
+      theVector*=dead_srf;
+    
     return theVector;
-}
+  }
 
 
 const XC::Vector& XC::ElasticTimoshenkoBeam3d::getResistingForceIncInertia(void) const
-{
+  {
     // first get the resisting forces
     theVector = this->getResistingForce();
     
@@ -348,11 +380,15 @@ const XC::Vector& XC::ElasticTimoshenkoBeam3d::getResistingForceIncInertia(void)
     const Vector &accel1 = theNodes[0]->getTrialAccel();
     const Vector &accel2 = theNodes[1]->getTrialAccel();
     static Vector accel(12);
-    for (int i=0; i<6; i++)  {
+    for (int i=0; i<6; i++)
+      {
         accel(i)   = accel1(i);
         accel(i+6) = accel2(i);
-    }
+      }
     theVector.addMatrixVector(1.0, M, accel, 1.0);
+    
+    if(isDead())
+      theVector*=dead_srf;
     
     return theVector;
   }

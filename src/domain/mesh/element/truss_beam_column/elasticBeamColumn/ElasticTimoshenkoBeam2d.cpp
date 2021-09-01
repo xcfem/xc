@@ -228,8 +228,7 @@ void XC::ElasticTimoshenkoBeam2d::zeroLoad(void)
   {
     ElasticBeam2dBase::zeroLoad();
     theLoad.Zero();
-    ql0.Zero();    
-    return;
+    ql0.Zero();
   }
 
 
