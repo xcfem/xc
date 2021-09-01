@@ -1266,7 +1266,10 @@ def getSquareAnchorGroup(steel, diameter, squareSide, xCenter= 0.0, yCenter= 0.0
     return AnchorGroup(steel, diameter, positions)
 
 class ASTMShape(object):
-    """Steel shape with ASTM/AISC verification routines."""
+    """Steel shape with ASTM/AISC verification routines.
+
+    :ivar name: shape name (i.e. W40X431)
+    """
     def __init__(self, name= ''):
        '''Constructor.
 
@@ -1610,13 +1613,12 @@ class ASTMShape(object):
 from materials.sections.structural_shapes import aisc_metric_shapes
 
 class WShape(ASTMShape,aisc_metric_shapes.WShape):
-    """W shape with ASTM/AISC verification routines.
-
-    :ivar steel: steel material (i.e. A36).
-    :ivar name: shape name (i.e. W40X431)
-    """
+    """W shape with ASTM/AISC verification routines."""
     def __init__(self,steel= None, name= ''):
         ''' Constructor.
+
+         :param steel: steel material (i.e. A36).
+         :param name: shape name (i.e. W40X431)
         '''
         ASTMShape.__init__(self,name)
         aisc_metric_shapes.WShape.__init__(self,steel,name)
@@ -1634,19 +1636,17 @@ class WShape(ASTMShape,aisc_metric_shapes.WShape):
 
 
 class IShape(ASTMShape, aisc_metric_shapes.IShape):
-    """I shape with ASTM/AISC verification routines.
-
-    :ivar steel: steel material (i.e. A36).
-    :ivar name: shape name
-    """
+    """I shape with ASTM/AISC verification routines."""
 
     def __init__(self, bf, tf, tw, hw, steel=None, name=''):
         ''' Constructor.
 
-        :ivar bf: Flange width
-        :ivar tf: Flange thickness
-        :ivar tw: Web thickess
-        :ivar hw: Web height
+        :param bf: Flange width
+        :param tf: Flange thickness
+        :param tw: Web thickess
+        :param hw: Web height
+        :param steel: steel material (i.e. A36).
+        :param name: shape name (i.e. W40X431)
         '''
         ASTMShape.__init__(self, name)
         aisc_metric_shapes.IShape.__init__(self, bf, tf, tw, hw, steel, name)
@@ -1664,11 +1664,7 @@ class IShape(ASTMShape, aisc_metric_shapes.IShape):
 
 
 class CShape(ASTMShape,aisc_metric_shapes.CShape):
-    """C shape with ASTM/AISC verification routines.
-
-    :ivar steel: steel material (i.e. A36).
-    :ivar name: shape name  (i.e. C380X74).
-    """
+    """C shape with ASTM/AISC verification routines."""
     def __init__(self,steel,name):
         ''' Constructor.
 
@@ -1707,11 +1703,7 @@ class CShape(ASTMShape,aisc_metric_shapes.CShape):
 #
 # *************************************************************************
 class SimpleLShape(ASTMShape, aisc_metric_shapes.SimpleLShape):
-    """Single angle shape with simplified ASTM/AISC verification routines.
-
-    :ivar steel: steel material (i.e. A36).
-    :ivar name: shape name  (i.e. L4X4X1/4).
-    """
+    """Single angle shape with simplified ASTM/AISC verification routines."""
     def __init__(self,steel,name):
         ''' Constructor.
 
@@ -1722,11 +1714,7 @@ class SimpleLShape(ASTMShape, aisc_metric_shapes.SimpleLShape):
         aisc_metric_shapes.SimpleLShape.__init__(self,steel,name)
 
 class LShape(ASTMShape, aisc_metric_shapes.LShape):
-    """Single angle shape with ASTM/AISC verification routines.
-
-    :ivar steel: steel material (i.e. A36).
-    :ivar name: shape name  (i.e. L4X4X1/4).
-    """
+    """Single angle shape with ASTM/AISC verification routines."""
     def __init__(self,steel,name):
         ''' Constructor.
 
@@ -1832,26 +1820,24 @@ class LShape(ASTMShape, aisc_metric_shapes.LShape):
         return self.getBiaxialBendingEfficiencyPrincipalAxes(Nd= Nd, MZ= MZ, MW= MW, chiN= chiN, chiLT= chiLT)
 
 class HSSShape(ASTMShape,aisc_metric_shapes.HSSShape):
-    """Rectangular HSS shape with ASTM/AISC verification routines.
-
-    :ivar steel: steel material (i.e. A36).
-    :ivar name: shape name (i.e. HSS2X2X_250).
-    """
+    """Rectangular HSS shape with ASTM/AISC verification routines."""
     def __init__(self,steel,name):
         ''' Constructor.
+
+        :param steel: steel material (i.e. A36).
+        :param name: shape name.
         '''
         ASTMShape.__init__(self, name)
         aisc_metric_shapes.HSSShape.__init__(self,steel,name)
 
 class CHSSShape(ASTMShape,aisc_metric_shapes.CHSSShape):
-    """Circular HSS shape with ASTM/AISC verification routines.
-
-    :ivar steel: steel material (i.e. A36).
-    :ivar name: shape name (i.e. HSS16.000X0.375).
-    """
+    """Circular HSS shape with ASTM/AISC verification routines."""
     def __init__(self,steel,name):
         ''' Constructor.
-        '''
+
+        :param steel: steel material (i.e. A36).
+        :param name: shape name.
+         '''
         ASTMShape.__init__(self, name)
         aisc_metric_shapes.CHSSShape.__init__(self,steel,name)
 
