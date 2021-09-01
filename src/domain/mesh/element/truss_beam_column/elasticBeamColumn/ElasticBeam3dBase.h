@@ -66,6 +66,55 @@ class ElasticBeam3dBase: public ProtoBeam3d
 
     const Vector &getVDirStrongAxisGlobalCoord(bool initialGeometry) const;
     const Vector &getVDirWeakAxisGlobalCoord(bool initialGeometry) const;    
+
+    //! @brief Internal axial force at the back end.   
+    //! Warning! call "calc_resisting_force" before calling this method.
+    virtual double getN1(void) const= 0;
+    //! @brief Internal axial force at the front end.   
+    //! Warning! call "calc_resisting_force" before calling this method.
+    virtual double getN2(void) const= 0;
+    //! @brief Internal axial force at the middle of the element.
+    //! Warning! call "calc_resisting_force" before calling this method.
+    virtual double getN(void) const= 0; //Mean axial force.
+    //! @brief Internal bending moment about z axis at the back end.
+    //! Warning! call "calc_resisting_force" before calling this method.
+    virtual double getMz1(void) const= 0;
+    //! @brief Internal bending moment about z axis at the front end.
+    //! Warning! call "calc_resisting_force" before calling this method.
+    virtual double getMz2(void) const= 0;
+    //! @brief Internal shear force in the middle of the element.
+    //! Warning! call "calc_resisting_force" before calling this method.
+    virtual double getVy(void) const= 0;
+    //! @brief Internal y shear force at the back end.
+    //! Warning! call "calc_resisting_force" before calling this method.
+    virtual double getVy1(void) const= 0;
+    //! @brief Internal y shear force at the front end.
+    //! Warning! call "calc_resisting_force" before calling this method.
+    virtual double getVy2(void) const= 0;
+    //! @brief Internal z shear force in the middle of the element.
+    //! Warning! call "calc_resisting_force" before calling this method.
+    virtual double getVz(void) const= 0;
+    //! @brief Internal z shear force at the back end.
+    //! Warning! call "calc_resisting_force" before calling this method.
+    virtual double getVz1(void) const= 0;
+    //! @brief Internal z shear force at the front end.
+    //! Warning! call "calc_resisting_force" before calling this method.
+    virtual double getVz2(void) const= 0;
+    //! @brief Internal bending moment about y axis at the back end.   
+    //! Warning! call "calc_resisting_force" before calling this method.
+    virtual double getMy1(void) const= 0;
+    //! @brief Internal bending moment about y axis at the front end.   
+    //! Warning! call "calc_resisting_force" before calling this method.
+    virtual double getMy2(void) const= 0;
+    //! @brief Internal torsional force in the middle of the element.   
+    //! Warning! call "calc_resisting_force" before calling this method.
+    virtual double getT(void) const= 0;
+    //! @brief Internal torsional force at the back end.   
+    //! Warning! call "calc_resisting_force" before calling this method.
+    virtual double getT1(void) const= 0;
+    //! @brief Internal torsional force at the front end.
+    //! Warning! call "calc_resisting_force" before calling this method.
+    virtual double getT2(void) const= 0;
   };
 } // end of XC namespace
 

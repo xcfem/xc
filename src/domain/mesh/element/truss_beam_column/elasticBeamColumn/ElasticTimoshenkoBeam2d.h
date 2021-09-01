@@ -130,6 +130,33 @@ class ElasticTimoshenkoBeam2d: public ElasticBeam2dBase
     const Vector &getResistingForce(void) const;
     const Vector &getResistingForceIncInertia(void) const;
     
+    //! @brief Internal shear force in the middle of the element.
+    inline double getV(void) const
+      { return (getV1()+getV2())/2.0; }
+    //! @brief Internal shear force at the back end.   
+    inline double getV1(void) const
+      { return -ql(1); }
+    //! @brief Internal shear force at the front end.   
+    inline double getV2(void) const
+      { return ql(4); }
+    //! @brief Internal axial force at the back end.   
+    inline double getN1(void) const
+      { return -ql(0); }
+    //! @brief Internal axial force at the front end.   
+    inline double getN2(void) const
+      { return ql(3); }
+    //! @brief Internal axial force at the middle of the element.
+    //! Warning! call "calc_resisting_force" before calling this method.
+    inline double getN(void) const //Average axial force.
+      {
+        return (getN1()+getN2())/2.0;
+      }
+    //! @brief Internal bending moment at the back end.   
+    inline double getM1(void) const
+      { return -ql(2); }
+    //! @brief Internal bending moment at the front end.   
+    inline double getM2(void) const
+      { return ql(5); }
     // public methods for element output
     int sendSelf(Communicator &);
     int recvSelf(const Communicator &);

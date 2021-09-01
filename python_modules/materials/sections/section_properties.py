@@ -209,7 +209,7 @@ class SectionProperties(object):
     def defElasticSection3d(self, preprocessor, material):
         ''' Return an elastic section appropiate for 3D beam analysis
 
-        :param preprocessor: preprocessor object.
+        :param preprocessor: preprocessor of the finite element problem.
         :param material:      material (for which E is the Young's modulus and G() the shear modulus)  
         '''
         if(not self.xc_material):

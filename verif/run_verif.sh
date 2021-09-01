@@ -208,6 +208,8 @@ python tests/elements/beam_column/elastic_beam3d_test2.py
 python tests/elements/beam_column/timoshenko_beam2d_test1.py
 python tests/elements/beam_column/timoshenko_beam3d_test1.py
 python tests/elements/beam_column/timoshenko_beam3d_test2.py
+python tests/elements/beam_column/timoshenko_beam2d_sign_criteria_01.py
+python tests/elements/beam_column/timoshenko_beam3d_sign_criteria_01.py
 echo "$BLEU" "    Elastic beam-column 3D tests." "$NORMAL"
 python tests/elements/beam_column/beam_test1.py
 python tests/elements/beam_column/cantilever3d_01.py

@@ -66,7 +66,24 @@ class ElasticBeam2dBase: public ProtoBeam2d
     const Vector &getVDirWeakAxisGlobalCoord(bool initialGeometry) const;
     
     virtual CrdTransf *getCoordTransf(void);
-    virtual const CrdTransf *getCoordTransf(void) const;    
+    virtual const CrdTransf *getCoordTransf(void) const;
+    
+    //! @brief Internal shear force in the middle of the element.
+    virtual double getV(void) const= 0; 
+    //! @brief Internal shear force at the back end.   
+    virtual double getV1(void) const= 0;
+    //! @brief Internal shear force at the front end.   
+    virtual double getV2(void) const= 0;
+    //! @brief Internal axial force at the back end.   
+    virtual double getN1(void) const= 0;
+    //! @brief Internal axial force at the front end.   
+    virtual double getN2(void) const= 0;
+    //! @brief Internal axial force at the middle of the element.
+    virtual double getN(void) const= 0; //Average axial force.
+    //! @brief Internal bending moment at the back end.   
+    virtual double getM1(void) const= 0;
+    //! @brief Internal bending moment at the front end.   
+    virtual double getM2(void) const= 0;
   };
 } // end of XC namespace
 

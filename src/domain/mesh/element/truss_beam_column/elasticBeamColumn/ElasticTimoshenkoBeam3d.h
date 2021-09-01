@@ -131,6 +131,64 @@ class ElasticTimoshenkoBeam3d : public ElasticBeam3dBase
     const Vector &getResistingForce(void) const;
     const Vector &getResistingForceIncInertia(void) const;
     
+    //! @brief Internal shear force in the middle of the element.
+    inline double getVy(void) const
+      { return (getVy1()+getVy2())/2.0; }
+    //! @brief Internal shear force at the back end.   
+    inline double getVy1(void) const
+      { return -ql(1); }
+    //! @brief Internal shear force at the front end.   
+    inline double getVy2(void) const
+      { return ql(7); }
+    //! @brief Internal shear force in the middle of the element.
+    inline double getVz(void) const
+      { return (getVz1()+getVz2())/2.0; }
+    //! @brief Internal shear force at the back end.   
+    inline double getVz1(void) const
+      { return -ql(2); }
+    //! @brief Internal shear force at the front end.   
+    inline double getVz2(void) const
+      { return ql(8); }
+    //! @brief Internal axial force at the back end.   
+    inline double getN1(void) const
+      { return -ql(0); }
+    //! @brief Internal axial force at the front end.   
+    inline double getN2(void) const
+      { return ql(6); }
+    //! @brief Internal axial force at the middle of the element.
+    //! Warning! call "calc_resisting_force" before calling this method.
+    inline double getN(void) const //Average axial force.
+      { return (getN1()+getN2())/2.0; }
+    //! @brief Internal bending moment at the back end.   
+    inline double getMy1(void) const
+      { return -ql(4); }
+    //! @brief Internal bending moment at the front end.   
+    inline double getMy2(void) const
+      { return ql(10); }
+    //! @brief Internal bending moment at the back end.   
+    inline double getMz1(void) const
+      { return -ql(5); }
+    //! @brief Internal bending moment at the front end.   
+    inline double getMz2(void) const
+      { return ql(11); }
+    //! @brief Internal torsional force at the back end.   
+    inline double getT1(void) const
+      {
+	std::cerr << getClassName() << "::" << __FUNCTION__
+	          << "; not implemented yet." << std::endl;
+	return 0.0;
+      }
+    //! @brief Internal torsional force at the front end.   
+    inline double getT2(void) const
+      {
+	std::cerr << getClassName() << "::" << __FUNCTION__
+	          << "; not implemented yet." << std::endl;
+	return 0.0;
+      }
+    //! @brief Internal torsional force at midpoint.   
+    inline double getT(void) const
+      { return (getT1()+getT2())/2.0; }
+    
     // public methods for element output
     int sendSelf(Communicator &);
     int recvSelf(const Communicator &);

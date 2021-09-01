@@ -327,7 +327,7 @@ const XC::Vector &XC::ElasticTimoshenkoBeam2d::getResistingForce(void) const
     
     if(isDead()) //Set internal forces to zero when element is dead.
       ql*= dead_srf;
-    
+
     // determine resisting forces in global system
     theVector.addMatrixTransposeVector(0.0, Tgl, ql, 1.0);
     

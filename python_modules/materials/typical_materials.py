@@ -305,6 +305,18 @@ def defElasticSectionFromMechProp2d(preprocessor,name,mechProp2d):
     retval= defElasticSection2d(preprocessor,name,mechProp2d.A,mechProp2d.E,mechProp2d.I,linearRho= mechProp2d.linearRho)
     return retval
 
+def defElasticShearSectionFromMechProp2d(preprocessor,name,mechProp2d):
+    '''Constructs an elastic section appropiate for 2D beam analysis, 
+    taking mechanical properties of the section form a MechProp2d object.
+
+    :param preprocessor: preprocessor of the finite element problem.
+    :param name:         name identifying the section
+    :param mechProp2d:   object of type MechProp2d that contains the mechanical 
+                         properties of the section
+    '''  
+    retval= defElasticShearSection2d(preprocessor,name= name, A= mechProp2d.A, E= mechProp2d.E, G= mechProp2d.G, I= mechProp2d.I, alpha= mechProp2d.Alpha, linearRho= mechProp2d.linearRho)
+    return retval
+
 #Elastic section 3d.
 def defElasticSection3d(preprocessor,name,A,E,G,Iz,Iy,J, linearRho= 0.0):
     '''Constructs an elastic section appropiate for 3D beam analysis
@@ -340,6 +352,17 @@ def defElasticSectionFromMechProp3d(preprocessor,name,mechProp3d):
                          mechanical properties of the section
     '''  
     return defElasticSection3d(preprocessor,name,mechProp3d.A,mechProp3d.E,mechProp3d.G,mechProp3d.Iz,mechProp3d.Iy,mechProp3d.J,linearRho= mechProp3d.linearRho)
+
+def defElasticShearSectionFromMechProp3d(preprocessor,name,mechProp3d):
+    '''Constructs an elastic section appropiate for 3D beam analysis, 
+    taking mechanical properties of the section form a MechProp3d object.
+
+    :param preprocessor: preprocessor of the finite element problem.
+    :param name:         name identifying the section
+    :param mechProp2d:   instance of the class MechProp3d that contains the 
+                         mechanical properties of the section
+    '''  
+    return defElasticShearSection3d(preprocessor, name= name, A= mechProp3d.A, E= mechProp3d.E, G= mechProp3d.G, Iz= mechProp3d.Iz, Iy= mechProp3d.Iy, J= mechProp3d.J, alpha_y= mechProp3d.AlphaY, alpha_z= mechProp3d.AlphaZ, linearRho= mechProp3d.linearRho)
 
 #Elastic shear section 3d.
 def defElasticShearSection3d(preprocessor, name, A, E, G, Iz, Iy, J, alpha_y, alpha_z, linearRho= 0.0):
