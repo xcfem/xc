@@ -105,8 +105,6 @@ delta= nC.getDisp[1]
 # Analytical solution
 deltaRef=-5.0*p*l**4/(384.0*E*I)
 
-elements= preprocessor.getElementHandler
-
 ratio1= abs(delta-deltaRef)/deltaRef
 
 '''
