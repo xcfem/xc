@@ -869,6 +869,7 @@ echo "$BLEU" "    EC5 tests." "$NORMAL"
 python tests/materials/ec5/test_EC5Wood_01.py
 python tests/materials/ec5/test_EC5Wood_02.py
 python tests/materials/ec5/test_EC5Wood_03.py
+python tests/materials/ec5/timber_beam_test_01.py
 
 echo "$BLEU" "  Prestressing." "$NORMAL"
 python tests/materials/prestressing/test_layout2D_frictLoss_prestress_tendon.py

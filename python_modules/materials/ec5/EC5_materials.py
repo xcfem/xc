@@ -13,6 +13,7 @@ __version__= "3.0"
 __email__= "l.pereztato@ciccp.es, ana.ortega@ciccp.es "
 
 import sys
+import math
 from materials import wood_base
 from materials import typical_materials
 from materials.sections import section_properties
@@ -224,6 +225,12 @@ class Wood(wood_base.Wood):
             lmsg.error(className+'.'+methodName+'; unknown service class: \''+str(serviceClass)+'\', values can be: 1, 2 or 3.')
         return retval
     
+    def getDepthFactor(self, h:float):
+        ''' Return the depth factor according to clause 3.2 of EC5.
+
+        :param h: depth.
+        '''
+        return 1.0 # Overloaded in solid timber. 
 
 class SolidTimber(Wood):
     '''Solid timber material according to EC5.
@@ -234,6 +241,18 @@ class SolidTimber(Wood):
         :param name: wood name.
         '''
         super(SolidTimber,self).__init__(name)
+        
+    def getDepthFactor(self, h:float):
+        ''' Return the depth factor according to clause 3.2 of EC5.
+
+        :param h: depth.
+        '''
+        retval= 1.0
+        if(h<0.15 and self.specificGravity<700):
+            retval= min(math.pow(0.15/h,0.2), 1.3)
+        return retval
+
+        
 
 C14= SolidTimber('C14')
 C16= SolidTimber('C16')
@@ -267,6 +286,16 @@ class GluedLaminatedTimber(Wood):
             according to table 2.3 of EC5.'''
         return 1.25
 
+    def getDepthFactor(self, h:float):
+        ''' Return the depth factor according to clause 3.3 of EC5.
+
+        :param h: depth.
+        '''
+        retval= 1.0
+        if(h<0.6):
+            retval= min(math.pow(0.6/h,0.1), 1.1)
+        return retval
+
 GL24h= GluedLaminatedTimber('GL24h')
 GL28h= GluedLaminatedTimber('GL28h')
 GL32h= GluedLaminatedTimber('GL32h')
@@ -292,6 +321,17 @@ class LVL(Wood):
         ''' return the partial factor for material properties and resistances
             according to table 2.3 of EC5.'''
         return 1.2
+    
+    def getDepthFactor(self, h:float):
+        ''' Return the depth factor according to clause 3.3 of EC5.
+
+        :param h: depth.
+        '''
+        retval= 1.0
+        className= type(self).__name__
+        methodName= sys._getframe(0).f_code.co_name
+        lmsg.error(className+'.'+methodName+'; not implemented yet.')
+        return retval
 
 class Plywood(Wood):
     '''Plywood material according to EC5.
@@ -542,7 +582,21 @@ class RectangularShape(EC5Shape, section_properties.RectangularSection):
         '''
         EC5Shape.__init__(self, wood, name)
         section_properties.RectangularSection.__init__(self,name, b, h)
+
+    def getDepthFactor(self):
+        ''' Return the depth factor according to clause 3.2 of EC5.'''
+        return self.wood.getDepthFactor(self.h)
         
+    def getDesignBendingStrength(self, loadDurationClass:str, serviceClass:int, k_sys):
+        ''' return the value of the characteristic bending strength.
+
+        :param loadDurationClass: duration of the load application , values 
+               can be: permanent, long_term, medium_term, short_term 
+               or instantaneous.
+        :param serviceClass: service class according to clause 2.3.1.3 of EC5.
+        :param k_sys: system strength factor.
+        '''
+        return self.wood.getDesignBendingStrength(loadDurationClass, serviceClass)*self.getDepthFactor()*k_sys
     
     def defElasticSection3d(self, prep):
         ''' Return an elastic section appropiate for 3D beam analysis
