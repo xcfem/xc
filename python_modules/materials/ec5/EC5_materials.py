@@ -93,7 +93,13 @@ class Wood(wood_base.Wood):
         return self.fm_k
     
     def getDesignBendingStrength(self, loadDurationClass:str, serviceClass:int):
-        ''' return the value of the characteristic bending strength.'''
+        ''' return the value of the characteristic bending strength.
+
+        :param loadDurationClass: duration of the load application , values 
+               can be: permanent, long_term, medium_term, short_term 
+               or instantaneous.
+        :param serviceClass: service class according to clause 2.3.1.3 of EC5.
+        '''
         return self.getCharacteristicBendingStrength()*self.getKmod(loadDurationClass, serviceClass)/self.gammaM()
     
     def getCharacteristicTensileStrengthAlongTheGrain(self):
@@ -111,7 +117,13 @@ class Wood(wood_base.Wood):
         return self.fc_0_k
     
     def getDesignCompressiveStrength(self, loadDurationClass:str, serviceClass:int):
-        ''' return the value of the characteristic bending strength.'''
+        ''' return the value of the characteristic bending strength.
+
+        :param loadDurationClass: duration of the load application , values 
+               can be: permanent, long_term, medium_term, short_term 
+               or instantaneous.
+        :param serviceClass: service class according to clause 2.3.1.3 of EC5.
+        '''
         return self.getCharacteristicCompressiveStrength()*self.getKmod(loadDurationClass, serviceClass)/self.gammaM()
     
     def getCharacteristicCompressiveStrengthPerpendicularToTheGrain(self):
@@ -121,7 +133,13 @@ class Wood(wood_base.Wood):
         return self.fc_90_k
     
     def getDesignCompressiveStrengthPerpendicularToTheGrain(self, loadDurationClass:str, serviceClass:int):
-        ''' return the value of the characteristic bending strength.'''
+        ''' return the value of the characteristic bending strength.
+
+        :param loadDurationClass: duration of the load application , values 
+               can be: permanent, long_term, medium_term, short_term 
+               or instantaneous.
+        :param serviceClass: service class according to clause 2.3.1.3 of EC5.
+        '''
         return self.getCharacteristicCompressiveStrengthPerpendicularToTheGrain()*self.getKmod(loadDurationClass, serviceClass)/self.gammaM()
     
     def getCharacteristicShearStrength(self):
