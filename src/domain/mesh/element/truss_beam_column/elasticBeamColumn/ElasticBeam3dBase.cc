@@ -287,3 +287,48 @@ int XC::ElasticBeam3dBase::recvData(const Communicator &comm)
     return res;
   }
 
+//! @brief Return a python list with the values of the argument property
+//! at element nodes.
+//!
+//! When the property requested its located at the integration point this
+//! function is responsible of the extrapolation of values from
+//! Gauss points to nodes.
+//! @param code: identifier of the requested value.
+//! @param silent: if true dont complaint about non-existent property.
+boost::python::list XC::ElasticBeam3dBase::getValuesAtNodes(const std::string &code, bool silent) const
+  {
+    boost::python::list retval;
+    if(code=="N")
+      {
+	retval.append(getN1());
+	retval.append(getN2());
+      }
+    else if(code=="Vy" || code=="Qy")
+      {
+	retval.append(getVy1());
+	retval.append(getVy2());
+      }
+    else if(code=="Vz" || code=="Qz")
+      {
+	retval.append(getVz1());
+	retval.append(getVz2());
+      }
+    else if(code=="T")
+      {
+	retval.append(getT1());
+	retval.append(getT2());
+      }
+    else if(code=="My")
+      {
+	retval.append(getMy1());
+	retval.append(getMy2());
+      }
+    else if(code=="Mz")
+      {
+	retval.append(getMz1());
+	retval.append(getMz2());
+      }
+    else
+      retval= ProtoBeam3d::getValuesAtNodes(code, silent); 
+    return retval;
+  }

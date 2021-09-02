@@ -169,6 +169,7 @@ class ElasticTimoshenkoBeam2d: public ElasticBeam2dBase
     
     int setParameter(const std::vector<std::string> &argv, Parameter &param);
     int updateParameter(int parameterID, Information &info);
+    
   };
 } // end of XC namespace
 

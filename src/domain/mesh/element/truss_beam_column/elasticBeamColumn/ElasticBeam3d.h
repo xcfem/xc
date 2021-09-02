@@ -272,8 +272,6 @@ class ElasticBeam3d: public ElasticBeam3dBase
 
     Response *setResponse(const std::vector<std::string> &argv, Information &info);
     int getResponse(int responseID, Information &info);
-    
-    boost::python::list getValuesAtNodes(const std::string &, bool silent= false) const;
   };
 } // end of XC namespace
 

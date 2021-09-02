@@ -115,6 +115,8 @@ class ElasticBeam3dBase: public ProtoBeam3d
     //! @brief Internal torsional force at the front end.
     //! Warning! call "calc_resisting_force" before calling this method.
     virtual double getT2(void) const= 0;
+    
+    boost::python::list getValuesAtNodes(const std::string &, bool silent= false) const;
   };
 } // end of XC namespace
 

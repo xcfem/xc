@@ -84,6 +84,8 @@ class ElasticBeam2dBase: public ProtoBeam2d
     virtual double getM1(void) const= 0;
     //! @brief Internal bending moment at the front end.   
     virtual double getM2(void) const= 0;
+    
+    boost::python::list getValuesAtNodes(const std::string &, bool silent= false) const;
   };
 } // end of XC namespace
 
