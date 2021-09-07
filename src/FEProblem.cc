@@ -56,6 +56,8 @@ XC::FEProblem::FEProblem(void)
   : preprocessor(this,&output_handlers),proc_solu(this), dataBase(nullptr) {}
 
 //! @brief Database definition.
+//! @param type: type of the database (File, MySql, BerkeleyDB, SQLite).
+//! @param name: name of the database.
 XC::FE_Datastore *XC::FEProblem::defineDatabase(const std::string &type, const std::string &name)
   {
     if(dataBase)
@@ -84,6 +86,7 @@ XC::FE_Datastore *XC::FEProblem::defineDatabase(const std::string &type, const s
     return dataBase; 
   }
 
+//! @brief Destructor.
 XC::FEProblem::~FEProblem(void)
   {
     clearAll();
