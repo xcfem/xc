@@ -15,3 +15,6 @@ The available constraint handlers are:
 		- If multiple nodes are constrained, make sure that the retained node is not constrained in any other constraint.
 	* And remember if a node is constrained to multiple nodes in your model it probably means you have messed up. 
 
+## References
+
+- [Handle Your Constraints with Care](https://portwooddigital.com/2020/06/05/handle-your-constraints-with-care)
