@@ -71,17 +71,18 @@ class Bolt(object):
         self.sectMat=tm.BeamMaterialData(mName+'_mat',gsect,self.mat)
         self.sectMat.setupElasticShear3DSection(prep)
 
-    def createBolt(self,pntLst,setName):
+    def createBolt(self,entLst,setName):
         '''Creates the bolt elements and appends them to a set which 
         name is given as parameter.
 
         :param prep: preprocessor
-        :param pntLst: list of ordered points that define the bolt 
+        :param entLst: list of ordered points or nodes (can be both in the same list) 
+                       that define the bolt 
         :param setName: name of the set to which append the bolt elements
                         (set must be created previously)
 
         '''
-        prep=pntLst[0].getPreprocessor
+        prep=entLst[0].getPreprocessor
         nodes=prep.getNodeHandler
         elements=prep.getElementHandler
         # if not prep.getSets.exists(setName):
@@ -91,9 +92,16 @@ class Bolt(object):
         retSet=prep.getSets.getSet(setName)
         if not self.sectMat:
             self.createBoltSectMat(prep)
-#        nodLst=[nodes.newNodeXYZ(p.getPos.x,p.getPos.y,p.getPos.z) for p in pntLst]
-        for p in pntLst: p.genMesh(xc.meshDir.I)
-        nodLst=[p.getNode() for p in pntLst]
+#        nodLst=[nodes.newNodeXYZ(p.getPos.x,p.getPos.y,p.getPos.z) for p in entLst]
+        nodLst=list()
+        for ent in entLst:
+            if 'Pnt' in ent.type():
+                ent.genMesh(xc.meshDir.I)
+                nodLst.append(ent.getNode())
+            elif 'Node' in ent.type():
+                nodLst.append(ent)
+            else:
+                lmsg.error('entities in the list must be points or nodes')
         linname= str(uuid.uuid1())
         lin=prep.getTransfCooHandler.newLinearCrdTransf3d(linname)
         lin.xzVector=predefined_spaces.getSuitableXZVector(nodLst[0],nodLst[1])
