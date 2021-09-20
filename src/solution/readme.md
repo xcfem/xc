@@ -6,4 +6,6 @@ Once the analyst has defined the model, the next step is to define the analysis 
 This folder contains the code that deals with the solution of the finite element problem.
 
 
-## Contents
+## References
+
+- [Like spinning nodes](https://portwooddigital.com/2021/09/19/like-spinning-nodes)
