@@ -34,19 +34,17 @@
 
 
 namespace XC {
+//!
+//! @defgroup BoundCond Boundary conditions.
 //! @ingroup Dom
 //
 //!
-//! @defgroup BoundCond Boundary conditions.
-//
+//! @defgroup CCont Essential boundary conditions (displacements).
 //! @ingroup BoundCond
 //
-//!
-//! @defgroup CCont Essential boundary conditions (displacements).
-//
-//! @ingroup CCont
 //
 //! @brief Base class for model constraints.
+//! @ingroup CCont
 class Constraint: public ContinuaReprComponent
   {
   protected:

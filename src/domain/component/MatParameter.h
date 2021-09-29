@@ -60,6 +60,8 @@
 namespace XC {
 class Domain;
 
+//! @brief Material parameter.
+//! @ingroup Dom
 class MatParameter: public Parameter
   {
   private:

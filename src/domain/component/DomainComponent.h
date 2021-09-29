@@ -77,6 +77,7 @@ class LoadPattern;
 
 //! @brief Base class for domain components (nodes, elements, constraints,
 //! loads,...).
+//! @ingroup Dom
 //!
 //! Base class for the different components of a domain.
 //! Each object of these types is a component of an enclosing Domain object.
