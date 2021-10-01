@@ -60,7 +60,7 @@
 // SingleDomSFreedom_Iter. SingleDomSFreedom_Iter is an iter for returning 
 // the single point constraints  of an object of class SingleDomain. 
 // SingleDomSFreedom_Iters must be written for each subclass of SingleDomain 
-// where the stoarge of the SFreedom_Constraints changes.
+// where the storage of the SFreedom_Constraints changes.
 
 #ifndef SingleDomSFreedom_Iter_h
 #define SingleDomSFreedom_Iter_h

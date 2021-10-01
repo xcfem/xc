@@ -107,7 +107,7 @@ class Subdomain: public Element, public Domain
     int pageCost;
     Timer theTimer;
     DomainDecompositionAnalysis *theAnalysis;
-    mutable ID *extNodes;
+    mutable ID extNodes;
     FE_Element *theFEele;
 
     SingleDomNodIter *internalNodeIter;
@@ -119,9 +119,9 @@ class Subdomain: public Element, public Domain
   protected:
     virtual int buildMap(void) const;
     mutable bool mapBuilt;
-    mutable ID *map;
-    mutable Vector *mappedVect;
-    mutable Matrix *mappedMatrix;
+    mutable ID map;
+    mutable Vector mappedVect;
+    mutable Matrix mappedMatrix;
 
 
     FE_Element *getFE_ElementPtr(void);
