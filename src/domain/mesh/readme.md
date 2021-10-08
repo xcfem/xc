@@ -6,6 +6,6 @@ This directory contains the classes that define the mesh components: nodes, elem
 
 ## Contents
 
-		- element: contains the element classes.
-        - node: the Node and NodalLoad classes.
-		- region: nodes and elements belonging to a mesh region.
+	- element: contains the element classes.
+	- node: the Node and NodalLoad classes.
+	- region: nodes and elements belonging to a mesh region.
