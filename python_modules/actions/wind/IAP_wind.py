@@ -8,6 +8,17 @@ from __future__ import division
 import math
 import scipy.interpolate
 
+# Probability factor
+
+def getProbabilityFactor(T:float, K= 0.2, n= 0.5):
+    ''' Return the probability factor according to clause 4.2.1 of IAP-11.
+
+    :param T: return period expressed in years.
+    :param K: parameter (defaults to 0.2).
+    :param n: parameter (defaults to 0.5)
+    '''
+    return math.pow((1.0-K*math.log(-math.log(1-1/T)))/(1-K*math.log(-math.log(0.98))),n)
+
 srHidingFactor= [0.10, 0.20, 0.30, 0.40, 0.50, 0.60, 1e3] # solidity ratio
 rsHidingFactor= [0.5, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0] # relative spacement
 
