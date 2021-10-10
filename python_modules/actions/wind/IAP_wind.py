@@ -121,6 +121,32 @@ def getUnitWindLoadPier(terrainCategory:str, v_b0: float, H_max:float= 20.0):
         lmsg.error(className+'.'+methodName+'; v_b0= '+str(v_b0)+' out of range [26,29] m/s.')
     return retval
 
+#           a
+#     ------------>|                           |
+#       ---------->|                           |
+#         -------->|     <=>    ==============>| point of application.
+#           ------>| h                         |
+#             ---->|                           |
+#              --->|                           |
+#               -->|                           |
+#                b
+
+def getTrapezoidalPressureDistribution(h:float, heightFraction:float= 0.6, averagePressure= 1.0):
+    ''' Return the dimensions of the parallel sides for the trapezoidal pressure
+        over the lateral surface of the bridge such as the resultant height is
+        0.6*h over the bottom edge of the surface.
+
+    :param h: height of the surfacd loaded by the wind.
+    :param pointOfApplicationHeight: fraction of the surface height of the 
+     desired point of application (defaults to 0.6 according to 
+     clause 4.2.5.1.3 of IAP-11).
+    :param averagePressure: average value of the wind pressure. 
+    '''
+    topSide= (4/h-6/h*(1.0-heightFraction))*averagePressure
+    bottomSide= (6/h*(1.0-heightFraction)-2/h)*averagePressure
+    return scipy.interpolate.interp1d([0.0,h], [bottomSide, topSide], kind='linear')
+
+
 srHidingFactor= [0.10, 0.20, 0.30, 0.40, 0.50, 0.60, 1e3] # solidity ratio
 rsHidingFactor= [0.5, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0] # relative spacement
 
