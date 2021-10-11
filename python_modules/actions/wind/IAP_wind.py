@@ -142,8 +142,8 @@ def getTrapezoidalPressureDistribution(h:float, heightFraction:float= 0.6, avera
      clause 4.2.5.1.3 of IAP-11).
     :param averagePressure: average value of the wind pressure. 
     '''
-    topSide= (4/h-6/h*(1.0-heightFraction))*averagePressure
-    bottomSide= (6/h*(1.0-heightFraction)-2/h)*averagePressure
+    topSide= (6*heightFraction-2)*averagePressure
+    bottomSide= (4-6*heightFraction)*averagePressure
     return scipy.interpolate.interp1d([0.0,h], [bottomSide, topSide], kind='linear')
 
 
