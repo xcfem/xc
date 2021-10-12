@@ -131,7 +131,7 @@ python tests/actions/test_peck_pressure_envelope.py
 python tests/actions/test_earth_pressure.py
 python tests/actions/test_earth_pressure_sloped_wall.py
 python tests/actions/test_surf_unif_load_distributed.py
-echo "$BLEU" "  Snow earthquake action tests." "$NORMAL"
+echo "$BLEU" "  Earthquake action tests." "$NORMAL"
 python tests/actions/quake/mononobe_okabe_test_01.py
 python tests/actions/quake/test_NCSP_01.py
 echo "$BLEU" "  Snow action tests." "$NORMAL"
