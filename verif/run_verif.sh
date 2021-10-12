@@ -128,10 +128,12 @@ echo "$BLEU" "Actions tests." "$NORMAL"
 python tests/actions/test_derailment_SIA.py
 python tests/actions/test_prestressing.py
 python tests/actions/test_peck_pressure_envelope.py
-python tests/actions/mononobe_okabe_test_01.py
 python tests/actions/test_earth_pressure.py
 python tests/actions/test_earth_pressure_sloped_wall.py
 python tests/actions/test_surf_unif_load_distributed.py
+echo "$BLEU" "  Snow earthquake action tests." "$NORMAL"
+python tests/actions/quake/mononobe_okabe_test_01.py
+python tests/actions/quake/test_NCSP_01.py
 echo "$BLEU" "  Snow action tests." "$NORMAL"
 python tests/actions/snow/test_snowSIA.py
 python tests/actions/snow/test_snowASCE7.py

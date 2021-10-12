@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
-from __future__ import print_function
-
 '''Verification of Mononobe-Okabe routines.
    Home made test.
 '''
+
+from __future__ import print_function
+from __future__ import division
 
 __author__= "Luis C. Pérez Tato (LCPT)"
 __copyright__= "Copyright 2017, LCPT"
@@ -51,7 +52,7 @@ print('ratio4= ', ratio4)
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
-if abs(ratio1)<1e-6 and abs(ratio2)<1e-6 and abs(ratio3)<1e-6and abs(ratio4)<1e-6:
+if abs(ratio1)<1e-6 and abs(ratio2)<1e-6 and abs(ratio3)<1e-6 and abs(ratio4)<1e-6:
     print('test '+fname+': ok.')
 else:
     lmsg.error('test: '+fname+' ERROR.')
