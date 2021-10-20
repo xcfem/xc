@@ -19,6 +19,7 @@ import math
 import xc_base
 import geom
 import xc
+from materials import concrete_base
 from materials.ec2 import EC2_materials
 
 radius= 0.25 # Cross-section radius expressed in meters.
@@ -70,10 +71,7 @@ secHA.setupFibers()
 #fibers= secHA.getFibers()
 
 # Create interaction diagram.
-param= xc.InteractionDiagramParameters()
-param.concreteTag= concrDiagram.tag # Set concrete type.
-param.reinforcementTag= steelDiagram.tag # Set steel type.
-interactionDiagram= materialHandler.calcInteractionDiagram(secHA.name,param)
+interactionDiagram= concrete_base.createInteractionDiagram(materialHandler, concrDiagram, steelDiagram, secHA)
 
 # Compute capacity factor.
 N= -1570e3 # Axial force at column top
