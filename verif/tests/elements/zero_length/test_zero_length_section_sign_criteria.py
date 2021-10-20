@@ -72,7 +72,7 @@ elast.pMax= geom.Pos2d(y0+y1,z0+z1)
 materialHandler= preprocessor.getMaterialHandler
 quadFibers= materialHandler.newMaterial("fiber_section_3d","quadFibers")
 fiberSectionRepr= quadFibers.getFiberSectionRepr()
-fiberSectionRepr.setGeomNamed("testQuadRegion")
+fiberSectionRepr.setGeomNamed(testQuadRegion.name)
 quadFibers.setupFibers()
 
 sa= materialHandler.newMaterial("section_aggregator","sa")

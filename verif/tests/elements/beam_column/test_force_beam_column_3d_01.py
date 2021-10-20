@@ -56,7 +56,7 @@ exec(open(pth+"/../../aux/testQuadRegion.py").read()) # Definition of section ge
 quadFibers= preprocessor.getMaterialHandler.newMaterial("fiber_section_3d","quadFibers")
 fiberSectionRepr= quadFibers.getFiberSectionRepr() # Fiber section representation
                                                      # of 'quadFibers'
-fiberSectionRepr.setGeomNamed("testQuadRegion") # We assign the geometry (regions and rebars)
+fiberSectionRepr.setGeomNamed(testQuadRegion.name) # We assign the geometry (regions and rebars)
                                                   # to the fiber section representation
                                                   # of 'quadFibers'
 quadFibers.setupFibers() # Create the fibers from the information contained in th

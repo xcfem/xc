@@ -63,7 +63,7 @@ for_each_region
 materialHandler= preprocessor.getMaterialHandler
 rectang= materialHandler.newMaterial("fiber_section_3d","rectang")
 fiberSectionRepr= rectang.getFiberSectionRepr()
-fiberSectionRepr.setGeomNamed("geomRectang")
+fiberSectionRepr.setGeomNamed(geomRectang.name)
 rectang.setupFibers()
 fibras= rectang.getFibers()
 

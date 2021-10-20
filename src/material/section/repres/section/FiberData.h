@@ -42,7 +42,7 @@ class VectorCells;
 class VectorReinfBar;
 class RegionContainer;
 class ListReinfLayer;
- class GeomSection;
+ class SectionGeometry;
 
 //! @ingroup MATSCCRepresGeom
 //
@@ -70,7 +70,7 @@ class FiberData
 
   public:
     FiberData(const int &sz);
-    FiberData(const GeomSection &);
+    FiberData(const SectionGeometry &);
 
     inline void setPtrMaterial(const int &i,Material *mat)
       { fibersMaterial[i]= mat; }

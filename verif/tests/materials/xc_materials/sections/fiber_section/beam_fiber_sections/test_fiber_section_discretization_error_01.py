@@ -52,7 +52,7 @@ rg.pMax= geom.Pos2d(y0+y1,z0+z1)
 import os
 fiberModel= preprocessor.getMaterialHandler.newMaterial("fiber_section_3d","fiberModel")
 fiberSectionRepr= fiberModel.getFiberSectionRepr()
-fiberSectionRepr.setGeomNamed("geomSCC")
+fiberSectionRepr.setGeomNamed(geomSCC.name)
 fiberModel.setupFibers()
 fibras= fiberModel.getFibers()
 

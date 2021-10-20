@@ -61,7 +61,7 @@ reinforcementSup.p2= geom.Pos2d(width/2.0-cover,depth/2.0-cover)
 materialHandler= preprocessor.getMaterialHandler
 secHA= materialHandler.newMaterial("fiber_section_3d","secHA")
 fiberSectionRepr= secHA.getFiberSectionRepr()
-fiberSectionRepr.setGeomNamed("geomSecHA")
+fiberSectionRepr.setGeomNamed(geomSecHA.name)
 secHA.setupFibers()
 
 scc3d_testing_bench.sectionModel(preprocessor, "secHA")

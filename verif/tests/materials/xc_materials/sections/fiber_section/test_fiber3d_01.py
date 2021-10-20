@@ -54,7 +54,7 @@ if(not pth):
 exec(open(pth+"/../../../../aux/testQuadRegion.py").read())
 quadFibers= preprocessor.getMaterialHandler.newMaterial("fiber_section_3d","quadFibers")
 fiberSectionRepr= quadFibers.getFiberSectionRepr()
-fiberSectionRepr.setGeomNamed("testQuadRegion")
+fiberSectionRepr.setGeomNamed(testQuadRegion.name)
 quadFibers.setupFibers()
 fibras= quadFibers.getFibers()
 

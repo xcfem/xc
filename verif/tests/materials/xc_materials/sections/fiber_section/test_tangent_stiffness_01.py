@@ -38,7 +38,7 @@ regEla.pMax= geom.Pos2d(depth/2.0,width/2.0)
 
 scc= preprocessor.getMaterialHandler.newMaterial("fiber_section_3d","scc")
 fiberSectionRepr= scc.getFiberSectionRepr()
-fiberSectionRepr.setGeomNamed("geomScc")
+fiberSectionRepr.setGeomNamed(geomScc.name)
 scc.setupFibers()
 
 ts= scc.getTangentStiffness()

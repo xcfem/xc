@@ -73,7 +73,7 @@ elast.pMin= geom.Pos2d(y0-y1,z0-z1)
 elast.pMax= geom.Pos2d(y0+y1,z0+z1)
 rectang= preprocessor.getMaterialHandler.newMaterial("fiber_section_3d","quadFibers")
 fiberSectionRepr= rectang.getFiberSectionRepr()
-fiberSectionRepr.setGeomNamed("testQuadRegion")
+fiberSectionRepr.setGeomNamed(testQuadRegion.name)
 rectang.setupFibers()
 fibras= rectang.getFibers()
 

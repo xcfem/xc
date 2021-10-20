@@ -41,7 +41,7 @@ exec(open(pth+"/prestressed_concrete_section_02.py").read())
 materialHandler= preprocessor.getMaterialHandler
 secHP= materialHandler.newMaterial("fiber_section_3d","secHP")
 fiberSectionRepr= secHP.getFiberSectionRepr()
-fiberSectionRepr.setGeomNamed("prestressedConcretSectionGeom02")
+fiberSectionRepr.setGeomNamed(geomSecPret02.name)
 secHP.setupFibers()
 
 elem= scc3d_testing_bench.sectionModel(preprocessor, "secHP")

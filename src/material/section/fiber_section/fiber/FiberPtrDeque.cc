@@ -34,7 +34,7 @@
 #include "material/section/fiber_section/FiberSection3dBase.h"
 #include "material/section/fiber_section/FiberSection3d.h"
 #include "material/section/fiber_section/FiberSectionGJ.h"
-#include "material/section/repres/geom_section/GeomSection.h"
+#include "material/section/repres/section_geometry/SectionGeometry.h"
 #include "material/uniaxial/UniaxialMaterial.h"
 
 #include <domain/mesh/element/utils/Information.h>
@@ -1491,7 +1491,7 @@ double XC::FiberPtrDeque::getFibersEffectiveConcreteArea(void) const
   }
 
 //! @brief Computes the cover of the fibers.
-void XC::FiberPtrDeque::computeCovers(const GeomSection &g) const
+void XC::FiberPtrDeque::computeCovers(const SectionGeometry &g) const
   {
     const GeomObj::list_Pos2d positions= getPositions();
     const Polygon2d contour= g.getRegionsContour();

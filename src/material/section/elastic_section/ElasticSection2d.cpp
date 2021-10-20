@@ -63,7 +63,7 @@
 // for the XC::ElasticSection2d class.
 
 #include <material/section/elastic_section/ElasticSection2d.h>
-#include "material/section/repres/geom_section/GeomSection.h"
+#include "material/section/repres/section_geometry/SectionGeometry.h"
 #include "preprocessor/prep_handlers/MaterialHandler.h"
 #include <utility/matrix/Matrix.h>
 #include <utility/matrix/Vector.h>

@@ -113,7 +113,7 @@ reinfBottLayer.p2= geom.Pos2d(yBotL,zBotL) # center point position of the starti
 materialHandler= preprocessor.getMaterialHandler
 sctFibers= materialHandler.newMaterial("fiber_section_3d","sctFibers")
 fiberSectionRepr= sctFibers.getFiberSectionRepr()
-fiberSectionRepr.setGeomNamed("geomSectFibers")
+fiberSectionRepr.setGeomNamed(geomSectFibers.name)
 sctFibers.setupFibers()
 
 

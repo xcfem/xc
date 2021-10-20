@@ -43,7 +43,7 @@ exec(open(pth+"/barsSectionGeometry.py").read())
 
 barsSection= preprocessor.getMaterialHandler.newMaterial("fiber_section_3d","barsSection")
 fiberSectionRepr= barsSection.getFiberSectionRepr()
-fiberSectionRepr.setGeomNamed("barsSectionGeometry")
+fiberSectionRepr.setGeomNamed(barsSectionGeometry.name)
 barsSection.setupFibers()
 
 scc3d_testing_bench.sectionModel(preprocessor, "barsSection")

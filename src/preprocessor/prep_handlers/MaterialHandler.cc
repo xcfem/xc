@@ -136,7 +136,7 @@
 #include "material/section/yieldSurface/YS_Section2D02.h"
 #include "material/section/yieldSurface/YS_Section2D01.h"
 #include "material/section/interaction_diagram/InteractionDiagramData.h"
-#include "material/section/repres/geom_section/GeomSection.h"
+#include "material/section/repres/section_geometry/SectionGeometry.h"
 #include "material/section/interaction_diagram/InteractionDiagram.h"
 #include "material/section/interaction_diagram/InteractionDiagram2d.h"
 
@@ -500,9 +500,9 @@ XC::Material *XC::MaterialHandler::newMaterial(const std::string &mat_type,const
   }
 
 //! @brief Defines a new material.
-XC::GeomSection *XC::MaterialHandler::newSectionGeometry(const std::string &cod)
+XC::SectionGeometry *XC::MaterialHandler::newSectionGeometry(const std::string &cod)
   {
-    XC::GeomSection *retval= nullptr;
+    XC::SectionGeometry *retval= nullptr;
     if(sections_geometry.find(cod)!=sections_geometry.end()) //Section geometry already exists.
       {
 	std::cerr << getClassName() << "::" << __FUNCTION__
@@ -512,7 +512,7 @@ XC::GeomSection *XC::MaterialHandler::newSectionGeometry(const std::string &cod)
        }
     else
       {
-        retval= new GeomSection(this);
+        retval= new SectionGeometry(this);
         retval->set_owner(this);
         sections_geometry[cod]= retval;
       }
@@ -762,9 +762,25 @@ std::string XC::MaterialHandler::getName(const int &tag) const
     return retval;
   }
 
+//! @brief Returns the name that corresponds to the section geometry argument.
+std::string XC::MaterialHandler::getSectionGeometryName(const SectionGeometry *sg) const
+  {
+    std::string retval= "nil";
+    const_geom_secc_iterator i= sections_geometry.begin();
+    for(;i!= sections_geometry.end();i++)
+      {
+	if(sg==(*i).second)
+	  {
+	    retval= (*i).first;
+	    break;
+	  }
+      }
+    return retval; 
+  }
+
 //! @brief Si encuentra el material which name is being passed as parameter returns a pointer al mismo,
 //! otherwise it returns nullptr.
-XC::GeomSection *XC::MaterialHandler::find_ptr_geom_section(const std::string &nmb)
+XC::SectionGeometry *XC::MaterialHandler::find_ptr_section_geometry(const std::string &nmb)
   {
     geom_secc_iterator i= sections_geometry.find(nmb);
     if(i!= sections_geometry.end())
@@ -775,7 +791,7 @@ XC::GeomSection *XC::MaterialHandler::find_ptr_geom_section(const std::string &n
 
 //! @brief Si encuentra el material which name is being passed as parameter returns a pointer al mismo,
 //! otherwise it returns nullptr.
-const XC::GeomSection *XC::MaterialHandler::find_ptr_geom_section(const std::string &nmb) const
+const XC::SectionGeometry *XC::MaterialHandler::find_ptr_section_geometry(const std::string &nmb) const
   {
     const_geom_secc_iterator i= sections_geometry.find(nmb);
     if(i!= sections_geometry.end())
@@ -839,9 +855,9 @@ XC::Material &XC::MaterialHandler::getMaterial(const std::string &nmb)
 
 //! @brief Returns a reference to the section geometry which identifier
 //! is being passed as parameter. 
-XC::GeomSection &XC::MaterialHandler::getSectionGeometry(const std::string &nmb)
+XC::SectionGeometry &XC::MaterialHandler::getSectionGeometry(const std::string &nmb)
   {
-    GeomSection *retval= find_ptr_geom_section(nmb);
+    SectionGeometry *retval= find_ptr_section_geometry(nmb);
     assert(retval);
     return *retval;
   }

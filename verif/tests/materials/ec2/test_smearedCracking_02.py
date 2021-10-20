@@ -116,7 +116,7 @@ reinforcementA.p1= geom.Pos2d(0.0,0.0) # 1 single rebar, centered in the cross-s
 materialHandler= preprocessor.getMaterialHandler
 sctFibers= materialHandler.newMaterial("fiber_section_3d","sctFibers")
 fiberSectionRepr= sctFibers.getFiberSectionRepr()
-fiberSectionRepr.setGeomNamed("geomSectFibers")
+fiberSectionRepr.setGeomNamed(geomSectFibers.name)
 sctFibers.setupFibers()
 
 # Elements definition

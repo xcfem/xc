@@ -71,7 +71,7 @@
 
 
 namespace XC {
-class GeomSection;
+class SectionGeometry;
 class MaterialHandler;
 class Material;
 
@@ -83,7 +83,7 @@ class SectionRepres: public TaggedObject
 
   protected:
     MaterialHandler *material_handler; //!< Material handler (searching,...).
-    const GeomSection *gmSecc; //!< Section geometry.
+    const SectionGeometry *gmSecc; //!< Section geometry.
 
   public:
     //Constructores
@@ -95,8 +95,8 @@ class SectionRepres: public TaggedObject
     // Section inquiring functions
     virtual int getType(void) const = 0;
     int getNumCells(void) const;
-    const GeomSection *getGeom(void) const;
-    void setGeom(const GeomSection *);
+    const SectionGeometry *getGeom(void) const;
+    void setGeom(const SectionGeometry *);
     void setGeomNamed(const std::string &);
 
 
