@@ -25,20 +25,46 @@
 # See http://www.salome-platform.org/ or email : webmaster.salome@opencascade.com
 #
 
-# ------
-
-MESSAGE(STATUS "Check for GMSH ...")
-
-# ------
-
 SET(GMSH_ROOT_DIR $ENV{GMSH_ROOT_DIR} CACHE PATH "Path to the GMSH.")
 
 IF(GMSH_ROOT_DIR)
- LIST(APPEND CMAKE_PREFIX_PATH "${GMSH_ROOT_DIR}")
+  LIST(APPEND CMAKE_PREFIX_PATH "${GMSH_ROOT_DIR}")
 ENDIF(GMSH_ROOT_DIR)
 
 FIND_PATH(GMSH_INCLUDE_DIRS Gmsh.h gmsh.h PATH_SUFFIXES gmsh)
 FIND_LIBRARY(GMSH_LIBRARIES NAMES Gmsh gmsh)
+
+if (GMSH_INCLUDE_DIRS)
+  if (EXISTS "${GMSH_INCLUDE_DIRS}/gmsh.h")
+    file(STRINGS "${GMSH_INCLUDE_DIRS}/gmsh.h" _gmsh_version
+      REGEX "GMSH_API_VERSION")
+    string(REGEX REPLACE ".*GMSH_API_VERSION_MAJOR *\([0-9]*\).*" "\\1" _gmsh_major "${_gmsh_version}")
+    string(REGEX REPLACE ".*GMSH_API_VERSION_MINOR *\([0-9]*\).*" "\\1" _gmsh_minor "${_gmsh_version}")
+    string(REGEX REPLACE ".*GMSH_API_VERSION_PATCH *\([0-9]*\).*" "\\1" _gmsh_patch "${_gmsh_version}")
+    unset(_gmsh_version)
+    if (NOT _gmsh_major STREQUAL "" AND
+        NOT _gmsh_minor STREQUAL "" AND
+        NOT _gmsh_patch STREQUAL "")
+      set(GMSH_VERSION "${_gmsh_major}.${_gmsh_minor}.${_gmsh_patch}")
+    endif ()
+    unset(_gmsh_major)
+    unset(_gmsh_minor)
+    unset(_gmsh_patch)
+  else ()
+    set(GMSH_VERSION GMSH_VERSION-NOTFOUND)
+  endif ()
+endif ()
+
+IF (GMSH_INCLUDE_DIRS AND GMSH_LIBRARIES)
+   SET(GMSH_FOUND TRUE)
+ENDIF (GMSH_INCLUDE_DIRS AND GMSH_LIBRARIES)
+
+IF (GMSH_FOUND)
+  MESSAGE(STATUS "Found GMSH: ${GMSH_LIBRARY} version: ${GMSH_VERSION}")
+ELSE (GMSH_FOUND)
+  MESSAGE(FATAL_ERROR "Could not find GMSH")
+ENDIF (GMSH_FOUND)
+
 
 INCLUDE(FindPackageHandleStandardArgs)
 FIND_PACKAGE_HANDLE_STANDARD_ARGS(GMSH REQUIRED_VARS GMSH_INCLUDE_DIRS GMSH_LIBRARIES)
