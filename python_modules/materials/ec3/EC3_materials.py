@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
-from __future__ import print_function
-
-from __future__ import division
 ''' Structural steel as specified in EC3 standard.'''
+
+from __future__ import print_function
+from __future__ import division
 
 __author__= "Ana Ortega (AO_O) and Luis C. Pérez Tato (LCPT)"
 __copyright__= "Copyright 2015, AO_O and LCPT"
@@ -91,6 +91,9 @@ def fuEC3(desig, t):
     '''
     Return steel ultimate strength from its name and the part thickness 
     (see table 3.1).
+    
+    :param desig: steel designation (235, 275, 355).
+    :param t: part thickness.
     '''
     retval= 0.0
     if(t>0.1):
@@ -363,7 +366,7 @@ class EC3Shape(object):
         '''Return (alpha,beta) constants for bi-axial bending criterion 
         (clause 6.2.9 of EC3.1.1)
         '''
-        n=NEd/NplRd
+        n= NEd/NplRd
         if self.name[0] in ['I','H']:
             alpha=2
             beta=max(1,5*n)
