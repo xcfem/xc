@@ -61,14 +61,16 @@
 #include <material/uniaxial/PathIndependentMaterial.h>
 #include <utility/matrix/ID.h>
 
+//! @brief Constructor.
 XC::PathIndependentMaterial::PathIndependentMaterial(int tag, UniaxialMaterial &material)
 :EncapsulatedMaterial(tag,MAT_TAG_PathIndependent)
   {
     theMaterial = material.getCopy();
-    if(theMaterial == 0)
+    if(theMaterial == nullptr)
       {
-        std::cerr <<  "XC::PathIndependentMaterial::PathIndependentMaterial -- failed to get copy of material\n";
-        exit(-1);
+        std::cerr << getClassName() << "::" << __FUNCTION__
+	          << "; failed to get copy of material\n";
+        //exit(-1);
       }
   }
 
@@ -80,21 +82,63 @@ XC::PathIndependentMaterial::PathIndependentMaterial(void)
 
 int XC::PathIndependentMaterial::setTrialStrain(double strain, double strainRate)
   {
-    return theMaterial->setTrialStrain(strain, strainRate);
+    if(theMaterial)
+      return theMaterial->setTrialStrain(strain, strainRate);
+    else
+      return -1;
   }
 
+//! @brief Return the material strain.
+double XC::PathIndependentMaterial::getStrain(void)
+  {
+    if (theMaterial)
+      return theMaterial->getStrain();
+    else
+      return 0.0;
+  }
+
+double XC::PathIndependentMaterial::getStrainRate(void)
+  {
+    if (theMaterial)
+      return theMaterial->getStrainRate();
+    else
+      return 0.0;
+  }
+
+//! @brief Return the material stress.
 double XC::PathIndependentMaterial::getStress(void) const
-  { return theMaterial->getStress(); }
+  {
+    if(theMaterial)
+      return theMaterial->getStress();
+    else
+      return 0.0;
+  }
 
-
+//! @brief Return the material tangent stiffness.
 double XC::PathIndependentMaterial::getTangent(void) const
-  { return theMaterial->getTangent(); }
+  {
+    if(theMaterial)
+      return theMaterial->getTangent();
+    else
+      return 0.0;
+  }
 
 double XC::PathIndependentMaterial::getDampTangent(void) const
-  { return theMaterial->getDampTangent(); }
+  {
+    if(theMaterial)
+      return theMaterial->getDampTangent();
+    else
+      return 0.0;
+  }
 
+//! @brief Return the material initial stiffness.
 double XC::PathIndependentMaterial::getInitialTangent(void) const
-  { return theMaterial->getInitialTangent(); }
+  {
+    if(theMaterial)
+      return theMaterial->getInitialTangent();
+    else
+      return 0.0;
+  }
 
 int XC::PathIndependentMaterial::commitState(void)
   { return 0; }
@@ -123,7 +167,8 @@ int XC::PathIndependentMaterial::sendSelf(Communicator &comm)
 
     res+= comm.sendIdData(getDbTagData(),dataTag);
     if(res<0)
-      std::cerr << "PathIndependentMaterial::sendSelf() - failed to send the ID.\n";
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; failed to send the ID.\n";
     return res;
 
   }
@@ -134,7 +179,8 @@ int XC::PathIndependentMaterial::recvSelf(const Communicator &comm)
     const int dataTag= getDbTag();
     int res= comm.receiveIdData(getDbTagData(),dataTag);
     if(res<0)
-      std::cerr << "PathIndependentMaterial::recvSelf() - failed to get the ID\n";
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; failed to get the ID\n";
     else
       res+= EncapsulatedMaterial::recvData(comm);
     return res;
