@@ -94,10 +94,11 @@ double XC::PYBase::getDashPot(void) const
 void XC::PYBase::getFarField(const double &v)
   { TFar.getField(v); }
 
+//! @brief Return the material tangent stiffness.
 double XC::PYBase::getTangent(void) const
   { return T.tang(); }
 
-//! @brief Get initial stiffness.
+//! @brief Return the material initial stiffness.
 double XC::PYBase::getInitialTangent(void) const
   { return initialTangent; }
 

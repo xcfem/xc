@@ -104,35 +104,33 @@ const XC::Vector &XC::DruckerPragerPlaneStrain::getStress()
  	return stress;
 }
 
-//send back the tangent 
+//! @brief Return the material tangent stiffness.
 const XC::Matrix &XC::DruckerPragerPlaneStrain::getTangent() 
-{
-	tangent(0,0) = mCep(0,0);
-	tangent(0,1) = mCep(0,1);
-	tangent(0,2) = mCep(0,3);
-	tangent(1,0) = mCep(1,0);
-	tangent(1,1) = mCep(1,1);
-	tangent(1,2) = mCep(1,3);
-	tangent(2,0) = mCep(3,0);
-	tangent(2,1) = mCep(3,1);
-	tangent(2,2) = mCep(3,3);
-	
-    return tangent;
-} 
-
-//send back the tangent 
-const XC::Matrix& XC::DruckerPragerPlaneStrain::getInitialTangent() 
-{
+  {
     tangent(0,0) = mCep(0,0);
-	tangent(0,1) = mCep(0,1);
-	tangent(0,2) = mCep(0,3);
-	tangent(1,0) = mCep(1,0);
-	tangent(1,1) = mCep(1,1);
-	tangent(1,2) = mCep(1,3);
-	tangent(2,0) = mCep(3,0);
-	tangent(2,1) = mCep(3,1);
-	tangent(2,2) = mCep(3,3);
-	
+    tangent(0,1) = mCep(0,1);
+    tangent(0,2) = mCep(0,3);
+    tangent(1,0) = mCep(1,0);
+    tangent(1,1) = mCep(1,1);
+    tangent(1,2) = mCep(1,3);
+    tangent(2,0) = mCep(3,0);
+    tangent(2,1) = mCep(3,1);
+    tangent(2,2) = mCep(3,3);	
     return tangent;
-} 
+  } 
+
+//! @brief Return the material initial stiffness.
+const XC::Matrix& XC::DruckerPragerPlaneStrain::getInitialTangent() 
+  {
+    tangent(0,0)= mCep(0,0);
+    tangent(0,1)= mCep(0,1);
+    tangent(0,2)= mCep(0,3);
+    tangent(1,0)= mCep(1,0);
+    tangent(1,1)= mCep(1,1);
+    tangent(1,2)= mCep(1,3);
+    tangent(2,0)= mCep(3,0);
+    tangent(2,1)= mCep(3,1);
+    tangent(2,2)= mCep(3,3);	
+    return tangent;
+  } 
 

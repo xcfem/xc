@@ -122,6 +122,7 @@ double XC::SteelBase0103::getStrain(void) const
 double XC::SteelBase0103::getStress(void) const
   { return Tstress; }
 
+//! @brief Return the material tangent stiffness.
 double XC::SteelBase0103::getTangent(void) const
   { return Ttangent; }
 

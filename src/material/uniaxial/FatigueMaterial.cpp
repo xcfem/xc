@@ -261,6 +261,7 @@ double XC::FatigueMaterial::getStress(void) const
       return theMaterial -> getStress();
   }
 
+//! @brief Return the material tangent stiffness.
 double XC::FatigueMaterial::getTangent(void) const
   {
     double modifier = 1.0;

@@ -829,17 +829,16 @@ int XC::Template3Dep::setTrialStrainIncr(const XC::Vector &v, const XC::Vector &
     return 0;
 }
 
-//================================================================================
+//! @brief Return the material tangent stiffness.
 const XC::Matrix& XC::Template3Dep::getTangent(void) const
   {
     static Matrix M;
     return M;
   }
 
+//! @brief Return the material initial stiffness.
 const XC::Matrix& XC::Template3Dep::getInitialTangent(void) const
-{
-  return this->getInitialTangent();
-}
+  { return this->getInitialTangent(); }
 
 //================================================================================
 const XC::Vector& XC::Template3Dep::getStress(void) const

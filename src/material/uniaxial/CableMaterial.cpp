@@ -182,6 +182,7 @@ double XC::CableMaterial::evalStress(double stress)
   }
 
 
+//! @brief Return the material tangent stiffness.
 double XC::CableMaterial::getTangent(void) const
   { return trialTangent; }
 

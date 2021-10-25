@@ -210,35 +210,32 @@ const XC::Matrix& XC::J2AxiSymm::getTangent(void) const
   return tangent_matrix;
 } 
 
-//! @brief send back the tangent 
+//! @brief Return the material initial stiffness.
 const XC::Matrix& XC::J2AxiSymm::getInitialTangent(void) const
-{
-  // matrix to tensor mapping
-  //  Matrix      Tensor
-  // -------     -------
-  //   0           0 0
-  //   1           1 1
-  //   2           2 2   
-  //   3           0 1  ( or 1 0 )
+  {
+    // matrix to tensor mapping
+    //  Matrix      Tensor
+    // -------     -------
+    //   0           0 0
+    //   1           1 1
+    //   2           2 2   
+    //   3           0 1  ( or 1 0 )
 
-  this->doInitialTangent();
+    this->doInitialTangent();
 
-  int ii, jj;
-  int i, j, k, l;
+    int i, j, k, l;
 
-  for( ii = 0; ii < 4; ii++ ) {
-    for( jj = 0; jj < 4; jj++ ) {
-
-      index_map( ii, i, j );
-      index_map( jj, k, l );
-
-      tangent_matrix(ii,jj) = initialTangent[i][j][k][l];
-
-    } //end for j
-  } //end for i
-
-  return tangent_matrix;
-} 
+    for(int ii = 0; ii < 4; ii++ )
+      {
+        for(int jj = 0; jj < 4; jj++ )
+	  {
+	    index_map( ii, i, j );
+	    index_map( jj, k, l );
+	    tangent_matrix(ii,jj) = initialTangent[i][j][k][l];
+	  } //end for j
+      } //end for i
+    return tangent_matrix;
+  } 
 
 
 

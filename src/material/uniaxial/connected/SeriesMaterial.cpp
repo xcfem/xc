@@ -163,10 +163,12 @@ double XC::SeriesMaterial::getStrain(void) const
 double XC::SeriesMaterial::getStress(void) const
   { return Tstress; }
 
+//! @brief Return the material tangent stiffness.
 double XC::SeriesMaterial::getTangent(void) const
   { return Ttangent; }
 
 
+//! @brief Return the material initial stiffness.
 double XC::SeriesMaterial::getInitialTangent(void) const
   {
     double kf = 0.0;

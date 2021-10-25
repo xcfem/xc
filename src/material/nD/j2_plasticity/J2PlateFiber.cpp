@@ -277,7 +277,7 @@ const XC::Matrix &XC::J2PlateFiber::getTangent(void) const
   } 
 
 
-//! @brief Reurn the tangent 
+//! @brief Return the material initial stiffness.
 const XC::Matrix &XC::J2PlateFiber::getInitialTangent(void) const
   {
 

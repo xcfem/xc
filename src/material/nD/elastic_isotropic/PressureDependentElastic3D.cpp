@@ -73,6 +73,7 @@ XC::PressureDependentElastic3D::PressureDependentElastic3D(int tag)
   {}
 
 
+//! @brief Return the material tangent stiffness.
 const XC::Matrix &XC::PressureDependentElastic3D::getTangent(void) const
   {
     double p = p_n;

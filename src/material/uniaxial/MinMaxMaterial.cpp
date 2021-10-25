@@ -98,6 +98,7 @@ double XC::MinMaxMaterial::getStress(void) const
       return theMaterial->getStress();
   }
 
+//! @brief Return the material tangent stiffness.
 double XC::MinMaxMaterial::getTangent(void) const
   {
     if(Tfailed)

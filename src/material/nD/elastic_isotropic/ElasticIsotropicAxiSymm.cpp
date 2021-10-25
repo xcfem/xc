@@ -68,6 +68,7 @@ XC::ElasticIsotropicAxiSymm::ElasticIsotropicAxiSymm(void)
   : ElasticIsotropicMaterial(0, ND_TAG_ElasticIsotropicAxiSymm,4, 0.0, 0.0)
   {}
 
+//! @brief Return the material tangent stiffness.
 const XC::Matrix &XC::ElasticIsotropicAxiSymm::getTangent(void) const
   {
 	double mu2 = E/(1.0+v);
@@ -83,6 +84,7 @@ const XC::Matrix &XC::ElasticIsotropicAxiSymm::getTangent(void) const
 	return D;
   }
 
+//! @brief Return the material initial stiffness.
 const XC::Matrix &XC::ElasticIsotropicAxiSymm::getInitialTangent(void) const
 {
 	double mu2 = E/(1.0+v);

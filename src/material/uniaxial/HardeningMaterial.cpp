@@ -193,6 +193,7 @@ int XC::HardeningMaterial::setTrialStrain(double strain, double strainRate)
 double XC::HardeningMaterial::getStress(void) const
   { return Tstress; }
 
+//! @brief Return the material tangent stiffness.
 double XC::HardeningMaterial::getTangent(void) const
   { return Ttangent; }
 

@@ -171,6 +171,7 @@ int XC::J2PlateFibre::setTrialStrainIncr(const Vector &strain)
 int XC::J2PlateFibre::setTrialStrainIncr(const Vector &strain, const Vector &rate)
   { return 0; }
 
+//! @brief Return the material tangent stiffness.
 const XC::Matrix &XC::J2PlateFibre::getTangent(void) const
   {
     double twoG= E/(1+nu);
@@ -347,6 +348,7 @@ const XC::Matrix &XC::J2PlateFibre::getTangent(void) const
     return D;
   }
 
+//! @brief Return the material initial stiffness.
 const XC::Matrix &XC::J2PlateFibre::getInitialTangent(void) const
   {
     const double G= 0.5*E/(1+nu);

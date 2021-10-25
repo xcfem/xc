@@ -267,34 +267,34 @@ const XC::Matrix &XC::J2PlaneStress::getTangent(void) const
 } 
 
 
-//! @brief send back the tangent 
+//! @brief Return the material initial stiffness.
 const XC::Matrix &XC::J2PlaneStress::getInitialTangent(void) const
-{
-  // matrix to tensor mapping
-  //  Matrix      Tensor
-  // -------     -------
-  //   0           0 0
-  //   1           1 1
-  //   2           0 1  ( or 1 0 ) 
-  // 
+  {
+    // matrix to tensor mapping
+    //  Matrix      Tensor
+    // -------     -------
+    //   0           0 0
+    //   1           1 1
+    //   2           0 1  ( or 1 0 ) 
+    // 
 
-  this->doInitialTangent();
-       
-  tangent_matrix(0,0)= initialTangent [0][0] [0][0];
-  tangent_matrix(1,1)= initialTangent [1][1] [1][1];
-  tangent_matrix(2,2)= initialTangent [0][1] [0][1];
+    this->doInitialTangent();
 
-  tangent_matrix(0,1)= initialTangent [0][0] [1][1];
-  tangent_matrix(1,0)= initialTangent [1][1] [0][0];
+    tangent_matrix(0,0)= initialTangent [0][0] [0][0];
+    tangent_matrix(1,1)= initialTangent [1][1] [1][1];
+    tangent_matrix(2,2)= initialTangent [0][1] [0][1];
 
-  tangent_matrix(0,2)= initialTangent [0][0] [0][1];
-  tangent_matrix(2,0)= initialTangent [0][1] [0][0];
+    tangent_matrix(0,1)= initialTangent [0][0] [1][1];
+    tangent_matrix(1,0)= initialTangent [1][1] [0][0];
 
-  tangent_matrix(1,2)= initialTangent [1][1] [0][1];
-  tangent_matrix(2,1)= initialTangent [0][1] [1][1];
+    tangent_matrix(0,2)= initialTangent [0][0] [0][1];
+    tangent_matrix(2,0)= initialTangent [0][1] [0][0];
 
-  return tangent_matrix;
-} 
+    tangent_matrix(1,2)= initialTangent [1][1] [0][1];
+    tangent_matrix(2,1)= initialTangent [0][1] [1][1];
+
+    return tangent_matrix;
+  } 
 
 int XC::J2PlaneStress::commitState( ) 
 {

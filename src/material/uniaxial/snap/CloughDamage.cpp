@@ -279,23 +279,28 @@ int XC::CloughDamage::revertToLastCommit()
 }
 
 
+//! @brief Return the material tangent stiffness.
 double XC::CloughDamage::getTangent(void) const
-{
-        if ( DEBG ==1 ) fprintf( OutputFile , "Get tangent\n" );        // debugging
-        return hsTrial[2];
-}
+  {
+    if( DEBG ==1 )
+      fprintf( OutputFile , "Get tangent\n" );        // debugging
+    return hsTrial[2];
+  }
 
+//! @brief Return the material initial stiffness.
 double XC::CloughDamage::getInitialTangent(void) const
-{
-        if ( DEBG ==1 ) fprintf( OutputFile , "Get initial tangent\n" );        // debugging
-        return elstk;
-}
+  {
+    if( DEBG ==1 )
+      fprintf( OutputFile , "Get initial tangent\n" );  // debugging
+    return elstk;
+  }
 
 double XC::CloughDamage::getStress(void) const
-{
-        if ( DEBG ==1 ) fprintf( OutputFile , "Get stress\n" );        // debugging
-        return hsTrial[1];
-}
+  {
+    if ( DEBG ==1 )
+      fprintf( OutputFile , "Get stress\n" );        // debugging
+    return hsTrial[1];
+  }
 
 
 double XC::CloughDamage::getStrain(void) const

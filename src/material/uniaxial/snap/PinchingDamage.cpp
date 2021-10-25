@@ -293,16 +293,17 @@ int XC::PinchingDamage::revertToLastCommit()
 }
 
 
+//! @brief Return the material tangent stiffness.
 double XC::PinchingDamage::getTangent() const
-{
-        if ( DEBG ==1 ) fprintf( OutputFile , "Get tangent\n" );        // debugging
-        return hsTrial[2];
-}
+  {
+    if( DEBG ==1 )
+      fprintf( OutputFile , "Get tangent\n" );        // debugging
+    return hsTrial[2];
+  }
 
-double XC::PinchingDamage::getInitialTangent (void) const
-{
-        return elstk;
-}
+//! @brief Return the material initial stiffness.
+double XC::PinchingDamage::getInitialTangent(void) const
+  { return elstk; }
 
 double XC::PinchingDamage::getStress() const
 {

@@ -362,6 +362,7 @@ int XC::Bilinear::commitState()
 }
 
 
+//! @brief Return the material tangent stiffness.
 double XC::Bilinear::getTangent(void) const
   {
     if(DEBG ==1 )
@@ -372,9 +373,11 @@ double XC::Bilinear::getTangent(void) const
     return hsTrial[2];
   }
 
-double XC::Bilinear::getInitialTangent (void) const
+//! @brief Return the material initial stiffness.
+double XC::Bilinear::getInitialTangent(void) const
   {
-    if( DEBG ==1 ) fprintf( OutputFile , "Get initial tangent\n" );        // debugging
+    if( DEBG ==1 )
+      fprintf( OutputFile , "Get initial tangent\n" ); // debugging
     return elstk;
   }
 

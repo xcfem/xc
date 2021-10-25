@@ -204,6 +204,7 @@ double XC::HystereticMaterial::getStrain(void) const
 double XC::HystereticMaterial::getStress(void) const
   { return trial.getStress(); }
 
+//! @brief Return the material tangent stiffness.
 double XC::HystereticMaterial::getTangent(void) const
   { return trial.getTangent(); }
 

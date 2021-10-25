@@ -225,7 +225,7 @@ const XC::Matrix &XC::J2PlaneStrain::getTangent(void) const
 } 
 
 
-//! @brief send back the tangent 
+//! @brief Return the material initial stiffness.
 const XC::Matrix &XC::J2PlaneStrain::getInitialTangent(void) const
 {
   // matrix to tensor mapping

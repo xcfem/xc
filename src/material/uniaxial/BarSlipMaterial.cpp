@@ -503,11 +503,13 @@ double XC::BarSlipMaterial::getStress(void)
     return material->getStress();
 }
 
+//! @brief Return the material tangent stiffness.
 double XC::BarSlipMaterial::getTangent(void)
 {
     return material->getTangent();
 }
 
+//! @brief Return the material initial stiffness.
 double XC::BarSlipMaterial::getInitialTangent(void)
 {
     return material->getInitialTangent();
@@ -746,9 +748,11 @@ double XC::BarSlipMaterial::getStrain(void) const
 double XC::BarSlipMaterial::getStress(void) const
   { return Tstress; }
 
+//! @brief Return the material tangent stiffness.
 double XC::BarSlipMaterial::getTangent(void) const
   { return Ttangent; }
 
+//! @brief Return the material initial stiffness.
 double XC::BarSlipMaterial::getInitialTangent(void) const
   { return envlpPosStress(0)/envlpPosStrain(0); }
 

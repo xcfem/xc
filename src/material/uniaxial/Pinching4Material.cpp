@@ -300,9 +300,11 @@ double XC::Pinching4Material::getStrain(void) const
 double XC::Pinching4Material::getStress(void) const
   { return Tstress; }
 
+//! @brief Return the material tangent stiffness.
 double XC::Pinching4Material::getTangent(void) const
   { return Ttangent; }
 
+//! @brief Return the material initial stiffness.
 double XC::Pinching4Material::getInitialTangent(void) const
   { return envlpPosStress(0)/envlpPosStrain(0); }
 

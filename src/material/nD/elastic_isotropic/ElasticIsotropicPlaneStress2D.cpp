@@ -88,6 +88,7 @@ XC::ElasticIsotropicPlaneStress2D::ElasticIsotropicPlaneStress2D(int tag)
   \right]
  \f]
 */
+//! @brief Return the material tangent stiffness.
 const XC::Matrix &XC::ElasticIsotropicPlaneStress2D::getTangent(void) const
   { return getInitialTangent(); }
 

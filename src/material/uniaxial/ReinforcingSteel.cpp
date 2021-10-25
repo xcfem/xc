@@ -237,6 +237,7 @@ double XC::ReinforcingSteel::getStress(void) const
     return tempOut;
   }
 
+//! @brief Return the material tangent stiffness.
 double XC::ReinforcingSteel::getTangent(void) const
   {
     double taTan= trial.getTangent();
@@ -254,6 +255,7 @@ double XC::ReinforcingSteel::getTangent(void) const
     return tempOut;
   }
 
+//! @brief Return the material initial stiffness.
 double XC::ReinforcingSteel::getInitialTangent(void) const
   { return Esp; }
 

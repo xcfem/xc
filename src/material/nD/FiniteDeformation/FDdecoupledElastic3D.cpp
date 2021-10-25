@@ -361,10 +361,11 @@ const XC::Tensor XC::FDdecoupledElastic3D::FDvolStiffness(void)
 
    return L_vol;
 }
-//! @brief 
+//! @brief Return the material tangent stiffness.
 const XC::Tensor& XC::FDdecoupledElastic3D::getTangentTensor(void) const
   { return Stiffness; }
-//! @brief 
+
+//! @brief Return the material initial stiffness.
 const XC::Tensor &XC::FDdecoupledElastic3D::getInitialTangentTensor(void) const
   {
     //BJtensor I2("I", 2, def_dim_2);

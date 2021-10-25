@@ -152,6 +152,7 @@ int XC::ElasticCrossAnisotropic::setTrialStrainIncr(const XC::Vector &strain, co
   return 0;
 }
 
+//! @brief Return the material tangent stiffness.
 const XC::Matrix &XC::ElasticCrossAnisotropic::getTangent(void) const
   {
     ElasticCrossAnisotropic *this_no_const=const_cast<ElasticCrossAnisotropic *>(this);

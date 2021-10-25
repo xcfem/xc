@@ -229,6 +229,7 @@ int XC::FluidSolidPorousMaterial::setTrialStrainIncr(const XC::Vector &strain, c
 }
 
 
+//! @brief Return the material tangent stiffness.
 const XC::Matrix &XC::FluidSolidPorousMaterial::getTangent(void) const
 {
     int ndm = ndmx[matN];
@@ -248,12 +249,12 @@ const XC::Matrix &XC::FluidSolidPorousMaterial::getTangent(void) const
     return *workM;
 }
 
+//! @brief Return the material initial stiffness.
 const XC::Matrix &XC::FluidSolidPorousMaterial::getInitialTangent(void) const
   {
     int ndm = ndmx[matN];
 
-    XC::Matrix *workM = (ndm == 2) ? &workM3 : &workM6;
-  
+    Matrix *workM = (ndm == 2) ? &workM3 : &workM6;
     *workM = theSoilMaterial->getInitialTangent();
 
     return *workM;
