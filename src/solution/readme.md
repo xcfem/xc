@@ -9,3 +9,4 @@ This folder contains the code that deals with the solution of the finite element
 ## References
 
 - [Like spinning nodes](https://portwooddigital.com/2021/09/19/like-spinning-nodes)
+- [Not All at Once](https://portwooddigital.com/2021/10/26/not-all-at-once/)
