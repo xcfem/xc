@@ -214,8 +214,7 @@ double XC::TzLiq1::getStrainRate(void) const
   { return TzSimple1::getStrainRate(); }
 
 /////////////////////////////////////////////////////////////////////
-int 
-XC::TzLiq1::commitState(void)
+int XC::TzLiq1::commitState(void)
 {
         // Call the XC::TzSimple1 base function to take care of details.
         //

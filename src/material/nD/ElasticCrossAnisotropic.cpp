@@ -231,6 +231,7 @@ const XC::straintensor &XC::ElasticCrossAnisotropic::getPlasticStrainTensor(void
      return t;
   }
 
+//! @brief Commit the state of the material.
 int XC::ElasticCrossAnisotropic::commitState(void)
 {
   //sigma = D * epsilon;

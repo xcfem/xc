@@ -186,6 +186,7 @@ double XC::HystereticEnergy::getNegDamage (void)
   { return this->getDamage(); }
 
 
+//! @brief Commit the state of the material.
 int XC::HystereticEnergy::commitState (void)
   {
         for ( int i=0 ; i<8 ; i++ )

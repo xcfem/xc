@@ -122,6 +122,7 @@ const XC::Vector &XC::ElasticIsotropicAxiSymm::getStress(void) const
     return sigma;
   }
 
+//! @brief Commit the state of the material.
 int XC::ElasticIsotropicAxiSymm::commitState(void)
 {
   return 0;

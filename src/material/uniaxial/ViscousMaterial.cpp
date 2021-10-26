@@ -114,6 +114,7 @@ double XC::ViscousMaterial::getStrain(void) const
 double XC::ViscousMaterial::getStrainRate(void) const
   { return trialRate; }
 
+//! @brief Commit the state of the material.
 int XC::ViscousMaterial::commitState(void)
   { return 0; }
 

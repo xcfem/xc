@@ -186,6 +186,7 @@ double XC::CableMaterial::evalStress(double stress)
 double XC::CableMaterial::getTangent(void) const
   { return trialTangent; }
 
+//! @brief Commit the state of the material.
 int XC::CableMaterial::commitState(void)
   { return ElasticBaseMaterial::commitState(); }
 

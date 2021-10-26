@@ -514,6 +514,7 @@ double XC::BarSlipMaterial::getInitialTangent(void)
 {
     return material->getInitialTangent();
 }
+//! @brief Commit the state of the material.
 int XC::BarSlipMaterial::commitState(void)
 {
     return material->commitState();
@@ -756,6 +757,7 @@ double XC::BarSlipMaterial::getTangent(void) const
 double XC::BarSlipMaterial::getInitialTangent(void) const
   { return envlpPosStress(0)/envlpPosStrain(0); }
 
+//! @brief Commit the state of the material.
 int XC::BarSlipMaterial::commitState(void)
   {
     Cstate = Tstate;

@@ -142,6 +142,7 @@ double XC::ParallelMaterial::getDampTangent(void) const
     return eta;
   }
 
+//! @brief Commit the state of the material.
 int XC::ParallelMaterial::commitState(void)
   {
 

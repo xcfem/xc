@@ -94,6 +94,7 @@ int XC::BeamFiberMaterial::getOrder(void) const
 const std::string &XC::BeamFiberMaterial::getType(void) const 
   { return strTypeBeamFiber; }
 
+//! @brief Commit the state of the material.
 int XC::BeamFiberMaterial::commitState(void)
   {
     Cstrain33 = Tstrain33;

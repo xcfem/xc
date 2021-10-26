@@ -285,6 +285,7 @@ XC::NDMaterial *XC::DruckerPrager::getCopy(const std::string &type) const
       }
   }
 
+//! @brief Commit the state of the material.
 int XC::DruckerPrager::commitState (void)
   {
     mEpsilon_n_p = mEpsilon_n1_p;

@@ -514,6 +514,7 @@ const XC::Vector &XC::J2PlateFibre::getStrain(void) const
     return retval;
   }
 
+//! @brief Commit the state of the material.
 int XC::J2PlateFibre::commitState(void)
   {
     epsPn[0]= epsPn1[0];

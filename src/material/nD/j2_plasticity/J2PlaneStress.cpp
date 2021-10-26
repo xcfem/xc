@@ -296,6 +296,7 @@ const XC::Matrix &XC::J2PlaneStress::getInitialTangent(void) const
     return tangent_matrix;
   } 
 
+//! @brief Commit the state of the material.
 int XC::J2PlaneStress::commitState( ) 
 {
   epsilon_p_n= epsilon_p_nplus1;

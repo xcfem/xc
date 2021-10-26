@@ -53,6 +53,7 @@ int XC::ElasticBaseMaterial::incrementInitialStrain(const double &initStrainIncr
 void XC::ElasticBaseMaterial::zeroInitialStrain(void)
   { ezero= 0.0; }
 
+//! @brief Commit the state of the material.
 int XC::ElasticBaseMaterial::commitState(void)
   {
     commitStrain= trialStrain;

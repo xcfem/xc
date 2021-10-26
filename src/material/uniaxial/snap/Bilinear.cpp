@@ -328,6 +328,7 @@ int XC::Bilinear::revertToLastCommit()
 }
 
 
+//! @brief Commit the state of the material.
 int XC::Bilinear::commitState()
 {
         if ( DEBG ==1 ) fprintf( OutputFile , "Commit state\n" );        // debugging

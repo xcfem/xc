@@ -135,6 +135,7 @@ int XC::YieldSurface_BC2D::getState(int stateInfo)
             return -1;
   }
 
+//! @brief Commit the state of the material.
 int XC::YieldSurface_BC2D::commitState(XC::Vector &force)
   {
     XC::YieldSurface_BC::commitState(force);

@@ -58,6 +58,7 @@ XC::YS_Evolution2D::YS_Evolution2D(int tag, int classtag,
 
 }
 
+//! @brief Commit the state of the material.
 int XC::YS_Evolution2D::commitState(void)
   {
 	this->XC::YS_Evolution::commitState();

@@ -237,6 +237,7 @@ double XC::BoucWenMaterial::getTangent(void) const
 double XC::BoucWenMaterial::getStrain(void) const
   { return Tstrain; }
 
+//! @brief Commit the state of the material.
 int XC::BoucWenMaterial::commitState(void)
   {
     // Commit trial history variables

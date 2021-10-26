@@ -189,6 +189,7 @@ double XC::SeriesMaterial::getInitialTangent(void) const
   }
 
 
+//! @brief Commit the state of the material.
 int XC::SeriesMaterial::commitState(void)
   {
     Cstrain = Tstrain;

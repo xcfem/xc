@@ -369,6 +369,7 @@ void XC::HystereticMaterial::negativeIncrement(double dStrain)
         }
 }
 
+//! @brief Commit the state of the material.
 int XC::HystereticMaterial::commitState(void)
   {
     CrotMax = TrotMax;

@@ -275,6 +275,7 @@ double XC::Bidirectional::getStrain(const double &,const double &) const
     return 0.0;
   }
 
+//! @brief Commit the state of the material.
 int XC::Bidirectional::commitState(void)
   {
         eP_n[0] = eP_n1[0];

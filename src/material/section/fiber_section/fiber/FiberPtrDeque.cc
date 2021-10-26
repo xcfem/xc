@@ -1609,6 +1609,7 @@ int XC::FiberPtrDeque::updateKRCenterOfMass(FiberSection2d &Section2d,CrossSecti
     return 0;
   }
 
+//! @brief Commit the state of the material.
 int XC::FiberPtrDeque::commitState(void)
   {
     int err= 0;

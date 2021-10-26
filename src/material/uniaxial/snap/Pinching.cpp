@@ -703,6 +703,7 @@ int XC::Pinching::setTrialStrain( double d, double strainRate)
 }
 
 
+//! @brief Commit the state of the material.
 int XC::Pinching::commitState()
 {
   if ( DEBG ==1 ) fprintf( OutputFile , "Commit State\n" );        // debugging

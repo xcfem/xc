@@ -269,6 +269,7 @@ const XC::Matrix &XC::FeapMaterial::getTangent(void) const
   }
 }
 
+//! @brief Commit the state of the material.
 int XC::FeapMaterial::commitState(void)
 {
   // Set committed values equal to corresponding trial values

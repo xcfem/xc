@@ -354,6 +354,7 @@ const XC::Vector & XC::PressureIndependMultiYield::getStrain(void) const
   { return getCommittedStrain(); }
 
 
+//! @brief Commit the state of the material.
 int XC::PressureIndependMultiYield::commitState(void)
 {
   int loadStage = loadStagex[matN];

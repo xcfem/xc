@@ -111,6 +111,7 @@ XC::YieldSurface_BC::~YieldSurface_BC()
       delete hModel;
   }
 
+//! @brief Commit the state of the material.
 int XC::YieldSurface_BC::commitState(XC::Vector &force)
 {
 //	return 0;

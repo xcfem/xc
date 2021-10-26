@@ -126,6 +126,7 @@ const XC::Vector &XC::ElasticIsotropicBeamFiber::getStress(void) const
     return sigma;
   }
 
+//! @brief Commit the state of the material.
 int XC::ElasticIsotropicBeamFiber::commitState(void)
 {
 	return 0;

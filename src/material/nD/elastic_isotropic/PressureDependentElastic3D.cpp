@@ -129,6 +129,7 @@ const XC::Vector& XC::PressureDependentElastic3D::getStress(void) const
     return sigma;
   }
 
+//! @brief Commit the state of the material.
 int XC::PressureDependentElastic3D::commitState(void)
   {
     Cepsilon= epsilon;

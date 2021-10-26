@@ -200,6 +200,7 @@ double XC::HardeningMaterial::getTangent(void) const
 double XC::HardeningMaterial::getStrain(void) const
   { return Tstrain; }
 
+//! @brief Commit the state of the material.
 int XC::HardeningMaterial::commitState(void)
 {
     // Commit trial history variables

@@ -116,6 +116,7 @@ double XC::MinMaxMaterial::getDampTangent(void) const
       return theMaterial->getDampTangent();
   }
 
+//! @brief Commit the state of the material.
 int XC::MinMaxMaterial::commitState(void)
   {        
     Cfailed = Tfailed;

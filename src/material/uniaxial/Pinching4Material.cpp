@@ -308,6 +308,7 @@ double XC::Pinching4Material::getTangent(void) const
 double XC::Pinching4Material::getInitialTangent(void) const
   { return envlpPosStress(0)/envlpPosStrain(0); }
 
+//! @brief Commit the state of the material.
 int XC::Pinching4Material::commitState(void)                                        
 {
         Cstate = Tstate;

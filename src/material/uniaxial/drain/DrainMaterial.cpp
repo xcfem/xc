@@ -134,6 +134,7 @@ double XC::DrainMaterial::getDampTangent(void) const
     return beto*tangentP;
   }
 
+//! @brief Commit the state of the material.
 int XC::DrainMaterial::commitState(void)
   {
         // Set committed values equal to corresponding trial values

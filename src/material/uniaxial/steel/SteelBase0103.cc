@@ -126,6 +126,7 @@ double XC::SteelBase0103::getStress(void) const
 double XC::SteelBase0103::getTangent(void) const
   { return Ttangent; }
 
+//! @brief Commit the state of the material.
 int XC::SteelBase0103::commitState(void)
   {
     // History variables

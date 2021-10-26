@@ -333,6 +333,7 @@ const XC::Vector & XC::FluidSolidPorousMaterial::getStrain(void) const
   { return theSoilMaterial->getStrain(); }
 
 
+//! @brief Commit the state of the material.
 int XC::FluidSolidPorousMaterial::commitState(void)
 {
     int loadStage = loadStagex[matN];

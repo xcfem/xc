@@ -65,6 +65,7 @@ int XC::PlasticHardeningMaterial::setTrialIncrValue(double dxVal)
 void XC::PlasticHardeningMaterial::setResidual(double res)
   { residual = res; }
 
+//! @brief Commit the state of the material.
 int XC::PlasticHardeningMaterial::commitState(void)
   {
     val_hist= val_trial;

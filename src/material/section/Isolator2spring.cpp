@@ -346,6 +346,7 @@ double XC::Isolator2spring::getStrain(const double &,const double &) const
     return 0.0;
   }
 
+//! @brief Commit the state of the material.
 int XC::Isolator2spring::commitState(void)
   {
     sP_n= sP_n1;

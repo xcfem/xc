@@ -140,6 +140,7 @@ double XC::PathIndependentMaterial::getInitialTangent(void) const
       return 0.0;
   }
 
+//! @brief Commit the state of the material.
 int XC::PathIndependentMaterial::commitState(void)
   { return 0; }
 
