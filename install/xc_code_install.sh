@@ -15,9 +15,8 @@ base_dir=`pwd`
 
 
 ##########################################################
-# clone xc_utils and XC
+# clone XC
 cd $base_dir
-git clone https://github.com/xcfem/xc_utils/ xc_utils
 git clone https://github.com/xcfem/xc/ xc
 
 
@@ -38,14 +37,15 @@ git clone https://github.com/xcfem/xc/ xc
 
 ##########################################################
 # build xc_utils
-cd $base_dir
-mkdir build-xc_utils
-cd build-xc_utils
-cmake ../xc_utils/src
-make -j 2
-sudo make install
-cd $base_dir/xc_utils/python_modules
-sudo sh local_install.sh
+### LCPT MERGED INTO xc 05.2021 so not needed anymore.
+# cd $base_dir
+# mkdir build-xc_utils
+# cd build-xc_utils
+# cmake ../xc_utils/src
+# make -j 2
+# sudo make install
+# cd $base_dir/xc_utils/python_modules
+# sudo sh local_install.sh
 
 
 ##########################################################
@@ -62,8 +62,5 @@ sudo sh local_install.sh
 
 ##########################################################
 # run unit tests
-cd $base_dir/xc_utils/verif
-sh run_verif.sh
-
 cd $base_dir/xc/verif
 sh run_verif.sh
