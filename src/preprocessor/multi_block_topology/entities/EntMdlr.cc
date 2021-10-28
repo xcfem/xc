@@ -383,10 +383,17 @@ bool XC::EntMdlr::create_elements(meshing_dir dm)
 		<< "; there is no nodes for the elements." << std::endl;
     const size_t numElements= ttzElements.NumPtrs();
     if(numElements==0 && verbosity>0)
-      std::clog << getClassName() << "::" << __FUNCTION__
-	        << "; warning 0 elements created for entity: " << getName()
-	        << std::endl;
-
+      {
+	const int entDimension= this->GetDimension();
+	int elementDimension= -1;
+        const Element *seed= getPreprocessor()->getElementHandler().get_seed_element();
+	if(seed)
+	  elementDimension= seed->getDimension();
+	if(elementDimension<=entDimension)
+	  std::clog << getClassName() << "::" << __FUNCTION__
+		    << "; warning 0 elements created for entity: " << getName()
+		    << std::endl;
+      }
     return retval;
   }
 
