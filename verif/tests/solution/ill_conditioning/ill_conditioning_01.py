@@ -31,9 +31,9 @@ constraints= preprocessor.getBoundaryCondHandler
 spc= constraints.newSPConstraint(n1.tag,0,0.0) # Node 1,gdl 0 translation X
 spc= constraints.newSPConstraint(n1.tag,1,0.0) # Node 1,gdl 1 translation Y
 spc= constraints.newSPConstraint(n1.tag,2,0.0) # Node 1,gdl 2 rotation.
-spc= constraints.newSPConstraint(n2.tag,0,0.0) # Node 1,gdl 0 translation X
-spc= constraints.newSPConstraint(n2.tag,1,0.0) # Node 1,gdl 1 translation Y
-#spc= constraints.newSPConstraint(n2.tag,2,0.0) # Node 1,gdl 2 rotation.
+spc= constraints.newSPConstraint(n2.tag,0,0.0) # Node 2,gdl 0 translation X
+spc= constraints.newSPConstraint(n2.tag,1,0.0) # Node 2,gdl 1 translation Y
+#spc= constraints.newSPConstraint(n2.tag,2,0.0) # Node 2,gdl 2 rotation.
 
 
 analOk= modelSpace.zeroEnergyModes(1)

@@ -329,12 +329,13 @@ python tests/elements/birth_and_death/kill_elements_06.py
 python tests/elements/birth_and_death/kill_elements_07.py
 python tests/elements/birth_and_death/kill_elements_08.py
 
-echo "$BLEU" "Solver tests." "$NORMAL"
+echo "$BLEU" "Solution tests." "$NORMAL"
 python tests/solution/superlu_solver_test_01.py
 python tests/solution/superlu_solver_test_02.py
 python tests/solution/umf_solver_test_01.py
 python tests/solution/mumps_solver_test_01.py
-python tests/solution/ill_conditioning_01.py
+python tests/solution/ill_conditioning/ill_conditioning_01.py
+python tests/solution/ill_conditioning/get_floating_nodes_01.py
 
 ## Constraint handlers tests.
 echo "$BLEU" "  Constraint handler tests." "$NORMAL"

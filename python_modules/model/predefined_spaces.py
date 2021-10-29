@@ -556,6 +556,25 @@ class PredefinedSpace(object):
             spc= self.newSPConstraint(newNode.tag,i,0.0)
         return newNode.tag, zl.tag
 
+    def getFloatingNodes(self, xcSet= None):
+        ''' Return a list of the nodes that are not connected to any
+            element nor any constraint.
+            obtained during the analysis.
+
+        :param xcSet: compute only the reactions of the nodes
+                      in the set.
+        '''
+        if(xcSet==None):
+            xcSet= self.getTotalSet()
+        floatingNodes= list()
+        for n in xcSet.nodes:
+            nElem= n.getNumberOfConnectedElements()
+            if(nElem==0):
+                nConstraints= n.getNumberOfConnectedConstraints()
+                if(nConstraints==0):
+                    floatingNodes.append(n)
+        return floatingNodes
+
     def getReactions(self, xcSet= None):
         ''' Return a Reactions object containing the reactions
             obtained during the analysis.
