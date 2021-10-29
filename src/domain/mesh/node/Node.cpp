@@ -481,6 +481,17 @@ void XC::Node::setDOF_GroupPtr(DOF_Group *theDOF_Grp)
 XC::DOF_Group *XC::Node::getDOF_GroupPtr(void)
   { return theDOF_GroupPtr; }
 
+//! @brief Gets the equation numbers corresponding to the node DOFS.
+const XC::ID &XC::Node::getDOFs(void) const
+  {
+    if(theDOF_GroupPtr)
+      return theDOF_GroupPtr->getID();
+    else
+      std::cerr << getClassName() << "::" << __FUNCTION__
+	        << "; equation numbers not assigned yet."
+	        << " Probably analyze has not being called yet."
+	        << std::endl;
+  }
 
 //! @brief Return the dimension of the node vector position (1,2 or 3).
 size_t XC::Node::getDim(void) const
