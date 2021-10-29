@@ -505,6 +505,8 @@ def defElasticMembranePlateSection(preprocessor, name:str, E:float, nu:float, rh
     materialHandler= preprocessor.getMaterialHandler
     retval= materialHandler.newMaterial("elastic_membrane_plate_section",name)
     retval.E= E
+    if(nu>0.5):
+        lmsg.warning('Poisson\'s ratio: '+str(nu)+' is very high.') 
     retval.nu= nu
     retval.rho= rho
     retval.h= h

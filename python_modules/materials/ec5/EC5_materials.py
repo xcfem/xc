@@ -69,11 +69,13 @@ class Wood(wood_base.Wood):
             self.Gmean= woodData['Gmean']
 
     def getPoissonRatio(self, perpendicular= False):
-        ''' Return the Poisson's ratio of the wood.'''
+        ''' Return the Poisson's ratio of the wood. Its value is quite large
+            due to the anisotropic material behavior.'''
         E= self.E0_mean
         if(perpendicular):
             E= self.E90_mean
-        return (E/(2.0*self.Gmean)-1.0)
+        G= self.Gmean
+        return E/(2.0*G)-1.0
     
     def getElasticMaterial(self, perpendicular= False):
         ''' Return an elastic material with the mechanical properties of the
@@ -87,16 +89,21 @@ class Wood(wood_base.Wood):
             E= self.E90_mean
         return typical_materials.BasicElasticMaterial(E, nu, self.specificGravity)
     
-    def getElasticMembranePlateSection(self, preprocessor, thickness:float, name:str= None, perpendicular= False):
+    def getElasticMembranePlateSection(self, preprocessor, thickness:float, overridePoissonRatio= None, name:str= None, perpendicular= False):
         ''' Return an elastic membrane plate material with the mechanical
             properties of the timber.
 
         :param preprocessor: preprocessor of the finite element problem.
-        :param thickness: overall depth of the section
+        :param thickness: overall depth of the section.
+        :param overridePoissonRatio: the Poisson's ratio value is quite large
+                                     due to the anisotropic material behavior.
         :param name: name for the new material.
         :param perpendicular: if true use the value of modulus of elasticity perpendicular to the grain.
         '''
-        nu= self.getPoissonRatio()
+        if(overridePoissonRatio):
+            nu= overridePoissonRatio
+        else:
+            nu= self.getPoissonRatio()
         E= self.E0_mean
         if(perpendicular):
             E= self.E90_mean
