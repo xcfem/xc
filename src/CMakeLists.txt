@@ -16,17 +16,6 @@ PROJECT(LIBXC)
 SET(build_setup_dir $ENV{HOME}/.xc_build)
 SET(build_setup_file ${build_setup_dir}/xc_dirs.cmake)
 
-#xc_utils
-SET(lcmd_setup_file ${build_setup_dir}/lcmd_dirs.cmake)
-INCLUDE(${lcmd_setup_file})
-SET(xc_utils_DIR ${lcmd_src_dir}/..)
-message(STATUS "lcmd project dir: " ${xc_utils_DIR})
-SET(xc_utils_INC ${lcmd_inc_dir})
-message(STATUS "lcmd include dir: " ${xc_utils_INC})
-INCLUDE_DIRECTORIES(${xc_utils_INC})
-SET(xc_utils_LIB ${lcmd_lib_dir})
-message(STATUS "lcmd lib dir: " ${xc_utils_LIB})
-
 #XC
 string(REGEX REPLACE "xc/src.*" "xc/" DIR_FUENTES_XC ${CMAKE_SOURCE_DIR})
 message(STATUS "xc project dir: " ${DIR_FUENTES_XC})
