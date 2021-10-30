@@ -298,7 +298,7 @@ class OutputHandler(object):
         captionText= self.getCaptionText(vMisesCode, unitDescription, setToDisplay)
         self.displayScalarPropertyAtNodes(propertyName, unitConversionFactor, unitDescription, captionText, setToDisplay, fileName, defFScale, rgMinMax)
         
-    def displayReactions(self,setToDisplay=None,fileName=None,defFScale=0.0, inclInertia= False):
+    def displayReactions(self, setToDisplay=None, fileName=None, defFScale=0.0, inclInertia= False, reactionCheckTolerance= 1e-7):
         ''' Display reactions.
 
         :param setToDisplay: set of entities to be represented.
@@ -310,10 +310,11 @@ class OutputHandler(object):
                 by this factor. (Defaults to 0.0, i.e. display of 
                 initial/undeformed shape)
         :param inclInertia: include inertia effects (defaults to false).
+        :param reactionCheckTolerance: relative tolerance when checking reaction values.
         '''
         if(setToDisplay==None):
             setToDisplay= self.modelSpace.getTotalSet()
-        self.modelSpace.preprocessor.getNodeHandler.calculateNodalReactions(inclInertia,1e-7)
+        self.modelSpace.preprocessor.getNodeHandler.calculateNodalReactions(inclInertia, reactionCheckTolerance)
         #auto-scale
         LrefModSize= setToDisplay.getBnd(1.0).diagonal.getModulus() #representative length of set size (to autoscale)
         maxAbs=0.0
@@ -361,6 +362,24 @@ class OutputHandler(object):
                                  title='Moments (' + self.getOutputForceUnitSym() + self.getOutputLengthUnitSym() +')')
         displaySettings.displayScene(captionText,fileName)
         
+    def displayReactionsOnSets(self, setsToDisplayReactions, fileName=None, defFScale=0.0, inclInertia= False, reactionCheckTolerance= 1e-7):
+        '''displays the reactions as vector on affected nodes
+
+        :param setsToDisplayReactions: ordered list of sets of nodes to display 
+                              reactions on them.
+        :param fileName:  name of the file to plot the graphic. Defaults to None,
+                       in that case an screen display is generated
+        :param defFScale: factor to apply to current displacement of nodes 
+                so that the display position of each node equals to
+                the initial position plus its displacement multiplied
+                by this factor. (Defaults to 0.0, i.e. display of 
+                initial/undeformed shape)
+        :param inclInertia: include inertia effects (defaults to false).
+        :param reactionCheckTolerance: relative tolerance when checking reaction values.
+        '''
+        for st in setsToDisplayReactions:
+            self.displayReactions(setToDisplay= st, fileName= fileName, defFScale= defFScale, inclInertia= inclInertia, reactionCheckTolerance= reactionCheckTolerance)
+            
     def displayDiagram(attributeName,component, setToDispRes,setDisp,caption,scaleFactor= 1.0, fileName= None, defFScale= 0.0,orientScbar=1,titleScbar=None):
         '''Auxiliary function to display results on linear elements.
 
@@ -580,7 +599,7 @@ class OutputHandler(object):
           caption= 'load case: ' + loadCaseName +' '+elLoadComp + ', set: ' + setToDisplay.name + ', '  + unitDescription
         displaySettings.displaySPconstraints(setToDisplay= setToDisplay, scale= scaleConstr)
         displaySettings.displayScene(caption=caption,fileName=fileName)
-        
+
     def displayNodeValueDiagram(self, itemToDisp, setToDisplay=None,caption= None,fileName=None,defFScale=0.0):
         '''displays the a displacement (uX,uY,...) or a property defined in nodes 
         as a diagram over lines.

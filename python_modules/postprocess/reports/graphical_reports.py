@@ -230,7 +230,7 @@ class RecordDisp(OuputUnits):
         for st in self.setsToDispBeamLoads:
             outputHandler.displayLoads(setToDisplay=st, fileName= fileName, defFScale= defFScale)
 
-    def displayReactionsOnSets(self, fileName=None,defFScale=0.0):
+    def displayReactionsOnSets(self, fileName=None, defFScale=0.0, inclInertia= False, reactionCheckTolerance= 1e-7):
         '''displays the reactions as vector on affected nodes
 
         :param fileName:  name of the file to plot the graphic. Defaults to None,
@@ -240,10 +240,11 @@ class RecordDisp(OuputUnits):
                 the initial position plus its displacement multiplied
                 by this factor. (Defaults to 0.0, i.e. display of 
                 initial/undeformed shape)
+        :param inclInertia: include inertia effects (defaults to false).
+        :param reactionCheckTolerance: relative tolerance when checking reaction values.
         '''
         outputHandler= self.getOutputHandler(self.setsToDispDspRot)
-        for st in self.setsToDispReactions:
-            outputHandler.displayReactions(setToDisplay= st, fileName= fileName, defFScale= defFScale)
+        outputHandler.displayReactionsOnSets(setsToDisplayReactions= self.setsToDispReactions, fileName= fileName, defFScale= defFScale, inclInertia= inclInertia, reactionCheckTolerance= reactionCheckTolerance)
             
     def displayEigenvectorsOnSets(self, eigenMode, fileName=None,defFScale=0.0):
         '''displays the reactions as vector on affected nodes
