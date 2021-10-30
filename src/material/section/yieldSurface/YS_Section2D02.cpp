@@ -77,6 +77,7 @@ XC::YS_Section2D02::YS_Section2D02
 }
 
 
+//! @brief Commit the state of the material.
 int XC::YS_Section2D02::commitState(void)
   {
     double pRot = fabs(ys->hModel->getTrialPlasticStrains(0));

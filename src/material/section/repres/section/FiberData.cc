@@ -29,16 +29,16 @@
 #include <material/section/repres/section/FiberData.h>
 #include <material/section/repres/cell/VectorCells.h>
 #include <material/section/repres/cell/Cell.h>
-#include "material/section/repres/geom_section/region/RegionContainer.h"
-#include <material/section/repres/geom_section/region/SectRegion.h>
-#include <material/section/repres/geom_section/reinfBar/VectorReinfBar.h>
-#include <material/section/repres/geom_section/reinfBar/ReinfBar.h>
-#include "material/section/repres/geom_section/reinfLayer/ReinfLayer.h"
-#include "material/section/repres/geom_section/reinfLayer/ListReinfLayer.h"
+#include "material/section/repres/section_geometry/region/RegionContainer.h"
+#include <material/section/repres/section_geometry/region/SectRegion.h>
+#include <material/section/repres/section_geometry/reinfBar/VectorReinfBar.h>
+#include <material/section/repres/section_geometry/reinfBar/ReinfBar.h>
+#include "material/section/repres/section_geometry/reinfLayer/ReinfLayer.h"
+#include "material/section/repres/section_geometry/reinfLayer/ListReinfLayer.h"
 #include "material/uniaxial/UniaxialMaterial.h"
 #include "material/section/fiber_section/fiber/UniaxialFiber2d.h"
 #include "material/section/fiber_section/fiber/UniaxialFiber3d.h"
-#include "material/section/repres/geom_section/GeomSection.h"
+#include "material/section/repres/section_geometry/SectionGeometry.h"
 
 
 //! @brief Constructor.
@@ -46,7 +46,7 @@ XC::FiberData::FiberData(const int &sz)
   : fibersMaterial(sz),fibersPosition(2,sz),fibersArea(sz) {}
 
 //! @brief Constructor.
-XC::FiberData::FiberData(const GeomSection &gmSecc)
+XC::FiberData::FiberData(const SectionGeometry &gmSecc)
   : fibersMaterial(gmSecc.getNumFiberData()),fibersPosition(2,gmSecc.getNumFiberData()),fibersArea(gmSecc.getNumFiberData())
   {
     int k= PutCells(0,gmSecc.getRegions());

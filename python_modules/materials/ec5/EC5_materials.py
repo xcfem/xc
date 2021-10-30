@@ -21,6 +21,9 @@ from misc_utils import log_messages as lmsg
 
 ec5_wood_classes= {'C14': {'fm_k': 14.00E+06, 'ft_0_k': 8.00E+06, 'ft_90_k': 400.00E+03, 'fc_0_k': 16.00E+06, 'fc_90_k': 2.00E+06, 'fv_k': 1.70E+06, 'E0_mean': 7.00E+09, 'E0_05': 4.70E+09, 'E90_mean': 230.00E+06, 'Gmean': 440.00E+06, 'ro_k': 290, 'ro_mean': 350}, 'C16': {'fm_k': 16.00E+06, 'ft_0_k': 10.00E+06, 'ft_90_k': 500.00E+03, 'fc_0_k': 17.00E+06, 'fc_90_k': 2.20E+06, 'fv_k': 1.80E+06, 'E0_mean': 8.00E+09, 'E0_05': 5.40E+09, 'E90_mean': 270.00E+06, 'Gmean': 500.00E+06, 'ro_k': 310, 'ro_mean': 370}, 'C18': {'fm_k': 18.00E+06, 'ft_0_k': 11.00E+06, 'ft_90_k': 500.00E+03, 'fc_0_k': 18.00E+06, 'fc_90_k': 2.20E+06, 'fv_k': 2.00E+06, 'E0_mean': 9.00E+09, 'E0_05': 6.00E+09, 'E90_mean': 300.00E+06, 'Gmean': 560.00E+06, 'ro_k': 320, 'ro_mean': 380}, 'C22': {'fm_k': 22.00E+06, 'ft_0_k': 13.00E+06, 'ft_90_k': 500.00E+03, 'fc_0_k': 20.00E+06, 'fc_90_k': 2.40E+06, 'fv_k': 2.40E+06, 'E0_mean': 10.00E+09, 'E0_05': 6.70E+09, 'E90_mean': 330.00E+06, 'Gmean': 630.00E+06, 'ro_k': 340, 'ro_mean': 410}, 'C24': {'fm_k': 24.00E+06, 'ft_0_k': 14.00E+06, 'ft_90_k': 500.00E+03, 'fc_0_k': 21.00E+06, 'fc_90_k': 2.50E+06, 'fv_k': 2.50E+06, 'E0_mean': 11.00E+09, 'E0_05': 7.40E+09, 'E90_mean': 370.00E+06, 'Gmean': 690.00E+06, 'ro_k': 350, 'ro_mean': 420}, 'C27': {'fm_k': 27.00E+06, 'ft_0_k': 16.00E+06, 'ft_90_k': 600.00E+03, 'fc_0_k': 22.00E+06, 'fc_90_k': 2.60E+06, 'fv_k': 2.80E+06, 'E0_mean': 11.50E+09, 'E0_05': 7.70E+09, 'E90_mean': 380.00E+06, 'Gmean': 720.00E+06, 'ro_k': 370, 'ro_mean': 450}, 'C30': {'fm_k': 30.00E+06, 'ft_0_k': 18.00E+06, 'ft_90_k': 600.00E+03, 'fc_0_k': 23.00E+06, 'fc_90_k': 2.70E+06, 'fv_k': 3.00E+06, 'E0_mean': 12.00E+09, 'E0_05': 8.00E+09, 'E90_mean': 400.00E+06, 'Gmean': 750.00E+06, 'ro_k': 380, 'ro_mean': 460}, 'C35': {'fm_k': 35.00E+06, 'ft_0_k': 21.00E+06, 'ft_90_k': 600.00E+03, 'fc_0_k': 25.00E+06, 'fc_90_k': 2.80E+06, 'fv_k': 3.40E+06, 'E0_mean': 13.00E+09, 'E0_05': 8.70E+09, 'E90_mean': 430.00E+06, 'Gmean': 810.00E+06, 'ro_k': 400, 'ro_mean': 480}, 'C40': {'fm_k': 40.00E+06, 'ft_0_k': 24.00E+06, 'ft_90_k': 600.00E+03, 'fc_0_k': 26.00E+06, 'fc_90_k': 2.90E+06, 'fv_k': 3.80E+06, 'E0_mean': 14.00E+09, 'E0_05': 9.40E+09, 'E90_mean': 470.00E+06, 'Gmean': 880.00E+06, 'ro_k': 420, 'ro_mean': 500}, 'D30':{'fm_k': 30.00E+06, 'ft_0_k': 18.00E+06, 'ft_90_k': 600.00E+03, 'fc_0_k': 23.00E+06, 'fc_90_k': 8.00E+06, 'fv_k': 3.00E+06, 'E0_mean': 10.00E+09, 'E0_05': 8.00E+09, 'E90_mean': 640.00E+06, 'Gmean': 600.00E+06, 'ro_k': 530, 'ro_mean': 640}, 'D35':{'fm_k': 35.00E+06, 'ft_0_k': 21.00E+06, 'ft_90_k': 600.00E+03, 'fc_0_k': 25.00E+06, 'fc_90_k': 8.40E+06, 'fv_k': 3.40E+06, 'E0_mean': 10.00E+09, 'E0_05': 8.70E+09, 'E90_mean': 690.00E+06, 'Gmean': 650.00E+06, 'ro_k': 560, 'ro_mean': 670}, 'D40':{'fm_k': 40.00E+06, 'ft_0_k': 24.00E+06, 'ft_90_k': 600.00E+03, 'fc_0_k': 26.00E+06, 'fc_90_k': 8.80E+06, 'fv_k': 3.80E+06, 'E0_mean': 11.00E+09, 'E0_05': 9.40E+09, 'E90_mean': 750.00E+06, 'Gmean': 700.00E+06, 'ro_k': 590, 'ro_mean': 700}, 'D50':{'fm_k': 50.00E+06, 'ft_0_k': 30.00E+06, 'ft_90_k': 600.00E+03, 'fc_0_k': 29.00E+06, 'fc_90_k': 9.70E+06, 'fv_k': 4.60E+06, 'E0_mean': 14.00E+09, 'E0_05': 11.80E+09, 'E90_mean': 930.00E+06, 'Gmean': 880.00E+06, 'ro_k': 650, 'ro_mean': 780}, 'D60':{'fm_k': 60.00E+06, 'ft_0_k': 36.00E+06, 'ft_90_k': 600.00E+03, 'fc_0_k': 32.00E+06, 'fc_90_k': 10.50E+06, 'fv_k': 5.30E+06, 'E0_mean': 17.00E+09, 'E0_05': 14.30E+09, 'E90_mean': 1.13E+09, 'Gmean': 1.06E+09, 'ro_k': 700, 'ro_mean': 840}, 'D70':{'fm_k': 70.00E+06, 'ft_0_k': 42.00E+06, 'ft_90_k': 600.00E+03, 'fc_0_k': 34.00E+06, 'fc_90_k': 13.50E+06, 'fv_k': 6.00E+06, 'E0_mean': 20.00E+09, 'E0_05': 16.80E+09, 'E90_mean': 1.33E+09, 'Gmean': 1.25E+09, 'ro_k': 900, 'ro_mean': 1080}, 'GL24h':{ 'fm_k': 24.00E+06, 'ft_0_k': 16.50E+06, 'ft_90_k': 400.00E+03, 'fc_0_k': 24.00E+06, 'fc_90_k': 2.70E+06, 'fv_k': 2.70E+06, 'E0_mean': 11.60E+09, 'E0_05': 9.40E+09, 'E90_mean': 390.00E+06, 'Gmean': 750.00E+06, 'ro_k': 380}, 'GL28h':{ 'fm_k': 28.00E+06, 'ft_0_k': 19.50E+06, 'ft_90_k': 450.00E+03, 'fc_0_k': 26.50E+06, 'fc_90_k': 3.00E+06, 'fv_k': 3.20E+06, 'E0_mean': 12.60E+09, 'E0_05': 10.20E+09, 'E90_mean': 420.00E+06, 'Gmean': 780.00E+06, 'ro_k': 410}, 'GL32h':{ 'fm_k': 32.00E+06, 'ft_0_k': 22.50E+06, 'ft_90_k': 500.00E+03, 'fc_0_k': 29.00E+06, 'fc_90_k': 3.30E+06, 'fv_k': 3.80E+06, 'E0_mean': 13.70E+09, 'E0_05': 11.10E+09, 'E90_mean': 460.00E+06, 'Gmean': 850.00E+06, 'ro_k': 430}, 'GL36h':{ 'fm_k': 36.00E+06, 'ft_0_k': 26.00E+06, 'ft_90_k': 600.00E+03, 'fc_0_k': 31.00E+06, 'fc_90_k': 3.60E+06, 'fv_k': 4.30E+06, 'E0_mean': 14.70E+09, 'E0_05': 11.90E+09, 'E90_mean': 490.00E+06, 'Gmean': 910.00E+06, 'ro_k': 450}, 'GL24c':{ 'fm_k': 24.00E+06, 'ft_0_k': 14.00E+06, 'ft_90_k': 350.00E+03, 'fc_0_k': 21.00E+06, 'fc_90_k': 2.40E+06, 'fv_k': 2.20E+06, 'E0_mean': 11.60E+09, 'E0_05': 9.40E+09, 'E90_mean': 320.00E+06, 'Gmean': 590.00E+06, 'ro_k': 350}, 'GL28c':{ 'fm_k': 28.00E+06, 'ft_0_k': 16.50E+06, 'ft_90_k': 400.00E+03, 'fc_0_k': 24.00E+06, 'fc_90_k': 2.70E+06, 'fv_k': 2.70E+06, 'E0_mean': 12.60E+09, 'E0_05': 10.20E+09, 'E90_mean': 390.00E+06, 'Gmean': 720.00E+06, 'ro_k': 380}, 'GL32c':{ 'fm_k': 32.00E+06, 'ft_0_k': 19.50E+06, 'ft_90_k': 450.00E+03, 'fc_0_k': 26.50E+06, 'fc_90_k': 3.00E+06, 'fv_k': 3.20E+06, 'E0_mean': 13.70E+09, 'E0_05': 11.10E+09, 'E90_mean': 420.00E+06, 'Gmean': 780.00E+06, 'ro_k': 410}, 'GL36c':{ 'fm_k': 36.00E+06, 'ft_0_k': 22.50E+06, 'ft_90_k': 500.00E+03, 'fc_0_k': 29.00E+06, 'fc_90_k': 3.30E+06, 'fv_k': 3.80E+06, 'E0_mean': 14.70E+09, 'E0_05': 11.90E+09, 'E90_mean': 460.00E+06, 'Gmean': 850.00E+06, 'ro_k': 430}}
 
+# Added by LCPT 20211028
+ec5_wood_classes['GL30h']= {'fm_k': 38.00E+06, 'ft_0_k': 22.00E+06, 'ft_90_k': 0.4E+06, 'fc_0_k': 23.00E+06, 'fc_90_k': 2.70E+06, 'fv_k': 4.0E+06, 'E0_mean': 12.00E+09, 'E0_05': 8.0E+09, 'E90_mean': 0.4E+09, 'Gmean': 0.75E+09, 'ro_k': 380, 'ro_mean': 460}
+
 class Wood(wood_base.Wood):
     '''Base class for wood materials according
        to EC5.
@@ -66,11 +69,13 @@ class Wood(wood_base.Wood):
             self.Gmean= woodData['Gmean']
 
     def getPoissonRatio(self, perpendicular= False):
-        ''' Return the Poisson's ratio of the wood.'''
+        ''' Return the Poisson's ratio of the wood. Its value is quite large
+            due to the anisotropic material behavior.'''
         E= self.E0_mean
         if(perpendicular):
             E= self.E90_mean
-        return (E/(2.0*self.Gmean)-1.0)
+        G= self.Gmean
+        return E/(2.0*G)-1.0
     
     def getElasticMaterial(self, perpendicular= False):
         ''' Return an elastic material with the mechanical properties of the
@@ -83,6 +88,28 @@ class Wood(wood_base.Wood):
         if(perpendicular):
             E= self.E90_mean
         return typical_materials.BasicElasticMaterial(E, nu, self.specificGravity)
+    
+    def getElasticMembranePlateSection(self, preprocessor, thickness:float, overridePoissonRatio= None, name:str= None, perpendicular= False):
+        ''' Return an elastic membrane plate material with the mechanical
+            properties of the timber.
+
+        :param preprocessor: preprocessor of the finite element problem.
+        :param thickness: overall depth of the section.
+        :param overridePoissonRatio: the Poisson's ratio value is quite large
+                                     due to the anisotropic material behavior.
+        :param name: name for the new material.
+        :param perpendicular: if true use the value of modulus of elasticity perpendicular to the grain.
+        '''
+        if(overridePoissonRatio):
+            nu= overridePoissonRatio
+        else:
+            nu= self.getPoissonRatio()
+        E= self.E0_mean
+        if(perpendicular):
+            E= self.E90_mean
+        if(name==None):
+            name= self.name+str(thickness)+'_elastic_membrane_plate_section'
+        return typical_materials.defElasticMembranePlateSection(preprocessor, name,E,nu, rho= self.specificGravity, h= thickness)
     
     def gammaM(self):
         ''' return the partial factor for material properties and resistances
@@ -298,6 +325,7 @@ class GluedLaminatedTimber(Wood):
 
 GL24h= GluedLaminatedTimber('GL24h')
 GL28h= GluedLaminatedTimber('GL28h')
+GL30h= GluedLaminatedTimber('GL30h')
 GL32h= GluedLaminatedTimber('GL32h')
 GL36h= GluedLaminatedTimber('GL36h')
 

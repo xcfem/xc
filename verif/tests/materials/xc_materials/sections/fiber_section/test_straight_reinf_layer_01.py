@@ -65,7 +65,7 @@ materialHandler= preprocessor.getMaterialHandler
 # Sections
 quadFibers= materialHandler.newMaterial("fiber_section_3d","quadFibers")
 fiberSectionRepr= quadFibers.getFiberSectionRepr()
-fiberSectionRepr.setGeomNamed("quadFibersGeom")
+fiberSectionRepr.setGeomNamed(quadFibersGeom.name)
 quadFibers.setupFibers()
 fibers= quadFibers.getFibers()
 

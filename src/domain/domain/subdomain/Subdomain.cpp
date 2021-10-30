@@ -104,9 +104,9 @@ XC::Subdomain::Subdomain(int tag,DataOutputHandler::map_output_handlers *oh,Comm
  :Element(tag,ELE_TAG_Subdomain),
   Domain(owr,oh),
   realCost(0.0),cpuCost(0.0),pageCost(0),
-  theAnalysis(nullptr), extNodes(nullptr), theFEele(nullptr),
+  theAnalysis(nullptr), extNodes(), theFEele(nullptr),
   thePartitionedModelBuilder(nullptr),
-  mapBuilt(false),map(0),mappedVect(0),mappedMatrix(0)
+  mapBuilt(false), map(), mappedVect(), mappedMatrix()
   {
     // init the arrays.
     internalNodes= new ArrayOfTaggedObjects(static_cast<Domain *>(this),8024,"intNod");
@@ -136,9 +136,6 @@ XC::Subdomain::~Subdomain(void)
     if(externalNodes) delete externalNodes;
     if(internalNodeIter) delete internalNodeIter;
     if(externalNodeIter) delete externalNodeIter;
-    if(map) delete map;
-    if(mappedVect) delete mappedVect;
-    if(mappedMatrix) delete mappedMatrix;
   }
 
 void XC::Subdomain::clearAll(void)
@@ -490,29 +487,13 @@ const XC::ID &XC::Subdomain::getExternalNodes(void) const
   {
     // first we check that extNodes exists and is of correct size
     int numExt = externalNodes->getNumComponents();
-    if(!extNodes)
+    extNodes.resize(numExt);
+    if(extNodes.Size() != numExt)
       {
-        extNodes= new ID(numExt);
-        if(extNodes == 0 || extNodes->Size() != numExt)
-          {
-            std::cerr << Domain::getClassName() << "::" << __FUNCTION__
-		      << "; ran out of memory for size "
-		      << numExt << std::endl;
-            exit(-1);
-          }
-      }
-
-    if(extNodes->Size() != numExt)
-      {
-        delete extNodes;
-        extNodes = new ID(numExt);
-        if(extNodes == 0 || extNodes->Size() != numExt)
-          {
-            std::cerr << Domain::getClassName() << "::" << __FUNCTION__
-		      << "; ran out of memory for size: "
-		      << numExt << std::endl;
-            exit(-1);
-          }
+        std::cerr << Domain::getClassName() << "::" << __FUNCTION__
+                  << "; ran out of memory for size: "
+	          << numExt << std::endl;
+        exit(-1);
       }
 
     // we now set the values of extNodes to be the node tags of the
@@ -523,11 +504,10 @@ const XC::ID &XC::Subdomain::getExternalNodes(void) const
     int cnt = 0;
 
     while ((nodPtr = theExtNodes()) != nullptr)
-      (*extNodes)(cnt++) = nodPtr->getTag();
+      extNodes(cnt++)= nodPtr->getTag();
 
     // done
-    ID &res = *extNodes;
-    return res;
+    return extNodes;
   }
 
 
@@ -630,14 +610,14 @@ const XC::Vector &XC::Subdomain::getResistingForce(void) const
     if(!mapBuilt)
       this->buildMap();
 
-    ID &theMap = *map;
+    ID &theMap= map;
     const Vector &anaResidual = theAnalysis->getResidual();
     int numDOF = this->getNumDOF();
     for(int i=0; i<numDOF; i++)
-      (*mappedVect)(i) = anaResidual(theMap(i));
+      mappedVect(i) = anaResidual(theMap(i));
     //std::cerr << Domain::getClassName() << "::" << __FUNCTION__
     //          << ": " << *mappedVect;
-    return *mappedVect;
+    return mappedVect;
   }
 
 
@@ -728,13 +708,13 @@ const XC::Matrix &XC::Subdomain::getTang(void)
     if(mapBuilt == false)
         this->buildMap();
 
-    ID &theMap = *map;
+    ID &theMap = map;
     const XC::Matrix &anaTang = theAnalysis->getTangent();
     int numDOF = this->getNumDOF();
     for(int i=0; i<numDOF; i++)
       for(int j=0; j<numDOF; j++)
-        (*mappedMatrix)(i,j) = anaTang(theMap(i),theMap(j));
-    return *mappedMatrix;
+        mappedMatrix(i,j) = anaTang(theMap(i),theMap(j));
+    return mappedMatrix;
   }
 
 
@@ -771,12 +751,12 @@ const XC::Vector &XC::Subdomain::getLastExternalSysResponse(void)
     if(mapBuilt == false)
       this->buildMap();
 
-    ID &theMap = *map;
-    const XC::Vector &localResponse = theFEele->getLastResponse();
+    ID &theMap= map;
+    const Vector &localResponse = theFEele->getLastResponse();
     int numDOF = this->getNumDOF();
     for(int i=0; i<numDOF; i++)
-      (*mappedVect)(theMap(i)) = localResponse(i);
-    return *mappedVect;
+      mappedVect(theMap(i)) = localResponse(i);
+    return mappedVect;
   }
 
 
@@ -868,13 +848,8 @@ int XC::Subdomain::buildMap(void) const
       {
         // determine the mapping between local dof and subdomain ana dof
         int numDOF = this->getNumDOF();
-        if(map == nullptr)
-          map = new ID(numDOF);
-        if(map->Size() != numDOF)
-          {
-            delete map;
-            map = new ID(numDOF);
-          }
+        if(map.Size() != numDOF)
+          { map.resize(numDOF); }
 
         //int numExt = theAnalysis->getNumExternalEqn();
         int numInt = theAnalysis->getNumInternalEqn();
@@ -891,26 +866,16 @@ int XC::Subdomain::buildMap(void) const
             for(int j=0; j<numNodeDOF; j++)
               {
                 int locInSubdomainExt = theLocalID(j)-numInt;
-                (*map)(locInMap)=locInSubdomainExt;
+                map(locInMap)=locInSubdomainExt;
                 locInMap++;
               }
           }
         mapBuilt = true;
 
-        if(mappedVect == nullptr)
-          mappedVect = new Vector(numDOF);
-        if(mappedVect->Size() != numDOF)
-          {
-            delete mappedVect;
-            mappedVect = new Vector(numDOF);
-          }
-        if(mappedMatrix == nullptr)
-          mappedMatrix = new Matrix(numDOF,numDOF);
-        if(mappedMatrix->noRows() != numDOF)
-          {
-            delete mappedMatrix;
-            mappedMatrix = new Matrix(numDOF,numDOF);
-          }
+        if(mappedVect.Size()!=numDOF)
+          mappedVect.resize(numDOF);
+        if(mappedMatrix.noRows()!=numDOF)
+          { mappedMatrix.resize(numDOF,numDOF); }
       }
     return 0;
   }

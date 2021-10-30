@@ -251,7 +251,7 @@ const XC::Matrix& XC::J2ThreeDimensional::getTangent(void) const
   return tangent_matrix ;
 } 
 
-//! @brief send back the tangent 
+//! @brief Return the material initial stiffness.
 const XC::Matrix& XC::J2ThreeDimensional::getInitialTangent(void) const
 {
   // matrix to tensor mapping

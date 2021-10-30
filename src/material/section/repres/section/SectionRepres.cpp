@@ -55,7 +55,7 @@
 // November 1998
 
 #include <material/section/repres/section/SectionRepres.h>
-#include <material/section/repres/geom_section/GeomSection.h>
+#include <material/section/repres/section_geometry/SectionGeometry.h>
 #include "preprocessor/prep_handlers/MaterialHandler.h"
 
 
@@ -88,7 +88,7 @@ int XC::SectionRepres::getNumCells(void) const
 
 void XC::SectionRepres::setGeomNamed(const std::string &nmbGeom)
   {
-    const GeomSection *tmp= material_handler->find_ptr_geom_section(nmbGeom);
+    const SectionGeometry *tmp= material_handler->find_ptr_section_geometry(nmbGeom);
     if(tmp)
       gmSecc= tmp;
     else
@@ -98,11 +98,11 @@ void XC::SectionRepres::setGeomNamed(const std::string &nmbGeom)
   }
 
 //! @brief Sets section geometry.
-void XC::SectionRepres::setGeom(const GeomSection *g)
+void XC::SectionRepres::setGeom(const SectionGeometry *g)
   { gmSecc= g; }
 
 //! @brief Returns a pointer to section geometry.
-const XC::GeomSection *XC::SectionRepres::getGeom(void) const
+const XC::SectionGeometry *XC::SectionRepres::getGeom(void) const
   { return gmSecc; }
 
 //! @brief Printing...

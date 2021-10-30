@@ -152,6 +152,7 @@ int XC::ElasticCrossAnisotropic::setTrialStrainIncr(const XC::Vector &strain, co
   return 0;
 }
 
+//! @brief Return the material tangent stiffness.
 const XC::Matrix &XC::ElasticCrossAnisotropic::getTangent(void) const
   {
     ElasticCrossAnisotropic *this_no_const=const_cast<ElasticCrossAnisotropic *>(this);
@@ -230,6 +231,7 @@ const XC::straintensor &XC::ElasticCrossAnisotropic::getPlasticStrainTensor(void
      return t;
   }
 
+//! @brief Commit the state of the material.
 int XC::ElasticCrossAnisotropic::commitState(void)
 {
   //sigma = D * epsilon;

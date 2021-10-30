@@ -243,6 +243,7 @@ void XC::Steel03::determineTrialState (double dStrain)
 }
 
 
+//! @brief Commit the state of the material.
 int XC::Steel03::commitState(void)
   {  
     // History variables

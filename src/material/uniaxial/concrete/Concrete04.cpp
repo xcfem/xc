@@ -297,6 +297,7 @@ void XC::Concrete04::setTenUnload(){
   TUtenSlope= trialState.getStress() / trialState.getStrain();
 }
 
+//! @brief Commit the state of the material.
 int XC::Concrete04::commitState(void)
   {
     convergedHistory= trialHistory; 

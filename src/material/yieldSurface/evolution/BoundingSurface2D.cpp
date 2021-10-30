@@ -62,6 +62,7 @@ XC::BoundingSurface2D::~BoundingSurface2D()
     delete boundSurface;
 }
 
+//! @brief Commit the state of the material.
 int XC::BoundingSurface2D::commitState()
 {
 	this->XC::YS_Evolution2D::commitState();

@@ -160,6 +160,7 @@ XC::PressureDependMultiYield02::PressureDependMultiYield02 (const XC::PressureDe
   { damage = a.damage; }
 
 
+//! @brief Return the material tangent stiffness.
 const XC::Matrix &XC::PressureDependMultiYield02::getTangent(void) const
 {
   int loadStage = loadStagex[matN];

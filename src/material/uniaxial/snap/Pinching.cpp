@@ -263,13 +263,16 @@ int XC::Pinching::revertToLastCommit()
 }
 
 
+//! @brief Return the material tangent stiffness.
 double XC::Pinching::getTangent(void) const
   {
-    if( DEBG ==1 ) fprintf( OutputFile , "Get tangent\n" );        // debugging
+    if(DEBG ==1)
+      fprintf( OutputFile , "Get tangent\n" );  // debugging
     return hsTrial[2];
   }
 
-double XC::Pinching::getInitialTangent (void) const
+//! @brief Return the material initial stiffness.
+double XC::Pinching::getInitialTangent(void) const
   { return elstk; }
 
 double XC::Pinching::getStress(void) const
@@ -700,6 +703,7 @@ int XC::Pinching::setTrialStrain( double d, double strainRate)
 }
 
 
+//! @brief Commit the state of the material.
 int XC::Pinching::commitState()
 {
   if ( DEBG ==1 ) fprintf( OutputFile , "Commit State\n" );        // debugging

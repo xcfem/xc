@@ -92,9 +92,9 @@ class RayleighDampingFactors;
 
 //!  @defgroup Dom Domain of the finite element problem.
 //
-//! @ingroup Dom
 //
 //! @brief Domain (mesh and boundary conditions) of the finite element model.
+//! @ingroup Dom
 //! Is a container class for storing and providing access to
 //! the components of a domain, i.e. nodes, elements, boundary conditions,
 //! and load patterns.

@@ -6,6 +6,6 @@ This directory contains the classes that define the mesh components: nodes, elem
 
 ## Contents
 
-		- element: contains the element classes, all in subdirectories, i.e.
-		         the Truss.h and Truss.C files are in a subdirectory truss.
-        - node: the Node and NodalLoad classes.
+	- element: contains the element classes.
+	- node: the Node and NodalLoad classes.
+	- region: nodes and elements belonging to a mesh region.

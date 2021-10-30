@@ -350,7 +350,7 @@ std::deque<GEOM_FT> &Polygon2d::getCovers(const Pos2dList &l) const
   { return l.getCovers(*this); }
 
 //! @brief Return a polygon with a vertex on the mid-point of each side of
-//! the argument (used in GeomSection::getAnchoMecanico).
+//! the argument (used in SectionGeometry::getAnchoMecanico).
 Polygon2d append_mid_points(const Polygon2d &plg)
   {
     Polygon2d retval;

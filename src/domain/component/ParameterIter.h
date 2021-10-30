@@ -32,6 +32,7 @@ class Parameter;
 //! iter for returning the elements of an object of class  Domain.
 //! ParameterIters must be written for each subclass of Domain
 //! (this is done for efficiency reasons), hence the abstract base class.
+//! @ingroup Dom
 class ParameterIter
   {
   public:

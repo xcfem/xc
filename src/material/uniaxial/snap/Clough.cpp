@@ -243,12 +243,14 @@ int XC::Clough::revertToLastCommit()
 }
 
 
+//! @brief Return the material tangent stiffness.
 double XC::Clough::getTangent(void) const
   {
     if( DEBG ==1 ) fprintf( OutputFile , "Get tangent\n" );        // debugging
     return hsTrial[2];
   }
 
+//! @brief Return the material initial stiffness.
 double XC::Clough::getInitialTangent(void) const
   {
     if( DEBG ==1 ) fprintf( OutputFile , "Get initial tangent\n" );        // debugging
@@ -678,6 +680,7 @@ int XC::Clough::setTrialStrain( double d, double strainRate)
 }
 
 
+//! @brief Commit the state of the material.
 int XC::Clough::commitState()
 {
   if ( DEBG ==1 ) fprintf( OutputFile , "Commit State\n" );        // debugging

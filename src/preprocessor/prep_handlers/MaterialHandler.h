@@ -35,7 +35,7 @@
 
 namespace XC {
 class Material;
-class GeomSection;
+class SectionGeometry;
 class InteractionDiagram;
 class InteractionDiagram2d;
 class InteractionDiagramData;
@@ -50,7 +50,7 @@ class MaterialHandler: public PrepHandler
     typedef map_materials::const_iterator const_iterator;
     typedef map_materials::iterator iterator;
 
-    typedef std::map<std::string,GeomSection *> map_geom_secc;
+    typedef std::map<std::string,SectionGeometry *> map_geom_secc;
     typedef map_geom_secc::const_iterator const_geom_secc_iterator;
     typedef map_geom_secc::iterator geom_secc_iterator;
 
@@ -83,8 +83,9 @@ class MaterialHandler: public PrepHandler
     Material *find_ptr(const int &tag);
     const Material *find_ptr(const int &tag) const;
     std::string getName(const int &tag) const;
-    GeomSection *find_ptr_geom_section(const std::string &nmb);
-    const GeomSection *find_ptr_geom_section(const std::string &nmb) const;
+    std::string getSectionGeometryName(const SectionGeometry *) const;
+    SectionGeometry *find_ptr_section_geometry(const std::string &nmb);
+    const SectionGeometry *find_ptr_section_geometry(const std::string &nmb) const;
     InteractionDiagram *find_ptr_interaction_diagram(const std::string &nmb);
     const InteractionDiagram *find_ptr_interaction_diagram(const std::string &nmb) const;
     InteractionDiagram2d *find_ptr_interaction_diagram2d(const std::string &nmb);
@@ -95,8 +96,8 @@ class MaterialHandler: public PrepHandler
     bool InteractionDiagramExists2d(const std::string &nmb) const;
     Material *newMaterial(const std::string &,const std::string &);
     Material &getMaterial(const std::string &);
-    GeomSection *newSectionGeometry(const std::string &);
-    GeomSection &getSectionGeometry(const std::string &);
+    SectionGeometry *newSectionGeometry(const std::string &);
+    SectionGeometry &getSectionGeometry(const std::string &);
     InteractionDiagram *newInteractionDiagram(const std::string &);
     InteractionDiagram *calcInteractionDiagram(const std::string &,const InteractionDiagramData &diag_data);
     InteractionDiagram &getInteractionDiagram(const std::string &);

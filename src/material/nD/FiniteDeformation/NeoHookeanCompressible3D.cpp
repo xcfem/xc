@@ -126,11 +126,12 @@ const XC::straintensor &XC::NeoHookeanCompressible3D::getC(void) const
 //   return J;
 //}
 
-//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//! @brief Return the material tangent stiffness.
 const XC::Tensor& XC::NeoHookeanCompressible3D::getTangentTensor(void) const
   { return Stiffness; }
 
-//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+//! @brief Return the material initial stiffness.
 const XC::Tensor &XC::NeoHookeanCompressible3D::getInitialTangentTensor(void) const
   { return this->getTangentTensor(); }
 

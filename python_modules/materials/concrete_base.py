@@ -21,6 +21,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import geom
 import xc_base
+import xc
 from postprocess.reports import graph_material as mg
 from misc_utils import log_messages as lmsg
 
@@ -902,17 +903,12 @@ class paramTensStiffness(object):
     
 
 def defDiagKConcrete(preprocessor, concreteRecord):
-  lmsg.warning('defDiagKConcrete deprecated; use concreteRecord.defDiagK(preproccesor)')
-  return concreteRecord.defDiagK(preprocessor)
+    lmsg.warning('defDiagKConcrete deprecated; use concreteRecord.defDiagK(preproccesor)')
+    return concreteRecord.defDiagK(preprocessor)
 
 def defDiagDConcrete(preprocessor, concreteRecord):
-  lmsg.warning('defDiagDConcrete deprecated; use concreteRecord.defDiagD(preproccesor)')
-  return concreteRecord.defDiagD(preprocessor)
-
-
-
-
-
+    lmsg.warning('defDiagDConcrete deprecated; use concreteRecord.defDiagD(preproccesor)')
+    return concreteRecord.defDiagD(preprocessor)
 
 def concreteDesignDiagramTest(preprocessor, concreteRecord):
     '''Calculates the differece between the stresses obtained from the
@@ -925,14 +921,14 @@ def concreteDesignDiagramTest(preprocessor, concreteRecord):
     errMax= 0.0
     e=  -0.1e-8
     while(e>=concreteRecord.epsilonU()):
-      diagConcrete.setTrialStrain(e,0.0)
-      diagConcrete.commitState()
-#      sg= sigmaDConcrete(e,concreteRecord)
-      sg=concreteRecord.sigmac(e)
-      stress= diagConcrete.getStress()
-      err= abs((sg-stress)/sg)
-      errMax= max(err,errMax)
-      e=(e+incr)
+        diagConcrete.setTrialStrain(e,0.0)
+        diagConcrete.commitState()
+  #      sg= sigmaDConcrete(e,concreteRecord)
+        sg=concreteRecord.sigmac(e)
+        stress= diagConcrete.getStress()
+        err= abs((sg-stress)/sg)
+        errMax= max(err,errMax)
+        e=(e+incr)
     return errMax
 
 def concreteDesignTangentTest(preprocessor, concreteRecord):
@@ -946,17 +942,17 @@ def concreteDesignTangentTest(preprocessor, concreteRecord):
     errMax= 0.0
     e=-0.1e-8
     while(e>=concreteRecord.epsilonU()):
-      diagConcrete.setTrialStrain(e,0.0)
-      diagConcrete.commitState()
-#      tg= concreteRecord.tangDConcrete(e)
-      tg=concreteRecord.tangc(e)
-      tgDiag= diagConcrete.getTangent()
-      if(tg!=0.0):
-        err= abs((tg-tgDiag)/tg)
-      else:
-        err= abs(tg-tgDiag)
-      errMax= max(err,errMax)
-      e=(e+incr)
+        diagConcrete.setTrialStrain(e,0.0)
+        diagConcrete.commitState()
+  #      tg= concreteRecord.tangDConcrete(e)
+        tg=concreteRecord.tangc(e)
+        tgDiag= diagConcrete.getTangent()
+        if(tg!=0.0):
+          err= abs((tg-tgDiag)/tg)
+        else:
+          err= abs(tg-tgDiag)
+        errMax= max(err,errMax)
+        e=(e+incr)
     return errMax
 
 # Reinforcing steel.
@@ -976,125 +972,127 @@ class ReinforcingSteel(matWDKD.MaterialWithDKDiagrams):
     bsh= 0.0 # Ratio between post-yield tangent and initial elastic tangent
     k=1.05   # fmaxk/fyk ratio (Annex C of EC2: class A k>=1,05 B , class B k>=1,08)
     def __init__(self,steelName, fyk, emax, gammaS, k=1.05):
-      super(ReinforcingSteel,self).__init__(steelName)
-      self.fyk= fyk # Characteristic value of the yield strength
-      self.gammaS= gammaS
-      self.emax= emax # Ultimate strain (rupture strain)
-      self.k=k        # fmaxk/fyk ratio
+        super(ReinforcingSteel,self).__init__(steelName)
+        self.fyk= fyk # Characteristic value of the yield strength
+        self.gammaS= gammaS
+        self.emax= emax # Ultimate strain (rupture strain)
+        self.k=k        # fmaxk/fyk ratio
 
     def fmaxk(self):
-      ''' Characteristic ultimate strength. '''
-      return self.k*self.fyk
+        ''' Characteristic ultimate strength. '''
+        return self.k*self.fyk
     def fyd(self):
-      ''' Design yield stress. '''
-      return self.fyk/self.gammaS
+        ''' Design yield stress. '''
+        return self.fyk/self.gammaS
     def eyk(self):
-      ''' Caracteristic strain at yield point. '''
-      return self.fyk/self.Es
+        ''' Caracteristic strain at yield point. '''
+        return self.fyk/self.Es
     def eyd(self):
-      ''' Design strain at yield point. '''
-      return self.fyd()/self.Es
+        ''' Design strain at yield point. '''
+        return self.fyd()/self.Es
     def Esh(self):
-      ''' Slope of the curve in the yielding region. '''
-      return (self.fmaxk()-self.fyk)/(self.emax-self.eyk())
+        ''' Slope of the curve in the yielding region. '''
+        return (self.fmaxk()-self.fyk)/(self.emax-self.eyk())
     def bsh(self):
-      ''' Ratio between post-yield tangent and initial elastic tangent. '''
-      return self.Esh()/self.Es
+        ''' Ratio between post-yield tangent and initial elastic tangent. '''
+        return self.Esh()/self.Es
     def defDiagK(self,preprocessor):
-      ''' Returns XC uniaxial material (characteristic values). '''
-      self.materialDiagramK= typical_materials.defSteel01(preprocessor,self.nmbDiagK,self.Es,self.fyk,self.bsh())
-      self.matTagK= self.materialDiagramK.tag
-      return self.materialDiagramK #30160925 was 'return self.matTagK'
+        ''' Returns XC uniaxial material (characteristic values). '''
+        self.materialDiagramK= typical_materials.defSteel01(preprocessor,self.nmbDiagK,self.Es,self.fyk,self.bsh())
+        self.matTagK= self.materialDiagramK.tag
+        return self.materialDiagramK #30160925 was 'return self.matTagK'
 
     def defDiagD(self,preprocessor):
-      ''' Returns XC uniaxial material (design values). '''
-      self.materialDiagramD= typical_materials.defSteel01(preprocessor,self.nmbDiagD,self.Es,self.fyd(),self.bsh())
-      self.matTagD= self.materialDiagramD.tag
-      return self.materialDiagramD #30160925 was 'return self.matTagD'
+        ''' Returns XC uniaxial material (design values). '''
+        self.materialDiagramD= typical_materials.defSteel01(preprocessor,self.nmbDiagD,self.Es,self.fyd(),self.bsh())
+        self.matTagD= self.materialDiagramD.tag
+        return self.materialDiagramD #30160925 was 'return self.matTagD'
 
     def plotDesignStressStrainDiagram(self,preprocessor,path=''):
-      '''Draws the steel design diagram.'''
-      if self.materialDiagramD== None:
-        self.defDiagD(preprocessor)
-      retval= mg.UniaxialMaterialDiagramGraphic(-0.016,0.016, self.materialName + ' design stress-strain diagram')
-      retval.setupGraphic(plt,self.materialDiagramD)
-      fileName= path+self.materialName+'_design_stress_strain_diagram'
-      retval.savefig(plt,fileName+'.png')
-      retval.savefig(plt,fileName+'.eps')
-      return retval
+        '''Draws the steel design diagram.'''
+        if self.materialDiagramD== None:
+            self.defDiagD(preprocessor)
+        retval= mg.UniaxialMaterialDiagramGraphic(-0.016,0.016, self.materialName + ' design stress-strain diagram')
+        retval.setupGraphic(plt,self.materialDiagramD)
+        fileName= path+self.materialName+'_design_stress_strain_diagram'
+        retval.savefig(plt,fileName+'.png')
+        retval.savefig(plt,fileName+'.eps')
+        return retval
 
 def defReinfSteelCharacteristicDiagram(preprocessor, steelRecord):
-  '''Characteristic stress-strain diagram.'''
-  return steelRecord.defDiagK(preprocessor)
+    '''Characteristic stress-strain diagram.'''
+    return steelRecord.defDiagK(preprocessor)
 
 def defReinfSteelDesignDiagram(preprocessor, steelRecord):
-  ''' Design stress-strain diagram. '''
-  return steelRecord.defDiagD(preprocessor)
+    ''' Design stress-strain diagram. '''
+    return steelRecord.defDiagD(preprocessor)
 
 # Functions for reinforcing steel testing.
 
 def sigmas(eps, fy, ey, Es, Esh):
-  '''Stress-strain diagram of reinforcing steel, according to EC2 
-     (the same one is adopted by EHE and SIA).
-  '''
-  if(eps>0):
-    if(eps<ey):
-      return (Es*eps)
+    '''Stress-strain diagram of reinforcing steel, according to EC2 
+       (the same one is adopted by EHE and SIA).
+    '''
+    if(eps>0):
+        if(eps<ey):
+            return (Es*eps)
+        else:
+            return (fy+(eps-ey)*Esh)
     else:
-      return (fy+(eps-ey)*Esh)
-  else:
-    if(eps>-(ey)):
-      return (Es*eps)
-    else:
-      return (-fy+(eps-ey)*Esh) 
+        if(eps>-(ey)):
+            return (Es*eps)
+        else:
+            return (-fy+(eps-ey)*Esh) 
 
 
 def sigmaKReinfSteel(eps,matRecord):
-  ''' Characteristic stress-strain diagram for reinforcing steel, according to EC2.'''
-  return sigmas(eps,matRecord.fyk,matRecord.eyk(),matRecord.Es,matRecord.Esh())
+    ''' Characteristic stress-strain diagram for reinforcing steel, 
+        according to EC2.'''
+    return sigmas(eps,matRecord.fyk,matRecord.eyk(),matRecord.Es,matRecord.Esh())
 
 def sigmaDReinfSteel(eps,matRecord):
-  '''Design stress-strain diagram for reinforcing steel, according to EC2.'''
-  return sigmas(eps,matRecord.fyd(),matRecord.eyd(),matRecord.Es,matRecord.Esh())
+    '''Design stress-strain diagram for reinforcing steel, 
+       according to EC2.'''
+    return sigmas(eps,matRecord.fyd(),matRecord.eyd(),matRecord.Es,matRecord.Esh())
 
 def testReinfSteelCharacteristicDiagram(preprocessor, matRecord):
-  ''' Checking of characteristic stress-strain diagram.'''
-  steelDiagram= defReinfSteelCharacteristicDiagram(preprocessor, matRecord)
-  ##30160925 was:
-#  tag= defReinfSteelCharacteristicDiagram(preprocessor, matRecord)
-#  steelDiagram= preprocessor.getMaterialHandler.getMaterial(matRecord.nmbDiagK)
-  incr= matRecord.emax/20
-  errMax= 0.0
-  e= 0.1e-8
-  while(e < matRecord.emax+1):
-    steelDiagram.setTrialStrain(e,0.0)
-    steelDiagram.commitState()
-    sg= sigmaKReinfSteel(e,matRecord)
-    stress= steelDiagram.getStress()
-    err= abs((sg-stress)/sg)
-    #print("e= ",e," strain= ",steelDiagram.getStrain()," stress= ",stress," sg= ", sg," err= ", err,"\n")
-    errMax= max(err,errMax)
-    e= e+incr
-  return errMax
+    ''' Checking of characteristic stress-strain diagram.'''
+    steelDiagram= defReinfSteelCharacteristicDiagram(preprocessor, matRecord)
+    ##30160925 was:
+    #  tag= defReinfSteelCharacteristicDiagram(preprocessor, matRecord)
+    #  steelDiagram= preprocessor.getMaterialHandler.getMaterial(matRecord.nmbDiagK)
+    incr= matRecord.emax/20
+    errMax= 0.0
+    e= 0.1e-8
+    while(e < matRecord.emax+1):
+        steelDiagram.setTrialStrain(e,0.0)
+        steelDiagram.commitState()
+        sg= sigmaKReinfSteel(e,matRecord)
+        stress= steelDiagram.getStress()
+        err= abs((sg-stress)/sg)
+        #print("e= ",e," strain= ",steelDiagram.getStrain()," stress= ",stress," sg= ", sg," err= ", err,"\n")
+        errMax= max(err,errMax)
+        e= e+incr
+    return errMax
 
 def testReinfSteelDesignDiagram(preprocessor, matRecord):
-  '''Checking of design stress-strain diagram.'''
-  steelDiagram= defReinfSteelDesignDiagram(preprocessor, matRecord)
-  ##30160925 was:
-#  tag= defReinfSteelDesignDiagram(preprocessor, matRecord)
-#  steelDiagram= preprocessor.getMaterialHandler.getMaterial(matRecord.nmbDiagD)
-  incr= matRecord.emax/20
-  errMax= 0.0
-  e= 0.1e-8
-  while(e < matRecord.emax+1):
-    steelDiagram.setTrialStrain(e,0.0)
-    steelDiagram.commitState()
-    sg= sigmaDReinfSteel(e,matRecord)
-    err= abs((sg-steelDiagram.getStress())/sg)
-# print("e= ",(e)," stress= ",stress," sg= ", (sg)," err= ", (err),"\n")
-    errMax= max(err,errMax)
-    e= e+incr
-  return errMax
+    '''Checking of design stress-strain diagram.'''
+    steelDiagram= defReinfSteelDesignDiagram(preprocessor, matRecord)
+    ##30160925 was:
+    #  tag= defReinfSteelDesignDiagram(preprocessor, matRecord)
+    #  steelDiagram= preprocessor.getMaterialHandler.getMaterial(matRecord.nmbDiagD)
+    incr= matRecord.emax/20
+    errMax= 0.0
+    e= 0.1e-8
+    while(e < matRecord.emax+1):
+        steelDiagram.setTrialStrain(e,0.0)
+        steelDiagram.commitState()
+        sg= sigmaDReinfSteel(e,matRecord)
+        err= abs((sg-steelDiagram.getStress())/sg)
+    # print("e= ",(e)," stress= ",stress," sg= ", (sg)," err= ", (err),"\n")
+        errMax= max(err,errMax)
+        e= e+incr
+    return errMax
 
 class PrestressingSteel(matWDKD.MaterialWithDKDiagrams):
     '''Prestressing steel parameters 
@@ -1112,40 +1110,40 @@ class PrestressingSteel(matWDKD.MaterialWithDKDiagrams):
     ptsShortTermRelaxation= scipy.interpolate.interp1d([0, 1, 5, 20, 100, 200, 500, 1000],[0, 0.25, 0.45, 0.55, 0.7, 0.8, 0.9, 1])
 
     def __init__(self,steelName,fpk,fmax= 1860e6, alpha= 0.75, steelRelaxationClass=1, tendonClass= 'strand', Es= 190e9):
-      ''' Prestressing steel base class.
+        ''' Prestressing steel base class.
 
-         :param fpk: Elastic limit.
-         :param fmax: Steel strength.
-         :param alpha: stress-to-strength ratio.
-         :param steelRelaxationClass: Relaxation class 1: normal, 2: improved, 
-                                      and 3: relaxation for bars.
-         :param tendonClass: Tendon class wire, strand or bar.
-         :param Es: elastic modulus.
-      '''
-      super(PrestressingSteel,self).__init__(steelName)
-      self.gammaS= 1.15 # partial safety factor for steel.
-      self.fpk= fpk # elastic limit.
-      self.fmax= fmax
-      self.alpha= alpha
-      self.Es= Es # elastic modulus.
-      self.bsh= 0.001 # slope ratio (yield branch/elastic branch)
-      self.steelRelaxationClass= steelRelaxationClass
-      self.tendonClass= tendonClass
+           :param fpk: Elastic limit.
+           :param fmax: Steel strength.
+           :param alpha: stress-to-strength ratio.
+           :param steelRelaxationClass: Relaxation class 1: normal, 2: improved, 
+                                        and 3: relaxation for bars.
+           :param tendonClass: Tendon class wire, strand or bar.
+           :param Es: elastic modulus.
+        '''
+        super(PrestressingSteel,self).__init__(steelName)
+        self.gammaS= 1.15 # partial safety factor for steel.
+        self.fpk= fpk # elastic limit.
+        self.fmax= fmax
+        self.alpha= alpha
+        self.Es= Es # elastic modulus.
+        self.bsh= 0.001 # slope ratio (yield branch/elastic branch)
+        self.steelRelaxationClass= steelRelaxationClass
+        self.tendonClass= tendonClass
       
     def getKRelaxation(self):
-      ''' Return the value of k factor for the relaxation expression
-         from the relaxation class. See Model Code 1990 paragraph 2.3.4.5.
-      '''
-      if(self.steelRelaxationClass==1):
-        return 0.12 
-      elif(self.steelRelaxationClass==2):
-        return 0.19 
-      else:
-        lmsg.error("Relaxation class : ",self.steelRelaxationClass," not implemented.\n")
-        return 0
+        ''' Return the value of k factor for the relaxation expression
+           from the relaxation class. See Model Code 1990 paragraph 2.3.4.5.
+        '''
+        if(self.steelRelaxationClass==1):
+            return 0.12 
+        elif(self.steelRelaxationClass==2):
+            return 0.19 
+        else:
+            lmsg.error("Relaxation class : ",self.steelRelaxationClass," not implemented.\n")
+            return 0
     
     def fpd(self):
-      return self.fpk/self.gammaS
+        return self.fpk/self.gammaS
 
     def getUltimateStress(self):
         ''' Return steel ultimate stress.'''
@@ -1156,16 +1154,34 @@ class PrestressingSteel(matWDKD.MaterialWithDKDiagrams):
         return self.fmax/self.gammaS
   
     def tInic(self):
-      return self.alpha**2*self.fmax # Final presstressing (initial at 75 percent  and 25 percent of total losses).
+        return self.alpha**2*self.fmax # Final presstressing (initial at 75 percent  and 25 percent of total losses).
   
     def defDiagK(self,preprocessor,initialStress):
-      '''Characteristic stress-strain diagram.'''
-      self.materialDiagramK= typical_materials.defSteel02(preprocessor,self.nmbDiagK,self.Es,self.fpk,self.bsh,initialStress)
-      self.matTagK= self.materialDiagramK.tag
-      return self.materialDiagramK
+        '''Characteristic stress-strain diagram.'''
+        self.materialDiagramK= typical_materials.defSteel02(preprocessor,self.nmbDiagK,self.Es,self.fpk,self.bsh,initialStress)
+        self.matTagK= self.materialDiagramK.tag
+        return self.materialDiagramK
   
     def defDiagD(self,preprocessor,initialStress):
-      '''Design stress-strain diagram.'''
-      self.materialDiagramD= typical_materials.defSteel02(preprocessor,self.nmbDiagD,self.Es,self.fpd(),self.bsh,initialStress)
-      self.matTagD= self.materialDiagramD.tag
-      return self.materialDiagramD
+        '''Design stress-strain diagram.'''
+        self.materialDiagramD= typical_materials.defSteel02(preprocessor,self.nmbDiagD,self.Es,self.fpd(),self.bsh,initialStress)
+        self.matTagD= self.materialDiagramD.tag
+        return self.materialDiagramD
+
+
+def createInteractionDiagram(materialHandler, concreteDiagram, steelDiagram, concreteSection):
+    ''' Return the three-dimensional interaction Diagram for the section.
+
+    :param materiaHandler: material handler.
+    :param concreteDiagram: diagram for concrete material.
+    :parma steelDiagram: diagram for steel material.
+    :param concreteSection: concrete section to compute the interaction
+                            diagram for.
+    '''
+    param= xc.InteractionDiagramParameters()
+    param.concreteTag= concreteDiagram.tag # Set concrete type.
+    param.reinforcementTag= steelDiagram.tag # Set steel type.
+    return materialHandler.calcInteractionDiagram(concreteSection.name,param)
+
+    
+    

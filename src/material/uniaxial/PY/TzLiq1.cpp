@@ -189,10 +189,11 @@ double XC::TzLiq1::getStress(void) const
 
   }
 
-/////////////////////////////////////////////////////////////////////
+//! @brief Return the material tangent stiffness.
 double  XC::TzLiq1::getTangent(void) const
   { return Tangent; }
-/////////////////////////////////////////////////////////////////////
+
+//! @brief Return the material initial stiffness.
 double XC::TzLiq1::getInitialTangent(void) const
   { return initialTangent; }
 
@@ -213,8 +214,7 @@ double XC::TzLiq1::getStrainRate(void) const
   { return TzSimple1::getStrainRate(); }
 
 /////////////////////////////////////////////////////////////////////
-int 
-XC::TzLiq1::commitState(void)
+int XC::TzLiq1::commitState(void)
 {
         // Call the XC::TzSimple1 base function to take care of details.
         //

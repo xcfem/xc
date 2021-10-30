@@ -110,6 +110,7 @@ double XC::ParallelMaterial::getStress(void) const
     return stress;
   }
 
+//! @brief Return the material tangent stiffness.
 double XC::ParallelMaterial::getTangent(void) const
   {
     // get the tangent = sum of tangents in all local MaterialModel objects    
@@ -120,6 +121,7 @@ double XC::ParallelMaterial::getTangent(void) const
     return E;
   }
 
+//! @brief Return the material initial stiffness.
 double XC::ParallelMaterial::getInitialTangent(void) const
   {
     // get the tangent = sum of tangents in all local MaterialModel objects    
@@ -140,6 +142,7 @@ double XC::ParallelMaterial::getDampTangent(void) const
     return eta;
   }
 
+//! @brief Commit the state of the material.
 int XC::ParallelMaterial::commitState(void)
   {
 

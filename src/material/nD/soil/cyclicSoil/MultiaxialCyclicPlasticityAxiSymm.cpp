@@ -250,7 +250,7 @@ const XC::Matrix& XC::MultiaxialCyclicPlasticityAxiSymm::getTangent(void) const
   return tangent_matrix ;
 } 
 
-//send back the tangent 
+//! @brief Return the material initial stiffness.
 const XC::Matrix &XC::MultiaxialCyclicPlasticityAxiSymm::getInitialTangent(void) const
   {
   // matrix to XC::BJtensor mapping

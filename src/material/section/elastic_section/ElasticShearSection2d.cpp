@@ -49,7 +49,7 @@
 // $Source: /usr/local/cvs/OpenSees/SRC/material/section/ElasticShearSection2d.cpp,v $
 
 #include "ElasticShearSection2d.h"
-#include "material/section/repres/geom_section/GeomSection.h"
+#include "material/section/repres/section_geometry/SectionGeometry.h"
 #include "material/section/ResponseId.h"
 #include "preprocessor/prep_handlers/MaterialHandler.h"
 #include <utility/matrix/Matrix.h>

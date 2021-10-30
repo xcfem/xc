@@ -77,6 +77,7 @@ XC::PlasticHardening2D::~PlasticHardening2D()
     delete kpMatYNeg;
 }
 
+//! @brief Commit the state of the material.
 int XC::PlasticHardening2D::commitState()
 {
 	this->XC::YS_Evolution2D::commitState();

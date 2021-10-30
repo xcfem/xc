@@ -24,7 +24,7 @@
 #include "fiber/python_interface.tcc"
 
 XC::Fiber *(XC::FiberSectionBase::*addFiberAdHoc)(const std::string &,const double &,const XC::Vector &)= &XC::FiberSectionBase::addFiber; 
-const XC::GeomSection *(XC::FiberSectionBase::*getSectionGeometryPtr)(void) const= &XC::FiberSectionBase::getSectionGeometry; 
+const XC::SectionGeometry *(XC::FiberSectionBase::*getSectionGeometryPtr)(void) const= &XC::FiberSectionBase::getSectionGeometry; 
 class_<XC::FiberSectionBase, bases<XC::PrismaticBarCrossSection>, boost::noncopyable >("FiberSectionBase", no_init)
   .def("addFiber",make_function(addFiberAdHoc,return_internal_reference<>()),"Adds a fiber to the section.")
   .def("getFibers",make_function(&XC::FiberSectionBase::getFibers,return_internal_reference<>()),"Return a fiber container with the fibers in the section.")

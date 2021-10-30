@@ -233,6 +233,7 @@ const XC::Vector &XC::FeapMaterial::getStress(void) const
   }
 }
 
+//! @brief Return the material tangent stiffness.
 const XC::Matrix &XC::FeapMaterial::getTangent(void) const
 {
   int isw = 6;
@@ -268,6 +269,7 @@ const XC::Matrix &XC::FeapMaterial::getTangent(void) const
   }
 }
 
+//! @brief Commit the state of the material.
 int XC::FeapMaterial::commitState(void)
 {
   // Set committed values equal to corresponding trial values

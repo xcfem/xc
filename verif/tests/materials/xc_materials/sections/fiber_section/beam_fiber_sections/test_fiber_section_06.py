@@ -43,7 +43,7 @@ exec(open(pth+"/concrete_section_01.py").read())
 
 secHA= preprocessor.getMaterialHandler.newMaterial("fiber_section_3d","secHA")
 fiberSectionRepr= secHA.getFiberSectionRepr()
-fiberSectionRepr.setGeomNamed("concreteSectionGeom01")
+fiberSectionRepr.setGeomNamed(concreteSectionGeom01.name)
 secHA.setupFibers()
 
 epsG1= CurvZ1*(defSec['depth']/2-x1)

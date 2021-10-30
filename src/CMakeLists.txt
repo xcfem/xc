@@ -16,17 +16,6 @@ PROJECT(LIBXC)
 SET(build_setup_dir $ENV{HOME}/.xc_build)
 SET(build_setup_file ${build_setup_dir}/xc_dirs.cmake)
 
-#xc_utils
-SET(lcmd_setup_file ${build_setup_dir}/lcmd_dirs.cmake)
-INCLUDE(${lcmd_setup_file})
-SET(xc_utils_DIR ${lcmd_src_dir}/..)
-message(STATUS "lcmd project dir: " ${xc_utils_DIR})
-SET(xc_utils_INC ${lcmd_inc_dir})
-message(STATUS "lcmd include dir: " ${xc_utils_INC})
-INCLUDE_DIRECTORIES(${xc_utils_INC})
-SET(xc_utils_LIB ${lcmd_lib_dir})
-message(STATUS "lcmd lib dir: " ${xc_utils_LIB})
-
 #XC
 string(REGEX REPLACE "xc/src.*" "xc/" DIR_FUENTES_XC ${CMAKE_SOURCE_DIR})
 message(STATUS "xc project dir: " ${DIR_FUENTES_XC})
@@ -315,9 +304,9 @@ SET(graph2 solution/graph/graph/FE_VertexIter solution/graph/numberer/MetisNumbe
 
 SET(feap_material material/nD/FeapMaterial material/nD/feap/FeapMaterial01 material/nD/feap/FeapMaterial02 material/nD/feap/FeapMaterial03)
 
-SET(geom_section_repres material/section/repres/SectionMassProperties material/section/repres/geom_section/region/RegionContainer material/section/repres/geom_section/region/SectRegion material/section/repres/geom_section/region/QuadCellRegion material/section/repres/geom_section/region/PolygonSectRegion material/section/repres/geom_section/region/CircularSectRegion material/section/repres/geom_section/region/QuadSectRegion material/section/repres/geom_section/reinfBar/ReinfBar  material/section/repres/geom_section/reinfBar/VectorReinfBar material/section/repres/geom_section/reinfLayer/ListReinfLayer material/section/repres/geom_section/reinfLayer/ReinfLayer material/section/repres/geom_section/reinfLayer/CircReinfLayer material/section/repres/geom_section/reinfLayer/SingleBar material/section/repres/geom_section/reinfLayer/StraightReinfLayer material/section/repres/geom_section/Spot material/section/repres/geom_section/Axis material/section/repres/geom_section/Segment material/section/repres/geom_section/EntGeomSection material/section/repres/geom_section/SectionReferenceFrame material/section/repres/geom_section/SectionCartesianReferenceFrame material/section/repres/geom_section/GeomSection)
+SET(section_geometry_repres material/section/repres/SectionMassProperties material/section/repres/section_geometry/region/RegionContainer material/section/repres/section_geometry/region/SectRegion material/section/repres/section_geometry/region/QuadCellRegion material/section/repres/section_geometry/region/PolygonSectRegion material/section/repres/section_geometry/region/CircularSectRegion material/section/repres/section_geometry/region/QuadSectRegion material/section/repres/section_geometry/reinfBar/ReinfBar  material/section/repres/section_geometry/reinfBar/VectorReinfBar material/section/repres/section_geometry/reinfLayer/ListReinfLayer material/section/repres/section_geometry/reinfLayer/ReinfLayer material/section/repres/section_geometry/reinfLayer/CircReinfLayer material/section/repres/section_geometry/reinfLayer/SingleBar material/section/repres/section_geometry/reinfLayer/StraightReinfLayer material/section/repres/section_geometry/Spot material/section/repres/section_geometry/Axis material/section/repres/section_geometry/Segment material/section/repres/section_geometry/SectionGeometryWrapper material/section/repres/section_geometry/SectionReferenceFrame material/section/repres/section_geometry/SectionCartesianReferenceFrame material/section/repres/section_geometry/SectionGeometry)
 
-SET(section_material_repres material/section/repres/cell/VectorCells material/section/repres/cell/Cell material/section/repres/cell/QuadCell material/section/repres/cell/TriangCell material/section/repres/DiscretBase material/section/repres/section/FiberSectionRepr material/section/repres/section/FiberData material/section/repres/section/SectionRepres material/section/repres/CrossSectionProperties1d material/section/repres/CrossSectionProperties2d material/section/repres/CrossSectionProperties3d ${geom_section_repres})
+SET(section_material_repres material/section/repres/cell/VectorCells material/section/repres/cell/Cell material/section/repres/cell/QuadCell material/section/repres/cell/TriangCell material/section/repres/DiscretBase material/section/repres/section/FiberSectionRepr material/section/repres/section/FiberData material/section/repres/section/SectionRepres material/section/repres/CrossSectionProperties1d material/section/repres/CrossSectionProperties2d material/section/repres/CrossSectionProperties3d ${section_geometry_repres})
 
 SET(section_plate_material material/section/plate_section/PlateBase material/section/plate_section/ElasticPlateBase material/section/plate_section/ElasticPlateProto material/section/plate_section/ElasticMembranePlateSection material/section/plate_section/ElasticPlateSection material/section/plate_section/MembranePlateFiberSection)
 

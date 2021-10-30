@@ -90,6 +90,7 @@ XC::NDAdaptorMaterial::~NDAdaptorMaterial(void)
   { free(); } 
 
 
+//! @brief Commit the state of the material.
 int XC::NDAdaptorMaterial::commitState(void)
   {
     Cstrain22 = Tstrain22;

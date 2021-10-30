@@ -52,7 +52,7 @@ geomRectang= preprocessor.getMaterialHandler.newSectionGeometry("geomRectang")
 reg= scc10x20.getRegion(gm=geomRectang,nmbMat="epp")
 rectang= preprocessor.getMaterialHandler.newMaterial("fiber_section_3d","rectang")
 fiberSectionRepr= rectang.getFiberSectionRepr()
-fiberSectionRepr.setGeomNamed("geomRectang")
+fiberSectionRepr.setGeomNamed(geomRectang.name)
 rectang.setupFibers()
 fibers= rectang.getFibers()
 

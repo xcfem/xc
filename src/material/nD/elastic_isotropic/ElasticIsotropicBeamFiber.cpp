@@ -85,6 +85,7 @@ XC::ElasticIsotropicBeamFiber::setTrialStrainIncr(const XC::Vector &strain, cons
 	return 0;
 }
 
+//! @brief Return the material tangent stiffness.
 const XC::Matrix &XC::ElasticIsotropicBeamFiber::getTangent(void) const
 {
 	double mu2 = E/(1.0+v);
@@ -98,6 +99,7 @@ const XC::Matrix &XC::ElasticIsotropicBeamFiber::getTangent(void) const
 	return D;
 }
 
+//! @brief Return the material initial stiffness.
 const XC::Matrix &XC::ElasticIsotropicBeamFiber::getInitialTangent(void) const
 {
 	double mu2 = E/(1.0+v);
@@ -124,6 +126,7 @@ const XC::Vector &XC::ElasticIsotropicBeamFiber::getStress(void) const
     return sigma;
   }
 
+//! @brief Commit the state of the material.
 int XC::ElasticIsotropicBeamFiber::commitState(void)
 {
 	return 0;

@@ -88,19 +88,13 @@ const XC::Vector& XC::DruckerPrager3D::getStrain( )
 
 //send back the stress 
 const XC::Vector& XC::DruckerPrager3D::getStress( ) 
-{
-  return mSigma ;
-}
+  { return mSigma; }
 
-//send back the tangent 
-const XC::Matrix& XC::DruckerPrager3D::getTangent( ) 
-  {
-    return mCep;
-  } 
+//! @brief Return the material tangent stiffness.
+const XC::Matrix& XC::DruckerPrager3D::getTangent(void) 
+  { return mCep; } 
 
-//send back the tangent 
-const XC::Matrix& XC::DruckerPrager3D::getInitialTangent( ) 
-{
-  return mCe ;
-} 
+//! @brief Return the material initial stiffness.
+const XC::Matrix& XC::DruckerPrager3D::getInitialTangent(void) 
+  { return mCe; } 
 

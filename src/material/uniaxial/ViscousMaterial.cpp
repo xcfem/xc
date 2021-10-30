@@ -89,9 +89,11 @@ double XC::ViscousMaterial::getStress(void) const
       return  stress;
   }
 
+//! @brief Return the material tangent stiffness.
 double XC::ViscousMaterial::getTangent(void) const
   { return 0.0; }
 
+//! @brief Return the material initial stiffness.
 double XC::ViscousMaterial::getInitialTangent(void) const
   { return 0.0; }
 
@@ -112,6 +114,7 @@ double XC::ViscousMaterial::getStrain(void) const
 double XC::ViscousMaterial::getStrainRate(void) const
   { return trialRate; }
 
+//! @brief Commit the state of the material.
 int XC::ViscousMaterial::commitState(void)
   { return 0; }
 

@@ -556,6 +556,40 @@ class PredefinedSpace(object):
             spc= self.newSPConstraint(newNode.tag,i,0.0)
         return newNode.tag, zl.tag
 
+    def getFloatingNodes(self, xcSet= None):
+        ''' Return a list of the nodes that are not connected to any
+            element nor any constraint.
+
+        :param xcSet: search only on the nodes in this set.
+        '''
+        if(xcSet==None):
+            xcSet= self.getTotalSet()
+        floatingNodes= list()
+        for n in xcSet.nodes:
+            nElem= n.getNumberOfConnectedElements()
+            if(nElem==0):
+                nConstraints= n.getNumberOfConnectedConstraints()
+                if(nConstraints==0):
+                    floatingNodes.append(n)
+        return floatingNodes
+
+    def locateEquationNumber(self, eqNumber, xcSet= None):
+        ''' Locate the node that contains the DOF that correspond to
+            the equation number argument.
+
+        :param eqNumber: number of the equation to locate.
+        :param xcSet: search only on the nodes in this set.
+        '''
+        if(xcSet==None):
+            xcSet= self.getTotalSet()
+        retval= None
+        for n in xcSet.nodes:
+            equationNumbers= n.DOFs
+            if(eqNumber in equationNumbers):
+                retval= n
+                break;
+        return retval
+
     def getReactions(self, xcSet= None):
         ''' Return a Reactions object containing the reactions
             obtained during the analysis.

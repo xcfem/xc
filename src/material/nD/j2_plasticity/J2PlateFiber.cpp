@@ -277,7 +277,7 @@ const XC::Matrix &XC::J2PlateFiber::getTangent(void) const
   } 
 
 
-//! @brief Reurn the tangent 
+//! @brief Return the material initial stiffness.
 const XC::Matrix &XC::J2PlateFiber::getInitialTangent(void) const
   {
 
@@ -310,6 +310,7 @@ const XC::Matrix &XC::J2PlateFiber::getInitialTangent(void) const
     return tangent_matrix;
   } 
 
+//! @brief Commit the state of the material.
 int XC::J2PlateFiber::commitState( ) 
   {
     epsilon_p_n = epsilon_p_nplus1;

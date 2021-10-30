@@ -204,6 +204,7 @@ double XC::HystereticMaterial::getStrain(void) const
 double XC::HystereticMaterial::getStress(void) const
   { return trial.getStress(); }
 
+//! @brief Return the material tangent stiffness.
 double XC::HystereticMaterial::getTangent(void) const
   { return trial.getTangent(); }
 
@@ -368,6 +369,7 @@ void XC::HystereticMaterial::negativeIncrement(double dStrain)
         }
 }
 
+//! @brief Commit the state of the material.
 int XC::HystereticMaterial::commitState(void)
   {
     CrotMax = TrotMax;

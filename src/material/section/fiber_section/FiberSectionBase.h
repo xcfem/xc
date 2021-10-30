@@ -112,8 +112,8 @@ class FiberSectionBase: public PrismaticBarCrossSection
     const Vector &getSectionDeformation(void) const;
 
     FiberSectionRepr *getFiberSectionRepr(void);
-    GeomSection *getSectionGeometry(void);
-    const GeomSection *getSectionGeometry(void) const;
+    SectionGeometry *getSectionGeometry(void);
+    const SectionGeometry *getSectionGeometry(void) const;
     Polygon2d getRegionsContour(void) const;
     double getCompressedZoneDepth(const Line2d &) const;
     double getCompressedZoneDepth(void) const;

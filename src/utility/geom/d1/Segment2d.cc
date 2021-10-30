@@ -312,7 +312,7 @@ GeomObj2d::list_Pos2d Segment2d::getIntersection(const Line2d &r) const
 	  {
             // This error message creates a false alarm when used
 	    // from Poygon2d::Clip called from getAnchoMecanico
-	    // in GeomSection.
+	    // in SectionGeometry.
 	    // std::cerr << getClassName() << "::" << __FUNCTION__
 	    //           << "; segment: " << (*this)
 	    //           << " is inside the line: " << r

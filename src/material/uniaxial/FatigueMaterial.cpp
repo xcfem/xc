@@ -261,6 +261,7 @@ double XC::FatigueMaterial::getStress(void) const
       return theMaterial -> getStress();
   }
 
+//! @brief Return the material tangent stiffness.
 double XC::FatigueMaterial::getTangent(void) const
   {
     double modifier = 1.0;
@@ -300,6 +301,7 @@ double XC::FatigueMaterial::getStrain(void) const
 double XC::FatigueMaterial::getStrainRate(void) const
   { return theMaterial->getStrainRate(); }
 
+//! @brief Commit the state of the material.
 int XC::FatigueMaterial::commitState(void)
   {        
     // NOTE: Do not accumulate damage if peaks are too small (e.g. if X < 1e-10)

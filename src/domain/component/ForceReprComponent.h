@@ -35,6 +35,7 @@
 namespace XC {
 
 //! @brief Base class for components that represent forces.
+//! @ingroup Dom
 class ForceReprComponent: public DomainComponent
   {
   public:

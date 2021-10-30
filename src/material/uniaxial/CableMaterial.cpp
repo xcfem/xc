@@ -182,9 +182,11 @@ double XC::CableMaterial::evalStress(double stress)
   }
 
 
+//! @brief Return the material tangent stiffness.
 double XC::CableMaterial::getTangent(void) const
   { return trialTangent; }
 
+//! @brief Commit the state of the material.
 int XC::CableMaterial::commitState(void)
   { return ElasticBaseMaterial::commitState(); }
 

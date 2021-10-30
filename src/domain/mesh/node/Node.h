@@ -178,6 +178,7 @@ class Node: public MeshComponent
     virtual int getNumberDOF(void) const;    
     virtual void setDOF_GroupPtr(DOF_Group *theDOF_Grp);
     virtual DOF_Group *getDOF_GroupPtr(void);
+    const ID &getDOFs(void) const;
 
     size_t getNumberOfConnectedConstraints(void) const;
 

@@ -226,15 +226,18 @@ int XC::BoucWenMaterial::setTrialStrain (double strain, double strainRate)
 double XC::BoucWenMaterial::getStress(void) const
   { return Tstress; }
 
+//! @brief Return the material initial stiffness.
 double XC::BoucWenMaterial::getInitialTangent(void) const
   { return ( alpha*ko + (1-alpha)*ko*Ao ); }
 
+//! @brief Return the material tangent stiffness.
 double XC::BoucWenMaterial::getTangent(void) const
   { return Ttangent; }
 
 double XC::BoucWenMaterial::getStrain(void) const
   { return Tstrain; }
 
+//! @brief Commit the state of the material.
 int XC::BoucWenMaterial::commitState(void)
   {
     // Commit trial history variables

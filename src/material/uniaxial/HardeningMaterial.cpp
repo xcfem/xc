@@ -193,12 +193,14 @@ int XC::HardeningMaterial::setTrialStrain(double strain, double strainRate)
 double XC::HardeningMaterial::getStress(void) const
   { return Tstress; }
 
+//! @brief Return the material tangent stiffness.
 double XC::HardeningMaterial::getTangent(void) const
   { return Ttangent; }
 
 double XC::HardeningMaterial::getStrain(void) const
   { return Tstrain; }
 
+//! @brief Commit the state of the material.
 int XC::HardeningMaterial::commitState(void)
 {
     // Commit trial history variables

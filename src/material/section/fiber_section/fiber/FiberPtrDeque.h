@@ -56,7 +56,7 @@ class Response;
 class Parameter;
 class Information;
 class CrossSectionKR;
-class GeomSection;
+class SectionGeometry;
 class DeformationPlane;
 
 enum ClaseEsfuerzo {SIMPLE_TENSION,COMPOSED_TENSION,FLEXION_SIMPLE,FLEXION_COMPUESTA,SIMPLE_COMPRESSION,COMPOSED_COMPRESSION,ERROR};
@@ -166,7 +166,7 @@ class FiberPtrDeque: public CommandEntity, public std::deque<Fiber *>, public Mo
     const std::list<Polygon2d> &getFiberEffectiveConcretAreaContour(const size_t &i) const;
     double getFiberEffectiveConcreteArea(const size_t &i) const;
     double getFibersEffectiveConcreteArea(void) const;
-    void computeCovers(const GeomSection &) const;
+    void computeCovers(const SectionGeometry &) const;
     void computeSpacement(void) const;
     const double &getFiberCover(const size_t &i) const;
     const double &getFiberSpacing(const size_t &i) const;

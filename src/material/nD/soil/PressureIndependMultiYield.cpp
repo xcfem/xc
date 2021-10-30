@@ -191,6 +191,7 @@ int XC::PressureIndependMultiYield::setTrialStrainIncr(const XC::Vector &strain,
 }
 
 
+//! @brief Return the material tangent stiffness.
 const XC::Matrix &XC::PressureIndependMultiYield::getTangent(void) const
 {
   int loadStage = loadStagex[matN];
@@ -260,6 +261,7 @@ const XC::Matrix &XC::PressureIndependMultiYield::getTangent(void) const
 }
 
 
+//! @brief Return the material initial stiffness.
 const XC::Matrix & XC::PressureIndependMultiYield::getInitialTangent(void) const
 {
   int ndm = ndmx[matN];
@@ -352,6 +354,7 @@ const XC::Vector & XC::PressureIndependMultiYield::getStrain(void) const
   { return getCommittedStrain(); }
 
 
+//! @brief Commit the state of the material.
 int XC::PressureIndependMultiYield::commitState(void)
 {
   int loadStage = loadStagex[matN];

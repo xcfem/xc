@@ -160,9 +160,11 @@ double XC::FedeasMaterial::getStrain(void) const
 double XC::FedeasMaterial::getStress(void) const
   { return trial.getStress(); }
 
+//! @brief Return the material tangent stiffness.
 double XC::FedeasMaterial::getTangent(void) const
   { return trial.getTangent(); }
 
+//! @brief Commit the state of the material.
 int XC::FedeasMaterial::commitState(void)
   {
     // Set committed values equal to corresponding trial values

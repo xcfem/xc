@@ -94,6 +94,7 @@ int XC::BeamFiberMaterial::getOrder(void) const
 const std::string &XC::BeamFiberMaterial::getType(void) const 
   { return strTypeBeamFiber; }
 
+//! @brief Commit the state of the material.
 int XC::BeamFiberMaterial::commitState(void)
   {
     Cstrain33 = Tstrain33;
@@ -230,6 +231,7 @@ const XC::Vector &XC::BeamFiberMaterial::getStress(void) const
     return this->stress;
   }
 
+//! @brief Return the material tangent stiffness.
 const XC::Matrix &XC::BeamFiberMaterial::getTangent(void) const
 {
   static Matrix dd11(3,3);
@@ -278,6 +280,7 @@ const XC::Matrix &XC::BeamFiberMaterial::getTangent(void) const
   return this->tangent;
 }
 
+//! @brief Return the material initial stiffness.
 const XC::Matrix &XC::BeamFiberMaterial::getInitialTangent(void) const
   {
     static Matrix dd11(3,3);

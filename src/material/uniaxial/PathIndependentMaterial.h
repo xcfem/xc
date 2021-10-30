@@ -78,6 +78,8 @@ class PathIndependentMaterial: public EncapsulatedMaterial
     PathIndependentMaterial();
 
     int setTrialStrain(double strain, double strainRate = 0.0); 
+    double getStrain(void);          
+    double getStrainRate(void);
     double getStress(void) const;
     double getTangent(void) const;
     double getDampTangent(void) const;

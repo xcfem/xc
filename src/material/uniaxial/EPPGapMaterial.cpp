@@ -164,6 +164,7 @@ double XC::EPPGapMaterial::getInitialTangent(void) const
       return E;
   }
 
+//! @brief Commit the state of the material.
 int XC::EPPGapMaterial::commitState(void)
   {
     if(fy >= 0)

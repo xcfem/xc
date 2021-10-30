@@ -32,5 +32,5 @@ git clone https://gitlab.onelab.info/gmsh/gmsh.git
 cd $base_dir
 cd build_gmsh
 cmake -DENABLE_BUILD_DYNAMIC=1 -DENABLE_FLTK=1 ../gmsh
-make -j 3
+make -j ${cpusToUse}
 sudo make install

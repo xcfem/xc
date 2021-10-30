@@ -35,6 +35,7 @@
 namespace XC {
 
 //! @brief Base class for components used to represent the material (continuum).
+//! @ingroup Dom
 class ContinuaReprComponent: public DomainComponent
   {
     bool dead; //!< True if domain component is not active.

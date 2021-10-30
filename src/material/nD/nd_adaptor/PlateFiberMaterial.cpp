@@ -262,8 +262,8 @@ const XC::Matrix  &XC::PlateFiberMaterial::getTangent(void) const
     return this->tangent;
   }
 
-
-const XC::Matrix  &XC::PlateFiberMaterial::getInitialTangent(void) const
+//! @brief Return the material initial stiffness.
+const XC::Matrix &XC::PlateFiberMaterial::getInitialTangent(void) const
   {
     std::cerr << getClassName() << "::" << __FUNCTION__
               << "; not yet implemented.\n";

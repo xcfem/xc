@@ -32,29 +32,32 @@ Ec= concr.getDiagD(preprocessor).getTangent
 tagB500S= EHE_materials.B500S.defDiagD(preprocessor)
 Es= EHE_materials.B500S.getDiagD(preprocessor).getTangent
 
+# Concrete section geometry.
 geomSecHA= preprocessor.getMaterialHandler.newSectionGeometry("geomSecHA")
 regions= geomSecHA.getRegions
 concrete= regions.newQuadRegion(EHE_materials.HA25.nmbDiagD)
-concrete.nDivIJ= 10
-concrete.nDivJK= 10
-concrete.pMin= geom.Pos2d(-depth/2.0,-width/2.0)
-concrete.pMax= geom.Pos2d(depth/2.0,width/2.0)
+concrete.nDivIJ= 10 # number of divisions in the IJ direction.
+concrete.nDivJK= 10 # number of divisions in the JK direction.
+concrete.pMin= geom.Pos2d(-depth/2.0,-width/2.0) # lower left corner.
+concrete.pMax= geom.Pos2d(depth/2.0,width/2.0) # upper right corner.
+
+# Reinforcement.
 reinforcement= geomSecHA.getReinfLayers
 reinforcementInf= reinforcement.newStraightReinfLayer(EHE_materials.B500S.nmbDiagD)
-reinforcementInf.numReinfBars= 2
-reinforcementInf.barArea= areaFi16
+reinforcementInf.numReinfBars= 2 # number of bars.
+reinforcementInf.barArea= areaFi16 # bar area.
 reinforcementInf.p1= geom.Pos2d(cover-depth/2.0,width/2.0-cover) # bottom layer.
 reinforcementInf.p2= geom.Pos2d(cover-depth/2.0,cover-width/2.0)
 reinforcementSup= reinforcement.newStraightReinfLayer(EHE_materials.B500S.nmbDiagD)
-reinforcementSup.numReinfBars= 2
-reinforcementSup.barArea= areaFi16
+reinforcementSup.numReinfBars= 2 # number of bars.
+reinforcementSup.barArea= areaFi16 # bar area.
 reinforcementSup.p1= geom.Pos2d(depth/2.0-cover,width/2.0-cover) # top layer.
 reinforcementSup.p2= geom.Pos2d(depth/2.0-cover,cover-width/2.0)
 
 materialHandler= preprocessor.getMaterialHandler
 secHA= materialHandler.newMaterial("fiber_section_3d","secHA")
 fiberSectionRepr= secHA.getFiberSectionRepr()
-fiberSectionRepr.setGeomNamed("geomSecHA")
+fiberSectionRepr.setGeomNamed(geomSecHA.name)
 secHA.setupFibers()
 fibras= secHA.getFibers()
 

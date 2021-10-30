@@ -195,10 +195,12 @@ double XC::PyLiq1::getStress(void) const
     else
       return Tp + dashForce;
   }
-/////////////////////////////////////////////////////////////////////
+
+//! @brief Return the material tangent stiffness.
 double XC::PyLiq1::getTangent(void) const
   { return this->Tangent; }
-/////////////////////////////////////////////////////////////////////
+
+//! @brief Return the material initial stiffness.
 double XC::PyLiq1::getInitialTangent(void) const
   { return initialTangent; }
 /////////////////////////////////////////////////////////////////////

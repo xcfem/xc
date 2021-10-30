@@ -63,6 +63,8 @@ class Channel;
 class FEM_ObjectBroker;
 class Domain;
 
+//! @brief Parameter.
+//! @ingroup Dom
 class Parameter: public TaggedObject, public MovableObject
   {
   private:

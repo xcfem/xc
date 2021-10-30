@@ -255,6 +255,7 @@ int XC::Concrete02::setTrialStrain(double trialStrain, double strainRate)
 
 
 
+//! @brief Commit the state of the material.
 int XC::Concrete02::commitState(void)
   {
     hstvP= hstv;

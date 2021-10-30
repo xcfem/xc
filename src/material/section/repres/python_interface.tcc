@@ -135,5 +135,5 @@ class_<XC::SectionMassProperties, bases<CommandEntity>, boost::noncopyable >("Se
   ;
 
 #include "cell/python_interface.tcc"
-#include "geom_section/python_interface.tcc"
+#include "section_geometry/python_interface.tcc"
 #include "section/python_interface.tcc"

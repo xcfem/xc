@@ -50,7 +50,7 @@ steel.pMin= geom.Pos2d(y0-y1,z0-z1)
 steel.pMax= geom.Pos2d(y0+y1,z0+z1)
 quadFibers= preprocessor.getMaterialHandler.newMaterial("fiber_section_3d","quadFibers")
 fiberSectionRepr= quadFibers.getFiberSectionRepr()
-fiberSectionRepr.setGeomNamed("quadFibersGeom")
+fiberSectionRepr.setGeomNamed(quadFibersGeom.name)
 quadFibers.setupFibers()
 fibers= quadFibers.getFibers()
 A= fibers.getArea

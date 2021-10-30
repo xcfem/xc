@@ -27,7 +27,7 @@
 //BaseElasticSection3d.cpp
 
 #include <material/section/elastic_section/BaseElasticSection3d.h>
-#include "material/section/repres/geom_section/GeomSection.h"
+#include "material/section/repres/section_geometry/SectionGeometry.h"
 #include "preprocessor/prep_handlers/MaterialHandler.h"
 #include <utility/matrix/Matrix.h>
 #include <utility/matrix/Vector.h>
@@ -56,7 +56,7 @@ void XC::BaseElasticSection3d::sectionGeometry(const std::string &cod_geom)
     const MaterialHandler *ldr= getMaterialHandler();
     if(ldr)
       {
-        const GeomSection *geom= ldr->find_ptr_geom_section(cod_geom);
+        const SectionGeometry *geom= ldr->find_ptr_section_geometry(cod_geom);
         if(geom)
           {
             if(ctes_scc.E()==0.0)

@@ -730,19 +730,20 @@ const XC::Vector &XC::ActorSubdomain::getLastExternalSysResponse(void)
     if(mapBuilt == false)
       this->buildMap();
 
-    ID &theMap = *map;
+    ID &theMap= map;
     Vector &localResponse= lastResponse;
     int numberDOF = this->getNumDOF();
     for(int i=0; i<numberDOF; i++)
-      (*mappedVect)(theMap(i)) = localResponse(i);
+      mappedVect(theMap(i))= localResponse(i);
 
-    return *mappedVect;
+    return mappedVect;
 
   }
 
+//! @brief Update the domain.
 int XC::ActorSubdomain::update(void)
   {
-    int res = this->XC::Domain::update();
+    int res = this->Domain::update();
     this->barrierCheck(res);
     return res;
   }

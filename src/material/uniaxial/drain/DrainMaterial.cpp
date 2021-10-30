@@ -119,9 +119,11 @@ double XC::DrainMaterial::getStrainRate(void) const
 double XC::DrainMaterial::getStress(void) const
   { return sigma; }
 
+//! @brief Return the material tangent stiffness.
 double XC::DrainMaterial::getTangent(void) const
   { return tangent; }
 
+//! @brief Return the material initial stiffness.
 double XC::DrainMaterial::getInitialTangent(void) const
   { return initialTangent; }
 
@@ -132,6 +134,7 @@ double XC::DrainMaterial::getDampTangent(void) const
     return beto*tangentP;
   }
 
+//! @brief Commit the state of the material.
 int XC::DrainMaterial::commitState(void)
   {
         // Set committed values equal to corresponding trial values

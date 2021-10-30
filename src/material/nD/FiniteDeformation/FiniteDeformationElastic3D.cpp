@@ -142,7 +142,7 @@ const XC::Tensor &XC::FiniteDeformationElastic3D::getTangentTensor(void) const
     return *ret;
   }
 
-//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//! @brief Return the material initial stiffness.
 const XC::Tensor &XC::FiniteDeformationElastic3D::getInitialTangentTensor(void) const
   {
     std::cerr << "FiniteDeformationElastic3D-- subclass responsibility\n";

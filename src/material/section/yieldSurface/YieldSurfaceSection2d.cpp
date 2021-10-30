@@ -68,6 +68,7 @@ XC::YieldSurfaceSection2d::YieldSurfaceSection2d(int tag, int classtag, YieldSur
 XC::YieldSurfaceSection2d::~YieldSurfaceSection2d(void)
   { if(ys) delete ys; }
 
+//! @brief Commit the state of the material.
 int XC::YieldSurfaceSection2d::commitState(void)
   {
     eCommit = eTrial;

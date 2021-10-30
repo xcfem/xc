@@ -491,7 +491,7 @@ def defJ2PlateFibre(preprocessor, name, E, nu, fy, alpha= .01, rho= 0.0):
     return retval
 
 #Elastic membrane plate section.
-def defElasticMembranePlateSection(preprocessor,name,E,nu,rho,h):
+def defElasticMembranePlateSection(preprocessor, name:str, E:float, nu:float, rho:float, h:float):
     '''Constructs an elastic isotropic section material appropiate 
        for plate and shell analysis.
 
@@ -505,13 +505,15 @@ def defElasticMembranePlateSection(preprocessor,name,E,nu,rho,h):
     materialHandler= preprocessor.getMaterialHandler
     retval= materialHandler.newMaterial("elastic_membrane_plate_section",name)
     retval.E= E
+    if(nu>0.5):
+        lmsg.warning('Poisson\'s ratio: '+str(nu)+' is very high.') 
     retval.nu= nu
     retval.rho= rho
     retval.h= h
     return retval
 
 #Elastic membrane plate section.
-def defMembranePlateFiberSection(preprocessor, name, nDMaterial, h):
+def defMembranePlateFiberSection(preprocessor, name:str, nDMaterial, h:float):
     '''Constructs a membrane plate fiber section appropiate 
        for plate and shell analysis.
 

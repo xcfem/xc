@@ -9,6 +9,7 @@ import os
 import sys
 from model import predefined_spaces
 from materials import typical_materials
+# from postprocess import output_handler
 
 __author__= "Luis C. Pérez Tato (LCPT)"
 __copyright__= "Copyright 2014, LCPT"
@@ -95,3 +96,15 @@ if (ratio1<=1e-10) & (ratio2<=1e-10) :
     print('test '+fname+': ok.')
 else:
     lmsg.error(fname+' ERROR.')
+    
+#Graphic stuff.
+# oh= output_handler.OutputHandler(modelSpace)
+
+# oh.displayBlocks()#setToDisplay= )
+# oh.displayFEMesh()#setsToDisplay=[])
+# oh.displayLocalAxes()
+# oh.displayLoads()
+# oh.displayReactions()
+# oh.displayDispRot(itemToDisp='uX')
+# oh.displayDispRot(itemToDisp='uY')
+# oh.displayDispRot(itemToDisp='uZ')
