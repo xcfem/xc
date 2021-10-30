@@ -230,7 +230,7 @@ class SolutionProcedure(object):
         result= self.analysis.analyze(self.numSteps)
         if(calculateNodalReactions and (result==0)):
             nodeHandler= self.feProblem.getPreprocessor.getNodeHandler
-            result= nodeHandler.calculateNodalReactions(includeInertia,reactionCheckTolerance)
+            result= nodeHandler.calculateNodalReactions(includeInertia, reactionCheckTolerance)
         return result
 
     def resetLoadCase(self):
@@ -680,14 +680,14 @@ class PenaltyModifiedNewton(PenaltyModifiedNewtonBase):
         self.analysisSetup('static_analysis')        
 
 ### Convenience function
-def penalty_modified_newton(prb, mxNumIter= 10, convergenceTestTol= 1e-4, printFlag= 0):
+def penalty_modified_newton(prb, mxNumIter= 10, convergenceTestTol= 1e-4, printFlag= 0, convTestType= 'relative_total_norm_disp_incr_conv_test'):
     ''' Return a simple static modified Newton solution procedure.
 
     :param maxNumIter: maximum number of iterations (defauts to 10)
     :param convergenceTestTol: convergence tolerance (defaults to 1e-9)
     :param printFlag: print message on each iteration
     '''
-    solProc= PenaltyModifiedNewton(prb,maxNumIter= mxNumIter, convergenceTestTol= convergenceTestTol, printFlag= printFlag)
+    solProc= PenaltyModifiedNewton(prb,maxNumIter= mxNumIter, convergenceTestTol= convergenceTestTol, printFlag= printFlag, convTestType= convTestType)
     solProc.setup()
     return solProc.analysis
     
@@ -965,7 +965,7 @@ class PlainLinearNewmark(SolutionProcedure):
         result= self.analysis.analyze(self.numSteps, self.timeStep)
         if(calculateNodalReactions and (result==0)):
             nodeHandler= self.feProblem.getPreprocessor.getNodeHandler
-            result= nodeHandler.calculateNodalReactions(includeInertia,reactionCheckTolerance)
+            result= nodeHandler.calculateNodalReactions(includeInertia, reactionCheckTolerance)
         return result
 
 class PenaltyNewmarkNewtonRapshon(SolutionProcedure):
