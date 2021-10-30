@@ -487,10 +487,14 @@ const XC::ID &XC::Node::getDOFs(void) const
     if(theDOF_GroupPtr)
       return theDOF_GroupPtr->getID();
     else
-      std::cerr << getClassName() << "::" << __FUNCTION__
-	        << "; equation numbers not assigned yet."
-	        << " Probably analyze has not being called yet."
-	        << std::endl;
+      {
+        std::cerr << getClassName() << "::" << __FUNCTION__
+	          << "; equation numbers not assigned yet."
+	          << " Probably analyze has not being called yet."
+	          << std::endl;
+	static XC::ID retval;
+	return retval;
+      }
   }
 
 //! @brief Return the dimension of the node vector position (1,2 or 3).
