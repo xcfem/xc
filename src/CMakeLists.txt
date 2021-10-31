@@ -10,6 +10,28 @@ ELSE (${CMAKE_VERSION_STRING} GREATER 2.8.4)
   MESSAGE ("CMake version is not greater than 2.8.4")
 ENDIF (${CMAKE_VERSION_STRING} GREATER 2.8.4)
 set(OpenGL_GL_PREFERENCE "GLVND")
+
+# Colorize output.
+if(NOT WIN32)
+  string(ASCII 27 Esc)
+  set(ColourReset "${Esc}[m")
+  set(ColourBold  "${Esc}[1m")
+  set(Red         "${Esc}[31m")
+  set(Green       "${Esc}[32m")
+  set(Yellow      "${Esc}[33m")
+  set(Blue        "${Esc}[34m")
+  set(Magenta     "${Esc}[35m")
+  set(Cyan        "${Esc}[36m")
+  set(White       "${Esc}[37m")
+  set(BoldRed     "${Esc}[1;31m")
+  set(BoldGreen   "${Esc}[1;32m")
+  set(BoldYellow  "${Esc}[1;33m")
+  set(BoldBlue    "${Esc}[1;34m")
+  set(BoldMagenta "${Esc}[1;35m")
+  set(BoldCyan    "${Esc}[1;36m")
+  set(BoldWhite   "${Esc}[1;37m")
+endif()
+
 # Project name.
 PROJECT(LIBXC)
 
@@ -38,7 +60,7 @@ INCLUDE(${CMAKE_ROOT}/Modules/CheckIncludeFile.cmake)
 INCLUDE(${DIR_FUENTES_XC}CMake/GetGitRevisionDescription.cmake)
 git_describe(VERSION --tags --dirty=-d)
 
-#parse the version information into pieces.
+# parse the version information into pieces.
 string(REGEX REPLACE "^v([0-9]+)\\..*" "\\1" VERSION_MAJOR "${VERSION}")
 string(REGEX REPLACE "^v[0-9]+\\.([0-9]+).*" "\\1" VERSION_MINOR "${VERSION}")
 string(REGEX REPLACE "^v[0-9]+\\.[0-9]+\\.([0-9]+).*" "\\1" VERSION_PATCH "${VERSION}")
@@ -52,6 +74,16 @@ set(version_file "${DIR_FUENTES_XC}src/version.cc")
 enable_language(Fortran)
 INCLUDE(${DIR_FUENTES_XC}CMake/find_packages.cmake)
 #MESSAGE(STATUS "Boost_LIBRARIES: " ${Boost_LIBRARIES})
+
+# Check GMSH version
+if(GMSH_FOUND)
+   if(GMSH_VERSION VERSION_LESS "4.8")
+      message(STATUS "${BoldRed}GMSH 4.8 or later required (found version: ${GMSH_VERSION}).")
+      message(FATAL_ERROR "See: https://github.com/xcfem/xc/blob/master/install/gmsh_install.md")
+      message(FATAL_ERROR "to install a more recent version.${ColourReset}")
+   endif(GMSH_VERSION)
+endif(GMSH_FOUND)
+
 
 #HDF5 library
 include_directories(${HDF5_HEADER_INCLUDE_DIR})
