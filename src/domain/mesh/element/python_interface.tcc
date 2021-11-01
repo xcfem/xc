@@ -41,7 +41,8 @@ double (XC::Element::*getDistPos3d)(const Pos3d &,bool initialGeometry) const= &
 double (XC::Element::*getDist2Pos2d)(const Pos2d &,bool initialGeometry) const= &XC::Element::getDist2;
 double (XC::Element::*getDist2Pos3d)(const Pos3d &,bool initialGeometry) const= &XC::Element::getDist2;
 class_<XC::Element, XC::Element *,bases<XC::MeshComponent>, boost::noncopyable >("Element", no_init)
-  .add_property("getNodes", make_function( getNodePtrsRef, return_internal_reference<>() ))
+  .add_property("getNodes", make_function( getNodePtrsRef, return_internal_reference<>() ),"DEPRECATED; return the element nodes.")
+  .add_property("nodes", make_function( getNodePtrsRef, return_internal_reference<>() ),"Return the element nodes.")
   .add_property("getIdxNodes",&XC::Element::getIdxNodes,"Return the node indices for its use in VTK arrays.")
   .def("setIdNodes", setIdNodesRef," setIdNodes(xc.ID([idNode0, idNode1,...]) set the element nodes.")
   .def("setIdNode", &XC::Element::setIdNode," setIdNode(i-th, idNode) set the element i-th node.")
