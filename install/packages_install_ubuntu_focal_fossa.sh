@@ -6,6 +6,9 @@ if [ $(whoami) != "root" ]; then
     exit 1
 fi
 
+# Extract version information.
+version () { echo "$@" | awk -F. '{ printf("%d%03d%03d%03d\n", $1,$2,$3,$4); }'; }
+
 # print information about non-free packages
 echo "Some packages are in the \"contrib\" and \"non-free\" areas of the Debian distribution so these areas should be included in the sources.list file before running this script."
 
@@ -17,7 +20,6 @@ if [ $1 != "DoNotAsk" ]; then
         exit 1
     fi
 fi
-
 
 # packages installed by package manager apt-get
 # tested on Ubuntu 18.04 Bionic Beaver
@@ -58,18 +60,6 @@ packages_lib="\
     libmetis-dev"
 sudo apt-get install -y $packages_lib
 
-gmshLib="/usr/local/lib/gmsh.py"
-if [ ! -f "$gmshLib" ]
-then
-    echo "$0: gmshLib '${gmshLib}' will be installed from Ubuntu repositories."
-    packages_gmsh="\
-	libgmsh-dev                 \
-	libgmsh4"
-    sudo apt-get install -y $packages_gmsh
-else
-    echo "$0: gmshLib '${gmshLib}' already installed. Skipping."    
-fi
-
 packages_dev="\
     python3-dev          \
     cimg-dev  \
@@ -97,6 +87,29 @@ packages_div="\
 # - graphicsmagick-imagemagick-compat is needed to convert between image
 #   formats.
 sudo apt-get install -y $packages_div
+
+GMSH_REQUIRED_VERSION="4.8.4"
+gmshHeader="/usr/local/include/gmsh.h"
+if [ ! -f "$gmshHeader" ] # GMSH not installed.
+then # Install GMSH
+    # Check ubuntu package version.
+    tmp=`sudo apt-cache policy gmsh | sed -n '3p' | cut -c 14-`
+    GMSH_PKG_VERSION="$(echo $tmp | cut -d'+' -f1)"
+    if [ $(version $GMSH_PKG_VERSION) -ge $(version $GMSH_REQUIRED_VERSION) ]; then
+	echo "$0: gmshHeader '${gmshHeader}' will be installed from Ubuntu repositories."
+	packages_gmsh="\
+	    libgmsh-dev                 \
+	    libgmsh4"
+	sudo apt-get install -y $packages_gmsh
+    else
+	echo "\e[31m\e[1mPackaged version: $GMSH_PKG_VERSION is too old. GMSH 4.8 or later required."
+        echo "See: https://github.com/xcfem/xc/blob/master/install/gmsh_install.md"
+        echo "to install a more recent version.\e[0m"
+    fi    
+else
+    echo "$0: gmshHeader '${gmshHeader}' already installed. Skipping."    
+fi
+
 
 # free disk space by cleaning install files
 sudo apt-get clean
