@@ -15,6 +15,7 @@ If you have any problem at installation process, feel free to add an issue at ht
 ## Introduction
 ### Installations steps
 - install all needed depencies to be able to compile XC
+- make sure Python 3 is the default Python interpreter in your system.
 - get the source code
 - compile the source code
 - install the programm
@@ -30,8 +31,8 @@ You will find further instructions in https://github.com/xcfem/xc/blob/master/in
 
 ## Detailed description
 ### Install dependencies
-You will need to install all packages needed for your distribution. The package installation scripts does
-install them for various Linux distributions. Your can run the script or copy the contents in a Linux shell.
+You will need to install all packages needed for your distribution. The package installation scripts does install them for various Linux distributions. Your can run the script or copy the contents in a Linux shell.
+
 Just do what ever fits best for you.
 
 Some dependencies needed are:
@@ -45,14 +46,20 @@ Some dependencies needed are:
 - GNU plotutils libraries
 - Multiple precision floating-point computation developers tools 
 - Multiprecision arithmetic library developers tools
+- MUMPS: MUltifrontal Massively Parallel sparse direct Solver (<http://mumps.enseeiht.fr/>).
 - Arpack Fortran77 subroutines to solve large scale eigenvalue problems
 - Arpack++ C++ interface for the Arpack library
 - Lapack (Library of linear algebra routines)
 - SuperLU (Direct solution of large, sparse systems of linear equations)
 - Suitesparse (collection of libraries for computations for sparse matrices)
 
+### Python 3
+Make sure Python 3 is the default Python interpreter for your system. If your using a Debian like distribution you can set Python 3 as the default interpreter as follows:
 
-## Get the source code
+`sudo dpkg -i python-is-python3`
+
+
+### Get the source code
 First make a directroy in your home directroy and go inside. Following the commands for all needed steps.
 foo@bar is common used term. You normally see your username and the name of the computer you sit at.
 After this you will see the directory your are in. Check this before you copy a command. If you would 
@@ -73,7 +80,7 @@ foo@bar:~/build_xc$  git clone https://github.com/xcfem/xc/ xc
 ```
 
 
-## Build and install XC
+### Build and install XC
 Building and installing XC works the same way as any other program that uses cmake:
 
 ```console
@@ -102,9 +109,9 @@ If you had no error message XC should be installed on your machine now. It is ti
 everything works as aspected.
 
 
-## Run verification tests
+### Run verification tests
 
-### xc
+#### xc
 ```console
 foo@bar:~/build_xc$
 foo@bar:~/build_xc$  cd xc/verif
