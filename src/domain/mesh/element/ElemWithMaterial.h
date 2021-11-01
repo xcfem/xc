@@ -53,8 +53,6 @@ class ElemWithMaterial: public ElementBase<NNODOS>
     int sendData(Communicator &);
     int recvData(const Communicator &);
 
-    const Material *get_material_ptr(const std::string &) const;
-
   public:
     ElemWithMaterial(int tag, int classTag);
     ElemWithMaterial(int tag, int classTag,const PhysProp &);
@@ -91,32 +89,11 @@ template <int NNODOS,class PhysProp>
 ElemWithMaterial<NNODOS,PhysProp>::ElemWithMaterial(int tag, int classTag,const PhysProp &physProp)
   : ElementBase<NNODOS>(tag,classTag), physicalProperties(physProp) {}
 
-
-//! @brief Return a pointer to the material that corresponds to the name.
-//!
-//! @param matName: name of the material.
-template <int NNODOS,class PhysProp>
-const Material *ElemWithMaterial<NNODOS, PhysProp>::get_material_ptr(const std::string &matName) const
-  {
-    const Material *retval= nullptr; 
-    const Preprocessor *preprocessor= this->getPreprocessor();
-    if(preprocessor)
-      {
-        const MaterialHandler &material_handler= preprocessor->getMaterialHandler();
-        retval= material_handler.find_ptr(matName);
-      }
-    else
-      {
-	std::cerr << this->getClassName() << "::" << __FUNCTION__
-		  << "; null pointer to preprocessor." << std::endl;
-      }
-    return retval;
-  }
 //! @brief Set the element material.
 template <int NNODOS,class PhysProp>
 void ElemWithMaterial<NNODOS, PhysProp>::setMaterial(const std::string &matName)
   {
-    const Material *ptr_mat= get_material_ptr(matName);
+    const Material *ptr_mat= this->get_material_ptr(matName);
     if(ptr_mat)
       {
 	const material_type *tmp= dynamic_cast<const material_type *>(ptr_mat);

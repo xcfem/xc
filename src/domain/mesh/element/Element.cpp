@@ -861,6 +861,27 @@ void XC::Element::add_to_sets(std::set<SetBase *> &sets)
       }
   }
 
+//! @brief Return a pointer to the material that corresponds to the name.
+//!
+//! @param matName: name of the material.
+const XC::Material *XC::Element::get_material_ptr(const std::string &matName) const
+  {
+    const Material *retval= nullptr; 
+    const Preprocessor *preprocessor= this->getPreprocessor();
+    if(preprocessor)
+      {
+        const MaterialHandler &material_handler= preprocessor->getMaterialHandler();
+        retval= material_handler.find_ptr(matName);
+      }
+    else
+      {
+	std::cerr << this->getClassName() << "::" << __FUNCTION__
+		  << "; null pointer to preprocessor." << std::endl;
+      }
+    return retval;
+  }
+
+
 XC::Response* XC::Element::setMaterialResponse(Material *theMaterial,const std::vector<std::string> &argv,const size_t &offset, Information &info)
   {
     Response *retval= nullptr;

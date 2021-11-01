@@ -138,6 +138,9 @@ class Element: public MeshComponent
                                              //(mutable to allow getDamp being const).
     mutable Matrix Kc; //!< pointer to hold last committed matrix if needed for rayleigh damping
                         //(mutable to allow getDamp being const).
+    
+    const Material *get_material_ptr(const std::string &) const;
+    
     int sendData(Communicator &comm);
     int recvData(const Communicator &comm);
 
