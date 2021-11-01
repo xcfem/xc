@@ -12,17 +12,17 @@ xc is a C++ (and fortran) library, so a C++ and a Fortran compiler are necessary
 * The library is supposed to be used over Linux, maybe it's possible to use it with other Unix flavours.
 * Libraries needed (normally you'll find OS packages to install them):
 
-    - Git version control system (<https://git-scm.com/>).
 	- Boost c++ libraries (<http://www.boost.org/>).
-	- xc_basic (must be previously installed xc_basic.tar.gz).
 	- CImg C++ Template Image Processing Toolkit (cimg-dev).
 	- CGAL computational geometry algorithms library <http://www.cgal.org/> (libcgal-dev).
-	- GNU plotutils libraries (libplot gnuplot).
+    - Git version control system (<https://git-scm.com/>).
 	- GLib library (libglib2.0-dev).
-	- Multiprecision arithmetic library developers tools (libgmp3-dev).
+	- GMSH Three-dimensional finite element mesh generator (<https://gmsh.info>).
 	- GTK GIMP Tookit (libgtk2.0-dev, libgtkgl2.0-dev, libgtkglextmm-x11-1.2-dev, libgtkmm-2.4-dev).
+	- GNU plotutils libraries (libplot gnuplot).
 	- GNU Triangulated Surface Library (libgts-bin libgts-dev).
 	- Multiple precision floating-point computation developers tools (libmpfr-dev).
+	- Multiprecision arithmetic library developers tools (libgmp3-dev).
 	- MySQL C++ library bindings (libmysql++-dev).
 	- SQLite 3 development files (libsqlite3).
 	- VTK Visualization ToolKit <http://www.vtk.org> (libvtk5-dev).
