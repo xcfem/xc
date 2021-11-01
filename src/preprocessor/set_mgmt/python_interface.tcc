@@ -29,6 +29,7 @@ class_<dq_ptrs_node, bases<CommandEntity>, boost::noncopyable >("dq_ptrs_node",n
   .def("at",make_function(&dq_ptrs_node::get, return_internal_reference<>() ), "Access specified node with bounds checking.")
   .def("__getitem__",make_function(&dq_ptrs_node::get, return_internal_reference<>() ), "Access specified node with bounds checking.")
   .def("getTags",make_function(&dq_ptrs_node::getTags, return_internal_reference<>() ),"Returns node identifiers.")
+  .def("findTag",make_function(&dq_ptrs_node::findTag, return_internal_reference<>() ),"Returns the node identified by the tag argument.")
   .def("clear",&dq_ptrs_node::clear,"Removes all items.")
   ;
 
@@ -57,6 +58,7 @@ class_<dq_ptrs_element, bases<CommandEntity>, boost::noncopyable >("dq_ptrs_elem
   .def("at",make_function(&dq_ptrs_element::get, return_internal_reference<>() ), "Access specified element with bounds checking.")
   .def("__getitem__",make_function(&dq_ptrs_element::get, return_internal_reference<>() ), "Access specified element with bounds checking.")
   .def("getTags",make_function(&dq_ptrs_element::getTags, return_internal_reference<>() ),"Returns element identifiers.")
+  .def("findTag",make_function(&dq_ptrs_element::findTag, return_internal_reference<>() ),"Returns the element identified by the tag argument.")
   .def("clear",&dq_ptrs_element::clear,"Removes all items.")
   ;
 

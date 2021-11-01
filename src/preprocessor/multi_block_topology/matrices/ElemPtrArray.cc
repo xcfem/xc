@@ -28,10 +28,7 @@
 
 #include "ElemPtrArray.h"
 #include "domain/mesh/element/Element.h"
-
-
 #include "utility/geom/pos_vec/Pos3d.h"
-
 #include "boost/lexical_cast.hpp"
 
 //! @brief Returns (if it exists) a pointer to the element
@@ -115,4 +112,22 @@ const XC::Element *XC::ElemPtrArray::getNearestElement(const Pos3d &p) const
   {
     ElemPtrArray *this_no_const= const_cast<ElemPtrArray *>(this);
     return this_no_const->getNearestElement(p);
+  }
+
+//! @brief Returns a Python list containing the elements of this array.
+boost::python::list XC::ElemPtrArray::getPyElementList(void) const
+  {
+    boost::python::list retval;
+    if(!Null())
+      {
+	const size_t numberOfRows= getNumberOfRows();
+	const size_t numberOfColumns= getNumberOfColumns();
+	for(size_t j= 1;j<=numberOfRows;j++)
+	  for(size_t k= 1;k<=numberOfColumns;k++)
+	    {
+	      const Element *elem= operator()(j,k);
+   	      retval.append(elem);
+	    }
+      }
+    return retval;
   }

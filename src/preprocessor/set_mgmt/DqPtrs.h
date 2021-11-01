@@ -274,7 +274,7 @@ template <class T>
 T *DqPtrs<T>::findTag(const size_t &tag)
   {
     for(const_iterator i= this->begin();i!=this->end();i++)
-      if((*i)->getTag()==tag) return *i;
+      if(static_cast<size_t>((*i)->getTag())==tag) return *i;
     return nullptr;
   }
 

@@ -119,6 +119,24 @@ const XC::Node *XC::NodePtrArray::getNearestNode(const Pos3d &p) const
     return this_no_const->getNearestNode(p);
   }
 
+//! @brief Returns a Python list containing the nodes of this array.
+boost::python::list XC::NodePtrArray::getPyNodeList(void) const
+  {
+    boost::python::list retval;
+    if(!Null())
+      {
+	const size_t numberOfRows= getNumberOfRows();
+	const size_t numberOfColumns= getNumberOfColumns();
+	for(size_t j= 1;j<=numberOfRows;j++)
+	  for(size_t k= 1;k<=numberOfColumns;k++)
+	    {
+	      const Node *node= operator()(j,k);
+   	      retval.append(node);
+	    }
+      }
+    return retval;
+  }
+
 //! @brief Impone desplazamiento nulo en the nodes de this set.
 void XC::NodePtrArray::fix(const SFreedom_Constraint &seed) const
   {

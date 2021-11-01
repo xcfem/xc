@@ -43,10 +43,7 @@ namespace XC{
 //! @brief Three-dimensional array of pointers to elements.
 class ElemPtrArray3d: public PtrArray3dBase<ElemPtrArray>
   {
-  protected:
-
   public:
-
     ElemPtrArray3d(const size_t n_layers= 0,const ElemPtrArray &m= ElemPtrArray());
     ElemPtrArray3d(const size_t ,const size_t ,const size_t );
 
@@ -54,8 +51,7 @@ class ElemPtrArray3d: public PtrArray3dBase<ElemPtrArray>
     const Element *findElement(const int &) const;
     Element *getNearestElement(const Pos3d &p);
     const Element *getNearestElement(const Pos3d &p) const;
-
-
+    boost::python::list getPyElementList(void) const;
   };
 
 } //end of XC namespace.

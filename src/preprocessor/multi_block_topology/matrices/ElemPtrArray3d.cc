@@ -109,3 +109,22 @@ const XC::Element *XC::ElemPtrArray3d::getNearestElement(const Pos3d &p) const
     ElemPtrArray3d *this_no_const= const_cast<ElemPtrArray3d *>(this);
     return this_no_const->getNearestElement(p);
   }
+
+//! @brief Returns a Python list containing the elements of this array.
+boost::python::list XC::ElemPtrArray3d::getPyElementList(void) const
+  {
+    boost::python::list retval;
+    const size_t numberOfLayers= getNumberOfLayers();
+    for(size_t i=1;i<=numberOfLayers;i++)
+      {
+        const ElemPtrArray &layer= operator()(i);
+	boost::python::list tmp= layer.getPyElementList();
+	const size_t sz= len(tmp);
+        for(size_t i= 0;i<sz;i++)
+          {
+	    const Element *elem= boost::python::extract<const Element *>(tmp[i]);
+	    retval.append(elem);
+	  }
+      }
+    return retval;
+  }

@@ -140,7 +140,24 @@ const XC::Node *XC::NodePtrArray3d::findNode(const int &tag) const
     return retval;
   }
 
-
+//! @brief Returns a Python list containing the nodes of this array.
+boost::python::list XC::NodePtrArray3d::getPyNodeList(void) const
+  {
+    boost::python::list retval;
+    const size_t numberOfLayers= getNumberOfLayers();
+    for(size_t i=1;i<=numberOfLayers;i++)
+      {
+        const NodePtrArray &layer= operator()(i);
+	boost::python::list tmp= layer.getPyNodeList();
+	const size_t sz= len(tmp);
+        for(size_t i= 0;i<sz;i++)
+          {
+	    const Node *node= boost::python::extract<const Node *>(tmp[i]);
+	    retval.append(node);
+	  }
+      }
+    return retval;
+  }
 
 XC::Vector XC::NodePtrArray3d::IRowSimpsonIntegration(const size_t &f,const size_t &c,const ExprAlgebra &e,const size_t &n) const
   {

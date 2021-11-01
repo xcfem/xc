@@ -49,8 +49,6 @@ namespace XC{
 //! @brief Matrix of pointers to elements.
 class ElemPtrArray: public PtrArrayBase<Element>
   {
-  protected:
-
   public:
     //! @brief Constructor.
     ElemPtrArray(const size_t &f=0,const size_t &c=0)
@@ -60,8 +58,7 @@ class ElemPtrArray: public PtrArrayBase<Element>
     const Element *findElement(const int &) const;
     Element *getNearestElement(const Pos3d &p);
     const Element *getNearestElement(const Pos3d &p) const;
-
-
+    boost::python::list getPyElementList(void) const;
   };
 
 } //end of XC namespace

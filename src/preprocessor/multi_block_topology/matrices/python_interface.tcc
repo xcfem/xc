@@ -86,7 +86,8 @@ class_<ptr_nodes_matrix, bases<t_matrix_ptr_nodes,CommandEntity>, boost::noncopy
 XC::Node *(XC::NodePtrArray::*getNearestNodNodePtrArray)(const Pos3d &)= &XC::NodePtrArray::getNearestNode;
 XC::Node *(XC::NodePtrArray::*getNodWithTagNodePtrArray)(const int &)= &XC::NodePtrArray::findNode;
 class_<XC::NodePtrArray, bases<ptr_nodes_matrix>, boost::noncopyable >("NodePtrArray", no_init)
-  .def("getNode", getNod, return_internal_reference<>())
+  .add_property("nodes",&XC::NodePtrArray::getPyNodeList,"returns the nodes of the container in a python list.")
+  .def("getNode", getNod, return_internal_reference<>(),"getNode(i,j) returns the node correponding to the indexes.")
   .def("getNearestNode",make_function(getNearestNodNodePtrArray, return_internal_reference<>() ),"Returns nearest node.")
   .def("getNodeWithTag",make_function(getNodWithTagNodePtrArray, return_internal_reference<>() ),"Returns node by tag.")
   ;
@@ -108,6 +109,7 @@ class_<array3d_nodes, bases<vector_mp_nodes,CommandEntity>, boost::noncopyable >
 XC::Node *(XC::NodePtrArray3d::*getNearestNodeNodePtrArray3d)(const Pos3d &)= &XC::NodePtrArray3d::getNearestNode;
 XC::Node *(XC::NodePtrArray3d::*getNodeWithTagNodePtrArray3d)(const int &)= &XC::NodePtrArray3d::findNode;
 class_<XC::NodePtrArray3d, bases<array3d_nodes>, boost::noncopyable >("NodePtrArray3d", no_init)
+  .add_property("nodes",&XC::NodePtrArray3d::getPyNodeList,"returns the nodes of the container in a python list.")
   .def("getNearestNode",make_function(getNearestNodeNodePtrArray3d, return_internal_reference<>() ),"Returns nearest node.")
   .def("getNodeWithTag",make_function(getNodeWithTagNodePtrArray3d, return_internal_reference<>() ),"Returns node by tag.")
   ;
@@ -129,6 +131,7 @@ class_<ptr_elements_matrix, bases<t_matrix_ptr_elements,CommandEntity>, boost::n
 XC::Element *(XC::ElemPtrArray::*getNearestElementElemPtrArray)(const Pos3d &)= &XC::ElemPtrArray::getNearestElement;
 XC::Element *(XC::ElemPtrArray::*getElementWithTag)(const int &)= &XC::ElemPtrArray::findElement;
 class_<XC::ElemPtrArray, bases<ptr_elements_matrix>, boost::noncopyable >("ElemPtrArray", no_init)
+  .add_property("elements",&XC::ElemPtrArray::getPyElementList,"returns the elements of the container in a python list.")
   .def("getNearestElement",make_function(getNearestElementElemPtrArray, return_internal_reference<>() ),"Returns nearest element.")
   .def("getElementWithTag",make_function(getElementWithTag, return_internal_reference<>() ),"Returns element by tag.")
   ;
@@ -150,6 +153,7 @@ class_<array3d_elements, bases<vector_mp_elements,CommandEntity>, boost::noncopy
 XC::Element *(XC::ElemPtrArray3d::*getNearestElementElemPtrArray3d)(const Pos3d &)= &XC::ElemPtrArray3d::getNearestElement;
 XC::Element *(XC::ElemPtrArray3d::*getElementWithTagElemPtrArray3d)(const int &)= &XC::ElemPtrArray3d::findElement;
 class_<XC::ElemPtrArray3d, bases<array3d_elements>, boost::noncopyable >("ElemPtrArray3d", no_init)
+  .add_property("elements",&XC::ElemPtrArray3d::getPyElementList,"returns the elements of the container in a python list.")
   .def("getNearestElement",make_function(getNearestElementElemPtrArray3d, return_internal_reference<>() ),"Returns nearest element.")
   .def("getElementWithTag",make_function(getElementWithTagElemPtrArray3d, return_internal_reference<>() ),"Returns element by tag.")
   ;
