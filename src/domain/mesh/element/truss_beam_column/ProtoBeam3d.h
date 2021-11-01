@@ -57,6 +57,8 @@ class ProtoBeam3d: public Element1D
     const CrossSectionProperties3d &getSectionProperties(void) const;
     CrossSectionProperties3d &getSectionProperties(void);
     void setSectionProperties(const CrossSectionProperties3d &);  
+    void setMaterial(const std::string &);
+    
     double getRho(void) const;
     void setRho(const double &);
     double getLinearRho(void) const;

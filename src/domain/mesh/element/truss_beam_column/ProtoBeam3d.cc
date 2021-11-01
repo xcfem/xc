@@ -123,6 +123,14 @@ void XC::ProtoBeam3d::setSectionProperties(const CrossSectionProperties3d &csp)
     physicalProperties.set(0,csp);
   }
 
+//! @brief Set the element material.
+void XC::ProtoBeam3d::setMaterial(const std::string &matName)
+  {
+    const Material *ptr_mat= get_material_ptr(matName);
+    if(ptr_mat)
+      { set_material(ptr_mat); }
+  }
+
 //! @brief Return density.
 double XC::ProtoBeam3d::getRho(void) const
   { return getSectionProperties().getRho(); }

@@ -86,7 +86,7 @@ XC::ProtoBeam2d::ProtoBeam2d(int tag, int class_tag, double a, double e, double 
 //! @param Nd2: idenfifier of the second node.
 XC::ProtoBeam2d::ProtoBeam2d(int tag, int class_tag, double a, double alpha, double e, double g, double i, int Nd1, int Nd2)
   :Element1D(tag,class_tag,Nd1,Nd2), physicalProperties(1)
-{ setSectionProperties(CrossSectionProperties2d(e,a,i,g,alpha)); }
+  { setSectionProperties(CrossSectionProperties2d(e,a,i,g,alpha)); }
 
 //! @brief Return the number of degrees of freedom of the element.
 int XC::ProtoBeam2d::getNumDOF(void) const
@@ -104,6 +104,14 @@ XC::CrossSectionProperties2d &XC::ProtoBeam2d::getSectionProperties(void)
 void XC::ProtoBeam2d::setSectionProperties(const CrossSectionProperties2d &csp)
   {
     physicalProperties.set(0,csp);
+  }
+
+//! @brief Set the element material.
+void XC::ProtoBeam2d::setMaterial(const std::string &matName)
+  {
+    const Material *ptr_mat= get_material_ptr(matName);
+    if(ptr_mat)
+      { set_material(ptr_mat); }
   }
 
 //! @brief Return density.

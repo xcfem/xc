@@ -62,7 +62,7 @@ class ProtoBeam2d: public Element1D
     const CrossSectionProperties2d &getSectionProperties(void) const;
     CrossSectionProperties2d &getSectionProperties(void);
     void setSectionProperties(const CrossSectionProperties2d &);
-    
+    void setMaterial(const std::string &);    
     
     double getRho(void) const;
     void setRho(const double &r); 
