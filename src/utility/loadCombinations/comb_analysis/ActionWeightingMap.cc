@@ -22,11 +22,7 @@
 
 #include "ActionWeightingMap.h"
 #include "utility/loadCombinations/actions/ActionsAndFactors.h"
-
-
 #include "LoadCombinations.h"
-
-
 
 //! @brief Return true if the object is found.
 bool cmb_acc::ActionWeightingMap::exists(const std::string &nmb) const
