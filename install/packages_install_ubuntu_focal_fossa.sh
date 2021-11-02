@@ -13,7 +13,7 @@ version () { echo "$@" | awk -F. '{ printf("%d%03d%03d%03d\n", $1,$2,$3,$4); }';
 echo "Some packages are in the \"contrib\" and \"non-free\" areas of the Debian distribution so these areas should be included in the sources.list file before running this script."
 
 # verify that the user wants to continue, but do not verify if a parameter DoNotAsk was given with script start
-if [ $1 != "DoNotAsk" ]; then
+if [ "$1" != "DoNotAsk" ]; then
     read -p "Continue (y/n)?" REPLY
     if [ $REPLY != "y" ]; then
         echo "Exiting..."
