@@ -33,6 +33,11 @@ See [here](https://github.com/xcfem/xc/blob/master/install/install.md)
 - [C++ API documentation](https://codedocs.xyz/xcfem/xc/index.html)
 - [Python API documentation](https://xcfem.github.io/XCmanual/)
 
+## Unix and XWindow
+
+- [Unix tutorial](https://www.tutorialspoint.com/unix/index.htm)
+- [X Window System tutorial](https://www.astro.princeton.edu/~strauss/AST303/Xintro.pdf)
+
 ## Git
 
 ### Git for beginners
