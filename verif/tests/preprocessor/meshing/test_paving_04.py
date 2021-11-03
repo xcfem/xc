@@ -13,11 +13,11 @@ __email__= "l.pereztato@gmail.com"
 import xc_base
 import geom
 import xc
-import matplotlib.pyplot as plt
 from model import predefined_spaces
 from materials import typical_materials
 from materials.astm_aisc import ASTM_materials
-#from postprocess import output_handler
+# import matplotlib.pyplot as plt
+# from postprocess import output_handler
 
 def getIntermediatePoints(corners, nDiv):
     ''' Return a series of intermediate points uniformly distributed

@@ -27,7 +27,7 @@ from materials.ehe import EHE_materials
 from materials import concrete_base
 from materials import typical_materials
 from materials.sections.fiber_section import fiber_sets
-import matplotlib.pyplot as plt
+# import matplotlib.pyplot as plt
 import numpy as np
 
 #Data from the experiment

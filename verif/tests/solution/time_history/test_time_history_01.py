@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-
 '''This example demonstrates how to perform time history analysis of a 2D elastic reinforced concrete cantilever column with a gravity load included in the analysis. See Ex1a.Canti2D.EQ.modif.tcl in OpenSees'''
+
 from __future__ import division
 from __future__ import print_function
 

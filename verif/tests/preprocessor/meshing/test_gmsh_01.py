@@ -13,10 +13,9 @@ __email__= "l.pereztato@gmail.com"
 import xc_base
 import geom
 import xc
-import matplotlib.pyplot as plt
 from model import predefined_spaces
 from materials import typical_materials
-#from postprocess import output_handler
+# from postprocess import output_handler
 
 pos1= geom.Pos3d(0,0,0)
 pos2= geom.Pos3d(1,0,0)

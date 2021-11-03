@@ -14,11 +14,11 @@ import math
 import xc_base
 import geom
 import xc
-import matplotlib.pyplot as plt
 from materials.astm_aisc import ASTM_materials
 from model import predefined_spaces
 from materials import typical_materials
-#from postprocess import output_handler
+# import matplotlib.pyplot as plt
+# from postprocess import output_handler
 
 # Test paving routine inside XC modeler.
 
