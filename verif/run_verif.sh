@@ -11,6 +11,15 @@ CYAN="\\033[1;36m"
 
 echo ""
 
+# Trying to avoid Matplotlib complaining about the XServer
+if [ -n "$MPLBACKEND" ]; then
+   echo "$JAUNE" "MPLBACKEND already set as: $MPLBACKEND" "$NORMAL"
+else
+   echo "$BLEU" "Setting MPLBACKEND to avoid Matplotlib complaints." "$NORMAL"
+   MPLBACKEND=Agg
+   export MPLBACKEND
+fi
+
 START=$(date +%s.%N)
 
 # Misc. tests
