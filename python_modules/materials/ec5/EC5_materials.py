@@ -611,6 +611,13 @@ class EC5Shape(object):
         ''' Put member values in a dictionary.'''
         return {'name':self.name, 'wood':wood.getDict()}
 
+    def getShearShapeFactor(self):
+        ''' Shape factor of the section.'''
+        className= type(self).__name__
+        methodName= sys._getframe(0).f_code.co_name
+        lmsg.error(className+'.'+methodName+': must be redefined in derived classes.')     
+        return None
+
 class RectangularShape(EC5Shape, section_properties.RectangularSection):
     ''' Rectangular timber shape.'''
     
@@ -632,13 +639,31 @@ class RectangularShape(EC5Shape, section_properties.RectangularSection):
     def getDesignBendingStrength(self, loadDurationClass:str, serviceClass:int, k_sys):
         ''' return the value of the characteristic bending strength.
 
-        :param loadDurationClass: duration of the load application , values 
+        :param loadDurationClass: duration of the load application, values 
                can be: permanent, long_term, medium_term, short_term 
                or instantaneous.
         :param serviceClass: service class according to clause 2.3.1.3 of EC5.
         :param k_sys: system strength factor.
         '''
         return self.wood.getDesignBendingStrength(loadDurationClass, serviceClass)*self.getDepthFactor()*k_sys
+    
+    def getShearShapeFactor(self):
+        ''' Shape factor of the section.'''
+        return 3/2.0
+    
+    def getDesignShearStrength(self, loadDurationClass:str, serviceClass:int, k_v= 1.0):
+        ''' return the value of the characteristic shear strength.
+
+        :param loadDurationClass: duration of the load application, values 
+               can be: permanent, long_term, medium_term, short_term 
+               or instantaneous.
+        :param serviceClass: service class according to clause 2.3.1.3 of EC5.
+        :param k_v: notch factor.
+        '''
+        fv_d= self.wood.getDesignShearStrength(loadDurationClass, serviceClass)
+        retval= fv_d*self.A()*k_v
+        retval/=self.getShearShapeFactor()
+        return retval
     
     def defElasticSection3d(self, prep):
         ''' Return an elastic section appropiate for 3D beam analysis
