@@ -130,6 +130,20 @@ class Wood(wood_base.Wood):
         '''
         return self.getCharacteristicBendingStrength()*self.getKmod(loadDurationClass, serviceClass)/self.gammaM()
     
+    def getCharacteristicShearStrength(self):
+        ''' return the value of the characteristic shear strength.'''
+        return self.fv_k
+    
+    def getDesignShearStrength(self, loadDurationClass:str, serviceClass:int):
+        ''' return the value of the characteristic shear strength.
+
+        :param loadDurationClass: duration of the load application , values 
+               can be: permanent, long_term, medium_term, short_term 
+               or instantaneous.
+        :param serviceClass: service class according to clause 2.3.1.3 of EC5.
+        '''
+        return self.getCharacteristicShearStrength()*self.getKmod(loadDurationClass, serviceClass)/self.gammaM()
+    
     def getCharacteristicTensileStrengthAlongTheGrain(self):
         ''' return the characteristic tensile strength along the grain.'''
         return ft_0_k
