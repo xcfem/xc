@@ -88,6 +88,23 @@ packages_div="\
 #   formats.
 sudo apt-get install -y $packages_div
 
+
+
+# free disk space by cleaning install files
+sudo apt-get clean
+
+
+# mayavi installation. Ubuntu 'mayavi' package seems to require VTK 6,
+# so we use pip (to reconsider because we already use VTK 6 LCPT 24/09/2018)
+sudo -H pip3 install mayavi
+sudo -H pip3 install ezdxf
+sudo -H pip3 install pyexcel
+sudo -H pip3 install pyexcel-ods
+sudo -H pip3 install dxfwrite # To replace with ezdxf
+# cairo installation. 
+sudo -H pip3 install pycairo
+
+# GMSH installation.
 GMSH_REQUIRED_VERSION="4.8.4"
 gmshHeader="/usr/local/include/gmsh.h"
 if [ ! -f "$gmshHeader" ] # GMSH not installed.
@@ -109,19 +126,3 @@ then # Install GMSH
 else
     echo "$0: gmshHeader '${gmshHeader}' already installed. Skipping."    
 fi
-
-
-# free disk space by cleaning install files
-sudo apt-get clean
-
-
-# mayavi installation. Ubuntu 'mayavi' package seems to require VTK 6,
-# so we use pip (to reconsider because we already use VTK 6 LCPT 24/09/2018)
-sudo -H pip3 install mayavi
-sudo -H pip3 install ezdxf
-sudo -H pip3 install pyexcel
-sudo -H pip3 install pyexcel-ods
-sudo -H pip3 install dxfwrite # To replace with ezdxf
-# cairo installation. 
-sudo -H pip3 install pycairo
-
