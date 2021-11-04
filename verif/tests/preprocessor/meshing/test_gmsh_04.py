@@ -79,14 +79,14 @@ xcTotalSet= modelSpace.getTotalSet()
 nNodes= len(xcTotalSet.nodes)
 nElements= len(xcTotalSet.elements)
 
-nNodesRef= [348, 354] # Different Gmsh versions give different results
-nElementsRef= [315, 321]
+nNodesRefRange= (340,360) # Different Gmsh versions give different results
+nElementsRefRange= (310,330)
 
 nNodesOk= False
-if nNodes in nNodesRef:
+if (nNodes>=nNodesRefRange[0]) and (nNodes<=nNodesRefRange[1]):
    nNodesOk= True
 nElementsOk= False
-if nElements in nElementsRef:
+if (nElements>=nElementsRefRange[0]) and (nElements<=nElementsRefRange[1]):
    nElementsOk= True
    
 '''
