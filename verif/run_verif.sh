@@ -11,13 +11,15 @@ CYAN="\\033[1;36m"
 
 echo ""
 
+mplbackend_backup="nil"
 # Trying to avoid Matplotlib complaining about the XServer
 if [ -n "$MPLBACKEND" ]; then
-   echo "$JAUNE" "MPLBACKEND already set as: $MPLBACKEND" "$NORMAL"
+    echo "$JAUNE" "MPLBACKEND already set as: $MPLBACKEND" "$NORMAL"
+    mplbackend_backup="$MPLBACKEND"
 else
-   echo "$BLEU" "Setting MPLBACKEND to avoid Matplotlib complaints." "$NORMAL"
-   MPLBACKEND=Agg
-   export MPLBACKEND
+    echo "$BLEU" "Setting MPLBACKEND to avoid Matplotlib complaints." "$NORMAL"
+    MPLBACKEND=Agg
+    export MPLBACKEND
 fi
 
 START=$(date +%s.%N)
@@ -994,3 +996,15 @@ NT=$(grep -c '^python' $0)
 echo ${NT} tests
 Q=$(echo "$DIFF / $NT" | bc -l)
 echo $Q seconds/test
+
+# Restore MPLBACKEND to its previous value.
+mplbackend_backup="nil"
+# Trying to avoid Matplotlib complaining about the XServer
+if [ "$mplbackend_backup"=="nil" ]; then
+    echo "$BLEU" "Removing MPLBACKEND from environment variables" "$NORMAL"
+    MPLBACKEND=''
+else
+   echo "$BLEU" "Restoring MPLBACKEND to its previous value." "$NORMAL"
+   MPLBACKEND=mplbackend_backup
+fi
+export MPLBACKEND

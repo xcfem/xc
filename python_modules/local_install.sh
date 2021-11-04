@@ -127,7 +127,14 @@ fi
 echo "Installing Python extensions."
 sudo python setup.py install --prefix=/usr/local --record installed_files.txt
 echo "Updating installed files history."
-touch installed_files_history.txt
+if test -f installed_files_history.txt; then
+    echo "${green}installed_files_history.txt already exists: OK!${clear}"
+else
+    echo "${green}Create installed_files_history.txt${clear}"
+    touch installed_files_history.txt
+    exit 1
+fi
 cat installed_files_history.txt installed_files.txt | sort | uniq > tmp.txt
 mv tmp.txt installed_files_history.txt
 sudo rm installed_files.txt
+echo "${green}installed_files_history.txt updated.${clear}"
