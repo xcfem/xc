@@ -1,6 +1,6 @@
 # How to start
 
-Some links you can find useful if you want to start using XC. Feel free  making suggestions to enhance this document.
+Some links you can find useful if you want to start using XC. Feel free  making suggestions to enhance this document. Take them in the order that suits to you.
 
 ## How to contribute to open source projects
 
@@ -9,6 +9,10 @@ This is all about cooperation. If you're new to open source projects you can tak
 <!-- ![cooperation](https://upload.wikimedia.org/wikipedia/commons/6/6d/Concurs_de_castells_Tarragona_2008_42._Castellers_de_Sants_4de8.jpg "Cooperation") -->
 
 <img align="right" src="https://upload.wikimedia.org/wikipedia/commons/6/6d/Concurs_de_castells_Tarragona_2008_42._Castellers_de_Sants_4de8.jpg" width="250" />
+
+### About open source software
+
+- [Free and open-source software](https://en.wikipedia.org/wiki/Portal:Free_and_open-source_software)
 
 ## XC installation
 
