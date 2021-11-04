@@ -81,7 +81,7 @@ if(GMSH_FOUND)
       message(STATUS "${BoldRed}GMSH 4.8 or later required (found version: ${GMSH_VERSION}).")
       message(FATAL_ERROR "See: https://github.com/xcfem/xc/blob/master/install/gmsh_install.md")
       message(FATAL_ERROR "to install a more recent version.${ColourReset}")
-   endif(GMSH_VERSION)
+   endif(GMSH_VERSION VERSION_LESS "4.8")
 endif(GMSH_FOUND)
 
 
