@@ -10,6 +10,7 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@ciccp.es, ana.ortega@ciccp.es "
 
+import sys
 import geom
 import vtk
 import math
@@ -44,25 +45,30 @@ class LinearLoadDiagram(cd.ColoredDiagram):
         :param actLP: list of active load patterns.
         '''
         retval= dict()
-        preprocessor=actLP[0].getDomain.getPreprocessor     
-        for lp in actLP:
-            lIter= lp.loads.getElementalLoadIter
-            eLoad= lIter.next()
-            eTagsSet= self.setToDisp.getElements.getTags()
-            while(eLoad):
-                if(hasattr(eLoad,'getVector3dLocalForce')):
-                    tags= eLoad.elementTags
-                    for i in range(0,len(tags)):
-                        eTag= tags[i]
-                        if eTag in eTagsSet:
-                            elem= preprocessor.getElementHandler.getElement(eTag)
-                            dim= elem.getDimension
-                            if(dim==1):
-                                if eTag in retval:
-                                    retval[eTag]+= eLoad.getVector3dLocalForce()
-                                else:
-                                    retval[eTag]= eLoad.getVector3dLocalForce()
+        if(len(actLP)>0):
+            preprocessor=actLP[0].getDomain.getPreprocessor     
+            for lp in actLP:
+                lIter= lp.loads.getElementalLoadIter
                 eLoad= lIter.next()
+                eTagsSet= self.setToDisp.getElements.getTags()
+                while(eLoad):
+                    if(hasattr(eLoad,'getVector3dLocalForce')):
+                        tags= eLoad.elementTags
+                        for i in range(0,len(tags)):
+                            eTag= tags[i]
+                            if eTag in eTagsSet:
+                                elem= preprocessor.getElementHandler.getElement(eTag)
+                                dim= elem.getDimension
+                                if(dim==1):
+                                    if eTag in retval:
+                                        retval[eTag]+= eLoad.getVector3dLocalForce()
+                                    else:
+                                        retval[eTag]= eLoad.getVector3dLocalForce()
+                    eLoad= lIter.next()
+        else:
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.warning(className+'.'+methodName+': no active load patterns; doing nothing.')
         return retval
        
 
