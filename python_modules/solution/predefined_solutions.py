@@ -872,6 +872,18 @@ class PenaltyNewtonLineSearchMUMPS(PenaltyNewtonLineSearchBase):
         self.sysOfEqnSetup()
         self.analysisSetup('static_analysis')
         
+### Convenience function
+def penalty_newton_line_search_mumps(prb, mxNumIter= 150, convergenceTestTol= 1e-9, printFlag= 0, convTestType= 'relative_total_norm_disp_incr_conv_test'):
+    ''' Return a simple static modified Newton solution procedure.
+
+    :param maxNumIter: maximum number of iterations (defauts to 10)
+    :param convergenceTestTol: convergence tolerance (defaults to 1e-9)
+    :param printFlag: print message on each iteration
+    '''
+    solProc= PenaltyNewtonLineSearchMUMPS(prb,maxNumIter= mxNumIter, convergenceTestTol= convergenceTestTol, printFlag= printFlag, convTestType= convTestType)
+    solProc.setup()
+    return solProc.analysis
+        
 class PlainKrylovNewton(SolutionProcedure):
     ''' KrylovNewton algorithm object which uses a Krylov subspace 
         accelerator to accelerate the convergence of the modified 
