@@ -9,6 +9,7 @@ __email__= "l.pereztato@ciccp.es, ana.ortega@ciccp.es "
 
 import math
 from materials.sections.structural_shapes import arcelor_shapes_dictionaries
+import re
 
 ''' ARCELOR's structural steel shapes (metric units).'''
 
@@ -376,7 +377,7 @@ def common_prefix(a:str, b:str):
     return retval
 
 def findNearestSteelShapeByDepth(namePattern:str, depth:float):
-    ''' Return the steel shape which name matches the pattern argument
+    ''' Return the steel shape whose name matches the pattern argument
         and whose depth is the nearest to the argument.
 
     :param namePattern: regular expression to match.
@@ -384,26 +385,52 @@ def findNearestSteelShapeByDepth(namePattern:str, depth:float):
     '''
     # Find the dictionary to search in.
     retval= None
+    regex= re.compile(namePattern)
     arcelorDict= arcelor_shapes_dictionaries.arcelor_shapes
     for tableKey in arcelorDict:
         c_prefix= common_prefix(namePattern, tableKey)
         if(c_prefix==tableKey):
             shapeDict= arcelorDict[tableKey]
             # initial values.
-            shapeKey= next(iter(shapeDict))
-            retval= shapeDict[shapeKey]
-            diff= abs(depth-retval['h'])
+            retval= None
+            diff= 6.023e23
             # iterate through dictionary
             for shapeKey in shapeDict:
-                shape= shapeDict[shapeKey]
-                tmp= abs(depth-shape['h'])
-                if(tmp<diff):
-                    diff= tmp
-                    retval= shape
-                    if(diff==0.0): break;
+                if(regex.match(shapeKey)):
+                    shape= shapeDict[shapeKey]
+                    tmp= abs(depth-shape['h'])
+                    if(tmp<diff):
+                        diff= tmp
+                        retval= shape
+                        if(diff==0.0): break;
         if(retval): break;
     return retval
-            
+
+def getSteelShapeDepthRange(namePattern:str, minDepth:float, maxDepth):
+    ''' Return the steel shapes whose name matches the pattern argument
+        and whose depth is belongs to the range (minDepth, maxDepth)
+
+    :param namePattern: regular expression to match.
+    :param depth: depth of the steel shape.
+    '''
+    # Find the dictionary to search in.
+    retval= list()
+    regex= re.compile(namePattern)
+    arcelorDict= arcelor_shapes_dictionaries.arcelor_shapes
+    for tableKey in arcelorDict:
+        c_prefix= common_prefix(namePattern, tableKey)
+        if(c_prefix==tableKey):
+            shapeDict= arcelorDict[tableKey]
+            # iterate through dictionary
+            for shapeKey in shapeDict:
+                if(regex.match(shapeKey)):
+                    shape= shapeDict[shapeKey]
+                    depth= shape['h']
+                    tmp= abs(depth-shape['h'])
+                    if((depth>=minDepth) and (depth<=maxDepth)):
+                        retval.append(shape)
+    return retval
+
 
 class IPNShape(structural_steel.IShape):
     def __init__(self,steel,name):
