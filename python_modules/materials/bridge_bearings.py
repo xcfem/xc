@@ -222,7 +222,7 @@ class ElastomericBearing(Bearing):
         self.matKTHY= typical_materials.defElasticMaterial(preprocessor, self.matTHYName, self.getKrotationBridgeAxis())
         self.matKTHZ= typical_materials.defElasticMaterial(preprocessor, self.matTHZName, self.getKrotationVerticalAxis())
 
-    def putBetweenNodes(self,modelSpace,iNodA, iNodB, orientation= None):
+    def putBetweenNodes(self,modelSpace,iNodA:int, iNodB:int, orientation= None):
         ''' Puts the bearing between the nodes.
 
             :param modelSpace (:obj:'PredefinedSpace'): space dimension and number of DOFs.
@@ -231,6 +231,24 @@ class ElastomericBearing(Bearing):
 
         '''
         return modelSpace.setBearingBetweenNodes(iNodA,iNodB,self.materials, orientation)
+
+    def putAsSupport(self,modelSpace, iNod:int , orientation= None):
+        ''' Puts the bearing between the nodes.
+
+            :param modelSpace (:obj:'PredefinedSpace'): space dimension and number of DOFs.
+            :param iNod (int): node to support.
+
+        '''
+        nodeHandler= modelSpace.getNodeHandler()
+        newNode= nodeHandler.duplicateNode(iNod) # new node.
+        
+        newElement= modelSpace.setBearingBetweenNodes(newNode.tag,iNod,self.materials, orientation)
+        # Boundary conditions
+        constraints= modelSpace.constraints
+        numDOFs= nodeHandler.numDOFs
+        for i in range(0,numDOFs):
+            spc= modelSpace.newSPConstraint(newNode.tag,i,0.0)
+        return newNode, newElement
 
 # Points that define the Teflon coefficient of friction of
 # from the mean compressive stress
