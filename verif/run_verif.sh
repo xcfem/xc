@@ -799,6 +799,7 @@ python tests/materials/steel_shapes/test_aisc_w_shapes.py
 python tests/materials/steel_shapes/test_aisc_hss_shapes.py
 python tests/materials/steel_shapes/test_steel_shape_01.py
 python tests/materials/steel_shapes/test_steel_shape_02.py
+python tests/materials/steel_shapes/test_arcelor_metric_shapes_01.py
 echo "$BLEU" "    EC3 tests." "$NORMAL"
 python tests/materials/ec3/test_buckling_resistance_01.py
 python tests/materials/ec3/test_lateral_torsional_buckling00.py
