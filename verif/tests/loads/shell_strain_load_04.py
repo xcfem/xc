@@ -45,10 +45,10 @@ elem= seedElemHandler.newElement("ShellNLDKGQ",xc.ID([0,0,0,0]))
 # Block topology (ne-quarter of the plate)
 L_2= L/2.0
 points= preprocessor.getMultiBlockTopology.getPoints
-pt1= points.newPntFromPos3d(geom.Pos3d(0.0,0.0,0.0))
-pt2= points.newPntFromPos3d(geom.Pos3d(L_2,0.0,0.0))
-pt3= points.newPntFromPos3d(geom.Pos3d(L_2,L_2,0.0))
-pt4= points.newPntFromPos3d(geom.Pos3d(0.0,L_2,0.0))
+pt1= points.newPoint(geom.Pos3d(0.0,0.0,0.0))
+pt2= points.newPoint(geom.Pos3d(L_2,0.0,0.0))
+pt3= points.newPoint(geom.Pos3d(L_2,L_2,0.0))
+pt4= points.newPoint(geom.Pos3d(0.0,L_2,0.0))
 surfaces= preprocessor.getMultiBlockTopology.getSurfaces
 s1= surfaces.newQuadSurfacePts(pt1.tag, pt2.tag, pt3.tag, pt4.tag)
 

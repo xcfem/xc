@@ -41,8 +41,8 @@ scc= section.defElasticShearSection3d(preprocessor)
 L= 4.5
 spacing= 0.5
 points= preprocessor.getMultiBlockTopology.getPoints
-pt1= points.newPntFromPos3d(geom.Pos3d(0,0,0))
-pt2= points.newPntFromPos3d(geom.Pos3d(L,0,0))
+pt1= points.newPoint(geom.Pos3d(0,0,0))
+pt2= points.newPoint(geom.Pos3d(L,0,0))
 
 lines= preprocessor.getMultiBlockTopology.getLines
 ln= lines.newLine(pt1.tag,pt2.tag)

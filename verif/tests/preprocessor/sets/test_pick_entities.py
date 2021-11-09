@@ -31,10 +31,10 @@ ele0= elements.newElement("ElasticBeam3d",xc.ID([nod0.tag,nod1.tag]))
 ele1= elements.newElement("ElasticBeam3d",xc.ID([nod2.tag,nod3.tag]))
 
 points= preprocessor.getMultiBlockTopology.getPoints
-pt0= points.newPntFromPos3d(geom.Pos3d(0.0,0.0,0.0))
-pt1= points.newPntFromPos3d(geom.Pos3d(0.5,0.5,0.5))
-pt2= points.newPntFromPos3d(geom.Pos3d(3.0,3.0,3.0))
-pt3= points.newPntFromPos3d(geom.Pos3d(4.0,4.0,4.0))
+pt0= points.newPoint(geom.Pos3d(0.0,0.0,0.0))
+pt1= points.newPoint(geom.Pos3d(0.5,0.5,0.5))
+pt2= points.newPoint(geom.Pos3d(3.0,3.0,3.0))
+pt3= points.newPoint(geom.Pos3d(4.0,4.0,4.0))
 
 l1=  preprocessor.getMultiBlockTopology.getLines.newLine(pt0.tag,pt1.tag)
 l2=  preprocessor.getMultiBlockTopology.getLines.newLine(pt2.tag,pt3.tag)

@@ -463,7 +463,7 @@ class OldDxfReader(object):
     if(nearestPoint):
       dist= nearestPoint.getPos.dist(pos3D)
     if(dist>self.tol):
-      retval= self.pointHandler.newPntFromPos3d(pos3D)
+      retval= self.pointHandler.newPoint(pos3D)
     return retval
   def newLine(self,l):
     start= l.dxf.start

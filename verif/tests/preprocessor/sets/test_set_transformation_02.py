@@ -19,8 +19,8 @@ feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
 
 points= preprocessor.getMultiBlockTopology.getPoints
-pt1= points.newPntIDPos3d(1,geom.Pos3d(0.0,0.0,0.0))
-pt2= points.newPntIDPos3d(2,geom.Pos3d(CooMax,CooMax,CooMax))
+pt1= points.newPoint(1,geom.Pos3d(0.0,0.0,0.0))
+pt2= points.newPoint(2,geom.Pos3d(CooMax,CooMax,CooMax))
 
 lines= preprocessor.getMultiBlockTopology.getLines
 l1= lines.newLine(pt1.tag,pt2.tag)

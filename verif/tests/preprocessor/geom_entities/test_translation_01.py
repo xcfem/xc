@@ -19,13 +19,13 @@ preprocessor=  feProblem.getPreprocessor
 # Defining nodes
 
 pts= preprocessor.getMultiBlockTopology.getPoints
-ptA= pts.newPntIDPos3d(1,geom.Pos3d(0.0,0.0,3.0))
-ptB= pts.newPntIDPos3d(2,geom.Pos3d(0.0,0.0,4.0))
+ptA= pts.newPoint(1,geom.Pos3d(0.0,0.0,3.0))
+ptB= pts.newPoint(2,geom.Pos3d(0.0,0.0,4.0))
 
 transl= xc.Translation(geom.Translation3d(ptB.getPos-ptA.getPos))
 
-ptTrfA= pts.newPntIDPos3d(10,transl.getTrfPos(ptA.getPos))
-ptTrfB= pts.newPntIDPos3d(11,transl.getTrfPos(ptB.getPos))
+ptTrfA= pts.newPoint(10,transl.getTrfPos(ptA.getPos))
+ptTrfB= pts.newPoint(11,transl.getTrfPos(ptB.getPos))
 
 ''' 
 for p in pts:

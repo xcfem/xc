@@ -45,8 +45,8 @@ scc= typical_materials.defElasticShearSection2d(preprocessor, "scc",A,E,G,I,alph
 
 # Problem geometry
 points= preprocessor.getMultiBlockTopology.getPoints
-pt1= points.newPntFromPos3d(geom.Pos3d(0,0,0))
-pt2= points.newPntFromPos3d(geom.Pos3d(l,0,0))
+pt1= points.newPoint(geom.Pos3d(0,0,0))
+pt2= points.newPoint(geom.Pos3d(l,0,0))
 
 lines= preprocessor.getMultiBlockTopology.getLines
 ln= lines.newLine(pt1.tag,pt2.tag)

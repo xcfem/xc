@@ -40,16 +40,16 @@ modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
 points= modelSpace.getPointHandler()
 
 #### Exterior contour
-pt1= points.newPntFromPos3d(p1)
-pt2= points.newPntFromPos3d(p2)
-pt3= points.newPntFromPos3d(p3)
-pt4= points.newPntFromPos3d(p4)
+pt1= points.newPoint(p1)
+pt2= points.newPoint(p2)
+pt3= points.newPoint(p3)
+pt4= points.newPoint(p4)
 
 #### Hole
-ptH0= points.newPntFromPos3d(pH0)
-ptH1= points.newPntFromPos3d(pH1)
-ptH2= points.newPntFromPos3d(pH2)
-ptH3= points.newPntFromPos3d(pH3)
+ptH0= points.newPoint(pH0)
+ptH1= points.newPoint(pH1)
+ptH2= points.newPoint(pH2)
+ptH3= points.newPoint(pH3)
 
 ### Define polygonal surfaces
 surfaces= modelSpace.getSurfaceHandler()

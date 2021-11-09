@@ -16,7 +16,7 @@ def getHoleAsPolygonalSurface(
     '''
     plg= bolt_fastener.getHoleAsPolygon()
     vertices= plg.getVertexList()
-    newPnts = [points.newPntFromPos3d(v) for v in vertices]
+    newPnts = [points.newPoint(v) for v in vertices]
     pntTags= [p.tag for p in newPnts]
     pFace= surfaces.newPolygonalFacePts(pntTags)
     return pFace

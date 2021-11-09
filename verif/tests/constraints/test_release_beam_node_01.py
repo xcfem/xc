@@ -35,8 +35,8 @@ xcSection= shape.defElasticShearSection3d(preprocessor)
 ## Points.
 span= 10.0
 pointHandler= preprocessor.getMultiBlockTopology.getPoints
-p0= pointHandler.newPntFromPos3d(geom.Pos3d(0.0,0.0,0.0))
-p1= pointHandler.newPntFromPos3d(geom.Pos3d(span,0.0,0.0))
+p0= pointHandler.newPoint(geom.Pos3d(0.0,0.0,0.0))
+p1= pointHandler.newPoint(geom.Pos3d(span,0.0,0.0))
 
 ## Lines
 lineHandler= preprocessor.getMultiBlockTopology.getLines

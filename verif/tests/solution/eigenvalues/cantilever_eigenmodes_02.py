@@ -53,8 +53,8 @@ beam3d.rho= m
 
 
 points= preprocessor.getMultiBlockTopology.getPoints
-pt1= points.newPntIDPos3d(1,geom.Pos3d(0.0,0.0,0.0))
-pt2= points.newPntIDPos3d(2,geom.Pos3d(L*math.cos(theta),L*math.sin(theta),0.0))
+pt1= points.newPoint(1,geom.Pos3d(0.0,0.0,0.0))
+pt2= points.newPoint(2,geom.Pos3d(L*math.cos(theta),L*math.sin(theta),0.0))
 lines= preprocessor.getMultiBlockTopology.getLines
 lines.defaultTag= 1
 l= lines.newLine(1,2)

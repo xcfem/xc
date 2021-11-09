@@ -41,14 +41,14 @@ modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
 ### Define k-points.
 points= modelSpace.getPointHandler()
 
-pt1= points.newPntFromPos3d(pos1)
-pt2= points.newPntFromPos3d(pos2)
-pt3= points.newPntFromPos3d(pos3)
-pt4= points.newPntFromPos3d(pos4)
-pt11= points.newPntFromPos3d(pos11)
-pt12= points.newPntFromPos3d(pos12)
-pt13= points.newPntFromPos3d(pos13)
-pt14= points.newPntFromPos3d(pos14)
+pt1= points.newPoint(pos1)
+pt2= points.newPoint(pos2)
+pt3= points.newPoint(pos3)
+pt4= points.newPoint(pos4)
+pt11= points.newPoint(pos11)
+pt12= points.newPoint(pos12)
+pt13= points.newPoint(pos13)
+pt14= points.newPoint(pos14)
 
 ### Define polygonal surface
 surfaces= modelSpace.getSurfaceHandler()

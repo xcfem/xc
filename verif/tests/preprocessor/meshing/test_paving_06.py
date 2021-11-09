@@ -52,7 +52,7 @@ def getHoleAsPolygonalSurface(hole, surfaces):
     vertices= plg.getVertexList()
     newPnts= list()
     for v in vertices:
-        newPnts.append(points.newPntFromPos3d(v))
+        newPnts.append(points.newPoint(v))
     pntTags= list()
     for p in newPnts:
         pntTags.append(p.tag)
@@ -160,11 +160,11 @@ modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
 points= modelSpace.getPointHandler()
 
 #### Exterior contour
-pt1= points.newPntFromPos3d(p1)
-pt2= points.newPntFromPos3d(p2)
-pt3= points.newPntFromPos3d(p3)
-pt4= points.newPntFromPos3d(p4)
-pt5= points.newPntFromPos3d(p5)
+pt1= points.newPoint(p1)
+pt2= points.newPoint(p2)
+pt3= points.newPoint(p3)
+pt4= points.newPoint(p4)
+pt5= points.newPoint(p5)
 
 ### Define polygonal surfaces
 surfaces= modelSpace.getSurfaceHandler()

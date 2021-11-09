@@ -17,13 +17,13 @@ feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
 
 points= preprocessor.getMultiBlockTopology.getPoints
-pt1= points.newPntIDPos3d(1,geom.Pos3d(1.0,1.0,0.0))
-pt2= points.newPntIDPos3d(2,geom.Pos3d(2,2,0))
-pt3= points.newPntIDPos3d(3,geom.Pos3d(0,1,0))
+pt1= points.newPoint(1,geom.Pos3d(1.0,1.0,0.0))
+pt2= points.newPoint(2,geom.Pos3d(2,2,0))
+pt3= points.newPoint(3,geom.Pos3d(0,1,0))
 
 rs= geom.Ref3d3d(pt1.getPos,pt2.getPos,pt3.getPos)
 
-pt4= points.newPntIDPos3d(4, rs.getGlobalPosition(geom.Pos3d(7, 0, 0)))
+pt4= points.newPoint(4, rs.getGlobalPosition(geom.Pos3d(7, 0, 0)))
 pos= pt4.getPos
 ratio1= (pos.x-5.9497475)
 ratio2= pos.y-5.9497475

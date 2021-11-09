@@ -893,7 +893,7 @@ class PredefinedSpace(object):
         :param z: z coordinate for the new point (defaults to 0.0).
         '''
         pos3d= geom.Pos3d(x,y,z)
-        return self.preprocessor.getMultiBlockTopology.getPoints.newPntFromPos3d(pos3d)
+        return self.preprocessor.getMultiBlockTopology.getPoints.newPoint(pos3d)
     
     def newLine(self, p1: xc.Pnt, p2: xc.Pnt):
         ''' Creates a line between the argument points.

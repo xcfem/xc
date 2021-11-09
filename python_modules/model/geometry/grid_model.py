@@ -343,7 +343,7 @@ class GridModel(object):
         for p in lstPt:
             (i,j,k,x,y,z)=p
             self.pointCounter+=1
-            pnt=points.newPntIDPos3d(self.pointCounter+inicTag,geom.Pos3d(x,y,z))
+            pnt=points.newPoint(self.pointCounter+inicTag,geom.Pos3d(x,y,z))
             self.indices.setPnt(i,j,k,pnt.tag)
 
     def generateCylZPoints(self):
@@ -370,7 +370,7 @@ class GridModel(object):
         for p in lstPt:
             (i,j,k,x,y,z)=p
             self.pointCounter+=1
-            pnt=points.newPntIDPos3d(self.pointCounter+inicTag,geom.Pos3d(x,y,z))
+            pnt=points.newPoint(self.pointCounter+inicTag,geom.Pos3d(x,y,z))
             self.indices.setPnt(i,j,k,pnt.tag)
             
     def generateEllipZPoints(self):
@@ -411,7 +411,7 @@ class GridModel(object):
         for p in lstPt:
             (i,j,k,x,y,z)=p
             self.pointCounter+=1
-            pnt=points.newPntIDPos3d(self.pointCounter+inicTag,geom.Pos3d(x,y,z))
+            pnt=points.newPoint(self.pointCounter+inicTag,geom.Pos3d(x,y,z))
             self.indices.setPnt(i,j,k,pnt.tag)
 
     def movePointsRange(self,ijkRange,vDisp):

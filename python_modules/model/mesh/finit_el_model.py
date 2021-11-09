@@ -209,8 +209,8 @@ def createBeam2Pnts(preprocessor,startPnt,endPnt,setName,matSect,elemSize,vDirLA
                   for each element (defaults to 'N')
     '''
     s=preprocessor.getSets.defSet(setName)
-    ext1=preprocessor.getMultiBlockTopology.getPoints.newPntFromPos3d(startPnt)
-    ext2=preprocessor.getMultiBlockTopology.getPoints.newPntFromPos3d(endPnt)
+    ext1=preprocessor.getMultiBlockTopology.getPoints.newPoint(startPnt)
+    ext2=preprocessor.getMultiBlockTopology.getPoints.newPoint(endPnt)
     l=preprocessor.getMultiBlockTopology.getLines.newLine(ext1.tag,ext2.tag)
     s.getLines.append(l)
     sMesh=LinSetToMesh(s,matSect,elemSize,vDirLAxZ,elemType,dimElemSpace,coordTransfType)

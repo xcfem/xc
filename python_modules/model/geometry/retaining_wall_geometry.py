@@ -105,13 +105,13 @@ class CantileverRetainingWallGeometry(object):
         points= preprocessor.getMultiBlockTopology.getPoints
         self.wireframeModelPoints= dict()
         pos= self.getWFStemTopPosition()
-        self.wireframeModelPoints['stemTop']= points.newPntFromPos3d(geom.Pos3d(pos.x,pos.y,0.0))
+        self.wireframeModelPoints['stemTop']= points.newPoint(geom.Pos3d(pos.x,pos.y,0.0))
         pos= self.getWFStemBottomPosition()
-        self.wireframeModelPoints['stemBottom']= points.newPntFromPos3d(geom.Pos3d(pos.x,pos.y,0.0))
+        self.wireframeModelPoints['stemBottom']= points.newPoint(geom.Pos3d(pos.x,pos.y,0.0))
         pos= self.getWFToeEndPosition()
-        self.wireframeModelPoints['toeEnd']= points.newPntFromPos3d(geom.Pos3d(pos.x,pos.y,0.0))
+        self.wireframeModelPoints['toeEnd']= points.newPoint(geom.Pos3d(pos.x,pos.y,0.0))
         pos= self.getWFHeelEndPosition()
-        self.wireframeModelPoints['heelEnd']= points.newPntFromPos3d(geom.Pos3d(pos.x,pos.y,0.0))
+        self.wireframeModelPoints['heelEnd']= points.newPoint(geom.Pos3d(pos.x,pos.y,0.0))
 
         lines= preprocessor.getMultiBlockTopology.getLines
         self.wireframeModelLines= dict()

@@ -42,10 +42,10 @@ deflectionSpan= (32-1.5+0.25)*0.0254
 internalForcesSpan= 32*0.0254 # 32
 span= internalForcesSpan 
 pointHandler= preprocessor.getMultiBlockTopology.getPoints
-pt1= pointHandler.newPntFromPos3d(geom.Pos3d(0.0,0.0,0.0))
-pt2= pointHandler.newPntFromPos3d(geom.Pos3d(span,0.0,0.0))
-pt3= pointHandler.newPntFromPos3d(geom.Pos3d(2.0*span,0.0,0.0))
-pt4= pointHandler.newPntFromPos3d(geom.Pos3d(3.0*span,0.0,0.0))
+pt1= pointHandler.newPoint(geom.Pos3d(0.0,0.0,0.0))
+pt2= pointHandler.newPoint(geom.Pos3d(span,0.0,0.0))
+pt3= pointHandler.newPoint(geom.Pos3d(2.0*span,0.0,0.0))
+pt4= pointHandler.newPoint(geom.Pos3d(3.0*span,0.0,0.0))
 
 lines= preprocessor.getMultiBlockTopology.getLines
 l1= lines.newLine(pt1.tag,pt2.tag)

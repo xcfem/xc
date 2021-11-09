@@ -26,9 +26,9 @@ ordenada= 8.2
 centroideTeor= geom.Pos3d(abcisas[numPorticos-1]/2.0, 0, ordenada/2.0)
 i= 1
 for x in abcisas:
-  pntA= points.newPntFromPos3d(geom.Pos3d(x,0.0,0.0))
+  pntA= points.newPoint(geom.Pos3d(x,0.0,0.0))
   porticoLateral.setPnt(1,1,i,pntA.tag)
-  pntB= points.newPntFromPos3d(geom.Pos3d(x,0.0,ordenada))
+  pntB= points.newPoint(geom.Pos3d(x,0.0,ordenada))
   porticoLateral.setPnt(1,2,i,pntB.tag)
   i+= 1
 

@@ -141,7 +141,7 @@ class PointRecord(me.NodeRecord):
         :param pointHandlerName: name of the point handler
         '''
         strId= str(self.id)
-        strCommand= '.newPntIDPos3d(' + strId + ',geom.Pos3d(' + str(self.coords[0]) + ',' + str(self.coords[1]) +','+ str(self.coords[2])+'))'
+        strCommand= '.newPoint(' + strId + ',geom.Pos3d(' + str(self.coords[0]) + ',' + str(self.coords[1]) +','+ str(self.coords[2])+'))'
         propCommand= self.blockProperties.getStrXCCommand('pt'+strId)
         if(len(propCommand)>0):
           strCommand+= '; '+propCommand
