@@ -141,7 +141,6 @@ double XC::PathSeries::getFactor(double pseudoTime) const
     double retval= 0.0;
     if(pseudoTime > 0.0)
       {
-
         // determine indexes into the data array whose boundary holds the time
         const double incr = pseudoTime/pathTimeIncr;
         const int incr1= static_cast<int>(floor(incr));

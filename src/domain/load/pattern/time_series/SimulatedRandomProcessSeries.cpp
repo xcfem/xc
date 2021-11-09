@@ -106,13 +106,12 @@ double XC::SimulatedRandomProcessSeries::getFactor(double time) const
     else
       {
         // Add up over all frequency intervals
-	double factor = 0.0;
-	double W, S;
+	double factor= 0.0;
 	for(int i=0; i<numFreqIntervals; i++)
           {
-	    W = (i+0.5)*deltaW+theSpectrum->getMinFrequency();
-	    S = theSpectrum->getAmplitude(W);
-	    factor += sqrt(2.0*S*deltaW) * A(i) * cos(W*time+theta(i));
+	    const double W = (i+0.5)*deltaW+theSpectrum->getMinFrequency();
+	    const double S = theSpectrum->getAmplitude(W);
+	    factor+= sqrt(2.0*S*deltaW) * A(i) * cos(W*time+theta(i));
 	  }
 //outputFile << (mean+factor) << endl;
 	return (mean + factor);

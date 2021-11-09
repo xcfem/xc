@@ -244,7 +244,7 @@ XC::TimeSeries *XC::MapLoadPatterns::newTimeSeries(const std::string &type, cons
       ts= create_time_series<TrigSeries>(cod_ts);
     else
       std::cerr << getClassName() << "::" << __FUNCTION__
-		<< "; ime series type: '" << type
+		<< "; time series type: '" << type
                 << "' unknown." << std::endl;
     if(!ts)
       std::cerr << getClassName() << "::" << __FUNCTION__

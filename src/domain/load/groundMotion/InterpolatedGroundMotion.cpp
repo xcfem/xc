@@ -105,24 +105,24 @@ XC::InterpolatedGroundMotion &XC::InterpolatedGroundMotion::operator=(const Inte
     return *this;
   }
 
-
 //! @brief Virtual constructor.
 XC::GroundMotion *XC::InterpolatedGroundMotion::getCopy(void) const
   { return new InterpolatedGroundMotion(*this); }
 
-
+//! @brief Destructor.
 XC::InterpolatedGroundMotion::~InterpolatedGroundMotion(void)
   { free_mem(); }
 
+//! @brief Return the duration of the motion history.
 double XC::InterpolatedGroundMotion::getDuration(void) const
   {
     double value = 0.0;
-    int numMotions = factors->Size();
+    const int numMotions = factors->Size();
     for(int i=0; i<numMotions; i++)
       {
-        const double motionValue = theMotions[i].getDuration();
+        const double motionValue= theMotions[i].getDuration();
         if(motionValue > value)
-          value = motionValue;
+          value= motionValue;
       }
     return value;
   }

@@ -114,8 +114,8 @@ class PathTimeSeries: public PathSeriesBase
     inline void setCurrentTimeLoc(const int &d)
       { currentTimeLoc= d; }
 
-    void readFromFile(const std::string &fileName);
-    void readFromFiles(const std::string &filePathName,const std::string &fileTimeName);
+    bool readFromFile(const std::string &fileName);
+    bool readFromFiles(const std::string &filePathName,const std::string &fileTimeName);
 
     // methods for output
     int sendSelf(Communicator &);
