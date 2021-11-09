@@ -574,14 +574,6 @@ python tests/loads/shell_strain_load_03.py
 python tests/loads/shell_strain_load_04.py
 python tests/loads/shell_strain_load_05.py
 python tests/loads/shell_grad_strain_load_02.py
-python tests/loads/test_ground_motion_01.py
-python tests/loads/test_ground_motion_02.py
-python tests/loads/test_ground_motion_03.py
-python tests/loads/test_ground_motion_04.py
-python tests/loads/test_ground_motion_05.py
-python tests/loads/test_ground_motion_06.py
-python tests/loads/test_ground_motion_07.py
-python tests/loads/test_ground_motion_08.py
 python tests/loads/test_inertia_loads_01.py
 python tests/loads/test_inertia_loads_02.py
 python tests/loads/test_inertia_loads_03.py
@@ -593,6 +585,21 @@ python tests/loads/test_inertia_loads_08.py
 python tests/loads/test_inertia_loads_09.py
 python tests/loads/test_inertia_loads_10.py
 python tests/loads/element_load_on_already_active_pattern.py
+echo "$BLEU" "  Load time series tests." "$NORMAL"
+python tests/loads/time_series/test_linear_01.py
+python tests/loads/time_series/test_constant_01.py
+python tests/loads/time_series/test_trig_01.py
+python tests/loads/time_series/test_triang_01.py
+python tests/loads/time_series/test_rectang_01.py
+python tests/loads/time_series/test_pulse_01.py
+python tests/loads/time_series/test_ground_motion_01.py
+python tests/loads/time_series/test_ground_motion_02.py
+python tests/loads/time_series/test_ground_motion_03.py
+python tests/loads/time_series/test_ground_motion_04.py
+python tests/loads/time_series/test_ground_motion_05.py
+python tests/loads/time_series/test_ground_motion_06.py
+python tests/loads/time_series/test_ground_motion_07.py
+python tests/loads/time_series/test_ground_motion_08.py
 
 #Materials tests
 #Uniaxial materials.

@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-''' Test ground motion time series. '''
 from __future__ import print_function
 
 import xc_base
@@ -11,14 +10,6 @@ __copyright__= "Copyright 2015, LCPT and AOO"
 __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
-
-motionDuration= 0.0
-motionPath= None 
-motionPathSize= 0
-motionFactor= 0.0
-motionPeakFactor= 0.0
-motionLastSendCommitTag= 0.0
-motionPathTimeIncrement= 0.0
 
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
@@ -32,29 +23,33 @@ gm= lPatterns.newLoadPattern("uniform_excitation","gm")
 mr= gm.motionRecord
 hist= mr.history
 accel= lPatterns.newTimeSeries("path_ts","accel")
-accel.path= xc.Vector([1,2,3,4])
+import os
+pth= os.path.dirname(__file__)
+#print("pth= ", pth)
+if(not pth):
+  pth= "."
+exec(open(pth+"//data/BM68elc_path.py").read())
 hist.accel= accel
-hist.delta= 0.01
 
 motionDuration= mr.getDuration() 
 motionPath= mr.history.accel.path
 motionPathSize= mr.history.getNumberOfDataPoints()
 motionFactor= mr.history.accel.getFactor(0.5)
-motionPeakFactor= mr.history.accel.getPeakFactor
+motionPeakFactor= mr.history.accel.getPeakFactor()
 motionLastSendCommitTag= mr.history.accel.lastSendCommitTag
 motionPathTimeIncrement= mr.history.accel.getTimeIncr(0.5)
 
-ratio1= (motionDuration-4)/4
-ratio2= (motionFactor-1.5)/1.5
-ratio3= (motionPeakFactor-4)/4
+ratio1= (motionDuration-4000)/4000
+ratio2= (motionFactor+0.0015141295)/0.0015141295
+ratio3= (motionPeakFactor-0.056658)/0.056658
 ratio4= (motionLastSendCommitTag+1)
 ratio5= (motionPathTimeIncrement-1)
-ratio6= (motionPathSize-4)/4
+ratio6= (motionPathSize-4000)/4000
 
 ''' 
 print("duration= ",motionDuration)
 print("ratio1= ",ratio1)
-print("path= ",motionPath)
+# print("path= ",motionPath)
 print("factor= ",motionFactor)
 print("ratio2= ",ratio2)
 print("peak factor= ",motionPeakFactor)
