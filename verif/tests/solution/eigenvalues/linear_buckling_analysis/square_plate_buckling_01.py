@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
-''' Taken from example 1.2.4 of "Abacus Benchmarks Manual".
+''' Linear buckling analysis of a plate.
+    Taken from example 1.2.4 of "Abacus Benchmarks Manual".
 
-Reference: Timoshenko, S. P., and J. M. Gere, Theory of Elastic Stability, 2nd Edition, McGraw-Hill, New York, 1961.
+    Reference: Timoshenko, S. P., and J. M. Gere, Theory of Elastic Stability, 2nd Edition, McGraw-Hill, New York, 1961.
 '''
 
 from __future__ import print_function
@@ -18,7 +19,7 @@ from materials import typical_materials
 #from postprocess import output_handler
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
-__copyright__= "Copyright 2015, LCPT and AOO"
+__copyright__= "Copyright 2020, LCPT and AOO"
 __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
@@ -92,7 +93,7 @@ pth= os.path.dirname(__file__)
 if(not pth):
     pth= "."
 # print("pth= ", pth)
-exec(open(pth+"/../../aux/solu_linear_buckling.py").read())
+exec(open(pth+"/../../../aux/solu_linear_buckling.py").read())
 
 eig1= analysis.getEigenvalue(1)
 D= E*t**3/12/(1-nu**2) # elastic bending stiffness of the plate
