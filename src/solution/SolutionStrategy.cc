@@ -664,6 +664,16 @@ const XC::SolutionStrategyMap *XC::SolutionStrategy::getSolutionStrategyMap(void
     return retval;
   }
 
+//! @brief Returns a pointer to the material handler (if possible).
+XC::SolutionStrategyMap *XC::SolutionStrategy::getSolutionStrategyMap(void)
+  {
+    SolutionStrategyMap *retval= dynamic_cast<SolutionStrategyMap *>(Owner());
+    if(!retval)
+      std::cerr << getClassName() << "::" << __FUNCTION__
+	        << "; container not defined." << std::endl;
+    return retval;
+  }
+
 //! @brief Return the name of this object in its container.
 std::string XC::SolutionStrategy::getName(void) const
   {
@@ -690,6 +700,20 @@ std::string XC::SolutionStrategy::getName(void) const
 	        << "; container not defined." << std::endl;
     return retval;
   }
+
+//! @brief Return a pointer to the model wrapper with the identifier
+//! being passed as parameter.
+const XC::ModelWrapper *XC::SolutionStrategy::getModelWrapper(const std::string &cod) const
+  { return getSolutionStrategyMap()->getModelWrapper(cod); }
+
+//! @brief Return a pointer to the model wrapper with the identifier
+//! passed as parameter.
+XC::ModelWrapper *XC::SolutionStrategy::getModelWrapper(const std::string &cod)
+  { return getSolutionStrategyMap()->getModelWrapper(cod); }
+
+//! @brief Return the name of a model wrapper.
+const std::string &XC::SolutionStrategy::getModelWrapperName(const ModelWrapper *mw) const
+  { return getSolutionStrategyMap()->getModelWrapperName(mw); }
 
 void XC::SolutionStrategy::clearAll(void)
   { free_mem(); }

@@ -128,7 +128,11 @@ class SolutionStrategy: public CommandEntity
     ~SolutionStrategy(void);
 
     const SolutionStrategyMap *getSolutionStrategyMap(void) const;
+    SolutionStrategyMap *getSolutionStrategyMap(void);
     std::string getName(void) const;
+    const ModelWrapper *getModelWrapper(const std::string &) const;
+    ModelWrapper *getModelWrapper(const std::string &);
+    const std::string &getModelWrapperName(const ModelWrapper *) const;
 
     inline ModelWrapper *getModelWrapperPtr(void)
       { return base; }

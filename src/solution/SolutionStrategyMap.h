@@ -54,6 +54,12 @@ class SolutionStrategyMap: public CommandEntity
   public:
     SolutionStrategyMap(SolutionProcedureControl *owr);
 
+    SolutionProcedureControl *getSolutionProcedureControl(void);
+    const SolutionProcedureControl *getSolutionProcedureControl(void) const;
+    const ModelWrapper *getModelWrapper(const std::string &) const;
+    ModelWrapper *getModelWrapper(const std::string &);
+    const std::string &getModelWrapperName(const ModelWrapper *) const;
+ 
     inline iterator begin()
       { return solu_methods.begin(); }
     inline iterator end()

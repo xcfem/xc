@@ -27,8 +27,8 @@
 //----------------------------------------------------------------------------
 //MapModelWrapper.h
 
-#ifndef MAPSOLUMODEL_H
-#define MAPSOLUMODEL_H
+#ifndef MAPMODELWRAPPER_H
+#define MAPMODELWRAPPER_H
 
 #include "utility/kernel/CommandEntity.h"
 #include "ModelWrapper.h"
@@ -74,6 +74,7 @@ class MapModelWrapper: public CommandEntity
     ModelWrapper &creaModelWrapper(const std::string &);
     const ModelWrapper *getModelWrapper(const std::string &) const;
     ModelWrapper *getModelWrapper(const std::string &);
+    const std::string &getModelWrapperName(const ModelWrapper *) const;
 
     void clearAll(void);
   };

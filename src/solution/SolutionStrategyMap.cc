@@ -40,6 +40,28 @@
 XC::SolutionStrategyMap::SolutionStrategyMap(SolutionProcedureControl *owr)
   : CommandEntity(owr) {}
 
+//! @brief Return a pointer to the object owner.
+XC::SolutionProcedureControl *XC::SolutionStrategyMap::getSolutionProcedureControl(void)
+  { return dynamic_cast<SolutionProcedureControl *>(Owner()); }
+
+//! @brief Return a pointer to the object owner.
+const XC::SolutionProcedureControl *XC::SolutionStrategyMap::getSolutionProcedureControl(void) const
+  { return dynamic_cast<const SolutionProcedureControl *>(Owner()); }
+
+//! @brief Return a pointer to the model wrapper with the identifier
+//! being passed as parameter.
+const XC::ModelWrapper *XC::SolutionStrategyMap::getModelWrapper(const std::string &cod) const
+  { return getSolutionProcedureControl()->getModelWrapper(cod); }
+
+//! @brief Return a pointer to the model wrapper with the identifier
+//! passed as parameter.
+XC::ModelWrapper *XC::SolutionStrategyMap::getModelWrapper(const std::string &cod)
+  { return getSolutionProcedureControl()->getModelWrapper(cod); }
+
+//! @brief Return the name of a model wrapper.
+const std::string &XC::SolutionStrategyMap::getModelWrapperName(const ModelWrapper *mw) const
+  { return getSolutionProcedureControl()->getModelWrapperName(mw); }
+
 //! @brief Return true if the solution method exists
 bool XC::SolutionStrategyMap::SolutionStrategyExists(const std::string &cod) const
   { 
