@@ -238,7 +238,16 @@ void XC::ModelWrapper::clearAll(void)
 std::string XC::ModelWrapper::getName(void) const
   {
     const SolutionStrategy *se= getSolutionStrategy();
-    return se->getModelWrapperName(this);
+    if(se)
+      return se->getModelWrapperName();
+    else
+      {
+        std::string retval= "nil";
+	if(getVerbosityLevel()> 1)
+	  std::cerr << getClassName() << "::" << __FUNCTION__
+                    << "; owner not found." << std::endl;
+	return retval;
+      }
   }
 
 

@@ -17,9 +17,10 @@ import xc_base
 import geom
 import xc
 
+import math
 from model import predefined_spaces
 from materials import typical_materials
-import math
+from solution import predefined_solutions
 
 __author__= "Luis C. Pérez Tato (LCPT)"
 __copyright__= "Copyright 2014, LCPT"
@@ -88,15 +89,11 @@ modelSpace.addLoadCaseToDomain(lp0.name)
 
 
 # Solution procedure
-import os
-pth= os.path.dirname(__file__)
-if(not pth):
-  pth= "."
-# print("pth= ", pth)
-exec(open(pth+"/../../../aux/solu_linear_buckling.py").read())
+linearBucklingAnalysis= predefined_solutions.LinearBucklingAnalysis(prb= feProblem, numModes= 2, constraintHandlerType= 'transformation', numberingMethod= 'rcm', convTestType= "norm_disp_incr_conv_test", convergenceTestTol= 1e-8, maxNumIter= 1000, soeType= "band_gen_lin_soe", solverType= "band_gen_lin_lapack_solver", solnAlgorithmType= 'krylov_newton_soln_algo', eigenSOEType= "band_arpackpp_soe", eigenSolverType= "band_arpackpp_solver")
+linearBucklingAnalysis.setup()
+analOk= linearBucklingAnalysis.solve()
 
-
-eig1= analysis.getEigenvalue(1)
+eig1= linearBucklingAnalysis.analysis.getEigenvalue(1)
 
 deltay= n2.getDisp[1] 
  

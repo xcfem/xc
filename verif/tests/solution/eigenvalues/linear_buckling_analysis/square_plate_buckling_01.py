@@ -88,14 +88,11 @@ for n in s1.nodes:
 modelSpace.addLoadCaseToDomain(lp0.name) # add the load case to domain.
             
 # Solution procedure
-import os
-pth= os.path.dirname(__file__)
-if(not pth):
-    pth= "."
-# print("pth= ", pth)
-exec(open(pth+"/../../../aux/solu_linear_buckling.py").read())
+linearBucklingAnalysis= predefined_solutions.LinearBucklingAnalysis(prb= feProblem, numModes= 2, constraintHandlerType= 'transformation', numberingMethod= 'rcm', convTestType= "norm_disp_incr_conv_test", convergenceTestTol= 1e-8, maxNumIter= 1000, soeType= "band_gen_lin_soe", solverType= "band_gen_lin_lapack_solver", solnAlgorithmType= 'krylov_newton_soln_algo', eigenSOEType= "band_arpackpp_soe", eigenSolverType= "band_arpackpp_solver")
+linearBucklingAnalysis.setup()
+analOk= linearBucklingAnalysis.solve()
 
-eig1= analysis.getEigenvalue(1)
+eig1= linearBucklingAnalysis.analysis.getEigenvalue(1)
 D= E*t**3/12/(1-nu**2) # elastic bending stiffness of the plate
 N_crit= -4.0*math.pi**2*D/b**2
 N_calc= eig1*P
