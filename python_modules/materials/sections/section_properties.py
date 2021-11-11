@@ -557,7 +557,7 @@ class CircularSection(SectionProperties):
         return 2*self.Iy()*self.torsionalStiffnessFactor
   
     def alphaY(self):
-        '''Return distorsion coefficient with respect to local Y axis
+        '''Return distortion coefficient with respect to local Y axis
            (see Oñate, Cálculo de estructuras por el MEF page 122)
          '''
         if self.Rint==0:
@@ -569,7 +569,7 @@ class CircularSection(SectionProperties):
         return alpha
   
     def alphaZ(self):
-        '''Return distorsion coefficient with respect to local Z axis.'''
+        '''Return distortion coefficient with respect to local Z axis.'''
         return self.alphaY()
 
     def getTorsionalStiffness(self, G):

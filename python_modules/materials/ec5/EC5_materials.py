@@ -17,12 +17,10 @@ import math
 from materials import wood_base
 from materials import typical_materials
 from materials.sections import section_properties
+from materials.ec5 import EC5_wood_classes # Timber classes.
 from misc_utils import log_messages as lmsg
 
-ec5_wood_classes= {'C14': {'fm_k': 14.00E+06, 'ft_0_k': 8.00E+06, 'ft_90_k': 400.00E+03, 'fc_0_k': 16.00E+06, 'fc_90_k': 2.00E+06, 'fv_k': 1.70E+06, 'E0_mean': 7.00E+09, 'E0_05': 4.70E+09, 'E90_mean': 230.00E+06, 'Gmean': 440.00E+06, 'ro_k': 290, 'ro_mean': 350}, 'C16': {'fm_k': 16.00E+06, 'ft_0_k': 10.00E+06, 'ft_90_k': 500.00E+03, 'fc_0_k': 17.00E+06, 'fc_90_k': 2.20E+06, 'fv_k': 1.80E+06, 'E0_mean': 8.00E+09, 'E0_05': 5.40E+09, 'E90_mean': 270.00E+06, 'Gmean': 500.00E+06, 'ro_k': 310, 'ro_mean': 370}, 'C18': {'fm_k': 18.00E+06, 'ft_0_k': 11.00E+06, 'ft_90_k': 500.00E+03, 'fc_0_k': 18.00E+06, 'fc_90_k': 2.20E+06, 'fv_k': 2.00E+06, 'E0_mean': 9.00E+09, 'E0_05': 6.00E+09, 'E90_mean': 300.00E+06, 'Gmean': 560.00E+06, 'ro_k': 320, 'ro_mean': 380}, 'C22': {'fm_k': 22.00E+06, 'ft_0_k': 13.00E+06, 'ft_90_k': 500.00E+03, 'fc_0_k': 20.00E+06, 'fc_90_k': 2.40E+06, 'fv_k': 2.40E+06, 'E0_mean': 10.00E+09, 'E0_05': 6.70E+09, 'E90_mean': 330.00E+06, 'Gmean': 630.00E+06, 'ro_k': 340, 'ro_mean': 410}, 'C24': {'fm_k': 24.00E+06, 'ft_0_k': 14.00E+06, 'ft_90_k': 500.00E+03, 'fc_0_k': 21.00E+06, 'fc_90_k': 2.50E+06, 'fv_k': 2.50E+06, 'E0_mean': 11.00E+09, 'E0_05': 7.40E+09, 'E90_mean': 370.00E+06, 'Gmean': 690.00E+06, 'ro_k': 350, 'ro_mean': 420}, 'C27': {'fm_k': 27.00E+06, 'ft_0_k': 16.00E+06, 'ft_90_k': 600.00E+03, 'fc_0_k': 22.00E+06, 'fc_90_k': 2.60E+06, 'fv_k': 2.80E+06, 'E0_mean': 11.50E+09, 'E0_05': 7.70E+09, 'E90_mean': 380.00E+06, 'Gmean': 720.00E+06, 'ro_k': 370, 'ro_mean': 450}, 'C30': {'fm_k': 30.00E+06, 'ft_0_k': 18.00E+06, 'ft_90_k': 600.00E+03, 'fc_0_k': 23.00E+06, 'fc_90_k': 2.70E+06, 'fv_k': 3.00E+06, 'E0_mean': 12.00E+09, 'E0_05': 8.00E+09, 'E90_mean': 400.00E+06, 'Gmean': 750.00E+06, 'ro_k': 380, 'ro_mean': 460}, 'C35': {'fm_k': 35.00E+06, 'ft_0_k': 21.00E+06, 'ft_90_k': 600.00E+03, 'fc_0_k': 25.00E+06, 'fc_90_k': 2.80E+06, 'fv_k': 3.40E+06, 'E0_mean': 13.00E+09, 'E0_05': 8.70E+09, 'E90_mean': 430.00E+06, 'Gmean': 810.00E+06, 'ro_k': 400, 'ro_mean': 480}, 'C40': {'fm_k': 40.00E+06, 'ft_0_k': 24.00E+06, 'ft_90_k': 600.00E+03, 'fc_0_k': 26.00E+06, 'fc_90_k': 2.90E+06, 'fv_k': 3.80E+06, 'E0_mean': 14.00E+09, 'E0_05': 9.40E+09, 'E90_mean': 470.00E+06, 'Gmean': 880.00E+06, 'ro_k': 420, 'ro_mean': 500}, 'D30':{'fm_k': 30.00E+06, 'ft_0_k': 18.00E+06, 'ft_90_k': 600.00E+03, 'fc_0_k': 23.00E+06, 'fc_90_k': 8.00E+06, 'fv_k': 3.00E+06, 'E0_mean': 10.00E+09, 'E0_05': 8.00E+09, 'E90_mean': 640.00E+06, 'Gmean': 600.00E+06, 'ro_k': 530, 'ro_mean': 640}, 'D35':{'fm_k': 35.00E+06, 'ft_0_k': 21.00E+06, 'ft_90_k': 600.00E+03, 'fc_0_k': 25.00E+06, 'fc_90_k': 8.40E+06, 'fv_k': 3.40E+06, 'E0_mean': 10.00E+09, 'E0_05': 8.70E+09, 'E90_mean': 690.00E+06, 'Gmean': 650.00E+06, 'ro_k': 560, 'ro_mean': 670}, 'D40':{'fm_k': 40.00E+06, 'ft_0_k': 24.00E+06, 'ft_90_k': 600.00E+03, 'fc_0_k': 26.00E+06, 'fc_90_k': 8.80E+06, 'fv_k': 3.80E+06, 'E0_mean': 11.00E+09, 'E0_05': 9.40E+09, 'E90_mean': 750.00E+06, 'Gmean': 700.00E+06, 'ro_k': 590, 'ro_mean': 700}, 'D50':{'fm_k': 50.00E+06, 'ft_0_k': 30.00E+06, 'ft_90_k': 600.00E+03, 'fc_0_k': 29.00E+06, 'fc_90_k': 9.70E+06, 'fv_k': 4.60E+06, 'E0_mean': 14.00E+09, 'E0_05': 11.80E+09, 'E90_mean': 930.00E+06, 'Gmean': 880.00E+06, 'ro_k': 650, 'ro_mean': 780}, 'D60':{'fm_k': 60.00E+06, 'ft_0_k': 36.00E+06, 'ft_90_k': 600.00E+03, 'fc_0_k': 32.00E+06, 'fc_90_k': 10.50E+06, 'fv_k': 5.30E+06, 'E0_mean': 17.00E+09, 'E0_05': 14.30E+09, 'E90_mean': 1.13E+09, 'Gmean': 1.06E+09, 'ro_k': 700, 'ro_mean': 840}, 'D70':{'fm_k': 70.00E+06, 'ft_0_k': 42.00E+06, 'ft_90_k': 600.00E+03, 'fc_0_k': 34.00E+06, 'fc_90_k': 13.50E+06, 'fv_k': 6.00E+06, 'E0_mean': 20.00E+09, 'E0_05': 16.80E+09, 'E90_mean': 1.33E+09, 'Gmean': 1.25E+09, 'ro_k': 900, 'ro_mean': 1080}, 'GL24h':{ 'fm_k': 24.00E+06, 'ft_0_k': 16.50E+06, 'ft_90_k': 400.00E+03, 'fc_0_k': 24.00E+06, 'fc_90_k': 2.70E+06, 'fv_k': 2.70E+06, 'E0_mean': 11.60E+09, 'E0_05': 9.40E+09, 'E90_mean': 390.00E+06, 'Gmean': 750.00E+06, 'ro_k': 380}, 'GL28h':{ 'fm_k': 28.00E+06, 'ft_0_k': 19.50E+06, 'ft_90_k': 450.00E+03, 'fc_0_k': 26.50E+06, 'fc_90_k': 3.00E+06, 'fv_k': 3.20E+06, 'E0_mean': 12.60E+09, 'E0_05': 10.20E+09, 'E90_mean': 420.00E+06, 'Gmean': 780.00E+06, 'ro_k': 410}, 'GL32h':{ 'fm_k': 32.00E+06, 'ft_0_k': 22.50E+06, 'ft_90_k': 500.00E+03, 'fc_0_k': 29.00E+06, 'fc_90_k': 3.30E+06, 'fv_k': 3.80E+06, 'E0_mean': 13.70E+09, 'E0_05': 11.10E+09, 'E90_mean': 460.00E+06, 'Gmean': 850.00E+06, 'ro_k': 430}, 'GL36h':{ 'fm_k': 36.00E+06, 'ft_0_k': 26.00E+06, 'ft_90_k': 600.00E+03, 'fc_0_k': 31.00E+06, 'fc_90_k': 3.60E+06, 'fv_k': 4.30E+06, 'E0_mean': 14.70E+09, 'E0_05': 11.90E+09, 'E90_mean': 490.00E+06, 'Gmean': 910.00E+06, 'ro_k': 450}, 'GL24c':{ 'fm_k': 24.00E+06, 'ft_0_k': 14.00E+06, 'ft_90_k': 350.00E+03, 'fc_0_k': 21.00E+06, 'fc_90_k': 2.40E+06, 'fv_k': 2.20E+06, 'E0_mean': 11.60E+09, 'E0_05': 9.40E+09, 'E90_mean': 320.00E+06, 'Gmean': 590.00E+06, 'ro_k': 350}, 'GL28c':{ 'fm_k': 28.00E+06, 'ft_0_k': 16.50E+06, 'ft_90_k': 400.00E+03, 'fc_0_k': 24.00E+06, 'fc_90_k': 2.70E+06, 'fv_k': 2.70E+06, 'E0_mean': 12.60E+09, 'E0_05': 10.20E+09, 'E90_mean': 390.00E+06, 'Gmean': 720.00E+06, 'ro_k': 380}, 'GL32c':{ 'fm_k': 32.00E+06, 'ft_0_k': 19.50E+06, 'ft_90_k': 450.00E+03, 'fc_0_k': 26.50E+06, 'fc_90_k': 3.00E+06, 'fv_k': 3.20E+06, 'E0_mean': 13.70E+09, 'E0_05': 11.10E+09, 'E90_mean': 420.00E+06, 'Gmean': 780.00E+06, 'ro_k': 410}, 'GL36c':{ 'fm_k': 36.00E+06, 'ft_0_k': 22.50E+06, 'ft_90_k': 500.00E+03, 'fc_0_k': 29.00E+06, 'fc_90_k': 3.30E+06, 'fv_k': 3.80E+06, 'E0_mean': 14.70E+09, 'E0_05': 11.90E+09, 'E90_mean': 460.00E+06, 'Gmean': 850.00E+06, 'ro_k': 430}}
-
-# Added by LCPT 20211028
-ec5_wood_classes['GL30h']= {'fm_k': 30.00E+06, 'ft_0_k': 24.00E+06, 'ft_90_k': 0.5E+06, 'fc_0_k': 30.00E+06, 'fc_90_k': 2.50E+06, 'fv_k': 3.5E+06, 'E0_mean': 13.6E+09, 'E0_05': 10.5E+09, 'E90_mean': 0.3E+09, 'Gmean': 0.25E+09, 'ro_k': 425}
+ec5_wood_classes= EC5_wood_classes.ec5_wood_classes
 
 class Wood(wood_base.Wood):
     '''Base class for wood materials according
@@ -206,6 +204,13 @@ class Wood(wood_base.Wood):
         ''' return the mean value of shear modulus.'''
         return self.Gmean 
         
+    def getFifthPercentileValueOfShearModulus(self):
+        ''' return the fifth percentile value of shear modulus assuming
+            that G is normally distributed with a coefficient of 
+            variation of about 10%.
+        '''
+        return 5/6.0*self.Gmean
+    
     def getKmod(self, loadDurationClass:str, serviceClass:int):
         ''' Return the strength modification factor according to table 3.1
             of EC5.
@@ -611,12 +616,33 @@ class EC5Shape(object):
         ''' Put member values in a dictionary.'''
         return {'name':self.name, 'wood':wood.getDict()}
 
+    def EIz(self):
+        ''' Return the bending stiffness around the z axis.'''
+        return self.Iz()*self.wood.getMeanValueOfModulusOfElasticityAlongTheGrain()
+    def EIy(self):
+        ''' Return the bending stiffness around the z axis.'''
+        return self.Iy()*self.wood.getMeanValueOfModulusOfElasticityAlongTheGrain()
     def getShearShapeFactor(self):
         ''' Shape factor of the section.'''
         className= type(self).__name__
         methodName= sys._getframe(0).f_code.co_name
         lmsg.error(className+'.'+methodName+': must be redefined in derived classes.')     
         return None
+    
+    def getCriticalStress(self, l_ef):
+        ''' Return the critical bending stress calculated according to the
+            classical theory of stability, using 5-percentile stiffness 
+            values (expression 6.31 of EC5).
+
+        :param l_ef: effective length of the beam, depending on the 
+                     support conditions and the load configuration, 
+                     according to Table 6.1 of EC5.
+        '''
+        E_05= self.wood.getFifthPercentileValueOfModulusOfElasticityAlongTheGrain()
+        G_05= self.wood.getFifthPercentileValueOfShearModulus()
+        Iy= self.Iy() # second moment of area about the weak axis
+        Itor= self.J()  # torsional moment of inertia
+        return math.pi*math.sqrt(E_05*Iy*G_05*Itor)/l_ef/self.Wzel()
 
 class RectangularShape(EC5Shape, section_properties.RectangularSection):
     ''' Rectangular timber shape.'''
@@ -632,6 +658,7 @@ class RectangularShape(EC5Shape, section_properties.RectangularSection):
         EC5Shape.__init__(self, wood, name)
         section_properties.RectangularSection.__init__(self,name, b, h)
 
+        
     def getDepthFactor(self):
         ''' Return the depth factor according to clause 3.2 of EC5.'''
         return self.wood.getDepthFactor(self.h)
