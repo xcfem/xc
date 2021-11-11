@@ -16,16 +16,18 @@ import xc_base
 import geom
 import xc
 
+import math
 from model import predefined_spaces
 from solution import predefined_solutions
 from materials import typical_materials
-import math
+# from postprocess import output_handler
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
 __copyright__= "Copyright 2015, LCPT and AOO"
 __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
+# from postprocess import output_handler
 
 L= 10 # Column length in meters
 b= 0.2 # Cross section width in meters
@@ -123,3 +125,16 @@ if (abs(ratio1)<1e-9) & (abs(ratio2)<0.03):
     print('test '+fname+': ok.')
 else:
     lmsg.error(fname+' ERROR.')
+#Graphic stuff.
+# oh= output_handler.OutputHandler(modelSpace)
+
+#oh.displayBlocks()#setToDisplay= )
+# oh.displayFEMesh()#setsToDisplay=[])
+# oh.displayLocalAxes()
+#oh.displayStrongWeakAxis(setToDisplay= frameSet)
+# oh.displayLoads()
+#oh.displayEigenvectors(mode= 1)
+# oh.displayEigenResult(eigenMode= 1, defFScale= .5)
+# oh.displayReactions(reactionCheckTolerance= 1e-2)
+# oh.displayDispRot(itemToDisp='uX', defFScale= 15)
+# oh.displayDispRot(itemToDisp='uY', defFScale= 15)

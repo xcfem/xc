@@ -16,10 +16,11 @@ import xc_base
 import geom
 import xc
 
+import math
 from model import predefined_spaces
 from solution import predefined_solutions
 from materials import typical_materials
-import math
+# from postprocess import output_handler
 
 __author__= "Luis C. Pérez Tato (LCPT)"
 __copyright__= "Copyright 2014, LCPT"
@@ -98,8 +99,8 @@ deltay= n2.getDisp[1]
 
 deltayTeor= P*L/(E*A)
 ratio1= abs(deltay-deltayTeor)/deltayTeor
-blCalc= eig1*P
-blTeor= -1*math.pi**2*E*I/(L**2)
+blCalc= eig1*P # Computed buckling load.
+blTeor= -1*math.pi**2*E*I/(L**2) # Theoretical buckling load
 ratio2= (blCalc-blTeor)/blTeor
 
 ''' 
@@ -119,3 +120,17 @@ if (abs(ratio1)<1e-5) & (abs(ratio2)<0.03):
     print('test '+fname+': ok.')
 else:
     lmsg.error(fname+' ERROR.')
+    
+#Graphic stuff.
+# oh= output_handler.OutputHandler(modelSpace)
+
+#oh.displayBlocks()#setToDisplay= )
+# oh.displayFEMesh()#setsToDisplay=[])
+# oh.displayLocalAxes()
+#oh.displayStrongWeakAxis(setToDisplay= frameSet)
+# oh.displayLoads()
+#oh.displayEigenvectors(mode= 1)
+# oh.displayEigenResult(eigenMode= 1, defFScale= .5)
+# oh.displayReactions(reactionCheckTolerance= 1e-2)
+# oh.displayDispRot(itemToDisp='uX', defFScale= 15)
+# oh.displayDispRot(itemToDisp='uY', defFScale= 15)
