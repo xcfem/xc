@@ -643,6 +643,37 @@ class EC5Shape(object):
         Iy= self.Iy() # second moment of area about the weak axis
         Itor= self.J()  # torsional moment of inertia
         return math.pi*math.sqrt(E_05*Iy*G_05*Itor)/l_ef/self.Wzel()
+    
+    def getBendingRelativeSlenderness(self, l_ef):
+        ''' Return the relative slenderness for bending according to the
+            expresion 6.30 of the paragraph (2) of clause 6.3.3 of EC5.
+
+        :param l_ef: effective length of the beam, depending on the 
+                     support conditions and the load configuration, 
+                     according to Table 6.1 of EC5.
+        '''
+        sg_m_crit= self.getCriticalStress(l_ef)
+        fm_k= self.wood.getCharacteristicBendingStrength()
+        return math.sqrt(fm_k/sg_m_crit)
+
+    def getLateralBucklingBendingStressReductionFactor(self, l_ef):
+        ''' Return the bending stress reduction factor due to lateral
+            buckling according to expression 6.34 of the paragraph
+            (4) of clause 6.3.3 of EC5.
+
+        :param l_ef: effective length of the beam, depending on the 
+                     support conditions and the load configuration, 
+                     according to Table 6.1 of EC5.
+        '''
+        lambda_rel_m= self.getBendingRelativeSlenderness(l_ef)
+        retval= 1
+        if(lambda_rel_m>0.75):
+            if(lambda_rel_m>1.4):
+                retval= 1.0/lambda_rel_m**2
+            else: # 0.75<lambda_rel_l<1.4
+                retval= 1.56-0.75*lambda_rel_m
+        return retval
+        
 
 class RectangularShape(EC5Shape, section_properties.RectangularSection):
     ''' Rectangular timber shape.'''
