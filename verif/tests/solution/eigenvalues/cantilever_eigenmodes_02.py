@@ -6,6 +6,7 @@ import geom
 import xc
 
 from model import predefined_spaces
+from solution import predefined_solutions
 from materials import typical_materials
 import math
 
@@ -53,11 +54,9 @@ beam3d.rho= m
 
 
 points= preprocessor.getMultiBlockTopology.getPoints
-pt1= points.newPoint(1,geom.Pos3d(0.0,0.0,0.0))
-pt2= points.newPoint(2,geom.Pos3d(L*math.cos(theta),L*math.sin(theta),0.0))
-lines= preprocessor.getMultiBlockTopology.getLines
-lines.defaultTag= 1
-l= lines.newLine(1,2)
+pt1= modelSpace.newKPoint(0.0,0.0,0.0)
+pt2= modelSpace.newKPoint(L*math.cos(theta),L*math.sin(theta),0.0)
+l= modelSpace.newLine(pt1,pt2)
 l.nDiv= NumDiv
 
 
@@ -79,13 +78,10 @@ spc= constraints.newSPConstraint(tagN1,5,0.0) # gdl 2
 
 
 # Solution procedure
-import os
-pth= os.path.dirname(__file__)
-if(not pth):
-  pth= "."
-#print("pth= ", pth)
-exec(open(pth+"/../../aux/sol_eigenmodes.py").read())
+analysis= predefined_solutions.frequency_analysis(feProblem)
+analOk= analysis.analyze(1)
 
+eig1= analysis.getEigenvalue(1)
 omega= eig1**0.5
 T= 2*math.pi/omega
 fcalc= 1/T

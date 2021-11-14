@@ -902,6 +902,15 @@ class PredefinedSpace(object):
         :param p2: to point.
         '''
         return self.preprocessor.getMultiBlockTopology.getLines.newLine(p1.tag, p2.tag)
+    
+    def newQuadSurface(self, p1: xc.Pnt, p2: xc.Pnt, p3: xc.Pnt, p4: xc.Pnt):
+        ''' Creates a quad surface between the argument points.
+
+        :param p1: first point.
+        :param p2: second point.
+        '''
+        return self.preprocessor.getMultiBlockTopology.getSurfaces.newQuadSurfacePts(p1.tag, p2.tag, p3.tag, p4.tag)
+    
     def getLineWithEndPoints(self, pA: xc.Pnt, pB: xc.Pnt):
         ''' Return the line from its endpoints.
 

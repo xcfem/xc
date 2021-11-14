@@ -6,6 +6,7 @@ import geom
 import xc
 
 from model import predefined_spaces
+from solution import predefined_solutions
 from materials import typical_materials
 import math
 
@@ -69,47 +70,13 @@ for n in lNodes:
 
 
 # Solution procedure
-solu= feProblem.getSoluProc
-solCtrl= solu.getSoluControl
-
-
-solModels= solCtrl.getModelWrapperContainer
-sm= solModels.newModelWrapper("sm")
-
-
-cHandler= sm.newConstraintHandler("transformation_constraint_handler")
-
-numberer= sm.newNumberer("default_numberer")
-numberer.useAlgorithm("rcm")
-
-solutionStrategies= solCtrl.getSolutionStrategyContainer
-solutionStrategy= solutionStrategies.newSolutionStrategy("solutionStrategy","sm")
-solAlgo= solutionStrategy.newSolutionAlgorithm("frequency_soln_algo")
-integ= solutionStrategy.newIntegrator("eigen_integrator",xc.Vector([]))
-
-#soe= solutionStrategy.newSystemOfEqn("sym_band_eigen_soe")
-#solver= soe.newSolver("sym_band_eigen_solver")
-soe= solutionStrategy.newSystemOfEqn("band_arpackpp_soe")
-soe.shift= 0.0
-solver= soe.newSolver("band_arpackpp_solver")
-solver.tol= 1e-3
-solver.maxNumIter= 5
-
-analysis= solu.newAnalysis("eigen_analysis","solutionStrategy","")
-
-
+analysis= predefined_solutions.frequency_analysis(feProblem, systemPrefix= 'band_arpackpp', shift= 0.0)
 analOk= analysis.analyze(2)
+
 eig1= analysis.getEigenvalue(1)
-
-
-
-
-
 omega1= math.sqrt(eig1)
 T1= 2*math.pi/omega1
 f1calc= 1.0/T1
-
-
 
 lambdA= 1.87510407
 f1teor= lambdA**2/(2*math.pi*L**2)*math.sqrt(EMat*inertia2/m)

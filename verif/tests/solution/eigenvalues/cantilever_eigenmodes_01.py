@@ -1,11 +1,14 @@
 # -*- coding: utf-8 -*-
+''' Taken from example A47 of the SOLVIA Verification Manual.'''
+
 from __future__ import print_function
-# Tomado del example A47 del SOLVIA Verification Manual
+
 import xc_base
 import geom
 import xc
 
 from model import predefined_spaces
+from solution import predefined_solutions
 from materials import typical_materials
 import math
 
@@ -35,9 +38,6 @@ modelSpace= predefined_spaces.StructuralMechanics2D(nodes)
 # Define materials
 scc= typical_materials.defElasticSection2d(preprocessor, "scc",A,E,I)
 
-
-
-
 # Geometric transformation(s)
 lin= modelSpace.newLinearCrdTransf("lin")
 
@@ -50,40 +50,33 @@ beam2d= seedElemHandler.newElement("ElasticBeam2d",xc.ID([0,0]))
 beam2d.h= h
 beam2d.rho= m
 
-
-points= preprocessor.getMultiBlockTopology.getPoints
-pt= points.newPoint(1,geom.Pos3d(0.0,0.0,0.0))
-pt= points.newPoint(2,geom.Pos3d(L*math.cos(theta),L*math.sin(theta),0.0))
-lines= preprocessor.getMultiBlockTopology.getLines
-lines.defaultTag= 1
-l= lines.newLine(1,2)
+pt1= modelSpace.newKPoint(0.0,0.0,0.0)
+pt2= modelSpace.newKPoint(L*math.cos(theta),L*math.sin(theta),0.0)
+l= modelSpace.newLine(pt1,pt2)
 l.nDiv= NumDiv
 
+# Generate mesh.
+setTotal= preprocessor.getSets.getSet("total")
+setTotal.genMesh(xc.meshDir.I)
 
 # Constraints
 constraints= preprocessor.getBoundaryCondHandler
 
-#
-spc= constraints.newSPConstraint(1,0,0.0) # Node 2,gdl 0
-spc= constraints.newSPConstraint(1,1,0.0) # Node 2,gdl 1
-spc= constraints.newSPConstraint(1,2,0.0) # Node 2,gdl 2
+constrainedNodeTag= pt1.getNode().tag
+spc= constraints.newSPConstraint(constrainedNodeTag,0,0.0) # Node 2,gdl 0
+spc= constraints.newSPConstraint(constrainedNodeTag,1,0.0) # Node 2,gdl 1
+spc= constraints.newSPConstraint(constrainedNodeTag,2,0.0) # Node 2,gdl 2
 
-
-setTotal= preprocessor.getSets.getSet("total")
-setTotal.genMesh(xc.meshDir.I)
 
 # Solution procedure
-import os
-pth= os.path.dirname(__file__)
-if(not pth):
-  pth= "."
-#print("pth= ", pth)
-exec(open(pth+"/../../aux/sol_eigenmodes.py").read())
+analysis= predefined_solutions.frequency_analysis(feProblem)
+analOk= analysis.analyze(1)
 
-
-omega= eig1**0.5
-T= 2*math.pi/omega
-fcalc= 1/T
+# Compute results
+eig1= analysis.getEigenvalue(1)
+omega= eig1**0.5 # natural frequency
+T= 2*math.pi/omega # period
+fcalc= 1/T # frequency
 
 
 lambdaA= 1.87510407
@@ -96,7 +89,7 @@ print("T= ",(T))
 print("fcalc= ",(fcalc))
 print("fteor= ",(fteor))
 print("ratio1= ",(ratio1))
-   '''
+'''
 
 import os
 from misc_utils import log_messages as lmsg

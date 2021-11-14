@@ -366,13 +366,14 @@ python tests/solution/eigenvalues/cantilever_eigenmodes_05.py
 python tests/solution/eigenvalues/cantilever_eigenmodes_06.py
 python tests/solution/eigenvalues/cantilever_eigenmodes_07.py
 python tests/solution/eigenvalues/test_string_under_tension.py
-python tests/solution/eigenvalues/modal_analysis_test_01.py
-python tests/solution/eigenvalues/modal_analysis_test_02.py
-python tests/solution/eigenvalues/modal_analysis_test_03.py
-python tests/solution/eigenvalues/modal_analysis_test_04.py
-python tests/solution/eigenvalues/modal_analysis_test_05.py
 python tests/solution/eigenvalues/test_cqc_01.py
 python tests/solution/eigenvalues/test_band_arpackpp_solver_01.py
+echo "$BLEU" "    Modal analysis tests." "$NORMAL"
+python tests/solution/eigenvalues/modal_analysis/modal_analysis_test_01.py
+python tests/solution/eigenvalues/modal_analysis/modal_analysis_test_02.py
+python tests/solution/eigenvalues/modal_analysis/modal_analysis_test_03.py
+python tests/solution/eigenvalues/modal_analysis/modal_analysis_test_04.py
+python tests/solution/eigenvalues/modal_analysis/modal_analysis_test_05.py
 echo "$BLEU" "    Linear buckling analysis tests." "$NORMAL"
 python tests/solution/eigenvalues/linear_buckling_analysis/linear_buckling_column01.py
 python tests/solution/eigenvalues/linear_buckling_analysis/linear_buckling_column02.py

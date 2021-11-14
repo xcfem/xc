@@ -451,11 +451,11 @@ void XC::SolutionStrategy::free_system_of_equations(void)
 bool XC::SolutionStrategy::alloc_system_of_equations(const std::string &nmb,AnalysisModel *theModel)
   {
     free_system_of_equations();
-    if(nmb=="band_arpack_soe")
+    if((nmb=="band_arpack_soe") || (nmb=="band_arpack_eigen_soe"))
       theSOE= new BandArpackSOE(this);
-    else if(nmb=="band_arpackpp_soe")
+    else if((nmb=="band_arpackpp_soe") || (nmb=="band_arpackpp_eigen_soe"))
       theSOE= new BandArpackppSOE(this);
-    else if(nmb=="sym_arpack_soe")
+    else if((nmb=="sym_arpack_soe") || (nmb=="sym_arpack_eigen_soe"))
       theSOE= new SymArpackSOE(this);
     else if(nmb=="sym_band_eigen_soe")
       theSOE= new SymBandEigenSOE(this);

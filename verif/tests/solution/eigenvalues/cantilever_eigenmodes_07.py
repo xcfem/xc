@@ -1,11 +1,13 @@
 # -*- coding: utf-8 -*-
+''' Taken from example VM66 of the Ansys Verification Manual Release 9.0.'''
+
 from __future__ import print_function
-# Tomado del example VM66 del Ansys Verification Manual Release 9.0
 import xc_base
 import geom
 import xc
 
 from model import predefined_spaces
+from solution import predefined_solutions
 from materials import typical_materials
 import math
 
@@ -38,73 +40,32 @@ modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
 # Define materials
 elast= typical_materials.defElasticMembranePlateSection(preprocessor, "elast",EMat,nuMat,espChapa*dens,espChapa)
 
-points= preprocessor.getMultiBlockTopology.getPoints
-pt1= points.newPoint(1, geom.Pos3d(0.0,0.0,0.0) )
-pt2= points.newPoint(2, geom.Pos3d(b,0.0,0.0) )
-pt3= points.newPoint(3, geom.Pos3d(b,L,0.0) )
-pt4= points.newPoint(4, geom.Pos3d(0,L,0.0) )
+pt1= modelSpace.newKPoint(0.0,0.0,0.0)
+pt2= modelSpace.newKPoint(b,0.0,0.0)
+pt3= modelSpace.newKPoint(b,L,0.0)
+pt4= modelSpace.newKPoint(0,L,0.0)
 surfaces= preprocessor.getMultiBlockTopology.getSurfaces
-surfaces.defaultTag= 1
-s= surfaces.newQuadSurfacePts(1,2,3,4)
+s= modelSpace.newQuadSurface(pt1,pt2,pt3,pt4)
 s.nDivI= 4
 s.nDivJ= NumDiv
-
-
-
 
 seedElemHandler= preprocessor.getElementHandler.seedElemHandler
 seedElemHandler.defaultMaterial= elast.name
 elem= seedElemHandler.newElement("ShellNLDKGQ",xc.ID([0,0,0,0]))
 
 
-f1= preprocessor.getSets.getSet("f1")
-f1.genMesh(xc.meshDir.I)
+s.genMesh(xc.meshDir.I)
 # Constraints
-
-
 ln= preprocessor.getMultiBlockTopology.getLineWithEndPoints(pt1.tag,pt2.tag)
 lNodes= ln.nodes
 for n in lNodes:
   n.fix(xc.ID([0,1,2,3,4,5]),xc.Vector([0,0,0,0,0,0])) # UX,UY,UZ,RX,RY,RZ
 
-
 # Solution procedure
-solu= feProblem.getSoluProc
-solCtrl= solu.getSoluControl
-
-
-solModels= solCtrl.getModelWrapperContainer
-sm= solModels.newModelWrapper("sm")
-
-
-cHandler= sm.newConstraintHandler("transformation_constraint_handler")
-
-numberer= sm.newNumberer("default_numberer")
-numberer.useAlgorithm("rcm")
-
-solutionStrategies= solCtrl.getSolutionStrategyContainer
-solutionStrategy= solutionStrategies.newSolutionStrategy("solutionStrategy","sm")
-solAlgo= solutionStrategy.newSolutionAlgorithm("frequency_soln_algo")
-integ= solutionStrategy.newIntegrator("eigen_integrator",xc.Vector([]))
-
-#soe= solutionStrategy.newSystemOfEqn("sym_band_eigen_soe")
-#solver= soe.newSolver("sym_band_eigen_solver")
-soe= solutionStrategy.newSystemOfEqn("band_arpackpp_soe")
-soe.shift= 0.0
-solver= soe.newSolver("band_arpackpp_solver")
-solver.tol= 1e-3
-solver.maxNumIter= 5
-
-analysis= solu.newAnalysis("eigen_analysis","solutionStrategy","")
-
-
+analysis= predefined_solutions.frequency_analysis(feProblem, systemPrefix= 'band_arpackpp', shift= 0.0)
 analOk= analysis.analyze(2)
+
 eig1= analysis.getEigenvalue(1)
-
-
-
-
-
 omega1= math.sqrt(eig1)
 T1= 2*math.pi/omega1
 f1calc= 1.0/T1
@@ -130,3 +91,11 @@ if (abs(ratio1)<1e-3):
     print('test '+fname+': ok.')
 else:
     lmsg.error(fname+' ERROR.')
+
+# from postprocess import output_handler
+# #########################################################
+# # Graphic stuff.
+# oh= output_handler.OutputHandler(modelSpace)
+
+# ## Uncomment to display the eigenvectors
+# oh.displayEigenvectors()

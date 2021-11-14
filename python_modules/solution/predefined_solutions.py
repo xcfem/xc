@@ -58,10 +58,11 @@ class SolutionProcedure(object):
     :ivar solu:
     :ivar solCtrl:
     :ivar modelWrapper: model representation for the analysis.
+    :ivar shift: shift-and-invert mode (used with ARPACK).
     '''
     _counter = 0 # Counts the objects of this type.
     
-    def __init__(self, name= None, constraintHandlerType= 'plain', maxNumIter= 10, convergenceTestTol= 1e-9, printFlag= 0, numSteps= 1, numberingMethod= 'rcm', convTestType= None, soeType:str= None, solverType:str = None):
+    def __init__(self, name= None, constraintHandlerType= 'plain', maxNumIter= 10, convergenceTestTol= 1e-9, printFlag= 0, numSteps= 1, numberingMethod= 'rcm', convTestType= None, soeType:str= None, solverType:str = None, shift:float= None):
         ''' Constructor.
 
         :param name: identifier for the solution procedure.
@@ -74,6 +75,7 @@ class SolutionProcedure(object):
         :param convTestType: convergence test type for non linear analysis (norm unbalance,...).
         :param soeType: type of the system of equations object.
         :param solverType: type of the solver.
+        :param shift: shift-and-invert mode (used with ARPACK).
         '''
         SolutionProcedure._counter += 1
         self.id = SolutionProcedure._counter
@@ -90,6 +92,7 @@ class SolutionProcedure(object):
         self.convTestType= convTestType
         self.soeType= soeType
         self.solverType= solverType
+        self.shift= shift
         self.solu= None
         self.solCtrl= None
         self.modelWrapper= None
@@ -196,15 +199,13 @@ class SolutionProcedure(object):
         
         return self.solutionStrategy.getConvergenceTest
 
-    def sysOfEqnSetup(self, shift= None):
+    def sysOfEqnSetup(self):
         ''' Defines the solver to use for the resulting system of
             equations.
-
-        :param shift: shift-and-invert mode (used with ARPACK).
         '''
         self.soe= self.solutionStrategy.newSystemOfEqn(self.soeType)
-        if(shift!=None):
-            self.soe.shift= shift
+        if(self.shift!=None):
+            self.soe.shift= self.shift
         self.solver= self.soe.newSolver(self.solverType)
 
     def setPenaltyFactors(self, alphaSP= 1e15, alphaMP= 1e15):
@@ -1155,7 +1156,7 @@ class PenaltyNewmarkNewtonRapshon(SolutionProcedure):
 class FrequencyAnalysis(SolutionProcedure):
     ''' Return a natural frequency computation procedure.'''
 
-    def __init__(self, prb, name= None, printFlag= 0, systemPrefix= 'sym_band', numberingMethod= 'rcm'):
+    def __init__(self, prb, name= None, printFlag= 0, systemPrefix= 'sym_band', numberingMethod= 'rcm', shift:float= None):
         ''' Constructor.
 
         :param prb: XC finite element problem.
@@ -1166,7 +1167,7 @@ class FrequencyAnalysis(SolutionProcedure):
         self.systemPrefix= systemPrefix
         soe_string= self.systemPrefix+'_eigen_soe'
         solver_string= self.systemPrefix+'_eigen_solver'
-        super(FrequencyAnalysis,self).__init__(name, 'transformation', printFlag, numberingMethod= numberingMethod, soeType= soe_string, solverType= solver_string)
+        super(FrequencyAnalysis,self).__init__(name, 'transformation', printFlag, numberingMethod= numberingMethod, soeType= soe_string, solverType= solver_string, shift= shift)
         self.feProblem= prb
         
     def setup(self):
@@ -1179,10 +1180,10 @@ class FrequencyAnalysis(SolutionProcedure):
         self.analysisSetup('modal_analysis')
         
 ### Convenience function
-def frequency_analysis(prb):
+def frequency_analysis(prb, systemPrefix= 'sym_band', shift:float= None):
     ''' Return a solution procedure that computes the natural
         frequencies of the model.'''
-    solProc= FrequencyAnalysis(prb)
+    solProc= FrequencyAnalysis(prb, systemPrefix= systemPrefix, shift= shift)
     solProc.setup()
     return solProc.analysis
 
@@ -1190,7 +1191,7 @@ class IllConditioningAnalysisBase(SolutionProcedure):
     ''' Base class for ill-conditioning
         solution procedures.
     '''
-    def __init__(self, prb, name= None, printFlag= 0, systemPrefix= 'sym_band_eigen', shift= None, numberingMethod= 'rcm'):
+    def __init__(self, prb, name= None, printFlag= 0, systemPrefix= 'sym_band_eigen', shift:float= None, numberingMethod= 'rcm'):
         ''' Constructor.
 
         :param prb: XC finite element problem.
@@ -1199,10 +1200,9 @@ class IllConditioningAnalysisBase(SolutionProcedure):
         :param systemPrefix: string that identifies the SOE and Solver types.
         :param numberingMethod: numbering method (plain or reverse Cuthill-McKee or alterntive minimum degree).
         '''        
-        super(IllConditioningAnalysisBase,self).__init__(name, 'penalty', printFlag= printFlag, numberingMethod= numberingMethod, soeType= systemPrefix+"_soe", solverType= systemPrefix+"_solver")
+        super(IllConditioningAnalysisBase,self).__init__(name, 'penalty', printFlag= printFlag, numberingMethod= numberingMethod, soeType= systemPrefix+"_soe", solverType= systemPrefix+"_solver", shift= shift)
         self.feProblem= prb
         self.setPenaltyFactors()
-        self.shift= shift
         
     def setup(self):
         ''' Defines the solution procedure in the finite element 
@@ -1210,13 +1210,13 @@ class IllConditioningAnalysisBase(SolutionProcedure):
         '''
         super(IllConditioningAnalysisBase,self).setup()
         self.solutionAlgorithmSetup(solAlgType= 'ill-conditioning_soln_algo', integratorType= 'ill-conditioning_integrator')
-        self.sysOfEqnSetup(shift= self.shift)
+        self.sysOfEqnSetup()
         self.analysisSetup('ill-conditioning_analysis')
     
 class ZeroEnergyModes(IllConditioningAnalysisBase):
     ''' Procedure to obtain the zero energy modes
         of the finite element model.'''
-    def __init__(self, prb, name= None, printFlag= 0, systemPrefix= 'sym_band_eigen', shift= None):
+    def __init__(self, prb, name= None, printFlag= 0, systemPrefix= 'sym_band_eigen', shift:float= None):
         ''' Constructor.
 
         :param prb: XC finite element problem.
@@ -1239,7 +1239,7 @@ class IllConditioningAnalysis(IllConditioningAnalysisBase):
     ''' Procedure to obtain the modes
         associated with very small eigenvalues of the
         stiffness matrix.'''
-    def __init__(self, prb, name= None, printFlag= 0, systemPrefix= 'band_arpack', shift= 0.0):
+    def __init__(self, prb, name= None, printFlag= 0, systemPrefix= 'band_arpack', shift:float= 0.0):
         ''' Constructor.
 
         :param prb: XC finite element problem.
@@ -1291,8 +1291,7 @@ class BucklingAnalysisEigenPart(SolutionProcedure):
         :param solverType: type of the solver.
         :param shift: shift-and-invert mode (used with ARPACK).
         '''        
-        super(BucklingAnalysisEigenPart,self).__init__(name, constraintHandlerType= None, printFlag= printFlag, numberingMethod= None, soeType= soeType, solverType= solverType)
-        self.shift= shift
+        super(BucklingAnalysisEigenPart,self).__init__(name, constraintHandlerType= None, printFlag= printFlag, numberingMethod= None, soeType= soeType, solverType= solverType, shift= shift)
         modelWrapper= staticAnalysisPart.getModelWrapper
         if(modelWrapper!= None):
             self.modelWrapper= modelWrapper
@@ -1308,7 +1307,7 @@ class BucklingAnalysisEigenPart(SolutionProcedure):
         '''
         self.soluControlSetup()
         self.solutionAlgorithmSetup(solAlgType= 'linear_buckling_soln_algo', integratorType= 'linear_buckling_integrator')
-        self.sysOfEqnSetup(shift= self.shift)
+        self.sysOfEqnSetup()
 
 class BucklingAnalysisStaticPart(SolutionProcedure):
     ''' Static analysis part of a linear buckling analysis.'''
