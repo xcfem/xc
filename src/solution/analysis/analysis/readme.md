@@ -14,3 +14,4 @@ Classes that implement the different types of analysis:
 - [Parameter Updates in the Loop](https://portwooddigital.com/2021/08/15/parameter-updates-in-the-loop)
 - [Numerical Modeling Techniques of High-Speed Rail Bridge Structures](https://trid.trb.org/view/1844146)
 - [OpenSeees modalProperties Command](https://opensees.github.io/OpenSeesDocumentation/user/manual/analysis/modalProperties.html#modalproperties-command)
+- [OpenSeesaw](https://portwooddigital.com/2021/11/12/openseesaw/)
