@@ -358,16 +358,17 @@ python tests/solution/constraint_handler/lagrange_handler_test_01.py
 
 ## Eigenvalues.
 echo "$BLEU" "  Eigenvalue solution tests." "$NORMAL"
-python tests/solution/eigenvalues/cantilever_eigenmodes_01.py
-python tests/solution/eigenvalues/cantilever_eigenmodes_02.py
-python tests/solution/eigenvalues/cantilever_eigenmodes_03.py
-python tests/solution/eigenvalues/cantilever_eigenmodes_04.py
-python tests/solution/eigenvalues/cantilever_eigenmodes_05.py
-python tests/solution/eigenvalues/cantilever_eigenmodes_06.py
-python tests/solution/eigenvalues/cantilever_eigenmodes_07.py
 python tests/solution/eigenvalues/test_string_under_tension.py
 python tests/solution/eigenvalues/test_cqc_01.py
 python tests/solution/eigenvalues/test_band_arpackpp_solver_01.py
+echo "$BLEU" "    Eigenmode computation." "$NORMAL"
+python tests/solution/eigenvalues/eigenmodes/cantilever_eigenmodes_01.py
+python tests/solution/eigenvalues/eigenmodes/cantilever_eigenmodes_02.py
+python tests/solution/eigenvalues/eigenmodes/cantilever_eigenmodes_03.py
+python tests/solution/eigenvalues/eigenmodes/cantilever_eigenmodes_04.py
+python tests/solution/eigenvalues/eigenmodes/cantilever_eigenmodes_05.py
+python tests/solution/eigenvalues/eigenmodes/cantilever_eigenmodes_06.py
+python tests/solution/eigenvalues/eigenmodes/cantilever_eigenmodes_07.py
 echo "$BLEU" "    Modal analysis tests." "$NORMAL"
 python tests/solution/eigenvalues/modal_analysis/modal_analysis_test_01.py
 python tests/solution/eigenvalues/modal_analysis/modal_analysis_test_02.py
