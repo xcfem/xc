@@ -10,7 +10,7 @@ class Beam(object):
     :ivar I: moment of inertia of the beam section.
     :ivar l: beam length.
     '''
-    def __init__(self,E= 1.0, I= 1.0, l= 1.0):
+    def __init__(self,E:float= 1.0, I:float = 1.0, l:float= 1.0):
         ''' Constructor.
 
         :param E: elastic modulus.

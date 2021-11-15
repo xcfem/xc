@@ -98,6 +98,29 @@ class Cantilever(bm.Beam):
         if(x>a):
           retval= P*a**2/(6.0*self.EI())*(3*x-a)
         return retval
+    
+    def getFundamentalBendingFrequencies(self, numModes, linearRho):
+        ''' Return the fundamental bending frequencies of the beam.
+
+        :param numModes: number of oscillation modes to compute.
+        :param linearRho: mass density per unit length.
+        '''
+        tmp= 1/2.0/math.pi*math.sqrt(self.E*self.I/linearRho)
+        retval= list()
+        if(numModes>=1):
+            f1= tmp*3.5156/self.l**2
+            retval.append(f1)
+        if(numModes>=2):
+            f2= 6.268*f1
+            retval.append(f2)
+        if(numModes>=3):
+            f3= 17.456*f1
+            retval.append(f3)
+        if(numModes>3):
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.warning(className+'.'+methodName+': computation for numModes<4 not implemented.')
+        return retval
       
 # WRITE CODE PENDING.
 
