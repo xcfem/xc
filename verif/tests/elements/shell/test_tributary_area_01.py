@@ -63,8 +63,7 @@ s.nDivJ= NumDivJ
 
 
 
-f1= preprocessor.getSets.getSet("f1")
-f1.genMesh(xc.meshDir.I)
+s.genMesh(xc.meshDir.I)
 constraints= preprocessor.getBoundaryCondHandler
 
 sides= s.getSides
@@ -75,23 +74,20 @@ for l in sides:
 # Load definition.
 lp0= modelSpace.newLoadPattern(name= '0')
 
-
-
-f1= preprocessor.getSets.getSet("f1")
-f1.resetTributaries()
-f1.computeTributaryAreas(False)
-areaTributaria= 0.0
-nNodes= f1.getNumNodes
-capa1= f1.getNodeLayers.getLayer(0)
+s.resetTributaries()
+s.computeTributaryAreas(False)
+tributaryArea= 0.0
+nNodes= s.getNumNodes
+capa1= s.getNodeLayers.getLayer(0)
 nf= capa1.nRow
 nc= capa1.nCol
 for i in range(2,nf):
   for j in range(2,nc):
     node= capa1.getNode(i,j)
-    areaTributaria= node.getTributaryArea()
-    lp0.newNodalLoad(node.tag,xc.Vector([0,0,-unifLoad*areaTributaria,0,0,0])) # Concentrated load
+    tributaryArea= node.getTributaryArea()
+    lp0.newNodalLoad(node.tag,xc.Vector([0,0,-unifLoad*tributaryArea,0,0,0])) # Concentrated load
 
-nElems= f1.getNumElements
+nElems= s.getNumElements
 # We add the load case to domain.
 modelSpace.addLoadCaseToDomain(lp0.name)
 
@@ -101,9 +97,7 @@ modelSpace.addLoadCaseToDomain(lp0.name)
 analysis= predefined_solutions.simple_static_linear(feProblem)
 analOk= analysis.analyze(1)
 
-f1= preprocessor.getSets.getSet("f1")
-
-node= f1.getNodeIJK(1, int(NumDivI/2+1), int(NumDivJ/2+1))
+node= s.getNodeIJK(1, int(NumDivI/2+1), int(NumDivJ/2+1))
 # print("Central node: ", node.tag)
 # print("Central node coordinates: ", node.getCoo)
 # print("Central node displacements: ", node.getDisp)
