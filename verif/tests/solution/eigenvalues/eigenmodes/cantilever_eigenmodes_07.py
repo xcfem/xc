@@ -32,7 +32,7 @@ inertia2= 1/12.0*b*espChapa**3 # Moment of inertia in m4
 dens= 0.000728 # Density of the material en lb-sec2/in4
 m= b*h*dens
 
-NumDiv= 10
+numDiv= 10
 
 # Problem type
 feProblem= xc.FEProblem()
@@ -50,7 +50,7 @@ pt4= modelSpace.newKPoint(0,L,0.0)
 surfaces= preprocessor.getMultiBlockTopology.getSurfaces
 s= modelSpace.newQuadSurface(pt1,pt2,pt3,pt4)
 s.nDivI= 4
-s.nDivJ= NumDiv
+s.nDivJ= numDiv
 
 seedElemHandler= preprocessor.getElementHandler.seedElemHandler
 seedElemHandler.defaultMaterial= elast.name
