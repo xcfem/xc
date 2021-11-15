@@ -1,6 +1,10 @@
 # -*- coding: utf-8 -*-
+''' SOLVIA Verification Manual. Example B46.
+    Arpack solver and ShellMITC4 element version.'''
+
 from __future__ import print_function
-# Tomado del example B46 del SOLVIA Verification Manual
+from __future__ import division
+
 import xc_base
 import geom
 import xc
@@ -8,6 +12,7 @@ import xc
 from model import predefined_spaces
 from solution import predefined_solutions
 from materials import typical_materials
+# from postprocess import output_handler
 import math
 
 __author__= "Luis C. Pérez Tato (LCPT)"
@@ -66,9 +71,10 @@ for n in lNodes:
     n.fix(xc.ID([0,1,2,3,4,5]),xc.Vector([0,0,0,0,0,0])) # UX,UY,UZ,RX,RY,RZ
 
 # Solution procedure
+numModes= 2
 analysis= predefined_solutions.frequency_analysis(feProblem, systemPrefix= 'band_arpackpp', shift= 0.0)
 
-analOk= analysis.analyze(2)
+analOk= analysis.analyze(numModes)
 eig1= analysis.getEigenvalue(1)
 eig2= analysis.getEigenvalue(2)
 
@@ -78,6 +84,7 @@ f1calc= 1.0/T1
 omega2= math.sqrt(eig2)
 T2= 2*math.pi/omega2
 f2calc= 1.0/T2
+periods= [T1, T2]
 
 Lambda= 1.87510407
 f1teor= Lambda**2/(2*math.pi*L**2)*math.sqrt(EMat*inertia1/m)
@@ -105,3 +112,13 @@ if (abs(ratio2)<1e-3):
     print('test '+fname+': ok.')
 else:
     lmsg.error(fname+' ERROR.')
+    
+# # Graphic stuff.
+# oh= output_handler.OutputHandler(modelSpace)
+
+# for mode in range(1,numModes+1):
+#     T= periods[mode-1]
+#     f= 1.0/T
+#     print('T_'+str(mode)+'= ',T, 's')
+#     print('f_'+str(mode)+'= ',f, 'Hz')
+#     oh.displayEigenvectors(mode)

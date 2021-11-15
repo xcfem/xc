@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
-''' SOLVIA Verification Manual. Example B46.''' 
+''' SOLVIA Verification Manual. Example B46.
+    Arpack solver and ShellNLDKGQ element version.'''
 
 from __future__ import print_function
 from __future__ import division
+
 import xc_base
 import geom
 import xc
@@ -10,6 +12,7 @@ import xc
 from model import predefined_spaces
 from solution import predefined_solutions
 from materials import typical_materials
+# from postprocess import output_handler
 import math
 
 __author__= "Luis C. Pérez Tato (LCPT)"
@@ -21,7 +24,7 @@ __email__= "l.pereztato@gmail.com"
 L= 1 # Cantilever length in meters
 b= 0.05 # Cross section width in meters
 h= 0.1 # Cross section depth in meters
-nuMat= 0.3 # Poisson's ratio.
+nuMat= 0 # Poisson's ratio.
 EMat= 2.0E11 # Young modulus en N/m2.
 espChapa= h # Thickness en m.
 area= b*espChapa # Cross section area en m2
@@ -39,7 +42,7 @@ nodes= preprocessor.getNodeHandler
 
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
 # Define materials
-elast= typical_materials.defElasticMembranePlateSection(preprocessor, "elast",EMat,nuMat,dens,espChapa)
+elast= typical_materials.defElasticMembranePlateSection(preprocessor, "elast",EMat,nuMat,espChapa*dens,espChapa)
 
 pt1= modelSpace.newKPoint(0.0,0.0,0.0)
 pt2= modelSpace.newKPoint(b,0.0,0.0)
@@ -52,7 +55,7 @@ s.nDivJ= NumDiv
 seedElemHandler= preprocessor.getElementHandler.seedElemHandler
 seedElemHandler.defaultMaterial= elast.name
 seedElemHandler.defaultTag= 1
-elem= seedElemHandler.newElement("ShellMITC4",xc.ID([0,0,0,0]))
+elem= seedElemHandler.newElement("ShellNLDKGQ",xc.ID([0,0,0,0]))
 
 s.genMesh(xc.meshDir.I)
 
@@ -65,7 +68,8 @@ for n in lNodes:
 # Solution procedure
 analysis= predefined_solutions.frequency_analysis(feProblem, systemPrefix= 'band_arpackpp', shift= 0.0)
 
-analOk= analysis.analyze(2)
+numModes= 2
+analOk= analysis.analyze(numModes)
 eig1= analysis.getEigenvalue(1)
 eig2= analysis.getEigenvalue(2)
 
@@ -75,8 +79,7 @@ f1calc= 1.0/T1
 omega2= math.sqrt(eig2)
 T2= 2*math.pi/omega2
 f2calc= 1.0/T2
-
-
+periods= [T1, T2]
 
 Lambda= 1.87510407
 f1teor= Lambda**2/(2*math.pi*L**2)*math.sqrt(EMat*inertia1/m)
@@ -104,3 +107,13 @@ if (abs(ratio2)<1e-3):
     print('test '+fname+': ok.')
 else:
     lmsg.error(fname+' ERROR.')
+    
+# # Graphic stuff.
+# oh= output_handler.OutputHandler(modelSpace)
+
+# for mode in range(1,numModes+1):
+#     T= periods[mode-1]
+#     f= 1.0/T
+#     print('T_'+str(mode)+'= ',T, 's')
+#     print('f_'+str(mode)+'= ',f, 'Hz')
+#     oh.displayEigenvectors(mode)
