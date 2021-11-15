@@ -91,7 +91,7 @@ result= analysis.analyze(1)
 
 delta= nC.getDisp[2]
 # Analytical solution
-elasticMaterial= wood.getElasticMaterial()
+elasticMaterial= wood.defElasticMaterial()
 EI= elasticMaterial.E*section.Iz()
 AG= elasticMaterial.G()*section.A()
 sry= 1.0/section.alphaY()

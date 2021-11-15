@@ -75,7 +75,7 @@ class Wood(wood_base.Wood):
         G= self.Gmean
         return E/(2.0*G)-1.0
     
-    def getElasticMaterial(self, perpendicular= False):
+    def defElasticMaterial(self, perpendicular= False):
         ''' Return an elastic material with the mechanical properties of the
             timber.
 
@@ -87,7 +87,7 @@ class Wood(wood_base.Wood):
             E= self.E90_mean
         return typical_materials.BasicElasticMaterial(E, nu, self.specificGravity)
     
-    def getElasticMembranePlateSection(self, preprocessor, thickness:float, overridePoissonRatio= None, name:str= None, perpendicular= False):
+    def defElasticMembranePlateSection(self, preprocessor, thickness:float, overridePoissonRatio= None, name:str= None, perpendicular= False):
         ''' Return an elastic membrane plate material with the mechanical
             properties of the timber.
 
@@ -728,32 +728,32 @@ class RectangularShape(EC5Shape, section_properties.RectangularSection):
 
         :param prep: preprocessor of the finite element problem.
         '''
-        return section_properties.RectangularSection.defElasticSection3d(self, preprocessor= prep, material= self.wood.getElasticMaterial())
+        return section_properties.RectangularSection.defElasticSection3d(self, preprocessor= prep, material= self.wood.defElasticMaterial())
    
     def defElasticShearSection3d(self, prep):
         ''' Return an elastic section appropiate for 3D beam analysis
 
         :param prep: preprocessor of the finite element problem.
         '''
-        return section_properties.RectangularSection.defElasticShearSection3d(self, preprocessor= prep, material= self.wood.getElasticMaterial())
+        return section_properties.RectangularSection.defElasticShearSection3d(self, preprocessor= prep, material= self.wood.defElasticMaterial())
    
     def defElasticSection1d(self, prep):
         ''' Return an elastic section appropiate for 1D beam analysis
 
         :param prep: preprocessor of the finite element problem.
         '''
-        return section_properties.RectangularSection.defElasticSection1d(self, preprocessor= prep, material= self.wood.getElasticMaterial())
+        return section_properties.RectangularSection.defElasticSection1d(self, preprocessor= prep, material= self.wood.defElasticMaterial())
     
     def defElasticSection2d(self, prep):
         ''' Return an elastic section appropiate for 2D beam analysis
 
         :param prep: preprocessor of the finite element problem.
         '''
-        return section_properties.RectangularSection.defElasticSection2d(self, preprocessor= prep, material= self.wood.getElasticMaterial())
+        return section_properties.RectangularSection.defElasticSection2d(self, preprocessor= prep, material= self.wood.defElasticMaterial())
     
     def defElasticShearSection2d(self, prep):
         ''' Return an elastic section appropiate for 2D beam analysis
 
         :param prep: preprocessor of the finite element problem.
         '''
-        return section_properties.RectangularSection.defElasticShearSection2d(self, preprocessor= prep, material= self.wood.getElasticMaterial())
+        return section_properties.RectangularSection.defElasticShearSection2d(self, preprocessor= prep, material= self.wood.defElasticMaterial())
