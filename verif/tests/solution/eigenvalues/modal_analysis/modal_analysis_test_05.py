@@ -10,6 +10,7 @@ import geom
 import xc
 
 from model import predefined_spaces
+from solution import predefined_solutions
 from materials import typical_materials
 import math
 
@@ -104,27 +105,12 @@ elements.defaultMaterial= sccPl4a.name
 beam2d= elements.newElement("ElasticBeam2d",xc.ID([4,5]))
 beam2d.h= B3a
 
-
-
 targetTotalMass= 5*storeyMass
 
 # Solution procedure
-solu= feProblem.getSoluProc
-solCtrl= solu.getSoluControl
-solModels= solCtrl.getModelWrapperContainer
-sm= solModels.newModelWrapper("sm")
-cHandler= sm.newConstraintHandler("transformation_constraint_handler")
-numberer= sm.newNumberer("default_numberer")
-numberer.useAlgorithm("rcm")
-solutionStrategies= solCtrl.getSolutionStrategyContainer
-solutionStrategy= solutionStrategies.newSolutionStrategy("solutionStrategy","sm")
-solAlgo= solutionStrategy.newSolutionAlgorithm("frequency_soln_algo")
-integ= solutionStrategy.newIntegrator("eigen_integrator",xc.Vector([]))
-soe= solutionStrategy.newSystemOfEqn("band_arpackpp_soe")
-soe.shift= 0.0
-solver= soe.newSolver("band_arpackpp_solver")
-analysis= solu.newAnalysis("modal_analysis","solutionStrategy","")
+analysis= predefined_solutions.frequency_analysis(feProblem, systemPrefix= 'band_arpackpp', shift= 0.0)
 analOk= analysis.analyze(3)
+
 periods= analysis.getPeriods()
 modes= analysis.getNormalizedEigenvectors()
 modalParticipationFactors= analysis.getModalParticipationFactors()
@@ -138,10 +124,10 @@ targetPeriods= xc.Vector([0.468,0.177,0.105])
 ratio1= (periods-targetPeriods).Norm()
 # Los modos se obtienen con distinto signo.
 exempleModes= xc.Matrix([[0.323,-0.764,-0.946],
-                                      [0.521,-0.941,-0.378],
-                                      [0.685,-0.700,0.672],
-                                      [0.891,0.241,1.000],
-                                      [1.000,1.000,-0.849]])
+                         [0.521,-0.941,-0.378],
+                         [0.685,-0.700,0.672],
+                         [0.891,0.241,1.000],
+                         [1.000,1.000,-0.849]])
 diff_modes= (modes-exempleModes)
 ratio2= (diff_modes).rowNorm()
 
