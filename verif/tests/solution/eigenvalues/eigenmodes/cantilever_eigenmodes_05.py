@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-''' SOLVIA Verification Manual. Example B46.
+''' SOLVIA Verification Manual. Example A50.
     Arpack solver and ShellNLDKGQ element version.'''
 
 from __future__ import print_function
@@ -24,7 +24,7 @@ __email__= "l.pereztato@gmail.com"
 L= 1 # Cantilever length in meters
 b= 0.05 # Cross section width in meters
 h= 0.1 # Cross section depth in meters
-nuMat= 0 # Poisson's ratio.
+nuMat= 0.3 # Poisson's ratio.
 EMat= 2.0E11 # Young modulus en N/m2.
 espChapa= h # Thickness en m.
 area= b*espChapa # Cross section area en m2
@@ -33,7 +33,7 @@ inertia2= 1/12.0*b*espChapa**3 # Moment of inertia in m4
 dens= 7800 # Density of the steel en kg/m3
 m= b*h*dens
 
-numDiv= 20
+numDiv= 10
 
 # Problem type
 feProblem= xc.FEProblem()
@@ -104,7 +104,7 @@ print("ratio2= ",ratio2)
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
-if (abs(ratio1)<1e-2 and abs(ratio2)<1e-3):
+if (abs(ratio1)<.05 and abs(ratio2)<1e-2):
     print('test '+fname+': ok.')
 else:
     lmsg.error(fname+' ERROR.')
