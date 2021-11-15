@@ -1,7 +1,10 @@
 # -*- coding: utf-8 -*-
-''' Taken from example VM66 of the Ansys Verification Manual Release 9.0.'''
+''' Taken from example VM66 of the Ansys Verification Manual Release 9.0. 
+     Arpack solver and ShellNLDKGQ element version.
+'''
 
 from __future__ import print_function
+
 import xc_base
 import geom
 import xc
@@ -53,13 +56,12 @@ seedElemHandler= preprocessor.getElementHandler.seedElemHandler
 seedElemHandler.defaultMaterial= elast.name
 elem= seedElemHandler.newElement("ShellNLDKGQ",xc.ID([0,0,0,0]))
 
-
 s.genMesh(xc.meshDir.I)
 # Constraints
 ln= preprocessor.getMultiBlockTopology.getLineWithEndPoints(pt1.tag,pt2.tag)
 lNodes= ln.nodes
 for n in lNodes:
-  n.fix(xc.ID([0,1,2,3,4,5]),xc.Vector([0,0,0,0,0,0])) # UX,UY,UZ,RX,RY,RZ
+    n.fix(xc.ID([0,1,2,3,4,5]),xc.Vector([0,0,0,0,0,0])) # UX,UY,UZ,RX,RY,RZ
 
 # Solution procedure
 analysis= predefined_solutions.frequency_analysis(feProblem, systemPrefix= 'band_arpackpp', shift= 0.0)
@@ -82,7 +84,7 @@ print("T1= ",T1)
 print("f1calc= ",f1calc)
 print("f1teor= ",f1teor)
 print("ratio1= ",ratio1)
-   '''
+'''
 
 import os
 from misc_utils import log_messages as lmsg

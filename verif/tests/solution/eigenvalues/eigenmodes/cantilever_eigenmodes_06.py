@@ -1,6 +1,10 @@
 # -*- coding: utf-8 -*-
+''' Example VM66 from Ansys Verification Manual Release 9.0. 
+    Arpack solver and ShellMITC4 element version.'''
+
+from __future__ import division
 from __future__ import print_function
-# Tomado del example VM66 del Ansys Verification Manual Release 9.0
+
 import xc_base
 import geom
 import xc
@@ -8,6 +12,7 @@ import xc
 from model import predefined_spaces
 from solution import predefined_solutions
 from materials import typical_materials
+# from postprocess import output_handler
 import math
 
 __author__= "Luis C. Pérez Tato (LCPT)"
@@ -50,28 +55,25 @@ s= surfaces.newQuadSurfacePts(1,2,3,4)
 s.nDivI= 4
 s.nDivJ= NumDiv
 
-
-
-
 seedElemHandler= preprocessor.getElementHandler.seedElemHandler
 seedElemHandler.defaultMaterial= elast.name
 elem= seedElemHandler.newElement("ShellMITC4",xc.ID([0,0,0,0]))
 
 
-f1= preprocessor.getSets.getSet("f1")
-f1.genMesh(xc.meshDir.I)
+s.genMesh(xc.meshDir.I)
 # Constraints
 
 
 ln= preprocessor.getMultiBlockTopology.getLineWithEndPoints(pt1.tag,pt2.tag)
 lNodes= ln.nodes
 for n in lNodes:
-  n.fix(xc.ID([0,1,2,3,4,5]),xc.Vector([0,0,0,0,0,0])) # UX,UY,UZ,RX,RY,RZ
+    n.fix(xc.ID([0,1,2,3,4,5]),xc.Vector([0,0,0,0,0,0])) # UX,UY,UZ,RX,RY,RZ
 
 
 # Solution procedure
+numModes= 2
 analysis= predefined_solutions.frequency_analysis(feProblem, systemPrefix= 'band_arpackpp', shift= 0.0)
-analOk= analysis.analyze(2)
+analOk= analysis.analyze(numModes)
 
 eig1= analysis.getEigenvalue(1)
 omega1= math.sqrt(eig1)
@@ -97,3 +99,9 @@ if (abs(ratio1)<1e-3):
     print('test '+fname+': ok.')
 else:
     lmsg.error(fname+' ERROR.')
+    
+# # Graphic stuff.
+# oh= output_handler.OutputHandler(modelSpace)
+
+# for mode in range(1,numModes+1):
+#     oh.displayEigenvectors(mode)

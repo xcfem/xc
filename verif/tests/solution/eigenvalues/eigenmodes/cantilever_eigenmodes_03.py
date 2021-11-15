@@ -1,6 +1,10 @@
 # -*- coding: utf-8 -*-
+''' SOLVIA Verification Manual. Example B46. 
+    Full general system of equations version.'''
+
 from __future__ import print_function
-# Tomado del example B46 del SOLVIA Verification Manual
+from __future__ import division
+
 import xc_base
 import geom
 import xc
@@ -8,6 +12,7 @@ import xc
 from model import predefined_spaces
 from solution import predefined_solutions
 from materials import typical_materials
+# from postprocess import output_handler
 import math
 
 __author__= "Luis C. Pérez Tato (LCPT)"
@@ -71,8 +76,8 @@ for n in lNodes:
 
 # Solution procedure
 analysis= predefined_solutions.frequency_analysis(feProblem, systemPrefix= 'full_gen')
-
-analOk= analysis.analyze(2)
+numModes= 2
+analOk= analysis.analyze(numModes)
 eig1= analysis.getEigenvalue(1)
 eig2= analysis.getEigenvalue(2)
 
@@ -82,6 +87,7 @@ f1calc= 1.0/T1
 omega2= math.sqrt(eig2)
 T2= 2*math.pi/omega2
 f2calc= 1.0/T2
+periods= [T1, T2]
 
 
 
@@ -96,7 +102,7 @@ print("omega1= ",omega1)
 print("T1= ",T1)
 print("f1calc= ",f1calc)
 print("f1teor= ",f1teor)
-print("ratio1= ",ratio1})
+print("ratio1= ",ratio1)
 print("omega2= ",omega2)
 print("T2= ",T2)
 print("f2calc= ",f2calc)
@@ -111,3 +117,13 @@ if (abs(ratio2)<1e-3):
     print('test '+fname+': ok.')
 else:
     lmsg.error(fname+' ERROR.')
+    
+# #Graphic stuff.
+# oh= output_handler.OutputHandler(modelSpace)
+
+# for mode in range(1,numModes+1):
+#     T= periods[mode-1]
+#     f= 1.0/T
+#     print('T_'+str(mode)+'= ',T, 's')
+#     print('f_'+str(mode)+'= ',f, 'Hz')
+#     oh.displayEigenvectors(mode)
