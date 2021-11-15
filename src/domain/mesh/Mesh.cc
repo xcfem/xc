@@ -1210,7 +1210,7 @@ double XC::Mesh::normalizeEigenvectors(int mode)
   {
     double norm= 0.0;
     const int numModes= getDomain()->getNumModes();
-    if(mode<numModes)
+    if(mode<=numModes)
       {
 	Node *theNode= nullptr;
 	NodeIter &theNodes = this->getNodes();
