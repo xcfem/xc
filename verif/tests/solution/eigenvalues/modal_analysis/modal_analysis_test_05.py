@@ -69,7 +69,7 @@ nod.setProp("gdlsCoartados",xc.ID([1,2]))
 setTotal= preprocessor.getSets.getSet("total")
 nodes= setTotal.getNodes
 for n in nodes:
-  n.fix(n.getProp("gdlsCoartados"),xc.Vector([0,0,0]))
+    n.fix(n.getProp("gdlsCoartados"),xc.Vector([0,0,0]))
 
 # Materials definition
 materialHandler= preprocessor.getMaterialHandler
@@ -122,7 +122,7 @@ distributionFactors= analysis.getDistributionFactors()
 
 targetPeriods= xc.Vector([0.468,0.177,0.105])
 ratio1= (periods-targetPeriods).Norm()
-# Los modos se obtienen con distinto signo.
+# Modes are obtained with different signs.
 exempleModes= xc.Matrix([[0.323,-0.764,-0.946],
                          [0.521,-0.941,-0.378],
                          [0.685,-0.700,0.672],

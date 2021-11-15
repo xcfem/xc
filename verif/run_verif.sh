@@ -959,10 +959,6 @@ python tests/rough_calculations/test_punzo01.py
 python tests/rough_calculations/test_punzo02.py
 python tests/rough_calculations/ng_rc_section_test.py
 python tests/rough_calculations/test_min_dim_abut_support.py
-python tests/rough_calculations/test_cantilever01.py
-python tests/rough_calculations/test_simple_beam_01.py
-python tests/rough_calculations/test_simple_beam_02.py
-python tests/rough_calculations/test_simple_beam_03.py
 python tests/rough_calculations/test_earth_pressure_kray.py
 python tests/rough_calculations/test_suspension_bridge_simple_model.py
 python tests/rough_calculations/test_cable_stayed_bridge_simple_model.py
@@ -977,6 +973,13 @@ python tests/rough_calculations/test_dome_02.py
 python tests/rough_calculations/test_hypar.py
 python tests/rough_calculations/test_base_plate_design.py
 python tests/rough_calculations/retaining_wall_test_01.py
+echo "$BLEU" "  Beam formulas..." "$NORMAL"
+python tests/rough_calculations/beam_formulas/test_cantilever01.py
+python tests/rough_calculations/beam_formulas/test_cantilever02.py
+python tests/rough_calculations/beam_formulas/test_simple_beam_01.py
+python tests/rough_calculations/beam_formulas/test_simple_beam_02.py
+python tests/rough_calculations/beam_formulas/test_simple_beam_03.py
+python tests/rough_calculations/beam_formulas/test_simple_beam_04.py
 
 #Postprocess tests
 echo "$BLEU" "Verifiying routines for post processing." "$NORMAL"
