@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 ''' SOLVIA Verification Manual. Example B46. 
-    Full general system of equations version.'''
+    Arpack solver version.'''
 
 from __future__ import print_function
 from __future__ import division
@@ -33,7 +33,7 @@ inertia2= 1/12.0*b*espChapa**3 # Moment of inertia in m4
 dens= 7800 # Density of the steel en kg/m3
 m= b*h*dens
 
-NumDiv= 10
+numDiv= 60
 
 # Problem type
 feProblem= xc.FEProblem()
@@ -44,6 +44,7 @@ modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
 # Define materials
 elast= typical_materials.defElasticMembranePlateSection(preprocessor, "elast",EMat,nuMat,dens,espChapa)
 
+# Geometry
 points= preprocessor.getMultiBlockTopology.getPoints
 pt1= points.newPoint(1, geom.Pos3d(0.0,0.0,0) )
 pt2= points.newPoint(2, geom.Pos3d(b,0.0,0) )
@@ -52,19 +53,16 @@ pt4= points.newPoint(4, geom.Pos3d(0,L,0) )
 surfaces= preprocessor.getMultiBlockTopology.getSurfaces
 surfaces.defaultTag= 1
 s= surfaces.newQuadSurfacePts(1,2,3,4)
-s.nDivI= 1
-s.nDivJ= NumDiv
+s.nDivI= max(int(numDiv/30),1)
+s.nDivJ= numDiv
 
-
-
-
+# Mesh
 seedElemHandler= preprocessor.getElementHandler.seedElemHandler
 seedElemHandler.defaultMaterial= elast.name
 seedElemHandler.defaultTag= 1
 elem= seedElemHandler.newElement("ShellMITC4",xc.ID([0,0,0,0]))
 
-f1= preprocessor.getSets.getSet("f1")
-f1.genMesh(xc.meshDir.I)
+s.genMesh(xc.meshDir.I)
 # Constraints
 
 
@@ -73,9 +71,9 @@ lNodes= ln.nodes
 for n in lNodes:
   n.fix(xc.ID([0,1,2,3,4,5]),xc.Vector([0,0,0,0,0,0])) # UX,UY,UZ,RX,RY,RZ
 
-
 # Solution procedure
-analysis= predefined_solutions.frequency_analysis(feProblem, systemPrefix= 'full_gen')
+analysis= predefined_solutions.frequency_analysis(feProblem, systemPrefix= 'band_arpack')
+#analysis= predefined_solutions.frequency_analysis(feProblem, systemPrefix= 'full_gen')
 numModes= 2
 analOk= analysis.analyze(numModes)
 eig1= analysis.getEigenvalue(1)
@@ -88,7 +86,6 @@ omega2= math.sqrt(eig2)
 T2= 2*math.pi/omega2
 f2calc= 1.0/T2
 periods= [T1, T2]
-
 
 
 Lambda= 1.87510407
@@ -113,7 +110,7 @@ print("ratio2= ",ratio2)
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
-if (abs(ratio2)<1e-3):
+if (abs(ratio1)<.05 and abs(ratio2)<1e-2):
     print('test '+fname+': ok.')
 else:
     lmsg.error(fname+' ERROR.')

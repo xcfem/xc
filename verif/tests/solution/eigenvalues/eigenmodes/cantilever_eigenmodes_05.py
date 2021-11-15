@@ -12,7 +12,7 @@ import xc
 from model import predefined_spaces
 from solution import predefined_solutions
 from materials import typical_materials
-# from postprocess import output_handler
+#from postprocess import output_handler
 import math
 
 __author__= "Luis C. Pérez Tato (LCPT)"
@@ -33,7 +33,7 @@ inertia2= 1/12.0*b*espChapa**3 # Moment of inertia in m4
 dens= 7800 # Density of the steel en kg/m3
 m= b*h*dens
 
-NumDiv= 10
+numDiv= 20
 
 # Problem type
 feProblem= xc.FEProblem()
@@ -49,8 +49,9 @@ pt2= modelSpace.newKPoint(b,0.0,0.0)
 pt3= modelSpace.newKPoint(b,L,0.0)
 pt4= modelSpace.newKPoint(0,L,0.0)
 s= modelSpace.newQuadSurface(pt1,pt2,pt3,pt4)
-s.nDivI= 1
-s.nDivJ= NumDiv
+elemSide= L/numDiv
+s.nDivI= max(int(b/elemSide),1)
+s.nDivJ= numDiv
 
 seedElemHandler= preprocessor.getElementHandler.seedElemHandler
 seedElemHandler.defaultMaterial= elast.name
@@ -103,7 +104,7 @@ print("ratio2= ",ratio2)
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
-if (abs(ratio2)<1e-3):
+if (abs(ratio1)<1e-2 and abs(ratio2)<1e-3):
     print('test '+fname+': ok.')
 else:
     lmsg.error(fname+' ERROR.')

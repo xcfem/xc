@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 ''' SOLVIA Verification Manual. Example B46.
-    Arpack solver and ShellMITC4 element version.'''
+    ArpackPP solver and ShellMITC4 element version.'''
 
 from __future__ import print_function
 from __future__ import division
@@ -33,7 +33,7 @@ inertia2= 1/12.0*b*espChapa**3 # Moment of inertia in m4
 dens= 7800 # Density of the steel en kg/m3
 m= b*h*dens
 
-NumDiv= 10
+numDiv= 60
 
 # Problem type
 feProblem= xc.FEProblem()
@@ -50,8 +50,8 @@ pt2= modelSpace.newKPoint(b,0.0,0.0)
 pt3= modelSpace.newKPoint(b,L,0.0)
 pt4= modelSpace.newKPoint(0,L,0.0)
 s= modelSpace.newQuadSurface(pt1,pt2,pt3,pt4)
-s.nDivI= 1
-s.nDivJ= NumDiv
+s.nDivI= max(int(numDiv/30),1)
+s.nDivJ= numDiv
 
 
 
@@ -108,7 +108,7 @@ print("ratio2= ",ratio2)
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
-if (abs(ratio2)<1e-3):
+if (abs(ratio1)<.05 and abs(ratio2)<1e-2):
     print('test '+fname+': ok.')
 else:
     lmsg.error(fname+' ERROR.')
