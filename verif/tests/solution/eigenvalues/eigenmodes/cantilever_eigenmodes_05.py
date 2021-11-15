@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 ''' SOLVIA Verification Manual. Example B46.
-    Arpack solver and ShellMITC4 element version.'''
+    Arpack solver and ShellNLDKGQ element version.'''
 
 from __future__ import print_function
 from __future__ import division
@@ -24,7 +24,7 @@ __email__= "l.pereztato@gmail.com"
 L= 1 # Cantilever length in meters
 b= 0.05 # Cross section width in meters
 h= 0.1 # Cross section depth in meters
-nuMat= 0.3 # Poisson's ratio.
+nuMat= 0 # Poisson's ratio.
 EMat= 2.0E11 # Young modulus en N/m2.
 espChapa= h # Thickness en m.
 area= b*espChapa # Cross section area en m2
@@ -42,8 +42,7 @@ nodes= preprocessor.getNodeHandler
 
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
 # Define materials
-elast= typical_materials.defElasticMembranePlateSection(preprocessor, "elast",EMat,nuMat,dens,espChapa)
-
+elast= typical_materials.defElasticMembranePlateSection(preprocessor, "elast",EMat,nuMat,espChapa*dens,espChapa)
 
 pt1= modelSpace.newKPoint(0.0,0.0,0.0)
 pt2= modelSpace.newKPoint(b,0.0,0.0)
@@ -53,27 +52,23 @@ s= modelSpace.newQuadSurface(pt1,pt2,pt3,pt4)
 s.nDivI= 1
 s.nDivJ= NumDiv
 
-
-
-
 seedElemHandler= preprocessor.getElementHandler.seedElemHandler
 seedElemHandler.defaultMaterial= elast.name
 seedElemHandler.defaultTag= 1
-elem= seedElemHandler.newElement("ShellMITC4",xc.ID([0,0,0,0]))
+elem= seedElemHandler.newElement("ShellNLDKGQ",xc.ID([0,0,0,0]))
 
 s.genMesh(xc.meshDir.I)
+
 # Constraints
-
-
 ln= preprocessor.getMultiBlockTopology.getLineWithEndPoints(pt1.tag,pt2.tag)
 lNodes= ln.nodes
 for n in lNodes:
     n.fix(xc.ID([0,1,2,3,4,5]),xc.Vector([0,0,0,0,0,0])) # UX,UY,UZ,RX,RY,RZ
 
 # Solution procedure
-numModes= 2
 analysis= predefined_solutions.frequency_analysis(feProblem, systemPrefix= 'band_arpackpp', shift= 0.0)
 
+numModes= 2
 analOk= analysis.analyze(numModes)
 eig1= analysis.getEigenvalue(1)
 eig2= analysis.getEigenvalue(2)
