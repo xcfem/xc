@@ -75,19 +75,30 @@ class Wood(wood_base.Wood):
         G= self.Gmean
         return E/(2.0*G)-1.0
     
-    def defElasticMaterial(self, perpendicular= False):
+    def defElasticMaterial(self, perpendicular= False, overridePoissonRatio= None, overrideRho= None):
         ''' Return an elastic material with the mechanical properties of the
             timber.
 
         :param perpendicular: if true use the value of modulus of elasticity perpendicular to the grain.
+        :param overridePoissonRatio: the Poisson's ratio value is quite large
+                                     due to the anisotropic material
+                                     behavior. This parameter allows to
+                                     override the computed value.
+        :param overrideRho: if defined (not None), override the value of 
+                            the material density.
         '''
         nu= self.getPoissonRatio()
+        if(overridePoissonRatio):
+            nu= overridePoissonRatio
         E= self.E0_mean
         if(perpendicular):
             E= self.E90_mean
-        return typical_materials.BasicElasticMaterial(E, nu, self.specificGravity)
+        rho= self.specificGravity
+        if(overrideRho!=None):
+            rho= overrideRho
+        return typical_materials.BasicElasticMaterial(E= E, nu= nu, rho= rho)
     
-    def defElasticMembranePlateSection(self, preprocessor, thickness:float, overridePoissonRatio= None, name:str= None, perpendicular= False):
+    def defElasticMembranePlateSection(self, preprocessor, thickness:float, overridePoissonRatio= None, name:str= None, perpendicular= False, overrideRho= None):
         ''' Return an elastic membrane plate material with the mechanical
             properties of the timber.
 
@@ -97,17 +108,21 @@ class Wood(wood_base.Wood):
                                      due to the anisotropic material behavior.
         :param name: name for the new material.
         :param perpendicular: if true use the value of modulus of elasticity perpendicular to the grain.
+        :param overrideRho: if defined (not None), override the value of 
+                            the material density.
         '''
+        nu= self.getPoissonRatio()
         if(overridePoissonRatio):
             nu= overridePoissonRatio
-        else:
-            nu= self.getPoissonRatio()
         E= self.E0_mean
         if(perpendicular):
             E= self.E90_mean
         if(name==None):
             name= self.name+str(thickness)+'_elastic_membrane_plate_section'
-        return typical_materials.defElasticMembranePlateSection(preprocessor, name,E,nu, rho= self.specificGravity, h= thickness)
+        rho= self.specificGravity
+        if(overrideRho!=None):
+            rho= overrideRho
+        return typical_materials.defElasticMembranePlateSection(preprocessor, name,E,nu, rho= rho, h= thickness)
     
     def gammaM(self):
         ''' return the partial factor for material properties and resistances
@@ -723,37 +738,52 @@ class RectangularShape(EC5Shape, section_properties.RectangularSection):
         retval/=self.getShearShapeFactor()
         return retval
     
-    def defElasticSection3d(self, prep):
+    def defElasticSection3d(self, prep, overrideRho= None):
         ''' Return an elastic section appropiate for 3D beam analysis
 
         :param prep: preprocessor of the finite element problem.
+        :param overrideRho: if defined (not None), override the value of 
+                            the material density.
         '''
-        return section_properties.RectangularSection.defElasticSection3d(self, preprocessor= prep, material= self.wood.defElasticMaterial())
+        mat= self.wood.defElasticMaterial(overrideRho= overrideRho)
+        return section_properties.RectangularSection.defElasticSection3d(self, preprocessor= prep, material= mat, overrideRho= overrideRho)
    
-    def defElasticShearSection3d(self, prep):
+    def defElasticShearSection3d(self, prep, overrideRho= None):
         ''' Return an elastic section appropiate for 3D beam analysis
 
         :param prep: preprocessor of the finite element problem.
+        :param overrideRho: if defined (not None), override the value of 
+                            the material density.
         '''
-        return section_properties.RectangularSection.defElasticShearSection3d(self, preprocessor= prep, material= self.wood.defElasticMaterial())
+        mat= self.wood.defElasticMaterial(overrideRho= overrideRho)
+        return section_properties.RectangularSection.defElasticShearSection3d(self, preprocessor= prep, material= mat, overrideRho= overrideRho)
    
-    def defElasticSection1d(self, prep):
+    def defElasticSection1d(self, prep, overrideRho= None):
         ''' Return an elastic section appropiate for 1D beam analysis
 
         :param prep: preprocessor of the finite element problem.
+        :param overrideRho: if defined (not None), override the value of 
+                            the material density.
         '''
-        return section_properties.RectangularSection.defElasticSection1d(self, preprocessor= prep, material= self.wood.defElasticMaterial())
+        mat= self.wood.defElasticMaterial(overrideRho= overrideRho)
+        return section_properties.RectangularSection.defElasticSection1d(self, preprocessor= prep, material= mat, overrideRho= overrideRho)
     
-    def defElasticSection2d(self, prep):
+    def defElasticSection2d(self, prep, overrideRho= None):
         ''' Return an elastic section appropiate for 2D beam analysis
 
         :param prep: preprocessor of the finite element problem.
+        :param overrideRho: if defined (not None), override the value of 
+                            the material density.
         '''
-        return section_properties.RectangularSection.defElasticSection2d(self, preprocessor= prep, material= self.wood.defElasticMaterial())
+        mat= self.wood.defElasticMaterial(overrideRho= overrideRho)
+        return section_properties.RectangularSection.defElasticSection2d(self, preprocessor= prep, material= mat, overrideRho= overrideRho)
     
-    def defElasticShearSection2d(self, prep):
+    def defElasticShearSection2d(self, prep, overrideRho= None):
         ''' Return an elastic section appropiate for 2D beam analysis
 
         :param prep: preprocessor of the finite element problem.
+        :param overrideRho: if defined (not None), override the value of 
+                            the material density.
         '''
-        return section_properties.RectangularSection.defElasticShearSection2d(self, preprocessor= prep, material= self.wood.defElasticMaterial())
+        mat= self.wood.defElasticMaterial(overrideRho= overrideRho)
+        return section_properties.RectangularSection.defElasticShearSection2d(self, preprocessor= prep, material= mat, overrideRho= overrideRho)

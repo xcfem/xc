@@ -195,22 +195,40 @@ class SectionProperties(object):
         return self.sectionName+"RespVz"
   
     def getRespT(self,preprocessor, G):
-        '''return an elastic material for modeling torsional response of section'''
+        ''' Return an elastic material for modeling torsional response of 
+           section.
+
+        :param preprocessor: preprocessor of the finite element problem.
+        :param G: shear modulus.
+        '''
         return typical_materials.defElasticMaterial(preprocessor,self.respTName(),self.getTorsionalStiffness(G)) # Torsional response of the section.
     
     def getRespVy(self, preprocessor, G):
-        ''' return an elastic material for modeling Y shear response of section'''
+        ''' Return an elastic material for modeling the resoponse of the
+            section along the Y axis.
+
+        :param preprocessor: preprocessor of the finite element problem.
+        :param G: shear modulus.
+        '''
         return typical_materials.defElasticMaterial(preprocessor, self.respVyName(), self.getShearStiffnessY(G))
 
     def getRespVz(self, preprocessor, G):
-        '''Material for modeling Z shear response of section'''
+        ''' Return an elastic material for modeling the resoponse of the
+            section along the Z axis.
+
+        :param preprocessor: preprocessor of the finite element problem.
+        :param G: shear modulus.
+        '''
         return typical_materials.defElasticMaterial(preprocessor, self.respVzName(), self.getShearStiffnessZ(G))
 
-    def defElasticSection3d(self, preprocessor, material):
+    def defElasticSection3d(self, preprocessor, material, overrideRho= None):
         ''' Return an elastic section appropiate for 3D beam analysis
 
         :param preprocessor: preprocessor of the finite element problem.
-        :param material:      material (for which E is the Young's modulus and G() the shear modulus)  
+        :param material: material (for which E is the Young's modulus 
+                         and G() the shear modulus).
+        :param overrideRho: if defined (not None), override the value of 
+                            the material density.
         '''
         if(not self.xc_material):
             materialHandler= preprocessor.getMaterialHandler
@@ -218,17 +236,23 @@ class SectionProperties(object):
                 lmsg.warning("Section: "+self.sectionName+" already defined.")
                 self.xc_material= materialHandler.getMaterial(self.sectionName)
             else:
-                self.xc_material= typical_materials.defElasticSection3d(preprocessor,self.sectionName,self.A(),material.E,material.G(),self.Iz(),self.Iy(),self.J(), linearRho= material.rho*self.A())
+                rho= material.rho*self.A()
+                if(overrideRho!=None):
+                    rho= overrideRho
+                self.xc_material= typical_materials.defElasticSection3d(preprocessor,self.sectionName,self.A(),material.E,material.G(),self.Iz(),self.Iy(),self.J(), linearRho= rho)
         else:
             lmsg.warning('Material: '+self.sectionName+ ' already defined as:'+str(self.xc_material))
         return self.xc_material
     
-    def defElasticShearSection3d(self, preprocessor, material):
+    def defElasticShearSection3d(self, preprocessor, material, overrideRho= None):
         '''elastic section appropiate for 3D beam analysis, including shear 
            deformations
 
         :param preprocessor: preprocessor object.
-        :param material:      material (for which E is the Young's modulus and G() the shear modulus)  
+        :param material: material (for which E is the Young's modulus 
+                         and G() the shear modulus)  
+        :param overrideRho: if defined (not None), override the value of 
+                            the material density.
         '''
         if(not self.xc_material):
             materialHandler= preprocessor.getMaterialHandler
@@ -236,17 +260,22 @@ class SectionProperties(object):
                 lmsg.warning("Section: "+self.sectionName+" already defined.")
                 self.xc_material= materialHandler.getMaterial(self.sectionName)
             else:
-                self.xc_material= typical_materials.defElasticShearSection3d(preprocessor, name= self.sectionName, A= self.A(), E= material.E, G= material.G(), Iz= self.Iz(), Iy= self.Iy(),J= self.J(), alpha_y= self.alphaY(), alpha_z= self.alphaZ(), linearRho= material.rho*self.A())
+                rho= material.rho*self.A()
+                if(overrideRho!=None):
+                    rho= overrideRho
+                self.xc_material= typical_materials.defElasticShearSection3d(preprocessor, name= self.sectionName, A= self.A(), E= material.E, G= material.G(), Iz= self.Iz(), Iy= self.Iy(),J= self.J(), alpha_y= self.alphaY(), alpha_z= self.alphaZ(), linearRho= rho)
         else:
             lmsg.warning('Material: '+self.sectionName+ ' already defined as:'+str(self.xc_material))
         return self.xc_material
 
-    def defElasticSection1d(self, preprocessor, material):
+    def defElasticSection1d(self, preprocessor, material, overrideRho= None):
         ''' Return an elastic section appropiate for truss analysis.
 
         :param preprocessor: preprocessor object.
         :param material:     material constitutive model 
                              (for which E is the Young's modulus)
+        :param overrideRho: if defined (not None), override the value of 
+                            the material density.
         '''
         if(not self.xc_material):
             materialHandler= preprocessor.getMaterialHandler
@@ -254,18 +283,23 @@ class SectionProperties(object):
                 lmsg.warning("Section: "+self.sectionName+" already defined.")
                 self.xc_material= materialHandler.getMaterial(self.sectionName)
             else:
-                self.xc_material= typical_materials.defElasticSection1d(preprocessor,self.sectionName,self.A(),material.E, linearRho= material.rho*self.A())
+                rho= material.rho*self.A()
+                if(overrideRho!=None):
+                    rho= overrideRho
+                self.xc_material= typical_materials.defElasticSection1d(preprocessor,self.sectionName,self.A(),material.E, linearRho= rho)
         else:
             lmsg.warning('Material: '+self.sectionName+ ' already defined as:'+str(self.xc_material))
         return self.xc_material
     
-    def defElasticSection2d(self, preprocessor, material, majorAxis= True):
+    def defElasticSection2d(self, preprocessor, material, majorAxis= True, overrideRho= None):
         ''' Return an elastic section appropiate for 2D beam analysis
 
         :param preprocessor: preprocessor object.
         :param material:     material constitutive model 
                              (for which E is the Young's modulus)
         :param majorAxis: true if bending occurs in the section major axis.
+        :param overrideRho: if defined (not None), override the value of 
+                            the material density.
         '''
         if(not self.xc_material):
             materialHandler= preprocessor.getMaterialHandler
@@ -276,18 +310,23 @@ class SectionProperties(object):
                 I= self.Iz();
                 if(not majorAxis):
                     I= self.Iy()
-                self.xc_material= typical_materials.defElasticSection2d(preprocessor,self.sectionName,self.A(),material.E,I, linearRho= material.rho*self.A())
+                rho= material.rho*self.A()
+                if(overrideRho!=None):
+                    rho= overrideRho
+                self.xc_material= typical_materials.defElasticSection2d(preprocessor,self.sectionName,self.A(),material.E,I, linearRho= rho)
         else:
             lmsg.warning('Material: '+self.sectionName+ ' already defined as:'+str(self.xc_material))
         return self.xc_material
     
-    def defElasticShearSection2d(self, preprocessor, material, majorAxis= True):
+    def defElasticShearSection2d(self, preprocessor, material, majorAxis= True, overrideRho= None):
         '''elastic section appropiate for 2D beam analysis, including shear deformations
 
         :param  preprocessor: preprocessor object.
         :param material: material constitutive model (for which 
                          E is the Young's modulus and G() the shear modulus).
         :param majorAxis: true if bending occurs in the section major axis.
+        :param overrideRho: if defined (not None), override the value of 
+                            the material density.
         '''
         if(not self.xc_material):
             materialHandler= preprocessor.getMaterialHandler
@@ -298,21 +337,24 @@ class SectionProperties(object):
                 I= self.Iz();
                 if(not majorAxis):
                     I= self.Iy()
-                self.xc_material= typical_materials.defElasticShearSection2d(preprocessor,self.sectionName,self.A(),material.E,material.G(),I,self.alphaY(), linearRho= material.rho*self.A())
+                rho= material.rho*self.A()
+                if(overrideRho!=None):
+                    rho= overrideRho
+                self.xc_material= typical_materials.defElasticShearSection2d(preprocessor,self.sectionName,self.A(),material.E,material.G(),I,self.alphaY(), linearRho= rho)
         else:
             lmsg.warning('Material: '+self.sectionName+' already defined as:'+str(self.xc_material))
         return self.xc_material
     
     def getCrossSectionProperties2D(self, material):
-      '''Return a CrossSectionProperties object with the
-         2D properties of the section.'''
-      retval= xc.CrossSectionProperties2d()
-      retval.E= material.E
-      retval.A= self.A()
-      retval.I= self.Iz()
-      retval.G= material.G()
-      retval.Alpha= self.alphaY()
-      return retval
+        '''Return a CrossSectionProperties object with the
+           2D properties of the section.'''
+        retval= xc.CrossSectionProperties2d()
+        retval.E= material.E
+        retval.A= self.A()
+        retval.I= self.Iz()
+        retval.G= material.G()
+        retval.Alpha= self.alphaY()
+        return retval
 
 class RectangularSection(SectionProperties):
     '''Rectangular section geometric parameters

@@ -365,12 +365,25 @@ class RCFiberSectionParameters(object):
         return self.nDivJK
 
     def getConcreteDiagram(self,preprocessor):
+        ''' Return the concrete strain-stress diagram.
+
+        :param preprocessor: preprocessor of the finite element problem.
+        '''
+
         return preprocessor.getMaterialHandler.getMaterial(self.concrDiagName)
       
     def getSteelDiagram(self,preprocessor):
+        ''' Return the steel strain-stress diagram.
+
+        :param preprocessor: preprocessor of the finite element problem.
+        '''
         return preprocessor.getMaterialHandler.getMaterial(self.reinfDiagName)
       
     def getSteelEquivalenceCoefficient(self,preprocessor):
+        ''' Return the equivalence coefficiente for the steel (Es/Ec).
+
+        :param preprocessor: preprocessor of the finite element problem.
+        '''
         tangHorm= self.getConcreteDiagram(preprocessor).getTangent()
         tangSteel= self.getSteelDiagram(preprocessor).getTangent()
         return tangSteel/tangHorm
@@ -378,6 +391,7 @@ class RCFiberSectionParameters(object):
     def defDiagrams(self,preprocessor,matDiagType):
         '''Stress-strain diagrams definition.
 
+        :param preprocessor: preprocessor of the finite element problem.
         :param matDiagType: type of stress-strain diagram 
                     ("k" for characteristic diagram, "d" for design diagram)
         '''
@@ -398,7 +412,10 @@ class RCFiberSectionParameters(object):
             self.reinfDiagName= self.reinfSteelType.nmbDiagK
             
     def defInteractionDiagramParameters(self, preprocessor):
-        ''' Defines the parameters for interaction diagrams. '''
+        ''' Defines the parameters for interaction diagrams.
+
+         :param preprocessor: preprocessor of the finite element problem.
+        '''
         self.idParams= xc.InteractionDiagramParameters()
         if(self.diagType=="d"):
             self.idParams.concreteTag= self.concrType.matTagD
@@ -437,33 +454,49 @@ class RCSectionBase(object):
         return "geom"+self.sectionName
                 
     def getConcreteDiagram(self,preprocessor):
-        ''' Return the concrete stress-strain diagram.'''
+        ''' Return the concrete stress-strain diagram.
+
+        :param preprocessor: preprocessor of the finite element problem.
+        '''
         return self.fiberSectionParameters.getConcreteDiagram(preprocessor)
       
     def getSteelDiagram(self,preprocessor):
-        ''' Return the reinforcing steel stress-strain diagram.'''
+        ''' Return the reinforcing steel stress-strain diagram.
+
+        :param preprocessor: preprocessor of the finite element problem.
+        '''
         return self.fiberSectionParameters.getSteelDiagram(preprocessor)
       
     def getSteelEquivalenceCoefficient(self,preprocessor):
-        ''' Return the equivalence coefficient: Es/Ec.'''
+        ''' Return the steel equivalence coefficient: Es/Ec.
+
+        :param preprocessor: preprocessor of the finite element problem.
+        '''
         return self.fiberSectionParameters.getSteelEquivalenceCoefficien(preprocessor)
 
     def defDiagrams(self,preprocessor,matDiagType):
         '''Stress-strain diagrams definition.
 
+        :param preprocessor: preprocessor of the finite element problem.
         :param matDiagType: type of stress-strain diagram 
                     ("k" for characteristic diagram, "d" for design diagram)
         '''
         return self.fiberSectionParameters.defDiagrams(preprocessor, matDiagType)
 
     def defShearResponse(self, preprocessor):
-        ''' Define the shear/torsional response of the section.'''
+        ''' Define the shear/torsional response of the section.
+
+        :param preprocessor: preprocessor of the finite element problem.
+        '''
         self.respT= self.getRespT(preprocessor) # Torsional response of the section.
         self.respVy= self.getRespVy(preprocessor)
         self.respVz= self.getRespVz(preprocessor)
 
     def defFiberSection(self,preprocessor):
-        '''Define fiber section from geometry data.'''
+        '''Define fiber section from geometry data.
+
+        :param preprocessor: preprocessor of the finite element problem.
+        '''
         self.fs= preprocessor.getMaterialHandler.newMaterial("fiberSectionShear3d",self.sectionName)
         self.fiberSectionRepr= self.fs.getFiberSectionRepr()
         self.fiberSectionRepr.setGeomNamed(self.gmSectionName())
@@ -474,9 +507,9 @@ class RCSectionBase(object):
         self.fs.setProp('sectionData',self)
         
     def defRCSection(self, preprocessor,matDiagType):
-        '''
-        Definition of an XC reinforced concrete section.
+        ''' Definition of an XC reinforced concrete section.
 
+        :param preprocessor: preprocessor of the finite element problem.
         :param matDiagType: type of stress-strain diagram 
                     ("k" for characteristic diagram, "d" for design diagram)
          '''
@@ -485,29 +518,44 @@ class RCSectionBase(object):
         self.defFiberSection(preprocessor)
 
     def isCircular(self):
-        ''' Return true if it's a circular section.'''
+        ''' Return true if it's a circular section.
+
+        :param preprocessor: preprocessor of the finite element problem.
+        '''
         return False
         
     def defInteractionDiagramParameters(self, preprocessor):
-        ''' parameters for interaction diagrams. '''
+        ''' parameters for interaction diagrams.
+
+        :param preprocessor: preprocessor of the finite element problem.
+        '''
         return self.fiberSectionParameters.defInteractionDiagramParameters(preprocessor)
 
     def defInteractionDiagram(self,preprocessor):
-        'Defines 3D interaction diagram.'
+        '''Defines 3D interaction diagram.
+
+        :param preprocessor: preprocessor of the finite element problem.
+        '''
         if(not self.fiberSectionRepr):
             lmsg.error("defInteractionDiagram: fiber section representation for section: "+ self.sectionName + ";  not defined yet; use defRCSection method.\n")
         self.defInteractionDiagramParameters(preprocessor)
         return preprocessor.getMaterialHandler.calcInteractionDiagram(self.sectionName,self.fiberSectionParameters.idParams)
 
     def defInteractionDiagramNMy(self,preprocessor):
-        'Defines N-My interaction diagram.'
+        '''Defines N-My interaction diagram.
+
+        :param preprocessor: preprocessor of the finite element problem.
+        '''
         if(not self.fiberSectionRepr):
             lmsg.error("defInteractionDiagramNMy: fiber section representation for section: "+ self.sectionName + ";  not defined yet; use defRCSection method.\n")
         self.defInteractionDiagramParameters(preprocessor)
         return preprocessor.getMaterialHandler.calcInteractionDiagramNMy(self.sectionName,self.fiberSectionParameters.idParams)
 
     def defInteractionDiagramNMz(self,preprocessor):
-        'Defines N-Mz interaction diagram.'
+        '''Defines N-Mz interaction diagram.
+
+        :param preprocessor: preprocessor of the finite element problem.
+        '''
         if(not self.fiberSectionRepr):
             lmsg.error("defInteractionDiagramNMz: fiber section representation for section: "+ self.sectionName + ";  not defined yet; use defRCSection method.\n")
         self.defInteractionDiagramParameters(preprocessor)
@@ -554,17 +602,23 @@ class BasicRectangularRCSection(RCSectionBase, section_properties.RectangularSec
         return self.shReinfZ
     
     def getRespT(self,preprocessor):
-        '''Material for modeling torsional response of section'''
+        '''Material for modeling torsional response of section.
+
+        :param preprocessor: preprocessor of the finite element problem.
+        '''
         return section_properties.RectangularSection.getRespT(self,preprocessor,self.fiberSectionParameters.concrType.Gcm()) # Torsional response of the section.
 
     def getRespVy(self,preprocessor):
-        '''Material for modeling Y shear response of section'''
+        '''Material for modeling Y shear response of section.
+
+        :param preprocessor: preprocessor of the finite element problem.
+        '''
         return section_properties.RectangularSection.getRespVy(self,preprocessor,self.fiberSectionParameters.concrType.Gcm())
 
     def getRespVz(self,preprocessor):
         '''Material for modeling Z shear response of section.
 
-        :param preprocessor: preprocessor object.
+        :param preprocessor: preprocessor of the finite element problem.
         '''
         return section_properties.RectangularSection.getRespVz(self,preprocessor,self.fiberSectionParameters.concrType.Gcm())
 
@@ -578,54 +632,63 @@ class BasicRectangularRCSection(RCSectionBase, section_properties.RectangularSec
         rg.pMin= geom.Pos2d(-self.b/2,-self.h/2)
         rg.pMax= geom.Pos2d(self.b/2,self.h/2)
 
-    def defElasticSection1d(self, preprocessor):
+    def defElasticSection1d(self, preprocessor, overrideRho= None):
         ''' Return an elastic section appropiate for truss analysis.
 
-        :param preprocessor: preprocessor object.
+        :param preprocessor: preprocessor of the finite element problem.
+        :param overrideRho: if defined (not None), override the value of 
+                            the material density.
         '''
-        mat= self.fiberSectionParameters.concrType.getElasticMaterialData()
-        return super(BasicRectangularRCSection, self).defElasticSection1d(preprocessor, mat)
+        mat= self.fiberSectionParameters.concrType.getElasticMaterialData(overrideRho= overrideRho)
+        return super(BasicRectangularRCSection, self).defElasticSection1d(preprocessor, material= mat, overrideRho= overrideRho)
     
-    def defElasticSection3d(self, preprocessor):
+    def defElasticSection3d(self, preprocessor, overrideRho= None):
         ''' Return an elastic section appropiate for 3D beam analysis
 
-        :param preprocessor: preprocessor object.
-        :param material:      material (for which E is the Young's modulus and G() the shear modulus)  
+        :param preprocessor: preprocessor of the finite element problem.
+        :param overrideRho: if defined (not None), override the value of 
+                            the material density.
         '''
-        mat= self.fiberSectionParameters.concrType.getElasticMaterialData()
-        return super(BasicRectangularRCSection, self).defElasticSection3d(preprocessor, mat)
+        mat= self.fiberSectionParameters.concrType.getElasticMaterialData(overrideRho= overrideRho)
+        return super(BasicRectangularRCSection, self).defElasticSection3d(preprocessor, material= mat, overrideRho= overrideRho)
     
-    def defElasticShearSection3d(self, preprocessor):
+    def defElasticShearSection3d(self, preprocessor, overrideRho= None):
         '''elastic section appropiate for 3D beam analysis, including shear 
            deformations
 
         :param preprocessor: XC preprocessor for the finite element problem.
+        :param overrideRho: if defined (not None), override the value of 
+                            the material density.
          '''
-        mat= self.fiberSectionParameters.concrType.getElasticMaterialData()
-        return super(BasicRectangularRCSection, self).defElasticShearSection3d(preprocessor, mat)
+        mat= self.fiberSectionParameters.concrType.getElasticMaterialData(overrideRho= overrideRho)
+        return super(BasicRectangularRCSection, self).defElasticShearSection3d(preprocessor, material= mat, overrideRho= overrideRho)
     
-    def defElasticSection2d(self, preprocessor, majorAxis= True):
+    def defElasticSection2d(self, preprocessor, majorAxis= True, overrideRho= None):
         ''' Return an elastic section appropiate for 2D beam analysis
 
         :param preprocessor: XC preprocessor for the finite element problem.
         :param majorAxis: true if bending occurs in the section major axis.
+        :param overrideRho: if defined (not None), override the value of 
+                            the material density.
         '''
-        mat= self.fiberSectionParameters.concrType.getElasticMaterialData()
-        return super(BasicRectangularRCSection, self).defElasticSection2d(preprocessor, mat, majorAxis)
+        mat= self.fiberSectionParameters.concrType.getElasticMaterialData(overrideRho= overrideRho)
+        return super(BasicRectangularRCSection, self).defElasticSection2d(preprocessor, material= mat, majorAxis= majorAxis, overrideRho= overrideRho)
         
-    def defElasticShearSection2d(self, preprocessor, material, majorAxis= True):
-        '''elastic section appropiate for 2D beam analysis, including shear deformations
+    def defElasticShearSection2d(self, preprocessor, material, majorAxis= True, overrideRho= None):
+        '''elastic section appropiate for 2D beam analysis, including 
+           shear deformations.
 
         :param preprocessor: XC preprocessor for the finite element problem.
         :param majorAxis: true if bending occurs in the section major axis.
+        :param overrideRho: if defined (not None), override the value of 
+                            the material density.
         '''
-        mat= self.fiberSectionParameters.concrType.getElasticMaterialData()
-        return super(BasicRectangularRCSection, self).defElasticShearSection2d(preprocessor, mat, majorAxis)
+        mat= self.fiberSectionParameters.concrType.getElasticMaterialData(overrideRho= overrideRho)
+        return super(BasicRectangularRCSection, self).defElasticShearSection2d(preprocessor, material= mat, majorAxis= majorAxis, overrideRho= overrideRho)
 
 class RCRectangularSection(BasicRectangularRCSection):
-    '''
-    This class is used to define the variables that make up a reinforced 
-    concrete section with top and bottom reinforcement layers.
+    ''' This class is used to define the variables that make up a reinforced 
+        concrete section with top and bottom reinforcement layers.
 
     :ivar sectionName:     name identifying the section
     :ivar sectionDescr:    section description
@@ -839,10 +902,11 @@ class RCRectangularSection(BasicRectangularRCSection):
             retval= min(retval, min(latNegCover))
         return retval
 
-    def defSectionGeometry(self,preprocessor,matDiagType):
+    def defSectionGeometry(self, preprocessor, matDiagType):
         '''
         Define the XC section geometry object for a reinforced concrete section 
 
+        :param preprocessor: preprocessor of the finite element problem.
         :param matDiagType: type of stress-strain diagram 
                      ("k" for characteristic diagram, "d" for design diagram)
         '''

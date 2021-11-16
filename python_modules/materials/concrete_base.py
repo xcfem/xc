@@ -706,66 +706,90 @@ class Concrete(matWDKD.MaterialWithDKDiagrams):
         retval.savefig(plt,fileName+'.png')
         return retval
     
-    def getElasticMaterialData(self):
-        '''Return the elastic material constitutive model.'''
-        materialModelName= self.materialName + 'ElasticMaterialData'
-        return typical_materials.MaterialData(name= materialModelName,E=self.getEcm(),nu=self.nuc,rho=self.density())
+    def getElasticMaterialData(self, overrideRho= None):
+        '''Return the elastic material constitutive model.
 
-    def defElasticMaterial(self, preprocessor, name= None):
+        :param overrideRho: if defined (not None), override the value of 
+                            the material density.
+        '''
+        materialModelName= self.materialName + 'ElasticMaterialData'
+        rho= self.density()
+        if(overrideRho!=None):
+            rho= overrideRho
+        return typical_materials.MaterialData(name= materialModelName,E=self.getEcm(),nu=self.nuc,rho= rho)
+
+    def defElasticMaterial(self, preprocessor, name:str= None, overrideRho= None):
         '''Constructs an elastic uniaxial material appropiate 
          for analysis of trusses.
 
-         :param preprocessor: preprocessor object.
+        :param preprocessor: preprocessor of the finite element problem.
+        :param name: name for the new material.
+        :param overrideRho: if defined (not None), override the value of 
+                            the material density.
         '''
         if(name==None):
             name= self.materialName+'_uniaxial'
-        return typical_materials.defElasticMaterial(preprocessor, name, E= self.getEcm())
+        return typical_materials.defElasticMaterial(preprocessor, name, E= self.getEcm(), overrideRho= overrideRho)
         
-    def defElasticSection2d(self, preprocessor, sectionProperties):
+    def defElasticSection2d(self, preprocessor, sectionProperties, overrideRho= None):
         '''Constructs an elastic section material appropiate 
          for elastic analysis of 2D beam elements.
 
-         :param preprocessor: preprocessor object.
+         :param preprocessor: preprocessor of the finite element problem.
          :param sectionProperties: mass properties of the section.
+         :param overrideRho: if defined (not None), override the value of 
+                            the material density.
          '''
-        return sectionProperties.defElasticSection2d(preprocessor,self.getElasticMaterialData())
+        matData= self.getElasticMaterialData(overrideRho= overrideRho)
+        return sectionProperties.defElasticSection2d(preprocessor, matData, overrideRho= overrideRho)
         
-    def defElasticShearSection2d(self, preprocessor, sectionProperties):
+    def defElasticShearSection2d(self, preprocessor, sectionProperties, overrideRho= None):
         '''Constructs an elastic section material appropiate 
          for elastic analysis of 2D beam elements including shear
          deformations.
 
-         :param preprocessor: preprocessor object.
+         :param preprocessor: preprocessor of the finite element problem.
          :param sectionProperties: mass properties of the section.
+         :param overrideRho: if defined (not None), override the value of 
+                            the material density.
          '''
-        return sectionProperties.defElasticShearSection2d(preprocessor,self.getElasticMaterialData())
+        matData= self.getElasticMaterialData(overrideRho= overrideRho)
+        return sectionProperties.defElasticShearSection2d(preprocessor, matData,overrideRho= overrideRho)
 
-    def defElasticSection3d(self, preprocessor, sectionProperties):
+    def defElasticSection3d(self, preprocessor, sectionProperties, overrideRho= None):
         '''Constructs an elastic section material appropiate 
          for elastic analysis of 3D beam elements.
 
-         :param preprocessor: preprocessor object.
+         :param preprocessor: preprocessor of the finite element problem.
          :param sectionProperties: mass properties of the section.
+         :param overrideRho: if defined (not None), override the value of 
+                            the material density.
          '''
-        return sectionProperties.defElasticSection3d(preprocessor,self.getElasticMaterialData())
+        matData= self.getElasticMaterialData(overrideRho= overrideRho)
+        return sectionProperties.defElasticSection3d(preprocessor, matData, overrideRho= overrideRho)
 
-    def defElasticShearSection3d(self, preprocessor, sectionProperties):
+    def defElasticShearSection3d(self, preprocessor, sectionProperties, overrideRho= None):
         '''Constructs an elastic section material appropiate 
          for elastic analysis of 3D beam elements including shear
          deformations.
 
-         :param preprocessor: preprocessor object.
+         :param preprocessor: preprocessor of the finite element problem.
          :param sectionProperties: mass properties of the section.
+         :param overrideRho: if defined (not None), override the value of 
+                            the material density.
          '''
-        return sectionProperties.defElasticShearSection3d(preprocessor,self.getElasticMaterialData())
+        matData= self.getElasticMaterialData(overrideRho= overrideRho)
+        return sectionProperties.defElasticShearSection3d(preprocessor,matData, overrideRho= overrideRho) 
     
-    def defElasticPlateSection(self, preprocessor, name, thickness):
+    def defElasticPlateSection(self, preprocessor, name, thickness, overrideRho= None):
         '''Constructs an elastic isotropic section material appropiate 
            for elastic analysis of plate elements.
 
-        :param  preprocessor: preprocessor object.
-        :param  name: name identifying the section
-        :param  thickness: section thickness.
+        :param preprocessor: preprocessor of the finite element problem.
+        :param name: name identifying the new section.
+        :param thickness: section thickness.
+        :param overrideRho: if defined (not None), override the value of 
+                            the material density.
         '''
         retval= None
         materialHandler= preprocessor.getMaterialHandler
@@ -773,16 +797,21 @@ class Concrete(matWDKD.MaterialWithDKDiagrams):
             lmsg.warning("Section: "+name+" already defined.")
             retval= materialHandler.getMaterial(name)
         else:
-            retval= typical_materials.defElasticPlateSection(preprocessor,name,E= self.getEcm(), nu=self.nuc ,rho= self.density(),h= thickness)
+            rho= self.density()
+            if(overrideRho!=None):
+                rho= overrideRho
+            retval= typical_materials.defElasticPlateSection(preprocessor, name,E= self.getEcm(), nu=self.nuc , rho= rho, h= thickness)
         return retval
 
-    def defElasticMembranePlateSection(self, preprocessor, name, thickness):
+    def defElasticMembranePlateSection(self, preprocessor, name, thickness, overrideRho= None):
         '''Constructs an elastic isotropic section material appropiate 
            for elastic analysis of plate and shell elements
 
-        :param  preprocessor: preprocessor object.
-        :param  name: name identifying the section
-        :param  thickness: section thickness.
+        :param preprocessor: preprocessor of the finite element problem.
+        :param name: name identifying the section
+        :param thickness: section thickness.
+        :param overrideRho: if defined (not None), override the value of 
+                            the material density.
         '''
         retval= None
         materialHandler= preprocessor.getMaterialHandler
@@ -790,7 +819,10 @@ class Concrete(matWDKD.MaterialWithDKDiagrams):
             lmsg.warning("Section: "+name+" already defined.")
             retval= materialHandler.getMaterial(name)
         else:
-            retval= typical_materials.defElasticMembranePlateSection(preprocessor,name,E= self.getEcm(), nu=self.nuc ,rho= self.density(),h= thickness)
+            rho= self.density()
+            if(overrideRho!=None):
+                rho= overrideRho
+            retval= typical_materials.defElasticMembranePlateSection(preprocessor,name,E= self.getEcm(), nu=self.nuc ,rho= rho, h= thickness)
         return retval
 
 
