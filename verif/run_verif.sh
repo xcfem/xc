@@ -579,17 +579,19 @@ python tests/loads/shell_strain_load_03.py
 python tests/loads/shell_strain_load_04.py
 python tests/loads/shell_strain_load_05.py
 python tests/loads/shell_grad_strain_load_02.py
-python tests/loads/test_inertia_loads_01.py
-python tests/loads/test_inertia_loads_02.py
-python tests/loads/test_inertia_loads_03.py
-python tests/loads/test_inertia_loads_04.py
-python tests/loads/test_inertia_loads_05.py
-python tests/loads/test_inertia_loads_06.py
-python tests/loads/test_inertia_loads_07.py
-python tests/loads/test_inertia_loads_08.py
-python tests/loads/test_inertia_loads_09.py
-python tests/loads/test_inertia_loads_10.py
 python tests/loads/element_load_on_already_active_pattern.py
+echo "$BLEU" "  Inertia loads." "$NORMAL"
+python tests/loads/inertia_loads/test_inertia_loads_01.py
+python tests/loads/inertia_loads/test_inertia_loads_02.py
+python tests/loads/inertia_loads/test_inertia_loads_03.py
+python tests/loads/inertia_loads/test_inertia_loads_04.py
+python tests/loads/inertia_loads/test_inertia_loads_05.py
+python tests/loads/inertia_loads/test_inertia_loads_06.py
+python tests/loads/inertia_loads/test_inertia_loads_07.py
+python tests/loads/inertia_loads/test_inertia_loads_08.py
+python tests/loads/inertia_loads/test_inertia_loads_09.py
+python tests/loads/inertia_loads/test_inertia_loads_10.py
+python tests/loads/inertia_loads/test_inertia_loads_11.py
 echo "$BLEU" "  Load time series tests." "$NORMAL"
 python tests/loads/time_series/test_linear_01.py
 python tests/loads/time_series/test_constant_01.py
