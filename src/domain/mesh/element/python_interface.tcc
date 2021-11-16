@@ -33,6 +33,8 @@ XC::NodePtrsWithIDs &(XC::Element::*getNodePtrsRef)(void)= &XC::Element::getNode
 const XC::Vector &(XC::Element::*getResistingForceRef)(void) const= &XC::Element::getResistingForce;
 const XC::Matrix &(XC::Element::*getInitialStiffRef)(void) const= &XC::Element::getInitialStiff;
 const XC::Matrix &(XC::Element::*getTangentStiffRef)(void) const= &XC::Element::getTangentStiff;
+const XC::Matrix &(XC::Element::*getMassRef)(void) const= &XC::Element::getMass;
+const XC::Matrix &(XC::Element::*getDampRef)(void) const= &XC::Element::getDamp;
 bool (XC::Element::*ElementIn3D)(const GeomObj3d &,const double &,const double &) const= &XC::Element::In;
 bool (XC::Element::*ElementOut3D)(const GeomObj3d &,const double &,const double &) const= &XC::Element::Out;
 void (XC::Element::*setIdNodesRef)(const XC::ID &inodes)= &XC::Element::setIdNodes;
@@ -55,6 +57,8 @@ class_<XC::Element, XC::Element *,bases<XC::MeshComponent>, boost::noncopyable >
   .def("getResistingForce",make_function(getResistingForceRef, return_internal_reference<>() ),"Calculates element's resisting force.")
   .def("getTangentStiff",make_function(getTangentStiffRef, return_internal_reference<>() ),"Return tangent stiffness matrix.")
   .def("getInitialStiff",make_function(getInitialStiffRef, return_internal_reference<>() ),"Return initial stiffness matrix.")
+  .add_property("mass", make_function(getMassRef, return_internal_reference<>()) ,"Element mass matrix.")
+  .add_property("damp", make_function(getDampRef, return_internal_reference<>()) ,"Element damping matrix.")
   .def("setDeadSRF",XC::Element::setDeadSRF,"Assigns Stress Reduction Factor for element deactivation.")
   .add_property("getVtkCellType",&XC::Element::getVtkCellType,"Return cell type for Vtk graphics.")
   .def("getPosCentroid",&XC::Element::getCenterOfMassPosition,"Return centroid's position.")
