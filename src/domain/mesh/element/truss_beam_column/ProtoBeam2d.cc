@@ -114,13 +114,13 @@ void XC::ProtoBeam2d::setMaterial(const std::string &matName)
       { set_material(ptr_mat); }
   }
 
-//! @brief Return density.
+//! @brief Return linear density.
 double XC::ProtoBeam2d::getRho(void) const
-  { return getSectionProperties().getRho(); }
+  { return getSectionProperties().getLinearRho(); }
 
-//! @brief Sets density.
+//! @brief Sets linear density.
 void XC::ProtoBeam2d::setRho(const double &r)
-  { getSectionProperties().setRho(r); }
+  { getSectionProperties().setLinearRho(r); }
 
 //! @brief Return linear density.
 double XC::ProtoBeam2d::getLinearRho(void) const
