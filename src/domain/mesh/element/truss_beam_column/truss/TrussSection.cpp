@@ -344,7 +344,7 @@ const XC::Matrix &XC::TrussSection::getMass(void) const
     Matrix &mass = *theMatrix;
     mass.Zero();
 
-    const double rho= getRho();
+    const double rho= getLinearRho(); // mass per unit length.
     // check for quick return
     if(L == 0.0 || rho == 0.0)
       { // - problem in setDomain() no further warnings
@@ -401,7 +401,7 @@ int XC::TrussSection::addLoad(ElementalLoad *theLoad, double loadFactor)
 
 int XC::TrussSection::addInertiaLoadToUnbalance(const XC::Vector &accel)
   {
-    const double rho= getRho();
+    const double rho= getLinearRho(); // mass per unit length.
     // check for a quick return
     if(L == 0.0 || rho == 0.0)
         return 0;
@@ -502,7 +502,7 @@ const XC::Vector &XC::TrussSection::getResistingForce(void) const
 const XC::Vector &XC::TrussSection::getResistingForceIncInertia(void) const
   {
     this->getResistingForce();
-    const double rho= getRho();
+    const double rho= getLinearRho(); // mass per unit length. 
     // now include the mass portion
     if(L != 0.0 && rho != 0.0)
       {

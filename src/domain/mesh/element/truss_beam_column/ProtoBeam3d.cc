@@ -302,6 +302,12 @@ boost::python::list XC::ProtoBeam3d::getValuesAtNodes(const std::string &code, b
 	for(int i= 0;i<nNodes;i++)
 	  retval.append(r);
       }
+    else if(code=="linearRho")
+      {
+	const double r= getLinearRho();
+	for(int i= 0;i<nNodes;i++)
+	  retval.append(r);
+      }
     else if(code=="strain")
       {
 	std::clog << getClassName() << "::" << __FUNCTION__

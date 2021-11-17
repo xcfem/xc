@@ -451,7 +451,7 @@ const XC::Matrix &XC::Truss::getMass(void) const
     Matrix &mass= *theMatrix;
     mass.Zero();
 
-    const double rho= getLinearRho();
+    const double rho= getLinearRho(); // mass per unit length.
     // check for quick return
     if(L == 0.0 || rho == 0.0)
       { // - problem in setDomain() no further warnings

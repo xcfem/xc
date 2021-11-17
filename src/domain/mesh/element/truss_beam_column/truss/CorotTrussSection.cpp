@@ -404,7 +404,7 @@ const XC::Matrix &XC::CorotTrussSection::getMass(void) const
     Matrix &Mass = *theMatrix;
     Mass.Zero();
 
-    const double rho= getRho();
+    const double rho= getLinearRho(); // mass per unit length.
     // check for quick return
     if(Lo == 0.0 || rho == 0.0)
         return Mass;
@@ -531,7 +531,7 @@ const XC::Vector &XC::CorotTrussSection::getResistingForceIncInertia(void) const
     Vector &P = *theVector;
     P = this->getResistingForce();
 
-    const double rho= getRho();
+    const double rho= getLinearRho(); // mass per unit length.
     if(rho != 0.0) {
 
       const Vector &accel1 = theNodes[0]->getTrialAccel();
