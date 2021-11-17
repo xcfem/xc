@@ -51,6 +51,12 @@ elements.defaultMaterial= trussMat.name
 truss= elements.newElement("CorotTruss",xc.ID([n1.tag,n2.tag]))
 truss.sectionArea= area
 
+## Whole model mass data.
+xcTotalSet= modelSpace.getTotalSet()
+massZ= xcTotalSet.getTotalMassComponent(2)
+massRefZ= truss.linearRho*l
+ratio0= abs(massZ-massRefZ)/massRefZ
+
 # Constraints
 constraints= preprocessor.getBoundaryCondHandler
 # Zero movement for node 1.
@@ -76,6 +82,9 @@ R_ref2= 0.5*l*area*steelType.rho*gravity
 ratio2= abs(R-R_ref2)/(-R_ref2)
 
 '''
+print('mass: ', massZ, 'kg')
+print('reference mass: ', massRefZ, 'kg')
+print('ratio0= ', ratio0)
 print('R= ', R)
 print('R_ref= ', R_ref)
 print('ratio1= ', ratio1)
@@ -86,7 +95,7 @@ print('weight: ', 2*R/l,' kg/m')
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
-if((abs(ratio1)<1e-5)  and (abs(ratio2)<1e-5)):
+if((abs(ratio0)<1e-12) and (abs(ratio1)<1e-12) and (abs(ratio2)<1e-12)):
     print('test '+fname+': ok.')
 else:
     lmsg.error(fname+' ERROR.')

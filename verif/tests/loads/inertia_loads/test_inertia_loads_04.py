@@ -25,6 +25,7 @@ E= 30e6 # Young modulus (psi)
 l= 10 # Bar length
 b= 0.1
 A= b*b #Área in square inches.
+rho= 10.0 # Material density.
 
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
@@ -37,7 +38,8 @@ n1= nodes.newNodeXY(0,0)
 n2= nodes.newNodeXY(l,0)
 
 # Materials definition
-trussScc= typical_materials.defElasticSection1d(preprocessor, "trussScc",A,E, linearRho= 10.0*A)
+trussScc= typical_materials.defElasticSection1d(preprocessor, "trussScc",A,E, linearRho= rho*A)
+refLinearRho= rho*A
 
 
 # Element definition.
@@ -45,6 +47,12 @@ elements= preprocessor.getElementHandler
 elements.dimElem= 2 # Bidimensional space.
 elements.defaultMaterial= trussScc.name
 truss= elements.newElement("CorotTrussSection",xc.ID([n1.tag,n2.tag]))
+
+## Whole model mass data.
+xcTotalSet= modelSpace.getTotalSet()
+massZ= xcTotalSet.getTotalMassComponent(1)
+massRefZ= refLinearRho*l
+ratio0= abs(massZ-massRefZ)/massRefZ
 
 # Constraints
 constraints= preprocessor.getBoundaryCondHandler
@@ -70,6 +78,9 @@ R_ref= 0.5*truss.linearRho*l*9.81
 ratio1= abs(R-R_ref)/(-R_ref)
 
 '''
+print('mass: ', massZ, 'kg')
+print('reference mass: ', massRefZ, 'kg')
+print('ratio0= ', ratio0)
 print('R= ', R)
 print('R_ref= ', R_ref)
 print('ratio1= ', ratio1)
@@ -78,7 +89,7 @@ print('ratio1= ', ratio1)
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
-if abs(ratio1)<1e-5 :
+if abs(ratio0)<1e-12 and abs(ratio1)<1e-12 :
     print('test '+fname+': ok.')
 else:
     lmsg.error(fname+' ERROR.')

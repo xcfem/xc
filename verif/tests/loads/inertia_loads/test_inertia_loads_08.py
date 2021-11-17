@@ -52,7 +52,7 @@ ring=gridGeom.genSurfOneXYZRegion([(r1,0,0),(r2,angList[-1],0)],setName='ring',c
 
 steel= tm.defElasticIsotropic3d(preprocessor=preprocessor, name='steel', E=172e9, nu=0.3, rho= matRho)
 ring_mat=tm.defMembranePlateFiberSection(preprocessor,name='ring_mat',h=t ,nDMaterial= steel)
-ring_mesh=fem.SurfSetToMesh(surfSet=ring,matSect=ring_mat,elemSize=0.5,elemType='ShellMITC4')
+ring_mesh= fem.SurfSetToMesh(surfSet=ring,matSect=ring_mat,elemSize=0.5,elemType='ShellMITC4')
 fem.multi_mesh(prep,[ring_mesh])
 
 # Constraints
