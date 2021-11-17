@@ -30,8 +30,8 @@ espChapa= h # Thickness en m.
 area= b*espChapa # Cross section area en m2
 inertia1= 1/12.0*espChapa*b**3 # Moment of inertia in m4
 inertia2= 1/12.0*b*espChapa**3 # Moment of inertia in m4
-dens= 7800 # Density of the steel en kg/m3
-m= b*h*dens
+rho= 7800 # Density of the steel en kg/m3
+m= b*h*rho
 
 numDiv= 10
 
@@ -42,7 +42,7 @@ nodes= preprocessor.getNodeHandler
 
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
 # Define materials
-elast= typical_materials.defElasticMembranePlateSection(preprocessor, "elast",EMat,nuMat,espChapa*dens,espChapa)
+plateMat= typical_materials.defElasticMembranePlateSection(preprocessor, "plateMat",EMat,nuMat,rho,espChapa)
 
 pt1= modelSpace.newKPoint(0.0,0.0,0.0)
 pt2= modelSpace.newKPoint(b,0.0,0.0)
@@ -54,7 +54,7 @@ s.nDivI= max(int(b/elemSide),1)
 s.nDivJ= numDiv
 
 seedElemHandler= preprocessor.getElementHandler.seedElemHandler
-seedElemHandler.defaultMaterial= elast.name
+seedElemHandler.defaultMaterial= plateMat.name
 seedElemHandler.defaultTag= 1
 elem= seedElemHandler.newElement("ShellNLDKGQ",xc.ID([0,0,0,0]))
 

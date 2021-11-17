@@ -23,7 +23,8 @@ E= 30e6 # Young modulus (psi)
 l= 100.0 # String length in inches
 sigmaPret= E*0.00543228 # Prestressing force (pounds)
 area= 0.00306796 # Section area in square inches.
-Mass= 0.00073*area # Mass per unit length.
+rho= 0.00073
+Mass= rho*area # Mass per unit length.
 MassNod= Mass*(l/NumDiv) # Mass per unit length.
 fPret= sigmaPret*area # Prestressing force (pounds)
 
@@ -37,7 +38,7 @@ modelSpace= predefined_spaces.StructuralMechanics2D(nodes)
 
 
 # Materials definition
-cable= typical_materials.defCableMaterial(preprocessor, "cable",E,sigmaPret,Mass)
+cable= typical_materials.defCableMaterial(preprocessor, "cable",E,sigmaPret,rho)
 
 ''' We define nodes at the points where loads will be applied.
     We will not compute stresses so we can use an arbitrary
