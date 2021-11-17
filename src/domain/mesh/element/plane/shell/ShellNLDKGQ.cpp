@@ -513,7 +513,7 @@ void XC::ShellNLDKGQ::formInertiaTerms(int tangFlag) const
     static double shp[nShape][numberNodes]; //shape functions at a gauss point
     static Vector momentum(ndf);
 
-    double temp, rhoH, massJK;
+    double temp, massJK;
 
     //zero mass
     mass.Zero();
@@ -538,7 +538,7 @@ void XC::ShellNLDKGQ::formInertiaTerms(int tangFlag) const
           }
 
         //density
-        rhoH= physicalProperties[i]->getRho();
+        const double rhoH= physicalProperties[i]->getArealRho(); // mass per unit area
 
         //multiply acceleration by density to form momentum
         momentum *= rhoH;

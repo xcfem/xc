@@ -872,7 +872,7 @@ const XC::Matrix &XC::ASDShellQ4::getMass(void) const
         double dA = w * jac.detJ;
 
         // Section density (already integrated through the thickness)
-        double rho = physicalProperties[i]->getRho();
+        const double rho = physicalProperties[i]->getArealRho(); // mass per unit area
 
         // Add current integration point contribution
         for (int j = 0; j < 4; j++)
