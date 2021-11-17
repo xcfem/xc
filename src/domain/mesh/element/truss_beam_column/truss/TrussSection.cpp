@@ -331,7 +331,7 @@ XC::Material *XC::TrussSection::getMaterial(void)
 
 //! @brief Return the density of the section.
 double XC::TrussSection::getRho(void) const
-  { return physicalProperties[0]->getRho(); }
+  { return physicalProperties[0]->getLinearRho(); }
 
 //! @brief Returns the element mass per unit length.
 double XC::TrussSection::getLinearRho(void) const
