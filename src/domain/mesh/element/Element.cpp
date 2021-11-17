@@ -321,7 +321,32 @@ const XC::Matrix &XC::Element::getMass(void) const
 
 //! @brief Returns the mass matrix corresponding to the node argument.
 XC::Matrix XC::Element::getMass(const Node *n) const
-  { return getNodeMatrixComponents(n,getMass()); }
+  {
+    const int iNod= getNodePtrs().getNodeIndex(n);
+    const int nDofI= getNodePtrs()[iNod]->getNumberDOF(); // number of DOFs in the node.
+    const int numNodes = this->getNumExternalNodes();
+    Matrix retval(nDofI,nDofI);
+    const Matrix &m= getMass();
+    if(iNod>=0)
+      {
+	const int nodRow= iNod*nDofI; //row where node data start.
+        int nodCol= 0;
+	for(int jNod= 0;jNod<numNodes;jNod++)
+	  {
+	    const int nodCol= jNod*nDofI;
+	    for(int i=0;i<nDofI;i++)
+	      {
+		const int row= nodRow+i;
+		for(int j= 0;j<nDofI;j++)
+		  {
+		    const int col= nodCol+j;
+		    retval(i,j)+= m(row,col);
+		  }
+	      }
+	  }
+      }
+    return retval; 
+  }
 
 //! @brief Returns the sum of the mass matrices corresponding to the nodes.
 XC::Matrix XC::Element::getTotalMass(void) const
@@ -422,12 +447,14 @@ XC::Matrix XC::Element::getNodeMatrixComponents(const Node *ptrNod,const Matrix 
     Matrix retval(ndof,ndof);
     if(iNod>=0)
       {
+	const int nodRow= iNod*ndof; //row where node data start.
+	const int &nodCol= nodRow;
 	for(int i=0;i<ndof;i++)
 	  {
-	    const int row= iNod*ndof+i;
+	    const int row= nodRow+i;
 	    for(int j= 0;j<ndof;j++)
 	      {
-		const int col= iNod*ndof+j;
+		const int col= nodCol+j;
 		retval(i,j)= m(row,col);
 	      }
 	  }
