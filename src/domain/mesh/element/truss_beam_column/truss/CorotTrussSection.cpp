@@ -390,16 +390,15 @@ const XC::Material *XC::CorotTrussSection::getMaterial(void) const
 XC::Material *XC::CorotTrussSection::getMaterial(void)
   { return physicalProperties[0]; }
 
-//! @brief Return the density of the section.
+//! @brief Return the linear density of the section.
 double XC::CorotTrussSection::getRho(void) const
-  { return physicalProperties[0]->getRho(); }
+  { return physicalProperties[0]->getLinearRho(); }
 
-//! @brief Returns the element mass per unit length.
+//! @brief Returns the mass per unit length.
 double XC::CorotTrussSection::getLinearRho(void) const
   { return getRho(); }
 
-
-
+//! @brief Return the mass matrix.
 const XC::Matrix &XC::CorotTrussSection::getMass(void) const
   {
     Matrix &Mass = *theMatrix;
