@@ -158,7 +158,7 @@ double XC::SectionForceDeformation::getRho(void) const
   { return 0.0; }
 
 //! @brief Returns the mass per unit length of the section.
-double XC::SectionForceDeformation::getLinearDensity(void) const
+double XC::SectionForceDeformation::getLinearRho(void) const
   {
     std::cerr << getClassName() << "::" << __FUNCTION__
               << "; not defined yet" << std::endl;
@@ -166,7 +166,7 @@ double XC::SectionForceDeformation::getLinearDensity(void) const
   }
 
 //! @brief Returns the mass per unit area of the section.
-double XC::SectionForceDeformation::getArealDensity(void) const
+double XC::SectionForceDeformation::getArealRho(void) const
   {
     std::cerr << getClassName() << "::" << __FUNCTION__
               << "; not defined yet" << std::endl;
@@ -174,7 +174,7 @@ double XC::SectionForceDeformation::getArealDensity(void) const
   }
 
 //! @brief Returns the mass per unit volume of the section.
-double XC::SectionForceDeformation::getVolumetricDensity(void) const
+double XC::SectionForceDeformation::getVolumetricRho(void) const
   {
     std::cerr << getClassName() << "::" << __FUNCTION__
               << "; not defined yet" << std::endl;

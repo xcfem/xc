@@ -24,6 +24,9 @@
 const XC::Vector &(XC::SectionForceDeformation::*getStressResultantVector)(void) const= &XC::SectionForceDeformation::getStressResultant;
 const XC::Vector &(XC::SectionForceDeformation::*getSectionDeformationConstVector)(void) const= &XC::SectionForceDeformation::getSectionDeformation;
 class_<XC::SectionForceDeformation, XC::SectionForceDeformation *, bases<XC::Material>, boost::noncopyable >("SectionForceDeformation", no_init)
+  .add_property("rho",&XC::SectionForceDeformation::getRho,"Return the material density.")
+  .add_property("linearRho",&XC::SectionForceDeformation::getLinearRho,"Return the material linear density (mass/lengt).")
+  .add_property("arealRho",&XC::SectionForceDeformation::getArealRho,"Return the material areal density (mass/surf. area).")
   .add_property("getType",make_function(&XC::SectionForceDeformation::getType, return_internal_reference<>()),"Returns section type.")
   .def("getStressResultantComponent",&XC::SectionForceDeformation::getStressResultantByName)
   .def("getStressResultant",make_function(getStressResultantVector, return_internal_reference<>()))
