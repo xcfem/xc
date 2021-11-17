@@ -729,7 +729,10 @@ class Concrete(matWDKD.MaterialWithDKDiagrams):
         '''
         if(name==None):
             name= self.materialName+'_uniaxial'
-        return typical_materials.defElasticMaterial(preprocessor, name, E= self.getEcm(), overrideRho= overrideRho)
+        rho= self.density()
+        if(overrideRho!=None):
+            rho= overrideRho
+        return typical_materials.defElasticMaterial(preprocessor, name, E= self.getEcm(), rho= rho)
         
     def defElasticSection2d(self, preprocessor, sectionProperties, overrideRho= None):
         '''Constructs an elastic section material appropiate 
