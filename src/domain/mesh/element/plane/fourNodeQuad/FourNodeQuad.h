@@ -94,7 +94,7 @@ class FourNodeQuad: public SolidMech4N
     int recvData(const Communicator &);
   public:
     FourNodeQuad(int tag= 0,const NDMaterial *ptr_mat= nullptr);
-    FourNodeQuad(int tag, int nd1, int nd2, int nd3, int nd4, NDMaterial &m, const std::string &type, double t, double pressure = 0.0, double rho = 0.0, const BodyForces2D &bForces= BodyForces2D());
+    FourNodeQuad(int tag, int nd1, int nd2, int nd3, int nd4, NDMaterial &m, const std::string &type, double t, double pressure = 0.0, const BodyForces2D &bForces= BodyForces2D());
     Element *getCopy(void) const;
     virtual ~FourNodeQuad(void);
 

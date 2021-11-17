@@ -76,7 +76,7 @@ double XC::FourNodeQuad::shp[3][4]; //Values of shape functions.
 
 //! @brief Constructor.
 XC::FourNodeQuad::FourNodeQuad(int tag,const NDMaterial *ptr_mat)
-  :SolidMech4N(tag,ELE_TAG_FourNodeQuad,SolidMech2D(4,ptr_mat,1.0,0.0)), pressureLoad(8), pressure(0.0)
+  :SolidMech4N(tag,ELE_TAG_FourNodeQuad,SolidMech2D(4,ptr_mat,1.0)), pressureLoad(8), pressure(0.0)
   {load.reset(8);}
 
 //! @brief Constructor.
@@ -92,8 +92,8 @@ XC::FourNodeQuad::FourNodeQuad(int tag,const NDMaterial *ptr_mat)
 //! @param m: element material.
 XC::FourNodeQuad::FourNodeQuad(int tag, int nd1, int nd2, int nd3, int nd4,
                                NDMaterial &m, const std::string &type, double t,
-                           double p, double r, const BodyForces2D &bForces)
-  : SolidMech4N(tag,ELE_TAG_FourNodeQuad,nd1,nd2,nd3,nd4,SolidMech2D(4,m,type,t,r)), bf(bForces), pressureLoad(8), pressure(p)
+                           double p, const BodyForces2D &bForces)
+  : SolidMech4N(tag,ELE_TAG_FourNodeQuad,nd1,nd2,nd3,nd4,SolidMech2D(4,m,type,t)), bf(bForces), pressureLoad(8), pressure(p)
   {
     load.reset(8);
   }
@@ -295,14 +295,12 @@ const XC::Matrix &XC::FourNodeQuad::getMass(void) const
     K.Zero();
 
     static Vector rhoi(4);
-    rhoi= physicalProperties.getRhoi();
-    double sum = this->physicalProperties.getRho();
-    for(int i= 0;i<rhoi.Size();i++)
-      sum += rhoi[i];
+    const double sum= physicalProperties.getRho();    
 
     if(sum != 0.0)
       {
         double rhodvol, Nrho;
+        rhoi= physicalProperties.getRhoi();
 
         // Compute a lumped mass matrix
         for(size_t i= 0;i<physicalProperties.size();i++)
@@ -345,12 +343,8 @@ int XC::FourNodeQuad::addLoad(ElementalLoad *theLoad, double loadFactor)
 //! @brief Adds inertia loads.
 int XC::FourNodeQuad::addInertiaLoadToUnbalance(const XC::Vector &accel)
   {
-    static Vector rhoi(4);
-    rhoi= physicalProperties.getRhoi();
-    double sum = this->physicalProperties.getRho();
-    for(int i= 0;i<rhoi.Size();i++)
-      sum += rhoi[i];
-
+    const double sum = this->physicalProperties.getRho();
+    
     if(sum == 0.0)
       return 0;
 
@@ -442,11 +436,7 @@ const XC::Vector &XC::FourNodeQuad::getResistingForce(void) const
 //! inertia.
 const XC::Vector &XC::FourNodeQuad::getResistingForceIncInertia(void) const
   {
-    static Vector rhoi(4);
-    rhoi= physicalProperties.getRhoi();
-    double sum = this->physicalProperties.getRho();
-    for(int i= 0;i<rhoi.Size();i++)
-      sum += rhoi[i];
+    const double sum = this->physicalProperties.getRho();
 
     // if no mass terms .. just add damping terms
     if(sum == 0.0)

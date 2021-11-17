@@ -188,7 +188,7 @@ double XC::NDMaterialPhysicalProperties::getRho(void) const
     const size_t numMaterials= theMaterial.size();
     double retval= 0.0;
     for(size_t i=0; i<numMaterials; i++)
-      retval+= theMaterial[i]->getRho();
+      { retval+= theMaterial[i]->getRho(); }
     retval/= numMaterials;
     return retval;
   }

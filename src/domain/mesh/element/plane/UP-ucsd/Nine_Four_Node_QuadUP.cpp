@@ -89,9 +89,8 @@ const int XC::NineFourNodeQuadUP::nenp=4;
 
 XC::NineFourNodeQuadUP::NineFourNodeQuadUP(int tag,
 	int nd1, int nd2, int nd3, int nd4,int nd5, int nd6, int nd7, int nd8,int nd9,
-	NDMaterial &m, const char *type, double t, double bulk, double r,
-					   double p1, double p2, const BodyForces2D &bForces)
-  :ElemWithMaterial<9,SolidMech2D>(tag, ELE_TAG_Nine_Four_Node_QuadUP,SolidMech2D(9,&m,t,r)), bf(bForces), Ki(nullptr),
+	NDMaterial &m, const char *type, double t, double bulk, double p1, double p2, const BodyForces2D &bForces)
+  :ElemWithMaterial<9,SolidMech2D>(tag, ELE_TAG_Nine_Four_Node_QuadUP,SolidMech2D(9,&m,t)), bf(bForces), Ki(nullptr),
   kc(bulk), applyLoad(0), initNodeDispl(nullptr)
   {
     load.reset(22);
@@ -129,7 +128,7 @@ XC::NineFourNodeQuadUP::NineFourNodeQuadUP(int tag,
 
 
 XC::NineFourNodeQuadUP::NineFourNodeQuadUP(void)
-  :ElemWithMaterial<9,SolidMech2D>(0,ELE_TAG_Nine_Four_Node_QuadUP,SolidMech2D(9,nullptr,1.0,0.0)),
+  :ElemWithMaterial<9,SolidMech2D>(0,ELE_TAG_Nine_Four_Node_QuadUP,SolidMech2D(9,nullptr,1.0)),
   Ki(nullptr), kc(0.0), applyLoad(0), initNodeDispl(nullptr)
   {
     load.reset(22);

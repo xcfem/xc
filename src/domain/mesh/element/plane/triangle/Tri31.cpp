@@ -77,20 +77,20 @@ double XC::Tri31::shp[3][3];
 XC::Tri31::Tri31(int tag, int nd1, int nd2, int nd3,
              NDMaterial &m, const std::string &type, double t,
              double p, double r, const BodyForces2D &bForces)
-  : TriBase3N<SolidMech2D>(tag,ELE_TAG_Tri31,SolidMech2D(1,m,type,t,r)),
+  : TriBase3N<SolidMech2D>(tag,ELE_TAG_Tri31,SolidMech2D(1,m,type,t)),
     bf(bForces), pressureLoad(6), pressure(p), Ki(nullptr)
   {
     load.reset(6);
   }
 
 XC::Tri31::Tri31(void)
-  :TriBase3N<SolidMech2D>(0,ELE_TAG_Tri31,SolidMech2D(1,nullptr,1.0,0.0)),
+  :TriBase3N<SolidMech2D>(0,ELE_TAG_Tri31,SolidMech2D(1,nullptr,1.0)),
    pressureLoad(6), pressure(0.0), Ki(0)
   { }
 
 //! @brief Constructor.
 XC::Tri31::Tri31(int tag,const NDMaterial *ptr_mat)
-  :TriBase3N<SolidMech2D>(tag,ELE_TAG_Tri31,SolidMech2D(4,ptr_mat,1.0,0.0)), pressureLoad(8), pressure(0.0), Ki(nullptr)
+  :TriBase3N<SolidMech2D>(tag,ELE_TAG_Tri31,SolidMech2D(4,ptr_mat,1.0)), pressureLoad(8), pressure(0.0), Ki(nullptr)
   {load.reset(8);}
 
 //! @brief Virtual constructor.

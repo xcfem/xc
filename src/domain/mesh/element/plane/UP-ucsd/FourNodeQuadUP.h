@@ -97,7 +97,7 @@ class FourNodeQuadUP: public QuadBase4N<SolidMech2D>
     int sendData(Communicator &comm);
     int recvData(const Communicator &comm);
   public:
-    FourNodeQuadUP(int tag, int nd1, int nd2, int nd3, int nd4, NDMaterial &m,const std::string &type, double t, double bulk, double rhof, double perm1, double perm2,const BodyForces2D &bForces= BodyForces2D(), double p = 0.0);
+    FourNodeQuadUP(int tag, int nd1, int nd2, int nd3, int nd4, NDMaterial &m,const std::string &type, double t, double bulk, double perm1, double perm2,const BodyForces2D &bForces= BodyForces2D(), double p = 0.0);
     Element *getCopy(void) const;
     FourNodeQuadUP();
     virtual ~FourNodeQuadUP();
