@@ -63,5 +63,7 @@ class_<XC::Domain, bases<XC::ObjWithRecorders>, boost::noncopyable >("Domain", n
   .def("getModalParticipationFactors", make_function( &XC::Domain::getModalParticipationFactors, return_internal_reference<>() ),"getModalParticipationFactors(): return the computed modal participation factors.")
   .def("getEffectiveModalMass",&XC::Domain::getEffectiveModalMass,"getEffectiveModalMass(mode): return the effective modal mass corresponding to the mode.")
   .def("getEffectiveModalMasses",&XC::Domain::getEffectiveModalMasses,"getEffectiveModalMasses(): return the computed effective modal masses.")
-  .def("getTotalMass",&XC::Domain::getTotalMass,"getTotalMass(): return the total mass.")
+  .def("getTotalEffectiveModalMass",&XC::Domain::getTotalEffectiveModalMass,"getTotalEffectiveModalMass(): return the total mass.")
+  .add_property("totalMass", &XC::Domain::getTotalMass, "Return the total mass matrix.")
+  .def("getTotalMassComponent", &XC::Domain::getTotalMassComponent,"Return the total mass matrix component for the DOF argument.")
   ;

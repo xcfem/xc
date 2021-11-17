@@ -319,6 +319,39 @@ const XC::Matrix &XC::Element::getMass(void) const
     return theMatrix;
   }
 
+//! @brief Returns the mass matrix corresponding to the node argument.
+XC::Matrix XC::Element::getMass(const Node *n) const
+  { return getNodeMatrixComponents(n,getMass()); }
+
+//! @brief Returns the sum of the mass matrices corresponding to the nodes.
+XC::Matrix XC::Element::getTotalMass(void) const
+  {
+    Matrix retval;
+    const NodePtrs &theNodes= getNodePtrs();
+    if(!theNodes.empty())
+      {
+	NodePtrs::const_iterator i= theNodes.begin();
+	retval= getMass(*i);
+	i++;
+        for(;i!= theNodes.end();i++)
+	  { retval+= getMass(*i); }
+      }
+    return retval;
+  }
+
+//! @brief Return the mass matrix component for the DOF argument.
+double XC::Element::getTotalMassComponent(const int &dof) const
+  {
+    const Matrix totalMass= getTotalMass();
+    const size_t sz= totalMass.noRows();
+    Vector J(sz);
+    J(dof)= 1.0;
+    Vector tmp(sz);
+    tmp.addMatrixVector(1.0, totalMass, J, 1.0);
+    const double retval= dot(J,tmp);
+    return retval;
+  }
+
 //! @brief Returns the action of the element over its attached nodes.
 //! Computes damping matrix.
 const XC::Vector &XC::Element::getResistingForceIncInertia(void) const
@@ -387,7 +420,7 @@ XC::Matrix XC::Element::getNodeMatrixComponents(const Node *ptrNod,const Matrix 
     const int iNod= getNodePtrs().getNodeIndex(ptrNod);
     const int ndof= getNodePtrs()[iNod]->getNumberDOF(); // number of DOFs in the node.
     Matrix retval(ndof,ndof);
-    if(iNod>0)
+    if(iNod>=0)
       {
 	for(int i=0;i<ndof;i++)
 	  {
@@ -1153,7 +1186,7 @@ Pos3d XC::Element::getProjection(const Pos3d &p,bool initialGeometry) const
     return retval;
   }
 
-//! @brief Returns the coordinates del center of gravity of the element.
+//! @brief Returns the coordinates of the center of gravity of the element.
 Pos3d XC::Element::getCenterOfMassPosition(bool initialGeometry) const
   {
     Pos3d retval;
@@ -1162,7 +1195,7 @@ Pos3d XC::Element::getCenterOfMassPosition(bool initialGeometry) const
     return retval;
   }
 
-//! @brief Returns the coordinates del center of gravity of the element.
+//! @brief Returns the coordinates of the center of mass of the element.
 XC::Vector XC::Element::getCenterOfMassCoordinates(bool initialGeometry) const
   {
     const Pos3d center_of_mass= getCenterOfMassPosition(initialGeometry);

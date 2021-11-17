@@ -1,98 +1,106 @@
 # -*- coding: utf-8 -*-
-''' Inertia load on MITC4 shell elements. 
-    Equilibrium based home made test.'''
-
-from __future__ import division
+from __future__ import division 
 from __future__ import print_function
-
-__author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
-__copyright__= "Copyright 2020, LCPT and AOO"
-__license__= "GPL"
-__version__= "3.0"
-__email__= "l.pereztato@gmail.com"
-
-import math
+import os
 import xc_base
 import geom
 import xc
+import math
 from model import predefined_spaces
-from materials.ehe import EHE_materials
-from postprocess import element_section_map
-#from postprocess import output_handler
+from model.geometry import grid_model as gm
+# Default configuration of environment variables.
+from postprocess.config import default_config
+#from postprocess import output_handler as outHndl
+from materials import typical_materials as tm
+from model.mesh import finit_el_model as fem
+from actions import loads
+from actions import load_cases as lcases
 
-feProblem= xc.FEProblem()
-preprocessor=  feProblem.getPreprocessor
-nodes= preprocessor.getNodeHandler
+#Data
+r1= 1
+r2= 1.2
+ndiv= 36
+angIncr=360/ndiv
+rList=[r1,r2]
+angList=[i*angIncr for i in range(ndiv)]
+zList=[0]
 
-# Problem type
+t= 10e-3
+matRho= 7850
+#
+area= math.pi*(r2**2-r1**2)
+volume= area*t
+mass= volume*matRho
+grav= 10 #Gravity acceleration (m/s2)
+weight= mass*grav
+
+FEcase= xc.FEProblem()
+preprocessor=FEcase.getPreprocessor
+prep=preprocessor   #short name
+nodes= prep.getNodeHandler
+elements= prep.getElementHandler
+elements.dimElem= 3
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
-n1= nodes.newNodeXYZ(0,0,0)
-n2= nodes.newNodeXYZ(1,0,0)
-n3= nodes.newNodeXYZ(1,1,0)
-n4= nodes.newNodeXYZ(0,1,0)
 
-# Materials definition
-h= 0.4 # thickness.
-concrete= EHE_materials.HA30
-reinfSteel= EHE_materials.B500S
-rcSection= element_section_map.RCSlabBeamSection(name= 'rcSection',sectionDescr= 'test', concrType= concrete, reinfSteelType= reinfSteel, depth= h)
-memb1= rcSection.getElasticMembranePlateSection(preprocessor)
+gridGeom=gm.GridModel(prep,rList,angList,zList,xCentCoo=0,yCentCoo=0)
+gridGeom.generateCylZPoints()
 
-elements= preprocessor.getElementHandler
-elements.defaultMaterial= memb1.name
-elem= elements.newElement("ShellMITC4",xc.ID([n1.tag,n2.tag,n3.tag,n4.tag]))
+ring=gridGeom.genSurfOneXYZRegion([(r1,0,0),(r2,angList[-1],0)],setName='ring',closeCyl='Y')
+#out=outHndl.OutputHandler(modelSpace)
+#out.displayBlocks()
 
-g= 1.0#9.81 # m/s2
-# Element mass
-eMass= elem.getArea(True)*concrete.density()*h
-eForce= eMass*g
-nForce= eForce/4.0
 
-# Constraints.
-constrainedNodes= [n1, n2, n3, n4]
-for n in constrainedNodes:
+steel= tm.defJ2PlateFibre(preprocessor=preprocessor, name='steel', E=172e9, nu=0.3, fy=250e6,alpha=1e-6,rho=matRho)
+
+ring_mat=tm.defMembranePlateFiberSection(preprocessor,name='ring_mat',h=t ,nDMaterial= steel)
+ring_mesh=fem.SurfSetToMesh(surfSet=ring,matSect=ring_mat,elemSize=0.5,elemType='ShellMITC4')
+fem.multi_mesh(prep,[ring_mesh])
+
+# Constraints
+xcTotalSet= modelSpace.getTotalSet()
+constrainedNodes= list()
+for n in xcTotalSet.nodes:
     modelSpace.fixNode000_FFF(n.tag)
+    constrainedNodes.append(n)
+    
 
-# Load definition.
-lp0= modelSpace.newLoadPattern(name= '0')
-modelSpace.setCurrentLoadPattern("0")
-accel= xc.Vector([0,0,g])
-elem.createInertiaLoad(accel)
-# We add the load case to domain.
-modelSpace.addLoadCaseToDomain(lp0.name)
+#out.displayFEMesh()
+
+selfWeight= loads.InertialLoad(name='selfWeight', lstSets=[ring], vAccel=xc.Vector( [0.0,0.0,-grav])) # Ana uses -accel
+
+D=lcases.LoadCase(preprocessor=prep,name="D",loadPType="default",timeSType="constant_ts")
+D.create()
+D.addLstLoads([selfWeight])
+modelSpace.addLoadCaseToDomain("D")
 
 # Solution
 result= modelSpace.analyze(calculateNodalReactions= True)
+#out.displayReactions()
 
 
-zReactions= list()
+zReaction= 0.0
 for n in constrainedNodes:
-    zReactions.append(n.getReaction[2])
+    zReaction+= n.getReaction[2]
 
-err= 0.0
-for r in zReactions:
-    err+=(nForce-r)**2
-err= math.sqrt(err)
-
+err= (weight-zReaction)/weight
+    
 '''
-print('reactions= ', zReactions)
-print('eMass= ', eMass)
-print('eForce= ', eForce)
-print('nForce= ', nForce)
+print('weight= ', weight/1e3, 'kN')
+print('zReaction=', zReaction/1e3, 'kN')
 print('err= ', err)
 '''
 
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
-if abs(err)<1e-12 :
+if(abs(err)<1e-2):
     print('test '+fname+': ok.')
 else:
     lmsg.error(fname+' ERROR.')
-
-# # Graphic stuff.
-# oh= output_handler.OutputHandler(modelSpace)
-# oh.displayFEMesh()
-# oh.displayLoads()
-# oh.displayLocalAxes()
-# oh.displayReactions()
+'''
+from postprocess import output_handler as outHndl
+from postprocess import output_styles as outSty
+sty=outSty.OutputStyle() 
+out=outHndl.OutputHandler(modelSpace,sty)
+out.displayLoads()
+'''

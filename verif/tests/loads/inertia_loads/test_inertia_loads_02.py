@@ -1,25 +1,23 @@
 # -*- coding: utf-8 -*-
-''' Inertia load on truss and elastic beam elements. 
-    Equilibrium based home made test.'''
 
 from __future__ import division
 from __future__ import print_function
 
+# Home made test.
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
 __copyright__= "Copyright 2015, LCPT and AOO"
 __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
-import math
 import xc_base
 import geom
 import xc
 from model import predefined_spaces
 from materials import typical_materials
-#from postprocess import output_handler
+import math
 
-
+gravity= 1#9.81
 E= 30e6 # Young modulus (psi)
 nu= 0.3 # Poisson's ratio
 G= E/(2*(1+nu)) # Shear modulus
@@ -33,84 +31,98 @@ preprocessor=  feProblem.getPreprocessor
 nodes= preprocessor.getNodeHandler
 
 # Problem type
-modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
+modelSpace= predefined_spaces.StructuralMechanics2D(nodes)
 
-# nodes.defaultTag= 1 # First node number.
-n1= nodes.newNodeXYZ(0,0,0)
-n2= nodes.newNodeXYZ(l,0,0)
+n1= nodes.newNodeXY(0,0)
+n2= nodes.newNodeXY(l,0)
 
 # Materials definition
 elast= typical_materials.defElasticMaterial(preprocessor, "elast",E)
 elast.E= E
 elast.rho= 10.0
-lin= modelSpace.newLinearCrdTransf("lin",xc.Vector([0,0,1]))
+lin= modelSpace.newLinearCrdTransf("lin")
 # Materials
-sectionProperties= xc.CrossSectionProperties3d()
+sectionProperties= xc.CrossSectionProperties2d()
 sectionProperties.A= A; sectionProperties.E= E; sectionProperties.G= G
-sectionProperties.Iz= Iz; sectionProperties.Iy= Iz; sectionProperties.J= Iz
-sectionProperties.rho= elast.rho
-section= typical_materials.defElasticSectionFromMechProp3d(preprocessor, "section",sectionProperties)
+sectionProperties.I= Iz;
+sectionProperties.rho= elast.rho # Material density
+section= typical_materials.defElasticSectionFromMechProp2d(preprocessor, "section",sectionProperties)
 
 
 # Element definition.
 elements= preprocessor.getElementHandler
-elements.dimElem= 3 # Three-dimensional space.
+elements.dimElem= 2 # Bidimensional space.
 elements.defaultMaterial= elast.name
 truss= elements.newElement("Truss",xc.ID([n1.tag,n2.tag]))
 truss.sectionArea= A
+
+trussMassZ= truss.getTotalMassComponent(1)
+trussMassRefZ= truss.sectionArea*elast.rho*l
+ratio0= abs(trussMassZ-trussMassRefZ)/trussMassRefZ
+
 elements.defaultTransformation= lin.name
 elements.defaultMaterial= section.name
-beam= elements.newElement("ElasticBeam3d",xc.ID([n1.tag,n2.tag]))
+beam= elements.newElement("ElasticBeam2d",xc.ID([n1.tag,n2.tag]))
+constraints= preprocessor.getBoundaryCondHandler
 
-# Constraints.
+beamMassZ= beam.getTotalMassComponent(1)
+beamMassRefZ= beam.sectionProperties.linearRho*l
+ratio1= abs(beamMassZ-beamMassRefZ)/beamMassRefZ
+
+
 # Zero movement for node 1.
-modelSpace.fixNode000_0FF(n1.tag)
-# Partial constraint for node 2.
-modelSpace.fixNode000_FFF(n2.tag)
-
+spc1= constraints.newSPConstraint(n1.tag,0,0.0)
+spc2= constraints.newSPConstraint(n1.tag,1,0.0)
+spc3= constraints.newSPConstraint(n1.tag,2,0.0)
+# Zero movement for node 2.
+spc4= constraints.newSPConstraint(n2.tag,0,0.0)
+spc5= constraints.newSPConstraint(n2.tag,1,0.0)
+spc6= constraints.newSPConstraint(n2.tag,2,0.0)
 
 # Load definition.
 lp0= modelSpace.newLoadPattern(name= '0')
 modelSpace.setCurrentLoadPattern("0")
-gravity= 9.81
-accel= xc.Vector([0,0,gravity])
-xcTotalSet= modelSpace.getTotalSet()
-xcTotalSet.createInertiaLoads(accel)
-#truss.createInertiaLoad(accel)
-#beam.createInertiaLoad(accel)
+accel= xc.Vector([0,gravity])
+truss.createInertiaLoad(accel)
+beam.createInertiaLoad(accel)
 # We add the load case to domain.
 modelSpace.addLoadCaseToDomain(lp0.name)
 
 # Solution
 result= modelSpace.analyze(calculateNodalReactions= True)
 
-reac1= n1.getReaction
-reac2= n2.getReaction
-R= n2.getReaction[2]
-R_ref= 0.0
-R_ref+= 0.5*truss.sectionArea*truss.getMaterial().rho*l*gravity
-R_ref+= 0.5*beam.sectionProperties.A*truss.getMaterial().rho*l*gravity
+R= n2.getReaction[1]
+R_ref= 0.5*trussMassRefZ*gravity
+R_ref+= 0.5*beamMassRefZ*gravity
+ratio2= abs(R-R_ref)/(-R_ref)
 
-ratio1= abs(R-R_ref)/R_ref
+xcTotalSet= modelSpace.getTotalSet()
+totalMassZ= xcTotalSet.getTotalMassComponent(1)
+totalWeightZ= totalMassZ*gravity
+ratio3= abs(R-0.5*totalWeightZ)/R_ref
+
 
 '''
-print('reac1= ', reac1)
-print('reac2= ', reac2)
+print('truss mass: ', trussMassZ, 'kg')
+print('reference truss mass: ', trussMassRefZ, 'kg')
+print('ratio0= ', ratio0)
+print('beam mass: ', beamMassZ, 'kg')
+print('reference beam mass: ', beamMassRefZ, 'kg')
+print('ratio1= ', ratio1)
 print('R= ', R)
 print('R_ref= ', R_ref)
-print('ratio1= ', ratio1)
+print('ratio2= ', ratio2)
+print("totalMassZ= ", totalMassZ)
+print("totalWeightZ= ", totalWeightZ)
+print('ratio3= ', ratio3)
 '''
+
 
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
-if abs(ratio1)<1e-5 :
+if abs(ratio0)<1e-12 and abs(ratio1)<1e-12 and abs(ratio2)<1e-12 and abs(ratio3)<1e-12 :
     print('test '+fname+': ok.')
 else:
     lmsg.error(fname+' ERROR.')
 
-# # Graphic stuff.
-# oh= output_handler.OutputHandler(modelSpace)
-# #oh.displayFEMesh()
-# #oh.displayLocalAxes()
-# oh.displayReactions()

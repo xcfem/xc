@@ -271,6 +271,7 @@ class Node: public MeshComponent
 
     // public methods for dynamic analysis
     virtual const Matrix &getMass(void) const;
+    double getMassComponent(const int &) const;
     virtual int setMass(const Matrix &theMass);
     virtual int setNumColR(int numCol);
     virtual int setR(int row, int col, double Value);

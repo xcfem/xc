@@ -189,6 +189,10 @@ class Mesh: public MeshComponentContainer
 
     const double getEffectiveModalMass(int mode) const;
     Vector getEffectiveModalMasses(const int &numModes) const;
+    
+    // mass distribution
+    Matrix getTotalMass(void) const;
+    double getTotalMassComponent(const int &) const;
 
     void zeroLoads(void);
 

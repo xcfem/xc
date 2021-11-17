@@ -235,6 +235,10 @@ class SetMeshComp: public SetBase
     Matrix getInitialStiff(const Node &);
 
     void createInertiaLoads(const Vector &);
+    
+    // mass distribution
+    Matrix getTotalMass(void) const;
+    double getTotalMassComponent(const int &) const;
 
     virtual int sendSelf(Communicator &);
     virtual int recvSelf(const Communicator &);

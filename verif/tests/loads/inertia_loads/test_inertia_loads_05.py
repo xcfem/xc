@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-''' Inertia load on MITC4 shell elements. 
+''' Inertia load on truss section elements. 
     Equilibrium based home made test.'''
 
 from __future__ import division
@@ -11,13 +11,21 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
-import math
 import xc_base
 import geom
 import xc
 from model import predefined_spaces
 from materials import typical_materials
-#from postprocess import output_handler
+import math
+
+
+E= 30e6 # Young modulus (psi)
+nu= 0.3 # Poisson's ratio
+G= E/(2*(1+nu)) # Shear modulus
+l= 10 # Bar length
+b= 0.1
+A= b*b # Area in square inches.
+Iz= 1/12.0*b**4 # Cross section moment of inertia (m4)
 
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
@@ -25,72 +33,53 @@ nodes= preprocessor.getNodeHandler
 
 # Problem type
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
+
+# nodes.defaultTag= 1 # First node number.
 n1= nodes.newNodeXYZ(0,0,0)
-n2= nodes.newNodeXYZ(1,0,0)
-n3= nodes.newNodeXYZ(1,1,0)
-n4= nodes.newNodeXYZ(0,1,0)
+n2= nodes.newNodeXYZ(l,0,0)
 
 # Materials definition
-E= 2.1e6 # Steel Young's modulus [kg/cm2].
-nu= 0.3 # Poisson's ratio.
-h= 0.2 # thickness.
-dens= 4.0 # specific mass [kg/m3].
-memb1= typical_materials.defElasticMembranePlateSection(preprocessor, "memb1",E,nu,dens,h)
+trussScc= typical_materials.defElasticSection1d(preprocessor, "trussScc",A,E, linearRho= 10.0*A)
 
+# Element definition.
 elements= preprocessor.getElementHandler
-elements.defaultMaterial= memb1.name
-elem= elements.newElement("ShellMITC4",xc.ID([n1.tag,n2.tag,n3.tag,n4.tag]))
+elements.dimElem= 3 # Three-dimensional space.
+elements.defaultMaterial= trussScc.name
+truss= elements.newElement("TrussSection",xc.ID([n1.tag,n2.tag]))
 
-g= 1.0#9.81 # m/s2
-# Element mass
-eMass= elem.getArea(True)*dens*h
-eForce= eMass*g
-nForce= eForce/4.0
-
-# Constraints.
-constrainedNodes= [n1, n2, n3, n4]
-for n in constrainedNodes:
-    modelSpace.fixNode000_FFF(n.tag)
+constraints= preprocessor.getBoundaryCondHandler
+# Zero movement for node 1.
+modelSpace.fixNode000_000(n1.tag)
+# Zero movement for node 2.
+modelSpace.fixNode000_000(n2.tag)
 
 # Load definition.
 lp0= modelSpace.newLoadPattern(name= '0')
 modelSpace.setCurrentLoadPattern("0")
-accel= xc.Vector([0,0,g])
-elem.createInertiaLoad(accel)
+accel= xc.Vector([0,9.81,0])
+truss.createInertiaLoad(accel)
 # We add the load case to domain.
 modelSpace.addLoadCaseToDomain(lp0.name)
 
 # Solution
 result= modelSpace.analyze(calculateNodalReactions= True)
 
+R= n2.getReaction[1]
+R_ref= 0.5*truss.linearRho*l*9.81
 
-zReactions= list()
-for n in constrainedNodes:
-    zReactions.append(n.getReaction[2])
-
-err= 0.0
-for r in zReactions:
-    err+=(nForce-r)**2
-err= math.sqrt(err)
+ratio1= abs(R-R_ref)/(-R_ref)
 
 '''
-print('reactions= ', zReactions)
-print('eMass= ', eMass)
-print('eForce= ', eForce)
-print('nForce= ', nForce)
-print('err= ', err)
+print('R= ', R)
+print('R_ref= ', R_ref)
+print('ratio1= ', ratio1)
 '''
 
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
-if abs(err)<1e-12 :
+if abs(ratio1)<1e-5 :
     print('test '+fname+': ok.')
 else:
     lmsg.error(fname+' ERROR.')
 
-# # Graphic stuff.
-# oh= output_handler.OutputHandler(modelSpace)
-# #oh.displayFEMesh()
-# #oh.displayLocalAxes()
-# oh.displayReactions()

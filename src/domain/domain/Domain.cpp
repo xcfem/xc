@@ -1122,7 +1122,7 @@ XC::Vector XC::Domain::getEffectiveModalMasses(void) const
   }
 
 //! @brief Return the total effective modal mass.
-double XC::Domain::getTotalMass(void) const
+double XC::Domain::getTotalEffectiveModalMass(void) const
   {
     double retval= 0;
     const Vector masas= getEffectiveModalMasses();
@@ -1131,6 +1131,14 @@ double XC::Domain::getTotalMass(void) const
       retval+= masas(i);
     return retval;
   }
+
+//! @brief Return the total mass matrix.
+XC::Matrix XC::Domain::getTotalMass(void) const
+  { return mesh.getTotalMass(); }
+
+//! @brief Return the total mass matrix component for the DOF argument.
+double XC::Domain::getTotalMassComponent(const int &dof) const
+  { return mesh.getTotalMassComponent(dof); }
 
 //! @brief Set the domain stamp to be \p newStamp. Domain stamp is the
 //! integer returned by hasDomainChanged(). 

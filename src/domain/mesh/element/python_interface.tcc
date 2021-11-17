@@ -34,6 +34,8 @@ const XC::Vector &(XC::Element::*getResistingForceRef)(void) const= &XC::Element
 const XC::Matrix &(XC::Element::*getInitialStiffRef)(void) const= &XC::Element::getInitialStiff;
 const XC::Matrix &(XC::Element::*getTangentStiffRef)(void) const= &XC::Element::getTangentStiff;
 const XC::Matrix &(XC::Element::*getMassRef)(void) const= &XC::Element::getMass;
+XC::Matrix (XC::Element::*getNodeMassRef)(const XC::Node *) const= &XC::Element::getMass;
+XC::Matrix (XC::Element::*getTotalMassRef)(void) const= &XC::Element::getTotalMass;
 const XC::Matrix &(XC::Element::*getDampRef)(void) const= &XC::Element::getDamp;
 bool (XC::Element::*ElementIn3D)(const GeomObj3d &,const double &,const double &) const= &XC::Element::In;
 bool (XC::Element::*ElementOut3D)(const GeomObj3d &,const double &,const double &) const= &XC::Element::Out;
@@ -58,6 +60,9 @@ class_<XC::Element, XC::Element *,bases<XC::MeshComponent>, boost::noncopyable >
   .def("getTangentStiff",make_function(getTangentStiffRef, return_internal_reference<>() ),"Return tangent stiffness matrix.")
   .def("getInitialStiff",make_function(getInitialStiffRef, return_internal_reference<>() ),"Return initial stiffness matrix.")
   .add_property("mass", make_function(getMassRef, return_internal_reference<>()) ,"Element mass matrix.")
+  .add_property("totalMass", getTotalMassRef, "Returns the sum of the mass matrices corresponding to the nodes.")
+  .def("getTotalMassComponent", &XC::Element::getTotalMassComponent,"Return the total mass matrix component for the DOF argument.")
+  .def("nodeMass", getNodeMassRef, "Components of the element mass matrix corresponding to DOFs of the argument node.")
   .add_property("damp", make_function(getDampRef, return_internal_reference<>()) ,"Element damping matrix.")
   .def("setDeadSRF",XC::Element::setDeadSRF,"Assigns Stress Reduction Factor for element deactivation.")
   .add_property("getVtkCellType",&XC::Element::getVtkCellType,"Return cell type for Vtk graphics.")

@@ -732,6 +732,42 @@ XC::Vector XC::Mesh::getEffectiveModalMasses(const int &numModes) const
     return retval;
   }
 
+//! @brief Return the total mass matrix.
+XC::Matrix XC::Mesh::getTotalMass(void) const
+  {
+    Matrix retval;
+    Mesh *this_no_const= const_cast<Mesh *>(this);    
+    // Nodal mass matrices.
+    if(getNumNodes()>0)
+      {
+	const Node *nodePtr= nullptr;
+	NodeIter &theNodeIter= this_no_const->getNodes();
+	nodePtr= theNodeIter();
+	retval= nodePtr->getMass();
+	while((nodePtr = theNodeIter()) != 0)
+	  { retval+= nodePtr->getMass(); }
+      }
+    // Element mass matrices.
+    const Element *elePtr= nullptr;
+    ElementIter &theElemIter = this_no_const->getElements();
+    while((elePtr = theElemIter()) != 0)
+      { retval+= elePtr->getTotalMass(); }
+    return retval;
+  }
+
+//! @brief Return the total mass matrix component for the DOF argument.
+double XC::Mesh::getTotalMassComponent(const int &dof) const
+  {
+    const Matrix totalMass= getTotalMass();
+    const size_t sz= totalMass.noRows();
+    Vector J(sz);
+    J(dof)= 1.0;
+    Vector tmp(sz);
+    tmp.addMatrixVector(1.0, totalMass, J, 1.0);
+    const double retval= dot(J,tmp);
+    return retval;
+  }
+
 //! @brief Loop over nodes and elements getting them to first zero their loads
 void XC::Mesh::zeroLoads(void)
   {
@@ -739,7 +775,7 @@ void XC::Mesh::zeroLoads(void)
     NodeIter &theNodeIter = this->getNodes();
     while((nodePtr = theNodeIter()) != 0)
       nodePtr->zeroUnbalancedLoad();
-    Element *elePtr;
+    Element *elePtr= nullptr;
     ElementIter &theElemIter = this->getElements();
     while((elePtr = theElemIter()) != 0)
       if(elePtr->isSubdomain() == false)

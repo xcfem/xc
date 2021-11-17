@@ -334,6 +334,7 @@ def defElasticShearSectionFromMechProp2d(preprocessor, name, mechProp2d, overrid
                         the material density.
     '''  
     rho= mechProp2d.linearRho
+    print('linear rho= ', rho)
     if(overrideRho!=None):
         rho= overrideRho
     retval= defElasticShearSection2d(preprocessor,name= name, A= mechProp2d.A, E= mechProp2d.E, G= mechProp2d.G, I= mechProp2d.I, alpha= mechProp2d.Alpha, linearRho= rho)

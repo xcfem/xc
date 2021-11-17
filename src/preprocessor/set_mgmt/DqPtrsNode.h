@@ -74,6 +74,10 @@ class DqPtrsNode: public DqPtrsKDTree<Node,KDTreeNodes>
     void numera(void);
 
     void createInertiaLoads(const Vector &);
+    
+    // mass distribution
+    Matrix getTotalMass(void) const;
+    double getTotalMassComponent(const int &) const;
   };
 
 DqPtrsNode operator+(const DqPtrsNode &a,const DqPtrsNode &b);

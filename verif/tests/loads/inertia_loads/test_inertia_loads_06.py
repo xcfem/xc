@@ -11,12 +11,13 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
+import math
 import xc_base
 import geom
 import xc
 from model import predefined_spaces
 from materials import typical_materials
-import math
+#from postprocess import output_handler
 
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
@@ -24,16 +25,16 @@ nodes= preprocessor.getNodeHandler
 
 # Problem type
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
-n1= nodes.newNodeXYZ(-1,-1,0)
-n2= nodes.newNodeXYZ(1,-2,0)
-n3= nodes.newNodeXYZ(1,2,0)
-n4= nodes.newNodeXYZ(-1,1,0)
+n1= nodes.newNodeXYZ(0,0,0)
+n2= nodes.newNodeXYZ(1,0,0)
+n3= nodes.newNodeXYZ(1,1,0)
+n4= nodes.newNodeXYZ(0,1,0)
 
 # Materials definition
 E= 2.1e6 # Steel Young's modulus [kg/cm2].
 nu= 0.3 # Poisson's ratio.
 h= 0.2 # thickness.
-dens= 4.0 # specific mass [kg/m2].
+dens= 4.0 # specific mass [kg/m3].
 memb1= typical_materials.defElasticMembranePlateSection(preprocessor, "memb1",E,nu,dens,h)
 
 elements= preprocessor.getElementHandler
@@ -44,6 +45,7 @@ g= 1.0#9.81 # m/s2
 # Element mass
 eMass= elem.getArea(True)*dens*h
 eForce= eMass*g
+nForce= eForce/4.0
 
 # Constraints.
 constrainedNodes= [n1, n2, n3, n4]
@@ -62,16 +64,20 @@ modelSpace.addLoadCaseToDomain(lp0.name)
 result= modelSpace.analyze(calculateNodalReactions= True)
 
 
-zReaction= 0.0
+zReactions= list()
 for n in constrainedNodes:
-    zReaction+= n.getReaction[2]
+    zReactions.append(n.getReaction[2])
 
-err= (eForce-zReaction)/eForce
+err= 0.0
+for r in zReactions:
+    err+=(nForce-r)**2
+err= math.sqrt(err)
 
 '''
-print('zREaction= ', zReaction)
+print('reactions= ', zReactions)
 print('eMass= ', eMass)
 print('eForce= ', eForce)
+print('nForce= ', nForce)
 print('err= ', err)
 '''
 
@@ -83,3 +89,8 @@ if abs(err)<1e-12 :
 else:
     lmsg.error(fname+' ERROR.')
 
+# # Graphic stuff.
+# oh= output_handler.OutputHandler(modelSpace)
+# #oh.displayFEMesh()
+# #oh.displayLocalAxes()
+# oh.displayReactions()

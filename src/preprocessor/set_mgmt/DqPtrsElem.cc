@@ -177,6 +177,34 @@ void  XC::DqPtrsElem::createInertiaLoads(const Vector &accel)
       (*i)->createInertiaLoad(accel);
   }
 
+//! @brief Return the total mass matrix.
+XC::Matrix XC::DqPtrsElem::getTotalMass(void) const
+  {
+    Matrix retval;
+    if(!empty())
+      {
+	const_iterator i= begin();
+	retval= (*i)->getTotalMass();
+	i++;
+	for(;i!=end();i++)
+	  { retval+= (*i)->getTotalMass(); }
+      }
+    return retval;
+  }
+
+//! @brief Return the total mass matrix component for the DOF argument.
+double XC::DqPtrsElem::getTotalMassComponent(const int &dof) const
+  {
+    const Matrix totalMass= getTotalMass();
+    const size_t sz= totalMass.noRows();
+    Vector J(sz);
+    J(dof)= 1.0;
+    Vector tmp(sz);
+    tmp.addMatrixVector(1.0, totalMass, J, 1.0);
+    const double retval= dot(J,tmp);
+    return retval;
+  }
+
 //! @brief Deactivates the elements.
 void XC::DqPtrsElem::kill_elements(void)
   {
