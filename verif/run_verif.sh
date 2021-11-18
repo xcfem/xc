@@ -663,7 +663,6 @@ python tests/materials/xc_materials/sections/test_material_elastic_plate_section
 
 #Cross sections.
 echo "$BLEU" "    Sections." "$NORMAL"
-python tests/materials/xc_materials/sections/test_compound_section.py
 #Cross sections. Geometry.
 echo "$BLEU" "      Section geometry tests." "$NORMAL"
 python tests/materials/xc_materials/sections/section_geom/test_spot_01.py
@@ -679,7 +678,10 @@ python tests/materials/xc_materials/sections/section_geom/test_mass_properties_0
 python tests/materials/xc_materials/sections/section_geom/test_mass_properties_04.py
 python tests/materials/xc_materials/sections/section_geom/test_geom_params_torsion_ehe_01.py
 python tests/materials/xc_materials/sections/section_geom/test_box_girder_torsional_stiffness.py
-
+# Compound sections.
+echo "$BLEU" "      Compound sections." "$NORMAL"
+python tests/materials/xc_materials/sections/test_compound_section_01.py
+python tests/materials/xc_materials/sections/test_compound_section_02.py
 #Cross sections. Fiber model.
 echo "$BLEU" "      Elastic section tests." "$NORMAL"
 python tests/materials/xc_materials/sections/elastic_section/test_elastic_section_2d_sign_convention_01.py

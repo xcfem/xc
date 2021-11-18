@@ -48,8 +48,8 @@ zCenter= compoundSection.zCenterOfMass()
 alphaY= compoundSection.alphaY()
 ratio1= (alphaY-0.5)/0.5
 ratio2= compoundSection.A()-8.0*chsSection.A()
-ratio3= (compoundSection.Iz()-0.001361296)/0.001361296
-ratio4= (compoundSection.Iy()-0.000708496)/0.000708496
+ratio3= (compoundSection.Iy()-0.001361296)/0.001361296
+ratio4= (compoundSection.Iz()-0.000708496)/0.000708496
 
 
 '''
@@ -62,6 +62,7 @@ print('compound Iy= ', compoundSection.Iy())
 print('ratio4= ', ratio4)
 print(compoundSection.alphaY())
 '''
+
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
@@ -69,3 +70,4 @@ if(abs(yCenter)<1e-15 and abs(zCenter)<1e-15 and abs(ratio1)<1e-15 and abs(ratio
     print('test '+fname+': ok.')
 else:
     lmsg.error(fname+' ERROR.')
+
