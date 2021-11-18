@@ -573,6 +573,18 @@ class PredefinedSpace(object):
                     floatingNodes.append(n)
         return floatingNodes
 
+    def checkFloatingNodes(self, xcSet= None):
+        ''' Print an error message if the model has floating nodes.
+
+        :param xcSet: search only on the nodes in this set.
+        '''
+        floatingNodes= self.getFloatingNodes()
+        if(len(floatingNodes)>0):
+            lmsg.error('There are floating nodes in the model.')
+            for n in floatingNodes:
+                print(n.tag, n.getInitialPos3d)
+        return floatingNodes
+        
     def locateEquationNumber(self, eqNumber, xcSet= None):
         ''' Locate the node that contains the DOF that correspond to
             the equation number argument.
