@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+''' Calculation of cross-section mechanical properties (area, inertia,...).'''
+
 from __future__ import division
 from __future__ import print_function
 
@@ -13,6 +15,8 @@ import math
 import uuid
 from materials import typical_materials
 from misc_utils import log_messages as lmsg
+import numpy as np
+import matplotlib.pyplot as plt
 import scipy.interpolate
 import geom
 import xc
@@ -104,7 +108,7 @@ class SectionProperties(object):
     def SteinerY(self,z):
         '''Return the moment of inertia obtained by applying
            the parallel axis theorem (or Huygens-Steiner theorem
-           or Steiner's theorem.
+           or Steiner's theorem).
 
           :param pos: position of the original section centroid
         '''
@@ -113,7 +117,7 @@ class SectionProperties(object):
     def SteinerZ(self,y):
         '''Return the moment of inertia obtained by applying
            the parallel axis theorem (or Huygens-Steiner theorem
-           or Steiner's theorem.
+           or Steiner's theorem).
 
           :param pos: position of the original section centroid
         '''
@@ -355,6 +359,52 @@ class SectionProperties(object):
         retval.G= material.G()
         retval.Alpha= self.alphaY()
         return retval
+    
+    def getXYVertices(self, offset:geom.Vector2d= None):
+        ''' Return the contour X,Y coordinates in two separate
+            lists to be used with pyplot.
+
+        :param offset: displacement vector to sum to the positions.
+        ''' 
+        x= list()
+        y= list()
+        vertices= self.getContourPoints()
+        for p in vertices:
+            if(offset!=None):
+                p+= offset
+            x.append(p.x)
+            y.append(p.y)
+        if(offset!=None):
+            x.append(vertices[0].x+offset.x)
+            y.append(vertices[0].y+offset.y)
+        else:
+            x.append(vertices[0].x)
+            y.append(vertices[0].y)
+        return x,y
+    
+    def draw(self, notes= None):
+        ''' Draw the section contour using pyplot.
+
+        :param notes: notes to insert in the plot.
+        '''
+        fig = plt.figure()
+        ax = fig.add_subplot(111, aspect= 'equal') # subplot axes
+        x,y= self.getXYVertices()
+        ax.fill(x,y,'tab:gray')
+        ax.plot(x,y,'k')
+        if(notes):
+            # build a rectangle in axes coords
+            left, width = .25, .5
+            bottom, height = .25, .5
+            right = left + width
+            top = bottom + height
+            for text in notes:
+                ax.text(left+width/2, top, text,
+                horizontalalignment='left',
+                verticalalignment='top',
+                transform= ax.transAxes)
+                top-= 0.05
+        plt.show()
 
 class RectangularSection(SectionProperties):
     '''Rectangular section geometric parameters
@@ -528,7 +578,7 @@ class RectangularSection(SectionProperties):
     def getShearStiffnessZ(self, G):
         '''Return the shear stiffness of the section.'''
         return 5.0/6.0*G*self.A()
-    
+
     def getRegion(self,gm,nmbMat):
         '''generation of a quadrilateral region from the section 
         geometry (sizes and number of divisions for the cells)
@@ -544,6 +594,15 @@ class RectangularSection(SectionProperties):
         reg.pMin= geom.Pos2d(-self.h/2.0,-self.b/2.0)
         reg.pMax= geom.Pos2d(self.h/2.0,self.b/2.0)
         return reg
+    
+    def getContourPoints(self):
+        ''' Return the vertices of the rectangle.'''
+        retval= list()
+        retval.append(geom.Pos2d(-self.b/2.0, -self.h/2.0))
+        retval.append(geom.Pos2d(self.b/2.0, -self.h/2.0))
+        retval.append(geom.Pos2d(self.b/2.0, self.h/2.0))
+        retval.append(geom.Pos2d(-self.b/2.0, self.h/2.0))
+        return retval
 
 class CircularSection(SectionProperties):
     '''Geometric parameters of a circular or circular hollow section
@@ -585,7 +644,6 @@ class CircularSection(SectionProperties):
         ''' Return the internal diameter.'''
         return 2.0*self.Rint
     
-  
     def Iy(self):
         '''Return second moment of area about the local y-axis'''
         return 1.0/4.0*math.pi*(self.Rext**4-self.Rint**4)
@@ -631,6 +689,18 @@ class CircularSection(SectionProperties):
         '''Return the shear stiffness of the section.'''
         return self.getShearStiffnessY(G)
         
+    def getContourPoints(self, nDiv= 100):
+        ''' Return the vertices approximating the contour of the circle.'''
+        theta = np.linspace(0, 2*np.pi, nDiv)
+        retval= list()
+        r = np.sqrt(self.Rext)
+        if(self.Rint!=0):
+            lmsg.error('getContourPoints for tubes not implemented yet.')
+        x1= r*np.cos(theta)
+        x2= r*np.sin(theta)
+        for x,y in zip(x1,x2):
+            retval.append(geom.Pos2d(x, y))
+        return retval
 
 class GenericSection(SectionProperties):
     '''Mechanical properties of generic section 
@@ -690,12 +760,12 @@ class GenericSection(SectionProperties):
 class ISection(SectionProperties):
     '''I section geometric parameters
 
-     :ivar wdTopFlange:  width of the top flange (parallel to local z-axis)
-     :ivar thTopFlange:  thickness of the top flange (parallel to local y-axis)
-     :ivar thWeb:        thickness of the web (parallel to local z-axis)
-     :ivar hgWeb:        height of the web (parallel to local y-axis)
-     :ivar wdBotFlange:  width of the bottom flange (parallel to local z-axis)
-     :ivar thBotFlange:  thickness of the bottom flange (parallel to local y-axis)
+     :ivar wdTF: width of the top flange (parallel to local z-axis)
+     :ivar tTF: thickness of the top flange (parallel to local y-axis)
+     :ivar tW: thickness of the web (parallel to local z-axis)
+     :ivar hW: height of the web (parallel to local y-axis)
+     :ivar wBF: width of the bottom flange (parallel to local z-axis)
+     :ivar tBF: thickness of the bottom flange (parallel to local y-axis)
    ''' 
       #      wdTopFlange
       # --------------------- thTopFlange
@@ -712,6 +782,17 @@ class ISection(SectionProperties):
       #      wdBotFlange
 
     def __init__(self,name,wdTopFlange,thTopFlange,thWeb,hgWeb,wdBotFlange,thBotFlange):
+        ''' Constructor.
+
+         :param name:  section name.
+         :param wdTopFlange:  width of the top flange (parallel to local z-axis)
+         :param thTopFlange:  thickness of the top flange (parallel to local y-axis)
+         :param thWeb:        thickness of the web (parallel to local z-axis)
+         :param hgWeb:        height of the web (parallel to local y-axis)
+         :param wdBotFlange:  width of the bottom flange (parallel to local z-axis)
+         :param thBotFlange:  thickness of the bottom flange (parallel to local y-axis)
+       ''' 
+
         super(ISection,self).__init__(name)
         self.wTF= wdTopFlange
         self.tTF= thTopFlange
@@ -861,6 +942,13 @@ class PolygonalSection(SectionProperties):
         msg+= '. 5/6 returned'
         lmsg.warning(msg)
         return 5.0/6.0
+    
+    def getContourPoints(self):
+        ''' Return the vertices of the rectangle.'''
+        retval= list()
+        for p in self.plg:
+            retval.append(p)
+        return retval
 
 ##   Return the torsion constant of a box 
 ##   according to the book "Puentes (apuntes para su diseño
@@ -934,9 +1022,13 @@ def solicitationTypeString(tipoSol):
 class CompoundSection(SectionProperties):
     '''Compound section properties (area, moments of inertia,...)
 
-    :ivar name:         name identifying the section
+    :ivar name: name identifying the section.
     '''
     def __init__(self,name, section_list):
+        ''' Constructor.
+
+        :param name: name identifying the section.
+        '''
         super(CompoundSection,self).__init__(name)
         self.sectionList= section_list
       
@@ -954,18 +1046,18 @@ class CompoundSection(SectionProperties):
         for s in self.sectionList:
             area= s[1].A()
             totalArea+=area 
-            retval+= s[0].x*area
+            retval+= s[0].y*area
         retval/= totalArea
         return retval
   
     def zCenterOfMass(self):
-        '''y coordinate of the center of mass.'''
+        '''z coordinate of the center of mass.'''
         retval= 0.0
         totalArea= 0.0
         for s in self.sectionList:
             area= s[1].A()
             totalArea+=area 
-            retval+= s[0].y*area
+            retval+= s[0].x*area
         retval/= totalArea
         return retval
   
@@ -974,7 +1066,7 @@ class CompoundSection(SectionProperties):
       zCenter= self.zCenterOfMass()
       retval= 0.0
       for s in self.sectionList:
-        z= s[0].y
+        z= s[0].x
         retval+= s[1].SteinerY(z-zCenter)
       return retval
   
@@ -983,13 +1075,13 @@ class CompoundSection(SectionProperties):
         yCenter= self.yCenterOfMass()
         retval= 0.0
         for s in self.sectionList:
-          y= s[0].x
+          y= s[0].y
           retval+= s[1].SteinerZ(y-yCenter)
         return retval
   
     def J(self):
         '''torsional constant of the section.'''
-        center= geom.Pos2d(self.yCenterOfMass(), self.zCenterOfMass())
+        center= geom.Pos2d(self.zCenterOfMass(), self.yCenterOfMass())
         retval= 0.0
         for s in self.sectionList:
             retval+= s[1].SteinerJ(s[0].dist(center))
@@ -1018,3 +1110,28 @@ class CompoundSection(SectionProperties):
         retval/= totalArea
         return retval
 
+    def draw(self, notes= None):
+        ''' Draw the section contour using pyplot.
+
+        :param notes: notes to insert in the plot.
+        '''
+        fig = plt.figure()
+        ax = fig.add_subplot(111, aspect= 'equal') # subplot axes
+        for section in self.sectionList:
+            org= section[0]
+            x,y= section[1].getXYVertices(offset=geom.Vector2d(org.x,org.y))
+            ax.fill(x,y,'tab:gray')
+            ax.plot(x,y,'k')
+        if(notes):
+            # build a rectangle in axes coords
+            left, width = .25, .5
+            bottom, height = .25, .5
+            right = left + width
+            top = bottom + height
+            for text in notes:
+                ax.text(left+width/2, top, text,
+                horizontalalignment='left',
+                verticalalignment='top',
+                transform= ax.transAxes)
+                top-= 0.05
+        plt.show()
