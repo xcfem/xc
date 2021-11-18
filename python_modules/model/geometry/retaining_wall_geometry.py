@@ -186,7 +186,10 @@ class CantileverRetainingWallGeometry(object):
         return x,y
 
     def draw(self, notes= None):
-        ''' Draw the wall contour using pyplot.'''
+        ''' Draw the wall contour using pyplot.
+
+        :param notes: notes to insert in the plot.
+        '''
         fig = plt.figure()
         #plt.axis('equal')
         #plt.grid(axis= 'both')
