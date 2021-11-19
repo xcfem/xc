@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
-''' Functions to model loads according to spanish code IAPF.'''
+''' Functions to model railway loads according to spanish code IAPF.'''
 
 from __future__ import division
+from __future__ import print_function
 
 import math
 __author__= "Ana Ortega (AO_O) Luis C. Pérez Tato"
