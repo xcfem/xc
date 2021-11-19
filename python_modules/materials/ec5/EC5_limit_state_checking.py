@@ -10,6 +10,7 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "ana.ortega@ciccp.es "
 
+import sys
 from misc_utils import log_messages as lmsg
 from materials.sections import section_properties
 from postprocess import def_vars_control
@@ -84,3 +85,120 @@ def printResultsELU(elems,crossSection):
     tauAdm= fmt.format(crossSection.taud/1e6)
     fcvCP= fmt2.format(e.getProp("FCVCP"))
     print("tag= ", e.tag, " Vy= ", Vy , "kN  Vz= ", Vz , "kN  TauMax= ", tauMax , "MPa tauAdm= ", tauAdm, "MPa FCVCP= ", fcvCP , " HIPCPV= ", e.getProp("HIPCPV"))
+
+# Annex B (informative) Vibrations caused by pedestrians.
+
+## B.2 Vertical vibrations.
+def getVerticalAccel1Person(f_vert:float, M:float, dampingRatio:float):
+    ''' Return the vertical acceleration of the bridge according to
+        paragraph (1) of clause B.2 of EC5 annex B.
+
+    :param f_vert: fundamental natural frequency for vertical 
+                   deformation of the bridge.
+    :param M: total mass of the bridge.
+    :param dampingRatio: damping ratio.
+    '''
+    retval= 100/M/dampingRatio
+    if(f_vert<=2.5): # Expression (B.1)
+        retval*= 2
+    elif(f_vert>5): # out of range
+        funcName= sys._getframe(0).f_code.co_name
+        lmsg.warning(funcName+'; frequency: '+str(f_vert)+' out of range [0,5] Hz. Normally a higer frequency means that there is no vibration problem.')
+        retval= 0.0
+    return retval
+        
+
+def kvert(f_vert:float):
+    ''' Return the value of the k_vert coefficient according to figure
+        B.1 of EC5 annex B.
+
+    :param f_vert: fundamental natural frequency for vertical 
+                   deformation of the bridge.
+    '''
+    retval= 1
+    if(f_vert<=1):
+        retval= 0.33
+    elif(f_vert<=1.5):
+        retval= 1.34*(f_vert-1)+0.33
+    elif(f_vert<=5.0):
+        retval= 1-0.4*(f_vert-2.5)
+    else:
+        retval= 0.0
+    return retval
+        
+def getVerticalAccelNPersons(n:int, f_vert:float, M:float, dampingRatio:float):
+    ''' Return the vertical acceleration of the bridge according to
+        paragraph (2) of clause B.2 of EC5 annex B.
+
+    :param n: number of pedestrians.
+    :param f_vert: fundamental natural frequency for vertical 
+                   deformation of the bridge.
+    :param M: total mass of the bridge.
+    :param dampingRatio: damping ratio.
+    '''
+    a_vert1= getVerticalAccel1Person(f_vert, M, dampingRatio)
+    k_vert= kvert(f_vert)
+    return 0.23*a_vert1*n*k_vert # Expression (B.2)
+
+def getVerticalAccel1Runner(f_vert:float, M:float, dampingRatio:float):
+    ''' Return the vertical acceleration of the bridge according to
+        paragraph (3) of clause B.2 of EC5 annex B.
+
+    :param f_vert: fundamental natural frequency for vertical 
+                   deformation of the bridge.
+    :param M: total mass of the bridge.
+    :param dampingRatio: damping ratio.
+    '''
+    if(f_vert>=2.5 and f_vert<=3.5): # Expression (B.3)
+        retval*= 600/M/dampingRatio
+    else: # out of range
+        funcName= sys._getframe(0).f_code.co_name
+        lmsg.warning(funcName+'; frequency: '+str(f_vert)+' out of range [2.5,3.5] Hz. Normally a higer frequency means that there is no vibration problem.')
+        retval= 0.0
+    return retval
+
+
+## B.3 Horizontal vibrations.
+def getHorizontalAccel1Person(f_hor:float, M:float, dampingRatio:float):
+    ''' Return the horizontal acceleration of the bridge according to
+        paragraph (1) of clause B.3 of EC5 annex B.
+
+    :param f_hor: fundamental natural frequency for horizontal 
+                   deformation of the bridge.
+    :param M: total mass of the bridge.
+    :param dampingRatio: damping ratio.
+    '''
+    retval= 50/M/dampingRatio # Expression B.4
+    if(f_hor>2.5): # out of range
+        funcName= sys._getframe(0).f_code.co_name
+        lmsg.warning(funcName+'; frequency: '+str(f_hor)+' out of range [0,2.5] Hz. Normally a higer frequency means that there is no vibration problem.')
+        retval= 0.0
+    return retval
+
+def khor(f_hor:float):
+    ''' Return the value of the k_hor coefficient according to figure
+        B.2 of EC5 annex B.
+
+    :param f_hor: fundamental natural frequency for horizontal 
+                   deformation of the bridge.
+    '''
+    retval= 1
+    if(f_hor>1.25 and f_hor<2.5):
+        retval= 1-0.8*(f_hor-1.25)
+    else:
+        retval= 0.0
+    return retval
+
+def getHorizontalAccelNPersons(n:int, f_hor:float, M:float, dampingRatio:float):
+    ''' Return the horizontal acceleration of the bridge according to
+        paragraph (2) of clause B.2 of EC5 annex B.
+
+    :param n: number of pedestrians.
+    :param f_hor: fundamental natural frequency for horizontal 
+                   deformation of the bridge.
+    :param M: total mass of the bridge.
+    :param dampingRatio: damping ratio.
+    '''
+    a_hor1= getHorizontalAccel1Person(f_hor, M, dampingRatio)
+    k_hor= khor(f_hor)
+    return 0.18*a_hor1*n*k_hor # Expression (B.2)

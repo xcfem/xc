@@ -136,7 +136,6 @@ python tests/utility/soil_mechanics/test_boussinesq.py
 
 # Tests about actions.
 echo "$BLEU" "Actions tests." "$NORMAL"
-python tests/actions/test_derailment_SIA.py
 python tests/actions/test_prestressing.py
 python tests/actions/test_peck_pressure_envelope.py
 python tests/actions/test_earth_pressure.py
@@ -160,7 +159,10 @@ python tests/actions/wind/test_iap_hiding_ratio.py
 echo "$BLEU" "  Thermal action tests." "$NORMAL"
 python tests/actions/thermal/test_thermal_grad_shell_01.py 
 python tests/actions/thermal/test_thermal_grad_shell_02.py 
-python tests/actions/thermal/test_iap_thermal.py 
+python tests/actions/thermal/test_iap_thermal.py
+echo "$BLEU" "  Trafic loads tests." "$NORMAL"
+python tests/actions/trafic_loads/test_derailment_SIA.py
+python tests/actions/trafic_loads/test_pedestrian_load_ec1.py
 
 # Load combinations tests.
 echo "$BLEU" "Load combination tests." "$NORMAL"

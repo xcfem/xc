@@ -207,7 +207,7 @@ for readed,computed in zip(openSeesRBase,rBase):
     computedRz.append(computed[1][2])
     readedRz.append(readed[1][2])
     
-## Diplay results
+## Display results
 # import matplotlib.pyplot as plt
 # plt.plot(t, computedRz, 'ro', t, readedRz,'bs')
 # plt.show()
