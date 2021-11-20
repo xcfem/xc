@@ -58,8 +58,8 @@ def getFourierCoefficients(walking:bool, fs, triangularModel= False):
                     retval[i-1]= 2*(1-c)/(1-d)
     return retval
 
-def getPedestrianLoad(t:float, fs:float, fourierCoefficients, phaseAngles= defaultPhaseAngles, G= 700.0):
-    ''' Return the vertical and horizontal loads of a single pedestrian 
+def getVerticalPedestrianLoad(t:float, fs:float, fourierCoefficients, phaseAngles= defaultPhaseAngles, G= 700.0):
+    ''' Return the vertical load of a single pedestrian 
         according to expression (2) in reference [1].
 
     :param t: time for which the load will be calculated.
@@ -70,12 +70,29 @@ def getPedestrianLoad(t:float, fs:float, fourierCoefficients, phaseAngles= defau
                         in the Fourier series.
     :param G: weight of the reference pedestrian (defaults to 700 N).
     '''
-    vLoad= 1.0 # vertical load.
-    for alpha_i, phi_i in zip(fourierCoefficients, phaseAngles):
-        vLoad+= alpha_i*math.sin(2*math.pi*fs*t-phi_i)
-    vLoad*=G
-    hLoad= vLoad-G
-    return (vLoad, hLoad)
+    retval= 1.0 # vertical load.
+    for i, (alpha_i, phi_i) in enumerate(zip(fourierCoefficients, phaseAngles)):
+        retval+= alpha_i*math.sin(2*math.pi*i*fs*t-phi_i)
+    retval*=G
+    return retval
+
+def getHorizontalPedestrianLoad(t:float, fs:float, fourierCoefficients, phaseAngles= defaultPhaseAngles, G= 700.0):
+    ''' Return the horizontal load of a single pedestrian 
+        according to expression (2) in reference [1].
+
+    :param t: time for which the load will be calculated.
+    :param fs: step frequency.
+    :param fourierCoefficients: values of the coefficients to use in the
+                                computation of the Fourier series.
+    :param phaseAngles: phase angles with respect to the first harmonic
+                        in the Fourier series.
+    :param G: weight of the reference pedestrian (defaults to 700 N).
+    '''
+    retval= 0.0 # horizontal load.
+    for i, (alpha_i, phi_i) in enumerate(zip(fourierCoefficients, phaseAngles)):
+        retval+= alpha_i*math.sin(math.pi*i*fs*t-phi_i) # half the frequency of the horizontal load.
+    retval*=G
+    return retval
 
 class PedestrianLoad(object):
     ''' Pedestrian load model according to prEN1991-2 
@@ -106,12 +123,18 @@ class PedestrianLoad(object):
         self.fourierCoefficients= getFourierCoefficients(walking= walking, fs= fs, triangularModel= False)
         self.phaseAngles= phaseAngles
 
-    def getLoad(self, t):
-        ''' Return the vertical and horizontal loads of a single pedestrian 
-            according to expression (2) in reference [1].
+    def getVerticalLoad(self, t):
+        ''' Return the vertical load of a single pedestrian.
 
         :param t: time for which the load will be calculated.
         '''
-        return getPedestrianLoad(t= t,fs= self.fs, fourierCoefficients= self.fourierCoefficients)
+        return getVerticalPedestrianLoad(t= t,fs= self.fs, fourierCoefficients= self.fourierCoefficients)
+    
+    def getHorizontalLoad(self, t):
+        ''' Return the horizontal load of a single pedestrian.
+
+        :param t: time for which the load will be calculated.
+        '''
+        return getHorizontalPedestrianLoad(t= t,fs= self.fs, fourierCoefficients= self.fourierCoefficients)
 
 
