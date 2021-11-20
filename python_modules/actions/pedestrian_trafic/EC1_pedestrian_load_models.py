@@ -2,7 +2,7 @@
 ''' Functions to model pedestrian loads according to prEN1991-2 
    (Draft stage 34) – General actions – Traffic loads on bridges; 
    Annex X (informative) Dynamic models of pedestrian loads. 
-   (August 2001)spanish code IAPF.'''
+   (August 2001).'''
 
 from __future__ import division
 from __future__ import print_function
@@ -58,9 +58,9 @@ def getFourierCoefficients(walking:bool, fs, triangularModel= False):
                     retval[i-1]= 2*(1-c)/(1-d)
     return retval
 
-def getPedestrianVerticalLoad(t:float, fs:float, fourierCoefficients, phaseAngles= defaultPhaseAngles, G= 700.0):
-    ''' Return the vertical load of a single pedestrian according to 
-        expression (2) in reference [1].
+def getPedestrianLoad(t:float, fs:float, fourierCoefficients, phaseAngles= defaultPhaseAngles, G= 700.0):
+    ''' Return the vertical and horizontal loads of a single pedestrian 
+        according to expression (2) in reference [1].
 
     :param t: time for which the load will be calculated.
     :param fs: step frequency.
@@ -70,9 +70,48 @@ def getPedestrianVerticalLoad(t:float, fs:float, fourierCoefficients, phaseAngle
                         in the Fourier series.
     :param G: weight of the reference pedestrian (defaults to 700 N).
     '''
-    retval= 1.0
-    for phi_i, alpha_i in zip(fourierCoefficients, phaseAngles):
-        retval+= alpha_i*math.sin(2*math.pi*fs*t-phi_i)
-    retval*=G
-    return retval
+    vLoad= 1.0 # vertical load.
+    for alpha_i, phi_i in zip(fourierCoefficients, phaseAngles):
+        vLoad+= alpha_i*math.sin(2*math.pi*fs*t-phi_i)
+    vLoad*=G
+    hLoad= vLoad-G
+    return (vLoad, hLoad)
+
+class PedestrianLoad(object):
+    ''' Pedestrian load model according to prEN1991-2 
+       (Draft stage 34) – General actions – Traffic loads on bridges; 
+       Annex X (informative) Dynamic models of pedestrian loads. 
+       (August 2001).
+
+    :ivar fs: step frequency.
+    :ivar G: weight of the reference pedestrian (defaults to 700 N).
+    :ivar fourierCoefficients: values of the coefficients to use in the
+                               computation of the Fourier series.
+    :ivar phaseAngles: phase angles with respect to the first harmonic
+                      in the Fourier series.
+    '''
+    def __init__(self, fs:float, walking:bool, G= 700.0, triangularModel= False, phaseAngles= defaultPhaseAngles):
+        ''' Constructor.
+
+        :param fs: step frequency.
+        :param walking: true if the pedestrian is supposed to walk.
+        :param G: weight of the reference pedestrian (defaults to 700 N).
+        :param triangularModel: if true use a triangular model in the time 
+                                domain otherwise use a half-sine model.
+        :param phaseAngles: phase angles with respect to the first harmonic
+                            in the Fourier series.
+        '''
+        self.fs= fs
+        self.G= G
+        self.fourierCoefficients= getFourierCoefficients(walking= walking, fs= fs, triangularModel= False)
+        self.phaseAngles= phaseAngles
+
+    def getLoad(self, t):
+        ''' Return the vertical and horizontal loads of a single pedestrian 
+            according to expression (2) in reference [1].
+
+        :param t: time for which the load will be calculated.
+        '''
+        return getPedestrianLoad(t= t,fs= self.fs, fourierCoefficients= self.fourierCoefficients)
+
 
