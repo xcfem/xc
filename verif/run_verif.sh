@@ -602,6 +602,7 @@ python tests/loads/time_series/test_trig_01.py
 python tests/loads/time_series/test_triang_01.py
 python tests/loads/time_series/test_rectang_01.py
 python tests/loads/time_series/test_pulse_01.py
+echo "$BLEU" "    Ground motion time series tests." "$NORMAL"
 python tests/loads/time_series/test_ground_motion_01.py
 python tests/loads/time_series/test_ground_motion_02.py
 python tests/loads/time_series/test_ground_motion_03.py
@@ -610,6 +611,9 @@ python tests/loads/time_series/test_ground_motion_05.py
 python tests/loads/time_series/test_ground_motion_06.py
 python tests/loads/time_series/test_ground_motion_07.py
 python tests/loads/time_series/test_ground_motion_08.py
+echo "$BLEU" "    Path time series tests." "$NORMAL"
+python tests/loads/time_series/test_path_01.py
+python tests/loads/time_series/test_path_time_01.py
 
 #Materials tests
 #Uniaxial materials.
