@@ -253,6 +253,20 @@ XC::TimeSeries *XC::MapLoadPatterns::newTimeSeries(const std::string &type, cons
     return ts;
   }
 
+//! @brief Returns the name of the time series pointed by the parameter.
+const std::string &XC::MapLoadPatterns::getTimeSeriesName(const TimeSeries *ptr) const
+  {
+    static std::string retval;
+    retval= "";
+    for(time_series_const_iterator i= tseries.begin();i!=tseries.end();i++)
+      if((*i).second == ptr)
+        {
+          retval= (*i).first;
+          break;
+        }
+    return retval;
+  }
+
 //! @brief Define a LoadPattern object with the type and the
 //! name being passed as parameters.
 XC::LoadPattern *XC::MapLoadPatterns::newLoadPattern(const std::string &type,const std::string &cod_lp)

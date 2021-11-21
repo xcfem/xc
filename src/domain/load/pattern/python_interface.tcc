@@ -106,7 +106,8 @@ class_<XC::LoadCombinationGroup, bases<XC::LoadHandlerMember,XC::LoadCombination
   ;
 
 class_<XC::TimeSeries, bases<CommandEntity,XC::MovableObject>, boost::noncopyable >("TimeSeries", no_init)
-.def("getFactor", &XC::TimeSeries::getFactor,"getFactor(pseudoTime): get load factor.")
+  .add_property("name", make_function(&XC::TimeSeries::getName, return_value_policy<return_by_value>() ),"return the load pattern name.")
+  .def("getFactor", &XC::TimeSeries::getFactor,"getFactor(pseudoTime): get load factor.")
   .def("getDuration",&XC::TimeSeries::getDuration,"Returns time series duration.")
 
   .def("getPeakFactor",&XC::TimeSeries::getPeakFactor,"Returns time series peak factor")

@@ -67,13 +67,29 @@
 #include "utility/matrix/Vector.h"
 #include "utility/matrix/ID.h"
 #include "utility/actor/objectBroker/FEM_ObjectBroker.h"
-
+#include "MapLoadPatterns.h"
 
 //! @brief Constructor.
 //! 
 //! @param classTag: class identifier.
 XC::TimeSeries::TimeSeries(int classTag)
   :MovableObject(classTag){}
+
+//! @brief Returns a pointer to the container of the time series.
+const XC::MapLoadPatterns *XC::TimeSeries::getMapLoadPatterns(void) const
+  {
+    const MapLoadPatterns *retval= dynamic_cast<const MapLoadPatterns *>(Owner());
+    if(!retval)
+      std::cerr << getClassName() << "::" << __FUNCTION__
+	        << "; load pattern container not defined." << std::endl;
+    return retval;
+  }
+//! @brief Returns the name of this load pattern.
+const std::string &XC::TimeSeries::getName(void) const
+  {
+    const MapLoadPatterns *mhandler= getMapLoadPatterns();
+    return mhandler->getTimeSeriesName(this);
+  }
 
 // AddingSensitivity:BEGIN //////////////////////////////////////////
 int XC::TimeSeries::setParameter(const std::vector<std::string> &argv, Parameter &param)
@@ -87,7 +103,6 @@ int XC::TimeSeries::activateParameter(int parameterID)
 
 double XC::TimeSeries::getFactorSensitivity(double pseudoTime)
   { return 0.0; }
-
 // AddingSensitivity:END ////////////////////////////////////////////
 
 //! @brief Send a pointer to the series through the communicator argument.
