@@ -330,7 +330,6 @@ XC::Matrix XC::Element::getMass(const Node *n) const
     if(iNod>=0)
       {
 	const int nodRow= iNod*nDofI; //row where node data start.
-        int nodCol= 0;
 	for(int jNod= 0;jNod<numNodes;jNod++)
 	  {
 	    const int nodCol= jNod*nDofI;
