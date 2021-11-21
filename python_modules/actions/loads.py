@@ -9,8 +9,9 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "ana.Ortega@ciccp.es"
 
-import xc
+import xc_base
 import geom
+import xc
 from actions.earth_pressure import earth_pressure as ep
 from model.sets import sets_mng as sets
 from misc_utils import log_messages as lmsg
@@ -722,5 +723,5 @@ class MovableLoad(object):
             loadHistory[nodeTag]= tmp
             targetNode= self.nodeTags.index(nodeTag)
             for t in ti:
-                tmp.append(movableLoad.getLoadOnNode(iNode= targetNode, t= t))
+                tmp.append(self.getLoadOnNode(iNode= targetNode, t= t))
         return ti, loadHistory
