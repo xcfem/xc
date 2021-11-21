@@ -541,60 +541,6 @@ python tests/constraints/test_pile_01.py
 
 #Load tests
 echo "$BLEU" "Loads tests." "$NORMAL"
-python tests/loads/beam2dNodalLoad.py
-python tests/loads/beam2dNodalLoad02.py
-python tests/loads/beam2dPointLoad.py
-python tests/loads/beam2dUniformLoad.py
-python tests/loads/beam2dUniformLoad02.py
-python tests/loads/beam3dPointLoad.py
-python tests/loads/beam3dUniformLoad.py
-python tests/loads/beam3dUniformLoad02.py
-python tests/loads/beam3dUniformLoad03.py
-python tests/loads/test_vector2d_uniform_load_local.py
-python tests/loads/test_vector2d_uniform_load_global01.py
-python tests/loads/test_vector2d_point_load_local.py
-python tests/loads/test_vector2d_point_load_global.py
-python tests/loads/test_vector3d_point_load_local.py
-python tests/loads/test_vector3d_point_load_global.py
-python tests/loads/test_vector3d_uniform_load_local.py
-python tests/loads/test_vector3d_uniform_load_global01.py
-python tests/loads/test_vector3d_uniform_load_global02.py
-python tests/loads/test_vector3d_uniform_load_global03.py
-python tests/loads/truss_strain_load_01.py
-python tests/loads/truss_strain_load_02.py
-python tests/loads/truss_strain_load_03.py
-python tests/loads/truss_strain_load_04.py
-python tests/loads/truss_strain_load_05.py
-python tests/loads/truss_strain_load_06.py
-python tests/loads/beam_strain_load_01.py
-python tests/loads/beam_strain_load_02.py
-python tests/loads/beam_strain_load_03.py
-python tests/loads/beam_strain_load_04.py
-python tests/loads/beam_strain_load_05.py
-python tests/loads/beam_strain_load_06.py
-python tests/loads/beam_strain_load_07.py
-python tests/loads/beam_strain_load_08.py
-python tests/loads/beam_strain_load_09.py
-python tests/loads/shell_strain_load_01.py
-python tests/loads/shell_strain_load_02.py
-python tests/loads/shell_strain_load_03.py
-python tests/loads/shell_strain_load_04.py
-python tests/loads/shell_strain_load_05.py
-python tests/loads/shell_grad_strain_load_02.py
-python tests/loads/element_load_on_already_active_pattern.py
-echo "$BLEU" "  Inertia loads." "$NORMAL"
-python tests/loads/inertia_loads/test_inertia_loads_00.py
-python tests/loads/inertia_loads/test_inertia_loads_01.py
-python tests/loads/inertia_loads/test_inertia_loads_02.py
-python tests/loads/inertia_loads/test_inertia_loads_03.py
-python tests/loads/inertia_loads/test_inertia_loads_04.py
-python tests/loads/inertia_loads/test_inertia_loads_05.py
-python tests/loads/inertia_loads/test_inertia_loads_06.py
-python tests/loads/inertia_loads/test_inertia_loads_07.py
-python tests/loads/inertia_loads/test_inertia_loads_08.py
-python tests/loads/inertia_loads/test_inertia_loads_09.py
-python tests/loads/inertia_loads/test_inertia_loads_10.py
-python tests/loads/inertia_loads/test_inertia_loads_11.py
 echo "$BLEU" "  Load time series tests." "$NORMAL"
 python tests/loads/time_series/test_linear_01.py
 python tests/loads/time_series/test_constant_01.py
@@ -614,6 +560,65 @@ python tests/loads/time_series/test_ground_motion_08.py
 echo "$BLEU" "    Path time series tests." "$NORMAL"
 python tests/loads/time_series/test_path_01.py
 python tests/loads/time_series/test_path_time_01.py
+echo "$BLEU" "  Loads tests." "$NORMAL"
+python tests/loads/beam2dNodalLoad.py
+python tests/loads/beam2dNodalLoad02.py
+python tests/loads/beam2dPointLoad.py
+python tests/loads/beam2dUniformLoad.py
+python tests/loads/beam2dUniformLoad02.py
+python tests/loads/beam3dPointLoad.py
+python tests/loads/beam3dUniformLoad.py
+python tests/loads/beam3dUniformLoad02.py
+python tests/loads/beam3dUniformLoad03.py
+python tests/loads/test_vector2d_uniform_load_local.py
+python tests/loads/test_vector2d_uniform_load_global01.py
+python tests/loads/test_vector2d_point_load_local.py
+python tests/loads/test_vector2d_point_load_global.py
+python tests/loads/test_vector3d_point_load_local.py
+python tests/loads/test_vector3d_point_load_global.py
+python tests/loads/test_vector3d_uniform_load_local.py
+python tests/loads/test_vector3d_uniform_load_global01.py
+python tests/loads/test_vector3d_uniform_load_global02.py
+python tests/loads/test_vector3d_uniform_load_global03.py
+python tests/loads/element_load_on_already_active_pattern.py
+echo "$BLEU" "    Strain loads." "$NORMAL"
+python tests/loads/strain_loads/truss_strain_load_01.py
+python tests/loads/strain_loads/truss_strain_load_02.py
+python tests/loads/strain_loads/truss_strain_load_03.py
+python tests/loads/strain_loads/truss_strain_load_04.py
+python tests/loads/strain_loads/truss_strain_load_05.py
+python tests/loads/strain_loads/truss_strain_load_06.py
+python tests/loads/strain_loads/beam_strain_load_01.py
+python tests/loads/strain_loads/beam_strain_load_02.py
+python tests/loads/strain_loads/beam_strain_load_03.py
+python tests/loads/strain_loads/beam_strain_load_04.py
+python tests/loads/strain_loads/beam_strain_load_05.py
+python tests/loads/strain_loads/beam_strain_load_06.py
+python tests/loads/strain_loads/beam_strain_load_07.py
+python tests/loads/strain_loads/beam_strain_load_08.py
+python tests/loads/strain_loads/beam_strain_load_09.py
+python tests/loads/strain_loads/shell_strain_load_01.py
+python tests/loads/strain_loads/shell_strain_load_02.py
+python tests/loads/strain_loads/shell_strain_load_03.py
+python tests/loads/strain_loads/shell_strain_load_04.py
+python tests/loads/strain_loads/shell_strain_load_05.py
+python tests/loads/strain_loads/shell_grad_strain_load_02.py
+python tests/loads/strain_loads/shell_grad_strain_load_03.py
+echo "$BLEU" "    Inertia loads." "$NORMAL"
+python tests/loads/inertia_loads/test_inertia_loads_00.py
+python tests/loads/inertia_loads/test_inertia_loads_01.py
+python tests/loads/inertia_loads/test_inertia_loads_02.py
+python tests/loads/inertia_loads/test_inertia_loads_03.py
+python tests/loads/inertia_loads/test_inertia_loads_04.py
+python tests/loads/inertia_loads/test_inertia_loads_05.py
+python tests/loads/inertia_loads/test_inertia_loads_06.py
+python tests/loads/inertia_loads/test_inertia_loads_07.py
+python tests/loads/inertia_loads/test_inertia_loads_08.py
+python tests/loads/inertia_loads/test_inertia_loads_09.py
+python tests/loads/inertia_loads/test_inertia_loads_10.py
+python tests/loads/inertia_loads/test_inertia_loads_11.py
+echo "$BLEU" "    Dynamic loads." "$NORMAL"
+python tests/loads/dynamic_loads/test_node_load_history_01.py
 
 #Materials tests
 #Uniaxial materials.
