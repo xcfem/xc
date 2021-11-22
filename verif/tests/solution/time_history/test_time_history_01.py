@@ -55,7 +55,7 @@ prep=FEcase.getPreprocessor
 nodes= prep.getNodeHandler
 elements= prep.getElementHandler
 modelSpace= predefined_spaces.StructuralMechanics2D(nodes) #defines dimension of
-                  #the space: nodes by three coordinates (x,y) and 
+                  #the space: nodes by two coordinates (x,y) and 
                   #three DOF for each node (Ux,Uy,Theta)
 
 ## *** MESH ***                  
