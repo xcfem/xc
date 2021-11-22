@@ -8,3 +8,4 @@ Transient dynamic analysis (also known as time-history analysis) aims at finding
 - [OpenSeesaw](https://portwooddigital.com/2021/11/12/openseesaw/)
 - [Transient Analysis of a Cantilever Beam](https://sites.ualberta.ca/~wmoussa/AnsysTutorial/IT/Transient/Transient.html)
 - [OpenSees: Static, Cyclic, and Dynamic Analysis Examples](https://opensees.berkeley.edu/workshop/OpenSeesDays2008/A10_UsersExampleAnalysis.pdf)
+- [Initial conditions](https://portwooddigital.com/2021/11/20/initial-conditions/)
