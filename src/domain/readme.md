@@ -11,3 +11,9 @@ This directory contains the classes that define the domain components (nodes, el
 		 - load: classes that represent the problem loads.
 		 - mesh: finite elements mesh (nodes and elements).
          - partitioner: object that can partition and load balance a PartitionedDomain.
+		 
+## References
+
+ -[Trying to get a reaction](https://portwooddigital.com/2021/11/15/trying-to-get-a-reaction)
+- [Reaction and unbalance](https://portwooddigital.com/2021/05/09/reaction-and-unbalance/)
+
