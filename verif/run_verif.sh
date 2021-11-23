@@ -624,6 +624,7 @@ python tests/loads/inertia_loads/test_inertia_loads_11.py
 echo "$BLEU" "    Dynamic loads." "$NORMAL"
 python tests/loads/dynamic_loads/test_node_load_history_01.py
 python tests/loads/dynamic_loads/test_node_load_history_02.py
+python tests/loads/dynamic_loads/test_node_load_history_03.py
 
 #Materials tests
 #Uniaxial materials.
