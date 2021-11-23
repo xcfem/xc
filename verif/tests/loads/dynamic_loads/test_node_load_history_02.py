@@ -5,13 +5,12 @@ from __future__ import print_function
 from __future__ import division
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
-__copyright__= "Copyright 2015, LCPT and AOO"
+__copyright__= "Copyright 2021, LCPT and AOO"
 __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
 import math
-from scipy import interpolate
 import xc_base
 import geom
 import xc
@@ -20,8 +19,6 @@ from model import predefined_spaces
 from materials.ec3 import EC3_materials # Steel shapes.
 from misc_utils import log_messages as lmsg
 from actions import loads
-from rough_calculations import simple_beam_oscillation as sbo
-from rough_calculations import ng_simple_beam as sb
 
 # Problem type
 feProblem= xc.FEProblem()
@@ -44,9 +41,6 @@ scc= shape.defElasticShearSection2d(preprocessor, "scc")
 linearRho= shape.getRho()
 E= shape.steelType.E
 I= shape.Iz()
-sBeam= sb.SimpleBeam(E= E, I= I, l= span)
-f0= sBeam.getFundamentalBendingFrequencies(1, linearRho)[0]
-w0= 2*math.pi*f0
 
 # Mesh generation
 
@@ -160,9 +154,6 @@ for row in cAccel:
         timePeakAccel= t
         xNodePeakAccel= x
 psi= 0.0
-peakAccelRefA= sbo.aceleracionCargaAislada(P= F, m= linearRho, L= span, w0= w0, psi= psi, V= v, x= xNodePeakAccel, t= timePeakAccel)
-peakAccelRefB= sbo.aceleracionExtremaCargaAislada(P= F, m= linearRho, L= span, w0= w0, psi= psi, V= v, x= xNodePeakAccel, tIni= tIni, tFin= tFin)
-
 
 ''' 
 print('span: ', span, 'm')
@@ -171,8 +162,6 @@ print('psi= ', psi*100.0, '%')
 print('v= ', v, 'm/s')
 print('x= ', x, 'm')
 print('peak acceleration in node: ', tagNodePeakAccel, '(x= ', xNodePeakAccel, ') at time: ', timePeakAccel, ' s with value a_peak= ', peakAccel, 'm/s2')
-print('peakAccelRefA= ', peakAccelRefA, 'm/s2')
-print('peakAccelRefB= ', peakAccelRefB, 'm/s2')
 print("error= ",error)
 '''
 
