@@ -4,6 +4,7 @@
 from __future__ import division
 import math
 from rough_calculations import ng_beam as bm
+from misc_utils import log_messages as lmsg
 
 #
 #  |----> x
@@ -119,7 +120,7 @@ class Cantilever(bm.Beam):
         if(numModes>3):
             className= type(self).__name__
             methodName= sys._getframe(0).f_code.co_name
-            lmsg.warning(className+'.'+methodName+': computation for numModes<4 not implemented.')
+            lmsg.warning(className+'.'+methodName+': computation for modes greater than 4 not implemented.')
         return retval
       
 # WRITE CODE PENDING.
