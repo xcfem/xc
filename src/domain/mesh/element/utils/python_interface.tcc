@@ -39,6 +39,9 @@ class_<XC::RayleighDampingFactors, bases<CommandEntity> >("RayleighDampingFactor
   .add_property("betaKinit",make_function( &XC::RayleighDampingFactors::getBetaK0, return_value_policy<return_by_value>()), &XC::RayleighDampingFactors::setBetaK0, "factor applied to elements initial stiffness matrix.")
   .add_property("betaKcommit",make_function( &XC::RayleighDampingFactors::getBetaKc, return_value_policy<return_by_value>()), &XC::RayleighDampingFactors::setBetaKc, "factor applied to elements committed stiffness matrix.")
   .def(self_ns::str(self_ns::self))
+  .def("getCurrentDampingRatio", &XC::RayleighDampingFactors::getCurrentDampingRatio, "Return the current damping value for the natural frequency argument (alphaM/(2*w)+betaK*w/2")
+  .def("getInitialDampingRatio", &XC::RayleighDampingFactors::getInitialDampingRatio, "Return the current initial value for the natural frequency argument (alphaM/(2*w)+betaK*w/2")
+  .def("getCommitedDampingRatio", &XC::RayleighDampingFactors::getCommitedDampingRatio, "Return the commited damping value for the natural frequency argument (alphaM/(2*w)+betaK*w/2")
   ;
 
 typedef XC::NodePtrs::vector_ptr_nodes vector_ptr_nodes;

@@ -111,6 +111,10 @@ class RayleighDampingFactors: public CommandEntity, public MovableObject
       { return (betaK == 0.0 && betaK0 == 0.0 && betaKc == 0.0); }
     int updateParameter(int parameterID, Information &info);
 
+    double getCurrentDampingRatio(const double &) const;
+    double getInitialDampingRatio(const double &) const;
+    double getCommitedDampingRatio(const double &) const;
+    
     int sendSelf(Communicator &);
     int recvSelf(const Communicator &);
 
