@@ -150,7 +150,7 @@ def getVerticalAccel1Runner(f_vert:float, M:float, dampingRatio:float):
     :param dampingRatio: damping ratio.
     '''
     if(f_vert>=2.5 and f_vert<=3.5): # Expression (B.3)
-        retval*= 600/M/dampingRatio
+        retval= 600/M/dampingRatio
     else: # out of range
         funcName= sys._getframe(0).f_code.co_name
         lmsg.warning(funcName+'; frequency: '+str(f_vert)+' out of range [2.5,3.5] Hz. Normally a higer frequency means that there is no vibration problem.')
