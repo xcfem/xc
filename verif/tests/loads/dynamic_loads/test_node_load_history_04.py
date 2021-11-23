@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-'''Example from Stimac-Grandic, Ivana. (2015). Serviceability verification of pedestrian bridges under pedestrian loading. Tehnicki vjesnik - Technical Gazette. 22. 527-537. 10.17559/TV-20131030105641.'''
+'''Inspired on the example from Stimac-Grandic, Ivana. (2015). Serviceability verification of pedestrian bridges under pedestrian loading. Tehnicki vjesnik - Technical Gazette. 22. 527-537. 10.17559/TV-20131030105641.'''
 
 
 from __future__ import print_function
@@ -21,7 +21,7 @@ from materials import typical_materials
 from misc_utils import log_messages as lmsg
 from actions import loads
 from rough_calculations import ng_fixed_fixed_beam as sb
-
+from actions.pedestrian_trafic import EC1_pedestrian_load_models as plm
 
 gravity= 9.81 # m/s2
 
@@ -74,8 +74,8 @@ nC= ln.getNearestNode(geom.Pos3d(span/2.0,0.0,0.0))
 nB= pt2.getNode()
 
 # Constraints
-modelSpace.fixNode000(nA.tag)
-modelSpace.fixNode000(nB.tag)
+modelSpace.fixNode000(nA.tag) # clamped.
+modelSpace.fixNode000(nB.tag) # clamped.
 
 ### Eigen analysis.
 sBeam= sb.FixedFixedBeam(E= beamE, I= beamIz, l= span)
@@ -90,31 +90,47 @@ preprocessor.getDomain.setRayleighDampingFactors(rayleigh)
 
 ## Load definition.
 ### Load value.
-A= 180 # amplitude of the pulsating force.
+fs= 3.5 # Hz
+walking= False # So running.
+v= fs*0.8 # load speed.
 tStart= 0.0
-v= 0.9*beam_fv
-tEnd= 3*span/v
+tEnd= span/v
 duration= tEnd-tStart
 dT= 1/(25*beam_fv) # time step.
 numSteps= int(duration/dT)+1
-period= 1/beam_fv
+pedestrianLoad= plm.PedestrianLoad(fs, walking)
+### Compute node list.
+nodeList= list()
+nodeTagList= list()
+for n in ln.nodes:
+    nodeList.append((n.tag, n.getInitialPos3d.x))
+    nodeTagList.append(n.tag)
+nodeList.sort(key=lambda tup: tup[1])  # sorts in place
+movableLoad= loads.MovableLoad(P= pedestrianLoad.getVerticalLoad, v= v, t0= tStart, nodes= nodeList)
+ti, loadHistory= movableLoad.getNodeLoadHistory(tBegin= tStart, tEnd= tEnd, step= dT)
 
 #### Create time series and load pattern.
 loadHandler= preprocessor.getLoadHandler
 lPatterns= loadHandler.getLoadPatterns
-## Definition of time series:
-pulse= lPatterns.newTimeSeries("trig_ts","ts")
-pulse.factor= 1.0
-pulse.Start= tStart
-pulse.tFinish= tEnd
-pulse.period= period
-pulse.shift= 0.0
-lp= lPatterns.newLoadPattern("default","pulseLoad")
-lp.newNodalLoad(nC.tag, xc.Vector([0,-A,0]))
-
-### Add load cases to domain.
-modelSpace.addLoadCaseToDomain(lp.name)
+timeSeries= dict()
+loadPatterns= dict()
+for nTag in loadHistory:
+    tsName= 'ts'+str(nTag)
+    tmp= lPatterns.newTimeSeries("path_ts",tsName)
+    lh= loadHistory[nTag] # load history for the node.
+    tmp.path= xc.Vector(lh)
+    tmp.setTimeIncr(dT)
+    timeSeries[nTag]= tmp
+    lPatterns.currentTimeSeries= tsName
+    lpName= 'lp'+str(nTag)
+    lp= lPatterns.newLoadPattern("default",lpName)
+    lp.newNodalLoad(nTag, xc.Vector([0,-1,0]))
+    loadPatterns[lpName]= lp
     
+### Add load cases to domain.
+for lpName in loadPatterns:
+    modelSpace.addLoadCaseToDomain(lpName)
+
 # Define RECORDERS
 cDisp= list()
 recDisp= preprocessor.getDomain.newRecorder("node_prop_recorder",None)
@@ -146,12 +162,12 @@ peakAccel= 0.0
 timePeakAccel= -1.0
 for row in cAccel:
     t= row[0]
-    accel= row[1][1]
+    accel= abs(row[1][1])
     if(accel>peakAccel):
         peakAccel= accel
         timePeakAccel= t
         
-ratio1= abs(peakAccel-0.17)/0.17
+ratio1= abs(peakAccel-0.0055)/0.0055
 
 ''' 
 print('span: ', span, 'm')

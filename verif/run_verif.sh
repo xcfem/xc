@@ -625,6 +625,7 @@ echo "$BLEU" "    Dynamic loads." "$NORMAL"
 python tests/loads/dynamic_loads/test_node_load_history_01.py
 python tests/loads/dynamic_loads/test_node_load_history_02.py
 python tests/loads/dynamic_loads/test_node_load_history_03.py
+python tests/loads/dynamic_loads/test_node_load_history_04.py
 
 #Materials tests
 #Uniaxial materials.
