@@ -1,14 +1,31 @@
 SET( PETSC_FOUND 0 )
 
+# Check environment variables.
+if (NOT PETSC_DIR AND DEFINED ENV{PETSC_DIR})
+    set(DEFAULT_PETSC_DIR "$ENV{PETSC_DIR}")
+else()
+    set(DEFAULT_PETSC_DIR "")
+endif()
+set(PETSC_DIR "${DEFAULT_PETSC_DIR}" CACHE PATH "Installation directory of PETSC library")
+
+if (NOT PETSC_ARCH AND DEFINED ENV{PETSC_ARCH})
+    set(DEFAULT_PETSC_ARCH "$ENV{PETSC_ARCH}")
+else()
+    set(DEFAULT_PETSC_ARCH "")
+endif()
+set(PETSC_ARCH "${DEFAULT_PETSC_ARCH}" CACHE STRING "Build architecture")
+    
 FIND_PATH(
   PETSC_INCLUDE_DIR
   NAMES petsc.h
+  PATHS ${PETSC_DIR}/include
   PATHS /usr/include/petsc/
   PATHS /usr/include/petscdir/
   )
 FIND_PATH(
   PETSCCONF_INCLUDE_DIR
   NAMES petscconf.h
+  PATHS ${PETSC_DIR}/${PETSC_ARCH}/include
   PATHS /usr/include/petsc/ 
   PATHS /usr/include/petscdir/
   )
