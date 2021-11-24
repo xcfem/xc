@@ -31,6 +31,11 @@ contains the code that deals with the solution of the finite element problem.
 ### Utility
 Utility classes and functions.
 
+## References
+
+- [Finite Element Method – What Is It?](https://www.simscale.com/blog/2016/10/what-is-finite-element-method)
+- [Finite Element Method (Wikipedia)](https://en.wikipedia.org/wiki/Finite_element_method)
+
 <!-- NOTES FOR MYSELF: -->
 <!-- notes for alpha cluster: -->
 <!--   1) change 'ssh' in ~/remote/remote.c to 'rsh' -->
