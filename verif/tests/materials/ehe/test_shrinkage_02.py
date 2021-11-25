@@ -198,8 +198,8 @@ def solveStaticLinearComb(tagComb,comb,tagSaveFase0):
     print("previousName= ",previousName)
     print("tag= ",tagComb)
     print("tagPrevia= ",tagPrevia)
-    print("descomp previa= ",getDescompCombPrevia)
-    print("resto sobre previa= ",getDescompRestoSobrePrevia)
+    print("descomp previa= ",getComponentsCombPrevia)
+    print("resto sobre previa= ",getComponentsRestoSobrePrevia)
     '''
 
     comb.addToDomain()
@@ -220,7 +220,7 @@ def procesResultVerif(tagComb, nmbComb):
     ''' 
     print("nmbComb= ",nmbComb)
     print("tagComb= ",tagComb)
-    print("descomp= ",getDescomp("%3.1f"))
+    print("descomp= ",getComponents("%3.1f"))
     print("dXMin= ",(dXMin*1e3)," mm\n")
     print("dXMax= ",(dXMax*1e3)," mm\n")
    '''
