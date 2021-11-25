@@ -170,7 +170,8 @@ echo "$BLEU" "  Forming load combination tests." "$NORMAL"
 #python tests/actions/loadCombinations/testLoadCombinations.py
 python tests/actions/loadCombinations/test_secondaries_00.py
 python tests/actions/loadCombinations/test_accidentales.py
-python tests/actions/loadCombinations/test_iap11.py
+python tests/actions/loadCombinations/test_iap11_01.py
+python tests/actions/loadCombinations/test_iap11_02.py
 echo "$BLEU" "  Computing load combination tests." "$NORMAL"
 python tests/combinations/add_loads_01.py
 python tests/combinations/test_add_load_cases.py
