@@ -168,7 +168,7 @@ python tests/actions/trafic_loads/test_pedestrian_load_ec1.py
 echo "$BLEU" "Load combination tests." "$NORMAL"
 echo "$BLEU" "  Forming load combination tests." "$NORMAL"
 #python tests/actions/loadCombinations/testLoadCombinations.py
-python tests/actions/loadCombinations/test_esclavas_00.py
+python tests/actions/loadCombinations/test_secondaries_00.py
 python tests/actions/loadCombinations/test_accidentales.py
 python tests/actions/loadCombinations/test_iap11.py
 echo "$BLEU" "  Computing load combination tests." "$NORMAL"

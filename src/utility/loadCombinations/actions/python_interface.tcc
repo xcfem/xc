@@ -22,9 +22,9 @@
 
 class_<ActionRelationships, bases<CommandEntity> >("ActionRelationships")
   .add_property("no_determinante", &ActionRelationships::NoDeterminante, &ActionRelationships::setNoDeterminante)
-  .def("agregaIncompatible", &ActionRelationships::AgregaIncompatible)
+  .def("appendIncompatible", &ActionRelationships::appendIncompatible)
   .def("incompatibleNames", &ActionRelationships::incompatibleNames)
-  .def("agregaMaestra", &ActionRelationships::AgregaMaestra)
+  .def("appendMain", &ActionRelationships::appendMain)
   .def("masterNames", &ActionRelationships::masterNames);
 
 class_<Action, bases<NamedEntity> >("Action")

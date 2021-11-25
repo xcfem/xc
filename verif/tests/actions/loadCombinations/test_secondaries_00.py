@@ -9,13 +9,13 @@ lcg= ehe.intenseControlCombGenerator
 PP1= lcg.insert("EHEIntenso","permanentes",loadCombinations.Action("PP1","Peso propio"),"permanents","permanentes_ctr_intenso")
 
 SC1= lcg.insert("EHEIntenso","variables",loadCombinations.Action("SC1","Puente grúa"),"azotea_solo_conserv","variables_ctr_intenso")
-SC1.getRelaciones.agregaIncompatible("SC.*")
+SC1.getRelaciones.appendIncompatible("SC.*")
 
 SC2= lcg.insert("EHEIntenso","variables",loadCombinations.Action("SC2","Sobrecarga de uso cubierta"),"azotea_solo_conserv","variables_ctr_intenso")
-SC2.getRelaciones.agregaIncompatible("SC.*")
+SC2.getRelaciones.appendIncompatible("SC.*")
 
 F1= lcg.insert("EHEIntenso","variables",loadCombinations.Action("F1","Frenado puente grúa"),"azotea_solo_conserv","variables_ctr_intenso")
-F1.getRelaciones.agregaMaestra("SC1.*")
+F1.getRelaciones.appendMain("SC1.*")
 
 #lcg.setVerbosityLevel(3)
 lcg.genera()

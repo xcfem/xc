@@ -63,7 +63,7 @@ std::deque<std::string> cmb_acc::ActionRelationships::get_combination_actions_na
 
 //! @brief Default constructor.
 cmb_acc::ActionRelationships::ActionRelationships(void)
-  : CommandEntity(), incompatibles(0), maestras(0), nodet(false), contiene_incomp(false) {}
+  : CommandEntity(), incompatibles(0), main_actions(0), nodet(false), contiene_incomp(false) {}
 
 //! @brief Return a string with the names of the list
 //! separated by commas.
@@ -84,14 +84,14 @@ std::string cmb_acc::ActionRelationships::names(const dq_string &l) const
 void cmb_acc::ActionRelationships::concat_incompatibles(const dq_string &other)
   {
     for(const_iterator i= other.begin();i!=other.end();i++)
-      AgregaIncompatible(*i);
+      appendIncompatible(*i);
   }
 
-//! @brief Añade a las acciones maestras la lista de expresiones regulares que se pasa como parámetro.
-void cmb_acc::ActionRelationships::concat_maestras(const dq_string &other)
+//! @brief Añade a las acciones main_actions la lista de expresiones regulares que se pasa como parámetro.
+void cmb_acc::ActionRelationships::concat_main_actions(const dq_string &other)
   {
     for(const_iterator i= other.begin();i!=other.end();i++)
-      AgregaMaestra(*i);
+      appendMain(*i);
   }
 
 //! @brief Return verdadero si alguna de las text strings de combActionsNames
@@ -159,7 +159,7 @@ bool cmb_acc::ActionRelationships::incompatible(const std::string &nmb) const
 bool cmb_acc::ActionRelationships::esclavaDe(const std::string &nmb) const
   { 
     bool retval= false;
-    for(const_iterator i= maestras.begin();i!=maestras.end();i++)
+    for(const_iterator i= main_actions.begin();i!=main_actions.end();i++)
       {
         boost::regex expresion(*i); //Inicializamos la expresión regular.
         retval= regex_match(nmb,expresion);
@@ -170,33 +170,33 @@ bool cmb_acc::ActionRelationships::esclavaDe(const std::string &nmb) const
 
 //! @brief Remove from the masters lists those which names match with
 //! the argument name.
-void cmb_acc::ActionRelationships::updateMaestras(const std::string &nmb)
+void cmb_acc::ActionRelationships::updateMainActions(const std::string &nmb)
   {
-    if(!maestras.empty())
+    if(!main_actions.empty())
       {
         const dq_string combActionsNames= get_combination_actions_names(nmb); //Names of the actions in this combination.
         dq_string nuevas;
-        for(const_iterator i= maestras.begin();i!=maestras.end();i++)
-          if(!match(*i,combActionsNames)) //No se encontró la maestra.
+        for(const_iterator i= main_actions.begin();i!=main_actions.end();i++)
+          if(!match(*i,combActionsNames)) // main action not found.
             nuevas.push_back(*i);
-        maestras= nuevas;
+        main_actions= nuevas;
       }
   }
 
 void cmb_acc::ActionRelationships::concat(const ActionRelationships &other)
   {
     concat_incompatibles(other.incompatibles);
-    concat_maestras(other.maestras);
+    concat_main_actions(other.main_actions);
   }
 
 std::string cmb_acc::ActionRelationships::incompatibleNames(void) const
   { return names(incompatibles); }
 std::string cmb_acc::ActionRelationships::masterNames(void) const
-  { return names(maestras); }
+  { return names(main_actions); }
 
 void cmb_acc::ActionRelationships::Print(std::ostream &os) const
   {
-    os << "incompatibles: {" << incompatibleNames() << "}; maestras: {"
+    os << "incompatibles: {" << incompatibleNames() << "}; main_actions: {"
        << masterNames() << "}";
     if(contiene_incomp) os << " contiente incompatibles." << std::endl;
   }
@@ -221,9 +221,9 @@ const cmb_acc::LoadCombinationVector &cmb_acc::get_compatibles(const LoadCombina
     LoadCombinationVector tmp(sz);
     size_t cont=0;
     for(size_t i=0;i<sz;i++)
-      if(!(comb[i].getRelaciones().contieneIncomp())) //Si no contiene acciones incompatibles.
+      if(!(comb[i].getRelaciones().contieneIncomp())) // has no incompatible actions.
        {
-         tmp[cont]= comb[i]; //La agregamos.
+         tmp[cont]= comb[i]; // append it.
          cont++;
        }
     retval.resize(cont);
@@ -246,9 +246,9 @@ const cmb_acc::LoadCombinationVector &cmb_acc::filtraCombsEsclavasHuerfanas(cons
     LoadCombinationVector tmp(sz);
     size_t cont=0;
     for(size_t i=0;i<sz;i++)
-      if(!(comb[i].getRelaciones().tieneHuerfanas())) //No contiene esclavas huerfanas.
+      if(!(comb[i].getRelaciones().tieneHuerfanas())) // Has not orphan secondaries.
         {
-          tmp[cont]= comb[i]; //La agregamos.
+          tmp[cont]= comb[i]; // append it.
           cont++;
         }
     retval.resize(cont);

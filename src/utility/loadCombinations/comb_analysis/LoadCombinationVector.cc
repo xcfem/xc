@@ -87,12 +87,12 @@ const cmb_acc::LoadCombinationVector &cmb_acc::LoadCombinationVector::GetDistint
         return retval;
       }
     LoadCombinationVector tmp(sz);
-    tmp[0]= (*this)[0]; //Colocamos la primera
+    tmp[0]= (*this)[0]; // append the first-one.
     size_t cont=1;
     for(size_t i=1;i<sz;i++)
-      if(!tmp.Existe((*this)[i])) //Si es distinta de las anteriores.
+      if(!tmp.Existe((*this)[i])) // if different from the previous.
        {
-         tmp[cont]= (*this)[i]; //La agregamos.
+         tmp[cont]= (*this)[i]; // append it.
          cont++;
        }
     retval.resize(cont);

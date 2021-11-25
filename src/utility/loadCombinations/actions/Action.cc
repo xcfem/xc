@@ -159,7 +159,7 @@ void cmb_acc::Action::suma(const Action &f)
         descripcion= f.descripcion;
       }
     relaciones.concat(f.relaciones);
-    relaciones.updateMaestras(getName());
+    relaciones.updateMainActions(getName());
     if(Nula(zero) && f.Nula(zero)) //Si ambas son nulas la suma es nula.
       f_pond= 0.0;
     else //Otherwise we don't know.
