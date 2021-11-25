@@ -40,7 +40,7 @@ class ActionContainer: public CommandEntity
     ActionsFamily AS; //!< Earthquake actions.
 
     LoadCombinationVector GetPermanentes(const bool &uls,const bool &sit_accidental) const;
-    LoadCombinationVector GetVariables(const LoadCombinationVector &permanentes,const bool &uls,const bool &sit_accidental,const short int &v) const;
+    LoadCombinationVector GetVariables(const LoadCombinationVector &,const bool &,const bool &, const bool &,const short int &v) const;
     LoadCombinationVector GetAccSis(const LoadCombinationVector &previas,const ActionsFamily &Acc) const;
 
   protected:

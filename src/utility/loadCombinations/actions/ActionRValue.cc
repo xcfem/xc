@@ -57,12 +57,13 @@ void cmb_acc::ActionRValue::setCombinationFactors(const std::string &nmb_factors
           tmp= acc_familia->getPtrCombinationFactors()->getPtrCoefs(nmb_factors);
         else
           std::cerr << getClassName() << "::" << __FUNCTION__
-	            << "; pointer to actions family not set." << std::endl;
+	            << "; ERROR: pointer to actions family not set." << std::endl;
         if(tmp)
            combination_factors= tmp;
 	else
           std::cerr << getClassName() << "::" << __FUNCTION__
-	            << "; combination factors with name: '" << nmb_factors
+	            << "; ERROR: combination factors with name: '"
+		    << nmb_factors
 	            << "' not found." << std::endl;	  
       }
   }
@@ -70,14 +71,24 @@ void cmb_acc::ActionRValue::setCombinationFactors(const std::string &nmb_factors
 
 //! @brief Return the r-th combination factor.
 double cmb_acc::ActionRValue::getCombinationFactor(short int r) const
-  { return combination_factors->getCombinationFactor(r); }
+  {
+    double retval= 1.0;
+    if(combination_factors)
+      retval= combination_factors->getCombinationFactor(r);
+    else
+      if(verbosity>1)
+	std::clog << getClassName() << "::" << __FUNCTION__
+		  << "; combination factors not set. Returning 1.0."
+		  << std::endl;
+    return retval;
+  }
 
 //! @brief Return the r-th combination factor.
 const cmb_acc::PartialSafetyFactors *cmb_acc::ActionRValue::getPartialSafetyFactors(void) const
   {
     if(!partial_safety_factors)
       std::cerr << getClassName() << "::" << __FUNCTION__
-	        << "; action: " << getName()
+	        << "; ERROR: action " << getName()
 	        << ": partial safety factors not set."
 	        << std::endl;
     return partial_safety_factors;
@@ -93,12 +104,14 @@ void cmb_acc::ActionRValue::setPartialSafetyFactors(const std::string &nmb_facto
           tmp= acc_familia->getPtrPartialSafetyFactors()->getPtrCoefs(nmb_factors);
         else
           std::cerr << getClassName() << "::" << __FUNCTION__
-	            << "; pointer to actions family not set." << std::endl;
+	            << "; ERROR: pointer to actions family not set."
+		    << std::endl;
         if(tmp)
            partial_safety_factors= tmp;
 	else
           std::cerr << getClassName() << "::" << __FUNCTION__
-	            << "; combination factors with name: '" << nmb_factors
+	            << "; ERROR: combination factors with name: '"
+		    << nmb_factors
 	            << "' not found." << std::endl;
       }
   }
@@ -152,7 +165,7 @@ cmb_acc::Action cmb_acc::ActionRValue::getRepresentativeValue(const LeadingActio
     Action retval= getValue(lai.getGeneralRepresentativeValueIndex());
     if(lai.leadingActionExists())
       {
-	const int j= getIndex(); 
+	const int j= getIndex();
         if(lai.isLeadingActionIndex(j)) //j is the leading action index.
 	  retval= getValue(lai.getLeadingRepresentativeValueIndex()); //Representative value for the leading action.
       }

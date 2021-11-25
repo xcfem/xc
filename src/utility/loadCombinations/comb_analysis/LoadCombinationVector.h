@@ -43,8 +43,7 @@ class LoadCombinationVector: public std::vector<Action>, public CommandEntity
     const LoadCombinationVector &GetDistintas(const LoadCombinationVector &s2) const;
   public:
     //! @brief Constructor.
-    LoadCombinationVector(const size_t &sz= 0)
-      : std::vector<Action>(sz), CommandEntity() {}
+    LoadCombinationVector(const size_t &sz= 0);
     static LoadCombinationVector ProdCartesiano(const LoadCombinationVector &f1,const LoadCombinationVector &f2,const double &tol);
     static LoadCombinationVector Concat(const LoadCombinationVector &f1,const LoadCombinationVector &f2,const double &tol);
     void Numera(const std::string &prefix= "H");

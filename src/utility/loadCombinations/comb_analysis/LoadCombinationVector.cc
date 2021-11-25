@@ -24,6 +24,10 @@
 #include "utility/utils/text/en_letra.h"
 
 
+//! @brief Constructor.
+cmb_acc::LoadCombinationVector::LoadCombinationVector(const size_t &sz)
+  : std::vector<Action>(sz), CommandEntity()
+  {}
 
         
 //! @brief Return true if all the combinations in the vector are null.
