@@ -73,7 +73,9 @@ class Action: public NamedEntity
     inline void setWeightingFactor(const double &f)
       { f_pond= f; }
     typedef std::map<std::string,float> map_descomp;
-    map_descomp getDescomp(void) const;
+    map_descomp getComponents(void) const;
+    boost::python::dict getComponentsPy(void) const;
+    
 
     //! @brief Return verdadero si esta acción es incompatible con la que se pasa como parámetro.
     bool Incompatible(const Action &f) const;

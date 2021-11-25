@@ -86,7 +86,7 @@ int XC::LoadCombination::getTagCombPrevia(void) const
   }
 
 //! @brief Returns, if possible, the decomposition of the "previous" combination.
-const std::string XC::LoadCombination::getDescompCombPrevia(void) const
+const std::string XC::LoadCombination::getComponentsCombPrevia(void) const
   {
     std::string retval;
     const LoadCombination *c= getPtrCombPrevia();
@@ -96,7 +96,7 @@ const std::string XC::LoadCombination::getDescompCombPrevia(void) const
   }
 
 //! @brief Returns, si puede, la diferencia entre esta y la previa.
-const std::string XC::LoadCombination::getDescompRestoSobrePrevia(void) const
+const std::string XC::LoadCombination::getComponentsRestoSobrePrevia(void) const
   {
     std::string retval;
     const LoadCombination *c= getPtrCombPrevia();

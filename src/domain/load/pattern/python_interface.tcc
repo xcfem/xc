@@ -72,7 +72,7 @@ class_<XC::LoadPatternCombination, XC::LoadPatternCombination *, bases<XC::Force
   .def("addToDomain", addToDomainWithFilter,"Add only the load patterns of the combination whose name is in the list.")
   .def("removeFromDomain", &XC::LoadPatternCombination::removeFromDomain,"Remove combination from the domain.")
   .def("isActive", &XC::LoadPatternCombination::isActive,"Return true if the combination is fully added to the domain.")
-  .def("getDescomp", &XC::LoadPatternCombination::getString,"Returns combination expression.")
+  .def("getComponents", &XC::LoadPatternCombination::getString,"Returns combination expression.")
   ;
 
 XC::LoadCombination &(XC::LoadCombination::*add)(const std::string &)= &XC::LoadCombination::add;
