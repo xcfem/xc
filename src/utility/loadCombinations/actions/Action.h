@@ -45,6 +45,7 @@ class Action: public NamedEntity
   {
     std::string descripcion; //!< Descripcion de la acción p. ej. "Viento derecho".
     ActionRelationships relaciones; //!< Relaciones de una acción con el resto.
+    bool nodet; //!< True if the action cannot be determinante.
     double f_pond; //!< Factor que pondera a la acción.
 
     void clean_names(void);
@@ -72,6 +73,12 @@ class Action: public NamedEntity
       { return f_pond; }
     inline void setWeightingFactor(const double &f)
       { f_pond= f; }
+
+    inline bool NoDeterminante(void) const
+      { return nodet; }
+    void setNoDeterminante(const bool &b)
+      { nodet= b; }
+
     typedef std::map<std::string,float> map_descomp;
     map_descomp getComponents(void) const;
     boost::python::dict getComponentsPy(void) const;

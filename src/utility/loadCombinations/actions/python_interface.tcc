@@ -21,7 +21,6 @@
 //python_interface.tcc
 
 class_<ActionRelationships, bases<CommandEntity> >("ActionRelationships")
-  .add_property("no_determinante", &ActionRelationships::NoDeterminante, &ActionRelationships::setNoDeterminante)
   .def("appendIncompatible", &ActionRelationships::appendIncompatible)
   .def("incompatibleNames", &ActionRelationships::incompatibleNames)
   .def("appendMain", &ActionRelationships::appendMain)
@@ -32,6 +31,7 @@ class_<Action, bases<NamedEntity> >("Action")
   .add_property("descripcion", make_function( &Action::GetDescripcion, return_value_policy<copy_const_reference>() ), &Action::SetDescripcion)
   .add_property("getRelaciones", make_function( &Action::getRelaciones, return_internal_reference<>() ))
   .add_property("weightingFactor", &Action::getWeightingFactor, &Action::setWeightingFactor)
+  .add_property("not_determinant", &Action::NoDeterminante, &Action::setNoDeterminante)
   .def("getExpandedName", &Action::getExpandedName)
   .def("getCoeficientes", &Action::getCoeficientes)
   .def("getComponents", &Action::getComponents)

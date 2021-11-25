@@ -34,7 +34,7 @@ const double cmb_acc::Action::zero= 1e-6;
 
 //! @brief Default constructor.
 cmb_acc::Action::Action(const std::string &n, const std::string &descrip)
-  : NamedEntity(n), descripcion(descrip),relaciones(), f_pond(1.0) {}
+  : NamedEntity(n), descripcion(descrip),relaciones(), nodet(false), f_pond(1.0) {}
 
 //! \fn cmb_acc::Action::NULA(void)
 //! @brief Return una acción nula.

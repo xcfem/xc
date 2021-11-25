@@ -47,7 +47,6 @@ class ActionRelationships: public CommandEntity
   private:
     dq_string incompatibles; //!< Expresiones regulares verdaderas para acciones incompatibles con ésta.
     dq_string main_actions; //!< Expresiones regulares verdaderas para acciones de las que ésta es esclava.
-    bool nodet; //!< Verdadero si la acción no puede ser determinante.
     bool contiene_incomp; //!< True if the combination contains incompatible actions.
 
     std::string names(const dq_string &) const;
@@ -66,10 +65,6 @@ class ActionRelationships: public CommandEntity
     //! @brief Append the regular expresion argument to the list of main actions.
     inline void appendMain(const std::string &str)
       { main_actions.push_back(str); }
-    inline bool NoDeterminante(void) const
-      { return nodet; }
-    void setNoDeterminante(const bool &b)
-      { nodet= b; }
 
     bool matchIncompatibles(const dq_string &) const;
     bool incompatible(const std::string &) const;

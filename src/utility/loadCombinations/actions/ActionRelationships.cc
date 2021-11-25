@@ -63,7 +63,7 @@ std::deque<std::string> cmb_acc::ActionRelationships::get_combination_actions_na
 
 //! @brief Default constructor.
 cmb_acc::ActionRelationships::ActionRelationships(void)
-  : CommandEntity(), incompatibles(0), main_actions(0), nodet(false), contiene_incomp(false) {}
+  : CommandEntity(), incompatibles(0), main_actions(0), contiene_incomp(false) {}
 
 //! @brief Return a string with the names of the list
 //! separated by commas.
