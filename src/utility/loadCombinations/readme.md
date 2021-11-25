@@ -4,4 +4,5 @@ A load combination results when more than one load type acts on the structure. B
 The aim of the code in this folders is to implement an algorithm that generates the load combinations from a set of actions automatically.
 
 ## References
-[LoadCombination (Wikipedia)](https://en.wikipedia.org/wiki/Structural_load#Load_combinations)
+- [LoadCombination (Wikipedia)](https://en.wikipedia.org/wiki/Structural_load#Load_combinations)
+- [Use keyword arguments in boost.python function](https://www.boost.org/doc/libs/1_34_0/libs/python/doc/v2/args.html)

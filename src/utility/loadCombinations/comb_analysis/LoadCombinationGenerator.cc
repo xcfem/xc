@@ -29,8 +29,13 @@ cmb_acc::LoadCombinationGenerator::LoadCombinationGenerator(CommandEntity *owr)
   : CommandEntity(owr), combinations(nullptr) {}
 
 //! @brief Insert the action being passed as parameter.
-cmb_acc::ActionRValue &cmb_acc::LoadCombinationGenerator::insert(const std::string &pond,const std::string &familia,const Action &acc,const std::string &combination_factors_name, const std::string &partial_safety_factors_name)
-  { return action_weighting.insert(pond,familia,acc,combination_factors_name,partial_safety_factors_name); }
+//! @param weighting: name of the weighting factors repository.
+//! @param family: family to which the action belongs ("permanent", "variable", "seismic",...)
+//! @param act: the action object itself.
+//! @param combination_factors_name: name of the combination factors container.
+//! @param partial_safety_factors_name: name of the partial safety factor container.
+cmb_acc::ActionRValue &cmb_acc::LoadCombinationGenerator::insert(const std::string &weighting,const std::string &family,const Action &act,const std::string &combination_factors_name, const std::string &partial_safety_factors_name)
+  { return action_weighting.insert(weighting,family,act,combination_factors_name,partial_safety_factors_name); }
 
 //! @brief Generation of combinations
 void cmb_acc::LoadCombinationGenerator::genera(void)

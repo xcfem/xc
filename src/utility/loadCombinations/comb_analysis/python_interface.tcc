@@ -52,7 +52,8 @@ class_<LoadCombinations, bases<CommandEntity> >("Combinations")
 
 class_<LoadCombinationGenerator, bases<CommandEntity> >("LoadCombGenerator")
   .add_property("actionWeighting", make_function( &LoadCombinationGenerator::getActionWeighting, return_internal_reference<>() ), &LoadCombinationGenerator::setActionWeighting)
-  .def("insert", make_function(&LoadCombinationGenerator::insert,return_internal_reference<>()))
-  .def("genera", &LoadCombinationGenerator::genera)
+.def("insert", make_function(&LoadCombinationGenerator::insert, return_internal_reference<>(), (arg("weighting"), arg("family"), arg("action"), arg("combination_factors_name"), arg("partial_safety_factors_name"))),"Insert an action into the load combination generator.")
+  .def("genera", &LoadCombinationGenerator::genera, "generate the load combinations.")
   .add_property("getLoadCombinations", make_function(&LoadCombinationGenerator::getLoadCombinations,return_internal_reference<>()))
   ;
+
