@@ -25,14 +25,42 @@
 # See http://www.salome-platform.org/ or email : webmaster.salome@opencascade.com
 #
 
-SET(GMSH_ROOT_DIR $ENV{GMSH_ROOT_DIR} CACHE PATH "Path to the GMSH.")
+# Check environment variables.
+if(NOT GMSH_ROOT_DIR AND DEFINED ENV{GMSH_ROOT_DIR})
+    SET(GMSH_ROOT_DIR $ENV{GMSH_ROOT_DIR})
+    MESSAGE(STATUS "GMSH_ROOT_DIR: ${GMSH_ROOT_DIR}")
+else()
+    set(GMSH_ROOT_DIR "")
+endif()
 
+
+# Append GMSH_ROOT_DIR to the list of directories specifying
+# installation prefixes
 IF(GMSH_ROOT_DIR)
   LIST(APPEND CMAKE_PREFIX_PATH "${GMSH_ROOT_DIR}")
+  MESSAGE(STATUS "cmake_prefix_path: ${CMAKE_PREFIX_PATH}")
 ENDIF(GMSH_ROOT_DIR)
 
-FIND_PATH(GMSH_INCLUDE_DIRS Gmsh.h gmsh.h PATH_SUFFIXES gmsh)
-FIND_LIBRARY(GMSH_LIBRARIES NAMES Gmsh gmsh)
+
+FIND_PATH(
+  GMSH_INCLUDE_DIRS
+  NAMES
+    Gmsh.h
+    gmsh.h
+  PATH_SUFFIXES
+    gmsh
+    include
+  )
+MESSAGE(STATUS "Gmsh headers: ${GMSH_INCLUDE_DIRS}")
+FIND_LIBRARY(
+  GMSH_LIBRARIES
+  NAMES
+    Gmsh
+    gmsh
+  PATH_SUFFIXES
+    lib
+  )
+MESSAGE(STATUS "Gmsh libraries: ${GMSH_LIBRARIES}")
 
 if (GMSH_INCLUDE_DIRS)
   if (EXISTS "${GMSH_INCLUDE_DIRS}/gmsh.h")
