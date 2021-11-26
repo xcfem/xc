@@ -43,7 +43,7 @@ ENDIF( PETSCCONF_INCLUDE_DIR STREQUAL PETSC_INCLUDE_DIR )
 IF (PETSC_INCLUDE_DIR)
   IF (PETSCCONF_INCLUDE_DIR)
     SET( PETSC_FOUND 1 )
-    MESSAGE( STATUS "Found PETSC: ${PETSC_INCLUDE_DIR}")
+    MESSAGE( STATUS "Found PETSC include dir: ${PETSC_INCLUDE_DIR}")
   ENDIF (PETSCCONF_INCLUDE_DIR)
 ELSE (PETSC_INCLUDE_DIR)
   MESSAGE(FATAL_ERROR "petsc.h not found.")
@@ -55,13 +55,65 @@ ENDIF( PETSC_FOUND )
 
 
 #FIND_LIBRARY(PETSC_LIB_MPIUNI    mpiuni    PATHS /usr/local/petsc-2.3.3-p8/lib/linux-gnu-c-debug QUIET )
-FIND_LIBRARY(PETSC_LIB_PETSC     petsc     PATHS /usr/lib)
-FIND_LIBRARY(PETSC_LIB_PETSCDM   petscdm   PATHS /usr/lib)
-FIND_LIBRARY(PETSC_LIB_PETSCVEC  petscvec  PATHS /usr/lib)
-FIND_LIBRARY(PETSC_LIB_PETSCMAT  petscmat  PATHS /usr/lib)
-FIND_LIBRARY(PETSC_LIB_PETSCKSP  petscksp  PATHS /usr/lib)
-FIND_LIBRARY(PETSC_LIB_PETSCSNES petscsnes PATHS /usr/lib)
-
+FIND_LIBRARY(
+  PETSC_LIB_PETSC
+  NAMES
+    petsc
+  PATHS
+    /usr/lib
+    /usr/local/lib
+    ${PETSC_DIR}/${PETSC_ARCH}/lib
+  )
+FIND_LIBRARY(
+  PETSC_LIB_PETSCDM
+  NAMES
+    petscdm
+  PATHS
+    /usr/lib
+    /usr/local/lib
+    ${PETSC_DIR}/${PETSC_ARCH}/lib
+  )
+FIND_LIBRARY(
+  PETSC_LIB_PETSCVEC
+  NAMES
+    petscvec
+  PATHS
+    /usr/lib
+    /usr/local/lib
+    ${PETSC_DIR}/${PETSC_ARCH}/lib
+  )
+FIND_LIBRARY(
+  PETSC_LIB_PETSCMAT
+  NAMES
+    petscmat
+  PATHS
+    /usr/lib
+    /usr/local/lib
+    ${PETSC_DIR}/${PETSC_ARCH}/lib
+  )
+FIND_LIBRARY(
+  PETSC_LIB_PETSCKSP
+  NAMES
+    petscksp
+  PATHS
+    /usr/lib
+    /usr/local/lib
+    ${PETSC_DIR}/${PETSC_ARCH}/lib
+  )
+FIND_LIBRARY(
+  PETSC_LIB_PETSCSNES
+  NAMES
+    petscsnes
+  PATHS
+    /usr/lib
+    /usr/local/lib
+    ${PETSC_DIR}/${PETSC_ARCH}/lib
+  )
+IF (PETSC_LIB_PETSC)
+  MESSAGE( STATUS "Found PETSC library: ${PETSC_LIB_PETSC}")
+ELSE (PETSC_LIB_PETSC)
+  MESSAGE(FATAL_ERROR "PETSC library not found.")
+ENDIF(PETSC_LIB_PETSC)
 
 SET(PETSC_LIBRARIES
   ${PETSC_LIB_PETSCSNES}
