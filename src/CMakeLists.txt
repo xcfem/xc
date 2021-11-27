@@ -177,7 +177,8 @@ SET(three_d_arrays utility/matrices/3d_arrays/Array3dBase utility/matrices/3d_ar
 
 SET(skypack utility/skypack/skypri.f utility/skypack/skypds.f utility/skypack/skyscf.f utility/skypack/skyssb.f utility/skypack/mtrxys.f utility/skypack/skyssf.f utility/skypack/skypsb.f utility/skypack/skypdc.f utility/skypack/skypf1.f utility/skypack/skysdc.f utility/skypack/skypsp.f utility/skypack/skypcf.f utility/skypack/skymef.f utility/skypack/skyssd.f utility/skypack/skyss.f utility/skypack/skysf1.f utility/skypack/skypf2.f utility/skypack/mtrxy.f utility/skypack/mtrxyd.f utility/skypack/skysf2.f utility/skypack/skypci.f)
 
-SET(itpack utility/itpack/dsrc2c.f utility/itpack/jcg.f utility/itpack/jsi.f utility/itpack/rscg.f utility/itpack/rssi.f utility/itpack/sor.f utility/itpack/ssorcg.f utility/itpack/ssorsi.f)
+#SET(itpack utility/itpack/dsrc2c.f  )
+SET(itpack utility/itpack/dsrc2c.f utility/itpack/jcg.f utility/itpack/jsi.f utility/itpack/rssi.f utility/itpack/rscg.f utility/itpack/ssorcg.f utility/itpack/sor.f utility/itpack/ssorsi.f)
 
 SET(umfpack utility/umfpack/umd2fb.f utility/umfpack/umd2co.f utility/umfpack/umd2fa.f utility/umfpack/umd2f0.f utility/umfpack/umd2f1.f utility/umfpack/umd2f2.f utility/umfpack/umd2fg.f utility/umfpack/umd2in.f utility/umfpack/umd2of.f utility/umfpack/umd2s2.f utility/umfpack/umd2sl.f utility/umfpack/umd2so.f utility/umfpack/umd2su.f utility/umfpack/umd2er.f utility/umfpack/umd2p1.f utility/umfpack/umd2p2.f utility/umfpack/umd2lt.f utility/umfpack/umd2ut.f utility/umfpack/umd2rf.f utility/umfpack/umd2ra.f utility/umfpack/umd2r0.f utility/umfpack/umd2r2.f utility/umfpack/umd2rg.f utility/umfpack/umd21i.f utility/umfpack/mc21b.f utility/umfpack/mc13e.f)
 
