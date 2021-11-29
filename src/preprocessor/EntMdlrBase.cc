@@ -96,14 +96,13 @@ size_t XC::EntMdlrBase::getTag(void) const
     try
       { retval= boost::lexical_cast<size_t>(tmp); }
     catch(boost::bad_lexical_cast &)
-        {
-	  retval= reinterpret_cast<size_t>(this); // and hope for the best.
-	  std::cerr << getClassName() << "::" << __FUNCTION__
-	            << "; ERROR: could not extract entity tag from its name: '"
-	            << getName() << "'. Weird results could follow."
-		    << " Returning: " << retval << std::endl;
-        }
-    
+      {
+	retval= reinterpret_cast<size_t>(this); // and hope for the best.
+	std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; ERROR: could not extract entity tag from its name: '"
+		  << getName() << "'. Weird results could follow."
+		  << " Returning: " << retval << std::endl;
+      }    
     return retval;
   }
 
