@@ -18,29 +18,18 @@ fs= 2.25 # Hz
 walking= True
 pedestrianLoad= plm.PedestrianLoad(fs, walking)
 
-ti= list()
-vLoad= list()
-hLoad= list()
-duration= 2
-incT= duration/100
-numSteps= int(duration/incT)
-t= 0.0
-for i in range(0,numSteps):
-    ti.append(t)
-    Fv= pedestrianLoad.getVerticalLoad(t)
-    vLoad.append(Fv) # Vertical load.
-    Fh= pedestrianLoad.getLateralLoad(t)
-    hLoad.append(Fh) # Lateral load.
-    t+= incT
+ti= pedestrianLoad.getTimeSequence()
+vLoad= pedestrianLoad.getVerticalLoadHistory(ti) # Vertical load.
+hLoad= pedestrianLoad.getLateralLoadHistory(ti) # Lateral load.
 
 vLoadMaxValue= max(vLoad)
 vLoadMinValue= min(vLoad)
 hLoadMaxValue= max(hLoad)
 hLoadMinValue= min(hLoad)
-vLoadMaxValueRef= 1080.4929616488178
-vLoadMinValueRef= 422.5249570460704
-hLoadMaxValueRef= 34.99568213685812
-hLoadMinValueRef=-34.982729612800604
+vLoadMaxValueRef= 1079.558203775136
+vLoadMinValueRef= 433.70417543735635
+hLoadMaxValueRef= 35.0
+hLoadMinValueRef=-35.0
 
 ratio1= abs(vLoadMaxValue-vLoadMaxValueRef)/vLoadMaxValueRef
 ratio2= abs(vLoadMinValue-vLoadMinValueRef)/vLoadMinValueRef
@@ -66,11 +55,6 @@ if ((ratio1<1e-15) and (ratio2<1e-15) and (ratio3<1e-15) and (ratio4<1e-15)):
 else:
     lmsg.error(fname+' ERROR.')
     
-# # Display results
-# import matplotlib.pyplot as plt
-# plt.title('Single pedestrian. Vertical and lateral forces.')
-# plt.xlabel('time (s)')
-# plt.plot(ti, vLoad, label='Vertical load')
-# plt.plot(ti, hLoad, label='Lateral load')
-# plt.legend()
-# plt.show()
+# Display results
+# pedestrianLoad.plot(loadToDisp= 'horizontal')
+
