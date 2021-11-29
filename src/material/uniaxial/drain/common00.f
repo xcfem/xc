@@ -10,13 +10,13 @@ c     created:  June 2001
 c .....................................................................
         
         implicit none
+        integer, parameter :: dp = selected_real_kind(15, 50)
+        real(dp) ::    param(*),hstv(*),stateP(*)
 
-        real*8         param(*),hstv(*),stateP(*)
-
-        real*8         E,sigY,Hiso,Hkin
-        real*8         ep,alpha,kappa
-        real*8         epsP,sigP,tangP
-        real*8         tang
+        real(dp)         E,sigY,Hiso,Hkin
+        real(dp)         ep,alpha,kappa
+        real(dp)         epsP,sigP,tangP
+        real(dp)         tang
         
         include 'infel00.h'
         
@@ -52,13 +52,13 @@ c     created:  June 2001
 c .....................................................................
 
         implicit none
-
-        real*8         hstv(*)
+        integer, parameter :: dp = selected_real_kind(15, 50)
+        real(dp)         hstv(*)
         
-        real*8         E,sigY,Hiso,Hkin
-        real*8         ep,alpha,kappa
-        real*8         epsP,sigP,tangP
-        real*8         tang
+        real(dp)         E,sigY,Hiso,Hkin
+        real(dp)         ep,alpha,kappa
+        real(dp)         epsP,sigP,tangP
+        real(dp)         tang
         
         include 'infel00.h'
         
