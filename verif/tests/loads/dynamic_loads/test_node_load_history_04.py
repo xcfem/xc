@@ -98,6 +98,8 @@ tEnd= span/v
 duration= tEnd-tStart
 dT= 1/(25*beam_fv) # time step.
 numSteps= int(duration/dT)+1
+#verticalLoadFourierCoefficients= plm.getFourierCoefficients(walking= walking, fs= fs)
+#pedestrianLoad= plm.PedestrianLoad(fs, walking, verticalFourierCoefficients= verticalLoadFourierCoefficients)
 pedestrianLoad= plm.PedestrianLoad(fs, walking)
 ### Compute node list.
 nodeList= list()
@@ -167,7 +169,7 @@ for row in cAccel:
         peakAccel= accel
         timePeakAccel= t
         
-ratio1= abs(peakAccel-0.0055)/0.0055
+ratio1= abs(peakAccel-0.0093645)/0.0093645
 
 ''' 
 print('span: ', span, 'm')
@@ -178,12 +180,12 @@ print("ratio1= ",ratio1)
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
-if abs(ratio1)<1e-3:
+if abs(ratio1)<1e-5:
     print('test '+fname+': ok.')
 else:
     lmsg.error(fname+' ERROR.')
 
-# # Display results
-# import matplotlib.pyplot as plt
-# plt.plot(ti, Azi)
-# plt.show()
+# Display results
+import matplotlib.pyplot as plt
+plt.plot(ti, Azi)
+plt.show()

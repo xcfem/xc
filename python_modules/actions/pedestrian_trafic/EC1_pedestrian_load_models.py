@@ -15,14 +15,16 @@ __email__= "ana.Ortega@ciccp.es l.pereztato@ciccp.es"
 
 import math
 import sys
+from misc_utils import log_messages as lmsg
 
 # Individual load model.
 
 ## References
 #  [1] Rebelo, Carlos & Negrao, J.H.J.O. & Rigueiro, Constança. (2005). Numerical simulation of timber footbridges dynamic response under pedestrian loads.
 #  [2] Bachmann, H. e Ammann, W (1987) Vibrations in Structures Induced by Man and Machines, Journal of IABSE, Structural Engineering International, vol 5
+#  [3] Footbridges. Assessment of vibrational behaviour of footbridges under pedestrian loading. Technical guide. Service d'Études techniques des routes et autoroutes. October 2006.
 
-defaultPhaseAngles= [0.0, math.pi/2.0, math.pi/2.0] # reference [2]
+defaultPhaseAngles= [0.0, math.pi/2.0, math.pi/2.0] # references [2] and [3]
 
 def getFourierCoefficients(walking:bool, fs, triangularModel= False):
     ''' Return the values of the Fourier coefficients according to table 1
@@ -33,6 +35,7 @@ def getFourierCoefficients(walking:bool, fs, triangularModel= False):
     :param triangularModel: if true use a triangular model in the time domain
                             otherwise use a half-sine model.
     '''
+    lmsg.warning('This function returns very high values of the fourier coefficients. Use with caution.')
     retval= [0.1,0.1,0.1]
     if(walking):
         if(1<fs and fs<=2.5):
@@ -58,6 +61,11 @@ def getFourierCoefficients(walking:bool, fs, triangularModel= False):
                     retval[i-1]= 2*(1-c)/(1-d)
     return retval
 
+setraVerticalFourierCoefficients= [0.4, 0.1, 0.1] # section 3.2.1 reference [3]
+setraLateralFourierCoefficients= [0.05, 0.0, 0.0] # section 3.2.1 reference [3]
+defaultVerticalFourierCoefficients= setraVerticalFourierCoefficients
+defaultLateralFourierCoefficients= setraLateralFourierCoefficients
+
 def getVerticalPedestrianLoad(t:float, fs:float, fourierCoefficients, phaseAngles= defaultPhaseAngles, G= 700.0):
     ''' Return the vertical load of a single pedestrian 
         according to expression (2) in reference [1].
@@ -71,13 +79,15 @@ def getVerticalPedestrianLoad(t:float, fs:float, fourierCoefficients, phaseAngle
     :param G: weight of the reference pedestrian (defaults to 700 N).
     '''
     retval= 1.0 # vertical load.
+    factor= 2*math.pi*fs*t
     for i, (alpha_i, phi_i) in enumerate(zip(fourierCoefficients, phaseAngles)):
-        retval+= alpha_i*math.sin(2*math.pi*i*fs*t-phi_i)
+        if(alpha_i!=0.0):
+            retval+= alpha_i*math.sin(factor*(i+1)-phi_i)
     retval*=G
     return retval
 
-def getHorizontalPedestrianLoad(t:float, fs:float, fourierCoefficients, phaseAngles= defaultPhaseAngles, G= 700.0):
-    ''' Return the horizontal load of a single pedestrian 
+def getLateralPedestrianLoad(t:float, fs:float, fourierCoefficients, phaseAngles= defaultPhaseAngles, G= 700.0):
+    ''' Return the lateral load of a single pedestrian 
         according to expression (2) in reference [1].
 
     :param t: time for which the load will be calculated.
@@ -88,9 +98,11 @@ def getHorizontalPedestrianLoad(t:float, fs:float, fourierCoefficients, phaseAng
                         in the Fourier series.
     :param G: weight of the reference pedestrian (defaults to 700 N).
     '''
-    retval= 0.0 # horizontal load.
+    retval= 0.0 # lateral load.
+    factor= math.pi*fs*t
     for i, (alpha_i, phi_i) in enumerate(zip(fourierCoefficients, phaseAngles)):
-        retval+= alpha_i*math.sin(math.pi*i*fs*t-phi_i) # half the frequency of the horizontal load.
+        if(alpha_i!=0.0):
+            retval+= alpha_i*math.sin(factor*(i+1)-phi_i) # half the frequency of the lateral load.
     retval*=G
     return retval
 
@@ -107,7 +119,7 @@ class PedestrianLoad(object):
     :ivar phaseAngles: phase angles with respect to the first harmonic
                       in the Fourier series.
     '''
-    def __init__(self, fs:float, walking:bool, G= 700.0, triangularModel= False, phaseAngles= defaultPhaseAngles):
+    def __init__(self, fs:float, walking:bool, G= 700.0, verticalFourierCoefficients= defaultVerticalFourierCoefficients, lateralFourierCoefficients= defaultLateralFourierCoefficients, phaseAngles= defaultPhaseAngles):
         ''' Constructor.
 
         :param fs: step frequency.
@@ -120,7 +132,8 @@ class PedestrianLoad(object):
         '''
         self.fs= fs
         self.G= G
-        self.fourierCoefficients= getFourierCoefficients(walking= walking, fs= fs, triangularModel= False)
+        self.verticalFourierCoefficients= verticalFourierCoefficients
+        self.lateralFourierCoefficients= lateralFourierCoefficients
         self.phaseAngles= phaseAngles
 
     def getVerticalLoad(self, t):
@@ -128,13 +141,13 @@ class PedestrianLoad(object):
 
         :param t: time for which the load will be calculated.
         '''
-        return getVerticalPedestrianLoad(t= t,fs= self.fs, fourierCoefficients= self.fourierCoefficients)
+        return getVerticalPedestrianLoad(t= t,fs= self.fs, fourierCoefficients= self.verticalFourierCoefficients)
     
-    def getHorizontalLoad(self, t):
-        ''' Return the horizontal load of a single pedestrian.
+    def getLateralLoad(self, t):
+        ''' Return the lateral load of a single pedestrian.
 
         :param t: time for which the load will be calculated.
         '''
-        return getHorizontalPedestrianLoad(t= t,fs= self.fs, fourierCoefficients= self.fourierCoefficients)
+        return getLateralPedestrianLoad(t= t,fs= self.fs, fourierCoefficients= self.lateralFourierCoefficients)
 
 
