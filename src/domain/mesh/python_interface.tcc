@@ -56,4 +56,6 @@ class_<XC::Mesh, bases<XC::MeshComponentContainer>, boost::noncopyable >("Mesh",
   .def("setDeadSRF",XC::Mesh::setDeadSRF,"Assigns Stress Reduction Factor for element deactivation. Syntax: setDeadSRF(factor)")
   .def("normalizeEigenvectors",&XC::Mesh::normalizeEigenvectors,"Normalize node eigenvectors for the argument mode. Syntax: normalizeEigenvectors(mode)")
   .staticmethod("setDeadSRF")
+  .add_property("totalMass", &XC::Mesh::getTotalMass, "Return the total mass matrix.")
+  .def("getTotalMassComponent", &XC::Mesh::getTotalMassComponent,"Return the total mass matrix component for the DOF argument.")
   ;

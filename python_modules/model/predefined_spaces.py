@@ -573,6 +573,18 @@ class PredefinedSpace(object):
                     floatingNodes.append(n)
         return floatingNodes
 
+    def checkFloatingNodes(self, xcSet= None):
+        ''' Print an error message if the model has floating nodes.
+
+        :param xcSet: search only on the nodes in this set.
+        '''
+        floatingNodes= self.getFloatingNodes()
+        if(len(floatingNodes)>0):
+            lmsg.error('There are floating nodes in the model.')
+            for n in floatingNodes:
+                print(n.tag, n.getInitialPos3d)
+        return floatingNodes
+        
     def locateEquationNumber(self, eqNumber, xcSet= None):
         ''' Locate the node that contains the DOF that correspond to
             the equation number argument.
@@ -893,7 +905,7 @@ class PredefinedSpace(object):
         :param z: z coordinate for the new point (defaults to 0.0).
         '''
         pos3d= geom.Pos3d(x,y,z)
-        return self.preprocessor.getMultiBlockTopology.getPoints.newPntFromPos3d(pos3d)
+        return self.preprocessor.getMultiBlockTopology.getPoints.newPoint(pos3d)
     
     def newLine(self, p1: xc.Pnt, p2: xc.Pnt):
         ''' Creates a line between the argument points.
@@ -902,6 +914,15 @@ class PredefinedSpace(object):
         :param p2: to point.
         '''
         return self.preprocessor.getMultiBlockTopology.getLines.newLine(p1.tag, p2.tag)
+    
+    def newQuadSurface(self, p1: xc.Pnt, p2: xc.Pnt, p3: xc.Pnt, p4: xc.Pnt):
+        ''' Creates a quad surface between the argument points.
+
+        :param p1: first point.
+        :param p2: second point.
+        '''
+        return self.preprocessor.getMultiBlockTopology.getSurfaces.newQuadSurfacePts(p1.tag, p2.tag, p3.tag, p4.tag)
+    
     def getLineWithEndPoints(self, pA: xc.Pnt, pB: xc.Pnt):
         ''' Return the line from its endpoints.
 

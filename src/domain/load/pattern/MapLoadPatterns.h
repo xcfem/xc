@@ -47,6 +47,9 @@ class MapLoadPatterns: public LoadHandlerMember
   {
     typedef std::map<std::string,TimeSeries *> map_timeseries;
     map_timeseries tseries; //!< Load/displacement time variation.
+    typedef map_timeseries::iterator time_series_iterator;
+    typedef map_timeseries::const_iterator time_series_const_iterator;
+    
     std::string time_series_name; //!< Time series identifier for new load patterns.
 
     typedef std::map<std::string,LoadPattern *> map_loadpatterns; //!< Load pattern container type.
@@ -115,6 +118,7 @@ class MapLoadPatterns: public LoadHandlerMember
       { return time_series_name; }
     inline void setCurrentTimeSeries(const std::string &nmb)
       { time_series_name= nmb; }
+    const std::string &getTimeSeriesName(const TimeSeries *) const;
 
     std::deque<std::string> getNamesList(void) const;
     boost::python::list getKeys(void) const;
@@ -146,6 +150,7 @@ TimeSeries *XC::MapLoadPatterns::create_time_series(const std::string &cod_ts)
         tseries[cod_ts]= nts;
         ts= nts;
       }
+    ts->set_owner(this);
     time_series_name= cod_ts;
     return ts;
   }

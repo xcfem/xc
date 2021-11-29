@@ -2,6 +2,12 @@
 
 from __future__ import division
 
+__author__= "Ana Ortega (A_OO) "
+__copyright__= "Copyright 2016, A_OO"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "ana.Ortega.Ort@gmail.com "
+
 #See notations in XC users manual
 
 def getFlechaVigaBiapQUnif(l,EI,q):

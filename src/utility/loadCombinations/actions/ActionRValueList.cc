@@ -47,12 +47,14 @@ cmb_acc::ActionRValue &cmb_acc::ActionRValueList::insert(const Action &a,const s
 //!
 //! @param v: Variation to build.
 //! @param leadingActioInfo: Information about the leading action.
-cmb_acc::Action cmb_acc::ActionRValueList::buildCombination(const Variation &var,const LeadingActionInfo &lai) const
+cmb_acc::Action cmb_acc::ActionRValueList::buildCombination(const Variation &var, const LeadingActionInfo &lai) const
   {
     const size_t num_acciones= size();
-    Action retval=Action::NULA(); //Initialize to zero.
+    Action retval= Action::NULA(); //Initialize to zero.
     for(size_t j=0;j<num_acciones;j++)
-      retval+= (*this)[j].getCombinationValue(lai,var[j]);
+      {
+        retval+= (*this)[j].getCombinationValue(lai,var[j]);
+      }
     return retval;
   }
 
@@ -161,7 +163,7 @@ cmb_acc::LoadCombinationVector cmb_acc::ActionRValueList::getCombinations(const 
 //! @param uls: Verdadero si se trata de un estado límite último.
 //! @param sit_accidental: Verdadero si estamos en situación accidental.
 //! @param leadingActioInfo: Information about the leading action.
-cmb_acc::LoadCombinationVector cmb_acc::ActionRValueList::getCombinationsWhenLeading(const bool &uls,const bool &sit_accidental,const short int &v) const
+cmb_acc::LoadCombinationVector cmb_acc::ActionRValueList::getCombinationsWhenLeading(const bool &uls,const bool &sit_accidental, const bool &sit_sismica,const short int &v) const
   {
     const size_t nq= size();
     LoadCombinationVector retval;
@@ -173,6 +175,11 @@ cmb_acc::LoadCombinationVector cmb_acc::ActionRValueList::getCombinationsWhenLea
 		    << i << " ...";
 	LeadingActionInfo lci(i,v-1,v); //Leading action with representative value v
 					//rest of actions with representative value v-1.
+	if(sit_accidental)
+	  lci= LeadingActionInfo(i,1,2); //Leading action with frequent value
+	                                 //rest of actions with quasi-permanent value.
+	if(sit_sismica)
+	  lci= LeadingActionInfo(-1,2,2); //All actions with quasi-permanent value.
 	LoadCombinationVector temp= getCombinations(uls,sit_accidental,lci); 
 	retval= LoadCombinationVector::Concat(retval,temp,Action::zero);
 	if(verbosity>1)

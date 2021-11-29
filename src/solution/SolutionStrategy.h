@@ -92,7 +92,7 @@ class SolutionStrategyMap;
 //! @ingroup Solu
 class SolutionStrategy: public CommandEntity
   {
-    ModelWrapper *base; //!< Wrapper for the finite element model.
+    ModelWrapper *theModelWrapper; //!< Wrapper for the finite element model.
     SolutionAlgorithm *theSolnAlgo; //!< Solution algorithm.
     Integrator *theIntegrator; //!< Integration scheme.
     SystemOfEqn *theSOE; //!< System of equations.
@@ -128,10 +128,12 @@ class SolutionStrategy: public CommandEntity
     ~SolutionStrategy(void);
 
     const SolutionStrategyMap *getSolutionStrategyMap(void) const;
+    SolutionStrategyMap *getSolutionStrategyMap(void);
     std::string getName(void) const;
+    const std::string &getModelWrapperName(void) const;
 
     inline ModelWrapper *getModelWrapperPtr(void)
-      { return base; }
+      { return theModelWrapper; }
     Domain *getDomainPtr(void);
     const Domain *getDomainPtr(void) const;
     ConstraintHandler *getConstraintHandlerPtr(void);

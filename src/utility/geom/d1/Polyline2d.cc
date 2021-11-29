@@ -97,9 +97,19 @@ void Polyline2d::Transform(const Trf2d &trf2d)
 //! @brief Return true if the point is in the polyline.
 bool Polyline2d::In(const Pos2d &p, const double &tol) const
   {
-    for(const_iterator j=begin();j != end();j++)
-      if(getSegment(j).In(p,tol)) return true;
-    return false;
+    bool retval= false;    
+    if(!empty())
+      {
+	list_Pos2d::const_iterator first= begin();
+	list_Pos2d::const_iterator last= std::prev(end());
+	for(list_Pos2d::const_iterator j=first;j != last;j++)
+          if(getSegment(j).In(p,tol))
+	    {
+	      retval= true;
+	      break;
+	    }
+      }
+    return retval;
   }
 
 //! @brief Return the maximum value of the i coordinate.

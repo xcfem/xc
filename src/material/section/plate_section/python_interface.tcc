@@ -24,7 +24,7 @@
 class_<XC::PlateBase, bases<XC::SectionForceDeformation>, boost::noncopyable >("ElasticPlateBase", no_init)
   .add_property("h", &XC::PlateBase::getH, &XC::PlateBase::setH,"material thickness.")
   .add_property("rho", &XC::PlateBase::getRho, &XC::PlateBase::setRho)
-  .add_property("arealDensity", &XC::PlateBase::getArealDensity, &XC::PlateBase::setArealDensity)
+  .add_property("arealRho", &XC::PlateBase::getArealRho, &XC::PlateBase::setArealRho)
    ;
 
 class_<XC::ElasticPlateBase, bases<XC::PlateBase>, boost::noncopyable >("ElasticPlateBase", no_init)

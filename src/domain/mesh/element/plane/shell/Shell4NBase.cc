@@ -761,7 +761,7 @@ void XC::Shell4NBase::formInertiaTerms( int tangFlag ) const
           momentum.addVector(1.0, theCoordTransf->getBasicTrialAccel(j), shp[massIndex][j] );
 
         //density on the Gauss point i.
-        const double rhoH= physicalProperties[i]->getArealDensity(); //getRho();
+        const double rhoH= physicalProperties[i]->getArealRho(); //mass per unit area.
 
         //multiply acceleration by density to form momentum
         momentum*= rhoH;
@@ -773,7 +773,6 @@ void XC::Shell4NBase::formInertiaTerms( int tangFlag ) const
             temp= shp[massIndex][j] * dvol;
             for(int p= 0;p<3;p++)
               resid(jj+p )+= (temp*momentum(p));
-
 
             if(tangFlag == 1 && rhoH != 0.0)
               {

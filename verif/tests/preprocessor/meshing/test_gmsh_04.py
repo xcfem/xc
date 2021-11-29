@@ -13,12 +13,12 @@ __email__= "l.pereztato@gmail.com"
 import xc_base
 import geom
 import xc
-import matplotlib.pyplot as plt
 from model import predefined_spaces
 from materials import typical_materials
 from materials.astm_aisc import ASTM_materials
 from helper_funcs import getHoleAsPolygonalSurface
-#from postprocess import output_handler
+# import matplotlib.pyplot as plt
+# from postprocess import output_handler
 
 
 p1= geom.Pos3d(-1.82,-1.82,0)
@@ -46,10 +46,10 @@ modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
 points= modelSpace.getPointHandler()
 
 #### Exterior contour
-pt1= points.newPntFromPos3d(p1)
-pt2= points.newPntFromPos3d(p2)
-pt3= points.newPntFromPos3d(p3)
-pt4= points.newPntFromPos3d(p4)
+pt1= points.newPoint(p1)
+pt2= points.newPoint(p2)
+pt3= points.newPoint(p3)
+pt4= points.newPoint(p4)
 
 
 ### Define polygonal surfaces
@@ -79,14 +79,14 @@ xcTotalSet= modelSpace.getTotalSet()
 nNodes= len(xcTotalSet.nodes)
 nElements= len(xcTotalSet.elements)
 
-nNodesRef= [348, 354] # Different Gmsh versions give different results
-nElementsRef= [315, 321]
+nNodesRefRange= (340,360) # Different Gmsh versions give different results
+nElementsRefRange= (310,330)
 
 nNodesOk= False
-if nNodes in nNodesRef:
+if (nNodes>=nNodesRefRange[0]) and (nNodes<=nNodesRefRange[1]):
    nNodesOk= True
 nElementsOk= False
-if nElements in nElementsRef:
+if (nElements>=nElementsRefRange[0]) and (nElements<=nElementsRefRange[1]):
    nElementsOk= True
    
 '''

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-
 '''This example demonstrates how to perform time history analysis of a 2D elastic reinforced concrete cantilever column with a gravity load included in the analysis. See Ex1a.Canti2D.EQ.modif.tcl in OpenSees'''
+
 from __future__ import division
 from __future__ import print_function
 
@@ -40,6 +40,7 @@ from materials import typical_materials
 from solution import predefined_solutions
 from scipy.interpolate import interp1d
 from scipy.integrate import trapz
+from misc_utils import log_messages as lmsg
 
 pth= os.path.dirname(__file__)
 if(not pth):
@@ -54,7 +55,7 @@ prep=FEcase.getPreprocessor
 nodes= prep.getNodeHandler
 elements= prep.getElementHandler
 modelSpace= predefined_spaces.StructuralMechanics2D(nodes) #defines dimension of
-                  #the space: nodes by three coordinates (x,y) and 
+                  #the space: nodes by two coordinates (x,y) and 
                   #three DOF for each node (Ux,Uy,Theta)
 
 ## *** MESH ***                  
@@ -207,7 +208,7 @@ for readed,computed in zip(openSeesRBase,rBase):
     computedRz.append(computed[1][2])
     readedRz.append(readed[1][2])
     
-## Diplay results
+## Display results
 # import matplotlib.pyplot as plt
 # plt.plot(t, computedRz, 'ro', t, readedRz,'bs')
 # plt.show()
@@ -222,7 +223,6 @@ for readed,computed in zip(openSeesRBase,rBase):
 #     output.write(str(r[0])+', '+str(r[1])+'\n')
 # output.close()
 
-from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if((abs(ratio0)<1e-8) and (ratio1<1e-5) and (ratioT<1e-10) and (ratioRx<0.08) and (ratioRz<0.01)):
     print('test '+fname+': ok.')

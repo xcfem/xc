@@ -165,15 +165,15 @@ ID XC::QuadBase4N<PhysProp>::getLocalIndexNodesEdge(const size_t &i) const
     return retval;
   }
 
-//! @brief Return material density.
+//! @brief Return material density (mass per surface unit).
 template <class PhysProp>
 double XC::QuadBase4N<PhysProp>::getRho(void) const
-  { return this->physicalProperties.getRho(); }
+  { return this->physicalProperties.getArealRho(); }
   
 //! @brief Return material density.
 template <class PhysProp>
 void XC::QuadBase4N<PhysProp>::setRho(const double &r)
-  { this->physicalProperties.setRho(r); }
+  { this->physicalProperties.setArealRho(r); }
   
 //! @brief Return material density.
 template <class PhysProp>

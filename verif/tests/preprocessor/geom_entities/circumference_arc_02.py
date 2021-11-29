@@ -37,9 +37,9 @@ truss= seedElemHandler.newElement("Truss",xc.ID([0,0]))
 truss.sectionArea= 10.0
 
 points= preprocessor.getMultiBlockTopology.getPoints
-pt= points.newPntIDPos3d(1,geom.Pos3d(R,0.0,0.0))
-points.newPntFromPos3d(geom.Pos3d((R*cos45),(R*sin45),0.0))
-points.newPntFromPos3d(geom.Pos3d(0.0,R,0.0))
+pt= points.newPoint(1,geom.Pos3d(R,0.0,0.0))
+points.newPoint(geom.Pos3d((R*cos45),(R*sin45),0.0))
+points.newPoint(geom.Pos3d(0.0,R,0.0))
 
 lines= preprocessor.getMultiBlockTopology.getLines
 lines.defaultTag= 1

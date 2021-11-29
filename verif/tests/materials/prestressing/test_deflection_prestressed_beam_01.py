@@ -84,7 +84,7 @@ beamSet=sets.defSet('beamSet')
 beamPoints= beamSet.getPoints
 beamLines= beamSet.getLines
 for i in range(4):
-    p=points.newPntFromPos3d(geom.Pos3d(0,i*span/3,0))
+    p=points.newPoint(geom.Pos3d(0,i*span/3,0))
     beamPoints.append(p)
     if(i>0):
         l= lines.newLine(beamPoints[i-1].tag,beamPoints[i].tag)
@@ -94,7 +94,7 @@ tendonSet=sets.defSet('tendonSet')
 tendonPoints= tendonSet.getPoints
 tendonLines= tendonSet.getLines
 for i in range(1,3):
-    p= points.newPntFromPos3d(geom.Pos3d(0,i*span/3,-deltaTendon))
+    p= points.newPoint(geom.Pos3d(0,i*span/3,-deltaTendon))
     tendonPoints.append(p)
 tendonLines.append(lines.newLine(beamPoints[0].tag,tendonPoints[0].tag))
 tendonLines.append(lines.newLine(tendonPoints[0].tag,tendonPoints[1].tag))

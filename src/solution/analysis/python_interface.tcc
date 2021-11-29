@@ -29,8 +29,9 @@
 #include "convergenceTest/python_interface.tcc"
 
 class_<XC::ModelWrapper, bases<CommandEntity>, boost::noncopyable >("ModelWrapper","\n" "Wrapper for the finite element model 'seen' from the solver. \n" "The model wrapper is a container for: \n""- Domain of the finite element model. \n""- Analysis model. \n""- Constraint handler. \n""- DOF numberer. \n",no_init)
-    .def("newNumberer", &XC::ModelWrapper::newNumberer,return_internal_reference<>(),"\n""newNumberer(nmb)\n""Create a new DOF numberer\n""Parameters: \n""nmb: name of the type of numberer. Available types of numberers: 'default_numberer', 'plain_numberer', 'parallel_numberer'. \n")
-    .def("newConstraintHandler", &XC::ModelWrapper::newConstraintHandler,return_internal_reference<>(),"\n""newConstraintHandler(nmb)\n""Create a new constraint handler. \n""Parameters: \n"" nmb: name of the type of handler. Available types of constraint handlers: 'lagrange_constraint_handler', 'penalty_constraint_handler', 'plain_handler', 'transformation_constraint_handler'. \n") 
+  .def("newNumberer", &XC::ModelWrapper::newNumberer,return_internal_reference<>(),"\n""newNumberer(nmb)\n""Create a new DOF numberer\n""Parameters: \n""nmb: name of the type of numberer. Available types of numberers: 'default_numberer', 'plain_numberer', 'parallel_numberer'. \n")
+  .def("newConstraintHandler", &XC::ModelWrapper::newConstraintHandler,return_internal_reference<>(),"\n""newConstraintHandler(nmb)\n""Create a new constraint handler. \n""Parameters: \n"" nmb: name of the type of handler. Available types of constraint handlers: 'lagrange_constraint_handler', 'penalty_constraint_handler', 'plain_handler', 'transformation_constraint_handler'. \n") 
+  .add_property("name",&XC::ModelWrapper::getName,"Return the name of the model wrapper.")
     ;
 
 class_<XC::MapModelWrapper, bases<CommandEntity>, boost::noncopyable >("MapModelWrapper", "Finite element model wrappers container.",no_init)

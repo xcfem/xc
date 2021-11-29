@@ -23,9 +23,9 @@ feProblem= xc.FEProblem()
 preprocessor= feProblem.getPreprocessor
 
 points= preprocessor.getMultiBlockTopology.getPoints
-ptA= points.newPntFromPos3d(geom.Pos3d(R,0.0,0.0))
-ptB= points.newPntFromPos3d(geom.Pos3d((R*cos45),(R*sin45),0.0))
-ptC= points.newPntFromPos3d(geom.Pos3d(0.0,R,0.0))
+ptA= points.newPoint(geom.Pos3d(R,0.0,0.0))
+ptB= points.newPoint(geom.Pos3d((R*cos45),(R*sin45),0.0))
+ptC= points.newPoint(geom.Pos3d(0.0,R,0.0))
 
 lines= preprocessor.getMultiBlockTopology.getLines
 l= lines.newCircleArc(ptA.tag,ptB.tag,ptC.tag)

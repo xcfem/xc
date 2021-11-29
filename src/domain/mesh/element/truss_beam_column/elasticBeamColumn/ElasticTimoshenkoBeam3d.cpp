@@ -299,7 +299,7 @@ int XC::ElasticTimoshenkoBeam3d::addLoad(ElementalLoad *theLoad, double loadFact
 int XC::ElasticTimoshenkoBeam3d::addInertiaLoadToUnbalance(const Vector &accel)
   {
     // check for quick return
-    const double rho= getRho();
+    const double rho= getLinearRho(); // mass per unit length.
     if (rho == 0.0)
         return 0;
     
@@ -372,7 +372,7 @@ const XC::Vector& XC::ElasticTimoshenkoBeam3d::getResistingForceIncInertia(void)
       theVector.addVector(1.0, this->getRayleighDampingForces(), 1.0);
     
     // check for quick return
-    const double rho= getRho();
+    const double rho= getLinearRho(); // mass per unit length.
     if (rho == 0.0)
         return theVector;
     
@@ -456,7 +456,8 @@ void XC::ElasticTimoshenkoBeam3d::Print(std::ostream &s, int flag) const
         s << "\tConnected Nodes: " << theNodes;
         s << "  section: " << getSectionProperties() << std::endl;
         s << "  coordTransf: " << theCoordTransf->getClassName() << std::endl;
-        s << "  rho: " << getRho() << "  cMass: " << cMass << std::endl;
+        s << "  linear rho: " << getLinearRho()
+	  << "  cMass: " << cMass << std::endl;
         // determine resisting forces in global system
         s << "  resisting force: " << this->getResistingForce() << std::endl;
       }
@@ -475,7 +476,7 @@ void XC::ElasticTimoshenkoBeam3d::Print(std::ostream &s, int flag) const
     //     s << "\"Jx\": " << Jx << ", ";
     //     s << "\"Iy\": " << Iy << ", ";
     //     s << "\"Iz\": " << Iz << ", ";
-    //     s << "\"massperlength\": " << getRho() << ", ";
+    //     s << "\"massperlength\": " << getLinearRho() << ", ";
     //     s << "\"crdTransformation\": \"" << theCoordTransf->getTag() << "\"}";
     //   }
   }
@@ -606,6 +607,11 @@ int XC::ElasticTimoshenkoBeam3d::setParameter(const std::vector<std::string> &ar
 	    param.setValue(sprop.getRho());
 	    return param.addObject(9, this);
 	  }
+	else if(argv[0]=="linearRho") // rho of the beam interior
+	  {
+	    param.setValue(sprop.getLinearRho());
+	    return param.addObject(10, this);
+	  }
       }
     return -1;
   }
@@ -717,7 +723,7 @@ void XC::ElasticTimoshenkoBeam3d::setUp()
     
     // compute mass matrix in global system
     M.Zero();
-    const double rho= getRho();
+    const double rho= getLinearRho(); // mass per unit length.
     if(rho > 0.0)
       {
         if(cMass == 0)

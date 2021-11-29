@@ -34,6 +34,7 @@
 #include <map>
 
 class Pos3d;
+class Pos2d;
 class Line3d;
 class Plane;
 class Vector3d;
@@ -68,6 +69,8 @@ class PntMap: public EntityMap<Pnt>
     Pnt *New(void);
     Pnt *New(const Pos3d &);
     Pnt *New(const size_t &,const Pos3d &);
+    Pnt *New(const Pos2d &);
+    Pnt *New(const size_t &,const Pos2d &);
 
     Pnt *Copy(const Pnt *,const Vector3d &v);
     void Copy(const std::vector<PntMap::Indice> &);

@@ -51,14 +51,14 @@ seedElemHandler.defaultTag= 1 # Tag for next element.
 beam2d= seedElemHandler.newElement("ElasticBeam2d",xc.ID([1,2]))
 
 points= preprocessor.getMultiBlockTopology.getPoints
-pt1= points.newPntIDPos3d(1, geom.Pos3d(0.0,0.0,0))
-pt2= points.newPntIDPos3d(2, geom.Pos3d(0.0,H,0))
-pt3= points.newPntIDPos3d(3, geom.Pos3d(B,0.0,0))
-pt4= points.newPntIDPos3d(4, geom.Pos3d(B,H,0))
-pt5= points.newPntIDPos3d(5, geom.Pos3d(offset,0.0,0))
-pt6= points.newPntIDPos3d(6, geom.Pos3d(offset,H,0))
-pt7= points.newPntIDPos3d(7, geom.Pos3d(offset+B,0.0,0))
-pt8= points.newPntIDPos3d(8, geom.Pos3d(offset+B,H,0))
+pt1= points.newPoint(1, geom.Pos3d(0.0,0.0,0))
+pt2= points.newPoint(2, geom.Pos3d(0.0,H,0))
+pt3= points.newPoint(3, geom.Pos3d(B,0.0,0))
+pt4= points.newPoint(4, geom.Pos3d(B,H,0))
+pt5= points.newPoint(5, geom.Pos3d(offset,0.0,0))
+pt6= points.newPoint(6, geom.Pos3d(offset,H,0))
+pt7= points.newPoint(7, geom.Pos3d(offset+B,0.0,0))
+pt8= points.newPoint(8, geom.Pos3d(offset+B,H,0))
 
 lines= preprocessor.getMultiBlockTopology.getLines
 l= lines.newLine(1,2)

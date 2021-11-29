@@ -14,7 +14,7 @@ documentation will have .. the .ps file is around 200 pages if you want
 to look at it and give your own comments)
 
 ### Domain
-contains the classes for the domain. all in subdirectores:
+contains the classes for the domain.
 
 ### Material
 Classes that represent the materials abstraction.
@@ -30,6 +30,16 @@ contains the code that deals with the solution of the finite element problem.
 
 ### Utility
 Utility classes and functions.
+
+## References
+
+- [Finite Element Method – What Is It?](https://www.simscale.com/blog/2016/10/what-is-finite-element-method)
+- [Finite Element Method (Wikipedia)](https://en.wikipedia.org/wiki/Finite_element_method)
+- [Introduction to Finite Element Analysis](https://fem-heroes.org/introduction-to-fea/)
+- [Pre-processing](https://fem-heroes.org/preprocessing)
+- [Solver](https://fem-heroes.org/solver)
+- [Post-processing](https://fem-heroes.org/postprocessing/)
+
 
 <!-- NOTES FOR MYSELF: -->
 <!-- notes for alpha cluster: -->

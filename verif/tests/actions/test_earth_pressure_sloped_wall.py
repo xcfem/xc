@@ -7,7 +7,6 @@ from __future__ import division
 
 from actions.earth_pressure import earth_pressure as ep
 
-
 __author__= "Ana Ortega (AO_O)"
 __copyright__= "Copyright 2019, AO_O"
 __license__= "GPL"

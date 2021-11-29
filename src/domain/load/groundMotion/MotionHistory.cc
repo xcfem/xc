@@ -168,6 +168,7 @@ size_t XC::MotionHistory::getNumDataPoints(void) const
       return 0;
   }
 
+//! @brief Return the duration of the motion history.
 double XC::MotionHistory::getDuration(void) const
   {
     if(theAccelSeries)
@@ -176,6 +177,7 @@ double XC::MotionHistory::getDuration(void) const
       return 0.0;
   }
 
+//! @brief Return the peak value of the acceleration.
 double XC::MotionHistory::getPeakAccel(void) const
   {
     if(theAccelSeries)
@@ -202,6 +204,7 @@ void XC::MotionHistory::calcDisp(void) const
       theDispSeries = this->integrate(theVelSeries); //Computes displacements.
   }
 
+//! @brief Return the peak value of the velocity.
 double XC::MotionHistory::getPeakVel(void) const
   {
     if(!theVelSeries) calcVel();
@@ -211,6 +214,7 @@ double XC::MotionHistory::getPeakVel(void) const
       return 0.0;
   }
 
+//! @brief Return the peak value of the displacement.
 double XC::MotionHistory::getPeakDisp(void) const
   {
     if(!theDispSeries) calcDisp();
@@ -231,6 +235,7 @@ double XC::MotionHistory::getAccel(double time) const
       return 0.0;
   }     
 
+//! @brief Return acceleration sensitivity at specified time.
 double XC::MotionHistory::getAccelSensitivity(double time)
   {
     if(time < 0.0)

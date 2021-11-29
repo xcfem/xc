@@ -80,7 +80,8 @@ void XC::EigenSOE::copy(const EigenSolver *newSolver)
         if(tmp)
           setSolver(tmp);
         else
-	  std::cerr << "Eigen::copy; no se pudo crear the solver."
+	  std::cerr << getClassName() << "::" << __FUNCTION__
+		    << "; can't allocate the solver."
                     << std::endl;
       }
   }
@@ -97,13 +98,14 @@ bool XC::EigenSOE::setSolver(EigenSolver *newSolver)
         const int solverOK= theSolver->setSize();
         if(solverOK < 0)
           {
-            std::cerr << "WARNING EigenSOE::setSolver :";
-            std::cerr << " solver failed setSize() in constructor\n";
+            std::cerr << getClassName() << "::" << __FUNCTION__
+		      << "; WARNING: solver failed setSize() in constructor\n";
           }
         retval= true;
       }
     else
-      std::cerr << "EigenSOE::setSolver; pointer to solver is null." << std::endl;
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; pointer to solver is null." << std::endl;
     return retval;
   }
 
@@ -111,20 +113,23 @@ bool XC::EigenSOE::setSolver(EigenSolver *newSolver)
 int XC::EigenSOE::getNumEqn(void) const
   { return size; }
 
+//! @brief Set the solver to use
+//! @param type: solver type to use.
 XC::EigenSolver &XC::EigenSOE::newSolver(const std::string &type)
   {
-    if(type=="band_arpack_solver")
+    if((type=="band_arpack_solver") || (type=="band_arpack_eigen_solver"))
       setSolver(new BandArpackSolver());
-    else if(type=="band_arpackpp_solver")
+    else if((type=="band_arpackpp_solver") || (type=="band_arpackpp_eigen_solver"))
       setSolver(new BandArpackppSolver());
     else if(type=="sym_band_eigen_solver")
       setSolver(new SymBandEigenSolver());
     else if(type=="full_gen_eigen_solver")
       setSolver(new FullGenEigenSolver());
-    else if(type=="sym_arpack_solver")
+    else if((type=="sym_arpack_solver") || (type=="band_arpack_eigen_solver"))
       setSolver(new SymArpackSolver());
     else
-      std::cerr << "Solver of type: '"
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; Solver of type: '"
                 << type << "' unknown." << std::endl;
     assert(theSolver);
     return *theSolver;
@@ -258,8 +263,8 @@ double XC::EigenSOE::getModalParticipationFactor(int mode) const
     const Vector ev= getEigenvector(mode);
     const size_t sz= ev.Size();
     if((massMatrix.size1()!=sz) || (massMatrix.size2()!=sz))
-      std::cerr << "EigenSOE::getModalParticipationFactor; ERROR "
-                << "the eigenvector has dimension " << sz
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; ERROR the eigenvector has dimension " << sz
                 << " and the mass matrix " << massMatrix.size1()
                 << "x" << massMatrix.size2() << ".\n";
     boost::numeric::ublas::vector<double> fi_mode(sz);

@@ -48,6 +48,8 @@ class_<XC::DqPtrsNode, bases<dq_ptrs_node> >("DqPtrsNode",no_init)
   .def(self - self)
   .def(self * self)
   .def("createInertiaLoads", &XC::DqPtrsNode::createInertiaLoads,"Create the inertia load for the given acceleration vector.")
+  .add_property("totalMass", &XC::DqPtrsNode::getTotalMass, "Return the total mass matrix.")
+  .def("getTotalMassComponent", &XC::DqPtrsNode::getTotalMassComponent,"Return the total mass matrix component for the DOF argument.")
   ;
 
 typedef XC::DqPtrs<XC::Element> dq_ptrs_element;
@@ -78,6 +80,8 @@ class_<XC::DqPtrsElem, bases<dq_ptrs_element> >("DqPtrsElem",no_init)
   .def("getMaterials",&XC::DqPtrsElem::getMaterialNamesPy,"getElementMaterials() return a list with the names of the element materials in the container.")
   .def("pickElemsOfMaterial",&XC::DqPtrsElem::pickElemsOfMaterial,"pickElemsOfMaterial(materialName) return the elements that have that material.")
   .def("createInertiaLoads", &XC::DqPtrsElem::createInertiaLoads,"Create the inertia load for the given acceleration vector.")
+  .add_property("totalMass", &XC::DqPtrsElem::getTotalMass, "Return the total mass matrix.")
+  .def("getTotalMassComponent", &XC::DqPtrsElem::getTotalMassComponent,"Return the total mass matrix component for the DOF argument.")
   .def("getAverageSize", &XC::DqPtrsElem::getAverageSize,"Get the average size of the elements (elements of dimension zero are ignored).")
   .def(self += self)
   .def(self + self)
@@ -160,6 +164,9 @@ class_<XC::SetMeshComp, XC::SetMeshComp *, bases<XC::SetBase>>("SetMeshComp",no_
   .def("extend", extend_elements, "Appends the elements in the argument to the set.")
   .def("extend", extend_constraints, "Appends the constraints in the argument to the set.")
   .def("extend", extend_mesh_comp, "Appends the argument components to the set.")
+  .def("createInertiaLoads", &XC::SetMeshComp::createInertiaLoads,"Create the inertia load for the given acceleration vector.")
+  .add_property("totalMass", &XC::SetMeshComp::getTotalMass, "Return the total mass matrix.")
+  .def("getTotalMassComponent", &XC::SetMeshComp::getTotalMassComponent,"Return the total mass matrix component for the DOF argument.")
   // The following operators return copies of the object stored in MapSet
   // and then the operations in those objects are lost. For now we'll
   // leave them aside.

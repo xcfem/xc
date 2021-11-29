@@ -13,4 +13,6 @@ Determing the next time step for an analysis can be done by one of the following
 
 
 ## References
-[Direct displacement control](https://www.eurocode.us/finite-element-method/direct-displacement-control.html)
+- [Direct displacement control](https://www.eurocode.us/finite-element-method/direct-displacement-control.html)
+- [Arc-Length Control](https://opensees.berkeley.edu/OpenSees/manuals/usermanual/684.htm)
+- 

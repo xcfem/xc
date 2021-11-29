@@ -68,6 +68,7 @@
 namespace XC {
   class Information;
   class Vector;
+  class MapLoadPatterns;
 
 //! @ingroup LPatterns
 //!
@@ -91,6 +92,9 @@ class TimeSeries: public MovableObject, public CommandEntity
     //! @brief Virtual constructor.
     virtual TimeSeries *getCopy(void) const= 0;
 
+    const MapLoadPatterns *getMapLoadPatterns(void) const;
+    const std::string &getName(void) const;
+    
     // pure virtual functions
     //! To return the current load factor for the given value of {\em
     //! pseudoTime} to be applied to the loads and single-point constraints in

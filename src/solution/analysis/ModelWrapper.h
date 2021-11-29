@@ -90,6 +90,8 @@ class ModelWrapper: public CommandEntity
     ModelWrapper &operator=(const ModelWrapper &);
     ~ModelWrapper(void);
 
+    std::string getName(void) const;
+    
     Domain *getDomainPtr(void);
     const Domain *getDomainPtr(void) const;
     Integrator *getIntegratorPtr(void);

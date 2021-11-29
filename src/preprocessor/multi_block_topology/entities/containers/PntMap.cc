@@ -234,6 +234,20 @@ XC::Pnt *XC::PntMap::New(const size_t &tag,const Pos3d &pos)
     return retval;
   }
 
+//! @brief Creates a new point at the position being passed as parameter.
+XC::Pnt *XC::PntMap::New(const Pos2d &pos)
+  {
+    const Pos3d p3d= To3dXY2d(pos);
+    return New(p3d);
+  }
+
+//! @brief Creates a new point with the tag being passed as parameter.
+XC::Pnt *XC::PntMap::New(const size_t &tag,const Pos2d &pos)
+  {
+    const Pos3d p3d= To3dXY2d(pos);
+    return New(tag, p3d);
+  }
+
 //! @brief Creates a new point, copy from the point argument with
 //! the corresponding name according to the value of the tag. The coordinates
 //! of the new point will be those obtained from the addition to the point

@@ -270,7 +270,11 @@ class Domain: public ObjWithRecorders, public DistributedBase
     virtual const Vector &getModalParticipationFactors(void) const;
     const double getEffectiveModalMass(int mode) const;
     Vector getEffectiveModalMasses(void) const;
-    double getTotalMass(void) const;
+    double getTotalEffectiveModalMass(void) const;
+
+    // mass distribution
+    Matrix getTotalMass(void) const;
+    double getTotalMassComponent(const int &) const;
 
      // methods for other objects to determine if model has changed
     virtual void domainChange(void);

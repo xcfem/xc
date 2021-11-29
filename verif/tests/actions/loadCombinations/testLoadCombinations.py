@@ -13,10 +13,10 @@ g= loadCombinations.GammaF(g_elu,g_els)
 print("favorable= ", g.getGammaFELU.favorable, " desfavorable= ", g.getGammaFELU.desfavorable, "favorable accidental= ", g.getGammaFELU.favorableAccidental, " desfavorable accidental= ", g.getGammaFELU.desfavorableAccidental)
 print("favorable= ", g.getGammaFELS.favorable, " desfavorable= ", g.getGammaFELS.desfavorable)
 
-g_els.setProp("nuevaPropiedad","Saluda")
+g_els.setProp("nuevaPropiedad","Hello")
 g_elu.nuevaPropiedad= "No sé"
-g_elu.setProp("nuevaPropiedad","Despide")
+g_elu.setProp("nuevaPropiedad","Bye")
 
-print("probando1: ", g_els.getProp("nuevaPropiedad"))
-print("probando2: ", g_elu.getProp("nuevaPropiedad"))
-print("probando3: ", g_elu.nuevaPropiedad)
+print("checking1: ", g_els.getProp("nuevaPropiedad"))
+print("checking2: ", g_elu.getProp("nuevaPropiedad"))
+print("checking3: ", g_elu.nuevaPropiedad)

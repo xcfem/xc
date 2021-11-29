@@ -29,8 +29,8 @@ class DatabaseHelperSolve:
         print("previousName= ",previousName)
         print("tag= ",comb.tag)
         print("tagPrevia= ",tagPrevia)
-        print("descomp previa= ",getDescompCombPrevia)
-        print("resto sobre previa= ",getDescompRestoSobrePrevia)
+        print("descomp previa= ",getComponentsCombPrevia)
+        print("resto sobre previa= ",getComponentsRestoSobrePrevia)
         '''
         comb.addToDomain()
         analOk= solutionProcedure.solve()

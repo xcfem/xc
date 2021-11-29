@@ -53,7 +53,7 @@ pointHandler= preprocessor.getMultiBlockTopology.getPoints
 points= list()
 for i in range(0,6):
     x= i*unbracedLength
-    points.append(pointHandler.newPntFromPos3d(geom.Pos3d(x,0.0,0.0)))
+    points.append(pointHandler.newPoint(geom.Pos3d(x,0.0,0.0)))
 
 ## Lines
 lines= list()

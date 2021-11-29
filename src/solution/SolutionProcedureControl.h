@@ -61,6 +61,7 @@ class SolutionProcedureControl: public CommandEntity
     DataOutputHandler::map_output_handlers *getOutputHandlers(void) const;
     const ModelWrapper *getModelWrapper(const std::string &) const;
     ModelWrapper *getModelWrapper(const std::string &);
+    const std::string &getModelWrapperName(const ModelWrapper *) const;
     const SolutionStrategy *getSolutionStrategy(const std::string &) const;
     SolutionStrategy *getSolutionStrategy(const std::string &);
 

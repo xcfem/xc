@@ -14,7 +14,6 @@ import math
 import xc_base
 import geom
 import xc
-import matplotlib.pyplot as plt
 from materials.astm_aisc import ASTM_materials
 from model import predefined_spaces
 from materials import typical_materials
@@ -48,11 +47,11 @@ modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
 points= modelSpace.getPointHandler()
 
 #### Exterior contour
-pt1= points.newPntFromPos3d(p1)
-pt2= points.newPntFromPos3d(p2)
-pt3= points.newPntFromPos3d(p3)
-pt4= points.newPntFromPos3d(p4)
-pt5= points.newPntFromPos3d(p5)
+pt1= points.newPoint(p1)
+pt2= points.newPoint(p2)
+pt3= points.newPoint(p3)
+pt4= points.newPoint(p4)
+pt5= points.newPoint(p5)
 
 ### Define polygonal surfaces
 surfaces= modelSpace.getSurfaceHandler()
@@ -81,14 +80,14 @@ xcTotalSet= modelSpace.getTotalSet()
 nNodes= len(xcTotalSet.nodes)
 nElements= len(xcTotalSet.elements)
 
-nNodesRef= [347, 348] # Different Gmsh versions give different results
-nElementsRef= [312, 313, 315]
+nNodesRefRange= (340,355) # Different Gmsh versions give different results
+nElementsRefRange= (300,320)
 
 nNodesOk= False
-if nNodes in nNodesRef:
+if (nNodes>=nNodesRefRange[0]) and (nNodes<=nNodesRefRange[1]):
    nNodesOk= True
 nElementsOk= False
-if nElements in nElementsRef:
+if (nElements>=nElementsRefRange[0]) and (nElements<=nElementsRefRange[1]):
    nElementsOk= True
 
 '''

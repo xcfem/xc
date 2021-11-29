@@ -12,7 +12,7 @@ def net2DfromXYlists(preprocessor,abscissae,ordinates):
   for x in abscissae:
     j= 1
     for y in ordinates:
-      pnt= points.newPntFromPos3d(geom.Pos3d(x,y,0.0))
+      pnt= points.newPoint(geom.Pos3d(x,y,0.0))
       retval.setPnt(j,i,pnt.tag)
       j+= 1
     i+= 1

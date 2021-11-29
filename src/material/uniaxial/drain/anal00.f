@@ -49,20 +49,21 @@ c  DOUBLE PRECISION
 c ---------------------------------------------------------------------
 c  ARGUMENT TYPES
       integer   kresis,ksave,kgem,kstep,ndof,kst,kenr
-      real*8    ener,ened,enso,beto
-      real*8    relas(ndof),rdamp(ndof),rinit(ndof)
-      real*8    ddise(ndof),dise(ndof),vele(ndof)
+      integer, parameter :: dp = selected_real_kind(15, 50)
+      real(dp)    ener,ened,enso,beto
+      real(dp)    relas(ndof),rdamp(ndof),rinit(ndof)
+      real(dp)    ddise(ndof),dise(ndof),vele(ndof)
       
 c ---------------------------------------------------------------------
 c     LABELLED COMMONS
-      real*8                E,sigY,Hiso,Hkin
-      real*8                ep,alpha,kappa
-      real*8                epsP,sigP,tangP
-      real*8                tang
+      real(dp)                E,sigY,Hiso,Hkin
+      real(dp)                ep,alpha,kappa
+      real(dp)                epsP,sigP,tangP
+      real(dp)                tang
       include                'infel00.h'
       
       integer sgn
-      real*8        eps,sig,xsi,f,dGamma
+      real(dp)        eps,sig,xsi,f,dGamma
       
 c     Current strain
       eps = dise(2)-dise(1)    
@@ -160,14 +161,15 @@ c  DOUBLE PRECISION
 c ---------------------------------------------------------------------
 c  ARGUMENT TYPES
       integer   kstt,ktype,ndof
-      real*8    fk(ndof,ndof)
+      integer, parameter :: dp = selected_real_kind(15, 50)
+      real(dp)    fk(ndof,ndof)
 
 c ---------------------------------------------------------------------
 c  LABELLED COMMONS
-      real*8                E,sigY,Hiso,Hkin
-      real*8                ep,alpha,kappa
-      real*8                epsP,sigP,tangP
-      real*8                tang
+      real(dp)                E,sigY,Hiso,Hkin
+      real(dp)                ep,alpha,kappa
+      real(dp)                epsP,sigP,tangP
+      real(dp)                tang
       include                'infel00.h'
 
 c

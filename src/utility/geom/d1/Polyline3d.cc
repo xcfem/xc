@@ -121,24 +121,43 @@ void Polyline3d::Move(const Vector3d &v)
     for(list_Pos3d::iterator j=begin();j != end();j++)
       (*j)= (*j) + v;
   }
+
+//! @brief Return true if the point is in the polyline.
 bool Polyline3d::In(const Pos3d &p, const double &tol) const
   {
-    for(list_Pos3d::const_iterator j=begin();j != end();j++)
-      if(getSegment(j).In(p,tol)) return true;
-    return false;
+    bool retval= false;    
+    if(!empty())
+      {
+	list_Pos3d::const_iterator first= begin();
+	list_Pos3d::const_iterator last= std::prev(end());
+	for(list_Pos3d::const_iterator j=first;j != last;j++)
+          if(getSegment(j).In(p,tol))
+	    {
+	      retval= true;
+	      break;
+	    }
+      }
+    return retval;
   }
 
+//! @brief Return the points of intersection of the polyline with
+//! the argument.
 GeomObj3d::list_Pos3d Polyline3d::getIntersection(const Plane &p) const
   {
     list_Pos3d retval;
     list_Pos3d::iterator i= retval.end();
     Segment3d s;
-    for(list_Pos3d::const_iterator j=begin();j != end();j++)
+    if(!empty())
       {
-        s= getSegment(j);
-        list_Pos3d lp= intersection(p,s);
-        retval.insert(i,lp.begin(),lp.end());
-        i= retval.end();
+	list_Pos3d::const_iterator first= begin();
+	list_Pos3d::const_iterator last= std::prev(end());
+	for(list_Pos3d::const_iterator j=first;j != last;j++)
+	  {
+	    s= getSegment(j);
+	    list_Pos3d lp= intersection(p,s);
+	    retval.insert(i,lp.begin(),lp.end());
+	    i= retval.end();
+	  }
       }
     return retval;
   }

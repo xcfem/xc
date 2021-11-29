@@ -33,8 +33,8 @@ elast= typical_materials.defElasticMaterial(preprocessor, "elast",3000)
 
 # Problem geometry
 points= preprocessor.getMultiBlockTopology.getPoints
-pt1= points.newPntFromPos3d(geom.Pos3d(0,0,0))
-pt2= points.newPntFromPos3d(geom.Pos3d(CooMax,CooMax,CooMax))
+pt1= points.newPoint(geom.Pos3d(0,0,0))
+pt2= points.newPoint(geom.Pos3d(CooMax,CooMax,CooMax))
 
 lines= preprocessor.getMultiBlockTopology.getLines
 l= lines.newLine(pt1.tag,pt2.tag)

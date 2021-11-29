@@ -148,3 +148,16 @@ class SimpleBeam(bm.Beam):
         if(x>a):
           retval= P*b*(self.l-x)/(6.0*self.E*self.I*self.l)*(2*self.l*x-x*2-a**2)
         return retval
+
+    def getFundamentalBendingFrequencies(self, numModes, linearRho):
+        ''' Return the fundamental bending frequencies of the beam.
+
+        :param numModes: number of oscillation modes to compute.
+        :param linearRho: mass density per unit length.
+        '''
+        tmp= 1/2.0/math.pi*math.sqrt(self.E*self.I/linearRho)
+        retval= list()
+        for i in range(0,numModes):
+            mode= i+1
+            retval.append(tmp*(mode*math.pi/self.l)**2)
+        return retval

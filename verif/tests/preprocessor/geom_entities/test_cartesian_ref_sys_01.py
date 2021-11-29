@@ -22,8 +22,8 @@ feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
 
 points= preprocessor.getMultiBlockTopology.getPoints
-pt= points.newPntIDPos3d(1,geom.Pos3d(0.0,0.0,0.0))
-pt= points.newPntIDPos3d(2,geom.Pos3d(CooMax,CooMax,CooMax))
+pt= points.newPoint(1,geom.Pos3d(0.0,0.0,0.0))
+pt= points.newPoint(2,geom.Pos3d(CooMax,CooMax,CooMax))
 rsMap= preprocessor.getMultiBlockTopology.getReferenceSystems
 
 rs= rsMap.newReferenceSystem("cartesianas")

@@ -46,13 +46,12 @@ class ActionRelationships: public CommandEntity
     static std::deque<std::string> get_combination_actions_names(const std::string &str);
   private:
     dq_string incompatibles; //!< Expresiones regulares verdaderas para acciones incompatibles con ésta.
-    dq_string maestras; //!< Expresiones regulares verdaderas para acciones de las que ésta es esclava.
-    bool nodet; //!< Verdadero si la acción no puede ser determinante.
+    dq_string main_actions; //!< Expresiones regulares verdaderas para acciones de las que ésta es esclava.
     bool contiene_incomp; //!< True if the combination contains incompatible actions.
 
     std::string names(const dq_string &) const;
     void concat_incompatibles(const dq_string &);
-    void concat_maestras(const dq_string &);
+    void concat_main_actions(const dq_string &);
     bool match(const std::string &,const dq_string &) const;
     bool match_any(const dq_string &,const dq_string &) const;
     bool match_all(const dq_string &,const dq_string &) const;
@@ -60,26 +59,22 @@ class ActionRelationships: public CommandEntity
   public:
     ActionRelationships(void);
 
-    //! @brief Agrega a la lista de incompatibles la expresión regular que se pasa como parámetro.
-    inline void AgregaIncompatible(const std::string &str)
+    //! @brief Append the regular expresion argument to the list of incompatible actions.
+    inline void appendIncompatible(const std::string &str)
       { incompatibles.push_back(str); }
-    //! @brief Agrega a la lista de maestras la expresión regular que se pasa como parámetro.
-    inline void AgregaMaestra(const std::string &str)
-      { maestras.push_back(str); }
-    inline bool NoDeterminante(void) const
-      { return nodet; }
-    void setNoDeterminante(const bool &b)
-      { nodet= b; }
+    //! @brief Append the regular expresion argument to the list of main actions.
+    inline void appendMain(const std::string &str)
+      { main_actions.push_back(str); }
 
     bool matchIncompatibles(const dq_string &) const;
     bool incompatible(const std::string &) const;
 
     bool esclavaDe(const std::string &) const;
     bool esEsclava(void) const
-      { return !maestras.empty(); }
+      { return !main_actions.empty(); }
     bool tieneHuerfanas(void) const
-      { return !maestras.empty(); }
-    void updateMaestras(const std::string &nmb);
+      { return !main_actions.empty(); }
+    void updateMainActions(const std::string &nmb);
 
     inline void setContieneIncomp(bool b)
       { contiene_incomp= b; }

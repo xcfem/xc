@@ -33,15 +33,15 @@ L= 8.0 #8.0
 inPlane= True # False
 points = preprocessor.getMultiBlockTopology.getPoints  # Point container.
 if(inPlane):
-  pt0 = points.newPntFromPos3d(geom.Pos3d(0.0,0.0,0.0)) 
-  pt1 = points.newPntFromPos3d(geom.Pos3d(0.0,1.0,0.0)) 
-  pt2 = points.newPntFromPos3d(geom.Pos3d(0.0,1.0,L)) 
-  pt3 = points.newPntFromPos3d(geom.Pos3d(0.0,0.0,L))  # Right end
+  pt0 = points.newPoint(geom.Pos3d(0.0,0.0,0.0)) 
+  pt1 = points.newPoint(geom.Pos3d(0.0,1.0,0.0)) 
+  pt2 = points.newPoint(geom.Pos3d(0.0,1.0,L)) 
+  pt3 = points.newPoint(geom.Pos3d(0.0,0.0,L))  # Right end
 else:
-  pt0 = points.newPntFromPos3d(geom.Pos3d(0.0,0.0,0.0)) 
-  pt1 = points.newPntFromPos3d(geom.Pos3d(1.0,0.0,0.0)) 
-  pt2 = points.newPntFromPos3d(geom.Pos3d(1.0,0.0,L)) 
-  pt3 = points.newPntFromPos3d(geom.Pos3d(0.0,0.0,L))  # Right end
+  pt0 = points.newPoint(geom.Pos3d(0.0,0.0,0.0)) 
+  pt1 = points.newPoint(geom.Pos3d(1.0,0.0,0.0)) 
+  pt2 = points.newPoint(geom.Pos3d(1.0,0.0,L)) 
+  pt3 = points.newPoint(geom.Pos3d(0.0,0.0,L))  # Right end
 
 surfaces = preprocessor.getMultiBlockTopology.getSurfaces  # Face container.
 surfaces.defaultTag = 1

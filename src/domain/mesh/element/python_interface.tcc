@@ -33,6 +33,10 @@ XC::NodePtrsWithIDs &(XC::Element::*getNodePtrsRef)(void)= &XC::Element::getNode
 const XC::Vector &(XC::Element::*getResistingForceRef)(void) const= &XC::Element::getResistingForce;
 const XC::Matrix &(XC::Element::*getInitialStiffRef)(void) const= &XC::Element::getInitialStiff;
 const XC::Matrix &(XC::Element::*getTangentStiffRef)(void) const= &XC::Element::getTangentStiff;
+const XC::Matrix &(XC::Element::*getMassRef)(void) const= &XC::Element::getMass;
+XC::Matrix (XC::Element::*getNodeMassRef)(const XC::Node *) const= &XC::Element::getMass;
+XC::Matrix (XC::Element::*getTotalMassRef)(void) const= &XC::Element::getTotalMass;
+const XC::Matrix &(XC::Element::*getDampRef)(void) const= &XC::Element::getDamp;
 bool (XC::Element::*ElementIn3D)(const GeomObj3d &,const double &,const double &) const= &XC::Element::In;
 bool (XC::Element::*ElementOut3D)(const GeomObj3d &,const double &,const double &) const= &XC::Element::Out;
 void (XC::Element::*setIdNodesRef)(const XC::ID &inodes)= &XC::Element::setIdNodes;
@@ -41,7 +45,8 @@ double (XC::Element::*getDistPos3d)(const Pos3d &,bool initialGeometry) const= &
 double (XC::Element::*getDist2Pos2d)(const Pos2d &,bool initialGeometry) const= &XC::Element::getDist2;
 double (XC::Element::*getDist2Pos3d)(const Pos3d &,bool initialGeometry) const= &XC::Element::getDist2;
 class_<XC::Element, XC::Element *,bases<XC::MeshComponent>, boost::noncopyable >("Element", no_init)
-  .add_property("getNodes", make_function( getNodePtrsRef, return_internal_reference<>() ))
+  .add_property("getNodes", make_function( getNodePtrsRef, return_internal_reference<>() ),"DEPRECATED; return the element nodes.")
+  .add_property("nodes", make_function( getNodePtrsRef, return_internal_reference<>() ),"Return the element nodes.")
   .add_property("getIdxNodes",&XC::Element::getIdxNodes,"Return the node indices for its use in VTK arrays.")
   .def("setIdNodes", setIdNodesRef," setIdNodes(xc.ID([idNode0, idNode1,...]) set the element nodes.")
   .def("setIdNode", &XC::Element::setIdNode," setIdNode(i-th, idNode) set the element i-th node.")
@@ -54,6 +59,11 @@ class_<XC::Element, XC::Element *,bases<XC::MeshComponent>, boost::noncopyable >
   .def("getResistingForce",make_function(getResistingForceRef, return_internal_reference<>() ),"Calculates element's resisting force.")
   .def("getTangentStiff",make_function(getTangentStiffRef, return_internal_reference<>() ),"Return tangent stiffness matrix.")
   .def("getInitialStiff",make_function(getInitialStiffRef, return_internal_reference<>() ),"Return initial stiffness matrix.")
+  .add_property("mass", make_function(getMassRef, return_internal_reference<>()) ,"Element mass matrix.")
+  .add_property("totalMass", getTotalMassRef, "Returns the sum of the mass matrices corresponding to the nodes.")
+  .def("getTotalMassComponent", &XC::Element::getTotalMassComponent,"Return the total mass matrix component for the DOF argument.")
+  .def("nodeMass", getNodeMassRef, "Components of the element mass matrix corresponding to DOFs of the argument node.")
+  .add_property("damp", make_function(getDampRef, return_internal_reference<>()) ,"Element damping matrix.")
   .def("setDeadSRF",XC::Element::setDeadSRF,"Assigns Stress Reduction Factor for element deactivation.")
   .add_property("getVtkCellType",&XC::Element::getVtkCellType,"Return cell type for Vtk graphics.")
   .def("getPosCentroid",&XC::Element::getCenterOfMassPosition,"Return centroid's position.")

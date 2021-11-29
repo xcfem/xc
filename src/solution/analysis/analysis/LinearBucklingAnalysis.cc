@@ -45,9 +45,11 @@
 
 
 //! @brief Constructor.
-XC::LinearBucklingAnalysis::LinearBucklingAnalysis(SolutionStrategy *analysis_aggregation,SolutionStrategy *esolu)
-  :StaticAnalysis(analysis_aggregation), eigen_solu(esolu), linearBucklingEigenAnalysis(esolu),
-   numModes(0),linear_buckling_analysis_step(0) {}
+//! 
+XC::LinearBucklingAnalysis::LinearBucklingAnalysis(SolutionStrategy *static_analysis, SolutionStrategy *buckling_analysis)
+  : StaticAnalysis(static_analysis), eigen_solu(buckling_analysis),
+    linearBucklingEigenAnalysis(buckling_analysis),
+    numModes(0),linear_buckling_analysis_step(0) {}
 
 //! @brief Clears all object members (constraint handler, analysis model,...).
 void XC::LinearBucklingAnalysis::clearAll(void)

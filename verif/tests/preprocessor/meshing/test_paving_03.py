@@ -13,10 +13,10 @@ __email__= "l.pereztato@gmail.com"
 import xc_base
 import geom
 import xc
-import matplotlib.pyplot as plt
 from model import predefined_spaces
 from materials import typical_materials
-#from postprocess import output_handler
+# import matplotlib.pyplot as plt
+# from postprocess import output_handler
 
 def getPoints(lstPos, nDiv):
     retval= list()
@@ -131,20 +131,20 @@ modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
 points= modelSpace.getPointHandler()
 
 #### Exterior contour
-pt1= points.newPntFromPos3d(p1)
-pt2= points.newPntFromPos3d(p2)
-pt3= points.newPntFromPos3d(p3)
-pt4= points.newPntFromPos3d(p4)
+pt1= points.newPoint(p1)
+pt2= points.newPoint(p2)
+pt3= points.newPoint(p3)
+pt4= points.newPoint(p4)
 
 #### Holes
-ptH0= points.newPntFromPos3d(pH0)
-ptH1= points.newPntFromPos3d(pH1)
-ptH2= points.newPntFromPos3d(pH2)
-ptH3= points.newPntFromPos3d(pH3)
-ptH4= points.newPntFromPos3d(pH4)
-ptH5= points.newPntFromPos3d(pH5)
-ptH6= points.newPntFromPos3d(pH6)
-ptH7= points.newPntFromPos3d(pH7)
+ptH0= points.newPoint(pH0)
+ptH1= points.newPoint(pH1)
+ptH2= points.newPoint(pH2)
+ptH3= points.newPoint(pH3)
+ptH4= points.newPoint(pH4)
+ptH5= points.newPoint(pH5)
+ptH6= points.newPoint(pH6)
+ptH7= points.newPoint(pH7)
 
 ### Define polygonal surfaces
 surfaces= modelSpace.getSurfaceHandler()

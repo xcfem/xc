@@ -40,12 +40,12 @@ elem= seedElemHandler.newElement("ShellMITC4",xc.ID([0,0,0,0]))
 
 
 points= preprocessor.getMultiBlockTopology.getPoints
-pt= points.newPntIDPos3d(1,geom.Pos3d(R,0.0,0.0))
-points.newPntFromPos3d(geom.Pos3d((R*cos45),(R*sin45),0.0))
-points.newPntFromPos3d(geom.Pos3d(0.0,R,0.0))
-points.newPntFromPos3d(geom.Pos3d(R,0.0,1.0))
-points.newPntFromPos3d(geom.Pos3d((R*cos45),(R*sin45),1.0))
-points.newPntFromPos3d(geom.Pos3d(0.0,R,1.0))
+pt= points.newPoint(1,geom.Pos3d(R,0.0,0.0))
+points.newPoint(geom.Pos3d((R*cos45),(R*sin45),0.0))
+points.newPoint(geom.Pos3d(0.0,R,0.0))
+points.newPoint(geom.Pos3d(R,0.0,1.0))
+points.newPoint(geom.Pos3d((R*cos45),(R*sin45),1.0))
+points.newPoint(geom.Pos3d(0.0,R,1.0))
 
 surfaces= preprocessor.getMultiBlockTopology.getSurfaces
 s1= surfaces.newQuadSurfaceGridPts([[1,2,3],[4,5,6]])

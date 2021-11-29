@@ -1193,6 +1193,18 @@ int XC::Node::revertToStart(void)
 const XC::Matrix &XC::Node::getMass(void) const
   { return mass; }
 
+//! @brief Return the mass matrix component for the DOF argument.
+double XC::Node::getMassComponent(const int &dof) const
+  {
+    const size_t sz= mass.noRows();
+    Vector J(sz);
+    J(dof)= 1.0;
+    Vector tmp(sz);
+    tmp.addMatrixVector(1.0, mass, J, 1.0);
+    const double retval= dot(J,tmp);
+    return retval;
+  }
+
 //! @brief Sets the Rayleigh dumping factor.
 int XC::Node::setRayleighDampingFactor(double alpham)
   {

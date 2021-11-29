@@ -35,7 +35,7 @@ difference= combs.newLoadCombination("DIFFERENCE","")
 previousName= combs.getCombPrevia(combs.getComb("COMB1")).name
 difference.asigna("COMB1")
 difference.subtract(previousName)
-descompDifference= difference.getDescomp("%3.1f")
+descompDifference= difference.getComponents("%3.1f")
 
 ratio1= (previousName=="COMB3")
 ratio2= (descompDifference=="1.5*B")

@@ -79,15 +79,21 @@ XC::TimeSeries *XC::TrapezoidalTimeSeriesIntegrator::integrate(TimeSeries *theSe
 	  delta << "<= 0\n";
         return 0;
       }
-    // check a XC::TimeSeries object was passed
+    // check a TimeSeries object was passed
     if(!theSeries)
       {
-        std::cerr << "XC::TrapezoidalTimeSeriesIntegrator::integrate() - - no XC::TimeSeries passed\n";
+        std::cerr << "TrapezoidalTimeSeriesIntegrator::" << __FUNCTION__
+	          << "; no TimeSeries passed.\n";
         return 0;
       }
+    const double duration= theSeries->getDuration();
+    if(duration<=0.0)
+        std::cerr << "TrapezoidalTimeSeriesIntegrator::" << __FUNCTION__
+	          << "; WARNING: duration is zero.\n";
+      
 
     // Add one to get ceiling out of type cast
-    const int numSteps= static_cast<int>(theSeries->getDuration()/delta + 1.0);
+    const int numSteps= static_cast<int>(duration/delta + 1.0);
 
     Vector theIntegratedValues(numSteps);
 

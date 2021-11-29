@@ -472,41 +472,51 @@ class SteelShape(sp.SectionProperties):
             elem.setProp("HIPCPV2",nmbComb)
         elem.setProp("FCVCP",fcv)
         
-    def defElasticSection3d(self,preprocessor):
+    def defElasticSection3d(self,preprocessor, overrideRho= None):
         ''' Return an elastic section appropiate for 3D beam analysis
 
         :param  preprocessor: preprocessor object.
+        :param overrideRho: if defined (not None), override the value of 
+                            the material density.
         '''
-        return super(SteelShape,self).defElasticSection3d(preprocessor, self.steelType)
+        return super(SteelShape,self).defElasticSection3d(preprocessor, self.steelType, overrideRho= overrideRho)
     
-    def defElasticShearSection3d(self,preprocessor):
+    def defElasticShearSection3d(self,preprocessor, overrideRho= None):
         '''elastic section appropiate for 3D beam analysis, including shear 
            deformations
 
-        :param  preprocessor: preprocessor object.
+        :param preprocessor: preprocessor object.
+        :param overrideRho: if defined (not None), override the value of 
+                            the material density.
         '''
-        return super(SteelShape,self).defElasticShearSection3d(preprocessor, self.steelType)
+        return super(SteelShape,self).defElasticShearSection3d(preprocessor, self.steelType, overrideRho= overrideRho)
 
-    def defElasticSection1d(self,preprocessor):
+    def defElasticSection1d(self,preprocessor, overrideRho= None):
         ''' Return an elastic section appropiate for truss analysis.
 
         :param preprocessor: preprocessor object.
+        :param overrideRho: if defined (not None), override the value of 
+                            the material density.
         '''
-        return super(SteelShape,self).defElasticSection1d(preprocessor, self.steelType)
+        return super(SteelShape,self).defElasticSection1d(preprocessor, self.steelType, overrideRho= overrideRho)
     
-    def defElasticSection2d(self,preprocessor, majorAxis= True):
+    def defElasticSection2d(self,preprocessor, majorAxis= True, overrideRho= None):
         ''' Return an elastic section appropiate for 2D beam analysis
 
         :param preprocessor: preprocessor object.
+        :param overrideRho: if defined (not None), override the value of 
+                            the material density.
         '''
-        return super(SteelShape,self).defElasticSection2d(preprocessor, material= self.steelType, majorAxis= majorAxis)
+        return super(SteelShape,self).defElasticSection2d(preprocessor, material= self.steelType, majorAxis= majorAxis, overrideRho= overrideRho)
     
-    def defElasticShearSection2d(self,preprocessor, majorAxis= True):
+    def defElasticShearSection2d(self,preprocessor, majorAxis= True, overrideRho= None):
         '''elastic section appropiate for 2D beam analysis, including shear deformations
 
         :param  preprocessor: preprocessor object.
+        :param overrideRho: if defined (not None), override the value of 
+                            the material density.
         '''
-        return super(SteelShape,self).defElasticShearSection2d(preprocessor, material= self.steelType, majorAxis= majorAxis)
+        return super(SteelShape,self).defElasticShearSection2d(preprocessor, material= self.steelType, majorAxis= majorAxis, overrideRho= overrideRho)
     
     def getCrossSectionProperties2D(self):
         '''Return a CrossSectionProperties object with the

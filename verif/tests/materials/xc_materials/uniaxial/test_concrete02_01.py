@@ -12,7 +12,7 @@ from model import predefined_spaces
 from materials import typical_materials
 from postprocess.reports import graph_material 
 from materials.ehe import EHE_materials
-import matplotlib.pyplot as plt
+# import matplotlib.pyplot as plt
 import numpy as np
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"

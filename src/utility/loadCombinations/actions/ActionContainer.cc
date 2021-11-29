@@ -133,12 +133,12 @@ cmb_acc::LoadCombinationVector cmb_acc::ActionContainer::GetPermanentes(const bo
 //! @param uls: True if the combinations correspond to ultimate limit states.
 //! @param sit_accidental: True if the combinations correspond to accidental situations.
 //! @param v: representative value to consider for the leading action.
-cmb_acc::LoadCombinationVector cmb_acc::ActionContainer::GetVariables(const LoadCombinationVector &permanentes,const bool &uls,const bool &sit_accidental,const short int &v) const
+cmb_acc::LoadCombinationVector cmb_acc::ActionContainer::GetVariables(const LoadCombinationVector &permanentes,const bool &uls,const bool &sit_accidental,const bool &sit_sismica,const short int &v) const
   {
     LoadCombinationVector retval; //Inicializa con acciones permanentes.
     if(!Q.empty()) //Hay acciones variables.
       {
-        LoadCombinationVector SQ= Q.getActions().getCombinationsWhenLeading(uls,sit_accidental,v);
+        LoadCombinationVector SQ= Q.getActions().getCombinationsWhenLeading(uls,sit_accidental, sit_sismica,v);
         retval= LoadCombinationVector::ProdCartesiano(permanentes,SQ,Action::zero);
         if(uls) retval= LoadCombinationVector::Concat(permanentes,retval,Action::zero); //Si ULS consideramos también las cargas permanentes SOLAS.
       }
@@ -150,7 +150,6 @@ cmb_acc::LoadCombinationVector cmb_acc::ActionContainer::GetVariables(const Load
     return retval;
   }
 
-//! \fn cmb_acc::LoadCombinationVector cmb_acc::ActionContainer::GetAccSis(const LoadCombinationVector &previas,const ActionsFamily &Acc) const
 //! @brief Return the combinations that correspond to accidental or seismic situations.
 //! @param previas: LoadCombinations de las acciones permanentes y variables obtenidas mediante cmb_acc::ActionContainer::GetVariables.
 //! @param Acc: Familia de acciones accidentales o sísmicas.
@@ -185,8 +184,7 @@ cmb_acc::LoadCombinationVector cmb_acc::ActionContainer::GetPersistentesOTransit
     LoadCombinationVector retval= GetPermanentes(true,false); //ULS, situación no accidental.
     if(verbosity>1) std::clog << "done." << std::endl;
     if(verbosity>1) std::clog << "  Computing combinations of variable actions...";
-    retval= GetVariables(retval,true,false,0);//ULS, leading action with characteristic value
-                                              //rest of actions with combination value.
+    retval= GetVariables(retval,true,false,false,0);
     if(verbosity>1) std::clog << "  Filtering combinations of incompatible actions...";
     retval= filtraCombsEsclavasHuerfanas(get_compatibles(retval)); //Filter incompatible actions.
     if(verbosity>1) std::clog << "done." << std::endl;
@@ -206,7 +204,7 @@ cmb_acc::LoadCombinationVector cmb_acc::ActionContainer::GetAccidentales(void) c
     retval= GetPermanentes(true,true); //ULS, accidental situations.
     if(verbosity>1) std::clog << "done." << std::endl;
     if(verbosity>1) std::clog << "  Computing combinations of variable actions...";
-    retval= GetVariables(retval,true,true,2); //ULS, leading action with characteristic value
+    retval= GetVariables(retval,true,true,false,2); //ULS, leading action with characteristic value
                                               //rest of actions with cuasi-permanent value.
     if(verbosity>1) std::clog << "  done." << std::endl;
     if(verbosity>1) std::clog << "  Computing combinations of accidental actions...";
@@ -228,14 +226,10 @@ cmb_acc::LoadCombinationVector cmb_acc::ActionContainer::GetSismicas(void) const
     if(AS.empty()) return retval; //No hay acciones sismicas.
     if(verbosity>1) std::clog << "Computing combinations for ULS in seismic situations..." << std::endl;
     if(verbosity>1) std::clog << "  Computing combinations of permanent actions...";
-    retval= GetPermanentes(true,true); //ULS, situación accidental.
+    retval= GetPermanentes(true,true); //ULS, situación sísmica.
     if(verbosity>1) std::clog << "done." << std::endl;
     if(verbosity>1) std::clog << "  Computing combinations of variable actions...";
-    if(!Q.empty()) //Hay acciones variables.
-      {
-        LoadCombinationVector SQ= Q.getActions().getCombinations(true,true,2); //ULS, all actions with quasi-permanent value.
-        retval= LoadCombinationVector::ProdCartesiano(retval,SQ,Action::zero);
-      }
+    retval= GetVariables(retval,true,true,true,2); //ULS, ll actions with quasi-permanent value.
     if(verbosity>1) std::clog << "  done." << std::endl;
     if(verbosity>1) std::clog << "  Computing combinations of seismic actions...";
     retval= GetAccSis(retval,AS);
@@ -274,7 +268,7 @@ cmb_acc::LoadCombinationVector cmb_acc::ActionContainer::GetPocoFrecuentes(void)
     LoadCombinationVector retval= GetPermanentes(false,false); //SLS, situación no accidental (obviamente).
     if(verbosity>1) std::clog << "done." << std::endl;
     if(verbosity>1) std::clog << "  Computing combinations of variable actions...";
-    retval= GetVariables(retval,false,false,0);//SLS, leading action with characteristic value
+    retval= GetVariables(retval,false,false,false,0);//SLS, leading action with characteristic value
                                               //rest of actions with combination value.
     if(verbosity>1) std::clog << "  Filtering combinations of incompatible actions...";
     retval= filtraCombsEsclavasHuerfanas(get_compatibles(retval)); //Filter incompatible actions.
@@ -293,7 +287,7 @@ cmb_acc::LoadCombinationVector cmb_acc::ActionContainer::GetFrecuentes(void) con
     LoadCombinationVector retval= GetPermanentes(false,false); //SLS, situación no accidental (obviamente).
     if(verbosity>1) std::clog << "done." << std::endl;
     if(verbosity>1) std::clog << "  Computing combinations of variable actions...";
-    retval= GetVariables(retval,false,false,1);//SLS, leading action with characteristic value
+    retval= GetVariables(retval,false,false,false,1);//SLS, leading action with characteristic value
                                               //rest of actions with quasi-permanent value.
     if(verbosity>1) std::clog << "  Filtering combinations of incompatible actions...";
     retval= filtraCombsEsclavasHuerfanas(get_compatibles(retval)); //Filter incompatible actions.
@@ -312,7 +306,8 @@ cmb_acc::LoadCombinationVector cmb_acc::ActionContainer::GetCuasiPermanentes(voi
     LoadCombinationVector retval= GetPermanentes(false,false); //SLS, situación no accidental.
     if(verbosity>1) std::clog << "done." << std::endl;
     if(verbosity>1) std::clog << "  Computing combinations of variable actions...";
-    retval= GetVariables(retval,false,false,2);//SLS, all actions with quasi-permanent value.
+    // We use sit_sismica= true to avoid leading loads.
+    retval= GetVariables(retval,false,false,true,2);//SLS, all actions with quasi-permanent value.
     if(verbosity>1) std::clog << "  Filtering combinations of incompatible actions...";
     retval= filtraCombsEsclavasHuerfanas(get_compatibles(retval)); //Filter incompatible actions.
     if(verbosity>1) std::clog << "done." << std::endl;

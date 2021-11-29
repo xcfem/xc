@@ -28,14 +28,14 @@ height= 12*0.0254
 ## Block topology
 
 points= preprocessor.getMultiBlockTopology.getPoints
-pt1= points.newPntFromPos3d(geom.Pos3d(0.0,0.0,0.0))
-pt2= points.newPntFromPos3d(geom.Pos3d(width,0.0,0.0))
-pt3= points.newPntFromPos3d(geom.Pos3d(width,length,0.0))
-pt4= points.newPntFromPos3d(geom.Pos3d(0.0,length,0.0))
-pt5= points.newPntFromPos3d(geom.Pos3d(0.0,0.0,height))
-pt6= points.newPntFromPos3d(geom.Pos3d(width,0.0,height))
-pt7= points.newPntFromPos3d(geom.Pos3d(width,length,height))
-pt8= points.newPntFromPos3d(geom.Pos3d(0.0,length,height))
+pt1= points.newPoint(geom.Pos3d(0.0,0.0,0.0))
+pt2= points.newPoint(geom.Pos3d(width,0.0,0.0))
+pt3= points.newPoint(geom.Pos3d(width,length,0.0))
+pt4= points.newPoint(geom.Pos3d(0.0,length,0.0))
+pt5= points.newPoint(geom.Pos3d(0.0,0.0,height))
+pt6= points.newPoint(geom.Pos3d(width,0.0,height))
+pt7= points.newPoint(geom.Pos3d(width,length,height))
+pt8= points.newPoint(geom.Pos3d(0.0,length,height))
 
 bodies= preprocessor.getMultiBlockTopology.getBodies
 b1= bodies.newBlockPts(pt1.tag,pt2.tag,pt3.tag,pt4.tag,pt5.tag,pt6.tag,pt7.tag,pt8.tag)

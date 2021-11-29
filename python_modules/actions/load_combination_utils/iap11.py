@@ -53,6 +53,9 @@ partial_safety_factors["variables_SCconstruccion"]= loadCombinations.PartialSafe
 #Coeficientes de ponderación para acciones accidentales.
 partial_safety_factors["accidentales"]= loadCombinations.PartialSafetyFactors(loadCombinations.ULSPartialSafetyFactors(0,1,1,1),loadCombinations.SLSPartialSafetyFactors(0,0))
 
+#Coeficientes de ponderación para acciones sísmicas.
+partial_safety_factors["sismicas"]= loadCombinations.PartialSafetyFactors(loadCombinations.ULSPartialSafetyFactors(0,1,1,1), loadCombinations.SLSPartialSafetyFactors(0,0))
+
 #Factores de simultaneidad (tabla 6.1-a)
 combination_factors= factors.getCombinationFactors()
 # SC uso

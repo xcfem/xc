@@ -83,6 +83,10 @@ class DqPtrsElem: public DqPtrsKDTree<Element,KDTreeElements>
     double getAverageSize(bool initialGeometry= true) const;
     
     void createInertiaLoads(const Vector &);
+    
+    // mass distribution
+    Matrix getTotalMass(void) const;
+    double getTotalMassComponent(const int &) const;
   };
 
 DqPtrsElem operator+(const DqPtrsElem &a,const DqPtrsElem &b);

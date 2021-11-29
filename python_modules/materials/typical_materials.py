@@ -36,14 +36,16 @@ class BasicElasticMaterial(object):
         self.rho= rho
         
     def G(self):
-        '''shear modulus'''
+        '''shear modulus.'''
         return self.E/(2*(1+self.nu))
     
-    def defElasticMaterial(self, preprocessor, name= None):
+    def defElasticMaterial(self, preprocessor, name= None, overrideRho= None):
         ''' Return an elastic material appropiate for example for
             truss elements
 
-        :param  preprocessor: preprocessor of the finite element problem.
+        :param preprocessor: preprocessor of the finite element problem.
+        :param overrideRho: if defined (not None), override the value of 
+                            the material density.
         '''        
         materialHandler= preprocessor.getMaterialHandler
         matName= name
@@ -51,7 +53,10 @@ class BasicElasticMaterial(object):
             matName= uuid.uuid1().hex
         retval= materialHandler.newMaterial("elastic_material",matName)
         retval.E= self.E
-        retval.rho= self.rho
+        rho= self.rho
+        if(overrideRho!=None):
+            rho= overrideRho
+        retval.rho= rho
         return retval
 
     def getDict(self):
@@ -66,12 +71,15 @@ class BasicElasticMaterial(object):
         self.rho= dct['rho']
         
 
-def defElasticMaterial(preprocessor,name, E, rho= 0.0, nu= 0.3):
+def defElasticMaterial(preprocessor, name:str, E:float, rho= 0.0, nu= 0.3):
     '''Constructs an elastic uniaxial material.
 
     :param preprocessor: preprocessor of the finite element problem.
     :param name:         name identifying the material
     :param E:            tangent in the stress-strain diagram
+    :param rho:          mass density
+    :param overrideRho: if defined (not None), override the value of 
+                        the material density.
     '''
     tmp= BasicElasticMaterial(E, nu, rho)
     return tmp.defElasticMaterial(preprocessor, name)
@@ -114,8 +122,7 @@ def defCableMaterial(preprocessor,name,E,prestress,rho):
     :param name:         name identifying the material
     :param E:            elastic modulus
     :param prestress:    prestress
-    :param rho:          effective self weight (gravity component of weight per 
-                    volume transverse to the cable)
+    :param rho:          mass density
     '''
     materialHandler= preprocessor.getMaterialHandler
     retval= materialHandler.newMaterial("cable_material",name)
@@ -224,14 +231,14 @@ def defConcrete02(preprocessor,name,epsc0,fpc,fpcu,epscu,ratioSlope= 0.1, ft= No
     return retval
 
 #Elastic section 1d.
-def defElasticSection1d(preprocessor,name,A,E,linearRho= 0.0):
+def defElasticSection1d(preprocessor,name,A,E, linearRho= 0.0):
     '''Constructs an elastic section appropiate for 1D beam analysis.
 
     :param preprocessor: preprocessor of the finite element problem.
     :param name:         name identifying the section
     :param A:            cross-sectional area of the section
     :param E:            Young’s modulus of material
-    :param I:            second moment of area about the local z-axis
+    :param linearRho:    mass per unit length.
     '''
     materialHandler= preprocessor.getMaterialHandler
     retval= materialHandler.newMaterial("elastic_section_1d",name)
@@ -249,6 +256,7 @@ def defElasticSection2d(preprocessor,name,A,E,I, linearRho= 0.0):
     :param A:            cross-sectional area of the section
     :param E:            Young’s modulus of material
     :param I:            second moment of area about the local z-axis
+    :param linearRho:    mass per unit length.
     '''
     materialHandler= preprocessor.getMaterialHandler
     retval= materialHandler.newMaterial("elastic_section_2d",name)
@@ -269,7 +277,8 @@ def defElasticShearSection2d(preprocessor,name,A,E,G,I,alpha, linearRho= 0.0):
     :param E:            Young’s modulus of the material
     :param G:            Shear modulus of the material          
     :param I:            second moment of area about the local z-axis
-     :param alpha:        shear shape factor
+    :param alpha:        shear shape factor
+    :param linearRho:    mass per unit length.
     '''
     materialHandler= preprocessor.getMaterialHandler
     retval= materialHandler.newMaterial("elasticShearSection2d",name)
@@ -281,7 +290,7 @@ def defElasticShearSection2d(preprocessor,name,A,E,G,I,alpha, linearRho= 0.0):
     retval.sectionProperties.linearRho= linearRho
     return retval
 
-def defElasticSectionFromMechProp1d(preprocessor,name,mechProp1d):
+def defElasticSectionFromMechProp1d(preprocessor,name,mechProp1d, overrideRho= None):
     '''Constructs an elastic section appropiate for 1D beam analysis, 
     taking mechanical properties of the section form a MechProp1d object.
 
@@ -289,11 +298,16 @@ def defElasticSectionFromMechProp1d(preprocessor,name,mechProp1d):
     :param name:         name identifying the section
     :param mechProp1d:   object of type MechProp1d that contains the mechanical 
                     properties of the section
+    :param overrideRho: if defined (not None), override the value of 
+                        the material density.
     '''  
-    retval= defElasticSection1d(preprocessor,name,mechProp1d.A,mechProp1d.E,linearRho= mechProp1d.linearRho)
+    rho= mechProp1d.linearRho
+    if(overrideRho!=None):
+        rho= overrideRho
+    retval= defElasticSection1d(preprocessor,name,mechProp1d.A,mechProp1d.E, linearRho= rho)
     return retval
 
-def defElasticSectionFromMechProp2d(preprocessor,name,mechProp2d):
+def defElasticSectionFromMechProp2d(preprocessor, name, mechProp2d, overrideRho= None):
     '''Constructs an elastic section appropiate for 2D beam analysis, 
     taking mechanical properties of the section form a MechProp2d object.
 
@@ -301,11 +315,16 @@ def defElasticSectionFromMechProp2d(preprocessor,name,mechProp2d):
     :param name:         name identifying the section
     :param mechProp2d:   object of type MechProp2d that contains the mechanical 
                     properties of the section
+    :param overrideRho: if defined (not None), override the value of 
+                        the material density.
     '''  
-    retval= defElasticSection2d(preprocessor,name,mechProp2d.A,mechProp2d.E,mechProp2d.I,linearRho= mechProp2d.linearRho)
+    rho= mechProp2d.linearRho
+    if(overrideRho!=None):
+        rho= overrideRho
+    retval= defElasticSection2d(preprocessor,name,mechProp2d.A,mechProp2d.E,mechProp2d.I,linearRho= rho)
     return retval
 
-def defElasticShearSectionFromMechProp2d(preprocessor,name,mechProp2d):
+def defElasticShearSectionFromMechProp2d(preprocessor, name, mechProp2d, overrideRho= None):
     '''Constructs an elastic section appropiate for 2D beam analysis, 
     taking mechanical properties of the section form a MechProp2d object.
 
@@ -313,8 +332,13 @@ def defElasticShearSectionFromMechProp2d(preprocessor,name,mechProp2d):
     :param name:         name identifying the section
     :param mechProp2d:   object of type MechProp2d that contains the mechanical 
                          properties of the section
+    :param overrideRho: if defined (not None), override the value of 
+                        the material density.
     '''  
-    retval= defElasticShearSection2d(preprocessor,name= name, A= mechProp2d.A, E= mechProp2d.E, G= mechProp2d.G, I= mechProp2d.I, alpha= mechProp2d.Alpha, linearRho= mechProp2d.linearRho)
+    rho= mechProp2d.linearRho
+    if(overrideRho!=None):
+        rho= overrideRho
+    retval= defElasticShearSection2d(preprocessor,name= name, A= mechProp2d.A, E= mechProp2d.E, G= mechProp2d.G, I= mechProp2d.I, alpha= mechProp2d.Alpha, linearRho= rho)
     return retval
 
 #Elastic section 3d.
@@ -329,7 +353,7 @@ def defElasticSection3d(preprocessor,name,A,E,G,Iz,Iy,J, linearRho= 0.0):
     :param Iz:           second moment of area about the local z-axis
     :param Iy:           second moment of area about the local y-axis
     :param J:            torsional moment of inertia of the section
-
+    :param linearRho:    mass per unit length.
     '''
     materialHandler= preprocessor.getMaterialHandler
     retval= materialHandler.newMaterial("elastic_section_3d",name)
@@ -342,7 +366,7 @@ def defElasticSection3d(preprocessor,name,A,E,G,Iz,Iy,J, linearRho= 0.0):
     retval.sectionProperties.linearRho= linearRho
     return retval
 
-def defElasticSectionFromMechProp3d(preprocessor,name,mechProp3d):
+def defElasticSectionFromMechProp3d(preprocessor, name, mechProp3d, overrideRho= None):
     '''Constructs an elastic section appropiate for 3D beam analysis, 
     taking mechanical properties of the section form a MechProp3d object.
 
@@ -350,10 +374,15 @@ def defElasticSectionFromMechProp3d(preprocessor,name,mechProp3d):
     :param name:         name identifying the section
     :param mechProp2d:   instance of the class MechProp3d that contains the 
                          mechanical properties of the section
+    :param overrideRho: if defined (not None), override the value of 
+                        the material density.
     '''  
-    return defElasticSection3d(preprocessor,name,mechProp3d.A,mechProp3d.E,mechProp3d.G,mechProp3d.Iz,mechProp3d.Iy,mechProp3d.J,linearRho= mechProp3d.linearRho)
+    rho= mechProp3d.linearRho
+    if(overrideRho!=None):
+        rho= overrideRho
+    return defElasticSection3d(preprocessor,name,mechProp3d.A,mechProp3d.E,mechProp3d.G,mechProp3d.Iz,mechProp3d.Iy,mechProp3d.J,linearRho= rho)
 
-def defElasticShearSectionFromMechProp3d(preprocessor,name,mechProp3d):
+def defElasticShearSectionFromMechProp3d(preprocessor, name, mechProp3d, overrideRho= None):
     '''Constructs an elastic section appropiate for 3D beam analysis, 
     taking mechanical properties of the section form a MechProp3d object.
 
@@ -361,8 +390,13 @@ def defElasticShearSectionFromMechProp3d(preprocessor,name,mechProp3d):
     :param name:         name identifying the section
     :param mechProp2d:   instance of the class MechProp3d that contains the 
                          mechanical properties of the section
+    :param overrideRho: if defined (not None), override the value of 
+                        the material density.
     '''  
-    return defElasticShearSection3d(preprocessor, name= name, A= mechProp3d.A, E= mechProp3d.E, G= mechProp3d.G, Iz= mechProp3d.Iz, Iy= mechProp3d.Iy, J= mechProp3d.J, alpha_y= mechProp3d.AlphaY, alpha_z= mechProp3d.AlphaZ, linearRho= mechProp3d.linearRho)
+    rho= mechProp3d.linearRho
+    if(overrideRho!=None):
+        rho= overrideRho
+    return defElasticShearSection3d(preprocessor, name= name, A= mechProp3d.A, E= mechProp3d.E, G= mechProp3d.G, Iz= mechProp3d.Iz, Iy= mechProp3d.Iy, J= mechProp3d.J, alpha_y= mechProp3d.AlphaY, alpha_z= mechProp3d.AlphaZ, linearRho= rho)
 
 #Elastic shear section 3d.
 def defElasticShearSection3d(preprocessor, name, A, E, G, Iz, Iy, J, alpha_y, alpha_z, linearRho= 0.0):
@@ -379,6 +413,7 @@ def defElasticShearSection3d(preprocessor, name, A, E, G, Iz, Iy, J, alpha_y, al
     :param J:            torsional moment of inertia of the section
     :param alpha_y:      shear shape factor on y axis.
     :param alpha_z:      shear shape factor on z axis.
+    :param linearRho:    mass per unit length.
     '''
     materialHandler= preprocessor.getMaterialHandler
     retval= materialHandler.newMaterial("elasticShearSection3d",name)
@@ -395,7 +430,7 @@ def defElasticShearSection3d(preprocessor, name, A, E, G, Iz, Iy, J, alpha_y, al
 
 
 #Linear elastic isotropic plane strain material.
-def defElasticIsotropicPlaneStrain(preprocessor,name,E,nu,rho):
+def defElasticIsotropicPlaneStrain(preprocessor,name,E,nu, rho= 0.0):
     '''Constructs an linear elastic isotropic plane-strain material.
 
     :param  preprocessor: preprocessor of the finite element problem.
@@ -412,7 +447,7 @@ def defElasticIsotropicPlaneStrain(preprocessor,name,E,nu,rho):
     return retval
 
 #Linear elastic isotropic plane stress material.
-def defElasticIsotropicPlaneStress(preprocessor,name,E,nu,rho):
+def defElasticIsotropicPlaneStress(preprocessor,name,E,nu, rho= 0.0):
     '''Constructs an linear elastic isotropic plane-stress material.
 
     :param  preprocessor: preprocessor of the finite element problem.
@@ -429,7 +464,7 @@ def defElasticIsotropicPlaneStress(preprocessor,name,E,nu,rho):
     return retval
 
 #Linear elastic isotropic 3d material.
-def defElasticIsotropic3d(preprocessor,name,E,nu,rho):
+def defElasticIsotropic3d(preprocessor,name,E,nu, rho= 0.0):
     '''Constructs an linear elastic isotropic 3D material.
 
     :param  preprocessor: preprocessor of the finite element problem.
@@ -477,7 +512,7 @@ def defJ2PlateFibre(preprocessor, name, E, nu, fy, alpha= .01, rho= 0.0):
     :param  fy:           material yield stress.
     :param  alpha:        strain hardening ratio (default: (0.01), 
                           range: 0 to 1).
-    :param  rho:          mass density
+    :param  rho:          mass density (defaults to 0.0).
     '''
     materialHandler= preprocessor.getMaterialHandler
     retval= materialHandler.newMaterial("J2_plate_fibre",name)
@@ -563,8 +598,13 @@ class DeckMaterialData(MaterialData):
         '''return the mass per unit area'''
         lmsg.warning('DeckMaterialData.getAreaDensity will be deprecated soon. Use the XC material method.')
         return self.rho*self.thickness
-    def setupElasticSection(self,preprocessor):
-        '''create an elastic isotropic section appropiate for plate and shell analysis
+    def setupElasticSection(self,preprocessor, overrideRho= None):
+        '''create an elastic isotropic section appropiate for plate 
+           and shell analysis.
+
+        :param preprocessor: preprocessor of the finite element problem.
+        :param overrideRho: if defined (not None), override the value of 
+                            the material density.
         '''
         if(not self.xc_material):
             materialHandler= preprocessor.getMaterialHandler
@@ -572,7 +612,10 @@ class DeckMaterialData(MaterialData):
                 lmsg.warning("Section: "+self.name+" already defined.")
                 self.xc_material= materialHandler.getMaterial(self.name)
             else:
-                self.xc_material= defElasticMembranePlateSection(preprocessor,self.name,self.E,self.nu,self.rho,self.thickness)
+                rho= self.rho
+                if(overrideRho!=None):
+                    rho= overrideRho
+                self.xc_material= defElasticMembranePlateSection(preprocessor, name= self.name,E= self.E, nu= self.nu, rho= rho, h= self.thickness)
         else:
             lmsg.warning('Material: ', self.name, ' already defined.')
         return self.xc_material
@@ -597,8 +640,12 @@ class BeamMaterialData(MaterialData):
         '''return the mass per unit length'''
         return self.rho*self.section.A()
     
-    def setupElasticShear3DSection(self,preprocessor):
-        '''Return an elastic section appropiate for 3D beam linear elastic analysis
+    def setupElasticShear3DSection(self,preprocessor, overrideRho= None):
+        '''Return an elastic section appropiate for 3D beam linear 
+           elastic analysis.
+
+        :param overrideRho: if defined (not None), override the value of 
+                            the material density.
         '''
         if(not self.xc_material):
             materialHandler= preprocessor.getMaterialHandler
@@ -606,7 +653,10 @@ class BeamMaterialData(MaterialData):
                 lmsg.warning("Section: "+self.name+" already defined.")
                 self.xc_material= materialHandler.getMaterial(self.name)
             else:
-                self.xc_material= defElasticShearSection3d(preprocessor,name= self.name, A= self.section.A(), E= self.material.E, G= self.material.G(), Iz= self.section.Iz(), Iy= self.section.Iy(), J= self.section.J(), alpha_y= self.section.alphaY(), alpha_z= self.section.alphaZ())
+                rho= self.getRho()
+                if(overrideRho!=None):
+                    rho= overrideRho
+                self.xc_material= defElasticShearSection3d(preprocessor,name= self.name, A= self.section.A(), E= self.material.E, G= self.material.G(), Iz= self.section.Iz(), Iy= self.section.Iy(), J= self.section.J(), alpha_y= self.section.alphaY(), alpha_z= self.section.alphaZ(), linearRho= rho)
         else:
             lmsg.warning('Material: ', self.name, ' already defined.')
         return self.xc_material

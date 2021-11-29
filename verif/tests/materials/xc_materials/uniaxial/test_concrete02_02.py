@@ -23,7 +23,7 @@ from materials import concrete_base
 from materials import typical_materials
 from materials.ehe import EHE_materials
 from materials import concrete_base
-import matplotlib.pyplot as plt
+# import matplotlib.pyplot as plt
 import math
 import numpy as np
 

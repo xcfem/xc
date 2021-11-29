@@ -67,6 +67,31 @@ const XC::ModelWrapper *XC::MapModelWrapper::getModelWrapper(const std::string &
     return retval;
   }
 
+//! @brief Return the name of a model wrapper.
+const std::string &XC::MapModelWrapper::getModelWrapperName(const ModelWrapper *mw) const
+  {
+    static std::string retval;
+    retval= "";
+    const_iterator i= begin();
+    for(; i!= end(); i++)
+      {
+	const ModelWrapper *tmp= &((*i).second);
+	if(tmp==mw) // found it.
+	  {
+	    retval= (*i).first;
+	    break;
+	  }
+      }
+    if(i==end())
+      {
+	retval= "not_found";
+	std::cerr << getClassName() << "::" << __FUNCTION__
+	          << "; model wrapper not found."
+	          << std::endl;
+      }
+    return retval;
+  }
+
 //! @brief Creates a new solution method with the identifier being passed as parameter (if already exists, it returns a pointer to it). 
 XC::ModelWrapper &XC::MapModelWrapper::creaModelWrapper(const std::string &cod)
   {

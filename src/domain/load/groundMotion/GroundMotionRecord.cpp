@@ -85,6 +85,7 @@ XC::GroundMotionRecord::GroundMotionRecord(const std::string &fileNameAccel,cons
 XC::GroundMotion *XC::GroundMotionRecord::getCopy(void) const
   { return new GroundMotionRecord(*this); }
 
+//! @brief Return the duration of the motion history.
 double XC::GroundMotionRecord::getDuration(void) const
   { return history.getDuration(); }
 

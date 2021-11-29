@@ -51,7 +51,7 @@ class PlateBase: public SectionForceDeformation
     int sendData(Communicator &);
     int recvData(const Communicator &);
   private:
-    double rhoH ; //!< mass per unit 2D area
+    double rho; //!< mass per volume unit
   public: 
     PlateBase(int tag,int classTag);
     PlateBase(int classTag);
@@ -65,8 +65,8 @@ class PlateBase: public SectionForceDeformation
       { h= d; }
     virtual double getRho(void) const;
     virtual void setRho(const double &);
-    virtual double getArealDensity(void) const;
-    virtual void setArealDensity(const double &);
+    virtual double getArealRho(void) const;
+    virtual void setArealRho(const double &);
     XC::Matrix getValues(const std::string &, bool silent) const;
   };
 } // end of XC namespace

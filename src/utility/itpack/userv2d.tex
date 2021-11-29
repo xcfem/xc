@@ -1,0 +1,896 @@
+\documentstyle{article}
+
+\def \la{\langle}
+\def \ra{\rangle}
+\def \lp{\left(}
+\def \rp{\right)}
+\def \lb{\left[}
+\def \rb{\right]}
+\def \lc{\left\{}
+\def \rc{\right\}}
+\def \om{\omega}
+\def \ha{\frac{1}{2}}
+
+\evensidemargin 0.5in
+\oddsidemargin 0.5in
+\textwidth 5.5in
+
+\begin{document}
+
+\thispagestyle{empty}
+\vspace*{0.6in}
+\centerline{\Large\bf ITPACKV 2D User's Guide}
+\vspace*{0.25in}
+\centerline{David R. Kincaid}
+\centerline{Thomas C. Oppe}
+\centerline{David M. Young}
+\vspace*{0.3in}
+\centerline{May 1989 \hspace*{1.4in} CNA-232}
+\vspace*{2.1in}
+\centerline{\bf Abstract}
+\vspace*{0.2in}
+\noindent
+ITPACKV 2D is an adaptation for vector computers of the ITPACK 2C
+software package for solving large sparse linear systems of equations by
+adaptive accelerated iterative algorithms.
+
+\vspace*{1.5in}
+\noindent
+This work was supported in part by Cray Research, Inc., through 
+Grant LTR DTD, by the Department of Energy, through Grant 
+DE-FG05-87ER25048, and by the National Science Foundation, through 
+Grant DCR-8518722, with The University of Texas at Austin.
+
+\newpage
+\setcounter{page}{1}
+
+\title{ITPACKV 2D User's Guide
+ \thanks{This work was supported in part by Cray Research, Inc., 
+         through Grant LTR DTD, by the Department of Energy, through 
+         Grant DE-FG05-87ER25048, and by the National Science 
+         Foundation, through Grant DCR-8518722, with The University 
+         of Texas at Austin. } }
+
+\author{David R. Kincaid \\
+        Thomas C. Oppe \\
+        David M. Young 
+        \thanks{Center for Numerical Analysis, RLM Bldg. 13.150, 
+                University of Texas, Austin, TX \ \ 78712} }
+
+\date{May 1989}
+
+\maketitle
+
+\begin{abstract}
+
+ITPACKV 2D is an adaptation for vector computers of the ITPACK 2C
+software package for solving large sparse linear systems of equations by
+adaptive accelerated iterative algorithms.
+
+\end{abstract}
+
+\section{Introduction}
+\label{intro}
+ 
+ITPACKV is a collection of seven FORTRAN subroutines for solving large
+sparse linear systems by adaptive accelerated iterative algorithms.
+Basic iterative procedures, such as the Jacobi method, the Successive
+Overrelaxation method, the Symmetric Successive Overrelaxation method,
+and the RS method for the reduced system are combined, where possible,
+with acceleration procedures, such as Chebyshev (Semi-Iteration) and
+Conjugate Gradient, for rapid convergence.  Automatic selection of the
+acceleration parameters and the use of accurate stopping criteria are
+major features of this software package.  While the ITPACKV routines
+can be called with any linear system containing positive diagonal
+elements, they are most successful in solving systems with symmetric
+positive definite or mildly nonsymmetric coefficient matrices.
+
+ITPACKV 2D is an adaptation for vector computers of the linear
+equation solution algorithms in the ITPACK 2C software package.  See
+reference \cite{6} for more details on the scalar version.  The data
+structure used to contain the coefficient matrix was changed to a
+format allowing greater efficiency on vector computers while being
+flexible enough to accommodate matrix problems with general structure.
+The data structure in the vector version was chosen to coincide with
+the ELLPACK \cite{9} data structure, which can efficiently store matrices
+arising from discretizations of partial differential equations on
+general domains.
+ 
+Throughout this paper, we adopt notation such as {\bf SOR()} when
+referring to a subroutine, {\bf U(*)} when referring to a 
+singly-dimensioned array, and {\bf COEF(*,*)} for a 
+doubly-dimensioned array.  The residual vector is $b-Au^{(n)}$ for 
+the linear system $Au=b$ and the pseudo-residual vector is 
+$Gu^{(n)}+k-u^{(n)}$ for a basic iterative method of the form 
+$u^{(n+1)}=Gu^{(n)}+k$.  The smallest and largest eigenvalues of 
+the iteration matrix $G$ are denoted $m(G)$ and $M(G)$, respectively.
+
+\section{Applicability}
+\label{apply}
+ 
+The ITPACKV package is designed to solve linear systems of the form
+$Au=b$ where $A$ is a symmetric and positive definite (or slightly
+nonsymmetric) system of {\bf N} linear equations, $b$ is the right hand 
+side, and $u$ is the desired solution vector.
+ 
+The basic solution methods provided are the Jacobi, SOR, Symmetric
+SOR, and Reduced System methods.  All methods except SOR are
+accelerated by either Conjugate Gradient or Chebyshev acceleration.
+When using the Reduced System methods, it is required that the system
+be reordered into a red-black system, that is, a system of the form
+\[ \lb \begin{array}{cc} D_R & H \\ K & D_B \end{array} \rb, \]
+where $D_R$ and $D_B$ are diagonal matrices.  A switch to compute,
+if possible, the red-black indexing, permute the linear system, and
+permute associated vectors is provided.
+ 
+\section{Sparse Matrix Storage}
+\label{storage} 
+ 
+There are two rectangular arrays, one real and one integer, which are
+used to store a representation of the coefficient matrix.  Both arrays
+are of size at least {\bf N} by {\bf MAXNZ}, where {\bf N} is the number of 
+linear equations and {\bf MAXNZ} is the maximum number of nonzeros per 
+row in the matrix, with the maximum being taken over all rows.  Each row 
+in {\bf COEF(*,*)} will contain the nonzeros of the respective row in 
+the full matrix $A$, and the corresponding row in {\bf JCOEF(*,*)} will 
+contain its respective column numbers. 
+ 
+For example, the matrix
+\[ A = \lb \begin{array}{rrrrr} 
+               11. &  0. &  0. & 14. & 15. \\
+                0. & 22. &  0. &  0. &  0. \\
+                0. &  0. & 33. &  0. &  0. \\
+               14. &  0. &  0. & 44. & 45. \\
+               15. &  0. &  0. & 45. & 55. 
+           \end{array} \rb \]
+would be represented in the {\bf COEF(*,*)} and {\bf JCOEF(*,*)} 
+arrays as
+\[ {\bf COEF(*,*)} = \lb \begin{array}{rrr} 
+               11. & 14. & 15. \\
+               22. &  0. &  0. \\
+               33. &  0. &  0. \\
+               44. & 14. & 45. \\
+               55. & 15. & 45.
+ \end{array} \rb \hspace*{0.7in} {\bf JCOEF(*,*)} = \lb \begin{array}{rrr}
+                1 & 4 & 5 \\
+                2 & 0 & 0 \\
+                3 & 0 & 0 \\
+                4 & 1 & 5 \\
+                5 & 1 & 4
+    \end{array} \rb \] 
+There are several remarks which should be made:
+
+\bigskip 
+\begin{enumerate}
+ \item If a row in the matrix $A$ has fewer than {\bf MAXNZ} 
+       nonzeros, the corresponding rows in {\bf COEF(*,*)} and 
+       {\bf JCOEF(*,*)} should be padded with zeros.
+ 
+ \item The nonzero entries in a given row of {\bf COEF(*,*)} may appear 
+       in any order.  However, if the diagonal element is not in
+       column 1, then ITPACKV will place it there without returning
+       it to its original position upon exiting.
+ 
+ \item The diagonal element of each row should be positive.  If
+       a diagonal element is negative, ITPACKV will reverse the
+       signs of all entries corresponding to this equation.
+       Since this may result in a loss of symmetry of the system,
+       convergence may be adversely affected.  Hence it is better
+       if the user enters the matrix with positive diagonal elements.
+ 
+ \item In ITPACKV 2D, all nonzero matrix entries must be present
+       even if the matrix is symmetric.  It does not suffice
+       to store just the upper or lower triangle of the matrix $A$.
+ 
+\end{enumerate}
+ 
+\section{Usage} 
+\label{usage}
+ 
+The user is expected to provide the coefficient matrix, the right hand
+side, an initial guess to the solution, and various integer and real
+workspace arrays.
+ 
+The calling sequence is
+
+\bigskip
+\centerline{\bf CALL $\la$ {\em method} $\ra$ (N, NDIM, MAXNZ, JCOEF, COEF, 
+              RHS, U, IWKSP, NW,}
+\centerline{\bf WKSP, IPARM, RPARM, IER)}
+\bigskip
+ 
+\noindent
+where $\la$ {\em method} $\ra$ is one of 
+
+\bigskip
+\begin{tabular}{ll} \hline
+  JCG    & Jacobi Conjugate Gradient \\
+  JSI    & Jacobi Semi-Iteration \\
+  SOR    & Successive Overrelaxation \\
+  SSORCG & Symmetric SOR Conjugate Gradient \\
+  SSORSI & Symmetric SOR Semi-Iteration \\
+  RSCG   & Reduced System Conjugate Gradient \\
+  RSSI   & Reduced System Semi-Iteration \\ \hline
+\end{tabular} 
+\bigskip
+
+\noindent
+and where the remaining parameters are defined in the following.  Here 
+``input" means that the subroutine expects the user to provide the 
+necessary input data and ``output" means that the routine passes back 
+information in the variable or array indicated.  All parameters are 
+arrays except variables {\bf N}, {\bf NDIM}, {\bf MAXNZ}, 
+{\bf NW}, and {\bf IER}.  Moreover, all parameters may be altered by 
+the subroutine call except variables {\bf N}, {\bf NDIM}, and {\bf NW}.
+(See Section~\ref{notes} for additional details.)
+
+\bigskip
+\begin{description}
+ \item[N] is the order of the linear system.  [integer; input] 
+ 
+ \item[NDIM] is the row dimension of the arrays {\bf COEF(*,*)} and 
+             {\bf JCOEF(*,*)} in the routine first defining them.  
+             Note that ${\bf NDIM} \geq {\bf N}$.  [integer; input]
+ 
+ \item[MAXNZ] is the maximum number of nonzero elements per row over 
+              all rows in the matrix $A$.  [integer; input]
+ 
+ \item[JCOEF(*,*)] is a rectangular array of dimension {\bf NDIM} by 
+                   {\bf MAXNZ} containing the column numbers of the 
+                   matrix coefficients given in the corresponding
+                   locations in {\bf COEF(*,*)}.  [integer array; input]
+
+ \item[COEF(*,*)] is a rectangular array of dimension {\bf NDIM} by 
+                  {\bf MAXNZ} containing the nonzero matrix coefficients.
+                  [real array; input]
+ 
+ \item[RHS(*)] is a vector of length {\bf N} containing the right-hand side 
+               of the linear system.  [real array; input] 
+
+ \item[U(*)] is a vector of length {\bf N} containing the initial guess 
+             to the solution of the linear system on input and the 
+             latest approximate solution on output.  Note that {\bf U(*)} 
+             may be filled with zeros if no initial guess is known by 
+             making a call to {\bf VFILL()} prior to calling an ITPACKV 
+             solution module.  See Section~\ref{vfill} for details.
+             [real array; input/output] 
+ 
+ \item[IWKSP(*)] is a vector of length ${\bf 3*N}$ used for integer workspace. 
+                 When reindexing for red-black ordering, the first 
+                 {\bf N} locations contain on output the permutation 
+                 vector for the red-black indexing, the next {\bf N} 
+                 locations contain its inverse, and the last {\bf N} 
+                 are used for integer workspace.\footnote{For the 
+                 red-black ordering, the {\bf I}th entry of a permutation 
+                 array {\bf P(*)} indicates the position {\bf J} into 
+                 which the {\bf I}th unknown of the original system is 
+                 being mapped, that is, if ${\bf P(I)=J}$ then unknown 
+                 {\bf I} is mapped into position {\bf J}.  The {\bf J}th 
+                 entry of an inverse permutation array {\bf IP(*)} 
+                 indicates the position {\bf I} into which the {\bf J}th 
+                 unknown of the permuted system must be mapped to regain 
+                 the original ordering, that is, ${\bf IP(J)=I}$.} 
+                 [integer array; output] 
+
+ \item[NW] is a scalar.  On input, {\bf NW} is the available length for 
+           {\bf WKSP(*)}.  On output, {\bf IPARM(8)} is the actual 
+           amount used (or needed).  [integer; input] 
+
+ \item[WKSP(*)] is a vector used for real working space whose length depends 
+                on the iterative method being used.  It must be at least 
+                {\bf NW} entries long.  (See Section~\ref{wksp} for the 
+                required amount of workspace for each method.) [real array] 
+
+ \item[IPARM(*)] is a vector of length 12 used to initialize various 
+                 integer and logical parameters.  Default values may be 
+                 set by calling subroutine {\bf DFAULT()} described 
+                 in Section~\ref{params}.  On output, {\bf IPARM(*)} 
+                 contains the values of the parameters that were changed.
+                 (Further details are given later in 
+                 Section~\ref{params}.)  [integer array; input/output] 
+
+ \item[RPARM(*)] is a vector of length 12 used to initialize various real 
+                 parameters on input.  Default values may be set by 
+                 calling subroutine {\bf DFAULT()} described in
+                 Section~\ref{params}.  On output, {\bf RPARM(*)} contains 
+                 the final values of the parameters that were changed.
+                 (Further details are given later in Section~\ref{params}.)
+                 [real array; input/output] 
+
+ \item[IER] is the error flag which is set to zero for normal convergence 
+            and to a nonzero integer when an error condition is present.
+            (See Section~\ref{error} for the meaning of nonzero values.)
+            [integer; output] 
+
+\end{description}
+\bigskip
+ 
+
+\section{Parameter Arrays}
+\label{params}
+ 
+The user must call subroutine {\bf DFAULT()} prior to calling one of the 
+ITPACKV iterative solution modules.  The routine {\bf DFAULT()} fills 
+parameter arrays {\bf IPARM(*)} and {\bf RPARM(*)} with default values 
+and has the syntax
+
+\bigskip
+\centerline{\bf CALL DFAULT (IPARM, RPARM)}
+\bigskip
+ 
+\noindent
+The user may supply nondefault values for selected quantities in 
+{\bf IPARM(*)} and \newline {\bf RPARM(*)} by first calling 
+{\bf DFAULT()} and 
+then assigning the appropriate nondefault values before calling a 
+solution module of ITPACKV.  Important variables in this package which 
+may change adaptively are {\bf CME} (estimate of $M(B)$, the largest 
+eigenvalue of the Jacobi matrix), {\bf SME} (estimate of $m(B)$, the 
+smallest eigenvalue of the Jacobi matrix), {\bf OMEGA} (overrelaxation 
+parameter for the SOR and SSOR methods), {\bf SPECR} (estimate of the 
+spectral radius of the SSOR matrix), {\bf BETAB} (estimate of the 
+spectral radius of the matrix $LU$, where $L$ and $U$ are strictly 
+lower and upper triangular matrices, respectively, such that the Jacobi 
+matrix $B=L+U$).
+ 
+The integer array {\bf IPARM(*)} and the real array {\bf RPARM(*)} allow 
+the user to control certain parameters which affect the performance 
+of the iterative algorithms.  Furthermore, these arrays allow the 
+updated parameters from the automatic adaptive procedures to be 
+communicated back to the user.  The entries in {\bf IPARM(*)} and 
+{\bf RPARM(*)} are
+
+\begin{description}
+ 
+ \item[IPARM(1)] {\bf ITMAX} is the maximum number of iterations 
+                 allowed.  It is reset on output to the number of 
+                 iterations performed. Default: $100$
+ 
+ \item[IPARM(2)] {\bf LEVEL} is used to control the level of output.
+                 Each higher value provides additional information.
+                 Default: $0$
+
+                 \begin{tabular}{rl} 
+                 [$<0$: & no output on unit {\bf IPARM(4)}; \\
+                   $0$: & fatal error messages only; \\
+                   $1$: & warning messages and minimum output; \\
+                   $2$: & reasonable summary (progress of algorithm); \\
+                   $3$: & parameter values and informative comments; \\
+                   $4$: & approximate solution after each iteration 
+                          (primarily useful for debugging); \\
+                   $5$: & original system] 
+                 \end{tabular} 
+  
+ \item[IPARM(3)] {\bf IRESET} is the communication switch.  Default: $0$
+
+                 \begin{tabular}{rl} 
+                 [$0$: & implies certain values of {\bf IPARM(*)} and 
+                         {\bf RPARM(*)} will be overwritten \\
+                       & to communicate parameters back to the user; \\
+             $\neq 0$: & only {\bf IPARM(1)} and {\bf IPARM(8)} 
+                         will be reset.]
+                 \end{tabular} 
+ 
+ \item[IPARM(4)] {\bf NOUT} is the output unit number. Default: $6$
+ 
+ \item[IPARM(5)] {\bf ISYM} is the symmetric matrix switch. 
+                 Default: $0$
+
+                 \begin{tabular}{rl} 
+                 [$0$: & the matrix is symmetric; \\
+                  $1$: & the matrix is nonsymmetric]
+                 \end{tabular} 
+  
+ \item[IPARM(6)] {\bf IADAPT} is the adaptive switch.  It determines 
+                 whether certain parameters have been set by the user or 
+                 should be computed automatically in either a fully 
+                 or partially adaptive sense. Default: $1$
+ 
+                 \begin{tabular}{rl}
+                 [$0$: & fixed iterative parameters used for {\bf SME}, 
+                         {\bf CME}, {\bf OMEGA}, {\bf SPECR}, and \\
+                       & {\bf BETAB} (nonadaptive); \\
+                  $1$: & fully adaptive procedures used for all parameters; \\
+                  $2$: & (SSOR methods only) {\bf SPECR} determined 
+                         adaptively and {\bf CME}, {\bf BETAB},\\
+                       & and {\bf OMEGA} fixed; \\
+                  $3$: & (SSOR methods only) {\bf BETAB} fixed and all other
+                         parameters determined \\
+                       & adaptively]
+                 \end{tabular} 
+
+                 \noindent
+                 (See \cite{1,2} for details and ${\bf RPARM(I), I=2,3,5,6,7}$ 
+                 for {\bf CME}, {\bf SME}, {\bf OMEGA}, {\bf SPECR}, 
+                 {\bf BETAB}, respectively.  These parameters are set
+                 by subroutine {\bf DFAULT()} or by the user.)
+ 
+ \item[IPARM(7)] {\bf ICASE} is the adaptive procedure case switch for the
+                 JSI and SSOR methods.  There are two strategies, called 
+                 Case I and Case II, for doing the adaptive procedure.
+                 The choice of which case to select corresponds to knowledge 
+                 of the eigenvalues of the Jacobi matrix $B$ and their 
+                 estimates.  Default: $1$
+ 
+                 \begin{tabular}{rl}
+                 [$\neq 2$ & Case I: Fixed ${\bf SME} \leq m(B)$ 
+                                      (general case); \\
+                  $=2$     & Case II: Use when it is known that
+                                  $|m(B)| \leq M(B)]$ 
+                 \end{tabular}
+
+                 \noindent
+                 The case switch determines how the estimates for 
+                 {\bf SME} and {\bf CME} are recomputed adaptively.  In 
+                 Case I, {\bf SME} is fixed throughout and should be less 
+                 than or equal to $m(B)$.  In Case II, {\bf SME} is set 
+                 to ${\bf -CME}$ which may adaptively change.  As far as 
+                 the adaptive procedure is concerned, Case I is the most
+                 general case and should be specified in the absence of
+                 specific knowledge of the relationship between the 
+                 eigenvalues and their estimates.  An example when Case II
+                 is appropriate occurs when the Jacobi matrix has 
+                 Property A, since $m(B) = -M(B)$.\footnote{A matrix has
+                 Property A if and only if it is a diagonal matrix or
+                 else there exists a rearrangement of the rows and 
+                 corresponding columns of the matrix which corresponds to 
+                 a red-black partitioning.}  Also, if $A$ is an $L$-matrix, 
+                 then for the Jacobi matrix, we have $|m(B)| \leq M(B)$ 
+                 and {\bf SME} is always ${\bf -CME}$ (Case II).
+                 \footnote{An $L$-matrix has positive diagonal elements
+                 and nonpositive off-diagonal elements.} Selecting the
+                 correct case may increase the rate of convergence of 
+                 the iterative method.  (See \cite{2} for additional
+                 discussion on Case I and II.  Also, see 
+                 ${\bf RPARM(I), I=2,3}$ for {\bf CME}, {\bf SME}, 
+                 respectively.)
+ 
+ \item[IPARM(8)] {\bf NWKSP} is the amount of workspace used.  It is used 
+                 for output only.  If {\bf ITMAX} is set to a value just 
+                 over the actual number of iterations necessary for 
+                 convergence, the amount of memory for {\bf WKSP(*)} can 
+                 be reduced to just over the value returned here.  This 
+                 may be done when rerunning a problem, for example.  
+                 Default: $0$
+
+ \item[IPARM(9)] {\bf NB} is the red-black ordering switch.  On output, 
+                 if reindexing is done, {\bf NB} is set to the order of 
+                 the black subsystem.  Default: $-2$
+ 
+                 \begin{tabular}{rl} 
+                  $-2$:     & skip indexing---system already in
+                               desired form and is not red-black. \\
+                  $-1$:     & compute red-black indexing and permute 
+                              system; \\
+                  $\geq 0$: & skip indexing---system already in red-black
+                              form, with {\bf NB} \\
+                            & as the order of the black subsystem.
+                 \end{tabular}
+
+ \item[IPARM(10)] {\bf IREMOVE} is the switch for effectively removing
+                  rows and columns when the diagonal entry is extremely 
+                  large compared to the nonzero off-diagonal entries in 
+                  that row.  (See {\bf RPARM(8)} for additional details.)
+                  Default: $0$
+ 
+                  \noindent 
+                  [$0$:  not done; $\neq 0$:  test done]
+ 
+ \item[IPARM(11)] {\bf ITIME} is the timing switch.  Default: $0$
+ 
+                  \noindent 
+                  [$0$:  time method; $\neq 0$:  not done]
+ 
+ \item[IPARM(12)] {\bf IDGTS} is the error analysis switch.  It determines
+                  if an analysis is done to determine the accuracy 
+                  of the final computed solution.  Default: $0$
+ 
+                  \begin{tabular}{rl} 
+                  [$<0$: & skip error analysis \\
+                   $0$:  & compute {\bf DIGIT1} and {\bf DIGIT2} and 
+                           store in ${\bf RPARM(I), I=11,12}$, \\ 
+                         & respectively; \\
+                   $1$:  & print {\bf DIGIT1} and {\bf DIGIT2}; \\
+                   $2$:  & print final approximate solution vector; \\
+                   $3$:  & print final approximate residual vector; \\
+                   $4$:  & print both solution and residual vectors; \\
+                         & otherwise:  no printing]
+                  \end{tabular}
+
+                  \noindent
+                  (If ${\bf LEVEL} \leq 0$, no printing is done.  See 
+                  ${\bf RPARM(I), I=11,12}$ for details on {\bf DIGIT1} 
+                  and {\bf DIGIT2}.)
+  
+ \item[RPARM(1)] {\bf ZETA} is the stopping criterion or approximate 
+                 relative accuracy desired in the final computed solution.
+                 If the method did not converge in {\bf IPARM(1)} 
+                 iterations, {\bf RPARM(1)} is reset to an estimate of 
+                 the relative accuracy achieved.  The stopping criterion 
+                 is a test of whether {\bf ZETA} is greater than the 
+                 ratio of the two norm of the pseudo-residual vector and 
+                 the two norm of the current iteration vector times a 
+                 constant involving an eigenvalue estimate.  (See \cite{1,2} 
+                 for details.) Default: $5 \times 10^{-6}$
+
+ \item[RPARM(2)] {\bf CME} is the estimate of the largest eigenvalue of 
+                 the Jacobi matrix.  It changes to a new estimate if the 
+                 adaptive procedure is used.  ${\bf CME} \leq M(B)$.
+                 Default: $0.0$
+
+ \item[RPARM(3)] {\bf SME} is the estimate of the smallest eigenvalue of 
+                 the Jacobi matrix for the JSI method.  In Case I, 
+                 {\bf SME} is fixed throughout at a value $\leq m(B)$.
+                 In Case II, {\bf SME} is always set to ${\bf -CME}$
+                 with {\bf CME} changing in the adaptive procedure.  (See
+                 {\bf IPARM(7)} for definitions of Case I and II.)
+                 Default: $0.0$
+
+ \item[RPARM(4)] {\bf FF} is the adaptive procedure damping factor.  Its
+                 values are in the interval $(0.,1.]$ with $1.$ causing 
+                 the most frequent parameter changes when the fully 
+                 adaptive switch ${\bf IPARM(6)=1}$ is used.  
+                 Default: $0.75$
+
+ \item[RPARM(5)] {\bf OMEGA} is the overrelaxation parameter for the SOR 
+                 and the SSOR methods.  If the method is fully adaptive, 
+                 {\bf OMEGA} changes.  Default: $1.0$
+ 
+ \item[RPARM(6)] {\bf SPECR} is the estimated spectral radius for the 
+                 SSOR matrix.  If the method is adaptive, {\bf SPECR} 
+                 changes.  Default: $0.0$
+     
+ \item[RPARM(7)] {\bf BETAB} is the estimate for the spectral radius of the
+                 matrix $LU$ used in the SSOR methods.  {\bf BETAB} may 
+                 change depending on the adaptive switch {\bf IPARM(6)}.
+                 The matrix $L$ is the strictly lower triangular part of 
+                 the Jacobi matrix and $U$ is the strictly upper triangular 
+                 part.  When the spectral radius of $LU$ is less than or 
+                 equal to $\frac{1}{4}$, the ``SSOR condition" is satisfied 
+                 for some problems provided one uses the natural ordering.
+                 (See \cite{1,10} for additional details.)  Default: $0.25$.
+   
+ \item[RPARM(8)] {\bf TOL} is the tolerance factor near machine relative 
+                 precision, {\bf SRELPR}.  In each row, if all nonzero 
+                 off-diagonal row entries are less than {\bf TOL} times 
+                 the value of the diagonal entry, then this row and 
+                 corresponding column are essentially removed from the 
+                 system.  This is done by setting the nonzero off-diagonal 
+                 elements in the row and corresponding column to zero, 
+                 replacing the diagonal element with $1$, and adjusting 
+                 the elements on the right-hand side of the system so that 
+                 the new system is equivalent to to the original one.
+                 \footnote{If the row and column corresponding to diagonal 
+                 entry $A_{i,i}$ are to be eliminated, then the 
+                 right-hand side is adjusted to $b_i \leftarrow b_i/A_{i,i}$ 
+                 and $b_j \leftarrow b_j-b_i A_{i,j}$ for $j \neq i$.}  
+                 If the diagonal entry is the only nonzero 
+                 element in a row and is not greater than the reciprocal 
+                 of {\bf TOL}, then no elimination is done.  This procedure 
+                 is useful for linear systems arising from finite element 
+                 discretizations of PDEs in which Dirichlet boundary 
+                 conditions are handled by giving the diagonal values in 
+                 the linear system extremely large values.  (The installer 
+                 of this package should set the value of {\bf SRELPR}.
+                 See comments in subroutine {\bf DFAULT()} and
+                 Section~\ref{install} for additional details.)  Default: 
+                 $100.\times{\bf SRELPR}$
+ 
+ \item[RPARM(9)] {\bf TIME1} is the total time in seconds from the beginning
+                 of the iterative algorithm until convergence.  (A machine
+                 dependent subprogram call for returning the time in
+                 seconds is provided by the installer of this package.)
+                 Default: $0.0$
+ 
+ \item[RPARM(10)] {\bf TIME2} is the total time in seconds for the entire 
+                  call.  Default: $0.0$
+ 
+ \item[RPARM(11)] {\bf DIGIT1} is the approximate number of digits using 
+                  the estimated relative error with the final approximate
+                  solution.  It is computed as the negative of the logarithm
+                  base ten of the final value of the stopping test.  (See
+                  details below or \cite{2}.)  Default: $0.0$
+ 
+ \item[RPARM(12)] {\bf DIGIT2} is the approximate number of digits using 
+                  the estimated relative residual with the final approximate
+                  solution.  It is computed as the negative of the logarithm
+                  base ten of the ratio of the two norm of the residual
+                  vector and the two norm of the right-hand side vector.
+                  This estimate is related to the condition number of the
+                  original linear system and, therefore, it will not be
+                  accurate if the system is ill-conditioned.  (See details
+                  below or \cite{2}.)  Default: $0.0$
+\end{description}
+\bigskip 
+ 
+{\bf DIGIT1} is determined from the actual stopping test computed on 
+the final iteration, whereas {\bf DIGIT2} is based on the computed 
+residual vector using the final approximate solution after the algorithm 
+has converged.  If these values differ greatly, then either the stopping 
+test has not worked successfully or the original system is ill-conditioned.
+(See \cite{2} for additional details.)
+
+\section{Workspace Requirements}
+\label{wksp}
+ 
+For storage of certain intermediate results, the solution modules
+require a real vector {\bf WKSP(*)} and a corresponding variable {\bf NW}
+indicating the available space.  The length of the workspace array varies 
+with each solution module and the maximum amount needed is given in 
+the following table.
+ 
+\bigskip
+\begin{tabular}{ll} \hline
+  Solution Module & Maximum Length of {\bf WKSP(*)} \\ \hline
+  {\bf JCG()}    & ${\bf 4*N + 4*ITMAX}$ \\
+  {\bf JSI()}    & ${\bf 2*N}$ \\
+  {\bf SOR()}    & ${\bf 2*N}$ \\
+  {\bf SSORCG()} & ${\bf 6*N + 4*ITMAX}$ \\
+  {\bf SSORSI()} & ${\bf 5*N}$ \\
+  {\bf RSCG()}   & ${\bf N + 3*NB + 4*ITMAX}$ \\
+  {\bf RSSI()}   & ${\bf N + NB}$ \\ \hline
+\end{tabular}
+\bigskip
+ 
+\noindent
+where {\bf N} is the number of linear equations, {\bf NB} is the number
+of black grid points in the red-black ordering, and {\bf ITMAX} is the
+maximum number of iterations allowed.  The Conjugate Gradient routines 
+require ${\bf 4*ITMAX}$ extra storage locations for eigenvalue 
+calculations.  It should be noted that the actual amount of workspace 
+used may be somewhat less than these upper limits since some of the 
+latter are dependent on the maximum number of iterations allowed, 
+{\bf ITMAX}, stored in {\bf IPARM(1)}.  Clearly, the array {\bf WKSP(*)} 
+must be dimensioned to at least the value of {\bf NW}.
+ 
+\section{Error Conditions}
+\label{error}
+ 
+The ITPACKV modules assign to the error flag {\bf IER} certain values
+to indicate error conditions (or lack of them) upon exiting.
+Nonzero integer values of the error flag indicate that an error
+condition was detected.  The values it can be assigned and the 
+corresponding meanings are indicated in the following table.
+ 
+\bigskip
+\begin{tabular}{rrl} \hline
+  \multicolumn{2}{l}{Error Flag} & Meaning \\ \hline
+   ${\bf IER} =$ &  $0$, & Normal convergence was obtained. \\
+   $ =$ & $1+M$, & Invalid order of the system, {\bf N}. \\
+   $ =$ & $2+M$, & Workspace array {\bf WKSP(*)} is not large 
+                            enough. {\bf IPARM(8)} \\
+        &        & is set to the amount of required workspace, 
+                            {\bf NW}. \\
+   $ =$ & $3+M$, & Failure to converge in {\bf IPARM(1)} 
+                           iterations. {\bf RPARM(1)} \\
+        &        & is reset to the last stopping value computed. \\
+   $ =$ & $4+M$, & Invalid order of the black subsystem, {\bf NB}. \\
+   $ =$ & $201$, & Red-black indexing is not possible. \\
+   $ =$ & $401$, & There is a zero diagonal element. \\
+   $ =$ & $402$, & No diagonal element in a row. \\
+   $ =$ & $501$, & Failure to converge in {\bf ITMAX} 
+                              function evaluations. \\
+   $ =$ & $502$, & Function does not change sign at the endpoints. \\
+   $ =$ & $601$, & Successive iterates are not monotone increasing. \\
+   $ =$ & $602$, & The matrix is not positive definite. \\
+                   \hline
+\end{tabular}
+\bigskip
+
+\noindent
+{\bf JCG()}, {\bf JSI()}, {\bf SOR()}, {\bf SSORCG()}, {\bf SSORSI()}, 
+{\bf RSCG()}, {\bf RSSI()} assign values to $M$ of $10$, $20$, $30$,
+$40$, $50$, $60$, $70$, 
+respectively.  {\bf PRBNDX()}, {\bf SCAL()}, {\bf ZBRENT()}, {\bf EQRT1S()} 
+are subroutines with error flags in the 200's, 400's, 500's, 600's, 
+respectively.  These routines perform the following functions:   
+{\bf PRBNDX()} determines the red-black indexing, {\bf SCAL()} scales 
+the system, {\bf ZBRENT()} is a modified IMSL routine 
+for computing a zero of a function which changes sign in a given 
+interval, {\bf EQRT1S()} is a modified IMSL routine for computing the 
+largest eigenvalue of a symmetric tridiagonal matrix.\footnote{IMSL 
+(International Mathematical and Statistical Libraries, Inc.),
+Sixth Floor NBC Bldg., 7500 Bellaire Blvd., Houston, TX, 77036.}
+ 
+\section{Use of Subroutine VFILL}
+\label{vfill} 
+
+The array {\bf U(*)} should contain an initial approximation to the 
+solution of the linear system before any ITPACKV module is called.  If 
+the user has no information for making such a guess, then the zero vector 
+may be used as the starting vector.  The subroutine {\bf VFILL()} can be 
+used to fill a vector with a constant.  For example,
+
+\bigskip
+\centerline{\bf CALL VFILL (N, U, VAL)}
+\bigskip
+
+\noindent
+fills the array {\bf U(*)} of length {\bf N} with the value {\bf VAL} in 
+each entry.
+ 
+\section{Notes on Use}
+\label{notes}
+ 
+Each of the ITPACKV solution modules scales the linear system to a
+unit diagonal system prior to iterating and unscales it upon
+termination.  This reduces the number of arithmetic operations, but it
+may introduce small changes in the coefficient matrix {\bf COEF(*,*)} 
+and the right hand side vector {\bf RHS(*)} due to round-off errors in 
+the computer arithmetic.  The scaling involves the diagonal matrix 
+$D^{\ha}$ of square roots of the diagonal entries of the linear system, 
+that is,
+\[  (D^{-\ha}AD^{-\ha})(D^{\ha}u) = (D^{-\ha}b). \]
+The algorithms iterate until convergence is reached based on the
+relative accuracy requested via the stopping criterion set in {\bf RPARM(1)}
+for the scaled solution vector $(D^{\ha}u)$.  Unscaling solves for $u$ and
+returns the linear system to its original form subject to roundoff
+errors in the arithmetic.
+ 
+When requested, a red-black permutation of the linear system will be
+done before and after the iterative algorithm is called.  Otherwise,
+the linear system is used in the order it is given.
+ 
+If {\bf SOR()}, {\bf SSORCG()}, or {\bf SSORSI()} is called, ITPACKV 
+will attempt to segregate the parts of {\bf COEF(*,*)} and 
+{\bf JCOEF(*,*)} corresponding to the upper and lower triangular parts 
+of the matrix $A$ into separate columns.  Since this will in general 
+take more storage, it may not be possible if {\bf MAXNZ} (the column 
+dimension of {\bf COEF(*,*)} and {\bf JCOEF(*,*)}) is too small.  In 
+this case the algorithms will operate on the existing data structure, 
+but performance will be degraded.  Segregation of $L$ and $U$ increases 
+the vectorizability of these algorithms.  In the case that red-black
+ordering is used with {\bf SOR()}, {\bf SSORCG()}, or {\bf SSORSI()}, 
+then no attempt to segregate $L$ and $U$ is made.
+ 
+The Successive Overrelaxation (SOR) method has been shown to be more
+effective with the red-black ordering than with the natural ordering
+for some problems.  In the SOR algorithm, the first iteration uses
+$\om=1$ and the stopping criterion is set to a large value so that
+at least one Gauss-Seidel iteration is performed before an approximate
+value for the optimum relaxation parameter is computed.
+
+Optional features of this package are red-black ordering, effective
+removal of rows and columns when the diagonal entry is extremely large,
+and error analysis.  In the event that one is not using some of these
+options and needs additional memory space for a very large linear
+system, the relevant subroutines which can be replaced with dummy
+subroutines are as follows:  red-black ordering [{\bf PRBNDX()},
+{\bf PERMAT()}, {\bf PERVEC()}], removal of rows [{\bf SBELM()}], 
+error analysis [{\bf PERROR()}].
+ 
+The iterative algorithms used in ITPACKV are quite complicated and
+some knowledge of iterative methods is necessary to completely
+understand them.  The interested reader should consult the references
+for details of the algorithms.
+ 
+\section{Installation Guide}
+\label{install}
+
+This package is written in 1977 ANSI standard FORTRAN in the interests
+of portability.  However, the following changes to the code should be
+considered when transporting the code to another computer.
+
+\begin{enumerate}
+
+ \item This version of ITPACK was written to be efficient on vector
+       computers having a vector cache or vector registers and whose
+       compilers can vectorize gather/scatter programming constructs.
+       For maximum efficiency on Cray vector computers, the FORTRAN
+       routines {\bf ISMIN()}, {\bf WHENIGE()}, {\bf WHENILT()},
+       {\bf SAXPY()}, {\bf SCOPY()}, {\bf SDOT()}, and {\bf SNRM2()}
+       should be deleted from the package since optimized CAL versions
+       of these routines exist.  Also, in routine {\bf DETERM()}, loop
+       10 should be deleted and the line containing the call to
+       {\bf SOLRN()} should be activated.  
+ 
+ \item The timing routine {\bf TIMER()} uses the routine {\bf SECOND()}.
+       Since there is no standard timing routine in FORTRAN, this
+       subroutine may have to be modified.  Also, many computers have 
+       more accurate timing facilities than {\bf SECOND()}.
+ 
+ \item The value of the machine relative precision is contained in the
+       variable {\bf SRELPR}, which is set in the {\bf DFAULT()} 
+       subroutine.  This and other default values may be permanently 
+       changed when the code is installed by changing their values in 
+       this subroutine.  In particular, {\bf SRELPR} must be changed for 
+       different computers.  If the installer of this package does not 
+       know its value, an approximate value can be determined from a 
+       simple FORTRAN program given in the comment statements of 
+       subroutine {\bf DFAULT()}.
+ 
+ \item Since the amount of precision may change from computer to 
+       computer, the relative accuracy requested in the stopping 
+       criterion {\bf ZETA} must not be less than about $500$ times 
+       the machine relative precision {\bf SRELPR}.  If a value of 
+       {\bf ZETA} is requested that is too small, then the code resets 
+       it to this value.  The current default value for {\bf ZETA},
+       $5 \times 10^{-6}$, is set by the routine {\bf DFAULT()} into 
+       {\bf RPARM(1)}.
+ 
+ \item The program line of the ITPACKV testing program may need to
+       be changed since  different computers have different conventions 
+       for opening files.  
+
+\end{enumerate}
+
+The testing program and the routines {\bf DFAULT()} and {\bf TIMER()} 
+are the only routines which require editing by the installer of the
+package.  It is suggested that ITPACKV be made into a compiled program
+library although not all of it would normally be used in a particular
+application.
+ 
+\section{Changes from ITPACKV 2C}
+ 
+This version of ITPACKV is an update of an earlier version, ITPACKV 2C.  
+In this version, the {\bf SOR()}, {\bf SSORCG()}, and {\bf SSORSI()} 
+modules have been modified so they are vectorizable in the 
+case of natural ordering.  These modules permute the system $Au=b$ 
+according to a ``wave front" ordering prior to iterating and unpermute the 
+system after iterating.  The wave front ordering is determined for these 
+routines by finding the sets of unknowns that can be updated 
+simultaneously (e.g., the unknowns along the diagonals of the mesh for 
+a 5-point star operator on a rectangular grid).  The vector lengths of 
+these wave fronts are dependent upon the sparsity pattern of the matrix 
+as well as the size of the matrix, but are typically much smaller than 
+{\bf N}.  This technique of vectorization will be effective on vector 
+computers which do not have large start-up costs for vector operations.  
+
+Also, for the {\bf SOR()}, {\bf SSORCG()}, and {\bf SSORSI()} modules, 
+the matrix is scaled by $\om$ to reduce the operation count during the
+forward and backward SOR passes.  The scaling process is done every time
+$\om$ is changed.  Finally, the routine {\bf DETERM()} was rewritten to 
+use the Cray library routine {\bf SOLRN()}, if it is available. See
+\cite{11} for details on the vectorization techniques used in ITPACKV 2D.
+
+\begin{thebibliography}{99}
+ 
+ \bibitem{1} R. G. Grimes, D. R. Kincaid, and D. M. Young.  ``ITPACK 2.0
+  User's Guide."  CNA-150, Center for Numerical Analysis,
+  University of Texas, Austin, Texas, 78712, August 1979.
+
+ \bibitem{2} L. A. Hageman and D. M. Young. {\em Applied Iterative 
+  Methods.} New York: Academic Press, 1981.
+ 
+ \bibitem{3} D. R. Kincaid, T. Oppe, and D. M. Young.  ``Adapting ITPACK
+  Routines for Use on a Vector Computer."  CNA-177, Center
+  for Numerical Analysis, University of Texas, Austin, Texas, 
+  78712, August, 1982.
+ 
+ \bibitem{4} D. R. Kincaid and T. Oppe.  ``ITPACK on Supercomputers."
+  in {\em Numerical Methods} (Lecture Notes in Mathematics 1005).
+  A. Dold and B. Eckmann (eds.), Springer-Verlag, New York,
+  1983, pp. 151-161.
+ 
+ \bibitem{5} D. R. Kincaid, T. C. Oppe, and D. M. Young.  ``Vector
+  Computations for Sparse Linear Systems."  CNA-189, Center
+  for Numerical Analysis, University of Texas, Austin, Texas, 
+  78712, February, 1984.
+ 
+ \bibitem{6} D. R. Kincaid, J. R. Respess, D. M. Young, and R. G. Grimes.
+  ``ITPACK 2C: A FORTRAN Package for Solving Large Sparse
+  Linear Systems by Adaptive Accelerated Iterative Methods."
+  {\em ACM Transactions on Mathematical Software}, Vol. 8, 
+  No. 3, 1982.
+ 
+ \bibitem{7} D. R. Kincaid and D. M. Young. ``Survey of Iterative Methods,"
+  in {\em Encyclopedia of Computer Sciences and Technology},
+  Vol. 13 (J. Belzer, A. Holzman, and A. Kent, eds.), Marcel
+  Dekker Inc., New York, 1979, pp. 354-391.
+ 
+ \bibitem{8} D. R. Kincaid and D. M. Young.  ``The ITPACK Project: Past,
+  Present, and Future." CNA-180, Center for Numerical Analysis,
+  University of Texas, Austin, Texas, 78712, March 1983.
+
+ \bibitem{11} T. C. Oppe.  ``The Vectorization of ITPACK 2C."  To be
+  published in {\em International Journal for Numerical Methods in
+  Engineering}.
+ 
+ \bibitem{9} J. Rice and R. Boisvert. {\em Solving Elliptic
+  Problems Using ELLPACK}. New York: Springer-Verlag, 1985.
+ 
+ \bibitem{10} D. M. Young.  {\em Iterative Solution of Large Linear Systems}.
+  New York: Academic Press, 1971.
+
+\end{thebibliography}
+\end{document} 

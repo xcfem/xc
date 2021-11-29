@@ -43,14 +43,14 @@ elem= seedElemHandler.newElement("FourNodeQuad",xc.ID([0,0,0,0]))
 
 
 points= preprocessor.getMultiBlockTopology.getPoints
-pt1= points.newPntFromPos3d(geom.Pos3d(0.0,0.0,0.0))
-pt2= points.newPntFromPos3d(geom.Pos3d(CooMaxX/3.0,0.0,0.0))
-pt3= points.newPntFromPos3d(geom.Pos3d(CooMaxX*2/3.0,0.0,0.0))
-pt4= points.newPntFromPos3d(geom.Pos3d(CooMaxX,0.0,0.0))
-pt5= points.newPntFromPos3d(geom.Pos3d(0.0,CooMaxY,0.0))
-pt6= points.newPntFromPos3d(geom.Pos3d(CooMaxX/3.0,CooMaxY,0.0))
-pt7= points.newPntFromPos3d(geom.Pos3d(CooMaxX*2/3.0,CooMaxY,0.0))
-pt8= points.newPntFromPos3d(geom.Pos3d(CooMaxX,CooMaxY,0.0))
+pt1= points.newPoint(geom.Pos3d(0.0,0.0,0.0))
+pt2= points.newPoint(geom.Pos3d(CooMaxX/3.0,0.0,0.0))
+pt3= points.newPoint(geom.Pos3d(CooMaxX*2/3.0,0.0,0.0))
+pt4= points.newPoint(geom.Pos3d(CooMaxX,0.0,0.0))
+pt5= points.newPoint(geom.Pos3d(0.0,CooMaxY,0.0))
+pt6= points.newPoint(geom.Pos3d(CooMaxX/3.0,CooMaxY,0.0))
+pt7= points.newPoint(geom.Pos3d(CooMaxX*2/3.0,CooMaxY,0.0))
+pt8= points.newPoint(geom.Pos3d(CooMaxX,CooMaxY,0.0))
 
 surfaces= preprocessor.getMultiBlockTopology.getSurfaces
 s1= surfaces.newQuadSurfacePts(pt1.tag,pt2.tag,pt6.tag,pt5.tag)

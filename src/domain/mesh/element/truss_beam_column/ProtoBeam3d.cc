@@ -131,13 +131,13 @@ void XC::ProtoBeam3d::setMaterial(const std::string &matName)
       { set_material(ptr_mat); }
   }
 
-//! @brief Return density.
+//! @brief Return linear density.
 double XC::ProtoBeam3d::getRho(void) const
-  { return getSectionProperties().getRho(); }
+  { return getSectionProperties().getLinearRho(); }
 
-//! @brief Sets density.
+//! @brief Sets linear density.
 void XC::ProtoBeam3d::setRho(const double &r)
-  { getSectionProperties().setRho(r); }
+  { getSectionProperties().setLinearRho(r); }
 
 //! @brief Return linear density.
 double XC::ProtoBeam3d::getLinearRho(void) const
@@ -299,6 +299,12 @@ boost::python::list XC::ProtoBeam3d::getValuesAtNodes(const std::string &code, b
     if(code=="rho")
       {
 	const double r= getRho();
+	for(int i= 0;i<nNodes;i++)
+	  retval.append(r);
+      }
+    else if(code=="linearRho")
+      {
+	const double r= getLinearRho();
 	for(int i= 0;i<nNodes;i++)
 	  retval.append(r);
       }

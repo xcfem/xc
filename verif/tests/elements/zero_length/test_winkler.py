@@ -60,9 +60,9 @@ beam2d.h= h
 
 
 points= preprocessor.getMultiBlockTopology.getPoints
-pt1= points.newPntIDPos3d(1,geom.Pos3d(geom.Pos3d(0.0,0.0,0.0)))
-pt2= points.newPntIDPos3d(2,geom.Pos3d(geom.Pos3d(L/2,0.0,0.0)))
-pt3= points.newPntIDPos3d(3,geom.Pos3d(geom.Pos3d(L,0.0,0.0)))
+pt1= points.newPoint(1,geom.Pos3d(geom.Pos3d(0.0,0.0,0.0)))
+pt2= points.newPoint(2,geom.Pos3d(geom.Pos3d(L/2,0.0,0.0)))
+pt3= points.newPoint(3,geom.Pos3d(geom.Pos3d(L,0.0,0.0)))
 
 lines= preprocessor.getMultiBlockTopology.getLines
 lines.defaultTag= 1

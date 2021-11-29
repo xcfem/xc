@@ -48,7 +48,7 @@ class LoadCombinations: public CommandEntity
   public:
     LoadCombinations(void);
     LoadCombinations(const ActionContainer &acc);
-    inline virtual ~LoadCombinations(void) {}
+    virtual ~LoadCombinations(void);
     void Concat(const LoadCombinations &others);
 
     inline LoadCombinationVector getULSTransientCombinations(void)
@@ -64,8 +64,6 @@ class LoadCombinations: public CommandEntity
       { return comb_sls_frec; }
     inline LoadCombinationVector getSLSQuasiPermanentCombinations(void)
       { return comb_sls_cuasi_perm; }
-
-
   };
 } //fin namespace nmb_acc.
 

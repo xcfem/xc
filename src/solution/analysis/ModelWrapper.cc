@@ -112,7 +112,9 @@ void XC::ModelWrapper::copy_constraint_handler(const ConstraintHandler *ptr)
         theHandler->set_owner(this);
       }
     else
-      std::cerr << "ModelWrapper::copy_constraint_handler; null pointer to constraint handler." << std::endl;
+      std::cerr << getClassName() << "::" << __FUNCTION__
+	        << "; null pointer to constraint handler."
+		<< std::endl;
   }
 
 //! @brief Create a constraints handler of the type passed as parameter.
@@ -198,9 +200,11 @@ void XC::ModelWrapper::copy(const ModelWrapper &other)
     if(other.theDOFNumberer) copy_numerador(other.theDOFNumberer);
   }
 
+//! @brief Return a pointer to the object owner.
 XC::SolutionStrategy *XC::ModelWrapper::getSolutionStrategy(void)
   { return dynamic_cast<SolutionStrategy *>(Owner()); }
 
+//! @brief Return a pointer to the object owner.
 const XC::SolutionStrategy *XC::ModelWrapper::getSolutionStrategy(void) const
   { return dynamic_cast<const SolutionStrategy *>(Owner()); }
 
@@ -229,6 +233,23 @@ XC::ModelWrapper::~ModelWrapper(void)
 
 void XC::ModelWrapper::clearAll(void)
   { free_mem(); }
+
+//! @brief Returns the name of the material.
+std::string XC::ModelWrapper::getName(void) const
+  {
+    const SolutionStrategy *se= getSolutionStrategy();
+    if(se)
+      return se->getModelWrapperName();
+    else
+      {
+        std::string retval= "nil";
+	if(getVerbosityLevel()> 1)
+	  std::cerr << getClassName() << "::" << __FUNCTION__
+                    << "; owner not found." << std::endl;
+	return retval;
+      }
+  }
+
 
 //! @brief Return a pointer to the domain.
 XC::Domain *XC::ModelWrapper::getDomainPtr(void)

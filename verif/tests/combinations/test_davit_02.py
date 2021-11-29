@@ -127,8 +127,8 @@ def solveStaticLinearComb(comb):
     print("previousName= ",previousName)
     print("tag= ",comb.tag)
     print("tagPrevia= ",tagPrevia)
-    print("descomp previa= ",getDescompCombPrevia)
-    print("resto sobre previa= ",getDescompRestoSobrePrevia)
+    print("descomp previa= ",getComponentsCombPrevia)
+    print("resto sobre previa= ",getComponentsRestoSobrePrevia)
     '''
     tagSave= tagPrevia*100
     if(tagPrevia>0):

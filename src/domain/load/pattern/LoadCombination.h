@@ -86,8 +86,8 @@ class LoadCombination: public LoadPatternCombination
     const LoadCombination *getPtrCombPrevia(void) const;
     const std::string getNombreCombPrevia(void) const;
     int getTagCombPrevia(void) const;
-    const std::string getDescompCombPrevia(void) const;
-    const std::string getDescompRestoSobrePrevia(void) const;
+    const std::string getComponentsCombPrevia(void) const;
+    const std::string getComponentsRestoSobrePrevia(void) const;
 
     int sendSelf(Communicator &);
     int recvSelf(const Communicator &);

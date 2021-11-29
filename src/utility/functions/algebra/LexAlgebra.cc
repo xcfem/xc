@@ -36,7 +36,7 @@ NamedOperand *LexAlgebra::NuevaVar(const Variable &v)
     if(i!=expresiones.end())
       std::cerr << "¡Ojo! la variable: '" << v.getName() 
            << "' ya existe como expresión." << std::endl;
-    //La agregamos a la tabla de expresiones.
+    // Append it to the expression table.
     return vars.Nueva(v);
   }
 
@@ -47,7 +47,7 @@ NamedOperand *LexAlgebra::NuevaExpr(const VarExpr &v)
     if(i!=vars.end())
       std::cerr << "¡Ojo! la expresión: '" << v.getName() 
            << "' ya existe como variable." << std::endl;
-    //Si realmente es nueva, la agregamos a la tabla de expresiones.
+    // If truly new, append it to the expression table.
     TablaExpresiones::iterator j= expresiones.find(v.getName());
     NamedOperand *retval= NULL;
     if(j==expresiones.end())

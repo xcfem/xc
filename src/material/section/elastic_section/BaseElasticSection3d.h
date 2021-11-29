@@ -65,10 +65,8 @@ class BaseElasticSection3d: public BaseElasticSection
   {
   protected:
     CrossSectionProperties3d ctes_scc; //!< Mechanical properties of the section.
-
     int sendData(Communicator &);
     int recvData(const Communicator &);
-
 
   public:
     BaseElasticSection3d(int tag,int classTag,const size_t &dim,const CrossSectionProperties3d &ctes,MaterialHandler *mat_ldr= nullptr);    

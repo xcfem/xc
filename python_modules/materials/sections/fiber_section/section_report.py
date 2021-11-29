@@ -149,7 +149,7 @@ class SectionInfo(object):
         fileHandler.write('\\begin{center}\n')
         fileHandler.write('\\begin{tabular}{|c|}\n')
         fileHandler.write('\\hline\n')
-        fileHandler.write('\\begin{large} '+latex_utils.toLaTex(self.sectName)+' \end{large}\\\\\n')
+        fileHandler.write('\\begin{large} '+latex_utils.toLaTeX(self.sectName)+' \end{large}\\\\\n')
         fileHandler.write('\\hline\n')
         fileHandler.write(self.sectDescr+'\\\\\n')
         fileHandler.write('\\hline\n')
@@ -218,7 +218,7 @@ class SectionInfo(object):
         fileHandler.write('\\hline\n')
         fileHandler.write('\\end{tabular}\n')
         fileHandler.write('\\end{center}\n')
-        fileHandler.write('\\caption{'+self.sectDescr+' ('+ latex_utils.toLaTex(self.sectName) +').'+'} \\label{tb_'+self.sectName+'}\n')
+        fileHandler.write('\\caption{'+self.sectDescr+' ('+ latex_utils.toLaTeX(self.sectName) +').'+'} \\label{tb_'+self.sectName+'}\n')
         fileHandler.write('\\end{table}\n')
         fileHandler.close()
 

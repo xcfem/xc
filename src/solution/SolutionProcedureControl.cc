@@ -99,6 +99,11 @@ const XC::ModelWrapper *XC::SolutionProcedureControl::getModelWrapper(const std:
 XC::ModelWrapper *XC::SolutionProcedureControl::getModelWrapper(const std::string &cod)
   { return solu_models.getModelWrapper(cod); }
 
+//! @brief Return the name of a model wrapper.
+const std::string &XC::SolutionProcedureControl::getModelWrapperName(const ModelWrapper *mw) const
+  { return solu_models.getModelWrapperName(mw); }
+
+
 //! @brief Return a const pointer to the solution method.
 const XC::SolutionStrategy *XC::SolutionProcedureControl::getSolutionStrategy(const std::string &cod) const
   { return solu_methods.getSolutionStrategy(cod); }

@@ -196,6 +196,12 @@ boost::python::list XC::ProtoTruss::getValuesAtNodes(const std::string &code, bo
         retval.append(r);
         retval.append(r);
       }
+    else if(code=="linearRho")
+      {
+	const double r= getLinearRho();
+        retval.append(r);
+        retval.append(r);
+      }
     else if(code=="N")
       {
 	const double N= getAxialForce();

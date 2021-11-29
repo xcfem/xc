@@ -72,6 +72,18 @@ int XC::RayleighDampingFactors::updateParameter(int parameterID, Information &in
       }
   }
 
+//! @brief Return the current damping value for the natural frequency argument (alphaM/(2*w)+betaK*w/2
+double XC::RayleighDampingFactors::getCurrentDampingRatio(const double &w) const
+  { return alphaM/(2*w)+betaK*w/2; }
+
+//! @brief Return the initial damping value for the natural frequency argument (alphaM/(2*w)+betaK*w/2
+double XC::RayleighDampingFactors::getInitialDampingRatio(const double &w) const
+  { return alphaM/(2*w)+betaK0*w/2; }
+
+//! @brief Return the commited damping value for the natural frequency argument (alphaM/(2*w)+betaK*w/2
+double XC::RayleighDampingFactors::getCommitedDampingRatio(const double &w) const
+  { return alphaM/(2*w)+betaKc*w/2; }
+
 //! @brief Send object members through the communicator argument.
 int XC::RayleighDampingFactors::sendData(Communicator &comm)
   {

@@ -38,24 +38,31 @@ XC::PlateBase::PlateBase(int classTag)
 
 //! @brief full constructor
 XC::PlateBase::PlateBase(int tag, int classTag, double thickness, double rho)
-  : SectionForceDeformation(tag,classTag), h(thickness), rhoH(rho*thickness)
-  {}
+  : SectionForceDeformation(tag,classTag), h(thickness), rho(rho) {}
 
 //! @brief Return material density.
 double XC::PlateBase::getRho(void) const
-  { return rhoH; }
+  { return rho; }
 
 //! @brief Assign material density.
 void XC::PlateBase::setRho(const double &r)
-  { rhoH= r; }
+  { rho= r; }
 
 //! @brief Return density per unit area
-double XC::PlateBase::getArealDensity(void) const
-  { return rhoH*h; }
+double XC::PlateBase::getArealRho(void) const
+  { return rho*h; }
 
 //! @brief Assign density per unit area
-void XC::PlateBase::setArealDensity(const double &r)
-  { rhoH= r/h; }
+void XC::PlateBase::setArealRho(const double &r)
+  {
+    if(h==0.0)
+      std::clog << getClassName() << "::" << __FUNCTION__
+	        << "; thickness is zero. Can't compute areal density."
+	        << " Command ignored."
+	        << std::endl;
+    else
+      rho= r/h;
+  }
 
 //! @brief Return values of internal forces, deformations...
 //! @param cod: name of the requested value.
@@ -85,7 +92,7 @@ double XC::PlateBase::getStrain(const double &,const double &) const
 int XC::PlateBase::sendData(Communicator &comm)
   {
     int res= SectionForceDeformation::sendData(comm);
-    res+= comm.sendDoubles(h, rhoH,getDbTagData(),CommMetaData(4));
+    res+= comm.sendDoubles(h, rho,getDbTagData(),CommMetaData(4));
     return res;
   }
 
@@ -93,6 +100,6 @@ int XC::PlateBase::sendData(Communicator &comm)
 int XC::PlateBase::recvData(const Communicator &comm)
   {
     int res= SectionForceDeformation::recvData(comm);
-    res+= comm.receiveDoubles(h, rhoH,getDbTagData(),CommMetaData(4));
+    res+= comm.receiveDoubles(h, rho,getDbTagData(),CommMetaData(4));
     return res;
   }

@@ -13,7 +13,6 @@ __version__= "3.0"
 __email__= "ana.ortega@xcengineering.xyz"
 
 import numpy as np
-import matplotlib.pyplot as plt
 from scipy import interpolate
 from scipy.spatial import distance
 import math

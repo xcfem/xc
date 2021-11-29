@@ -724,7 +724,7 @@ class OutputHandler(object):
             displaySettings.cameraParameters= self.getCameraParameters()
             displaySettings.setupGrid(setToDisplay)
             displaySettings.defineMeshScene(None,defFScale,color=setToDisplay.color)
-            scOrient=1
+            scOrient= 1
             if(len(dispPairs)>0):
                 vFieldD.addToDisplay(displaySettings,orientation=scOrient,title='Displacement')
                 scOrient+=1
@@ -763,7 +763,7 @@ class OutputHandler(object):
         displaySettings.defineMeshScene(None,defFScale,eigenMode,color=setToDisplay.color)
         unitsScale= 1.0
         if equLoadVctScale not in [None,0]:
-            vField=vf.VectorField(name='modo'+str(eigenMode),fUnitConv=unitsScale,scaleFactor=equLoadVctScale,showPushing= True)
+            vField=vf.VectorField(name='mode'+str(eigenMode),fUnitConv=unitsScale,scaleFactor=equLoadVctScale,showPushing= True)
             setNodes= setToDisplay.nodes
             for n in setNodes:
                 pos= n.getEigenPos3d(defFScale,eigenMode)

@@ -40,11 +40,10 @@ namespace XC {
 
 //! @ingroup AnalysisType
 //
-//! @brief Linear buckling analysis (used inside an StaticAnalysis).
+//! @brief Eigenvalue analysis for linear buckling analysis (used inside an StaticAnalysis).
 class LinearBucklingEigenAnalysis: public EigenAnalysis
   {
   protected:
-
     friend class SolutionProcedure;
     friend class LinearBucklingAnalysis;
     LinearBucklingEigenAnalysis(SolutionStrategy *analysis_aggregation);
@@ -57,10 +56,7 @@ class LinearBucklingEigenAnalysis: public EigenAnalysis
     virtual int setIntegrator(LinearBucklingIntegrator &theIntegrator);
     virtual int setEigenSOE(ArpackSOE &theSOE);
     virtual const double &getEigenvalue(int mode) const;
-
   };
-inline Analysis *LinearBucklingEigenAnalysis::getCopy(void) const
-  { return new LinearBucklingEigenAnalysis(*this); }
 } // end of XC namespace
 
 #endif

@@ -61,9 +61,8 @@ double XC::FourNodeQuadUP::dvol[4];
 double XC::FourNodeQuadUP::shpBar[3][4];
 
 XC::FourNodeQuadUP::FourNodeQuadUP(int tag, int nd1, int nd2, int nd3, int nd4,
-                                   NDMaterial &m, const std::string &type, double t, double bulk, double r,
-                  double p1, double p2, const BodyForces2D &bForces, double p)
-  :QuadBase4N<SolidMech2D>(tag, ELE_TAG_FourNodeQuadUP,nd1,nd2,nd3,nd4,SolidMech2D(4,m,type,t,r)), bf(bForces), pressureLoad(12), kc(bulk), pressure(p), Ki(nullptr)
+                                   NDMaterial &m, const std::string &type, double t, double bulk, double p1, double p2, const BodyForces2D &bForces, double p)
+  :QuadBase4N<SolidMech2D>(tag, ELE_TAG_FourNodeQuadUP,nd1,nd2,nd3,nd4,SolidMech2D(4,m,type,t)), bf(bForces), pressureLoad(12), kc(bulk), pressure(p), Ki(nullptr)
   {
     load.reset(12);
 
@@ -87,7 +86,7 @@ XC::FourNodeQuadUP::FourNodeQuadUP(int tag, int nd1, int nd2, int nd3, int nd4,
   }
 
 XC::FourNodeQuadUP::FourNodeQuadUP(void)
-  :QuadBase4N<SolidMech2D>(ELE_TAG_FourNodeQuadUP,SolidMech2D(4,nullptr,1.0,0.0)),
+  :QuadBase4N<SolidMech2D>(ELE_TAG_FourNodeQuadUP,SolidMech2D(4,nullptr,1.0)),
   pressureLoad(12), kc(0.0), pressure(0.0), Ki(0)
   {
      load.reset(12);

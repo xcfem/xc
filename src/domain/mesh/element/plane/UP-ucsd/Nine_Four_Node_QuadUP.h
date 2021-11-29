@@ -101,7 +101,7 @@ class NineFourNodeQuadUP: public ElemWithMaterial<9,SolidMech2D>
     NineFourNodeQuadUP(int tag, int nd1, int nd2, int nd3, int nd4,
 		  int nd5, int nd6, int nd7, int nd8, int nd9,
 		  NDMaterial &m, const char *type,
-		  double t, double bulk, double rhof, double perm1, double perm2,
+		  double t, double bulk, double perm1, double perm2,
 		  const BodyForces2D &bForces= BodyForces2D());
 
     Element *getCopy(void) const;    

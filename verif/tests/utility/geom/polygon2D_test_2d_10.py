@@ -4,7 +4,7 @@ from __future__ import division
 
 import xc_base
 import geom
-import matplotlib.pyplot as plt
+# import matplotlib.pyplot as plt
 
 pol=geom.Polygon2d()
 

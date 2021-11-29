@@ -13,7 +13,6 @@ __email__= "l.pereztato@gmail.com"
 import xc_base
 import geom
 import xc
-import matplotlib.pyplot as plt
 from model import predefined_spaces
 from materials import typical_materials
 #from postprocess import output_handler
@@ -41,16 +40,16 @@ modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
 points= modelSpace.getPointHandler()
 
 #### Exterior contour
-pt1= points.newPntFromPos3d(p1)
-pt2= points.newPntFromPos3d(p2)
-pt3= points.newPntFromPos3d(p3)
-pt4= points.newPntFromPos3d(p4)
+pt1= points.newPoint(p1)
+pt2= points.newPoint(p2)
+pt3= points.newPoint(p3)
+pt4= points.newPoint(p4)
 
 #### Hole
-ptH0= points.newPntFromPos3d(pH0)
-ptH1= points.newPntFromPos3d(pH1)
-ptH2= points.newPntFromPos3d(pH2)
-ptH3= points.newPntFromPos3d(pH3)
+ptH0= points.newPoint(pH0)
+ptH1= points.newPoint(pH1)
+ptH2= points.newPoint(pH2)
+ptH3= points.newPoint(pH3)
 
 ### Define polygonal surfaces
 surfaces= modelSpace.getSurfaceHandler()
@@ -75,14 +74,14 @@ xcTotalSet= modelSpace.getTotalSet()
 nNodes= len(xcTotalSet.nodes)
 nElements= len(xcTotalSet.elements)
 
-nNodesRef= [203, 219] # Different Gmsh versions give different results
-nElementsRef= [179, 195]
+nNodesRefRange= (190,230) # Different Gmsh versions give different results
+nElementsRefRange= (170,200)
 
 nNodesOk= False
-if nNodes in nNodesRef:
+if (nNodes>=nNodesRefRange[0]) and (nNodes<=nNodesRefRange[1]):
    nNodesOk= True
 nElementsOk= False
-if nElements in nElementsRef:
+if (nElements>=nElementsRefRange[0]) and (nElements<=nElementsRefRange[1]):
    nElementsOk= True
 
 '''

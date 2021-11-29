@@ -29,19 +29,16 @@
 #include "SolidMech2D.h"
 
 //! @brief Constructor.
-XC::SolidMech2D::SolidMech2D(const size_t &nMat,const NDMaterial *ptr_mat, const double &t, const double &r)
+XC::SolidMech2D::SolidMech2D(const size_t &nMat,const NDMaterial *ptr_mat, const double &t)
   :NDMaterialPhysicalProperties(nMat,ptr_mat), thickness(t)
-  {
-    setRho(r);
-  }
+  {}
 
 //! @brief Constructor.
-XC::SolidMech2D::SolidMech2D(const size_t &nMat, NDMaterial &theMat,const std::string &type, const double &t, const double &r)
+XC::SolidMech2D::SolidMech2D(const size_t &nMat, NDMaterial &theMat,const std::string &type, const double &t)
   : NDMaterialPhysicalProperties(nMat,nullptr), thickness(t)
   {
     if(check_material_type(type))
       theMaterial.setMaterial(&theMat,type);
-    setRho(r);
   }
 
 size_t  XC::SolidMech2D::getComponentIndexFromCode(const std::string &code) const

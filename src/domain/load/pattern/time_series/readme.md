@@ -14,3 +14,6 @@ This directory contains the different types of times series available:
 - Path time series.
 - Discretized random process series.
 - Simulated random process series.
+
+## References
+- [OpenSees Time Series command](https://opensees.github.io/OpenSeesDocumentation/user/manual/model/timeSeries.html)

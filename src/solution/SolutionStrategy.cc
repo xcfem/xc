@@ -451,11 +451,11 @@ void XC::SolutionStrategy::free_system_of_equations(void)
 bool XC::SolutionStrategy::alloc_system_of_equations(const std::string &nmb,AnalysisModel *theModel)
   {
     free_system_of_equations();
-    if(nmb=="band_arpack_soe")
+    if((nmb=="band_arpack_soe") || (nmb=="band_arpack_eigen_soe"))
       theSOE= new BandArpackSOE(this);
-    else if(nmb=="band_arpackpp_soe")
+    else if((nmb=="band_arpackpp_soe") || (nmb=="band_arpackpp_eigen_soe"))
       theSOE= new BandArpackppSOE(this);
-    else if(nmb=="sym_arpack_soe")
+    else if((nmb=="sym_arpack_soe") || (nmb=="sym_arpack_eigen_soe"))
       theSOE= new SymArpackSOE(this);
     else if(nmb=="sym_band_eigen_soe")
       theSOE= new SymBandEigenSOE(this);
@@ -529,9 +529,9 @@ void XC::SolutionStrategy::copy_system_of_equations(SystemOfEqn *ptr)
 XC::SystemOfEqn &XC::SolutionStrategy::newSystemOfEqn(const std::string &type)
   {
     AnalysisModel *theModel= nullptr;
-    if(base)
+    if(theModelWrapper)
       {
-        theModel= base->getAnalysisModelPtr();
+        theModel= theModelWrapper->getAnalysisModelPtr();
         alloc_system_of_equations(type,theModel);
       }
     else
@@ -620,21 +620,21 @@ void XC::SolutionStrategy::copy(const SolutionStrategy &other)
 
 //! @brief Default constructor.
 XC::SolutionStrategy::SolutionStrategy(Analysis *owr,ModelWrapper *b)
-  : CommandEntity(owr), base(b), theSolnAlgo(nullptr),theIntegrator(nullptr),
+  : CommandEntity(owr), theModelWrapper(b), theSolnAlgo(nullptr),theIntegrator(nullptr),
     theSOE(nullptr), theTest(nullptr)
   {
-    if(base)
-      base->set_owner(this);
+    if(theModelWrapper)
+      theModelWrapper->set_owner(this);
   }
 
 
 //! @brief Copy constructor.
 XC::SolutionStrategy::SolutionStrategy(const SolutionStrategy &other)
-  : CommandEntity(other), base(other.base), theSolnAlgo(nullptr),theIntegrator(nullptr),
+  : CommandEntity(other), theModelWrapper(other.theModelWrapper), theSolnAlgo(nullptr),theIntegrator(nullptr),
     theSOE(nullptr), theTest(nullptr)
   {
-    if(base)
-      base->set_owner(this);
+    if(theModelWrapper)
+      theModelWrapper->set_owner(this);
     copy(other);
   }
 
@@ -643,9 +643,9 @@ XC::SolutionStrategy::SolutionStrategy(const SolutionStrategy &other)
 XC::SolutionStrategy &XC::SolutionStrategy::operator=(const SolutionStrategy &other)
   {
     CommandEntity::operator=(other);
-    base= other.base;
-    if(base)
-      base->set_owner(this);
+    theModelWrapper= other.theModelWrapper;
+    if(theModelWrapper)
+      theModelWrapper->set_owner(this);
     copy(other);
     return *this;
   }
@@ -658,6 +658,16 @@ XC::SolutionStrategy::~SolutionStrategy(void)
 const XC::SolutionStrategyMap *XC::SolutionStrategy::getSolutionStrategyMap(void) const
   {
     const SolutionStrategyMap *retval= dynamic_cast<const SolutionStrategyMap *>(Owner());
+    if(!retval)
+      std::cerr << getClassName() << "::" << __FUNCTION__
+	        << "; container not defined." << std::endl;
+    return retval;
+  }
+
+//! @brief Returns a pointer to the material handler (if possible).
+XC::SolutionStrategyMap *XC::SolutionStrategy::getSolutionStrategyMap(void)
+  {
+    SolutionStrategyMap *retval= dynamic_cast<SolutionStrategyMap *>(Owner());
     if(!retval)
       std::cerr << getClassName() << "::" << __FUNCTION__
 	        << "; container not defined." << std::endl;
@@ -690,6 +700,10 @@ std::string XC::SolutionStrategy::getName(void) const
 	        << "; container not defined." << std::endl;
     return retval;
   }
+
+//! @brief Return the name of a model wrapper.
+const std::string &XC::SolutionStrategy::getModelWrapperName(void) const
+  { return getSolutionStrategyMap()->getModelWrapperName(theModelWrapper); }
 
 void XC::SolutionStrategy::clearAll(void)
   { free_mem(); }
@@ -756,8 +770,8 @@ XC::Subdomain *XC::SolutionStrategy::getSubdomainPtr(void)
 //! @brief Returns a pointer to the constraint handler.
 XC::ConstraintHandler *XC::SolutionStrategy::getConstraintHandlerPtr(void)
   {
-    if(base)
-      return base->getConstraintHandlerPtr();
+    if(theModelWrapper)
+      return theModelWrapper->getConstraintHandlerPtr();
     else
       return nullptr;
   }
@@ -765,16 +779,16 @@ XC::ConstraintHandler *XC::SolutionStrategy::getConstraintHandlerPtr(void)
 //! @brief Returns a pointer to the numberer.
 XC::DOF_Numberer *XC::SolutionStrategy::getDOF_NumbererPtr(void) const
   {
-    if(base)
-      return base->getDOF_NumbererPtr();
+    if(theModelWrapper)
+      return theModelWrapper->getDOF_NumbererPtr();
     else
       return nullptr;
   }
 //! @brief Returns a pointer to the analysis model.
 XC::AnalysisModel *XC::SolutionStrategy::getAnalysisModelPtr(void) const
   {
-    if(base)
-      return base->getAnalysisModelPtr();
+    if(theModelWrapper)
+      return theModelWrapper->getAnalysisModelPtr();
     else
       return nullptr;
   }
@@ -785,9 +799,15 @@ XC::LinearSOE *XC::SolutionStrategy::getLinearSOEPtr(void)
   {
     LinearSOE *ptr= dynamic_cast<LinearSOE *>(theSOE);
     if(!ptr)
-      std::cerr << getClassName() << "::" << __FUNCTION__
-		<< "; not a suitable system of equations (not a LinearSOE)."
-		<< std::endl;
+      {
+	std::string cName= "nil";
+	if(theSOE)
+	  cName= theSOE->getClassName();
+        std::cerr << getClassName() << "::" << __FUNCTION__
+	  	  << "; not a suitable system of equations ("
+	          << cName << " is not a LinearSOE)."
+		  << std::endl;
+      }
     return ptr;
   }
 
@@ -1002,13 +1022,13 @@ void XC::SolutionStrategy::brokeEquiSolnAlgo(const Communicator &comm,const ID &
 //! @brief Verifies that the pointers are not null.
 bool XC::SolutionStrategy::CheckPointers(void)
   {
-    if(!base)
+    if(!theModelWrapper)
       {
         std::cerr << getClassName() << "::" << __FUNCTION__
                   << "; error, model not defined." << std::endl;
         return false;
       }
-    if(!base->CheckPointers())
+    if(!theModelWrapper->CheckPointers())
       {
         return false;
       }

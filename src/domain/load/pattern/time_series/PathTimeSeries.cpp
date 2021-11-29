@@ -101,7 +101,7 @@ XC::PathTimeSeries::PathTimeSeries(const std::string &fileName, double theFactor
   { readFromFile(fileName); }
 
 //! @brief Read path from file.
-void XC::PathTimeSeries::readFromFile(const std::string &fileName)
+bool XC::PathTimeSeries::readFromFile(const std::string &fileName)
   {
     // determine the number of data points
     int numDataPoints= 0;
@@ -156,67 +156,85 @@ void XC::PathTimeSeries::readFromFile(const std::string &fileName)
             // finally close the file
             theFile1.close();
           }
-
       }
+    return (numDataPoints!=0);
   }
 
 //! @brief Read path from TWO files.
-void XC::PathTimeSeries::readFromFiles(const std::string &filePathName,const std::string &fileTimeName)
+//! @param filePathName: name of the file that contains the values of the displacement, velocity or acceleration.
+//! @param fileTimeName: name of the file that contains the values of time for the previous data.
+bool XC::PathTimeSeries::readFromFiles(const std::string &filePathName,const std::string &fileTimeName)
   {
     // determine the number of data points
-    int numDataPoints1= getNumDataPointsOnFile(filePathName);
-    int numDataPoints2= getNumDataPointsOnFile(fileTimeName);
+    const size_t numDataPoints1= getNumDataPointsOnFile(filePathName);
+    const size_t numDataPoints2= getNumDataPointsOnFile(fileTimeName);
 
-
-    // check number of data entries in both are the same
-    if(numDataPoints1 != numDataPoints2)
+    bool retval= true; 
+    if((numDataPoints1>0) && (numDataPoints2>0)) // Some points read.
       {
-        std::cerr << getClassName() << "::" << __FUNCTION__
-		  << "; WARNING - files containing data "
-		  << "points for path and time do not contain "
-	          << "same number of points\n";
+	// check number of data entries in both are the same
+	if(numDataPoints1 != numDataPoints2)
+	  {
+	    std::cerr << getClassName() << "::" << __FUNCTION__
+		      << "; WARNING - files containing data "
+		      << "points for path and time do not contain "
+		      << "same number of points\n";
+	  }
+	else
+	  {
+	    // create a vector and read in the data
+	    if(numDataPoints1>0)
+	      {
+		// now create the two vector
+		thePath.resize(numDataPoints1);
+		time.resize(numDataPoints1);
+
+		// first open the path file and read in the data
+		std::ifstream theFile2;
+		theFile2.open(filePathName.c_str(), std::ios::in);
+		if(theFile2.bad() || !theFile2.is_open())
+		  {
+		    std::cerr << getClassName() << "::" << __FUNCTION__
+			      << "; WARNING - could not open file "
+			      << filePathName << std::endl;
+		  }
+		else
+		  { // read in the path data and then do the time
+
+		    load_vector_from_file(thePath,theFile2);
+		    theFile2.close();
+
+		    // now open the time file and read in the data
+		    std::ifstream theFile3;
+		    theFile3.open(fileTimeName.c_str(), std::ios::in);
+		    if(theFile3.bad() || !theFile3.is_open())
+		      {
+			std::cerr << getClassName() << "::" << __FUNCTION__
+				  << "; WARNING  - could not open file "
+				  << fileTimeName << std::endl;
+		      }
+		    else
+		      {
+			load_vector_from_file(time,theFile3);
+			theFile3.close();
+		      }
+		  }
+	     }
+	 }
       }
     else
       {
-        // create a vector and read in the data
-        if(numDataPoints1>0)
-          {
-            // now create the two vector
-            thePath.resize(numDataPoints1);
-            time.resize(numDataPoints1);
-
-            // first open the path file and read in the data
-            std::ifstream theFile2;
-            theFile2.open(filePathName.c_str(), std::ios::in);
-            if(theFile2.bad() || !theFile2.is_open())
-              {
-                std::cerr << getClassName() << "::" << __FUNCTION__
-			  << "; WARNING - could not open file "
-			  << filePathName << std::endl;
-              }
-            else
-              { // read in the path data and then do the time
-                
-                load_vector_from_file(thePath,theFile2);
-                theFile2.close();
-
-                // now open the time file and read in the data
-                std::ifstream theFile3;
-                theFile3.open(fileTimeName.c_str(), std::ios::in);
-                if(theFile3.bad() || !theFile3.is_open())
-                  {
-                    std::cerr << getClassName() << "::" << __FUNCTION__
-			      << "; WARNING  - could not open file "
-			      << fileTimeName << std::endl;
-                  }
-                else
-                  {
-                    load_vector_from_file(time,theFile3);
-                    theFile3.close();
-                  }
-              }
-         }
-     }
+	retval= false;
+	if(numDataPoints1==0)
+            std::cerr << getClassName() << "::" << __FUNCTION__
+	              << "; zero values read from file: "
+	              << filePathName << std::endl;
+	if(numDataPoints2==0)
+            std::cerr << getClassName() << "::" << __FUNCTION__
+	              << "; zero values read from file: "
+	              << fileTimeName << std::endl;
+      }
+    return retval;
   }
 
 //! @brief Returns the time increment at the pseudo-time.
@@ -289,14 +307,18 @@ double XC::PathTimeSeries::getFactor(double pseudoTime) const
 //! @brief Returns series duration.
 double XC::PathTimeSeries::getDuration(void) const
   {
+    double retval= 0.0;
     if(thePath.Size()<1)
       {
         std::cerr << getClassName() << "::" << __FUNCTION__
 		  << "; WARNING on empty vector" << std::endl;
-        return 0.0;
       }
-    int lastIndex= time.Size(); // index to last entry in time vector
-    return(time(lastIndex-1));
+    else
+      {
+        const int lastIndex= time.Size(); // index to last entry in time vector
+	retval= time(lastIndex-1);
+      }
+    return retval;
   }
 
 //! @brief Send members through the communicator argument.

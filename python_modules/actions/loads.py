@@ -9,8 +9,9 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "ana.Ortega@ciccp.es"
 
-import xc
+import xc_base
 import geom
+import xc
 from actions.earth_pressure import earth_pressure as ep
 from model.sets import sets_mng as sets
 from misc_utils import log_messages as lmsg
@@ -660,3 +661,67 @@ class SlidingVectorLoad(BaseVectorLoad):
                 n.newLoad(xc.Vector([f.x,f.y,f.z,0.0,0.0,0.0]))
 
         
+class MovableLoad(object):
+    ''' Load that moves along a row of nodes.
+
+    :ivar P: load value (constant or function of time).
+    :ivar v: load speed (constant or function of time).
+    :ivar t0: time when the load enters the first node.
+    :ivar nodePositions: list of pairs (nodeTag, xNode).
+    '''
+    def __init__(self, P, v, t0:float, nodes):
+        ''' Constructor.
+
+        :param P: load value (constant or function of time).
+        :param v: load speed.
+        :param t0: time when the load enters the first node.
+        :param nodes: list of pairs (nodeTag, xNode).
+        '''
+        self.P= P
+        self.v= v
+        self.t0= t0
+        tmp= [list(item) for item in zip(*nodes)] # unzip the list.
+        self.nodeTags= tmp[0]
+        self.nodePositions= tmp[1]
+
+    def getLoadOnNode(self, iNode:int, t):
+        ''' Return the value of the load in the node.
+
+        :param iNode: node index.
+        :param t: time.
+        '''
+        retval= 0.0
+        vVal= self.v(t) if(callable(self.v)) else self.v # speed value at time t.
+        x= vVal*(t-self.t0)
+        pVal= self.P(t) if(callable(self.P)) else self.P # load value at time t.
+        xNode= self.nodePositions[iNode]
+        if(x<xNode): # before the node.
+            xPreviousNode= self.nodePositions[iNode-1] if(iNode>0) else xNode 
+            if(x>xPreviousNode):
+                retval= pVal*(x-xPreviousNode)/(xNode-xPreviousNode)
+        elif(x>xNode): # after the node.
+            numNodes= len(self.nodePositions)
+            xNextNode= self.nodePositions[iNode+1] if(iNode<numNodes-1) else xNode
+            if(x<xNextNode):
+                retval= pVal*(xNextNode-x)/(xNextNode-xNode)
+        else: # in the node.
+            retval= pVal
+        return retval
+
+    def getNodeLoadHistory(self, tBegin, tEnd, step):
+        ''' Compute the load history for each node.
+
+        :param tBegin: start time.
+        :param tEnd: end time.
+        :param step: time step.
+        '''
+        # Compute time values.
+        ti= np.arange(tBegin, tEnd+step, step)
+        loadHistory= dict()
+        for nodeTag in self.nodeTags:
+            tmp= list()
+            loadHistory[nodeTag]= tmp
+            targetNode= self.nodeTags.index(nodeTag)
+            for t in ti:
+                tmp.append(self.getLoadOnNode(iNode= targetNode, t= t))
+        return ti, loadHistory

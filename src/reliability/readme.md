@@ -4,4 +4,5 @@ The finite element reliability analysis is useful to account for uncertainties b
 
 ## References
 
-[Reliability in OpenSees](https://portwooddigital.com/2021/05/16/striking-youtube-gold/)
+- [Reliability in OpenSees](https://portwooddigital.com/2021/05/16/striking-youtube-gold/)
+- [Monte Carlo Simulation](https://portwooddigital.com/2021/11/19/monte-carlo-simulation)

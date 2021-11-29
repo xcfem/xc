@@ -764,7 +764,7 @@ class OSBPanelSection(WoodPanelSection):
             "Design Capacities for Oriented Strand Board V1.0 – 01/2008"
             from PFS TECO • 1507 Matt Pass, Cottage Grove, WI 53527, USA
 
-            angle: angle of the stress with the strength axis.
+        :param angle: angle of the stress with the strength axis.
         '''
         spanRating= self.getAPARatedSturdIFloor()
         EI= 0.0
@@ -825,12 +825,22 @@ class OSBPanelSection(WoodPanelSection):
                     EI= 91.5e3
         E= EI/self.Iz()*4.44822*0.0254**2/0.3048
         return E
-    def defElasticShearSection2d(self,preprocessor, angle= math.pi/2.0):
+    
+    def defElasticShearSection2d(self,preprocessor, angle= math.pi/2.0, overrideRho= None):
         ''' Defines a elastic shear section for two-dimensional
-            problems.'''
+            problems.
+
+        :param preprocessor: pre-processor for the finite element problem.
+        :param angle: angle of the stress with the strength axis.
+        :param overrideRho: if defined (not None), override the value of 
+                            the material density.
+        '''
         matName= self.sectionName+'_'+'osbMaterial'
-        osbMaterial= typical_materials.MaterialData(name= matName,E= self.getE(angle), nu=0.2, rho=self.rho)
-        retval= super(OSBPanelSection,self).defElasticShearSection2d(preprocessor,osbMaterial)
+        rho= self.rho
+        if(overrideRho!=None):
+            rho= overrideRho
+        osbMaterial= typical_materials.MaterialData(name= matName,E= self.getE(angle), nu=0.2, rho= rho)
+        retval= super(OSBPanelSection,self).defElasticShearSection2d(preprocessor,osbMaterial, overrideRho= overrideRho)
         return retval
 
 
@@ -852,18 +862,41 @@ class HeaderSection(sp.RectangularSection):
         return self.rho*self.b*self.h
     def getFb(self):
         return self.getVolumeFactor()*self.wood.Fb_12
-    def defXCMaterial(self):
-        '''Defines the material in XC.'''
+    def defXCMaterial(self, overrideRho= None):
+        '''Defines the material in XC.
+
+        :param overrideRho: if defined (not None), override the value of 
+                            the material density.
+        '''
+        rho= self.rho
+        if(overrideRho!=None):
+            rho= overrideRho
         if(not self.xc_wood_material):
-            self.xc_wood_material= typical_materials.MaterialData(name= self.wood.xc_material_name,E=self.wood.E,nu=self.nu,rho=self.rho)
+            self.xc_wood_material= typical_materials.MaterialData(name= self.wood.xc_material_name,E=self.wood.E,nu=self.nu,rho= rho)
         return self.xc_wood_material
-    def defElasticShearSection2d(self, preprocessor):
-        mat= self.defXCMaterial()
-        self.xc_section= super(HeaderSection,self).defElasticShearSection2d(preprocessor,mat)
+    
+    def defElasticShearSection2d(self, preprocessor, overrideRho= None):
+        ''' Defines a elastic shear section for two-dimensional
+            problems.
+
+        :param preprocessor: pre-processor for the finite element problem.
+        :param overrideRho: if defined (not None), override the value of 
+                            the material density.
+        '''
+        mat= self.defXCMaterial(overrideRho)
+        self.xc_section= super(HeaderSection,self).defElasticShearSection2d(preprocessor,mat, overrideRho)
         return self.xc_section
-    def defElasticShearSection3d(self, preprocessor):
-        mat= self.defXCMaterial()
-        self.xc_section= super(HeaderSection,self).defElasticShearSection3d(preprocessor,mat)
+    
+    def defElasticShearSection3d(self, preprocessor, overrideRho= None):
+        ''' Defines a elastic shear section for three-dimensional
+            problems.
+
+        :param preprocessor: pre-processor for the finite element problem.
+        :param overrideRho: if defined (not None), override the value of 
+                            the material density.
+        '''
+        mat= self.defXCMaterial(overrideRho)
+        self.xc_section= super(HeaderSection,self).defElasticShearSection3d(preprocessor,mat, overrideRho)
         return self.xc_section
 
     
@@ -932,13 +965,28 @@ class CustomLumberSection(sp.RectangularSection):
         self.xc_section= None
     def getFb(self):
         return self.wood.getFb(self.h)
-    def defElasticShearSection2d(self, preprocessor):
-        mat= self.wood.defXCMaterial()
-        self.xc_section= super(DimensionLumberSection,self).defElasticShearSection2d(preprocessor,mat)
+    def defElasticShearSection2d(self, preprocessor, overrideRho= None):
+        ''' Defines a elastic shear section for two-dimensional
+            problems.
+
+        :param preprocessor: pre-processor for the finite element problem.
+        :param overrideRho: if defined (not None), override the value of 
+                            the material density.
+        '''
+        mat= self.wood.defXCMaterial(overrideRho)
+        self.xc_section= super(DimensionLumberSection,self).defElasticShearSection2d(preprocessor,mat, overrideRho)
         return self.xc_section
-    def defElasticShearSection3d(self, preprocessor):
-        mat= self.wood.defXCMaterial()
-        self.xc_section= super(DimensionLumberSection,self).defElasticShearSection3d(preprocessor,mat)
+    
+    def defElasticShearSection3d(self, preprocessor, overrideRho= None):
+        ''' Defines a elastic shear section for three-dimensional
+            problems.
+
+        :param preprocessor: pre-processor for the finite element problem.
+        :param overrideRho: if defined (not None), override the value of 
+                            the material density.
+        '''
+        mat= self.wood.defXCMaterial(overrideRho)
+        self.xc_section= super(DimensionLumberSection,self).defElasticShearSection3d(preprocessor,mat, overrideRho)
         return self.xc_section
     def getBendingFlatUseFactor(self):
         ''' Return the flat use factor for the bending design

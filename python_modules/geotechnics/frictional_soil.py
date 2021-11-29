@@ -1,13 +1,12 @@
 # -*- coding: utf-8 -*-
+'''frictional_soil.py: frictional (or cohesionless) soil model.'''
+
 from __future__ import division
 from __future__ import print_function
 import math
 from scipy.constants import g
 from geotechnics import mononobe_okabe
 from misc_utils import log_messages as lmsg
-
-
-'''frictional_soil.py: frictional (or cohesionless) soil model.'''
 
 __author__= "Luis C. Pérez Tato (LCPT)"
 __copyright__= "Copyright 2016, LCPT"
@@ -21,21 +20,22 @@ class FrictionalSoil(object):
   :ivar phi:    internal friction angle of the soil
   :ivar rho:   soil density (mass per unit volume)
   '''
-  def __init__(self,phi,rho= 2100.0,gammaMPhi= 1.0):
+  def __init__(self, phi:float, rho= 2100.0, gammaMPhi= 1.0):
     '''Constructor.
 
-        Args:
-            :phi: (float) internal friction angle of the soil
-            :rho: (float) soil density (mass per unit volume)
-            :gammaMPhi: (float) partial reduction factor for internal 
-                        friction angle of the soil.
+    :param phi: (float) internal friction angle of the soil
+    :param rho: (float) soil density (mass per unit volume)
+    :param gammaMPhi: (float) partial reduction factor for internal 
+                      friction angle of the soil.
     '''
     self.phi= phi
     self.gammaMPhi= gammaMPhi
     self.rho= rho
+    
   def K0Jaky(self):
     '''Returns Jaky's earth pressure at rest.'''
     return 1.0-math.sin(self.getDesignPhi())
+  
   def Ka(self):
     '''Active earth pressure coefficient.'''
     sinPhi= math.sin(self.getDesignPhi())

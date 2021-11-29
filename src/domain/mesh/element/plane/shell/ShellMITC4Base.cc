@@ -718,7 +718,7 @@ void XC::ShellMITC4Base::formResidAndTangent(int tang_flag) const
 	const int nShape= 3;
 	const int numberNodes= 4;
 	const int massIndex= nShape - 1;
-	double temp, rhoH;
+	double temp;
 	//If defined, apply self-weight
 	static Vector momentum(ndf);
 	double ddvol = 0;
@@ -738,7 +738,7 @@ void XC::ShellMITC4Base::formResidAndTangent(int tang_flag) const
 	    momentum(2)= appliedB[2];
 
 	    //density on the Gauss point i.
-            rhoH= physicalProperties[i]->getRho();
+            const double rhoH= physicalProperties[i]->getArealRho(); // mass per unit area
 
 	    //multiply acceleration by density to form momentum
 	    momentum*= rhoH;

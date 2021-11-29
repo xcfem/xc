@@ -526,7 +526,7 @@ const XC::Matrix &XC::BeamWithHinges2d::getMass(void) const
   {
     theMatrix.Zero();
 
-    const double rho= getRho();
+    const double rho= getRho(); //mass per unit length.
     if(rho != 0.0)
       {
         const double L = theCoordTransf->getInitialLength();
@@ -589,7 +589,7 @@ int XC::BeamWithHinges2d::addLoad(ElementalLoad *theLoad, double loadFactor)
 
 int XC::BeamWithHinges2d::addInertiaLoadToUnbalance(const XC::Vector &accel)
   {
-    const double rho= getRho();
+    const double rho= getRho(); // mass per unit length.
     if(rho == 0.0)
       return 0;
 
@@ -654,7 +654,7 @@ const XC::Vector &XC::BeamWithHinges2d::getResistingForceIncInertia(void) const
   {
     theVector=  this->getResistingForce();
 
-    const double rho= getRho();
+    const double rho= getRho(); // mass per unit length.
     if(rho != 0.0)
       {
 

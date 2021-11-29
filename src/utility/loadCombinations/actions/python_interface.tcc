@@ -21,10 +21,9 @@
 //python_interface.tcc
 
 class_<ActionRelationships, bases<CommandEntity> >("ActionRelationships")
-  .add_property("no_determinante", &ActionRelationships::NoDeterminante, &ActionRelationships::setNoDeterminante)
-  .def("agregaIncompatible", &ActionRelationships::AgregaIncompatible)
+  .def("appendIncompatible", &ActionRelationships::appendIncompatible)
   .def("incompatibleNames", &ActionRelationships::incompatibleNames)
-  .def("agregaMaestra", &ActionRelationships::AgregaMaestra)
+  .def("appendMain", &ActionRelationships::appendMain)
   .def("masterNames", &ActionRelationships::masterNames);
 
 class_<Action, bases<NamedEntity> >("Action")
@@ -32,9 +31,11 @@ class_<Action, bases<NamedEntity> >("Action")
   .add_property("descripcion", make_function( &Action::GetDescripcion, return_value_policy<copy_const_reference>() ), &Action::SetDescripcion)
   .add_property("getRelaciones", make_function( &Action::getRelaciones, return_internal_reference<>() ))
   .add_property("weightingFactor", &Action::getWeightingFactor, &Action::setWeightingFactor)
+  .add_property("not_determinant", &Action::NoDeterminante, &Action::setNoDeterminante)
   .def("getExpandedName", &Action::getExpandedName)
   .def("getCoeficientes", &Action::getCoeficientes)
-  .def("getDescomp", &Action::getDescomp)
+  .def("getComponents", &Action::getComponents)
+  .def("getComponentDict", &Action::getComponentsPy)
   .def(self_ns::str(self_ns::self))
   .def(self_ns::repr(self_ns::self))
   ;

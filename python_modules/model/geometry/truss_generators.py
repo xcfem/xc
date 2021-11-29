@@ -137,9 +137,9 @@ class TrussBase(TrussGeometry):
         self.preprocessor= feProblem.getPreprocessor
         kPoints= self.preprocessor.getMultiBlockTopology.getPoints # Point container.
         for j in self.lowerChordJointsPos:
-            self.lowerChordPoints.append(kPoints.newPntFromPos3d(j))
+            self.lowerChordPoints.append(kPoints.newPoint(j))
         for j in self.upperChordJointsPos:
-            self.upperChordPoints.append(kPoints.newPntFromPos3d(j))
+            self.upperChordPoints.append(kPoints.newPoint(j))
             
     def createChordsGeometry(self):
         '''Creates the geometry of the truss chords.'''

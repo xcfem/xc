@@ -57,11 +57,12 @@ class SolutionProcedure(object):
     :ivar numSteps: number of steps to use in the analysis (useful only when loads are variable in time).
     :ivar solu:
     :ivar solCtrl:
-    :ivar sm:
+    :ivar modelWrapper: model representation for the analysis.
+    :ivar shift: shift-and-invert mode (used with ARPACK).
     '''
     _counter = 0 # Counts the objects of this type.
     
-    def __init__(self, name= None, constraintHandlerType= 'plain', maxNumIter= 10, convergenceTestTol= 1e-9, printFlag= 0, numSteps= 1, numberingMethod= 'rcm', convTestType= None, soeType: str= None, solverType:str = None):
+    def __init__(self, name= None, constraintHandlerType= 'plain', maxNumIter= 10, convergenceTestTol= 1e-9, printFlag= 0, numSteps= 1, numberingMethod= 'rcm', convTestType= None, soeType:str= None, solverType:str = None, shift:float= None):
         ''' Constructor.
 
         :param name: identifier for the solution procedure.
@@ -74,6 +75,7 @@ class SolutionProcedure(object):
         :param convTestType: convergence test type for non linear analysis (norm unbalance,...).
         :param soeType: type of the system of equations object.
         :param solverType: type of the solver.
+        :param shift: shift-and-invert mode (used with ARPACK).
         '''
         SolutionProcedure._counter += 1
         self.id = SolutionProcedure._counter
@@ -90,9 +92,10 @@ class SolutionProcedure(object):
         self.convTestType= convTestType
         self.soeType= soeType
         self.solverType= solverType
+        self.shift= shift
         self.solu= None
         self.solCtrl= None
-        self.sm= None
+        self.modelWrapper= None
         self.numberer= None
         self.cHandler= None
         self.solutionStrategy= None
@@ -108,7 +111,7 @@ class SolutionProcedure(object):
             self.solu.clear()
         self.solu= None
         self.solCtrl= None
-        self.sm= None
+        self.modelWrapper= None
         self.numberer= None
         self.cHandler= None
         self.solutionStrategy= None
@@ -128,17 +131,32 @@ class SolutionProcedure(object):
 
     def getModelWrapperName(self):
         ''' Return the name for the model wrapper.'''
-        return 'sm_'+self.name
+        retval= 'sm_'+self.name
+        if(self.modelWrapper):
+            mw= self.modelWrapper
+            tmp= mw.name
+            if(tmp!='nil'):
+                retval= tmp
+        return retval
+
+    def soluControlSetup(self):
+        ''' Defines the solution control object.'''
+        self.solu= self.feProblem.getSoluProc
+        self.solCtrl= self.solu.getSoluControl        
 
     def modelWrapperSetup(self):
         ''' Defines the model wrapper. '''
-        self.solu= self.feProblem.getSoluProc
-        self.solCtrl= self.solu.getSoluControl
-        solModels= self.solCtrl.getModelWrapperContainer
+        self.soluControlSetup()
         modelWrapperName= self.getModelWrapperName()
-        self.sm= solModels.newModelWrapper(modelWrapperName)
-        self.numberer= self.sm.newNumberer("default_numberer")
-        self.numberer.useAlgorithm(self.numberingMethod)
+        if(not self.modelWrapper):
+            solModels= self.solCtrl.getModelWrapperContainer
+            self.modelWrapper= solModels.newModelWrapper(modelWrapperName)
+            self.numberer= self.modelWrapper.newNumberer("default_numberer")
+            self.numberer.useAlgorithm(self.numberingMethod)
+        else:
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.warning(className+'.'+methodName+'; model wrapper already set. Command ignored.')
         return modelWrapperName
 
     def integratorSetup(self, integratorType= 'load_control_integrator'):
@@ -146,14 +164,17 @@ class SolutionProcedure(object):
 
         :param integratorType: type of integrator to use.
         '''
-        if(integratorType in ['load_control_integrator','eigen_integrator', 'ill-conditioning_integrator']):
+        if(integratorType in ['load_control_integrator','eigen_integrator', 'ill-conditioning_integrator', 'linear_buckling_integrator']):
             self.integ= self.solutionStrategy.newIntegrator(integratorType,xc.Vector([]))
         elif(integratorType=='newmark_integrator'):
             self.integ= self.solutionStrategy.newIntegrator(integratorType,xc.Vector([0.5,0.25]))
 
     def getSolutionStrategyName(self):
         ''' Return the name for the model wrapper.'''
-        return 'se_'+self.name
+        if(self.solutionStrategy):
+            return self.solutionStrategy.name
+        else:
+            return 'se_'+self.name
     
     def solutionAlgorithmSetup(self, solAlgType= 'linear_soln_algo', integratorType= 'load_control_integrator'):
         ''' Define the solution strategy.
@@ -183,6 +204,8 @@ class SolutionProcedure(object):
             equations.
         '''
         self.soe= self.solutionStrategy.newSystemOfEqn(self.soeType)
+        if(self.shift!=None):
+            self.soe.shift= self.shift
         self.solver= self.soe.newSolver(self.solverType)
 
     def setPenaltyFactors(self, alphaSP= 1e15, alphaMP= 1e15):
@@ -197,15 +220,15 @@ class SolutionProcedure(object):
     def constraintHandlerSetup(self):
         ''' Define the constraint handler and return a reference to it.'''
         if(self.cHandlerType=='penalty'):
-            self.cHandler= self.sm.newConstraintHandler("penalty_constraint_handler")
+            self.cHandler= self.modelWrapper.newConstraintHandler("penalty_constraint_handler")
             self.cHandler.alphaSP= self.alphaSP
             self.cHandler.alphaMP= self.alphaMP
         elif(self.cHandlerType=='transformation'):
-            self.cHandler= self.sm.newConstraintHandler("transformation_constraint_handler")
+            self.cHandler= self.modelWrapper.newConstraintHandler("transformation_constraint_handler")
         elif(self.cHandlerType=='lagrange'):
-            self.cHandler= self.sm.newConstraintHandler("lagrange_constraint_handler")
+            self.cHandler= self.modelWrapper.newConstraintHandler("lagrange_constraint_handler")
         elif(self.cHandlerType=='plain'):
-            self.cHandler= self.sm.newConstraintHandler("plain_handler")
+            self.cHandler= self.modelWrapper.newConstraintHandler("plain_handler")
         else:
             lmsg.error('unknown constraint handler type: '+self.cHandlerType)
 
@@ -872,6 +895,138 @@ class PenaltyNewtonLineSearchMUMPS(PenaltyNewtonLineSearchBase):
         self.sysOfEqnSetup()
         self.analysisSetup('static_analysis')
         
+### Convenience function
+def penalty_newton_line_search_mumps(prb, mxNumIter= 150, convergenceTestTol= 1e-9, printFlag= 0, convTestType= 'relative_total_norm_disp_incr_conv_test', lineSearchMethod= 'regula_falsi_line_search'):
+    ''' Return a simple static modified Newton solution procedure.
+
+    :param maxNumIter: maximum number of iterations (defauts to 10)
+    :param convergenceTestTol: convergence tolerance (defaults to 1e-9)
+    :param printFlag: print message on each iteration
+    '''
+    solProc= PenaltyNewtonLineSearchMUMPS(prb,maxNumIter= mxNumIter, convergenceTestTol= convergenceTestTol, printFlag= printFlag, convTestType= convTestType, lineSearchMethod= lineSearchMethod)
+    solProc.setup()
+    return solProc.analysis
+ 
+class TransformationNewtonLineSearchBase(LineSearchBase):
+    ''' Base class for transformation Newton line search solution aggregation.'''
+    def __init__(self, prb, name, maxNumIter, convergenceTestTol, printFlag, numSteps, numberingMethod, convTestType, lineSearchMethod, soeType, solverType):
+        ''' Constructor.
+
+        :param prb: XC finite element problem.
+        :param name: identifier for the solution procedure.
+        :param maxNumIter: maximum number of iterations (defauts to 10)
+        :param convergenceTestTol: convergence tolerance (defaults to 1e-9)
+        :param printFlag: if not zero print convergence results on each step.
+        :param numSteps: number of steps to use in the analysis (useful only when loads are variable in time).
+        :param numberingMethod: numbering method (plain or reverse Cuthill-McKee or alterntive minimum degree).
+        :param convTestType: convergence test for non linear analysis (norm unbalance,...).
+        :param lineSearchMethod: line search method to use (bisection_line_search, initial_interpolated_line_search, regula_falsi_line_search, secant_line_search).
+        :param soeType: type of the system of equations object.
+        :param solverType: type of the solver.
+        '''
+        super(TransformationNewtonLineSearchBase,self).__init__(prb, name, 'transformation', maxNumIter, convergenceTestTol, printFlag, numSteps, numberingMethod, convTestType, lineSearchMethod, soeType, solverType)
+        #self.setTransformationFactors()
+        
+    def setup(self):
+        ''' Defines the solution procedure in the finite element 
+            problem object.
+        '''
+        super(TransformationNewtonLineSearchBase,self).setup()
+        self.solutionAlgorithmSetup(solAlgType= 'newton_line_search_soln_algo', integratorType= 'load_control_integrator')
+        self.solAlgo.setLineSearchMethod(self.lineSearchMethod)
+
+class TransformationNewtonLineSearch(TransformationNewtonLineSearchBase):
+    ''' Static solution procedure with a Newton line search algorithm
+        and a transformation constraint handler.'''
+    def __init__(self, prb, name= None, maxNumIter= 150, convergenceTestTol= 1e-9, printFlag= 0, numSteps= 1, numberingMethod= 'rcm', convTestType= 'relative_total_norm_disp_incr_conv_test', lineSearchMethod= 'regula_falsi_line_search'):
+        ''' Constructor.
+
+        :param prb: XC finite element problem.
+        :param name: identifier for the solution procedure.
+        :param maxNumIter: maximum number of iterations (defauts to 10)
+        :param convergenceTestTol: convergence tolerance (defaults to 1e-9)
+        :param printFlag: if not zero print convergence results on each step.
+        :param numSteps: number of steps to use in the analysis (useful only when loads are variable in time).
+        :param numberingMethod: numbering method (plain or reverse Cuthill-McKee or alterntive minimum degree).
+        :param convTestType: convergence test for non linear analysis (norm unbalance,...).
+        :param lineSearchMethod: line search method to use (bisection_line_search, initial_interpolated_line_search, regula_falsi_line_search, secant_line_search).
+        '''
+        super(TransformationNewtonLineSearch,self).__init__(prb, name, maxNumIter, convergenceTestTol, printFlag, numSteps, numberingMethod, convTestType, lineSearchMethod, soeType= 'sparse_gen_col_lin_soe', solverType= 'super_lu_solver')
+        
+    def setup(self):
+        ''' Defines the solution procedure in the finite element 
+            problem object.
+        '''
+        super(TransformationNewtonLineSearch,self).setup()
+        self.sysOfEqnSetup()
+        self.analysisSetup('static_analysis')
+
+class TransformationNewtonLineSearchUMF(TransformationNewtonLineSearchBase):
+    ''' Static solution procedure with a Newton line search algorithm,
+        a transformation constraint handler and a UMF
+        (Unsimmetric multi-frontal method) solver.'''
+    def __init__(self, prb, name= None, maxNumIter= 150, convergenceTestTol= 1e-9, printFlag= 0, numSteps= 1, numberingMethod= 'rcm', convTestType= 'relative_total_norm_disp_incr_conv_test', lineSearchMethod= 'regula_falsi_line_search'):
+        ''' Constructor.
+
+        :param prb: XC finite element problem.
+        :param name: identifier for the solution procedure.
+        :param maxNumIter: maximum number of iterations (defauts to 10)
+        :param convergenceTestTol: convergence tolerance (defaults to 1e-9)
+        :param printFlag: if not zero print convergence results on each step.
+        :param numSteps: number of steps to use in the analysis (useful only when loads are variable in time).
+        :param numberingMethod: numbering method (plain or reverse Cuthill-McKee or alterntive minimum degree).
+        :param convTestType: convergence test for non linear analysis (norm unbalance,...).
+        :param lineSearchMethod: line search method to use (bisection_line_search, initial_interpolated_line_search, regula_falsi_line_search, secant_line_search).
+        '''
+        super(TransformationNewtonLineSearchUMF,self).__init__(prb, name, maxNumIter, convergenceTestTol, printFlag, numSteps, numberingMethod, convTestType, lineSearchMethod, soeType= 'umfpack_gen_lin_soe', solverType= 'umfpack_gen_lin_solver')
+        
+    def setup(self):
+        ''' Defines the solution procedure in the finite element 
+            problem object.
+        '''
+        super(TransformationNewtonLineSearchUMF,self).setup()
+        self.sysOfEqnSetup()
+        self.analysisSetup('static_analysis')
+        
+class TransformationNewtonLineSearchMUMPS(TransformationNewtonLineSearchBase):
+    ''' Static solution procedure with a Newton line search algorithm,
+        a transformation constraint handler and a MUMPS
+        (parallel sparse direct solver) solver.'''
+    def __init__(self, prb, name= None, maxNumIter= 150, convergenceTestTol= 1e-9, printFlag= 0, numSteps= 1, numberingMethod= 'rcm', convTestType= 'relative_total_norm_disp_incr_conv_test', lineSearchMethod= 'regula_falsi_line_search'):
+        ''' Constructor.
+
+        :param prb: XC finite element problem.
+        :param name: identifier for the solution procedure.
+        :param maxNumIter: maximum number of iterations (defauts to 10)
+        :param convergenceTestTol: convergence tolerance (defaults to 1e-9)
+        :param printFlag: if not zero print convergence results on each step.
+        :param numSteps: number of steps to use in the analysis (useful only when loads are variable in time).
+        :param numberingMethod: numbering method (plain or reverse Cuthill-McKee or alterntive minimum degree).
+        :param convTestType: convergence test for non linear analysis (norm unbalance,...).
+        :param lineSearchMethod: line search method to use (bisection_line_search, initial_interpolated_line_search, regula_falsi_line_search, secant_line_search).
+        '''
+        super(TransformationNewtonLineSearchMUMPS,self).__init__(prb, name, maxNumIter, convergenceTestTol, printFlag, numSteps, numberingMethod, convTestType, lineSearchMethod, soeType= 'mumps_soe', solverType= 'mumps_solver')
+        
+    def setup(self):
+        ''' Defines the solution procedure in the finite element 
+            problem object.
+        '''
+        super(TransformationNewtonLineSearchMUMPS,self).setup()
+        self.sysOfEqnSetup()
+        self.analysisSetup('static_analysis')
+        
+### Convenience function
+def transformation_newton_line_search_mumps(prb, mxNumIter= 150, convergenceTestTol= 1e-9, printFlag= 0, convTestType= 'relative_total_norm_disp_incr_conv_test'):
+    ''' Return a simple static modified Newton solution procedure.
+
+    :param maxNumIter: maximum number of iterations (defauts to 10)
+    :param convergenceTestTol: convergence tolerance (defaults to 1e-9)
+    :param printFlag: print message on each iteration
+    '''
+    solProc= TransformationNewtonLineSearchMUMPS(prb,maxNumIter= mxNumIter, convergenceTestTol= convergenceTestTol, printFlag= printFlag, convTestType= convTestType)
+    solProc.setup()
+    return solProc.analysis
+
 class PlainKrylovNewton(SolutionProcedure):
     ''' KrylovNewton algorithm object which uses a Krylov subspace 
         accelerator to accelerate the convergence of the modified 
@@ -1001,7 +1156,7 @@ class PenaltyNewmarkNewtonRapshon(SolutionProcedure):
 class FrequencyAnalysis(SolutionProcedure):
     ''' Return a natural frequency computation procedure.'''
 
-    def __init__(self, prb, name= None, printFlag= 0, systemPrefix= 'sym_band', numberingMethod= 'rcm'):
+    def __init__(self, prb, name= None, printFlag= 0, systemPrefix= 'sym_band', numberingMethod= 'rcm', shift:float= None):
         ''' Constructor.
 
         :param prb: XC finite element problem.
@@ -1012,7 +1167,7 @@ class FrequencyAnalysis(SolutionProcedure):
         self.systemPrefix= systemPrefix
         soe_string= self.systemPrefix+'_eigen_soe'
         solver_string= self.systemPrefix+'_eigen_solver'
-        super(FrequencyAnalysis,self).__init__(name, 'transformation', printFlag, numberingMethod= numberingMethod, soeType= soe_string, solverType= solver_string)
+        super(FrequencyAnalysis,self).__init__(name, 'transformation', printFlag, numberingMethod= numberingMethod, soeType= soe_string, solverType= solver_string, shift= shift)
         self.feProblem= prb
         
     def setup(self):
@@ -1025,10 +1180,10 @@ class FrequencyAnalysis(SolutionProcedure):
         self.analysisSetup('modal_analysis')
         
 ### Convenience function
-def frequency_analysis(prb):
+def frequency_analysis(prb, systemPrefix= 'sym_band', shift:float= None):
     ''' Return a solution procedure that computes the natural
         frequencies of the model.'''
-    solProc= FrequencyAnalysis(prb)
+    solProc= FrequencyAnalysis(prb, systemPrefix= systemPrefix, shift= shift)
     solProc.setup()
     return solProc.analysis
 
@@ -1036,7 +1191,7 @@ class IllConditioningAnalysisBase(SolutionProcedure):
     ''' Base class for ill-conditioning
         solution procedures.
     '''
-    def __init__(self, prb, name= None, printFlag= 0, systemPrefix= 'sym_band_eigen', shift= None, numberingMethod= 'rcm'):
+    def __init__(self, prb, name= None, printFlag= 0, systemPrefix= 'sym_band_eigen', shift:float= None, numberingMethod= 'rcm'):
         ''' Constructor.
 
         :param prb: XC finite element problem.
@@ -1045,10 +1200,9 @@ class IllConditioningAnalysisBase(SolutionProcedure):
         :param systemPrefix: string that identifies the SOE and Solver types.
         :param numberingMethod: numbering method (plain or reverse Cuthill-McKee or alterntive minimum degree).
         '''        
-        super(IllConditioningAnalysisBase,self).__init__(name, 'penalty', printFlag= printFlag, numberingMethod= numberingMethod, soeType= systemPrefix+"_soe", solverType= systemPrefix+"_solver")
+        super(IllConditioningAnalysisBase,self).__init__(name, 'penalty', printFlag= printFlag, numberingMethod= numberingMethod, soeType= systemPrefix+"_soe", solverType= systemPrefix+"_solver", shift= shift)
         self.feProblem= prb
         self.setPenaltyFactors()
-        self.shift= shift
         
     def setup(self):
         ''' Defines the solution procedure in the finite element 
@@ -1057,14 +1211,12 @@ class IllConditioningAnalysisBase(SolutionProcedure):
         super(IllConditioningAnalysisBase,self).setup()
         self.solutionAlgorithmSetup(solAlgType= 'ill-conditioning_soln_algo', integratorType= 'ill-conditioning_integrator')
         self.sysOfEqnSetup()
-        if(self.shift):
-            self.soe.shift= self.shift
         self.analysisSetup('ill-conditioning_analysis')
     
 class ZeroEnergyModes(IllConditioningAnalysisBase):
     ''' Procedure to obtain the zero energy modes
         of the finite element model.'''
-    def __init__(self, prb, name= None, printFlag= 0, systemPrefix= 'sym_band_eigen', shift= None):
+    def __init__(self, prb, name= None, printFlag= 0, systemPrefix= 'sym_band_eigen', shift:float= None):
         ''' Constructor.
 
         :param prb: XC finite element problem.
@@ -1087,7 +1239,7 @@ class IllConditioningAnalysis(IllConditioningAnalysisBase):
     ''' Procedure to obtain the modes
         associated with very small eigenvalues of the
         stiffness matrix.'''
-    def __init__(self, prb, name= None, printFlag= 0, systemPrefix= 'band_arpack', shift= 0.0):
+    def __init__(self, prb, name= None, printFlag= 0, systemPrefix= 'band_arpack', shift:float= 0.0):
         ''' Constructor.
 
         :param prb: XC finite element problem.
@@ -1125,3 +1277,117 @@ def solveStaticNoLinCase(combName):
     lmsg.warning("DEPRECATED; use use solveComb")
     solveComb(preprocessor,combName,analysis,numSteps)
 
+class BucklingAnalysisEigenPart(SolutionProcedure):
+    ''' Eigenvalue part of a linear buckling analysis.'''
+
+    def __init__(self, prb, staticAnalysisPart, name= None, printFlag= 0, soeType:str= None, solverType:str= None, shift:float= 0.0):
+        ''' Constructor.
+
+        :param prb: XC finite element problem.
+        :param staticAnalysisPart: static analysis part of the linear buckling analysis. 
+        :param name: identifier for the solution procedure.
+        :param printFlag: if not zero print convergence results on each step.
+        :param soeType: type of the system of equations object.
+        :param solverType: type of the solver.
+        :param shift: shift-and-invert mode (used with ARPACK).
+        '''        
+        super(BucklingAnalysisEigenPart,self).__init__(name, constraintHandlerType= None, printFlag= printFlag, numberingMethod= None, soeType= soeType, solverType= solverType, shift= shift)
+        modelWrapper= staticAnalysisPart.getModelWrapper
+        if(modelWrapper!= None):
+            self.modelWrapper= modelWrapper
+        else:
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.error(className+'.'+methodName+'; model wrapper not set.')
+        self.feProblem= prb
+                
+    def setup(self):
+        ''' Defines the solution procedure in the finite element 
+            problem object.
+        '''
+        self.soluControlSetup()
+        self.solutionAlgorithmSetup(solAlgType= 'linear_buckling_soln_algo', integratorType= 'linear_buckling_integrator')
+        self.sysOfEqnSetup()
+
+class BucklingAnalysisStaticPart(SolutionProcedure):
+    ''' Static analysis part of a linear buckling analysis.'''
+
+    def __init__(self, prb, name= None, constraintHandlerType= 'transformation', maxNumIter= 100, convergenceTestTol= 1e-9, printFlag= 0, numSteps= 1, numberingMethod= 'rcm', convTestType= None, soeType:str= None, solverType:str= None, solnAlgorithmType= 'krylov_newton_soln_algo'):
+        ''' Constructor.
+
+        :param prb: XC finite element problem.
+        :param name: identifier for the solution procedure.
+        :param printFlag: if not zero print convergence results on each step.
+        :param soeType: type of the system of equations object.
+        :param solverType: type of the solver.
+        :param numberingMethod: numbering method (plain or reverse Cuthill-McKee or alterntive minimum degree).
+        '''        
+        super(BucklingAnalysisStaticPart,self).__init__(name, constraintHandlerType= constraintHandlerType, maxNumIter= maxNumIter, convergenceTestTol= convergenceTestTol, printFlag= printFlag, numSteps= numSteps, numberingMethod= numberingMethod, convTestType= convTestType, soeType= soeType, solverType= solverType)
+        self.feProblem= prb
+        self.solnAlgorithmType= solnAlgorithmType
+                
+    def setup(self):
+        ''' Defines the solution procedure in the finite element 
+            problem object.
+        '''
+        super(BucklingAnalysisStaticPart,self).setup()
+        self.solutionAlgorithmSetup(solAlgType= self.solnAlgorithmType, integratorType= 'load_control_integrator')
+        # self.solAlgo.maxDimension= self.maxDim
+        self.sysOfEqnSetup()
+        self.analysisSetup('static_analysis')
+
+
+class LinearBucklingAnalysis(object):
+    ''' Linear buckling analysis.
+
+    :ivar staticPart: solution for the static problem.
+    :ivar eigenPart: solution for the eigen problem.
+    :ivar numModes: number of buckling modes to compute.
+    '''
+    def __init__(self, prb, numModes, constraintHandlerType= 'transformation', numberingMethod= 'rcm', convTestType= 'norm_disp_incr_conv_test', convergenceTestTol= 1e-8, maxNumIter= 1000, soeType= 'band_gen_lin_soe', solverType= 'band_gen_lin_lapack_solver', solnAlgorithmType= 'krylov_newton_soln_algo', eigenSOEType= 'band_arpackpp_soe', eigenSolverType= 'band_arpackpp_solver'):
+        ''' Constructor.
+
+        '''
+        self.feProblem= prb
+        self.numModes= numModes
+        self.constraintHandlerType= constraintHandlerType 
+        self.numberingMethod= numberingMethod 
+        self.convTestType= convTestType 
+        self.convergenceTestTol= convergenceTestTol 
+        self.maxNumIter= maxNumIter 
+        self.soeType= soeType 
+        self.solverType= solverType 
+        self.solnAlgorithmType= solnAlgorithmType 
+        self.eigenSOEType= eigenSOEType 
+        self.eigenSolverType= eigenSolverType 
+                
+    def soluControlSetup(self):
+        ''' Defines the solution control object.'''
+        self.solu= self.feProblem.getSoluProc
+        self.solCtrl= self.solu.getSoluControl
+        
+    def setup(self):
+        ''' Defines the solution procedure in the finite element 
+            problem object.
+        '''
+        self.staticPart= BucklingAnalysisStaticPart(prb= self.feProblem, constraintHandlerType= self.constraintHandlerType , numberingMethod= self.numberingMethod , convTestType= self.convTestType , convergenceTestTol= self.convergenceTestTol, maxNumIter= self.maxNumIter, soeType= self.soeType , solverType= self.solverType , solnAlgorithmType= self.solnAlgorithmType )
+        self.staticPart.setup()
+
+        self.eigenPart= BucklingAnalysisEigenPart(prb= self.feProblem, staticAnalysisPart= self.staticPart.solutionStrategy, soeType= self.eigenSOEType, solverType= self.eigenSolverType)
+        self.eigenPart.setup()
+        self.soluControlSetup()
+        self.analysisSetup()
+        self.analysis.numModes= self.numModes
+
+    def analysisSetup(self):
+        ''' Define the analysis object.
+
+        :param analysisType: type of the analysis to perform.
+        '''
+        self.analysis= self.solu.newAnalysis('linear_buckling_analysis',self.staticPart.getSolutionStrategyName(),self.eigenPart.getSolutionStrategyName())
+        
+    def solve(self):
+        ''' Compute the linear buckling modes.'''
+        return self.analysis.analyze(self.numModes)
+
+    

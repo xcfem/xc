@@ -20,9 +20,9 @@ preprocessor=  feProblem.getPreprocessor
 
 points= preprocessor.getMultiBlockTopology.getPoints
 points.defaultTag= 1
-pt= points.newPntFromPos3d(geom.Pos3d(0,0,0))
-pt= points.newPntFromPos3d(geom.Pos3d(1,1,1))
-pt= points.newPntFromPos3d(geom.Pos3d(2,2,2))
+pt= points.newPoint(geom.Pos3d(0,0,0))
+pt= points.newPoint(geom.Pos3d(1,1,1))
+pt= points.newPoint(geom.Pos3d(2,2,2))
 
 setTotal= preprocessor.getSets.getSet("total")
 ptsSet= setTotal.getPoints

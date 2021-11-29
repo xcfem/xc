@@ -466,6 +466,27 @@ void XC::SetMeshComp::createInertiaLoads(const Vector &accel)
     elements.createInertiaLoads(accel);
   }
 
+//! @brief Return the total mass matrix.
+XC::Matrix XC::SetMeshComp::getTotalMass(void) const
+  {
+    Matrix retval= nodes.getTotalMass();
+    retval+= elements.getTotalMass();
+    return retval;
+  }
+
+//! @brief Return the total mass matrix component for the DOF argument.
+double XC::SetMeshComp::getTotalMassComponent(const int &dof) const
+  {
+    const Matrix totalMass= getTotalMass();
+    const size_t sz= totalMass.noRows();
+    Vector J(sz);
+    J(dof)= 1.0;
+    Vector tmp(sz);
+    tmp.addMatrixVector(1.0, totalMass, J, 1.0);
+    const double retval= dot(J,tmp);
+    return retval;
+  }
+
 //! @brief Returns true if the node with the tag
 //! being passed as parameter, belongs to the set.
 bool XC::SetMeshComp::InNodeTag(const int tag_node) const

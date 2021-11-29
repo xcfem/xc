@@ -410,10 +410,8 @@ void XC::ShellMITC9::formInertiaTerms(int tangFlag) const
     double dvol; //volume element
     static double shp[nShape][numberNodes];  //shape functions at a gauss point
     static Vector momentum(ndf);
-
-
-    double temp, rhoH, massJK;
-
+    
+    double temp, massJK;
 
     //zero mass 
     mass.Zero();
@@ -435,7 +433,7 @@ void XC::ShellMITC9::formInertiaTerms(int tangFlag) const
           momentum.addVector(1.0, theNodes[j]->getTrialAccel(), shp[massIndex][j]);
       
         //density
-        rhoH= physicalProperties[i]->getRho();
+        const double rhoH= physicalProperties[i]->getArealRho(); // mass per unit area
 
         //multiply acceleration by density to form momentum
         momentum*= rhoH;

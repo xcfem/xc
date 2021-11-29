@@ -11,6 +11,17 @@ CYAN="\\033[1;36m"
 
 echo ""
 
+mplbackend_backup="nil"
+# Trying to avoid Matplotlib complaining about the XServer
+if [ -n "$MPLBACKEND" ]; then
+    echo "$JAUNE" "MPLBACKEND already set as: $MPLBACKEND" "$NORMAL"
+    mplbackend_backup="$MPLBACKEND"
+else
+    echo "$BLEU" "Setting MPLBACKEND to avoid Matplotlib complaints." "$NORMAL"
+    MPLBACKEND=Agg
+    export MPLBACKEND
+fi
+
 START=$(date +%s.%N)
 
 # Misc. tests
@@ -125,7 +136,6 @@ python tests/utility/soil_mechanics/test_boussinesq.py
 
 # Tests about actions.
 echo "$BLEU" "Actions tests." "$NORMAL"
-python tests/actions/test_derailment_SIA.py
 python tests/actions/test_prestressing.py
 python tests/actions/test_peck_pressure_envelope.py
 python tests/actions/test_earth_pressure.py
@@ -149,15 +159,19 @@ python tests/actions/wind/test_iap_hiding_ratio.py
 echo "$BLEU" "  Thermal action tests." "$NORMAL"
 python tests/actions/thermal/test_thermal_grad_shell_01.py 
 python tests/actions/thermal/test_thermal_grad_shell_02.py 
-python tests/actions/thermal/test_iap_thermal.py 
+python tests/actions/thermal/test_iap_thermal.py
+echo "$BLEU" "  Trafic loads tests." "$NORMAL"
+python tests/actions/trafic_loads/test_derailment_SIA.py
+python tests/actions/trafic_loads/test_pedestrian_load_ec1.py
 
 # Load combinations tests.
 echo "$BLEU" "Load combination tests." "$NORMAL"
 echo "$BLEU" "  Forming load combination tests." "$NORMAL"
 #python tests/actions/loadCombinations/testLoadCombinations.py
-python tests/actions/loadCombinations/test_esclavas_00.py
+python tests/actions/loadCombinations/test_secondaries_00.py
 python tests/actions/loadCombinations/test_accidentales.py
-python tests/actions/loadCombinations/test_iap11.py
+python tests/actions/loadCombinations/test_iap11_01.py
+python tests/actions/loadCombinations/test_iap11_02.py
 echo "$BLEU" "  Computing load combination tests." "$NORMAL"
 python tests/combinations/add_loads_01.py
 python tests/combinations/test_add_load_cases.py
@@ -197,24 +211,15 @@ python tests/elements/crd_transf/test_crd_transf2d_01.py
 python tests/elements/crd_transf/test_crd_transf3d_01.py
 echo "$BLEU" "  Beam column tests." "$NORMAL"
 echo "$BLEU" "    Elastic beam-column 2D tests." "$NORMAL"
-python tests/elements/beam_column/elastic_beam2d_sign_criteria_01.py
-python tests/elements/beam_column/elastic_beam2d_sign_criteria_02.py
-python tests/elements/beam_column/elastic_beam2d_sign_criteria_03.py
-python tests/elements/beam_column/elastic_beam3d_sign_criteria_01.py
-python tests/elements/beam_column/elastic_beam3d_sign_criteria_02.py
-python tests/elements/beam_column/elastic_beam3d_sign_criteria_03.py
-python tests/elements/beam_column/test_beam3d_sections_axes_orientation.py
-python tests/elements/beam_column/modify_section_properties.py
-python tests/elements/beam_column/elastic_beam2d_test1.py
-python tests/elements/beam_column/elastic_beam3d_test1.py
-python tests/elements/beam_column/elastic_beam3d_test2.py
-python tests/elements/beam_column/timoshenko_beam2d_test1.py
-python tests/elements/beam_column/timoshenko_beam3d_test1.py
-python tests/elements/beam_column/timoshenko_beam3d_test2.py
-python tests/elements/beam_column/timoshenko_beam2d_sign_criteria_01.py
-python tests/elements/beam_column/timoshenko_beam3d_sign_criteria_01.py
+python tests/elements/beam_column/elastic_beam_2d/beam_test1.py
+python tests/elements/beam_column/elastic_beam_2d/elastic_beam2d_sign_criteria_01.py
+python tests/elements/beam_column/elastic_beam_2d/elastic_beam2d_sign_criteria_02.py
+python tests/elements/beam_column/elastic_beam_2d/elastic_beam2d_sign_criteria_03.py
+python tests/elements/beam_column/elastic_beam_2d/modify_section_properties.py
+python tests/elements/beam_column/elastic_beam_2d/elastic_beam2d_test1.py
+python tests/elements/beam_column/elastic_beam_2d/test_frame_01.py
+python tests/elements/beam_column/elastic_beam_2d/elastic_beam2d_frequency_01.py
 echo "$BLEU" "    Elastic beam-column 3D tests." "$NORMAL"
-python tests/elements/beam_column/beam_test1.py
 python tests/elements/beam_column/cantilever3d_01.py
 python tests/elements/beam_column/cantilever3d_02.py
 python tests/elements/beam_column/cantilever3d_03.py
@@ -227,6 +232,19 @@ python tests/elements/beam_column/cantilever3d_09.py
 python tests/elements/beam_column/cantilever3d_10.py
 python tests/elements/beam_column/test_torsion_01.py
 python tests/elements/beam_column/test_torsion_02.py
+python tests/elements/beam_column/elastic_beam3d_sign_criteria_01.py
+python tests/elements/beam_column/elastic_beam3d_sign_criteria_02.py
+python tests/elements/beam_column/elastic_beam3d_sign_criteria_03.py
+python tests/elements/beam_column/test_beam3d_sections_axes_orientation.py
+python tests/elements/beam_column/elastic_beam3d_test1.py
+python tests/elements/beam_column/elastic_beam3d_test2.py
+echo "$BLEU" "    Timoshenko beam 2D tests." "$NORMAL"
+python tests/elements/beam_column/timoshenko_beam2d_test1.py
+python tests/elements/beam_column/timoshenko_beam2d_sign_criteria_01.py
+echo "$BLEU" "    Timoshenko beam 3D tests." "$NORMAL"
+python tests/elements/beam_column/timoshenko_beam3d_sign_criteria_01.py
+python tests/elements/beam_column/timoshenko_beam3d_test1.py
+python tests/elements/beam_column/timoshenko_beam3d_test2.py
 echo "$BLEU" "    Force beam-column 2D tests." "$NORMAL"
 python tests/elements/beam_column/test_force_beam_column_2d_01.py
 python tests/elements/beam_column/test_force_beam_column_2d_02.py
@@ -240,7 +258,6 @@ python tests/elements/beam_column/test_force_beam_column_3d_05.py
 python tests/elements/beam_column/test_force_beam_column_3d_06.py
 python tests/elements/beam_column/plastic_hinge_on_cantilever.py
 python tests/elements/beam_column/test_crdTransf_rotation_01.py
-python tests/elements/beam_column/test_frame_01.py
 python tests/elements/beam_column/test_integration_options_01.py
 python tests/elements/beam_column/test_strains_sign_01.py
 echo "$BLEU" "  Zero length elements tests." "$NORMAL"
@@ -347,27 +364,32 @@ python tests/solution/constraint_handler/lagrange_handler_test_01.py
 
 ## Eigenvalues.
 echo "$BLEU" "  Eigenvalue solution tests." "$NORMAL"
-python tests/solution/eigenvalues/cantilever_eigenmodes_01.py
-python tests/solution/eigenvalues/cantilever_eigenmodes_02.py
-python tests/solution/eigenvalues/cantilever_eigenmodes_03.py
-python tests/solution/eigenvalues/cantilever_eigenmodes_04.py
-python tests/solution/eigenvalues/cantilever_eigenmodes_05.py
-python tests/solution/eigenvalues/cantilever_eigenmodes_06.py
-python tests/solution/eigenvalues/cantilever_eigenmodes_07.py
-python tests/solution/eigenvalues/linear_buckling_column01.py
-python tests/solution/eigenvalues/linear_buckling_column02.py
-python tests/solution/eigenvalues/linear_buckling_column03.py
-python tests/solution/eigenvalues/linear_buckling_column04.py
-python tests/solution/eigenvalues/linear_buckling_column05.py
-python tests/solution/eigenvalues/square_plate_buckling_01.py
 python tests/solution/eigenvalues/test_string_under_tension.py
-python tests/solution/eigenvalues/modal_analysis_test_01.py
-python tests/solution/eigenvalues/modal_analysis_test_02.py
-python tests/solution/eigenvalues/modal_analysis_test_03.py
-python tests/solution/eigenvalues/modal_analysis_test_04.py
-python tests/solution/eigenvalues/modal_analysis_test_05.py
 python tests/solution/eigenvalues/test_cqc_01.py
 python tests/solution/eigenvalues/test_band_arpackpp_solver_01.py
+echo "$BLEU" "    Eigenmode computation." "$NORMAL"
+python tests/solution/eigenvalues/eigenmodes/cantilever_eigenmodes_01.py
+python tests/solution/eigenvalues/eigenmodes/cantilever_eigenmodes_02.py
+python tests/solution/eigenvalues/eigenmodes/cantilever_eigenmodes_03.py
+python tests/solution/eigenvalues/eigenmodes/cantilever_eigenmodes_04.py
+python tests/solution/eigenvalues/eigenmodes/cantilever_eigenmodes_05.py
+python tests/solution/eigenvalues/eigenmodes/cantilever_eigenmodes_06.py
+python tests/solution/eigenvalues/eigenmodes/cantilever_eigenmodes_07.py
+python tests/solution/eigenvalues/eigenmodes/cantilever_eigenmodes_08.py
+python tests/solution/eigenvalues/eigenmodes/cantilever_eigenmodes_09.py
+echo "$BLEU" "    Modal analysis tests." "$NORMAL"
+python tests/solution/eigenvalues/modal_analysis/modal_analysis_test_01.py
+python tests/solution/eigenvalues/modal_analysis/modal_analysis_test_02.py
+python tests/solution/eigenvalues/modal_analysis/modal_analysis_test_03.py
+python tests/solution/eigenvalues/modal_analysis/modal_analysis_test_04.py
+python tests/solution/eigenvalues/modal_analysis/modal_analysis_test_05.py
+echo "$BLEU" "    Linear buckling analysis tests." "$NORMAL"
+python tests/solution/eigenvalues/linear_buckling_analysis/linear_buckling_column01.py
+python tests/solution/eigenvalues/linear_buckling_analysis/linear_buckling_column02.py
+python tests/solution/eigenvalues/linear_buckling_analysis/linear_buckling_column03.py
+python tests/solution/eigenvalues/linear_buckling_analysis/linear_buckling_column04.py
+python tests/solution/eigenvalues/linear_buckling_analysis/linear_buckling_column05.py
+python tests/solution/eigenvalues/linear_buckling_analysis/square_plate_buckling_01.py
 
 ## Geometric non-linearity.
 echo "$BLEU" "  PDelta solution tests." "$NORMAL"
@@ -386,6 +408,7 @@ python tests/solution/geom_nl/aisc_360_benchmark_problem_case_08.py
 
 ## Time history.
 echo "$BLEU" "  Time history solution tests." "$NORMAL"
+python tests/solution/time_history/test_time_history_00.py
 python tests/solution/time_history/test_time_history_01.py
 python tests/solution/time_history/test_pseudo_time_history.py
 
@@ -523,6 +546,26 @@ python tests/constraints/test_pile_01.py
 
 #Load tests
 echo "$BLEU" "Loads tests." "$NORMAL"
+echo "$BLEU" "  Load time series tests." "$NORMAL"
+python tests/loads/time_series/test_linear_01.py
+python tests/loads/time_series/test_constant_01.py
+python tests/loads/time_series/test_trig_01.py
+python tests/loads/time_series/test_triang_01.py
+python tests/loads/time_series/test_rectang_01.py
+python tests/loads/time_series/test_pulse_01.py
+echo "$BLEU" "    Ground motion time series tests." "$NORMAL"
+python tests/loads/time_series/test_ground_motion_01.py
+python tests/loads/time_series/test_ground_motion_02.py
+python tests/loads/time_series/test_ground_motion_03.py
+python tests/loads/time_series/test_ground_motion_04.py
+python tests/loads/time_series/test_ground_motion_05.py
+python tests/loads/time_series/test_ground_motion_06.py
+python tests/loads/time_series/test_ground_motion_07.py
+python tests/loads/time_series/test_ground_motion_08.py
+echo "$BLEU" "    Path time series tests." "$NORMAL"
+python tests/loads/time_series/test_path_01.py
+python tests/loads/time_series/test_path_time_01.py
+echo "$BLEU" "  Loads tests." "$NORMAL"
 python tests/loads/beam2dNodalLoad.py
 python tests/loads/beam2dNodalLoad02.py
 python tests/loads/beam2dPointLoad.py
@@ -542,46 +585,48 @@ python tests/loads/test_vector3d_uniform_load_local.py
 python tests/loads/test_vector3d_uniform_load_global01.py
 python tests/loads/test_vector3d_uniform_load_global02.py
 python tests/loads/test_vector3d_uniform_load_global03.py
-python tests/loads/truss_strain_load_01.py
-python tests/loads/truss_strain_load_02.py
-python tests/loads/truss_strain_load_03.py
-python tests/loads/truss_strain_load_04.py
-python tests/loads/truss_strain_load_05.py
-python tests/loads/truss_strain_load_06.py
-python tests/loads/beam_strain_load_01.py
-python tests/loads/beam_strain_load_02.py
-python tests/loads/beam_strain_load_03.py
-python tests/loads/beam_strain_load_04.py
-python tests/loads/beam_strain_load_05.py
-python tests/loads/beam_strain_load_06.py
-python tests/loads/beam_strain_load_07.py
-python tests/loads/beam_strain_load_08.py
-python tests/loads/beam_strain_load_09.py
-python tests/loads/shell_strain_load_01.py
-python tests/loads/shell_strain_load_02.py
-python tests/loads/shell_strain_load_03.py
-python tests/loads/shell_strain_load_04.py
-python tests/loads/shell_strain_load_05.py
-python tests/loads/shell_grad_strain_load_02.py
-python tests/loads/test_ground_motion_01.py
-python tests/loads/test_ground_motion_02.py
-python tests/loads/test_ground_motion_03.py
-python tests/loads/test_ground_motion_04.py
-python tests/loads/test_ground_motion_05.py
-python tests/loads/test_ground_motion_06.py
-python tests/loads/test_ground_motion_07.py
-python tests/loads/test_ground_motion_08.py
-python tests/loads/test_inertia_loads_01.py
-python tests/loads/test_inertia_loads_02.py
-python tests/loads/test_inertia_loads_03.py
-python tests/loads/test_inertia_loads_04.py
-python tests/loads/test_inertia_loads_05.py
-python tests/loads/test_inertia_loads_06.py
-python tests/loads/test_inertia_loads_07.py
-python tests/loads/test_inertia_loads_08.py
-python tests/loads/test_inertia_loads_09.py
-python tests/loads/test_inertia_loads_10.py
 python tests/loads/element_load_on_already_active_pattern.py
+echo "$BLEU" "    Strain loads." "$NORMAL"
+python tests/loads/strain_loads/truss_strain_load_01.py
+python tests/loads/strain_loads/truss_strain_load_02.py
+python tests/loads/strain_loads/truss_strain_load_03.py
+python tests/loads/strain_loads/truss_strain_load_04.py
+python tests/loads/strain_loads/truss_strain_load_05.py
+python tests/loads/strain_loads/truss_strain_load_06.py
+python tests/loads/strain_loads/beam_strain_load_01.py
+python tests/loads/strain_loads/beam_strain_load_02.py
+python tests/loads/strain_loads/beam_strain_load_03.py
+python tests/loads/strain_loads/beam_strain_load_04.py
+python tests/loads/strain_loads/beam_strain_load_05.py
+python tests/loads/strain_loads/beam_strain_load_06.py
+python tests/loads/strain_loads/beam_strain_load_07.py
+python tests/loads/strain_loads/beam_strain_load_08.py
+python tests/loads/strain_loads/beam_strain_load_09.py
+python tests/loads/strain_loads/shell_strain_load_01.py
+python tests/loads/strain_loads/shell_strain_load_02.py
+python tests/loads/strain_loads/shell_strain_load_03.py
+python tests/loads/strain_loads/shell_strain_load_04.py
+python tests/loads/strain_loads/shell_strain_load_05.py
+python tests/loads/strain_loads/shell_grad_strain_load_02.py
+python tests/loads/strain_loads/shell_grad_strain_load_03.py
+echo "$BLEU" "    Inertia loads." "$NORMAL"
+python tests/loads/inertia_loads/test_inertia_loads_00.py
+python tests/loads/inertia_loads/test_inertia_loads_01.py
+python tests/loads/inertia_loads/test_inertia_loads_02.py
+python tests/loads/inertia_loads/test_inertia_loads_03.py
+python tests/loads/inertia_loads/test_inertia_loads_04.py
+python tests/loads/inertia_loads/test_inertia_loads_05.py
+python tests/loads/inertia_loads/test_inertia_loads_06.py
+python tests/loads/inertia_loads/test_inertia_loads_07.py
+python tests/loads/inertia_loads/test_inertia_loads_08.py
+python tests/loads/inertia_loads/test_inertia_loads_09.py
+python tests/loads/inertia_loads/test_inertia_loads_10.py
+python tests/loads/inertia_loads/test_inertia_loads_11.py
+echo "$BLEU" "    Dynamic loads." "$NORMAL"
+python tests/loads/dynamic_loads/test_node_load_history_01.py
+python tests/loads/dynamic_loads/test_node_load_history_02.py
+python tests/loads/dynamic_loads/test_node_load_history_03.py
+python tests/loads/dynamic_loads/test_node_load_history_04.py
 
 #Materials tests
 #Uniaxial materials.
@@ -637,7 +682,6 @@ python tests/materials/xc_materials/sections/test_material_elastic_plate_section
 
 #Cross sections.
 echo "$BLEU" "    Sections." "$NORMAL"
-python tests/materials/xc_materials/sections/test_compound_section.py
 #Cross sections. Geometry.
 echo "$BLEU" "      Section geometry tests." "$NORMAL"
 python tests/materials/xc_materials/sections/section_geom/test_spot_01.py
@@ -653,7 +697,10 @@ python tests/materials/xc_materials/sections/section_geom/test_mass_properties_0
 python tests/materials/xc_materials/sections/section_geom/test_mass_properties_04.py
 python tests/materials/xc_materials/sections/section_geom/test_geom_params_torsion_ehe_01.py
 python tests/materials/xc_materials/sections/section_geom/test_box_girder_torsional_stiffness.py
-
+# Compound sections.
+echo "$BLEU" "      Compound sections." "$NORMAL"
+python tests/materials/xc_materials/sections/test_compound_section_01.py
+python tests/materials/xc_materials/sections/test_compound_section_02.py
 #Cross sections. Fiber model.
 echo "$BLEU" "      Elastic section tests." "$NORMAL"
 python tests/materials/xc_materials/sections/elastic_section/test_elastic_section_2d_sign_convention_01.py
@@ -788,6 +835,7 @@ python tests/materials/steel_shapes/test_aisc_w_shapes.py
 python tests/materials/steel_shapes/test_aisc_hss_shapes.py
 python tests/materials/steel_shapes/test_steel_shape_01.py
 python tests/materials/steel_shapes/test_steel_shape_02.py
+python tests/materials/steel_shapes/test_arcelor_metric_shapes_01.py
 echo "$BLEU" "    EC3 tests." "$NORMAL"
 python tests/materials/ec3/test_buckling_resistance_01.py
 python tests/materials/ec3/test_lateral_torsional_buckling00.py
@@ -873,6 +921,8 @@ echo "$BLEU" "    EC5 tests." "$NORMAL"
 python tests/materials/ec5/test_EC5Wood_01.py
 python tests/materials/ec5/test_EC5Wood_02.py
 python tests/materials/ec5/test_EC5Wood_03.py
+python tests/materials/ec5/test_EC5Wood_04.py
+python tests/materials/ec5/test_critical_stress.py
 python tests/materials/ec5/timber_beam_test_01.py
 
 echo "$BLEU" "  Prestressing." "$NORMAL"
@@ -935,10 +985,6 @@ python tests/rough_calculations/test_punzo01.py
 python tests/rough_calculations/test_punzo02.py
 python tests/rough_calculations/ng_rc_section_test.py
 python tests/rough_calculations/test_min_dim_abut_support.py
-python tests/rough_calculations/test_cantilever01.py
-python tests/rough_calculations/test_simple_beam_01.py
-python tests/rough_calculations/test_simple_beam_02.py
-python tests/rough_calculations/test_simple_beam_03.py
 python tests/rough_calculations/test_earth_pressure_kray.py
 python tests/rough_calculations/test_suspension_bridge_simple_model.py
 python tests/rough_calculations/test_cable_stayed_bridge_simple_model.py
@@ -953,6 +999,14 @@ python tests/rough_calculations/test_dome_02.py
 python tests/rough_calculations/test_hypar.py
 python tests/rough_calculations/test_base_plate_design.py
 python tests/rough_calculations/retaining_wall_test_01.py
+python tests/rough_calculations/test_simple_beam_oscillation.py
+echo "$BLEU" "  Beam formulas..." "$NORMAL"
+python tests/rough_calculations/beam_formulas/test_cantilever01.py
+python tests/rough_calculations/beam_formulas/test_cantilever02.py
+python tests/rough_calculations/beam_formulas/test_simple_beam_01.py
+python tests/rough_calculations/beam_formulas/test_simple_beam_02.py
+python tests/rough_calculations/beam_formulas/test_simple_beam_03.py
+python tests/rough_calculations/beam_formulas/test_simple_beam_04.py
 
 #Postprocess tests
 echo "$BLEU" "Verifiying routines for post processing." "$NORMAL"
@@ -985,3 +1039,15 @@ NT=$(grep -c '^python' $0)
 echo ${NT} tests
 Q=$(echo "$DIFF / $NT" | bc -l)
 echo $Q seconds/test
+
+# Restore MPLBACKEND to its previous value.
+mplbackend_backup="nil"
+# Trying to avoid Matplotlib complaining about the XServer
+if [ "$mplbackend_backup"=="nil" ]; then
+    echo "$BLEU" "Removing MPLBACKEND from environment variables" "$NORMAL"
+    MPLBACKEND=''
+else
+   echo "$BLEU" "Restoring MPLBACKEND to its previous value." "$NORMAL"
+   MPLBACKEND=mplbackend_backup
+fi
+export MPLBACKEND

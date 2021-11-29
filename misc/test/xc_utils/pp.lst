@@ -1,7 +1,0 @@
- 
- Accion G-1: CARGA PERMTE.                                                     
- 
-    STAT    MIXED       CURRENT     CURRENT     MIXED       CURRENT     CURRENT     MIXED       CURRENT 
-    ELEM    AXIL_X      AXIL_Y      RASANTE     MOM_X       MOM_Y       TORSOR      Q_X         Q_Y     
-       1  0.26409E-13 0.16650E-12-0.29961E-13-0.25381     0.76536    -0.26848     -1.3153     0.99011    
-

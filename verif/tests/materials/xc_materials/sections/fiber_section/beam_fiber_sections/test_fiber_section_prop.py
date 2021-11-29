@@ -42,7 +42,7 @@ from materials import concrete_base
 from materials import typical_materials
 from materials.sections.fiber_section import fiber_sets
 from materials.sections.fiber_section import section_report 
-import matplotlib.pyplot as plt
+# import matplotlib.pyplot as plt
 from materials.ec2 import EC2_limit_state_checking
 from misc_utils import log_messages as lmsg
 

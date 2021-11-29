@@ -14,11 +14,11 @@ import math
 import xc_base
 import geom
 import xc
-import matplotlib.pyplot as plt
 from materials.astm_aisc import ASTM_materials
 from model import predefined_spaces
 from materials import typical_materials
-#from postprocess import output_handler
+# import matplotlib.pyplot as plt
+# from postprocess import output_handler
 
 def round_up_to_even(f):
     return math.ceil(f / 2.) * 2
@@ -52,7 +52,7 @@ def getHoleAsPolygonalSurface(hole, surfaces):
     vertices= plg.getVertexList()
     newPnts= list()
     for v in vertices:
-        newPnts.append(points.newPntFromPos3d(v))
+        newPnts.append(points.newPoint(v))
     pntTags= list()
     for p in newPnts:
         pntTags.append(p.tag)
@@ -161,10 +161,10 @@ modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
 points= modelSpace.getPointHandler()
 
 #### Exterior contour
-pt1= points.newPntFromPos3d(p1)
-pt2= points.newPntFromPos3d(p2)
-pt3= points.newPntFromPos3d(p3)
-pt4= points.newPntFromPos3d(p4)
+pt1= points.newPoint(p1)
+pt2= points.newPoint(p2)
+pt3= points.newPoint(p3)
+pt4= points.newPoint(p4)
 
 ### Define polygonal surfaces
 surfaces= modelSpace.getSurfaceHandler()

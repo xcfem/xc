@@ -10,3 +10,7 @@ This directory contains the classes that define the finite elements available in
 		- utils: code useful for element programming (coordinate transformations, gauss models, ...)
 		- volumentric: three-dimensional elements (hexahedrons, tetrahedrons, ...)
 		- zeroLenght: zero-dimensional elements (contact elements, ...)
+		
+## References
+
+- [Inerters everywhere](https://portwooddigital.com/2021/11/13/inerters-everywhere/)

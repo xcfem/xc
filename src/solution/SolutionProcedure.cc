@@ -60,7 +60,7 @@ void XC::SolutionProcedure::free_analysis(void)
       }
   }
 
-bool XC::SolutionProcedure::alloc_analysis(const std::string &nmb,const std::string &analysis_aggregation_code,const std::string &cod_solu_eigenM)
+bool XC::SolutionProcedure::alloc_analysis(const std::string &cod,const std::string &analysis_aggregation_code,const std::string &cod_solu_eigenM)
   {
     free_analysis();
     SolutionStrategy *analysis_aggregation= solu_control.getSolutionStrategy(analysis_aggregation_code);
@@ -68,30 +68,35 @@ bool XC::SolutionProcedure::alloc_analysis(const std::string &nmb,const std::str
       {
         if(analysis_aggregation->CheckPointers())
           {
-            if(nmb=="direct_integration_analysis")
+            if(cod=="direct_integration_analysis")
               theAnalysis= new DirectIntegrationAnalysis(analysis_aggregation);
-            else if(nmb=="eigen_analysis")
+            else if(cod=="eigen_analysis")
               theAnalysis= new EigenAnalysis(analysis_aggregation);
-            else if(nmb=="modal_analysis")
+            else if(cod=="modal_analysis")
               theAnalysis= new ModalAnalysis(analysis_aggregation);
-            else if(nmb=="linear_buckling_analysis")
+            else if(cod=="linear_buckling_analysis")
               {
                 SolutionStrategy *eigenM= solu_control.getSolutionStrategy(cod_solu_eigenM);
                 if(eigenM)
                   theAnalysis= new LinearBucklingAnalysis(analysis_aggregation,eigenM);
+		else
+		  std::cerr << getClassName() << "::" << __FUNCTION__
+		            << " ERROR; solution strategy: '"
+		            << cod_solu_eigenM << "' not found."
+		            << std::endl;
               }
-            else if(nmb=="linear_buckling_eigen_analysis") //Used only inside LinearBucklingAnalysis.
+            else if(cod=="linear_buckling_eigen_analysis") //Used only inside LinearBucklingAnalysis.
               theAnalysis= new LinearBucklingEigenAnalysis(analysis_aggregation);
-            else if(nmb=="ill-conditioning_analysis")
+            else if(cod=="ill-conditioning_analysis")
               theAnalysis= new IllConditioningAnalysis(analysis_aggregation);
-            else if(nmb=="static_analysis")
+            else if(cod=="static_analysis")
               theAnalysis= new StaticAnalysis(analysis_aggregation);
-            else if(nmb=="variable_time_step_direct_integration_analysis")
+            else if(cod=="variable_time_step_direct_integration_analysis")
               theAnalysis= new VariableTimeStepDirectIntegrationAnalysis(analysis_aggregation);
 	    else
 	      std::cerr << getClassName() << "::" << __FUNCTION__
 	            << "; analysis type: '"
-                    << nmb << "' unknown." << std::endl;
+                    << cod << "' unknown." << std::endl;
 	  }
         else
           std::cerr << getClassName() << "::" << __FUNCTION__
@@ -100,9 +105,13 @@ bool XC::SolutionProcedure::alloc_analysis(const std::string &nmb,const std::str
     else
       std::cerr << getClassName() << "::" << __FUNCTION__
 	        << "; analysis method: '"
-                << analysis_aggregation_code << "' not found, in command: " << nmb << std::endl;
+                << analysis_aggregation_code << "' not found, in command: " << cod << std::endl;
     if(theAnalysis)
       theAnalysis->set_owner(this);
+    else
+      std::cerr << getClassName() << "::" << __FUNCTION__
+	        << " ERROR; allocation of the: '"
+	        << cod << "' analysis failed." << std::endl;
 
     return (theAnalysis!=nullptr);
   }
@@ -120,9 +129,9 @@ void XC::SolutionProcedure::copy_analysis(Analysis *ptr)
   }
 
 //! @brief Defines type of analysis (static, dynamic,...)
-XC::Analysis &XC::SolutionProcedure::newAnalysis(const std::string &nmb,const std::string &analysis_aggregation_code,const std::string &cod_solu_eigenM)
+XC::Analysis &XC::SolutionProcedure::newAnalysis(const std::string &cod,const std::string &analysis_aggregation_code,const std::string &cod_solu_eigenM)
   {
-    alloc_analysis(nmb,analysis_aggregation_code,cod_solu_eigenM);
+    alloc_analysis(cod,analysis_aggregation_code,cod_solu_eigenM);
     assert(theAnalysis);
     return *theAnalysis;
   }

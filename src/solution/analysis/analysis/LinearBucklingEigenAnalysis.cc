@@ -39,7 +39,11 @@
 
 //! @brief Constructor.
 XC::LinearBucklingEigenAnalysis::LinearBucklingEigenAnalysis(SolutionStrategy *analysis_aggregation)
-  :EigenAnalysis(analysis_aggregation) {}
+  : EigenAnalysis(analysis_aggregation) {}
+
+//! @brief Virtual constructor.
+XC::Analysis *XC::LinearBucklingEigenAnalysis::getCopy(void) const
+  { return new LinearBucklingEigenAnalysis(*this); }
 
 //! @brief Performs the analysis.
 int XC::LinearBucklingEigenAnalysis::setupPreviousStep(void)

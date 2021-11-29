@@ -44,10 +44,16 @@ class_<point_map, bases<cm_point_map>, boost::noncopyable >("point_map", no_init
 XC::Pnt *(XC::PntMap::*newPoint)(void)= &XC::PntMap::New;
 XC::Pnt *(XC::PntMap::*newPointFromPos3d)(const Pos3d &)= &XC::PntMap::New;
 XC::Pnt *(XC::PntMap::*newPointIDPos3d)(const size_t &,const Pos3d &)= &XC::PntMap::New;
+XC::Pnt *(XC::PntMap::*newPointFromPos2d)(const Pos2d &)= &XC::PntMap::New;
+XC::Pnt *(XC::PntMap::*newPointIDPos2d)(const size_t &,const Pos2d &)= &XC::PntMap::New;
 class_<XC::PntMap, bases<point_map>, boost::noncopyable >("PntMap", no_init)
   .def("newPnt", newPoint, return_internal_reference<>(),"Creates a point.")
-  .def("newPntFromPos3d", newPointFromPos3d, return_internal_reference<>(),"Creates a point in the position.")
-  .def("newPntIDPos3d", newPointIDPos3d, return_internal_reference<>(),"Creates a point with the ID and the the position provided.")
+  .def("newPntFromPos3d", newPointFromPos3d, return_internal_reference<>(),"DEPRECATED 09/11/2021 USE newPoint; creates a point in the position.")
+  .def("newPntIDPos3d", newPointIDPos3d, return_internal_reference<>(),"DEPRECATED 09/11/2021 USE newPoint; creates a point with the ID and the the position provided.")
+  .def("newPoint", newPointFromPos3d, return_internal_reference<>(),"Creates a point in the position.")
+  .def("newPoint", newPointIDPos3d, return_internal_reference<>(),"Creates a point with the ID and the the position provided.")
+  .def("newPoint", newPointFromPos2d, return_internal_reference<>(),"Creates a point in the position.")
+  .def("newPoint", newPointIDPos2d, return_internal_reference<>(),"Creates a point with the ID and the the position provided.")
   .def("get", &XC::PntMap::get, return_internal_reference<>(),"Return the i-th point.")
   .def("getCentroid", &XC::PntMap::getCentroid, "Return the centroid of the point set.")
   ;

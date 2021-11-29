@@ -28,6 +28,10 @@
 cmb_acc::LoadCombinations::LoadCombinations(void)
  {}
 
+//! @brief Destructor.
+cmb_acc::LoadCombinations::~LoadCombinations(void)
+  {}
+
 //! @brief Constructor.
 cmb_acc::LoadCombinations::LoadCombinations(const ActionContainer &acc)
   : comb_uls_transient(acc.GetPersistentesOTransit()), comb_uls_accid(acc.GetAccidentales()),

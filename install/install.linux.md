@@ -56,7 +56,7 @@ Some dependencies needed are:
 ### Python 3
 Make sure Python 3 is the default Python interpreter for your system. If your using a Debian like distribution you can set Python 3 as the default interpreter as follows:
 
-`sudo dpkg -i python-is-python3`
+`sudo apt install python-is-python3`
 
 
 ### Get the source code

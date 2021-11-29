@@ -59,8 +59,9 @@ size_t XC::PathSeriesBase::getNumDataPointsOnFile(const std::string &fName) cons
     theFile.open(fName.c_str(), std::ios::in);
     if(theFile.bad() || !theFile.is_open())
       {
-        std::cerr << "WARNING - XC::PathSeriesBase::getNumDataPointsOnFile(fName)";
-        std::cerr << " - could not open file " << fName << std::endl;
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; WARNING - could not open file "
+		  << fName << std::endl;
       }
     else
       {
@@ -87,17 +88,24 @@ size_t XC::PathSeriesBase::load_vector_from_file(Vector &v,std::istream &is)
 //! @brief Return the peak value of the factor.
 double XC::PathSeriesBase::getPeakFactor(void) const
   {
-    double peak = fabs(thePath(0));
+    double retval= 0.0;
     const int num = thePath.Size();
-    double temp= 0.0;
-
-    for(int i=1;i<num;i++)
+    if(num>0)
       {
-        temp= fabs(thePath(i));
-        if(temp > peak)
-          peak= temp;
+	double peak= fabs(thePath(0));
+	double temp= 0.0;
+	for(int i=1;i<num;i++)
+	  {
+	    temp= fabs(thePath(i));
+	    if(temp > peak)
+	      peak= temp;
+	  }
+	retval= peak*cFactor;
       }
-    return (peak*cFactor);
+    else
+      std::cerr << getClassName() << "::" << __FUNCTION__
+	        << "; WARNING: empty data path." << std::endl;
+    return retval;
   }
 
 //! @brief Printing stuff.

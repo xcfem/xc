@@ -43,8 +43,8 @@ class_<XC::LoadPattern, bases<XC::NodeLocker>, boost::noncopyable >("LoadPattern
   .def("getName", make_function(&XC::LoadPattern::getName, return_value_policy<return_by_value>() ),"return the load pattern name.")
   .add_property("name", make_function(&XC::LoadPattern::getName, return_value_policy<return_by_value>() ),"return the load pattern name.")
   .add_property("description", make_function( &XC::LoadPattern::getDescription, return_value_policy<return_by_value>() ), &XC::LoadPattern::setDescription,"load case description.")
-  .add_property("loadFactor", make_function( &XC::LoadPattern::getLoadFactor, return_value_policy<return_by_value>() ))
-  .add_property("gammaF", make_function( getGammaFRef, return_value_policy<return_by_value>() ), &XC::LoadPattern::setGammaF)
+.add_property("loadFactor", make_function( &XC::LoadPattern::getLoadFactor, return_value_policy<return_by_value>() ), "Return the current load factor.")
+.add_property("gammaF", make_function( getGammaFRef, return_value_policy<return_by_value>() ), &XC::LoadPattern::setGammaF,"Get/set the partial safety factor for this load pattern.")
   .add_property("constant", &XC::LoadPattern::getIsConstant, &XC::LoadPattern::setIsConstant,"determines if the load is constant in time or not.")
   .def("newNodalLoad", &XC::LoadPattern::newNodalLoad,return_internal_reference<>(),"Create a nodal load.")
   .add_property("getNumNodalLoads",&XC::LoadPattern::getNumNodalLoads,"return the number of nodal loads.")
@@ -72,7 +72,7 @@ class_<XC::LoadPatternCombination, XC::LoadPatternCombination *, bases<XC::Force
   .def("addToDomain", addToDomainWithFilter,"Add only the load patterns of the combination whose name is in the list.")
   .def("removeFromDomain", &XC::LoadPatternCombination::removeFromDomain,"Remove combination from the domain.")
   .def("isActive", &XC::LoadPatternCombination::isActive,"Return true if the combination is fully added to the domain.")
-  .def("getDescomp", &XC::LoadPatternCombination::getString,"Returns combination expression.")
+  .def("getComponents", &XC::LoadPatternCombination::getString,"Returns combination expression.")
   ;
 
 XC::LoadCombination &(XC::LoadCombination::*add)(const std::string &)= &XC::LoadCombination::add;
@@ -106,9 +106,11 @@ class_<XC::LoadCombinationGroup, bases<XC::LoadHandlerMember,XC::LoadCombination
   ;
 
 class_<XC::TimeSeries, bases<CommandEntity,XC::MovableObject>, boost::noncopyable >("TimeSeries", no_init)
-.def("getFactor", &XC::TimeSeries::getFactor,"getFactor(pseudoTime): get load factor.")
-  .add_property("getDuration", &XC::TimeSeries::getDuration)
-  .add_property("getPeakFactor", &XC::TimeSeries::getPeakFactor)
+  .add_property("name", make_function(&XC::TimeSeries::getName, return_value_policy<return_by_value>() ),"return the load pattern name.")
+  .def("getFactor", &XC::TimeSeries::getFactor,"getFactor(pseudoTime): get load factor.")
+  .def("getDuration",&XC::TimeSeries::getDuration,"Returns time series duration.")
+
+  .def("getPeakFactor",&XC::TimeSeries::getPeakFactor,"Returns time series peak factor")
   .def("getTimeIncr", &XC::TimeSeries::getTimeIncr)
   ;
 

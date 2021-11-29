@@ -34,7 +34,7 @@ const double cmb_acc::Action::zero= 1e-6;
 
 //! @brief Default constructor.
 cmb_acc::Action::Action(const std::string &n, const std::string &descrip)
-  : NamedEntity(n), descripcion(descrip),relaciones(), f_pond(1.0) {}
+  : NamedEntity(n), descripcion(descrip),relaciones(), nodet(false), f_pond(1.0) {}
 
 //! \fn cmb_acc::Action::NULA(void)
 //! @brief Return una acción nula.
@@ -64,7 +64,7 @@ const std::string cmb_acc::Action::getExpandedName(void) const
   }
 
 //! @brief Return la decomposition when the action is a combination.
-cmb_acc::Action::map_descomp cmb_acc::Action::getDescomp(void) const
+cmb_acc::Action::map_descomp cmb_acc::Action::getComponents(void) const
   {
     map_descomp descomp;
     typedef std::deque<std::string> dq_string;
@@ -86,13 +86,27 @@ cmb_acc::Action::map_descomp cmb_acc::Action::getDescomp(void) const
     return descomp;
   }
 
+//! @brief Return la decomposition when the action is a combination.
+boost::python::dict cmb_acc::Action::getComponentsPy(void) const
+  {
+    boost::python::dict retval; 
+    const map_descomp descomp= getComponents();
+    for(map_descomp::const_iterator i= descomp.begin(); i!= descomp.end(); i++)
+      {
+	const std::string key= (*i).first;
+	const double factor= (*i).second;
+	retval[key]= factor;
+      }
+    return retval;
+  }
+
 //! @brief When it's a combination, it returns the factors that multiply
 //! each of the actions in the argument.
 std::vector<double> cmb_acc::Action::getCoeficientes(const std::vector<std::string> &base) const
   {
     const size_t sz= base.size();
     std::vector<double> retval(sz,0.0);
-    const map_descomp descomp= getDescomp();
+    const map_descomp descomp= getComponents();
     for(size_t i= 0;i<sz;i++)
       {
         const std::string &nmb_accion= base[i];
@@ -145,7 +159,7 @@ void cmb_acc::Action::suma(const Action &f)
         descripcion= f.descripcion;
       }
     relaciones.concat(f.relaciones);
-    relaciones.updateMaestras(getName());
+    relaciones.updateMainActions(getName());
     if(Nula(zero) && f.Nula(zero)) //Si ambas son nulas la suma es nula.
       f_pond= 0.0;
     else //Otherwise we don't know.
