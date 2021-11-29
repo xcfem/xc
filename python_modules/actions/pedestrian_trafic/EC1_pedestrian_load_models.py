@@ -215,12 +215,13 @@ class PedestrianLoad(object):
             title= 'Single pedestrian. Lateral force.'
         plt.title(title)
         plt.xlabel('time (s)')
-        plt.xlabel('force (N)')
+        plt.ylabel('force (N)')
         if(vLoad!=None):
             plt.plot(ti, vLoad, label='Vertical load')
         if(hLoad!=None):
             plt.plot(ti, hLoad, label='Lateral load')
         plt.legend()
+        plt.grid()
         plt.show()
 
 
