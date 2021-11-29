@@ -185,7 +185,7 @@ if abs(ratio1)<1e-5:
 else:
     lmsg.error(fname+' ERROR.')
 
-# Display results
-import matplotlib.pyplot as plt
-plt.plot(ti, Azi)
-plt.show()
+# # Display results
+# import matplotlib.pyplot as plt
+# plt.plot(ti, Azi)
+# plt.show()
