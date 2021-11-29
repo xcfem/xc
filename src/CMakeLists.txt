@@ -145,7 +145,7 @@ INCLUDE_DIRECTORIES(${LIBXC_SOURCE_DIR})
 #ADD_DEFINITIONS(-Wall -O0 -frounding-math -g)
 # For RELEASE
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++17 ${CMAKE_CXX_FLAGS_RELEASE} -Wall -march=native -pedantic -fPIC -Wno-unused-but-set-variable")
-set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -fPIC")
+set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -fPIC -std=f95")
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${OpenMP_C_FLAGS}")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
 set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${OpenMP_EXE_LINKER_FLAGS}")
@@ -178,8 +178,6 @@ SET(three_d_arrays utility/matrices/3d_arrays/Array3dBase utility/matrices/3d_ar
 SET(skypack utility/skypack/skypri.f utility/skypack/skypds.f utility/skypack/skyscf.f utility/skypack/skyssb.f utility/skypack/mtrxys.f utility/skypack/skyssf.f utility/skypack/skypsb.f utility/skypack/skypdc.f utility/skypack/skypf1.f utility/skypack/skysdc.f utility/skypack/skypsp.f utility/skypack/skypcf.f utility/skypack/skymef.f utility/skypack/skyssd.f utility/skypack/skyss.f utility/skypack/skysf1.f utility/skypack/skypf2.f utility/skypack/mtrxy.f utility/skypack/mtrxyd.f utility/skypack/skysf2.f utility/skypack/skypci.f)
 
 SET(itpack utility/itpack/dsrc2c.f utility/itpack/jcg.f utility/itpack/jsi.f utility/itpack/rssi.f utility/itpack/rscg.f utility/itpack/ssorcg.f utility/itpack/sor.f utility/itpack/ssorsi.f)
-
-SET(umfpack utility/umfpack/umd2fb.f utility/umfpack/umd2co.f utility/umfpack/umd2fa.f utility/umfpack/umd2f0.f utility/umfpack/umd2f1.f utility/umfpack/umd2f2.f utility/umfpack/umd2fg.f utility/umfpack/umd2in.f utility/umfpack/umd2of.f utility/umfpack/umd2s2.f utility/umfpack/umd2sl.f utility/umfpack/umd2so.f utility/umfpack/umd2su.f utility/umfpack/umd2er.f utility/umfpack/umd2p1.f utility/umfpack/umd2p2.f utility/umfpack/umd2lt.f utility/umfpack/umd2ut.f utility/umfpack/umd2rf.f utility/umfpack/umd2ra.f utility/umfpack/umd2r0.f utility/umfpack/umd2r2.f utility/umfpack/umd2rg.f utility/umfpack/umd21i.f utility/umfpack/mc21b.f utility/umfpack/mc13e.f)
 
 SET(algebra utility/functions/algebra/TablaLiterales utility/functions/algebra/ExprBase utility/functions/algebra/ArbolExpr utility/functions/algebra/ExprAlgebra utility/functions/algebra/Expresion utility/functions/algebra/ExprInfija utility/functions/algebra/ExprPostfija utility/functions/algebra/LexAlgebra utility/functions/algebra/Lexico utility/functions/algebra/Literal utility/functions/algebra/OpBinario utility/functions/algebra/OpComparacion utility/functions/algebra/OpBooleano utility/functions/algebra/Macaulay utility/functions/algebra/Operando utility/functions/algebra/OpUnario utility/functions/algebra/ProtoExpr utility/functions/algebra/Rama utility/functions/algebra/Variable utility/functions/algebra/Operador utility/functions/algebra/Segnal utility/functions/algebra/ExprFunctor utility/functions/algebra/NamedOperand utility/functions/algebra/OpTrigonometricas utility/functions/algebra/ConjVariables utility/functions/algebra/MapValores utility/functions/algebra/num_integration)
 
@@ -434,7 +432,7 @@ SET(preprocessor preprocessor/EntMdlrBase preprocessor/MeshingParams ${preproces
 SET(solution solution/analysis/ModelWrapper solution/SolutionStrategy solution/SolutionStrategyMap solution/analysis/MapModelWrapper solution/SolutionProcedureControl solution/SolutionProcedure)
 
 # Build our libraries
-add_library(xc_basic_utils ${text_utils} ${stream_utils} ${misc_utils} ${sqlitepp_utils} ${matrices} ${three_d_arrays} ${skypack} ${itpack} ${umfpack} ${functions})
+add_library(xc_basic_utils ${text_utils} ${stream_utils} ${misc_utils} ${sqlitepp_utils} ${matrices} ${three_d_arrays} ${skypack} ${itpack} ${functions})
 install(TARGETS xc_basic_utils DESTINATION lib)
 
 add_library(xc_utils SHARED ${SQLITE} ${cuadGauss} ${geom} ${GnuGts} ${KERNEL}  ${VtkAux} ${ca_factors} ${ca_actions} ${ca_combinations})
