@@ -92,7 +92,18 @@ XC::EntMdlrBase &XC::EntMdlrBase::operator*=(const EntMdlrBase &other)
 size_t XC::EntMdlrBase::getTag(void) const
   {
     const std::string tmp= getName().substr(1);
-    return boost::lexical_cast<size_t>(tmp);
+    int retval= 0;
+    try
+      { retval= boost::lexical_cast<size_t>(tmp); }
+    catch(boost::bad_lexical_cast &)
+        {
+	  std::cerr << getClassName() << "::" << __FUNCTION__
+	            << "; could not extract entity tag from its name: '"
+	            << getName() << "'.\n" << std::endl;
+	  retval= reinterpret_cast<size_t>(this); // and hope for the best.
+        }
+    
+    return retval;
   }
 
 //! @brief Check for preprocessor.
