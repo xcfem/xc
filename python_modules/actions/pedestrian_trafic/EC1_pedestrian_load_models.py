@@ -16,6 +16,7 @@ __email__= "ana.Ortega@ciccp.es l.pereztato@ciccp.es"
 import math
 import sys
 from misc_utils import log_messages as lmsg
+import matplotlib.pyplot as plt
 
 # Individual load model.
 
@@ -125,6 +126,8 @@ class PedestrianLoad(object):
         :param fs: step frequency.
         :param walking: true if the pedestrian is supposed to walk.
         :param G: weight of the reference pedestrian (defaults to 700 N).
+        :param verticalFourierCoefficients: Fourier coefficients for vertical force.
+        :param lateralFourierCoefficients: Fourier coefficients for lateral force.
         :param triangularModel: if true use a triangular model in the time 
                                 domain otherwise use a half-sine model.
         :param phaseAngles: phase angles with respect to the first harmonic
@@ -149,5 +152,75 @@ class PedestrianLoad(object):
         :param t: time for which the load will be calculated.
         '''
         return getLateralPedestrianLoad(t= t,fs= self.fs, fourierCoefficients= self.lateralFourierCoefficients)
+
+    def getTimeSequence(self, tStart= 0.0, tInc= None, duration= None):
+        ''' Return a time sequence.
+
+        :param tStart: first item in the sequence.
+        :param tInc: time increment (defaults to T/10).
+        :param duration: duration of the sequence (defaults to 2*T).
+        '''
+        retval= list()
+        T= 1.0/self.fs
+        if(duration==None):
+            duration= 4.0*T
+        if(tInc==None):
+            tInc= T/10.0
+        numSteps= int(duration/tInc)+1
+        t= tStart
+        for i in range(0,numSteps):
+            retval.append(t)
+            t+= tInc
+        return retval
+
+    def getVerticalLoadHistory(self, ti):
+        ''' Return the vertical loads for each item of the input list.
+
+        :param ti: time values.
+        '''
+        retval= list()
+        for t in ti:
+            retval.append(self.getVerticalLoad(t))
+        return retval
+
+    def getLateralLoadHistory(self, ti):
+        ''' Return the lateral loads for each item of the input list.
+
+        :param ti: time values.
+        '''
+        retval= list()
+        for t in ti:
+            retval.append(self.getLateralLoad(t))
+        return retval
+
+    def plot(self, loadToDisp:str, tStart= 0.0, tInc= None, duration= None):
+        ''' Create a plot of the loads.
+
+        :parma loadToDisp: load to display (vertical, lateral or both).
+        :param tStart: first item in the sequence.
+        :param tInc: time increment (defaults to T/10).
+        :param duration: duration of the sequence (defaults to 2*T).
+        '''
+        ti= self.getTimeSequence(tStart= tStart, tInc= tInc, duration= duration)
+        vLoad= None
+        if(loadToDisp=='vertical' or loadToDisp=='both'):
+            vLoad= self.getVerticalLoadHistory(ti) # Vertical load.
+        hLoad= None
+        if(loadToDisp=='lateral' or loadToDisp=='both'):
+            hLoad= self.getLateralLoadHistory(ti) # Lateral load.
+        title= 'Single pedestrian. Vertical and lateral forces.'
+        if(loadToDisp=='vertical'):
+            title= 'Single pedestrian. Vertical force.'
+        elif(loadToDisp=='lateral'):
+            title= 'Single pedestrian. Lateral force.'
+        plt.title(title)
+        plt.xlabel('time (s)')
+        plt.xlabel('force (N)')
+        if(vLoad!=None):
+            plt.plot(ti, vLoad, label='Vertical load')
+        if(hLoad!=None):
+            plt.plot(ti, hLoad, label='Lateral load')
+        plt.legend()
+        plt.show()
 
 
