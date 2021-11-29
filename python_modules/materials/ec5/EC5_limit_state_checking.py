@@ -168,7 +168,7 @@ def getHorizontalAccel1Person(f_hor:float, M:float, dampingRatio:float):
     :param M: total mass of the bridge.
     :param dampingRatio: damping ratio.
     '''
-    retval= 50/M/dampingRatio # Expression B.4
+    retval= 50.0/M/dampingRatio # Expression B.4
     if(f_hor>2.5): # out of range
         funcName= sys._getframe(0).f_code.co_name
         lmsg.warning(funcName+'; frequency: '+str(f_hor)+' out of range [0,2.5] Hz. Normally a higer frequency means that there is no vibration problem.')
