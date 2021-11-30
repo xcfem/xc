@@ -100,7 +100,7 @@ class SolutionProcedure(object):
         self.cHandler= None
         self.solutionStrategy= None
         self.solAlgo= None
-        self.integ= None
+        self.integrator= None
         self.soe= None
         self.solver= None
         self.analysis= None
@@ -116,7 +116,7 @@ class SolutionProcedure(object):
         self.cHandler= None
         self.solutionStrategy= None
         self.solAlgo= None
-        self.integ= None
+        self.integrator= None
         self.soe= None
         self.solver= None
         self.analysis= None
@@ -165,9 +165,9 @@ class SolutionProcedure(object):
         :param integratorType: type of integrator to use.
         '''
         if(integratorType in ['load_control_integrator','eigen_integrator', 'ill-conditioning_integrator', 'linear_buckling_integrator']):
-            self.integ= self.solutionStrategy.newIntegrator(integratorType,xc.Vector([]))
+            self.integrator= self.solutionStrategy.newIntegrator(integratorType,xc.Vector([]))
         elif(integratorType=='newmark_integrator'):
-            self.integ= self.solutionStrategy.newIntegrator(integratorType,xc.Vector([0.5,0.25]))
+            self.integrator= self.solutionStrategy.newIntegrator(integratorType,xc.Vector([0.5,0.25]))
 
     def getSolutionStrategyName(self):
         ''' Return the name for the model wrapper.'''
@@ -692,7 +692,7 @@ class PenaltyModifiedNewton(PenaltyModifiedNewtonBase):
         :param numberingMethod: numbering method (plain or reverse Cuthill-McKee or alterntive minimum degree).
         :param convTestType: convergence test for non linear analysis (norm unbalance,...).
         '''
-        super(PenaltyModifiedNewton,self).__init__(prb, name, maxNumIter, convergenceTestTol, printFlag, numSteps, numberingMethod, convTestType, soeType= 'sparse_gen_col_lin_soe', solverType= 'super_lu_solver')
+        super(PenaltyModifiedNewton,self).__init__(prb= prb, name= name, maxNumIter= maxNumIter, convergenceTestTol= convergenceTestTol, printFlag= printFlag, numSteps= numSteps, numberingMethod= numberingMethod, convTestType= convTestType, soeType= 'sparse_gen_col_lin_soe', solverType= 'super_lu_solver')
 
     def setup(self):
         ''' Defines the solution procedure in the finite element 
