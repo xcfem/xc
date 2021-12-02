@@ -44,10 +44,6 @@ BOOST_PYTHON_MODULE(loadCombinations)
     using namespace cmb_acc;
     docstring_options doc_options;
 
-
-    class_<std::vector<double> >("StdVectorDouble")
-        .def(vector_indexing_suite<std::vector<double> >() );
-
 #include "factors/python_interface.tcc"
 #include "actions/python_interface.tcc"
 #include "comb_analysis/python_interface.tcc"

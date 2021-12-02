@@ -65,9 +65,6 @@ BOOST_PYTHON_MODULE(geom)
     using namespace boost::python;
     docstring_options doc_options;
 
-    class_<std::vector<double> >("StdVectorDouble")
-      .def(vector_indexing_suite<std::vector<double> >() );
-
     class_<ProtoGeom, bases<CommandEntity> >("ProtoGeom")
       .add_property("exists",&ProtoGeom::exists, "Return true if not degenerated/invalid.")
       ;
