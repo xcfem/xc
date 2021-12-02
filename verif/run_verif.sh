@@ -165,29 +165,13 @@ python tests/actions/trafic_loads/test_derailment_SIA.py
 python tests/actions/trafic_loads/test_pedestrian_load_ec1.py
 
 # Load combinations tests.
-echo "$BLEU" "Load combination tests." "$NORMAL"
-echo "$BLEU" "  Forming load combination tests." "$NORMAL"
+echo "$BLEU" "Forming load combination tests." "$NORMAL"
 #python tests/actions/loadCombinations/testLoadCombinations.py
 python tests/actions/loadCombinations/test_secondaries_00.py
 python tests/actions/loadCombinations/test_accidentales.py
 python tests/actions/loadCombinations/test_iap11_01.py
 python tests/actions/loadCombinations/test_iap11_02.py
 python tests/actions/loadCombinations/test_combination_dict.py
-echo "$BLEU" "  Computing load combination tests." "$NORMAL"
-python tests/combinations/add_loads_01.py
-python tests/combinations/test_add_load_cases.py
-python tests/combinations/test_combination01.py
-python tests/combinations/test_combination02.py
-python tests/combinations/test_combination03.py
-#XXX sqlitepp extremely slow. Seek for another solution.
-# python tests/combinations/test_combination04.py
-python tests/combinations/test_combination05.py
-python tests/combinations/test_combination06.py
-python tests/combinations/test_combination07.py
-python tests/combinations/test_combination08.py
-python tests/combinations/test_davit_01.py
-python tests/combinations/test_davit_02.py
-
 
 echo "$BLEU" "Elements tests." "$NORMAL"
 echo "$BLEU" "  Truss element tests." "$NORMAL"
@@ -628,6 +612,20 @@ python tests/loads/dynamic_loads/test_node_load_history_01.py
 python tests/loads/dynamic_loads/test_node_load_history_02.py
 python tests/loads/dynamic_loads/test_node_load_history_03.py
 python tests/loads/dynamic_loads/test_node_load_history_04.py
+echo "$BLEU" "    Computing load combination tests." "$NORMAL"
+python tests/loads/combinations/add_loads_01.py
+python tests/loads/combinations/test_add_load_cases.py
+python tests/loads/combinations/test_combination01.py
+python tests/loads/combinations/test_combination02.py
+python tests/loads/combinations/test_combination03.py
+#XXX sqlitepp extremely slow. Seek for another solution.
+# python tests/combinations/test_combination04.py
+python tests/loads/combinations/test_combination05.py
+python tests/loads/combinations/test_combination06.py
+python tests/loads/combinations/test_combination07.py
+python tests/loads/combinations/test_combination08.py
+python tests/loads/combinations/test_davit_01.py
+python tests/loads/combinations/test_davit_02.py
 
 #Materials tests
 #Uniaxial materials.
