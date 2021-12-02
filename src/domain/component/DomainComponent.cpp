@@ -171,3 +171,18 @@ int XC::DomainComponent::recvData(const Communicator &comm)
     int res= comm.receiveSzt(idx,getDbTagData(),CommMetaData(1));
     return res;
   }
+
+//! @brief Return a Python dictionary with the object members values.
+boost::python::dict XC::DomainComponent::getPyDict(void) const
+  {
+    boost::python::dict retval= TaggedObject::getPyDict(); // tag member.
+    retval["idx"]= idx; // idx member.
+    return retval;
+  }
+
+//! @brief Set the values of the object members from a Python dictionary.
+void XC::DomainComponent::setPyDict(const boost::python::dict &d)
+  {
+    TaggedObject::setPyDict(d);
+    idx= boost::python::extract<size_t>(d["int"]);
+  }

@@ -108,7 +108,9 @@ class TaggedObject: public CommandEntity
     int getTag(void) const;
 
     virtual void Print(std::ostream &, int flag =0) const;       
-    friend std::ostream &operator<<(std::ostream &, const TaggedObject &);        
+    boost::python::dict getPyDict(void) const;
+    void setPyDict(const boost::python::dict &);    
+    friend std::ostream &operator<<(std::ostream &, const TaggedObject &);   
   };
 
 std::ostream &operator<<(std::ostream &, const TaggedObject &);        
@@ -116,7 +118,6 @@ std::ostream &operator<<(std::ostream &, const TaggedObject &);
 //! @brief Returns the tag associated with the object.
 inline int TaggedObject::getTag(void) const
   { return theTag; }
-
 
 } // end of XC namespace
 

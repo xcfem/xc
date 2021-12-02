@@ -277,7 +277,7 @@ bool XC::LoadCombination::operator!=(const LoadCombination &other) const
     for(const_iterator i= begin();i!=end();i++)
       {
         const LoadPattern *lPattern= (*i).getLoadPattern();
-        const float f1= (*i).Factor();
+        const float f1= (*i).getFactor();
         const float f2= other.getLoadPatternFactor(lPattern);
         if(f1!=f2)
           {
@@ -295,7 +295,7 @@ bool XC::LoadCombination::operator==(const LoadCombination &other) const
     for(const_iterator i= begin();i!=end();i++)
       {
         const LoadPattern *lPattern= (*i).getLoadPattern();
-        const float f1= (*i).Factor();
+        const float f1= (*i).getFactor();
         const float f2= other.getLoadPatternFactor(lPattern);
         if(f1!=f2)
           {
@@ -321,7 +321,7 @@ bool XC::LoadCombination::dominaA(const LoadCombination &other) const
         for(const_iterator i= begin();i!=end();i++)
           {
             const LoadPattern *lPattern= (*i).getLoadPattern();
-            const float f1= (*i).Factor();
+            const float f1= (*i).getFactor();
             const float f2= other.getLoadPatternFactor(lPattern);
             if(f1<f2)
               {
@@ -333,7 +333,7 @@ bool XC::LoadCombination::dominaA(const LoadCombination &other) const
           {
             const LoadPattern *lPattern= (*i).getLoadPattern();
             const float f1= getLoadPatternFactor(lPattern);
-            const float f2= (*i).Factor();
+            const float f2= (*i).getFactor();
             if(f1<f2)
               {
                 retval= false;
