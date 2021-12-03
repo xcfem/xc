@@ -335,7 +335,7 @@ def getTrapezoidalPressureDistribution(h:float, heightFraction:float= 0.6, avera
     :param averagePressure: average value of the wind pressure. 
     '''
     (topSide, bottomSide)= getLinearDistribution(h= h, hR= h*heightFraction) 
-    return scipy.interpolate.interp1d([0.0,h], [bottomSide, topSide], kind='linear')
+    return scipy.interpolate.interp1d([0.0,h], [bottomSide*averagePressure, topSide*averagePressure], kind='linear')
 
 
 srHidingFactor= [0.10, 0.20, 0.30, 0.40, 0.50, 0.60, 1e3] # solidity ratio
