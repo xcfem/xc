@@ -1,14 +1,15 @@
 # -*- coding: utf-8 -*-
-from __future__ import division
-from __future__ import print_function
-
 '''Calculation of lateral earth pressures on vertical walls (retaining, 
 basement, earth support system, ...) exerced by a given back soil with 
 or without water level
 
 Calculation of lateral earth pressures on vertical walls (retaining, 
-basement, earth support system, ...) due to different kind of loads on the backfill.
+basement, earth support system, ...) due to different kind of loads 
+on the backfill.
 '''
+
+from __future__ import division
+from __future__ import print_function
 
 __author__= "Ana Ortega (AO_O) and Luis C. Pérez Tato (LCPT)"
 __copyright__= "Copyright 2015, AO_O and LCPT"
