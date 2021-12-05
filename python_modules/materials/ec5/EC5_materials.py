@@ -134,7 +134,7 @@ class Wood(wood_base.Wood):
         return self.fm_k
     
     def getDesignBendingStrength(self, loadDurationClass:str, serviceClass:int):
-        ''' return the value of the characteristic bending strength.
+        ''' return the value of the design bending strength.
 
         :param loadDurationClass: duration of the load application , values 
                can be: permanent, long_term, medium_term, short_term 
