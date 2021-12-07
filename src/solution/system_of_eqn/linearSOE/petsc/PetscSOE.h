@@ -68,7 +68,7 @@
 #include "solution/system_of_eqn/linearSOE/DistributedLinSOE.h"
 
 // extern "C" {
-#include "petsc/petscksp.h"
+#include "petscksp.h"
 
 // }
 

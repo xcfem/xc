@@ -65,9 +65,9 @@
 #include <solution/graph/graph/Vertex.h>
 #include <solution/graph/graph/VertexIter.h>
 
-XC::ShadowPetscSOE::ShadowPetscSOE(PetscSolver &theSOESolver, int bs)
-  :LinearSOE(owr,LinSOE_TAGS_ShadowPetscSOE, &theSOESolver),
- theSOE(theSOESolver, bs), theSolver(&theSOESolver), myRank(0),
+XC::ShadowPetscSOE::ShadowPetscSOE(SolutionStrategy *owr,PetscSolver &theSOESolver, int bs)
+  :LinearSOE(owr,LinSOE_TAGS_ShadowPetscSOE),
+   theSOE(owr,bs), theSolver(&theSOESolver), myRank(0),
  sendBuffer(0), blockSize(bs)
 {
 
@@ -167,7 +167,7 @@ XC::ShadowPetscSOE::~ShadowPetscSOE(void)
 int XC::ShadowPetscSOE::solve(void)
   {
     sendData[0] = 1;
-    sendData[1] = theSOE.isFactored;
+    sendData[1] = theSOE.factored;
     MPI_Bcast(sendBuffer, 3, MPI_INT, 0, PETSC_COMM_WORLD);
     return theSOE.solve();
   }
@@ -216,12 +216,11 @@ int XC::ShadowPetscSOE::setSize(Graph &theGraph)
 
             colA(lastLoc++) = theVertex->getTag(); // place diag in first
             const std::set<int> &theAdjacency = theVertex->getAdjacency();
-            int idSize = theAdjacency.size();
 	
             // now we have to place the entries in the ID into order in colA
-            for(int i=0; i<idSize; i++)
+	    for(std::set<int>::const_iterator i=theAdjacency.begin(); i!=theAdjacency.end(); i++)
               {
-                int row = theAdjacency(i);
+                const int row= *i;
 	        bool foundPlace = false;
 	        // find a place in colA for current col
 	        for(int j=startLoc; j<lastLoc; j++)
@@ -247,8 +246,6 @@ int XC::ShadowPetscSOE::setSize(Graph &theGraph)
     sendData[0] = 2;
     MPI_Bcast(sendBuffer, 3, MPI_INT, 0, PETSC_COMM_WORLD);
 
-    int dnz = 0;
-    int onz = 0;
     int numRowsTyp = N/blockSize/numProcessors;
     numRowsTyp *= blockSize;
     int numRowsLast = numRowsTyp + (N - numProcessors*numRowsTyp); // lastProc extra rows
@@ -310,7 +307,12 @@ int XC::ShadowPetscSOE::setSize(Graph &theGraph)
     // this is because Petsc all processes need to call setup at same
     // time .. if don't we hang
     MPI_Bcast(sendBuffer, 3, MPI_INT, 0, PETSC_COMM_WORLD);  
-    result = theSOE.setSizeParallel(numRows, n, dnz, dnnz.getDataPtr(), onz, onnz.getDataPtr());
+    // int dnz = 0;
+    // int onz = 0;
+    //result = theSOE.setSizeParallel(numRows, n, dnz, dnnz.getDataPtr(), onz, onnz.getDataPtr());
+    std::cerr << getClassName() << "::" << __FUNCTION__
+              << "setSizeParallel commented out because it's not defined."
+              << std::endl;
 
     return result;
   }
@@ -336,8 +338,7 @@ void  XC::ShadowPetscSOE::zeroA(void)
     theSOE.zeroA();
   }
 	
-void 
-XC::ShadowPetscSOE::zeroB(void)
+void XC::ShadowPetscSOE::zeroB(void)
 {
   sendData[0] = 4;
   MPI_Bcast(sendBuffer, 3, MPI_INT, 0, PETSC_COMM_WORLD);
@@ -345,44 +346,47 @@ XC::ShadowPetscSOE::zeroB(void)
 }
 
 
-const XC::Vector &XC::ShadowPetscSOE::getX(void)
+const XC::Vector &XC::ShadowPetscSOE::getX(void) const
   {
     sendData[0] = 5;
     MPI_Bcast(sendBuffer, 3, MPI_INT, 0, PETSC_COMM_WORLD);
 
 
-  double *theData =0;
-  double *X = theSOE.X;
+    double *theData= nullptr;
+    Vector &X= const_cast<Vector &>(theSOE.X);
 
-  // put the local data into the X array
-  int high, low;
-  int ierr = VecGetOwnershipRange(theSOE.x, &low, &high);CHKERRA(ierr);       
+    // put the local data into the X array
+    int high, low;
+    int ierr= VecGetOwnershipRange(theSOE.x, &low, &high);
+    //CHKERRA(ierr); # Doesn't compile LCPT 20211207       
 
-  ierr = VecGetArray(theSOE.x, &theData); CHKERRA(ierr);       
-  std::cerr << "XC::ShadowPetscSOE::getX - low:high " << low << " " << high << std::endl;
-  for (int i=low; i<=high; i++)
-    X[i] = theData[i-low];
-  ierr = VecRestoreArray(theSOE.x, &theData); CHKERRA(ierr);             
-
-  // now from each actor object get it's local copy
-  // and place in the array
-  int tag = 99;
-  for (i=1; i<numProcessors; i++) {
-    MPI_Status status;
-    MPI_Recv(sendBuffer, 3, MPI_INT, i, tag, PETSC_COMM_WORLD, &status);
-    low = sendData[0];
-    high = sendData[1];
-  std::cerr << "XC::ShadowPetscSOE::getX - low:high " << low << " " << high << std::endl;
-    double *dataBuf = &X[low];
-    void *buffer = (void *)dataBuf;
-    MPI_Recv(buffer, high-low, MPI_DOUBLE, i, tag, PETSC_COMM_WORLD, &status);
+    ierr = VecGetArray(theSOE.x, &theData); 
+    //CHKERRA(ierr); # Doesn't compile LCPT 20211207       
+    std::cerr << getClassName() << "::" << __FUNCTION__
+              << "; - low:high " << low << " " << high << std::endl;
+    for(int i=low; i<=high; i++)
+      X[i] = theData[i-low];
+    ierr = VecRestoreArray(theSOE.x, &theData);
+    //CHKERRA(ierr); # Doesn't compile LCPT 2021120
+    // now from each actor object get it's local copy
+    // and place in the array
+    int tag = 99;
+    for(int i=1; i<numProcessors; i++)
+      {
+	MPI_Status status;
+	MPI_Recv(sendBuffer, 3, MPI_INT, i, tag, PETSC_COMM_WORLD, &status);
+	low = sendData[0];
+	high = sendData[1];
+	std::cerr << "XC::ShadowPetscSOE::getX - low:high " << low << " " << high << std::endl;
+	double *dataBuf = &X[low];
+	void *buffer = (void *)dataBuf;
+	MPI_Recv(buffer, high-low, MPI_DOUBLE, i, tag, PETSC_COMM_WORLD, &status);
+      }
+   return theSOE.getX();
   }
 
-  return theSOE.getX();
-}
 
-
-const XC::Vector &XC::ShadowPetscSOE::getB(void)
+const XC::Vector &XC::ShadowPetscSOE::getB(void) const
   {
     sendData[0] = 6;
     MPI_Bcast(sendBuffer, 3, MPI_INT, 0, PETSC_COMM_WORLD);
@@ -392,7 +396,7 @@ const XC::Vector &XC::ShadowPetscSOE::getB(void)
   }
 
 
-double XC::ShadowPetscSOE::normRHS(void)
+double XC::ShadowPetscSOE::normRHS(void) const
   {
     theSOE.getB();
     double norm =0.0;
@@ -410,7 +414,12 @@ double XC::ShadowPetscSOE::normRHS(void)
 void XC::ShadowPetscSOE::setX(int loc, double value)
   { theSOE.setX(loc, value); }
 
-bool XC::ShadowPetscSOE::setSolver(PetscSolver &newSolver)
+void XC::ShadowPetscSOE::setX(const Vector &x)
+  { theSOE.setX(x); }
+
+
+
+int XC::ShadowPetscSOE::setSolver(PetscSolver &newSolver)
   {
     std::cerr << getClassName() << "::" << __FUNCTION__
               << "; not yet working\n";

@@ -68,7 +68,7 @@
 #include <solution/system_of_eqn/linearSOE/petsc/PetscSOE.h>
 
 // extern "C" {
-#include <solution/system_of_eqn/linearSOE/petsc/petsc.h>
+#include <petsc.h>
 // }
 
 namespace XC {
@@ -86,7 +86,7 @@ class ShadowPetscSOE: public LinearSOE
     PetscSolver *theSolver; // created by the user
     int myRank;
     int numProcessors;
-    int sendData[3];
+    mutable int sendData[3];
     void *sendBuffer;
     int blockSize;
 
@@ -102,17 +102,18 @@ class ShadowPetscSOE: public LinearSOE
     int setSize(Graph &theGraph);
 
     int addA(const Matrix &, const ID &, double fact = 1.0);
-    int addB(const Vector &, const ID &,const double &fact= 1.0);
+    int addB(const Vector &, const ID &, const double &fact= 1.0);
     int setB(const Vector &, const double &fact= 1.0);
 
     void zeroA(void);
     void zeroB(void);
 
-    const Vector &getX(void);
-    const Vector &getB(void);
-    double normRHS(void);
+    const Vector &getX(void) const;
+    const Vector &getB(void) const;
+    double normRHS(void) const;
 
     void setX(int loc, double value);
+    void setX(const Vector &x);
 
     int setSolver(PetscSolver &);
 
