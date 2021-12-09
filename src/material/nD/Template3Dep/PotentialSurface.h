@@ -56,6 +56,7 @@
 #define PS_H
 
 #include <iostream>
+#include "utility/kernel/CommandEntity.h"
 
 namespace XC {
   class BJtensor;
@@ -72,7 +73,7 @@ namespace XC {
 //! Plastic flow direction is in most cases defined as normal to the
 //! potential surface, which is usually quite similar to the yield
 //! surface (function).
-class PotentialSurface
+class PotentialSurface: public CommandEntity
   {
   public:
     virtual PotentialSurface *getCopy(void)= 0; // create a clone of itself

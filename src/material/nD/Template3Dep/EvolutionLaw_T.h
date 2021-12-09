@@ -58,6 +58,7 @@
 #define EL_T_H
 
 #include <iostream>
+#include "utility/kernel/CommandEntity.h"
 
 namespace XC {
 class EPState;
@@ -67,7 +68,7 @@ class PotentialSurface;
 //! @ingroup MatNDEL
 //!
 //! @brief Base class for tensorial evolution laws.
-class EvolutionLaw_T
+class EvolutionLaw_T: public CommandEntity
   {
   public:
     // Constructor

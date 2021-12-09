@@ -59,12 +59,11 @@
 #include "utility/matrix/nDarray/stresst.h"
 #include "utility/matrix/nDarray/straint.h"
 #include "utility/matrix/nDarray/BJtensor.h"
+#include "utility/kernel/CommandEntity.h"
 
 // Constants
 #define MaxNScalarVar 4
 #define MaxNTensorVar 4
-#define FALSE 0
-#define TRUE 1
 
 namespace XC {
 //! @ingroup EPMat3D
@@ -73,7 +72,7 @@ namespace XC {
 //! 
 //! This class is used to hold all state parameters and
 //! internal variables in an elasto-plastic constitutive model. 
-class EPState
+class EPState: public CommandEntity
   {
   public:
 //ZC05/2004    // Elastic parameters

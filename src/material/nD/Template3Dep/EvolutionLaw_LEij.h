@@ -74,11 +74,8 @@ class EvolutionLaw_L_Eij: public EvolutionLaw_T
   private:
     double  a;  //coefficient to define the linear hardening rule of a scalar hardening var
 
-  public:
-    //EvolutionLaw_L_Eij( );    // default constructor---no parameters
-    
-    EvolutionLaw_L_Eij( double ad = 10.0);
-                         
+  public:    
+    EvolutionLaw_L_Eij( double ad = 10.0);                
     EvolutionLaw_L_Eij(const EvolutionLaw_L_Eij &LEL );   // Copy constructor
     
     EvolutionLaw_T *getCopy(void); // create a clone of itself

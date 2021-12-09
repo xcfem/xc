@@ -1781,7 +1781,7 @@ XC::EPState XC::Template3Dep::ForwardEulerEPState( const XC::straintensor &strai
     }
 
     //::fprintf(stderr,"ForwardEulerStress EXIT Criterion.kappa_get(start_stress)=%.8e\n",Criterion.kappa_get(start_stress));
-    //forwardEPS.setConverged(TRUE);
+    //forwardEPS.setConverged(true);
 
     //double p = (forwardEPS.getStress()).p_hydrostatic();
     //double ec = (forwardEPS.getec()) - (forwardEPS.getLam()) * log( p / (forwardEPS.getpo()) );
@@ -2178,7 +2178,7 @@ XC::EPState XC::Template3Dep::BackwardEulerEPState( const XC::straintensor &stra
 
       //Set Elasto-Plastic stiffness XC::BJtensor
       ElasticPredictorEPS.setEep(E);
-      ElasticPredictorEPS.setConverged(TRUE);
+      ElasticPredictorEPS.setConverged(true);
       //E.printshort(" BE -- Eep ");
 
       backwardEPS = ElasticPredictorEPS;
@@ -2678,7 +2678,7 @@ XC::EPState XC::Template3Dep::BackwardEulerEPState( const XC::straintensor &stra
     //Guanzhou out Mar2005       sigmaBack= sigmaBack.pqtheta2stress(0.1, 0.0, 0.0);
     //Guanzhou out Mar2005       Felplpredictor = 0;
     //Guanzhou out Mar2005       backwardEPS.setStress(sigmaBack);
-    //Guanzhou out Mar2005       backwardEPS.setConverged(TRUE);
+    //Guanzhou out Mar2005       backwardEPS.setConverged(true);
     //Guanzhou out Mar2005       return backwardEPS;
     //Guanzhou out Mar2005    }
 
@@ -2893,7 +2893,7 @@ XC::EPState XC::Template3Dep::BackwardEulerEPState( const XC::straintensor &stra
 
            //Set Elasto-Plastic stiffness XC::BJtensor
            EP_PredictorEPS.setEep(Eep);
-           EP_PredictorEPS.setConverged(TRUE);
+           EP_PredictorEPS.setConverged(true);
 
      //GZ out //set plastic strain and total strain
            //GZ out incrPlasticStrain = dQods("kl")*Delta_lambda;
@@ -3511,7 +3511,7 @@ std::ostream& XC::operator<<(std::ostream &os, const XC::Template3Dep & MP)
 //        elastic_strain = elastic_strain + strain_incr;
 //          backwardEPS.setElasticStrain(elastic_strain);
 //        backwardEPS.setEep(E);
-//        backwardEPS.setConverged(TRUE);
+//        backwardEPS.setConverged(true);
 //        //if( getELT1() ) {
 //        //         getELT1()->updateEeDm(&backwardEPS, -st_vol, 0.0);
 //              //}
