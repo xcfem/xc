@@ -51,8 +51,8 @@
 #                                                                              #
 ################################################################################*/
 
-#ifndef YS_H
-#define YS_H
+#ifndef YieldSurface_H
+#define YieldSurface_H
 
 #include <iostream>
 #include "utility/kernel/CommandEntity.h"

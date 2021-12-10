@@ -68,9 +68,9 @@
 XC::TriFCYieldSurface::TriFCYieldSurface (double fc, double ft, double e, double coh )
   { 
 
-     fcomp= fc;                      // a way to fix those two factors so they are not        
-     ftens= ft;                     // in need for evolution law, do not need to be derived and could be
-     el= e;                // supplied as a constansts (how this is done look in definition of Cam Clay model)
+     fcomp= fc; // a way to fix those two factors so they are not        
+     ftens= ft; // in need for evolution law, do not need to be derived and could be
+     el= e;     // supplied as a constansts (how this is done look in definition of Cam Clay model)
      c= coh;
   }
 
@@ -85,11 +85,6 @@ double XC::TriFCYieldSurface::f(const XC::EPState *EPS) const
     const double xi= EPS->getStress().xi();           //  functions to get  Haigh-Westergard   
     const double rho= EPS->getStress().rho();           //  stress invariants for   
     const double th= EPS->getStress().theta();        //  explanation look Jeremic&Sture,1998  
-
-    //double el= EPS->getScalarVar(1);                   // functions to select four parameters needed
-    //double fcomp= EPS->getScalarVar(3);           // to define yield surface. All are called through
-    //double ftens= EPS->getScalarVar(4);           // EPS state so that scalar evolution laws could 
-    //double c= EPS->getScalarVar(2);                   // be developed for all of them
 
     const double a1= pow (1.5,(1./2.) );                            // constants needed 
     const double a2= pow (6.,(1./2.) );                            // to make calculation of the yield surface 
@@ -258,18 +253,29 @@ XC::BJtensor XC::TriFCYieldSurface::dFods(const XC::EPState *EPS ) const
 //} 
 
 
-double XC::TriFCYieldSurface::getfcomp() const
+double XC::TriFCYieldSurface::getFcomp() const
   { return fcomp; }
 
-double XC::TriFCYieldSurface::getftens() const
+double XC::TriFCYieldSurface::getFtens() const
   { return ftens; }
 
-double XC::TriFCYieldSurface::getel() const
+double XC::TriFCYieldSurface::getEl() const
   { return el; }
 
-double XC::TriFCYieldSurface::get_c() const
+double XC::TriFCYieldSurface::getC() const
   { return c; }
 
+void XC::TriFCYieldSurface::setFcomp(const double &d)
+  { fcomp= d; }
+
+void XC::TriFCYieldSurface::setFtens(const double &d)
+  { ftens= d; }
+
+void XC::TriFCYieldSurface::setEl(const double &d)
+  { el= d; }
+
+void XC::TriFCYieldSurface::setC(const double &d)
+  { c= d; }
 
 std::ostream& XC::operator<<(std::ostream &os, const XC::TriFCYieldSurface & YS)
   {

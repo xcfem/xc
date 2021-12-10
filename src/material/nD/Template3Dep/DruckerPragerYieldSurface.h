@@ -76,17 +76,10 @@ namespace XC {
 //! @brief Drucker-Prager model yield surface.
 class DruckerPragerYieldSurface: public YieldSurface
   {
-  private:		  // Private vars to define the Drucker-Prager Yield Surface
-    //double alfa1;	  // Cone orientation angle now in EPState's first scalar var 
-  
   public:
-    //alpha machines complains on this
-    //DruckerPragerYieldSurface *getCopy(void); //create a clone of itself  
+    DruckerPragerYieldSurface(void) {}    // Default constructor
     YieldSurface *getCopy(void); //create a clone of itself
     
-    DruckerPragerYieldSurface(void) {}    // Default constructor
-
-    //DruckerPragerYieldSurface (const DruckerPragerYieldSurface & );   // copy constructor
 
     double f(const EPState *EPS) const;
     BJtensor dFods(const EPState *EPS) const;
@@ -100,10 +93,6 @@ class DruckerPragerYieldSurface: public YieldSurface
 
     void print() { std::cerr << *this; }; 
   
-    //================================================================================
-    // Overloaded Insertion Operator
-    // prints an Drucker-Prager YieldSurface's contents 
-    //================================================================================
     friend std::ostream& operator<<(std::ostream &, const DruckerPragerYieldSurface &);
   };
 std::ostream& operator<<(std::ostream &, const DruckerPragerYieldSurface &);

@@ -64,10 +64,10 @@ class CamClayYieldSurface: public YieldSurface
   {
   // Private vars to define the Manzari-Dafalias Yield Surface
   private:
-    double M;	// the slope of critical state line
+    double M; //!< the slope of critical state line
   public:
+    CamClayYieldSurface(const double &Mp= 1.2); // Default constructor
     YieldSurface *getCopy(void); // create a clone of itself
-    CamClayYieldSurface(double Mp = 1.2); // Default constructor
 
     double f(const EPState *EPS) const;
     BJtensor dFods(const EPState *EPS) const;
@@ -78,16 +78,8 @@ class CamClayYieldSurface: public YieldSurface
     // Redefine 1st derivative of F over tensorial internal variables
 
     double getM() const;
-    void print() { std::cerr << *this; };
-    
-// moved to stresstensor
-//   private:
-//     BJtensor dpoverds( ) const;
-//     BJtensor dqoverds(const EPState *EPS) const;
-//     BJtensor dthetaoverds(const EPState *EPS) const;
-		         
-    //================================================================================
-
+    void setM(const double &);
+    void print() { std::cerr << *this; };    
   };
 
 // Overloaded Insertion Operator

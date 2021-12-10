@@ -63,14 +63,10 @@ namespace XC {
 class VonMisesYieldSurface: public YieldSurface
   {
   public:
-    // Create a clone of itself
-    YieldSurface *getCopy(void);  
-
     // Default constructor
     VonMisesYieldSurface ( ) {}     
-
-    // Copy constructor
-    //VonMisesYieldSurface (const VonMisesYieldSurface & );   
+    // Create a clone of itself
+    YieldSurface *getCopy(void);  
 
     // Evaluation of f
     double f(const EPState *EPS) const;
@@ -78,18 +74,12 @@ class VonMisesYieldSurface: public YieldSurface
     //First derivative of F over sigma
     BJtensor dFods(const EPState *EPS) const;
 
-    // Redefine 1st derivative of F over first scalar internal variable
     double xi_s1(const EPState *EPS) const;   
 
-    // Redefine 1st derivative of F over first tensorial internal variable
     BJtensor xi_t1(const EPState *EPS) const;
 
     void print() { std::cerr << *this; }; 
   
-    //========================================================================
-    // Overloaded Insertion Operator
-    // prints an VonMises YieldSurface's contents 
-    //========================================================================
     friend std::ostream& operator<<(std::ostream &, const VonMisesYieldSurface &);
   };
  

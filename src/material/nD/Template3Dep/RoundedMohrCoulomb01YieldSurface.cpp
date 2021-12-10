@@ -61,9 +61,6 @@
 //================================================================================
 //
 
-#ifndef RoundedMohrCoulomb01YieldSurface_CPP
-#define RoundedMohrCoulomb01YieldSurface_CPP
-
 #include "material/nD/Template3Dep/RoundedMohrCoulomb01YieldSurface.h"
 #include "material/nD/Template3Dep/RoundedMohrCoulomb01.h"
 #include "material/nD/Template3Dep/RoundedMohrCoulomb01.h"
@@ -75,11 +72,8 @@
 XC::YieldSurface * XC::RoundedMohrCoulomb01YieldSurface::getCopy(void) 
   { return new RoundedMohrCoulomb01YieldSurface(*this); }
 
-//================================================================================
-//  Yield criterion evaluation function F(EPState)
-//================================================================================
-
-double XC::RoundedMohrCoulomb01YieldSurface::f(const XC::EPState *EPS) const 
+//! @brief Yield criterion evaluation function F(EPState)
+double XC::RoundedMohrCoulomb01YieldSurface::f(const EPState *EPS) const 
   {
     double p = EPS->getStress().p_hydrostatic(); // 
     double q = EPS->getStress().q_deviatoric(); // q
@@ -98,11 +92,8 @@ double XC::RoundedMohrCoulomb01YieldSurface::f(const XC::EPState *EPS) const
     return f;
   }
 
-//================================================================================
-// BJtensor dF/dsigma_ij  
-//================================================================================
-
-XC::BJtensor XC::RoundedMohrCoulomb01YieldSurface::dFods(const XC::EPState *EPS) const 
+//! @brief BJtensor dF/dsigma_ij  
+XC::BJtensor XC::RoundedMohrCoulomb01YieldSurface::dFods(const EPState *EPS) const 
   {
   
     BJtensor dFoverds( 2, def_dim_2, 0.0);
@@ -134,16 +125,10 @@ XC::BJtensor XC::RoundedMohrCoulomb01YieldSurface::dFods(const XC::EPState *EPS)
                DthetaoDs * dFoverdtheta; // dF/ds
 
     return dFoverds;
-
   }
 
-
-
-//================================================================================
-// double xi_s1 = dF/dS1 = dF/dalfa1 = I1  Derivative in terms of first scalar var 
-//================================================================================
-
-double XC::RoundedMohrCoulomb01YieldSurface::xi_s1( const XC::EPState *EPS ) const  
+//! @brief double xi_s1 = dF/dS1 = dF/dalfa1 = I1  Derivative in terms of first scalar var 
+double XC::RoundedMohrCoulomb01YieldSurface::xi_s1( const EPState *EPS ) const  
   {
     double p = EPS->getStress().p_hydrostatic();
 //    double q = EPS->getStress().q_deviatoric();
@@ -161,11 +146,8 @@ double XC::RoundedMohrCoulomb01YieldSurface::xi_s1( const XC::EPState *EPS ) con
     return p*(-3.0);
   }
 
-//================================================================================
-// double xi_s2 = dF/dS2 = dF/k = -1.0  Derivative in terms of second scalar var 
-//================================================================================
-
-double XC::RoundedMohrCoulomb01YieldSurface::xi_s2( const XC::EPState *EPS ) const 
+//! @brief double xi_s2 = dF/dS2 = dF/k = -1.0  Derivative in terms of second scalar var 
+double XC::RoundedMohrCoulomb01YieldSurface::xi_s2( const EPState *EPS ) const 
   {
 //    double p = EPS->getStress().p_hydrostatic();
 //    double q = EPS->getStress().q_deviatoric();
@@ -183,22 +165,16 @@ double XC::RoundedMohrCoulomb01YieldSurface::xi_s2( const XC::EPState *EPS ) con
   }
 
 
-//================================================================================
 // double xi_t1 = dF/dt1  Derivative in terms of first tensorial var 
-//================================================================================
 
 //BJtensor XC::RoundedMohrCoulomb01YieldSurface::xi_t1( ) const 
 //{
-
-
 //}
 
-//================================================================================
-std::ostream& XC::operator<<(std::ostream &os, const XC::RoundedMohrCoulomb01YieldSurface & YS)
+std::ostream& XC::operator<<(std::ostream &os, const RoundedMohrCoulomb01YieldSurface & YS)
   {
     os << "Rounded Mohr Coulomb Surface Parameters: " << std::endl;
     return os;
   }
 
-#endif
 

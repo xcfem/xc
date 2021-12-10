@@ -60,15 +60,12 @@ namespace XC {
 //!
 //! @brief Drucker-Prager model yield surface.
 class DruckerPragerYieldSurface01: public YieldSurface
-{
-  // Private vars to define the Manzari-Dafalias Yield Surface
+  {
   private:
     double Pc;
-
   public:
+    DruckerPragerYieldSurface01(const double &pc= 0.0); // Default constructor
     YieldSurface *getCopy(void); // create a clone of itself
-    DruckerPragerYieldSurface01(double pc); // Default constructor
-    //DruckerPragerYieldSurface01(const DruckerPragerYieldSurface01 &); // Default constructor
 
     double f(const EPState *EPS) const;
     BJtensor dFods(const EPState *EPS) const;
@@ -79,13 +76,12 @@ class DruckerPragerYieldSurface01: public YieldSurface
 
     // Redefine 1st derivative of F over tensorial internal variables
     BJtensor xi_t1(const EPState *EPS) const; // dF / d alpha_ij
+    
     const double &getPc(void) const;
+    void setPc(const double &);
 
     void print() {std::cerr << *this; };
-  
-    //================================================================================
-
-};
+  };
 
 // Overloaded Insertion Operator
 std::ostream &operator<<(std::ostream &, const DruckerPragerYieldSurface01 &);

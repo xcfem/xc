@@ -24,19 +24,40 @@
 // class_<XC::MatPoint3D, XC::MatPoint3D *, bases<CommandEntity>, boost::noncopyable >("MatPoint3D", no_init)
 //   ;
 
+class_<XC::EPState, XC::EPState *, bases<CommandEntity>, boost::noncopyable >("EPState", no_init)
+  ;
+
 class_<XC::YieldSurface, XC::YieldSurface *, bases<CommandEntity>, boost::noncopyable >("YieldSurface", no_init)
+  .def("f",&XC::YieldSurface::f, (arg("elastoPlasticState")), "Yield criterion evaluation function.")
   ;
 
 class_<XC::CamClayYieldSurface, XC::CamClayYieldSurface *, bases<XC::YieldSurface> >("CamClayYieldSurface")
+  .def(init<double>())
+  .add_property("M", &XC::CamClayYieldSurface::getM, &XC::CamClayYieldSurface::setM,"Get/set the slope of critical state line.")
   ;
+
 class_<XC::DruckerPragerYieldSurface, XC::DruckerPragerYieldSurface *, bases<XC::YieldSurface> >("DruckerPragerYieldSurface")
   ;
+
+// class_<XC::DruckerPragerYieldSurface01, XC::DruckerPragerYieldSurface01 *, bases<XC::YieldSurface> >("DruckerPragerYieldSurface01")
+//   .def(init<double>())
+//   .add_property("Pc", &XC::DruckerPragerYieldSurface01::getPc, &XC::DruckerPragerYieldSurface01::setPc,"Get/set the Pc parameter.")
+//   ;
+
 class_<XC::ManzariDafaliasYieldSurface, XC::ManzariDafaliasYieldSurface *, bases<XC::YieldSurface> >("ManzariDafaliasYieldSurface")
   ;
+
 class_<XC::RoundedMohrCoulomb01YieldSurface, XC::RoundedMohrCoulomb01YieldSurface *, bases<XC::YieldSurface> >("RoundedMohrCoulomb01YieldSurface")
   ;
+
 class_<XC::TriFCYieldSurface, XC::TriFCYieldSurface *, bases<XC::YieldSurface> >("TriFCYieldSurface")
+  .def(init<double, double, double, double>())
+  .add_property("fcomp", &XC::TriFCYieldSurface::getFcomp, &XC::TriFCYieldSurface::setFcomp,"fcomp parameter.")
+  .add_property("ftens", &XC::TriFCYieldSurface::getFtens, &XC::TriFCYieldSurface::setFtens,"ftens parameter.")
+  .add_property("el", &XC::TriFCYieldSurface::getEl, &XC::TriFCYieldSurface::setEl,"el parameter.")
+  .add_property("c", &XC::TriFCYieldSurface::getC, &XC::TriFCYieldSurface::setC,"c parameter.")
   ;
+
 class_<XC::VonMisesYieldSurface, XC::VonMisesYieldSurface *, bases<XC::YieldSurface> >("VonMisesYieldSurface")
   ;
 
@@ -72,9 +93,6 @@ class_<XC::EvolutionLaw_L_Eij, XC::EvolutionLaw_L_Eij *, bases<XC::EvolutionLaw_
 class_<XC::EvolutionLaw_NL_Eij, XC::EvolutionLaw_NL_Eij *, bases<XC::EvolutionLaw_T>, boost::noncopyable >("EvolutionLaw_NL_Eij", no_init)
   ;
 class_<XC::EvolutionLaw_NL_EijMD, XC::EvolutionLaw_NL_EijMD *, bases<XC::EvolutionLaw_T>, boost::noncopyable >("EvolutionLaw_NL_EijMD", no_init)
-  ;
-
-class_<XC::EPState, XC::EPState *, bases<CommandEntity>, boost::noncopyable >("EPState", no_init)
   ;
 
 class_<XC::Template3Dep, XC::Template3Dep *, bases<XC::NDMaterial>, boost::noncopyable >("Template3Dep", no_init)
