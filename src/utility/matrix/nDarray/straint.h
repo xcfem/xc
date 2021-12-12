@@ -58,7 +58,7 @@
 #define STRAINTENSOR_HH
 
 #include "stress_strain_tensor.h"
-#include <iostream>
+#include "tmpl_operators.h"
 
 namespace XC {
 
@@ -78,12 +78,17 @@ class straintensor: public stressstraintensor
     explicit straintensor(const Vector &);
 
     straintensor(const straintensor & x );
-    straintensor(const BJtensor & x); // copy-initializer
-    straintensor(const nDarray & x); // copy-initializer
+    explicit straintensor(const BJtensor & x); // copy-initializer
+    explicit straintensor(const nDarray & x); // copy-initializer
 
     straintensor operator=(const straintensor & rval); // straintensor assignment
     straintensor operator=(const BJtensor & rval);// tensor assignment to straintensor
     straintensor operator=(const nDarray & rval);// nDarray assignment to straintensor
+    straintensor &operator+=(const straintensor & rval); // straintensor addition
+    straintensor &operator-=(const straintensor & rval); // straintensor subtraction
+    
+    straintensor &operator*=(const double &rval); // product
+    straintensor operator*(const double &rval) const; // scalar multiplication
 
     straintensor deep_copy(void);
 //..    straintensor * p_deep_copy(void);
@@ -119,6 +124,13 @@ class straintensor: public stressstraintensor
   };
 
 std::ostream &operator<<(std::ostream &, const straintensor &);
+template straintensor operator*(const double & , const straintensor & );
+template straintensor operator+(const straintensor & , const straintensor & );
+template straintensor operator-(const straintensor & , const straintensor & );
+BJtensor operator+(const BJtensor &, const straintensor &);
+BJtensor operator-(const BJtensor &, const straintensor &);
+BJtensor operator+(const straintensor &, const BJtensor &);
+BJtensor operator-(const straintensor &, const BJtensor &);
 
 } // end of XC namespace
 

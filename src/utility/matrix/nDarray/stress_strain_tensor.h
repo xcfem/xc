@@ -30,7 +30,7 @@
 #define STRESSSTRAINTENSOR_H
 
 #include "utility/matrix/nDarray/BJtensor.h"
-#include <iostream>
+#include "tmpl_operators.h"
 
 namespace XC {
 class Vector;
@@ -51,13 +51,19 @@ class stressstraintensor: public BJtensor
     explicit stressstraintensor(const Vector &);
 
     stressstraintensor(const stressstraintensor & x );
-    stressstraintensor(const BJtensor & x); // copy-initializer
-    stressstraintensor(const nDarray & x); // copy-initializer
+    explicit stressstraintensor(const BJtensor & x); // copy-initializer
+    explicit stressstraintensor(const nDarray & x); // copy-initializer
 
     stressstraintensor operator=(const stressstraintensor & rval);
     stressstraintensor operator=(const BJtensor & rval);
     stressstraintensor operator=(const nDarray & rval);
 
+    stressstraintensor &operator+=(const stressstraintensor & rval); // stressstraintensor addition
+    stressstraintensor &operator-=(const stressstraintensor & rval); // stressstraintensor subtraction
+    
+    stressstraintensor &operator*=(const double &rval); // scalar multiplication
+    stressstraintensor operator*(const double &rval) const; // scalar multiplication
+    
     Vector getVector(const size_t &dim) const;
 
     double Iinvariant1(void) const;
@@ -83,6 +89,10 @@ class stressstraintensor: public BJtensor
     double p_hydrostatic(void) const;
     double q_deviatoric(void) const;
   };
+  
+template stressstraintensor operator*(const double & , const stressstraintensor & );
+template stressstraintensor operator+(const stressstraintensor & , const stressstraintensor & );
+template stressstraintensor operator-(const stressstraintensor & , const stressstraintensor & );
 
 } // end of XC namespace
 

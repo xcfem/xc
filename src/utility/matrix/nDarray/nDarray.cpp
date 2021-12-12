@@ -536,19 +536,19 @@ XC::nDarray::nDarray(const XC::nDarray & x)
 
 //##############################################################################
 XC::nDarray::~nDarray()
-{
- if (--pc_nDarray_rep->n == 0)  // if reference count  goes to 0
   {
-// DEallocate memory of the actual XC::nDarray
-//    delete [pc_nDarray_rep->pc_nDarray_rep->total_numb] pc_nDarray_rep->pd_nDdata;
-//  see ELLIS & STROUSTRUP $18.3
-//  and note on the p.65($5.3.4)
-//  and the page 276 ($12.4)
-    delete [] pc_nDarray_rep->pd_nDdata;
-    delete [] pc_nDarray_rep->dim;
-    delete pc_nDarray_rep;
+   if (--pc_nDarray_rep->n == 0)  // if reference count  goes to 0
+      {
+    // DEallocate memory of the actual nDarray
+    //    delete [pc_nDarray_rep->pc_nDarray_rep->total_numb] pc_nDarray_rep->pd_nDdata;
+    //  see ELLIS & STROUSTRUP $18.3
+    //  and note on the p.65($5.3.4)
+    //  and the page 276 ($12.4)
+	delete [] pc_nDarray_rep->pd_nDdata;
+	delete [] pc_nDarray_rep->dim;
+	delete pc_nDarray_rep;
+      }
   }
-}
 
 
 //##############################################################################
@@ -645,7 +645,7 @@ XC::nDarray XC::nDarray::deep_copy()
 
 //##############################################################################
 XC::nDarray& XC::nDarray::operator=(const XC::nDarray & rval)
-{
+  {
     rval.pc_nDarray_rep->n++;  // tell the rval it has another reference
 
 //   /*  It is important to increment the reference_counter in the new
@@ -668,7 +668,7 @@ XC::nDarray& XC::nDarray::operator=(const XC::nDarray & rval)
  // connect to new value
     pc_nDarray_rep = rval.pc_nDarray_rep;  // point at the rval nDarray_rep
     return *this;
-}
+  }
 
 
 //##############################################################################
@@ -1139,9 +1139,8 @@ double XC::nDarray::cval(int subscript, ...)  const
 //++    return add;
 //++  }
 
-//##############################################################################
-// nDarray addition
-XC::nDarray& XC::nDarray::operator+=(const XC::nDarray & rval)
+//! @brief nDarray addition
+XC::nDarray& XC::nDarray::operator+=(const nDarray & rval)
   {
     int this_rank_of_nDarray = this->pc_nDarray_rep->nDarray_rank;
     int rval_rank_of_nDarray =  rval.pc_nDarray_rep->nDarray_rank;
@@ -1214,12 +1213,11 @@ XC::nDarray operator+(const XC::nDarray & lval, const XC::nDarray & rval)
     return result;
   }
 
-//##############################################################################
-// scalar addition
-XC::nDarray  XC::nDarray::operator+(double rval)
- {
-// construct XC::nDarray using the same control numbers as for the
-// original one.
+//! @brief scalar addition
+XC::nDarray XC::nDarray::operator+(const double &rval)
+  {
+      // construct XC::nDarray using the same control numbers as for the
+      // original one.
       nDarray add(pc_nDarray_rep->nDarray_rank, pc_nDarray_rep->dim, 0.0);
       switch(pc_nDarray_rep->nDarray_rank)
         {
@@ -1282,29 +1280,28 @@ XC::nDarray  XC::nDarray::operator+(double rval)
     return add;
  }
 
-//##############################################################################
-// scalar multiplication
-XC::nDarray  XC::nDarray::operator*( const double rval) const
- {
-// construct XC::nDarray using the same control numbers as for the
-// original one.
-    nDarray mult(pc_nDarray_rep->nDarray_rank, pc_nDarray_rep->dim, 0.0);
-    for ( int i=0 ; i<pc_nDarray_rep->total_numb ; i++ )
-      mult.pc_nDarray_rep->pd_nDdata[i] = this->pc_nDarray_rep->pd_nDdata[i]*rval;
 
-    return mult;
- }
+//! @brief scalar multiplication
+XC::nDarray &XC::nDarray::operator*=(const double &rval)
+   {
+      for ( int i=0 ; i<pc_nDarray_rep->total_numb ; i++ )
+	this->pc_nDarray_rep->pd_nDdata[i]*=rval;
+      return *this;
+   }
 
-//    nDarray operator*( double lval, nDarray & rval);  // REVIEWER global
-//##############################################################################
-// scalar multiplication
-XC::nDarray  operator*( const double lval,const XC::nDarray &rval)
-  {
-    return rval*lval;
-  }
+//! @brief scalar multiplication
+XC::nDarray  XC::nDarray::operator*(const double &rval) const
+   {
+      // construct XC::nDarray using the same control numbers as for the
+      // original one.
+      nDarray mult(pc_nDarray_rep->nDarray_rank, pc_nDarray_rep->dim, 0.0);
+      mult*=(rval);
+      return mult;
+   }
+
 //##############################################################################
 // nDarray subtraction
-XC::nDarray& XC::nDarray::operator-=(const XC::nDarray & rval)
+XC::nDarray& XC::nDarray::operator-=(const nDarray & rval)
   {
     int this_rank_of_nDarray = this->pc_nDarray_rep->nDarray_rank;
     int rval_rank_of_nDarray =  rval.pc_nDarray_rep->nDarray_rank;
@@ -1476,10 +1473,10 @@ XC::nDarray operator-(const XC::nDarray &lval, const XC::nDarray &rval)
 
 //##############################################################################
 // scalar subtraction
-XC::nDarray  XC::nDarray::operator-( double rval)
+XC::nDarray  XC::nDarray::operator-(const double &rval)
   {
-// construct XC::nDarray using the same control numbers as for the
-// original one.
+    // construct XC::nDarray using the same control numbers as for the
+    // original one.
     nDarray sub(pc_nDarray_rep->nDarray_rank, pc_nDarray_rep->dim, 0.0);
 
     switch(pc_nDarray_rep->nDarray_rank)
