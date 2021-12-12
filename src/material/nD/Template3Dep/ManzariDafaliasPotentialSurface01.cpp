@@ -74,41 +74,41 @@ XC::PotentialSurface * XC::ManzariDafaliasPotentialSurface01::getCopy(void)
 //  BJtensor dQ/dsigma_ij: the normal to the potential surface
 //================================================================================
 
-XC::BJtensor XC::ManzariDafaliasPotentialSurface01::dQods(const XC::EPState *EPS) const { 
+XC::BJtensor XC::ManzariDafaliasPotentialSurface01::dQods(const XC::EPState *EPS) const
+  { 
+    BJtensor dQoverds( 2, def_dim_2, 0.0);
+    BJtensor I2("I", 2, def_dim_2);
 
-  BJtensor dQoverds( 2, def_dim_2, 0.0);
-  BJtensor I2("I", 2, def_dim_2);
+    BJtensor S = EPS->getStress().deviator();
+    double p = EPS->getStress().p_hydrostatic();
+    p = p -  Pc;
 
-  BJtensor S = EPS->getStress().deviator();
-  double p = EPS->getStress().p_hydrostatic();
-  p = p -  Pc;
+    BJtensor alpha = EPS->getTensorVar( 1 ); //the first XC::BJtensor hardening var is alpha_ij
 
-  BJtensor alpha = EPS->getTensorVar( 1 ); //the first XC::BJtensor hardening var is alpha_ij
+    //double m = EPS->getScalarVar( 1 );	 //the first scalar hardening var is m
+    double D = EPS->getScalarVar( 2 );	 // D is stored in scalar var array's second cell
+    //printf("Here we go!  D= %e\n", D);
 
-  //double m = EPS->getScalarVar( 1 );	 //the first scalar hardening var is m
-  double D = EPS->getScalarVar( 2 );	 // D is stored in scalar var array's second cell
-  //printf("Here we go!  D= %e\n", D);
+    BJtensor r = S *(1.0/p);
+    BJtensor temp_f1 = r - alpha;
+    BJtensor temp_f2 = temp_f1("ij") * temp_f1("ij");
+    double temp_f3 = sqrt( temp_f2.trace() );
 
-  BJtensor r = S *(1.0/p);
-  BJtensor temp_f1 = r - alpha;
-  BJtensor temp_f2 = temp_f1("ij") * temp_f1("ij");
-  double temp_f3 = sqrt( temp_f2.trace() );
+    stresstensor n;
+    if ( temp_f3 >= d_macheps() ){ 
+      n = temp_f1 * (1.0 / temp_f3 );
+    }
+    else {
+      std::cerr << "XC::ManzariDafaliasPotentialSurface01::dQods  |n_ij| = 0, divide by zero! Program exits.\n";
+      exit(-1);
+      //::printf(" \n\n n_ij not defined!!!! Program exits\n");
+      //exit(1);
+    }
 
-  XC::stresstensor n;
-  if ( temp_f3 >= d_macheps() ){ 
-    n = temp_f1 * (1.0 / temp_f3 );
+    dQoverds =  n +  stresstensor((D *(1.0/3.0))*I2);
+
+    return dQoverds;
   }
-  else {
-    std::cerr << "XC::ManzariDafaliasPotentialSurface01::dQods  |n_ij| = 0, divide by zero! Program exits.\n";
-    exit(-1);
-    //::printf(" \n\n n_ij not defined!!!! Program exits\n");
-    //exit(1);
-  }
-  
-  dQoverds =  n + I2 * (D *(1.0/3.0));
-
-  return dQoverds;
-}
 
 
 //================================================================================
@@ -192,94 +192,93 @@ XC::BJtensor XC::ManzariDafaliasPotentialSurface01::d2Qods2(const XC::EPState *E
 // BJtensor dn_pq/dsigma_mn
 //================================================================================
 XC::BJtensor XC::ManzariDafaliasPotentialSurface01::dnods(const XC::EPState *EPS) const
-{
-  BJtensor dnods( 2, def_dim_2, 0.0);
-  BJtensor I2("I", 2, def_dim_2);
+  {
+    BJtensor dnods( 2, def_dim_2, 0.0);
+    BJtensor I2("I", 2, def_dim_2);
 
-  XC::stresstensor S = EPS->getStress().deviator();
-  //S.reportshort("S");
-  XC::stresstensor alpha = EPS->getTensorVar( 1 );
+    stresstensor S = EPS->getStress().deviator();
+    //S.reportshort("S");
+    stresstensor alpha = EPS->getTensorVar( 1 );
 
-  double p = EPS->getStress().p_hydrostatic();
-  p = p -  Pc;
+    double p = EPS->getStress().p_hydrostatic();
+    p = p -  Pc;
 
-  //double m = EPS->getScalarVar( 1 );
-  //double fac = 1.0/(sqrt(2.0/3.0)*m);
+    //double m = EPS->getScalarVar( 1 );
+    //double fac = 1.0/(sqrt(2.0/3.0)*m);
 
-  BJtensor Ipmnq = I2("pm") * I2("nq");
-  BJtensor Imnpq = I2("mn") * I2("pq");
-  BJtensor Apqmn = alpha("pq") * I2("mn");
-  BJtensor X  = Ipmnq - Imnpq * (1.0/3.0) - Apqmn * (1.0/3.0);
+    BJtensor Ipmnq = I2("pm") * I2("nq");
+    BJtensor Imnpq = I2("mn") * I2("pq");
+    BJtensor Apqmn = alpha("pq") * I2("mn");
+    BJtensor X  = Ipmnq - Imnpq * (1.0/3.0) - Apqmn * (1.0/3.0);
 
-  //Ipmnq.print("in XC::ManzariDafaliasPotentialSurface01", "");
-  
-  BJtensor sa = S("ij") * alpha("ij");
-  double sad =sa.trace();
-  BJtensor aa = alpha("ij") * alpha("ij");
-  double aad =aa.trace();
-  BJtensor Y = S - ( p + 0.333333333*(sad-p*aad) )*I2;
-  Y.null_indices();
+    //Ipmnq.print("in XC::ManzariDafaliasPotentialSurface01", "");
 
-  BJtensor s_bar = S("ij") - p*alpha("ij");
-  s_bar.null_indices();
-  BJtensor norm2 = s_bar("ij") * s_bar("ij");
-  double norm =  norm2.trace();
+    const BJtensor sa = S("ij") * alpha("ij");
+    const double sad =sa.trace();
+    const BJtensor aa = alpha("ij") * alpha("ij");
+    const double aad =aa.trace();
+    BJtensor Y(S - ( p + 0.333333333*(sad-p*aad) )*static_cast<const stresstensor &>(I2));
+    Y.null_indices();
 
-  s_bar.null_indices();
-  BJtensor tmp = s_bar("pq")*Y("mn");
-  dnods = ( X - 2.0 * tmp)*(1.0/norm);
-  
-  return  dnods;
-}
+    BJtensor s_bar = S("ij") - p*alpha("ij");
+    s_bar.null_indices();
+    BJtensor norm2 = s_bar("ij") * s_bar("ij");
+    double norm =  norm2.trace();
+
+    s_bar.null_indices();
+    BJtensor tmp = s_bar("pq")*Y("mn");
+    dnods = ( X - 2.0 * tmp)*(1.0/norm);
+
+    return  dnods;
+  }
 
 //================================================================================
 // BJtensor alpha_pq*dnods
 //================================================================================
 XC::BJtensor XC::ManzariDafaliasPotentialSurface01::apqdnods(const XC::EPState *EPS) const
-{
-  BJtensor ddnods( 2, def_dim_2, 0.0);
-  BJtensor I2("I", 2, def_dim_2);
+  {
+    BJtensor ddnods( 2, def_dim_2, 0.0);
+    BJtensor I2("I", 2, def_dim_2);
 
-  XC::stresstensor S = EPS->getStress().deviator();
-  //S.reportshort("S");
+    XC::stresstensor S = EPS->getStress().deviator();
+    //S.reportshort("S");
 
-  double p = EPS->getStress().p_hydrostatic();
-  p = p -  Pc;
+    double p = EPS->getStress().p_hydrostatic();
+    p = p -  Pc;
 
-  //printf("Here we go!  p %f\n", p);
-	      
-  XC::stresstensor alpha = EPS->getTensorVar( 1 );
-  //XC::stresstensor d = EPS->getTensorVar( 3 );   // getting  d_ij from XC::EPState
+    //printf("Here we go!  p %f\n", p);
 
-  BJtensor akk = alpha("ij") * I2("ij");
-  double akkd =akk.trace();
+    stresstensor alpha = EPS->getTensorVar( 1 );
+    //stresstensor d = EPS->getTensorVar( 3 );   // getting  d_ij from XC::EPState
 
-  BJtensor aa = alpha("ij") * alpha("ij");
-  double aad =aa.trace();
+    BJtensor akk = alpha("ij") * I2("ij");
+    double akkd =akk.trace();
 
-  BJtensor aX = alpha - I2*(akkd +aad)*0.3333333;
-	         
-  //Ymn
-  BJtensor sa = S("ij") * alpha("ij");
-  double sad =sa.trace();
-  BJtensor Y = S - ( p + 0.333333333*(sad-p*aad) )*I2;
-  Y.null_indices();
-  
-  BJtensor s_bar = S - p*alpha;
-  s_bar.null_indices();
+    BJtensor aa = alpha("ij") * alpha("ij");
+    double aad =aa.trace();
 
-  BJtensor as_bar = alpha("pq") * s_bar("pq");
-  double as_bard = as_bar.trace();
-  s_bar.null_indices();
-  
-  //Norm
-  BJtensor norm2 = s_bar("ij") * s_bar("ij");
-  double norm = norm2.trace();
-  
-	   	     
-  ddnods = (aX - Y*2.0*as_bard)*(1.0/norm);
-  return  ddnods;
-}
+    BJtensor aX(alpha - static_cast<const stresstensor &>(I2)*(akkd +aad)*0.3333333);
+
+    //Ymn
+    BJtensor sa = S("ij") * alpha("ij");
+    const double sad =sa.trace();
+    BJtensor Y(S - ( p + 0.333333333*(sad-p*aad) )*static_cast<const stresstensor &>(I2));
+    Y.null_indices();
+
+    BJtensor s_bar = S - p*alpha;
+    s_bar.null_indices();
+
+    BJtensor as_bar = alpha("pq") * s_bar("pq");
+    double as_bard = as_bar.trace();
+    s_bar.null_indices();
+
+    //Norm
+    BJtensor norm2 = s_bar("ij") * s_bar("ij");
+    double norm = norm2.trace();
+
+    ddnods = (aX - Y*2.0*as_bard)*(1.0/norm);
+    return  ddnods;
+  }
 
 
 //================================================================================
@@ -303,12 +302,12 @@ double XC::ManzariDafaliasPotentialSurface01::dgoverdt(double theta, double c) c
 XC::BJtensor XC::ManzariDafaliasPotentialSurface01::dthetaoverds(const XC::EPState *EPS) const
 {
    BJtensor ret(2, def_dim_2, 0.0);
-   XC::stresstensor s( 0.0);
-   XC::stresstensor t( 0.0);
+   stresstensor s( 0.0);
+   stresstensor t( 0.0);
    BJtensor I2("I", 2, def_dim_2);
 
    //double EPS = pow(d_macheps(),(1./3.));
-   XC::stresstensor stress = EPS->getStress();
+   stresstensor stress = EPS->getStress();
   
    double J2D = stress.Jinvariant2();
    double q     = stress.q_deviatoric();

@@ -74,9 +74,9 @@ double XC::ManzariDafaliasYieldSurface::f(const EPState *EPS) const
 
     double m = EPS->getScalarVar(1);
 
-    stresstensor r = S - alpha*p;
+    stresstensor r(S - alpha*p);
     r.null_indices();
-    stresstensor r2 = r("ij") * r("ij");  
+    stresstensor r2(r("ij") * r("ij"));  
 
     stresstensor n;
 
@@ -158,7 +158,7 @@ XC::BJtensor XC::ManzariDafaliasYieldSurface::dFods(const EPState *EPS) const
     //double N = temp.trace() + 2.0/3.0*m; 
     //printf("    N =  %e\n", N);
 
-    dFoverds =  n - I2 * N*(1.0/3.0);
+    dFoverds =  n - stresstensor((N*(1.0/3.0))*I2);
 
     return dFoverds;
   }

@@ -72,7 +72,7 @@ double XC::fdYield::dYodq(const XC::stresstensor &sts,  const XC::FDEPState &fde
 XC::stresstensor XC::fdYield::dYoda(const XC::stresstensor &sts,  const XC::FDEPState &fdepstate ) const 
   { 
      BJtensor tZ2(2, def_dim_2, 0.0);
-     return tZ2;
+     return stresstensor(tZ2);
   }
 
 std::ostream& XC::operator<<(std::ostream &os, const XC::fdYield & fdyd)

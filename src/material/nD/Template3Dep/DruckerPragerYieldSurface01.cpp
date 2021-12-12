@@ -85,11 +85,11 @@ double XC::DruckerPragerYieldSurface01::f(const XC::EPState *EPS) const
     temp1.null_indices();
     //temp1.print("temp1 ", " temp1");
 
-    stresstensor temp2 = temp1("ij") * temp1("ij");  
+    stresstensor temp2(temp1("ij") * temp1("ij"));
 
     double temp3 = sqrt( temp2.trace() );
 
-    temp3 = temp3 - sqrt(2.0/3.0) * m * p;        
+    temp3= temp3 - sqrt(2.0/3.0) * m * p;        
     //printf("\n========Inside f  temp3 = %.4f x = %.4f\n ", temp3, x);
 
     return temp3;
@@ -99,18 +99,17 @@ double XC::DruckerPragerYieldSurface01::f(const XC::EPState *EPS) const
 //! @brief BJtensor dF/dsigma_ij
 XC::BJtensor XC::DruckerPragerYieldSurface01::dFods(const EPState *EPS) const
   {
-  
     BJtensor dFoverds( 2, def_dim_2, 0.0);
     BJtensor I2("I", 2, def_dim_2);
 
-    XC::stresstensor S = EPS->getStress().deviator();
+    stresstensor S = EPS->getStress().deviator();
     //S.reportshort("S");
 
     double p = EPS->getStress().p_hydrostatic();
     p = p - Pc;
     //printf("Here we go!  p %f\n", p);
 
-    XC::stresstensor alpha = EPS->getTensorVar( 1 ); // getting alpha_ij from XC::EPState
+    stresstensor alpha = EPS->getTensorVar( 1 ); // getting alpha_ij from XC::EPState
     //alpha.reportshort("alpha");
 
     //XC::stresstensor n = EPS->getTensorVar( 3 );     // getting n_ij from XC::EPState
@@ -118,28 +117,28 @@ XC::BJtensor XC::DruckerPragerYieldSurface01::dFods(const EPState *EPS) const
 
     //-------------------------------------------------
     // might be moved to Evolution Law
-      XC::stresstensor r = S * (1.0 / p);
-      //r.reportshort("r");
-      XC::stresstensor r_bar = r - alpha;
-      //r_bar.reportshort("r_bar"); 
-      XC::stresstensor norm2 = r_bar("ij") * r_bar("ij");
-      double norm = sqrt( norm2.trace() );
+    stresstensor r(S * (1.0 / p));
+    //r.reportshort("r");
+    stresstensor r_bar = r - alpha;
+    //r_bar.reportshort("r_bar"); 
+    stresstensor norm2(r_bar("ij") * r_bar("ij"));
+    const double norm = sqrt( norm2.trace() );
 
-      //std::cerr << "d_macheps " << d_macheps() << std::endl;
+    //std::cerr << "d_macheps " << d_macheps() << std::endl;
 
-      XC::stresstensor n;
-      if ( norm >= d_macheps() ){ 
-	n =  r_bar*(1.0 / norm );
-      }
-      else {
-	std::cerr << "XC::DruckerPragerYieldSurface01::dFods  |n_ij| = 0, divide by zero! Program exits.\n";
+    stresstensor n;
+    if( norm >= d_macheps() )
+      {	n =  r_bar*(1.0 / norm ); }
+    else
+      {
+	std::cerr << getClassName() << "::" << __FUNCTION__
+	          << "; |n_ij| = 0, divide by zero! Program exits.\n";
 	exit(-1);
       }
-      //EPS->setTensorVar( 3, n); //update n_ij//
+    //EPS->setTensorVar( 3, n); //update n_ij//
     //-------------------------------------------------
 
-
-    double m = EPS->getScalarVar( 1 );
+    const double m = EPS->getScalarVar( 1 );
 
 
     //tensorial multiplication produces 1st-order XC::BJtensor
@@ -149,10 +148,10 @@ XC::BJtensor XC::DruckerPragerYieldSurface01::dFods(const EPState *EPS) const
 
     //!!Very important:  N = n_pq * alpha_pq +sqrt(2/3)*m (always) = n_pq*r_pq(not hold when not on the yield surface)
     BJtensor temp = n("ij") * alpha("ij");
-    double N = temp.trace() + sqrt(2.0/3.0)*m; 
+    const double N = temp.trace() + sqrt(2.0/3.0)*m; 
     //printf("    N =  %e\n", N);
 
-    dFoverds =  n - N *I2 *(1.0/3.0);
+    dFoverds=  n - stresstensor((N*(1.0/3.0))*I2);
 
     return dFoverds;
   }
@@ -173,19 +172,19 @@ XC::BJtensor XC::DruckerPragerYieldSurface01::xi_t1( const XC::EPState *EPS) con
     BJtensor dFoverds( 2, def_dim_2, 0.0);
     BJtensor I2("I", 2, def_dim_2);
 
-    XC::stresstensor S = EPS->getStress().deviator();
+    stresstensor S = EPS->getStress().deviator();
     
     double p = EPS->getStress().p_hydrostatic();
     p = p - Pc;
     	    
-    XC::stresstensor alpha = EPS->getTensorVar( 1 ); // getting alpha_ij from XC::EPState
+    stresstensor alpha = EPS->getTensorVar( 1 ); // getting alpha_ij from XC::EPState
     
-    XC::stresstensor r = S * (1.0 / p); //for p = sig_kk/3
-    XC::stresstensor r_bar = r - alpha;
-    XC::stresstensor norm2 = r_bar("ij") * r_bar("ij");
+    stresstensor r(S * (1.0 / p)); //for p = sig_kk/3
+    stresstensor r_bar = r - alpha;
+    stresstensor norm2(r_bar("ij") * r_bar("ij"));
     double norm = sqrt( norm2.trace() );
     
-    XC::stresstensor n;
+    stresstensor n;
     if ( norm >= d_macheps() ){ 
       n = r_bar *(1.0 / norm );
     }

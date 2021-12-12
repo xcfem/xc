@@ -112,23 +112,20 @@ XC::EvolutionLaw_T * XC::EvolutionLaw_L_Eij::getCopy(void)
 // Evaluating h_s = a * dSodeij = a*Rij (For the evaluation of Kp)
 //================================================================================
 
-XC::BJtensor XC::EvolutionLaw_L_Eij::h_t( EPState *EPS, PotentialSurface *PS){
-
-    //=========================================================================
+XC::BJtensor XC::EvolutionLaw_L_Eij::h_t( EPState *EPS, PotentialSurface *PS)
+  {
     // Getting de_ij / dLambda
-    XC::stresstensor dQods = PS->dQods( EPS );
+    stresstensor dQods(PS->dQods( EPS ));
     //dQods.reportshort("dQods");
     
     BJtensor de_ijodLam = dQods;
 
     //Evaluating dSodeeq
-    double dSodeij = geta();
+    const double dSodeij = geta();
 
-    BJtensor h = de_ijodLam*dSodeij;
-
+    BJtensor h= de_ijodLam*dSodeij;
     return h;
-
-}
+  }
 
 
 //================================================================================

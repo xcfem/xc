@@ -50,49 +50,40 @@
 //#
 //===============================================================================
 
-#ifndef fdEvolution_TL_CPP
-#define fdEvolution_TL_CPP
-
 #include "material/nD/FiniteDeformation/fdEvolution/fdEvolution_TL.h"
-
-using namespace XC;
+#include <iostream>
 
 //------------------------------------------------------------------------
 XC::fdEvolution_TL::fdEvolution_TL(double H_linear_in)
 :H_linear(H_linear_in)
-{
-    
-}
+  {}
 
 //------------------------------------------------------------------------
 XC::fdEvolution_T * XC::fdEvolution_TL::getCopy(void) 
   { return new fdEvolution_TL(*this); }
 
-//------------------------------------------------------------------------
- XC::BJtensor XC::fdEvolution_TL::HModulus(const XC::stresstensor &sts, const XC::FDEPState &fdepstate) const 
-{
-   BJtensor eta = fdepstate.getStrainLikeKiVar();
-   BJtensor I2("I", 2 , def_dim_2);
-   BJtensor I4 = I2("ij")*I2("kl"); I4.null_indices();
-    //I4 = (I4.transpose0110()+I4.transpose0111())*0.5; //For symmetric XC::BJtensor
-    I4 = I4.transpose0110();  //For general XC::BJtensor
-    return I4*H_linear;
-}
+
+XC::BJtensor XC::fdEvolution_TL::HModulus(const XC::stresstensor &sts, const XC::FDEPState &fdepstate) const 
+  {
+    BJtensor eta = fdepstate.getStrainLikeKiVar();
+    BJtensor I2("I", 2 , def_dim_2);
+    BJtensor I4 = I2("ij")*I2("kl"); I4.null_indices();
+     //I4 = (I4.transpose0110()+I4.transpose0111())*0.5; //For symmetric XC::BJtensor
+     I4 = I4.transpose0110();  //For general XC::BJtensor
+     return I4*H_linear;
+  }
 
 //------------------------------------------------------------------------
 void XC::fdEvolution_TL::print()
-{
-    std::cerr << (*this);
-}
+  { std::cerr << (*this); }
 
 //------------------------------------------------------------------------
 std::ostream& XC::operator<<(std::ostream &os, const XC::fdEvolution_TL & fdetl)
-{
-   os.precision(5);
-   os.width(10);
-   os << "XC::Tensor Linear Evolution Law's Modulus: " << "\n";
+  {
+    os.precision(5);
+    os.width(10);
+    os << "Tensor Linear Evolution Law's Modulus: " << "\n";
    
-   return os;
-}
+    return os;
+  }
 
-#endif

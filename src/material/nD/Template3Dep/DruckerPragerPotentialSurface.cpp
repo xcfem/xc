@@ -88,21 +88,22 @@ XC::PotentialSurface * XC::DruckerPragerPotentialSurface::getCopy(void)
 // BJtensor dQ/dsigma_ij
 //================================================================================
 
-XC::BJtensor XC::DruckerPragerPotentialSurface::dQods(const XC::EPState *EPS) const {
-    XC::stresstensor dQods;
+XC::BJtensor XC::DruckerPragerPotentialSurface::dQods(const XC::EPState *EPS) const
+  {
+    stresstensor dQods;
     
-	BJtensor KroneckerI("I", 2, def_dim_2);
+    BJtensor KroneckerI("I", 2, def_dim_2);
     //double temp1 =  EPS->getScalarVar(1);    
     double temp1 = getalfa2();    
     
-    XC::stresstensor alpha;
-    XC::stresstensor s_bar;
-    XC::stresstensor Tnsr0;
+    stresstensor alpha;
+    stresstensor s_bar;
+    stresstensor Tnsr0;
     double temp6 = 0.0;
-    XC::stresstensor temp5;
-    XC::stresstensor sigma = EPS->getStress();   
+    stresstensor temp5;
+    stresstensor sigma = EPS->getStress();   
     double p = sigma.p_hydrostatic();
-    XC::stresstensor sdev = sigma.deviator();
+    stresstensor sdev = sigma.deviator();
     double halfRt2 = 0.5 * sqrt(2.0);
     int nod = EPS->getNTensorVar();
     if ( nod >=1 )  { //May not have kinematic hardening
@@ -116,81 +117,84 @@ XC::BJtensor XC::DruckerPragerPotentialSurface::dQods(const XC::EPState *EPS) co
     else {
 	  s_bar = sdev;
     }
-    XC::stresstensor temp3 = s_bar("ij") * s_bar("ij");
+    stresstensor temp3(s_bar("ij") * s_bar("ij"));
     temp3.null_indices();
     double temp4 = temp3.trace();
     temp4 = sqrt(temp4);
     Tnsr0 += s_bar;
     double eps = pow( d_macheps(), 0.5 );
-    if ( fabs(temp4) > eps )  {
-      Tnsr0 = Tnsr0 * (halfRt2/temp4);
-    }
+    if ( fabs(temp4) > eps )
+      { Tnsr0 = Tnsr0 * (halfRt2/temp4); }
     	    
-    dQods = (KroneckerI * temp1) + Tnsr0;; 
+    dQods = stresstensor(KroneckerI * temp1) + Tnsr0;; 
         
     return dQods;
-}
+  }
 
 
 //================================================================================
 // BJtensor d2Q/dsigma_ij_2
 //================================================================================
 
-XC::BJtensor XC::DruckerPragerPotentialSurface::d2Qods2(const XC::EPState *EPS) const {
+XC::BJtensor XC::DruckerPragerPotentialSurface::d2Qods2(const XC::EPState *EPS) const
+  {
     BJtensor d2Qods2(4, def_dim_4, 0.0);
     
-	BJtensor KroneckerI("I", 2, def_dim_2);
-	BJtensor T1 = KroneckerI("ij")*KroneckerI("mn");
-	T1.null_indices();
-	BJtensor T2 = (T1.transpose0110()+T1.transpose0111())*0.5;
-	BJtensor T3 = T2 - T1*(1.0/3.0);
+    BJtensor KroneckerI("I", 2, def_dim_2);
+    BJtensor T1 = KroneckerI("ij")*KroneckerI("mn");
+    T1.null_indices();
+    BJtensor T2 = (T1.transpose0110()+T1.transpose0111())*0.5;
+    BJtensor T3 = T2 - T1*(1.0/3.0);
 	
     //double temp1 =  EPS->getScalarVar(1);    
     //double temp1 = getalfa2();
     
     BJtensor T4;
-    XC::stresstensor alpha;
-    XC::stresstensor s_bar;
+    stresstensor alpha;
+    stresstensor s_bar;
     BJtensor temp9(4, def_dim_4, 0.0);
-    XC::stresstensor sigma = EPS->getStress();
+    stresstensor sigma = EPS->getStress();
     double p = sigma.p_hydrostatic();
-    XC::stresstensor sdev = sigma.deviator();
+    stresstensor sdev = sigma.deviator();
     double halfRt2 = 0.5 * sqrt(2.0);
     int nod = EPS->getNTensorVar();
-    if ( nod >=1 )  { //May not have kinematic hardening
-      alpha = EPS->getTensorVar(1);
-      temp9 = KroneckerI("ij") * alpha("mn");
-      temp9.null_indices();
-      T4 = T2 + temp9*(1.0/3.0);
-      s_bar = sdev - (alpha*p);
-    }
-    else {
-	  s_bar = sdev;
-	  T4 = T2;
-    }
+    if( nod >=1 )
+      { //May not have kinematic hardening
+	alpha = EPS->getTensorVar(1);
+	temp9 = KroneckerI("ij") * alpha("mn");
+	temp9.null_indices();
+	T4 = T2 + temp9*(1.0/3.0);
+	s_bar = sdev - (alpha*p);
+      }
+    else
+      {
+        s_bar = sdev;
+        T4 = T2;
+      }
     T4 = T2 - temp9;
-    BJtensor temp3 = s_bar("ij") * s_bar("ij");
+    BJtensor temp3= s_bar("ij") * s_bar("ij");
     temp3.null_indices();  
     double temp4 = temp3.trace();
     temp4 = sqrt(temp4);
     BJtensor temp5 = s_bar("ij")*s_bar("mn");
     double eps = pow( d_macheps(), 0.5 );
-    if ( fabs(temp4) > eps )  {
-      d2Qods2 = T3 * (halfRt2/temp4) - temp5*(halfRt2/(temp4*temp4*temp4));
-      d2Qods2 = T4("ijkl") * d2Qods2("klmn");
-      d2Qods2.null_indices();
-    }   
+    if ( fabs(temp4) > eps )
+      {
+        d2Qods2 = T3 * (halfRt2/temp4) - temp5*(halfRt2/(temp4*temp4*temp4));
+        d2Qods2 = T4("ijkl") * d2Qods2("klmn");
+        d2Qods2.null_indices();
+      }   
     
     return d2Qods2;
-}
+  }
 
 // For Consistent Algorithm, Z Cheng, Jan 2004
 XC::BJtensor XC::DruckerPragerPotentialSurface::d2Qodsds1(const XC::EPState *EPS) const 
-{  
-  BJtensor I("I", 2, def_dim_2);
-  BJtensor d2Qoverdsds1 = I;
-  return d2Qoverdsds1;
-}
+  {  
+    BJtensor I("I", 2, def_dim_2);
+    BJtensor d2Qoverdsds1 = I;
+    return d2Qoverdsds1;
+  }
 
 //================================================================================
 

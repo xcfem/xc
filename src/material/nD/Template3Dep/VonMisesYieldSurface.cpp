@@ -87,7 +87,7 @@ double XC::VonMisesYieldSurface::f(const XC::EPState *EPS) const
     double k = EPS->getScalarVar(1);
     double k2 = k * k;
     
-    stresstensor temp1 = s_bar("ij") * s_bar("ij");
+    stresstensor temp1(s_bar("ij") * s_bar("ij"));
     double temp = temp1.trace();
     temp = temp * 3.0 / 2.0;
 

@@ -146,25 +146,24 @@ void XC::ManzariDafaliasEvolutionLaw::InitVars(EPState  *EPS) {
 //							       	        
 //================================================================================
 
-void XC::ManzariDafaliasEvolutionLaw::setInitD(EPState  *EPS) {
-
-    //=========================================================================
+void XC::ManzariDafaliasEvolutionLaw::setInitD(EPState  *EPS)
+  {
     //calculate  n_ij
-    XC::stresstensor S = EPS->getStress().deviator();
+    stresstensor S = EPS->getStress().deviator();
     double p = EPS->getStress().p_hydrostatic();
-    XC::stresstensor alpha = EPS->getTensorVar( 1 );  // alpha_ij
+    stresstensor alpha = EPS->getTensorVar( 1 );  // alpha_ij
 
     // Find the norm of alpha
     BJtensor norm_alphat = alpha("ij") * alpha("ij");
     //double norm_alpha = sqrt( norm_alphat.trace() );
    
-    XC::stresstensor r = S * (1.0 / p);
+    stresstensor r(S * (1.0 / p));
     //r.reportshort("r");
-    XC::stresstensor r_bar = r - alpha;
-    XC::stresstensor norm2 = r_bar("ij") * r_bar("ij");
+    stresstensor r_bar = r - alpha;
+    stresstensor norm2(r_bar("ij") * r_bar("ij"));
     double norm = sqrt( norm2.trace() );
     
-    XC::stresstensor n;
+    stresstensor n;
     if ( norm >= d_macheps() ){ 
       n = ( r  - alpha ) *(1.0 / norm );
     }
@@ -180,7 +179,7 @@ void XC::ManzariDafaliasEvolutionLaw::setInitD(EPState  *EPS) {
 
     //calculating A
     double m = EPS->getScalarVar(1);
-    XC::stresstensor F = EPS->getTensorVar( 2 );   // getting  F_ij from XC::EPState
+    stresstensor F = EPS->getTensorVar( 2 );   // getting  F_ij from XC::EPState
     BJtensor temp_tensor = F("ij") * n("ij");
     double temp = temp_tensor.trace();
     if (temp < 0)   temp = 0;
@@ -202,9 +201,9 @@ void XC::ManzariDafaliasEvolutionLaw::setInitD(EPState  *EPS) {
 
     double cd = getke_d() / getkc_d();
     double alpha_theta_dd = (g_WW(theta, c) * Mc + g_WW(theta, cd) * kc_d * xi - m);
-    XC::stresstensor alpha_theta_d = n("ij") * alpha_theta_dd * pow(2.0/3.0, 0.5);
+    stresstensor alpha_theta_d(n("ij") * alpha_theta_dd * pow(2.0/3.0, 0.5));
 
-    XC::stresstensor d;
+    stresstensor d;
     d =  alpha_theta_d - alpha;
     d.null_indices();
 
@@ -232,21 +231,21 @@ void XC::ManzariDafaliasEvolutionLaw::UpdateAllVars( EPState *EPS, double dlamda
    
     //=========================================================================
     //calculate  n_ij
-    XC::stresstensor S = EPS->getStress().deviator();
+    stresstensor S = EPS->getStress().deviator();
     double p = EPS->getStress().p_hydrostatic();
-    XC::stresstensor alpha = EPS->getTensorVar( 1 );  // alpha_ij
+    stresstensor alpha = EPS->getTensorVar( 1 );  // alpha_ij
 
     // Find the norm of alpha
     BJtensor norm_alphat = alpha("ij") * alpha("ij");
     double norm_alpha = sqrt( norm_alphat.trace() );
    
-    XC::stresstensor r = S * (1.0 / p);
+    stresstensor r(S * (1.0 / p));
     //r.reportshort("r");
     stresstensor r_bar = r - alpha;
-    stresstensor norm2 = r_bar("ij") * r_bar("ij");
+    stresstensor norm2(r_bar("ij") * r_bar("ij"));
     double norm = sqrt( norm2.trace() );
     
-    XC::stresstensor n;
+    stresstensor n;
     if ( norm >= d_macheps() ){ 
       n = ( r  - alpha ) *(1.0 / norm );
     }
@@ -288,7 +287,7 @@ void XC::ManzariDafaliasEvolutionLaw::UpdateAllVars( EPState *EPS, double dlamda
     // Update D 
        
     double m = EPS->getScalarVar(1);
-    XC::stresstensor F = EPS->getTensorVar( 2 );   // getting  F_ij from XC::EPState
+    stresstensor F = EPS->getTensorVar( 2 );   // getting  F_ij from XC::EPState
     BJtensor temp_tensor = F("ij") * n("ij");
     double temp = temp_tensor.trace();
     if (temp < 0)   temp = 0;
@@ -310,18 +309,18 @@ void XC::ManzariDafaliasEvolutionLaw::UpdateAllVars( EPState *EPS, double dlamda
 
     double cd = getke_d() / getkc_d();
     double alpha_theta_dd = (g_WW(theta, c) * Mc + g_WW(theta, cd) * kc_d * xi - m);
-    XC::stresstensor alpha_theta_d = n("ij") * alpha_theta_dd * pow(2.0/3.0, 0.5);
+    stresstensor alpha_theta_d(n("ij") * alpha_theta_dd * pow(2.0/3.0, 0.5));
 
     double cb = getke_b() / getkc_b();
     if ( xi > 0 ) xi = 0.0;  // < -xi >
     double alpha_theta_bd = (g_WW(theta, c) * Mc + g_WW(theta, cb) * kc_b * (-xi) - m);
-    XC::stresstensor alpha_theta_b = n("ij") *alpha_theta_bd * pow(2.0/3.0, 0.5);
+    stresstensor alpha_theta_b(n("ij") *alpha_theta_bd * pow(2.0/3.0, 0.5));
     alpha_theta_b.null_indices();
 
-    XC::stresstensor b;
+    stresstensor b;
     b =  alpha_theta_b - alpha;
     b.null_indices();
-    XC::stresstensor d;
+    stresstensor d;
     d =  alpha_theta_d - alpha;
     d.null_indices();
 
@@ -360,7 +359,7 @@ void XC::ManzariDafaliasEvolutionLaw::UpdateAllVars( EPState *EPS, double dlamda
     std::clog << " ||b|| " << (alpha_theta_bd - norm_alpha) << std::endl;
     std::clog << " dlamda " << dlamda << " h = " << h << std::endl;
 
-    XC::stresstensor dalpha;
+    stresstensor dalpha;
     dalpha = dlamda * h * b("ij");
     //dalpha.null_indices();
     std::clog << "delta alpha =" << dalpha << std::endl;
@@ -373,7 +372,7 @@ void XC::ManzariDafaliasEvolutionLaw::UpdateAllVars( EPState *EPS, double dlamda
 
     //=========================================================================
     // Update F
-    XC::stresstensor dF;
+    stresstensor dF;
     if ( D > 0.0 ) D = 0.0;
     dF =  dlamda * getCf() * (-D) * ( getFmax() * n("ij") + F("ij") );
     //std::clog << "dF" << dF;
@@ -397,17 +396,17 @@ double XC::ManzariDafaliasEvolutionLaw::getKp( EPState *EPS , double dummy) {
     
     //=========================================================================
     //calculate  n_ij
-    XC::stresstensor S = EPS->getStress().deviator();
+    stresstensor S = EPS->getStress().deviator();
     double p = EPS->getStress().p_hydrostatic();
-    XC::stresstensor alpha = EPS->getTensorVar( 1 );  // alpha_ij
+    stresstensor alpha = EPS->getTensorVar( 1 );  // alpha_ij
    
-    XC::stresstensor r = S * (1.0 / p);
+    stresstensor r(S * (1.0 / p));
     //r.reportshort("r");
-    XC::stresstensor r_bar = r - alpha;
-    XC::stresstensor norm2 = r_bar("ij") * r_bar("ij");
+    stresstensor r_bar = r - alpha;
+    stresstensor norm2(r_bar("ij") * r_bar("ij"));
     double norm = sqrt( norm2.trace() );
     
-    XC::stresstensor n;
+    stresstensor n;
     if ( norm >= d_macheps() ){ 
       n = ( r  - alpha ) *(1.0 / norm );
     }
@@ -439,20 +438,20 @@ double XC::ManzariDafaliasEvolutionLaw::getKp( EPState *EPS , double dummy) {
     double c = getMe() / getMc();
 
     double cd = getke_d() / getkc_d();
-    XC::stresstensor alpha_theta_d = n("ij") * (g_WW(theta, c) * Mc + g_WW(theta, cd) * kc_d * xi - m) * pow(2.0/3.0, 0.5);
+    stresstensor alpha_theta_d(n("ij") * (g_WW(theta, c) * Mc + g_WW(theta, cd) * kc_d * xi - m) * pow(2.0/3.0, 0.5));
 
 
     double cb = getke_b() / getkc_b();
     if ( xi > 0.0 ) xi = 0.0;  // < -xi >
-    XC::stresstensor alpha_theta_b = n("ij") * (g_WW(theta, c) * Mc - g_WW(theta, cb) * kc_b * xi - m) * pow(2.0/3.0, 0.5);
+    stresstensor alpha_theta_b(n("ij") * (g_WW(theta, c) * Mc - g_WW(theta, cb) * kc_b * xi - m) * pow(2.0/3.0, 0.5));
     alpha_theta_b.null_indices();
 
     //=========================================================================
     // calculating h
-    XC::stresstensor b;
+    stresstensor b;
     b =  alpha_theta_b - alpha;
     b.null_indices();
-    XC::stresstensor d;
+    stresstensor d;
     d =  alpha_theta_d - alpha;
     d.null_indices();
 
@@ -468,7 +467,7 @@ double XC::ManzariDafaliasEvolutionLaw::getKp( EPState *EPS , double dummy) {
 
 
     // Calculating A
-    XC::stresstensor F = EPS->getTensorVar( 2 );   // getting  F_ij from XC::EPState
+    stresstensor F = EPS->getTensorVar( 2 );   // getting  F_ij from XC::EPState
     temp1 = F("ij") * n("ij");
     double temp = temp1.trace();
     if (temp < 0)   temp = 0;

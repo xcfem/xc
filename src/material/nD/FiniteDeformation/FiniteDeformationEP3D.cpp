@@ -84,7 +84,7 @@ XC::FiniteDeformationEP3D::FiniteDeformationEP3D(int tag)
 
 //! @brief Constructor 01
 XC::FiniteDeformationEP3D::FiniteDeformationEP3D(int tag,
-                                         XC::FiniteDeformationMaterial *fde3d_in,
+                                         FiniteDeformationMaterial *fde3d_in,
                                          fdYield *fdy_in,
                                          fdFlow *fdf_in,
                                          fdEvolution_S *fdEvolutionS_in,
@@ -134,7 +134,7 @@ XC::FiniteDeformationEP3D::FiniteDeformationEP3D(int tag,
 
 //! @brief Constructor 02
 XC::FiniteDeformationEP3D::FiniteDeformationEP3D(int tag,
-                                         XC::FiniteDeformationMaterial *fde3d_in,
+                                         FiniteDeformationMaterial *fde3d_in,
                                          fdYield *fdy_in,
                                          fdFlow *fdf_in,
                                          fdEvolution_S *fdEvolutionS_in)
@@ -355,7 +355,7 @@ XC::NDMaterial* XC::FiniteDeformationEP3D::getCopy(void) const
 //----------------------------------------------------------------------
 XC::NDMaterial* XC::FiniteDeformationEP3D::getCopy(const std::string &code) const
   {
-    XC::NDMaterial *tmp= nullptr;
+    NDMaterial *tmp= nullptr;
     if( (code==strTypeFiniteDeformationEP3D)
          || (code==strTypeFDEP3D) )
       tmp= getCopy();
@@ -443,50 +443,50 @@ XC::NDMaterial * XC::FiniteDeformationEP3D::getFDE3D() const
 ///*//
 //----------------------------------------------------------------------
 int XC::FiniteDeformationEP3D::ImplicitAlgorithm()
-{
+  {
     // Initializing
     double yieldfun = 0.0;              // trial value of yield function
     double D_gamma  = 0.0;              // consistency parameter /Delta_{gamma}
     double d_gamma  = 0.0;              // increment of consistency parameter /delta_{gamma}
-    int         iter_counter = 0;
+    int iter_counter = 0;
 
-    straintensor res_Ee = tensorZ2;     // residual of intermediate Ee
-    straintensor res_eta = tensorZ2;    // norm of residual of eta
+    stresstensor res_Ee(tensorZ2);     // residual of intermediate Ee
+    straintensor res_eta(tensorZ2);    // norm of residual of eta
 
     double  res_xi = 0.0;                // residual of strain like internal variable
     double  res_norm_eta = 0.0;         // norm of residual of eta
     double  res_norm_Ee  = 0.0;         // norm of residual of intermediate Ee
     double  residual = 0.0;                // residual of Ee and xi and eta
 
-    XC::straintensor Fp = tensorI2;;        // Plastic deformation gradient
+    straintensor Fp(tensorI2);;        // Plastic deformation gradient
     double xi = 0.0;                        // strain like internal isotropic variable
     double q = 0.0;                        // stress like internal isotropic variable
-    XC::straintensor eta;                        // strain like internal kinematic variable
-    XC::stresstensor a;                        // stress like internal kinematic variable
+    straintensor eta;                        // strain like internal kinematic variable
+    stresstensor a;                        // stress like internal kinematic variable
 
-    XC::straintensor Fpinv = tensorI2;      // inverse of Fp
-    XC::straintensor Ce = tensorI2;                // intermediate C
-    XC::straintensor Ee = tensorZ2;                // intermediate Ee
+    straintensor Fpinv(tensorI2);      // inverse of Fp
+    straintensor Ce(tensorI2);                // intermediate C
+    straintensor Ee(tensorZ2);                // intermediate Ee
 
-    XC::straintensor Fp_n = tensorI2;       // Plastic deformation gradient at time n
-    XC::straintensor Fp_ninv = tensorI2;    // Plastic deformation gradient at time n
-    XC::straintensor Ee_n = tensorZ2;       // Ee at the incremental step n, calculated from Fp_n
+    straintensor Fp_n(tensorI2);       // Plastic deformation gradient at time n
+    straintensor Fp_ninv(tensorI2);    // Plastic deformation gradient at time n
+    straintensor Ee_n(tensorZ2);       // Ee at the incremental step n, calculated from Fp_n
     double xi_n = 0.0;                        // xi at the incremental step n, known
-    XC::straintensor eta_n = tensorZ2;        // eta at the incremental step n, known
+    straintensor eta_n(tensorZ2);        // eta at the incremental step n, known
 
-    XC::stresstensor Mtensor = tensorZ2;    // --> dFl/dT
-    XC::stresstensor MCtensor = tensorZ2;   // --> dFl/dS
-    BJtensor Ltensor = tensorZ4 ;         // Tangent XC::BJtensor in the intermediate configuration
-    BJtensor LATStensor = tensorZ4;        // Consistent tangent XC::BJtensor in the intermediate configuration
+    stresstensor Mtensor(tensorZ2);    // --> dFl/dT
+    stresstensor MCtensor(tensorZ2);   // --> dFl/dS
+    BJtensor Ltensor = tensorZ4 ;         // Tangent BJtensor in the intermediate configuration
+    BJtensor LATStensor = tensorZ4;        // Consistent tangent BJtensor in the intermediate configuration
 
     double nscalar = 0.0;                // --> dFl/d(xi)
     double Kscalar = 0.0;                // Isotropic hardening modoulus
-    XC::straintensor ntensor;                // --> dFl/d(eta)
+    straintensor ntensor;                // --> dFl/d(eta)
     BJtensor Ktensor = tensorZ4;                // Kinematic hardening modoulus
 
-    XC::stresstensor dyods = tensorZ2 ;     // --> dY/d(stress)
+    stresstensor dyods(tensorZ2);     // --> dY/d(stress)
     double dyodq = 0.0;                        // --> dY/d(xi)
-    XC::stresstensor dyoda = tensorZ2 ;     // --> dY/d(eta)
+    stresstensor dyoda(tensorZ2);     // --> dY/d(eta)
 
     BJtensor dMods = tensorZ4;                // --> dM/d(stress), from d2Fl/d(stress)d(stress)
     BJtensor dMCods = tensorZ4;                // --> dMs/d(stress)
@@ -494,15 +494,15 @@ int XC::FiniteDeformationEP3D::ImplicitAlgorithm()
     double dnsodq = 0.0;                // --> d2Fl/dqdq
     BJtensor dntoda = tensorZ4;           // --> d2Fl/dada
 
-    XC::straintensor D_Ee = tensorZ2;
+    straintensor D_Ee(tensorZ2);
     double D_xi  = 0.0;
-    XC::straintensor D_eta = tensorZ2;
+    straintensor D_eta(tensorZ2);
 
     BJtensor tensorI4 = (tensorI2("ij")*tensorI2("kl")).transpose0110();
 
-    BJtensor A11 = tensorI4;  BJtensor A12 = tensorZ2;  BJtensor A13 = tensorZ4;
-    BJtensor A21 = tensorZ2;  double a22 = 1.0;            BJtensor A23 = tensorZ2;
-    BJtensor A31 = tensorZ4;  BJtensor A32 = tensorZ2;  BJtensor A33 = tensorI4;
+    BJtensor A11 = tensorI4;  BJtensor A12(tensorZ2);  BJtensor A13 = tensorZ4;
+    BJtensor A21(tensorZ2);  double a22 = 1.0;            BJtensor A23(tensorZ2);
+    BJtensor A31 = tensorZ4;  BJtensor A32(tensorZ2);  BJtensor A33 = tensorI4;
 
     BJmatrix C99(9, 9, 0.0);
     BJmatrix CCC(19, 19, 0.0);
@@ -524,7 +524,7 @@ int XC::FiniteDeformationEP3D::ImplicitAlgorithm()
     double temp5 = 0.0;
 
     BJtensor LM = tensorZ4;                 // For Mandel Tangent Stiffness
-    XC::stresstensor  B_Mandel = tensorZ2;   // For Mandel stress
+    stresstensor  B_Mandel(tensorZ2);   // For Mandel stress
 
     // Read the previous incremental step history variables
     Fp = fdeps->getCommittedFpInVar();
@@ -570,7 +570,7 @@ int XC::FiniteDeformationEP3D::ImplicitAlgorithm()
         Mtensor = fdf->dFods(B_Mandel, *fdeps);
         Mtensor = Ce("ik")*Mtensor("kj");
       Mtensor.null_indices();
-        MCtensor = (Mtensor + Mtensor.transpose11()) * 0.5;
+      MCtensor= (Mtensor + stresstensor(Mtensor.transpose11())) * 0.5;
 
         // Return tangent variables
     Ltensor = fde3d->getTangentTensor();
@@ -866,20 +866,20 @@ int XC::FiniteDeformationEP3D::ImplicitAlgorithm()
     //if(d_gamma < 0.0) d_gamma = 0.0;
 
     //Begin,  Calculate incremental variables
-    tensorTemp2 = MCtensor*(-d_gamma) - res_Ee;
+    tensorTemp2= (-d_gamma)*MCtensor - res_Ee;
     temp2 = nscalar*(-d_gamma) - res_xi;
-    if( fdEvolutionT ) {
-      tensorTemp8 = ntensor*(-d_gamma) - res_eta;
-    }
+    if( fdEvolutionT )
+      { tensorTemp8 = (-d_gamma)*ntensor - res_eta; }
 
     tensorTemp1 = A11("ijkl") *tensorTemp2("kl");
       tensorTemp1.null_indices();
     D_Ee = tensorTemp1 + A12*temp2;
-    if( fdEvolutionT ) {
-      tensorTemp3 = A13("ijkl") *tensorTemp8("kl");
+    if(fdEvolutionT)
+      {
+        tensorTemp3 = A13("ijkl") *tensorTemp8("kl");
         tensorTemp3.null_indices();
-      D_Ee += tensorTemp3;
-    }
+	D_Ee += static_cast<const straintensor &>(tensorTemp3);
+      }
 
     tensorTemp1 = A21("kl") *tensorTemp2("kl");
       tensorTemp1.null_indices();
@@ -905,7 +905,7 @@ int XC::FiniteDeformationEP3D::ImplicitAlgorithm()
         D_gamma += d_gamma;                  // updated D_gamma
 
     Ee += D_Ee;
-    Ce = Ee*2.0 + tensorI2;
+    Ce = Ee*2.0 + static_cast<const straintensor &>(tensorI2);
     fde3d->setTrialC(Ce);  // Note: It is C, not F!!!
     B_PK2 = fde3d->getStressTensor();    // Updated B_PK2
         B_Mandel = Ce("ik")*B_PK2("kj");     // Update Mandel Stress
@@ -916,17 +916,18 @@ int XC::FiniteDeformationEP3D::ImplicitAlgorithm()
     fdeps->setStrainLikeInVar(xi);
     fdeps->setStressLikeInVar(q);
 
-    if( fdEvolutionT ) {
-      eta += D_eta;
-      tensorTemp2 = Ktensor("ijkl")*D_eta("kl");
+    if( fdEvolutionT )
+      {
+        eta += D_eta;
+        tensorTemp2 = Ktensor("ijkl")*D_eta("kl");
         tensorTemp2.null_indices();
-      a += tensorTemp2;
-      fdeps->setStrainLikeKiVar(eta);
-      fdeps->setStressLikeKiVar(a);
-    }
+	a += static_cast<const stresstensor &>(tensorTemp2);
+        fdeps->setStrainLikeKiVar(eta);
+        fdeps->setStressLikeKiVar(a);
+      }
 
     //Begin, Calculate residuals
-    res_Ee = (MCtensor*D_gamma) + Ee - Ee_n;
+    res_Ee = (MCtensor*D_gamma) + stresstensor(Ee - Ee_n);
     res_xi = (nscalar*D_gamma) + xi - xi_n;
 
     tensorTemp1 = res_Ee("ij")*res_Ee("ij");
@@ -964,7 +965,7 @@ int XC::FiniteDeformationEP3D::ImplicitAlgorithm()
       // Update Fp
       tensorTemp2 = Mtensor("ij")*Fp_n("jk");
         tensorTemp2.null_indices();
-      Fp = Fp_n + tensorTemp2 *D_gamma;
+	Fp = Fp_n + static_cast<const straintensor &>(tensorTemp2) *D_gamma;
       fdeps->setFpInVar(Fp);
       Fpinv = Fp.inverse();  //Using the iterative FP
 
@@ -1129,42 +1130,42 @@ int XC::FiniteDeformationEP3D::SemiImplicitAlgorithm()
     double d_gamma  = 0.0;              // increment of consistency parameter /delta_{gamma}
     int         iter_counter = 0;
 
-    XC::straintensor res_Ee = tensorZ2;     // residual of intermediate Ee
-    XC::straintensor res_eta = tensorZ2;    // norm of residual of eta
+    straintensor res_Ee(tensorZ2);     // residual of intermediate Ee
+    straintensor res_eta(tensorZ2);    // norm of residual of eta
 
-    XC::straintensor Fp = tensorI2;;        // Plastic deformation gradient
+    straintensor Fp(tensorI2);;        // Plastic deformation gradient
     double xi = 0.0;                        // strain like internal isotropic variable
     double q = 0.0;                        // stress like internal isotropic variable
-    XC::straintensor eta;                        // strain like internal kinematic variable
-    XC::stresstensor a;                        // stress like internal kinematic variable
+    straintensor eta;                        // strain like internal kinematic variable
+    stresstensor a;                        // stress like internal kinematic variable
 
-    XC::straintensor Fpinv = tensorI2;      // inverse of Fp
-    XC::straintensor Ce = tensorI2;                // intermediate C
-    XC::straintensor Ee = tensorZ2;                // intermediate Ee
+    straintensor Fpinv(tensorI2);      // inverse of Fp
+    straintensor Ce(tensorI2);                // intermediate C
+    straintensor Ee(tensorZ2);                // intermediate Ee
 
-    XC::straintensor Fp_n = tensorI2;       // Plastic deformation gradient at time n
-    XC::straintensor Fp_ninv = tensorI2;    // Plastic deformation gradient at time n
-    XC::straintensor Ee_n = tensorZ2;       // Ee at the incremental step n, calculated from Fp_n
+    straintensor Fp_n(tensorI2);       // Plastic deformation gradient at time n
+    straintensor Fp_ninv(tensorI2);    // Plastic deformation gradient at time n
+    straintensor Ee_n(tensorZ2);       // Ee at the incremental step n, calculated from Fp_n
     double xi_n;                        // xi at the incremental step n, known
-    XC::straintensor eta_n = tensorZ2;        // eta at the incremental step n, known
+    straintensor eta_n(tensorZ2);        // eta at the incremental step n, known
 
-    XC::stresstensor Mtensor = tensorZ2;    // --> dFl/dT
-    XC::stresstensor MCtensor = tensorZ2;   // --> dFl/dS
+    stresstensor Mtensor(tensorZ2);    // --> dFl/dT
+    stresstensor MCtensor(tensorZ2);   // --> dFl/dS
     BJtensor Ltensor = tensorZ4 ;         // Tangent XC::BJtensor in the intermediate configuration
     BJtensor LATStensor = tensorZ4;        // Consistent tangent XC::BJtensor in the intermediate configuration
 
     double nscalar = 0.0;                // --> dFl/d(xi)
     double Kscalar = 0.0;                // Isotropic hardening modoulus
-    XC::straintensor ntensor;                // --> dFl/d(eta)
+    straintensor ntensor;                // --> dFl/d(eta)
     BJtensor Ktensor = tensorZ4;                // Kinematic hardening modoulus
 
-    XC::stresstensor dyods = tensorZ2 ;     // --> dY/d(stress)
+    stresstensor dyods(tensorZ2);     // --> dY/d(stress)
     double dyodq = 0.0;                        // --> dY/d(xi)
-    XC::stresstensor dyoda = tensorZ2 ;     // --> dY/d(eta)
+    stresstensor dyoda(tensorZ2);     // --> dY/d(eta)
 
-    XC::straintensor D_Ee = tensorZ2;
+    straintensor D_Ee(tensorZ2);
     double D_xi  = 0.0;
-    XC::straintensor D_eta = tensorZ2;
+    straintensor D_eta(tensorZ2);
 
     BJtensor tensorTemp0;
     BJtensor tensorTemp1;
@@ -1176,7 +1177,7 @@ int XC::FiniteDeformationEP3D::SemiImplicitAlgorithm()
     double lowerPart = 0.0;
 
     BJtensor LM = tensorZ4;                 // For Mandel Tangent Stiffness
-    XC::stresstensor  B_Mandel = tensorZ2;   // For Mandel stress
+    stresstensor  B_Mandel(tensorZ2);   // For Mandel stress
 
     tensorTemp1 = tensorI2("ij")*tensorI2("kl");
       tensorTemp1.null_indices();
@@ -1229,18 +1230,19 @@ int XC::FiniteDeformationEP3D::SemiImplicitAlgorithm()
       if( fdEvolutionT)
         ntensor = fdf->dFoda(B_Mandel, *fdeps);
 
-      do {   // beginning of do - while
-        MCtensor = Ce("ik")*Mtensor("kj");
-      MCtensor.null_indices();
-        MCtensor = (MCtensor + MCtensor.transpose11()) * 0.5;
+      do
+	{   // beginning of do - while
+          MCtensor = Ce("ik")*Mtensor("kj");
+          MCtensor.null_indices();
+          MCtensor = (MCtensor + stresstensor(MCtensor.transpose11())) * 0.5;
 
-        // Return tangent variables
-    Ltensor = fde3d->getTangentTensor();
-    tensorTemp1 = tensorI2("ij") *B_PK2("mn");
-      tensorTemp1.null_indices();
-    tensorTemp2 = Ce("ik") *Ltensor("kjmn");
-      tensorTemp2.null_indices();
-        LM = tensorTemp2 + tensorTemp1.transpose0110() + tensorTemp1.transpose0111();
+          // Return tangent variables
+          Ltensor = fde3d->getTangentTensor();
+          tensorTemp1 = tensorI2("ij") *B_PK2("mn");
+          tensorTemp1.null_indices();
+          tensorTemp2 = Ce("ik") *Ltensor("kjmn");
+          tensorTemp2.null_indices();
+          LM = tensorTemp2 + tensorTemp1.transpose0110() + tensorTemp1.transpose0111();
         dyods = fdy->dYods(B_Mandel, *fdeps);
 
     if( fdEvolutionS) {
@@ -1288,7 +1290,7 @@ int XC::FiniteDeformationEP3D::SemiImplicitAlgorithm()
         D_gamma += d_gamma;   // updated D_gamma
 
     Ee += D_Ee;
-    Ce = Ee*2.0 + tensorI2;
+    Ce = Ee*2.0 + straintensor(tensorI2);
     fde3d->setTrialC(Ce);  // Note: It is C, not F!!!
     B_PK2 = fde3d->getStressTensor();    // Updated B_PK2
         B_Mandel = Ce("ik")*B_PK2("kj");     // Update Mandel Stress
@@ -1301,14 +1303,15 @@ int XC::FiniteDeformationEP3D::SemiImplicitAlgorithm()
       fdeps->setStressLikeInVar(q);
     }
 
-    if( fdEvolutionT ) {
-      eta += D_eta;
-      tensorTemp1 = Ktensor("ijkl") *D_eta("kl");
+    if( fdEvolutionT )
+      {
+        eta += D_eta;
+        tensorTemp1 = Ktensor("ijkl") *D_eta("kl");
         tensorTemp1.null_indices();
-      a += tensorTemp1;
-      fdeps->setStrainLikeKiVar(eta);
-      fdeps->setStressLikeKiVar(a);
-    }
+	a += static_cast<const stresstensor &>(tensorTemp1);
+        fdeps->setStrainLikeKiVar(eta);
+        fdeps->setStressLikeKiVar(a);
+      }
 
     yieldfun = fdy->Yd(B_Mandel, *fdeps);        // Updated yieldfun
     //printf("Y= %e\n ", yieldfun);
@@ -1331,7 +1334,7 @@ int XC::FiniteDeformationEP3D::SemiImplicitAlgorithm()
       // Update Fp
       tensorTemp2 = Mtensor("ij")*Fp_n("jk");
         tensorTemp2.null_indices();
-      Fp = Fp_n + (tensorTemp2 *D_gamma);
+	Fp = Fp_n + static_cast<const straintensor &>(tensorTemp2)*D_gamma;
       fdeps->setFpInVar(Fp);
 
       // Return iniTangent and iniPK2

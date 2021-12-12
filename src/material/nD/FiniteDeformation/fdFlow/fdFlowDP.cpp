@@ -50,24 +50,19 @@
 //#
 //===============================================================================
 
-#ifndef fdFlowDP_CPP
-#define fdFlowDP_CPP
-
 #include "material/nD/FiniteDeformation/fdFlow/fdFlowDP.h"
 #include "material/nD/FiniteDeformation/FDEPState.h"
 #include <cmath>
 #include <iostream>
 
-using namespace XC;
+const double pipi= 3.14159265358979323846;
 
-//--------------------------------------------------------------------
 XC::fdFlowDP::fdFlowDP(double DilatedAngle_in, double Cohesion_in, int ConeIndex_in)
 :DilatedAngle(DilatedAngle_in), Cohesion(Cohesion_in), ConeIndex(ConeIndex_in)
-{
-   double pipi = 3.14159265358979323846;
-   double Root3 = sqrt(3.0);
-   double Root1o3 = 1.0/Root3;
-   double archAngle = DilatedAngle*pipi/180.0; 
+  {
+   const double Root3 = sqrt(3.0);
+   const double Root1o3 = 1.0/Root3;
+   const double archAngle = DilatedAngle*pipi/180.0; 
 
    switch (ConeIndex) {
 
@@ -104,7 +99,7 @@ XC::fdFlowDP::fdFlowDP(double DilatedAngle_in, double Cohesion_in, int ConeIndex
 }
 
 //! @brief Virtual constructor.
-XC::fdFlow * XC::fdFlowDP::getCopy(void)
+XC::fdFlow *XC::fdFlowDP::getCopy(void)
   { return new fdFlowDP(*this); }
 
 //-------------------------------------------------------------------
@@ -116,7 +111,7 @@ XC::fdFlow * XC::fdFlowDP::getCopy(void)
 
 //--------------------------------------------------------------------
 XC::stresstensor XC::fdFlowDP::dFods(const XC::stresstensor &sts, const XC::FDEPState &fdepstate) const
-{    
+  {    
     // NumRank=1, No Ki Hardeing
     //BJtensor tI2("I", 2 , def_dim_2);
     //XC::stresstensor dev = sts.deviator();
@@ -126,30 +121,32 @@ XC::stresstensor XC::fdFlowDP::dFods(const XC::stresstensor &sts, const XC::FDEP
     //return tI2*k1 + dev *(1.0/sqrt(2.0*x));
 
     // NumRank=2, with Ki Hardeing
-    double pipi = 3.14159265358979323846;
     double archAngle = DilatedAngle*pipi/180.0;
     BJtensor tI2("I", 2, def_dim_2);
     double root3 = sqrt(3.0);
     double M = 3.0*root3*k1;
     double cv = fdepstate.getStressLikeInVar();
-    if ( tan(archAngle) < 1.0e-4 ) {
-      std::cerr << "fdFlowDP-- (close) zero or invalid dilation angle, try VM flow rule\n";
-      exit (-1);      
-    }
+    if( tan(archAngle) < 1.0e-4 )
+      {
+        std::cerr << "fdFlowDP::" << __FUNCTION__
+	          << "; (close) zero or invalid dilation angle, try VM flow rule\n";
+        exit (-1);      
+      }
     double pa = Cohesion/tan(archAngle) + cv;
-    XC::stresstensor a = fdepstate.getStressLikeKiVar();
-    XC::stresstensor dev = sts.deviator();
+    stresstensor a = fdepstate.getStressLikeKiVar();
+    stresstensor dev = sts.deviator();
     double p = sts.p_hydrostatic();
     double pb = p + pa;
     BJtensor aijaij = a("ij")*a("ij");
       aijaij.null_indices();
     double aa = aijaij.trace();
-    XC::stresstensor w  = dev - a *pb;
+    stresstensor w(dev - a *pb);
     BJtensor wijaij = w("ij")*a("ij");
       wijaij.null_indices();
-    double wa = wijaij.trace();
-    return w*3.0 + tI2*(pb*aa +wa + (2.0/3.0)*M*M*pb);
-}
+    const double wa = wijaij.trace();
+    stresstensor retval(w*3.0 + stresstensor(tI2*(pb*aa +wa + (2.0/3.0)*M*M*pb)));
+    return retval;
+  }
 
 //--------------------------------------------------------------------
 double XC::fdFlowDP::dFodq(const XC::stresstensor &sts, const XC::FDEPState &fdepstate ) const
@@ -158,7 +155,6 @@ double XC::fdFlowDP::dFodq(const XC::stresstensor &sts, const XC::FDEPState &fde
     //return -k2;
 
     // NumRank=2, with Ki Hardeing
-    double pipi = 3.14159265358979323846;
     double archAngle = DilatedAngle*pipi/180.0;
     double root3 = sqrt(3.0);
     double M = 3.0*root3*k1;
@@ -170,9 +166,9 @@ double XC::fdFlowDP::dFodq(const XC::stresstensor &sts, const XC::FDEPState &fde
     double pa = Cohesion/tan(archAngle) + cv;
     double p = sts.p_hydrostatic();
     double pb = p + pa;
-    XC::stresstensor a = fdepstate.getStressLikeKiVar();
-    XC::stresstensor dev = sts.deviator();
-    XC::stresstensor w  = dev - a *pb;
+    stresstensor a = fdepstate.getStressLikeKiVar();
+    stresstensor dev = sts.deviator();
+    stresstensor w(dev - a *pb);
     BJtensor wijaij = w("ij")*a("ij");
       wijaij.null_indices();
     double wa = wijaij.trace();
@@ -184,22 +180,23 @@ double XC::fdFlowDP::dFodq(const XC::stresstensor &sts, const XC::FDEPState &fde
 XC::stresstensor XC::fdFlowDP::dFoda(const XC::stresstensor &sts, const XC::FDEPState &fdepstate) const
 {    
     // NumRank=2, with Ki Hardeing
-    double pipi = 3.14159265358979323846;
     double archAngle = DilatedAngle*pipi/180.0;
     double cv = fdepstate.getStressLikeInVar();
-    if ( tan(archAngle) < 1.0e-4 ) {
-      std::cerr << "fdFlowDP-- (close) zero or invalid dilation angle, try VM flow rule\n";
-      exit (-1);      
-    }
+    if( tan(archAngle) < 1.0e-4 )
+      {
+        std::cerr << "fdFlowDP::" << __FUNCTION__
+	          << "; (close) zero or invalid dilation angle, try VM flow rule\n";
+        exit (-1);      
+      }
     double pa = Cohesion/tan(archAngle) + cv;
-    XC::stresstensor a = fdepstate.getStressLikeKiVar();
-    XC::stresstensor dev = sts.deviator();
+    stresstensor a = fdepstate.getStressLikeKiVar();
+    stresstensor dev = sts.deviator();
     double p = sts.p_hydrostatic();
     double pb = p + pa;
-    XC::stresstensor w  = dev - a*pb;
-
-    return w*(-3.0*pb);
-}
+    stresstensor w(dev - a*pb);
+    stresstensor retval(w*(-3.0*pb));
+    return retval;
+  }
 
 //--------------------------------------------------------------------
 XC::BJtensor XC::fdFlowDP::d2Fodsds(const XC::stresstensor &sts, const XC::FDEPState &fdepstate ) const
@@ -219,7 +216,6 @@ XC::BJtensor XC::fdFlowDP::d2Fodsds(const XC::stresstensor &sts, const XC::FDEPS
     //return I4 *(1.0/sqrt(x)) - st4 *(2.0/x/sqrt(x));
 
     // NumRank=2, with Ki Hardeing
-    double pipi = 3.14159265358979323846;
     double archAngle = DilatedAngle*pipi/180.0;
     BJtensor tI2("I", 2, def_dim_2);
     double root3 = sqrt(3.0);
@@ -230,11 +226,11 @@ XC::BJtensor XC::fdFlowDP::d2Fodsds(const XC::stresstensor &sts, const XC::FDEPS
       exit (-1);      
     }
     double pa = Cohesion/tan(archAngle) + cv;
-    XC::stresstensor a = fdepstate.getStressLikeKiVar();
-    XC::stresstensor dev = sts.deviator();
+    stresstensor a = fdepstate.getStressLikeKiVar();
+    stresstensor dev = sts.deviator();
     double p = sts.p_hydrostatic();
     double pb = p + pa;
-    XC::stresstensor w  = dev - a *pb;
+    stresstensor w(dev - a *pb);
     double akk = a.Iinvariant1();
     BJtensor aijaij = a("ij")*a("ij");
       aijaij.null_indices();
@@ -252,25 +248,24 @@ XC::BJtensor XC::fdFlowDP::d2Fodsds(const XC::stresstensor &sts, const XC::FDEPS
 
 //--------------------------------------------------------------------
 XC::stresstensor XC::fdFlowDP::d2Fodsdq(const XC::stresstensor &sts, const XC::FDEPState &fdepstate ) const
-{
+  {
     // NumRank=2, with Ki Hardeing
     BJtensor tI2("I", 2, def_dim_2);
     double root3 = sqrt(3.0);
     double M = 3.0*root3*k1;
-    XC::stresstensor a = fdepstate.getStressLikeKiVar();
+    stresstensor a = fdepstate.getStressLikeKiVar();
     double akk = a.Iinvariant1();
     BJtensor aijaij = a("ij")*a("ij");
       aijaij.null_indices();
-    double aa = aijaij.trace();
-
-    return a*(-3.0) + tI2*(akk - aa + M*M*2.0/3.0); 
-}
+    const double aa = aijaij.trace();
+    stresstensor retval(a*(-3.0) + stresstensor(tI2*(akk - aa + M*M*2.0/3.0)));
+    return retval; 
+  }
 
 //--------------------------------------------------------------------
 XC::BJtensor XC::fdFlowDP::d2Fodsda(const XC::stresstensor &sts, const XC::FDEPState &fdepstate ) const
 {  
     // NumRank=2, with Ki Hardeing
-    double pipi = 3.14159265358979323846;
     double archAngle = DilatedAngle*pipi/180.0;
     BJtensor tI2("I", 2, def_dim_2);
     double cv = fdepstate.getStressLikeInVar();
@@ -279,11 +274,11 @@ XC::BJtensor XC::fdFlowDP::d2Fodsda(const XC::stresstensor &sts, const XC::FDEPS
       exit (-1);      
     }
     double pa = Cohesion/tan(archAngle) + cv;
-    XC::stresstensor a = fdepstate.getStressLikeKiVar();
-    XC::stresstensor dev = sts.deviator();
+    stresstensor a = fdepstate.getStressLikeKiVar();
+    stresstensor dev = sts.deviator();
     double p = sts.p_hydrostatic();
     double pb = p + pa;
-    XC::stresstensor w  = dev - a *pb;
+    stresstensor w(dev - a *pb);
     BJtensor tI40 = tI2("ij")*tI2("kl");
       tI40.null_indices();	
     BJtensor tI41 = tI40.transpose0110(); // for non-symmetric
@@ -301,7 +296,7 @@ double XC::fdFlowDP::d2Fodqdq(const XC::stresstensor &sts, const XC::FDEPState &
     // NumRank=2, with Ki Hardeing
     double root3 = sqrt(3.0);
     double M = 3.0*root3*k1;
-    XC::stresstensor a = fdepstate.getStressLikeKiVar();
+    stresstensor a = fdepstate.getStressLikeKiVar();
     BJtensor aijaij = a("ij")*a("ij");
       aijaij.null_indices();
     double aa = aijaij.trace();
@@ -313,28 +308,28 @@ double XC::fdFlowDP::d2Fodqdq(const XC::stresstensor &sts, const XC::FDEPState &
 XC::stresstensor XC::fdFlowDP::d2Fodqda(const XC::stresstensor &sts, const XC::FDEPState &fdepstate ) const
 {
     // NumRank=2, with Ki Hardeing
-    double pipi = 3.14159265358979323846;
     double archAngle = DilatedAngle*pipi/180.0;
     BJtensor tI2("I", 2, def_dim_2);
     double cv = fdepstate.getStressLikeInVar();
-    if ( tan(archAngle) < 1.0e-4 ) {
-      std::cerr << "fdFlowDP-- (close) zero or invalid dilation angle, try VM flow rule\n";
-      exit (-1);      
-    }
+    if ( tan(archAngle) < 1.0e-4 )
+      {
+        std::cerr << "fdFlowDP::" << __FUNCTION__
+		  << "; (close) zero or invalid dilation angle, try VM flow rule\n";
+        exit (-1);      
+      }
     double pa = Cohesion/tan(archAngle) + cv;
-    XC::stresstensor a = fdepstate.getStressLikeKiVar();
-    XC::stresstensor dev = sts.deviator();
+    stresstensor a = fdepstate.getStressLikeKiVar();
+    stresstensor dev = sts.deviator();
     double p = sts.p_hydrostatic();
     double pb = p + pa;
-    XC::stresstensor w  = dev - a*pb;
-
-    return a*(3.0*pb) - w*3.0; 
-}
+    stresstensor w(dev - a*pb);
+    stresstensor retval(a*(3.0*pb) - w*3.0);
+    return retval; 
+  }
 
 XC::BJtensor XC::fdFlowDP::d2Fodada(const XC::stresstensor &sts, const XC::FDEPState &fdepstate ) const
 {  
     // NumRank=2, with Ki Hardeing
-    double pipi = 3.14159265358979323846;
     double archAngle = DilatedAngle*pipi/180.0;
     BJtensor tI2("I", 2, def_dim_2);
     double cv = fdepstate.getStressLikeInVar();
@@ -343,8 +338,8 @@ XC::BJtensor XC::fdFlowDP::d2Fodada(const XC::stresstensor &sts, const XC::FDEPS
       exit (-1);      
     }
     double pa = Cohesion/tan(archAngle) + cv;
-    XC::stresstensor a = fdepstate.getStressLikeKiVar();
-    XC::stresstensor dev = sts.deviator();
+    stresstensor a = fdepstate.getStressLikeKiVar();
+    stresstensor dev = sts.deviator();
     double p = sts.p_hydrostatic();
     double pb = p + pa;
     BJtensor tI40 = tI2("ij")*tI2("kl");
@@ -368,5 +363,4 @@ void XC::fdFlowDP::print(void)
   { std::cerr << *this; }
 
 
-#endif
 

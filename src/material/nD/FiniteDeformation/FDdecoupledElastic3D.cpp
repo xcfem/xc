@@ -144,7 +144,7 @@ const double XC::FDdecoupledElastic3D::getJ(void) const
 //! @brief 
 const XC::Vector XC::FDdecoupledElastic3D::getlambda(void) const
   {
-    XC::Vector lambda(3);
+    Vector lambda(3);
 
     lambda(0) = lambda1;
     lambda(1) = lambda2;
@@ -249,46 +249,46 @@ const XC::Tensor XC::FDdecoupledElastic3D::FDisoStiffness(void)
       double d2 = (lambda2+lambda3)*(lambda2+lambda1)*(lambda2-lambda3)*(lambda2-lambda1);
       double d3 = (lambda3+lambda1)*(lambda3+lambda2)*(lambda3-lambda1)*(lambda3-lambda2);
 
-      Tensor M1 = ( C - I_ij*(I1-lambda1*lambda1) + Cinv*(J*J/(lambda1*lambda1)) ) * (1.0/d1);
-      Tensor M2 = ( C - I_ij*(I1-lambda2*lambda2) + Cinv*(J*J/(lambda2*lambda2)) ) * (1.0/d2);
-      Tensor M3 = ( C - I_ij*(I1-lambda3*lambda3) + Cinv*(J*J/(lambda3*lambda3)) ) * (1.0/d3);
+      Tensor M1(( straintensor(C - I_ij*(I1-lambda1*lambda1)) + Cinv*(J*J/(lambda1*lambda1)) ) * (1.0/d1));
+      Tensor M2(( straintensor(C - I_ij*(I1-lambda2*lambda2)) + Cinv*(J*J/(lambda2*lambda2)) ) * (1.0/d2));
+      Tensor M3(( straintensor(C - I_ij*(I1-lambda3*lambda3)) + Cinv*(J*J/(lambda3*lambda3)) ) * (1.0/d3));
 
     double d1p = 4.0 *lambda1*lambda1*lambda1*lambda1 - I1*lambda1*lambda1 - J*J /(lambda1*lambda1);
     double d2p = 4.0 *lambda2*lambda2*lambda2*lambda2 - I1*lambda2*lambda2 - J*J /(lambda2*lambda2);
     double d3p = 4.0 *lambda3*lambda3*lambda3*lambda3 - I1*lambda3*lambda3 - J*J /(lambda3*lambda3);
 
-    XC::Tensor Cm1M1M1Cm1 = Cinv("ij")*M1("kl") + M1("ij")*Cinv("kl");
+    Tensor Cm1M1M1Cm1 = Cinv("ij")*M1("kl") + M1("ij")*Cinv("kl");
     Cinv.null_indices(); M1.null_indices(); Cm1M1M1Cm1.null_indices();
 
-    XC::Tensor Cm1M2M2Cm1 = Cinv("ij")*M2("kl") + M2("ij")*Cinv("kl");
+    Tensor Cm1M2M2Cm1 = Cinv("ij")*M2("kl") + M2("ij")*Cinv("kl");
     Cinv.null_indices(); M2.null_indices(); Cm1M2M2Cm1.null_indices();
 
-    XC::Tensor Cm1M3M3Cm1 = Cinv("ij")*M3("kl") + M3("ij")*Cinv("kl");
+    Tensor Cm1M3M3Cm1 = Cinv("ij")*M3("kl") + M3("ij")*Cinv("kl");
     Cinv.null_indices(); M3.null_indices(); Cm1M3M3Cm1.null_indices();
 
 
-    XC::Tensor dM1M1d = I_ij("ij")*M1("kl") + M1("ij")*I_ij("kl");
+    Tensor dM1M1d = I_ij("ij")*M1("kl") + M1("ij")*I_ij("kl");
     I_ij.null_indices(); M1.null_indices(); dM1M1d.null_indices();
 
-    XC::Tensor dM2M2d = I_ij("ij")*M2("kl") + M2("ij")*I_ij("kl");
+    Tensor dM2M2d = I_ij("ij")*M2("kl") + M2("ij")*I_ij("kl");
     I_ij.null_indices(); M2.null_indices(); dM2M2d.null_indices();
 
-    XC::Tensor dM3M3d = I_ij("ij")*M3("kl") + M3("ij")*I_ij("kl");
+    Tensor dM3M3d = I_ij("ij")*M3("kl") + M3("ij")*I_ij("kl");
     I_ij.null_indices(); M3.null_indices(); dM3M3d.null_indices();
 
-    XC::Tensor M1M1 = M1("ij") * M1("kl");
+    Tensor M1M1 = M1("ij") * M1("kl");
     M1.null_indices(); M1M1.null_indices();
-    XC::Tensor M2M2 = M2("ij") * M2("kl");
+    Tensor M2M2 = M2("ij") * M2("kl");
     M2.null_indices(); M2M2.null_indices();
-    XC::Tensor M3M3 = M3("ij") * M3("kl");
+    Tensor M3M3 = M3("ij") * M3("kl");
     M3.null_indices(); M3M3.null_indices();
 
-    XC::Tensor calM1 = ( tempI + (CinvCinv_ICinv -Cm1M1M1Cm1)*(J*J/(lambda1*lambda1)) + dM1M1d*(lambda1*lambda1) - M1M1*d1p ) *(1.0/d1);
-    XC::Tensor calM2 = ( tempI + (CinvCinv_ICinv -Cm1M2M2Cm1)*(J*J/(lambda2*lambda2)) + dM2M2d*(lambda2*lambda2) - M2M2*d2p ) *(1.0/d2);
-    XC::Tensor calM3 = ( tempI + (CinvCinv_ICinv -Cm1M3M3Cm1)*(J*J/(lambda3*lambda3)) + dM3M3d*(lambda3*lambda3) - M3M3*d3p ) *(1.0/d3);
+    Tensor calM1 = ( tempI + (CinvCinv_ICinv -Cm1M1M1Cm1)*(J*J/(lambda1*lambda1)) + dM1M1d*(lambda1*lambda1) - M1M1*d1p ) *(1.0/d1);
+    Tensor calM2 = ( tempI + (CinvCinv_ICinv -Cm1M2M2Cm1)*(J*J/(lambda2*lambda2)) + dM2M2d*(lambda2*lambda2) - M2M2*d2p ) *(1.0/d2);
+    Tensor calM3 = ( tempI + (CinvCinv_ICinv -Cm1M3M3Cm1)*(J*J/(lambda3*lambda3)) + dM3M3d*(lambda3*lambda3) - M3M3*d3p ) *(1.0/d3);
 
-    XC::Tensor L_iso_1 = ( calM1*Wa(0) + calM2*Wa(1) + calM3*Wa(2) ) * 2.0;
-    XC::Tensor L_iso_2 =  M1("ij") * M1("kl") * yab.cval(1,1)  + M1("ij") * M2("kl") * yab.cval(1,2)  + M1("ij") * M3("kl") * yab.cval(1,3)  +
+    Tensor L_iso_1 = ( calM1*Wa(0) + calM2*Wa(1) + calM3*Wa(2) ) * 2.0;
+    Tensor L_iso_2 =  M1("ij") * M1("kl") * yab.cval(1,1)  + M1("ij") * M2("kl") * yab.cval(1,2)  + M1("ij") * M3("kl") * yab.cval(1,3)  +
                       M2("ij") * M1("kl") * yab.cval(2,1)  + M2("ij") * M2("kl") * yab.cval(2,2)  + M2("ij") * M3("kl") * yab.cval(2,3)  +
                       M3("ij") * M1("kl") * yab.cval(3,1)  + M3("ij") * M2("kl") * yab.cval(3,2)  + M3("ij") * M3("kl") * yab.cval(3,3);
     L_iso = L_iso_1 + L_iso_2 ;
@@ -297,19 +297,19 @@ const XC::Tensor XC::FDdecoupledElastic3D::FDisoStiffness(void)
   if(caseIndex == 11)
   {
     double d1 = (lambda1+lambda2)*(lambda1+lambda3)*(lambda1-lambda2)*(lambda1-lambda3);
-    XC::Tensor M1 = (I_ij - Cinv * (lambda2*lambda2)) * (1.0/(lambda1+lambda2)/(lambda1-lambda2));
-    XC::Tensor Mr = Cinv - M1;
+    Tensor M1((I_ij - Cinv * (lambda2*lambda2)) * (1.0/(lambda1+lambda2)/(lambda1-lambda2)));
+    Tensor Mr(Cinv - M1);
     double d1p = 4.0 *lambda1*lambda1*lambda1*lambda1 - I1*lambda1*lambda1 - J*J /(lambda1*lambda1);
-    XC::Tensor Cm1M1M1Cm1 = Cinv("ij")*M1("kl") + M1("ij")*Cinv("kl");
+    Tensor Cm1M1M1Cm1 = Cinv("ij")*M1("kl") + M1("ij")*Cinv("kl");
     Cinv.null_indices(); M1.null_indices(); Cm1M1M1Cm1.null_indices();
-    XC::Tensor dM1M1d = I_ij("ij")*M1("kl") + M1("ij")*I_ij("kl");
+    Tensor dM1M1d = I_ij("ij")*M1("kl") + M1("ij")*I_ij("kl");
     I_ij.null_indices(); M1.null_indices(); dM1M1d.null_indices();
-    XC::Tensor M1M1 = M1("ij") * M1("kl");
+    Tensor M1M1 = M1("ij") * M1("kl");
     M1.null_indices(); M1M1.null_indices();
-    XC::Tensor calM1 = ( tempI + (CinvCinv_ICinv -Cm1M1M1Cm1)*(J*J/(lambda1*lambda1)) + dM1M1d*(lambda1*lambda1) - M1M1*d1p ) *(1.0/d1);
-    XC::Tensor calMr = (ICinv + calM1) * (-1.0);
-    XC::Tensor L_iso_1 = ( calM1*Wa(0) + calMr*Wa(2) ) * 2.0;
-    XC::Tensor L_iso_2 =  M1("ij") * M1("kl") * yab.cval(1,1)  + M1("ij") * Mr("kl") * yab.cval(1,3)  +
+    Tensor calM1 = ( tempI + (CinvCinv_ICinv -Cm1M1M1Cm1)*(J*J/(lambda1*lambda1)) + dM1M1d*(lambda1*lambda1) - M1M1*d1p ) *(1.0/d1);
+    Tensor calMr = (ICinv + calM1) * (-1.0);
+    Tensor L_iso_1 = ( calM1*Wa(0) + calMr*Wa(2) ) * 2.0;
+    Tensor L_iso_2 =  M1("ij") * M1("kl") * yab.cval(1,1)  + M1("ij") * Mr("kl") * yab.cval(1,3)  +
                       Mr("ij") * M1("kl") * yab.cval(3,1)  + Mr("ij") * Mr("kl") * yab.cval(3,3);
     L_iso = L_iso_1 + L_iso_2 ;
   }
@@ -317,29 +317,29 @@ const XC::Tensor XC::FDdecoupledElastic3D::FDisoStiffness(void)
   if(caseIndex == 13)
   {
     double d3 = (lambda3+lambda1)*(lambda3+lambda2)*(lambda3-lambda1)*(lambda3-lambda2);
-    XC::Tensor M3 = (I_ij - Cinv * (lambda2*lambda2)) * (1.0/(lambda3+lambda2)/(lambda3-lambda2));
-    XC::Tensor Mr = Cinv - M3;
+    Tensor M3((I_ij - Cinv * (lambda2*lambda2)) * (1.0/(lambda3+lambda2)/(lambda3-lambda2)));
+    Tensor Mr(Cinv - M3);
     double d3p = 4.0 *lambda3*lambda3*lambda3*lambda3 - I1*lambda3*lambda3 - J*J /(lambda3*lambda3);
-    XC::Tensor Cm1M3M3Cm1 = Cinv("ij")*M3("kl") + M3("ij")*Cinv("kl");
+    Tensor Cm1M3M3Cm1 = Cinv("ij")*M3("kl") + M3("ij")*Cinv("kl");
     Cinv.null_indices(); M3.null_indices(); Cm1M3M3Cm1.null_indices();
-    XC::Tensor dM3M3d = I_ij("ij")*M3("kl") + M3("ij")*I_ij("kl");
+    Tensor dM3M3d = I_ij("ij")*M3("kl") + M3("ij")*I_ij("kl");
     I_ij.null_indices(); M3.null_indices(); dM3M3d.null_indices();
-    XC::Tensor M3M3 = M3("ij") * M3("kl");
+    Tensor M3M3 = M3("ij") * M3("kl");
     M3.null_indices(); M3M3.null_indices();
-    XC::Tensor calM3 = ( tempI + (CinvCinv_ICinv -Cm1M3M3Cm1)*(J*J/(lambda3*lambda3)) + dM3M3d*(lambda3*lambda3) - M3M3*d3p ) *(1.0/d3);
-    XC::Tensor calMr = (ICinv + calM3) * (-1.0);
-    XC::Tensor L_iso_1 = ( calM3*Wa(2) + calMr*Wa(0) ) * 2.0;
-    XC::Tensor L_iso_2 =  M3("ij") * M3("kl") * yab.cval(3,3)  + M3("ij") * Mr("kl") * yab.cval(3,1)  +
+    Tensor calM3 = ( tempI + (CinvCinv_ICinv -Cm1M3M3Cm1)*(J*J/(lambda3*lambda3)) + dM3M3d*(lambda3*lambda3) - M3M3*d3p ) *(1.0/d3);
+    Tensor calMr = (ICinv + calM3) * (-1.0);
+    Tensor L_iso_1 = ( calM3*Wa(2) + calMr*Wa(0) ) * 2.0;
+    Tensor L_iso_2 =  M3("ij") * M3("kl") * yab.cval(3,3)  + M3("ij") * Mr("kl") * yab.cval(3,1)  +
                       Mr("ij") * M3("kl") * yab.cval(1,3)  + Mr("ij") * Mr("kl") * yab.cval(1,1);
     L_iso = L_iso_1 + L_iso_2 ;
   }
 
     if(caseIndex == 2)
   {
-    XC::Vector lambda_wave(3);
+    Vector lambda_wave(3);
     lambda_wave = this->getlambda_wave();
-    XC::Vector  d11 = W->d2isowOdlambda2(lambda_wave);
-    XC::Vector  d1 = W->disowOdlambda(lambda_wave);
+    Vector  d11 = W->d2isowOdlambda2(lambda_wave);
+    Vector  d1 = W->disowOdlambda(lambda_wave);
     double G2linear = d11(1)*lambda_wave2*lambda_wave2 + d1(1)*lambda_wave2;
 
     L_iso = ( ICinv - CinvCinv * (1.0/3.0) ) * G2linear;
@@ -350,14 +350,14 @@ const XC::Tensor XC::FDdecoupledElastic3D::FDisoStiffness(void)
 //! @brief 
 const XC::Tensor XC::FDdecoupledElastic3D::FDvolStiffness(void)
 {
-   XC::Tensor CinvCinv = Cinv("ij")*Cinv("kl") ;
+   Tensor CinvCinv = Cinv("ij")*Cinv("kl") ;
    Cinv.null_indices(); CinvCinv.null_indices();
-   XC::Tensor ICinv = ( CinvCinv.transpose0110() + CinvCinv.transpose0111() ) * (0.5);
+   Tensor ICinv = ( CinvCinv.transpose0110() + CinvCinv.transpose0111() ) * (0.5);
    double dWdJ = W->dvolwOdJ(J);
    double d2WdJ2 = W->d2volwOdJ2(J);
    double wj = d2WdJ2*J*J + J*dWdJ;
 
-   XC::Tensor L_vol = CinvCinv*wj - ICinv *2.0*J*dWdJ  ;
+   Tensor L_vol = CinvCinv*wj - ICinv *2.0*J*dWdJ  ;
 
    return L_vol;
 }
@@ -388,8 +388,8 @@ const XC::stresstensor &XC::FDdecoupledElastic3D::getStressTensor(void) const
 //! @brief 
 const XC::stresstensor XC::FDdecoupledElastic3D::getPK1StressTensor(void) const
   {
-   XC::stresstensor thisSPKStress;
-   XC::stresstensor thisFPKStress;
+   stresstensor thisSPKStress;
+   stresstensor thisFPKStress;
 
    if( FromForC == 0 ) {
     thisSPKStress = this->getStressTensor();
@@ -407,8 +407,8 @@ const XC::stresstensor XC::FDdecoupledElastic3D::getPK1StressTensor(void) const
 //! @brief 
 const XC::stresstensor XC::FDdecoupledElastic3D::getCauchyStressTensor(void) const
   {
-   XC::stresstensor thisSPKStress;
-   XC::stresstensor thisCauchyStress;
+   stresstensor thisSPKStress;
+   stresstensor thisCauchyStress;
 
    if( FromForC == 0 ) {
     thisSPKStress = this->getStressTensor();
@@ -438,7 +438,7 @@ int XC::FDdecoupledElastic3D::revertToStart(void)
     C = F0;
     Cinv = F0;
 
-    XC::Tensor ss_zero(2,def_dim_2,0.0);
+    Tensor ss_zero(2,def_dim_2,0.0);
     thisPK2Stress = ss_zero;
     thisGreenStrain = ss_zero;
     Stiffness = getInitialTangentTensor();
@@ -595,11 +595,11 @@ int XC::FDdecoupledElastic3D::ComputeTrials()
    else   {std::cerr << "FDdecoupledElastic3D::getCaseIndex -- unknown case! \n";
     exit(-1);}
 
-   XC::Tensor I_ij("I", 2, def_dim_2);
+   Tensor I_ij("I", 2, def_dim_2);
 
-   XC::Tensor isoPK2Stress(2, def_dim_2, 0.0);
+   Tensor isoPK2Stress(2, def_dim_2, 0.0);
 
-   XC::Vector Wa = this->wa();
+   Vector Wa = this->wa();
 
    double I1 = lambda1*lambda1+lambda2*lambda2+lambda3*lambda3;
 
@@ -609,24 +609,24 @@ int XC::FDdecoupledElastic3D::ComputeTrials()
      double d2 = (lambda2+lambda3)*(lambda2+lambda1)*(lambda2-lambda3)*(lambda2-lambda1);
      double d3 = (lambda3+lambda1)*(lambda3+lambda2)*(lambda3-lambda1)*(lambda3-lambda2);
 
-     XC::Tensor M1 = ( C - I_ij*(I1-lambda1*lambda1) + Cinv *(J*J/(lambda1*lambda1)) ) * (1.0/d1);
-     XC::Tensor M2 = ( C - I_ij*(I1-lambda2*lambda2) + Cinv *(J*J/(lambda2*lambda2)) ) * (1.0/d2);
-     XC::Tensor M3 = ( C - I_ij*(I1-lambda3*lambda3) + Cinv *(J*J/(lambda3*lambda3)) ) * (1.0/d3);
+     Tensor M1(( straintensor(C - I_ij*(I1-lambda1*lambda1)) + Cinv *(J*J/(lambda1*lambda1)) ) * (1.0/d1));
+     Tensor M2(( straintensor(C - I_ij*(I1-lambda2*lambda2)) + Cinv *(J*J/(lambda2*lambda2)) ) * (1.0/d2));
+     Tensor M3(( straintensor(C - I_ij*(I1-lambda3*lambda3)) + Cinv *(J*J/(lambda3*lambda3)) ) * (1.0/d3));
 
      isoPK2Stress = M1*Wa(0) + M2*Wa(1) + M3*Wa(2);
    }
 
    if(caseIndex == 11)
    {
-     XC::Tensor M1 = (I_ij - Cinv * (lambda2*lambda2)) * (1.0/(lambda1+lambda2)/(lambda1-lambda2));
-     XC::Tensor Mr = Cinv - M1;
+     Tensor M1((I_ij - Cinv * (lambda2*lambda2)) * (1.0/(lambda1+lambda2)/(lambda1-lambda2)));
+     Tensor Mr(Cinv - M1);
      isoPK2Stress = Mr*Wa(2) + M1*Wa(0);
    }
 
    if(caseIndex == 13)
    {
-     XC::Tensor M3 = (I_ij - Cinv * (lambda2*lambda2)) * (1.0/(lambda3+lambda2)/(lambda3-lambda2));
-     XC::Tensor Mr = Cinv - M3;
+     Tensor M3((I_ij - Cinv * (lambda2*lambda2)) * (1.0/(lambda3+lambda2)/(lambda3-lambda2)));
+     Tensor Mr(Cinv - M3);
      isoPK2Stress = Mr*Wa(0) + M3*Wa(2);
    }
 
@@ -636,14 +636,14 @@ int XC::FDdecoupledElastic3D::ComputeTrials()
    }
 
    double dWdJ = W->dvolwOdJ(J);
-   XC::Tensor volPK2Stress = Cinv * J * dWdJ;
+   Tensor volPK2Stress = Cinv * J * dWdJ;
 
    thisPK2Stress = volPK2Stress + isoPK2Stress; // This is PK2Stress
 
    thisGreenStrain = (C - I_ij) * 0.5; // This is Green Strain
 
-   XC::Tensor L_iso = this->FDisoStiffness();
-   XC::Tensor L_vol = this->FDvolStiffness();
+   Tensor L_iso = this->FDisoStiffness();
+   Tensor L_vol = this->FDvolStiffness();
    Stiffness = L_iso + L_vol; // This is Langrangian Tangent Stiffness
 
    return 0;

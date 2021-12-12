@@ -67,8 +67,8 @@ XC::Matrix XC::ElasticCrossAnisotropic::D(6, 6);
 ///////////////////////////////////////////////////////////////////////////////
 XC::ElasticCrossAnisotropic::ElasticCrossAnisotropic(int tag,double Ehp, double Evp, 
                                                  double nuhvp,double nuhhp,double Ghvp, 
-                                                 double rhop):
-XC::NDMaterial(tag, ND_TAG_ElasticCrossAnisotropic3D),
+                                                 double rhop)
+  : NDMaterial(tag, ND_TAG_ElasticCrossAnisotropic3D),
 Tepsilon(6), Cepsilon(6),
 Eh(Ehp), Ev(Evp), 
 nuhv(nuhvp), nuhh(nuhhp),
@@ -193,22 +193,21 @@ XC::ElasticCrossAnisotropic::setTrialStrain(const XC::Tensor &v)
 }
 
 int
-XC::ElasticCrossAnisotropic::setTrialStrain(const XC::Tensor &v, const XC::Tensor &r)
+XC::ElasticCrossAnisotropic::setTrialStrain(const Tensor &v, const XC::Tensor &r)
 {
     Strain = v;
     return 0;
 }
 
-int
-XC::ElasticCrossAnisotropic::setTrialStrainIncr(const XC::Tensor &v)
-{
-    Strain = Strain + v;
-    return 0;
-}
-
-int XC::ElasticCrossAnisotropic::setTrialStrainIncr(const XC::Tensor &v, const XC::Tensor &r)
+int XC::ElasticCrossAnisotropic::setTrialStrainIncr(const Tensor &v)
   {
-    Strain = Strain + v;
+    Strain = Strain + static_cast<const straintensor &>(v);
+    return 0;
+  }
+
+int XC::ElasticCrossAnisotropic::setTrialStrainIncr(const Tensor &v, const Tensor &r)
+  {
+    Strain = Strain + static_cast<const straintensor &>(v);
     return 0;
   }
 

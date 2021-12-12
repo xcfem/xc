@@ -50,18 +50,15 @@
 //#
 //===============================================================================
 
-#ifndef fdYieldDP_CPP
-#define fdYieldDP_CPP
-
 #include "material/nD/FiniteDeformation/fdYield/fdYieldDP.h"
 #include "material/nD/FiniteDeformation/FDEPState.h"
 
+const double pipi= 3.14159265358979323846;
 
 //--------------------------------------------------------------------
 XC::fdYieldDP::fdYieldDP(double FricAngle_in, double Cohesion_in, int ConeIndex_in)
  : FricAngle(FricAngle_in), Cohesion(Cohesion_in), ConeIndex(ConeIndex_in)
 {   
-   double pipi = 3.14159265358979323846;
    double Root3 = sqrt(3.0);
    double Root1o3 = 1.0/Root3;
    double archAngle = FricAngle*pipi/180.0;
@@ -136,7 +133,6 @@ double XC::fdYieldDP::Yd(const XC::stresstensor &sts, const XC::FDEPState &fdeps
     //return k1*I1 + sqrt(0.5*x) - k2*(Cohesion+q);
 
     // NumRank=2, with Ki Hardeing
-    double pipi = 3.14159265358979323846;
     double archAngle = FricAngle*pipi/180.0;
     double root3 = sqrt(3.0);
     double M = 3.0*root3*k1;
@@ -146,11 +142,11 @@ double XC::fdYieldDP::Yd(const XC::stresstensor &sts, const XC::FDEPState &fdeps
       exit (-1);      
     }
     double pa = Cohesion/tan(archAngle) + cv;
-    XC::stresstensor a = fdepstate.getStressLikeKiVar();
-    XC::stresstensor dev = sts.deviator();
+    stresstensor a = fdepstate.getStressLikeKiVar();
+    stresstensor dev = sts.deviator();
     double p = sts.p_hydrostatic();
     double pb = p + pa;
-    XC::stresstensor w  = dev - a *pb;
+    stresstensor w(dev-a*pb);
     BJtensor st = w("ij")*w("ij");
       st.null_indices();
     double x = st.trace();
@@ -170,7 +166,6 @@ XC::stresstensor XC::fdYieldDP::dYods(const XC::stresstensor &sts, const XC::FDE
     //return tI2*k1 + dev*(1.0/sqrt(2.0*x));
 
     // NumRank=2, with Ki Hardeing
-    double pipi = 3.14159265358979323846;
     double archAngle = FricAngle*pipi/180.0;
     BJtensor tI2("I", 2, def_dim_2);
     double root3 = sqrt(3.0);
@@ -181,28 +176,28 @@ XC::stresstensor XC::fdYieldDP::dYods(const XC::stresstensor &sts, const XC::FDE
       exit (-1);      
     }
     double pa = Cohesion/tan(archAngle) + cv;
-    XC::stresstensor a = fdepstate.getStressLikeKiVar();
-    XC::stresstensor dev = sts.deviator();
+    stresstensor a = fdepstate.getStressLikeKiVar();
+    stresstensor dev = sts.deviator();
     double p = sts.p_hydrostatic();
     double pb = p + pa;
     BJtensor aijaij = a("ij")*a("ij");
       aijaij.null_indices();
     double aa = aijaij.trace();
-    XC::stresstensor w  = dev - a *pb;
+    stresstensor w(dev-a*pb);
     BJtensor wijaij = w("ij")*a("ij");
       wijaij.null_indices();
     double wa = wijaij.trace();
-    return w*3.0 + tI2*(pb*aa +wa + (2.0/3.0)*M*M*pb);
-}					      
+    stresstensor retval(w*3.0 + stresstensor(tI2*(pb*aa +wa + (2.0/3.0)*M*M*pb)));
+    return retval;
+  }
 
 //--------------------------------------------------------------------
 double XC::fdYieldDP::dYodq(const XC::stresstensor &sts, const XC::FDEPState &fdepstate ) const
-{      
+  {      
     //// NumRank=1, No Ki Hardeing
     //return -k2;
 
     // NumRank=2, with Ki Hardeing
-    double pipi = 3.14159265358979323846;
     double archAngle = FricAngle*pipi/180.0;
     double root3 = sqrt(3.0);
     double M = 3.0*root3*k1;
@@ -214,9 +209,9 @@ double XC::fdYieldDP::dYodq(const XC::stresstensor &sts, const XC::FDEPState &fd
     double pa = Cohesion/tan(archAngle) + cv;
     double p = sts.p_hydrostatic();
     double pb = p + pa;
-    XC::stresstensor a = fdepstate.getStressLikeKiVar();
-    XC::stresstensor dev = sts.deviator();
-    XC::stresstensor w  = dev - a *pb;
+    stresstensor a = fdepstate.getStressLikeKiVar();
+    stresstensor dev = sts.deviator();
+    stresstensor w(dev-a*pb);
     BJtensor wijaij = w("ij")*a("ij");
       wijaij.null_indices();
     double wa = wijaij.trace();
@@ -226,9 +221,8 @@ double XC::fdYieldDP::dYodq(const XC::stresstensor &sts, const XC::FDEPState &fd
 
 //--------------------------------------------------------------------
 XC::stresstensor XC::fdYieldDP::dYoda(const XC::stresstensor &sts, const XC::FDEPState &fdepstate ) const
-{   
+  {   
     // NumRank=2, with Ki Hardeing
-    double pipi = 3.14159265358979323846;
     double archAngle = FricAngle*pipi/180.0;
     double cv = fdepstate.getStressLikeInVar();
     if ( tan(archAngle) < 1.0e-4 ) {
@@ -238,12 +232,12 @@ XC::stresstensor XC::fdYieldDP::dYoda(const XC::stresstensor &sts, const XC::FDE
     double pa = Cohesion/tan(archAngle) + cv;
     double p = sts.p_hydrostatic();
     double pb = p + pa;
-    XC::stresstensor a = fdepstate.getStressLikeKiVar();
-    XC::stresstensor dev = sts.deviator();
-    XC::stresstensor w  = dev - a *pb;
-
-    return w*(-3.0*pb);
-}
+    stresstensor a = fdepstate.getStressLikeKiVar();
+    stresstensor dev = sts.deviator();
+    stresstensor w(dev-a*pb);
+    stresstensor retval(w*(-3.0*pb));
+    return retval;
+  }
 	
 //--------------------------------------------------------------------
 std::ostream& XC::operator<<(std::ostream &os, const XC::fdYieldDP &fdydDP)
@@ -258,5 +252,4 @@ std::ostream& XC::operator<<(std::ostream &os, const XC::fdYieldDP &fdydDP)
 void XC::fdYieldDP::print(void)
   { std::cerr << *this; }
 
-#endif
 

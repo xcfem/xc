@@ -50,10 +50,8 @@
 //#
 //===============================================================================
 
-#ifndef fdEvolution_SLS_CPP
-#define fdEvolution_SLS_CPP
-
 #include "material/nD/FiniteDeformation/fdEvolution/fdEvolution_SLS.h"
+#include <iostream>
 
 using namespace XC;
 
@@ -64,9 +62,7 @@ XC::fdEvolution_SLS::fdEvolution_SLS(double H_linear_in,
 		                 double q_saturated_in,
 		                 double delta_in)
 :H_linear(H_linear_in), q_saturated(q_saturated_in), delta(delta_in)
-{
-    
-}
+  {}
 
 //! @brief Virtual constructor.
 XC::fdEvolution_S * XC::fdEvolution_SLS::getCopy(void) 
@@ -81,21 +77,17 @@ double XC::fdEvolution_SLS::HModulus(const XC::stresstensor &sts, const XC::FDEP
 
 //------------------------------------------------------------------------
 void XC::fdEvolution_SLS::print()
-{
-    std::cerr << (*this);
-}
+  { std::cerr << (*this); }
 
 //------------------------------------------------------------------------
 std::ostream& XC::operator<<(std::ostream &os, const XC::fdEvolution_SLS & fdesl)
-{
-   os.precision(5);
-   os.width(10);
-   os << "Linear & Saturate Scalar Linear Evolution Law's Modulus: " << "\n";
-   os << "H_linear = " << fdesl.H_linear << "; " << "\n";
-   os << "H_initial = " << fdesl.q_saturated << "; " << "\n";
-   os << "Delta= " << fdesl.delta << "; " << "\n";
-   
-   return os;
-}
+  {
+    os.precision(5);
+    os.width(10);
+    os << "Linear & Saturate Scalar Linear Evolution Law's Modulus: " << "\n";
+    os << "H_linear = " << fdesl.H_linear << "; " << "\n";
+    os << "H_initial = " << fdesl.q_saturated << "; " << "\n";
+    os << "Delta= " << fdesl.delta << "; " << "\n";
 
-#endif
+    return os;
+  }

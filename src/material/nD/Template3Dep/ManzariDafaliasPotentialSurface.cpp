@@ -70,46 +70,43 @@ XC::ManzariDafaliasPotentialSurface::ManzariDafaliasPotentialSurface( ) { }
 XC::PotentialSurface * XC::ManzariDafaliasPotentialSurface::getCopy(void)
   { return new ManzariDafaliasPotentialSurface(*this); }
 
-//================================================================================
-//  BJtensor dQ/dsigma_ij: the normal to the potential surface
-//================================================================================
+//! @brief tensor dQ/dsigma_ij: the normal to the potential surface
+XC::BJtensor XC::ManzariDafaliasPotentialSurface::dQods(const XC::EPState *EPS) const
+  { 
+    BJtensor dQoverds( 2, def_dim_2, 0.0);
+    BJtensor I2("I", 2, def_dim_2);
 
-XC::BJtensor XC::ManzariDafaliasPotentialSurface::dQods(const XC::EPState *EPS) const { 
+    BJtensor S = EPS->getStress().deviator();
+    //double p = EPS->getStress().p_hydrostatic();
 
-  BJtensor dQoverds( 2, def_dim_2, 0.0);
-  BJtensor I2("I", 2, def_dim_2);
+    BJtensor alpha = EPS->getTensorVar( 1 ); //the first XC::BJtensor hardening var is alpha_ij
 
-  BJtensor S = EPS->getStress().deviator();
-  //double p = EPS->getStress().p_hydrostatic();
-  
-  BJtensor alpha = EPS->getTensorVar( 1 ); //the first XC::BJtensor hardening var is alpha_ij
+    //double m = EPS->getScalarVar( 1 );	 //the first scalar hardening var is m
+    const double D = EPS->getScalarVar( 2 );	 // D is stored in scalar var array's second cell
 
-  //double m = EPS->getScalarVar( 1 );	 //the first scalar hardening var is m
-  double D = EPS->getScalarVar( 2 );	 // D is stored in scalar var array's second cell
+    stresstensor n = EPS->getTensorVar( 2 );
+    //XC::stresstensor n;
 
-  XC::stresstensor n = EPS->getTensorVar( 2 );
-  //XC::stresstensor n;
+    ////-------------------------------------------------
+    //XC::stresstensor r = S *(1.0/p);
+    //XC::stresstensor r_bar = r - alpha;
+    //XC::stresstensor norm2 = r_bar("ij") * r_bar("ij");
+    //double norm = sqrt( norm2.trace() );
+    //if ( norm >= d_macheps() ){ 
+    //  n = r_bar *(1.0 / norm );
+    //}
+    //else {
+    //  std::cerr->fatal("XC::ManzariDafaliasYieldSurface::dQods |n_ij| = 0, divide by zero! Program exits.");
+    //  exit(-1);
+    //}
+    //
+    ////n = r_bar *(1.0 / sqrt23rd / m );
+    ////-------------------------------------------------
 
-  ////-------------------------------------------------
-  //XC::stresstensor r = S *(1.0/p);
-  //XC::stresstensor r_bar = r - alpha;
-  //XC::stresstensor norm2 = r_bar("ij") * r_bar("ij");
-  //double norm = sqrt( norm2.trace() );
-  //if ( norm >= d_macheps() ){ 
-  //  n = r_bar *(1.0 / norm );
-  //}
-  //else {
-  //  std::cerr->fatal("XC::ManzariDafaliasYieldSurface::dQods |n_ij| = 0, divide by zero! Program exits.");
-  //  exit(-1);
-  //}
-  //
-  ////n = r_bar *(1.0 / sqrt23rd / m );
-  ////-------------------------------------------------
-  
-  dQoverds =  n + I2 * D *(1.0/3.0);
+    dQoverds =  n + stresstensor((D*(1.0/3.0))*I2);
 
-  return dQoverds;
-}
+    return dQoverds;
+  }
 
 
 //================================================================================
@@ -224,9 +221,9 @@ XC::BJtensor XC::ManzariDafaliasPotentialSurface::dnods(const XC::EPState *EPS) 
   BJtensor dnods;
   BJtensor I2("I", 2, def_dim_2);
 
-  XC::stresstensor S = EPS->getStress().deviator();
+  stresstensor S = EPS->getStress().deviator();
   //S.reportshort("S");
-  XC::stresstensor alpha = EPS->getTensorVar( 1 );
+  stresstensor alpha = EPS->getTensorVar( 1 );
 
   double p = EPS->getStress().p_hydrostatic();
   //p = p -  Pc;
@@ -243,7 +240,7 @@ XC::BJtensor XC::ManzariDafaliasPotentialSurface::dnods(const XC::EPState *EPS) 
   
   BJtensor s_bar = S("ij") - alpha("ij")*p;
 
-  BJtensor ad = alpha - I2; //Vlado found a bug
+  BJtensor ad(alpha - static_cast<const stresstensor &>(I2)); //Vlado found a bug
   BJtensor sa = S("ij") * ad("ij");
   double sad =sa.trace();
   BJtensor aa = alpha("ij") * ad("ij");
@@ -373,51 +370,51 @@ double XC::ManzariDafaliasPotentialSurface::dgoverdt(double theta, double c) con
 // BJtensor dtheta/dsigma_pq
 //================================================================================
 XC::BJtensor XC::ManzariDafaliasPotentialSurface::dthetaoverds(const XC::EPState *EPS) const
-{
-   BJtensor ret(2, def_dim_2, 0.0);
-   XC::stresstensor s( 0.0);
-   XC::stresstensor t( 0.0);
-   BJtensor I2("I", 2, def_dim_2);
+  {
+    BJtensor ret(2, def_dim_2, 0.0);
+    stresstensor s( 0.0);
+    stresstensor t( 0.0);
+    BJtensor I2("I", 2, def_dim_2);
 
-   //double EPS = pow(d_macheps(),(1./3.));
-   XC::stresstensor stress = EPS->getStress();
-  
-   double J2D = stress.Jinvariant2();
-   double q     = stress.q_deviatoric();
-   double theta = stress.theta();
+    //double EPS = pow(d_macheps(),(1./3.));
+    stresstensor stress = EPS->getStress();
 
-   //out    while ( theta >= 2.0*PI )
-   //out      theta = theta - 2.0*PI; // if bigger than full cycle
-   //out    while ( theta >= 4.0*PI/3.0 )
-   //out      theta = theta - 4.0*PI/3.0; // if bigger than four thirds of half cycle
-   //out    while ( theta >= 2.0*PI/3.0 )
-   //out      theta = theta - 2.0*PI/3.0; // if bigger than two third of half cycle
-   //out    while ( theta >= PI/3.0 )
-   //out      theta = 2.0*PI/3.0 - theta; // if bigger than one third of half cycle
-   //out
-   //out    if ( theta < 0.0001 )
-   //out      {
-   //out        ::printf("theta = %.10e in XC::Material_Model::dthetaoverds(stress)\n",
-   //out                           theta);
-   //out//>><<>><<>><<        return ret;
-   //out      }
-   
-   double c3t = cos(3.0*theta);
-   double s3t = sin(3.0*theta);
+    double J2D = stress.Jinvariant2();
+    double q     = stress.q_deviatoric();
+    double theta = stress.theta();
 
-   double tempS = (3.0/2.0)*(c3t/(q*q*s3t));
-   double tempT = (9.0/2.0)*(1.0/(q*q*q*s3t));
+    //out    while ( theta >= 2.0*PI )
+    //out      theta = theta - 2.0*PI; // if bigger than full cycle
+    //out    while ( theta >= 4.0*PI/3.0 )
+    //out      theta = theta - 4.0*PI/3.0; // if bigger than four thirds of half cycle
+    //out    while ( theta >= 2.0*PI/3.0 )
+    //out      theta = theta - 2.0*PI/3.0; // if bigger than two third of half cycle
+    //out    while ( theta >= PI/3.0 )
+    //out      theta = 2.0*PI/3.0 - theta; // if bigger than one third of half cycle
+    //out
+    //out    if ( theta < 0.0001 )
+    //out      {
+    //out        ::printf("theta = %.10e in XC::Material_Model::dthetaoverds(stress)\n",
+    //out                           theta);
+    //out//>><<>><<>><<        return ret;
+    //out      }
 
-   s = stress.deviator();
-   t = s("qk")*s("kp") - I2*(J2D*(2.0/3.0));
+    double c3t = cos(3.0*theta);
+    double s3t = sin(3.0*theta);
 
-   s.null_indices();
-   t.null_indices();
+    double tempS = (3.0/2.0)*(c3t/(q*q*s3t));
+    double tempT = (9.0/2.0)*(1.0/(q*q*q*s3t));
 
-   ret = s*tempS - t*tempT;
-   ret.null_indices();
-   return ret;
-}
+    s = stress.deviator();
+    t = s("qk")*s("kp") - I2*(J2D*(2.0/3.0));
+
+    s.null_indices();
+    t.null_indices();
+
+    ret = s*tempS - t*tempT;
+    ret.null_indices();
+    return ret;
+  }
 
 
 

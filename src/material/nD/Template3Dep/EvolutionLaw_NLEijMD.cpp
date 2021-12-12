@@ -130,18 +130,18 @@ XC::BJtensor XC::EvolutionLaw_NL_EijMD::h_t( EPState *EPS, PotentialSurface *PS)
 {
     //=========================================================================
     //calculate  n_ij
-    XC::stresstensor S = EPS->getStress().deviator();
+    stresstensor S = EPS->getStress().deviator();
     double p = EPS->getStress().p_hydrostatic();
-    XC::stresstensor alpha = EPS->getTensorVar( 1 );  // alpha_ij
+    stresstensor alpha = EPS->getTensorVar( 1 );  // alpha_ij
     double m = EPS->getScalarVar(1);
 
-    XC::stresstensor n;
+    stresstensor n;
     //XC::stresstensor n = EPS->getTensorVar( 2 );
    
-    XC::stresstensor r = S * (1.0 / p);
+    stresstensor r(S * (1.0 / p));
     //r.reportshort("r");
-    XC::stresstensor r_bar = r - alpha;
-    XC::stresstensor norm2 = r_bar("ij") * r_bar("ij");
+    stresstensor r_bar = r - alpha;
+    stresstensor norm2(r_bar("ij") * r_bar("ij"));
     double norm = sqrt( norm2.trace() );
     
     if ( norm >= d_macheps()){ 
@@ -202,12 +202,12 @@ XC::BJtensor XC::EvolutionLaw_NL_EijMD::h_t( EPState *EPS, PotentialSurface *PS)
     //XC::stresstensor alpha_theta_b = n("ij") * (g_WW(theta, c) * Mc - g_WW(theta, cb) * kc_b * xi - m) * pow(2.0/3.0, 0.5);
     //XC::stresstensor alpha_theta_b = n * (g_A(theta, c) * Mc - g_A(theta, cb) * kc_b * xi - m) * sqrt23rd;
     double a_theta_b_scalar = g_A(theta, c) * Mc + g_A(theta, cb) * kc_b *(-1.0*xi) - m; // Mc^b > Mc --> this is right refer to p258 of Manzari's paper
-    XC::stresstensor alpha_theta_b = n * a_theta_b_scalar * sqrt23rd;
+    stresstensor alpha_theta_b(n * a_theta_b_scalar * sqrt23rd);
     alpha_theta_b.null_indices();
 
     //=========================================================================
     // calculating h
-    XC::stresstensor b;
+    stresstensor b;
     b =  alpha_theta_b - alpha;
     b.null_indices();
     //  XC::stresstensor d;
@@ -360,14 +360,14 @@ int XC::EvolutionLaw_NL_EijMD::updateEeDm(EPState *EPS, double st_vol, double dL
 
     //Just moved here!!!!!
        double m = EPS->getScalarVar(1);
-       XC::stresstensor n;
-       XC::stresstensor S = (EPS->getStress()).deviator();
-       XC::stresstensor alpha = EPS->getTensorVar( 1 );  // alpha_ij
+       stresstensor n;
+       stresstensor S = (EPS->getStress()).deviator();
+       stresstensor alpha = EPS->getTensorVar( 1 );  // alpha_ij
 
-       XC::stresstensor r = S * (1.0 / p);
+       stresstensor r(S * (1.0 / p));
        //r.reportshort("r");
-       XC::stresstensor r_bar = r - alpha;
-       XC::stresstensor norm2 = r_bar("ij") * r_bar("ij");
+       stresstensor r_bar = r - alpha;
+       stresstensor norm2(r_bar("ij") * r_bar("ij"));
        double norm = sqrt( norm2.trace() );
        
        if ( norm >= d_macheps()){ 
@@ -421,8 +421,8 @@ int XC::EvolutionLaw_NL_EijMD::updateEeDm(EPState *EPS, double st_vol, double dL
 
        //=========================================================================
        // Update F
-       XC::stresstensor dF;
-       XC::stresstensor F = EPS->getTensorVar( 3 );   // getting  F_ij from XC::EPState
+       stresstensor dF;
+       stresstensor F = EPS->getTensorVar( 3 );   // getting  F_ij from XC::EPState
        double D = getD();
        //if (D != EPS->getScalarVar(2)) {
        //  std::clog << "XC::EvolutionLaw_L_EijMD::updateEeDm  D values contradict:%f %f ", D, EPS->getScalarVar(2);
@@ -465,12 +465,12 @@ int XC::EvolutionLaw_NL_EijMD::updateEeDm(EPState *EPS, double st_vol, double dL
        //std::cerr << "g_A(0, c) " << g_A(0.0, 0.0167) << std::endl;
        //std::cerr << "g_A(60, c) " << g_A(1.0472, 0.0167) << std::endl;
        double alpha_theta_dd = g_A(theta, c) * Mc + g_A(theta, cd) * getkc_d() * xi - m;
-       XC::stresstensor alpha_theta_d = n("ij") * alpha_theta_dd * sqrt23rd;
+       stresstensor alpha_theta_d(n("ij") * alpha_theta_dd * sqrt23rd);
        ////std::cerr << " cd "<< cd << " c " << c << "alpha_theta_d_norm " << alpha_theta_dd << std::endl;
        //std::cerr << " alpha_theta_d " << alpha_theta_d; //<<" g_A(theta, cd) "<< g_A(theta, cd) << " Mc " << Mc << std::endl;
        //std::cerr << " alpha = " << alpha << "\n";
        		        
-       XC::stresstensor d;
+       stresstensor d;
        d =  alpha_theta_d - alpha;
        d.null_indices();
        //EPS->setTensorVar(2, d); //d is also stored in XC::Tensor array for 2nd derivative eval in XC::PS  //no use since F is gone.

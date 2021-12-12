@@ -116,7 +116,7 @@ XC::EvolutionLaw_S* XC::EvolutionLaw_NL_Eeq::getCopy(void)
 //    // Updating corresponding internal var by a nonliear function f
 //    
 //    // Getting e_eq
-//    XC::straintensor pstrain =  EPS->getPlasticStrain();
+//    straintensor pstrain =  EPS->getPlasticStrain();
 //    double e_eq  = pstrain.equivalent();
 //    double e_eq2  = e_eq * e_eq;
 //
@@ -141,13 +141,13 @@ XC::EvolutionLaw_S* XC::EvolutionLaw_NL_Eeq::getCopy(void)
 //double XC::EvolutionLaw_NL_Eeq::h( EPState *EPS, double norm_dQods_dev ) {
 
 double XC::EvolutionLaw_NL_Eeq::h_s( EPState *EPS, PotentialSurface *PS)
-{
+  {
     double h;
 
     //=========================================================================
     // Getting de_eq/dLambda
     //double  de_eq = EPS->getdPlasticStrain().equivalent();
-    XC::stresstensor dQods = PS->dQods( EPS );
+    stresstensor dQods(PS->dQods( EPS ));
     BJtensor dQods_dev = dQods.deviator();
 
     //Evaluate the norm of the deviator of dQods
@@ -158,8 +158,8 @@ double XC::EvolutionLaw_NL_Eeq::h_s( EPState *EPS, PotentialSurface *PS)
     
     //Evaluating dSodeeq
     double dSodeeq;
-    XC::straintensor pstrain =  EPS->getPlasticStrain(); //bug! should be total plastic strain's deviatoric part????
-    XC::straintensor pstrain_dev =  pstrain.deviator(); 
+    straintensor pstrain =  EPS->getPlasticStrain(); //bug! should be total plastic strain's deviatoric part????
+    straintensor pstrain_dev =  pstrain.deviator(); 
 
     //Checking equivalent()
     //Using deviatoric plastic strain to evolve the scalar internal var!

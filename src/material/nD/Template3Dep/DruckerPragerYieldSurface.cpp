@@ -66,22 +66,22 @@ double XC::DruckerPragerYieldSurface::f(const EPState *EPS) const
     stresstensor sdev = sigma.deviator();
     double halfRt2 = 0.5 * sqrt(2.0);
     int nod = EPS->getNTensorVar();
-    if ( nod >=1 )  { //May not have kinematic hardening
-      alpha = EPS->getTensorVar(1);   
-      s_bar = sdev - (alpha*p);
-    }
-    else {
-	  s_bar = sdev;
-    }  
-    stresstensor temp3 = s_bar("ij") * s_bar("ij");
+    if( nod >=1 )
+      { //May not have kinematic hardening
+        alpha = EPS->getTensorVar(1);   
+        s_bar = sdev - (alpha*p);
+      }
+    else
+      { s_bar = sdev; }  
+    stresstensor temp3(s_bar("ij") * s_bar("ij"));
     temp3.null_indices();
     double temp4 = temp3.trace();
     temp4 = sqrt(temp4);
     double temp5 = halfRt2 * temp4;  
     
-    double k = EPS->getScalarVar(2);
+    double k= EPS->getScalarVar(2);
     
-    double f   = temp2 + temp5 - k;
+    double f= temp2 + temp5 - k;
 
     return f;
   }
@@ -115,17 +115,16 @@ XC::BJtensor XC::DruckerPragerYieldSurface::dFods(const EPState *EPS) const
     else {
 	  s_bar = sdev;
     }
-    stresstensor temp3 = s_bar("ij") * s_bar("ij");
+    stresstensor temp3(s_bar("ij") * s_bar("ij"));
     temp3.null_indices();
     double temp4 = temp3.trace();
     temp4 = sqrt(temp4);
     Tnsr0 += s_bar;
     double eps = pow( d_macheps(), 0.5 );
-    if ( fabs(temp4) > eps )  {
-      Tnsr0 = Tnsr0 * (halfRt2/temp4);
-    }
+    if ( fabs(temp4) > eps )
+      { Tnsr0 = Tnsr0 * (halfRt2/temp4); }
         	    
-    dFods = (KroneckerI*temp1) + Tnsr0; 
+    dFods = stresstensor(KroneckerI*temp1) + Tnsr0; 
         
     return dFods;
 }
@@ -149,15 +148,16 @@ XC::BJtensor XC::DruckerPragerYieldSurface::xi_t1( const EPState *EPS) const
     
     stresstensor alpha;
     stresstensor sigma = EPS->getStress();
-    double p = sigma.p_hydrostatic();
-    double halfRt2 = 0.5 * sqrt(2.0);
+    const double p= sigma.p_hydrostatic();
+    const double halfRt2= 0.5 * sqrt(2.0);
     int nod = EPS->getNTensorVar();
-    if ( nod >=1 )  { //May not have kinematic hardening
-      alpha = EPS->getTensorVar(1); 
-    }
-    stresstensor sigma_bar = sigma - alpha*p;   
+    if(nod >=1)
+      { //May not have kinematic hardening
+        alpha = EPS->getTensorVar(1); 
+      }
+    stresstensor sigma_bar= sigma - p*alpha;   
     stresstensor s_bar = sigma_bar.deviator();
-    stresstensor temp3 = s_bar("ij") * s_bar("ij");
+    stresstensor temp3(s_bar("ij") * s_bar("ij"));
     temp3.null_indices();
     double temp4 = temp3.trace();
     temp4 = sqrt(temp4);

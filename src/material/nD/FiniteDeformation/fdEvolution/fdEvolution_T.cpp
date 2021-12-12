@@ -50,28 +50,22 @@
 //#
 //===============================================================================
 
-#ifndef fdEvolution_T_CPP
-#define fdEvolution_T_CPP
-
 #include "material/nD/FiniteDeformation/fdEvolution/fdEvolution_T.h"
-
-using namespace XC;
+#include <iostream>
 
 //! @brief Virtual constructor.
 XC::fdEvolution_T *XC::fdEvolution_T::getCopy(void) 
   { return new fdEvolution_T(*this); }    
 
 
-XC::BJtensor XC::fdEvolution_T::HModulus(const XC::stresstensor &sts, const XC::FDEPState &fdepstate) const
-{
+XC::BJtensor XC::fdEvolution_T::HModulus(const stresstensor &sts, const FDEPState &fdepstate) const
+  {
     BJtensor Z400(4, def_dim_4, 0.0);
     return Z400;
-}
+  }
 
 void XC::fdEvolution_T::print()
-{
-    std::cerr << (*this);
-}
+  { std::cerr << (*this); }
 
 std::ostream& XC::operator<<(std::ostream &os, const XC::fdEvolution_T & ev)
   {
@@ -79,5 +73,4 @@ std::ostream& XC::operator<<(std::ostream &os, const XC::fdEvolution_T & ev)
     return os;
   }
 
-#endif
 
