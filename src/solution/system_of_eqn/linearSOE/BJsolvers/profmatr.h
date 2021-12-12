@@ -184,10 +184,10 @@ class profilematrix
      //Zhaohui  added to set the max-element in diagonal of eqn_no_shake!
      void  set_penalty_element(int *eqn_no_shake, int no_of_shake, double max_element);
 
-      void lower_print(char *msg = ""); // print lower part of
-                                        // skymatrix with a message
-      void upper_print(char *msg = ""); // print upper part of
-                                        // skymatrix with a message
+    //void lower_print(const std::string &msg= ""); // print lower part of
+                                                    // skymatrix with a message
+    //void upper_print(const std::string &msg= ""); // print upper part of
+                                                   // skymatrix with a message
 
 //      void profile_init( FEModelData      & FEMD);	        // initialize profile
 // This sub has been merged with initializor No.1                    //Zhaohui added   
@@ -199,8 +199,8 @@ class profilematrix
       void profile_al_print( );         // print al vector
                                         //Zhaohui added  
 
-      void full_print(char *msg =  ""); // print sky matrix
-                                        // as a full matrix with a message
+    void full_print(const std::string &msg= ""); // print sky matrix
+                                                  // as a full matrix with a message
 
 //tempout      profilematrix & AssembleBricksInProfMatrix(stiffness_matrix & Ke,
 //tempout                                            Brick3D          * b3d,

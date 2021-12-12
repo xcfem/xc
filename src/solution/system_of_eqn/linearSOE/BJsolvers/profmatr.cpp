@@ -1200,9 +1200,9 @@ double XC::profilematrix::mean()
 
 
 //..//##########################################################################
-//..void XC::profilematrix::lower_print(char *msg)
+//..void XC::profilematrix::lower_print(const std::string &msg)
 //..  {
-//..    if (*msg) printf("%s\n",msg);
+//..    if (!msg.empty()) printf("%s\n",msg.c_str());
 //..    for ( int row=1 ; row<=dimension_of_prof_M() ; row++ )
 //..      {
 //..        int total_column_height= row;
@@ -1227,9 +1227,9 @@ double XC::profilematrix::mean()
 //..  }
 //..
 //..//##########################################################################
-//..void XC::profilematrix::upper_print(char *msg)
+//..void XC::profilematrix::upper_print(const std::string &msg)
 //..  {
-//..    if (*msg) printf("%s\n",msg);
+//..    if (!msg.empty()) printf("%s\n",msg.c_str());
 //..    for ( int row=1 ; row<=dimension_of_prof_M() ; row++ )
 //..      {
 //..        for ( int voids=0 ; voids<row-1 ; voids++ ) printf("        ");
@@ -1404,9 +1404,9 @@ void XC::profilematrix::profile_ad_print( void )
 }
 
 //##########################################################################
-void XC::profilematrix::full_print(char *msg)
+void XC::profilematrix::full_print(const std::string &msg)
   {
-    if (*msg) printf("%s\n",msg);
+    if(!msg.empty()) printf("%s\n",msg.c_str());
     for ( int row=1 ; row<=dimension_of_profile_M() ; row++ )
       {
         for ( int col=1 ; col<=dimension_of_profile_M() ; col++ )
