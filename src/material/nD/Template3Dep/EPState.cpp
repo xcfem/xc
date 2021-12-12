@@ -25,74 +25,151 @@
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
 /*
-//================================================================================
-# COPYRIGHT (C):     :-))                                                        #
-# PROJECT:           Object Oriented Finite XC::Element Program                      #
-# PURPOSE:           General platform for elaso-plastic constitutive model       #
-#                    implementation                                              #
-# CLASS:             DPEPState (the base class for all Elasto-plastic state)     #
-#                                                                                #
-# VERSION:                                                                       #
-# LANGUAGE:          C++.ver >= 2.0 ( Borland C++ ver=3.00, SUN C++ ver=2.1 )    #
-# TARGET OS:         DOS || UNIX || . . .                                        #
-# DESIGNER(S):       Boris Jeremic, Zhaohui Yang                                 #
-# PROGRAMMER(S):     Boris Jeremic, Zhaohui Yang                                 #
-#                                                                                #
-#                                                                                #
-# DATE:              08-03-2000                                                  #
-# UPDATE HISTORY:    May 2004 Guanzhou changed Commit to be consistent           #
-#                             with theory                                        #
-#		     May 2004, Zhao Cheng splitted the elastic part	         #
-#                                                                                #
-#                                                                                #
-#                                                                                #
+//============================================================================
+# COPYRIGHT (C):     :-))                                                     #
+# PROJECT:           Object Oriented Finite XC::Element Program               #
+# PURPOSE:           General platform for elaso-plastic constitutive model    #
+#                    implementation                                           #
+# CLASS:             DPEPState (the base class for all Elasto-plastic state)  #
+#                                                                             #
+# VERSION:                                                                    #
+# LANGUAGE:          C++.ver >= 2.0 ( Borland C++ ver=3.00, SUN C++ ver=2.1 ) #
+# TARGET OS:         DOS || UNIX || . . .                                     #
+# DESIGNER(S):       Boris Jeremic, Zhaohui Yang                              #
+# PROGRAMMER(S):     Boris Jeremic, Zhaohui Yang                              #
+#                                                                             #
+#                                                                             #
+# DATE:              08-03-2000                                               #
+# UPDATE HISTORY:    May 2004 Guanzhou changed Commit to be consistent        #
+#                             with theory                                     #
+#		     May 2004, Zhao Cheng splitted the elastic part	      #
+#                                                                             #
+#                                                                             #
+#                                                                             #
 # SHORT EXPLANATION: This class is used to hold all state parameters and internal#
-#                    variables in an elasto-plastic constitutive model!          #
-#                                                                                #
-//================================================================================
-*/
-
-#ifndef EPState_CPP
-#define EPState_CPP
+#                    variables in an elasto-plastic constitutive model!       #
+#                                                                             #
+//===========================================================================*/
 
 #include "material/nD/Template3Dep/EPState.h"
 #include <iostream>
 
-//BJtensor  XC::EPState::Eep( 4, def_dim_4, 0.0 );
-//BJtensor  XC::EPState::Eep_commit( 4, def_dim_4, 0.0 );
-//BJtensor  XC::EPState::Eep_init( 4, def_dim_4, 0.0 );
+//! @brief Default constructor
+XC::state_vars::state_vars(void)
+  : ScalarVar(MaxNScalarVar), TensorVar(MaxNTensorVar)
+  {
+    Eep= BJtensor( 4, def_dim_4, 0.0 ); // need to be initialized as 4th order BJtensor
+  }
 
+//! @brief Constructor
+XC::state_vars::state_vars(
+                 const stresstensor & Stressp,
+                 const straintensor & Strainp,
+		 const straintensor & ElasticStrainp)
+  : Stress(Stressp), Strain(Strainp), ElasticStrain(ElasticStrainp),
+    ScalarVar(MaxNScalarVar), TensorVar(MaxNTensorVar), Eep( 4, def_dim_4, 0.0)
+  {}
 
-//Normal Constructor 1
-
-
-//ZC05/2004 XC::EPState::EPState(double               Eod,
-//ZC05/2004                  double               Ed,
-//ZC05/2004                  double               nu,
-//ZC05/2004                  double               rho,
-XC::EPState::EPState(
-                 const stresstensor  &stressp,
-                 const straintensor  &strainp,
-                 const straintensor  &Estrainp,
-                 const straintensor  &Pstrainp,
-                 const straintensor  &dEstrainp,
-                 const straintensor  &dPstrainp,
-                 int                  NScalarp,
+//! @brief Constructor
+XC::state_vars::state_vars(
+                 const stresstensor & Stressp,
+                 const straintensor & Strainp,
+		 const straintensor & ElasticStrainp,
                  const std::vector<double> & Scalarp,
-                 int                  NTensorp,
                  const std::vector<stresstensor> & Tensorp,
-                 const BJtensor       & Eepp,
-                 const stresstensor & Stress_commitp,
-                 const straintensor & Strain_commitp,
-		 const straintensor & ElasticStrain_commitp,
-                 const std::vector<double> & Scalar_commitp,
-                 const std::vector<stresstensor> & Tensor_commitp,
-                 const BJtensor       & Eep_commitp,
-                 const stresstensor & Stress_initp,
-                 const straintensor & Strain_initp,
-                 const std::vector<double> & Scalar_initp,
-                 const std::vector<stresstensor> & Tensor_initp,
-                 const BJtensor       & Eep_initp,
+                 const BJtensor & Eepp)
+  : Stress(Stressp), Strain(Strainp), ElasticStrain(ElasticStrainp),
+    ScalarVar(Scalarp), TensorVar(Tensorp), Eep(Eepp)
+  {}
+
+//! @brief Constructor
+XC::state_vars::state_vars(
+                 const stresstensor  stressp,
+                 const straintensor  strainp,
+                 const straintensor  Estrainp,
+                 const std::vector<double> &Scalarp,
+                 const std::vector<stresstensor> &Tensorp)
+  : Stress(stressp), Strain(strainp),
+    ElasticStrain(Estrainp), //Guanzhou Mar2005
+    ScalarVar(Scalarp), TensorVar(Tensorp)
+  {
+    Eep= BJtensor( 4, def_dim_4, 0.0 ); // need to be initialized as 4th order BJtensor
+  }
+
+//! @brief Constructor
+XC::state_vars::state_vars(const std::vector<double> &Scalarp, const std::vector<stresstensor> &Tensorp)
+  : ScalarVar(Scalarp), TensorVar(Tensorp)
+  {
+    Eep= BJtensor( 4, def_dim_4, 0.0 ); // need to be initialized as 4th order BJtensor
+  }
+
+const XC::stresstensor &XC::state_vars::getStress(void) const
+  { return Stress; }
+
+const XC::straintensor &XC::state_vars::getStrain(void) const
+  { return Strain; }
+
+const XC::straintensor &XC::state_vars::getElasticStrain(void) const
+  { return ElasticStrain; }
+
+const std::vector<double> &XC::state_vars::getScalarVar(void) const
+  { return ScalarVar; }
+
+const std::vector<XC::stresstensor> &XC::state_vars::getTensorVar(void) const
+  { return TensorVar; }
+
+const XC::BJtensor &XC::state_vars::getEep(void) const
+  { return Eep; }
+
+//! @brief Constructor
+XC::trial_state_vars::trial_state_vars(void)
+  : state_vars() {}
+
+//! @brief Constructor
+XC::trial_state_vars::trial_state_vars(const std::vector<double> &Scalarp, const std::vector<stresstensor> &Tensorp)
+  : state_vars(Scalarp,Tensorp) {}
+
+//! @brief Constructor.
+XC::trial_state_vars::trial_state_vars(const stresstensor &Stress,
+				       const straintensor &Strain,    
+				       const straintensor &ElasticStrain,
+				       const straintensor &Pstrainp)
+  : state_vars(Stress, Strain, ElasticStrain),
+    PlasticStrain(Pstrainp) {}
+
+//! @brief Constructor.
+XC::trial_state_vars::trial_state_vars(const stresstensor &Stress,
+				       const straintensor &Strain,    
+				       const straintensor &ElasticStrain,
+				       const straintensor &Pstrainp,
+				       const straintensor &dEstrainp,
+				       const straintensor &dPstrainp,
+				       const std::vector<double> &Scalar,
+				       const std::vector<stresstensor> &Tensor, 
+				       const XC::BJtensor &Eep)
+  : state_vars(Stress, Strain, ElasticStrain, Scalar, Tensor, Eep),
+    PlasticStrain(Pstrainp), dElasticStrain(dEstrainp),
+    dPlasticStrain(dPstrainp) {}
+
+void XC::trial_state_vars::set(const state_vars &initStateVars)
+  { state_vars::operator=(initStateVars); }
+
+void XC::trial_state_vars::init(const state_vars &initStateVars)
+  {
+    set(initStateVars);
+    straintensor Strain0;
+    ElasticStrain= Strain0;
+    PlasticStrain= Strain0;
+    dElasticStrain= Strain0;
+    dPlasticStrain= Strain0;
+  }
+
+//! @brief Normal Constructor 1
+XC::EPState::EPState(const trial_state_vars &trialSt,
+                 int                  NScalarp,
+                 int                  NTensorp,
+		 const state_vars &commitSt,
+		 const state_vars &initSt,
                  bool                 Convergedp,
 //ZC05/2004           int                  Elasticflagp,
 //ZC05/2004           double         Evp,
@@ -107,23 +184,15 @@ XC::EPState::EPState(
 		 int flag )
 //ZC05/2004           double          ap
 //ZC05/2004     )
-//ZC05/2004: Eo(Eod), E_Young(Ed), nu_Poisson(nu), rho_mass_density(rho), CurrentStress(stressp),
-//ZC05/2004  CurrentStrain(strainp), ElasticStrain(Estrainp), PlasticStrain(Pstrainp),
+//ZC05/2004: Eo(Eod), E_Young(Ed), nu_Poisson(nu), rho_mass_density(rho),
+//ZC05/2004  PlasticStrain(Pstrainp),
 //ZC05/2004  dElasticStrain(dEstrainp), dPlasticStrain(dPstrainp), Eep(Eepp),
-//ZC05/2004  Stress_commit(Stress_commitp), Strain_commit(Strain_commitp),
-//ZC05/2004  Eep_commit(Eep_commitp), Stress_init(Stress_initp), Strain_init(Strain_initp),
-//ZC05/2004  Eep_init(Eep_initp), Converged (Convergedp),
+//ZC05/2004  Converged (Convergedp),
 //ZC05/2004  Elasticflag(Elasticflagp),Ev(Evp),nuhv(nuhvp),Ghv(Ghvp),
 //ZC05/2004  eo(eop), ec(ecp), Lambda(Lamp), po(pop), e(ep), psi(psip), a(ap)
-: CurrentStress(stressp),
-  CurrentStrain(strainp), ElasticStrain(Estrainp), PlasticStrain(Pstrainp),
-  dElasticStrain(dEstrainp), dPlasticStrain(dPstrainp), Eep(Eepp),
-  NScalarVar(NScalarp), ScalarVar(Scalarp), NTensorVar(NTensorp), TensorVar(Tensorp),
-  Stress_commit(Stress_commitp), Strain_commit(Strain_commitp), ElasticStrain_commit(ElasticStrain_commitp),
-  ScalarVar_commit(Scalar_commitp), TensorVar_commit(Tensor_commitp),
-  Eep_commit(Eep_commitp), Stress_init(Stress_initp), Strain_init(Strain_initp),
-  ScalarVar_init(Scalar_initp), TensorVar_init(Tensor_initp),
-  Eep_init(Eep_initp), Converged (Convergedp), Delta_lambda(0.0),
+: NScalarVar(NScalarp), NTensorVar(NTensorp),
+  trialStateVars(trialSt), commitStateVars(commitSt), initStateVars(initSt),
+  Converged (Convergedp), Delta_lambda(0.0),
   e(ep), psi(psip),
   integratorFlag(flag)
   {
@@ -134,22 +203,15 @@ XC::EPState::EPState(
   }
 
 
-//Normal Constructor 11
-
-
+//! @brief Normal Constructor 11
 //ZC05/2004EPState::EPState(double              Eod,
 //ZC05/2004                 double              Ed,
 //ZC05/2004                 double              nu,
 //ZC05/2004                 double              rho,
-XC::EPState::EPState(
-                 const stresstensor  stressp,
-                 const straintensor  strainp,
-                 const straintensor  Estrainp,
+XC::EPState::EPState(const trial_state_vars &trialSt,
                  const straintensor  Pstrainp,
                  int                 NScalarp,
-                 const std::vector<double> &Scalarp,
                  int                 NTensorp,
-                 const std::vector<stresstensor> &Tensorp,
 		 double             ep,
 		 double             psip,
 		 int flag )
@@ -164,80 +226,51 @@ XC::EPState::EPState(
 //ZC05/2004                 double              ap
 //ZC05/2004     )
 //: Eo(Eod), E_Young(Ed), nu_Poisson(nu), rho_mass_density(rho),
-//  CurrentStress(stressp), CurrentStrain(strainp), ElasticStrain(Estrainp),
-//  PlasticStrain(Pstrainp), Stress_commit(stressp), Strain_commit(strainp),
-//  Stress_init(stressp), Strain_init(strainp),
+//  ElasticStrain(Estrainp),
+//  PlasticStrain(Pstrainp),
 //  Elasticflag(Elasticflagp),Ev(Evp),nuhv(nuhvp),Ghv(Ghvp),
 //  eo(eop), ec(ecp), Lambda(Lamp),po(pop), e(eop), a(ap)
-  : ScalarVar(Scalarp), TensorVar(Tensorp),
-    ScalarVar_commit(Scalarp), TensorVar_commit(Tensorp),
-    ScalarVar_init(Scalarp), TensorVar_init(Tensorp)
+  : NScalarVar(NScalarp), NTensorVar(NTensorp),
+    trialStateVars(trialSt),
+    commitStateVars(trialSt),
+    initStateVars(trialSt)
   {
 
-  //ZC05/2004Eo  = Eod;
-  //ZC05/2004E_Young  = Ed;
-  //ZC05/2004nu_Poisson  = nu;
-  //ZC05/2004rho_mass_density  = rho;
+    //ZC05/2004Eo  = Eod;
+    //ZC05/2004E_Young  = Ed;
+    //ZC05/2004nu_Poisson  = nu;
+    //ZC05/2004rho_mass_density  = rho;
 
-  CurrentStress  = stressp;
-  CurrentStrain  = strainp;
-  ElasticStrain  = Estrainp;
-  ElasticStrain_commit = Estrainp;//Guanzhou Mar2005
-  Delta_lambda = 0.0;
+    Delta_lambda = 0.0;
 
-  PlasticStrain  = Pstrainp;
-  Stress_commit  = stressp;
-  Strain_commit  = strainp;
+    integratorFlag = flag;//Guanzhou March2005
 
-  Stress_init  = stressp;
-  Strain_init  = strainp;
-  integratorFlag = flag;//Guanzhou March2005
+    //ZC05/2004Elasticflag  = Elasticflagp;
+    //ZC05/2004Ev  = Evp;
+    //ZC05/2004nuhv  = nuhvp;
+    //ZC05/2004Ghv  = Ghvp;
 
-  //ZC05/2004Elasticflag  = Elasticflagp;
-  //ZC05/2004Ev  = Evp;
-  //ZC05/2004nuhv  = nuhvp;
-  //ZC05/2004Ghv  = Ghvp;
+    //ZC05/2004eo  = eop;
+    //ZC05/2004ec  = ecp;
+    //ZC05/2004Lambda  = Lamp;
+    //ZC05/2004po  = pop;
+    //ZC05/2004e  = eop;
+    //ZC05/2004a  = ap;
 
-  //ZC05/2004eo  = eop;
-  //ZC05/2004ec  = ecp;
-  //ZC05/2004Lambda  = Lamp;
-  //ZC05/2004po  = pop;
-  //ZC05/2004e  = eop;
-  //ZC05/2004a  = ap;
+    e = ep;    //ZC
+    psi = psip;  //ZC
 
-  e = ep;    //ZC
-  psi = psip;  //ZC
+    //Eo               = Eod;
+    //E_Young          = Ed;
+    //nu_Poisson       = nu;
+    //rho_mass_density = rho;
 
-	//Eo               = Eod;
-	//E_Young          = Ed;
-	//nu_Poisson       = nu;
-	//rho_mass_density = rho;
 
-	//CurrentStress    = stressp;
+    //std::cerr << "stressp " << stressp;
+    //Eep = Eepp;
 
-	//std::cerr << "stressp " << stressp;
-	//CurrentStress.null_indices();
-
-	//CurrentStrain    =  strainp;
-	//ElasticStrain    =  Estrainp;
-	//PlasticStrain    =  Pstrainp;
-	//Eep = Eepp;
-	Eep = BJtensor( 4, def_dim_4, 0.0 ); // need to be initialized as 4th order BJtensor
-
-	//std::cerr << "strainp " << strainp;
-	//CurrentStrain.null_indices();
-
-	NScalarVar = NScalarp;
-
-	NTensorVar = NTensorp;
-	//TensorVar = new stresstensor[ NTensorVar ];
-	//if ( !TensorVar ) {
-	//   std::cerr << "EPState::EPState insufficient memory for Tensor hardening vars";
-	//   ::exit(1);
-	//}
-
-       Converged = false;
-  //ZC05/2004     psi = e - ec;
+    Converged = false;
+    //ZC05/2004     psi = e - ec;
   }
 
 
@@ -260,90 +293,68 @@ XC::EPState::EPState(
 //: Eo(Eod), E_Young(Ed), nu_Poisson(nu), rho_mass_density(rho),
 //  Elasticflag(Elasticflagp),Ev(Evp),nuhv(nuhvp),Ghv(Ghvp),
 //  eo(eop), ec(ecp), Lambda(Lamp), po(pop), e(eop), a(ap)
-  : NScalarVar(NScalarp), ScalarVar(Scalarp),
-    NTensorVar(NTensorp), TensorVar(Tensorp),
-    ScalarVar_commit(Scalarp), TensorVar_commit(Tensorp),
-    ScalarVar_init(Scalarp), TensorVar_init(Tensorp)
+  : NScalarVar(NScalarp), NTensorVar(NTensorp),
+    trialStateVars(Scalarp, Tensorp),
+    commitStateVars(Scalarp, Tensorp),
+    initStateVars(Scalarp, Tensorp)
   {
 
-  //ZC05/2004Eo = Eod;
-  //ZC05/2004E_Young = Ed;
-  //ZC05/2004nu_Poisson = nu;
-  //ZC05/2004rho_mass_density = rho;
-  //ZC05/2004Elasticflag = Elasticflagp;
-  //ZC05/2004Ev = Evp;
-  //ZC05/2004nuhv = nuhvp;
-  //ZC05/2004Ghv = Ghvp;
-  //ZC05/2004eo = eop;
-  //ZC05/2004ec = ecp;
-  //ZC05/2004Lambda = Lamp;
-  //ZC05/2004po = pop;
-  //ZC05/2004e = eop;
-  //ZC05/2004a = a;
-	Delta_lambda = 0.0;
+    //ZC05/2004Eo = Eod;
+    //ZC05/2004E_Young = Ed;
+    //ZC05/2004nu_Poisson = nu;
+    //ZC05/2004rho_mass_density = rho;
+    //ZC05/2004Elasticflag = Elasticflagp;
+    //ZC05/2004Ev = Evp;
+    //ZC05/2004nuhv = nuhvp;
+    //ZC05/2004Ghv = Ghvp;
+    //ZC05/2004eo = eop;
+    //ZC05/2004ec = ecp;
+    //ZC05/2004Lambda = Lamp;
+    //ZC05/2004po = pop;
+    //ZC05/2004e = eop;
+    //ZC05/2004a = a;
+    Delta_lambda = 0.0;
 
-	e = 0.85;    //ZC
-	psi  = 0.05; //ZC
-	integratorFlag = 0;//ForwardEuler assumed
+    e = 0.85;    //ZC
+    psi  = 0.05; //ZC
+    integratorFlag = 0;//ForwardEuler assumed
 
-	//Eo               = Eod;
-	//E_Young          = Ed;
-	//nu_Poisson       = nu;
-	//rho_mass_density = rho;
+    //Eo               = Eod;
+    //E_Young          = Ed;
+    //nu_Poisson       = nu;
+    //rho_mass_density = rho;
 
-	//CurrentStress    = stressp;
-	//std::cerr << "CurrentStress " << CurrentStress;
-	//CurrentStress.null_indices();
-	//CurrentStrain    =  strainp;
-	//ElasticStrain    =  Estrainp;
-	//PlasticStrain    =  Pstrainp;
-	//dElasticStrain   =  dEstrainp;
-	//dPlasticStrain   =  dPstrainp;
-
-	Eep = BJtensor( 4, def_dim_4, 0.0 ); // need to be initialized as 4th order BJtensor
-	//std::cerr << "strainp " << strainp;
-	//CurrentStrain.null_indices();
-
-	Converged = false;
-  //ZC05/2004      psi = e - ec;
+    Converged = false;
+    //ZC05/2004      psi = e - ec;
   }
 
-
-
-//Normal Constructor --no parameters
-
-
+//! @brief Default constructor
 XC::EPState::EPState(void)
 //ZC05/2004: Eo(30000.0), E_Young(30000.0), nu_Poisson(0.3), rho_mass_density(0.0),
 //ZC05/2004  Converged(false),
 //ZC05/2004  Elasticflag(0),Ev(0.0),nuhv(0.0),Ghv(0.0),
 //ZC05/2004  eo(0.85), ec(0.80), Lambda(0.025), po(100.0), e(0.85), psi(0.05), a(0.5)
-  : NScalarVar(MaxNScalarVar), ScalarVar(MaxNScalarVar),
-    NTensorVar(MaxNTensorVar), TensorVar(MaxNTensorVar), 
-    ScalarVar_commit(MaxNScalarVar), TensorVar_commit(MaxNTensorVar),
-    ScalarVar_init(MaxNScalarVar), TensorVar_init(MaxNTensorVar),
-    Converged(false), e(0.85), psi(0.05) //ZC05/2004
-    
+  : NScalarVar(MaxNScalarVar),
+    NTensorVar(MaxNTensorVar),
+    trialStateVars(),
+    commitStateVars(),
+    initStateVars(),
+    Converged(false), e(0.85), psi(0.05) //ZC05/2004    
   {
-	//Eo               = 30000.0;
-	//E_Young          = 30000.0;
-	//nu_Poisson       = 0.3;
-	//rho_mass_density = 0.0;
-	Eep = BJtensor( 4, def_dim_4, 0.0 );
-	integratorFlag = 0;//ForwardEuler assumed
-	Delta_lambda = 0.0;
+    //Eo               = 30000.0;
+    //E_Young          = 30000.0;
+    //nu_Poisson       = 0.3;
+    //rho_mass_density = 0.0;
+    integratorFlag = 0;//ForwardEuler assumed
+    Delta_lambda = 0.0;
   }
-
-
-//create a clone of itself
 
 
 //! @brief Virtual constructor.
 XC::EPState* XC::EPState::getCopy(void)
   { return new EPState(*this); }
 
-// Destructor
-
+//! @brief Destructor
 XC::EPState::~EPState(void)
   {}
 
@@ -443,65 +454,62 @@ int XC::EPState::getIntegratorFlag() const
 
 
 const XC::stresstensor &XC::EPState::getStress(void) const
-  { return CurrentStress; }
+  { return trialStateVars.Stress; }
 
 
 const XC::stresstensor &XC::EPState::getStress_commit(void) const
-  { return Stress_commit; }
+  { return commitStateVars.Stress; }
 
 
 const XC::stresstensor &XC::EPState::getStress_init(void) const
-  { return Stress_init; }
-
+  { return initStateVars.Stress; }
 
 const XC::stresstensor &XC::EPState::getIterativeStress() const
-  { return IterativeStress; }
+  { return trialStateVars.IterativeStress; }
 
 
 const XC::straintensor &XC::EPState::getStrain() const
-  { return CurrentStrain; }
+  { return trialStateVars.Strain; }
 
 
 const XC::straintensor &XC::EPState::getStrain_commit() const
-  { return Strain_commit; }
+  { return commitStateVars.Strain; }
 
 
 const XC::straintensor &XC::EPState::getStrain_init() const
-  { return Strain_init; }
+  { return initStateVars.Strain; }
 
 
 const XC::straintensor &XC::EPState::getElasticStrain() const
-  { return ElasticStrain; }
+  { return trialStateVars.ElasticStrain; }
 
 //GZ Mar2005
 const XC::straintensor &XC::EPState::getElasticStrain_commit() const
-  { return ElasticStrain_commit; }
+  { return commitStateVars.ElasticStrain; }
 
 
 const XC::straintensor &XC::EPState::getPlasticStrain() const
-  { return PlasticStrain; }
+  { return trialStateVars.PlasticStrain; }
 
 
 const XC::straintensor &XC::EPState::getdElasticStrain() const
-  { return dElasticStrain; }
-
+  { return trialStateVars.dElasticStrain; }
 
 
 const XC::straintensor &XC::EPState::getdPlasticStrain() const
-  { return dPlasticStrain; }
-
+  { return trialStateVars.dPlasticStrain; }
 
 
 const XC::BJtensor &XC::EPState::getEep() const
-  { return Eep; }
+  { return trialStateVars.Eep; }
 
 
 const XC::BJtensor &XC::EPState::getEep_commit() const
-  { return Eep_commit; }
+  { return commitStateVars.Eep; }
 
 
 const XC::BJtensor &XC::EPState::getEep_init() const
-  { return Eep_init; }
+  { return initStateVars.Eep; }
 
 //ZC05/2004 
 //ZC05/2004 void XC::EPState::setElasticflag( int efd ) {
@@ -542,57 +550,57 @@ const XC::BJtensor &XC::EPState::getEep_init() const
 
 
 void XC::EPState::setStress(const stresstensor &newstress )
-  { CurrentStress = newstress; }
+  { trialStateVars.Stress = newstress; }
 
 
 void XC::EPState::setIterativeStress(const stresstensor &newstress )
-  { IterativeStress = newstress; }
+  { trialStateVars.IterativeStress = newstress; }
 
 
 
 void XC::EPState::setStrain(const straintensor &newstrain )
-  { CurrentStrain = newstrain; }
+  { trialStateVars.Strain = newstrain; }
 
 
 void XC::EPState::setStress_commit(const stresstensor &newstress )
-  { Stress_commit = newstress; }
+  { commitStateVars.Stress = newstress; }
 
 
 void XC::EPState::setStrain_commit(const straintensor &newstrain )
-  { Strain_commit = newstrain; }
+  { commitStateVars.Strain = newstrain; }
 
 void XC::EPState::setElasticStrain_commit(const straintensor &newstrain )
-  { ElasticStrain_commit = newstrain; }
+  { commitStateVars.ElasticStrain = newstrain; }
 
 
 
 void XC::EPState::setStress_init(const stresstensor &newstress )
-  { Stress_init = newstress; }
+  { initStateVars.Stress = newstress; }
 
 
 void XC::EPState::setStrain_init(const straintensor &newstrain )
-  { Strain_init = newstrain; }
+  { initStateVars.Strain = newstrain; }
 
 
 void XC::EPState::setElasticStrain(const straintensor &newEstrain )
-  { ElasticStrain = newEstrain; }
+  { trialStateVars.ElasticStrain = newEstrain; }
 
 
 void XC::EPState::setPlasticStrain(const straintensor &newPstrain )
-  { PlasticStrain = newPstrain; }
+  { trialStateVars.PlasticStrain = newPstrain; }
 
 
 
 void XC::EPState::setdElasticStrain(const straintensor &newdEstrain )
-  { dElasticStrain = newdEstrain; }
+  { trialStateVars.dElasticStrain = newdEstrain; }
 
 
 void XC::EPState::setdPlasticStrain(const straintensor &newdPstrain )
-  { dPlasticStrain = newdPstrain; }
+  { trialStateVars.dPlasticStrain = newdPstrain; }
 
 
 void XC::EPState::setEep(const BJtensor &newEep )
-  { Eep = newEep; }
+  { trialStateVars.Eep = newEep; }
 
 
 void XC::EPState::setConverged( bool b)
@@ -636,44 +644,41 @@ void XC::EPState::setpsi( double psid )
 
 double XC::EPState::getScalarVar( int WhichOne) const
   {
-
-      if ( WhichOne <= getNScalarVar() )
-         return ScalarVar[ WhichOne - 1 ];
-      else
+    if( WhichOne <= getNScalarVar() )
+      return trialStateVars.ScalarVar[ WhichOne - 1 ];
+    else
       {
-   std::cerr << "EPState::getScalarVar Out of ScalarVar's range: " <<  getNScalarVar()  << std::endl;
-         return 0.0;
-   exit(1);
+	std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; Out of ScalarVar's range "
+		  <<  getNScalarVar() << std::endl;
+	exit(1);
       }
-
-      return 0.0;
-
+    return 0.0;
   }
 
 
 
-// Return the nth Tensor Var.... Starting from 1!!
-
-XC::stresstensor XC::EPState::getTensorVar(int WhichOne) const
+//! @brief Return the nth Tensor Var.... Starting from 1!!
+const XC::stresstensor &XC::EPState::getTensorVar(int WhichOne) const
   {
-      stresstensor st;
-
-      if ( WhichOne <= getNTensorVar() )
-         return TensorVar[ WhichOne - 1 ];
-      else
+    static stresstensor retval;
+    if( WhichOne <= getNTensorVar() )
+       return trialStateVars.TensorVar[ WhichOne - 1 ];
+    else
       {
-  std::cerr << "EPState::getTensorVar No. %d: Out of Tensortial Var's range " << WhichOne << " out of " <<  getNTensorVar() << std::endl;
-   exit(1);
+	std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; Out of ScalarVar's range "
+		  <<  getNScalarVar() << std::endl;
+	exit(1);
       }
-
-      return st;
+    return retval;
   }
 
 
 // Return Scalar pointer
 
 const std::vector<double> &XC::EPState::getScalarVar() const
-  { return ScalarVar; }
+  { return trialStateVars.ScalarVar; }
 
 
 void XC::EPState::setNScalarVar(int rval)
@@ -685,130 +690,135 @@ void XC::EPState::setNTensorVar(int rval)
 
 
 const std::vector<double> & XC::EPState::getScalarVar_commit(void) const
-  { return ScalarVar_commit; }
+  { return commitStateVars.ScalarVar; }
 
 
 double XC::EPState::getScalarVar_commit( int i) const
-  { return ScalarVar_commit[i-1]; }
+  { return commitStateVars.ScalarVar[i-1]; }
 
 
 const std::vector<double> & XC::EPState::getScalarVar_init(void) const
-  { return ScalarVar_init; }
+  { return initStateVars.ScalarVar; }
 
 
 double XC::EPState::getScalarVar_init(int i) const
-  { return ScalarVar_init[i]; }
+  { return initStateVars.ScalarVar[i]; }
 
 
 // Return Tensor pointer
 
 const std::vector<XC::stresstensor> &XC::EPState::getTensorVar(void) const
-  { return TensorVar; }
+  { return trialStateVars.TensorVar; }
 
 
 const std::vector<XC::stresstensor> &XC::EPState::getTensorVar_commit() const
-  { return TensorVar_commit; }
+  { return commitStateVars.TensorVar; }
 
 
-XC::stresstensor XC::EPState::getTensorVar_commit(int i) const
-  { return TensorVar_commit[i-1]; }
+const XC::stresstensor &XC::EPState::getTensorVar_commit(int i) const
+  { return commitStateVars.TensorVar[i-1]; }
 
 
-XC::stresstensor XC::EPState::getTensorVar_init(int i) const
-  { return TensorVar_init[i-1]; }
+const XC::stresstensor &XC::EPState::getTensorVar_init(int i) const
+  { return initStateVars.TensorVar[i-1]; }
 
 
 const std::vector<XC::stresstensor> & XC::EPState::getTensorVar_init() const
-  { return TensorVar_init; }
+  { return initStateVars.TensorVar; }
 
 
 // set nth Scalar Var.... Starting from 1!!
 
 void XC::EPState::setScalarVar(int WhichOne, double rval)
   {
-
-      if ( WhichOne <= getNScalarVar() )
-         ScalarVar[ WhichOne - 1 ] = rval;
-      else
+    if( WhichOne <= getNScalarVar() )
+       trialStateVars.ScalarVar[ WhichOne - 1 ] = rval;
+    else
       {
-         std::cerr << "EPState::setScalarVar Out of ScalarVar's range " << getNScalarVar() << std::endl;
-         //std::cerr << " Out of ScalarVar's range!";
-   exit(1);
+	std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; Out of ScalarVar's range "
+		  <<  getNScalarVar() << std::endl;
+	exit(1);
       }
-}
-void XC::EPState::setScalarVar_commit(int WhichOne, double rval) {
+  }
 
-      if ( WhichOne <= getNScalarVar() )
-         ScalarVar_commit[ WhichOne - 1 ] = rval;
+void XC::EPState::setScalarVar_commit(int WhichOne, double rval)
+  {
+
+      if(WhichOne <= getNScalarVar())
+         commitStateVars.ScalarVar[ WhichOne - 1 ] = rval;
       else
-      {
-  std::cerr << "EPState::setScalarVar Out of ScalarVar's range " <<  getNScalarVar() << std::endl;
-         //std::cerr << " Out of ScalarVar's range!";
-   exit(1);
-      }
-}
+        {
+          std::cerr << getClassName() << "::" << __FUNCTION__
+	            << "; Out of ScalarVar's range "
+		    <<  getNScalarVar() << std::endl;
+          exit(1);
+        }
+  }
 
-void XC::EPState::setScalarVar_init(int WhichOne, double rval) {
-
-      if ( WhichOne <= getNScalarVar() )
-         ScalarVar_init[ WhichOne - 1 ] = rval;
+void XC::EPState::setScalarVar_init(int WhichOne, double rval)
+  {
+      if( WhichOne <= getNScalarVar() )
+         initStateVars.ScalarVar[ WhichOne - 1 ] = rval;
       else
-      {
-  std::cerr << "EPState::setScalarVar Out of ScalarVar's range " <<  getNScalarVar() << std::endl;
-         //std::cerr << " Out of ScalarVar's range!";
-   exit(1);
-      }
-}
+        {
+          std::cerr << getClassName() << "::" << __FUNCTION__
+	            << "; Out of ScalarVar's range "
+		    <<  getNScalarVar() << std::endl;
+          exit(1);
+        }
+  }
 
 
 
-// set nth Tensor Var.... Starting from 1!!
-
-void XC::EPState::setTensorVar(int WhichOne, const stresstensor &rval) {
-
-      if ( WhichOne <= getNTensorVar() )
-         TensorVar[ WhichOne - 1 ] = rval;
+//! @brief set nth Tensor Var.... Starting from 1!!
+void XC::EPState::setTensorVar(int WhichOne, const stresstensor &rval)
+  {
+      if( WhichOne <= getNTensorVar() )
+         trialStateVars.TensorVar[ WhichOne - 1 ] = rval;
       else
+        {
+          std::cerr << getClassName() << "::" << __FUNCTION__
+	            << "; Out of TensorVars's range "
+		    <<  getNScalarVar() << std::endl;
+          exit(1);
+        }
+  }
+
+void XC::EPState::setTensorVar_commit(int WhichOne, const stresstensor &rval)
+  {
+    if ( WhichOne <= getNTensorVar() )
+       commitStateVars.TensorVar[ WhichOne - 1 ] = rval;
+    else
       {
-  std::cerr << "EPState::setTensorVar Out of Tensor Var's range " <<  getNTensorVar() << std::endl;
-   exit(1);
+	std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; Out of TensorVars's range "
+		  <<  getNScalarVar() << std::endl;
+	exit(1);
       }
-
-}
-
-void XC::EPState::setTensorVar_commit(int WhichOne, const stresstensor &rval) {
-
-      if ( WhichOne <= getNTensorVar() )
-         TensorVar_commit[ WhichOne - 1 ] = rval;
-      else
-      {
-  std::cerr << "EPState::setTensorVar Out of Tensor Var's range " <<  getNTensorVar()<< std::endl;
-   exit(1);
-      }
-
   }
 
 void XC::EPState::setTensorVar_init(int WhichOne, const stresstensor &rval)
   {
-
-      if ( WhichOne <= getNTensorVar() )
-         TensorVar_init[ WhichOne - 1 ] = rval;
-      else
+    if ( WhichOne <= getNTensorVar() )
+      initStateVars.TensorVar[ WhichOne - 1 ] = rval;
+    else
       {
-  std::cerr << "EPState::setTensorVar Out of Tensor Var's range " <<  getNTensorVar() << std::endl;
-   exit(1);
+	std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; Out of TensorVars's range "
+		  <<  getNScalarVar() << std::endl;
+	exit(1);
       }
-
   }
 
 //! @brief set all Scalar Vars ..No boundary checking!
 void XC::EPState::setScalarVar(const std::vector<double> &rval)
-  { ScalarVar= rval; }
+  { trialStateVars.ScalarVar= rval; }
 
 
 //! @brief set all Scalar Vars
 void XC::EPState::setTensorVar(const std::vector<stresstensor> &rval)
-  { TensorVar= rval; }
+  { trialStateVars.TensorVar= rval; }
 
 
 void XC::EPState::print()
@@ -817,128 +827,61 @@ void XC::EPState::print()
 
 
 //! @brief Set all state variables to initials
-void XC::EPState::setInit()
+void XC::EPState::setInit(void)
   {
-    stresstensor Stress0;
     straintensor Strain0;
 
-    CurrentStress   = Stress_init;
-    CurrentStrain   = Strain_init;
-    ElasticStrain   = Strain0;
-    PlasticStrain   = Strain0;
-    dElasticStrain  = Strain0;
-    dPlasticStrain  = Strain0;
-    Eep = Eep_init;
+    trialStateVars.init(initStateVars);
 
-    Stress_commit   = Stress_init;
-    Strain_commit   = Strain_init;
-    Eep_commit = Eep_init;
-    ElasticStrain_commit = Strain0;
-
-    ScalarVar= ScalarVar_init;
-    ScalarVar_commit= ScalarVar_init;
-
-    TensorVar= TensorVar_init;
-    TensorVar_commit= TensorVar_init;
+    commitStateVars= initStateVars;
+    commitStateVars.ElasticStrain = Strain0;
 
     Converged = false;
   }
 
-
+//! @brief Commit the material state.
 int XC::EPState::commitState(void)
   {
-
-
 //      std::cerr << "\n\n\n\n int EPState::commitState ()\n\n\n\n";
-
-
     int err = 0;
-      // commit the variables state
-//Guanzhou out 5-6-2004      CurrentStress   = Stress_init;
-//Guanzhou out 5-6-2004      CurrentStrain   = Strain_init;
-//Guanzhou out 5-6-2004      Eep = Eep_init;
+    // commit the variables state
+//Guanzhou out 5-6-2004      CurrentStress   = initStateVars.Stress;
+//Guanzhou out 5-6-2004      CurrentStrain   = initStateVars.Strain;
+//Guanzhou out 5-6-2004      Eep = initStateVars.Eep;
+    commitStateVars= trialStateVars;
 
-    Stress_commit   = CurrentStress;
-    Strain_commit   = CurrentStrain;
-    Eep_commit = Eep;
-
-
-    //GZ Mar2005
-    ElasticStrain_commit = ElasticStrain;
-
-    //ScalarVar = ScalarVar_init;
-    ScalarVar_commit= ScalarVar;
-    //TensorVar= TensorVar_init;
-    TensorVar_commit= TensorVar;
+    //trialStateVars= initStateVars;
     return err;
   }
 
+//! @brief revert to the last commited state.
+int XC::EPState::revertToLastCommit(void)
+  {
+    int err = 0;
+    // revert the variables state  to last committed
+    trialStateVars.set(commitStateVars);
 
-int XC::EPState::revertToLastCommit () {
-      int err = 0;
-      // revert the variables state  to last committed
-      CurrentStress   = Stress_commit;
-      CurrentStrain   = Strain_commit;
-      Eep = Eep_commit;
-
-      ElasticStrain = ElasticStrain_commit;
-
-    int i;
-      for (i = 0; i < NScalarVar; i++) {
-          //ScalarVar[i] = ScalarVar_init[i];
-          ScalarVar[i] = ScalarVar_commit[i];
-      }
-
-      for (i = 0; i < NTensorVar; i++) {
-         //TensorVar[i] = TensorVar_init[i];
-         TensorVar[i] = TensorVar_commit[i];
-      }
-
-      return err;
-
-}
+    return err;
+  }
 
 //! @brief Revert the material to its initial state.
 int XC::EPState::revertToStart(void)
   {
     int err = 0;
     // revert the variables state to the initials
-    CurrentStress   = Stress_init;
-    CurrentStrain   = Strain_init;
-    Eep = Eep_init;
-
-    Stress_commit   = Stress_init;
-    Strain_commit   = Strain_init;
-    Eep_commit = Eep_init;
-    //ElasticStrain_commit = Strain0;
-
-  int i;
-    for (i = 0; i < NScalarVar; i++) {
-	ScalarVar[i] = ScalarVar_init[i];
-	ScalarVar_commit[i] = ScalarVar_init[i];
-    }
-
-    for (i = 0; i < NTensorVar; i++) {
-       TensorVar[i] = TensorVar_init[i];
-       TensorVar_commit[i] = TensorVar_init[i];
-    }
-
+    trialStateVars.set(initStateVars);
+    commitStateVars= initStateVars;
+    //commitStateVars.ElasticStrain = Strain0;
     return err;
   }
 
 
-
-
-
-
-// Overloaded Insertion Operator
-// prints an XC::EPState's contents
-
+//! @brief prints an XC::EPState's contents
 std::ostream &XC::operator<<(std::ostream &os, const EPState & EPS)
-    {
-      //        os.setf( ios::showpos | ios::scientific);
-      os.precision(4);
-        os.width(10);
+  {
+    //        os.setf( ios::showpos | ios::scientific);
+    os.precision(4);
+    os.width(10);
 //ZC05/2004         os << std::endl << "Elastic plastic state parameters: "  << std::endl;
 //ZC05/2004 
 //ZC05/2004   int ef = EPS.getElasticflag();
@@ -994,23 +937,21 @@ std::ostream &XC::operator<<(std::ostream &os, const EPState & EPS)
 
   os << std::endl << "\tNScalarVar = " << NS << std::endl;
 
-    int i;
-        for (i = 0; i < NS; i++) {
-            os << "\tNo." << i+1 << " " << EPS.ScalarVar[i] << "; ";
+        for (int i = 0; i < NS; i++) {
+            os << "\tNo." << i+1 << " " << EPS.trialStateVars.ScalarVar[i] << "; ";
   }
         os << std::endl << std::endl;
 
         os << "\tNTensorVar = " << NT;
-        for (i = 0; i < NT; i++) {
+        for(int i = 0; i < NT; i++) {
     //           os.unsetf( ios::showpos);
            os << std::endl << "\tNo." << i+1 << " tensorial var:";
      //           os.setf( ios::showpos);
-           os << EPS.TensorVar[i];
+           os << EPS.trialStateVars.TensorVar[i];
         }
 
         os << std::endl;
         return os;
     }
 
-#endif
 
