@@ -76,7 +76,8 @@ namespace XC {
 //
 //! @ingroup EINDMat
 //
-//! @brief Base class for elastic isotropic materials.
+//! @brief Base class for elastic isotropic materials with elastic
+//! modulus E and Poisson ratio v.
 //!
 //! ElasticIsotropicMaterial is an abstract class.  It provides the
 //! interface to which all elastic isotropic material implementations
