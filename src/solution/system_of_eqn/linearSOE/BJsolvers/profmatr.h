@@ -223,8 +223,6 @@ class profilematrix
       double full_val (int , int ) const;
 
   private:
-//..    double* data(void) const;
-//..    void set_data_pointer(double* );
 //    int rank(void) const;
 //    void rank(int );
     long int total_number(void) const ;

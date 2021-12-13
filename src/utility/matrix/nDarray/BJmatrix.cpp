@@ -64,8 +64,6 @@
 //#                                                                              #
 //################################################################################
 //*/
-#ifndef MATRIX_CC
-#define MATRIX_CC
 
 #include "utility/matrix/nDarray/BJmatrix.h"
 #include "utility/matrix/nDarray/BJtensor.h"
@@ -117,19 +115,14 @@ XC::BJmatrix::BJmatrix(const std::string &flag, int dimension ): // create an id
      set_dim(pdim);  // array for dimensions
 
 // allocate memory for the actual XC::nDarray as XC::nDarray
-     set_data_pointer( new double [ (size_t) total_number() ]);
-       if (!data())
-         {
-           ::printf("\a\nInsufficient memory for array\n");
-           ::exit(1);
-         }
+     pc_nDarray_rep->init_data();
 
      set_reference_count(+1);  // so far, there's one reference
 
-     for ( int i2=1 ; i2<=dim(1) ; i2++ )
-       for ( int j2=1 ; j2<=dim(2) ; j2++ )
+     for(int i2=1 ; i2<=dim(1) ; i2++ )
+       for( int j2=1 ; j2<=dim(2) ; j2++ )
          val(i2,j2) = (i2 == j2 ? 1  : 0);
-}
+  }
 
 //#############################################################################
 // error message when trying to read a 'standard'
@@ -138,86 +131,81 @@ static const std::string nonstandard= "is a 'non-standard'file. A 'standard' BJm
 
 //#############################################################################
 // read from "standard" BJmatrix file:
-XC::BJmatrix::BJmatrix(const std::string &initfile):
-  nDarray("NO")           // with base class constructor cancellation
-{
-#define BSIZE 120
-  FILE *from;
+XC::BJmatrix::BJmatrix(const std::string &initfile)
+  : nDarray("NO") // with base class constructor cancellation
+  {
+  #define BSIZE 120
+    FILE *from;
 
-  int rows    = 0;
-  int columns = 0;
+    int rows    = 0;
+    int columns = 0;
 
-  if ((from = fopen(initfile.c_str(),"r")) == 0)
-    error("cannot open XC::BJmatrix initializer file", initfile);
-  char buf[BSIZE], *cp, *cp2;
-  int rfound = 0, cfound = 0, colonsfound = 0;
-//        /*Parse file initialization header  */
-  while( fgets(buf, BSIZE, from) )         // for each header line
-    {
-// Remove comments with ANSI C library function 'strp
-      if( ( cp = strpbrk(buf,"!")) != nullptr ) // look for comments
-        *cp = '\0';  // terminate string at comment
-      if(( cp = strpbrk(buf,"r")) != nullptr )
-        if (( cp2 = strpbrk(cp, "=")) != nullptr )
-          if (( cp = strpbrk( cp2, "0123456789")) != nullptr )
-            {
-              rows = atoi(cp);
-              rfound++;  // flag to say rows were found
-            }
-      if( ( cp = strpbrk(buf,"c") ) != nullptr )
-         if ( ( cp2 = strpbrk(cp, "=")) != nullptr )
-           if ( ( cp = strpbrk(cp2, "O123456789")) != nullptr )
-             {
-               columns = atoi(cp);
-               cfound++;  // flag to say cols were found
-             }
-      if ( strstr(buf,"::") != nullptr )
-        {
-          colonsfound++;
-          break; //... out of "while" loop
-        }
-    }
-  if ( !rfound || !cfound || !colonsfound )
-    {
-      std::cerr << initfile << nonstandard << std::endl;
-      exit(1);
-    }
-
-// let's construct a XC::BJmatrix
-
-// create the structure:
-  pc_nDarray_rep = new nDarray_rep; // this 'new' is overloaded
-  rank(2);  // rank_of_nDarray here XC::BJmatrix = 2
-
-     const std::vector<int> pdim({rows,columns});
-     set_dim(pdim);// array for dimensions
-
-// allocate memory for the actual XC::nDarray as XC::nDarray
-  set_data_pointer( new double [ (size_t) total_number() ] );
-    if (!data())
+    if ((from = fopen(initfile.c_str(),"r")) == 0)
+      error("cannot open XC::BJmatrix initializer file", initfile);
+    char buf[BSIZE], *cp, *cp2;
+    int rfound = 0, cfound = 0, colonsfound = 0;
+  //        /*Parse file initialization header  */
+    while( fgets(buf, BSIZE, from) )         // for each header line
       {
-        ::printf("\a\nInsufficient memory for array\n");
-        ::exit(1);
-      }
-
-  set_reference_count(+1);  // so far, there's one reference
-
-  for ( int row=1 ; row <= rows ; row++ )
-    for ( int col=1 ; col <= columns ; col++ )
-      {
-        char nb[20];
-        const int tmp= fscanf(from, "%s", nb); // scan for space-delimited string
-        if(tmp==EOF)
+  // Remove comments with ANSI C library function 'strp
+	if( ( cp = strpbrk(buf,"!")) != nullptr ) // look for comments
+	  *cp = '\0';  // terminate string at comment
+	if(( cp = strpbrk(buf,"r")) != nullptr )
+	  if (( cp2 = strpbrk(cp, "=")) != nullptr )
+	    if (( cp = strpbrk( cp2, "0123456789")) != nullptr )
+	      {
+		rows = atoi(cp);
+		rfound++;  // flag to say rows were found
+	      }
+	if( ( cp = strpbrk(buf,"c") ) != nullptr )
+	   if ( ( cp2 = strpbrk(cp, "=")) != nullptr )
+	     if ( ( cp = strpbrk(cp2, "O123456789")) != nullptr )
+	       {
+		 columns = atoi(cp);
+		 cfound++;  // flag to say cols were found
+	       }
+	if ( strstr(buf,"::") != nullptr )
 	  {
-            std::cerr << "end of file while reading BJmatrix." << std::endl;
-            break;
-          }
-        val(row,col) = (double) atof(nb); // convert it to a double
-        if(ferror(from))
-          error("problem with XC::BJmatrix initializer file ", initfile);
+	    colonsfound++;
+	    break; //... out of "while" loop
+	  }
       }
-  fclose(from);
-}
+    if ( !rfound || !cfound || !colonsfound )
+      {
+	std::cerr << initfile << nonstandard << std::endl;
+	exit(1);
+      }
+
+  // let's construct a BJmatrix
+
+  // create the structure:
+    pc_nDarray_rep = new nDarray_rep; // this 'new' is overloaded
+    rank(2);  // rank_of_nDarray here BJmatrix = 2
+
+       const std::vector<int> pdim({rows,columns});
+       set_dim(pdim);// array for dimensions
+
+  // allocate memory for the actual nDarray as nDarray
+       pc_nDarray_rep->init_data();
+
+    set_reference_count(+1);  // so far, there's one reference
+
+    for(int row=1 ; row <= rows ; row++ )
+      for(int col=1 ; col <= columns ; col++ )
+	{
+	  char nb[20];
+	  const int tmp= fscanf(from, "%s", nb); // scan for space-delimited string
+	  if(tmp==EOF)
+	    {
+	      std::cerr << "end of file while reading BJmatrix." << std::endl;
+	      break;
+	    }
+	  val(row,col) = (double) atof(nb); // convert it to a double
+	  if(ferror(from))
+	    error("problem with BJmatrix initializer file ", initfile);
+	}
+    fclose(from);
+  }
 
 //#############################################################################
 // read from flat XC::BJmatrix file: and write to test output
@@ -247,15 +235,10 @@ XC::BJmatrix::BJmatrix(const std::string &initfile,const std::string &outfile):
      const std::vector<int> pdim({rows,columns});
      set_dim(pdim);// array for dimensions
 
-// allocate memory for the actual XC::nDarray as XC::nDarray
-  set_data_pointer( new double [ (size_t) total_number() ] );
-    if (!data())
-      {
-        ::printf("\a\nInsufficient memory for array\n");
-        ::exit(1);
-      }
+     // allocate memory for the actual nDarray as XC::nDarray
+     pc_nDarray_rep->init_data();
 
-  set_reference_count(+1);  // so far, there's one reference
+     set_reference_count(+1);  // so far, there's one reference
 
   for ( int row=1 ; row <= rows ; row++ )
     for ( int col=1 ; col <= columns ; col++ )
@@ -279,7 +262,7 @@ XC::BJmatrix::BJmatrix(const std::string &initfile,const std::string &outfile):
 }
 
 //##############################################################################
-XC::BJmatrix::BJmatrix(const XC::BJmatrix & x): // copy-initializer
+XC::BJmatrix::BJmatrix(const BJmatrix &x): // copy-initializer
   nDarray("NO")     // with base class constructor cancellation
     {
       x.pc_nDarray_rep->n++;  // we're adding another reference.
@@ -293,25 +276,6 @@ XC::BJmatrix::BJmatrix(const XC::BJmatrix & x): // copy-initializer
 XC::BJmatrix::BJmatrix(const XC::nDarray & x):
   nDarray( x ) { }
 
-
-
-//--// IT IS NOT INHERITED so must be defined in all derived classes
-//--// See ARM page 277.
-//--//##############################################################################
-//--XC::BJmatrix::~BJmatrix()
-//--{
-//--  if (reference_count(-1) == 0)  // if reference count  goes to 0
-//--    {
-//--// DEallocate memory of the actual XC::nDarray
-//--//    delete [pc_nDarray_rep->pc_nDarray_rep->total_numb] pc_nDarray_rep->pd_nDdata;
-//--// nema potrebe za brojem clanova koji se brisu## see ELLIS & STROUSTRUP $18.3
-//--//                                                and note on the p.65($5.3.4)
-//--//  and the page 276 ($12.4)
-//--    delete [] data();
-//--    clear_dim();
-//--    delete pc_nDarray_rep;
-//--  }
-//--}
 
 
 //#############################################################################
@@ -332,25 +296,13 @@ int XC::BJmatrix::cols( ) const       // cols in XC::BJmatrix
 
 //#############################################################################
 XC::BJmatrix &XC::BJmatrix::operator=( const XC::BJmatrix & rval)
-{
-      rval.pc_nDarray_rep->n++;  // we're adding another reference.
-//    rval.reference_count(+1);  // tell the rval it has another reference
-//   /*  It is important to increment the reference_counter in the new
-//       BJtensor before decrementing the reference_counter in the
-//       old BJtensor_rep to ensure proper operation when assigning a
-//       BJtensor_rep to itself ( after ARKoenig JOOP May/June '90 )  */
-
- // clean up current value;
-    if( reference_count(-1) == 0)  // if nobody else is referencing us.
-      {
-        delete [] data();
-        clear_dim();
-        delete pc_nDarray_rep;
-      }
- // connect to new value
-    pc_nDarray_rep = rval.pc_nDarray_rep;  // point at the rval BJtensor_rep
+  {
+    if(&rval == this) // if assign an BJvector to itself
+      return *this;
+    
+    assign(rval);
     return *this;
-}
+  }
 
 
 
@@ -378,94 +330,6 @@ void XC::BJmatrix::write_standard(const std::string &filename,const std::string 
         fprintf(to, "\n");
       }
 }
-
-//....//#############################################################################
-//....// This is from JOOP May/June 1990 after ARKoenig ( I did the rest )
-//....BJmatrix & XC::BJmatrix::operator*=( const XC::BJmatrix & rval )
-//....  {
-//....    if( this->cols() != rval.rows())
-//....      error("# rows of second mat must equal "
-//....               "# cols of first for multiply#");
-//....
-//....   int this_r = this->pc_nDarray_rep->dim[0];
-//....   int this_c = this->pc_nDarray_rep->dim[1];
-//....   int rval_r = rval.pc_nDarray_rep->dim[0];
-//....   int rval_c = rval.pc_nDarray_rep->dim[1];
-//....// temporary XC::BJmatrix that will keep result
-//....   BJmatrix result( this_r, rval_c, 0.0 );
-//....
-//....// copy *this if necessary
-//....// i.e. if somebody else is pointing to the same nDarray_rep class
-//....// then allocate new memory for the this and disconnect this from
-//....// the old one!
-//....    if ( this->pc_nDarray_rep->n > 1 )// see ARK in JOOP may/june '90
-//....      {                               // "Letter From a Newcomer"
-//....//..//..............................................................................
-//....//..// create the structure:
-//....//..        nDarray_rep * New_pc_nDarray_rep = new nDarray_rep; // this 'new' is overloaded
-//....//..        New_pc_nDarray_rep->nDarray_rank = this->pc_nDarray_rep->nDarray_rank;
-//....//..// in the case of nDarray_rank=0 add one to get right thing from the
-//....//..// operator new
-//....//..        int one_or0 = 0;
-//....//..        if(!New_pc_nDarray_rep->nDarray_rank) one_or0 = 1;
-//....//..        New_pc_nDarray_rep->dim = new int[New_pc_nDarray_rep->nDarray_rank+one_or0];
-//....//..                                  // array for dimensions
-//....//..        New_pc_nDarray_rep->total_numb = 1;
-//....//..        for( int idim = 0 ; idim < New_pc_nDarray_rep->nDarray_rank ; idim++ )
-//....//..          {
-//....//..            New_pc_nDarray_rep->dim[idim] = this->pc_nDarray_rep->dim[idim];
-//....//..            New_pc_nDarray_rep->total_numb *= New_pc_nDarray_rep->dim[idim];
-//....//..          }
-//....//..// allocate memory for the actual XC::nDarray as XC::nDarray
-//....//..        New_pc_nDarray_rep->pd_nDdata = new double [(size_t)New_pc_nDarray_rep->total_numb];
-//....//..          if (!New_pc_nDarray_rep->pd_nDdata)
-//....//..            {
-//....//..              ::printf("\a\nInsufficient memory for array\n");
-//....//..              ::exit(1);
-//....//..            }
-//....//..         New_pc_nDarray_rep->n = 1;  // so far, there's one reference
-//....//..         for ( int i=0 ; i<New_pc_nDarray_rep->total_numb ; i++ )
-//....//..           New_pc_nDarray_rep->pd_nDdata[i] = this->pc_nDarray_rep->pd_nDdata[i];
-//....//.........
-//....         this->pc_nDarray_rep->total_numb--;
-//....         this->pc_nDarray_rep = New_pc_nDarray_rep;
-//....//..............................................................................
-//....      }
-//....
-//....// multiply rval with *this
-//....   for ( int row=0 ; row<this_r ; row++ )
-//....      for ( int col=0 ; col<rval_c ; col++ )
-//....        {
-//....          double sum = 0.0;
-//....          for( int i=0 ; i<this_c ; i++ )
-//....            sum += this->pc_nDarray_rep->m[row][i]*rval.pc_nDarray_rep->m[i][col];
-//....          result.val(row,col) = sum;
-//....        }
-//....//..// copy result to *this
-//....//..   for ( int i=0 ; i<this_r ; i++ )
-//....//..      for ( int j=0 ; j<rval_c ; j++ )
-//....//..         this->pc_nDarray_rep->m[i][j] = result.val(i,j);
-//....// copy result to *this actually take the whole class pointer and just
-//....// assign it to the this
-//....
-//....   this->pc_nDarray_rep = result.pc_nDarray_rep;
-//....
-//....   return *this;
-//....  }
-//....
-//....//#############################################################################
-//....// This is from JOOP May/June 1990 after ARKoenig
-//....inline XC::BJmatrix operator*(const XC::BJmatrix & left_val, const XC::BJmatrix & right_val)
-//....  {
-//....    BJmatrix result(left_value);
-//....    result *= right_val;
-//....    return result;
-//....  }
-//....
-//....
-
-
-
 
 //#############################################################################
 // OLD good version
@@ -1108,301 +972,15 @@ double & XC::BJmatrix::mval (int row, int col) // I am still keeping mval
   {                                      // operator for compatibility
      return( this->val(row+1,col+1) );   // with old XC::BJmatrix class members
   }                                      // and they start from 0 !
-    // used by XC::BJmatrix functions which KNOW they aren't
-    // exceeding the boundaries
-
-// // Moved to  nDarray 14 Oct. 1996
-// //#############################################################################
-// vector XC::BJmatrix::eigenvalues(void)
-//   {
-//     int rows = this->rows();
-//     int cols = this->cols();
-//     if ( rows != cols )
-//       {
-//         ::printf("rows!=cols in eigenvalues\n");
-//         ::exit(1);
-//       }
-// 
-//     vector EV((rows), 0.0);
-// 
-// // most painless to really make a two-dimensional array and copy it to 'a'
-// // BEWARE they work in NRC as in FORTRAN therefore strings from 1 to n
-//     double ** a = new double *[rows+1];
-//     if ( !a ) {::printf("memory exhausted for **a \n"); ::exit(1);}
-//     for ( int i=0 ; i<(rows+1) ; i++ )
-//       {
-//         a[i] = new double[rows+1];
-//         if ( !a[i] ) {::printf("memory exhausted for *a \n"); ::exit(1);}
-//       }
-//     double * d = new double [rows+1];
-//     double * e = new double [rows+1];
-// 
-//     for ( int j=0 ; j<rows ; j++) 
-//       for ( int k=0 ; k<rows ; k++) 
-//         {
-//           a[j+1][k+1] = this->cval(j+1,k+1);
-//         }
-// 
-// 
-// // Householder reduction of a real symmetric XC::BJmatrix see NRC page 373
-//     tred2( a, rows, d, e);
-// // QL algorithm with implicit shift see NRC page 380
-//     tqli( d, e, rows, a);
-// // sort eigenvalues see NRC page 366
-//     eigsrt( d, a, rows);
-// 
-//     for ( int l=0 ; l<rows ; l++ )
-//       {
-//         EV.val(l+1) = d[l+1];
-//       }
-// 
-// // delete new - ed arrays
-//     for ( int i1=0 ; i1<rows ; i1++ )
-//       {
-//         delete a[i1];
-//       }
-//     delete a;
-//     delete d;
-//     delete e;
-// 
-//     return EV;
-//   }
-// 
-// //#############################################################################
-// BJmatrix XC::BJmatrix::eigenvectors(void)
-//   {
-//     int rows = this->rows();
-//     int cols = this->cols();
-//     if ( rows != cols )
-//       {
-//         ::printf("rows!=cols in eigenvectors\n");
-//         ::exit(1);
-//       }
-// 
-//     BJmatrix EV(rows, rows, 0.0);
-// //    BJmatrix temp( rows, rows, rows, this->data() );
-// 
-// // most painless to really make a two-dimensional array and copy it to 'a'
-// // BEWARE they work in NRC as in FORTRAN therefore strings from 1 to n
-//     double ** a = new double *[rows+1];
-//     if ( !a ) {::printf("memory exhausted for **a \n"); ::exit(1);}
-//     for ( int i=0 ; i<(rows+1) ; i++ )
-//       {
-//         a[i] = new double[rows+1];
-//         if ( !a[i] ) {::printf("memory exhausted for *a \n"); ::exit(1);}
-//       }
-//     double * d = new double [rows+1];
-//     double * e = new double [rows+1];
-// 
-//     for ( int j=0 ; j<rows ; j++) 
-//       for ( int k=0 ; k<rows ; k++) 
-//         {
-//           a[j+1][k+1] = this->cval(j+1,k+1);
-//         }
-// // Householder reduction of a real symmetric XC::BJmatrix see NRC page 373
-//     tred2( a, rows, d, e);
-// // QL algorithm with implicit shift see NRC page 380
-//     tqli( d, e, rows, a);
-// // sort eigenvalues see NRC page 366
-//     eigsrt( d, a, rows);
-// 
-//     for ( int l=0 ; l<rows ; l++ )
-//       for ( int l1=0; l1<rows ; l1++ )
-//         {
-//           EV.val(l+1,l1+1) = a[l+1][l1+1];
-//         }
-// 
-// // delete new - ed arrays
-//     for ( int i1=0 ; i1<(rows+1) ; i1++ )
-//       {
-//         delete a[i1];
-//       }
-//     delete a;
-//     delete d;
-//     delete e;
-// 
-//     return EV;
-//   }
-//
 
 
-// // prebacen u XC::nDarray 14 oktobra 1996
-// //#############################################################################
-// #define SIGN(a,b) ((b)<0 ? -fabs(a) : fabs(a))
-// 
-// void XC::BJmatrix::tqli(double * d, double * e, int n, double ** z)
-// {
-//         int m,l,iter,i,k;
-//         double s,r,p,g,f,dd,c,b;
-// //	void nrerror();
-// 
-//         for (i=2;i<=n;i++) e[i-1]=e[i];
-//         e[n]=0.0;
-//         for (l=1;l<=n;l++) {
-//                 iter=0;
-//                 do {
-//                         for (m=l;m<=n-1;m++) {
-//                                 dd=fabs(d[m])+fabs(d[m+1]);
-//                                 if (fabs(e[m])+dd == dd) break;
-//                         }
-//                         if (m != l) {
-//                                 if (iter++ == 30) { ::printf("Too many iterations in TQLI\n"); ::exit(1); }
-//                                 g=(d[l+1]-d[l])/(2.0*e[l]);
-//                                 r=sqrt((g*g)+1.0);
-//                                 g=d[m]-d[l]+e[l]/(g+SIGN(r,g));
-//                                 s=c=1.0;
-//                                 p=0.0;
-//                                 for (i=m-1;i>=l;i--) {
-//                                         f=s*e[i];
-//                                         b=c*e[i];
-//                                         if (fabs(f) >= fabs(g)) {
-//                                                 c=g/f;
-//                                                 r=sqrt((c*c)+1.0);
-//                                                 e[i+1]=f*r;
-//                                                 c *= (s=1.0/r);
-//                                         } else {
-//                                                 s=f/g;
-//                                                 r=sqrt((s*s)+1.0);
-//                                                 e[i+1]=g*r;
-//                                                 s *= (c=1.0/r);
-//                                         }
-//                                         g=d[i+1]-p;
-//                                         r=(d[i]-g)*s+2.0*c*b;
-//                                         p=s*r;
-//                                         d[i+1]=g+p;
-//                                         g=c*r-b;
-//                                         /* Next loop can be omitted if eigenvectors not wanted */
-//                                         for (k=1;k<=n;k++) {
-//                                                 f=z[k][i+1];
-//                                                 z[k][i+1]=s*z[k][i]+c*f;
-//                                                 z[k][i]=c*z[k][i]-s*f;
-//                                         }
-//                                 }
-//                                 d[l]=d[l]-p;
-//                                 e[l]=g;
-//                                 e[m]=0.0;
-//                         }
-//                 } while (m != l);
-//         }
-// }
-// 
-// 
-// //#############################################################################
-// void XC::BJmatrix::tred2(double ** a, int n, double * d, double * e)
-// {
-//         int l,k,j,i;
-//         double scale,hh,h,g,f;
-// 
-//         for (i=n;i>=2;i--) {
-//                 l=i-1;
-//                 h=scale=0.0;
-//                 if (l > 1) {
-//                         for (k=1;k<=l;k++)
-//                                 scale += fabs(a[i][k]);
-//                         if (scale == 0.0)
-//                                 e[i]=a[i][l];
-//                         else {
-//                                 for (k=1;k<=l;k++) {
-//                                         a[i][k] /= scale;
-//                                         h += a[i][k]*a[i][k];
-//                                 }
-//                                 f=a[i][l];
-//                                 g = f>0 ? -sqrt(h) : sqrt(h);
-//                                 e[i]=scale*g;
-//                                 h -= f*g;
-//                                 a[i][l]=f-g;
-//                                 f=0.0;
-//                                 for (j=1;j<=l;j++) {
-//                                 /* Next statement can be omitted if eigenvectors not wanted */
-//                                         a[j][i]=a[i][j]/h;
-//                                         g=0.0;
-//                                         for (k=1;k<=j;k++)
-//                                                 g += a[j][k]*a[i][k];
-//                                         for (k=j+1;k<=l;k++)
-//                                                 g += a[k][j]*a[i][k];
-//                                         e[j]=g/h;
-//                                         f += e[j]*a[i][j];
-//                                 }
-//                                 hh=f/(h+h);
-//                                 for (j=1;j<=l;j++) {
-//                                         f=a[i][j];
-//                                         e[j]=g=e[j]-hh*f;
-//                                         for (k=1;k<=j;k++)
-//                                                 a[j][k] -= (f*e[k]+g*a[i][k]);
-//                                 }
-//                         }
-//                 } else
-//                         e[i]=a[i][l];
-//                 d[i]=h;
-//         }
-//         /* Next statement can be omitted if eigenvectors not wanted */
-//         d[1]=0.0;
-//         e[1]=0.0;
-//         /* Contents of this loop can be omitted if eigenvectors not
-//                         wanted except for statement d[i]=a[i][i]; */
-//         for (i=1;i<=n;i++) {
-//                 l=i-1;
-//                 if (d[i]) {
-//                         for (j=1;j<=l;j++) {
-//                                 g=0.0;
-//                                 for (k=1;k<=l;k++)
-//                                         g += a[i][k]*a[k][j];
-//                                 for (k=1;k<=l;k++)
-//                                         a[k][j] -= g*a[k][i];
-//                         }
-//                 }
-//                 d[i]=a[i][i];
-//                 a[i][i]=1.0;
-//                 for (j=1;j<=l;j++) a[j][i]=a[i][j]=0.0;
-//         }
-// }
-// 
-// 
-// 
-// //#############################################################################
-// void XC::BJmatrix::eigsrt(double * d, double ** v, int n)
-// {
-//         int k,j,i;
-//         double p;
-// 
-//         for (i=1;i<n;i++) {
-//                 p=d[k=i];
-//                 for (j=i+1;j<=n;j++)
-//                         if (d[j] >= p) p=d[k=j];
-//                 if (k != i) {
-//                         d[k]=d[i];
-//                         d[i]=p;
-//                         for (j=1;j<=n;j++) {
-//                                 p=v[j][i];
-//                                 v[j][i]=v[j][k];
-//                                 v[j][k]=p;
-//                         }
-//                 }
-//         }
-// }
-// 
 
- 
-// //#############################################################################
-double*  XC::BJmatrix::BJmatrixtoarray(int& num)
+//#############################################################################
+double *XC::BJmatrix::BJmatrixtoarray(int &num)
   {
-        num=pc_nDarray_rep->total_numb;
-/*
-        double *data = new double [num];
-
-        for(int i=0 ; i< num ; i++)
-        {
-           data[i]=pc_nDarray_rep->pd_nDdata[i];
-        }
-
-        return data;
-*/
-        return pc_nDarray_rep->pd_nDdata;
+    num=pc_nDarray_rep->total_numb;
+    return pc_nDarray_rep->get_data_ptr();
   }
-
-
-
-#endif 
 
 
 

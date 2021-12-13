@@ -87,73 +87,23 @@ XC::Cosseratstraintensor::Cosseratstraintensor( const Cosseratstraintensor & x )
 
 
 //##############################################################################
-XC::Cosseratstraintensor::Cosseratstraintensor(const XC::BJtensor & x):
-  BJtensor( x ) {  } // copy-initializer
+XC::Cosseratstraintensor::Cosseratstraintensor(const BJtensor & x)
+  : BJtensor( x ) {  } // copy-initializer
 
 //##############################################################################
-XC::Cosseratstraintensor::Cosseratstraintensor(const XC::nDarray & x):
-  BJtensor( x ) {  }  // copy-initializer
+XC::Cosseratstraintensor::Cosseratstraintensor(const nDarray & x)
+  : BJtensor( x ) {  }  // copy-initializer
 
-
-//#//##############################################################################
-//#XC::Cosseratstraintensor::Cosseratstraintensor(Cosseratstraintensor & x)
-//#  {
-//#    x.reference_count(+1);              // we're adding another reference.
-//#    pc_nDarray_rep = x.pc_nDarray_rep;  // point to the new tensor_rep.
-//#// add the indices
-//#    indices1 = x.indices1;
-//#    indices2 = x.indices2;
-//#  }
-
-
- // IT IS NOT INHERITED so must be defined in all derived classes
- // See ARM page 277.
- //##############################################################################
-// XC::Cosseratstraintensor::~Cosseratstraintensor()
-// {
-//   if (reference_count(-1) == 0)  // if reference count  goes to 0
-//     {
-// // DEallocate memory of the actual XC::nDarray
-// //    delete [pc_nDarray_rep->pc_nDarray_rep->total_numb] pc_nDarray_rep->pd_nDdata;
-// // nema potrebe za brojem clanova koji se brisu## see ELLIS & STROUSTRUP $18.3
-// //                                                and note on the p.65($5.3.4)
-//     delete [] data();
-//     clear_dim();
-//     delete pc_nDarray_rep;
-//   }
-// }
-//
 
 // IT IS NOT INHERITED so must be defined in all derived classes
 // See ARM page 306.
 //##############################################################################
 XC::Cosseratstraintensor XC::Cosseratstraintensor::operator=(const Cosseratstraintensor &rval)
-{
-    rval.pc_nDarray_rep->n++;  // tell the rval it has another reference
-//    rval.reference_count(+1);  // tell the rval it has another reference
-//   /*  It is important to increment the reference_counter in the new
-//       BJtensor before decrementing the reference_counter in the
-//       old tensor_rep to ensure proper operation when assigning a
-//       tensor_rep to itself ( after ARKoenig JOOP May/June '90 )  */
-
- // clean up current value;
-//    if(--pc_nDarray_rep->n == 0)  // if nobody else is referencing us.
-    if( reference_count(-1) == 0)  // if nobody else is referencing us.
-      {
-// DEallocate memory of the actual XC::BJtensor
-//      delete [pc_tensor_rep->pc_tensor_rep->total_numb] pc_tensor_rep->pd_nDdata;
-// nema potrebe za brojem clanova koji se brisu## see ELLIS & STROUSTRUP $18.3
-//                                                and note on the p.65($5.3.4)
-//        delete  pc_nDarray_rep->pd_nDdata;
-        delete [] data();
-        clear_dim();
-// ovo ne smem da brisem jer nije dinamicki alocirano
-//        delete pc_tensor_rep->indices;
-        delete pc_nDarray_rep;
-      }
-
- // connect to new value
-    pc_nDarray_rep = rval.pc_nDarray_rep;  // point at the rval tensor_rep
+  {
+    if(&rval == this) // if assign an Cosseratstraintensor to itself
+      return *this;
+    
+    assign(rval);
 // Temporary out !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 // null indices in the rval
 //    rval.indices1 = nullptr;
@@ -162,7 +112,7 @@ XC::Cosseratstraintensor XC::Cosseratstraintensor::operator=(const Cosseratstrai
 // Temporary out !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     this->null_indices();
     return *this;
-}
+  }
 
 
 
@@ -170,32 +120,10 @@ XC::Cosseratstraintensor XC::Cosseratstraintensor::operator=(const Cosseratstrai
 // IT IS NOT INHERITED so must be defined in all derived classes
 // See ARM page 306.
 //##############################################################################
-XC::Cosseratstraintensor XC::Cosseratstraintensor::operator=( const XC::BJtensor & rval)
-{
-    rval.pc_nDarray_rep->n++;  // tell the rval it has another reference
-//    rval.reference_count(+1);  // tell the rval it has another reference
-//   /*  It is important to increment the reference_counter in the new
-//       BJtensor before decrementing the reference_counter in the
-//       old tensor_rep to ensure proper operation when assigning a
-//       tensor_rep to itself ( after ARKoenig JOOP May/June '90 )  */
+XC::Cosseratstraintensor XC::Cosseratstraintensor::operator=(const BJtensor &rval)
+  {
+    assign(rval);
 
- // clean up current value;
-    if( reference_count(-1) == 0)  // if nobody else is referencing us.
-      {
-// DEallocate memory of the actual XC::BJtensor
-//      delete [pc_tensor_rep->pc_tensor_rep->total_numb] pc_tensor_rep->pd_nDdata;
-// nema potrebe za brojem clanova koji se brisu## see ELLIS & STROUSTRUP $18.3
-//                                                and note on the p.65($5.3.4)
-//        delete  pc_nDarray_rep->pd_nDdata;
-        delete [] data();
-        clear_dim();
-// ovo ne smem da brisem jer nije dinamicki alocirano
-//        delete pc_tensor_rep->indices;
-        delete pc_nDarray_rep;
-      }
-
- // connect to new value
-    pc_nDarray_rep = rval.pc_nDarray_rep;  // point at the rval tensor_rep
 // Temporary out !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 // null indices in the rval
 //    rval.indices1 = nullptr;
@@ -204,31 +132,16 @@ XC::Cosseratstraintensor XC::Cosseratstraintensor::operator=( const XC::BJtensor
 // Temporary out !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     this->null_indices();
     return *this;
-}
+  }
 
 // IT IS NOT INHERITED so must be defined in all derived classes
 // See ARM page 306.
 //##############################################################################
-XC::Cosseratstraintensor XC::Cosseratstraintensor::operator=( const XC::nDarray & rval)
-{
-    rval.pc_nDarray_rep->n++;  // tell the rval it has another reference
-//    rval.reference_count(+1);  // tell the rval it has another reference
-//   /*  It is important to increment the reference_counter in the new
-//       BJtensor before decrementing the reference_counter in the
-//       old tensor_rep to ensure proper operation when assigning a
-//       tensor_rep to itself ( after ARKoenig JOOP May/June '90 )  */
-
-    if( reference_count(-1) == 0)  // if nobody else is referencing us.
-      {
-        delete [] data();
-        clear_dim();
-        delete pc_nDarray_rep;
-      }
-
- // connect to new value
-    pc_nDarray_rep = rval.pc_nDarray_rep;  // point at the rval tensor_rep
+XC::Cosseratstraintensor XC::Cosseratstraintensor::operator=(const nDarray &rval)
+  {
+    assign(rval);
     return *this;
-}
+  }
 
 //##############################################################################
 // makes a complete new copy of Cosseratstraintensor!!
@@ -243,40 +156,14 @@ XC::Cosseratstraintensor XC::Cosseratstraintensor::deep_copy(void)
 //..    return &this->deep_copy(); // call constructor and return it !
 //..  }
 
-//ini  //##############################################################################
-//ini  // use "from" and initialize already allocated strain XC::BJtensor from "from" values
-//ini  void XC::Cosseratstraintensor::Initialize( const Cosseratstraintensor & from )
-//ini    {
-//ini  // copy onlu data because everything else is default
-//ini      for ( int i=0 ; i<pc_nDarray_rep->total_numb ; i++ )
-//ini        this->pc_nDarray_rep->pd_nDdata[i] = from.pc_nDarray_rep->pd_nDdata[i] ;
-//ini    }
 
-//___//##############################################################################
-//___//##############################################################################
-//___//##############################################################################
-//___Cosseratstraintensor & XC::Cosseratstraintensor::operator()(short ir, short is, short it,
-//___                                        short tr, short ts, short tt  )
-//___// another overloading of operator() . . .  // overloaded for THREE arguments
-//___  {
-//___    short where = ir - 1;
-//___          where = where*ts + is - 1;
-//___          where = where*tt + it - 1;
-//___
-//___//::printf(" w=%ld ",where);
-//___    Cosseratstraintensor *p_value = this + where;
-//___    return (*p_value);
-//___  }
-
-
-//##############################################################################
-// invariants of the strain XC::BJtensor              // Chen XC::W.F. "plasticity for
-double XC::Cosseratstraintensor::Iinvariant1()const       // Structural Engineers"
+//! @brief invariants of the strain tensor Chen XC::W.F. "plasticity for Structural Engineers"
+double XC::Cosseratstraintensor::Iinvariant1() const
   {
     return (cval(1,1)+cval(2,2)+cval(3,3));
   }
 
-//##############################################################################
+//! @brief invariants of the strain tensor Chen XC::W.F. "plasticity for Structural Engineers"
 double XC::Cosseratstraintensor::Iinvariant2() const
   {
     return (cval(2,2)*cval(3,3)-cval(3,2)*cval(2,3)+
@@ -284,7 +171,7 @@ double XC::Cosseratstraintensor::Iinvariant2() const
             cval(1,1)*cval(2,2)-cval(2,1)*cval(1,2));
   }
 
-//##############################################################################
+//! @brief invariants of the strain tensor Chen XC::W.F. "plasticity for Structural Engineers"
 double XC::Cosseratstraintensor::Iinvariant3() const
   {
 
@@ -302,8 +189,7 @@ double XC::Cosseratstraintensor::Iinvariant3() const
 
 
 
-//##############################################################################
-// invariants of the deviatoric strain XC::BJtensor
+//! @brief invariants of the deviatoric strain XC::BJtensor
 double XC::Cosseratstraintensor::Jinvariant1() const
   {
     return (0.0);

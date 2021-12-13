@@ -109,22 +109,10 @@ XC::stressstraintensor::stressstraintensor(const Vector &x)
 //##############################################################################
 XC::stressstraintensor XC::stressstraintensor::operator=( const stressstraintensor & rval)
   {
-    rval.pc_nDarray_rep->n++;  // tell the rval it has another reference
-//    rval.reference_count(+1);  // tell the rval it has another reference
-//   /*  It is important to increment the reference_counter in the new
-//       BJtensor before decrementing the reference_counter in the
-//       old tensor_rep to ensure proper operation when assigning a
-//       tensor_rep to itself ( after ARKoenig JOOP May/June '90 )  */
- // clean up current value;
-    if( reference_count(-1) == 0)  // if nobody else is referencing us.
-      {
-// DEallocate memory of the actual XC::BJtensor
-        delete [] data();
-        clear_dim();
-        delete pc_nDarray_rep;
-      }
- // connect to new value
-    pc_nDarray_rep = rval.pc_nDarray_rep;  // point at the rval tensor_rep
+    if(&rval == this) // if assign an stressstraintensor to itself
+      return *this;
+    
+    assign(rval);
 // Temporary out !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 // null indices in the rval
 //    rval.indices1 = nullptr;
@@ -138,34 +126,9 @@ XC::stressstraintensor XC::stressstraintensor::operator=( const stressstraintens
 // IT IS NOT INHERITED so must be defined in all derived classes
 // See ARM page 306.
 //##############################################################################
-XC::stressstraintensor XC::stressstraintensor::operator=(const XC::BJtensor &rval)
+XC::stressstraintensor XC::stressstraintensor::operator=(const BJtensor &rval)
   {
-    rval.pc_nDarray_rep->n++;  // tell the rval it has another reference
-//    rval.pc_nDarray_rep->n++;  // tell the rval it has another reference
-//    rval.reference_count(+1);  // tell the rval it has another reference
-//   /*  It is important to increment the reference_counter in the new
-//       BJtensor before decrementing the reference_counter in the
-//       old tensor_rep to ensure proper operation when assigning a
-//       tensor_rep to itself ( after ARKoenig JOOP May/June '90 )  */
-
- // clean up current value;
-//    if(--pc_nDarray_rep->n == 0)  // if nobody else is referencing us.
-    if( reference_count(-1) == 0)  // if nobody else is referencing us.
-      {
-// DEallocate memory of the actual XC::BJtensor
-//      delete [pc_tensor_rep->pc_tensor_rep->total_numb] pc_tensor_rep->pd_nDdata;
-// nema potrebe za brojem clanova koji se brisu## see ELLIS & STROUSTRUP $18.3
-//                                                and note on the p.65($5.3.4)
-//        delete  pc_nDarray_rep->pd_nDdata;
-        delete [] data();
-        clear_dim();
-// ovo ne smem da brisem jer nije dinamicki alocirano
-//        delete pc_tensor_rep->indices;
-        delete pc_nDarray_rep;
-      }
-
- // connect to new value
-    pc_nDarray_rep = rval.pc_nDarray_rep;  // point at the rval tensor_rep
+    assign(rval);
 // Temporary out !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 // null indices in the rval
 //    rval.indices1 = nullptr;
@@ -180,24 +143,9 @@ XC::stressstraintensor XC::stressstraintensor::operator=(const XC::BJtensor &rva
 // IT IS NOT INHERITED so must be defined in all derived classes
 // See ARM page 306.
 //##############################################################################
-XC::stressstraintensor XC::stressstraintensor::operator=( const XC::nDarray & rval)
-{
-    rval.pc_nDarray_rep->n++;  // tell the rval it has another reference
-//    rval.reference_count(+1);  // tell the rval it has another reference
-//   /*  It is important to increment the reference_counter in the new
-//       BJtensor before decrementing the reference_counter in the
-//       old tensor_rep to ensure proper operation when assigning a
-//       tensor_rep to itself ( after ARKoenig JOOP May/June '90 )  */
-
-    if( reference_count(-1) == 0)  // if nobody else is referencing us.
-      {
-        delete [] data();
-        clear_dim();
-        delete pc_nDarray_rep;
-      }
-
- // connect to new value
-    pc_nDarray_rep = rval.pc_nDarray_rep;  // point at the rval tensor_rep
+XC::stressstraintensor XC::stressstraintensor::operator=( const nDarray & rval)
+  {
+    assign(rval);
     return *this;
   }
 

@@ -127,7 +127,7 @@ class nDarray_rep
     friend class Cosseratstraintensor;
 
   private:
-    double *pd_nDdata;  // nD array as 1D array
+    std::vector<double> pd_nDdata;  // nD array as 1D array
     int nDarray_rank;   ///*  nDarray rank :
                         //     0  ->  scalar
                         //     1  ->  BJvector
@@ -149,6 +149,35 @@ class nDarray_rep
     void init_dim(const size_t &, const std::vector<int> &pdim);
     inline void clear_dim(void)
       { dim.clear(); }
+    void init_data(void);
+    void init_data(const double &);
+    void init_data(const double *);
+    void init_data(const std::vector<double> &);
+    void init_data(const boost::python::list &);
+    void reset_data_to(const double &);
+    inline double *get_data_ptr(void)
+      { return pd_nDdata.data(); }
+    inline const double *get_data_ptr(void) const
+      { return pd_nDdata.data(); }
+    inline const double &val(const size_t &where) const
+      {
+        const double *p_value = pd_nDdata.data() + where;
+        return (*p_value);
+      }
+    inline double &val(const size_t &where)
+      {
+        double *p_value = pd_nDdata.data() + where;
+        return (*p_value);
+      }
+    inline void clear_data(void)
+      { pd_nDdata.clear(); }
+
+    inline void clear(void)
+      {
+	clear_data();
+	clear_dim();
+      }
+    void sum_data(const std::vector<double> &);
   };
 
 //! @brief n-dimensional array.
@@ -174,6 +203,9 @@ class nDarray
           // explanation why this one should be a friend instead
           // of inheriting all data through protected construct
           // see in J. Coplien "Advanced C++..." page 96.
+  protected:
+    void clear_rep(void);
+    void assign(const nDarray &rval);
   public:
     nDarray(int rank_of_nDarray=1, const double &initval=0.0);// default constructor
     nDarray(int rank_of_nDarray, const std::vector<int> &pdim, const double *values);
@@ -201,7 +233,7 @@ class nDarray
                                                // ( dimensions, rank and data )
                                                // for BJtensor
 
-    void Reset_to(double value );  // reset data to "value"
+    void Reset_to(const double &value);  // reset data to "value"
 
 //..    double operator( ) (int subscript, ...) const; // same as val
                                                    // but overloaded (...)
@@ -249,7 +281,7 @@ class nDarray
 //..                 int subscript,
 //..                 ... ); // overloaded for more than FOUR arguments
 //..
-    double cval(int subscript, ...) const; // const
+    const double &cval(int subscript, ...) const; // const
 
 //..
 
@@ -312,19 +344,20 @@ class nDarray
 
 // from Numerical recipes in C
   private:
-    void tqli(double * d, double * e, int n, double ** z);
-    void tred2(double ** a, int n, double * d, double * e);
-    void eigsrt(double * d, double ** v, int n);
+    static void tqli(std::vector<double> &d, std::vector<double> &, int n, std::vector<std::vector<double> > &z);
+    static void tred2(std::vector<std::vector<double> > &a, int n, std::vector<double> &d, std::vector<double> &e);
+    static void eigsrt(std::vector<double> &d, std::vector<std::vector<double> > &v, int n);
 
   private:
     double* data(void) const;
-    void set_data_pointer(double* );
 //  int rank(void) const;
     void rank(int );
     long int total_number(void) const;
     void total_number(long int );
     const std::vector<int> &dim(void) const;
     void clear_dim(void);
+    void clear_data(void);
+    void clear_dim_data(void);
     int &get_dim_pointer(void) const;
     void set_dim(const std::vector<int> &);
     //    int dim(int which) const;

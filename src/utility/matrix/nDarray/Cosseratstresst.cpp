@@ -93,87 +93,33 @@ XC::Cosseratstresstensor::Cosseratstresstensor( const nDarray & x)
 
 
 
- // IT IS NOT INHERITED so must be defined in all derived classes
- // See ARM page 277.
- //##############################################################################
-// XC::Cosseratstresstensor::~Cosseratstresstensor()
-// {
-//   if (reference_count(-1) <= 0)  // Zhaohui changed  == 0 to <= 0 // if reference count  goes to 0
-//     {
-// // DEallocate memory of the actual XC::nDarray
-// //    delete [pc_nDarray_rep->pc_nDarray_rep->total_numb] pc_nDarray_rep->pd_nDdata;
-// // nema potrebe za brojem clanova koji se brisu## see ELLIS & STROUSTRUP $18.3
-// //                                                and note on the p.65($5.3.4)
-//     delete [] data();
-//     clear_dim();
-//     delete pc_nDarray_rep;
-//   }
-// }
-//
-
 //##############################################################################
 // IT IS NOT INHERITED so must be defined in all derived classes
 // See ARM page 306.
 //##############################################################################
 XC::Cosseratstresstensor XC::Cosseratstresstensor::operator=( const Cosseratstresstensor & rval)
-{
-    rval.pc_nDarray_rep->n++;  // tell the rval it has another reference
-//    rval.reference_count(+1);  // tell the rval it has another reference
-//   /*  It is important to increment the reference_counter in the new
-//       BJtensor before decrementing the reference_counter in the
-//       old tensor_rep to ensure proper operation when assigning a
-//       tensor_rep to itself ( after ARKoenig JOOP May/June '90 )  */
- // clean up current value;
-    if( reference_count(-1) == 0)  // if nobody else is referencing us.
-      {
-// DEallocate memory of the actual BJtensor
-        delete [] data();
-        clear_dim();
-        delete pc_nDarray_rep;
-      }
- // connect to new value
-    pc_nDarray_rep = rval.pc_nDarray_rep;  // point at the rval tensor_rep
-// Temporary out !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-// null indices in the rval
-//    rval.indices1 = nullptr;
-//    rval.indices2 = nullptr;
-//    rval.null_indices();
-// Temporary out !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+  {
+    if(&rval == this) // if assign an Cosseratstresstensor to itself
+      return *this;
+    assign(rval);
+
+    // Temporary out !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    // null indices in the rval
+    //    rval.indices1 = nullptr;
+    //    rval.indices2 = nullptr;
+    //    rval.null_indices();
+    // Temporary out !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     this->null_indices();
     return *this;
-}
+  }
 
 // IT IS NOT INHERITED so must be defined in all derived classes
 // See ARM page 306.
 //##############################################################################
 XC::Cosseratstresstensor XC::Cosseratstresstensor::operator=( const BJtensor &rval)
   {
-    rval.pc_nDarray_rep->n++;  // tell the rval it has another reference
-//    rval.pc_nDarray_rep->n++;  // tell the rval it has another reference
-//    rval.reference_count(+1);  // tell the rval it has another reference
-//   /*  It is important to increment the reference_counter in the new
-//       BJtensor before decrementing the reference_counter in the
-//       old tensor_rep to ensure proper operation when assigning a
-//       tensor_rep to itself ( after ARKoenig JOOP May/June '90 )  */
+    assign(rval);
 
- // clean up current value;
-//    if(--pc_nDarray_rep->n == 0)  // if nobody else is referencing us.
-    if( reference_count(-1) == 0)  // if nobody else is referencing us.
-      {
-// DEallocate memory of the actual BJtensor
-//      delete [pc_tensor_rep->pc_tensor_rep->total_numb] pc_tensor_rep->pd_nDdata;
-// nema potrebe za brojem clanova koji se brisu## see ELLIS & STROUSTRUP $18.3
-//                                                and note on the p.65($5.3.4)
-//        delete  pc_nDarray_rep->pd_nDdata;
-        delete [] data();
-        clear_dim();
-// ovo ne smem da brisem jer nije dinamicki alocirano
-//        delete pc_tensor_rep->indices;
-        delete pc_nDarray_rep;
-      }
-
- // connect to new value
-    pc_nDarray_rep = rval.pc_nDarray_rep;  // point at the rval tensor_rep
 // Temporary out !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 // null indices in the rval
 //    rval.indices1 = nullptr;
@@ -189,25 +135,11 @@ XC::Cosseratstresstensor XC::Cosseratstresstensor::operator=( const BJtensor &rv
 // See ARM page 306.
 //##############################################################################
 XC::Cosseratstresstensor XC::Cosseratstresstensor::operator=( const nDarray & rval)
-{
-    rval.pc_nDarray_rep->n++;  // tell the rval it has another reference
-//    rval.reference_count(+1);  // tell the rval it has another reference
-//   /*  It is important to increment the reference_counter in the new
-//       BJtensor before decrementing the reference_counter in the
-//       old tensor_rep to ensure proper operation when assigning a
-//       tensor_rep to itself ( after ARKoenig JOOP May/June '90 )  */
+  {
+    assign(rval);
 
-    if( reference_count(-1) == 0)  // if nobody else is referencing us.
-      {
-        delete [] data();
-        clear_dim();
-        delete pc_nDarray_rep;
-      }
-
- // connect to new value
-    pc_nDarray_rep = rval.pc_nDarray_rep;  // point at the rval tensor_rep
     return *this;
-}
+  }
 
 
 //##############################################################################
@@ -216,40 +148,7 @@ XC::Cosseratstresstensor XC::Cosseratstresstensor::deep_copy(void)
   {
     return Cosseratstresstensor(this->data()); // call constructor and return it !
   }
-//..//##############################################################################
-//../ returns a pointer to the Cosseratstresstensor!!
-//..Cosseratstresstensor * XC::Cosseratstresstensor::p_deep_copy(void)
-//..  {
-//..    Cosseratstresstensor temp = this->deep_copy();
-//..    return &temp; // call constructor and return it !
-//..  }
 
-//ini  //##############################################################################
-//ini  // use "from" and initialize already allocated stress XC::BJtensor from "from" values
-//ini  void XC::Cosseratstresstensor::Initialize( const Cosseratstresstensor & from )
-//ini    {
-//ini  // copy only data because everything else is default
-//ini      for ( int i=0 ; i<pc_nDarray_rep->total_numb ; i++ )
-//ini        this->pc_nDarray_rep->pd_nDdata[i] = from.pc_nDarray_rep->pd_nDdata[i] ;
-//ini    }
-
-//___//##############################################################################
-//___//##############################################################################
-//___//##############################################################################
-//___Cosseratstresstensor & XC::Cosseratstresstensor::operator()(short ir, short is, short it,
-//___                                        short tr, short ts, short tt  )
-//___// another overloading of operator() . . .  // overloaded for THREE arguments
-//___  {
-//___    short where = ir - 1;
-//___          where = where*ts + is - 1;
-//___          where = where*tt + it - 1;
-//___
-//___//::printf(" w=%ld ",where);
-//___    Cosseratstresstensor *p_value = this + where;
-//___    return (*p_value);
-//___  }
-
-//##############################################################################
 // invariants of the stress XC::BJtensor              // Chen W.F. "plasticity for
 double XC::Cosseratstresstensor::Iinvariant1(void) const       // Structural Engineers"
   {

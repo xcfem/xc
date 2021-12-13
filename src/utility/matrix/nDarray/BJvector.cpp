@@ -111,131 +111,15 @@ XC::BJvector::BJvector(const nDarray & x)
 
 
 
-//.... // IT IS NOT INHERITED so must be defined in all derived classes
-//.... // See ARM page 277.
-//.... //##############################################################################
-//.... XC::BJvector::~BJvector()
-//.... {
-//....   if (reference_count(-1) == 0)  // if reference count  goes to 0
-//....     {
-//.... // DEallocate memory of the actual XC::nDarray
-//.... //    delete [pc_nDarray_rep->pc_nDarray_rep->total_numb] pc_nDarray_rep->pd_nDdata;
-//.... // nema potrebe za brojem clanova koji se brisu## see ELLIS & STROUSTRUP $18.3
-//.... //                                                and note on the p.65($5.3.4)
-//.... //  and the page 276 ($12.4)
-//....     delete [] data();
-//....     clear_dim();
-//....     delete pc_nDarray_rep;
-//....   }
-//.... }
-
-
-
-
-//#############################################################################
+//! @brief Assignment operator.
 XC::BJvector &XC::BJvector::operator=(const XC::BJvector & rval)
   {
-    rval.pc_nDarray_rep->n++; // we're adding another reference.
-//    rval.reference_count(+1);  // tell the rval it has another reference
-//   /*  It is important to increment the reference_counter in the new
-//       BJtensor before decrementing the reference_counter in the
-//       old BJtensor_rep to ensure proper operation when assigning a
-//       BJtensor_rep to itself ( after ARKoenig JOOP May/June '90 )  */
-// clean up current value;
-    if( reference_count(-1) == 0)  // if nobody else is referencing us.
-      {
-        delete [] data();
-        clear_dim();
-        delete pc_nDarray_rep;
-      }
- // connect to new value
-    pc_nDarray_rep = rval.pc_nDarray_rep;  // point at the rval nDarray_rep
+    if(&rval == this) // if assign an BJvector to itself
+      return *this;
+    
+    assign(rval);
     return *this;
   }
-
-//..//#############################################################################
-//..BJvector& XC::BJvector::operator=( const XC::BJmatrix & rval)
-//..{
-//..    rval.pc_nDarray_rep->n++; // we're adding another reference.
-//..//    rval.reference_count(+1);  // tell the rval it has another reference
-//..//   /*  It is important to increment the reference_counter in the new
-//..//       BJtensor before decrementing the reference_counter in the
-//..//       old BJtensor_rep to ensure proper operation when assigning a
-//..//       BJtensor_rep to itself ( after ARKoenig JOOP May/June '90 )  */
-//..
-//.. // clean up current value;
-//..    if( reference_count(-1) == 0)  // if nobody else is referencing us.
-//..      {
-//..        delete [] data();
-//..        clear_dim();
-//..        delete pc_nDarray_rep;
-//..      }
-//..
-//..// set back rank to 1 for XC::BJvector instead of 2 as in XC::BJmatrix case
-//..      rval.pc_nDarray_rep->nDarray_rank = 1;
-//..//    rval.rank(1);
-//..// connect to new value
-//..    pc_nDarray_rep = rval.pc_nDarray_rep;  // point at the rval nDarray_rep
-//..    return *this;
-//..}
-//..
-//..//#############################################################################
-//..BJvector& XC::BJvector::operator=( const XC::nDarray & rval)
-//..{
-//..    rval.pc_nDarray_rep->n++; // we're adding another reference.
-//..//    rval.reference_count(+1);  // tell the rval it has another reference
-//..//   /*  It is important to increment the reference_counter in the new
-//..//       BJtensor before decrementing the reference_counter in the
-//..//       old BJtensor_rep to ensure proper operation when assigning a
-//..//       BJtensor_rep to itself ( after ARKoenig JOOP May/June '90 )  */
-//..
-//.. // clean up current value;
-//..    if( reference_count(-1) == 0)  // if nobody else is referencing us.
-//..      {
-//..        delete [] data();
-//..        clear_dim();
-//..        delete pc_nDarray_rep;
-//..      }
-//..
-//.. // connect to new value
-//..    pc_nDarray_rep = rval.pc_nDarray_rep;  // point at the rval nDarray_rep
-//..    return *this;
-//..}
-//..
-
-//#######  //#############################################################################
-//#######  // I had to overload the operator* from XC::BJmatrix class
-//#######  // because in the case of BJvectors s*sT and so on
-//#######  BJmatrix XC::BJvector::operator*( BJvector & arg)
-//#######    {
-//#######  //    if( cols() != arg.rows())
-//#######  //      error("# rows of second mat must equal "
-//#######  //               "# cols of first for multiply#");
-//#######      BJmatrix result(rows(),arg.cols());
-//#######      for( int row=0 ; row<rows() ; row++ )
-//#######        for( int col=0 ; col<arg.cols() ; col++ )
-//#######          {
-//#######            double sum = 0;
-//#######            for( int i=0 ; i<cols() ; i++ )
-//#######              sum += mval(row,i)*arg.mval(i,col);
-//#######            result.mval(row,col) = sum;
-//#######          }
-//#######      return result; // Returning a local variable?
-//#######      // copy-initializer happens before the destructor,
-//#######      // so reference count is 2 when destructor is called,
-//#######      // thus destructor doesn't free the memory.
-//#######    }
-//#######  
-//....//#############################################################################
-//....BJvector XC::BJvector::operator*( double arg)
-//....  {
-//....    BJvector result(rows());
-//....    for ( int i=0 ; i<rows() ; i++ )
-//....      result.val(i) = cval(i) * arg;
-//....    return result;
-//....  }
-
-
 
 //##############################################################################
 //

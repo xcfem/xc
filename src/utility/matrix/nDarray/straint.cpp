@@ -93,38 +93,9 @@ XC::straintensor::straintensor(const BJtensor & x)
   : stressstraintensor(x) {  } // copy-initializer
 
 //! @brief Constructor.
-XC::straintensor::straintensor(const XC::nDarray & x)
+XC::straintensor::straintensor(const nDarray & x)
   : stressstraintensor(x) {  }  // copy-initializer
 
-
-//#//##############################################################################
-//#XC::straintensor::straintensor(straintensor & x)
-//#  {
-//#    x.reference_count(+1);              // we're adding another reference.
-//#    pc_nDarray_rep = x.pc_nDarray_rep;  // point to the new tensor_rep.
-//#// add the indices
-//#    indices1 = x.indices1;
-//#    indices2 = x.indices2;
-//#  }
-
-
- // IT IS NOT INHERITED so must be defined in all derived classes
- // See ARM page 277.
- //##############################################################################
-// XC::straintensor::~straintensor()
-// {
-//   if (reference_count(-1) == 0)  // if reference count  goes to 0
-//     {
-// // DEallocate memory of the actual XC::nDarray
-// //    delete [pc_nDarray_rep->pc_nDarray_rep->total_numb] pc_nDarray_rep->pd_nDdata;
-// // nema potrebe za brojem clanova koji se brisu## see ELLIS & STROUSTRUP $18.3
-// //                                                and note on the p.65($5.3.4)
-//     delete [] data();
-//     delete [] dim();
-//     delete pc_nDarray_rep;
-//   }
-// }
-//
 
 // IT IS NOT INHERITED so must be defined in all derived classes
 // See ARM page 306.

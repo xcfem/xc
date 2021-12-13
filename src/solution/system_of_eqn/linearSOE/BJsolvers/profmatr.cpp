@@ -1435,15 +1435,6 @@ void XC::profilematrix::error(const std::string &msg1,const std::string &msg2) c
 //##############################################################################
 // very private part
 //##############################################################################
-//..   double * XC::profilematrix::data(void) const
-//..    {
-//..      return this->pc_profilematrix_rep->pd_nDdata;
-//..    }
-//..
-//..    void XC::profilematrix::set_data_pointer(double * data_pointer)
-//..    {
-//..      this->pc_profilematrix_rep->pd_nDdata= data_pointer;
-//..    }
 //
 //    int XC::profilematrix::rank(void) const
 //    {

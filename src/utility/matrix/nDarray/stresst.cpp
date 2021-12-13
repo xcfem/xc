@@ -143,34 +143,16 @@ XC::stresstensor::stresstensor( const stresstensor & x )
   {}
 
 //##############################################################################
-XC::stresstensor::stresstensor( const XC::BJtensor & x)
+XC::stresstensor::stresstensor( const BJtensor & x)
   : stressstraintensor( x )
     {  } // copy-initializer
 
 //##############################################################################
-XC::stresstensor::stresstensor( const XC::nDarray & x)
+XC::stresstensor::stresstensor( const nDarray & x)
   : stressstraintensor ( x )
     {  } // copy-initializer
 
 
-
- // IT IS NOT INHERITED so must be defined in all derived classes
- // See ARM page 277.
- //##############################################################################
-// XC::stresstensor::~stresstensor()
-// {
-//   if (reference_count(-1) <= 0)  // Zhaohui changed  == 0 to <= 0 // if reference count  goes to 0
-//     {
-// // DEallocate memory of the actual XC::nDarray
-// //    delete [pc_nDarray_rep->pc_nDarray_rep->total_numb] pc_nDarray_rep->pd_nDdata;
-// // nema potrebe za brojem clanova koji se brisu## see ELLIS & STROUSTRUP $18.3
-// //                                                and note on the p.65($5.3.4)
-//     delete [] data();
-//     delete [] dim();
-//     delete pc_nDarray_rep;
-//   }
-// }
-//
 
 //##############################################################################
 // IT IS NOT INHERITED so must be defined in all derived classes
