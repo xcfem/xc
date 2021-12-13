@@ -170,8 +170,9 @@ class OutputHandler(object):
                 the initial position plus its displacement multiplied
                 by this factor. (Defaults to 0.0, i.e. display of 
                 initial/undeformed shape)
-        :param rgMinMax: range (vmin,vmax) with the maximum and minimum values of 
-              the field to be represented. All the values less than vmin are 
+        :param rgMinMax: range (vmin,vmax) with the maximum and minimum values  
+              of the field to be represented (in units of calculation, 
+              not units of display). All the values less than vmin are 
               displayed in blue and those greater than vmax in red
               (defaults to None)
 
@@ -195,8 +196,9 @@ class OutputHandler(object):
                 the initial position plus its displacement multiplied
                 by this factor. (Defaults to 0.0, i.e. display of 
                 initial/undeformed shape)
-        :param rgMinMax: range (vmin,vmax) with the maximum and minimum values of 
-              the field to be represented. All the values less than vmin are 
+        :param rgMinMax: range (vmin,vmax) with the maximum and minimum values 
+              of the field to be represented  (in units of calculation, 
+              not units of display). All the values less than vmin are 
               displayed in blue and those greater than vmax in red
               (defaults to None)
 
@@ -226,8 +228,9 @@ class OutputHandler(object):
                 the initial position plus its displacement multiplied
                 by this factor. (Defaults to 0.0, i.e. display of 
                 initial/undeformed shape)
-        :param rgMinMax: range (vmin,vmax) with the maximum and minimum values of 
-              the field to be represented. All the values less than vmin are 
+        :param rgMinMax: range (vmin,vmax) with the maximum and minimum values 
+              of the field to be represented  (in units of calculation, 
+              not units of display). All the values less than vmin are 
               displayed in blue and those greater than vmax in red
               (defaults to None)
 
@@ -253,8 +256,9 @@ class OutputHandler(object):
                 the initial position plus its displacement multiplied
                 by this factor. (Defaults to 0.0, i.e. display of 
                 initial/undeformed shape)
-        :param rgMinMax: range (vmin,vmax) with the maximum and minimum values of 
-              the field to be represented. All the values less than vmin are 
+        :param rgMinMax: range (vmin,vmax) with the maximum and minimum values 
+              of the field to be represented  (in units of calculation, 
+              not units of display). All the values less than vmin are 
               displayed in blue and those greater than vmax in red
               (defaults to None)
 
@@ -283,8 +287,9 @@ class OutputHandler(object):
                 the initial position plus its displacement multiplied
                 by this factor. (Defaults to 0.0, i.e. display of 
                 initial/undeformed shape)
-        :param rgMinMax: range (vmin,vmax) with the maximum and minimum values of 
-              the field to be represented. All the values less than vmin are 
+        :param rgMinMax: range (vmin,vmax) with the maximum and minimum values 
+              of the field to be represented  (in units of calculation, 
+              not units of display). All the values less than vmin are 
               displayed in blue and those greater than vmax in red
               (defaults to None)
 
@@ -463,8 +468,9 @@ class OutputHandler(object):
                 the initial position plus its displacement multiplied
                 by this factor. (Defaults to 0.0, i.e. display of 
                 initial/undeformed shape)
-        :param rgMinMax: range (vmin,vmax) with the maximum and minimum values of 
-              the field to be represented. All the values less than vmin are 
+        :param rgMinMax: range (vmin,vmax) with the maximum and minimum values 
+              of the field to be represented  (in units of calculation, 
+              not units of display). All the values less than vmin are 
               displayed in blue and those greater than vmax in red
               (defaults to None)
         '''
@@ -854,7 +860,8 @@ class OutputHandler(object):
                     by this factor. (Defaults to 0.0, i.e. display of 
                     initial/undeformed shape)
         :param rgMinMax: range (vmin,vmax) with the maximum and minimum values  
-                    of the scalar field (if any) to be represented. All the values 
+                    of the scalar field (if any) to be represented  (in units 
+                    of calculation, not units of display). All the values 
                     less than vmin are displayed in blue and those greater than vmax 
                     in red (defaults to None)
         '''
@@ -879,7 +886,8 @@ class OutputHandler(object):
                     by this factor. (Defaults to 0.0, i.e. display of 
                     initial/undeformed shape)
         :param rgMinMax: range (vmin,vmax) with the maximum and minimum values  
-                    of the scalar field (if any) to be represented. All the values 
+                    of the scalar field (if any) to be represented  (in units 
+                    of calculation, not units of display). All the values 
                     less than vmin are displayed in blue and those greater than vmax 
                     in red (defaults to None)
         '''
