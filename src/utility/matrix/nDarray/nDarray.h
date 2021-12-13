@@ -134,17 +134,21 @@ class nDarray_rep
                         //     2  ->  BJmatrix
                         //     *  ->  ********   */
     long int total_numb; // total number of elements in nDarray
-    int *dim;          //  array of dimensions in each rank direction
-                       //  for example, if nDarray_rank = 3 :
-                       //      dim[0] = dimension in direction 1
-                       //      dim[1] = dimension in direction 2
-                       //      dim[2] = dimension in direction 3  */
-    int n;             // reference count
+    std::vector<int> dim; //  array of dimensions in each rank direction
+                          //  for example, if nDarray_rank = 3 :
+                          //      dim[0] = dimension in direction 1
+                          //      dim[1] = dimension in direction 2
+                          //      dim[2] = dimension in direction 3  */
+    int n;                // reference count
   public:
 // overloading operator new and delete in nDarray_rep class  ########
     void *operator new(size_t s); // see C++ reference manual by
     void operator delete(void *);  // by ELLIS and STROUSTRUP page 283.
                                    // and ECKEL page 529.
+    void init_dim(const size_t &, const int &default_dim= 1);
+    void init_dim(const size_t &, const std::vector<int> &pdim);
+    inline void clear_dim(void)
+      { dim.clear(); }
   };
 
 //! @brief n-dimensional array.
@@ -171,23 +175,20 @@ class nDarray
           // of inheriting all data through protected construct
           // see in J. Coplien "Advanced C++..." page 96.
   public:
-    nDarray(int rank_of_nDarray=1, double initval=0.0);// default constructor
-    nDarray(int rank_of_nDarray, const int *pdim, const double *values);
-    nDarray(int rank_of_nDarray, const int *pdim, const std::vector<double> &);
-    nDarray(int rank_of_nDarray, const int *pdim, const boost::python::list &);
-    nDarray(int rank_of_nDarray, const int *pdim, double initvalue);
-//..//  for skyBJmatrix --v
-//..    nDarray(int dim);
-//..    nDarray(int dim, double* initvalue);
+    nDarray(int rank_of_nDarray=1, const double &initval=0.0);// default constructor
+    nDarray(int rank_of_nDarray, const std::vector<int> &pdim, const double *values);
+    nDarray(int rank_of_nDarray, const std::vector<int> &pdim, const std::vector<double> &);
+    nDarray(int rank_of_nDarray, const std::vector<int> &pdim, const boost::python::list &);
+    nDarray(int rank_of_nDarray, const std::vector<int> &pdim, double initvalue);
 
-// special case for BJmatrix and BJvector . . .
+    // special case for BJmatrix and BJvector . . .
     nDarray(int rank_of_nDarray, int rows, int cols, double *values);
     nDarray(int rank_of_nDarray, int rows, int cols, double initvalue);
 
 // special case when I don't want any initialization at all##
     explicit nDarray(const std::string &){};
 
-    nDarray(const std::string &flag, int rank_of_nDarray, const int *pdim); // create a unit nDarray
+    nDarray(const std::string &flag, int rank_of_nDarray, const std::vector<int> &pdim); // create a unit nDarray
     nDarray(const nDarray &x);  // copy-initializer
     virtual ~nDarray(void);
 
@@ -320,11 +321,12 @@ class nDarray
     void set_data_pointer(double* );
 //  int rank(void) const;
     void rank(int );
-    long int total_number(void) const ;
+    long int total_number(void) const;
     void total_number(long int );
-    int* dim(void) const ;
-    int& get_dim_pointer(void) const ;
-    void set_dim_pointer(int* );
+    const std::vector<int> &dim(void) const;
+    void clear_dim(void);
+    int &get_dim_pointer(void) const;
+    void set_dim(const std::vector<int> &);
     //    int dim(int which) const;
     int reference_count(int );
     void set_reference_count(int );

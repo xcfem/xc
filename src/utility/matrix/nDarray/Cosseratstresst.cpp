@@ -25,26 +25,26 @@
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
 ///*
-//################################################################################
-//# COPY-YES  (C):     :-))                                                      #
-//# PROJECT:           Object Oriented Finite XC::Element Program                    #
-//# PURPOSE:           stress XC::BJtensor with all necessary functions                #
-//# CLASS:             stresstensor                                              #
-//#                                                                              #
-//# VERSION:                                                                     #
+//#############################################################################
+//# COPY-YES  (C):     :-))                                                   #
+//# PROJECT:           Object Oriented Finite Element Program                 #
+//# PURPOSE:           stress BJtensor with all necessary functions           #
+//# CLASS:             stresstensor                                           #
+//#                                                                           #
+//# VERSION:                                                                  #
 //# LANGUAGE:          C++.ver >= 2.0 ( Borland C++ ver=3.00, SUN C++ ver=2.1 )  #
-//# TARGET OS:         DOS || UNIX || . . .                                      #
-//# DESIGNER(S):       Alireza Tabarrei                                          #
-//# PROGRAMMER(S):     Alireza Tabarrei                                          #
-//#                                                                              #
-//#                                                                              #
-//# DATE:              June 2004                                                 #
-//# UPDATE HISTORY:                                                              #
-//#                                                                              #
-//#                                                                              #
-//#                                                                              #
-//#                                                                              #
-//################################################################################
+//# TARGET OS:         DOS || UNIX || . . .                                   #
+//# DESIGNER(S):       Alireza Tabarrei                                       #
+//# PROGRAMMER(S):     Alireza Tabarrei                                       #
+//#                                                                           #
+//#                                                                           #
+//# DATE:              June 2004                                              #
+//# UPDATE HISTORY:                                                           #
+//#                                                                           #
+//#                                                                           #
+//#                                                                           #
+//#                                                                           #
+//#############################################################################
 //*/
 
 
@@ -57,22 +57,20 @@
 using std::ios;
 
 // just send appropriate arguments to the base constructor
-//##############################################################################
-XC::Cosseratstresstensor::Cosseratstresstensor (int rank_of_tensor, double initval):
+XC::Cosseratstresstensor::Cosseratstresstensor(int rank_of_tensor, double initval):
   BJtensor(rank_of_tensor, Cosserat_def_dim_2, initval) {  } // default constructor
 
-
-//##############################################################################
+//! @brief Constructor.
 XC::Cosseratstresstensor::Cosseratstresstensor ( double *values ):
   BJtensor( 2, Cosserat_def_dim_2, values) {  }
 
-//##############################################################################
+//! @brief Constructor.
 XC::Cosseratstresstensor::Cosseratstresstensor ( double initvalue ):
   BJtensor( 2, Cosserat_def_dim_2, initvalue)  {  }
 
-//##############################################################################
-XC::Cosseratstresstensor::Cosseratstresstensor( const Cosseratstresstensor & x ):
-  BJtensor("NO")
+//! @brief Copy constructor.
+XC::Cosseratstresstensor::Cosseratstresstensor(const Cosseratstresstensor &x)
+  : BJtensor("NO")
     {
       x.pc_nDarray_rep->n++;  // tell the rval it has another reference
 //      x.reference_count(+1);              // we're adding another reference.
@@ -83,14 +81,14 @@ XC::Cosseratstresstensor::Cosseratstresstensor( const Cosseratstresstensor & x )
     }
 
 
-//##############################################################################
-XC::Cosseratstresstensor::Cosseratstresstensor( const XC::BJtensor & x):
-  BJtensor( x )
+//! @brief Copy constructor.
+XC::Cosseratstresstensor::Cosseratstresstensor( const BJtensor & x)
+  : BJtensor( x )
     {  } // copy-initializer
 
-//##############################################################################
-XC::Cosseratstresstensor::Cosseratstresstensor( const XC::nDarray & x):
-  BJtensor ( x )
+//! @brief Copy constructor.
+XC::Cosseratstresstensor::Cosseratstresstensor( const nDarray & x)
+  : BJtensor ( x )
     {  } // copy-initializer
 
 
@@ -107,7 +105,7 @@ XC::Cosseratstresstensor::Cosseratstresstensor( const XC::nDarray & x):
 // // nema potrebe za brojem clanova koji se brisu## see ELLIS & STROUSTRUP $18.3
 // //                                                and note on the p.65($5.3.4)
 //     delete [] data();
-//     delete [] dim();
+//     clear_dim();
 //     delete pc_nDarray_rep;
 //   }
 // }
@@ -128,9 +126,9 @@ XC::Cosseratstresstensor XC::Cosseratstresstensor::operator=( const Cosseratstre
  // clean up current value;
     if( reference_count(-1) == 0)  // if nobody else is referencing us.
       {
-// DEallocate memory of the actual XC::BJtensor
+// DEallocate memory of the actual BJtensor
         delete [] data();
-        delete [] dim();
+        clear_dim();
         delete pc_nDarray_rep;
       }
  // connect to new value
@@ -148,8 +146,8 @@ XC::Cosseratstresstensor XC::Cosseratstresstensor::operator=( const Cosseratstre
 // IT IS NOT INHERITED so must be defined in all derived classes
 // See ARM page 306.
 //##############################################################################
-XC::Cosseratstresstensor XC::Cosseratstresstensor::operator=( const XC::BJtensor & rval)
-{
+XC::Cosseratstresstensor XC::Cosseratstresstensor::operator=( const BJtensor &rval)
+  {
     rval.pc_nDarray_rep->n++;  // tell the rval it has another reference
 //    rval.pc_nDarray_rep->n++;  // tell the rval it has another reference
 //    rval.reference_count(+1);  // tell the rval it has another reference
@@ -162,13 +160,13 @@ XC::Cosseratstresstensor XC::Cosseratstresstensor::operator=( const XC::BJtensor
 //    if(--pc_nDarray_rep->n == 0)  // if nobody else is referencing us.
     if( reference_count(-1) == 0)  // if nobody else is referencing us.
       {
-// DEallocate memory of the actual XC::BJtensor
+// DEallocate memory of the actual BJtensor
 //      delete [pc_tensor_rep->pc_tensor_rep->total_numb] pc_tensor_rep->pd_nDdata;
 // nema potrebe za brojem clanova koji se brisu## see ELLIS & STROUSTRUP $18.3
 //                                                and note on the p.65($5.3.4)
 //        delete  pc_nDarray_rep->pd_nDdata;
         delete [] data();
-        delete [] dim();
+        clear_dim();
 // ovo ne smem da brisem jer nije dinamicki alocirano
 //        delete pc_tensor_rep->indices;
         delete pc_nDarray_rep;
@@ -190,7 +188,7 @@ XC::Cosseratstresstensor XC::Cosseratstresstensor::operator=( const XC::BJtensor
 // IT IS NOT INHERITED so must be defined in all derived classes
 // See ARM page 306.
 //##############################################################################
-XC::Cosseratstresstensor XC::Cosseratstresstensor::operator=( const XC::nDarray & rval)
+XC::Cosseratstresstensor XC::Cosseratstresstensor::operator=( const nDarray & rval)
 {
     rval.pc_nDarray_rep->n++;  // tell the rval it has another reference
 //    rval.reference_count(+1);  // tell the rval it has another reference
@@ -202,7 +200,7 @@ XC::Cosseratstresstensor XC::Cosseratstresstensor::operator=( const XC::nDarray 
     if( reference_count(-1) == 0)  // if nobody else is referencing us.
       {
         delete [] data();
-        delete [] dim();
+        clear_dim();
         delete pc_nDarray_rep;
       }
 
@@ -252,8 +250,8 @@ XC::Cosseratstresstensor XC::Cosseratstresstensor::deep_copy(void)
 //___  }
 
 //##############################################################################
-// invariants of the stress XC::BJtensor              // Chen XC::W.F. "plasticity for
-double XC::Cosseratstresstensor::Iinvariant1() const       // Structural Engineers"
+// invariants of the stress XC::BJtensor              // Chen W.F. "plasticity for
+double XC::Cosseratstresstensor::Iinvariant1(void) const       // Structural Engineers"
   {
     return (cval(1,1)+cval(2,2)+cval(3,3) + cval(4,4)+cval(5,5)+cval(6,6)   );
   }
@@ -261,7 +259,7 @@ double XC::Cosseratstresstensor::Iinvariant1() const       // Structural Enginee
 
 ////////////////// ALIREZA  from now on
 //##############################################################################
-double XC::Cosseratstresstensor::Iinvariant2() const
+double XC::Cosseratstresstensor::Iinvariant2(void) const
   {
     return (cval(2,2)*cval(3,3)-cval(3,2)*cval(2,3)+
             cval(1,1)*cval(3,3)-cval(3,1)*cval(1,3)+
@@ -269,7 +267,7 @@ double XC::Cosseratstresstensor::Iinvariant2() const
   }
 
 //##############################################################################
-double XC::Cosseratstresstensor::Iinvariant3()  const
+double XC::Cosseratstresstensor::Iinvariant3(void)  const
   {
 
     double I3 = cval(1,1)*cval(2,2)*cval(3,3) +
@@ -285,14 +283,14 @@ double XC::Cosseratstresstensor::Iinvariant3()  const
 
 
 //##############################################################################
-// invariants of the deviatoric stress XC::BJtensor
-double XC::Cosseratstresstensor::Jinvariant1()  const
+// invariants of the deviatoric stress BJtensor
+double XC::Cosseratstresstensor::Jinvariant1(void)  const
   {
     return (0.0);
   }
 
 //##############################################################################
-double XC::Cosseratstresstensor::Jinvariant2()  const
+double XC::Cosseratstresstensor::Jinvariant2(void)  const
   {
     double temp1 = (Iinvariant1()*Iinvariant1()-3.0*Iinvariant2())*ONEOVERTHREE;
 //    double EPS = sqrt(d_macheps());
@@ -305,17 +303,16 @@ double XC::Cosseratstresstensor::Jinvariant2()  const
   }
 
 //##############################################################################
-double XC::Cosseratstresstensor::Jinvariant3()  const
+double XC::Cosseratstresstensor::Jinvariant3(void)  const
   {
-    double I1 = Iinvariant1();
-    double I2 = Iinvariant2();
-    double I3 = Iinvariant3();
-
+    const double I1 = Iinvariant1();
+    const double I2 = Iinvariant2();
+    const double I3 = Iinvariant3();
     return ( (2.0*I1*I1*I1 - 9.0*I1*I2 + 27.0*I3)/27.0 );
   }
 
 //##############################################################################
-XC::Cosseratstresstensor XC::Cosseratstresstensor::principal()  const
+XC::Cosseratstresstensor XC::Cosseratstresstensor::principal(void)  const
   {
     Cosseratstresstensor ret;
 
@@ -383,7 +380,7 @@ XC::Cosseratstresstensor XC::Cosseratstresstensor::principal()  const
   }
 
 //##############################################################################
-XC::Cosseratstresstensor XC::Cosseratstresstensor::deviator() const
+XC::Cosseratstresstensor XC::Cosseratstresstensor::deviator(void) const
   {
     BJtensor I2("I", 2, def_dim_2); // Kronecker delta  \delta_{ij}
     Cosseratstresstensor st_vol = I2 * (this->trace()*(0.333333333));
@@ -524,7 +521,7 @@ double XC::Cosseratstresstensor::theta( ) const              // Chen XC::W.F. "p
   }
 
 //##############################################################################
-double XC::Cosseratstresstensor::thetaPI()  const
+double XC::Cosseratstresstensor::thetaPI(void) const
   {
     double thetaPI = theta() / PI;
     return thetaPI;

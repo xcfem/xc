@@ -1475,11 +1475,6 @@ void XC::profilematrix::error(const std::string &msg1,const std::string &msg2) c
 //      return this->pc_profilematrix_rep->dim[0];
 //    }
 //
-//    void XC::profilematrix::set_dim_pointer(int * dim_pointer)
-//    {
-//      this->pc_profilematrix_rep->dim= dim_pointer;
-//    }
-//
 //    int XC::profilematrix::dim(int which) const
 //    {
 //      return this->pc_profilematrix_rep->dim[which-1];

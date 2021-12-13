@@ -121,11 +121,11 @@ class BJtensor: public nDarray
                                     //  then operator will be identified
   public: // just send appropriate arguments to the base constructor
     BJtensor(int rank_of_BJtensor=1,const double &initval=0); // default constructor
-    BJtensor(int rank_of_BJtensor, const int *pdim, const double *values);
-    BJtensor(int rank_of_BJtensor, const int *pdim, const std::vector<double> &values);
-    BJtensor(int rank_of_BJtensor, const int *pdim, const boost::python::list &l);    
-    BJtensor(int rank_of_BJtensor, const int *pdim,const double &initvalue);
-    BJtensor(const std::string &flag, int rank_of_BJtensor, const int *pdim);  // create a unit nDarray
+    BJtensor(int rank_of_BJtensor, const std::vector<int> &pdim, const double *values);
+    BJtensor(int rank_of_BJtensor, const std::vector<int> &pdim, const std::vector<double> &values);
+    BJtensor(int rank_of_BJtensor, const std::vector<int> &pdim, const boost::python::list &l);    
+    BJtensor(int rank_of_BJtensor, const std::vector<int> &pdim,const double &initvalue);
+    BJtensor(const std::string &flag, int rank_of_BJtensor, const std::vector<int> &pdim);  // create a unit nDarray
     BJtensor(const std::string &flag);   //this one used to send "NO" message
     BJtensor(const BJtensor &x);  // instead of: "BJtensor(nDarray & x):"   :-)
     explicit BJtensor(const nDarray &x);
@@ -178,8 +178,8 @@ class BJtensor: public nDarray
   private:
 //K    int BJtensor::contracted_ind(const std::string &, const std::string &, int *, int *, int , int );
 //K    int BJtensor::uncontracted_ind(int *, int *, int);
-    int contracted_ind(const std::string &,const std::string &, int *, int *, int , int ) const;
-    int uncontracted_ind(int *, int *, int) const;
+    int contracted_ind(const std::string &,const std::string &, std::vector<int> &, std::vector<int> &, int , int ) const;
+    int uncontracted_ind(std::vector<int> &, std::vector<int> &, int) const;
   };
 
 template BJtensor operator*(const double & , const BJtensor & );

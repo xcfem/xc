@@ -21,7 +21,9 @@
 //----------------------------------------------------------------------------
 //python_interface.tcc
 
-class_<XC::nDarray, boost::noncopyable >("nDarray", no_init);
+class_<XC::nDarray>("nDarray")
+  .def(init<int, double>())
+  ;
 
 class_<XC::BJmatrix , bases<XC::nDarray>, boost::noncopyable >("BJmatrix", no_init);
 

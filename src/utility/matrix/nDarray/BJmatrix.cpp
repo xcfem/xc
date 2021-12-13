@@ -109,17 +109,12 @@ XC::BJmatrix::BJmatrix(const std::string &flag, int dimension ): // create an id
      }
 // create the structure:
      pc_nDarray_rep = new nDarray_rep; // this 'new' is overloaded
-     rank(2);  //rank_of_nDarray here XC::BJmatrix = 2
+     rank(2);  //rank_of_nDarray here BJmatrix = 2
 
 // in the case of nDarray_rank=0 add one to get right thing from the
 // operator new
-     set_dim_pointer( new int[rank()] );  // array for dimensions
-     long int number = dimension*dimension;
-     total_number(number);
-     for( int idim = 1 ; idim <= rank() ; idim++ )
-       {
-         dim()[idim-1] = dimension;
-       }
+     const std::vector<int> pdim({dimension,dimension});
+     set_dim(pdim);  // array for dimensions
 
 // allocate memory for the actual XC::nDarray as XC::nDarray
      set_data_pointer( new double [ (size_t) total_number() ]);
@@ -194,12 +189,8 @@ XC::BJmatrix::BJmatrix(const std::string &initfile):
   pc_nDarray_rep = new nDarray_rep; // this 'new' is overloaded
   rank(2);  // rank_of_nDarray here XC::BJmatrix = 2
 
-  set_dim_pointer( (new int[ rank() ]) );// array for dimensions
-  long int number = rows*columns;
-  total_number(number);
-
-  dim()[0] = rows;
-  dim()[1] = columns;
+     const std::vector<int> pdim({rows,columns});
+     set_dim(pdim);// array for dimensions
 
 // allocate memory for the actual XC::nDarray as XC::nDarray
   set_data_pointer( new double [ (size_t) total_number() ] );
@@ -253,12 +244,8 @@ XC::BJmatrix::BJmatrix(const std::string &initfile,const std::string &outfile):
   pc_nDarray_rep = new nDarray_rep; // this 'new' is overloaded
   rank(2);  // rank_of_nDarray here XC::BJmatrix = 2
 
-  set_dim_pointer( (new int[ rank() ]) );// array for dimensions
-  long int number = rows*columns;
-  total_number(number);
-
-  dim()[0] = rows;
-  dim()[1] = columns;
+     const std::vector<int> pdim({rows,columns});
+     set_dim(pdim);// array for dimensions
 
 // allocate memory for the actual XC::nDarray as XC::nDarray
   set_data_pointer( new double [ (size_t) total_number() ] );
@@ -321,7 +308,7 @@ XC::BJmatrix::BJmatrix(const XC::nDarray & x):
 //--//                                                and note on the p.65($5.3.4)
 //--//  and the page 276 ($12.4)
 //--    delete [] data();
-//--    delete [] dim();
+//--    clear_dim();
 //--    delete pc_nDarray_rep;
 //--  }
 //--}
@@ -357,7 +344,7 @@ XC::BJmatrix &XC::BJmatrix::operator=( const XC::BJmatrix & rval)
     if( reference_count(-1) == 0)  // if nobody else is referencing us.
       {
         delete [] data();
-        delete [] dim();
+        clear_dim();
         delete pc_nDarray_rep;
       }
  // connect to new value

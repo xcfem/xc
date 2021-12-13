@@ -249,11 +249,11 @@ void XC::TwentyNodeBrick::incremental_Update()
 
     //double this_one_PP = (matpoint)->operator[](where).IS_Perfect_Plastic();
 
-    int dh_dim[] = {20,3};
+    const std::vector<int> dh_dim({20,3});
     BJtensor dh(2, dh_dim, 0.0);
 
 
-    static int disp_dim[] = {20,3};
+    static const std::vector<int> disp_dim({20,3});
     BJtensor incremental_displacements(2,disp_dim,0.0);
 
     straintensor incremental_strain;
@@ -331,7 +331,7 @@ void XC::TwentyNodeBrick::incremental_Update()
  XC::BJtensor XC::TwentyNodeBrick::H_3D(double r1, double r2, double r3)
   {
 
-    int dimension[] = {60,3};
+    const std::vector<int> dimension({60,3});
 
     BJtensor H(2, dimension, 0.0);
 
@@ -449,7 +449,7 @@ void XC::TwentyNodeBrick::incremental_Update()
  XC::BJtensor XC::TwentyNodeBrick::interp_poli_at(double r1, double r2, double r3)
   {
 
-    int dimension[] = {20};
+    const std::vector<int> dimension({20});
     BJtensor h(1, dimension, 0.0);
 
 
@@ -510,7 +510,7 @@ void XC::TwentyNodeBrick::incremental_Update()
  XC::BJtensor XC::TwentyNodeBrick::dh_drst_at(double r1, double r2, double r3)
   {
 
-    int dimensions[] = {20,3};  // Changed from{20,3} to {8,3} Xiaoyan 07/12
+    const std::vector<int> dimensions({20,3});  // Changed from{20,3} to {8,3} Xiaoyan 07/12
     BJtensor dh(2, dimensions, 0.0);
 
 
@@ -628,7 +628,7 @@ void XC::TwentyNodeBrick::incremental_Update()
 ////#############################################################################
  XC::BJtensor XC::TwentyNodeBrick::getStiffnessTensor(void) const
   {
-    int K_dim[] = {20,3,3,20};
+    const std::vector<int> K_dim({20,3,3,20});
     BJtensor Kk(4,K_dim,0.0);
     BJtensor Kkt(4,K_dim,0.0);
 
@@ -645,7 +645,7 @@ void XC::TwentyNodeBrick::incremental_Update()
     short where = 0;
     double weight = 0.0;
 
-    int dh_dim[] = {20,3};
+    const std::vector<int> dh_dim({20,3});
     BJtensor dh(2, dh_dim, 0.0);
 
     //    BJtensor Constitutive( 4, def_dim_4, 0.0);
@@ -653,7 +653,7 @@ void XC::TwentyNodeBrick::incremental_Update()
 
     double det_of_Jacobian = 0.0;
 
-    static int disp_dim[] = {20,3};
+    static const std::vector<int> disp_dim({20,3});
     BJtensor incremental_displacements(2,disp_dim,0.0); // \Delta u
 
     straintensor incremental_strain;
@@ -828,7 +828,7 @@ void XC::TwentyNodeBrick::incremental_Update()
 
 void XC::TwentyNodeBrick::set_strain_stress_tensor(FILE *fp, double * u)
   {
-    int dh_dim[] = {20,3};
+    const std::vector<int> dh_dim({20,3});
     BJtensor dh(2, dh_dim, 0.0);
 
 //    BJtensor Constitutive( 4, def_dim_4, 0.0);
@@ -848,7 +848,7 @@ void XC::TwentyNodeBrick::set_strain_stress_tensor(FILE *fp, double * u)
     BJtensor dhGlobal;
 
 
-    static int disp_dim[] = {20,3};
+    static std::vector<int> disp_dim({20,3});
     BJtensor total_displacements(2,disp_dim,0.0); //
 
     total_displacements = total_disp(fp, u);
@@ -919,8 +919,8 @@ void XC::TwentyNodeBrick::set_strain_stress_tensor(FILE *fp, double * u)
 //  BJtensor XC::TwentyNodeBrick::mass_tensor(Elastic  mmodel)
  XC::BJtensor XC::TwentyNodeBrick::getMassTensor(void) const
   {
-    //int M_dim[] = {8,3,3,8};
-    int M_dim[] = {60,60};
+    //std::vector<int> M_dim({8,3,3,8});
+    std::vector<int> M_dim({60,60});
     BJtensor Mm(2,M_dim,0.0);
 
     double r  = 0.0;
@@ -933,11 +933,11 @@ void XC::TwentyNodeBrick::set_strain_stress_tensor(FILE *fp, double * u)
     short where = 0;
     double weight = 0.0;
 
-    int dh_dim[] = {20,3};
+    std::vector<int> dh_dim({20,3});
 
     BJtensor dh(2, dh_dim, 0.0);
 
-    int h_dim[] = {60,3}; // Xiaoyan changed from {60,3} to {24,3}
+    std::vector<int> h_dim({60,3}); // Xiaoyan changed from {60,3} to {24,3}
     BJtensor H(2, h_dim, 0.0);
 
     double det_of_Jacobian = 0.0;
@@ -1021,7 +1021,7 @@ void XC::TwentyNodeBrick::set_strain_stress_tensor(FILE *fp, double * u)
 
  XC::BJtensor XC::TwentyNodeBrick::stiffness_matrix(const BJtensor & K)
   {
-//    int K_dim[] = {20,3,3,20};
+//    std::vector<int> K_dim({20,3,3,20});
 //    BJtensor K(4,K_dim,0.0);
     matrix Kmatrix(60,60,0.0);
 
@@ -1053,7 +1053,7 @@ void XC::TwentyNodeBrick::set_strain_stress_tensor(FILE *fp, double * u)
 ////#############################################################################
 XC::BJtensor XC::TwentyNodeBrick::mass_matrix(const BJtensor & M)
   {
-    //    int K_dim[] = {20,3,3,20};
+    //    std::vector<int> K_dim({20,3,3,20});
     //    BJtensor K(4,K_dim,0.0);
     matrix Mmatrix(60,60,0.0);
 
@@ -1089,7 +1089,7 @@ XC::BJtensor XC::TwentyNodeBrick::Jacobian_3Dinv(BJtensor dh) const
 ////#############################################################################
 XC::BJtensor XC::TwentyNodeBrick::Nodal_Coordinates(void) const
   {
-    const int dimensions[] = {20,3};
+    const std::vector<int> dimensions({20,3});
     BJtensor N_coord(2, dimensions, 0.0);
 
     //Zhaohui using node pointers, which come from the XC::Domain
@@ -1149,7 +1149,7 @@ XC::BJtensor XC::TwentyNodeBrick::Nodal_Coordinates(void) const
 ////#############################################################################
 XC::BJtensor XC::TwentyNodeBrick::incr_disp(void) const
   {
-    const int dimensions[] = {20,3};
+    const std::vector<int> dimensions({20,3});
     BJtensor increment_disp(2, dimensions, 0.0);
 
     //for( int i=0 ; i<20 ; i++ )
@@ -1224,7 +1224,7 @@ XC::BJtensor XC::TwentyNodeBrick::incr_disp(void) const
 ////#############################################################################
 XC::BJtensor XC::TwentyNodeBrick::total_disp(void) const
   {
-    const int dimensions[] = {20,3};
+    const std::vector<int> dimensions({20,3});
     BJtensor total_disp(2, dimensions, 0.0);
 
     //Zhaohui using node pointers, which come from the XC::Domain
@@ -1306,7 +1306,7 @@ XC::BJtensor XC::TwentyNodeBrick::total_disp(void) const
 ////#############################################################################
  XC::BJtensor XC::TwentyNodeBrick::total_disp(FILE *fp, double * u)
   {
-    const int dimensions[] = {20,3};
+    const std::vector<int> dimensions({20,3});
     BJtensor total_disp(2, dimensions, 0.0);
     //    double totalx, totaly, totalz;
     //    totalx=0;
@@ -1405,7 +1405,7 @@ int  XC::TwentyNodeBrick::get_Brick_Number(void)
 // returns nodal forces for given stress field in an element
 XC::BJtensor XC::TwentyNodeBrick::nodal_forces(void) const
   {
-    int force_dim[] = {20,3};  // Xiaoyan changed from {20,3 to {8,3} for 8 nodes
+    std::vector<int> force_dim({20,3});  // Xiaoyan changed from {20,3 to {8,3} for 8 nodes
 
     BJtensor nodal_forces(2,force_dim,0.0);
 
@@ -1419,7 +1419,7 @@ XC::BJtensor XC::TwentyNodeBrick::nodal_forces(void) const
     short where = 0;
     double weight = 0.0;
 
-    int dh_dim[] = {20,3};  // Xiaoyan changed from {20,3 to {8,3} for 8 nodes
+    std::vector<int> dh_dim({20,3});  // Xiaoyan changed from {20,3 to {8,3} for 8 nodes
 
     BJtensor dh(2, dh_dim, 0.0);
 
@@ -1429,7 +1429,7 @@ XC::BJtensor XC::TwentyNodeBrick::nodal_forces(void) const
 
     straintensor incremental_strain;
 
-    static int disp_dim[] = {20,3};   // Xiaoyan changed from {20,3} to {8,3}
+    static std::vector<int> disp_dim({20,3});   // Xiaoyan changed from {20,3} to {8,3}
     BJtensor incremental_displacements(2,disp_dim,0.0); // \Delta u
 
     incremental_displacements= incr_disp();
@@ -1604,7 +1604,7 @@ XC::BJtensor XC::TwentyNodeBrick::nodal_forces(void) const
 // returns nodal forces for given ITERATIVE stress field in an element
 XC::BJtensor XC::TwentyNodeBrick::iterative_nodal_forces(void) const
   {
-    int force_dim[] = {20,3}; // Xiaoyan changed from {20,3 to {8,3} for 8 nodes
+    std::vector<int> force_dim({20,3}); // Xiaoyan changed from {20,3 to {8,3} for 8 nodes
 
     BJtensor nodal_forces(2,force_dim,0.0);
 
@@ -1618,7 +1618,7 @@ XC::BJtensor XC::TwentyNodeBrick::iterative_nodal_forces(void) const
     short where = 0;
     double weight = 0.0;
 
-    int dh_dim[] = {20,3};   // Xiaoyan changed from {20,3 to {8,3} for 8 nodes
+    std::vector<int> dh_dim({20,3});   // Xiaoyan changed from {20,3 to {8,3} for 8 nodes
 
     BJtensor dh(2, dh_dim, 0.0);
 
@@ -1701,7 +1701,7 @@ XC::BJtensor XC::TwentyNodeBrick::iterative_nodal_forces(void) const
 // returns nodal forces for given constant stress field in the element
  XC::BJtensor XC::TwentyNodeBrick::nodal_forces_from_stress(stresstensor & stress) const
   {
-    int force_dim[] = {20,3};  // Xiaoyan changed from {20,3 to {8,3} for 8 nodes
+    std::vector<int> force_dim({20,3});  // Xiaoyan changed from {20,3 to {8,3} for 8 nodes
 
     BJtensor nodal_forces(2,force_dim,0.0);
 
@@ -1714,7 +1714,7 @@ XC::BJtensor XC::TwentyNodeBrick::iterative_nodal_forces(void) const
 
     double weight = 0.0;
 
-    int dh_dim[] = {20,3}; // Xiaoyan changed from {20,3 to {8,3} for 8 nodes
+    std::vector<int> dh_dim({20,3}); // Xiaoyan changed from {20,3 to {8,3} for 8 nodes
 
     BJtensor dh(2, dh_dim, 0.0);
 
@@ -1793,7 +1793,7 @@ XC::BJtensor XC::TwentyNodeBrick::iterative_nodal_forces(void) const
 // by using the linearized constitutive XC::BJtensor from the beginning of the step !
 XC::BJtensor XC::TwentyNodeBrick::linearized_nodal_forces(void) const
   {
-    int force_dim[] = {20,3};  // Xiaoyan changed from {20,3 to {8,3} for 8 nodes
+    std::vector<int> force_dim({20,3});  // Xiaoyan changed from {20,3 to {8,3} for 8 nodes
 
     BJtensor linearized_nodal_forces(2,force_dim,0.0);
 
@@ -1807,7 +1807,7 @@ XC::BJtensor XC::TwentyNodeBrick::linearized_nodal_forces(void) const
     short where = 0;
     double weight = 0.0;
 
-    int dh_dim[] = {20,3};  // Xiaoyan changed from {20,3 to {8,3} for 8 nodes
+    std::vector<int> dh_dim({20,3});  // Xiaoyan changed from {20,3 to {8,3} for 8 nodes
 
     BJtensor dh(2, dh_dim, 0.0);
 
@@ -1815,7 +1815,7 @@ XC::BJtensor XC::TwentyNodeBrick::linearized_nodal_forces(void) const
 
     double det_of_Jacobian = 0.0;
 
-    static int disp_dim[] = {20,3};  // Xiaoyan changed from {20,3 to {8,3} for 8 nodes
+    static std::vector<int> disp_dim({20,3});  // Xiaoyan changed from {20,3 to {8,3} for 8 nodes
 
     BJtensor incremental_displacements(2,disp_dim,0.0);
 
@@ -1931,7 +1931,7 @@ XC::BJtensor XC::TwentyNodeBrick::linearized_nodal_forces(void) const
 //....// updates Gauss point stresses and strains from given displacements
 //....void XC::TwentyNodeBrick::update_stress_strain(BJtensor & displacementsT)
 //....  {
-//....//    int force_dim[] = {20,3};
+//....//    std::vector<int> force_dim({20,3});
 //....//    BJtensor nodal_forces(2,force_dim,0.0);
 //....
 //....    double r  = 0.0;
@@ -1944,7 +1944,7 @@ XC::BJtensor XC::TwentyNodeBrick::linearized_nodal_forces(void) const
 //....    short where = 0;
 //....    double weight = 0.0;
 //....
-//....    int dh_dim[] = {20,3};
+//....    std::vector<int> dh_dim({20,3});
 //....    BJtensor dh(2, dh_dim, 0.0);
 //....
 //....    stresstensor stress_at_GP(0.0);
@@ -2228,11 +2228,11 @@ void XC::TwentyNodeBrick::computeGaussPoint(void)
     short where = 0;
 
     // special case for 8 nodes only
-    static const int dim[] = {3, 20}; // static-> see ARM pp289-290
-    static const int dim27[] = {3, count}; // static-> see ARM pp289-290 Joey found a bug: dimension count is integr. points dependent
+    static const std::vector<int> dim({3, 20}); // static-> see ARM pp289-290
+    static const std::vector<int> dim27({3, count}); // static-> see ARM pp289-290 Joey found a bug: dimension count is integr. points dependent
     BJtensor NodalCoord(2, dim, 0.0);
     BJtensor matpointCoord(2, dim27, 0.0);
-    int h_dim[] = {60,3};
+    std::vector<int> h_dim({60,3});
     BJtensor H(2, h_dim, 0.0);
 
     //for(int ncount = 1 ; ncount <= 8 ; ncount++ )
@@ -2372,10 +2372,10 @@ void XC::TwentyNodeBrick::reportTensorF(FILE * fp)
     short where = 0;
 
     // special case for 8 nodes only
-    static const int dim[] = {3, 20}; // static-> see ARM pp289-290
+    static const std::vector<int> dim({3, 20}); // static-> see ARM pp289-290
     BJtensor NodalCoord(2, dim, 0.0);
     BJtensor matpointCoord(2, dim, 0.0);
-    int h_dim[] = {60,3};  // Xiaoyan changed from {60,3} to {24,3} for 8 nodes
+    std::vector<int> h_dim({60,3});  // Xiaoyan changed from {60,3} to {24,3} for 8 nodes
 
     BJtensor H(2, h_dim, 0.0);
 
@@ -3176,7 +3176,7 @@ const XC::Vector XC::TwentyNodeBrick::FormEquiBodyForce(void)
 //=============================================================================
 const XC::Vector &XC::TwentyNodeBrick::getResistingForce(void) const
   {
-    int force_dim[] = {20,3};
+    std::vector<int> force_dim({20,3});
     BJtensor nodalforces(2,force_dim,0.0);
 
     nodalforces = nodal_forces();
@@ -3699,8 +3699,8 @@ int XC::TwentyNodeBrick::getResponse (int responseID, Information &eleInfo)
 ////#############################################################################
  XC::Vector XC::TwentyNodeBrick::getWeightofGP(void)
   {
-    //int M_dim[] = {8,3,3,8};
-    //int M_dim[] = {60,60};
+    //std::vector<int> M_dim({8,3,3,8});
+    //std::vector<int> M_dim({60,60});
     //BJtensor Mm(2,M_dim,0.0);
 
     XC::Vector Weight( FixedOrder * FixedOrder );
@@ -3718,7 +3718,7 @@ int XC::TwentyNodeBrick::getResponse (int responseID, Information &eleInfo)
 
     double weight = 0.0;
 
-    int dh_dim[] = {20,3};
+    std::vector<int> dh_dim({20,3});
 
     BJtensor dh(2, dh_dim, 0.0);
 
@@ -4449,10 +4449,10 @@ int XC::TwentyNodeBrick::update(void) //Added by Guanzhou, May 7 2004
 
     short where = 0;
 
-    int dh_dim[] = {20,3};
+    std::vector<int> dh_dim({20,3});
     BJtensor dh(2, dh_dim, 0.0);
 
-    static int disp_dim[] = {20,3};
+    static std::vector<int> disp_dim({20,3});
     BJtensor incremental_displacements(2,disp_dim,0.0);
 
     straintensor incremental_strain;

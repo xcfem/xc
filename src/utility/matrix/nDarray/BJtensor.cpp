@@ -107,23 +107,23 @@ XC::BJtensor::BJtensor(int rank_of_BJtensor,const double &initval)
   : nDarray(rank_of_BJtensor, initval), indices1(""), indices2("") {}
 
 //! @brief Constructor
-XC::BJtensor::BJtensor(int rank_of_BJtensor, const int *pdim, const double *values)
+XC::BJtensor::BJtensor(int rank_of_BJtensor, const std::vector<int> &pdim, const double *values)
   : nDarray(rank_of_BJtensor, pdim, values), indices1(""), indices2("") {}
 
 //! @brief Constructor
-XC::BJtensor::BJtensor(int rank_of_BJtensor, const int *pdim, const std::vector<double> &values)
+XC::BJtensor::BJtensor(int rank_of_BJtensor, const std::vector<int> &pdim, const std::vector<double> &values)
   : nDarray(rank_of_BJtensor, pdim, values), indices1(""), indices2("") {}
 
 //! @brief Constructor
-XC::BJtensor::BJtensor(int rank_of_BJtensor, const int *pdim, const boost::python::list &l)
+XC::BJtensor::BJtensor(int rank_of_BJtensor, const std::vector<int> &pdim, const boost::python::list &l)
   : nDarray(rank_of_BJtensor, pdim, l), indices1(""), indices2("") {}
 
 //! @brief Constructor
-XC::BJtensor::BJtensor(int rank_of_BJtensor, const int *pdim,const double &initvalue)
+XC::BJtensor::BJtensor(int rank_of_BJtensor, const std::vector<int> &pdim,const double &initvalue)
   : nDarray(rank_of_BJtensor, pdim, initvalue), indices1(""), indices2("") {}
 
 //! @brief Constructor
-XC::BJtensor::BJtensor(const std::string &flag, int rank_of_BJtensor, const int *pdim)
+XC::BJtensor::BJtensor(const std::string &flag, int rank_of_BJtensor, const std::vector<int> &pdim)
   : nDarray( flag, rank_of_BJtensor, pdim), indices1(""), indices2("") {}
 
 
@@ -151,29 +151,24 @@ XC::BJtensor::BJtensor(const std::string &flag)
 XC::BJtensor::BJtensor(const BJtensor & x)
   : indices1(x.indices1), indices2(x.indices2)    
   {
-   pc_nDarray_rep = new nDarray_rep;
-   pc_nDarray_rep->nDarray_rank = x.pc_nDarray_rep->nDarray_rank;
+    pc_nDarray_rep = new nDarray_rep;
+    pc_nDarray_rep->nDarray_rank = x.pc_nDarray_rep->nDarray_rank;
 
-   int one_or0 = 0;
-   if(!x.pc_nDarray_rep->nDarray_rank) one_or0 = 1;
-   pc_nDarray_rep->dim = new int[pc_nDarray_rep->nDarray_rank+one_or0];
-                                                                
-   pc_nDarray_rep->total_numb = x.pc_nDarray_rep->total_numb;
+    int one_or0 = 0;
+    if(!x.pc_nDarray_rep->nDarray_rank) one_or0 = 1;
+    pc_nDarray_rep->init_dim(pc_nDarray_rep->nDarray_rank+one_or0, x.pc_nDarray_rep->dim);
 
-   for( int idim = 0 ; idim < pc_nDarray_rep->nDarray_rank ; idim++ )
-       pc_nDarray_rep->dim[idim] = x.pc_nDarray_rep->dim[idim];
+    pc_nDarray_rep->pd_nDdata = new double [x.pc_nDarray_rep->total_numb];
+    if (!pc_nDarray_rep->pd_nDdata)
+      {
+	std::cerr << "\a\nInsufficient memory for array\n";
+	::exit(1);
+      }
 
-   pc_nDarray_rep->pd_nDdata = new double [x.pc_nDarray_rep->total_numb];
-     if (!pc_nDarray_rep->pd_nDdata)
-       {
-         std::cerr << "\a\nInsufficient memory for array\n";
-         ::exit(1);
-       }
+    pc_nDarray_rep->n = 1;
 
-   pc_nDarray_rep->n = 1;
-
-   for ( int i=0 ; i<pc_nDarray_rep->total_numb ; i++ )
-      pc_nDarray_rep->pd_nDdata[i] = x.pc_nDarray_rep->pd_nDdata[i];
+    for ( int i=0 ; i<pc_nDarray_rep->total_numb ; i++ )
+       pc_nDarray_rep->pd_nDdata[i] = x.pc_nDarray_rep->pd_nDdata[i];
   }
 
 
@@ -225,7 +220,7 @@ XC::BJtensor &XC::BJtensor::operator=(const BJtensor & rval)
     if( reference_count(-1) == 0)  // if nobody else is referencing us.
       {
         delete [] data();
-        delete [] dim();
+        clear_dim();
         delete pc_nDarray_rep;
       }
 // connect to new value
@@ -841,12 +836,12 @@ XC::BJtensor XC::BJtensor::operator*(const BJtensor &arg) const
     //DEBUGprint          arg.rank());
 
     // space for CONTRACTED indices
-    int *this_contr = new int[MAX_TENS_ORD];
-    int *arg_contr  = new int[MAX_TENS_ORD];
+    std::vector<int> this_contr(MAX_TENS_ORD);
+    std::vector<int> arg_contr(MAX_TENS_ORD);
 
     // space for UN-CONTRACTED indices
-    int *this_uncontr = new int[MAX_TENS_ORD];
-    int *arg_uncontr  = new int[MAX_TENS_ORD];
+    std::vector<int> this_uncontr(MAX_TENS_ORD);
+    std::vector<int> arg_uncontr(MAX_TENS_ORD);
 
     for(int this_ic=0 ; this_ic<MAX_TENS_ORD ; this_ic++ )
       {
@@ -968,7 +963,7 @@ XC::BJtensor XC::BJtensor::operator*(const BJtensor &arg) const
 
    int t = 0;
    int a = 0;
-   static int results_dims[MAX_TENS_ORD];
+   static std::vector<int> results_dims(MAX_TENS_ORD);
    for( t=0 ; t < this_uni_count ; t++ )
      results_dims[t]=this->dim()[this_uncontr[t]-1];
    for( a=0 ; a < arg_uni_count ; a++ )
@@ -1028,7 +1023,7 @@ XC::BJtensor XC::BJtensor::operator*(const BJtensor &arg) const
 /////#*%
 //#*%
 
-   int *inerr_dims = new int[MAX_TENS_ORD];
+   std::vector<int> inerr_dims(MAX_TENS_ORD);
    for( t=0 ; t<contr_counter ; t++ )
      {
        inerr_dims[t] = this->dim()[this_contr[t]-1];
@@ -1041,24 +1036,24 @@ XC::BJtensor XC::BJtensor::operator*(const BJtensor &arg) const
      }
 
 
-   int *lid = new int[MAX_TENS_ORD];
+   std::vector<int> lid(MAX_TENS_ORD);
    for( t=0 ; t<MAX_TENS_ORD ; t++ )
      {
        lid[t] = 1;
 //DEBUGprint       ::printf("    lid[%d] = %d\n",t,lid[t]);
      }
 
-   int *rid = new int[MAX_TENS_ORD];
+   std::vector<int> rid(MAX_TENS_ORD);
    for( t=0 ;  t<MAX_TENS_ORD ; t++ )
      {
        rid[t] = 1;
 //DEBUGprint       ::printf("    rid[%d] = %d\n",t,rid[t]);
      }
 
-   int *cd = new int[MAX_TENS_ORD];
-   int *rd = new int[MAX_TENS_ORD];
+   std::vector<int> cd(MAX_TENS_ORD);
+   std::vector<int> rd(MAX_TENS_ORD);
 
-   int *resd = new int[MAX_TENS_ORD];
+   std::vector<int> resd(MAX_TENS_ORD);
    for( t=0 ;  t<MAX_TENS_ORD ; t++ )
      {
        resd[t] = 1;
@@ -1185,24 +1180,6 @@ XC::BJtensor XC::BJtensor::operator*(const BJtensor &arg) const
 
           }
 
-// deleting dynamically allocated arrays
-                             
-    delete  [] this_contr;   
-    delete  [] arg_contr;    
-                             
-    delete  [] this_uncontr; 
-    delete  [] arg_uncontr ; 
-                             
-    delete  [] inerr_dims;   
-                             
-    delete  [] lid;          
-    delete  [] rid;          
-                             
-    delete  [] cd;           
-    delete  [] rd;           
-                             
-    delete  [] resd;         
-
 // nullptrification of indices
 
     null_indices();
@@ -1246,12 +1223,12 @@ XC::BJtensor XC::BJtensor::operator*(const BJtensor &arg) const
 //......//DEBUGprint          rval.rank());
 //......
 //......// space for CONTRACTED indices
-//......   int *lval_contr = new int[MAX_TENS_ORD];
-//......   int *rval_contr  = new int[MAX_TENS_ORD];
+//......   std::vector<int> lval_contr(MAX_TENS_ORD);
+//......   std::vector<int> rval_contr (MAX_TENS_ORD);
 //......
 //......// space for UN-CONTRACTED indices
-//......   int *lval_uncontr = new int[MAX_TENS_ORD];
-//......   int *rval_uncontr = new int[MAX_TENS_ORD];
+//......   std::vector<int> lval_uncontr(MAX_TENS_ORD);
+//......   std::vector<int> rval_uncontr(MAX_TENS_ORD);
 //......
 //......   for(int lval_ic=0 ; lval_ic<MAX_TENS_ORD ; lval_ic++ )
 //......     {
@@ -1436,7 +1413,7 @@ XC::BJtensor XC::BJtensor::operator*(const BJtensor &arg) const
 //....../////#*%
 //......//#*%
 //......
-//......   int *inerr_dims = new int[MAX_TENS_ORD];
+//......   std::vector<int> inerr_dims(MAX_TENS_ORD);
 //......   for( t=0 ; t<contr_counter ; t++ )
 //......     {
 //......       inerr_dims[t] = lval.dim()[lval_contr[t]-1];
@@ -1449,24 +1426,24 @@ XC::BJtensor XC::BJtensor::operator*(const BJtensor &arg) const
 //......     }
 //......
 //......
-//......   int *lid = new int[MAX_TENS_ORD];
+//......   std::vector<int> lid(MAX_TENS_ORD);
 //......   for( t=0 ; t<MAX_TENS_ORD ; t++ )
 //......     {
 //......       lid[t] = 1;
 //......//DEBUGprint       ::printf("    lid[%d] = %d\n",t,lid[t]);
 //......     }
 //......
-//......   int *rid = new int[MAX_TENS_ORD];
+//......   std::vector<int> rid(MAX_TENS_ORD);
 //......   for( t=0 ;  t<MAX_TENS_ORD ; t++ )
 //......     {
 //......       rid[t] = 1;
 //......//DEBUGprint       ::printf("    rid[%d] = %d\n",t,rid[t]);
 //......     }
 //......
-//......   int *cd = new int[MAX_TENS_ORD];
-//......   int *rd = new int[MAX_TENS_ORD];
+//......   std::vector<int> cd(MAX_TENS_ORD);
+//......   std::vector<int> rd(MAX_TENS_ORD);
 //......
-//......   int *resd = new int[MAX_TENS_ORD];
+//......   std::vector<int> resd(MAX_TENS_ORD);
 //......   for( t=0 ;  t<MAX_TENS_ORD ; t++ )
 //......     {
 //......       resd[t] = 1;
@@ -1637,8 +1614,8 @@ XC::BJtensor XC::BJtensor::operator*(const BJtensor &arg) const
 // counter for contracted indices
 int XC::BJtensor::contracted_ind(const std::string &argleft_indices,
                                  const std::string &argright_indices,
-                                 int   *argleft_contr,
-                                 int   *argright_contr,
+                                 std::vector<int> &argleft_contr,
+                                 std::vector<int> &argright_contr,
                                  int   argleft_ind_numb,
                                  int     argright_ind_numb) const
   {
@@ -1690,9 +1667,9 @@ int XC::BJtensor::contracted_ind(const std::string &argleft_indices,
 
 //##############################################################################
 // counter for UNcontracted indices
-int XC::BJtensor::uncontracted_ind(int *tens_uncontr,
-                             int *tens_contr,
-                             int tens_ind_numb) const
+int XC::BJtensor::uncontracted_ind(std::vector<int> &tens_uncontr,
+				     std::vector<int> &tens_contr,
+                                     int tens_ind_numb) const
   {
 // counter for UNcontracted indices
     int tens_uni_count = 0;

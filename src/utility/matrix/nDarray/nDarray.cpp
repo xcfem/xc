@@ -118,261 +118,233 @@
 #include "nDarray.h"
 #include <iostream>
 
-//! @brief Constructor.
-XC::nDarray::nDarray(int rank_of_nDarray, double initval)
+//! @brief Initialize dimensions vector.
+void XC::nDarray_rep::init_dim(const size_t &sz, const int &default_dim)
   {
-   // create the structure:
-     pc_nDarray_rep = new nDarray_rep; // this 'new' is overloaded 1
-     pc_nDarray_rep->nDarray_rank = rank_of_nDarray;  //rank_of_nDarray;
-
-  // in the case of nDarray_rank=0 add one to get right thing from the
-  // operator new
-     int one_or0 = 0;
-     if(!pc_nDarray_rep->nDarray_rank) one_or0 = 1;
-     pc_nDarray_rep->dim = new int[pc_nDarray_rep->nDarray_rank+one_or0];// array for
-									 // dimensions
-     const int default_dim  = 1;
-     pc_nDarray_rep->total_numb = 1;
-     for( int idim = 0 ; idim < pc_nDarray_rep->nDarray_rank ; idim++ )
+     dim= std::vector<int>(sz);// array for dimensions.
+     total_numb= 1;
+     for(int i = 0 ; i<nDarray_rank ; i++ )
        {
-	 pc_nDarray_rep->dim[idim] = default_dim;
-	 pc_nDarray_rep->total_numb *= pc_nDarray_rep->dim[idim];
+	 dim[i]= default_dim;
+	 total_numb*= default_dim;
        }
+  }
 
-  // allocate memory for the actual XC::nDarray as XC::nDarray
-     pc_nDarray_rep->pd_nDdata = new double [(size_t) pc_nDarray_rep->total_numb];
-       if (!pc_nDarray_rep->pd_nDdata)
-	 {
-	   ::fprintf(stderr,"\a\nInsufficient memory for array\n");
-	   ::exit(1);
-	 }
-
-     pc_nDarray_rep->n = 1;  // so far, there's one reference
-
-      for ( int i=0 ; i<pc_nDarray_rep->total_numb ; i++ )
-	 pc_nDarray_rep->pd_nDdata[i]= initval;
-
+//! @brief Initialize dimensions vector.
+void XC::nDarray_rep::init_dim(const size_t &sz, const std::vector<int> &pdim)
+  {
+    dim= std::vector<int>(sz);// array for dimensions.
+    total_numb= 1;
+    int idim= 0;
+    for(int i= 0 ; i<nDarray_rank ; i++ )
+      {
+	idim= pdim[i];
+	dim[i]= idim;
+	total_numb*= idim;
+      }
   }
 
 //! @brief Constructor.
-XC::nDarray::nDarray(int rank_of_nDarray, const int *pdim, const double *values)
+XC::nDarray::nDarray(int rank_of_nDarray, const double &initval)
   {
-   // create the structure:
-     pc_nDarray_rep = new nDarray_rep; // this 'new' is overloaded 2
-     pc_nDarray_rep->nDarray_rank = rank_of_nDarray;  //rank_of_nDarray;
-
-  // in the case of nDarray_rank=0 add one to get right thing from the
-  // operator new
-     int one_or0 = 0;
-     if(!pc_nDarray_rep->nDarray_rank) one_or0 = 1;
-     pc_nDarray_rep->dim = new int[pc_nDarray_rep->nDarray_rank+one_or0];// array for
-								         // dimensions
-
-     pc_nDarray_rep->total_numb = 1;
-     for( int idim = 0 ; idim < pc_nDarray_rep->nDarray_rank ; idim++ )
-       {
-	 pc_nDarray_rep->dim[idim] = pdim[idim];
-	 pc_nDarray_rep->total_numb *= pc_nDarray_rep->dim[idim];
-       }
-
-
-  // allocate memory for the actual nDarray as nDarray
-     pc_nDarray_rep->pd_nDdata = new double [(size_t)pc_nDarray_rep->total_numb];
-       if (!pc_nDarray_rep->pd_nDdata)
-	 {
-	   ::fprintf(stderr,"\a\nInsufficient memory for array\n");
-	   ::exit(1);
-	 }
-
-
-     pc_nDarray_rep->n = 1;  // so far, there's one reference
-
-      for ( int i=0 ; i<pc_nDarray_rep->total_numb ; i++ )
-	pc_nDarray_rep->pd_nDdata[i] = values[i];
-
-  }
-
-//! @brief Constructor.
-XC::nDarray::nDarray(int rank_of_nDarray, const int *pdim, const std::vector<double> &values)
-  {
-   // create the structure:
-     pc_nDarray_rep = new nDarray_rep; // this 'new' is overloaded 2
-     pc_nDarray_rep->nDarray_rank = rank_of_nDarray;  //rank_of_nDarray;
-
-  // in the case of nDarray_rank=0 add one to get right thing from the
-  // operator new
-     int one_or0 = 0;
-     if(!pc_nDarray_rep->nDarray_rank) one_or0 = 1;
-     pc_nDarray_rep->dim = new int[pc_nDarray_rep->nDarray_rank+one_or0];// array for
-								         // dimensions
-
-     pc_nDarray_rep->total_numb = 1;
-     for( int idim = 0 ; idim < pc_nDarray_rep->nDarray_rank ; idim++ )
-       {
-	 pc_nDarray_rep->dim[idim] = pdim[idim];
-	 pc_nDarray_rep->total_numb *= pc_nDarray_rep->dim[idim];
-       }
-
-
-  // allocate memory for the actual nDarray as nDarray
-     pc_nDarray_rep->pd_nDdata = new double [(size_t)pc_nDarray_rep->total_numb];
-       if (!pc_nDarray_rep->pd_nDdata)
-	 {
-	   ::fprintf(stderr,"\a\nInsufficient memory for array\n");
-	   ::exit(1);
-	 }
-
-
-     pc_nDarray_rep->n = 1;  // so far, there's one reference
-
-      for ( int i=0 ; i<pc_nDarray_rep->total_numb ; i++ )
-	pc_nDarray_rep->pd_nDdata[i] = values[i];
-
-  }
-
-//! @brief Constructor.
-XC::nDarray::nDarray(int rank_of_nDarray, const int *pdim, const boost::python::list &l)
-  {
-     // create the structure:
-       pc_nDarray_rep = new nDarray_rep; // this 'new' is overloaded 3
-       pc_nDarray_rep->nDarray_rank = rank_of_nDarray;  //rank_of_nDarray;
+    // create the structure:
+    pc_nDarray_rep = new nDarray_rep; // this 'new' is overloaded 1
+    pc_nDarray_rep->nDarray_rank = rank_of_nDarray;  //rank_of_nDarray;
 
     // in the case of nDarray_rank=0 add one to get right thing from the
     // operator new
-       int one_or0 = 0;
-       if(!pc_nDarray_rep->nDarray_rank) one_or0 = 1;
-       pc_nDarray_rep->dim = new int[pc_nDarray_rep->nDarray_rank+one_or0];// array for
-								     // dimensions
+    int one_or0 = 0;
+    if(!pc_nDarray_rep->nDarray_rank) one_or0 = 1;
+    const int default_dim  = 1;
+    pc_nDarray_rep->init_dim(pc_nDarray_rep->nDarray_rank+one_or0, default_dim);
+     
 
-       pc_nDarray_rep->total_numb = 1;
-       for( int idim = 0 ; idim < pc_nDarray_rep->nDarray_rank ; idim++ )
-	 {
-	   pc_nDarray_rep->dim[idim] = pdim[idim];
-	   pc_nDarray_rep->total_numb *= pc_nDarray_rep->dim[idim];
-	 }
+    // allocate memory for the actual XC::nDarray as XC::nDarray
+    pc_nDarray_rep->pd_nDdata = new double [(size_t) pc_nDarray_rep->total_numb];
+    if(!pc_nDarray_rep->pd_nDdata)
+      {
+        std::cerr << "\a\nInsufficient memory for array\n";
+	::exit(1);
+      }
+
+    pc_nDarray_rep->n = 1;  // so far, there's one reference
+
+    for( int i=0 ; i<pc_nDarray_rep->total_numb ; i++ )
+       pc_nDarray_rep->pd_nDdata[i]= initval;
+
+  }
+
+//! @brief Constructor.
+XC::nDarray::nDarray(int rank_of_nDarray, const std::vector<int> &pdim, const double *values)
+  {
+    // create the structure:
+    pc_nDarray_rep = new nDarray_rep; // this 'new' is overloaded 2
+    pc_nDarray_rep->nDarray_rank = rank_of_nDarray;  //rank_of_nDarray;
+
+    // in the case of nDarray_rank=0 add one to get right thing from the
+    // operator new
+    int one_or0 = 0;
+    if(!pc_nDarray_rep->nDarray_rank) one_or0 = 1;
+    pc_nDarray_rep->init_dim(pc_nDarray_rep->nDarray_rank+one_or0, pdim);
+
 
 
     // allocate memory for the actual nDarray as nDarray
-       pc_nDarray_rep->pd_nDdata = new double [(size_t)pc_nDarray_rep->total_numb];
-	 if (!pc_nDarray_rep->pd_nDdata)
-	   {
-	     ::fprintf(stderr,"\a\nInsufficient memory for array\n");
-	     ::exit(1);
-	   }
+    pc_nDarray_rep->pd_nDdata = new double [(size_t)pc_nDarray_rep->total_numb];
+    if(!pc_nDarray_rep->pd_nDdata)
+      {
+        std::cerr << "\a\nInsufficient memory for array\n";
+	::exit(1);
+      }
 
+     pc_nDarray_rep->n = 1;  // so far, there's one reference
 
-       pc_nDarray_rep->n = 1;  // so far, there's one reference
+     for( int i=0 ; i<pc_nDarray_rep->total_numb ; i++ )
+       pc_nDarray_rep->pd_nDdata[i] = values[i];
 
-	for ( int i=0 ; i<pc_nDarray_rep->total_numb ; i++ )
-	  pc_nDarray_rep->pd_nDdata[i] =boost::python::extract<double>(l[i]);
+  }
+
+//! @brief Constructor.
+XC::nDarray::nDarray(int rank_of_nDarray, const std::vector<int> &pdim, const std::vector<double> &values)
+  {
+    // create the structure:
+    pc_nDarray_rep = new nDarray_rep; // this 'new' is overloaded 2
+    pc_nDarray_rep->nDarray_rank = rank_of_nDarray;  //rank_of_nDarray;
+
+    // in the case of nDarray_rank=0 add one to get right thing from the
+    // operator new
+    int one_or0 = 0;
+    if(!pc_nDarray_rep->nDarray_rank) one_or0 = 1;
+    pc_nDarray_rep->init_dim(pc_nDarray_rep->nDarray_rank+one_or0, pdim);
+
+    // allocate memory for the actual nDarray as nDarray
+    pc_nDarray_rep->pd_nDdata = new double [(size_t)pc_nDarray_rep->total_numb];
+    if(!pc_nDarray_rep->pd_nDdata)
+      {
+        std::cerr << "\a\nInsufficient memory for array\n";
+	::exit(1);
+      }
+
+     pc_nDarray_rep->n = 1;  // so far, there's one reference
+
+      for ( int i=0 ; i<pc_nDarray_rep->total_numb ; i++ )
+	pc_nDarray_rep->pd_nDdata[i] = values[i];
+
+  }
+
+//! @brief Constructor.
+XC::nDarray::nDarray(int rank_of_nDarray, const std::vector<int> &pdim, const boost::python::list &l)
+  {
+    // create the structure:
+    pc_nDarray_rep = new nDarray_rep; // this 'new' is overloaded 3
+    pc_nDarray_rep->nDarray_rank = rank_of_nDarray;  //rank_of_nDarray;
+
+    // in the case of nDarray_rank=0 add one to get right thing from the
+    // operator new
+    int one_or0 = 0;
+    if(!pc_nDarray_rep->nDarray_rank) one_or0 = 1;
+    pc_nDarray_rep->init_dim(pc_nDarray_rep->nDarray_rank+one_or0, pdim);
+
+    // allocate memory for the actual nDarray as nDarray
+    pc_nDarray_rep->pd_nDdata = new double [(size_t)pc_nDarray_rep->total_numb];
+    if(!pc_nDarray_rep->pd_nDdata)
+      {
+        std::cerr << "\a\nInsufficient memory for array\n";
+	::exit(1);
+      }
+
+    pc_nDarray_rep->n = 1;  // so far, there's one reference
+
+    for(int i=0 ; i<pc_nDarray_rep->total_numb ; i++ )
+      pc_nDarray_rep->pd_nDdata[i] =boost::python::extract<double>(l[i]);
   }
 
 //##############################################################################
-XC::nDarray::nDarray(int rank_of_nDarray, const int *pdim, double initvalue)
-{
- // create the structure:
-   pc_nDarray_rep = new nDarray_rep; // this 'new' is overloaded 4
-   pc_nDarray_rep->nDarray_rank = rank_of_nDarray;  //rank_of_nDarray;
+XC::nDarray::nDarray(int rank_of_nDarray, const std::vector<int> &pdim, double initvalue)
+  {
+    // create the structure:
+    pc_nDarray_rep = new nDarray_rep; // this 'new' is overloaded 4
+    pc_nDarray_rep->nDarray_rank = rank_of_nDarray;  //rank_of_nDarray;
 
-// in the case of nDarray_rank=0 add one to get right thing from the
-// operator new
-   int one_or0 = 0;
-   if(!pc_nDarray_rep->nDarray_rank) one_or0 = 1;
-   pc_nDarray_rep->dim = new int[pc_nDarray_rep->nDarray_rank+one_or0];// array for
-                                                                 // dimensions
+    // in the case of nDarray_rank=0 add one to get right thing from the
+    // operator new
+    int one_or0 = 0;
+    if(!pc_nDarray_rep->nDarray_rank) one_or0 = 1;
+    pc_nDarray_rep->init_dim(pc_nDarray_rep->nDarray_rank+one_or0, pdim);
 
-   pc_nDarray_rep->total_numb = 1;
-   for( int idim = 0 ; idim < pc_nDarray_rep->nDarray_rank ; idim++ )
-     {
-       pc_nDarray_rep->dim[idim] = pdim[idim];
-       pc_nDarray_rep->total_numb *= pc_nDarray_rep->dim[idim];
-     }
+    // allocate memory for the actual XC::nDarray as XC::nDarray
+    pc_nDarray_rep->pd_nDdata = new double [(size_t)pc_nDarray_rep->total_numb];
+    if(!pc_nDarray_rep->pd_nDdata)
+      {
+        std::cerr << "\a\nInsufficient memory for array\n";
+	::exit(1);
+      }
+    
+    pc_nDarray_rep->n = 1;  // so far, there's one reference
 
-// allocate memory for the actual XC::nDarray as XC::nDarray
-   pc_nDarray_rep->pd_nDdata = new double [(size_t)pc_nDarray_rep->total_numb];
-     if (!pc_nDarray_rep->pd_nDdata)
-       {
-         ::fprintf(stderr,"\a\nInsufficient memory for array\n");
-         ::exit(1);
-       }
-
-   pc_nDarray_rep->n = 1;  // so far, there's one reference
-
-    for ( int i=0 ; i<pc_nDarray_rep->total_numb ; i++ )
+    for( int i=0 ; i<pc_nDarray_rep->total_numb ; i++ )
       pc_nDarray_rep->pd_nDdata[i] = initvalue;
-}
+  }
 
 
 
 //##############################################################################
 // special case for XC::BJmatrix and XC::BJvector . . .
 XC::nDarray::nDarray(int rank_of_nDarray, int rows, int cols, double *values)
-{
-// create the structure:
-  pc_nDarray_rep =  new nDarray_rep; // this 'new' is overloaded 5
-  pc_nDarray_rep->nDarray_rank = rank_of_nDarray;  //rank_of_nDarray;
+  {
+    // create the structure:
+    pc_nDarray_rep =  new nDarray_rep; // this 'new' is overloaded 5
+    pc_nDarray_rep->nDarray_rank = rank_of_nDarray;  //rank_of_nDarray;
 
-// not needed for XC::BJmatrix or XC::BJvector but who knows #
-// in the case of nDarray_rank=0 add one to get right thing from the
-// operator new
-  int one_or0 = 0;
-  if(!pc_nDarray_rep->nDarray_rank) one_or0 = 1;
-  pc_nDarray_rep->dim = new int[pc_nDarray_rep->nDarray_rank+one_or0];// array for
-                                                                // dimensions
+    // not needed for BJmatrix or BJvector but who knows #
+    // in the case of nDarray_rank=0 add one to get right thing from the
+    // operator new
+    int one_or0 = 0;
+    if(!pc_nDarray_rep->nDarray_rank) one_or0 = 1;
+    const std::vector<int> pdim= {rows, cols};
+    pc_nDarray_rep->init_dim(pc_nDarray_rep->nDarray_rank+one_or0,pdim);
 
-  pc_nDarray_rep->total_numb = 1;
-
-  pc_nDarray_rep->dim[0] = rows;
-  pc_nDarray_rep->dim[1] = cols;
-  pc_nDarray_rep->total_numb = rows*cols;
-
-// allocate memory for the actual XC::nDarray as XC::nDarray
-  pc_nDarray_rep->pd_nDdata = new double [(size_t)pc_nDarray_rep->total_numb];
-    if (!pc_nDarray_rep->pd_nDdata)
+    // allocate memory for the actual XC::nDarray as XC::nDarray
+    pc_nDarray_rep->pd_nDdata = new double [(size_t)pc_nDarray_rep->total_numb];
+    if(!pc_nDarray_rep->pd_nDdata)
       {
-        ::fprintf(stderr,"\a\nInsufficient memory for array\n");
-        ::exit(1);
+        std::cerr << "\a\nInsufficient memory for array\n";
+	::exit(1);
       }
-  pc_nDarray_rep->n = 1;  // so far, there's one reference
-
-  for ( int i=0 ; i<pc_nDarray_rep->total_numb ; i++ )
-    pc_nDarray_rep->pd_nDdata[i] = values[i];
-}
+    pc_nDarray_rep->n = 1;  // so far, there's one reference
+    for ( int i=0 ; i<pc_nDarray_rep->total_numb ; i++ )
+      pc_nDarray_rep->pd_nDdata[i] = values[i];
+  }
 
 //##############################################################################
 // special case for XC::BJmatrix and XC::BJvector . . .
-XC::nDarray::nDarray(int rank_of_nDarray, int rows, int cols, double values)
-{
-// create the structure:
-  pc_nDarray_rep = new nDarray_rep; // this 'new' is overloaded 6
-  pc_nDarray_rep->nDarray_rank = rank_of_nDarray;  //rank_of_nDarray;
+XC::nDarray::nDarray(int rank_of_nDarray, int rows, int cols, double value)
+  {
+    // create the structure:
+    pc_nDarray_rep = new nDarray_rep; // this 'new' is overloaded 6
+    pc_nDarray_rep->nDarray_rank = rank_of_nDarray;  //rank_of_nDarray;
 
-// not needed for XC::BJmatrix or XC::BJvector but who knows #
-// in the case of nDarray_rank=0 add one to get right thing from the
-// operator new
-  int one_or0 = 0;
-  if(!pc_nDarray_rep->nDarray_rank) one_or0 = 1;
-  pc_nDarray_rep->dim = new int[pc_nDarray_rep->nDarray_rank+one_or0];// array for
-                                                                // dimensions
+    // not needed for BJmatrix or BJvector but who knows #
+    // in the case of nDarray_rank=0 add one to get right thing from the
+    // operator new
+    int one_or0 = 0;
+    if(!pc_nDarray_rep->nDarray_rank) one_or0 = 1;
+    const std::vector<int> pdim= {rows, cols};
+    pc_nDarray_rep->init_dim(pc_nDarray_rep->nDarray_rank+one_or0, pdim);
 
-  pc_nDarray_rep->total_numb = 1;
-
-  pc_nDarray_rep->dim[0] = rows;
-  pc_nDarray_rep->dim[1] = cols;
-  pc_nDarray_rep->total_numb = rows*cols;
-
-// allocate memory for the actual XC::nDarray as XC::nDarray
-  pc_nDarray_rep->pd_nDdata = new double [(size_t)pc_nDarray_rep->total_numb];
-    if (!pc_nDarray_rep->pd_nDdata)
+    // allocate memory for the actual XC::nDarray as XC::nDarray
+    pc_nDarray_rep->pd_nDdata = new double [(size_t)pc_nDarray_rep->total_numb];
+    if(!pc_nDarray_rep->pd_nDdata)
       {
-        ::fprintf(stderr,"\a\nInsufficient memory for array\n");
-        ::exit(1);
+        std::cerr << "\a\nInsufficient memory for array\n";
+	::exit(1);
       }
-  pc_nDarray_rep->n = 1;  // so far, there's one reference
+    
+    pc_nDarray_rep->n = 1;  // so far, there's one reference
 
-  for ( int i=0 ; i<pc_nDarray_rep->total_numb ; i++ )
-    pc_nDarray_rep->pd_nDdata[i] = values;
-}
+    for ( int i=0 ; i<pc_nDarray_rep->total_numb ; i++ )
+      pc_nDarray_rep->pd_nDdata[i] = value;
+  }
 
 
 //---//##############################################################################
@@ -388,8 +360,8 @@ XC::nDarray::nDarray(int rank_of_nDarray, int rows, int cols, double values)
 //---// operator new
 //---  int one_or0 = 0;
 //---  if(!pc_nDarray_rep->nDarray_rank) one_or0 = 1;
-//---  pc_nDarray_rep->dim = new int[pc_nDarray_rep->nDarray_rank+one_or0];// array for
-//---                                                                // dimensions
+//---  std::vector<int> pdim= {rows, cols};
+//---  pc_nDarray_rep->init_dim(pc_nDarray_rep->nDarray_rank+one_or0, pdim);
 //---
 //---  pc_nDarray_rep->total_numb = 1;
 //---
@@ -416,113 +388,105 @@ XC::nDarray::nDarray(int rank_of_nDarray, int rows, int cols, double values)
 
 
 
-//...//##############################################################################
-// create a unit XC::nDarray
-XC::nDarray::nDarray(const std::string &flag, int rank_of_nDarray, const int *pdim)
-{
-  if ( flag[0] != 'I' && flag[0] != 'e' && flag[0] != 'C' )
-   {
-     std::cerr <<"\n To create a 2nd rank Kronecker delta type: nDarray (\"I\",2,dims);\n"
-     //        << " To create a 4th rank unit XC::nDarray type: nDarray (\"I\",4,dims);\n";
-               << "To create a 3th rank Levi-Civita XC::BJtensor type: nDarray (\"e\",3,dims);\n"
-	       << "To create a 2nd rank Cosserat Kronecker delta type: nDarray (\"C\",3,dims);\n";
-    ::exit( 1 );
-   }
- // create the structure:
-   pc_nDarray_rep = new nDarray_rep; // this 'new' is overloaded 7
-   pc_nDarray_rep->nDarray_rank = rank_of_nDarray;  //rank_of_nDarray;
-
-// in the case of nDarray_rank=0 add one to get right thing from the
-// operator new
-   int one_or0 = 0;
-   if(!pc_nDarray_rep->nDarray_rank) one_or0 = 1;
-   pc_nDarray_rep->dim = new int[pc_nDarray_rep->nDarray_rank+one_or0];// array for
-                                                                 // dimensions
-
-   pc_nDarray_rep->total_numb = 1;
-   for( int idim = 0 ; idim < pc_nDarray_rep->nDarray_rank ; idim++ )
-     {
-       pc_nDarray_rep->dim[idim] = pdim[idim];
-       pc_nDarray_rep->total_numb *= pc_nDarray_rep->dim[idim];
-     }
-
-// allocate memory for the actual XC::nDarray as XC::nDarray
-   pc_nDarray_rep->pd_nDdata = new double [(size_t)pc_nDarray_rep->total_numb];
-     if (!pc_nDarray_rep->pd_nDdata)
-       {
-         ::fprintf(stderr,"\a\nInsufficient memory for array\n");
-         ::exit(1);
-       }
-
-   pc_nDarray_rep->n = 1;  // so far, there's one reference
-
-    switch(pc_nDarray_rep->nDarray_rank)
+//! @brief create a unit XC::nDarray
+XC::nDarray::nDarray(const std::string &flag, int rank_of_nDarray, const std::vector<int> &pdim)
+  {
+    if( flag[0] != 'I' && flag[0] != 'e' && flag[0] != 'C' )
       {
-        case 0:
-          {
-            ::printf("\a\n Unit XC::nDarray of rank 0 ???\n");
-            break;
-          }
-
-        case 1:
-          {
-            ::printf("\a\n Unit XC::nDarray of rank 1 ???\n");
-            break;
-          }
-
-                case 2:   // Kronecker delta
-             
-                if ( flag[0] == 'I' )
-                  {
-                    for ( int i2=1 ; i2<=pc_nDarray_rep->dim[0] ; i2++ )
-                      {
-                        for ( int j2=1 ; j2<=pc_nDarray_rep->dim[1] ; j2++ )
-                          {
-                       val(i2,j2) = (i2 == j2 ? 1  : 0);
-                     }
-                 }
-               break;
-             
-             }
-
-        case 3:  // Levi - Civita permutation XC::BJtensor
-           {
-             for ( int i3=1 ; i3<=pc_nDarray_rep->dim[0] ; i3++ )
-               {
-                 for ( int j3=1 ; j3<=pc_nDarray_rep->dim[1] ; j3++ )
-                   {
-                     for ( int k3=1 ; k3<=pc_nDarray_rep->dim[2] ; k3++ )
-                       {
-                         if ( (i3==1 && j3==2 && k3==3)  ||
-                              (i3==2 && j3==3 && k3==1)  ||
-                              (i3==3 && j3==1 && k3==2) )
-                           {
-                             val(i3,j3,k3) = 1.0;
-                           }
-                         else if ( (i3==3 && j3==2 && k3==1)  ||
-                                   (i3==2 && j3==1 && k3==3)  ||
-                                   (i3==1 && j3==3 && k3==2) )
-                           {
-                             val(i3,j3,k3) = -1.0;
-                           }
-                         else val(i3,j3,k3) = 0.0;
-                       }
-                   }
-               }
-           break;
-           }
-
-//        case 4:
-//          for ( int i4=1 ; i4<=pc_nDarray_rep->dim[0] ; i4++ )
-//            for ( int j4=1 ; j4<=pc_nDarray_rep->dim[1] ; j4++ )
-//              for ( int k4=1 ; k4<=pc_nDarray_rep->dim[2] ; k4++ )
-//                for ( int l4=1 ; l4<=pc_nDarray_rep->dim[3] ; l4++ )
-//                  val(i4,j4,k4,l4) = (((i4==k4) && (j4==l4)) ? 1 : 0);
-//        break;
+        std::cerr <<"\n To create a 2nd rank Kronecker delta type: nDarray (\"I\",2,dims);\n"
+        //        << " To create a 4th rank unit XC::nDarray type: nDarray (\"I\",4,dims);\n";
+	 	  << "To create a 3th rank Levi-Civita XC::BJtensor type: nDarray (\"e\",3,dims);\n"
+		  << "To create a 2nd rank Cosserat Kronecker delta type: nDarray (\"C\",3,dims);\n";
+        ::exit( 1 );
       }
+    // create the structure:
+    pc_nDarray_rep = new nDarray_rep; // this 'new' is overloaded 7
+    pc_nDarray_rep->nDarray_rank = rank_of_nDarray;  //rank_of_nDarray;
+
+    // in the case of nDarray_rank=0 add one to get right thing from the
+    // operator new
+    int one_or0 = 0;
+    if(!pc_nDarray_rep->nDarray_rank) one_or0 = 1;
+    pc_nDarray_rep->init_dim(pc_nDarray_rep->nDarray_rank+one_or0,pdim);
 
 
-}
+  // allocate memory for the actual XC::nDarray as XC::nDarray
+     pc_nDarray_rep->pd_nDdata = new double [(size_t)pc_nDarray_rep->total_numb];
+       if (!pc_nDarray_rep->pd_nDdata)
+	 {
+	   ::fprintf(stderr,"\a\nInsufficient memory for array\n");
+	   ::exit(1);
+	 }
+
+     pc_nDarray_rep->n = 1;  // so far, there's one reference
+
+      switch(pc_nDarray_rep->nDarray_rank)
+	{
+	  case 0:
+	    {
+	      ::printf("\a\n Unit XC::nDarray of rank 0 ???\n");
+	      break;
+	    }
+
+	  case 1:
+	    {
+	      ::printf("\a\n Unit XC::nDarray of rank 1 ???\n");
+	      break;
+	    }
+
+		  case 2:   // Kronecker delta
+
+		  if ( flag[0] == 'I' )
+		    {
+		      for ( int i2=1 ; i2<=pc_nDarray_rep->dim[0] ; i2++ )
+			{
+			  for ( int j2=1 ; j2<=pc_nDarray_rep->dim[1] ; j2++ )
+			    {
+			 val(i2,j2) = (i2 == j2 ? 1  : 0);
+		       }
+		   }
+		 break;
+
+	       }
+
+	  case 3:  // Levi - Civita permutation XC::BJtensor
+	     {
+	       for ( int i3=1 ; i3<=pc_nDarray_rep->dim[0] ; i3++ )
+		 {
+		   for ( int j3=1 ; j3<=pc_nDarray_rep->dim[1] ; j3++ )
+		     {
+		       for ( int k3=1 ; k3<=pc_nDarray_rep->dim[2] ; k3++ )
+			 {
+			   if ( (i3==1 && j3==2 && k3==3)  ||
+				(i3==2 && j3==3 && k3==1)  ||
+				(i3==3 && j3==1 && k3==2) )
+			     {
+			       val(i3,j3,k3) = 1.0;
+			     }
+			   else if ( (i3==3 && j3==2 && k3==1)  ||
+				     (i3==2 && j3==1 && k3==3)  ||
+				     (i3==1 && j3==3 && k3==2) )
+			     {
+			       val(i3,j3,k3) = -1.0;
+			     }
+			   else val(i3,j3,k3) = 0.0;
+			 }
+		     }
+		 }
+	     break;
+	     }
+
+  //        case 4:
+  //          for ( int i4=1 ; i4<=pc_nDarray_rep->dim[0] ; i4++ )
+  //            for ( int j4=1 ; j4<=pc_nDarray_rep->dim[1] ; j4++ )
+  //              for ( int k4=1 ; k4<=pc_nDarray_rep->dim[2] ; k4++ )
+  //                for ( int l4=1 ; l4<=pc_nDarray_rep->dim[3] ; l4++ )
+  //                  val(i4,j4,k4,l4) = (((i4==k4) && (j4==l4)) ? 1 : 0);
+  //        break;
+	}
+
+
+  }
 
 
 //##############################################################################
@@ -545,7 +509,7 @@ XC::nDarray::~nDarray()
     //  and note on the p.65($5.3.4)
     //  and the page 276 ($12.4)
 	delete [] pc_nDarray_rep->pd_nDdata;
-	delete [] pc_nDarray_rep->dim;
+	pc_nDarray_rep->clear_dim();
 	delete pc_nDarray_rep;
       }
   }
@@ -570,81 +534,66 @@ void XC::nDarray::Reset_to( double value )  // reset data to "value"
       this->pc_nDarray_rep->pd_nDdata[i] = value;
   }
 //##############################################################################
-// use "from" and initialize AND allocate XC::BJtensor from "from" values
+// use "from" and initialize AND allocate BJtensor from "from" values
 // it should work on all the things that are missed by default constructor
 //(int rank_of_nDarray, const int *pdim, double *values)
-void XC::nDarray::Initialize_all( const XC::nDarray & from )
+void XC::nDarray::Initialize_all(const nDarray &from)
   {
- // create the structure:
-//   pc_nDarray_rep = new nDarray_rep; // this 'new' is overloaded //IN DEFAULT
-   this->pc_nDarray_rep->nDarray_rank = from.rank();  //rank_of_nDarray;
-// in the case of nDarray_rank=0 add one to get right thing from the
-// operator new
-   int one_or0 = 0;
-   if(!this->pc_nDarray_rep->nDarray_rank) one_or0 = 1;
-   delete  [] this->pc_nDarray_rep->dim; // get rid of old allocated memory
-   this->pc_nDarray_rep->dim = new int[pc_nDarray_rep->nDarray_rank+one_or0];// array for
-                                                                 // dimensions
-   this->pc_nDarray_rep->total_numb = 1;
-   for( int idim = 0 ; idim < this->pc_nDarray_rep->nDarray_rank ; idim++ )
-     {
-       this->pc_nDarray_rep->dim[idim] = from.dim()[idim]; // fill dims from from!!
-       this->pc_nDarray_rep->total_numb *= pc_nDarray_rep->dim[idim]; // find total number
-     }
-   delete [] this->pc_nDarray_rep->pd_nDdata; // get rid of old allocated memory
-// allocate memory for the actual XC::nDarray as XC::nDarray
-   this->pc_nDarray_rep->pd_nDdata = new double [(size_t)pc_nDarray_rep->total_numb];
-     if (!this->pc_nDarray_rep->pd_nDdata)
-       {
-         ::fprintf(stderr,"\a\nInsufficient memory for array in Initialize_all \n");
-         ::exit(1);
-       }
-   this->pc_nDarray_rep->n = 1;  // so far, there's one reference
-   for ( int i=0 ; i<pc_nDarray_rep->total_numb ; i++ )
-     this->pc_nDarray_rep->pd_nDdata[i] = from.pc_nDarray_rep->pd_nDdata[i];
+    // create the structure:
+    //   pc_nDarray_rep = new nDarray_rep; // this 'new' is overloaded //IN DEFAULT
+    this->pc_nDarray_rep->nDarray_rank= from.rank();  //rank_of_nDarray;
+    // in the case of nDarray_rank=0 add one to get right thing from the
+    // operator new
+    int one_or0 = 0;
+    if(!this->pc_nDarray_rep->nDarray_rank) one_or0 = 1;
+    const std::vector<int> &pdim= from.dim();
+    this->pc_nDarray_rep->init_dim(pc_nDarray_rep->nDarray_rank+one_or0, pdim);
 
+    delete [] this->pc_nDarray_rep->pd_nDdata; // get rid of old allocated memory
+    // allocate memory for the actual XC::nDarray as XC::nDarray
+    this->pc_nDarray_rep->pd_nDdata = new double [(size_t)pc_nDarray_rep->total_numb];
+    if(!this->pc_nDarray_rep->pd_nDdata)
+       {
+         std::cerr << "\a\nInsufficient memory for array in Initialize_all \n";
+         exit(1);
+       }
+     this->pc_nDarray_rep->n = 1;  // so far, there's one reference
+     for ( int i=0 ; i<pc_nDarray_rep->total_numb ; i++ )
+       this->pc_nDarray_rep->pd_nDdata[i] = from.pc_nDarray_rep->pd_nDdata[i];
   }
 
 //##############################################################################
 XC::nDarray XC::nDarray::deep_copy()
-{
- // create the structure:
-   nDarray temp;
-   temp.pc_nDarray_rep->nDarray_rank = this->pc_nDarray_rep->nDarray_rank;
+  {
+   // create the structure:
+     nDarray temp;
+     temp.pc_nDarray_rep->nDarray_rank = this->pc_nDarray_rep->nDarray_rank;
 
-// in the case of nDarray_rank=0 add one to get right thing from the
-// operator new
-   int one_or0 = 0;
-   if(!temp.pc_nDarray_rep->nDarray_rank) one_or0 = 1;
-   delete [] temp.pc_nDarray_rep->dim; //delete default value
-   temp.pc_nDarray_rep->dim = new int[temp.pc_nDarray_rep->nDarray_rank+one_or0];// array for
-                                                                 // dimensions
+  // in the case of nDarray_rank=0 add one to get right thing from the
+  // operator new
+     int one_or0 = 0;
+     if(!temp.pc_nDarray_rep->nDarray_rank) one_or0 = 1;
+     temp.pc_nDarray_rep->init_dim(temp.pc_nDarray_rep->nDarray_rank+one_or0, this->pc_nDarray_rep->dim);
 
-   for( int idim = 0 ; idim < temp.pc_nDarray_rep->nDarray_rank ; idim++ )
-     {
-       temp.pc_nDarray_rep->dim[idim] = this->pc_nDarray_rep->dim[idim] ;
-     }
-       temp.pc_nDarray_rep->total_numb = this->pc_nDarray_rep->total_numb;
-
-   delete [] temp.pc_nDarray_rep->pd_nDdata;//delete default value
-   temp.pc_nDarray_rep->pd_nDdata = new double [temp.pc_nDarray_rep->total_numb];
+     delete [] temp.pc_nDarray_rep->pd_nDdata;//delete default value
+     temp.pc_nDarray_rep->pd_nDdata = new double [temp.pc_nDarray_rep->total_numb];
      if (!temp.pc_nDarray_rep->pd_nDdata)
        {
-         ::fprintf(stderr,"\a\nInsufficient memory for array in deep_copy\n");
-         ::exit(1);
+	 ::fprintf(stderr,"\a\nInsufficient memory for array in deep_copy\n");
+	 ::exit(1);
        }
 
-   temp.pc_nDarray_rep->n = 1;  // so far, there's one reference
+     temp.pc_nDarray_rep->n = 1;  // so far, there's one reference
 
-    for ( int i=0 ; i<temp.pc_nDarray_rep->total_numb ; i++ )
-      temp.pc_nDarray_rep->pd_nDdata[i] = this->pc_nDarray_rep->pd_nDdata[i] ;
+     for ( int i=0 ; i<temp.pc_nDarray_rep->total_numb ; i++ )
+       temp.pc_nDarray_rep->pd_nDdata[i] = this->pc_nDarray_rep->pd_nDdata[i] ;
 
-    return temp;
-}
+     return temp;
+  }
 
 
 //##############################################################################
-XC::nDarray& XC::nDarray::operator=(const XC::nDarray & rval)
+XC::nDarray& XC::nDarray::operator=(const nDarray & rval)
   {
     rval.pc_nDarray_rep->n++;  // tell the rval it has another reference
 
@@ -661,7 +610,7 @@ XC::nDarray& XC::nDarray::operator=(const XC::nDarray & rval)
 //  see ELLIS & STROUSTRUP $18.3
 //  and note on the p.65($5.3.4)
         delete [] pc_nDarray_rep->pd_nDdata;
-        delete [] pc_nDarray_rep->dim;
+        pc_nDarray_rep->clear_dim();
         delete pc_nDarray_rep;
       }
 
@@ -1155,12 +1104,12 @@ XC::nDarray& XC::nDarray::operator+=(const nDarray & rval)
     for ( i=0 ; i<this_rank_of_nDarray ; i++ )
       if (this->pc_nDarray_rep->dim[i] != rval.pc_nDarray_rep->dim[i] )
         {
-::fprintf(stderr,"\a\nDimension discrepancy in operator+=\n\
-this->pc_nDarray_rep->dim[%d]=%d\n\
-arg.pc_nDarray_rep->dim[%d]=%d\n",
-i,this->pc_nDarray_rep->dim[i],
-i,rval.pc_nDarray_rep->dim[i]);
-::exit(1);
+	  ::fprintf(stderr,"\a\nDimension discrepancy in operator+=\n\
+	  this->pc_nDarray_rep->dim[%d]=%d\n\
+	  arg.pc_nDarray_rep->dim[%d]=%d\n",
+	  i,this->pc_nDarray_rep->dim[i],
+	  i,rval.pc_nDarray_rep->dim[i]);
+	  ::exit(1);
         }
 // Copy *this if necessary
     if ( this->pc_nDarray_rep->n > 1 )// see ARK in JOOP may/june '90
@@ -1173,15 +1122,9 @@ i,rval.pc_nDarray_rep->dim[i]);
 // operator new
         int one_or0 = 0;
         if(!New_pc_nDarray_rep->nDarray_rank) one_or0 = 1;
-        New_pc_nDarray_rep->dim = new int[New_pc_nDarray_rep->nDarray_rank+one_or0];
-                                  // array for dimensions
-        New_pc_nDarray_rep->total_numb = 1;
-        for( int idim = 0 ; idim < New_pc_nDarray_rep->nDarray_rank ; idim++ )
-          {
-            New_pc_nDarray_rep->dim[idim] = this->pc_nDarray_rep->dim[idim];
-            New_pc_nDarray_rep->total_numb *= New_pc_nDarray_rep->dim[idim];
-          }
-// allocate memory for the actual XC::nDarray as XC::nDarray
+        New_pc_nDarray_rep->init_dim(New_pc_nDarray_rep->nDarray_rank+one_or0, this->pc_nDarray_rep->dim);
+
+        // allocate memory for the actual nDarray as XC::nDarray
         New_pc_nDarray_rep->pd_nDdata = new double [(size_t)New_pc_nDarray_rep->total_numb];
           if (!New_pc_nDarray_rep->pd_nDdata)
             {
@@ -1228,10 +1171,8 @@ XC::nDarray XC::nDarray::operator+(const double &rval)
             }
           case 1:
             {
-              for ( int i1=1 ; i1<=this->pc_nDarray_rep->dim[0] ; i1++ )
-                {
-                  add.val(i1) = val(i1) + rval;
-                }
+              for( int i1=1 ; i1<=this->pc_nDarray_rep->dim[0] ; i1++ )
+                { add.val(i1) = val(i1) + rval; }
               break;
             }
           case 2:
@@ -1315,12 +1256,12 @@ XC::nDarray& XC::nDarray::operator-=(const nDarray & rval)
     for ( i=0 ; i<this_rank_of_nDarray ; i++ )
       if (this->pc_nDarray_rep->dim[i] != rval.pc_nDarray_rep->dim[i] )
         {
-::fprintf(stderr,"\a\nDimension discrepancy in operator+\n\
-this->pc_nDarray_rep->dim[%d]=%d\n\
-arg.pc_nDarray_rep->dim[%d]=%d\n",
-i,this->pc_nDarray_rep->dim[i],
-i,rval.pc_nDarray_rep->dim[i]);
-::exit(1);
+	  ::fprintf(stderr,"\a\nDimension discrepancy in operator+\n\
+	  this->pc_nDarray_rep->dim[%d]=%d\n\
+	  arg.pc_nDarray_rep->dim[%d]=%d\n",
+	  i,this->pc_nDarray_rep->dim[i],
+	  i,rval.pc_nDarray_rep->dim[i]);
+	  ::exit(1);
         }
 // Copy *this if necessary
     if ( this->pc_nDarray_rep->n > 1 )// see ARK in JOOP may/june '90
@@ -1333,15 +1274,9 @@ i,rval.pc_nDarray_rep->dim[i]);
 // operator new
         int one_or0 = 0;
         if(!New_pc_nDarray_rep->nDarray_rank) one_or0 = 1;
-        New_pc_nDarray_rep->dim = new int[New_pc_nDarray_rep->nDarray_rank+one_or0];
-                                  // array for dimensions
-        New_pc_nDarray_rep->total_numb = 1;
-        for( int idim = 0 ; idim < New_pc_nDarray_rep->nDarray_rank ; idim++ )
-          {
-            New_pc_nDarray_rep->dim[idim] = this->pc_nDarray_rep->dim[idim];
-            New_pc_nDarray_rep->total_numb *= New_pc_nDarray_rep->dim[idim];
-          }
-// allocate memory for the actual XC::nDarray as XC::nDarray
+        New_pc_nDarray_rep->init_dim(New_pc_nDarray_rep->nDarray_rank+one_or0, this->pc_nDarray_rep->dim);
+
+        // allocate memory for the actual XC::nDarray as XC::nDarray
         New_pc_nDarray_rep->pd_nDdata = new double [(size_t)New_pc_nDarray_rep->total_numb];
           if (!New_pc_nDarray_rep->pd_nDdata)
             {
@@ -1565,8 +1500,8 @@ double XC::nDarray::trace() const
           {
             if(dim()[0] != 1)
               {
-::printf("\a\nERROR in trace function : not a squared 1-st rank XC::BJtensor\n");
-::exit( 1 );
+		::printf("\a\nERROR in trace function : not a squared 1-st rank XC::BJtensor\n");
+		::exit( 1 );
               }
             tr = cval(1);
             break;
@@ -1576,8 +1511,8 @@ double XC::nDarray::trace() const
           {
             if(dim()[0] != dim()[1])
               {
-::printf("\a\nERROR in trace function : not a sqared 2nd-rank XC::BJtensor\n");
-::exit( 1 );
+		::printf("\a\nERROR in trace function : not a sqared 2nd-rank XC::BJtensor\n");
+		::exit( 1 );
               }
             for ( int i2=1 ; i2<=dim()[0] ; i2++ )
               tr += cval(i2, i2);
@@ -1590,8 +1525,8 @@ double XC::nDarray::trace() const
                 dim()[1] != dim()[2] ||
                 dim()[2] != dim()[0]    )
               {
-::printf("\a\nERROR in trace function : not a sqared 3nd-rank XC::BJtensor\n");
-::exit( 1 );
+		::printf("\a\nERROR in trace function : not a sqared 3nd-rank XC::BJtensor\n");
+		::exit( 1 );
               }
             for ( int i3=1 ; i3<=dim()[0] ; i3++ )
               tr += cval(i3, i3, i3);
@@ -1605,8 +1540,8 @@ double XC::nDarray::trace() const
                 dim()[2] != dim()[3] ||
                 dim()[3] != dim()[0]    )
               {
-::printf("\a\nERROR in trace function : not a sqared 4nd-rank XC::BJtensor\n");
-::exit( 1 );
+		::printf("\a\nERROR in trace function : not a sqared 4nd-rank XC::BJtensor\n");
+		::exit( 1 );
               }
             for ( int i4=1 ; i4<=dim()[0] ; i4++ )
               tr += cval(i4, i4, i4, i4);
@@ -2168,7 +2103,7 @@ int XC::nDarray::number_of_zeros() const  // number of members that are
   }
 
 
-// prebacen u XC::nDarray 14 oktobra 1996
+// prebacen u nDarray 14 oktobra 1996
 //#############################################################################
 XC::nDarray XC::nDarray::eigenvalues(void)
   {
@@ -2181,11 +2116,11 @@ XC::nDarray XC::nDarray::eigenvalues(void)
       }
 
  //   BJvector EV(rows, 0.0);
-    const int pdim[] = {rows};
+    const std::vector<int> pdim({rows});
     nDarray EV(1, pdim, 0.0);
 
-// most painless to really make a two dimensional string and copy it to 'a'
-// BEWARE they work in NRC as in FORTRAN therefore strings of 1 - n
+    // most painless to really make a two dimensional string and copy it to 'a'
+    // BEWARE they work in NRC as in FORTRAN therefore strings of 1 - n
     double ** a = new double *[rows+1];
     if ( !a ) {::printf("memory exhausted for **a \n"); ::exit(1);}
     for ( int i=0 ; i<(rows+1) ; i++ )
@@ -2243,7 +2178,7 @@ XC::nDarray XC::nDarray::eigenvectors(void)
       }
 
 //    BJmatrix EV(rows, rows, 0.0);
-    const int pdim[] = {rows, rows};
+    const std::vector<int> pdim({rows, rows});
     nDarray  EV(2, pdim, 0.0);
 //    BJmatrix temp( rows, rows, rows, this->data() );
 
@@ -2488,45 +2423,34 @@ void XC::nDarray::eigsrt(double * d, double ** v, int n)
     }
 
     long int XC::nDarray::total_number(void) const
-    {
-      return this->pc_nDarray_rep->total_numb;
-    }
+      { return this->pc_nDarray_rep->total_numb; }
 
     void XC::nDarray::total_number(long int number)
-    {
-      this->pc_nDarray_rep->total_numb = number;
-    }
+      { this->pc_nDarray_rep->total_numb = number; }
 
-    int * XC::nDarray::dim(void) const
-    {
-      return this->pc_nDarray_rep->dim;
-    }
+    const std::vector<int> &XC::nDarray::dim(void) const
+      { return this->pc_nDarray_rep->dim; }
 
-    int & XC::nDarray::get_dim_pointer(void) const
-    {
-      return this->pc_nDarray_rep->dim[0];
-    }
+    void XC::nDarray::clear_dim(void)
+      { return this->pc_nDarray_rep->clear_dim(); }
 
-    void XC::nDarray::set_dim_pointer(int * dim_pointer)
-    {
-      this->pc_nDarray_rep->dim = dim_pointer;
-    }
+    int &XC::nDarray::get_dim_pointer(void) const
+      { return this->pc_nDarray_rep->dim[0]; }
+
+    void XC::nDarray::set_dim(const std::vector<int> &pdim)
+      { this->pc_nDarray_rep->init_dim(pdim.size(), pdim); }
 
     int XC::nDarray::dim(int which) const
-    {
-      return this->pc_nDarray_rep->dim[which-1];
-    }
+      { return this->pc_nDarray_rep->dim[which-1]; }
 
     int XC::nDarray::reference_count(int up_down)
-    {
-      this->pc_nDarray_rep->n += up_down;
-      return(this->pc_nDarray_rep->n);
-    }
+      {
+	this->pc_nDarray_rep->n += up_down;
+        return(this->pc_nDarray_rep->n);
+      }
 
     void XC::nDarray::set_reference_count(int ref_count)
-    {
-      this->pc_nDarray_rep->n=ref_count;
-    }
+      { this->pc_nDarray_rep->n=ref_count; }
 
 
 //tempOUT//##############################################################################

@@ -299,7 +299,7 @@ XC::BJtensor XC::TotalLagrangianFD8NodeBrick::getStiffnessTensor(void) const
 
 	  
 
-	int K_dim[] = {NumNodes,NumDof,NumDof,NumNodes};
+	std::vector<int> K_dim({NumNodes,NumDof,NumDof,NumNodes});
 
     BJtensor Kk(4,K_dim,0.0);
 
@@ -320,7 +320,7 @@ XC::BJtensor XC::TotalLagrangianFD8NodeBrick::getStiffnessTensor(void) const
 
 
 
-    int dh_dim[] = {NumNodes,NumDof};
+    std::vector<int> dh_dim({NumNodes,NumDof});
 
     BJtensor dh(2, dh_dim, 0.0);
 
@@ -419,7 +419,7 @@ XC::BJtensor XC::TotalLagrangianFD8NodeBrick::getStiffnessTensor(void) const
 XC::BJtensor XC::TotalLagrangianFD8NodeBrick::getRtensor(void) const
   {
 
-    int R_dim[] = {NumNodes,NumDof};
+    std::vector<int> R_dim({NumNodes,NumDof});
 
     BJtensor Rr(2,R_dim,0.0);
 
@@ -440,7 +440,7 @@ XC::BJtensor XC::TotalLagrangianFD8NodeBrick::getRtensor(void) const
 
 
 
-    int dh_dim[] = {NumNodes,NumDof};
+    std::vector<int> dh_dim({NumNodes,NumDof});
     BJtensor dh(2, dh_dim, 0.0);
 
 
@@ -511,7 +511,7 @@ XC::BJtensor XC::TotalLagrangianFD8NodeBrick::getRtensor(void) const
 XC::BJtensor XC::TotalLagrangianFD8NodeBrick::getBodyForce(void) const
   {
 
-    int B_dim[] = {NumNodes,NumDof};
+    std::vector<int> B_dim({NumNodes,NumDof});
 
     BJtensor Bb(2,B_dim,0.0);
 
@@ -539,15 +539,15 @@ XC::BJtensor XC::TotalLagrangianFD8NodeBrick::getBodyForce(void) const
 
 
 
-    int h_dim[] = {20};
+    std::vector<int> h_dim({20});
 
     BJtensor h(1, h_dim, 0.0);
 
-    int dh_dim[] = {NumNodes,NumDof};
+    std::vector<int> dh_dim({NumNodes,NumDof});
 
     BJtensor dh(2, dh_dim, 0.0);
 
-    int bodyforce_dim[] = {3};
+    std::vector<int> bodyforce_dim({3});
 
     BJtensor bodyforce(1, bodyforce_dim, 0.0);
 
@@ -622,7 +622,7 @@ XC::BJtensor XC::TotalLagrangianFD8NodeBrick::getBodyForce(void) const
 XC::BJtensor XC::TotalLagrangianFD8NodeBrick::getSurfaceForce(void) const
   {
 
-    int S_dim[] = {NumNodes, NumDof};
+    std::vector<int> S_dim({NumNodes, NumDof});
 
     BJtensor Ss(2,S_dim,0.0);
 
@@ -640,7 +640,7 @@ XC::BJtensor XC::TotalLagrangianFD8NodeBrick::getSurfaceForce(void) const
 XC::BJtensor XC::TotalLagrangianFD8NodeBrick::getForces(void) const
   {
 
-    int F_dim[] = {NumNodes,NumDof};
+    std::vector<int> F_dim({NumNodes,NumDof});
 
     BJtensor Ff(2,F_dim,0.0);
 
@@ -746,7 +746,7 @@ const XC::Matrix &XC::TotalLagrangianFD8NodeBrick::getMass(void) const
 XC::BJtensor XC::TotalLagrangianFD8NodeBrick::getNodesCrds(void) const
   {
 
-    const int dimensions[] = {NumNodes, NumDof};
+    const std::vector<int> dimensions({NumNodes, NumDof});
 
     BJtensor N_coord(2, dimensions, 0.0);
 
@@ -780,7 +780,7 @@ XC::BJtensor XC::TotalLagrangianFD8NodeBrick::getNodesDisp(void) const
 
     int i, j;
 
-    int dimU[] = {NumNodes, NumDof};
+    std::vector<int> dimU({NumNodes, NumDof});
 
     BJtensor total_disp(2, dimU, 0.0);
 
@@ -913,7 +913,7 @@ const XC::Vector &XC::TotalLagrangianFD8NodeBrick::getResistingForce(void) const
 
 	int i, j;
 
-    int f_dim[] = {NumNodes, NumDof};
+    std::vector<int> f_dim({NumNodes, NumDof});
 
     BJtensor NodalForces_in(2, f_dim, 0.0);
 
@@ -1262,7 +1262,7 @@ XC::BJtensor XC::TotalLagrangianFD8NodeBrick::shapeFunction(double r1, double r2
 
 
 
-    int dimension[] = {NumNodes};
+    std::vector<int> dimension({NumNodes});
 
     BJtensor h(1, dimension, 0.0);
 
@@ -1319,7 +1319,7 @@ XC::BJtensor XC::TotalLagrangianFD8NodeBrick::shapeFunctionDerivative(double r1,
 
 
 
-    int dimensions[] = {NumNodes, NumDof};
+    std::vector<int> dimensions({NumNodes, NumDof});
 
     BJtensor dh(2, dimensions, 0.0);
 

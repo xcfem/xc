@@ -120,7 +120,7 @@ XC::stressstraintensor XC::stressstraintensor::operator=( const stressstraintens
       {
 // DEallocate memory of the actual XC::BJtensor
         delete [] data();
-        delete [] dim();
+        clear_dim();
         delete pc_nDarray_rep;
       }
  // connect to new value
@@ -158,7 +158,7 @@ XC::stressstraintensor XC::stressstraintensor::operator=(const XC::BJtensor &rva
 //                                                and note on the p.65($5.3.4)
 //        delete  pc_nDarray_rep->pd_nDdata;
         delete [] data();
-        delete [] dim();
+        clear_dim();
 // ovo ne smem da brisem jer nije dinamicki alocirano
 //        delete pc_tensor_rep->indices;
         delete pc_nDarray_rep;
@@ -192,7 +192,7 @@ XC::stressstraintensor XC::stressstraintensor::operator=( const XC::nDarray & rv
     if( reference_count(-1) == 0)  // if nobody else is referencing us.
       {
         delete [] data();
-        delete [] dim();
+        clear_dim();
         delete pc_nDarray_rep;
       }
 

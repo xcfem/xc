@@ -231,7 +231,6 @@ class profilematrix
     void total_number(int );
 //    int* dim(void) const ;
 //    int& get_dim_pointer(void) const ;
-//    void set_dim_pointer(int* );
 //    int dim(int which) const;
     int reference_count(int );
     void set_reference_count(int );

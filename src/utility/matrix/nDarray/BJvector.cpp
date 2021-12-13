@@ -101,13 +101,13 @@ XC::BJvector::BJvector(int order_n, double initvalue):
   BJmatrix( 2, order_n, 1, initvalue)  {  }  // default constructor
 // rank 2 ^ just to be consistent with rank of XC::BJmatrix
 //##############################################################################
-XC::BJvector::BJvector(int order_n, double *initval):
-  BJmatrix(2, order_n, 1, initval)  {  }
+XC::BJvector::BJvector(int order_n, double *initval)
+  : BJmatrix(2, order_n, 1, initval)  {  }
 //rank 2 ^ just to be consistent with rank of XC::BJmatrix
 
 //##############################################################################
-XC::BJvector::BJvector( const XC::nDarray & x):
-  BJmatrix( x )   {  } // copy-initializer
+XC::BJvector::BJvector(const nDarray & x)
+  : BJmatrix( x )   {  } // copy-initializer
 
 
 
@@ -124,7 +124,7 @@ XC::BJvector::BJvector( const XC::nDarray & x):
 //.... //                                                and note on the p.65($5.3.4)
 //.... //  and the page 276 ($12.4)
 //....     delete [] data();
-//....     delete [] dim();
+//....     clear_dim();
 //....     delete pc_nDarray_rep;
 //....   }
 //.... }
@@ -145,7 +145,7 @@ XC::BJvector &XC::BJvector::operator=(const XC::BJvector & rval)
     if( reference_count(-1) == 0)  // if nobody else is referencing us.
       {
         delete [] data();
-        delete [] dim();
+        clear_dim();
         delete pc_nDarray_rep;
       }
  // connect to new value
@@ -167,7 +167,7 @@ XC::BJvector &XC::BJvector::operator=(const XC::BJvector & rval)
 //..    if( reference_count(-1) == 0)  // if nobody else is referencing us.
 //..      {
 //..        delete [] data();
-//..        delete [] dim();
+//..        clear_dim();
 //..        delete pc_nDarray_rep;
 //..      }
 //..
@@ -193,7 +193,7 @@ XC::BJvector &XC::BJvector::operator=(const XC::BJvector & rval)
 //..    if( reference_count(-1) == 0)  // if nobody else is referencing us.
 //..      {
 //..        delete [] data();
-//..        delete [] dim();
+//..        clear_dim();
 //..        delete pc_nDarray_rep;
 //..      }
 //..

@@ -438,14 +438,14 @@ void XC::EightNodeBrick::incremental_Update()
 
     //double this_one_PP= (matpoint)->operator[](where).IS_Perfect_Plastic();
 
-    int dh_dim[]= {8,3};   //Xiaoyan changed from {20,3} to {8,3}  07/12/00
+    std::vector<int> dh_dim({8,3});   //Xiaoyan changed from {20,3} to {8,3}  07/12/00
     BJtensor dh(2, dh_dim, 0.0);
 
 //    BJtensor Constitutive( 4, def_dim_4, 0.0);
 
     //    double det_of_Jacobian= 0.0;
 
-    static int disp_dim[]= {8,3}; //Xiaoyan changed from {20,3} to {8,3}  07/12/00
+    static std::vector<int> disp_dim({8,3}); //Xiaoyan changed from {20,3} to {8,3}  07/12/00
     BJtensor incremental_displacements(2,disp_dim,0.0);
 
     straintensor incremental_strain;
@@ -593,7 +593,7 @@ void XC::EightNodeBrick::incremental_Update()
  XC::BJtensor XC::EightNodeBrick::H_3D(double r1, double r2, double r3) const
   {
 
-    int dimension[]= {24,3}; // Xiaoyan changed from {60,3} to {24,3} for 8 nodes
+    std::vector<int> dimension({24,3}); // Xiaoyan changed from {60,3} to {24,3} for 8 nodes
                               // 3*8=24  07/12/00
     BJtensor H(2, dimension, 0.0);
 
@@ -658,7 +658,7 @@ void XC::EightNodeBrick::incremental_Update()
  XC::BJtensor XC::EightNodeBrick::interp_poli_at(double r1, double r2, double r3)
   {
 
-    int dimension[]= {8};  // Xiaoyan changed from {20} to {8} for 8 nodes 07/12
+    std::vector<int> dimension({8});  // Xiaoyan changed from {20} to {8} for 8 nodes 07/12
     BJtensor h(1, dimension, 0.0);
 
 
@@ -690,7 +690,7 @@ void XC::EightNodeBrick::incremental_Update()
  XC::BJtensor XC::EightNodeBrick::dh_drst_at(double r1, double r2, double r3) const
   {
 
-    int dimensions[]= {8,3};  // Changed from{20,3} to {8,3} Xiaoyan 07/12
+    std::vector<int> dimensions({8,3});  // Changed from{20,3} to {8,3} Xiaoyan 07/12
     BJtensor dh(2, dimensions, 0.0);
 
 
@@ -757,7 +757,7 @@ void XC::EightNodeBrick::incremental_Update()
 //BJ    std::cerr << "\n\n\n\n Print in XC::BJtensor XC::EightNodeBrick::getStiffnessTensor(void) " <<std::endl; this->Print(std::cerr);
 //BJ//BJ
 
-    int K_dim[]= {8,3,3,8};  // Xiaoyan changed from {20,3,3,20} to {8,3,3,8}
+    std::vector<int> K_dim({8,3,3,8});  // Xiaoyan changed from {20,3,3,20} to {8,3,3,8}
             // for 8 nodes      07/12
     BJtensor Kk(4,K_dim,0.0);
     BJtensor Kkt(4,K_dim,0.0);
@@ -775,7 +775,7 @@ void XC::EightNodeBrick::incremental_Update()
     short where= 0;
     double weight= 0.0;
 
-    int dh_dim[]= {8,3};  // Xiaoyan changed from {20,3} to {8,3}
+    std::vector<int> dh_dim({8,3});  // Xiaoyan changed from {20,3} to {8,3}
     BJtensor dh(2, dh_dim, 0.0);
 
     //    BJtensor Constitutive( 4, def_dim_4, 0.0);
@@ -783,7 +783,7 @@ void XC::EightNodeBrick::incremental_Update()
 
     double det_of_Jacobian= 0.0;
 
-    static int disp_dim[]= {8,3};   // Xiaoyan changed from {20,3} to {8,3}
+    static std::vector<int> disp_dim({8,3});   // Xiaoyan changed from {20,3} to {8,3}
     BJtensor incremental_displacements(2,disp_dim,0.0); // \Delta u
 
     straintensor incremental_strain;
@@ -989,7 +989,7 @@ void XC::EightNodeBrick::set_strain_stress_tensor(FILE *fp, double * u)
 //BJ    std::cerr << "\n\n\n\n Print in void XC::EightNodeBrick::set_strain_stress_tensor" <<std::endl; this->Print(std::cerr);
 //BJ//BJ
 
-    int dh_dim[]= {8,3};   // Xiaoyan changed from {20,3} to {8,3}
+    std::vector<int> dh_dim({8,3});   // Xiaoyan changed from {20,3} to {8,3}
     BJtensor dh(2, dh_dim, 0.0);
 
 //    BJtensor Constitutive( 4, def_dim_4, 0.0);
@@ -1009,7 +1009,7 @@ void XC::EightNodeBrick::set_strain_stress_tensor(FILE *fp, double * u)
     BJtensor dhGlobal;
 
 
-    static int disp_dim[]= {8,3};    // Xiaoyan changed from {20,3} to {8,3}
+    static std::vector<int> disp_dim({8,3});    // Xiaoyan changed from {20,3} to {8,3}
     BJtensor total_displacements(2,disp_dim,0.0); //
 
     total_displacements= total_disp(fp, u);
@@ -1074,8 +1074,8 @@ void XC::EightNodeBrick::set_strain_stress_tensor(FILE *fp, double * u)
 //! @brief Returns the tensor de masas.
 XC::BJtensor XC::EightNodeBrick::getMassTensor(void) const
   {
-    //int M_dim[]= {8,3,3,8};
-    int M_dim[]= {24,24};
+    //std::vector<int> M_dim({8,3,3,8});
+    std::vector<int> M_dim({24,24});
     BJtensor Mm(2,M_dim,0.0);
 
     double r= 0.0;
@@ -1088,13 +1088,13 @@ XC::BJtensor XC::EightNodeBrick::getMassTensor(void) const
     short where= 0;
     double weight= 0.0;
 
-    int dh_dim[]= {8,3};    // Xiaoyan changed from {20,3} to {8,3}
+    std::vector<int> dh_dim({8,3});    // Xiaoyan changed from {20,3} to {8,3}
 
     BJtensor dh(2, dh_dim, 0.0);
 
-    int h_dim[]= {24,3};  // Xiaoyan changed from {60,3} to {24,3}
-    //int h_dim[]= {8,3};  // Xiaoyan changed from {60,3} to {24,3}
-    //int h_dim[]= {20,3};
+    std::vector<int> h_dim({24,3});  // Xiaoyan changed from {60,3} to {24,3}
+    //std::vector<int> h_dim({8,3});  // Xiaoyan changed from {60,3} to {24,3}
+    //std::vector<int> h_dim({20,3});
     BJtensor H(2, h_dim, 0.0);
 
     double det_of_Jacobian= 0.0;
@@ -1196,7 +1196,7 @@ XC::BJtensor XC::EightNodeBrick::getMassTensor(void) const
 //BJ/BJ
 //BJ    std::cerr << "\n\n\n\n Print in XC::BJtensor XC::EightNodeBrick::stiffness_matrix" <<std::endl; this->Print(std::cerr);
 //BJ//BJ
-//    int K_dim[]= {20,3,3,20};
+//    std::vector<int> K_dim({20,3,3,20});
 //    BJtensor K(4,K_dim,0.0);
     matrix Kmatrix(24,24,0.0);   // Xiaoyan changed from (60,60,0,0) to (24,24,0,0)
 
@@ -1229,7 +1229,7 @@ XC::BJtensor XC::EightNodeBrick::getMassTensor(void) const
 // Constructing mass matrix from mass XC::BJtensor ___Zhaohui 07-05-99
  XC::BJtensor XC::EightNodeBrick::mass_matrix(const XC::BJtensor & M)
   {
-    //    int K_dim[]= {20,3,3,20};
+    //    std::vector<int> K_dim({20,3,3,20});
     //    BJtensor K(4,K_dim,0.0);
     matrix Mmatrix(24,24,0.0);  // Xiaoyan changed from (60,60,0,0) to (24,24,0,0) for 8 nodes
 
@@ -1267,7 +1267,7 @@ XC::BJtensor XC::EightNodeBrick::getMassTensor(void) const
 ////#############################################################################
  XC::BJtensor XC::EightNodeBrick::Nodal_Coordinates(void) const
   {
-    const int dimensions[]= {8,3};  // Xiaoyan changed from {20,3} to {8,3} for 8 nodes
+    const std::vector<int> dimensions({8,3});  // Xiaoyan changed from {20,3} to {8,3} for 8 nodes
     BJtensor N_coord(2, dimensions, 0.0);
 
     //for( int i=0 ; i<8 ; i++ )    // Xiaoyan changed from 20 to 8 for 8 nodes
@@ -1310,7 +1310,7 @@ XC::BJtensor XC::EightNodeBrick::getMassTensor(void) const
 ////#############################################################################
 XC::BJtensor XC::EightNodeBrick::incr_disp(void) const
   {
-    const int dimensions[]= {8,3};  // Xiaoyan changed from {20,3} to {8,3} for 8 nodes
+    const std::vector<int> dimensions({8,3});  // Xiaoyan changed from {20,3} to {8,3} for 8 nodes
     BJtensor increment_disp(2, dimensions, 0.0);
 
     //for( int i=0 ; i<8 ; i++ )   // Xiaoyan changed from 20 to 8 for 8 nodes
@@ -1378,7 +1378,7 @@ XC::BJtensor XC::EightNodeBrick::incr_disp(void) const
 ////#############################################################################
 XC::BJtensor XC::EightNodeBrick::total_disp(void) const
   {
-    const int dimensions[]= {8,3};  // Xiaoyan changed from {20,3} to {8,3} for 8 nodes
+    const std::vector<int> dimensions({8,3});  // Xiaoyan changed from {20,3} to {8,3} for 8 nodes
     BJtensor total_disp(2, dimensions, 0.0);
 
     //Zhaohui using node pointers, which come from the XC::Domain
@@ -1415,7 +1415,7 @@ XC::BJtensor XC::EightNodeBrick::total_disp(void) const
 ////#############################################################################
  XC::BJtensor XC::EightNodeBrick::total_disp(FILE *fp, double * u)
   {
-    const int dimensions[]= {8,3};  // Xiaoyan changed from {20,3} to {8,3} for 8 nodes
+    const std::vector<int> dimensions({8,3});  // Xiaoyan changed from {20,3} to {8,3} for 8 nodes
     BJtensor total_disp(2, dimensions, 0.0);
     //    double totalx, totaly, totalz;
     //    totalx=0;
@@ -1489,7 +1489,7 @@ XC::BJtensor XC::EightNodeBrick::nodal_forces(void) const
 //BJ    std::cerr << "\n\n\n\n Print in XC::BJtensor XC::EightNodeBrick::nodal_forces(" <<std::endl; this->Print(std::cerr);
 //BJ//BJ
 
-    int force_dim[]= {8,3};  // Xiaoyan changed from {20,3 to {8,3} for 8 nodes
+    std::vector<int> force_dim({8,3});  // Xiaoyan changed from {20,3 to {8,3} for 8 nodes
 
     BJtensor nodal_forces(2,force_dim,0.0);
 
@@ -1503,7 +1503,7 @@ XC::BJtensor XC::EightNodeBrick::nodal_forces(void) const
     short where= 0;
     double weight= 0.0;
 
-    int dh_dim[]= {8,3};  // Xiaoyan changed from {20,3 to {8,3} for 8 nodes
+    std::vector<int> dh_dim({8,3});  // Xiaoyan changed from {20,3 to {8,3} for 8 nodes
 
     BJtensor dh(2, dh_dim, 0.0);
 
@@ -1513,7 +1513,7 @@ XC::BJtensor XC::EightNodeBrick::nodal_forces(void) const
 
     straintensor incremental_strain;
 
-    static int disp_dim[]= {8,3};   // Xiaoyan changed from {20,3} to {8,3}
+    static std::vector<int> disp_dim({8,3});   // Xiaoyan changed from {20,3} to {8,3}
     BJtensor incremental_displacements(2,disp_dim,0.0); // \Delta u
 
     incremental_displacements= incr_disp();
@@ -1691,7 +1691,7 @@ XC::BJtensor XC::EightNodeBrick::iterative_nodal_forces(void) const
 //BJ    std::cerr << "\n\n\n\n Print in XC::BJtensor XC::EightNodeBrick::iterative_nodal_forces(void)" <<std::endl; this->Print(std::cerr);
 //BJ//BJ
 
-    int force_dim[]= {8,3}; // Xiaoyan changed from {20,3 to {8,3} for 8 nodes
+    std::vector<int> force_dim({8,3}); // Xiaoyan changed from {20,3 to {8,3} for 8 nodes
 
     BJtensor nodal_forces(2,force_dim,0.0);
 
@@ -1705,7 +1705,7 @@ XC::BJtensor XC::EightNodeBrick::iterative_nodal_forces(void) const
     short where= 0;
     double weight= 0.0;
 
-    int dh_dim[]= {8,3};   // Xiaoyan changed from {20,3 to {8,3} for 8 nodes
+    std::vector<int> dh_dim({8,3});   // Xiaoyan changed from {20,3 to {8,3} for 8 nodes
 
     BJtensor dh(2, dh_dim, 0.0);
 
@@ -1793,7 +1793,7 @@ XC::BJtensor XC::EightNodeBrick::nodal_forces_from_stress(stresstensor & stress)
 //BJ    std::cerr << "\n\n\n\n Print in XC::BJtensor XC::EightNodeBrick::nodal_forces_from_stress(stresstensor & stress)" <<std::endl; this->Print(std::cerr);
 //BJ//BJ
 
-    int force_dim[]= {8,3};  // Xiaoyan changed from {20,3 to {8,3} for 8 nodes
+    std::vector<int> force_dim({8,3});  // Xiaoyan changed from {20,3 to {8,3} for 8 nodes
 
     BJtensor nodal_forces(2,force_dim,0.0);
 
@@ -1806,7 +1806,7 @@ XC::BJtensor XC::EightNodeBrick::nodal_forces_from_stress(stresstensor & stress)
 
     double weight= 0.0;
 
-    int dh_dim[]= {8,3}; // Xiaoyan changed from {20,3 to {8,3} for 8 nodes
+    std::vector<int> dh_dim({8,3}); // Xiaoyan changed from {20,3 to {8,3} for 8 nodes
 
     BJtensor dh(2, dh_dim, 0.0);
 
@@ -1884,7 +1884,7 @@ XC::BJtensor XC::EightNodeBrick::nodal_forces_from_stress(stresstensor & stress)
 // by using the linearized constitutive XC::BJtensor from the beginning of the step !
 XC::BJtensor XC::EightNodeBrick::linearized_nodal_forces(void) const
   {
-    int force_dim[]= {8,3};  // Xiaoyan changed from {20,3 to {8,3} for 8 nodes
+    std::vector<int> force_dim({8,3});  // Xiaoyan changed from {20,3 to {8,3} for 8 nodes
 
     BJtensor linearized_nodal_forces(2,force_dim,0.0);
 
@@ -1898,7 +1898,7 @@ XC::BJtensor XC::EightNodeBrick::linearized_nodal_forces(void) const
     short where= 0;
     double weight= 0.0;
 
-    int dh_dim[]= {8,3};  // Xiaoyan changed from {20,3 to {8,3} for 8 nodes
+    std::vector<int> dh_dim({8,3});  // Xiaoyan changed from {20,3 to {8,3} for 8 nodes
 
     BJtensor dh(2, dh_dim, 0.0);
 
@@ -1906,7 +1906,7 @@ XC::BJtensor XC::EightNodeBrick::linearized_nodal_forces(void) const
 
     double det_of_Jacobian= 0.0;
 
-    static int disp_dim[]= {8,3};  // Xiaoyan changed from {20,3 to {8,3} for 8 nodes
+    static std::vector<int> disp_dim({8,3});  // Xiaoyan changed from {20,3 to {8,3} for 8 nodes
 
     BJtensor incremental_displacements(2,disp_dim,0.0);
 
@@ -2188,11 +2188,11 @@ void XC::EightNodeBrick::computeGaussPoint()
     short where= 0;
 
     // special case for 8 nodes only
-    static const int dim[]= {3, 8}; // static-> see ARM pp289-290
-    static const int dimM[]= {3,  FixedOrder*FixedOrder*FixedOrder}; // found a bug: dimM depends on Order of Gauss Points Joey Yang March 02, 02
+    static const std::vector<int> dim({3, 8}); // static-> see ARM pp289-290
+    static const std::vector<int> dimM({3,  FixedOrder*FixedOrder*FixedOrder}); // found a bug: dimM depends on Order of Gauss Points Joey Yang March 02, 02
     BJtensor NodalCoord(2, dim, 0.0);
     BJtensor matpointCoord(2, dimM, 0.0);
-    int h_dim[]= {24,3};   // Xiaoyan changed from {60,3} to {24,3} for 8 nodes
+    std::vector<int> h_dim({24,3});   // Xiaoyan changed from {60,3} to {24,3} for 8 nodes
     BJtensor H(2, h_dim, 0.0);
 
     //for(int ncount= 1 ; ncount <= 8 ; ncount++ )
@@ -2304,10 +2304,10 @@ void XC::EightNodeBrick::reportTensorF(FILE * fp)
     short where= 0;
 
     // special case for 8 nodes only
-    static const int dim[]= {3, 8}; // static-> see ARM pp289-290
+    static const std::vector<int> dim({3, 8}); // static-> see ARM pp289-290
     BJtensor NodalCoord(2, dim, 0.0);
     BJtensor matpointCoord(2, dim, 0.0);
-    int h_dim[]= {24,3};  // Xiaoyan changed from {60,3} to {24,3} for 8 nodes
+    std::vector<int> h_dim({24,3});  // Xiaoyan changed from {60,3} to {24,3} for 8 nodes
 
     BJtensor H(2, h_dim, 0.0);
 
@@ -2952,7 +2952,7 @@ const XC::Vector &XC::EightNodeBrick::getResistingForce(void) const
 //BJ    std::cerr << "\n\n\n\n Print in const XC::Vector &XC::EightNodeBrick::getResistingForce ()" <<std::endl; this->Print(std::cerr);
 //BJ//BJ
 
-    int force_dim[]= {8,3};
+    std::vector<int> force_dim({8,3});
     BJtensor nodalforces(2,force_dim,0.0);
 
     nodalforces= nodal_forces();
@@ -4037,10 +4037,10 @@ int XC::EightNodeBrick::update(void) //Note: Guanzhou finished the algorithm con
 
     short where= 0;
 
-    static int dh_dim[]= {8,3};
+    static std::vector<int> dh_dim({8,3});
     BJtensor dh(2, dh_dim, 0.0);
 
-    static int disp_dim[]= {8,3};
+    static std::vector<int> disp_dim({8,3});
     //GZ out XC::BJtensor incr_displacements(2,disp_dim,0.0);
 
     //GZ out straintensor incr_strain;

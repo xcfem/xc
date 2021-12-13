@@ -85,6 +85,7 @@
 #ifndef BASICS_HH
 #define BASICS_HH
 
+#include <vector>
 #include <cmath>
 //#include <values.h>
 #include <cstdio>
@@ -124,14 +125,14 @@
 
 #ifndef DEF_DIM
 #define DEF_DIM
-  static const int def_dim_1[] = {3};
-  static const int def_dim_2[] = {3, 3}; // static-> see ARM pp289-290
-  static const int def_dim_3[] = {3, 3, 3}; // static-> see ARM pp289-290
-  static const int def_dim_4[] = {3, 3, 3, 3}; // static-> see ARM pp289-290
+static const std::vector<int> def_dim_1({3});
+static const std::vector<int> def_dim_2({3, 3}); // static-> see ARM pp289-290
+static const std::vector<int> def_dim_3({3, 3, 3}); // static-> see ARM pp289-290
+static const std::vector<int> def_dim_4({3, 3, 3, 3}); // static-> see ARM pp289-290
 
 // Cosserat
-  static const int Cosserat_def_dim_2[] = {6, 6}; // static-> see ARM pp289-290
-  static const int Cosserat_def_dim_4[] = {6, 6, 6, 6}; // static-> see ARM pp289-290
+static const std::vector<int> Cosserat_def_dim_2({6, 6}); // static-> see ARM pp289-290
+static const std::vector<int> Cosserat_def_dim_4({6, 6, 6, 6}); // static-> see ARM pp289-290
 
 #endif
 

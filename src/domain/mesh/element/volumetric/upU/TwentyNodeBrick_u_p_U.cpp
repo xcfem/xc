@@ -540,12 +540,12 @@ int XC::TwentyNodeBrick_u_p_U::update(void)
     double s  = 0.0;
     double t  = 0.0;
 
-    int Tdisp_dim[] = {Num_Nodes,Num_Dof};
+    std::vector<int> Tdisp_dim({Num_Nodes,Num_Dof});
     BJtensor total_displacements(2,Tdisp_dim,0.0);
-    int tdisp_dim[] = {Num_Nodes,Num_Dim};
+    std::vector<int> tdisp_dim({Num_Nodes,Num_Dim});
     BJtensor total_disp(2,tdisp_dim,0.0);
 
-    int dh_dim[] = {Num_Nodes,Num_Dim};
+    std::vector<int> dh_dim({Num_Nodes,Num_Dim});
     BJtensor dh(2, dh_dim, 0.0);
 
     straintensor eps;
@@ -597,11 +597,11 @@ int XC::TwentyNodeBrick_u_p_U::update(void)
     double weight = 0.0;
     double det_of_Jacobian = 0.0;
 
-    int hp_dim[] = {Num_Nodes};
+    std::vector<int> hp_dim({Num_Nodes});
     BJtensor hp(1, hp_dim, 0.0);
     BJtensor Pexs(1, hp_dim, 0.0);
 
-    int dh_dim[] = {Num_Nodes,Num_Dim};
+    std::vector<int> dh_dim({Num_Nodes,Num_Dim});
     BJtensor dh(2, dh_dim, 0.0);
 
     BJtensor Jacobian;
@@ -651,10 +651,10 @@ int XC::TwentyNodeBrick_u_p_U::update(void)
     double weight = 0.0;
     double det_of_Jacobian = 0.0;
 
-    int hp_dim[] = {Num_Nodes};
+    std::vector<int> hp_dim({Num_Nodes});
     BJtensor hp(1, hp_dim, 0.0);
     BJtensor Pexf(1, hp_dim, 0.0);
-    int dh_dim[] = {Num_Nodes,Num_Dim};
+    std::vector<int> dh_dim({Num_Nodes,Num_Dim});
     BJtensor dh(2, dh_dim, 0.0);
 
     BJtensor Jacobian;
@@ -761,7 +761,7 @@ const XC::Matrix &XC::TwentyNodeBrick_u_p_U::getStiff(int Ki_flag) const
 //======================================================================
  XC::BJtensor XC::TwentyNodeBrick_u_p_U::getStiffnessTensorKep(void) const
 {
-    int K_dim[] = {Num_Nodes,Num_Dim,Num_Dim,Num_Nodes};
+    std::vector<int> K_dim({Num_Nodes,Num_Dim,Num_Dim,Num_Nodes});
     BJtensor Kep(4,K_dim,0.0);
     BJtensor Kkt(4,K_dim,0.0);
 
@@ -775,7 +775,7 @@ const XC::Matrix &XC::TwentyNodeBrick_u_p_U::getStiff(int Ki_flag) const
     double weight = 0.0;
     double det_of_Jacobian = 0.0;
 
-    int dh_dim[] = {Num_Nodes,Num_Dim};
+    std::vector<int> dh_dim({Num_Nodes,Num_Dim});
     BJtensor dh(2, dh_dim, 0.0);
 
     BJtensor Constitutive;
@@ -818,7 +818,7 @@ const XC::Matrix &XC::TwentyNodeBrick_u_p_U::getStiff(int Ki_flag) const
     // G1 = (alpha-poro) *G;
     // G2 = poro *G;
 
-    int G_dim[] = {Num_Nodes,Num_Dim,Num_Nodes};
+    std::vector<int> G_dim({Num_Nodes,Num_Dim,Num_Nodes});
     BJtensor G(3,G_dim,0.0);
 
     double r  = 0.0;
@@ -829,10 +829,10 @@ const XC::Matrix &XC::TwentyNodeBrick_u_p_U::getStiff(int Ki_flag) const
     double tw = 0.0;
     double weight = 0.0;
 
-    int dh_dim[] = {Num_Nodes,Num_Dim};
+    std::vector<int> dh_dim({Num_Nodes,Num_Dim});
     BJtensor dh(2, dh_dim, 0.0);
 
-    int hp_dim[] = {Num_Nodes};
+    std::vector<int> hp_dim({Num_Nodes});
     BJtensor hp(1, hp_dim,0.0);
 
     double det_of_Jacobian = 0.0;
@@ -878,9 +878,9 @@ XC::BJtensor XC::TwentyNodeBrick_u_p_U::getDampTensorC123(void) const
 
     BJtensor perm_inv = perm.inverse();
 
-    int C_dim[] = {Num_Nodes,Num_Dim,Num_Dim,Num_Nodes};
+    std::vector<int> C_dim({Num_Nodes,Num_Dim,Num_Dim,Num_Nodes});
     BJtensor C123(4,C_dim,0.0);
-    int c_dim[] = {Num_Nodes,Num_Dim,Num_Dim};
+    std::vector<int> c_dim({Num_Nodes,Num_Dim,Num_Dim});
     BJtensor c123(3,c_dim,0.0);
 
     double r  = 0.0;
@@ -892,10 +892,10 @@ XC::BJtensor XC::TwentyNodeBrick_u_p_U::getDampTensorC123(void) const
     double weight = 0.0;
     double det_of_Jacobian = 0.0;
 
-    int dh_dim[] = {Num_Nodes,Num_Dim};
+    std::vector<int> dh_dim({Num_Nodes,Num_Dim});
     BJtensor dh(2, dh_dim, 0.0);
 
-    int hp_dim[] = {Num_Nodes};
+    std::vector<int> hp_dim({Num_Nodes});
     BJtensor hp(1, hp_dim,0.0);
 
     BJtensor Jacobian;
@@ -932,7 +932,7 @@ XC::BJtensor XC::TwentyNodeBrick_u_p_U::getDampTensorC123(void) const
     // Ms = Msf * (1.0-poro)*rho_s
     // Mf = Msf * poro*rho_f
 
-    int M_dim[] = {Num_Nodes,Num_Nodes};
+    std::vector<int> M_dim({Num_Nodes,Num_Nodes});
     BJtensor Msf(2,M_dim,0.0);
 
     double r  = 0.0;
@@ -944,9 +944,9 @@ XC::BJtensor XC::TwentyNodeBrick_u_p_U::getDampTensorC123(void) const
     double weight = 0.0;
     double det_of_Jacobian = 0.0;
 
-    int dh_dim[] = {Num_Nodes,Num_Dim};
+    std::vector<int> dh_dim({Num_Nodes,Num_Dim});
     BJtensor dh(2, dh_dim, 0.0);
-    int hp_dim[] = {Num_Nodes};
+    std::vector<int> hp_dim({Num_Nodes});
     BJtensor hp(1, hp_dim,0.0);
 
     BJtensor Jacobian;
@@ -984,7 +984,7 @@ XC::BJtensor XC::TwentyNodeBrick_u_p_U::getStiffnessTensorP(void) const
     }
     double  oneOverQ = poro/kf + (alpha-poro)/ks;
 
-    int Pp_dim[] = {Num_Nodes,Num_Nodes};
+    std::vector<int> Pp_dim({Num_Nodes,Num_Nodes});
     BJtensor Pp(2,Pp_dim,0.0);
 
     double r  = 0.0;
@@ -995,10 +995,10 @@ XC::BJtensor XC::TwentyNodeBrick_u_p_U::getStiffnessTensorP(void) const
     double tw = 0.0;
     double weight = 0.0;
 
-    int dh_dim[] = {Num_Nodes,Num_Dim};
+    std::vector<int> dh_dim({Num_Nodes,Num_Dim});
     BJtensor dh(2, dh_dim, 0.0);
 
-    int hp_dim[] = {Num_Nodes};
+    std::vector<int> hp_dim({Num_Nodes});
     BJtensor hp(1, hp_dim,0.0);
 
     double det_of_Jacobian = 0.0;
@@ -1055,7 +1055,7 @@ XC::BJtensor XC::TwentyNodeBrick_u_p_U::dh_Global(BJtensor dh) const
  XC::BJtensor XC::TwentyNodeBrick_u_p_U::getNodesCrds(void) const
   {
     int i,j;
-    int dimX[] = {Num_Nodes,Num_Dim};
+    std::vector<int> dimX({Num_Nodes,Num_Dim});
     BJtensor N_coord(2, dimX, 0.0);
 
     for(i=0; i<Num_Nodes; i++) {
@@ -1073,7 +1073,7 @@ XC::BJtensor XC::TwentyNodeBrick_u_p_U::dh_Global(BJtensor dh) const
  XC::BJtensor XC::TwentyNodeBrick_u_p_U::getNodesDisp(void)
   {
     int i,j;
-    int dimU[] = {Num_Nodes,Num_Dof};
+    std::vector<int> dimU({Num_Nodes,Num_Dof});
     BJtensor total_disp(2, dimU, 0.0);
 
     for(i=0; i<Num_Nodes; i++) {
@@ -1101,7 +1101,7 @@ double XC::TwentyNodeBrick_u_p_U::getPorePressure(double x1, double x2, double x
 //======================================================================
  XC::BJtensor XC::TwentyNodeBrick_u_p_U::shapeFunction(double r1, double r2, double r3)
 {
-    int Hfun[] = {Num_Nodes};
+    std::vector<int> Hfun({Num_Nodes});
     BJtensor h(1, Hfun, 0.0);
 
       // influence of the node number 20
@@ -1156,7 +1156,7 @@ double XC::TwentyNodeBrick_u_p_U::getPorePressure(double x1, double x2, double x
 //==============================================================
  XC::BJtensor XC::TwentyNodeBrick_u_p_U::shapeFunctionDerivative(double r1, double r2, double r3)
 {
-    int DHfun[] = {Num_Nodes,Num_Dim};
+    std::vector<int> DHfun({Num_Nodes,Num_Dim});
     BJtensor dh(2, DHfun, 0.0);
 
       // influence of the node number 20
@@ -1250,9 +1250,9 @@ double XC::TwentyNodeBrick_u_p_U::getPorePressure(double x1, double x2, double x
 //==============================================================
  XC::BJtensor XC::TwentyNodeBrick_u_p_U::getGaussPts(void)
 {
-    int dimensions1[] = {Num_TotalGaussPts,Num_Dim};
+    std::vector<int> dimensions1({Num_TotalGaussPts,Num_Dim});
     BJtensor Gs(2, dimensions1, 0.0);
-    int dimensions2[] = {Num_Nodes};
+    std::vector<int> dimensions2({Num_Nodes});
     BJtensor shp(1, dimensions2, 0.0);
 
     double r = 0.0;
