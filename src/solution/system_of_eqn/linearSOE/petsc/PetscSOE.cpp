@@ -57,7 +57,7 @@
 
 #include "solution/system_of_eqn/linearSOE/petsc/PetscSOE.h"
 #include "solution/system_of_eqn/linearSOE/petsc/PetscSolver.h"
-#include "petsc/petscvec.h"
+#include "petscvec.h"
 #include "utility/matrix/Matrix.h"
 #include "utility/matrix/Vector.h"
 #include "solution/graph/graph/Graph.h"

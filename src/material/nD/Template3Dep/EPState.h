@@ -59,21 +59,79 @@
 #include "utility/matrix/nDarray/stresst.h"
 #include "utility/matrix/nDarray/straint.h"
 #include "utility/matrix/nDarray/BJtensor.h"
+#include "utility/kernel/CommandEntity.h"
 
 // Constants
 #define MaxNScalarVar 4
 #define MaxNTensorVar 4
-#define FALSE 0
-#define TRUE 1
 
 namespace XC {
+
+struct state_vars
+  {
+    stresstensor Stress; //!< stress  --total             
+    straintensor Strain; //!< strain  --total             
+    straintensor ElasticStrain; //!< GZ Mar2005
+
+    std::vector<double> ScalarVar; //!< scalar variable array for scalar hardening vars 
+    std::vector<stresstensor> TensorVar; //!< tensor variable array for tensor hardening vars 
+    BJtensor Eep; //!< Elastic plastic stifness tensor
+    state_vars(void);
+    state_vars(const std::vector<double> &Scalarp, const std::vector<stresstensor> &Tensorp);
+    state_vars(const stresstensor & Stressp,
+                const straintensor & Strainp,
+	       const straintensor & ElasticStrainp);
+    state_vars(const stresstensor &Stress,
+                const straintensor &Strain,    
+                const straintensor &ElasticStrain,
+    	        const std::vector<double> &Scalar,
+                const std::vector<stresstensor> &Tensor, 
+	        const XC::BJtensor &Eep);
+    state_vars(const stresstensor  stressp,
+	       const straintensor  strainp,
+	       const straintensor  Estrainp,
+	       const std::vector<double> &Scalarp,
+	       const std::vector<stresstensor> &Tensorp);
+    const XC::stresstensor &getStress(void) const;
+    const XC::straintensor &getStrain(void) const;
+    const XC::straintensor &getElasticStrain(void) const;
+    const std::vector<double> &getScalarVar(void) const;
+    const std::vector<stresstensor> &getTensorVar(void) const;
+    const BJtensor &getEep(void) const;
+  };
+
+struct trial_state_vars: public state_vars
+  {
+    stresstensor IterativeStress; //!< Iterative Stress           
+    straintensor PlasticStrain;  //!< Current cumulative plastic strain      
+    straintensor dElasticStrain; //!< Current elastic strain increment       
+    straintensor dPlasticStrain; //!< Current plastic strain increment    
+    trial_state_vars(void);
+    trial_state_vars(const std::vector<double> &Scalarp, const std::vector<stresstensor> &Tensorp);
+    trial_state_vars(const stresstensor &Stress,
+                       const straintensor &Strain,    
+                       const straintensor &ElasticStrain,
+		       const straintensor &Pstrainp);
+    trial_state_vars(const stresstensor &Stress,
+                       const straintensor &Strain,    
+                       const straintensor &ElasticStrain,
+		       const straintensor &Pstrainp,
+		       const straintensor &dEstrainp,
+		       const straintensor &dPstrainp,
+    	               const std::vector<double> &Scalar,
+                       const std::vector<stresstensor> &Tensor, 
+	               const XC::BJtensor &Eep);
+    void set(const state_vars &initStateVars);
+    void init(const state_vars &initStateVars);
+  };
+  
 //! @ingroup EPMat3D
 //!
 //! @brief Base class for all elasto-plastic states.
 //! 
 //! This class is used to hold all state parameters and
 //! internal variables in an elasto-plastic constitutive model. 
-class EPState
+class EPState: public CommandEntity
   {
   public:
 //ZC05/2004    // Elastic parameters
@@ -82,47 +140,16 @@ class EPState
 //ZC05/2004    double nu_Poisson;            // Poisson's ratio -- [in-plane] in terms of cross-anisotropic materi          
 //ZC05/2004    double rho_mass_density;      // Mass density               
             
-    // Trial state
-    stresstensor CurrentStress;   // Current trial stress  --total          
-    straintensor CurrentStrain;    // Current trial strain  --total       
-    stresstensor IterativeStress; // Iterative Stress           
-    straintensor ElasticStrain;    // Current cumulative elastic strain      
-    straintensor PlasticStrain;    // Current cumulative plastic strain      
-    straintensor dElasticStrain;  // Current elastic strain increment       
-    straintensor dPlasticStrain;  // Current plastic strain increment       
-    BJtensor Eep;             // Current Elastic plastic stifness tensor
-    int NScalarVar;               //Actual Number of internal scalar vars 
-    int NTensorVar;               //Actual Number of internal tensor vars 
     
-    double       ScalarVar[ MaxNScalarVar ]; // scalar variable array for scalar hardening vars 
-    //static stresstensor TensorVar[ MaxNTensorVar ]; // tensor variable array for tensor hardening vars 
-    stresstensor TensorVar[ MaxNTensorVar ]; // tensor variable array for tensor hardening vars 
-    //straintensor TensorVar[ MaxNTensorVar ]; // tensor variable array for tensor hardening vars 
+    int NScalarVar; //!< Actual Number of internal scalar vars 
+    int NTensorVar; //!< Actual Number of internal tensor vars 
+    trial_state_vars trialStateVars; //!< Trial state    
+    state_vars commitStateVars; //!< Committed state    
+    state_vars initStateVars; //!< Initial state
 
-    // Committed state
-    stresstensor Stress_commit;   // Committed stress  --total             
-    straintensor Strain_commit;   // Committed strain  --total             
-    straintensor ElasticStrain_commit; //GZ Mar2005
-    //straintensor PlasticStrain
-
-
-    double       ScalarVar_commit[ MaxNScalarVar ]; // Committed scalar variable array for scalar hardening vars 
-    //static stresstensor TensorVar_commit[ MaxNTensorVar ]; // Committed tensor variable array for tensor hardening vars     
-    stresstensor TensorVar_commit[ MaxNTensorVar ]; // Committed tensor variable array for tensor hardening vars 
-    BJtensor Eep_commit;      // Current Elastic plastic stifness tensor
-
-    //Initial state
-    stresstensor Stress_init;     // Initial stress  --total
-    straintensor Strain_init;     // Initial strain  --total
+    bool Converged; //!< Bool to indicate whether this is the converged EPState by current CDriver
     
-    double       ScalarVar_init[ MaxNScalarVar ]; // initial scalar variable array for scalar hardening vars 
-    //static stresstensor TensorVar_init[ MaxNTensorVar ]; // initial tensor variable array for tensor hardening vars     
-    stresstensor TensorVar_init[ MaxNTensorVar ]; // initial tensor variable array for tensor hardening vars 
-    BJtensor Eep_init;             // initial Elastic plastic stifness tensor
-
-    bool Converged;      // Bool to indicate whether this is the converged EPState by current CDriver
-    
-    double Delta_lambda; //Guanzhou Mar2005
+    double Delta_lambda; //!< Guanzhou Mar2005
 
 //ZC05/2004    // Flag to indicate if elastic portion is pressure dependent isotropic, pressure independent isotropic, pressure 
 //ZC05/2004    // independent cross-anisotropic or pressure dependentcross-anisotropic 
@@ -149,8 +176,8 @@ class EPState
     
   public:
     //Normal Constructor--no parameters
-    EPState();
-    ~EPState();
+    EPState(void);
+    ~EPState(void);
     
 //ZC05/2004     //Normal Constructor1
 //ZC05/2004     EPState(double              Eod,
@@ -164,19 +191,19 @@ class EPState
 //ZC05/2004             const straintensor &dEstrainp,
 //ZC05/2004             const straintensor &dPstrainp,
 //ZC05/2004             int                 NScalarp,
-//ZC05/2004              const double       *Scalarp,
+//ZC05/2004              const std::vector<double> &Scalarp,
 //ZC05/2004             int                 NTensorp,
-//ZC05/2004              const stresstensor *Tensorp,
+//ZC05/2004              const std::vector<stresstensor> &Tensorp,
 //ZC05/2004              const tensor       &Eepp,
 //ZC05/2004           const stresstensor &Stress_commitp,
 //ZC05/2004           const straintensor &Strain_commitp,    
-//ZC05/2004           const double       *Scalar_commitp,
-//ZC05/2004           const stresstensor *Tensor_commitp, 
+//ZC05/2004           const std::vector<double> &Scalar_commitp,
+//ZC05/2004           const std::vector<stresstensor> &Tensor_commitp, 
 //ZC05/2004           const tensor       &Eep_commitp,
 //ZC05/2004           const stresstensor &Stress_initp,    
 //ZC05/2004           const straintensor &Strain_initp,   
-//ZC05/2004           const double       *Scalar_initp,
-//ZC05/2004           const stresstensor *Tensor_initp,
+//ZC05/2004           const const std::vector<double> &Scalar_initp,
+//ZC05/2004           const std::vector<stresstensor> &Tensor_initp,
 //ZC05/2004           const tensor       &Eep_initp, 
 //ZC05/2004           bool                Convergedp,
 //ZC05/2004       int                 Elasticflagp = 0,
@@ -203,9 +230,9 @@ class EPState
 //ZC05/2004             const straintensor  Estrainp,
 //ZC05/2004             const straintensor  Pstrainp,
 //ZC05/2004       int                 NScalarp,
-//ZC05/2004       const double       *Scalarp,
+//ZC05/2004       const std::vector<double> &Scalarp,
 //ZC05/2004       int                 NTensorp,
-//ZC05/2004       const stresstensor *Tensorp, 
+//ZC05/2004       const std::vector<stresstensor> &Tensorp, 
 //ZC05/2004       int                 Elasticflagp = 0,
 //ZC05/2004       double     Evp   = 0.0,
 //ZC05/2004       double              nuhvp = 0.0,
@@ -223,9 +250,9 @@ class EPState
 //ZC05/2004             double              nu,
 //ZC05/2004       double              rho,
 //ZC05/2004             int                 NScalarp,
-//ZC05/2004       const double       *Scalarp,
+//ZC05/2004       const std::vector<double> &Scalarp,
 //ZC05/2004       int                 NTensorp,
-//ZC05/2004       const stresstensor *Tensorp,
+//ZC05/2004       const std::vector<stresstensor> &Tensorp,
 //ZC05/2004       int                 Elasticflagp = 0,
 //ZC05/2004       double     Evp   = 0.0,
 //ZC05/2004       double              nuhvp = 0.0,
@@ -238,55 +265,32 @@ class EPState
 //ZC05/2004       );
 
     //Normal Constructor1
-    EPState(const stresstensor &stressp,
-            const straintensor &strainp,
-            const straintensor &Estrainp,
-            const straintensor &Pstrainp,
-            const straintensor &dEstrainp,
-            const straintensor &dPstrainp,
+    EPState(const trial_state_vars &trialSt,
             int                 NScalarp,
-            const double       *Scalarp,
             int                 NTensorp,
-            const stresstensor *Tensorp,
-            const BJtensor     &Eepp,
-            const stresstensor &Stress_commitp,
-            const straintensor &Strain_commitp,    
-            const straintensor & ElasticStrain_commitp,
-	    const double       *Scalar_commitp,
-            const stresstensor *Tensor_commitp, 
-            const BJtensor       &Eep_commitp,
-            const stresstensor &Stress_initp,    
-            const straintensor &Strain_initp,   
-            const double       *Scalar_initp,
-            const stresstensor *Tensor_initp,
-            const BJtensor       &Eep_initp, 
+	    const state_vars &commitSt,
+	    const state_vars &initSt,
             bool                Convergedp, 
 	    double              ep  = 0.85,
 	    double              psip = 0.05,
 	    int flag = 0 );
 
     //Normal Constructor11
-    EPState(const stresstensor  stressp,       
-            const straintensor  strainp, 
-            const straintensor  Estrainp,
+    EPState(const trial_state_vars &trialSt,
             const straintensor  Pstrainp,
             int                 NScalarp,
-            const double       *Scalarp,
             int                 NTensorp,
-            const stresstensor *Tensorp, 
 	    double              ep = 0.85,
 	    double              psip = 0.05, 
 	    int flag = 0); //Guanzhou
 
     //Normal Constructor2
     EPState(int                 NScalarp,
-            const double       *Scalarp,
+            const std::vector<double> &Scalarp,
             int                 NTensorp,
-            const stresstensor *Tensorp );
+            const std::vector<stresstensor> &Tensorp );
 
     EPState *getCopy(void); //create a clone of itself
-    EPState( const EPState &rhs );     // Copy constructor    
-    const EPState &operator=(const EPState &rhs );  //Overloading assignment
 
 //ZC05/2004    int getElasticflag() const;
 
@@ -325,19 +329,19 @@ class EPState
     const stresstensor &getStress_commit() const;
     const straintensor &getStrain_commit() const;
     const straintensor &getElasticStrain_commit() const;
-    double *getScalarVar_commit();
-    double getScalarVar_commit(int i);
-    stresstensor *getTensorVar_commit();
-    stresstensor getTensorVar_commit(int i);
+    const std::vector<double> &getScalarVar_commit() const;
+    double getScalarVar_commit(int i) const;
+    const std::vector<stresstensor> &getTensorVar_commit() const;
+    const stresstensor &getTensorVar_commit(int i) const;
     const BJtensor &getEep_commit() const;
 
     //Get initial state vars
     const stresstensor &getStress_init() const;
     const straintensor &getStrain_init() const;
-    double * getScalarVar_init();
-    double getScalarVar_init(int i);
-    stresstensor *getTensorVar_init();
-    stresstensor getTensorVar_init(int i);
+    const std::vector<double> & getScalarVar_init() const;
+    double getScalarVar_init(int i) const;
+    const std::vector<stresstensor> &getTensorVar_init() const;
+    const stresstensor &getTensorVar_init(int i) const;
     const BJtensor &getEep_init() const;
 
 //ZC05/2004    void setElasticflag( int efd );
@@ -378,11 +382,11 @@ class EPState
 
     // WhichOne starts from 1 and ends up to  NScalarVar
     double getScalarVar( int WhichOne) const;
-    stresstensor getTensorVar(int WhichOne) const;
+    const stresstensor &getTensorVar(int WhichOne) const;
 
     // return the pointers
-    double *getScalarVar();
-    stresstensor *getTensorVar();
+    const std::vector<double> &getScalarVar() const;
+    const std::vector<stresstensor> &getTensorVar() const;
 
     // WhichOne starts from 1 and ends up to NTensorVar
     void setNScalarVar(int rval);
@@ -395,14 +399,14 @@ class EPState
     void setTensorVar_commit(int WhichOne, const stresstensor &rval);
     void setTensorVar_init(int WhichOne, const stresstensor &rval);
 
-    void setScalarVar(double *rval);
-    void setTensorVar(const stresstensor *rval);
+    void setScalarVar(const std::vector<double> &rval);
+    void setTensorVar(const std::vector<stresstensor> &rval);
     void setInit();
 
     //added for OpenSees _Zhaohui 02-10-2000
-    int commitState ();
-    int revertToLastCommit ();
-    int revertToStart ();
+    int commitState(void);
+    int revertToLastCommit(void);
+    int revertToStart(void);
 
     void print();
 

@@ -38,6 +38,10 @@ BOOST_PYTHON_MODULE(xc_base)
     class_<std_vector_int>("std_vector_int")
       .def(vector_indexing_suite<std_vector_int>() );
 
+    typedef std::vector<double> std_vector_double;
+    class_<std_vector_double>("std_vector_double")
+      .def(vector_indexing_suite<std_vector_double>() );
+    
     typedef std::vector<std::string> std_vector_string;
     class_<std_vector_string>("std_vector_string")
       .def(vector_indexing_suite<std_vector_string>() );

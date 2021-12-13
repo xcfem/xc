@@ -95,9 +95,9 @@ class J2ThreeDimensional: public J2Plasticity
 //-------------------Declarations-------------------------------
   private:
     //static vectors and matrices
-    static Vector strain_vec ;     //strain in vector notation
-    static Vector stress_vec ;     //stress in vector notation
-    static Matrix tangent_matrix ; //material tangent in matrix notation
+    static Vector strain_vec;     //strain in vector notation
+    static Vector stress_vec;     //stress in vector notation
+    static Matrix tangent_matrix; //material tangent in matrix notation
   public: 
     J2ThreeDimensional(int tag= 0);
     J2ThreeDimensional(   int    tag, 
@@ -115,10 +115,10 @@ class J2ThreeDimensional: public J2Plasticity
     NDMaterial* getCopy(void) const;
 
     //send back type of material
-    const std::string &getType( ) const ;
+    const std::string &getType(void) const;
 
     //send back order of strain in vector form
-    int getOrder( ) const ;
+    int getOrder(void) const;
 
     //get the strain and integrate plasticity equations
     int setTrialStrain( const Vector &strain_from_element);

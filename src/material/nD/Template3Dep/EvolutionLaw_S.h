@@ -57,6 +57,7 @@
 #define EL_S_H
 
 #include <iostream>
+#include "utility/kernel/CommandEntity.h"
 
 namespace XC {
 class EPState;
@@ -69,7 +70,7 @@ class EPState;
 //! @ingroup MatNDEL
 //
 //! @brief Base class for scalar evolution laws.
-class EvolutionLaw_S
+class EvolutionLaw_S: public CommandEntity
   {
   public:
     

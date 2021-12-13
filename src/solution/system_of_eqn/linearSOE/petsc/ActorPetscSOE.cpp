@@ -66,7 +66,7 @@
 #include <solution/graph/graph/Vertex.h>
 #include <solution/graph/graph/VertexIter.h>
 
-XC::ActorPetscSOE::ActorPetscSOE(PetscSolver &theSOESolver, int blockSize)
+XC::ActorPetscSOE::ActorPetscSOE(SolutionStrategy *owr, PetscSolver &theSOESolver, int blockSize)
   : theSOE(nullptr), theSolver(&theSOESolver), myRank(0), recvBuffer(0)
   {
     MPI_Comm_rank(PETSC_COMM_WORLD, &myRank);
@@ -76,7 +76,8 @@ XC::ActorPetscSOE::ActorPetscSOE(PetscSolver &theSOESolver, int blockSize)
       { std::cerr << " ActorPetscSOE::ActorPetscSOE - must be rank 0\n"; }
     recvBuffer= reinterpret_cast<void *>(&recvData[0]);
     MPI_Barrier(PETSC_COMM_WORLD);
-    theSOE=new PetscSOE(theSolver, blockSize);
+    theSOE=new PetscSOE(owr,blockSize);
+    theSOE->setSolver(theSolver);
   }
 
 
@@ -93,11 +94,11 @@ int XC::ActorPetscSOE::run(void)
     int flag = 1;
     int tag, low, high, ierr, n, numRows;
     double *theData;
-    int dnz = 0;
-    int onz = 0;
     MPI_Status status;
     void *buffer = 0;
   
+    std::vector<int> onnz;
+    std::vector<int> dnnz;
     while(flag != 0)
       {
         MPI_Bcast(recvBuffer, 3, MPI_INT, 0, PETSC_COMM_WORLD);  
@@ -124,18 +125,21 @@ int XC::ActorPetscSOE::run(void)
 
       numRows = recvData[1];
       n = recvData[2];
-      int onnz[numRows];
-      int dnnz[numRows];
-      buffer = reinterpret_cast<void *>(dnnz);
+      onnz.resize(numRows);
+      dnnz.resize(numRows);
+      buffer = reinterpret_cast<void *>(dnnz.data());
       tag = 101;
       MPI_Recv(buffer, numRows, MPI_INT, 0, tag, PETSC_COMM_WORLD, &status);
 
-      buffer= reinterpret_cast<void *>(onnz);
+      buffer= reinterpret_cast<void *>(onnz.data());
       tag = 102;
       MPI_Recv(buffer, numRows, MPI_INT, 0, tag, PETSC_COMM_WORLD, &status);
 
       MPI_Bcast(recvBuffer, 3, MPI_INT, 0, PETSC_COMM_WORLD);  
-      theSOE->setSizeParallel(numRows, n, dnz, dnnz, onz, onnz);	
+      //theSOE->setSizeParallel(numRows, n, dnz, dnnz, onz, onnz);	
+      std::cerr << "ActorPetscSOE::" << __FUNCTION__
+		<< "setSizeParallel commented out because it's not defined."
+		<< std::endl;
       break;
 
     case 3:
@@ -154,12 +158,15 @@ int XC::ActorPetscSOE::run(void)
       if(!theSOE)
 	return -1;
       tag = 99;
-      ierr = VecGetOwnershipRange(theSOE->x, &low, &high); CHKERRA(ierr);
+      ierr = VecGetOwnershipRange(theSOE->x, &low, &high);
+      // CHKERRA(ierr); # Doesn't compile LCPT 20211207
       recvData[0] = low; recvData[1] = high;
       MPI_Send(recvBuffer, 2, MPI_INT, 0, tag, PETSC_COMM_WORLD);
-      ierr = VecGetArray(theSOE->x, &theData); CHKERRA(ierr);       
+      ierr = VecGetArray(theSOE->x, &theData);
+      // CHKERRA(ierr); # Doesn't compile LCPT 20211207      
       MPI_Send(theData, high-low, MPI_DOUBLE, 0, tag, PETSC_COMM_WORLD); 
-      ierr = VecRestoreArray(theSOE->x, &theData); CHKERRA(ierr);             
+      ierr = VecRestoreArray(theSOE->x, &theData);
+      // CHKERRA(ierr); # Doesn't compile LCPT 20211207         
       break;
 
     case 6:
@@ -168,7 +175,8 @@ int XC::ActorPetscSOE::run(void)
       // some work here
 
     default:
-      std::cerr << "XC::ActorPetscSOE::invalid action " << flag << " received\n";
+      std::cerr << "ActorPetscSOE::" << __FUNCTION__
+	        << "; invalid action " << flag << " received\n";
     }
   }
   return 0;

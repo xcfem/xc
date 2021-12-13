@@ -57,53 +57,53 @@
 //#############################################################################
 ///*
 //################################################################################
-//# COPYRIGHT (C):     :-))                                                      #
-//# PROJECT:           Object Oriented Finite Element Program                    #
-//# PURPOSE:                                                                     #
-//# CLASS:             BJtensor                                                    #
-//#                                                                              #
-//# VERSION:                                                                     #
+//# COPYRIGHT (C):     :-))                                                   #
+//# PROJECT:           Object Oriented Finite Element Program                 #
+//# PURPOSE:                                                                  #
+//# CLASS:             BJtensor                                                 #
+//#                                                                           #
+//# VERSION:                                                                  #
 //# LANGUAGE:          C++.ver >= 2.0 ( Borland C++ ver=3.10, SUN C++ ver=2.1 )  #
-//# TARGET OS:         DOS || UNIX || . . .                                      #
-//# DESIGNER(S):       Boris Jeremic                                             #
-//# PROGRAMMER(S):     Boris Jeremic                                             #
-//#                                                                              #
-//#                                                                              #
-//# DATE:              May 28. - July  __  '93                                   #
-//# UPDATE HISTORY:    july 8. '93. BJtensor02 - BJtensor multiplication             #
-//#                                 inner and outer products                     #
-//#                    august 17-19 '93 fixed default constructor that wasted    #
-//#                                     memory ###                               #
-//#                    october 11 '93 added transpose0110, transpose0101,        #
-//#                                   transpose0111 so the creation of           #
-//#                                   isotropic BJtensor is much easier and         #
-//#                                   understandable!                            #
-//#                    january 06 '93  added BJtensor2BJmatrix_1, BJtensor2BJmatrix_2     #
-//#                                   BJtensor2BJmatrix_3, inverse_1, inverse_2,     #
-//#                                   inverse_3                                  #
-//#                    january 20 '93  added inverse  TRUE ONE                    #
-//#                    August 22-29 '94 choped to separate files and worked on   #
-//#                                   const and & issues                         #
-//#                    August 30-31 '94 added use_def_dim to full the CC         #
-//#                                   resolved problem with temoraries for       #
-//#                                   operators + and - ( +=, -= )               #
-//#                    Oktobar 15 '96  added  trasposeoverbar trasposeunderbar   #
-//#                                    ( the same as transpose0110 and           #
-//#                                    transpose0101) but just to make it        #
-//#                                    easier to work with Runesson's notation   #
-//#                    28June2004     added val4 for efficiency still            #
-//#                                   to be worked on                            #
-//#                                                                              #
-//#                                                                              #
-//################################################################################
+//# TARGET OS:         DOS || UNIX || . . .                                   #
+//# DESIGNER(S):       Boris Jeremic                                          #
+//# PROGRAMMER(S):     Boris Jeremic                                          #
+//#                                                                           #
+//#                                                                           #
+//# DATE:              May 28. - July  __  '93                                #
+//# UPDATE HISTORY:    july 8. '93. BJtensor02 - BJtensor multiplication          #
+//#                                 inner and outer products                  #
+//#                    august 17-19 '93 fixed default constructor that wasted #
+//#                                     memory ###                            #
+//#                    october 11 '93 added transpose0110, transpose0101,     #
+//#                                   transpose0111 so the creation of        #
+//#                                   isotropic BJtensor is much easier and      #
+//#                                   understandable!                         #
+//#                    january 06 '93  added BJtensor2BJmatrix_1, BJtensor2BJmatrix_2  #
+//#                                   BJtensor2BJmatrix_3, inverse_1, inverse_2,  #
+//#                                   inverse_3                               #
+//#                    january 20 '93  added inverse  TRUE ONE                 #
+//#                    August 22-29 '94 choped to separate files and worked on#
+//#                                   const and & issues                      #
+//#                    August 30-31 '94 added use_def_dim to full the CC      #
+//#                                   resolved problem with temoraries for    #
+//#                                   operators + and - ( +=, -= )            #
+//#                    Oktobar 15 '96  added  trasposeoverbar trasposeunderbar#
+//#                                    ( the same as transpose0110 and        #
+//#                                    transpose0101) but just to make it     #
+//#                                    easier to work with Runesson's notation#
+//#                    28June2004     added val4 for efficiency still         #
+//#                                   to be worked on                         #
+//#                                                                           #
+//#                                                                           #
+//#############################################################################
 //*/
 
-#ifndef TENSOR_HH
-#define TENSOR_HH
+#ifndef BJTENSOR_HH
+#define BJTENSOR_HH
 
 
 #include "utility/matrix/nDarray/nDarray.h"
-
+#include "tmpl_operators.h"
 
 namespace XC {
 //! @ingroup Matrix
@@ -132,12 +132,11 @@ class BJtensor: public nDarray
 
     //~BJtensor( );
 
-    BJtensor&  operator=( const BJtensor & rval);       // BJtensor assignment
-
-    friend BJtensor operator+(const BJtensor & , const BJtensor & ); // BJtensor addition
-    friend BJtensor operator-(const BJtensor & , const BJtensor & ); // BJtensor subtraction
-
-    BJtensor& operator*=(const double &rval);     // Added Zhao Oct2005
+    BJtensor &operator=(const BJtensor & rval); // BJtensor assignment
+    BJtensor &operator+=(const BJtensor & rval); // BJtensor addition
+    BJtensor &operator-=(const BJtensor & rval); // BJtensor subtraction
+    
+    BJtensor &operator*=(const double &rval);     // Added Zhao Oct2005
     BJtensor operator*(const double &rval) const; // scalar multiplication, Added const Zhao Oct2005
     BJtensor operator*(const BJtensor &rval) const;       // inner/outer product
     BJtensor operator/(const BJtensor &rval) const;       // BJtensor division rval MUST BE BJtensor of
@@ -183,10 +182,9 @@ class BJtensor: public nDarray
     int uncontracted_ind(int *, int *, int) const;
   };
 
-// GLOBAL
-BJtensor operator*(const double &lval,const BJtensor &rval);  // REVIEWER global *
-BJtensor operator+(const BJtensor & , const BJtensor & ); // BJtensor addition
-BJtensor operator-(const BJtensor & , const BJtensor & ); // BJtensor subtraction
+template BJtensor operator*(const double & , const BJtensor & );
+template BJtensor operator+(const BJtensor & , const BJtensor & );
+template BJtensor operator-(const BJtensor & , const BJtensor & );
 
 } // end of XC namespace
 

@@ -50,28 +50,23 @@
 //#
 //===============================================================================
 
-#ifndef fdYieldVM_CPP
-#define fdYieldVM_CPP
-
 #include "material/nD/FiniteDeformation/fdYield/fdYieldVM.h"
 #include "material/nD/FiniteDeformation/FDEPState.h"
 
 
 //--------------------------------------------------------------------
 XC::fdYieldVM::fdYieldVM(double Y0_in) :Y0(Y0_in)
-{
-
-}
+  {}
 
 //! @brief Virtual constructor.
 XC::fdYield * XC::fdYieldVM::getCopy(void)
   { return new fdYieldVM(*this); }
 
 int XC::fdYieldVM::getNumRank()
-{
+  {
     //return 1;
     return 2;
-}
+  }
 
 double XC::fdYieldVM::getTolerance()
 {
@@ -97,9 +92,9 @@ double XC::fdYieldVM::Yd(const XC::stresstensor &sts, const XC::FDEPState &fdeps
     //return sqrt(2.0*J2) - sqrt(2.0/3.0);
     
     // NumRank=2, With Ki Hardeing
-    XC::stresstensor a = fdepstate.getStressLikeKiVar();
+    stresstensor a = fdepstate.getStressLikeKiVar();
     double q = fdepstate.getStressLikeInVar();
-    XC::stresstensor dev = sts.deviator() - a;
+    stresstensor dev = sts.deviator() - a;
     BJtensor st = dev("ij")*dev("ij");   
       st.null_indices();
     double x = st.trace();
@@ -117,14 +112,15 @@ XC::stresstensor XC::fdYieldVM::dYods(const XC::stresstensor &sts, const XC::FDE
     //return sts.deviator()/(sqrt(8.0*J2);
 
     // NumRank=2, With Ki Hardeing
-    XC::stresstensor a = fdepstate.getStressLikeKiVar();
-    XC::stresstensor dev = sts.deviator() - a;
-    return dev *3.0;
-}					      
+    stresstensor a = fdepstate.getStressLikeKiVar();
+    stresstensor dev = sts.deviator() - a;
+    stresstensor retval(dev *3.0);
+    return retval;
+  }					      
 
 //--------------------------------------------------------------------
 double XC::fdYieldVM::dYodq(const XC::stresstensor &sts, const XC::FDEPState &fdepstate ) const
-{  
+  {  
     //// NumRank=2, No Ki Hardeing
     //double q = fdepstate.getStressLikeInVar();
     //return -2.0 * (Y0+q);
@@ -135,7 +131,7 @@ double XC::fdYieldVM::dYodq(const XC::stresstensor &sts, const XC::FDEPState &fd
     // NumRank=2, With Ki Hardeing
     double q = fdepstate.getStressLikeInVar();
     return -2.0 * (Y0+q);
-}
+  }
 
 //--------------------------------------------------------------------
 XC::stresstensor XC::fdYieldVM::dYoda(const XC::stresstensor &sts, const XC::FDEPState &fdepstate ) const
@@ -148,10 +144,11 @@ XC::stresstensor XC::fdYieldVM::dYoda(const XC::stresstensor &sts, const XC::FDE
     //return sts.deviator()/(sqrt(8.0*J2);
 
     // NumRank=2, With Ki Hardeing
-    XC::stresstensor a = fdepstate.getStressLikeKiVar();
-    XC::stresstensor dev = sts.deviator() - a;
-    return dev *(-3.0);
-}	
+    stresstensor a = fdepstate.getStressLikeKiVar();
+    stresstensor dev = sts.deviator() - a;
+    stresstensor retval(dev *(-3.0));
+    return retval;
+  }	
 
 //--------------------------------------------------------------------
 std::ostream& XC::operator<<(std::ostream &os, const XC::fdYieldVM &fdydVM)
@@ -164,5 +161,4 @@ std::ostream& XC::operator<<(std::ostream &os, const XC::fdYieldVM &fdydVM)
 void XC::fdYieldVM::print(void)
   { std::cerr << *this; }
 
-#endif
 

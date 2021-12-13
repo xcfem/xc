@@ -49,7 +49,7 @@ XC::LoadPatternCombination::summand::summand(const float &f,LoadPattern *lp)
   : factor(f), lpattern(lp) {}
 
 //! @brief Returns the factor that multiplies the summand.
-const float &XC::LoadPatternCombination::summand::Factor(void) const
+const float &XC::LoadPatternCombination::summand::getFactor(void) const
   { return factor; }
 
 //! @brief Returns the LoadPattern corresponding to the summand.
@@ -70,7 +70,7 @@ bool XC::LoadPatternCombination::summand::set_gamma_f(void)
     bool retval= true;
     LoadPattern *lp= getLoadPattern();
     if(lp)
-      lp->GammaF()= Factor();
+      lp->GammaF()= getFactor();
     else
       {
         std::cerr << getClassName() << "::" << __FUNCTION__
@@ -170,7 +170,7 @@ void XC::LoadPatternCombination::clear(void)
 void XC::LoadPatternCombination::add_component(const summand &sum)
   {
     const LoadPattern *lp= sum.getLoadPattern();
-    if((sum.Factor()!= 0.0) && lp)
+    if((sum.getFactor()!= 0.0) && lp)
       {
         iterator j= findLoadPattern(lp);
         if(j!=end())
@@ -250,7 +250,7 @@ void XC::LoadPatternCombination::limpia_ceros(void)
   {
     TDescomp nueva;
     for(iterator i= begin();i!=end();i++)
-      if(i->Factor()!=0.0)
+      if(i->getFactor()!=0.0)
         nueva.push_back(*i);
     descomp= nueva;
   }
@@ -361,7 +361,7 @@ bool XC::LoadPatternCombination::isActive(void) const
           {
             if(lp->isActive())
 	      {
-	        if(i->Factor()!=lp->GammaF())
+	        if(i->getFactor()!=lp->GammaF())
 		  {
 		    retval= false;
 		    break;
@@ -423,7 +423,7 @@ float XC::LoadPatternCombination::getLoadPatternFactor(const LoadPattern *lp) co
     float retval= 0.0;
     const_iterator i= findLoadPattern(lp);
     if(i!=end())
-      retval= (*i).Factor();
+      retval= (*i).getFactor();
     return retval;
   }
 
@@ -456,6 +456,24 @@ int XC::LoadPatternCombination::recvData(const Communicator &comm)
     //Decomposition is established later (in LoadCombinationGroup::recvData),
     //after setting up the object's owner and the pointer to LoadHandler.
     return res;
+  }
+
+//! @brief Return a Python dictionary with the object members values.
+boost::python::dict XC::LoadPatternCombination::getPyDict(void) const
+  {
+    boost::python::dict retval= ForceReprComponent::getPyDict();
+    retval["name"]= name; // idx member.
+    retval["components"]= getString();
+    return retval;
+  }
+
+//! @brief Set the values of the object members from a Python dictionary.
+void XC::LoadPatternCombination::setPyDict(const boost::python::dict &d)
+  {
+    ForceReprComponent::setPyDict(d);
+    name= boost::python::extract<std::string>(d["name"]);
+    const std::string components= boost::python::extract<std::string>(d["components"]);
+    setDescomp(components);
   }
 
 //! @brief Imprime.

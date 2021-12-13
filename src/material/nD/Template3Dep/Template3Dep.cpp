@@ -501,7 +501,7 @@ XC::BJtensor XC::Template3Dep::ElasticComplianceTensor(void) const
 //ZC05/2004           }
 //ZC05/2004
 //ZC05/2004       //Update E
-//ZC05/2004       XC::stresstensor stc = (this->EPS)->getStress();
+//ZC05/2004       stresstensor stc = (this->EPS)->getStress();
 //ZC05/2004       double p = stc.p_hydrostatic();
 //ZC05/2004       double po = EPS->getpo();
 //ZC05/2004
@@ -539,7 +539,7 @@ XC::BJtensor XC::Template3Dep::ElasticComplianceTensor(void) const
 //ZC05/2004       double B = 1.0/Ev;
 //ZC05/2004       //std::cerr << "A " << A << " B " << B;
 //ZC05/2004
-//ZC05/2004       XC::Matrix D(6,6);
+//ZC05/2004       Matrix D(6,6);
 //ZC05/2004       D(0,0) = D(1,1) = A;
 //ZC05/2004       D(2,2) = B;
 //ZC05/2004       D(0,1) = D(1,0) = -nu*A;
@@ -582,7 +582,7 @@ XC::BJtensor XC::Template3Dep::ElasticComplianceTensor(void) const
 //ZC05/2004           }
 //ZC05/2004
 //ZC05/2004       //Update E
-//ZC05/2004       XC::stresstensor stc = (this->EPS)->getStress();
+//ZC05/2004       stresstensor stc = (this->EPS)->getStress();
 //ZC05/2004       double p = stc.p_hydrostatic();
 //ZC05/2004       double po = EPS->getpo();
 //ZC05/2004
@@ -599,7 +599,7 @@ XC::BJtensor XC::Template3Dep::ElasticComplianceTensor(void) const
 //ZC05/2004       double B = 1.0/Ev;
 //ZC05/2004       //std::cerr << "A " << A << " B " << B;
 //ZC05/2004
-//ZC05/2004       XC::Matrix D(6,6);
+//ZC05/2004       Matrix D(6,6);
 //ZC05/2004       D(0,0) = D(1,1) = A;
 //ZC05/2004       D(2,2) = B;
 //ZC05/2004       D(0,1) = D(1,0) = -nu*A;
@@ -682,7 +682,7 @@ XC::BJtensor XC::Template3Dep::ElasticStiffnessTensor(void) const
 //ZC05/2004     else if( eflag == 1) {
 //ZC05/2004
 //ZC05/2004        //Update E
-//ZC05/2004        XC::stresstensor stc = (this->EPS)->getStress();
+//ZC05/2004        stresstensor stc = (this->EPS)->getStress();
 //ZC05/2004        double p = stc.p_hydrostatic();
 //ZC05/2004        double po = EPS->getpo();
 //ZC05/2004        //std::cerr << " p = " <<  p;
@@ -716,7 +716,7 @@ XC::BJtensor XC::Template3Dep::ElasticStiffnessTensor(void) const
 //ZC05/2004       double nuhv = this->EPS->getnuhv();
 //ZC05/2004       //Update E
 //ZC05/2004
-//ZC05/2004       XC::stresstensor stc = (this->EPS)->getStress();
+//ZC05/2004       stresstensor stc = (this->EPS)->getStress();
 //ZC05/2004       double p = stc.p_hydrostatic();
 //ZC05/2004       double po = EPS->getpo();
 //ZC05/2004
@@ -730,7 +730,7 @@ XC::BJtensor XC::Template3Dep::ElasticStiffnessTensor(void) const
 //ZC05/2004       double B = 1.0/Ev;
 //ZC05/2004       //std::cerr << "A " << A << " B " << B;
 //ZC05/2004
-//ZC05/2004       XC::Matrix D(6,6);
+//ZC05/2004       Matrix D(6,6);
 //ZC05/2004       D(0,0) = D(1,1) = A;
 //ZC05/2004       D(2,2) = B;
 //ZC05/2004       D(0,1) = D(1,0) = -nu*A;
@@ -765,7 +765,7 @@ XC::BJtensor XC::Template3Dep::ElasticStiffnessTensor(void) const
 //ZC05/2004       double B = 1.0/Ev;
 //ZC05/2004       //std::cerr << "A " << A << " B " << B;
 //ZC05/2004
-//ZC05/2004       XC::Matrix D(6,6);
+//ZC05/2004       Matrix D(6,6);
 //ZC05/2004       D(0,0) = D(1,1) = A;
 //ZC05/2004       D(2,2) = B;
 //ZC05/2004       D(0,1) = D(1,0) = -nu*A;
@@ -858,30 +858,32 @@ const XC::Vector& XC::Template3Dep::getStrain(void) const
 
 //================================================================================
 // what is the trial strain? Initial strain?
-int XC::Template3Dep::setTrialStrain(const XC::Tensor &v)
-{
+int XC::Template3Dep::setTrialStrain(const Tensor &v)
+  {
     //Guanzhou made it compatible with global iterations Mar2005
-    this->setTrialStrainIncr( v - EPS->getStrain() );
+    Tensor tmp(v - EPS->getStrain());
+    this->setTrialStrainIncr(tmp);
     return 0;
-}
+  }
 
 
 //================================================================================
-int XC::Template3Dep::setTrialStrain(const XC::Tensor &v, const XC::Tensor &r)
-{
+int XC::Template3Dep::setTrialStrain(const Tensor &v, const Tensor &r)
+  {
     //Guanzhou made it compatible with global iterations Mar2005
-    this->setTrialStrainIncr( v - EPS->getStrain() );
+    Tensor tmp(v - EPS->getStrain());
+    this->setTrialStrainIncr(tmp);
     return 0;
-}
+  }
 
 //================================================================================
 
-int XC::Template3Dep::setTrialStrainIncr(const XC::Tensor &v)
-{
+int XC::Template3Dep::setTrialStrainIncr(const Tensor &v)
+  {
 
     //std::cerr << "\nBE: " << std::endl;
     //EPState StartEPS( *(this->getEPS()) );
-    //XC::stresstensor start_stress = StartEPS.getStress_commit(); //Guanzhou Mar2005
+    //stresstensor start_stress = StartEPS.getStress_commit(); //Guanzhou Mar2005
     //std::cerr << "start_stress 0 " << start_stress;
 
     //EPState tmp_EPS = BackwardEulerEPState(v);
@@ -907,7 +909,7 @@ int XC::Template3Dep::setTrialStrainIncr(const XC::Tensor &v)
     //
     //   setEPS( StartEPS );
     //   EPState startEPS( *(this->getEPS()) );
-    //   XC::stresstensor start_stress = startEPS.getStress();
+    //   stresstensor start_stress = startEPS.getStress();
     //   std::cerr << " Step Start Stress:" << start_stress << std::endl;
     //
     //   loop += 1;
@@ -935,10 +937,11 @@ int XC::Template3Dep::setTrialStrainIncr(const XC::Tensor &v)
     //EPState tmp_EPS = FESubIncrementation(v, NUM_OF_SUB_INCR);
     EPState *thisEPState = this->getEPS();
     EPState tmp_EPS;
+    const straintensor &strainTensor= static_cast<const straintensor &>(v);
     if( thisEPState->getIntegratorFlag() == 0 )
-      tmp_EPS = ForwardEulerEPState(v);
+      tmp_EPS = ForwardEulerEPState(strainTensor);
     else if( thisEPState->getIntegratorFlag() == 1 )
-      tmp_EPS = BackwardEulerEPState(v);
+      tmp_EPS = BackwardEulerEPState(strainTensor);
     else
       {
         std::cerr << getClassName() << "::" << __FUNCTION__
@@ -963,16 +966,16 @@ int XC::Template3Dep::setTrialStrainIncr(const XC::Tensor &v, const XC::Tensor &
 //================================================================================
 const XC::BJtensor &XC::Template3Dep::getTangentTensor(void) const
   {
-//    XC::Tensor Eep = EPS->getEep();
+//    Tensor Eep = EPS->getEep();
 //    return Eep;
-    return EPS->Eep;
+    return EPS->trialStateVars.Eep;
   }
 
 //================================================================================
 const XC::stresstensor &XC::Template3Dep::getStressTensor(void) const
   {
     //std::cerr << *EPS;
-    //XC::stresstensor tmp;
+    //stresstensor tmp;
     //tmp =  EPS->getStress();
     //std::cerr << "EPS->getStress() " << EPS->getStress() << std::endl;
 
@@ -1084,104 +1087,7 @@ XC::Template3Dep::Print(std::ostream &s, int flag) const
 //================================================================================
 
 void XC::Template3Dep::setEPS( EPState & rval)
-{
-    //EPState eps = rval; older buggy one
-    //EPS = rval.getCopy();
-/*
-//EPS->setEo(rval.getEo());
-EPS->setE(rval.getE());
-//EPS->setnu(getnu());
-//EPS->setrho(getrho());
-EPS->setStress(rval.getStress());
-EPS->setStrain(rval.getStrain());
-EPS->setElasticStrain(rval.getElasticStrain());
-EPS->setPlasticStrain(rval.getPlasticStrain());
-EPS->setdElasticStrain(rval.getdElasticStrain());
-EPS->setdPlasticStrain(rval.getdPlasticStrain());
-//EPS->setNScalarVar(rval.getNScalarVar());
-for(int i = 0; i <rval.getNScalarVar(); i++)
-  EPS->setScalarVar(i, rval.getScalarVar(i));
-
-
-//EPS->setNTensorVar(rval.getNTensorVar());
-EPS->setTensorVar(rval.getTensorVar());
-EPS->setEep(rval.getEep());
-EPS->Stress_commit=(rval.getStress_commit());
-EPS->Strain_commit=(rval.getStrain_commit());
-
-for(int i = 0; i <rval.getNScalarVar(); i++)
-  EPS->ScalarVar_commit[i] = rval.getScalarVar_commit()[i];
-
-for(int i = 0; i <rval.getNTensorVar(); i++)
-   EPS->TensorVar_commit[i] = (rval.getTensorVar_commit()[i]);
-
-EPS->Eep_commit = (rval.getEep_commit());
-//EPS->setStress_init(getStress_init());
-//EPS->setStrain_init(getStrain_init());
-//EPS->setScalarVar_init(getScalarVar_init());
-//EPS->setTensorVar_init(getTensorVar_init());
-//EPS->setEep_init(getEep_init());
-EPS->setConverged(rval.getConverged());
-
-*/
-
-//ZC05/2004     EPS->setElasticflag(rval.getElasticflag());
-//ZC05/2004
-//ZC05/2004     EPS->setEo(rval.getEo());
-//ZC05/2004     EPS->setE(rval.getE());
-//ZC05/2004     EPS->setEv(rval.getEv());
-//ZC05/2004     EPS->setGhv(rval.getGhv());
-//ZC05/2004     EPS->setnu(rval.getnu());
-//ZC05/2004     EPS->setnuhv(rval.getnuhv());
-
-    EPS->setStress(rval.getStress());
-    EPS->setStrain(rval.getStrain());
-    EPS->setElasticStrain(rval.getElasticStrain());
-    EPS->setPlasticStrain(rval.getPlasticStrain());
-    EPS->setdElasticStrain(rval.getdElasticStrain());
-    EPS->setdPlasticStrain(rval.getdPlasticStrain());
-    EPS->setNScalarVar( rval.getNScalarVar() );
-
-    int i;
-    for(i = 0; i <rval.getNScalarVar(); i++)
-      EPS->setScalarVar(i+1, rval.getScalarVar(i+1));
-
-
-    EPS->setNTensorVar( rval.getNTensorVar() );
-    EPS->setTensorVar(rval.getTensorVar());
-    EPS->setEep(rval.getEep());
-    EPS->setStress_commit(rval.getStress_commit());
-    EPS->setStrain_commit(rval.getStrain_commit());
-    EPS->setElasticStrain_commit(rval.getElasticStrain_commit());
-
-    for(i = 0; i <rval.getNScalarVar(); i++)
-      EPS->setScalarVar_commit(i+1, rval.getScalarVar_commit(i+1));
-
-    for(i = 0; i <rval.getNTensorVar(); i++)
-       EPS->setTensorVar_commit(i+1, rval.getTensorVar_commit(i+1));
-
-    EPS->Eep_commit = (rval.getEep_commit());
-    EPS->Stress_init = rval.getStress_init();
-    EPS->Strain_init = rval.getStrain_init();
-
-    for(i = 0; i <rval.getNScalarVar(); i++)
-       EPS->setScalarVar_init(i+1, rval.getScalarVar_init(i+1));
-
-    for(i = 0; i <rval.getNTensorVar(); i++)
-       EPS->setTensorVar_init(i+1, rval.getTensorVar_init(i+1));
-
-    EPS->Eep_init = rval.getEep_init();
-    EPS->setConverged(rval.getConverged());
-
-//ZC05/2004     //Added Joey 02-13-03
-//ZC05/2004     EPS->seteo(rval.geteo());
-//ZC05/2004     EPS->setec(rval.getec());
-//ZC05/2004     EPS->setLam(rval.getLam());
-//ZC05/2004     EPS->setpo(rval.getpo());
-    EPS->sete(rval.gete());
-    EPS->setpsi(rval.getpsi());
-//ZC05/2004     EPS->seta(rval.geta());
-}
+  { EPS->operator=(rval); }
 
 //================================================================================
 // Get the Elastic XC::Material //ZC05/2004
@@ -1270,7 +1176,7 @@ XC::EvolutionLaw_T * XC::Template3Dep::getELT4() const
 // Predictor XC::EPState by Forward, Backward, MidPoint Methods...
 //================================================================================
 
-XC::EPState XC::Template3Dep::PredictorEPState(XC::straintensor & strain_increment)
+XC::EPState XC::Template3Dep::PredictorEPState(straintensor & strain_increment)
   {
 
     EPState Predictor = ForwardEulerEPState( strain_increment);
@@ -1282,7 +1188,7 @@ XC::EPState XC::Template3Dep::PredictorEPState(XC::straintensor & strain_increme
 //================================================================================
 // New XC::EPState using Forward Euler Algorithm
 //================================================================================
-XC::EPState XC::Template3Dep::ForwardEulerEPState( const XC::straintensor &strain_increment)
+XC::EPState XC::Template3Dep::ForwardEulerEPState( const straintensor &strain_increment)
   {
     // Volumetric strain
     //double st_vol = strain_increment.p_hydrostatic();
@@ -1306,14 +1212,14 @@ XC::EPState XC::Template3Dep::ForwardEulerEPState( const XC::straintensor &strai
     //BJtensor ed = E("ijpq") * D("pqkl");
     //double edd = ed.trace(); // = 3.
 
-    XC::straintensor strain_incr = strain_increment;
+    straintensor strain_incr = strain_increment;
     strain_incr.null_indices();
-    XC::stresstensor stress_increment = E("ijpq") * strain_incr("pq");
+    stresstensor stress_increment(E("ijpq") * strain_incr("pq"));
     stress_increment.null_indices();
     //std::cerr << " stress_increment: " << stress_increment << std::endl;
 
     EPState startEPS( *(getEPS()) );
-    XC::stresstensor start_stress = startEPS.getStress();
+    stresstensor start_stress = startEPS.getStress();
     start_stress.null_indices();
     //std::cerr << "===== start_EPS =====: " << startEPS;
 
@@ -1323,7 +1229,7 @@ XC::EPState XC::Template3Dep::ForwardEulerEPState( const XC::straintensor &strai
     EPState IntersectionEPS( startEPS );
 
     EPState ElasticPredictorEPS( startEPS );
-    XC::stresstensor elastic_predictor_stress = start_stress + stress_increment;
+    stresstensor elastic_predictor_stress = start_stress + stress_increment;
     ElasticPredictorEPS.setStress( elastic_predictor_stress );
     //std::cerr << " Elastic_predictor_stress: " << elastic_predictor_stress << std::endl;
 
@@ -1381,7 +1287,7 @@ XC::EPState XC::Template3Dep::ForwardEulerEPState( const XC::straintensor &strai
         true_stress_increment = elastic_predictor_stress - elpl_start_stress;
         //true_stress_increment.null_indices();
 
-  XC::stresstensor EstressIncr = intersection_stress- start_stress;
+      stresstensor EstressIncr = intersection_stress- start_stress;
 
         //forwardEPS.setStress( elpl_start_stress );
   //Should only count on that elastic portion, not st_vol...
@@ -1413,9 +1319,9 @@ XC::EPState XC::Template3Dep::ForwardEulerEPState( const XC::straintensor &strai
     //  pulling out some XC::BJtensor and double definitions
     //BJtensor dFods( 2, def_dim_2, 0.0);
     //BJtensor dQods( 2, def_dim_2, 0.0);
-    XC::stresstensor dFods;
-    XC::stresstensor dQods;
-    //  XC::stresstensor s;  // deviator
+    stresstensor dFods;
+    stresstensor dQods;
+    //  stresstensor s;  // deviator
     BJtensor H( 2, def_dim_2, 0.0);
     BJtensor temp1( 2, def_dim_2, 0.0);
     BJtensor temp2( 2, def_dim_2, 0.0);
@@ -1425,17 +1331,17 @@ XC::EPState XC::Template3Dep::ForwardEulerEPState( const XC::straintensor &strai
     double Delta_lambda = 0.0;
     double h_s[4]       = {0.0, 0.0, 0.0, 0.0};
     double xi_s[4]      = {0.0, 0.0, 0.0, 0.0};
-    XC::stresstensor h_t[4];
-    XC::stresstensor xi_t[4];
+    stresstensor h_t[4];
+    stresstensor xi_t[4];
     double hardMod_     = 0.0;
 
     //double Dq_ast   = 0.0;
     //double q_ast_entry = 0.0;
     //double q_ast = 0.0;
 
-    XC::stresstensor plastic_stress;
-    XC::straintensor plastic_strain;
-    XC::stresstensor elastic_plastic_stress;
+    stresstensor plastic_stress;
+    straintensor plastic_strain;
+    stresstensor elastic_plastic_stress;
     // ::printf("\n...... felpred = %lf\n",felpred);
 
     if( f_pred >= 0 ) {
@@ -1561,19 +1467,19 @@ XC::EPState XC::Template3Dep::ForwardEulerEPState( const XC::straintensor &strai
         //elastic_plastic_stress.reportshortpqtheta("FE elastic plastic stress \n");
 
         //calculating elatic strain increment
-        //XC::stresstensor dstress_el = elastic_plastic_stress - start_stress;
-        //XC::straintensor elastic_strain = D("ijpq") * dstress_el("pq");
-        XC::straintensor elastic_strain = strain_incr - plastic_strain;  // elastic strain increment
+        //stresstensor dstress_el = elastic_plastic_stress - start_stress;
+        //straintensor elastic_strain = D("ijpq") * dstress_el("pq");
+        straintensor elastic_strain = strain_incr - plastic_strain;  // elastic strain increment
         //std::cerr << "elastic_strain I1=" << elastic_strain.Iinvariant1() << std::endl;
         //std::cerr << "elastic_strain " << elastic_strain << std::endl;
         //std::cerr << "strain increment I1=" << strain_increment.Iinvariant1() << std::endl;
         //std::cerr << "strain increment    " << strain_increment << std::endl;
 
-        XC::straintensor estrain = forwardEPS.getElasticStrain(); //get old elastic strain
-        XC::straintensor pstrain = forwardEPS.getPlasticStrain(); //get old plastic strain
-        //XC::straintensor pstrain = forwardEPS.getStrain_commit() - estrain; //get old plastic strain
+        straintensor estrain = forwardEPS.getElasticStrain(); //get old elastic strain
+        straintensor pstrain = forwardEPS.getPlasticStrain(); //get old plastic strain
+        //straintensor pstrain = forwardEPS.getStrain_commit() - estrain; //get old plastic strain
 
-        XC::straintensor tstrain = forwardEPS.getStrain();        //get old total strain
+        straintensor tstrain = forwardEPS.getStrain();        //get old total strain
         pstrain = pstrain + plastic_strain;
         estrain = estrain + elastic_strain;
         tstrain = tstrain + elastic_strain + plastic_strain;
@@ -1736,9 +1642,9 @@ XC::EPState XC::Template3Dep::ForwardEulerEPState( const XC::straintensor &strai
               forwardEPS.setScalarVar(ii, S + dS ); // Update internal scalar var
   }
 
-  XC::stresstensor dT;
-  XC::stresstensor T;
-  XC::stresstensor new_T;
+  stresstensor dT;
+  stresstensor T;
+  stresstensor new_T;
 
   for(ii = 1; ii <= NT; ii++) {
         dT = h_t[ii-1]*Delta_lambda  ;       // Increment to the XC::BJtensor internal var
@@ -1748,7 +1654,7 @@ XC::EPState XC::Template3Dep::ForwardEulerEPState( const XC::straintensor &strai
         }
 
         // Update E_Young and e according to current stress state
-  //XC::straintensor pl_strain_increment;
+  //straintensor pl_strain_increment;
     if( getELT1() )
       {
         //pl_strain_increment = strain_increment - El_strain_increment;
@@ -1781,7 +1687,7 @@ XC::EPState XC::Template3Dep::ForwardEulerEPState( const XC::straintensor &strai
     }
 
     //::fprintf(stderr,"ForwardEulerStress EXIT Criterion.kappa_get(start_stress)=%.8e\n",Criterion.kappa_get(start_stress));
-    //forwardEPS.setConverged(TRUE);
+    //forwardEPS.setConverged(true);
 
     //double p = (forwardEPS.getStress()).p_hydrostatic();
     //double ec = (forwardEPS.getec()) - (forwardEPS.getLam()) * log( p / (forwardEPS.getpo()) );
@@ -1797,9 +1703,9 @@ XC::EPState XC::Template3Dep::ForwardEulerEPState( const XC::straintensor &strai
 //================================================================================
 // Starting XC::EPState using Semi Backward Euler Starting Point
 //================================================================================
-XC::EPState XC::Template3Dep::SemiBackwardEulerEPState( const XC::straintensor &strain_increment)
+XC::EPState XC::Template3Dep::SemiBackwardEulerEPState( const straintensor &strain_increment)
   {
-    XC::stresstensor start_stress;
+    stresstensor start_stress;
     EPState SemibackwardEPS( *(this->getEPS()) );
     start_stress = SemibackwardEPS.getStress();
 
@@ -1818,27 +1724,27 @@ XC::EPState XC::Template3Dep::SemiBackwardEulerEPState( const XC::straintensor &
 
     EPState E_Pred_EPS( *(this->getEPS()) );
 
-    XC::straintensor strain_incr = strain_increment;
-    XC::stresstensor stress_increment = E("ijkl")*strain_incr("kl");
+    straintensor strain_incr = strain_increment;
+    stresstensor stress_increment(E("ijkl")*strain_incr("kl"));
     stress_increment.null_indices();
     // stress_increment.reportshort("stress Increment\n");
 
 
-    XC::stresstensor plastic_stress;
-    XC::stresstensor elastic_predictor_stress;
-    XC::stresstensor elastic_plastic_stress;
+    stresstensor plastic_stress;
+    stresstensor elastic_predictor_stress;
+    stresstensor elastic_plastic_stress;
     //..  double Felplpredictor = 0.0;
 
     double h_s[4]       = {0.0, 0.0, 0.0, 0.0};
     double xi_s[4]      = {0.0, 0.0, 0.0, 0.0};
-    XC::stresstensor h_t[4];
-    XC::stresstensor xi_t[4];
+    stresstensor h_t[4];
+    stresstensor xi_t[4];
     double hardMod_ = 0.0;
 
     double S        = 0.0;
     double dS       = 0.0;
-    XC::stresstensor T;
-    XC::stresstensor dT;
+    stresstensor T;
+    stresstensor dT;
     //double Dq_ast   = 0.0;
     //double q_ast_entry = 0.0;
     //double q_ast = 0.0;
@@ -1988,10 +1894,10 @@ XC::EPState XC::Template3Dep::SemiBackwardEulerEPState( const XC::straintensor &
         ////Criterion.kappa_set( elastic_plastic_stress, q_ast);
         //SemibackwardEPS.setScalarVar(1, S + dS );
 
-  //XC::stresstensor new_T = T + dT;
+  //stresstensor new_T = T + dT;
         //SemibackwardEPS.setTensorVar(1, new_T );
 
-  XC::stresstensor new_T;
+  stresstensor new_T;
 
   for(ii = 1; ii <= NT; ii++) {
         dT = h_t[ii-1] * Delta_lambda;            // Increment to the XC::BJtensor internal var
@@ -2014,7 +1920,7 @@ XC::EPState XC::Template3Dep::SemiBackwardEulerEPState( const XC::straintensor &
 //================================================================================
 // New XC::EPState using Backward Euler Algorithm
 //================================================================================
-XC::EPState XC::Template3Dep::BackwardEulerEPState( const XC::straintensor &strain_increment)
+XC::EPState XC::Template3Dep::BackwardEulerEPState( const straintensor &strain_increment)
   {
   //!!!!!!!! Guanzhou rewrote the code according to Prof. Boris Jeremic, May2004
 
@@ -2026,7 +1932,7 @@ XC::EPState XC::Template3Dep::BackwardEulerEPState( const XC::straintensor &stra
   EPState backwardEPS( * (this->getEPS()) );
   EPState startEPS( *(this->getEPS()) );
 
-  XC::stresstensor start_stress = startEPS.getStress(); //Guanzhou Mar2005
+  stresstensor start_stress = startEPS.getStress(); //Guanzhou Mar2005
 
   //Output for plotting
   //std::cerr.precision(5);
@@ -2050,7 +1956,7 @@ XC::EPState XC::Template3Dep::BackwardEulerEPState( const XC::straintensor &stra
   //BJtensor E = StiffnessTensorE(Ey,nu);
   BJtensor E  = ElasticStiffnessTensor();
   // BJtensor D = ComplianceTensorD(Ey,nu);
-  // XC::stresstensor REAL_start_stress = start_stress;
+  // stresstensor REAL_start_stress = start_stress;
 
   BJtensor dFods(2, def_dim_2, 0.0);
   BJtensor dQods(2, def_dim_2, 0.0);
@@ -2076,8 +1982,8 @@ XC::EPState XC::Template3Dep::BackwardEulerEPState( const XC::straintensor &stra
   //  double entry_kappa_cap  = Criterion.kappa_cap_get();
 
   BJtensor aC(2, def_dim_2, 0.0);
-  XC::stresstensor BEstress;
-  XC::stresstensor residual;
+  stresstensor BEstress;
+  stresstensor residual;
   BJtensor d2Qoverds2( 4, def_dim_4, 0.0);
   BJtensor T( 4, def_dim_4, 0.0);
   BJtensor Tinv( 4, def_dim_4, 0.0);
@@ -2088,12 +1994,12 @@ XC::EPState XC::Template3Dep::BackwardEulerEPState( const XC::straintensor &stra
   double temp6 = 0.0;
   double upper = 0.0;
 
-  XC::stresstensor dsigma;
+  stresstensor dsigma;
   //XC::stresstensor Dsigma;
-  XC::stresstensor sigmaBack;
-  XC::straintensor dPlasticStrain; // delta plastic strain
-  XC::straintensor PlasticStrain;  // Total plastic strain
-  XC::straintensor incrPlasticStrain;
+  stresstensor sigmaBack;
+  straintensor dPlasticStrain; // delta plastic strain
+  straintensor PlasticStrain;  // Total plastic strain
+  straintensor incrPlasticStrain;
 
   //double dq_ast = 0.0;       // iterative change in internal variable (kappa in this case)
   //double Dq_ast = 0.0;       // incremental change in internal variable (kappa in this case)
@@ -2105,16 +2011,16 @@ XC::EPState XC::Template3Dep::BackwardEulerEPState( const XC::straintensor &stra
   //  int MAX_STEP_COUNT = 0;
   //int flag = 0;
 
-  XC::straintensor strain_incr = strain_increment;
+  straintensor strain_incr = strain_increment;
   strain_incr.null_indices();
-  XC::stresstensor stress_increment = E("ijkl")*strain_incr("kl");
+  stresstensor stress_increment(E("ijkl")*strain_incr("kl"));
   stress_increment.null_indices();
 
   //XC::stresstensor Return_stress; //  stress to be returned can be either predictor
                               // or elastic plastic stress.
 
   EPState ElasticPredictorEPS( startEPS );
-  XC::stresstensor elastic_predictor_stress = start_stress + stress_increment;
+  stresstensor elastic_predictor_stress = start_stress + stress_increment;
 
   ElasticPredictorEPS.setStress( elastic_predictor_stress );
   //  elastic_predictor_stress.reportshortpqtheta("\n . . . .  ELASTIC PREDICTOR stress");
@@ -2123,7 +2029,7 @@ XC::EPState XC::Template3Dep::BackwardEulerEPState( const XC::straintensor &stra
   //std::cerr.width(10);
   //std::cerr << "elastic predictor " <<  elastic_predictor_stress << std::endl;
 
-  XC::stresstensor elastic_plastic_predictor_stress;
+  stresstensor elastic_plastic_predictor_stress;
   EPState EP_PredictorEPS( startEPS );
 
   //double f_start = material_point.YS->f( &startEPS );
@@ -2145,8 +2051,8 @@ XC::EPState XC::Template3Dep::BackwardEulerEPState( const XC::straintensor &stra
 
   double h_s[4]       = {0.0, 0.0, 0.0, 0.0};
   double xi_s[4]      = {0.0, 0.0, 0.0, 0.0};
-  XC::stresstensor h_t[4];
-  XC::stresstensor xi_t[4];
+  stresstensor h_t[4];
+  stresstensor xi_t[4];
 
   //region
   //check for the region than proceede
@@ -2163,8 +2069,8 @@ XC::EPState XC::Template3Dep::BackwardEulerEPState( const XC::straintensor &stra
   {
 
       //Updating elastic strain increment
-      XC::straintensor estrain = ElasticPredictorEPS.getElasticStrain(); //Guanzhou
-      XC::straintensor tstrain = ElasticPredictorEPS.getStrain(); //Guanzhou
+      straintensor estrain = ElasticPredictorEPS.getElasticStrain(); //Guanzhou
+      straintensor tstrain = ElasticPredictorEPS.getStrain(); //Guanzhou
       estrain = estrain + strain_increment;
       tstrain = tstrain + strain_increment;
       ElasticPredictorEPS.setElasticStrain( estrain );
@@ -2178,7 +2084,7 @@ XC::EPState XC::Template3Dep::BackwardEulerEPState( const XC::straintensor &stra
 
       //Set Elasto-Plastic stiffness XC::BJtensor
       ElasticPredictorEPS.setEep(E);
-      ElasticPredictorEPS.setConverged(TRUE);
+      ElasticPredictorEPS.setConverged(true);
       //E.printshort(" BE -- Eep ");
 
       backwardEPS = ElasticPredictorEPS;
@@ -2396,7 +2302,7 @@ XC::EPState XC::Template3Dep::BackwardEulerEPState( const XC::straintensor &stra
         {
           //std::cerr << "Iteration " << step_counter << " F " << Felplpredictor << " delta " << Delta_lambda << std::endl;
           aC = getPS()->dQods( &EP_PredictorEPS );
-          BEstress = elastic_predictor_stress - E("ijkl")*aC("kl")*Delta_lambda;
+          BEstress = elastic_predictor_stress - stresstensor(E("ijkl")*aC("kl")*Delta_lambda);
           //BEstress.reportshort("......BEstress ");
           /////          BEstress = elastic_plastic_predictor_stress - E("ijkl")*aC("kl")*Delta_lambda;
           BEstress.null_indices();
@@ -2559,15 +2465,15 @@ XC::EPState XC::Template3Dep::BackwardEulerEPState( const XC::straintensor &stra
       dPlasticStrain = dQods("kl") * delta_lambda;
       incrPlasticStrain = incrPlasticStrain + dPlasticStrain;
       //Updating elastic strain increment
-      XC::straintensor estrain = EP_PredictorEPS.getElasticStrain(); //Guanzhou
-      XC::straintensor tstrain = EP_PredictorEPS.getStrain(); //Guanzhou
-      XC::straintensor pstrain = tstrain - estrain;
+      straintensor estrain = EP_PredictorEPS.getElasticStrain(); //Guanzhou
+      straintensor tstrain = EP_PredictorEPS.getStrain(); //Guanzhou
+      straintensor pstrain = tstrain - estrain;
       pstrain = pstrain + incrPlasticStrain;
       estrain = tstrain - pstrain;
       EP_PredictorEPS.setElasticStrain( estrain );
       EP_PredictorEPS.setPlasticStrain( pstrain );
       EP_PredictorEPS.setdPlasticStrain( incrPlasticStrain );
-      XC::straintensor incrElasticStrain = incrPlasticStrain * (-1.0);
+      straintensor incrElasticStrain= (-1.0)*incrPlasticStrain;
       EP_PredictorEPS.setdElasticStrain( incrElasticStrain );
       EP_PredictorEPS.Delta_lambda = Delta_lambda;
 
@@ -2615,9 +2521,9 @@ XC::EPState XC::Template3Dep::BackwardEulerEPState( const XC::straintensor &stra
               double S  = 0;
       //double new_S = 0;
 
-              XC::stresstensor dT;
-              XC::stresstensor T;
-              XC::stresstensor new_T;
+              stresstensor dT;
+              stresstensor T;
+              stresstensor new_T;
 
     //if( delta_lambda < 0) delta_lambda = 0;
             int ii;
@@ -2678,7 +2584,7 @@ XC::EPState XC::Template3Dep::BackwardEulerEPState( const XC::straintensor &stra
     //Guanzhou out Mar2005       sigmaBack= sigmaBack.pqtheta2stress(0.1, 0.0, 0.0);
     //Guanzhou out Mar2005       Felplpredictor = 0;
     //Guanzhou out Mar2005       backwardEPS.setStress(sigmaBack);
-    //Guanzhou out Mar2005       backwardEPS.setConverged(TRUE);
+    //Guanzhou out Mar2005       backwardEPS.setConverged(true);
     //Guanzhou out Mar2005       return backwardEPS;
     //Guanzhou out Mar2005    }
 
@@ -2893,7 +2799,7 @@ XC::EPState XC::Template3Dep::BackwardEulerEPState( const XC::straintensor &stra
 
            //Set Elasto-Plastic stiffness XC::BJtensor
            EP_PredictorEPS.setEep(Eep);
-           EP_PredictorEPS.setConverged(TRUE);
+           EP_PredictorEPS.setConverged(true);
 
      //GZ out //set plastic strain and total strain
            //GZ out incrPlasticStrain = dQods("kl")*Delta_lambda;
@@ -2958,17 +2864,17 @@ XC::EPState XC::Template3Dep::FESubIncrementation( const XC::straintensor & stra
     //XC::NDMaterial *MP = this->getCopy();
     //std::cerr << "in FESubIncrementation MP " << MP;
 
-    XC::stresstensor back_stress;
-    XC::stresstensor begin_stress = this->getEPS()->getStress();
+    stresstensor back_stress;
+    stresstensor begin_stress = this->getEPS()->getStress();
     //XC::stresstensor begin_stress = start_stress;
     //::fprintf(stderr,"{");
 
     double sub = 1./( (double) number_of_subincrements );
     //XC::stresstensor elastic_subincremental_stress = stress_increment * sub;
 
-    XC::straintensor tempp = strain_increment;
-    XC::straintensor elastic_subincremental_strain = tempp * sub;
-    XC::straintensor total_strain = elastic_subincremental_strain;
+    straintensor tempp = strain_increment;
+    straintensor elastic_subincremental_strain(tempp * sub);
+    straintensor total_strain = elastic_subincremental_strain;
     //elastic_subincremental_stress.reportshort("SUB INCREMENT in stresses\n");
     //std::cerr << "INCREMENT strain " << strain_increment << std::endl; ;
     //std::cerr << "SUB INCREMENT strain " << elastic_subincremental_strain << std::endl; ;
@@ -3025,13 +2931,13 @@ XC::EPState XC::Template3Dep::BESubIncrementation( const XC::straintensor & stra
   {
     EPState old_EPS( *(this->getEPS()) );
     EPState BESI_EPS( *(this->getEPS()) );
-    XC::straintensor strain_incr = strain_increment;
+    straintensor strain_incr = strain_increment;
     //XC::NDMaterial MP( material_point );
     //XC::NDMaterial *MP = getCopy();
     //std::cerr << "in FESubIncrementation MP " << MP;
 
-    XC::stresstensor back_stress;
-    XC::stresstensor begin_stress = old_EPS.getStress();
+    stresstensor back_stress;
+    stresstensor begin_stress = old_EPS.getStress();
     //XC::stresstensor begin_stress = getEPS()->getStress();
     //XC::stresstensor begin_stress = start_stress;
     //::fprintf(stderr,"{");
@@ -3039,8 +2945,8 @@ XC::EPState XC::Template3Dep::BESubIncrementation( const XC::straintensor & stra
     double sub = 1./( (double) number_of_subincrements );
     //XC::stresstensor elastic_subincremental_stress = stress_increment * sub;
 
-    XC::straintensor elastic_subincremental_strain = strain_incr * sub;
-    XC::straintensor total_strain = elastic_subincremental_strain;
+    straintensor elastic_subincremental_strain(strain_incr * sub);
+    straintensor total_strain = elastic_subincremental_strain;
     //elastic_subincremental_stress.reportshort("SUB INCREMENT in stresses\n");
 
     for( int steps=0 ; steps < number_of_subincrements ; steps++ ){
@@ -3177,8 +3083,8 @@ XC::stresstensor XC::Template3Dep::yield_surface_cross(const XC::stresstensor & 
   double a = zbrentstress( start_stress, end_stress, x1, x2, TOL ); // Defined below
   // ::printf("\n****\n a = %lf \n****\n",a);
 
-  XC::stresstensor delta_stress = end_stress - start_stress;
-  XC::stresstensor intersection_stress = start_stress + delta_stress * a;
+  stresstensor delta_stress(end_stress - start_stress);
+  stresstensor intersection_stress(start_stress + stresstensor(delta_stress * a));
   //***  intersection_stress.reportshort("FINAL Intersection stress\n");
 
   return intersection_stress;
@@ -3296,23 +3202,22 @@ double XC::Template3Dep::zbrentstress(const XC::stresstensor & start_stress,
 // routine used by zbrentstress, takes an alfa and returns the
 // yield function value for that alfa
 //================================================================================
-double XC::Template3Dep::func(const XC::stresstensor & start_stress,
-                          const XC::stresstensor & end_stress,
+double XC::Template3Dep::func(const stresstensor & start_stress,
+                          const stresstensor & end_stress,
                           double alfa )
-{
+  {
+    //EPState *tempEPS = getEPS()->getCopy();
+    EPState tempEPS( (*this->getEPS()) );
+    stresstensor delta_stress= end_stress - start_stress;
+    stresstensor intersection_stress(start_stress + delta_stress*alfa);
 
-   //EPState *tempEPS = getEPS()->getCopy();
-   EPState tempEPS( (*this->getEPS()) );
-   XC::stresstensor delta_stress = end_stress - start_stress;
-   XC::stresstensor intersection_stress = start_stress + delta_stress*alfa;
+    tempEPS.setStress(intersection_stress);
 
-   tempEPS.setStress(intersection_stress);
+    //std::cerr << "*tempEPS" << *tempEPS;
 
-   //std::cerr << "*tempEPS" << *tempEPS;
-
-   double f = getYS()->f( &tempEPS );
-   return f;
-}
+    double f = getYS()->f( &tempEPS );
+    return f;
+  }
 
 //================================================================================
 // Overloaded Insertion Operator
@@ -3386,15 +3291,15 @@ std::ostream& XC::operator<<(std::ostream &os, const XC::Template3Dep & MP)
 //
 //  BJtensor E  = ElasticStiffnessTensor();
 //
-//  XC::straintensor strain_incr = strain_increment;
-//  XC::straintensor total_strain = backwardEPS.getStrain();
+//  straintensor strain_incr = strain_increment;
+//  straintensor total_strain = backwardEPS.getStrain();
 //  total_strain = total_strain + strain_incr;
 //  backwardEPS.setStrain(total_strain);//watch out, iteration is carried out with constant total strain!!!
 //
-//  XC::straintensor plastic_strain = backwardEPS.getPlasticStrain();
-//  XC::straintensor trial_incr = total_strain - plastic_strain;
+//  straintensor plastic_strain = backwardEPS.getPlasticStrain();
+//  straintensor trial_incr = total_strain - plastic_strain;
 //
-//  XC::stresstensor elastic_predictor = E("ijkl") * trial_incr("kl");
+//  stresstensor elastic_predictor = E("ijkl") * trial_incr("kl");
 //  elastic_predictor.null_indices();
 //
 //  backwardEPS.setStress(elastic_predictor);
@@ -3405,13 +3310,13 @@ std::ostream& XC::operator<<(std::ostream &os, const XC::Template3Dep & MP)
 //
 //  dQods = getPS()->dQods( &backwardEPS );
 //
-//  XC::straintensor plastic_strain_residual =
+//  straintensor plastic_strain_residual =
 //          plastic_strain * (-1.0) + startEPS.getPlasticStrain() + dQods("kl") * Delta_lambda;
 //
 //  //double hardMod_ = 0.0;
-//  XC::Vector h_s(4);
+//  Vector h_s(4);
 //  //double xi_s[4]      = {0.0, 0.0, 0.0, 0.0};
-//  XC::stresstensor h_t[4];
+//  stresstensor h_t[4];
 //  //XC::stresstensor xi_t[4];
 //
 //  //BJtensor Hh(2, def_dim_2, 0.0);
@@ -3479,11 +3384,11 @@ std::ostream& XC::operator<<(std::ostream &os, const XC::Template3Dep & MP)
 //  int NS = backwardEPS.getNScalarVar();
 //  int NT = backwardEPS.getNTensorVar();
 //
-//  XC::Vector internal_variable_residual(NS+NT);
+//  Vector internal_variable_residual(NS+NT);
 //
-//  XC::stresstensor T;
-//  XC::stresstensor new_T;
-//  XC::stresstensor dT;
+//  stresstensor T;
+//  stresstensor new_T;
+//  stresstensor dT;
 //
 //  BJtensor
 //
@@ -3511,7 +3416,7 @@ std::ostream& XC::operator<<(std::ostream &os, const XC::Template3Dep & MP)
 //        elastic_strain = elastic_strain + strain_incr;
 //          backwardEPS.setElasticStrain(elastic_strain);
 //        backwardEPS.setEep(E);
-//        backwardEPS.setConverged(TRUE);
+//        backwardEPS.setConverged(true);
 //        //if( getELT1() ) {
 //        //         getELT1()->updateEeDm(&backwardEPS, -st_vol, 0.0);
 //              //}

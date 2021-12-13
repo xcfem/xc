@@ -274,34 +274,32 @@ void XC::NeoHookeanCompressible3D::Print(std::ostream &s, int flag) const
 
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 int XC::NeoHookeanCompressible3D::ComputeTrials()
-{   
-   BJtensor tensorI2("I", 2, def_dim_2);
-   BJtensor tsr1;
-   BJtensor tsr2;
+  {   
+    straintensor tensorI2(BJtensor("I", 2, def_dim_2));
 
-   // Cinv:
-   Cinv = C.inverse();
-   Cinv.symmetrize11();
+    // Cinv:
+    Cinv = C.inverse();
+    Cinv.symmetrize11();
 
-   // J:
-   J = sqrt(C.determinant());
+    // J:
+    J = sqrt(C.determinant());
 
-   // lame constants:
-   double lambda = K - 2.0*G/3.0;
-   double mu = G - lambda*log(J);
+    // lame constants:
+    double lambda = K - 2.0*G/3.0;
+    double mu = G - lambda*log(J);
 
-   // Pk2Stress:
-   thisPK2Stress = (tensorI2-Cinv)*G + Cinv*lambda*log(J);
-   
-   // Green Strain:
-   thisGreenStrain = (C - tensorI2) * 0.5; 
-   
-   // Langrangian Tangent Stiffness:
-   tsr1 = Cinv("ij")*Cinv("kl");
-     tsr1.null_indices();
-   tsr2 = tsr1.transpose0110() + tsr1.transpose0111();
-   Stiffness = tsr1*lambda + tsr2*mu;
+    // Pk2Stress:
+    thisPK2Stress = (tensorI2-Cinv)*G + Cinv*lambda*log(J);
 
-   return 0;
-}
+    // Green Strain:
+    thisGreenStrain = (C - tensorI2) * 0.5; 
+
+    // Langrangian Tangent Stiffness:
+    stresstensor tsr1(Cinv("ij")*Cinv("kl"));
+    tsr1.null_indices();
+    const stresstensor tsr2(tsr1.transpose0110() + tsr1.transpose0111());
+    Stiffness = tsr1*lambda + tsr2*mu;
+
+    return 0;
+  }
 

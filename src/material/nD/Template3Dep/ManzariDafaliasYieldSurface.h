@@ -62,9 +62,8 @@ namespace XC {
 class ManzariDafaliasYieldSurface: public YieldSurface
   {
   public:
+    ManzariDafaliasYieldSurface(void); // Default constructor
     YieldSurface *getCopy(void); // create a clone of itself
-    ManzariDafaliasYieldSurface(); // Default constructor
-    //ManzariDafaliasYieldSurface(const ManzariDafaliasYieldSurface &); // Default constructor
 
     double f(const EPState *EPS) const;
     BJtensor dFods(const EPState *EPS) const;
@@ -79,8 +78,6 @@ class ManzariDafaliasYieldSurface: public YieldSurface
     void print()
       { std::cout << *this; };
   
-    //================================================================================
-    // Overloaded Insertion Operator
     friend std::ostream& operator<<(std::ostream &, const ManzariDafaliasYieldSurface &);
   };
  

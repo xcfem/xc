@@ -154,8 +154,36 @@ XC::straintensor XC::straintensor::operator=( const XC::nDarray & rval)
     return *this;
   }
 
-//##############################################################################
-// makes a complete new copy of straintensor!!
+//! @brief straintensor addition
+XC::straintensor &XC::straintensor::operator+=(const straintensor & rval)
+  {
+    stressstraintensor::operator+=(rval);
+    return *this;
+  }
+
+//! @brief straintensor subtraction
+XC::straintensor &XC::straintensor::operator-=(const straintensor & rval) 
+  {
+    stressstraintensor::operator-=(rval);
+    return *this;
+  }
+    
+//! @brief product.
+XC::straintensor &XC::straintensor::operator*=(const double &rval)
+  {
+    stressstraintensor::operator*=(rval);
+    return *this;
+  }
+
+//! @brief Scalar multiplication.
+XC::straintensor XC::straintensor::operator*(const double &rval) const
+  {
+    straintensor retval(*this);
+    retval*= rval;
+    return retval;
+  }
+
+//! @brief makes a complete new copy of straintensor!!
 XC::straintensor XC::straintensor::deep_copy(void)
   {
     return straintensor(this->data()); // call constructor and return it !
@@ -284,7 +312,7 @@ void XC::straintensor::report(const std::string &msg) const
 
     BJtensor I2("I", 2, def_dim_2);
 
-    straintensor st_vol = I2 * trace() * (1./3.);
+    straintensor st_vol = straintensor(I2 * trace() * (1./3.));
     st_vol.print("st_v","BJtensor st_vol (volumetric part of the st XC::BJtensor)");
 
     straintensor st_dev = this->deviator();  // - st_vol;
@@ -333,5 +361,15 @@ std::ostream &XC::operator<<(std::ostream &os,const XC::straintensor & rhs)
     os << "st_trace = " << rhs.trace() << ", mean pressure p = " << rhs.trace()/3.0 << std::endl;
     return os;
   }
+
+XC::BJtensor XC::operator+(const BJtensor &lval, const straintensor &rval)
+  { return XC::operator+(lval,static_cast<const BJtensor &>(rval)); }
+XC::BJtensor XC::operator-(const BJtensor &lval, const straintensor &rval)
+  { return XC::operator-(lval,static_cast<const BJtensor &>(rval)); }
+XC::BJtensor XC::operator+(const straintensor &lval, const BJtensor &rval)
+  { return XC::operator+(static_cast<const BJtensor &>(lval),rval); }
+XC::BJtensor XC::operator-(const straintensor &lval, const BJtensor &rval)
+  { return XC::operator-(static_cast<const BJtensor &>(lval),rval); }
+
 
 #endif

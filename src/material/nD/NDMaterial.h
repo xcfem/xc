@@ -84,19 +84,20 @@ class straintensor;
 class stresstensor;
 class Tensor;
 
-//! @ingroup Mat
-//!
 //! @defgroup NDMat n-dimensional materials.
+//! @ingroup Mat
 //
-//! @ingroup NDMat
 //
 //! @brief Base class for 2D and 3D materials.
+//! @ingroup NDMat
 //!
-//! NDMaterial class provides the interface that all
-//! NDMaterial writers must provide when introducing new
-//! NDMaterial subclasses. An NDMaterial object 
-//! is responsible for keeping track of stress, strain and the
-//! constitution for a particular integration point in the domain. 
+//! NDMaterial objects represent stress-strain relationships at the
+//! integration points of continuum and force-deformation elements.
+//! NDMaterial class provides the interface that all NDMaterial writers
+//! must provide when introducing new NDMaterial subclasses.
+//! An NDMaterial object is responsible for keeping track of stress,
+//! strain and the constitution for a particular integration point
+//! in the domain. 
 class NDMaterial: public Material
   {
   private:

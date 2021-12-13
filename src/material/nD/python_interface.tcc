@@ -33,13 +33,13 @@ class_<XC::NDMaterial, XC::NDMaterial *, bases<XC::Material>, boost::noncopyable
     .add_property("getVonMisesStress", &XC::NDMaterial::getVonMisesStress)
     .def("setTrialStrain",setNDTrialStrain, "Set the trial strains for the material (the order of the components depends on the subclass) [eps_11, eps_22, eps_33, eps_12, eps_23, eps_31].") 
     .def("getStress",make_function(&XC::NDMaterial::getStress,return_internal_reference<>()), "Return the material stresses (the order of the components depends on the subclass) [sigma_11, sigma_22, sigma_33, sigma_12, sigma_23, sigma_31].") 
-       ;
+  ;
 
 class_<XC::ElasticIsotropicMaterial, bases<XC::NDMaterial>, boost::noncopyable >("ElasticIsotropicMaterial", no_init)
     .add_property("rho", &XC::ElasticIsotropicMaterial::getRho, &XC::ElasticIsotropicMaterial::setRho)
     .add_property("E", &XC::ElasticIsotropicMaterial::getE, &XC::ElasticIsotropicMaterial::setE)
     .add_property("nu", &XC::ElasticIsotropicMaterial::getnu, &XC::ElasticIsotropicMaterial::setnu)
-       ;
+  ;
 #include "elastic_isotropic/python_interface.tcc"
 
 //class_<XC::FeapMaterial , bases<XC::NDMaterial>, boost::noncopyable >("FeapMaterial", no_init);
@@ -68,4 +68,6 @@ class_<material_vector_NDMat, bases<vectorNDMaterial, CommandEntity>, boost::non
   .def("getNames",&material_vector_NDMat::getNamesPy,"Returns the names of the materials.")
   .def("getValues",&material_vector_NDMat::getValues,"Ask the materials for the values corresponding to the argument code (stress, strain, ...).")
   ;
+
+#include "Template3Dep/python_interface.tcc"
 

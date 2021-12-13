@@ -71,16 +71,15 @@ namespace XC {
 //! Yield surface is to model triaxial strength of concrete.
 class TriFCYieldSurface: public YieldSurface
   {
-  // Private vars to define the TriFCYieldSurface Yield Surface
   private:
      double fcomp;
      double ftens;
-     double el; 
+     double el;
      double c;
   public:
     YieldSurface *getCopy(void); //create a clone of itself
     
-    TriFCYieldSurface (double fc, double ft, double e, double coh ); // Default constructor
+    TriFCYieldSurface(double fc= 0.0, double ft= 0.0, double e= 0.0, double coh= 0.0); // Default constructor
 
      
 
@@ -92,15 +91,16 @@ class TriFCYieldSurface: public YieldSurface
     //double xi_s2( const EPState *EPS ) const;
 
     // Redefine 1st derivative of F over tensorial internal variables
-    //tensor xi_t1(const EPState *EPS) const
-    //{
+    //tensor xi_t1(const EPState *EPS) const;
     
-    //}
-    
-    double getfcomp() const;
-    double getftens() const;
-    double getel() const;
-    double get_c() const;
+    double getFcomp(void) const;
+    void setFcomp(const double &);
+    double getFtens(void) const;
+    void setFtens(const double &);
+    double getEl(void) const;
+    void setEl(const double &);
+    double getC(void) const;
+    void setC(const double &);
 
     void print() { std::cerr << *this; }; 
   

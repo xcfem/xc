@@ -50,29 +50,21 @@
 //#
 //===============================================================================
 
-#ifndef fdEvolution_S_CPP
-#define fdEvolution_S_CPP
-
 #include "material/nD/FiniteDeformation/fdEvolution/fdEvolution_S.h"
+#include <iostream>
 
 XC::fdEvolution_S * XC::fdEvolution_S::getCopy(void) 
   { return new fdEvolution_S(*this); }
 
 double XC::fdEvolution_S::HModulus(const XC::stresstensor &sts, const XC::FDEPState &fdepstate) const
-{
-    return 0.0;
-}
+  { return 0.0; }
 
 void XC::fdEvolution_S::print()
-{
-    std::cerr << (*this);
-}
+  { std::cerr << (*this); }
 
 std::ostream& XC::operator<<(std::ostream &os, const XC::fdEvolution_S & ev)
-{
-   os << "Scalar Evolution Law's Parameters: " << "\n";
-   return os;
-}
-
-#endif
+  {
+    os << "Scalar Evolution Law's Parameters: " << "\n";
+    return os;
+  }
 

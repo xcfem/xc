@@ -47,14 +47,15 @@
 #                                                                              #
 #                                                                              #
 # SHORT EXPLANATION: The goal is to create a platform for efficient and easy   #
-#                    implementation of any elasto-plastic constitutive model!   #
+#                    implementation of any elasto-plastic constitutive model!  #
 #                                                                              #
 ################################################################################*/
 
-#ifndef YS_H
-#define YS_H
+#ifndef YieldSurface_H
+#define YieldSurface_H
 
 #include <iostream>
+#include "utility/kernel/CommandEntity.h"
 
 namespace XC {
   class EPState;
@@ -65,7 +66,7 @@ namespace XC {
 
 //! @brief Base class for yield surfaces.
 //! @ingroup MatNDYS
-class YieldSurface
+class YieldSurface: public CommandEntity
   {
   public:
     YieldSurface(void){} //Normal Constructor

@@ -110,11 +110,12 @@ XC::EvolutionLaw_S * XC::EvolutionLaw_L_Eeq::getCopy(void)
 // Evaluating h_s = a * pow( 2.0*Rij_dev * Rij_dev/3.0, 0.5) (For the evaluation of Kp)
 //================================================================================
 
-double XC::EvolutionLaw_L_Eeq::h_s( EPState *EPS, PotentialSurface *PS){
+double XC::EvolutionLaw_L_Eeq::h_s( EPState *EPS, PotentialSurface *PS)
+  {
 
     //=========================================================================
     // Getting de_eq / dLambda
-    stresstensor dQods = PS->dQods( EPS );
+    stresstensor dQods(PS->dQods( EPS ));
     //dQods.reportshort("dQods");
 
     //Evaluate the norm of the deviator of dQods

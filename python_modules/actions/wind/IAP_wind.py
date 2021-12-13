@@ -34,6 +34,198 @@ def getSolidWebBridgeDragForceCoefficient(B: float, h_eq: float):
     '''
     return max(min(2.5- 0.3*(B/h_eq), 2.4), 1.3)
 
+def getWindPressure(v_b: float, rho:float= 1.25):
+    ''' Return the wind pressure according to clause 4.2.3 of IAP-11.  
+
+    :param v_b: basic wind velocity according to clause 4.2.1 of IAP-11.
+    :param rho: density of air (defaults to 1.25 kg/m3).
+    '''
+    return 0.5*rho*v_b**2
+
+def getZmin(terrainCategory:str):
+    ''' Return the minimum height according to table 4.2-b of IAP-11.
+
+    :param terrainCategory: terrain category according to clause 4.2.2 
+                            of IAP-11.
+    '''
+    retval= None
+    if(terrainCategory in ['0', 'I']):
+        retval= 1.0
+    elif(terrainCategory=='II'):
+        retval= 2.0
+    elif(terrainCategory=='III'):
+        retval= 5.0
+    elif(terrainCategory=='IV'):
+        retval= 10.0
+    else:
+        className= type(self).__name__
+        methodName= sys._getframe(0).f_code.co_name
+        lmsg.error(className+'.'+methodName+'; terrainCategory: '+str(terrainCategory)+' unknown.')
+    return retval
+
+def getZ0(terrainCategory:str):
+    ''' Return the rugosity length according to table 4.2-b of IAP-11.
+
+    :param terrainCategory: terrain category according to clause 4.2.2 
+                            of IAP-11.
+    '''
+    retval= None
+    if(terrainCategory=='0'):
+        retval= .003
+    elif(terrainCategory=='I'):
+        retval= .01
+    elif(terrainCategory=='II'):
+        retval= .05
+    elif(terrainCategory=='III'):
+        retval= .3
+    elif(terrainCategory=='IV'):
+        retval= 1.0
+    else:
+        className= type(self).__name__
+        methodName= sys._getframe(0).f_code.co_name
+        lmsg.error(className+'.'+methodName+'; terrainCategory: '+str(terrainCategory)+' unknown.')
+    return retval
+
+def getKr(terrainCategory:str):
+    ''' Return the terrain factor according to table 4.2-b of IAP-11.
+
+    :param terrainCategory: terrain category according to clause 4.2.2 
+                            of IAP-11.
+    '''
+    retval= None
+    if(terrainCategory=='0'):
+        retval= .156
+    elif(terrainCategory=='I'):
+        retval= .17
+    elif(terrainCategory=='II'):
+        retval= .19
+    elif(terrainCategory=='III'):
+        retval= .216
+    elif(terrainCategory=='IV'):
+        retval= .235
+    else:
+        className= type(self).__name__
+        methodName= sys._getframe(0).f_code.co_name
+        lmsg.error(className+'.'+methodName+'; terrainCategory: '+str(terrainCategory)+' unknown.')
+    return retval
+        
+
+def getWindExpositionFactor(terrainCategory:str, z:float, c_0:float= 1.0, k_l: float= 1.0):
+    ''' Return the value of the wind exposition factor according to clause
+        4.2.3 of IAP-11.
+
+    :param terrainCategory: terrain category according to clause 4.2.2 
+                            of IAP-11.
+    :param z: Height above ground surface at the site of the building or 
+              other structure.
+    :param k_l: turbulent factor (defaults to 1.0) according to 
+                clause 4.2.2 of IAP-11.
+    :param c_0: topography factor (defaults to 1.0) according to 
+                clause 4.2.2 of IAP-11.
+    '''
+    z_min= getZmin(terrainCategory)
+    z= max(z, z_min)
+    z_0= getZ0(terrainCategory)
+    k_r= getKr(terrainCategory)
+    ln= math.log(z/z_0)
+    return k_r**2*(c_0**2*ln**2+7*k_l*c_0*ln)
+        
+def getVerticalPressure(terrainCategory:str, z:float, v_b:float, c_0:float= 1.0, k_l: float= 1.0, c_fz= (-0.9,0.9), rho= 1.25):
+    ''' Return the value of the average vertical pressure according to clause
+        4.2.5.1.2 of IAP-11.
+
+    :param terrainCategory: terrain category according to clause 4.2.2 
+                            of IAP-11.
+    :param z: Height above ground surface at the site of the building or 
+              other structure.
+    :param v_b: basic wind velocity according to clause 4.2.1 of IAP-11.
+    :param k_l: turbulent factor (defaults to 1.0) according to 
+                clause 4.2.2 of IAP-11.
+    :param c_0: topography factor (defaults to 1.0) according to 
+                clause 4.2.2 of IAP-11.
+    :param c_fz: force coefficient in vertical direction 
+                 (defaults to (-0.9,0.9)).
+    :param rho: density of air (defaults to 1.25 kg/m3).
+    '''
+    windPressure= getWindPressure(v_b, rho)
+    c_e= getWindExpositionFactor(terrainCategory, z, c_0, k_l)
+    return (windPressure*c_e*c_fz[0], windPressure*c_e*c_fz[1])
+
+def getVerticalForce(terrainCategory:str, z:float, v_b:float, A_refz:float, c_0:float= 1.0, k_l: float= 1.0, c_fz= (-0.9,0.9), rho= 1.25):
+    ''' Return the value of the vertical force according to clause
+        4.2.5.1.2 of IAP-11.
+
+    :param terrainCategory: terrain category according to clause 4.2.2 
+                            of IAP-11.
+    :param z: Height above ground surface at the site of the building or 
+              other structure.
+    :param v_b: basic wind velocity according to clause 4.2.1 of IAP-11.
+    :param A_refz: area of the bridge deck (horizontal projection).
+    :param k_l: turbulent factor (defaults to 1.0) according to 
+                clause 4.2.2 of IAP-11.
+    :param c_0: topography factor (defaults to 1.0) according to 
+                clause 4.2.2 of IAP-11.
+    :param c_fz: force coefficient in vertical direction 
+                 (defaults to (-0.9,0.9)).
+    :param rho: density of air (defaults to 1.25 kg/m3).
+    '''
+    vp= getVerticalPressure(terrainCategory, z, v_b, c_0, k_l, c_fz, rho)
+    return (vp[0]*A_refz, vp[1]*A_refz)
+
+#          a
+#      --------->|                 1    |                
+#       -------->/             ========>|     -
+#        ------->/                      |     ^        
+#         ------>/   h    <>            |     |    
+#          ----->/                      |     | hR
+#           ---->/                      |     |
+#            --->/                      |     -
+#              b
+
+def getLinearDistribution(h:float, hR:float):
+    ''' Return the values (a,b) of a linear pressure distribution whose
+        resultant passes through a point at heigth= hR.
+
+    :param h: height of the pressure distribution.
+    :param hR: height of the resultant.
+    '''
+    ratio= hR/h
+    a= 2*(3*ratio-1)
+    b= 2*(2-3*ratio)
+    return (a,b)
+
+def getVerticalPressureDistribution(terrainCategory:str, x0: float, x1: float, z:float, v_b:float, c_0:float= 1.0, k_l: float= 1.0, c_fz= (-0.9,0.9), rho= 1.25):
+    ''' Return the vertical pressure distribution over a bridge deck to fullfill
+    the clause 4.2.5.1.3 of IAP-11. The resultant of the pressure passes at a
+    distance of the leftmost point of the deck equal to a quarter of the
+    deck width.
+
+    :param terrainCategory: terrain category according to clause 4.2.2 
+                            of IAP-11.
+    :param x0: leftmost point of the deck.
+    :param x1: rigthmost point of the deck.
+    :param z: Height above ground surface at the site of the building or 
+              other structure.
+    :param v_b: basic wind velocity according to clause 4.2.1 of IAP-11.
+    :param k_l: turbulent factor (defaults to 1.0) according to 
+                clause 4.2.2 of IAP-11.
+    :param c_0: topography factor (defaults to 1.0) according to 
+                clause 4.2.2 of IAP-11.
+    :param c_fz: force coefficient in vertical direction 
+                 (defaults to (-0.9,0.9)).
+    :param rho: density of air (defaults to 1.25 kg/m3).
+    '''
+    averagePressure= getVerticalPressure(terrainCategory, z, v_b, c_0, k_l, c_fz, rho)
+    w= x1-x0 # Deck width
+    (a,b)= getLinearDistribution(h= w, hR= 0.75*w)
+    xi= [x0, x1]
+    y0i= [averagePressure[0]*a, averagePressure[0]*b]
+    pressureDistrib0= scipy.interpolate.interp1d(xi, y0i, kind='linear')
+    y1i= [averagePressure[1]*a, averagePressure[1]*b]
+    pressureDistrib1= scipy.interpolate.interp1d(xi, y1i, kind='linear')
+    return (pressureDistrib0, pressureDistrib1)
+
+
 fundamentalBasicWindSpeed= [26.0, 27.0, 29.0]
 # Table 4.2-e
 ## Load on deck.
@@ -142,9 +334,8 @@ def getTrapezoidalPressureDistribution(h:float, heightFraction:float= 0.6, avera
      clause 4.2.5.1.3 of IAP-11).
     :param averagePressure: average value of the wind pressure. 
     '''
-    topSide= (6*heightFraction-2)*averagePressure
-    bottomSide= (4-6*heightFraction)*averagePressure
-    return scipy.interpolate.interp1d([0.0,h], [bottomSide, topSide], kind='linear')
+    (topSide, bottomSide)= getLinearDistribution(h= h, hR= h*heightFraction) 
+    return scipy.interpolate.interp1d([0.0,h], [bottomSide*averagePressure, topSide*averagePressure], kind='linear')
 
 
 srHidingFactor= [0.10, 0.20, 0.30, 0.40, 0.50, 0.60, 1e3] # solidity ratio

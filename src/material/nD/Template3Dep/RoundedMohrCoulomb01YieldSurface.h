@@ -94,10 +94,6 @@ class RoundedMohrCoulomb01YieldSurface: public YieldSurface
     void print()
       { std::cout << *this; }; 
   
-    //================================================================================
-    // Overloaded Insertion Operator
-    // prints an RoundedMohrCoulomb01 YieldSurface's contents 
-    //================================================================================
     friend std::ostream& operator<<(std::ostream &os, const RoundedMohrCoulomb01YieldSurface & YS);
   };
  

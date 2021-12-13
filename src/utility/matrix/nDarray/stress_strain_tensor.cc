@@ -201,6 +201,36 @@ XC::stressstraintensor XC::stressstraintensor::operator=( const XC::nDarray & rv
     return *this;
   }
 
+//! @brief stressstraintensor addition
+XC::stressstraintensor &XC::stressstraintensor::operator+=(const stressstraintensor & rval)
+  {
+    BJtensor::operator+=(rval);
+    return *this;
+  }
+
+//! @brief stressstraintensor subtraction
+XC::stressstraintensor &XC::stressstraintensor::operator-=(const stressstraintensor & rval) 
+  {
+    BJtensor::operator-=(rval);
+    return *this;
+  }
+    
+//! @brief Scalar multiplication.
+XC::stressstraintensor &XC::stressstraintensor::operator*=(const double &rval)
+  {
+    BJtensor::operator*=(rval);
+    return *this;
+  }
+
+//! @brief Scalar multiplication.
+XC::stressstraintensor XC::stressstraintensor::operator*(const double &rval) const
+  {
+    stressstraintensor retval(*this);
+    retval*= rval;
+    return retval;
+  }
+
+
 XC::Vector XC::stressstraintensor::getVector(const size_t &dim) const
   {
     Vector retval(dim);
@@ -354,7 +384,7 @@ void XC::stressstraintensor::compute_principal(stressstraintensor &ret)  const
 void XC::stressstraintensor::compute_deviator(stressstraintensor &st_dev) const
   {
     BJtensor I2("I", 2, def_dim_2); // Kronecker delta  \delta_{ij}
-    stressstraintensor st_vol= I2 * (this->trace()*(1./3.));
+    stressstraintensor st_vol(I2 * (this->trace()*(1./3.)));
     st_dev= (*this) - st_vol;
   }
 

@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Earthquake loads according to NCSP-07 (Spain).
+'''Earthquake loads according to NCSP-07 (Spain).'''
 
 from __future__ import print_function
 from __future__ import division
@@ -76,7 +76,7 @@ class HorizontalElasticResponseSpectrum(object):
     def eval(self, T: float):
         ''' Return the value of the elastic response spectrum.
 
-        :param T: vibration period of a linear single-degree-of-freedo111 system.
+        :param T: vibration period of a linear single-degree-of-freedom system.
         '''
         retval= self.ac
         if(T<=self.Ta):

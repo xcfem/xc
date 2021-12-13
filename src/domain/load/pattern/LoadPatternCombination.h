@@ -59,7 +59,7 @@ class LoadPatternCombination: public ForceReprComponent
       public:
         summand(const float &f= 1.0,LoadPattern *lp= nullptr);
         //! @brief Returns the factor that multiplies the load pattern.
-        const float &Factor(void) const;
+        const float &getFactor(void) const;
         const LoadPattern *getLoadPattern(void) const;
         LoadPattern *getLoadPattern(void);
 	const std::string &getLoadPatternName(const MapLoadPatterns &lps) const;
@@ -136,6 +136,8 @@ class LoadPatternCombination: public ForceReprComponent
       { return descomp.empty(); }
 
     std::string getString(const std::string &fmt= "") const;
+    boost::python::dict getPyDict(void) const;
+    void setPyDict(const boost::python::dict &);    
     virtual void Print(std::ostream &s, int flag =0) const;
 
   };

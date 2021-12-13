@@ -52,41 +52,41 @@
 //#############################################################################
 ///*
 //################################################################################
-//# COPYRIGHT (C):     :-))                                                      #
-//# PROJECT:           Object Oriented Finite Element Program                    #
-//# PURPOSE:                                                                     #
-//# CLASS:             nDarray                                                   #
-//#                                                                              #
-//# VERSION:                                                                     #
+//# COPYRIGHT (C):     :-))                                                   #
+//# PROJECT:           Object Oriented Finite Element Program                 #
+//# PURPOSE:                                                                  #
+//# CLASS:             nDarray                                                #
+//#                                                                           #
+//# VERSION:                                                                  #
 //# LANGUAGE:          C++.ver >= 2.0 ( Borland C++ ver=3.10, SUN C++ ver=2.1 )  #
-//# TARGET OS:         DOS || UNIX || . . .                                      #
-//# DESIGNER(S):       Boris Jeremic                                             #
-//# PROGRAMMER(S):     Boris Jeremic                                             #
-//#                                                                              #
-//#                                                                              #
-//# DATE:              May 28. - July  20  '93                                   #
-//# UPDATE HISTORY:    july 8. '93. BJtensor02 - BJtensor multiplication             #
-//#                                 inner and outer products                     #
-//#                    December 23 1993 print from the base class, operator==,   #
-//#                                     macheps . . .                            #
-//#                    August 22-29 '94 choped to separate files and worked on   #
-//#                                   const and & issues                         #
-//#                    August 30-31 '94 added use_def_dim to full the CC         #
-//#                                   resolved problem with temoraries for       #
-//#                                   operators + and - ( +=, -= )               #
-//#                    January 16 '95 fixed the memory leakage introduced        #
-//#                                   by previous work on +=, -+. I was          #
-//#                                   by mistake decreasing                      #
-//#                                   this->pc_nDarray_rep->total_numb--;        #
-//#                                   inststead of                               #
-//#                                   this->pc_nDarray_rep->n--;                 #
-//#                    28June2004     added val4 for efficiency still            #
-//#                                   to be worked on                            #
-//#                                                                              #
-//#                                                                              #
-//#                                                                              #
-//#                                                                              #
-//################################################################################
+//# TARGET OS:         DOS || UNIX || . . .                                   #
+//# DESIGNER(S):       Boris Jeremic                                          #
+//# PROGRAMMER(S):     Boris Jeremic                                          #
+//#                                                                           #
+//#                                                                           #
+//# DATE:              May 28. - July  20  '93                                #
+//# UPDATE HISTORY:    july 8. '93. BJtensor02 - BJtensor multiplication          #
+//#                                 inner and outer products                  #
+//#                    December 23 1993 print from the base class, operator==,#
+//#                                     macheps . . .                         #
+//#                    August 22-29 '94 choped to separate files and worked on#
+//#                                   const and & issues                      #
+//#                    August 30-31 '94 added use_def_dim to full the CC      #
+//#                                   resolved problem with temoraries for    #
+//#                                   operators + and - ( +=, -= )            #
+//#                    January 16 '95 fixed the memory leakage introduced     #
+//#                                   by previous work on +=, -+. I was       #
+//#                                   by mistake decreasing                   #
+//#                                   this->pc_nDarray_rep->total_numb--;     #
+//#                                   inststead of                            #
+//#                                   this->pc_nDarray_rep->n--;              #
+//#                    28June2004     added val4 for efficiency still         #
+//#                                   to be worked on                         #
+//#                                                                           #
+//#                                                                           #
+//#                                                                           #
+//#                                                                           #
+//#############################################################################
 //*/
 
 #ifndef NDARRAY_HH
@@ -95,6 +95,7 @@
 #include "utility/matrix/nDarray/basics.h"
 #include <string>
 #include <boost/python.hpp>
+#include "tmpl_operators.h"
 
 // forward reference
 namespace XC {
@@ -102,24 +103,13 @@ class BJtensor;
 class BJmatrix;
 class BJvector;
 
-//class stiffness_BJmatrix;
 
-//class Material_Model;
-//class Elastic;
-//class Drucker_Prager;
-//class von_Mises;
-//class MRS_Lade_cone;
-//class Parabolic;
-//
 class stresstensor;
 class straintensor;
 
 
-
-
-//! @ingroup Matrix
-//!
 //! @brief Storage of n-dimensional array data.
+//! @ingroup Matrix
 class nDarray_rep
   {
   public:
@@ -157,9 +147,8 @@ class nDarray_rep
                                    // and ECKEL page 529.
   };
 
-//! @ingroup Matrix
-//!
 //! @brief n-dimensional array.
+//! @ingroup Matrix
 class nDarray
   {
   private:
@@ -272,26 +261,14 @@ class nDarray
     nDarray& operator+=(const nDarray &); // nDarray addition
 
 
-    friend nDarray operator+(const nDarray & , const nDarray & ); // nDarray addition
-///////##############################################################################
-/////// nDarray addition
-/////friend nDarray operator+(const nDarray & lval, const nDarray & rval)
-/////  {
-/////    nDarray result(lval);
-/////    result += rval;
-/////    return result;
-/////  }
-
-
-
 //++    nDarray operator-( nDarray & rval); // nDarray subtraction
 //....// This is from JOOP May/June 1990 after ARKoenig
     nDarray &operator-=(const nDarray & ); // nDarray subtraction
-    friend nDarray operator-(const nDarray & , const nDarray & ); // nDarray subtraction
 
-    nDarray operator+(double rval);  // scalar addition
-    nDarray operator-(double rval);  // scalar subtraction
-    nDarray operator*(const double rval) const ;  // scalar multiplication
+    nDarray operator+(const double &rval);  // scalar addition
+    nDarray operator-(const double &rval);  // scalar subtraction
+    nDarray &operator*=(const double &rval); // scalar multiplication
+    nDarray operator*(const double &rval) const; // scalar multiplication
 
     nDarray operator-();  // Unary minus
 
@@ -352,9 +329,11 @@ class nDarray
     int reference_count(int );
     void set_reference_count(int );
 
-};
-// GLOBAL
-nDarray operator*(const double lval,const nDarray &rval);  // REVIEWER global *
+  };
+  
+template nDarray operator*(const double & , const nDarray & );
+template nDarray operator+(const nDarray & , const nDarray & );
+template nDarray operator-(const nDarray & , const nDarray & );
 
 } // end of XC namespace
 

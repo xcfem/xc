@@ -97,8 +97,6 @@
 //################################################################################
 //*/
 //
-#ifndef TENSOR_CC
-#define TENSOR_CC
 
 #include "utility/matrix/nDarray/BJtensor.h"
 #include "utility/matrix/nDarray/BJmatrix.h"
@@ -150,7 +148,7 @@ XC::BJtensor::BJtensor(const std::string &flag)
 
 //ZhaoOct2005 re-wrote the copy constructor 
 //##############################################################################
-XC::BJtensor::BJtensor(const XC::BJtensor & x)
+XC::BJtensor::BJtensor(const BJtensor & x)
   : indices1(x.indices1), indices2(x.indices2)    
   {
    pc_nDarray_rep = new nDarray_rep;
@@ -176,11 +174,11 @@ XC::BJtensor::BJtensor(const XC::BJtensor & x)
 
    for ( int i=0 ; i<pc_nDarray_rep->total_numb ; i++ )
       pc_nDarray_rep->pd_nDdata[i] = x.pc_nDarray_rep->pd_nDdata[i];
-}
+  }
 
 
 //##############################################################################
-XC::BJtensor::BJtensor(const XC::nDarray &x)
+XC::BJtensor::BJtensor(const nDarray &x)
   : nDarray(x) {} // copy-initializer
                   // DO NOT delete ( nullptr ) indices because return
                   // from operator*( BJtensor & arg ) this one
@@ -212,8 +210,7 @@ XC::BJtensor::BJtensor(const XC::nDarray &x)
 
 // IT IS NOT INHERITED so must be defined in all derived classes
 // See ARM page 306.
-//##############################################################################
-XC::BJtensor& XC::BJtensor::operator=(const XC::BJtensor & rval)
+XC::BJtensor &XC::BJtensor::operator=(const BJtensor & rval)
   {
     if (&rval == this) // if assign an XC::BJtensor to itself
         return *this;
@@ -240,6 +237,19 @@ XC::BJtensor& XC::BJtensor::operator=(const XC::BJtensor & rval)
     return *this;
   }
 
+//! @brief Addition.
+XC::BJtensor &XC::BJtensor::operator+=(const BJtensor & rval)
+  {
+    nDarray::operator+=(rval);
+    return *this;
+  }
+
+//! @brief Subtraction.
+XC::BJtensor &XC::BJtensor::operator-=(const BJtensor &rval)
+  {
+    nDarray::operator-=(rval);
+    return *this;
+  }
 
 
 
@@ -432,14 +442,14 @@ void XC::BJtensor::null_indices(void) const
 //````````  }
 //````````
 
-//##############################################################################
-// BJtensor addition
-XC::BJtensor XC::operator+(const XC::BJtensor &lval, const XC::BJtensor &rval)
-  {
-    XC::BJtensor result(lval);
-    result += rval;
-    return result;
-  }
+
+// //! @brief BJtensor addition
+// XC::BJtensor XC::operator+(const XC::BJtensor &lval, const XC::BJtensor &rval)
+//   {
+//     BJtensor result(lval);
+//     result += rval;
+//     return result;
+//   }
 
 
 
@@ -651,14 +661,14 @@ XC::BJtensor XC::operator+(const XC::BJtensor &lval, const XC::BJtensor &rval)
 //````````  }
 //````````
 
-//##############################################################################
-// BJtensor subtraction
-XC::BJtensor XC::operator-(const XC::BJtensor & lval, const XC::BJtensor & rval)
-  {
-    XC::BJtensor result(lval);
-    result -= rval;
-    return result;
-  }
+// //##############################################################################
+// // BJtensor subtraction
+// XC::BJtensor XC::operator-(const XC::BJtensor & lval, const XC::BJtensor & rval)
+//   {
+//     BJtensor result(lval);
+//     result -= rval;
+//     return result;
+//   }
 
 
 
@@ -722,11 +732,10 @@ XC::BJtensor XC::operator-(const XC::BJtensor & lval, const XC::BJtensor & rval)
 //  }
 //
 
-// Optimized by  Zhao Oct2005
+//! @brief Scalar multiplication. Optimized by  Zhao Oct2005
 XC::BJtensor &XC::BJtensor::operator*=(const double &rval)
   {
-    for ( int i=0 ; i<pc_nDarray_rep->total_numb ; i++ )
-      pc_nDarray_rep->pd_nDdata[i]*= rval;
+    nDarray::operator*=(rval);
     this->null_indices();
     return *this;
   }
@@ -796,17 +805,13 @@ XC::BJtensor XC::BJtensor::operator*(const double &rval) const // Added const he
 //ZC    return mult;
 
     BJtensor mult(*this);
-
     mult *= rval;
-
     return mult;
  }
 
-//    BJtensor operator*( double lval, nDarray & rval);  // REVIEWER global
-//##############################################################################
-// scalar multiplication
-XC::BJtensor XC::operator*(const double &lval,const XC::BJtensor &rval)
-  { return rval*lval; }
+// //! @brief scalar multiplication
+// XC::BJtensor XC::operator*(const double &lval,const XC::BJtensor &rval)
+//   { return rval*lval; }
 
 //##############################################################################
 //##############################################################################
@@ -2561,7 +2566,4 @@ const std::string &XC::BJtensor::f_indices1( void ) const
 //##############################################################################
 const std::string &XC::BJtensor::f_indices2( void ) const
   { return( this->indices2 ); }
-
-
-#endif
 

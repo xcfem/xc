@@ -188,75 +188,57 @@ int XC::TotalLagrangianFD8NodeBrick::revertToStart(void)
 //=============================================================================
 
 int XC::TotalLagrangianFD8NodeBrick::update(void)
-
-{
+  {
 
     int ret = 0;
-
     BJtensor dh;
-
     BJtensor dH_dX;
-
     int where = 0;
 
     int GP_c_r, GP_c_s, GP_c_t;
 
     double r = 0.0;
-
     double s = 0.0;
-
     double t = 0.0;
 
     BJtensor I_ij("I", 2, def_dim_2);
-
     BJtensor currentF;
-
     BJtensor updatedF;
 
-
-
     BJtensor InitialNodesCrds = this->getNodesCrds();
-
     BJtensor CurrentNodesDisp = this->getNodesDisp();
 
 
+    for( GP_c_r = 0 ; GP_c_r < NumIntegrationPts ; GP_c_r++ )
+      {
+        r = pts[GP_c_r ];
+        for( GP_c_s = 0 ; GP_c_s < NumIntegrationPts ; GP_c_s++ )
+	  {
+            s = pts[GP_c_s ];
+            for( GP_c_t = 0 ; GP_c_t < NumIntegrationPts ; GP_c_t++ )
+	      {
+                t = pts[GP_c_t ];
+                where =(GP_c_r * NumIntegrationPts + GP_c_s) * NumIntegrationPts + GP_c_t;
 
-    for( GP_c_r = 0 ; GP_c_r < NumIntegrationPts ; GP_c_r++ ) {
+		//dh = shapeFunctionDerivative(r,s,t);
 
-      r = pts[GP_c_r ];
+		dH_dX = this->dh_Global(r,s,t);
 
-      for( GP_c_s = 0 ; GP_c_s < NumIntegrationPts ; GP_c_s++ ) {
+		currentF = CurrentNodesDisp("Ia") * dH_dX("Ib");
 
-        s = pts[GP_c_s ];
+		  currentF.null_indices();
 
-        for( GP_c_t = 0 ; GP_c_t < NumIntegrationPts ; GP_c_t++ ) {
+		updatedF = currentF + I_ij;
+		FiniteDeformationMaterial *fdMaterial= dynamic_cast<FiniteDeformationMaterial *>(physicalProperties[where]);
+		const straintensor &cast_updatedF= static_cast<const straintensor &>(updatedF);
 
-          t = pts[GP_c_t ];
-
-          where =(GP_c_r * NumIntegrationPts + GP_c_s) * NumIntegrationPts + GP_c_t;
-
-          //dh = shapeFunctionDerivative(r,s,t);
-
-          dH_dX = this->dh_Global(r,s,t);
-
-          currentF = CurrentNodesDisp("Ia") * dH_dX("Ib");
-
-            currentF.null_indices();
-
-          updatedF = currentF + I_ij;
-	  FiniteDeformationMaterial *fdMaterial= dynamic_cast<FiniteDeformationMaterial *>(physicalProperties[where]);
-
-          ret += fdMaterial->setTrialF(updatedF);
-
-        }
+		ret += fdMaterial->setTrialF(cast_updatedF);
+	      }
+	  }
 
       }
-
-    }
-
     return ret;
-
-}
+  }
 
 
 //======================================================================
@@ -265,7 +247,6 @@ XC::BJtensor XC::TotalLagrangianFD8NodeBrick::Jacobian_3D(double x, double y, do
   {
 
      BJtensor N_C = this->getNodesCrds();
-
      BJtensor dh = this->shapeFunctionDerivative(x, y, z);
 
      

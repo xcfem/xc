@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+''' Classes and functions to facilitate the building of the model.'''
 
 from __future__ import print_function
 __author__= "Luis C. Pérez Tato (LCPT) , Ana Ortega (AO_O) "
@@ -16,6 +17,7 @@ import geom
 from materials import typical_materials as tm
 from postprocess import extrapolate_elem_attr
 from postprocess import get_reactions
+from actions.load_combination_utils import utils
 from solution import predefined_solutions
 import uuid
 
@@ -739,7 +741,7 @@ class PredefinedSpace(object):
         '''
         self.getLoadHandler().removeFromDomain(loadCaseName)
         
-    def addNewLoadCaseToDomain(self, loadCaseName: str, loadCaseExpression: str):
+    def addNewLoadCaseToDomain(self, loadCaseName: str, loadCaseExpression:str):
         '''Defines a new combination and add it to the domain.
 
            :param loadCaseName: name of the load pattern or combination.
@@ -748,10 +750,25 @@ class PredefinedSpace(object):
                                       e.g. '1.0*GselfWeight+1.0*GearthPress'
         '''
         combs= self.getLoadHandler().getLoadCombinations
-        lCase=combs.newLoadCombination(loadCaseName,loadCaseExpression)
+        lCase= combs.newLoadCombination(loadCaseName,loadCaseExpression)
         self.preprocessor.resetLoadCase()
         self.addLoadCaseToDomain(loadCaseName)
 
+    def addCombinationForNonLinearAnalysis(self, loadCaseExpression:str):
+        ''' Adds a load combination to the domain and sets the partial
+            safety factors obtained from the expresion.
+
+           :param loadCaseExpression: expression that defines de load case as a
+                                      combination of previously defined actions
+                                      e.g. '1.0*GselfWeight+1.0*GearthPress'
+        '''
+        # Get load pattern names and partial safety factors.
+        combDict= utils.getCombinationDict(loadCaseExpression)
+        for lpName in combDict:
+            factor= combDict[lpName] # partial safety factor.
+            lp= self.addLoadCaseToDomain(lpName)
+            lp.gammaF= factor
+                
     def createSelfWeightLoad(self,xcSet: xc.Set, gravityVector):
         ''' Creates the self-weight load on the elements.
 

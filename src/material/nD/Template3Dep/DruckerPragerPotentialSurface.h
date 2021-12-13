@@ -27,41 +27,41 @@
 //----------------------------------------------------------------------------
 ///*
 //################################################################################
-//# COPYRIGHT (C):     :-))                                                      #
-//# PROJECT:           Object Oriented Finite Element Program                    #
-//# PURPOSE:           Drucker - Prager  potential criterion                     #
-//# CLASS:             DruckerPragerPotentialSurface                                        #
-//#                                                                              #
-//# VERSION:                                                                     #
-//# LANGUAGE:          C++.ver >= 2.0 ( Borland C++ ver=3.00, SUN C++ ver=2.1 )  #
-//# TARGET OS:         DOS || UNIX || . . .                                      #
-//# PROGRAMMER(S):     Boris Jeremic, ZHaohui Yang                               #
-//#                                                                              #
-//#                                                                              #
-//# DATE:              August 03 '93                                             #
-//# UPDATE HISTORY:    August 08 '00                                             #
-//#                                                                              #
-//#                                                                              #
-//#                                                                              #
-//#                                                                              #
-//# SHORT EXPLANATION:                                                           #
-//#                                                                              #
-//# if alfa1#=0 && alfa2#=0 && alfa1#=alfa2 =>                                   #
-//#              Drucker-Prager with non-associated flow rule                    #
-//#                                                                              #
-//# if alfa1#=0 && alfa2#=0 && alfa1==alfa2 =>                                   #
-//#              Drucker-Prager with associated flow rule                        #
-//#                                                                              #
-//# if alfa1==0 && alfa2#=0 =>                                                   #
-//#              Von Mises with non-associated Drucker-Prager flow rule          #
-//#                                                                              #
-//# if alfa1#=0 && alfa2==0 =>                                                   #
-//#              Drucker-Prager with non-associated Von Mises flow rule          #
-//#                                                                              #
-//# if alfa1==0 && alfa2==0 =>                                                   #
-//#              Von Mises with associated flow rule                             #
-//#                                                                              #
-//################################################################################
+//# COPYRIGHT (C):     :-))                                                    #
+//# PROJECT:           Object Oriented Finite Element Program                  #
+//# PURPOSE:           Drucker - Prager  potential criterion                   #
+//# CLASS:             DruckerPragerPotentialSurface                                      #
+//#                                                                            #
+//# VERSION:                                                                   #
+//# LANGUAGE:          C++.ver >= 2.0 ( Borland C++ ver=3.00, SUN C++ ver=2.1 )#
+//# TARGET OS:         DOS || UNIX || . . .                                    #
+//# PROGRAMMER(S):     Boris Jeremic, ZHaohui Yang                             #
+//#                                                                            #
+//#                                                                            #
+//# DATE:              August 03 '93                                           #
+//# UPDATE HISTORY:    August 08 '00                                           #
+//#                                                                            #
+//#                                                                            #
+//#                                                                            #
+//#                                                                            #
+//# SHORT EXPLANATION:                                                         #
+//#                                                                            #
+//# if alfa1#=0 && alfa2#=0 && alfa1#=alfa2 =>                                 #
+//#              Drucker-Prager with non-associated flow rule                  #
+//#                                                                            #
+//# if alfa1#=0 && alfa2#=0 && alfa1==alfa2 =>                                 #
+//#              Drucker-Prager with associated flow rule                      #
+//#                                                                            #
+//# if alfa1==0 && alfa2#=0 =>                                                 #
+//#              Von Mises with non-associated Drucker-Prager flow rule        #
+//#                                                                            #
+//# if alfa1#=0 && alfa2==0 =>                                                 #
+//#              Drucker-Prager with non-associated Von Mises flow rule        #
+//#                                                                            #
+//# if alfa1==0 && alfa2==0 =>                                                 #
+//#              Von Mises with associated flow rule                           #
+//#                                                                            #
+//##############################################################################
 //*/
 
 #ifndef DruckerPragerPotentialSurface_H

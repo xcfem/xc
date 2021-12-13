@@ -74,30 +74,25 @@ XC::PotentialSurface *XC::CamClayPotentialSurface::getCopy(void)
 //CamClayPotentialSurface::CamClayPotentialSurface(CamClayPotentialSurface &CamClayYS ) { }
 //
 
-//================================================================================
-// tensor dQ/dsigma_ij  the normal to the potential surface
-//================================================================================
+//! @brief tensor dQ/dsigma_ij  the normal to the potential surface
+XC::BJtensor XC::CamClayPotentialSurface::dQods(const EPState *EPS) const
+  {
+    BJtensor dQoverds( 2, def_dim_2, 0.0);
+    BJtensor I2("I", 2, def_dim_2);
 
-XC::BJtensor XC::CamClayPotentialSurface::dQods(const EPState *EPS) const {
-  
-  BJtensor dQoverds( 2, def_dim_2, 0.0);
-  BJtensor I2("I", 2, def_dim_2);
+    double p = EPS->getStress().p_hydrostatic();
+    double q = EPS->getStress().q_deviatoric();
+    double po = EPS->getScalarVar( 1 );
+    BJtensor DpoDs = EPS->getStress().dpoverds();
+    BJtensor DqoDs = EPS->getStress().dqoverds();
 
-  double p = EPS->getStress().p_hydrostatic();
-  double q = EPS->getStress().q_deviatoric();
-  double po = EPS->getScalarVar( 1 );
-   BJtensor DpoDs = EPS->getStress().dpoverds();
-   BJtensor DqoDs = EPS->getStress().dqoverds();
+    double dQoverdp = -1.0*M*M*( po - 2.0*p );
+    double dQoverdq = 2.0*q;
 
-  double dQoverdp = -1.0*M*M*( po - 2.0*p );
-  double dQoverdq = 2.0*q;
-
-  dQoverds = DpoDs  * dQoverdp +
-             DqoDs  * dQoverdq;
-
-  return dQoverds;
-
-}
+    dQoverds = DpoDs  * dQoverdp +
+	       DqoDs  * dQoverdq;
+    return dQoverds;
+  }
 
 //================================================================================
 // tensor d2Q/ds2  the normal to the potential surface

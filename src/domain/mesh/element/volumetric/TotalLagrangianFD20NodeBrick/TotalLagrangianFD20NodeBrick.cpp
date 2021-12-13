@@ -133,7 +133,7 @@ void XC::TotalLagrangianFD20NodeBrick::setDomain(Domain *theDomain)
 
 //=============================================================================
 int XC::TotalLagrangianFD20NodeBrick::update(void)
-{
+  {
     int ret = 0;
     BJtensor dh;
     BJtensor dH_dX;
@@ -162,7 +162,8 @@ int XC::TotalLagrangianFD20NodeBrick::update(void)
             currentF.null_indices();
           updatedF = currentF + I_ij;
 	  FiniteDeformationMaterial *fdMaterial= dynamic_cast<FiniteDeformationMaterial *>(physicalProperties[where]);
-          ret += fdMaterial->setTrialF(updatedF);
+	  const straintensor &cast_updatedF= static_cast<const straintensor &>(updatedF);
+          ret += fdMaterial->setTrialF(cast_updatedF);
         }
       }
     }

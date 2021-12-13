@@ -105,7 +105,8 @@ class DomainComponent: public TaggedObject, public MovableObject
     LoadPattern *getCurrentLoadPattern(void);
     
     void set_index(const size_t &i);
-
+    boost::python::dict getPyDict(void) const;
+    void setPyDict(const boost::python::dict &);    
   };
 } // end of XC namespace
 

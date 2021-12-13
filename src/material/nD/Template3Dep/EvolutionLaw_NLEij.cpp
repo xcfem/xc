@@ -117,7 +117,7 @@ XC::EvolutionLaw_T * XC::EvolutionLaw_NL_Eij::getCopy(void)
 //    // Updating alfa1 by dalfa1 = a* de_eq
 //    
 //    // Calculate  e_eq = sqrt( 2.0 * epsilon_ij * epsilon_ij / 3.0)
-//    XC::straintensor pstrain =  EPS->getdPlasticStrain(); 
+//    straintensor pstrain =  EPS->getdPlasticStrain(); 
 //    double e_eq  = pstrain.equivalent();
 //
 //    double dS =  e_eq * geta();
@@ -133,12 +133,11 @@ XC::EvolutionLaw_T * XC::EvolutionLaw_NL_Eij::getCopy(void)
 // Evaluating h_s = 2*ha*Rij/3 - Cr*pow( 2.0*Rij_dev * Rij_dev/3.0, 0.5) (For the evaluation of Kp)
 //================================================================================
 
-XC::BJtensor XC::EvolutionLaw_NL_Eij::h_t( EPState *EPS, PotentialSurface *PS){
-
-    //=========================================================================
+XC::BJtensor XC::EvolutionLaw_NL_Eij::h_t( EPState *EPS, PotentialSurface *PS)
+  {
     // Getting de_ij / dLambda
     
-    XC::stresstensor dQods = PS->dQods( EPS );
+    stresstensor dQods(PS->dQods( EPS ));
     //dQods.reportshort("dQods");
 
     BJtensor dQods_dev = dQods.deviator();
@@ -146,15 +145,14 @@ XC::BJtensor XC::EvolutionLaw_NL_Eij::h_t( EPState *EPS, PotentialSurface *PS){
     double norm_dQods_dev =  pow( temp1.trace(), 0.5 );
     double temp2 = pow( 2.0 / 3.0, 0.5 ) * norm_dQods_dev;
     
-    double ha = getha();
-    double Cr = getCr();
-    BJtensor alpha = EPS->getTensorVar(1);
+    const double ha = getha();
+    const double Cr = getCr();
+    stresstensor alpha(EPS->getTensorVar(1));
              
     BJtensor h = dQods * (2.0/3.0) * ha - alpha * Cr * temp2;
 
     return h;
-
-}
+  }
 
 
 //================================================================================

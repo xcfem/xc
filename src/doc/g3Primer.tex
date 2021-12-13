@@ -411,39 +411,10 @@ unloading stiffness based on ductility, $\mu^{-\beta}$.
 % among UniaxialMaterial objects in the BasicBuilder object.
 
 \subsection{The nDMaterial Command}
-{\sf\small
-\begin{verbatim}
-   nDMaterial materialType <specific material args>
-\end{verbatim}
-}
-
-The nDMaterial command is used to construct an NDMaterial object. NDMaterial
-objects represent stress-strain relationships at the integration points of
-continuum and force-deformation elements. The command has at least one
-argument, the material type. Currently the following types are
-permitted: ElasticIsotropic and J2Plastciity continuum models and one
-force-deformation model Bidirectional. The commands for specifying
-each type are as outlined below.  
-
-The valid queries to any ND material when creating an ElementRecorder
-are 'strain', 'stress', and 'tangent'.
+%% Migrated to Doxygen documentation.
 
 \subsubsection{Elastic Isotropic Material}
-{\sf\small
-\begin{verbatim}
-   nDMaterial ElasticIsotropic matTag? E? v?
-\end{verbatim}
-}
-
-To construct an ElasticIsotropic material object with elastic modulus
-E and Poisson ratio v. The argument matTag is used to
-uniquely identify this NDMaterial object among NDMaterial objects
-in the BasicBuilder object.
-
-The material formulations for the ElasticIsotropic object are 'PlaneStrain2D' and
-'PlaneStress2D'. These are the valid strings that can be passed to the quad
-element for the type parameter. Other types will be added as more
-continuum elements become available, e.g. 'Axisymmetric'.
+%% Migrated to Doxygen documentation.
 
 \subsubsection{J2 Plasticity Material}
 {\sf\small

@@ -1,7 +1,27 @@
 # -*- coding: utf-8 -*-
+''' Functions that are useful when dealing with load combinations.'''
+
 from __future__ import print_function
+
+import re
 import math
+import xc_base
 import loadCombinations
+
+def getCombinationDict(loadCombination):
+    ''' Return a Python dictionary whose keys are the names of the actions
+        in the combination and whose values are the factor that multiply the
+        action.
+
+    :param loadCombination: string of the form "1.00*G1 + 1.00*G2 + 1.35*Qwind"
+    '''
+    loads= loadCombination.split('+')
+    retval= dict()
+    for l in loads:
+        l= l.strip()
+        factor, action= l.split('*')
+        retval[action]= float(factor)
+    return retval
 
 def listActionGroup(actionGroup):
     '''List the defined actions in a group (permanent, variable, accidental).'''

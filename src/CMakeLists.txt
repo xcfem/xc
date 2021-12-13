@@ -124,16 +124,16 @@ INCLUDE_DIRECTORIES(${SQLITEWP_INCL_DIR})
 
 #MPI library
 INCLUDE_DIRECTORIES(${MPI_INCLUDE_PATH})
+message(STATUS "MPI version: ${MPI_CXX_VERSION}")
 
 #TCL library
 INCLUDE_DIRECTORIES(${TCL_INCLUDE_PATH})
 
 #Portable, Extensible Toolkit for Scientific Computation
-SET(PETSC_DIR /usr/lib/petscdir/3.0.0)
-SET(PETSC_ARCH linux-gnu-c-opt)
 find_package(Petsc)
 SET(PETSC_LIB_DIR ${PETSC_DIR}/${PETSC_ARCH}/lib)
 INCLUDE_DIRECTORIES(${PETSC_INCLUDE_DIR})
+INCLUDE_DIRECTORIES(${PETSCCONF_INCLUDE_DIR})
 
 #Python
 INCLUDE_DIRECTORIES(${PYTHON_INCLUDE_DIRS})
@@ -144,11 +144,11 @@ INCLUDE_DIRECTORIES(${LIBXC_SOURCE_DIR})
 # For DEBUG
 #ADD_DEFINITIONS(-Wall -O0 -frounding-math -g)
 # For RELEASE
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++17 ${CMAKE_CXX_FLAGS_RELEASE} -Wall -march=native -pedantic -fPIC -Wno-unused-but-set-variable")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++17 ${CMAKE_CXX_FLAGS_RELEASE} -Wall -march=native -pedantic -fPIC -Wno-unused-but-set-variable ${MPI_CXX_COMPILE_OPTIONS}")
 set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -fPIC -std=f95")
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${OpenMP_C_FLAGS}")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
-set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${OpenMP_EXE_LINKER_FLAGS}")
+set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${OpenMP_EXE_LINKER_FLAGS} ${MPI_CXX_LINK_FLAGS}")
 MESSAGE(STATUS "**** compiler fortran flags ${CMAKE_Fortran_FLAGS}")
 MESSAGE(STATUS "**** compiler c flags ${CMAKE_C_FLAGS}")
 MESSAGE(STATUS "**** compiler cxx flags ${CMAKE_CXX_FLAGS}")
@@ -395,9 +395,7 @@ SET(siseq_linear solution/system_of_eqn/linearSOE/LinearSOEData solution/system_
 
 SET(siseq_eigen solution/system_of_eqn/eigenSOE/ArpackSOE solution/system_of_eqn/eigenSOE/BandArpackSOE solution/system_of_eqn/eigenSOE/BandArpackSolver solution/system_of_eqn/eigenSOE/EigenSOE solution/system_of_eqn/eigenSOE/EigenSolver solution/system_of_eqn/eigenSOE/SymArpackSOE solution/system_of_eqn/eigenSOE/SymArpackSolver solution/system_of_eqn/eigenSOE/SymBandEigenSOE solution/system_of_eqn/eigenSOE/SymBandEigenSolver solution/system_of_eqn/eigenSOE/BandArpackppSOE solution/system_of_eqn/eigenSOE/BandArpackppSolver solution/system_of_eqn/eigenSOE/FullGenEigenSOE solution/system_of_eqn/eigenSOE/FullGenEigenSolver)
 
-SET(siseq_petsc solution/system_of_eqn/linearSOE/petsc/PetscSolver solution/system_of_eqn/linearSOE/petsc/PetscSOE solution/system_of_eqn/linearSOE/petsc/PetscSparseSeqSolver)
-
-SET(siseq_petsc_no solution/system_of_eqn/linearSOE/petsc/ActorPetscSOE solution/system_of_eqn/linearSOE/petsc/badPetscSOE solution/system_of_eqn/linearSOE/petsc/ShadowPetscSOE)
+SET(siseq_petsc solution/system_of_eqn/linearSOE/petsc/PetscSolver solution/system_of_eqn/linearSOE/petsc/PetscSOE solution/system_of_eqn/linearSOE/petsc/PetscSparseSeqSolver solution/system_of_eqn/linearSOE/petsc/ShadowPetscSOE solution/system_of_eqn/linearSOE/petsc/ActorPetscSOE)
 
 SET(siseq solution/system_of_eqn/Solver solution/system_of_eqn/SystemOfEqn ${siseq_linear} ${siseq_eigen} ${siseq_petsc})
 
@@ -449,7 +447,7 @@ add_library(xc_base SHARED utility/kernel/python_interface.cc)
 
 INSTALL(TARGETS xc_basic_utils xc_utils DESTINATION lib)
 
-target_link_libraries(XcBib xc_utils xc_basic_utils OpenMP::OpenMP_CXX ${VTK_BIB} CGAL::CGAL CGAL::CGAL_Core ${Plot_LIBRARY} ${MPFR_LIBRARIES} ${GMP_LIBRARY} ${MYSQL_LIBRARY} ${MySQLpp_LIBRARIES} ${SQLITE3_LIBRARY} ${GNUGTS_LIBRARIES} ${BerkeleyDB_LIBRARIES} ${ARPACK_LIB} ${ARPACKPP_LIB} ${LAPACK_LIBRARIES} ${SUPERLU_LIBRARIES} ${BLAS_LIBRARIES} ${PETSC_LIB_PETSC} ${METIS_LIBRARIES} ${TCL_LIBRARY} ${XC_UTILS_BOOST_LIBRARIES} ${PYTHON_LIBRARIES} ${F2C_LIBRARY} ${GMSH_LIBRARIES} ${SUITESPARSE_LIBRARIES})
+target_link_libraries(XcBib xc_utils xc_basic_utils OpenMP::OpenMP_CXX ${VTK_BIB} CGAL::CGAL CGAL::CGAL_Core ${Plot_LIBRARY} ${MPFR_LIBRARIES} ${GMP_LIBRARY} ${MYSQL_LIBRARY} ${MySQLpp_LIBRARIES} ${SQLITE3_LIBRARY} ${GNUGTS_LIBRARIES} ${BerkeleyDB_LIBRARIES} ${ARPACK_LIB} ${ARPACKPP_LIB} ${UMFPACK_LIB} ${DMUMPS_LIB} ${LAPACK_LIBRARIES} ${SUPERLU_LIBRARIES} ${BLAS_LIBRARIES} ${PETSC_LIB_PETSC} ${METIS_LIBRARIES} ${TCL_LIBRARY} ${XC_UTILS_BOOST_LIBRARIES} ${PYTHON_LIBRARIES} ${F2C_LIBRARY} ${GMSH_LIBRARIES} ${SUITESPARSE_LIBRARIES} ${MPI_CXX_LIBRARIES})
 add_definitions(-fno-strict-aliasing)
 
 ## Define the wrapper libraries

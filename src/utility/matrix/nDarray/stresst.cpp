@@ -185,7 +185,7 @@ XC::stresstensor XC::stresstensor::operator=( const stresstensor & rval)
 // IT IS NOT INHERITED so must be defined in all derived classes
 // See ARM page 306.
 //##############################################################################
-XC::stresstensor XC::stresstensor::operator=( const XC::BJtensor & rval)
+XC::stresstensor XC::stresstensor::operator=(const BJtensor & rval)
   {
     stressstraintensor::operator=(rval);
     return *this;
@@ -195,12 +195,40 @@ XC::stresstensor XC::stresstensor::operator=( const XC::BJtensor & rval)
 // IT IS NOT INHERITED so must be defined in all derived classes
 // See ARM page 306.
 //##############################################################################
-XC::stresstensor XC::stresstensor::operator=( const XC::nDarray & rval)
+XC::stresstensor XC::stresstensor::operator=(const nDarray & rval)
   {
     stressstraintensor::operator=(rval);
     return *this;
   }
 
+//! @brief stresstensor addition
+XC::stresstensor &XC::stresstensor::operator+=(const stresstensor & rval)
+  {
+    stressstraintensor::operator+=(rval);
+    return *this;
+  }
+
+//! @brief stresstensor subtraction
+XC::stresstensor &XC::stresstensor::operator-=(const stresstensor & rval) 
+  {
+    stressstraintensor::operator-=(rval);
+    return *this;
+  }
+    
+//! @brief product.
+XC::stresstensor &XC::stresstensor::operator*=(const double &rval)
+  {
+    stressstraintensor::operator*=(rval);
+    return *this;
+  }
+
+//! @brief Scalar multiplication.
+XC::stresstensor XC::stresstensor::operator*(const double &rval) const
+  {
+    stresstensor retval(*this);
+    retval*= rval;
+    return retval;
+  }
 
 //##############################################################################
 // makes a complete new copy of stresstensor!!
@@ -645,7 +673,7 @@ void XC::stresstensor::report(const std::string &msg) const
 
     BJtensor I2("I", 2, def_dim_2);
 
-    stresstensor st_vol = I2 * trace() * (1./3.);
+    stresstensor st_vol= stresstensor(I2 * trace() * (1./3.));
     st_vol.print("st_v","BJtensor st_vol (volumetric part of the st XC::BJtensor)");
 
     stresstensor st_dev = this->deviator();   // - st_vol;
@@ -797,8 +825,14 @@ std::ostream &XC::operator<<(std::ostream &os, const XC::stresstensor & rhs)
 	return os;
    }
 
-
-
+XC::BJtensor XC::operator+(const BJtensor &lval, const stresstensor &rval)
+  { return XC::operator+(lval,static_cast<const BJtensor &>(rval)); }
+XC::BJtensor XC::operator-(const BJtensor &lval, const stresstensor &rval)
+  { return XC::operator-(lval,static_cast<const BJtensor &>(rval)); }
+XC::BJtensor XC::operator+(const stresstensor &lval, const BJtensor &rval)
+  { return XC::operator+(static_cast<const BJtensor &>(lval),rval); }
+XC::BJtensor XC::operator-(const stresstensor &lval, const BJtensor &rval)
+  { return XC::operator-(static_cast<const BJtensor &>(lval),rval); }
 
 #endif
 

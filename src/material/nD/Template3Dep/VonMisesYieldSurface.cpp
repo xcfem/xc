@@ -70,23 +70,24 @@ XC::YieldSurface *XC::VonMisesYieldSurface::getCopy(void)
 //  c.f. pp.274 XC::W.F.Chen Plasticity for Structure Engineers
 //================================================================================
 
-double XC::VonMisesYieldSurface::f(const XC::EPState *EPS) const {
-    //deviatoric stress XC::BJtensor
+double XC::VonMisesYieldSurface::f(const XC::EPState *EPS) const
+  {
+    //deviatoric stress BJtensor
     int nod = EPS->getNTensorVar();
-    XC::stresstensor alpha;
+    stresstensor alpha;
 
-    XC::stresstensor sigma = EPS->getStress();
+    stresstensor sigma = EPS->getStress();
     if ( nod >=1 ) //May not have kinematic hardening
       alpha = EPS->getTensorVar(1);
 
-    XC::stresstensor sigma_bar = sigma - alpha;   
-    XC::stresstensor s_bar = sigma_bar.deviator();
+    stresstensor sigma_bar = sigma - alpha;   
+    stresstensor s_bar = sigma_bar.deviator();
 
 
     double k = EPS->getScalarVar(1);
     double k2 = k * k;
     
-    XC::stresstensor temp1 = s_bar("ij") * s_bar("ij");
+    stresstensor temp1(s_bar("ij") * s_bar("ij"));
     double temp = temp1.trace();
     temp = temp * 3.0 / 2.0;
 
@@ -100,51 +101,46 @@ double XC::VonMisesYieldSurface::f(const XC::EPState *EPS) const {
 // BJtensor dF/dsigma_ij = 3*( S_ij - alpha_ij )
 //================================================================================
 
- XC::BJtensor XC::VonMisesYieldSurface::dFods(const XC::EPState *EPS) const {
+ XC::BJtensor XC::VonMisesYieldSurface::dFods(const EPState *EPS) const {
 
     int nod = EPS->getNTensorVar();
 
-    XC::stresstensor sigma = EPS->getStress();
-    XC::stresstensor alpha;
+    stresstensor sigma = EPS->getStress();
+    stresstensor alpha;
     if ( nod >=1 ) //May not have kinematic hardening
       alpha = EPS->getTensorVar(1);
 
-    XC::stresstensor sigma_bar = sigma - alpha;   
-    XC::stresstensor s_bar = sigma_bar.deviator();
+    stresstensor sigma_bar = sigma - alpha;   
+    stresstensor s_bar = sigma_bar.deviator();
     BJtensor dFods = s_bar * 3.0;
     
     return dFods;
 }
 
-//================================================================================
-// double xi1 = dF/dk = 2.0*k  Derivative in terms of first scalar var
-//================================================================================
-
-double XC::VonMisesYieldSurface::xi_s1(const XC::EPState *EPS) const {
-
-    double k = EPS->getScalarVar( 1 );
-    
+//! @brief double xi1 = dF/dk = 2.0*k  Derivative in terms of first scalar var.
+//! Redefine 1st derivative of F over first scalar internal variable
+double XC::VonMisesYieldSurface::xi_s1(const EPState *EPS) const
+  {
+    double k = EPS->getScalarVar( 1 );  
     return 2.0 * k;
-}
+  }
 
 
-//================================================================================
-// BJtensor xi_k1=dF/d_alpha_ij=-3.0*S_bar_pq  Derivative in terms of 1st XC::BJtensor var
-//================================================================================
 
- XC::BJtensor XC::VonMisesYieldSurface::xi_t1(const XC::EPState *EPS) const {
-
-    XC::stresstensor sigma = EPS->getStress();
-    XC::stresstensor alpha = EPS->getTensorVar(1);
-
-    XC::stresstensor sigma_bar = sigma - alpha;   
-    XC::stresstensor s_bar = sigma_bar.deviator();
+//! @brief BJtensor xi_k1=dF/d_alpha_ij=-3.0*S_bar_pq  Derivative in terms
+//! of 1st BJtensor var. Redefine 1st derivative of F over first tensorial
+//! internal variable
+XC::BJtensor XC::VonMisesYieldSurface::xi_t1(const EPState *EPS) const
+  {
+    stresstensor sigma = EPS->getStress();
+    stresstensor alpha = EPS->getTensorVar(1);
+    stresstensor sigma_bar = sigma - alpha;   
+    stresstensor s_bar = sigma_bar.deviator();
     BJtensor xi = s_bar * (-3.0);
-    
     return xi;
-}
+  }
 
-//================================================================================
+//! @brief Print stuff.
 std::ostream& XC::operator<<(std::ostream &os, const VonMisesYieldSurface & YS)
   {
     os << "Von Mises Yield Surface Parameters: " << std::endl;

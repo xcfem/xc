@@ -27,34 +27,34 @@
 //----------------------------------------------------------------------------
 //
 //================================================================================
-//# COPYRIGHT (C):     :-))                                                      #
-//# PROJECT:           Object Oriented Finite Element Program                    #
-//# PURPOSE:           Manzari-Dafalias potential criterion(with Pc)             #
-//# CLASS:             DruckerPragerPotentialSurface01                                      #
-//#                                                                              #
-//# VERSION:                                                                     #
-//# LANGUAGE:          C++.ver >= 2.0 ( Borland C++ ver=3.00, SUN C++ ver=2.1 )  #
-//# TARGET OS:         DOS || UNIX || . . .                                      #
-//# PROGRAMMER(S):     Boris Jeremic, Zhaohui Yang                               #
-//#                                                                              #
-//#                                                                              #
-//# DATE:              August 08 '00                                             #
-//# UPDATE HISTORY:    December 13 '00                                           #
-//#                                                                              #
-//#                                                                              #
-//#                                                                              #
-//#                                                                              #
-//# SHORT EXPLANATION:                                                           #
-//#                                                                              #
-//#                                                                              #
-//#                                                                              #
-//#                                                                              #
-//#                                                                              #
-//#                                                                              #
-//#                                                                              #
-//#                                                                              #
-//#                                                                              #
-//#                                                                              #
+//# COPYRIGHT (C):     :-))                                                    #
+//# PROJECT:           Object Oriented Finite Element Program                  #
+//# PURPOSE:           Manzari-Dafalias potential criterion(with Pc)           #
+//# CLASS:             DruckerPragerPotentialSurface01                                    #
+//#                                                                            #
+//# VERSION:                                                                   #
+//# LANGUAGE:          C++.ver >= 2.0 ( Borland C++ ver=3.00, SUN C++ ver=2.1 )#
+//# TARGET OS:         DOS || UNIX || . . .                                    #
+//# PROGRAMMER(S):     Boris Jeremic, Zhaohui Yang                             #
+//#                                                                            #
+//#                                                                            #
+//# DATE:              August 08 '00                                           #
+//# UPDATE HISTORY:    December 13 '00                                         #
+//#                                                                            #
+//#                                                                            #
+//#                                                                            #
+//#                                                                            #
+//# SHORT EXPLANATION:                                                         #
+//#                                                                            #
+//#                                                                            #
+//#                                                                            #
+//#                                                                            #
+//#                                                                            #
+//#                                                                            #
+//#                                                                            #
+//#                                                                            #
+//#                                                                            #
+//#                                                                            #
 //================================================================================
 //
 
@@ -64,6 +64,8 @@
 #include "material/nD/Template3Dep/PotentialSurface.h"
 
 namespace XC {
+class tensor;
+  
 //! @ingroup MatPS
 //!
 //! @brief Manzari-Dafalias potential surface.

@@ -70,18 +70,18 @@ XC::PotentialSurface * XC::VonMisesPotentialSurface::getCopy(void)
 // BJtensor dQ/dsigma_ij = 3*( S_ij )        c.f. pp.274 XC::W.F.Chen
 //================================================================================
 
-XC::BJtensor XC::VonMisesPotentialSurface::dQods(const XC::EPState *EPS) const {
+XC::BJtensor XC::VonMisesPotentialSurface::dQods(const XC::EPState *EPS) const   {
     
     // Deviatoric stress XC::BJtensor of sigma - alpha
-    XC::stresstensor sigma = EPS->getStress();
+    stresstensor sigma = EPS->getStress();
     int nod = EPS->getNTensorVar();
-    XC::stresstensor alpha;
+    stresstensor alpha;
 
     if ( nod >=1 ) //May not have kinematic hardening
       alpha = EPS->getTensorVar(1);
 
-    XC::stresstensor sigma_bar = sigma - alpha;   
-    XC::stresstensor s_bar = sigma_bar.deviator();
+    stresstensor sigma_bar = sigma - alpha;   
+    stresstensor s_bar = sigma_bar.deviator();
     //s_bar.null_indices();
     
     // XC::Tensor dQ/dsigma_ij 
@@ -89,7 +89,7 @@ XC::BJtensor XC::VonMisesPotentialSurface::dQods(const XC::EPState *EPS) const {
     dQods.null_indices();
     
     return dQods;
-}
+  }
 
 //================================================================================
 // BJtensor d2Qods2 = d[ 3*(S_ij - alpha_ij) ] /dsigma_ij 

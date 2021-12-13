@@ -27,38 +27,38 @@
 //----------------------------------------------------------------------------
 ///*
 //################################################################################
-//# COPYRIGHT (C):     :-))                                                      #
-//# PROJECT:           Object Oriented Finite Element Program                    #
-//# PURPOSE:           stress tensor with all necessary functions                #
-//# CLASS:             stresstensor                                              #
-//#                                                                              #
-//# VERSION:                                                                     #
+//# COPYRIGHT (C):     :-))                                                   #
+//# PROJECT:           Object Oriented Finite Element Program                 #
+//# PURPOSE:           stress tensor with all necessary functions             #
+//# CLASS:             stresstensor                                           #
+//#                                                                           #
+//# VERSION:                                                                  #
 //# LANGUAGE:          C++.ver >= 2.0 ( Borland C++ ver=3.00, SUN C++ ver=2.1 )  #
-//# TARGET OS:         DOS || UNIX || . . .                                      #
-//# DESIGNER(S):       Boris Jeremic                                             #
-//# PROGRAMMER(S):     Boris Jeremic                                             #
-//#                                                                              #
-//#                                                                              #
-//# DATE:              July 22 '93                                               #
-//# UPDATE HISTORY:    August 22-29 '94 choped to separate files and worked on   #
-//#                                   const and & issues                         #
-//#                    August 30-31 '94 added use_def_dim to full the CC         #
-//#                                   resolved problem with temoraries for       #
-//#                                   operators + and - ( +=, -= )               #
-//#                    13 septembar '96 added reportAnim  :)                     #
-//#                                                                              #
-//#                                                                              #
-//#                                                                              #
-//#                                                                              #
-//#                                                                              #
-//################################################################################
+//# TARGET OS:         DOS || UNIX || . . .                                   #
+//# DESIGNER(S):       Boris Jeremic                                          #
+//# PROGRAMMER(S):     Boris Jeremic                                          #
+//#                                                                           #
+//#                                                                           #
+//# DATE:              July 22 '93                                            #
+//# UPDATE HISTORY:    August 22-29 '94 choped to separate files and worked on#
+//#                                   const and & issues                      #
+//#                    August 30-31 '94 added use_def_dim to full the CC      #
+//#                                   resolved problem with temoraries for    #
+//#                                   operators + and - ( +=, -= )            #
+//#                    13 septembar '96 added reportAnim  :)                  #
+//#                                                                           #
+//#                                                                           #
+//#                                                                           #
+//#                                                                           #
+//#                                                                           #
+//#############################################################################
 //*/
 
 #ifndef STRESSTENSOR_H
 #define STRESSTENSOR_H
 
 #include "stress_strain_tensor.h"
-#include <iostream>
+#include "tmpl_operators.h"
 
 namespace XC {
 class Material_Model;
@@ -81,8 +81,8 @@ class stresstensor: public stressstraintensor
     explicit stresstensor(const Vector &);
 
     stresstensor(const stresstensor & x );
-    stresstensor(const BJtensor & x); // copy-initializer
-    stresstensor(const nDarray & x); // copy-initializer
+    explicit stresstensor(const BJtensor & x); // copy-initializer
+    explicit stresstensor(const nDarray & x); // copy-initializer
 
     //~stresstensor( );
     
@@ -91,6 +91,12 @@ class stresstensor: public stressstraintensor
     stresstensor operator=(const BJtensor & rval);// tensor assignment to stresstensor
     stresstensor operator=(const nDarray & rval);// nDarray assignment to stresstensor
 
+    stresstensor &operator+=(const stresstensor & rval); // stresstensor addition
+    stresstensor &operator-=(const stresstensor & rval); // stresstensor subtraction
+    
+    stresstensor &operator*=(const double &rval); // product
+    stresstensor operator*(const double &rval) const;
+    
     stresstensor deep_copy(void);
     //..    stresstensor * p_deep_copy(void);
 
@@ -164,6 +170,13 @@ class stresstensor: public stressstraintensor
   };
 
 std::ostream &operator<<(std::ostream &, const stresstensor &);
+template stresstensor operator*(const double & , const stresstensor & );
+template stresstensor operator+(const stresstensor & , const stresstensor & );
+template stresstensor operator-(const stresstensor & , const stresstensor & );
+BJtensor operator+(const BJtensor &, const stresstensor &);
+BJtensor operator-(const BJtensor &, const stresstensor &);
+BJtensor operator+(const stresstensor &, const BJtensor &);
+BJtensor operator-(const stresstensor &, const BJtensor &);
 
 } // end of XC namespace
 

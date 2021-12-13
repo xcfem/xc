@@ -103,6 +103,21 @@ void XC::TaggedObject::assignTag(int newTag)
     setTag(newTag);
   }
 
+//! @brief Return a Python dictionary with the object members values.
+boost::python::dict XC::TaggedObject::getPyDict(void) const
+  {
+    boost::python::dict retval= CommandEntity::getPyDict();
+    retval["tag"]= theTag;
+    return retval;
+  }
+
+//! @brief Set the values of the object members from a Python dictionary.
+void XC::TaggedObject::setPyDict(const boost::python::dict &d)
+  {
+    CommandEntity::setPyDict(d);
+    setTag(boost::python::extract<int>(d["tag"]));
+  }
+
 //! @brief Print stuff.
 void XC::TaggedObject::Print(std::ostream &s, int flag) const
   {

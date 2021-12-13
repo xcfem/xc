@@ -57,7 +57,7 @@
 //  phi(sigma,q) = || dev(sigma) ||  - sqrt(2/3)*q(xi)
 //
 //  Saturation Isotropic Hardening with linear term
-//  q(xi) = simga_0 + (sigma_infty - sigma_0)*exp(-delta*xi) + H*xi
+//  q(xi) = sigma_0 + (sigma_infty - sigma_0)*exp(-delta*xi) + H*xi
 //
 //  Flow Rules
 //  \dot{epsilon_p} =  gamma * d_phi/d_sigma
@@ -88,7 +88,7 @@ namespace XC{
 //! @includedoc j2_plasticity_grp.md
 //  ===== Group documentation ends. =====
 //
-//! @brief J2 isotropic hardening material class.
+//! @brief Base class for J2 isotropic hardening materials.
 //! @ingroup J2NDMat
 //!
 //! The von Mises theory is often called “J2 plasticity” because it is usually
@@ -98,10 +98,10 @@ class J2Plasticity: public NDMaterial
   {
   protected :
     //material parameters
-    double bulk; //!< bulk modulus
+    double bulk; //!< bulk modulus: ratio between pressure increase and the resulting decrease in a material's volume.
     double shear; //!< shear modulus
     double sigma_0; //!< initial yield stress
-    double sigma_infty; //!< final saturation yield stress
+    double sigma_infty; //!< final saturation yield stress (often comparable to the ultimate tensile strength).
     double delta; //!< exponential hardening parameter
     double Hard; //!< linear hardening parameter
     double eta; //!< viscosity
