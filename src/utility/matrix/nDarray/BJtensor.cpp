@@ -396,9 +396,6 @@ XC::BJtensor XC::BJtensor::operator*(const BJtensor &arg) const
 //XC::DEBUGprint::printf("arg_indices=%s\n",  arg_indices);
 
 
-//   int this_indices_number = ::strlen(this->pc_nDarray_rep->indices1);
-//   int  arg_indices_number = ::strlen(arg.pc_nDarray_rep->indices1);
-
    int this_indices_number= this_indices.size();
    int  arg_indices_number = arg_indices.size();
 
