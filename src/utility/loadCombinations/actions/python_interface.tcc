@@ -2,7 +2,7 @@
 //  programa XC; cálculo mediante el método de los elementos finitos orientado
 //  a la solución de problemas estructurales.
 //
-//  Copyright (C)  Luis Claudio Pérez Tato
+//  Copyright (C)  Luis C. Pérez Tato
 //
 //  XC utils is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by

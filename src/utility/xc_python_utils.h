@@ -3,7 +3,7 @@
 //  XC program; finite element analysis code
 //  for structural analysis and design.
 //
-//  Copyright (C)  Luis Claudio Pérez Tato
+//  Copyright (C)  Luis C. Pérez Tato
 //
 //  XC is free software: you can redistribute it and/or modify 
 //  it under the terms of the GNU General Public License as published by

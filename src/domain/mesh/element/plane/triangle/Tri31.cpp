@@ -2,7 +2,7 @@
 //  XC program; finite element analysis code
 //  for structural analysis and design.
 //
-//  Copyright (C)  Luis Claudio Pérez Tato
+//  Copyright (C)  Luis C. Pérez Tato
 //
 //  This program derives from OpenSees <http://opensees.berkeley.edu>
 //  developed by the  «Pacific earthquake engineering research center».
