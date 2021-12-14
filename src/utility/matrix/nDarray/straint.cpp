@@ -110,16 +110,7 @@ XC::straintensor XC::straintensor::operator=( const straintensor & rval)
 // IT IS NOT INHERITED so must be defined in all derived classes
 // See ARM page 306.
 //! @brief Assignment operator.
-XC::straintensor XC::straintensor::operator=( const XC::BJtensor & rval)
-  {
-    stressstraintensor::operator=(rval);
-    return *this;
-  }
-
-// IT IS NOT INHERITED so must be defined in all derived classes
-// See ARM page 306.
-//! @brief Assignment operator.
-XC::straintensor XC::straintensor::operator=( const XC::nDarray & rval)
+XC::straintensor XC::straintensor::operator=( const BJtensor & rval)
   {
     stressstraintensor::operator=(rval);
     return *this;
@@ -153,34 +144,6 @@ XC::straintensor XC::straintensor::operator*(const double &rval) const
     retval*= rval;
     return retval;
   }
-
-//! @brief makes a complete new copy of straintensor!!
-XC::straintensor XC::straintensor::deep_copy(void)
-  {
-    return straintensor(this->data()); // call constructor and return it !
-  }
-//..//##############################################################################
-//..// returns a pointer to this for a deep copy
-//..straintensor XC::straintensor::p_deep_copy(void)
-//..  {
-//..    return &this->deep_copy(); // call constructor and return it !
-//..  }
-
-//___//##############################################################################
-//___//##############################################################################
-//___//##############################################################################
-//___straintensor & XC::straintensor::operator()(short ir, short is, short it,
-//___                                        short tr, short ts, short tt  )
-//___// another overloading of operator() . . .  // overloaded for THREE arguments
-//___  {
-//___    short where = ir - 1;
-//___          where = where*ts + is - 1;
-//___          where = where*tt + it - 1;
-//___
-//___//::printf(" w=%ld ",where);
-//___    straintensor *p_value = this + where;
-//___    return (*p_value);
-//___  }
 
 
 //##############################################################################

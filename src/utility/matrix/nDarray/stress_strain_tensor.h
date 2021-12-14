@@ -56,7 +56,6 @@ class stressstraintensor: public BJtensor
 
     stressstraintensor operator=(const stressstraintensor & rval);
     stressstraintensor operator=(const BJtensor & rval);
-    stressstraintensor operator=(const nDarray & rval);
 
     stressstraintensor &operator+=(const stressstraintensor & rval); // stressstraintensor addition
     stressstraintensor &operator-=(const stressstraintensor & rval); // stressstraintensor subtraction

@@ -89,17 +89,12 @@ class stresstensor: public stressstraintensor
 
     stresstensor operator=(const stresstensor & rval);// stresstensor assignment
     stresstensor operator=(const BJtensor & rval);// tensor assignment to stresstensor
-    stresstensor operator=(const nDarray & rval);// nDarray assignment to stresstensor
-
     stresstensor &operator+=(const stresstensor & rval); // stresstensor addition
     stresstensor &operator-=(const stresstensor & rval); // stresstensor subtraction
     
     stresstensor &operator*=(const double &rval); // product
     stresstensor operator*(const double &rval) const;
     
-    stresstensor deep_copy(void);
-    //..    stresstensor * p_deep_copy(void);
-
     //ini  // use "from" and initialize already allocated stress tensor from "from" values
     //ini      void Initialize( const stresstensor & from );
 

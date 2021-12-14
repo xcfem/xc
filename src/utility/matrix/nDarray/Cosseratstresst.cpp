@@ -70,16 +70,7 @@ XC::Cosseratstresstensor::Cosseratstresstensor ( double initvalue ):
 
 //! @brief Copy constructor.
 XC::Cosseratstresstensor::Cosseratstresstensor(const Cosseratstresstensor &x)
-  : BJtensor("NO")
-    {
-      x.pc_nDarray_rep->n++;  // tell the rval it has another reference
-//      x.reference_count(+1);              // we're adding another reference.
-      pc_nDarray_rep = x.pc_nDarray_rep;  // point to the new tensor_rep.
-// add the indices
-      indices1 = x.indices1;
-      indices2 = x.indices2;
-    }
-
+  : BJtensor(x) {}
 
 //! @brief Copy constructor.
 XC::Cosseratstresstensor::Cosseratstresstensor( const BJtensor & x)
@@ -100,15 +91,7 @@ XC::Cosseratstresstensor XC::Cosseratstresstensor::operator=( const Cosseratstre
   {
     if(&rval == this) // if assign an Cosseratstresstensor to itself
       return *this;
-    assign(rval);
-
-    // Temporary out !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    // null indices in the rval
-    //    rval.indices1 = nullptr;
-    //    rval.indices2 = nullptr;
-    //    rval.null_indices();
-    // Temporary out !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    this->null_indices();
+    BJtensor::operator=(rval);
     return *this;
   }
 
@@ -117,38 +100,12 @@ XC::Cosseratstresstensor XC::Cosseratstresstensor::operator=( const Cosseratstre
 //##############################################################################
 XC::Cosseratstresstensor XC::Cosseratstresstensor::operator=( const BJtensor &rval)
   {
-    assign(rval);
-
-// Temporary out !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-// null indices in the rval
-//    rval.indices1 = nullptr;
-//    rval.indices2 = nullptr;
-//    rval.null_indices();
-// Temporary out !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    this->null_indices();
-    return *this;
-}
-
-
-// IT IS NOT INHERITED so must be defined in all derived classes
-// See ARM page 306.
-//##############################################################################
-XC::Cosseratstresstensor XC::Cosseratstresstensor::operator=( const nDarray & rval)
-  {
-    assign(rval);
-
+    BJtensor::operator=(rval);
     return *this;
   }
 
 
-//##############################################################################
-// makes a complete new copy of Cosseratstresstensor!!
-XC::Cosseratstresstensor XC::Cosseratstresstensor::deep_copy(void)
-  {
-    return Cosseratstresstensor(this->data()); // call constructor and return it !
-  }
-
-// invariants of the stress XC::BJtensor              // Chen W.F. "plasticity for
+// invariants of the stress BJtensor              // Chen W.F. "plasticity for
 double XC::Cosseratstresstensor::Iinvariant1(void) const       // Structural Engineers"
   {
     return (cval(1,1)+cval(2,2)+cval(3,3) + cval(4,4)+cval(5,5)+cval(6,6)   );

@@ -174,15 +174,6 @@ XC::stresstensor XC::stresstensor::operator=(const BJtensor & rval)
   }
 
 
-// IT IS NOT INHERITED so must be defined in all derived classes
-// See ARM page 306.
-//##############################################################################
-XC::stresstensor XC::stresstensor::operator=(const nDarray & rval)
-  {
-    stressstraintensor::operator=(rval);
-    return *this;
-  }
-
 //! @brief stresstensor addition
 XC::stresstensor &XC::stresstensor::operator+=(const stresstensor & rval)
   {
@@ -211,20 +202,6 @@ XC::stresstensor XC::stresstensor::operator*(const double &rval) const
     retval*= rval;
     return retval;
   }
-
-//##############################################################################
-// makes a complete new copy of stresstensor!!
-XC::stresstensor XC::stresstensor::deep_copy(void)
-  {
-    return stresstensor(this->data()); // call constructor and return it !
-  }
-//..//##############################################################################
-//../ returns a pointer to the stresstensor!!
-//..stresstensor * XC::stresstensor::p_deep_copy(void)
-//..  {
-//..    stresstensor temp = this->deep_copy();
-//..    return &temp; // call constructor and return it !
-//..  }
 
 //___//##############################################################################
 //___//##############################################################################

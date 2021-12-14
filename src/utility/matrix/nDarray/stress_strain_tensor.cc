@@ -56,24 +56,15 @@ XC::stressstraintensor::stressstraintensor ( double initvalue ):
 
 //##############################################################################
 XC::stressstraintensor::stressstraintensor( const stressstraintensor & x )
-  : BJtensor("NO")
-    {
-      x.pc_nDarray_rep->n++;  // tell the rval it has another reference
-//      x.reference_count(+1);              // we're adding another reference.
-      pc_nDarray_rep = x.pc_nDarray_rep;  // point to the new tensor_rep.
-// add the indices
-      indices1 = x.indices1;
-      indices2 = x.indices2;
-    }
-
+  : BJtensor(x) {}
 
 //##############################################################################
-XC::stressstraintensor::stressstraintensor( const XC::BJtensor & x)
+XC::stressstraintensor::stressstraintensor( const BJtensor & x)
   : BJtensor( x )
     {  } // copy-initializer
 
 //##############################################################################
-XC::stressstraintensor::stressstraintensor( const XC::nDarray & x)
+XC::stressstraintensor::stressstraintensor( const nDarray & x)
   : BJtensor ( x )
     {  } // copy-initializer
 
@@ -111,15 +102,7 @@ XC::stressstraintensor XC::stressstraintensor::operator=( const stressstraintens
   {
     if(&rval == this) // if assign an stressstraintensor to itself
       return *this;
-    
-    assign(rval);
-// Temporary out !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-// null indices in the rval
-//    rval.indices1 = nullptr;
-//    rval.indices2 = nullptr;
-//    rval.null_indices();
-// Temporary out !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    this->null_indices();
+    BJtensor::operator=(rval);
     return *this;
   }
 
@@ -128,26 +111,10 @@ XC::stressstraintensor XC::stressstraintensor::operator=( const stressstraintens
 //##############################################################################
 XC::stressstraintensor XC::stressstraintensor::operator=(const BJtensor &rval)
   {
-    assign(rval);
-// Temporary out !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-// null indices in the rval
-//    rval.indices1 = nullptr;
-//    rval.indices2 = nullptr;
-//    rval.null_indices();
-// Temporary out !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    this->null_indices();
+    BJtensor::operator=(rval);
     return *this;
   }
 
-
-// IT IS NOT INHERITED so must be defined in all derived classes
-// See ARM page 306.
-//##############################################################################
-XC::stressstraintensor XC::stressstraintensor::operator=( const nDarray & rval)
-  {
-    assign(rval);
-    return *this;
-  }
 
 //! @brief stressstraintensor addition
 XC::stressstraintensor &XC::stressstraintensor::operator+=(const stressstraintensor & rval)

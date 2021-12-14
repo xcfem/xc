@@ -83,15 +83,11 @@ class straintensor: public stressstraintensor
 
     straintensor operator=(const straintensor & rval); // straintensor assignment
     straintensor operator=(const BJtensor & rval);// tensor assignment to straintensor
-    straintensor operator=(const nDarray & rval);// nDarray assignment to straintensor
     straintensor &operator+=(const straintensor & rval); // straintensor addition
     straintensor &operator-=(const straintensor & rval); // straintensor subtraction
     
     straintensor &operator*=(const double &rval); // product
     straintensor operator*(const double &rval) const; // scalar multiplication
-
-    straintensor deep_copy(void);
-//..    straintensor * p_deep_copy(void);
 
 //ini  // use "from" and initialize already allocated strain tensor from "from" values
 //ini      void Initialize( const straintensor & from );

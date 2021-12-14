@@ -136,19 +136,7 @@ XC::BJtensor::BJtensor(const std::string &flag)
 //ZhaoOct2005 re-wrote the copy constructor 
 //##############################################################################
 XC::BJtensor::BJtensor(const BJtensor & x)
-  : indices1(x.indices1), indices2(x.indices2)    
-  {
-    pc_nDarray_rep = new nDarray_rep;
-    pc_nDarray_rep->nDarray_rank = x.pc_nDarray_rep->nDarray_rank;
-
-    int one_or0 = 0;
-    if(!x.pc_nDarray_rep->nDarray_rank) one_or0 = 1;
-    pc_nDarray_rep->init_dim(pc_nDarray_rep->nDarray_rank+one_or0, x.pc_nDarray_rep->dim);
-
-    pc_nDarray_rep->init_data(x.pc_nDarray_rep->pd_nDdata);
-    pc_nDarray_rep->n = 1;
-
-  }
+  : nDarray(x) {}
 
 
 //##############################################################################
@@ -168,11 +156,7 @@ XC::BJtensor &XC::BJtensor::operator=(const BJtensor & rval)
     if(&rval == this) // if assign an BJtensor to itself
       return *this;
     
-    assign(rval);
-
-    // null indices in the rval AND in the this
-    // because rval is temporary anyway and I need *this
-    //    rval.null_indices();
+    nDarray::operator=(rval);
     this->null_indices();
     return *this;
   }
@@ -374,7 +358,7 @@ XC::BJtensor XC::BJtensor::operator*(const BJtensor &arg) const
 
 //fprintf(stdout,"\n\n\n\n  this->indices1 = %s   ; this->indices2 = %s\n", this->indices1,this->indices2);
 // if the BJtensors are same then split indices :-)
-   if( this->pc_nDarray_rep == arg.pc_nDarray_rep )
+   if( this == &arg )
      {
 // WATCH OUT THIS IS NOT STANDRAD AS YOU CANNOT QUARANTY THE ORDER OF EXECUTION!!!!
        this_indices= this->indices2; // this is changed because

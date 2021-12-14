@@ -112,12 +112,11 @@ XC::BJvector::BJvector(const nDarray & x)
 
 
 //! @brief Assignment operator.
-XC::BJvector &XC::BJvector::operator=(const XC::BJvector & rval)
+XC::BJvector &XC::BJvector::operator=(const BJvector & rval)
   {
     if(&rval == this) // if assign an BJvector to itself
       return *this;
-    
-    assign(rval);
+    BJmatrix::operator=(rval);
     return *this;
   }
 

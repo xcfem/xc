@@ -74,26 +74,12 @@ XC::Cosseratstraintensor::Cosseratstraintensor ( double initvalue ):
   BJtensor( 2, Cosserat_def_dim_2, initvalue) {  }
 
 //##############################################################################
-XC::Cosseratstraintensor::Cosseratstraintensor( const Cosseratstraintensor & x ):
-  BJtensor("NO")
-    {
-      x.pc_nDarray_rep->n++;  // tell the rval it has another reference
-//      x.reference_count(+1);              // we're adding another reference.
-      pc_nDarray_rep = x.pc_nDarray_rep;  // point to the new tensor_rep.
-// add the indices
-      indices1 = x.indices1;
-      indices2 = x.indices2;
-    }
-
+XC::Cosseratstraintensor::Cosseratstraintensor( const Cosseratstraintensor & x )
+  : BJtensor(x) {}
 
 //##############################################################################
 XC::Cosseratstraintensor::Cosseratstraintensor(const BJtensor & x)
   : BJtensor( x ) {  } // copy-initializer
-
-//##############################################################################
-XC::Cosseratstraintensor::Cosseratstraintensor(const nDarray & x)
-  : BJtensor( x ) {  }  // copy-initializer
-
 
 // IT IS NOT INHERITED so must be defined in all derived classes
 // See ARM page 306.
@@ -102,60 +88,18 @@ XC::Cosseratstraintensor XC::Cosseratstraintensor::operator=(const Cosseratstrai
   {
     if(&rval == this) // if assign an Cosseratstraintensor to itself
       return *this;
-    
-    assign(rval);
-// Temporary out !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-// null indices in the rval
-//    rval.indices1 = nullptr;
-//    rval.indices2 = nullptr;
-//    rval.null_indices();
-// Temporary out !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    this->null_indices();
+    BJtensor::operator=(rval);
     return *this;
   }
-
-
-
 
 // IT IS NOT INHERITED so must be defined in all derived classes
 // See ARM page 306.
 //##############################################################################
 XC::Cosseratstraintensor XC::Cosseratstraintensor::operator=(const BJtensor &rval)
   {
-    assign(rval);
-
-// Temporary out !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-// null indices in the rval
-//    rval.indices1 = nullptr;
-//    rval.indices2 = nullptr;
-//    rval.null_indices();
-// Temporary out !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    this->null_indices();
+    BJtensor::operator=(rval);
     return *this;
   }
-
-// IT IS NOT INHERITED so must be defined in all derived classes
-// See ARM page 306.
-//##############################################################################
-XC::Cosseratstraintensor XC::Cosseratstraintensor::operator=(const nDarray &rval)
-  {
-    assign(rval);
-    return *this;
-  }
-
-//##############################################################################
-// makes a complete new copy of Cosseratstraintensor!!
-XC::Cosseratstraintensor XC::Cosseratstraintensor::deep_copy(void)
-  {
-    return Cosseratstraintensor(this->data()); // call constructor and return it !
-  }
-//..//##############################################################################
-//..// returns a pointer to this for a deep copy
-//..Cosseratstraintensor XC::Cosseratstraintensor::p_deep_copy(void)
-//..  {
-//..    return &this->deep_copy(); // call constructor and return it !
-//..  }
-
 
 //! @brief invariants of the strain tensor Chen XC::W.F. "plasticity for Structural Engineers"
 double XC::Cosseratstraintensor::Iinvariant1() const

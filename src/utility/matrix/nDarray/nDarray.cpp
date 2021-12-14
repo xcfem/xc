@@ -113,32 +113,6 @@
 
 #include "nDarray.h"
 #include <iostream>
-//tempOUT
-// TENSOR_REP_CC
-// #######################
-// memory manager part
-// overloading operator new in XC::nDarray::nDarray_rep class  ##################
-void *XC::nDarray_rep::operator new(size_t s)
-  {                                       // see C++ reference manual by
-    void *void_pointer;                   // ELLIS and STROUSTRUP page 283.
-    void_pointer = ::operator new(s);     // and ECKEL page 529.
-//    ::printf("\nnew pointer %p of size %d\n",void_pointer,s);
-    if (!void_pointer)
-      {
-        ::fprintf(stderr,"\a\nInsufficient memory\n");
-        ::exit(1);
-      }
-    return void_pointer;
-  }
-
-// overloading operator delete in nDarray::nDarray_rep class  ##################
-void XC::nDarray_rep::operator delete(void *p)
-  {                                       // see C++ reference manual by
-                                          // ELLIS and STROUSTRUP page 283.
-                                          // and ECKEL page 529.
-//    ::printf("deleted pointer %p\n",p);
-    ::operator delete(p);
-  }
 
 //! @brief Initialize dimensions vector.
 void XC::nDarray_rep::init_dim(const size_t &sz, const int &default_dim)
@@ -232,107 +206,107 @@ void XC::nDarray_rep::sum_data(const std::vector<double> &rval)
       pd_nDdata[i]+= rval[i];
   }
 
+void XC::nDarray_rep::substract_data(const std::vector<double> &rval)
+  {
+    for(int i=0 ; i<total_numb; i++ )
+      pd_nDdata[i]-= rval[i];
+  }
+
+void XC::nDarray_rep::neg(void)
+  {
+    for(int i=0 ; i<total_numb; i++ )
+      pd_nDdata[i]= -pd_nDdata[i];
+  }
+
+double XC::nDarray_rep::sum() const
+  {
+    double retval= 0.0;
+    for(int memb=0; memb<total_numb; memb++ )
+      retval+= pd_nDdata[memb];
+    return retval;
+  }
 
 //! @brief Constructor.
 XC::nDarray::nDarray(int rank_of_nDarray, const double &initval)
   {
     // create the structure:
-    pc_nDarray_rep = new nDarray_rep; // this 'new' is overloaded 1
-    pc_nDarray_rep->nDarray_rank = rank_of_nDarray;  //rank_of_nDarray;
+    pc_nDarray_rep.nDarray_rank = rank_of_nDarray;  //rank_of_nDarray;
 
     // in the case of nDarray_rank=0 add one to get right thing from the
     // operator new
     int one_or0 = 0;
-    if(!pc_nDarray_rep->nDarray_rank) one_or0 = 1;
+    if(!pc_nDarray_rep.nDarray_rank) one_or0 = 1;
     const int default_dim  = 1;
-    pc_nDarray_rep->init_dim(pc_nDarray_rep->nDarray_rank+one_or0, default_dim);
+    pc_nDarray_rep.init_dim(pc_nDarray_rep.nDarray_rank+one_or0, default_dim);
      
     // allocate memory for the actual nDarray as nDarray
-    pc_nDarray_rep->init_data(initval);
-    
-    pc_nDarray_rep->n = 1;  // so far, there's one reference
+    pc_nDarray_rep.init_data(initval);
   }
 
 //! @brief Constructor.
 XC::nDarray::nDarray(int rank_of_nDarray, const std::vector<int> &pdim, const double *values)
   {
     // create the structure:
-    pc_nDarray_rep = new nDarray_rep; // this 'new' is overloaded 2
-    pc_nDarray_rep->nDarray_rank = rank_of_nDarray;  //rank_of_nDarray;
+    pc_nDarray_rep.nDarray_rank = rank_of_nDarray;  //rank_of_nDarray;
 
     // in the case of nDarray_rank=0 add one to get right thing from the
     // operator new
     int one_or0 = 0;
-    if(!pc_nDarray_rep->nDarray_rank) one_or0 = 1;
-    pc_nDarray_rep->init_dim(pc_nDarray_rep->nDarray_rank+one_or0, pdim);
+    if(!pc_nDarray_rep.nDarray_rank) one_or0 = 1;
+    pc_nDarray_rep.init_dim(pc_nDarray_rep.nDarray_rank+one_or0, pdim);
 
 
 
     // allocate memory for the actual nDarray as nDarray
-    pc_nDarray_rep->init_data(values);
-
-    pc_nDarray_rep->n = 1;  // so far, there's one reference
-
+    pc_nDarray_rep.init_data(values);
   }
 
 //! @brief Constructor.
 XC::nDarray::nDarray(int rank_of_nDarray, const std::vector<int> &pdim, const std::vector<double> &values)
   {
     // create the structure:
-    pc_nDarray_rep = new nDarray_rep; // this 'new' is overloaded 2
-    pc_nDarray_rep->nDarray_rank = rank_of_nDarray;  //rank_of_nDarray;
+    pc_nDarray_rep.nDarray_rank = rank_of_nDarray;  //rank_of_nDarray;
 
     // in the case of nDarray_rank=0 add one to get right thing from the
     // operator new
     int one_or0 = 0;
-    if(!pc_nDarray_rep->nDarray_rank) one_or0 = 1;
-    pc_nDarray_rep->init_dim(pc_nDarray_rep->nDarray_rank+one_or0, pdim);
+    if(!pc_nDarray_rep.nDarray_rank) one_or0 = 1;
+    pc_nDarray_rep.init_dim(pc_nDarray_rep.nDarray_rank+one_or0, pdim);
 
     // allocate memory for the actual nDarray as nDarray
-    pc_nDarray_rep->init_data(values);
-
-    pc_nDarray_rep->n = 1;  // so far, there's one reference
-
+    pc_nDarray_rep.init_data(values);
   }
 
 //! @brief Constructor.
 XC::nDarray::nDarray(int rank_of_nDarray, const std::vector<int> &pdim, const boost::python::list &l)
   {
     // create the structure:
-    pc_nDarray_rep = new nDarray_rep; // this 'new' is overloaded 3
-    pc_nDarray_rep->nDarray_rank = rank_of_nDarray;  //rank_of_nDarray;
+    pc_nDarray_rep.nDarray_rank = rank_of_nDarray;  //rank_of_nDarray;
 
     // in the case of nDarray_rank=0 add one to get right thing from the
     // operator new
     int one_or0 = 0;
-    if(!pc_nDarray_rep->nDarray_rank) one_or0 = 1;
-    pc_nDarray_rep->init_dim(pc_nDarray_rep->nDarray_rank+one_or0, pdim);
+    if(!pc_nDarray_rep.nDarray_rank) one_or0 = 1;
+    pc_nDarray_rep.init_dim(pc_nDarray_rep.nDarray_rank+one_or0, pdim);
 
     // allocate memory for the actual nDarray as nDarray
-    pc_nDarray_rep->init_data(l);
-
-    pc_nDarray_rep->n = 1;  // so far, there's one reference
-
+    pc_nDarray_rep.init_data(l);
   }
 
 //##############################################################################
 XC::nDarray::nDarray(int rank_of_nDarray, const std::vector<int> &pdim, double initvalue)
   {
     // create the structure:
-    pc_nDarray_rep = new nDarray_rep; // this 'new' is overloaded 4
-    pc_nDarray_rep->nDarray_rank = rank_of_nDarray;  //rank_of_nDarray;
+    pc_nDarray_rep.nDarray_rank = rank_of_nDarray;  //rank_of_nDarray;
 
     // in the case of nDarray_rank=0 add one to get right thing from the
     // operator new
     int one_or0 = 0;
-    if(!pc_nDarray_rep->nDarray_rank) one_or0 = 1;
-    pc_nDarray_rep->init_dim(pc_nDarray_rep->nDarray_rank+one_or0, pdim);
+    if(!pc_nDarray_rep.nDarray_rank) one_or0 = 1;
+    pc_nDarray_rep.init_dim(pc_nDarray_rep.nDarray_rank+one_or0, pdim);
 
     // allocate memory for the actual nDarray as nDarray
-    pc_nDarray_rep->init_data(initvalue);
-    
-    pc_nDarray_rep->n = 1;  // so far, there's one reference
-
+    pc_nDarray_rep.init_data(initvalue);
   }
 
 
@@ -342,21 +316,18 @@ XC::nDarray::nDarray(int rank_of_nDarray, const std::vector<int> &pdim, double i
 XC::nDarray::nDarray(int rank_of_nDarray, int rows, int cols, double *values)
   {
     // create the structure:
-    pc_nDarray_rep =  new nDarray_rep; // this 'new' is overloaded 5
-    pc_nDarray_rep->nDarray_rank = rank_of_nDarray;  //rank_of_nDarray;
+    pc_nDarray_rep.nDarray_rank = rank_of_nDarray;  //rank_of_nDarray;
 
     // not needed for BJmatrix or BJvector but who knows #
     // in the case of nDarray_rank=0 add one to get right thing from the
     // operator new
     int one_or0 = 0;
-    if(!pc_nDarray_rep->nDarray_rank) one_or0 = 1;
+    if(!pc_nDarray_rep.nDarray_rank) one_or0 = 1;
     const std::vector<int> pdim= {rows, cols};
-    pc_nDarray_rep->init_dim(pc_nDarray_rep->nDarray_rank+one_or0,pdim);
+    pc_nDarray_rep.init_dim(pc_nDarray_rep.nDarray_rank+one_or0,pdim);
 
     // allocate memory for the actual XC::nDarray as nDarray
-    pc_nDarray_rep->init_data(values);
-    
-    pc_nDarray_rep->n = 1;  // so far, there's one reference
+    pc_nDarray_rep.init_data(values);
   }
 
 //##############################################################################
@@ -364,56 +335,19 @@ XC::nDarray::nDarray(int rank_of_nDarray, int rows, int cols, double *values)
 XC::nDarray::nDarray(int rank_of_nDarray, int rows, int cols, double value)
   {
     // create the structure:
-    pc_nDarray_rep = new nDarray_rep; // this 'new' is overloaded 6
-    pc_nDarray_rep->nDarray_rank = rank_of_nDarray;  //rank_of_nDarray;
+    pc_nDarray_rep.nDarray_rank = rank_of_nDarray;  //rank_of_nDarray;
 
     // not needed for BJmatrix or BJvector but who knows #
     // in the case of nDarray_rank=0 add one to get right thing from the
     // operator new
     int one_or0 = 0;
-    if(!pc_nDarray_rep->nDarray_rank) one_or0 = 1;
+    if(!pc_nDarray_rep.nDarray_rank) one_or0 = 1;
     const std::vector<int> pdim= {rows, cols};
-    pc_nDarray_rep->init_dim(pc_nDarray_rep->nDarray_rank+one_or0, pdim);
+    pc_nDarray_rep.init_dim(pc_nDarray_rep.nDarray_rank+one_or0, pdim);
 
     // allocate memory for the actual nDarray as nDarray
-    pc_nDarray_rep->init_data(value);
-    
-    pc_nDarray_rep->n = 1;  // so far, there's one reference
+    pc_nDarray_rep.init_data(value);
   }
-
-
-//---//##############################################################################
-//---// special case for XC::BJmatrix and XC::BJvector . . .
-//---XC::nDarray::nDarray(int rank_of_nDarray, int rows, int cols, double initvalue)
-//---{
-//--- // create the structure:
-//---  pc_nDarray_rep = new nDarray_rep; // this 'new' is overloaded
-//---  pc_nDarray_rep->nDarray_rank = rank_of_nDarray;  //rank_of_nDarray;
-//---
-//---// not needed for XC::BJmatrix or XC::BJvector but who knows #
-//---// in the case of nDarray_rank=0 add one to get right thing from the
-//---// operator new
-//---  int one_or0 = 0;
-//---  if(!pc_nDarray_rep->nDarray_rank) one_or0 = 1;
-//---  std::vector<int> pdim= {rows, cols};
-//---  pc_nDarray_rep->init_dim(pc_nDarray_rep->nDarray_rank+one_or0, pdim);
-//---
-//---  pc_nDarray_rep->total_numb = 1;
-//---
-//---  pc_nDarray_rep->dim[0] = rows;
-//---  pc_nDarray_rep->dim[1] = cols;
-//---  pc_nDarray_rep->total_numb = rows*cols;
-//---
-//---// allocate memory for the actual Darray as nDarray
-//---  pc_nDarray_rep->init_data(initvalue);
-//---
-//---  pc_nDarray_rep->n = 1;  // so far, there's one reference
-//---
-//---}
-//---
-
-
-
 
 
 //! @brief create a unit XC::nDarray
@@ -428,22 +362,19 @@ XC::nDarray::nDarray(const std::string &flag, int rank_of_nDarray, const std::ve
         ::exit( 1 );
       }
     // create the structure:
-    pc_nDarray_rep = new nDarray_rep; // this 'new' is overloaded 7
-    pc_nDarray_rep->nDarray_rank = rank_of_nDarray;  //rank_of_nDarray;
+    pc_nDarray_rep.nDarray_rank = rank_of_nDarray;  //rank_of_nDarray;
 
     // in the case of nDarray_rank=0 add one to get right thing from the
     // operator new
     int one_or0 = 0;
-    if(!pc_nDarray_rep->nDarray_rank) one_or0 = 1;
-    pc_nDarray_rep->init_dim(pc_nDarray_rep->nDarray_rank+one_or0,pdim);
+    if(!pc_nDarray_rep.nDarray_rank) one_or0 = 1;
+    pc_nDarray_rep.init_dim(pc_nDarray_rep.nDarray_rank+one_or0,pdim);
 
 
     // allocate memory for the actual XC::nDarray as XC::nDarray
-    pc_nDarray_rep->init_data();
-    
-    pc_nDarray_rep->n = 1;  // so far, there's one reference
+    pc_nDarray_rep.init_data();
 
-    switch(pc_nDarray_rep->nDarray_rank)
+    switch(pc_nDarray_rep.nDarray_rank)
       {
 	case 0:
 	  {
@@ -460,20 +391,20 @@ XC::nDarray::nDarray(const std::string &flag, int rank_of_nDarray, const std::ve
 	case 2:   // Kronecker delta
 	  if ( flag[0] == 'I' )
 	    {
-	      for ( int i2=1 ; i2<=pc_nDarray_rep->dim[0] ; i2++ )
+	      for ( int i2=1 ; i2<=pc_nDarray_rep.dim[0] ; i2++ )
 		{
-		  for ( int j2=1 ; j2<=pc_nDarray_rep->dim[1] ; j2++ )
+		  for ( int j2=1 ; j2<=pc_nDarray_rep.dim[1] ; j2++ )
 		    { val(i2,j2) = (i2 == j2 ? 1  : 0); }
 		}
 	      break;
 	    }
 	case 3:  // Levi - Civita permutation XC::BJtensor
 	   {
-	     for ( int i3=1 ; i3<=pc_nDarray_rep->dim[0] ; i3++ )
+	     for ( int i3=1 ; i3<=pc_nDarray_rep.dim[0] ; i3++ )
 	       {
-		 for ( int j3=1 ; j3<=pc_nDarray_rep->dim[1] ; j3++ )
+		 for ( int j3=1 ; j3<=pc_nDarray_rep.dim[1] ; j3++ )
 		   {
-		     for ( int k3=1 ; k3<=pc_nDarray_rep->dim[2] ; k3++ )
+		     for ( int k3=1 ; k3<=pc_nDarray_rep.dim[2] ; k3++ )
 		       {
 			 if ( (i3==1 && j3==2 && k3==3)  ||
 			      (i3==2 && j3==3 && k3==1)  ||
@@ -495,57 +426,19 @@ XC::nDarray::nDarray(const std::string &flag, int rank_of_nDarray, const std::ve
 	   }
 
 //        case 4:
-//          for ( int i4=1 ; i4<=pc_nDarray_rep->dim[0] ; i4++ )
-//            for ( int j4=1 ; j4<=pc_nDarray_rep->dim[1] ; j4++ )
-//              for ( int k4=1 ; k4<=pc_nDarray_rep->dim[2] ; k4++ )
-//                for ( int l4=1 ; l4<=pc_nDarray_rep->dim[3] ; l4++ )
+//          for ( int i4=1 ; i4<=pc_nDarray_rep.dim[0] ; i4++ )
+//            for ( int j4=1 ; j4<=pc_nDarray_rep.dim[1] ; j4++ )
+//              for ( int k4=1 ; k4<=pc_nDarray_rep.dim[2] ; k4++ )
+//                for ( int l4=1 ; l4<=pc_nDarray_rep.dim[3] ; l4++ )
 //                  val(i4,j4,k4,l4) = (((i4==k4) && (j4==l4)) ? 1 : 0);
 //        break;
       }
   }
 
 
-//##############################################################################
-XC::nDarray::nDarray(const nDarray & x)
-  {
-    x.pc_nDarray_rep->n++; // we're adding another reference.
-    pc_nDarray_rep= x.pc_nDarray_rep;  // point to the same nDarray_rep.
-  }
-
-
-//! @brief Clear memory.
-void XC::nDarray::clear_rep(void)
-  {
-    if(--pc_nDarray_rep->n == 0)  // if reference count  goes to 0
-      {
-	pc_nDarray_rep->clear();
-	delete pc_nDarray_rep;
-	pc_nDarray_rep= nullptr;
-      }
-  }
-
-void XC::nDarray::assign(const nDarray &rval)
-  {
-    rval.pc_nDarray_rep->n++; // we're adding another reference.
-    //    rval.reference_count(+1);  // tell the rval it has another reference
-    //   /*  It is important to increment the reference_counter in the new
-    //       BJtensor before decrementing the reference_counter in the
-    //       old BJtensor_rep to ensure proper operation when assigning a
-    //       BJtensor_rep to itself ( after ARKoenig JOOP May/June '90 )  */
-    // clean up current value;
-    if(reference_count(-1) == 0)  // if nobody else is referencing us.
-      {
-        clear_dim_data();
-        delete pc_nDarray_rep;
-	pc_nDarray_rep= nullptr;
-      }
-    // connect to new value
-    pc_nDarray_rep = rval.pc_nDarray_rep; // point at the rval nDarray_rep
-  }
-
 //! @brief Destructor.
 XC::nDarray::~nDarray(void)
-  { clear_rep(); }
+  {}
 
 
 
@@ -554,14 +447,14 @@ void XC::nDarray::Initialize( const nDarray & from )
   {
     // copy only data because everything else has already been defined
     // WATCH OUT IT HAS TO BE DEFINED BEFORE THIS FUNCTIONS IS CALLED
-    this->pc_nDarray_rep->pd_nDdata= from.pc_nDarray_rep->pd_nDdata;
+    this->pc_nDarray_rep.pd_nDdata= from.pc_nDarray_rep.pd_nDdata;
   }
 //! @brief Reset data to "value".
 void XC::nDarray::Reset_to(const double &value )  // reset data to "value"
   {
     // set only data because everything else has already been defined
     // WATCH OUT IT HAS TO BE DEFINED BEFORE THIS FUNCTIONS IS CALLED
-    this->pc_nDarray_rep->reset_data_to(value);
+    this->pc_nDarray_rep.reset_data_to(value);
   }
 
 // use "from" and initialize AND allocate BJtensor from "from" values
@@ -570,64 +463,23 @@ void XC::nDarray::Reset_to(const double &value )  // reset data to "value"
 void XC::nDarray::Initialize_all(const nDarray &from)
   {
     // create the structure:
-    //   pc_nDarray_rep = new nDarray_rep; // this 'new' is overloaded //IN DEFAULT
-    this->pc_nDarray_rep->nDarray_rank= from.rank();  //rank_of_nDarray;
+    this->pc_nDarray_rep.nDarray_rank= from.rank();  //rank_of_nDarray;
     // in the case of nDarray_rank=0 add one to get right thing from the
     // operator new
     int one_or0 = 0;
-    if(!this->pc_nDarray_rep->nDarray_rank) one_or0 = 1;
+    if(!this->pc_nDarray_rep.nDarray_rank) one_or0 = 1;
     const std::vector<int> &pdim= from.dim();
-    this->pc_nDarray_rep->init_dim(pc_nDarray_rep->nDarray_rank+one_or0, pdim);
+    this->pc_nDarray_rep.init_dim(pc_nDarray_rep.nDarray_rank+one_or0, pdim);
 
     // allocate memory for the actual XC::nDarray as XC::nDarray
-    this->pc_nDarray_rep->init_data(from.pc_nDarray_rep->pd_nDdata);
-    this->pc_nDarray_rep->n = 1;  // so far, there's one reference
+    this->pc_nDarray_rep.init_data(from.pc_nDarray_rep.pd_nDdata);
   }
-
-XC::nDarray XC::nDarray::deep_copy(void)
-  {
-    // create the structure:
-    nDarray temp;
-    temp.pc_nDarray_rep->nDarray_rank = this->pc_nDarray_rep->nDarray_rank;
-
-    // in the case of nDarray_rank=0 add one to get right thing from the
-    // operator new
-    int one_or0 = 0;
-    if(!temp.pc_nDarray_rep->nDarray_rank) one_or0 = 1;
-    temp.pc_nDarray_rep->init_dim(temp.pc_nDarray_rep->nDarray_rank+one_or0, this->pc_nDarray_rep->dim);
-
-    temp.pc_nDarray_rep->init_data(pc_nDarray_rep->pd_nDdata);
-
-    temp.pc_nDarray_rep->n = 1;  // so far, there's one reference
-
-    return temp;
-  }
-
-//! @brief Assignment operator.
-XC::nDarray& XC::nDarray::operator=(const nDarray &rval)
-  {
-    rval.pc_nDarray_rep->n++;  // tell the rval it has another reference
-
-//   /*  It is important to increment the reference_counter in the new
-//       nDarray before decrementing the reference_counter in the
-//       old nDarray_rep to ensure proper operation when assigning a
-//       nDarray_rep to itself ( after ARKoenig JOOP May/June '90 )  */
-
-    // clean up current value;
-    clear_rep();
-
-    // connect to new value
-    pc_nDarray_rep= rval.pc_nDarray_rep;  // point at the rval nDarray_rep
-    return *this;
-  }
-
-
 
 const double &XC::nDarray::val(int subscript, ...) const
   {
     // if scalar get back
-    if(pc_nDarray_rep->nDarray_rank==0)
-      return (pc_nDarray_rep->pd_nDdata[0]);
+    if(pc_nDarray_rep.nDarray_rank==0)
+      return (pc_nDarray_rep.pd_nDdata[0]);
     
     // for all others proceed
     va_list p_arg;
@@ -638,21 +490,21 @@ const double &XC::nDarray::val(int subscript, ...) const
 
     first = subscript; // first index
     long int where = first - 1;
-    for( int Dcount=1 ; Dcount<=pc_nDarray_rep->nDarray_rank-1 ; Dcount++ )
+    for( int Dcount=1 ; Dcount<=pc_nDarray_rep.nDarray_rank-1 ; Dcount++ )
       {    // for all dimensions less then 1 this will be skipped
         second = va_arg(p_arg, int);    // next
-        where = where*pc_nDarray_rep->dim[Dcount]+second - 1;
+        where = where*pc_nDarray_rep.dim[Dcount]+second - 1;
         first = second;
       }
     va_end(p_arg);
     //::printf("*w=%2ld ",where);
-    return pc_nDarray_rep->val(static_cast<size_t>(where));
+    return pc_nDarray_rep.val(static_cast<size_t>(where));
   }
 
 double &XC::nDarray::val(int subscript, ...)
   {    
 // if scalar get back
-    if(pc_nDarray_rep->nDarray_rank==0) return (pc_nDarray_rep->pd_nDdata[0]);
+    if(pc_nDarray_rep.nDarray_rank==0) return (pc_nDarray_rep.pd_nDdata[0]);
 // for all others proceed
     va_list p_arg;
     va_start(p_arg, subscript); // initialize p_arg
@@ -662,185 +514,67 @@ double &XC::nDarray::val(int subscript, ...)
 
     first = subscript; // first index
     long int where = first - 1;
-    for( int Dcount=1 ; Dcount<=pc_nDarray_rep->nDarray_rank-1 ; Dcount++ )
+    for( int Dcount=1 ; Dcount<=pc_nDarray_rep.nDarray_rank-1 ; Dcount++ )
       {    // for all dimensions less then 1 this will be skipped
         second = va_arg(p_arg, int);    // next
-        where = where*pc_nDarray_rep->dim[Dcount]+second - 1;
+        where = where*pc_nDarray_rep.dim[Dcount]+second - 1;
         first = second;
       }
     va_end(p_arg);
 //::printf("*w=%2ld ",where);
-    return pc_nDarray_rep->val(static_cast<size_t>(where));
+    return pc_nDarray_rep.val(static_cast<size_t>(where));
   }
-// ..JB..
-// ..JB..// another overloading of operator() . . .  // overloaded for ONE argument
-// ..JB..double & XC::nDarray::val(int first)
-// ..JB..  {
-// ..JB..    long int where = first - 1;
-// ..JB..
-// ..JB..//::printf(" w=%ld ",where);
-// ..JB..    return pc_nDarray_rep->val(static_cast<size_t>(where));
-// ..JB..  }
-// ..JB..
-// ..JB..
-// ..JB..// another overloading of operator() . . .  // overloaded for TWO arguments
-// ..JB..double & XC::nDarray::val(int first, int second)
-// ..JB..  {
-// ..JB..    long int where = first - 1;
-// ..JB..             where = where*pc_nDarray_rep->dim[1]+second - 1;
-// ..JB..
-// ..JB..//::printf(" w=%ld ",where);
-// ..JB..    return pc_nDarray_rep->val(static_cast<size_t>(where));
-// ..JB..  }
-// ..JB..
-// ..JB..
-// ..JB..// another overloading of operator() . . .  // overloaded for THREE arguments
-// ..JB..double & XC::nDarray::val(int first, int second, int third )
-// ..JB..  {
-// ..JB..    long int where = first - 1;
-// ..JB..             where = where*pc_nDarray_rep->dim[1]+second - 1;
-// ..JB..             where = where*pc_nDarray_rep->dim[2]+third  - 1;
-// ..JB..
-// ..JB..//::printf(" w=%ld ",where);
-// ..JB..    return pc_nDarray_rep->val(static_cast<size_t>(where));
-// ..JB..  }
-// ..JB..
-// ..JB..
-// ..JB..// another overloading of operator() . . .  // overloaded for FOUR arguments
-// ..JB..double & XC::nDarray::val(int first, int second,
-// ..JB..                      int third, int fourth)
-// ..JB..  {
-// ..JB..    if(pc_nDarray_rep->nDarray_rank==0) return (*pc_nDarray_rep->pd_nDdata);
-// ..JB..
-// ..JB..    long int where = first - 1;
-// ..JB..
-// ..JB..    if(pc_nDarray_rep->nDarray_rank==2)
-// ..JB..      {
-// ..JB..         where = where*pc_nDarray_rep->dim[1]+second - 1;
-// ..JB..      }
-// ..JB..
-// ..JB..    if(pc_nDarray_rep->nDarray_rank==3)
-// ..JB..      {
-// ..JB..        where = where*pc_nDarray_rep->dim[2]+third  - 1;
-// ..JB..      }
-// ..JB..
-// ..JB..    if(pc_nDarray_rep->nDarray_rank==4)
-// ..JB..      {
-// ..JB..        where = where*pc_nDarray_rep->dim[3]+fourth - 1;
-// ..JB..      }
-// ..JB..
-// ..JB..//::printf(" w=%ld ",where);
-// ..JB..    return pc_nDarray_rep->val(static_cast<size_t>(where));
-// ..JB..  }
-// ..JB..
-// ..JB..
-
-
-
 
 // another overloading of operator() . . .  // overloaded for FOUR arguments
 const double &XC::nDarray::val4(int first, int second, int third, int fourth) const
   {
-//JB//JB    long int where = (((first-1)*pc_nDarray_rep->dim[1]+second-1)*pc_nDarray_rep->dim[2]+third-1)*pc_nDarray_rep->dim[3]+fourth-1;
-//JB    double *p_value = pc_nDarray_rep->pd_nDdata + (size_t)where;
-//JB// ..JB..    double *p_value = pc_nDarray_rep->pd_nDdata + (size_t)where;
-//JB    return (*p_value);
-//JB//    return (*pc_nDarray_rep->pd_nDdata + (size_t)(((first-1)*pc_nDarray_rep->dim[1]+second-1)*pc_nDarray_rep->dim[2]+third-1)*pc_nDarray_rep->dim[3]+fourth-1);
 
-
-    if(pc_nDarray_rep->nDarray_rank==0)
-      return (pc_nDarray_rep->pd_nDdata[0]);
+    if(pc_nDarray_rep.nDarray_rank==0)
+      return (pc_nDarray_rep.pd_nDdata[0]);
 
     long int where = first - 1;
 
-    if(pc_nDarray_rep->nDarray_rank==2)
-      { where = where*pc_nDarray_rep->dim[1]+second - 1; }
+    if(pc_nDarray_rep.nDarray_rank==2)
+      { where = where*pc_nDarray_rep.dim[1]+second - 1; }
 
-    if(pc_nDarray_rep->nDarray_rank==3)
-      { where = where*pc_nDarray_rep->dim[2]+third  - 1; }
+    if(pc_nDarray_rep.nDarray_rank==3)
+      { where = where*pc_nDarray_rep.dim[2]+third  - 1; }
 
-    if(pc_nDarray_rep->nDarray_rank==4)
-      { where = where*pc_nDarray_rep->dim[3]+fourth - 1; }
+    if(pc_nDarray_rep.nDarray_rank==4)
+      { where = where*pc_nDarray_rep.dim[3]+fourth - 1; }
 
 //::printf(" w=%ld ",where);
-    return pc_nDarray_rep->val(static_cast<size_t>(where));
+    return pc_nDarray_rep.val(static_cast<size_t>(where));
   }
 
 
 // another overloading of operator() . . .  // overloaded for FOUR arguments
 double &XC::nDarray::val4(int first, int second, int third, int fourth)
   {
-//JB//JB    long int where = (((first-1)*pc_nDarray_rep->dim[1]+second-1)*pc_nDarray_rep->dim[2]+third-1)*pc_nDarray_rep->dim[3]+fourth-1;
-//JB    double *p_value = pc_nDarray_rep->pd_nDdata + (size_t)where;
-//JB// ..JB..    double *p_value = pc_nDarray_rep->pd_nDdata + (size_t)where;
-//JB    return (*p_value);
-//JB//    return (*pc_nDarray_rep->pd_nDdata + (size_t)(((first-1)*pc_nDarray_rep->dim[1]+second-1)*pc_nDarray_rep->dim[2]+third-1)*pc_nDarray_rep->dim[3]+fourth-1);
 
-
-    if(pc_nDarray_rep->nDarray_rank==0)
-      return (pc_nDarray_rep->pd_nDdata[0]);
+    if(pc_nDarray_rep.nDarray_rank==0)
+      return (pc_nDarray_rep.pd_nDdata[0]);
 
     long int where = first - 1;
 
-    if(pc_nDarray_rep->nDarray_rank==2)
-      { where = where*pc_nDarray_rep->dim[1]+second - 1; }
+    if(pc_nDarray_rep.nDarray_rank==2)
+      { where = where*pc_nDarray_rep.dim[1]+second - 1; }
 
-    if(pc_nDarray_rep->nDarray_rank==3)
-      { where = where*pc_nDarray_rep->dim[2]+third  - 1; }
+    if(pc_nDarray_rep.nDarray_rank==3)
+      { where = where*pc_nDarray_rep.dim[2]+third  - 1; }
 
-    if(pc_nDarray_rep->nDarray_rank==4)
-      { where = where*pc_nDarray_rep->dim[3]+fourth - 1; }
+    if(pc_nDarray_rep.nDarray_rank==4)
+      { where = where*pc_nDarray_rep.dim[3]+fourth - 1; }
 
 //::printf(" w=%ld ",where);
-    return pc_nDarray_rep->val(static_cast<size_t>(where));
+    return pc_nDarray_rep.val(static_cast<size_t>(where));
   }
-
-
-
-//..
-//..// another overloading of operator() . . .
-//..// overloaded for more than FOUR arguments
-//..double & XC::nDarray::val(int first, int second,
-//..                      int third, int fourth,
-//..                      int subscript, ...)
-//..  {
-//..// if the scalar is zero order then o'ma back
-//..    if(pc_nDarray_rep->nDarray_rank==0) return (*pc_nDarray_rep->pd_nDdata);
-//..// for any higher order go ahead
-//..    va_list p_arg;
-//..    va_start(p_arg, subscript); // initialize p_arg
-//..
-//..    int prvi  = subscript;
-//..    int drugi = 0;
-//..
-//..    long int where = first - 1;
-//..             where = where*pc_nDarray_rep->dim[1]+second - 1;
-//..             where = where*pc_nDarray_rep->dim[2]+third  - 1;
-//..             where = where*pc_nDarray_rep->dim[3]+fourth - 1;
-//..
-//..// dalje iza cetvrtog
-//..             where = where*pc_nDarray_rep->dim[4]+prvi - 1;
-//..
-//..
-//..    for ( int Dcount=5 ; Dcount<=pc_nDarray_rep->nDarray_rank-1 ; Dcount++ )
-//..      {    // this will actually be skipped for all dimensions less than 2
-//..        drugi = va_arg(p_arg, int);    // sledeci
-//..        where = where*pc_nDarray_rep->dim[Dcount]+drugi - 1;
-//..        prvi = drugi;
-//..      }
-//..    va_end(p_arg);
-//..
-//..//::printf(" w=%ld ",where);
-//..    return pc_nDarray_rep->val(static_cast<size_t>(where));
-//..  }
-
-
 
 
 const double &XC::nDarray::cval(int subscript, ...)  const
   {
 // if scalar get back
-    if(pc_nDarray_rep->nDarray_rank==0) return (pc_nDarray_rep->pd_nDdata[0]);
+    if(pc_nDarray_rep.nDarray_rank==0) return (pc_nDarray_rep.pd_nDdata[0]);
 // for all others proceed
     va_list p_arg;
     va_start(p_arg, subscript); // initialize p_arg
@@ -850,239 +584,24 @@ const double &XC::nDarray::cval(int subscript, ...)  const
 
     first = subscript; // first indeks
     long int where = first - 1;
-    for ( int Dcount=1 ; Dcount<=pc_nDarray_rep->nDarray_rank-1 ; Dcount++ )
+    for ( int Dcount=1 ; Dcount<=pc_nDarray_rep.nDarray_rank-1 ; Dcount++ )
       {    // for all dimensions less then 2 this will be skipped
         second = va_arg(p_arg, int);    // next
-        where = where*pc_nDarray_rep->dim[Dcount]+second - 1;
+        where = where*pc_nDarray_rep.dim[Dcount]+second - 1;
         first = second;
       }
     va_end(p_arg);
 
 //::printf("*w=%2ld ",where);
-    return pc_nDarray_rep->val(static_cast<size_t>(where));
+    return pc_nDarray_rep.val(static_cast<size_t>(where));
   }
 
-
-//..
-//..// another overloading of operator() . . .
-//..double XC::nDarray::operator()(int subscript, ...) const
-//..  {
-//..// if the scalar is zero order then o'ma back
-//..    if(pc_nDarray_rep->nDarray_rank==0) return (*pc_nDarray_rep->pd_nDdata);
-//..// for any higher order go ahead
-//..    va_list p_arg;
-//..    va_start(p_arg, subscript); // initialize p_arg
-//..
-//..    int prvi  = 0;
-//..    int drugi = 0;
-//..
-//..    prvi = subscript; // prvi indeks
-//..    long int where = prvi - 1;
-//..    for ( int Dcount=1 ; Dcount<=pc_nDarray_rep->nDarray_rank-1 ; Dcount++ )
-//..      {    // this will actually be skipped for all dimensions less than 2
-//..        drugi = va_arg(p_arg, int);    // sledeci
-//..        where = where*pc_nDarray_rep->dim[Dcount]+drugi - 1;
-//..        prvi = drugi;
-//..      }
-//..    va_end(p_arg);
-//..
-//..//::printf(" w=%ld ",where);
-//..    return pc_nDarray_rep->val(static_cast<size_t>(where));
-//..  }
-//..
-//..
-//..
-
-//@@@@@
-//@@@@@ 
-//@@@@@ // another overloading of operator() . . .  // overloaded for ONE argument
-//@@@@@ double XC::nDarray::operator()(int first) const
-//@@@@@   {
-//@@@@@     long int where = first - 1;
-//@@@@@
-//@@@@@ //::printf(" w=%ld ",where);
-//@@@@@    return pc_nDarray_rep->val(static_cast<size_t>(where));
-//@@@@@   }
-//@@@@@
-//@@@@@ 
-//@@@@@ // another overloading of operator() . . .  // overloaded for TWO arguments
-//@@@@@ double XC::nDarray::operator()(int first, int second) const
-//@@@@@   {
-//@@@@@     long int where = first - 1;
-//@@@@@              where = where*pc_nDarray_rep->dim[1]+second - 1;
-//@@@@@
-//@@@@@ //::printf(" w=%ld ",where);
-//@@@@@    return pc_nDarray_rep->val(static_cast<size_t>(where));
-//@@@@@   }
-//@@@@@
-//@@@@@ 
-//@@@@@ // another overloading of operator() . . .  // overloaded for THREE arguments
-//@@@@@ double XC::nDarray::operator()(int first, int second, int third ) const
-//@@@@@   {
-//@@@@@     long int where = first - 1;
-//@@@@@              where = where*pc_nDarray_rep->dim[1]+second - 1;
-//@@@@@              where = where*pc_nDarray_rep->dim[2]+third  - 1;
-//@@@@@
-//@@@@@ //::printf(" w=%ld ",where);
-//@@@@@     return pc_nDarray_rep->val(static_cast<size_t>(where));
-//@@@@@   }
-//@@@@@
-//@@@@@ 
-//@@@@@ // another overloading of operator() . . .  // overloaded for FOUR arguments
-//@@@@@ double XC::nDarray::operator()(int first, int second,
-//@@@@@                            int third, int fourth) const
-//@@@@@   {
-//@@@@@     long int where = first - 1;
-//@@@@@              where = where*pc_nDarray_rep->dim[1]+second - 1;
-//@@@@@              where = where*pc_nDarray_rep->dim[2]+third  - 1;
-//@@@@@              where = where*pc_nDarray_rep->dim[3]+fourth - 1;
-//@@@@@
-//@@@@@ //::printf(" w=%ld ",where);
-//@@@@@     return pc_nDarray_rep->val(static_cast<size_t>(where));
-//@@@@@   }
-//@@@@@
-//@@@@@
-//@@@@@
-//@@@@@ 
-//@@@@@ // another overloading of operator() . . .
-//@@@@@ // overloaded for more than FOUR arguments
-//@@@@@ double XC::nDarray::operator()(int first, int second,
-//@@@@@                            int third, int fourth,
-//@@@@@                            int subscript, ...) const
-//@@@@@   {
-//@@@@@ // if the scalar is zero order then o'ma back
-//@@@@@     if(pc_nDarray_rep->nDarray_rank==0) return (*pc_nDarray_rep->pd_nDdata);
-//@@@@@ // for any higher order go ahead
-//@@@@@     va_list p_arg;
-//@@@@@     va_start(p_arg, subscript); // initialize p_arg
-//@@@@@
-//@@@@@     int prvi  = subscript;
-//@@@@@     int drugi = 0;
-//@@@@@
-//@@@@@     long int where = first - 1;
-//@@@@@              where = where*pc_nDarray_rep->dim[1]+second - 1;
-//@@@@@              where = where*pc_nDarray_rep->dim[2]+third  - 1;
-//@@@@@              where = where*pc_nDarray_rep->dim[3]+fourth - 1;
-//@@@@@
-//@@@@@ // dalje iza cetvrtog
-//@@@@@              where = where*pc_nDarray_rep->dim[4]+prvi - 1;
-//@@@@@
-//@@@@@
-//@@@@@     for ( int Dcount=5 ; Dcount<=pc_nDarray_rep->nDarray_rank-1 ; Dcount++ )
-//@@@@@       {    // this will actually be skipped for all dimensions less than 2
-//@@@@@         drugi = va_arg(p_arg, int);    // sledeci
-//@@@@@         where = where*pc_nDarray_rep->dim[Dcount]+drugi - 1;
-//@@@@@         prvi = drugi;
-//@@@@@       }
-//@@@@@     va_end(p_arg);
-//@@@@@
-//@@@@@ //::printf(" w=%ld ",where);
-//@@@@@     return pc_nDarray_rep->val(static_cast<size_t>(where));
-//@@@@@   }
-//@@@@@
-//@@@@@
-//@@@@@
-
-
-
-//++
-//++// nDarray addition
-//++nDarray XC::nDarray::operator+( nDarray & rval)
-//++  {
-//++    int this_rank_of_nDarray = this->pc_nDarray_rep->nDarray_rank;
-//++    int rval_rank_of_nDarray =  rval.pc_nDarray_rep->nDarray_rank;
-//++
-//++    if(this_rank_of_nDarray != rval_rank_of_nDarray)
-//++      {
-//++        ::printf("\a\nnDarrays of different ranks: addition not possible\n");
-//++        ::exit ( 1 );
-//++      }
-//++
-//++    for ( int i=0 ; i<this_rank_of_nDarray ; i++ )
-//++      if (this->pc_nDarray_rep->dim[i] != rval.pc_nDarray_rep->dim[i] )
-//++        {
-//++          ::fprintf(stderr,"\a\nDimension discrepancy in operator+\n",
-//++                           "this->pc_nDarray_rep->dim[%d]=%d\n",
-//++                           "arg.pc_nDarray_rep->dim[%d]=%d\n",
-//++                           i,this->pc_nDarray_rep->dim[i],
-//++                           i,rval.pc_nDarray_rep->dim[i]);
-//++          ::exit(1);
-//++        }
-//++// construct XC::nDarray using the same control numbers as for the
-//++// original one .
-//++      nDarray add(pc_nDarray_rep->nDarray_rank, pc_nDarray_rep->dim, 0.0);
-//++
-//++      switch(pc_nDarray_rep->nDarray_rank)
-//++        {
-//++          case 0:
-//++            {
-//++              add.val(1) = val(1) + rval.val(1);
-//++              break;
-//++            }
-//++
-//++          case 1:
-//++            {
-//++              for ( int i1=1 ; i1<=this->pc_nDarray_rep->dim[0] ; i1++ )
-//++                {
-//++                  add.val(i1) = val(i1) + rval.val(i1);
-//++                }
-//++              break;
-//++            }
-//++
-//++          case 2:
-//++            {
-//++              for ( int i2=1 ; i2<=this->pc_nDarray_rep->dim[0] ; i2++ )
-//++                {
-//++                  for ( int j2=1 ; j2<=this->pc_nDarray_rep->dim[1] ; j2++ )
-//++                    {
-//++                      add.val(i2, j2) = val(i2, j2) + rval.val(i2, j2);
-//++                    }
-//++                }
-//++              break;
-//++            }
-//++
-//++          case 3:
-//++            {
-//++              for ( int i3=1 ; i3<=this->pc_nDarray_rep->dim[0] ; i3++ )
-//++                {
-//++                  for ( int j3=1 ; j3<=this->pc_nDarray_rep->dim[1] ; j3++ )
-//++                    {
-//++                      for ( int k3=1 ; k3<=this->pc_nDarray_rep->dim[2] ; k3++ )
-//++                        {
-//++                          add.val(i3, j3, k3) = val(i3, j3, k3) + rval.val(i3, j3, k3);
-//++                        }
-//++                    }
-//++                }
-//++              break;
-//++            }
-//++
-//++          case 4:
-//++            {
-//++              for ( int i4=1 ; i4<=this->pc_nDarray_rep->dim[0] ; i4++ )
-//++                {
-//++                  for ( int j4=1 ; j4<=this->pc_nDarray_rep->dim[1] ; j4++ )
-//++                    {
-//++                      for ( int k4=1 ; k4<=this->pc_nDarray_rep->dim[2] ; k4++ )
-//++                        {
-//++                          for ( int l4=1 ; l4<=this->pc_nDarray_rep->dim[3] ; l4++ )
-//++                            {
-//++                              add.val(i4,j4,k4,l4)=val(i4,j4,k4,l4)+rval.val(i4,j4,k4,l4);
-//++                            }
-//++                        }
-//++                    }
-//++                }
-//++              break;
-//++            }
-//++        }
-//++
-//++    return add;
-//++  }
 
 //! @brief nDarray addition
 XC::nDarray& XC::nDarray::operator+=(const nDarray & rval)
   {
-    int this_rank_of_nDarray = this->pc_nDarray_rep->nDarray_rank;
-    int rval_rank_of_nDarray =  rval.pc_nDarray_rep->nDarray_rank;
+    int this_rank_of_nDarray = this->pc_nDarray_rep.nDarray_rank;
+    int rval_rank_of_nDarray =  rval.pc_nDarray_rep.nDarray_rank;
 
     if(this_rank_of_nDarray != rval_rank_of_nDarray)
       {
@@ -1092,43 +611,20 @@ XC::nDarray& XC::nDarray::operator+=(const nDarray & rval)
 
     int i = 0;
     for ( i=0 ; i<this_rank_of_nDarray ; i++ )
-      if (this->pc_nDarray_rep->dim[i] != rval.pc_nDarray_rep->dim[i] )
+      if (this->pc_nDarray_rep.dim[i] != rval.pc_nDarray_rep.dim[i] )
         {
 	  ::fprintf(stderr,"\a\nDimension discrepancy in operator+=\n\
-	  this->pc_nDarray_rep->dim[%d]=%d\n\
-	  arg.pc_nDarray_rep->dim[%d]=%d\n",
-	  i,this->pc_nDarray_rep->dim[i],
-	  i,rval.pc_nDarray_rep->dim[i]);
+	  this->pc_nDarray_rep.dim[%d]=%d\n\
+	  arg.pc_nDarray_rep.dim[%d]=%d\n",
+	  i,this->pc_nDarray_rep.dim[i],
+	  i,rval.pc_nDarray_rep.dim[i]);
 	  ::exit(1);
         }
-// Copy *this if necessary
-    if ( this->pc_nDarray_rep->n > 1 )// see ARK in JOOP may/june '90
-      {                               // "Letter From a Newcomer"
-//..............................................................................
-      // create the structure:
-        nDarray_rep *New_pc_nDarray_rep = new nDarray_rep; // this 'new' is overloaded
-        New_pc_nDarray_rep->nDarray_rank = this->pc_nDarray_rep->nDarray_rank;
-// in the case of nDarray_rank=0 add one to get right thing from the
-// operator new
-        int one_or0 = 0;
-        if(!New_pc_nDarray_rep->nDarray_rank) one_or0 = 1;
-        New_pc_nDarray_rep->init_dim(New_pc_nDarray_rep->nDarray_rank+one_or0, this->pc_nDarray_rep->dim);
 
-        // allocate memory for the actual nDarray as nDarray
-        New_pc_nDarray_rep->init_data(pc_nDarray_rep->pd_nDdata);
-        New_pc_nDarray_rep->n = 1;  // so far, there's one reference
-//.........
-        this->pc_nDarray_rep->n--;
-        this->pc_nDarray_rep = New_pc_nDarray_rep;
-//..............................................................................
-      }
-// it appears that I can add this two nDarrays just as a simple BJvectors:
-    this->pc_nDarray_rep->sum_data(rval.pc_nDarray_rep->pd_nDdata);
+    this->pc_nDarray_rep.sum_data(rval.pc_nDarray_rep.pd_nDdata);
 
     return *this;
   }
-
-
 
 // nDarray addition
 XC::nDarray operator+(const XC::nDarray & lval, const XC::nDarray & rval)
@@ -1143,8 +639,8 @@ XC::nDarray XC::nDarray::operator+(const double &rval)
   {
       // construct XC::nDarray using the same control numbers as for the
       // original one.
-      nDarray add(pc_nDarray_rep->nDarray_rank, pc_nDarray_rep->dim, 0.0);
-      switch(pc_nDarray_rep->nDarray_rank)
+      nDarray add(pc_nDarray_rep.nDarray_rank, pc_nDarray_rep.dim, 0.0);
+      switch(pc_nDarray_rep.nDarray_rank)
         {
           case 0:
             {
@@ -1153,15 +649,15 @@ XC::nDarray XC::nDarray::operator+(const double &rval)
             }
           case 1:
             {
-              for( int i1=1 ; i1<=this->pc_nDarray_rep->dim[0] ; i1++ )
+              for( int i1=1 ; i1<=this->pc_nDarray_rep.dim[0] ; i1++ )
                 { add.val(i1) = val(i1) + rval; }
               break;
             }
           case 2:
             {
-              for ( int i2=1 ; i2<=this->pc_nDarray_rep->dim[0] ; i2++ )
+              for ( int i2=1 ; i2<=this->pc_nDarray_rep.dim[0] ; i2++ )
                 {
-                  for ( int j2=1 ; j2<=this->pc_nDarray_rep->dim[1]  ; j2++ )
+                  for ( int j2=1 ; j2<=this->pc_nDarray_rep.dim[1]  ; j2++ )
                      {
                        add.val(i2, j2) = val(i2, j2) + rval;
                      }
@@ -1170,11 +666,11 @@ XC::nDarray XC::nDarray::operator+(const double &rval)
             }
           case 3:
             {
-              for ( int i3=1 ; i3<=this->pc_nDarray_rep->dim[0] ; i3++ )
+              for ( int i3=1 ; i3<=this->pc_nDarray_rep.dim[0] ; i3++ )
                 {
-                  for ( int j3=1 ; j3<=this->pc_nDarray_rep->dim[1] ; j3++ )
+                  for ( int j3=1 ; j3<=this->pc_nDarray_rep.dim[1] ; j3++ )
                     {
-                      for ( int k3=1 ; k3<=this->pc_nDarray_rep->dim[2] ; k3++ )
+                      for ( int k3=1 ; k3<=this->pc_nDarray_rep.dim[2] ; k3++ )
                         {
                           add.val(i3, j3, k3) = val(i3, j3, k3) + rval;
                         }
@@ -1184,13 +680,13 @@ XC::nDarray XC::nDarray::operator+(const double &rval)
             }
           case 4:
             {
-              for ( int i4=1 ; i4<=this->pc_nDarray_rep->dim[0] ; i4++ )
+              for ( int i4=1 ; i4<=this->pc_nDarray_rep.dim[0] ; i4++ )
                 {
-                  for ( int j4=1 ; j4<=this->pc_nDarray_rep->dim[1] ; j4++ )
+                  for ( int j4=1 ; j4<=this->pc_nDarray_rep.dim[1] ; j4++ )
                     {
-                      for ( int k4=1 ; k4<=this->pc_nDarray_rep->dim[2] ; k4++ )
+                      for ( int k4=1 ; k4<=this->pc_nDarray_rep.dim[2] ; k4++ )
                         {
-                          for ( int l4=1 ; l4<=this->pc_nDarray_rep->dim[3] ; l4++ )
+                          for ( int l4=1 ; l4<=this->pc_nDarray_rep.dim[3] ; l4++ )
                             {
                               add.val(i4,j4,k4,l4)=val(i4,j4,k4,l4)+rval;
                             }
@@ -1207,8 +703,8 @@ XC::nDarray XC::nDarray::operator+(const double &rval)
 //! @brief scalar multiplication
 XC::nDarray &XC::nDarray::operator*=(const double &rval)
    {
-      for ( int i=0 ; i<pc_nDarray_rep->total_numb ; i++ )
-	this->pc_nDarray_rep->pd_nDdata[i]*=rval;
+      for ( int i=0 ; i<pc_nDarray_rep.total_numb ; i++ )
+	this->pc_nDarray_rep.pd_nDdata[i]*=rval;
       return *this;
    }
 
@@ -1217,7 +713,7 @@ XC::nDarray  XC::nDarray::operator*(const double &rval) const
    {
       // construct XC::nDarray using the same control numbers as for the
       // original one.
-      nDarray mult(pc_nDarray_rep->nDarray_rank, pc_nDarray_rep->dim, 0.0);
+      nDarray mult(pc_nDarray_rep.nDarray_rank, pc_nDarray_rep.dim, 0.0);
       mult*=(rval);
       return mult;
    }
@@ -1226,8 +722,8 @@ XC::nDarray  XC::nDarray::operator*(const double &rval) const
 // nDarray subtraction
 XC::nDarray& XC::nDarray::operator-=(const nDarray & rval)
   {
-    int this_rank_of_nDarray = this->pc_nDarray_rep->nDarray_rank;
-    int rval_rank_of_nDarray =  rval.pc_nDarray_rep->nDarray_rank;
+    int this_rank_of_nDarray = this->pc_nDarray_rep.nDarray_rank;
+    int rval_rank_of_nDarray =  rval.pc_nDarray_rep.nDarray_rank;
             if(this_rank_of_nDarray != rval_rank_of_nDarray)
       {
         ::printf("\a\nnDarrays of different ranks: -= not possible\n");
@@ -1236,39 +732,18 @@ XC::nDarray& XC::nDarray::operator-=(const nDarray & rval)
 
     int i = 0;
     for ( i=0 ; i<this_rank_of_nDarray ; i++ )
-      if (this->pc_nDarray_rep->dim[i] != rval.pc_nDarray_rep->dim[i] )
+      if (this->pc_nDarray_rep.dim[i] != rval.pc_nDarray_rep.dim[i] )
         {
 	  ::fprintf(stderr,"\a\nDimension discrepancy in operator+\n\
-	  this->pc_nDarray_rep->dim[%d]=%d\n\
-	  arg.pc_nDarray_rep->dim[%d]=%d\n",
-	  i,this->pc_nDarray_rep->dim[i],
-	  i,rval.pc_nDarray_rep->dim[i]);
+	  this->pc_nDarray_rep.dim[%d]=%d\n\
+	  arg.pc_nDarray_rep.dim[%d]=%d\n",
+	  i,this->pc_nDarray_rep.dim[i],
+	  i,rval.pc_nDarray_rep.dim[i]);
 	  ::exit(1);
         }
-// Copy *this if necessary
-    if ( this->pc_nDarray_rep->n > 1 )// see ARK in JOOP may/june '90
-      {                               // "Letter From a Newcomer"
-//..............................................................................
-      // create the structure:
-        nDarray_rep * New_pc_nDarray_rep = new nDarray_rep; // this 'new' is overloaded
-        New_pc_nDarray_rep->nDarray_rank = this->pc_nDarray_rep->nDarray_rank;
-// in the case of nDarray_rank=0 add one to get right thing from the
-// operator new
-        int one_or0 = 0;
-        if(!New_pc_nDarray_rep->nDarray_rank) one_or0 = 1;
-        New_pc_nDarray_rep->init_dim(New_pc_nDarray_rep->nDarray_rank+one_or0, this->pc_nDarray_rep->dim);
 
-        // allocate memory for the actual XC::nDarray as XC::nDarray
-        New_pc_nDarray_rep->init_data(this->pc_nDarray_rep->pd_nDdata);
-        New_pc_nDarray_rep->n = 1;  // so far, there's one reference
-//.........
-         this->pc_nDarray_rep->n--;
-         this->pc_nDarray_rep = New_pc_nDarray_rep;
-//..............................................................................
-      }
 // it appears that I can add this two nDarrays just as a simple BJvectors:
-    for (int j=0 ; j<this->pc_nDarray_rep->total_numb ; j++)
-      this->pc_nDarray_rep->pd_nDdata[j] -= rval.pc_nDarray_rep->pd_nDdata[j];
+    this->pc_nDarray_rep.substract_data(rval.pc_nDarray_rep.pd_nDdata);
     return *this;
   }
 
@@ -1282,114 +757,14 @@ XC::nDarray operator-(const XC::nDarray &lval, const XC::nDarray &rval)
     return result;
   }
 
-//++
-//++// nDarray subtraction
-//++nDarray XC::nDarray::operator-( nDarray & rval)
-//++ {
-//++    int this_rank_of_nDarray = this->pc_nDarray_rep->nDarray_rank;
-//++    int rval_rank_of_nDarray = rval.pc_nDarray_rep->nDarray_rank;
-//++
-//++    if(this_rank_of_nDarray != rval_rank_of_nDarray)
-//++      {
-//++        ::printf("\a\nnDarrays of different ranks:",
-//++                 " subtraction not possible\n");
-//++        ::exit ( 1 );
-//++      }
-//++
-//++    for ( int i=0 ; i<this_rank_of_nDarray ; i++ )
-//++      if (this->pc_nDarray_rep->dim[i] != rval.pc_nDarray_rep->dim[i] )
-//++        {
-//++          ::fprintf(stderr,"\a\nDimension discrepancy in operator  -  \n",
-//++                   "this->pc_nDarray_rep->dim[%d]=%d\n",
-//++                   "arg.pc_nDarray_rep->dim[%d]=%d\n",
-//++                    i,this->pc_nDarray_rep->dim[i],
-//++                    i,rval.pc_nDarray_rep->dim[i]);
-//++          ::exit(1);
-//++        }
-//++// construct XC::nDarray using the same control numbers as for the
-//++// original one.
-//++      nDarray sub(pc_nDarray_rep->nDarray_rank, pc_nDarray_rep->dim, 0.0);
-//++
-//++      switch(pc_nDarray_rep->nDarray_rank)
-//++        {
-//++          case 0:
-//++            {
-//++              sub.val(1) = val(1) - rval.val(1);
-//++              break;
-//++            }
-//++
-//++          case 1:
-//++            {
-//++              for ( int i1=1 ; i1<=this->pc_nDarray_rep->dim[0] ; i1++ )
-//++                {
-//++                  sub.val(i1) = val(i1) - rval.val(i1);
-//++                }
-//++              break;
-//++            }
-//++
-//++          case 2:
-//++            {
-//++              for ( int i2=1 ; i2<=this->pc_nDarray_rep->dim[0] ; i2++ )
-//++                {
-//++                  for ( int j2=1 ; j2<=this->pc_nDarray_rep->dim[1] ; j2++ )
-//++                    {
-//++                      sub.val(i2, j2) = val(i2, j2) - rval.val(i2, j2);
-//++                    }
-//++                }
-//++              break;
-//++            }
-//++
-//++          case 3:
-//++            {
-//++              for ( int i3=1 ; i3<=this->pc_nDarray_rep->dim[0] ; i3++ )
-//++                {
-//++                  for ( int j3=1 ; j3<=this->pc_nDarray_rep->dim[1] ; j3++ )
-//++                    {
-//++                      for ( int k3=1 ; k3<=this->pc_nDarray_rep->dim[2] ; k3++ )
-//++                        {
-//++                          sub.val(i3, j3, k3) = val(i3, j3, k3) - rval.val(i3, j3, k3);
-//++                        }
-//++                    }
-//++                }
-//++              break;
-//++            }
-//++
-//++          case 4:
-//++            {
-//++              for ( int i4=1 ; i4<=this->pc_nDarray_rep->dim[0] ; i4++ )
-//++                {
-//++                  for ( int j4=1 ; j4<=this->pc_nDarray_rep->dim[1] ; j4++ )
-//++                    {
-//++                      for ( int k4=1 ; k4<=this->pc_nDarray_rep->dim[2] ; k4++ )
-//++                        {
-//++
-//++
-//++
-//++
-//++                          for ( int l4=1 ; l4<=this->pc_nDarray_rep->dim[3] ; l4++ )
-//++                            {
-//++                              sub.val(i4,j4,k4,l4)=val(i4,j4,k4,l4)-rval.val(i4,j4,k4,l4);
-//++                            }
-//++                        }
-//++                    }
-//++                }
-//++              break;
-//++             }
-//++        }
-//++
-//++    return sub;
-//++ }
-//++
-
-
 // scalar subtraction
-XC::nDarray  XC::nDarray::operator-(const double &rval)
+XC::nDarray XC::nDarray::operator-(const double &rval)
   {
     // construct XC::nDarray using the same control numbers as for the
     // original one.
-    nDarray sub(pc_nDarray_rep->nDarray_rank, pc_nDarray_rep->dim, 0.0);
+    nDarray sub(pc_nDarray_rep.nDarray_rank, pc_nDarray_rep.dim, 0.0);
 
-    switch(pc_nDarray_rep->nDarray_rank)
+    switch(pc_nDarray_rep.nDarray_rank)
       {
         case 0:
           {
@@ -1399,34 +774,34 @@ XC::nDarray  XC::nDarray::operator-(const double &rval)
 
         case 1:
           {
-            for ( int i1=1 ; i1<=this->pc_nDarray_rep->dim[0] ; i1++ )
+            for ( int i1=1 ; i1<=this->pc_nDarray_rep.dim[0] ; i1++ )
               sub.val(i1) = val(i1) - rval;
             break;
           }
 
         case 2:
           {
-            for ( int i2=1 ; i2<=this->pc_nDarray_rep->dim[0] ; i2++ )
-              for ( int j2=1 ; j2<=this->pc_nDarray_rep->dim[1] ; j2++ )
+            for ( int i2=1 ; i2<=this->pc_nDarray_rep.dim[0] ; i2++ )
+              for ( int j2=1 ; j2<=this->pc_nDarray_rep.dim[1] ; j2++ )
                 sub.val(i2, j2) = val(i2, j2) - rval;
             break;
           }
 
         case 3:
           {
-            for ( int i3=1 ; i3<=this->pc_nDarray_rep->dim[0] ; i3++ )
-              for ( int j3=1 ; j3<=this->pc_nDarray_rep->dim[1] ; j3++ )
-                for ( int k3=1 ; k3<=this->pc_nDarray_rep->dim[2] ; k3++ )
+            for ( int i3=1 ; i3<=this->pc_nDarray_rep.dim[0] ; i3++ )
+              for ( int j3=1 ; j3<=this->pc_nDarray_rep.dim[1] ; j3++ )
+                for ( int k3=1 ; k3<=this->pc_nDarray_rep.dim[2] ; k3++ )
                   sub.val(i3, j3, k3) = val(i3, j3, k3) - rval;
             break;
           }
 
         case 4:
           {
-            for ( int i4=1 ; i4<=this->pc_nDarray_rep->dim[0] ; i4++ )
-              for ( int j4=1 ; j4<=this->pc_nDarray_rep->dim[1] ; j4++ )
-                for ( int k4=1 ; k4<=this->pc_nDarray_rep->dim[2] ; k4++ )
-                  for ( int l4=1 ; l4<=this->pc_nDarray_rep->dim[3] ; l4++ )
+            for ( int i4=1 ; i4<=this->pc_nDarray_rep.dim[0] ; i4++ )
+              for ( int j4=1 ; j4<=this->pc_nDarray_rep.dim[1] ; j4++ )
+                for ( int k4=1 ; k4<=this->pc_nDarray_rep.dim[2] ; k4++ )
+                  for ( int l4=1 ; l4<=this->pc_nDarray_rep.dim[3] ; l4++ )
                     sub.val(i4,j4,k4,l4)=val(i4,j4,k4,l4)-rval;
             break;
           }
@@ -1435,24 +810,18 @@ XC::nDarray  XC::nDarray::operator-(const double &rval)
     return sub;
   }
 
-
 // unary minus
 XC::nDarray XC::nDarray::operator-( void )
   {
-    nDarray ret = *this *-1.0;
-
+    nDarray ret(*this);
+    ret.pc_nDarray_rep.neg();
     return ret;
   }
 
 
 
 double XC::nDarray::sum() const
-  {
-    double sum = 0;
-    for ( int memb=0 ; memb<pc_nDarray_rep->total_numb ; memb++ )
-      sum += pc_nDarray_rep->pd_nDdata[memb];
-    return sum;
-  }
+  { return pc_nDarray_rep.sum(); }
 
 
 // trace function: trace of a second rank XC::BJtensor
@@ -1531,61 +900,6 @@ double XC::nDarray::trace() const
 
 
 
-//-----
-//-----// scalar multiplication (nDarray * scalar)
-//-----nDarray  XC::nDarray::operator*( double rval)
-//----- {
-//-----// construct XC::nDarray using the same control numbers as for the
-//-----// original one.
-//-----    nDarray mult(this->pc_nDarray_rep->nDarray_rank, this->pc_nDarray_rep->dim, 0.0);
-//-----
-//-----    switch(pc_nDarray_rep->nDarray_rank)
-//-----      {
-//-----        case 0:
-//-----          {
-//-----            mult.val(1) = val(1) * rval;
-//-----            break;
-//-----          }
-//-----
-//-----        case 1:
-//-----          {
-//-----            for ( int i1=1 ; i1<=this->pc_nDarray_rep->dim[0] ; i1++ )
-//-----              mult.val(i1) = val(i1) * rval;
-//-----            break;
-//-----          }
-//-----
-//-----        case 2:
-//-----          {
-//-----            for ( int i2=1 ; i2<=this->pc_nDarray_rep->dim[0] ; i2++ )
-//-----              for ( int j2=1 ; j2<=this->pc_nDarray_rep->dim[1] ; j2++ )
-//-----                mult.val(i2, j2) = val(i2, j2) * rval;
-//-----            break;
-//-----          }
-//-----
-//-----        case 3:
-//-----          {
-//-----            for ( int i3=1 ; i3<=this->pc_nDarray_rep->dim[0] ; i3++ )
-//-----              for ( int j3=1 ; j3<=this->pc_nDarray_rep->dim[1] ; j3++ )
-//-----                for ( int k3=1 ; k3<=this->pc_nDarray_rep->dim[2] ; k3++ )
-//-----                  mult.val(i3, j3, k3) = val(i3, j3, k3) * rval;
-//-----            break;
-//-----          }
-//-----
-//-----        case 4:
-//-----          {
-//-----            for ( int i4=1 ; i4<=this->pc_nDarray_rep->dim[0] ; i4++ )
-//-----              for ( int j4=1 ; j4<=this->pc_nDarray_rep->dim[1] ; j4++ )
-//-----                for ( int k4=1 ; k4<=this->pc_nDarray_rep->dim[2] ; k4++ )
-//-----                  for ( int l4=1 ; l4<=this->pc_nDarray_rep->dim[3] ; l4++ )
-//-----                    mult.val(i4,j4,k4,l4)=val(i4,j4,k4,l4)*rval;
-//-----            break;
-//-----          }
-//-----      }
-//-----
-//-----    return mult;
-//----- }
-//-----
-
 
 // nDarray comparison                    // nDarray comparison
 bool XC::nDarray::operator==(const nDarray &rval)  // returns 1 if they are same
@@ -1597,8 +911,8 @@ bool XC::nDarray::operator==(const nDarray &rval)  // returns 1 if they are same
 
     double tolerance = sqrt_d_macheps;
 
-    int this_rank_of_nDarray = this->pc_nDarray_rep->nDarray_rank;
-    int rval_rank_of_nDarray =  rval.pc_nDarray_rep->nDarray_rank;
+    int this_rank_of_nDarray = this->pc_nDarray_rep.nDarray_rank;
+    int rval_rank_of_nDarray =  rval.pc_nDarray_rep.nDarray_rank;
 
     if(this_rank_of_nDarray != rval_rank_of_nDarray)
       {
@@ -1607,20 +921,20 @@ bool XC::nDarray::operator==(const nDarray &rval)  // returns 1 if they are same
       }
 
     for ( int i=0 ; i<this_rank_of_nDarray ; i++ )
-      if (this->pc_nDarray_rep->dim[i] != rval.pc_nDarray_rep->dim[i] )
+      if (this->pc_nDarray_rep.dim[i] != rval.pc_nDarray_rep.dim[i] )
         {
 ::fprintf(stderr,"\a\nDimension discrepancy in operator==\n\
-          this->pc_nDarray_rep->dim[%d]=%d\n\
-          arg.pc_nDarray_rep->dim[%d]=%d\n",
-          i,this->pc_nDarray_rep->dim[i],
-          i,rval.pc_nDarray_rep->dim[i]);
+          this->pc_nDarray_rep.dim[%d]=%d\n\
+          arg.pc_nDarray_rep.dim[%d]=%d\n",
+          i,this->pc_nDarray_rep.dim[i],
+          i,rval.pc_nDarray_rep.dim[i]);
           ::exit(1);
         }
 //..// construct XC::nDarray using the same control numbers as for the
 //..// original one .
-//..      nDarray add(pc_nDarray_rep->nDarray_rank, pc_nDarray_rep->dim, 0.0);
+//..      nDarray add(pc_nDarray_rep.nDarray_rank, pc_nDarray_rep.dim, 0.0);
 
-      switch(pc_nDarray_rep->nDarray_rank)
+      switch(pc_nDarray_rep.nDarray_rank)
         {
           case 0:
             {
@@ -1631,7 +945,7 @@ bool XC::nDarray::operator==(const nDarray &rval)  // returns 1 if they are same
 
           case 1:
             {
-              for ( int i1=1 ; i1<=this->pc_nDarray_rep->dim[0] ; i1++ )
+              for ( int i1=1 ; i1<=this->pc_nDarray_rep.dim[0] ; i1++ )
                 if ( fabs(  val(i1)-rval.val(i1) ) >= tolerance)
                   true_or_not = 0;
               break;
@@ -1639,8 +953,8 @@ bool XC::nDarray::operator==(const nDarray &rval)  // returns 1 if they are same
 
           case 2:
             {
-              for ( int i2=1 ; i2<=this->pc_nDarray_rep->dim[0] ; i2++ )
-                for ( int j2=1 ; j2<=this->pc_nDarray_rep->dim[1] ; j2++ )
+              for ( int i2=1 ; i2<=this->pc_nDarray_rep.dim[0] ; i2++ )
+                for ( int j2=1 ; j2<=this->pc_nDarray_rep.dim[1] ; j2++ )
                   if ( fabs( val(i2,j2)-rval.val(i2,j2) ) >= tolerance)
                     true_or_not = 0;
               break;
@@ -1648,9 +962,9 @@ bool XC::nDarray::operator==(const nDarray &rval)  // returns 1 if they are same
 
           case 3:
             {
-              for ( int i3=1 ; i3<=this->pc_nDarray_rep->dim[0] ; i3++ )
-                for ( int j3=1 ; j3<=this->pc_nDarray_rep->dim[1] ; j3++ )
-                  for ( int k3=1 ; k3<=this->pc_nDarray_rep->dim[2] ; k3++ )
+              for ( int i3=1 ; i3<=this->pc_nDarray_rep.dim[0] ; i3++ )
+                for ( int j3=1 ; j3<=this->pc_nDarray_rep.dim[1] ; j3++ )
+                  for ( int k3=1 ; k3<=this->pc_nDarray_rep.dim[2] ; k3++ )
                     if (fabs(val(i3,j3,k3)-rval.val(i3,j3,k3))>=tolerance)
                       true_or_not = 0;
               break;
@@ -1658,10 +972,10 @@ bool XC::nDarray::operator==(const nDarray &rval)  // returns 1 if they are same
 
           case 4:
             {
-              for ( int i4=1 ; i4<=this->pc_nDarray_rep->dim[0] ; i4++ )
-               for ( int j4=1 ; j4<=this->pc_nDarray_rep->dim[1] ; j4++ )
-                for ( int k4=1 ; k4<=this->pc_nDarray_rep->dim[2] ; k4++ )
-                 for ( int l4=1 ; l4<=this->pc_nDarray_rep->dim[3] ; l4++ )
+              for ( int i4=1 ; i4<=this->pc_nDarray_rep.dim[0] ; i4++ )
+               for ( int j4=1 ; j4<=this->pc_nDarray_rep.dim[1] ; j4++ )
+                for ( int k4=1 ; k4<=this->pc_nDarray_rep.dim[2] ; k4++ )
+                 for ( int l4=1 ; l4<=this->pc_nDarray_rep.dim[3] ; l4++ )
                   if(fabs(val(i4,j4,k4,l4)-rval.val(i4,j4,k4,l4))>=tolerance)
                   true_or_not = 0;
               break;
@@ -1679,7 +993,7 @@ void XC::nDarray::print(const std::string &name ,const std::string &msg) const
   {
     std::cerr << msg << std::endl;
 
-    switch(pc_nDarray_rep->nDarray_rank)
+    switch(pc_nDarray_rep.nDarray_rank)
       {
         case 0:
           {
@@ -1690,7 +1004,7 @@ void XC::nDarray::print(const std::string &name ,const std::string &msg) const
 
         case 1:
           {
-            for ( int i=1 ; i<=pc_nDarray_rep->dim[0]; i++ )
+            for ( int i=1 ; i<=pc_nDarray_rep.dim[0]; i++ )
               {
                 ::printf("%s(%2d)=%+8.4e  ", name.c_str(), i, cval(i));
                 ::printf("\n");
@@ -1700,9 +1014,9 @@ void XC::nDarray::print(const std::string &name ,const std::string &msg) const
 
         case 2:
           {
-            for ( int i2=1 ; i2<=pc_nDarray_rep->dim[0]  ; i2++ )
+            for ( int i2=1 ; i2<=pc_nDarray_rep.dim[0]  ; i2++ )
               {
-                for ( int j2=1 ; j2<=pc_nDarray_rep->dim[1] ; j2++ )
+                for ( int j2=1 ; j2<=pc_nDarray_rep.dim[1] ; j2++ )
                   {
                     ::printf("%s(%2d,%2d)=%+12.8e ", name.c_str(), i2, j2, cval(i2, j2));
                   }
@@ -1713,10 +1027,10 @@ void XC::nDarray::print(const std::string &name ,const std::string &msg) const
 
         case 3:
           {
-            for ( int i3=1 ; i3<=pc_nDarray_rep->dim[0] ; i3++ )
-              for ( int j3=1 ; j3<=pc_nDarray_rep->dim[1] ; j3++ )
+            for ( int i3=1 ; i3<=pc_nDarray_rep.dim[0] ; i3++ )
+              for ( int j3=1 ; j3<=pc_nDarray_rep.dim[1] ; j3++ )
                 {
-                  for ( int k3=1 ; k3<=pc_nDarray_rep->dim[2] ; k3++ )
+                  for ( int k3=1 ; k3<=pc_nDarray_rep.dim[2] ; k3++ )
                     {
                       ::printf("%s(%d,%d,%d)=%+8.4e  ", name.c_str(), i3, j3, k3,
                         cval(i3, j3, k3));
@@ -1728,11 +1042,11 @@ void XC::nDarray::print(const std::string &name ,const std::string &msg) const
 
         case 4:
           {
-            for ( int i4=1 ; i4<=pc_nDarray_rep->dim[0] ; i4++ )
-              for ( int j4=1 ; j4<=pc_nDarray_rep->dim[1] ; j4++ )
-                for ( int k4=1 ; k4<=pc_nDarray_rep->dim[2] ; k4++ )
+            for ( int i4=1 ; i4<=pc_nDarray_rep.dim[0] ; i4++ )
+              for ( int j4=1 ; j4<=pc_nDarray_rep.dim[1] ; j4++ )
+                for ( int k4=1 ; k4<=pc_nDarray_rep.dim[2] ; k4++ )
                   {
-                    for ( int l4=1 ; l4<=pc_nDarray_rep->dim[3] ; l4++ )
+                    for ( int l4=1 ; l4<=pc_nDarray_rep.dim[3] ; l4++ )
                       {
                         ::printf("%s(%d,%d,%d,%d)=%+8.4e  ",name.c_str(),i4,j4,k4,l4,
                           cval(i4, j4, k4, l4));
@@ -1752,7 +1066,7 @@ void XC::nDarray::printshort(const std::string &msg) const
   {
     std::cerr << msg << std::endl;
 
-    switch(pc_nDarray_rep->nDarray_rank)
+    switch(pc_nDarray_rep.nDarray_rank)
       {
         case 0:
           {
@@ -1763,7 +1077,7 @@ void XC::nDarray::printshort(const std::string &msg) const
 
         case 1:
           {
-            for ( int i=1 ; i<=pc_nDarray_rep->dim[0]; i++ )
+            for ( int i=1 ; i<=pc_nDarray_rep.dim[0]; i++ )
               {
                 ::printf("%+6.2e ",cval(i));
                 ::printf("\n");
@@ -1773,9 +1087,9 @@ void XC::nDarray::printshort(const std::string &msg) const
 
         case 2:
           {
-            for ( int i2=1 ; i2<=pc_nDarray_rep->dim[0]  ; i2++ )
+            for ( int i2=1 ; i2<=pc_nDarray_rep.dim[0]  ; i2++ )
               {
-                for ( int j2=1 ; j2<=pc_nDarray_rep->dim[1] ; j2++ )
+                for ( int j2=1 ; j2<=pc_nDarray_rep.dim[1] ; j2++ )
                   {
                     ::printf("%+6.2e ", cval(i2, j2));
                   }
@@ -1786,10 +1100,10 @@ void XC::nDarray::printshort(const std::string &msg) const
 
         case 3:
           {
-            for ( int i3=1 ; i3<=pc_nDarray_rep->dim[0] ; i3++ )
-              for ( int j3=1 ; j3<=pc_nDarray_rep->dim[1] ; j3++ )
+            for ( int i3=1 ; i3<=pc_nDarray_rep.dim[0] ; i3++ )
+              for ( int j3=1 ; j3<=pc_nDarray_rep.dim[1] ; j3++ )
                 {
-                  for ( int k3=1 ; k3<=pc_nDarray_rep->dim[2] ; k3++ )
+                  for ( int k3=1 ; k3<=pc_nDarray_rep.dim[2] ; k3++ )
                     {
                       ::printf("%+6.2e  ", cval(i3, j3, k3));
                     }
@@ -1800,11 +1114,11 @@ void XC::nDarray::printshort(const std::string &msg) const
 
         case 4:
           {
-            for ( int i4=1 ; i4<=pc_nDarray_rep->dim[0] ; i4++ )
-              for ( int j4=1 ; j4<=pc_nDarray_rep->dim[1] ; j4++ )
-                for ( int k4=1 ; k4<=pc_nDarray_rep->dim[2] ; k4++ )
+            for ( int i4=1 ; i4<=pc_nDarray_rep.dim[0] ; i4++ )
+              for ( int j4=1 ; j4<=pc_nDarray_rep.dim[1] ; j4++ )
+                for ( int k4=1 ; k4<=pc_nDarray_rep.dim[2] ; k4++ )
                   {
-                    for ( int l4=1 ; l4<=pc_nDarray_rep->dim[3] ; l4++ )
+                    for ( int l4=1 ; l4<=pc_nDarray_rep.dim[3] ; l4++ )
                       {
                         ::printf("%+6.2e  ", cval(i4, j4, k4, l4));
                       }
@@ -1822,7 +1136,7 @@ void XC::nDarray::printshort(const std::string &msg) const
 void XC::nDarray::mathprint(void) const
   {
 
-    switch(pc_nDarray_rep->nDarray_rank)
+    switch(pc_nDarray_rep.nDarray_rank)
       {
         case 0:
           {
@@ -1836,55 +1150,55 @@ void XC::nDarray::mathprint(void) const
           {
             ::printf("{");
             int i = 1;
-            for ( i=1 ; i<=pc_nDarray_rep->dim[0]; i++ )
+            for ( i=1 ; i<=pc_nDarray_rep.dim[0]; i++ )
               {
                 ::printf("%12f, ", cval(i));
                 ::printf("\n");
-                if (i<pc_nDarray_rep->dim[0]) ::printf(", ");
-                if (i==pc_nDarray_rep->dim[0]) ::printf(" \n");
+                if (i<pc_nDarray_rep.dim[0]) ::printf(", ");
+                if (i==pc_nDarray_rep.dim[0]) ::printf(" \n");
               }
-            if (i<(pc_nDarray_rep->dim[0]+1)) ::printf("},\n");
-            if (i==(pc_nDarray_rep->dim[0]+1)) ::printf("}\n");
+            if (i<(pc_nDarray_rep.dim[0]+1)) ::printf("},\n");
+            if (i==(pc_nDarray_rep.dim[0]+1)) ::printf("}\n");
             break;
           }
 
         case 2:
           {
             ::printf("{\n");
-            for ( int i2=1 ; i2<=pc_nDarray_rep->dim[0]  ; i2++ )
+            for ( int i2=1 ; i2<=pc_nDarray_rep.dim[0]  ; i2++ )
               {
-                if (pc_nDarray_rep->dim[1]!=1)
+                if (pc_nDarray_rep.dim[1]!=1)
                   {
                     ::printf("{");
                   }
-                for ( int j2=1 ; j2<=pc_nDarray_rep->dim[1] ; j2++ )
+                for ( int j2=1 ; j2<=pc_nDarray_rep.dim[1] ; j2++ )
                   {
                     ::printf("%12f", cval(i2, j2));
-                    if (j2<pc_nDarray_rep->dim[1]  )
+                    if (j2<pc_nDarray_rep.dim[1]  )
                       {
                          ::printf(", ");
                       }
-//                    if (j2==pc_nDarray_rep->dim[1]) ::printf("");
+//                    if (j2==pc_nDarray_rep.dim[1]) ::printf("");
                   }
-//                if (i2<pc_nDarray_rep->dim[1] && pc_nDarray_rep->dim[1]!=1 )
+//                if (i2<pc_nDarray_rep.dim[1] && pc_nDarray_rep.dim[1]!=1 )
 //                  {
 //                    ::printf(",\n");
 //                  }
-                if ( pc_nDarray_rep->dim[1]==1 && i2<pc_nDarray_rep->dim[0] )
+                if ( pc_nDarray_rep.dim[1]==1 && i2<pc_nDarray_rep.dim[0] )
                   {
                          ::printf(", ");
                   }
-                if (i2<pc_nDarray_rep->dim[1] )
+                if (i2<pc_nDarray_rep.dim[1] )
                   {
                     ::printf("},\n");
                   }
-                if (i2==pc_nDarray_rep->dim[1] && pc_nDarray_rep->dim[1]!=1 )
+                if (i2==pc_nDarray_rep.dim[1] && pc_nDarray_rep.dim[1]!=1 )
                   {
                     ::printf("}\n");
                   }
               }
-//            if (i2<(pc_nDarray_rep->dim[0]+1)) ::printf("},\n");
-//            if (i2==(pc_nDarray_rep->dim[0]+1))
+//            if (i2<(pc_nDarray_rep.dim[0]+1)) ::printf("},\n");
+//            if (i2==(pc_nDarray_rep.dim[0]+1))
 //              {
                 ::printf("}\n");
 //              }
@@ -1893,10 +1207,10 @@ void XC::nDarray::mathprint(void) const
 
         case 3:
           {
-            for ( int i3=1 ; i3<=pc_nDarray_rep->dim[0] ; i3++ )
-              for ( int j3=1 ; j3<=pc_nDarray_rep->dim[1] ; j3++ )
+            for ( int i3=1 ; i3<=pc_nDarray_rep.dim[0] ; i3++ )
+              for ( int j3=1 ; j3<=pc_nDarray_rep.dim[1] ; j3++ )
                 {
-                  for ( int k3=1 ; k3<=pc_nDarray_rep->dim[2] ; k3++ )
+                  for ( int k3=1 ; k3<=pc_nDarray_rep.dim[2] ; k3++ )
                     {
                       ::printf("%12f,  ", cval(i3, j3, k3));
                     }
@@ -1907,11 +1221,11 @@ void XC::nDarray::mathprint(void) const
 
         case 4:
           {
-            for ( int i4=1 ; i4<=pc_nDarray_rep->dim[0] ; i4++ )
-              for ( int j4=1 ; j4<=pc_nDarray_rep->dim[1] ; j4++ )
-                for ( int k4=1 ; k4<=pc_nDarray_rep->dim[2] ; k4++ )
+            for ( int i4=1 ; i4<=pc_nDarray_rep.dim[0] ; i4++ )
+              for ( int j4=1 ; j4<=pc_nDarray_rep.dim[1] ; j4++ )
+                for ( int k4=1 ; k4<=pc_nDarray_rep.dim[2] ; k4++ )
                   {
-                    for ( int l4=1 ; l4<=pc_nDarray_rep->dim[3] ; l4++ )
+                    for ( int l4=1 ; l4<=pc_nDarray_rep.dim[3] ; l4++ )
                       {
                         ::printf("%12f,  ", cval(i4, j4, k4, l4));
                       }
@@ -1931,7 +1245,7 @@ double XC::nDarray::Frobenius_norm(void)  // BJmatrix, BJtensor, BJvector
   {                                   // see Dennis & Schnabel page 43
     double FN = 0.0;
 
-    switch(pc_nDarray_rep->nDarray_rank)
+    switch(pc_nDarray_rep.nDarray_rank)
       {
         case 0:
           {
@@ -1941,7 +1255,7 @@ double XC::nDarray::Frobenius_norm(void)  // BJmatrix, BJtensor, BJvector
 
         case 1:
           {
-            for ( int i=1 ; i<=pc_nDarray_rep->dim[0]; i++ )
+            for ( int i=1 ; i<=pc_nDarray_rep.dim[0]; i++ )
               {
                 FN = FN + (val(i))*(val(i));
               }
@@ -1950,9 +1264,9 @@ double XC::nDarray::Frobenius_norm(void)  // BJmatrix, BJtensor, BJvector
 
         case 2:
           {
-            for ( int i2=1 ; i2<=pc_nDarray_rep->dim[0]  ; i2++ )
+            for ( int i2=1 ; i2<=pc_nDarray_rep.dim[0]  ; i2++ )
               {
-                for ( int j2=1 ; j2<=pc_nDarray_rep->dim[1] ; j2++ )
+                for ( int j2=1 ; j2<=pc_nDarray_rep.dim[1] ; j2++ )
                   {
                     FN = FN + (val(i2,j2))*(val(i2,j2));
                   }
@@ -1962,10 +1276,10 @@ double XC::nDarray::Frobenius_norm(void)  // BJmatrix, BJtensor, BJvector
 
         case 3:
           {
-            for ( int i3=1 ; i3<=pc_nDarray_rep->dim[0] ; i3++ )
-              for ( int j3=1 ; j3<=pc_nDarray_rep->dim[1] ; j3++ )
+            for ( int i3=1 ; i3<=pc_nDarray_rep.dim[0] ; i3++ )
+              for ( int j3=1 ; j3<=pc_nDarray_rep.dim[1] ; j3++ )
                 {
-                  for ( int k3=1 ; k3<=pc_nDarray_rep->dim[2] ; k3++ )
+                  for ( int k3=1 ; k3<=pc_nDarray_rep.dim[2] ; k3++ )
                     {
                       FN = FN + (val(i3,j3,k3))*(val(i3,j3,k3));
                     }
@@ -1975,11 +1289,11 @@ double XC::nDarray::Frobenius_norm(void)  // BJmatrix, BJtensor, BJvector
 
         case 4:
           {
-          for ( int i4=1 ; i4<=pc_nDarray_rep->dim[0] ; i4++ )
-            for ( int j4=1 ; j4<=pc_nDarray_rep->dim[1] ; j4++ )
-              for ( int k4=1 ; k4<=pc_nDarray_rep->dim[2] ; k4++ )
+          for ( int i4=1 ; i4<=pc_nDarray_rep.dim[0] ; i4++ )
+            for ( int j4=1 ; j4<=pc_nDarray_rep.dim[1] ; j4++ )
+              for ( int k4=1 ; k4<=pc_nDarray_rep.dim[2] ; k4++ )
                 {
-                  for ( int l4=1 ; l4<=pc_nDarray_rep->dim[3] ; l4++ )
+                  for ( int l4=1 ; l4<=pc_nDarray_rep.dim[3] ; l4++ )
                     {
                       FN = FN + (val(i4, j4, k4, l4))*(val(i4, j4, k4, l4));
                     }
@@ -1998,7 +1312,7 @@ double XC::nDarray::General_norm(double p)  // BJmatrix, BJtensor, BJvector
   {                                     // see Dennis & Schnabel page 42
     double N = 0.0;
 
-    switch(pc_nDarray_rep->nDarray_rank)
+    switch(pc_nDarray_rep.nDarray_rank)
       {
         case 0:
           {
@@ -2008,7 +1322,7 @@ double XC::nDarray::General_norm(double p)  // BJmatrix, BJtensor, BJvector
 
         case 1:
           {
-            for ( int i=1 ; i<=pc_nDarray_rep->dim[0]; i++ )
+            for ( int i=1 ; i<=pc_nDarray_rep.dim[0]; i++ )
               {
                 N = N + pow(fabs(val(i)),p);
               }
@@ -2017,9 +1331,9 @@ double XC::nDarray::General_norm(double p)  // BJmatrix, BJtensor, BJvector
 
         case 2:
           {
-            for ( int i2=1 ; i2<=pc_nDarray_rep->dim[0]  ; i2++ )
+            for ( int i2=1 ; i2<=pc_nDarray_rep.dim[0]  ; i2++ )
               {
-                for ( int j2=1 ; j2<=pc_nDarray_rep->dim[1] ; j2++ )
+                for ( int j2=1 ; j2<=pc_nDarray_rep.dim[1] ; j2++ )
                   {
                     N = N + pow(fabs(val(i2,j2)),p);
                   }
@@ -2029,10 +1343,10 @@ double XC::nDarray::General_norm(double p)  // BJmatrix, BJtensor, BJvector
 
         case 3:
           {
-            for ( int i3=1 ; i3<=pc_nDarray_rep->dim[0] ; i3++ )
-              for ( int j3=1 ; j3<=pc_nDarray_rep->dim[1] ; j3++ )
+            for ( int i3=1 ; i3<=pc_nDarray_rep.dim[0] ; i3++ )
+              for ( int j3=1 ; j3<=pc_nDarray_rep.dim[1] ; j3++ )
                 {
-                  for ( int k3=1 ; k3<=pc_nDarray_rep->dim[2] ; k3++ )
+                  for ( int k3=1 ; k3<=pc_nDarray_rep.dim[2] ; k3++ )
                     {
                       N = N + pow(fabs(val(i3,j3,k3)),p);
                     }
@@ -2042,11 +1356,11 @@ double XC::nDarray::General_norm(double p)  // BJmatrix, BJtensor, BJvector
 
         case 4:
           {
-          for ( int i4=1 ; i4<=pc_nDarray_rep->dim[0] ; i4++ )
-            for ( int j4=1 ; j4<=pc_nDarray_rep->dim[1] ; j4++ )
-              for ( int k4=1 ; k4<=pc_nDarray_rep->dim[2] ; k4++ )
+          for ( int i4=1 ; i4<=pc_nDarray_rep.dim[0] ; i4++ )
+            for ( int j4=1 ; j4<=pc_nDarray_rep.dim[1] ; j4++ )
+              for ( int k4=1 ; k4<=pc_nDarray_rep.dim[2] ; k4++ )
                 {
-                  for ( int l4=1 ; l4<=pc_nDarray_rep->dim[3] ; l4++ )
+                  for ( int l4=1 ; l4<=pc_nDarray_rep.dim[3] ; l4++ )
                     {
                       N = N + pow(fabs(val(i4,j4,k4,l4)),p);
                     }
@@ -2068,8 +1382,8 @@ int XC::nDarray::number_of_zeros() const  // number of members that are
     double machepsilon = d_macheps();
     double tolerance   = sqrt(machepsilon);
 
-    for (int j=0 ; j<this->pc_nDarray_rep->total_numb ; j++)
-      if ( this->pc_nDarray_rep->pd_nDdata[j] <= tolerance )
+    for (int j=0 ; j<this->pc_nDarray_rep.total_numb ; j++)
+      if ( this->pc_nDarray_rep.pd_nDdata[j] <= tolerance )
         {
           n++;
         }
@@ -2164,10 +1478,10 @@ XC::nDarray XC::nDarray::eigenvectors(void)
 
 XC::nDarray XC::nDarray::nDsqrt(void)  // returns all elements square root
   {
-    nDarray newnD( this->rank(), this->pc_nDarray_rep->dim, this->data());
+    nDarray newnD( this->rank(), this->pc_nDarray_rep.dim, this->data());
 
-    for ( int i=0 ; i<pc_nDarray_rep->total_numb ; i++ )
-      newnD.pc_nDarray_rep->pd_nDdata[i] = sqrt(this->pc_nDarray_rep->pd_nDdata[i]) ;
+    for ( int i=0 ; i<pc_nDarray_rep.total_numb ; i++ )
+      newnD.pc_nDarray_rep.pd_nDdata[i] = sqrt(this->pc_nDarray_rep.pd_nDdata[i]) ;
 
     return newnD;
 
@@ -2342,59 +1656,47 @@ void XC::nDarray::eigsrt(std::vector<double> &d, std::vector<std::vector<double>
       }
   }
 
-
-
-
-
-
 // very private part
-double *XC::nDarray::data(void) const
-  { return this->pc_nDarray_rep->get_data_ptr(); }
+const double *XC::nDarray::data(void) const
+  { return this->pc_nDarray_rep.get_data_ptr(); }
 
 int XC::nDarray::rank(void) const
-  { return this->pc_nDarray_rep->nDarray_rank; }
+  { return this->pc_nDarray_rep.nDarray_rank; }
 
 void XC::nDarray::rank(int nDarray_rank)
-  { this->pc_nDarray_rep->nDarray_rank = nDarray_rank; }
+  { this->pc_nDarray_rep.nDarray_rank = nDarray_rank; }
 
 long int XC::nDarray::total_number(void) const
-  { return this->pc_nDarray_rep->total_numb; }
+  { return this->pc_nDarray_rep.total_numb; }
 
 void XC::nDarray::total_number(long int number)
-  { this->pc_nDarray_rep->total_numb = number; }
+  { this->pc_nDarray_rep.total_numb = number; }
 
 const std::vector<int> &XC::nDarray::dim(void) const
-  { return this->pc_nDarray_rep->dim; }
+  { return this->pc_nDarray_rep.dim; }
 
 void XC::nDarray::clear_dim(void)
-  { this->pc_nDarray_rep->clear_dim(); }
+  { this->pc_nDarray_rep.clear_dim(); }
 
 void XC::nDarray::clear_data(void)
-  { return this->pc_nDarray_rep->clear_data(); }
+  { return this->pc_nDarray_rep.clear_data(); }
 
 void XC::nDarray::clear_dim_data(void)
   {
-    this->pc_nDarray_rep->clear_dim();
-    this->pc_nDarray_rep->clear_data();
+    this->pc_nDarray_rep.clear_dim();
+    this->pc_nDarray_rep.clear_data();
   }
 
-int &XC::nDarray::get_dim_pointer(void) const
-  { return this->pc_nDarray_rep->dim[0]; }
+const int &XC::nDarray::get_dim_pointer(void) const
+  { return this->pc_nDarray_rep.dim[0]; }
 
 void XC::nDarray::set_dim(const std::vector<int> &pdim)
-  { this->pc_nDarray_rep->init_dim(pdim.size(), pdim); }
+  { this->pc_nDarray_rep.init_dim(pdim.size(), pdim); }
 
 int XC::nDarray::dim(int which) const
-  { return this->pc_nDarray_rep->dim[which-1]; }
+  { return this->pc_nDarray_rep.dim[which-1]; }
 
-int XC::nDarray::reference_count(int up_down)
-  {
-    this->pc_nDarray_rep->n += up_down;
-    return(this->pc_nDarray_rep->n);
-  }
 
-void XC::nDarray::set_reference_count(int ref_count)
-  { this->pc_nDarray_rep->n=ref_count; }
 
 
 

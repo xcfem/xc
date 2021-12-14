@@ -139,12 +139,7 @@ class nDarray_rep
                           //      dim[0] = dimension in direction 1
                           //      dim[1] = dimension in direction 2
                           //      dim[2] = dimension in direction 3  */
-    int n;                // reference count
   public:
-// overloading operator new and delete in nDarray_rep class  ########
-    void *operator new(size_t s); // see C++ reference manual by
-    void operator delete(void *);  // by ELLIS and STROUSTRUP page 283.
-                                   // and ECKEL page 529.
     void init_dim(const size_t &, const int &default_dim= 1);
     void init_dim(const size_t &, const std::vector<int> &pdim);
     inline void clear_dim(void)
@@ -178,6 +173,9 @@ class nDarray_rep
 	clear_dim();
       }
     void sum_data(const std::vector<double> &);
+    void substract_data(const std::vector<double> &);
+    void neg(void);
+    double sum(void) const;
   };
 
 //! @brief n-dimensional array.
@@ -191,24 +189,15 @@ class nDarray
     void clear_dim(void);
     void clear_data(void);
     void clear_dim_data(void);
-    int &get_dim_pointer(void) const;
+    const int &get_dim_pointer(void) const;
     //    int dim(int which) const;
 
   protected:
-    nDarray_rep *pc_nDarray_rep;
+    nDarray_rep pc_nDarray_rep;
 
-//.. no need    friend class GaussPoint;
-          // explanation why this one should be a friend instead
-          // of inheriting all data through protected construct
-          // see in J. Coplien "Advanced C++..." page 96.
-
-    double* data(void) const;
-    void clear_rep(void);
-    void assign(const nDarray &rval);
+    const double *data(void) const;
     void set_dim(const std::vector<int> &);
     const std::vector<int> &dim(void) const;
-    int reference_count(int );
-    void set_reference_count(int );
     void rank(int);
   public:
     nDarray(int rank_of_nDarray=1, const double &initval=0.0);// default constructor
@@ -225,7 +214,6 @@ class nDarray
     explicit nDarray(const std::string &){};
 
     nDarray(const std::string &flag, int rank_of_nDarray, const std::vector<int> &pdim); // create a unit nDarray
-    nDarray(const nDarray &x);  // copy-initializer
     virtual ~nDarray(void);
 
 //##############################################################################
@@ -239,59 +227,16 @@ class nDarray
 
     void Reset_to(const double &value);  // reset data to "value"
 
-//..    double operator( ) (int subscript, ...) const; // same as val
-                                                   // but overloaded (...)
-                                                   // and public !
-
-//@@@@@     double operator( )(int first) const;  // overloaded for ONE argument
-//@@@@@     double operator( )(int first,
-//@@@@@                        int second) const; // overloaded for TWO arguments
-//@@@@@     double operator( )(int first,
-//@@@@@                        int second,
-//@@@@@                        int third) const;  // overloaded for THREE arguments
-//@@@@@     double operator( )(int first,
-//@@@@@                        int second,
-//@@@@@                        int third,
-//@@@@@                        int fourth) const;  // overloaded for FOUR arguments
-//@@@@@
-//@@@@@     double operator( )(int first,
-//@@@@@                        int second,
-//@@@@@                        int third,
-//@@@@@                        int fourth,
-//@@@@@                        int subscript,
-//@@@@@                        ... ) const; // overloaded for more than FOUR arguments
-
-//    BJtensor & operator()(char *indices_from_user);// to be defined in BJtensor class
     const double &val(int subscript, ...) const;
     double &val(int subscript, ...);
     const double &val4(int first, int second, int third, int fourth) const;  // overloaded for FOUR arguments for operator * for two tensors
     double &val4(int first, int second, int third, int fourth);  // overloaded for FOUR arguments for operator * for two tensors
 
-// ..JB..     double & val(int first);  // overloaded for ONE argument
-// ..JB..     double & val(int first,
-// ..JB..                  int second); // overloaded for TWO arguments
-// ..JB..     double & val(int first,
-// ..JB..                  int second,
-// ..JB..                  int third);  // overloaded for THREE arguments
-// ..JB..     double & val(int first,
-// ..JB..                  int second,
-// ..JB..                  int third,
-// ..JB..                  int fourth);  // overloaded for FOUR arguments
-// ..JB..
-//..    double & val(int first,
-//..                 int second,
-//..                 int third,
-//..                 int fourth,
-//..                 int subscript,
-//..                 ... ); // overloaded for more than FOUR arguments
-//..
     const double &cval(int subscript, ...) const; // const
 
 //..
 
 
-
-    nDarray& operator=(const nDarray &rval); // nDarray assignment
 
 //++    nDarray operator+( nDarray & rval); // nDarray addition
 //....// This is from JOOP May/June 1990 after ARKoenig
@@ -311,8 +256,6 @@ class nDarray
 
     double sum(void) const;    // summ of all the elements
     double trace(void) const;            // trace of a 2-nd BJtensor, BJmatrix
-
-    nDarray deep_copy(void); // make an image
 
     bool operator==(const nDarray &rval);  // nDarray comparison
                                       // returns 1 if they are same

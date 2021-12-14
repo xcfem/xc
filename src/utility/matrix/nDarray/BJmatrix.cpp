@@ -96,8 +96,9 @@ XC::BJmatrix::BJmatrix(int rank, int rows, int columns, double initvalues):
   nDarray( rank, rows, columns, initvalues){ } // calling the appropriate
                                              // base constructor
 //##############################################################################
-XC::BJmatrix::BJmatrix(const std::string &flag, int dimension ): // create an ident XC::BJmatrix
-  nDarray("NO")           // with base class constructor cancellation
+XC::BJmatrix::BJmatrix(const std::string &flag, int dimension )
+  : nDarray("NO") // create an ident XC::BJmatrix
+                  // with base class constructor cancellation
   {
     if ( flag[0] != 'I' && flag[0] != 'e' )
      {
@@ -106,7 +107,6 @@ XC::BJmatrix::BJmatrix(const std::string &flag, int dimension ): // create an id
        ::exit(1);
      }
 // create the structure:
-     pc_nDarray_rep = new nDarray_rep; // this 'new' is overloaded
      rank(2);  //rank_of_nDarray here BJmatrix = 2
 
 // in the case of nDarray_rank=0 add one to get right thing from the
@@ -115,9 +115,7 @@ XC::BJmatrix::BJmatrix(const std::string &flag, int dimension ): // create an id
      set_dim(pdim);  // array for dimensions
 
 // allocate memory for the actual nDarray as nDarray
-     pc_nDarray_rep->init_data();
-
-     set_reference_count(+1);  // so far, there's one reference
+     pc_nDarray_rep.init_data();
 
      for(int i2=1 ; i2<=dim(1) ; i2++ )
        for( int j2=1 ; j2<=dim(2) ; j2++ )
@@ -179,16 +177,13 @@ XC::BJmatrix::BJmatrix(const std::string &initfile)
   // let's construct a BJmatrix
 
   // create the structure:
-    pc_nDarray_rep = new nDarray_rep; // this 'new' is overloaded
     rank(2);  // rank_of_nDarray here BJmatrix = 2
 
        const std::vector<int> pdim({rows,columns});
        set_dim(pdim);// array for dimensions
 
   // allocate memory for the actual nDarray as nDarray
-       pc_nDarray_rep->init_data();
-
-    set_reference_count(+1);  // so far, there's one reference
+       pc_nDarray_rep.init_data();
 
     for(int row=1 ; row <= rows ; row++ )
       for(int col=1 ; col <= columns ; col++ )
@@ -229,16 +224,13 @@ XC::BJmatrix::BJmatrix(const std::string &initfile,const std::string &outfile):
 //  cp = strpbrk( buf, "0123456789")
   rows = columns = atoi(cp);
 // create the structure:
-  pc_nDarray_rep = new nDarray_rep; // this 'new' is overloaded
   rank(2);  // rank_of_nDarray here XC::BJmatrix = 2
 
      const std::vector<int> pdim({rows,columns});
      set_dim(pdim);// array for dimensions
 
      // allocate memory for the actual nDarray as XC::nDarray
-     pc_nDarray_rep->init_data();
-
-     set_reference_count(+1);  // so far, there's one reference
+     pc_nDarray_rep.init_data();
 
   for ( int row=1 ; row <= rows ; row++ )
     for ( int col=1 ; col <= columns ; col++ )
@@ -261,19 +253,13 @@ XC::BJmatrix::BJmatrix(const std::string &initfile,const std::string &outfile):
   write_standard(outfile, "this is a test XC::BJmatrix output"); 
 }
 
-//##############################################################################
-XC::BJmatrix::BJmatrix(const BJmatrix &x): // copy-initializer
-  nDarray("NO")     // with base class constructor cancellation
-    {
-      x.pc_nDarray_rep->n++;  // we're adding another reference.
-//      x.reference_count(+1); // we're adding another reference.
-      pc_nDarray_rep = x.pc_nDarray_rep;  // point to the new BJtensor_rep.
-    }
+XC::BJmatrix::BJmatrix(const BJmatrix &x)
+  : nDarray(x){}
 
 
 
 //##############################################################################
-XC::BJmatrix::BJmatrix(const XC::nDarray & x):
+XC::BJmatrix::BJmatrix(const nDarray & x):
   nDarray( x ) { }
 
 
@@ -295,12 +281,12 @@ int XC::BJmatrix::cols( ) const       // cols in XC::BJmatrix
 
 
 //#############################################################################
-XC::BJmatrix &XC::BJmatrix::operator=( const XC::BJmatrix & rval)
+XC::BJmatrix &XC::BJmatrix::operator=( const BJmatrix & rval)
   {
     if(&rval == this) // if assign an BJvector to itself
       return *this;
     
-    assign(rval);
+    nDarray::operator=(rval);
     return *this;
   }
 
@@ -978,8 +964,8 @@ double & XC::BJmatrix::mval (int row, int col) // I am still keeping mval
 //#############################################################################
 double *XC::BJmatrix::BJmatrixtoarray(int &num)
   {
-    num= pc_nDarray_rep->total_numb;
-    return pc_nDarray_rep->get_data_ptr();
+    num= pc_nDarray_rep.total_numb;
+    return pc_nDarray_rep.get_data_ptr();
   }
 
 

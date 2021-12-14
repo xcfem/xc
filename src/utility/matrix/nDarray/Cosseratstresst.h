@@ -77,15 +77,8 @@ class Cosseratstresstensor: public BJtensor
     Cosseratstresstensor(const BJtensor & x); // copy-initializer
     Cosseratstresstensor(const nDarray & x); // copy-initializer
 
-    //~Cosseratstresstensor( );
-    
-
     Cosseratstresstensor operator=(const Cosseratstresstensor & rval);// Cosseratstresstensor assignment
     Cosseratstresstensor operator=(const BJtensor & rval);// tensor assignment to Cosseratstresstensor
-    Cosseratstresstensor operator=(const nDarray & rval);// nDarray assignment to Cosseratstresstensor
-
-    Cosseratstresstensor deep_copy(void);
-    //..    Cosseratstresstensor * p_deep_copy(void);
 
     //ini  // use "from" and initialize already allocated stress tensor from "from" values
     //ini      void Initialize( const Cosseratstresstensor & from );

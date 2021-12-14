@@ -81,16 +81,10 @@ class Cosseratstraintensor: public BJtensor
 
     Cosseratstraintensor(const Cosseratstraintensor & x );
     Cosseratstraintensor(const BJtensor & x); // copy-initializer
-    Cosseratstraintensor(const nDarray & x); // copy-initializer
-
-    //~Cosseratstraintensor( );
     
     Cosseratstraintensor operator=(const Cosseratstraintensor & rval); // Cosseratstraintensor assignment
     Cosseratstraintensor operator=(const BJtensor & rval);// tensor assignment to Cosseratstraintensor
     Cosseratstraintensor operator=(const nDarray & rval);// nDarray assignment to Cosseratstraintensor
-
-    Cosseratstraintensor deep_copy(void);
-//..    Cosseratstraintensor * p_deep_copy(void);
 
 //ini  // use "from" and initialize already allocated strain tensor from "from" values
 //ini      void Initialize( const Cosseratstraintensor & from );
