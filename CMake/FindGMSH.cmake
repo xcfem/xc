@@ -1,3 +1,27 @@
+# ----------------------------------------------------------------------------
+#   XC program; finite element analysis code
+#   for structural analysis and design.
+# 
+#   Copyright (C)  Luis C. Pérez Tato
+# 
+#   Except for the restrictions that may arise from the copyright
+#   of the original program (see copyright below if any)
+#   XC is free software: you can redistribute it and/or modify
+#   it under the terms of the GNU General Public License as published by
+#   the Free Software Foundation, either version 3 of the License, or 
+#   (at your option) any later version.
+# 
+#   This software is distributed in the hope that it will be useful, but 
+#   WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#   GNU General Public License for more details. 
+# 
+# 
+#  You should have received a copy of the GNU General Public License 
+#  along with this program.
+#  If not, see <http:// www.gnu.org/licenses/>.
+# ----------------------------------------------------------------------------
+
 # - Find GMSH
 # Sets the following variables:
 #   GMSH_INCLUDE_DIRS - path to the GMSH include directory
@@ -30,6 +54,7 @@ if(NOT GMSH_ROOT_DIR AND DEFINED ENV{GMSH_ROOT_DIR})
     SET(GMSH_ROOT_DIR $ENV{GMSH_ROOT_DIR})
     MESSAGE(STATUS "GMSH_ROOT_DIR: ${GMSH_ROOT_DIR}")
 else()
+    MESSAGE(STATUS "GMSH_ROOT_DIR not set (and that's probably OK).")
     set(GMSH_ROOT_DIR "")
 endif()
 
@@ -47,6 +72,8 @@ FIND_PATH(
   NAMES
     Gmsh.h
     gmsh.h
+  PATHS
+    ${GMSH_ROOT_DIR}
   PATH_SUFFIXES
     gmsh
     include
@@ -57,6 +84,8 @@ FIND_LIBRARY(
   NAMES
     Gmsh
     gmsh
+  PATHS
+    ${GMSH_ROOT_DIR}
   PATH_SUFFIXES
     lib
   )
