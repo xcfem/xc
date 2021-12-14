@@ -1163,7 +1163,7 @@ XC::BJtensor XC::BJtensor::symmetrize11() const
 double XC::BJtensor::determinant() const
   {
     double det = 0.0;
-//    switch(pc_nDarray_rep->nDarray_rank)
+
     switch(this->rank())
       {
         case 0:

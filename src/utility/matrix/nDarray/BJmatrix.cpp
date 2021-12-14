@@ -114,7 +114,7 @@ XC::BJmatrix::BJmatrix(const std::string &flag, int dimension ): // create an id
      const std::vector<int> pdim({dimension,dimension});
      set_dim(pdim);  // array for dimensions
 
-// allocate memory for the actual XC::nDarray as XC::nDarray
+// allocate memory for the actual nDarray as nDarray
      pc_nDarray_rep->init_data();
 
      set_reference_count(+1);  // so far, there's one reference
@@ -978,7 +978,7 @@ double & XC::BJmatrix::mval (int row, int col) // I am still keeping mval
 //#############################################################################
 double *XC::BJmatrix::BJmatrixtoarray(int &num)
   {
-    num=pc_nDarray_rep->total_numb;
+    num= pc_nDarray_rep->total_numb;
     return pc_nDarray_rep->get_data_ptr();
   }
 

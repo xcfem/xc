@@ -185,27 +185,31 @@ class nDarray_rep
 class nDarray
   {
   private:
-    nDarray_rep * pc_nDarray_rep;
-  private:
-    friend class BJtensor;
-    friend class BJmatrix;
-    friend class BJvector;
-    friend class stiffness_matrix;
+//  int rank(void) const;
+    long int total_number(void) const;
+    void total_number(long int );
+    void clear_dim(void);
+    void clear_data(void);
+    void clear_dim_data(void);
+    int &get_dim_pointer(void) const;
+    //    int dim(int which) const;
 
-    friend class stressstraintensor;
-    friend class stresstensor;
-    friend class straintensor;
-
-    friend class Cosseratstresstensor;
-    friend class Cosseratstraintensor;
+  protected:
+    nDarray_rep *pc_nDarray_rep;
 
 //.. no need    friend class GaussPoint;
           // explanation why this one should be a friend instead
           // of inheriting all data through protected construct
           // see in J. Coplien "Advanced C++..." page 96.
-  protected:
+
+    double* data(void) const;
     void clear_rep(void);
     void assign(const nDarray &rval);
+    void set_dim(const std::vector<int> &);
+    const std::vector<int> &dim(void) const;
+    int reference_count(int );
+    void set_reference_count(int );
+    void rank(int);
   public:
     nDarray(int rank_of_nDarray=1, const double &initval=0.0);// default constructor
     nDarray(int rank_of_nDarray, const std::vector<int> &pdim, const double *values);
@@ -347,22 +351,6 @@ class nDarray
     static void tqli(std::vector<double> &d, std::vector<double> &, int n, std::vector<std::vector<double> > &z);
     static void tred2(std::vector<std::vector<double> > &a, int n, std::vector<double> &d, std::vector<double> &e);
     static void eigsrt(std::vector<double> &d, std::vector<std::vector<double> > &v, int n);
-
-  private:
-    double* data(void) const;
-//  int rank(void) const;
-    void rank(int );
-    long int total_number(void) const;
-    void total_number(long int );
-    const std::vector<int> &dim(void) const;
-    void clear_dim(void);
-    void clear_data(void);
-    void clear_dim_data(void);
-    int &get_dim_pointer(void) const;
-    void set_dim(const std::vector<int> &);
-    //    int dim(int which) const;
-    int reference_count(int );
-    void set_reference_count(int );
 
   };
   

@@ -92,7 +92,6 @@ XC::Cosseratstresstensor::Cosseratstresstensor( const nDarray & x)
     {  } // copy-initializer
 
 
-
 //##############################################################################
 // IT IS NOT INHERITED so must be defined in all derived classes
 // See ARM page 306.

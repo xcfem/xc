@@ -226,15 +226,6 @@ XC::stresstensor XC::stresstensor::deep_copy(void)
 //..    return &temp; // call constructor and return it !
 //..  }
 
-//ini  //##############################################################################
-//ini  // use "from" and initialize already allocated stress XC::BJtensor from "from" values
-//ini  void XC::stresstensor::Initialize( const stresstensor & from )
-//ini    {
-//ini  // copy only data because everything else is default
-//ini      for ( int i=0 ; i<pc_nDarray_rep->total_numb ; i++ )
-//ini        this->pc_nDarray_rep->pd_nDdata[i] = from.pc_nDarray_rep->pd_nDdata[i] ;
-//ini    }
-
 //___//##############################################################################
 //___//##############################################################################
 //___//##############################################################################

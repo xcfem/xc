@@ -166,15 +166,6 @@ XC::straintensor XC::straintensor::deep_copy(void)
 //..    return &this->deep_copy(); // call constructor and return it !
 //..  }
 
-//ini  //##############################################################################
-//ini  // use "from" and initialize already allocated strain XC::BJtensor from "from" values
-//ini  void XC::straintensor::Initialize( const straintensor & from )
-//ini    {
-//ini  // copy onlu data because everything else is default
-//ini      for ( int i=0 ; i<pc_nDarray_rep->total_numb ; i++ )
-//ini        this->pc_nDarray_rep->pd_nDdata[i] = from.pc_nDarray_rep->pd_nDdata[i] ;
-//ini    }
-
 //___//##############################################################################
 //___//##############################################################################
 //___//##############################################################################
