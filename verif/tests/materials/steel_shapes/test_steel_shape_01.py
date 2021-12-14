@@ -1,7 +1,13 @@
 # -*- coding: utf-8 -*-
+''' Home made test. Cantilever under vertical load at his end.'''
+
 from __future__ import print_function
-# home made test
-# Cantilever under vertical load at his end.
+
+__author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
+__copyright__= "Copyright 2015, LCPT and AOO"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@ciccp.es"
 
 import xc_base
 import geom
@@ -14,12 +20,6 @@ from materials.sections import structural_steel
 from materials.ec3 import EC3_materials
 from postprocess import def_vars_control as vc
 from postprocess import callback_controls as cc
-
-__author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
-__copyright__= "Copyright 2015, LCPT and AOO"
-__license__= "GPL"
-__version__= "3.0"
-__email__= "l.pereztato@ciccp.es"
 
 # Geometry
 L= 10 # Bar length (m)

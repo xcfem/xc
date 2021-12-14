@@ -5,13 +5,14 @@
    ISBN-13: 978-0-495-66812-1
 '''
 from __future__ import print_function
-from geotechnics import settlement
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
 __copyright__= "Copyright 2017, LCPT and AOO"
 __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
+
+from geotechnics import settlement
 
 incSigma= settlement.stress_increment_under_rectangular_loaded_area(q=150e3, B= 2.5, L=5.0, x=0.0, y=0.0, z=6.25, eSize= 0.1)
 averageIncSigma= settlement.average_stress_increment_under_rectangular_loaded_area(q=100e3, B= 3.0, L=3.0, x=0.0, y=0.0, z1=3.0, z2= 5.0, eSize= 0.2, zInc= 0.5)

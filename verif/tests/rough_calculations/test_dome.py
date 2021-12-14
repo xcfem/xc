@@ -1,4 +1,8 @@
 # -*- coding: utf-8 -*-
+''' Astrodome Sports Complex, Houston TX
+ Example 1 from 'The art of structural engineering : Vaults' course,
+ by María Garlock.'''
+
 from __future__ import print_function
 from __future__ import division
 
@@ -11,9 +15,6 @@ __email__= "ana.Ortega.Ort@gmail.com"
 import math
 from rough_calculations import vaults_rough_calc as vault
 
-# Astrodome Sports Complex, Houston TX
-# Example 1 from 'The art of structural engineering : Vaults' course,
-# by María Garlock
 
 #Data. Units: ft,psf
 radius=600 # spherical radius [ft]

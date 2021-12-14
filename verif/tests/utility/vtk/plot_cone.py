@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 import vtk
 from misc.vtk_utils import display_vtk
 outputFileName= "/tmp/plot_cone.jpeg"

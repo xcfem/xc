@@ -4,13 +4,13 @@
 from __future__ import print_function
 from __future__ import division
 
-from actions.thermal import IAP_thermal
-
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
 __copyright__= "Copyright 2021, LCPT and AOO"
 __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
+
+from actions.thermal import IAP_thermal
 
 Tmin1= IAP_thermal.getMinAnnualTemp(climateZn= 1, height= 0.0, returnPeriod= 50.0)
 ratio1= abs(Tmin1+7)/7

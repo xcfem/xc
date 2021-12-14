@@ -1,6 +1,14 @@
 # -*- coding: utf-8 -*-
+''' Elastic bearing test. Home made test.'''
+
 from __future__ import print_function
-# Home made test
+
+__author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AO_O)"
+__copyright__= "Copyright 2015, LCPT and AO_O"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@ciccp.es ana.ortega@ciccp.es"
+
 KX= 1000 # Spring constant
 KY= 2000 # Spring constant
 FX= 1 # Magnitude of force

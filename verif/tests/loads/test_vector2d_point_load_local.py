@@ -1,10 +1,11 @@
 # -*- coding: utf-8 -*-
+''' home made test
+ Reference:  Expresiones de la flecha el el Prontuario de
+ Estructuras Metálicas del CEDEX. Apartado 3.3 Punctual load on cantilever.
+ ISBN: 84-7790-336-0
+ url={https://books.google.ch/books?id=j88yAAAACAAJ}.'''
+
 from __future__ import print_function
-# home made test
-# Reference:  Expresiones de la flecha el el Prontuario de
-# Estructuras Metálicas del CEDEX. Apartado 3.3 Punctual load on cantilever.
-# ISBN: 84-7790-336-0
-# url={https://books.google.ch/books?id=j88yAAAACAAJ},
 
 '''vector2d_point_load_local verification test.'''
 

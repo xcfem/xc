@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
+''' Home made test.'''
 from __future__ import print_function
-# Home made test
 fy= 2600 # Yield stress of the material.
 E= 2.1e6 # Young modulus of the material.
 Nsteps= 10 # number of analysis steps.

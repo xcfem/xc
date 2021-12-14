@@ -1,10 +1,9 @@
 # -*- coding: utf-8 -*-
+'''Test sets and grid model. Generation/selection of geometric and FE 
+   entities using grid model, boolean operations with the created sets.'''
 
 from __future__ import print_function
 from __future__ import division
-
-'''Test sets and grid model. Generation/selection of geometric and FE 
-   entities using grid model, boolean operations with the created sets.'''
 
 __author__= "Ana Ortega (AO_O)"
 __copyright__= "Copyright 2017, AO_O"

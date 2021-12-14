@@ -1,7 +1,13 @@
 # -*- coding: utf-8 -*-
+''' Home made test.'''
 from __future__ import print_function
 
-# home made test
+__author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
+__copyright__= "Copyright 2015, LCPT and AOO"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com"
+
 l= 1e-7 # Distance between nodes
 
 import xc_base
@@ -14,12 +20,6 @@ from postprocess.reports import graph_material
 from materials.ehe import EHE_materials
 # import matplotlib.pyplot as plt
 import numpy as np
-
-__author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
-__copyright__= "Copyright 2015, LCPT and AOO"
-__license__= "GPL"
-__version__= "3.0"
-__email__= "l.pereztato@gmail.com"
 
 # Model definition
 feProblem= xc.FEProblem()

@@ -1,7 +1,13 @@
 # -*- coding: utf-8 -*-
+''' Home made test. Sum of the actions over the cantilever.'''
+
 from __future__ import print_function
-# home made test
-# Sum of the actions over the cantilever.
+
+__author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
+__copyright__= "Copyright 2015, LCPT and AOO"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com"
 
 import xc_base
 import geom
@@ -9,12 +15,6 @@ import xc
 from solution import predefined_solutions
 from model import predefined_spaces
 from materials import typical_materials
-
-__author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
-__copyright__= "Copyright 2015, LCPT and AOO"
-__license__= "GPL"
-__version__= "3.0"
-__email__= "l.pereztato@gmail.com"
 
 # Material properties
 E= 2.1e6*9.81/1e-4 # Elastic modulus (Pa)

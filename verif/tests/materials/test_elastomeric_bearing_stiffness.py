@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
+''' Home made test.'''
 from __future__ import print_function
-# Home made test
 # Computation of the stiffness of a rectangular elastomeric bearing.
 
 from materials import bridge_bearings

@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-from __future__ import print_function
 ''' home made test
     Reference:  Cálculo de estructuras por el método de los elemen-
     tos finitos. 1991. E. Oñate, page 165, example 5.3
@@ -8,6 +7,8 @@ from __future__ import print_function
     url={https://books.google.ch/books?id=lV1GSQAACAAJ}
 
 '''
+from __future__ import print_function
+
 import xc_base
 import geom
 import xc

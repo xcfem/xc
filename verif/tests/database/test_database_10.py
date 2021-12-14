@@ -1,10 +1,11 @@
 # -*- coding: utf-8 -*-
-from __future__ import print_function
-# home made test
-''' Check of the restore function.
+''' Home made test. Check of the restore function.
    In the second analysis the solution is obtained
    at the first iteration because the state
-   of the model is restored from the database. '''
+   of the model is restored from the database.
+'''
+
+from __future__ import print_function
 
 __author__= "Luis C. Pérez Tato (LCPT)"
 __copyright__= "Copyright 2014, LCPT"

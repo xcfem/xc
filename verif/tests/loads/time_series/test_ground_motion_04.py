@@ -1,20 +1,21 @@
 # -*- coding: utf-8 -*-
-from __future__ import print_function
 '''  Checks ground_motion_record function
     by integrating the accelerations calculated as follows:
     x= 9*t**3+10*t**2
     xdot= 27*t**2+20*t
     xdotdot= 54*t+20  '''
 
-import xc_base
-import geom
-import xc
+from __future__ import print_function
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
 __copyright__= "Copyright 2015, LCPT and AOO"
 __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
+
+import xc_base
+import geom
+import xc
 
 
 feProblem= xc.FEProblem()

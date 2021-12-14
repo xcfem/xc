@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
+''' Home made test.'''
 from __future__ import print_function
-# Home made test
 
 import math
 import xc_base

@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
+''' Home made test.'''
+
 from __future__ import print_function
-# home made test
 
 # ForceBeamColum3d element sign criteria.
 

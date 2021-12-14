@@ -3,13 +3,14 @@
 
 from __future__ import division
 from __future__ import print_function
-from actions.railway_trafic import SIA_rail_load_models
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
 __copyright__= "Copyright 2015, LCPT and AOO"
 __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
+
+from actions.railway_trafic import SIA_rail_load_models
 
 LM1= SIA_rail_load_models.LM1 # Load model.
 qDerailmentModel2_25= LM1.trainDerailmentModel2(25.0)

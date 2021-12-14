@@ -1,6 +1,12 @@
 # -*- coding: utf-8 -*-
 ''' Shear strength according to clause 58.6 of EAE. Home made test'''
 
+__author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AO_O)"
+__copyright__= "Copyright 2015, LCPT and AO_O"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@ciccp.es ana.ortega@ciccp.es"
+
 from materials.eae import EAE_materials
 
 bolt= EAE_materials.BoltFastener(name= '8.8bolt', steel= EAE_materials.iso898_8_8, diameter= 22e-3)

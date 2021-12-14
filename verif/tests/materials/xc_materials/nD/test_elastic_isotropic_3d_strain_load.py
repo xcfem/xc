@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-from __future__ import print_function
 ''' home made test
     Reference:  Cálculo de estructuras por el método de los elemen-
     tos finitos. 1991. E. Oñate, page 165, example 5.3
@@ -9,18 +8,20 @@ from __future__ import print_function
 
 '''
 
-import xc_base
-import geom
-import xc
-from solution import predefined_solutions
-from model import predefined_spaces
-from materials import typical_materials
+from __future__ import print_function
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
 __copyright__= "Copyright 2015, LCPT and AOO"
 __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
+
+import xc_base
+import geom
+import xc
+from solution import predefined_solutions
+from model import predefined_spaces
+from materials import typical_materials
 
 L= 1.0 # Size of element edge (m)
 E= 2.1e6*9.81/1e-4 # Elastic modulus

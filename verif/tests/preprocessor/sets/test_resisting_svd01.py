@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
+''' Home made test.'''
+
 from __future__ import print_function
-# home made test
 #    Check of the function that computes the force resultant
 #    when cutting a subset of the model by a plane.
 

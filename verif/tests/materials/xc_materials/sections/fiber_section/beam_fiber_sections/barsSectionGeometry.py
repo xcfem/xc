@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+# XXX Migrate to YAML
+
 barsSectionGeometry= preprocessor.getMaterialHandler.newSectionGeometry("barsSectionGeometry")
 reinforcement= barsSectionGeometry.getReinfLayers
 reinforcementInf= reinforcement.newStraightReinfLayer(EHE_materials.B500S.nmbDiagD)

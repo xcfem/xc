@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 '''Example from Stimac-Grandic, Ivana. (2015). Serviceability verification of pedestrian bridges under pedestrian loading. Tehnicki vjesnik - Technical Gazette. 22. 527-537. 10.17559/TV-20131030105641.'''
 
-
 from __future__ import print_function
 from __future__ import division
 

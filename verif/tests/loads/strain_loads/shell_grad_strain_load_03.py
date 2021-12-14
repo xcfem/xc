@@ -1,9 +1,15 @@
 # -*- coding: utf-8 -*-
-from __future__ import print_function
 ''' home made test
-    Thermal gradient strain in a shell element
-
+    Thermal gradient strain in a shell element.
 '''
+
+from __future__ import print_function
+
+__author__= "Ana Ortega (AO_O) and Luis C. Pérez Tato (LCPT)"
+__copyright__= "Copyright 2019, AO_O and LCPT"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "ana.ortega@ciccp.es l.pereztato@gmail.com"
 
 import xc_base
 import geom
@@ -12,12 +18,6 @@ import math
 from solution import predefined_solutions
 from model import predefined_spaces
 from materials import typical_materials
-
-__author__= "Ana Ortega (AO_O) and Luis C. Pérez Tato (LCPT)"
-__copyright__= "Copyright 2019, AO_O and LCPT"
-__license__= "GPL"
-__version__= "3.0"
-__email__= "ana.ortega@ciccp.es l.pereztato@gmail.com"
 
 L= 1.0 # Size of element edge (m)
 E= 2.1e6*9.81/1e-4 # Elastic modulus

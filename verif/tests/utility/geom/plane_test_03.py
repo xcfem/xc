@@ -1,10 +1,16 @@
 # -*- coding: utf-8 -*-
-
-#Intersection of plane with a line.
-#Exemple 1.2 of the thesis «La teoría de bloque aplicada a la dinámica
-#de rocas» de Juan Carlos Ayes Zamudio
+'''Intersection of plane with a line.
+vExemple 1.2 of the thesis «La teoría de bloque aplicada a la dinámica
+ de rocas» de Juan Carlos Ayes Zamudio.'''
 
 from __future__ import print_function
+
+__author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AO_O)"
+__copyright__= "Copyright 2015, LCPT and AO_O"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@ciccp.es ana.ortega@ciccp.es"
+
 import xc_base
 import geom
 import math

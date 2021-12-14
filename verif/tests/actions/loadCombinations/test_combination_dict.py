@@ -2,6 +2,13 @@
 
 from __future__ import print_function
 
+__author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AO_O)"
+__copyright__= "Copyright 2015, LCPT and AO_O"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@ciccp.es ana.ortega@ciccp.es"
+
+
 from actions.load_combination_utils import utils
 from misc_utils import log_messages as lmsg
 

@@ -3,15 +3,16 @@
 
 from __future__ import print_function
 from __future__ import division
-from actions.wind import base_wind
-from actions.wind import ASCE7_wind
-import math
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
 __copyright__= "Copyright 2016, AOO and LCPT"
 __license__= "GPL"
 __version__= "1.0"
 __email__= "l.pereztato@gmail.com  ana.Ortega.Ort@gmail.com"
+
+from actions.wind import base_wind
+from actions.wind import ASCE7_wind
+import math
 
 #                                Roof ridge
 #                    /\

@@ -1,9 +1,15 @@
 # -*- coding: utf-8 -*-
-# home made test
-# Sign convention for fiber sections.
+''' Home made test. Sign convention for fiber sections.'''
 
 from __future__ import print_function
 from __future__ import division
+
+__author__= "Luis C. Pérez Tato (LCPT)"
+__copyright__= "Copyright 2014, LCPT"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com"
+
 import xc_base
 import geom
 import xc
@@ -11,12 +17,6 @@ from model import predefined_spaces
 from materials import typical_materials
 from postprocess import prop_statistics
 import math
-
-__author__= "Luis C. Pérez Tato (LCPT)"
-__copyright__= "Copyright 2014, LCPT"
-__license__= "GPL"
-__version__= "3.0"
-__email__= "l.pereztato@gmail.com"
 
 # Problem type
 feProblem= xc.FEProblem()

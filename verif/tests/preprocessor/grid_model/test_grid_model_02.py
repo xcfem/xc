@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
+'''Test grid model 02. Generation/selection of geometric entities (points, lines and surfaces.'''
+
 from __future__ import print_function
 
-#Test grid model 02. Generation/selection of geometric entities (points, lines and surfaces)
 __author__= "Ana Ortega (AO_O)"
 __copyright__= "Copyright 2017, AO_O"
 __license__= "GPL"

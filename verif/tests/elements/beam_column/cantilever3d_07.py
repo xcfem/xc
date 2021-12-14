@@ -1,14 +1,13 @@
 # -*- coding: utf-8 -*-
+''' Home made test. Cantilever under horizontal uniform load in local x direction.'''
+
 from __future__ import print_function
-# home made test
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
 __copyright__= "Copyright 2015, LCPT and AOO"
 __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
-
-'''Cantilever under horizontal uniform load in local x direction.'''
 
 import xc_base
 import geom

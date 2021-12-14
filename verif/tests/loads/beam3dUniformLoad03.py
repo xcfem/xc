@@ -1,6 +1,12 @@
 # -*- coding: utf-8 -*-
+''' Home made test.'''
 from __future__ import print_function
-# home made test
+
+__author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
+__copyright__= "Copyright 2015, LCPT and AOO"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com"
 
 import xc_base
 import geom
@@ -10,12 +16,6 @@ from model import predefined_spaces
 from materials import typical_materials
 from materials.sections import section_properties
 from materials.sections import def_secc_aggregation
-
-__author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
-__copyright__= "Copyright 2015, LCPT and AOO"
-__license__= "GPL"
-__version__= "3.0"
-__email__= "l.pereztato@gmail.com"
 
 L= 2 # Bar length.
 P= 10e3 # Transverse uniform load.

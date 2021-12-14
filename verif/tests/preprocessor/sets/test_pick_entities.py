@@ -2,6 +2,12 @@
 from __future__ import print_function
 '''Selection of entities inside a geometric object. Home made test.'''
 
+__author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AO_O)"
+__copyright__= "Copyright 2015, LCPT and AO_O"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@ciccp.es ana.ortega@ciccp.es"
+
 import xc_base
 import geom
 import xc

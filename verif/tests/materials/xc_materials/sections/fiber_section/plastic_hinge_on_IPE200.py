@@ -1,7 +1,13 @@
 # -*- coding: utf-8 -*-
+''' Home made test. Testing hinge development in a cantilever.'''
+
 from __future__ import print_function
-# home made test
-# Testing hinge development in a cantilever.
+
+__author__= "Luis C. Pérez Tato (LCPT)"
+__copyright__= "Copyright 2014, LCPT"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com"
 
 import xc_base
 import geom
@@ -9,12 +15,6 @@ import xc
 
 from materials.sections.structural_shapes import arcelor_metric_shapes
 from materials.ec3 import EC3_materials
-
-__author__= "Luis C. Pérez Tato (LCPT)"
-__copyright__= "Copyright 2014, LCPT"
-__license__= "GPL"
-__version__= "3.0"
-__email__= "l.pereztato@gmail.com"
 
 test= xc.FEProblem()
 preprocessor=  test.getPreprocessor

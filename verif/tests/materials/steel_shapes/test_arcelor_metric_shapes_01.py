@@ -1,15 +1,15 @@
 # -*- coding: utf-8 -*-
-from __future__ import print_function
-# home made test
-# Cantilever under vertical load at his end.
+''' Home made test. Cantilever under vertical load at his end.'''
 
-from materials.sections.structural_shapes import arcelor_metric_shapes
+from __future__ import print_function
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
 __copyright__= "Copyright 2021, LCPT and AOO"
 __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@ciccp.es"
+
+from materials.sections.structural_shapes import arcelor_metric_shapes
 
 shapes= list()
 test= list()

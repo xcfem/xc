@@ -1,17 +1,18 @@
 # -*- coding: utf-8 -*-
 ''' Test linear time series. '''
-from __future__ import print_function
 
-import math
-import xc_base
-import geom
-import xc
+from __future__ import print_function
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
 __copyright__= "Copyright 2015, LCPT and AOO"
 __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
+
+import math
+import xc_base
+import geom
+import xc
 
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor

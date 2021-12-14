@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
+''' Home made test. Save and restore methods verification.'''
+
 from __future__ import print_function
-# home made test
-'''Save and restore methods verification.'''
 
 import xc_base
 import geom

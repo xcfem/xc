@@ -1,7 +1,14 @@
 # -*- coding: utf-8 -*-
+''' Test from Ansys manual
+ Reference:  Strength of Material, Part I, Elementary Theory and Problems, pg. 26, problem 10.'''
+
 from __future__ import print_function
-# Test from Ansys manual
-# Reference:  Strength of Material, Part I, Elementary Theory and Problems, pg. 26, problem 10
+
+__author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
+__copyright__= "Copyright 2015, LCPT and AOO"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com"
 
 import math
 import xc_base
@@ -10,12 +17,6 @@ import xc
 from model import predefined_spaces
 from actions.basic_loads import nodal_loads
 from materials import typical_materials
-
-__author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
-__copyright__= "Copyright 2015, LCPT and AOO"
-__license__= "GPL"
-__version__= "3.0"
-__email__= "l.pereztato@gmail.com"
 
 NumDiv= 100
 E= 30e6 # Young modulus (psi)

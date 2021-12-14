@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
-# home made test
-# Rectangular HSS compression member with slender elements
+''' Home made test. Rectangular HSS compression member with slender elements.'''
 
 from __future__ import division
 from __future__ import print_function

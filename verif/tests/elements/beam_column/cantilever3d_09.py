@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
+''' Home made test. Cantilever under uniform horizontal load in local z direction.'''
+
 from __future__ import print_function
-# home made test
-'''Cantilever under uniform horizontal load in local z direction.'''
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
 __copyright__= "Copyright 2015, LCPT and AOO"

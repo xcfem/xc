@@ -1,11 +1,12 @@
 # -*- coding: utf-8 -*-
-from __future__ import print_function
-# Reference:  Expresiones de la flecha el el Prontuario de
-# Estructuras Metálicas del CEDEX. Apartado 3.3 Punctual load on cantilever.
-# ISBN: 84-7790-336-0
-# url={https://books.google.ch/books?id=j88yAAAACAAJ},
+''' Reference:  Expresiones de la flecha el el Prontuario de
+ Estructuras Metálicas del CEDEX. Apartado 3.3 Punctual load on cantilever.
+ ISBN: 84-7790-336-0
+ url={https://books.google.ch/books?id=j88yAAAACAAJ},
 
-'''vector3d_point_load_local verification test. Home made test.'''
+ vector3d_point_load_local verification test. Home made test.'''
+
+from __future__ import print_function
 
 __author__= "Luis C. Pérez Tato (LCPT) , Ana Ortega (AO_O) "
 __copyright__= "Copyright 2016, LCPT, AO_O"

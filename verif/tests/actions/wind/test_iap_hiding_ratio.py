@@ -4,13 +4,13 @@
 from __future__ import print_function
 from __future__ import division
 
-from actions.wind import IAP_wind
-
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AO_O)"
 __copyright__= "Copyright 2015, LCPT and AO_O"
 __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
+
+from actions.wind import IAP_wind
 
 ratio1= abs(IAP_wind.getHidingFactor(0.5, 0.1)-0.75)/0.75
 ratio2= abs(IAP_wind.getHidingFactor(0.5, 1.0)-0.06)/0.06

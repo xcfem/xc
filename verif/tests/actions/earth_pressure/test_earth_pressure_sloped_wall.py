@@ -5,13 +5,13 @@
 from __future__ import print_function
 from __future__ import division
 
-from actions.earth_pressure import earth_pressure as ep
-
 __author__= "Ana Ortega (AO_O)"
 __copyright__= "Copyright 2019, AO_O"
 __license__= "GPL"
 __version__= "3.0"
 __email__= "ana.ortega@ciccp.es"
+
+from actions.earth_pressure import earth_pressure as ep
 
 Ksoil=0.5    #pressure coefficient of the soil
 gammaSoil=2  #weight density of the soil

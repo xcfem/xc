@@ -5,6 +5,12 @@ steel02 material presstressing.
 
 from __future__ import print_function
 
+__author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
+__copyright__= "Copyright 2015, LCPT and AOO"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com"
+
 L= 1.0 # Bar length (m)
 E= 190e9 # Elastic modulus expressed in MPa
 A= 140e-6 # bar area expressed in square meters
@@ -20,12 +26,6 @@ from model import predefined_spaces
 from materials import typical_materials
 from solution import predefined_solutions
 #from postprocess import output_handler
-
-__author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
-__copyright__= "Copyright 2015, LCPT and AOO"
-__license__= "GPL"
-__version__= "3.0"
-__email__= "l.pereztato@gmail.com"
 
 # Problem type
 feProblem= xc.FEProblem()

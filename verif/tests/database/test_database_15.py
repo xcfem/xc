@@ -1,6 +1,13 @@
 # -*- coding: utf-8 -*-
+''' Home made test.'''
+
 from __future__ import print_function
-# home made test
+
+__author__= "Luis C. Pérez Tato (LCPT)"
+__copyright__= "Copyright 2014, LCPT"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com"
 
 import xc_base
 import geom
@@ -8,12 +15,6 @@ import xc
 from model import predefined_spaces
 from solution import predefined_solutions
 from materials import typical_materials
-
-__author__= "Luis C. Pérez Tato (LCPT)"
-__copyright__= "Copyright 2014, LCPT"
-__license__= "GPL"
-__version__= "3.0"
-__email__= "l.pereztato@gmail.com"
 
 E= 2.1e9 # Young modulus of the steel.
 nu= 0.3 # Poisson's ratio.

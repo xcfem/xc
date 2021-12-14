@@ -1,7 +1,13 @@
 # -*- coding: utf-8 -*-
+''' Home made test.'''
+
 from __future__ import print_function
-# home made test
-#    Shrinking load pattern test.
+
+__author__= "Luis C. Pérez Tato (LCPT)"
+__copyright__= "Copyright 2014, LCPT"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com"
 
 import math
 import xc_base
@@ -11,12 +17,6 @@ from materials.ehe import EHE_materials
 from solution import predefined_solutions
 from model import predefined_spaces
 from materials import typical_materials
-
-__author__= "Luis C. Pérez Tato (LCPT)"
-__copyright__= "Copyright 2014, LCPT"
-__license__= "GPL"
-__version__= "3.0"
-__email__= "l.pereztato@gmail.com"
 
 Ec= 2e5*9.81/1e-4 # Concrete Young modulus (Pa).
 nuC= 0.2 # Concrete Poisson's ratio.

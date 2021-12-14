@@ -1,9 +1,8 @@
 # -*- coding: utf-8 -*-
+'''Test sets and grid model. Selection of subsets'''
 
 from __future__ import print_function
 from __future__ import division
-
-'''Test sets and grid model. Selection of subsets'''
 
 __author__= "Ana Ortega (AO_O)"
 __copyright__= "Copyright 2017, AO_O"

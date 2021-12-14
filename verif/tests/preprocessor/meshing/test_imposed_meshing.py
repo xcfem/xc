@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
+''' Meshing of a grid model with cylindrical surfaces, imposing the number of
+  divisions in its lines.'''
+
 from __future__ import print_function
 
-# Meshing of a grid model with cylindrical surfaces, imposing the number of
-# divisions in its lines.
 __author__= "Ana Ortega (AO_O)"
 __copyright__= "Copyright 2019, AO_O"
 __license__= "GPL"

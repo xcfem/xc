@@ -1,10 +1,17 @@
 # -*- coding: utf-8 -*-
-from __future__ import division
-from __future__ import print_function
 ''' Base plate design according to document
     Base Plate and Anchor Rod Design Second Edition
     American Institute of Steel Construction, Inc.
 '''
+
+from __future__ import division
+from __future__ import print_function
+
+__author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AO_O)"
+__copyright__= "Copyright 2015, LCPT and AO_O"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@ciccp.es ana.ortega@ciccp.es"
 
 import math
 from materials.astm_aisc import ASTM_materials

@@ -1,16 +1,15 @@
 # -*- coding: utf-8 -*-
 from __future__ import print_function
 
-
-import xc_base
-import geom
-import xc
-
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
 __copyright__= "Copyright 2015, LCPT and AOO"
 __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
+
+import xc_base
+import geom
+import xc
 
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor

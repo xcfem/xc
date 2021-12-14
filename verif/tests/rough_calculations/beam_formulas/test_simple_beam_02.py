@@ -1,16 +1,17 @@
 # -*- coding: utf-8 -*-
-from __future__ import print_function
-from rough_calculations import ng_simple_beam as sb
-
 ''' From:
 PrincetonX: CEE262.1x The Art of Structural Engineering: Bridges 
 Week 5: Robert Maillart and Concrete Bridges > Structural Studies > Calculation Exercise 2: Bending Moment.'''
+
+from __future__ import print_function
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
 __copyright__= "Copyright 2015, LCPT and AOO"
 __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
+
+from rough_calculations import ng_simple_beam as sb
 
 beam= sb.SimpleBeam()
 beam.l= 100 #ft

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
+''' Home made test.'''
 from __future__ import print_function
-# Home made test
 # Design stress-strain diagram of B500S steel
 import xc_base
 import geom

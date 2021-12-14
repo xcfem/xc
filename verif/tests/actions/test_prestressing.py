@@ -1,16 +1,16 @@
 # -*- coding: utf-8 -*-
 from __future__ import print_function
 
-import xc_base
-import geom
-from geom_utils import parabola as pb
-import math
-
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
 __copyright__= "Copyright 2015, LCPT and AOO"
 __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
+
+import xc_base
+import geom
+from geom_utils import parabola as pb
+import math
 
 e1= 0.5
 e2= 0.0

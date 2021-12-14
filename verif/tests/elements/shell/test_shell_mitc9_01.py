@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
+''' Home made test.'''
+
 from __future__ import print_function
-# home made test
 
 __author__= "Luis C. Pérez Tato (LCPT) , Ana Ortega (AO_O)"
 __copyright__= "Copyright 2015, LCPT  AO_O"

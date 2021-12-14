@@ -1,11 +1,13 @@
-import rough_calculations.ng_punching_shear
-
+# -*- coding: utf-8 -*-
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AO_O)"
 __copyright__= "Copyright 2016, AO_O and LCPT"
 __license__= "GPL"
 __version__= "1.0"
 __email__= "l.pereztato@gmail.com  ana.Ortega.Ort@gmail.com"
+
+import rough_calculations.ng_punching_shear
+
 
 #CASO 1
 

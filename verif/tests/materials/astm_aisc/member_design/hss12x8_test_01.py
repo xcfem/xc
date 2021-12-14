@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
-# home made test
-# COMPANION TO THE AISC STEEL CONSTRUCTION MANUAL
-# Volume 1: Design Examples
-# EXAMPLE E.10 Rectangular HSS compression member with slender elements
+''' Home made test.
+ COMPANION TO THE AISC STEEL CONSTRUCTION MANUAL
+ Volume 1: Design Examples
+ EXAMPLE E.10 Rectangular HSS compression member with slender elements'''
 
 from __future__ import division
 from __future__ import print_function

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
+''' Home made test. Ménsula sometida a carga vertical en su extremo.'''
+
 from __future__ import print_function
-# home made test
-# Mésula sometida a carga vertical en su extremo.
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
 __copyright__= "Copyright 2015, LCPT and AOO"

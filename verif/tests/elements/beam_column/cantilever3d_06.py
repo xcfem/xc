@@ -1,14 +1,13 @@
 # -*- coding: utf-8 -*-
+''' Home made test. Ménsula sometida a carga horizontal en su extremo.'''
+
 from __future__ import print_function
-# home made test
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
 __copyright__= "Copyright 2015, LCPT and AOO"
 __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
-
-# Ménsula sometida a carga horizontal en su extremo.
 
 # Material properties
 E= 2.1e6*9.81/1e-4 # Elastic modulus (Pa)

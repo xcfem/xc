@@ -1,7 +1,13 @@
 # -*- coding: utf-8 -*-
+''' Home made test. Save and restore methods verification.'''
+
 from __future__ import print_function
-# home made test
-'''Save and restore methods verification.'''
+
+__author__= "Luis C. Pérez Tato (LCPT)"
+__copyright__= "Copyright 2014, LCPT"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com"
 
 import xc_base
 import geom
@@ -9,12 +15,6 @@ import xc
 from model import predefined_spaces
 from solution import predefined_solutions
 from materials import typical_materials
-
-__author__= "Luis C. Pérez Tato (LCPT)"
-__copyright__= "Copyright 2014, LCPT"
-__license__= "GPL"
-__version__= "3.0"
-__email__= "l.pereztato@gmail.com"
 
 # Material properties
 E= 2.1e6*9.81/1e-4 # Elastic modulus (Pa)

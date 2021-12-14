@@ -1,4 +1,13 @@
+# -*- coding: utf-8 -*-
+''' Plane normal vector test.'''
 from __future__ import print_function
+
+__author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AO_O)"
+__copyright__= "Copyright 2015, LCPT and AO_O"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@ciccp.es ana.ortega@ciccp.es"
+
 import xc_base
 import geom
 o=geom.Pos3d(0,0,0)

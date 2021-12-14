@@ -1,9 +1,16 @@
 # -*- coding: utf-8 -*-
-from __future__ import print_function
-
 #*    Nov. 2015   Ana Ortega    *
 
 # Home made test
+
+from __future__ import print_function
+
+__author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
+__copyright__= "Copyright 2015, LCPT and AOO"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com"
+
 
 import math
 import xc_base
@@ -11,12 +18,6 @@ import geom
 import xc
 from materials import concrete_base
 from materials.ehe import EHE_materials
-
-__author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
-__copyright__= "Copyright 2015, LCPT and AOO"
-__license__= "GPL"
-__version__= "3.0"
-__email__= "l.pereztato@gmail.com"
 
 # Model definition
 feProblem= xc.FEProblem()

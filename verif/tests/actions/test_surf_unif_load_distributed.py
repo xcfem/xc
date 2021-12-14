@@ -2,6 +2,13 @@
 '''Home-made test on distribute uniform load applied on a non meshed surfaces
 among the nodes that touch those surfaces 
 '''
+
+__author__= "Ana Ortega (AO_O)  Luis C. Pérez Tato (LCPT)"
+__copyright__= "Copyright 2019, AO_O  LCPT"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "ana.ortega@ciccp.es l.pereztato@gmail.com"
+
 import os
 import xc_base
 import geom
@@ -17,12 +24,6 @@ from actions import load_cases as lcases
 # Uncomment the following lines to make graphics output work.
 # from postprocess import output_styles as outSty
 # from postprocess import output_handler as outHndl
-
-__author__= "Ana Ortega (AO_O)  Luis C. Pérez Tato (LCPT)"
-__copyright__= "Copyright 2019, AO_O  LCPT"
-__license__= "GPL"
-__version__= "3.0"
-__email__= "ana.ortega@ciccp.es l.pereztato@gmail.com"
 
 
 #data

@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# home made test
+''' Home made test.'''
 
 # ZeroLengthSection elements sign criteria.
 

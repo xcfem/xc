@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
+''' Home made test. Horizontal cantilever under vertical load at his front end.'''
+
 from __future__ import print_function
-# home made test
-''' Horizontal cantilever under vertical load at his front end.'''
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
 __copyright__= "Copyright 2015, LCPT and AOO"

@@ -1,13 +1,20 @@
 # -*- coding: utf-8 -*-
-from __future__ import division
-from __future__ import print_function
-
 ''' Steel bolts according to AISC 360-16 verification test.
     Based on the:
     Example – Design of a Bolted Tension Bearing-Type Connection
     of the course:
     Design of Bolts in Shear-BearingConnections per AISC LRFD 3rdEdition (2001)
 '''
+
+from __future__ import division
+from __future__ import print_function
+
+__author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AO_O)"
+__copyright__= "Copyright 2015, LCPT and AO_O"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@ciccp.es ana.ortega@ciccp.es"
+
 
 in2m= 25.4e-3
 kip2N= 4448.2216

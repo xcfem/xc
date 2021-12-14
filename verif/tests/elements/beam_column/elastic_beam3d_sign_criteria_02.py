@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
+''' Home made test.'''
 from __future__ import print_function
-# Home made test
 # Sign criteria for the internal forces in an elastic beam 3d element.
 # 3D cantilever beam, start node  with all its 6DOF fixed, point loads on the 
 # mid-span (x=L/2)

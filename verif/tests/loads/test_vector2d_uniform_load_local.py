@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
+'''vector2d_uniform_load_local function verification. Home made test.'''
+
 from __future__ import print_function
-# home made test
-'''vector2d_uniform_load_local function verification.'''
 
 import xc_base
 import geom
@@ -9,7 +9,6 @@ import xc
 from solution import predefined_solutions
 from model import predefined_spaces
 from materials import typical_materials
-
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AO_O)"
 __copyright__= "Copyright 2015, LCPT and AO_O"

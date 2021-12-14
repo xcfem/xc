@@ -1,11 +1,18 @@
 # -*- coding: utf-8 -*-
-from __future__ import print_function
-# Reference:  Expresiones de la flecha el el Prontuario de
-# Estructuras Metálicas del CEDEX. Apartado 3.3 Punctual load on cantilever.
-# ISBN: 84-7790-336-0
-# url={https://books.google.ch/books?id=j88yAAAACAAJ},
+''' Reference:  Expresiones de la flecha el el Prontuario de
+ Estructuras Metálicas del CEDEX. Apartado 3.3 Punctual load on cantilever.
+ ISBN: 84-7790-336-0
+ url={https://books.google.ch/books?id=j88yAAAACAAJ},
 
-'''vector2d_point_load_global verification test. Home made test.'''
+ vector2d_point_load_global verification test. Home made test.'''
+
+from __future__ import print_function
+
+__author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
+__copyright__= "Copyright 2015, LCPT and AOO"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com"
 
 import xc_base
 import geom
@@ -14,12 +21,6 @@ from solution import predefined_solutions
 from model import predefined_spaces
 from materials import typical_materials
 import math
-
-__author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
-__copyright__= "Copyright 2015, LCPT and AOO"
-__license__= "GPL"
-__version__= "3.0"
-__email__= "l.pereztato@gmail.com"
 
 E= 2e6 # Elastic modulus
 L= 20 # Bar length.

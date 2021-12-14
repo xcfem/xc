@@ -1,11 +1,16 @@
 # -*- coding: utf-8 -*-
+''' home made test
+    This test computes the effect on an "in plane" temperature gradient.
+'''
 
 from __future__ import print_function
 from __future__ import division
 
-''' home made test
-    This test computes the effect on an "in plane" temperature gradient.
-'''
+__author__= "Ana Ortega (AO_O) and Luis C. Pérez Tato (LCPT)"
+__copyright__= "Copyright 2020, AO_O and LCPT"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "ana.ortega@ciccp.es l.pereztato@ciccp.es"
 
 import xc_base
 import geom
@@ -15,12 +20,6 @@ from solution import predefined_solutions
 from model import predefined_spaces
 from materials import typical_materials
 #from postprocess import output_handler
-
-__author__= "Ana Ortega (AO_O) and Luis C. Pérez Tato (LCPT)"
-__copyright__= "Copyright 2020, AO_O and LCPT"
-__license__= "GPL"
-__version__= "3.0"
-__email__= "ana.ortega@ciccp.es l.pereztato@ciccp.es"
 
 L= 1.0 # Size of element edge (m)
 E= 2.1e6*9.81/1e-4 # Elastic modulus

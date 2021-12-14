@@ -1,4 +1,5 @@
 #Armatures type
+# XXX: migrate to YAML.
 A08_10= EHE_limit_state_checking.EHERebarFamily(reinfSteel,8e-3,0.10,cover)
 A10_10= EHE_limit_state_checking.EHERebarFamily(reinfSteel,10e-3,0.10,cover)
 A12_10= EHE_limit_state_checking.EHERebarFamily(reinfSteel,12e-3,0.10,cover)

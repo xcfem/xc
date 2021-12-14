@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-from __future__ import print_function
 '''Obtaining «previous» combination and combination difference. Home made test.'''
+
+from __future__ import print_function
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
 __copyright__= "Copyright 2015, LCPT and AOO"

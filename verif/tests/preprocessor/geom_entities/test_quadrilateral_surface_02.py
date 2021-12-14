@@ -1,13 +1,8 @@
 # -*- coding: utf-8 -*-
+''' Home made test.'''
+
 from __future__ import print_function
 from __future__ import division
-import xc_base
-import geom
-import xc
-import math
-import os
-from model import predefined_spaces
-from materials import typical_materials
 
 __author__= "Luis C. Pérez Tato (LCPT)"
 __copyright__= "Copyright 2014, LCPT"
@@ -15,7 +10,13 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
-# home made test
+import xc_base
+import geom
+import xc
+import math
+import os
+from model import predefined_spaces
+from materials import typical_materials
 
 NumDivI= 3
 NumDivJ= 2

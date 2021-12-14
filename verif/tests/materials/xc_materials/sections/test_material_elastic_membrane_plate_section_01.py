@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
+''' Home made test.'''
 from __future__ import print_function
-# Home made test
 E= 2.1e6 # Young modulus of the steel.
 nu= 0.3 # Poisson's ratio.
 h= 0.1 # Thickness.

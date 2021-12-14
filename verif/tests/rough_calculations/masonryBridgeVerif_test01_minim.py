@@ -1,17 +1,18 @@
 #-*- coding: utf-8 -*-
 
 from __future__ import division
-import math
-import sys
-import numpy as np
-import pydoc
-import rough_calculations.masonry_vault as masonry_vault
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
 __copyright__= "Copyright 2015, LCPT and AOO"
 __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
+
+import math
+import sys
+import numpy as np
+import pydoc
+import rough_calculations.masonry_vault as masonry_vault
 
 #Compute polynomial coefficients from four points that lie in the arc.
 #(we take the 4 points obtained as rotules in the thesis example).

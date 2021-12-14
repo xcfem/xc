@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# home made test
+''' Home made test.'''
 
 from __future__ import print_function
 from __future__ import division

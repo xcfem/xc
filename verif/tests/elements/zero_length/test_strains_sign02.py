@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
-# home made test
-# ZeroLengthSection elements sign criteria.
+''' Home made test. ZeroLengthSection elements sign criteria..'''
 
 #     Axial and shear forces have the same direction and sense that
 #     the local axes.

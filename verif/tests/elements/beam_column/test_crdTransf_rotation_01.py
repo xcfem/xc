@@ -1,15 +1,14 @@
 # -*- coding: utf-8 -*-
+''' Home made test. «rotate» method verification for a 3D elastic section.
+   Cantilever under vertical load at its end with de load and the section inclined 45 degrees. '''
+
 from __future__ import print_function
-# home made test
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
 __copyright__= "Copyright 2015, LCPT and AOO"
 __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
-
-''' «rotate» method verification for a 3D elastic section.
-   Cantilever under vertical load at its end with de load and the section inclined 45 degrees. '''
 
 import xc_base
 import geom

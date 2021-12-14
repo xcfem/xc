@@ -1,6 +1,13 @@
 # -*- coding: utf-8 -*-
+'''Glue node to element. Home made test.'''
+
 from __future__ import print_function
-# home made test
+
+__author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AO_O)"
+__copyright__= "Copyright 2015, LCPT and AO_O"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@ciccp.es ana.ortega@ciccp.es"
 
 E= 2.1e6 # Young modulus of the steel en kg/cm2.
 nu= 0.3 # Poisson's ratio.

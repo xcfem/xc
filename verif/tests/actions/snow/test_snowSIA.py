@@ -4,13 +4,13 @@
 from __future__ import print_function
 from __future__ import division
 
-from actions.snow import SIA_snow
-
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
 __copyright__= "Copyright 2015, LCPT and AOO"
 __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
+
+from actions.snow import SIA_snow
 
 h0= 400
 

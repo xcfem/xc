@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
+''' Home made test.'''
+
 from __future__ import print_function
-# home made test
 
 fy= 2600 # Yield stress of the steel.
 E= 2.1e6 # Young modulus of the steel.

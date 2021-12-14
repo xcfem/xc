@@ -1,9 +1,16 @@
 # -*- coding: utf-8 -*-
-from __future__ import print_function
-from __future__ import division
 ''' Exemple 10.2 of the book "Principles of Foundation Engineering" 
     from Braja M. Das. Seventh Edition.
 '''
+
+from __future__ import print_function
+from __future__ import division
+
+__author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AO_O)"
+__copyright__= "Copyright 2015, LCPT and AO_O"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@ciccp.es ana.ortega@ciccp.es"
 
 import math
 from actions.earth_pressure import earth_pressure
