@@ -154,6 +154,7 @@ class nDarray_rep
       { return pd_nDdata.data(); }
     inline const double *get_data_ptr(void) const
       { return pd_nDdata.data(); }
+    bool equal_data(const std::vector<double> &other_data) const;
     inline const double &val(const size_t &where) const
       {
         const double *p_value = pd_nDdata.data() + where;
@@ -184,8 +185,8 @@ class nDarray
   {
   private:
 //  int rank(void) const;
-    long int total_number(void) const;
-    void total_number(long int );
+    size_t total_number(void) const;
+    void total_number(size_t );
     void clear_dim(void);
     void clear_data(void);
     void clear_dim_data(void);

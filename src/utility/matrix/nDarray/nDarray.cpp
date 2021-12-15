@@ -226,6 +226,34 @@ double XC::nDarray_rep::sum() const
     return retval;
   }
 
+bool XC::nDarray_rep::equal_data(const std::vector<double> &rval) const
+  {
+    bool retval= true;
+    const size_t sz1= pd_nDdata.size();
+    const size_t sz2= rval.size();
+    if(sz1!=sz2)
+      {
+	std::cerr << "nDarray_rep::" << __FUNCTION__
+	          << "; arrays of different sizes: "
+	          << sz1 << "!=" << sz2
+	          << std::endl;
+      }
+    const size_t sz= std::min(sz1,sz2);
+    const double sqrt_d_macheps = sqrt(d_macheps());
+    const double tolerance = sqrt_d_macheps;
+    for(size_t i= 0;i<sz; i++)
+      {
+	const double &v1= pd_nDdata[i];
+	const double &v2= rval[i];
+        if(fabs(v1-v2) >= tolerance)
+	  {
+	    retval= false;
+	    break;
+	  }
+      }
+    return retval;
+  }
+
 //! @brief Constructor.
 XC::nDarray::nDarray(int rank_of_nDarray, const double &initval)
   {
@@ -442,7 +470,7 @@ XC::nDarray::~nDarray(void)
 
 
 
-// use "from" and initialize already allocated XC::BJtensor from "from" values
+// use "from" and initialize already allocated BJtensor from "from" values
 void XC::nDarray::Initialize( const nDarray & from )
   {
     // copy only data because everything else has already been defined
@@ -485,11 +513,11 @@ const double &XC::nDarray::val(int subscript, ...) const
     va_list p_arg;
     va_start(p_arg, subscript); // initialize p_arg
 
-    long int first  = 0;
-    long int second = 0;
+    size_t first  = 0;
+    size_t second = 0;
 
     first = subscript; // first index
-    long int where = first - 1;
+    size_t where = first - 1;
     for( int Dcount=1 ; Dcount<=pc_nDarray_rep.nDarray_rank-1 ; Dcount++ )
       {    // for all dimensions less then 1 this will be skipped
         second = va_arg(p_arg, int);    // next
@@ -509,11 +537,11 @@ double &XC::nDarray::val(int subscript, ...)
     va_list p_arg;
     va_start(p_arg, subscript); // initialize p_arg
 
-    long int first  = 0;
-    long int second = 0;
+    size_t first  = 0;
+    size_t second = 0;
 
     first = subscript; // first index
-    long int where = first - 1;
+    size_t where = first - 1;
     for( int Dcount=1 ; Dcount<=pc_nDarray_rep.nDarray_rank-1 ; Dcount++ )
       {    // for all dimensions less then 1 this will be skipped
         second = va_arg(p_arg, int);    // next
@@ -532,7 +560,7 @@ const double &XC::nDarray::val4(int first, int second, int third, int fourth) co
     if(pc_nDarray_rep.nDarray_rank==0)
       return (pc_nDarray_rep.pd_nDdata[0]);
 
-    long int where = first - 1;
+    size_t where = first - 1;
 
     if(pc_nDarray_rep.nDarray_rank==2)
       { where = where*pc_nDarray_rep.dim[1]+second - 1; }
@@ -555,7 +583,7 @@ double &XC::nDarray::val4(int first, int second, int third, int fourth)
     if(pc_nDarray_rep.nDarray_rank==0)
       return (pc_nDarray_rep.pd_nDdata[0]);
 
-    long int where = first - 1;
+    size_t where = first - 1;
 
     if(pc_nDarray_rep.nDarray_rank==2)
       { where = where*pc_nDarray_rep.dim[1]+second - 1; }
@@ -583,7 +611,7 @@ const double &XC::nDarray::cval(int subscript, ...)  const
     int second = 0;
 
     first = subscript; // first indeks
-    long int where = first - 1;
+    size_t where = first - 1;
     for ( int Dcount=1 ; Dcount<=pc_nDarray_rep.nDarray_rank-1 ; Dcount++ )
       {    // for all dimensions less then 2 this will be skipped
         second = va_arg(p_arg, int);    // next
@@ -901,15 +929,10 @@ double XC::nDarray::trace() const
 
 
 
-// nDarray comparison                    // nDarray comparison
-bool XC::nDarray::operator==(const nDarray &rval)  // returns 1 if they are same
-  {                                       // returns 0 if they are not
+//! @brief nDarray comparison returns true if they are equal.
+bool XC::nDarray::operator==(const nDarray &rval)  
+  {
     int true_or_not = 1; // suppose that they are the same
-
-    double sqrt_d_macheps = sqrt(d_macheps());
-//    double qub_d_macheps = pow(d_macheps(),(1.0/3.0));
-
-    double tolerance = sqrt_d_macheps;
 
     int this_rank_of_nDarray = this->pc_nDarray_rep.nDarray_rank;
     int rval_rank_of_nDarray =  rval.pc_nDarray_rep.nDarray_rank;
@@ -930,57 +953,8 @@ bool XC::nDarray::operator==(const nDarray &rval)  // returns 1 if they are same
           i,rval.pc_nDarray_rep.dim[i]);
           ::exit(1);
         }
-//..// construct XC::nDarray using the same control numbers as for the
-//..// original one .
-//..      nDarray add(pc_nDarray_rep.nDarray_rank, pc_nDarray_rep.dim, 0.0);
-
-      switch(pc_nDarray_rep.nDarray_rank)
-        {
-          case 0:
-            {
-              if ( fabs( val(1)-rval.val(1) ) >= tolerance)
-                true_or_not = 0;
-              break;
-            }
-
-          case 1:
-            {
-              for ( int i1=1 ; i1<=this->pc_nDarray_rep.dim[0] ; i1++ )
-                if ( fabs(  val(i1)-rval.val(i1) ) >= tolerance)
-                  true_or_not = 0;
-              break;
-            }
-
-          case 2:
-            {
-              for ( int i2=1 ; i2<=this->pc_nDarray_rep.dim[0] ; i2++ )
-                for ( int j2=1 ; j2<=this->pc_nDarray_rep.dim[1] ; j2++ )
-                  if ( fabs( val(i2,j2)-rval.val(i2,j2) ) >= tolerance)
-                    true_or_not = 0;
-              break;
-            }
-
-          case 3:
-            {
-              for ( int i3=1 ; i3<=this->pc_nDarray_rep.dim[0] ; i3++ )
-                for ( int j3=1 ; j3<=this->pc_nDarray_rep.dim[1] ; j3++ )
-                  for ( int k3=1 ; k3<=this->pc_nDarray_rep.dim[2] ; k3++ )
-                    if (fabs(val(i3,j3,k3)-rval.val(i3,j3,k3))>=tolerance)
-                      true_or_not = 0;
-              break;
-            }
-
-          case 4:
-            {
-              for ( int i4=1 ; i4<=this->pc_nDarray_rep.dim[0] ; i4++ )
-               for ( int j4=1 ; j4<=this->pc_nDarray_rep.dim[1] ; j4++ )
-                for ( int k4=1 ; k4<=this->pc_nDarray_rep.dim[2] ; k4++ )
-                 for ( int l4=1 ; l4<=this->pc_nDarray_rep.dim[3] ; l4++ )
-                  if(fabs(val(i4,j4,k4,l4)-rval.val(i4,j4,k4,l4))>=tolerance)
-                  true_or_not = 0;
-              break;
-            }
-        }
+    if(not pc_nDarray_rep.equal_data(rval.pc_nDarray_rep.pd_nDdata))
+      true_or_not= 0;
 
     return true_or_not;
   }
@@ -1379,8 +1353,8 @@ double XC::nDarray::General_norm(double p)  // BJmatrix, BJtensor, BJvector
 int XC::nDarray::number_of_zeros() const  // number of members that are
   {                                   // smaller than sqrt(macheps)
     int n = 0;
-    double machepsilon = d_macheps();
-    double tolerance   = sqrt(machepsilon);
+    const double machepsilon= d_macheps();
+    const double tolerance   = sqrt(machepsilon);
 
     for (int j=0 ; j<this->pc_nDarray_rep.total_numb ; j++)
       if ( this->pc_nDarray_rep.pd_nDdata[j] <= tolerance )
@@ -1666,10 +1640,10 @@ int XC::nDarray::rank(void) const
 void XC::nDarray::rank(int nDarray_rank)
   { this->pc_nDarray_rep.nDarray_rank = nDarray_rank; }
 
-long int XC::nDarray::total_number(void) const
+size_t XC::nDarray::total_number(void) const
   { return this->pc_nDarray_rep.total_numb; }
 
-void XC::nDarray::total_number(long int number)
+void XC::nDarray::total_number(size_t number)
   { this->pc_nDarray_rep.total_numb = number; }
 
 const std::vector<int> &XC::nDarray::dim(void) const
