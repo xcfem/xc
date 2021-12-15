@@ -104,27 +104,27 @@ XC::Cosseratstraintensor XC::Cosseratstraintensor::operator=(const BJtensor &rva
 //! @brief invariants of the strain tensor Chen XC::W.F. "plasticity for Structural Engineers"
 double XC::Cosseratstraintensor::Iinvariant1() const
   {
-    return (cval(1,1)+cval(2,2)+cval(3,3));
+    return ((*this)(1,1)+(*this)(2,2)+(*this)(3,3));
   }
 
 //! @brief invariants of the strain tensor Chen XC::W.F. "plasticity for Structural Engineers"
 double XC::Cosseratstraintensor::Iinvariant2() const
   {
-    return (cval(2,2)*cval(3,3)-cval(3,2)*cval(2,3)+
-            cval(1,1)*cval(3,3)-cval(3,1)*cval(1,3)+
-            cval(1,1)*cval(2,2)-cval(2,1)*cval(1,2));
+    return ((*this)(2,2)*(*this)(3,3)-(*this)(3,2)*(*this)(2,3)+
+            (*this)(1,1)*(*this)(3,3)-(*this)(3,1)*(*this)(1,3)+
+            (*this)(1,1)*(*this)(2,2)-(*this)(2,1)*(*this)(1,2));
   }
 
 //! @brief invariants of the strain tensor Chen XC::W.F. "plasticity for Structural Engineers"
 double XC::Cosseratstraintensor::Iinvariant3() const
   {
 
-    double I3 = cval(1,1)*cval(2,2)*cval(3,3) +
-                cval(1,2)*cval(2,3)*cval(3,1) +
-                cval(1,3)*cval(2,1)*cval(3,2) -
-                cval(1,3)*cval(2,2)*cval(3,1) -
-                cval(1,2)*cval(2,1)*cval(3,3) -
-                cval(1,1)*cval(2,3)*cval(3,2) ;
+    const double I3 = (*this)(1,1)*(*this)(2,2)*(*this)(3,3) +
+                (*this)(1,2)*(*this)(2,3)*(*this)(3,1) +
+                (*this)(1,3)*(*this)(2,1)*(*this)(3,2) -
+                (*this)(1,3)*(*this)(2,2)*(*this)(3,1) -
+                (*this)(1,2)*(*this)(2,1)*(*this)(3,3) -
+                (*this)(1,1)*(*this)(2,3)*(*this)(3,2) ;
 
     return I3;
 
@@ -202,9 +202,9 @@ XC::Cosseratstraintensor XC::Cosseratstraintensor::principal() const
     double ctm = cos( theta_ - 2.0*PI/3.0 );
     double ctp = cos( theta_ + 2.0*PI/3.0 );
 
-    ret.val(1,1) = p_ + temp*ct;
-    ret.val(2,2) = p_ + temp*ctm;
-    ret.val(3,3) = p_ + temp*ctp;
+    ret(1,1) = p_ + temp*ct;
+    ret(2,2) = p_ + temp*ctm;
+    ret(3,3) = p_ + temp*ctp;
 
 //    ret.report("ret");
     return ret;
@@ -234,9 +234,9 @@ XC::Cosseratstraintensor XC::Cosseratstraintensor::principal() const
 //..
 //..    Cosseratstraintensor principal(0.0);
 //..
-//..    principal.val(1,1) = real(roots[3]); // since they are sorted by
-//..    principal.val(2,2) = real(roots[2]); // the zroot function in ascending
-//..    principal.val(3,3) = real(roots[1]); // order . . .
+//..    principal(1,1) = real(roots[3]); // since they are sorted by
+//..    principal(2,2) = real(roots[2]); // the zroot function in ascending
+//..    principal(3,3) = real(roots[1]); // order . . .
 //..                                         // sig1>sig2>sig3
 //..    return principal;
 //..
@@ -412,9 +412,9 @@ XC::Cosseratstraintensor XC::Cosseratstraintensor::pqtheta2strain( double p, dou
     double ctm = cos( theta - 2.0*PI/3.0 );
     double ctp = cos( theta + 2.0*PI/3.0 );
 
-    ret.val(1,1) = p + temp*ct;
-    ret.val(2,2) = p + temp*ctm;
-    ret.val(3,3) = p + temp*ctp;
+    ret(1,1) = p + temp*ct;
+    ret(2,2) = p + temp*ctm;
+    ret(3,3) = p + temp*ctp;
 
     return ret;
 
@@ -426,9 +426,9 @@ XC::Cosseratstraintensor XC::Cosseratstraintensor::evoleq2strain( double evol, d
   {
     Cosseratstraintensor ret;
 
-    ret.val(1,1) = 1./3.*evol + 1./2.*eq;
-    ret.val(2,2) = 1./3.*evol + 1./2.*eq;
-    ret.val(3,3) = 1./3.*evol - eq;
+    ret(1,1) = 1./3.*evol + 1./2.*eq;
+    ret(2,2) = 1./3.*evol + 1./2.*eq;
+    ret(3,3) = 1./3.*evol - eq;
 
     return ret;
 

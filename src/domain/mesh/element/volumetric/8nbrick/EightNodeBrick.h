@@ -224,8 +224,8 @@ class EightNodeBrick: public ElementBase<8>
     BJtensor getMassTensor(void) const;
 //out19Jan2001     double Potential_Energy(void);
 
-    BJtensor Jacobian_3D(BJtensor dh) const;
-    BJtensor Jacobian_3Dinv(BJtensor dh) const;
+    BJtensor Jacobian_3D(const BJtensor &dh) const;
+    BJtensor Jacobian_3Dinv(const BJtensor &dh) const;
     BJtensor Nodal_Coordinates(void) const;
 
     BJtensor incr_disp(void) const;

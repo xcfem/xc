@@ -359,7 +359,7 @@ XC::BJmatrix XC::BJmatrix::operator*( BJmatrix & arg)
 //**sky**//            sum += temp;
 //**sky**              sum += val(row,i)*arg.full_val(i+1,col+1);
 //**sky**            }
-//**sky**          result.val(row,col) = sum;                   // start from 1
+//**sky**          result(row,col) = sum;                   // start from 1
 //**sky**        }
 //**sky**    return result; // Returning a local variable?
 //**sky**    // copy-initializer happens before the destructor,
@@ -393,8 +393,8 @@ XC::BJmatrix XC::BJmatrix::operator*( double arg)
 //....        {
 //....          double sum = 0;
 //....          for( int i=0 ; i<cols() ; i++ )
-//....            sum += mval(row,i)*arg.cval(i);
-//....          result.val(row) = sum;
+//....            sum += mval(row,i)*arg(i);
+//....          result(row) = sum;
 //....        }
 //....    return result; // Returning a local variable?
 //....    // copy-initializer happens before the destructor,
@@ -555,7 +555,7 @@ XC::BJmatrix XC::BJmatrix::inverse()
 //~~~~            m41 = back_conv.dim(1)*(c41-1)+c43;
 //~~~~            m42 = back_conv.dim(2)*(c42-1)+c44;
 //~~~~
-//~~~~            back_conv.val(c41,c42,c43,c44) = this->val(m41,m42);
+//~~~~            back_conv(c41,c42,c43,c44) = (*this)(m41,m42);
 //~~~~          }
 //~~~~
 //~~~~//    back_conv.print("t","back to XC::BJtensor back_conv");
@@ -585,7 +585,7 @@ XC::BJtensor XC::BJmatrix::BJmatrix2BJtensor_2()  // convert XC::BJmatrix of to 
             m41 = back_conv.dim(1)*(c41-1)+c42;
             m42 = back_conv.dim(3)*(c43-1)+c44;
 
-            back_conv.val(c41,c42,c43,c44) = this->val(m41,m42);
+            back_conv(c41,c42,c43,c44) = (*this)(m41,m42);
           }
 
 //    back_conv.print("t","back to XC::BJtensor back_conv");
@@ -612,7 +612,7 @@ XC::BJtensor XC::BJmatrix::BJmatrix2BJtensor_22()  // convert XC::BJmatrix of to
 //..  //         m41 = back_conv.dim(1)*(c41-1)+c42;
 //..  //         m42 = back_conv.dim(3)*(c43-1)+c44;
 //..       
-//..           back_conv.val(c21,c22) = this->val(m41,m42);
+//..           back_conv(c21,c22) = (*this)(m41,m42);
 //..         }
 //..  
 //..  //    back_conv.print("t","back to XC::BJtensor back_conv");
@@ -639,7 +639,7 @@ XC::BJtensor XC::BJmatrix::BJmatrix2BJtensor_22()  // convert XC::BJmatrix of to
 //~~~~            m41 = back_conv.dim(1)*(c41-1)+c44;
 //~~~~            m42 = back_conv.dim(2)*(c42-1)+c43;
 //~~~~
-//~~~~            back_conv.val(c41,c42,c43,c44) = this->val(m41,m42);
+//~~~~            back_conv(c41,c42,c43,c44) = (*this)(m41,m42);
 //~~~~          }
 //~~~~
 //~~~~//    back_conv.print("t","back to XC::BJtensor back_conv");
@@ -954,9 +954,9 @@ void XC::BJmatrix::lu_back_subst(BJmatrix & indx, BJmatrix & b)
 
 
 //#############################################################################
-double & XC::BJmatrix::mval (int row, int col) // I am still keeping mval
+double & XC::BJmatrix::mval(int row, int col) // I am still keeping mval
   {                                      // operator for compatibility
-     return( this->val(row+1,col+1) );   // with old XC::BJmatrix class members
+     return( (*this)(row+1,col+1) );   // with old XC::BJmatrix class members
   }                                      // and they start from 0 !
 
 

@@ -174,27 +174,27 @@ XC::Vector XC::stressstraintensor::getVector(const size_t &dim) const
 //! Chen XC::W.F. "plasticity for Structural Engineers"
 double XC::stressstraintensor::Iinvariant1() const
   {
-    return (cval(1,1)+cval(2,2)+cval(3,3));
+    return ((*this)(1,1)+(*this)(2,2)+(*this)(3,3));
   }
 
 //##############################################################################
 double XC::stressstraintensor::Iinvariant2() const
   {
-    return (cval(2,2)*cval(3,3)-cval(3,2)*cval(2,3)+
-            cval(1,1)*cval(3,3)-cval(3,1)*cval(1,3)+
-            cval(1,1)*cval(2,2)-cval(2,1)*cval(1,2));
+    return ((*this)(2,2)*(*this)(3,3)-(*this)(3,2)*(*this)(2,3)+
+            (*this)(1,1)*(*this)(3,3)-(*this)(3,1)*(*this)(1,3)+
+            (*this)(1,1)*(*this)(2,2)-(*this)(2,1)*(*this)(1,2));
   }
 
 //##############################################################################
 double XC::stressstraintensor::Iinvariant3()  const
   {
 
-    double I3 = cval(1,1)*cval(2,2)*cval(3,3) +
-                cval(1,2)*cval(2,3)*cval(3,1) +
-                cval(1,3)*cval(2,1)*cval(3,2) -
-                cval(1,3)*cval(2,2)*cval(3,1) -
-                cval(1,2)*cval(2,1)*cval(3,3) -
-                cval(1,1)*cval(2,3)*cval(3,2) ;
+    double I3 = (*this)(1,1)*(*this)(2,2)*(*this)(3,3) +
+                (*this)(1,2)*(*this)(2,3)*(*this)(3,1) +
+                (*this)(1,3)*(*this)(2,1)*(*this)(3,2) -
+                (*this)(1,3)*(*this)(2,2)*(*this)(3,1) -
+                (*this)(1,2)*(*this)(2,1)*(*this)(3,3) -
+                (*this)(1,1)*(*this)(2,3)*(*this)(3,2) ;
 
     return I3;
 //    return ( this->determinant());
@@ -254,9 +254,9 @@ void XC::stressstraintensor::compute_principal(stressstraintensor &ret)  const
     double ctm = cos( theta_ - TWOOVERTHREE*PI );
     double ctp = cos( theta_ + TWOOVERTHREE*PI );
 
-    ret.val(1,1) = - p_ + temp*ct;  // - because p is p = -1/3 sigma_ij delta_ii
-    ret.val(2,2) = - p_ + temp*ctm;
-    ret.val(3,3) = - p_ + temp*ctp;
+    ret(1,1) = - p_ + temp*ct;  // - because p is p = -1/3 sigma_ij delta_ii
+    ret(2,2) = - p_ + temp*ctm;
+    ret(3,3) = - p_ + temp*ctp;
 
 //    ret.report("ret");
 
@@ -286,9 +286,9 @@ void XC::stressstraintensor::compute_principal(stressstraintensor &ret)  const
 //..
 //..    stressstraintensor principal(0.0);
 //..
-//..    principal.val(1,1) = real(roots[3]); // since they are sorted by
-//..    principal.val(2,2) = real(roots[2]); // the zroot function in ascending
-//..    principal.val(3,3) = real(roots[1]); // order . . .
+//..    principal(1,1) = real(roots[3]); // since they are sorted by
+//..    principal(2,2) = real(roots[2]); // the zroot function in ascending
+//..    principal(3,3) = real(roots[1]); // order . . .
 //..                                         // sig1>sig2>sig3
 //..    return principal;
 //..

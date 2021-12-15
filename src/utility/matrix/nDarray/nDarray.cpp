@@ -769,7 +769,7 @@ double XC::nDarray::trace() const
           {
 //            ::printf(" trace=%.4e  ", val(1));
 //            ::printf("\n");
-            tr = cval(1);
+            tr = (*this)(1);
             break;
           }
 
@@ -780,7 +780,7 @@ double XC::nDarray::trace() const
 		::printf("\a\nERROR in trace function : not a squared 1-st rank XC::BJtensor\n");
 		::exit( 1 );
               }
-            tr = cval(1);
+            tr = (*this)(1);
             break;
           }
 
@@ -792,7 +792,7 @@ double XC::nDarray::trace() const
 		::exit( 1 );
               }
             for ( int i2=1 ; i2<=dim()[0] ; i2++ )
-              tr += cval(i2, i2);
+              tr += (*this)(i2, i2);
             break;
           }
 
@@ -806,7 +806,7 @@ double XC::nDarray::trace() const
 		::exit( 1 );
               }
             for ( int i3=1 ; i3<=dim()[0] ; i3++ )
-              tr += cval(i3, i3, i3);
+              tr += (*this)(i3, i3, i3);
             break;
           }
 
@@ -821,7 +821,7 @@ double XC::nDarray::trace() const
 		::exit( 1 );
               }
             for ( int i4=1 ; i4<=dim()[0] ; i4++ )
-              tr += cval(i4, i4, i4, i4);
+              tr += (*this)(i4, i4, i4, i4);
             break;
           }
       }
@@ -847,7 +847,7 @@ void XC::nDarray::print(const std::string &name ,const std::string &msg) const
       {
         case 0:
           {
-            ::printf("%s(1)=%+8.4e  ", name.c_str(), cval(1));
+            ::printf("%s(1)=%+8.4e  ", name.c_str(), (*this)(1));
             ::printf("\n");
             break;
           }
@@ -856,7 +856,7 @@ void XC::nDarray::print(const std::string &name ,const std::string &msg) const
           {
             for ( int i=1 ; i<=pc_nDarray_rep.dim[0]; i++ )
               {
-                ::printf("%s(%2d)=%+8.4e  ", name.c_str(), i, cval(i));
+                ::printf("%s(%2d)=%+8.4e  ", name.c_str(), i, (*this)(i));
                 ::printf("\n");
               }
             break;
@@ -868,7 +868,7 @@ void XC::nDarray::print(const std::string &name ,const std::string &msg) const
               {
                 for ( int j2=1 ; j2<=pc_nDarray_rep.dim[1] ; j2++ )
                   {
-                    ::printf("%s(%2d,%2d)=%+12.8e ", name.c_str(), i2, j2, cval(i2, j2));
+                    ::printf("%s(%2d,%2d)=%+12.8e ", name.c_str(), i2, j2, (*this)(i2, j2));
                   }
                 ::printf("\n");
               }
@@ -883,7 +883,7 @@ void XC::nDarray::print(const std::string &name ,const std::string &msg) const
                   for ( int k3=1 ; k3<=pc_nDarray_rep.dim[2] ; k3++ )
                     {
                       ::printf("%s(%d,%d,%d)=%+8.4e  ", name.c_str(), i3, j3, k3,
-                        cval(i3, j3, k3));
+                        (*this)(i3, j3, k3));
                     }
                   ::printf("\n");
                 }
@@ -899,7 +899,7 @@ void XC::nDarray::print(const std::string &name ,const std::string &msg) const
                     for ( int l4=1 ; l4<=pc_nDarray_rep.dim[3] ; l4++ )
                       {
                         ::printf("%s(%d,%d,%d,%d)=%+8.4e  ",name.c_str(),i4,j4,k4,l4,
-                          cval(i4, j4, k4, l4));
+                          (*this)(i4, j4, k4, l4));
                       }
                     ::printf("\n");
                    }
@@ -920,7 +920,7 @@ void XC::nDarray::printshort(const std::string &msg) const
       {
         case 0:
           {
-            ::printf("%+6.2e ",cval(1));
+            ::printf("%+6.2e ",(*this)(1));
             ::printf("\n");
             break;
           }
@@ -929,7 +929,7 @@ void XC::nDarray::printshort(const std::string &msg) const
           {
             for ( int i=1 ; i<=pc_nDarray_rep.dim[0]; i++ )
               {
-                ::printf("%+6.2e ",cval(i));
+                ::printf("%+6.2e ",(*this)(i));
                 ::printf("\n");
               }
             break;
@@ -941,7 +941,7 @@ void XC::nDarray::printshort(const std::string &msg) const
               {
                 for ( int j2=1 ; j2<=pc_nDarray_rep.dim[1] ; j2++ )
                   {
-                    ::printf("%+6.2e ", cval(i2, j2));
+                    ::printf("%+6.2e ", (*this)(i2, j2));
                   }
                 ::printf("\n");
               }
@@ -955,7 +955,7 @@ void XC::nDarray::printshort(const std::string &msg) const
                 {
                   for ( int k3=1 ; k3<=pc_nDarray_rep.dim[2] ; k3++ )
                     {
-                      ::printf("%+6.2e  ", cval(i3, j3, k3));
+                      ::printf("%+6.2e  ", (*this)(i3, j3, k3));
                     }
                   ::printf("\n");
                 }
@@ -970,7 +970,7 @@ void XC::nDarray::printshort(const std::string &msg) const
                   {
                     for ( int l4=1 ; l4<=pc_nDarray_rep.dim[3] ; l4++ )
                       {
-                        ::printf("%+6.2e  ", cval(i4, j4, k4, l4));
+                        ::printf("%+6.2e  ", (*this)(i4, j4, k4, l4));
                       }
                     ::printf("\n");
                    }
@@ -991,7 +991,7 @@ void XC::nDarray::mathprint(void) const
         case 0:
           {
             ::printf("{");
-            ::printf("%12f, ", cval(1));
+            ::printf("%12f, ", (*this)(1));
             ::printf("},\n");
             break;
           }
@@ -1002,7 +1002,7 @@ void XC::nDarray::mathprint(void) const
             int i = 1;
             for ( i=1 ; i<=pc_nDarray_rep.dim[0]; i++ )
               {
-                ::printf("%12f, ", cval(i));
+                ::printf("%12f, ", (*this)(i));
                 ::printf("\n");
                 if (i<pc_nDarray_rep.dim[0]) ::printf(", ");
                 if (i==pc_nDarray_rep.dim[0]) ::printf(" \n");
@@ -1023,7 +1023,7 @@ void XC::nDarray::mathprint(void) const
                   }
                 for ( int j2=1 ; j2<=pc_nDarray_rep.dim[1] ; j2++ )
                   {
-                    ::printf("%12f", cval(i2, j2));
+                    ::printf("%12f", (*this)(i2, j2));
                     if (j2<pc_nDarray_rep.dim[1]  )
                       {
                          ::printf(", ");
@@ -1062,7 +1062,7 @@ void XC::nDarray::mathprint(void) const
                 {
                   for ( int k3=1 ; k3<=pc_nDarray_rep.dim[2] ; k3++ )
                     {
-                      ::printf("%12f,  ", cval(i3, j3, k3));
+                      ::printf("%12f,  ", (*this)(i3, j3, k3));
                     }
                   ::printf("\n");
                 }
@@ -1077,7 +1077,7 @@ void XC::nDarray::mathprint(void) const
                   {
                     for ( int l4=1 ; l4<=pc_nDarray_rep.dim[3] ; l4++ )
                       {
-                        ::printf("%12f,  ", cval(i4, j4, k4, l4));
+                        ::printf("%12f,  ", (*this)(i4, j4, k4, l4));
                       }
                     ::printf("\n");
                    }
@@ -1248,7 +1248,7 @@ XC::nDarray XC::nDarray::eigenvalues(void)
     for ( int j=0 ; j<rows ; j++)
       for ( int k=0 ; k<rows ; k++)
         {
-          a[j+1][k+1] = this->cval(j+1,k+1);
+          a[j+1][k+1] = (*this)(j+1,k+1);
         }
 
 
@@ -1260,7 +1260,7 @@ XC::nDarray XC::nDarray::eigenvalues(void)
     eigsrt( d, a, rows);
 
     for( int l=0 ; l<rows ; l++ )
-      { EV.val(l+1) = d[l+1]; }
+      { EV(l+1) = d[l+1]; }
 
     return EV;
   }
@@ -1289,7 +1289,7 @@ XC::nDarray XC::nDarray::eigenvectors(void)
     for ( int j=0 ; j<rows ; j++)
       for ( int k=0 ; k<rows ; k++)
         {
-          a[j+1][k+1] = this->cval(j+1,k+1);
+          a[j+1][k+1] = (*this)(j+1,k+1);
         }
 // Householder reduction of a real symmetric XC::BJmatrix see NRC page 373
     tred2( a, rows, d, e);
@@ -1301,7 +1301,7 @@ XC::nDarray XC::nDarray::eigenvectors(void)
     for ( int l=0 ; l<rows ; l++ )
       for ( int l1=0; l1<rows ; l1++ )
         {
-          EV.val(l+1,l1+1) = a[l+1][l1+1];
+          EV(l+1,l1+1) = a[l+1][l1+1];
         }
     return EV;
   }

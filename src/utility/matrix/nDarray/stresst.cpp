@@ -598,9 +598,9 @@ XC::stresstensor XC::stresstensor::pqtheta2stress( double p, double q, double th
     double ctm = cos( theta - TWOOVERTHREE*PI );
     double ctp = cos( theta + TWOOVERTHREE*PI );
 
-    ret.val(1,1) = temp*ct  - p;
-    ret.val(2,2) = temp*ctm - p;
-    ret.val(3,3) = temp*ctp - p;
+    ret(1,1) = temp*ct  - p;
+    ret(2,2) = temp*ctm - p;
+    ret(3,3) = temp*ctp - p;
 
 //    ret.report("ret");
     return ret;
@@ -750,12 +750,12 @@ void XC::stresstensor::reportTensor(const std::string &msg) const
     std::cerr << msg;
 
     ::fprintf(stdout," %+.6e %+.6e %+.6e %+.6e %+.6e %+.6e \n",
-    		      this->cval(1,1),
-    		      this->cval(1,2),
-    		      this->cval(1,3),
-    		      this->cval(2,2),
-    		      this->cval(2,3),
-    		      this->cval(3,3));
+    		      (*this)(1,1),
+    		      (*this)(1,2),
+    		      (*this)(1,3),
+    		      (*this)(2,2),
+    		      (*this)(2,3),
+    		      (*this)(3,3));
   }
 
 //##############################################################################

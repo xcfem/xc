@@ -590,7 +590,7 @@ void XC::EightNodeBrick::incremental_Update()
 //#############################################################################
 //#############################################################################
 //***************************************************************
- XC::BJtensor XC::EightNodeBrick::H_3D(double r1, double r2, double r3) const
+XC::BJtensor XC::EightNodeBrick::H_3D(double r1, double r2, double r3) const
   {
 
     std::vector<int> dimension({24,3}); // Xiaoyan changed from {60,3} to {24,3} for 8 nodes
@@ -598,49 +598,49 @@ void XC::EightNodeBrick::incremental_Update()
     BJtensor H(2, dimension, 0.0);
 
     // influence of the node number 8
-    H.val(22,1)=(1.0+r1)*(1.0-r2)*(1.0-r3)*0.125;// - (H.val(43,1)+H.val(48,3)+H.val(60,3))/2.0;
-    H.val(23,2)= H.val(22,1); //(1.0+r1)*(1.0-r2)*(1.0-r3)*0.125;// - (H.val(43,1)+H.val(48,3)+H.val(60,3))/2.0;
-    H.val(24,3)= H.val(22,1); //(1.0+r1)*(1.0-r2)*(1.0-r3)*0.125;// - (H.val(43,1)+H.val(48,3)+H.val(60,3))/2.0;
+    H(22,1)=(1.0+r1)*(1.0-r2)*(1.0-r3)*0.125;// - (H(43,1)+H(48,3)+H(60,3))/2.0;
+    H(23,2)= H(22,1); //(1.0+r1)*(1.0-r2)*(1.0-r3)*0.125;// - (H(43,1)+H(48,3)+H(60,3))/2.0;
+    H(24,3)= H(22,1); //(1.0+r1)*(1.0-r2)*(1.0-r3)*0.125;// - (H(43,1)+H(48,3)+H(60,3))/2.0;
     // influence of the node number 7
-    H.val(19,1)=(1.0-r1)*(1.0-r2)*(1.0-r3)*0.125;// - (H.val(42,3)+H.val(43,1)+H.val(57,3))/2.0;
-    H.val(20,2)=H.val(19,1); //(1.0-r1)*(1.0-r2)*(1.0-r3)*0.125;// - (H.val(42,3)+H.val(43,1)+H.val(57,3))/2.0;
-    H.val(21,3)=H.val(19,1); //(1.0-r1)*(1.0-r2)*(1.0-r3)*0.125;// - (H.val(42,3)+H.val(43,1)+H.val(57,3))/2.0;
+    H(19,1)=(1.0-r1)*(1.0-r2)*(1.0-r3)*0.125;// - (H(42,3)+H(43,1)+H(57,3))/2.0;
+    H(20,2)=H(19,1); //(1.0-r1)*(1.0-r2)*(1.0-r3)*0.125;// - (H(42,3)+H(43,1)+H(57,3))/2.0;
+    H(21,3)=H(19,1); //(1.0-r1)*(1.0-r2)*(1.0-r3)*0.125;// - (H(42,3)+H(43,1)+H(57,3))/2.0;
     // influence of the node number 6
-    H.val(16,1)=(1.0-r1)*(1.0+r2)*(1.0-r3)*0.125;//- (H.val(39,3)+H.val(42,3)+H.val(54,3))/2.0;
-    H.val(17,2)=H.val(16,1); //(1.0-r1)*(1.0+r2)*(1.0-r3)*0.125;//- (H.val(39,3)+H.val(42,3)+H.val(54,3))/2.0;
-    H.val(18,3)=H.val(16,1); //(1.0-r1)*(1.0+r2)*(1.0-r3)*0.125;//- (H.val(39,3)+H.val(42,3)+H.val(54,3))/2.0;
+    H(16,1)=(1.0-r1)*(1.0+r2)*(1.0-r3)*0.125;//- (H(39,3)+H(42,3)+H(54,3))/2.0;
+    H(17,2)=H(16,1); //(1.0-r1)*(1.0+r2)*(1.0-r3)*0.125;//- (H(39,3)+H(42,3)+H(54,3))/2.0;
+    H(18,3)=H(16,1); //(1.0-r1)*(1.0+r2)*(1.0-r3)*0.125;//- (H(39,3)+H(42,3)+H(54,3))/2.0;
     // influence of the node number 5
-    H.val(13,1)=(1.0+r1)*(1.0+r2)*(1.0-r3)*0.125;//- (H.val(39,3)+H.val(48,3)+H.val(51,3))/2.0;
-    H.val(14,2)=H.val(13,1); //(1.0+r1)*(1.0+r2)*(1.0-r3)*0.125;//- (H.val(39,3)+H.val(48,3)+H.val(51,3))/2.0;
-    H.val(15,3)=H.val(13,1); //(1.0+r1)*(1.0+r2)*(1.0-r3)*0.125;//- (H.val(39,3)+H.val(48,3)+H.val(51,3))/2.0;
+    H(13,1)=(1.0+r1)*(1.0+r2)*(1.0-r3)*0.125;//- (H(39,3)+H(48,3)+H(51,3))/2.0;
+    H(14,2)=H(13,1); //(1.0+r1)*(1.0+r2)*(1.0-r3)*0.125;//- (H(39,3)+H(48,3)+H(51,3))/2.0;
+    H(15,3)=H(13,1); //(1.0+r1)*(1.0+r2)*(1.0-r3)*0.125;//- (H(39,3)+H(48,3)+H(51,3))/2.0;
 
     // influence of the node number 4
-    H.val(10,1)=(1.0+r1)*(1.0-r2)*(1.0+r3)*0.125;//- (H.val(33,3)+H.val(36,3)+H.val(60,3))/2.0;
-    H.val(11,2)=H.val(10,1); //(1.0+r1)*(1.0-r2)*(1.0+r3)*0.125;//- (H.val(33,3)+H.val(36,3)+H.val(60,3))/2.0;
-    H.val(12,3)=H.val(10,1); //(1.0+r1)*(1.0-r2)*(1.0+r3)*0.125;//- (H.val(33,3)+H.val(36,3)+H.val(60,3))/2.0;
+    H(10,1)=(1.0+r1)*(1.0-r2)*(1.0+r3)*0.125;//- (H(33,3)+H(36,3)+H(60,3))/2.0;
+    H(11,2)=H(10,1); //(1.0+r1)*(1.0-r2)*(1.0+r3)*0.125;//- (H(33,3)+H(36,3)+H(60,3))/2.0;
+    H(12,3)=H(10,1); //(1.0+r1)*(1.0-r2)*(1.0+r3)*0.125;//- (H(33,3)+H(36,3)+H(60,3))/2.0;
     // influence of the node number 3
-    H.val(7,1)=(1.0-r1)*(1.0-r2)*(1.0+r3)*0.125;//- (H.val(30,3)+H.val(33,3)+H.val(57,3))/2.0;
-    H.val(8,2)=H.val(7,1); //(1.0-r1)*(1.0-r2)*(1.0+r3)*0.125;//- (H.val(30,3)+H.val(33,3)+H.val(57,3))/2.0;
-    H.val(9,3)=H.val(7,1); //(1.0-r1)*(1.0-r2)*(1.0+r3)*0.125;//- (H.val(30,3)+H.val(33,3)+H.val(57,3))/2.0;
+    H(7,1)=(1.0-r1)*(1.0-r2)*(1.0+r3)*0.125;//- (H(30,3)+H(33,3)+H(57,3))/2.0;
+    H(8,2)=H(7,1); //(1.0-r1)*(1.0-r2)*(1.0+r3)*0.125;//- (H(30,3)+H(33,3)+H(57,3))/2.0;
+    H(9,3)=H(7,1); //(1.0-r1)*(1.0-r2)*(1.0+r3)*0.125;//- (H(30,3)+H(33,3)+H(57,3))/2.0;
     // influence of the node number 2
-    H.val(4,1)=(1.0-r1)*(1.0+r2)*(1.0+r3)*0.125;//- (H.val(30,3)+H.val(54,3)+H.val(27,3))/2.0;
-    H.val(5,2)=H.val(4,1); //(1.0-r1)*(1.0+r2)*(1.0+r3)*0.125;//- (H.val(30,3)+H.val(54,3)+H.val(27,3))/2.0;
-    H.val(6,3)=H.val(4,1); //(1.0-r1)*(1.0+r2)*(1.0+r3)*0.125;//- (H.val(30,3)+H.val(54,3)+H.val(27,3))/2.0;
+    H(4,1)=(1.0-r1)*(1.0+r2)*(1.0+r3)*0.125;//- (H(30,3)+H(54,3)+H(27,3))/2.0;
+    H(5,2)=H(4,1); //(1.0-r1)*(1.0+r2)*(1.0+r3)*0.125;//- (H(30,3)+H(54,3)+H(27,3))/2.0;
+    H(6,3)=H(4,1); //(1.0-r1)*(1.0+r2)*(1.0+r3)*0.125;//- (H(30,3)+H(54,3)+H(27,3))/2.0;
     // influence of the node number 1
-    H.val(1,1)=(1.0+r1)*(1.0+r2)*(1.0+r3)*0.125;//- (H.val(36,3)+H.val(51,3)+H.val(27,3))/2.0;
-    H.val(2,2)=H.val(1,1); //(1.0+r1)*(1.0+r2)*(1.0+r3)*0.125;//- (H.val(36,3)+H.val(51,3)+H.val(27,3))/2.0;
-    H.val(3,3)=H.val(1,1); //(1.0+r1)*(1.0+r2)*(1.0+r3)*0.125;//- (H.val(36,3)+H.val(51,3)+H.val(27,3))/2.0;
+    H(1,1)=(1.0+r1)*(1.0+r2)*(1.0+r3)*0.125;//- (H(36,3)+H(51,3)+H(27,3))/2.0;
+    H(2,2)=H(1,1); //(1.0+r1)*(1.0+r2)*(1.0+r3)*0.125;//- (H(36,3)+H(51,3)+H(27,3))/2.0;
+    H(3,3)=H(1,1); //(1.0+r1)*(1.0+r2)*(1.0+r3)*0.125;//- (H(36,3)+H(51,3)+H(27,3))/2.0;
 
                  // The second part were commented by Xiaoyan
     //         double sum= 0;
     //
     //   for(int i=1; i<=60 ; i++)
     //           {
-    // //        sum+=H.cval(i,1);
+    // //        sum+=H(i,1);
     //       for(int j=1; j<= 1; j++)
     //          {
-    //                    sum+=H.cval(i,1);
-    //             ::printf( "  %+9.2e", H.cval(i,j) );
+    //                    sum+=H(i,1);
+    //             ::printf( "  %+9.2e", H(i,j) );
     //           }
     //            // ::printf( "  %d \n", i);
     //      }
@@ -665,22 +665,22 @@ void XC::EightNodeBrick::incremental_Update()
     // Commented by Xiaoyan
 
     // influence of the node number 8
-    h.val(8)=(1.0+r1)*(1.0-r2)*(1.0-r3)/8.0;// - (h.val(15)+h.val(16)+h.val(20))/2.0;
+    h(8)=(1.0+r1)*(1.0-r2)*(1.0-r3)/8.0;// - (h(15)+h(16)+h(20))/2.0;
     // influence of the node number 7
-    h.val(7)=(1.0-r1)*(1.0-r2)*(1.0-r3)/8.0;// - (h.val(14)+h.val(15)+h.val(19))/2.0;
+    h(7)=(1.0-r1)*(1.0-r2)*(1.0-r3)/8.0;// - (h(14)+h(15)+h(19))/2.0;
     // influence of the node number 6
-    h.val(6)=(1.0-r1)*(1.0+r2)*(1.0-r3)/8.0;// - (h.val(13)+h.val(14)+h.val(18))/2.0;
+    h(6)=(1.0-r1)*(1.0+r2)*(1.0-r3)/8.0;// - (h(13)+h(14)+h(18))/2.0;
     // influence of the node number 5
-    h.val(5)=(1.0+r1)*(1.0+r2)*(1.0-r3)/8.0;// - (h.val(13)+h.val(16)+h.val(17))/2.0;
+    h(5)=(1.0+r1)*(1.0+r2)*(1.0-r3)/8.0;// - (h(13)+h(16)+h(17))/2.0;
 
     // influence of the node number 4
-    h.val(4)=(1.0+r1)*(1.0-r2)*(1.0+r3)/8.0;// - (h.val(11)+h.val(12)+h.val(20))/2.0;
+    h(4)=(1.0+r1)*(1.0-r2)*(1.0+r3)/8.0;// - (h(11)+h(12)+h(20))/2.0;
     // influence of the node number 3
-    h.val(3)=(1.0-r1)*(1.0-r2)*(1.0+r3)/8.0;// - (h.val(10)+h.val(11)+h.val(19))/2.0;
+    h(3)=(1.0-r1)*(1.0-r2)*(1.0+r3)/8.0;// - (h(10)+h(11)+h(19))/2.0;
     // influence of the node number 2
-    h.val(2)=(1.0-r1)*(1.0+r2)*(1.0+r3)/8.0;// - (h.val(10)+h.val(18)+h.val(9))/2.0;
+    h(2)=(1.0-r1)*(1.0+r2)*(1.0+r3)/8.0;// - (h(10)+h(18)+h(9))/2.0;
     // influence of the node number 1
-    h.val(1)=(1.0+r1)*(1.0+r2)*(1.0+r3)/8.0;// - (h.val(12)+h.val(17)+h.val(9))/2.0;
+    h(1)=(1.0+r1)*(1.0+r2)*(1.0+r3)/8.0;// - (h(12)+h(17)+h(9))/2.0;
 
     return h;
   }
@@ -695,38 +695,38 @@ void XC::EightNodeBrick::incremental_Update()
 
 
     // influence of the node number 8
-    dh.val(8,1)= (1.0-r2)*(1.0-r3)*0.125; ///8.0;// - (dh.val(15,1)+dh.val(16,1)+dh.val(20,1))/2.0;
-    dh.val(8,2)=-(1.0+r1)*(1.0-r3)*0.125; ///8.0;// - (dh.val(15,2)+dh.val(16,2)+dh.val(20,2))/2.0;
-    dh.val(8,3)=-(1.0+r1)*(1.0-r2)*0.125; ///8.0;// - (dh.val(15,3)+dh.val(16,3)+dh.val(20,3))/2.0;
+    dh(8,1)= (1.0-r2)*(1.0-r3)*0.125; ///8.0;// - (dh(15,1)+dh(16,1)+dh(20,1))/2.0;
+    dh(8,2)=-(1.0+r1)*(1.0-r3)*0.125; ///8.0;// - (dh(15,2)+dh(16,2)+dh(20,2))/2.0;
+    dh(8,3)=-(1.0+r1)*(1.0-r2)*0.125; ///8.0;// - (dh(15,3)+dh(16,3)+dh(20,3))/2.0;
     // influence of the node number 7
-    dh.val(7,1)=-(1.0-r2)*(1.0-r3)*0.125; ///8.0;// - (dh.val(14,1)+dh.val(15,1)+dh.val(19,1))/2.0;
-    dh.val(7,2)=-(1.0-r1)*(1.0-r3)*0.125; ///8.0;// - (dh.val(14,2)+dh.val(15,2)+dh.val(19,2))/2.0;
-    dh.val(7,3)=-(1.0-r1)*(1.0-r2)*0.125; ///8.0;// - (dh.val(14,3)+dh.val(15,3)+dh.val(19,3))/2.0;
+    dh(7,1)=-(1.0-r2)*(1.0-r3)*0.125; ///8.0;// - (dh(14,1)+dh(15,1)+dh(19,1))/2.0;
+    dh(7,2)=-(1.0-r1)*(1.0-r3)*0.125; ///8.0;// - (dh(14,2)+dh(15,2)+dh(19,2))/2.0;
+    dh(7,3)=-(1.0-r1)*(1.0-r2)*0.125; ///8.0;// - (dh(14,3)+dh(15,3)+dh(19,3))/2.0;
     // influence of the node number 6
-    dh.val(6,1)=-(1.0+r2)*(1.0-r3)*0.125; ///8.0;// - (dh.val(13,1)+dh.val(14,1)+dh.val(18,1))/2.0;
-    dh.val(6,2)= (1.0-r1)*(1.0-r3)*0.125; ///8.0;// - (dh.val(13,2)+dh.val(14,2)+dh.val(18,2))/2.0;
-    dh.val(6,3)=-(1.0-r1)*(1.0+r2)*0.125; ///8.0;//- (dh.val(13,3)+dh.val(14,3)+dh.val(18,3))/2.0;
+    dh(6,1)=-(1.0+r2)*(1.0-r3)*0.125; ///8.0;// - (dh(13,1)+dh(14,1)+dh(18,1))/2.0;
+    dh(6,2)= (1.0-r1)*(1.0-r3)*0.125; ///8.0;// - (dh(13,2)+dh(14,2)+dh(18,2))/2.0;
+    dh(6,3)=-(1.0-r1)*(1.0+r2)*0.125; ///8.0;//- (dh(13,3)+dh(14,3)+dh(18,3))/2.0;
     // influence of the node number 5
-    dh.val(5,1)= (1.0+r2)*(1.0-r3)*0.125; ///8.0;// - (dh.val(13,1)+dh.val(16,1)+dh.val(17,1))/2.0;
-    dh.val(5,2)= (1.0+r1)*(1.0-r3)*0.125; ///8.0;// - (dh.val(13,2)+dh.val(16,2)+dh.val(17,2))/2.0;
-    dh.val(5,3)=-(1.0+r1)*(1.0+r2)*0.125; ///8.0;// - (dh.val(13,3)+dh.val(16,3)+dh.val(17,3))/2.0;
+    dh(5,1)= (1.0+r2)*(1.0-r3)*0.125; ///8.0;// - (dh(13,1)+dh(16,1)+dh(17,1))/2.0;
+    dh(5,2)= (1.0+r1)*(1.0-r3)*0.125; ///8.0;// - (dh(13,2)+dh(16,2)+dh(17,2))/2.0;
+    dh(5,3)=-(1.0+r1)*(1.0+r2)*0.125; ///8.0;// - (dh(13,3)+dh(16,3)+dh(17,3))/2.0;
 
     // influence of the node number 4
-    dh.val(4,1)= (1.0-r2)*(1.0+r3)*0.125; ///8.0;// - (dh.val(11,1)+dh.val(12,1)+dh.val(20,1))/2.0;
-    dh.val(4,2)=-(1.0+r1)*(1.0+r3)*0.125; ///8.0;// - (dh.val(11,2)+dh.val(12,2)+dh.val(20,2))/2.0;
-    dh.val(4,3)= (1.0+r1)*(1.0-r2)*0.125; ///8.0;// - (dh.val(11,3)+dh.val(12,3)+dh.val(20,3))/2.0;
+    dh(4,1)= (1.0-r2)*(1.0+r3)*0.125; ///8.0;// - (dh(11,1)+dh(12,1)+dh(20,1))/2.0;
+    dh(4,2)=-(1.0+r1)*(1.0+r3)*0.125; ///8.0;// - (dh(11,2)+dh(12,2)+dh(20,2))/2.0;
+    dh(4,3)= (1.0+r1)*(1.0-r2)*0.125; ///8.0;// - (dh(11,3)+dh(12,3)+dh(20,3))/2.0;
     // influence of the node number 3
-    dh.val(3,1)=-(1.0-r2)*(1.0+r3)*0.125; ///8.0;// - (dh.val(10,1)+dh.val(11,1)+dh.val(19,1))/2.0;
-    dh.val(3,2)=-(1.0-r1)*(1.0+r3)*0.125; ///8.0;// - (dh.val(10,2)+dh.val(11,2)+dh.val(19,2))/2.0;
-    dh.val(3,3)= (1.0-r1)*(1.0-r2)*0.125; ///8.0;// - (dh.val(10,3)+dh.val(11,3)+dh.val(19,3))/2.0;
+    dh(3,1)=-(1.0-r2)*(1.0+r3)*0.125; ///8.0;// - (dh(10,1)+dh(11,1)+dh(19,1))/2.0;
+    dh(3,2)=-(1.0-r1)*(1.0+r3)*0.125; ///8.0;// - (dh(10,2)+dh(11,2)+dh(19,2))/2.0;
+    dh(3,3)= (1.0-r1)*(1.0-r2)*0.125; ///8.0;// - (dh(10,3)+dh(11,3)+dh(19,3))/2.0;
     // influence of the node number 2
-    dh.val(2,1)=-(1.0+r2)*(1.0+r3)*0.125; ///8.0;// - (dh.val(10,1)+dh.val(18,1)+dh.val(9,1))/2.0;
-    dh.val(2,2)= (1.0-r1)*(1.0+r3)*0.125; ///8.0;// - (dh.val(10,2)+dh.val(18,2)+dh.val(9,2))/2.0;
-    dh.val(2,3)= (1.0-r1)*(1.0+r2)*0.125; ///8.0;// - (dh.val(10,3)+dh.val(18,3)+dh.val(9,3))/2.0;
+    dh(2,1)=-(1.0+r2)*(1.0+r3)*0.125; ///8.0;// - (dh(10,1)+dh(18,1)+dh(9,1))/2.0;
+    dh(2,2)= (1.0-r1)*(1.0+r3)*0.125; ///8.0;// - (dh(10,2)+dh(18,2)+dh(9,2))/2.0;
+    dh(2,3)= (1.0-r1)*(1.0+r2)*0.125; ///8.0;// - (dh(10,3)+dh(18,3)+dh(9,3))/2.0;
     // influence of the node number 1
-    dh.val(1,1)= (1.0+r2)*(1.0+r3)*0.125; ///8.0;// - (dh.val(12,1)+dh.val(17,1)+dh.val(9,1))/2.0;
-    dh.val(1,2)= (1.0+r1)*(1.0+r3)*0.125; ///8.0;// - (dh.val(12,2)+dh.val(17,2)+dh.val(9,2))/2.0;
-    dh.val(1,3)= (1.0+r1)*(1.0+r2)*0.125; ///8.0;//- (dh.val(12,3)+dh.val(17,3)+dh.val(9,3))/2.0;
+    dh(1,1)= (1.0+r2)*(1.0+r3)*0.125; ///8.0;// - (dh(12,1)+dh(17,1)+dh(9,1))/2.0;
+    dh(1,2)= (1.0+r1)*(1.0+r3)*0.125; ///8.0;// - (dh(12,2)+dh(17,2)+dh(9,2))/2.0;
+    dh(1,3)= (1.0+r1)*(1.0+r2)*0.125; ///8.0;//- (dh(12,3)+dh(17,3)+dh(9,3))/2.0;
                // Commented by Xiaoyan
     return dh;
   }
@@ -1019,9 +1019,9 @@ void XC::EightNodeBrick::set_strain_stress_tensor(FILE *fp, double * u)
       {
 	std::cerr << "Global# " << theNodes.getTagNode(ii-1)
 	          << "Local# " << ii
-                  << " " << total_displacements.val(ii,1)
-                  << " " << total_displacements.val(ii,2)
-                  << " " << total_displacements.val(ii,3) << std::endl;
+                  << " " << total_displacements(ii,1)
+                  << " " << total_displacements(ii,2)
+                  << " " << total_displacements(ii,3) << std::endl;
       }
     for( short GP_c_r= 1 ; GP_c_r <= r_integration_order ; GP_c_r++ )
       {
@@ -1145,11 +1145,11 @@ XC::BJtensor XC::EightNodeBrick::getMassTensor(void) const
                 //  double sum= 0.0;
                 //  for(int i=1; i<=60 ; i++)
                 //           {
-                // //        sum+=H.cval(i,1);
+                // //        sum+=H(i,1);
                 //       for(int j=1; j<= 3; j++)
                 //          {
-                //                    sum+=H.cval(i,j);
-                //             ::printf( "  %+9.2e", H.cval(i,j) );
+                //                    sum+=H(i,j);
+                //             ::printf( "  %+9.2e", H(i,j) );
                 //           }
                 //             ::printf( "  %d \n", i);
                 //      }
@@ -1191,7 +1191,7 @@ XC::BJtensor XC::EightNodeBrick::getMassTensor(void) const
 
 ////#############################################################################
 
- XC::BJtensor XC::EightNodeBrick::stiffness_matrix(const XC::BJtensor & K)
+XC::BJtensor XC::EightNodeBrick::stiffness_matrix(const BJtensor & K)
   {
 //BJ/BJ
 //BJ    std::cerr << "\n\n\n\n Print in XC::BJtensor XC::EightNodeBrick::stiffness_matrix" <<std::endl; this->Print(std::cerr);
@@ -1215,7 +1215,7 @@ XC::BJtensor XC::EightNodeBrick::getMassTensor(void) const
                     Kj= l+3*(j-1);
                     //::printf("i=%d k=%d  Ki=%d       j=%d l=%d  Kj=%d\n",i,k,Ki,j,l,Kj);
 
-                    Kmatrix.val( Ki , Kj )= K.cval(i,k,l,j);
+                    Kmatrix( Ki , Kj )= K(i,k,l,j);
                   }
               }
           }
@@ -1227,7 +1227,7 @@ XC::BJtensor XC::EightNodeBrick::getMassTensor(void) const
 
 ////#############################################################################
 // Constructing mass matrix from mass XC::BJtensor ___Zhaohui 07-05-99
- XC::BJtensor XC::EightNodeBrick::mass_matrix(const XC::BJtensor & M)
+ XC::BJtensor XC::EightNodeBrick::mass_matrix(const BJtensor & M)
   {
     //    std::vector<int> K_dim({20,3,3,20});
     //    BJtensor K(4,K_dim,0.0);
@@ -1237,8 +1237,8 @@ XC::BJtensor XC::EightNodeBrick::getMassTensor(void) const
       {
         for( int j=1 ; j<=24 ; j++ ) // Xiaoyan changed from i<=60 to i<=24 for 8 nodes
           {
-             Mmatrix.val( i , j )= M.cval(i,j);
-             //  ::printf("Mi Mj %d %d %+6.2e ",Mi,Mj,Mmatrix.val( Mi , Mj ) );
+             Mmatrix( i , j )= M(i,j);
+             //  ::printf("Mi Mj %d %d %+6.2e ",Mi,Mj,Mmatrix( Mi , Mj ) );
           }
       }
     return BJtensor(Mmatrix);
@@ -1246,7 +1246,7 @@ XC::BJtensor XC::EightNodeBrick::getMassTensor(void) const
 ////#############################################################################
 
 ////#############################################################################
- XC::BJtensor XC::EightNodeBrick::Jacobian_3D(BJtensor dh) const
+ XC::BJtensor XC::EightNodeBrick::Jacobian_3D(const BJtensor &dh) const
   {
      //       dh ( 20*3)  // dh(8*3) Xiaoyan
      BJtensor N_C= Nodal_Coordinates(); // 20*3    // 8*3 Xiaoyan
@@ -1255,7 +1255,7 @@ XC::BJtensor XC::EightNodeBrick::getMassTensor(void) const
   }
 
 //#############################################################################
- XC::BJtensor XC::EightNodeBrick::Jacobian_3Dinv(BJtensor dh) const
+ XC::BJtensor XC::EightNodeBrick::Jacobian_3Dinv(const BJtensor &dh) const
   {
      //       dh ( 20*3)    // dh(8*3) Xiaoyan
      BJtensor N_C= Nodal_Coordinates(); // 20*3        // 8*3 Xiaoyan
@@ -1272,15 +1272,15 @@ XC::BJtensor XC::EightNodeBrick::getMassTensor(void) const
 
     //for( int i=0 ; i<8 ; i++ )    // Xiaoyan changed from 20 to 8 for 8 nodes
     //  {
-    //    //        N_coord.val(i+1,1)= nodes[ G_N_numbs[i] ].x_coordinate();
-    //    //        N_coord.val(i+1,2)= nodes[ G_N_numbs[i] ].y_coordinate();
-    //    //        N_coord.val(i+1,3)= nodes[ G_N_numbs[i] ].z_coordinate();
+    //    //        N_coord(i+1,1)= nodes[ G_N_numbs[i] ].x_coordinate();
+    //    //        N_coord(i+1,2)= nodes[ G_N_numbs[i] ].y_coordinate();
+    //    //        N_coord(i+1,3)= nodes[ G_N_numbs[i] ].z_coordinate();
     //    // Xiaoyan changed to the following:  09/27/00
     //    /// LOOK WITH DDD
     //  Vector Coordinates= nodes[ G_N_numbs[i] ].getCrds();
-    //    N_coord.val(i+1,1)= Coordinates(0);
-    //    N_coord.val(i+1,2)= Coordinates(1);
-    //    N_coord.val(i+1,3)= Coordinates(2);
+    //    N_coord(i+1,1)= Coordinates(0);
+    //    N_coord(i+1,2)= Coordinates(1);
+    //    N_coord(i+1,3)= Coordinates(2);
     //  }
 
     //Zhaohui using node pointers, which come from the XC::Domain
@@ -1293,14 +1293,14 @@ XC::BJtensor XC::EightNodeBrick::getMassTensor(void) const
     const XC::Vector &nd7Crds= theNodes[6]->getCrds();
     const XC::Vector &nd8Crds= theNodes[7]->getCrds();
 
-    N_coord.val(1,1)=nd1Crds(0); N_coord.val(1,2)=nd1Crds(1); N_coord.val(1,3)=nd1Crds(2);
-    N_coord.val(2,1)=nd2Crds(0); N_coord.val(2,2)=nd2Crds(1); N_coord.val(2,3)=nd2Crds(2);
-    N_coord.val(3,1)=nd3Crds(0); N_coord.val(3,2)=nd3Crds(1); N_coord.val(3,3)=nd3Crds(2);
-    N_coord.val(4,1)=nd4Crds(0); N_coord.val(4,2)=nd4Crds(1); N_coord.val(4,3)=nd4Crds(2);
-    N_coord.val(5,1)=nd5Crds(0); N_coord.val(5,2)=nd5Crds(1); N_coord.val(5,3)=nd5Crds(2);
-    N_coord.val(6,1)=nd6Crds(0); N_coord.val(6,2)=nd6Crds(1); N_coord.val(6,3)=nd6Crds(2);
-    N_coord.val(7,1)=nd7Crds(0); N_coord.val(7,2)=nd7Crds(1); N_coord.val(7,3)=nd7Crds(2);
-    N_coord.val(8,1)=nd8Crds(0); N_coord.val(8,2)=nd8Crds(1); N_coord.val(8,3)=nd8Crds(2);
+    N_coord(1,1)=nd1Crds(0); N_coord(1,2)=nd1Crds(1); N_coord(1,3)=nd1Crds(2);
+    N_coord(2,1)=nd2Crds(0); N_coord(2,2)=nd2Crds(1); N_coord(2,3)=nd2Crds(2);
+    N_coord(3,1)=nd3Crds(0); N_coord(3,2)=nd3Crds(1); N_coord(3,3)=nd3Crds(2);
+    N_coord(4,1)=nd4Crds(0); N_coord(4,2)=nd4Crds(1); N_coord(4,3)=nd4Crds(2);
+    N_coord(5,1)=nd5Crds(0); N_coord(5,2)=nd5Crds(1); N_coord(5,3)=nd5Crds(2);
+    N_coord(6,1)=nd6Crds(0); N_coord(6,2)=nd6Crds(1); N_coord(6,3)=nd6Crds(2);
+    N_coord(7,1)=nd7Crds(0); N_coord(7,2)=nd7Crds(1); N_coord(7,3)=nd7Crds(2);
+    N_coord(8,1)=nd8Crds(0); N_coord(8,2)=nd8Crds(1); N_coord(8,3)=nd8Crds(2);
 
     //N_coord.print();
 
@@ -1316,15 +1316,15 @@ XC::BJtensor XC::EightNodeBrick::incr_disp(void) const
     //for( int i=0 ; i<8 ; i++ )   // Xiaoyan changed from 20 to 8 for 8 nodes
     //
     //  {
-    //    // increment_disp.val(i+1,1)= nodes[ G_N_numbs[i] ].incremental_translation_x();
-    //    // increment_disp.val(i+1,2)= nodes[ G_N_numbs[i] ].incremental_translation_y();
-    //    // increment_disp.val(i+1,3)= nodes[ G_N_numbs[i] ].incremental_translation_z();
+    //    // increment_disp(i+1,1)= nodes[ G_N_numbs[i] ].incremental_translation_x();
+    //    // increment_disp(i+1,2)= nodes[ G_N_numbs[i] ].incremental_translation_y();
+    //    // increment_disp(i+1,3)= nodes[ G_N_numbs[i] ].incremental_translation_z();
     //    // Xiaoyan changed to the following 09/27/00
     //    Vector IncremenDis= nodes[ G_N_numbs[i] ].getIncrDisp();
     //
-    //    increment_disp.val(i+1,1)= IncremenDis(0);
-    //    increment_disp.val(i+1,2)= IncremenDis(1);
-    //    increment_disp.val(i+1,3)= IncremenDis(2);
+    //    increment_disp(i+1,1)= IncremenDis(0);
+    //    increment_disp(i+1,2)= IncremenDis(1);
+    //    increment_disp(i+1,3)= IncremenDis(2);
     //
     //  }
 
@@ -1363,14 +1363,14 @@ XC::BJtensor XC::EightNodeBrick::incr_disp(void) const
     //std::cerr << " incr del node " << theNodes[7]->getTag() << " x " << IncrDis8(0) <<" y "<< IncrDis8(1) << " z "<< IncrDis8(2) << std::std::endl;
     //}
 
-    increment_disp.val(1,1)=IncrDis1(0); increment_disp.val(1,2)=IncrDis1(1);increment_disp.val(1,3)=IncrDis1(2);
-    increment_disp.val(2,1)=IncrDis2(0); increment_disp.val(2,2)=IncrDis2(1);increment_disp.val(2,3)=IncrDis2(2);
-    increment_disp.val(3,1)=IncrDis3(0); increment_disp.val(3,2)=IncrDis3(1);increment_disp.val(3,3)=IncrDis3(2);
-    increment_disp.val(4,1)=IncrDis4(0); increment_disp.val(4,2)=IncrDis4(1);increment_disp.val(4,3)=IncrDis4(2);
-    increment_disp.val(5,1)=IncrDis5(0); increment_disp.val(5,2)=IncrDis5(1);increment_disp.val(5,3)=IncrDis5(2);
-    increment_disp.val(6,1)=IncrDis6(0); increment_disp.val(6,2)=IncrDis6(1);increment_disp.val(6,3)=IncrDis6(2);
-    increment_disp.val(7,1)=IncrDis7(0); increment_disp.val(7,2)=IncrDis7(1);increment_disp.val(7,3)=IncrDis7(2);
-    increment_disp.val(8,1)=IncrDis8(0); increment_disp.val(8,2)=IncrDis8(1);increment_disp.val(8,3)=IncrDis8(2);
+    increment_disp(1,1)=IncrDis1(0); increment_disp(1,2)=IncrDis1(1);increment_disp(1,3)=IncrDis1(2);
+    increment_disp(2,1)=IncrDis2(0); increment_disp(2,2)=IncrDis2(1);increment_disp(2,3)=IncrDis2(2);
+    increment_disp(3,1)=IncrDis3(0); increment_disp(3,2)=IncrDis3(1);increment_disp(3,3)=IncrDis3(2);
+    increment_disp(4,1)=IncrDis4(0); increment_disp(4,2)=IncrDis4(1);increment_disp(4,3)=IncrDis4(2);
+    increment_disp(5,1)=IncrDis5(0); increment_disp(5,2)=IncrDis5(1);increment_disp(5,3)=IncrDis5(2);
+    increment_disp(6,1)=IncrDis6(0); increment_disp(6,2)=IncrDis6(1);increment_disp(6,3)=IncrDis6(2);
+    increment_disp(7,1)=IncrDis7(0); increment_disp(7,2)=IncrDis7(1);increment_disp(7,3)=IncrDis7(2);
+    increment_disp(8,1)=IncrDis8(0); increment_disp(8,2)=IncrDis8(1);increment_disp(8,3)=IncrDis8(2);
 
     return increment_disp;
   }
@@ -1399,14 +1399,14 @@ XC::BJtensor XC::EightNodeBrick::total_disp(void) const
     const XC::Vector &TotDis8= theNodes[7]->getTrialDisp();
 //    std::cerr << "tot node " << theNodes[7]->getTag() << " x " << TotDis8(0) <<" y "<< TotDis8(1) << " z "<< TotDis8(2) << std::endl;
 
-    total_disp.val(1,1)=TotDis1(0); total_disp.val(1,2)=TotDis1(1);total_disp.val(1,3)=TotDis1(2);
-    total_disp.val(2,1)=TotDis2(0); total_disp.val(2,2)=TotDis2(1);total_disp.val(2,3)=TotDis2(2);
-    total_disp.val(3,1)=TotDis3(0); total_disp.val(3,2)=TotDis3(1);total_disp.val(3,3)=TotDis3(2);
-    total_disp.val(4,1)=TotDis4(0); total_disp.val(4,2)=TotDis4(1);total_disp.val(4,3)=TotDis4(2);
-    total_disp.val(5,1)=TotDis5(0); total_disp.val(5,2)=TotDis5(1);total_disp.val(5,3)=TotDis5(2);
-    total_disp.val(6,1)=TotDis6(0); total_disp.val(6,2)=TotDis6(1);total_disp.val(6,3)=TotDis6(2);
-    total_disp.val(7,1)=TotDis7(0); total_disp.val(7,2)=TotDis7(1);total_disp.val(7,3)=TotDis7(2);
-    total_disp.val(8,1)=TotDis8(0); total_disp.val(8,2)=TotDis8(1);total_disp.val(8,3)=TotDis8(2);
+    total_disp(1,1)=TotDis1(0); total_disp(1,2)=TotDis1(1);total_disp(1,3)=TotDis1(2);
+    total_disp(2,1)=TotDis2(0); total_disp(2,2)=TotDis2(1);total_disp(2,3)=TotDis2(2);
+    total_disp(3,1)=TotDis3(0); total_disp(3,2)=TotDis3(1);total_disp(3,3)=TotDis3(2);
+    total_disp(4,1)=TotDis4(0); total_disp(4,2)=TotDis4(1);total_disp(4,3)=TotDis4(2);
+    total_disp(5,1)=TotDis5(0); total_disp(5,2)=TotDis5(1);total_disp(5,3)=TotDis5(2);
+    total_disp(6,1)=TotDis6(0); total_disp(6,2)=TotDis6(1);total_disp(6,3)=TotDis6(2);
+    total_disp(7,1)=TotDis7(0); total_disp(7,2)=TotDis7(1);total_disp(7,3)=TotDis7(2);
+    total_disp(8,1)=TotDis8(0); total_disp(8,2)=TotDis8(1);total_disp(8,3)=TotDis8(2);
 
     return total_disp;
   }
@@ -1425,15 +1425,15 @@ XC::BJtensor XC::EightNodeBrick::total_disp(void) const
     //for( int i=0 ; i<8 ; i++ )  // Xiaoyan changed from 20 to 8 for 8 nodes
     //
     //  {
-    //    // total_disp.val(i+1,1)= nodes[ G_N_numbs[i] ].total_translation_x(u);
-    //    // total_disp.val(i+1,2)= nodes[ G_N_numbs[i] ].total_translation_y(u);
-    //    // total_disp.val(i+1,3)= nodes[ G_N_numbs[i] ].total_translation_z(u);
+    //    // total_disp(i+1,1)= nodes[ G_N_numbs[i] ].total_translation_x(u);
+    //    // total_disp(i+1,2)= nodes[ G_N_numbs[i] ].total_translation_y(u);
+    //    // total_disp(i+1,3)= nodes[ G_N_numbs[i] ].total_translation_z(u);
     //    // Xiaoyan changed to the following 09/27/00
     //    Vector TotalTranDis= nodes[ G_N_numbs[i] ].getDisp();
     //
-    //    total_disp.val(i+1,1)= TotalTranDis(0);
-    //  total_disp.val(i+1,2)= TotalTranDis(1);
-    //    total_disp.val(i+1,3)= TotalTranDis(2);
+    //    total_disp(i+1,1)= TotalTranDis(0);
+    //  total_disp(i+1,2)= TotalTranDis(1);
+    //    total_disp(i+1,3)= TotalTranDis(2);
     //
     //  }
 
@@ -1447,14 +1447,14 @@ XC::BJtensor XC::EightNodeBrick::total_disp(void) const
     const XC::Vector &TotDis7= theNodes[6]->getTrialDisp();
     const XC::Vector &TotDis8= theNodes[7]->getTrialDisp();
 
-    total_disp.val(1,1)=TotDis1(0); total_disp.val(1,2)=TotDis1(1);total_disp.val(1,3)=TotDis1(2);
-    total_disp.val(2,1)=TotDis2(0); total_disp.val(2,2)=TotDis2(1);total_disp.val(2,3)=TotDis2(2);
-    total_disp.val(3,1)=TotDis3(0); total_disp.val(3,2)=TotDis3(1);total_disp.val(3,3)=TotDis3(2);
-    total_disp.val(4,1)=TotDis4(0); total_disp.val(4,2)=TotDis4(1);total_disp.val(4,3)=TotDis4(2);
-    total_disp.val(5,1)=TotDis5(0); total_disp.val(5,2)=TotDis5(1);total_disp.val(5,3)=TotDis5(2);
-    total_disp.val(6,1)=TotDis6(0); total_disp.val(6,2)=TotDis6(1);total_disp.val(6,3)=TotDis6(2);
-    total_disp.val(7,1)=TotDis7(0); total_disp.val(7,2)=TotDis7(1);total_disp.val(7,3)=TotDis7(2);
-    total_disp.val(8,1)=TotDis8(0); total_disp.val(8,2)=TotDis8(1);total_disp.val(8,3)=TotDis8(2);
+    total_disp(1,1)=TotDis1(0); total_disp(1,2)=TotDis1(1);total_disp(1,3)=TotDis1(2);
+    total_disp(2,1)=TotDis2(0); total_disp(2,2)=TotDis2(1);total_disp(2,3)=TotDis2(2);
+    total_disp(3,1)=TotDis3(0); total_disp(3,2)=TotDis3(1);total_disp(3,3)=TotDis3(2);
+    total_disp(4,1)=TotDis4(0); total_disp(4,2)=TotDis4(1);total_disp(4,3)=TotDis4(2);
+    total_disp(5,1)=TotDis5(0); total_disp(5,2)=TotDis5(1);total_disp(5,3)=TotDis5(2);
+    total_disp(6,1)=TotDis6(0); total_disp(6,2)=TotDis6(1);total_disp(6,3)=TotDis6(2);
+    total_disp(7,1)=TotDis7(0); total_disp(7,2)=TotDis7(1);total_disp(7,3)=TotDis7(2);
+    total_disp(8,1)=TotDis8(0); total_disp(8,2)=TotDis8(1);total_disp(8,3)=TotDis8(2);
 
     return total_disp;
   }
@@ -2201,19 +2201,19 @@ void XC::EightNodeBrick::computeGaussPoint()
     //  //int global_node_number= get_global_number_of_node(ncount-1);
     //  // printf("global node num %d",global_node_number);
     //
-    //    //   NodalCoord.val(1,ncount)= nodes[global_node_number].x_coordinate();
-    //    //   NodalCoord.val(2,ncount)= nodes[global_node_number].y_coordinate();
-    //    //   NodalCoord.val(3,ncount)= nodes[global_node_number].z_coordinate();
+    //    //   NodalCoord(1,ncount)= nodes[global_node_number].x_coordinate();
+    //    //   NodalCoord(2,ncount)= nodes[global_node_number].y_coordinate();
+    //    //   NodalCoord(3,ncount)= nodes[global_node_number].z_coordinate();
     //    // Xiaoyan changed to the following:  09/27/00
     //  Vector Coordinates= nodes[global_node_number].getCrds();
     //
-    //    NodalCoord.val(1,ncount)= Coordinates(0);
-    //    NodalCoord.val(2,ncount)= Coordinates(1);
-    //    NodalCoord.val(3,ncount)= Coordinates(2);
+    //    NodalCoord(1,ncount)= Coordinates(0);
+    //    NodalCoord(2,ncount)= Coordinates(1);
+    //    NodalCoord(3,ncount)= Coordinates(2);
     //printf("global point %d     x=%+.6e   y=%+.6e   z=%+.6e \n ", global_node_number,
-    //                                                      NodalCoord.val(1,ncount),
-    //                  NodalCoord.val(2,ncount),
-    //                  NodalCoord.val(3,ncount));
+    //                                                      NodalCoord(1,ncount),
+    //                  NodalCoord(2,ncount),
+    //                  NodalCoord(3,ncount));
     //}
 
     //Zhaohui using node pointers, which come from the XC::Domain
@@ -2226,14 +2226,14 @@ void XC::EightNodeBrick::computeGaussPoint()
     const XC::Vector &nd7Crds= theNodes[6]->getCrds();
     const XC::Vector &nd8Crds= theNodes[7]->getCrds();
 
-    NodalCoord.val(1,1)=nd1Crds(0); NodalCoord.val(2,1)=nd1Crds(1); NodalCoord.val(3,1)=nd1Crds(2);
-    NodalCoord.val(1,2)=nd2Crds(0); NodalCoord.val(2,2)=nd2Crds(1); NodalCoord.val(3,2)=nd2Crds(2);
-    NodalCoord.val(1,3)=nd3Crds(0); NodalCoord.val(2,3)=nd3Crds(1); NodalCoord.val(3,3)=nd3Crds(2);
-    NodalCoord.val(1,4)=nd4Crds(0); NodalCoord.val(2,4)=nd4Crds(1); NodalCoord.val(3,4)=nd4Crds(2);
-    NodalCoord.val(1,5)=nd5Crds(0); NodalCoord.val(2,5)=nd5Crds(1); NodalCoord.val(3,5)=nd5Crds(2);
-    NodalCoord.val(1,6)=nd6Crds(0); NodalCoord.val(2,6)=nd6Crds(1); NodalCoord.val(3,6)=nd6Crds(2);
-    NodalCoord.val(1,7)=nd7Crds(0); NodalCoord.val(2,7)=nd7Crds(1); NodalCoord.val(3,7)=nd7Crds(2);
-    NodalCoord.val(1,8)=nd8Crds(0); NodalCoord.val(2,8)=nd8Crds(1); NodalCoord.val(3,8)=nd8Crds(2);
+    NodalCoord(1,1)=nd1Crds(0); NodalCoord(2,1)=nd1Crds(1); NodalCoord(3,1)=nd1Crds(2);
+    NodalCoord(1,2)=nd2Crds(0); NodalCoord(2,2)=nd2Crds(1); NodalCoord(3,2)=nd2Crds(2);
+    NodalCoord(1,3)=nd3Crds(0); NodalCoord(2,3)=nd3Crds(1); NodalCoord(3,3)=nd3Crds(2);
+    NodalCoord(1,4)=nd4Crds(0); NodalCoord(2,4)=nd4Crds(1); NodalCoord(3,4)=nd4Crds(2);
+    NodalCoord(1,5)=nd5Crds(0); NodalCoord(2,5)=nd5Crds(1); NodalCoord(3,5)=nd5Crds(2);
+    NodalCoord(1,6)=nd6Crds(0); NodalCoord(2,6)=nd6Crds(1); NodalCoord(3,6)=nd6Crds(2);
+    NodalCoord(1,7)=nd7Crds(0); NodalCoord(2,7)=nd7Crds(1); NodalCoord(3,7)=nd7Crds(2);
+    NodalCoord(1,8)=nd8Crds(0); NodalCoord(2,8)=nd8Crds(1); NodalCoord(3,8)=nd8Crds(2);
 
 
     for( short GP_c_r= 1 ; GP_c_r <= r_integration_order ; GP_c_r++ )
@@ -2256,24 +2256,24 @@ void XC::EightNodeBrick::computeGaussPoint()
           for(int encount=1 ; encount <= 8 ; encount++ )
                 //         for(int encount=0 ; encount <= 7 ; encount++ )
            {
-                  //  matpointCoord.val(1,where+1) =+NodalCoord.val(1,where+1) * H.val(encount*3-2,1);
-                  //  matpointCoord.val(2,where+1) =+NodalCoord.val(2,where+1) * H.val(encount*3-1,2);
-                  //  matpointCoord.val(3,where+1) =+NodalCoord.val(3,where+1) * H.val(encount*3-0,3);
-                  matpointCoord.val(1,where+1) +=NodalCoord.val(1,encount) * H.val(encount*3-2,1);
-                  //::printf("-- NO nodal, H_val :%d %+.2e %+.2e %+.5e\n", encount,NodalCoord.val(1,encount),H.val(encount*3-2,1),matpointCoord.val(1,where+1) );
-                  matpointCoord.val(2,where+1) +=NodalCoord.val(2,encount) * H.val(encount*3-1,2);
-                  matpointCoord.val(3,where+1) +=NodalCoord.val(3,encount) * H.val(encount*3-0,3);
+                  //  matpointCoord(1,where+1) =+NodalCoord(1,where+1) * H(encount*3-2,1);
+                  //  matpointCoord(2,where+1) =+NodalCoord(2,where+1) * H(encount*3-1,2);
+                  //  matpointCoord(3,where+1) =+NodalCoord(3,where+1) * H(encount*3-0,3);
+                  matpointCoord(1,where+1) +=NodalCoord(1,encount) * H(encount*3-2,1);
+                  //::printf("-- NO nodal, H_val :%d %+.2e %+.2e %+.5e\n", encount,NodalCoord(1,encount),H(encount*3-2,1),matpointCoord(1,where+1) );
+                  matpointCoord(2,where+1) +=NodalCoord(2,encount) * H(encount*3-1,2);
+                  matpointCoord(3,where+1) +=NodalCoord(3,encount) * H(encount*3-0,3);
 
       }
 
                //::printf("gauss point# %d   %+.6e %+.6e %+.6e \n", where+1,
-               //                                        matpointCoord.val(1,where+1),
-               //                                        matpointCoord.val(2,where+1),
-               //                                        matpointCoord.val(3,where+1));
+               //                                        matpointCoord(1,where+1),
+               //                                        matpointCoord(2,where+1),
+               //                                        matpointCoord(3,where+1));
 
-         Gsc8(where*3+1)= matpointCoord.val(1,where+1);
-         Gsc8(where*3+2)= matpointCoord.val(2,where+1);
-         Gsc8(where*3+3)= matpointCoord.val(3,where+1);
+         Gsc8(where*3+1)= matpointCoord(1,where+1);
+         Gsc8(where*3+2)= matpointCoord(2,where+1);
+         Gsc8(where*3+3)= matpointCoord(3,where+1);
 
     //matpoint[where].reportTensor("");
 
@@ -2317,18 +2317,18 @@ void XC::EightNodeBrick::reportTensorF(FILE * fp)
     //  int global_node_number= get_global_number_of_node(ncount-1);
     //  // printf("global node num %d",global_node_number);
     //
-    //    //        NodalCoord.val(1,ncount)= nodes[global_node_number].x_coordinate();
-    //    //        NodalCoord.val(2,ncount)= nodes[global_node_number].y_coordinate();
-    //    //        NodalCoord.val(3,ncount)= nodes[global_node_number].z_coordinate();
+    //    //        NodalCoord(1,ncount)= nodes[global_node_number].x_coordinate();
+    //    //        NodalCoord(2,ncount)= nodes[global_node_number].y_coordinate();
+    //    //        NodalCoord(3,ncount)= nodes[global_node_number].z_coordinate();
     //    // Xiaoyan changed to the following:  09/27/00
     //  Vector Coordinates= nodes[global_node_number].getCrds();
-    //    NodalCoord.val(1,ncount)= Coordinates(0);
-    //    NodalCoord.val(2,ncount)= Coordinates(1);
-    //    NodalCoord.val(3,ncount)= Coordinates(2);
+    //    NodalCoord(1,ncount)= Coordinates(0);
+    //    NodalCoord(2,ncount)= Coordinates(1);
+    //    NodalCoord(3,ncount)= Coordinates(2);
     //printf("global point %d     x=%+.6e   y=%+.6e   z=%+.6e \n ", global_node_number,
-    //                                                      NodalCoord.val(1,ncount),
-    //                  NodalCoord.val(2,ncount),
-    //                  NodalCoord.val(3,ncount));
+    //                                                      NodalCoord(1,ncount),
+    //                  NodalCoord(2,ncount),
+    //                  NodalCoord(3,ncount));
     //  }
 
     //Zhaohui using node pointers, which come from the XC::Domain
@@ -2341,14 +2341,14 @@ void XC::EightNodeBrick::reportTensorF(FILE * fp)
     const XC::Vector &nd7Crds= theNodes[6]->getCrds();
     const XC::Vector &nd8Crds= theNodes[7]->getCrds();
 
-    NodalCoord.val(1,1)=nd1Crds(0); NodalCoord.val(2,1)=nd1Crds(1); NodalCoord.val(3,1)=nd1Crds(2);
-    NodalCoord.val(1,2)=nd2Crds(0); NodalCoord.val(2,2)=nd2Crds(1); NodalCoord.val(3,2)=nd2Crds(2);
-    NodalCoord.val(1,3)=nd3Crds(0); NodalCoord.val(2,3)=nd3Crds(1); NodalCoord.val(3,3)=nd3Crds(2);
-    NodalCoord.val(1,4)=nd4Crds(0); NodalCoord.val(2,4)=nd4Crds(1); NodalCoord.val(3,4)=nd4Crds(2);
-    NodalCoord.val(1,5)=nd5Crds(0); NodalCoord.val(2,5)=nd5Crds(1); NodalCoord.val(3,5)=nd5Crds(2);
-    NodalCoord.val(1,6)=nd6Crds(0); NodalCoord.val(2,6)=nd6Crds(1); NodalCoord.val(3,6)=nd6Crds(2);
-    NodalCoord.val(1,7)=nd7Crds(0); NodalCoord.val(2,7)=nd7Crds(1); NodalCoord.val(3,7)=nd7Crds(2);
-    NodalCoord.val(1,8)=nd8Crds(0); NodalCoord.val(2,8)=nd8Crds(1); NodalCoord.val(3,8)=nd8Crds(2);
+    NodalCoord(1,1)=nd1Crds(0); NodalCoord(2,1)=nd1Crds(1); NodalCoord(3,1)=nd1Crds(2);
+    NodalCoord(1,2)=nd2Crds(0); NodalCoord(2,2)=nd2Crds(1); NodalCoord(3,2)=nd2Crds(2);
+    NodalCoord(1,3)=nd3Crds(0); NodalCoord(2,3)=nd3Crds(1); NodalCoord(3,3)=nd3Crds(2);
+    NodalCoord(1,4)=nd4Crds(0); NodalCoord(2,4)=nd4Crds(1); NodalCoord(3,4)=nd4Crds(2);
+    NodalCoord(1,5)=nd5Crds(0); NodalCoord(2,5)=nd5Crds(1); NodalCoord(3,5)=nd5Crds(2);
+    NodalCoord(1,6)=nd6Crds(0); NodalCoord(2,6)=nd6Crds(1); NodalCoord(3,6)=nd6Crds(2);
+    NodalCoord(1,7)=nd7Crds(0); NodalCoord(2,7)=nd7Crds(1); NodalCoord(3,7)=nd7Crds(2);
+    NodalCoord(1,8)=nd8Crds(0); NodalCoord(2,8)=nd8Crds(1); NodalCoord(3,8)=nd8Crds(2);
 
     for( short GP_c_r= 1 ; GP_c_r <= r_integration_order ; GP_c_r++ )
       {
@@ -2370,20 +2370,20 @@ void XC::EightNodeBrick::reportTensorF(FILE * fp)
           for(int encount=1 ; encount <= 8 ; encount++ )
                 //         for(int encount=0 ; encount <= 7 ; encount++ )
          {
-                  //  matpointCoord.val(1,where+1) =+NodalCoord.val(1,where+1) * H.val(encount*3-2,1);
-                  //  matpointCoord.val(2,where+1) =+NodalCoord.val(2,where+1) * H.val(encount*3-1,2);
-                  //  matpointCoord.val(3,where+1) =+NodalCoord.val(3,where+1) * H.val(encount*3-0,3);
-                  matpointCoord.val(1,where+1) +=NodalCoord.val(1,encount) * H.val(encount*3-2,1);
-                  //::printf("-- NO nodal, H_val :%d %+.2e %+.2e %+.5e\n", encount,NodalCoord.val(1,encount),H.val(encount*3-2,1),matpointCoord.val(1,where+1) );
-                  matpointCoord.val(2,where+1) +=NodalCoord.val(2,encount) * H.val(encount*3-1,2);
-                  matpointCoord.val(3,where+1) +=NodalCoord.val(3,encount) * H.val(encount*3-0,3);
+                  //  matpointCoord(1,where+1) =+NodalCoord(1,where+1) * H(encount*3-2,1);
+                  //  matpointCoord(2,where+1) =+NodalCoord(2,where+1) * H(encount*3-1,2);
+                  //  matpointCoord(3,where+1) =+NodalCoord(3,where+1) * H(encount*3-0,3);
+                  matpointCoord(1,where+1) +=NodalCoord(1,encount) * H(encount*3-2,1);
+                  //::printf("-- NO nodal, H_val :%d %+.2e %+.2e %+.5e\n", encount,NodalCoord(1,encount),H(encount*3-2,1),matpointCoord(1,where+1) );
+                  matpointCoord(2,where+1) +=NodalCoord(2,encount) * H(encount*3-1,2);
+                  matpointCoord(3,where+1) +=NodalCoord(3,encount) * H(encount*3-0,3);
 
          }
 
     fprintf(fp, "gauss point# %d   %+.6e %+.6e %+.6e \n", where+1,
-                                                          matpointCoord.val(1,where+1),
-                                                          matpointCoord.val(2,where+1),
-                                                          matpointCoord.val(3,where+1));
+                                                          matpointCoord(1,where+1),
+                                                          matpointCoord(2,where+1),
+                                                          matpointCoord(3,where+1));
 
     //matpoint[where].reportTensor("");
 
@@ -2471,16 +2471,16 @@ int XC::EightNodeBrick::commitState(void)
 //           stnprin= stn.principal();
 //
 //  //   std::cerr << "\nGauss Point: " << i << std::endl;
-//  //   std::cerr << "sigma11: "<< st.cval(1, 1) << " "<< st.cval(1, 2) << " " << st.cval(1, 3) << std::endl;
-//  //   std::cerr << "sigma21: "<< st.cval(2, 1) << " "<< st.cval(2, 2) << " " << st.cval(2, 3) << std::endl;
-//  //    std::cerr << "sigma31: "<< st.cval(3, 1) << " "<< st.cval(3, 2) << " " << st.cval(3, 3) << std::endl << std::endl;
+//  //   std::cerr << "sigma11: "<< st(1, 1) << " "<< st(1, 2) << " " << st(1, 3) << std::endl;
+//  //   std::cerr << "sigma21: "<< st(2, 1) << " "<< st(2, 2) << " " << st(2, 3) << std::endl;
+//  //    std::cerr << "sigma31: "<< st(3, 1) << " "<< st(3, 2) << " " << st(3, 3) << std::endl << std::endl;
 //
-//     //std::cerr << "strain11: "<< stn.cval(1, 1) << " "<< stn.cval(1, 2) << " " << stn.cval(1, 3) << std::endl;
-//     //std::cerr << "strain21: "<< stn.cval(2, 1) << " "<< stn.cval(2, 2) << " " << stn.cval(2, 3) << std::endl;
-//      //std::cerr << "strain31: "<< stn.cval(3, 1) << " "<< stn.cval(3, 2) << " " << stn.cval(3, 3) << std::endl;
+//     //std::cerr << "strain11: "<< stn(1, 1) << " "<< stn(1, 2) << " " << stn(1, 3) << std::endl;
+//     //std::cerr << "strain21: "<< stn(2, 1) << " "<< stn(2, 2) << " " << stn(2, 3) << std::endl;
+//      //std::cerr << "strain31: "<< stn(3, 1) << " "<< stn(3, 2) << " " << stn(3, 3) << std::endl;
 //
-//     //double  p= -1*( prin.cval(1, 1)+ prin.cval(2, 2) +prin.cval(3, 3) )/3.0;
-//     //double  ev= -1*( stnprin.cval(1, 1)+ stnprin.cval(2, 2) + stnprin.cval(3, 3) )/3.0;
+//     //double  p= -1*( prin(1, 1)+ prin(2, 2) +prin(3, 3) )/3.0;
+//     //double  ev= -1*( stnprin(1, 1)+ stnprin(2, 2) + stnprin(3, 3) )/3.0;
 //     //std::cerr << "   " << p;
 //
 //     //if(p < 0)
@@ -2488,17 +2488,17 @@ int XC::EightNodeBrick::commitState(void)
 //
 //
 //     double q;
-//     //if( fabs(prin.cval(1, 1) - prin.cval(2, 2) ) <=  0.0001 )
-//           if( fabs(prin.cval(1, 1) - prin.cval(2, 2) ) <=  0.001 )
+//     //if( fabs(prin(1, 1) - prin(2, 2) ) <=  0.0001 )
+//           if( fabs(prin(1, 1) - prin(2, 2) ) <=  0.001 )
 //           {
-//               q= prin.cval(1, 1) - prin.cval(3, 3);
+//               q= prin(1, 1) - prin(3, 3);
 //               //std::cerr << "1= 2";
 //           }
 //           else
-//               q= prin.cval(3, 3) - prin.cval(1, 1);
+//               q= prin(3, 3) - prin(1, 1);
 //
 //     //Triaxial compr.  fabs
-//           //std::cerr << "     " << st.cval(2, 3); //tau_yz
+//           //std::cerr << "     " << st(2, 3); //tau_yz
 //     //std::cerr << "     " << q;
 //     ////----std::cerr << "     " << fabs(q);
 //
@@ -2517,8 +2517,8 @@ int XC::EightNodeBrick::commitState(void)
 //  //out22Jan2001    }
 //
 //      //double  p= st.p_hydrostatic();
-//      //double  p= -1*( prin.cval(1, 1)+ prin.cval(2, 2) +prin.cval(3, 3) )/3.0;
-//            //std::cerr << "\n " << prin.cval(1, 1) << "   " << prin.cval(2, 2) << "  " <<  prin.cval(3, 3) << std::endl;
+//      //double  p= -1*( prin(1, 1)+ prin(2, 2) +prin(3, 3) )/3.0;
+//            //std::cerr << "\n " << prin(1, 1) << "   " << prin(2, 2) << "  " <<  prin(3, 3) << std::endl;
 //            //if( getTag() == 960)
 //            //std::cerr << " El= " << getTag() << " , p    " << p << std::endl;
 //
@@ -2535,13 +2535,13 @@ int XC::EightNodeBrick::commitState(void)
 //            //std::cerr << "        " << st.q_deviatoric();
 //
 //            //double q;
-//            //if( fabs(prin.cval(1, 1) - prin.cval(2, 2) ) <=  0.0001 )
+//            //if( fabs(prin(1, 1) - prin(2, 2) ) <=  0.0001 )
 //            //{
-//            //    q= prin.cval(1, 1) - prin.cval(3, 3);
+//            //    q= prin(1, 1) - prin(3, 3);
 //            //    //std::cerr << "1= 2";
 //            //}
 //            //else
-//            //    q= prin.cval(3, 3) - prin.cval(1, 1);
+//            //    q= prin(3, 3) - prin(1, 1);
 //
 //            //Triaxial compr.
 //            //std::cerr << "        " << q;
@@ -2633,7 +2633,7 @@ const XC::Matrix &XC::EightNodeBrick::getTangentStiff(void) const
               {
                  Ki= k+3*(i-1);
                  Kj= l+3*(j-1);
-                 K( Ki-1 , Kj-1 )= stifftensor.cval(i,k,l,j);
+                 K( Ki-1 , Kj-1 )= stifftensor(i,k,l,j);
               }
            }
         }
@@ -2688,9 +2688,9 @@ const XC::Matrix &XC::EightNodeBrick::getConsMass ()
   for( int j=1 ; j<=24 ; j++ )
         {
 
-     //M( i-1 , j-1 )= masstensor.cval(i,j);
+     //M( i-1 , j-1 )= masstensor(i,j);
 
-     column_mass += masstensor.cval(i,j);
+     column_mass += masstensor(i,j);
      M( i-1 , j-1 )= 0;
      //tot_mass += M( i-1 , j-1 );
      //if(i == j)
@@ -2725,9 +2725,9 @@ const XC::Matrix &XC::EightNodeBrick::getMass(void) const
         //column_mass= 0.0;
   for( int j=1 ; j<=24 ; j++ )
         {
-     M( i-1 , j-1 )= masstensor.cval(i,j);
+     M( i-1 , j-1 )= masstensor(i,j);
 
-     //column_mass += masstensor.cval(i,j);
+     //column_mass += masstensor(i,j);
      //M( i-1 , j-1 )= 0;
      //tot_mass += M( i-1 , j-1 );
      //if(i == j)
@@ -2960,7 +2960,7 @@ const XC::Vector &XC::EightNodeBrick::getResistingForce(void) const
     //converting nodalforce XC::BJtensor to vector
     for(int i= 0; i< 8; i++)
       for(int j= 0; j < 3; j++)
-          P(i *3 + j)= nodalforces.cval(i+1, j+1);
+          P(i *3 + j)= nodalforces(i+1, j+1);
 
     //std::cerr << "P" << P << '\n';
     //std::cerr << "load" << load << '\n';
@@ -3263,12 +3263,12 @@ int XC::EightNodeBrick::getResponse (int responseID, Information &eleInfo)
                              ((GP_c_r-1)*s_integration_order+GP_c_s-1)*t_integration_order+GP_c_t-1;
 
                           sts= matpoint[i].getStressTensor();
-           InfoS(i*6+1)= sts.cval(1,1); //sigma_xx
-           InfoS(i*6+2)= sts.cval(2,2); //sigma_yy
-           InfoS(i*6+3)= sts.cval(3,3); //sigma_zz
-           InfoS(i*6+4)= sts.cval(1,2); //Assign sigma_xy
-           InfoS(i*6+5)= sts.cval(1,3); //Assign sigma_xz
-           InfoS(i*6+6)= sts.cval(2,3); //Assign sigma_yz
+           InfoS(i*6+1)= sts(1,1); //sigma_xx
+           InfoS(i*6+2)= sts(2,2); //sigma_yy
+           InfoS(i*6+3)= sts(3,3); //sigma_zz
+           InfoS(i*6+4)= sts(1,2); //Assign sigma_xy
+           InfoS(i*6+5)= sts(1,3); //Assign sigma_xz
+           InfoS(i*6+6)= sts(2,3); //Assign sigma_yz
             }
         }
     }
@@ -3311,12 +3311,12 @@ int XC::EightNodeBrick::getResponse (int responseID, Information &eleInfo)
         InfoSpq_all(i*2+1) =sts.q_deviatoric();
         //deviator stress +/-
         principle= sts.principal();
-              //InfoSpq_all(i*2+1) =principle.val(1,1)-principle.val(3,3);
+              //InfoSpq_all(i*2+1) =principle(1,1)-principle(3,3);
 
                            if(i == 7)  {
-          InfoSpq_all(i*2+2)= principle.val(1,1);
-          //InfoSpq_all(i*2+3)= principle.val(2,2);
-          InfoSpq_all(i*2+3)= principle.val(3,3);
+          InfoSpq_all(i*2+2)= principle(1,1);
+          //InfoSpq_all(i*2+3)= principle(2,2);
+          InfoSpq_all(i*2+3)= principle(3,3);
 
           //Output volumetric strain for the eight Gauss point
           straintensor pl_stn;

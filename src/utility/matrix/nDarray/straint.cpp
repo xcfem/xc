@@ -197,9 +197,9 @@ XC::straintensor XC::straintensor::pqtheta2strain( double p, double q, double th
     double ctm = cos( theta - 2.0*PI/3.0 );
     double ctp = cos( theta + 2.0*PI/3.0 );
 
-    ret.val(1,1) = p + temp*ct;
-    ret.val(2,2) = p + temp*ctm;
-    ret.val(3,3) = p + temp*ctp;
+    ret(1,1) = p + temp*ct;
+    ret(2,2) = p + temp*ctm;
+    ret(3,3) = p + temp*ctp;
 
     return ret;
 
@@ -211,9 +211,9 @@ XC::straintensor XC::straintensor::evoleq2strain( double evol, double eq )
   {
     straintensor ret;
 
-    ret.val(1,1) = 1./3.*evol + 1./2.*eq;
-    ret.val(2,2) = 1./3.*evol + 1./2.*eq;
-    ret.val(3,3) = 1./3.*evol - eq;
+    ret(1,1) = 1./3.*evol + 1./2.*eq;
+    ret(2,2) = 1./3.*evol + 1./2.*eq;
+    ret(3,3) = 1./3.*evol - eq;
 
     return ret;
 

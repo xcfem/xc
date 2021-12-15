@@ -247,14 +247,14 @@ XC::BJtensor XC::BJtensor::operator*(const double &rval) const // Added const he
 //ZC      {
 //ZC        case 0:
 //ZC          {
-//ZC            mult.val(1) = val(1) * rval;
+//ZC            mult(1) = val(1) * rval;
 //ZC            break;
 //ZC          }
 //ZC
 //ZC        case 1:
 //ZC          {
 //ZC            for ( int i1=1 ; i1<=this->dim()[0] ; i1++ )
-//ZC              mult.val(i1) = val(i1) * rval;
+//ZC              mult(i1) = val(i1) * rval;
 //ZC            break;
 //ZC          }
 //ZC
@@ -262,7 +262,7 @@ XC::BJtensor XC::BJtensor::operator*(const double &rval) const // Added const he
 //ZC          {
 //ZC            for ( int i2=1 ; i2<=this->dim()[0] ; i2++ )
 //ZC              for ( int j2=1 ; j2<=this->dim()[1] ; j2++ )
-//ZC                mult.val(i2, j2) = val(i2, j2) * rval;
+//ZC                mult(i2, j2) = val(i2, j2) * rval;
 //ZC            break;
 //ZC          }
 //ZC
@@ -271,7 +271,7 @@ XC::BJtensor XC::BJtensor::operator*(const double &rval) const // Added const he
 //ZC            for ( int i3=1 ; i3<=this->dim()[0] ; i3++ )
 //ZC              for ( int j3=1 ; j3<=this->dim()[1] ; j3++ )
 //ZC                for ( int k3=1 ; k3<=this->dim()[2] ; k3++ )
-//ZC                  mult.val(i3, j3, k3) = val(i3, j3, k3) * rval;
+//ZC                  mult(i3, j3, k3) = val(i3, j3, k3) * rval;
 //ZC            break;
 //ZC          }
 //ZC
@@ -281,7 +281,7 @@ XC::BJtensor XC::BJtensor::operator*(const double &rval) const // Added const he
 //ZC              for ( int j4=1 ; j4<=this->dim()[1] ; j4++ )
 //ZC                for ( int k4=1 ; k4<=this->dim()[2] ; k4++ )
 //ZC                  for ( int l4=1 ; l4<=this->dim()[3] ; l4++ )
-//ZC                    mult.val(i4,j4,k4,l4)=val(i4,j4,k4,l4)*rval;
+//ZC                    mult(i4,j4,k4,l4)=val(i4,j4,k4,l4)*rval;
 //ZC            break;
 //ZC          }
 //ZC      }
@@ -618,7 +618,7 @@ XC::BJtensor XC::BJtensor::operator*(const BJtensor &arg) const
 //                                     rid[4],rid[5],rid[6],rid[7]);
 
                       inerr = inerr +
-                      this->val(lid[0],lid[1],lid[2],lid[3]) * arg.val(rid[0],rid[1],rid[2],rid[3]);
+			(*this)(lid[0],lid[1],lid[2],lid[3]) * arg(rid[0],rid[1],rid[2],rid[3]);
 //::printf(" inerr = %12.4lf \n   this[%1d,%1d,%1d,%1d,%1d,%1d,%1d,%1d] = %12.4lf arg[%1d,%1d,%1d,%1d,%1d,%1d,%1d,%1d] = %12.4lf\n",
 //      inerr,lid[0],lid[1],lid[2],lid[3],lid[4],lid[5],lid[6],lid[7],
 //      this->val(lid[0],lid[1],lid[2],lid[3],lid[4],lid[5],lid[6],lid[7]),
@@ -627,9 +627,9 @@ XC::BJtensor XC::BJtensor::operator*(const BJtensor &arg) const
 
 //XC::DEBUGprint::printf("inerr=%6.2lf this[%1d,%1d,%1d,%1d]=%6.2lf arg[%1d,%1d,%1d,%1d]=%6.2lf\n",
 //DEBUGprint      inerr,lid[0],lid[1],lid[2],lid[3],
-//DEBUGprint      this->val(lid[0],lid[1],lid[2],lid[3]),
+//DEBUGprint      (*this)(lid[0],lid[1],lid[2],lid[3]),
 //DEBUGprint      rid[0],rid[1],rid[2],rid[3],
-//DEBUGprint      arg.val(rid[0],rid[1],rid[2],rid[3]));
+//DEBUGprint      arg(rid[0],rid[1],rid[2],rid[3]));
 
                     }
 
@@ -660,7 +660,7 @@ XC::BJtensor XC::BJtensor::operator*(const BJtensor &arg) const
 //      resd[0],resd[1],resd[2],resd[3],resd[4],resd[5],resd[6],resd[7],
 //      result(resd[0],resd[1],resd[2],resd[3],resd[4],resd[5],resd[6],resd[7]));
 
-          result.val(resd[0],resd[1],resd[2],resd[3]) = inerr ;
+          result(resd[0],resd[1],resd[2],resd[3]) = inerr ;
 //XC::DEBUGprint::printf("##################################### result[%1d,%1d,%1d,%1d]=%8.2lf\n",
 //DEBUGprint             resd[0],resd[1],resd[2],resd[3],
 //DEBUGprint      result(resd[0],resd[1],resd[2],resd[3]));
@@ -802,14 +802,14 @@ XC::BJtensor XC::BJtensor::operator/(const BJtensor &rval) const
       {
         case 0:
           {
-            div.val(1) = val(1)/rvalDouble;
+            div(1) = val(1)/rvalDouble;
             break;
           }
 
         case 1:
           {
             for ( int i1=1 ; i1<=3 ; i1++ )
-              div.val(i1) = val(i1)/rvalDouble;
+              div(i1) = val(i1)/rvalDouble;
             break;
           }
 
@@ -817,7 +817,7 @@ XC::BJtensor XC::BJtensor::operator/(const BJtensor &rval) const
           {
             for ( int i2=1 ; i2<=3 ; i2++ )
               for ( int j2=1 ; j2<=3 ; j2++ )
-                div.val(i2, j2) = val(i2, j2)/rvalDouble;
+                div(i2, j2) = val(i2, j2)/rvalDouble;
             break;
           }
 
@@ -826,7 +826,7 @@ XC::BJtensor XC::BJtensor::operator/(const BJtensor &rval) const
             for ( int i3=1 ; i3<=3 ; i3++ )
               for ( int j3=1 ; j3<=3 ; j3++ )
                 for ( int k3=1 ; k3<=3 ; k3++ )
-                  div.val(i3, j3, k3) = val(i3, j3, k3)/rvalDouble;
+                  div(i3, j3, k3) = val(i3, j3, k3)/rvalDouble;
             break;
           }
 
@@ -836,7 +836,7 @@ XC::BJtensor XC::BJtensor::operator/(const BJtensor &rval) const
               for ( int j4=1 ; j4<=3 ; j4++ )
                 for ( int k4=1 ; k4<=3 ; k4++ )
                   for ( int l4=1 ; l4<=3 ; l4++ )
-                    div.val(i4,j4,k4,l4)=val(i4,j4,k4,l4)/rvalDouble;
+                    div(i4,j4,k4,l4)=val(i4,j4,k4,l4)/rvalDouble;
             break;
           }
       }
@@ -861,7 +861,7 @@ XC::BJtensor XC::BJtensor::transpose0110() const
      for ( int j=1 ; j<=dim()[1] ; j++ )
        for ( int k=1 ; k<=dim()[2] ; k++ )
          for ( int l=1 ; l<=dim()[3] ; l++ )
-           trans1.val(i, j, k, l) = cval(i, k, j, l);
+           trans1(i, j, k, l) = (*this)(i, k, j, l);
 
     trans1.null_indices();
 //    null_indices();
@@ -881,7 +881,7 @@ XC::BJtensor XC::BJtensor::transposeoverbar() const // same as transpose0110
      for ( int j=1 ; j<=dim()[1] ; j++ )
        for ( int k=1 ; k<=dim()[2] ; k++ )
          for ( int l=1 ; l<=dim()[3] ; l++ )
-           trans1.val(i, j, k, l) = cval(i, k, j, l);
+           trans1(i, j, k, l) = (*this)(i, k, j, l);
 
     trans1.null_indices();
 //    null_indices();
@@ -900,7 +900,7 @@ XC::BJtensor XC::BJtensor::transpose0101() const
      for ( int j=1 ; j<=dim()[1] ; j++ )
        for ( int k=1 ; k<=dim()[2] ; k++ )
          for ( int l=1 ; l<=dim()[3] ; l++ )
-           trans1.val(i, j, k, l) = cval(i, l, k, j);
+           trans1(i, j, k, l) = (*this)(i, l, k, j);
 
     trans1.null_indices();
 //    null_indices();
@@ -920,7 +920,7 @@ XC::BJtensor XC::BJtensor::transpose0111() const
      for ( int j=1 ; j<=dim()[1] ; j++ )
        for ( int k=1 ; k<=dim()[2] ; k++ )
          for ( int l=1 ; l<=dim()[3] ; l++ )
-           trans1.val(i, j, k, l) = cval(i, l, j, k);
+           trans1(i, j, k, l) = (*this)(i, l, j, k);
 
     trans1.null_indices();
 //    null_indices();
@@ -939,7 +939,7 @@ XC::BJtensor XC::BJtensor::transposeunderbar() const   // transpose0111()
      for ( int j=1 ; j<=dim()[1] ; j++ )
        for ( int k=1 ; k<=dim()[2] ; k++ )
          for ( int l=1 ; l<=dim()[3] ; l++ )
-           trans1.val(i, j, k, l) = cval(i, l, j, k);
+           trans1(i, j, k, l) = (*this)(i, l, j, k);
 
     trans1.null_indices();
 //    null_indices();
@@ -959,7 +959,7 @@ XC::BJtensor XC::BJtensor::transpose1100() const
      for ( int j=1 ; j<=dim()[1] ; j++ )
        for ( int k=1 ; k<=dim()[2] ; k++ )
          for ( int l=1 ; l<=dim()[3] ; l++ )
-           trans1.val(i, j, k, l) = cval(j, i, k, l);
+           trans1(i, j, k, l) = (*this)(j, i, k, l);
 
     trans1.null_indices();
 //    null_indices();
@@ -979,7 +979,7 @@ XC::BJtensor XC::BJtensor::transpose0011() const
      for ( int j=1 ; j<=dim()[1] ; j++ )
        for ( int k=1 ; k<=dim()[2] ; k++ )
          for ( int l=1 ; l<=dim()[3] ; l++ )
-           trans1.val(i, j, k, l) = cval(i, j, l, k);
+           trans1(i, j, k, l) = (*this)(i, j, l, k);
 
     trans1.null_indices();
 //    null_indices();
@@ -999,7 +999,7 @@ XC::BJtensor XC::BJtensor::transpose1001() const
      for ( int j=1 ; j<=dim()[1] ; j++ )
        for ( int k=1 ; k<=dim()[2] ; k++ )
          for ( int l=1 ; l<=dim()[3] ; l++ )
-           trans1.val(i, j, k, l) = cval(l, j, k, i);
+           trans1(i, j, k, l) = (*this)(l, j, k, i);
 
     trans1.null_indices();
 //    null_indices();
@@ -1020,7 +1020,7 @@ XC::BJtensor XC::BJtensor::transpose11() const
 
    for ( int i=1 ; i<=dim()[0] ; i++ )
      for ( int j=1 ; j<=dim()[1] ; j++ )
-       trans1.val(i, j) = cval(j, i);
+       trans1(i, j) = (*this)(j, i);
 
     trans1.null_indices();
 //    null_indices();
@@ -1079,7 +1079,7 @@ XC::BJtensor XC::BJtensor::symmetrize11() const
 //--          {
 //--//            ::printf(" trace=%.4e  ", val(1));
 //--//            ::printf("\n");
-//--            tr = cval(1);
+//--            tr = (*this)(1);
 //--            break;
 //--          }
 //--
@@ -1090,7 +1090,7 @@ XC::BJtensor XC::BJtensor::symmetrize11() const
 //--::printf("\a\nERROR in trace function : not a squared 1-st rank XC::BJtensor\n");
 //--::exit( 1 );
 //--              }
-//--            tr = cval(1);
+//--            tr = (*this)(1);
 //--            break;
 //--          }
 //--
@@ -1102,7 +1102,7 @@ XC::BJtensor XC::BJtensor::symmetrize11() const
 //--::exit( 1 );
 //--              }
 //--            for ( int i2=1 ; i2<=dim()[0] ; i2++ )
-//--              tr += cval(i2, i2);
+//--              tr += (*this)(i2, i2);
 //--            break;
 //--          }
 //--
@@ -1116,7 +1116,7 @@ XC::BJtensor XC::BJtensor::symmetrize11() const
 //--::exit( 1 );
 //--              }
 //--            for ( int i3=1 ; i3<=dim()[0] ; i3++ )
-//--              tr += cval(i3, i3, i3);
+//--              tr += (*this)(i3, i3, i3);
 //--            break;
 //--          }
 //--
@@ -1131,7 +1131,7 @@ XC::BJtensor XC::BJtensor::symmetrize11() const
 //--::exit( 1 );
 //--              }
 //--            for ( int i4=1 ; i4<=dim()[0] ; i4++ )
-//--              tr += cval(i4, i4, i4, i4);
+//--              tr += (*this)(i4, i4, i4, i4);
 //--            break;
 //--          }
 //--      }
@@ -1152,7 +1152,7 @@ double XC::BJtensor::determinant() const
       {
         case 0:
           {
-            det = cval(1);
+            det = (*this)(1);
             break;
           }
 
@@ -1163,7 +1163,7 @@ double XC::BJtensor::determinant() const
                 ::fprintf(stderr,"\a\n ERROR: only for square XC::BJvector (1) \n");
                 ::exit(1);
               }
-            det = cval(1);
+            det = (*this)(1);
             break;
           }
 
@@ -1231,7 +1231,7 @@ XC::BJmatrix XC::BJtensor::BJtensor2BJmatrix_1() const // convert XC::BJtensor o
       {
         for ( int c22=1 ; c22<=this->dim(2) ; c22++ )
           for ( int c21=1 ; c21<=this->dim(1) ; c21++ )
-            converted.val(c21,c22)=this->cval(c21,c22);
+            converted(c21,c22)=(*this)(c21,c22);
       }
     else if ( BJtensor_order == 4 )
       {
@@ -1243,7 +1243,7 @@ XC::BJmatrix XC::BJtensor::BJtensor2BJmatrix_1() const // convert XC::BJtensor o
                   m41 = this->dim(1)*(c41-1)+c43;
                   m42 = this->dim(2)*(c42-1)+c44;
 
-                  converted.val( m41, m42 ) = this->cval( c41, c42, c43, c44 );
+                  converted( m41, m42 ) = (*this)( c41, c42, c43, c44 );
 
                 }
       }
@@ -1293,7 +1293,7 @@ XC::BJmatrix XC::BJtensor::BJtensor2BJmatrix_2() const // convert XC::BJtensor o
       {
         for ( int c22=1 ; c22<=this->dim(2) ; c22++ )
           for ( int c21=1 ; c21<=this->dim(1) ; c21++ )
-            converted.val(c21,c22)=this->cval(c21,c22);
+            converted(c21,c22)=(*this)(c21,c22);
       }
     else if ( BJtensor_order == 4 )
       {
@@ -1305,7 +1305,7 @@ XC::BJmatrix XC::BJtensor::BJtensor2BJmatrix_2() const // convert XC::BJtensor o
                   m41 = this->dim(1)*(c41-1)+c42;
                   m42 = this->dim(3)*(c43-1)+c44;
 
-                  converted.val( m41, m42 ) = this->cval( c41, c42, c43, c44 );
+                  converted( m41, m42 ) = (*this)( c41, c42, c43, c44 );
 
                 }
       }
@@ -1357,7 +1357,7 @@ XC::BJmatrix XC::BJtensor::BJtensor2BJmatrix_2() const // convert XC::BJtensor o
 //~~~~      {
 //~~~~        for ( int c22=1 ; c22<=this->dim(2) ; c22++ )
 //~~~~          for ( int c21=1 ; c21<=this->dim(1) ; c21++ )
-//~~~~            converted.val(c21,c22)=this->val(c21,c22);
+//~~~~            converted(c21,c22)=(*this)(c21,c22);
 //~~~~      }
 //~~~~    else if ( BJtensor_order == 4 )
 //~~~~      {
@@ -1369,7 +1369,7 @@ XC::BJmatrix XC::BJtensor::BJtensor2BJmatrix_2() const // convert XC::BJtensor o
 //~~~~                  m41 = this->dim(1)*(c41-1)+c44;
 //~~~~                  m42 = this->dim(2)*(c42-1)+c43;
 //~~~~
-//~~~~                  converted.val( m41, m42 ) = this->val( c41, c42, c43, c44 );
+//~~~~                  converted( m41, m42 ) = (*this)( c41, c42, c43, c44 );
 //~~~~
 //~~~~                }
 //~~~~      }
@@ -1420,7 +1420,7 @@ XC::BJmatrix XC::BJtensor::BJtensor2BJmatrix_2() const // convert XC::BJtensor o
 //..      {
 //..        for ( int c22=1 ; c22<=this->dim(2) ; c22++ )
 //..          for ( int c21=1 ; c21<=this->dim(1) ; c21++ )
-//..            converted.val(c21,c22)=this->val(c21,c22);
+//..            converted(c21,c22)=(*this)(c21,c22);
 //..      }
 //..    else if ( this->rank() == 4 )
 //..      {
@@ -1432,7 +1432,7 @@ XC::BJmatrix XC::BJtensor::BJtensor2BJmatrix_2() const // convert XC::BJtensor o
 //..                  m41 = this->dim(1)*(c41-1)+c42;
 //..                  m42 = this->dim(3)*(c43-1)+c44;
 //..
-//..                  converted.val( m41, m42 ) = this->val( c41, c42, c43, c44 );
+//..                  converted( m41, m42 ) = (*this)( c41, c42, c43, c44 );
 //..                }
 //..      }
 //..    else
@@ -1452,7 +1452,7 @@ XC::BJmatrix XC::BJtensor::BJtensor2BJmatrix_2() const // convert XC::BJtensor o
 //..      {
 //..        for ( int c22=1 ; c22<=this->dim(2) ; c22++ )
 //..          for ( int c21=1 ; c21<=this->dim(1) ; c21++ )
-//..            result.val(c21,c22)=converted_inverse.val(c21,c22);
+//..            result(c21,c22)=converted_inverse(c21,c22);
 //..      }
 //..    else if ( this->rank() == 4 )
 //..      {
@@ -1464,7 +1464,7 @@ XC::BJmatrix XC::BJtensor::BJtensor2BJmatrix_2() const // convert XC::BJtensor o
 //..                  m41 = this->dim(1)*(c41-1)+c42;
 //..                  m42 = this->dim(3)*(c43-1)+c44;
 //..
-//..                  result.val(c41,c42,c43,c44) = converted_inverse.val(m41,m42);
+//..                  result(c41,c42,c43,c44) = converted_inverse(m41,m42);
 //..                }
 //..      }
 //..//    result.print("t","back to XC::BJtensor result");

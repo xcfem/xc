@@ -168,6 +168,29 @@ class BJtensor: public nDarray
                                                          //           |
     BJtensor inverse_2(void) const;    // inverse of a BJtensor   <--|
                                        // I_ikjl scheme
+    inline const double &operator()(int first) const
+      { return nDarray::operator()(first); }
+    
+    inline double &operator()(int first)
+      { return nDarray::operator()(first); }
+    
+    inline const double &operator()(int first, int second) const
+      { return nDarray::operator()(first, second); }
+
+    inline double &operator()(int first, int second)
+      { return nDarray::operator()(first, second); }
+    
+    inline const double &operator()(int first, int second, int third) const
+      { return nDarray::operator()(first, second, third); }
+
+    inline double &operator()(int first, int second, int third)
+      { return nDarray::operator()(first, second, third); }
+
+    inline const double &operator()(int first, int second, int third, int fourth) const
+      { return nDarray::operator()(first, second, third, fourth); }
+    
+    inline double &operator()(int first, int second, int third, int fourth)
+      { return nDarray::operator()(first, second, third, fourth); }
 
     const BJtensor &operator()(const std::string &indices_from_user) const;
 
