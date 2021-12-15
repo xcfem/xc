@@ -144,6 +144,8 @@ class nDarray_rep
     void init_dim(const size_t &, const std::vector<int> &pdim);
     inline void clear_dim(void)
       { dim.clear(); }
+    inline bool equal_dim(const std::vector<int> &rval) const
+      { return (dim==rval); }
     void init_data(void);
     void init_data(const double &);
     void init_data(const double *);
@@ -177,6 +179,7 @@ class nDarray_rep
     void substract_data(const std::vector<double> &);
     void neg(void);
     double sum(void) const;
+    bool operator==(const nDarray_rep &rval) const;
   };
 
 //! @brief n-dimensional array.
@@ -258,17 +261,12 @@ class nDarray
     double sum(void) const;    // summ of all the elements
     double trace(void) const;            // trace of a 2-nd BJtensor, BJmatrix
 
-    bool operator==(const nDarray &rval);  // nDarray comparison
-                                      // returns 1 if they are same
-                                      // returns 0 if they are not
+    bool operator==(const nDarray &rval) const;
 
 // prebacen u nDarray 14 oktobra 1996
   public:
     nDarray eigenvalues(void);
     nDarray eigenvectors(void);
-
-    nDarray nDsqrt(void);
-
 
     void print(const std::string &name = "t",const std::string &msg = "Hi there#") const;
     void printshort(const std::string &msg = "Hi there#") const;
@@ -279,13 +277,6 @@ class nDarray
                                    // BJmatrix, BJtensor, BJvector
     double General_norm( double p ); // return the General p-th norm of
                                      // BJmatrix, BJtensor, BJvector
-
-    int number_of_zeros(void) const; // number of members that are
-                                      // smaller than sqrt(macheps)
-//.....//-> the declaration also put in the nDaray_rep class definition because
-//.....//-> frienship is not inhereted ( see ARM page 251 or around ).
-//.....    friend BJtensor operator*(BJtensor& lval, BJtensor& rval); // inner/outer product
-
   public:
     int rank(void) const;
     int dim(int which) const;
