@@ -133,7 +133,7 @@ class nDarray_rep
                         //     1  ->  BJvector
                         //     2  ->  BJmatrix
                         //     *  ->  ********   */
-    long int total_numb; // total number of elements in nDarray
+    size_t total_numb; // total number of elements in nDarray
     std::vector<int> dim; //  array of dimensions in each rank direction
                           //  for example, if nDarray_rank = 3 :
                           //      dim[0] = dimension in direction 1
@@ -141,7 +141,7 @@ class nDarray_rep
                           //      dim[2] = dimension in direction 3  */
   public:
     void init_dim(const size_t &, const int &default_dim= 1);
-    void init_dim(const size_t &, const std::vector<int> &pdim);
+    void init_dim(const std::vector<int> &pdim);
     inline void clear_dim(void)
       { dim.clear(); }
     inline bool equal_dim(const std::vector<int> &rval) const
