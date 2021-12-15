@@ -69,9 +69,8 @@ class Cosseratstresstensor: public BJtensor
     friend class Material_Model;
   public:
     // just send appropriate arguments to the base constructor
-    Cosseratstresstensor(int rank_of_tensor=2, double initval=0.0); // default constructor
+    Cosseratstresstensor(double initval=0.0); // default constructor
     Cosseratstresstensor( double *values );
-    Cosseratstresstensor( double initvalue );
 
     Cosseratstresstensor(const Cosseratstresstensor & x );
     Cosseratstresstensor(const BJtensor & x); // copy-initializer

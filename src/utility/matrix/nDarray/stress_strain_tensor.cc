@@ -34,25 +34,21 @@
 
 // just send appropriate arguments to the base constructor
 //##############################################################################
-XC::stressstraintensor::stressstraintensor(int rank_of_tensor, double initval)
-  : BJtensor(rank_of_tensor, def_dim_2, initval) {  } // default constructor
+XC::stressstraintensor::stressstraintensor(double initval)
+  : BJtensor(def_dim_2, initval) {  } // default constructor
 
 
 //! @brief Constructor.
 XC::stressstraintensor::stressstraintensor(const double *values )
-  : BJtensor( 2, def_dim_2, values) {  }
+  : BJtensor(def_dim_2, values) {  }
 
 //! @brief Constructor.
 XC::stressstraintensor::stressstraintensor(const std::vector<double> &values )
-  : BJtensor( 2, def_dim_2, values) {  }
+  : BJtensor(def_dim_2, values) {  }
 
 //! @brief Constructor
 XC::stressstraintensor::stressstraintensor(const boost::python::list &l)
-  : BJtensor( 2, def_dim_2, l) {  }
-
-//##############################################################################
-XC::stressstraintensor::stressstraintensor ( double initvalue ):
-  BJtensor( 2, def_dim_2, initvalue)  {  }
+  : BJtensor(def_dim_2, l) {  }
 
 //##############################################################################
 XC::stressstraintensor::stressstraintensor( const stressstraintensor & x )
@@ -60,7 +56,7 @@ XC::stressstraintensor::stressstraintensor( const stressstraintensor & x )
 
 //##############################################################################
 XC::stressstraintensor::stressstraintensor( const BJtensor & x)
-  : BJtensor( x )
+  : BJtensor(x)
     {  } // copy-initializer
 
 //##############################################################################
@@ -70,7 +66,7 @@ XC::stressstraintensor::stressstraintensor( const nDarray & x)
 
 
 XC::stressstraintensor::stressstraintensor(const Vector &x)
-  : BJtensor(2, def_dim_2, 0.0)
+  : BJtensor(def_dim_2, 0.0)
   {
     const int sz= x.Size();
     if(sz==3)
@@ -298,7 +294,7 @@ void XC::stressstraintensor::compute_principal(stressstraintensor &ret)  const
 //##############################################################################
 void XC::stressstraintensor::compute_deviator(stressstraintensor &st_dev) const
   {
-    BJtensor I2("I", 2, def_dim_2); // Kronecker delta  \delta_{ij}
+    BJtensor I2("I", def_dim_2); // Kronecker delta  \delta_{ij}
     stressstraintensor st_vol(I2 * (this->trace()*(1./3.)));
     st_dev= (*this) - st_vol;
   }

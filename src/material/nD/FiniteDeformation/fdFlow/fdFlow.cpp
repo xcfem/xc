@@ -74,7 +74,7 @@ XC::stresstensor XC::fdFlow::dFoda(const XC::stresstensor &sts,  const XC::FDEPS
 
 XC::BJtensor XC::fdFlow::d2Fodsds(const XC::stresstensor &sts,  const XC::FDEPState &fdepstate ) const
 {    
-     BJtensor Z4(4, def_dim_4, 0.0);
+     BJtensor Z4(def_dim_4, 0.0);
      return Z4;
 }
 
@@ -86,7 +86,7 @@ XC::stresstensor XC::fdFlow::d2Fodsdq(const XC::stresstensor &sts,  const XC::FD
 
 XC::BJtensor XC::fdFlow::d2Fodsda(const XC::stresstensor &sts,  const XC::FDEPState &fdepstate ) const
 {    
-     BJtensor Z4(4, def_dim_4, 0.0);
+     BJtensor Z4(def_dim_4, 0.0);
      return Z4;
 }
 
@@ -103,7 +103,7 @@ XC::stresstensor XC::fdFlow::d2Fodqda(const XC::stresstensor &sts,  const XC::FD
 
 XC::BJtensor XC::fdFlow::d2Fodada(const XC::stresstensor &sts,  const XC::FDEPState &fdepstate ) const
 {    
-     BJtensor Z4(4, def_dim_4, 0.0);
+     BJtensor Z4(def_dim_4, 0.0);
      return Z4;
 }
 

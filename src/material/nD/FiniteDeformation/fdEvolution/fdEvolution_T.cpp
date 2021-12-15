@@ -60,7 +60,7 @@ XC::fdEvolution_T *XC::fdEvolution_T::getCopy(void)
 
 XC::BJtensor XC::fdEvolution_T::HModulus(const stresstensor &sts, const FDEPState &fdepstate) const
   {
-    BJtensor Z400(4, def_dim_4, 0.0);
+    BJtensor Z400(def_dim_4, 0.0);
     return Z400;
   }
 

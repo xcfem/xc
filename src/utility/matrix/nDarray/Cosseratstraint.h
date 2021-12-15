@@ -72,12 +72,9 @@ class Cosseratstraintensor: public BJtensor
   public: // just send appropriate arguments to the base constructor
 
 //    Cosseratstraintensor (int rank_of_tensor=2, double initval=0.00000003141528);
-    Cosseratstraintensor (int rank_of_tensor=2, double initval=0.0);
-// default constructor           // this is just PI/10^8 to check default constructor
+    Cosseratstraintensor(double initval=0.0);
 
     Cosseratstraintensor ( double *values );
-
-    Cosseratstraintensor ( double initvalue );
 
     Cosseratstraintensor(const Cosseratstraintensor & x );
     Cosseratstraintensor(const BJtensor & x); // copy-initializer

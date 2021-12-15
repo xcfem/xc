@@ -73,11 +73,10 @@ class stresstensor: public stressstraintensor
     friend class Material_Model;
   public:
     // just send appropriate arguments to the base constructor
-    stresstensor(int rank_of_tensor=2, double initval=0.0); // default constructor
+    stresstensor(double initval=0.0); // default constructor
     stresstensor(const boost::python::list &l);
     stresstensor(const double *values );
     stresstensor(const std::vector<double> &values );
-    stresstensor(double initvalue );
     explicit stresstensor(const Vector &);
 
     stresstensor(const stresstensor & x );

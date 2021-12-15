@@ -62,7 +62,7 @@
 //================================================================================
 XC::BJtensor XC::PotentialSurface::d2Qodsds1( const XC::EPState *EPS ) const
   { 
-    BJtensor temp(2,def_dim_2,0.0);
+    BJtensor temp(def_dim_2,0.0);
     return temp;
   }
 
@@ -71,7 +71,7 @@ XC::BJtensor XC::PotentialSurface::d2Qodsds1( const XC::EPState *EPS ) const
 //================================================================================
 XC::BJtensor XC::PotentialSurface::d2Qodsds2( const XC::EPState *EPS ) const
 { 
-     BJtensor temp(2,def_dim_2,0.0);
+     BJtensor temp(def_dim_2,0.0);
      return temp;
 }
 
@@ -80,7 +80,7 @@ XC::BJtensor XC::PotentialSurface::d2Qodsds2( const XC::EPState *EPS ) const
 //================================================================================
 XC::BJtensor XC::PotentialSurface::d2Qodsds3( const XC::EPState *EPS ) const
 { 
-     BJtensor temp(2,def_dim_2,0.0);
+     BJtensor temp(def_dim_2,0.0);
      return temp;
 }
 
@@ -89,7 +89,7 @@ XC::BJtensor XC::PotentialSurface::d2Qodsds3( const XC::EPState *EPS ) const
 //================================================================================
 XC::BJtensor XC::PotentialSurface::d2Qodsds4( const XC::EPState *EPS ) const
 { 
-     BJtensor temp(2,def_dim_2,0.0);
+     BJtensor temp(def_dim_2,0.0);
      return temp;
 }
           
@@ -98,7 +98,7 @@ XC::BJtensor XC::PotentialSurface::d2Qodsds4( const XC::EPState *EPS ) const
 //================================================================================
 XC::BJtensor XC::PotentialSurface::d2Qodsdt1( const XC::EPState *EPS ) const
 { 
-     BJtensor temp(4,def_dim_4,0.0);
+     BJtensor temp(def_dim_4,0.0);
      return temp;
 }
 
@@ -107,7 +107,7 @@ XC::BJtensor XC::PotentialSurface::d2Qodsdt1( const XC::EPState *EPS ) const
 //================================================================================
 XC::BJtensor XC::PotentialSurface::d2Qodsdt2( const XC::EPState *EPS ) const
 { 
-     BJtensor temp(4,def_dim_4,0.0);
+     BJtensor temp(def_dim_4,0.0);
      return temp;
 }
 
@@ -116,7 +116,7 @@ XC::BJtensor XC::PotentialSurface::d2Qodsdt2( const XC::EPState *EPS ) const
 //================================================================================
 XC::BJtensor XC::PotentialSurface::d2Qodsdt3( const XC::EPState *EPS ) const
 { 
-     BJtensor temp(4,def_dim_4,0.0);
+     BJtensor temp(def_dim_4,0.0);
      return temp;
 }
 
@@ -125,7 +125,7 @@ XC::BJtensor XC::PotentialSurface::d2Qodsdt3( const XC::EPState *EPS ) const
 //================================================================================
 XC::BJtensor XC::PotentialSurface::d2Qodsdt4( const XC::EPState *EPS ) const
   { 
-     BJtensor temp(4,def_dim_4,0.0);
+     BJtensor temp(def_dim_4,0.0);
      return temp;
   }
 

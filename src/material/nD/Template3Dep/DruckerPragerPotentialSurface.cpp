@@ -92,7 +92,7 @@ XC::BJtensor XC::DruckerPragerPotentialSurface::dQods(const XC::EPState *EPS) co
   {
     stresstensor dQods;
     
-    BJtensor KroneckerI("I", 2, def_dim_2);
+    BJtensor KroneckerI("I", def_dim_2);
     //double temp1 =  EPS->getScalarVar(1);    
     double temp1 = getalfa2();    
     
@@ -138,9 +138,9 @@ XC::BJtensor XC::DruckerPragerPotentialSurface::dQods(const XC::EPState *EPS) co
 
 XC::BJtensor XC::DruckerPragerPotentialSurface::d2Qods2(const XC::EPState *EPS) const
   {
-    BJtensor d2Qods2(4, def_dim_4, 0.0);
+    BJtensor d2Qods2(def_dim_4, 0.0);
     
-    BJtensor KroneckerI("I", 2, def_dim_2);
+    BJtensor KroneckerI("I", def_dim_2);
     BJtensor T1 = KroneckerI("ij")*KroneckerI("mn");
     T1.null_indices();
     BJtensor T2 = (T1.transpose0110()+T1.transpose0111())*0.5;
@@ -152,7 +152,7 @@ XC::BJtensor XC::DruckerPragerPotentialSurface::d2Qods2(const XC::EPState *EPS) 
     BJtensor T4;
     stresstensor alpha;
     stresstensor s_bar;
-    BJtensor temp9(4, def_dim_4, 0.0);
+    BJtensor temp9(def_dim_4, 0.0);
     stresstensor sigma = EPS->getStress();
     double p = sigma.p_hydrostatic();
     stresstensor sdev = sigma.deviator();
@@ -191,7 +191,7 @@ XC::BJtensor XC::DruckerPragerPotentialSurface::d2Qods2(const XC::EPState *EPS) 
 // For Consistent Algorithm, Z Cheng, Jan 2004
 XC::BJtensor XC::DruckerPragerPotentialSurface::d2Qodsds1(const XC::EPState *EPS) const 
   {  
-    BJtensor I("I", 2, def_dim_2);
+    BJtensor I("I", def_dim_2);
     BJtensor d2Qoverdsds1 = I;
     return d2Qoverdsds1;
   }

@@ -113,7 +113,7 @@ XC::fdFlow *XC::fdFlowDP::getCopy(void)
 XC::stresstensor XC::fdFlowDP::dFods(const XC::stresstensor &sts, const XC::FDEPState &fdepstate) const
   {    
     // NumRank=1, No Ki Hardeing
-    //BJtensor tI2("I", 2 , def_dim_2);
+    //BJtensor tI2("I", def_dim_2);
     //XC::stresstensor dev = sts.deviator();
     //BJtensor st = dev("ij")*dev("ij");  
     //  st.null_indices();
@@ -122,7 +122,7 @@ XC::stresstensor XC::fdFlowDP::dFods(const XC::stresstensor &sts, const XC::FDEP
 
     // NumRank=2, with Ki Hardeing
     double archAngle = DilatedAngle*pipi/180.0;
-    BJtensor tI2("I", 2, def_dim_2);
+    BJtensor tI2("I", def_dim_2);
     double root3 = sqrt(3.0);
     double M = 3.0*root3*k1;
     double cv = fdepstate.getStressLikeInVar();
@@ -202,7 +202,7 @@ XC::stresstensor XC::fdFlowDP::dFoda(const XC::stresstensor &sts, const XC::FDEP
 XC::BJtensor XC::fdFlowDP::d2Fodsds(const XC::stresstensor &sts, const XC::FDEPState &fdepstate ) const
 {  
     // NumRank=1, No Ki Hardeing
-    //BJtensor tI2("I", 2, def_dim_2);
+    //BJtensor tI2("I", def_dim_2);
     //XC::stresstensor dev = sts.deviator();
     //BJtensor st = dev("ij")*dev("ij")*2.0;  
     //  st.null_indices();
@@ -217,7 +217,7 @@ XC::BJtensor XC::fdFlowDP::d2Fodsds(const XC::stresstensor &sts, const XC::FDEPS
 
     // NumRank=2, with Ki Hardeing
     double archAngle = DilatedAngle*pipi/180.0;
-    BJtensor tI2("I", 2, def_dim_2);
+    BJtensor tI2("I", def_dim_2);
     double root3 = sqrt(3.0);
     double M = 3.0*root3*k1;
     double cv = fdepstate.getStressLikeInVar();
@@ -250,7 +250,7 @@ XC::BJtensor XC::fdFlowDP::d2Fodsds(const XC::stresstensor &sts, const XC::FDEPS
 XC::stresstensor XC::fdFlowDP::d2Fodsdq(const XC::stresstensor &sts, const XC::FDEPState &fdepstate ) const
   {
     // NumRank=2, with Ki Hardeing
-    BJtensor tI2("I", 2, def_dim_2);
+    BJtensor tI2("I", def_dim_2);
     double root3 = sqrt(3.0);
     double M = 3.0*root3*k1;
     stresstensor a = fdepstate.getStressLikeKiVar();
@@ -267,7 +267,7 @@ XC::BJtensor XC::fdFlowDP::d2Fodsda(const XC::stresstensor &sts, const XC::FDEPS
 {  
     // NumRank=2, with Ki Hardeing
     double archAngle = DilatedAngle*pipi/180.0;
-    BJtensor tI2("I", 2, def_dim_2);
+    BJtensor tI2("I", def_dim_2);
     double cv = fdepstate.getStressLikeInVar();
     if ( tan(archAngle) < 1.0e-4 ) {
       std::cerr << "fdFlowDP-- (close) zero or invalid dilation angle, try VM flow rule\n";
@@ -309,7 +309,7 @@ XC::stresstensor XC::fdFlowDP::d2Fodqda(const XC::stresstensor &sts, const XC::F
 {
     // NumRank=2, with Ki Hardeing
     double archAngle = DilatedAngle*pipi/180.0;
-    BJtensor tI2("I", 2, def_dim_2);
+    BJtensor tI2("I", def_dim_2);
     double cv = fdepstate.getStressLikeInVar();
     if ( tan(archAngle) < 1.0e-4 )
       {
@@ -331,7 +331,7 @@ XC::BJtensor XC::fdFlowDP::d2Fodada(const XC::stresstensor &sts, const XC::FDEPS
 {  
     // NumRank=2, with Ki Hardeing
     double archAngle = DilatedAngle*pipi/180.0;
-    BJtensor tI2("I", 2, def_dim_2);
+    BJtensor tI2("I", def_dim_2);
     double cv = fdepstate.getStressLikeInVar();
     if ( tan(archAngle) < 1.0e-4 ) {
       std::cerr << "fdFlowDP-- (close) zero or invalid dilation angle, try VM flow rule\n";

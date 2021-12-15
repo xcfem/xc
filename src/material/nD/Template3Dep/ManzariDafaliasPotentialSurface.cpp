@@ -73,8 +73,8 @@ XC::PotentialSurface * XC::ManzariDafaliasPotentialSurface::getCopy(void)
 //! @brief tensor dQ/dsigma_ij: the normal to the potential surface
 XC::BJtensor XC::ManzariDafaliasPotentialSurface::dQods(const XC::EPState *EPS) const
   { 
-    BJtensor dQoverds( 2, def_dim_2, 0.0);
-    BJtensor I2("I", 2, def_dim_2);
+    BJtensor dQoverds( def_dim_2, 0.0);
+    BJtensor I2("I", def_dim_2);
 
     BJtensor S = EPS->getStress().deviator();
     //double p = EPS->getStress().p_hydrostatic();
@@ -118,7 +118,7 @@ XC::BJtensor XC::ManzariDafaliasPotentialSurface::d2Qods2(const XC::EPState *EPS
 
   
   BJtensor d2Qoverds2;
-  BJtensor I2("I", 2, def_dim_2);
+  BJtensor I2("I", def_dim_2);
 
   XC::stresstensor stress = EPS->getStress();
   
@@ -147,7 +147,7 @@ XC::BJtensor XC::ManzariDafaliasPotentialSurface::d2Qods2(const XC::EPState *EPS
   }
   */
   
-  //BJtensor d2Qoverds2( 2, def_dim_2, 0.0); // dummy second derivatives. To be redefined.
+  //BJtensor d2Qoverds2( def_dim_2, 0.0); // dummy second derivatives. To be redefined.
   BJtensor dnds =  dnods( EPS);
   double A = 2.64;
   double Mc = 1.14;
@@ -185,7 +185,7 @@ XC::BJtensor XC::ManzariDafaliasPotentialSurface::d2Qods2(const XC::EPState *EPS
   d2Qoverds2.null_indices();
   
 
-  BJtensor d2Qoverds2x( 4, def_dim_2, 0.0); // dummy second derivatives. To be redefined.
+  BJtensor d2Qoverds2x( def_dim_2, 0.0); // dummy second derivatives. To be redefined.
   return d2Qoverds2x;
   //return dnds;
 }
@@ -197,7 +197,7 @@ XC::BJtensor XC::ManzariDafaliasPotentialSurface::dnods(const XC::EPState *EPS) 
 {
   /*
   BJtensor xdnods;
-  BJtensor I2("I", 2, def_dim_2);
+  BJtensor I2("I", def_dim_2);
 
   XC::stresstensor S = EPS->getStress().deviator();
   //S.reportshort("S");
@@ -219,7 +219,7 @@ XC::BJtensor XC::ManzariDafaliasPotentialSurface::dnods(const XC::EPState *EPS) 
   
   
   BJtensor dnods;
-  BJtensor I2("I", 2, def_dim_2);
+  BJtensor I2("I", def_dim_2);
 
   stresstensor S = EPS->getStress().deviator();
   //S.reportshort("S");
@@ -269,8 +269,8 @@ XC::BJtensor XC::ManzariDafaliasPotentialSurface::dnods(const XC::EPState *EPS) 
 XC::BJtensor XC::ManzariDafaliasPotentialSurface::apqdnods(const XC::EPState *EPS) const
 {
   /* old fomulation, not correct
-  BJtensor ddnods( 2, def_dim_2, 0.0);
-  BJtensor I2("I", 2, def_dim_2);
+  BJtensor ddnods( def_dim_2, 0.0);
+  BJtensor I2("I", def_dim_2);
 
   XC::stresstensor S = EPS->getStress().deviator();
   //S.reportshort("S");
@@ -297,8 +297,8 @@ XC::BJtensor XC::ManzariDafaliasPotentialSurface::apqdnods(const XC::EPState *EP
   */
 
   /*
-  BJtensor ddnods( 2, def_dim_2, 0.0);
-  BJtensor I2("I", 2, def_dim_2);
+  BJtensor ddnods( def_dim_2, 0.0);
+  BJtensor I2("I", def_dim_2);
 
   XC::stresstensor S = EPS->getStress().deviator();
   //S.reportshort("S");
@@ -371,10 +371,10 @@ double XC::ManzariDafaliasPotentialSurface::dgoverdt(double theta, double c) con
 //================================================================================
 XC::BJtensor XC::ManzariDafaliasPotentialSurface::dthetaoverds(const XC::EPState *EPS) const
   {
-    BJtensor ret(2, def_dim_2, 0.0);
+    BJtensor ret(def_dim_2, 0.0);
     stresstensor s( 0.0);
     stresstensor t( 0.0);
-    BJtensor I2("I", 2, def_dim_2);
+    BJtensor I2("I", def_dim_2);
 
     //double EPS = pow(d_macheps(),(1./3.));
     stresstensor stress = EPS->getStress();

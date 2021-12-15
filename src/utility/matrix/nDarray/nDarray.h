@@ -271,20 +271,20 @@ class nDarray
     void rank(int);
   public:
     nDarray(int rank_of_nDarray=1, const double &initval=0.0);// default constructor
-    nDarray(int rank_of_nDarray, const std::vector<int> &pdim, const double *values);
-    nDarray(int rank_of_nDarray, const std::vector<int> &pdim, const std::vector<double> &);
-    nDarray(int rank_of_nDarray, const std::vector<int> &pdim, const boost::python::list &);
-    nDarray(int rank_of_nDarray, const std::vector<int> &pdim, double initvalue);
+    nDarray(const std::vector<int> &pdim, const double *values);
+    nDarray(const std::vector<int> &pdim, const std::vector<double> &);
+    nDarray(const std::vector<int> &pdim, const boost::python::list &);
+    nDarray(const std::vector<int> &pdim, double initvalue);
 
     // special case for BJmatrix and BJvector . . .
-    nDarray(int rank_of_nDarray, int rows, int cols, double *values);
-    nDarray(int rank_of_nDarray, int rows, int cols, double initvalue);
+    nDarray(int rows, int cols, double *values);
+    nDarray(int rows, int cols, double initvalue);
 
 // special case when I don't want any initialization at all##
     explicit nDarray(const std::string &){};
 
-    nDarray(const std::string &flag, int rank_of_nDarray, const std::vector<int> &pdim); // create a unit nDarray
-    virtual ~nDarray(void);
+    nDarray(const std::string &flag, const std::vector<int> &pdim); // create a unit nDarray
+    inline virtual ~nDarray(void){};
 
 //##############################################################################
 // copy only data because everything else has already been defined

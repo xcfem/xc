@@ -103,8 +103,8 @@ double XC::ManzariDafaliasYieldSurface::f(const EPState *EPS) const
 //! @brief BJtensor dF/dsigma_ij
 XC::BJtensor XC::ManzariDafaliasYieldSurface::dFods(const EPState *EPS) const
   {  
-    BJtensor dFoverds( 2, def_dim_2, 0.0);
-    BJtensor I2("I", 2, def_dim_2);
+    BJtensor dFoverds( def_dim_2, 0.0);
+    BJtensor I2("I", def_dim_2);
 
     stresstensor S = EPS->getStress().deviator();
     //S.reportshort("S");
@@ -174,8 +174,8 @@ double XC::ManzariDafaliasYieldSurface::xi_s1( const EPState *EPS ) const
 // double xi_t1 = dF/dt1 = dF/dalpha= -p*n  Derivative in terms of first tensorial var 
 XC::BJtensor XC::ManzariDafaliasYieldSurface::xi_t1( const EPState *EPS) const
   {
-    BJtensor dFoverds( 2, def_dim_2, 0.0);
-    BJtensor I2("I", 2, def_dim_2);
+    BJtensor dFoverds( def_dim_2, 0.0);
+    BJtensor I2("I", def_dim_2);
 
     stresstensor S = EPS->getStress().deviator();
 

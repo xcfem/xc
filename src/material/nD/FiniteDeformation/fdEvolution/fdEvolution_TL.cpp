@@ -66,7 +66,7 @@ XC::fdEvolution_T * XC::fdEvolution_TL::getCopy(void)
 XC::BJtensor XC::fdEvolution_TL::HModulus(const XC::stresstensor &sts, const XC::FDEPState &fdepstate) const 
   {
     BJtensor eta = fdepstate.getStrainLikeKiVar();
-    BJtensor I2("I", 2 , def_dim_2);
+    BJtensor I2("I", def_dim_2);
     BJtensor I4 = I2("ij")*I2("kl"); I4.null_indices();
      //I4 = (I4.transpose0110()+I4.transpose0111())*0.5; //For symmetric XC::BJtensor
      I4 = I4.transpose0110();  //For general XC::BJtensor

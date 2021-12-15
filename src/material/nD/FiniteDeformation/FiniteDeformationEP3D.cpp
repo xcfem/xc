@@ -63,9 +63,9 @@
 const int    Max_Iter  = 40;
 const double tolerance = 1.0e-8;
 
-XC::BJtensor tensorZ2(2, def_dim_2, 0.0);
-XC::BJtensor tensorI2("I", 2, def_dim_2);
-XC::BJtensor tensorZ4(4, def_dim_4, 0.0);
+XC::BJtensor tensorZ2(def_dim_2, 0.0);
+XC::BJtensor tensorI2("I", def_dim_2);
+XC::BJtensor tensorZ4(def_dim_4, 0.0);
 
 //! @brief Constructor 00
 XC::FiniteDeformationEP3D::FiniteDeformationEP3D(int tag)

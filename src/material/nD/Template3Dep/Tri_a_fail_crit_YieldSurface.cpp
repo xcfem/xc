@@ -114,7 +114,7 @@ double XC::TriFCYieldSurface::f(const XC::EPState *EPS) const
 //! @brief BJtensor dF/dsigma_ij  (this is the place where a derivative over yield function is coded)
 XC::BJtensor XC::TriFCYieldSurface::dFods(const XC::EPState *EPS ) const 
   {
-     BJtensor dFoverds( 2, def_dim_2, 0.0);
+     BJtensor dFoverds( def_dim_2, 0.0);
      
      //double xi= EPS->getStress().xi();                   //  functions to get  Haigh-Westergard   
      double rho= EPS->getStress().rho();                   //  stress invariants for   

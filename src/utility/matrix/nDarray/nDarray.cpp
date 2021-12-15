@@ -293,10 +293,10 @@ XC::nDarray::nDarray(int rank_of_nDarray, const double &initval)
   }
 
 //! @brief Constructor.
-XC::nDarray::nDarray(int rank_of_nDarray, const std::vector<int> &pdim, const double *values)
+XC::nDarray::nDarray(const std::vector<int> &pdim, const double *values)
   {
     // create the structure:
-    pc_nDarray_rep.nDarray_rank = rank_of_nDarray;  //rank_of_nDarray;
+    pc_nDarray_rep.nDarray_rank= pdim.size();  //rank_of_nDarray;
 
     // in the case of nDarray_rank=0 add one to get right thing from the
     // operator new
@@ -311,10 +311,10 @@ XC::nDarray::nDarray(int rank_of_nDarray, const std::vector<int> &pdim, const do
   }
 
 //! @brief Constructor.
-XC::nDarray::nDarray(int rank_of_nDarray, const std::vector<int> &pdim, const std::vector<double> &values)
+XC::nDarray::nDarray(const std::vector<int> &pdim, const std::vector<double> &values)
   {
     // create the structure:
-    pc_nDarray_rep.nDarray_rank = rank_of_nDarray;  //rank_of_nDarray;
+    pc_nDarray_rep.nDarray_rank= pdim.size();  //rank_of_nDarray;
 
     // in the case of nDarray_rank=0 add one to get right thing from the
     // operator new
@@ -327,10 +327,10 @@ XC::nDarray::nDarray(int rank_of_nDarray, const std::vector<int> &pdim, const st
   }
 
 //! @brief Constructor.
-XC::nDarray::nDarray(int rank_of_nDarray, const std::vector<int> &pdim, const boost::python::list &l)
+XC::nDarray::nDarray(const std::vector<int> &pdim, const boost::python::list &l)
   {
     // create the structure:
-    pc_nDarray_rep.nDarray_rank = rank_of_nDarray;  //rank_of_nDarray;
+    pc_nDarray_rep.nDarray_rank= pdim.size();  //rank_of_nDarray;
 
     // in the case of nDarray_rank=0 add one to get right thing from the
     // operator new
@@ -343,10 +343,10 @@ XC::nDarray::nDarray(int rank_of_nDarray, const std::vector<int> &pdim, const bo
   }
 
 //##############################################################################
-XC::nDarray::nDarray(int rank_of_nDarray, const std::vector<int> &pdim, double initvalue)
+XC::nDarray::nDarray(const std::vector<int> &pdim, double initvalue)
   {
     // create the structure:
-    pc_nDarray_rep.nDarray_rank = rank_of_nDarray;  //rank_of_nDarray;
+    pc_nDarray_rep.nDarray_rank= pdim.size();  //rank_of_nDarray;
 
     // in the case of nDarray_rank=0 add one to get right thing from the
     // operator new
@@ -362,10 +362,10 @@ XC::nDarray::nDarray(int rank_of_nDarray, const std::vector<int> &pdim, double i
 
 //##############################################################################
 // special case for XC::BJmatrix and XC::BJvector . . .
-XC::nDarray::nDarray(int rank_of_nDarray, int rows, int cols, double *values)
+XC::nDarray::nDarray(int rows, int cols, double *values)
   {
     // create the structure:
-    pc_nDarray_rep.nDarray_rank = rank_of_nDarray;  //rank_of_nDarray;
+    pc_nDarray_rep.nDarray_rank= 2;  //rank_of_nDarray;
 
     // not needed for BJmatrix or BJvector but who knows #
     // in the case of nDarray_rank=0 add one to get right thing from the
@@ -381,10 +381,10 @@ XC::nDarray::nDarray(int rank_of_nDarray, int rows, int cols, double *values)
 
 //##############################################################################
 // special case for XC::BJmatrix and XC::BJvector . . .
-XC::nDarray::nDarray(int rank_of_nDarray, int rows, int cols, double value)
+XC::nDarray::nDarray(int rows, int cols, double value)
   {
     // create the structure:
-    pc_nDarray_rep.nDarray_rank = rank_of_nDarray;  //rank_of_nDarray;
+    pc_nDarray_rep.nDarray_rank= 2;  //rank_of_nDarray;
 
     // not needed for BJmatrix or BJvector but who knows #
     // in the case of nDarray_rank=0 add one to get right thing from the
@@ -400,7 +400,7 @@ XC::nDarray::nDarray(int rank_of_nDarray, int rows, int cols, double value)
 
 
 //! @brief create a unit XC::nDarray
-XC::nDarray::nDarray(const std::string &flag, int rank_of_nDarray, const std::vector<int> &pdim)
+XC::nDarray::nDarray(const std::string &flag, const std::vector<int> &pdim)
   {
     if( flag[0] != 'I' && flag[0] != 'e' && flag[0] != 'C' )
       {
@@ -411,7 +411,7 @@ XC::nDarray::nDarray(const std::string &flag, int rank_of_nDarray, const std::ve
         ::exit( 1 );
       }
     // create the structure:
-    pc_nDarray_rep.nDarray_rank = rank_of_nDarray;  //rank_of_nDarray;
+    pc_nDarray_rep.nDarray_rank = pdim.size();  //rank_of_nDarray;
 
     // in the case of nDarray_rank=0 add one to get right thing from the
     // operator new
@@ -483,11 +483,6 @@ XC::nDarray::nDarray(const std::string &flag, int rank_of_nDarray, const std::ve
 //        break;
       }
   }
-
-
-//! @brief Destructor.
-XC::nDarray::~nDarray(void)
-  {}
 
 
 
@@ -693,11 +688,11 @@ XC::nDarray &XC::nDarray::operator*=(const double &rval)
    }
 
 //! @brief scalar multiplication
-XC::nDarray  XC::nDarray::operator*(const double &rval) const
+XC::nDarray XC::nDarray::operator*(const double &rval) const
    {
       // construct XC::nDarray using the same control numbers as for the
       // original one.
-      nDarray mult(pc_nDarray_rep.nDarray_rank, pc_nDarray_rep.dim, 0.0);
+      nDarray mult(*this);
       mult*=(rval);
       return mult;
    }
@@ -1238,7 +1233,7 @@ XC::nDarray XC::nDarray::eigenvalues(void)
 
  //   BJvector EV(rows, 0.0);
     const std::vector<int> pdim({rows});
-    nDarray EV(1, pdim, 0.0);
+    nDarray EV(pdim, 0.0);
 
     // most painless to really make a two dimensional string and copy it to 'a'
     // BEWARE they work in NRC as in FORTRAN therefore strings of 1 - n
@@ -1278,7 +1273,7 @@ XC::nDarray XC::nDarray::eigenvectors(void)
 
 //    BJmatrix EV(rows, rows, 0.0);
     const std::vector<int> pdim({rows, rows});
-    nDarray  EV(2, pdim, 0.0);
+    nDarray  EV(pdim, 0.0);
 //    BJmatrix temp( rows, rows, rows, this->data() );
 
 // most painless to really make a two dimensional string and copy it to 'a'

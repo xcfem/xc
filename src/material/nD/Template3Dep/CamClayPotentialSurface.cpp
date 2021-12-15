@@ -77,8 +77,8 @@ XC::PotentialSurface *XC::CamClayPotentialSurface::getCopy(void)
 //! @brief tensor dQ/dsigma_ij  the normal to the potential surface
 XC::BJtensor XC::CamClayPotentialSurface::dQods(const EPState *EPS) const
   {
-    BJtensor dQoverds( 2, def_dim_2, 0.0);
-    BJtensor I2("I", 2, def_dim_2);
+    BJtensor dQoverds( def_dim_2, 0.0);
+    BJtensor I2("I", def_dim_2);
 
     double p = EPS->getStress().p_hydrostatic();
     double q = EPS->getStress().q_deviatoric();
@@ -100,7 +100,7 @@ XC::BJtensor XC::CamClayPotentialSurface::dQods(const EPState *EPS) const
 
 XC::BJtensor XC::CamClayPotentialSurface::d2Qods2(const EPState *EPS) const 
 {  
-  BJtensor d2Qoverds2(4, def_dim_4, 0.0);
+  BJtensor d2Qoverds2(def_dim_4, 0.0);
   return d2Qoverds2;
 }
 
@@ -108,7 +108,7 @@ XC::BJtensor XC::CamClayPotentialSurface::d2Qods2(const EPState *EPS) const
 // For Consistent Algorithm, Z Cheng, Jan 2004
 XC::BJtensor XC::CamClayPotentialSurface::d2Qodsds1(const EPState *EPS) const 
 {  
-  BJtensor d2Qoverdsds1(2, def_dim_2, 0.0);
+  BJtensor d2Qoverdsds1(def_dim_2, 0.0);
   BJtensor DpoDs = EPS->getStress().dpoverds();
   double D2QoDpDs1 = -M*M;
   d2Qoverdsds1 = DpoDs * D2QoDpDs1;
@@ -120,8 +120,8 @@ XC::BJtensor XC::CamClayPotentialSurface::d2Qodsds1(const EPState *EPS) const
 // //#############################################################################
 // BJtensor CamClayPotentialSurface::dpoverds( ) const
 //   {
-//     BJtensor ret(2, def_dim_2, 0.0);
-//     BJtensor I2("I", 2, def_dim_2);
+//     BJtensor ret(def_dim_2, 0.0);
+//     BJtensor I2("I", def_dim_2);
 //     ret = I2*(-1.0/3.0);
 //     ret.null_indices();
 //     return ret;
@@ -133,7 +133,7 @@ XC::BJtensor XC::CamClayPotentialSurface::d2Qodsds1(const EPState *EPS) const
 //     
 //     stresstensor stress = EPS->getStress();
 //     
-//     BJtensor ret(2, def_dim_2, 0.0);
+//     BJtensor ret(def_dim_2, 0.0);
 //     double q = stress.q_deviatoric();
 //     stresstensor s( 0.0);
 // //...    double J2D = stress.Jinvariant2();
@@ -151,10 +151,10 @@ XC::BJtensor XC::CamClayPotentialSurface::d2Qodsds1(const EPState *EPS) const
 //   {
 //     stresstensor stress = EPS->getStress();
 // 
-//     BJtensor ret(2, def_dim_2, 0.0);
+//     BJtensor ret(def_dim_2, 0.0);
 //     stressBJtensor s( 0.0);
 //     stresstensor t( 0.0);
-//     BJtensor I2("I", 2, def_dim_2);
+//     BJtensor I2("I", def_dim_2);
 // 
 // //    double EPS = pow(d_macheps(),(1./3.));
 //     double J2D = stress.Jinvariant2();
@@ -196,14 +196,14 @@ XC::BJtensor XC::CamClayPotentialSurface::d2Qodsds1(const EPState *EPS) const
 // 
 // //#############################################################################
 // //!..........................................................................
-// //!  BJtensor d2poverds2( 4, def_dim_4, 0.0); //second derivative of p over
+// //!  BJtensor d2poverds2( def_dim_4, 0.0); //second derivative of p over
 // //!                                         // d sigma_pq  d sigma_mn
 // //!  d2poverds2 = 0.0; //IDENTICALLY EQUAL TO ZERO
 // //!..........................................................................
 // //#############################################################################
 // BJtensor CamClayPotentialSurface::d2poverds2( void ) const
 //   {
-//     BJtensor ret(4, def_dim_4, 0.0);
+//     BJtensor ret(def_dim_4, 0.0);
 //     return ret;
 //     //!!!!! this one is equivalent to zero at all times so no need to call it !!!
 //   }
@@ -216,15 +216,15 @@ XC::BJtensor XC::CamClayPotentialSurface::d2Qodsds1(const EPState *EPS) const
 // 
 // 
 //     //first the return tensor in order not to fragment the memory
-//     BJtensor ret( 4, def_dim_4, 0.0); //  second derivative of q over
+//     BJtensor ret( def_dim_4, 0.0); //  second derivative of q over
 //                                     //  d sigma_pq  d sigma_mn
 //     //setting up some constants
 // 
-//     BJtensor I2("I", 2, def_dim_2);      // To check out this three fourth-order
-//     BJtensor I_pqmn("I", 4, def_dim_4);  // isotropic tensor please see
+//     BJtensor I2("I", def_dim_2);      // To check out this three fourth-order
+//     BJtensor I_pqmn("I", def_dim_4);  // isotropic tensor please see
 //     I_pqmn = I2("pq")*I2("mn");        // W.Michael Lai, David Rubin,
 //     I_pqmn.null_indices();
-//     BJtensor I_pmqn("I", 4, def_dim_4);  // Erhard Krempl
+//     BJtensor I_pmqn("I", def_dim_4);  // Erhard Krempl
 //     I_pmqn = I_pqmn.transpose0110();   // " Introduction to Continuum Mechanics"
 //                                        // QA808.2  ;   ISBN 0-08-022699-X
 // 
@@ -233,7 +233,7 @@ XC::BJtensor XC::CamClayPotentialSurface::d2Qodsds1(const EPState *EPS) const
 //     stresstensor s = stress.deviator();
 //     s.null_indices();
 // 
-//     BJtensor iso1( 4, def_dim_4, 0.0); //this will be d_pm*d_nq-d_pq*d_nm*(1/3)
+//     BJtensor iso1( def_dim_4, 0.0); //this will be d_pm*d_nq-d_pq*d_nm*(1/3)
 //     iso1 = I_pmqn  - I_pqmn*(1.0/3.0);
 // 
 //     double tempiso1  = (3.0/2.0)*(1/q_dev);
@@ -250,23 +250,23 @@ XC::BJtensor XC::CamClayPotentialSurface::d2Qodsds1(const EPState *EPS) const
 //   {
 //     stresstensor stress = EPS->getStress();
 // 
-//     BJtensor ret( 4, def_dim_4, 0.0);
+//     BJtensor ret( def_dim_4, 0.0);
 // 
-//     BJtensor I2("I", 2, def_dim_2);
-//     BJtensor I_pqmn("I", 4, def_dim_4);  // To check out this three fourth-order
+//     BJtensor I2("I", def_dim_2);
+//     BJtensor I_pqmn("I", def_dim_4);  // To check out this three fourth-order
 //     I_pqmn = I2("pq")*I2("mn");        // isotropic tensor please see
 //     I_pqmn.null_indices();
-//     BJtensor I_pmqn("I", 4, def_dim_4);  // W.Michael Lai, David Rubin,
+//     BJtensor I_pmqn("I", def_dim_4);  // W.Michael Lai, David Rubin,
 //     I_pmqn = I_pqmn.transpose0110();   // Erhard Krempl
-// //no    BJtensor I_pnqm("I", 4, def_dim_4);  // " Introduction to Continuum Mechanics"
+// //no    BJtensor I_pnqm("I", def_dim_4);  // " Introduction to Continuum Mechanics"
 // //no    I_pnqm = I_pqmn.transpose0111();   // QA808.2  ;   ISBN 0-08-022699-X
 // 
 //     double J2D = stress.Jinvariant2();
 // 
 // //    double EPS = pow(d_macheps(),(1./3.));
 // 
-//     BJtensor s( 2, def_dim_2, 0.0);
-//     BJtensor t( 2, def_dim_2, 0.0);
+//     BJtensor s( def_dim_2, 0.0);
+//     BJtensor t( def_dim_2, 0.0);
 //     s = stress.deviator();
 //     t = s("qk")*s("kp") - I2*(J2D*(2.0/3.0));
 // //s.print("s"," \n\n tensor s \n\n");
@@ -274,8 +274,8 @@ XC::BJtensor XC::CamClayPotentialSurface::d2Qodsds1(const EPState *EPS) const
 //     s.null_indices();
 //     t.null_indices();
 // 
-//     BJtensor p( 4, def_dim_4, 0.0); //this will be d_mp*d_nq - d_pq*d_nm*(1/3)
-//     BJtensor w( 4, def_dim_4, 0.0);
+//     BJtensor p( def_dim_4, 0.0); //this will be d_mp*d_nq - d_pq*d_nm*(1/3)
+//     BJtensor w( def_dim_4, 0.0);
 // 
 //     double theta = stress.theta();
 // //out    while ( theta >= 2.0*PI )
@@ -340,13 +340,13 @@ XC::BJtensor XC::CamClayPotentialSurface::d2Qodsds1(const EPState *EPS) const
 // // of theta over ( d \sigma_{pq} d \sigma_{mn} )
 // // BE CAREFUL order is   PQ MN
 // 
-//     BJtensor s_pq_d_mn( 4, def_dim_4, 0.0);
-//     BJtensor s_pn_d_mq( 4, def_dim_4, 0.0);
-// //...    BJtensor s_pm_d_nq( 4, def_dim_4, 0.0);
+//     BJtensor s_pq_d_mn( def_dim_4, 0.0);
+//     BJtensor s_pn_d_mq( def_dim_4, 0.0);
+// //...    BJtensor s_pm_d_nq( def_dim_4, 0.0);
 // 
-//     BJtensor d_pq_s_mn( 4, def_dim_4, 0.0);
-//     BJtensor d_pn_s_mq( 4, def_dim_4, 0.0);
-// //...    BJtensor d_pm_s_nq( 4, def_dim_4, 0.0);
+//     BJtensor d_pq_s_mn( def_dim_4, 0.0);
+//     BJtensor d_pn_s_mq( def_dim_4, 0.0);
+// //...    BJtensor d_pm_s_nq( def_dim_4, 0.0);
 // 
 //     p = I_pmqn  - I_pqmn*(1.0/3.0);
 // 

@@ -90,7 +90,7 @@ XC::stresstensor XC::fdFlowVM::dFoda(const XC::stresstensor &sts, const XC::FDEP
 //--------------------------------------------------------------------
 XC::BJtensor XC::fdFlowVM::d2Fodsds(const XC::stresstensor &sts, const XC::FDEPState &fdepstate ) const
   {  
-    BJtensor I2("I", 2 , def_dim_2);
+    BJtensor I2("I", def_dim_2);
     BJtensor I4 = I2("ij")*I2("kl"); I4.null_indices();
     //I4 = (I4.transpose0110()+I4.transpose0111())*1.5 - I4; //For symmetric XC::BJtensor
     I4 = I4*3.0 - I4;	//For general XC::BJtensor
@@ -100,7 +100,7 @@ XC::BJtensor XC::fdFlowVM::d2Fodsds(const XC::stresstensor &sts, const XC::FDEPS
 //--------------------------------------------------------------------
  XC::BJtensor XC::fdFlowVM::d2Fodsda(const XC::stresstensor &sts, const XC::FDEPState &fdepstate ) const
 {  
-    BJtensor I2("I", 2 , def_dim_2);
+    BJtensor I2("I", def_dim_2);
     BJtensor I4 = I2("ij")*I2("kl"); I4.null_indices();
     //I4 = (I4.transpose0110()+I4.transpose0111())*1.5 - I4; //For symmetric XC::BJtensor
     I4 = I4*3.0 - I4;	//For general XC::BJtensor
@@ -116,7 +116,7 @@ double XC::fdFlowVM::d2Fodqdq(const XC::stresstensor &sts, const XC::FDEPState &
 //--------------------------------------------------------------------
  XC::BJtensor XC::fdFlowVM::d2Fodada(const XC::stresstensor &sts, const XC::FDEPState &fdepstate ) const
 {  
-    BJtensor I2("I", 2 , def_dim_2);
+    BJtensor I2("I", def_dim_2);
     BJtensor I4 = I2("ij")*I2("kl"); I4.null_indices();
     //I4 = (I4.transpose0110()+I4.transpose0111())*1.5; //For symmetric XC::BJtensor
     I4 = I4 *3.0;       //For general XC::BJtensor

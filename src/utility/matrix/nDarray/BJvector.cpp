@@ -98,11 +98,11 @@
 
 //##############################################################################
 XC::BJvector::BJvector(int order_n, double initvalue):
-  BJmatrix( 2, order_n, 1, initvalue)  {  }  // default constructor
+  BJmatrix(order_n, 1, initvalue)  {  }  // default constructor
 // rank 2 ^ just to be consistent with rank of XC::BJmatrix
 //##############################################################################
 XC::BJvector::BJvector(int order_n, double *initval)
-  : BJmatrix(2, order_n, 1, initval)  {  }
+  : BJmatrix(order_n, 1, initval)  {  }
 //rank 2 ^ just to be consistent with rank of XC::BJmatrix
 
 //##############################################################################

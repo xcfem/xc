@@ -77,23 +77,12 @@ void XC::BJmatrix::error(const std::string &msg1, const std::string &msg2)
   }
 
 //##############################################################################
-XC::BJmatrix::BJmatrix(int rows, int columns, double initval):
-  nDarray( 2, rows, columns, initval){ } // calling the appropriate
+XC::BJmatrix::BJmatrix(int rows, int columns, double initval)
+  : nDarray(rows, columns, initval){ } // calling the appropriate
                                           // base constructor
 //##############################################################################
-XC::BJmatrix::BJmatrix(int rows, int columns, double *initvalues):
-  nDarray( 2, rows, columns, initvalues){ } // calling the appropriate
-                                             // base constructor
-//Xiaoyan found a bug it should be initvalue instead of *initvalue
-//##############################################################################
-//  special for vector
-XC::BJmatrix::BJmatrix(int rank, int rows, int columns, double *initvalues):
-  nDarray( rank, rows, columns, initvalues){ } // calling the appropriate
-                                             // base constructor
-//##############################################################################
-//  special for vector
-XC::BJmatrix::BJmatrix(int rank, int rows, int columns, double initvalues):
-  nDarray( rank, rows, columns, initvalues){ } // calling the appropriate
+XC::BJmatrix::BJmatrix(int rows, int columns, double *initvalues)
+  : nDarray(rows, columns, initvalues){ } // calling the appropriate
                                              // base constructor
 //##############################################################################
 XC::BJmatrix::BJmatrix(const std::string &flag, int dimension )
@@ -541,7 +530,7 @@ XC::BJmatrix XC::BJmatrix::inverse()
 //~~~~
 //~~~~// building up a XC::BJtensor back_conv
 //~~~~// this is special case just for 4th order with def_dim_4 !!
-//~~~~  BJtensor back_conv( 4, def_dim_4, 0.0);
+//~~~~  BJtensor back_conv( def_dim_4, 0.0);
 //~~~~
 //~~~~  int m41 = 0;
 //~~~~  int m42 = 0;
@@ -568,9 +557,9 @@ XC::BJtensor XC::BJmatrix::BJmatrix2BJtensor_2()  // convert XC::BJmatrix of to 
 
 // building up a XC::BJtensor back_conv
 // this is special case just for 4th order with def_dim_4 !!
-  BJtensor back_conv( 4, def_dim_4, 0.0);
+  BJtensor back_conv(def_dim_4, 0.0);
 #ifdef SASA
-  BJtensor Back_conv(4,def_dim_4_2,0.0);
+  BJtensor Back_conv(def_dim_4_2,0.0);
  if(cols()==4) back_conv=Back_conv; // dimenzije su po 2
 #endif
   int m41 = 0;
@@ -599,8 +588,8 @@ XC::BJtensor XC::BJmatrix::BJmatrix2BJtensor_22()  // convert XC::BJmatrix of to
 // building up a XC::BJtensor back_conv
 // this is special case just for 4th order with def_dim_4 !!
 
-//  BJtensor back_conv( 2, def_dim_2, 0.0);
-  BJtensor back_conv( 2, def_dim_2, this->data());
+//  BJtensor back_conv( def_dim_2, 0.0);
+    BJtensor back_conv(def_dim_2, this->data());
 
 //..  //  int m41 = 0;
 //..  //  int m42 = 0;
@@ -625,7 +614,7 @@ XC::BJtensor XC::BJmatrix::BJmatrix2BJtensor_22()  // convert XC::BJmatrix of to
 //~~~~
 //~~~~// building up a XC::BJtensor back_conv
 //~~~~// this is special case just for 4th order with def_dim_4 !!
-//~~~~  BJtensor back_conv( 4, def_dim_4, 0.0);
+//~~~~  BJtensor back_conv( def_dim_4, 0.0);
 //~~~~
 //~~~~  int m41 = 0;
 //~~~~  int m42 = 0;

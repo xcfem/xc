@@ -75,7 +75,7 @@ const XC::Vector XC::WEnergy::d2isowOdlambda2(const Vector &lambda_wave_in)
 
 const XC::BJtensor XC::WEnergy::d2isowOdlambda1dlambda2(const Vector &lambda_wave_in)
   {
-    Tensor zerotensor(2,def_dim_2,0.0);
+    Tensor zerotensor(def_dim_2,0.0);
     return zerotensor;
   }
 

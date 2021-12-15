@@ -81,7 +81,7 @@ XC::PotentialSurface * XC::RoundedMohrCoulomb01PotentialSurface::getCopy(void)
 
 XC::BJtensor XC::RoundedMohrCoulomb01PotentialSurface::dQods(const XC::EPState *EPS) const
 {
-  BJtensor dQoverds( 2, def_dim_2, 0.0);
+  BJtensor dQoverds( def_dim_2, 0.0);
 //  double p = EPS->getStress().p_hydrostatic(); // p
   double q = EPS->getStress().q_deviatoric(); // q
   double theta = EPS->getStress().theta(); // theta
@@ -120,7 +120,7 @@ XC::BJtensor XC::RoundedMohrCoulomb01PotentialSurface::dQods(const XC::EPState *
 
 XC::BJtensor XC::RoundedMohrCoulomb01PotentialSurface::d2Qods2( const XC::EPState *EPS ) const
 {
-  BJtensor d2Qoverds2( 4, def_dim_4, 0.0); // d2Q/ds2(pqmn)
+  BJtensor d2Qoverds2( def_dim_4, 0.0); // d2Q/ds2(pqmn)
 
 //  double p = EPS->getStress().p_hydrostatic(); // p
   double q = EPS->getStress().q_deviatoric(); // q
@@ -174,7 +174,7 @@ XC::BJtensor XC::RoundedMohrCoulomb01PotentialSurface::d2Qods2( const XC::EPStat
 // For Consistent Algorithm, Z Cheng, Jan 2004
 XC::BJtensor XC::RoundedMohrCoulomb01PotentialSurface::d2Qodsds1(const XC::EPState *EPS) const 
 {  
-  BJtensor I("I", 2, def_dim_2);
+  BJtensor I("I", def_dim_2);
   BJtensor d2Qoverdsds1 = I;
   return d2Qoverdsds1;
 }

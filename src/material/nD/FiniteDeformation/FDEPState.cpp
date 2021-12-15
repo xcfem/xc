@@ -261,8 +261,8 @@ int XC::FDEPState::revertToLastCommit(void)
 //! @brief Revert the material to its initial state.
 int XC::FDEPState::revertToStart(void)
   {
-    BJtensor tI2("I", 2, def_dim_2);
-    BJtensor t00(2, def_dim_2, 0.0);
+    BJtensor tI2("I", def_dim_2);
+    BJtensor t00(def_dim_2, 0.0);
 
     FpInVar = tI2;
     StressLikeInVar = 0.0;

@@ -87,8 +87,8 @@ double XC::CamClayYieldSurface::f(const XC::EPState *EPS) const
 //! @brief BJtensor dF/dsigma_ij
 XC::BJtensor XC::CamClayYieldSurface::dFods(const XC::EPState *EPS) const
   {
-    BJtensor dFoverds( 2, def_dim_2, 0.0);
-    BJtensor I2("I", 2, def_dim_2);
+    BJtensor dFoverds( def_dim_2, 0.0);
+    BJtensor I2("I", def_dim_2);
 
     double p = EPS->getStress().p_hydrostatic();
     double q = EPS->getStress().q_deviatoric();

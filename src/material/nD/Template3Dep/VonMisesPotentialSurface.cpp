@@ -97,11 +97,11 @@ XC::BJtensor XC::VonMisesPotentialSurface::dQods(const XC::EPState *EPS) const  
 
 XC::BJtensor XC::VonMisesPotentialSurface::d2Qods2(const XC::EPState *EPS) const {
 
-    BJtensor I("I", 2, def_dim_2);
+    BJtensor I("I", def_dim_2);
     BJtensor temp1 = I("im") * I("jn");
     temp1.null_indices();
 
-    BJtensor I2("I", 2, def_dim_2);
+    BJtensor I2("I", def_dim_2);
     BJtensor temp2 = I2("mn") * I2("ij") * (1.0/3.0);
     temp2.null_indices();
     
@@ -118,8 +118,8 @@ XC::BJtensor XC::VonMisesPotentialSurface::d2Qods2(const XC::EPState *EPS) const
 // For Consistent Algorithm, Z Cheng, Jan 2004
 XC::BJtensor XC::VonMisesPotentialSurface::d2Qodsdt1(const XC::EPState *EPS) const 
 {  
-  BJtensor d2Qoverdsdt1(4, def_dim_4, 0.0);
-  BJtensor I2("I", 2, def_dim_2);
+  BJtensor d2Qoverdsdt1(def_dim_4, 0.0);
+  BJtensor I2("I", def_dim_2);
   BJtensor I4 = I2("ij") * I2("mn");
   I2.null_indices();
   d2Qoverdsdt1 = ( I4.transpose0110() + I4.transpose0111() ) * (-1.5);

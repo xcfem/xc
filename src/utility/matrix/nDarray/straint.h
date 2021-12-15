@@ -69,12 +69,11 @@ class straintensor: public stressstraintensor
   {
   public: // just send appropriate arguments to the base constructor
 //    straintensor (int rank_of_tensor=2, double initval=0.00000003141528);
-    straintensor (int rank_of_tensor=2, double initval=0.0);
+    straintensor(double initval=0.0);
 // default constructor           // this is just PI/10^8 to check default constructor
 
     straintensor(const double *values);
     straintensor(const std::vector<double> &values);
-    straintensor(double initvalue);
     explicit straintensor(const Vector &);
 
     straintensor(const straintensor & x );

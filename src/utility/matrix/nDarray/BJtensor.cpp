@@ -107,24 +107,24 @@ XC::BJtensor::BJtensor(int rank_of_BJtensor,const double &initval)
   : nDarray(rank_of_BJtensor, initval), indices1(""), indices2("") {}
 
 //! @brief Constructor
-XC::BJtensor::BJtensor(int rank_of_BJtensor, const std::vector<int> &pdim, const double *values)
-  : nDarray(rank_of_BJtensor, pdim, values), indices1(""), indices2("") {}
+XC::BJtensor::BJtensor(const std::vector<int> &pdim, const double *values)
+  : nDarray(pdim, values), indices1(""), indices2("") {}
 
 //! @brief Constructor
-XC::BJtensor::BJtensor(int rank_of_BJtensor, const std::vector<int> &pdim, const std::vector<double> &values)
-  : nDarray(rank_of_BJtensor, pdim, values), indices1(""), indices2("") {}
+XC::BJtensor::BJtensor(const std::vector<int> &pdim, const std::vector<double> &values)
+  : nDarray(pdim, values), indices1(""), indices2("") {}
 
 //! @brief Constructor
-XC::BJtensor::BJtensor(int rank_of_BJtensor, const std::vector<int> &pdim, const boost::python::list &l)
-  : nDarray(rank_of_BJtensor, pdim, l), indices1(""), indices2("") {}
+XC::BJtensor::BJtensor(const std::vector<int> &pdim, const boost::python::list &l)
+  : nDarray(pdim, l), indices1(""), indices2("") {}
 
 //! @brief Constructor
-XC::BJtensor::BJtensor(int rank_of_BJtensor, const std::vector<int> &pdim,const double &initvalue)
-  : nDarray(rank_of_BJtensor, pdim, initvalue), indices1(""), indices2("") {}
+XC::BJtensor::BJtensor(const std::vector<int> &pdim,const double &initvalue)
+  : nDarray(pdim, initvalue), indices1(""), indices2("") {}
 
 //! @brief Constructor
-XC::BJtensor::BJtensor(const std::string &flag, int rank_of_BJtensor, const std::vector<int> &pdim)
-  : nDarray( flag, rank_of_BJtensor, pdim), indices1(""), indices2("") {}
+XC::BJtensor::BJtensor(const std::string &flag, const std::vector<int> &pdim)
+  : nDarray( flag, pdim), indices1(""), indices2("") {}
 
 
 //! @brief Constructor
@@ -424,7 +424,7 @@ XC::BJtensor XC::BJtensor::operator*(const BJtensor &arg) const
                                          arg_indices_number);
 
 //number of UNcontractions
-   int uncontr_counter = this_uni_count + arg_uni_count;
+   const int uncontr_counter= this_uni_count + arg_uni_count;
 
 //TEMP  this is just the test because right now only up to order = 4
    if ( uncontr_counter > MAX_TENS_ORD )
@@ -447,35 +447,31 @@ XC::BJtensor XC::BJtensor::operator*(const BJtensor &arg) const
 //DEBUGprint   ::printf("             arg_uncontr[%d]=%d\n",parg_ic,arg_uncontr[parg_ic]);
 
 /////////////////////////////////////////////////////
-// let's make result XC::BJtensor
+// let's make result BJtensor
 
    int t = 0;
    int a = 0;
-   static std::vector<int> results_dims(MAX_TENS_ORD);
+   std::vector<int> results_dims(uncontr_counter);
    for( t=0 ; t < this_uni_count ; t++ )
      results_dims[t]=this->dim()[this_uncontr[t]-1];
    for( a=0 ; a < arg_uni_count ; a++ )
      results_dims[a+t]=arg.dim()[arg_uncontr[a]-1];
-// do kraja (till the end) . . .
-   for( ; a < MAX_TENS_ORD-t ; a++ )
-     results_dims[a+t]=1;
-
 
 // Indices  pa sada indeksi ( index )
-   static char results_indices[MAX_TENS_ORD+1];
+   std::string results_indices(uncontr_counter+1, '\0');
    for( t=0 ; t < this_uni_count ; t++ )
-     results_indices[t]=this_indices[this_uncontr[t]-1];
+     results_indices[t]= this_indices[this_uncontr[t]-1];
    for( a=0 ; a < arg_uni_count ; a++ )
-     results_indices[a+t]=arg_indices[arg_uncontr[a]-1];
+     results_indices[a+t]= arg_indices[arg_uncontr[a]-1];
 // the last one . . .
-   results_indices[uncontr_counter] = '\0';
+   results_indices[uncontr_counter]= '\0';
 
 
 //DEBUGprint  ::printf("\n\n......  uncontr_counter+1=%d\n", uncontr_counter+1);
 //DEBUGprintfor( int pa=0 ; pa < MAX_TENS_ORD ; pa++ )
 //DEBUGprint  ::printf("   results_dims[%d]=%d\n",pa,results_dims[pa]);
 
-   BJtensor result(uncontr_counter, results_dims, 0.0);
+   BJtensor result(results_dims, 0.0);
    result(results_indices);  // initialize indices in result
 //DEBUGprint  ::printf("\n\n..................   results_indices=%s\n",results_indices);
 
@@ -792,7 +788,7 @@ XC::BJtensor XC::BJtensor::operator/(const BJtensor &rval) const
  {
 // construct XC::BJtensor using the same control numbers as for the
 // original one.
-    BJtensor div(this->rank(), dim(), 0.0);
+    BJtensor div(dim(), 0.0);
     double rvalDouble = rval.trace();
     if ( rval.rank() != 1 ) ::printf("rval.rank() != 1 for XC::BJtensor XC::BJtensor::operator/( BJtensor & rval)\n");
 
@@ -855,7 +851,7 @@ XC::BJtensor XC::BJtensor::transpose0110() const
   {
 // construct XC::BJtensor using the same control numbers as for the
 // original one and than transpose it.
-   BJtensor trans1(this->rank(), dim(), 0.0);
+   BJtensor trans1(dim(), 0.0);
 
    for ( int i=1 ; i<=dim()[0] ; i++ )
      for ( int j=1 ; j<=dim()[1] ; j++ )
@@ -875,7 +871,7 @@ XC::BJtensor XC::BJtensor::transposeoverbar() const // same as transpose0110
   {
 // construct XC::BJtensor using the same control numbers as for the
 // original one and than transpose it.
-   BJtensor trans1(this->rank(), dim(), 0.0);
+   BJtensor trans1(dim(), 0.0);
 
    for ( int i=1 ; i<=dim()[0] ; i++ )
      for ( int j=1 ; j<=dim()[1] ; j++ )
@@ -894,7 +890,7 @@ XC::BJtensor XC::BJtensor::transpose0101() const
   {
 // construct XC::BJtensor using the same control numbers as for the
 // original one and than transpose it.
-   BJtensor trans1(this->rank(), dim(), 0.0);
+   BJtensor trans1(dim(), 0.0);
 
    for ( int i=1 ; i<=dim()[0] ; i++ )
      for ( int j=1 ; j<=dim()[1] ; j++ )
@@ -914,7 +910,7 @@ XC::BJtensor XC::BJtensor::transpose0111() const
   {
 // construct XC::BJtensor using the same control numbers as for the
 // original one and than transpose it.
-   BJtensor trans1(this->rank(), dim(), 0.0);
+   BJtensor trans1(dim(), 0.0);
 
    for ( int i=1 ; i<=dim()[0] ; i++ )
      for ( int j=1 ; j<=dim()[1] ; j++ )
@@ -933,7 +929,7 @@ XC::BJtensor XC::BJtensor::transposeunderbar() const   // transpose0111()
   {
 // construct XC::BJtensor using the same control numbers as for the
 // original one and than transpose it.
-   BJtensor trans1(this->rank(), dim(), 0.0);
+   BJtensor trans1(dim(), 0.0);
 
    for ( int i=1 ; i<=dim()[0] ; i++ )
      for ( int j=1 ; j<=dim()[1] ; j++ )
@@ -953,7 +949,7 @@ XC::BJtensor XC::BJtensor::transpose1100() const
   {
 // construct XC::BJtensor using the same control numbers as for the
 // original one and than transpose it.
-   BJtensor trans1(this->rank(), dim(), 0.0);
+   BJtensor trans1(dim(), 0.0);
 
    for ( int i=1 ; i<=dim()[0] ; i++ )
      for ( int j=1 ; j<=dim()[1] ; j++ )
@@ -973,7 +969,7 @@ XC::BJtensor XC::BJtensor::transpose0011() const
   {
 // construct XC::BJtensor using the same control numbers as for the
 // original one and than transpose it.
-   BJtensor trans1(this->rank(), dim(), 0.0);
+   BJtensor trans1(dim(), 0.0);
 
    for ( int i=1 ; i<=dim()[0] ; i++ )
      for ( int j=1 ; j<=dim()[1] ; j++ )
@@ -993,7 +989,7 @@ XC::BJtensor XC::BJtensor::transpose1001() const
   {
 // construct XC::BJtensor using the same control numbers as for the
 // original one and than transpose it.
-   BJtensor trans1(this->rank(), dim(), 0.0);
+   BJtensor trans1(dim(), 0.0);
 
    for ( int i=1 ; i<=dim()[0] ; i++ )
      for ( int j=1 ; j<=dim()[1] ; j++ )
@@ -1016,7 +1012,7 @@ XC::BJtensor XC::BJtensor::transpose11() const
   {
 // construct XC::BJtensor using the same control numbers as for the
 // original one and than transpose it.
-   BJtensor trans1(this->rank(), dim(), 0.0);
+   BJtensor trans1(dim(), 0.0);
 
    for ( int i=1 ; i<=dim()[0] ; i++ )
      for ( int j=1 ; j<=dim()[1] ; j++ )

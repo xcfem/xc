@@ -115,9 +115,6 @@ class BJmatrix: public nDarray
     public:
       BJmatrix(int mrows = 1, int columns = 1, double initval = 0.0);
       BJmatrix(int mrows, int columns, double *initvalues);
- //special for vector
-      BJmatrix(int rank, int mrows, int columns, double *initvalues);
-      BJmatrix(int rank, int mrows, int columns, double initvalues);
 
       BJmatrix(const std::string &flag, int dimension ); // create an ident BJmatrix
       BJmatrix(const std::string &matfile); // read from a "standard" BJmatrix file

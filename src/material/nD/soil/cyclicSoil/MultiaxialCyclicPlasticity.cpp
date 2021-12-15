@@ -108,8 +108,8 @@
 #include "material/nD/NDMaterialType.h"
 
 //this is mike's problem
-XC::Tensor XC::MultiaxialCyclicPlasticity::rank2(2, def_dim_2, 0.0 );
-XC::Tensor XC::MultiaxialCyclicPlasticity::rank4(2, def_dim_2, 0.0 );
+XC::Tensor XC::MultiaxialCyclicPlasticity::rank2(def_dim_2, 0.0 );
+XC::Tensor XC::MultiaxialCyclicPlasticity::rank4(def_dim_2, 0.0 );
 
 //parameters
 const double XC::MultiaxialCyclicPlasticity::one3   = 1.0 / 3.0;

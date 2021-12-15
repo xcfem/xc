@@ -181,8 +181,8 @@ const XC::Vector XC::FDdecoupledElastic3D::wa(void)
 //! @brief 
 const XC::Tensor XC::FDdecoupledElastic3D::Yab(void)
   {
-    Tensor Y(2, def_dim_2, 0.0);
-    Tensor I_ij("I", 2, def_dim_2);
+    Tensor Y(def_dim_2, 0.0);
+    Tensor I_ij("I", def_dim_2);
     Vector lambda_wave(3);
     lambda_wave = this->getlambda_wave();
     Tensor  d2 = W->d2isowOdlambda1dlambda2(lambda_wave);
@@ -218,13 +218,13 @@ const XC::Tensor XC::FDdecoupledElastic3D::Yab(void)
 //! @brief 
 const XC::Tensor XC::FDdecoupledElastic3D::FDisoStiffness(void)
 {
-  Tensor I_ij("I", 2, def_dim_2);
-  Tensor I_ijkl( 4, def_dim_4, 0.0 );
+  Tensor I_ij("I", def_dim_2);
+  Tensor I_ijkl( def_dim_4, 0.0 );
   I_ijkl = I_ij("ij") * I_ij("kl");
   I_ij.null_indices();
-  Tensor I_ikjl( 4, def_dim_4, 0.0 );
+  Tensor I_ikjl( def_dim_4, 0.0 );
   I_ikjl = I_ijkl.transpose0110();
-  Tensor I_iljk( 4, def_dim_4, 0.0 );
+  Tensor I_iljk( def_dim_4, 0.0 );
   I_iljk = I_ijkl.transpose0111();
   Tensor I4s = (I_ikjl+I_iljk)*0.5;
   Tensor  tempI = I4s - I_ijkl;
@@ -241,7 +241,7 @@ const XC::Tensor XC::FDdecoupledElastic3D::FDisoStiffness(void)
   Vector Wa = this->wa();
   Tensor yab = this->Yab();
 
-  Tensor L_iso(2,def_dim_2,0.0);
+  Tensor L_iso(def_dim_2,0.0);
 
   if(caseIndex == 0)
     {
@@ -368,7 +368,7 @@ const XC::Tensor& XC::FDdecoupledElastic3D::getTangentTensor(void) const
 //! @brief Return the material initial stiffness.
 const XC::Tensor &XC::FDdecoupledElastic3D::getInitialTangentTensor(void) const
   {
-    //BJtensor I2("I", 2, def_dim_2);
+    //BJtensor I2("I", def_dim_2);
     //BJtensor I_ijkl = I2("ij")*I2("kl");
     //BJtensor I_ikjl = I_ijkl.transpose0110();
     //BJtensor I_iljk = I_ijkl.transpose0111();
@@ -433,12 +433,12 @@ int XC::FDdecoupledElastic3D::revertToLastCommit(void)
 int XC::FDdecoupledElastic3D::revertToStart(void)
   {
     int retval= FiniteDeformationElastic3D::revertToStart();
-    Tensor F0("I", 2, def_dim_2);
+    Tensor F0("I", def_dim_2);
     F = F0;
     C = F0;
     Cinv = F0;
 
-    Tensor ss_zero(2,def_dim_2,0.0);
+    Tensor ss_zero(def_dim_2,0.0);
     thisPK2Stress = ss_zero;
     thisGreenStrain = ss_zero;
     Stiffness = getInitialTangentTensor();
@@ -595,9 +595,9 @@ int XC::FDdecoupledElastic3D::ComputeTrials()
    else   {std::cerr << "FDdecoupledElastic3D::getCaseIndex -- unknown case! \n";
     exit(-1);}
 
-   Tensor I_ij("I", 2, def_dim_2);
+   Tensor I_ij("I", def_dim_2);
 
-   Tensor isoPK2Stress(2, def_dim_2, 0.0);
+   Tensor isoPK2Stress(def_dim_2, 0.0);
 
    Vector Wa = this->wa();
 

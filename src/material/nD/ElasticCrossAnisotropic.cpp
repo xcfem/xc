@@ -58,8 +58,8 @@
 #include <utility/matrix/Matrix.h>
 #include "material/nD/NDMaterialType.h"
 
-//XC::Tensor XC::ElasticCrossAnisotropic::rank2 (2, def_dim_2, 0.0 ) ;
-//XC::Tensor XC::ElasticCrossAnisotropic::rank4 (2, def_dim_2, 0.0 ) ;
+//XC::Tensor XC::ElasticCrossAnisotropic::rank2 (def_dim_2, 0.0 ) ;
+//XC::Tensor XC::ElasticCrossAnisotropic::rank4 (def_dim_2, 0.0 ) ;
 
 XC::Vector XC::ElasticCrossAnisotropic::sigma(6);
 XC::Matrix XC::ElasticCrossAnisotropic::D(6, 6);
@@ -76,7 +76,7 @@ Ghv(Ghvp),
 rho(rhop)
 {
    D.Zero();
-   Dt = BJtensor( 4, def_dim_4, 0.0 );
+   Dt = BJtensor( def_dim_4, 0.0 );
    this->convertD2TensorEijkl();
 }
 

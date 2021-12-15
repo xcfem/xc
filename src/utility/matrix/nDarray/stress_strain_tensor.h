@@ -43,11 +43,10 @@ class stressstraintensor: public BJtensor
   {
   public:
     // just send appropriate arguments to the base constructor
-    stressstraintensor(int rank_of_tensor=2, double initval=0.0); // default constructor
+    stressstraintensor(double initval=0.0); // default constructor
     stressstraintensor(const boost::python::list &l);
     stressstraintensor(const double *values );
     stressstraintensor(const std::vector<double> &values );
-    stressstraintensor(double initvalue );
     explicit stressstraintensor(const Vector &);
 
     stressstraintensor(const stressstraintensor & x );

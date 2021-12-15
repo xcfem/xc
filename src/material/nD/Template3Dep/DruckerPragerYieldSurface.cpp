@@ -91,7 +91,7 @@ XC::BJtensor XC::DruckerPragerYieldSurface::dFods(const EPState *EPS) const
   {
     stresstensor dFods;
     
-    BJtensor KroneckerI("I", 2, def_dim_2);
+    BJtensor KroneckerI("I", def_dim_2);
     double temp1 =  EPS->getScalarVar(1);    
     
     stresstensor alpha;

@@ -27,7 +27,7 @@
 //################################################################################
 //# COPY-YES  (C):     :-))                                                      #
 //# PROJECT:           Object Oriented Finite XC::Element Program                    #
-//# PURPOSE:           strain XC::BJtensor with all necessary functions                #
+//# PURPOSE:           strain BJtensor with all necessary functions                #
 //# CLASS:             Cosseratstraintensor                                     #
 //#                                                                              #
 //# VERSION:                                                                     #
@@ -60,18 +60,14 @@
 #include <iostream>
 
 //##############################################################################
-XC::Cosseratstraintensor::Cosseratstraintensor (int rank_of_tensor, double initval):
-  BJtensor(rank_of_tensor, Cosserat_def_dim_2, initval)
+XC::Cosseratstraintensor::Cosseratstraintensor(double initval):
+  BJtensor(Cosserat_def_dim_2, initval)
     {   } // default constructor
 
 //##############################################################################
 XC::Cosseratstraintensor::Cosseratstraintensor ( double *values ):
-  BJtensor( 2, Cosserat_def_dim_2, values)
+  BJtensor(Cosserat_def_dim_2, values)
     {  }
-
-//##############################################################################
-XC::Cosseratstraintensor::Cosseratstraintensor ( double initvalue ):
-  BJtensor( 2, Cosserat_def_dim_2, initvalue) {  }
 
 //##############################################################################
 XC::Cosseratstraintensor::Cosseratstraintensor( const Cosseratstraintensor & x )
@@ -246,7 +242,7 @@ XC::Cosseratstraintensor XC::Cosseratstraintensor::principal() const
 //##############################################################################
 XC::Cosseratstraintensor XC::Cosseratstraintensor::deviator() const
   {
-    BJtensor I2("I", 2, Cosserat_def_dim_2);
+    BJtensor I2("I", Cosserat_def_dim_2);
     Cosseratstraintensor st_vol = I2 * (trace()*(1./3.));
     Cosseratstraintensor st_dev = (*this) - st_vol;
     return st_dev;
@@ -450,7 +446,7 @@ void XC::Cosseratstraintensor::report(const std::string &msg) const
     printf("st_trace = %.8e,  mean pressure p = %.8e\n",
              trace(),  trace()/3.0);
 
-    BJtensor I2("I", 2, Cosserat_def_dim_2);
+    BJtensor I2("I", Cosserat_def_dim_2);
 
     Cosseratstraintensor st_vol = I2 * trace() * (1./3.);
     st_vol.print("st_v","BJtensor st_vol (volumetric part of the st XC::BJtensor)");

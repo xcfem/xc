@@ -198,13 +198,13 @@ int XC::NeoHookeanCompressible3D::revertToLastCommit(void)
 int XC::NeoHookeanCompressible3D::revertToStart(void)
   {
     int retval= FiniteDeformationElastic3D::revertToStart();
-    BJtensor F0("I", 2, def_dim_2);
+    BJtensor F0("I", def_dim_2);
     F = F0;
     C = F0;
     Cinv = F0;
     J = 1.0;
 
-    BJtensor ss_zero(2,def_dim_2,0.0);
+    BJtensor ss_zero(def_dim_2,0.0);
     thisPK2Stress = ss_zero;
     thisGreenStrain = ss_zero;
 
@@ -275,7 +275,7 @@ void XC::NeoHookeanCompressible3D::Print(std::ostream &s, int flag) const
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 int XC::NeoHookeanCompressible3D::ComputeTrials()
   {   
-    straintensor tensorI2(BJtensor("I", 2, def_dim_2));
+    straintensor tensorI2(BJtensor("I", def_dim_2));
 
     // Cinv:
     Cinv = C.inverse();

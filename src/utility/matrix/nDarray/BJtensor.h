@@ -121,11 +121,11 @@ class BJtensor: public nDarray
                                     //  then operator will be identified
   public: // just send appropriate arguments to the base constructor
     BJtensor(int rank_of_BJtensor=1,const double &initval=0); // default constructor
-    BJtensor(int rank_of_BJtensor, const std::vector<int> &pdim, const double *values);
-    BJtensor(int rank_of_BJtensor, const std::vector<int> &pdim, const std::vector<double> &values);
-    BJtensor(int rank_of_BJtensor, const std::vector<int> &pdim, const boost::python::list &l);    
-    BJtensor(int rank_of_BJtensor, const std::vector<int> &pdim,const double &initvalue);
-    BJtensor(const std::string &flag, int rank_of_BJtensor, const std::vector<int> &pdim);  // create a unit nDarray
+    BJtensor(const std::vector<int> &pdim, const double *values);
+    BJtensor(const std::vector<int> &pdim, const std::vector<double> &values);
+    BJtensor(const std::vector<int> &pdim, const boost::python::list &l);    
+    BJtensor(const std::vector<int> &pdim,const double &initvalue);
+    BJtensor(const std::string &flag, const std::vector<int> &pdim);  // create a unit nDarray
     BJtensor(const std::string &flag);   //this one used to send "NO" message
     BJtensor(const BJtensor &x);  // instead of: "BJtensor(nDarray & x):"   :-)
     explicit BJtensor(const nDarray &x);
@@ -192,7 +192,7 @@ class BJtensor: public nDarray
     inline double &operator()(int first, int second, int third, int fourth)
       { return nDarray::operator()(first, second, third, fourth); }
 
-    const BJtensor &operator()(const std::string &indices_from_user) const;
+    const BJtensor &operator()(const std::string &) const;
 
     void null_indices(void) const;
     const std::string &f_indices1(void) const;

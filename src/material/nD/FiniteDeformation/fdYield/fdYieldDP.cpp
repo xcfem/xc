@@ -158,7 +158,7 @@ double XC::fdYieldDP::Yd(const XC::stresstensor &sts, const XC::FDEPState &fdeps
 XC::stresstensor XC::fdYieldDP::dYods(const XC::stresstensor &sts, const XC::FDEPState &fdepstate ) const
 {   
     //// NumRank=1, No Ki Hardeing
-    //BJtensor tI2("I", 2, def_dim_2);
+    //BJtensor tI2("I", def_dim_2);
     //XC::stresstensor dev = sts.deviator();
     //BJtensor st = dev("ij")*dev("ij");  
     //  st.null_indices();
@@ -167,7 +167,7 @@ XC::stresstensor XC::fdYieldDP::dYods(const XC::stresstensor &sts, const XC::FDE
 
     // NumRank=2, with Ki Hardeing
     double archAngle = FricAngle*pipi/180.0;
-    BJtensor tI2("I", 2, def_dim_2);
+    BJtensor tI2("I", def_dim_2);
     double root3 = sqrt(3.0);
     double M = 3.0*root3*k1;
     double cv = fdepstate.getStressLikeInVar();

@@ -58,7 +58,7 @@
 XC::state_vars::state_vars(void)
   : ScalarVar(MaxNScalarVar), TensorVar(MaxNTensorVar)
   {
-    Eep= BJtensor( 4, def_dim_4, 0.0 ); // need to be initialized as 4th order BJtensor
+    Eep= BJtensor( def_dim_4, 0.0 ); // need to be initialized as 4th order BJtensor
   }
 
 //! @brief Constructor
@@ -67,7 +67,7 @@ XC::state_vars::state_vars(
                  const straintensor & Strainp,
 		 const straintensor & ElasticStrainp)
   : Stress(Stressp), Strain(Strainp), ElasticStrain(ElasticStrainp),
-    ScalarVar(MaxNScalarVar), TensorVar(MaxNTensorVar), Eep( 4, def_dim_4, 0.0)
+    ScalarVar(MaxNScalarVar), TensorVar(MaxNTensorVar), Eep( def_dim_4, 0.0)
   {}
 
 //! @brief Constructor
@@ -93,14 +93,14 @@ XC::state_vars::state_vars(
     ElasticStrain(Estrainp), //Guanzhou Mar2005
     ScalarVar(Scalarp), TensorVar(Tensorp)
   {
-    Eep= BJtensor( 4, def_dim_4, 0.0 ); // need to be initialized as 4th order BJtensor
+    Eep= BJtensor( def_dim_4, 0.0 ); // need to be initialized as 4th order BJtensor
   }
 
 //! @brief Constructor
 XC::state_vars::state_vars(const std::vector<double> &Scalarp, const std::vector<stresstensor> &Tensorp)
   : ScalarVar(Scalarp), TensorVar(Tensorp)
   {
-    Eep= BJtensor( 4, def_dim_4, 0.0 ); // need to be initialized as 4th order BJtensor
+    Eep= BJtensor( def_dim_4, 0.0 ); // need to be initialized as 4th order BJtensor
   }
 
 const XC::stresstensor &XC::state_vars::getStress(void) const

@@ -99,8 +99,8 @@ double XC::DruckerPragerYieldSurface01::f(const XC::EPState *EPS) const
 //! @brief BJtensor dF/dsigma_ij
 XC::BJtensor XC::DruckerPragerYieldSurface01::dFods(const EPState *EPS) const
   {
-    BJtensor dFoverds( 2, def_dim_2, 0.0);
-    BJtensor I2("I", 2, def_dim_2);
+    BJtensor dFoverds( def_dim_2, 0.0);
+    BJtensor I2("I", def_dim_2);
 
     stresstensor S = EPS->getStress().deviator();
     //S.reportshort("S");
@@ -169,8 +169,8 @@ double XC::DruckerPragerYieldSurface01::xi_s1( const XC::EPState *EPS ) const
 //! @brief double xi_t1 = dF/dt1 = dF/dalpha= -p*n  Derivative in terms of first tensorial var 
 XC::BJtensor XC::DruckerPragerYieldSurface01::xi_t1( const XC::EPState *EPS) const
   {
-    BJtensor dFoverds( 2, def_dim_2, 0.0);
-    BJtensor I2("I", 2, def_dim_2);
+    BJtensor dFoverds( def_dim_2, 0.0);
+    BJtensor I2("I", def_dim_2);
 
     stresstensor S = EPS->getStress().deviator();
     

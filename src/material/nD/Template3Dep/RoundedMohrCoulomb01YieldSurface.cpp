@@ -96,7 +96,7 @@ double XC::RoundedMohrCoulomb01YieldSurface::f(const EPState *EPS) const
 XC::BJtensor XC::RoundedMohrCoulomb01YieldSurface::dFods(const EPState *EPS) const 
   {
   
-    BJtensor dFoverds( 2, def_dim_2, 0.0);
+    BJtensor dFoverds( def_dim_2, 0.0);
 
 //    double p = EPS->getStress().p_hydrostatic();
     double q = EPS->getStress().q_deviatoric();

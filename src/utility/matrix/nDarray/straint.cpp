@@ -60,8 +60,8 @@
 #include "utility/matrix/Vector.h"
 
 //! @brief Constructor.
-XC::straintensor::straintensor(int rank_of_tensor, double initval)
-  : stressstraintensor(rank_of_tensor, initval)
+XC::straintensor::straintensor(double initval)
+  : stressstraintensor(initval)
     {   } // default constructor
 
 //! @brief Constructor.
@@ -73,10 +73,6 @@ XC::straintensor::straintensor(const double *values)
 XC::straintensor::straintensor(const std::vector<double> &values)
   : stressstraintensor(values)
     {  }
-
-//! @brief Constructor.
-XC::straintensor::straintensor(double initvalue)
-  : stressstraintensor(initvalue) {}
 
 //! @brief Constructor.
 XC::straintensor::straintensor( const straintensor & x )
@@ -235,7 +231,7 @@ void XC::straintensor::report(const std::string &msg) const
     printf("st_trace = %.8e,  mean pressure p = %.8e\n",
              trace(),  trace()/3.0);
 
-    BJtensor I2("I", 2, def_dim_2);
+    BJtensor I2("I", def_dim_2);
 
     straintensor st_vol = straintensor(I2 * trace() * (1./3.));
     st_vol.print("st_v","BJtensor st_vol (volumetric part of the st XC::BJtensor)");

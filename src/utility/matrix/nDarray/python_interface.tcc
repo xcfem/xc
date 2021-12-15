@@ -36,7 +36,7 @@ class_<XC::Cosseratstresstensor , bases<XC::BJtensor>, boost::noncopyable >("Cos
 class_<XC::straintensor , bases<XC::BJtensor> >("straintensor");
 
 class_<XC::stresstensor , bases<XC::BJtensor> >("stresstensor")
-  .def(init<int,double>())
+  .def(init<double>())
   .def(init<boost::python::list>())
   .def(self_ns::str(self_ns::self))
   .def("Iinvariant1",&XC::stresstensor::Iinvariant1)

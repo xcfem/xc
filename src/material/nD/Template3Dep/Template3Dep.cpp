@@ -450,7 +450,7 @@ XC::Template3Dep &XC::Template3Dep::operator=(const Template3Dep &other)
 //! @brief  Routine used to generate elastic compliance BJtensor D for this material point
 XC::BJtensor XC::Template3Dep::ElasticComplianceTensor(void) const
   {
-    BJtensor ret( 4, def_dim_4, 0.0 );
+    BJtensor ret( def_dim_4, 0.0 );
 
     ret = ElasticStiffnessTensor().inverse();
 
@@ -477,7 +477,7 @@ XC::BJtensor XC::Template3Dep::ElasticComplianceTensor(void) const
 //ZC05/2004           }
 //ZC05/2004
 //ZC05/2004       // Kronecker delta XC::BJtensor
-//ZC05/2004       BJtensor I2("I", 2, def_dim_2);
+//ZC05/2004       BJtensor I2("I", def_dim_2);
 //ZC05/2004
 //ZC05/2004       BJtensor I_ijkl = I2("ij")*I2("kl");
 //ZC05/2004       //I_ijkl.null_indices();
@@ -514,7 +514,7 @@ XC::BJtensor XC::Template3Dep::ElasticComplianceTensor(void) const
 //ZC05/2004       //std::cerr << " Ec = " << Ey << std::endl;
 //ZC05/2004
 //ZC05/2004       // Kronecker delta XC::BJtensor
-//ZC05/2004       BJtensor I2("I", 2, def_dim_2);
+//ZC05/2004       BJtensor I2("I", def_dim_2);
 //ZC05/2004
 //ZC05/2004       BJtensor I_ijkl = I2("ij")*I2("kl");
 //ZC05/2004       //I_ijkl.null_indices();
@@ -638,7 +638,7 @@ XC::BJtensor XC::Template3Dep::ElasticComplianceTensor(void) const
 //================================================================================
 XC::BJtensor XC::Template3Dep::ElasticStiffnessTensor(void) const
   {
-    BJtensor ret( 4, def_dim_4, 0.0 );
+    BJtensor ret( def_dim_4, 0.0 );
 
     if(theElasticMat->setTrialStrain( this->EPS->getElasticStrain() ) < 0)
       {
@@ -665,7 +665,7 @@ XC::BJtensor XC::Template3Dep::ElasticStiffnessTensor(void) const
 //ZC05/2004     if( eflag == 0) {
 //ZC05/2004        double E = Ey;
 //ZC05/2004        // Kronecker delta XC::BJtensor
-//ZC05/2004        BJtensor I2("I", 2, def_dim_2);
+//ZC05/2004        BJtensor I2("I", def_dim_2);
 //ZC05/2004
 //ZC05/2004        BJtensor I_ijkl = I2("ij")*I2("kl");
 //ZC05/2004
@@ -695,7 +695,7 @@ XC::BJtensor XC::Template3Dep::ElasticStiffnessTensor(void) const
 //ZC05/2004
 //ZC05/2004
 //ZC05/2004        // Kronecker delta XC::BJtensor
-//ZC05/2004        BJtensor I2("I", 2, def_dim_2);
+//ZC05/2004        BJtensor I2("I", def_dim_2);
 //ZC05/2004
 //ZC05/2004        BJtensor I_ijkl = I2("ij")*I2("kl");
 //ZC05/2004
@@ -1317,16 +1317,16 @@ XC::EPState XC::Template3Dep::ForwardEulerEPState( const straintensor &strain_in
 
 
     //  pulling out some XC::BJtensor and double definitions
-    //BJtensor dFods( 2, def_dim_2, 0.0);
-    //BJtensor dQods( 2, def_dim_2, 0.0);
+    //BJtensor dFods( def_dim_2, 0.0);
+    //BJtensor dQods( def_dim_2, 0.0);
     stresstensor dFods;
     stresstensor dQods;
     //  stresstensor s;  // deviator
-    BJtensor H( 2, def_dim_2, 0.0);
-    BJtensor temp1( 2, def_dim_2, 0.0);
-    BJtensor temp2( 2, def_dim_2, 0.0);
+    BJtensor H( def_dim_2, 0.0);
+    BJtensor temp1( def_dim_2, 0.0);
+    BJtensor temp2( def_dim_2, 0.0);
     double lower = 0.0;
-    BJtensor temp3( 2, def_dim_2, 0.0);
+    BJtensor temp3( def_dim_2, 0.0);
 
     double Delta_lambda = 0.0;
     double h_s[4]       = {0.0, 0.0, 0.0, 0.0};
@@ -1716,9 +1716,9 @@ XC::EPState XC::Template3Dep::SemiBackwardEulerEPState( const straintensor &stra
     //  BJtensor D = Criterion.ComplianceTensorD(Ey,nu);
 
     //  pulling out some XC::BJtensor and double definitions
-    BJtensor dFods(2, def_dim_2, 0.0);
-    BJtensor dQods(2, def_dim_2, 0.0);
-    BJtensor temp2(2, def_dim_2, 0.0);
+    BJtensor dFods(def_dim_2, 0.0);
+    BJtensor dQods(def_dim_2, 0.0);
+    BJtensor temp2(def_dim_2, 0.0);
     double lower = 0.0;
     double Delta_lambda = 0.0;
 
@@ -1944,11 +1944,11 @@ XC::EPState XC::Template3Dep::BackwardEulerEPState( const straintensor &strain_i
   //std::cerr << "start_stress " <<  start_stress;
 
   // Pulling out some XC::BJtensor and double definitions
-  BJtensor I2("I", 2, def_dim_2);
-  BJtensor I_ijkl("I", 4, def_dim_4);
+  BJtensor I2("I", def_dim_2);
+  BJtensor I_ijkl("I", def_dim_4);
   I_ijkl = I2("ij")*I2("kl");
   I_ijkl.null_indices();
-  BJtensor I_ikjl("I", 4, def_dim_4);
+  BJtensor I_ikjl("I", def_dim_4);
   I_ikjl = I_ijkl.transpose0110();
 
   //double Ey = Criterion.E();
@@ -1958,11 +1958,11 @@ XC::EPState XC::Template3Dep::BackwardEulerEPState( const straintensor &strain_i
   // BJtensor D = ComplianceTensorD(Ey,nu);
   // stresstensor REAL_start_stress = start_stress;
 
-  BJtensor dFods(2, def_dim_2, 0.0);
-  BJtensor dQods(2, def_dim_2, 0.0);
-  //  BJtensor dQodsextended(2, def_dim_2, 0.0);
-  //  BJtensor d2Qodqast(2, def_dim_2, 0.0);
-  BJtensor temp2(2, def_dim_2, 0.0);
+  BJtensor dFods(def_dim_2, 0.0);
+  BJtensor dQods(def_dim_2, 0.0);
+  //  BJtensor dQodsextended(def_dim_2, 0.0);
+  //  BJtensor d2Qodqast(def_dim_2, 0.0);
+  BJtensor temp2(def_dim_2, 0.0);
   double lower = 0.0;
   double Delta_lambda = 0.0; // Lambda
   double delta_lambda = 0.0; // dLambda
@@ -1981,12 +1981,12 @@ XC::EPState XC::Template3Dep::BackwardEulerEPState( const straintensor &strain_i
   //  double entry_kappa_cone = Criterion.kappa_cone_get();
   //  double entry_kappa_cap  = Criterion.kappa_cap_get();
 
-  BJtensor aC(2, def_dim_2, 0.0);
+  BJtensor aC(def_dim_2, 0.0);
   stresstensor BEstress;
   stresstensor residual;
-  BJtensor d2Qoverds2( 4, def_dim_4, 0.0);
-  BJtensor T( 4, def_dim_4, 0.0);
-  BJtensor Tinv( 4, def_dim_4, 0.0);
+  BJtensor d2Qoverds2( def_dim_4, 0.0);
+  BJtensor T( def_dim_4, 0.0);
+  BJtensor Tinv( def_dim_4, 0.0);
 
   double Fold = 0.0;
   BJtensor temp3lower;
@@ -2139,7 +2139,7 @@ XC::EPState XC::Template3Dep::BackwardEulerEPState( const straintensor &strain_i
       //GZ out
       //GZ out //Guanzhou added internal evolution Mar2005
       //GZ out hardMod_ = 0.0;
-      //GZ out XC::BJtensor Hh(2, def_dim_2, 0.0);
+      //GZ out XC::BJtensor Hh(def_dim_2, 0.0);
       //GZ out //Of 1st scalar internal vars
       //GZ out if( getELS1() ) {
       //GZ out         h_s[0]  = getELS1()->h_s( &EP_PredictorEPS, getPS());
@@ -2330,7 +2330,7 @@ XC::EPState XC::Template3Dep::BackwardEulerEPState( const straintensor &strain_i
 
               //Guanzhou out Mar2005
           //Guanzhou out Mar2005 //Z Cheng add: H
-              //Guanzhou out Mar2005 XC::BJtensor H( 2, def_dim_2, 0.0);
+              //Guanzhou out Mar2005 XC::BJtensor H( def_dim_2, 0.0);
               //Guanzhou out Mar2005 H = dQods;
 
           //dFods = Criterion.dFods(elastic_plastic_predictor_stress);
@@ -2339,7 +2339,7 @@ XC::EPState XC::Template3Dep::BackwardEulerEPState( const straintensor &strain_i
           dQods = getPS()->dQods( &EP_PredictorEPS );
 
           //Guanzhou Mar2005
-          BJtensor H( 2, def_dim_2, 0.0);
+          BJtensor H( def_dim_2, 0.0);
           H = dQods;
 
           //Fold = Criterion.f(elastic_plastic_predictor_stress);
@@ -2356,7 +2356,7 @@ XC::EPState XC::Template3Dep::BackwardEulerEPState( const straintensor &strain_i
           // Evaluating the hardening modulus: sum of  (df/dq*) * qbar
 
               hardMod_ = 0.0;
-          BJtensor Hh(2, def_dim_2, 0.0);
+          BJtensor Hh(def_dim_2, 0.0);
               //Of 1st scalar internal vars
 
              if( getELS1() ) {
@@ -2674,7 +2674,7 @@ XC::EPState XC::Template3Dep::BackwardEulerEPState( const straintensor &strain_i
            //Criterion.kappa_set( Return_stress, q_ast) ;
 
            // Generating Consistent Stiffness XC::Tensor Eep
-           BJtensor I2("I", 2, def_dim_2);
+           BJtensor I2("I", def_dim_2);
            BJtensor I_ijkl = I2("ij")*I2("kl");
            I_ijkl.null_indices();
            BJtensor I_ikjl = I_ijkl.transpose0110();
@@ -2696,9 +2696,9 @@ XC::EPState XC::Template3Dep::BackwardEulerEPState( const straintensor &strain_i
            BJtensor R = Tinv("ijmn")*E("ijkl");
            R.null_indices();
 
-     BJtensor Hh(2, def_dim_2, 0.0);
+     BJtensor Hh(def_dim_2, 0.0);
      //Hh.Reset_to(0.0);
-     BJtensor H(2, def_dim_2, 0.0);
+     BJtensor H(def_dim_2, 0.0);
      H =dQods;
 
     //Of 1st scalar internal vars
@@ -3017,9 +3017,9 @@ XC::EPState XC::Template3Dep::BESubIncrementation( const XC::straintensor & stra
 ////================================================================================
 //BJtensor XC::Template3Dep::ElasticStiffnessTensor( double E, double nu) const
 //  {
-//    BJtensor ret( 4, def_dim_4, 0.0 );
+//    BJtensor ret( def_dim_4, 0.0 );
 //
-//    BJtensor I2("I", 2, def_dim_2);
+//    BJtensor I2("I", def_dim_2);
 //    BJtensor I_ijkl = I2("ij")*I2("kl");
 //    I_ijkl.null_indices();
 //    BJtensor I_ikjl = I_ijkl.transpose0110();
@@ -3044,10 +3044,10 @@ XC::EPState XC::Template3Dep::BESubIncrementation( const XC::straintensor & stra
 //      exit(1);
 //    }
 //
-//    BJtensor ret( 4, def_dim_4, 0.0 );
+//    BJtensor ret( def_dim_4, 0.0 );
 //    //BJtensor ret;
 //
-//    BJtensor I2("I", 2, def_dim_2);
+//    BJtensor I2("I", def_dim_2);
 //    BJtensor I_ijkl = I2("ij")*I2("kl");
 //    I_ijkl.null_indices();
 //    BJtensor I_ikjl = I_ijkl.transpose0110();
@@ -3304,9 +3304,9 @@ std::ostream& XC::operator<<(std::ostream &os, const XC::Template3Dep & MP)
 //
 //  backwardEPS.setStress(elastic_predictor);
 //
-//  BJtensor dFods(2, def_dim_2, 0.0);
-//  BJtensor dQods(2, def_dim_2, 0.0);
-//  BJtensor d2Qoverds2( 4, def_dim_4, 0.0);
+//  BJtensor dFods(def_dim_2, 0.0);
+//  BJtensor dQods(def_dim_2, 0.0);
+//  BJtensor d2Qoverds2( def_dim_4, 0.0);
 //
 //  dQods = getPS()->dQods( &backwardEPS );
 //
@@ -3319,7 +3319,7 @@ std::ostream& XC::operator<<(std::ostream &os, const XC::Template3Dep & MP)
 //  stresstensor h_t[4];
 //  //XC::stresstensor xi_t[4];
 //
-//  //BJtensor Hh(2, def_dim_2, 0.0);
+//  //BJtensor Hh(def_dim_2, 0.0);
 //  //Of 1st scalar internal vars
 //  if( getELS1() ) {
 //          h_s[0]  = getELS1()->h_s( &backwardEPS, getPS());
