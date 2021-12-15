@@ -919,8 +919,8 @@ double *XC::profilematrix::operator*(const BJvector &arg)
 
     for( int i=0 ; i<neq ; i++ )
      {
-      result[i] += this->pc_profilematrix_rep->ad[i] * arg.val(i+1);
-//       ::printf(" \n\nI%d %+6.2e%+6.2e%+6.2e\n\n",i,this->pc_profilematrix_rep->ad[i],arg.val(i+1),result[i+1] );
+      result[i] += this->pc_profilematrix_rep->ad[i] * arg(i+1);
+//       ::printf(" \n\nI%d %+6.2e%+6.2e%+6.2e\n\n",i,this->pc_profilematrix_rep->ad[i],arg(i+1),result[i+1] );
       jp= this->pc_profilematrix_rep->jp[i];
       if ( i==0 )
          {
@@ -937,16 +937,16 @@ double *XC::profilematrix::operator*(const BJvector &arg)
  	  //iau= jp - j +1;
 	  iau= jp - j ;
 	  irow= i  -j ;
-	  result[irow] +=this->pc_profilematrix_rep->au[iau] * arg.val(i+1);
-	  result[i]  +=this->pc_profilematrix_rep->al[iau] * arg.val(irow+1);
-//       ::printf(" \n\nJ%d %+6.2e%+6.2e%+6.2e\n\n",j,this->pc_profilematrix_rep->au[iau],arg.val(i+1),result[irow] );
+	  result[irow] +=this->pc_profilematrix_rep->au[iau] * arg(i+1);
+	  result[i]  +=this->pc_profilematrix_rep->al[iau] * arg(irow+1);
+//       ::printf(" \n\nJ%d %+6.2e%+6.2e%+6.2e\n\n",j,this->pc_profilematrix_rep->au[iau],arg(i+1),result[irow] );
        }
      
 //      ::printf(" \n\n  %+6.2e\n", result[i+1] );
       
      }
 //   for( int i=0 ; i<neq ; i++ )
-//       ::printf(" \n result=%+6.2e arg=%+6.2e\n", result[i+1], arg.val(i+1) );
+//       ::printf(" \n result=%+6.2e arg=%+6.2e\n", result[i+1], arg(i+1) );
   return result;
   }
 
@@ -1322,21 +1322,21 @@ double XC::profilematrix::mean()
 //tempout                      { 
 //tempout                        KK= MI - IJ + 1;
 //tempout                        pc_profilematrix_rep->al[KK-1]= 
-//tempout			  pc_profilematrix_rep->al[KK-1] + Ke.val(I,J)*scale;
+//tempout			  pc_profilematrix_rep->al[KK-1] + Ke(I,J)*scale;
 //tempout                      }
 //tempout                    
 //tempout		    else if (IJ == 0 ) // Diagonal elements
 //tempout                      { 
 //tempout                        KK= II ;
 //tempout                        pc_profilematrix_rep->ad[KK-1]= 
-//tempout			  pc_profilematrix_rep->ad[KK-1] + Ke.val(I,J)*scale;
+//tempout			  pc_profilematrix_rep->ad[KK-1] + Ke(I,J)*scale;
 //tempout                      }
 //tempout                    
 //tempout		    else if (IJ < 0 )  // Upper triangular!
 //tempout                      { 
 //tempout                        KK= MJ + IJ + 1;
 //tempout                        pc_profilematrix_rep->au[KK-1]= 
-//tempout		          pc_profilematrix_rep->au[KK-1] + Ke.val(I,J)*scale;
+//tempout		          pc_profilematrix_rep->au[KK-1] + Ke(I,J)*scale;
 //tempout                      }
 //tempout
 //tempout                  }

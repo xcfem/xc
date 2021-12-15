@@ -349,7 +349,7 @@ Vector & Vector::operator=(const TNSR &V)
              std::cerr << "Vector::operator=() - Vector size must be 1\n"; 
              return *this;
            }
-        theData[0]= V.cval(1,1);
+        theData[0]= V(1,1);
       }
     else if(dim == 2)
       {
@@ -358,9 +358,9 @@ Vector & Vector::operator=(const TNSR &V)
             std::cerr << "Vector::operator=() - Vector size must be 3\n"; 
             return *this;
           }
-        theData[0]= V.cval(1,1);
-        theData[1]= V.cval(2,2);
-        theData[2]= V.cval(1,2);
+        theData[0]= V(1,1);
+        theData[1]= V(2,2);
+        theData[2]= V(1,2);
       }
     else
       {
@@ -369,12 +369,12 @@ Vector & Vector::operator=(const TNSR &V)
             std::cerr << "Vector::operator=() - Vector size must be 6\n"; 
             return *this;
           }      
-        theData[0]= V.cval(1,1);
-        theData[1]= V.cval(2,2);
-        theData[2]= V.cval(3,3);
-        theData[3]= V.cval(1,2);
-        theData[4]= V.cval(1,3);
-        theData[5]= V.cval(2,3);
+        theData[0]= V(1,1);
+        theData[1]= V(2,2);
+        theData[2]= V(3,3);
+        theData[3]= V(1,2);
+        theData[4]= V(1,3);
+        theData[5]= V(2,3);
       }
     return *this;
   }

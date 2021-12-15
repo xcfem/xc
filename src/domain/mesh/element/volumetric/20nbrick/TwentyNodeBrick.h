@@ -126,8 +126,8 @@ class TwentyNodeBrick: public ElementBase<20>
     void set_strain_stress_tensor(FILE *fp, double * u);
     BJtensor getMassTensor(void) const;
 
-    BJtensor Jacobian_3D(BJtensor dh) const;
-    BJtensor Jacobian_3Dinv(BJtensor dh) const;
+    BJtensor Jacobian_3D(const BJtensor &dh) const;
+    BJtensor Jacobian_3Dinv(const BJtensor &dh) const;
     BJtensor Nodal_Coordinates(void) const;
 
     BJtensor incr_disp(void) const;
@@ -135,8 +135,8 @@ class TwentyNodeBrick: public ElementBase<20>
 
     BJtensor total_disp(FILE *fp, double * u);
 
-    BJtensor stiffness_matrix(const BJtensor & K);
-    BJtensor mass_matrix(const BJtensor & M);
+    BJtensor stiffness_matrix(const BJtensor &);
+    BJtensor mass_matrix(const BJtensor &);
 
 
     int  get_global_number_of_node(int local_node_number);
@@ -161,7 +161,7 @@ class TwentyNodeBrick: public ElementBase<20>
     BJtensor linearized_nodal_forces(void) const;
 
     // updates Material point stresses and strains from given displacements
-    BJtensor update_stress_strain(BJtensor & disp);
+    BJtensor update_stress_strain(BJtensor &disp);
 
     void report(const std::string &);
     void reportshort(const std::string &);

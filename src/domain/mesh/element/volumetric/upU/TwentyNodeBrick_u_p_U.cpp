@@ -133,9 +133,9 @@ XC::TwentyNodeBrick_u_p_U::TwentyNodeBrick_u_p_U(int element_number,
    rho_s(rs), rho_f(rf), ks(kks), kf(kkf), pressure(pp), eleQ(0), Ki(0)
   {
     // permeability
-    perm.val(1,1) = permb_x;
-    perm.val(2,2) = permb_y;
-    perm.val(3,3) = permb_z;
+    perm(1,1) = permb_x;
+    perm(2,2) = permb_y;
+    perm(3,3) = permb_z;
     theNodes.set_id_nodes(node_numb_1,node_numb_2,node_numb_3,node_numb_4,node_numb_5,node_numb_6,node_numb_7,node_numb_8,node_numb_9,node_numb_10,node_numb_11,node_numb_12,node_numb_13,node_numb_14,node_numb_15,node_numb_16,node_numb_17,node_numb_18,node_numb_19,node_numb_20);
 
   }
@@ -211,13 +211,13 @@ const XC::Matrix &XC::TwentyNodeBrick_u_p_U::getDamp(void) const
       for( j=0; j<Num_Nodes; j++ ) {
         for( m=0; m<Num_Dim; m++) {
           for( n=0; n<Num_Dim; n++) {
-            Ctemp =  tC.cval(i+1, m+1, n+1, j+1);
+            Ctemp =  tC(i+1, m+1, n+1, j+1);
             //C1
             C(i*Num_Dof+m, j*Num_Dof+n) = Ctemp *(poro*poro);
             if(rayFactors.getAlphaM() != 0.0)
-               C(i*Num_Dof+m, j*Num_Dof+n) += CRm.cval(i+1, j+1) * rayFactors.getAlphaM();
+               C(i*Num_Dof+m, j*Num_Dof+n) += CRm(i+1, j+1) * rayFactors.getAlphaM();
             if(rayFactors.getBetaK() != 0.0)
-               C(i*Num_Dof+m, j*Num_Dof+n) += CRk.cval(i+1, m+1, n+1, j+1) * rayFactors.getBetaK();
+               C(i*Num_Dof+m, j*Num_Dof+n) += CRk(i+1, m+1, n+1, j+1) * rayFactors.getBetaK();
 
             //C3
             C(i*Num_Dof+m+4, j*Num_Dof+n+4) = Ctemp *(poro*poro);
@@ -459,12 +459,12 @@ int XC::TwentyNodeBrick_u_p_U::getResponse(int responseID, Information &eleInfo)
     for(i=0; i<Num_TotalGaussPts; i++)
       {
         sigma = physicalProperties[i]->getStressTensor();
-        stresses(cnt++) = sigma.cval(1,1);  //xx
-        stresses(cnt++) = sigma.cval(2,2);  //yy
-        stresses(cnt++) = sigma.cval(3,3);  //zz
-        stresses(cnt++) = sigma.cval(2,3);  //yz
-        stresses(cnt++) = sigma.cval(3,1);  //zx
-        stresses(cnt++) = sigma.cval(2,3);  //xy
+        stresses(cnt++) = sigma(1,1);  //xx
+        stresses(cnt++) = sigma(2,2);  //yy
+        stresses(cnt++) = sigma(3,3);  //zz
+        stresses(cnt++) = sigma(2,3);  //yz
+        stresses(cnt++) = sigma(3,1);  //zx
+        stresses(cnt++) = sigma(2,3);  //xy
       }
     return eleInfo.setVector(stresses);
   }
@@ -477,7 +477,7 @@ int XC::TwentyNodeBrick_u_p_U::getResponse(int responseID, Information &eleInfo)
     GCoord = getGaussPts();
     for(i=0; i<Num_TotalGaussPts; i++) {
       for(j=0; j<Num_Dim; j++) {
-        Gpts(cnt++) = GCoord.cval(i+1,j+1);     //fixed '+1's, ZC 12/01/04
+        Gpts(cnt++) = GCoord(i+1,j+1);     //fixed '+1's, ZC 12/01/04
       }
     }
     return eleInfo.setVector(Gpts);
@@ -555,9 +555,9 @@ int XC::TwentyNodeBrick_u_p_U::update(void)
     total_displacements = getNodesDisp();
     int i;
     for(i=1; i<=Num_Nodes; i++) {
-      total_disp.val(i,1) = total_displacements.cval(i,1);
-      total_disp.val(i,2) = total_displacements.cval(i,2);
-      total_disp.val(i,3) = total_displacements.cval(i,3);
+      total_disp(i,1) = total_displacements(i,1);
+      total_disp(i,2) = total_displacements(i,2);
+      total_disp(i,3) = total_displacements(i,3);
     }
 
     int GP_c_r, GP_c_s, GP_c_t, where;
@@ -629,7 +629,7 @@ int XC::TwentyNodeBrick_u_p_U::update(void)
 
     for(i=0; i<Num_Nodes; i++) {
       for(j=0; j<Num_Dim; j++) {
-        PExS(i*Num_Dof+j) += Pexs.cval(i+1)*bf(j) * ((1.0-poro)*rho_s);
+        PExS(i*Num_Dof+j) += Pexs(i+1)*bf(j) * ((1.0-poro)*rho_s);
       }
     }
 
@@ -682,7 +682,7 @@ int XC::TwentyNodeBrick_u_p_U::update(void)
 
     for(i=0; i<Num_Nodes; i++) {
       for(j=0; j<Num_Dim; j++) {
-        PExF(i*Num_Dof+j+4) += Pexf.cval(i+1)*bf(j) * (poro*rho_f);
+        PExF(i*Num_Dof+j+4) += Pexf(i+1)*bf(j) * (poro*rho_f);
       }
     }
 
@@ -711,7 +711,7 @@ const XC::Matrix &XC::TwentyNodeBrick_u_p_U::getStiff(int Ki_flag) const
       for( j=0; j<Num_Nodes; j++ ) {
         for( m=0; m<Num_Dim; m++) {
           for( n=0; n<Num_Dim; n++) {
-            K(i*Num_Dof+m, j*Num_Dof+n) = tKep.cval(i+1, m+1, n+1, j+1);
+            K(i*Num_Dof+m, j*Num_Dof+n) = tKep(i+1, m+1, n+1, j+1);
           }
         }
       }
@@ -721,8 +721,8 @@ const XC::Matrix &XC::TwentyNodeBrick_u_p_U::getStiff(int Ki_flag) const
     for( i=0 ; i<Num_Nodes; i++ ) {
       for( j=0; j<Num_Nodes; j++ ) {
         for( m=0; m<Num_Dim; m++) {
-          K(i*Num_Dof+m, j*Num_Dof+3) = -tG.cval(i+1, m+1, j+1) *(alpha-poro);
-          K(j*Num_Dof+3, i*Num_Dof+m) = -tG.cval(i+1, m+1, j+1) *(alpha-poro);
+          K(i*Num_Dof+m, j*Num_Dof+3) = -tG(i+1, m+1, j+1) *(alpha-poro);
+          K(j*Num_Dof+3, i*Num_Dof+m) = -tG(i+1, m+1, j+1) *(alpha-poro);
         }
       }
     }
@@ -730,7 +730,7 @@ const XC::Matrix &XC::TwentyNodeBrick_u_p_U::getStiff(int Ki_flag) const
     //P
     for( i=0 ; i<Num_Nodes; i++ ) {
       for( j=0; j<Num_Nodes; j++ ) {
-        K(i*Num_Dof+3, j*Num_Dof+3) = -tP.cval(i+1, j+1);
+        K(i*Num_Dof+3, j*Num_Dof+3) = -tP(i+1, j+1);
       }
     }
 
@@ -738,8 +738,8 @@ const XC::Matrix &XC::TwentyNodeBrick_u_p_U::getStiff(int Ki_flag) const
     for( i=0 ; i<Num_Nodes; i++ ) {
       for( j=0; j<Num_Nodes; j++ ) {
         for( m=0; m<Num_Dim; m++) {
-          K(i*Num_Dof+m+4, j*Num_Dof+3) = -tG.cval(i+1, m+1, j+1) *poro;
-          K(j*Num_Dof+3, i*Num_Dof+m+4) = -tG.cval(i+1, m+1, j+1) *poro;
+          K(i*Num_Dof+m+4, j*Num_Dof+3) = -tG(i+1, m+1, j+1) *poro;
+          K(j*Num_Dof+3, i*Num_Dof+m+4) = -tG(i+1, m+1, j+1) *poro;
         }
       }
     }
@@ -871,7 +871,7 @@ XC::BJtensor XC::TwentyNodeBrick_u_p_U::getDampTensorC123(void) const
     // This is for C1, C2 and C3, C1 = C2 = c3
     // Since solid and fluid shape function the same
 
-    if(perm.val(1,1)==0.0 || perm.val(2,2)==0.0 || perm.val(3,3)==0.0) {
+    if(perm(1,1)==0.0 || perm(2,2)==0.0 || perm(3,3)==0.0) {
        std::cerr<<" Error, XC::TwentyNodeBrick_u_p_U::getDampTensorC123 -- permeability (x/y/z) is zero\n";
        exit(-1);
     }
@@ -1030,7 +1030,7 @@ XC::BJtensor XC::TwentyNodeBrick_u_p_U::getStiffnessTensorP(void) const
 }
 
 //======================================================================
- XC::BJtensor XC::TwentyNodeBrick_u_p_U::Jacobian_3D(BJtensor dh) const
+ XC::BJtensor XC::TwentyNodeBrick_u_p_U::Jacobian_3D(const BJtensor &dh) const
 {
      BJtensor N_C = getNodesCrds();
      BJtensor J3D = N_C("ki") * dh("kj");
@@ -1039,11 +1039,11 @@ XC::BJtensor XC::TwentyNodeBrick_u_p_U::getStiffnessTensorP(void) const
 }
 
 //======================================================================
-XC::BJtensor XC::TwentyNodeBrick_u_p_U::Jacobian_3Dinv(BJtensor dh) const
+XC::BJtensor XC::TwentyNodeBrick_u_p_U::Jacobian_3Dinv(const BJtensor &dh) const
   { return Jacobian_3D(dh).inverse(); }
 
 //======================================================================
-XC::BJtensor XC::TwentyNodeBrick_u_p_U::dh_Global(BJtensor dh) const
+XC::BJtensor XC::TwentyNodeBrick_u_p_U::dh_Global(const BJtensor &dh) const
   {
      BJtensor  JacobianINV0 = Jacobian_3Dinv(dh);
      BJtensor  dhGlobal_0 = dh("ik") * JacobianINV0("kj");
@@ -1061,7 +1061,7 @@ XC::BJtensor XC::TwentyNodeBrick_u_p_U::dh_Global(BJtensor dh) const
     for(i=0; i<Num_Nodes; i++) {
       const XC::Vector&TNodesCrds = theNodes[i]->getCrds();
       for(j=0; j<Num_Dim; j++) {
-        N_coord.val(i+1,j+1) = TNodesCrds(j);
+        N_coord(i+1,j+1) = TNodesCrds(j);
       }
     }
 
@@ -1079,7 +1079,7 @@ XC::BJtensor XC::TwentyNodeBrick_u_p_U::dh_Global(BJtensor dh) const
     for(i=0; i<Num_Nodes; i++) {
       const XC::Vector&TNodesDisp = theNodes[i]->getTrialDisp();
       for(j=0; j<Num_Dof; j++) {
-        total_disp.val(i+1,j+1) = TNodesDisp(j);
+        total_disp(i+1,j+1) = TNodesDisp(j);
       }
     }
 
@@ -1093,7 +1093,7 @@ double XC::TwentyNodeBrick_u_p_U::getPorePressure(double x1, double x2, double x
     for(int i=0; i<Num_Nodes; i++)
       {
         const XC::Vector& T_disp = theNodes[i]->getTrialDisp();
-        pp += shapeFunction(x1,x2,x3).cval(i+1) * T_disp(3);
+        pp += shapeFunction(x1,x2,x3)(i+1) * T_disp(3);
       }
     return pp;
   }
@@ -1105,49 +1105,49 @@ double XC::TwentyNodeBrick_u_p_U::getPorePressure(double x1, double x2, double x
     BJtensor h(1, Hfun, 0.0);
 
       // influence of the node number 20
-    h.val(20)=(1.0+r1)*(1.0-r2)*(1.0-r3*r3)/4.0;
+    h(20)=(1.0+r1)*(1.0-r2)*(1.0-r3*r3)/4.0;
       // influence of the node number 19
-    h.val(19)=(1.0-r1)*(1.0-r2)*(1.0-r3*r3)/4.0;
+    h(19)=(1.0-r1)*(1.0-r2)*(1.0-r3*r3)/4.0;
       // influence of the node number 18
-    h.val(18)=(1.0-r1)*(1.0+r2)*(1.0-r3*r3)/4.0;
+    h(18)=(1.0-r1)*(1.0+r2)*(1.0-r3*r3)/4.0;
       // influence of the node number 17
-    h.val(17)=(1.0+r1)*(1.0+r2)*(1.0-r3*r3)/4.0;
+    h(17)=(1.0+r1)*(1.0+r2)*(1.0-r3*r3)/4.0;
 
       // influence of the node number 16
-    h.val(16)=(1.0+r1)*(1.0-r2*r2)*(1.0-r3)/4.0;
+    h(16)=(1.0+r1)*(1.0-r2*r2)*(1.0-r3)/4.0;
       // influence of the node number 15
-    h.val(15)=(1.0-r1*r1)*(1.0-r2)*(1.0-r3)/4.0;
+    h(15)=(1.0-r1*r1)*(1.0-r2)*(1.0-r3)/4.0;
       // influence of the node number 14
-    h.val(14)=(1.0-r1)*(1.0-r2*r2)*(1.0-r3)/4.0;
+    h(14)=(1.0-r1)*(1.0-r2*r2)*(1.0-r3)/4.0;
       // influence of the node number 13
-    h.val(13)=(1.0-r1*r1)*(1.0+r2)*(1.0-r3)/4.0;
+    h(13)=(1.0-r1*r1)*(1.0+r2)*(1.0-r3)/4.0;
 
       // influence of the node number 12
-    h.val(12)=(1.0+r1)*(1.0-r2*r2)*(1.0+r3)/4.0;
+    h(12)=(1.0+r1)*(1.0-r2*r2)*(1.0+r3)/4.0;
       // influence of the node number 11
-    h.val(11)=(1.0-r1*r1)*(1.0-r2)*(1.0+r3)/4.0;
+    h(11)=(1.0-r1*r1)*(1.0-r2)*(1.0+r3)/4.0;
       // influence of the node number 10
-    h.val(10)=(1.0-r1)*(1.0-r2*r2)*(1.0+r3)/4.0;
+    h(10)=(1.0-r1)*(1.0-r2*r2)*(1.0+r3)/4.0;
       // influence of the node number 9
-    h.val( 9)=(1.0-r1*r1)*(1.0+r2)*(1.0+r3)/4.0;
+    h( 9)=(1.0-r1*r1)*(1.0+r2)*(1.0+r3)/4.0;
 
       // influence of the node number 8
-    h.val(8)=(1.0+r1)*(1.0-r2)*(1.0-r3)/8.0 - (h.val(15)+h.val(16)+h.val(20))/2.0;
+    h(8)=(1.0+r1)*(1.0-r2)*(1.0-r3)/8.0 - (h(15)+h(16)+h(20))/2.0;
       // influence of the node number 7
-    h.val(7)=(1.0-r1)*(1.0-r2)*(1.0-r3)/8.0 - (h.val(14)+h.val(15)+h.val(19))/2.0;
+    h(7)=(1.0-r1)*(1.0-r2)*(1.0-r3)/8.0 - (h(14)+h(15)+h(19))/2.0;
       // influence of the node number 6
-    h.val(6)=(1.0-r1)*(1.0+r2)*(1.0-r3)/8.0 - (h.val(13)+h.val(14)+h.val(18))/2.0;
+    h(6)=(1.0-r1)*(1.0+r2)*(1.0-r3)/8.0 - (h(13)+h(14)+h(18))/2.0;
       // influence of the node number 5
-    h.val(5)=(1.0+r1)*(1.0+r2)*(1.0-r3)/8.0 - (h.val(13)+h.val(16)+h.val(17))/2.0;
+    h(5)=(1.0+r1)*(1.0+r2)*(1.0-r3)/8.0 - (h(13)+h(16)+h(17))/2.0;
 
       // influence of the node number 4
-    h.val(4)=(1.0+r1)*(1.0-r2)*(1.0+r3)/8.0 - (h.val(11)+h.val(12)+h.val(20))/2.0;
+    h(4)=(1.0+r1)*(1.0-r2)*(1.0+r3)/8.0 - (h(11)+h(12)+h(20))/2.0;
       // influence of the node number 3
-    h.val(3)=(1.0-r1)*(1.0-r2)*(1.0+r3)/8.0 - (h.val(10)+h.val(11)+h.val(19))/2.0;
+    h(3)=(1.0-r1)*(1.0-r2)*(1.0+r3)/8.0 - (h(10)+h(11)+h(19))/2.0;
       // influence of the node number 2
-    h.val(2)=(1.0-r1)*(1.0+r2)*(1.0+r3)/8.0 - (h.val(10)+h.val(18)+h.val(9))/2.0;
+    h(2)=(1.0-r1)*(1.0+r2)*(1.0+r3)/8.0 - (h(10)+h(18)+h(9))/2.0;
       // influence of the node number 1
-    h.val(1)=(1.0+r1)*(1.0+r2)*(1.0+r3)/8.0 - (h.val(12)+h.val(17)+h.val(9))/2.0;
+    h(1)=(1.0+r1)*(1.0+r2)*(1.0+r3)/8.0 - (h(12)+h(17)+h(9))/2.0;
 
     return h;
 }
@@ -1160,89 +1160,89 @@ double XC::TwentyNodeBrick_u_p_U::getPorePressure(double x1, double x2, double x
     BJtensor dh(2, DHfun, 0.0);
 
       // influence of the node number 20
-    dh.val(20,1) =   (1.0-r2)*(1.0-r3*r3)/4.0;
-    dh.val(20,2) = - (1.0+r1)*(1.0-r3*r3)/4.0;
-    dh.val(20,3) = - (1.0+r1)*(1.0-r2)*r3/2.0;
+    dh(20,1) =   (1.0-r2)*(1.0-r3*r3)/4.0;
+    dh(20,2) = - (1.0+r1)*(1.0-r3*r3)/4.0;
+    dh(20,3) = - (1.0+r1)*(1.0-r2)*r3/2.0;
       // influence of the node number 19
-    dh.val(19,1) = - (1.0-r2)*(1.0-r3*r3)/4.0;
-    dh.val(19,2) = - (1.0-r1)*(1.0-r3*r3)/4.0;
-    dh.val(19,3) = - (1.0-r1)*(1.0-r2)*r3/2.0;
+    dh(19,1) = - (1.0-r2)*(1.0-r3*r3)/4.0;
+    dh(19,2) = - (1.0-r1)*(1.0-r3*r3)/4.0;
+    dh(19,3) = - (1.0-r1)*(1.0-r2)*r3/2.0;
       // influence of the node number 18
-    dh.val(18,1) = - (1.0+r2)*(1.0-r3*r3)/4.0;
-    dh.val(18,2) =   (1.0-r1)*(1.0-r3*r3)/4.0;
-    dh.val(18,3) = - (1.0-r1)*(1.0+r2)*r3/2.0;
+    dh(18,1) = - (1.0+r2)*(1.0-r3*r3)/4.0;
+    dh(18,2) =   (1.0-r1)*(1.0-r3*r3)/4.0;
+    dh(18,3) = - (1.0-r1)*(1.0+r2)*r3/2.0;
       // influence of the node number 17
-    dh.val(17,1) =   (1.0+r2)*(1.0-r3*r3)/4.0;
-    dh.val(17,2) =   (1.0+r1)*(1.0-r3*r3)/4.0;
-    dh.val(17,3) = - (1.0+r1)*(1.0+r2)*r3/2.0;
+    dh(17,1) =   (1.0+r2)*(1.0-r3*r3)/4.0;
+    dh(17,2) =   (1.0+r1)*(1.0-r3*r3)/4.0;
+    dh(17,3) = - (1.0+r1)*(1.0+r2)*r3/2.0;
 
       // influence of the node number 16
-    dh.val(16,1) =   (1.0-r2*r2)*(1.0-r3)/4.0;
-    dh.val(16,2) = - (1.0+r1)*r2*(1.0-r3)/2.0;
-    dh.val(16,3) = - (1.0+r1)*(1.0-r2*r2)/4.0;
+    dh(16,1) =   (1.0-r2*r2)*(1.0-r3)/4.0;
+    dh(16,2) = - (1.0+r1)*r2*(1.0-r3)/2.0;
+    dh(16,3) = - (1.0+r1)*(1.0-r2*r2)/4.0;
       // influnce of the node number 15
-    dh.val(15,1) = - r1*(1.0-r2)*(1.0-r3)/2.0;
-    dh.val(15,2) = - (1.0-r1*r1)*(1.0-r3)/4.0;
-    dh.val(15,3) = - (1.0-r1*r1)*(1.0-r2)/4.0;
+    dh(15,1) = - r1*(1.0-r2)*(1.0-r3)/2.0;
+    dh(15,2) = - (1.0-r1*r1)*(1.0-r3)/4.0;
+    dh(15,3) = - (1.0-r1*r1)*(1.0-r2)/4.0;
       // influence of the node number 14
-    dh.val(14,1) = - (1.0-r2*r2)*(1.0-r3)/4.0;
-    dh.val(14,2) = - (1.0-r1)*r2*(1.0-r3)/2.0;
-    dh.val(14,3) = - (1.0-r1)*(1.0-r2*r2)/4.0;
+    dh(14,1) = - (1.0-r2*r2)*(1.0-r3)/4.0;
+    dh(14,2) = - (1.0-r1)*r2*(1.0-r3)/2.0;
+    dh(14,3) = - (1.0-r1)*(1.0-r2*r2)/4.0;
       // influence of the node number 13
-    dh.val(13,1) = - r1*(1.0+r2)*(1.0-r3)/2.0;
-    dh.val(13,2) =   (1.0-r1*r1)*(1.0-r3)/4.0;
-    dh.val(13,3) = - (1.0-r1*r1)*(1.0+r2)/4.0;
+    dh(13,1) = - r1*(1.0+r2)*(1.0-r3)/2.0;
+    dh(13,2) =   (1.0-r1*r1)*(1.0-r3)/4.0;
+    dh(13,3) = - (1.0-r1*r1)*(1.0+r2)/4.0;
 
       // influence of the node number 12
-    dh.val(12,1) =   (1.0-r2*r2)*(1.0+r3)/4.0;
-    dh.val(12,2) = - (1.0+r1)*r2*(1.0+r3)/2.0;
-    dh.val(12,3) =   (1.0+r1)*(1.0-r2*r2)/4.0;
+    dh(12,1) =   (1.0-r2*r2)*(1.0+r3)/4.0;
+    dh(12,2) = - (1.0+r1)*r2*(1.0+r3)/2.0;
+    dh(12,3) =   (1.0+r1)*(1.0-r2*r2)/4.0;
       // influence of the node number 11
-    dh.val(11,1) = - r1*(1.0-r2)*(1.0+r3)/2.0;
-    dh.val(11,2) = - (1.0-r1*r1)*(1.0+r3)/4.0;
-    dh.val(11,3) =   (1.0-r1*r1)*(1.0-r2)/4.0;
+    dh(11,1) = - r1*(1.0-r2)*(1.0+r3)/2.0;
+    dh(11,2) = - (1.0-r1*r1)*(1.0+r3)/4.0;
+    dh(11,3) =   (1.0-r1*r1)*(1.0-r2)/4.0;
       // influence of the node number 10
-    dh.val(10,1) = - (1.0-r2*r2)*(1.0+r3)/4.0;
-    dh.val(10,2) = - (1.0-r1)*r2*(1.0+r3)/2.0;
-    dh.val(10,3) =   (1.0-r1)*(1.0-r2*r2)/4.0;
+    dh(10,1) = - (1.0-r2*r2)*(1.0+r3)/4.0;
+    dh(10,2) = - (1.0-r1)*r2*(1.0+r3)/2.0;
+    dh(10,3) =   (1.0-r1)*(1.0-r2*r2)/4.0;
       // influence of the node number 9
-    dh.val(9,1)  = - r1*(1.0+r2)*(1.0+r3)/2.0;
-    dh.val(9,2)  =   (1.0-r1*r1)*(1.0+r3)/4.0;
-    dh.val(9,3)  =   (1.0-r1*r1)*(1.0+r2)/4.0;
+    dh(9,1)  = - r1*(1.0+r2)*(1.0+r3)/2.0;
+    dh(9,2)  =   (1.0-r1*r1)*(1.0+r3)/4.0;
+    dh(9,3)  =   (1.0-r1*r1)*(1.0+r2)/4.0;
 
       // influence of the node number 8
-    dh.val(8,1)= (1.0-r2)*(1.0-r3)/8.0 - (dh.val(15,1)+dh.val(16,1)+dh.val(20,1))/2.0;
-    dh.val(8,2)=-(1.0+r1)*(1.0-r3)/8.0 - (dh.val(15,2)+dh.val(16,2)+dh.val(20,2))/2.0;
-    dh.val(8,3)=-(1.0+r1)*(1.0-r2)/8.0 - (dh.val(15,3)+dh.val(16,3)+dh.val(20,3))/2.0;
+    dh(8,1)= (1.0-r2)*(1.0-r3)/8.0 - (dh(15,1)+dh(16,1)+dh(20,1))/2.0;
+    dh(8,2)=-(1.0+r1)*(1.0-r3)/8.0 - (dh(15,2)+dh(16,2)+dh(20,2))/2.0;
+    dh(8,3)=-(1.0+r1)*(1.0-r2)/8.0 - (dh(15,3)+dh(16,3)+dh(20,3))/2.0;
       // influence of the node number 7
-    dh.val(7,1)=-(1.0-r2)*(1.0-r3)/8.0 - (dh.val(14,1)+dh.val(15,1)+dh.val(19,1))/2.0;
-    dh.val(7,2)=-(1.0-r1)*(1.0-r3)/8.0 - (dh.val(14,2)+dh.val(15,2)+dh.val(19,2))/2.0;
-    dh.val(7,3)=-(1.0-r1)*(1.0-r2)/8.0 - (dh.val(14,3)+dh.val(15,3)+dh.val(19,3))/2.0;
+    dh(7,1)=-(1.0-r2)*(1.0-r3)/8.0 - (dh(14,1)+dh(15,1)+dh(19,1))/2.0;
+    dh(7,2)=-(1.0-r1)*(1.0-r3)/8.0 - (dh(14,2)+dh(15,2)+dh(19,2))/2.0;
+    dh(7,3)=-(1.0-r1)*(1.0-r2)/8.0 - (dh(14,3)+dh(15,3)+dh(19,3))/2.0;
       // influence of the node number 6
-    dh.val(6,1)=-(1.0+r2)*(1.0-r3)/8.0 - (dh.val(13,1)+dh.val(14,1)+dh.val(18,1))/2.0;
-    dh.val(6,2)= (1.0-r1)*(1.0-r3)/8.0 - (dh.val(13,2)+dh.val(14,2)+dh.val(18,2))/2.0;
-    dh.val(6,3)=-(1.0-r1)*(1.0+r2)/8.0 - (dh.val(13,3)+dh.val(14,3)+dh.val(18,3))/2.0;
+    dh(6,1)=-(1.0+r2)*(1.0-r3)/8.0 - (dh(13,1)+dh(14,1)+dh(18,1))/2.0;
+    dh(6,2)= (1.0-r1)*(1.0-r3)/8.0 - (dh(13,2)+dh(14,2)+dh(18,2))/2.0;
+    dh(6,3)=-(1.0-r1)*(1.0+r2)/8.0 - (dh(13,3)+dh(14,3)+dh(18,3))/2.0;
       // influence of the node number 5
-    dh.val(5,1)= (1.0+r2)*(1.0-r3)/8.0 - (dh.val(13,1)+dh.val(16,1)+dh.val(17,1))/2.0;
-    dh.val(5,2)= (1.0+r1)*(1.0-r3)/8.0 - (dh.val(13,2)+dh.val(16,2)+dh.val(17,2))/2.0;
-    dh.val(5,3)=-(1.0+r1)*(1.0+r2)/8.0 - (dh.val(13,3)+dh.val(16,3)+dh.val(17,3))/2.0;
+    dh(5,1)= (1.0+r2)*(1.0-r3)/8.0 - (dh(13,1)+dh(16,1)+dh(17,1))/2.0;
+    dh(5,2)= (1.0+r1)*(1.0-r3)/8.0 - (dh(13,2)+dh(16,2)+dh(17,2))/2.0;
+    dh(5,3)=-(1.0+r1)*(1.0+r2)/8.0 - (dh(13,3)+dh(16,3)+dh(17,3))/2.0;
 
       // influence of the node number 4
-    dh.val(4,1)= (1.0-r2)*(1.0+r3)/8.0 - (dh.val(11,1)+dh.val(12,1)+dh.val(20,1))/2.0;
-    dh.val(4,2)=-(1.0+r1)*(1.0+r3)/8.0 - (dh.val(11,2)+dh.val(12,2)+dh.val(20,2))/2.0;
-    dh.val(4,3)= (1.0+r1)*(1.0-r2)/8.0 - (dh.val(11,3)+dh.val(12,3)+dh.val(20,3))/2.0;
+    dh(4,1)= (1.0-r2)*(1.0+r3)/8.0 - (dh(11,1)+dh(12,1)+dh(20,1))/2.0;
+    dh(4,2)=-(1.0+r1)*(1.0+r3)/8.0 - (dh(11,2)+dh(12,2)+dh(20,2))/2.0;
+    dh(4,3)= (1.0+r1)*(1.0-r2)/8.0 - (dh(11,3)+dh(12,3)+dh(20,3))/2.0;
       // influence of the node number 3
-    dh.val(3,1)=-(1.0-r2)*(1.0+r3)/8.0 - (dh.val(10,1)+dh.val(11,1)+dh.val(19,1))/2.0;
-    dh.val(3,2)=-(1.0-r1)*(1.0+r3)/8.0 - (dh.val(10,2)+dh.val(11,2)+dh.val(19,2))/2.0;
-    dh.val(3,3)= (1.0-r1)*(1.0-r2)/8.0 - (dh.val(10,3)+dh.val(11,3)+dh.val(19,3))/2.0;
+    dh(3,1)=-(1.0-r2)*(1.0+r3)/8.0 - (dh(10,1)+dh(11,1)+dh(19,1))/2.0;
+    dh(3,2)=-(1.0-r1)*(1.0+r3)/8.0 - (dh(10,2)+dh(11,2)+dh(19,2))/2.0;
+    dh(3,3)= (1.0-r1)*(1.0-r2)/8.0 - (dh(10,3)+dh(11,3)+dh(19,3))/2.0;
       // influence of the node number 2
-    dh.val(2,1)=-(1.0+r2)*(1.0+r3)/8.0 - (dh.val(10,1)+dh.val(18,1)+dh.val(9,1))/2.0;
-    dh.val(2,2)= (1.0-r1)*(1.0+r3)/8.0 - (dh.val(10,2)+dh.val(18,2)+dh.val(9,2))/2.0;
-    dh.val(2,3)= (1.0-r1)*(1.0+r2)/8.0 - (dh.val(10,3)+dh.val(18,3)+dh.val(9,3))/2.0;
+    dh(2,1)=-(1.0+r2)*(1.0+r3)/8.0 - (dh(10,1)+dh(18,1)+dh(9,1))/2.0;
+    dh(2,2)= (1.0-r1)*(1.0+r3)/8.0 - (dh(10,2)+dh(18,2)+dh(9,2))/2.0;
+    dh(2,3)= (1.0-r1)*(1.0+r2)/8.0 - (dh(10,3)+dh(18,3)+dh(9,3))/2.0;
       // influence of the node number 1
-    dh.val(1,1)= (1.0+r2)*(1.0+r3)/8.0 - (dh.val(12,1)+dh.val(17,1)+dh.val(9,1))/2.0;
-    dh.val(1,2)= (1.0+r1)*(1.0+r3)/8.0 - (dh.val(12,2)+dh.val(17,2)+dh.val(9,2))/2.0;
-    dh.val(1,3)= (1.0+r1)*(1.0+r2)/8.0 - (dh.val(12,3)+dh.val(17,3)+dh.val(9,3))/2.0;
+    dh(1,1)= (1.0+r2)*(1.0+r3)/8.0 - (dh(12,1)+dh(17,1)+dh(9,1))/2.0;
+    dh(1,2)= (1.0+r1)*(1.0+r3)/8.0 - (dh(12,2)+dh(17,2)+dh(9,2))/2.0;
+    dh(1,3)= (1.0+r1)*(1.0+r2)/8.0 - (dh(12,3)+dh(17,3)+dh(9,3))/2.0;
 
     return dh;
 }
@@ -1271,9 +1271,9 @@ double XC::TwentyNodeBrick_u_p_U::getPorePressure(double x1, double x2, double x
           where = (GP_c_r*Num_IntegrationPts+GP_c_s)*Num_IntegrationPts+GP_c_t;
           shp = shapeFunction(r,s,t);
             for(i=0; i<Num_Nodes; i++) {
-              const XC::Vector& T_Crds = theNodes[i]->getCrds();
+              const Vector& T_Crds = theNodes[i]->getCrds();
               for(j=0; j<Num_Dim; j++) {
-                Gs.val(where+1, j+1) += shp.cval(i+1) * T_Crds(j);
+                Gs(where+1, j+1) += shp(i+1) * T_Crds(j);
               }
             }
         }

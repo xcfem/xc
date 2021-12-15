@@ -382,7 +382,7 @@ XC::Matrix &XC::Matrix::operator=(const TNSR &V)
 	              << "; matrix must be 1x1 for BJtensor of dimension 3.\n";
             return *this;
           }      	
-        (*this)(0,0)= V.cval(1,1,1,1);
+        (*this)(0,0)= V(1,1,1,1);
 
       }
     else if(dim == 2)
@@ -393,17 +393,17 @@ XC::Matrix &XC::Matrix::operator=(const TNSR &V)
 	              << "; matrix must be 1x1 for BJtensor of dimension 3.\n";
             return *this;
           }
-        (*this)(0,0)= V.cval(1,1,1,1);
-        (*this)(0,1)= V.cval(1,1,2,2);
-        (*this)(0,2)= V.cval(1,1,1,2);
+        (*this)(0,0)= V(1,1,1,1);
+        (*this)(0,1)= V(1,1,2,2);
+        (*this)(0,2)= V(1,1,1,2);
 
-        (*this)(1,0)= V.cval(2,2,1,1);
-        (*this)(1,1)= V.cval(2,2,2,2);
-        (*this)(1,2)= V.cval(2,2,1,2);
+        (*this)(1,0)= V(2,2,1,1);
+        (*this)(1,1)= V(2,2,2,2);
+        (*this)(1,2)= V(2,2,1,2);
 
-        (*this)(2,0)= V.cval(1,2,1,1);
-        (*this)(2,1)= V.cval(1,2,2,2);
-        (*this)(2,2)= V.cval(1,2,1,2);
+        (*this)(2,0)= V(1,2,1,1);
+        (*this)(2,1)= V(1,2,2,2);
+        (*this)(2,2)= V(1,2,1,2);
 
       }
     else
@@ -414,47 +414,47 @@ XC::Matrix &XC::Matrix::operator=(const TNSR &V)
 	              << "; matrix must be 1x1 for BJtensor of dimension 3.\n";
             return *this;
           }
-        (*this)(0,0)= V.cval(1,1,1,1);
-        (*this)(0,1)= V.cval(1,1,2,2);
-        (*this)(0,2)= V.cval(1,1,3,3);
-        (*this)(0,3)= V.cval(1,1,1,2);
-        (*this)(0,4)= V.cval(1,1,1,3);
-        (*this)(0,5)= V.cval(1,1,2,3);
+        (*this)(0,0)= V(1,1,1,1);
+        (*this)(0,1)= V(1,1,2,2);
+        (*this)(0,2)= V(1,1,3,3);
+        (*this)(0,3)= V(1,1,1,2);
+        (*this)(0,4)= V(1,1,1,3);
+        (*this)(0,5)= V(1,1,2,3);
 
-        (*this)(1,0)= V.cval(2,2,1,1);
-        (*this)(1,1)= V.cval(2,2,2,2);
-        (*this)(1,2)= V.cval(2,2,3,3);
-        (*this)(1,3)= V.cval(2,2,1,2);
-        (*this)(1,4)= V.cval(2,2,1,3);
-        (*this)(1,5)= V.cval(2,2,2,3);
+        (*this)(1,0)= V(2,2,1,1);
+        (*this)(1,1)= V(2,2,2,2);
+        (*this)(1,2)= V(2,2,3,3);
+        (*this)(1,3)= V(2,2,1,2);
+        (*this)(1,4)= V(2,2,1,3);
+        (*this)(1,5)= V(2,2,2,3);
 
-        (*this)(2,0)= V.cval(3,3,1,1);
-        (*this)(2,1)= V.cval(3,3,2,2);
-        (*this)(2,2)= V.cval(3,3,3,3);
-        (*this)(2,3)= V.cval(3,3,1,2);
-        (*this)(2,4)= V.cval(3,3,1,3);
-        (*this)(2,5)= V.cval(3,3,2,3);
+        (*this)(2,0)= V(3,3,1,1);
+        (*this)(2,1)= V(3,3,2,2);
+        (*this)(2,2)= V(3,3,3,3);
+        (*this)(2,3)= V(3,3,1,2);
+        (*this)(2,4)= V(3,3,1,3);
+        (*this)(2,5)= V(3,3,2,3);
 
-        (*this)(3,0)= V.cval(1,2,1,1);
-        (*this)(3,1)= V.cval(1,2,2,2);
-        (*this)(3,2)= V.cval(1,2,3,3);
-        (*this)(3,3)= V.cval(1,2,1,2);
-        (*this)(3,4)= V.cval(1,2,1,3);
-        (*this)(3,5)= V.cval(1,2,2,3);
+        (*this)(3,0)= V(1,2,1,1);
+        (*this)(3,1)= V(1,2,2,2);
+        (*this)(3,2)= V(1,2,3,3);
+        (*this)(3,3)= V(1,2,1,2);
+        (*this)(3,4)= V(1,2,1,3);
+        (*this)(3,5)= V(1,2,2,3);
 
-        (*this)(4,0)= V.cval(1,3,1,1);
-        (*this)(4,1)= V.cval(1,3,2,2);
-        (*this)(4,2)= V.cval(1,3,3,3);
-        (*this)(4,3)= V.cval(1,3,1,2);
-        (*this)(4,4)= V.cval(1,3,1,3);
-        (*this)(4,5)= V.cval(1,3,2,3);
+        (*this)(4,0)= V(1,3,1,1);
+        (*this)(4,1)= V(1,3,2,2);
+        (*this)(4,2)= V(1,3,3,3);
+        (*this)(4,3)= V(1,3,1,2);
+        (*this)(4,4)= V(1,3,1,3);
+        (*this)(4,5)= V(1,3,2,3);
 
-        (*this)(5,0)= V.cval(2,3,1,1);
-        (*this)(5,1)= V.cval(2,3,2,2);
-        (*this)(5,2)= V.cval(2,3,3,3);
-        (*this)(5,3)= V.cval(2,3,1,2);
-        (*this)(5,4)= V.cval(2,3,1,3);
-        (*this)(5,5)= V.cval(2,3,2,3);
+        (*this)(5,0)= V(2,3,1,1);
+        (*this)(5,1)= V(2,3,2,2);
+        (*this)(5,2)= V(2,3,3,3);
+        (*this)(5,3)= V(2,3,1,2);
+        (*this)(5,4)= V(2,3,1,3);
+        (*this)(5,5)= V(2,3,2,3);
       }
     return *this;
   }

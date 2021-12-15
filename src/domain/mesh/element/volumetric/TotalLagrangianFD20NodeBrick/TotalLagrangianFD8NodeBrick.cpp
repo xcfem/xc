@@ -563,11 +563,11 @@ XC::BJtensor XC::TotalLagrangianFD8NodeBrick::getBodyForce(void) const
 
 
 
-    bodyforce.val(1) = bf(0);
+    bodyforce(1) = bf(0);
 
-    bodyforce.val(2) = bf(1);
+    bodyforce(2) = bf(1);
 
-    bodyforce.val(3) = bf(2);
+    bodyforce(3) = bf(2);
 
 
 
@@ -688,7 +688,7 @@ const XC::Matrix &XC::TotalLagrangianFD8NodeBrick::getTangentStiff(void) const
 
                  kkj = l + NumDof*(j-1);
 
-                 K(kki-1 , kkj-1) = stifftensor.cval(i,k,l,j); 
+                 K(kki-1 , kkj-1) = stifftensor(i,k,l,j); 
 
               }
 
@@ -760,7 +760,7 @@ XC::BJtensor XC::TotalLagrangianFD8NodeBrick::getNodesCrds(void) const
 
       for (j=0; j<NumDof; j++) {
 
-        N_coord.val(i+1, j+1) = TNodesCrds(j);
+        N_coord(i+1, j+1) = TNodesCrds(j);
 
 	  }		    
 
@@ -792,7 +792,7 @@ XC::BJtensor XC::TotalLagrangianFD8NodeBrick::getNodesDisp(void) const
 
       for (j=0; j<NumDof; j++) {
 
-        total_disp.val(i+1, j+1) = TNodesDisp(j);
+        total_disp(i+1, j+1) = TNodesDisp(j);
 
       }
 
@@ -914,18 +914,15 @@ const XC::Vector &XC::TotalLagrangianFD8NodeBrick::getResistingForce(void) const
 	int i, j;
 
     std::vector<int> f_dim({NumNodes, NumDof});
-
     BJtensor NodalForces_in(2, f_dim, 0.0);
 
     NodalForces_in = this->getRtensor() - this->getForces();
-
-    
 
     for (i=0; i<NumNodes; i++) {
 
       for (j=0; j<NumDof; j++) {
 
-         P(i*NumDof +j) = NodalForces_in.cval(i+1, j+1);
+         P(i*NumDof +j) = NodalForces_in(i+1, j+1);
 
       }
 
@@ -1049,12 +1046,12 @@ void XC::TotalLagrangianFD8NodeBrick::Print(std::ostream &s, int flag) const
         const FiniteDeformationMaterial *fdMaterial= dynamic_cast<const FiniteDeformationMaterial *>(physicalProperties[i]);
 	sigma = fdMaterial->getCauchyStressTensor();
 
-	P00(0) = sigma.val(1,1);
-	P00(1) = sigma.val(2,2);
-	P00(2) = sigma.val(3,3);
-	P00(3) = sigma.val(2,3);
-	P00(4) = sigma.val(3,1);
-	P00(5) = sigma.val(1,2);
+	P00(0) = sigma(1,1);
+	P00(1) = sigma(2,2);
+	P00(2) = sigma(3,3);
+	P00(3) = sigma(2,3);
+	P00(4) = sigma(3,1);
+	P00(5) = sigma(1,2);
 	s << "\n where = " << i << std::endl;
         s << " Stress (Cauchy): xx yy zz yz zx xy) " << P00 << std::endl;
       }
@@ -1123,12 +1120,12 @@ int XC::TotalLagrangianFD8NodeBrick::getResponse (int responseID, Information &e
 	  {
             const FiniteDeformationMaterial *fdMaterial= dynamic_cast<const FiniteDeformationMaterial *>(physicalProperties[i]);
 	    sigma = fdMaterial->getCauchyStressTensor();
-	    P0(i*6 +0 ) = sigma.val(1,1);
-	    P0(i*6 +1 ) = sigma.val(2,2);
-	    P0(i*6 +2 ) = sigma.val(3,3);
-	    P0(i*6 +3 ) = sigma.val(2,3);
-	    P0(i*6 +4 ) = sigma.val(3,1);
-	    P0(i*6 +5 ) = sigma.val(1,2);
+	    P0(i*6 +0 ) = sigma(1,1);
+	    P0(i*6 +1 ) = sigma(2,2);
+	    P0(i*6 +2 ) = sigma(3,3);
+	    P0(i*6 +3 ) = sigma(2,3);
+	    P0(i*6 +4 ) = sigma(3,1);
+	    P0(i*6 +5 ) = sigma(1,2);
 
 	  }
 
@@ -1148,17 +1145,17 @@ int XC::TotalLagrangianFD8NodeBrick::getResponse (int responseID, Information &e
 
           sigma = physicalProperties[i]->getStressTensor();
 
-          P0(i*6 +0 ) = sigma.val(1,1);
+          P0(i*6 +0 ) = sigma(1,1);
 
-          P0(i*6 +1 ) = sigma.val(2,2);
+          P0(i*6 +1 ) = sigma(2,2);
 
-          P0(i*6 +2 ) = sigma.val(3,3);
+          P0(i*6 +2 ) = sigma(3,3);
 
-          P0(i*6 +3 ) = sigma.val(2,3);
+          P0(i*6 +3 ) = sigma(2,3);
 
-          P0(i*6 +4 ) = sigma.val(3,1);
+          P0(i*6 +4 ) = sigma(3,1);
 
-          P0(i*6 +5 ) = sigma.val(1,2);
+          P0(i*6 +5 ) = sigma(1,2);
 
         }
 
@@ -1190,17 +1187,17 @@ int XC::TotalLagrangianFD8NodeBrick::getResponse (int responseID, Information &e
 
 	  e = (tI2-e) *0.5;
 
-          P0(i*6 +0 ) = e.val(1,1);
+          P0(i*6 +0 ) = e(1,1);
 
-          P0(i*6 +1 ) = e.val(2,2);
+          P0(i*6 +1 ) = e(2,2);
 
-          P0(i*6 +2 ) = e.val(3,3);
+          P0(i*6 +2 ) = e(3,3);
 
-          P0(i*6 +3 ) = e.val(2,3);
+          P0(i*6 +3 ) = e(2,3);
 
-          P0(i*6 +4 ) = e.val(3,1);
+          P0(i*6 +4 ) = e(3,1);
 
-          P0(i*6 +5 ) = e.val(1,2);
+          P0(i*6 +5 ) = e(1,2);
 
         }
 
@@ -1220,17 +1217,17 @@ int XC::TotalLagrangianFD8NodeBrick::getResponse (int responseID, Information &e
 
           E = physicalProperties[i]->getStrainTensor();
 
-          P0(i*6 +0 ) = E.val(1,1);
+          P0(i*6 +0 ) = E(1,1);
 
-          P0(i*6 +1 ) = E.val(2,2);
+          P0(i*6 +1 ) = E(2,2);
 
-          P0(i*6 +2 ) = E.val(3,3);
+          P0(i*6 +2 ) = E(3,3);
 
-          P0(i*6 +3 ) = E.val(2,3);
+          P0(i*6 +3 ) = E(2,3);
 
-          P0(i*6 +4 ) = E.val(3,1);
+          P0(i*6 +4 ) = E(3,1);
 
-          P0(i*6 +5 ) = E.val(1,2);
+          P0(i*6 +5 ) = E(1,2);
 
         }
 
@@ -1270,37 +1267,37 @@ XC::BJtensor XC::TotalLagrangianFD8NodeBrick::shapeFunction(double r1, double r2
 
       // influence of the node number 8
 
-    h.val(8)=(1.0+r1)*(1.0-r2)*(1.0-r3)*0.125;
+    h(8)=(1.0+r1)*(1.0-r2)*(1.0-r3)*0.125;
 
       // influence of the node number 7
 
-    h.val(7)=(1.0-r1)*(1.0-r2)*(1.0-r3)*0.125;
+    h(7)=(1.0-r1)*(1.0-r2)*(1.0-r3)*0.125;
 
       // influence of the node number 6
 
-    h.val(6)=(1.0-r1)*(1.0+r2)*(1.0-r3)*0.125;
+    h(6)=(1.0-r1)*(1.0+r2)*(1.0-r3)*0.125;
 
       // influence of the node number 5
 
-    h.val(5)=(1.0+r1)*(1.0+r2)*(1.0-r3)*0.125;
+    h(5)=(1.0+r1)*(1.0+r2)*(1.0-r3)*0.125;
 
 
 
       // influence of the node number 4
 
-    h.val(4)=(1.0+r1)*(1.0-r2)*(1.0+r3)*0.125;
+    h(4)=(1.0+r1)*(1.0-r2)*(1.0+r3)*0.125;
 
       // influence of the node number 3
 
-    h.val(3)=(1.0-r1)*(1.0-r2)*(1.0+r3)*0.125;
+    h(3)=(1.0-r1)*(1.0-r2)*(1.0+r3)*0.125;
 
       // influence of the node number 2
 
-    h.val(2)=(1.0-r1)*(1.0+r2)*(1.0+r3)*0.125;
+    h(2)=(1.0-r1)*(1.0+r2)*(1.0+r3)*0.125;
 
       // influence of the node number 1
 
-    h.val(1)=(1.0+r1)*(1.0+r2)*(1.0+r3)*0.125;
+    h(1)=(1.0+r1)*(1.0+r2)*(1.0+r3)*0.125;
 
 
 
@@ -1327,69 +1324,69 @@ XC::BJtensor XC::TotalLagrangianFD8NodeBrick::shapeFunctionDerivative(double r1,
 
       // influence of the node number 8
 
-    dh.val(8,1)= (1.0-r2)*(1.0-r3)*0.125;
+    dh(8,1)= (1.0-r2)*(1.0-r3)*0.125;
 
-    dh.val(8,2)=-(1.0+r1)*(1.0-r3)*0.125;
+    dh(8,2)=-(1.0+r1)*(1.0-r3)*0.125;
 
-    dh.val(8,3)=-(1.0+r1)*(1.0-r2)*0.125;
+    dh(8,3)=-(1.0+r1)*(1.0-r2)*0.125;
 
       // influence of the node number 7
 
-    dh.val(7,1)=-(1.0-r2)*(1.0-r3)*0.125;
+    dh(7,1)=-(1.0-r2)*(1.0-r3)*0.125;
 
-    dh.val(7,2)=-(1.0-r1)*(1.0-r3)*0.125;
+    dh(7,2)=-(1.0-r1)*(1.0-r3)*0.125;
 
-    dh.val(7,3)=-(1.0-r1)*(1.0-r2)*0.125;
+    dh(7,3)=-(1.0-r1)*(1.0-r2)*0.125;
 
       // influence of the node number 6
 
-    dh.val(6,1)=-(1.0+r2)*(1.0-r3)*0.125;
+    dh(6,1)=-(1.0+r2)*(1.0-r3)*0.125;
 
-    dh.val(6,2)= (1.0-r1)*(1.0-r3)*0.125;
+    dh(6,2)= (1.0-r1)*(1.0-r3)*0.125;
 
-    dh.val(6,3)=-(1.0-r1)*(1.0+r2)*0.125;
+    dh(6,3)=-(1.0-r1)*(1.0+r2)*0.125;
 
       // influence of the node number 5
 
-    dh.val(5,1)= (1.0+r2)*(1.0-r3)*0.125;
+    dh(5,1)= (1.0+r2)*(1.0-r3)*0.125;
 
-    dh.val(5,2)= (1.0+r1)*(1.0-r3)*0.125;
+    dh(5,2)= (1.0+r1)*(1.0-r3)*0.125;
 
-    dh.val(5,3)=-(1.0+r1)*(1.0+r2)*0.125;
+    dh(5,3)=-(1.0+r1)*(1.0+r2)*0.125;
 
 
 
       // influence of the node number 4
 
-    dh.val(4,1)= (1.0-r2)*(1.0+r3)*0.125;
+    dh(4,1)= (1.0-r2)*(1.0+r3)*0.125;
 
-    dh.val(4,2)=-(1.0+r1)*(1.0+r3)*0.125;
+    dh(4,2)=-(1.0+r1)*(1.0+r3)*0.125;
 
-    dh.val(4,3)= (1.0+r1)*(1.0-r2)*0.125;
+    dh(4,3)= (1.0+r1)*(1.0-r2)*0.125;
 
       // influence of the node number 3
 
-    dh.val(3,1)=-(1.0-r2)*(1.0+r3)*0.125;
+    dh(3,1)=-(1.0-r2)*(1.0+r3)*0.125;
 
-    dh.val(3,2)=-(1.0-r1)*(1.0+r3)*0.125;
+    dh(3,2)=-(1.0-r1)*(1.0+r3)*0.125;
 
-    dh.val(3,3)= (1.0-r1)*(1.0-r2)*0.125;
+    dh(3,3)= (1.0-r1)*(1.0-r2)*0.125;
 
       // influence of the node number 2
 
-    dh.val(2,1)=-(1.0+r2)*(1.0+r3)*0.125;
+    dh(2,1)=-(1.0+r2)*(1.0+r3)*0.125;
 
-    dh.val(2,2)= (1.0-r1)*(1.0+r3)*0.125;
+    dh(2,2)= (1.0-r1)*(1.0+r3)*0.125;
 
-    dh.val(2,3)= (1.0-r1)*(1.0+r2)*0.125;
+    dh(2,3)= (1.0-r1)*(1.0+r2)*0.125;
 
       // influence of the node number 1
 
-    dh.val(1,1)= (1.0+r2)*(1.0+r3)*0.125;
+    dh(1,1)= (1.0+r2)*(1.0+r3)*0.125;
 
-    dh.val(1,2)= (1.0+r1)*(1.0+r3)*0.125;
+    dh(1,2)= (1.0+r1)*(1.0+r3)*0.125;
 
-    dh.val(1,3)= (1.0+r1)*(1.0+r2)*0.125;
+    dh(1,3)= (1.0+r1)*(1.0+r2)*0.125;
 
 
 

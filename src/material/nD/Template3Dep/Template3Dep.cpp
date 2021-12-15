@@ -551,17 +551,17 @@ XC::BJtensor XC::Template3Dep::ElasticComplianceTensor(void) const
 //ZC05/2004       //std::cerr << " C " << D;
 //ZC05/2004
 //ZC05/2004       //Convert Matric D to 4th order Elastic constants XC::BJtensor ret;
-//ZC05/2004       ret.val(1,1,1,1) = D(0,0); ret.val(1,1,2,2) = D(0,1); ret.val(1,1,3,3) = D(0,2); // --> Sigma_xx
-//ZC05/2004       ret.val(1,2,1,2) = D(3,3); ret.val(1,2,2,1) = D(3,3); // --> Sigma_xy
-//ZC05/2004       ret.val(1,3,1,3) = D(4,4); ret.val(1,3,3,1) = D(4,4); // --> Sigma_xz
+//ZC05/2004       ret(1,1,1,1) = D(0,0); ret(1,1,2,2) = D(0,1); ret(1,1,3,3) = D(0,2); // --> Sigma_xx
+//ZC05/2004       ret(1,2,1,2) = D(3,3); ret(1,2,2,1) = D(3,3); // --> Sigma_xy
+//ZC05/2004       ret(1,3,1,3) = D(4,4); ret(1,3,3,1) = D(4,4); // --> Sigma_xz
 //ZC05/2004
-//ZC05/2004       ret.val(2,1,1,2) = D(3,3); ret.val(2,1,2,1) = D(3,3); // --> Sigma_yx
-//ZC05/2004       ret.val(2,2,1,1) = D(1,0); ret.val(2,2,2,2) = D(1,1); ret.val(2,2,3,3) = D(1,2); // --> Sigma_yy
-//ZC05/2004       ret.val(2,3,2,3) = D(5,5); ret.val(2,3,3,2) = D(5,5); // --> Sigma_yz
+//ZC05/2004       ret(2,1,1,2) = D(3,3); ret(2,1,2,1) = D(3,3); // --> Sigma_yx
+//ZC05/2004       ret(2,2,1,1) = D(1,0); ret(2,2,2,2) = D(1,1); ret(2,2,3,3) = D(1,2); // --> Sigma_yy
+//ZC05/2004       ret(2,3,2,3) = D(5,5); ret(2,3,3,2) = D(5,5); // --> Sigma_yz
 //ZC05/2004
-//ZC05/2004       ret.val(3,1,1,3) = D(4,4); ret.val(3,1,3,1) = D(4,4); // --> Sigma_zx
-//ZC05/2004       ret.val(3,2,2,3) = D(5,5); ret.val(3,2,3,2) = D(5,5); // --> Sigma_zy
-//ZC05/2004       ret.val(3,3,1,1) = D(2,0); ret.val(3,3,2,2) = D(2,1); ret.val(3,3,3,3) = D(2,2); // --> Sigma_zz
+//ZC05/2004       ret(3,1,1,3) = D(4,4); ret(3,1,3,1) = D(4,4); // --> Sigma_zx
+//ZC05/2004       ret(3,2,2,3) = D(5,5); ret(3,2,3,2) = D(5,5); // --> Sigma_zy
+//ZC05/2004       ret(3,3,1,1) = D(2,0); ret(3,3,2,2) = D(2,1); ret(3,3,3,3) = D(2,2); // --> Sigma_zz
 //ZC05/2004
 //ZC05/2004       }
 //ZC05/2004
@@ -609,17 +609,17 @@ XC::BJtensor XC::Template3Dep::ElasticComplianceTensor(void) const
 //ZC05/2004       //std::cerr << " C " << D;
 //ZC05/2004
 //ZC05/2004       //Convert Matric D to 4th order Elastic constants XC::BJtensor ret;
-//ZC05/2004       ret.val(1,1,1,1) = D(0,0); ret.val(1,1,2,2) = D(0,1); ret.val(1,1,3,3) = D(0,2); // --> Sigma_xx
-//ZC05/2004       ret.val(1,2,1,2) = D(3,3); ret.val(1,2,2,1) = D(3,3); // --> Sigma_xy
-//ZC05/2004       ret.val(1,3,1,3) = D(4,4); ret.val(1,3,3,1) = D(4,4); // --> Sigma_xz
+//ZC05/2004       ret(1,1,1,1) = D(0,0); ret(1,1,2,2) = D(0,1); ret(1,1,3,3) = D(0,2); // --> Sigma_xx
+//ZC05/2004       ret(1,2,1,2) = D(3,3); ret(1,2,2,1) = D(3,3); // --> Sigma_xy
+//ZC05/2004       ret(1,3,1,3) = D(4,4); ret(1,3,3,1) = D(4,4); // --> Sigma_xz
 //ZC05/2004
-//ZC05/2004       ret.val(2,1,1,2) = D(3,3); ret.val(2,1,2,1) = D(3,3); // --> Sigma_yx
-//ZC05/2004       ret.val(2,2,1,1) = D(1,0); ret.val(2,2,2,2) = D(1,1); ret.val(2,2,3,3) = D(1,2); // --> Sigma_yy
-//ZC05/2004       ret.val(2,3,2,3) = D(5,5); ret.val(2,3,3,2) = D(5,5); // --> Sigma_yz
+//ZC05/2004       ret(2,1,1,2) = D(3,3); ret(2,1,2,1) = D(3,3); // --> Sigma_yx
+//ZC05/2004       ret(2,2,1,1) = D(1,0); ret(2,2,2,2) = D(1,1); ret(2,2,3,3) = D(1,2); // --> Sigma_yy
+//ZC05/2004       ret(2,3,2,3) = D(5,5); ret(2,3,3,2) = D(5,5); // --> Sigma_yz
 //ZC05/2004
-//ZC05/2004       ret.val(3,1,1,3) = D(4,4); ret.val(3,1,3,1) = D(4,4); // --> Sigma_zx
-//ZC05/2004       ret.val(3,2,2,3) = D(5,5); ret.val(3,2,3,2) = D(5,5); // --> Sigma_zy
-//ZC05/2004       ret.val(3,3,1,1) = D(2,0); ret.val(3,3,2,2) = D(2,1); ret.val(3,3,3,3) = D(2,2); // --> Sigma_zz
+//ZC05/2004       ret(3,1,1,3) = D(4,4); ret(3,1,3,1) = D(4,4); // --> Sigma_zx
+//ZC05/2004       ret(3,2,2,3) = D(5,5); ret(3,2,3,2) = D(5,5); // --> Sigma_zy
+//ZC05/2004       ret(3,3,1,1) = D(2,0); ret(3,3,2,2) = D(2,1); ret(3,3,3,3) = D(2,2); // --> Sigma_zz
 //ZC05/2004
 //ZC05/2004       }
 //ZC05/2004     else
@@ -743,17 +743,17 @@ XC::BJtensor XC::Template3Dep::ElasticStiffnessTensor(void) const
 //ZC05/2004       D.Invert( D );
 //ZC05/2004
 //ZC05/2004       //Convert Matric D to 4th order Elastic constants XC::BJtensor ret;
-//ZC05/2004       ret.val(1,1,1,1) = D(0,0); ret.val(1,1,2,2) = D(0,1); ret.val(1,1,3,3) = D(0,2); // --> Sigma_xx
-//ZC05/2004       ret.val(1,2,1,2) = D(3,3); ret.val(1,2,2,1) = D(3,3); // --> Sigma_xy
-//ZC05/2004       ret.val(1,3,1,3) = D(4,4); ret.val(1,3,3,1) = D(4,4); // --> Sigma_xz
+//ZC05/2004       ret(1,1,1,1) = D(0,0); ret(1,1,2,2) = D(0,1); ret(1,1,3,3) = D(0,2); // --> Sigma_xx
+//ZC05/2004       ret(1,2,1,2) = D(3,3); ret(1,2,2,1) = D(3,3); // --> Sigma_xy
+//ZC05/2004       ret(1,3,1,3) = D(4,4); ret(1,3,3,1) = D(4,4); // --> Sigma_xz
 //ZC05/2004
-//ZC05/2004       ret.val(2,1,1,2) = D(3,3); ret.val(2,1,2,1) = D(3,3); // --> Sigma_yx
-//ZC05/2004       ret.val(2,2,1,1) = D(1,0); ret.val(2,2,2,2) = D(1,1); ret.val(2,2,3,3) = D(1,2); // --> Sigma_yy
-//ZC05/2004       ret.val(2,3,2,3) = D(5,5); ret.val(2,3,3,2) = D(5,5); // --> Sigma_yz
+//ZC05/2004       ret(2,1,1,2) = D(3,3); ret(2,1,2,1) = D(3,3); // --> Sigma_yx
+//ZC05/2004       ret(2,2,1,1) = D(1,0); ret(2,2,2,2) = D(1,1); ret(2,2,3,3) = D(1,2); // --> Sigma_yy
+//ZC05/2004       ret(2,3,2,3) = D(5,5); ret(2,3,3,2) = D(5,5); // --> Sigma_yz
 //ZC05/2004
-//ZC05/2004       ret.val(3,1,1,3) = D(4,4); ret.val(3,1,3,1) = D(4,4); // --> Sigma_zx
-//ZC05/2004       ret.val(3,2,2,3) = D(5,5); ret.val(3,2,3,2) = D(5,5); // --> Sigma_zy
-//ZC05/2004       ret.val(3,3,1,1) = D(2,0); ret.val(3,3,2,2) = D(2,1); ret.val(3,3,3,3) = D(2,2); // --> Sigma_zz
+//ZC05/2004       ret(3,1,1,3) = D(4,4); ret(3,1,3,1) = D(4,4); // --> Sigma_zx
+//ZC05/2004       ret(3,2,2,3) = D(5,5); ret(3,2,3,2) = D(5,5); // --> Sigma_zy
+//ZC05/2004       ret(3,3,1,1) = D(2,0); ret(3,3,2,2) = D(2,1); ret(3,3,3,3) = D(2,2); // --> Sigma_zz
 //ZC05/2004
 //ZC05/2004     }
 //ZC05/2004     else if( eflag == 2) {
@@ -778,17 +778,17 @@ XC::BJtensor XC::Template3Dep::ElasticStiffnessTensor(void) const
 //ZC05/2004       D.Invert( D );
 //ZC05/2004
 //ZC05/2004       //Convert Matric D to 4th order Elastic constants XC::BJtensor ret;
-//ZC05/2004       ret.val(1,1,1,1) = D(0,0); ret.val(1,1,2,2) = D(0,1); ret.val(1,1,3,3) = D(0,2); // --> Sigma_xx
-//ZC05/2004       ret.val(1,2,1,2) = D(3,3); ret.val(1,2,2,1) = D(3,3); // --> Sigma_xy
-//ZC05/2004       ret.val(1,3,1,3) = D(4,4); ret.val(1,3,3,1) = D(4,4); // --> Sigma_xz
+//ZC05/2004       ret(1,1,1,1) = D(0,0); ret(1,1,2,2) = D(0,1); ret(1,1,3,3) = D(0,2); // --> Sigma_xx
+//ZC05/2004       ret(1,2,1,2) = D(3,3); ret(1,2,2,1) = D(3,3); // --> Sigma_xy
+//ZC05/2004       ret(1,3,1,3) = D(4,4); ret(1,3,3,1) = D(4,4); // --> Sigma_xz
 //ZC05/2004
-//ZC05/2004       ret.val(2,1,1,2) = D(3,3); ret.val(2,1,2,1) = D(3,3); // --> Sigma_yx
-//ZC05/2004       ret.val(2,2,1,1) = D(1,0); ret.val(2,2,2,2) = D(1,1); ret.val(2,2,3,3) = D(1,2); // --> Sigma_yy
-//ZC05/2004       ret.val(2,3,2,3) = D(5,5); ret.val(2,3,3,2) = D(5,5); // --> Sigma_yz
+//ZC05/2004       ret(2,1,1,2) = D(3,3); ret(2,1,2,1) = D(3,3); // --> Sigma_yx
+//ZC05/2004       ret(2,2,1,1) = D(1,0); ret(2,2,2,2) = D(1,1); ret(2,2,3,3) = D(1,2); // --> Sigma_yy
+//ZC05/2004       ret(2,3,2,3) = D(5,5); ret(2,3,3,2) = D(5,5); // --> Sigma_yz
 //ZC05/2004
-//ZC05/2004       ret.val(3,1,1,3) = D(4,4); ret.val(3,1,3,1) = D(4,4); // --> Sigma_zx
-//ZC05/2004       ret.val(3,2,2,3) = D(5,5); ret.val(3,2,3,2) = D(5,5); // --> Sigma_zy
-//ZC05/2004       ret.val(3,3,1,1) = D(2,0); ret.val(3,3,2,2) = D(2,1); ret.val(3,3,3,3) = D(2,2); // --> Sigma_zz
+//ZC05/2004       ret(3,1,1,3) = D(4,4); ret(3,1,3,1) = D(4,4); // --> Sigma_zx
+//ZC05/2004       ret(3,2,2,3) = D(5,5); ret(3,2,3,2) = D(5,5); // --> Sigma_zy
+//ZC05/2004       ret(3,3,1,1) = D(2,0); ret(3,3,2,2) = D(2,1); ret(3,3,3,3) = D(2,2); // --> Sigma_zz
 //ZC05/2004
 //ZC05/2004     }
 //ZC05/2004     else

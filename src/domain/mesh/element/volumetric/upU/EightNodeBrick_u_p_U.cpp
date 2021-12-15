@@ -120,9 +120,9 @@ XC::EightNodeBrick_u_p_U::EightNodeBrick_u_p_U(int element_number,
    ks(kks), kf(kkf), pressure(pp), eleQ(0), Ki(0)
   {
     // permeability
-    perm.val(1,1) = permb_x;
-    perm.val(2,2) = permb_y;
-    perm.val(3,3) = permb_z;
+    perm(1,1) = permb_x;
+    perm(2,2) = permb_y;
+    perm(3,3) = permb_z;
   }
 
 //======================================================================
@@ -198,13 +198,13 @@ const XC::Matrix &XC::EightNodeBrick_u_p_U::getDamp(void) const
         for( m=0; m<Num_Dim; m++) {
           for( n=0; n<Num_Dim; n++)
             {
-              Ctemp = tC.cval(i+1, m+1, n+1, j+1);
+              Ctemp = tC(i+1, m+1, n+1, j+1);
               //C1
               C(i*Num_Dof+m, j*Num_Dof+n) = Ctemp *(poro*poro);
               if(rayFactors.getAlphaM() != 0.0)
-                 C(i*Num_Dof+m, j*Num_Dof+n) += CRm.cval(i+1, j+1) * rayFactors.getAlphaM();
+                 C(i*Num_Dof+m, j*Num_Dof+n) += CRm(i+1, j+1) * rayFactors.getAlphaM();
               if(rayFactors.getBetaK() != 0.0)
-                 C(i*Num_Dof+m, j*Num_Dof+n) += CRk.cval(i+1, m+1, n+1, j+1) * rayFactors.getBetaK();
+                 C(i*Num_Dof+m, j*Num_Dof+n) += CRk(i+1, m+1, n+1, j+1) * rayFactors.getBetaK();
               //C3
               C(i*Num_Dof+m+4, j*Num_Dof+n+4) = Ctemp *(poro*poro);
               //C2 and C2^T
@@ -231,7 +231,7 @@ const XC::Matrix &XC::EightNodeBrick_u_p_U::getMass (void) const
 
     for( i=0 ; i<Num_Nodes; i++ ) {
       for( j=0; j<Num_Nodes; j++ ) {
-        Mtemp = tM.cval(i+1, j+1);
+        Mtemp = tM(i+1, j+1);
         //Ms, Note *(1.0-poro)*rho_s here!
         M(i*Num_Dof+0, j*Num_Dof+0) = Mtemp *(1.0-poro)*rho_s;
         M(i*Num_Dof+1, j*Num_Dof+1) = Mtemp *(1.0-poro)*rho_s;
@@ -447,12 +447,12 @@ int XC::EightNodeBrick_u_p_U::getResponse(int responseID, Information &eleInfo)
     for(i=0; i<Num_TotalGaussPts; i++)
       {
         sigma = physicalProperties[i]->getStressTensor();
-        stresses(cnt++) = sigma.cval(1,1);  //xx
-        stresses(cnt++) = sigma.cval(2,2);  //yy
-        stresses(cnt++) = sigma.cval(3,3);  //zz
-        stresses(cnt++) = sigma.cval(2,3);  //yz
-        stresses(cnt++) = sigma.cval(3,1);  //zx
-        stresses(cnt++) = sigma.cval(2,3);  //xy
+        stresses(cnt++) = sigma(1,1);  //xx
+        stresses(cnt++) = sigma(2,2);  //yy
+        stresses(cnt++) = sigma(3,3);  //zz
+        stresses(cnt++) = sigma(2,3);  //yz
+        stresses(cnt++) = sigma(3,1);  //zx
+        stresses(cnt++) = sigma(2,3);  //xy
       }
     return eleInfo.setVector(stresses);
   }
@@ -465,7 +465,7 @@ int XC::EightNodeBrick_u_p_U::getResponse(int responseID, Information &eleInfo)
     GCoord = getGaussPts();
     for(i=0; i<Num_TotalGaussPts; i++) {
       for(j=0; j<Num_Dim; j++) {
-        Gpts(cnt++) = GCoord.cval(i+1,j+1);     //fixed '+1's, ZC 12/01/04
+        Gpts(cnt++) = GCoord(i+1,j+1);     //fixed '+1's, ZC 12/01/04
       }
     }
     return eleInfo.setVector(Gpts);
@@ -531,9 +531,9 @@ int XC::EightNodeBrick_u_p_U::update(void)
     total_displacements = getNodesDisp();
     int i;
     for(i=1; i<=Num_Nodes; i++) {
-      total_disp.val(i,1) = total_displacements.cval(i,1);
-      total_disp.val(i,2) = total_displacements.cval(i,2);
-      total_disp.val(i,3) = total_displacements.cval(i,3);
+      total_disp(i,1) = total_displacements(i,1);
+      total_disp(i,2) = total_displacements(i,2);
+      total_disp(i,3) = total_displacements(i,3);
     }
 
     int GP_c_r, GP_c_s, GP_c_t, where;
@@ -608,7 +608,7 @@ int XC::EightNodeBrick_u_p_U::update(void)
 
     for(i=0; i<Num_Nodes; i++) {
       for(j=0; j<Num_Dim; j++) {
-        PExS(i*Num_Dof+j) += Pexs.cval(i+1)*bf(j) * ((1.0-poro)*rho_s);
+        PExS(i*Num_Dof+j) += Pexs(i+1)*bf(j) * ((1.0-poro)*rho_s);
       }
     }
 
@@ -661,7 +661,7 @@ int XC::EightNodeBrick_u_p_U::update(void)
 
     for(i=0; i<Num_Nodes; i++) {
       for(j=0; j<Num_Dim; j++) {
-        PExF(i*Num_Dof+j+4) += Pexf.cval(i+1)*bf(j) * (poro*rho_f);
+        PExF(i*Num_Dof+j+4) += Pexf(i+1)*bf(j) * (poro*rho_f);
       }
     }
 
@@ -692,7 +692,7 @@ const XC::Matrix &XC::EightNodeBrick_u_p_U::getStiff(int Ki_flag) const
         for( m=0; m<Num_Dim; m++) {
           for( n=0; n<Num_Dim; n++)
             {
-              K(i*Num_Dof+m, j*Num_Dof+n) = tKep.cval(i+1, m+1, n+1, j+1);
+              K(i*Num_Dof+m, j*Num_Dof+n) = tKep(i+1, m+1, n+1, j+1);
             }
         }
       }
@@ -703,8 +703,8 @@ const XC::Matrix &XC::EightNodeBrick_u_p_U::getStiff(int Ki_flag) const
       for( j=0; j<Num_Nodes; j++ ) {
         for( m=0; m<Num_Dim; m++)
           {
-            K(i*Num_Dof+m, j*Num_Dof+3) = -tG.cval(i+1, m+1, j+1) *(alpha-poro);
-            K(j*Num_Dof+3, i*Num_Dof+m) = -tG.cval(i+1, m+1, j+1) *(alpha-poro);
+            K(i*Num_Dof+m, j*Num_Dof+3) = -tG(i+1, m+1, j+1) *(alpha-poro);
+            K(j*Num_Dof+3, i*Num_Dof+m) = -tG(i+1, m+1, j+1) *(alpha-poro);
           }
       }
     }
@@ -712,7 +712,7 @@ const XC::Matrix &XC::EightNodeBrick_u_p_U::getStiff(int Ki_flag) const
     //P
     for( i=0 ; i<Num_Nodes; i++ ) {
       for( j=0; j<Num_Nodes; j++ ) {
-        K(i*Num_Dof+3, j*Num_Dof+3) = -tP.cval(i+1, j+1);
+        K(i*Num_Dof+3, j*Num_Dof+3) = -tP(i+1, j+1);
       }
     }
 
@@ -721,8 +721,8 @@ const XC::Matrix &XC::EightNodeBrick_u_p_U::getStiff(int Ki_flag) const
       for( j=0; j<Num_Nodes; j++ ) {
         for( m=0; m<Num_Dim; m++)
           {
-            K(i*Num_Dof+m+4, j*Num_Dof+3) = -tG.cval(i+1, m+1, j+1) *poro;
-            K(j*Num_Dof+3, i*Num_Dof+m+4) = -tG.cval(i+1, m+1, j+1) *poro;
+            K(i*Num_Dof+m+4, j*Num_Dof+3) = -tG(i+1, m+1, j+1) *poro;
+            K(j*Num_Dof+3, i*Num_Dof+m+4) = -tG(i+1, m+1, j+1) *poro;
           }
       }
     }
@@ -856,7 +856,7 @@ const XC::Matrix &XC::EightNodeBrick_u_p_U::getStiff(int Ki_flag) const
     // This is for C1, C2 and C3, C1 = C2 = c3
     // Since solid and fluid shape function the same
 
-    if(perm.val(1,1)==0.0 || perm.val(2,2)==0.0 || perm.val(3,3)==0.0) {
+    if(perm(1,1)==0.0 || perm(2,2)==0.0 || perm(3,3)==0.0) {
        std::cerr<<" Error, XC::EightNodeBrick_u_p_U::getDampTensorC123 -- permeability (x/y/z) is zero\n";
        exit(-1);
     }
@@ -1015,7 +1015,7 @@ XC::BJtensor XC::EightNodeBrick_u_p_U::getStiffnessTensorP(void) const
 }
 
 //======================================================================
-XC::BJtensor XC::EightNodeBrick_u_p_U::Jacobian_3D(BJtensor dh) const
+XC::BJtensor XC::EightNodeBrick_u_p_U::Jacobian_3D(const BJtensor &dh) const
   {
      BJtensor N_C = getNodesCrds();
      BJtensor J3D = N_C("ki") * dh("kj");
@@ -1024,11 +1024,11 @@ XC::BJtensor XC::EightNodeBrick_u_p_U::Jacobian_3D(BJtensor dh) const
   }
 
 //======================================================================
-XC::BJtensor XC::EightNodeBrick_u_p_U::Jacobian_3Dinv(BJtensor dh) const
+XC::BJtensor XC::EightNodeBrick_u_p_U::Jacobian_3Dinv(const BJtensor &dh) const
   { return Jacobian_3D(dh).inverse(); }
 
 //======================================================================
- XC::BJtensor XC::EightNodeBrick_u_p_U::dh_Global(BJtensor dh) const
+ XC::BJtensor XC::EightNodeBrick_u_p_U::dh_Global(const BJtensor &dh) const
 {
      BJtensor  JacobianINV0 = Jacobian_3Dinv(dh);
      BJtensor  dhGlobal_0 = dh("ik") * JacobianINV0("kj");
@@ -1046,7 +1046,7 @@ XC::BJtensor XC::EightNodeBrick_u_p_U::Jacobian_3Dinv(BJtensor dh) const
     for(i=0; i<Num_Nodes; i++) {
       const XC::Vector&TNodesCrds = theNodes[i]->getCrds();
       for(j=0; j<Num_Dim; j++) {
-        N_coord.val(i+1,j+1) = TNodesCrds(j);
+        N_coord(i+1,j+1) = TNodesCrds(j);
       }
     }
 
@@ -1064,7 +1064,7 @@ XC::BJtensor XC::EightNodeBrick_u_p_U::Jacobian_3Dinv(BJtensor dh) const
     for(i=0; i<Num_Nodes; i++) {
       const XC::Vector&TNodesDisp = theNodes[i]->getTrialDisp();
       for(j=0; j<Num_Dof; j++) {
-        total_disp.val(i+1,j+1) = TNodesDisp(j);
+        total_disp(i+1,j+1) = TNodesDisp(j);
       }
     }
 
@@ -1079,7 +1079,7 @@ double XC::EightNodeBrick_u_p_U::getPorePressure(double x1, double x2, double x3
 
     for(i=0; i<Num_Nodes; i++) {
       const XC::Vector& T_disp = theNodes[i]->getTrialDisp();
-      pp += shapeFunction(x1,x2,x3).cval(i+1) * T_disp(3);
+      pp += shapeFunction(x1,x2,x3)(i+1) * T_disp(3);
     }
 
     return pp;
@@ -1091,14 +1091,14 @@ XC::BJtensor XC::EightNodeBrick_u_p_U::shapeFunction(double r1, double r2, doubl
     std::vector<int> Hfun({Num_Nodes});
     BJtensor h(1, Hfun, 0.0);
 
-    h.val(8)=(1.0+r1)*(1.0-r2)*(1.0-r3)*0.125;
-    h.val(7)=(1.0-r1)*(1.0-r2)*(1.0-r3)*0.125;
-    h.val(6)=(1.0-r1)*(1.0+r2)*(1.0-r3)*0.125;
-    h.val(5)=(1.0+r1)*(1.0+r2)*(1.0-r3)*0.125;
-    h.val(4)=(1.0+r1)*(1.0-r2)*(1.0+r3)*0.125;
-    h.val(3)=(1.0-r1)*(1.0-r2)*(1.0+r3)*0.125;
-    h.val(2)=(1.0-r1)*(1.0+r2)*(1.0+r3)*0.125;
-    h.val(1)=(1.0+r1)*(1.0+r2)*(1.0+r3)*0.125;
+    h(8)=(1.0+r1)*(1.0-r2)*(1.0-r3)*0.125;
+    h(7)=(1.0-r1)*(1.0-r2)*(1.0-r3)*0.125;
+    h(6)=(1.0-r1)*(1.0+r2)*(1.0-r3)*0.125;
+    h(5)=(1.0+r1)*(1.0+r2)*(1.0-r3)*0.125;
+    h(4)=(1.0+r1)*(1.0-r2)*(1.0+r3)*0.125;
+    h(3)=(1.0-r1)*(1.0-r2)*(1.0+r3)*0.125;
+    h(2)=(1.0-r1)*(1.0+r2)*(1.0+r3)*0.125;
+    h(1)=(1.0+r1)*(1.0+r2)*(1.0+r3)*0.125;
 
     return h;
   }
@@ -1111,44 +1111,44 @@ XC::BJtensor XC::EightNodeBrick_u_p_U::shapeFunctionDerivative(double r1, double
     BJtensor dh(2, DHfun, 0.0);
 
       //  node number 8
-    dh.val(8,1)= (1.0-r2)*(1.0-r3)*0.125;
-    dh.val(8,2)=-(1.0+r1)*(1.0-r3)*0.125;
-    dh.val(8,3)=-(1.0+r1)*(1.0-r2)*0.125;
+    dh(8,1)= (1.0-r2)*(1.0-r3)*0.125;
+    dh(8,2)=-(1.0+r1)*(1.0-r3)*0.125;
+    dh(8,3)=-(1.0+r1)*(1.0-r2)*0.125;
       //  node number 7
-    dh.val(7,1)=-(1.0-r2)*(1.0-r3)*0.125;
-    dh.val(7,2)=-(1.0-r1)*(1.0-r3)*0.125;
-    dh.val(7,3)=-(1.0-r1)*(1.0-r2)*0.125;
+    dh(7,1)=-(1.0-r2)*(1.0-r3)*0.125;
+    dh(7,2)=-(1.0-r1)*(1.0-r3)*0.125;
+    dh(7,3)=-(1.0-r1)*(1.0-r2)*0.125;
       //  node number 6
-    dh.val(6,1)=-(1.0+r2)*(1.0-r3)*0.125;
-    dh.val(6,2)= (1.0-r1)*(1.0-r3)*0.125;
-    dh.val(6,3)=-(1.0-r1)*(1.0+r2)*0.125;
+    dh(6,1)=-(1.0+r2)*(1.0-r3)*0.125;
+    dh(6,2)= (1.0-r1)*(1.0-r3)*0.125;
+    dh(6,3)=-(1.0-r1)*(1.0+r2)*0.125;
       //  node number 5
-    dh.val(5,1)= (1.0+r2)*(1.0-r3)*0.125;
-    dh.val(5,2)= (1.0+r1)*(1.0-r3)*0.125;
-    dh.val(5,3)=-(1.0+r1)*(1.0+r2)*0.125;
+    dh(5,1)= (1.0+r2)*(1.0-r3)*0.125;
+    dh(5,2)= (1.0+r1)*(1.0-r3)*0.125;
+    dh(5,3)=-(1.0+r1)*(1.0+r2)*0.125;
       //  node number 4
-    dh.val(4,1)= (1.0-r2)*(1.0+r3)*0.125;
-    dh.val(4,2)=-(1.0+r1)*(1.0+r3)*0.125;
-    dh.val(4,3)= (1.0+r1)*(1.0-r2)*0.125;
+    dh(4,1)= (1.0-r2)*(1.0+r3)*0.125;
+    dh(4,2)=-(1.0+r1)*(1.0+r3)*0.125;
+    dh(4,3)= (1.0+r1)*(1.0-r2)*0.125;
       //  node number 3
-    dh.val(3,1)=-(1.0-r2)*(1.0+r3)*0.125;
-    dh.val(3,2)=-(1.0-r1)*(1.0+r3)*0.125;
-    dh.val(3,3)= (1.0-r1)*(1.0-r2)*0.125;
+    dh(3,1)=-(1.0-r2)*(1.0+r3)*0.125;
+    dh(3,2)=-(1.0-r1)*(1.0+r3)*0.125;
+    dh(3,3)= (1.0-r1)*(1.0-r2)*0.125;
       //  node number 2
-    dh.val(2,1)=-(1.0+r2)*(1.0+r3)*0.125;
-    dh.val(2,2)= (1.0-r1)*(1.0+r3)*0.125;
-    dh.val(2,3)= (1.0-r1)*(1.0+r2)*0.125;
+    dh(2,1)=-(1.0+r2)*(1.0+r3)*0.125;
+    dh(2,2)= (1.0-r1)*(1.0+r3)*0.125;
+    dh(2,3)= (1.0-r1)*(1.0+r2)*0.125;
       //  node number 1
-    dh.val(1,1)= (1.0+r2)*(1.0+r3)*0.125;
-    dh.val(1,2)= (1.0+r1)*(1.0+r3)*0.125;
-    dh.val(1,3)= (1.0+r1)*(1.0+r2)*0.125;
+    dh(1,1)= (1.0+r2)*(1.0+r3)*0.125;
+    dh(1,2)= (1.0+r1)*(1.0+r3)*0.125;
+    dh(1,3)= (1.0+r1)*(1.0+r2)*0.125;
 
     return dh;
-}
+  }
 
 //==============================================================
- XC::BJtensor XC::EightNodeBrick_u_p_U::getGaussPts(void)
-{
+XC::BJtensor XC::EightNodeBrick_u_p_U::getGaussPts(void)
+  {
     std::vector<int> dimensions1({Num_TotalGaussPts,Num_Dim});
     BJtensor Gs(2, dimensions1, 0.0);
     std::vector<int> dimensions2({Num_Nodes});
@@ -1159,29 +1159,29 @@ XC::BJtensor XC::EightNodeBrick_u_p_U::shapeFunctionDerivative(double r1, double
     double t = 0.0;
     int i, j, where;
 
-    int GP_c_r, GP_c_s, GP_c_t;
 
-    for( GP_c_r = 0 ; GP_c_r < Num_IntegrationPts; GP_c_r++ ) {
-      r = pts[GP_c_r];
-      for( GP_c_s = 0 ; GP_c_s < Num_IntegrationPts; GP_c_s++ ) {
-        s = pts[GP_c_s];
-        for( GP_c_t = 0 ; GP_c_t < Num_IntegrationPts; GP_c_t++ ) {
-          t = pts[GP_c_t];
-          where = (GP_c_r*Num_IntegrationPts+GP_c_s)*Num_IntegrationPts+GP_c_t;
-          shp = shapeFunction(r,s,t);
-          for(i=0; i<Num_Nodes; i++) {
-            const XC::Vector& T_Crds = theNodes[i]->getCrds();
-            for(j=0; j<Num_Dim; j++) {
-              Gs.val(where+1, j+1) += shp.cval(i+1) * T_Crds(j);
-            }
-          }
-        }
+    for(int GP_c_r = 0 ; GP_c_r < Num_IntegrationPts; GP_c_r++ )
+      {
+	r = pts[GP_c_r];
+	for(int GP_c_s = 0 ; GP_c_s < Num_IntegrationPts; GP_c_s++ )
+	  {
+	    s = pts[GP_c_s];
+	    for(int GP_c_t = 0 ; GP_c_t < Num_IntegrationPts; GP_c_t++ )
+	      {
+		t = pts[GP_c_t];
+		where = (GP_c_r*Num_IntegrationPts+GP_c_s)*Num_IntegrationPts+GP_c_t;
+		shp = shapeFunction(r,s,t);
+		for(i=0; i<Num_Nodes; i++)
+		  {
+		    const Vector& T_Crds = theNodes[i]->getCrds();
+		    for(j=0; j<Num_Dim; j++)
+		      { Gs(where+1, j+1) += shp(i+1) * T_Crds(j); }
+		  }
+	      }
+	  }
       }
-    }
-
     return Gs;
-
-}
+  }
 
 
 #endif

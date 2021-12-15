@@ -188,9 +188,9 @@ const XC::Tensor XC::FDdecoupledElastic3D::Yab(void)
     Tensor  d2 = W->d2isowOdlambda1dlambda2(lambda_wave);
     Vector  d1 = W->disowOdlambda(lambda_wave);
     Vector  d11 = W->d2isowOdlambda2(lambda_wave);
-    d2.val(1,1) = d11(0);
-    d2.val(2,2) = d11(1);
-    d2.val(3,3) = d11(2);
+    d2(1,1) = d11(0);
+    d2(2,2) = d11(1);
+    d2(3,3) = d11(2);
     Vector tempi(3);
     double tempd = d1(0)*lambda_wave(0) + d1(1)*lambda_wave(1) + d1(2)*lambda_wave(2) ;
     double tempcd = 0.0;
@@ -199,15 +199,15 @@ const XC::Tensor XC::FDdecoupledElastic3D::Yab(void)
         tempi(i) = 0.0;
         for(int j=0; j<3; j++)
           {
-            tempi(i) += d2.cval(i+1,j+1) * lambda_wave(i) * lambda_wave(j);
-            tempcd   += d2.cval(i+1,j+1) * lambda_wave(i) * lambda_wave(j);
+            tempi(i) += d2(i+1,j+1) * lambda_wave(i) * lambda_wave(j);
+            tempcd   += d2(i+1,j+1) * lambda_wave(i) * lambda_wave(j);
           }
       }
     for(int a=1; a<=3; a++)
       {
         for(int b=1; b<=3; b++)
           {
-            Y.val(a,b) = d1(a-1)*I_ij.cval(a,b)*lambda_wave(b-1) + d2.cval(a,b)*lambda_wave(a-1)*lambda_wave(b-1) -
+            Y(a,b) = d1(a-1)*I_ij(a,b)*lambda_wave(b-1) + d2(a,b)*lambda_wave(a-1)*lambda_wave(b-1) -
                           (  tempi(a-1) + tempi(b-1) + d1(a-1)*lambda_wave(a-1) + d1(b-1)*lambda_wave(b-1) ) / 3.0 +
                            ( tempcd + tempd ) / 9.0;
           }
@@ -288,9 +288,9 @@ const XC::Tensor XC::FDdecoupledElastic3D::FDisoStiffness(void)
     Tensor calM3 = ( tempI + (CinvCinv_ICinv -Cm1M3M3Cm1)*(J*J/(lambda3*lambda3)) + dM3M3d*(lambda3*lambda3) - M3M3*d3p ) *(1.0/d3);
 
     Tensor L_iso_1 = ( calM1*Wa(0) + calM2*Wa(1) + calM3*Wa(2) ) * 2.0;
-    Tensor L_iso_2 =  M1("ij") * M1("kl") * yab.cval(1,1)  + M1("ij") * M2("kl") * yab.cval(1,2)  + M1("ij") * M3("kl") * yab.cval(1,3)  +
-                      M2("ij") * M1("kl") * yab.cval(2,1)  + M2("ij") * M2("kl") * yab.cval(2,2)  + M2("ij") * M3("kl") * yab.cval(2,3)  +
-                      M3("ij") * M1("kl") * yab.cval(3,1)  + M3("ij") * M2("kl") * yab.cval(3,2)  + M3("ij") * M3("kl") * yab.cval(3,3);
+    Tensor L_iso_2 =  M1("ij") * M1("kl") * yab(1,1)  + M1("ij") * M2("kl") * yab(1,2)  + M1("ij") * M3("kl") * yab(1,3)  +
+                      M2("ij") * M1("kl") * yab(2,1)  + M2("ij") * M2("kl") * yab(2,2)  + M2("ij") * M3("kl") * yab(2,3)  +
+                      M3("ij") * M1("kl") * yab(3,1)  + M3("ij") * M2("kl") * yab(3,2)  + M3("ij") * M3("kl") * yab(3,3);
     L_iso = L_iso_1 + L_iso_2 ;
   }
 
@@ -309,8 +309,8 @@ const XC::Tensor XC::FDdecoupledElastic3D::FDisoStiffness(void)
     Tensor calM1 = ( tempI + (CinvCinv_ICinv -Cm1M1M1Cm1)*(J*J/(lambda1*lambda1)) + dM1M1d*(lambda1*lambda1) - M1M1*d1p ) *(1.0/d1);
     Tensor calMr = (ICinv + calM1) * (-1.0);
     Tensor L_iso_1 = ( calM1*Wa(0) + calMr*Wa(2) ) * 2.0;
-    Tensor L_iso_2 =  M1("ij") * M1("kl") * yab.cval(1,1)  + M1("ij") * Mr("kl") * yab.cval(1,3)  +
-                      Mr("ij") * M1("kl") * yab.cval(3,1)  + Mr("ij") * Mr("kl") * yab.cval(3,3);
+    Tensor L_iso_2 =  M1("ij") * M1("kl") * yab(1,1)  + M1("ij") * Mr("kl") * yab(1,3)  +
+                      Mr("ij") * M1("kl") * yab(3,1)  + Mr("ij") * Mr("kl") * yab(3,3);
     L_iso = L_iso_1 + L_iso_2 ;
   }
 
@@ -329,8 +329,8 @@ const XC::Tensor XC::FDdecoupledElastic3D::FDisoStiffness(void)
     Tensor calM3 = ( tempI + (CinvCinv_ICinv -Cm1M3M3Cm1)*(J*J/(lambda3*lambda3)) + dM3M3d*(lambda3*lambda3) - M3M3*d3p ) *(1.0/d3);
     Tensor calMr = (ICinv + calM3) * (-1.0);
     Tensor L_iso_1 = ( calM3*Wa(2) + calMr*Wa(0) ) * 2.0;
-    Tensor L_iso_2 =  M3("ij") * M3("kl") * yab.cval(3,3)  + M3("ij") * Mr("kl") * yab.cval(3,1)  +
-                      Mr("ij") * M3("kl") * yab.cval(1,3)  + Mr("ij") * Mr("kl") * yab.cval(1,1);
+    Tensor L_iso_2 =  M3("ij") * M3("kl") * yab(3,3)  + M3("ij") * Mr("kl") * yab(3,1)  +
+                      Mr("ij") * M3("kl") * yab(1,3)  + Mr("ij") * Mr("kl") * yab(1,1);
     L_iso = L_iso_1 + L_iso_2 ;
   }
 
@@ -570,9 +570,9 @@ int XC::FDdecoupledElastic3D::ComputeTrials()
 
    // lambda:
    BJtensor eigtensor(C.eigenvalues());
-   lambda1 = sqrt(eigtensor.cval(1));
-   lambda2 = sqrt(eigtensor.cval(2));
-   lambda3 = sqrt(eigtensor.cval(3));
+   lambda1 = sqrt(eigtensor(1));
+   lambda2 = sqrt(eigtensor(2));
+   lambda3 = sqrt(eigtensor(3));
 
    // lambda_wave
    double JJJ = pow(J, -0.33333333333333333333333333333);

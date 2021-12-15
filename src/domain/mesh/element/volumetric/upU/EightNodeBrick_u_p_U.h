@@ -153,9 +153,9 @@ class EightNodeBrick_u_p_U: public BrickBase
     BJtensor getGaussPts(void);
     BJtensor getNodesCrds(void) const;
     BJtensor getNodesDisp(void) const;
-    BJtensor Jacobian_3D(BJtensor dh) const;
-    BJtensor Jacobian_3Dinv(BJtensor dh) const;
-    BJtensor dh_Global(BJtensor dh) const;
+    BJtensor Jacobian_3D(const BJtensor &dh) const;
+    BJtensor Jacobian_3Dinv(const BJtensor &dh) const;
+    BJtensor dh_Global(const BJtensor &dh) const;
 
     BJtensor getStiffnessTensorKep() const;
     BJtensor getStiffnessTensorG12() const;

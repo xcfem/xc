@@ -171,7 +171,7 @@ int XC::TotalLagrangianFD20NodeBrick::update(void)
 }
 
 //======================================================================
- XC::BJtensor XC::TotalLagrangianFD20NodeBrick::Jacobian_3D(BJtensor dh) const
+ XC::BJtensor XC::TotalLagrangianFD20NodeBrick::Jacobian_3D(const BJtensor &dh) const
 {
      BJtensor N_C = this->getNodesCrds();
      BJtensor J3D = dh("ij") * N_C("ik");
@@ -180,7 +180,7 @@ int XC::TotalLagrangianFD20NodeBrick::update(void)
 }
 
 //======================================================================
- XC::BJtensor XC::TotalLagrangianFD20NodeBrick::Jacobian_3Dinv(BJtensor dh) const
+ XC::BJtensor XC::TotalLagrangianFD20NodeBrick::Jacobian_3Dinv(const BJtensor &dh) const
 {
      BJtensor N_C = this->getNodesCrds();
      BJtensor J3D = dh("ij") * N_C("ik");
@@ -190,7 +190,7 @@ int XC::TotalLagrangianFD20NodeBrick::update(void)
 }
 
 //======================================================================
-XC::BJtensor XC::TotalLagrangianFD20NodeBrick::dh_Global(BJtensor dh) const
+XC::BJtensor XC::TotalLagrangianFD20NodeBrick::dh_Global(const BJtensor &dh) const
   {
      BJtensor  JacobianINV0 = this->Jacobian_3Dinv(dh);
      BJtensor  dhGlobal_0 = dh("ij") * JacobianINV0("kj");
@@ -379,9 +379,9 @@ XC::BJtensor XC::TotalLagrangianFD20NodeBrick::getBodyForce(void) const
     BJtensor Jacobian;
     BJtensor JacobianINV;
 
-    bodyforce.val(1) = bf(0);
-    bodyforce.val(2) = bf(1);
-    bodyforce.val(3) = bf(2);
+    bodyforce(1) = bf(0);
+    bodyforce(2) = bf(1);
+    bodyforce(3) = bf(2);
 
     const double rho= physicalProperties.getRho();
     for( GP_c_r = 0 ; GP_c_r < NumIntegrationPts ; GP_c_r++ ) {
@@ -442,7 +442,7 @@ const XC::Matrix &XC::TotalLagrangianFD20NodeBrick::getTangentStiff(void) const
               for(l=1 ; l<=NumDof ; l++ ) {
                  kki = k + NumDof*(i-1);
                  kkj = l + NumDof*(j-1);
-                 K(kki-1 , kkj-1) = stifftensor.cval(i,k,l,j);
+                 K(kki-1 , kkj-1) = stifftensor(i,k,l,j);
               }
            }
         }
@@ -484,7 +484,7 @@ const XC::Matrix &XC::TotalLagrangianFD20NodeBrick::getMass(void) const
     for(i=0; i<NumNodes; i++) {
           const XC::Vector &TNodesCrds = theNodes[i]->getCrds();
       for(j=0; j<NumDof; j++) {
-        N_coord.val(i+1, j+1) = TNodesCrds(j);
+        N_coord(i+1, j+1) = TNodesCrds(j);
           }
     }
 
@@ -501,7 +501,7 @@ const XC::Matrix &XC::TotalLagrangianFD20NodeBrick::getMass(void) const
     for(i=0; i<NumNodes; i++) {
       const XC::Vector &TNodesDisp = theNodes[i]->getTrialDisp();
       for(j=0; j<NumDof; j++) {
-        total_disp.val(i+1, j+1) = TNodesDisp(j);
+        total_disp(i+1, j+1) = TNodesDisp(j);
       }
     }
 
@@ -560,7 +560,7 @@ const XC::Vector &XC::TotalLagrangianFD20NodeBrick::getResistingForce(void) cons
     for(i=0; i<NumNodes; i++)
       {
         for(j=0; j<NumDof; j++)
-          { P(i*NumDof +j) = NodalForces_in.cval(i+1, j+1); }
+          { P(i*NumDof +j) = NodalForces_in(i+1, j+1); }
       }
     if(!load.isEmpty())
       P.addVector(1.0, load, -1.0);
@@ -632,12 +632,12 @@ void XC::TotalLagrangianFD20NodeBrick::Print(std::ostream &s, int flag) const
       {
         const FiniteDeformationMaterial *fdMaterial= dynamic_cast<const FiniteDeformationMaterial *>(physicalProperties[i]);
         sigma = fdMaterial->getCauchyStressTensor();
-        P00(0) = sigma.val(1,1);
-        P00(1) = sigma.val(2,2);
-        P00(2) = sigma.val(3,3);
-        P00(3) = sigma.val(2,3);
-        P00(4) = sigma.val(3,1);
-        P00(5) = sigma.val(1,2);
+        P00(0) = sigma(1,1);
+        P00(1) = sigma(2,2);
+        P00(2) = sigma(3,3);
+        P00(3) = sigma(2,3);
+        P00(4) = sigma(3,1);
+        P00(5) = sigma(1,2);
 
         s << "\n where = " << i << std::endl;
         s << " Stress (Cauchy): xx yy zz yz zx xy) " << P00 << std::endl;
@@ -691,12 +691,12 @@ int XC::TotalLagrangianFD20NodeBrick::getResponse(int responseID, Information &e
 	  {
             const FiniteDeformationMaterial *fdMaterial= dynamic_cast<const FiniteDeformationMaterial *>(physicalProperties[i]);
 	    sigma = fdMaterial->getCauchyStressTensor();
-	    P0(i*6 +0 ) = sigma.val(1,1);
-	    P0(i*6 +1 ) = sigma.val(2,2);
-	    P0(i*6 +2 ) = sigma.val(3,3);
-	    P0(i*6 +3 ) = sigma.val(2,3);
-	    P0(i*6 +4 ) = sigma.val(3,1);
-	    P0(i*6 +5 ) = sigma.val(1,2);
+	    P0(i*6 +0 ) = sigma(1,1);
+	    P0(i*6 +1 ) = sigma(2,2);
+	    P0(i*6 +2 ) = sigma(3,3);
+	    P0(i*6 +3 ) = sigma(2,3);
+	    P0(i*6 +4 ) = sigma(3,1);
+	    P0(i*6 +5 ) = sigma(1,2);
 	  }
         return eleInfo.setVector(P0);
      }
@@ -706,12 +706,12 @@ int XC::TotalLagrangianFD20NodeBrick::getResponse(int responseID, Information &e
         BJtensor sigma;
         for(i=0; i<NumTotalGaussPts; i++) {
           sigma = physicalProperties[i]->getStressTensor();
-          P0(i*6 +0 ) = sigma.val(1,1);
-          P0(i*6 +1 ) = sigma.val(2,2);
-          P0(i*6 +2 ) = sigma.val(3,3);
-          P0(i*6 +3 ) = sigma.val(2,3);
-          P0(i*6 +4 ) = sigma.val(3,1);
-          P0(i*6 +5 ) = sigma.val(1,2);
+          P0(i*6 +0 ) = sigma(1,1);
+          P0(i*6 +1 ) = sigma(2,2);
+          P0(i*6 +2 ) = sigma(3,3);
+          P0(i*6 +3 ) = sigma(2,3);
+          P0(i*6 +4 ) = sigma(3,1);
+          P0(i*6 +5 ) = sigma(1,2);
         }
         return eleInfo.setVector(P0);
      }
@@ -731,12 +731,12 @@ int XC::TotalLagrangianFD20NodeBrick::getResponse(int responseID, Information &e
             F = F.inverse();
             e = F("ki")*F("kj"); e.null_indices();
             e = (tI2-e) *0.5;
-            P0(i*6 +0 ) = e.val(1,1);
-            P0(i*6 +1 ) = e.val(2,2);
-            P0(i*6 +2 ) = e.val(3,3);
-            P0(i*6 +3 ) = e.val(2,3);
-            P0(i*6 +4 ) = e.val(3,1);
-            P0(i*6 +5 ) = e.val(1,2);
+            P0(i*6 +0 ) = e(1,1);
+            P0(i*6 +1 ) = e(2,2);
+            P0(i*6 +2 ) = e(3,3);
+            P0(i*6 +3 ) = e(2,3);
+            P0(i*6 +4 ) = e(3,1);
+            P0(i*6 +5 ) = e(1,2);
           }
         return eleInfo.setVector(P0);
      }
@@ -746,12 +746,12 @@ int XC::TotalLagrangianFD20NodeBrick::getResponse(int responseID, Information &e
         BJtensor E;
         for(i=0; i<NumTotalGaussPts; i++) {
           E = physicalProperties[i]->getStrainTensor();
-          P0(i*6 +0 ) = E.val(1,1);
-          P0(i*6 +1 ) = E.val(2,2);
-          P0(i*6 +2 ) = E.val(3,3);
-          P0(i*6 +3 ) = E.val(2,3);
-          P0(i*6 +4 ) = E.val(3,1);
-          P0(i*6 +5 ) = E.val(1,2);
+          P0(i*6 +0 ) = E(1,1);
+          P0(i*6 +1 ) = E(2,2);
+          P0(i*6 +2 ) = E(3,3);
+          P0(i*6 +3 ) = E(2,3);
+          P0(i*6 +4 ) = E(3,1);
+          P0(i*6 +5 ) = E(1,2);
         }
         return eleInfo.setVector(P0);
      }
@@ -771,49 +771,49 @@ XC::BJtensor XC::TotalLagrangianFD20NodeBrick::shapeFunction(double r1, double r
     BJtensor h(1, dimension, 0.0);
 
     // influence of the node number 20
-        h.val(20)=(1.0+r1)*(1.0-r2)*(1.0-r3*r3)*0.25;
+        h(20)=(1.0+r1)*(1.0-r2)*(1.0-r3*r3)*0.25;
     // influence of the node number 19
-        h.val(19)=(1.0-r1)*(1.0-r2)*(1.0-r3*r3)*0.25;
+        h(19)=(1.0-r1)*(1.0-r2)*(1.0-r3*r3)*0.25;
     // influence of the node number 18
-        h.val(18)=(1.0-r1)*(1.0+r2)*(1.0-r3*r3)*0.25;
+        h(18)=(1.0-r1)*(1.0+r2)*(1.0-r3*r3)*0.25;
     // influence of the node number 17
-        h.val(17)=(1.0+r1)*(1.0+r2)*(1.0-r3*r3)*0.25;
+        h(17)=(1.0+r1)*(1.0+r2)*(1.0-r3*r3)*0.25;
 
     // influence of the node number 16
-        h.val(16)=(1.0+r1)*(1.0-r2*r2)*(1.0-r3)*0.25;
+        h(16)=(1.0+r1)*(1.0-r2*r2)*(1.0-r3)*0.25;
     // influence of the node number 15
-        h.val(15)=(1.0-r1*r1)*(1.0-r2)*(1.0-r3)*0.25;
+        h(15)=(1.0-r1*r1)*(1.0-r2)*(1.0-r3)*0.25;
     // influence of the node number 14
-        h.val(14)=(1.0-r1)*(1.0-r2*r2)*(1.0-r3)*0.25;
+        h(14)=(1.0-r1)*(1.0-r2*r2)*(1.0-r3)*0.25;
     // influence of the node number 13
-        h.val(13)=(1.0-r1*r1)*(1.0+r2)*(1.0-r3)*0.25;
+        h(13)=(1.0-r1*r1)*(1.0+r2)*(1.0-r3)*0.25;
 
     // influence of the node number 12
-        h.val(12)=(1.0+r1)*(1.0-r2*r2)*(1.0+r3)*0.25;
+        h(12)=(1.0+r1)*(1.0-r2*r2)*(1.0+r3)*0.25;
     // influence of the node number 11
-        h.val(11)=(1.0-r1*r1)*(1.0-r2)*(1.0+r3)*0.25;
+        h(11)=(1.0-r1*r1)*(1.0-r2)*(1.0+r3)*0.25;
     // influence of the node number 10
-        h.val(10)=(1.0-r1)*(1.0-r2*r2)*(1.0+r3)*0.25;
+        h(10)=(1.0-r1)*(1.0-r2*r2)*(1.0+r3)*0.25;
     // influence of the node number 9
-        h.val( 9)=(1.0-r1*r1)*(1.0+r2)*(1.0+r3)*0.25;
+        h( 9)=(1.0-r1*r1)*(1.0+r2)*(1.0+r3)*0.25;
 
       // influence of the node number 8
-    h.val(8)=(1.0+r1)*(1.0-r2)*(1.0-r3)*0.125 - (h.val(15)+h.val(16)+h.val(20))*0.5;
+    h(8)=(1.0+r1)*(1.0-r2)*(1.0-r3)*0.125 - (h(15)+h(16)+h(20))*0.5;
       // influence of the node number 7
-    h.val(7)=(1.0-r1)*(1.0-r2)*(1.0-r3)*0.125 - (h.val(14)+h.val(15)+h.val(19))*0.5;
+    h(7)=(1.0-r1)*(1.0-r2)*(1.0-r3)*0.125 - (h(14)+h(15)+h(19))*0.5;
       // influence of the node number 6
-    h.val(6)=(1.0-r1)*(1.0+r2)*(1.0-r3)*0.125 - (h.val(13)+h.val(14)+h.val(18))*0.5;
+    h(6)=(1.0-r1)*(1.0+r2)*(1.0-r3)*0.125 - (h(13)+h(14)+h(18))*0.5;
       // influence of the node number 5
-    h.val(5)=(1.0+r1)*(1.0+r2)*(1.0-r3)*0.125 - (h.val(13)+h.val(16)+h.val(17))*0.5;
+    h(5)=(1.0+r1)*(1.0+r2)*(1.0-r3)*0.125 - (h(13)+h(16)+h(17))*0.5;
 
       // influence of the node number 4
-    h.val(4)=(1.0+r1)*(1.0-r2)*(1.0+r3)*0.125 - (h.val(11)+h.val(12)+h.val(20))*0.5;
+    h(4)=(1.0+r1)*(1.0-r2)*(1.0+r3)*0.125 - (h(11)+h(12)+h(20))*0.5;
       // influence of the node number 3
-    h.val(3)=(1.0-r1)*(1.0-r2)*(1.0+r3)*0.125 - (h.val(10)+h.val(11)+h.val(19))*0.5;
+    h(3)=(1.0-r1)*(1.0-r2)*(1.0+r3)*0.125 - (h(10)+h(11)+h(19))*0.5;
       // influence of the node number 2
-    h.val(2)=(1.0-r1)*(1.0+r2)*(1.0+r3)*0.125 - (h.val(10)+h.val(18)+h.val( 9))*0.5;
+    h(2)=(1.0-r1)*(1.0+r2)*(1.0+r3)*0.125 - (h(10)+h(18)+h( 9))*0.5;
       // influence of the node number 1
-    h.val(1)=(1.0+r1)*(1.0+r2)*(1.0+r3)*0.125 - (h.val(12)+h.val(17)+h.val( 9))*0.5;
+    h(1)=(1.0+r1)*(1.0+r2)*(1.0+r3)*0.125 - (h(12)+h(17)+h( 9))*0.5;
 
     return h;
 }
@@ -827,89 +827,89 @@ XC::BJtensor XC::TotalLagrangianFD20NodeBrick::shapeFunction(double r1, double r
     BJtensor dh(2, dimensions, 0.0);
 
     // influence of the node number 20
-        dh.val(20,1) =   (1.0-r2)*(1.0-r3*r3)*0.25;
-        dh.val(20,2) = - (1.0+r1)*(1.0-r3*r3)*0.25;
-        dh.val(20,3) = - (1.0+r1)*(1.0-r2)*r3*0.50;
+        dh(20,1) =   (1.0-r2)*(1.0-r3*r3)*0.25;
+        dh(20,2) = - (1.0+r1)*(1.0-r3*r3)*0.25;
+        dh(20,3) = - (1.0+r1)*(1.0-r2)*r3*0.50;
     // influence of the node number 19
-        dh.val(19,1) = - (1.0-r2)*(1.0-r3*r3)*0.25;
-        dh.val(19,2) = - (1.0-r1)*(1.0-r3*r3)*0.25;
-        dh.val(19,3) = - (1.0-r1)*(1.0-r2)*r3*0.50;
+        dh(19,1) = - (1.0-r2)*(1.0-r3*r3)*0.25;
+        dh(19,2) = - (1.0-r1)*(1.0-r3*r3)*0.25;
+        dh(19,3) = - (1.0-r1)*(1.0-r2)*r3*0.50;
     // influence of the node number 18
-        dh.val(18,1) = - (1.0+r2)*(1.0-r3*r3)*0.25;
-        dh.val(18,2) =   (1.0-r1)*(1.0-r3*r3)*0.25;
-        dh.val(18,3) = - (1.0-r1)*(1.0+r2)*r3*0.50;
+        dh(18,1) = - (1.0+r2)*(1.0-r3*r3)*0.25;
+        dh(18,2) =   (1.0-r1)*(1.0-r3*r3)*0.25;
+        dh(18,3) = - (1.0-r1)*(1.0+r2)*r3*0.50;
     // influence of the node number 17
-        dh.val(17,1) =   (1.0+r2)*(1.0-r3*r3)*0.25;
-        dh.val(17,2) =   (1.0+r1)*(1.0-r3*r3)*0.25;
-        dh.val(17,3) = - (1.0+r1)*(1.0+r2)*r3*0.50;
+        dh(17,1) =   (1.0+r2)*(1.0-r3*r3)*0.25;
+        dh(17,2) =   (1.0+r1)*(1.0-r3*r3)*0.25;
+        dh(17,3) = - (1.0+r1)*(1.0+r2)*r3*0.50;
 
     // influence of the node number 16
-        dh.val(16,1) =   (1.0-r2*r2)*(1.0-r3)*0.25;
-        dh.val(16,2) = - (1.0+r1)*r2*(1.0-r3)*0.50;
-        dh.val(16,3) = - (1.0+r1)*(1.0-r2*r2)*0.25;
+        dh(16,1) =   (1.0-r2*r2)*(1.0-r3)*0.25;
+        dh(16,2) = - (1.0+r1)*r2*(1.0-r3)*0.50;
+        dh(16,3) = - (1.0+r1)*(1.0-r2*r2)*0.25;
     // influnce of the node number 15
-        dh.val(15,1) = - r1*(1.0-r2)*(1.0-r3)*0.50;
-        dh.val(15,2) = - (1.0-r1*r1)*(1.0-r3)*0.25;
-        dh.val(15,3) = - (1.0-r1*r1)*(1.0-r2)*0.25;
+        dh(15,1) = - r1*(1.0-r2)*(1.0-r3)*0.50;
+        dh(15,2) = - (1.0-r1*r1)*(1.0-r3)*0.25;
+        dh(15,3) = - (1.0-r1*r1)*(1.0-r2)*0.25;
     // influence of the node number 14
-        dh.val(14,1) = - (1.0-r2*r2)*(1.0-r3)*0.25;
-        dh.val(14,2) = - (1.0-r1)*r2*(1.0-r3)*0.50;
-        dh.val(14,3) = - (1.0-r1)*(1.0-r2*r2)*0.25;
+        dh(14,1) = - (1.0-r2*r2)*(1.0-r3)*0.25;
+        dh(14,2) = - (1.0-r1)*r2*(1.0-r3)*0.50;
+        dh(14,3) = - (1.0-r1)*(1.0-r2*r2)*0.25;
     // influence of the node number 13
-        dh.val(13,1) = - r1*(1.0+r2)*(1.0-r3)*0.50;
-        dh.val(13,2) =   (1.0-r1*r1)*(1.0-r3)*0.25;
-        dh.val(13,3) = - (1.0-r1*r1)*(1.0+r2)*0.25;
+        dh(13,1) = - r1*(1.0+r2)*(1.0-r3)*0.50;
+        dh(13,2) =   (1.0-r1*r1)*(1.0-r3)*0.25;
+        dh(13,3) = - (1.0-r1*r1)*(1.0+r2)*0.25;
 
     // influence of the node number 12
-        dh.val(12,1) =   (1.0-r2*r2)*(1.0+r3)*0.25;
-        dh.val(12,2) = - (1.0+r1)*r2*(1.0+r3)*0.50;
-        dh.val(12,3) =   (1.0+r1)*(1.0-r2*r2)*0.25;
+        dh(12,1) =   (1.0-r2*r2)*(1.0+r3)*0.25;
+        dh(12,2) = - (1.0+r1)*r2*(1.0+r3)*0.50;
+        dh(12,3) =   (1.0+r1)*(1.0-r2*r2)*0.25;
     // influence of the node number 11
-        dh.val(11,1) = - r1*(1.0-r2)*(1.0+r3)*0.50;
-        dh.val(11,2) = - (1.0-r1*r1)*(1.0+r3)*0.25;
-        dh.val(11,3) =   (1.0-r1*r1)*(1.0-r2)*0.25;
+        dh(11,1) = - r1*(1.0-r2)*(1.0+r3)*0.50;
+        dh(11,2) = - (1.0-r1*r1)*(1.0+r3)*0.25;
+        dh(11,3) =   (1.0-r1*r1)*(1.0-r2)*0.25;
     // influence of the node number 10
-        dh.val(10,1) = - (1.0-r2*r2)*(1.0+r3)*0.25;
-        dh.val(10,2) = - (1.0-r1)*r2*(1.0+r3)*0.50;
-        dh.val(10,3) =   (1.0-r1)*(1.0-r2*r2)*0.25;
+        dh(10,1) = - (1.0-r2*r2)*(1.0+r3)*0.25;
+        dh(10,2) = - (1.0-r1)*r2*(1.0+r3)*0.50;
+        dh(10,3) =   (1.0-r1)*(1.0-r2*r2)*0.25;
     // influence of the node number 9
-        dh.val(9,1)  = - r1*(1.0+r2)*(1.0+r3)*0.50;
-        dh.val(9,2)  =   (1.0-r1*r1)*(1.0+r3)*0.25;
-        dh.val(9,3)  =   (1.0-r1*r1)*(1.0+r2)*0.25;
+        dh(9,1)  = - r1*(1.0+r2)*(1.0+r3)*0.50;
+        dh(9,2)  =   (1.0-r1*r1)*(1.0+r3)*0.25;
+        dh(9,3)  =   (1.0-r1*r1)*(1.0+r2)*0.25;
 
       // influence of the node number 8
-    dh.val(8,1)= (1.0-r2)*(1.0-r3)*0.125 - (dh.val(15,1)+dh.val(16,1)+dh.val(20,1))*0.5;
-    dh.val(8,2)=-(1.0+r1)*(1.0-r3)*0.125 - (dh.val(15,2)+dh.val(16,2)+dh.val(20,2))*0.5;
-    dh.val(8,3)=-(1.0+r1)*(1.0-r2)*0.125 - (dh.val(15,3)+dh.val(16,3)+dh.val(20,3))*0.5;
+    dh(8,1)= (1.0-r2)*(1.0-r3)*0.125 - (dh(15,1)+dh(16,1)+dh(20,1))*0.5;
+    dh(8,2)=-(1.0+r1)*(1.0-r3)*0.125 - (dh(15,2)+dh(16,2)+dh(20,2))*0.5;
+    dh(8,3)=-(1.0+r1)*(1.0-r2)*0.125 - (dh(15,3)+dh(16,3)+dh(20,3))*0.5;
       // influence of the node number 7
-    dh.val(7,1)=-(1.0-r2)*(1.0-r3)*0.125 - (dh.val(14,1)+dh.val(15,1)+dh.val(19,1))*0.5;
-    dh.val(7,2)=-(1.0-r1)*(1.0-r3)*0.125 - (dh.val(14,2)+dh.val(15,2)+dh.val(19,2))*0.5;
-    dh.val(7,3)=-(1.0-r1)*(1.0-r2)*0.125 - (dh.val(14,3)+dh.val(15,3)+dh.val(19,3))*0.5;
+    dh(7,1)=-(1.0-r2)*(1.0-r3)*0.125 - (dh(14,1)+dh(15,1)+dh(19,1))*0.5;
+    dh(7,2)=-(1.0-r1)*(1.0-r3)*0.125 - (dh(14,2)+dh(15,2)+dh(19,2))*0.5;
+    dh(7,3)=-(1.0-r1)*(1.0-r2)*0.125 - (dh(14,3)+dh(15,3)+dh(19,3))*0.5;
       // influence of the node number 6
-    dh.val(6,1)=-(1.0+r2)*(1.0-r3)*0.125 - (dh.val(13,1)+dh.val(14,1)+dh.val(18,1))*0.5;
-    dh.val(6,2)= (1.0-r1)*(1.0-r3)*0.125 - (dh.val(13,2)+dh.val(14,2)+dh.val(18,2))*0.5;
-    dh.val(6,3)=-(1.0-r1)*(1.0+r2)*0.125 - (dh.val(13,3)+dh.val(14,3)+dh.val(18,3))*0.5;
+    dh(6,1)=-(1.0+r2)*(1.0-r3)*0.125 - (dh(13,1)+dh(14,1)+dh(18,1))*0.5;
+    dh(6,2)= (1.0-r1)*(1.0-r3)*0.125 - (dh(13,2)+dh(14,2)+dh(18,2))*0.5;
+    dh(6,3)=-(1.0-r1)*(1.0+r2)*0.125 - (dh(13,3)+dh(14,3)+dh(18,3))*0.5;
       // influence of the node number 5
-    dh.val(5,1)= (1.0+r2)*(1.0-r3)*0.125 - (dh.val(13,1)+dh.val(16,1)+dh.val(17,1))*0.5;
-    dh.val(5,2)= (1.0+r1)*(1.0-r3)*0.125 - (dh.val(13,2)+dh.val(16,2)+dh.val(17,2))*0.5;
-    dh.val(5,3)=-(1.0+r1)*(1.0+r2)*0.125 - (dh.val(13,3)+dh.val(16,3)+dh.val(17,3))*0.5;
+    dh(5,1)= (1.0+r2)*(1.0-r3)*0.125 - (dh(13,1)+dh(16,1)+dh(17,1))*0.5;
+    dh(5,2)= (1.0+r1)*(1.0-r3)*0.125 - (dh(13,2)+dh(16,2)+dh(17,2))*0.5;
+    dh(5,3)=-(1.0+r1)*(1.0+r2)*0.125 - (dh(13,3)+dh(16,3)+dh(17,3))*0.5;
 
       // influence of the node number 4
-    dh.val(4,1)= (1.0-r2)*(1.0+r3)*0.125 - (dh.val(11,1)+dh.val(12,1)+dh.val(20,1))*0.5;
-    dh.val(4,2)=-(1.0+r1)*(1.0+r3)*0.125 - (dh.val(11,2)+dh.val(12,2)+dh.val(20,2))*0.5;
-    dh.val(4,3)= (1.0+r1)*(1.0-r2)*0.125 - (dh.val(11,3)+dh.val(12,3)+dh.val(20,3))*0.5;
+    dh(4,1)= (1.0-r2)*(1.0+r3)*0.125 - (dh(11,1)+dh(12,1)+dh(20,1))*0.5;
+    dh(4,2)=-(1.0+r1)*(1.0+r3)*0.125 - (dh(11,2)+dh(12,2)+dh(20,2))*0.5;
+    dh(4,3)= (1.0+r1)*(1.0-r2)*0.125 - (dh(11,3)+dh(12,3)+dh(20,3))*0.5;
       // influence of the node number 3
-    dh.val(3,1)=-(1.0-r2)*(1.0+r3)*0.125 - (dh.val(10,1)+dh.val(11,1)+dh.val(19,1))*0.5;
-    dh.val(3,2)=-(1.0-r1)*(1.0+r3)*0.125 - (dh.val(10,2)+dh.val(11,2)+dh.val(19,2))*0.5;
-    dh.val(3,3)= (1.0-r1)*(1.0-r2)*0.125 - (dh.val(10,3)+dh.val(11,3)+dh.val(19,3))*0.5;
+    dh(3,1)=-(1.0-r2)*(1.0+r3)*0.125 - (dh(10,1)+dh(11,1)+dh(19,1))*0.5;
+    dh(3,2)=-(1.0-r1)*(1.0+r3)*0.125 - (dh(10,2)+dh(11,2)+dh(19,2))*0.5;
+    dh(3,3)= (1.0-r1)*(1.0-r2)*0.125 - (dh(10,3)+dh(11,3)+dh(19,3))*0.5;
       // influence of the node number 2
-    dh.val(2,1)=-(1.0+r2)*(1.0+r3)*0.125 - (dh.val(10,1)+dh.val(18,1)+dh.val( 9,1))*0.5;
-    dh.val(2,2)= (1.0-r1)*(1.0+r3)*0.125 - (dh.val(10,2)+dh.val(18,2)+dh.val( 9,2))*0.5;
-    dh.val(2,3)= (1.0-r1)*(1.0+r2)*0.125 - (dh.val(10,3)+dh.val(18,3)+dh.val( 9,3))*0.5;
+    dh(2,1)=-(1.0+r2)*(1.0+r3)*0.125 - (dh(10,1)+dh(18,1)+dh( 9,1))*0.5;
+    dh(2,2)= (1.0-r1)*(1.0+r3)*0.125 - (dh(10,2)+dh(18,2)+dh( 9,2))*0.5;
+    dh(2,3)= (1.0-r1)*(1.0+r2)*0.125 - (dh(10,3)+dh(18,3)+dh( 9,3))*0.5;
       // influence of the node number 1
-    dh.val(1,1)= (1.0+r2)*(1.0+r3)*0.125 - (dh.val(12,1)+dh.val(17,1)+dh.val( 9,1))*0.5;
-    dh.val(1,2)= (1.0+r1)*(1.0+r3)*0.125 - (dh.val(12,2)+dh.val(17,2)+dh.val( 9,2))*0.5;
-    dh.val(1,3)= (1.0+r1)*(1.0+r2)*0.125 - (dh.val(12,3)+dh.val(17,3)+dh.val( 9,3))*0.5;
+    dh(1,1)= (1.0+r2)*(1.0+r3)*0.125 - (dh(12,1)+dh(17,1)+dh( 9,1))*0.5;
+    dh(1,2)= (1.0+r1)*(1.0+r3)*0.125 - (dh(12,2)+dh(17,2)+dh( 9,2))*0.5;
+    dh(1,3)= (1.0+r1)*(1.0+r2)*0.125 - (dh(12,3)+dh(17,3)+dh( 9,3))*0.5;
 
     return dh;
 }

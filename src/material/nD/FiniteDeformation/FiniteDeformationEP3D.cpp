@@ -648,68 +648,68 @@ int XC::FiniteDeformationEP3D::ImplicitAlgorithm()
     // CCC: XC::Tensor -> XC::Matrix
     C99 = A11.BJtensor2BJmatrix_2();
     for(i=10; i<=19; i++)
-      CCC.val(i,i) = 1.0;
+      CCC(i,i) = 1.0;
 
                if( fdEvolutionS ) {
-      CCC.val(1,10) = A12.cval(1,1);
-      CCC.val(2,10) = A12.cval(1,2);
-      CCC.val(3,10) = A12.cval(1,3);
-      CCC.val(4,10) = A12.cval(2,1);
-      CCC.val(5,10) = A12.cval(2,2);
-      CCC.val(6,10) = A12.cval(2,3);
-      CCC.val(7,10) = A12.cval(3,1);
-      CCC.val(8,10) = A12.cval(3,2);
-      CCC.val(9,10) = A12.cval(3,3);
+      CCC(1,10) = A12(1,1);
+      CCC(2,10) = A12(1,2);
+      CCC(3,10) = A12(1,3);
+      CCC(4,10) = A12(2,1);
+      CCC(5,10) = A12(2,2);
+      CCC(6,10) = A12(2,3);
+      CCC(7,10) = A12(3,1);
+      CCC(8,10) = A12(3,2);
+      CCC(9,10) = A12(3,3);
 
-      CCC.val(10,1) = A21.cval(1,1);
-          CCC.val(10,2) = A21.cval(1,2);
-      CCC.val(10,3) = A21.cval(1,3);
-      CCC.val(10,4) = A21.cval(2,1);
-      CCC.val(10,5) = A21.cval(2,2);
-      CCC.val(10,6) = A21.cval(2,3);
-      CCC.val(10,7) = A21.cval(3,1);
-      CCC.val(10,8) = A21.cval(3,2);
-      CCC.val(10,9) = A21.cval(3,3);
+      CCC(10,1) = A21(1,1);
+          CCC(10,2) = A21(1,2);
+      CCC(10,3) = A21(1,3);
+      CCC(10,4) = A21(2,1);
+      CCC(10,5) = A21(2,2);
+      CCC(10,6) = A21(2,3);
+      CCC(10,7) = A21(3,1);
+      CCC(10,8) = A21(3,2);
+      CCC(10,9) = A21(3,3);
 
-      CCC.val(10,10) = a22;
+      CCC(10,10) = a22;
     }
 
     if( fdEvolutionT ) {
       C99 = A13.BJtensor2BJmatrix_2();
       for(i =1; i <=9; i++) {
         for(j =1; j <=9; j++) {
-          CCC.val(10+i,j) = C99.cval(i,j);
-          CCC.val(j,10+i) = C99.cval(i,j);
+          CCC(10+i,j) = C99(i,j);
+          CCC(j,10+i) = C99(i,j);
         }
       }
       C99 = A33.BJtensor2BJmatrix_2();
       for(i =1; i <=9; i++) {
         for(j =1; j <=9; j++) {
-          CCC.val(10+i,10+j) = C99.cval(i,j);
+          CCC(10+i,10+j) = C99(i,j);
         }
       }
     }
 
     if( fdEvolutionS && fdEvolutionT ) {
-      CCC.val(10,11) = A23.cval(1,1);
-      CCC.val(10,12) = A23.cval(1,2);
-      CCC.val(10,13) = A23.cval(1,3);
-      CCC.val(10,14) = A23.cval(2,1);
-      CCC.val(10,15) = A23.cval(2,2);
-      CCC.val(10,16) = A23.cval(2,3);
-      CCC.val(10,17) = A23.cval(3,1);
-      CCC.val(10,18) = A23.cval(3,2);
-      CCC.val(10,19) = A23.cval(3,3);
+      CCC(10,11) = A23(1,1);
+      CCC(10,12) = A23(1,2);
+      CCC(10,13) = A23(1,3);
+      CCC(10,14) = A23(2,1);
+      CCC(10,15) = A23(2,2);
+      CCC(10,16) = A23(2,3);
+      CCC(10,17) = A23(3,1);
+      CCC(10,18) = A23(3,2);
+      CCC(10,19) = A23(3,3);
 
-      CCC.val(11,10) = A32.cval(1,1);
-      CCC.val(12,10) = A32.cval(1,2);
-      CCC.val(13,10) = A32.cval(1,3);
-      CCC.val(14,10) = A32.cval(2,1);
-      CCC.val(15,10) = A32.cval(2,2);
-      CCC.val(16,10) = A32.cval(2,3);
-      CCC.val(17,10) = A32.cval(3,1);
-      CCC.val(18,10) = A32.cval(3,2);
-      CCC.val(19,10) = A32.cval(3,3);
+      CCC(11,10) = A32(1,1);
+      CCC(12,10) = A32(1,2);
+      CCC(13,10) = A32(1,3);
+      CCC(14,10) = A32(2,1);
+      CCC(15,10) = A32(2,2);
+      CCC(16,10) = A32(2,3);
+      CCC(17,10) = A32(3,1);
+      CCC(18,10) = A32(3,2);
+      CCC(19,10) = A32(3,3);
     }
 
     // Inverse of CCC
@@ -720,71 +720,71 @@ int XC::FiniteDeformationEP3D::ImplicitAlgorithm()
     // CCC: XC::Matrix -> XC::Tensor
     for(i =1; i <=9; i++) {
       for(j =1; j <=9; j++) {
-        C99.val(i,j) = CCC.cval(i,j);
+        C99(i,j) = CCC(i,j);
       }
     }
 
     A11 = C99.BJmatrix2BJtensor_2();
 
-    A12.val(1,1)=CCC.cval(1,10);
-    A12.val(1,2)=CCC.cval(2,10);
-    A12.val(1,3)=CCC.cval(3,10);
-    A12.val(2,1)=CCC.cval(4,10);
-    A12.val(2,2)=CCC.cval(5,10);
-    A12.val(2,3)=CCC.cval(6,10);
-    A12.val(3,1)=CCC.cval(7,10);
-    A12.val(3,2)=CCC.cval(8,10);
-    A12.val(3,3)=CCC.cval(9,10);
+    A12(1,1)=CCC(1,10);
+    A12(1,2)=CCC(2,10);
+    A12(1,3)=CCC(3,10);
+    A12(2,1)=CCC(4,10);
+    A12(2,2)=CCC(5,10);
+    A12(2,3)=CCC(6,10);
+    A12(3,1)=CCC(7,10);
+    A12(3,2)=CCC(8,10);
+    A12(3,3)=CCC(9,10);
 
-    A21.val(1,1)=CCC.cval(10,1);
-    A21.val(1,2)=CCC.cval(10,2);
-    A21.val(1,3)=CCC.cval(10,3);
-    A21.val(2,1)=CCC.cval(10,4);
-    A21.val(2,2)=CCC.cval(10,5);
-    A21.val(2,3)=CCC.cval(10,6);
-    A21.val(3,1)=CCC.cval(10,7);
-    A21.val(3,2)=CCC.cval(10,8);
-    A21.val(3,3)=CCC.cval(10,9);
+    A21(1,1)=CCC(10,1);
+    A21(1,2)=CCC(10,2);
+    A21(1,3)=CCC(10,3);
+    A21(2,1)=CCC(10,4);
+    A21(2,2)=CCC(10,5);
+    A21(2,3)=CCC(10,6);
+    A21(3,1)=CCC(10,7);
+    A21(3,2)=CCC(10,8);
+    A21(3,3)=CCC(10,9);
 
-    a22  = CCC.cval(10,10);
+    a22  = CCC(10,10);
 
     for(i =1; i <=9; i++) {
       for(j =1; j <=9; j++) {
-        C99.val(i,j) = CCC.cval(i,10+j);
+        C99(i,j) = CCC(i,10+j);
       }
     }
     A13 = C99.BJmatrix2BJtensor_2();
 
     for(i =1; i <=9; i++) {
       for(j =1; j <=9; j++) {
-        C99.val(j,i) = CCC.cval(10+i,j);
+        C99(j,i) = CCC(10+i,j);
       }
     }
     A31 = C99.BJmatrix2BJtensor_2();
 
-    A32.val(1,1)=CCC.cval(11,10);
-    A32.val(1,2)=CCC.cval(12,10);
-    A32.val(1,3)=CCC.cval(13,10);
-    A32.val(2,1)=CCC.cval(14,10);
-    A32.val(2,2)=CCC.cval(15,10);
-    A32.val(2,3)=CCC.cval(16,10);
-    A32.val(3,1)=CCC.cval(17,10);
-    A32.val(3,2)=CCC.cval(18,10);
-    A32.val(3,3)=CCC.cval(19,10);
+    A32(1,1)=CCC(11,10);
+    A32(1,2)=CCC(12,10);
+    A32(1,3)=CCC(13,10);
+    A32(2,1)=CCC(14,10);
+    A32(2,2)=CCC(15,10);
+    A32(2,3)=CCC(16,10);
+    A32(3,1)=CCC(17,10);
+    A32(3,2)=CCC(18,10);
+    A32(3,3)=CCC(19,10);
 
-    A23.val(1,1)=CCC.cval(10,11);
-    A23.val(1,2)=CCC.cval(10,12);
-    A23.val(1,3)=CCC.cval(10,13);
-    A23.val(2,1)=CCC.cval(10,14);
-    A23.val(2,2)=CCC.cval(10,15);
-    A23.val(2,3)=CCC.cval(10,16);
-    A23.val(3,1)=CCC.cval(10,17);
-    A23.val(3,2)=CCC.cval(10,18);
-    A23.val(3,3)=CCC.cval(10,19);
+    A23(1,1)=CCC(10,11);
+    A23(1,2)=CCC(10,12);
+    A23(1,3)=CCC(10,13);
+    A23(2,1)=CCC(10,14);
+    A23(2,2)=CCC(10,15);
+    A23(2,3)=CCC(10,16);
+    A23(3,1)=CCC(10,17);
+    A23(3,2)=CCC(10,18);
+    A23(3,3)=CCC(10,19);
 
     for(i =1; i <=9; i++) {
       for(j =1; j <=9; j++) {
-        C99.val(i,j) = CCC.cval(10+i,10+j);
+        C99(i,j) = CCC(10+i,10+j);
       }
     }
     A33 = C99.BJmatrix2BJtensor_2();

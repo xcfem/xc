@@ -92,9 +92,9 @@ class TotalLagrangianFD20NodeBrick: public ElemWithMaterial<20,NDMaterialPhysica
     static BJtensor shapeFunction(double , double , double );
     static BJtensor shapeFunctionDerivative(double , double , double );
 
-    BJtensor Jacobian_3D(BJtensor dh) const;
-    BJtensor Jacobian_3Dinv(BJtensor dh) const;
-    BJtensor dh_Global(BJtensor dh) const;
+    BJtensor Jacobian_3D(const BJtensor &dh) const;
+    BJtensor Jacobian_3Dinv(const BJtensor &dh) const;
+    BJtensor dh_Global(const BJtensor &dh) const;
     BJtensor getNodesCrds(void) const;
     BJtensor getNodesDisp(void) const;
 
