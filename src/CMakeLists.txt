@@ -144,15 +144,14 @@ INCLUDE_DIRECTORIES(${LIBXC_SOURCE_DIR})
 # For DEBUG
 #ADD_DEFINITIONS(-Wall -O0 -frounding-math -g)
 # For RELEASE
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++17 ${CMAKE_CXX_FLAGS_RELEASE} -Wall -march=native -pedantic -fPIC -Wno-unused-but-set-variable ${MPI_CXX_COMPILE_OPTIONS}")
-set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -fPIC -std=f95")
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${OpenMP_C_FLAGS}")
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++17 ${CMAKE_CXX_FLAGS_RELEASE} -Wall -march=native -pedantic -fPIC -Wno-unused-but-set-variable ${MPI_CXX_COMPILE_OPTIONS} ${OpenMP_CXX_FLAGS}")
+set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} ${CMAKE_Fortran_FLAGS_RELEASE} -fPIC -std=f95")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${CMAKE_C_FLAGS_RELEASE} ${OpenMP_C_FLAGS}")
 set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${OpenMP_EXE_LINKER_FLAGS} ${MPI_CXX_LINK_FLAGS}")
-MESSAGE(STATUS "**** compiler fortran flags ${CMAKE_Fortran_FLAGS}")
-MESSAGE(STATUS "**** compiler c flags ${CMAKE_C_FLAGS}")
-MESSAGE(STATUS "**** compiler cxx flags ${CMAKE_CXX_FLAGS}")
-MESSAGE(STATUS "**** linker flags ${CMAKE_EXE_LINKER_FLAGS}")
+MESSAGE(STATUS "**** compiler fortran flags: ${CMAKE_Fortran_FLAGS}")
+MESSAGE(STATUS "**** compiler c flags: ${CMAKE_C_FLAGS}")
+MESSAGE(STATUS "**** compiler cxx: flags ${CMAKE_CXX_FLAGS}")
+MESSAGE(STATUS "**** linker flags: ${CMAKE_EXE_LINKER_FLAGS}")
 #set(CMAKE_VERBOSE_MAKEFILE ON)
 
 #Errores en arpack++
