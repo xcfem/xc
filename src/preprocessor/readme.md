@@ -8,4 +8,9 @@ The tools that generate the finite element model are organized as follows:
   - set_management: routines to manage model component sets (nodes, elements, k-points, lines,...). See some simple examples [here](https://github.com/xcfem/xc/tree/master/verif/tests/preprocessor/sets).
   - prep_handlers: objects to interact directly with the model entities containers (node container, element container, load container, sets container, ...). Those are used in every example.
   
+## References
+
+- [Preprocessing](https://fem-heroes.org/preprocessing/)
+
+
 

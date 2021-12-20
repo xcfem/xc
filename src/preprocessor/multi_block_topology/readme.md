@@ -12,3 +12,5 @@ This directory contains the classes used to define multi-block topology as follo
 
 - [Mesh generation](https://en.wikipedia.org/wiki/Mesh_generation)
 - [Transfinite interpolation](https://en.wikipedia.org/wiki/Transfinite_interpolation)
+- [Gmsh: a three-dimensional finite element mesh generator with built-in pre- and post-processing facilities](https://gmsh.info/)
+- [Netgen](https://ngsolve.org/)
