@@ -271,13 +271,6 @@ XC::BerkeleyDbDatastore::~BerkeleyDbDatastore(void)
   }
 
 
-int XC::BerkeleyDbDatastore::getDbTag(void) const
-  {
-    dbTAG++;
-    return dbTAG;
-  }
-
-
 int XC::BerkeleyDbDatastore::sendMsg(int dbTag, int commitTag, const Message &, ChannelAddress *theAddress)
   {
     std::cerr << getClassName() << "::" << __FUNCTION__

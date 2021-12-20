@@ -227,7 +227,7 @@ SET(alpha_broker utility/actor/machineBroker/AlphaBaseMachineBroker utility/acto
 
 SET(tcp utility/actor/channel/TCP_SocketNoDelay)
 
-SET(database utility/database/FE_Datastore utility/database/FileDatastore utility/database/DBDatastore utility/database/BerkeleyDbDatastore utility/database/MySqlDatastore utility/database/SQLiteDatastore utility/database/NEESData )
+SET(database utility/database/FE_Datastore utility/database/FileDatastore utility/database/DBDatastore utility/database/BerkeleyDbDatastore utility/database/MySqlDatastore utility/database/SQLiteDatastore utility/database/NEESData utility/database/PyDictDatastore )
 
 IF(ORACLE_FOUND)
 SET(database ${database} utility/database/OracleDatastore)

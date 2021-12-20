@@ -36,6 +36,9 @@ class_<XC::BerkeleyDbDatastore, bases<XC::DBDatastore>, boost::noncopyable  >("B
 class_<XC::SQLiteDatastore, bases<XC::DBDatastore>, boost::noncopyable  >("SQLiteDatastore", no_init)
   ;
 
+class_<XC::PyDictDatastore, bases<XC::DBDatastore>, boost::noncopyable  >("PyDictDatastore", no_init)
+  ;
+
 //class_<XC::OracleDatastore, bases<XC::DBDatastore>, boost::noncopyable  >("OracleDatastore", no_init)
 //  ;
 

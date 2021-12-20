@@ -99,9 +99,6 @@ class BerkeleyDbDatastore: public DBDatastore
     BerkeleyDbDatastore(const std::string &projectName, Preprocessor &preprocessor, FEM_ObjectBroker &theBroker,const std::string &type= "");
     ~BerkeleyDbDatastore(void);
 
-    // method to get a database tag
-    int getDbTag(void) const;
-  
     // methods for sending and receiving matrices, vectors and id's
     int sendMsg(int dbTag, int commitTag, const Message &, ChannelAddress *theAddress= nullptr);    
     int recvMsg(int dbTag, int commitTag, Message &, ChannelAddress *theAddress= nullptr);        

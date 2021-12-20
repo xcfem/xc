@@ -601,7 +601,7 @@ int XC::MySqlDatastore::insertData(const std::string &tableName,const std::vecto
         query= "UPDATE " + tableName + " SET " + columns[0] + "= " + boost::lexical_cast<std::string>(data(0));
         for(int i=1; i<data.Size(); i++)
           query+= columns[i] + "= " + boost::lexical_cast<std::string>(data(i));
-        query+= " WHERE dbRun= " + boost::lexical_cast<std::string>(dbTAG) + " AND commitTag= " + boost::lexical_cast<std::string>(commitTag);
+        query+= " WHERE dbRun= " + boost::lexical_cast<std::string>(lastDbTag) + " AND commitTag= " + boost::lexical_cast<std::string>(commitTag);
 
         // invoke the query on the database
         if(mysql_query(&mysql,query.c_str()) != 0)
@@ -656,7 +656,7 @@ int XC::MySqlDatastore::getData(const std::string &tableName,const std::vector<s
         // no vector stored in XC::db with these keys
         std::cerr << getClassName() << "::" << __FUNCTION__
 		  << "; no data in database for XC::Vector with dbTag, cTag: "
-		  << dbTAG << ", " << commitTag << std::endl;
+		  << lastDbTag << ", " << commitTag << std::endl;
         return -4;
       }
     row = mysql_fetch_row(results);
@@ -664,8 +664,8 @@ int XC::MySqlDatastore::getData(const std::string &tableName,const std::vector<s
       {
         // no vector stored in XC::db with these keys
         std::cerr << getClassName() << "::" << __FUNCTION__
-		  << "; no data in database for XC::Vector with dbTag, cTag: "
-		  << dbTAG << ", " << commitTag << std::endl;
+		  << "; no data in database for Vector with dbTag, cTag: "
+		  << lastDbTag << ", " << commitTag << std::endl;
         mysql_free_result(results);
         return -5;
       }

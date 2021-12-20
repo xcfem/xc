@@ -484,6 +484,7 @@
 #include "utility/matrix/ID.h"
 #include "utility/xc_python_utils.h"
 #include "utility/database/SQLiteDatastore.h"
+#include "utility/database/PyDictDatastore.h"
 #include "utility/database/OracleDatastore.h"
 #include "utility/database/BerkeleyDbDatastore.h"
 #include "utility/database/NEESData.h"

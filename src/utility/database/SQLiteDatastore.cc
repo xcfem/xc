@@ -270,7 +270,7 @@ int XC::SQLiteDatastore::insertData(const std::string &tableName,const std::vect
         //const int sizeData = 128 + strlen(tableName);
 
         // form the insert query
-        query= "INSERT INTO " + tableName + "VALUES (" + boost::lexical_cast<std::string>(dbTAG) + "," + boost::lexical_cast<std::string>(commitTag);
+        query= "INSERT INTO " + tableName + "VALUES (" + boost::lexical_cast<std::string>(lastDbTag) + "," + boost::lexical_cast<std::string>(commitTag);
         for(int i=0; i<data.Size(); i++)
           query+= boost::lexical_cast<std::string>(data(i));
         query+= ")";
@@ -284,7 +284,7 @@ int XC::SQLiteDatastore::insertData(const std::string &tableName,const std::vect
             query= "UPDATE " + tableName + " SET " + columns[0] + "= " + boost::lexical_cast<std::string>(data(0));
             for(int i=1; i<data.Size(); i++)
               query+= columns[i] + "= " + boost::lexical_cast<std::string>(data(i));
-            query+= " WHERE dbTag= " + boost::lexical_cast<std::string>(dbTAG) + " AND commitTag= " + boost::lexical_cast<std::string>(commitTag);
+            query+= " WHERE dbTag= " + boost::lexical_cast<std::string>(lastDbTag) + " AND commitTag= " + boost::lexical_cast<std::string>(commitTag);
 
             // invoke the query on the database
             if(db.getDefaultQuery()->execute(query) != SQLITE_OK)
@@ -317,7 +317,7 @@ int XC::SQLiteDatastore::getData(const std::string &tableName,const std::vector<
         // 3. clean up the SQLITE_RES datastructure
         //
         // form the SELECT query
-        query= "Select * FROM " + tableName + " WHERE dbTag= " + boost::lexical_cast<std::string>(dbTAG) + " AND commitTag= " + boost::lexical_cast<std::string>(commitTag);
+        query= "Select * FROM " + tableName + " WHERE dbTag= " + boost::lexical_cast<std::string>(lastDbTag) + " AND commitTag= " + boost::lexical_cast<std::string>(commitTag);
 
         sqlite3_stmt *result= db.getDefaultQuery()->get_result(query);
 
@@ -326,7 +326,7 @@ int XC::SQLiteDatastore::getData(const std::string &tableName,const std::vector<
           {
             // no data stored in db with these keys
             std::cerr << "SQLiteDatastore::getData - no data in database for object with dbTag, cTag: ";
-            std::cerr << dbTAG << ", " << commitTag << std::endl;
+            std::cerr << lastDbTag << ", " << commitTag << std::endl;
           }
         else
           {

@@ -39,8 +39,6 @@ namespace XC {
 //! @brief Base class for classes that store model information on a database.
 class DBDatastore: public FE_Datastore
   {
-  protected:
-    mutable int dbTAG;
   public:
     DBDatastore(Preprocessor &, FEM_ObjectBroker &theBroker);    
   };

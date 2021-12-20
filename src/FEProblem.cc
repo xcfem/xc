@@ -42,6 +42,7 @@
 #include "utility/database/MySqlDatastore.h"
 #include "utility/database/BerkeleyDbDatastore.h"
 #include "utility/database/SQLiteDatastore.h"
+#include "utility/database/PyDictDatastore.h"
 
 #include "domain/mesh/Mesh.h"
 #include "domain/domain/Domain.h"
@@ -73,6 +74,8 @@ XC::FE_Datastore *XC::FEProblem::defineDatabase(const std::string &type, const s
       dataBase= new BerkeleyDbDatastore(name, preprocessor, theBroker);
     else if(type == "SQLite")
       dataBase= new SQLiteDatastore(name, preprocessor, theBroker);
+    else if(type == "PyDict")
+      dataBase= new PyDictDatastore(name, preprocessor, theBroker);
     else
       {  
         std::cerr << getClassName() << "::" << __FUNCTION__

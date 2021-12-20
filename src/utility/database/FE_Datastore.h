@@ -85,9 +85,9 @@ class FE_Datastore: public Channel
   {
   private:
     FEM_ObjectBroker *theObjectBroker; //!< Deals with the object serialization.
-    static int lastDbTag;
     std::set<int> savedStates;
   protected:
+    mutable int lastDbTag;
     FEM_ObjectBroker *getObjectBroker(void);
     const Preprocessor *getPreprocessor(void) const;
     Preprocessor *getPreprocessor(void);

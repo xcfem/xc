@@ -68,6 +68,8 @@
 
 #include <fstream>
 #include <map>
+#include <memory>
+
 using std::fstream;
 using std::map;
 
@@ -76,33 +78,42 @@ using std::map;
 
 namespace XC {
 class FEM_ObjectBroker;
-
-//! @brief Output file stream wrapper.
-typedef struct fileDatastoreOutputFile
-  {
-    fstream *theFile;
-    STREAM_POSITION_TYPE fileEnd;
-    int      maxDbTag;
-  } FileDatastoreOutputFile;
-
-typedef map<int, FileDatastoreOutputFile *>      MAP_FILES;
-typedef MAP_FILES::value_type                    MAP_FILES_TYPE;
-typedef MAP_FILES::iterator                      MAP_FILES_ITERATOR;
-
+  
 //! @brief Integer array wrapper.
-typedef struct intData
+struct IntData
   {
     int *dbTag;
     int *values;     
-  } IntData;
+  };
 
 
 //! @brief Double array wrapper.
-typedef struct doubleData
+struct DoubleData
   {
     int *dbTag;
     double *values;     
-  } DoubleData;
+  };
+
+//! @brief Output file stream wrapper.
+struct FileDatastoreOutputFile
+  {
+    std::shared_ptr<fstream> theFile;
+    STREAM_POSITION_TYPE fileEnd;
+    int      maxDbTag;
+    FileDatastoreOutputFile(void)
+      : theFile(nullptr), fileEnd(0), maxDbTag(0) {}
+    FileDatastoreOutputFile(const std::shared_ptr<fstream> &fs, const STREAM_POSITION_TYPE &fEnd, const int &mx)
+      : theFile(fs), fileEnd(fEnd), maxDbTag(mx) {}
+    fstream *getFStream(void)
+      { return theFile.get(); }
+    int openFile(const std::string &, int , IntData &, std::vector<char> &);
+    void resetFilePointers(IntData &, const std::vector<char> &);
+  };
+
+typedef map<int, FileDatastoreOutputFile> FilesMap;
+typedef FilesMap::value_type FilesMap_type;
+typedef FilesMap::iterator FilesMap_iterator;
+
 
 
 //! @ingroup Database
@@ -135,21 +146,19 @@ class FileDatastore: public FE_Datastore
     int resizeInt(int newSize);
     int resizeDouble(int newSize);
     void resetFilePointers(void);
-    int openFile(const std::string &fileName, FileDatastoreOutputFile *, int dataSize);
 
     // private attributes
     std::string dataBase;
-    MAP_FILES theIDFiles;
-    MAP_FILES theVectFiles;
-    MAP_FILES theMatFiles;
-    MAP_FILES_ITERATOR theIDFilesIter;
-    MAP_FILES_ITERATOR theVectFilesIter;
-    MAP_FILES_ITERATOR theMatFilesIter;
+    FilesMap theIDFiles;
+    FilesMap theVectFiles;
+    FilesMap theMatFiles;
+    FilesMap_iterator theIDFilesIter;
+    FilesMap_iterator theVectFilesIter;
+    FilesMap_iterator theMatFilesIter;
 
     int lastDomainChangeStamp;
     int currentCommitTag;
-    char *charPtrData;
-    int sizeData;
+    std::vector<char> charPtrData;
     
     IntData    theIntData;
     DoubleData theDoubleData;
@@ -160,6 +169,7 @@ class FileDatastore: public FE_Datastore
     void free_mem(void);
     void alloc(const size_t &sz);
     std::string getFileName(const std::string &, int idSize,int commitTag) const;
+    FileDatastoreOutputFile *getFileStruct(FilesMap &, const std::string &, int objSize, int stepSize, int commitTag);
   public:
     FileDatastore(const std::string &dataBase,Preprocessor &preprocessor, FEM_ObjectBroker &theBroker);    
     

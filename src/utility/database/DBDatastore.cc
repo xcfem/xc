@@ -31,4 +31,4 @@
 
 
 XC::DBDatastore::DBDatastore(Preprocessor &preprocessor, FEM_ObjectBroker &theObjBroker)
-  :FE_Datastore(preprocessor, theObjBroker), dbTAG(0) {}
+  :FE_Datastore(preprocessor, theObjBroker) {}

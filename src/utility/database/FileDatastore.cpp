@@ -79,27 +79,94 @@
 #include "domain/mesh/element/Element.h"
 #include "domain/mesh/node/Node.h"
 
-void XC::FileDatastore::free_mem(void)
+void XC::FileDatastoreOutputFile::resetFilePointers(IntData &theIntData, const std::vector<char> &charPtrData)
   {
-    if(charPtrData)
+    if(theFile)
       {
-        delete charPtrData;
-        charPtrData= nullptr;
-        sizeData= 0;
+	theFile->seekp(0, std::ios::beg);
+	*(theIntData.dbTag)= maxDbTag;
+	theFile->write(charPtrData.data(), sizeof(int));
+	theFile->close();
+	// delete theFile;
+	// theFile= nullptr;
       }
   }
+
+int XC::FileDatastoreOutputFile::openFile(const std::string &fileName, int dataSize, IntData &theIntData, std::vector<char> &charPtrData)
+  {
+    std::shared_ptr<fstream> res(new fstream());
+    if(res == 0)
+      {
+        std::cerr << "FileDatastoreOutputFile::" << __FUNCTION__
+		  << "; out of memory; failed to open file: " << fileName
+		  << std::endl;
+        return 0;
+      }
+
+    res.get()->open(fileName.c_str(), std::ios::in | std::ios::out | std::ios::binary);
+
+    // if file did not exist, need to pass trunc flag to open it
+    if(res.get()->bad() == true || res.get()->is_open() == false)
+      {
+	// delete & new again for unix gcc compiler to work!
+	res= std::shared_ptr<fstream>(new fstream());
+	if(res == 0)
+	  {
+	    std::cerr << "FileDatastoreOutputFile::" << __FUNCTION__
+		      << "; out of memory; failed to open file: "
+		      << fileName << std::endl;
+	    return -1;
+	  }
+	res.get()->open(fileName.c_str(), std::ios::in | std::ios::out | std::ios::trunc | std::ios::binary);
+      }
+
+    if(res.get()->bad() == true || res.get()->is_open() == false)
+      {
+	 std::cerr << "FileDatastoreOutputFile::" << __FUNCTION__
+		   << "; FATAL - could not open file: "
+		   << fileName << std::endl;
+	 res= std::shared_ptr<fstream>(nullptr);
+	 return -1;
+      }
+
+    // set the position for writing to eof
+    res.get()->seekp(0,std::ios::end);
+    STREAM_POSITION_TYPE fileEnd= res.get()->tellp();
+    int maxDataTag= 0;
+
+    if(fileEnd == 0 || fileEnd == -1)
+      {
+	*(theIntData.dbTag)= maxDataTag;
+	res.get()->write(charPtrData.data(), sizeof(int));
+	fileEnd= sizeof(int);
+	maxDataTag= -1;
+      }
+    else
+      {
+        res.get()->seekg(0, std::ios::beg);
+        res.get()->read(charPtrData.data(), sizeof(int));
+        maxDataTag= *(theIntData.dbTag);
+      }
+
+    // move to start of data part
+    res.get()->seekp(sizeof(int), std::ios::beg);
+    res.get()->seekg(sizeof(int), std::ios::beg);
+
+    // fill in the structure data
+    theFile= res;
+    fileEnd= fileEnd;
+    maxDbTag= maxDataTag; 	
+
+    return 0;
+  }
+
+void XC::FileDatastore::free_mem(void)
+  {}
+
 void XC::FileDatastore::alloc(const size_t &sz)
   {
     free_mem();
-    charPtrData= new char[sz];
-    if(charPtrData)
-      sizeData= sz;
-    else
-      {
-        std::cerr << getClassName() << "::" << __FUNCTION__
-	          << "; out of memory for size: " << sz << std::endl;
-        sizeData= 0;
-      }
+    charPtrData.resize(sz);
   }
 
 //! @brief Constructor.
@@ -111,7 +178,7 @@ void XC::FileDatastore::alloc(const size_t &sz)
 //! memory for the arrays an error message is printed and the program
 //! is terminated.
 XC::FileDatastore::FileDatastore(const std::string &dataBaseName,Preprocessor &preprocessor, FEM_ObjectBroker &theObjBroker)
-  :FE_Datastore(preprocessor, theObjBroker), dataBase(dataBaseName), charPtrData(nullptr), sizeData(0), currentMaxInt(0), currentMaxDouble(0)
+  :FE_Datastore(preprocessor, theObjBroker), dataBase(dataBaseName), charPtrData(), currentMaxInt(0), currentMaxDouble(0)
   { resizeDouble(1024); }
 
 //! @brief Destructor.
@@ -121,54 +188,16 @@ XC::FileDatastore::FileDatastore(const std::string &dataBaseName,Preprocessor &p
 XC::FileDatastore::~FileDatastore(void)
   {
     free_mem();
-    //  while(theIDFilesIter != theIDFiles.end()) {
-    //    theIDFilesIter++;
-    // }
-
-    for(theIDFilesIter = theIDFiles.begin(); theIDFilesIter != theIDFiles.end(); theIDFilesIter++)
-      {
-        FileDatastoreOutputFile *theFileStruct = theIDFilesIter->second;
-        fstream *theFile = theFileStruct->theFile;
-        if(theFile)
-          {
-            theFile->close();
-            delete theFile;
-          }
-        delete theFileStruct;
-      }
 
     theIDFiles.clear();
-
-    for(theMatFilesIter = theMatFiles.begin(); theMatFilesIter != theMatFiles.end(); theMatFilesIter++)
-      {
-        FileDatastoreOutputFile *theFileStruct = theMatFilesIter->second;
-        fstream *theFile = theFileStruct->theFile;
-        if(theFile)
-          {
-            theFile->close();
-            delete theFile;
-          }
-        delete theFileStruct;
-      }
     theMatFiles.clear();
-    for(theVectFilesIter = theVectFiles.begin(); theVectFilesIter != theVectFiles.end(); theVectFilesIter++)
-      {
-        FileDatastoreOutputFile *theFileStruct = theVectFilesIter->second;
-        fstream *theFile = theFileStruct->theFile;
-        if(theFile)
-          {
-            theFile->close();
-            delete theFile;
-          }
-        delete theFileStruct;
-      }
     theVectFiles.clear();
   }
 
 
 int XC::FileDatastore::commitState(int commitTag)
   {
-    int result = FE_Datastore::commitState(commitTag);
+    int result= FE_Datastore::commitState(commitTag);
     if(result == commitTag)
       resetFilePointers();
     return result;
@@ -177,47 +206,22 @@ int XC::FileDatastore::commitState(int commitTag)
 
 void XC::FileDatastore::resetFilePointers(void)
   {
+    for(theIDFilesIter= theIDFiles.begin(); theIDFilesIter != theIDFiles.end(); theIDFilesIter++)
+      {
+	theIDFilesIter->second.resetFilePointers(theIntData, charPtrData);
+      }
 
-  for(theIDFilesIter = theIDFiles.begin(); theIDFilesIter != theIDFiles.end(); theIDFilesIter++) {
-    FileDatastoreOutputFile *theFileStruct = theIDFilesIter->second;
-    fstream *theFile = theFileStruct->theFile;
-    if(theFile != 0) {
-      theFile->seekp(0, std::ios::beg);
-      *(theIntData.dbTag) = theFileStruct->maxDbTag;
-      theFile->write(charPtrData, sizeof(int));
-      theFile->close();
-      delete theFile;
-      theFileStruct->theFile = 0;
-    }
-  }
+    for(theMatFilesIter= theMatFiles.begin(); theMatFilesIter != theMatFiles.end(); theMatFilesIter++)
+      {
+	theMatFilesIter->second.resetFilePointers(theIntData, charPtrData);
+      }
 
-  for(theMatFilesIter = theMatFiles.begin(); theMatFilesIter != theMatFiles.end(); theMatFilesIter++) {
-    FileDatastoreOutputFile *theFileStruct = theMatFilesIter->second;
-    fstream *theFile = theFileStruct->theFile;
-    if(theFile != 0) {
-      theFile->seekp(0, std::ios::beg);
-      *(theIntData.dbTag) = theFileStruct->maxDbTag;
-      theFile->write(charPtrData, sizeof(int));
-      theFile->close();
-      delete theFile;
-      theFileStruct->theFile = 0;
-    }
+    for(theVectFilesIter= theVectFiles.begin(); theVectFilesIter != theVectFiles.end(); theVectFilesIter++)
+      {
+	theVectFilesIter->second.resetFilePointers(theIntData, charPtrData);
+      }
+    currentCommitTag= -1;
   }
-
-  for(theVectFilesIter = theVectFiles.begin(); theVectFilesIter != theVectFiles.end(); theVectFilesIter++) {
-    FileDatastoreOutputFile *theFileStruct = theVectFilesIter->second;
-    fstream *theFile = theFileStruct->theFile;
-    if(theFile != 0) {
-      theFile->seekp(0, std::ios::beg);
-      *(theIntData.dbTag) = theFileStruct->maxDbTag;
-      theFile->write(charPtrData, sizeof(int));
-      theFile->close();
-      delete theFile;
-      theFileStruct->theFile = 0;
-    }
-  }
-  currentCommitTag = -1;
-}
 
 
 //! @brief Prints an error message and returns \f$-1\f$ as not yet implemented.
@@ -240,6 +244,72 @@ int XC::FileDatastore::recvMsg(int dBTag, int commitTag, Message &, ChannelAddre
 std::string XC::FileDatastore::getFileName(const std::string &tp, int idSize,int commitTag) const
   { return dataBase + tp + boost::lexical_cast<std::string>(idSize)+"."+boost::lexical_cast<std::string>(commitTag); }
 
+XC::FileDatastoreOutputFile *XC::FileDatastore::getFileStruct(FilesMap &filesMap, const std::string &tp, int objSize, int stepSize, int commitTag)
+  {    
+    FileDatastoreOutputFile *retval= nullptr;
+    FilesMap::iterator filesIter= filesMap.find(objSize);
+    if(filesIter == filesMap.end())
+      {
+
+        // we first check if we need to resize send buffer
+        if(objSize > currentMaxInt)
+          {
+            if(this->resizeInt(objSize) < 0)
+              {
+	        std::cerr << getClassName() << "::" << __FUNCTION__
+			  << "; failed in resizeInt()\n";
+	        return retval;
+              }
+          }
+
+        const std::string fileName= getFileName(tp,objSize,commitTag);
+
+        FileDatastoreOutputFile theFileStruct;
+        if(theFileStruct.openFile(fileName, stepSize, theIntData, charPtrData) < 0)
+          {
+            std::cerr << getClassName() << "::" << __FUNCTION__
+		      << "; could not open file\n";
+            return retval;
+          }
+        else
+	  {
+            filesMap.insert(FilesMap_type(objSize, theFileStruct));
+            FilesMap::iterator tmp= filesMap.find(objSize);
+	    assert(tmp!=filesMap.end());
+	    retval= &(tmp->second);
+	  }
+      }
+    else
+      {
+        FileDatastoreOutputFile &theFileStruct= filesIter->second;
+	retval= &theFileStruct;
+        // make sure not close from a last commit
+        if(theFileStruct.getFStream() == nullptr)
+          {
+            if(objSize > currentMaxInt)
+              {
+                if(this->resizeInt(objSize) < 0)
+                  {
+                    std::cerr << getClassName() << "::" << __FUNCTION__
+			      << "; failed in resizeInt()\n";
+                    return retval;
+	          }
+              }
+            const std::string fileName= getFileName(tp,objSize,commitTag);
+            if(theFileStruct.openFile(fileName, stepSize, theIntData, charPtrData) < 0)
+              {
+        	std::cerr << getClassName() << "::" << __FUNCTION__
+			  << "; could not open file\n";
+                return retval;
+              }
+          }
+      }
+    if(!retval)
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; something went wrong." << std::endl;
+    return retval;
+  }
+
 //! @brief Send (write) the ID.
 //!
 //! //! If a file for IDs of this size has not yet been created, one is created
@@ -260,9 +330,8 @@ int XC::FileDatastore::sendID(int dBTag, int commitTag, const ID &theID, Channel
     if(currentCommitTag != commitTag)
       this->resetFilePointers();
 
-    currentCommitTag = commitTag;
+    currentCommitTag= commitTag;
 
-    FileDatastoreOutputFile *theFileStruct= nullptr;
 
     //
     // next we see if we already have this file;
@@ -270,121 +339,63 @@ int XC::FileDatastore::sendID(int dBTag, int commitTag, const ID &theID, Channel
     //  if we have data structure, need to check file is opened (we close in a commit)
     //
 
-    int idSize = theID.Size();
-    int stepSize = (1 + idSize)*sizeof(int);
+    const int idSize= theID.Size();
+    const int stepSize= (1 + idSize)*sizeof(int);
 
-    theIDFilesIter = theIDFiles.find(idSize);
-    if(theIDFilesIter == theIDFiles.end())
-      {
-
-        // we first check if we need to resize send buffer
-        if(idSize > currentMaxInt)
-          {
-            if(this->resizeInt(idSize) < 0)
-              {
-	        std::cerr << getClassName() << "::" << __FUNCTION__
-			  << "; failed in resizeInt()\n";
-	        return -1;
-              }
-          }
-
-        theFileStruct = new FileDatastoreOutputFile;
-
-        if(!theFileStruct)
-          {
-            std::cerr << getClassName() << "::" << __FUNCTION__
-		      << "; out of memory\n";
-            return -1;
-          }
-
-        const std::string fileName= getFileName(".IDs.",idSize,commitTag);
-
-        if(this->openFile(fileName, theFileStruct, stepSize) < 0)
-          {
-            std::cerr << getClassName() << "::" << __FUNCTION__
-		      << "; could not open file\n";
-            return -1;
-          }
-        else
-          theIDFiles.insert(MAP_FILES_TYPE(idSize, theFileStruct));
-      }
-    else
-      {
-        theFileStruct = theIDFilesIter->second;
-        // make sure not close from a last commit
-        if(theFileStruct->theFile == 0)
-          {
-            if(idSize > currentMaxInt)
-              {
-                if(this->resizeInt(idSize) < 0)
-                  {
-                    std::cerr << getClassName() << "::" << __FUNCTION__
-			      << "; failed in resizeInt()\n";
-                    return -1;
-	          }
-              }
-            const std::string fileName= getFileName(".IDs.",idSize,commitTag);
-            if(this->openFile(fileName, theFileStruct, stepSize) < 0)
-              {
-        	std::cerr << getClassName() << "::" << __FUNCTION__
-			  << "; could not open file\n";
-                return -1;
-              }
-          }
-      }
-
+    FileDatastoreOutputFile *theFileStruct= getFileStruct(theIDFiles, ".IDs.", idSize, stepSize, commitTag);
+    
     //
     // find location in file to place the data
     //
 
-    fstream *theStream = theFileStruct->theFile;
-    bool found = false;
-    STREAM_POSITION_TYPE pos = theStream->tellg();
-    STREAM_POSITION_TYPE fileEnd = theFileStruct->fileEnd;
+    fstream *theStream= theFileStruct->getFStream();
+    bool found= false;
+    STREAM_POSITION_TYPE pos= theStream->tellg();
+    STREAM_POSITION_TYPE fileEnd= theFileStruct->fileEnd;
 
     // we first check if the data can go at the end of the file
     // true if commitTag larger than any we have encountered so far
 
     if(theFileStruct->maxDbTag < dBTag)
       {
-        pos = fileEnd;
-        found = true;
-        theFileStruct->maxDbTag = dBTag;
+        pos= fileEnd;
+        found= true;
+        theFileStruct->maxDbTag= dBTag;
       }
 
     // try current location
     if(pos < fileEnd && found == false)
       {
-        theStream->read(charPtrData, stepSize);
+        theStream->read(charPtrData.data(), stepSize);
         if(*(theIntData.dbTag) == dBTag )
-          { found = true; }
+          { found= true; }
       }
 
     // we have to search from the beginning of the file
     if(found == false)
       {
-        *(theIntData.dbTag) = -1;
-        pos = sizeof(int);
+        *(theIntData.dbTag)= -1;
+        pos= sizeof(int);
         theStream->seekg(pos, std::ios::beg);
         while(pos < fileEnd && found == false)
           {
-            theStream->read(charPtrData, stepSize);
+            theStream->read(charPtrData.data(), stepSize);
             if(*(theIntData.dbTag) == dBTag)
-	      found = true;
+	      found= true;
             else
               pos += stepSize;
           }
         if(found == false)
-         { pos = fileEnd; }
+         { pos= fileEnd; }
       }
 
     //
     // we now place the data to be sent into our buffer
     //
 
-    *(theIntData.dbTag) = dBTag;
+    *(theIntData.dbTag)= dBTag;
     for(int i=0; i<idSize; i++)
-      theIntData.values[i] = theID(i);
+      theIntData.values[i]= theID(i);
 
     //
     // we now write the data
@@ -392,7 +403,7 @@ int XC::FileDatastore::sendID(int dBTag, int commitTag, const ID &theID, Channel
 
     theStream->seekp(pos, std::ios::beg); // reset so can go write at the end
 
-    theStream->write(charPtrData, stepSize);
+    theStream->write(charPtrData.data(), stepSize);
     if(theStream->bad())
       {
         std::cerr << getClassName() << "::" << __FUNCTION__
@@ -402,9 +413,8 @@ int XC::FileDatastore::sendID(int dBTag, int commitTag, const ID &theID, Channel
 
     // update the size of file if we have added to eof
     if(fileEnd <= pos)
-      theFileStruct->fileEnd = pos + stepSize;
+      theFileStruct->fileEnd= pos + stepSize;
 
-    //std::cerr << "WROTE: " << dBTag << " " << pos << std::endl;
     return 0;
   }		
 
@@ -424,9 +434,7 @@ int XC::FileDatastore::recvID(int dBTag, int commitTag, ID &theID, ChannelAddres
     if(currentCommitTag != commitTag)
       this->resetFilePointers();
 
-    currentCommitTag = commitTag;
-
-    FileDatastoreOutputFile *theFileStruct;
+    currentCommitTag= commitTag;
 
     //
     // next we see if we already have this file;
@@ -434,101 +442,43 @@ int XC::FileDatastore::recvID(int dBTag, int commitTag, ID &theID, ChannelAddres
     //  if we have data structure, need to check file is opened (we close in a commit)
     //
 
-    int idSize = theID.Size();
-    int stepSize = (1 + idSize)*sizeof(int);
+    const int idSize= theID.Size();
+    const int stepSize= (1 + idSize)*sizeof(int);
 
-    theIDFilesIter = theIDFiles.find(idSize);
-    if(theIDFilesIter == theIDFiles.end())
-      {
+    FileDatastoreOutputFile *theFileStruct= getFileStruct(theIDFiles, ".IDs.", idSize, stepSize, commitTag);
 
-        // we first check if we need to resize recv buffer
-        if(idSize > currentMaxInt)
-          {
-            if(this->resizeInt(idSize) < 0)
-              {
-	        std::cerr << getClassName() << "::" << __FUNCTION__
-			  << "; failed in resizeInt()\n";
-                return -1;
-              }
-          }
-
-        theFileStruct = new FileDatastoreOutputFile;
-        if(theFileStruct == 0)
-          {
-            std::cerr << getClassName() << "::" << __FUNCTION__
-		      << "; out of memory\n";
-            return -1;
-          }
-
-        const std::string fileName= getFileName(".IDs.",idSize,commitTag);
-
-        if(this->openFile(fileName, theFileStruct, stepSize) < 0)
-          {
-            std::cerr << getClassName() << "::" << __FUNCTION__
-		      << "; could not open file\n";
-            return -1;
-          }
-        else
-          theIDFiles.insert(MAP_FILES_TYPE(idSize, theFileStruct));
-      }
-    else
-      {
-        theFileStruct = theIDFilesIter->second;
-
-        // make sure not close from a last commit
-        if(theFileStruct->theFile == 0)
-          {
-            if(idSize > currentMaxInt)
-              {
-                if(this->resizeInt(idSize) < 0)
-                  {
-                    std::cerr << getClassName() << "::" << __FUNCTION__
-			      << "; failed in resizeInt()\n";
-                    return -1;
-	          }
-              }
-            const std::string fileName= getFileName(".IDs.",idSize,commitTag);
-
-            if(this->openFile(fileName, theFileStruct, stepSize) < 0)
-              {
-	        std::cerr << getClassName() << "::" << __FUNCTION__
-			  << "; could not open file\n";
-                return -1;
-              }
-          }
-      }
-    fstream *theStream = theFileStruct->theFile;
-    STREAM_POSITION_TYPE fileEnd = theFileStruct->fileEnd;
-    STREAM_POSITION_TYPE pos = theStream->tellg();
+    fstream *theStream= theFileStruct->getFStream();
+    STREAM_POSITION_TYPE fileEnd= theFileStruct->fileEnd;
+    STREAM_POSITION_TYPE pos= theStream->tellg();
 
     //
     // find location in file to place the data
     //
 
-    bool found = false;
+    bool found= false;
 
     // we try the current file position first
 
     if(pos < fileEnd)
       {
-        theStream->read(charPtrData, stepSize);
+        theStream->read(charPtrData.data(), stepSize);
         if(*(theIntData.dbTag) == dBTag)
           {
-            found = true;
-            pos += stepSize;
+            found= true;
+            pos+= stepSize;
           }
       }
 
     // we must search from the beginning of the file
     if(found == false)
       {
-        pos = sizeof(int);
+        pos= sizeof(int);
         theStream->seekg(pos, std::ios::beg);
         while((pos < fileEnd) && (found == false))
           {
-            theStream->read(charPtrData, stepSize);
+            theStream->read(charPtrData.data(), stepSize);
             if(*(theIntData.dbTag) == dBTag)
-	      found = true;
+	      found= true;
             else
 	      pos += stepSize;
           }
@@ -544,7 +494,7 @@ int XC::FileDatastore::recvID(int dBTag, int commitTag, ID &theID, ChannelAddres
 
     // we now place the received data into the XC::ID
     for(int i=0; i<idSize; i++)
-      theID(i) = theIntData.values[i];
+      theID(i)= theIntData.values[i];
     return 0;
   }		
 
@@ -569,9 +519,7 @@ int XC::FileDatastore::sendMatrix(int dBTag, int commitTag,const Matrix &theMatr
     if(currentCommitTag != commitTag)
       this->resetFilePointers();
 
-    currentCommitTag = commitTag;
-
-    FileDatastoreOutputFile *theFileStruct;
+    currentCommitTag= commitTag;
 
     //
     // next we see if we already have this file;
@@ -581,126 +529,67 @@ int XC::FileDatastore::sendMatrix(int dBTag, int commitTag,const Matrix &theMatr
 
     // we first ensure that the XC::Matrix is not too big
     const int noMatCols= theMatrix.noCols();
-    const int noMatRows = theMatrix.noRows();
-    const int matSize = noMatRows * noMatCols;
-    const int stepSize = sizeof(int) + matSize*sizeof(double);
-
-    theMatFilesIter = theMatFiles.find(matSize);
-    if(theMatFilesIter == theMatFiles.end())
-      {
-        // we first check if we need to resize send buffer
-        if(matSize > currentMaxDouble)
-          {
-            if(this->resizeDouble(matSize) < 0)
-              {
-	        std::cerr << getClassName() << "::" << __FUNCTION__
-			  << "; failed in resizeDouble()\n";
-	        return -1;
-              }
-          }
-
-        theFileStruct = new FileDatastoreOutputFile;
-        if(theFileStruct == 0)
-          {
-            std::cerr << getClassName() << "::" << __FUNCTION__
-		      << "; out of memory\n";
-            return -1;
-          }
-
-        const std::string fileName= getFileName(".MATs.",matSize,commitTag);
-
-        if(this->openFile(fileName, theFileStruct, stepSize) < 0)
-          {
-            std::cerr << getClassName() << "::" << __FUNCTION__
-		      << "; could not open file\n";
-            return -1;
-          }
-        else
-          theMatFiles.insert(MAP_FILES_TYPE(matSize, theFileStruct));
-      }
-    else
-      {
-        theFileStruct = theMatFilesIter->second;
-
-        // make sure not close from a last commit
-        if(theFileStruct->theFile == 0)
-          {
-            if(matSize > currentMaxDouble)
-              {
-                if(this->resizeDouble(matSize) < 0)
-                  {
-	            std::cerr << getClassName() << "::" << __FUNCTION__
-			      << "; failed in resizeDouble()\n";
-	            return -1;
-	          }
-              }
-
-            const std::string fileName= getFileName(".MATs.",matSize,commitTag);
-
-            if(this->openFile(fileName, theFileStruct, stepSize) < 0)
-              {
-	        std::cerr << getClassName() << "::" << __FUNCTION__
-			  << "; could not open file\n";
-                return -1;
-              }
-          }
-      }
+    const int noMatRows= theMatrix.noRows();
+    const int matSize= noMatRows * noMatCols;
+    const int stepSize= sizeof(int) + matSize*sizeof(double);
+    
+    FileDatastoreOutputFile *theFileStruct= getFileStruct(theMatFiles, ".MATs.", matSize, stepSize, commitTag);
 
     //
     // find location in file to place the data
     //
 
-    fstream *theStream = theFileStruct->theFile;
-    bool found = false;
-    STREAM_POSITION_TYPE pos = theStream->tellg();
-    STREAM_POSITION_TYPE fileEnd = theFileStruct->fileEnd;
+    fstream *theStream= theFileStruct->getFStream();
+    bool found= false;
+    STREAM_POSITION_TYPE pos= theStream->tellg();
+    STREAM_POSITION_TYPE fileEnd= theFileStruct->fileEnd;
 
     // we first check if the data can go at the end of the file
     // true if commitTag larger than any we have encountered so far
 
     if(theFileStruct->maxDbTag < dBTag)
       {
-        pos = fileEnd;
-        found = true;
-        theFileStruct->maxDbTag = dBTag;
+        pos= fileEnd;
+        found= true;
+        theFileStruct->maxDbTag= dBTag;
       }
 
     // try current location
     if(pos < fileEnd && found == false)
       {
-        theStream->read(charPtrData, stepSize);
+        theStream->read(charPtrData.data(), stepSize);
         if(*(theIntData.dbTag) == dBTag )
-          { found = true; }
+          { found= true; }
       }
 
     // we have to search from the beginning of the file
     if(found == false)
       {
-        *(theIntData.dbTag) = -1;
-        pos = sizeof(int);
+        *(theIntData.dbTag)= -1;
+        pos= sizeof(int);
         theStream->seekg(pos, std::ios::beg);
         while(pos < fileEnd && found == false)
           {
-            theStream->read(charPtrData, stepSize);
+            theStream->read(charPtrData.data(), stepSize);
             if(*(theIntData.dbTag) == dBTag)
-	      found = true;
+	      found= true;
             else
 	      pos += stepSize;
           }
         if(!found)
-          { pos = fileEnd; }
+          { pos= fileEnd; }
       }
 
     //
     // we now place the data to be sent into our buffer
     //
 
-    *(theDoubleData.dbTag) = dBTag;
+    *(theDoubleData.dbTag)= dBTag;
     int loc=0;
     for(int j=0; j<noMatCols; j++)
     for(int k=0; k < noMatRows; k++)
       {
-        theDoubleData.values[loc] = theMatrix(k,j);
+        theDoubleData.values[loc]= theMatrix(k,j);
         loc++;
       }
 
@@ -709,7 +598,7 @@ int XC::FileDatastore::sendMatrix(int dBTag, int commitTag,const Matrix &theMatr
     //
 
     theStream->seekp(pos, std::ios::beg); // reset so can go write at the end
-    theStream->write(charPtrData, stepSize);
+    theStream->write(charPtrData.data(), stepSize);
 
     // update the size of file if we have added to eof
     if(theFileStruct->fileEnd <= pos)
@@ -736,9 +625,7 @@ int XC::FileDatastore::recvMatrix(int dBTag, int commitTag,Matrix &theMatrix,Cha
     if(currentCommitTag != commitTag)
       this->resetFilePointers();
 
-    currentCommitTag = commitTag;
-
-    FileDatastoreOutputFile *theFileStruct;
+    currentCommitTag= commitTag;
 
   //
   // next we see if we already have this file;
@@ -747,99 +634,41 @@ int XC::FileDatastore::recvMatrix(int dBTag, int commitTag,Matrix &theMatrix,Cha
   //
 
   // we first check XC::Matrix not too big
-  int noMatCols= theMatrix.noCols();
-  int noMatRows = theMatrix.noRows();
-  int matSize = noMatRows * noMatCols;
-  int stepSize = sizeof(int) + matSize*sizeof(double);
+  const int noMatCols= theMatrix.noCols();
+  const int noMatRows= theMatrix.noRows();
+  const int matSize= noMatRows * noMatCols;
+  const int stepSize= sizeof(int) + matSize*sizeof(double);
+  
+  FileDatastoreOutputFile *theFileStruct= getFileStruct(theMatFiles, ".MATs.", matSize, stepSize, commitTag);
 
-  theMatFilesIter = theMatFiles.find(matSize);
-  if(theMatFilesIter == theMatFiles.end()) {
-
-    // we first check if we need to resize recv buffer
-    if(matSize > currentMaxDouble) {
-      if(this->resizeDouble(matSize) < 0)
-	{
-	  std::cerr << getClassName() << "::" << __FUNCTION__
-	  	    << "; failed in resizeDouble()\n";
-	  return -1;
-        }
-    }
-
-    theFileStruct = new FileDatastoreOutputFile;
-
-    if(theFileStruct == 0)
-      {
-        std::cerr << getClassName() << "::" << __FUNCTION__
-		  << "; out of memory\n";
-        return -1;
-      }
-
-    const std::string fileName= getFileName(".MATs.",matSize,commitTag);
-
-    if(this->openFile(fileName, theFileStruct, stepSize) < 0)
-      {
-        std::cerr << getClassName() << "::" << __FUNCTION__
-		  << "; could not open file\n";
-        return -1;
-      }
-    else
-      theMatFiles.insert(MAP_FILES_TYPE(matSize, theFileStruct));
-
-
-  } else {
-
-    theFileStruct = theMatFilesIter->second;
-
-    // make sure not close from a last commit
-    if(theFileStruct->theFile == 0) {
-
-      if(matSize > currentMaxDouble) {
-	if(this->resizeDouble(matSize) < 0)
-	  {
-	    std::cerr << getClassName() << "::" << __FUNCTION__
-		      << "; failed in resizeDouble()\n";
-	    return -1;
-	  }
-      }
-      const std::string fileName= getFileName(".MATs.",matSize,commitTag);
-      if(this->openFile(fileName, theFileStruct, stepSize) < 0) {
-	std::cerr << getClassName() << "::" << __FUNCTION__
-		  << "; could not open file\n";
-	return -1;
-      }
-
-    }
-  }
-
-
-  fstream *theStream = theFileStruct->theFile;
-  STREAM_POSITION_TYPE fileEnd = theFileStruct->fileEnd;
-  STREAM_POSITION_TYPE pos = theStream->tellg();
+  fstream *theStream= theFileStruct->getFStream();
+  STREAM_POSITION_TYPE fileEnd= theFileStruct->fileEnd;
+  STREAM_POSITION_TYPE pos= theStream->tellg();
 
   //
   // find location in file to place the data
   //
 
-  bool found = false;
+  bool found= false;
 
   // we try the current file position first
 
   if(pos < fileEnd) {
-    theStream->read(charPtrData, stepSize);
+    theStream->read(charPtrData.data(), stepSize);
     if((*(theIntData.dbTag) == dBTag)) {
-      found = true;
+      found= true;
       pos += stepSize;
     }
   }
 
   // we must search from the beginning of the file
   if(found == false) {
-    pos = sizeof(int);
+    pos= sizeof(int);
     theStream->seekg(pos, std::ios::beg);
     while((pos < fileEnd) && (found == false)) {
-      theStream->read(charPtrData, stepSize);
+      theStream->read(charPtrData.data(), stepSize);
       if(*(theIntData.dbTag) == dBTag)
-	found = true;
+	found= true;
       else
 	pos += stepSize;
     }
@@ -855,7 +684,7 @@ int XC::FileDatastore::recvMatrix(int dBTag, int commitTag,Matrix &theMatrix,Cha
   int loc=0;
   for(int j=0; j<noMatCols; j++)
     for(int k=0; k < noMatRows; k++) {
-      theMatrix(k,j) = theDoubleData.values[loc];
+      theMatrix(k,j)= theDoubleData.values[loc];
       loc++;
     }
 
@@ -882,9 +711,7 @@ int XC::FileDatastore::sendVector(int dBTag, int commitTag,const Vector &theVect
   if(currentCommitTag != commitTag)
     this->resetFilePointers();
 
-  currentCommitTag = commitTag;
-
-  FileDatastoreOutputFile *theFileStruct;
+  currentCommitTag= commitTag;
 
   //
   // next we see if we already have this file;
@@ -892,84 +719,30 @@ int XC::FileDatastore::sendVector(int dBTag, int commitTag,const Vector &theVect
   //  if we have data structure, need to check file is opened (we close in a commit)
   //
 
-  // we first ensure that the XC::Matrix is not too big
-  int vectSize = theVector.Size();
-  int stepSize = sizeof(int) + vectSize*sizeof(double);
-
-  theVectFilesIter = theVectFiles.find(vectSize);
-  if(theVectFilesIter == theVectFiles.end()) {
-
-    // we first check if we need to resize send buffer
-    if(vectSize > currentMaxDouble) {
-      if(this->resizeDouble(vectSize) < 0)
-	{
-	  std::cerr << getClassName() << "::" << __FUNCTION__
-		    << "; failed in resizeDouble()\n";
-	  return -1;
-        }
-    }
-
-    theFileStruct = new FileDatastoreOutputFile;
-
-    if(theFileStruct == 0) {
-      std::cerr << getClassName() << "::" << __FUNCTION__
-		<< "; out of memory\n";
-      return -1;
-    }
-
-    const std::string fileName= getFileName(".VECs.",vectSize,commitTag);
-
-    if(this->openFile(fileName, theFileStruct, stepSize) < 0) {
-      std::cerr << getClassName() << "::" << __FUNCTION__
-		<< "; could not open file\n";
-      return -1;
-    } else
-      theVectFiles.insert(MAP_FILES_TYPE(vectSize, theFileStruct));
-
-
-  } else {
-
-    theFileStruct = theVectFilesIter->second;
-
-    // make sure not close from a last commit
-    if(theFileStruct->theFile == 0) {
-
-      if(vectSize > currentMaxDouble) {
-	if(this->resizeDouble(vectSize) < 0) {
-	  std::cerr << getClassName() << "::" << __FUNCTION__
-		    << "; failed in resizeDouble()\n";
-	  return -1;
-	}
-      }
-      const std::string fileName= getFileName(".VECs.",vectSize,commitTag);
-
-      if(this->openFile(fileName, theFileStruct, stepSize) < 0) {
-	std::cerr << getClassName() << "::" << __FUNCTION__
-		  << "; could not open file\n";
-	return -1;
-      }
-
-    }
-  }
+  // we first ensure that the Matrix is not too big
+  const int vectSize= theVector.Size();
+  const int stepSize= sizeof(int) + vectSize*sizeof(double);
+  
+  FileDatastoreOutputFile *theFileStruct= getFileStruct(theVectFiles, ".VECs.", vectSize, stepSize, commitTag);
 
   //
   // find location in file to place the data
   //
 
-  fstream *theStream = theFileStruct->theFile;
-  bool found = false;
-  STREAM_POSITION_TYPE pos = theStream->tellg();
-  STREAM_POSITION_TYPE fileEnd = theFileStruct->fileEnd;
+  fstream *theStream= theFileStruct->getFStream();
+  bool found= false;
+  STREAM_POSITION_TYPE pos= theStream->tellg();
+  STREAM_POSITION_TYPE fileEnd= theFileStruct->fileEnd;
 
   // we first check if the data can go at the end of the file
   // true if commitTag larger than any we have encountered so far
-  found = false;
+  found= false;
 
 
   if(theFileStruct->maxDbTag < dBTag)  {
-    pos = fileEnd;
-    found = true;
-    theFileStruct->maxDbTag = dBTag;
+    pos= fileEnd;
+    found= true;
+    theFileStruct->maxDbTag= dBTag;
   }
 
 
@@ -979,28 +752,28 @@ int XC::FileDatastore::sendVector(int dBTag, int commitTag,const Vector &theVect
     // must be a bug in the vc compiler! .. we are here already tellg() above!!
     theStream->seekg(pos, std::ios::beg);
 // #endif
-    theStream->read(charPtrData, stepSize);
+    theStream->read(charPtrData.data(), stepSize);
     if(*(theIntData.dbTag) == dBTag ) {
-      found = true;
+      found= true;
     }
   }
 
   // we have to search from the beginning of the file
   if(found == false) {
-    *(theIntData.dbTag) = -1;
-    pos = sizeof(int);
+    *(theIntData.dbTag)= -1;
+    pos= sizeof(int);
     theStream->seekg(pos, std::ios::beg);
     while(pos < fileEnd && found == false) {
-      theStream->read(charPtrData, stepSize);
+      theStream->read(charPtrData.data(), stepSize);
 
       if(*(theIntData.dbTag) == dBTag)
-	found = true;
+	found= true;
       else
 	pos += stepSize;
     }
 
     if(found == false) {
-      pos = fileEnd;
+      pos= fileEnd;
     }
   }
 
@@ -1008,16 +781,16 @@ int XC::FileDatastore::sendVector(int dBTag, int commitTag,const Vector &theVect
   // we now place the data to be sent into our buffer
   //
 
-  *(theDoubleData.dbTag) = dBTag;
+  *(theDoubleData.dbTag)= dBTag;
   for(int i=0; i<vectSize; i++)
-    theDoubleData.values[i] = theVector(i);
+    theDoubleData.values[i]= theVector(i);
 
   //
   // we now write the data
   //
 
   theStream->seekp(pos, std::ios::beg); // reset so can go write at the end
-  theStream->write(charPtrData, stepSize);
+  theStream->write(charPtrData.data(), stepSize);
 
   // update the size of file if we have added to eof
   if(theFileStruct->fileEnd <= pos)
@@ -1044,9 +817,8 @@ int XC::FileDatastore::recvVector(int dBTag, int commitTag, Vector &theVector, C
   if(currentCommitTag != commitTag)
     this->resetFilePointers();
 
-  currentCommitTag = commitTag;
+  currentCommitTag= commitTag;
 
-  FileDatastoreOutputFile *theFileStruct;
 
   //
   // next we see if we already have this file;
@@ -1055,92 +827,39 @@ int XC::FileDatastore::recvVector(int dBTag, int commitTag, Vector &theVector, C
   //
 
   // we first check XC::Vector not too big
-  int vectSize = theVector.Size();
-  int stepSize = sizeof(int) + vectSize*sizeof(double);
+  const int vectSize= theVector.Size();
+  const int stepSize= sizeof(int) + vectSize*sizeof(double);
+  
+  FileDatastoreOutputFile *theFileStruct= getFileStruct(theVectFiles, ".VECs.", vectSize, stepSize, commitTag);
 
-  theVectFilesIter = theVectFiles.find(vectSize);
-  if(theVectFilesIter == theVectFiles.end()) {
-
-    // we first check if we need to resize recv buffer
-    if(vectSize > currentMaxDouble) {
-      if(this->resizeDouble(vectSize) < 0) {
-	std::cerr << getClassName() << "::" << __FUNCTION__
-		  << "; failed in resizeDouble()\n";
-	return -1;
-      }
-    }
-
-    theFileStruct = new FileDatastoreOutputFile;
-
-    if(theFileStruct == 0) {
-      std::cerr << getClassName() << "::" << __FUNCTION__
-		<< "; out of memory\n";
-      return -1;
-    }
-
-    const std::string fileName= getFileName(".VECs.",vectSize,commitTag);
-
-    if(this->openFile(fileName, theFileStruct, stepSize) < 0) {
-      std::cerr << getClassName() << "::" << __FUNCTION__
-		<< "; could not open file\n";
-      return -1;
-    } else
-      theVectFiles.insert(MAP_FILES_TYPE(vectSize, theFileStruct));
-
-
-  } else {
-
-    theFileStruct = theVectFilesIter->second;
-
-    // make sure not close from a last commit
-    if(theFileStruct->theFile == 0) {
-
-      if(vectSize > currentMaxDouble) {
-	if(this->resizeDouble(vectSize) < 0) {
-	  std::cerr << getClassName() << "::" << __FUNCTION__
-		    << "; failed in resizeDouble()\n";
-	  return -1;
-	}
-      }
-      const std::string fileName= getFileName(".VECs.",vectSize,commitTag);
-
-      if(this->openFile(fileName, theFileStruct, stepSize) < 0) {
-	std::cerr << getClassName() << "::" << __FUNCTION__
-		  << "; could not open file\n";
-	return -1;
-      }
-
-    }
-  }
-
-  fstream *theStream = theFileStruct->theFile;
-  STREAM_POSITION_TYPE fileEnd = theFileStruct->fileEnd;
-  STREAM_POSITION_TYPE pos = theStream->tellg();
+  fstream *theStream= theFileStruct->getFStream();
+  STREAM_POSITION_TYPE fileEnd= theFileStruct->fileEnd;
+  STREAM_POSITION_TYPE pos= theStream->tellg();
 
   //
   // find location in file to place the data
   //
 
-  bool found = false;
+  bool found= false;
 
   // we try the current file position first
 
   if(pos < fileEnd) {
-    theStream->read(charPtrData, stepSize);
+    theStream->read(charPtrData.data(), stepSize);
     if((*(theIntData.dbTag) == dBTag)) {
-      found = true;
+      found= true;
       pos += stepSize;
     }
   }
 
   // we must search from the beginning of the file
   if(found == false) {
-    pos = sizeof(int);
+    pos= sizeof(int);
     theStream->seekg(pos, std::ios::beg);
     while((pos < fileEnd) && (found == false)) {
-      theStream->read(charPtrData, stepSize);
+      theStream->read(charPtrData.data(), stepSize);
       if(*(theIntData.dbTag) == dBTag)
-	found = true;
+	found= true;
       else
 	pos += stepSize;
     }
@@ -1153,7 +872,7 @@ int XC::FileDatastore::recvVector(int dBTag, int commitTag, Vector &theVector, C
   }
 
   for(int i=0; i<vectSize; i++)
-    theVector(i) = theDoubleData.values[i];
+    theVector(i)= theDoubleData.values[i];
 
   return 0;
 }		
@@ -1166,7 +885,7 @@ int XC::FileDatastore::createTable(const std::string &tableName,const std::vecto
   {
     const int numColumns= columns.size();
     // open the file
-    int res = 0;
+    int res= 0;
     const std::string fileName= dataBase + "." + tableName;
 
     std::ofstream table;
@@ -1176,7 +895,7 @@ int XC::FileDatastore::createTable(const std::string &tableName,const std::vecto
       {
         std::cerr << getClassName() << "::" << __FUNCTION__
 		  << "; failed to open file: " << fileName << std::endl;
-        res = -1;
+        res= -1;
       }
 
     // write the data
@@ -1193,26 +912,26 @@ int XC::FileDatastore::insertData(const std::string &tableName,const std::vector
     const std::string fileName= dataBase + "." + tableName;
 
     std::ofstream table;
-  table.open(fileName.c_str(), std::ios::app);
-  if(table.bad() == true || table.is_open() == false) {
-    std::cerr << getClassName() << "::" << __FUNCTION__
-	      << "; failed to open file: " << fileName << std::endl;
-    return -1;
+    table.open(fileName.c_str(), std::ios::app);
+    if(table.bad() == true || table.is_open() == false)
+      {
+	std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; failed to open file: " << fileName << std::endl;
+	return -1;
+      }
+
+    table << setiosflags(std::ios::scientific);
+    table << std::setprecision(16);
+
+    // write the data
+    for(int i=0; i<vectorData.Size(); i++)
+      { table << vectorData(i) << "\t"; }
+
+    table << "\n";
+    table.close();
+
+    return 0;
   }
-
-  table << setiosflags(std::ios::scientific);
-  table << std::setprecision(16);
-
-  // write the data
-  for(int i=0; i<vectorData.Size(); i++) {
-    table << vectorData(i) << "\t";
-  }
-
-  table << "\n";
-  table.close();
-
-  return 0;
-}
 
 
 int XC::FileDatastore::getData(const std::string &tableName,const std::vector<std::string> &columns, int commitTag, Vector &)
@@ -1220,130 +939,61 @@ int XC::FileDatastore::getData(const std::string &tableName,const std::vector<st
 
 
 
-/*******************************************************************
- *              MISC METHODS & FUNCTIONS FOR OPENING THE FILE       *
- *******************************************************************/
-
-int XC::FileDatastore::openFile(const std::string &fileName, FileDatastoreOutputFile *theFileStruct, int dataSize)
+int XC::FileDatastore::resizeInt(int newSz)
   {
-    fstream *res= new fstream();
-    if(res == 0)
+    if(newSz <= 0)
       {
         std::cerr << getClassName() << "::" << __FUNCTION__
-		  << "; out of memory; failed to open file: " << fileName
-		  << std::endl;
-        return 0;
-      }
-
-  res->open(fileName.c_str(), std::ios::in | std::ios::out | std::ios::binary);
-
-  // if file did not exist, need to pass trunc flag to open it
-  if(res->bad() == true || res->is_open() == false) {
-    // delete & new again for unix gcc compiler to work!
-    delete res;
-    res = new fstream();
-    if(res == 0) {
-      std::cerr << getClassName() << "::" << __FUNCTION__
-		<< "; out of memory; failed to open file: "
-		<< fileName << std::endl;
-      theFileStruct->theFile = res;
-      return -1;
-    }
-    res->open(fileName.c_str(), std::ios::in | std::ios::out | std::ios::trunc | std::ios::binary);
-  }
-
-  if(res->bad() == true || res->is_open() == false)
-    {
-       std::cerr << getClassName() << "::" << __FUNCTION__
-		 << "; FATAL - could not open file: "
-		 << fileName << std::endl;
-       delete res;
-       theFileStruct->theFile = 0;
-       return -1;
-    }
-
-  // set the position for writing to eof
-  res->seekp(0,std::ios::end);
-  STREAM_POSITION_TYPE fileEnd = res->tellp();
-  int maxDataTag = 0;
-
-  if(fileEnd == 0 || fileEnd == -1) {
-    *(theIntData.dbTag) = maxDataTag;
-    res->write(charPtrData, sizeof(int));
-    fileEnd = sizeof(int);
-    maxDataTag = -1;
-  } else {
-    res->seekg(0, std::ios::beg);
-    res->read(charPtrData, sizeof(int));
-    maxDataTag = *(theIntData.dbTag);
-  }
-
-  // move to start of data part
-  res->seekp(sizeof(int), std::ios::beg);
-  res->seekg(sizeof(int), std::ios::beg);
-
-  // fill in the structure data
-  theFileStruct->theFile = res;
-  theFileStruct->fileEnd = fileEnd;
-
-  theFileStruct->maxDbTag = maxDataTag; 	
-
-  return 0;
-}
-
-int XC::FileDatastore::resizeInt(int newSize)
-  {
-    int sizeOfChar = sizeof(char);
-    int sizeOfInt = sizeof(int);
-    int sizeOfDouble = sizeof(double);
-    newSize = (newSize+1)*sizeOfInt/sizeOfChar;
-
-    if(newSize < sizeData)
-      return 0; // already big enough
-
-    if(newSize <= 0)
-      {
-        std::cerr << getClassName() << "::" << __FUNCTION__
-		  << "; invalidSize: " << newSize << std::endl;
+		  << "; invalidSize: " << newSz << std::endl;
         return -1; // invalid size
       }
-
-    alloc(newSize);
-
-    currentMaxInt = (sizeData/sizeOfChar-sizeOfInt)/sizeOfInt;
-    currentMaxDouble = (sizeData/sizeOfChar-sizeOfInt)/sizeOfDouble;
-    char *dataPtr = &charPtrData[sizeof(int)];
-    theIntData.dbTag = reinterpret_cast<int *>(charPtrData);
-    theIntData.values = reinterpret_cast<int *>(dataPtr);
-    theDoubleData.dbTag = reinterpret_cast<int *>(charPtrData);
-    theDoubleData.values = reinterpret_cast<double *>(dataPtr);
-    return 0;
-  }
-
-int XC::FileDatastore::resizeDouble(int newSize)
-  {
     const int sizeOfChar= sizeof(char);
     const int sizeOfInt= sizeof(int);
     const int sizeOfDouble= sizeof(double);
-    newSize= (newSize*sizeOfDouble+sizeOfInt)/sizeOfChar;
+    const size_t newSize= (newSz+1)*sizeOfInt/sizeOfChar;
 
+    const size_t sizeData= charPtrData.size();
     if(newSize < sizeData)
       return 0; // already big enough
 
-    if(newSize <= 0)
-      {
-        std::cerr << getClassName() << "::" << __FUNCTION__
-		  << "; invalidSize: " << newSize << std::endl;
-        return -1; // invalid size
-      }
+
     alloc(newSize);
 
-    currentMaxInt = (sizeOfChar*sizeData-sizeOfInt)/sizeOfInt;
-    currentMaxDouble = (sizeOfChar*sizeData-sizeOfInt)/sizeOfDouble;
-    char *dataPtr = &charPtrData[sizeof(int)];
-    theIntData.dbTag = reinterpret_cast<int *>(charPtrData);
-    theIntData.values = reinterpret_cast<int *>(dataPtr);
-    theDoubleData.dbTag = reinterpret_cast<int *>(charPtrData);
-    theDoubleData.values = reinterpret_cast<double *>(dataPtr);
+    currentMaxInt= (sizeData/sizeOfChar-sizeOfInt)/sizeOfInt;
+    currentMaxDouble= (sizeData/sizeOfChar-sizeOfInt)/sizeOfDouble;
+    char *dataPtr= &(charPtrData.data())[sizeof(int)];
+    theIntData.dbTag= reinterpret_cast<int *>(charPtrData.data());
+    theIntData.values= reinterpret_cast<int *>(dataPtr);
+    theDoubleData.dbTag= reinterpret_cast<int *>(charPtrData.data());
+    theDoubleData.values= reinterpret_cast<double *>(dataPtr);
+    return 0;
+  }
+
+int XC::FileDatastore::resizeDouble(int newSz)
+  {
+    if(newSz <= 0)
+      {
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; invalidSize: " << newSz << std::endl;
+        return -1; // invalid size
+      }
+    const int sizeOfChar= sizeof(char);
+    const int sizeOfInt= sizeof(int);
+    const int sizeOfDouble= sizeof(double);
+    const size_t newSize= (newSz*sizeOfDouble+sizeOfInt)/sizeOfChar;
+
+    const size_t sizeData= charPtrData.size();
+    if(newSize < sizeData)
+      return 0; // already big enough
+
+    alloc(newSize);
+
+    currentMaxInt= (sizeOfChar*sizeData-sizeOfInt)/sizeOfInt;
+    currentMaxDouble= (sizeOfChar*sizeData-sizeOfInt)/sizeOfDouble;
+    char *dataPtr= &(charPtrData.data())[sizeof(int)];
+    theIntData.dbTag= reinterpret_cast<int *>(charPtrData.data());
+    theIntData.values= reinterpret_cast<int *>(dataPtr);
+    theDoubleData.dbTag= reinterpret_cast<int *>(charPtrData.data());
+    theDoubleData.values= reinterpret_cast<double *>(dataPtr);
     return 0;
   }

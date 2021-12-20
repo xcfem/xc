@@ -69,14 +69,12 @@
 #include "domain/mesh/element/Element.h"
 #include "domain/mesh/node/Node.h"
 
-int XC::FE_Datastore::lastDbTag(0);
-
 //! @brief Constructor.
 //!
 //! @param prep: preprocessor used to build the finite element model.
 //! @param theBroker: deals with object serialization.
 XC::FE_Datastore::FE_Datastore(Preprocessor &prep, FEM_ObjectBroker &theBroker) 
-  : Channel(&prep), theObjectBroker(&theBroker),  savedStates() {}
+  : Channel(&prep), theObjectBroker(&theBroker), savedStates(), lastDbTag(0) {}
 
 //! @brief Returns a pointer to \p theBroker object passed in the constructor. 
 XC::FEM_ObjectBroker *XC::FE_Datastore::getObjectBroker(void)
@@ -151,7 +149,7 @@ int XC::FE_Datastore::commitState(int commitTag)
         res = getPreprocessor()->sendSelf(comm);
         if(res < 0)
           std::cerr << getClassName() << "::" << __FUNCTION__
-		    << "; preprocessor failed to sendSelf\n";
+		    << "; preprocessor failed to sendSelf.\n";
         else
           {
             ID maxlastDbTag(1);
