@@ -37,12 +37,13 @@ namespace XC {
 //!
 //! @defgroup Database Database utilities.
 //
-//! @ingroup Database
 //
 //! @brief Store model data in a Python dictionary.
+//! @ingroup Database
 class PyDictDatastore: public FE_Datastore
   {
   private:
+    std::string fileName;
     boost::python::dict pyDict; //!< python dictionary.
     void insertData(const std::string &,const int &,const int &,const double *,const int &);
     void insertData(const std::string &,const int &,const int &,const int *,const int &);
@@ -64,6 +65,10 @@ class PyDictDatastore: public FE_Datastore
     int sendID(int , int ,const ID &,ChannelAddress *a= nullptr);
     int recvID(int , int ,ID &,ChannelAddress *a= nullptr);    
 
+    void jsonWrite(std::ostream &) const;
+    void jsonRead(std::istream &);
+    int save(const int &commitTag);
+    int restore(const int &commitTag);
   };
 } // end of XC namespace
 

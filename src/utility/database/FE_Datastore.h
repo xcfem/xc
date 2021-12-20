@@ -119,8 +119,8 @@ class FE_Datastore: public Channel
     virtual int insertData(const std::string &tableName,const std::vector<std::string> &, int commitTag, const Vector &data);
     virtual int getData(const std::string &tableName,const std::vector<std::string> &, int commitTag, Vector &data);
 
-    int save(const int &commitTag);
-    int restore(const int &commitTag);
+    virtual int save(const int &commitTag);
+    virtual int restore(const int &commitTag);
 
   };
 } // end of XC namespace

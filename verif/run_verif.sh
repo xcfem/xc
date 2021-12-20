@@ -991,6 +991,7 @@ python tests/database/test_database_12.py
 python tests/database/test_database_13.py
 python tests/database/test_database_14.py
 python tests/database/test_database_15.py
+python tests/database/test_database_16.py
 python tests/database/sqlite_test_01.py
 python tests/database/sqlite_test_02.py
 python tests/database/sqlite_test_03.py

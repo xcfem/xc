@@ -31,9 +31,11 @@
 #include <utility/matrix/Matrix.h>
 #include <utility/matrix/ID.h>
 #include "boost/lexical_cast.hpp"
+#include <boost/property_tree/ptree.hpp>
+#include <boost/property_tree/json_parser.hpp>
 
-XC::PyDictDatastore::PyDictDatastore(const std::string &projectName, Preprocessor &preprocessor, FEM_ObjectBroker &theObjectBroker, int run)
-  : FE_Datastore(preprocessor, theObjectBroker), pyDict()
+XC::PyDictDatastore::PyDictDatastore(const std::string &fName, Preprocessor &preprocessor, FEM_ObjectBroker &theObjectBroker, int run)
+  : FE_Datastore(preprocessor, theObjectBroker), fileName(fName), pyDict()
   {}
 
 int XC::PyDictDatastore::sendMsg(int dataTag, int commitTag,const XC::Message &,ChannelAddress *theAddress)
@@ -59,13 +61,13 @@ void XC::PyDictDatastore::insertData(const std::string &tbName,const int &dbTag,
     boost::python::dict objDict= boost::python::extract<boost::python::dict>(tableDict[dbTag]);
     if(!objDict.has_key(commitTag))
       { objDict[commitTag]= boost::python::list(); }
-    boost::python::list valueList= boost::python::extract<boost::python::list>(objDict[commitTag]);
-    valueList= boost::python::list();
+    boost::python::list valueList;
     for(int i= 0; i<sz;i++)
       {
 	const double &v= data[i];
         valueList.append(v);
       }
+    objDict[commitTag]= valueList;
   }
 
 //! @brief Inserts integer data.
@@ -79,13 +81,13 @@ void XC::PyDictDatastore::insertData(const std::string &tbName,const int &dbTag,
     boost::python::dict objDict= boost::python::extract<boost::python::dict>(tableDict[dbTag]);
     if(!objDict.has_key(commitTag))
       { objDict[commitTag]= boost::python::list(); }
-    boost::python::list valueList= boost::python::extract<boost::python::list>(objDict[commitTag]);
-    valueList= boost::python::list();
+    boost::python::list valueList;
     for(int i= 0; i<sz;i++)
       {
 	const int &v= data[i];
         valueList.append(v);
       }
+    objDict[commitTag]= valueList;
   }
 
 std::vector<double> XC::PyDictDatastore::retrieveDoubleData(const std::string &tbName,const int &dbTag,const int &commitTag)
@@ -110,6 +112,7 @@ std::vector<double> XC::PyDictDatastore::retrieveDoubleData(const std::string &t
 	      { 
 		boost::python::list valueList= boost::python::extract<boost::python::list>(objDict[commitTag]);
 		const int sz= len(valueList);
+		retval.resize(sz);
 		for(int i= 0; i<sz;i++)
 		  { retval[i]= boost::python::extract<double>(valueList[i]); }
 	      }
@@ -140,6 +143,7 @@ std::vector<int> XC::PyDictDatastore::retrieveIntData(const std::string &tbName,
 	      { 
 		boost::python::list valueList= boost::python::extract<boost::python::list>(objDict[commitTag]);
 		const int sz= len(valueList);
+		retval.resize(sz);
 		for(int i= 0; i<sz;i++)
 		  { retval[i]= boost::python::extract<int>(valueList[i]); }
 	      }
@@ -206,5 +210,131 @@ int XC::PyDictDatastore::recvID(int dbTag, int commitTag,ID &theID,ChannelAddres
     return 0;
   }
 
+//! @brief Write Python dictionary from JSON file.
+void XC::PyDictDatastore::jsonWrite(std::ostream &os) const
+  {
+    namespace pt = boost::property_tree;    
+    pt::ptree root;
+    boost::python::list tbNames = boost::python::list(pyDict.keys());
+    for(int i = 0; i < len(tbNames); ++i)
+      {
+	boost::python::extract<std::string> extractor(tbNames[i]);
+	if(extractor.check())
+	  {
+	    const std::string tbName= extractor(); // First level.
+	    pt::ptree &tbName_tree = root.add_child(tbName, {});
+            boost::python::dict tableDict= boost::python::extract<boost::python::dict>(pyDict[tbName]);
+	    boost::python::list dbTags = boost::python::list(tableDict.keys());
+            for(int j = 0; j < len(dbTags); ++j)
+	      {
+		boost::python::extract<int> dbExtractor(dbTags[j]);
+	        if(dbExtractor.check())
+	          {
+	            const int dbTag= dbExtractor(); // Second level.
+		    pt::ptree &dbTag_tree = tbName_tree.add_child(std::to_string(dbTag), {});
+		    boost::python::dict objDict= boost::python::extract<boost::python::dict>(tableDict[dbTag]);
+		    boost::python::list cTags = boost::python::list(objDict.keys());
+		    for(int k = 0; k < len(cTags); ++k)
+		      {
+			boost::python::extract<int> cExtractor(cTags[k]);
+			if(cExtractor.check())
+	                  {
+			    const int commitTag= cExtractor(); // Third level.
+			    pt::ptree &cTag_tree = dbTag_tree.add_child(std::to_string(commitTag), {});
+			    boost::python::list valueList= boost::python::extract<boost::python::list>(objDict[commitTag]);
+			    const int sz= len(valueList);
+			    for(int l= 0;l<sz;l++)
+			      {
+				boost::python::extract<int> vExtractor(valueList[l]);
+				if(vExtractor.check())
+				  {
+				    const int iValue= vExtractor();
+				    pt::ptree iv_node;
+				    iv_node.put("", iValue);
+				    cTag_tree.push_back(std::make_pair("", iv_node));
+				  }
+				else
+				  {
+				    const double dValue= boost::python::extract<double>(valueList[l]);
+				    pt::ptree dv_node;
+				    dv_node.put("", dValue);
+				    cTag_tree.push_back(std::make_pair("", dv_node));
+				  }
+			      }
+			  }
+		      }
+		  }
+	      }
+	  }
+      }    
+    pt::write_json(os, root);
+  }
 
+//! @brief Read Python dictionary from JSON file.
+void XC::PyDictDatastore::jsonRead(std::istream &is)
+  {
+    namespace pt = boost::property_tree;
+    pt::ptree iroot;
+    pt::read_json(is, iroot);
+    for(pt::ptree::const_iterator i= iroot.begin(); i!= iroot.end(); i++)
+      {
+	const std::string tbName= (*i).first; // First level.
+	bool integerValues= false;
+	if(tbName=="IDs")
+	  integerValues= true;
+	pt::ptree tbName_tree= (*i).second;
+	for(pt::ptree::const_iterator j= tbName_tree.begin(); j!= tbName_tree.end(); j++)
+	  {
+	    const int dbTag= std::stoi((*j).first); // Second level.
+  	    pt::ptree dbTag_tree= (*j).second;
+	    for(pt::ptree::const_iterator k= dbTag_tree.begin(); k!= dbTag_tree.end(); k++)
+	      {
+		const int commitTag= std::stoi((*k).first); // Third level.
+  	        pt::ptree cTag_tree= (*k).second;
+		std::deque<std::string> values;
+	        for(pt::ptree::const_iterator l= cTag_tree.begin(); l!= cTag_tree.end(); l++)
+		  {
+		    const std::string key= (*l).first;
+		    const std::string value= (*l).second.data();
+		    values.push_back(value);
+		  }
+		const size_t sz= values.size();
+		if(integerValues)
+		  {
+		    std::vector<int> iValues(sz);
+		    for(size_t ii= 0; ii<sz; ii++)
+		      iValues[ii]= std::stoi(values[ii]);
+		    insertData(tbName, dbTag, commitTag, iValues.data(), sz);
+		  }
+		else
+		  {
+		    std::vector<double> dValues(sz);
+		    for(size_t ii= 0; ii<sz; ii++)
+		      dValues[ii]= std::stod(values[ii]);
+		    insertData(tbName, dbTag, commitTag, dValues.data(), sz);
+		  }
+	      }
+	  }
+      }
+  }
+
+int XC::PyDictDatastore::save(const int &commitTag)
+  {
+    const int retval= FE_Datastore::save(commitTag);
+    std::filebuf fb;
+    fb.open(fileName,std::ios::out);
+    std::ostream os(&fb);
+    jsonWrite(os);
+    return retval;
+  }
+
+int XC::PyDictDatastore::restore(const int &commitTag)
+  {
+    std::filebuf fb;
+    fb.open(fileName,std::ios::in);
+    std::istream os(&fb);
+    jsonRead(os);    
+    const int retval= FE_Datastore::restore(commitTag);
+    return retval;
+  }
 
