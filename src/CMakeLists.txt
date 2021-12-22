@@ -84,8 +84,10 @@ if(GMSH_FOUND)
    endif(GMSH_VERSION VERSION_LESS "4.8")
 endif(GMSH_FOUND)
 
+# GMSH library
+include_directories(${GMSH_INCLUDE_DIRS})
 
-#HDF5 library
+# HDF5 library
 include_directories(${HDF5_HEADER_INCLUDE_DIR})
 
 # Python libraries
