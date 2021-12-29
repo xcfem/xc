@@ -92,11 +92,11 @@ XC::EPPGapMaterial::EPPGapMaterial(int tag, double e, double fyl, double gap0, d
 		  << "; alternate signs on fy and gap encountered"
 	          << ", continuing anyway\n";
       }
-    if((eta >= 1) || (eta <= -1))
+    if((eta > 1) || (eta <= -1))
       {
         std::cerr << getClassName() << "::" << __FUNCTION__
 		  << "; value of eta must be -1 <= eta <= 1, setting eta to 0\n";
-        eta = 0;
+        eta= 0;
       }
     if((damage < 0) || (damage > 1))
       { std::cerr << getClassName() << "::" << __FUNCTION__
