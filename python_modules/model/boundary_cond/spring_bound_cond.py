@@ -366,3 +366,36 @@ class PileFoundation(object):
             
         
         
+def spring_bound_cond_anydir(setNodes,orientation,Klist,name):
+    '''Apply spring boundary conditions to a set of nodes
+
+    :param setNodes: set of nodes to apply boundary conditions
+    :param orientation: (list) of two vectors [x,y] used to orient 
+       the zero length element, where: 
+       x are the vector components in global coordinates defining 
+          local x-axis (optional)
+       y: vector components in global coordinates defining a  vector
+            that lies in the local x-y plane of the element(optional).
+     If the optional orientation vector are not specified, the local
+     element axes coincide with the global axes. Otherwise, the local
+     z-axis is defined by the cross product between the vectors x 
+     and yp specified in the command line.
+    :param Klist: stiffness [KX,KY,KZ,KrotX,KrotY,KrotZ]
+    :param name: string to name the spring materials
+    '''
+    prep=setNodes.getPreprocessor
+    nodes=prep.getNodeHandler
+    constr=prep.getBoundaryCondHandler
+    matKX=typical_materials.defElasticMaterial(prep,name+'matKX',Klist[0])
+    matKY=typical_materials.defElasticMaterial(prep,name+'matKY',Klist[1])
+    matKZ=typical_materials.defElasticMaterial(prep,name+'matKZ',Klist[2])
+    matKrotX=typical_materials.defElasticMaterial(prep,name+'matKrotX',Klist[3])
+    matKrotY=typical_materials.defElasticMaterial(prep,name+'matKropY',Klist[4])
+    matKrotZ=typical_materials.defElasticMaterial(prep,name+'matKrotZ',Klist[5])
+    materials=[matKX.name,matKY.name,matKZ.name,matKrotX.name,matKrotY.name,matKrotZ.name]
+    for n in setNodes.nodes:
+        p=n.getInitialPos3d
+        nn=nodes.newNodeXYZ(p.x,p.y,p.z)
+        for i in range(6):
+            constr.newSPConstraint(nn.tag,i,0.0)
+        predefined_spaces.setBearingBetweenNodes(prep,n.tag,nn.tag,materials,orientation)
