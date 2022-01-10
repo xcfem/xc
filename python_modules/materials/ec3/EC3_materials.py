@@ -589,3 +589,13 @@ class RHSShape(EC3Shape,arcelor_metric_shapes.RHSShape):
         EC3Shape.__init__(self, name, 'rolled')
         arcelor_metric_shapes.RHSShape.__init__(self,steel,name)
     
+class UCShape(EC3Shape,arcelor_metric_shapes.UCShape):
+    """UC shape with Eurocode 3 verification routines."""
+    def __init__(self,steel,name):
+        ''' Constructor.
+
+        :param steel: steel material.
+        :param name: shape name (i.e. UC_23)
+        '''
+        EC3Shape.__init__(self, name, 'rolled')
+        arcelor_metric_shapes.UCShape.__init__(self,steel,name)
