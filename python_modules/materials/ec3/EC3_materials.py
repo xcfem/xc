@@ -54,10 +54,8 @@ class EC3Steel(steel_base.BasicSteel):
     def gammaM0(self):
         return self.gammaM
 
-    def fyd(self):
-        return self.fy/self.gammaM
-
     def fydV(self):
+        ''' Return the design value of the shear strength.'''
         return self.fyd()/math.sqrt(3)
 
     def getLambda1(self):
@@ -213,7 +211,6 @@ class EC3Shape(object):
         if self.name[0] in ['I','H']:
             C=self.h
         
-        
     def getLateralTorsionalBucklingCurve(self):
         ''' Return the lateral torsional bukling curve name (a,b,c or d) depending of the type of section (rolled, welded,...). EC3 Table 6.4, 6.3.2.2(2).'''
         return EC3lsc.getLateralTorsionalBucklingCurve(self)
@@ -221,6 +218,23 @@ class EC3Shape(object):
     def getAvy(self):
         '''Return y direction (web direction) shear area'''
         return self.get('Avy')
+    
+    def getShearArea(self, majorAxis= True):
+        ''' Return area for shear strength calculation (added for compatibility
+            with ASTM steel sections).
+
+        :param majorAxis: if true major axis bending; so shear parallel to
+                          minor axis.
+        '''
+        retval= self.getAvy()
+        if(majorAxis):
+            return retval
+        else:
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.error(className+'.'+methodName+': for minor axis not implemented yet.')
+            retval/= 1e3
+        return retval
     
     def shearBucklingVerificationNeeded(self):
         '''Return true if shear buckling verification is needed EC3-1-5'''

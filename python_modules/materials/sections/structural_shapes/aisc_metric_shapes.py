@@ -977,7 +977,7 @@ class WShape(structural_steel.IShape):
     def getAw(self, majorAxis= True):
         ''' Return area for shear strength calculation.'''
         return getUIAw(self, majorAxis)
-            
+    
     def getWebPlateShearBucklingCoefficient(self, a= 1e6):
         '''Return the web plate shear buckling coefficient
            according to expression G2-5 of AISC-360-16.
@@ -1447,7 +1447,7 @@ class CShape(structural_steel.UShape):
     def getAw(self, majorAxis= True):
         ''' Return area for shear strength calculation.'''
         return getUIAw(self, majorAxis)
-    
+        
     def getWebPlateShearBucklingCoefficient(shape, a= 1e6):
         '''Return the web plate shear buckling coefficient
            according to expression G2-5 of AISC-360-16.
