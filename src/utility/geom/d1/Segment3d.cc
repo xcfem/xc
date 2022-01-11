@@ -538,7 +538,7 @@ std::list<Polyline3d> get_polylines(const std::list<Segment3d> &segments, const 
 	    if(d2>tol2)
 	      {
 		positions.push_back(p0);
-	        npIterA= (++positions.rbegin()).base();
+	        npIterA= boost::prior(positions.end());//(++positions.rbegin()).base();
 	      }
 	    const Pos3d p1= s.getToPoint();
 	    pos_iterator npIterB= positions.getNearestPoint(p1);
@@ -546,7 +546,7 @@ std::list<Polyline3d> get_polylines(const std::list<Segment3d> &segments, const 
 	    if(d2>tol2)
 	      {
 		positions.push_back(p1);
-	        npIterB= (++positions.rbegin()).base();
+	        npIterB= boost::prior(positions.end()); //(++positions.rbegin()).base();
 	      }
 	    edge_pairs.push_back(edge_pair(npIterA, npIterB));
 	  }
@@ -615,6 +615,11 @@ std::list<Polyline3d> get_polylines(const std::list<Segment3d> &segments, const 
                     retval.push_back(tmp);
 	      }
           }
+	if(visited.size()<nv)
+	  std::clog << __FUNCTION__
+	            << "; number of unvisited vertices: " << nv-visited.size()
+	            << " there are probably loops in the graph." 
+		    << std::endl;
       }
     return retval;
   }
