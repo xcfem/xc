@@ -23,3 +23,4 @@ Of course you can also learn how to work with XC by examining those tests.
 
 - [Minimal working example](https://portwooddigital.com/2021/07/01/minimal-working-example/)
 - [Verifying Ain’t Easy](https://portwooddigital.com/2021/07/11/verifying-aint-easy/)
+- [Verifying Will Never Be Easy](https://portwooddigital.com/2022/01/12/verifying-will-never-be-easy)
