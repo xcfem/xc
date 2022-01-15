@@ -78,6 +78,7 @@ class PolyPos : public std::deque<pos>
     iterator find(const pos &p)
       { return std::find(this->begin(),this->end(),p); }
     bool In(const pos &p) const;
+    void close(void);
     bool isClosed(const GEOM_FT &tol= 1e-6) const;
     GEOM_FT getLength(void) const;
     GEOM_FT GetMax(unsigned short i) const;
@@ -115,6 +116,17 @@ void PolyPos<pos>::AgregaSiNuevo(const pos &p)
   {
     if(!In(p))
       this->push_back(p);
+  }
+
+//! @brief Close the point list (insert the first point as its last one)
+template <class pos>
+void PolyPos<pos>::close(void)
+  {
+    if(!isClosed())
+      {
+        const pos &first= this->front();
+        this->push_back(first);
+      }
   }
 
 //! @brief True if dist(lastPoint,firstPoint)< tol*length
