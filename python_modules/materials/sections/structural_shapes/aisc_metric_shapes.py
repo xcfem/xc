@@ -4,6 +4,12 @@
 from __future__ import print_function
 from __future__ import division
 
+__author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
+__copyright__= "Copyright 2016, LCPT and AOO"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com"
+
 # Section axis:
 
 #    AISC            XC
@@ -977,7 +983,7 @@ class WShape(structural_steel.IShape):
     def getAw(self, majorAxis= True):
         ''' Return area for shear strength calculation.'''
         return getUIAw(self, majorAxis)
-            
+    
     def getWebPlateShearBucklingCoefficient(self, a= 1e6):
         '''Return the web plate shear buckling coefficient
            according to expression G2-5 of AISC-360-16.
@@ -1447,7 +1453,7 @@ class CShape(structural_steel.UShape):
     def getAw(self, majorAxis= True):
         ''' Return area for shear strength calculation.'''
         return getUIAw(self, majorAxis)
-    
+        
     def getWebPlateShearBucklingCoefficient(shape, a= 1e6):
         '''Return the web plate shear buckling coefficient
            according to expression G2-5 of AISC-360-16.

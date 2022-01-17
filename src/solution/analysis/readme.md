@@ -30,3 +30,4 @@ The components of the analysis are:
 
 - [Its power and its problem](https://portwooddigital.com/2021/04/18/its-power-and-its-problem/)
 - [Numerical Linear Algebra Problems in StructuralAnalysis](http://eprints.maths.manchester.ac.uk/2195/1/thesis-main.pdf)
+- [Two Paths You Can Go By](http://portwooddigital.com/2021/12/05/two-paths-you-can-go-by/)

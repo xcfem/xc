@@ -37,6 +37,7 @@ class BasicSteel(typical_materials.BasicElasticMaterial):
         self.gammaM= gammaM
 
     def fyd(self):
+        ''' Return the design value of the yield strength.'''
         return self.fy/self.gammaM
 
     def fmaxk(self):

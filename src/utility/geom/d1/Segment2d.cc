@@ -620,9 +620,9 @@ std::list<Polyline2d> get_polylines(const std::list<Segment2d> &segments, const 
         typedef boost::graph_traits< graph_t >::out_edge_iterator edge_iterator;
 	graph_t G;
 	// Create and populate vertex container.
-	const int nv= positions.size();
+	const size_t nv= positions.size();
 	std::vector<vertex_t> verts(nv);
-	for(int i= 0;i<nv;i++)
+	for(size_t i= 0;i<nv;i++)
 	  {
 	    VertexProps p;
 	    p.idx= i;
@@ -678,6 +678,66 @@ std::list<Polyline2d> get_polylines(const std::list<Segment2d> &segments, const 
                     retval.push_back(tmp);
 	      }
           }
+	if(visited.size()<nv) //Extract loops.
+	  {
+	    // Get vertices that have degree 2 and are not visited yet.
+	    std::deque<graph_t::vertex_iterator> loop_vertices;
+	    for(boost::tie(v, vend) = vertices(G); v != vend; ++v)
+	      {
+		int degree= out_degree(*v,G);
+		if(degree==2) // loop candidate.
+		  {
+		    vertex_t nv= *v;
+                    int nextVertexIdx= G[nv].idx;
+                    const bool not_visited= (visited.find(nextVertexIdx)==visited.end());
+		    if(not_visited)
+		      { loop_vertices.push_back(v); }
+		  }
+	      }
+	    
+	    for(std::deque<graph_t::vertex_iterator>:: const_iterator i= loop_vertices.begin();i!=loop_vertices.end();i++)
+	      {
+		v= *i;
+                Polyline2d tmp;
+	        bool stop= false;
+		vertex_t nv= *v;
+                int nextVertexIdx= G[nv].idx;
+		do
+		  {
+		    const bool not_visited= (visited.find(nextVertexIdx)==visited.end());
+		    if(not_visited)
+		      {
+			const Pos2d pos= positions[nextVertexIdx];
+			tmp.push_back(pos);
+			visited.insert(nextVertexIdx);
+			// Get the next vertex id.
+			edge_iterator ei, ei_end;
+			boost::tie(ei, ei_end) = out_edges(nv, G);
+			for(; ei != ei_end; ++ei)
+			  {
+			    nv= target(*ei, G);
+			    nextVertexIdx= G[nv].idx;
+			    //degree= out_degree(nv,G);
+			    if(visited.find(nextVertexIdx)==visited.end()) // not already visited.
+			      break;
+			  }
+		      }
+		    else
+		      stop= true; // Loop ends.
+		  }
+		while(!stop);
+		if(!tmp.empty())
+		  {
+		    tmp.close(); // it's a loop.
+                    retval.push_back(tmp);
+		  }
+	      }
+	  }
+	if(visited.size()<nv) // Something went wrong.
+	    std::clog << __FUNCTION__
+		    << "; number of unvisited vertices: " << nv-visited.size()
+		    << " something went wrong." 
+		    << std::endl;	
       }
     return retval;
   }

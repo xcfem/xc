@@ -1285,6 +1285,15 @@ class ASTMShape(object):
         ''' Read member values from a dictionary.'''
         self.name= dct['name']
 
+    def getShearArea(self, majorAxis= True):
+        ''' Return area for shear strength calculation (added for compatibility
+            with EC3 steel sections).
+
+        :param majorAxis: if true major axis bending; so shear parallel to
+                          minor axis.
+        '''
+        return self.getAw(majorAxis)    
+
     # Tension
     def getDesignTensileStrength(self, Ae= None):
         ''' Return the tensile strength of the section according
@@ -1599,7 +1608,6 @@ class ASTMShape(object):
         '''
         return getBoltForHole(ratio*self.getWebThickness(), boltSteelType)
 
-        
     def getFlangeGrossArea(self):
         ''' Return the gross area of the flange.'''
         return self.getFlangeWidth()*self.getFlangeThickness()
