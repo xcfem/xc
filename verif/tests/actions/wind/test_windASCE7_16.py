@@ -4,13 +4,14 @@
 from __future__ import print_function
 from __future__ import division
 
-__author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
-__copyright__= "Copyright 2016, AOO and LCPT"
+__author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AO_O)"
+__copyright__= "Copyright 2021, AO_O and LCPT"
 __license__= "GPL"
 __version__= "1.0"
 __email__= "l.pereztato@gmail.com  ana.Ortega.Ort@gmail.com"
 
 from actions.wind import base_wind
+from actions.wind import ASCE7_16_wind
 from actions.wind import ASCE7_wind
 import math
 
@@ -29,10 +30,10 @@ import math
 #           ____________________ Ground
 #
 
-V= 52 # Basic wind speed (m/s) (figs. 26.5-1 of ASCE 7-22)
-exposureCategory= 'C' # Exposure category (sect. 26.7 of ASCE 7-22)
-Kd= 0.85 # Wind directionality factor (table 26.6-1 of ASCE 7-22)
-Kzt= 1.0 # Topographic factor (fig. 26.8-1  of ASCE 7-22)
+V= 52 # Basic wind speed (m/s)
+exposureCategory= 'C' # Exposure category
+Kd= 0.85 # Wind directionality factor.
+Kzt= 1.0 # Topographic factor.
 zg= 110 # Ground elevation above sea level.
 eaveHeight= 5 # Eave height is the distance from the ground surface
               # adjacent to the building to the roof eave line at
@@ -42,26 +43,26 @@ meanRoofHeight= 6.5 # the Mean Roof Height (h) is defined as the average
                     # of the roof eave height and the height to the
                     # highest point on the roof surface
 
-Ke= ASCE7_wind.Ke(zg) # Ground elevation factor (table 26.9-1 of ASCE 7-22)
+Ke= ASCE7_wind.Ke(zg) # Ground elevation factor
 KeRef= 0.9869953014457066
 ratio1= abs(Ke-KeRef)/KeRef
 
 # Velocity pressure coefficients
-eaveHeightKz= ASCE7_wind.Kz(exposure= exposureCategory, z= eaveHeight) 
-eaveHeightKzRef= 0.8667957746847256
+eaveHeightKz= ASCE7_16_wind.Kz(exposure= exposureCategory, z= eaveHeight) 
+eaveHeightKzRef= 0.8650282179175907
 ratio2= abs(eaveHeightKz-eaveHeightKzRef)/eaveHeightKzRef
 
-meanRoofHeightKz= ASCE7_wind.Kz(exposure= exposureCategory, z= meanRoofHeight)
-meanRoofHeightKzRef= 0.9144722495965638
+meanRoofHeightKz= ASCE7_16_wind.Kz(exposure= exposureCategory, z= meanRoofHeight)
+meanRoofHeightKzRef= 0.9141518634861495
 ratio3= abs(meanRoofHeightKz-meanRoofHeightKzRef)/meanRoofHeightKzRef
 
 # Velocity Pressure
 eaveHeight_qz= ASCE7_wind.qz(z= eaveHeight, Kz= eaveHeightKz, Kzt= Kzt, Kd= Kd, zg= zg, V= V)
-eaveHeight_qz_ref= 1205.3632836226432
+eaveHeight_qz_ref= 1202.9053251380185
 ratio4= abs(eaveHeight_qz-eaveHeight_qz_ref)/eaveHeight_qz_ref
 
 meanRoofHeight_qz= ASCE7_wind.qz(z= meanRoofHeight, Kz= meanRoofHeightKz, Kzt= Kzt, Kd= Kd, zg= zg, V= V)
-meanRoofHeight_qz_ref= 1271.662028989957
+meanRoofHeight_qz_ref= 1271.2165011443503
 ratio5= abs(meanRoofHeight_qz-meanRoofHeight_qz_ref)/meanRoofHeight_qz_ref
 
 # Gust effect factor
@@ -111,31 +112,31 @@ ratio16= math.sqrt((abs(pllRoofCp3h[0]-pllRoofCp3hRef[0])/-pllRoofCp3hRef[1])**2
 
 ## Wall external pressure.
 windwardWallPe= windwardWallCp*G*eaveHeight_qz
-windwardWallPeRef= 819.6470328633974
+windwardWallPeRef= 817.9756210938526
 ratio9= abs(windwardWallPe-windwardWallPeRef)/windwardWallPeRef
 leewardWallPe= leewardWallCp*G*meanRoofHeight_qz
-leewardWallPeRef= -540.4563623207317
+leewardWallPeRef= -540.2670129863488
 ratio10= abs(leewardWallPe-leewardWallPeRef)/-leewardWallPeRef
 sideWallsPe= sideWallsCp*G*meanRoofHeight_qz
-sideWallsPeRef= -756.6389072490243
+sideWallsPeRef= -756.3738181808884
 ratio11= abs(sideWallsPe-sideWallsPeRef)/-sideWallsPeRef
 
 ## Roof external pressure.
 ### Wind normal to ridge.
 windwardRoofPe= windwardRoofCp*G*meanRoofHeight_qz
-windwardRoofPeRef= 425.0419061471395
+windwardRoofPeRef= 424.89299236311416
 ratio17= abs(windwardRoofPe-windwardRoofPeRef)/windwardRoofPeRef
 leewardRoofPe= leewardRoofCp*G*meanRoofHeight_qz
-leewardRoofPeRef= -648.547634784878
+leewardRoofPeRef= -648.3204155836187
 ratio18= abs(leewardRoofPe-leewardRoofPeRef)/-leewardRoofPeRef
 pllRoofPe05h= [pllRoofCp05h[0]*G*meanRoofHeight_qz, pllRoofCp05h[1]*G*meanRoofHeight_qz]
-pllRoofPe05hRef= [-972.8214521773172, -194.56429043546342]
+pllRoofPe05hRef= [-972.480623375428, -194.4961246750856]
 ratio19= math.sqrt((abs(pllRoofPe05h[0]-pllRoofPe05hRef[0])/-pllRoofPe05hRef[1])**2+(abs(pllRoofPe05h[1]-pllRoofPe05hRef[1])/-pllRoofPe05hRef[1])**2)
 pllRoofPe1_5h= [pllRoofCp1_5h[0]*G*meanRoofHeight_qz, pllRoofCp1_5h[1]*G*meanRoofHeight_qz]
-pllRoofPe1_5hRef= [-540.4563623207317, -194.56429043546342]
+pllRoofPe1_5hRef= [-540.2670129863488, -194.4961246750856]
 ratio20= math.sqrt((abs(pllRoofPe1_5h[0]-pllRoofPe1_5hRef[0])/-pllRoofPe1_5hRef[1])**2+(abs(pllRoofPe1_5h[1]-pllRoofPe1_5hRef[1])/-pllRoofPe1_5hRef[1])**2)
 pllRoofPe3h= [pllRoofCp3h[0]*G*meanRoofHeight_qz, pllRoofCp3h[1]*G*meanRoofHeight_qz]
-pllRoofPe3hRef= [-324.273817392439, -194.56429043546342]
+pllRoofPe3hRef= [-324.16020779180934, -194.4961246750856]
 ratio21= math.sqrt((abs(pllRoofPe3h[0]-pllRoofPe3hRef[0])/-pllRoofPe3hRef[1])**2+(abs(pllRoofPe3h[1]-pllRoofPe3hRef[1])/-pllRoofPe3hRef[1])**2)
 
 # Critical load condition
@@ -162,7 +163,7 @@ for row in externalPressures:
         pressureRow.append(bottom)
     combinedPressures.append([surface, pressureRow])
 
-combinedPressuresRef=[['windward wall', [1519.061148807874, 120.23291691892098]], ['leeward wall', [158.95775362374468, -1239.870478265208]], ['side wall', [-57.22479130454792, -1456.0530231935008]], ['windward roof', [1124.456022091616, -274.3722097973369]], ['leeward roof', [50.86648115959838, -1347.9617507293544]], ['flat (along ridge) 0 to h', [-273.40733623284075, -1672.2355681217937, 504.849825509013, -893.9784063799398]], ['flat (along ridge) h to 2h', [158.95775362374468, -1239.870478265208, 504.849825509013, -893.9784063799398]], ['flat (along ridge) >2h', [375.1402985520374, -1023.6879333369154, 504.849825509013, -893.9784063799398]]]
+combinedPressuresRef= [['windward wall', [1517.1446967232455, 118.80654546445987]], ['leeward wall', [158.9020626430439, -1239.4360886157415]], ['side wall', [-57.204742551495656, -1455.5428938102812]], ['windward roof', [1124.0620679925069, -274.2760832662786]], ['leeward roof', [50.84866004577407, -1347.4894912130114]], ['flat (along ridge) 0 to h', [-273.3115477460352, -1671.6496990048208, 504.6729509543071, -893.6652003044784]], ['flat (along ridge) h to 2h', [158.9020626430439, -1239.4360886157415, 504.6729509543071, -893.6652003044784]], ['flat (along ridge) >2h', [375.0088678375834, -1023.329283421202, 504.6729509543071, -893.6652003044784]]]
 
 ratio22= 0.0
 for r1,r2 in zip(combinedPressures, combinedPressuresRef):

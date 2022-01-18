@@ -170,6 +170,7 @@ python tests/actions/snow/test_snowASCE7.py
 echo "$BLEU" "  Wind action tests." "$NORMAL"
 python tests/actions/wind/test_windSIA.py
 python tests/actions/wind/test_windASCE7.py
+python tests/actions/wind/test_windASCE7_16.py
 python tests/actions/wind/test_wind_cylindr_01.py
 python tests/actions/wind/test_wind_cylindr_02.py
 python tests/actions/wind/test_wind_beam_truss.py
