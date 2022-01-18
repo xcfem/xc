@@ -599,3 +599,18 @@ class UCShape(EC3Shape,arcelor_metric_shapes.UCShape):
         '''
         EC3Shape.__init__(self, name, 'rolled')
         arcelor_metric_shapes.UCShape.__init__(self,steel,name)
+
+from materials.sections.structural_shapes import bs_en_10210_shapes
+
+class HFSHSShape(EC3Shape,bs_en_10210_shapes.HFSHSShape):
+    """BS EN 10210-2: 2006 steel shapes with Eurocode 3 
+       verification routines.
+    """
+    def __init__(self,steel,name):
+        ''' Constructor.
+
+        :param steel: steel material.
+        :param name: shape name (i.e. 'HFSHS175x175x8')
+        '''
+        EC3Shape.__init__(self,name,'rolled')
+        bs_en_10210_shapes.HFSHSShape.__init__(self,steel,name)
