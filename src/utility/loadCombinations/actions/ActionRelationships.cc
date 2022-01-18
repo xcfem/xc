@@ -33,7 +33,7 @@ std::string cmb_acc::ActionRelationships::limpia(const std::string &str)
   {
     std::string retval= str;
     if(str.find('*')!=std::string::npos)
-      retval=copia_desde(str,'*');
+      retval=copy_from(str,'*');
     return retval;
   }
 

@@ -106,22 +106,12 @@ inline std::string q_blancos(const std::string &s)
 
 void replace_in_situ(std::string &s,char v,char n);
 const std::string &replace(const std::string &s,char v,char n);
-const std::string &copia_hasta(const std::string &s,char delim,size_t cont= 1);
-//Devuelve la cadena que resulta de copiar
-//la que se le pasa como parámetro hasta
-//encontrar el carácter delim tantas veces
-//como cont.
-const std::string &copia_desde(const std::string &s,char delim);
-//Devuelve la cadena que resulta de copiar
-//la que se le pasa como parámetro desde la posición
-//siguiente a la del carácter delim.
-const std::string &copia_hasta(const std::string &s,const std::string &delim);
-//Devuelve la cadena que resulta de copiar
-//la que se le pasa como parámetro hasta
-//encontrar el alguno de los characters de delim.
+const std::string &copy_to(const std::string &s,char delim,size_t cont= 1);
+const std::string &copy_from(const std::string &s,char delim);
+const std::string &copy_to(const std::string &s,const std::string &delim);
 
 const std::string &get_car_d(const std::string &s,const size_t &n);
-//Devuelve los n últimos characters.
+
 
 //! @brief Devuelve el número de  characters de apertura '{[«' menos el de characters de
 //! cierre '}]»' en la cadena que se pasa como parámetro.

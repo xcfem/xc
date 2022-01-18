@@ -604,7 +604,7 @@ int XC::NodeRecorder::initialize(void)
     else if(dataFlag == 4)
       dataToStore= "incrDeltaDisp";
     else if(dataFlag == 5)
-      dataToStore= "eigen_" + copia_desde(dataToStore,' ');
+      dataToStore= "eigen_" + copy_from(dataToStore,' ');
     else
       dataToStore= "invalid";
 

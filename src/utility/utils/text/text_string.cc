@@ -203,7 +203,7 @@ const std::string &replace(const std::string &s,char v,char n)
 //! @brief Devuelve la cadena que resulta de copiar la que se le 
 //! pasa como parámetro hasta encontrar el carácter delim tantas veces
 //! como cont.
-const std::string &copia_hasta(const std::string &s,char delim,size_t cont)
+const std::string &copy_to(const std::string &s,char delim,size_t cont)
   {
     size_t c= 0;
     static std::string retval;
@@ -222,10 +222,12 @@ const std::string &copia_hasta(const std::string &s,char delim,size_t cont)
     return retval;
   }
 
-//! @brief Devuelve la cadena que resulta de copiar la que se le pasa
-//! como parámetro desde la posición siguiente a la de la primera ocurrencia
-//! del carácter delim.
-const std::string &copia_desde(const std::string &s,char delim)
+//! @brief Return the substring from the position following the
+//! \p delim character to the end of the \p s string.
+//!
+//! @param[in] s: string to copy from.
+//! @param[in] delim: delimiter.
+const std::string &copy_from(const std::string &s,char delim)
   {
     static std::string retval;
     retval.clear();
@@ -241,10 +243,12 @@ const std::string &copia_desde(const std::string &s,char delim)
     return retval;
   }
 
-//! @brief Devuelve la cadena que resulta de copiar
-//! la que se le pasa como parámetro hasta
-//! encontrar alguno de los characters de delim.
-const std::string &copia_hasta(const std::string &s,const std::string &delim)
+//! @brief Return the substring from the beginning of the \p s string
+//! to the \p delim character.
+//!
+//! @param[in] s: string to copy from.
+//! @param[in] delim: delimiter.
+const std::string &copy_to(const std::string &s,const std::string &delim)
   {
     static std::string retval;
     retval.clear();
