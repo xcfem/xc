@@ -30,6 +30,7 @@ __email__= "l.pereztato@gmail.com"
 import sys
 import math
 from materials.sections.structural_shapes import aisc_shapes_dictionaries as shapes
+from materials.sections.structural_shapes import bs_en_10210_shapes
 from materials.sections.structural_shapes import aisc_shapes_labels as labels
 from materials.sections import structural_steel
 from materials.sections import section_properties
@@ -2423,16 +2424,16 @@ HSS= shapes.HSS
 class HSSShape(structural_steel.QHShape):
     ''' Hollow structural section.
 
-    :ivar steel: steel material.
-    :ivar name: shape name (i.e. HSS2X2X_250).
     '''
-    def __init__(self,steel,name):
+    def __init__(self, steel, name, table= HSS):
         ''' Constructor.
 
         :param steel: steel material.
         :param name: shape name (i.e. HSS2X2X_250).
+        :param table: module containing a dictionary with mechanical 
+                      characteristics of a series of shapes.
         '''
-        super(HSSShape,self).__init__(steel,name,HSS)
+        super(HSSShape,self).__init__(steel, name, table)
 
     def t(self):
         '''Return HSS nominal wall thickess'''
@@ -2984,6 +2985,28 @@ class HSSShape(structural_steel.QHShape):
         Fy= shape.steelType.fy
         Ry= shape.steelType.Ry
         return 0.65*math.sqrt(E/Fy/Ry) # Case 4
+
+HFSHS= bs_en_10210_shapes.HFSHS
+
+class HFSHSShape(HSSShape):
+    ''' Hollow structural section.
+
+    :ivar steel: steel material.
+    :ivar name: shape name (i.e. HSS2X2X_250).
+    '''
+    def __init__(self,steel,name):
+        ''' Constructor.
+
+        :param steel: steel material.
+        :param name: shape name (i.e. HSS2X2X_250).
+        '''
+        tb= HFSHS
+        super(HFSHSShape,self).__init__(steel, name, table= tb)
+
+    def t(self):
+        '''Return wall thickess'''
+        return self.get('e')
+
     
 for item in shapes.CHSS:
     shape= shapes.CHSS[item]

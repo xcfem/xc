@@ -610,7 +610,7 @@ class HFSHSShape(EC3Shape,bs_en_10210_shapes.HFSHSShape):
         ''' Constructor.
 
         :param steel: steel material.
-        :param name: shape name (i.e. 'HFSHS175x175x8')
+        :param name: shape name (i.e. 'HFSHS300x300x10.0')
         '''
         EC3Shape.__init__(self,name,'rolled')
         bs_en_10210_shapes.HFSHSShape.__init__(self,steel,name)

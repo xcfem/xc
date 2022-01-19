@@ -1849,6 +1849,20 @@ class CHSSShape(ASTMShape,aisc_metric_shapes.CHSSShape):
         ASTMShape.__init__(self, name)
         aisc_metric_shapes.CHSSShape.__init__(self,steel,name)
 
+class HFSHSShape(ASTMShape,aisc_metric_shapes.HFSHSShape):
+    """BS EN 10210-2: 2006 steel shapes with ASTM/AISC
+       verification routines.
+    """
+    def __init__(self,steel,name):
+        ''' Constructor.
+
+        :param steel: steel material.
+        :param name: shape name (i.e. 'HFSHS300x300x10.0')
+        '''
+        ASTMShape.__init__(self,name)
+        aisc_metric_shapes.HFSHSShape.__init__(self,steel,name)
+
+
 def getCrossSections(steelShapes, steel_W= A992, steel_C= A36, steel_L= A36, steel_HSS= A500):
     ''' Return a dictionary containing the cross section definition for each
         of the structural shapes in the steelShapes arguments.

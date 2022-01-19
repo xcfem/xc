@@ -650,7 +650,7 @@ class IShape(SteelShape):
 
 class QHShape(SteelShape):
     '''Quadrilateral hollow shape''' 
-    def __init__(self,steel,name,table):
+    def __init__(self,steel, name, table):
         ''' Constructor.
 
         :param steel: steel object (e.g. S275JR)
