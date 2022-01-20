@@ -66,6 +66,7 @@ class Plane : public Surface3d
     explicit Plane(const Polygon3d &trg);
     explicit Plane(const GeneralEquationOfPlane &eg);
     explicit Plane(const GeomObj3d::list_Pos3d &lp);
+    explicit Plane(const boost::python::list &);
     template <typename InputIterator>
     Plane(InputIterator begin,InputIterator end);
     

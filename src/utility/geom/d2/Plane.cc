@@ -74,6 +74,19 @@ Plane::Plane(const GeomObj3d::list_Pos3d &lp)
     (*this)= tmp;
   }
 
+//! @brief Constructor (Python interface).
+Plane::Plane(const boost::python::list &l)
+  {
+    GeomObj3d::list_Pos3d points;
+    const int sz= len(l);
+    // copy the components
+    for(int i=0; i<sz; i++)
+      points.push_back(boost::python::extract<Pos3d>(l[i]));
+    Plane tmp(points);
+    (*this)= tmp;    
+  }
+
+
 //! @brief Constructor
 Plane::Plane(const Polygon3d &pg3d)
   : Surface3d(), cgp()
