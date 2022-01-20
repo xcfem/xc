@@ -2423,7 +2423,6 @@ HSS= shapes.HSS
 
 class HSSShape(structural_steel.QHShape):
     ''' Hollow structural section.
-
     '''
     def __init__(self, steel, name, table= HSS):
         ''' Constructor.
@@ -2441,9 +2440,20 @@ class HSSShape(structural_steel.QHShape):
         # tnom: according to the readme of AISC Shapes Database v15.0
         # is the HSS or pipe nominal wall thickness; this value matches
         # the thickness that the shape name expresses
-        # t: according to the readme of AISC Shapes Database v15.0 is
-        # the thickness of angle leg.
+        # tdes (t): according to the readme of AISC Shapes Database v15.0 is
+        # the design wall thickness (stored as 't' in the shapes dictionary).
         return self.get('tnom')
+
+    def getDesignWallThickness(self):
+        '''Return HSS design wall thickess'''
+        # HSS shapes have two values of thickness:
+        # tnom: according to the readme of AISC Shapes Database v15.0
+        # is the HSS or pipe nominal wall thickness; this value matches
+        # the thickness that the shape name expresses
+        # tdes (t): according to the readme of AISC Shapes Database v15.0 is
+        # the design wall thickness (stored as 't' in the shapes dictionary).
+        return self.get('t')
+
 
     def getMetricName(self):
         '''Return the metric label from the US customary one.'''
@@ -2618,7 +2628,7 @@ class HSSShape(structural_steel.QHShape):
     
     def getAw(self, majorAxis= True):
         ''' Return area for shear strength calculation.'''
-        t= self.get('t')
+        t= self.getDesignWallThickness()
         if(majorAxis): # see equation G4-1
             h= self.get('h_flat')
             return 2.0*h*t
@@ -2990,15 +3000,12 @@ HFSHS= bs_en_10210_shapes.HFSHS
 
 class HFSHSShape(HSSShape):
     ''' Hollow structural section.
-
-    :ivar steel: steel material.
-    :ivar name: shape name (i.e. HSS2X2X_250).
     '''
     def __init__(self,steel,name):
         ''' Constructor.
 
         :param steel: steel material.
-        :param name: shape name (i.e. HSS2X2X_250).
+        :param name: shape name (i.e. "HFSHS40x40x2.9).
         '''
         tb= HFSHS
         super(HFSHSShape,self).__init__(steel, name, table= tb)
@@ -3007,6 +3014,9 @@ class HFSHSShape(HSSShape):
         '''Return wall thickess'''
         return self.get('e')
 
+    def getDesignWallThickness(self):
+        '''Return HSS design wall thickess'''
+        return self.get('e')
     
 for item in shapes.CHSS:
     shape= shapes.CHSS[item]

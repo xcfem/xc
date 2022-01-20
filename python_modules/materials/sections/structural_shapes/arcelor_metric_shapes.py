@@ -472,7 +472,7 @@ class RHSShape(structural_steel.QHShape):
         super(RHSShape,self).__init__(steel,name,RHS)
 
     def t(self):
-        '''Return the thickness'''
+        '''Return the wall thickness'''
         return self.get('e')
 
         
@@ -481,7 +481,7 @@ class SHSShape(structural_steel.QHShape):
         super(SHSShape,self).__init__(steel,name,SHS)
         
     def t(self):
-        '''Return the thickness'''
+        '''Return the wall thickness'''
         return self.get('e')
 
     
