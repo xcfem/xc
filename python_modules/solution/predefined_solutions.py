@@ -328,6 +328,13 @@ class SimpleStaticLinear(PenaltyStaticLinearBase):
         self.feProblem= prb
         self.setPenaltyFactors()
         
+### Convenience function.
+def simple_static_linear(prb):
+    ''' Return a simple static linear solution procedure.'''
+    solProc= SimpleStaticLinear(prb)
+    solProc.setup()
+    return solProc.analysis
+        
 class SimpleStaticLinearUMF(PenaltyStaticLinearBase):
     ''' Return a linear static solution algorithm
         with a penalty constraint handler.
@@ -345,6 +352,13 @@ class SimpleStaticLinearUMF(PenaltyStaticLinearBase):
         self.feProblem= prb
         self.setPenaltyFactors()
         
+### Convenience function.
+def simple_static_linear_umf(prb):
+    ''' Return a simple static linear solution procedure.'''
+    solProc= SimpleStaticLinearUMF(prb)
+    solProc.setup()
+    return solProc.analysis
+        
 class SimpleStaticLinearMUMPS(PenaltyStaticLinearBase):
     ''' Return a linear static solution algorithm
         with a penalty constraint handler.
@@ -361,11 +375,11 @@ class SimpleStaticLinearMUMPS(PenaltyStaticLinearBase):
         super(SimpleStaticLinearMUMPS,self).__init__(name, printFlag= printFlag, numSteps= numSteps, numberingMethod= numberingMethod, soeType= soeType, solverType= solverType)
         self.feProblem= prb
         self.setPenaltyFactors()
-
+        
 ### Convenience function.
-def simple_static_linear(prb):
+def simple_static_linear_mumps(prb):
     ''' Return a simple static linear solution procedure.'''
-    solProc= SimpleStaticLinear(prb)
+    solProc= SimpleStaticLinearMUMPS(prb)
     solProc.setup()
     return solProc.analysis
 
