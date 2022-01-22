@@ -822,15 +822,16 @@ void XC::Shell4NBase::computeBasis(void)
 //! @param ss "s" natural coordinate of the point.
 //! @param tt "t" natural coordinate of the point.
 //! @param x[2][4]
-//! @param shp[3][4] shape function values at the gauss points.
-//! @param xsj
+//! @param shp[3][4] shape function values at the (ss,tt) point (value and two derivatives for each shape function).
+//! @param xsj jacobian determinant.
+//! @param sx jacobian inverse
 void XC::Shell4NBase::shape2d(const double &ss, const double &tt,const double x[2][4],double shp[3][4],double &xsj, double sx[2][2])
   {
 
     static const double s[]= { -0.5,  0.5, 0.5, -0.5 };
     static const double t[]= { -0.5, -0.5, 0.5,  0.5 };
 
-    static double xs[2][2];
+    static double xs[2][2]; // jacobian.
 
     for(int i= 0; i < 4; i++ )
       {
