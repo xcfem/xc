@@ -40,7 +40,7 @@ n3= nodes.newNodeXYZ(p3.x,p3.y,p3.z)
 n4= nodes.newNodeXYZ(p4.x,p4.y,p4.z)
 
 pA= geom.Pos3d(p1.x,p1.y,p1.z)
-nA= nodes.newNodeXYZ(pA.x,pA.y,pA.z)
+nA= nodes.newNodeXYZ(pA.x,pA.y,pA.z) # node to be glued.
 
 # Materials definition
 memb1= typical_materials.defElasticMembranePlateSection(preprocessor, "memb1",E,nu,dens,h)
@@ -59,7 +59,7 @@ modelSpace.fixNode000_FFF(n4.tag)
 # modelSpace.fixNode000_000( 3)
 # modelSpace.fixNode000_000( 4)
 
-# Glued node.
+## Glued node.
 gluedDOFs= [0,3,4,5]
 loadOnDOFs= [0,0,0,0,0,0]
 for i in range(0,6):
