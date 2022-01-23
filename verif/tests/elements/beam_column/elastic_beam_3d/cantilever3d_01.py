@@ -40,7 +40,7 @@ nodes= preprocessor.getNodeHandler
 # Problem type
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
 
-nodes.defaultTag= 1 # First node number.
+# Problem geometry
 n1= nodes.newNodeXYZ(0,0.0,0.0)
 n2= nodes.newNodeXYZ(L,0.0,0.0)
 
@@ -72,7 +72,7 @@ result= analysis.analyze(1)
 
 delta= n2.getDisp[0] # x displacement of node 2.
 beam3d.getResistingForce()
-N1= elements.getElement(1).getN1
+N1= beam3d.getN1
 
 deltateor= (F*L/(E*A))
 ratio1= (delta-deltateor)/deltateor
