@@ -228,24 +228,25 @@ python tests/elements/beam_column/elastic_beam_2d/elastic_beam2d_test1.py
 python tests/elements/beam_column/elastic_beam_2d/test_frame_01.py
 python tests/elements/beam_column/elastic_beam_2d/elastic_beam2d_frequency_01.py
 echo "$BLEU" "    Elastic beam-column 3D tests." "$NORMAL"
-python tests/elements/beam_column/cantilever3d_01.py
-python tests/elements/beam_column/cantilever3d_02.py
-python tests/elements/beam_column/cantilever3d_03.py
-python tests/elements/beam_column/cantilever3d_04.py
-python tests/elements/beam_column/cantilever3d_05.py
-python tests/elements/beam_column/cantilever3d_06.py
-python tests/elements/beam_column/cantilever3d_07.py
-python tests/elements/beam_column/cantilever3d_08.py
-python tests/elements/beam_column/cantilever3d_09.py
-python tests/elements/beam_column/cantilever3d_10.py
-python tests/elements/beam_column/test_torsion_01.py
-python tests/elements/beam_column/test_torsion_02.py
-python tests/elements/beam_column/elastic_beam3d_sign_criteria_01.py
-python tests/elements/beam_column/elastic_beam3d_sign_criteria_02.py
-python tests/elements/beam_column/elastic_beam3d_sign_criteria_03.py
-python tests/elements/beam_column/test_beam3d_sections_axes_orientation.py
-python tests/elements/beam_column/elastic_beam3d_test1.py
-python tests/elements/beam_column/elastic_beam3d_test2.py
+python tests/elements/beam_column/elastic_beam_3d/cantilever3d_01.py
+python tests/elements/beam_column/elastic_beam_3d/cantilever3d_02.py
+python tests/elements/beam_column/elastic_beam_3d/cantilever3d_03.py
+python tests/elements/beam_column/elastic_beam_3d/cantilever3d_04.py
+python tests/elements/beam_column/elastic_beam_3d/cantilever3d_05.py
+python tests/elements/beam_column/elastic_beam_3d/cantilever3d_06.py
+python tests/elements/beam_column/elastic_beam_3d/cantilever3d_07.py
+python tests/elements/beam_column/elastic_beam_3d/cantilever3d_08.py
+python tests/elements/beam_column/elastic_beam_3d/cantilever3d_09.py
+python tests/elements/beam_column/elastic_beam_3d/cantilever3d_10.py
+python tests/elements/beam_column/elastic_beam_3d/elastic_beam3d_sign_criteria_01.py
+python tests/elements/beam_column/elastic_beam_3d/elastic_beam3d_sign_criteria_02.py
+python tests/elements/beam_column/elastic_beam_3d/elastic_beam3d_sign_criteria_03.py
+python tests/elements/beam_column/elastic_beam_3d/test_beam3d_sections_axes_orientation.py
+python tests/elements/beam_column/elastic_beam_3d/elastic_beam3d_test1.py
+python tests/elements/beam_column/elastic_beam_3d/elastic_beam3d_test2.py
+python tests/elements/beam_column/elastic_beam_3d/test_crdTransf_rotation_01.py
+python tests/elements/beam_column/elastic_beam_3d/test_torsion_01.py
+python tests/elements/beam_column/elastic_beam_3d/test_torsion_02.py
 echo "$BLEU" "    Timoshenko beam 2D tests." "$NORMAL"
 python tests/elements/beam_column/timoshenko_beam2d_test1.py
 python tests/elements/beam_column/timoshenko_beam2d_sign_criteria_01.py
@@ -265,7 +266,6 @@ python tests/elements/beam_column/test_force_beam_column_3d_04.py
 python tests/elements/beam_column/test_force_beam_column_3d_05.py
 python tests/elements/beam_column/test_force_beam_column_3d_06.py
 python tests/elements/beam_column/plastic_hinge_on_cantilever.py
-python tests/elements/beam_column/test_crdTransf_rotation_01.py
 python tests/elements/beam_column/test_integration_options_01.py
 python tests/elements/beam_column/test_strains_sign_01.py
 echo "$BLEU" "  Zero length elements tests." "$NORMAL"
@@ -554,6 +554,7 @@ python tests/constraints/test_glue_node_to_element_05.py
 python tests/constraints/test_glue_node_to_element_06.py
 python tests/constraints/test_glue_node_to_element_07.py
 python tests/constraints/test_glue_node_to_element_08.py
+python tests/constraints/test_glue_node_to_element_09.py
 
 #Load tests
 echo "$BLEU" "Loads tests." "$NORMAL"
