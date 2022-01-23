@@ -60,7 +60,7 @@ lin= modelSpace.newLinearCrdTransf("lin")
 
 ## Seed element
 seedElemHandler= preprocessor.getElementHandler.seedElemHandler
-seedElemHandler.dimElem= 2 # Bars defined in a three dimensional space.
+seedElemHandler.dimElem= 2 # Bars defined in a two-dimensional space.
 seedElemHandler.defaultMaterial= scc.name
 seedElemHandler.defaultTransformation= lin.name
 beam2d= seedElemHandler.newElement("ElasticBeam2d",xc.ID([0,0]))
