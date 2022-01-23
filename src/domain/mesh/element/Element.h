@@ -297,6 +297,7 @@ class Element: public MeshComponent
     virtual double getTributaryVolume(const Node *) const;
     virtual double getTributaryVolumeByTag(const int &) const;
 
+    virtual ParticlePos3d getNaturalCoordinates(const Pos3d &, bool initialGeometry= true) const;
     virtual Vector getInterpolationFactors(const ParticlePos3d &) const;
     virtual Vector getInterpolationFactors(const Pos3d &) const;
 

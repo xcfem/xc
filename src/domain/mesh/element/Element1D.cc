@@ -44,6 +44,7 @@
 #include "utility/matrices/m_int.h"
 #include "domain/mesh/element/utils/coordTransformation/CrdTransf2d.h"
 #include "domain/mesh/element/utils/coordTransformation/CrdTransf3d.h"
+#include "domain/mesh/element/utils/ParticlePos3d.h"
 #include "utility/geom/pos_vec/Pos3dArray.h"
 #include "utility/geom/pos_vec/Vector3d.h"
 #include "utility/geom/pos_vec/Pos2d.h"
@@ -525,6 +526,15 @@ BoolArray3d XC::Element1D::getNodePattern(void) const
     return retval;
   }
 
+//! @brief shape function routine for one-dimesional two node elements.
+//! @param r "r" natural coordinate of the point.
+//! @param shp[4] shape function values at the (r) point.
+void XC::Element1D::shape1d(const double &r, double shp[2])
+  {
+    shp[0]= (1.0-r)/2.0;
+    shp[1]= (1.0+r)/2.0;
+  }
+
 //! @brief Put the elements on the nodes being passed as parameter.
 XC::ElemPtrArray3d XC::Element1D::put_on_mesh(const NodePtrArray3d &nodes,meshing_dir dm) const
   {
@@ -534,7 +544,9 @@ XC::ElemPtrArray3d XC::Element1D::put_on_mesh(const NodePtrArray3d &nodes,meshin
     const size_t mesh_dim= nodes.GetDim();
     ElemPtrArray3d retval;
     if(mesh_dim<1)
-      std::cerr << "There is only one node, can't create elements." << std::endl;
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "There is only one node, can't create elements."
+		<< std::endl;
     else
       {
         if(mesh_dim<2) //Bidimensional mesh
@@ -881,7 +893,49 @@ XC::CrdTransf3d *XC::Element1D::recvCoordTransf3d(int posFlag,const int &posClas
 int XC::Element1D::getVtkCellType(void) const
   { return VTK_LINE; }
 
-//! @brief Calcula the tributary lengths that corresponds to each
+//! @brief Return the local coordinates of the point
+double XC::Element1D::getLocalCoordinates(const Pos3d &pt,bool initialGeometry) const
+  {
+    const Pos3d proj= getProjection(pt, initialGeometry);
+    Pos3d node0Pos;
+    if(initialGeometry)
+      node0Pos= theNodes[0]->getInitialPosition3d();
+    else
+      node0Pos= theNodes[0]->getCurrentPosition3d();
+    return dist(node0Pos, proj);
+  }
+
+//! @brief Return the local coordinates of the point
+XC::ParticlePos3d XC::Element1D::getNaturalCoordinates(const Pos3d &pt, bool initialGeometry) const
+  {
+    const double localCoord= getLocalCoordinates(pt, initialGeometry);
+    const double L= getLength(initialGeometry);
+    
+    return ParticlePos3d(2*(localCoord/L)-1.0,0.0,0.0);
+  }
+      
+//! @brief Returns interpolation factors for a material point.
+//! @param pos: natural coordinates of the material point.
+XC::Vector XC::Element1D::getInterpolationFactors(const ParticlePos3d &pos) const
+  {
+    static const int numberOfNodes= 2;
+    static double shp[numberOfNodes]; // storage for shape functions values
+
+    shape1d(pos.r_coordinate(), shp);
+
+    Vector retval(2);
+    retval[0]= shp[0];
+    retval[1]= shp[1];
+    
+    return retval;
+  }
+
+//! @brief Returns interpolation factors for a material point.
+XC::Vector XC::Element1D::getInterpolationFactors(const Pos3d &pos) const
+  { return getInterpolationFactors(getNaturalCoordinates(pos)); }
+
+
+//! @brief Compute the tributary lengths that corresponds to each
 //! node of the element
 void XC::Element1D::computeTributaryLengths(bool initialGeometry) const
   {

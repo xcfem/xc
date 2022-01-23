@@ -544,13 +544,15 @@ python tests/constraints/test_huge_beam.py
 python tests/constraints/test_huge_truss.py
 python tests/constraints/test_fulcrum_01.py
 python tests/constraints/test_release_beam_node_01.py
+python tests/constraints/test_pile_01.py
+echo "$BLEU" "  Glue node to element constraints tests." "$NORMAL"
 python tests/constraints/test_glue_node_to_element_01.py
 python tests/constraints/test_glue_node_to_element_02.py
 python tests/constraints/test_glue_node_to_element_03.py
 python tests/constraints/test_glue_node_to_element_04.py
 python tests/constraints/test_glue_node_to_element_05.py
 python tests/constraints/test_glue_node_to_element_06.py
-python tests/constraints/test_pile_01.py
+python tests/constraints/test_glue_node_to_element_07.py
 
 #Load tests
 echo "$BLEU" "Loads tests." "$NORMAL"

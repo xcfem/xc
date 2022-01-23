@@ -603,28 +603,29 @@ int XC::Shell4NBase::revertToStart(void)
   }
 
 //! @brief Returns interpolation factors for a material point.
+//! @param pos: natural coordinates of the material point.
 XC::Vector XC::Shell4NBase::getInterpolationFactors(const ParticlePos3d &pos) const
   {
-    static const int numberNodes= 4;
+    static const int numberOfNodes= 4;
     static const int nShape= 3;
-    static const int massIndex= nShape - 1;
+    static const int shpIndex= nShape-1;
 
     double xsj;  // determinant of the jacobian matrix
-    static double shp[nShape][numberNodes];  //shape functions at a gauss point
-    Vector retval(numberNodes);
+    static double shp[nShape][numberOfNodes]; //storage for shape functions values.
+    Vector retval(numberOfNodes);
 
 
     //compute basis vectors and local nodal coordinates
     //theCoordTransf->update( );
 
 
-    double sx[2][2]; //inverse jacobian matrix.
+    double sx[2][2]; //inverse jacobian matrix (not used here).
     shape2d(pos.r_coordinate(), pos.s_coordinate(), xl, shp, xsj, sx);
 
-    //node loop to compute factors
+    //node loop to extract factors
     retval.Zero( );
-    for(int j= 0; j < numberNodes; j++ )
-      retval[j]= shp[massIndex][j];
+    for(int j= 0; j < numberOfNodes; j++ )
+      retval[j]= shp[shpIndex][j]; // last row for each node.
 
     return retval;
   }
@@ -636,11 +637,11 @@ Pos3d XC::Shell4NBase::getCartesianCoordinates(const ParticlePos3d &p, bool init
   {
     Pos3d retval;
     //Values of the shape functions.
-    static const int numberNodes= 4;
+    static const int numberOfNodes= 4;
     static const int nShape= 3;
     double xsj;  // determinant of the jacobian matrix
     double sx[2][2]; //inverse jacobian matrix.
-    static double shp[nShape][numberNodes];  //shape functions at point p
+    static double shp[nShape][numberOfNodes];  //shape functions at point p
     shape2d(p.r_coordinate(), p.s_coordinate(), xl, shp, xsj, sx);
     const double N1= shp[nShape-1][0];
     const double N2= shp[nShape-1][1];
@@ -670,7 +671,7 @@ XC::ParticlePos3d XC::Shell4NBase::getLocalCoordinatesOfNode(const int &i) const
   { return ParticlePos3d(xl[0][i],xl[1][i],0.0); }
 
 //! @brief Return the natural coordinates that correspond to the argument.
-XC::ParticlePos3d XC::Shell4NBase::getNaturalCoordinates(const Pos3d &p) const
+XC::ParticlePos3d XC::Shell4NBase::getNaturalCoordinates(const Pos3d &p, bool initialGeometry) const
   { return theCoordTransf->getNaturalCoordinates(p,xl); }
 
 //! @brief Returns interpolated displacements for a material point.
@@ -691,7 +692,7 @@ XC::Vector XC::Shell4NBase::getInterpolatedDisplacements(const ParticlePos3d &po
 
 
     static const int ndf= 6;
-    static const int numberNodes= 4;
+    static const int numberOfNodes= 4;
     Vector displacement(ndf);
 
 
@@ -703,7 +704,7 @@ XC::Vector XC::Shell4NBase::getInterpolatedDisplacements(const ParticlePos3d &po
 
     //node loop to compute displacements
     displacement.Zero( );
-    for(int j= 0; j < numberNodes; j++ )
+    for(int j= 0; j < numberOfNodes; j++ )
       //displacement += ( factor[j] * theNodes[j]->getTrialAccel() );
       displacement.addVector(1.0, theCoordTransf->getBasicTrialAccel(j), factors[j] );
 
@@ -721,14 +722,14 @@ void XC::Shell4NBase::formInertiaTerms( int tangFlag ) const
     //translational mass only
     //rotational inertia terms are neglected
     static const int ndf= 6;
-    static const int numberNodes= 4;
+    static const int numberOfNodes= 4;
     static const int numberGauss= 4;
     static const int nShape= 3;
     static const int massIndex= nShape - 1;
 
     double xsj;  // determinant of the jacobian matrix
     double dvol; //volume element
-    static double shp[nShape][numberNodes];  //shape functions at a gauss point
+    static double shp[nShape][numberOfNodes];  //shape functions at a gauss point
     static Vector momentum(ndf);
 
 
@@ -756,7 +757,7 @@ void XC::Shell4NBase::formInertiaTerms( int tangFlag ) const
 
         //node loop to compute accelerations
         momentum.Zero( );
-        for(int j= 0; j < numberNodes; j++ )
+        for(int j= 0; j < numberOfNodes; j++ )
           //momentum += ( shp[massIndex][j] * theNodes[j]->getTrialAccel() );
           momentum.addVector(1.0, theCoordTransf->getBasicTrialAccel(j), shp[massIndex][j] );
 
@@ -768,7 +769,7 @@ void XC::Shell4NBase::formInertiaTerms( int tangFlag ) const
 
 
         //residual and tangent calculations node loops
-        for(int j=0, jj=0; j<numberNodes; j++, jj+=ndf )
+        for(int j=0, jj=0; j<numberOfNodes; j++, jj+=ndf )
           {
             temp= shp[massIndex][j] * dvol;
             for(int p= 0;p<3;p++)
@@ -779,7 +780,7 @@ void XC::Shell4NBase::formInertiaTerms( int tangFlag ) const
                //multiply by density
                temp *= rhoH;
 
-               for(int k=0, kk=0; k<numberNodes; k++, kk+=ndf )
+               for(int k=0, kk=0; k<numberOfNodes; k++, kk+=ndf )
                  {
                    massJK= temp * shp[massIndex][k];
                    //node-node translational mass

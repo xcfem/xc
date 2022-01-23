@@ -775,6 +775,16 @@ int XC::Element::addResistingForceToNodalReaction(bool inclInertia)
     return result;
   }
 
+XC::ParticlePos3d XC::Element::getNaturalCoordinates(const Pos3d &, bool initialGeometry) const
+  {
+    std::cerr << getClassName() << "::" << __FUNCTION__
+              << "; must be overloaded in derived classes."
+              << std::endl;
+    static const ParticlePos3d retval;
+    return retval;
+  }
+
+
 //! @brief Returns interpolation factors for a material point.
 XC::Vector XC::Element::getInterpolationFactors(const ParticlePos3d &) const
   {

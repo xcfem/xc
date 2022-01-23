@@ -91,7 +91,7 @@ class BrickBase: public ElemWithMaterial<8,NDMaterialPhysicalProperties>
 
     Matrix getLocalAxes(bool initialGeometry= true) const;
     Pos3d getGlobalCoordinates(const double &r, const double &s, const double &t) const;  
-    ParticlePos3d getNaturalCoordinates(const Pos3d &) const;
+    ParticlePos3d getNaturalCoordinates(const Pos3d &, bool initialGeometry= true) const;
     const Matrix &getExtrapolationMatrix(void) const;
   };
 

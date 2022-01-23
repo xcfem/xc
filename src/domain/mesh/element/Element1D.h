@@ -55,6 +55,8 @@ class Element1D: public ElementBase<2>
   protected:
     mutable std::vector<double> tributaryLengths;
 
+    static void shape1d(const double &, double shp[2]);
+    
     ElemPtrArray3d put_on_mesh(const NodePtrArray3d &,meshing_dir dm) const;
     ElemPtrArray3d sew(const SetEstruct &f1,const SetEstruct &f2) const;
 
@@ -63,6 +65,7 @@ class Element1D: public ElementBase<2>
     CrdTransf2d *recvCoordTransf2d(int posFlag,const int &,const int &,const Communicator &);
 
     CrdTransf3d *recvCoordTransf3d(int posFlag,const int &,const int &,const Communicator &);
+
 
   public:
     Element1D(int tag, int classTag);
@@ -88,6 +91,11 @@ class Element1D: public ElementBase<2>
     size_t getDimension(void) const;
     double getLength(bool initialGeometry= true) const;
     int getVtkCellType(void) const;
+
+    double getLocalCoordinates(const Pos3d &, bool initialGeometry= true) const;
+    ParticlePos3d getNaturalCoordinates(const Pos3d &, bool initialGeometry= true) const;    
+    Vector getInterpolationFactors(const ParticlePos3d &) const;
+    Vector getInterpolationFactors(const Pos3d &) const;
 
     virtual void computeTributaryLengths(bool initialGeometry= true) const;
     double getTributaryLength(const Node *) const;

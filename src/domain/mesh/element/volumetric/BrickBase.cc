@@ -455,8 +455,9 @@ Pos3d XC::BrickBase::getGlobalCoordinates(const double &r, const double &s, cons
     return retval;
   }
   
-XC::ParticlePos3d XC::BrickBase::getNaturalCoordinates(const Pos3d &pos) const
+XC::ParticlePos3d XC::BrickBase::getNaturalCoordinates(const Pos3d &pos,bool initialGeometry) const
   {
+    // initialGeometry not used yet.
     ParticlePos3d retval;
     double pnt[ndm]= {pos.x(),pos.y(),pos.z()};
     double solution[ndm]= {0.0,0.0,0.0}; // {r,s,t}

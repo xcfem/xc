@@ -49,15 +49,15 @@ elem= elements.newElement("ShellMITC4",xc.ID([n4.tag,n3.tag,n2.tag,n1.tag]))
 c= elem.getCoordTransf.getVPosCentroide
 O= geom.Pos3d(c[0],c[1],c[2])
 elem.computeBasis()
-On= elem.getNaturalCoordinates(O)
-p1n= elem.getNaturalCoordinates(p1)
-p2n= elem.getNaturalCoordinates(p2)
-p3n= elem.getNaturalCoordinates(p3)
-p4n= elem.getNaturalCoordinates(p4)
+On= elem.getNaturalCoordinates(O, True)
+p1n= elem.getNaturalCoordinates(p1, True)
+p2n= elem.getNaturalCoordinates(p2, True)
+p3n= elem.getNaturalCoordinates(p3, True)
+p4n= elem.getNaturalCoordinates(p4, True)
 vv= elem.getCoordTransf.getG3Vector+0.02*elem.getCoordTransf.getG2Vector
 p= O+10.0*geom.Vector3d(vv[0],vv[1],vv[2])
 pp= elem.getCoordTransf.getProj(p)
-ppn= elem.getNaturalCoordinates(pp)
+ppn= elem.getNaturalCoordinates(pp, True)
 
 ratio= 0.0
 ratio1= abs(On.r)

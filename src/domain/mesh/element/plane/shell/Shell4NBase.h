@@ -140,7 +140,7 @@ class Shell4NBase: public QuadBase4N<SectionFDPhysicalProperties>
 
     void computeBasis(void);
     ParticlePos3d getLocalCoordinatesOfNode(const int &) const;
-    ParticlePos3d getNaturalCoordinates(const Pos3d &) const;
+    ParticlePos3d getNaturalCoordinates(const Pos3d &, bool initialGeometry= true) const;
     Pos3d getCartesianCoordinates(const ParticlePos3d &,bool initialGeometry= true) const;    
     //! @brief Return initial displacements.
     inline const std::vector<Vector> &getInitDisp(void) const
