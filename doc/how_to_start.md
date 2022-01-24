@@ -55,11 +55,13 @@ See [here](https://github.com/xcfem/xc/blob/master/install/install.md)
 - [Bifurcar un repositorio](https://docs.github.com/es/github/getting-started-with-github/quickstart/fork-a-repo)
 
 
-## Visualization toolkit (VTK)
+## Graphic interface. Visualization toolkit (VTK)
 
 - [The Visualization Toolkit](https://vtk.org/vtk-textbook/)
 - [VTK User's Guide](https://vtk.org/documentation/)
 - [VTK Examples](https://kitware.github.io/vtk-examples/site/)
+- [Open Graphics Library](https://en.wikipedia.org/wiki/OpenGL)
+- [X Window System](https://en.wikipedia.org/wiki/X_Window_System)
 
 ## Python
 

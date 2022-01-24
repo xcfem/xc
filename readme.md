@@ -39,39 +39,37 @@ You can also find <a href="https://hub.docker.com/repository/docker/antonsurv/xc
 
 ### Dependencies
 Don't worry, if you have a decent *nix system the installation is straightforward. The program is based on:
-<ul>
-<li> <a href="http://www.python.org/" target="_new">Python.</a> </li>
-<li> <a href="http://opensees.berkeley.edu" target="_new">OpenSees.</a> </li>
-<li> <a href="http://www.vtk.org" target="_new">Visualization ToolKit (VTK).</a> </li>
-<li> <a href="http://www.boost.org" target="_new">Boost c++ libraries.</a> </li>
-<li> <a href="http://www.cgal.org" target="_new">Computational geometry algorithms library (CGAL).</a> </li>
-<li> <a href="https://gmsh.info" target="_new">Gmsh.</a> </li>
-<li> <a href="http://www.numpy.org/" target="_new">NumPy.</a> </li>
-<li> <a href="http://www.scipy.org/" target="_new">SciPy.</a> </li>
-<li> <a href="http://www.latex-project.org/" target="_new">LaTeX.</a> </li>
-<li> <a href="http://matplotlib.org/" target="_new">Matplotlib.</a> </li>
-<li> <a href="http://www.mpfr.org/" target="_new">libmpfr.</a> Multiple precision floating-point computation developers tools (libmpfr).</li>
-<li> <a href="https://gmplib.org/" target="_new">libgmp.</a> Multiple precision arithmetic library developers tools (libgmp).</li>
-<li> <a href="https://code.launchpad.net/~bdb/berkeley-db/trunk" target="_new"> Berkeley DB.</a> Berkeley database libraries for C++ (libdb,libdb-dev).</li>
-<li> SQLite 3 development files (libsqlite3).</li>
-<li> <a href="http://www.caam.rice.edu/software/ARPACK/" target="_new"> Arpack</a> (Fortran77 subroutines to solve large scale eigenvalue problems; libarcpack2-dev).</li>
-<li> <a href="http://www.caam.rice.edu/software/ARPACK/" target="_new"> Arpack++</a> (object-oriented version of the ARPACK package).</li>
-<li> <a href="http://http://www.netlib.org/lapack/" target="_new"> Lapack</a> Library of linear algebra routines; (liblapack-dev).</li>
-<li> <a href="https://launchpad.net/ubuntu/+source/superlu" target="_new"> SuperLU</a> (Direct solution of large, sparse systems of linear equations libsuperlu3-dev).</li>
-<li> <a href="http://faculty.cse.tamu.edu/davis/suitesparse.html" target="_new"> Suitesparse</a> (collection of libraries for computations for sparse matrices).</li>
-<li> <a href="http://www.mcs.anl.gov/petsc/petsc-as" target="_new"> PETSC</a> (Portable, Extensible Toolkit for Scientific Computation).</li>
-<li> <a href="http://crd-legacy.lbl.gov/~osni/#Software" target="_new"> Skypack</a> (SKYline PACKage).</li>
-<li> <a href="http://rene.ma.utexas.edu/CNA/ITPACK/" target="_new"> ITPACK</a> (collection of subroutines for solving large sparse linear systems by adaptive accelerated iterative algorithms).</li>
-</ul>
 
+ - [Python.](http://www.python.org/) 
+ - [OpenSees.](http://opensees.berkeley.edu) 
+ - [Visualization ToolKit (VTK).](http://www.vtk.org) 
+ - [Boost c++ libraries.](http://www.boost.org) 
+ - [Computational geometry algorithms library (CGAL).](http://www.cgal.org) 
+ - [Gmsh.](https://gmsh.info) 
+ - [NumPy.](http://www.numpy.org/) 
+ - [SciPy.](http://www.scipy.org/) 
+ - [LaTeX.](http://www.latex-project.org/) 
+ - [Matplotlib.](http://matplotlib.org/) 
+ - [libmpfr. Multiple precision floating-point computation developers tools (libmpfr).](http://www.mpfr.org/)
+ - [libgmp. Multiple precision arithmetic library developers tools (libgmp).](https://gmplib.org/)
+ - [Berkeley DB. Berkeley database libraries for C++ (libdb,libdb-dev).](https://code.launchpad.net/~bdb/berkeley-db/trunk)
+ - [SQLite](https://www.sqlite.org/index.html)
+ - [Arpack (Fortran77 subroutines to solve large scale eigenvalue problems; libarcpack2-dev).](http://www.caam.rice.edu/software/ARPACK/)
+ - [Arpack++ (object-oriented version of the ARPACK package).](http://www.caam.rice.edu/software/ARPACK/)
+ - [Lapack Library of linear algebra routines; (liblapack-dev).](http://http://www.netlib.org/lapack/)
+ - [SuperLU (Direct solution of large, sparse systems of linear equations libsuperlu3-dev).](https://launchpad.net/ubuntu/+source/superlu)
+ - [Suitesparse (collection of libraries for computations for sparse matrices).](http://faculty.cse.tamu.edu/davis/suitesparse.html)
+ - [PETSC (Portable, Extensible Toolkit for Scientific Computation).](http://www.mcs.anl.gov/petsc/petsc-as)
+ - [Skypack (SKYline PACKage).](http://crd-legacy.lbl.gov/~osni/#Software)
+ - [ITPACK (collection of subroutines for solving large sparse linear systems by adaptive accelerated iterative algorithms).](http://rene.ma.utexas.edu/CNA/ITPACK/)
+- [Open Graphics Library](https://en.wikipedia.org/wiki/OpenGL)
+- [X Window System](https://en.wikipedia.org/wiki/X_Window_System)
 
 ## Where to start
 The programs lacks of a user manual (would you help us with that?). Anyway you can start with some simple examples you'll find <a href= "https://github.com/xcfem/xc_examples" target="_new"> here</a>. You can also take a look [here](https://github.com/xcfem/xc/blob/master/doc/how_to_start.md)
 
 ## Links
 You can take a look to the project <a href="https://sites.google.com/site/xcfemanalysis/" target="_new">home</a>, to the <a href="https://xcfem.github.io/XCmanual/" target="_new">Python documentation</a> or the <a href="https://codedocs.xyz/xcfem/xc/index.html" target="_new">C++ API documentation</a> or to our <a href="http://www.xcengineering.xyz/html_files/software.html" target="_new"> XC page in the company site.</a> (all of them are work in progress ;-). 
-
-
 
 
 
