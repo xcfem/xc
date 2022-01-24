@@ -14,6 +14,7 @@ If you have any problem at installation process, feel free to add an issue at ht
 
 ## Introduction
 ### Installations steps
+- Make sure you have at least 6 GB of RAM (you'll need that to compile the sources).
 - install all needed depencies to be able to compile XC
 - make sure Python 3 is the default Python interpreter in your system.
 - get the source code
@@ -89,11 +90,17 @@ foo@bar:~/build_xc$  mkdir build-xc
 foo@bar:~/build_xc$  cd build-xc
 foo@bar:~/build_xc/build-xc$
 foo@bar:~/build_xc/build-xc$  cmake ../xc/src
-foo@bar:~/build_xc/build-xc$  make -j 4  # depending on the core count of your machine put in more
+foo@bar:~/build_xc/build-xc$  make -j 4  # Assuming you have enough RAM. See comments below. 
 foo@bar:~/build_xc/build-xc$  sudo make install
 foo@bar:~/build_xc/build-xc$  cd ../..
 foo@bar:~/build_xc$
 ```
+#### Compile using multiple processors (make -j n)
+
+- If you don't have more than 6 GB of RAM use one processor only: type `make` or `make -j 1`.
+- If you have more than 16 GB of RAM and 4 processors or more you can use: `make -j 4`
+- If you have 32 GB or more you can try using 10 processors or more at the same time.
+
 
 XC needs to install some Python modules:
 ```console
