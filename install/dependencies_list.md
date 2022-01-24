@@ -29,7 +29,8 @@
  - [PETSC (Portable, Extensible Toolkit for Scientific Computation).](http://www.mcs.anl.gov/petsc/petsc-as)
  - [Skypack (SKYline PACKage).](http://crd-legacy.lbl.gov/~osni/#Software)
  - [ITPACK (collection of subroutines for solving large sparse linear systems by adaptive accelerated iterative algorithms).](http://rene.ma.utexas.edu/CNA/ITPACK/)
-
+ - [MUMPS: MUltifrontal Massively Parallel sparse direct Solver](<http://mumps.enseeiht.fr/>).
+ 
 ## Data storage
 
  - [Berkeley DB. Berkeley database libraries for C++ (libdb,libdb-dev).](https://code.launchpad.net/~bdb/berkeley-db/trunk)

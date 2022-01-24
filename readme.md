@@ -38,7 +38,7 @@ See <a href="https://github.com/xcfem/xc/blob/master/install/install.md" target=
 You can also find <a href="https://hub.docker.com/repository/docker/antonsurv/xcfem" target="_new">Docker images</a> created by Anton Surviyanto. The source code of the Dockerfile is <a href="https://github.com/antonsurv/docker-antonsurv-xcfem" target="_new">here</a>
 
 ### Dependencies
-Don't worry, if you have a decent *nix system the installation is straightforward. You can take a look to the list of dependencies [here](https://github.com/xcfem/xc/blob/master/install/dependencies_list.md):
+Don't worry, if you have a decent *nix system the installation is straightforward. You can take a look to the list of dependencies [here](https://github.com/xcfem/xc/blob/master/install/dependencies_list.md).
 
 
 ## Where to start

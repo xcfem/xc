@@ -36,23 +36,7 @@ You will need to install all packages needed for your distribution. The package 
 
 Just do what ever fits best for you.
 
-Some dependencies needed are:
-
-- C++ and a Fortran compiler as well as cmake and a Pythoninterpreter
-- VTK Visualization ToolKit (<http://www.vtk.org>)
-- Boost c++ libraries (<http://www.boost.org>)
-- f2c Fortran to C translator
-- CGAL (computational geometry algorithms library <http://www.cgal.org/>)
-- Gmsh (A three-dimensional finite element mesh generator with built-in pre- and post-processing facilities <https://gmsh.info/>)
-- GNU plotutils libraries
-- Multiple precision floating-point computation developers tools 
-- Multiprecision arithmetic library developers tools
-- MUMPS: MUltifrontal Massively Parallel sparse direct Solver (<http://mumps.enseeiht.fr/>).
-- Arpack Fortran77 subroutines to solve large scale eigenvalue problems
-- Arpack++ C++ interface for the Arpack library
-- Lapack (Library of linear algebra routines)
-- SuperLU (Direct solution of large, sparse systems of linear equations)
-- Suitesparse (collection of libraries for computations for sparse matrices)
+You can take a look to the program dependencies [here](https://github.com/xcfem/xc/blob/master/install/dependencies_list.md).
 
 ### Python 3
 Make sure Python 3 is the default Python interpreter for your system. If your using a Debian like distribution you can set Python 3 as the default interpreter as follows:
