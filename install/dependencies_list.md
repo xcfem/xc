@@ -4,7 +4,10 @@
  - [Python.](http://www.python.org/) 
  - [Visualization ToolKit (VTK).](http://www.vtk.org) 
  - [LaTeX.](http://www.latex-project.org/) 
- - [Matplotlib.](http://matplotlib.org/) 
+ - [Matplotlib.](http://matplotlib.org/)
+ - [ImageMagick](https://imagemagick.org/index.php)
+ - [Mayavi](https://docs.enthought.com/mayavi/mayavi/)
+ - [C++ Template Image Processing Toolkit](https://www.cimg.eu/)
  - [Open Graphics Library](https://en.wikipedia.org/wiki/OpenGL)
  - [X Window System](https://en.wikipedia.org/wiki/X_Window_System)
 
@@ -29,9 +32,16 @@
  - [PETSC (Portable, Extensible Toolkit for Scientific Computation).](http://www.mcs.anl.gov/petsc/petsc-as)
  - [Skypack (SKYline PACKage).](http://crd-legacy.lbl.gov/~osni/#Software)
  - [ITPACK (collection of subroutines for solving large sparse linear systems by adaptive accelerated iterative algorithms).](http://rene.ma.utexas.edu/CNA/ITPACK/)
- - [MUMPS: MUltifrontal Massively Parallel sparse direct Solver](<http://mumps.enseeiht.fr/>).
+ - [MUMPS: MUltifrontal Massively Parallel sparse direct Solver](http://mumps.enseeiht.fr/).
  
 ## Data storage
 
  - [Berkeley DB. Berkeley database libraries for C++ (libdb,libdb-dev).](https://code.launchpad.net/~bdb/berkeley-db/trunk)
  - [SQLite](https://www.sqlite.org/index.html)
+
+## Libraries building. Version control.
+
+- [Git](https://git-scm.com/)
+- [GNU C++ compiler](https://gcc.gnu.org)
+- [GNU FORTRAN compiler](https://gcc.gnu.org/fortran/)
+- [CMake](https://cmake.org/)
