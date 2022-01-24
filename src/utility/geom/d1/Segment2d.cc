@@ -588,10 +588,8 @@ std::list<Polyline2d> get_polylines(const std::list<Segment2d> &segments, const 
 	positions.push_back(fp);
 	// Insert following points
 	const GEOM_FT tol2= tol*tol;
+	// Populate positions.
 	typedef GeomObj::list_Pos2d::const_iterator pos_iterator;
-	typedef std::pair<pos_iterator, pos_iterator> edge_pair;
-	typedef std::list<edge_pair> edge_pair_list;
-	edge_pair_list edge_pairs;
 	for(std::list<Segment2d>::const_iterator i= segments.begin();i!=segments.end();i++)
 	  {
 	    const Segment2d &s= *i;
@@ -599,19 +597,36 @@ std::list<Polyline2d> get_polylines(const std::list<Segment2d> &segments, const 
 	    pos_iterator npIterA= positions.getNearestPoint(p0);
 	    GEOM_FT d2= p0.dist2(*npIterA);
 	    if(d2>tol2)
-	      {
-		positions.push_back(p0);
-	        npIterA= (++positions.rbegin()).base();
-	      }
+	      { positions.push_back(p0); }
 	    const Pos2d p1= s.getToPoint();
 	    pos_iterator npIterB= positions.getNearestPoint(p1);
 	    d2= p1.dist2(*npIterB);
 	    if(d2>tol2)
-	      {
-		positions.push_back(p1);
-	        npIterB= (++positions.rbegin()).base();
-	      }
-	    edge_pairs.push_back(edge_pair(npIterA, npIterB));
+	      { positions.push_back(p1); }
+	  }
+        const int sz= positions.size();
+	typedef std::pair<int, int> edge_pair;
+	typedef std::list<edge_pair> edge_pair_list;
+	edge_pair_list edge_pairs;
+	const pos_iterator firstPosition= positions.begin();
+	for(std::list<Segment2d>::const_iterator i= segments.begin();i!=segments.end();i++)
+	  {
+	    const Segment2d &s= *i;
+	    const Pos2d p0= s.getFromPoint();
+	    pos_iterator npIterA= positions.getNearestPoint(p0);
+	    const Pos2d p1= s.getToPoint();
+	    pos_iterator npIterB= positions.getNearestPoint(p1);
+	    const int iA= npIterA-firstPosition;
+	    const int iB= npIterB-firstPosition;
+	    if((iA>=0 and iA<sz) and (iB>=0 and iB<sz))
+	      edge_pairs.push_back(edge_pair(iA, iB));
+	    else
+	      std::cerr << __FUNCTION__
+	                << "; something went wrong index out of range:"
+		        << " p0= " << p0 << " index: " << iA
+		        << " p1= " << p1 << " index: " << iB
+		        << " segment ignored."
+	                << std::endl;
 	  }
 	// Create Graph
         struct VertexProps { int idx; char name; };
@@ -633,10 +648,8 @@ std::list<Polyline2d> get_polylines(const std::list<Segment2d> &segments, const 
 	const pos_iterator p0= positions.begin();
 	for(edge_pair_list::const_iterator i= edge_pairs.begin();i!=edge_pairs.end();i++)
 	  {
-	    const pos_iterator pA= (*i).first;
-	    const int iA= pA-p0;
-	    const pos_iterator pB= (*i).second;
-	    const int iB= pB-p0;
+	    const int iA= (*i).first;
+	    const int iB= (*i).second;
 	    add_edge(verts[iA], verts[iB], G);
 	  }
 	// Extract polylines.
