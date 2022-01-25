@@ -71,7 +71,6 @@ numberOfPointsToGet= 2*numberOfLinesBeforeSplitting+2*numberOfClips**2
 ratio1= abs(numberOfLinesToGet-numberOfLinesAfterSplitting)/numberOfLinesToGet
 ratio2= abs(numberOfPointsToGet-numberOfPointsAfterSplitting)/numberOfPointsToGet
 
-# # Problem type
 # nodes= preprocessor.getNodeHandler
 # modelSpace= predefined_spaces.StructuralMechanics3D(nodes) 
 
