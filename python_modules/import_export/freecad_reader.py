@@ -37,6 +37,35 @@ ifcLengthAttributes= ['Thickness', 'LongitudinalBarNominalDiameter', 'Longitudin
 
 ifcAreaAttributes= ['LongitudinalBarCrossSectionArea', 'TransverseBarCrossSectionArea']
 
+def getType(obj):
+    '''getType(object): returns the Draft type of the given object'''
+    import Part
+    if not obj:
+        return None
+    if isinstance(obj,Part.Shape):
+        return 'Shape'
+    if 'Proxy' in obj.PropertiesList:
+        if hasattr(obj.Proxy,'Type'):
+            return obj.Proxy.Type
+    if obj.isDerivedFrom('Sketcher::SketchObject'):
+        return 'Sketch'
+    if (obj.TypeId == 'Part::Line'):
+        return 'Part::Line'
+    if (obj.TypeId == 'Part::Offset2D'):
+        return 'Offset2D'
+    if obj.isDerivedFrom('Part::Feature'):
+        return 'Part'
+    if (obj.TypeId == 'App::Annotation'):
+        return 'Annotation'
+    if obj.isDerivedFrom('Mesh::Feature'):
+        return 'Mesh'
+    if obj.isDerivedFrom('Points::Feature'):
+        return 'Points'
+    if (obj.TypeId == 'App::DocumentObjectGroup'):
+        return 'Group'
+    if (obj.TypeId == 'App::Part'):
+        return 'App::Part'
+    return 'Unknown'
     
 def get_ifc_attributes(obj):
     ''' Return the ifc attributes of the argument.
@@ -179,7 +208,7 @@ class FreeCADImport(reader_base.ReaderBase):
                 labelName= obj.Label
                 if(shapeType=='Wire'):
                     for i, e in enumerate(obj.Shape.Edges):
-                        lineName= f"{obj.Name}{i}"
+                        lineName= f'{obj.Name}{i}'
                         vertices= [-1,-1]
                         v0= e.Vertexes[0]
                         v1= e.Vertexes[1]
@@ -211,7 +240,7 @@ class FreeCADImport(reader_base.ReaderBase):
         for obj in self.groupsToImport:
             self.facesTree[obj.Label]= dict()
 
-        def import_face(faceShape, faceName, labelName):
+        def import_face(faceShape, faceName, objLabel):
             ''' Add the face argument to the dictionary.'''
             vertices= list()
             objPoints= list()
@@ -222,28 +251,28 @@ class FreeCADImport(reader_base.ReaderBase):
                 idx= self.getIndexNearestPoint(p)
                 vertices.append(idx)
             facesDict[faceName]= vertices
-            properties= bte.BlockProperties(labels= [labelName], attributes= get_ifc_attributes(obj))
+            properties= bte.BlockProperties(labels= [objLabel], attributes= get_ifc_attributes(obj))
             self.propertyDict[faceName]= properties
 
-        def import_shell(shapeContainer, faceName, labelName):
+        def import_shell(shapeContainer, faceName, objLabel):
             ''' Import shell objects from the container argument.'''
             for fCount, f in enumerate(shapeContainer):
                 thisFaceName= f'{faceName}.{fCount}'
-                import_face(f, thisFaceName, labelName)
+                import_face(f, thisFaceName, objLabel)
 
-        def import_shape(shape, objName, labelName):
+        def import_shape(shape, objName, objLabel):
             ''' Import simple shape.'''
             shapeType= shape.ShapeType
             if(shapeType=='Face'):
-                import_face(shape, objName, labelName)
+                import_face(shape, objName, objLabel)
             elif(shapeType=='Shell'):
                 for s in shape.SubShapes:
-                    import_shape(s, objName, labelName)
+                    import_shape(s, objName, objLabel)
             elif(shapeType=='Compound'):
                 for cCount, ss in enumerate(shape.SubShapes):
                     ssType= ss.ShapeType
                     ssName= f'{objName}.{cCount}'
-                    import_shape(ss, ssName, labelName)
+                    import_shape(ss, ssName, objLabel)
             elif(shapeType=='Vertex'):
                 count=0 # Nothing to do with those here.
             elif(shapeType in ['Wire']):
@@ -255,18 +284,25 @@ class FreeCADImport(reader_base.ReaderBase):
             if(hasattr(obj,'Shape')):
                 shapeType= obj.Shape.ShapeType
                 objName= obj.Name
-                labelName= obj.Label
-                if(labelName in self.facesTree):
-                    facesDict= self.facesTree[labelName]
-                    import_shape(obj.Shape, objName, labelName)
+                objLabel= obj.Label
+                if(objLabel in self.facesTree):
+                    facesDict= self.facesTree[objLabel]
+                    import_shape(obj.Shape, objName, objLabel)
                     # Store compound components.
                     if(shapeType=='Compound'):
-                        for lnk in obj.Links:
-                            componentLabel= lnk.Label
-                            if(componentLabel in self.compounds):
-                                self.compounds[componentLabel].add({labelName})
-                            else:
-                                self.compounds[componentLabel]= {labelName}
+                        objTypeId= obj.TypeId
+                        #draftType= getType(obj)
+                        if(objTypeId=='Part::FeaturePython'):
+                            className= type(self).__name__
+                            methodName= sys._getframe(0).f_code.co_name
+                            lmsg.warning(className+'.'+methodName+'; compounds of type: \''+objTypeId+'\'; not implemented yet. Object ignored.')
+                        else:
+                            for lnk in obj.Links:
+                                componentLabel= lnk.Label
+                                if(componentLabel in self.compounds):
+                                    self.compounds[componentLabel].add({objLabel})
+                                else:
+                                    self.compounds[componentLabel]= {objLabel}
         # Define belongsTo attribute for compounds components. 
         for key in self.propertyDict:
             pDict= self.propertyDict[key]
