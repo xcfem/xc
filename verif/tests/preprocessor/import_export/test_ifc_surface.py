@@ -11,6 +11,7 @@ __email__= "l.pereztato@ciccp.es ana.ortega@ciccp.es"
 from misc_utils import log_messages as lmsg
 from import_export import freecad_reader
 from import_export import neutral_mesh_description as nmd
+from model import predefined_spaces
 import os
 import xc_base
 import geom
@@ -42,8 +43,10 @@ ieData.writeToXCFile()
 FEcase= xc.FEProblem()
 FEcase.title= 'Test IFC points.'
 exec(open(ieData.outputFileName+'.py').read())
+nodes= preprocessor.getNodeHandler
+modelSpace= predefined_spaces.StructuralMechanics3D(nodes) 
 
-xcTotalSet= preprocessor.getSets.getSet('total')
+xcTotalSet= modelSpace.getTotalSet()
 
 numPoints= len(xcTotalSet.points)
 ratio1= abs(numPoints-4)
@@ -74,3 +77,9 @@ if(ratio1==0 and matOk and ratio2==0):
     print('test '+fname+': ok.')
 else:
     lmsg.error(fname+' ERROR.')
+    
+# Graphic stuff.
+# from postprocess import output_handler
+# oh= output_handler.OutputHandler(modelSpace)
+
+# oh.displayBlocks()
