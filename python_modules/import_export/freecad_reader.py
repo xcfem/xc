@@ -292,13 +292,10 @@ class FreeCADImport(reader_base.ReaderBase):
                     if(shapeType=='Compound'):
                         objTypeId= obj.TypeId
                         #draftType= getType(obj)
-                        if(objTypeId=='Part::FeaturePython'):
-                            className= type(self).__name__
-                            methodName= sys._getframe(0).f_code.co_name
-                            lmsg.warning(className+'.'+methodName+'; compounds of type: \''+objTypeId+'\'; not implemented yet. Object ignored.')
-                        else:
+                        if(objTypeId!='Part::FeaturePython'):
                             for lnk in obj.Links:
                                 componentLabel= lnk.Label
+                                print('componentLabel= ', componentLabel)
                                 if(componentLabel in self.compounds):
                                     self.compounds[componentLabel].add({objLabel})
                                 else:
