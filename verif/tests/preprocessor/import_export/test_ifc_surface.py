@@ -8,6 +8,7 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@ciccp.es ana.ortega@ciccp.es"
 
+from misc_utils import log_messages as lmsg
 from import_export import freecad_reader
 from import_export import neutral_mesh_description as nmd
 import os
@@ -47,8 +48,15 @@ xcTotalSet= preprocessor.getSets.getSet('total')
 numPoints= len(xcTotalSet.points)
 ratio1= abs(numPoints-4)
 
-face= xcTotalSet.surfaces[0]
-thk= face.getProp('thickness')
+fname= os.path.basename(__file__)
+
+thk= -1.0
+if(len(xcTotalSet.surfaces)>0):
+    face= xcTotalSet.surfaces[0]
+    thk= face.getProp('thickness')
+else:
+    lmsg.error(fname+': no surfaces found.')
+    quit()
 ratio2= (thk-0.2)/0.2
 
 material= face.getProp('attributes')['matId']
@@ -62,8 +70,6 @@ print(ratio2)
 print(material)
 '''
 
-from misc_utils import log_messages as lmsg
-fname= os.path.basename(__file__)
 if(ratio1==0 and matOk and ratio2==0):
     print('test '+fname+': ok.')
 else:
