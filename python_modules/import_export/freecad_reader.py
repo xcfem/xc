@@ -11,6 +11,7 @@ __version__= "3.0"
 __email__= "l.pereztato@gmail.com" "ana.ortega.ort@gmail.com"
 
 import sys
+import re
 from import_export import reader_base
 from scipy.spatial.distance import cdist
 from misc_utils import log_messages as lmsg
@@ -71,7 +72,7 @@ class FreeCADImport(reader_base.ReaderBase):
         ''' Constructor.
 
            :param fileName: file name to import.
-           :param grouptsToImport: list of regular expressions to be tested.
+           :param groupsToImport: list of regular expressions to be tested.
            :param getRelativeCoo: coordinate transformation to be applied to the
                                   points.
            :param importLines: if true import lines.
@@ -98,9 +99,13 @@ class FreeCADImport(reader_base.ReaderBase):
            :param namesToImport: list of regular expressions to be tested.
         '''
         retval= []
+        # Compile regular expressions.
+        regExpList= list()
+        for name in namesToImport:
+            regExpList.append(re.compile(name))
         for obj in self.document.Objects:
-            if(reader_base.nameToImport(obj.Label, namesToImport)):
-                retval.append(obj.Label)
+            if(reader_base.nameToImport(obj.Label, regExpList)):
+                retval.append(obj)
         if(len(retval)==0):
             lmsg.warning(f'No groups to import (names to import: {namesToImport})')
         return retval
@@ -109,35 +114,35 @@ class FreeCADImport(reader_base.ReaderBase):
         '''Extract the points from the entities argument.'''
         retval_pos= dict()
         retval_properties= dict()
-        def append_point(pt, groupName, pointName, objProperties):
+        def append_point(pt, groupLabel, pointName, objProperties):
             '''Append the point to the lists.'''
             retval_pos[pointName]= self.getRelativeCoo(pt)
             # group name as label.
-            objProperties.extendLabels([groupName])
+            objProperties.extendLabels([groupLabel])
             retval_properties[pointName]= objProperties
-        def append_points(vertexes, objName, groupName, objProperties):
+        def append_points(vertexes, objName, groupLabel, objProperties):
             '''Append the points to the list.'''
             if(len(vertexes)>1):
                 for ptCount, v in enumerate(vertexes):
                     pointName= f'{objName}.{ptCount}'
-                    append_point([v.X, v.Y, v.Z], grpName, pointName, objProperties)
+                    append_point([v.X, v.Y, v.Z], groupLabel, pointName, objProperties)
             else:
                 v= vertexes[0]
-                append_point([v.X, v.Y, v.Z], grpName, objName, objProperties)
+                append_point([v.X, v.Y, v.Z], groupLabel, objName, objProperties)
                 
-        for grpName in self.groupsToImport:
-            grp= self.document.getObjectsByLabel(grpName)[0]
+        for grp in self.groupsToImport:
+            groupLabel= grp.Label
             if(hasattr(grp,'Shape')): # Object has shape.
                 objName= grp.Name
                 shape= grp.Shape
                 shapeType= shape.ShapeType
-                objProperties= bte.BlockProperties(labels= [grp.Label])
+                objProperties= bte.BlockProperties(labels= [groupLabel])
                 if(shapeType=='Shell'):
                     for fCount, f in enumerate(shape.SubShapes):
                         thisFaceName= f'{objName}.{fCount}'
-                        append_points(f.OuterWire.OrderedVertexes, thisFaceName, grpName, objProperties)
+                        append_points(f.OuterWire.OrderedVertexes, thisFaceName, groupLabel, objProperties)
                 else:
-                    append_points(grp.Shape.Vertexes, objName, grpName, objProperties)
+                    append_points(grp.Shape.Vertexes, objName, groupLabel, objProperties)
             elif(len(grp.OutList)>0): # Object is a group
                 for obj in grp.OutList: 
                     if(hasattr(obj,'Shape')): # Object has shape.
@@ -145,19 +150,19 @@ class FreeCADImport(reader_base.ReaderBase):
                         objName= obj.Name
                         objProperties= bte.BlockProperties(labels= [obj.Label])
                         if(shapeType=='Face'):
-                            append_points(obj.Shape.Vertexes, objName, grpName, objProperties)
+                            append_points(obj.Shape.Vertexes, objName, groupLabel, objProperties)
         return retval_pos, retval_properties
     
     def importPoints(self):
         ''' Import points from FreeCAD file.'''
         self.points= dict()
-        for obj in self.document.Objects:
+        for obj in self.groupsToImport:
             if(hasattr(obj,'Shape')):
                 shape= obj.Shape
                 shapeType= shape.ShapeType
                 pointName= obj.Name
                 labelName= obj.Label
-                if((shapeType=='Vertex') and (labelName in self.groupsToImport)):
+                if(shapeType=='Vertex'):
                     vertices= [-1]
                     p= self.getRelativeCoo([float(shape.X), float(shape.Y), float(shape.Z)])
                     vertices[0]= self.getIndexNearestPoint(p)
@@ -168,11 +173,11 @@ class FreeCADImport(reader_base.ReaderBase):
     def importLines(self):
         ''' Import lines from FreeCAD file.'''
         self.lines= dict()
-        for obj in self.document.Objects:
+        for obj in self.groupsToImport:
             if(hasattr(obj,'Shape')):
                 shapeType= obj.Shape.ShapeType
                 labelName= obj.Label
-                if((shapeType=='Wire') and (labelName in self.groupsToImport)):
+                if(shapeType=='Wire'):
                     for i, e in enumerate(obj.Shape.Edges):
                         lineName= f"{obj.Name}{i}"
                         vertices= [-1,-1]
@@ -203,8 +208,8 @@ class FreeCADImport(reader_base.ReaderBase):
     def importFaces(self):
         ''' Import faces from FreeCAD file.'''
         self.facesTree= {}
-        for name in self.groupsToImport:
-            self.facesTree[name]= dict()
+        for obj in self.groupsToImport:
+            self.facesTree[obj.Label]= dict()
 
         def import_face(faceShape, faceName, labelName):
             ''' Add the face argument to the dictionary.'''
@@ -245,14 +250,13 @@ class FreeCADImport(reader_base.ReaderBase):
                 count= 0 # Nothing to do with those.
             else:
                 lmsg.log('Entity with shape of type: '+shapeType+' ignored.')      
-            
 
-        for obj in self.document.Objects:
+        for obj in self.groupsToImport:
             if(hasattr(obj,'Shape')):
                 shapeType= obj.Shape.ShapeType
                 objName= obj.Name
                 labelName= obj.Label
-                if(labelName in self.groupsToImport):
+                if(labelName in self.facesTree):
                     facesDict= self.facesTree[labelName]
                     import_shape(obj.Shape, objName, labelName)
                     # Store compound components.
@@ -278,4 +282,7 @@ class FreeCADImport(reader_base.ReaderBase):
               
     def getNamesToImport(self):
         ''' Return the names of the objects to import.'''
-        return self.groupsToImport
+        retval= list()
+        for obj in self.groupsToImport:
+            retval.append(obj.Label)
+        return retval
