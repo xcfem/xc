@@ -68,9 +68,9 @@ err+= (homogenizedSectionCOGy-0.232290926852)**2
 err= math.sqrt(err)
 
 # Display section geometry
-feProblem= xc.FEProblem()
-preprocessor=  feProblem.getPreprocessor
-rcSection.plot(preprocessor)
+# feProblem= xc.FEProblem()
+# preprocessor=  feProblem.getPreprocessor
+# rcSection.plot(preprocessor)
 
 '''
 print('gross section area: ', grossSectionArea, ' m2')
