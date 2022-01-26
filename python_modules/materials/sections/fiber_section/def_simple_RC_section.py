@@ -562,11 +562,16 @@ class RCSectionBase(object):
         self.defInteractionDiagramParameters(preprocessor)
         return preprocessor.getMaterialHandler.calcInteractionDiagramNMz(self.sectionName,self.fiberSectionParameters.idParams)
 
-    def plot(self, preprocessor, matDiagType= 'k'):
-        ''' Get a drawing of the section using matplotlib.'''
-        fig = plt.figure()
-        ax = fig.add_subplot(111)
+    def subplot(self, ax, preprocessor, matDiagType= 'k'):
+        ''' Put the section drawing in the subplot argument.
+
+        :param ax: matplotlib subplot.
+        :param preprocessor: pre-processor of the finite element problem.
+        :param matDiagType: type of stress-strain diagram
+                     ("k" for characteristic diagram, "d" for design diagram)
+        '''
         ax.axis('equal')
+        ax.set_title('Section: '+self.sectionName)
         ax.grid(visible= True, linestyle='dotted')
         # Plot contour.
         contour= self.getContour()
@@ -592,7 +597,12 @@ class RCSectionBase(object):
                 circle= plt.Circle((ptPlot.x, ptPlot.y), rPlot, color= rebarColor)
                 ax.add_patch(circle)
                 ax.annotate(labelPlot, (ptPlot.x+rPlot, ptPlot.y+rPlot))
-        
+
+    def plot(self, preprocessor, matDiagType= 'k'):
+        ''' Get a drawing of the section using matplotlib.'''
+        fig = plt.figure()
+        ax = fig.add_subplot(111)
+        self.subplot(ax, preprocessor, matDiagType)
         plt.show()
    
 

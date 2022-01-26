@@ -7,6 +7,7 @@ import copy
 from misc_utils import log_messages as lmsg
 from materials.sections.fiber_section import def_simple_RC_section
 from materials import typical_materials
+import matplotlib.pyplot as plt
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AO_O)"
 __copyright__= "Copyright 2016, LCPT and AO_O"
@@ -110,6 +111,26 @@ class ElementSections(object):
             sect.sectionName+= ipText
             sect.sectionDescr+= ' ' + ipText + " integration point."
         self.append_section(sect)
+
+    def plot(self, preprocessor, matDiagType= 'k'):
+        ''' Get a drawing of the sections using matplotlib.'''
+        numSections= len(self.lstRCSects)
+        if(numSections>0):
+            numColumns= 2
+            numRows= int(numSections/numColumns)
+            fig, axs = plt.subplots(nrows= numRows, ncols= numColumns)
+            # fig.tight_layout()
+            if(numRows==1):
+                for c in range(0,numColumns):
+                    section= self.lstRCSects[c]
+                    section.subplot(axs[c], preprocessor, matDiagType)
+            else:
+                for r in range(0,numRows):
+                    for c in range(0,numColumns):
+                        idx= r*numColumns+c
+                        section= self.lstRCSects[idx]
+                        section.subplot(axs[r,c], preprocessor, matDiagType)
+            plt.show()
     
 class setRCSections2SetElVerif(ElementSections):
     '''This class is an specialization of ElemenSections for rectangular

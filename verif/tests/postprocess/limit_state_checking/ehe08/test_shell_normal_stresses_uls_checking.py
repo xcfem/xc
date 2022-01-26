@@ -66,6 +66,11 @@ deckSections.dir1PositvRebarRows= def_simple_RC_section.LongReinfLayers([def_sim
 deckSections.dir1NegatvRebarRows= def_simple_RC_section.LongReinfLayers([def_simple_RC_section.ReinfRow(rebarsDiam=20e-3,areaRebar=areaFi20,rebarsSpacing=sepL,nominalCover=basicCover+12e-3)])
 sections.append(deckSections)
 
+# # Display sections geometry
+# feProblem= xc.FEProblem()
+# preprocessor=  feProblem.getPreprocessor
+# deckSections.plot(preprocessor, matDiagType= 'k')
+
 import os
 pth= os.path.dirname(__file__)
 #print("pth= ", pth)
