@@ -228,15 +228,24 @@ class BlockRecord(me.CellRecord):
         '''Return the type of the block.'''
         return self.cellType
 
+    def isHole(self):
+        ''' Return true if the block defines a hole'''
+        objType= self.getAttribute('objType')
+        retval= (objType=='hole')
+        return retval
+
     def hasHoles(self):
         ''' Return true if the block has holes in it.'''
-        return hasattr(self,'holes')
+        retval= hasattr(self,'holes')
+        if(not retval):
+            retval= self.hasAttribute('holeNames')
+        return retval
 
     def getHoles(self):
         ''' Return the blocks defining the holes of the
             block.'''
         retval= None
-        if(self.hasHoles()):
+        if(hasattr(self,'holes')):
             retval= self.holes
         return retval
 
@@ -279,7 +288,7 @@ class BlockRecord(me.CellRecord):
             strCommand= strId + '= ' + handlerName + '.newLine(' + pointIds +')'
         elif(self.cellType=='face'):
             strId= 'f'+strId
-            if(len(self.nodeIds)==4 and (not self.hasHoles())): # quad surface.
+            if(len(self.nodeIds)==4 and (not self.hasHoles()) and (not self.isHole())): # quad surface.
                 strCommand= strId + '= ' + handlerName + '.newQuadSurfacePts(' + pointIds  +')'
             else:
                 strCommand= strId + '= ' + handlerName + '.newPolygonalFacePts([' + pointIds  +'])'
@@ -346,16 +355,31 @@ class BlockDict(dict):
     def writeToXCFile(self,f,xcImportExportData):
         '''Write the XC commands that define the cells (elements).'''
         strDict= ''
+        holeDict= dict() # Blocks which are holes.
+        blocksWithHoles= dict() # blocks which have holes.
         for key in self:
             block= self[key]
-            strCommand= self[key].getStrXCCommand(xcImportExportData)
+            strCommand= block.getStrXCCommand(xcImportExportData)
             f.write(strCommand+'\n')
             blockName= strCommand.split('= ')[0]
             blockId= blockName[1:]
             strDict+= blockId+':'+blockName+','
+            # Check for holes.
+            holeNames= block.getAttribute('holeNames')
+            if(holeNames!=None): # Block has holes.
+                blocksWithHoles[block.getAttribute('name')]= blockId
+            if(block.isHole()): # Block is a hole.
+                holeDict[blockId]= block.getAttribute('ownerName')            
+            
         # Write a dictionary to access those blocks from its id.
         f.write('\n')
         f.write('xcBlocksDict= {'+strDict[:-1]+'}\n\n')
+
+        # Loop on holes.
+        for holeId in holeDict:
+            ownerName= holeDict[holeId] # name of the block with the hole.
+            ownerId= blocksWithHoles[ownerName] # id of the block with the hole.
+            f.write('f'+str(ownerId)+'.addHole(f'+holeId+')\n')
           
     def getTags(self):
         ''' Return the identifiers of the objects.'''

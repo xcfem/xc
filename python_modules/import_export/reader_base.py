@@ -62,9 +62,9 @@ class ReaderBase(object):
         self.threshold= threshold
         self.impLines= importLines
         self.impSurfaces= importSurfaces
-        self.propertyDict= {}
-        self.lines= {}
-        self.facesTree= {}
+        self.propertyDict= dict()
+        self.lines= dict()
+        self.facesTree= dict()
 
     def getIndexNearestPoint(self, pt):
         return cdist([pt], self.kPoints).argmin()

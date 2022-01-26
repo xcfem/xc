@@ -236,23 +236,45 @@ class FreeCADImport(reader_base.ReaderBase):
                         
     def importFaces(self):
         ''' Import faces from FreeCAD file.'''
-        self.facesTree= {}
+        self.facesTree= dict()
         for obj in self.groupsToImport:
             self.facesTree[obj.Label]= dict()
 
         def import_face(faceShape, faceName, objLabel):
             ''' Add the face argument to the dictionary.'''
-            vertices= list()
             objPoints= list()
-            for v in faceShape.OuterWire.OrderedVertexes:                    
-                objPoints.append([float(v.X), float(v.Y), float(v.Z)])
-            for pt in objPoints:
-                p= self.getRelativeCoo(pt)
-                idx= self.getIndexNearestPoint(p)
-                vertices.append(idx)
-            facesDict[faceName]= vertices
-            properties= bte.BlockProperties(labels= [objLabel], attributes= get_ifc_attributes(obj))
+            for wire in faceShape.Wires:
+                wirePoints= list()
+                for v in wire.OrderedVertexes:                    
+                    wirePoints.append([float(v.X), float(v.Y), float(v.Z)])
+                objPoints.append(wirePoints)
+            vertices= list()
+            for wirePoints in objPoints:
+                wireVertices= list()
+                for pt in wirePoints:
+                    p= self.getRelativeCoo(pt)
+                    idx= self.getIndexNearestPoint(p)
+                    wireVertices.append(idx)
+                vertices.append(wireVertices)
+            # Outer wire.
+            facesDict[faceName]= vertices[0]
+            faceAttributes= get_ifc_attributes(obj)
+            faceAttributes.update({'name':faceName})
+            # Inner wire(s).
+            holes= list()
+            for idx, wire in enumerate(vertices[1:]):
+                holeName= faceName+'_hole'+str(idx)
+                facesDict[holeName]= wire
+                holeAttributes= get_ifc_attributes(obj)
+                holeAttributes.update({'objType':'hole', 'ownerName':faceName})
+                holeProperties= bte.BlockProperties(labels= [objLabel], attributes= holeAttributes)
+                self.propertyDict[holeName]= holeProperties
+                holes.append(holeName)
+            if(len(holes)>0):
+                faceAttributes.update({'holeNames':holes})
+            properties= bte.BlockProperties(labels= [objLabel], attributes= faceAttributes)
             self.propertyDict[faceName]= properties
+            
 
         def import_shell(shapeContainer, faceName, objLabel):
             ''' Import shell objects from the container argument.'''
@@ -295,7 +317,6 @@ class FreeCADImport(reader_base.ReaderBase):
                         if(objTypeId!='Part::FeaturePython'):
                             for lnk in obj.Links:
                                 componentLabel= lnk.Label
-                                print('componentLabel= ', componentLabel)
                                 if(componentLabel in self.compounds):
                                     self.compounds[componentLabel].add({objLabel})
                                 else:
