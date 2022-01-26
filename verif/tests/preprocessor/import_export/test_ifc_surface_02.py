@@ -38,7 +38,7 @@ nodes= preprocessor.getNodeHandler
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
 
 ## Import block topology from FreeCAD.
-exec(modelSpace.importFromFreeCAD(fileName= filePath+'/'+freeCADFileName, groupsToImport= groupsToImport, getRelativeCoo= getRelativeCoo, threshold= 0.001))
+modelSpace.importFromFreeCAD(fileName= filePath+'/'+freeCADFileName, groupsToImport= groupsToImport, getRelativeCoo= getRelativeCoo, threshold= 0.001)
 
 
 xcTotalSet= modelSpace.getTotalSet()

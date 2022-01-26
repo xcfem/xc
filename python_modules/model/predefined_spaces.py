@@ -1041,7 +1041,9 @@ class PredefinedSpace(object):
         ## Convert readed blocks to XC commands.
         xcCommands= ieData.getXCCommandString()
         ## Return the XC commands.
-        return xcCommands
+        preprocessor= self.preprocessor
+        exec(xcCommands)
+        
                 
 def getModelSpace(preprocessor: xc.Preprocessor):
       '''Return a PredefinedSpace from the dimension of the space 
