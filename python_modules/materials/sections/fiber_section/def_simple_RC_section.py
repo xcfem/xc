@@ -19,6 +19,7 @@ from materials.sections import section_properties
 from materials import typical_materials
 from materials.sections import stress_calc as sc
 from misc_utils import log_messages as lmsg
+import matplotlib.pyplot as plt
 
 # Classes defining reinforcement.
 
@@ -130,19 +131,19 @@ class ReinfRow(object):
         '''center the row of rebars in the width of the section'''
         self.coverLat= (width-(self.nRebars-1)*self.rebarsSpacing)/2.0
 
-    def defStraightLayer(self,reinforcement,code,diagramName,p1,p2):
+    def defStraightLayer(self, reinforcement, layerCode, diagramName, p1, p2):
         '''Definition of a straight reinforcement layer in the XC section 
            geometry object between the 2d positions p1 and p2.
 
         :param reinforcement: XC section geometry reinforcement.
-        :param code: identifier for the layer.
+        :param layerCode: identifier for the layer.
         :param diagramName: name of the strain-stress diagram of the steel.
         :param p1: first point of the layer.
         :param p2: last point of the layer.
         '''
         if(self.nRebars>0):
             self.reinfLayer= reinforcement.newStraightReinfLayer(diagramName)
-            self.reinfLayer.code= code
+            self.reinfLayer.code= layerCode
             self.reinfLayer.numReinfBars= self.nRebars
             self.reinfLayer.barDiameter= self.rebarsDiam
             self.reinfLayer.barArea= self.areaRebar
@@ -275,18 +276,18 @@ class LongReinfLayers(object):
         for rbRow in self.rebarRows:
             rbRow.centerRebars(b)
             
-    def defStraightLayers(self, reinforcement, code, diagramName, pointPairs):
+    def defStraightLayers(self, reinforcement, layerCode, diagramName, pointPairs):
         '''
         Definition of the reinforcement layers
 
         :param reinforcement: XC section reinforcement.
-        :param code: identifier for the layer.
+        :param layerCode: identifier for the layer.
         :param diagramName: name of the strain-stress diagram of the steel.
         :param pointPairs: end points for each row.
         '''
         for rbRow, pts in zip(self.rebarRows, pointPairs):
             p1= pts[0]; p2= pts[1]
-            self.reinfLayers.append(rbRow.defStraightLayer(reinforcement,code,diagramName,p1,p2))
+            self.reinfLayers.append(rbRow.defStraightLayer(reinforcement,layerCode,diagramName,p1,p2))
             
     def defCircularLayers(self, reinforcement, code, diagramName, extRad, anglePairs= None):
         '''
@@ -560,6 +561,39 @@ class RCSectionBase(object):
             lmsg.error("defInteractionDiagramNMz: fiber section representation for section: "+ self.sectionName + ";  not defined yet; use defRCSection method.\n")
         self.defInteractionDiagramParameters(preprocessor)
         return preprocessor.getMaterialHandler.calcInteractionDiagramNMz(self.sectionName,self.fiberSectionParameters.idParams)
+
+    def plot(self, preprocessor, matDiagType= 'k'):
+        ''' Get a drawing of the section using matplotlib.'''
+        fig = plt.figure()
+        ax = fig.add_subplot(111)
+        ax.axis('equal')
+        ax.grid(visible= True, linestyle='dotted')
+        # Plot contour.
+        contour= self.getContour()
+        x= list(); y= list()
+        for p in contour:
+            x.append(p.x)
+            y.append(p.y)
+        ax.fill(x,y,'tab:gray')
+        #ax.plot(x,y,'tab:blue')
+        # Plot reinforcement.
+        if(not hasattr(self, 'geomSection')):
+            self.defSectionGeometry(preprocessor, matDiagType)
+        reinforcement= self.geomSection.getReinfLayers
+        reinfLayersColors= ['black', 'blue', 'darkblue', 'red', 'darkred', 'darkgreen', 'purple']
+        numColors= len(reinfLayersColors)
+        for idx, reinfLayer in enumerate(reinforcement):
+            rebars= reinfLayer.getReinfBars
+            rebarColor= reinfLayersColors[idx % numColors]
+            for b in rebars:
+                ptPlot= b.getPos2d # bar position.
+                rPlot= b.diameter/2.0 # bar radius.
+                labelPlot= str(int(round(b.diameter*1e3))) # bar label.
+                circle= plt.Circle((ptPlot.x, ptPlot.y), rPlot, color= rebarColor)
+                ax.add_patch(circle)
+                ax.annotate(labelPlot, (ptPlot.x+rPlot, ptPlot.y+rPlot))
+        
+        plt.show()
    
 
 class BasicRectangularRCSection(RCSectionBase, section_properties.RectangularSection):
@@ -621,6 +655,13 @@ class BasicRectangularRCSection(RCSectionBase, section_properties.RectangularSec
         :param preprocessor: preprocessor of the finite element problem.
         '''
         return section_properties.RectangularSection.getRespVz(self,preprocessor,self.fiberSectionParameters.concrType.Gcm())
+
+    def getContour(self):
+        ''' Return the vertices of the section contour.'''
+        pMin= geom.Pos2d(-self.b/2,-self.h/2)
+        pMax= geom.Pos2d(self.b/2,self.h/2)
+        vertices= [pMin, geom.Pos2d(pMax.x, pMin.y), pMax, geom.Pos2d(pMin.x, pMax.y), pMin]
+        return vertices
 
     def defConcreteRegion(self, geomSection):
         ''' Define a rectangular region filled with concrete.

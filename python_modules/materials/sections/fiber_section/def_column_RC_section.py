@@ -14,6 +14,8 @@ import math
 from materials.ehe import EHE_materials
 from materials.sections.fiber_section import def_simple_RC_section
 from materials.sections import section_properties
+import xc_base
+import geom
 
 class ColumnMainReinforcement(object):
     ''' Main (longitudinal) rebars of a column.
@@ -157,6 +159,23 @@ class RCCircularSection(def_simple_RC_section.RCSectionBase, section_properties.
     def getMinCover(self):
         ''' return the minimal cover of the reinforcement.'''
         return self.mainReinf.getMinCover()
+
+    def getContour(self):
+        ''' Return the vertices of the section contour.'''
+        vertices= list()
+        numSegments= 32
+        angleIncrement= 2.0*math.pi/numSegments
+        theta= 0.0
+        for i in range(0,numSegments):
+            x= self.Rext * math.cos(theta) # calculate the x component
+            y= self.Rext * math.sin(theta) # calculate the y component
+            vertices.append(geom.Pos2d(x,y))
+            theta+= angleIncrement 
+        if(self.Rint!= 0.0):
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.warning(className+'.'+methodName+'; hollow sections not implemented yet. Internal contour ignored.')
+        return vertices
         
     def defSectionGeometry(self,preprocessor,matDiagType):
         '''
