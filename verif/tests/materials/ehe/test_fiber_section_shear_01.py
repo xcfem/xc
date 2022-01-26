@@ -142,6 +142,7 @@ ratio3= ((Vu2C-Vu2CTeor)/Vu2CTeor)
 
 
 '''
+section.plot(preprocessor) # Display section geometry
 print("Vu2A= ",Vu2A/1e3," kN")
 print("Vu2ATeor= ",Vu2ATeor/1e3," kN")
 print("ratio1= ",ratio1)

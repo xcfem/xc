@@ -106,6 +106,7 @@ ratio3= ((VsuA-111.966e3)/111.966e3)
 ratio4= ((Vu2A-194.574e3)/194.574e3)
 
 '''
+section.plot(preprocessor) # Display section geometry
 print("Vu1A= ",Vu1A/1e3," kN")
 print("Vu1ATeor= ",Vu1ATeor/1e3," kN")
 print("ratio1= ",ratio1)

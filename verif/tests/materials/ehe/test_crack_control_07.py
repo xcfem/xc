@@ -106,7 +106,9 @@ secHAParamsFis.computeWk(scc,concr.matTagK,steel.matTagK,concr.fctm())
 ratio1= ((secHAParamsFis.Wk-0.383585469616e-3)/0.383585469616e-3)
 
 
+
 '''
+section.plot(preprocessor) # Display section geometry
 print("Wk= ", secHAParamsFis.Wk*1e3,"mm")
 print("ratio1= ", ratio1)
 secHAParamsFis.printParams()

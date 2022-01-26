@@ -98,6 +98,7 @@ ratio1= (sigma_s-166.925177095e6)/166.925177095e6
 
 
 ''' 
+datosScc1LosC.plot(preprocessor) # Display section geometry
 print("sigma_s= ",sigma_s/1e6, " MPa")
 print("ratio1= ",ratio1)
 '''

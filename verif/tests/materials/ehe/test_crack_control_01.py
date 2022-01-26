@@ -77,6 +77,7 @@ ratio1= (abs(secHAParamsFis.Wk-wkReference)/wkReference)
 ratio2= ((secHAParamsFis.Wk-0.21e-3)/0.21e-3)
 
 '''
+section.plot(preprocessor) # Display section geometry
 secHAParamsFis.printParams()
 print("Wk= ", secHAParamsFis.Wk*1e3,"mm")
 print("ratio1= ", ratio1)

@@ -89,8 +89,9 @@ ratio1= secHAParamsFis.Wk
 
 
 ''' 
-    print("ratio1= ",ratio1)
- '''
+datosScc1LosC.plot(preprocessor) # Display section geometry
+print("ratio1= ",ratio1)
+'''
 
 import os
 from misc_utils import log_messages as lmsg

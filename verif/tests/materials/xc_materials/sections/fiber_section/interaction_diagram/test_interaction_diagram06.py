@@ -71,6 +71,7 @@ ratio1= abs(fcELU13-0.777283365776)
 ratio2= abs(fcELU14-4.4411488676)
 
 '''
+sccData.plot(preprocessor) # Display section geometry
 print("fcELU13= ", fcELU13)
 print("ratio1= ", ratio1)
 print("fcELU14= ", fcELU14)
