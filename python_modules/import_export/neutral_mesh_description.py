@@ -132,33 +132,31 @@ class XCImportExportData(object):
     def writeDxfFile(self,fileName):
         self.blockData.writeDxfFile(fileName)
 
+    def getXCCommandString(self):
+        ''' Return a string with the XC commands that define the model.'''
+        strCommand= ''
+        if(self.problemName!=None):
+            strCommand+= 'problemName= \'' + self.problemName+'\'\n'
+            strCommand+= self.problemName + '= xc.FEProblem()'+'\n'
+            strCommand+= 'preprocessor= ' + self.problemName + '.getPreprocessor\n'
+        strCommand+= self.nodeHandlerName + '= preprocessor.getNodeHandler\n'
+        strCommand+= self.cellHandlerName + '= preprocessor.getElementHandler\n'
+        strCommand+= self.pointHandlerName + '= preprocessor.getMultiBlockTopology.getPoints\n'
+        strCommand+= self.lineHandlerName + '= preprocessor.getMultiBlockTopology.getLines\n'
+        strCommand+= self.surfaceHandlerName + '= preprocessor.getMultiBlockTopology.getSurfaces\n'
+        #strCommand+= self.lineHandlerName + '= preprocessor.getMultiBlockTopology.getLines\n'
+        strCommand+= self.setHandlerName + '= preprocessor.getSets\n'
+        if(self.blockData):
+            strCommand+= self.blockData.getXCCommandString(self)
+        if(self.meshDesc):
+            strCommand+= self.meshDesc.getXCCommandString(self)
+        return strCommand
+        
     def writeToXCFile(self):
         ''' Write the model to a XC file.'''
         self.outputFile= open(self.getXCFileName(),"w")
-        strCommand= 'problemName= \'' + self.problemName+'\''
-        self.outputFile.write(strCommand+'\n')
-        strCommand= self.problemName + '= xc.FEProblem()'
-        self.outputFile.write(strCommand+'\n')
-        strCommand= 'preprocessor= ' + self.problemName + '.getPreprocessor'
-        self.outputFile.write(strCommand+'\n')
-        strCommand= self.nodeHandlerName + '= preprocessor.getNodeHandler'
-        self.outputFile.write(strCommand+'\n')
-        strCommand= self.cellHandlerName + '= preprocessor.getElementHandler'
-        self.outputFile.write(strCommand+'\n')
-        strCommand= self.pointHandlerName + '= preprocessor.getMultiBlockTopology.getPoints'
-        self.outputFile.write(strCommand+'\n')
-        strCommand= self.lineHandlerName + '= preprocessor.getMultiBlockTopology.getLines'
-        self.outputFile.write(strCommand+'\n')
-        strCommand= self.surfaceHandlerName + '= preprocessor.getMultiBlockTopology.getSurfaces'
-        self.outputFile.write(strCommand+'\n')
-        #strCommand= self.lineHandlerName + '= preprocessor.getMultiBlockTopology.getLines'
-        #self.outputFile.write(strCommand+'\n')
-        strCommand= self.setHandlerName + '= preprocessor.getSets'
-        self.outputFile.write(strCommand+'\n')
-        if(self.blockData):
-            self.blockData.writeToXCFile(self)
-        if(self.meshDesc):
-            self.meshDesc.writeToXCFile(self)
+        xcCommandString= self.getXCCommandString()
+        self.outputFile.write(xcCommandString)
         self.outputFile.close()
         
 class MEDMeshData(me.MeshData):

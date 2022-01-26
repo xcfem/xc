@@ -102,7 +102,7 @@ class BlockProperties(object):
         self.extend(other)
         return self
 
-    def getStrXCCommand(self, strId):
+    def getXCCommandString(self, strId):
         ''' Return the XC command that stores the properties.
  
         :param strId: identifier of the object.
@@ -135,14 +135,14 @@ class PointRecord(me.NodeRecord):
         else:
             self.blockProperties= BlockProperties()
             
-    def getStrXCCommand(self, pointHandlerName: str):
+    def getXCCommandString(self, pointHandlerName: str):
         ''' Return the XC command that creates the point.
   
         :param pointHandlerName: name of the point handler
         '''
         strId= str(self.id)
         strCommand= '.newPoint(' + strId + ',geom.Pos3d(' + str(self.coords[0]) + ',' + str(self.coords[1]) +','+ str(self.coords[2])+'))'
-        propCommand= self.blockProperties.getStrXCCommand('pt'+strId)
+        propCommand= self.blockProperties.getXCCommandString('pt'+strId)
         if(len(propCommand)>0):
           strCommand+= '; '+propCommand
         return 'pt' + strId + '= ' + pointHandlerName + strCommand
@@ -178,19 +178,25 @@ class PointDict(me.NodeDict):
             pos= p.getPos
             self.append(p.tag, pos.x, pos.y, pos.z)
         return len(self)
-            
-    def writeToXCFile(self,f,xcImportExportData):
-        ''' Write the XC commands that define nodes.'''
+
+    def getXCCommandString(self,xcImportExportData):
+        ''' Return a string with the XC commands that define the nodes.'''
         strDict= ''
+        retval= ''
         for key in self:
-            strCommand= self[key].getStrXCCommand(xcImportExportData.pointHandlerName)
-            f.write(strCommand+'\n')
+            strCommand= self[key].getXCCommandString(xcImportExportData.pointHandlerName)
+            retval+= (strCommand+'\n')
             pointName= strCommand.split('= ')[0]
             pointId= pointName[2:]
             strDict+= pointId+':'+pointName+','
         # Write a dictionary to access those points from its id.
-        f.write('\n')
-        f.write('xcPointsDict= {'+strDict[:-1]+'}\n\n')
+        retval+= '\nxcPointsDict= {'+strDict[:-1]+'}\n\n'
+        return retval;
+            
+    def writeToXCFile(self,f, xcImportExportData):
+        ''' Write the XC commands that define nodes.'''
+        xcCommandString= self.getXCCommandString(xcImportExportData)
+        f.write(xcCommandString)
             
 
 class BlockRecord(me.CellRecord):
@@ -277,7 +283,7 @@ class BlockRecord(me.CellRecord):
         tmp= str(self.nodeIds)
         return tmp[tmp.index("[") + 1:tmp.rindex("]")]
 
-    def getStrXCCommand(self,xcImportExportData):
+    def getXCCommandString(self,xcImportExportData):
         ''' Return the XC Python string defining the object.'''
         strId= str(self.id)
         handlerName= xcImportExportData.getBlockHandlerName(self.getType())
@@ -293,8 +299,8 @@ class BlockRecord(me.CellRecord):
             else:
                 strCommand= strId + '= ' + handlerName + '.newPolygonalFacePts([' + pointIds  +'])'
         else:
-            lmsg.error('BlockRecord::getStrXCCommand not implemented for blocks of type: '+ self.cellType)
-        propCommand= self.blockProperties.getStrXCCommand(strId)
+            lmsg.error('BlockRecord::getXCCommandString not implemented for blocks of type: '+ self.cellType)
+        propCommand= self.blockProperties.getXCCommandString(strId)
         if(len(propCommand)>0):
           strCommand+= '; '+propCommand
         strCommand+= self.getStrThicknessCommand(strId)
@@ -351,16 +357,17 @@ class BlockDict(dict):
         drawing.layers.new(name= layerName)
         for key in self:
             self[key].writeDxf(pointDict,drawing,layerName)
-
-    def writeToXCFile(self,f,xcImportExportData):
-        '''Write the XC commands that define the cells (elements).'''
+            
+    def getXCCommandString(self,xcImportExportData):
+        ''' Return a string with the XC commands that define the cells.'''
+        retval= ''
         strDict= ''
         holeDict= dict() # Blocks which are holes.
         blocksWithHoles= dict() # blocks which have holes.
         for key in self:
             block= self[key]
-            strCommand= block.getStrXCCommand(xcImportExportData)
-            f.write(strCommand+'\n')
+            strCommand= block.getXCCommandString(xcImportExportData)
+            retval+= (strCommand+'\n')
             blockName= strCommand.split('= ')[0]
             blockId= blockName[1:]
             strDict+= blockId+':'+blockName+','
@@ -372,14 +379,19 @@ class BlockDict(dict):
                 holeDict[blockId]= block.getAttribute('ownerName')            
             
         # Write a dictionary to access those blocks from its id.
-        f.write('\n')
-        f.write('xcBlocksDict= {'+strDict[:-1]+'}\n\n')
+        retval+= ('\nxcBlocksDict= {'+strDict[:-1]+'}\n\n')
 
         # Loop on holes.
         for holeId in holeDict:
             ownerName= holeDict[holeId] # name of the block with the hole.
             ownerId= blocksWithHoles[ownerName] # id of the block with the hole.
-            f.write('f'+str(ownerId)+'.addHole(f'+holeId+')\n')
+            retval+= ('f'+str(ownerId)+'.addHole(f'+holeId+')\n')
+        return retval
+
+    def writeToXCFile(self,f,xcImportExportData):
+        '''Write the XC commands that define the cells (elements).'''
+        xcCommandString= self.getXCCommandString(xcImportExportData)
+        f.write(xcCommandString)
           
     def getTags(self):
         ''' Return the identifiers of the objects.'''
@@ -567,14 +579,21 @@ class BlockData(object):
         drawing.saveas(fileName)
         if(silent): # Restore logging level.
             logger.setLevel(level=oldLoggingLevel)
-
+    
+    def getXCCommandString(self,xcImportExportData):
+        ''' Return a string with the XC commands that define the blocks.'''
+        retval= ''
+        if(hasattr(self,'logMessage')): # not a very elegant solution.
+            retval+= (self.logMessage+'\n')
+        retval+= self.points.getXCCommandString(xcImportExportData)
+        retval+= self.blocks.getXCCommandString(xcImportExportData)
+        return retval
+        
     def writeToXCFile(self,xcImportExportData):
         ''' Write a Python file with XC commands.'''
         f= xcImportExportData.outputFile
-        if(hasattr(self,'logMessage')): # not a very elegant solution.
-            f.write(self.logMessage+'\n')
-        self.points.writeToXCFile(f,xcImportExportData)
-        self.blocks.writeToXCFile(f,xcImportExportData)
+        xcCommandString= self.getXCCommandString(xcImportExportData)
+        f.write(xcCommandString)
         f.close()
 
     def getPointTags(self):

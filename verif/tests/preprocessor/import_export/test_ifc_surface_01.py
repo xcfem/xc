@@ -26,7 +26,7 @@ pth= os.path.dirname(__file__)
 if(not pth):
   pth= "."
 filePath= pth+'/../../aux/freecad' 
-baseName= 'test_ifc_surface'
+baseName= 'test_ifc_surface_01'
 freeCADFileName= baseName+'.FCStd'
 freeCADImport= freecad_reader.FreeCADImport(filePath+'/'+freeCADFileName, groupsToImport, getRelativeCoo, threshold= 0.001)
 
@@ -41,7 +41,7 @@ ieData.blockData= blocks
 ieData.writeToXCFile()
 
 FEcase= xc.FEProblem()
-FEcase.title= 'Test IFC points.'
+FEcase.title= 'Test IFC surfaces.'
 exec(open(ieData.outputFileName+'.py').read())
 nodes= preprocessor.getNodeHandler
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes) 

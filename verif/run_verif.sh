@@ -528,7 +528,8 @@ python tests/preprocessor/import_export/test_dxf_surfaces.py
 python tests/preprocessor/import_export/test_dxf_export_01.py
 python tests/preprocessor/import_export/test_ifc_points.py
 python tests/preprocessor/import_export/test_ifc_lines.py
-python tests/preprocessor/import_export/test_ifc_surface.py
+python tests/preprocessor/import_export/test_ifc_surface_01.py
+python tests/preprocessor/import_export/test_ifc_surface_02.py
 
 #Tests about constraints.
 echo "$BLEU" "Displacement constraints tests." "$NORMAL"

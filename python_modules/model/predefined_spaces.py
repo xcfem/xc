@@ -19,6 +19,8 @@ from postprocess import extrapolate_elem_attr
 from postprocess import get_reactions
 from actions.load_combination_utils import utils
 from solution import predefined_solutions
+from import_export import freecad_reader
+from import_export import neutral_mesh_description as nmd
 import uuid
 
 defaultSolutionProcedureType= predefined_solutions.SimpleStaticLinear
@@ -1006,7 +1008,7 @@ class PredefinedSpace(object):
         '''
         setImperfectionsXY(nodeSet, slopeX, slopeY)
         
-    def setImperfectionsX(nodeSet, slopeX= 1.0/500.0):
+    def setImperfectionsX(self, nodeSet, slopeX= 1.0/500.0):
         '''Set the initial imperfection of the model.
 
         :param nodeSet: set which nodes will be moved.
@@ -1014,13 +1016,32 @@ class PredefinedSpace(object):
         '''
         setImperfectionsXY(nodeSet, slopeX, 0.0)
 
-    def setImperfectionsY(nodeSet, slopeY= 1.0/500.0):
+    def setImperfectionsY(self, nodeSet, slopeY= 1.0/500.0):
         '''Set the initial imperfection of the model.
 
         :param nodeSet: set which nodes will be moved.
         :param slopeY: out of plumbness on y axis.
         '''
         setImperfectionsXY(nodeSet, 0.0, slopeY)
+
+    def importFromFreeCAD(self, fileName, groupsToImport, getRelativeCoo, threshold= 0.01,importLines= True, importSurfaces= True):
+        ''' Constructor.
+
+           :param fileName: file name to import.
+           :param groupsToImport: list of regular expressions to be tested.
+           :param getRelativeCoo: coordinate transformation to be applied to the
+                                  points.
+           :param importLines: if true import lines.
+           :param importSurfaces: if true import surfaces.
+        '''
+        freeCADImport= freecad_reader.FreeCADImport(fileName, groupsToImport, getRelativeCoo, threshold, importLines, importSurfaces)
+        # Create block topology from FreeCAD model.
+        ieData= nmd.XCImportExportData()
+        ieData.blockData= freeCADImport.exportBlockTopology('test')
+        ## Convert readed blocks to XC commands.
+        xcCommands= ieData.getXCCommandString()
+        ## Return the XC commands.
+        return xcCommands
                 
 def getModelSpace(preprocessor: xc.Preprocessor):
       '''Return a PredefinedSpace from the dimension of the space 

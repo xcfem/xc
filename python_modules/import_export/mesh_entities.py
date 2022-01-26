@@ -44,7 +44,7 @@ class NodeRecord(object):
         return self.coords[1]
     def getZ(self):
         return self.coords[2]
-    def getStrXCCommand(self,nodeHandlerName):
+    def getXCCommandString(self,nodeHandlerName):
         strId= str(self.id)
         strCommand= '.newNodeIDXYZ(' + strId + ',' + self.coords[0] + ',' + self.coords[1] +','+ self.coords[2]+')'
         return 'n' + strId + '= ' + nodeHandlerName + strCommand
@@ -77,17 +77,27 @@ class NodeDict(dict):
         for n in nodeSet:
           pos= n.getInitialPos3d
           self.append(n.tag, pos.x, pos.y, pos.z)
+          
     def writeDxf(self,drawing):
         '''Write the node positions in dxf file.'''
         layerName= self.getName()
         drawing.add_layer(layerName)
         for key in self:
             self[key].writeDxf(drawing,layerName)
+
+    def getXCCommandString(self,xcImportExportData):
+        ''' Return a string with the XC commands that define the nodes.'''
+        retval= ''
+        for key in self:
+            strCommand= self[key].getXCCommandString(xcImportExportData.nodeHandlerName)
+            retval+= (strCommand+'\n')
+        return retval
+        
     def writeToXCFile(self,f,xcImportExportData):
         ''' Write the XC commands that define nodes.'''
-        for key in self:
-            strCommand= self[key].getStrXCCommand(xcImportExportData.nodeHandlerName)
-            f.write(strCommand+'\n')
+        xcCommandString= self.getXCCommandString(xcImportExportData)
+        f.write(xcCommandString)
+            
     def getTags(self):
         retval= list()
         for key in self:
@@ -139,7 +149,7 @@ class CellRecord(object):
         retval= '; '+strId+'.setProp("thickness",'+str(self.thickness)+')'
         return retval
         
-    def getStrXCCommand(self,xcImportExportData):
+    def getXCCommandString(self,xcImportExportData):
         strId= str(self.id)
         type= xcImportExportData.convertCellType(self.cellType)
         strType= "'"+type+"'"
@@ -200,6 +210,7 @@ class CellDict(dict):
           for j in range(2,sz):
             nodeIds.append(int(lst[j]))
           self[id]= CellRecord(id, type, nodeIds)
+          
     def readFromUMesh(self,umesh):
         for i in range(0,umesh.getNumberOfCells()):
           self.append(CellRecord(umesh.getTypeOfCell(i), umesh.getNodeIdsOfCell(i)))
@@ -215,26 +226,37 @@ class CellDict(dict):
           elif(numNodes==2):
             tagNodes= [nodes[0],nodes[1]]
             cell= CellRecord(e.tag,str(e.tag),tagNodes,0.0)
-          self.append(cell)        
+          self.append(cell)
+          
     def writeDxf(self,nodeDict,drawing):
         '''Write the cells in dxf file.'''
         layerName= 'cells'
         drawing.add_layer(layerName)
         for key in self:
           self[key].writeDxf(nodeDict,drawing,layerName)
-    def writeToXCFile(self,f,xcImportExportData):
-        '''Write the XC commands that define the cells (elements).'''
+          
+    def getXCCommandString(self,xcImportExportData):
+        ''' Return a string with the XC commands that define the cells.'''
+        retval= ''
         for key in self:
             cell= self[key]
-            type= xcImportExportData.convertCellType(cell.cellType)
-            if(type!=None):
-                strCommand= self[key].getStrXCCommand(xcImportExportData)
-                f.write(strCommand+'\n')
+            cellType= xcImportExportData.convertCellType(cell.cellType)
+            if(cellType!=None):
+                strCommand= self[key].getXCCommandString(xcImportExportData)
+                retval+= (strCommand+'\n')
+        return retval
+          
+    def writeToXCFile(self,f,xcImportExportData):
+        '''Write the XC commands that define the cells (elements).'''
+        xcCommandString= self.getXCCommandString(xcImportExportData)
+        f.write(xcCommandString)
+                
     def getTags(self):
         retval= list()
         for key in self:
           retval.append(self[key].id)
         return retval
+    
     def __str__(self):
         retval= ''
         for key in self:
@@ -350,14 +372,21 @@ class MeshData(object):
         drawing.saveas(fileName)
         if(silent): # Restore logging level.
             logger.setLevel(level= oldLoggingLevel)
-        
+            
+    def getXCCommandString(self,xcImportExportData):
+        ''' Return a string with the XC commands that define the blocks.'''
+        retval= self.nodes.getXCCommandString(xcImportExportData)
+        retval+= self.cells.getXCCommandString(xcImportExportData)
+        for g in self.groups:
+            retval+= g.getXCCommandString(xcImportExportData)
+        return retval
+       
     def writeToXCFile(self,xcImportExportData):
         '''Write the XC commands that define the mesh.'''
         f= xcImportExportData.outputFile
-        self.nodes.writeToXCFile(f,xcImportExportData)
-        self.cells.writeToXCFile(f,xcImportExportData)
-        for g in self.groups:
-          g.writeToXCFile(xcImportExportData)
+        xcCommandString= self.getXCCommandString(xcImportExportData)
+        f.write(xcCommandString)
+          
     def __str__(self):
         retval= "numberOfNodes= " +' '+str(self.numberOfNodes) + '\n'
         retval+= "numberOfCells= " +' '+str(self.numberOfCells) + '\n'
