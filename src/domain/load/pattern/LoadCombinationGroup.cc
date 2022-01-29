@@ -26,17 +26,12 @@
 //----------------------------------------------------------------------------
 //LoadCombinationGroup.cc
 
+
 #include "LoadCombinationGroup.h"
 #include "preprocessor/prep_handlers/LoadHandler.h"
-
 #include "domain/load/pattern/LoadCombination.h"
 #include "domain/domain/Domain.h"
-
-
-
 #include "utility/actor/actor/MovableMap.h"
-
-
 
 //! @brief Default constructor.
 XC::LoadCombinationGroup::LoadCombinationGroup(LoadHandler *owr)
@@ -131,15 +126,21 @@ void XC::LoadCombinationGroup::removeAllFromDomain(void)
       dom->removeLoadCombination((*i).second);
   }
 
-XC::LoadCombination *XC::LoadCombinationGroup::newLoadCombination(const std::string &code,const std::string &descomp)
+XC::LoadCombination *XC::LoadCombinationGroup::newLoadCombination(const std::string &code, const std::string &descomp)
   {
     int tag_comb= getLoadHandler()->getTagLP();
     LoadCombination *comb= find_combination(code);
     if(comb) //Load combination already exists.
       {
-        std::cerr << "Load combination: " << code
-                  << " already exists, redefined." << std::endl;
-        comb->setDescomp(descomp);
+        std::clog << getClassName() << "::" << __FUNCTION__
+	          << "; load combination: " << code
+                  << " already exists, will be redefined." << std::endl;
+        bool ok= comb->setDescomp(descomp);
+	if(!ok)
+	    std::cerr << getClassName() << "::" << __FUNCTION__
+		      << "; when redefining load combination: " << code
+                      << " definition: '"
+	              << descomp << "' was incorrect." << std::endl;
       }
     else //New combination
       {
@@ -148,9 +149,26 @@ XC::LoadCombination *XC::LoadCombinationGroup::newLoadCombination(const std::str
         if(comb)
           {
             comb->setDomain(getDomain());
-            comb->setDescomp(descomp);
-            (*this)[comb->getName()]= comb;
+            bool ok= comb->setDescomp(descomp);
+	    if(ok)
+                (*this)[comb->getName()]= comb;
+	    else
+	      {
+	        std::cerr << getClassName() << "::" << __FUNCTION__
+		          << "; could not create load combination: " << code
+                          << " definition: '"
+	                  << descomp << "' was incorrect." << std::endl;
+		delete comb;
+		comb= nullptr;
+	      }
           }
+	else
+	  {
+	    std::cerr << getClassName() << "::" << __FUNCTION__
+		      << "; could not create load combination: " << code
+                      << " defined as: '"
+	              << descomp << "'." << std::endl;
+	  }
       }
     return comb;
   }

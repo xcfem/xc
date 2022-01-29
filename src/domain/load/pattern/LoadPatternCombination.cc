@@ -181,8 +181,10 @@ void XC::LoadPatternCombination::add_component(const summand &sum)
   }
 
 //! @brief Computes the combination from the string being passed as parameter.
-void XC::LoadPatternCombination::interpreta_descomp(const std::string &str_descomp)
+//! returns true if the string is interpreted successfully.
+bool XC::LoadPatternCombination::interpreta_descomp(const std::string &str_descomp)
   {
+    bool retval= true;
     clear();
     typedef std::deque<std::string> dq_string;
     dq_string str_summands= separa_cadena(str_descomp,"+-");
@@ -192,8 +194,11 @@ void XC::LoadPatternCombination::interpreta_descomp(const std::string &str_desco
         dq_string str_prod= separa_cadena(str_sum_i,"*");
         const size_t sz= str_prod.size();
         if(sz!=2)
+	  {
 	  std::cerr << getClassName() << "::" << __FUNCTION__
 		    << "Term: " << str_sum_i << " is incorrect." << std::endl;
+	    retval= false;
+	  }
         else
           {
             const float factor= boost::lexical_cast<float>(q_blancos(str_prod[0]));
@@ -206,9 +211,10 @@ void XC::LoadPatternCombination::interpreta_descomp(const std::string &str_desco
                 else
 		  {
 	            std::cerr << getClassName() << "::" << __FUNCTION__
-		              << " load case identified by: '" 
+		              << " load pattern identified by: '" 
                               << hypothesis_name << "' not found.\n";
-		    exit(EXIT_FAILURE);
+		    retval= false;
+		    //exit(EXIT_FAILURE);
 		  }
               }
             else
@@ -216,6 +222,7 @@ void XC::LoadPatternCombination::interpreta_descomp(const std::string &str_desco
 			<< "; pointer to LoadHandler not set." << std::endl;
           } 
       }
+    return retval;
   }
 
 

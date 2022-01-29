@@ -87,7 +87,7 @@ class LoadPatternCombination: public ForceReprComponent
     
     void clear(void);
     void add_component(const summand &);
-    void interpreta_descomp(const std::string &str);
+    bool interpreta_descomp(const std::string &str);
     void limpia_ceros(void);
     const_iterator findLoadPattern(const LoadPattern *) const;
     iterator findLoadPattern(const LoadPattern *);
@@ -121,8 +121,8 @@ class LoadPatternCombination: public ForceReprComponent
     bool isActive(void) const;
     void removeFromDomain(void);
 
-    inline void setDescomp(const std::string &descomp)
-      { interpreta_descomp(descomp); }
+    inline bool setDescomp(const std::string &descomp)
+      { return interpreta_descomp(descomp); }
     
     float getLoadPatternFactor(const LoadPattern *) const;
 
