@@ -24,6 +24,9 @@ if(sys.version_info.major == 3):
 sys.path.append(FREECADPATH)
 
 # import FreeCAD
+# 2901201 Apparently the FreeCAD module redirects C standard output
+# somewhere so you stop seeing cout, clog and cerr messages in the
+# console. 
 try:
     import FreeCAD
 except ModuleNotFoundError as err:
