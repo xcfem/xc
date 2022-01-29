@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from __future__ import print_function
+from __future__ import division
 
 __author__= "Ana Ortega (AO_O) "
 __copyright__= "Copyright 2016, AO_O" 
@@ -8,20 +9,10 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= " ana.Ortega@ciccp.es "
 
-import xc_base
-import geom
-import xc
 from misc_utils import data_struct_utils as su
 from postprocess import output_handler
-from postprocess.xcVtk.FE_model import vtk_FE_graphic
-from postprocess.xcVtk.fields import fields
-from postprocess import utils_display
-from postprocess.xcVtk.diagrams import control_var_diagram as cvd
 from postprocess.xcVtk import vtk_graphic_base
-from postprocess import output_handler as oh
 from model import predefined_spaces
-from postprocess.xcVtk.FE_model import quick_graphics as QGrph
-from PIL import Image
 
 class OuputUnits(object):
     '''Unit for the generation of graphic files report files.
@@ -148,7 +139,7 @@ class RecordDisp(OuputUnits):
         ''' Return an output handler from the set argument.
             NOT a very elegant solution-> to refactor.'''
         modelSpace= predefined_spaces.getModelSpaceFromPreprocessor(setToDisplay.getPreprocessor)
-        outputHandler= oh.OutputHandler(modelSpace)
+        outputHandler= output_handler.OutputHandler(modelSpace)
         outputHandler.outputStyle.cameraParameters= self.cameraParameters
         return outputHandler
         
@@ -339,7 +330,7 @@ class LoadCaseDispParameters(RecordDisp):
             grFileName= fullgrfname+'.png'
             outputHandler.displayLoads(setToDisplay=st,caption= capt,fileName= grFileName)  # changed 22/06/2020
             #outputHandler.displayLoadVectors(setToDisplay=st,caption= capt,fileName=jpegFileName)
-            oh.insertGrInTex(texFile=texFile,grFileNm=rltvgrfname,grWdt=cfg.grWidth,capText=capt,labl=labl)
+            output_handler.insertGrInTex(texFile=texFile,grFileNm=rltvgrfname,grWdt=cfg.grWidth,capText=capt,labl=labl)
         for st in self.setsToDispBeamLoads:
             fullgrfname= fullPath+self.loadCaseName+st.name
             rltvgrfname= rltvPath+self.loadCaseName+st.name
@@ -347,7 +338,7 @@ class LoadCaseDispParameters(RecordDisp):
             labl= getLabelText(capt)
             grFileName= fullgrfname+'.png'
             outputHandler.displayLoads(setToDisplay=st,caption= capt,fileName= grFileName)  # changed 22/06/2020
-            oh.insertGrInTex(texFile=texFile,grFileNm=rltvgrfname,grWdt=cfg.grWidth,capText=capt,labl=labl)
+            output_handler.insertGrInTex(texFile=texFile,grFileNm=rltvgrfname,grWdt=cfg.grWidth,capText=capt,labl=labl)
 
     def loadReports(self,FEcase,texFile,cfg):
         '''Creates the graphics files of loads for the load case and insert them in
@@ -399,7 +390,7 @@ class LoadCaseDispParameters(RecordDisp):
                 # else:
                 #     unDesc=cfg.getRotationUnitsDescription()
                 capt= self.getCaptionText(setDescr= st.description, captTexts= cfg.capTexts[arg], unitsDescr= unDesc)
-                oh.insertGrInTex(texFile=texFile,grFileNm=rltvgrfname,grWdt=cfg.grWidth,capText=capt)
+                output_handler.insertGrInTex(texFile=texFile,grFileNm=rltvgrfname,grWdt=cfg.grWidth,capText=capt)
                 
         # The disctinction between beam elements and the rest of elements
         # is to deprecate. The idea is to specify the type of output for all
@@ -412,7 +403,7 @@ class LoadCaseDispParameters(RecordDisp):
                 grFileName= fullgrfname+'.png'
                 outputHandler.displayIntForc(itemToDisp=arg,setToDisplay=st,fileName= grFileName,orientScbar=1,titleScbar=None)
                 capt= self.getCaptionText(setDescr= st.description, captTexts= cfg.capTexts[arg], unitsDescr= cfg.getForceUnitsDescription())
-                oh.insertGrInTex(texFile=texFile,grFileNm=rltvgrfname,grWdt=cfg.grWidth,capText=capt)
+                output_handler.insertGrInTex(texFile=texFile,grFileNm=rltvgrfname,grWdt=cfg.grWidth,capText=capt)
         #Internal forces displays on sets of «beam» elements
         for st in self.setsToDispBeamIntForc:
             for arg in self.listBeamIntForc:
@@ -421,7 +412,7 @@ class LoadCaseDispParameters(RecordDisp):
                 grFileName= fullgrfname+'.png'
                 outputHandler.displayIntForcDiag(itemToDisp=arg,setToDisplay=st,fileName= grFileName,orientScbar=1,titleScbar=None)
                 capt= self.getCaptionText(setDescr= st.description, captTexts= cfg.capTexts[arg], unitsDescr= cfg.getForceUnitsDescription())
-                oh.insertGrInTex(texFile=texFile,grFileNm=rltvgrfname,grWdt=cfg.grWidth,capText=capt)
+                output_handler.insertGrInTex(texFile=texFile,grFileNm=rltvgrfname,grWdt=cfg.grWidth,capText=capt)
         texFile.write('\\cleardoublepage\n')
         
     def simplLCReports(self,FEproblem,texFile,cfg):
