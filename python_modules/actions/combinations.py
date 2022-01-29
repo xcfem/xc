@@ -7,8 +7,10 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com ana.Ortega.Ort@gmail.com"
 
+import sys
 from import_export import neutral_load_description as nld
 from postprocess.reports import graphical_reports
+from misc_utils import log_messages as lmsg
 
 
 class CombinationRecord(object):
@@ -27,8 +29,11 @@ class CombinationRecord(object):
         self.expr= expr
 
     def createCombination(self,xcCombHandler):
-        '''Create combination and insert it into the XC combination handler.'''
-        xcCombHandler.newLoadCombination(self.name,self.expr)
+        '''Create combination and insert it into the XC combination handler.
+
+        :param xcCombHandler: combination handler.
+        '''
+        return xcCombHandler.newLoadCombination(self.name,self.expr)
 
     def exportToLatex(self, outputFile):
          '''Creates LaTeX tables and put the combinations in them.
@@ -97,9 +102,16 @@ class SituationCombs(dict):
         return retval
       
     def dumpCombinations(self,xcCombHandler):
-        '''Introduces the combinations into the XC combination handler.'''
+        '''Introduces the combinations into the XC combination handler.
+
+        :param xcCombHandler: combination handler.
+        '''
         for key in self:
-            self[key].createCombination(xcCombHandler)
+            retval= self[key].createCombination(xcCombHandler)
+            if(retval==None):
+                className= type(self).__name__
+                methodName= sys._getframe(0).f_code.co_name
+                lmsg.error(className+'.'+methodName+': couln\'t create combination: \''+key+'\'')
             
     def exportToLatex(self, outputFile):
         '''Creates LaTeX tables and put the combinations in them.
@@ -170,7 +182,10 @@ class SituationsSet(object):
         return retval
       
     def dumpCombinations(self,xcCombHandler):
-        '''Introduces the combinations into the XC combination handler.'''
+        '''Introduces the combinations into the XC combination handler.
+
+        :param xcCombHandler: combination handler.
+        '''
         for s in self.situations:
             s.dumpCombinations(xcCombHandler)
             
@@ -271,7 +286,10 @@ class CombContainer(object):
         return retval
      
     def dumpCombinations(self,preprocessor):
-        '''Introduces the combinations into the XC combination handler.'''
+        '''Introduces the combinations into the XC combination handler.
+
+        :param preprocessor: pre-processor for the finite element problem.
+        '''
         xcCombHandler= preprocessor.getLoadHandler.getLoadCombinations
         for ls in self.limitStates:
             ls.dumpCombinations(xcCombHandler)
