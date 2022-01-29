@@ -8,18 +8,17 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@ciccp.es, ana.Ortega@ciccp.es "
 
-import math
+# import math
 from typing import Sequence
+import geom
 import xc
 import numpy as np
 from misc_utils import log_messages as lmsg
-import geom
 from materials import typical_materials as tm
 from postprocess import extrapolate_elem_attr
 from postprocess import get_reactions
 from actions.load_combination_utils import utils
 from solution import predefined_solutions
-from import_export import freecad_reader
 from import_export import neutral_mesh_description as nmd
 import uuid
 
@@ -1034,6 +1033,7 @@ class PredefinedSpace(object):
            :param importLines: if true import lines.
            :param importSurfaces: if true import surfaces.
         '''
+        from import_export import freecad_reader
         freeCADImport= freecad_reader.FreeCADImport(fileName, groupsToImport, getRelativeCoo, threshold, importLines, importSurfaces)
         # Create block topology from FreeCAD model.
         ieData= nmd.XCImportExportData()
