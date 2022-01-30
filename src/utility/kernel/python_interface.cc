@@ -95,6 +95,7 @@ const EntityWithProperties *(EntityWithProperties::*getOwner)(void) const= &Enti
       .add_property("standardOutputWrapper", make_function( getStandardOutputWrapper, return_internal_reference<>() ), "returns standard output wrapper.")
       .add_property("logFileName", make_function( &CommandEntity::getLogFileName, return_internal_reference<>() ), &CommandEntity::setLogFileName)
       .add_property("errFileName", make_function( &CommandEntity::getErrFileName, return_internal_reference<>() ), &CommandEntity::setErrFileName)
+      .add_property("outputFileName", make_function( &CommandEntity::getOutputFileName, return_internal_reference<>() ), &CommandEntity::setOutputFileName)
       .def("hasProp", &CommandEntity::hasPyProp,"True if property exists.")
       .def("getProp", &CommandEntity::getPyProp,"Return a user defined property.")
       .def("setProp", &CommandEntity::setPyProp,"Sets the value of a user defined property.")

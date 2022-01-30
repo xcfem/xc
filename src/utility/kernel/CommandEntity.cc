@@ -98,11 +98,22 @@ void CommandEntity::setLogFileName(const std::string &fname)
 const std::string &CommandEntity::getErrFileName(void) const
   { return standardOutput.getErrFileName(); }
 
-//! @brief Sets log file name.
+//! @brief Sets error file name.
 void CommandEntity::setErrFileName(const std::string &fname)
   {
     if(fname != "")
       standardOutput.setErrFileName(fname);
+  }
+
+//! @brief Returns regular output file name.
+const std::string &CommandEntity::getOutputFileName(void) const
+  { return standardOutput.getOutputFileName(); }
+
+//! @brief Sets regular output file name.
+void CommandEntity::setOutputFileName(const std::string &fname)
+  {
+    if(fname != "")
+      standardOutput.setOutputFileName(fname);
   }
 
 //! @brief Reset the standard output streams to its defaults buffers.
