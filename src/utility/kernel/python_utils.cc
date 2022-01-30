@@ -274,3 +274,5 @@ boost::python::object CommandEntity_exec_file(boost::python::object self, const 
     return retval;
   }
 
+void resetStandardOutput(void)
+  { CommandEntity::resetStandardOutput(); } 

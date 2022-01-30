@@ -10,6 +10,7 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com" "ana.ortega.ort@gmail.com"
 
+import xc_base
 import sys
 import re
 from import_export import reader_base
@@ -24,11 +25,12 @@ if(sys.version_info.major == 3):
 sys.path.append(FREECADPATH)
 
 # import FreeCAD
-# 2901201 Apparently the FreeCAD module redirects C standard output
+# NOTE 1: Apparently the FreeCAD module redirects C standard output
 # somewhere so you stop seeing cout, clog and cerr messages in the
 # console. 
 try:
     import FreeCAD
+    xc_base.resetStandardOutput() # See NOTE 1. 
 except ModuleNotFoundError as err:
     # Error handling
     lmsg.log(err)

@@ -85,4 +85,7 @@ struct std_item
         x.push_back(v);
       }
   };
+
+void resetStandardOutput(void);
+
 #endif

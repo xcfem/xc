@@ -87,7 +87,7 @@ const EntityWithProperties *(EntityWithProperties::*getOwner)(void) const= &Enti
       .def("setVerbosityLevel", &EntityWithProperties::setVerbosityLevel,"Set verbosity level.")
         .staticmethod("setVerbosityLevel")
       .def("getVerbosityLevel", &EntityWithProperties::getVerbosityLevel,"Get verbosity level.")
-        .staticmethod("getVerbosityLevel")
+      .staticmethod("getVerbosityLevel")
       ;
 
     StandardOutputWrapper &(CommandEntity::*getStandardOutputWrapper)(void)= &CommandEntity::getStandardOutputWrapper;
@@ -117,5 +117,6 @@ const EntityWithProperties *(EntityWithProperties::*getOwner)(void) const= &Enti
       .add_property("nRow",&ProtoMatrix::getNumberOfRows,"returns number of rows.")
       .add_property("nCol",&ProtoMatrix::getNumberOfColumns,"returns number of columns.")
       ;
+    def("resetStandardOutput",resetStandardOutput);
   }
 

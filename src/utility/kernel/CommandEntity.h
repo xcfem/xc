@@ -67,7 +67,8 @@ class CommandEntity: public EntityWithProperties
     const std::string &getLogFileName(void) const;
     void setLogFileName(const std::string &);
     const std::string &getErrFileName(void) const;
-    void setErrFileName(const std::string &);    
+    void setErrFileName(const std::string &);
+    static void resetStandardOutput(void);
 
     void clearPyProps(void);
     bool hasPyProp(const std::string &);

@@ -105,6 +105,10 @@ void CommandEntity::setErrFileName(const std::string &fname)
       standardOutput.setErrFileName(fname);
   }
 
+//! @brief Reset the standard output streams to its defaults buffers.
+void CommandEntity::resetStandardOutput(void)
+  { standardOutput.reset(); }
+
 //! @brief Clear python properties map.
 void CommandEntity::clearPyProps(void)
   { python_dict.clear(); }
