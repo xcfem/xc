@@ -115,9 +115,9 @@ class FEProblem: public CommandEntity
   };
 
 inline std::string getXCVersion(void)
-   { return FEProblem::getXCVersion(); }
+  { return FEProblem::getXCVersion(); }
 inline std::string getXCVersionShort(void)
-   { return FEProblem::getXCVersionShort(); }
+  { return FEProblem::getXCVersionShort(); }
 
 } // end of XC namespace
 
