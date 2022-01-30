@@ -38,7 +38,11 @@ nodes= preprocessor.getNodeHandler
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
 
 ## Import block topology from FreeCAD.
+#FEcase.errFileName= '/tmp/err.txt'
+#FEcase.logFileName= '/tmp/log.txt'
+FEcase.outputFileName= '/tmp/out.txt' # Avoid message about topology version.
 modelSpace.importFromFreeCAD(fileName= filePath+'/'+freeCADFileName, groupsToImport= groupsToImport, getRelativeCoo= getRelativeCoo, threshold= 0.001)
+xc_base.resetStandardOutput()
 
 
 xcTotalSet= modelSpace.getTotalSet()
