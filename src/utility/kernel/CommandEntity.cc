@@ -34,7 +34,7 @@
 #include <cstdlib>
 
 //Variables estáticas de CommandEntity.
-ErrLogFiles CommandEntity::err_log_files; //!< Streams para errores y avisos.
+StandardOutputWrapper CommandEntity::standardOutput; //!< Standard output streams.
 
 //! @brief Default constructor.
 CommandEntity::CommandEntity(CommandEntity *owr)
@@ -75,26 +75,34 @@ const CommandEntity *CommandEntity::Owner(void) const
     return retval;
   }
 
+//! @brief Return the regular output stream wrapper.
+const StandardOutputWrapper &CommandEntity::getStandardOutputWrapper(void) const
+  { return standardOutput; }
+
+//! @brief Return the regular output stream wrapper.
+StandardOutputWrapper &CommandEntity::getStandardOutputWrapper(void)
+  { return standardOutput; }
+
 //! @brief Returns log file name.
 const std::string &CommandEntity::getLogFileName(void) const
-  { return err_log_files.getLogFileName(); }
+  { return standardOutput.getLogFileName(); }
 
 //! @brief Sets log file name.
 void CommandEntity::setLogFileName(const std::string &fname)
   {
     if(fname != "")
-      err_log_files.setLogFileName(fname);
+      standardOutput.setLogFileName(fname);
   }
 
 //! @brief Returns err file name.
 const std::string &CommandEntity::getErrFileName(void) const
-  { return err_log_files.getErrFileName(); }
+  { return standardOutput.getErrFileName(); }
 
 //! @brief Sets log file name.
 void CommandEntity::setErrFileName(const std::string &fname)
   {
     if(fname != "")
-      err_log_files.setErrFileName(fname);
+      standardOutput.setErrFileName(fname);
   }
 
 //! @brief Clear python properties map.

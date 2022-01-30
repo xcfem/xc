@@ -64,7 +64,24 @@ BOOST_PYTHON_MODULE(xc_base)
       // .def("count", &set_ints::count)
        ;
 
-    const EntityWithProperties *(EntityWithProperties::*getOwner)(void) const= &EntityWithProperties::Owner;
+    class_<StandardStreamWrapper, boost::noncopyable  >("StandardStreamWrapper", no_init)
+      .def("reset", &StandardStreamWrapper::reset,"Reset the stream to its default buffer.")
+      ;
+    
+    StandardStreamWrapper &(StandardOutputWrapper::*getErrorStreamWrapper)(void)= &StandardOutputWrapper::getErrorStreamWrapper;
+    StandardStreamWrapper &(StandardOutputWrapper::*getLogStreamWrapper)(void)= &StandardOutputWrapper::getLogStreamWrapper;
+    StandardStreamWrapper &(StandardOutputWrapper::*getOutputStreamWrapper)(void)= &StandardOutputWrapper::getOutputStreamWrapper;
+    class_<StandardOutputWrapper, boost::noncopyable  >("StandardOutputWrapper", no_init)
+      .def("reset", &StandardOutputWrapper::reset,"Reset standard output streams to its default buffers.")
+      .add_property("errorStreamWrapper", make_function( getErrorStreamWrapper, return_internal_reference<>() ), "returns error stream wrapper.")
+      .add_property("errorStreamWrapper", make_function( getErrorStreamWrapper, return_internal_reference<>() ), "returns error stream wrapper.")
+      .add_property("logStreamWrapper", make_function( getLogStreamWrapper, return_internal_reference<>() ), "returns log stream wrapper.")
+      .add_property("logStreamWrapper", make_function( getLogStreamWrapper, return_internal_reference<>() ), "returns log stream wrapper.")
+      .add_property("outStreamWrapper", make_function( getOutputStreamWrapper, return_internal_reference<>() ), "returns regular output stream wrapper.")
+      .add_property("outStreamWrapper", make_function( getOutputStreamWrapper, return_internal_reference<>() ), "returns regular output stream wrapper.")
+      ;
+
+const EntityWithProperties *(EntityWithProperties::*getOwner)(void) const= &EntityWithProperties::Owner;
     class_<EntityWithProperties,EntityWithProperties *, boost::noncopyable  >("EntityWithProperties", no_init)
       .add_property("owner", make_function( getOwner, return_internal_reference<>() ), "returns object's owner (container).")
       .def("setVerbosityLevel", &EntityWithProperties::setVerbosityLevel,"Set verbosity level.")
@@ -73,7 +90,9 @@ BOOST_PYTHON_MODULE(xc_base)
         .staticmethod("getVerbosityLevel")
       ;
 
+    StandardOutputWrapper &(CommandEntity::*getStandardOutputWrapper)(void)= &CommandEntity::getStandardOutputWrapper;
     class_<CommandEntity, bases<EntityWithProperties> >("CommandEntity")
+      .add_property("standardOutputWrapper", make_function( getStandardOutputWrapper, return_internal_reference<>() ), "returns standard output wrapper.")
       .add_property("logFileName", make_function( &CommandEntity::getLogFileName, return_internal_reference<>() ), &CommandEntity::setLogFileName)
       .add_property("errFileName", make_function( &CommandEntity::getErrFileName, return_internal_reference<>() ), &CommandEntity::setErrFileName)
       .def("hasProp", &CommandEntity::hasPyProp,"True if property exists.")

@@ -29,7 +29,7 @@
 #include <deque>
 #include <stack>
 #include "utility/utils/text/text_string.h"
-#include "utility/kernel/ErrLogFiles.h"
+#include "utility/kernel/StandardOutputWrapper.h"
 #include <boost/python.hpp>
 #include <boost/python/dict.hpp>
 
@@ -48,7 +48,7 @@ class CommandEntity: public EntityWithProperties
     static inline const std::string py_prop_prefix= "py_prop";
     typedef std::map<std::string, boost::python::object> PythonDict;
   private:
-    static ErrLogFiles err_log_files; //!< Streams para errores y avisos.
+    static StandardOutputWrapper standardOutput; //!< Streams para errores y avisos.
     PythonDict python_dict; //!< Python variables.
   protected:
     static CommandEntity *entcmd_cast(boost::any &data);
@@ -62,6 +62,8 @@ class CommandEntity: public EntityWithProperties
     CommandEntity *Owner(void);
     const CommandEntity *Owner(void) const;
 
+    const StandardOutputWrapper &getStandardOutputWrapper(void) const;
+    StandardOutputWrapper &getStandardOutputWrapper(void);
     const std::string &getLogFileName(void) const;
     void setLogFileName(const std::string &);
     const std::string &getErrFileName(void) const;

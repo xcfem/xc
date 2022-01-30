@@ -19,10 +19,10 @@
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
 //log_file.h
-//Arhivo para imprimir errores y avisos.
+//Standard stream redirection.
 
-#ifndef LOG_FILE_H
-#define LOG_FILE_H
+#ifndef STANDARD_STREAM_WRAPPER_H
+#define STANDARD_STREAM_WRAPPER_H
 
 #include <iostream>
 #include <fstream>
@@ -30,25 +30,24 @@
 
 //! @ingroup BASE
 //
-//! @brief Archivos para imprimir errores y avisos.
-class ErrLogFiles
+//! @brief Standard stream redirection.
+class StandardStreamWrapper
   {
-    std::string nmbErrFile;
-    std::ofstream *salida_err_file;
-    std::string nmbLogFile;
-    std::ofstream *salida_log_file;
-    std::streambuf *stream_buffer_cerr;
-    std::streambuf *stream_buffer_clog;
+    std::string fileName;
+    std::ostream &standardStream;
+    std::ofstream *customStream;
+    std::streambuf *standardStreamBuffer;
+  protected:
+    void free(void);
+    void alloc(const std::string &);
   public:
-    ErrLogFiles(void);
-    std::ostream &getErrFile(void);
-    std::ostream &getLogFile(void);
-    inline const std::string &getErrFileName(void) const
-      { return nmbErrFile; }
-    void setErrFileName(const std::string &filename);
-    inline const std::string &getLogFileName(void) const
-      { return nmbLogFile; }
-    void setLogFileName(const std::string &filename);
+    StandardStreamWrapper(const std::string &, std::ostream &);
+    ~StandardStreamWrapper(void);
+    void reset(void);
+    std::ostream &getStream(void);
+    inline const std::string &getFileName(void) const
+      { return fileName; }
+    void setFileName(const std::string &);
   };
 
 #endif
