@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+''' Import problem geometry from FreeCAD.'''
 from __future__ import division
 from __future__ import print_function
 
