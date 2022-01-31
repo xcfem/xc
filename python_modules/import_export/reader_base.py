@@ -11,6 +11,7 @@ __version__= "3.0"
 __email__= "l.pereztato@ciccp.es" "ana.ortega.ort@gmail.com"
 
 import re
+import sys
 import datetime
 from scipy.spatial.distance import cdist
 from misc_utils import log_messages as lmsg
@@ -180,6 +181,7 @@ def populateSetsFromEntitiesLabels(labelSetPairs, xcSet):
     :param xcSet: set of the entities that will be classified according to
                   its labels.
     '''
+    # Classify points.
     for p in xcSet.points: # for each point in the set.
         labels= p.getProp('labels') # point labels.
         for pair in labelSetPairs:
@@ -189,6 +191,7 @@ def populateSetsFromEntitiesLabels(labelSetPairs, xcSet):
                 if(regEx.match(lbl)): # if the label match the regular expr.
                     setToPopulate.getPoints.append(p) # put the point in the set
 
+    # Classify lines.
     for l in xcSet.lines: # for each line in the set.
         labels= l.getProp('labels') # line labels.
         for pair in labelSetPairs:
@@ -198,6 +201,7 @@ def populateSetsFromEntitiesLabels(labelSetPairs, xcSet):
                 if(regEx.match(lbl)): # if the label match the regular expr
                     setToPopulate.getLines.append(l) # put the line in the set
                     
+    # Classify surfaces.
     for s in xcSet.surfaces: # for each line in the set.
         labels= s.getProp('labels') # surface labels.
         for pair in labelSetPairs:
@@ -207,6 +211,7 @@ def populateSetsFromEntitiesLabels(labelSetPairs, xcSet):
                 if(regEx.match(lbl)): # if the label match the regular expr
                     setToPopulate.getSurfaces.append(s) # put the surface in the set
                     
+    # Classify bodies.
     for b in xcSet.bodies: # for each line in the set.
         labels= b.getProp('labels') # body labels.
         for pair in labelSetPairs:
@@ -216,3 +221,13 @@ def populateSetsFromEntitiesLabels(labelSetPairs, xcSet):
                 if(regEx.match(lbl)): # if the label match the regular expr
                     setToPopulate.getBodies.append(b) # put the body in the set
 
+    # Fill sets downwards.
+    visited= list()
+    for pair in labelSetPairs:
+        setToPopulate= pair[1]
+        if(setToPopulate.empty()):
+            functionName= sys._getframe(0).f_code.co_name
+            lmsg.warning(functionName+'; set: \''+setToPopulate.name+'\' is empty.')
+        if(setToPopulate not in visited):
+            setToPopulate.fillDownwards()
+        visited.append(setToPopulate)

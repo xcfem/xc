@@ -10,6 +10,7 @@ __email__= "l.pereztato@ciccp.es, ana.Ortega@ciccp.es "
 
 # import math
 from typing import Sequence
+import re
 import geom
 import xc
 import numpy as np
@@ -19,6 +20,7 @@ from postprocess import extrapolate_elem_attr
 from postprocess import get_reactions
 from actions.load_combination_utils import utils
 from solution import predefined_solutions
+from import_export import reader_base
 from import_export import neutral_mesh_description as nmd
 import uuid
 
@@ -1043,7 +1045,24 @@ class PredefinedSpace(object):
         ## Return the XC commands.
         preprocessor= self.preprocessor
         exec(xcCommands)
-        
+
+    def classifyBlockTopologyObjects(self, setsFromLabels, xcSet= None):
+        ''' Insert each block topology object (point, line, surface, volume)
+            in one or more set according to the value of its "Labels" property.
+
+        :param setsFromLabels: Python list containing the (regex, set) pairs
+                               defining the classification. The first value of
+                               the pair is a regular expression to be matched
+                               against the object labels, the second value is 
+                               the set that will receive the object if the 
+                               regular expression matches.
+        :param xcSet: set containing the objects to classify (defaults to the
+                      total set).
+        '''
+        if(xcSet==None):
+            xcSet= self.getTotalSet()
+        reader_base.populateSetsFromEntitiesLabels(setsFromLabels, xcSet)
+
                 
 def getModelSpace(preprocessor: xc.Preprocessor):
       '''Return a PredefinedSpace from the dimension of the space 
