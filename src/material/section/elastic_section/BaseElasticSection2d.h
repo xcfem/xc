@@ -62,6 +62,8 @@ class BaseElasticSection2d: public BaseElasticSection
       { return ctes_scc.getRho(); }
     inline void setRho(const double &r)
       { ctes_scc.setRho(r); }
+    virtual double getLinearRho(void) const
+      { return ctes_scc.getLinearRho(); }
 
     double getStrain(const double &y,const double &z= 0) const;
 
