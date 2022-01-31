@@ -237,6 +237,10 @@ class FreeCADImport(reader_base.ReaderBase):
                             self.propertyDict[lineName]= bte.BlockProperties(labels= objLabels, attributes= get_ifc_attributes(obj))
                         else:
                             lmsg.error(f'line too short: {p1},{p2}, {length}')
+                elif(shapeType=='Edge'):
+                    className= type(self).__name__
+                    methodName= sys._getframe(0).f_code.co_name
+                    lmsg.warning(className+'.'+methodName+'; entity with shape of type: '+shapeType+' ignored (promote it into "Line" if you want it to be imported).')
 
                         
     def importFaces(self):
@@ -305,7 +309,9 @@ class FreeCADImport(reader_base.ReaderBase):
             elif(shapeType in ['Wire']):
                 count= 0 # Nothing to do with those.
             else:
-                lmsg.log('Entity with shape of type: '+shapeType+' ignored.')      
+                className= type(self).__name__
+                methodName= sys._getframe(0).f_code.co_name
+                lmsg.warning(className+'.'+methodName+'; entity with shape of type: '+shapeType+' ignored.')
 
         for obj in self.groupsToImport:
             if(hasattr(obj,'Shape')):
