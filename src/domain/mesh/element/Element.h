@@ -172,6 +172,8 @@ class Element: public MeshComponent
     virtual void setIdNodes(const std::vector<int> &inodes);
     virtual void setIdNodes(const ID &inodes);
     virtual void setIdNode(const int &i, const int &inode);
+    int find(const Node *) const;
+    void replaceNode(Node *, Node *);
     void setDomain(Domain *theDomain);
 
     

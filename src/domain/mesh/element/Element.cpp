@@ -236,6 +236,42 @@ void XC::Element::setIdNode(const int &i, const int &inode)
       }
   }
 
+//! @brief Returns the index of the node whose pointer is being passed
+//! as parameter.
+int XC::Element::find(const Node *nPtr) const
+  { return getNodePtrs().find(nPtr); }
+
+//! @brief Replace the old node by the new one.
+//! @param oldNode: pointer to the node to be replaced.
+//! @param newNode: node to place in-lieu of the previous one.
+void XC::Element::replaceNode(Node *oldNode, Node *newNode)
+  {
+    if(oldNode and newNode)
+      {
+	const int position= find(oldNode); //Position of the old node.
+	if(position>=0)
+	  {
+	    const int newTag= newNode->getTag();
+	    setIdNode(position, newTag);
+	  }
+	else
+	  std::cerr << getClassName() << "::" << __FUNCTION__
+	            << "; node: " << oldNode->getTag()
+	            << " does not belong to this element."
+	            << std::endl;
+      }
+    else
+      {
+	std::cerr << getClassName() << "::" << __FUNCTION__;
+	if(!oldNode)
+	  std::cerr << "; null pointer to the old node (first argument)."
+	            << std::endl;
+	if(!newNode)
+	  std::cerr << "; null pointer to the new node (second argument)."
+	            << std::endl;
+      }
+  }
+
 //! @brief Sets the domain for the element.
 void XC::Element::setDomain(Domain *theDomain)
   {

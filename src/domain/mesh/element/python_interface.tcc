@@ -50,6 +50,7 @@ class_<XC::Element, XC::Element *,bases<XC::MeshComponent>, boost::noncopyable >
   .add_property("getIdxNodes",&XC::Element::getIdxNodes,"Return the node indices for its use in VTK arrays.")
   .def("setIdNodes", setIdNodesRef," setIdNodes(xc.ID([idNode0, idNode1,...]) set the element nodes.")
   .def("setIdNode", &XC::Element::setIdNode," setIdNode(i-th, idNode) set the element i-th node.")
+  .def("replaceNode", &XC::Element::replaceNode," replaceNode(oldNode, newNode) replaces the old node by the new one.")
   .add_property("getDimension",&XC::Element::getDimension,"Return element's dimension (point: 0, line: 1, surface: 2 or volume: 3).")
   .def("commitState", &XC::Element::commitState,"Commits element state.")
   .def("revertToLastCommit", &XC::Element::revertToLastCommit,"Return to the last committed state.")
