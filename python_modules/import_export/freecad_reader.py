@@ -201,7 +201,8 @@ class FreeCADImport(reader_base.ReaderBase):
                     p= self.getRelativeCoo([float(shape.X), float(shape.Y), float(shape.Z)])
                     vertices[0]= self.getIndexNearestPoint(p)
                     self.points[pointName]= vertices
-                    properties= bte.BlockProperties(labels= [labelName], attributes= get_ifc_attributes(obj))
+                    pointAttributes= get_ifc_attributes(obj)
+                    properties= bte.BlockProperties(labels= [labelName], attributes= pointAttributes)
                     self.propertyDict[pointName]= properties
                     
     def importLines(self):
@@ -234,7 +235,8 @@ class FreeCADImport(reader_base.ReaderBase):
                             # # groups
                             # if(lineName in self.entitiesGroups):
                             #     objLabels.extend(self.entitiesGroups[lineName])
-                            self.propertyDict[lineName]= bte.BlockProperties(labels= objLabels, attributes= get_ifc_attributes(obj))
+                            lineAttributes= get_ifc_attributes(obj)
+                            self.propertyDict[lineName]= bte.BlockProperties(labels= objLabels, attributes= lineAttributes)
                         else:
                             lmsg.error(f'line too short: {p1},{p2}, {length}')
                 elif(shapeType=='Edge'):

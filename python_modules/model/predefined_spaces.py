@@ -2138,6 +2138,37 @@ class StructuralMechanics3D(StructuralMechanics):
         elem.sectionArea=A
         return elem
 
+    def releaseLineExtremities(self, ln):
+        ''' Releases the rotational degrees of fredom at the extremities 
+            of the line.
+
+        :param line: line whose end elements will be pinned.
+        '''
+        nodes= self.preprocessor.getNodeHandler
+        dofs= xc.ID([0,1,2])
+        n1= ln.firstNode # First node.
+        totalConnectedElements= len(n1.getConnectedElements())
+        print('total connected elements n1: ', totalConnectedElements)
+        if(totalConnectedElements>1):
+            e1= ln.getConnectedElements(n1)[0] # First element.
+            n1Tag= n1.tag
+            newNode= nodes.duplicateNode(n1Tag) # new node.
+            # Connect the beam with the new node.
+            e1.replaceNode(n1, newNode)
+            self.newEqualDOF(newNode.tag,n1Tag,dofs)
+
+        n2= ln.lastNode # Last node.
+        totalConnectedElements= len(n2.getConnectedElements())
+        print('total connected elements n2: ', totalConnectedElements)
+        if(totalConnectedElements>1):
+            e2= ln.getConnectedElements(n2)[0] # Last element.
+            n2Tag= n2.tag
+            newNode= nodes.duplicateNode(n2Tag) # new node.
+            # Connect the beam with the new node.
+            e2.replaceNode(n2, newNode)
+            self.newEqualDOF(newNode.tag,n2Tag,dofs)        
+
+        
     def releaseBeamEnd(self, beamElement, stiffnessFactors, nodesToRelease):
         ''' Releases some degrees of fredom at the extremities of the beam element.
 
@@ -2145,7 +2176,7 @@ class StructuralMechanics3D(StructuralMechanics):
         :stiffnessFactors: factors that multiply the element stiffnesses on 
                            each DOF: [KX, KY, KZ, KrotX, KrotY, KrotZ]
                            the axis correspond to the local axis of the element.
-        :param nodesToRelease: indexesof the element nodes to release.
+        :param nodesToRelease: indexes of the element nodes to release.
         '''
         if(len(nodesToRelease)>0):
             beamMaterial= beamElement.getPhysicalProperties.getVectorMaterials[0]
