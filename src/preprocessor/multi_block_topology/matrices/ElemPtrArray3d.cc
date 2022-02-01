@@ -128,3 +128,40 @@ boost::python::list XC::ElemPtrArray3d::getPyElementList(void) const
       }
     return retval;
   }
+
+//! @brief Return the elements connected to the node being passed as parameter.
+std::set<const XC::Element *> XC::ElemPtrArray3d::getConnectedElements(const Node *n) const
+  {
+    ElemPtrArray3d *this_no_const= const_cast<ElemPtrArray3d *>(this);
+    std::set<Element *> tmp= this_no_const->getConnectedElements(n);
+    std::set<const XC::Element *> retval(tmp.begin(), tmp.end());
+    return retval;
+  }
+
+//! @brief Return the elements connected to the node being passed as parameter.
+std::set<XC::Element *> XC::ElemPtrArray3d::getConnectedElements(const Node *n)
+  {
+    std::set<Element *> retval;
+    const size_t numberOfLayers= getNumberOfLayers();
+    for(size_t i=1;i<=numberOfLayers;i++)
+      {
+        ElemPtrArray &layer= operator()(i);
+	const std::set<Element *> tmp= layer.getConnectedElements(n);
+	retval.insert(tmp.begin(), tmp.end());
+      }
+    return retval;
+  }
+
+//! @brief Return the elements connected to the node being passed as parameter.
+boost::python::list XC::ElemPtrArray3d::getConnectedElementsPy(const Node *n)
+  {
+    boost::python::list retval;
+    std::set<XC::Element *> elements= getConnectedElements(n);
+    for(std::set<XC::Element *>::iterator i= elements.begin(); i!= elements.end(); i++)
+      {
+        Element *ptrElem= *i;
+	boost::python::object pyObj(boost::ref(*ptrElem));
+	retval.append(pyObj);
+      }
+    return retval;
+  }

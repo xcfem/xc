@@ -115,6 +115,9 @@ class EntMdlr: public SetEstruct
     const Element *findElement(const int &) const;
     Element *getNearestElement(const Pos3d &p);
     const Element *getNearestElement(const Pos3d &p) const;
+    std::set<const Element *> getConnectedElements(const Node *) const;
+    std::set<Element *> getConnectedElements(const Node *);
+    boost::python::list getConnectedElementsPy(const Node *);    
 
     NodePtrArray3d &getTtzNodes(void)
       { return ttzNodes; }

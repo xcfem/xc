@@ -224,6 +224,18 @@ const XC::Element *XC::EntMdlr::getNearestElement(const Pos3d &p) const
     return this_no_const->getNearestElement(p);
   }
 
+//! @brief Return the elements connected to the node being passed as parameter.
+std::set<const XC::Element *> XC::EntMdlr::getConnectedElements(const Node *n) const
+  { return ttzElements.getConnectedElements(n); }
+
+//! @brief Return the elements connected to the node being passed as parameter.
+std::set<XC::Element *> XC::EntMdlr::getConnectedElements(const Node *n)
+  { return ttzElements.getConnectedElements(n); }
+
+//! @brief Return the elements connected to the node being passed as parameter.
+boost::python::list XC::EntMdlr::getConnectedElementsPy(const Node *n)
+  { return ttzElements.getConnectedElementsPy(n); }
+
 //! @brief Returns a pointer to the node cuyo identifier is being passed as parameter.
 XC::Node *XC::EntMdlr::findNode(const int &tag)
   { return ttzNodes.findNode(tag); }

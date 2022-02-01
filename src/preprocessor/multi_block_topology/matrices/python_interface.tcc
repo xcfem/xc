@@ -134,6 +134,7 @@ class_<XC::ElemPtrArray, bases<ptr_elements_matrix>, boost::noncopyable >("ElemP
   .add_property("elements",&XC::ElemPtrArray::getPyElementList,"returns the elements of the container in a python list.")
   .def("getNearestElement",make_function(getNearestElementElemPtrArray, return_internal_reference<>() ),"Returns nearest element.")
   .def("getElementWithTag",make_function(getElementWithTag, return_internal_reference<>() ),"Returns element by tag.")
+  .def("getConnectedElements",&XC::ElemPtrArray::getConnectedElementsPy,"Returns the elements connected to the node argument.")
   ;
 
 typedef std::vector<XC::ElemPtrArray> vector_mp_elements;
@@ -156,6 +157,7 @@ class_<XC::ElemPtrArray3d, bases<array3d_elements>, boost::noncopyable >("ElemPt
   .add_property("elements",&XC::ElemPtrArray3d::getPyElementList,"returns the elements of the container in a python list.")
   .def("getNearestElement",make_function(getNearestElementElemPtrArray3d, return_internal_reference<>() ),"Returns nearest element.")
   .def("getElementWithTag",make_function(getElementWithTagElemPtrArray3d, return_internal_reference<>() ),"Returns element by tag.")
+  .def("getConnectedElements",&XC::ElemPtrArray3d::getConnectedElementsPy,"Returns the elements connected to the node argument.")
   ;
 
 

@@ -28,6 +28,7 @@
 
 #include "ElemPtrArray.h"
 #include "domain/mesh/element/Element.h"
+#include "domain/mesh/node/Node.h"
 #include "utility/geom/pos_vec/Pos3d.h"
 #include "boost/lexical_cast.hpp"
 
@@ -128,6 +129,49 @@ boost::python::list XC::ElemPtrArray::getPyElementList(void) const
 	      const Element *elem= operator()(j,k);
    	      retval.append(elem);
 	    }
+      }
+    return retval;
+  }
+
+
+//! @brief Return the elements connected to the node being passed as parameter.
+std::set<const XC::Element *> XC::ElemPtrArray::getConnectedElements(const Node *n) const
+  {
+    ElemPtrArray *this_no_const= const_cast<ElemPtrArray *>(this);
+    std::set<Element *> tmp= this_no_const->getConnectedElements(n);
+    std::set<const XC::Element *> retval(tmp.begin(), tmp.end());
+    return retval;
+  }
+
+//! @brief Return the elements connected to the node being passed as parameter.
+std::set<XC::Element *> XC::ElemPtrArray::getConnectedElements(const Node *n)
+  {
+    std::set<Element *> retval;
+    if(n)
+      {
+	Node *node_no_const= const_cast<Node *>(n);
+        const std::set<Element *> tmp= node_no_const->getConnectedElements();
+	for(std::set<Element *>::const_iterator i= tmp.begin(); i!= tmp.end(); i++)
+	  {
+	    const int elementTag= (*i)->getTag();
+	    Element *e= findElement(elementTag);
+	    if(e)
+	      retval.insert(e);
+	  }
+      }
+    return retval;
+  }
+
+//! @brief Return the elements connected to the node being passed as parameter.
+boost::python::list XC::ElemPtrArray::getConnectedElementsPy(const Node *n)
+  {
+    boost::python::list retval;
+    const std::set<Element *> elements= getConnectedElements(n);
+    for(std::set<Element *>::const_iterator i= elements.begin(); i!= elements.end(); i++)
+      {
+        Element *ptrElem= *i;
+	boost::python::object pyObj(boost::ref(*ptrElem));
+	retval.append(pyObj);
       }
     return retval;
   }

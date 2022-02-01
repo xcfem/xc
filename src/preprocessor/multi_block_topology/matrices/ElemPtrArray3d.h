@@ -52,6 +52,10 @@ class ElemPtrArray3d: public PtrArray3dBase<ElemPtrArray>
     Element *getNearestElement(const Pos3d &p);
     const Element *getNearestElement(const Pos3d &p) const;
     boost::python::list getPyElementList(void) const;
+    
+    std::set<const Element *> getConnectedElements(const Node *) const;
+    std::set<Element *> getConnectedElements(const Node *);
+    boost::python::list getConnectedElementsPy(const Node *);    
   };
 
 } //end of XC namespace.
