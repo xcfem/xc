@@ -320,8 +320,7 @@ class OutputHandler(object):
         if(setToDisplay==None):
             setToDisplay= self.modelSpace.getTotalSet()
         self.modelSpace.preprocessor.getNodeHandler.calculateNodalReactions(inclInertia, reactionCheckTolerance)
-        #auto-scale
-        LrefModSize= setToDisplay.getBnd(1.0).diagonal.getModulus() #representative length of set size (to autoscale)
+        LrefModSize= setToDisplay.getBnd(defFScale).diagonal.getModulus() #representative length of set size (to autoscale)
         maxAbs=0.0
         forcePairs= list()
         momentPairs= list()
@@ -434,7 +433,7 @@ class OutputHandler(object):
         if(setToDisplay==None):
             setToDisplay= self.modelSpace.getTotalSet()
         #auto-scale parameters
-        LrefModSize= setToDisplay.getBnd(1.0).diagonal.getModulus() #representative length of set size (to autoscale)
+        LrefModSize= setToDisplay.getBnd(defFScale).diagonal.getModulus() #representative length of set size (to autoscale)
         scaleFactor= self.outputStyle.internalForcesDiagramScaleFactor
         unitConversionFactor= self.outputStyle.getForceUnitsScaleFactor()
         unitDescription= self.outputStyle.getForceUnitsDescription()
@@ -519,7 +518,7 @@ class OutputHandler(object):
         unitDescription= self.outputStyle.getForceUnitsDescription()
         if(not caption):
             caption= 'load case: ' + loadCaseName + ', set: ' + setToDisplay.name + ', '  + unitDescription
-        LrefModSize=setToDisplay.getBnd(1.0).diagonal.getModulus() #representative length of set size (to auto-scale)
+        LrefModSize=setToDisplay.getBnd(defFScale).diagonal.getModulus() #representative length of set size (to auto-scale)
         vectorScale= self.outputStyle.loadVectorsScaleFactor*LrefModSize/10.
         vField= lvf.LoadVectorField(loadCaseName,setToDisplay,unitConversionFactor,vectorScale)
         vField.multiplyByElementArea= self.outputStyle.multLoadsByElemArea
@@ -565,7 +564,7 @@ class OutputHandler(object):
         displaySettings.defineMeshScene(None,defFScale,color=setToDisplay.color)
         scOrient=1 #scalar bar orientation (1 horiz., 2 left-vert, 3 right-vert)
         # auto-scaling parameters
-        LrefModSize=setToDisplay.getBnd(1.0).diagonal.getModulus() #representative length of set size (to auto-scale)
+        LrefModSize=setToDisplay.getBnd(defFScale).diagonal.getModulus() #representative length of set size (to auto-scale)
         elLoadScaleF= self.outputStyle.loadDiagramsScaleFactor
         diagram= lld.LinearLoadDiagram(setToDisp=setToDisplay,scale=elLoadScaleF,fUnitConv= unitConversionFactor,component=elLoadComp)
         maxAbs= diagram.getMaxAbsComp(preprocessor)
@@ -625,7 +624,7 @@ class OutputHandler(object):
             setToDisplay= self.modelSpace.getTotalSet()
         unitConversionFactor, unitDescription= self.outputStyle.getUnitParameters(itemToDisp)
         lmsg.warning("Auto scale not implemented yet.")
-        LrefModSize= setToDisplay.getBnd(1.0).diagonal.getModulus() #representative length of set size (to autoscale)
+        LrefModSize= setToDisplay.getBnd(defFScale).diagonal.getModulus() #representative length of set size (to autoscale)
         scaleFactor= LrefModSize/unitConversionFactor 
         diagram= npd.NodePropertyDiagram(scaleFactor= scaleFactor,fUnitConv= unitConversionFactor,sets=[setToDisplay], attributeName= itemToDisp)
         diagram.addDiagram()
@@ -696,7 +695,7 @@ class OutputHandler(object):
         if(mode<=numModes):
             norm= preprocessor.getDomain.getMesh.normalizeEigenvectors(mode)
             #auto-scale
-            LrefModSize=setToDisplay.getBnd(1.0).diagonal.getModulus() #representative length of set size (to autoscale)
+            LrefModSize=setToDisplay.getBnd(defFScale).diagonal.getModulus() #representative length of set size (to autoscale)
             maxAbs= 0.0
             dispPairs= list()
             rotPairs= list()
@@ -802,7 +801,7 @@ class OutputHandler(object):
        '''
         #auto-scale parameters
         if(len(beamSetDispRes.elements)):            
-            LrefModSize=setToDisplay.getBnd(1.0).diagonal.getModulus() #representative length of set size (to autoscale)
+            LrefModSize=setToDisplay.getBnd(defFScale).diagonal.getModulus() #representative length of set size (to autoscale)
             lstArgVal=[e.getProp(attributeName+'Sect1')(itemToDisp) for e in beamSetDispRes.elements]
             unitConversionFactor, unitDescription= self.outputStyle.getUnitParameters(itemToDisp)
             scaleFactor= 1.0
