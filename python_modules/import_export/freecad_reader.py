@@ -96,7 +96,7 @@ def get_ifc_attributes(obj):
     if hasattr(obj,'Description'):
         retval['IfcDescription']= obj.Description
     return retval
-
+    
 class FreeCADImport(reader_base.ReaderBase):
     '''Import FreeCAD geometric entities.
 

@@ -13,6 +13,7 @@ __email__= "l.pereztato@ciccp.es" "ana.ortega.ort@gmail.com"
 import re
 import sys
 import datetime
+import math
 from scipy.spatial.distance import cdist
 from misc_utils import log_messages as lmsg
 from import_export import block_topology_entities as bte
@@ -231,3 +232,55 @@ def populateSetsFromEntitiesLabels(labelSetPairs, xcSet):
         if(setToPopulate not in visited):
             setToPopulate.fillDownwards()
         visited.append(setToPopulate)
+
+def findLabel(members, labelToFind):
+    ''' Search for the member(s) with the label argument.
+
+    :param members: container with the members to search on.
+    :param labelToFind: label to find. 
+    '''
+    retval= list()
+    for m in members:
+        labels= m.getProp('labels')
+        if(labelToFind in labels):
+            retval.append(m)
+    return retval
+
+def findTouchingMember(members, posToFind):
+    ''' Search for the member which has the nearest vertex 
+        to the position argument.
+
+    :param members: container with the members to search on.
+    :param posToFind: position to approach. 
+    '''
+    retval= None
+    vertexIndex= None
+    minDist= 6.023e23
+    for member in members:
+        vertices= member.getVertices
+        for i, v in enumerate(vertices):
+            d2= v.getPos.dist2(posToFind)
+            if(d2<minDist):
+                minDist= d2
+                vertexIndex= i
+                retval= member
+    return retval, vertexIndex, math.sqrt(minDist)
+ 
+def findConnectedMember(members, labelToFind, posToFind):
+    ''' Search for the member which has the label argument
+        and is the nearest vertex to the position argument.
+
+    :param members: container with the members to search on.
+    :param labelToFind: label to find. 
+    :param posToFind: position to approach. 
+    '''
+    # Search for the members which has the label.
+    connectedMembers= findLabel(members, labelToFind)
+    retval= None
+    if(len(connectedMembers)>0):
+        retval= findTouchingMember(connectedMembers, posToFind)
+    else:
+        funcName= sys._getframe(0).f_code.co_name
+        lmsg.error(funcName+'; no members found with label: \''+labelToFind+'\'')
+    # Search for the touching member between the connected.
+    return retval
