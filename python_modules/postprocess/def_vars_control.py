@@ -278,7 +278,7 @@ def updateEnvelopeInternalForcesBeamElem(beamElem):
     beamElem.setProp('T-',minT)
   
 def defSteelShapeElasticRangeElementParameters(e,shape):
-  e.setProp("nmbSecc",shape.sectionName)
+  e.setProp("nmbSecc",shape.name)
   e.setProp("Area",shape.A())
   e.setProp("fyd",shape.steelType.fyd())
   e.setProp("fydV",shape.steelType.fydV())

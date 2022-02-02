@@ -737,7 +737,7 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
         foundationMaterial= foundationSection.defElasticShearSection2d(preprocessor,wallMatData) #Foundation elements material.
         elementSize= 0.2
         seedElemHandler= preprocessor.getElementHandler.seedElemHandler
-        seedElemHandler.defaultMaterial= foundationSection.sectionName
+        seedElemHandler.defaultMaterial= foundationSection.name
         seedElemHandler.defaultTransformation= transformationName
         seedElem= seedElemHandler.newElement("ElasticBeam2d",xc.ID([0,0]))
         self.wallSet= preprocessor.getSets.defSet("wallSet")
@@ -763,7 +763,7 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
         for lineName in ['stem']:
             l= self.wireframeModelLines[lineName]
             l.setElemSize(elementSize)
-            seedElemHandler.defaultMaterial= stemSection.sectionName
+            seedElemHandler.defaultMaterial= stemSection.name
             l.genMesh(xc.meshDir.I)
             for e in l.elements:
                 y= -e.getPosCentroid(True).y

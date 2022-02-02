@@ -69,7 +69,7 @@ section.shReinfY= shearReinf
 
 section.defRCSection(preprocessor,matDiagType= 'd')
 
-scc3d_testing_bench.sectionModel(preprocessor, section.sectionName)
+scc3d_testing_bench.sectionModel(preprocessor, section.name)
 
 # Constraints
 modelSpace= predefined_spaces.getStructuralMechanics3DSpace(preprocessor)

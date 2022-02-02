@@ -48,7 +48,7 @@ section.positvRebarRows= def_simple_RC_section.LongReinfLayers([lowerRow])
 section.negatvRebarRows= def_simple_RC_section.LongReinfLayers([])
 
 section.defRCSection(preprocessor,matDiagType= 'k')
-scc3d_testing_bench.sectionModel(preprocessor, section.sectionName)
+scc3d_testing_bench.sectionModel(preprocessor, section.name)
 
 # Constraints
 modelSpace= predefined_spaces.getStructuralMechanics3DSpace(preprocessor)

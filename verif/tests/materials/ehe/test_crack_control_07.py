@@ -67,7 +67,7 @@ materialHandler= preprocessor.getMaterialHandler
 section.mainReinf= mainReinf
 
 section.defRCSection(preprocessor,matDiagType= 'k')
-scc3d_testing_bench.sectionModel(preprocessor, section.sectionName)
+scc3d_testing_bench.sectionModel(preprocessor, section.name)
 
 # Constraints
 modelSpace= predefined_spaces.getStructuralMechanics3DSpace(preprocessor)

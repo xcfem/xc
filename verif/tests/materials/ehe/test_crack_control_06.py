@@ -23,7 +23,7 @@ from materials.ehe import EHE_limit_state_checking
 from model import predefined_spaces
 
 datosScc1LosC= def_simple_RC_section.RCRectangularSection()
-datosScc1LosC.sectionName= "secHA1LosC"
+datosScc1LosC.name= "secHA1LosC"
 datosScc1LosC.sectionDescr= "Losa. Central portion. Section normal to X axis."
 datosScc1LosC.fiberSectionParameters.concrType= EHE_materials.HA25
 datosScc1LosC.depth= 0.25
@@ -55,7 +55,7 @@ reinfSteelMaterialTag= EHE_materials.B500S.defDiagK(preprocessor)
 
 datosScc1LosC.defRCSection(preprocessor, "k")
 
-scc3d_testing_bench.sectionModel(preprocessor, datosScc1LosC.sectionName)
+scc3d_testing_bench.sectionModel(preprocessor, datosScc1LosC.name)
 
 # Constraints
 modelSpace= predefined_spaces.getStructuralMechanics3DSpace(preprocessor)

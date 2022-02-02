@@ -27,7 +27,7 @@ preprocessor=  feProblem.getPreprocessor
 SHS50x50x2_5=  section_properties.RectangularSection("SHS50x50x2_5",b=0.05,h=0.05) # Section geometry.
 matSHS50x50x2_5=  typical_materials.MaterialData(name='matSec',E=210000e6,nu=0.3e6,rho=2500) # Section material.
 
-SHS50x50x2_5.sectionName= "SHS50x50x2_5"
+SHS50x50x2_5.name= "SHS50x50x2_5"
 SHS50x50x2_5.b= 0.05
 SHS50x50x2_5.h= 0.05
 SHS50x50x2_5.e= 2.5e-3
@@ -48,7 +48,7 @@ SHS50x50x2_5.alpha= 5/6 # XXX Corregir
 
 # Materials definition
 mat= SHS50x50x2_5.defElasticSection3d(preprocessor,matSHS50x50x2_5)
-elemZLS= scc3d_testing_bench.sectionModel(preprocessor, SHS50x50x2_5.sectionName)
+elemZLS= scc3d_testing_bench.sectionModel(preprocessor, SHS50x50x2_5.name)
 
 # Constraints
 modelSpace= predefined_spaces.getStructuralMechanics3DSpace(preprocessor)

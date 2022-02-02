@@ -452,7 +452,7 @@ class RCSectionBase(object):
 
     def gmSectionName(self):
         ''' returns the name of the geometric section'''
-        return "geom"+self.sectionName
+        return "geom"+self.name
                 
     def getConcreteDiagram(self,preprocessor):
         ''' Return the concrete stress-strain diagram.
@@ -498,7 +498,7 @@ class RCSectionBase(object):
 
         :param preprocessor: preprocessor of the finite element problem.
         '''
-        self.fs= preprocessor.getMaterialHandler.newMaterial("fiberSectionShear3d",self.sectionName)
+        self.fs= preprocessor.getMaterialHandler.newMaterial("fiberSectionShear3d",self.name)
         self.fiberSectionRepr= self.fs.getFiberSectionRepr()
         self.fiberSectionRepr.setGeomNamed(self.gmSectionName())
         self.fs.setupFibers()
@@ -538,9 +538,9 @@ class RCSectionBase(object):
         :param preprocessor: preprocessor of the finite element problem.
         '''
         if(not self.fiberSectionRepr):
-            lmsg.error("defInteractionDiagram: fiber section representation for section: "+ self.sectionName + ";  not defined yet; use defRCSection method.\n")
+            lmsg.error("defInteractionDiagram: fiber section representation for section: "+ self.name + ";  not defined yet; use defRCSection method.\n")
         self.defInteractionDiagramParameters(preprocessor)
-        return preprocessor.getMaterialHandler.calcInteractionDiagram(self.sectionName,self.fiberSectionParameters.idParams)
+        return preprocessor.getMaterialHandler.calcInteractionDiagram(self.name,self.fiberSectionParameters.idParams)
 
     def defInteractionDiagramNMy(self,preprocessor):
         '''Defines N-My interaction diagram.
@@ -548,9 +548,9 @@ class RCSectionBase(object):
         :param preprocessor: preprocessor of the finite element problem.
         '''
         if(not self.fiberSectionRepr):
-            lmsg.error("defInteractionDiagramNMy: fiber section representation for section: "+ self.sectionName + ";  not defined yet; use defRCSection method.\n")
+            lmsg.error("defInteractionDiagramNMy: fiber section representation for section: "+ self.name + ";  not defined yet; use defRCSection method.\n")
         self.defInteractionDiagramParameters(preprocessor)
-        return preprocessor.getMaterialHandler.calcInteractionDiagramNMy(self.sectionName,self.fiberSectionParameters.idParams)
+        return preprocessor.getMaterialHandler.calcInteractionDiagramNMy(self.name,self.fiberSectionParameters.idParams)
 
     def defInteractionDiagramNMz(self,preprocessor):
         '''Defines N-Mz interaction diagram.
@@ -558,9 +558,9 @@ class RCSectionBase(object):
         :param preprocessor: preprocessor of the finite element problem.
         '''
         if(not self.fiberSectionRepr):
-            lmsg.error("defInteractionDiagramNMz: fiber section representation for section: "+ self.sectionName + ";  not defined yet; use defRCSection method.\n")
+            lmsg.error("defInteractionDiagramNMz: fiber section representation for section: "+ self.name + ";  not defined yet; use defRCSection method.\n")
         self.defInteractionDiagramParameters(preprocessor)
-        return preprocessor.getMaterialHandler.calcInteractionDiagramNMz(self.sectionName,self.fiberSectionParameters.idParams)
+        return preprocessor.getMaterialHandler.calcInteractionDiagramNMz(self.name,self.fiberSectionParameters.idParams)
 
     def subplot(self, ax, preprocessor, matDiagType= 'k'):
         ''' Put the section drawing in the subplot argument.
@@ -571,7 +571,7 @@ class RCSectionBase(object):
                      ("k" for characteristic diagram, "d" for design diagram)
         '''
         ax.axis('equal')
-        ax.set_title('Section: '+self.sectionName)
+        ax.set_title('Section: '+self.name)
         ax.grid(visible= True, linestyle='dotted')
         # Plot contour.
         contour= self.getContour()
@@ -610,7 +610,6 @@ class BasicRectangularRCSection(RCSectionBase, section_properties.RectangularSec
     '''
     Base class for rectangular reinforced concrete sections.
 
-    :ivar sectionName:     name identifying the section
     :ivar shReinfZ:        record of type ShearReinforcement
                            defining the shear reinforcement in Z direction
     :ivar shReinfY:        record of type ShearReinforcement
@@ -741,8 +740,6 @@ class RCRectangularSection(BasicRectangularRCSection):
     ''' This class is used to define the variables that make up a reinforced 
         concrete section with top and bottom reinforcement layers.
 
-    :ivar sectionName:     name identifying the section
-    :ivar sectionDescr:    section description
     :ivar minCover:        minimum value of end or clear concrete cover of main 
                            bars from both the positive and negative faces
     :ivar negatvRebarRows: layers of main rebars in the local negative face of 
@@ -750,6 +747,7 @@ class RCRectangularSection(BasicRectangularRCSection):
     :ivar positvRebarRows: layers of main rebars in the local positive face of 
                            the section
     '''
+    
     def __init__(self, name= None, sectionDescr= None, width=0.25, depth=0.25, concrType= None, reinfSteelType= None):
         ''' Constructor.
 

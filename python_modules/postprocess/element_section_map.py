@@ -101,14 +101,14 @@ class ElementSections(object):
         directionText= ''
         if(direction):
             directionText= str(direction)
-            sect.sectionName+= directionText 
+            sect.name+= directionText 
             sect.sectionDescr+= ". "+ directionText + " direction."
         ipText= ''
         if(gaussPnt):
             ipText= str(gaussPnt)
             if(direction):
-                sect.sectionName+= '_'
-            sect.sectionName+= ipText
+                sect.name+= '_'
+            sect.name+= ipText
             sect.sectionDescr+= ' ' + ipText + " integration point."
         self.append_section(sect)
 
@@ -301,7 +301,7 @@ class RCSlabBeamSection(setRCSections2SetElVerif):
         ''' Return the template section to use with createSingleSection
             method.'''
         sect= def_simple_RC_section.RCRectangularSection()
-        sect.sectionName= self.name
+        sect.name= self.name
         sect.sectionDescr= self.sectionDescr
         sect.fiberSectionParameters.concrType= self.concrType
         sect.h= self.depth
@@ -508,9 +508,9 @@ def loadMainRefPropertyIntoElements(elemSet, sectionContainer, code):
     '''add to each element of the set the
        desired property (As1+,As1-,...,d1+,d1-,...).''' 
     for e in elemSet:
-        if(e.hasProp('sectionName')):
-            sectionName= e.getProp('sectionName')
-            s= sectionContainer.search(sectionName)
+        if(e.hasProp('name')):
+            name= e.getProp('name')
+            s= sectionContainer.search(name)
             e.setProp(code,s.getMainReinfProperty(code))
         else:
             sys.stderr.write("element: "+ str(e.tag) + " section undefined.\n")
@@ -521,7 +521,7 @@ class ElementSectionMap(dict):
        for each element number. This way it defines
        a spatial distribution of the sections over
        the structure.'''
-    propName= 'sectionName'
+    propName= 'name'
     def assign(self,elemSet,setRCSects):
         '''Assigns the sections names to the elements of the set.
 
@@ -537,7 +537,7 @@ class ElementSectionMap(dict):
             if(not e.hasProp(self.propName)):
                 self[e.tag]= list()
                 for s in setRCSects.lstRCSects:
-                    self[e.tag].append(s.sectionName)
+                    self[e.tag].append(s.name)
                 e.setProp(self.propName,setRCSects.name)
             else:
               lmsg.error("element: "+ str(e.tag) + " has already a section ("+e.getProp(self.propName)+")\n")

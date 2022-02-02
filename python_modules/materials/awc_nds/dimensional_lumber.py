@@ -39,6 +39,7 @@ class DimensionLumberWood(mat.Wood):
     stud_fc_size_factor_y= [1.05,1.05,1.05,1.05,1.0,1.0,1.00]
     fc_size_factor_interp= scipy.interpolate.interp1d(fc_size_factor_x,fc_size_factor_y)
     stud_fc_size_factor_interp= scipy.interpolate.interp1d(stud_fc_size_factor_x,stud_fc_size_factor_y)
+    
     def __init__(self, name= None, grade= '', sub_grade= '', rho= None, wet= False):
         '''Constructor.'''
         super(DimensionLumberWood,self).__init__(name)
@@ -47,18 +48,25 @@ class DimensionLumberWood(mat.Wood):
         self.xc_material= None
         self.rho= rho
         self.wet= wet
+        
     def getXCMaterialName(self):
         ''' Return the name for create the corresponding
             XC material.'''
         return self.name+'_'+self.grade+'_'+self.sub_grade
+    
     def defXCMaterial(self):
         '''Defines the material in XC.'''
         if(not self.xc_material):
             self.xc_material= typical_materials.MaterialData(name= self.getXCMaterialName(), E= self.E, nu= self.nu, rho= self.rho)
         return self.xc_material
+    
     def getBendingFlatUseFactor(self, b, h):
         ''' Return the flat use factor for the bending design
-            value Fb according to National Design Specification table 4A.'''
+            value Fb according to National Design Specification table 4A.
+
+        :param b: section width.
+        :param h: section depth.
+        '''
         retval= 1.0
         if(b>h): # flat use
             f= self.flat_use_interp_3
@@ -66,9 +74,14 @@ class DimensionLumberWood(mat.Wood):
                 f= self.flat_use_interp_4
             retval= f(b/mat.in2meter)
         return retval;
+    
     def getBendingSizeFactor(self, b, h):
         ''' Return the size factor for the bending design
-            value Fb according to National Design Specification table 4A.'''
+            value Fb according to National Design Specification table 4A.
+
+        :param b: section width.
+        :param h: section depth.
+        '''
         width= max(b,h)
         thickness= min(b,h)
         retval= 1.0
@@ -86,9 +99,14 @@ class DimensionLumberWood(mat.Wood):
         else:
             lmsg.error('Grade: '+grade+' unknown.')
         return retval;
+    
     def getTensionSizeFactor(self, b, h):
         ''' Return the size factor for the tension design
-            value Ft according to National Design Specification table 4A.'''
+            value Ft according to National Design Specification table 4A.
+
+        :param b: section width.
+        :param h: section depth.
+        '''
         width= max(b,h)
         thickness= min(b,h)
         retval= 1.0
@@ -104,9 +122,14 @@ class DimensionLumberWood(mat.Wood):
         else:
             lmsg.error('Grade: '+grade+' unknown.')
         return retval;
+    
     def getCompressionSizeFactor(self, b, h):
         ''' Return the size factor for the compression design
-            value Ft according to National Design Specification table 4A.'''
+            value Ft according to National Design Specification table 4A.
+
+        :param b: section width.
+        :param h: section depth.
+        '''
         width= max(b,h)
         thickness= min(b,h)
         retval= 1.0
@@ -122,16 +145,20 @@ class DimensionLumberWood(mat.Wood):
         else:
             lmsg.error('Grade: '+grade+' unknown.')
         return retval;
+    
     def getFb(self,h):
         ''' Return the value of Fb. Used in BeamMember.getBeamStabilityFactor
 
         :param h: section depth
         '''
         return self.Fb
+    
     def getFbAdj(self, b, h, Cr= 1.0):
         ''' Return the adjusted value of Fb according
             to National Design Specification table 4A.
 
+        :param b: section width.
+        :param h: section depth
         :param Cr: repetitive member factor
         '''
         C= Cr # Repetitive member factor.
@@ -142,13 +169,19 @@ class DimensionLumberWood(mat.Wood):
         C*= self.getBendingFlatUseFactor(b, h) # Flat use factor
         C*= self.getBendingSizeFactor(b, h) # Size factor
         return C*self.Fb
+    
     def getFtAdj(self, b, h):
         ''' Return the adjusted value of Ft according
-            to National Design Specification table 4A.'''
+            to National Design Specification table 4A.
+
+        :param b: section width.
+        :param h: section depth
+        '''
         C= 1.0 # Wet service factor.
         # No flat use far tension
         C*= self.getTensionSizeFactor(b,h) # Size factor
         return C*self.Ft
+    
     def getFvAdj(self):
         ''' Return the adjusted value of Fv according
             to National Design Specification table 4A.'''
@@ -157,6 +190,7 @@ class DimensionLumberWood(mat.Wood):
         if(self.wet):
             C*=0.97
         return C*self.Fv
+    
     def getFc_perpAdj(self, Cb= 1.0):
         ''' Return the adjusted value of Fc_perp according
             to National Design Specification table 4A.
@@ -168,9 +202,14 @@ class DimensionLumberWood(mat.Wood):
         if(self.wet):
             C*=0.67
         return C*self.Fct
+    
     def getFcAdj(self, b, h):
         ''' Return the adjusted value of Fc according
-            to National Design Specification table 4A.'''
+            to National Design Specification table 4A.
+
+        :param b: section width.
+        :param h: section depth
+        '''
         C= 1.0 # Wet service factor.
         # Wet service factor
         threshold= 750.0*mat.psi2Pa/0.8
@@ -178,6 +217,7 @@ class DimensionLumberWood(mat.Wood):
             C*=0.8
         C*= self.getCompressionSizeFactor(b, h) # Size factor
         return C*self.Fc
+    
     def getEAdj(self):
         ''' Return the adjusted value of E according
             to National Design Specification table 4A.'''
@@ -186,6 +226,7 @@ class DimensionLumberWood(mat.Wood):
         if(self.wet):
             C*=0.9
         return C*self.E
+    
     def getEminAdj(self):
         ''' Return the adjusted value of Emin according
             to National Design Specification table 4A.'''

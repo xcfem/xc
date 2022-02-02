@@ -48,7 +48,7 @@ lin= modelSpace.newLinearCrdTransf("lin",xc.Vector([0,0,1]))
 # Elements definition
 elements= preprocessor.getElementHandler
 elements.defaultTransformation= lin.name
-elements.defaultMaterial= seccTest.sectionName
+elements.defaultMaterial= seccTest.name
 elements.numSections= 3 # Number of sections along the element.
 elements.defaultTag= 1
 beam3d= elements.newElement("ForceBeamColumn3d",xc.ID([1,2]))

@@ -42,21 +42,22 @@ def ansysExtractElem(nmbDBase,nmbTablaEsf,nmbTablaElem):
   cur= con.cursor()
   cur.execute("insert into "+nmbTablaElem+ " select distinct ELEM from " + nmbTablaEsf )
 
-def ansysCreaElem(nmbDBase,nmbTablaElem,sectionName):
-  '''Crea los elementos a partir de la tabla creada anteriormente
-   nmbDBase: Name of the database that will store the tables.
-   nmbTableElem: Name of the table that stores the element indexes.
-   sectionName: Name of the section assigned to each element.'''
-  con= sqlite.connect(nmbDBase)
-  cur= con.cursor()
+def ansysCreaElem(nmbDBase,nmbTablaElem, sectionName):
+    '''Crea los elementos a partir de la tabla creada anteriormente
 
-  i= 1
-  cur.execute("select * from " + nmbTablaElem)
-  while True:
-    row= cur.fetchone()
-    if row == None:
-      break
-    else:
-      nuevoZeroLengthSeccFibras(sectionName,i,row("ELEM"))
-      i+= 2
+     :param nmbDBase: Name of the database that will store the tables.
+     :param nmbTableElem: Name of the table that stores the element indexes.
+     :param sectionName: Name of the section assigned to each element.'''
+    con= sqlite.connect(nmbDBase)
+    cur= con.cursor()
+
+    i= 1
+    cur.execute("select * from " + nmbTablaElem)
+    while True:
+        row= cur.fetchone()
+        if row == None:
+            break
+        else:
+            nuevoZeroLengthSeccFibras(sectionName,i,row("ELEM"))
+            i+= 2
 

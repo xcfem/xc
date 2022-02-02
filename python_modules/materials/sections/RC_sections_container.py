@@ -40,7 +40,7 @@ class SectionContainer(object):
         rcSections.createSections()
         self.sections.append(rcSections)
         for i in range(len(rcSections.lstRCSects)):
-            self.mapSections[rcSections.lstRCSects[i].sectionName]= rcSections.lstRCSects[i]
+            self.mapSections[rcSections.lstRCSects[i].name]= rcSections.lstRCSects[i]
 
     def search(self,nmb):
         ''' Return section named nmb (if founded) '''
@@ -88,5 +88,5 @@ class SectionContainer(object):
                     diag= s.lstRCSects[i].defInteractionDiagramNMz(preprocessor,matDiagType)
                 else:
                     lmsg.error("calcInteractionDiagrams; interaction diagram type: " + diagramType + "' unknown.")
-                self.mapInteractionDiagrams[s.lstRCSects[i].sectionName]= diag
+                self.mapInteractionDiagrams[s.lstRCSects[i].name]= diag
 

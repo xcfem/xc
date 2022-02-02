@@ -56,7 +56,7 @@ section.negatvRebarRows= def_simple_RC_section.LongReinfLayers([upperRow])
 # section.shReinfY= shearReinf
 
 section.defRCSection(preprocessor,matDiagType= 'd')
-scc3d_testing_bench.sectionModel(preprocessor, section.sectionName)
+scc3d_testing_bench.sectionModel(preprocessor, section.name)
 
 
 # Constraints

@@ -49,7 +49,7 @@ shape= HE400B.defElasticShearSection3d(preprocessor)
 # Elements definition
 elements= preprocessor.getElementHandler
 elements.defaultTransformation= lin.name
-elements.defaultMaterial= HE400B.sectionName
+elements.defaultMaterial= HE400B.name
 elem= elements.newElement("ElasticBeam3d",xc.ID([1,2]))
 elem.rho= HE400B.get('P')
 vc.defSteelShapeElasticRangeElementParameters(elem,HE400B)

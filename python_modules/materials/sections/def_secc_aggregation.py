@@ -10,16 +10,16 @@ def def_secc_aggregation3d(preprocessor,defSecc,defMat):
   :param defSecc:  object with the mechanical properties of the section (A, Iy, Iz, ...)
   :param defMat:   object with the properties of the material (E, G)  
   '''
-  nmbRigF= defSecc.sectionName+ "_rigF" # Bending stiffness.
+  nmbRigF= defSecc.name+ "_rigF" # Bending stiffness.
   typical_materials.defElasticSection3d(preprocessor,nmbRigF,defSecc.A(),defMat.E,defMat.G(),defSecc.Iz(),defSecc.Iy(),defSecc.J())
-  nmbRigVy= defSecc.sectionName+"_rigVy" # Y shear stiffness.
+  nmbRigVy= defSecc.name+"_rigVy" # Y shear stiffness.
   typical_materials.defElasticMaterial(preprocessor,nmbRigVy,defSecc.alphaY()*defMat.G()*defSecc.A())
-  nmbRigVz= defSecc.sectionName+"_rigVz" # Z shear stiffness.
+  nmbRigVz= defSecc.name+"_rigVz" # Z shear stiffness.
   typical_materials.defElasticMaterial(preprocessor,nmbRigVz,defSecc.alphaY()*defMat.G()*defSecc.A())
-  nmbRigT= defSecc.sectionName+"_rigT" # Torsional stiffness.
+  nmbRigT= defSecc.name+"_rigT" # Torsional stiffness.
   typical_materials.defElasticMaterial(preprocessor,nmbRigT,defMat.G()*defSecc.J())
   materialHandler= preprocessor.getMaterialHandler
-  agg= materialHandler.newMaterial("section_aggregator",defSecc.sectionName)
+  agg= materialHandler.newMaterial("section_aggregator",defSecc.name)
   agg.setSection(nmbRigF)
   agg.setAdditions(["T","Vy","Vz"],[nmbRigT,nmbRigVy,nmbRigVz])
   #agg.setAddition("Vy",nmbRigVy)
@@ -32,12 +32,12 @@ def def_secc_aggregation2d(preprocessor,defSecc,defMat):
   :param defSecc:  object with the mechanical properties of the section (A, Iy, Iz, ...)
   :param defMat:   object with the properties of the material (E, G)  
   '''
-  nmbRigF= defSecc.sectionName+ "_rigF" # Bending stiffness.
+  nmbRigF= defSecc.name+ "_rigF" # Bending stiffness.
   typical_materials.defElasticSection2d(preprocessor,nmbRigF,defSecc.A(),defMat.E,defSecc.Iz())
-  nmbRigVy= defSecc.sectionName+"_rigVy" # Y shear stiffness.
+  nmbRigVy= defSecc.name+"_rigVy" # Y shear stiffness.
   typical_materials.defElasticMaterial(preprocessor,nmbRigVy,defSecc.alphaY()*defMat.G()*defSecc.A())
   materialHandler= preprocessor.getMaterialHandler
-  agg= materialHandler.newMaterial("section_aggregator",defSecc.sectionName)
+  agg= materialHandler.newMaterial("section_aggregator",defSecc.name)
   agg.setSection(nmbRigF)
   agg.setAdditions(["Vy"],[nmbRigVy])
   #agg.setAddition("Vy",nmbRigVy)

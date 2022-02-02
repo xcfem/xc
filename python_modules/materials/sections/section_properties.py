@@ -25,7 +25,7 @@ import xc
 class SectionProperties(object):
     '''Abstract section properties (area, moments of inertia,...)
 
-     :ivar sectionName:  name identifying the section
+     :ivar name:  name identifying the section
      :ivar xc_material:  pointer to XC material.
      :ivar torsionalStiffnessFactor: factor to apply to the sectional
                                      stiffness (defaults to 1.0).
@@ -33,7 +33,7 @@ class SectionProperties(object):
     def __init__(self,name):
         if(not name):
             name= str(uuid.uuid1())        
-        self.sectionName= name
+        self.name= name
         self.xc_material= None
         self.torsionalStiffnessFactor= 1.0
         
@@ -41,12 +41,12 @@ class SectionProperties(object):
         ''' Put member values in a dictionary.'''
         if(self.xc_material):
             lmsg.error('Cannot export xc materials yet.')
-        retval= {'sectionName':self.sectionName, 'xc_material':None}
+        retval= {'name':self.name, 'xc_material':None}
         return retval
 
     def setFromDict(self,dct):
         ''' Read member values from a dictionary.'''
-        self.sectionName= dct['sectionName']
+        self.name= dct['name']
         self.xc_material= dct['xc_material']
         
     def A(self):
@@ -188,15 +188,15 @@ class SectionProperties(object):
   
     def respTName(self):
         ''' returns a name to identify the torsional response of the section'''
-        return self.sectionName+"RespT"
+        return self.name+"RespT"
     
     def respVyName(self):
         ''' returns a name to identify the shear Y response of the section'''
-        return self.sectionName+"RespVy"
+        return self.name+"RespVy"
 
     def respVzName(self):
         ''' returns a name to identify the shear Z response of the section'''
-        return self.sectionName+"RespVz"
+        return self.name+"RespVz"
   
     def getRespT(self,preprocessor, G):
         ''' Return an elastic material for modeling torsional response of 
@@ -236,16 +236,16 @@ class SectionProperties(object):
         '''
         if(not self.xc_material):
             materialHandler= preprocessor.getMaterialHandler
-            if(materialHandler.materialExists(self.sectionName)):
-                lmsg.warning("Section: "+self.sectionName+" already defined.")
-                self.xc_material= materialHandler.getMaterial(self.sectionName)
+            if(materialHandler.materialExists(self.name)):
+                lmsg.warning("Section: "+self.name+" already defined.")
+                self.xc_material= materialHandler.getMaterial(self.name)
             else:
                 rho= material.rho*self.A()
                 if(overrideRho!=None):
                     rho= overrideRho
-                self.xc_material= typical_materials.defElasticSection3d(preprocessor,self.sectionName,self.A(),material.E,material.G(),self.Iz(),self.Iy(),self.J(), linearRho= rho)
+                self.xc_material= typical_materials.defElasticSection3d(preprocessor,self.name,self.A(),material.E,material.G(),self.Iz(),self.Iy(),self.J(), linearRho= rho)
         else:
-            lmsg.warning('Material: '+self.sectionName+ ' already defined as:'+str(self.xc_material))
+            lmsg.warning('Material: '+self.name+ ' already defined as:'+str(self.xc_material))
         return self.xc_material
     
     def defElasticShearSection3d(self, preprocessor, material, overrideRho= None):
@@ -260,16 +260,16 @@ class SectionProperties(object):
         '''
         if(not self.xc_material):
             materialHandler= preprocessor.getMaterialHandler
-            if(materialHandler.materialExists(self.sectionName)):
-                lmsg.warning("Section: "+self.sectionName+" already defined.")
-                self.xc_material= materialHandler.getMaterial(self.sectionName)
+            if(materialHandler.materialExists(self.name)):
+                lmsg.warning("Section: "+self.name+" already defined.")
+                self.xc_material= materialHandler.getMaterial(self.name)
             else:
                 rho= material.rho*self.A()
                 if(overrideRho!=None):
                     rho= overrideRho
-                self.xc_material= typical_materials.defElasticShearSection3d(preprocessor, name= self.sectionName, A= self.A(), E= material.E, G= material.G(), Iz= self.Iz(), Iy= self.Iy(),J= self.J(), alpha_y= self.alphaY(), alpha_z= self.alphaZ(), linearRho= rho)
+                self.xc_material= typical_materials.defElasticShearSection3d(preprocessor, name= self.name, A= self.A(), E= material.E, G= material.G(), Iz= self.Iz(), Iy= self.Iy(),J= self.J(), alpha_y= self.alphaY(), alpha_z= self.alphaZ(), linearRho= rho)
         else:
-            lmsg.warning('Material: '+self.sectionName+ ' already defined as:'+str(self.xc_material))
+            lmsg.warning('Material: '+self.name+ ' already defined as:'+str(self.xc_material))
         return self.xc_material
 
     def defElasticSection1d(self, preprocessor, material, overrideRho= None):
@@ -283,16 +283,16 @@ class SectionProperties(object):
         '''
         if(not self.xc_material):
             materialHandler= preprocessor.getMaterialHandler
-            if(materialHandler.materialExists(self.sectionName)):
-                lmsg.warning("Section: "+self.sectionName+" already defined.")
-                self.xc_material= materialHandler.getMaterial(self.sectionName)
+            if(materialHandler.materialExists(self.name)):
+                lmsg.warning("Section: "+self.name+" already defined.")
+                self.xc_material= materialHandler.getMaterial(self.name)
             else:
                 rho= material.rho*self.A()
                 if(overrideRho!=None):
                     rho= overrideRho
-                self.xc_material= typical_materials.defElasticSection1d(preprocessor,self.sectionName,self.A(),material.E, linearRho= rho)
+                self.xc_material= typical_materials.defElasticSection1d(preprocessor,self.name,self.A(),material.E, linearRho= rho)
         else:
-            lmsg.warning('Material: '+self.sectionName+ ' already defined as:'+str(self.xc_material))
+            lmsg.warning('Material: '+self.name+ ' already defined as:'+str(self.xc_material))
         return self.xc_material
     
     def defElasticSection2d(self, preprocessor, material, majorAxis= True, overrideRho= None):
@@ -307,9 +307,9 @@ class SectionProperties(object):
         '''
         if(not self.xc_material):
             materialHandler= preprocessor.getMaterialHandler
-            if(materialHandler.materialExists(self.sectionName)):
-                lmsg.warning("Section: "+self.sectionName+" already defined.")
-                self.xc_material= materialHandler.getMaterial(self.sectionName)
+            if(materialHandler.materialExists(self.name)):
+                lmsg.warning("Section: "+self.name+" already defined.")
+                self.xc_material= materialHandler.getMaterial(self.name)
             else:
                 I= self.Iz();
                 if(not majorAxis):
@@ -317,9 +317,9 @@ class SectionProperties(object):
                 rho= material.rho*self.A()
                 if(overrideRho!=None):
                     rho= overrideRho
-                self.xc_material= typical_materials.defElasticSection2d(preprocessor,self.sectionName,self.A(),material.E,I, linearRho= rho)
+                self.xc_material= typical_materials.defElasticSection2d(preprocessor,self.name,self.A(),material.E,I, linearRho= rho)
         else:
-            lmsg.warning('Material: '+self.sectionName+ ' already defined as:'+str(self.xc_material))
+            lmsg.warning('Material: '+self.name+ ' already defined as:'+str(self.xc_material))
         return self.xc_material
     
     def defElasticShearSection2d(self, preprocessor, material, majorAxis= True, overrideRho= None):
@@ -334,9 +334,9 @@ class SectionProperties(object):
         '''
         if(not self.xc_material):
             materialHandler= preprocessor.getMaterialHandler
-            if(materialHandler.materialExists(self.sectionName)):
-                lmsg.warning("Section: "+self.sectionName+" already defined.")
-                self.xc_material= materialHandler.getMaterial(self.sectionName)
+            if(materialHandler.materialExists(self.name)):
+                lmsg.warning("Section: "+self.name+" already defined.")
+                self.xc_material= materialHandler.getMaterial(self.name)
             else:
                 I= self.Iz();
                 if(not majorAxis):
@@ -344,9 +344,9 @@ class SectionProperties(object):
                 rho= material.rho*self.A()
                 if(overrideRho!=None):
                     rho= overrideRho
-                self.xc_material= typical_materials.defElasticShearSection2d(preprocessor,self.sectionName,self.A(),material.E,material.G(),I,self.alphaY(), linearRho= rho)
+                self.xc_material= typical_materials.defElasticShearSection2d(preprocessor,self.name,self.A(),material.E,material.G(),I,self.alphaY(), linearRho= rho)
         else:
-            lmsg.warning('Material: '+self.sectionName+' already defined as:'+str(self.xc_material))
+            lmsg.warning('Material: '+self.name+' already defined as:'+str(self.xc_material))
         return self.xc_material
     
     def getCrossSectionProperties2D(self, material):
@@ -930,7 +930,7 @@ class PolygonalSection(SectionProperties):
     def alphaY(self):
         '''Return shear shape factor with respect to local y-axis'''
         msg= 'alphaY: shear shape factor not implemented for section: '
-        msg+= self.sectionName
+        msg+= self.name
         msg+= '. 5/6 returned'
         lmsg.warning(msg)
         return 5.0/6.0
@@ -938,7 +938,7 @@ class PolygonalSection(SectionProperties):
     def alphaZ(self):
         '''Return shear shape factor with respect to local z-axis'''
         msg= 'alphaZ: shear shape factor not implemented for section: '
-        msg+= self.sectionName
+        msg+= self.name
         msg+= '. 5/6 returned'
         lmsg.warning(msg)
         return 5.0/6.0

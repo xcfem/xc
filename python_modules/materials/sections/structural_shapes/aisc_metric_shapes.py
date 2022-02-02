@@ -1279,7 +1279,6 @@ class IShape(WShape, structural_steel.IShape):
         '''
         isection = section_properties.ISection(name, bf, tf, tw, hw, bf, tf)
         idict = isection.getDict()
-        idict['name'] = idict['sectionName']
         idict['E'] = steel.E
         idict['nu'] = steel.nu
         steel_class = f"{type(steel).__module__}.{type(steel).__name__}"

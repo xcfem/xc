@@ -28,7 +28,7 @@ areaFi22= SIA262_materials.section_barres_courantes[22e-3]
 areaFi26= SIA262_materials.section_barres_courantes[26e-3]
 
 datosScc1LosC= def_simple_RC_section.RCRectangularSection()
-datosScc1LosC.sectionName= "secHA1LosC"
+datosScc1LosC.name= "secHA1LosC"
 datosScc1LosC.sectionDescr= "Deck. Central portion. Section normal to X axis."
 concr= EHE_materials.HA30
 concr.alfacc=0.85 # f_maxd= 0.85*fcd
@@ -64,7 +64,7 @@ preprocessor=  feProblem.getPreprocessor
 
 datosScc1LosC.defRCSection(preprocessor, "k")
 
-scc3d_testing_bench.sectionModel(preprocessor, datosScc1LosC.sectionName)
+scc3d_testing_bench.sectionModel(preprocessor, datosScc1LosC.name)
 
 # Constraints
 modelSpace= predefined_spaces.getStructuralMechanics3DSpace(preprocessor)

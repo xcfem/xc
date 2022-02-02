@@ -124,7 +124,7 @@ class PhantomModel(object):
         elements.dimElem= 1
         self.tagsNodesToLoad= defaultdict(list)
         if(outputCfg.controller.fakeSection):
-            elements.defaultMaterial= sccFICT.sectionName
+            elements.defaultMaterial= sccFICT.name
         for tagElem in self.elementTags:
             elementSectionNames= self.sectionsDistribution.getSectionNamesForElement(tagElem)
             if(elementSectionNames):

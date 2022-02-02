@@ -580,30 +580,30 @@ class WoodPanelSection(sp.RectangularSection):
             both from PFS TECO • 1507 Matt Pass, Cottage Grove, WI 53527, USA
         '''
         spanRating= 'unknown'
-        if(self.sectionName=='3/8'):
+        if(self.name=='3/8'):
             spanRating= '24/0'
-        elif(self.sectionName=='7/16'):
+        elif(self.name=='7/16'):
             spanRating= '24/16'
-        elif(self.sectionName=='15/32'):
+        elif(self.name=='15/32'):
             spanRating= '32/16'
-        elif(self.sectionName=='1/2'):
+        elif(self.name=='1/2'):
             spanRating= '32/16'
-        elif(self.sectionName=='19/32'):
+        elif(self.name=='19/32'):
             spanRating= '40/20'
-        elif(self.sectionName=='5/8'):
+        elif(self.name=='5/8'):
             spanRating= '40/20'
-        elif(self.sectionName=='23/32'):
+        elif(self.name=='23/32'):
             spanRating= '48/24'
-        elif(self.sectionName=='3/4'):
+        elif(self.name=='3/4'):
             spanRating= '48/24'
-        elif(self.sectionName=='7/8'):
+        elif(self.name=='7/8'):
             spanRating= '48/24'
-        elif(self.sectionName=='1'):
+        elif(self.name=='1'):
             spanRating= '48/24'
-        elif(self.sectionName=='1-1/8'):
+        elif(self.name=='1-1/8'):
             spanRating= '48/24'
         else:
-            lmsg.error('name: ', self.sectionName, 'unknown')
+            lmsg.error('name: ', self.name, 'unknown')
         return spanRating
     def getAPARatedSturdIFloor(self):
         ''' Return the APA rated Sturd-I-Floor from the panel thickness 
@@ -613,30 +613,30 @@ class WoodPanelSection(sp.RectangularSection):
             both from PFS TECO • 1507 Matt Pass, Cottage Grove, WI 53527, USA
         '''
         spanRating= 'unknown'
-        if(self.sectionName=='3/8'):
+        if(self.name=='3/8'):
             spanRating= '0oc'
-        elif(self.sectionName=='7/16'):
+        elif(self.name=='7/16'):
             spanRating= '0oc'
-        elif(self.sectionName=='15/32'):
+        elif(self.name=='15/32'):
             spanRating= '0oc'
-        elif(self.sectionName=='1/2'):
+        elif(self.name=='1/2'):
             spanRating= '0oc'
-        elif(self.sectionName=='19/32'):
+        elif(self.name=='19/32'):
             spanRating= '20oc'
-        elif(self.sectionName=='5/8'):
+        elif(self.name=='5/8'):
             spanRating= '20oc'
-        elif(self.sectionName=='23/32'):
+        elif(self.name=='23/32'):
             spanRating= '24oc'
-        elif(self.sectionName=='3/4'):
+        elif(self.name=='3/4'):
             spanRating= '24oc'
-        elif(self.sectionName=='7/8'):
+        elif(self.name=='7/8'):
             spanRating= '32oc'
-        elif(self.sectionName=='1'):
+        elif(self.name=='1'):
             spanRating= '32oc'
-        elif(self.sectionName=='1-1/8'):
+        elif(self.name=='1-1/8'):
             spanRating= '48oc'
         else:
-            lmsg.error('name: ', self.sectionName, 'unknown')
+            lmsg.error('name: ', self.name, 'unknown')
         return spanRating
 
 
@@ -835,7 +835,7 @@ class OSBPanelSection(WoodPanelSection):
         :param overrideRho: if defined (not None), override the value of 
                             the material density.
         '''
-        matName= self.sectionName+'_'+'osbMaterial'
+        matName= self.name+'_'+'osbMaterial'
         rho= self.rho
         if(overrideRho!=None):
             rho= overrideRho

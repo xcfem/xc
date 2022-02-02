@@ -29,7 +29,7 @@ feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
 # Materials definition
 matPoteau= scc10x20.defElasticShearSection3d(preprocessor,matscc10x20)
-elemZLS= scc3d_testing_bench.sectionModel(preprocessor, scc10x20.sectionName)
+elemZLS= scc3d_testing_bench.sectionModel(preprocessor, scc10x20.name)
 
 # Constraints
 modelSpace= predefined_spaces.getStructuralMechanics3DSpace(preprocessor)

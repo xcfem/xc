@@ -98,12 +98,11 @@ class RCCircularSection(def_simple_RC_section.RCSectionBase, section_properties.
     '''
     Base class for rectangular reinforced concrete sections.
 
-    :ivar sectionName: name identifying the section
     :ivar mainReinf: layers of main reinforcement.
     :ivar shReinf:  record of type ShearReinforcement
                     defining the shear reinforcement.
     '''
-    def __init__(self,name= 'noName', sectionDescr= None, Rext= 0.25, Rint= 0.0, concrType=None, reinfSteelType=None):
+    def __init__(self, name= 'noName', sectionDescr= None, Rext= 0.25, Rint= 0.0, concrType=None, reinfSteelType=None):
         ''' Constructor.
 
         :param name: name of the section.
