@@ -208,41 +208,87 @@ class FreeCADImport(reader_base.ReaderBase):
     def importLines(self):
         ''' Import lines from FreeCAD file.'''
         self.lines= dict()
+
+        def import_edge(e, edgeName, labelName, edgeAttributes):
+            ''' Import an edge.
+            
+            :param e: edge to import.
+            :param edgeName: name of the edge object.
+            :param labelName: label of the parent object.
+            :param edgeAttributes: IFC attributes of the parent object.
+            '''
+            vertices= [-1,-1]
+            v0= e.Vertexes[0]
+            v1= e.Vertexes[1]
+            p1= self.getRelativeCoo([float(v0.X), float(v0.Y), float(v0.Z)])
+            p2= self.getRelativeCoo([float(v1.X), float(v1.Y), float(v1.Z)])
+            length= cdist([p1],[p2])[0][0]
+            # Try to have all lines with the
+            # same orientation.
+            idx0, idx1= self.getOrientation(p1, p2, length/1e4)
+            # end orientation.
+            vertices[0]= idx0
+            vertices[1]= idx1
+            if(vertices[0]==vertices[1]):
+                lmsg.error(f'Error in line {edgeName} vertices are equal: {vertices}')
+            if(length>self.threshold):
+                self.lines[edgeName]= vertices
+                objLabels= [labelName]
+                # # groups
+                # if(edgeName in self.entitiesGroups):
+                #     objLabels.extend(self.entitiesGroups[edgeName])
+                self.propertyDict[edgeName]= bte.BlockProperties(labels= objLabels, attributes= edgeAttributes)
+            else:
+                lmsg.error(f'line too short: {p1},{p2}, {length}')
+
+        def import_edges(edges, names, labelName, attributes):
+            ''' Import edges from a wire shape.
+            
+            :param edges: edge list.
+            :param names: list containing the names of the edges.
+            :param labelName: label of the parent object.
+            :param attributes: IFC attributes for all the edges.
+            '''
+            for e, name in zip(edges, names):
+                import_edge(e, name, labelName, attributes)
+            
+        def import_wire(wireObj, attributes):
+            ''' Import a wire shape.
+            
+            :param wireObj: shape object containing the wire.
+            :param wireName: name of the wire object.
+            :param objLabel: label of the parent object.
+            :param attributes: IFC attributes for all the edges.
+            '''
+            labelName= wireObj.Label
+            edges= list()
+            names= list()
+            for i, e in enumerate(wireObj.Shape.Edges):
+                edges.append(e)
+                names.append(f'{wireObj.Name}{i}')
+            import_edges(edges, names, labelName, attributes)
+
         for obj in self.groupsToImport:
             if(hasattr(obj,'Shape')):
                 shapeType= obj.Shape.ShapeType
                 labelName= obj.Label
+                attributes= get_ifc_attributes(obj)
                 if(shapeType=='Wire'):
-                    for i, e in enumerate(obj.Shape.Edges):
-                        lineName= f'{obj.Name}{i}'
-                        vertices= [-1,-1]
-                        v0= e.Vertexes[0]
-                        v1= e.Vertexes[1]
-                        p1= self.getRelativeCoo([float(v0.X), float(v0.Y), float(v0.Z)])
-                        p2= self.getRelativeCoo([float(v1.X), float(v1.Y), float(v1.Z)])
-                        length= cdist([p1],[p2])[0][0]
-                        # Try to have all lines with the
-                        # same orientation.
-                        idx0, idx1= self.getOrientation(p1, p2, length/1e4)
-                        # end orientation.
-                        vertices[0]= idx0
-                        vertices[1]= idx1
-                        if(vertices[0]==vertices[1]):
-                            lmsg.error(f'Error in line {lineName} vertices are equal: {vertices}')
-                        if(length>self.threshold):
-                            self.lines[lineName]= vertices
-                            objLabels= [labelName]
-                            # # groups
-                            # if(lineName in self.entitiesGroups):
-                            #     objLabels.extend(self.entitiesGroups[lineName])
-                            lineAttributes= get_ifc_attributes(obj)
-                            self.propertyDict[lineName]= bte.BlockProperties(labels= objLabels, attributes= lineAttributes)
-                        else:
-                            lmsg.error(f'line too short: {p1},{p2}, {length}')
+                    import_wire(obj, attributes)
+                elif(shapeType=='Compound'):
+                    for cCount, ss in enumerate(obj.Shape.SubShapes):
+                        ssType= ss.ShapeType
+                        ssName= f'{obj.Name}.{cCount}'
+                        edges= ss.Edges
+                        names= list()
+                        for i in range(0,len(edges)):
+                            names.append(ssName+'.'+str(i))
+                        import_edges(edges, names, labelName+'.'+ssName, attributes)
+                        #import_wire(ss)
                 elif(shapeType=='Edge'):
                     className= type(self).__name__
                     methodName= sys._getframe(0).f_code.co_name
-                    lmsg.warning(className+'.'+methodName+'; entity with shape of type: '+shapeType+' ignored (promote it into "Line" if you want it to be imported).')
+                    lmsg.warning(className+'.'+methodName+'; entity with shape of type: '+shapeType+' not imported yet (promote it into "Line" if you want it to be imported).')
 
                         
     def importFaces(self):

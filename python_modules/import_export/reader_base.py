@@ -194,6 +194,7 @@ def populateSetsFromEntitiesLabels(labelSetPairs, xcSet):
     # Classify lines.
     for l in xcSet.lines: # for each line in the set.
         labels= l.getProp('labels') # line labels.
+        print('labels= ', labels)
         for pair in labelSetPairs:
             regEx= re.compile(pair[0]) # regular expression
             setToPopulate= pair[1] # set to populate
