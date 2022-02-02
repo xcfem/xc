@@ -54,10 +54,17 @@ class DimensionLumberWood(mat.Wood):
             XC material.'''
         return self.name+'_'+self.grade+'_'+self.sub_grade
     
-    def defXCMaterial(self):
-        '''Defines the material in XC.'''
+    def defXCMaterial(self, overrideRho= None):
+        '''Defines the material in XC.
+
+        :param overrideRho: if defined (not None), override the value of 
+                            the material density.
+        '''
+        rho= self.rho
+        if(overrideRho!=None):
+            rho= overrideRho
         if(not self.xc_material):
-            self.xc_material= typical_materials.MaterialData(name= self.getXCMaterialName(), E= self.E, nu= self.nu, rho= self.rho)
+            self.xc_material= typical_materials.MaterialData(name= self.getXCMaterialName(), E= self.E, nu= self.nu, rho= rho)
         return self.xc_material
     
     def getBendingFlatUseFactor(self, b, h):

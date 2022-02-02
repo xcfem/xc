@@ -883,7 +883,7 @@ class HeaderSection(sp.RectangularSection):
         :param overrideRho: if defined (not None), override the value of 
                             the material density.
         '''
-        mat= self.defXCMaterial(overrideRho)
+        mat= self.defXCMaterial(overrideRho= overrideRho)
         self.xc_section= super(HeaderSection,self).defElasticShearSection2d(preprocessor,mat, overrideRho)
         return self.xc_section
     
@@ -895,7 +895,7 @@ class HeaderSection(sp.RectangularSection):
         :param overrideRho: if defined (not None), override the value of 
                             the material density.
         '''
-        mat= self.defXCMaterial(overrideRho)
+        mat= self.defXCMaterial(overrideRho= overrideRho)
         self.xc_section= super(HeaderSection,self).defElasticShearSection3d(preprocessor,mat, overrideRho)
         return self.xc_section
 
@@ -973,8 +973,8 @@ class CustomLumberSection(sp.RectangularSection):
         :param overrideRho: if defined (not None), override the value of 
                             the material density.
         '''
-        mat= self.wood.defXCMaterial(overrideRho)
-        self.xc_section= super(DimensionLumberSection,self).defElasticShearSection2d(preprocessor,mat, overrideRho)
+        mat= self.wood.defXCMaterial(overrideRho= overrideRho)
+        self.xc_section= super(CustomLumberSection,self).defElasticShearSection2d(preprocessor,mat, overrideRho= overrideRho)
         return self.xc_section
     
     def defElasticShearSection3d(self, preprocessor, overrideRho= None):
@@ -985,9 +985,10 @@ class CustomLumberSection(sp.RectangularSection):
         :param overrideRho: if defined (not None), override the value of 
                             the material density.
         '''
-        mat= self.wood.defXCMaterial(overrideRho)
-        self.xc_section= super(DimensionLumberSection,self).defElasticShearSection3d(preprocessor,mat, overrideRho)
+        mat= self.wood.defXCMaterial(overrideRho= overrideRho)
+        self.xc_section= super(CustomLumberSection,self).defElasticShearSection3d(preprocessor, mat, overrideRho= overrideRho)
         return self.xc_section
+    
     def getBendingFlatUseFactor(self):
         ''' Return the flat use factor for the bending design
             value Fb.'''

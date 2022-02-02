@@ -9,6 +9,7 @@ __version__= "3.0"
 __email__= "l.pereztato@ciccp.es, ana.Ortega@ciccp.es "
 
 # import math
+import math
 from typing import Sequence
 import re
 import geom
@@ -39,6 +40,24 @@ def getSuitableXZVector(iNode, jNode):
     sg= geom.Line3d(p1,p2)
     v3d= sg.getKVector
     return xc.Vector([v3d.x, v3d.y, v3d.z])
+
+def setWebOrientation(lines, vertBarsWebOrientationVector= geom.Vector3d(0,1,0), barsWebOrientationVector= geom.Vector3d(0,0,1)):
+    ''' Defines a property called 'webOrientation' on each line that contains
+        a vector that will define the orientation of the web of the structural shape.
+
+    :param lines: line container.
+    :vertBarsWebOrientationVector: orientation of the web for the vertical members.
+    :barsWebOrientationVector: orientation of the web for the non vertical members.
+    '''
+    for l in lines:
+        iVector= l.getIVector
+        angle= abs(barsWebOrientationVector.getAngle(iVector))
+        if(angle<1e-3 or abs(angle-math.pi)<1e-3 or abs(angle-2*math.pi)<1e-3): # vertical line.
+            orientationVector= vertBarsWebOrientationVector
+        else: # non-vertical line.
+            orientationVector= barsWebOrientationVector
+        kVector= orientationVector.cross(iVector)
+        l.setProp('webOrientation', kVector) # orientation of the web.
 
 def setBearingBetweenNodes(prep,iNodA,iNodB,bearingMaterialNames,orientation= None):
     '''Modelize a bearing between the nodes
@@ -277,7 +296,9 @@ class PredefinedSpace(object):
         elif componentName == 'Q2':
             return 'q23'
         else: #LCPT I don't like this too much, I prefer let the user make the program to crass. Maybe a Warning? 
-            lmsg.error('Item '+str(componentName) + ' is not a valid component. Available components are: N1, N2, N12, M1, M2, M12, Q1, Q2')
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.error(className+'.'+methodName+'; item '+str(componentName) + ' is not a valid component. Available components are: N1, N2, N12, M1, M2, M12, Q1, Q2')
             return 'N1'
         
     def setPreprocessor(self, preprocessor: xc.Preprocessor):
@@ -407,7 +428,9 @@ class PredefinedSpace(object):
         numDOFs= self.preprocessor.getNodeHandler.numDOFs
         numDisp= len(prescDisplacements)
         if(numDisp<numDOFs):
-            lmsg.warning('prescribed '+str(numDisp)+' displacements, nDOFS= '+str(numDOFs))
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.warning(className+'.'+methodName+'; prescribed '+str(numDisp)+' displacements, nDOFS= '+str(numDOFs))
         sz= min(numDOFs,numDisp)
         for i in range(0,sz):
             spc= self.newSPConstraint(nodeTag,i,prescDisplacements[i])
@@ -549,7 +572,9 @@ class PredefinedSpace(object):
         elems= self.getElementHandler()
         elems.dimElem= self.preprocessor.getNodeHandler.dimSpace # space dimension.
         if(elems.dimElem>2):
-            lmsg.warning("Not a bi-dimensional space.")
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.warning(className+'.'+methodName+'; Not a bi-dimensional space.')
         elems.defaultMaterial= bearingMaterialName
         zl= elems.newElement("ZeroLength",xc.ID([newNode.tag,iNod]))
         zl.setupVectors(xc.Vector([direction[0],direction[1],0]),xc.Vector([-direction[1],direction[0],0]))
@@ -585,7 +610,9 @@ class PredefinedSpace(object):
         '''
         floatingNodes= self.getFloatingNodes()
         if(len(floatingNodes)>0):
-            lmsg.error('There are floating nodes in the model.')
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.error(className+'.'+methodName+'; there are floating nodes in the model.')
             for n in floatingNodes:
                 print(n.tag, n.getInitialPos3d)
         return floatingNodes
@@ -811,7 +838,9 @@ class PredefinedSpace(object):
         '''
         if(numSteps<1):
             numSteps= 1
-            lmsg.error('Number of steps must be greater than zero. Setting numSteps= '+str(numSteps))
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.error(className+'.'+methodName+'; number of steps must be greater than zero. Setting numSteps= '+str(numSteps))
         result= 0
         problem= self.getProblem()
         if(not self.analysis):
@@ -820,7 +849,9 @@ class PredefinedSpace(object):
             self.analysis= solProc.analysis
         result= self.analysis.analyze(numSteps)
         if(result!=0):
-            lmsg.error("Error in analysis")
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.error(className+'.'+methodName+'; error in analysis.')
         else:
             if(calculateNodalReactions):
                 result= self.calculateNodalReactions(includeInertia, reactionCheckTolerance)
@@ -833,7 +864,9 @@ class PredefinedSpace(object):
         '''
         problem= self.getProblem()
         if(self.analysis):
-            lmsg.log('Redefining analysis.')
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.log(className+'.'+methodName+'; redefining analysis.')
         self.analysis= predefined_solutions.zero_energy_modes(problem)
         return self.analysis.analyze(numModes)
     
@@ -844,7 +877,9 @@ class PredefinedSpace(object):
         '''
         problem= self.getProblem()
         if(self.analysis):
-            lmsg.log('Redefining analysis.')
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.log(className+'.'+methodName+'; edefining analysis.')
         self.analysis= predefined_solutions.ill_conditioning_analysis(problem)
         return self.analysis.analyze(numModes)
 
@@ -1117,7 +1152,9 @@ class SolidMechanics2D(PredefinedSpace):
         elif compName == 'uY':
             retval= self.Uy
         else:
-            lmsg.error('Item '+str(compName) + ' is not a valid component. Available components are: uX, uY')
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.error(className+'.'+methodName+'; item '+str(compName) + ' is not a valid component. Available components are: uX, uY')
         return retval
 
     def getStrainComponentFromName(self, compName: str):
@@ -1135,7 +1172,9 @@ class SolidMechanics2D(PredefinedSpace):
              or (compName == 'epsilon_yx') or (compName == 'epsilon_21')):
             retval= self.epsilon_12
         else:
-            lmsg.error('Item '+str(compName) + ' is not a valid component. Available components are: epsilon_11, epsilon_22, epsilon_12')
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.error(className+'.'+methodName+'; item '+str(compName) + ' is not a valid component. Available components are: epsilon_11, epsilon_22, epsilon_12')
         return retval
 
     def getStressComponentFromName(self, compName: str):
@@ -1153,7 +1192,9 @@ class SolidMechanics2D(PredefinedSpace):
              or (compName == 'sigma_yx') or (compName == 'sigma_21')):
             retval= self.sigma_12
         else:
-            lmsg.error('Item '+str(compName) + ' is not a valid component. Available components are: sigma_11, sigma_22, sigma_12')
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.error(className+'.'+methodName+'; item '+str(compName) + ' is not a valid component. Available components are: sigma_11, sigma_22, sigma_12')
         return retval
 
     def getDisplacementDOFs(self):
@@ -1282,7 +1323,9 @@ class StructuralMechanics(PredefinedSpace):
             if(not xc_material):
                 xc_material= crossSection.defElasticShearSection3d(self.preprocessor)
         else:
-            lmsg.error('Something went wrong; numDOFs= '+str(numDOFs))
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.error(className+'.'+methodName+'; something went wrong; numDOFs= '+str(numDOFs))
         seedElemHandler= self.getSeedElementHandler()
             
         seedElemHandler.defaultMaterial= xc_material.getName()
@@ -1344,7 +1387,9 @@ class StructuralMechanics2D(StructuralMechanics):
         elif compName == 'rotZ':
             retval= self.Theta
         else:
-            lmsg.error('Item '+str(compName) + ' is not a valid component. Available components are: uX, uY, rotZ')
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.error(className+'.'+methodName+'; item '+str(compName) + ' is not a valid component. Available components are: uX, uY, rotZ')
         return retval
 
     def getStrainComponentFromName(self, compName):
@@ -1358,7 +1403,9 @@ class StructuralMechanics2D(StructuralMechanics):
         elif(compName == 'gamma'): # shear
             retval= self.gamma
         else:
-            lmsg.error('Item '+str(compName) + ' is not a valid component. Available components are: epsilon, kappa, gamma')
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.error(className+'.'+methodName+'; item '+str(compName) + ' is not a valid component. Available components are: epsilon, kappa, gamma')
         return retval
 
     def getStressComponentFromName(self, compName):
@@ -1372,7 +1419,9 @@ class StructuralMechanics2D(StructuralMechanics):
         elif((compName == 'Q') or (compName == 'V')):
             retval= self.Q
         else:
-            lmsg.error('Item '+str(compName) + ' is not a valid component. Available components are: N, M, Q')
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.error(className+'.'+methodName+'; item '+str(compName) + ' is not a valid component. Available components are: N, M, Q')
         return retval
 
     def getDisplacementDOFs(self):
@@ -1436,7 +1485,9 @@ class StructuralMechanics2D(StructuralMechanics):
         elif(trfType=='corotational'):
             retval= self.newCorotCrdTransf(trfName)
         else:
-            lmsg.error('Unknown transformation type: \''+trfType+'\'')
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.error(className+'.'+methodName+'; unknown transformation type: \''+trfType+'\'')
         return retval
     
     def fixNode000(self, nodeTag, restrainedNodeId: str= None):
@@ -1574,7 +1625,9 @@ class SolidMechanics3D(PredefinedSpace):
         elif compName == 'uZ':
             retval= self.Uz
         else:
-            lmsg.error('Item '+str(compName) + ' is not a valid component. Available components are: uX, uY, uZ')
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.error(className+'.'+methodName+'; item '+str(compName) + ' is not a valid component. Available components are: uX, uY, uZ')
         return retval
     
     def getStrainComponentFromName(self, compName):
@@ -1597,7 +1650,9 @@ class SolidMechanics3D(PredefinedSpace):
              or (compName == 'epsilon_zy') or (compName == 'epsilon_32')):
             retval= self.epsilon_23
         else:
-            lmsg.error('Item '+str(compName) + ' is not a valid component. Available components are: epsilon_11, epsilon_22, epsilon_33, epsilon_12, epsilon_13, epsilon_23')
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.error(className+'.'+methodName+'; item '+str(compName) + ' is not a valid component. Available components are: epsilon_11, epsilon_22, epsilon_33, epsilon_12, epsilon_13, epsilon_23')
         return retval
 
     def getStressComponentFromName(self, compName):
@@ -1620,7 +1675,9 @@ class SolidMechanics3D(PredefinedSpace):
              or (compName == 'sigma_zy') or (compName == 'sigma_32')):
             retval= self.sigma_23
         else:
-            lmsg.error('Item '+str(compName) + ' is not a valid component. Available components are: sigma_11, sigma_22, sigma_33, sigma_12, sigma_13, sigma_23')
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.error(className+'.'+methodName+'; item '+str(compName) + ' is not a valid component. Available components are: sigma_11, sigma_22, sigma_33, sigma_12, sigma_13, sigma_23')
         return retval
     
     def getDisplacementDOFs(self):
@@ -1718,7 +1775,9 @@ class StructuralMechanics3D(StructuralMechanics):
         elif compName == 'rotZ':
             retval= self.ThetaZ
         else:
-            lmsg.error('Item '+str(compName) + ' is not a valid component. Available components are: uX, uY, uZ, rotX, rotY, rotZ')
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.error(className+'.'+methodName+'; item '+str(compName) + ' is not a valid component. Available components are: uX, uY, uZ, rotX, rotY, rotZ')
         return retval
     
     def getStrainComponentFromName(self, compName):
@@ -1739,7 +1798,9 @@ class StructuralMechanics3D(StructuralMechanics):
         elif(compName == 'theta'): # torsion along x-axis.
             retval= self.theta
         else:
-            lmsg.error('Item '+str(compName) + ' is not a valid component. Available components are: epsilon, kappa_z, gamma_y, kappa_y, gamma_z, theta')
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.error(className+'.'+methodName+'; item '+str(compName) + ' is not a valid component. Available components are: epsilon, kappa_z, gamma_y, kappa_y, gamma_z, theta')
         return retval
 
     def getStressComponentFromName(self, compName):
@@ -1766,7 +1827,9 @@ class StructuralMechanics3D(StructuralMechanics):
         elif(compName == 'T'):
             retval= self.Qz
         else:
-            lmsg.error('Item '+str(compName) + ' is not a valid component. Available components are: N, Mz, Qy, My, Qz, T.')
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.error(className+'.'+methodName+'; item '+str(compName) + ' is not a valid component. Available components are: N, Mz, Qy, My, Qz, T.')
         return retval
         
     def getDisplacementDOFs(self):
@@ -1845,7 +1908,9 @@ class StructuralMechanics3D(StructuralMechanics):
         elif(trfType=='corotational'):
             retval= self.newCorotCrdTransf(trfName, xzVector)
         else:
-            lmsg.error('Unknown transformation type: \''+trfType+'\'')
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.error(className+'.'+methodName+'; unknown transformation type: \''+trfType+'\'')
         return retval
 
     def fixNode000_000(self, nodeTag, restrainedNodeId: str= None):
@@ -2138,36 +2203,42 @@ class StructuralMechanics3D(StructuralMechanics):
         elem.sectionArea=A
         return elem
 
-    def releaseLineExtremities(self, ln):
+    def releaseLineExtremities(self, ln, stiffnessFactors= [1.0e7,1.0e7,1.0e7,.001,.001,.001], extremitiesToRelease= [0,1]):
         ''' Releases the rotational degrees of fredom at the extremities 
             of the line.
 
         :param line: line whose end elements will be pinned.
+        :stiffnessFactors: factors that multiply the element stiffnesses on 
+                           each DOF: [KX, KY, KZ, KrotX, KrotY, KrotZ]
+                           the axis correspond to the local axis of the element.
+        :param extremitiesToRelease: indexes of the element extremities 
+                                     to release: [0]->only the "from" point
+                                     [1]->only the "to" point
+                                     [0,1]-> both extremities.
         '''
         nodes= self.preprocessor.getNodeHandler
-        dofs= xc.ID([0,1,2])
-        n1= ln.firstNode # First node.
-        totalConnectedElements= len(n1.getConnectedElements())
-        print('total connected elements n1: ', totalConnectedElements)
-        if(totalConnectedElements>1):
-            e1= ln.getConnectedElements(n1)[0] # First element.
-            n1Tag= n1.tag
-            newNode= nodes.duplicateNode(n1Tag) # new node.
-            # Connect the beam with the new node.
-            e1.replaceNode(n1, newNode)
-            self.newEqualDOF(newNode.tag,n1Tag,dofs)
-
-        n2= ln.lastNode # Last node.
-        totalConnectedElements= len(n2.getConnectedElements())
-        print('total connected elements n2: ', totalConnectedElements)
-        if(totalConnectedElements>1):
-            e2= ln.getConnectedElements(n2)[0] # Last element.
-            n2Tag= n2.tag
-            newNode= nodes.duplicateNode(n2Tag) # new node.
-            # Connect the beam with the new node.
-            e2.replaceNode(n2, newNode)
-            self.newEqualDOF(newNode.tag,n2Tag,dofs)        
-
+        if(0 in extremitiesToRelease):
+            n0= ln.firstNode # First node.
+            connectedElements= ln.getConnectedElements(n0)
+            if(len(connectedElements)>0):
+                e0= connectedElements[0] # First element.
+                nodeIndex= e0.find(n0) # Index of the node in the element.
+                self.releaseBeamEnd(e0, stiffnessFactors, [nodeIndex])
+            else:
+                className= type(self).__name__
+                methodName= sys._getframe(0).f_code.co_name
+                lmsg.error(className+'.'+methodName+'; last node of the line not connected to any element of the line itself. Has been already released?')
+        if(1 in extremitiesToRelease):
+            n1= ln.lastNode # Last node.
+            connectedElements= ln.getConnectedElements(n1)
+            if(len(connectedElements)>0):
+                e1= connectedElements[0] # First element.
+                nodeIndex= e1.find(n1) # Index of the node in the element.
+                self.releaseBeamEnd(e1, stiffnessFactors, [nodeIndex])
+            else:
+                className= type(self).__name__
+                methodName= sys._getframe(0).f_code.co_name
+                lmsg.error(className+'.'+methodName+'; last node of the line not connected to any element of the line itself. Has been already released?')
         
     def releaseBeamEnd(self, beamElement, stiffnessFactors, nodesToRelease):
         ''' Releases some degrees of fredom at the extremities of the beam element.
