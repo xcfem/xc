@@ -38,20 +38,7 @@ class InternalForceDiagram(cd.ColoredDiagram):
            :param silent: if true don't complain about non-existent properties.
         '''
         # this code seems not used anymore 17/05/2020 LCPT
-        elemVDir= elem.getJVector3d(True) #initialGeometry= True
-        values= elem.getValuesAtNodes(self.component, silent)
-        if((self.component == 'Qy') or (self.component == 'Vy')):
-            elemVDir= elem.getJVector3d(True) # initialGeometry= True 
-        elif((self.component == 'Qz') or (self.component == 'Vz')):
-            elemVDir= elem.getKVector3d(True) # initialGeometry= True 
-        elif(self.component == 'My'):
-            elemVDir= elem.getKVector3d(True) # initialGeometry= True 
-        elif(self.component == 'Mz'):
-            elemVDir= elem.getJVector3d(True) # initialGeometry= True 
-        else:
-          lmsg.warning("'component :'"+ self.component+ "' unknown.")
-        return [elemVDir,values[0],values[1]]
-    
+        return cv.getElementInternalForceComponentData(elem, self.component)
 
     def addDiagram(self):
         self.creaEstrucDatosDiagrama()
@@ -65,7 +52,7 @@ class InternalForceDiagram(cd.ColoredDiagram):
           for e in s.elements:
             e.getResistingForce()
             componentData= self.getElementComponentData(e)
-            indxDiagrama= self.appendDataFromElementEnds(componentData[0],e,indxDiagrama,componentData[1],componentData[2])
+            indxDiagrama= self.appendDataFromElementEnds(componentData[0],e,indxDiagrama, componentData[1], componentData[2])
 
         self.updateLookUpTable()
         self.updateActorDiagrama()

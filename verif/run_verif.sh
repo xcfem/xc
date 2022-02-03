@@ -1061,8 +1061,11 @@ python tests/postprocess/limit_state_checking/aisc/test_uls_checking_aisc_04.py
 python tests/postprocess/limit_state_checking/aisc/test_uls_checking_aisc_05.py
 python tests/postprocess/limit_state_checking/aisc/test_uls_checking_aisc_06.py
 
-#VTK tests
-##python tests/vtk/dibuja_edges.py
+# Graphic output tests
+##python tests/postprocess/vtk/dibuja_edges.py
+echo "$BLEU" "  Graphic output." "$NORMAL"
+python tests/postprocess/vtk/test_beam3d_bending_moment_belly_01.py
+python tests/postprocess/vtk/test_beam3d_bending_moment_belly_02.py
 
 END=$(date +%s.%N)
 DIFF=$(echo "$END - $START" | bc)

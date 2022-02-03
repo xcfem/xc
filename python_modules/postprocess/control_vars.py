@@ -24,6 +24,31 @@ import xc
 from postprocess.reports import common_formats as fmt
 from postprocess import extrapolate_elem_attr as ext
 
+def getElementInternalForceComponentData(elem, component):
+    '''Return the data to use to represent the diagram over the element
+
+    :param elem: element to deal with.
+    :param component: component to show. 
+           Valid components are: 'N', 'Qy', 'Vy', 'Qz', 'Vz', 'My', 'Mz', 
+           'T'
+    '''
+    # default values
+    value1= 0.0
+    value2= 0.0
+    elemVDir= elem.getJVector3d(True) #initialGeometry= True
+    values= elem.getValuesAtNodes(component, False)
+    if(len(values)>1): # component found.
+        value1= values[0]; value2= values[1]
+    if((component == 'Qy') or (component == 'Vy')):
+        elemVDir= elem.getJVector3d(True) # initialGeometry= True 
+    elif((component == 'Qz') or (component == 'Vz')):
+        elemVDir= elem.getKVector3d(True) # initialGeometry= True 
+    elif(component == 'My'):
+        elemVDir= elem.getKVector3d(True) # initialGeometry= True 
+    elif(component == 'Mz'):
+        elemVDir= -elem.getJVector3d(True) # initialGeometry= True 
+    return [elemVDir,value1,value2]
+
 
 class ControlVarsBase(object):
     '''Base class for the control of variables (internal forces, 

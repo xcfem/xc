@@ -217,7 +217,10 @@ class DisplaySettingsFE(vtk_graphic_base.DisplaySettings):
                    initial/undeformed shape)
         '''
         self.setupGrid(setToDisplay)
-        vField= lavf.LocalAxesVectorField(setToDisplay.name+'_localAxes',vectorScale)
+        elementAvgSize= setToDisplay.elements.getAverageSize(False)
+        LrefModSize= setToDisplay.getBnd(defFScale).diagonal.getModulus()
+        vScale= vectorScale*min(elementAvgSize, .15*LrefModSize)        
+        vField= lavf.LocalAxesVectorField(setToDisplay.name+'_localAxes',vScale)
         vField.dumpVectors(setToDisplay)
         self.defineMeshScene(field= None) 
         vField.addToDisplay(self)

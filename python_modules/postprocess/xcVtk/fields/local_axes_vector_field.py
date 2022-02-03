@@ -20,7 +20,7 @@ class LocalAxesVectorField(object):
     xColor= [1.0,0.0,0.0] # red
     yColor= [0.0,1.0,0.0] # green
     zColor= [0.0,0.0,1.0] # blue
-    def __init__(self,name,scaleFactor= 1.0):
+    def __init__(self, name, scaleFactor= 1.0):
         '''
           Constructor.
 
@@ -98,7 +98,7 @@ class StrongWeakAxisVectorField(object):
     '''Draws a the strong axis on elements.'''
     strongColor= [1.0,0.0,0.0] # red
     weakColor= [0.0,0.0,1.0] # blue
-    def __init__(self,name,scaleFactor= 1.0):
+    def __init__(self, name, scaleFactor= 1.0):
       '''
         Constructor.
 

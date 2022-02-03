@@ -76,17 +76,7 @@ class ControlVarDiagram(cd.ColoredDiagram):
                 value1= None
                 value2= None
         else:
-            values= elem.getValuesAtNodes(self.component, False)
-            if(len(values)>1): # component found.
-                value1= values[0]; value2= values[1]
-        if((self.component == 'Qy') or (self.component == 'Vy')):
-            elemVDir= elem.getJVector3d(True) # initialGeometry= True 
-        elif((self.component == 'Qz') or (self.component == 'Vz')):
-            elemVDir= elem.getKVector3d(True) # initialGeometry= True 
-        elif(self.component == 'My'):
-            elemVDir= elem.getKVector3d(True) # initialGeometry= True 
-        elif(self.component == 'Mz'):
-            elemVDir= elem.getJVector3d(True) # initialGeometry= True 
+            [elemVDir,value1,value2]= cv.getElementInternalForceComponentData(elem, self.component)
         return [elemVDir,value1,value2]
 
     def getMaxAbsComp(self):
