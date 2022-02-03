@@ -94,13 +94,15 @@ class ControlVarDiagram(cd.ColoredDiagram):
         It is used only for calculating auto-scale parameter, so 
         we compare only values of the component in first node of the elements
         '''
-        maxV=0
+        maxV= 0.0
         for s in self.conjuntos:
-          for e in s.elements:
-            e.getResistingForce()
-            componentData= abs(self.getElementComponentData(e)[1])
-            if componentData > maxV:
-                maxV=componentData
+            for e in s.elements:
+                e.getResistingForce()
+                elementComponentData= self.getElementComponentData(e)
+                v1= abs(elementComponentData[1])
+                maxV= max(v1, maxV)
+                v2= abs(elementComponentData[2])
+                maxV= max(v2, maxV)
         return maxV
             
 

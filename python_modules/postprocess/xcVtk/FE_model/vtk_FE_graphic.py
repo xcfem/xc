@@ -278,10 +278,10 @@ class DisplaySettingsFE(vtk_graphic_base.DisplaySettings):
         if(type(xcSets)==list):
             for s in xcSets:
                 self.defineMeshActorsSet(s, field, defFScale, nodeSize)
-                self.displaySPconstraints(s, scaleConstr)
+                self.displaySPconstraints(s, scaleConstr, defFScale)
         else:
             self.defineMeshActorsSet(xcSets, field, defFScale, nodeSize)
-            self.displaySPconstraints(xcSets, scaleConstr)
+            self.displaySPconstraints(xcSets, scaleConstr, defFScale)
         self.renderer.ResetCamera()
         if(diagrams):
             for d in diagrams:
@@ -394,15 +394,22 @@ class DisplaySettingsFE(vtk_graphic_base.DisplaySettings):
         '''
         diagram.addDiagramToScene(self,orientScbar,titleScbar)
 
-    def displaySPconstraints(self, setToDisplay, scale):
+    def displaySPconstraints(self, setToDisplay, scale, defFScale=0.0):
         ''' Display single point constraints.
 
         :param setToDisplay: set to be displayed
         :param scale: scale for SPConstraints symbols.
+        :param defFScale: factor to apply to current displacement of nodes 
+                    so that the display position of each node equals to
+                    the initial position plus its displacement multiplied
+                    by this factor. (Defaults to 0.0, i.e. display of 
+                    initial/undeformed shape)
         '''
         prep= setToDisplay.getPreprocessor
         nodInSet= setToDisplay.nodes.getTags()
         elementAvgSize= setToDisplay.elements.getAverageSize(False)
+        LrefModSize= setToDisplay.getBnd(defFScale).diagonal.getModulus()
+        cScale= scale*min(elementAvgSize, .15*LrefModSize)
         #direction vectors for each DOF
         vx,vy,vz=[1,0,0],[0,1,0],[0,0,1]
         DOFdirVct=(vx,vy,vz,vx,vy,vz)
@@ -413,9 +420,9 @@ class DisplaySettingsFE(vtk_graphic_base.DisplaySettings):
             if nod.tag in nodInSet:
                 dof= sp.getDOFNumber
                 if dof < 3: # This is not true in 2D problems.
-                    utils_vtk.drawVtkSymb(symbType='cone',renderer=self.renderer, RGBcolor=[0,0,1], vPos=nod.getInitialPos3d, vDir=DOFdirVct[dof], scale=scale*elementAvgSize)
+                    utils_vtk.drawVtkSymb(symbType='cone',renderer=self.renderer, RGBcolor=[0,0,1], vPos=nod.getInitialPos3d, vDir=DOFdirVct[dof], scale= cScale)
                 else:
-                    utils_vtk.drawVtkSymb(symbType='shaftkey',renderer=self.renderer, RGBcolor=[0,1,0], vPos=nod.getInitialPos3d, vDir=DOFdirVct[dof], scale=scale*elementAvgSize)
+                    utils_vtk.drawVtkSymb(symbType='shaftkey',renderer=self.renderer, RGBcolor=[0,1,0], vPos=nod.getInitialPos3d, vDir=DOFdirVct[dof], scale= cScale)
             sp= spIter.next()
         return
                     

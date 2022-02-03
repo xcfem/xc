@@ -43,9 +43,12 @@ class VectorField(fb.FieldBase):
         self.actor.SetMapper(self.mapper)
         return self.actor
 
-    def populateFromPairList(self,pairList):
+    def populateFromPairList(self, pairList):
         ''' Adds vector data from the pair list
-            argument. '''
+            argument.
+
+        :param pairList: list pairs (position, vector).
+        '''
         for pair in pairList:
             p= pair[0]
             v= pair[1]

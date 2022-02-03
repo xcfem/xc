@@ -437,8 +437,8 @@ class OutputHandler(object):
         scaleFactor= self.outputStyle.internalForcesDiagramScaleFactor
         unitConversionFactor= self.outputStyle.getForceUnitsScaleFactor()
         unitDescription= self.outputStyle.getForceUnitsDescription()
-        diagAux=cvd.ControlVarDiagram(scaleFactor= scaleFactor,fUnitConv= unitConversionFactor,sets=[setToDisplay],attributeName= "intForce",component= itemToDisp)
-        maxAbs=diagAux.getMaxAbsComp()
+        diagAux= cvd.ControlVarDiagram(scaleFactor= scaleFactor,fUnitConv= unitConversionFactor,sets=[setToDisplay],attributeName= "intForce",component= itemToDisp)
+        maxAbs= diagAux.getMaxAbsComp()
         if maxAbs > 0:
             scaleFactor*=0.15*LrefModSize/(maxAbs*unitConversionFactor)
         captionText= self.getCaptionText(itemToDisp, unitDescription, setToDisplay)
@@ -564,7 +564,7 @@ class OutputHandler(object):
         displaySettings.defineMeshScene(None,defFScale,color=setToDisplay.color)
         scOrient=1 #scalar bar orientation (1 horiz., 2 left-vert, 3 right-vert)
         # auto-scaling parameters
-        LrefModSize=setToDisplay.getBnd(defFScale).diagonal.getModulus() #representative length of set size (to auto-scale)
+        LrefModSize= setToDisplay.getBnd(defFScale).diagonal.getModulus() #representative length of set size (to auto-scale)
         elLoadScaleF= self.outputStyle.loadDiagramsScaleFactor
         diagram= lld.LinearLoadDiagram(setToDisp=setToDisplay,scale=elLoadScaleF,fUnitConv= unitConversionFactor,component=elLoadComp)
         maxAbs= diagram.getMaxAbsComp(preprocessor)
@@ -592,13 +592,23 @@ class OutputHandler(object):
                                   self.getOutputLengthUnitSym()+'2)' )
             scOrient+=1
         # nodal loads
-        vFieldNod= lvf.LoadVectorField(loadPatternName= loadCaseName,
-                                       setToDisp=setToDisplay,fUnitConv= unitConversionFactor,
+        ## forces on nodes.
+        vFieldFNod= lvf.LoadVectorField(loadPatternName= loadCaseName,
+                                       setToDisp=setToDisplay, fUnitConv= unitConversionFactor,
                                        scaleFactor= vectorScale, showPushing= self.outputStyle.showLoadsPushing)
-        count= vFieldNod.dumpNodalLoads(preprocessor, defFScale=defFScale)
+        count= vFieldFNod.dumpNodalLoads(preprocessor, defFScale=defFScale)
         if(count >0):
-            vFieldNod.addToDisplay(displaySettings,orientation= scOrient,
+            vFieldFNod.addToDisplay(displaySettings,orientation= scOrient,
                                    title='Nodal loads ('+self.getOutputForceUnitSym()+')')
+            scOrient+=1
+        ## moments on nodes.
+        vFieldMNod= lvf.LoadVectorField(loadPatternName= loadCaseName,
+                                       setToDisp=setToDisplay, fUnitConv= unitConversionFactor,
+                                       scaleFactor= vectorScale, showPushing= self.outputStyle.showLoadsPushing, components= [3,4,5])
+        count= vFieldMNod.dumpNodalLoads(preprocessor, defFScale=defFScale)
+        if(count >0):
+            vFieldMNod.addToDisplay(displaySettings,orientation= scOrient,
+                                   title='Nodal moments ('+self.getOutputForceUnitSym()+')')
             scOrient+=1
         if(not caption):
           caption= 'load case: ' + loadCaseName +' '+elLoadComp + ', set: ' + setToDisplay.name + ', '  + unitDescription

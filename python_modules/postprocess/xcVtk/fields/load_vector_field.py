@@ -40,7 +40,7 @@ class LoadOnPoints(vf.VectorField):
 
 class LoadVectorField(LoadOnPoints):
     '''Draws a load over a point on nodes and on elements.'''
-    def __init__(self,loadPatternName,setToDisp,fUnitConv= 1e-3,scaleFactor= 1.0,showPushing= True,components= [0,1,2],multiplyByElementArea= True):
+    def __init__(self,loadPatternName,setToDisp,fUnitConv= 1e-3,scaleFactor= 1.0,showPushing= True, components= [0,1,2], multiplyByElementArea= True):
         '''
         Parameters:
           loadPatternName: name of the load pattern to display.
@@ -51,7 +51,7 @@ class LoadVectorField(LoadOnPoints):
           components: index of the components of the load. Default: [0,1,2] 
           multiplyByElementArea: for loads over elements (default= True).
         '''
-        super(LoadVectorField,self).__init__(loadPatternName,fUnitConv,scaleFactor,showPushing)
+        super(LoadVectorField,self).__init__(loadPatternName, fUnitConv, scaleFactor, showPushing, components)
         self.multiplyByElementArea= multiplyByElementArea
         self.setToDisp=setToDisp
 
@@ -61,11 +61,11 @@ class LoadVectorField(LoadOnPoints):
         :param actLP: list of active load patterns.
         '''
         retval= dict()
+        comp_i= self.components[0]; comp_j= self.components[1]; comp_k= self.components[2]
         for lp in actLP:
             lIter= lp.loads.getElementalLoadIter
             preprocessor= lp.getDomain.getPreprocessor
             elementLoad= lIter.next()
-            comp_i= self.components[0]; comp_j= self.components[1]; comp_k= self.components[2]
             eTagsSet=self.setToDisp.getElements.getTags()
             while(elementLoad):
                 if hasattr(elementLoad,'getLocalForce'):
@@ -126,22 +126,24 @@ class LoadVectorField(LoadOnPoints):
         :param actLP: list of active load patterns
         '''
         retval= dict()
+        comp_i= self.components[0]; comp_j= self.components[1]; comp_k= self.components[2]
         for lp in actLP:
             lIter= lp.loads.getNodalLoadIter
             nl= lIter.next()
             nTagsSet=self.setToDisp.getNodes.getTags()
             preprocessor= lp.getDomain.getPreprocessor
             while(nl):
-              nTag= nl.getNodeTag
-              if nTag in nTagsSet:
-                  node= preprocessor.getNodeHandler.getNode(nTag)
-                  vLoad= nl.getForce
-                  v= xc.Vector([vLoad[0], vLoad[1], vLoad[2]])
-                  if nTag in retval:
-                    retval[nTag]+= v
-                  else:
-                    retval[nTag]= v
-              nl= lIter.next()
+                nTag= nl.getNodeTag
+                if nTag in nTagsSet:
+                    node= preprocessor.getNodeHandler.getNode(nTag)
+                    vLoad= nl.getLoadVector
+                    v= xc.Vector([vLoad[comp_i], vLoad[comp_j], vLoad[comp_k]])
+                    if(v.Norm()>1e-6):
+                        if nTag in retval:
+                            retval[nTag]+= v
+                        else:
+                            retval[nTag]= v
+                nl= lIter.next()
         return retval
 
     def populateWithNodalLoads(self, actLP):
@@ -237,6 +239,6 @@ class LoadVectorField(LoadOnPoints):
                       the initial position plus its displacement multiplied
                       by this factor.
             '''
-            return self.dumpVectors(preprocessor, defFScale,showElementalLoads=True,showNodalLoads=False)
+            return self.dumpVectors(preprocessor, defFScale,showElementalLoads=True, showNodalLoads=False)
     
 

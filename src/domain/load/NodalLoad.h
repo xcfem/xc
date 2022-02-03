@@ -109,7 +109,8 @@ class NodalLoad: public Load
       { return get_node_ptr(); }
     virtual int getNodeTag(void) const;
     virtual void applyLoad(double loadFactor);
-    
+
+    const Vector &getLoadVector(void) const;
     const Vector &getForce(void) const;
     const Vector &getMoment(void) const;
 

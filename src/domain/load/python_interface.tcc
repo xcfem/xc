@@ -26,8 +26,9 @@ class_<XC::Load, bases<XC::DomainComponent>, boost::noncopyable >("Load", no_ini
 class_<XC::NodalLoad, bases<XC::Load>, boost::noncopyable >("NodalLoad", no_init)
   .add_property("getNodeTag", &XC::NodalLoad::getNodeTag,"Returns loaded node tag.")
   .add_property("getNode", make_function(&XC::NodalLoad::getNode,return_internal_reference<>()),"Returns loaded node.")
-  .add_property("getForce", make_function(&XC::NodalLoad::getForce,return_internal_reference<>()),"Returns force components.")
-  .add_property("getMoment", make_function(&XC::NodalLoad::getMoment,return_internal_reference<>()),"Returns moment components.")
+  .add_property("getLoadVector", make_function(&XC::NodalLoad::getLoadVector,return_internal_reference<>()),"Returns the load vector.")
+  .add_property("getForce", make_function(&XC::NodalLoad::getForce,return_internal_reference<>()),"Returns the force components of the load vector.")
+  .add_property("getMoment", make_function(&XC::NodalLoad::getMoment,return_internal_reference<>()),"Returns the moment components of the load vector.")
   ;
 
 class_<XC::NodalLoadIter, boost::noncopyable >("NodalLoadIter", no_init)
