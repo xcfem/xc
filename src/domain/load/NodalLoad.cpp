@@ -132,26 +132,10 @@ XC::NodalLoad::NodalLoad(int tag, int nodeTag, const Vector &theLoad, bool isLoa
 //! @brief To set the associated Domain object.
 //! 
 //! To set the associated Domain object.
-void  XC::NodalLoad::setDomain(Domain *newDomain)
+void XC::NodalLoad::setDomain(Domain *newDomain)
   {
-    // first get loadedNodePtr
     if(newDomain)
       this->DomainComponent::setDomain(newDomain); // invoke the ancestor class method.
-
-    /*
-    if(newDomain)
-      {
-        loadedNodePtr = newDomain->getNode(loadedNode);
-        if(loadedNodePtr == 0)
-          {
-            std::cerr << getClassName() << "::" << __FUNCTION__
-                      << "; WARNING - No associated node " 
-                      << " for NodalLoad " << *this
-                      << *newDomain;
-            return;
-          }
-      }
-    */
   }
 
 //! Returns the identifier of the loaded node.
@@ -294,11 +278,17 @@ void XC::NodalLoad::applyLoad(double loadFactor)
     if(!loadedNodePtr)
       loadedNodePtr= get_node_ptr();
 
-    // add the load times the load factor to nodal unbalanced load
-    if(konstant == false)
-      loadedNodePtr->addUnbalancedLoad(load,loadFactor);
+    if(loadedNodePtr)
+      {
+	// add the load times the load factor to nodal unbalanced load
+	if(konstant == false)
+	  loadedNodePtr->addUnbalancedLoad(load,loadFactor);
+	else
+	  loadedNodePtr->addUnbalancedLoad(load,1.0);
+      }
     else
-      loadedNodePtr->addUnbalancedLoad(load,1.0);
+      std::cerr << getClassName() << "::" << __FUNCTION__
+	        << "; loaded node not found. Load ignored." << std::endl;
   } 
 
 //! @brief Returns a vector to store the dbTags

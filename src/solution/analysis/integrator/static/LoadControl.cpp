@@ -97,7 +97,7 @@ XC::Integrator *XC::LoadControl::getCopy(void) const
 int XC::LoadControl::newStep(void)
   {
     int retval= 0;
-    AnalysisModel *theModel = this->getAnalysisModelPtr();    
+    AnalysisModel *theModel = this->getAnalysisModelPtr();
     if(theModel)
       {
         // determine delta lambda for this step based on dLambda and #iter of last step

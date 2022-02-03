@@ -251,7 +251,8 @@ void XC::LoadContainer::applyLoad(const double &factor)
   {
     NodalLoad *nodLoad= nullptr;
     NodalLoadIter &theNodalIter= getNodalLoads();
-    while((nodLoad = theNodalIter()) != 0)
+
+    while((nodLoad = theNodalIter()) != nullptr)
       nodLoad->applyLoad(factor);
 
     ElementalLoad *eleLoad= nullptr;

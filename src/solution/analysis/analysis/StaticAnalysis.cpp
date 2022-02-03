@@ -161,8 +161,8 @@ int XC::StaticAnalysis::check_domain_change(int num_step,int numSteps)
 //! @brief Ask the integrator to perform a new step in the analysis.
 int XC::StaticAnalysis::new_integrator_step(int num_step)
   {
-    const int result= getStaticIntegratorPtr()->newStep();
-    if(result < 0)
+    int retval= getStaticIntegratorPtr()->newStep();
+    if(retval < 0)
       {
         std::cerr << getClassName() << "::" << __FUNCTION__
 		  << "; the Integrator failed"
@@ -172,9 +172,9 @@ int XC::StaticAnalysis::new_integrator_step(int num_step)
 	if(num_step>1)
           std::cerr << stepNumberMessage;
         getDomainPtr()->revertToLastCommit();
-        return -2;
+        retval= -2;
       }
-    return result;
+    return retval;
   }
 
 //! @brief Solves for current step.
@@ -254,7 +254,6 @@ int XC::StaticAnalysis::run_analysis_step(int num_step,int numSteps)
     if(result < 0) //Fallo en check_domain_change.
       return -1;
     
-
     result= new_integrator_step(num_step);
     if(result < 0) //Fallo en new_integrator_step.
       return -2;

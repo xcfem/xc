@@ -41,7 +41,6 @@ from postprocess import RC_material_distribution
 from materials.sia262 import SIA262_materials
 from model import predefined_spaces
 from materials import typical_materials
-from solution import predefined_solutions
 from actions import combinations as combs
 from postprocess import limit_state_data as lsd
 from materials.sia262 import SIA262_limit_state_checking
@@ -99,20 +98,16 @@ beamRCsect.dir2NegatvRebarRows= def_simple_RC_section.LongReinfLayers([fi16s75r3
 sections.append(beamRCsect)
 
 feProblem= xc.FEProblem()
-feProblem.errFileName= "/tmp/erase.err" # Don't print(errors.)
 preprocessor=  feProblem.getPreprocessor   
 nodes= preprocessor.getNodeHandler
 # Problem type
-modelSpace= predefined_spaces.StructuralMechanics3D(nodes) #Defines the dimension of
-                  #the space: nodes by three coordinates (x,y,z) and six
-                  #DOF for each node (Ux,Uy,Uz,thetaX,thetaY,thetaZ)
+modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
 
-
-nodes.defaultTag= 0 #First node number.
-nod= nodes.newNodeXYZ(0,0.0,0.0)
-nod= nodes.newNodeXYZ(Lbeam,0.0,0.0)
-nod= nodes.newNodeXYZ(0.0,Lbeam,0.0)
-nod= nodes.newNodeXYZ(0.0,0.0,Lbeam)
+# Problem geometry
+n0= nodes.newNodeXYZ(0,0.0,0.0)
+n1= nodes.newNodeXYZ(Lbeam,0.0,0.0)
+n2= nodes.newNodeXYZ(0.0,Lbeam,0.0)
+n3= nodes.newNodeXYZ(0.0,0.0,Lbeam)
 
 
 # Geometric transformations
@@ -157,25 +152,23 @@ scc= typical_materials.defElasticSection3d(preprocessor=preprocessor, name= "scc
 # Elements definition
 elements= preprocessor.getElementHandler
 elements.defaultMaterial= scc.name
-elements.defaultTag= 1 #Tag for next element.
 
 elements.defaultTransformation= ltXbeam.name
-beam3dX= elements.newElement("ElasticBeam3d",xc.ID([0,1]))
+beam3dX= elements.newElement("ElasticBeam3d",xc.ID([n0.tag,n1.tag]))
 elements.defaultTransformation= ltYbeam.name
-beam3dY= elements.newElement("ElasticBeam3d",xc.ID([0,2]))
+beam3dY= elements.newElement("ElasticBeam3d",xc.ID([n0.tag,n2.tag]))
 elements.defaultTransformation= ltZbeam.name
-beam3dZ= elements.newElement("ElasticBeam3d",xc.ID([0,3]))
+beam3dZ= elements.newElement("ElasticBeam3d",xc.ID([n0.tag,n3.tag]))
 
-    
 # Constraints
 constraints= preprocessor.getBoundaryCondHandler
 #
-spc= constraints.newSPConstraint(0,0,0.0) # Node 0
-spc= constraints.newSPConstraint(0,1,0.0)
-spc= constraints.newSPConstraint(0,2,0.0)
-spc= constraints.newSPConstraint(0,3,0.0)
-spc= constraints.newSPConstraint(0,4,0.0)
-spc= constraints.newSPConstraint(0,5,0.0)
+spc= constraints.newSPConstraint(n0.tag,0,0.0) # Node 0
+spc= constraints.newSPConstraint(n0.tag,1,0.0)
+spc= constraints.newSPConstraint(n0.tag,2,0.0)
+spc= constraints.newSPConstraint(n0.tag,3,0.0)
+spc= constraints.newSPConstraint(n0.tag,4,0.0)
+spc= constraints.newSPConstraint(n0.tag,5,0.0)
 
 # Loads definition
 loadHandler= preprocessor.getLoadHandler
@@ -186,11 +179,11 @@ lPatterns.currentTimeSeries= "ts"
 #Load case definition
 #Nodal Loads defined as [Fx,Fy,Fz,Mx,My,Mz] in the global coordinate system
 lcXbeam= lPatterns.newLoadPattern("default","lcXbeam")
-lcXbeam.newNodalLoad(1,xc.Vector([0,0,F,0,-M,0])) #loads applied at front end
+lcXbeam.newNodalLoad(n1.tag,xc.Vector([0,0,F,0,-M,0])) #loads applied at front end
 lcYbeam= lPatterns.newLoadPattern("default","lcYbeam")
-lcYbeam.newNodalLoad(2,xc.Vector([F,0,0,0,0,-M])) #loads applied at front end
+lcYbeam.newNodalLoad(n2.tag,xc.Vector([F,0,0,0,0,-M])) #loads applied at front end
 lcZbeam= lPatterns.newLoadPattern("default","lcZbeam")
-lcZbeam.newNodalLoad(3,xc.Vector([F/math.sqrt(2),-F/math.sqrt(2),0,M/math.sqrt(2),M/math.sqrt(2),0])) #loads applied at front end
+lcZbeam.newNodalLoad(n3.tag,xc.Vector([F/math.sqrt(2),-F/math.sqrt(2),0,M/math.sqrt(2),M/math.sqrt(2),0])) #loads applied at front end
 
 # lcbeams= lPatterns.newLoadPattern("default","lcbeams")
 # lcbeams.newNodalLoad(1,xc.Vector([0,0,F,0,-M,0])) # loads applied at front end
@@ -201,11 +194,6 @@ lcZbeam.newNodalLoad(3,xc.Vector([F/math.sqrt(2),-F/math.sqrt(2),0,M/math.sqrt(2
 #                                                   # of beam Z
 
 # lPatterns.addToDomain("lcbeams")
-
-# Solution
-# analysis= predefined_solutions.simple_static_linear(feProblem)
-# result= analysis.analyze(1)
-
 
 # Load combinations
 combContainer= combs.CombContainer()
@@ -224,19 +212,21 @@ limitStateLabel= lsd.normalStressesResistance.label
 lsd.normalStressesResistance.outputDataBaseFileName= 'resVerif'
 
 # Using runChecking method we create the phantom model and run the checking on it. Unlike other check methods that also creates the phantom model this one doesn't clear the model after carrying out the verification. This method returns a tuple with the FE model (phantom model) and the result of verification
+feProblem.errFileName= "/tmp/erase.err" # Don't print errors.
 outputCfg= lsd.VerifOutVars(controller= SIA262_limit_state_checking.BiaxialBendingNormalStressController(limitStateLabel))
 (FEcheckedModel,checkResult)= reinfConcreteSectionDistribution.runChecking(lsd.normalStressesResistance, matDiagType="d",threeDim= True, outputCfg= outputCfg)  
+feProblem.errFileName= "cerr" # Print errors if any
 
 #Set with all the elements in the phantom model 
 elements= FEcheckedModel.getPreprocessor.getSets.getSet('total').getElements
 
 # Elements of the phantom model (ordered by the number of the section)
 # associated with each of the beam elements
-FMeBx=minq.get_attached_PhModElems(elemTag=beam3dX.tag,setElPhMod=elements)
+FMeBx=minq.get_attached_PhModElems(elemTag= beam3dX.tag,setElPhMod=elements)
 #print(FMeBx[0].tag,FMeBx[1].tag)
-FMeBy=minq.get_attached_PhModElems(elemTag=beam3dY.tag,setElPhMod=elements)
+FMeBy=minq.get_attached_PhModElems(elemTag= beam3dY.tag,setElPhMod=elements)
 #print(FMeBy[0].tag,FMeBy[1].tag)
-FMeBz=minq.get_attached_PhModElems(elemTag=beam3dZ.tag,setElPhMod=elements)
+FMeBz=minq.get_attached_PhModElems(elemTag= beam3dZ.tag,setElPhMod=elements)
 #print(FMeBz[0].tag,FMeBz[1].tag)
 
 #checks
@@ -314,15 +304,15 @@ ratio2=(Rsec2beamX-Rsec2beamY).sum()+(Rsec2beamX-Rsec2beamZ).sum()+(Rsec2beamY-R
 exec(open('/tmp/resVerif.py').read())
 
 sec1MzTeor=(M+F*Lbeam) # expressed in mkN
-sec1beamXMz=preprocessor.getElementHandler.getElement(1).getProp("ULS_normalStressesResistanceSect1").Mz
-sec1beamYMz=preprocessor.getElementHandler.getElement(2).getProp("ULS_normalStressesResistanceSect1").Mz
-sec1beamZMz=preprocessor.getElementHandler.getElement(3).getProp("ULS_normalStressesResistanceSect1").Mz
+sec1beamXMz= beam3dX.getProp("ULS_normalStressesResistanceSect1").Mz
+sec1beamYMz= beam3dY.getProp("ULS_normalStressesResistanceSect1").Mz
+sec1beamZMz= beam3dZ.getProp("ULS_normalStressesResistanceSect1").Mz
 ratio3=(sec1beamXMz-sec1MzTeor)+(sec1beamYMz-sec1MzTeor)+(sec1beamZMz-sec1MzTeor)
 
 sec2MzTeor=M # expressed in mkN
-sec2beamXMz=preprocessor.getElementHandler.getElement(1).getProp("ULS_normalStressesResistanceSect2").Mz
-sec2beamYMz=preprocessor.getElementHandler.getElement(2).getProp("ULS_normalStressesResistanceSect2").Mz
-sec2beamZMz=preprocessor.getElementHandler.getElement(3).getProp("ULS_normalStressesResistanceSect2").Mz
+sec2beamXMz= beam3dX.getProp("ULS_normalStressesResistanceSect2").Mz
+sec2beamYMz= beam3dY.getProp("ULS_normalStressesResistanceSect2").Mz
+sec2beamZMz= beam3dZ.getProp("ULS_normalStressesResistanceSect2").Mz
 ratio4=(sec2beamXMz-sec2MzTeor)+(sec2beamYMz-sec2MzTeor)+(sec2beamZMz-sec2MzTeor)
 
 ratios=[ratio1_0,ratio1_1,ratio2_0,ratio2_1,ratio3_0,ratio3_1,ratio1,ratio2,ratio3,ratio4]

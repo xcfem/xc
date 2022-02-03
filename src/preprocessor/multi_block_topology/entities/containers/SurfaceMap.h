@@ -81,7 +81,6 @@ class SurfaceMap: public EntityMap<Face>
 		s = q.front();
 		retval.insert(s);
 		q.pop_front();
-		//std::cout << "s= " << s << " i= " << i << std::endl;
 		const_iterator i_edges= find(s);
 		for(auto i : i_edges->second)
 		  {
