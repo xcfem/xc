@@ -412,7 +412,7 @@ class OutputHandler(object):
         displaySettings.appendDiagram(diagram,orientScbar,titleScbar) #Append diagram to the scene.
         displaySettings.displayScene(caption=caption,fileName=fileName)
 
-    def displayIntForcDiag(self,itemToDisp, setToDisplay=None,fileName=None,defFScale=0.0,orientScbar=1,titleScbar=None):
+    def displayIntForcDiag(self, itemToDisp, setToDisplay=None,fileName=None,defFScale=0.0,orientScbar=1,titleScbar=None):
         '''displays the component of internal forces in the set of entities as a 
          diagram over lines (i.e. appropiated for beam elements).
 
