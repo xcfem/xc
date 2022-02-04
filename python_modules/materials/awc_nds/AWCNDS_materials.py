@@ -905,6 +905,7 @@ class HeaderSection(sp.RectangularSection):
         self.wood= wood
         self.xc_wood_material= None
         self.xc_section= None
+        
     def getLinearDensity(self):
         ''' Return the mass per unit length.'''
         return self.rho*self.b*self.h
