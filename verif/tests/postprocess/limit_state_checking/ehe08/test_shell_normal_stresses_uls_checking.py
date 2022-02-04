@@ -79,7 +79,7 @@ if(not pth):
 fname= os.path.basename(__file__)
 
 #Checking normal stresses.
-cfg=default_config.EnvConfig(language='en', resultsPath= 'tmp_results/', intForcPath= 'internalForces/',verifPath= 'verifications/',reportPath='./',reportResultsPath= 'annex/',grWidth='120mm')
+cfg=default_config.EnvConfig(language='en', resultsPath= 'tmp_results/', intForcPath= 'internalForces/',verifPath= 'verifications/',reportPath='./',reportResultsPath= '/tmp/annex/',grWidth='120mm')
 cfg.projectDirTree.workingDirectory= '/tmp/'+os.path.splitext(fname)[0]
 cfg.projectDirTree.createTree() # To allow copying existing internal force data into.
 lsd.LimitStateData.envConfig= cfg
@@ -111,6 +111,7 @@ print("ratio2= ",ratio2)
 
 feProblem.errFileName= "cerr" # Display errors if any.
 import os
+os.system("rm -f -r /tmp/annex") # Clean after yourself.
 from misc_utils import log_messages as lmsg
 if (ratio1<0.01) & (ratio2<0.01):
     print('test '+fname+': ok.')
