@@ -948,6 +948,8 @@ python tests/materials/awc_nds/lateral_design_value_test_01.py
 python tests/materials/awc_nds/lateral_design_value_test_02.py
 python tests/materials/awc_nds/test_beam_stability_factor.py
 python tests/materials/awc_nds/test_linear_density_01.py
+python tests/materials/awc_nds/lvl_beam_test_01.py
+
 echo "$BLEU" "    EC5 tests." "$NORMAL"
 python tests/materials/ec5/test_EC5Wood_01.py
 python tests/materials/ec5/test_EC5Wood_02.py
