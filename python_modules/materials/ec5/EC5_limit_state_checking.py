@@ -49,7 +49,7 @@ class EC5TimberRectCrossSection(section_properties.RectangularSection):
             e.setProp("Wzel",Wz)
             e.setProp("AreaQz",self.A()-e.getProp("AreaQy"))
 
-    def installElementElasticStressesControlRecorder(self,recorderName, elemSet):
+    def installElementElasticStressesControlRecorder(self, recorderName, elemSet):
         preprocessor= elemSet.owner.getPreprocessor
         nodes= preprocessor.getNodeHandler
         domain= preprocessor.getDomain

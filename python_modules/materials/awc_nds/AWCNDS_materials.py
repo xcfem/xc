@@ -8,6 +8,7 @@ from __future__ import division
 from __future__ import print_function
 
 import math
+import sys
 import scipy.interpolate
 from misc_utils import log_messages as lmsg
 from materials import wood_base
@@ -332,257 +333,68 @@ class LVL_2900Fb2E(LSL):
         '''
         super(LVL_2900Fb2E,self).__init__(name)
 
+class WoodSection(sp.RectangularSection):
+    ''' Wood structural cross-section.'''
+    def __init__(self, name, b, h):
+        ''' Constructor.
 
-class MemberBase(object):
-    ''' Base class for beam and column members according to chapter 
-        3 of NDS-2018.
-    '''
-    def __init__(self, unbracedLength, section, connection= steel_member_base.MemberConnection()):
-        ''' Constructor. '''
-        self.unbracedLength= unbracedLength
-        self.section= section
-        self.connection= connection
-        
-class BeamMember(MemberBase):
-    ''' Beam member according to chapter 3.3 of NDS-2018.'''
-    def __init__(self, unbracedLength, section, connection= steel_member_base.MemberConnection()):
-        ''' Constructor. '''
-        super(BeamMember,self).__init__(unbracedLength, section, connection)
-    def getEffectiveLength(self,numberOfConcentratedLoads= 0, lateralSupport= False, cantilever= False):
-        ''' Return the effective length of the beam according to table
-            3.3.3 of NDS-2018.
-
-           :param numberOfConcentratedLoads: number of concentrated loads equally
-                                             spaced along the beam (0: uniform load).
-           :param lateralSupport: if true beam has a lateral support on each load.
-           :param cantilever: if true cantilever beam otherwise single span beam.
+        :param name: section name.
+        :param b: section width.
+        :param h: section height.
         '''
-        retval= self.unbracedLength
-        if(cantilever):
-            if(numberOfConcentratedLoads==0):
-                retval*= 1.33 # Uniform load
-            else:
-                retval*= 1.87 # Concentrated load at unsupported end.
+        super(WoodSection,self).__init__(name, b, h)
+        
+    def setupULSControlVars2d(self,elems):
+        '''For each element creates the variables
+           needed to check ultimate limit state criterion to satisfy.
+
+        :param elems: elements to process.
+        '''
+        className= type(self).__name__
+        methodName= sys._getframe(0).f_code.co_name
+        lmsg.error(className+'.'+methodName+': not implemented yet.')
+        # def_vars_control.defVarsControlTensRegElastico2d(elems)
+        # W= self.Wzel()
+        # for e in elems:
+        #     e.setProp("fyd",self.fyd)
+        #     e.setProp("fydV",self.taud)
+        #     e.setProp("Wel",W)
+
+    def setupULSControlVars3d(self,elems):
+        '''For each element creates the variables
+           needed to check ultimate limit state criterion to satisfy.
+
+        :param elems: elements to process.
+        '''
+        className= type(self).__name__
+        methodName= sys._getframe(0).f_code.co_name
+        lmsg.error(className+'.'+methodName+': not implemented yet.')
+        # def_vars_control.defVarsControlTensRegElastico3d(elems)
+        # Wz= self.Wzel()
+        # Wy= self.Wyel()
+        # for e in elems:
+        #     e.setProp("fyd",self.fyd)
+        #     e.setProp("fydV",self.taud)
+        #     e.setProp("Wyel",Wy)
+        #     e.setProp("AreaQy",0.9*self.A())
+        #     e.setProp("Wzel",Wz)
+        #     e.setProp("AreaQz",self.A()-e.getProp("AreaQy"))
+        
+    def setupULSControlVars(self, elemSet):
+        '''For each element creates the variables
+           needed to check ultimate limit state criterion to satisfy.
+
+        :param elemSet: xc set containing the elements to process.
+        '''
+        preprocessor= elemSet.owner.getPreprocessor
+        nodes= preprocessor.getNodeHandler
+        if(nodes.numDOFs==3):
+            self.setupULSControlVars2d(elemSet)
         else:
-            ratio= self.unbracedLength/self.section.h
-            if(numberOfConcentratedLoads==0):
-                if(ratio<7.0):
-                    retval*= 2.06 # Uniform load
-                else:
-                    retval= 1.63*self.unbracedLength+3.0*self.section.h
-            elif((numberOfConcentratedLoads==1) and (not lateralSupport)):
-                if(ratio<7.0):
-                    retval*= 1.80 # Uniform load
-                else:
-                    retval= 1.37*self.unbracedLength+3.0*self.section.h
-            elif(numberOfConcentratedLoads==1):
-                if(lateralSupport):
-                    retval*=1.11
-                else:
-                    lmsg.error('Load case not implemented.')
-                    retval*=10.0
-            elif(numberOfConcentratedLoads==2):
-                if(lateralSupport):
-                    retval*=1.68
-                else:
-                    lmsg.error('Load case not implemented.')
-                    retval*=10.0
-            elif(numberOfConcentratedLoads==3):
-                if(lateralSupport):
-                    retval*=1.54
-                else:
-                    lmsg.error('Load case not implemented.')
-                    retval*=10.0
-            elif(numberOfConcentratedLoads==4):
-                if(lateralSupport):
-                    retval*=1.68
-                else:
-                    lmsg.error('Load case not implemented.')
-                    retval*=10.0
-            elif(numberOfConcentratedLoads==5):
-                if(lateralSupport):
-                    retval*=1.73
-                else:
-                    lmsg.error('Load case not implemented.')
-                    retval*=10.0
-            elif(numberOfConcentratedLoads==6):
-                if(lateralSupport):
-                    retval*=1.78
-                else:
-                    lmsg.error('Load case not implemented.')
-                    retval*=10.0
-            elif(numberOfConcentratedLoads==7):
-                if(lateralSupport):
-                    retval*=1.84
-                else:
-                    lmsg.error('Load case not implemented.')
-                    retval*=10.0
-        return retval
-    def getBendingSlendernessRatio(self,numberOfConcentratedLoads= 0, lateralSupport= False, cantilever= False):
-        ''' Return the slenderness ratio according to equation
-            3.3-5 of NDS-2018.
+            self.setupULSControlVars3d(elemSet)
 
-           :param numberOfConcentratedLoads: number of concentrated loads equally
-                                             spaced along the beam (0: uniform load).
-           :param lateralSupport: if true beam has a lateral support on each load.
-           :param cantilever: if true cantilever beam otherwise single span beam.
-        '''
-        le= self.getEffectiveLength(numberOfConcentratedLoads, lateralSupport, cantilever)
-        return math.sqrt(le*self.section.h/self.section.b**2)
-    def getFbECriticalBucklingDesignValue(self,numberOfConcentratedLoads= 0, lateralSupport= False, cantilever= False):
-        ''' Return the critical bucking design value for bending according to 
-            section 3.3.3.8 of NDS-2018.
-
-           :param numberOfConcentratedLoads: number of concentrated loads equally
-                                             spaced along the beam (0: uniform load).
-           :param lateralSupport: if true beam has a lateral support on each load.
-           :param cantilever: if true cantilever beam otherwise single span beam.
-        '''
-        RB= self.getBendingSlendernessRatio(numberOfConcentratedLoads, lateralSupport, cantilever)
-        return 1.2*self.section.wood.Emin/RB**2
-    def getBeamStabilityFactor(self,numberOfConcentratedLoads= 0, lateralSupport= False, cantilever= False):
-        ''' Return the beam stability factor according to equation 
-            3.3.6 of NDS-2018.
-
-           :param numberOfConcentratedLoads: number of concentrated loads equally
-                                             spaced along the beam (0: uniform load).
-           :param lateralSupport: if true beam has a lateral support on each load.
-           :param cantilever: if true cantilever beam otherwise single span beam.
-        '''
-        FbE= self.getFbECriticalBucklingDesignValue(numberOfConcentratedLoads, lateralSupport, cantilever)
-        ratio= FbE/self.section.wood.getFb(self.section.h)
-        A= (1+ratio)/1.9
-        B= A**2
-        C= ratio/0.95
-        return A-math.sqrt(B-C)
-
-class ColumnMember(MemberBase):
-    ''' Column member according to chapter 3.7 and 3.9 of NDS-2018.'''
-    def __init__(self, unbracedLengthB, unbracedLengthH, section, connection= steel_member_base.MemberConnection()):
-        ''' Constructor. '''
-        super(ColumnMember,self).__init__(unbracedLengthB, section, connection)
-        self.unbracedLengthH= unbracedLengthH
-
-    def getUnbracedLengthB(self):
-        ''' Return the B unbraced length.'''
-        return self.unbracedLength
-
-    def getEffectiveBucklingLengthCoefficientRecommended(self):
-        '''Return the column effective buckling length coefficients
-           according to NDS 2018 appendix G'''
-        return self.connection.getEffectiveBucklingLengthCoefficientRecommended()
-    def getBSlendernessRatio(self):
-        ''' Return the slenderness ratio for the B dimension.'''
-        Ke= self.getEffectiveBucklingLengthCoefficientRecommended()
-        return Ke*self.getUnbracedLengthB()/self.section.b
-    
-    def getHSlendernessRatio(self):
-        ''' Return the slenderness ratio for the H dimension.'''
-        Ke= self.getEffectiveBucklingLengthCoefficientRecommended()
-        return Ke*self.unbracedLengthH/self.section.h
         
-    def getSlendernessRatio(self):
-        ''' Return the slenderness ratio.'''
-        Ke= self.getEffectiveBucklingLengthCoefficientRecommended()
-        srB= Ke*self.getUnbracedLengthB()/self.section.b
-        srH= Ke*self.unbracedLengthH/self.section.h
-        return max(srB,srH)
-
-    def getColumnStabilityFactor(self, c, E_adj, Fc_adj):
-        ''' Return the column stability factor according
-            to expression 3.7-1 of NDS-2.018. 
-
-        :param E_adj: adjusted modulus of elasticity for beam 
-                      stability and column stability calculations.
-        :param Fc_adj: adjusted compression stress design value parallel 
-                       to grain.
-        :param c: 0.8 for sawn lumber, 0.85 for round timber poles 
-                  and piles and 0.9 for structural glued laminated
-                  timber structural composite lumber, and 
-                  cross-laminated timber.
-        '''
-        sr= self.getSlendernessRatio()
-        FcE= 0.822*E_adj/((sr)**2)
-        ratio= FcE/Fc_adj
-        tmp= (1+ratio)/2.0/c
-        return tmp-math.sqrt(tmp**2-ratio/c)
-    def getFcE1(self, E_adj):
-        ''' Return the value of F_{cE1} as defined in section
-            3.9.2 of NDS-2.018.
-
-        :param E_adj: adjusted modulus of elasticity for beam 
-                      stability and column stability calculations.
-        '''
-        if(self.section.h>self.section.b): # Wide side: H
-            return 0.822*E_adj/(self.getHSlendernessRatio())**2
-        else: # Wide side B
-            return 0.822*E_adj/(self.getBSlendernessRatio())**2
-    def getFcE2(self, E_adj):
-        ''' Return the value of F_{cE2} as defined in section
-            3.9.2 of NDS-2.018.
-
-        :param E_adj: adjusted modulus of elasticity for beam 
-                      stability and column stability calculations.
-        '''
-        if(self.section.h<self.section.b): # Narrow side: H
-            return 0.822*E_adj/(self.getHSlendernessRatio())**2
-        else: # Narrow side B
-            return 0.822*E_adj/(self.getBSlendernessRatio())**2
-    def getBendingSlendernessRatioH(self):
-        ''' Return the slenderness ratio for bending in
-            the h plane.'''
-        Ke= self.getEffectiveBucklingLengthCoefficientRecommended()
-        le= Ke*self.unbracedLengthH
-        return math.sqrt(le*self.section.h/self.section.b**2)
-    def getBendingSlendernessRatioB(self):
-        ''' Return the slenderness ratio for bending in the
-            B plane.'''
-        Ke= self.getEffectiveBucklingLengthCoefficientRecommended()
-        le= Ke*self.getUnbracedLengthB()
-        return math.sqrt(le*self.section.b/self.section.h**2)
-    def getFbE(self, E_adj):
-        ''' Return the value of F_{bE} as defined in section
-            3.9.2 of NDS-2.018.
-
-        :param E_adj: adjusted modulus of elasticity for beam 
-                      stability and column stability calculations.
-        '''
-        sr= 1.0
-        if(self.section.h<self.section.b): # Narrow side: H
-            sr= self.getBendingSlendernessRatioB()
-        else: # Narrow side B
-            sr= self.getBendingSlendernessRatioH()
-        return 1.2*E_adj/sr**2
-    def getCapacityFactor(self, E_adj, Fc_adj, Fb1_adj, Fb2_adj, fc,fb1, fb2):
-        ''' Return the capacity factor for members subjected to a 
-            combination of bending about one or both principal axes 
-            and axial compression according to section 3.9.2 of
-            NDS-2.018.
-
-        :param E_adj: adjusted modulus of elasticity for beam 
-                      stability and column stability calculations.
-        :param Fc_adj: adjusted value of reference compression stress.
-        :param Fb1_adj: adjusted value of reference bending stress (for
-                        bending load applied to narrow face of member).
-        :param Fb2_adj: adjusted value of reference bending stress (for
-                        bending load applied to wide face of member).
-        :param fc: compression stress.
-        :param fb1: bending stress (bending load applied to narrow face
-                    of member).
-        :param fb2: bending stress (bending load applied to wide face
-                    of member).
-        '''
-        val393= (fc/Fc_adj)**2 #Equation 3-9-3
-        FcE1= self.getFcE1(E_adj) #Critical buckling design values.
-        FcE2= self.getFcE2(E_adj)
-        FbE= self.getFbE(E_adj)
-        almostOne= 1-1e-15
-        val393+= fb1/(Fb1_adj*(1-min(fc/FcE1,almostOne)))
-        val393+= fb2/(Fb2_adj*(1-min(fc/FcE2,almostOne)-min(fb1/FbE,almostOne)**2))
-        val394= fc/FcE2+(fb1/FbE)**2 #Equation 3-9-4
-        return max(val393,val394)
-
-class WoodPanelSection(sp.RectangularSection):
+class WoodPanelSection(WoodSection):
     ''' Wood structural panel.'''
     def __init__(self, name, b, h, shear_constant):
         ''' Constructor.
@@ -630,6 +442,7 @@ class WoodPanelSection(sp.RectangularSection):
         else:
             lmsg.error('name: ', self.name, 'unknown')
         return spanRating
+    
     def getAPARatedSturdIFloor(self):
         ''' Return the APA rated Sturd-I-Floor from the panel thickness 
             according to the table B of the documents:
@@ -665,6 +478,18 @@ class WoodPanelSection(sp.RectangularSection):
         return spanRating
 
 
+        # def_vars_control.defVarsControlTensRegElastico3d(elems)
+        # Wz= self.Wzel()
+        # Wy= self.Wyel()
+        # for e in elems:
+        #     e.setProp("fyd",self.fyd)
+        #     e.setProp("fydV",self.taud)
+        #     e.setProp("Wyel",Wy)
+        #     e.setProp("AreaQy",0.9*self.A())
+        #     e.setProp("Wzel",Wz)
+        #     e.setProp("AreaQz",self.A()-e.getProp("AreaQy"))
+
+        
 # Properties of Plywood structural panels taken from:
 # http://www.pfsteco.com/techtips/pdf/tt_plywooddesigncapacities
 # table C.
@@ -882,11 +707,10 @@ class OSBPanelSection(WoodPanelSection):
         retval= super(OSBPanelSection,self).defElasticShearSection2d(preprocessor,osbMaterial, overrideRho= overrideRho)
         return retval
 
-
-
-class HeaderSection(sp.RectangularSection):
+class HeaderSection(WoodSection):
     ''' Structural beam/header.'''
     nu= 0.2
+    
     def __init__(self, name, b, h, Ms, Vs, linearDensity, wood):
         ''' Constructor.
 
@@ -948,7 +772,6 @@ class HeaderSection(sp.RectangularSection):
         self.xc_section= super(HeaderSection,self).defElasticShearSection3d(preprocessor,mat, overrideRho)
         return self.xc_section
 
-    
 # Properties of LSL beams and headers taken from:
 # LP SolidStart LSL Beam & Header Technical Guide
 
@@ -1050,7 +873,7 @@ class LVL_2900Fb2E_HeaderSection(LVLHeaderSection):
         '''
         super(LVL_2900Fb2E_HeaderSection,self).__init__(name, b, h, Ms, Vs, linearDensity, wood= LVL_2900Fb2E())
 
-class CustomLumberSection(sp.RectangularSection):
+class CustomLumberSection(WoodSection):
     ''' Section of a lumber member with custom dimensions.'''
     def __init__(self, name, b, h, woodMaterial):
         ''' Constructor.

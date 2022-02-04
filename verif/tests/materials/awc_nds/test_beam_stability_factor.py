@@ -14,6 +14,7 @@ __email__= "l.pereztato@ciccp.es, ana.ortega@ciccp.es "
 
 from materials.sections import section_properties
 from materials.awc_nds import AWCNDS_materials
+from materials.awc_nds import AWCNDS_limit_state_checking
 from materials.awc_nds import dimensional_lumber
 
 inchToMeter= 2.54/100.0
@@ -27,7 +28,7 @@ wood= dimensional_lumber.DouglasFirLarchWood(grade= 'structural')
 beamSection= AWCNDS_materials.CustomLumberSection("DouglasFirLarch",b=3.5*inchToMeter,h=15.25*inchToMeter, woodMaterial= wood)
 
 length= 20.0*footToMeter
-beam= AWCNDS_materials.BeamMember(unbracedLength= length, section= beamSection)
+beam= AWCNDS_limit_state_checking.BeamMember(unbracedLength= length, section= beamSection)
 Fb= beam.section.wood.Fb
 E= beam.section.wood.E
 Emin= beam.section.wood.Emin

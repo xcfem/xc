@@ -16,50 +16,6 @@ from materials import member_base
 import xc_base
 import geom
 
-class MemberConnection(object):
-    '''Member connection
-
-       :ivar rotI: fixity of the rotation at member start.
-       :ivar transI: fixity of the translation at member start.
-       :ivar rotJ: fixity of the rotation at member end.
-       :ivar transJ: fixity of the translation at member end.
-    '''
-    def __init__(self,rotI='free',transI='fixed',rotJ= 'free',transJ= 'fixed'):
-        '''Constructor.'''
-        self.rotI= rotI
-        self.transI= transI
-        self.rotJ= rotJ
-        self.transJ= transJ
-
-    def getEffectiveBucklingLengthCoefficientRecommended(self):
-        '''Return the effective length factor
-           according to table C-A-7.1 or AISC specification
-           and NDS 2018 appendix G'''
-        if(self.rotI=='fixed'):
-            if(self.rotJ=='fixed'):
-                if(self.transJ=='fixed'):
-                    retval= .65 # Theoretical .5
-                else: # self.transJ=='free'
-                    retval= 1.2 #Theoretical 1.0
-            else: # self.rotJ=='free'
-                if(self.transJ== 'fixed'):
-                    retval= .8 # Theoretical .7
-                else: # self.transJ=='free'
-                    retval= 2.1 # Theoretical 2.0
-        else: # self.rotI=='free'
-             if(self.rotJ=='fixed'):
-                 if(self.transJ=='free'):
-                     retval= 2.0 # Theoretical 2.0
-                 else:
-                     retval= 0.8 # Theoretical .7
-             else: # self.rotJ=='free'
-                 if(self.transI=='fixed' and self.transJ=='fixed'):
-                     retval= 1.0 # Theoretical 1.0
-                 else:
-                     retval= 1e6 # Stiffness matrix singular
-        return retval
-
-
 class Member(member_base.Member):
     '''Base class for steel members.
     
