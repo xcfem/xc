@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
+''' Base classes and functions for structural steel members.'''
+
 from __future__ import division
-''' Base classes and functions for structural steel.'''
+
 
 __author__= "Ana Ortega (AO_O) and Luis C. Pérez Tato (LCPT)"
 __copyright__= "Copyright 2015, AO_O and LCPT"
@@ -10,6 +12,7 @@ __email__= " ana.Ortega.Ort@gmail.com, l.pereztato@gmail.com"
 
 from misc_utils import log_messages as lmsg
 from model.geometry import geom_utils as gu
+from materials import member_base
 import xc_base
 import geom
 
@@ -57,68 +60,22 @@ class MemberConnection(object):
         return retval
 
 
-class Member(object):
+class Member(member_base.Member):
     '''Base class for steel members.
     
-    :ivar name: object name.
-    :ivar shape: cross-section shape (e.g. IPNShape, IPEShape, ...)
-    :ivar lstLines: ordered list of lines that make up the member 
-          (defaults to None).
-    :ivar elemSet: elements along the member.
+    :ivar shape: cross-section steel shape (e.g. IPNShape, IPEShape, ...)
     '''
     def __init__(self,name,shape, lstLines=None):
         '''Constructor.
 
         :param name: object name.
-        :param shape: cross-section shape
+        :param shape: cross-section steel shape.
         :param lstLines: ordered list of lines that make up the member 
                         (defaults to None).
         '''
-        self.name= name
+        super(Member,self).__init__(name, lstLines)
         self.shape= shape
-        self.lstLines= lstLines
-        self.elemSet= None # elements along the member.
         
-    def getPreprocessor(self):
-        ''' Return the XC preprocessor.'''
-        retval= None
-        if self.lstLines:
-            retval=self.lstLines[0].getPreprocessor
-        else:
-            lmsg.error('No lines.')
-        return retval
-
-    def getMemberGeometry(self):
-        ''' Return the lines and points along the member.'''
-        lstLn= None
-        lstP3d= None
-        if(self.lstLines):
-            lstLn= self.lstLines
-            lstP3d= gu.lstP3d_from_lstLns(lstLn)
-        else:
-            lmsg.warning('Incomplete member definition: list of lines required')
-        return lstLn, lstP3d
-
-    def getLength(self):
-        ''' Return the member length.'''
-        return self.pline.getLength()
-    
-    def createElementSet(self):
-        '''Create the attributes 'length' and 'elemSet' that 
-        represent the length of the member and the set of elements 
-        included in it.'''
-        lstLn, lstP3d= self.getMemberGeometry()
-        
-        prep= self.getPreprocessor()
-        # set of elements included in the member
-        setName= self.name+'Set'
-        if(prep.getSets.exists(setName)):
-            lmsg.error('set: '+setName+ ' already exists.')
-        s= prep.getSets.defSet(setName)
-        self.elemSet= s.elements
-        for l in lstLn:
-            for e in l.elements:
-                self.elemSet.append(e)
 
 class BucklingMember(Member):
     '''Base class for steel members that could buckle.
