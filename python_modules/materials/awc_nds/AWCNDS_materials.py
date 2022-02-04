@@ -256,7 +256,12 @@ class Wood(wood_base.Wood):
 class LSL(Wood):
     ''' Base class for laminated strand lumber (LSL)'''
     def __init__(self, name= 'LSL'):
+        ''' Constructor.
+
+        :param name: material name.
+        '''
         super(LSL,self).__init__(name)
+        
     def getFb(self,depth):
         ''' Return the allowable bending stress given
             the member depth.
@@ -278,7 +283,12 @@ class LSL_135E(LSL):
     Fc_perp= 750*psi2Pa # Compression stress (perpendicular to grain)
     xc_material_name= 'LSL_135E'
     def __init__(self, name= 'LSL_135E'):
+        ''' Constructor.
+
+        :param name: material name.
+        '''
         super(LSL_135E,self).__init__(name)
+        
     def getFb(self,depth):
         ''' Return the allowable bending stress given
             the member depth.
@@ -300,6 +310,10 @@ class LSL_155E(LSL):
     Fc_perp= 875*psi2Pa # Compression stress (perpendicular to grain)
     xc_material_name= 'LSL_155E'
     def __init__(self, name= 'LSL_135E'):
+        ''' Constructor.
+
+        :param name: material name.
+        '''
         super(LSL_155E,self).__init__(name)
 
 class LVL_2900Fb2E(LSL):
@@ -312,6 +326,10 @@ class LVL_2900Fb2E(LSL):
     Fc_perp= 750*psi2Pa # Compression stress (perpendicular to grain)
     xc_material_name= 'LVL_2900Fb2E'
     def __init__(self, name= 'LVL_2900Fb2E'):
+        ''' Constructor.
+
+        :param name: material name.
+        '''
         super(LVL_2900Fb2E,self).__init__(name)
 
 
@@ -567,6 +585,13 @@ class ColumnMember(MemberBase):
 class WoodPanelSection(sp.RectangularSection):
     ''' Wood structural panel.'''
     def __init__(self, name, b, h, shear_constant):
+        ''' Constructor.
+
+        :param name: section name.
+        :param b: section width.
+        :param h: section height.
+        :param shear_constant: shear constant.
+        '''
         super(WoodPanelSection,self).__init__(name, b, h)
         self.shearConstant= shear_constant
     def getArealDensity(self):
@@ -648,6 +673,13 @@ class PlywoodPanelSection(WoodPanelSection):
     ''' Plywood structural panel.'''
     rho= 577.941243312 # density kg/m3
     def __init__(self, name, b, h, shear_constant):
+        ''' Constructor.
+
+        :param name: section name.
+        :param b: section width.
+        :param h: section height.
+        :param shear_constant: shear constant.
+        '''
         super(PlywoodPanelSection,self).__init__(name, b, h, shear_constant)
 
 # Oriented strand board panels according to document:
@@ -657,6 +689,13 @@ class OSBPanelSection(WoodPanelSection):
     ''' Oriented strand board panel.'''
     rho= 632.62 # average density kg/m3 Table 12
     def __init__(self, name, b, h, shear_constant):
+        ''' Constructor.
+
+        :param name: section name.
+        :param b: section width.
+        :param h: section height.
+        :param shear_constant: shear constant.
+        '''
         super(OSBPanelSection,self).__init__(name, b, h, shear_constant)
     def getFb(self, angle= math.pi/2.0):
         ''' Return the bending stress Fb or the panel according
@@ -849,7 +888,16 @@ class HeaderSection(sp.RectangularSection):
     ''' Structural beam/header.'''
     nu= 0.2
     def __init__(self, name, b, h, Ms, Vs, linearDensity, wood):
-        '''Constructor.'''
+        ''' Constructor.
+
+        :param name: section name.
+        :param b: section width.
+        :param h: section height.
+        :param Ms: allowable moment.
+        :param Vs: allowable shear.
+        :param linearDensity: mass per unit length.
+        :param wood: timber material.
+        '''
         super(HeaderSection,self).__init__(name, b, h)
         self.Ms= Ms # Allowable moment.
         self.Vs= Vs # Allowable shear.
@@ -906,7 +954,16 @@ class HeaderSection(sp.RectangularSection):
 class LSLHeaderSection(HeaderSection):
     ''' LSL structural beam/header.'''
     def __init__(self, name, b, h, Ms, Vs, linearDensity, wood):
-        '''Constructor.'''
+        ''' Constructor.
+
+        :param name: section name.
+        :param b: section width.
+        :param h: section height.
+        :param Ms: allowable moment.
+        :param Vs: allowable shear.
+        :param linearDensity: mass per unit length.
+        :param wood: timber material.
+        '''
         super(LSLHeaderSection,self).__init__(name, b, h, Ms, Vs, linearDensity, wood)
     def getVolumeFactor(self):
         '''Return volumen factor.'''
@@ -922,11 +979,29 @@ class LSLHeaderSection(HeaderSection):
 class LSL_135E_HeaderSection(LSLHeaderSection):
     ''' LSL 1.35E structural beam/header.'''
     def __init__(self, name, b, h, Ms, Vs, linearDensity):
+        ''' Constructor.
+
+        :param name: section name.
+        :param b: section width.
+        :param h: section height.
+        :param Ms: allowable moment.
+        :param Vs: allowable shear.
+        :param linearDensity: mass per unit length.
+        '''
         super(LSL_135E_HeaderSection,self).__init__(name, b, h, Ms, Vs, linearDensity, wood= LSL_135E())
 
 class LSL_155E_HeaderSection(LSLHeaderSection):
     ''' LSL 1.55E structural beam/header.'''
     def __init__(self, name, b, h, Ms, Vs, linearDensity):
+        ''' Constructor.
+
+        :param name: section name.
+        :param b: section width.
+        :param h: section height.
+        :param Ms: allowable moment.
+        :param Vs: allowable shear.
+        :param linearDensity: mass per unit length.
+        '''
         super(LSL_155E_HeaderSection,self).__init__(name, b, h, Ms, Vs, linearDensity, wood= LSL_155E())
 
 # Properties of LVL beams and headers taken from:
@@ -935,7 +1010,16 @@ class LSL_155E_HeaderSection(LSLHeaderSection):
 class LVLHeaderSection(HeaderSection):
     ''' LVL structural beam/header.'''
     def __init__(self, name, b, h, Ms, Vs, linearDensity, wood):
-        '''Constructor.'''
+        ''' Constructor.
+
+        :param name: section name.
+        :param b: section width.
+        :param h: section height.
+        :param Ms: allowable moment.
+        :param Vs: allowable shear.
+        :param linearDensity: mass per unit length.
+        :param wood: timber material.
+        '''
         super(LVLHeaderSection,self).__init__(name, b, h, Ms, Vs, linearDensity, wood)
     def getVolumeFactor(self):
         '''Return volumen factor.'''
@@ -954,17 +1038,34 @@ class LVLHeaderSection(HeaderSection):
 class LVL_2900Fb2E_HeaderSection(LVLHeaderSection):
     ''' LVL 2900Fb 2.0E structural beam/header.'''
     def __init__(self, name, b, h, Ms, Vs, linearDensity):
-        super(LVL_2900Fb2E_HeaderSection,self).__init__(name,b,h, Ms, Vs, linearDensity, wood= LVL_2900Fb2E())
+        ''' Constructor.
+
+        :param name: section name.
+        :param b: section width.
+        :param h: section height.
+        :param Ms: allowable moment.
+        :param Vs: allowable shear.
+        :param linearDensity: mass per unit length.
+        '''
+        super(LVL_2900Fb2E_HeaderSection,self).__init__(name, b, h, Ms, Vs, linearDensity, wood= LVL_2900Fb2E())
 
 class CustomLumberSection(sp.RectangularSection):
     ''' Section of a lumber member with custom dimensions.'''
     def __init__(self, name, b, h, woodMaterial):
-        '''Constructor.'''
+        ''' Constructor.
+
+        :param name: section name.
+        :param b: section width.
+        :param h: section height.
+        :param woodMaterial: timber material.
+        '''
         super(CustomLumberSection,self).__init__(name, b, h)
         self.wood= woodMaterial
         self.xc_section= None
+        
     def getFb(self):
         return self.wood.getFb(self.h)
+    
     def defElasticShearSection2d(self, preprocessor, overrideRho= None):
         ''' Defines a elastic shear section for two-dimensional
             problems.
@@ -1071,7 +1172,11 @@ dimensionLumberSizes['6x4']= (140e-3, 89e-3)
 class DimensionLumberSection(CustomLumberSection):
     ''' Section of a dimension lumber member.'''
     def __init__(self, name, woodMaterial):
-        '''Constructor.'''
+        ''' Constructor.
+
+        :param name: section name.
+        :param woodMaterial: timber material.
+        '''
         b= 0.0
         h= 0.0
         if(name in dimensionLumberSizes.keys()):
