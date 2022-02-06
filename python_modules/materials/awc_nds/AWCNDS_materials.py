@@ -344,11 +344,11 @@ class WoodSection(sp.RectangularSection):
         '''
         super(WoodSection,self).__init__(name, b, h)
         
-    def setupULSControlVars(self, elemSet):
+    def setupULSControlVars(self, elems):
         '''For each element creates the variables
            needed to check ultimate limit state criterion to satisfy.
 
-        :param elemSet: xc set containing the elements to process.
+        :param elems: elements to define properties on.
         '''
         for e in elems:
             e.setProp('FCTNCP',[-1.0,-1.0]) #Normal stresses efficiency.

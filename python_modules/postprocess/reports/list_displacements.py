@@ -66,7 +66,7 @@ def listNodeDisplacementsSET(nmbComb, setName, fmt, fName, encab, tit):
 
   cierraSupertabular(fName)
 
-#exec(open("modelo/model_inquiry.xcm").read())
+# from model import model_inquiry
 
 # Imprime los desplazamientos of the nodes contenidos en las lineas del conjunto que se pasa como parámetro.
 def listNodeDisplacementsLineas(preprocessor, nmbComb, setNameLineas, fmt, fName, encab, tit):

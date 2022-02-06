@@ -1557,9 +1557,10 @@ class ASTMShape(object):
         '''For each element creates the variables
            needed to check ultimate limit state criterion to be satisfied.
 
-           :param sectionClass: dummy argument used for compatibility.
-           :param chiN: axial load reduction reduction factor (default= 1.0).
-           :param chiLT: lateral buckling reduction factor (default= 1.0).
+        :param elems: elements to define properties on.
+        :param sectionClass: dummy argument used for compatibility.
+        :param chiN: axial load reduction reduction factor (default= 1.0).
+        :param chiLT: lateral buckling reduction factor (default= 1.0).
         '''
         super(ASTMShape,self).setupULSControlVars(elems)
         for e in elems:

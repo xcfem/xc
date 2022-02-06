@@ -78,27 +78,21 @@ class Member(wood_member_base.Member):
         return recorder
 
 def controlULSCriterion():
-    funcName= sys._getframe(0).f_code.co_name
-    lmsg.error(funcName+': not implemented yet.')
-    return ''
-# '''recorder= self.getProp('ULSControlRecorder')
-# nmbComb= recorder.getCurrentCombinationName
-# self.getResistingForce()
-# crossSection= self.getProp('crossSection')
-# crossSection.checkBiaxialBendingForElement(self,nmbComb)
-# crossSection.checkYShearForElement(self,nmbComb)
-# crossSection.checkZShearForElement(self,nmbComb)'''
+    return '''recorder= self.getProp('ULSControlRecorder')
+nmbComb= recorder.getCurrentCombinationName
+self.getResistingForce()
+crossSection= self.getProp('crossSection')
+crossSection.checkBiaxialBendingForElement(self,nmbComb)
+crossSection.checkYShearForElement(self,nmbComb)
+crossSection.checkZShearForElement(self,nmbComb)'''
 
 def controlULSCriterion2D():
-    funcName= sys._getframe(0).f_code.co_name
-    lmsg.error(funcName+': not implemented yet.')
-    return ''
-# '''recorder= self.getProp('ULSControlRecorder')
-# nmbComb= recorder.getCurrentCombinationName
-# self.getResistingForce()
-# crossSection= self.getProp('crossSection')
-# crossSection.checkUniaxialBendingForElement(self,nmbComb)
-# crossSection.checkYShearForElement(self,nmbComb)'''
+    return '''recorder= self.getProp('ULSControlRecorder')
+nmbComb= recorder.getCurrentCombinationName
+self.getResistingForce()
+crossSection= self.getProp('crossSection')
+crossSection.checkUniaxialBendingForElement(self,nmbComb)
+crossSection.checkYShearForElement(self,nmbComb)'''
 
 class MemberBase(object):
     ''' Base class for beam and column members according to chapter 
