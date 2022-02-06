@@ -145,7 +145,7 @@ class RCMaterialDistribution(object):
         result= phantomModel.runChecking(limitStateData,outputCfg)
         return (feProblem, result)
 
-    def internalForcesVerification3D(self,limitStateData,matDiagType,outputCfg):
+    def internalForcesVerification3D(self, limitStateData, matDiagType, outputCfg):
         '''Limit state verification based on internal force (Fx,Fy,Fz,Mx,My,Mz) values.
 
         :param limitStateData: object that contains the name of the file
