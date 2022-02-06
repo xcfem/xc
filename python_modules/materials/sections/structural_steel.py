@@ -357,11 +357,11 @@ class SteelShape(sp.SectionProperties):
         '''
         elem.getResistingForce()
         sectionClass= elem.getProp('sectionClass')
-        chiLT= elem.getProp('chiLT')
-        chiN= elem.getProp('chiN')
+        chiLT= elem.getProp('chiLT') # Lateral torsional buckling reduction factor.
+        chiN= elem.getProp('chiN') # Axial strength reduction factor.
         [[N1, M1, V1], [N2, M2, V2]]= model_inquiry.getValuesAtNodes(elem, ['N', 'M', 'V'], False)
-        FCTN1= self.getZBendingEfficiency(Nd= N1, Mzd= M1, Vyd= V1,chiN= chiN, chiLT= chiLT, sectionClass= sectionClass)[0]
-        FCTN2= self.getZBendingEfficiency(Nd= N2, Mzd= M2, Vyd= V2,chiN= chiN, chiLT= chiLT, sectionClass= sectionClass)[0]
+        FCTN1= self.getZBendingEfficiency(Nd= N1, Mzd= M1, Vyd= V1, chiN= chiN, chiLT= chiLT, sectionClass= sectionClass)[0]
+        FCTN2= self.getZBendingEfficiency(Nd= N2, Mzd= M2, Vyd= V2, chiN= chiN, chiLT= chiLT, sectionClass= sectionClass)[0]
         fctn= elem.getProp("FCTNCP")
         if(FCTN1 > fctn[0]):
             fctn[0]= FCTN1
@@ -381,8 +381,8 @@ class SteelShape(sp.SectionProperties):
         '''
         elem.getResistingForce()
         sectionClass= elem.getProp('sectionClass')
-        chiLT= elem.getProp('chiLT')
-        chiN= elem.getProp('chiN')
+        chiLT= elem.getProp('chiLT') # Lateral torsional buckling reduction factor.
+        chiN= elem.getProp('chiN') # Axial strength reduction factor.
         [[N1, My1, Mz1, Vy1], [N2, My2, Mz2, Vy2]]= model_inquiry.getValuesAtNodes(elem, ['N', 'My', 'Mz', 'Vy'], silent= False)
         FCTN1= self.getBiaxialBendingEfficiency(Nd= N1, Myd= My1, Mzd= Mz1, Vyd= Vy1, chiN= chiN, chiLT= chiLT)[0]
         FCTN2= self.getBiaxialBendingEfficiency(Nd= N2, Myd= My2, Mzd= Mz2, Vyd= Vy2, chiN= chiN, chiLT= chiLT)[0]

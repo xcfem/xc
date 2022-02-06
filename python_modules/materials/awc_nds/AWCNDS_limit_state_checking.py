@@ -52,10 +52,12 @@ class Member(wood_member_base.Member):
         else:
             self.unbracedLengthZ= unbracedLengthX
             
-    def installULSControlRecorder(self,recorderType):
+    def installULSControlRecorder(self,recorderType, chiN: float= 1.0, chiLT: float= 1.0):
         '''Install recorder for verification of ULS criterion.
 
         :param recorderType: type of the recorder to install.
+        :param chiN: compressive strength reduction factor.
+        :param chiLT: flexural strength reduction factor.
         '''
         prep= self.getPreprocessor()
         nodes= prep.getNodeHandler
@@ -69,7 +71,7 @@ class Member(wood_member_base.Member):
             e.setProp('ULSControlRecorder',recorder)
         idEleTags= xc.ID(eleTags)
         recorder.setElements(idEleTags)
-        self.crossSection.setupULSControlVars(self.elemSet)
+        self.crossSection.setupULSControlVars(self.elemSet, chiN= chiN, chiLT= chiLT)
         if(nodes.numDOFs==3):
             recorder.callbackRecord= controlULSCriterion2D()
         else:
@@ -201,6 +203,7 @@ class BeamMember(MemberBase):
         '''
         RB= self.getBendingSlendernessRatio(numberOfConcentratedLoads, lateralSupport, cantilever)
         return 1.2*self.section.wood.Emin/RB**2
+    
     def getBeamStabilityFactor(self,numberOfConcentratedLoads= 0, lateralSupport= False, cantilever= False):
         ''' Return the beam stability factor according to equation 
             3.3.6 of NDS-2018.
@@ -267,6 +270,7 @@ class ColumnMember(MemberBase):
         ratio= FcE/Fc_adj
         tmp= (1+ratio)/2.0/c
         return tmp-math.sqrt(tmp**2-ratio/c)
+    
     def getFcE1(self, E_adj):
         ''' Return the value of F_{cE1} as defined in section
             3.9.2 of NDS-2.018.
@@ -278,6 +282,7 @@ class ColumnMember(MemberBase):
             return 0.822*E_adj/(self.getHSlendernessRatio())**2
         else: # Wide side B
             return 0.822*E_adj/(self.getBSlendernessRatio())**2
+        
     def getFcE2(self, E_adj):
         ''' Return the value of F_{cE2} as defined in section
             3.9.2 of NDS-2.018.
@@ -289,18 +294,21 @@ class ColumnMember(MemberBase):
             return 0.822*E_adj/(self.getHSlendernessRatio())**2
         else: # Narrow side B
             return 0.822*E_adj/(self.getBSlendernessRatio())**2
+        
     def getBendingSlendernessRatioH(self):
         ''' Return the slenderness ratio for bending in
             the h plane.'''
         Ke= self.getEffectiveBucklingLengthCoefficientRecommended()
         le= Ke*self.unbracedLengthH
         return math.sqrt(le*self.section.h/self.section.b**2)
+    
     def getBendingSlendernessRatioB(self):
         ''' Return the slenderness ratio for bending in the
             B plane.'''
         Ke= self.getEffectiveBucklingLengthCoefficientRecommended()
         le= Ke*self.getUnbracedLengthB()
         return math.sqrt(le*self.section.b/self.section.h**2)
+    
     def getFbE(self, E_adj):
         ''' Return the value of F_{bE} as defined in section
             3.9.2 of NDS-2.018.
@@ -314,6 +322,7 @@ class ColumnMember(MemberBase):
         else: # Narrow side B
             sr= self.getBendingSlendernessRatioH()
         return 1.2*E_adj/sr**2
+    
     def getCapacityFactor(self, E_adj, Fc_adj, Fb1_adj, Fb2_adj, fc,fb1, fb2):
         ''' Return the capacity factor for members subjected to a 
             combination of bending about one or both principal axes 

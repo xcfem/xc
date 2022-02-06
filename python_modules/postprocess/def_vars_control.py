@@ -21,8 +21,6 @@ import xc_base
 import geom
 import xc
 
-
-
 def defVarControlMov(obj, code):
     ''' Define variables for movement control.
 

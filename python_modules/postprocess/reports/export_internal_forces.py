@@ -23,16 +23,17 @@ def getInternalForcesDict(nmbComb, elems, vonMisesStressId= 'max_von_mises_stres
                             (see NDMaterial and MembranePlateFiberSection).
     '''
     def getChiLTChiN(element):
-        '''Return the values of the chiLT and chiN properties
-           of an element.
+        '''Return the values of the lateral buckling reduction reduction 
+           factor (chiLT) and the axial load reduction factor (chiN)
+           properties of an element.
 
         :param element: element to get the properties from.
         '''
         chiLT= None
-        if e.hasProp('chiLT'): # steel beam
+        if e.hasProp('chiLT'): # lateral buckling reduction factor.
             chiLT= e.getProp('chiLT')
         chiN= None
-        if e.hasProp('chiN'): # steel beam
+        if e.hasProp('chiN'): # axial load reduction reduction factor.
             chiN= e.getProp('chiN')
         return chiLT, chiN
            
@@ -77,13 +78,11 @@ def getInternalForcesDict(nmbComb, elems, vonMisesStressId= 'max_von_mises_stres
             internalForces= internal_forces.CrossSectionInternalForces(N2,V2,0.0,0.0,0.0,M2) # Internal forces at the end of the bar.
             internalForcesDict[1]= internalForces.getDict()
             chiLT, chiN= getChiLTChiN(e)
-            if(chiLT): # steel beam
+            if(chiLT): # lateral buckling reduction factor.
                 internalForcesDict[0]['chiLT']= chiLT
-            if(chiN): # steel beam
-                internalForcesDict[0]['chiN']= chiN
-            if(chiLT): # steel beam
                 internalForcesDict[1]['chiLT']= chiLT
-            if(chiN): # steel beam
+            if(chiN): # axial load reduction reduction factor.
+                internalForcesDict[0]['chiN']= chiN
                 internalForcesDict[1]['chiN']= chiN
             elemDict['internalForces']= internalForcesDict
         elif('Beam' in elementType):
@@ -95,13 +94,11 @@ def getInternalForcesDict(nmbComb, elems, vonMisesStressId= 'max_von_mises_stres
             internalForces= internal_forces.CrossSectionInternalForces(N2,Vy2,Vz2,T2,My2,Mz2) # Internal forces at the end of the bar.
             internalForcesDict[1]= internalForces.getDict()
             chiLT, chiN= getChiLTChiN(e)
-            if(chiLT): # steel beam
+            if(chiLT): # ateral buckling reduction factor.
                 internalForcesDict[0]['chiLT']= chiLT
-            if(chiN): # steel beam
-                internalForcesDict[0]['chiN']= chiN
-            if(chiLT): # steel beam
                 internalForcesDict[1]['chiLT']= chiLT
-            if(chiN): # steel beam
+            if(chiN): # axial load reduction reduction factor.
+                internalForcesDict[0]['chiN']= chiN
                 internalForcesDict[1]['chiN']= chiN
             elemDict['internalForces']= internalForcesDict
         elif('Truss' in elementType):
@@ -110,15 +107,15 @@ def getInternalForcesDict(nmbComb, elems, vonMisesStressId= 'max_von_mises_stres
             [[N1], [N2]]= model_inquiry.getValuesAtNodes(e,['N'], False)
             internalForces= internal_forces.CrossSectionInternalForces(N1) # Internal forces at the origin of the bar.
             internalForcesDict[0]= internalForces.getDict()
-            if e.hasProp('chiLT'):   #steel beam
+            if e.hasProp('chiLT'): # lateral buckling reduction factor.
                 internalForcesDict[0]['chiLT']= e.getProp('chiLT')
-            if e.hasProp('chiN'):   #steel beam
+            if e.hasProp('chiN'): # axial load reduction reduction factor.
                 internalForcesDict[0]['chiN']= e.getProp('chiN')
             internalForces= internal_forces.CrossSectionInternalForces(N2) # Internal forces at the end of the bar.
             internalForcesDict[1]= internalForces.getDict()
-            if e.hasProp('chiLT'):
+            if e.hasProp('chiLT'): # lateral buckling reduction factor.
                 internalForcesDict[1]['chiLT']= e.getProp('chiLT')
-            if e.hasProp('chiN'):
+            if e.hasProp('chiN'): # axial load reduction reduction factor.
                 internalForcesDict[1]['chiN']= e.getProp('chiN')
             elemDict['internalForces']= internalForcesDict
         elif('ZeroLength' in elementType):

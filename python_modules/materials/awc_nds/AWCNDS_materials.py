@@ -13,11 +13,13 @@ import scipy.interpolate
 from misc_utils import log_messages as lmsg
 from materials import wood_base
 from materials.sections import section_properties as sp
+from postprocess import def_vars_control as vc
 from materials import typical_materials
 from materials import steel_member_base
 import pickle
 from misc_utils import pickle_utils
 import os
+from model import model_inquiry
 
 __author__= "Luis C. Pérez Tato (LCPT) , Ana Ortega (AO_O) "
 __copyright__= "Copyright 2016, LCPT, AO_O"
@@ -344,17 +346,100 @@ class WoodSection(sp.RectangularSection):
         '''
         super(WoodSection,self).__init__(name, b, h)
         
-    def setupULSControlVars(self, elems):
+    def setupULSControlVars(self, elems, chiN=1.0, chiLT=1.0):
         '''For each element creates the variables
            needed to check ultimate limit state criterion to satisfy.
 
         :param elems: elements to define properties on.
+        :param chiN: axial load reduction reduction factor (default= 1.0).
+        :param chiLT: lateral buckling reduction factor (default= 1.0).
         '''
+        vc.defVarsEnvelopeInternalForcesBeamElems(elems)
         for e in elems:
+            e.setProp('chiLT',chiLT) # Lateral torsional buckling reduction factor.
+            e.setProp('chiN',chiN) # Axial strength reduction factor.
             e.setProp('FCTNCP',[-1.0,-1.0]) #Normal stresses efficiency.
             e.setProp('FCVCP',[-1.0,-1.0]) #Shear stresses efficiency.
             e.setProp('crossSection', self)
 
+    def getCompressiveStrength(self):
+        ''' Return the value of the compressive strength of the section.
+        '''
+        return self.getFcAdj()*self.A()
+    
+    def getTensileStrength(self):
+        ''' Return the value of the tensile strength of the section.
+        '''
+        className= type(self).__name__
+        methodName= sys._getframe(0).f_code.co_name
+        lmsg.warning(className+'.'+methodName+'; tensile strength not implemented yet.')
+        return self.getCompressiveStrength()/1000.0
+        
+    def getFlexuralStrength(self, majorAxis= True):
+        ''' Return the value of the flexural strength of the section.
+        '''
+        retval= self.getFbAdj()
+        if(majorAxis):
+            retval*= self.getElasticSectionModulusZ()
+        else:
+            retval*= self.getElasticSectionModulusY()
+
+    def getBiaxialBendingEfficiency(self,Nd,Myd,Mzd,Vyd= 0.0, chiN=1.0, chiLT=1.0):
+        '''Return biaxial bending efficiency according to section H1
+           of AISC-360-16.
+
+        :param Nd: required axial strength.
+        :param Mzd: required bending strength (major axis).
+        :param Vyd: required shear strength (major axis)
+        :param chiN: axial load reduction reduction factor (default= 1.0).
+        :param chiLT: lateral buckling reduction factor (default= 1.0).
+        '''
+        ratioN= 0.0
+        if(Nd<0): # compression
+            NcRd= chiN*self.getCompressiveStrength() # available axial strength.
+            ratioN=  abs(Nd)/NcRd
+        else:
+            NcRd= self.getTensileStrength() # available axial strength.
+            ratioN= Nd/NcRd
+        if(ratioN!=0.0):
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.warning(className+'.'+methodName+'; compression and bending not implemented yet.')            
+        McRdy= self.getFlexuralStrength(majorAxis= False) # available flexural strength minor axis.
+        McRdz= self.getFlexuralStrength(majorAxis= True) # reference flexural strength major axis.
+        MbRdz= chiLT*McRdz # available flexural strength major axis.
+        ratioMz= abs(Mzd)/MbRdz
+        ratioMy= abs(Myd)/McRdy
+        if(ratioMy!=0.0 and ratioMz!=0.0):
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.warning(className+'.'+methodName+'; biaxial bending not implemented yet.')
+        CF= max(rationN, ratioMy, ratioMz)
+
+        return (CF,NcRd,McRdy,McRdz,MvRdz,MbRdz)
+
+    def checkBiaxialBendingForElement(self, elem, nmbComb):
+        '''Called in every commit to check biaxial bending criterion 
+            (bars in 3D problems).
+
+        :param elem: finite element to check.
+        :param nmbComb: name of the load combination.
+        '''
+        elem.getResistingForce()
+        chiLT= elem.getProp('chiLT') # lateral buckling reduction factor.
+        chiN= elem.getProp('chiN') # axial load reduction reduction factor.
+        [[N1, My1, Mz1, Vy1], [N2, My2, Mz2, Vy2]]= model_inquiry.getValuesAtNodes(elem, ['N', 'My', 'Mz', 'Vy'], silent= False)
+        FCTN1= self.getBiaxialBendingEfficiency(Nd= N1, Myd= My1, Mzd= Mz1, Vyd= Vy1, chiN= chiN, chiLT= chiLT)[0]
+        FCTN2= self.getBiaxialBendingEfficiency(Nd= N2, Myd= My2, Mzd= Mz2, Vyd= Vy2, chiN= chiN, chiLT= chiLT)[0]
+        fctn= elem.getProp("FCTNCP")
+        if(FCTN1 > fctn[0]):
+            fctn[0]= FCTN1
+            elem.setProp("HIPCPTN1",nmbComb)
+        if(FCTN2 > fctn[1]):
+            fctn[1]= FCTN2
+            elem.setProp("HIPCPTN2",nmbComb)
+        elem.setProp("FCTNCP",fctn)
+        vc.updateEnvelopeInternalForcesBeamElem(elem)
         
 class WoodPanelSection(WoodSection):
     ''' Wood structural panel.'''
@@ -695,8 +780,16 @@ class HeaderSection(WoodSection):
     def getLinearDensity(self):
         ''' Return the mass per unit length.'''
         return self.rho*self.b*self.h
+    
     def getFb(self):
         return self.getVolumeFactor()*self.wood.Fb_12
+
+    def getFbAdj(self):
+        return self.getFb()
+    
+    def getFcAdj(self):
+        return self.wood.Fc_pll
+    
     def defXCMaterial(self, overrideRho= None):
         '''Defines the material in XC.
 
@@ -880,27 +973,33 @@ class CustomLumberSection(WoodSection):
         ''' Return the flat use factor for the bending design
             value Fb.'''
         return self.wood.getBendingFlatUseFactor(self.b,self.h)
+    
     def getBendingSizeFactor(self):
         ''' Return the size factor for the bending design
             value Fb.'''
         return self.wood.getBendingSizeFactor(self.b,self.h)
+    
     def getTensionSizeFactor(self):
         ''' Return the size factor for the tension design
             value Ft.'''
         return self.wood.getTensionSizeFactor(self.b,self.h)
+    
     def getCompressionSizeFactor(self):
         ''' Return the size factor for the compression design
             value Fc.'''
         return self.wood.getCompressionSizeFactor(self.b,self.h)
+    
     def getFbAdj(self, Cr= 1.0):
         ''' Return the adjusted value of Fb.
 
         :param Cr: repetitive member factor
         '''
         return self.wood.getFbAdj(self.b,self.h, Cr)
+    
     def getFtAdj(self):
         ''' Return the adjusted value of Ft.'''
         return self.wood.getFtAdj(self.b,self.h)
+    
     def getFvAdj(self):
         ''' Return the adjusted value of Fv.'''
         return self.wood.getFvAdj()
