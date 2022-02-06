@@ -344,54 +344,16 @@ class WoodSection(sp.RectangularSection):
         '''
         super(WoodSection,self).__init__(name, b, h)
         
-    def setupULSControlVars2d(self,elems):
-        '''For each element creates the variables
-           needed to check ultimate limit state criterion to satisfy.
-
-        :param elems: elements to process.
-        '''
-        className= type(self).__name__
-        methodName= sys._getframe(0).f_code.co_name
-        lmsg.error(className+'.'+methodName+': not implemented yet.')
-        # def_vars_control.defVarsControlTensRegElastico2d(elems)
-        # W= self.Wzel()
-        # for e in elems:
-        #     e.setProp("fyd",self.fyd)
-        #     e.setProp("fydV",self.taud)
-        #     e.setProp("Wel",W)
-
-    def setupULSControlVars3d(self,elems):
-        '''For each element creates the variables
-           needed to check ultimate limit state criterion to satisfy.
-
-        :param elems: elements to process.
-        '''
-        className= type(self).__name__
-        methodName= sys._getframe(0).f_code.co_name
-        lmsg.error(className+'.'+methodName+': not implemented yet.')
-        # def_vars_control.defVarsControlTensRegElastico3d(elems)
-        # Wz= self.Wzel()
-        # Wy= self.Wyel()
-        # for e in elems:
-        #     e.setProp("fyd",self.fyd)
-        #     e.setProp("fydV",self.taud)
-        #     e.setProp("Wyel",Wy)
-        #     e.setProp("AreaQy",0.9*self.A())
-        #     e.setProp("Wzel",Wz)
-        #     e.setProp("AreaQz",self.A()-e.getProp("AreaQy"))
-        
     def setupULSControlVars(self, elemSet):
         '''For each element creates the variables
            needed to check ultimate limit state criterion to satisfy.
 
         :param elemSet: xc set containing the elements to process.
         '''
-        preprocessor= elemSet.owner.getPreprocessor
-        nodes= preprocessor.getNodeHandler
-        if(nodes.numDOFs==3):
-            self.setupULSControlVars2d(elemSet)
-        else:
-            self.setupULSControlVars3d(elemSet)
+        for e in elems:
+            e.setProp('FCTNCP',[-1.0,-1.0]) #Normal stresses efficiency.
+            e.setProp('FCVCP',[-1.0,-1.0]) #Shear stresses efficiency.
+            e.setProp('crossSection', self)
 
         
 class WoodPanelSection(WoodSection):
