@@ -881,7 +881,7 @@ double XC::FiberSectionBase::getCompressedStrutWidth(void) const
     double retval= 0.0;
     const SectionGeometry *geom= getSectionGeometry();
     if(geom)
-      retval= geom->getCompressedStrutWidth(getLeverArmSegment());
+        retval= geom->getCompressedStrutWidth(getLeverArmSegment());
     return retval;
   }
 

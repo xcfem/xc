@@ -199,7 +199,7 @@ Segment2d Segment2d::Offset(const GEOM_FT &d) const
 //! @brief Return the perpendicular_bisector of the segment.
 Line2d Segment2d::getPerpendicularBisector(void) const
   {
-    const Pos2d p=getCenterOfMass();
+    const Pos2d p= getCenterOfMass();
     const Vector2d v= VDir().Perpendicular(CGAL::COUNTERCLOCKWISE);
     const Pos2d p2= p+100.0*v;
     return Line2d(p,p2);
