@@ -47,6 +47,7 @@ double (XC::Element::*getDist2Pos3d)(const Pos3d &,bool initialGeometry) const= 
 class_<XC::Element, XC::Element *,bases<XC::MeshComponent>, boost::noncopyable >("Element", no_init)
   .add_property("getNodes", make_function( getNodePtrsRef, return_internal_reference<>() ),"DEPRECATED; return the element nodes.")
   .add_property("nodes", make_function( getNodePtrsRef, return_internal_reference<>() ),"Return the element nodes.")
+  .add_property("numNodes", &XC::Element::getNumExternalNodes, "Return the number of nodes.")
   .def("find",&XC::Element::find,"Return the index of the node in the element (-1 if not found).")
   .add_property("getIdxNodes",&XC::Element::getIdxNodes,"Return the node indices for its use in VTK arrays.")
   .def("setIdNodes", setIdNodesRef," setIdNodes(xc.ID([idNode0, idNode1,...]) set the element nodes.")

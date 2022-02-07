@@ -17,6 +17,7 @@ from misc_utils import log_messages as lmsg
 import xc_base
 import geom
 import materials
+from model import model_inquiry
 
 
 #Alpha imperfection factor.
@@ -339,7 +340,10 @@ class SteelShape(sp.SectionProperties):
 
     def setupULSControlVars(self,elems):
         '''For each element creates the variables
-           needed to check ultimate limit state criterion to satisfy.'''
+           needed to check ultimate limit state criterion to satisfy.
+
+        :param elems: elements to define properties on.
+        '''
         vc.defVarsEnvelopeInternalForcesBeamElems(elems)
         for e in elems:
             e.setProp('FCTNCP',[-1.0,-1.0]) #Normal stresses efficiency.
@@ -353,24 +357,11 @@ class SteelShape(sp.SectionProperties):
         '''
         elem.getResistingForce()
         sectionClass= elem.getProp('sectionClass')
-        chiLT= elem.getProp('chiLT')
-        chiN= elem.getProp('chiN')
-        N1= 0.0; M1= 0.0; V1= 0.0
-        N2= 0.0; M2= 0.0; V2= 0.0
-        axialForces= elem.getValuesAtNodes('N', False)
-        if(len(axialForces)>1): # 'N' found.
-            N1= axialForces[0]
-            N2= axialForces[1]
-        bending= elem.getValuesAtNodes('M', False)
-        if(len(bending)>1): # 'M' found.
-            M1= bending[0]
-            M2= bending[1]
-        shear= elem.getValuesAtNodes('V', False)
-        if(len(shear)>1): # 'V' found.
-            V1= shear[0]
-            V2= shear[1]
-        FCTN1= self.getZBendingEfficiency(Nd= N1, Mzd= M1, Vyd= V1,chiN= chiN, chiLT= chiLT, sectionClass= sectionClass)[0]
-        FCTN2= self.getZBendingEfficiency(Nd= N2, Mzd= M2, Vyd= V2,chiN= chiN, chiLT= chiLT, sectionClass= sectionClass)[0]
+        chiLT= elem.getProp('chiLT') # Lateral torsional buckling reduction factor.
+        chiN= elem.getProp('chiN') # Axial strength reduction factor.
+        [[N1, M1, V1], [N2, M2, V2]]= model_inquiry.getValuesAtNodes(elem, ['N', 'M', 'V'], False)
+        FCTN1= self.getZBendingEfficiency(Nd= N1, Mzd= M1, Vyd= V1, chiN= chiN, chiLT= chiLT, sectionClass= sectionClass)[0]
+        FCTN2= self.getZBendingEfficiency(Nd= N2, Mzd= M2, Vyd= V2, chiN= chiN, chiLT= chiLT, sectionClass= sectionClass)[0]
         fctn= elem.getProp("FCTNCP")
         if(FCTN1 > fctn[0]):
             fctn[0]= FCTN1
@@ -381,7 +372,7 @@ class SteelShape(sp.SectionProperties):
         elem.setProp("FCTNCP",fctn)
         vc.updateEnvelopeInternalForcesBeamElem2D(elem)
 
-    def checkBiaxialBendingForElement(self,elem,nmbComb):
+    def checkBiaxialBendingForElement(self, elem, nmbComb):
         '''Called in every commit to check biaxial bending criterion 
             (bars in 3D problems).
 
@@ -390,26 +381,9 @@ class SteelShape(sp.SectionProperties):
         '''
         elem.getResistingForce()
         sectionClass= elem.getProp('sectionClass')
-        chiLT= elem.getProp('chiLT')
-        chiN= elem.getProp('chiN')
-        N1= 0.0; My1= 0.0; Mz1= 0.0; Vy1= 0.0;
-        N2= 0.0; My2= 0.0; Mz2= 0.0; Vy2= 0.0;
-        axialForces= elem.getValuesAtNodes('N', False)
-        if(len(axialForces)>1): # 'N' found.
-            N1= axialForces[0]
-            N2= axialForces[1]
-        bendingY= elem.getValuesAtNodes('My', False)
-        if(len(bendingY)>1): # 'My' found.
-            My1= bendingY[0]
-            My2= bendingY[1]
-        bendingZ= elem.getValuesAtNodes('Mz', False)
-        if(len(bendingZ)>1): # 'Mz' found.
-            Mz1= bendingZ[0]
-            Mz2= bendingZ[1]
-        shearY= elem.getValuesAtNodes('Vy', False)
-        if(len(shearY)>1): # 'Vy' found.
-            Vy1= shearY[0]
-            Vy2= shearY[1]
+        chiLT= elem.getProp('chiLT') # Lateral torsional buckling reduction factor.
+        chiN= elem.getProp('chiN') # Axial strength reduction factor.
+        [[N1, My1, Mz1, Vy1], [N2, My2, Mz2, Vy2]]= model_inquiry.getValuesAtNodes(elem, ['N', 'My', 'Mz', 'Vy'], silent= False)
         FCTN1= self.getBiaxialBendingEfficiency(Nd= N1, Myd= My1, Mzd= Mz1, Vyd= Vy1, chiN= chiN, chiLT= chiLT)[0]
         FCTN2= self.getBiaxialBendingEfficiency(Nd= N2, Myd= My2, Mzd= Mz2, Vyd= Vy2, chiN= chiN, chiLT= chiLT)[0]
         fctn= elem.getProp("FCTNCP")
@@ -430,12 +404,7 @@ class SteelShape(sp.SectionProperties):
         '''
         elem.getResistingForce()
         sectionClass= elem.getProp('sectionClass')
-        Vy1= 0.0
-        Vy2= 0.0
-        shearY= elem.getValuesAtNodes('Vy', False)
-        if(len(shearY)>1): # 'Vy' found.
-            Vy1= shearY[0]
-            Vy2= shearY[1]
+        [[Vy1], [Vy2]]= model_inquiry.getValuesAtNodes(elem,['Vy'], False)
         FCV1= self.getYShearEfficiency(sectionClass,Vy1)
         FCV2= self.getYShearEfficiency(sectionClass,Vy2)
         fcv= elem.getProp("FCVCP")
@@ -455,12 +424,7 @@ class SteelShape(sp.SectionProperties):
         '''
         elem.getResistingForce()
         sectionClass= elem.getProp('sectionClass')
-        Vz1= 0.0
-        Vz2= 0.0
-        shearZ= elem.getValuesAtNodes('Vz', False)
-        if(len(shearZ)>1): # 'Vz' found.
-            Vz1= shearZ[0]
-            Vz2= shearZ[1]
+        [[Vz1], [Vz2]]= model_inquiry.getValuesAtNodes(elem,['Vz'], False)
         FCV1= self.getZShearEfficiency(sectionClass,Vz1)
         FCV2= self.getZShearEfficiency(sectionClass,Vz2)
         fcv= elem.getProp("FCVCP")

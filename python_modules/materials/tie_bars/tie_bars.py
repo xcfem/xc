@@ -15,6 +15,7 @@ __email__= "ana.ortega@ciccp.es, l.pereztato@ciccp.es"
 
 from materials import steel_base
 from postprocess import def_vars_control as vc
+from model import model_inquiry
 
 class TieBarSteel(steel_base.BasicSteel):
     '''SBS steel according to https://www.s3i.co.uk/carbon-steel-tie-bar.php.
@@ -153,6 +154,7 @@ class TieBar(object):
         '''For each element creates the variables
            needed to check ultimate limit state criterion to be satisfied.
 
+        :param elems: elements to define properties on.
         '''
         vc.defVarsEnvelopeInternalForcesTrussElems(elems)
         for e in elems:
@@ -184,7 +186,7 @@ class TieBar(object):
         elem.setProp("FCTNCP",fctn)
         vc.updateEnvelopeInternalForcesTruss(elem)
 
-    def checkBiaxialBendingForElement(self,elem,nmbComb):
+    def checkBiaxialBendingForElement(self, elem, nmbComb):
         '''Called in every commit to check biaxial bending criterion 
             (bars in 3D problems).
 
@@ -192,12 +194,7 @@ class TieBar(object):
         :param nmbComb: name of the load combination.
         '''
         elem.getResistingForce()
-        N1= 0.0; My1= 0.0; Mz1= 0.0; Vy1= 0.0;
-        N2= 0.0; My2= 0.0; Mz2= 0.0; Vy2= 0.0;
-        axialForces= elem.getValuesAtNodes('N', False)
-        if(len(axialForces)>1): # 'N' found.
-            N1= axialForces[0]
-            N2= axialForces[1]
+        [[N1], [N2]]= model_inquiry.getValuesAtNodes(elem,['N'], False)
         FCTN1= self.getBiaxialBendingEfficiency(Nd= N1)
         FCTN2= self.getBiaxialBendingEfficiency(Nd= N2)
         fctn= elem.getProp("FCTNCP")

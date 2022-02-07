@@ -199,7 +199,7 @@ lcZbeam.newNodalLoad(n3.tag,xc.Vector([F/math.sqrt(2),-F/math.sqrt(2),0,M/math.s
 combContainer= combs.CombContainer()
 combContainer.ULS.perm.add('allLoads', '1.0*lcXbeam+1.0*lcYbeam+1.0*lcZbeam')
 totalSet= preprocessor.getSets.getSet('total')
-cfg=default_config.EnvConfig(language='en',resultsPath= '', intForcPath= '',verifPath= '',reportPath='./',reportResultsPath= 'annex/',grWidth='120mm')
+cfg=default_config.EnvConfig(language='en',resultsPath= '', intForcPath= '',verifPath= '',reportPath='./',reportResultsPath= '/tmp/annex/',grWidth='120mm')
 cfg.projectDirTree.workingDirectory= '/tmp/'
 lsd.LimitStateData.envConfig= cfg
 lsd.normalStressesResistance.saveAll(combContainer,totalSet) 
@@ -323,6 +323,7 @@ for r in ratios:
 result= math.sqrt(result)
 feProblem.errFileName= "cerr" # Display errors if any.
 import os
+os.system("rm -f -r /tmp/annex") # Clean after yourself.
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (result<1e-10):

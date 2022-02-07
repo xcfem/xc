@@ -411,10 +411,11 @@ class EC3Shape(object):
         CF=(abs(Mzd)/MbRdz)**alpha+(abs(Myd)/McRdy)**beta
         return (CF,NcRd,McRdy,McRdz,MvRdz,MbRdz)
 
-    def setupULSControlVars(self,elems,sectionClass= 1, chiLT=1.0):
+    def setupULSControlVars(self, elems, sectionClass= 1, chiLT=1.0):
         '''For each element creates the variables
            needed to check ultimate limit state criterion to be satisfied.
 
+        :param elems: elements to define properties on.
         :param sectionClass: section classification (1,2,3 or 4)
         :param chiLT: lateral buckling reduction factor (default= 1.0).
         '''
@@ -424,9 +425,10 @@ class EC3Shape(object):
             e.setProp('chiLT',chiLT) #Lateral torsional buckling reduction factor.
             e.setProp('crossSection',self)
 
-    def installULSControlRecorder(self,recorderType, elems, sectionClass= 1, chiLT=1.0):
+    def installULSControlRecorder(self, recorderType, elems, sectionClass= 1, chiLT=1.0):
         '''Installs recorder for verification of ULS criterion. Preprocessor obtained from the set of elements.
 
+        :param recorderType: recorder type.
         :param sectionClass: section classification (1,2,3 or 4)
         :param chiLT: lateral buckling reduction factor (default= 1.0).
         '''

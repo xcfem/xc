@@ -25,6 +25,7 @@ import materials
 from geom_utils import closest_pair_of_points as cpp
 from materials import steel_base
 from misc_utils import log_messages as lmsg
+from materials import member_base
 from materials import steel_member_base
 from materials.astm_aisc import AISC_limit_state_checking as aisc
 from import_export import block_topology_entities as bte
@@ -1556,9 +1557,10 @@ class ASTMShape(object):
         '''For each element creates the variables
            needed to check ultimate limit state criterion to be satisfied.
 
-           :param sectionClass: dummy argument used for compatibility.
-           :param chiN: axial load reduction reduction factor (default= 1.0).
-           :param chiLT: lateral buckling reduction factor (default= 1.0).
+        :param elems: elements to define properties on.
+        :param sectionClass: dummy argument used for compatibility.
+        :param chiN: axial load reduction reduction factor (default= 1.0).
+        :param chiLT: lateral buckling reduction factor (default= 1.0).
         '''
         super(ASTMShape,self).setupULSControlVars(elems)
         for e in elems:
@@ -1919,7 +1921,7 @@ class BendingState(object):
         '''
         return 12.5*self.Mmax/(2.5*self.Mmax+3*self.Ma+4*self.Mb+3*self.Mc)
 
-class MemberConnection(steel_member_base.MemberConnection):
+class MemberConnection(member_base.MemberConnection):
     '''Member length and connections
 
        :ivar L: member length.

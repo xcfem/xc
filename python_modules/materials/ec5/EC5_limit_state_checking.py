@@ -25,9 +25,12 @@ class EC5TimberRectCrossSection(section_properties.RectangularSection):
         self.fyd= fyd
         self.taud= taud
 
-    def setupULSControlVars2d(self,elems):
+    def setupULSControlVars2d(self, elems):
         '''For each element creates the variables
-           needed to check ultimate limit state criterion to satisfy.'''
+           needed to check ultimate limit state criterion to satisfy.
+
+        :param elems: elements to define properties on.
+        '''
         def_vars_control.defVarsControlTensRegElastico2d(elems)
         W= self.Wzel()
         for e in elems:
@@ -35,9 +38,12 @@ class EC5TimberRectCrossSection(section_properties.RectangularSection):
             e.setProp("fydV",self.taud)
             e.setProp("Wel",W)
 
-    def setupULSControlVars3d(self,elems):
+    def setupULSControlVars3d(self, elems):
         '''For each element creates the variables
-           needed to check ultimate limit state criterion to satisfy.'''
+           needed to check ultimate limit state criterion to satisfy.
+
+        :param elems: elements to define properties on.
+        '''
         def_vars_control.defVarsControlTensRegElastico3d(elems)
         Wz= self.Wzel()
         Wy= self.Wyel()
@@ -49,7 +55,12 @@ class EC5TimberRectCrossSection(section_properties.RectangularSection):
             e.setProp("Wzel",Wz)
             e.setProp("AreaQz",self.A()-e.getProp("AreaQy"))
 
-    def installElementElasticStressesControlRecorder(self,recorderName, elemSet):
+    def installElementElasticStressesControlRecorder(self, recorderName, elemSet):
+        ''' Define recorder
+
+        :param recorderName: recorder name.
+        :param elemSet: elements to define recorder on.
+        '''
         preprocessor= elemSet.owner.getPreprocessor
         nodes= preprocessor.getNodeHandler
         domain= preprocessor.getDomain

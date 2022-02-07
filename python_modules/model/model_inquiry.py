@@ -6,6 +6,29 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "ana.ortega@ciccp.es, l.pereztato@ciccp.es"
 
+def getValuesAtNodes(element, components= ['N', 'M', 'V'], silent= False):
+    ''' Return the values at the element nodes.
+
+    :param element: element which the components at its nodes will be retrieved.
+    :param component: components to retrieve.
+    :param silent: if true don't complain about non-existent components.
+    '''
+    values= dict()
+    for c in components:
+        values[c]= element.getValuesAtNodes(c, silent)
+    numNodes= element.numNodes
+    retval= list()
+    for i in range(0,numNodes):
+        nodeValues= list()
+        for c in components:
+            nValues= values[c]
+            if(len(nValues)>0):
+                nodeValues.append(nValues[i])
+            else:
+                nodeValues.append(0.0)
+        retval.append(nodeValues)
+    return retval
+
 # Return the identifiers of the lines in the set.
 def getIdsLineasSet(preprocessor, setName):
     retvalIdsLineasSet= [] 

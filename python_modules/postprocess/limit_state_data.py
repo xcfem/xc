@@ -12,6 +12,7 @@ __email__= "l.pereztato@ciccp.es, ana.Ortega@ciccp.es"
 
 import pickle
 import os
+import sys
 from solution import predefined_solutions
 from postprocess.reports import export_internal_forces as eif
 from postprocess.reports import export_reactions as er
@@ -82,23 +83,27 @@ class LimitStateData(object):
     :ivar outputDataBaseFileName: name (whithout extension) of the 
                                        file that contains the results to
                                        display.
+    :ivar designSituation: design situation; permanent, quasi-permanent,
+                           frequent, rare, earthquake. 
     '''
     
     envConfig= None
 
-    def __init__(self,limitStateLabel,outputDataBaseFileName):
+    def __init__(self, limitStateLabel, outputDataBaseFileName, designSituation):
         '''Limit state data constructor.
 
 
-        :param label: limit state check label; Something like "Fatigue" 
-                      or "CrackControl".
+        :param limitStateLabel: limit state check label; Something like "Fatigue"                               or "CrackControl".
         :param outputDataBaseFileName: name (whithout extension) of the 
                                        file that contains the results to
                                        display.
+        :param designSituation: design situation; permanent, quasi-permanent,
+                                frequent, rare, earthquake. 
         '''
         self.label= limitStateLabel
         self.outputDataBaseFileName= outputDataBaseFileName
-        
+        self.designSituation= designSituation
+       
     def getInternalForcesFileName(self):
         '''Return the name of the file where internal forces are stored.'''
         return self.envConfig.projectDirTree.getInternalForcesResultsPath()+'intForce_'+ self.label +'.json'
@@ -155,6 +160,35 @@ class LimitStateData(object):
         with open(name + '.pkl', 'r') as f:
             return pickle.load(f)
 
+    def dumpCombinations(self,combContainer,loadCombinations):
+        '''Load into the solver the combinations needed for this limit state.
+
+        :param combContainer: container with the definition of the different
+                              combination families (ULS, fatigue, SLS,...)
+                              see actions/combinations module.
+        :param loadCombinations: load combination handler inside the XC solver.
+        '''
+        loadCombinations.clear()
+        if(self.designSituation=='permanent'):
+            combContainer.ULS.perm.dumpCombinations(loadCombinations)
+        elif(self.designSituation== 'quasi-permanent'):
+            combContainer.SLS.qp.dumpCombinations(loadCombinations)
+        elif(self.designSituation== 'frequent'):
+            combContainer.SLS.freq.dumpCombinations(loadCombinations)
+        elif(self.designSituation== 'rare'):
+            combContainer.SLS.rare.dumpCombinations(loadCombinations)
+        elif(self.designSituation== 'fatigue'):
+            combContainer.ULS.fatigue.dumpCombinations(loadCombinations)
+        elif(self.designSituation== 'sls_earthquake'):
+            combContainer.SLS.earthquake.dumpCombinations(loadCombinations)
+        elif(self.designSituation== 'uls_earthquake'):
+            combContainer.ULS.earthquake.dumpCombinations(loadCombinations)
+        else:
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.warning(className+'.'+methodName+"; design situation: '"+str(self.designSituation)+"' unknown..")
+        return loadCombinations
+                         
     def getLastCalculationTime(self):
         ''' Return the time of last modification of the internal
            forces file.'''
@@ -208,14 +242,13 @@ class LimitStateData(object):
             json.dump(reactionsDict, outfile)
         outfile.close()
         
-    def saveAll(self, combContainer, setCalc, solutionProcedureType= defaultSolutionProcedureType, lstSteelBeams=None, constrainedNodeSet= None):
+    def saveAll(self, combContainer, setCalc, solutionProcedureType= defaultSolutionProcedureType, constrainedNodeSet= None):
         '''Write internal forces, displacements, .., for each combination
 
         :param setCalc: set of entities for which the verification is 
                           going to be performed
         :param solutionProcedureType: type of the solution strategy to solve
                                       the finite element problem.
-        :param lstSteelBeams: list of steel beams to analyze (defaults to None)
         :param constrainedNodeSet: constrained nodes (defaults to None)
         '''
         preprocessor= setCalc.getPreprocessor
@@ -238,9 +271,6 @@ class LimitStateData(object):
             comb.addToDomain() #Combination to analyze.
             #Solution
             result= solutionProcedure.solve()
-            if lstSteelBeams:
-                for sb in lstSteelBeams:
-                    sb.updateReductionFactors()
             #Writing results.
             internalForcesDict.update(self.getInternalForcesDict(comb.getName,elemSet))
             reactionsDict.update(self.getReactionsDict(comb.getName,constrainedNodeSet))
@@ -269,86 +299,130 @@ class LimitStateData(object):
 
 #20181117 end
 
-class NormalStressesRCLimitStateData(LimitStateData):
-    ''' Reinforced concrete normal stresses data for limit state checking.'''
-    def __init__(self):
-        '''Constructor '''
-        super(NormalStressesRCLimitStateData,self).__init__('ULS_normalStressesResistance','verifRsl_normStrsULS')
+class ULS_LimitStateData(LimitStateData):
+    ''' Ultimate limit state data for permanent or transient combinations.'''
+    
+    def __init__(self, limitStateLabel, outputDataBaseFileName, designSituation):
+        '''Constructor.
 
-    def dumpCombinations(self,combContainer,loadCombinations):
-        '''Load into the solver the combinations needed for this limit state.
-
-        :param combContainer: container with the definition of the different
-                              combination families (ULS, fatigue, SLS,...)
-                              see actions/combinations module.
-        :param loadCombinations: load combination handler inside the XC solver.
+        :param limitStateLabel: limit state check label; Something like "Fatigue" 
+                              or "CrackControl".
+        :param outputDataBaseFileName: name (whithout extension) of the 
+                                       file that contains the results to
+                                       display.
+        :param designSituation: design situation; permanent, quasi-permanent,
+                                frequent, rare, earthquake. 
         '''
-        loadCombinations.clear()
-        combContainer.ULS.perm.dumpCombinations(loadCombinations)
-        return loadCombinations
+        super(ULS_LimitStateData,self).__init__(limitStateLabel= limitStateLabel, outputDataBaseFileName= outputDataBaseFileName, designSituation= designSituation)
 
-    def check(self,reinfConcreteSections,outputCfg= VerifOutVars()):
+    def check(self, crossSections,outputCfg= VerifOutVars()):
         '''Checking of normal stresses in ultimate limit states
         (see self.dumpCombinations).
 
-        :param reinfConcreteSections: Reinforced concrete sections on each 
-               element.
+        :param crossSections: cross sections on each element.
         :param outputCfg: instance of class 'VerifOutVars' which defines the 
                variables that control the output of the checking (set of 
                elements to be analyzed, append or not the results to a file,
                generation or not of lists, ...)
          '''
-        return reinfConcreteSections.internalForcesVerification3D(self, "d",outputCfg)
+        return crossSections.internalForcesVerification3D(self, "d",outputCfg)
+    
+class NormalStressesRCLimitStateData(ULS_LimitStateData):
+    ''' Reinforced concrete normal stresses data for limit state checking.'''
+    def __init__(self):
+        '''Constructor '''
+        super(NormalStressesRCLimitStateData,self).__init__(limitStateLabel= 'ULS_normalStressesResistance', outputDataBaseFileName= 'verifRsl_normStrsULS', designSituation= 'permanent')
 
-class ShearResistanceRCLimitStateData(LimitStateData):
+class ULS_SteelLimitStateData(ULS_LimitStateData):
+    ''' Steel normal stresses data for limit state checking.'''
+    def __init__(self, limitStateLabel, outputDataBaseFileName, designSituation):
+        '''Constructor.
+
+        :param limitStateLabel: limit state check label; Something like "Fatigue"                               or "CrackControl".
+        :param outputDataBaseFileName: name (whithout extension) of the 
+                                       file that contains the results to
+                                       display.
+        :param designSituation: design situation; permanent, quasi-permanent,
+                                frequent, rare, earthquake. 
+        '''
+        super(ULS_SteelLimitStateData,self).__init__(limitStateLabel= limitStateLabel, outputDataBaseFileName= outputDataBaseFileName, designSituation= designSituation)
+        
+    def saveAll(self, combContainer, setCalc, solutionProcedureType= defaultSolutionProcedureType, lstSteelBeams=None, constrainedNodeSet= None):
+        '''Write internal forces, displacements, .., for each combination
+
+        :param setCalc: set of entities for which the verification is 
+                          going to be performed
+        :param solutionProcedureType: type of the solution strategy to solve
+                                      the finite element problem.
+        :param lstSteelBeams: list of steel beams to analyze (defaults to None)
+        :param constrainedNodeSet: constrained nodes (defaults to None)
+        '''
+        preprocessor= setCalc.getPreprocessor
+        feProblem= preprocessor.getProblem
+        solutionProcedure= solutionProcedureType(feProblem)
+        preprocessor= feProblem.getPreprocessor
+        loadCombinations= preprocessor.getLoadHandler.getLoadCombinations
+        #Putting combinations inside XC.
+        loadCombinations= self.dumpCombinations(combContainer,loadCombinations)
+        elemSet= setCalc.elements
+        nodSet= setCalc.nodes
+        self.createOutputFiles()
+        internalForcesDict= dict()
+        reactionsDict= dict()
+        for key in loadCombinations.getKeys():
+            comb= loadCombinations[key]
+            preprocessor.resetLoadCase()
+            preprocessor.getDomain.revertToStart()
+            comb.addToDomain() #Combination to analyze.
+            #Solution
+            result= solutionProcedure.solve()
+            if lstSteelBeams:
+                for sb in lstSteelBeams:
+                    sb.updateReductionFactors()
+            #Writing results.
+            internalForcesDict.update(self.getInternalForcesDict(comb.getName,elemSet))
+            reactionsDict.update(self.getReactionsDict(comb.getName,constrainedNodeSet))
+            self.writeDisplacements(comb.getName,nodSet)
+            comb.removeFromDomain() #Remove combination from the model.
+        self.writeInternalForces(internalForcesDict)
+        self.writeReactions(reactionsDict)
+        
+class NormalStressesSteelLimitStateData(ULS_SteelLimitStateData):
+    ''' Steel normal stresses data for limit state checking.'''
+    def __init__(self):
+        '''Constructor '''
+        super(NormalStressesSteelLimitStateData,self).__init__(limitStateLabel= 'ULS_normalStressesResistance', outputDataBaseFileName= 'verifRsl_normStrsULS', designSituation= 'permanent')
+
+class ShearResistanceRCLimitStateData(ULS_LimitStateData):
     ''' Reinforced concrete shear resistance limit state data.'''
     def __init__(self):
         '''Limit state data constructor '''
-        super(ShearResistanceRCLimitStateData,self).__init__('ULS_shearResistance','verifRsl_shearULS')
+        super(ShearResistanceRCLimitStateData,self).__init__(limitStateLabel= 'ULS_shearResistance', outputDataBaseFileName= 'verifRsl_shearULS', designSituation= 'permanent')
         
-    def dumpCombinations(self,combContainer,loadCombinations):
-        '''Load into the solver the combinations needed for this limit state.
-
-        :param combContainer: container with the definition of the different
-                              combination families (ULS, fatigue, SLS,...)
-                              see actions/combinations module.
-        :param loadCombinations: load combination handler inside the XC solver.
-        '''
-        loadCombinations.clear()
-        combContainer.ULS.perm.dumpCombinations(loadCombinations)
-        return loadCombinations
-    def check(self,reinfConcreteSections,outputCfg= VerifOutVars()):
-        '''Checking of shear resistance in ultimate limit states 
-        (see self.dumpCombinations).
-
-        :param reinfConcreteSections: Reinforced concrete sections on each 
-               element.
-        :param outputCfg: instance of class 'VerifOutVars' which defines the 
-               variables that control the output of the checking (set of 
-               elements to be analyzed, append or not the results to a file,
-               generation or not of lists, ...)
-        '''
-        return reinfConcreteSections.internalForcesVerification3D(self,"d",outputCfg)
-
-class FreqLoadsCrackControlRCLimitStateData(LimitStateData):
-    ''' Reinforced concrete crack control under frequent loads limit state data.'''
+class ShearResistanceSteelLimitStateData(ULS_SteelLimitStateData):
+    ''' Reinforced concrete shear resistance limit state data.'''
     def __init__(self):
         '''Limit state data constructor '''
-        super(FreqLoadsCrackControlRCLimitStateData,self).__init__('SLS_frequentLoadsCrackControl','verifRsl_crackingSLS_freq')
-    def dumpCombinations(self,combContainer,loadCombinations):
-        '''Load into the solver the combinations needed for this limit state.
+        super(ShearResistanceSteelLimitStateData,self).__init__(limitStateLabel= 'ULS_shearResistance', outputDataBaseFileName= 'verifRsl_shearULS', designSituation= 'permanent')
 
-        :param combContainer: container with the definition of the different
-                              combination families (ULS, fatigue, SLS,...)
-                              see actions/combinations module.
-        :param loadCombinations: load combination handler inside the XC solver.
+class SLS_LimitStateData(LimitStateData):
+    ''' Serviceability limit state data for frequent load combinations.'''
+    
+    def __init__(self, limitStateLabel, outputDataBaseFileName, designSituation):
+        '''Constructor.
+
+        :param limitStateLabel: limit state check label; Something like "Fatigue"                               or "CrackControl".
+        :param outputDataBaseFileName: name (whithout extension) of the 
+                                       file that contains the results to
+                                       display.
+        :param designSituation: design situation; permanent, quasi-permanent,
+                                frequent, rare, earthquake. 
         '''
-        loadCombinations.clear()
-        combContainer.SLS.freq.dumpCombinations(loadCombinations)
-        return loadCombinations
+        super(SLS_LimitStateData,self).__init__(limitStateLabel= limitStateLabel, outputDataBaseFileName= outputDataBaseFileName, designSituation= designSituation)
+
     def check(self,reinfConcreteSections,outputCfg= VerifOutVars()):
-        '''Checking of crack width under frequent loads in serviceability limit states 
-           (see self.dumpCombinations).
+        '''Checking of crack width under frequent loads in serviceability 
+           limit states (see self.dumpCombinations).
 
         :param reinfConcreteSections: Reinforced concrete sections on each 
                element.
@@ -358,53 +432,25 @@ class FreqLoadsCrackControlRCLimitStateData(LimitStateData):
                generation or not of lists, ...)
          '''
         return reinfConcreteSections.internalForcesVerification3D(self, "k",outputCfg)
-
-class QPLoadsCrackControlRCLimitStateData(LimitStateData):
+        
+class FreqLoadsCrackControlRCLimitStateData(SLS_LimitStateData):
+    ''' Reinforced concrete crack control under frequent loads limit state data.'''
+    def __init__(self):
+        '''Limit state data constructor '''
+        super(FreqLoadsCrackControlRCLimitStateData,self).__init__('SLS_frequentLoadsCrackControl','verifRsl_crackingSLS_freq', designSituation= 'frequent')
+        
+class QPLoadsCrackControlRCLimitStateData(SLS_LimitStateData):
     ''' Reinforced concrete crack control under quasi-permanent loads limit state data.'''
     def __init__(self):
         '''Limit state data constructor '''
-        super(QPLoadsCrackControlRCLimitStateData,self).__init__('SLS_quasiPermanentLoadsLoadsCrackControl','verifRsl_crackingSLS_qperm')
-    def dumpCombinations(self,combContainer,loadCombinations):
-        '''Load into the solver the combinations needed for this limit state.
-
-        :param combContainer: container with the definition of the different
-                              combination families (ULS, fatigue, SLS,...)
-                              see actions/combinations module.
-        :param loadCombinations: load combination handler inside the XC solver.
-        '''
-        loadCombinations.clear()
-        combContainer.SLS.qp.dumpCombinations(loadCombinations)
-        return loadCombinations
-
-    def check(self,reinfConcreteSections,outputCfg= VerifOutVars()):
-        '''Checking of crack width under quasi-permanent loads in
-        serviceability limit states (see self.dumpCombinations).
-
-        :param reinfConcreteSections: Reinforced concrete sections on each 
-               element.
-        :param outputCfg: instance of class VerifOutVars which defines the 
-               variables that control the output of the checking (set of 
-               elements to be analyzed, append or not the results to file,
-               generation or not of lists, ...)
-        '''
-        return reinfConcreteSections.internalForcesVerification3D(self,"k",outputCfg)
-
-class FreqLoadsDisplacementControlLimitStateData(LimitStateData):
+        super(QPLoadsCrackControlRCLimitStateData,self).__init__('SLS_quasiPermanentLoadsLoadsCrackControl','verifRsl_crackingSLS_qperm', designSituation= 'quasi-permanent')
+        
+class FreqLoadsDisplacementControlLimitStateData(SLS_LimitStateData):
     ''' Displacement control under frequent loads limit state data.'''
     def __init__(self):
         '''Limit state data constructor '''
-        super(FreqLoadsDisplacementControlLimitStateData,self).__init__('SLS_frequentLoadsDisplacementControl','')
-    def dumpCombinations(self,combContainer,loadCombinations):
-        '''Load into the solver the combinations needed for this limit state.
-
-        :param combContainer: container with the definition of the different
-                              combination families (ULS, fatigue, SLS,...)
-                              see actions/combinations module.
-        :param loadCombinations: load combination handler inside the XC solver.
-        '''
-        loadCombinations.clear()
-        combContainer.SLS.freq.dumpCombinations(loadCombinations)
-        return loadCombinations
+        super(FreqLoadsDisplacementControlLimitStateData,self).__init__('SLS_frequentLoadsDisplacementControl','', designSituation= 'frequent')
+        
     def check(self,reinfConcreteSections):
         '''Checking of displacements under frequent loads in
         serviceability limit states (see self.dumpCombinations).
@@ -413,38 +459,13 @@ class FreqLoadsDisplacementControlLimitStateData(LimitStateData):
         '''
         lmsg.error('FreqLoadsDisplacementControlLimitStateData.check() not implemented.')
 
-class FatigueResistanceRCLimitStateData(LimitStateData):
+class FatigueResistanceRCLimitStateData(ULS_LimitStateData):
     ''' Reinforced concrete shear resistance limit state data.'''
     def __init__(self):
         '''Limit state data constructor '''
-        super(FatigueResistanceRCLimitStateData,self).__init__('ULS_fatigueResistance','verifRsl_fatigueULS')
-        
-    def dumpCombinations(self,combContainer,loadCombinations):
-        '''Load into the solver the combinations needed for this limit state.
-
-        :param combContainer: container with the definition of the different
-                              combination families (ULS, fatigue, SLS,...)
-                              see actions/combinations module.
-        :param loadCombinations: load combination handler inside the XC solver.
-        '''
-        loadCombinations.clear()
-        combContainer.ULS.fatigue.dumpCombinations(loadCombinations)
-        return loadCombinations
-    
-    def check(self,reinfConcreteSections,outputCfg= VerifOutVars()):
-        '''Checking of fatigue under fatigue combinations loads in
-        ultimate limit states (see self.dumpCombinations).
-
-        :param reinfConcreteSections: Reinforced concrete sections on each 
-               element.
-        :param outputCfg: instance of class 'VerifOutVars' which defines the 
-               variables that control the output of the checking (set of 
-               elements to be analyzed, append or not the results to a file,
-               generation or not of lists, ...)
-        '''
-        return reinfConcreteSections.internalForcesVerification3D(self, "d",outputCfg)
-
-class VonMisesStressLimitStateData(LimitStateData):
+        super(FatigueResistanceRCLimitStateData,self).__init__('ULS_fatigueResistance','verifRsl_fatigueULS', designSituation= 'fatigue')
+            
+class VonMisesStressLimitStateData(ULS_LimitStateData):
     ''' Steel Von Mises stress limit state data.'''
     def __init__(self, vonMisesStressId= 'max_von_mises_stress'):
         '''Von Mises stress limit state data constructor.
@@ -452,7 +473,7 @@ class VonMisesStressLimitStateData(LimitStateData):
         :param vonMisesStressId: identifier of the Von Mises stress to read
                                 (see NDMaterial and MembranePlateFiberSection).
         '''
-        super(VonMisesStressLimitStateData,self).__init__('ULS_VonMisesStressResistance','verifRsl_VonMisesStressULS')
+        super(VonMisesStressLimitStateData,self).__init__('ULS_VonMisesStressResistance','verifRsl_VonMisesStressULS', designSituation= 'permanent')
         self.vonMisesStressId= vonMisesStressId
         
     def getInternalForcesDict(self, nmbComb, elems):
@@ -469,19 +490,7 @@ class VonMisesStressLimitStateData(LimitStateData):
         :param setCalc: elements to read internal forces for.
         '''
         return readIntForcesFile(self.getInternalForcesFileName(), setCalc, vonMisesStressId= self.vonMisesStressId)
-    
-    def dumpCombinations(self,combContainer,loadCombinations):
-        '''Load into the solver the combinations needed for this limit state.
-
-        :param combContainer: container with the definition of the different
-                              combination families (ULS, fatigue, SLS,...)
-                              see actions/combinations module.
-        :param loadCombinations: load combination handler inside the XC solver.
-        '''
-        loadCombinations.clear()
-        combContainer.ULS.perm.dumpCombinations(loadCombinations)
-        return loadCombinations
-    
+        
     def check(self,elementsToCheck,outputCfg= VerifOutVars()):
         '''Checking of fatigue under fatigue combinations loads in
         ultimate limit states (see self.dumpCombinations).
@@ -512,12 +521,17 @@ class VonMisesStressLimitStateData(LimitStateData):
         retval= super(VonMisesStressLimitStateData,self).runChecking(outputCfg, sections= [''])
         return retval
 
-
 freqLoadsDisplacementControl= FreqLoadsDisplacementControlLimitStateData()
 freqLoadsCrackControl= FreqLoadsCrackControlRCLimitStateData()
 quasiPermanentLoadsCrackControl= QPLoadsCrackControlRCLimitStateData()
+# Normal stresses.
 normalStressesResistance= NormalStressesRCLimitStateData()
+steelNormalStressesResistance= NormalStressesSteelLimitStateData()
+
+# Shear strength.
 shearResistance= ShearResistanceRCLimitStateData()
+steelShearResistance= ShearResistanceSteelLimitStateData()
+
 fatigueResistance= FatigueResistanceRCLimitStateData()
 vonMisesStressResistance= VonMisesStressLimitStateData()
 

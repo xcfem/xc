@@ -346,7 +346,7 @@ class Member(steel_member_base.BucklingMember):
         idEleTags= xc.ID(eleTags)
         recorder.setElements(idEleTags)
         sectionClassif= 1 # dummy argument usef for compatibility
-        self.shape.setupULSControlVars(self.elemSet, sectionClassif,chiN= chiN, chiLT= chiLT)
+        self.shape.setupULSControlVars(self.elemSet, sectionClassif, chiN= chiN, chiLT= chiLT)
         if(nodes.numDOFs==3):
             recorder.callbackRecord= controlULSCriterion2D()
         else:

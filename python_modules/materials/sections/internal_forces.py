@@ -104,9 +104,11 @@ class CrossSectionInternalForces:
         self.T= dct['T']
         self.My= dct['My']
         self.Mz= dct['Mz']
+        # Lateral torsional buckling reduction factor.
         if('chiLT' in dct.keys()):
               self.chiLT= dct['chiLT']
-        if('chiN' in dct.keys()):
+        # Axial strength reduction factor.     
+        if('chiN' in dct.keys()): 
               self.chiN= dct['chiN']
 
     def getCSVString(self):

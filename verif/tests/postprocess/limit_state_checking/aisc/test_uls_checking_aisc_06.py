@@ -111,7 +111,7 @@ combContainer.dumpCombinations(preprocessor)
 
 ## Setup working directory.
 fname= os.path.basename(__file__)
-cfg= default_config.EnvConfig(language='en', resultsPath= 'tmp_results/', intForcPath= 'internalForces/',verifPath= 'verifications/',reportPath='./',reportResultsPath= 'annex/',grWidth='120mm')
+cfg= default_config.EnvConfig(language='en', resultsPath= 'tmp_results/', intForcPath= 'internalForces/',verifPath= 'verifications/',reportPath='./',reportResultsPath= '/tmp/annex/',grWidth='120mm')
 cfg.projectDirTree.workingDirectory= '/tmp/'+os.path.splitext(fname)[0]
 lsd.LimitStateData.envConfig= cfg
 
@@ -119,8 +119,8 @@ lsd.LimitStateData.envConfig= cfg
 loadCombinations= preprocessor.getLoadHandler.getLoadCombinations
 
 ## Limit states to calculate internal forces for.
-limitStates= [lsd.normalStressesResistance, # Normal stresses resistance.
-lsd.shearResistance, # Shear stresses resistance (IS THE SAME AS NORMAL STRESSES, THIS IS WHY IT'S COMMENTED OUT).
+limitStates= [lsd.steelNormalStressesResistance, # Normal stresses resistance.
+lsd.steelShearResistance, # Shear stresses resistance (IS THE SAME AS NORMAL STRESSES, THIS IS WHY IT'S COMMENTED OUT).
 ] 
 
 ## Create AISC Member objects.
@@ -149,6 +149,7 @@ print('average= ', average)
 print('ratio= ', ratio)
 '''
 
+os.system("rm -f -r /tmp/annex") # Clean after yourself.
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if(ratio<1e-8):

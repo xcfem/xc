@@ -909,7 +909,7 @@ class PredefinedSpace(object):
     def getValuesAtNodes(self, element, code: str, silent= False):
         ''' Return the values corresponding to code at each of the element nodes.
 
-         :param element: element which the stresses at its nodes will be calculated.
+         :param element: element which the stresses at its nodes will be retrieved.
          :param code: magnitude to return (stress, strain,...).
          :param silent: if true don't complain about non-existent properties.
         '''
