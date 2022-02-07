@@ -139,10 +139,10 @@ outCfg.controller.analysisToPerform= predefined_solutions.plain_newton_raphson
 
 #print("mean FCs: ", meanFCs)
 
-meanFC0Teor= 0.89306075607898694
-ratio1= abs(meanFCs[0]-meanFC0Teor)/meanFC0Teor
-meanFC1Teor= 0.97448959156755022
-ratio2= abs(meanFCs[1]-meanFC1Teor)/meanFC1Teor
+refMeanFC0= 0.9015944748072897
+ratio1= abs(meanFCs[0]-refMeanFC0)/refMeanFC0
+refMeanFC1= 1.017060280651913
+ratio2= abs(meanFCs[1]-refMeanFC1)/refMeanFC1
 
 '''
 print("meanFCs[0]= ", meanFCs[0])
