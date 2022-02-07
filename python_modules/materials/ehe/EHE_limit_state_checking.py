@@ -897,6 +897,8 @@ class UniaxialBendingNormalStressController(lscb.UniaxialBendingNormalStressCont
 
 class ShearController(lscb.ShearControllerBase):
     '''Shear control according to EHE-08.'''
+
+    ControlVars= cv.RCShearControlVars
     def __init__(self,limitStateLabel):
         super(ShearController,self).__init__(limitStateLabel,fakeSection= False)
         self.concreteFibersSetName= "concrete" #Name of the concrete fibers set.
@@ -1159,7 +1161,7 @@ class ShearController(lscb.ShearControllerBase):
             FCtmp, VuTmp, NTmp, VyTmp, VzTmp, TTmp, MyTmp, MzTmp= self.checkSection(scc, secHAParamsTorsion)
             Mu= 0.0 #Apparently EHE doesn't use Mu
             if(FCtmp>=e.getProp(self.limitStateLabel).CF):
-                e.setProp(self.limitStateLabel,cv.RCShearControlVars(idSection,combName,FCtmp,NTmp,MyTmp,MzTmp,Mu,VyTmp,VzTmp,self.theta,self.Vcu,self.Vsu,VuTmp)) # Worst case
+                e.setProp(self.limitStateLabel, self.ControlVars(idSection,combName,FCtmp,NTmp,MyTmp,MzTmp,Mu,VyTmp,VzTmp,self.theta,self.Vcu,self.Vsu,VuTmp)) # Worst case
 
 
 class CrackStraightController(lscb.LimitStateControllerBase):
@@ -1168,6 +1170,7 @@ class CrackStraightController(lscb.LimitStateControllerBase):
        concrete stress-strain diagram that takes account of the effects of
        tension stiffening.
     '''
+    ControlVars= cv.RCCrackStraightControlVars
     def __init__(self,limitStateLabel):
         ''' Constructor.'''
         super(CrackStraightController,self).__init__(limitStateLabel,fakeSection= False)
@@ -1179,7 +1182,7 @@ class CrackStraightController(lscb.LimitStateControllerBase):
           :param elements: elements to define control variables in.
         '''
         for e in elements:
-            e.setProp(self.limitStateLabel,cv.RCCrackStraightControlVars())
+            e.setProp(self.limitStateLabel, self.ControlVars())
 
     def EHE_hceff(self,width,h,x):
         '''Return the maximum height to be considered in the calculation of 
@@ -1288,9 +1291,9 @@ class CrackStraightController(lscb.LimitStateControllerBase):
             wk=srmax*eps_sm
       #      print(' eps_sm= ',eps_sm, ' srmax= ', srmax, ' wk= ',wk)
             if (wk>e.getProp(self.limitStateLabel).wk):
-      #         e.setProp(self.limitStateLabel,cv.RCCrackStraightControlVars(idSection,combName,NTmp,MyTmp,MzTmp,srmax,eps_sm,wk))
+      #         e.setProp(self.limitStateLabel, self.ControlVars(idSection,combName,NTmp,MyTmp,MzTmp,srmax,eps_sm,wk))
                 R=e.getProp('ResF')
-                e.setProp(self.limitStateLabel,cv.RCCrackStraightControlVars(idSection=e.getProp("idSection"),combName=combName,N=-R[0],My=-R[4],Mz=-R[5],s_rmax=srmax,eps_sm=eps_sm,wk=wk))
+                e.setProp(self.limitStateLabel, self.ControlVars(idSection=e.getProp("idSection"),combName=combName,N=-R[0],My=-R[4],Mz=-R[5],s_rmax=srmax,eps_sm=eps_sm,wk=wk))
             '''
             print('element= ', e.tag)
             print('max. strain= ', eps_sm)

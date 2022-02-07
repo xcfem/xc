@@ -193,6 +193,7 @@ def VuWithShearRebarsSIA262(concrete,steel,Nd,Md,Mu,b,d,Asw,s,z,alpha=math.radia
 class ShearController(lsc.ShearControllerBase):
     '''Object that controls shear limit state according to SIA 262.'''
 
+    ControlVars= cv.RCShearControlVars
     def __init__(self,limitStateLabel):
         super(ShearController,self).__init__(limitStateLabel)
 
@@ -289,13 +290,14 @@ class ShearController(lsc.ShearControllerBase):
               FCtmp= 10
           if(FCtmp>=e.getProp(self.limitStateLabel).CF):
               VzTmp= scc.getStressResultantComponent("Vz")
-              e.setProp(self.limitStateLabel,cv.RCShearControlVars(idSection,nmbComb,FCtmp,NTmp,MyTmp,MzTmp,Mu,VyTmp,VzTmp,theta,self.Vcu,self.Vsu,VuTmp)) # Worst case
+              e.setProp(self.limitStateLabel,self.ControlVars(idSection,nmbComb,FCtmp,NTmp,MyTmp,MzTmp,Mu,VyTmp,VzTmp,theta,self.Vcu,self.Vsu,VuTmp)) # Worst case
           #13.02.2018 End of changes
 
 
 class CrackControlSIA262(lsc.CrackControlBaseParameters):
     '''Crack control checking of a reinforced concrete section
      according to SIA 262.'''
+    ControlVars= cv.CrackControlVars
     def __init__(self,limitStateLabel,limitStress):
         super(CrackControlSIA262,self).__init__(limitStateLabel)
         self.limitStress= limitStress #Limit value for rebar stresses.
@@ -327,7 +329,7 @@ class CrackControlSIA262(lsc.CrackControlBaseParameters):
           :param elements: elements to define control variables in
         '''
         for e in elements:
-          e.setProp(self.limitStateLabel,cv.CrackControlVars(idSection= e.getProp('idSection')))
+          e.setProp(self.limitStateLabel, self.ControlVars(idSection= e.getProp('idSection')))
 
     def check(self,elements,nmbComb):
         '''Crack control checking.'''
@@ -348,52 +350,55 @@ class CrackControlSIA262(lsc.CrackControlBaseParameters):
 
 
 class CrackControlSIA262PlanB(CrackControlSIA262):
-  def __init__(self,limitStateLabel,limitStress):
-    super(CrackControlSIA262PlanB,self).__init__(limitStateLabel,limitStress)
-  def check(self,elements,nmbComb):
-    '''Crack control.'''
-    for e in elements:
-      e.getResistingForce()
-      scc= e.getSection()
-      idSection= e.getProp("idSection")
-      Ntmp= scc.getStressResultantComponent("N")
-      MyTmp= scc.getStressResultantComponent("My")
-      MzTmp= scc.getStressResultantComponent("Mz")
-      datosScc= scc.getProp('sectionData')
-      stressCalc= datosScc.getStressCalculator()
-      stressCalc.solve(Ntmp, MyTmp)
-      sigma_sPos= stressCalc.sgs
-      sigma_sNeg= stressCalc.sgsp
-      sigma_c= stressCalc.sgc
-      #print("sgc0= ", stressCalc.sgc0)
-      # sigma_s= 0.0
-      # eNC= datosScc.depth/3
-      # exc= 0.0
-      # As= max(datosScc.getAsPos(),datosScc.getAsNeg())
-      # denom= 0.5*As*0.9*datosScc.depth
-      # if(abs(Ntmp)<1e-6):
-      #   sigma_s= MyTmp/denom
-      # else:
-      #   exc= abs(MyTmp/Ntmp)
-      #   if(exc<eNC):
-      #     sg= Ntmp/datosScc.getAc()
-      #     sg+= MyTmp/datosScc.getI()*datosScc.depth/2
-      #     sigma_s= 10*sg
-      #   else:
-      #     sigma_s= MyTmp/denom
-      # print("eNC= ", eNC, " exc= ", exc, "sigma_s= ", sigma_s/1e6)
-      CFPos= sigma_sPos/self.limitStress #Positive face capacity factor.
-      CFNeg= sigma_sNeg/self.limitStress #Negative face capacity factor.
-      elementControlVars= None
-      if(e.hasProp(self.limitStateLabel)):
-        elementControlVars= e.getProp(self.limitStateLabel)
-      else:
-        elementControlVars= cv.CrackControlVars(idSection,cv.CrackControlBaseVars(nmbComb,CFPos,Ntmp,MyTmp,MzTmp,sigma_sPos),CrackControlBaseVars(nmbComb,CFNeg,Ntmp,MyTmp,MzTmp,sigma_sNeg))
-      if(CFPos>elementControlVars.crackControlVarsPos.CF):
-        elementControlVars.crackControlVarsPos= cv.CrackControlBaseVars(nmbComb,CFPos,Ntmp,MyTmp,MzTmp,sigma_sPos)
-      if(CFNeg>elementControlVars.crackControlVarsNeg.CF):
-        elementControlVars.crackControlVarsNeg= cv.CrackControlBaseVars(nmbComb,CFNeg,Ntmp,MyTmp,MzTmp,sigma_sNeg)
-      e.setProp(self.limitStateLabel,elementControlVars)
+
+    ControlVars= cv.CrackControlVars
+    def __init__(self,limitStateLabel,limitStress):
+        super(CrackControlSIA262PlanB,self).__init__(limitStateLabel,limitStress)
+
+    def check(self,elements,nmbComb):
+        '''Crack control.'''
+        for e in elements:
+            e.getResistingForce()
+            scc= e.getSection()
+            idSection= e.getProp("idSection")
+            Ntmp= scc.getStressResultantComponent("N")
+            MyTmp= scc.getStressResultantComponent("My")
+            MzTmp= scc.getStressResultantComponent("Mz")
+            datosScc= scc.getProp('sectionData')
+            stressCalc= datosScc.getStressCalculator()
+            stressCalc.solve(Ntmp, MyTmp)
+            sigma_sPos= stressCalc.sgs
+            sigma_sNeg= stressCalc.sgsp
+            sigma_c= stressCalc.sgc
+            #print("sgc0= ", stressCalc.sgc0)
+            # sigma_s= 0.0
+            # eNC= datosScc.depth/3
+            # exc= 0.0
+            # As= max(datosScc.getAsPos(),datosScc.getAsNeg())
+            # denom= 0.5*As*0.9*datosScc.depth
+            # if(abs(Ntmp)<1e-6):
+            #   sigma_s= MyTmp/denom
+            # else:
+            #   exc= abs(MyTmp/Ntmp)
+            #   if(exc<eNC):
+            #     sg= Ntmp/datosScc.getAc()
+            #     sg+= MyTmp/datosScc.getI()*datosScc.depth/2
+            #     sigma_s= 10*sg
+            #   else:
+            #     sigma_s= MyTmp/denom
+            # print("eNC= ", eNC, " exc= ", exc, "sigma_s= ", sigma_s/1e6)
+            CFPos= sigma_sPos/self.limitStress #Positive face capacity factor.
+            CFNeg= sigma_sNeg/self.limitStress #Negative face capacity factor.
+            elementControlVars= None
+            if(e.hasProp(self.limitStateLabel)):
+                elementControlVars= e.getProp(self.limitStateLabel)
+            else:
+                elementControlVars= self.ControlVars(idSection,cv.CrackControlBaseVars(nmbComb,CFPos,Ntmp,MyTmp,MzTmp,sigma_sPos),CrackControlBaseVars(nmbComb,CFNeg,Ntmp,MyTmp,MzTmp,sigma_sNeg))
+            if(CFPos>elementControlVars.crackControlVarsPos.CF):
+                elementControlVars.crackControlVarsPos= cv.CrackControlBaseVars(nmbComb,CFPos,Ntmp,MyTmp,MzTmp,sigma_sPos)
+            if(CFNeg>elementControlVars.crackControlVarsNeg.CF):
+                elementControlVars.crackControlVarsNeg= cv.CrackControlBaseVars(nmbComb,CFNeg,Ntmp,MyTmp,MzTmp,sigma_sNeg)
+            e.setProp(self.limitStateLabel,elementControlVars)
 
 
 def procesResultVerifFISSIA262(preprocessor,nmbComb,limitStress):
@@ -467,7 +472,7 @@ def estimateSigmaCPlanB(sccData, N, M):
     sgc= min(min(sg1,sg2),0.0)
     return 2.0*sgc #Ver Jiménez Montoya 12.3 (page 244)
 
-def getConcreteLimitStress(sccData,kc,controlVars):
+def getConcreteLimitStress(sccData,kc, controlVars):
     '''4.3.8.3.1 SIA 262 2013'''
     fcd= sccData.fiberSectionParameters.concrType.fcd()
     concreteStresses= controlVars.getConcreteMaxMinStresses()
@@ -502,6 +507,7 @@ def getShearCF(controlVars):
 class FatigueController(lsc.LimitStateControllerBase):
     '''Object that controls RC fatigue limit state.'''
 
+    ControlVars= cv.FatigueControlVars
     def __init__(self,limitStateLabel):
         super(FatigueController,self).__init__(limitStateLabel)
 
@@ -509,7 +515,7 @@ class FatigueController(lsc.LimitStateControllerBase):
         ''' Defines limit state control variables for all the elements.'''
         for e in elements:
             idS= e.getProp("idSection")
-            e.setProp(self.limitStateLabel,cv.FatigueControlVars(idSection= idS))
+            e.setProp(self.limitStateLabel,self.ControlVars(idSection= idS))
 
     def check(self,elements, combNm):
         '''

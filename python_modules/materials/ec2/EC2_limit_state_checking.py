@@ -31,9 +31,8 @@ class CrackStraightController(lscb.LimitStateControllerBase):
           effectively plain surface (e.g. prestressing tendons). Defaults to 0.8
     :ivar k3: defaults to the value recommended by EC2 and in EHE k3=3.4
     :ivar k4: defaults to the value recommended by EC2 and EHE k4=0.425
-
-  
     '''
+    ControlVars= cv.RCCrackStraightControlVars
     def __init__(self,limitStateLabel):
         super(CrackStraightController,self).__init__(limitStateLabel,fakeSection= False)
         self.k1=0.8
@@ -46,7 +45,7 @@ class CrackStraightController(lscb.LimitStateControllerBase):
         :param elements: elements to define control variables in
         '''
         for e in elements:
-            e.setProp(self.limitStateLabel,cv.RCCrackStraightControlVars())
+            e.setProp(self.limitStateLabel, self.ControlVars())
 
     def EC2_k2(self,eps1,eps2):
         '''Return the coefficient k2 involved in the calculation of the mean 
@@ -132,7 +131,7 @@ class CrackStraightController(lscb.LimitStateControllerBase):
 #            print('e.getProp(self.limitStateLabel).wk', e.getProp(self.limitStateLabel).wk)
             if (wk>e.getProp(self.limitStateLabel).wk):
                 R=e.getProp('ResF')
-                e.setProp(self.limitStateLabel,cv.RCCrackStraightControlVars(idSection=e.getProp("idSection"),combName=nmbComb,N=-R[0],My=-R[4],Mz=-R[5],s_rmax=srmax,eps_sm=eps_sm,wk=wk))
+                e.setProp(self.limitStateLabel, self.ControlVars(idSection=e.getProp("idSection"),combName=nmbComb,N=-R[0],My=-R[4],Mz=-R[5],s_rmax=srmax,eps_sm=eps_sm,wk=wk))
 
 
 

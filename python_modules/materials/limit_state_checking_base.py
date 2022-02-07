@@ -175,91 +175,94 @@ class CrackControlBaseParameters(LimitStateControllerBase):
         self.tensionedRebars.printParams()
 
 class BiaxialBendingNormalStressControllerBase(LimitStateControllerBase):
-  '''Base class for object that controls normal stresses
-     limit state.
-  '''
-
-  def __init__(self,limitStateLabel):
-    super(BiaxialBendingNormalStressControllerBase,self).__init__(limitStateLabel)
-
-  def initControlVars(self,elements):
-    '''Initialize control variables over elements.
-
-      :param elements: elements to define control variables in
+    '''Base class for object that controls normal stresses
+       limit state.
     '''
-    for e in elements:
-      e.setProp(self.limitStateLabel,cv.BiaxialBendingControlVars())
+    ControlVars= cv.BiaxialBendingControlVars
+    def __init__(self,limitStateLabel):
+        super(BiaxialBendingNormalStressControllerBase,self).__init__(limitStateLabel)
 
-  def check(self,elements, nmbComb):
-    '''Launch checking.
-    
-      :param elements: elements to check.
-      :param nmbComb: load case name.
-    '''
-    if(self.verbose):
-        lmsg.log("Postprocessing combination: "+nmbComb)
-    for e in elements:
-        e.getResistingForce()
-        TagTmp= e.tag
-        scc= e.getSection()
-        idSection= e.getProp("idSection")
-        Ntmp= scc.getStressResultantComponent("N")
-        MyTmp= scc.getStressResultantComponent("My")
-        MzTmp= scc.getStressResultantComponent("Mz")
-        posEsf= geom.Pos3d(Ntmp,MyTmp,MzTmp)
-        diagInt= e.getProp("diagInt")
-        CFtmp= diagInt.getCapacityFactor(posEsf)
-        if(CFtmp>e.getProp(self.limitStateLabel).CF):
-            e.setProp(self.limitStateLabel,cv.BiaxialBendingControlVars(idSection,nmbComb,CFtmp,Ntmp,MyTmp,MzTmp)) # Worst case.
+    def initControlVars(self,elements):
+        '''Initialize control variables over elements.
+
+          :param elements: elements to define control variables in
+        '''
+        for e in elements:
+            e.setProp(self.limitStateLabel, self.ControlVars())
+
+    def check(self,elements, nmbComb):
+        '''Launch checking.
+
+          :param elements: elements to check.
+          :param nmbComb: load case name.
+        '''
+        if(self.verbose):
+            lmsg.log("Postprocessing combination: "+nmbComb)
+        for e in elements:
+            e.getResistingForce()
+            TagTmp= e.tag
+            scc= e.getSection()
+            idSection= e.getProp("idSection")
+            Ntmp= scc.getStressResultantComponent("N")
+            MyTmp= scc.getStressResultantComponent("My")
+            MzTmp= scc.getStressResultantComponent("Mz")
+            posEsf= geom.Pos3d(Ntmp,MyTmp,MzTmp)
+            diagInt= e.getProp("diagInt")
+            CFtmp= diagInt.getCapacityFactor(posEsf)
+            if(CFtmp>e.getProp(self.limitStateLabel).CF):
+                e.setProp(self.limitStateLabel, self.ControlVars(idSection,nmbComb,CFtmp,Ntmp,MyTmp,MzTmp)) # Worst case.
 
 
 class UniaxialBendingNormalStressControllerBase(LimitStateControllerBase):
-  '''Base class for object that controls normal stresses 
-     limit state (uniaxial bending).
-  '''
+    '''Base class for object that controls normal stresses 
+       limit state (uniaxial bending).
+    '''
+    ControlVars= cv.BiaxialBendingControlVars
+    def __init__(self,limitStateLabel):
+        super(UniaxialBendingNormalStressControllerBase,self).__init__(limitStateLabel)
 
-  def __init__(self,limitStateLabel):
-      super(UniaxialBendingNormalStressControllerBase,self).__init__(limitStateLabel)
+    def initControlVars(self,elements):
+        '''Initialize control variables over elements.
 
-  def initControlVars(self,elements):
-      '''Initialize control variables over elements.
+          :param elements: elements to define control variables in
+        '''
+        for e in elements:
+            e.setProp(self.limitStateLabel, self.ControlVars())
 
-        :param elements: elements to define control variables in
-      '''
-      for e in elements:
-          e.setProp(self.limitStateLabel,cv.BiaxialBendingControlVars())
+    def check(self,elements, combName):
+        '''
+        Check the normal stresses
 
-  def check(self,elements, combName):
-      '''
-      Check the normal stresses
-      
-      :param  elements: elements to check
-      :param  combName: name of the load combination being treated.
-      '''
-      if(self.verbose):
-          lmsg.log("Postprocessing combination: "+combName)
-      for e in elements:
-          e.getResistingForce()
-          TagTmp= e.tag
-          scc= e.getSection()
-          idSection= e.getProp("idSection")
-          Ntmp= scc.getStressResultantComponent("N")
-          MyTmp= scc.getStressResultantComponent("My")
-          posEsf= geom.Pos2d(Ntmp,MyTmp)
-          diagInt= e.getProp("diagInt")
-          CFtmp= diagInt.getCapacityFactor(posEsf)
-          if(CFtmp>e.getProp(self.limitStateLabel).CF):
-              e.setProp(self.limitStateLabel,cv.BiaxialBendingControlVars(idSection,combName,CFtmp,Ntmp,MyTmp)) # Worst case.
+        :param  elements: elements to check
+        :param  combName: name of the load combination being treated.
+        '''
+        if(self.verbose):
+            lmsg.log("Postprocessing combination: "+combName)
+        for e in elements:
+            e.getResistingForce()
+            TagTmp= e.tag
+            scc= e.getSection()
+            idSection= e.getProp("idSection")
+            Ntmp= scc.getStressResultantComponent("N")
+            MyTmp= scc.getStressResultantComponent("My")
+            posEsf= geom.Pos2d(Ntmp,MyTmp)
+            diagInt= e.getProp("diagInt")
+            CFtmp= diagInt.getCapacityFactor(posEsf)
+            if(CFtmp>e.getProp(self.limitStateLabel).CF):
+                e.setProp(self.limitStateLabel, self.ControlVars(idSection,combName,CFtmp,Ntmp,MyTmp)) # Worst case.
 
 class ShearControllerBase(LimitStateControllerBase):
     '''Base class for shear controller classes.'''
+
+    ControlVars= cv.RCShearControlVars
     def initControlVars(self,elements):
         ''' Initialize control variables over elements.
 
           :param elements: elements to define control variables in
         '''
         for e in elements:
-          e.setProp(self.limitStateLabel,cv.RCShearControlVars())
+          e.setProp(self.limitStateLabel, self.ControlVars())
+          
     def check(self, elements, combName):
         '''Shear control.'''
         lmsg.error('shear limit state check not implemented.')

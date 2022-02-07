@@ -390,6 +390,7 @@ class AISCBiaxialBendingControlVars(cv.SteelShapeBiaxialBendingControlVars):
 class BiaxialBendingNormalStressController(lsc.LimitStateControllerBase):
     '''Object that controls normal stresses limit state.'''
 
+    ControlVars= AISCBiaxialBendingControlVars
     def __init__(self,limitStateLabel):
         super(BiaxialBendingNormalStressController,self).__init__(limitStateLabel)
 
@@ -399,8 +400,8 @@ class BiaxialBendingNormalStressController(lsc.LimitStateControllerBase):
         :param setCalc: set of elements to which define control variables
         '''
         for e in setCalc.elements:
-            e.setProp(self.limitStateLabel+'Sect1',AISCBiaxialBendingControlVars(idSection= 'Sect1'))
-            e.setProp(self.limitStateLabel+'Sect2',AISCBiaxialBendingControlVars(idSection= 'Sect2'))
+            e.setProp(self.limitStateLabel+'Sect1',self.ControlVars(idSection= 'Sect1'))
+            e.setProp(self.limitStateLabel+'Sect2',self.ControlVars(idSection= 'Sect2'))
 
     def checkSetFromIntForcFile(self,intForcCombFileName,setCalc=None):
         '''Launch checking.
@@ -422,15 +423,16 @@ class BiaxialBendingNormalStressController(lsc.LimitStateControllerBase):
                 if lf.idSection == 0:
                     label= self.limitStateLabel+'Sect1'
                     if(CFtmp>e.getProp(label).CF):
-                        e.setProp(label,AISCBiaxialBendingControlVars('Sect1',lf.idComb,CFtmp,lf.N,lf.My,lf.Mz,NcRdtmp,McRdytmp,McRdztmp,MvRdztmp,MbRdztmp,lf.chiLT, lf.chiN))
+                        e.setProp(label,self.ControlVars('Sect1',lf.idComb,CFtmp,lf.N,lf.My,lf.Mz,NcRdtmp,McRdytmp,McRdztmp,MvRdztmp,MbRdztmp,lf.chiLT, lf.chiN))
                 else:
                     label= self.limitStateLabel+'Sect2'
                     if(CFtmp>e.getProp(label).CF):
-                        e.setProp(label,AISCBiaxialBendingControlVars('Sect2',lf.idComb,CFtmp,lf.N,lf.My,lf.Mz,NcRdtmp,McRdytmp,McRdztmp,MvRdztmp,MbRdztmp,lf.chiLT, lf.chiN))
+                        e.setProp(label,self.ControlVars('Sect2',lf.idComb,CFtmp,lf.N,lf.My,lf.Mz,NcRdtmp,McRdytmp,McRdztmp,MvRdztmp,MbRdztmp,lf.chiLT, lf.chiN))
 
 class ShearController(lsc.LimitStateControllerBase):
     '''Object that controls shear limit state.'''
 
+    ControlVars= cv.ShearYControlVars
     def __init__(self,limitStateLabel):
         super(ShearController,self).__init__(limitStateLabel)
 
@@ -440,8 +442,8 @@ class ShearController(lsc.LimitStateControllerBase):
         :param setCalc: set of elements to which define control variables
         '''
         for e in setCalc.elements:
-            e.setProp(self.limitStateLabel+'Sect1',cv.ShearYControlVars())
-            e.setProp(self.limitStateLabel+'Sect2',cv.ShearYControlVars())
+            e.setProp(self.limitStateLabel+'Sect1',self.ControlVars())
+            e.setProp(self.limitStateLabel+'Sect2',self.ControlVars())
 
     def checkSetFromIntForcFile(self,intForcCombFileName,setCalc=None):
         '''Launch checking.
@@ -460,14 +462,15 @@ class ShearController(lsc.LimitStateControllerBase):
                 CFtmp= sh.getYShearEfficiency(sc,lf.Vy)
                 if lf.idSection == 0:
                     if(CFtmp>e.getProp(self.limitStateLabel+'Sect1').CF):
-                        e.setProp(self.limitStateLabel+'Sect1',cv.ShearYControlVars('Sects1',lf.idComb,CFtmp,lf.Vy))
+                        e.setProp(self.limitStateLabel+'Sect1',self.ControlVars('Sects1',lf.idComb,CFtmp,lf.Vy))
                 else:
                     if(CFtmp>e.getProp(self.limitStateLabel+'Sect2').CF):
-                        e.setProp(self.limitStateLabel+'Sect2',cv.ShearYControlVars('Sects2',lf.idComb,CFtmp,lf.Vy))
+                        e.setProp(self.limitStateLabel+'Sect2',self.ControlVars('Sects2',lf.idComb,CFtmp,lf.Vy))
 
 class VonMisesStressController(lsc.LimitStateControllerBase):
     '''Object that controls Von Mises stress limit state.'''
 
+    ControlVars= cv.VonMisesControlVars
     def __init__(self,limitStateLabel, vonMisesStressId= 'max_von_mises_stress'):
         ''' Constructor.
 
@@ -483,7 +486,7 @@ class VonMisesStressController(lsc.LimitStateControllerBase):
         :param setCalc: set of elements to which define control variables
         '''
         for e in setCalc.elements:
-            e.setProp(self.limitStateLabel,cv.VonMisesControlVars())
+            e.setProp(self.limitStateLabel,self.ControlVars())
 
     def checkSetFromIntForcFile(self,intForcCombFileName,setCalc=None):
         '''Launch checking.
@@ -503,7 +506,7 @@ class VonMisesStressController(lsc.LimitStateControllerBase):
                 CFtmp= lf.vonMisesStress/factoredYieldStress
                 # Both sections will have the same Von Mises stress so this is redundant.
                 if(CFtmp>e.getProp(self.limitStateLabel).CF):
-                    e.setProp(self.limitStateLabel,cv.VonMisesControlVars(lf.idComb,CFtmp,lf.vonMisesStress))
+                    e.setProp(self.limitStateLabel,self.ControlVars(lf.idComb,CFtmp,lf.vonMisesStress))
 
                         
 def controlULSCriterion():

@@ -64,7 +64,7 @@ class BiaxialBendingControlVars(cv.BiaxialBendingControlVars):
     
 class BiaxialBendingNormalStressController(lsc.LimitStateControllerBase):
     '''Object that controls normal stresses limit state.'''
-
+    ControlVars= BiaxialBendingControlVars
     def __init__(self,limitStateLabel):
         super(BiaxialBendingNormalStressController,self).__init__(limitStateLabel)
 
@@ -74,8 +74,8 @@ class BiaxialBendingNormalStressController(lsc.LimitStateControllerBase):
         :param setCalc: set of elements to which define control variables
         '''
         for e in setCalc.elements:
-            e.setProp(self.limitStateLabel+'Sect1',BiaxialBendingControlVars(idSection= 'Sect1'))
-            e.setProp(self.limitStateLabel+'Sect2',BiaxialBendingControlVars(idSection= 'Sect2'))
+            e.setProp(self.limitStateLabel+'Sect1',self.ControlVars(idSection= 'Sect1'))
+            e.setProp(self.limitStateLabel+'Sect2',self.ControlVars(idSection= 'Sect2'))
 
     def checkSetFromIntForcFile(self, intForcCombFileName, setCalc=None):
         '''Launch checking.
@@ -96,11 +96,11 @@ class BiaxialBendingNormalStressController(lsc.LimitStateControllerBase):
                 if lf.idSection == 0:
                     label= self.limitStateLabel+'Sect1'
                     if(CFtmp>e.getProp(label).CF):
-                        e.setProp(label,BiaxialBendingControlVars('Sect1',lf.idComb,CFtmp,lf.N,lf.My,lf.Mz))
+                        e.setProp(label,self.ControlVars('Sect1',lf.idComb,CFtmp,lf.N,lf.My,lf.Mz))
                 else:
                     label= self.limitStateLabel+'Sect2'
                     if(CFtmp>e.getProp(label).CF):
-                        e.setProp(label,BiaxialBendingControlVars('Sect2',lf.idComb,CFtmp,lf.N,lf.My,lf.Mz))
+                        e.setProp(label,self.ControlVars('Sect2',lf.idComb,CFtmp,lf.N,lf.My,lf.Mz))
 
 def controlULSCriterion():
     return '''recorder= self.getProp('ULSControlRecorder')
