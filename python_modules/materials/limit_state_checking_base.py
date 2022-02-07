@@ -42,11 +42,41 @@ class LimitStateControllerBase(object):
         self.preprocessor=None
         self.verbose= True # display log messages by default
 
-
     def check(self,elements,nmbComb):
         '''Limit state control.'''
         lmsg.error('limit state check not implemented.')
 
+class LimitStateControllerBase2Sections(LimitStateControllerBase):
+    '''
+    Limit state controller 2 sections for each element..
+    '''
+    def __init__(self,limitStateLabel, fakeSection= True, elementSections= ['Sect1', 'Sect2']):
+        '''
+        :param limitStateLabel: property name in the check results file 
+               (something like 'ULS_shear' or 'SLS_crack_freq' or ...).
+        :param fakeSection: true if a fiber section model of the section is 
+               not needed to perform control. In that case a fake section 
+               of type 'xc.ElasticShearSection3d' is generated for each 
+               element of the phantom model. Otherwise, when fakeSection 
+               is set to False (shear and cracking LS checking), a true fiber 
+               section of type 'xc.FiberSectionShear3d' is generated. 
+        '''
+        super(LimitStateControllerBase2Sections,self).__init__(limitStateLabel, fakeSection)
+        self.elementSections= elementSections
+
+    def getSectionLabel(self, idSection):
+        ''' Return the label that corresponds to the index argument.'''
+        return self.elementSections[idSection]
+    
+    def initControlVars(self,setCalc):
+        '''Initialize control variables over elements.
+
+        :param setCalc: set of elements to which define control variables.
+        :param elementSections: element sections to initialize.
+        '''
+        for e in setCalc.elements:
+            for s in self.elementSections:
+                e.setProp(self.limitStateLabel+s,self.ControlVars(idSection= s))
 
 
 class fibSectLSProperties(object):

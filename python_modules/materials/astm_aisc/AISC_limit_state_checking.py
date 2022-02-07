@@ -387,22 +387,12 @@ class AISCBiaxialBendingControlVars(cv.SteelShapeBiaxialBendingControlVars):
         retval+= ',chiN= ' + str(self.chiN)
         return retval
     
-class BiaxialBendingNormalStressController(lsc.LimitStateControllerBase):
+class BiaxialBendingNormalStressController(lsc.LimitStateControllerBase2Sections):
     '''Object that controls normal stresses limit state.'''
 
     ControlVars= AISCBiaxialBendingControlVars
     def __init__(self,limitStateLabel):
         super(BiaxialBendingNormalStressController,self).__init__(limitStateLabel)
-
-    def initControlVars(self,setCalc):
-        '''Initialize control variables over elements.
-
-        :param setCalc: set of elements to which define control variables
-        '''
-        for e in setCalc.elements:
-            e.setProp(self.limitStateLabel+'Sect1',self.ControlVars(idSection= 'Sect1'))
-            e.setProp(self.limitStateLabel+'Sect2',self.ControlVars(idSection= 'Sect2'))
-
     def checkSetFromIntForcFile(self,intForcCombFileName,setCalc=None):
         '''Launch checking.
 
@@ -420,30 +410,17 @@ class BiaxialBendingNormalStressController(lsc.LimitStateControllerBase):
                 lmsg.warning('No internal forces for element: '+str(e.tag)+' of type: '+e.type())
             for lf in elIntForc:
                 CFtmp,NcRdtmp,McRdytmp,McRdztmp,MvRdztmp,MbRdztmp= sh.getBiaxialBendingEfficiency(Nd= lf.N,Myd= lf.My,Mzd= lf.Mz,Vyd= lf.Vy,chiN= lf.chiN, chiLT= lf.chiLT)
-                if lf.idSection == 0:
-                    label= self.limitStateLabel+'Sect1'
-                    if(CFtmp>e.getProp(label).CF):
-                        e.setProp(label,self.ControlVars('Sect1',lf.idComb,CFtmp,lf.N,lf.My,lf.Mz,NcRdtmp,McRdytmp,McRdztmp,MvRdztmp,MbRdztmp,lf.chiLT, lf.chiN))
-                else:
-                    label= self.limitStateLabel+'Sect2'
-                    if(CFtmp>e.getProp(label).CF):
-                        e.setProp(label,self.ControlVars('Sect2',lf.idComb,CFtmp,lf.N,lf.My,lf.Mz,NcRdtmp,McRdytmp,McRdztmp,MvRdztmp,MbRdztmp,lf.chiLT, lf.chiN))
+                sectionLabel= self.getSectionLabel(lf.idSection)
+                label= self.limitStateLabel+sectionLabel
+                if(CFtmp>e.getProp(label).CF):
+                    e.setProp(label,self.ControlVars(sectionLabel,lf.idComb,CFtmp,lf.N,lf.My,lf.Mz,NcRdtmp,McRdytmp,McRdztmp,MvRdztmp,MbRdztmp,lf.chiLT, lf.chiN))
 
-class ShearController(lsc.LimitStateControllerBase):
+class ShearController(lsc.LimitStateControllerBase2Sections):
     '''Object that controls shear limit state.'''
 
     ControlVars= cv.ShearYControlVars
     def __init__(self,limitStateLabel):
         super(ShearController,self).__init__(limitStateLabel)
-
-    def initControlVars(self,setCalc):
-        '''Initialize control variables over elements.
-
-        :param setCalc: set of elements to which define control variables
-        '''
-        for e in setCalc.elements:
-            e.setProp(self.limitStateLabel+'Sect1',self.ControlVars())
-            e.setProp(self.limitStateLabel+'Sect2',self.ControlVars())
 
     def checkSetFromIntForcFile(self,intForcCombFileName,setCalc=None):
         '''Launch checking.
@@ -460,12 +437,10 @@ class ShearController(lsc.LimitStateControllerBase):
                 lmsg.warning('No internal forces for element: '+str(e.tag)+' of type: '+e.type())
             for lf in elIntForc:
                 CFtmp= sh.getYShearEfficiency(sc,lf.Vy)
-                if lf.idSection == 0:
-                    if(CFtmp>e.getProp(self.limitStateLabel+'Sect1').CF):
-                        e.setProp(self.limitStateLabel+'Sect1',self.ControlVars('Sects1',lf.idComb,CFtmp,lf.Vy))
-                else:
-                    if(CFtmp>e.getProp(self.limitStateLabel+'Sect2').CF):
-                        e.setProp(self.limitStateLabel+'Sect2',self.ControlVars('Sects2',lf.idComb,CFtmp,lf.Vy))
+                sectionLabel= self.getSectionLabel(lf.idSection)
+                label= self.limitStateLabel+sectionLabel
+                if(CFtmp>e.getProp(label).CF):
+                    e.setProp(label,self.ControlVars(sectionLabel+'s',lf.idComb,CFtmp,lf.Vy))
 
 class VonMisesStressController(lsc.LimitStateControllerBase):
     '''Object that controls Von Mises stress limit state.'''

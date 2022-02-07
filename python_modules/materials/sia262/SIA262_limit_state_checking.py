@@ -329,7 +329,7 @@ class CrackControlSIA262(lsc.CrackControlBaseParameters):
           :param elements: elements to define control variables in
         '''
         for e in elements:
-          e.setProp(self.limitStateLabel, self.ControlVars(idSection= e.getProp('idSection')))
+            e.setProp(self.limitStateLabel, self.ControlVars(idSection= e.getProp('idSection')))
 
     def check(self,elements,nmbComb):
         '''Crack control checking.'''

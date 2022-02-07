@@ -62,21 +62,11 @@ class BiaxialBendingControlVars(cv.BiaxialBendingControlVars):
         '''
         super(BiaxialBendingControlVars,self).__init__(idSection,combName,CF,N,My,Mz)
     
-class BiaxialBendingNormalStressController(lsc.LimitStateControllerBase):
+class BiaxialBendingNormalStressController(lsc.LimitStateControllerBase2Sections):
     '''Object that controls normal stresses limit state.'''
     ControlVars= BiaxialBendingControlVars
     def __init__(self,limitStateLabel):
         super(BiaxialBendingNormalStressController,self).__init__(limitStateLabel)
-
-    def initControlVars(self,setCalc):
-        '''Initialize control variables over elements.
-
-        :param setCalc: set of elements to which define control variables
-        '''
-        for e in setCalc.elements:
-            e.setProp(self.limitStateLabel+'Sect1',self.ControlVars(idSection= 'Sect1'))
-            e.setProp(self.limitStateLabel+'Sect2',self.ControlVars(idSection= 'Sect2'))
-
     def checkSetFromIntForcFile(self, intForcCombFileName, setCalc=None):
         '''Launch checking.
 
@@ -93,14 +83,10 @@ class BiaxialBendingNormalStressController(lsc.LimitStateControllerBase):
                 lmsg.warning('No internal forces for element: '+str(e.tag)+' of type: '+e.type())
             for lf in elIntForc:
                 CFtmp= sh.getBiaxialBendingEfficiency(lf.N,lf.My,lf.Mz)
-                if lf.idSection == 0:
-                    label= self.limitStateLabel+'Sect1'
-                    if(CFtmp>e.getProp(label).CF):
-                        e.setProp(label,self.ControlVars('Sect1',lf.idComb,CFtmp,lf.N,lf.My,lf.Mz))
-                else:
-                    label= self.limitStateLabel+'Sect2'
-                    if(CFtmp>e.getProp(label).CF):
-                        e.setProp(label,self.ControlVars('Sect2',lf.idComb,CFtmp,lf.N,lf.My,lf.Mz))
+                sectionLabel= self.getSectionLabel(lf.idSection)
+                label= self.limitStateLabel+sectionLabel
+                if(CFtmp>e.getProp(label).CF):
+                    e.setProp(label,self.ControlVars(sectionLabel,lf.idComb,CFtmp,lf.N,lf.My,lf.Mz))
 
 def controlULSCriterion():
     return '''recorder= self.getProp('ULSControlRecorder')

@@ -1160,15 +1160,6 @@ class BoltedPlateController(lsc.LimitStateControllerBase):
         super(BoltedPlateController,self).__init__(limitStateLabel= limit_state_data.normalStressesResistance.label)
         self.boltedPlate= boltedPlate
         
-    # def initControlVars(self,setCalc):
-    #     '''Initialize control variables over elements.
-
-    #     :param setCalc: set of elements to which define control variables
-    #     '''
-    #     for e in setCalc.elements:
-    #         e.setProp(self.limitStateLabel+'Sect1',cv.AISCBiaxialBendingControlVars(idSection= 'Sect1'))
-    #         e.setProp(self.limitStateLabel+'Sect2',cv.AISCBiaxialBendingControlVars(idSection= 'Sect2'))
-            
     def predimConnection(self, intForcCombFileName, setCalc=None):
         '''Launch predim connection.
 

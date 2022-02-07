@@ -1081,10 +1081,8 @@ def writeControlVarsFromPhantomElements(preprocessor,outputFileName,outputCfg):
         idSection= e.getProp("idSection")  
         controlVar= e.getProp(controlVarName)
         outStr= controlVar.getLaTeXString(eTag,1e-3)
-        if(e.getProp("dir")==1):
-            xcOutput.write(controlVar.strElementProp(eTag,controlVarName+'Sect1'))
-        else:
-            xcOutput.write(controlVar.strElementProp(eTag,controlVarName+'Sect2'))
+        sectionName= 'Sect'+str(e.getProp('dir'))
+        xcOutput.write(controlVar.strElementProp(eTag,controlVarName+sectionName))
     xcOutput.close()
     if outputCfg.listFile.lower()[0]=='y':
         if outputCfg.appendToResFile.lower()[0]=='y':
