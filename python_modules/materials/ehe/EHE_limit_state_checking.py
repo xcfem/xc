@@ -979,7 +979,7 @@ class ShearController(lscb.ShearControllerBase):
                 self.strutWidth= scc.getCompressedStrutWidth() # b0
                 if((self.E0*self.eps1)<self.fctdH): # Non cracked section
                     self.I= scc.getHomogenizedI(self.E0)
-                    self.S= scc.getSPosHomogeneizada(self.E0)
+                    self.S= scc.getSPosHomogenized(self.E0)
                     self.Vu2= getVu2EHE08NoAtNoFis(self.fctdH,self.I,self.S,self.strutWidth,self.alphaL,self.concreteAxialForce,self.concreteArea)
                 else: # Cracked section
                   self.effectiveDepth= scc.getEffectiveDepth() # d
