@@ -377,3 +377,9 @@ class AWCNDSBiaxialBendingControlVars(cv.BiaxialBendingStrengthControlVars):
         '''
         super(AWCNDSBiaxialBendingControlVars,self).__init__(idSection,combName,CF,N,My,Mz,Ncrd=Ncrd,McRdy=McRdy,McRdz=McRdz,MvRdz=MvRdz,MbRdz=MbRdz, chiLT=chiLT, chiN= chiN)
 
+class BiaxialBendingNormalStressController(lsc.LimitStateControllerBase2Sections):
+    '''Object that controls normal stresses limit state.'''
+
+    ControlVars= AWCNDSBiaxialBendingControlVars
+    def __init__(self,limitStateLabel):
+        super(BiaxialBendingNormalStressController,self).__init__(limitStateLabel)
