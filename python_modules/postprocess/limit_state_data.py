@@ -225,6 +225,7 @@ class LimitStateData(object):
         loadCombinations= preprocessor.getLoadHandler.getLoadCombinations
         #Putting combinations inside XC.
         loadCombinations= self.dumpCombinations(combContainer,loadCombinations)
+        
         elemSet= setCalc.elements
         nodSet= setCalc.nodes
         self.createOutputFiles()

@@ -11,6 +11,7 @@ from misc_utils import log_messages as lmsg
 from postprocess.xcVtk.fields import fields
 from postprocess.xcVtk.FE_model import quick_graphics as QGrph
 from postprocess.xcVtk.FE_model import vtk_FE_graphic
+from solution import predefined_solutions
 
 '''Generation of boundary conditions based on springs 
 '''
@@ -182,13 +183,15 @@ class ElasticFoundation(object):
 
         field= fields.ExtrapolatedScalarField('soilPressure','getProp',self.foundationSet,component=2,fUnitConv= fUnitConv,rgMinMax=rgMinMax)
         displaySettings= vtk_FE_graphic.DisplaySettingsFE()
-        field.display(displaySettings,caption= caption+' '+unitDescription,fName=fileName)
+        field.display(displaySettings,caption= caption+' '+unitDescription,fileName=fileName)
 
-    def displayMaxPressures(self,FEcase,combs,caption,fUnitConv,unitDescription,rgMinMax=None,fileName=None):
-        '''Calculate and display the maximum earth pressures (Z direction)
+    def displayMaxPressures(self,modelSpace,analysis,combs,caption,fUnitConv,unitDescription,rgMinMax=None,fileName=None):
+        '''
+        Calculate and display the maximum earth pressures (Z direction)
         obtained from the group of load combinations passed as paremeter.
 
-        :param FEcase: finite element problem
+        :param analysis: analysis type (e.g. predefined_solutions.simple_static_linear(FEcase))
+        
         :param combs: load cases to analyze and compare to obtain the maximum 
                     pressures.
         :param caption: caption text to diaplay.
@@ -204,10 +207,12 @@ class ElasticFoundation(object):
         nodSet=self.foundationSet.getNodes
         for n in nodSet:
             n.setProp('maxSoilPressure',-1e10)
-        #Calculate max. pressures
-        for lc in combs:
-            lcs=QGrph.LoadCaseResults(FEcase)
-            lcs.solve(loadCaseName=combs[lc].name,loadCaseExpr=combs[lc].expr)
+        #Calculate max. pressure
+        comb_keys=[key for key in combs] 
+        for k in comb_keys:
+            modelSpace.removeAllLoadPatternsFromDomain()
+            modelSpace.addNewLoadCaseToDomain(combs[k].name,combs[k].expr)
+            result= analysis.analyze(1)
             reac= self.calcPressures()
             for n in nodSet:
                 prs=n.getProp('soilPressure')[2]
@@ -216,7 +221,8 @@ class ElasticFoundation(object):
         #Display max. pressures
         field= fields.ExtrapolatedScalarField(name='maxSoilPressure',functionName='getProp',xcSet=self.foundationSet,component=None,fUnitConv=fUnitConv,rgMinMax=rgMinMax)
         displaySettings= vtk_FE_graphic.DisplaySettingsFE()
-        field.display(displaySettings,caption= caption+' '+unitDescription,fName=fileName)
+        field.display(displaySettings,caption= caption+' '+unitDescription,fileName=fileName)
+        modelSpace.removeLoadCaseFromDomain(combs[k].name)
         
 def takeSecond(elem):
     return elem[1]
