@@ -1176,14 +1176,6 @@ class CrackStraightController(lscb.LimitStateControllerBase):
         super(CrackStraightController,self).__init__(limitStateLabel,fakeSection= False)
         self.beta=1.7    #if only indirect actions beta must be =1.3
 
-    def initControlVars(self,elements):
-        ''' Initialize control variables over elements.
-
-          :param elements: elements to define control variables in.
-        '''
-        for e in elements:
-            e.setProp(self.limitStateLabel, self.ControlVars())
-
     def EHE_hceff(self,width,h,x):
         '''Return the maximum height to be considered in the calculation of 
            the concrete effective area in tension.

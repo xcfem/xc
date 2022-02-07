@@ -41,6 +41,14 @@ class LimitStateControllerBase(object):
         self.solutionProcedureType=  predefined_solutions.SimpleStaticLinear
         self.preprocessor=None
         self.verbose= True # display log messages by default
+        
+    def initControlVars(self,elements):
+        ''' Initialize control variables over elements.
+
+          :param elements: elements to define control variables in.
+        '''
+        for e in elements:
+            e.setProp(self.limitStateLabel, self.ControlVars())
 
     def check(self,elements,nmbComb):
         '''Limit state control.'''
@@ -212,14 +220,6 @@ class BiaxialBendingNormalStressControllerBase(LimitStateControllerBase):
     def __init__(self,limitStateLabel):
         super(BiaxialBendingNormalStressControllerBase,self).__init__(limitStateLabel)
 
-    def initControlVars(self,elements):
-        '''Initialize control variables over elements.
-
-          :param elements: elements to define control variables in
-        '''
-        for e in elements:
-            e.setProp(self.limitStateLabel, self.ControlVars())
-
     def check(self,elements, nmbComb):
         '''Launch checking.
 
@@ -251,14 +251,6 @@ class UniaxialBendingNormalStressControllerBase(LimitStateControllerBase):
     def __init__(self,limitStateLabel):
         super(UniaxialBendingNormalStressControllerBase,self).__init__(limitStateLabel)
 
-    def initControlVars(self,elements):
-        '''Initialize control variables over elements.
-
-          :param elements: elements to define control variables in
-        '''
-        for e in elements:
-            e.setProp(self.limitStateLabel, self.ControlVars())
-
     def check(self,elements, combName):
         '''
         Check the normal stresses
@@ -285,13 +277,6 @@ class ShearControllerBase(LimitStateControllerBase):
     '''Base class for shear controller classes.'''
 
     ControlVars= cv.RCShearControlVars
-    def initControlVars(self,elements):
-        ''' Initialize control variables over elements.
-
-          :param elements: elements to define control variables in
-        '''
-        for e in elements:
-          e.setProp(self.limitStateLabel, self.ControlVars())
           
     def check(self, elements, combName):
         '''Shear control.'''

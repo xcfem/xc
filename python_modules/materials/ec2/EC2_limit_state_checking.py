@@ -39,14 +39,6 @@ class CrackStraightController(lscb.LimitStateControllerBase):
         self.k3=3.4
         self.k4=0.425
 
-    def initControlVars(self,elements):
-        ''' Initialize control variables over elements.
-
-        :param elements: elements to define control variables in
-        '''
-        for e in elements:
-            e.setProp(self.limitStateLabel, self.ControlVars())
-
     def EC2_k2(self,eps1,eps2):
         '''Return the coefficient k2 involved in the calculation of the mean 
         crack distance according to EC2. This coefficient represents the effect of 
