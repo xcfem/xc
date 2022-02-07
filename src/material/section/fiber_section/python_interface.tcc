@@ -64,7 +64,7 @@ class_<XC::FiberSectionBase, bases<XC::PrismaticBarCrossSection>, boost::noncopy
   .def("computeFibersEffectiveConcreteArea",&XC::FiberSectionBase::computeFibersEffectiveConcreteArea)
   .def("getGrossEffectiveConcreteAreaContour",&XC::FiberSectionBase::getGrossEffectiveConcreteAreaContour)
   .def("getHomogenizedI",&XC::FiberSectionBase::getHomogenizedI,"Moment of inertia relative to bending axis.")
-  .def("getSPosHomogeneizada",&XC::FiberSectionBase::getSPosHomogeneizada,"Static moment relative to bending axis of area that rests over this axis.")
+  .def("getSPosHomogenized",&XC::FiberSectionBase::getSPosHomogenized,"Static moment relative to bending axis of area that rests over this axis.")
   .def("computeCovers",&XC::FiberSectionBase::computeCovers,"Return the concrete cover of the set of reinforcement fibers whose name is given as parameter. Syntax: computeCovers(reinforcementSetName)")
 .def("computeSpacement",&XC::FiberSectionBase::computeSpacement,"Return the spacing between bars in the set of reinforcement fibers whose name is given as parameter. Syntax: computeSpacement(reinforcementSetName)")
   .def("getStrClaseEsfuerzo",&XC::FiberSectionBase::getStrClaseEsfuerzo,"Return the type of load acting at the cross-section('flexion_compuesta',...). Syntax: getStrClaseEsfuerzo(tolerance)")

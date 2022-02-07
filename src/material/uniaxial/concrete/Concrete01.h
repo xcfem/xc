@@ -101,7 +101,7 @@ class Concrete01: public ConcreteBase
     int sendData(Communicator &);
     int recvData(const Communicator &);
 
-    void calcula_trial_state(const double &strain);
+    void compute_trial_state(const double &strain);
   public:
     Concrete01(int tag, double fpc, double eco, double fpcu, double ecu);
     Concrete01(int tag);

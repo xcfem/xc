@@ -142,7 +142,7 @@ XC::Concrete01::~Concrete01(void)
   {}
 
 //! @brief Calculate the trial state given the change in strain
-void XC::Concrete01::calcula_trial_state(const double &dStrain)
+void XC::Concrete01::compute_trial_state(const double &dStrain)
   {
     trialHistory.UnloadSlope()= convergedHistory.getUnloadSlope(); //Reset unload slope.
   
@@ -195,7 +195,7 @@ int XC::Concrete01::setTrialStrain(double strain, double strainRate)
   
     // Calculate the trial state given the change in strain
     // determineTrialState (dStrain);
-    calcula_trial_state(dStrain);
+    compute_trial_state(dStrain);
     return 0;
   }
 
@@ -231,7 +231,7 @@ int XC::Concrete01::setTrial(double strain, double &stress, double &tangent, dou
   
     // Calculate the trial state given the change in strain
     // determineTrialState (dStrain);
-    calcula_trial_state(dStrain);
+    compute_trial_state(dStrain);
     stress= trialState.getStress();
     tangent=  trialState.getTangent();
     return 0;

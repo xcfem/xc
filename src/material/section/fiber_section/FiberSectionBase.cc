@@ -918,7 +918,7 @@ double XC::FiberSectionBase::getHomogenizedI(const double &E0) const
   }
 
 //! @brief Static moment relative to bending axis of area that rests over this axis.
-double XC::FiberSectionBase::getSPosHomogeneizada(const double &E0) const
+double XC::FiberSectionBase::getSPosHomogenized(const double &E0) const
   {
     if(fabs(E0)<1e-6)
       std::clog << "homogenization reference modulus too small; E0= " << E0 << std::endl; 

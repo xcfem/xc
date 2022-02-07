@@ -143,7 +143,7 @@ class FiberSectionBase: public PrismaticBarCrossSection
     void computeSpacement(const std::string &) const;
     int updateCenterOfMass(void);
     double getHomogenizedI(const double &E0) const;
-    double getSPosHomogeneizada(const double &E0) const;
+    double getSPosHomogenized(const double &E0) const;
 
     const Vector &getStressResultant(void) const;
     double getStressResultant(const int &) const;

@@ -683,12 +683,13 @@ double XC::FiberPtrDeque::getSPosHomogenizedSection(const double &E0,const HalfP
           {
             d= -sp.DistSigno((*i)->getPos());
             if(d>0)
-              retval+= (*i)->getArea()*(mat->getTangent()/E0)*d;
+	      { retval+= (*i)->getArea()*(mat->getInitialTangent())*d; }
           }
         else
           std::cerr << getClassName() << "::" << __FUNCTION__
 		    << "; null pointer to material." << std::endl;
       }
+    retval/=E0;
     return retval;
   }
 
@@ -710,13 +711,14 @@ double XC::FiberPtrDeque::getSNegHomogenizedSection(const double &E0,const HalfP
           {
             d= sp.DistSigno((*i)->getPos());
             if(d>0)
-              retval+= (*i)->getArea()*(mat->getTangent()/E0)*d;
+              retval+= (*i)->getArea()*(mat->getInitialTangent())*d;
           }
         else
           std::cerr << getClassName() << "::" << __FUNCTION__
 		    << "; null pointer to material!."
 		    << std::endl;
       }
+    retval/=E0;
     return retval;
   }
 
@@ -939,7 +941,7 @@ const XC::Vector &XC::FiberPtrDeque::getCentroidFibersWithStrainSmallerThan(cons
           {
             r+= (*i)->getForce(); // Resultant
             retval[0]+= (*i)->getMz(); // Moment around Z
-            retval[1]+= (*i)->getMy(); // Moment aroutn Y
+            retval[1]+= (*i)->getMy(); // Moment around Y
 	    area= (*i)->getArea();
 	    y_c+= (*i)->getLocY()*area;
 	    z_c+= (*i)->getLocZ()*area;
@@ -1042,23 +1044,36 @@ const XC::Vector &XC::FiberPtrDeque::getTensionedFibersCentroid(void) const
 const XC::Vector &XC::FiberPtrDeque::getCentroidFibersWithStrainGreaterThan(const double &defRef) const
   {
     static Vector retval(2);
-    static double def,r;
-    retval[0]= 0.0; retval[1]= 0.0; def= 0.0; r= 0.0;
+    static double def,r, y_c, z_c;
+    retval[0]= 0.0; retval[1]= 0.0; def= 0.0; r= 0.0; y_c= 0.0; z_c= 0.0;
+    double area= 0.0, totalArea= 0.0;
     std::deque<Fiber *>::const_iterator i= begin();
     for(;i!= end();i++)
       {
         def=  (*i)->getStrain();
         if(def>defRef)
           {
-            r+= (*i)->getForce();
-            retval[0]+= (*i)->getMz();
-            retval[1]+= (*i)->getMy();
+            r+= (*i)->getForce(); // Resultant
+            retval[0]+= (*i)->getMz(); // Moment around Z.
+            retval[1]+= (*i)->getMy(); // Moment around Y.
+	    area= (*i)->getArea();
+	    y_c+= (*i)->getLocY()*area;
+	    z_c+= (*i)->getLocZ()*area;
+	    totalArea+= area;
           }
       }
     if(r!= 0.0)
       retval/= r;
     else
-      { retval[0]= NAN; retval[1]= NAN; }
+      {
+	if(totalArea>0.0)
+	  {
+	    retval[0]= y_c/totalArea;
+	    retval[1]= z_c/totalArea;
+	  }
+	else
+	  { retval[0]= NAN; retval[1]= NAN; }
+      }
     return retval;
   }
 
