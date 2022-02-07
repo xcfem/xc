@@ -354,7 +354,7 @@ class Member(steel_member_base.BucklingMember):
 #        recorder.callbackRestart= "print(\"Restart method called.\")" #20181121
         return recorder
     
-class AISCBiaxialBendingControlVars(cv.SSBiaxialBendingControlVars):
+class AISCBiaxialBendingControlVars(cv.SteelShapeBiaxialBendingControlVars):
     '''Control variables for biaxial bending normal stresses LS 
     verification in steel-shape elements according to AISC.
 
@@ -381,13 +381,6 @@ class AISCBiaxialBendingControlVars(cv.SSBiaxialBendingControlVars):
         super(AISCBiaxialBendingControlVars,self).__init__(idSection,combName,CF,N,My,Mz,Ncrd=Ncrd,McRdy=McRdy,McRdz=McRdz,MvRdz=MvRdz,MbRdz=MbRdz, chiLT=chiLT)
         self.chiN= chiN # reduction factor for compressive strength
         
-    def getLaTeXFields(self, factor= 1e-3):
-        ''' Returns a string with the intermediate fields of the LaTeX string.
-
-        :param factor: factor for units (default 1e-3 -> kN)'''
-        retval= super(SSBiaxialBendingControlVars,self).getLaTeXFields(factor)+" & "+fmt.Esf.format(self.chiN)
-        return retval
-
     def getStrArguments(self):
         '''Returns a string for a 'copy' (kind of) constructor.'''
         retval= super(AISCBiaxialBendingControlVars,self).getStrArguments()

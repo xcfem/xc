@@ -1,11 +1,12 @@
 # -*- coding: utf-8 -*-
-from __future__ import print_function
-from __future__ import division
 '''Classes to store limit state control variables (internal forces, 
    strains, stresses,...) calculated in the analysis.
    THESE CLASSES ARE INTENDED TO REPLACE THE PROPERTIES DEFINED
    IN def_vars_control.py WICH MUST DISSAPEAR.
 '''
+
+from __future__ import print_function
+from __future__ import division
 
 __author__= "Luis C. Pérez Tato (LCPT), Ana Ortega(AO_O)"
 __copyright__= "Copyright 2016,LCPT, AO_O"
@@ -103,7 +104,20 @@ class ControlVarsBase(object):
         ''' Returns a string with the intermediate fields of the LaTeX string.
 
         :param factor: factor for units (default 1e-3 -> kN)'''
-        return self.combName
+        dct= self.getDict()
+        retval= ''
+        for key in dct:
+            value= dct[key]
+            initial= key[0]
+            if(initial in ['N', 'M','V']): # internal force
+                value= fmt.Esf.format(float(value)*factor)
+            if('Stress' in key):
+                value= fmt.Stress.format(value*factor*factor)
+            if('stress' in key):
+                value= fmt.Stress.format(value*factor*factor)
+            retval+= str(value)+' & '
+        retval= retval.strip(' &')
+        return retval
 
     def getLaTeXString(self,eTag,factor= 1e-3):
         ''' Returns a string that we can insert in a LaTeX table.
@@ -112,7 +126,7 @@ class ControlVarsBase(object):
         :param factor: factor for units (default 1e-3 -> kN)'''
         return str(eTag)+" & "+self.getLaTeXFields(factor)+" & "+fmt.Esf.format(self.getCF())+"\\\\\n"
 
-    def getAnsysStrings(self,eTag,axis, factor= 1e-3):
+    def getAnsysStrings(self,eTag, axis, factor= 1e-3):
         ''' Returns a string to represent fields in ANSYS (R).
 
         :param eTag:   element identifier.
@@ -122,12 +136,29 @@ class ControlVarsBase(object):
         retval.append("detab,"+str(eTag)+",CF" +axis+","+str(self.getCF())+"\n")
         return retval
 
+    def getDict(self):
+        ''' Return a dictionary containing the object data.'''
+        return {'combName': self.combName, 'CF':self.getCF()}
+
+    def setFromDict(self, dct):
+        ''' Set the data values from the dictionary argument.'''
+        self.combName= dct['combName']
+        self.CF= dct['CF']
+       
     def getStrArguments(self):
         '''Returns a string for a 'copy' (kind of) constructor.
 
         '''
-        retval= 'combName= "' + self.combName 
-        retval+= '", CF=' + str(self.getCF())
+        dct= self.getDict()
+        retval= ''
+        for key in dct:
+            value= dct[key]
+            if(isinstance(value, str)):
+                value= '"'+str(value)+'"'
+            else:
+                value= str(value)
+            retval+= str(key)+'= '+value+','
+        retval= retval.strip(',')
         return retval
 
     def getModuleImportString(self):
@@ -157,7 +188,6 @@ class ControlVarsBase(object):
         retval+= ',' + self.getStrConstructor()
         retval+= ")\n"
         return retval
-
   
 class N(ControlVarsBase):
     '''Uniaxial tension or compression. Internal force [N] for a combination.
@@ -174,30 +204,27 @@ class N(ControlVarsBase):
         super(N,self).__init__(combName)
         self.N= NN # Axial force.
 
-    def getLaTeXFields(self,factor= 1e-3):
-      ''' Returns a string with the intermediate fields of the LaTeX string.
-
-      :param factor: factor for units (default 1e-3 -> kN)'''
-      retval= super(N,self).getLaTeXFields(factor)
-      retval+= " & "+fmt.Esf.format(self.N*factor)
-      return retval
-
     def getAnsysStrings(self, eTag, axis, factor= 1e-3):
-      ''' Returns a string to represent fields in ANSYS (R).
+        ''' Returns a string to represent fields in ANSYS (R).
 
-      :param eTag: element identifier.
-      :param axis: section 1 or 2
-      :param factor: factor for units (default 1e-3 -> kN)
-      '''
-      retval= super(N,self).getAnsysStrings(eTag,axis,factor)
-      retval.append("detab,"+str(eTag)+",N" +axis+","+str(self.N*factor)+"\n")
-      return retval
+        :param eTag: element identifier.
+        :param axis: section 1 or 2
+        :param factor: factor for units (default 1e-3 -> kN)
+        '''
+        retval= super(N,self).getAnsysStrings(eTag,axis,factor)
+        retval.append("detab,"+str(eTag)+",N" +axis+","+str(self.N*factor)+"\n")
+        return retval
 
-    def getStrArguments(self):
-      '''Returns a string for a 'copy' (kind of) constructor.'''
-      retval= super(N,self).getStrArguments()
-      retval+= ',N= ' + str(self.N) 
-      return retval
+    def getDict(self):
+        ''' Return a dictionary containing the object data.'''
+        retval= super(N,self).getDict()
+        retval.update({'N':self.N})
+        return retval
+       
+    def setFromDict(self,dct):
+        ''' Set the data values from the dictionary argument.'''
+        super(N,self).setFromDict(dct)
+        self.N= dct['N']
   
 class NMy(N):
     '''Uniaxial bending. Internal forces [N,My] for a combination.
@@ -215,14 +242,6 @@ class NMy(N):
         super(NMy,self).__init__(combName, N)
         self.My= My # Bending moment about y axis.
 
-    def getLaTeXFields(self,factor= 1e-3):
-        ''' Returns a string with the intermediate fields of the LaTeX string.
-
-        :param factor: factor for units (default 1e-3 -> kN)'''
-        retval= super(NMy,self).getLaTeXFields(factor)
-        retval+= " & "+fmt.Esf.format(self.My*factor)
-        return retval
-
     def getAnsysStrings(self,eTag,axis, factor= 1e-3):
       ''' Returns a string to represent fields in ANSYS (R).
 
@@ -233,11 +252,16 @@ class NMy(N):
       retval.append("detab,"+str(eTag)+",My" +axis+","+str(self.My*factor)+"\n")
       return retval
 
-    def getStrArguments(self):
-      '''Returns a string for a 'copy' (kind of) constructor.'''
-      retval= super(NMy,self).getStrArguments()
-      retval+= ',My= ' + str(self.My)
-      return retval
+    def getDict(self):
+        ''' Return a dictionary containing the object data.'''
+        retval= super(NMy,self).getDict()
+        retval.update({'My':self.My})
+        return retval
+       
+    def setFromDict(self,dct):
+        ''' Set the data values from the dictionary argument.'''
+        super(NMy,self).setFromDict(dct)
+        self.My= dct['My']
 
 class NMyMz(NMy):
     '''Biaxial bending. Internal forces [N,My,Mz] for a combination.
@@ -256,14 +280,6 @@ class NMyMz(NMy):
         super(NMyMz,self).__init__(combName,N,My)
         self.Mz= Mz #Bending moment about z axis.
 
-    def getLaTeXFields(self,factor= 1e-3):
-      ''' Returns a string with the intermediate fields of the LaTeX string.
-
-      :param factor: factor for units (default 1e-3 -> kN)'''
-      retval= super(NMyMz,self).getLaTeXFields(factor)
-      retval+= " & "+fmt.Esf.format(self.Mz*factor)
-      return retval
-
     def getAnsysStrings(self,eTag,axis, factor= 1e-3):
       ''' Returns a string to represent fields in ANSYS (R).
 
@@ -274,11 +290,16 @@ class NMyMz(NMy):
       retval.append("detab,"+str(eTag)+",Mz" +axis+","+str(self.Mz*factor)+"\n")
       return retval
 
-    def getStrArguments(self):
-      '''Returns a string for a 'copy' (kind of) constructor.'''
-      retval= super(NMyMz,self).getStrArguments()
-      retval+= ',Mz= ' + str(self.Mz)
-      return retval
+    def getDict(self):
+        ''' Return a dictionary containing the object data.'''
+        retval= super(NMyMz,self).getDict()
+        retval.update({'Mz':self.Mz})
+        return retval
+       
+    def setFromDict(self,dct):
+        ''' Set the data values from the dictionary argument.'''
+        super(NMyMz,self).setFromDict(dct)
+        self.Mz= dct['Mz']
 
 class CFN(N):
     '''Uniaxial tension or compression. Normal stresses limit state variables.
@@ -336,14 +357,6 @@ class ShVy(ControlVarsBase):
         super(ShVy,self).__init__(combName)
         self.Vy= Vy #Shear along y axis.
 
-    def getLaTeXFields(self,factor= 1e-3):
-        ''' Returns a string with the intermediate fields of the LaTeX string.
-
-        :param factor: factor for units (default 1e-3 -> kN)'''
-        retval= super(ShVy,self).getLaTeXFields(factor)
-        retval+= " & "+ fmt.Esf.format(self.Vy*factor)
-        return retval
-
     def getAnsysStrings(self,eTag,axis, factor= 1e-3):
         ''' Returns a string to represent fields in ANSYS (R).
 
@@ -354,11 +367,16 @@ class ShVy(ControlVarsBase):
         retval.append("detab,"+str(eTag)+",Vy" +axis+","+str(self.Vy*factor)+"\n")
         return retval
 
-    def getStrArguments(self):
-        '''Returns a string for a 'copy' (kind of) constructor.'''
-        retval= super(ShVy,self).getStrArguments()
-        retval+= ',Vy= ' + str(self.Vy)
+    def getDict(self):
+        ''' Return a dictionary containing the object data.'''
+        retval= super(ShVy,self).getDict()
+        retval.update({'Vy':self.Vy})
         return retval
+       
+    def setFromDict(self,dct):
+        ''' Set the data values from the dictionary argument.'''
+        super(ShVy,self).setFromDict(dct)
+        self.Vy= dct['Vy']
 
 class CFVy(ShVy):
     '''Uniaxial bending. Shear stresses limit state variables.
@@ -397,20 +415,16 @@ class ShearYControlVars(CFVy):
         super(ShearYControlVars,self).__init__(combName,CF,Vy)
         self.idSection= idSection # Section identifier.
 
-    def getLaTeXFields(self,factor= 1e-3):
-        ''' Returns a string with the intermediate fields of the LaTeX string.
-
-        :param factor: factor for units (default 1e-3 -> kN)'''
-        retval= self.idSection+" & "
-        retval+= super(ShearYControlVars,self).getLaTeXFields(factor)
+    def getDict(self):
+        ''' Return a dictionary containing the object data.'''
+        retval= super(ShearYControlVars,self).getDict()
+        retval.update({'idSection':self.idSection})
         return retval
-
-    def getStrArguments(self):
-        '''Returns a string for a 'copy' (kind of) constructor.
-        '''
-        retval= 'idSection= "' + self.idSection +'", ' 
-        retval+= super(ShearYControlVars,self).getStrArguments()
-        return retval
+       
+    def setFromDict(self,dct):
+        ''' Set the data values from the dictionary argument.'''
+        super(ShearYControlVars,self).setFromDict(dct)
+        self.idSection= dct['idSection']
 
 class UniaxialBendingControlVars(CFNMy):
     '''Uniaxial bending. Normal stresses limit state variables [CF,N,My].
@@ -430,20 +444,16 @@ class UniaxialBendingControlVars(CFNMy):
         super(UniaxialBendingControlVars,self).__init__(combName,CF,N,My)
         self.idSection= idSection # Section identifier.
 
-    def getLaTeXFields(self,factor= 1e-3):
-        ''' Returns a string with the intermediate fields of the LaTeX string.
-
-        :param factor: factor for units (default 1e-3 -> kN)'''
-        retval= self.idSection+" & "
-        retval+= super(UniaxialBendingControlVars,self).getLaTeXFields(factor)
+    def getDict(self):
+        ''' Return a dictionary containing the object data.'''
+        retval= super(UniaxialBendingControlVars,self).getDict()
+        retval.update({'idSection':self.idSection})
         return retval
-
-    def getStrArguments(self):
-        '''Returns a string for a 'copy' (kind of) constructor.
-        '''
-        retval= 'idSection= "' + self.idSection +'", ' 
-        retval+= super(UniaxialBendingControlVars,self).getStrArguments()
-        return retval
+       
+    def setFromDict(self,dct):
+        ''' Set the data values from the dictionary argument.'''
+        super(UniaxialBendingControlVars,self).setFromDict(dct)
+        self.idSection= dct['idSection']
 
 class CFNMyMz(CFNMy):
     '''Biaxial bending. Normal stresses limit state variables. [CF,N,My,Mz].
@@ -463,13 +473,6 @@ class CFNMyMz(CFNMy):
         super(CFNMyMz,self).__init__(combName,CF,N,My)
         self.Mz= Mz #Bending moment about z axis.
 
-    def getLaTeXFields(self,factor= 1e-3):
-        ''' Returns a string with the intermediate fields of the LaTeX string.
-
-        :param factor: factor for units (default 1e-3 -> kN)'''
-        retval= super(CFNMyMz,self).getLaTeXFields(factor)+" & "+fmt.Esf.format(self.Mz*factor)
-        return retval
-
     def getAnsysStrings(self,eTag,axis, factor= 1e-3):
         ''' Returns a string to represent fields in ANSYS (R).
 
@@ -480,11 +483,16 @@ class CFNMyMz(CFNMy):
         retval.append("detab,"+str(eTag)+",Mz" +axis+","+str(self.Mz*factor)+"\n")
         return retval
 
-    def getStrArguments(self):
-        '''Returns a string for a 'copy' (kind of) constructor.'''
-        retval= super(CFNMyMz,self).getStrArguments()
-        retval+= ',Mz= ' + str(self.Mz)
+    def getDict(self):
+        ''' Return a dictionary containing the object data.'''
+        retval= super(CFNMyMz,self).getDict()
+        retval.update({'Mz':self.Mz})
         return retval
+       
+    def setFromDict(self,dct):
+        ''' Set the data values from the dictionary argument.'''
+        super(CFNMyMz,self).setFromDict(dct)
+        self.Mz= dct['Mz']
 
 class AxialForceControlVars(CFN):
     '''Axial force. Internal forces [N] for a combination.
@@ -502,14 +510,6 @@ class AxialForceControlVars(CFN):
         super(AxialForceControlVars,self).__init__(combName, N)
         self.idSection= idSection # Section identifier.
 
-    def getLaTeXFields(self,factor= 1e-3):
-      ''' Returns a string with the intermediate fields of the LaTeX string.
-
-      :param factor: factor for units (default 1e-3 -> kN)'''
-      retval= self.idSection+" & "
-      retval+= super(AxialForceControlVars,self).getLaTeXFields(factor)
-      return retval
-
     def getAnsysStrings(self,eTag,axis, factor= 1e-3):
       ''' Returns a string to represent fields in ANSYS (R).
 
@@ -520,11 +520,16 @@ class AxialForceControlVars(CFN):
       retval+= super(AxialForceControlVars,self).getAnsysStrings(eTag,axis,factor)
       return retval
 
-    def getStrArguments(self):
-      '''Returns a string for a 'copy' (kind of) constructor.'''
-      retval= 'idSection= "' + self.idSection +'", ' 
-      retval+= super(AxialForceControlVars,self).getStrArguments()
-      return retval
+    def getDict(self):
+        ''' Return a dictionary containing the object data.'''
+        retval= super(AxialForceControlVars,self).getDict()
+        retval.update({'idSection':self.idSection})
+        return retval
+       
+    def setFromDict(self,dct):
+        ''' Set the data values from the dictionary argument.'''
+        super(AxialForceControlVars,self).setFromDict(dct)
+        self.idSection= dct['idSection']
 
         
 class BiaxialBendingControlVars(UniaxialBendingControlVars):
@@ -546,14 +551,6 @@ class BiaxialBendingControlVars(UniaxialBendingControlVars):
         super(BiaxialBendingControlVars,self).__init__(idSection,combName,CF,N,My)
         self.Mz= Mz #Bending moment about z axis.
 
-    def getLaTeXFields(self,factor= 1e-3):
-        ''' Returns a string with the intermediate fields of the LaTeX string.
-
-        :param factor: factor for units (default 1e-3 -> kN)'''
-    #    print('super(BiaxialBendingControlVars,self).getLaTeXFields(factor) =', super(BiaxialBendingControlVars,self).getLaTeXFields(factor))
-        retval= super(BiaxialBendingControlVars,self).getLaTeXFields(factor)+" & "+fmt.Esf.format(self.Mz*factor)
-        return retval
-
     def getAnsysStrings(self,eTag,axis, factor= 1e-3):
         ''' Returns a string to represent fields in ANSYS (R).
 
@@ -564,24 +561,73 @@ class BiaxialBendingControlVars(UniaxialBendingControlVars):
         retval.append("detab,"+str(eTag)+",Mz" +axis+","+str(self.Mz*factor)+"\n")
         return retval
 
-    def getStrArguments(self):
-        '''Returns a string for a 'copy' (kind of) constructor.'''
-        retval= super(BiaxialBendingControlVars,self).getStrArguments()
-        retval+= ',Mz= ' + str(self.Mz)
+    def getDict(self):
+        ''' Return a dictionary containing the object data.'''
+        retval= super(BiaxialBendingControlVars,self).getDict()
+        retval.update({'Mz':self.Mz})
         return retval
-
-class SSBiaxialBendingControlVars(BiaxialBendingControlVars):
+       
+    def setFromDict(self,dct):
+        ''' Set the data values from the dictionary argument.'''
+        super(BiaxialBendingControlVars,self).setFromDict(dct)
+        self.Mz= dct['Mz']
+    
+class BiaxialBendingStrengthControlVars(BiaxialBendingControlVars):
     '''Control variables for biaxial bending normal stresses LS 
     verification en steel-shape elements.
 
-    :ivar Ncrd:     design strength to axial compression
-    :ivar McRdy:    design moment strength about Y (weak) axis
-    :ivar McRdz:    design moment strength about Z (strong) axis
+    :ivar Ncrd:  design strength to axial compression
+    :ivar McRdy: design moment strength about Y (weak) axis
+    :ivar McRdz: design moment strength about Z (strong) axis
+    :ivar chiLT: reduction factor for lateral-torsional buckling (defaults to 1)
+    :ivar chiN:  reduction factor for compressive strength (defaults to 1)
+    '''
+    def __init__(self,idSection= 'nil',combName= 'nil',CF= -1.0,N= 0.0,My= 0.0,Mz= 0.0,Ncrd=0.0,McRdy=0.0,McRdz=0.0,chiLT=1.0, chiN= 1.0):
+        '''
+        Constructor.
+
+        :param idSection: section identifier
+        :param combName: name of the load combinations to deal with
+        :param CF:       capacity factor (efficiency) (defaults to -1)
+        :param N:        axial force (defaults to 0.0)
+        :param My:       bending moment about Y axis (defaults to 0.0)
+        :param Mz:       bending moment about Z axis (defaults to 0.0)
+        :param Ncrd:     design strength to axial compression
+        :param McRdy:    design moment strength about Y (weak) axis
+        :param McRdz:    design moment strength about Z (strong) axis
+        :param chiLT:    reduction factor for lateral-torsional buckling (defaults to 1)
+        :param chiN:     reduction factor for compressive strength (defaults to 1)
+        '''
+        super(BiaxialBendingStrengthControlVars,self).__init__(idSection,combName,CF,N,My,Mz)
+        self.Ncrd=Ncrd
+        self.McRdy=McRdy
+        self.McRdz=McRdz
+        self.chiLT=chiLT
+        self.chiN= chiN
+        
+    def getDict(self):
+        ''' Return a dictionary containing the object data.'''
+        retval= super(BiaxialBendingControlVars,self).getDict()
+        retval.update({'Ncrd':self.Ncrd, 'McRdy':self.McRdy, 'McRdz':self.McRdz, 'chiLT':self.chiLT, 'chiN':self.chiN})
+        return retval
+       
+    def setFromDict(self,dct):
+        ''' Set the data values from the dictionary argument.'''
+        super(BiaxialBendingControlVars,self).setFromDict(dct)
+        self.Ncrd= dct['Ncrd']
+        self.McRdy= dct['McRdy']
+        self.McRdz= dct['McRdz']
+        self.chiLT= dct['chiLT']
+        self.chiN= dct['chiN']
+        
+class SteelShapeBiaxialBendingControlVars(BiaxialBendingStrengthControlVars):
+    '''Control variables for biaxial bending normal stresses LS 
+    verification en steel-shape elements.
+
     :ivar MvRdz:    reduced design moment strength about Z (strong) axis for shear interaction
     :ivar MbRdz:    reduced design moment strength about Z (strong) axis for lateral-torsional bucking
-    :ivar chiLT:    reduction factor for lateral-torsional buckling (defaults to 1)
     '''
-    def __init__(self,idSection= 'nil',combName= 'nil',CF= -1.0,N= 0.0,My= 0.0,Mz= 0.0,Ncrd=0.0,McRdy=0.0,McRdz=0.0,MvRdz=0.0,MbRdz=0.0,chiLT=1.0):
+    def __init__(self,idSection= 'nil',combName= 'nil',CF= -1.0,N= 0.0,My= 0.0,Mz= 0.0,Ncrd=0.0,McRdy=0.0,McRdz=0.0,MvRdz=0.0,MbRdz=0.0, chiLT=1.0, chiN=1.0):
         '''
         Constructor.
 
@@ -597,32 +643,23 @@ class SSBiaxialBendingControlVars(BiaxialBendingControlVars):
         :param MvRdz:    reduced design moment strength about Z (strong) axis for shear interaction
         :param MbRdz:    reduced design moment strength about Z (strong) axis for lateral-torsional bucking
         :param chiLT:    reduction factor for lateral-torsional buckling (defaults to 1)
+        :param chiN:     reduction factor for compressive strength (defaults to 1)
         '''
-        super(SSBiaxialBendingControlVars,self).__init__(idSection,combName,CF,N,My,Mz)
-        self.Ncrd=Ncrd
-        self.McRdy=McRdy
-        self.McRdz=McRdz
+        super(SteelShapeBiaxialBendingControlVars,self).__init__(idSection= idSection,combName= combName,CF= CF,N= N, My= My, Mz= Mz, Ncrd= Ncrd, McRdy= McRdy, McRdz= McRdz, chiLT=chiLT, chiN= chiN)
         self.MvRdz=MvRdz
         self.MbRdz=MbRdz
-        self.chiLT=chiLT
         
-    def getLaTeXFields(self,factor= 1e-3):
-        ''' Returns a string with the intermediate fields of the LaTeX string.
-
-        :param factor: factor for units (default 1e-3 -> kN)'''
-        retval= super(SSBiaxialBendingControlVars,self).getLaTeXFields(factor)+" & "+fmt.Esf.format(self.Ncrd*factor)+" & "+fmt.Esf.format(self.McRdy*factor)+" & "+fmt.Esf.format(self.McRdz*factor)+" & "+fmt.Esf.format(self.MvRdz*factor)+" & "+fmt.Esf.format(self.MbRdz*factor)+" & "+fmt.Esf.format(self.chiLT)
+    def getDict(self):
+        ''' Return a dictionary containing the object data.'''
+        retval= super(SteelShapeBiaxialBendingControlVars,self).getDict()
+        retval.update({'MvRdz':self.MvRdz, 'MbRdz':self.MbRdz})
         return retval
-
-    def getStrArguments(self):
-        '''Returns a string for a 'copy' (kind of) constructor.'''
-        retval= super(SSBiaxialBendingControlVars,self).getStrArguments()
-        retval+= ',Ncrd= ' + str(self.Ncrd)
-        retval+= ',McRdy= ' + str(self.McRdy)
-        retval+= ',McRdz= ' + str(self.McRdz)
-        retval+= ',MvRdz= ' + str(self.MvRdz)
-        retval+= ',MbRdz= ' + str(self.MbRdz)
-        retval+= ',chiLT= ' + str(self.chiLT)
-        return retval
+       
+    def setFromDict(self,dct):
+        ''' Set the data values from the dictionary argument.'''
+        super(SteelShapeBiaxialBendingControlVars,self).setFromDict(dct)
+        self.MvRdz= dct['MvRdz']
+        self.MbRdz= dct['MbRdz']
 
 class RCShearControlVars(BiaxialBendingControlVars):
     '''Control variables for shear limit state verification in reinforced concrete elements.
@@ -663,13 +700,6 @@ class RCShearControlVars(BiaxialBendingControlVars):
         self.Vsu= Vsu #Vsu component of the shear strength (defined in the codes).
         self.Vu= Vu # Shear strength.
 
-    def getLaTeXFields(self,factor= 1e-3):
-        ''' Returns a string with the intermediate fields of the LaTeX string.
-
-        :param factor: factor for units (default 1e-3 -> kN)'''
-        retval= super(BiaxialBendingControlVars,self).getLaTeXFields(factor)+' & '+fmt.Esf.format(self.Mu*factor)+' & '+fmt.Esf.format(self.Vy*factor)+' & '+fmt.Esf.format(self.Vz*factor)+' & '+fmt.Esf.format(self.Vu*factor)
-        return retval
-
     def getAnsysStrings(self,eTag,axis, factor= 1e-3):
         ''' Returns a string to represent fields in ANSYS (R).
 
@@ -685,17 +715,22 @@ class RCShearControlVars(BiaxialBendingControlVars):
         retval.append("detab,"+str(eTag)+",Vu" +axis+","+str(self.Vu*factor)+"\n")
         return retval
 
-    def getStrArguments(self):
-        '''Returns a string for a 'copy' (kind of) constructor.'''
-        retval= super(RCShearControlVars,self).getStrArguments()
-        retval+= ',Mu= ' + str(self.Mu)
-        retval+= ',Vy= ' + str(self.Vy)
-        retval+= ',Vz= ' + str(self.Vz)
-        retval+= ',theta= ' + str(self.theta)
-        retval+= ',Vcu= ' + str(self.Vcu)
-        retval+= ',Vsu= ' + str(self.Vsu)
-        retval+= ',Vu= ' + str(self.Vu)
+    def getDict(self):
+        ''' Return a dictionary containing the object data.'''
+        retval= super(RCShearControlVars,self).getDict()
+        retval.update({'Mu':self.Mu, 'Vy':self.Vy, 'Vz':self.Vz, 'theta':self.theta, 'Vcu':self.Vcu, 'Vsu':self.Vsu, 'Vu':self.Vu})
         return retval
+       
+    def setFromDict(self,dct):
+        ''' Set the data values from the dictionary argument.'''
+        super(RCShearControlVars,self).setFromDict(dct)
+        self.Mu= dct['Mu']
+        self.Vy= dct['Vy']
+        self.Vz= dct['Vz']
+        self.theta= dct['theta']
+        self.Vcu= dct['Vcu']
+        self.Vsu= dct['Vsu']
+        self.Vu= dct['Vu']
 
 class CrackControlBaseVars(CFNMyMz):
     '''Biaxial bending. Cracking serviceability limit state variables.
@@ -717,13 +752,6 @@ class CrackControlBaseVars(CFNMyMz):
         super(CrackControlBaseVars,self).__init__(combName,CF,N,My,Mz)
         self.steelStress= steelStress #Stress in rebars.
 
-    def getLaTeXFields(self,factor= 1e-3):
-        ''' Returns a string with the intermediate fields of the LaTeX string.
-
-        :param factor: factor for units (default 1e-3 -> kN)'''
-        retval= super(CrackControlBaseVars,self).getLaTeXFields(factor)+" & "+fmt.Stress.format(self.steelStress*factor*factor) #Factor for stresses ??
-        return retval
-
     def getAnsysStrings(self,eTag,axis, factor= 1e-3):
         ''' Returns a string to represent fields in ANSYS (R).
 
@@ -734,11 +762,16 @@ class CrackControlBaseVars(CFNMyMz):
         retval.append("detab,"+str(eTag)+",steelStress" +axis+","+str(self.steelStress*factor)+"\n")
         return retval
 
-    def getStrArguments(self):
-        '''Returns a string for a 'copy' (kind of) constructor.'''
-        retval= super(CrackControlBaseVars,self).getStrArguments()
-        retval+= ',steelStress= ' + str(self.steelStress)
+    def getDict(self):
+        ''' Return a dictionary containing the object data.'''
+        retval= super(CrackControlBaseVars,self).getDict()
+        retval.update({'steelStress':self.steelStress})
         return retval
+       
+    def setFromDict(self,dct):
+        ''' Set the data values from the dictionary argument.'''
+        super(CrackControlBaseVars,self).setFromDict(dct)
+        self.steelStress= dct['steelStress']
 
 
 class CrackControlVars(ControlVarsBase):
@@ -778,20 +811,27 @@ class CrackControlVars(ControlVarsBase):
         '''Maximum internal axial force.'''
         return max(self.crackControlVarsPos.N,self.crackControlVarsNeg.N)
 
-    def getLaTeXFields(self,factor= 1e-3):
-        ''' Returns a string with the intermediate fields of the LaTeX string.
-            factor: factor for units (default 1e-3 -> kN)'''
-        retval= self.idSection+" & "
-        retval+= self.crackControlVarsPos.getLaTeXFields()+" & "
-        retval+= self.crackControlVarsNeg.getLaTeXFields()
-        return retval
-
     def getStrArguments(self):
         '''Returns a string for a 'copy' (kind of) constructor.'''
         retval= 'idSection= "' + self.idSection + '"' 
         retval+= ', crackControlBaseVarsPos= ' + self.crackControlVarsPos.getStrConstructor()
         retval+= ', crackControlBaseVarsNeg= ' + self.crackControlVarsNeg.getStrConstructor()
         return retval
+    
+    def getDict(self):
+        ''' Return a dictionary containing the object data.'''
+        retval= dict()
+        retval.update({'idSection':self.idSection})
+        retval.update({'crackControlBaseVarsPos':self.crackControlVarsPos.getStrConstructor()})
+        retval.update({'crackControlBaseVarsNeg':self.crackControlVarsNeg.getStrConstructor()})
+        return retval
+       
+    def setFromDict(self,dct):
+        ''' Set the data values from the dictionary argument.'''
+        self.idSection= dct['idSection']
+        self.crackControlVarsPos= eval(dct['crackControlBaseVarsPos'])
+        self.crackControlVarsNeg= eval(dct['crackControlBaseVarsNeg'])
+        
 
 class RCCrackStraightControlVars(NMyMz):
     '''Control variables for cracking serviacebility limit state verification
@@ -822,20 +862,19 @@ class RCCrackStraightControlVars(NMyMz):
         self.eps_sm= eps_sm
         self.wk=wk
 
-    def getLaTeXFields(self,factor= 1e-3):
-        ''' Returns a string with the intermediate fields of the LaTeX string.
-
-        :param factor: factor for units (default 1e-3 -> kN)'''
-        retval= super(NMyMz,self).getLaTeXFields(factor)+' & '+fmt.Esf.format(self.s_rmax)+' & '+fmt.Esf.format(self.eps_sm)+' & '+fmt.Esf.format(self.wk)
+    def getDict(self):
+        ''' Return a dictionary containing the object data.'''
+        retval= super(RCCrackStraightControlVars,self).getDict()
+        retval.update({'s_rmax':self.s_rmax,'eps_sm':self.eps_sm,'wk': self.wk})
         return retval
-
-    def getStrArguments(self):
-        '''Returns a string for a 'copy' (kind of) constructor.'''
-        retval= super(RCCrackStraightControlVars,self).getStrArguments()
-        retval+= ',s_rmax= ' + str(self.s_rmax)
-        retval+= ',eps_sm= ' + str(self.eps_sm)
-        retval+= ',wk= ' + str(self.wk)
-        return retval
+       
+    def setFromDict(self,dct):
+        ''' Set the data values from the dictionary argument.'''
+        super(RCCrackStraightControlVars,self).setFromDict(dct)
+        self.s_rmax= dct['s_rmax']
+        self.eps_sm= dct['eps_sm']
+        self.wk= dct['wk']
+        
   
 class FatigueControlBaseVars(NMyMz):
     '''Biaxial bending. Fatigue limit state variables.
@@ -867,13 +906,6 @@ class FatigueControlBaseVars(NMyMz):
         self.negSteelStress= negSteelStress #compression stress in rebars.
         self.concreteStress= concreteStress #compression stress in concrete.
 
-    def getLaTeXFields(self,factor= 1e-3):
-        ''' Returns a string with the intermediate fields of the LaTeX string.
-
-        :param factor: factor for units (default 1e-3 -> kN)'''
-        retval= super(FatigueControlBaseVars,self).getLaTeXFields(factor)+" & "+fmt.Esf.format(self.Vy*factor)+" & "+fmt.Stress.format(self.posSteelStress*factor*factor)+" & "+fmt.Stress.format(self.negSteelStress*factor*factor)+" & "+fmt.Stress.format(self.concreteStress*factor*factor) #Factor for stresses == factor*factor ??
-        return retval
-
     def getAnsysStrings(self,eTag,axis, factor= 1e-3):
         ''' Returns a string to represent fields in ANSYS (R).
 
@@ -887,14 +919,19 @@ class FatigueControlBaseVars(NMyMz):
         retval.append("detab,"+str(eTag)+",concreteStress" +axis+","+str(self.concreteStress*factor*factor)+"\n")
         return retval
 
-    def getStrArguments(self):
-        '''Returns a string for a 'copy' (kind of) constructor.'''
-        retval= super(FatigueControlBaseVars,self).getStrArguments()
-        retval+= ',Vy= ' + str(self.Vy)
-        retval+= ',negSteelStress= ' + str(self.negSteelStress)
-        retval+= ',posSteelStress= ' + str(self.posSteelStress)
-        retval+= ',concreteStress= ' + str(self.concreteStress)
+    def getDict(self):
+        ''' Return a dictionary containing the object data.'''
+        retval= super(FatigueControlBaseVars,self).getDict()
+        retval.update({'Vy':self.Vy, 'negSteelStress':self.negSteelStress, 'posSteelStress':self.posSteelStress, 'concreteStress': self.concreteStress})
         return retval
+       
+    def setFromDict(self,dct):
+        ''' Set the data values from the dictionary argument.'''
+        super(FatigueControlBaseVars,self).setFromDict(dct)
+        self.Vy= dct['Vy']
+        self.negSteelStress= dct['negSteelStress']
+        self.posSteelStress= dct['posSteelStress']
+        self.concreteStress= dct['concreteStress']
 
 class FatigueControlVars(ControlVarsBase):
     '''Fatigue limit state control variables.
@@ -970,33 +1007,26 @@ class FatigueControlVars(ControlVarsBase):
         sgc1= abs(min(self.state1.concreteStress,0.0))
         return max(sgc0,sgc1)
 
-    def getLaTeXFields(self,factor= 1e-3):
-        ''' Returns a string with the intermediate fields of the LaTeX string.
-
-        :param factor: factor for units (default 1e-3 -> kN)'''
-        retval= self.idSection+" & "
-        retval+= self.state0.getLaTeXFields()+" & "
-        retval+= self.state1.getLaTeXFields()+" & "
-        retval+= fmt.Stress.format(self.concreteLimitStress*factor*factor)+" & "
-        retval+= fmt.Esf.format(self.concreteBendingCF)+" & "
-        retval+= fmt.Esf.format(self.shearLimit*factor)+" & "
-        retval+= fmt.Esf.format(self.concreteShearCF)+" & "
-        retval+= fmt.Esf.format(self.Mu*factor)+" & "
-        retval+= fmt.Esf.format(self.Vu*factor)
+    def getDict(self):
+        ''' Return a dictionary containing the object data.'''
+        retval= dict()
+        retval.update({'idSection':self.idSection})
+        retval.update({'controlBaseVars0':self.state0.getStrConstructor()})
+        retval.update({'controlBaseVars1':self.state1.getStrConstructor()})
+        retval.update({'concreteLimitStress':self.concreteLimitStress, 'concreteBendingCF':self.concreteBendingCF, 'shearLimit':self.shearLimit, 'concreteShearCF':self.concreteShearCF, 'Mu':self.Mu, 'Vu':self.Vu})
         return retval
-
-    def getStrArguments(self):
-        '''Returns a string for a 'copy' (kind of) constructor.'''
-        retval= 'idSection= "' + self.idSection + '"' 
-        retval+= ', controlBaseVars0= ' + self.state0.getStrConstructor()
-        retval+= ', controlBaseVars1= ' + self.state1.getStrConstructor()
-        retval+= ', concreteLimitStress= ' + str(self.concreteLimitStress)
-        retval+= ', concreteBendingCF= ' + str(self.concreteBendingCF)
-        retval+= ', shearLimit= ' + str(self.shearLimit)
-        retval+= ', concreteShearCF= ' + str(self.concreteShearCF)
-        retval+= ', Mu= ' + str(self.Mu)
-        retval+= ', Vu= ' + str(self.Vu)
-        return retval
+       
+    def setFromDict(self,dct):
+        ''' Set the data values from the dictionary argument.'''
+        self.idSection= dct['idSection']
+        self.controlBaseVars0= eval(dct['controlBaseVars0'])
+        self.controlBaseVars1= eval(dct['controlBaseVars1'])
+        self.concreteLimitStress= dct['concreteLimitStress']
+        self.concreteBendingCF= dct['concreteBendingCF']
+        self.shearLimit= dct['shearLimit']
+        self.concreteShearCF= dct['concreteShearCF']
+        self.Mu= dct['Mu']
+        self.Vu= dct['Vu']
   
 class VonMisesControlVars(ControlVarsBase):
     '''Von Mises stresses control vars.
@@ -1015,19 +1045,16 @@ class VonMisesControlVars(ControlVarsBase):
         self.vm_stress= vm_stress #Shear along y axis.
         self.CF= CF # Capacity factor or efficiency
 
-    def getLaTeXFields(self,factor= 1e-3):
-        ''' Returns a string with the intermediate fields of the LaTeX string.
-
-        :param factor: factor for units (default 1e-3 -> kN)'''
-        retval= super(VonMisesControlVars,self).getLaTeXFields(factor)
-        retval+= " & "+ fmt.Esf.format(self.vm_stress*factor)
+    def getDict(self):
+        ''' Return a dictionary containing the object data.'''
+        retval= super(VonMisesControlVars,self).getDict()
+        retval.update({'vm_stress':self.vm_stress})
         return retval
-
-    def getStrArguments(self):
-        '''Returns a string for a 'copy' (kind of) constructor.'''
-        retval= super(VonMisesControlVars,self).getStrArguments()
-        retval+= ', vm_stress= ' + str(self.vm_stress)
-        return retval
+       
+    def setFromDict(self,dct):
+        ''' Set the data values from the dictionary argument.'''
+        super(VonMisesControlVars,self).setFromDict(dct)
+        self.vm_stress= dct['vm_stress']
 
     def getCF(self):
         ''' Return the capacity factor.'''

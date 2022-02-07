@@ -383,6 +383,12 @@ class WoodSection(sp.RectangularSection):
             retval*= self.getElasticSectionModulusZ()
         else:
             retval*= self.getElasticSectionModulusY()
+        return retval
+
+    def getShearStrength(self, majorAxis= True):
+        ''' Return the value of the flexural strength of the section.
+        '''
+        return self.getFvAdj()*self.A()/1.5
 
     def getBiaxialBendingEfficiency(self,Nd,Myd,Mzd,Vyd= 0.0, chiN=1.0, chiLT=1.0):
         '''Return biaxial bending efficiency according to section H1
@@ -395,7 +401,7 @@ class WoodSection(sp.RectangularSection):
         :param chiLT: lateral buckling reduction factor (default= 1.0).
         '''
         ratioN= 0.0
-        if(Nd<0): # compression
+        if(Nd<=0): # compression
             NcRd= chiN*self.getCompressiveStrength() # available axial strength.
             ratioN=  abs(Nd)/NcRd
         else:
@@ -414,9 +420,23 @@ class WoodSection(sp.RectangularSection):
             className= type(self).__name__
             methodName= sys._getframe(0).f_code.co_name
             lmsg.warning(className+'.'+methodName+'; biaxial bending not implemented yet.')
-        CF= max(rationN, ratioMy, ratioMz)
+        CF= max(ratioN, ratioMy, ratioMz)
 
-        return (CF,NcRd,McRdy,McRdz,MvRdz,MbRdz)
+        return (CF,NcRd,McRdy,McRdz,MbRdz)
+    
+    def getYShearEfficiency(self, Vy):
+        '''Return major axis shear efficiency according to AISC-360-16.
+
+        :param Vy: required shear strength (major axis)
+        '''
+        return abs(Vy)/self.getShearStrength(majorAxis= True)
+    
+    def getZShearEfficiency(self, Vz):
+        '''Return major axis shear efficiency according to AISC-360-16.
+
+        :param Vz: required shear strength (minor axis)
+        '''
+        return Vz/self.getShearStrength(majorAxis= False)
 
     def checkBiaxialBendingForElement(self, elem, nmbComb):
         '''Called in every commit to check biaxial bending criterion 
@@ -440,6 +460,44 @@ class WoodSection(sp.RectangularSection):
             elem.setProp("HIPCPTN2",nmbComb)
         elem.setProp("FCTNCP",fctn)
         vc.updateEnvelopeInternalForcesBeamElem(elem)
+        
+    def checkYShearForElement(self,elem,nmbComb):
+        '''Called in every commit to y shear criterion.
+
+        :param elem: finite element to check.
+        :param nmbComb: name of the load combination.
+        '''
+        elem.getResistingForce()
+        [[Vy1], [Vy2]]= model_inquiry.getValuesAtNodes(elem,['Vy'], False)
+        FCV1= self.getYShearEfficiency(Vy1)
+        FCV2= self.getYShearEfficiency(Vy2)
+        fcv= elem.getProp("FCVCP")
+        if(FCV1 > fcv[0]):
+            fcv[0]= FCV1
+            elem.setProp("HIPCPV1",nmbComb)
+        if(FCV2 > fcv[1]):
+            fcv[1]= FCV2
+            elem.setProp("HIPCPV2",nmbComb)
+        elem.setProp("FCVCP",fcv)
+        
+    def checkZShearForElement(self,elem,nmbComb):
+        '''Called in every commit to y shear criterion.
+
+        :param elem: finite element to check.
+        :param nmbComb: name of the load combination.
+        '''
+        elem.getResistingForce()
+        [[Vz1], [Vz2]]= model_inquiry.getValuesAtNodes(elem,['Vz'], False)
+        FCV1= self.getZShearEfficiency(Vz1)
+        FCV2= self.getZShearEfficiency(Vz2)
+        fcv= elem.getProp("FCVCP")
+        if(FCV1 > fcv[0]):
+            fcv[0]= FCV1
+            elem.setProp("HIPCPV1",nmbComb)
+        if(FCV2 > fcv[1]):
+            fcv[1]= FCV2
+            elem.setProp("HIPCPV2",nmbComb)
+        elem.setProp("FCVCP",fcv)
         
 class WoodPanelSection(WoodSection):
     ''' Wood structural panel.'''
@@ -782,13 +840,24 @@ class HeaderSection(WoodSection):
         return self.rho*self.b*self.h
     
     def getFb(self):
+        ''' Return the allovable bending stress.'''
         return self.getVolumeFactor()*self.wood.Fb_12
 
     def getFbAdj(self):
+        ''' Return the adjusted value of the allovable bending stress.'''
         return self.getFb()
     
     def getFcAdj(self):
+        ''' Return the adjusted value of the allovable compressive stress.'''
         return self.wood.Fc_pll
+
+    def getFv(self):
+        ''' Return the allovable shear stress.'''
+        return self.wood.Fv
+    
+    def getFvAdj(self):
+        ''' Return the adjusted value of the allovable shear stress.'''
+        return self.getFv()
     
     def defXCMaterial(self, overrideRho= None):
         '''Defines the material in XC.
@@ -1003,6 +1072,7 @@ class CustomLumberSection(WoodSection):
     def getFvAdj(self):
         ''' Return the adjusted value of Fv.'''
         return self.wood.getFvAdj()
+    
     def getFc_perpAdj(self, Cb= 1.0):
         ''' Return the adjusted value of Fc_perp.
 

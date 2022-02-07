@@ -82,7 +82,6 @@ class Member(wood_member_base.Member):
 def controlULSCriterion():
     return '''recorder= self.getProp('ULSControlRecorder')
 nmbComb= recorder.getCurrentCombinationName
-self.getResistingForce()
 crossSection= self.getProp('crossSection')
 crossSection.checkBiaxialBendingForElement(self,nmbComb)
 crossSection.checkYShearForElement(self,nmbComb)
@@ -91,7 +90,6 @@ crossSection.checkZShearForElement(self,nmbComb)'''
 def controlULSCriterion2D():
     return '''recorder= self.getProp('ULSControlRecorder')
 nmbComb= recorder.getCurrentCombinationName
-self.getResistingForce()
 crossSection= self.getProp('crossSection')
 crossSection.checkUniaxialBendingForElement(self,nmbComb)
 crossSection.checkYShearForElement(self,nmbComb)'''
@@ -351,3 +349,31 @@ class ColumnMember(MemberBase):
         val393+= fb2/(Fb2_adj*(1-min(fc/FcE2,almostOne)-min(fb1/FbE,almostOne)**2))
         val394= fc/FcE2+(fb1/FbE)**2 #Equation 3-9-4
         return max(val393,val394)
+
+
+class AWCNDSBiaxialBendingControlVars(cv.BiaxialBendingStrengthControlVars):
+    '''Control variables for biaxial bending normal stresses LS 
+    verification in steel-shape elements according to AISC.
+
+    :ivar chiN:    reduction factor for compressive strength (defaults to 1)
+    '''
+    def __init__(self,idSection= 'nil',combName= 'nil',CF= -1.0,N= 0.0,My= 0.0,Mz= 0.0,Ncrd=0.0,McRdy=0.0,McRdz=0.0,MvRdz=0.0,MbRdz=0.0, chiLT=1.0, chiN= 1.0):
+        '''
+        Constructor.
+
+        :param idSection: section identifier
+        :param combName: name of the load combinations to deal with
+        :param CF:       capacity factor (efficiency) (defaults to -1)
+        :param N:        axial force (defaults to 0.0)
+        :param My:       bending moment about Y axis (defaults to 0.0)
+        :param Mz:       bending moment about Z axis (defaults to 0.0)
+        :param Ncrd:     design strength to axial compression
+        :param McRdy:    design moment strength about Y (weak) axis
+        :param McRdz:    design moment strength about Z (strong) axis
+        :param MvRdz:    reduced design moment strength about Z (strong) axis for shear interaction
+        :param MbRdz:    reduced design moment strength about Z (strong) axis for lateral-torsional bucking
+        :param chiLT:    reduction factor for lateral-torsional buckling (defaults to 1)
+        :param chiN:     reduction factor for compressive strength (defaults to 1)
+        '''
+        super(AWCNDSBiaxialBendingControlVars,self).__init__(idSection,combName,CF,N,My,Mz,Ncrd=Ncrd,McRdy=McRdy,McRdz=McRdz,MvRdz=MvRdz,MbRdz=MbRdz, chiLT=chiLT, chiN= chiN)
+
