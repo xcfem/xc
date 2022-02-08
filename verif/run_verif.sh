@@ -115,11 +115,13 @@ python tests/utility/geom/sliding_vectors_system_2d_test_02.py
 python tests/utility/geom/sliding_vectors_system_2d_test_03.py
 python tests/utility/geom/sliding_vectors_system_2d_test_04.py
 python tests/utility/geom/sliding_vectors_system_2d_test_05.py
+python tests/utility/geom/sliding_vectors_system_2d_test_06.py
 python tests/utility/geom/sliding_vectors_system_3d_test_01.py
 python tests/utility/geom/sliding_vectors_system_3d_test_02.py
 python tests/utility/geom/sliding_vectors_system_3d_test_03.py
 python tests/utility/geom/sliding_vectors_system_3d_test_04.py
 python tests/utility/geom/sliding_vectors_system_3d_test_05.py
+python tests/utility/geom/sliding_vectors_system_3d_test_06.py
 echo "$BLEU" "    Planes." "$NORMAL"
 python tests/utility/geom/plane_test_01.py
 python tests/utility/geom/plane_test_02.py

@@ -222,6 +222,7 @@ Vector2d (SlidingVectorsSystem2d::*getResultant2D)(void) const= &SlidingVectorsS
 class_<SlidingVectorsSystem2d, bases<SlidingVector2d> >("SlidingVectorsSystem2d")
   .def(init<Pos2d,Vector2d,GEOM_FT>())
   .def(init<SlidingVector2d>())
+  .def(init<SlidingVectorsSystem2d>()) // IMPORTANT: last constructor higher priority.
   .def("getResultant",getResultant2D,"Return the resultant of the SVS.")
   .def("getMoment",getMoment2D)
   .def("getMomentPos2d",getMomentPos2d)
@@ -273,8 +274,9 @@ const Vector3d &(SlidingVectorsSystem3d::*getMoment3D)(void) const= &SlidingVect
 Vector3d (SlidingVectorsSystem3d::*getResultant3D)(void) const= &SlidingVectorsSystem3d::getResultant;
 
 class_<SlidingVectorsSystem3d, bases<SlidingVector3d> >("SlidingVectorsSystem3d")
-  .def(init<Pos3d,Vector3d,Vector3d>())
   .def(init<SlidingVector3d>())
+  .def(init<Pos3d,Vector3d,Vector3d>())
+  .def(init<SlidingVectorsSystem3d>()) // IMPORTANT: last constructor higher priority.
   .def("getResultant",getResultant3D," return the resultant of the SVS.")
   .def("getMoment",make_function(getMoment3D,return_internal_reference<>()), "return the SVS moment.")
   .def("zeroMomentLine",&SlidingVectorsSystem3d::getZeroMomentLine,"Return zero moment line (if it exists).")

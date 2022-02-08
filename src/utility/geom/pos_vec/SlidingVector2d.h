@@ -34,7 +34,7 @@
 //! @brief sliding vector en dos dimensiones.
 class SlidingVector2d : public Vector2d
   {
-    Pos2d org; //Point that fixes the line of action.
+    Pos2d org; //!< Point that fixes the line of action.
   public:
     SlidingVector2d(const Pos2d &o= Pos2d(),const Vector2d &v= Vector2d())
       : Vector2d(v), org(o) {}
