@@ -107,6 +107,7 @@ echo "$BLEU" "    Circles." "$NORMAL"
 python tests/utility/geom/circle2d_test_01.py
 python tests/utility/geom/circle2d_test_02.py
 echo "$BLEU" "    Sliding vectors." "$NORMAL"
+python tests/utility/geom/sliding_vectors_systems/sliding_vector_2d_test_01.py
 python tests/utility/geom/sliding_vectors_systems/sliding_vector_3d_test_01.py
 python tests/utility/geom/sliding_vectors_systems/sliding_vector_3d_test_02.py
 python tests/utility/geom/sliding_vectors_systems/sliding_vector_3d_test_03.py
@@ -116,6 +117,7 @@ python tests/utility/geom/sliding_vectors_systems/sliding_vectors_system_2d_test
 python tests/utility/geom/sliding_vectors_systems/sliding_vectors_system_2d_test_04.py
 python tests/utility/geom/sliding_vectors_systems/sliding_vectors_system_2d_test_05.py
 python tests/utility/geom/sliding_vectors_systems/sliding_vectors_system_2d_test_06.py
+python tests/utility/geom/sliding_vectors_systems/sliding_vectors_system_2d_test_07.py
 python tests/utility/geom/sliding_vectors_systems/sliding_vectors_system_3d_test_01.py
 python tests/utility/geom/sliding_vectors_systems/sliding_vectors_system_3d_test_02.py
 python tests/utility/geom/sliding_vectors_systems/sliding_vectors_system_3d_test_03.py

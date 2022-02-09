@@ -28,10 +28,12 @@ result= R.getResultant()
 mom= R.getMoment()
 ratio= result.getModulus()+ math.sqrt(mom**2)
 
-# print('R= ', R)
-# print('result= ', result)
-# print('mom= ', mom)
-# print('ratio= ', ratio)
+'''
+print('R= ', R)
+print('result= ', result)
+print('mom= ', mom)
+print('ratio= ', ratio)
+'''
 
 import os
 from misc_utils import log_messages as lmsg

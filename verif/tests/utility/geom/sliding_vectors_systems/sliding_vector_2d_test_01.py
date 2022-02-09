@@ -11,14 +11,19 @@ __email__= "l.pereztato@ciccp.es ana.ortega@ciccp.es"
 import xc_base
 import geom
 
-pto=geom.Pos3d(0,0,0)
-vectorDir=geom.Vector3d(1,2,3)
-vec1=geom.SlidingVector3d(pto,vectorDir)
+pA= geom.Pos2d(0.0,0.0)
+pB= geom.Pos2d(1.0,0.0); vB= geom.Vector2d(-1e3, 1e3)
+
+vec=geom.SlidingVector2d(pB,vB)
+Mvec= vec.getMoment(pA)
+ratio1= abs(Mvec-1000)/1000
+
+# print('Mvec= ', Mvec)
 
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
-if vec1.x==1 and vec1.y==2 and vec1.z==3:
+if (ratio1<1e-15):
     print('test: '+fname+': ok.')
 else:
     lmsg.error('test: '+fname+' ERROR.')
