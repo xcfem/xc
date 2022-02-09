@@ -195,7 +195,7 @@ class_<v_pos3d>("v_pos3d")
   .def(vector_indexing_suite<v_pos3d>() )
  ;
 
-// SlidingVector2d (SlidingVector2d::*getMomentPos2d)(const Pos2d &o) const= &SlidingVector2d::getMoment;
+GEOM_FT (SlidingVector2d::*getMomentPos2d)(const Pos2d &o) const= &SlidingVector2d::getMoment;
 // GEOM_FT (SlidingVector2d::*getMomentLine2d)(const Line2d &e) const= &SlidingVector2d::getMoment;
 
 class_<SlidingVector2d, bases<Vector2d> >("SlidingVector2d")
@@ -204,8 +204,7 @@ class_<SlidingVector2d, bases<Vector2d> >("SlidingVector2d")
   .def(init<SlidingVector2d>())
   .def("getOrg", make_function(&SlidingVector2d::getOrg,return_internal_reference<>()), "return the vector application point.")
   .def("getVector2d",&SlidingVector2d::getVector2d,"Return the 2D vector part of the object.")
-  // .def("getMomentPos2d",getMomentPos2d)
-  // .def("getMomentLine2d",getMomentLine2d)
+  .def("getMoment",getMomentPos2d, "Return the moment of the vector with respect to the point argument.")
   .def(self + self)          // __add__
   .def(self - self)           // __sub__
   .def(self * double())
@@ -216,7 +215,7 @@ class_<SlidingVector2d, bases<Vector2d> >("SlidingVector2d")
 
 
 GEOM_FT (SlidingVectorsSystem2d::*getMoment2D)(void) const= &SlidingVectorsSystem2d::getMoment;
-GEOM_FT (SlidingVectorsSystem2d::*getMomentPos2d)(const Pos2d &) const= &SlidingVectorsSystem2d::getMoment;
+GEOM_FT (SlidingVectorsSystem2d::*getMomentPos2D)(const Pos2d &) const= &SlidingVectorsSystem2d::getMoment;
 Vector2d (SlidingVectorsSystem2d::*getResultant2D)(void) const= &SlidingVectorsSystem2d::getResultant;
 
 class_<SlidingVectorsSystem2d, bases<SlidingVector2d> >("SlidingVectorsSystem2d")
@@ -224,14 +223,12 @@ class_<SlidingVectorsSystem2d, bases<SlidingVector2d> >("SlidingVectorsSystem2d"
   .def(init<SlidingVector2d>())
   .def(init<SlidingVectorsSystem2d>()) // IMPORTANT: last constructor higher priority.
   .def("getResultant",getResultant2D,"Return the resultant of the SVS.")
-  .def("getMoment",getMoment2D)
-  .def("getMoment",getMomentPos2d)
+  .def("getMoment",getMoment2D, "Return the moment of the SVS.")
+  .def("getMoment",getMomentPos2D, "Return the moment of the SVS with respect to the point argument.")
   .def("reduceTo",&SlidingVectorsSystem2d::reduceTo,"Sets the reference point to express the moments with respect to.")
   .def("zeroMomentLine",&SlidingVectorsSystem2d::getZeroMomentLine,"Return zero moment line (if it exists).")
   .def("distribute",&SlidingVectorsSystem2d::distributePy, "distribute(pointList, weights): create an equivalent vector system on the argument points.") 
   .def("distribute",&SlidingVectorsSystem2d::distributePyNoWeights, "distribute(pointList): create an equivalent vector system on the argument points.") 
-  // //.def("getMomentPos2d",getMomentPos2d)
-  // //.def("getMomentLine2d",getMomentLine2d)
   .def(SlidingVector2d()+self) //Sobrecarga de operadores
   .def(self+SlidingVector2d())
   .def(SlidingVector2d()-self)
