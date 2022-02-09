@@ -225,7 +225,7 @@ class_<SlidingVectorsSystem2d, bases<SlidingVector2d> >("SlidingVectorsSystem2d"
   .def(init<SlidingVectorsSystem2d>()) // IMPORTANT: last constructor higher priority.
   .def("getResultant",getResultant2D,"Return the resultant of the SVS.")
   .def("getMoment",getMoment2D)
-  .def("getMomentPos2d",getMomentPos2d)
+  .def("getMoment",getMomentPos2d)
   .def("reduceTo",&SlidingVectorsSystem2d::reduceTo,"Sets the reference point to express the moments with respect to.")
   .def("zeroMomentLine",&SlidingVectorsSystem2d::getZeroMomentLine,"Return zero moment line (if it exists).")
   .def("distribute",&SlidingVectorsSystem2d::distributePy, "distribute(pointList, weights): create an equivalent vector system on the argument points.") 
@@ -259,8 +259,8 @@ class_<SlidingVector3d, bases<Vector3d> >("SlidingVector3d")
   .def(init<SlidingVector3d>())
   .def("getOrg", make_function(&SlidingVector3d::getOrg,return_internal_reference<>()), " return the vector application point.")
   .def("getVector3d",&SlidingVector3d::getVector3d,"Return the 3D vector part of the object.")
-  .def("getMomentPos3d",getMomentPos3d)
-  .def("getMomentLine3d",getMomentLine3d)
+  .def("getMoment",getMomentPos3d)
+  .def("getMoment",getMomentLine3d)
   .def(self + self)          // __add__
   .def(self - self)           // __sub__
   .def(self * double())
@@ -271,6 +271,8 @@ class_<SlidingVector3d, bases<Vector3d> >("SlidingVector3d")
 
 
 const Vector3d &(SlidingVectorsSystem3d::*getMoment3D)(void) const= &SlidingVectorsSystem3d::getMoment;
+SlidingVector3d (SlidingVectorsSystem3d::*getMomentPos3D)(const Pos3d &) const= &SlidingVectorsSystem3d::getMoment;
+GEOM_FT (SlidingVectorsSystem3d::*getMomentLine3D)(const Line3d &e) const= &SlidingVectorsSystem3d::getMoment;
 Vector3d (SlidingVectorsSystem3d::*getResultant3D)(void) const= &SlidingVectorsSystem3d::getResultant;
 
 class_<SlidingVectorsSystem3d, bases<SlidingVector3d> >("SlidingVectorsSystem3d")
@@ -279,6 +281,8 @@ class_<SlidingVectorsSystem3d, bases<SlidingVector3d> >("SlidingVectorsSystem3d"
   .def(init<SlidingVectorsSystem3d>()) // IMPORTANT: last constructor higher priority.
   .def("getResultant",getResultant3D," return the resultant of the SVS.")
   .def("getMoment",make_function(getMoment3D,return_internal_reference<>()), "return the SVS moment.")
+  .def("getMoment",getMomentPos3D, "return the SVS moment.")
+  .def("getMoment",getMomentLine3D, "return the SVS moment.")
   .def("zeroMomentLine",&SlidingVectorsSystem3d::getZeroMomentLine,"Return zero moment line (if it exists).")
   .def("reduceTo",&SlidingVectorsSystem3d::reduceTo,"Sets the reference point to express the moments with respect to.")
   .def("distribute",&SlidingVectorsSystem3d::distributePy, "distribute(pointList, weights): create an equivalent vector system on the argument points.") 
