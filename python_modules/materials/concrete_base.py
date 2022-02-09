@@ -920,7 +920,7 @@ class paramTensStiffness(object):
         rgLin=self.regresLine()
         r1=geom.Line2d(geom.Pos2d(rgLin['interceptX'],0.),geom.Pos2d(0,rgLin['interceptY']))
         r2=geom.Line2d(geom.Pos2d(0.,0.),geom.Pos2d(self.f_ct/self.E_ct,self.f_ct))
-        pInt=r1.getIntersectionWithLine(r2)[0]
+        pInt=r1.getIntersection(r2)[0]
         return {'eps_ct':pInt.x, 'ft':pInt.y}
 
     def slopeRegresLineFixedPoint(self):

@@ -17,7 +17,7 @@ r1=geom.Line2d(geom.Pos2d(1.,0.),geom.Pos2d(1.,1.))
 r2=geom.Line2d(geom.Pos2d(0.,1.),geom.Pos2d(1.,1.))
 
 #In lines doesn't intersect the list well be empty.
-p= r1.getIntersectionWithLine(r2)[0] 
+p= r1.getIntersection(r2)[0] 
 
 ratio1= math.fabs(p.x-1.0)
 ratio2= math.fabs(p.y-1.0)

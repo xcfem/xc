@@ -17,7 +17,7 @@ s= geom.Segment2d(geom.Pos2d(0.443,0.),geom.Pos2d(0.443,0.443))
 r= geom.Line2d(geom.Pos2d(1.0,0.0116016),geom.Pos2d(-4735.73,0.0116019))
 
 #In lines doesn't intersect the list well be empty.
-p= s.getIntersectionWithLine(r)[0] 
+p= s.getIntersection(r)[0] 
 
 ratio1= math.fabs(p.x-0.443)
 ratio2= math.fabs(p.y-0.0116016)

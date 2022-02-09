@@ -905,7 +905,7 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
         '''
         foundationPlane= self.getFoundationPlane()
         zml= R.zeroMomentLine(1e-5).getXY2DProjection() #Resultant line of action.
-        p= foundationPlane.getIntersectionWithLine(zml)[0] # Intersection with
+        p= foundationPlane.getIntersection(zml)[0] # Intersection with
                                                            # foundation plane.
         foundationCenterPos2D= self.getFoundationCenterPosition()
         return p.x-foundationCenterPos2D.x #eccentricity

@@ -15,7 +15,7 @@ import math
 
 sg= geom.Segment2d(geom.Pos2d(-0.443,0.443),geom.Pos2d(-0.443,-0.443))
 sr= geom.Ray2d(geom.Pos2d(0.19855,-0.082042),geom.Pos2d(-39.7765,16.6642))
-p= sg.getIntersectionWithRay(sr)[0] 
+p= sg.getIntersection(sr)[0] 
 
 d= sr.dist(p)
 

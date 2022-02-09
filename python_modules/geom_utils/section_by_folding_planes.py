@@ -16,7 +16,7 @@ class XYFoldingPlanes(object):
         P0proj= geom.Pos2d(p0.x,p0.y)
         P1proj= geom.Pos2d(p1.x,p1.y)
         line2d= geom.Line2d(P0proj,P1proj)
-        proj= self.xyPline.getIntersectionWithLine(line2d)
+        proj= self.xyPline.getIntersection(line2d)
         for p in proj:
             lmb= p.dist(P0proj)/P1proj.dist(P0proj)
             pInt= geom.LineSegment3d(p0,p1).getPoint(lmb)
@@ -37,7 +37,7 @@ class XYFoldingPlanes(object):
         P0proj= geom.Pos2d(p0.x,p0.y)
         P1proj= geom.Pos2d(p1.x,p1.y)
         segment2d= geom.Segment2d(P0proj,P1proj)
-        proj= self.xyPline.getIntersectionWithSegment(segment2d)
+        proj= self.xyPline.getIntersection(segment2d)
         for p in proj:
             lmb= p.dist(P0proj)/P1proj.dist(P0proj)
             pInt= segment3d.getPoint(lmb)
