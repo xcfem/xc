@@ -21,10 +21,10 @@ tp=r1.tipo()
 pto_aplic=geom.Pos3d(5,0,0)
 vectorDir=geom.Vector3d(0,2,0)
 vec1=geom.SlidingVector3d(pto_aplic,vectorDir)
-pto=vec1.getOrg()
-brazo=pto.dist(r1)
+pto= vec1.getOrg()
+brazo= pto.dist(r1)
 fuerza=vec1.y
-m=vec1.getMomentLine3d(r1)
+m= vec1.getMoment(r1)
 
 mTeor=fuerza*brazo
 ratio1=(m-mTeor)/mTeor

@@ -18,10 +18,10 @@ V=geom.Vector3d(0,1,0)
 
 svs1= geom.SlidingVectorsSystem3d(A,V,geom.Vector3d(0,0,0))
 pto= svs1.getOrg()
-momO= svs1.getMomentPos3d(O)
+momO= svs1.getMoment(O)
 
 svs2= svs1.reduceTo(O)
-momA= svs2.getMomentPos3d(A)
+momA= svs2.getMoment(A)
 ratio1= momA.getModulus()
 
 '''

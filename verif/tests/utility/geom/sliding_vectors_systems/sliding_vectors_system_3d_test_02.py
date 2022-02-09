@@ -32,8 +32,8 @@ svd1+=vec
 
 Res=svd1.getResultant()
 Mom=svd1.getMoment()
-MomP=svd1.getMomentPos3d(pto)
-MomR=svd1.getMomentLine3d(r1) #devuelve el valor con signo (en función del sentido de la recta), probablemente sea mejor ignorar el signo
+MomP=svd1.getMoment(pto)
+MomR=svd1.getMoment(r1) #devuelve el valor con signo (en función del sentido de la recta), probablemente sea mejor ignorar el signo
 
 ##print("Res.x =", Res.x)
 ##print("Res.y =", Res.y)

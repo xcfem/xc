@@ -18,10 +18,10 @@ V=geom.Vector2d(0,1)
 
 svs1= geom.SlidingVectorsSystem2d(A,V,0.0)
 pto= svs1.getOrg()
-momO= svs1.getMomentPos2d(O)
+momO= svs1.getMoment(O)
 
 svs2= svs1.reduceTo(O)
-momA= svs2.getMomentPos2d(A)
+momA= svs2.getMoment(A)
 ratio1= momA
 
 '''

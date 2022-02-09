@@ -18,7 +18,7 @@ vectorDir=geom.Vector3d(0,2,0)
 vec1=geom.SlidingVector3d(ptoAplica,vectorDir)
 
 brazo=vec1.getOrg().x-pos1.x
-m=vec1.getMomentPos3d(pos1)
+m=vec1.getMoment(pos1)
 
 fuerza=vec1.y
 mTeor=fuerza*brazo
