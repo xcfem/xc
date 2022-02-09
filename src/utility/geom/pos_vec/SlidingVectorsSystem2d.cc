@@ -199,7 +199,7 @@ boost::python::list SlidingVectorsSystem2d::distributePy(const boost::python::li
 SlidingVectorsSystem2d &SlidingVectorsSystem2d::operator+=(const SlidingVector2d &v)
   {
     SlidingVector2d::operator+=(v);
-    mom-= v.getMoment(getOrg());
+    mom+= v.getMoment(getOrg());
     return *this;
   }
 SlidingVectorsSystem2d &SlidingVectorsSystem2d::operator-=(const SlidingVector2d &v)
