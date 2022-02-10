@@ -401,3 +401,30 @@ class BiaxialBendingNormalStressController(lsc.LimitStateControllerBase2Sections
             # Update efficiency.
             if(CFtmp>elem.getProp(label).CF):
                 elem.setProp(label,self.ControlVars(idSection= sectionLabel, combName= lf.idComb, CF= CFtmp, N= lf.N, My= lf.My, Mz= lf.Mz, Ncrd= NcRdtmp, McRdy= McRdytmp, McRdz= McRdztmp, chiN= lf.chiN, chiLT= lf.chiLT))
+                
+class ShearController(lsc.LimitStateControllerBase2Sections):
+    '''Object that controls shear limit state.'''
+
+    ControlVars= cv.ShearYControlVars
+    def __init__(self,limitStateLabel):
+        super(ShearController,self).__init__(limitStateLabel)
+
+    def updateEfficiency(self, elem, elementInternalForces):
+        ''' Compute the efficiency of the element steel shape
+            subjected to the internal forces argument and update
+            its value if its bigger than the previous one.
+
+        :param elem: finite element whose section will be checked.
+        :param elementInternalForces: internal forces acting on the steel shape.
+        '''
+        # Get section properties.
+        crossSection= elem.getProp('crossSection')
+        # Check each element section.
+        for sectionIForces in elementInternalForces:
+            # Compute efficiency.
+            CFtmp= crossSection.getYShearEfficiency(sectionIForces.Vy)
+            sectionLabel= self.getSectionLabel(sectionIForces.idSection)
+            label= self.limitStateLabel+sectionLabel
+            # Update efficiency.
+            if(CFtmp>elem.getProp(label).CF):
+                elem.setProp(label,self.ControlVars(sectionLabel+'s',sectionIForces.idComb,CFtmp,sectionIForces.Vy))

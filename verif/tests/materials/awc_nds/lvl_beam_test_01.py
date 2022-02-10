@@ -79,6 +79,8 @@ refVu= 7481.0*poundToN
 ratio6= (Vu-refVu)/refVu
 refVu2= A*beamSection.wood.Fv/1.5
 ratio7= (Vu-refVu2)/refVu2
+shearCF= Vmax/Vu
+
 
 ## Bending
 Mmax= totalLoad*span**2/8.0
@@ -87,6 +89,7 @@ refMu= 17970.0*poundToN*footToMeter
 ratio8= (Mu-refMu)/refMu
 refMu2= beamSection.getFb()*Sz
 ratio9= (Mu-refMu2)/refMu2
+bendingCF= Mmax/Mu
 
 '''
 print('A= ', A)
@@ -108,11 +111,13 @@ print('refVu= ', refVu/1e3, ' kN')
 print('ratio6=', ratio6)
 print('refVu2= ', refVu2/1e3, ' kN')
 print('ratio7=', ratio7)
+print('shear efficiency CF= '+str(shearCF))
 
 print('ratio8=', ratio8)
 print('Mmax= ', Mmax/1e3, ' kN.m Mu= ', Mu/1e3, ' kN.m; F= ',Mmax/Mu)
 print('refMu2= ', refMu2/1e3, ' kN.m')
 print('ratio9=', ratio9)
+print('bending efficiency CF= '+str(bendingCF))
 '''
 
 import os

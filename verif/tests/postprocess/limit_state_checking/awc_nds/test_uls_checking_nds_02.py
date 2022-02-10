@@ -139,11 +139,11 @@ for ls in limitStates:
     ls.saveAll(combContainer, xcTotalSet)
 outCfg= lsd.VerifOutVars(setCalc=xcTotalSet, appendToResFile='Y', listFile='N', calcMeanCF='Y')
 limitState= lsd.normalStressesResistance
-outCfg.controller= nds.BiaxialBendingNormalStressController(limitState.label)
+outCfg.controller= nds.ShearController(limitState.label)
 average= limitState.runChecking(outCfg)
 
-ratio= ((average[0]-0.4545055626333311)/0.4545055626333311)**2
-ratio+= ((average[1]-0.45450556263332986)/0.45450556263332986)**2
+ratio= ((average[0]-0.22055129655618932)/0.22055129655618932)**2
+ratio+= ((average[1]-0.22055129655619)/0.22055129655619)**2
 ratio0= math.sqrt(ratio)
 
 # Label to get the property that contains the control vars.
@@ -151,7 +151,7 @@ label1= outCfg.controller.limitStateLabel+outCfg.controller.getSectionLabel(0)
 label2= outCfg.controller.limitStateLabel+outCfg.controller.getSectionLabel(1)
 maxCF= 0.0
 # Reference value obtained from verification test: lvl_beam_test_01.py 
-refMaxCF= 0.6886480109745837 
+refMaxCF= 0.441117667235691
 for e in xcTotalSet.elements:
     CF= e.getProp(label1).CF
     maxCF= max(maxCF, CF)
@@ -159,18 +159,18 @@ for e in xcTotalSet.elements:
     maxCF= max(maxCF, CF)
 
 ratio1= abs(maxCF-refMaxCF)/refMaxCF
-
 '''
 print('average= ', average)
 print('ratio0= ', ratio0)
 print('max. CF:', maxCF)
+print('ref. max. CF:', refMaxCF)
 print('ratio1= ', ratio1)
 '''
 
 os.system("rm -f -r ./tmp") # Clean after yourself.
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
-if((ratio0<1e-8) and (ratio1<1e-5)):
+if((ratio0<1e-8) and (ratio1<1e-4)):
     print('test '+fname+': ok.')
 else:
     lmsg.error(fname+' ERROR.')
