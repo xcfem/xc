@@ -102,8 +102,6 @@ for e in xcTotalSet.elements:
 
 ## Load combinations
 combContainer= combs.CombContainer()
-### Serviceability limit states.
-combContainer.SLS.qp.add('combSLS01', '1.0*liveLoad')
 ### Ultimate limit state.
 combContainer.ULS.perm.add('combULS01','1.0*deadLoad+1.0*liveLoad')
 ### Dump combination definition into XC.
