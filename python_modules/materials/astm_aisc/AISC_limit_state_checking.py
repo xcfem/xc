@@ -395,14 +395,14 @@ class BiaxialBendingNormalStressController(lsc.LimitStateControllerBase2Sections
         super(BiaxialBendingNormalStressController,self).__init__(limitStateLabel)
 
     def updateEfficiency(self, elem, elementInternalForces):
-        ''' Compute the efficiency of the steel shape argument
+        ''' Compute the efficiency of the element steel shape
             subjected to the internal forces argument and update
             its value if its bigger than the previous one.
 
         :param elem: finite element whose section will be checked.
         :param elementInternalForces: internal forces acting on the steel shape.
         '''
-        # Get section properties.
+        # Get element section properties.
         steelShape= elem.getProp('crossSection') # steel shape to check.
         for sectionIForces in elementInternalForces: # Check each element section.
             # Compute efficiency.
@@ -422,7 +422,7 @@ class ShearController(lsc.LimitStateControllerBase2Sections):
         super(ShearController,self).__init__(limitStateLabel)
 
     def updateEfficiency(self, elem, elementInternalForces):
-        ''' Compute the efficiency of the steel shape argument
+        ''' Compute the efficiency of the element steel shape
             subjected to the internal forces argument and update
             its value if its bigger than the previous one.
 
@@ -475,7 +475,7 @@ class VonMisesStressController(lsc.LimitStateControllerBase):
         return intForcItems[2]
             
     def updateEfficiency(self, elem, elementInternalForces):
-        ''' Compute the efficiency of the steel shape argument
+        ''' Compute the efficiency of the element material
             subjected to the internal forces argument and update
             its value if its bigger than the previous one.
 

@@ -381,3 +381,23 @@ class BiaxialBendingNormalStressController(lsc.LimitStateControllerBase2Sections
     ControlVars= AWCNDSBiaxialBendingControlVars
     def __init__(self,limitStateLabel):
         super(BiaxialBendingNormalStressController,self).__init__(limitStateLabel)
+
+    def updateEfficiency(self, elem, elementInternalForces):
+        ''' Compute the efficiency of the material of the element
+            subjected to the internal forces argument and update
+            its value if its bigger than the previous one.
+
+        :param elem: finite element whose material will be checked.
+        :param elementInternalForces: internal forces acting on the steel shape.
+        '''
+        # Get section properties.
+        crossSection= elem.getProp('crossSection')
+        # Check each element section.
+        for lf in elementInternalForces:
+            # Compute efficiency.
+            CFtmp, NcRdtmp, McRdytmp, McRdztmp, MbRdztmp= crossSection.getBiaxialBendingEfficiency(Nd= lf.N, Myd= lf.My, Mzd= lf.Mz, Vyd= lf.Vy, chiN= lf.chiN, chiLT= lf.chiLT)
+            sectionLabel= self.getSectionLabel(lf.idSection)
+            label= self.limitStateLabel+sectionLabel
+            # Update efficiency.
+            if(CFtmp>elem.getProp(label).CF):
+                elem.setProp(label,self.ControlVars(idSection= sectionLabel, combName= lf.idComb, CF= CFtmp, N= lf.N, My= lf.My, Mz= lf.Mz, Ncrd= NcRdtmp, McRdy= McRdytmp, McRdz= McRdztmp, chiN= lf.chiN, chiLT= lf.chiLT))

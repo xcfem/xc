@@ -69,24 +69,24 @@ class BiaxialBendingNormalStressController(lsc.LimitStateControllerBase2Sections
         super(BiaxialBendingNormalStressController,self).__init__(limitStateLabel)
         
     def updateEfficiency(self, elem, elementInternalForces):
-        ''' Compute the efficiency of the steel shape argument
+        ''' Compute the efficiency of the material of the element
             subjected to the internal forces argument and update
             its value if its bigger than the previous one.
 
-        :param elem: finite element whose section will be checked.
+        :param elem: finite element whose material will be checked.
         :param elementInternalForces: internal forces acting on the steel shape.
         '''
         # Get section properties.
-        crossSection= e.getProp('crossSection')
+        crossSection= elem.getProp('crossSection')
         # Check each element section.
-        for lf in elIntForc:
+        for lf in elementInternalForces:
             # Compute efficiency.
             CFtmp= crossSection.getBiaxialBendingEfficiency(lf.N,lf.My,lf.Mz)
             sectionLabel= self.getSectionLabel(lf.idSection)
             label= self.limitStateLabel+sectionLabel
             # Update efficiency.
-            if(CFtmp>e.getProp(label).CF):
-                e.setProp(label,self.ControlVars(sectionLabel,lf.idComb,CFtmp,lf.N,lf.My,lf.Mz))
+            if(CFtmp>elem.getProp(label).CF):
+                elem.setProp(label,self.ControlVars(sectionLabel,lf.idComb,CFtmp,lf.N,lf.My,lf.Mz))
         
 def controlULSCriterion():
     return '''recorder= self.getProp('ULSControlRecorder')

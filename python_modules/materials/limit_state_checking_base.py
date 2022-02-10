@@ -10,6 +10,7 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@ciccp.es ana.ortega@ciccp.es"
 
+import sys
 import math
 from misc_utils import log_messages as lmsg
 from materials.sections.fiber_section import fiber_sets
@@ -52,7 +53,7 @@ class LimitStateControllerBase(object):
             e.setProp(self.limitStateLabel, self.ControlVars())
 
     def updateEfficiency(self, elem, elementInternalForces):
-        ''' Compute the efficiency of the steel shape argument
+        ''' Compute the efficiency of the element material
             subjected to the internal forces argument and update
             its value if its bigger than the previous one.
 
