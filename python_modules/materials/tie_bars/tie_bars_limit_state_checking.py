@@ -67,35 +67,27 @@ class BiaxialBendingNormalStressController(lsc.LimitStateControllerBase2Sections
     ControlVars= BiaxialBendingControlVars
     def __init__(self,limitStateLabel):
         super(BiaxialBendingNormalStressController,self).__init__(limitStateLabel)
-    def checkSetFromIntForcFile(self, intForcCombFileName, setCalc=None):
-        '''Launch checking.
+        
+    def updateEfficiency(self, elem, elementInternalForces):
+        ''' Compute the efficiency of the steel shape argument
+            subjected to the internal forces argument and update
+            its value if its bigger than the previous one.
 
-        :param intForcCombFileName: Name of the file containing the internal 
-                                    forces on the element sections.
-        :param setCalc: set of elements to check.
+        :param elem: finite element whose section will be checked.
+        :param elementInternalForces: internal forces acting on the steel shape.
         '''
-        # Read internal forces results.
-        intForcItems= lsd.readIntForcesFile(intForcCombFileName,setCalc)
-        internalForcesValues= intForcItems[2]
-        # Check elements on setCalc.
-        for e in setCalc.elements:
-            # Get section properties.
-            crossSection= e.getProp('crossSection')
-            # Get internal forces on the element sections.
-            elIntForc= internalForcesValues[e.tag]
-            if(len(elIntForc)==0):
-                className= type(self).__name__
-                methodName= sys._getframe(0).f_code.co_name
-                lmsg.warning(className+'.'+methodName+': no internal forces for element: '+str(e.tag)+' of type: '+e.type())
-            for lf in elIntForc: # Check each element section.
-                # Compute efficiency.
-                CFtmp= crossSection.getBiaxialBendingEfficiency(lf.N,lf.My,lf.Mz)
-                sectionLabel= self.getSectionLabel(lf.idSection)
-                label= self.limitStateLabel+sectionLabel
-                # Update efficiency.
-                if(CFtmp>e.getProp(label).CF):
-                    e.setProp(label,self.ControlVars(sectionLabel,lf.idComb,CFtmp,lf.N,lf.My,lf.Mz))
-
+        # Get section properties.
+        crossSection= e.getProp('crossSection')
+        # Check each element section.
+        for lf in elIntForc:
+            # Compute efficiency.
+            CFtmp= crossSection.getBiaxialBendingEfficiency(lf.N,lf.My,lf.Mz)
+            sectionLabel= self.getSectionLabel(lf.idSection)
+            label= self.limitStateLabel+sectionLabel
+            # Update efficiency.
+            if(CFtmp>e.getProp(label).CF):
+                e.setProp(label,self.ControlVars(sectionLabel,lf.idComb,CFtmp,lf.N,lf.My,lf.Mz))
+        
 def controlULSCriterion():
     return '''recorder= self.getProp('ULSControlRecorder')
 nmbComb= recorder.getCurrentCombinationName

@@ -61,13 +61,17 @@ class VerifOutVars(object):
     def runChecking(self, intForcCombFileName, outputDataBaseFileName, sections):
         '''Launch checking.
 
-        :param intForcCombFileName: name of the file to read the internal force results.
+        :param intForcCombFileName: Name of the file containing the internal 
+                                    forces on the element sections.
+        :param outputDataBaseFileName: Name of the file to write the results on.
         :param sections: names of the sections to write the output for.
         '''
         retval=None
         if(self.setCalc):
+            # Initialize control variables.
             self.controller.initControlVars(self.setCalc)
-            self.controller.checkSetFromIntForcFile(intForcCombFileName,self.setCalc)
+            # Update efficiency values.
+            self.controller.updateEfficiencyForSet(intForcCombFileName,self.setCalc)
             prep= self.setCalc.getPreprocessor
             retval= cv.writeControlVarsFromElements(prep,outputDataBaseFileName,self, sections)
         else:
@@ -282,7 +286,7 @@ class LimitStateData(object):
     def runChecking(self, outputCfg, sections= ['Sect1', 'Sect2']):
         '''This method reads, for the elements in setCalc,  the internal 
         forces previously calculated and saved in the corresponding file.
-        Using the 'initControlVars' and 'checkSetFromIntForcFile' methods of 
+        Using the 'initControlVars' and 'updateEfficiencyForSet' methods of 
         the controller, the appropiate attributes are assigned to the 
         elements and the associated limit state verification is run.
         The results are written to a file in order to be displayed or listed.
@@ -506,7 +510,7 @@ class VonMisesStressLimitStateData(ULS_LimitStateData):
     def runChecking(self,outputCfg):
         '''This method reads, for the elements in setCalc,  the internal 
         forces previously calculated and saved in the corresponding file.
-        Using the 'initControlVars' and 'checkSetFromIntForcFile' methods of 
+        Using the 'initControlVars' and 'updateEfficiencyForSet' methods of 
         the controller, the appropiate attributes are assigned to the 
         elements and the associated limit state verification is run.
         The results are written to a file in order to be displayed or listed.

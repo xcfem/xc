@@ -269,35 +269,28 @@ class BiaxialBendingNormalStressController(lsc.LimitStateControllerBase2Sections
     ControlVars= cv.SteelShapeBiaxialBendingControlVars
     def __init__(self,limitStateLabel):
         super(BiaxialBendingNormalStressController,self).__init__(limitStateLabel)
-    def checkSetFromIntForcFile(self, intForcCombFileName, setCalc=None):
-        '''Launch checking.
+    
+    def updateEfficiency(self, elem, elementInternalForces):
+        ''' Compute the efficiency of the steel shape argument
+            subjected to the internal forces argument and update
+            its value if its bigger than the previous one.
 
-        :param intForcCombFileName: name of the file to read the internal 
-               force results
-        :param setCalc: set of elements to check
+        :param elem: finite element whose section will be checked.
+        :param elementInternalForces: internal forces acting on the steel shape.
         '''
-        # Read internal forces results.
-        intForcItems= lsd.readIntForcesFile(intForcCombFileName, setCalc)
-        internalForcesValues= intForcItems[2]
-        # Check elements on setCalc.
-        for e in setCalc.elements:
-            # Get section properties.
-            steelShape= e.getProp('crossSection')
-            sectionClass= e.getProp('sectionClass')
-            elIntForc= internalForcesValues[e.tag] # Get element internal forces.
-            if(len(elIntForc)==0):
-                className= type(self).__name__
-                methodName= sys._getframe(0).f_code.co_name
-                lmsg.warning(className+'.'+methodName+': no internal forces for element: '+str(e.tag)+' of type: '+e.type())
-            for lf in elIntForc: # Check each element section.
-                # Compute efficiency.
-                CFtmp,NcRdtmp,McRdytmp,McRdztmp,MvRdztmp,MbRdztmp= steelShape.getBiaxialBendingEfficiency(sectionClass,lf.N,lf.My,lf.Mz,lf.Vy,lf.chiLT)
-                sectionLabel= self.getSectionLabel(lf.idSection)
-                label= self.limitStateLabel+sectionLabel
-                # Update efficiency.
-                if(CFtmp>e.getProp(label).CF):
-                    e.setProp(label, self.ControlVars(sectionLabel+'s',lf.idComb,CFtmp,lf.N,lf.My,lf.Mz,NcRdtmp,McRdytmp,McRdztmp,MvRdztmp,MbRdztmp,lf.chiLT))
-
+        # Get section properties.
+        steelShape= elem.getProp('crossSection')
+        sectionClass= elem.getProp('sectionClass')
+        # Check each element section.
+        for lf in elementInternalForces: 
+            # Compute efficiency.
+            CFtmp,NcRdtmp,McRdytmp,McRdztmp,MvRdztmp,MbRdztmp= steelShape.getBiaxialBendingEfficiency(sectionClass,lf.N,lf.My,lf.Mz,lf.Vy,lf.chiLT)
+            sectionLabel= self.getSectionLabel(lf.idSection)
+            label= self.limitStateLabel+sectionLabel
+            # Update efficiency.
+            if(CFtmp>elem.getProp(label).CF):
+                elem.setProp(label, self.ControlVars(sectionLabel+'s',lf.idComb,CFtmp,lf.N,lf.My,lf.Mz,NcRdtmp,McRdytmp,McRdztmp,MvRdztmp,MbRdztmp,lf.chiLT))
+        
 
 class ShearController(lsc.LimitStateControllerBase2Sections):
     '''Object that controls shear limit state.'''
@@ -306,34 +299,26 @@ class ShearController(lsc.LimitStateControllerBase2Sections):
     def __init__(self,limitStateLabel):
         super(ShearController,self).__init__(limitStateLabel)
 
-    def checkSetFromIntForcFile(self,intForcCombFileName,setCalc=None):
-        '''Launch checking.
+    def updateEfficiency(self, elem, elementInternalForces):
+        ''' Compute the efficiency of the steel shape argument
+            subjected to the internal forces argument and update
+            its value if its bigger than the previous one.
 
-        :param setCalc: set of elements to check
+        :param elem: finite element whose section will be checked.
+        :param elementInternalForces: internal forces acting on the steel shape.
         '''
-        # Read internal forces results.        
-        intForcItems= lsd.readIntForcesFile(intForcCombFileName, setCalc)
-        internalForcesValues= intForcItems[2]
-        # Check elements on setCalc.
-        for e in setCalc.elements:
-            # Get section properties.
-            steelShape= e.getProp('crossSection')
-            sectionClass= e.getProp('sectionClass')
-            # Get element internal forces.
-            elIntForc= internalForcesValues[e.tag] 
-            if(len(elIntForc)==0):
-                className= type(self).__name__
-                methodName= sys._getframe(0).f_code.co_name
-                lmsg.warning(className+'.'+methodName+': no internal forces for element: '+str(e.tag)+' of type: '+e.type())
-            for lf in elIntForc: # Check each element section.
-                # Compute efficiency.
-                CFtmp= steelShape.getYShearEfficiency(sectionClass,lf.Vy)
-                sectionLabel= self.getSectionLabel(lf.idSection)
-                label= self.limitStateLabel+sectionLabel
-                # Update efficiency.
-                if (CFtmp>e.getProp(label).CF):
-                    e.setProp(label, self.ControlVars(sectionLabel+'s',lf.idComb,CFtmp,lf.Vy))
-
+        # Get section properties.
+        steelShape= elem.getProp('crossSection')
+        sectionClass= elem.getProp('sectionClass')
+        # Check each element section.
+        for lf in elementInternalForces: 
+            # Compute efficiency.
+            CFtmp= steelShape.getYShearEfficiency(sectionClass,lf.Vy)
+            sectionLabel= self.getSectionLabel(lf.idSection)
+            label= self.limitStateLabel+sectionLabel
+            # Update efficiency.
+            if (CFtmp>elem.getProp(label).CF):
+                elem.setProp(label, self.ControlVars(sectionLabel+'s',lf.idComb,CFtmp,lf.Vy))
 
 # Routines to install in recorder  to execute in every commit to check
 # eurocode-3 criterions.

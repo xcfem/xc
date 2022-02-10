@@ -15,6 +15,7 @@ from misc_utils import log_messages as lmsg
 from materials.sections.fiber_section import fiber_sets
 from solution import predefined_solutions
 from postprocess import control_vars as cv
+from postprocess import limit_state_data as lsd
 import xc_base
 import geom
 
@@ -50,9 +51,55 @@ class LimitStateControllerBase(object):
         for e in elements:
             e.setProp(self.limitStateLabel, self.ControlVars())
 
+    def updateEfficiency(self, elem, elementInternalForces):
+        ''' Compute the efficiency of the steel shape argument
+            subjected to the internal forces argument and update
+            its value if its bigger than the previous one.
+
+        :param elem: finite element whose section will be checked.
+        :param elementInternalForces: internal forces acting on the steel shape.
+        '''
+        className= type(self).__name__
+        methodName= sys._getframe(0).f_code.co_name
+        lmsg.error(className+'.'+methodName+': not implemented yet.')
+
+    def readInternalForces(self, intForcCombFileName, setCalc=None):
+        '''Launch checking.
+
+        :param intForcCombFileName: Name of the file containing the internal 
+                                    forces on the element sections.
+        '''
+        # Read internal forces results.
+        intForcItems= lsd.readIntForcesFile(intForcCombFileName,setCalc)
+        return intForcItems[2]
+
+    def updateEfficiencyForSet(self,intForcCombFileName, setCalc=None):
+        '''Update the efficiency value (and the corresponding control vars)
+           for the elements in the argument set, under the internal forces
+           stored in the file argument.
+
+        :param intForcCombFileName: Name of the file containing the internal 
+                                    forces on the element sections.
+        :param setCalc: set of elements to check
+        '''
+        # Read internal forces results.
+        internalForcesValues= self.readInternalForces(intForcCombFileName, setCalc)
+        # Check elements on setCalc.
+        for e in setCalc.elements:
+            # Get element internal forces.
+            elIntForc= internalForcesValues[e.tag]
+            if(len(elIntForc)==0):
+                className= type(self).__name__
+                methodName= sys._getframe(0).f_code.co_name
+                lmsg.warning(className+'.'+methodName+': no internal forces for element: '+str(e.tag)+' of type: '+e.type())
+            # Update efficiency.
+            self.updateEfficiency(e, elIntForc)
+
     def check(self,elements,nmbComb):
         '''Limit state control.'''
-        lmsg.error('limit state check not implemented.')
+        className= type(self).__name__
+        methodName= sys._getframe(0).f_code.co_name
+        lmsg.error(className+'.'+methodName+': limit state check not implemented.')
 
 class LimitStateControllerBase2Sections(LimitStateControllerBase):
     '''
