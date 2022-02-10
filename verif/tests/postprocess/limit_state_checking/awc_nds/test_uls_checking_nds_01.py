@@ -177,7 +177,7 @@ else:
     
 # #########################################################
 # # Graphic stuff.
-from postprocess import output_handler
+# from postprocess import output_handler
 # oh= output_handler.OutputHandler(modelSpace)
 
 # oh.displayElementValueDiagram('chiLT', setToDisplay= xcTotalSet)
