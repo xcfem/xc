@@ -357,7 +357,7 @@ class AWCNDSBiaxialBendingControlVars(cv.BiaxialBendingStrengthControlVars):
 
     :ivar chiN:    reduction factor for compressive strength (defaults to 1)
     '''
-    def __init__(self,idSection= 'nil',combName= 'nil',CF= -1.0,N= 0.0,My= 0.0,Mz= 0.0,Ncrd=0.0,McRdy=0.0,McRdz=0.0,MvRdz=0.0,MbRdz=0.0, chiLT=1.0, chiN= 1.0):
+    def __init__(self,idSection= 'nil',combName= 'nil',CF= -1.0,N= 0.0,My= 0.0,Mz= 0.0,Ncrd=0.0,McRdy=0.0,McRdz=0.0, chiLT=1.0, chiN= 1.0):
         '''
         Constructor.
 
@@ -370,12 +370,10 @@ class AWCNDSBiaxialBendingControlVars(cv.BiaxialBendingStrengthControlVars):
         :param Ncrd:     design strength to axial compression
         :param McRdy:    design moment strength about Y (weak) axis
         :param McRdz:    design moment strength about Z (strong) axis
-        :param MvRdz:    reduced design moment strength about Z (strong) axis for shear interaction
-        :param MbRdz:    reduced design moment strength about Z (strong) axis for lateral-torsional bucking
         :param chiLT:    reduction factor for lateral-torsional buckling (defaults to 1)
         :param chiN:     reduction factor for compressive strength (defaults to 1)
         '''
-        super(AWCNDSBiaxialBendingControlVars,self).__init__(idSection,combName,CF,N,My,Mz,Ncrd=Ncrd,McRdy=McRdy,McRdz=McRdz,MvRdz=MvRdz,MbRdz=MbRdz, chiLT=chiLT, chiN= chiN)
+        super(AWCNDSBiaxialBendingControlVars,self).__init__(idSection,combName,CF,N,My,Mz,Ncrd=Ncrd,McRdy=McRdy,McRdz=McRdz, chiLT=chiLT, chiN= chiN)
 
 class BiaxialBendingNormalStressController(lsc.LimitStateControllerBase2Sections):
     '''Object that controls normal stresses limit state.'''

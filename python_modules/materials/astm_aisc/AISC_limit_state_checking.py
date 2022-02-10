@@ -396,22 +396,29 @@ class BiaxialBendingNormalStressController(lsc.LimitStateControllerBase2Sections
     def checkSetFromIntForcFile(self,intForcCombFileName,setCalc=None):
         '''Launch checking.
 
-        :param intForcCombFileName: name of the file to read the internal 
-               force results
+        :param intForcCombFileName: Name of the file containing the internal 
+                                    forces on the element sections.
         :param setCalc: set of elements to check
         '''
+        # Read internal forces results.
         intForcItems= lsd.readIntForcesFile(intForcCombFileName,setCalc)
         internalForcesValues= intForcItems[2]
+        # Check elements on setCalc.
         for e in setCalc.elements:
-            sh= e.getProp('crossSection')
-            sc= e.getProp('sectionClass')
+            # Get section properties.
+            steelShape= e.getProp('crossSection')
+            # Get internal forces on the element sections.
             elIntForc= internalForcesValues[e.tag]
             if(len(elIntForc)==0):
-                lmsg.warning('No internal forces for element: '+str(e.tag)+' of type: '+e.type())
-            for lf in elIntForc:
-                CFtmp,NcRdtmp,McRdytmp,McRdztmp,MvRdztmp,MbRdztmp= sh.getBiaxialBendingEfficiency(Nd= lf.N,Myd= lf.My,Mzd= lf.Mz,Vyd= lf.Vy,chiN= lf.chiN, chiLT= lf.chiLT)
+                className= type(self).__name__
+                methodName= sys._getframe(0).f_code.co_name
+                lmsg.warning(className+'.'+methodName+': no internal forces for element: '+str(e.tag)+' of type: '+e.type())
+            for lf in elIntForc: # Check each element section.
+                # Compute efficiency.
+                CFtmp,NcRdtmp,McRdytmp,McRdztmp,MvRdztmp,MbRdztmp= steelShape.getBiaxialBendingEfficiency(Nd= lf.N,Myd= lf.My,Mzd= lf.Mz,Vyd= lf.Vy,chiN= lf.chiN, chiLT= lf.chiLT)
                 sectionLabel= self.getSectionLabel(lf.idSection)
                 label= self.limitStateLabel+sectionLabel
+                # Update efficiency.
                 if(CFtmp>e.getProp(label).CF):
                     e.setProp(label,self.ControlVars(sectionLabel,lf.idComb,CFtmp,lf.N,lf.My,lf.Mz,NcRdtmp,McRdytmp,McRdztmp,MvRdztmp,MbRdztmp,lf.chiLT, lf.chiN))
 
@@ -425,20 +432,29 @@ class ShearController(lsc.LimitStateControllerBase2Sections):
     def checkSetFromIntForcFile(self,intForcCombFileName,setCalc=None):
         '''Launch checking.
 
+        :param intForcCombFileName: Name of the file containing the internal 
+                                    forces on the element sections.
         :param setCalc: set of elements to check
         '''
+        # Read internal forces results.
         intForcItems= lsd.readIntForcesFile(intForcCombFileName,setCalc)
-        internalForcesValues=intForcItems[2]
+        internalForcesValues= intForcItems[2]
+        # Check elements on setCalc.
         for e in setCalc.elements:
-            sh=e.getProp('crossSection')
-            sc=e.getProp('sectionClass')
+            steelShape=e.getProp('crossSection')
+            sectionClass=e.getProp('sectionClass')
+            # Get internal forces on the element sections.
             elIntForc=internalForcesValues[e.tag]
             if(len(elIntForc)==0):
-                lmsg.warning('No internal forces for element: '+str(e.tag)+' of type: '+e.type())
-            for lf in elIntForc:
-                CFtmp= sh.getYShearEfficiency(sc,lf.Vy)
+                className= type(self).__name__
+                methodName= sys._getframe(0).f_code.co_name
+                lmsg.warning(className+'.'+methodName+': no internal forces for element: '+str(e.tag)+' of type: '+e.type())
+            for lf in elIntForc: # Check each element section.
+                # Compute efficiency.
+                CFtmp= steelShape.getYShearEfficiency(sectionClass,lf.Vy)
                 sectionLabel= self.getSectionLabel(lf.idSection)
                 label= self.limitStateLabel+sectionLabel
+                # Update efficiency.
                 if(CFtmp>e.getProp(label).CF):
                     e.setProp(label,self.ControlVars(sectionLabel+'s',lf.idComb,CFtmp,lf.Vy))
 
@@ -466,20 +482,28 @@ class VonMisesStressController(lsc.LimitStateControllerBase):
     def checkSetFromIntForcFile(self,intForcCombFileName,setCalc=None):
         '''Launch checking.
 
-        :param intForcCombFileName: file containing the internal forces
-                                    for each element.
+        :param intForcCombFileName: Name of the file containing the internal 
+                                    forces on the element sections.
         :param setCalc: set of elements to check
         '''
+        # Read internal forces results.
         intForcItems= lsd.readIntForcesFile(intForcCombFileName,setCalc, self.vonMisesStressId)
         internalForcesValues= intForcItems[2]
+        # Check elements on setCalc.
         for e in setCalc.elements:
+            # Get factored yield stress.
             factoredYieldStress= 0.9*e.getProp('yieldStress')
+            # Get element internal forces.
             elIntForc= internalForcesValues[e.tag]
             if(len(elIntForc)==0):
-                lmsg.warning('No internal forces for element: '+str(e.tag)+' of type: '+e.type())
-            for lf in elIntForc:
+                className= type(self).__name__
+                methodName= sys._getframe(0).f_code.co_name
+                lmsg.warning(className+'.'+methodName+': no internal forces for element: '+str(e.tag)+' of type: '+e.type())
+            for lf in elIntForc: # Check each element section.
+                # Compute efficiency (both sections will have the
+                # same Von Mises stress so this is redundant)
                 CFtmp= lf.vonMisesStress/factoredYieldStress
-                # Both sections will have the same Von Mises stress so this is redundant.
+                # Update efficiency.
                 if(CFtmp>e.getProp(self.limitStateLabel).CF):
                     e.setProp(self.limitStateLabel,self.ControlVars(lf.idComb,CFtmp,lf.vonMisesStress))
 
