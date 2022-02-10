@@ -1094,3 +1094,8 @@ else
    MPLBACKEND=mplbackend_backup
 fi
 export MPLBACKEND
+
+# Clean garbage if any
+
+rm -f -r ./annex
+rm -f -r ./tmp
