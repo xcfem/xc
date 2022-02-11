@@ -381,11 +381,6 @@ class AISCBiaxialBendingControlVars(cv.SteelShapeBiaxialBendingControlVars):
         super(AISCBiaxialBendingControlVars,self).__init__(idSection,combName,CF,N,My,Mz,Ncrd=Ncrd,McRdy=McRdy,McRdz=McRdz,MvRdz=MvRdz,MbRdz=MbRdz, chiLT=chiLT)
         self.chiN= chiN # reduction factor for compressive strength
         
-    def getStrArguments(self):
-        '''Returns a string for a 'copy' (kind of) constructor.'''
-        retval= super(AISCBiaxialBendingControlVars,self).getStrArguments()
-        retval+= ',chiN= ' + str(self.chiN)
-        return retval
     
 class BiaxialBendingNormalStressController(lsc.LimitStateControllerBase2Sections):
     '''Object that controls normal stresses limit state.'''
