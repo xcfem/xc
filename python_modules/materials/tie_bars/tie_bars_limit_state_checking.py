@@ -19,28 +19,18 @@ import xc
 class TieBarMember(steel_member_base.Member):
     ''' Tie bar members.'''
     
-    def installULSControlRecorder(self, recorderType, prep):
+    def installULSControlRecorder(self, recorderType, calcSet= None):
         '''Install recorder for verification of ULS criterion.
 
         :param recorderType: type of the recorder to install.
-        :param prep: pre-processor for the finite element problem.
+        :param calcSet: set of elements to be checked (defaults to 'None' which 
+                        means that this set will be created elsewhere). In not
+                        'None' the member elements will be appended to this set.
         '''
-        self.prep= prep
-        nodes= prep.getNodeHandler
-        domain= prep.getDomain
-        recorder= domain.newRecorder(recorderType,None)
-        if(not self.elemSet):
-            self.createElementSet()
-        if(len(self.elemSet)==0):
-            lmsg.warning('Element set is empty.')
-        eleTags= list()
-        for e in self.elemSet:
-            eleTags.append(e.tag)
-            e.setProp('ULSControlRecorder',recorder)
-        idEleTags= xc.ID(eleTags)
-        recorder.setElements(idEleTags)
+        recorder= self.createRecorder(recorderType, calcSet)
         self.shape.setupULSControlVars(self.elemSet)
-        if(nodes.numDOFs==3):
+        nodHndlr= self.getPreprocessor().getNodeHandler        
+        if(nodHndlr.numDOFs==3):
             recorder.callbackRecord= controlULSCriterion2D()
         else:
             recorder.callbackRecord= controlULSCriterion()

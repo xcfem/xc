@@ -124,18 +124,19 @@ lsd.shearResistance, # Shear stresses resistance (IS THE SAME AS NORMAL STRESSES
 ]
 
 ## Create NDS Member objects.
-ndsMembers= list()
+ndsCalcSet= modelSpace.defSet('ndsCalcSet') # Elements to be checked as NDS members.
+ndsMembers= list() # NDS members list.
 for l in xcTotalSet.getLines:
     Lx= 0.5 # continuously braced.
     member= nds.Member(name= l.name, section= beamSection, unbracedLengthX= Lx, lstLines= [l])
     #member.setControlPoints()
-    member.installULSControlRecorder(recorderType="element_prop_recorder")
+    member.installULSControlRecorder(recorderType="element_prop_recorder", calcSet= ndsCalcSet)
     ndsMembers.append(member)
     
 ## Compute internal forces for each combination
 for ls in limitStates:
-    ls.saveAll(combContainer, xcTotalSet)
-outCfg= lsd.VerifOutVars(setCalc=xcTotalSet, appendToResFile='Y', listFile='N', calcMeanCF='Y')
+    ls.saveAll(combContainer, ndsCalcSet)
+outCfg= lsd.VerifOutVars(setCalc=ndsCalcSet, appendToResFile='Y', listFile='N', calcMeanCF='Y')
 limitState= lsd.normalStressesResistance
 outCfg.controller= nds.ShearController(limitState.label)
 average= limitState.runChecking(outCfg)
@@ -150,7 +151,7 @@ label2= outCfg.controller.limitStateLabel+outCfg.controller.getSectionLabel(1)
 maxCF= 0.0
 # Reference value obtained from verification test: lvl_beam_test_01.py 
 refMaxCF= 0.441117667235691
-for e in xcTotalSet.elements:
+for e in ndsCalcSet.elements:
     CF= e.getProp(label1).CF
     maxCF= max(maxCF, CF)
     CF= e.getProp(label2).CF
@@ -178,7 +179,7 @@ else:
 # from postprocess import output_handler
 # oh= output_handler.OutputHandler(modelSpace)
 
-# oh.displayElementValueDiagram('chiLT', setToDisplay= xcTotalSet)
+# oh.displayElementValueDiagram('chiLT', setToDisplay= ndsCalcSet)
 
-# oh.displayBeamResult(attributeName=lsd.normalStressesResistance.label, itemToDisp='CF', beamSetDispRes=xcTotalSet, setToDisplay=xcTotalSet)
+# oh.displayBeamResult(attributeName=lsd.normalStressesResistance.label, itemToDisp='CF', beamSetDispRes=ndsCalcSet, setToDisplay=xcTotalSet)
 

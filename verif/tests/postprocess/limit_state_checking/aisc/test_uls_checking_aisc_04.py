@@ -122,16 +122,17 @@ lines= [l1]
 Lx= l1.getLength()
 member= aisc.Member(name= l1.name, section= shape,unbracedLengthX= Lx, lstLines= [l1])
 
-aiscMembers= [member]
+aiscCalcSet= modelSpace.defSet('aiscCalcSet') # Elements to be checked as AISC members.
+aiscMembers= [member] # AISC members.
 for m in aiscMembers:
-    m.installULSControlRecorder(recorderType="element_prop_recorder")
+    m.installULSControlRecorder(recorderType="element_prop_recorder", calcSet= aiscCalcSet)
     
 ## Compute internal forces for each combination
 for ls in limitStates:
-    ls.saveAll(combContainer,xcTotalSet,lstSteelBeams=aiscMembers)
+    ls.saveAll(combContainer,aiscCalcSet,lstSteelBeams=aiscMembers)
 
 
-outCfg= lsd.VerifOutVars(setCalc=xcTotalSet, appendToResFile='Y', listFile='N', calcMeanCF='Y')
+outCfg= lsd.VerifOutVars(setCalc=aiscCalcSet, appendToResFile='Y', listFile='N', calcMeanCF='Y')
 limitState=lsd.normalStressesResistance
 outCfg.controller= aisc.BiaxialBendingNormalStressController(limitState.label)
 average= limitState.runChecking(outCfg)
@@ -157,6 +158,6 @@ else:
 # # Graphic stuff.
 # oh= output_handler.OutputHandler(modelSpace)
 
-# oh.displayElementValueDiagram('chiN', setToDisplay= xcTotalSet)
+# oh.displayElementValueDiagram('chiN', setToDisplay= aiscCalcSet)
 
-# oh.displayBeamResult(attributeName=lsd.normalStressesResistance.label, itemToDisp='CF', beamSetDispRes=xcTotalSet, setToDisplay=xcTotalSet)
+# oh.displayBeamResult(attributeName=lsd.normalStressesResistance.label, itemToDisp='CF', beamSetDispRes=aiscCalcSet, setToDisplay=xcTotalSet)

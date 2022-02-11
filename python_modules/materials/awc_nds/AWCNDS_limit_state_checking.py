@@ -52,27 +52,20 @@ class Member(wood_member_base.Member):
         else:
             self.unbracedLengthZ= unbracedLengthX
             
-    def installULSControlRecorder(self,recorderType, chiN: float= 1.0, chiLT: float= 1.0):
+    def installULSControlRecorder(self, recorderType, chiN: float= 1.0, chiLT: float= 1.0, calcSet= None):
         '''Install recorder for verification of ULS criterion.
 
         :param recorderType: type of the recorder to install.
         :param chiN: compressive strength reduction factor.
         :param chiLT: flexural strength reduction factor.
+        :param calcSet: set of elements to be checked (defaults to 'None' which 
+                        means that this set will be created elsewhere). In not
+                        'None' the member elements will be appended to this set.
         '''
-        prep= self.getPreprocessor()
-        nodes= prep.getNodeHandler
-        domain= prep.getDomain
-        recorder= domain.newRecorder(recorderType,None)
-        if(not self.elemSet):
-            self.createElementSet()
-        eleTags= list()
-        for e in self.elemSet:
-            eleTags.append(e.tag)
-            e.setProp('ULSControlRecorder',recorder)
-        idEleTags= xc.ID(eleTags)
-        recorder.setElements(idEleTags)
+        recorder= self.createRecorder(recorderType, calcSet)
         self.crossSection.setupULSControlVars(self.elemSet, chiN= chiN, chiLT= chiLT)
-        if(nodes.numDOFs==3):
+        nodHndlr= self.getPreprocessor().getNodeHandler        
+        if(nodHndlr.numDOFs==3):
             recorder.callbackRecord= controlULSCriterion2D()
         else:
             recorder.callbackRecord= controlULSCriterion()
@@ -392,15 +385,20 @@ class BiaxialBendingNormalStressController(lsc.LimitStateControllerBase2Sections
         '''
         # Get section properties.
         crossSection= elem.getProp('crossSection')
-        # Check each element section.
-        for lf in elementInternalForces:
-            # Compute efficiency.
-            CFtmp, NcRdtmp, McRdytmp, McRdztmp, MbRdztmp= crossSection.getBiaxialBendingEfficiency(Nd= lf.N, Myd= lf.My, Mzd= lf.Mz, Vyd= lf.Vy, chiN= lf.chiN, chiLT= lf.chiLT)
-            sectionLabel= self.getSectionLabel(lf.idSection)
-            label= self.limitStateLabel+sectionLabel
-            # Update efficiency.
-            if(CFtmp>elem.getProp(label).CF):
-                elem.setProp(label,self.ControlVars(idSection= sectionLabel, combName= lf.idComb, CF= CFtmp, N= lf.N, My= lf.My, Mz= lf.Mz, Ncrd= NcRdtmp, McRdy= McRdytmp, McRdz= McRdztmp, chiN= lf.chiN, chiLT= lf.chiLT))
+        if(not crossSection):
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.warning(className+'.'+methodName+'; undefined "crossSection" property for element: '+str(elem.tag)+'; nothing done.')
+        else:
+            # Check each element section.
+            for lf in elementInternalForces:
+                # Compute efficiency.
+                CFtmp, NcRdtmp, McRdytmp, McRdztmp, MbRdztmp= crossSection.getBiaxialBendingEfficiency(Nd= lf.N, Myd= lf.My, Mzd= lf.Mz, Vyd= lf.Vy, chiN= lf.chiN, chiLT= lf.chiLT)
+                sectionLabel= self.getSectionLabel(lf.idSection)
+                label= self.limitStateLabel+sectionLabel
+                # Update efficiency.
+                if(CFtmp>elem.getProp(label).CF):
+                    elem.setProp(label,self.ControlVars(idSection= sectionLabel, combName= lf.idComb, CF= CFtmp, N= lf.N, My= lf.My, Mz= lf.Mz, Ncrd= NcRdtmp, McRdy= McRdytmp, McRdz= McRdztmp, chiN= lf.chiN, chiLT= lf.chiLT))
                 
 class ShearController(lsc.LimitStateControllerBase2Sections):
     '''Object that controls shear limit state.'''
@@ -419,12 +417,17 @@ class ShearController(lsc.LimitStateControllerBase2Sections):
         '''
         # Get section properties.
         crossSection= elem.getProp('crossSection')
-        # Check each element section.
-        for sectionIForces in elementInternalForces:
-            # Compute efficiency.
-            CFtmp= crossSection.getYShearEfficiency(sectionIForces.Vy)
-            sectionLabel= self.getSectionLabel(sectionIForces.idSection)
-            label= self.limitStateLabel+sectionLabel
-            # Update efficiency.
-            if(CFtmp>elem.getProp(label).CF):
-                elem.setProp(label,self.ControlVars(sectionLabel+'s',sectionIForces.idComb,CFtmp,sectionIForces.Vy))
+        if(not crossSection):
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.warning(className+'.'+methodName+'; undefined "crossSection" property for element: '+str(elem.tag)+'; nothing done.')
+        else:
+            # Check each element section.
+            for sectionIForces in elementInternalForces:
+                # Compute efficiency.
+                CFtmp= crossSection.getYShearEfficiency(sectionIForces.Vy)
+                sectionLabel= self.getSectionLabel(sectionIForces.idSection)
+                label= self.limitStateLabel+sectionLabel
+                # Update efficiency.
+                if(CFtmp>elem.getProp(label).CF):
+                    elem.setProp(label,self.ControlVars(sectionLabel+'s',sectionIForces.idComb,CFtmp,sectionIForces.Vy))

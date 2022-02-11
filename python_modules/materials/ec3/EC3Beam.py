@@ -72,22 +72,18 @@ class EC3Beam(steel_member_base.BucklingMember):
         '''Update the value of the appropriate reduction factors.'''
         self.updateLateralBucklingReductionFactor()
 
-    def installULSControlRecorder(self,recorderType, chiLT=1.0):
-        '''Install recorder for verification of ULS criterion.'''
-        prep= self.getPreprocessor()
-        nodes= prep.getNodeHandler
-        domain= prep.getDomain
-        recorder= domain.newRecorder(recorderType,None)
-        if(not self.elemSet):
-            self.createElementSet()
-        eleTags= list()
-        for e in self.elemSet:
-            eleTags.append(e.tag)
-            e.setProp('ULSControlRecorder',recorder)
-        idEleTags= xc.ID(eleTags)
-        recorder.setElements(idEleTags)
+    def installULSControlRecorder(self,recorderType, chiLT=1.0, calcSet= None):
+        '''Install recorder for verification of ULS criterion.
+
+        :param recorderType: type of the recorder to install.
+        :param calcSet: set of elements to be checked (defaults to 'None' which 
+                        means that this set will be created elsewhere). In not
+                        'None' the member elements will be appended to this set.
+        '''
+        recorder= self.createRecorder(recorderType, calcSet)
         self.shape.setupULSControlVars(self.elemSet,self.sectionClass,chiLT)
-        if(nodes.numDOFs==3):
+        nodHndlr= self.getPreprocessor().getNodeHandler        
+        if(nodHndlr.numDOFs==3):
             recorder.callbackRecord= EC3lsc.controlULSCriterion2D()
         else:
             recorder.callbackRecord= EC3lsc.controlULSCriterion()

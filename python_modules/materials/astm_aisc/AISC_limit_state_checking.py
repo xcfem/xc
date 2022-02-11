@@ -326,28 +326,21 @@ class Member(steel_member_base.BucklingMember):
              e.setProp('chiLT',chiLT) # flexural strength reduction factor.
              e.setProp('chiN',chiN) # compressive strength reduction factor.
 
-    def installULSControlRecorder(self,recorderType, chiN: float= 1.0, chiLT: float= 1.0):
+    def installULSControlRecorder(self,recorderType, chiN: float= 1.0, chiLT: float= 1.0, calcSet= None):
         '''Install recorder for verification of ULS criterion.
 
         :param recorderType: type of the recorder to install.
         :param chiN: compressive strength reduction factor.
         :param chiLT: flexural strength reduction factor.
+        :param calcSet: set of elements to be checked (defaults to 'None' which 
+                        means that this set will be created elsewhere). In not
+                        'None' the member elements will be appended to this set.
         '''
-        prep= self.getPreprocessor()
-        nodes= prep.getNodeHandler
-        domain= prep.getDomain
-        recorder= domain.newRecorder(recorderType,None)
-        if(not self.elemSet):
-            self.createElementSet()
-        eleTags= list()
-        for e in self.elemSet:
-            eleTags.append(e.tag)
-            e.setProp('ULSControlRecorder',recorder)
-        idEleTags= xc.ID(eleTags)
-        recorder.setElements(idEleTags)
+        recorder= self.createRecorder(recorderType, calcSet)
         sectionClassif= 1 # dummy argument usef for compatibility
         self.shape.setupULSControlVars(self.elemSet, sectionClassif, chiN= chiN, chiLT= chiLT)
-        if(nodes.numDOFs==3):
+        nodHndlr= self.getPreprocessor().getNodeHandler
+        if(nodHndlr.numDOFs==3):
             recorder.callbackRecord= controlULSCriterion2D()
         else:
             recorder.callbackRecord= controlULSCriterion()

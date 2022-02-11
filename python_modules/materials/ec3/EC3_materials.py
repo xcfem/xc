@@ -425,22 +425,21 @@ class EC3Shape(object):
             e.setProp('chiLT',chiLT) #Lateral torsional buckling reduction factor.
             e.setProp('crossSection',self)
 
-    def installULSControlRecorder(self, recorderType, elems, sectionClass= 1, chiLT=1.0):
+    def installULSControlRecorder(self, recorderType, elems, sectionClass= 1, chiLT=1.0, calcSet= None):
         '''Installs recorder for verification of ULS criterion. Preprocessor obtained from the set of elements.
 
         :param recorderType: recorder type.
         :param sectionClass: section classification (1,2,3 or 4)
         :param chiLT: lateral buckling reduction factor (default= 1.0).
+        :param calcSet: set of elements to be checked (defaults to 'None' which 
+                        means that this set will be created elsewhere). In not
+                        'None' the member elements will be appended to this set.
         '''
-        preprocessor= elems.owner.getPreprocessor
-        nodes= preprocessor.getNodeHandler
-        domain= preprocessor.getDomain
-        recorder= domain.newRecorder(recorderType,None)
-        recorder.setElements(elems.getTags())
-        for e in elems:
-            e.setProp('ULSControlRecorder', recorder)
+        recorder= self.createRecorder(recorderType, calcSet)
+
         self.setupULSControlVars(elems,sectionClass,chiLT)
-        if(nodes.numDOFs==3):
+        nodHndlr= self.getPreprocessor().getNodeHandler        
+        if(nodHndlr.numDOFs==3):
             recorder.callbackRecord= EC3lsc.controlULSCriterion2D()
         else:
             recorder.callbackRecord= EC3lsc.controlULSCriterion()
