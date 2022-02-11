@@ -12,6 +12,10 @@ __email__= " ana.Ortega.Ort@gmail.com, l.pereztato@gmail.com"
 from misc_utils import log_messages as lmsg
 from model.geometry import geom_utils as gu
 
+import xc_base
+import geom
+import xc
+
 class MemberConnection(object):
     '''Member connection
 
@@ -115,3 +119,26 @@ class Member(object):
             for e in l.elements:
                 self.elemSet.append(e)
 
+    def createRecorder(self, recorderType:str, calcSet= None):
+        '''Install recorder for verification of ULS criterion.
+
+        :param recorderType: type of the recorder to install.
+        :param calcSet: set of elements to be checked (defaults to 'None' which 
+                        means that this set will be created elsewhere). In not
+                        'None' the member elements will be appended to this set.
+        '''
+        # Create recorder.
+        domain= self.getPreprocessor().getDomain
+        recorder= domain.newRecorder(recorderType,None)
+        if(not self.elemSet):
+            self.createElementSet()
+        eleTags= list()
+        for e in self.elemSet:
+            eleTags.append(e.tag)
+            e.setProp('ULSControlRecorder',recorder)
+        idEleTags= xc.ID(eleTags)
+        recorder.setElements(idEleTags)
+        # Append the member elements into calcSet
+        if(calcSet):
+            calcSet.extend(self.elemSet)
+        return recorder
