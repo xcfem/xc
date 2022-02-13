@@ -17,7 +17,7 @@ from materials.awc_nds import AWCNDS_materials
 # Data obtained from: https://apawood-europe.org/wp-content/uploads/2020/05/Z725-I-joists.pdf
 
 jsonDict= None
-with importlib.resources.open_text("materials.awc_nds.aux", "pr-400_i-joists.json") as file:
+with importlib.resources.open_text("materials.awc_nds.aux", "pr_400_i_joists.json") as file:
     jsonDict= json.load(file)
 
 pr400_i_joists= dict()
@@ -27,4 +27,5 @@ for key in jsonDict:
     h= sectionData['h']
     Mr= sectionData['Mr']
     Vr= sectionData['Vr']
-    pr400_i_joists[key]= AWCNDS_materials.TJIJoistSection(name= key, h= h, Ms= Mr, Vs= Vr)
+    EI= sectionData['EI']
+    pr400_i_joists[key]= AWCNDS_materials.TJIJoistSection(name= key, h= h, Ms= Mr, Vs= Vr, EI= EI)

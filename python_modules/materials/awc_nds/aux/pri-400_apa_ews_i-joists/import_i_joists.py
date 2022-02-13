@@ -41,7 +41,7 @@ import json
 #      application based on Eqs. 1 and 2.
 
 fNameIn= "factored_resistance_apa_ews_performance_rated_i_joists.ods"
-fNameOut= '../pr-400_i-joists.json'
+fNameOut= '../pr_400_i_joists.json'
 
 columnOrder= ['','nmb', 'h', 'EI', 'Mr', 'Vr', 'Ir', 'ER_44_wo_stiff', 'ER_44_stiff', 'ER_102_wo_stiff', 'ER_102_stiff', 'VLCr', 'K']
 numColumns= len(columnOrder)
