@@ -12,6 +12,7 @@ import sys
 import scipy.interpolate
 from misc_utils import log_messages as lmsg
 from materials import wood_base
+from materials import typical_materials
 from materials.sections import section_properties as sp
 from postprocess import def_vars_control as vc
 from materials import typical_materials
@@ -636,8 +637,11 @@ class PlywoodPanelSection(WoodPanelSection):
 # "Panel design specification" Form No. D510C/Revised May 2012/0300
 
 class OSBPanelSection(WoodPanelSection):
-    ''' Oriented strand board panel.'''
+    ''' Oriented strand board panelaccording to document:
+        "Panel design specification" 
+        Form No. D510C/Revised May 2012/0300.'''
     rho= 632.62 # average density kg/m3 Table 12
+    
     def __init__(self, name, b, h, shear_constant):
         ''' Constructor.
 
@@ -647,6 +651,7 @@ class OSBPanelSection(WoodPanelSection):
         :param shear_constant: shear constant.
         '''
         super(OSBPanelSection,self).__init__(name, b, h, shear_constant)
+        
     def getFb(self, angle= math.pi/2.0):
         ''' Return the bending stress Fb or the panel according
             to the table A of the document:
@@ -902,7 +907,7 @@ class HeaderSection(WoodRectangularSection):
                             the material density.
         '''
         mat= self.defXCMaterial(overrideRho= overrideRho)
-        self.xc_section= super(HeaderSection,self).defElasticShearSection2d(preprocessor,mat, overrideRho)
+        self.xc_section= super(HeaderSection,self).defElasticShearSection2d(preprocessor, mat, overrideRho)
         return self.xc_section
     
     def defElasticShearSection3d(self, preprocessor, overrideRho= None):
@@ -1020,28 +1025,39 @@ class LVL_2900Fb2E_HeaderSection(LVLHeaderSection):
         
 class TJIJoistSection(WoodSection):
     ''' TJI joist section.'''
-    
-    def __init__(self, name, h, Ms, Vs):
+    E= 1.55e6*psi2Pa # Elastic modulus (Pa) arbitrarily chosen.
+    def __init__(self, name:str, h:float, Ms:float, Vs:float, EI:float, linearRho:float= None):
         ''' Constructor.
 
         :param name: section name.
         :param h: section height.
         :param Ms: allowable moment.
         :param Vs: allowable shear.
+        :param EI: bending stiffness-
         '''
         super(TJIJoistSection,self).__init__(name)
+        self.h= h
         self.Ms= Ms # Allowable moment.
         self.Vs= Vs # Allowable shear.
-        
+        self.Iz= EI/self.E
+        self.linearRho= linearRho
+
+    def getCompressiveStrength(self):
+        ''' Return the value of the compressive strength of the section.
+        '''
+        b= 12*self.Iz/self.h**3
+        area= self.h*b
+        return area # very small strength 1N/m2
+    
     def getFlexuralStrength(self, majorAxis= True):
         ''' Return the value of the flexural strength of the section.
         '''
         retval= self.Ms
         if(not majorAxis):
-            className= type(self).__name__
-            methodName= sys._getframe(0).f_code.co_name
-            lmsg.error(className+'.'+methodName+'; not implemented for minor axis.')
-            retval/=1e4
+            # className= type(self).__name__
+            # methodName= sys._getframe(0).f_code.co_name
+            # lmsg.error(className+'.'+methodName+'; not implemented for minor axis.')
+            retval/=1e4 # very small strength
         return retval
 
     def getShearStrength(self, majorAxis= True):
@@ -1049,11 +1065,45 @@ class TJIJoistSection(WoodSection):
         '''
         retval= self.Vs
         if(not majorAxis):
-            className= type(self).__name__
-            methodName= sys._getframe(0).f_code.co_name
-            lmsg.error(className+'.'+methodName+'; not implemented for minor axis.')
-            retval/=1e4
+            # className= type(self).__name__
+            # methodName= sys._getframe(0).f_code.co_name
+            # lmsg.error(className+'.'+methodName+'; not implemented for minor axis.')
+            retval/=1e4 # very small strength
         return retval
+
+    def defElasticShearSection2d(self, preprocessor, overrideRho= None):
+        ''' Defines a elastic shear section for two-dimensional
+            problems.
+
+        :param preprocessor: pre-processor for the finite element problem.
+        :param overrideRho: if defined (not None), override the value of 
+                            the material density.
+        '''
+        b= 12*self.Iz/self.h**3
+        area= self.h*b
+        G= self.E/(2*(1+0.3))
+        lR= self.linearRho
+        if(lR==None):
+            lR= 632.62*b*self.h # average density kg/m3
+        return typical_materials.defElasticShearSection2d(preprocessor,name= self.name, A= area,E= self.E,G= G, I= self.Iz,alpha= 5.0/6.0, linearRho= lR)
+    
+    def defElasticShearSection3d(self, preprocessor, overrideRho= None):
+        ''' Defines a elastic shear section for two-dimensional
+            problems.
+
+        :param preprocessor: pre-processor for the finite element problem.
+        :param overrideRho: if defined (not None), override the value of 
+                            the material density.
+        '''
+        b= 12*self.Iz/self.h**3
+        area= self.h*b
+        G= self.E/(2*(1+0.3))
+        lR= self.linearRho
+        Iy= 1/12.0*self.h*b**3
+        J= Iy/1000.0
+        if(lR==None):
+            lR= 632.62*b*self.h # average density kg/m3
+        return typical_materials.defElasticShearSection3d(preprocessor,name= self.name, A= area,E= self.E, G= G,Iz= self.Iz, Iy= Iy, J= J, alpha_y= 5.0/6.0, alpha_z= 5/6.0, linearRho= lR)
 
 class CustomLumberSection(WoodRectangularSection):
     ''' Section of a lumber member with custom dimensions.'''
