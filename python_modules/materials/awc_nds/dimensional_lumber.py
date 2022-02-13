@@ -153,9 +153,10 @@ class DimensionLumberWood(mat.Wood):
             lmsg.error('Grade: '+grade+' unknown.')
         return retval;
     
-    def getFb(self,h):
+    def getFb(self,b, h):
         ''' Return the value of Fb. Used in BeamMember.getBeamStabilityFactor
 
+        :param b: section width.
         :param h: section depth
         '''
         return self.Fb
@@ -175,7 +176,7 @@ class DimensionLumberWood(mat.Wood):
             C*=0.85
         C*= self.getBendingFlatUseFactor(b, h) # Flat use factor
         C*= self.getBendingSizeFactor(b, h) # Size factor
-        return C*self.Fb
+        return C*self.getFb(b,h)
     
     def getFtAdj(self, b, h):
         ''' Return the adjusted value of Ft according
@@ -209,13 +210,21 @@ class DimensionLumberWood(mat.Wood):
         if(self.wet):
             C*=0.67
         return C*self.Fct
+
+    def getFc(self,  b, h):
+        ''' Return the value of Fc.
+
+        :param b: section width.
+        :param h: section depth.
+        '''
+        return self.Fc
     
     def getFcAdj(self, b, h):
         ''' Return the adjusted value of Fc according
             to National Design Specification table 4A.
 
         :param b: section width.
-        :param h: section depth
+        :param h: section depth.
         '''
         C= 1.0 # Wet service factor.
         # Wet service factor
@@ -223,7 +232,7 @@ class DimensionLumberWood(mat.Wood):
         if(self.wet and self.Fc>threshold):
             C*=0.8
         C*= self.getCompressionSizeFactor(b, h) # Size factor
-        return C*self.Fc
+        return C*self.getFc(b,h)
     
     def getEAdj(self):
         ''' Return the adjusted value of E according
@@ -483,8 +492,22 @@ class SouthernPineWood(DimensionLumberWood):
                 lmsg.error('number 3 and stud grades have not sub grades.')
         else:
             lmsg.error('Grade: '+grade+' unknown.')
-    def getFb(self, h):
-        return self.Fb(h)
+        
+    def getFb(self,  b, h):
+        ''' Return the value of Fc.
+
+        :param b: section width.
+        :param h: section depth.
+        '''
+        return self.Fb(max(b,h))
+
+    def getFc(self,  b, h):
+        ''' Return the value of Fc.
+
+        :param b: section width.
+        :param h: section depth.
+        '''
+        return self.Fc(max(b,h))
 
 # Spruce-Pine-Fir reference design values according to table 4A
 # of National Design Specification page 37

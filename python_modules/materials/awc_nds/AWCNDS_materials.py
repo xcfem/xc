@@ -1119,7 +1119,7 @@ class CustomLumberSection(WoodRectangularSection):
         self.wood= woodMaterial
         
     def getFb(self):
-        return self.wood.getFb(self.h)
+        return self.wood.getFb(b= self.b, h= self.h)
     
     def defElasticShearSection2d(self, preprocessor, overrideRho= None):
         ''' Defines a elastic shear section for two-dimensional

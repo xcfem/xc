@@ -205,7 +205,7 @@ class BeamMember(MemberBase):
            :param cantilever: if true cantilever beam otherwise single span beam.
         '''
         FbE= self.getFbECriticalBucklingDesignValue(numberOfConcentratedLoads, lateralSupport, cantilever)
-        ratio= FbE/self.section.wood.getFb(self.section.h)
+        ratio= FbE/self.section.wood.getFb(b= self.section.b, h=self.section.h)
         A= (1+ratio)/1.9
         B= A**2
         C= ratio/0.95
