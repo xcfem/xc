@@ -137,7 +137,7 @@ for l in xcTotalSet.getLines:
 for ls in limitStates:
     ls.saveAll(combContainer, ndsCalcSet)
 outCfg= lsd.VerifOutVars(setCalc=ndsCalcSet, appendToResFile='Y', listFile='N', calcMeanCF='Y')
-limitState= lsd.normalStressesResistance
+limitState= lsd.shearResistance
 outCfg.controller= nds.ShearController(limitState.label)
 average= limitState.runChecking(outCfg)
 
@@ -179,7 +179,5 @@ else:
 # from postprocess import output_handler
 # oh= output_handler.OutputHandler(modelSpace)
 
-# oh.displayElementValueDiagram('chiLT', setToDisplay= ndsCalcSet)
-
-# oh.displayBeamResult(attributeName=lsd.normalStressesResistance.label, itemToDisp='CF', beamSetDispRes=ndsCalcSet, setToDisplay=xcTotalSet)
+# oh.displayBeamResult(attributeName=lsd.shearResistance.label, itemToDisp='CF', beamSetDispRes=ndsCalcSet, setToDisplay=xcTotalSet)
 
