@@ -334,17 +334,19 @@ class LVL_2900Fb2E(LSL):
         :param name: material name.
         '''
         super(LVL_2900Fb2E,self).__init__(name)
+        
+class WoodSection(object):
+    ''' Wood structural cross-section.
 
-class WoodSection(sp.RectangularSection):
-    ''' Wood structural cross-section.'''
-    def __init__(self, name, b, h):
-        ''' Constructor.
-
-        :param name: section name.
-        :param b: section width.
-        :param h: section height.
-        '''
-        super(WoodSection,self).__init__(name, b, h)
+    :ivar name: section name.
+    :ivar xc_wood_material: section wood material.
+    :ivar xc_section: XC section material.
+    '''
+    def __init__(self, name):
+        ''' Constructor.'''
+        self.name= name
+        self.xc_wood_material= None
+        self.xc_section= None
         
     def setupULSControlVars(self, elems, chiN=1.0, chiLT=1.0):
         '''For each element creates the variables
@@ -361,7 +363,7 @@ class WoodSection(sp.RectangularSection):
             e.setProp('FCTNCP',[-1.0,-1.0]) #Normal stresses efficiency.
             e.setProp('FCVCP',[-1.0,-1.0]) #Shear stresses efficiency.
             e.setProp('crossSection', self)
-
+            
     def getCompressiveStrength(self):
         ''' Return the value of the compressive strength of the section.
         '''
@@ -389,7 +391,7 @@ class WoodSection(sp.RectangularSection):
         ''' Return the value of the flexural strength of the section.
         '''
         return self.getFvAdj()*self.A()/1.5
-
+    
     def getBiaxialBendingEfficiency(self,Nd,Myd,Mzd,Vyd= 0.0, chiN=1.0, chiLT=1.0):
         '''Return biaxial bending efficiency according to section H1
            of AISC-360-16.
@@ -498,9 +500,25 @@ class WoodSection(sp.RectangularSection):
             fcv[1]= FCV2
             elem.setProp("HIPCPV2",nmbComb)
         elem.setProp("FCVCP",fcv)
+
+class WoodRectangularSection(WoodSection, sp.RectangularSection):
+    ''' Wood structural cross-section.'''
+    def __init__(self, name, b, h):
+        ''' Constructor.
+
+        :param name: section name.
+        :param b: section width.
+        :param h: section height.
+        '''
+        WoodSection.__init__(self, name)
+        sp.RectangularSection.__init__(self, name= name, b= b, h= h)
+
         
-class WoodPanelSection(WoodSection):
-    ''' Wood structural panel.'''
+class WoodPanelSection(WoodRectangularSection):
+    ''' Wood structural panel.
+
+    :ivar shearConstant: shear constant
+    '''
     def __init__(self, name, b, h, shear_constant):
         ''' Constructor.
 
@@ -511,9 +529,11 @@ class WoodPanelSection(WoodSection):
         '''
         super(WoodPanelSection,self).__init__(name, b, h)
         self.shearConstant= shear_constant
+        
     def getArealDensity(self):
         ''' Return the mass per unit area (thickness= h).'''
         return self.rho*self.h
+    
     def getSpanRating(self):
         ''' Return the span rating from the panel thickness according
             to the table B of the documents:
@@ -694,6 +714,7 @@ class OSBPanelSection(WoodPanelSection):
                     FbS= 405.0
         Fb= FbS/self.Wzel()*4.44822*0.0254/0.3048
         return Fb
+    
     def getFv(self):
         ''' Return the bending stress Fb or the panel according
             to the table A of the document:
@@ -727,6 +748,7 @@ class OSBPanelSection(WoodPanelSection):
                 Fvtv= 220.0
         Fv= Fvtv/self.h*4.44822/0.3048
         return Fv
+    
     def getE(self, angle= math.pi/2.0):
         ''' Return the bending stress Fb or the panel according
             to the table A of the document:
@@ -808,11 +830,12 @@ class OSBPanelSection(WoodPanelSection):
         rho= self.rho
         if(overrideRho!=None):
             rho= overrideRho
-        osbMaterial= typical_materials.MaterialData(name= matName,E= self.getE(angle), nu=0.2, rho= rho)
-        retval= super(OSBPanelSection,self).defElasticShearSection2d(preprocessor,osbMaterial, overrideRho= overrideRho)
+        if(not self.xc_wood_material):
+            self.xc_wood_material= typical_materials.MaterialData(name= matName,E= self.getE(angle), nu=0.2, rho= rho)
+        retval= super(OSBPanelSection,self).defElasticShearSection2d(preprocessor, self.xc_wood_material, overrideRho= overrideRho)
         return retval
 
-class HeaderSection(WoodSection):
+class HeaderSection(WoodRectangularSection):
     ''' Structural beam/header.'''
     nu= 0.2
     
@@ -832,8 +855,6 @@ class HeaderSection(WoodSection):
         self.Vs= Vs # Allowable shear.
         self.rho= linearDensity/b/h
         self.wood= wood
-        self.xc_wood_material= None
-        self.xc_section= None
         
     def getLinearDensity(self):
         ''' Return the mass per unit length.'''
@@ -996,8 +1017,45 @@ class LVL_2900Fb2E_HeaderSection(LVLHeaderSection):
         :param linearDensity: mass per unit length.
         '''
         super(LVL_2900Fb2E_HeaderSection,self).__init__(name, b, h, Ms, Vs, linearDensity, wood= LVL_2900Fb2E())
+        
+class TJIJoistSection(WoodSection):
+    ''' TJI joist section.'''
+    
+    def __init__(self, name, h, Ms, Vs):
+        ''' Constructor.
 
-class CustomLumberSection(WoodSection):
+        :param name: section name.
+        :param h: section height.
+        :param Ms: allowable moment.
+        :param Vs: allowable shear.
+        '''
+        super(TJIJoistSection,self).__init__(name)
+        self.Ms= Ms # Allowable moment.
+        self.Vs= Vs # Allowable shear.
+        
+    def getFlexuralStrength(self, majorAxis= True):
+        ''' Return the value of the flexural strength of the section.
+        '''
+        retval= self.Ms
+        if(not majorAxis):
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.error(className+'.'+methodName+'; not implemented for minor axis.')
+            retval/=1e4
+        return retval
+
+    def getShearStrength(self, majorAxis= True):
+        ''' Return the value of the flexural strength of the section.
+        '''
+        retval= self.Vs
+        if(not majorAxis):
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.error(className+'.'+methodName+'; not implemented for minor axis.')
+            retval/=1e4
+        return retval
+
+class CustomLumberSection(WoodRectangularSection):
     ''' Section of a lumber member with custom dimensions.'''
     def __init__(self, name, b, h, woodMaterial):
         ''' Constructor.
@@ -1009,7 +1067,6 @@ class CustomLumberSection(WoodSection):
         '''
         super(CustomLumberSection,self).__init__(name, b, h)
         self.wood= woodMaterial
-        self.xc_section= None
         
     def getFb(self):
         return self.wood.getFb(self.h)

@@ -38,7 +38,6 @@ import json
 fNameIn= "HFSHS-secpropsdimsprops-EC3-UKNA-UK-18_01_2022.ods"
 fNameOut= '../bs_en_10210_hfshs_profiles.json'
 
-data= get_data(fNameIn)
 columnOrder= ['','','','nmb', 'b', 'e', 'CheckAvailability', 'P', 'A', 'hSlendernessRatio', 'Iz', 'iz', 'Wzel', 'Wzpl', 'It', 'Wt', 'AL', 'AG']
 numColumns= len(columnOrder)
 
@@ -54,6 +53,7 @@ for count, key in enumerate(columnOrder):
         columnKeys[key]= count
     
 shapesDict= dict() # Dictionary with all the shapes.
+data= get_data(fNameIn)
 for sheet in data:
     rows= data[sheet]
     for r in rows:

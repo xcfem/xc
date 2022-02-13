@@ -424,7 +424,7 @@ class RectangularSection(SectionProperties):
     yBeta= [0.208, 0.221, 0.231, 0.246, 0.267, 0.282, 0.299, 0.307, 0.313, 1.0/3]
     betaTable= scipy.interpolate.interp1d(xBeta,yBeta)
 
-    def __init__(self,name,b,h):
+    def __init__(self, name:str, b:float, h:float):
         ''' Constructor.
 
         :param name: section name.
