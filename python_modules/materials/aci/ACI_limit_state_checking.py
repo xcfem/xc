@@ -582,7 +582,7 @@ class AnchorBolt(object):
 
     :ivar ca1: distance from the center of an anchor shaft to the edge of 
                concrete in one direction. If shear is applied to anchor, ca1 
-               is taken in the direc-tion of the applied shear. If the
+               is taken in the direction of the applied shear. If the
                tension isapplied to the anchor, ca1 is the minimum edge 
                distance.
     :ivar ca2: distance from center of an anchor shaft to the edge of concrete
