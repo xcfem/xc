@@ -1070,6 +1070,9 @@ echo "$BLEU" "    AWC/NDS limit state checking." "$NORMAL"
 python tests/postprocess/limit_state_checking/awc_nds/test_uls_checking_nds_01.py
 python tests/postprocess/limit_state_checking/awc_nds/test_uls_checking_nds_02.py
 
+echo "$BLEU" "    serviceability limit state checking." "$NORMAL"
+python tests/postprocess/limit_state_checking/serviceability_limit_states/test_ibc2018_deflection.py
+
 # Graphic output tests
 ##python tests/postprocess/vtk/dibuja_edges.py
 echo "$BLEU" "  Graphic output." "$NORMAL"
