@@ -25,6 +25,7 @@ from postprocess import RC_material_distribution
 from postprocess.config import default_config
 from materials.sections.fiber_section import def_simple_RC_section
 from postprocess import element_section_map
+import os
 import sys
 import logging
 
@@ -89,8 +90,7 @@ lPatterns.addToDomain(lp0.getName())
 combContainer= combs.CombContainer()
 combContainer.ULS.perm.add('allLoads', '1.0*lp0')
 totalSet= preprocessor.getSets.getSet('total')
-cfg=default_config.EnvConfig(language='en',intForcPath= '',verifPath= '')
-cfg.projectDirTree.workingDirectory= '/tmp/'
+cfg= default_config.get_temporary_env_config()
 lsd.LimitStateData.envConfig= cfg
 lsd.shearResistance.saveAll(combContainer,totalSet) 
 
@@ -150,9 +150,8 @@ print("meanFCs[1]= ", meanFCs[1])
 print("ratio2= ",ratio2)
 '''
 
+cfg.cleandirs() # Clean after yourself.
 # Show logging messages.
-#sys.stdout = sysstdout
-import os
 fname= os.path.basename(__file__)
 if((ratio1<0.01) and (ratio2<0.01)):
     print('test '+fname+': ok.')

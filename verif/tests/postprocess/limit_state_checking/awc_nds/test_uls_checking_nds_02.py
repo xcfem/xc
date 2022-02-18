@@ -110,9 +110,7 @@ combContainer.dumpCombinations(preprocessor)
 # Compute internal forces.
 
 ## Setup working directory.
-fname= os.path.basename(__file__)
-cfg= default_config.EnvConfig(language='en', resultsPath= 'tmp_results/', intForcPath= 'internalForces/',verifPath= 'verifications/',reportPath='./',reportResultsPath= '/tmp/annex/',grWidth='120mm')
-cfg.projectDirTree.workingDirectory= '/tmp/'+os.path.splitext(fname)[0]
+cfg= default_config.get_temporary_env_config()
 lsd.LimitStateData.envConfig= cfg
 
 ## Set combinations to compute.
@@ -166,7 +164,7 @@ print('ref. max. CF:', refMaxCF)
 print('ratio1= ', ratio1)
 '''
 
-os.system("rm -f -r ./tmp") # Clean after yourself.
+cfg.cleandirs() # Clean after yourself.
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if((ratio0<1e-8) and (ratio1<1e-4)):

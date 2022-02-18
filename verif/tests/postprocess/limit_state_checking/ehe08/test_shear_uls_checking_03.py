@@ -95,10 +95,8 @@ pth= os.path.dirname(__file__)
 #print("pth= ", pth)
 if(not pth):
   pth= "."
-fname= os.path.basename(__file__)
 
-cfg=default_config.EnvConfig(language='en', resultsPath= 'tmp_results/', intForcPath= 'internalForces/',verifPath= 'verifications/',reportPath='./',reportResultsPath= '/tmp/annex/',grWidth='120mm')
-cfg.projectDirTree.workingDirectory= '/tmp/'+os.path.splitext(fname)[0]
+cfg= default_config.get_temporary_env_config()
 cfg.projectDirTree.createTree() # To allow copying existing internal force data into.
 limit_state_data.LimitStateData.envConfig= cfg
 shutil.copy(pth+'/intForce_ULS_shearResistance.csv',limit_state_data.shearResistance.getInternalForcesFileName())
@@ -124,8 +122,9 @@ print("ratio2= ",ratio2)
 '''
 
 import os
-os.system("rm -f -r /tmp/annex") # Clean after yourself.
+cfg.cleandirs()  # Clean after yourself.
 from misc_utils import log_messages as lmsg
+fname= os.path.basename(__file__)
 if (ratio1<1e-4) and (ratio2<1e-4):
     print('test '+fname+': ok.')
 else:

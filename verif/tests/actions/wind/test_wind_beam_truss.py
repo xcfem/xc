@@ -165,7 +165,6 @@ else:
 
 '''
 #Graphics
-from postprocess.config import default_config
 from postprocess import output_styles as outSty
 from postprocess import output_handler as outHndl
 sty=outSty.OutputStyle() 

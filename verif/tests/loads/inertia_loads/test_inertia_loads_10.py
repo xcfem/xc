@@ -15,8 +15,6 @@ import xc
 import math
 from model import predefined_spaces
 from model.geometry import grid_model as gm
-# Default configuration of environment variables.
-from postprocess.config import default_config
 #from postprocess import output_handler as outHndl
 from materials import typical_materials as tm
 from model.mesh import finit_el_model as fem

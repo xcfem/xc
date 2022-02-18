@@ -3,6 +3,7 @@ from __future__ import division
 from __future__ import print_function
 
 import os
+import tempfile
 import xc_base
 import geom
 import xc
@@ -86,6 +87,19 @@ class ProjectDirTree(object):
         self.reportPath= reportPath
         self.reportResultsPath= reportResultsPath
 
+    def getMainPaths(self):
+        ''' Return the main paths used in the project.'''
+        retval= list()
+        retval.append(self.getFullResultsPath())
+        retval.append(self.getFullReportPath())
+        return retval
+                      
+    def cleanWorkingDirectory(self):
+        ''' Clean all the files in the working directory.'''
+        fullPaths= self.getMainPaths()
+        for pth in fullPaths:
+            os.system("rm -f -r "+pth)
+
     def getRltvResultsPath(self):
         ''' Return the relative path for the files that contains
             results.'''
@@ -132,12 +146,20 @@ class ProjectDirTree(object):
         
     def getRltvReportPath(self):
         ''' Return the relative path for the report files.'''  
-        return self.reportResultsPath+'text/'
+        return self.reportResultsPath
+    
+    def getRltvTextReportPath(self):
+        ''' Return the relative path for the text report files.'''  
+        return self.getRltvReportPath()+'text/'
     
     def getFullReportPath(self):
-        ''' Return the full path for the report files.'''        
-        return self.reportPath+self.getRltvReportPath()
+        ''' Return the full path for the report files.'''
+        return self.workingDirectory+'/'+self.reportPath+self.getRltvReportPath()
     
+    def getFullTextReportPath(self):
+        ''' Return the full path for the text report files.'''
+        return self.workingDirectory+'/'+self.reportPath+self.getRltvTextReportPath()
+
     def getFullGraphicsPath(self):
         ''' Return the full path for the graphic files.'''        
         return self.getFullReportPath()+'graphics/'
@@ -148,11 +170,11 @@ class ProjectDirTree(object):
 
     def getReportSectionsFile(self):
         ''' Return the full path for the sections report file.'''        
-        return self.getFullReportPath()+'sectReport.tex'
+        return self.getFullTextReportPath()+'sectReport.tex'
     
     def getReportSectionsGrPath(self):
         ''' Return the full path for the sections graphic files.'''        
-        return self.getFullReportPath()+'sections/'
+        return self.getFullTextReportPath()+'sections/'
 
     def getRltvReportSectionsGrPath(self):
         ''' Return the relative path for the sections graphic files.'''        
@@ -160,7 +182,7 @@ class ProjectDirTree(object):
 
     def getReportLoadsFile(self):
         ''' Return the path for the load report file.'''        
-        return self.getFullReportPath()+'report_loads.tex'
+        return self.getFullTextReportPath()+'report_loads.tex'
     
     def getReportLoadsGrPath(self):
         ''' Return the path for the load graphic files.'''        
@@ -178,7 +200,7 @@ class ProjectDirTree(object):
     def getReportNormStrFile(self):
         ''' Return the path of the normal stresses verification
             report file.'''
-        return self.getFullReportPath()+'report_normStrsULS.tex'
+        return self.getFullTextReportPath()+'report_normStrsULS.tex'
     
     def getReportNormStrGrPath(self):
         ''' Return the path for the normal stresses verification
@@ -198,7 +220,7 @@ class ProjectDirTree(object):
     def getReportShearFile(self):
         ''' Return the path of the shear verification
             report file.'''
-        return self.getFullReportPath()+'report_shearULS.tex'
+        return self.getFullTextReportPath()+'report_shearULS.tex'
     
     def getReportShearGrPath(self):
         ''' Return the path for the shear verification
@@ -218,7 +240,7 @@ class ProjectDirTree(object):
     def getReportVonMisesStressFile(self):
         ''' Return the path of the VonMisesStress verification
             report file.'''
-        return self.getFullReportPath()+'report_VonMisesStressULS.tex'
+        return self.getFullTextReportPath()+'report_VonMisesStressULS.tex'
     
     def getReportVonMisesStressGrPath(self):
         ''' Return the path for the VonMisesStress verification
@@ -238,7 +260,7 @@ class ProjectDirTree(object):
     def getReportCrackFreqFile(self):
         ''' Return the path of the crack verification
             report file (frequent loads).'''
-        return self.getFullReportPath()+'report_crackingSLS_freq.tex'
+        return self.getFullTextReportPath()+'report_crackingSLS_freq.tex'
     
     def getReportCrackFreqGrPath(self):
         ''' Return the path for the crack verification
@@ -258,7 +280,7 @@ class ProjectDirTree(object):
     def getReportCrackQpermFile(self):
         ''' Return the path of the crack verification
             report file (quasi-permanent loads).'''
-        return self.getFullReportPath()+'report_crackingSLS_qperm.tex'
+        return self.getFullTextReportPath()+'report_crackingSLS_qperm.tex'
     
     def getReportCrackQpermGrPath(self):
         ''' Return the path for the crack verification
@@ -278,7 +300,7 @@ class ProjectDirTree(object):
     def getReportFatigueFile(self):
         ''' Return the path of the fatigue verification
             report file.'''
-        return self.getFullReportPath()+'report_fatigueStrsULS.tex'
+        return self.getFullTextReportPath()+'report_fatigueStrsULS.tex'
     
     def getReportFatigueGrPath(self):
         ''' Return the path for the fatigue verification
@@ -379,7 +401,7 @@ class ProjectDirTree(object):
             return None
     
     def getReportSimplLCFile(self):
-        return self.getFullReportPath()+'report_resSimplLC.tex'
+        return self.getFullTextReportPath()+'report_resSimplLC.tex'
     
     def getReportSimplLCGrPath(self):
         return self.getFullGraphicsPath()+'resSimplLC/'
@@ -388,12 +410,12 @@ class ProjectDirTree(object):
         return self.getRltvGraphicsPath()+'resSimplLC/'
 
     def getPathList(self):
-        ''' Create the project directory tree.'''
+        ''' Return the project directory tree.'''
         retval= list()
         retval.append(self.getInternalForcesResultsPath())
         retval.append(self.getReactionsResultsPath())
         retval.append(self.getFullVerifPath())
-        retval.append(self.getFullReportPath())
+        retval.append(self.getFullTextReportPath())
         retval.append(self.getFullGraphicsPath())
 #        retval.append(self.getReportSectionsFile())
         retval.append(self.getReportSectionsGrPath())
@@ -471,7 +493,7 @@ class EnvConfig(output_styles.OutputStyle):
         super(EnvConfig,self).__init__(language= language)
         #default names of files with data for FE model generation, results of
         #limit state verifications, ..
-        self.projectDirTree= ProjectDirTree(resultsPath= resultsPath, intForcPath= intForcPath,verifPath= verifPath,reportPath=reportPath,reportResultsPath= reportResultsPath, fNameMark= fNameMark)
+        self.projectDirTree= ProjectDirTree(resultsPath= resultsPath, intForcPath= intForcPath,verifPath= verifPath,reportPath= reportPath,reportResultsPath= reportResultsPath, fNameMark= fNameMark)
 
         lsd.LimitStateData.internal_forces_results_directory= intForcPath
         lsd.LimitStateData.check_results_directory= verifPath
@@ -492,6 +514,10 @@ class EnvConfig(output_styles.OutputStyle):
         :param path: the path to create.
         '''
         return self.projectDirTree.makedirs(pth)
+    
+    def cleandirs(self):
+        ''' Clean all the files in the working directory.'''
+        self.projectDirTree.cleanWorkingDirectory()
 
     def open(self, fileName, mode='r', buffering=-1, encoding=None, errors=None, newline=None, closefd=True, opener=None):
         ''' Open file and return a corresponding file object..
@@ -506,7 +532,6 @@ class EnvConfig(output_styles.OutputStyle):
         :param opener: see Python documentation for open built-in function.
         '''
         return self.projectDirTree.open(fileName, mode, buffering, encoding, errors, newline, closefd, opener)
-
 
 #Predefined colors for sets (progressing from light to dark)
 
@@ -540,3 +565,21 @@ setBasicColors={
     'blue03':xc.Vector([0.,0.4,1]),
     'blue04':xc.Vector([0.,0.,0.9])     
   }
+
+# Configuration for temporary storage of results (normally with testing purposes).
+
+def get_temporary_env_config(subDirName: str= None):
+    ''' Return an EnvConvig object suitable for temporary storage of results,
+        normally with testing purposes.
+
+        :param subDirName: name of the folder where results will be stored.
+    '''
+    dirName= None
+    if(subDirName==None):
+        tempDir= tempfile.TemporaryDirectory()
+        dirName= tempDir.name
+    else:
+        dirName= '/tmp/'+subDirName
+    retval= EnvConfig(language='en', resultsPath= 'tmp_results/', intForcPath= 'internalForces/',verifPath= 'verifications/',reportPath='',reportResultsPath= 'annex/',grWidth='120mm')
+    retval.projectDirTree.workingDirectory= dirName
+    return retval

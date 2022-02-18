@@ -15,9 +15,6 @@ import xc
 import math
 from model import predefined_spaces
 from model.geometry import grid_model as gm
-# Default configuration of environment variables.
-from postprocess.config import default_config
-#from postprocess import output_handler as outHndl
 from materials import typical_materials as tm
 from model.mesh import finit_el_model as fem
 from actions import loads
@@ -53,6 +50,7 @@ gridGeom=gm.GridModel(prep,rList,angList,zList,xCentCoo=0,yCentCoo=0)
 gridGeom.generateCylZPoints()
 
 ring=gridGeom.genSurfOneXYZRegion([(r1,0,0),(r2,angList[-1],0)],setName='ring',closeCyl='Y')
+#from postprocess import output_handler as outHndl
 #out=outHndl.OutputHandler(modelSpace)
 #out.displayBlocks()
 
@@ -105,8 +103,6 @@ else:
     lmsg.error(fname+' ERROR.')
 '''
 from postprocess import output_handler as outHndl
-from postprocess import output_styles as outSty
-sty=outSty.OutputStyle() 
-out=outHndl.OutputHandler(modelSpace,sty)
+out=outHndl.OutputHandler(modelSpace)
 out.displayLoads()
 '''

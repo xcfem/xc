@@ -125,9 +125,7 @@ combContainer.dumpCombinations(preprocessor)
 ## Compute internal forces.
 
 ### Setup working directory.
-fname= os.path.basename(__file__)
-cfg= default_config.EnvConfig(language='en', resultsPath= 'tmp_results/', intForcPath= 'internalForces/',verifPath= 'verifications/',reportPath='./',reportResultsPath= '/tmp/annex/',grWidth='120mm')
-cfg.projectDirTree.workingDirectory= '/tmp/'+os.path.splitext(fname)[0]
+cfg= default_config.get_temporary_env_config()
 lsd.LimitStateData.envConfig= cfg
 
 ### Set combinations to compute.
@@ -152,8 +150,8 @@ print(average)
 print('ratio= ', ratio)
 '''
 
+cfg.cleandirs() # Clean after yourself.
 import os
-os.system("rm -f -r /tmp/annex") # Clean after yourself.
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if(ratio<1e-6):

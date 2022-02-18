@@ -21,7 +21,6 @@ from materials.sia262 import SIA262_limit_state_checking
 from postprocess import limit_state_data as lsd
 from postprocess.config import default_config
 import shutil
-
 import logging
 
 
@@ -30,8 +29,6 @@ rootLogger = logging.getLogger()
 rootLogger.setLevel(logging.ERROR)
 
 feProblem= xc.FEProblem()
-feProblem.logFileName= "/tmp/erase.log" # Don't print warnings
-feProblem.errFileName= "/tmp/erase.err" # Ignore warning messagess about maximum error in computation of the interaction diagram.
 
 
 elementTags= [2524,2527]
@@ -71,11 +68,9 @@ pth= os.path.dirname(__file__)
 #print("pth= ", pth)
 if(not pth):
     pth= "."
-fname= os.path.basename(__file__)
 
 #Checking normal stresses.
-cfg=default_config.EnvConfig(language='en', resultsPath= 'tmp_results/', intForcPath= 'internalForces/',verifPath= 'verifications/',reportPath='./',reportResultsPath= '/tmp/annex/',grWidth='120mm')
-cfg.projectDirTree.workingDirectory= '/tmp/'+os.path.splitext(fname)[0]
+cfg= default_config.get_temporary_env_config()
 cfg.projectDirTree.createTree() # To allow copying existing internal force data into.
 lsd.LimitStateData.envConfig= cfg
 shutil.copy(pth+'/intForce_ULS_normalStressesResistance.csv',lsd.normalStressesResistance.getInternalForcesFileName())
@@ -87,7 +82,9 @@ shutil.copy(pth+'/intForce_ULS_normalStressesResistance.csv',lsd.normalStressesR
 outCfg= lsd.VerifOutVars(listFile='N',calcMeanCF='Y')
 outCfg.controller= SIA262_limit_state_checking.BiaxialBendingNormalStressController('ULS_normalStress')
 
+feProblem.errFileName= "/tmp/erase.err" # Ignore warning messagess about maximum error in computation of the interaction diagram.
 meanFCs= reinfConcreteSections.internalForcesVerification3D(lsd.normalStressesResistance,"d",outCfg)
+feProblem.errFileName= "cerr" # From now on display errors if any.
 
 
 #print("mean FCs: ", meanFCs)
@@ -104,10 +101,10 @@ print("meanFCs[1]= ", meanFCs[1])
 print("ratio2= ",ratio2)
 '''
 
-feProblem.errFileName= "cerr" # Display errors if any.
+cfg.cleandirs() # Clean after yourself.
 import os
-os.system("rm -f -r /tmp/annex") # Clean after yourself.
 from misc_utils import log_messages as lmsg
+fname= os.path.basename(__file__)
 if (ratio1<0.01) & (ratio2<0.01):
     print('test '+fname+': ok.')
 else:

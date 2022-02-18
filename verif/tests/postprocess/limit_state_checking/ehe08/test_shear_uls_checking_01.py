@@ -27,6 +27,7 @@ from materials.sections.fiber_section import def_simple_RC_section
 from postprocess import element_section_map
 from postprocess.config import default_config
 import sys
+import os
 import logging
 
 from misc_utils import log_messages as lmsg
@@ -91,8 +92,7 @@ lPatterns.addToDomain(lp0.getName())
 combContainer= combs.CombContainer()
 combContainer.ULS.perm.add('allLoads', '1.0*lp0')
 totalSet= preprocessor.getSets.getSet('total')
-cfg=default_config.EnvConfig(language='en',intForcPath= '',verifPath= '',reportPath='./',reportResultsPath= '/tmp/annex/',grWidth='120mm')
-cfg.projectDirTree.workingDirectory= '/tmp/'
+cfg= default_config.get_temporary_env_config()
 lsd.LimitStateData.envConfig= cfg
 lsd.shearResistance.saveAll(combContainer,totalSet) 
 
@@ -152,9 +152,7 @@ print("ratio2= ",ratio2)
 '''
 
 # Show logging messages.
-#sys.stdout = sysstdout
-import os
-os.system("rm -f -r /tmp/annex") # Clean after yourself.
+cfg.cleandirs()  # Clean after yourself.
 fname= os.path.basename(__file__)
 if (ratio1<0.01) & (ratio2<0.01):
     print('test '+fname+': ok.')
