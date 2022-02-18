@@ -22,22 +22,22 @@ def getDeflectionLimit(span= 1.0, memberType= 'Floor', memberSubType= None, dead
     retval= span/360.0
     if(memberType=='Roof'):
         if(memberSubType=='PlasterCeiling'):
-            if(deadLoad and liveLoad):
+            if(deadLoad or (deadLoad and liveLoad)):
                 retval= span/240.0
             elif(liveLoad or snowLoad or windLoad):
                 retval= span/360.0
         elif(memberSubType=='NonPlasterCeiling'):
-            if(deadLoad and liveLoad):
+            if(deadLoad or (deadLoad and liveLoad)):
                 retval= span/180.0
             elif(liveLoad or snowLoad or windLoad):
                 retval= span/240.0
         elif(memberSubType=='NoCeiling'):
-            if(deadLoad and liveLoad):
+            if(deadLoad or (deadLoad and liveLoad)):
                 retval= span/120.0
             elif(liveLoad or snowLoad or windLoad):
                 retval= span/180.0
     elif(memberType=='Floor'):
-            if(deadLoad and liveLoad):
+            if(deadLoad or (deadLoad and liveLoad)):
                 retval= span/240.0
             elif(liveLoad or snowLoad or windLoad): # normally liveLoad only.
                 retval= span/360.0
