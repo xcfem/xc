@@ -96,8 +96,8 @@ mesh= feProblem.getDomain.getMesh
 eIter= mesh.getElementIter
 elem= eIter.next()
 while not(elem is None):
-  elem.vector3dUniformLoadLocal(xc.Vector([f,0,0]))
-  elem= eIter.next()
+    elem.vector3dUniformLoadLocal(xc.Vector([f,0,0]))
+    elem= eIter.next()
 
 loadHandler= preprocessor.getLoadHandler
 
@@ -141,3 +141,19 @@ if (abs(ratio1)<1e-6) & (abs(ratio2)<1e-10) & (abs(ratio3)<1e-10) & (abs(RN2)<1e
     print('test '+fname+': ok.')
 else:
     lmsg.error(fname+' ERROR.')
+
+# # Graphic stuff.
+# from postprocess import output_handler
+# oh= output_handler.OutputHandler(modelSpace)
+
+# # oh.displayBlocks(setToDisplay= beamSet)
+# # oh.displayFEMesh()
+# #oh.displayLocalAxes(setToDisplay= beamSet)
+# # oh.displayStrongWeakAxis(setToDisplay= beamSet)
+# oh.displayLoads()#setToDisplay= lvlBlindFasciaSet)
+# oh.displayReactions(reactionCheckTolerance= 1e-4)
+# #oh.displayDispRot(itemToDisp='uZ', defFScale= 10.0)
+# #oh.displayIntForcDiag(itemToDisp= 'Mz', setToDisplay= beamSet)
+# #oh.displayIntForcDiag(itemToDisp= 'Qy', setToDisplay= xcTotalSet)
+# #oh.displayIntForcDiag(itemToDisp= 'Mz', setToDisplay= xcTotalSet)
+# #oh.displayIntForcDiag(itemToDisp= 'T', setToDisplay= beamSet)
