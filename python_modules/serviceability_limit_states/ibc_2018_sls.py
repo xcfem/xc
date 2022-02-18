@@ -20,24 +20,25 @@ def getDeflectionLimit(span= 1.0, memberType= 'Floor', memberSubType= None, dead
     :param windLoad: if true the wind load is present in the load combination to check.
     '''
     retval= span/360.0
+    deadLoadOnly= deadLoad and not (liveLoad or snowLoad or windLoad)
     if(memberType=='Roof'):
         if(memberSubType=='PlasterCeiling'):
-            if(deadLoad or (deadLoad and liveLoad)):
+            if(deadLoadOnly or (deadLoad and liveLoad)):
                 retval= span/240.0
             elif(liveLoad or snowLoad or windLoad):
                 retval= span/360.0
         elif(memberSubType=='NonPlasterCeiling'):
-            if(deadLoad or (deadLoad and liveLoad)):
+            if(deadLoadOnly or (deadLoad and liveLoad)):
                 retval= span/180.0
             elif(liveLoad or snowLoad or windLoad):
                 retval= span/240.0
         elif(memberSubType=='NoCeiling'):
-            if(deadLoad or (deadLoad and liveLoad)):
+            if(deadLoadOnly or (deadLoad and liveLoad)):
                 retval= span/120.0
             elif(liveLoad or snowLoad or windLoad):
                 retval= span/180.0
     elif(memberType=='Floor'):
-            if(deadLoad or (deadLoad and liveLoad)):
+            if(deadLoadOnly or (deadLoad and liveLoad)):
                 retval= span/240.0
             elif(liveLoad or snowLoad or windLoad): # normally liveLoad only.
                 retval= span/360.0
