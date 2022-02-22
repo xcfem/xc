@@ -906,25 +906,26 @@ void XC::SetEntities::splitLinesAtIntersections(const double &tol)
 	      aliases[ir.second].push_back(newLine);
 	  }
       }
-    // And for the remaining lines we use a "brute-force"
-    // algorithm. Some form of nearest neighbor algorithm
-    // will be very useful here. The double for loop is
-    // expensive.
+    // We use entities shadows as spatial indexing tool.
+    const EntitiesShadows<Edge> line_shadows(lines);
+    const Vector3d offset(tol,tol,tol);
     for(pnt_iterator i=points.begin();i!=points.end();i++)
       {
 	Pnt *pnt= *i;
 	const Pos3d pos= pnt->getPos();
+	std::set<Edge *> neighbors= line_shadows.getNeighbors(pos-offset,pos+offset);
         std::set<const Edge *> conn= getConnectedLines(*pnt);
+	// candidates= neighbours not already connected.
+        std::set<Edge *> candidates;
+        std::set_difference(neighbors.begin(), neighbors.end(), conn.begin(), conn.end(), std::inserter(candidates, candidates.end()));
+	// Search for the points on the lines.
         const double tol2= tol*tol;
-        for(lin_iterator j= lines.begin();j!=lines.end();j++)
+	for(std::set<Edge *>::iterator j= candidates.begin(); j!=candidates.end(); j++)
 	  {
 	    Edge *l= *j;
-	    if(conn.find(l)==conn.end()) // not already connected
-	      {
-	        const double dist2= (*j)->getSquaredDistanceTo(pos);
-		if(dist2<tol2)
-		  { l->splitAtPoint(pnt); }
-	      }
+            const double dist2= (*j)->getSquaredDistanceTo(pos);
+            if(dist2<tol2)
+ 	      { l->splitAtPoint(pnt); }	    
 	  }
       }
   }

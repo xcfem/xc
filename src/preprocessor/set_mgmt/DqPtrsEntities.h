@@ -36,6 +36,7 @@
 #include "utility/geom/pos_vec/Pos3d.h"
 #include "utility/geom/pos_vec/Vector3d.h"
 #include "utility/geom/d3/BND3d.h"
+#include "boost/icl/interval_map.hpp"
 
 class GeomObj3d;
 class BND3d;
@@ -50,7 +51,8 @@ class DqPtrsEntities: public DqPtrs<T>
     typedef DqPtrs<T> dq_ptr;
     typedef typename dq_ptr::const_iterator const_iterator;
     typedef typename dq_ptr::iterator iterator;
-
+    
+  public:
     DqPtrsEntities(CommandEntity *owr= nullptr)
       : DqPtrs<T>(owr) {}
     DqPtrsEntities(const DqPtrs<T> &other)
@@ -74,7 +76,6 @@ class DqPtrsEntities: public DqPtrs<T>
     DqPtrsEntities<T> pickEntitiesInside(const GeomObj3d &, const double &tol= 0.0) const;
     BND3d Bnd(void) const;
   };
-
  
 //! @brief Returns a pointer to the object identified by the name.
 template <class T>
@@ -196,6 +197,7 @@ DqPtrsEntities<T> DqPtrsEntities<T>::pickEntitiesInside(const GeomObj3d &geomObj
     return retval;
   }
 
+  
 //! @brief Return the entities boundary.
 //!
 template <class T>
@@ -300,6 +302,91 @@ DqPtrsEntities<T> operator*(const DqPtrsEntities<T> &a,const DqPtrsEntities<T> &
       }
     return retval;
   }
+  
+//! @brief Shadows of the entities on the coordinate axis
+//! used for spatial indexing.
+template <class T>
+class EntitiesShadows
+  {
+  public:
+    typedef std::set<T*> shadow_makers;
+    typedef boost::icl::interval_map<double, shadow_makers> shadow_interval_map;
+    typedef typename shadow_interval_map::iterator interval_iterator;
+    typedef typename shadow_interval_map::const_iterator interval_const_iterator;
+    typedef boost::icl::interval<double> shadow_interval;
+  protected:    
+    shadow_interval_map x_shadows; // "shadows" of the objects in the x axis.
+    shadow_interval_map y_shadows; // "shadows" of the objects in the y axis.
+    shadow_interval_map z_shadows; // "shadows" of the objects in the z axis.
+  public:
+    EntitiesShadows(const DqPtrsEntities<T> &);
+
+    std::set<T *> getNeighbors(const Pos3d &pMin, const Pos3d &pMax) const;
+  };
+  
+//! @brief Constructor.
+//! Compute the shadows of the entities on the axis.
+//! We call "shadows" the (xmin, xmax), (ymin_ymax), (zmin,zmax)
+//! intervals obtained from the object boudary box.
+template <class T>
+EntitiesShadows<T>::EntitiesShadows(const DqPtrsEntities<T> &entities)
+  {
+    typedef typename DqPtrsEntities<T>::const_iterator const_iterator;
+    for(const_iterator i= entities.begin();i!= entities.end();i++)
+      {
+        T *t= (*i);
+        assert(t);
+	shadow_makers sm;
+	sm.insert(t);
+	BND3d tmp= t->Bnd();
+	const Pos3d pMin= tmp.getPMin();
+	const Pos3d pMax= tmp.getPMax();
+	auto shadow_interval_x= shadow_interval::closed(pMin.x(), pMax.x());
+	auto x_pair= std::make_pair(shadow_interval_x, sm);
+        x_shadows.add(x_pair);
+	auto shadow_interval_y= shadow_interval::closed(pMin.y(), pMax.y());
+        y_shadows.add(std::make_pair(shadow_interval_y, sm));
+	auto shadow_interval_z= shadow_interval::closed(pMin.z(), pMax.z());
+        z_shadows.add(std::make_pair(shadow_interval_z, sm));
+      }
+  }
+
+//! @brief Return the objects whose "shadow" overlaps whith the interval argument.
+template <class T>
+std::set<T *> EntitiesShadows<T>::getNeighbors(const Pos3d &pMin, const Pos3d &pMax) const
+  {
+    std::set<T *> retval;
+    auto x_shadow= shadow_interval::closed(pMin.x(), pMax.x());
+    shadow_interval_map x_neighbors= x_shadows & x_shadow;
+    if(!x_neighbors.empty())
+      {
+	auto y_shadow= shadow_interval::closed(pMin.y(), pMax.y());
+	shadow_interval_map y_neighbors= y_shadows & y_shadow;
+	if(!y_neighbors.empty())
+	  {
+	    auto z_shadow= shadow_interval::closed(pMin.z(), pMax.z());
+	    shadow_interval_map z_neighbors= z_shadows & z_shadow;
+	    if(!z_neighbors.empty())
+	      {
+	        std::set<T *> z_set;
+  	        for(interval_const_iterator k= z_neighbors.begin();k!=z_neighbors.end();k++)
+                  { z_set.insert((*k).second.begin(), (*k).second.end()); }
+	        std::set<T *> y_set;
+    	        for(interval_const_iterator j= y_neighbors.begin();j!=y_neighbors.end();j++)
+		  { y_set.insert((*j).second.begin(), (*j).second.end()); }
+	        std::set<T *> x_set;
+    	        for(interval_const_iterator i= x_neighbors.begin();i!=x_neighbors.end();i++)
+		  { x_set.insert((*i).second.begin(), (*i).second.end()); }
+		// Intersection of the three sets.
+		std::set<T *> yz_set;
+                set_intersection(y_set.begin(), y_set.end(), z_set.begin(), z_set.end(), std::inserter(yz_set, yz_set.begin()));
+                set_intersection(x_set.begin(), x_set.end(), yz_set.begin(), yz_set.end(), std::inserter(retval, retval.begin()));
+	      }
+	  }
+      }
+    return retval;
+  }
+
 
 } //end of XC namespace
 
