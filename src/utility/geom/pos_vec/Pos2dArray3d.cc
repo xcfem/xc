@@ -36,8 +36,8 @@ Pos2dArray3d create_uniform_grid(const BND2d &bnd,const size_t &ndiv_x,const siz
   {
     const size_t n_layers= ndiv_z+1;
     Pos2dArray3d retval(n_layers);
-    Pos2d pmin= bnd.GetPMin();
-    Pos2d pmax= bnd.GetPMax();
+    Pos2d pmin= bnd.getPMin();
+    Pos2d pmax= bnd.getPMax();
     GEOM_FT x= pmin.x();
     GEOM_FT y= pmin.y();
     const GEOM_FT Lx= pmax.x()-pmin.x();

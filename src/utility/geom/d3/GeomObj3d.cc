@@ -67,12 +67,12 @@ Vector3d GeomObj3d::Projection(const Vector3d &v) const
     return retval;
   }
 
-Pos3d GeomObj3d::GetPMax(void) const
+Pos3d GeomObj3d::getPMax(void) const
   {
     Pos3d p(GetXMax(),GetYMax(),GetZMax());
     return p;
   }
-Pos3d GeomObj3d::GetPMin(void) const
+Pos3d GeomObj3d::getPMin(void) const
   {
     Pos3d p(GetXMin(),GetYMin(),GetZMin());
     return p;
@@ -80,7 +80,7 @@ Pos3d GeomObj3d::GetPMin(void) const
 
 //! @brief Return the boudary of the object.
 BND3d GeomObj3d::Bnd(void) const
-  { return BND3d(GetPMin(),GetPMax()); }
+  { return BND3d(getPMin(),getPMax()); }
 
 //! @brief Return true if point lies inside the object.
 bool GeomObj3d::In(const Pos3d &p, const double &tol) const

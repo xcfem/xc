@@ -31,13 +31,13 @@
 
 #include "utility/geom/trf/Translation2d.h"
 
-Pos2d GeomObj2d::GetPMax(void) const
+Pos2d GeomObj2d::getPMax(void) const
   {
     Pos2d p(GetXMax(),GetYMax());
     return p;
   }
 
-Pos2d GeomObj2d::GetPMin(void) const
+Pos2d GeomObj2d::getPMin(void) const
   {
     Pos2d p(GetXMin(),GetYMin());
     return p;
@@ -65,7 +65,7 @@ Vector2d GeomObj2d::Projection(const Vector2d &v) const
 
 //! @brief Return the bounding rectangle.
 BND2d GeomObj2d::Bnd(void) const
-  { return BND2d(GetPMin(),GetPMax()); }
+  { return BND2d(getPMin(),getPMax()); }
 
 //! @brief Return true if the point lies inside the object.
 bool GeomObj2d::In(const Pos2d &p, const double &tol) const

@@ -57,8 +57,8 @@ class_<BND3d, bases<GeomObj3d> >("BND3d")
 
 
   .def("update", &BND3d::Update)
-  .add_property("pMax", &BND3d::GetPMax, &BND3d::PutPMax,"upper right corner.")
-  .add_property("pMin", &BND3d::GetPMin, &BND3d::PutPMin,"lower left corner.")
+  .add_property("pMax", &BND3d::getPMax, &BND3d::PutPMax,"upper right corner.")
+  .add_property("pMin", &BND3d::getPMin, &BND3d::PutPMin,"lower left corner.")
 
   .def("getIx", &BND3d::Ix)
   .def("getIy", &BND3d::Iy)

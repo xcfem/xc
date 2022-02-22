@@ -40,8 +40,8 @@ class_<BND2d, bases<GeomObj2d> >("BND2d")
 
 
   .def("update", &BND2d::Update)
-  .add_property("pMax", &BND2d::GetPMax, &BND2d::PutPMax,"upper right corner.")
-  .add_property("pMin", &BND2d::GetPMin, &BND2d::PutPMin,"lower left corner.")
+  .add_property("pMax", &BND2d::getPMax, &BND2d::PutPMax,"upper right corner.")
+  .add_property("pMin", &BND2d::getPMin, &BND2d::PutPMin,"lower left corner.")
 
   .def("getIx", &BND2d::Ix)
   .def("getIy", &BND2d::Iy)

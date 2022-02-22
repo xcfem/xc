@@ -121,14 +121,14 @@ void BND3d::Update(const Pos3d &p)
   }
 
 void BND3d::PutPMax(const Pos3d &pmax)
-  { BND3d::operator=(BND3d(GetPMin(),pmax)); }
+  { BND3d::operator=(BND3d(getPMin(),pmax)); }
 void BND3d::PutPMin(const Pos3d &pmin)
-  { BND3d::operator=(BND3d(pmin,GetPMax())); }
+  { BND3d::operator=(BND3d(pmin,getPMax())); }
 void BND3d::PutPMinMax(const Pos3d &pmin,const Pos3d &pmax)
   { BND3d::operator=(BND3d(pmin,pmax)); }
-Pos3d BND3d::GetPMax(void) const
+Pos3d BND3d::getPMax(void) const
   { return Pos3d(cgisocub.max()); }
-Pos3d BND3d::GetPMin(void) const
+Pos3d BND3d::getPMin(void) const
   { return Pos3d(cgisocub.min()); }
 
 Vector3d BND3d::Diagonal(void) const
@@ -136,14 +136,14 @@ Vector3d BND3d::Diagonal(void) const
     if(undefined)
       std::cerr << getClassName() << "::" << __FUNCTION__
 	        << "; boundary is undefined." << std::endl;
-     return GetPMax() - GetPMin();
+     return getPMax() - getPMin();
   }
 Pos3d BND3d::getCenterOfMass(void) const
   {
     if(undefined)
       std::cerr << getClassName() << "::" << __FUNCTION__
 	        << "; boundary is undefined." << std::endl;
-    Pos3d center_of_mass= GetPMin() + Diagonal()/2;
+    Pos3d center_of_mass= getPMin() + Diagonal()/2;
     return center_of_mass;
   }
 bool BND3d::ClipLine(const Pos3d &p1,const Pos3d &p2) const
@@ -158,7 +158,7 @@ BND3d &BND3d::operator +=(const Pos3d &p)
     if(undefined)
       Update(p);
     else
-      PutPMinMax(pos_min(GetPMin(),p),pos_max(GetPMax(),p));
+      PutPMinMax(pos_min(getPMin(),p),pos_max(getPMax(),p));
     return *this;
   }
 BND3d &BND3d::operator +=(const BND3d &a)
@@ -166,7 +166,7 @@ BND3d &BND3d::operator +=(const BND3d &a)
     if(undefined)
       BND3d::operator=(a);
     else      
-      PutPMinMax(pos_min(GetPMin(),a.GetPMin()),pos_max(GetPMax(),a.GetPMax()));
+      PutPMinMax(pos_min(getPMin(),a.getPMin()),pos_max(getPMax(),a.getPMax()));
     return *this;
   }
 BND3d operator +(const BND3d &a, const BND3d &b)
@@ -176,8 +176,8 @@ BND3d operator +(const BND3d &a, const BND3d &b)
   }
 bool operator ==(const BND3d &a,const BND3d &b)
   {
-    if ( a.GetPMax() != b.GetPMax() ) return false; 
-    if ( a.GetPMin() != b.GetPMin() ) 
+    if ( a.getPMax() != b.getPMax() ) return false; 
+    if ( a.getPMin() != b.getPMin() ) 
       return false;
     else
       return true;
@@ -216,8 +216,8 @@ bool BND3d::LBClipTest(const GEOM_FT &p,const GEOM_FT &q,GEOM_FT &u1,GEOM_FT &u2
 
 bool BND3d::LBClipLine(const Pos3d &pa,const Pos3d &pb) const
   {
-    const Pos3d PMin= GetPMin();
-    const Pos3d PMax= GetPMax();
+    const Pos3d PMin= getPMin();
+    const Pos3d PMax= getPMax();
     Pos3d p1(pa);
     Pos3d p2(pb);
     GEOM_FT u1= 0, u2= 1, dx= p2.x()-p1.x(),dy,dz;
@@ -282,8 +282,8 @@ unsigned short int BND3d::RegionCode(const Pos3d &p,const double &tol) const
     if(undefined)
       std::cerr << getClassName() << "::" << __FUNCTION__
 	        << "; boundary is undefined." << std::endl;
-    const Pos3d PMin= GetPMin();
-    const Pos3d PMax= GetPMax();
+    const Pos3d PMin= getPMin();
+    const Pos3d PMax= getPMax();
     int reg_code= 0;
     const GEOM_FT tol_ft= tol;
     if ((p.x()-PMin.x()) < -tol_ft) reg_code= 1;  //00000001
@@ -310,7 +310,7 @@ BND3d BND3d::Offset(const GEOM_FT &o) const
       std::cerr << getClassName() << "::" << __FUNCTION__
 	        << "; boundary is undefined." << std::endl;
     const Vector3d vo(o,o,o);
-    return BND3d(GetPMin()-vo,GetPMax()+vo);
+    return BND3d(getPMin()-vo,getPMax()+vo);
   }
 
 CGBbox_3 BND3d::GetCGALBbox_3(void) const
@@ -321,6 +321,6 @@ CGBbox_3 BND3d::GetCGALBbox_3(void) const
     return CGBbox_3(GetXMin(),GetYMin(),GetZMin(),GetXMax(),GetYMax(),GetZMax()); }
 void BND3d::Print(std::ostream &stream) const
   {
-    stream << "PMax= " << GetPMax() << ','
-           << "PMin= " << GetPMin();
+    stream << "PMax= " << getPMax() << ','
+           << "PMin= " << getPMin();
   }

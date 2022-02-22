@@ -81,8 +81,8 @@ class BND2d: public GeomObj2d
     void PutPMax(const Pos2d &);
     void PutPMin(const Pos2d &);
     void PutPMinMax(const Pos2d &,const Pos2d &);
-    Pos2d GetPMax(void) const;
-    Pos2d GetPMin(void) const;
+    Pos2d getPMax(void) const;
+    Pos2d getPMin(void) const;
     inline GEOM_FT GetMax(unsigned short int i) const
       { return cgrectg.max_coord(i-1); }
     inline GEOM_FT GetMin(unsigned short int i) const

@@ -73,14 +73,14 @@ void BND2d::Update(const Pos2d &p)
 	}
   }
 void BND2d::PutPMax(const Pos2d &pmax)
-  { BND2d::operator=(BND2d(GetPMin(),pmax)); }
+  { BND2d::operator=(BND2d(getPMin(),pmax)); }
 void BND2d::PutPMin(const Pos2d &pmin)
-  { BND2d::operator=(BND2d(pmin,GetPMax())); }
+  { BND2d::operator=(BND2d(pmin,getPMax())); }
 void BND2d::PutPMinMax(const Pos2d &pmin,const Pos2d &pmax)
   { BND2d::operator=(BND2d(pmin,pmax)); }
-Pos2d BND2d::GetPMax(void) const
+Pos2d BND2d::getPMax(void) const
   { return Pos2d(cgrectg.max()); }
-Pos2d BND2d::GetPMin(void) const
+Pos2d BND2d::getPMin(void) const
   { return Pos2d(cgrectg.min()); }
 
 Polygon2d BND2d::getPolygon(void) const
@@ -88,8 +88,8 @@ Polygon2d BND2d::getPolygon(void) const
     if(undefined)
       std::cerr << getClassName() << "::" << __FUNCTION__
 	        << "; boundary is undefined." << std::endl;
-    const Pos2d p1= GetPMin();
-    const Pos2d p2= GetPMax();
+    const Pos2d p1= getPMin();
+    const Pos2d p2= getPMax();
     Polygon2d retval;
     retval.push_back(p1);
     retval.push_back(Pos2d(p2.x(),p1.y()));
@@ -111,14 +111,14 @@ Vector2d BND2d::Diagonal(void) const
     if(undefined)
       std::cerr << getClassName() << "::" << __FUNCTION__
 	        << "; boundary is undefined." << std::endl;
-    return GetPMax() - GetPMin();
+    return getPMax() - getPMin();
   }
 Pos2d BND2d::getCenterOfMass(void) const
   {
     if(undefined)
       std::cerr << getClassName() << "::" << __FUNCTION__
 	        << "; boundary is undefined." << std::endl;
-    Pos2d center_of_mass= GetPMin() + Diagonal()/2;
+    Pos2d center_of_mass= getPMin() + Diagonal()/2;
     return center_of_mass;
   }
 GEOM_FT BND2d::Ix(void) const
@@ -265,8 +265,8 @@ void BND2d::Transform(const Trf2d &trf2d)
     if(undefined)
       std::cerr << getClassName() << "::" << __FUNCTION__
 	        << "; boundary is undefined." << std::endl;
-    const Pos2d pA= trf2d.Transform(GetPMin());
-    const Pos2d pB= trf2d.Transform(GetPMax());
+    const Pos2d pA= trf2d.Transform(getPMin());
+    const Pos2d pB= trf2d.Transform(getPMax());
     (*this)= BND2d(pA,pB);
   }
 
@@ -275,7 +275,7 @@ BND2d &BND2d::operator+=(const Pos2d &p)
     if(undefined)
       Update(p);
     else
-      PutPMinMax(pos_min(GetPMin(),p),pos_max(GetPMax(),p));
+      PutPMinMax(pos_min(getPMin(),p),pos_max(getPMax(),p));
     return *this;
   }
 BND2d &BND2d::operator+=(const BND2d &a)
@@ -283,7 +283,7 @@ BND2d &BND2d::operator+=(const BND2d &a)
     if(undefined)
       BND2d::operator=(a);
     else      
-      PutPMinMax(pos_min(GetPMin(),a.GetPMin()),pos_max(GetPMax(),a.GetPMax()));
+      PutPMinMax(pos_min(getPMin(),a.getPMin()),pos_max(getPMax(),a.getPMax()));
     return *this;
   }
 BND2d operator +(const BND2d &a, const BND2d &b)
@@ -293,21 +293,21 @@ BND2d operator +(const BND2d &a, const BND2d &b)
   }
 bool operator ==(const BND2d &a,const BND2d &b)
   {
-    if ( a.GetPMax() != b.GetPMax() ) return false; 
-    if ( a.GetPMin() != b.GetPMin() ) 
+    if ( a.getPMax() != b.getPMax() ) return false; 
+    if ( a.getPMin() != b.getPMin() ) 
       return false;
     else
       return true;
   }
 void BND2d::Print(std::ostream &stream) const
   {
-    stream << "PMax= " << GetPMax() << ','
-           << "PMin= " << GetPMin();
+    stream << "PMax= " << getPMax() << ','
+           << "PMin= " << getPMin();
   }
 void BND2d::Plot(Plotter &plotter) const
   {
-    const Pos2d pmin= GetPMin();
-    const Pos2d pmax= GetPMax();
+    const Pos2d pmin= getPMin();
+    const Pos2d pmax= getPMax();
     plotter.fline(pmin.x(),pmin.y(),pmax.x(),pmin.y());
     plotter.fline(pmax.x(),pmin.y(),pmax.x(),pmax.y());
     plotter.fline(pmax.x(),pmax.y(),pmin.x(),pmax.y());

@@ -65,8 +65,8 @@ class GeomObj3d: public GeomObj
     virtual void ZProjection(void) {}
     virtual Pos3d Projection(const Pos3d &) const;
     virtual Vector3d Projection(const Vector3d &) const;
-    Pos3d GetPMax(void) const;
-    Pos3d GetPMin(void) const;
+    Pos3d getPMax(void) const;
+    Pos3d getPMin(void) const;
     BND3d Bnd(void) const;
     virtual bool In(const Pos3d &p, const double &tol= 0.0) const;
     virtual bool Out(const Pos3d &p, const double &tol= 0.0) const;

@@ -70,8 +70,8 @@ class BND3d: public GeomObj3d
     void PutPMax(const Pos3d &);
     void PutPMin(const Pos3d &);
     void PutPMinMax(const Pos3d &,const Pos3d &);
-    Pos3d GetPMax(void) const;
-    Pos3d GetPMin(void) const;
+    Pos3d getPMax(void) const;
+    Pos3d getPMin(void) const;
     inline GEOM_FT GetMax(unsigned short int i) const
       { return cgisocub.max_coord(i-1); }
     inline GEOM_FT GetMin(unsigned short int i) const
