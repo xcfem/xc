@@ -233,7 +233,8 @@ matIntForc=np.array(6*[np.array([0.0,0.0,0.0])]) #array to which import the resu
                                            #[Fx,Fy,Fz] expressed in the element
                                            #local axes for the two sections of
                                            #each element
-internalForces= lsd.readIntForcesDict("/tmp/intForce_ULS_normalStressesResistance.json")
+intForcesPth= cfg.projectDirTree.getInternalForcesResultsPath()+"intForce_ULS_normalStressesResistance.json"
+internalForces= lsd.readIntForcesDict(intForcesPth)
 internalForcesValues= internalForces[2]
 for key in internalForcesValues.keys():
     intForces= internalForcesValues[key]
@@ -300,7 +301,8 @@ Rsec2beamZ= matrix_utils.vectorToNumpyArray(elsec2z.getResistingForce())
 ratio2=(Rsec2beamX-Rsec2beamY).sum()+(Rsec2beamX-Rsec2beamZ).sum()+(Rsec2beamY-Rsec2beamZ).sum()
 
 #Check the internal forces written in the checking file
-exec(open('/tmp/resVerif.py').read())
+verifResultsPth= cfg.projectDirTree.getFullVerifPath()+'resVerif.py'
+exec(open(verifResultsPth).read())
 
 sec1MzTeor=(M+F*Lbeam) # expressed in mkN
 sec1beamXMz= beam3dX.getProp("ULS_normalStressesResistanceSect1").Mz
