@@ -30,19 +30,17 @@ elast= typical_materials.defElasticMaterial(preprocessor, "elast",3000)
 seedElemHandler= preprocessor.getElementHandler.seedElemHandler
 seedElemHandler.dimElem= 3 #Bars defined in a three dimensional space.
 seedElemHandler.defaultMaterial= elast.name
-seedElemHandler.defaultTag= 1 #Number for the next element will be 1.
 truss= seedElemHandler.newElement("Truss",xc.ID([0,0]))
 truss.sectionArea= 10
 
 points= preprocessor.getMultiBlockTopology.getPoints
-pt= points.newPoint(1,geom.Pos3d(0.0,0.0,0.0))
-pt= points.newPoint(2,geom.Pos3d(CooMax/2.0,CooMax/2.0,CooMax/2.0))
-pt= points.newPoint(3,geom.Pos3d(CooMax,CooMax,CooMax))
+pt1= points.newPoint(geom.Pos3d(0.0,0.0,0.0))
+pt2= points.newPoint(geom.Pos3d(CooMax/2.0,CooMax/2.0,CooMax/2.0))
+pt3= points.newPoint(geom.Pos3d(CooMax,CooMax,CooMax))
 
 lines= preprocessor.getMultiBlockTopology.getLines
-lines.defaultTag= 1
 l1= lines.newLineSequence()
-l1.addPoints(xc.ID([1,2,3]))
+l1.addPoints(xc.ID([pt1.tag,pt2.tag,pt3.tag]))
 l1.nDiv= NumDiv
 
 setTotal= preprocessor.getSets.getSet("total")
@@ -67,8 +65,6 @@ lteor= math.sqrt(3*vteor2)
 for e in elements:
   #print("  elem: ",tag," nod. I: ",nod[0].tag," nod. J: ",nod[1].tag," L= ",e.getLength(True))
   ratio1+= (e.getLength(True)-lteor)/lteor
-
-
 
 ratio2= (nnodPline-(NumDiv+1))
 ratio3= (nelemPline-NumDiv)

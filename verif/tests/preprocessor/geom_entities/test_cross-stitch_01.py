@@ -42,15 +42,14 @@ elements.defaultTransformation= lin.name
  
 
 points= preprocessor.getMultiBlockTopology.getPoints
-pt1= points.newPoint(1,geom.Pos3d(0.0,0.0,0.0))
-pt2= points.newPoint(2,geom.Pos3d(CooMax,0.0,0.0))
-pt3= points.newPoint(3,geom.Pos3d(0.0,L,0.0))
-pt4= points.newPoint(4,geom.Pos3d(CooMax,L,0.0))
+pt1= points.newPoint(geom.Pos3d(0.0,0.0,0.0))
+pt2= points.newPoint(geom.Pos3d(CooMax,0.0,0.0))
+pt3= points.newPoint(geom.Pos3d(0.0,L,0.0))
+pt4= points.newPoint(geom.Pos3d(CooMax,L,0.0))
 lines= preprocessor.getMultiBlockTopology.getLines
-lines.defaultTag= 1
-l1= lines.newLine(1,2)
+l1= lines.newLine(pt1.tag,pt2.tag)
 l1.nDiv= NumDiv
-l2= lines.newLine(3,4)
+l2= lines.newLine(pt3.tag,pt4.tag)
 l2.nDiv= NumDiv
 
 
@@ -60,11 +59,11 @@ scc= typical_materials.defElasticSection2d(preprocessor, "scc",A,E,I)
 setTotal= preprocessor.getSets.getSet("total")
 
 feProblem.setVerbosityLevel(0) # Dont print(warning messages about element seed.)
-setL1= preprocessor.getSets.getSet("l1")
+setL1= preprocessor.getSets.getSet(l1.name)
 setL1.genMesh(xc.meshDir.I)
 
 
-setL2= preprocessor.getSets.getSet("l2")
+setL2= preprocessor.getSets.getSet(l2.name)
 setL2.genMesh(xc.meshDir.I)
 feProblem.setVerbosityLevel(1) # print(warnings again )
 
@@ -80,17 +79,12 @@ for i in range(1,NumDiv+2):
   beam2d= elements.newElement("ElasticBeam2d",xc.ID([n1.tag,n2.tag]))
   beam2d.h= h
 
-
-
 modelSpace.fixNodesLine(line= l1)
-
 
 # Load patterns
 # Load definition.
 lp0= modelSpace.newLoadPattern(name= '0')
 
-
-l2= preprocessor.getSets.getSet("l2")
 
 nNodes= l2.getNumNodes
 for i in range(1,nNodes+1):

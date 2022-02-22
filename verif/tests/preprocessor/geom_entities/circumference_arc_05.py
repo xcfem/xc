@@ -38,19 +38,17 @@ elast= typical_materials.defElasticMaterial(preprocessor, "elast",3000)
 seedElemHandler= preprocessor.getElementHandler.seedElemHandler
 seedElemHandler.defaultMaterial= elast.name
 seedElemHandler.dimElem= 3 # Dimension of element space
-seedElemHandler.defaultTag= 1 #Tag for the next element.
 truss= seedElemHandler.newElement("Truss",xc.ID([0,0]))
 truss.sectionArea= 10.0
 points= preprocessor.getMultiBlockTopology.getPoints
-pt= points.newPoint(1,geom.Pos3d(R,0.0,0.0))
-pt= points.newPoint(2,geom.Pos3d(R*cos225,R*sin225,0.0))
-pt= points.newPoint(3,geom.Pos3d((R*cos45),(R*sin45),0.0))
-pt= points.newPoint(4,geom.Pos3d((R*cos675),(R*sin675),0.0))
-pt= points.newPoint(5,geom.Pos3d(0.0,R,0.0))
+pt1= points.newPoint(geom.Pos3d(R,0.0,0.0))
+pt2= points.newPoint(geom.Pos3d(R*cos225,R*sin225,0.0))
+pt3= points.newPoint(geom.Pos3d((R*cos45),(R*sin45),0.0))
+pt4= points.newPoint(geom.Pos3d((R*cos675),(R*sin675),0.0))
+pt5= points.newPoint(geom.Pos3d(0.0,R,0.0))
 
 lines= preprocessor.getMultiBlockTopology.getLines
-lines.defaultTag= 1
-l1= lines.newCircleArc(1,2,3)
+l1= lines.newCircleArc(pt1.tag,pt2.tag,pt3.tag)
 l1.nDiv= NumDiv
 th1= l1.getTheta1()
 th2= l1.getTheta2()
@@ -63,14 +61,11 @@ yi= l1.getPInic().y
 zi= l1.getPInic().z
 r= l1.getRadius()
 
-l2= lines.newCircleArc(3,4,5)
+l2= lines.newCircleArc(pt3.tag,pt4.tag,pt5.tag)
 l2.nDiv= NumDiv
 
 
-l1= preprocessor.getSets.getSet("l1")
 l1.genMesh(xc.meshDir.I)
-
-l2= preprocessor.getSets.getSet("l2")
 l2.genMesh(xc.meshDir.I)
 
 

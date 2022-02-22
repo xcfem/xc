@@ -31,13 +31,13 @@ lines= preprocessor.getMultiBlockTopology.getLines
 surfaces= preprocessor.getMultiBlockTopology.getSurfaces
 groups= preprocessor.getSets
 
-pt12= points.newPoint(12,geom.Pos3d(-2.045,-1.80837510901,0.655344163406)); pt12.setProp("labels",['gusset_plate', 'flange_gusset', 'joint_1800'])
-pt13= points.newPoint(13,geom.Pos3d(-2.045,-1.8744,0.607318379568)); pt13.setProp("labels",['gusset_plate', 'flange_gusset', 'joint_1800'])
-pt14= points.newPoint(14,geom.Pos3d(-2.045,-1.8744,0.383745721271)); pt14.setProp("labels",['gusset_plate', 'flange_gusset', 'joint_1800'])
-pt15= points.newPoint(15,geom.Pos3d(-2.045,-1.8744,0.0)); pt15.setProp("labels",['gusset_plate', 'flange_gusset', 'joint_1800'])
-pt16= points.newPoint(16,geom.Pos3d(-2.045,-1.7169980504,0.614721101481)); pt16.setProp("labels",['gusset_plate', 'flange_gusset', 'joint_1800'])
+pt12= points.newPoint(geom.Pos3d(-2.045,-1.80837510901,0.655344163406)); pt12.setProp("labels",['gusset_plate', 'flange_gusset', 'joint_1800'])
+pt13= points.newPoint(geom.Pos3d(-2.045,-1.8744,0.607318379568)); pt13.setProp("labels",['gusset_plate', 'flange_gusset', 'joint_1800'])
+pt14= points.newPoint(geom.Pos3d(-2.045,-1.8744,0.383745721271)); pt14.setProp("labels",['gusset_plate', 'flange_gusset', 'joint_1800'])
+pt15= points.newPoint(geom.Pos3d(-2.045,-1.8744,0.0)); pt15.setProp("labels",['gusset_plate', 'flange_gusset', 'joint_1800'])
+pt16= points.newPoint(geom.Pos3d(-2.045,-1.7169980504,0.614721101481)); pt16.setProp("labels",['gusset_plate', 'flange_gusset', 'joint_1800'])
 
-f5= surfaces.newPolygonalFacePts([12, 13, 14, 15, 16]); f5.setProp("labels",['gusset_plate', 'flange_gusset', 'joint_1800']); f5.setProp("thickness",0.015); f5.setProp('matId','A36')
+f5= surfaces.newPolygonalFacePts([pt12.tag, pt13.tag, pt14.tag, pt15.tag, pt16.tag]); f5.setProp("labels",['gusset_plate', 'flange_gusset', 'joint_1800']); f5.setProp("thickness",0.015); f5.setProp('matId','A36')
 
 plg= f5.getPolygon();
 d= plg.dist(geom.Pos3d(0,0,0))

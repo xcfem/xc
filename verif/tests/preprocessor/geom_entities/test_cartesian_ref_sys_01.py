@@ -13,8 +13,6 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
-NumDiv= 25
-CooMax= 10
 xOrg= 1
 yOrg= 2
 zOrg= 3
@@ -22,8 +20,6 @@ feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
 
 points= preprocessor.getMultiBlockTopology.getPoints
-pt= points.newPoint(1,geom.Pos3d(0.0,0.0,0.0))
-pt= points.newPoint(2,geom.Pos3d(CooMax,CooMax,CooMax))
 rsMap= preprocessor.getMultiBlockTopology.getReferenceSystems
 
 rs= rsMap.newReferenceSystem("cartesianas")

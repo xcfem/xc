@@ -6,7 +6,6 @@ import geom
 import xc
 import math
 import os
-from model import model_inquiry as mi
 
 __author__= "Luis C. Pérez Tato (LCPT)"
 __copyright__= "Copyright 2014, LCPT"
@@ -20,17 +19,17 @@ preprocessor=  feProblem.getPreprocessor
 
 
 points= preprocessor.getMultiBlockTopology.getPoints
-pt1= points.newPoint(1,geom.Pos3d(0,0,0))
-pt2= points.newPoint(2,geom.Pos3d(0,0,1))
-pt3= points.newPoint(3,geom.Pos3d(1,0,0))
+pt1= points.newPoint(geom.Pos3d(0,0,0))
+pt2= points.newPoint(geom.Pos3d(0,0,1))
+pt3= points.newPoint(geom.Pos3d(1,0,0))
 
 axis= geom.Line3d(pt1.getPos,pt2.getPos)
 ang= math.pi/2.0
 rot1= xc.Rotation(geom.Rotation3d(axis,-ang))
 
-pt4= points.newPoint(4,rot1.getTrfPos(geom.Pos3d(0.0, 1.0, 0.0)))
+pt4= points.newPoint(rot1.getTrfPos(geom.Pos3d(0.0, 1.0, 0.0)))
 
-dist34= mi.distance_2points(preprocessor, 3,4)
+dist34= pt3.dist(pt4.getPos)
 #print("dist(3,4)= ",dist34)
 
 import os

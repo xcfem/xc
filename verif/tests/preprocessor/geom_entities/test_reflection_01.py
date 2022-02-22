@@ -18,9 +18,9 @@ preprocessor=  feProblem.getPreprocessor
 # Defining nodes
 
 points= preprocessor.getMultiBlockTopology.getPoints
-pt1= points.newPoint(1, geom.Pos3d(1.0, 0.0, 0.0) )
-pt2= points.newPoint(2, geom.Pos3d(0.0, 1.0, 0.0) )
-pt3= points.newPoint(3, geom.Pos3d(0.0, 0.0, 1.0) )
+pt1= points.newPoint(geom.Pos3d(1.0, 0.0, 0.0) )
+pt2= points.newPoint(geom.Pos3d(0.0, 1.0, 0.0) )
+pt3= points.newPoint(geom.Pos3d(0.0, 0.0, 1.0) )
 plane= geom.Plane3d(pt1.getPos,pt2.getPos,pt3.getPos)
 
 reflex1= xc.Reflection(geom.Reflection3d(plane))

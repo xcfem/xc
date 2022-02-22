@@ -20,18 +20,16 @@ feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
 
 points= preprocessor.getMultiBlockTopology.getPoints
-pt= points.newPoint(1,geom.Pos3d(0.0,0.0,0.0))
-pt= points.newPoint(2,geom.Pos3d(CooMax,CooMax,CooMax))
-pt= points.newPoint(3,geom.Pos3d(CooMax/2,CooMax/2,CooMax/2))
+pt1= points.newPoint(geom.Pos3d(0.0,0.0,0.0))
+pt2= points.newPoint(geom.Pos3d(CooMax,CooMax,CooMax))
+pt3= points.newPoint(geom.Pos3d(CooMax/2,CooMax/2,CooMax/2))
 
 lines= preprocessor.getMultiBlockTopology.getLines
-lines.defaultTag= 1
-l1= lines.newLine(1,2)
-l1.nDiv= NumDiv
+l1= lines.newLine(pt1.tag,pt2.tag)
 
-l1.splitAtPoint(points.get(3))
+l1.splitAtPoint(pt3)
 kpoints1= l1.getKPoints()
-l2= lines.get(2)
+l2= lines.get(1)
 kpoints2= l2.getKPoints()
 
 ratio1= (kpoints1[0]-1)+(kpoints1[1]-3)

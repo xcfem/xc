@@ -16,16 +16,16 @@ __email__= "l.pereztato@gmail.com"
 
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
-# Defining nodes
 
+# Defining points
 pts= preprocessor.getMultiBlockTopology.getPoints
-ptA= pts.newPoint(1,geom.Pos3d(0.0,0.0,3.0))
-ptB= pts.newPoint(2,geom.Pos3d(0.0,0.0,4.0))
+ptA= pts.newPoint(geom.Pos3d(0.0,0.0,3.0))
+ptB= pts.newPoint(geom.Pos3d(0.0,0.0,4.0))
 
 transl= xc.Translation(geom.Translation3d(ptB.getPos-ptA.getPos))
 
-ptTrfA= pts.newPoint(10,transl.getTrfPos(ptA.getPos))
-ptTrfB= pts.newPoint(11,transl.getTrfPos(ptB.getPos))
+ptTrfA= pts.newPoint(transl.getTrfPos(ptA.getPos))
+ptTrfB= pts.newPoint(transl.getTrfPos(ptB.getPos))
 
 ''' 
 for p in pts:
@@ -34,12 +34,11 @@ for p in pts:
  ''' 
   
 
-dist110= mi.distance_2points(preprocessor, 1,10)
+dist110= mi.distance_2points(preprocessor, ptA.tag,ptTrfA.tag)
+dist211= mi.distance_2points(preprocessor, ptB.tag,ptTrfB.tag)
+
 # print("dist(1,10)= ",dist110)
-dist211= mi.distance_2points(preprocessor, 2,11)
 # print("dist(2,11)= ",dist211)
-
-
 
 import os
 from misc_utils import log_messages as lmsg

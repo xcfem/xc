@@ -17,7 +17,7 @@ __email__= "l.pereztato@gmail.com"
 
 NumDiv= 10
 CooMax= 10
-raiz3= math.sqrt(3)
+root3= math.sqrt(3)
 
 # Problem type
 feProblem= xc.FEProblem()
@@ -31,18 +31,16 @@ elast= typical_materials.defElasticMaterial(preprocessor, "elast",3000)
 seedElemHandler= preprocessor.getElementHandler.seedElemHandler
 seedElemHandler.dimElem= 3 #Bars defined in a three dimensional space.
 seedElemHandler.defaultMaterial= elast.name
-seedElemHandler.defaultTag= 1 #Number for the next element will be 1.
 truss= seedElemHandler.newElement("Truss",xc.ID([0,0]))
 truss.sectionArea= 10
 
 points= preprocessor.getMultiBlockTopology.getPoints
-pt= points.newPoint(1,geom.Pos3d(0.0,0.0,0.0))
-pt= points.newPoint(2,geom.Pos3d(CooMax,CooMax,CooMax))
+pt1= points.newPoint(geom.Pos3d(0.0,0.0,0.0))
+pt2= points.newPoint(geom.Pos3d(CooMax,CooMax,CooMax))
 
 lines= preprocessor.getMultiBlockTopology.getLines
-lines.defaultTag= 1
-l= lines.newDividedLine(1,2)
-l.setLengths(xc.Vector([raiz3,raiz3,raiz3,raiz3,raiz3,raiz3,raiz3,raiz3,raiz3,raiz3]))
+l= lines.newDividedLine(pt1.tag,pt2.tag)
+l.setLengths(xc.Vector([root3,root3,root3,root3,root3,root3,root3,root3,root3,root3]))
 
 setTotal= preprocessor.getSets.getSet("total")
 setTotal.genMesh(xc.meshDir.I)

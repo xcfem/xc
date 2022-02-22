@@ -32,18 +32,17 @@ modelSpace= predefined_spaces.SolidMechanics3D(nodes)
 seedElemHandler= preprocessor.getElementHandler.seedElemHandler
 seedElemHandler.defaultMaterial= elast.name
 seedElemHandler.dimElem= 3 # Dimension of element space
-seedElemHandler.defaultTag= 1 #Tag for the next element.
 truss= seedElemHandler.newElement("Truss",xc.ID([0,0]))
 truss.sectionArea= 10.0
 
 points= preprocessor.getMultiBlockTopology.getPoints
-pt= points.newPoint(1,geom.Pos3d(R,0.0,0.0))
-points.newPoint(geom.Pos3d((R*cos45),(R*sin45),0.0))
-points.newPoint(geom.Pos3d(0.0,R,0.0))
+pt1= points.newPoint(geom.Pos3d(R,0.0,0.0))
+pt2= points.newPoint(geom.Pos3d((R*cos45),(R*sin45),0.0))
+pt3= points.newPoint(geom.Pos3d(0.0,R,0.0))
 
 lines= preprocessor.getMultiBlockTopology.getLines
 lines.defaultTag= 1
-l= lines.newCircleArc(1,2,3)
+l= lines.newCircleArc(pt1.tag,pt2.tag,pt3.tag)
 l.nDiv= NumDiv
 th1= l.getTheta1()
 th2= l.getTheta2()

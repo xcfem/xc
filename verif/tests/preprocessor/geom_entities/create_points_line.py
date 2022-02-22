@@ -20,13 +20,12 @@ feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
 
 points= preprocessor.getMultiBlockTopology.getPoints
-pt1= points.newPoint(1,geom.Pos3d(0.0,0.0,0.0))
-pt2= points.newPoint(2,geom.Pos3d(CooMax,CooMax,CooMax))
+pt1= points.newPoint(geom.Pos3d(0.0,0.0,0.0))
+pt2= points.newPoint(geom.Pos3d(CooMax,CooMax,CooMax))
 points.defaultTag= 100
 
 lines= preprocessor.getMultiBlockTopology.getLines
-lines.defaultTag= 1
-l1= lines.newLine(1,2)
+l1= lines.newLine(pt1.tag,pt2.tag)
 l1.nDiv= NumDiv
 l1.divide()
 

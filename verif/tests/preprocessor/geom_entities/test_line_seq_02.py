@@ -31,31 +31,26 @@ elast= typical_materials.defElasticMaterial(preprocessor, "elast",3000)
 seedElemHandler= preprocessor.getElementHandler.seedElemHandler
 seedElemHandler.dimElem= 3 #Bars defined in a three dimensional space.
 seedElemHandler.defaultMaterial= elast.name
-seedElemHandler.defaultTag= 1 #Number for the next element will be 1.
 truss= seedElemHandler.newElement("Truss",xc.ID([0,0]))
 truss.sectionArea= 10
 
 points= preprocessor.getMultiBlockTopology.getPoints
-pt= points.newPoint(1,geom.Pos3d(0.0,0.0,0.0))
-pt= points.newPoint(2,geom.Pos3d(CooMax/3,CooMax/3,CooMax/3))
-pt= points.newPoint(3,geom.Pos3d(2*CooMax/3,2*CooMax/3,2*CooMax/3))
-pt= points.newPoint(4,geom.Pos3d(CooMax,CooMax,CooMax))
+pt1= points.newPoint(geom.Pos3d(0.0,0.0,0.0))
+pt2= points.newPoint(geom.Pos3d(CooMax/3,CooMax/3,CooMax/3))
+pt3= points.newPoint(geom.Pos3d(2*CooMax/3,2*CooMax/3,2*CooMax/3))
+pt4= points.newPoint(geom.Pos3d(CooMax,CooMax,CooMax))
 
 lines= preprocessor.getMultiBlockTopology.getLines
-lines.defaultTag= 3
-l3= lines.newLine(1,2)        
+l3= lines.newLine(pt1.tag,pt2.tag)        
 
 # print("name: ",name," p1:",p1.name," p2:",p2.name)
-lines.defaultTag= 2
-l2= lines.newLine(4,3)
+l2= lines.newLine(pt4.tag,pt3.tag)
 # print("name: ",name," p1:",p1.name," p2:",p2.name)
-lines.defaultTag= 1
-l1= lines.newLine(2,3)
+l1= lines.newLine(pt2.tag,pt3.tag)
 
 # print("name: ",name," p1:",p1.name," p2:",p2.name)
-lines.defaultTag= 4
 l4= lines.newLineSequence()
-l4.addLines(xc.ID([1,2,3]))
+l4.addLines(xc.ID([l1.tag,l2.tag,l3.tag]))
 l4.nDiv= NumDiv
 
 ''' 

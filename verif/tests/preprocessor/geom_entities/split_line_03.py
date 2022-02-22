@@ -21,19 +21,16 @@ preprocessor=  feProblem.getPreprocessor
 nodes= preprocessor.getNodeHandler
 
 points= preprocessor.getMultiBlockTopology.getPoints
-pt= points.newPoint(1,geom.Pos3d(0.0,0.0,0.0))
-pt= points.newPoint(2,geom.Pos3d(CooMax,CooMax,CooMax))
+pt1= points.newPoint(geom.Pos3d(0.0,0.0,0.0))
+pt2= points.newPoint(geom.Pos3d(CooMax,CooMax,CooMax))
 
 lines= preprocessor.getMultiBlockTopology.getLines
-lines.defaultTag= 1
-l1= lines.newLine(1,2)
-l1.nDiv= NumDiv
+l1= lines.newLine(pt1.tag,pt2.tag)
 
 length= l1.getLength()
 l1.splitAtNaturalCoordinate(0.0)
-l2= lines.get(2) 
 length1= l1.getLength()
-l2= lines.get(2)
+l2= lines.get(1)
 length2= l2.getLength()
 
 
