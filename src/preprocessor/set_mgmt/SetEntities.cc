@@ -907,7 +907,7 @@ void XC::SetEntities::splitLinesAtIntersections(const double &tol)
 	  }
       }
     // And for the remaining lines we use a "brute-force"
-    // algorithm. Some form of neares neighbor algorithm
+    // algorithm. Some form of nearest neighbor algorithm
     // will be very useful here. The double for loop is
     // expensive.
     for(pnt_iterator i=points.begin();i!=points.end();i++)
