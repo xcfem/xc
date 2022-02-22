@@ -304,16 +304,16 @@ GeomObj::list_Pos2d XC::FiberPtrDeque::getPositions(void) const
   }
 
 //! @brief Return the upper right corner of the bounding rectangle.
-Pos2d XC::FiberPtrDeque::GetPMax(void) const
+Pos2d XC::FiberPtrDeque::getPMax(void) const
   { return Pos2d(GetYMax(),GetZMax()); }
 
 //! @brief Return the lower left corner of the bounding rectangle.
-Pos2d XC::FiberPtrDeque::GetPMin(void) const
+Pos2d XC::FiberPtrDeque::getPMin(void) const
   { return Pos2d(GetYMin(),GetZMin()); }
 
 //! @brief Return the bounding rectangle.
 BND2d XC::FiberPtrDeque::Bnd(void) const
-  { return BND2d(GetPMin(),GetPMax()); }
+  { return BND2d(getPMin(),getPMax()); }
 
 
 //! @brief Return the areas of each fiber.

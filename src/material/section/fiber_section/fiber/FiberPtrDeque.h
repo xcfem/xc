@@ -216,8 +216,8 @@ class FiberPtrDeque: public CommandEntity, public std::deque<Fiber *>, public Mo
     double GetZMin(void) const;
     double GetYMax(void) const;
     double GetZMax(void) const;
-    Pos2d GetPMax(void) const;
-    Pos2d GetPMin(void) const;
+    Pos2d getPMax(void) const;
+    Pos2d getPMin(void) const;
     BND2d Bnd(void) const;
     size_t nearest_fiber(const double &y,const double &z) const;
     Fiber *getClosestFiber(const int matTag, const double &yCoord);
