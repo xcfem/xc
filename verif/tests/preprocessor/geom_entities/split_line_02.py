@@ -4,10 +4,7 @@ from __future__ import print_function
 import xc_base
 import geom
 import xc
-import math
 import os
-from model import predefined_spaces
-from materials import typical_materials
 
 __author__= "Luis C. Pérez Tato (LCPT)"
 __copyright__= "Copyright 2014, LCPT"
@@ -21,18 +18,6 @@ CooMax= 10
 # Problem type
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
-nodes= preprocessor.getNodeHandler
-modelSpace= predefined_spaces.SolidMechanics3D(nodes)
-# Define materials
-elast= typical_materials.defElasticMaterial(preprocessor, "elast",3000)
-
-
-seedElemHandler= preprocessor.getElementHandler.seedElemHandler
-seedElemHandler.defaultMaterial= elast.name
-seedElemHandler.dimElem= 3 # Dimension of element space
-seedElemHandler.defaultTag= 1 #Tag for the next element.
-truss= seedElemHandler.newElement("Truss",xc.ID([0,0]))
-truss.sectionArea= 10.0
 
 points= preprocessor.getMultiBlockTopology.getPoints
 pt= points.newPoint(1,geom.Pos3d(0.0,0.0,0.0))
