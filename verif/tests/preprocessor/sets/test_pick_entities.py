@@ -53,7 +53,6 @@ setIn.nodes= xcTotalSet.nodes.pickNodesInside(geomObj,0.0)
 setIn.elements= xcTotalSet.elements.pickElemsInside(geomObj,0.0)
 setIn.points= xcTotalSet.points.pickPointsInside(geomObj,0.0)
 setIn.lines= xcTotalSet.lines.pickLinesInside(geomObj,0.0)
-
 nNodes= len(setIn.nodes)
 nElements= len(setIn.elements)
 nPoints= len(setIn.points)
