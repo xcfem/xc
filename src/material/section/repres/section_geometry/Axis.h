@@ -31,7 +31,7 @@
 #define AXIS_H
 
 #include "SectionGeometryWrapper.h"
-
+#include <set>
 
 class BND2d;
 

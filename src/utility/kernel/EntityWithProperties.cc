@@ -21,53 +21,12 @@
 //EntityWithProperties.cc
 
 #include "EntityWithProperties.h"
-#include <fstream>
 #include <iostream>
-#include "utility/utils/misc_utils/memoria.h"
-#include "boost/lexical_cast.hpp"
-#include "boost/algorithm/string/trim.hpp"
-#include "boost/algorithm/string.hpp"
-#include <cxxabi.h>
-#include <sys/stat.h>
-
-#include <cctype>
-#include "CImg.h"
-
-//Variables estáticas de EntityWithProperties.
-int EntityWithProperties::verbosity= 1;
 
 //! @brief Default constructor.
 EntityWithProperties::EntityWithProperties(EntityWithProperties *owr)
-  : owner(owr)
-  {
-    if(this == owner)
-      std::cerr << getClassName() << "::" << __FUNCTION__
-                << "; ¡ojo!, object is owner of itself." << std::endl;
-  }
-
-//! @brief Copy constructor
-EntityWithProperties::EntityWithProperties(const EntityWithProperties &other)
-  : owner(other.owner)
-  {
-    if(this == owner)
-      std::cerr << getClassName() << "::" << __FUNCTION__
-                << "; ¡ojo!, object is owner of itself." << std::endl;
-  }
-
-//! @brief Assignment operator.
-EntityWithProperties &EntityWithProperties::operator=(const EntityWithProperties &other)
-  {
-    owner= other.owner;
-    if(this == owner)
-      {
-        std::cerr << getClassName() << "::" << __FUNCTION__
-		  << "; ¡ojo!, objeto of class: '"
-		  << getClassName() 
-                  << "', owns itself." << std::endl;
-        owner= nullptr;
-      }
-    return *this;
-  }
+  : EntityWithOwner(owr)
+  {}
 
 //! @brief Comparison operator.
 bool EntityWithProperties::operator==(const EntityWithProperties &other) const
@@ -76,32 +35,90 @@ bool EntityWithProperties::operator==(const EntityWithProperties &other) const
     if(this==&other)
       retval= true;
     else
-      { retval= (owner==other.owner); }
+      {
+        retval= EntityWithOwner::operator==(other);
+        if(retval)
+          retval= (python_dict==other.python_dict);
+       }
     return retval;
   }
 
-//! @brief Returns demangled class name.
-std::string EntityWithProperties::getClassName(void) const
+//! @brief Clear python properties map.
+void EntityWithProperties::clearPyProps(void)
+  { python_dict.clear(); }
+
+//! @brief Returns true if property exists.
+bool EntityWithProperties::hasPyProp(const std::string &str)
+  { return (python_dict.find(str) != python_dict.end()); }
+
+//! @brief Return the Python object with the name being passed as parameter.
+boost::python::object EntityWithProperties::getPyProp(const std::string &str)
+   {
+     boost::python::object retval; //Defaults to None.
+     // Python checks the class attributes before it calls __getattr__
+     // so we don't have to do anything special here.
+     PythonDict::const_iterator i= python_dict.find(str);
+     if(i == python_dict.end())
+       {
+         std::clog << getClassName() << "::" << __FUNCTION__
+	           << "; Warning, property: '" << str
+		   << "' not found. Returning None."
+		   << std::endl;
+         // PyErr_SetString(PyExc_AttributeError, str.c_str());
+         // throw boost::python::error_already_set();
+       }
+     else
+       retval= i->second;
+     return retval;
+   }
+
+//! @brief Sets/appends a value tho the Python object's dictionary.
+// However, with __setattr__, python doesn't do anything with the class attributes first,
+// it just calls __setattr__.
+// Which means anything that's been defined as a class attribute won't be modified
+// here - including things set with
+//add_property(), def_readwrite(), etc.
+void EntityWithProperties::setPyProp(std::string str, boost::python::object val)
   {
-    std::string tmp= typeid(*this).name();
-    std::bad_exception  e;
-    int status;
-    char *realname= abi::__cxa_demangle(tmp.c_str(), 0, 0, &status);
-    if(realname)
-      tmp= std::string(realname);
-    free(realname);
-    return tmp;
+    python_dict[str] = val;
   }
 
-//! @brief Get the value of the verbosity level.
-int EntityWithProperties::getVerbosityLevel(void)
-  { return verbosity; }
+//! @brief Return the names of the object properties weightings.
+boost::python::list EntityWithProperties::getPropNames(void) const
+  {
+    boost::python::list retval;
+    for(PythonDict::const_iterator i= python_dict.begin();i!= python_dict.end();i++)
+      retval.append((*i).first);
+    return retval;
+  }
 
-//! @brief Set the value of the verbosity level.
-void EntityWithProperties::setVerbosityLevel(const int &vl)
-  { verbosity= vl; }
+//! @brief Return a Python dictionary containing the object members values.
+boost::python::dict EntityWithProperties::getPyDict(void) const
+  {
+    boost::python::dict retval;
+    // Store properties.
+    for(PythonDict::const_iterator i= python_dict.begin();i!= python_dict.end();i++)
+      {
+	const std::string key= py_prop_prefix+(*i).first;
+        retval[key]= (*i).second;
+      }
+    return retval;
+  }
 
-//! @brief Asigna el propietario del objeto.
-void EntityWithProperties::set_owner(EntityWithProperties *owr)
-  { owner= owr; }
-
+//! @brief Set the values of the object members from a Python dictionary.
+void EntityWithProperties::setPyDict(const boost::python::dict &d)
+  {
+    auto items = d.attr("items")(); // just plain d.items or d.iteritems for Python 2!
+    for(auto it = boost::python::stl_input_iterator<boost::python::tuple>(items); it != boost::python::stl_input_iterator<boost::python::tuple>(); ++it)
+      {
+	boost::python::tuple kv = *it;
+	std::string key= boost::python::extract<std::string>(kv[0]);
+	if(key.rfind(py_prop_prefix, 0) == 0) // it's a property.
+	  {
+	    const int sz= py_prop_prefix.size();
+	    key.erase(0,sz); // remove prefix
+            auto value= kv[1];
+	    setPyProp(key, value);
+          }    
+      }
+  }

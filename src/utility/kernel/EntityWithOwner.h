@@ -21,19 +21,37 @@
 //EntityWithOwner.h
 //Entidad con punetero a su propietaria.
 
-#ifndef ENTWOWNER_H
-#define ENTWOWNER_H
+#ifndef ENTITYWITHOWNER_H
+#define ENTITYWITHOWNER_H
 
-#include "../kernel/CommandEntity.h"
+#include <string>
 
 //! @ingroup BASE
 //
-//!  @brief Entity with a pointer to its owner (TO DEPRECATE).
-class EntityWithOwner: public CommandEntity
+//!  @brief Entity with a pointer to its owner.
+class EntityWithOwner
   {
+  private:
+    EntityWithOwner *owner; //! Object that owns THIS ONE.
   protected:
-    //! @brief Constructor.
-    EntityWithOwner(CommandEntity *owr);
+    static int verbosity; //!< Verbosity level.
+   public:
+    EntityWithOwner(EntityWithOwner *owr= nullptr);
+    EntityWithOwner(const EntityWithOwner &);
+    EntityWithOwner &operator=(const EntityWithOwner &);
+    virtual bool operator==(const EntityWithOwner &) const;
+    //! @brief Virtual destructor
+    virtual ~EntityWithOwner(void) {}
+    
+    static int getVerbosityLevel(void);
+    static void setVerbosityLevel(const int &);
+    virtual std::string getClassName(void) const;
+    
+    void set_owner(EntityWithOwner *owr);
+    inline EntityWithOwner *Owner(void)
+      { return owner; }
+    inline const EntityWithOwner *Owner(void) const
+      { return owner; }    
   };
 
 #endif

@@ -23,32 +23,33 @@
 #ifndef ENTPROP_H
 #define ENTPROP_H
 
-#include <string>
+#include "EntityWithOwner.h"
+#include <map>
+#include <boost/python.hpp>
+#include <boost/python/dict.hpp>
 
 //! @ingroup NUCLEO
 //
 //! @brief Object that can return properties as Python objects.
-class EntityWithProperties
+class EntityWithProperties: public EntityWithOwner
   {
   private:
-    EntityWithProperties *owner; //! Object that owns THIS ONE.
-  protected:
-    static int verbosity; //!< Verbosity level.
-   public:
+    static inline const std::string py_prop_prefix= "py_prop";
+    typedef std::map<std::string, boost::python::object> PythonDict;
+    
+    PythonDict python_dict; //!< Python variables.
+  public:
     EntityWithProperties(EntityWithProperties *owr= nullptr);
-    EntityWithProperties(const EntityWithProperties &);
-    EntityWithProperties &operator=(const EntityWithProperties &);
+    
     virtual bool operator==(const EntityWithProperties &) const;
-    //! @brief Virtual destructor
-    virtual ~EntityWithProperties(void) {}
-    static int getVerbosityLevel(void);
-    static void setVerbosityLevel(const int &);
-    virtual std::string getClassName(void) const;
-    void set_owner(EntityWithProperties *owr);
-    inline EntityWithProperties *Owner(void)
-      { return owner; }
-    inline const EntityWithProperties *Owner(void) const
-      { return owner; }
+    
+    void clearPyProps(void);
+    bool hasPyProp(const std::string &);
+    boost::python::object getPyProp(const std::string &str);
+    void setPyProp(std::string str, boost::python::object val);
+    boost::python::list getPropNames(void) const;
+    virtual boost::python::dict getPyDict(void) const;
+    virtual void setPyDict(const boost::python::dict &);
   };
 
 #endif

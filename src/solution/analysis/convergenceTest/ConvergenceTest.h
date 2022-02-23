@@ -62,7 +62,7 @@
 // to test the convergence of an algorithm. 
 
 #include <utility/actor/actor/MovableObject.h>
-#include "utility/kernel/EntityWithOwner.h"
+#include "utility/kernel/CommandEntity.h"
 #include "utility/matrix/Vector.h"
 #include "solution/system_of_eqn/linearSOE/LinearSOE.h"
 
@@ -78,7 +78,7 @@ class SolutionStrategy;
 //! algorithmic class to test if convergence has been achieved for an 
 //! iteration. The ConvergenceTest class is an abstract class, defining
 //! the interface that all subclasses must provide.
-class ConvergenceTest: public MovableObject, public EntityWithOwner
+class ConvergenceTest: public MovableObject, public CommandEntity
   {
     SolutionStrategy *getSolutionStrategy(void);
     const SolutionStrategy *getSolutionStrategy(void) const;

@@ -81,14 +81,25 @@ BOOST_PYTHON_MODULE(xc_base)
       .add_property("outStreamWrapper", make_function( getOutputStreamWrapper, return_internal_reference<>() ), "returns regular output stream wrapper.")
       ;
 
-const EntityWithProperties *(EntityWithProperties::*getOwner)(void) const= &EntityWithProperties::Owner;
-    class_<EntityWithProperties,EntityWithProperties *, boost::noncopyable  >("EntityWithProperties", no_init)
+const EntityWithOwner *(EntityWithOwner::*getOwner)(void) const= &EntityWithOwner::Owner;
+    class_<EntityWithOwner,EntityWithOwner *, boost::noncopyable  >("EntityWithOwner", no_init)
       .add_property("owner", make_function( getOwner, return_internal_reference<>() ), "returns object's owner (container).")
-      .def("setVerbosityLevel", &EntityWithProperties::setVerbosityLevel,"Set verbosity level.")
+      .def("setVerbosityLevel", &EntityWithOwner::setVerbosityLevel,"Set verbosity level.")
         .staticmethod("setVerbosityLevel")
-      .def("getVerbosityLevel", &EntityWithProperties::getVerbosityLevel,"Get verbosity level.")
+      .def("getVerbosityLevel", &EntityWithOwner::getVerbosityLevel,"Get verbosity level.")
       .staticmethod("getVerbosityLevel")
+      .def("tipo", &EntityWithOwner::getClassName,"DEPRECATED Return the class name.")
+      .def("type", &EntityWithOwner::getClassName,"Returns class name.")
       ;
+    
+    class_<EntityWithProperties, bases<EntityWithOwner> >("EntityWithProperties")
+      .def("hasProp", &EntityWithProperties::hasPyProp,"True if property exists.")
+      .def("getProp", &EntityWithProperties::getPyProp,"Return a user defined property.")
+      .def("setProp", &EntityWithProperties::setPyProp,"Sets the value of a user defined property.")
+      .def("getPropNames", &EntityWithProperties::getPropNames,"Return the names of the object properties.")
+      .def("getDict", &EntityWithProperties::getPyDict,"Return a Python dictionary containing the object members values.")
+      .def("setFromDict", &EntityWithProperties::setPyDict,"Set the values of the object members from a Python dictionary.")
+  ;
 
     StandardOutputWrapper &(CommandEntity::*getStandardOutputWrapper)(void)= &CommandEntity::getStandardOutputWrapper;
     class_<CommandEntity, bases<EntityWithProperties> >("CommandEntity")
@@ -96,17 +107,9 @@ const EntityWithProperties *(EntityWithProperties::*getOwner)(void) const= &Enti
       .add_property("logFileName", make_function( &CommandEntity::getLogFileName, return_internal_reference<>() ), &CommandEntity::setLogFileName)
       .add_property("errFileName", make_function( &CommandEntity::getErrFileName, return_internal_reference<>() ), &CommandEntity::setErrFileName)
       .add_property("outputFileName", make_function( &CommandEntity::getOutputFileName, return_internal_reference<>() ), &CommandEntity::setOutputFileName)
-      .def("hasProp", &CommandEntity::hasPyProp,"True if property exists.")
-      .def("getProp", &CommandEntity::getPyProp,"Return a user defined property.")
-      .def("setProp", &CommandEntity::setPyProp,"Sets the value of a user defined property.")
-      .def("getPropNames", &CommandEntity::getPropNames,"Return the names of the object properties.")
       .def("evalPy", &CommandEntity_eval,"Evaluates expresion.")
       .def("execPy", &CommandEntity_exec,"Executes code block.")
       .def("execFilePy", &CommandEntity_exec_file,"Executes code block.")
-      .def("getDict", &CommandEntity::getPyDict,"Return a Python dictionary containing the object members values.")
-      .def("setFromDict", &CommandEntity::setPyDict,"Set the values of the object members from a Python dictionary.")
-      .def("tipo", &CommandEntity::getClassName,"DEPRECATED Return the class name.")
-      .def("type", &CommandEntity::getClassName,"Returns class name.")
   ;
 
     class_<NamedEntity, bases<CommandEntity> >("NamedEntity")

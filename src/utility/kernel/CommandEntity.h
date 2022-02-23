@@ -24,14 +24,8 @@
 #define ENTCMD_H
 
 #include "EntityWithProperties.h"
-#include <map>
-#include <set>
-#include <deque>
-#include <stack>
 #include "utility/utils/text/text_string.h"
 #include "utility/kernel/StandardOutputWrapper.h"
-#include <boost/python.hpp>
-#include <boost/python/dict.hpp>
 
 namespace boost
   {
@@ -45,11 +39,8 @@ typedef enum{FALLO,CONTINUA,COMPLETADO} resul_lectura;
 //! @brief Objet that can execute python scripts.
 class CommandEntity: public EntityWithProperties
   {
-    static inline const std::string py_prop_prefix= "py_prop";
-    typedef std::map<std::string, boost::python::object> PythonDict;
   private:
     static StandardOutputWrapper standardOutput; //!< Streams para errores y avisos.
-    PythonDict python_dict; //!< Python variables.
   protected:
     static CommandEntity *entcmd_cast(boost::any &data);
 
@@ -57,7 +48,6 @@ class CommandEntity: public EntityWithProperties
     void string_to(T &,const std::string &) const;
   public:
     CommandEntity(CommandEntity *owr= nullptr);
-    virtual bool operator==(const CommandEntity &) const;
 
     CommandEntity *Owner(void);
     const CommandEntity *Owner(void) const;
@@ -72,17 +62,10 @@ class CommandEntity: public EntityWithProperties
     void setOutputFileName(const std::string &);
     static void resetStandardOutput(void);
 
-    void clearPyProps(void);
-    bool hasPyProp(const std::string &);
-    boost::python::object getPyProp(const std::string &str);
-    void setPyProp(std::string str, boost::python::object val);
-    boost::python::list getPropNames(void) const;
    
     boost::python::object evalPy(boost::python::object dict,const std::string &);
     boost::python::object execPy(boost::python::object dict,const std::string &);
     boost::python::object execFilePy(boost::python::object dict,const std::string &);
-    virtual boost::python::dict getPyDict(void) const;
-    virtual void setPyDict(const boost::python::dict &);
   };
 
 #endif

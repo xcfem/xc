@@ -66,6 +66,7 @@
 
 #include "utility/kernel/CommandEntity.h"
 #include <vector>
+#include <set>
 #include <boost/python/list.hpp>
 
 namespace XC {

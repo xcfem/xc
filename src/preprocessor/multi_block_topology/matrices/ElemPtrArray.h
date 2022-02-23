@@ -33,6 +33,7 @@
 
 #include "PtrArrayBase.h"
 #include <vector>
+#include <set>
 
 class Pos3d;
 

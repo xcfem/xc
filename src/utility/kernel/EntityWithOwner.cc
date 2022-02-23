@@ -22,8 +22,80 @@
 
 #include "EntityWithOwner.h"
 
-//! @brief Constructor.
-EntityWithOwner::EntityWithOwner(CommandEntity *owr)
-  : CommandEntity(owr) {}
+#include <iostream>
+#include <cxxabi.h>
+
+// Static variables.
+int EntityWithOwner::verbosity= 1;
+
+//! @brief Default constructor.
+EntityWithOwner::EntityWithOwner(EntityWithOwner *owr)
+  : owner(owr)
+  {
+    if(this == owner)
+      std::cerr << getClassName() << "::" << __FUNCTION__
+                << "; ¡ojo!, object is owner of itself." << std::endl;
+  }
+
+//! @brief Copy constructor
+EntityWithOwner::EntityWithOwner(const EntityWithOwner &other)
+  : owner(other.owner)
+  {
+    if(this == owner)
+      std::cerr << getClassName() << "::" << __FUNCTION__
+                << "; ¡ojo!, object is owner of itself." << std::endl;
+  }
+
+//! @brief Assignment operator.
+EntityWithOwner &EntityWithOwner::operator=(const EntityWithOwner &other)
+  {
+    owner= other.owner;
+    if(this == owner)
+      {
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; ¡ojo!, objeto of class: '"
+		  << getClassName() 
+                  << "', owns itself." << std::endl;
+        owner= nullptr;
+      }
+    return *this;
+  }
+
+//! @brief Comparison operator.
+bool EntityWithOwner::operator==(const EntityWithOwner &other) const
+  {
+    bool retval= false;
+    if(this==&other)
+      retval= true;
+    else
+      { retval= (owner==other.owner); }
+    return retval;
+  }
+
+//! @brief Returns demangled class name.
+std::string EntityWithOwner::getClassName(void) const
+  {
+    std::string tmp= typeid(*this).name();
+    std::bad_exception  e;
+    int status;
+    char *realname= abi::__cxa_demangle(tmp.c_str(), 0, 0, &status);
+    if(realname)
+      tmp= std::string(realname);
+    free(realname);
+    return tmp;
+  }
+
+//! @brief Get the value of the verbosity level.
+int EntityWithOwner::getVerbosityLevel(void)
+  { return verbosity; }
+
+//! @brief Set the value of the verbosity level.
+void EntityWithOwner::setVerbosityLevel(const int &vl)
+  { verbosity= vl; }
+
+//! @brief Asigna el propietario del objeto.
+void EntityWithOwner::set_owner(EntityWithOwner *owr)
+  { owner= owr; }
+
 
 
