@@ -473,6 +473,7 @@ python tests/preprocessor/geom_entities/split_line_01.py
 python tests/preprocessor/geom_entities/split_line_02.py
 python tests/preprocessor/geom_entities/split_line_03.py
 python tests/preprocessor/geom_entities/test_split_lines_01.py
+python tests/preprocessor/geom_entities/test_split_lines_02.py
 python tests/preprocessor/geom_entities/test_block_definition.py
 echo "$BLEU" "  Meshing routines tests." "$NORMAL"
 python tests/preprocessor/meshing/test_surface_axes_01.py
