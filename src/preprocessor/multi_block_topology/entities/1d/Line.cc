@@ -142,14 +142,16 @@ XC::Edge *XC::Line::split_at(Pnt *p,const double &lambda,const double &length)
 	  }
 	retval= dynamic_cast<Line *>(tmp);
 	assert(retval);
-	//Settint the number of divisions so
-	//the element size remains almost constant.
+	// Setting the number of divisions so
+	// the element size remains almost constant.
 	const double sz_elem= length/NDiv();
 	setNDiv(ceil(getLength()/sz_elem));
 	retval->setNDiv(ceil(retval->getLength()/sz_elem));
-	//copying sets.
+	// copying sets.
 	std::set<SetBase *> sets= get_sets();
 	retval->add_to_sets(sets);
+	// copying properties.
+	retval->copyPropsFrom(*this);
       }
     return retval;
   }

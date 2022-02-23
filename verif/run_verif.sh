@@ -44,8 +44,9 @@ START=$(date +%s.%N)
 
 # Misc. tests
 echo "$BLEU" "Misc. tests." "$NORMAL"
-python tests/test_evalPy.py
-python tests/test_execPy.py
+python tests/utility/test_evalPy.py
+python tests/utility/test_execPy.py
+python tests/utility/test_copy_properties.py
 python tests/utility/miscUtils/testStairCaseFunction.py
 python tests/utility/miscUtils/test_linear_interpolation.py
 python tests/utility/miscUtils/test_remove_accents.py

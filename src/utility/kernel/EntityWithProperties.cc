@@ -92,11 +92,19 @@ boost::python::list EntityWithProperties::getPropNames(void) const
     return retval;
   }
 
+//! @brief Copy the properties from the argument.
+void EntityWithProperties::copyPropsFrom(const EntityWithProperties &other)
+  {
+    const PythonDict &otherDict= other.python_dict;
+    for(PythonDict::const_iterator i= otherDict.begin();i!= otherDict.end();i++)
+      setPyProp((*i).first, (*i).second);
+  }
+
 //! @brief Return a Python dictionary containing the object members values.
 boost::python::dict EntityWithProperties::getPyDict(void) const
   {
     boost::python::dict retval;
-    // Store properties.
+    // Retrieve properties.
     for(PythonDict::const_iterator i= python_dict.begin();i!= python_dict.end();i++)
       {
 	const std::string key= py_prop_prefix+(*i).first;

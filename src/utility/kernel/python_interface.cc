@@ -97,6 +97,7 @@ const EntityWithOwner *(EntityWithOwner::*getOwner)(void) const= &EntityWithOwne
       .def("getProp", &EntityWithProperties::getPyProp,"Return a user defined property.")
       .def("setProp", &EntityWithProperties::setPyProp,"Sets the value of a user defined property.")
       .def("getPropNames", &EntityWithProperties::getPropNames,"Return the names of the object properties.")
+      .def("copyPropsFrom", &EntityWithProperties::copyPropsFrom,"Copy the properties from the argument.")
       .def("getDict", &EntityWithProperties::getPyDict,"Return a Python dictionary containing the object members values.")
       .def("setFromDict", &EntityWithProperties::setPyDict,"Set the values of the object members from a Python dictionary.")
   ;
