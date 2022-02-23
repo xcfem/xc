@@ -907,7 +907,7 @@ void XC::SetEntities::splitLinesAtIntersections(const double &tol)
 	  }
       }
     // We use entities shadows as spatial indexing tool.
-    const EntitiesShadows<Edge> line_shadows(lines);
+    EntitiesShadows<Edge> line_shadows(lines);
     const Vector3d offset(tol,tol,tol);
     for(pnt_iterator i=points.begin();i!=points.end();i++)
       {
@@ -925,7 +925,15 @@ void XC::SetEntities::splitLinesAtIntersections(const double &tol)
 	    Edge *l= *j;
             const double dist2= (*j)->getSquaredDistanceTo(pos);
             if(dist2<tol2)
- 	      { l->splitAtPoint(pnt); }	    
+ 	      {
+		// Remove line l from intervals.
+		line_shadows.remove(l);
+		// Split the line.
+		Edge *newLine= l->splitAtPoint(pnt);
+		// Add resulting lines to intervals.
+		line_shadows.add(newLine);
+		line_shadows.add(l);
+	      }	    
 	  }
       }
   }

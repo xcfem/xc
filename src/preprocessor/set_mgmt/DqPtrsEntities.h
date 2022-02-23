@@ -321,6 +321,9 @@ class EntitiesShadows
   public:
     EntitiesShadows(const DqPtrsEntities<T> &);
 
+    void add(T *);
+    void remove(T *);
+    
     std::set<T *> getNeighbors(const Pos3d &pMin, const Pos3d &pMax) const;
   };
   
@@ -336,19 +339,43 @@ EntitiesShadows<T>::EntitiesShadows(const DqPtrsEntities<T> &entities)
       {
         T *t= (*i);
         assert(t);
-	shadow_makers sm;
-	sm.insert(t);
-	BND3d tmp= t->Bnd();
-	const Pos3d pMin= tmp.getPMin();
-	const Pos3d pMax= tmp.getPMax();
-	auto shadow_interval_x= shadow_interval::closed(pMin.x(), pMax.x());
-	auto x_pair= std::make_pair(shadow_interval_x, sm);
-        x_shadows.add(x_pair);
-	auto shadow_interval_y= shadow_interval::closed(pMin.y(), pMax.y());
-        y_shadows.add(std::make_pair(shadow_interval_y, sm));
-	auto shadow_interval_z= shadow_interval::closed(pMin.z(), pMax.z());
-        z_shadows.add(std::make_pair(shadow_interval_z, sm));
+	this->add(t);
       }
+  }
+  
+//! @brief Add entity to the interval map.
+template <class T>
+void EntitiesShadows<T>::add(T *t)
+  {
+    shadow_makers sm;
+    sm.insert(t);
+    BND3d tmp= t->Bnd();
+    const Pos3d pMin= tmp.getPMin();
+    const Pos3d pMax= tmp.getPMax();
+    auto shadow_interval_x= shadow_interval::closed(pMin.x(), pMax.x());
+    auto shadow_interval_y= shadow_interval::closed(pMin.y(), pMax.y());
+    auto shadow_interval_z= shadow_interval::closed(pMin.z(), pMax.z());
+    x_shadows.add(std::make_pair(shadow_interval_x, sm));
+    y_shadows.add(std::make_pair(shadow_interval_y, sm));
+    z_shadows.add(std::make_pair(shadow_interval_z, sm));
+  }
+  
+//! @brief Remove entity from the interval map.
+template <class T>
+void EntitiesShadows<T>::remove(T *t)
+  {
+    shadow_makers sm;
+    sm.insert(t);
+    BND3d tmp= t->Bnd();
+    const Pos3d pMin= tmp.getPMin();
+    const Pos3d pMax= tmp.getPMax();
+    const double margin= 1.0; // To be sure that the interval is completely removed.
+    auto shadow_interval_x= shadow_interval::closed(pMin.x()-margin, pMax.x()+margin);
+    auto shadow_interval_y= shadow_interval::closed(pMin.y()-margin, pMax.y()+margin);
+    auto shadow_interval_z= shadow_interval::closed(pMin.z()-margin, pMax.z()+margin);
+    x_shadows-= std::make_pair(shadow_interval_x, sm);
+    y_shadows-= std::make_pair(shadow_interval_y, sm);
+    z_shadows-= std::make_pair(shadow_interval_z, sm);
   }
 
 //! @brief Return the objects whose "shadow" overlaps whith the interval argument.
