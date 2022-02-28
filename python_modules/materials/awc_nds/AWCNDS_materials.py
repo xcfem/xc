@@ -53,6 +53,35 @@ def getLoadDurationFactor(duration):
     '''
     return table232(duration)
 
+def getLoadCombinationDurationFactor(deadLoad= False, liveLoad= True, snowLoad= False, windLoad= False):
+    ''' Return the duration factor according to appendix B Section B.2
+        of AWC-NDS2018 (Non-mandatory).
+
+    :param deadLoad: if true the dead load is present in the load combination.
+    :param liveLoad: if true the live load is present in the load combination.
+    :param snowLoad: if true the snow load is present in the load combination.
+    :param windLoad: if true the wind load is present in the load combination.
+    '''
+    retval= 1.0
+    deadLoadOnly= deadLoad and not (liveLoad or snowLoad or windLoad)
+    if(deadLoadOnly):
+        retval= 0.9
+    elif(deadLoad and liveLoad and not (windLoad or snowLoad)):
+        retval= 1.0
+    elif(deadLoad and snowLoad and not (liveLoad or windLoad)):
+        retval= 1.15
+    elif(deadLoad and windLoad and not (liveLoad or snowLoad)):
+        retval= 1.6
+    elif(deadLoad and liveLoad and snowLoad and not windLoad):
+        retval= 1.15
+    elif(deadLoad and liveLoad and windLoad and not snowLoad):
+        retval= 1.6
+    elif(deadLoad and snowLoad and windLoad and not liveLoad):
+        retval= 1.6
+    else:
+        retval= 1.6
+    return retval
+
 def convertToFahrenheit(celsius):
     '''Convert to Fahrenheit degrees.'''
     return celsius * 9 / 5 + 32
