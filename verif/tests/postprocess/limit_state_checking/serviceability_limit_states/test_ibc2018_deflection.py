@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+''' Test deflection values returned by the function getDeflectionLimit
+    of the ibc_2018_sls module.'''
 
 from serviceability_limit_states import ibc_2018_sls
 
