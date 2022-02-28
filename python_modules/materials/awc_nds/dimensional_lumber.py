@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
-''' Dimensional lumber reference design values.'''
+''' Dimensional lumber reference design values according to chapter 4
+    orh the .'''
 
 from __future__ import division
 from __future__ import print_function
@@ -510,7 +511,7 @@ class SouthernPineWood(DimensionLumberWood):
         return self.Fc(max(b,h))
 
 # Spruce-Pine-Fir reference design values according to table 4A
-# of National Design Specification page 37
+# of National Design Specification Supplement page 37
 class SprucePineFirWood(DimensionLumberWood):
     ''' Spruce-pine-fir refence design values according to
         table 4A of National Design Specification page 37.'''
@@ -548,7 +549,7 @@ class SprucePineFirWood(DimensionLumberWood):
             lmsg.error('Grade: '+grade+' unknown.')
 
 # Douglas Fir-Larch reference design values according to table 4A
-# of National Design Specification page 34
+# of National Design Specification Supplement page 34
 class DouglasFirLarchWood(DimensionLumberWood):
     ''' Douglas Fir-Larch refence design values according to
         table 4A of National Design Specification page 34.'''
@@ -596,3 +597,54 @@ class DouglasFirLarchWood(DimensionLumberWood):
             self.Emin= 510e3*mat.psi2Pa
         else:
             lmsg.error('Grade: '+grade+' unknown.')
+
+# Hem-Fir reference design values according to table 4A
+# of National Design Specification Supplement page 35
+class HemFirWood(DimensionLumberWood):
+    ''' HemFir Fir-Larch refence design values according to
+        table 4A of National Design Specification page 34.'''
+    nu= 0.2
+    def __init__(self, name='HemFir', grade= 'no_2', sub_grade= ''):
+        '''Constructor.'''
+        super(HemFirWood,self).__init__(name, grade, sub_grade, rho= 500)
+        self.Fv= 150.0*mat.psi2Pa
+        self.Fct= 405.0*mat.psi2Pa
+        if(grade=='structural'): # 2" and wider.
+            self.Fb= 1400.0*mat.psi2Pa
+            self.Ft= 925.0*mat.psi2Pa
+            self.Fc= 1500.0*mat.psi2Pa
+            self.E= 1.6e6*mat.psi2Pa
+            self.Emin= 580e3*mat.psi2Pa
+        elif(grade=='no_1_&_Btr'): # 2" and wider.
+            self.Fb= 1100.0*mat.psi2Pa
+            self.Ft= 725.0*mat.psi2Pa
+            self.Fc= 1350.0*mat.psi2Pa
+            self.E= 1.5e6*mat.psi2Pa
+            self.Emin= 550e3*mat.psi2Pa
+        elif(grade=='no_1'): # 2" and wider.
+            self.Fb=975*mat.psi2Pa
+            self.Ft=625*mat.psi2Pa
+            self.Fc=1350*mat.psi2Pa
+            self.E=1500000*mat.psi2Pa
+            self.Emin=550000*mat.psi2Pa
+        elif(grade=='no_2'): # 2" and wider.
+            self.Fb=850*mat.psi2Pa
+            self.Ft=525*mat.psi2Pa
+            self.Fc=1300*mat.psi2Pa
+            self.E=1300000*mat.psi2Pa
+            self.Emin=470000*mat.psi2Pa
+        elif(grade=='no_3'): # 2" and wider.
+            self.Fb=500*mat.psi2Pa
+            self.Ft=300*mat.psi2Pa
+            self.Fc=725*mat.psi2Pa
+            self.E=1200000*mat.psi2Pa
+            self.Emin=440000*mat.psi2Pa
+        elif(grade=='stud'):  # 2" and wider.
+            self.Fb=675*mat.psi2Pa
+            self.Ft=400*mat.psi2Pa
+            self.Fc=800*mat.psi2Pa
+            self.E=1200000*mat.psi2Pa
+            self.Emin=440000*mat.psi2Pa
+        else:
+            lmsg.error('Grade: '+grade+' unknown.')
+
