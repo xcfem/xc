@@ -468,7 +468,7 @@ class WoodSection(object):
         :param chiN: column stability factor clause 3.7.1 of AWC-NDS2018 (default= 1.0).
         :param chiLT: beam stability factor clause 3.3.3 of AWC-NDS2018 (default= 1.0).
         '''
-        retval= None
+        CF= None # Capacity factor (efficiency).
         ratioN= self.getAxialEfficiency(Nd, chiN)
         if(Myd!=0.0 and Mzd!=0.0):
             className= type(self).__name__
@@ -479,37 +479,37 @@ class WoodSection(object):
                 Sy= self.getElasticSectionModulusY()
                 fb= Myd/Sy
                 Fb_aster= self.getFlexuralStrength(majorAxis= True, chiLT= 1.0)/Sy # No CL adjustement
-                retval= ratioN+fb/Fb_aster # equation 3.9-1
+                CF= ratioN+fb/Fb_aster # equation 3.9-1
                 if(Myd!=0.0):
                     ft= Nd/self.A()
                     Fb_aster2= Fb_aster*chiLT # CL adjustement
                     eq392= (fb-ft)/Fb_aster2 # equation 3.9-2
-                    retval= max(retval, eq392)
+                    CF= max(CF, eq392)
             elif(Nd<0):
                 className= type(self).__name__
                 methodName= sys._getframe(0).f_code.co_name
                 lmsg.error(className+'.'+methodName+'; bending and axial compression not implemented yet.')
             else: # Nd==0
-                retval= self.getFlexuralEfficiency(Md= Myd, majorAxis= False, chiLT= chiLT) # available flexural strength minor axis.
+                CF= self.getFlexuralEfficiency(Md= Myd, majorAxis= False, chiLT= chiLT) # available flexural strength minor axis.
         else:
             if(Nd>0):
                 Sz= self.getElasticSectionModulusZ()
                 fb= Mzd/Sz
                 Fb_aster= self.getFlexuralStrength(majorAxis= True, chiLT= 1.0)/Sz # No CL adjustement
-                retval= ratioN+fb/Fb_aster # equation 3.9-1
+                CF= ratioN+fb/Fb_aster # equation 3.9-1
                 if(Mzd!=0.0):
                     ft= Nd/self.A()
                     Fb_aster2= Fb_aster*chiLT # CL adjustement
                     eq392= (fb-ft)/Fb_aster2 # equation 3.9-2
-                    retval= max(retval, eq392)
+                    CF= max(CF, eq392)
             elif(Nd<0):
                 className= type(self).__name__
                 methodName= sys._getframe(0).f_code.co_name
                 lmsg.error(className+'.'+methodName+'; bending and axial compression not implemented yet.')
             else:
-                retval= self.getFlexuralEfficiency(Md= Mzd, majorAxis= True, chiLT= chiLT) # reference flexural strength major axis.
+                CF= self.getFlexuralEfficiency(Md= Mzd, majorAxis= True, chiLT= chiLT) # reference flexural strength major axis.
                 
-        return retval    
+        return (CF,)    
 
     
     def getYShearEfficiency(self, Vy):
