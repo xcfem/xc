@@ -90,18 +90,35 @@ crossSection.checkYShearForElement(self,nmbComb)'''
 class MemberBase(object):
     ''' Base class for beam and column members according to chapter 
         3 of NDS-2018.
+
+    :ivar Cr: repetitive member factor.
     '''
-    def __init__(self, unbracedLength, section, connection= member_base.MemberConnection()):
-        ''' Constructor. '''
+    def __init__(self, unbracedLength, section, Cr= 1.0, connection= member_base.MemberConnection()):
+        ''' Constructor. 
+
+        :param unbracedLength: length between bracing elements.
+        :param section: member cross-section.
+        :param Cr: repetitive member factor.
+        :param connection: connection type at beam ends.
+        '''
         self.unbracedLength= unbracedLength
         self.section= section
+        self.Cr= Cr
         self.connection= connection
-        
+       
 class BeamMember(MemberBase):
-    ''' Beam member according to chapter 3.3 of NDS-2018.'''
-    def __init__(self, unbracedLength, section, connection= member_base.MemberConnection()):
-        ''' Constructor. '''
-        super(BeamMember,self).__init__(unbracedLength, section, connection)
+    ''' Beam member according to chapter 3.3 of NDS-2018.
+
+    '''
+    def __init__(self, unbracedLength, section, connection= member_base.MemberConnection(), Cr= 1.0):
+        ''' Constructor. 
+
+        :param unbracedLength: length between bracing elements.
+        :param connection: connection type at beam ends.
+        :param Cr: repetitive member factor.
+        '''
+        super(BeamMember,self).__init__(unbracedLength= unbracedLength, section= section, Cr= Cr, connection= connection)
+        
     def getEffectiveLength(self,numberOfConcentratedLoads= 0, lateralSupport= False, cantilever= False):
         ''' Return the effective length of the beam according to table
             3.3.3 of NDS-2018.
@@ -195,7 +212,7 @@ class BeamMember(MemberBase):
         RB= self.getBendingSlendernessRatio(numberOfConcentratedLoads, lateralSupport, cantilever)
         return 1.2*self.section.wood.Emin/RB**2
     
-    def getBeamStabilityFactor(self,numberOfConcentratedLoads= 0, lateralSupport= False, cantilever= False):
+    def getBeamStabilityFactor(self,numberOfConcentratedLoads= 0, lateralSupport= False, cantilever= False, CD= 1.0):
         ''' Return the beam stability factor according to equation 
             3.3.6 of NDS-2018.
 
@@ -203,9 +220,11 @@ class BeamMember(MemberBase):
                                              spaced along the beam (0: uniform load).
            :param lateralSupport: if true beam has a lateral support on each load.
            :param cantilever: if true cantilever beam otherwise single span beam.
+           :param CD: load duration factor.
         '''
         FbE= self.getFbECriticalBucklingDesignValue(numberOfConcentratedLoads, lateralSupport, cantilever)
-        ratio= FbE/self.section.wood.getFb(b= self.section.b, h=self.section.h)
+        FbAdj= self.section.getFbAdj(CD= CD, Cr= self.Cr)
+        ratio= FbE/FbAdj
         A= (1+ratio)/1.9
         B= A**2
         C= ratio/0.95
