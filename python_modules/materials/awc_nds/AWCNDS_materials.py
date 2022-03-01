@@ -1194,12 +1194,13 @@ class CustomLumberSection(WoodRectangularSection):
             value Fc.'''
         return self.wood.getCompressionSizeFactor(self.b,self.h)
     
-    def getFbAdj(self, Cr= 1.0):
+    def getFbAdj(self, CD= 1.0, Cr= 1.0):
         ''' Return the adjusted value of Fb.
 
+        :param CD: load duration factor.
         :param Cr: repetitive member factor
         '''
-        return self.wood.getFbAdj(self.b,self.h, Cr)
+        return self.wood.getFbAdj(b= self.b, h= self.h, CD= CD, Cr= Cr)
     
     def getFtAdj(self):
         ''' Return the adjusted value of Ft.'''
