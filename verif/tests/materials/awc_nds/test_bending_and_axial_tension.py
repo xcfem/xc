@@ -112,10 +112,10 @@ for key in loadCases:
     Fb_aster2= beam.getFbAdj()
     results[key]['Fb**']= Fb_aster2/psiToPa
     # Bending and axial tension.
-    CF= beam.getBiaxialBendingEfficiency(Nd= T, Myd= 0.0, Mzd= M, chiN= 1.0, chiLT= CL)
-    results[key]['CF']= CF
+    bendingCF= beam.getBiaxialBendingEfficiency(Nd= T, Myd= 0.0, Mzd= M, chiN= 1.0, chiLT= CL)
+    results[key]['CF']= bendingCF
 
-refResults= {'LC1': {'CD': 1.6, 'ft': 292.4136791579146, 'Ft*': 1008.0, 'Fb*': 1632.0, 'CL': 0.40444999015184435, 'Fb**': 660.06238392781, 'CF': 0.6123981947524744}, 'LC2': {'CD': 1.25, 'ft': 211.49417046012692, 'Ft*': 787.5, 'Fb*': 1275.0, 'CL': 0.5089065816672449, 'Fb**': 648.8558916257373, 'CF': 0.6811147576034369}, 'LC3': {'CD': 0.9, 'ft': 130.57466176233925, 'Ft*': 567.0, 'Fb*': 918.0000000000001, 'CL': 0.6738331918478999, 'Fb**': 618.5788701163722, 'CF': 0.8032775360051476}}
+refResults= {'LC1': {'CD': 1.6, 'ft': 292.4136791579146, 'Ft*': 1008.0, 'Fb*': 1632.0, 'CL': 0.40444999015184435, 'Fb**': 660.06238392781, 'CF': (0.6123981947524744,)}, 'LC2': {'CD': 1.25, 'ft': 211.49417046012692, 'Ft*': 787.5, 'Fb*': 1275.0, 'CL': 0.5089065816672449, 'Fb**': 648.8558916257373, 'CF': (0.6811147576034369,)}, 'LC3': {'CD': 0.9, 'ft': 130.57466176233925, 'Ft*': 567.0, 'Fb*': 918.0000000000001, 'CL': 0.6738331918478999, 'Fb**': 618.5788701163722, 'CF': (0.8032775360051476,)}}
 
 
 error= 0.0
@@ -124,6 +124,9 @@ for lc in results:
     for key in combResults:
         v1= combResults[key]
         v2= refResults[lc][key]
+        if(key=='CF'):
+            v1= v1[0]
+            v2= v2[0]
         error+= (v1-v2)**2
 
 error= math.sqrt(error)
