@@ -59,6 +59,9 @@ Fbp_aster= Fb*CD*CM*Ct*CF*Ci*Cr  # Fbp_aster is adjusted bending design value
                                  # with all adjustment factors except the
                                  # beam stability factor CL and flat use factor
                                  # Cfu applied.
+FbAdj= beam.section.getFbAdj(CD= CD, Cr= Cr)
+ratio0= abs(FbAdj-Fbp_aster)/Fbp_aster
+
 lu= beam.unbracedLength
 le= beam.getEffectiveLength(numberOfConcentratedLoads= 1, lateralSupport= False, cantilever= False)
 RB= beam.getBendingSlendernessRatio(numberOfConcentratedLoads= 1, lateralSupport= False, cantilever= False)
@@ -82,9 +85,12 @@ ratio13= abs(FbE-12.24350981e6)/12.24350981e6
 ratio14= abs(CL-.875623337112)/.875623337112
 ratio15= abs(Fb_aster-9.05581913968e6)/(9.05581913968e6)
 
-check= (ratio1<1e-15) and (ratio2<1e-15) and (ratio3<1e-15) and (ratio4<1e-15) and (ratio5<1e-15) and (ratio6<1e-7) and (ratio8<1e-9) and (ratio9<1e-15) and (ratio10<1e-15) and (ratio11<1e-4) and (ratio12<1e-3) and (ratio13<1e-9) and (ratio14<1e-12) and (ratio15<1e-12)
+check= (ratio0<1e-15) and (ratio1<1e-15) and (ratio2<1e-15) and (ratio3<1e-15) and (ratio4<1e-15) and (ratio5<1e-15) and (ratio6<1e-7) and (ratio8<1e-9) and (ratio9<1e-15) and (ratio10<1e-15) and (ratio11<1e-4) and (ratio12<1e-3) and (ratio13<1e-9) and (ratio14<1e-12) and (ratio15<1e-12)
 
 '''
+print('Fb_aster= ', Fb_aster/1e6, ' MPa theor. Fb_aster= ',  1313*psiToPa/1e6)
+print('FbAdj= ', FbAdj/1e6, ' MPa theor. FbAdj= ',  1313*psiToPa/1e6)
+print('ratio0= ',ratio0)
 print('ratio1= ',ratio1)
 print('ratio2= ',ratio2)
 print('ratio3= ',ratio3)
@@ -102,7 +108,7 @@ print('ratio11= ',ratio11)
 print('ratio12= ',ratio12)
 print('FbE= ', FbE/1e6, ' MPa theor. FbE= ', 1776*psiToPa/1e6)
 print('ratio13= ',ratio13)
-print('FbE= ', CL, ' theor. CL= ', .876)
+print('CL= ', CL, ' theor. CL= ', .876)
 print('ratio14= ',ratio14)
 print('Fb_aster= ', Fb_aster/1e6, ' MPa theor. Fb_aster= ',  1313*psiToPa/1e6)
 print('ratio15= ',ratio15)
@@ -114,4 +120,4 @@ fname= os.path.basename(__file__)
 if(check):
     print("test "+fname+": ok.")
 else:
-    print("test "+fname+": ERROR.")
+    lmsg.error('test: '+fname+' ERROR.')

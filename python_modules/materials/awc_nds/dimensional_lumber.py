@@ -15,8 +15,77 @@ import scipy.interpolate
 from materials.awc_nds import AWCNDS_materials as mat
 from materials import typical_materials
 
+
+def getDressedThickness(nominalThickness, dressedSize= 'Dry'):
+    ''' Return the dressed thickness of dimension lumber according to
+        table 1A of 2018 National Design Specification Supplement
+        (page 13).
+
+    :param nominalThickness: nominal thicness of the member (m).
+    :param dressedSize: dressed size to use (defaults to 'Dry').
+    '''
+    retval= nominalThickness-25.4e-3/2.0
+    if(dressedSize!='Dry'): # Green
+        retval= nominalThickness-25.4e-3*7/16.0
+    return retval
+
+def getNominalThickness(dressedThickness, dressedSize= 'Dry'):
+    ''' Return the nominal thickness of dimension lumber according to
+        table 1A of 2018 National Design Specification Supplement
+        (page 13).
+
+    :param dressedThickness: dressed thicness of the member (m).
+    :param dressedSize: dressed size to use (defaults to 'Dry').
+    '''
+    retval= dressedThickness+25.4e-3/2.0
+    if(dressedSize!='Dry'): # Green
+        retval= dressedThickness+7/16.0*25.4e-3
+    return retval
+
+def getDressedWidth(nominalWidth, dressedSize= 'Dry'):
+    ''' Return the dressed width of dimension lumber according to
+        table 1A of 2018 National Design Specification Supplement
+        (page 13).
+
+    :param nominalWidth: nominal thicness of the member (m).
+    :param dressedSize: dressed size to use (defaults to 'Dry').
+    '''
+    retval= nominalWidth-25.4e-3/2.0 # <=6 inches
+    if(nominalWidth>152.4e-3): # >6 inches
+        retval= nominalWidth-0.75*25.4e-3
+    if(dressedSize!='Dry'): # Green
+        retval= nominalWidth-7/16.0*25.4e-3  # <=4 inches
+        if(nominalWidth>152.4e-3): # >6 inches
+            retval= nominalWidth-0.5*25.4e-3
+        elif(nominalWidth>101.6e-3): # >4 inches
+            retval= nominalWidth-3/8.0*25.4e-3
+    return retval
+
+def getNominalWidth(dressedWidth, dressedSize= 'Dry'):
+    ''' Return the nominal width of dimension lumber according to
+        table 1A of 2018 National Design Specification Supplement
+        (page 13).
+
+    :param dressedWidth: dressed thicness of the member (m).
+    :param dressedSize: dressed size to use (defaults to 'Dry').
+    '''
+    retval= dressedWidth+25.4e-3/2.0 # <=6 inches
+    if(dressedWidth>139.7e-3): # nominal width >6 inches
+        retval= dressedWidth+0.75*25.4e-3
+    if(dressedSize!='Dry'): # Green
+        retval= dressedWidth+7/16.0*25.4e-3  # nominal width <=4 inches
+        if(dressedWidth>142.88e-3): # nominal width >6 inches
+            retval= dressedWidth+0.5*25.4e-3
+        elif(dressedWidth>90.49e-3): # nominal width >4 inches
+            retval= dressedWidth+3/8.0*25.4e-3
+    return retval
+ 
+
 class DimensionLumberWood(mat.Wood):
-    ''' Dimensional lumber material.'''
+    ''' Dimensional lumber material.
+
+    :ivar dressedSize: dressed size to use (defaults to 'Dry').
+    '''
 
     # Flat use factor data.
     flat_use_x=  [1.0,2.0,3.0,4.0,5.0,6.00,8.00,10.0,1000.0]
@@ -28,10 +97,10 @@ class DimensionLumberWood(mat.Wood):
     fb_size_factor_x=  [1.0,2.0,3.0,4.0,5.0,6.00,8.00,10.0,12.0,14.0,1000.0]
     fb_size_factor_y3= [1.5,1.5,1.5,1.5,1.4,1.30,1.20,1.10,1.00,0.90,0.9]
     fb_size_factor_y4= [1.5,1.5,1.5,1.5,1.4,1.30,1.30,1.20,1.10,1.00,1.0]
-    stud_fb_size_factor_x= [1.0,2.0,3.0,4.0,5.0,6.0,8.00]
-    stud_fb_size_factor_y= [1.1,1.1,1.1,1.1,1.0,1.0,1.00]
     fb_size_factor_interp_3= scipy.interpolate.interp1d(fb_size_factor_x,fb_size_factor_y3)
     fb_size_factor_interp_4= scipy.interpolate.interp1d(fb_size_factor_x,fb_size_factor_y4)
+    stud_fb_size_factor_x= [1.0,2.0,3.0,4.0,5.0,6.0,8.00]
+    stud_fb_size_factor_y= [1.1,1.1,1.1,1.1,1.0,1.0,1.00]
     stud_fb_size_factor_interp= scipy.interpolate.interp1d(stud_fb_size_factor_x,stud_fb_size_factor_y)
     # Fc size factor data
     fc_size_factor_x= [1.00,2.00,3.00,4.00,5.0,6.0,8.00,10.0,12.0,14.0,1000.0]
@@ -41,14 +110,23 @@ class DimensionLumberWood(mat.Wood):
     fc_size_factor_interp= scipy.interpolate.interp1d(fc_size_factor_x,fc_size_factor_y)
     stud_fc_size_factor_interp= scipy.interpolate.interp1d(stud_fc_size_factor_x,stud_fc_size_factor_y)
     
-    def __init__(self, name= None, grade= '', sub_grade= '', rho= None, wet= False):
-        '''Constructor.'''
+    def __init__(self, name= None, grade= '', sub_grade= '', rho= None, wet= False, dressedSize= 'Dry'):
+        '''Constructor.
+
+        :param name: material name.
+        :param grade: wood grade.
+        :param sub_grade: wood sub-grade.
+        :param rho: material density.
+        :param wet: if true then wet condition.
+        :param dressedSize: dressed size to use (defaults to 'Dry').
+        '''
         super(DimensionLumberWood,self).__init__(name)
         self.grade= grade
         self.sub_grade= sub_grade
         self.xc_material= None
         self.rho= rho
         self.wet= wet
+        self.dressedSize= dressedSize
         
     def getXCMaterialName(self):
         ''' Return the name for create the corresponding
@@ -85,17 +163,18 @@ class DimensionLumberWood(mat.Wood):
     
     def getBendingSizeFactor(self, b, h):
         ''' Return the size factor for the bending design
-            value Fb according to National Design Specification table 4A.
+            value Fb according to National Design Specification Supplement
+            table 4A (page 32).
 
-        :param b: section width.
-        :param h: section depth.
+        :param b: nominal section width.
+        :param h: nominal section depth.
         '''
         width= max(b,h)
         thickness= min(b,h)
         retval= 1.0
-        if(self.grade in ['structural','no_1','no_2','no_3']):
+        if(self.grade in ['structural','no_1', 'no_1_&_Btr','no_2','no_3']):
             f= self.fb_size_factor_interp_3
-            if(thickness>4):
+            if(thickness>=4*mat.in2meter):
                 f= self.fb_size_factor_interp_4
             retval= f(width/mat.in2meter)
         elif(self.grade == 'stud'):
@@ -154,7 +233,7 @@ class DimensionLumberWood(mat.Wood):
             lmsg.error('Grade: '+grade+' unknown.')
         return retval;
     
-    def getFb(self,b, h):
+    def getFb(self, b, h):
         ''' Return the value of Fb. Used in BeamMember.getBeamStabilityFactor
 
         :param b: section width.
@@ -162,21 +241,25 @@ class DimensionLumberWood(mat.Wood):
         '''
         return self.Fb
     
-    def getFbAdj(self, b, h, Cr= 1.0):
+    def getFbAdj(self, b, h, CD= 1.0, Cr= 1.0):
         ''' Return the adjusted value of Fb according
-            to National Design Specification table 4A.
+            to AWC-NDS 2018 table 4.3.1.
 
-        :param b: section width.
-        :param h: section depth
+        :param b: nominal section width.
+        :param h: nominal section depth.
+        :param CD: load duration factor.
         :param Cr: repetitive member factor
         '''
-        C= Cr # Repetitive member factor.
+        C= CD*Cr # Argument factors.
         # Wet service factor
         threshold= 1150.0*mat.psi2Pa/0.85
         if(self.wet and self.Fb>threshold):
             C*=0.85
-        C*= self.getBendingFlatUseFactor(b, h) # Flat use factor
-        C*= self.getBendingSizeFactor(b, h) # Size factor
+        # Nominal dimensions.
+        bNom= getNominalThickness(b, self.dressedSize)
+        hNom= getNominalWidth(h, self.dressedSize)
+        C*= self.getBendingFlatUseFactor(bNom, hNom) # Flat use factor
+        C*= self.getBendingSizeFactor(bNom, hNom) # Size factor
         return C*self.getFb(b,h)
     
     def getFtAdj(self, b, h):
