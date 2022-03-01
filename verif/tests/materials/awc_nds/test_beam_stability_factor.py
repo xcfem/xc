@@ -59,7 +59,7 @@ Fbp_aster= Fb*CD*CM*Ct*CF*Ci*Cr  # Fbp_aster is adjusted bending design value
                                  # with all adjustment factors except the
                                  # beam stability factor CL and flat use factor
                                  # Cfu applied.
-FbAdj= beam.section.getFbAdj(CD= CD, Cr= Cr)
+FbAdj= beam.section.getFbAdj(Cr= Cr)
 ratio0= abs(FbAdj-Fbp_aster)/Fbp_aster
 
 lu= beam.unbracedLength

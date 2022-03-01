@@ -53,23 +53,26 @@ def getLoadDurationFactor(duration):
     '''
     return table232(duration)
 
-def getLoadCombinationDurationFactor(deadLoad= False, liveLoad= True, snowLoad= False, windLoad= False):
+def getLoadCombinationDurationFactor(deadLoad= False, liveLoad= False, constructionLoad= False, snowLoad= False, windLoad= False):
     ''' Return the duration factor according to appendix B Section B.2
         of AWC-NDS2018 (Non-mandatory).
 
     :param deadLoad: if true the dead load is present in the load combination.
     :param liveLoad: if true the live load is present in the load combination.
+    :param constructionLoad: if true the construction load (short live load) is present in the load combination.
     :param snowLoad: if true the snow load is present in the load combination.
     :param windLoad: if true the wind load is present in the load combination.
     '''
     retval= 1.0
-    deadLoadOnly= deadLoad and not (liveLoad or snowLoad or windLoad)
+    deadLoadOnly= deadLoad and not (constructionLoad or liveLoad or snowLoad or windLoad)
     if(deadLoadOnly):
         retval= 0.9
     elif(deadLoad and liveLoad and not (windLoad or snowLoad)):
         retval= 1.0
     elif(deadLoad and snowLoad and not (liveLoad or windLoad)):
         retval= 1.15
+    elif(deadLoad and constructionLoad and not (liveLoad or windLoad or snowLoad)):
+        retval= 1.25
     elif(deadLoad and windLoad and not (liveLoad or snowLoad)):
         retval= 1.6
     elif(deadLoad and liveLoad and snowLoad and not windLoad):
@@ -248,15 +251,19 @@ def getFireDesignAdjustementFactor(refValue):
 
 class Wood(wood_base.Wood):
     '''Base class for wood materials according
-       to AWC-NDS2018.    
+       to AWC-NDS2018.
+
+    ;ivar CD: load duration factor.
     '''
-    def __init__(self, name, specificGravity= None):
+    def __init__(self, name, specificGravity= None, CD= 1.0):
         '''Constructor.
 
         :param name: wood name.
         :param specificGravity: specific gravity of the wood.   
+        :param CD: load duration factor.
         '''
         super(Wood,self).__init__(name, specificGravity)
+        self.CD= CD
         
     def getDowelBearingStrength(self, diameter, theta, endGrain= False):
         ''' Return the dowel bearing strength for Dowel-Type
@@ -383,8 +390,8 @@ class WoodSection(object):
            needed to check ultimate limit state criterion to satisfy.
 
         :param elems: elements to define properties on.
-        :param chiN: axial load reduction reduction factor (default= 1.0).
-        :param chiLT: lateral buckling reduction factor (default= 1.0).
+        :param chiN: column stability factor clause 3.7.1 of AWC-NDS2018 (default= 1.0).
+        :param chiLT: beam stability factor clause 3.3.3 of AWC-NDS2018 (default= 1.0).
         '''
         vc.defVarsEnvelopeInternalForcesBeamElems(elems)
         for e in elems:
@@ -401,16 +408,17 @@ class WoodSection(object):
     
     def getTensileStrength(self):
         ''' Return the value of the tensile strength of the section.
+
         '''
-        className= type(self).__name__
-        methodName= sys._getframe(0).f_code.co_name
-        lmsg.warning(className+'.'+methodName+'; tensile strength not implemented yet.')
-        return self.getCompressiveStrength()/1000.0
+        return self.getFtAdj()*self.A()
         
-    def getFlexuralStrength(self, majorAxis= True):
+    def getFlexuralStrength(self, majorAxis= True, chiLT= 1.0):
         ''' Return the value of the flexural strength of the section.
+
+        :param majorAxis: if true, return the major flexural strength.
+        :param chiLT: beam stability factor clause 3.3.3 of AWC-NDS2018 (default= 1.0).
         '''
-        retval= self.getFbAdj()
+        retval= self.getFbAdj()*chiLT
         if(majorAxis):
             retval*= self.getElasticSectionModulusZ()
         else:
@@ -421,40 +429,88 @@ class WoodSection(object):
         ''' Return the value of the flexural strength of the section.
         '''
         return self.getFvAdj()*self.A()/1.5
-    
-    def getBiaxialBendingEfficiency(self,Nd,Myd,Mzd,Vyd= 0.0, chiN=1.0, chiLT=1.0):
-        '''Return biaxial bending efficiency according to section H1
-           of AISC-360-16.
+
+    def getAxialEfficiency(self, Nd, chiN):
+        '''Return axial efficiency according to AWC-NDS2018.
 
         :param Nd: required axial strength.
-        :param Mzd: required bending strength (major axis).
-        :param Vyd: required shear strength (major axis)
-        :param chiN: axial load reduction reduction factor (default= 1.0).
-        :param chiLT: lateral buckling reduction factor (default= 1.0).
+        :param chiN: column stability factor clause 3.7.1 of AWC-NDS2018 (default= 1.0).
         '''
         ratioN= 0.0
         if(Nd<=0): # compression
             NcRd= chiN*self.getCompressiveStrength() # available axial strength.
             ratioN=  abs(Nd)/NcRd
         else:
-            NcRd= self.getTensileStrength() # available axial strength.
+            NcRd= chiN*self.getTensileStrength() # available axial strength.
             ratioN= Nd/NcRd
-        if(ratioN!=0.0):
-            className= type(self).__name__
-            methodName= sys._getframe(0).f_code.co_name
-            lmsg.warning(className+'.'+methodName+'; compression and bending not implemented yet.')            
-        McRdy= self.getFlexuralStrength(majorAxis= False) # available flexural strength minor axis.
-        McRdz= self.getFlexuralStrength(majorAxis= True) # reference flexural strength major axis.
-        MbRdz= chiLT*McRdz # available flexural strength major axis.
-        ratioMz= abs(Mzd)/MbRdz
-        ratioMy= abs(Myd)/McRdy
-        if(ratioMy!=0.0 and ratioMz!=0.0):
-            className= type(self).__name__
-            methodName= sys._getframe(0).f_code.co_name
-            lmsg.warning(className+'.'+methodName+'; biaxial bending not implemented yet.')
-        CF= max(ratioN, ratioMy, ratioMz)
+        return ratioN
+    
+    def getFlexuralEfficiency(self, Md , chiLT, majorAxis= True):
+        '''Return biaxial bending efficiency according to clause
+           3.9 of AWC-NDS2018.
 
-        return (CF,NcRd,McRdy,McRdz,MbRdz)
+        :param Md: required bending strength.
+        :param chiLT: beam stability factor clause 3.3.3 of AWC-NDS2018 (default= 1.0).
+        :param majorAxis: if true, return the efficiency about the major axis.
+        '''
+        McRd= self.getFlexuralStrength(majorAxis= majorAxis, chiLT= chiLT) # available flexural strength.
+        return abs(Md)/McRd
+
+        
+    def getBiaxialBendingEfficiency(self,Nd,Myd,Mzd,Vyd= 0.0, chiN=1.0, chiLT=1.0):
+        '''Return biaxial bending efficiency according to clause
+           3.9 of AWC-NDS2018.
+
+        :param Nd: required axial strength.
+        :param Myd: required bending strength (minor axis).
+        :param Mzd: required bending strength (major axis).
+        :param Vyd: required shear strength (major axis)
+        :param chiN: column stability factor clause 3.7.1 of AWC-NDS2018 (default= 1.0).
+        :param chiLT: beam stability factor clause 3.3.3 of AWC-NDS2018 (default= 1.0).
+        '''
+        retval= None
+        ratioN= self.getAxialEfficiency(Nd, chiN)
+        if(Myd!=0.0 and Mzd!=0.0):
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.error(className+'.'+methodName+'; biaxial bending not implemented yet.')
+        if(abs(Myd)>abs(Mzd)): 
+            if(Nd>0):
+                Sy= self.getElasticSectionModulusY()
+                fb= Myd/Sy
+                Fb_aster= self.getFlexuralStrength(majorAxis= True, chiLT= 1.0)/Sy # No CL adjustement
+                retval= ratioN+fb/Fb_aster # equation 3.9-1
+                if(Myd!=0.0):
+                    ft= Nd/self.A()
+                    Fb_aster2= Fb_aster*chiLT # CL adjustement
+                    eq392= (fb-ft)/Fb_aster2 # equation 3.9-2
+                    retval= max(retval, eq392)
+            elif(Nd<0):
+                className= type(self).__name__
+                methodName= sys._getframe(0).f_code.co_name
+                lmsg.error(className+'.'+methodName+'; bending and axial compression not implemented yet.')
+            else: # Nd==0
+                retval= self.getFlexuralEfficiency(Md= Myd, majorAxis= False, chiLT= chiLT) # available flexural strength minor axis.
+        else:
+            if(Nd>0):
+                Sz= self.getElasticSectionModulusZ()
+                fb= Mzd/Sz
+                Fb_aster= self.getFlexuralStrength(majorAxis= True, chiLT= 1.0)/Sz # No CL adjustement
+                retval= ratioN+fb/Fb_aster # equation 3.9-1
+                if(Mzd!=0.0):
+                    ft= Nd/self.A()
+                    Fb_aster2= Fb_aster*chiLT # CL adjustement
+                    eq392= (fb-ft)/Fb_aster2 # equation 3.9-2
+                    retval= max(retval, eq392)
+            elif(Nd<0):
+                className= type(self).__name__
+                methodName= sys._getframe(0).f_code.co_name
+                lmsg.error(className+'.'+methodName+'; bending and axial compression not implemented yet.')
+            else:
+                retval= self.getFlexuralEfficiency(Md= Mzd, majorAxis= True, chiLT= chiLT) # reference flexural strength major axis.
+                
+        return retval    
+
     
     def getYShearEfficiency(self, Vy):
         '''Return major axis shear efficiency according to AISC-360-16.
@@ -478,8 +534,8 @@ class WoodSection(object):
         :param nmbComb: name of the load combination.
         '''
         elem.getResistingForce()
-        chiLT= elem.getProp('chiLT') # lateral buckling reduction factor.
-        chiN= elem.getProp('chiN') # axial load reduction reduction factor.
+        chiLT= elem.getProp('chiLT') # beam stability factor.
+        chiN= elem.getProp('chiN') # column stability factor.
         [[N1, My1, Mz1, Vy1], [N2, My2, Mz2, Vy2]]= model_inquiry.getValuesAtNodes(elem, ['N', 'My', 'Mz', 'Vy'], silent= False)
         FCTN1= self.getBiaxialBendingEfficiency(Nd= N1, Myd= My1, Mzd= Mz1, Vyd= Vy1, chiN= chiN, chiLT= chiLT)[0]
         FCTN2= self.getBiaxialBendingEfficiency(Nd= N2, Myd= My2, Mzd= Mz2, Vyd= Vy2, chiN= chiN, chiLT= chiLT)[0]
@@ -1078,10 +1134,12 @@ class TJIJoistSection(WoodSection):
         area= self.h*b
         return area # very small strength 1N/m2
     
-    def getFlexuralStrength(self, majorAxis= True):
+    def getFlexuralStrength(self, majorAxis= True, chiLT= 1.0):
         ''' Return the value of the flexural strength of the section.
+
+        :param chiLT: beam stability factor clause 3.3.3 of AWC-NDS2018 (default= 1.0).
         '''
-        retval= self.Ms
+        retval= self.Ms*chiLT
         if(not majorAxis):
             # className= type(self).__name__
             # methodName= sys._getframe(0).f_code.co_name
@@ -1182,7 +1240,9 @@ class CustomLumberSection(WoodRectangularSection):
     def getBendingSizeFactor(self):
         ''' Return the size factor for the bending design
             value Fb.'''
-        return self.wood.getBendingSizeFactor(self.b,self.h)
+        bNom= self.wood.getNominalThickness(self.b)
+        hNom= self.wood.getNominalWidth(self.h)
+        return self.wood.getBendingSizeFactor(b= bNom, h= hNom)
     
     def getTensionSizeFactor(self):
         ''' Return the size factor for the tension design
@@ -1194,17 +1254,17 @@ class CustomLumberSection(WoodRectangularSection):
             value Fc.'''
         return self.wood.getCompressionSizeFactor(self.b,self.h)
     
-    def getFbAdj(self, CD= 1.0, Cr= 1.0):
+    def getFbAdj(self, Cr= 1.0):
         ''' Return the adjusted value of Fb.
 
-        :param CD: load duration factor.
         :param Cr: repetitive member factor
         '''
-        return self.wood.getFbAdj(b= self.b, h= self.h, CD= CD, Cr= Cr)
+        return self.wood.getFbAdj(b= self.b, h= self.h, Cr= Cr)
     
     def getFtAdj(self):
-        ''' Return the adjusted value of Ft.'''
-        return self.wood.getFtAdj(self.b,self.h)
+        ''' Return the adjusted value of Ft.
+        '''
+        return self.wood.getFtAdj(self.b, self.h)
     
     def getFvAdj(self):
         ''' Return the adjusted value of Fv.'''
@@ -1216,9 +1276,11 @@ class CustomLumberSection(WoodRectangularSection):
         :param Cb: bearing area factor
         '''
         return self.wood.getFc_perpAdj(Cb)
+    
     def getFcAdj(self):
         ''' Return the adjusted value of Fc.'''
         return self.wood.getFcAdj(self.b,self.h)
+    
     def getEAdj(self):
         ''' Return the adjusted value of E.'''
         return self.wood.getEAdj()

@@ -212,7 +212,7 @@ class BeamMember(MemberBase):
         RB= self.getBendingSlendernessRatio(numberOfConcentratedLoads, lateralSupport, cantilever)
         return 1.2*self.section.wood.Emin/RB**2
     
-    def getBeamStabilityFactor(self,numberOfConcentratedLoads= 0, lateralSupport= False, cantilever= False, CD= 1.0):
+    def getBeamStabilityFactor(self,numberOfConcentratedLoads= 0, lateralSupport= False, cantilever= False):
         ''' Return the beam stability factor according to equation 
             3.3.6 of NDS-2018.
 
@@ -220,15 +220,41 @@ class BeamMember(MemberBase):
                                              spaced along the beam (0: uniform load).
            :param lateralSupport: if true beam has a lateral support on each load.
            :param cantilever: if true cantilever beam otherwise single span beam.
-           :param CD: load duration factor.
         '''
         FbE= self.getFbECriticalBucklingDesignValue(numberOfConcentratedLoads, lateralSupport, cantilever)
-        FbAdj= self.section.getFbAdj(CD= CD, Cr= self.Cr)
+        FbAdj= self.section.getFbAdj(Cr= self.Cr)
         ratio= FbE/FbAdj
         A= (1+ratio)/1.9
         B= A**2
         C= ratio/0.95
         return A-math.sqrt(B-C)
+
+    def getFtAdj(self):
+        ''' Return the adjusted value of Ft.'''
+        return self.section.getFtAdj()
+    
+    def getFbAdj(self, numberOfConcentratedLoads= 0, lateralSupport= False, cantilever= False):
+        ''' Return the adjusted value of Fb.
+
+        :param numberOfConcentratedLoads: number of concentrated loads.
+        :param Cr: repetitive member factor
+        '''
+        sectionFbAdj= self.section.getFbAdj(Cr= self.Cr)
+        CL= self.getBeamStabilityFactor(numberOfConcentratedLoads=numberOfConcentratedLoads, lateralSupport=lateralSupport, cantilever=cantilever)
+        return CL*sectionFbAdj
+
+    def getBiaxialBendingEfficiency(self,Nd,Myd,Mzd,Vyd= 0.0, chiN=1.0, chiLT= 1.0):
+        '''Return biaxial bending efficiency according to clause 3.9 of AWC-NDS2018.
+
+        :param Nd: required axial strength.
+        :param Myd: required bending strength (minor axis).
+        :param Mzd: required bending strength (major axis).
+        :param Vyd: required shear strength (major axis)
+        :param chiN: column stability factor clause 3.7.1 of AWC-NDS2018 (default= 1.0).
+        :param chiLT: beam stability factor clause 3.3.3 of AWC-NDS2018 (default= 1.0).
+        '''
+        return self.section.getBiaxialBendingEfficiency(Nd= Nd, Myd= Myd, Mzd= Mzd, Vyd= Vyd, chiN= chiN, chiLT= chiLT)
+    
 
 class ColumnMember(MemberBase):
     ''' Column member according to chapter 3.7 and 3.9 of NDS-2018.'''

@@ -12,7 +12,7 @@ __version__= "3.0"
 __email__= "l.pereztato@ciccp.es, ana.ortega@ciccp.es "
 
 import scipy.interpolate
-from materials.awc_nds import AWCNDS_materials as mat
+from materials.awc_nds import AWCNDS_materials
 from materials import typical_materials
 
 
@@ -21,7 +21,7 @@ def getDressedThickness(nominalThickness, dressedSize= 'Dry'):
         table 1A of 2018 National Design Specification Supplement
         (page 13).
 
-    :param nominalThickness: nominal thicness of the member (m).
+    :param nominalThickness: nominal thickness of the member (m).
     :param dressedSize: dressed size to use (defaults to 'Dry').
     '''
     retval= nominalThickness-25.4e-3/2.0
@@ -34,7 +34,7 @@ def getNominalThickness(dressedThickness, dressedSize= 'Dry'):
         table 1A of 2018 National Design Specification Supplement
         (page 13).
 
-    :param dressedThickness: dressed thicness of the member (m).
+    :param dressedThickness: dressed thickness of the member (m).
     :param dressedSize: dressed size to use (defaults to 'Dry').
     '''
     retval= dressedThickness+25.4e-3/2.0
@@ -47,7 +47,7 @@ def getDressedWidth(nominalWidth, dressedSize= 'Dry'):
         table 1A of 2018 National Design Specification Supplement
         (page 13).
 
-    :param nominalWidth: nominal thicness of the member (m).
+    :param nominalWidth: nominal width of the member (m).
     :param dressedSize: dressed size to use (defaults to 'Dry').
     '''
     retval= nominalWidth-25.4e-3/2.0 # <=6 inches
@@ -66,7 +66,7 @@ def getNominalWidth(dressedWidth, dressedSize= 'Dry'):
         table 1A of 2018 National Design Specification Supplement
         (page 13).
 
-    :param dressedWidth: dressed thicness of the member (m).
+    :param dressedWidth: dressed width of the member (m).
     :param dressedSize: dressed size to use (defaults to 'Dry').
     '''
     retval= dressedWidth+25.4e-3/2.0 # <=6 inches
@@ -81,7 +81,7 @@ def getNominalWidth(dressedWidth, dressedSize= 'Dry'):
     return retval
  
 
-class DimensionLumberWood(mat.Wood):
+class DimensionLumberWood(AWCNDS_materials.Wood):
     ''' Dimensional lumber material.
 
     :ivar dressedSize: dressed size to use (defaults to 'Dry').
@@ -146,6 +146,42 @@ class DimensionLumberWood(mat.Wood):
             self.xc_material= typical_materials.MaterialData(name= self.getXCMaterialName(), E= self.E, nu= self.nu, rho= rho)
         return self.xc_material
     
+    def getDressedThickness(self, nominalThickness):
+        ''' Return the dressed thickness of dimension lumber according to
+            table 1A of 2018 National Design Specification Supplement
+            (page 13).
+
+        :param nominalThickness: nominal thickness of the member (m).
+        '''
+        return getDressedThickness(nominalThickness, self.dressedSize)
+
+    def getNominalThickness(self, dressedThickness):
+        ''' Return the nominal thickness of dimension lumber according to
+            table 1A of 2018 National Design Specification Supplement
+            (page 13).
+
+        :param dressedThickness: dressed thickness of the member (m).
+        '''
+        return getNominalThickness(dressedThickness, self.dressedSize)
+
+    def getDressedWidth(self, nominalWidth):
+        ''' Return the dressed width of dimension lumber according to
+            table 1A of 2018 National Design Specification Supplement
+            (page 13).
+
+        :param nominalWidth: nominal width of the member (m).
+        '''
+        return getDressedWidth(nominalWidth, self.dressedSize)
+
+    def getNominalWidth(self, dressedWidth):
+        ''' Return the nominal width of dimension lumber according to
+            table 1A of 2018 National Design Specification Supplement
+            (page 13).
+
+        :param dressedWidth: dressed width of the member (m).
+        '''
+        return getNominalWidth(dressedWidth, self.dressedSize)
+
     def getBendingFlatUseFactor(self, b, h):
         ''' Return the flat use factor for the bending design
             value Fb according to National Design Specification table 4A.
@@ -156,9 +192,9 @@ class DimensionLumberWood(mat.Wood):
         retval= 1.0
         if(b>h): # flat use
             f= self.flat_use_interp_3
-            if(h>3*mat.in2meter):
+            if(h>3*AWCNDS_materials.in2meter):
                 f= self.flat_use_interp_4
-            retval= f(b/mat.in2meter)
+            retval= f(b/AWCNDS_materials.in2meter)
         return retval;
     
     def getBendingSizeFactor(self, b, h):
@@ -174,13 +210,13 @@ class DimensionLumberWood(mat.Wood):
         retval= 1.0
         if(self.grade in ['structural','no_1', 'no_1_&_Btr','no_2','no_3']):
             f= self.fb_size_factor_interp_3
-            if(thickness>=4*mat.in2meter):
+            if(thickness>=4*AWCNDS_materials.in2meter):
                 f= self.fb_size_factor_interp_4
-            retval= f(width/mat.in2meter)
+            retval= f(width/AWCNDS_materials.in2meter)
         elif(self.grade == 'stud'):
-            if(width<8*mat.in2meter):
+            if(width<8*AWCNDS_materials.in2meter):
                 f= self.stud_fb_size_factor_interp
-                retval= f(width/mat.in2meter)
+                retval= f(width/AWCNDS_materials.in2meter)
             else:
                 lmsg.error('Stud too wide')
         else:
@@ -199,11 +235,11 @@ class DimensionLumberWood(mat.Wood):
         retval= 1.0
         if(self.grade in ['structural','no_1','no_2','no_3']):
             f= self.fb_size_factor_interp_3 # Same values
-            retval= f(width/mat.in2meter)
+            retval= f(width/AWCNDS_materials.in2meter)
         elif(self.grade == 'stud'):
-            if(width<8*mat.in2meter):
+            if(width<8*AWCNDS_materials.in2meter):
                 f= self.stud_fb_size_factor_interp_3 # Same values
-                retval= f(width/mat.in2meter)            
+                retval= f(width/AWCNDS_materials.in2meter)            
             else:
                 lmsg.error('Stud too wide')
         else:
@@ -222,11 +258,11 @@ class DimensionLumberWood(mat.Wood):
         retval= 1.0
         if(self.grade in ['structural','no_1','no_2','no_3']):
             f= self.fc_size_factor_interp
-            retval= f(width/mat.in2meter)
+            retval= f(width/AWCNDS_materials.in2meter)
         elif(self.grade == 'stud'):
-            if(width<8*mat.in2meter):
+            if(width<8*AWCNDS_materials.in2meter):
                 f= self.stud_fc_size_factor_interp
-                retval= f(width/mat.in2meter)            
+                retval= f(width/AWCNDS_materials.in2meter)            
             else:
                 lmsg.error('Stud too wide')
         else:
@@ -241,25 +277,24 @@ class DimensionLumberWood(mat.Wood):
         '''
         return self.Fb
     
-    def getFbAdj(self, b, h, CD= 1.0, Cr= 1.0):
+    def getFbAdj(self, b, h, Cr= 1.0):
         ''' Return the adjusted value of Fb according
             to AWC-NDS 2018 table 4.3.1.
 
         :param b: nominal section width.
         :param h: nominal section depth.
-        :param CD: load duration factor.
         :param Cr: repetitive member factor
         '''
-        C= CD*Cr # Argument factors.
+        C= self.CD*Cr # repetitive member factor.
         # Wet service factor
-        threshold= 1150.0*mat.psi2Pa/0.85
+        threshold= 1150.0*AWCNDS_materials.psi2Pa/0.85
         if(self.wet and self.Fb>threshold):
             C*=0.85
         # Nominal dimensions.
-        bNom= getNominalThickness(b, self.dressedSize)
-        hNom= getNominalWidth(h, self.dressedSize)
-        C*= self.getBendingFlatUseFactor(bNom, hNom) # Flat use factor
-        C*= self.getBendingSizeFactor(bNom, hNom) # Size factor
+        bNom= self.getNominalThickness(b)
+        hNom= self.getNominalWidth(h)
+        C*= self.getBendingFlatUseFactor(b= bNom, h= hNom) # Flat use factor
+        C*= self.getBendingSizeFactor(b= bNom, h= hNom) # Size factor
         return C*self.getFb(b,h)
     
     def getFtAdj(self, b, h):
@@ -267,11 +302,13 @@ class DimensionLumberWood(mat.Wood):
             to National Design Specification table 4A.
 
         :param b: section width.
-        :param h: section depth
+        :param h: section depth.
         '''
-        C= 1.0 # Wet service factor.
+        C= self.CD # load duration factor.
         # No flat use far tension
-        C*= self.getTensionSizeFactor(b,h) # Size factor
+        bNom= self.getNominalThickness(b)
+        hNom= self.getNominalWidth(h)
+        C*= self.getTensionSizeFactor(b= bNom, h= hNom) # Size factor
         return C*self.Ft
     
     def getFvAdj(self):
@@ -312,7 +349,7 @@ class DimensionLumberWood(mat.Wood):
         '''
         C= 1.0 # Wet service factor.
         # Wet service factor
-        threshold= 750.0*mat.psi2Pa/0.8
+        threshold= 750.0*AWCNDS_materials.psi2Pa/0.8
         if(self.wet and self.Fc>threshold):
             C*=0.8
         C*= self.getCompressionSizeFactor(b, h) # Size factor
@@ -602,32 +639,32 @@ class SprucePineFirWood(DimensionLumberWood):
     def __init__(self, name='SprucePineFir', grade= 'no_2', sub_grade= ''):
         '''Constructor.'''
         super(SprucePineFirWood,self).__init__(name, grade, sub_grade, rho= (657+577)/2.0)
-        self.Fv= 135.0*mat.psi2Pa
-        self.Fct= 425.0*mat.psi2Pa
+        self.Fv= 135.0*AWCNDS_materials.psi2Pa
+        self.Fct= 425.0*AWCNDS_materials.psi2Pa
         if(grade=='structural'):
-            self.Fb= 1150.0*mat.psi2Pa
-            self.Ft= 700.0*mat.psi2Pa
-            self.Fc= 1400.0*mat.psi2Pa
-            self.E= 1.5e6*mat.psi2Pa
-            self.Emin= 550e3*mat.psi2Pa
+            self.Fb= 1150.0*AWCNDS_materials.psi2Pa
+            self.Ft= 700.0*AWCNDS_materials.psi2Pa
+            self.Fc= 1400.0*AWCNDS_materials.psi2Pa
+            self.E= 1.5e6*AWCNDS_materials.psi2Pa
+            self.Emin= 550e3*AWCNDS_materials.psi2Pa
         elif((grade=='no_1') or (grade=='no_2')):
-            self.Fb= 875.0*mat.psi2Pa
-            self.Ft= 450.0*mat.psi2Pa
-            self.Fc= 1150.0*mat.psi2Pa
-            self.E= 1.4e6*mat.psi2Pa
-            self.Emin= 510e3*mat.psi2Pa
+            self.Fb= 875.0*AWCNDS_materials.psi2Pa
+            self.Ft= 450.0*AWCNDS_materials.psi2Pa
+            self.Fc= 1150.0*AWCNDS_materials.psi2Pa
+            self.E= 1.4e6*AWCNDS_materials.psi2Pa
+            self.Emin= 510e3*AWCNDS_materials.psi2Pa
         elif(grade=='no_3'):
-            self.Fb= 500.0*mat.psi2Pa
-            self.Ft= 250.0*mat.psi2Pa
-            self.Fc= 650.0*mat.psi2Pa
-            self.E= 1.2e6*mat.psi2Pa
-            self.Emin= 440e3*mat.psi2Pa
+            self.Fb= 500.0*AWCNDS_materials.psi2Pa
+            self.Ft= 250.0*AWCNDS_materials.psi2Pa
+            self.Fc= 650.0*AWCNDS_materials.psi2Pa
+            self.E= 1.2e6*AWCNDS_materials.psi2Pa
+            self.Emin= 440e3*AWCNDS_materials.psi2Pa
         elif(grade=='stud'):
-            self.Fb= 675.0*mat.psi2Pa
-            self.Ft= 350.0*mat.psi2Pa
-            self.Fc= 725.0*mat.psi2Pa
-            self.E= 1.2e6*mat.psi2Pa
-            self.Emin= 440e3*mat.psi2Pa
+            self.Fb= 675.0*AWCNDS_materials.psi2Pa
+            self.Ft= 350.0*AWCNDS_materials.psi2Pa
+            self.Fc= 725.0*AWCNDS_materials.psi2Pa
+            self.E= 1.2e6*AWCNDS_materials.psi2Pa
+            self.Emin= 440e3*AWCNDS_materials.psi2Pa
         else:
             lmsg.error('Grade: '+grade+' unknown.')
 
@@ -640,44 +677,44 @@ class DouglasFirLarchWood(DimensionLumberWood):
     def __init__(self, name='DouglasFirLarch', grade= 'no_2', sub_grade= ''):
         '''Constructor.'''
         super(DouglasFirLarchWood,self).__init__(name, grade, sub_grade, rho= 500)
-        self.Fv= 180.0*mat.psi2Pa
-        self.Fct= 625.0*mat.psi2Pa
+        self.Fv= 180.0*AWCNDS_materials.psi2Pa
+        self.Fct= 625.0*AWCNDS_materials.psi2Pa
         if(grade=='structural'):
-            self.Fb= 1500.0*mat.psi2Pa
-            self.Ft= 1000.0*mat.psi2Pa
-            self.Fc= 1700.0*mat.psi2Pa
-            self.E= 1.9e6*mat.psi2Pa
-            self.Emin= 690e3*mat.psi2Pa
+            self.Fb= 1500.0*AWCNDS_materials.psi2Pa
+            self.Ft= 1000.0*AWCNDS_materials.psi2Pa
+            self.Fc= 1700.0*AWCNDS_materials.psi2Pa
+            self.E= 1.9e6*AWCNDS_materials.psi2Pa
+            self.Emin= 690e3*AWCNDS_materials.psi2Pa
         elif(grade=='no_1_&_Btr'):
-            self.Fb= 1200.0*mat.psi2Pa
-            self.Ft= 800.0*mat.psi2Pa
-            self.Fc= 1550.0*mat.psi2Pa
-            self.E= 1.8e6*mat.psi2Pa
-            self.Emin= 660e3*mat.psi2Pa
+            self.Fb= 1200.0*AWCNDS_materials.psi2Pa
+            self.Ft= 800.0*AWCNDS_materials.psi2Pa
+            self.Fc= 1550.0*AWCNDS_materials.psi2Pa
+            self.E= 1.8e6*AWCNDS_materials.psi2Pa
+            self.Emin= 660e3*AWCNDS_materials.psi2Pa
         elif(grade=='no_1'):
-            self.Fb= 1000.0*mat.psi2Pa
-            self.Ft= 675.0*mat.psi2Pa
-            self.Fc= 1500.0*mat.psi2Pa
-            self.E= 1.7e6*mat.psi2Pa
-            self.Emin= 620e3*mat.psi2Pa
+            self.Fb= 1000.0*AWCNDS_materials.psi2Pa
+            self.Ft= 675.0*AWCNDS_materials.psi2Pa
+            self.Fc= 1500.0*AWCNDS_materials.psi2Pa
+            self.E= 1.7e6*AWCNDS_materials.psi2Pa
+            self.Emin= 620e3*AWCNDS_materials.psi2Pa
         elif(grade=='no_2'):
-            self.Fb= 900.0*mat.psi2Pa
-            self.Ft= 575.0*mat.psi2Pa
-            self.Fc= 1350.0*mat.psi2Pa
-            self.E= 1.6e6*mat.psi2Pa
-            self.Emin= 580e3*mat.psi2Pa
+            self.Fb= 900.0*AWCNDS_materials.psi2Pa
+            self.Ft= 575.0*AWCNDS_materials.psi2Pa
+            self.Fc= 1350.0*AWCNDS_materials.psi2Pa
+            self.E= 1.6e6*AWCNDS_materials.psi2Pa
+            self.Emin= 580e3*AWCNDS_materials.psi2Pa
         elif(grade=='no_3'):
-            self.Fb= 525.0*mat.psi2Pa
-            self.Ft= 325.0*mat.psi2Pa
-            self.Fc= 775.0*mat.psi2Pa
-            self.E= 1.4e6*mat.psi2Pa
-            self.Emin= 510e3*mat.psi2Pa
+            self.Fb= 525.0*AWCNDS_materials.psi2Pa
+            self.Ft= 325.0*AWCNDS_materials.psi2Pa
+            self.Fc= 775.0*AWCNDS_materials.psi2Pa
+            self.E= 1.4e6*AWCNDS_materials.psi2Pa
+            self.Emin= 510e3*AWCNDS_materials.psi2Pa
         elif(grade=='stud'):
-            self.Fb= 700.0*mat.psi2Pa
-            self.Ft= 450.0*mat.psi2Pa
-            self.Fc= 850.0*mat.psi2Pa
-            self.E= 1.4e6*mat.psi2Pa
-            self.Emin= 510e3*mat.psi2Pa
+            self.Fb= 700.0*AWCNDS_materials.psi2Pa
+            self.Ft= 450.0*AWCNDS_materials.psi2Pa
+            self.Fc= 850.0*AWCNDS_materials.psi2Pa
+            self.E= 1.4e6*AWCNDS_materials.psi2Pa
+            self.Emin= 510e3*AWCNDS_materials.psi2Pa
         else:
             lmsg.error('Grade: '+grade+' unknown.')
 
@@ -690,44 +727,44 @@ class HemFirWood(DimensionLumberWood):
     def __init__(self, name='HemFir', grade= 'no_2', sub_grade= ''):
         '''Constructor.'''
         super(HemFirWood,self).__init__(name, grade, sub_grade, rho= 500)
-        self.Fv= 150.0*mat.psi2Pa
-        self.Fct= 405.0*mat.psi2Pa
+        self.Fv= 150.0*AWCNDS_materials.psi2Pa
+        self.Fct= 405.0*AWCNDS_materials.psi2Pa
         if(grade=='structural'): # 2" and wider.
-            self.Fb= 1400.0*mat.psi2Pa
-            self.Ft= 925.0*mat.psi2Pa
-            self.Fc= 1500.0*mat.psi2Pa
-            self.E= 1.6e6*mat.psi2Pa
-            self.Emin= 580e3*mat.psi2Pa
+            self.Fb= 1400.0*AWCNDS_materials.psi2Pa
+            self.Ft= 925.0*AWCNDS_materials.psi2Pa
+            self.Fc= 1500.0*AWCNDS_materials.psi2Pa
+            self.E= 1.6e6*AWCNDS_materials.psi2Pa
+            self.Emin= 580e3*AWCNDS_materials.psi2Pa
         elif(grade=='no_1_&_Btr'): # 2" and wider.
-            self.Fb= 1100.0*mat.psi2Pa
-            self.Ft= 725.0*mat.psi2Pa
-            self.Fc= 1350.0*mat.psi2Pa
-            self.E= 1.5e6*mat.psi2Pa
-            self.Emin= 550e3*mat.psi2Pa
+            self.Fb= 1100.0*AWCNDS_materials.psi2Pa
+            self.Ft= 725.0*AWCNDS_materials.psi2Pa
+            self.Fc= 1350.0*AWCNDS_materials.psi2Pa
+            self.E= 1.5e6*AWCNDS_materials.psi2Pa
+            self.Emin= 550e3*AWCNDS_materials.psi2Pa
         elif(grade=='no_1'): # 2" and wider.
-            self.Fb=975*mat.psi2Pa
-            self.Ft=625*mat.psi2Pa
-            self.Fc=1350*mat.psi2Pa
-            self.E=1500000*mat.psi2Pa
-            self.Emin=550000*mat.psi2Pa
+            self.Fb=975*AWCNDS_materials.psi2Pa
+            self.Ft=625*AWCNDS_materials.psi2Pa
+            self.Fc=1350*AWCNDS_materials.psi2Pa
+            self.E=1500000*AWCNDS_materials.psi2Pa
+            self.Emin=550000*AWCNDS_materials.psi2Pa
         elif(grade=='no_2'): # 2" and wider.
-            self.Fb=850*mat.psi2Pa
-            self.Ft=525*mat.psi2Pa
-            self.Fc=1300*mat.psi2Pa
-            self.E=1300000*mat.psi2Pa
-            self.Emin=470000*mat.psi2Pa
+            self.Fb=850*AWCNDS_materials.psi2Pa
+            self.Ft=525*AWCNDS_materials.psi2Pa
+            self.Fc=1300*AWCNDS_materials.psi2Pa
+            self.E=1300000*AWCNDS_materials.psi2Pa
+            self.Emin=470000*AWCNDS_materials.psi2Pa
         elif(grade=='no_3'): # 2" and wider.
-            self.Fb=500*mat.psi2Pa
-            self.Ft=300*mat.psi2Pa
-            self.Fc=725*mat.psi2Pa
-            self.E=1200000*mat.psi2Pa
-            self.Emin=440000*mat.psi2Pa
+            self.Fb=500*AWCNDS_materials.psi2Pa
+            self.Ft=300*AWCNDS_materials.psi2Pa
+            self.Fc=725*AWCNDS_materials.psi2Pa
+            self.E=1200000*AWCNDS_materials.psi2Pa
+            self.Emin=440000*AWCNDS_materials.psi2Pa
         elif(grade=='stud'):  # 2" and wider.
-            self.Fb=675*mat.psi2Pa
-            self.Ft=400*mat.psi2Pa
-            self.Fc=800*mat.psi2Pa
-            self.E=1200000*mat.psi2Pa
-            self.Emin=440000*mat.psi2Pa
+            self.Fb=675*AWCNDS_materials.psi2Pa
+            self.Ft=400*AWCNDS_materials.psi2Pa
+            self.Fc=800*AWCNDS_materials.psi2Pa
+            self.E=1200000*AWCNDS_materials.psi2Pa
+            self.Emin=440000*AWCNDS_materials.psi2Pa
         else:
             lmsg.error('Grade: '+grade+' unknown.')
 
