@@ -38,22 +38,22 @@ beam= sb.SimpleBeam(E,I,span)
 delta= beam.getDeflectionUnderUniformLoad(designLoad,beam.l/2.0)
 
 
-ratio1= (Fb-5.5e6)/5.5e6
-ratio2= (Fv-1.2e6)/1.2e6
-ratio3= (delta-20.8425973321e-3)/20.8425973321e-3
+ratio1= abs(Fb-5.500882352941176e6)/5.500882352941176e6
+ratio2= abs(Fv-1.2e6)/1.2e6
+ratio3= abs(delta-20.801166867982307e-3)/20.801166867982307e-3
 
-'''
 print('b= ', joist.b*1000, 'mm (',joist.b/inch2meter,'in)')
 print('h= ', joist.h*1000, 'mm (',joist.h/inch2meter,'in)')
 print('S= ', S, 'm3 (',S/inch2meter**3,'in3)')
 print('Bending stress fb= ', fb/1e6, 'MPa (',fb/pound2Newton*inch2meter**2,'psi)')
 print('Fb= ', Fb/1e6, 'MPa (',Fb/pound2Newton*inch2meter**2,'psi)')
-print('E= ', E/1e6, 'MPa (',E/pound2Newton*inch2meter**2,'psi)')
-print('delta= ', delta*1000, 'mm (',delta/inch2meter,'in)')
-print('Fv= ', Fv/1e6, 'MPa (',Fv/pound2Newton*inch2meter**2,'psi)')
 print('ratio1= ',ratio1)
+print('E= ', E/1e6, 'MPa (',E/pound2Newton*inch2meter**2,'psi)')
+print('Fv= ', Fv/1e6, 'MPa (',Fv/pound2Newton*inch2meter**2,'psi)')
 print('ratio2= ',ratio2)
+print('delta= ', delta*1000, 'mm (',delta/inch2meter,'in)')
 print('ratio3= ',ratio3)
+'''
 '''
 
 import os
