@@ -22,7 +22,7 @@ def getInternalForcesDict(nmbComb, elems, vonMisesStressId= 'max_von_mises_stres
     :param vonMisesStressId: identifier of the Von Mises stress to read
                             (see NDMaterial and MembranePlateFiberSection).
     '''
-    def getChiLTChiN(element):
+    def getExtendedProperties(element):
         '''Return the values of the lateral buckling reduction reduction 
            factor (chiLT) and the axial load reduction factor (chiN)
            properties of an element.
@@ -35,7 +35,10 @@ def getInternalForcesDict(nmbComb, elems, vonMisesStressId= 'max_von_mises_stres
         chiN= None
         if e.hasProp('chiN'): # axial load reduction reduction factor.
             chiN= e.getProp('chiN')
-        return chiLT, chiN
+        FcE= None
+        if e.hasProp('FcE'): # AWC NDS-2018 critical buckling design values for compression.
+            FcE= e.getProp('FcE')
+        return chiLT, chiN, FcE
            
     combInternalForcesDict= dict()
     outDict= dict()
@@ -77,13 +80,16 @@ def getInternalForcesDict(nmbComb, elems, vonMisesStressId= 'max_von_mises_stres
             internalForcesDict[0]= internalForces.getDict()
             internalForces= internal_forces.CrossSectionInternalForces(N2,V2,0.0,0.0,0.0,M2) # Internal forces at the end of the bar.
             internalForcesDict[1]= internalForces.getDict()
-            chiLT, chiN= getChiLTChiN(e)
+            chiLT, chiN, FcE = getExtendedProperties(e)
             if(chiLT): # lateral buckling reduction factor.
                 internalForcesDict[0]['chiLT']= chiLT
                 internalForcesDict[1]['chiLT']= chiLT
             if(chiN): # axial load reduction reduction factor.
                 internalForcesDict[0]['chiN']= chiN
                 internalForcesDict[1]['chiN']= chiN
+            if(FcE): # AWC NDS 2018 critical buckling design values for compression.
+                internalForcesDict[0]['FcE']= FcE
+                internalForcesDict[1]['FcE']= FcE
             elemDict['internalForces']= internalForcesDict
         elif('Beam' in elementType):
             e.getResistingForce()
@@ -93,13 +99,16 @@ def getInternalForcesDict(nmbComb, elems, vonMisesStressId= 'max_von_mises_stres
             internalForcesDict[0]= internalForces.getDict()
             internalForces= internal_forces.CrossSectionInternalForces(N2,Vy2,Vz2,T2,My2,Mz2) # Internal forces at the end of the bar.
             internalForcesDict[1]= internalForces.getDict()
-            chiLT, chiN= getChiLTChiN(e)
+            chiLT, chiN, FcE= getExtendedProperties(e)
             if(chiLT): # ateral buckling reduction factor.
                 internalForcesDict[0]['chiLT']= chiLT
                 internalForcesDict[1]['chiLT']= chiLT
             if(chiN): # axial load reduction reduction factor.
                 internalForcesDict[0]['chiN']= chiN
                 internalForcesDict[1]['chiN']= chiN
+            if(FcE): # AWC NDS 2018 critical buckling design values for compression.
+                internalForcesDict[0]['FcE']= FcE
+                internalForcesDict[1]['FcE']= FcE
             elemDict['internalForces']= internalForcesDict
         elif('Truss' in elementType):
             e.getResistingForce()
@@ -107,16 +116,14 @@ def getInternalForcesDict(nmbComb, elems, vonMisesStressId= 'max_von_mises_stres
             [[N1], [N2]]= model_inquiry.getValuesAtNodes(e,['N'], False)
             internalForces= internal_forces.CrossSectionInternalForces(N1) # Internal forces at the origin of the bar.
             internalForcesDict[0]= internalForces.getDict()
-            if e.hasProp('chiLT'): # lateral buckling reduction factor.
-                internalForcesDict[0]['chiLT']= e.getProp('chiLT')
-            if e.hasProp('chiN'): # axial load reduction reduction factor.
-                internalForcesDict[0]['chiN']= e.getProp('chiN')
+            for extProp in ['chiLT', 'chiN', 'FcE']: # Origin extended properties.
+                if e.hasProp(extProp):
+                    internalForcesDict[0][extProp]= e.getProp(extProp)
             internalForces= internal_forces.CrossSectionInternalForces(N2) # Internal forces at the end of the bar.
             internalForcesDict[1]= internalForces.getDict()
-            if e.hasProp('chiLT'): # lateral buckling reduction factor.
-                internalForcesDict[1]['chiLT']= e.getProp('chiLT')
-            if e.hasProp('chiN'): # axial load reduction reduction factor.
-                internalForcesDict[1]['chiN']= e.getProp('chiN')
+            for extProp in ['chiLT', 'chiN', 'FcE']: # End extended properties.
+                if e.hasProp(extProp):
+                    internalForcesDict[1][extProp]= e.getProp(extProp)
             elemDict['internalForces']= internalForcesDict
         elif('ZeroLength' in elementType):
             e.getResistingForce()
@@ -169,28 +176,32 @@ def exportInternalForces(nmbComb, elems, fDesc):
             e.getResistingForce()
             [[N1, My1, Mz1, Vy1, Vz1, T1], [N2, My2, Mz2, Vy2, Vz2, T2]]= model_inquiry.getValuesAtNodes(e, ['N', 'My', 'Mz', 'Vy', 'Vz', 'T'], False)
             internalForces= internal_forces.CrossSectionInternalForces(N1,Vy1,Vz1,T1,My1,Mz1) # Internal forces at the origin of the bar.
-            if e.hasProp('chiLT'):   #steel beam
-                fDesc.write(nmbComb+", "+str(e.tag)+", 0, "+internalForces.getCSVString()+" , "+str(e.getProp('chiLT'))+'\n')
-            else:
-                fDesc.write(nmbComb+", "+str(e.tag)+", 0, "+internalForces.getCSVString()+'\n')
+            originStr= nmbComb+", "+str(e.tag)+", 0, "+internalForces.getCSVString()
+            for extProp in ['chiLT', 'chiN', 'FcE']: # Origin extended properties.
+                if e.hasProp(extProp):
+                    originStr+= " , "+str(e.getProp(extProp))
+            fDesc.write(originStr+'\n')
             internalForces= internal_forces.CrossSectionInternalForces(N2,Vy2,Vz2,T2,My2,Mz2) # Internal forces at the end of the bar.
-            if e.hasProp('chiLT'):
-                fDesc.write(nmbComb+", "+str(e.tag)+", 1, "+internalForces.getCSVString()+" , " + str(e.getProp('chiLT'))+'\n')
-            else:
-                fDesc.write(nmbComb+", "+str(e.tag)+", 1, "+internalForces.getCSVString()+'\n')
+            endStr= nmbComb+", "+str(e.tag)+", 1, "+internalForces.getCSVString()
+            for extProp in ['chiLT', 'chiN', 'FcE']: # End extended properties.
+                if e.hasProp(extProp):
+                    endStr+= " , "+str(e.getProp(extProp))
+            fDesc.write(endStr+'\n')
         elif('Truss' in elementType):
             e.getResistingForce()
             [[N1], [N2]]= model_inquiry.getValuesAtNodes(e,['N'], False)
             internalForces= internal_forces.CrossSectionInternalForces(N1) # Internal forces at the origin of the bar.
-            if e.hasProp('chiLT'):   #steel beam
-                fDesc.write(nmbComb+", "+str(e.tag)+", 0, "+internalForces.getCSVString()+" , "+str(e.getProp('chiLT'))+'\n')
-            else:
-                fDesc.write(nmbComb+", "+str(e.tag)+", 0, "+internalForces.getCSVString()+'\n')
+            originStr= nmbComb+", "+str(e.tag)+", 0, "+internalForces.getCSVString()
+            for extProp in ['chiLT', 'chiN', 'FcE']: # Origin extended properties.
+                if e.hasProp(extProp):
+                    originStr+= " , "+str(e.getProp(extProp))
+            fDesc.write(originStr+'\n')
             internalForces= internal_forces.CrossSectionInternalForces(N2) # Internal forces at the end of the bar.
-            if e.hasProp('chiLT'):
-                fDesc.write(nmbComb+", "+str(e.tag)+", 1, "+internalForces.getCSVString()+" , " + str(e.getProp('chiLT'))+'\n')
-            else:
-                fDesc.write(nmbComb+", "+str(e.tag)+", 1, "+internalForces.getCSVString()+'\n')
+            endStr= nmbComb+", "+str(e.tag)+", 1, "+internalForces.getCSVString()
+            for extProp in ['chiLT', 'chiN', 'FcE']: # End extended properties.
+                if e.hasProp(extProp):
+                    endStr+= " , "+str(e.getProp(extProp))
+            fDesc.write(endStr+'\n')
         elif('ZeroLength' in elementType):
             lmsg.warning("exportInternalForces for element type: '"+elementType+"' not implemented.")
         else:

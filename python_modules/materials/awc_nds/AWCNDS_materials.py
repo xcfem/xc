@@ -402,18 +402,20 @@ class WoodSection(object):
         self.xc_wood_material= None
         self.xc_section= None
         
-    def setupULSControlVars(self, elems, chiN=1.0, chiLT=1.0):
+    def setupULSControlVars(self, elems, chiN=1.0, chiLT=1.0, FcE=(0.0,0.0)):
         '''For each element creates the variables
            needed to check ultimate limit state criterion to satisfy.
 
         :param elems: elements to define properties on.
         :param chiN: column stability factor clause 3.7.1 of AWC-NDS2018 (default= 1.0).
         :param chiLT: beam stability factor clause 3.3.3 of AWC-NDS2018 (default= 1.0).
+        :param FcE: Critical buckling design values for compression.
         '''
         vc.defVarsEnvelopeInternalForcesBeamElems(elems)
         for e in elems:
             e.setProp('chiLT',chiLT) # Lateral torsional buckling reduction factor.
             e.setProp('chiN',chiN) # Axial strength reduction factor.
+            e.setProp('FcE', FcE) # Critical buckling design values for compression.
             e.setProp('FCTNCP',[-1.0,-1.0]) #Normal stresses efficiency.
             e.setProp('FCVCP',[-1.0,-1.0]) #Shear stresses efficiency.
             e.setProp('crossSection', self)
@@ -474,14 +476,15 @@ class WoodSection(object):
         return abs(Md)/McRd
 
         
-    def getBiaxialBendingEfficiency(self, Nd, Myd, Mzd, Vyd= 0.0, chiN=1.0, chiLT=1.0):
+    def getBiaxialBendingEfficiency(self, Nd, Myd, Mzd, FcE= None, chiN=1.0, chiLT=1.0):
         '''Return biaxial bending efficiency according to clause
            3.9 of AWC-NDS2018.
 
         :param Nd: required axial strength.
         :param Myd: required bending strength (minor axis).
         :param Mzd: required bending strength (major axis).
-        :param Vyd: required shear strength (major axis).
+        :param FcE: critical buckling design value for compression
+                    members (F_{cE}) as defined in section 3.9.2 of NDS-2.018
         :param chiN: column stability factor clause 3.7.1 of AWC-NDS2018 (default= 1.0).
         :param chiLT: beam stability factor clause 3.3.3 of AWC-NDS2018 (default= 1.0).
         '''
@@ -560,9 +563,10 @@ class WoodSection(object):
         elem.getResistingForce()
         chiLT= elem.getProp('chiLT') # beam stability factor.
         chiN= elem.getProp('chiN') # column stability factor.
+        FcE= elem.getProp('FcE') # critical buckling design value for compression
         [[N1, My1, Mz1, Vy1], [N2, My2, Mz2, Vy2]]= model_inquiry.getValuesAtNodes(elem, ['N', 'My', 'Mz', 'Vy'], silent= False)
-        FCTN1= self.getBiaxialBendingEfficiency(Nd= N1, Myd= My1, Mzd= Mz1, chiN= chiN, chiLT= chiLT)[0]
-        FCTN2= self.getBiaxialBendingEfficiency(Nd= N2, Myd= My2, Mzd= Mz2, chiN= chiN, chiLT= chiLT)[0]
+        FCTN1= self.getBiaxialBendingEfficiency(Nd= N1, Myd= My1, Mzd= Mz1, FcE= FcE, chiN= chiN, chiLT= chiLT)[0]
+        FCTN2= self.getBiaxialBendingEfficiency(Nd= N2, Myd= My2, Mzd= Mz2, FcE= FcE, chiN= chiN, chiLT= chiLT)[0]
         fctn= elem.getProp("FCTNCP")
         if(FCTN1 > fctn[0]):
             fctn[0]= FCTN1

@@ -106,10 +106,13 @@ class CrossSectionInternalForces:
         self.Mz= dct['Mz']
         # Lateral torsional buckling reduction factor.
         if('chiLT' in dct.keys()):
-              self.chiLT= dct['chiLT']
+            self.chiLT= dct['chiLT']
         # Axial strength reduction factor.     
         if('chiN' in dct.keys()): 
-              self.chiN= dct['chiN']
+            self.chiN= dct['chiN']
+        # AWC NDS-2018 critical buckling design values for compression.
+        if('FcE' in dct.keys()): 
+            self.FcE= dct['FcE']
 
     def getCSVString(self):
         '''returns a comma separated values string that represents the

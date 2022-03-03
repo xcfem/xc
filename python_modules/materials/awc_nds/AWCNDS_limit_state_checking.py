@@ -53,7 +53,7 @@ class Member(wood_member_base.Member):
         else:
             self.unbracedLengthZ= unbracedLengthX
             
-    def installULSControlRecorder(self, recorderType, chiN: float= 1.0, chiLT: float= 1.0, calcSet= None):
+    def installULSControlRecorder(self, recorderType, chiN: float= 1.0, chiLT: float= 1.0, FcE= (0.0,0.0), calcSet= None):
         '''Install recorder for verification of ULS criterion.
 
         :param recorderType: type of the recorder to install.
@@ -64,7 +64,7 @@ class Member(wood_member_base.Member):
                         'None' the member elements will be appended to this set.
         '''
         recorder= self.createRecorder(recorderType, calcSet)
-        self.crossSection.setupULSControlVars(self.elemSet, chiN= chiN, chiLT= chiLT)
+        self.crossSection.setupULSControlVars(self.elemSet, chiN= chiN, chiLT= chiLT, FcE= FcE)
         nodHndlr= self.getPreprocessor().getNodeHandler        
         if(nodHndlr.numDOFs==3):
             recorder.callbackRecord= controlULSCriterion2D()
@@ -159,20 +159,7 @@ class MemberBase(object):
         '''
         RB= self.getBendingSlendernessRatio(numberOfConcentratedLoads, lateralSupport, cantilever)
         return 1.2*self.section.wood.Emin/RB**2
-    
-    def getBiaxialBendingEfficiency(self, Nd, Myd, Mzd, Vyd= 0.0, chiN=1.0, chiLT= 1.0):
-        '''Return biaxial bending efficiency according to clause 3.9 of AWC-NDS2018.
-
-        :param Nd: required axial strength.
-        :param Myd: required bending strength (minor axis).
-        :param Mzd: required bending strength (major axis).
-        :param Vyd: required shear strength (major axis)
-        :param chiN: column stability factor clause 3.7.1 of AWC-NDS2018 (default= 1.0).
-        :param chiLT: beam stability factor clause 3.3.3 of AWC-NDS2018 (default= 1.0).
-        '''
-        # Critical buckling design values for compression.
-        return self.section.getBiaxialBendingEfficiency(Nd= Nd, Myd= Myd, Mzd= Mzd, chiN= chiN, chiLT= chiLT)
-       
+           
 class BeamMember(MemberBase):
     ''' Beam member according to chapter 3.3 of NDS-2018.
 
@@ -273,6 +260,18 @@ class BeamMember(MemberBase):
         ''' Return the adjusted value of Ft.'''
         return self.section.getFtAdj()    
     
+    def getBiaxialBendingEfficiency(self, Nd, Myd, Mzd, Vyd= 0.0, chiN=1.0, chiLT= 1.0):
+        '''Return biaxial bending efficiency according to clause 3.9 of AWC-NDS2018.
+
+        :param Nd: required axial strength.
+        :param Myd: required bending strength (minor axis).
+        :param Mzd: required bending strength (major axis).
+        :param Vyd: required shear strength (major axis)
+        :param chiN: column stability factor clause 3.7.1 of AWC-NDS2018 (default= 1.0).
+        :param chiLT: beam stability factor clause 3.3.3 of AWC-NDS2018 (default= 1.0).
+        '''
+        # Critical buckling design values for compression.
+        return self.section.getBiaxialBendingEfficiency(Nd= Nd, Myd= Myd, Mzd= Mzd, chiN= chiN, chiLT= chiLT)
 
 class ColumnMember(MemberBase):
     ''' Column member according to chapter 3.7 and 3.9 of NDS-2018.
@@ -352,7 +351,7 @@ class ColumnMember(MemberBase):
 
     def getFcE(self):
         ''' Return the critical buckling design value for compression
-            members (F_{cE2}) as defined in section 3.9.2 of NDS-2.018
+            members (F_{cE}) as defined in section 3.9.2 of NDS-2.018
             for buckling about the major and minor axis.'''
         E_adj= self.section.wood.getEminAdj()
         EH= 0.822*E_adj/(self.getHSlendernessRatio())**2
@@ -362,7 +361,6 @@ class ColumnMember(MemberBase):
         else: # Wide side B
             return (EB, EH)
         
-
     def getEffectiveLength(self):
         ''' Return the effective length for bending in
             the H and B planes.'''
@@ -433,6 +431,21 @@ class ColumnMember(MemberBase):
         val394= fc/FcE2+(fb1/FbE)**2 #Equation 3-9-4
         return max(val393,val394)
 
+    def getBiaxialBendingEfficiency(self, Nd, Myd, Mzd, Vyd= 0.0, chiN=1.0, chiLT= 1.0):
+        '''Return biaxial bending efficiency according to clause 3.9 of AWC-NDS2018.
+
+        :param Nd: required axial strength.
+        :param Myd: required bending strength (minor axis).
+        :param Mzd: required bending strength (major axis).
+        :param Vyd: required shear strength (major axis)
+        :param chiN: column stability factor clause 3.7.1 of AWC-NDS2018 (default= 1.0).
+        :param chiLT: beam stability factor clause 3.3.3 of AWC-NDS2018 (default= 1.0).
+        '''
+        # Critical buckling design values for compression.
+        FcE= self.getFcE()
+        return self.section.getBiaxialBendingEfficiency(Nd= Nd, Myd= Myd, Mzd= Mzd, FcE= FcE, chiN= chiN, chiLT= chiLT)
+
+
 class AWCNDSBiaxialBendingControlVars(cv.BiaxialBendingStrengthControlVars):
     '''Control variables for biaxial bending normal stresses LS 
     verification in steel-shape elements according to AISC.
@@ -482,7 +495,7 @@ class BiaxialBendingNormalStressController(lsc.LimitStateControllerBase2Sections
             # Check each element section.
             for lf in elementInternalForces:
                 # Compute efficiency.
-                CFtmp= crossSection.getBiaxialBendingEfficiency(Nd= lf.N, Myd= lf.My, Mzd= lf.Mz, Vyd= lf.Vy, chiN= lf.chiN, chiLT= lf.chiLT)[0]
+                CFtmp= crossSection.getBiaxialBendingEfficiency(Nd= lf.N, Myd= lf.My, Mzd= lf.Mz, FcE= lf.FcE, chiN= lf.chiN, chiLT= lf.chiLT)[0]
                 sectionLabel= self.getSectionLabel(lf.idSection)
                 label= self.limitStateLabel+sectionLabel
                 # Update efficiency.
