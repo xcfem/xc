@@ -55,8 +55,6 @@ le= beam.getEffectiveLength(numberOfConcentratedLoads= 0, lateralSupport= False,
 RB= beam.getBendingSlendernessRatio(numberOfConcentratedLoads= 0, lateralSupport= False, cantilever= False)
 FbE= beam.getFbECriticalBucklingDesignValue(numberOfConcentratedLoads= 0, lateralSupport= False, cantilever= False)
 
-
-
 Cfu= 1.0
 CM= 1.0
 Cr= 1.0

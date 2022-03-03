@@ -17,6 +17,7 @@ from misc_utils import log_messages as lmsg
 from materials import member_base
 from materials import wood_member_base
 from materials import limit_state_checking_base as lsc
+from materials.awc_nds import AWCNDS_materials
 from postprocess import control_vars as cv
 from postprocess import limit_state_data as lsd
 
@@ -93,7 +94,7 @@ class MemberBase(object):
 
     :ivar Cr: repetitive member factor.
     '''
-    def __init__(self, unbracedLength, section, Cr= 1.0, connection= member_base.MemberConnection()):
+    def __init__(self, unbracedLength, section, Cr= 1.0, connection= member_base.MemberConnection(), memberRestraint= AWCNDS_materials.MemberRestraint.notApplicable):
         ''' Constructor. 
 
         :param unbracedLength: length between bracing elements.
@@ -105,19 +106,85 @@ class MemberBase(object):
         self.section= section
         self.Cr= Cr
         self.connection= connection
+        self.memberRestraint= memberRestraint
+        
+    def getFcAdj(self):
+        ''' Return the adjusted value of Fc including the column stability
+            factor.'''
+        sectionFbAdj= self.section.getFcAdj()
+        CP= self.getColumnStabilityFactor()
+        return CP*sectionFbAdj
+    
+    def getFbAdj(self, numberOfConcentratedLoads= 0, lateralSupport= False, cantilever= False):
+        ''' Return the adjusted value of Fb including the beam stability factor.
+
+        :param numberOfConcentratedLoads: number of concentrated loads.
+        :param Cr: repetitive member factor
+        '''
+        sectionFbAdj= self.section.getFbAdj(Cr= self.Cr)
+        CL= self.getBeamStabilityFactor(numberOfConcentratedLoads=numberOfConcentratedLoads, lateralSupport=lateralSupport, cantilever=cantilever)
+        return CL*sectionFbAdj
+    
+    def getBeamStabilityFactor(self,numberOfConcentratedLoads= 0, lateralSupport= False, cantilever= False):
+        ''' Return the beam stability factor according to clauses 3.3.3 
+            and 4.4.1.2 of AWC NDS-2018.
+
+           :param numberOfConcentratedLoads: number of concentrated loads equally
+                                             spaced along the beam (0: uniform load).
+           :param lateralSupport: if true beam has a lateral support on each load and at the ends.
+           :param cantilever: if true cantilever beam otherwise single span beam.
+        '''
+        retval= .001
+        ## Check if
+        if(self.memberRestraint>self.section.getRequiredRestraint()):
+            retval= 1.0
+        else: ## Equation 3.3-6
+            FbE= self.getFbECriticalBucklingDesignValue(numberOfConcentratedLoads, lateralSupport, cantilever)
+            FbAdj= self.section.getFbAdj(Cr= self.Cr)
+            ratio= FbE/FbAdj
+            A= (1+ratio)/1.9
+            B= A**2
+            C= ratio/0.95
+            retval= A-math.sqrt(B-C)
+        return retval
+    
+    def getFbECriticalBucklingDesignValue(self,numberOfConcentratedLoads= 0, lateralSupport= False, cantilever= False):
+        ''' Return the critical bucking design value for bending according to 
+            section 3.3.3.8 of NDS-2018.
+
+           :param numberOfConcentratedLoads: number of concentrated loads equally
+                                             spaced along the beam (0: uniform load).
+           :param lateralSupport: if true beam has a lateral support on each load.
+           :param cantilever: if true cantilever beam otherwise single span beam.
+        '''
+        RB= self.getBendingSlendernessRatio(numberOfConcentratedLoads, lateralSupport, cantilever)
+        return 1.2*self.section.wood.Emin/RB**2
+    
+    def getBiaxialBendingEfficiency(self, Nd, Myd, Mzd, Vyd= 0.0, chiN=1.0, chiLT= 1.0):
+        '''Return biaxial bending efficiency according to clause 3.9 of AWC-NDS2018.
+
+        :param Nd: required axial strength.
+        :param Myd: required bending strength (minor axis).
+        :param Mzd: required bending strength (major axis).
+        :param Vyd: required shear strength (major axis)
+        :param chiN: column stability factor clause 3.7.1 of AWC-NDS2018 (default= 1.0).
+        :param chiLT: beam stability factor clause 3.3.3 of AWC-NDS2018 (default= 1.0).
+        '''
+        # Critical buckling design values for compression.
+        return self.section.getBiaxialBendingEfficiency(Nd= Nd, Myd= Myd, Mzd= Mzd, chiN= chiN, chiLT= chiLT)
        
 class BeamMember(MemberBase):
     ''' Beam member according to chapter 3.3 of NDS-2018.
 
     '''
-    def __init__(self, unbracedLength, section, connection= member_base.MemberConnection(), Cr= 1.0):
+    def __init__(self, unbracedLength, section, connection= member_base.MemberConnection(), Cr= 1.0, memberRestraint= AWCNDS_materials.MemberRestraint.notApplicable):
         ''' Constructor. 
 
         :param unbracedLength: length between bracing elements.
         :param connection: connection type at beam ends.
         :param Cr: repetitive member factor.
         '''
-        super(BeamMember,self).__init__(unbracedLength= unbracedLength, section= section, Cr= Cr, connection= connection)
+        super(BeamMember,self).__init__(unbracedLength= unbracedLength, section= section, Cr= Cr, connection= connection, memberRestraint= memberRestraint)
         
     def getEffectiveLength(self,numberOfConcentratedLoads= 0, lateralSupport= False, cantilever= False):
         ''' Return the effective length of the beam according to table
@@ -189,6 +256,7 @@ class BeamMember(MemberBase):
                     lmsg.error('Load case not implemented.')
                     retval*=10.0
         return retval
+    
     def getBendingSlendernessRatio(self,numberOfConcentratedLoads= 0, lateralSupport= False, cantilever= False):
         ''' Return the slenderness ratio according to equation
             3.3-5 of NDS-2018.
@@ -200,71 +268,30 @@ class BeamMember(MemberBase):
         '''
         le= self.getEffectiveLength(numberOfConcentratedLoads, lateralSupport, cantilever)
         return math.sqrt(le*self.section.h/self.section.b**2)
-    def getFbECriticalBucklingDesignValue(self,numberOfConcentratedLoads= 0, lateralSupport= False, cantilever= False):
-        ''' Return the critical bucking design value for bending according to 
-            section 3.3.3.8 of NDS-2018.
-
-           :param numberOfConcentratedLoads: number of concentrated loads equally
-                                             spaced along the beam (0: uniform load).
-           :param lateralSupport: if true beam has a lateral support on each load.
-           :param cantilever: if true cantilever beam otherwise single span beam.
-        '''
-        RB= self.getBendingSlendernessRatio(numberOfConcentratedLoads, lateralSupport, cantilever)
-        return 1.2*self.section.wood.Emin/RB**2
-    
-    def getBeamStabilityFactor(self,numberOfConcentratedLoads= 0, lateralSupport= False, cantilever= False):
-        ''' Return the beam stability factor according to equation 
-            3.3.6 of NDS-2018.
-
-           :param numberOfConcentratedLoads: number of concentrated loads equally
-                                             spaced along the beam (0: uniform load).
-           :param lateralSupport: if true beam has a lateral support on each load.
-           :param cantilever: if true cantilever beam otherwise single span beam.
-        '''
-        FbE= self.getFbECriticalBucklingDesignValue(numberOfConcentratedLoads, lateralSupport, cantilever)
-        FbAdj= self.section.getFbAdj(Cr= self.Cr)
-        ratio= FbE/FbAdj
-        A= (1+ratio)/1.9
-        B= A**2
-        C= ratio/0.95
-        return A-math.sqrt(B-C)
-
+        
     def getFtAdj(self):
         ''' Return the adjusted value of Ft.'''
-        return self.section.getFtAdj()
-    
-    def getFbAdj(self, numberOfConcentratedLoads= 0, lateralSupport= False, cantilever= False):
-        ''' Return the adjusted value of Fb.
-
-        :param numberOfConcentratedLoads: number of concentrated loads.
-        :param Cr: repetitive member factor
-        '''
-        sectionFbAdj= self.section.getFbAdj(Cr= self.Cr)
-        CL= self.getBeamStabilityFactor(numberOfConcentratedLoads=numberOfConcentratedLoads, lateralSupport=lateralSupport, cantilever=cantilever)
-        return CL*sectionFbAdj
-
-    def getBiaxialBendingEfficiency(self,Nd,Myd,Mzd,Vyd= 0.0, chiN=1.0, chiLT= 1.0):
-        '''Return biaxial bending efficiency according to clause 3.9 of AWC-NDS2018.
-
-        :param Nd: required axial strength.
-        :param Myd: required bending strength (minor axis).
-        :param Mzd: required bending strength (major axis).
-        :param Vyd: required shear strength (major axis)
-        :param chiN: column stability factor clause 3.7.1 of AWC-NDS2018 (default= 1.0).
-        :param chiLT: beam stability factor clause 3.3.3 of AWC-NDS2018 (default= 1.0).
-        '''
-        return self.section.getBiaxialBendingEfficiency(Nd= Nd, Myd= Myd, Mzd= Mzd, Vyd= Vyd, chiN= chiN, chiLT= chiLT)
+        return self.section.getFtAdj()    
     
 
 class ColumnMember(MemberBase):
-    ''' Column member according to chapter 3.7 and 3.9 of NDS-2018.'''
-    def __init__(self, unbracedLengthB, unbracedLengthH, section, connection= member_base.MemberConnection()):
-        ''' Constructor. '''
-        super(ColumnMember,self).__init__(unbracedLengthB, section, connection)
+    ''' Column member according to chapter 3.7 and 3.9 of NDS-2018.
+
+    :ivar unbracedLengthB: unbraced lenght for bending about weak axis.
+    '''
+    def __init__(self, unbracedLengthB, unbracedLengthH, section, connection= member_base.MemberConnection(), memberRestraint= AWCNDS_materials.MemberRestraint.notApplicable):
+        ''' Constructor. 
+
+        :param unbracedLengthB: unbraced lenght for bending about weak axis (B<H).
+        :param unbradedLengthH: unbraced lenght for bending about strong axis (HZB).
+        :param section: member cross-section.
+        :param connection: connection type.
+        '''
+        super(ColumnMember,self).__init__(unbracedLength= unbracedLengthB, section= section, connection= connection, memberRestraint= memberRestraint)
         self.unbracedLengthH= unbracedLengthH
 
     def getUnbracedLengthB(self):
-        ''' Return the B unbraced length.'''
+        ''' Return the B unbraced length a.'''
         return self.unbracedLength
 
     def getEffectiveBucklingLengthCoefficientRecommended(self):
@@ -288,48 +315,59 @@ class ColumnMember(MemberBase):
         srH= Ke*self.unbracedLengthH/self.section.h
         return max(srB,srH)
 
-    def getColumnStabilityFactor(self, c, E_adj, Fc_adj):
+    def getColumnStabilityFactor(self):
         ''' Return the column stability factor according
             to expression 3.7-1 of NDS-2.018. 
-
-        :param E_adj: adjusted modulus of elasticity for beam 
-                      stability and column stability calculations.
-        :param Fc_adj: adjusted compression stress design value parallel 
-                       to grain.
-        :param c: 0.8 for sawn lumber, 0.85 for round timber poles 
-                  and piles and 0.9 for structural glued laminated
-                  timber structural composite lumber, and 
-                  cross-laminated timber.
         '''
         sr= self.getSlendernessRatio()
+        E_adj= self.section.wood.getEminAdj()
         FcE= 0.822*E_adj/((sr)**2)
+        Fc_adj= self.section.getFcAdj()
         ratio= FcE/Fc_adj
+        c= self.section.wood.get37_1c()
         tmp= (1+ratio)/2.0/c
         return tmp-math.sqrt(tmp**2-ratio/c)
     
-    def getFcE1(self, E_adj):
-        ''' Return the value of F_{cE1} as defined in section
-            3.9.2 of NDS-2.018.
-
-        :param E_adj: adjusted modulus of elasticity for beam 
-                      stability and column stability calculations.
+    def getFcE1(self):
+        ''' Return the critical buckling design value for compression
+            members (F_{cE1}) as defined in section 3.9.2 of NDS-2.018
+            for buckling about the major axis.
         '''
+        E_adj= self.section.wood.getEminAdj()
         if(self.section.h>self.section.b): # Wide side: H
             return 0.822*E_adj/(self.getHSlendernessRatio())**2
         else: # Wide side B
             return 0.822*E_adj/(self.getBSlendernessRatio())**2
         
-    def getFcE2(self, E_adj):
-        ''' Return the value of F_{cE2} as defined in section
-            3.9.2 of NDS-2.018.
-
-        :param E_adj: adjusted modulus of elasticity for beam 
-                      stability and column stability calculations.
+    def getFcE2(self):
+        ''' Return the critical buckling design value for compression
+            members (F_{cE2}) as defined in section 3.9.2 of NDS-2.018
+            for buckling about the minor axis.
         '''
+        E_adj= self.section.wood.getEminAdj()
         if(self.section.h<self.section.b): # Narrow side: H
             return 0.822*E_adj/(self.getHSlendernessRatio())**2
         else: # Narrow side B
             return 0.822*E_adj/(self.getBSlendernessRatio())**2
+
+    def getFcE(self):
+        ''' Return the critical buckling design value for compression
+            members (F_{cE2}) as defined in section 3.9.2 of NDS-2.018
+            for buckling about the major and minor axis.'''
+        E_adj= self.section.wood.getEminAdj()
+        EH= 0.822*E_adj/(self.getHSlendernessRatio())**2
+        EB= 0.822*E_adj/(self.getBSlendernessRatio())**2
+        if(self.section.h>self.section.b): # Wide side: H
+            return (EH, EB)
+        else: # Wide side B
+            return (EB, EH)
+        
+
+    def getEffectiveLength(self):
+        ''' Return the effective length for bending in
+            the H and B planes.'''
+        Ke= self.getEffectiveBucklingLengthCoefficientRecommended()
+        return (Ke*self.unbracedLengthH, Ke*self.getUnbracedLengthB())
         
     def getBendingSlendernessRatioH(self):
         ''' Return the slenderness ratio for bending in
@@ -344,29 +382,37 @@ class ColumnMember(MemberBase):
         Ke= self.getEffectiveBucklingLengthCoefficientRecommended()
         le= Ke*self.getUnbracedLengthB()
         return math.sqrt(le*self.section.b/self.section.h**2)
-    
-    def getFbE(self, E_adj):
-        ''' Return the value of F_{bE} as defined in section
-            3.9.2 of NDS-2.018.
 
-        :param E_adj: adjusted modulus of elasticity for beam 
-                      stability and column stability calculations.
+    def getBendingSlendernessRatioHB(self):
+        ''' Return the slenderness ratio for bending in the
+            H and B planes.'''
+        leH, leB= self.getEffectiveLength()
+        return (math.sqrt(leH*self.section.h/self.section.b**2), math.sqrt(leB*self.section.b/self.section.h**2))
+    
+    def getBendingSlendernessRatio(self,numberOfConcentratedLoads= 0, lateralSupport= False, cantilever= False):
+        ''' Return the maximum slenderness ratio for bending between the
+            H and B planes.'''
+        srH, srB= self.getBendingSlendernessRatioHB()
+        return max(srH, srB)
+    
+    def getFbE(self):
+        ''' Return the critical buckling desing value for bending (F_{bE}) 
+            as defined in section 3.9.2 of NDS-2.018.
         '''
         sr= 1.0
         if(self.section.h<self.section.b): # Narrow side: H
             sr= self.getBendingSlendernessRatioB()
         else: # Narrow side B
             sr= self.getBendingSlendernessRatioH()
+        E_adj= self.section.wood.getEminAdj()
         return 1.2*E_adj/sr**2
     
-    def getCapacityFactor(self, E_adj, Fc_adj, Fb1_adj, Fb2_adj, fc,fb1, fb2):
+    def getCapacityFactor(self, Fc_adj, Fb1_adj, Fb2_adj, fc,fb1, fb2):
         ''' Return the capacity factor for members subjected to a 
             combination of bending about one or both principal axes 
             and axial compression according to section 3.9.2 of
             NDS-2.018.
 
-        :param E_adj: adjusted modulus of elasticity for beam 
-                      stability and column stability calculations.
         :param Fc_adj: adjusted value of reference compression stress.
         :param Fb1_adj: adjusted value of reference bending stress (for
                         bending load applied to narrow face of member).
@@ -379,15 +425,13 @@ class ColumnMember(MemberBase):
                     of member).
         '''
         val393= (fc/Fc_adj)**2 #Equation 3-9-3
-        FcE1= self.getFcE1(E_adj) #Critical buckling design values.
-        FcE2= self.getFcE2(E_adj)
-        FbE= self.getFbE(E_adj)
+        (FcE1, FcE2)= self.getFcE() #Critical buckling design values.
+        FbE= self.getFbE()
         almostOne= 1-1e-15
         val393+= fb1/(Fb1_adj*(1-min(fc/FcE1,almostOne)))
         val393+= fb2/(Fb2_adj*(1-min(fc/FcE2,almostOne)-min(fb1/FbE,almostOne)**2))
         val394= fc/FcE2+(fb1/FbE)**2 #Equation 3-9-4
         return max(val393,val394)
-
 
 class AWCNDSBiaxialBendingControlVars(cv.BiaxialBendingStrengthControlVars):
     '''Control variables for biaxial bending normal stresses LS 

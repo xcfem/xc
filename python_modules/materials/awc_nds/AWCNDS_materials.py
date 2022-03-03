@@ -9,6 +9,7 @@ from __future__ import print_function
 
 import math
 import sys
+from enum import IntEnum
 import scipy.interpolate
 from misc_utils import log_messages as lmsg
 from materials import wood_base
@@ -313,6 +314,12 @@ class LSL(Wood):
         else:
             return math.pow((12.0/depth),0.12)*self.Fb_12
 
+    def get37_1c(self):
+        ''' Return the c coefficient for equation 3.7-1 of
+            AWC_NDS2018 (clause 3.7.1 column stability factor.'''
+        return 0.9 # structural glued laminated timber,
+                   # structural composite lumber, and cross-laminated timber
+
 class LSL_135E(LSL):
     ''' LSL 1.35E.'''
     E= 1.35e6*psi2Pa # Elastic modulus (Pa)
@@ -371,6 +378,16 @@ class LVL_2900Fb2E(LSL):
         :param name: material name.
         '''
         super(LVL_2900Fb2E,self).__init__(name)
+
+class MemberRestraint(IntEnum):
+    ''' Member restrain condition according  to clause 4.4.1.2 of
+        AWC_NDS2018.'''
+    notApplicable= -1 # No sawn lumber...
+    noLateralSupport= 0 # 4.4.1.2 (a)
+    endSupport= 1 # 4.4.1.2 (b)
+    compressionEdgeSupport= 2 # 4.4.1.2 (c)
+    fullDepthSolidBlocking= 3 # 4.4.1.2 (d)
+    bothEdgeSupport= 4 # 4.4.1.2 (e)
         
 class WoodSection(object):
     ''' Wood structural cross-section.
@@ -457,14 +474,14 @@ class WoodSection(object):
         return abs(Md)/McRd
 
         
-    def getBiaxialBendingEfficiency(self,Nd,Myd,Mzd,Vyd= 0.0, chiN=1.0, chiLT=1.0):
+    def getBiaxialBendingEfficiency(self, Nd, Myd, Mzd, Vyd= 0.0, chiN=1.0, chiLT=1.0):
         '''Return biaxial bending efficiency according to clause
            3.9 of AWC-NDS2018.
 
         :param Nd: required axial strength.
         :param Myd: required bending strength (minor axis).
         :param Mzd: required bending strength (major axis).
-        :param Vyd: required shear strength (major axis)
+        :param Vyd: required shear strength (major axis).
         :param chiN: column stability factor clause 3.7.1 of AWC-NDS2018 (default= 1.0).
         :param chiLT: beam stability factor clause 3.3.3 of AWC-NDS2018 (default= 1.0).
         '''
@@ -492,20 +509,27 @@ class WoodSection(object):
             else: # Nd==0
                 CF= self.getFlexuralEfficiency(Md= Myd, majorAxis= False, chiLT= chiLT) # available flexural strength minor axis.
         else:
+            Sz= self.getElasticSectionModulusZ()
+            Sy= self.getElasticSectionModulusY()
+            Fb1_aster= self.getFlexuralStrength(majorAxis= True, chiLT= 1.0)/Sz # No CL adjustement
+            Fb2_aster= self.getFlexuralStrength(majorAxis= True, chiLT= 1.0)/Sy
+            fb1= Mzd/Sz # Bending stress (major axis)
             if(Nd>0):
-                Sz= self.getElasticSectionModulusZ()
-                fb= Mzd/Sz
-                Fb_aster= self.getFlexuralStrength(majorAxis= True, chiLT= 1.0)/Sz # No CL adjustement
-                CF= ratioN+fb/Fb_aster # equation 3.9-1
+                CF= ratioN+fb1/Fb1_aster # equation 3.9-1
                 if(Mzd!=0.0):
                     ft= Nd/self.A()
-                    Fb_aster2= Fb_aster*chiLT # CL adjustement
-                    eq392= (fb-ft)/Fb_aster2 # equation 3.9-2
+                    Fb1_aster2= Fb1_aster*chiLT # CL adjustement
+                    eq392= (fb1-ft)/Fb1_aster2 # equation 3.9-2
                     CF= max(CF, eq392)
             elif(Nd<0):
-                className= type(self).__name__
-                methodName= sys._getframe(0).f_code.co_name
-                lmsg.error(className+'.'+methodName+'; bending and axial compression not implemented yet.')
+                # Equation 3.9-3
+                CF= ratioN
+                fc= Nd/self.A() # Compression stress.
+                Fb1_aster2= Fb1_aster*chiLT # F'b1 in equation 3.9-3.
+                FcE1= FcE[0] # major axis.
+                print('F\'b1= ',Fb1_aster2/6894.76)
+                print('FcE1= ',FcE1/6894.76)
+                FcE2= FcE[1] # minor axis.
             else:
                 CF= self.getFlexuralEfficiency(Md= Mzd, majorAxis= True, chiLT= chiLT) # reference flexural strength major axis.
                 
@@ -537,8 +561,8 @@ class WoodSection(object):
         chiLT= elem.getProp('chiLT') # beam stability factor.
         chiN= elem.getProp('chiN') # column stability factor.
         [[N1, My1, Mz1, Vy1], [N2, My2, Mz2, Vy2]]= model_inquiry.getValuesAtNodes(elem, ['N', 'My', 'Mz', 'Vy'], silent= False)
-        FCTN1= self.getBiaxialBendingEfficiency(Nd= N1, Myd= My1, Mzd= Mz1, Vyd= Vy1, chiN= chiN, chiLT= chiLT)[0]
-        FCTN2= self.getBiaxialBendingEfficiency(Nd= N2, Myd= My2, Mzd= Mz2, Vyd= Vy2, chiN= chiN, chiLT= chiLT)[0]
+        FCTN1= self.getBiaxialBendingEfficiency(Nd= N1, Myd= My1, Mzd= Mz1, chiN= chiN, chiLT= chiLT)[0]
+        FCTN2= self.getBiaxialBendingEfficiency(Nd= N2, Myd= My2, Mzd= Mz2, chiN= chiN, chiLT= chiLT)[0]
         fctn= elem.getProp("FCTNCP")
         if(FCTN1 > fctn[0]):
             fctn[0]= FCTN1
@@ -586,6 +610,11 @@ class WoodSection(object):
             fcv[1]= FCV2
             elem.setProp("HIPCPV2",nmbComb)
         elem.setProp("FCVCP",fcv)
+        
+    def getRequiredRestraint(self):
+        ''' Return the required restrains according to clause 4.4.1.2 of
+            AWC_NDS2018.'''
+        return MemberRestraint.notApplicable
 
 class WoodRectangularSection(WoodSection, sp.RectangularSection):
     ''' Wood structural cross-section.'''
@@ -1284,44 +1313,72 @@ class CustomLumberSection(WoodRectangularSection):
     def getEAdj(self):
         ''' Return the adjusted value of E.'''
         return self.wood.getEAdj()
+    
     def getEminAdj(self):
         ''' Return the adjusted value of Emin.'''
         return self.wood.getEminAdj()
+    
+    def getRequiredRestraint(self):
+        ''' Return the required restrains according to clause 4.4.1.2 of
+            AWC_NDS2018.'''
+        retval= MemberRestraint.bothEdgeSupport
+        depthToBreadthRatio= self.h/self.b
+        if(depthToBreadthRatio<=2.0):
+            retval= MemberRestraint.noLateralSupport
+        elif(depthToBreadthRatio<=4.0):
+            retval= MemberRestraint.endSupport
+        elif(depthToBreadthRatio<=5.0):
+            retval= MemberRestraint.compressionEdgeSupport
+        elif(depthToBreadthRatio<=6.0):
+            retval= MemberRestraint.fullDepthSolidBlocking
+        elif(depthToBreadthRatio<=7.0):
+            retval= MemberRestraint.bothEdgeSupport
+        return retval
+
+threeQuarters= 0.75*in2meter
+inchAndAHalf= 1.5*in2meter
+twoInchAndAHalf= 2.5*in2meter
+threeInchAndAHalf= 3.5*in2meter
+fourInchAndAHalf= 4.5*in2meter
+fiveInchAndAHalf= 5.5*in2meter
+sevenInchAndAQuarter= 7.25*in2meter
+nineInchAndAQuarter= 9.25*in2meter
+elevenInchAndAQuarter= 11.25*in2meter
 
 dimensionLumberSizes= dict()
-dimensionLumberSizes['1x2']= (19e-3, 38e-3)
-dimensionLumberSizes['1x3']= (19e-3, 64e-3)
-dimensionLumberSizes['1x4']= (19e-3, 89e-3)
-dimensionLumberSizes['1x5']= (19e-3, 114e-3)
-dimensionLumberSizes['1x6']= (19e-3, 140e-3)
-dimensionLumberSizes['1x8']= (19e-3, 184e-3)
-dimensionLumberSizes['1x10']= (19e-3, 235e-3)
-dimensionLumberSizes['1x12']= (19e-3, 286e-3)
-dimensionLumberSizes['2x2']= (38e-3, 38e-3)
-dimensionLumberSizes['2x3']= (38e-3, 64e-3)
-dimensionLumberSizes['2x4']= (38e-3, 89e-3)
-dimensionLumberSizes['2x6']= (38e-3, 140e-3)
-dimensionLumberSizes['2x8']= (38e-3, 184e-3)
-dimensionLumberSizes['2x10']= (38e-3, 235e-3)
-dimensionLumberSizes['2x12']= (38e-3, 286e-3)
-dimensionLumberSizes['4x4']= (89e-3, 89e-3)
-dimensionLumberSizes['4x6']= (89e-3, 140e-3)
-dimensionLumberSizes['6x6']= (140e-3, 140e-3)
-dimensionLumberSizes['2x1']= (38e-3, 19e-3)
-dimensionLumberSizes['3x1']= (64e-3, 19e-3)
-dimensionLumberSizes['4x1']= (89e-3, 19e-3)
-dimensionLumberSizes['5x1']= (114e-3, 19e-3)
-dimensionLumberSizes['6x1']= (140e-3, 19e-3)
-dimensionLumberSizes['8x1']= (184e-3, 19e-3)
-dimensionLumberSizes['10x1']= (235e-3, 19e-3)
-dimensionLumberSizes['12x1']= (286e-3, 19e-3)
-dimensionLumberSizes['3x2']= (64e-3, 38e-3)
-dimensionLumberSizes['4x2']= (89e-3, 38e-3)
-dimensionLumberSizes['6x2']= (140e-3, 38e-3)
-dimensionLumberSizes['8x2']= (184e-3, 38e-3)
-dimensionLumberSizes['10x2']= (235e-3, 38e-3)
-dimensionLumberSizes['12x2']= (286e-3, 38e-3)
-dimensionLumberSizes['6x4']= (140e-3, 89e-3)
+dimensionLumberSizes['1x2']= (threeQuarters, inchAndAHalf)
+dimensionLumberSizes['1x3']= (threeQuarters, twoInchAndAHalf)
+dimensionLumberSizes['1x4']= (threeQuarters, threeInchAndAHalf)
+dimensionLumberSizes['1x5']= (threeQuarters, fourInchAndAHalf)
+dimensionLumberSizes['1x6']= (threeQuarters, fiveInchAndAHalf)
+dimensionLumberSizes['1x8']= (threeQuarters, sevenInchAndAQuarter)
+dimensionLumberSizes['1x10']= (threeQuarters, nineInchAndAQuarter)
+dimensionLumberSizes['1x12']= (threeQuarters, elevenInchAndAQuarter)
+dimensionLumberSizes['2x2']= (inchAndAHalf, inchAndAHalf)
+dimensionLumberSizes['2x3']= (inchAndAHalf, twoInchAndAHalf)
+dimensionLumberSizes['2x4']= (inchAndAHalf, threeInchAndAHalf)
+dimensionLumberSizes['2x6']= (inchAndAHalf, fiveInchAndAHalf)
+dimensionLumberSizes['2x8']= (inchAndAHalf, sevenInchAndAQuarter)
+dimensionLumberSizes['2x10']= (inchAndAHalf, nineInchAndAQuarter)
+dimensionLumberSizes['2x12']= (inchAndAHalf, elevenInchAndAQuarter)
+dimensionLumberSizes['4x4']= (threeInchAndAHalf, threeInchAndAHalf)
+dimensionLumberSizes['4x6']= (threeInchAndAHalf, fiveInchAndAHalf)
+dimensionLumberSizes['6x6']= (fiveInchAndAHalf, fiveInchAndAHalf)
+dimensionLumberSizes['2x1']= (inchAndAHalf, threeQuarters)
+dimensionLumberSizes['3x1']= (twoInchAndAHalf, threeQuarters)
+dimensionLumberSizes['4x1']= (threeInchAndAHalf, threeQuarters)
+dimensionLumberSizes['5x1']= (fourInchAndAHalf, threeQuarters)
+dimensionLumberSizes['6x1']= (fiveInchAndAHalf, threeQuarters)
+dimensionLumberSizes['8x1']= (sevenInchAndAQuarter, threeQuarters)
+dimensionLumberSizes['10x1']= (nineInchAndAQuarter, threeQuarters)
+dimensionLumberSizes['12x1']= (elevenInchAndAQuarter, threeQuarters)
+dimensionLumberSizes['3x2']= (twoInchAndAHalf, inchAndAHalf)
+dimensionLumberSizes['4x2']= (threeInchAndAHalf, inchAndAHalf)
+dimensionLumberSizes['6x2']= (fiveInchAndAHalf, inchAndAHalf)
+dimensionLumberSizes['8x2']= (sevenInchAndAQuarter, inchAndAHalf)
+dimensionLumberSizes['10x2']= (nineInchAndAQuarter, inchAndAHalf)
+dimensionLumberSizes['12x2']= (elevenInchAndAQuarter, inchAndAHalf)
+dimensionLumberSizes['6x4']= (fiveInchAndAHalf, threeInchAndAHalf)
 
 class DimensionLumberSection(CustomLumberSection):
     ''' Section of a dimension lumber member.'''
@@ -1340,3 +1397,4 @@ class DimensionLumberSection(CustomLumberSection):
         else:
             lmsg.error('section: \''+name+'\' doesn\'t exists.')
         super(DimensionLumberSection,self).__init__(name, b, h, woodMaterial)
+

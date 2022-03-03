@@ -110,7 +110,7 @@ class DimensionLumberWood(AWCNDS_materials.Wood):
     fc_size_factor_interp= scipy.interpolate.interp1d(fc_size_factor_x,fc_size_factor_y)
     stud_fc_size_factor_interp= scipy.interpolate.interp1d(stud_fc_size_factor_x,stud_fc_size_factor_y)
     
-    def __init__(self, name= None, grade= '', sub_grade= '', rho= None, wet= False, dressedSize= 'Dry'):
+    def __init__(self, name= None, grade= '', sub_grade= '', rho= None, wet= False, dressedSize= 'Dry', c= 0.8):
         '''Constructor.
 
         :param name: material name.
@@ -119,6 +119,7 @@ class DimensionLumberWood(AWCNDS_materials.Wood):
         :param rho: material density.
         :param wet: if true then wet condition.
         :param dressedSize: dressed size to use (defaults to 'Dry').
+        :param c: c coefficient for equation 3.7-1 of AWC_NDS2018 (clause 3.7.1 column stability factor) (defaults to 0.8; must be set to 0.85 for round sections).
         '''
         super(DimensionLumberWood,self).__init__(name)
         self.grade= grade
@@ -127,6 +128,13 @@ class DimensionLumberWood(AWCNDS_materials.Wood):
         self.rho= rho
         self.wet= wet
         self.dressedSize= dressedSize
+        self.c= c # c coefficient for equation 3.7-1
+        
+    def get37_1c(self):
+        ''' Return the c coefficient for equation 3.7-1 of
+            AWC_NDS2018 (clause 3.7.1 column stability factor).'''
+        return 0.8 # structural glued laminated timber,
+                   # structural composite lumber, and cross-laminated timber
         
     def getXCMaterialName(self):
         ''' Return the name for create the corresponding
@@ -225,7 +233,8 @@ class DimensionLumberWood(AWCNDS_materials.Wood):
     
     def getTensionSizeFactor(self, b, h):
         ''' Return the size factor for the tension design
-            value Ft according to National Design Specification table 4A.
+            value Ft according to National Design Specification Supplement
+            table 4A.
 
         :param b: section width.
         :param h: section depth.
@@ -248,10 +257,10 @@ class DimensionLumberWood(AWCNDS_materials.Wood):
     
     def getCompressionSizeFactor(self, b, h):
         ''' Return the size factor for the compression design
-            value Ft according to National Design Specification table 4A.
+            value Fc according to National Design Specification table 4A.
 
-        :param b: section width.
-        :param h: section depth.
+        :param b: nominal section width.
+        :param h: nominal section depth.
         '''
         width= max(b,h)
         thickness= min(b,h)
@@ -347,12 +356,15 @@ class DimensionLumberWood(AWCNDS_materials.Wood):
         :param b: section width.
         :param h: section depth.
         '''
-        C= 1.0 # Wet service factor.
+        C= self.CD # Wet service factor.
         # Wet service factor
         threshold= 750.0*AWCNDS_materials.psi2Pa/0.8
         if(self.wet and self.Fc>threshold):
             C*=0.8
-        C*= self.getCompressionSizeFactor(b, h) # Size factor
+        # Get nominal dimensions.
+        bNom= self.getNominalThickness(b)
+        hNom= self.getNominalWidth(h)
+        C*= self.getCompressionSizeFactor(b= bNom, h= hNom) # Size factor
         return C*self.getFc(b,h)
     
     def getEAdj(self):
@@ -629,6 +641,80 @@ class SouthernPineWood(DimensionLumberWood):
         :param h: section depth.
         '''
         return self.Fc(max(b,h))
+    
+    def getBendingSizeFactor(self, b, h):
+        ''' Return the size factor for the bending design
+            value Fb according to National Design Specification Supplement
+            table 4B (page 39).
+
+        :param b: nominal section width.
+        :param h: nominal section depth.
+        '''
+        width= max(b,h)
+        thickness= min(b,h)
+        retval= 1.0
+        for s in ['86', '72', '65']:
+            if s in self.grade:
+                className= type(self).__name__
+                methodName= sys._getframe(0).f_code.co_name
+                lmsg.error(className+'.'+methodName+'; not implemented yet for grade: '+self.grade)
+            if s in self.sub_grade:
+                className= type(self).__name__
+                methodName= sys._getframe(0).f_code.co_name
+                lmsg.error(className+'.'+methodName+'; not implemented yet for sub-grade: '+self.sub_grade)
+        if(width>=12*AWCNDS_materials.in2meter):
+            retval= 0.9
+        elif((width>=8*AWCNDS_materials.in2meter) and (abs(thickness-4*AWCNDS_materials.in2meter)<1e-3)):
+            retval= 1.1
+        return retval;
+    
+    def getTensionSizeFactor(self, b, h):
+        ''' Return the size factor for the tension design
+            value Ft according to National Design Specification Supplement
+            table 4A.
+
+        :param b: section width.
+        :param h: section depth.
+        '''
+        width= max(b,h)
+        thickness= min(b,h)
+        retval= 1.0
+        for s in ['86', '72', '65']:
+            if s in self.grade:
+                className= type(self).__name__
+                methodName= sys._getframe(0).f_code.co_name
+                lmsg.error(className+'.'+methodName+'; not implemented yet for grade: '+self.grade)
+            if s in self.sub_grade:
+                className= type(self).__name__
+                methodName= sys._getframe(0).f_code.co_name
+                lmsg.error(className+'.'+methodName+'; not implemented yet for sub-grade: '+self.sub_grade)
+        if(width>=12*AWCNDS_materials.in2meter):
+            retval= 0.9
+        return retval;
+    
+    def getCompressionSizeFactor(self, b, h):
+        ''' Return the size factor for the compression design
+            value Fc according to National Design Specification 
+            2018 Supplement table 4B (page 39).
+
+        :param b: nominal section width.
+        :param h: nominal section depth.
+        '''
+        width= max(b,h)
+        thickness= min(b,h)
+        retval= 1.0
+        for s in ['86', '72', '65']:
+            if s in self.grade:
+                className= type(self).__name__
+                methodName= sys._getframe(0).f_code.co_name
+                lmsg.error(className+'.'+methodName+'; not implemented yet for grade: '+self.grade)
+            if s in self.sub_grade:
+                className= type(self).__name__
+                methodName= sys._getframe(0).f_code.co_name
+                lmsg.error(className+'.'+methodName+'; not implemented yet for sub-grade: '+self.sub_grade)
+        if(width>=12*AWCNDS_materials.in2meter):
+            retval= 0.9
+        return retval;
 
 # Spruce-Pine-Fir reference design values according to table 4A
 # of National Design Specification Supplement page 37
