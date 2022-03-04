@@ -388,6 +388,102 @@ class MemberRestraint(IntEnum):
     compressionEdgeSupport= 2 # 4.4.1.2 (c)
     fullDepthSolidBlocking= 3 # 4.4.1.2 (d)
     bothEdgeSupport= 4 # 4.4.1.2 (e)
+
+class MemberLoadingCondition(object):
+    ''' Parameters defining the member condition in order to obtain
+        its effective length accordint to table 3.3.3 of
+        AWC NDS-2018
+
+    :ivar numberOfConcentratedLoads: number of concentrated loads equally
+                                      spaced along the beam (0: uniform load).
+    :ivar lateralSupport: if true beam has a lateral support on each load.
+    :ivar cantilever: if true cantilever beam otherwise single span beam.    
+    '''
+    def __init__(self, numberOfConcentratedLoads= 0, lateralSupport= False, cantilever= False):
+        ''' Constructor.
+
+        :param numberOfConcentratedLoads: number of concentrated loads equally
+                                          spaced along the beam (0: uniform load).
+        :param lateralSupport: if true beam has a lateral support on each load.
+        :param cantilever: if true cantilever beam otherwise single span beam.
+        '''
+        self.numberOfConcentratedLoads= numberOfConcentratedLoads
+        self.lateralSupport= lateralSupport
+        self.cantilever= cantilever
+
+    def getEffectiveLength(self, unbracedLength, section, majorAxis= True):
+        ''' Return the effective length of the member according to table
+            3.3.3 of NDS-2018.
+
+        :param unbracedLength: unbraced length for the bending axis.
+        :param section: member cross-section.
+        :param majorAxis: if true return the bending axis is the major axis.
+        '''
+        retval= unbracedLength
+        h= section.h
+        if(not majorAxis):
+            h= section.b
+        if(self.cantilever):
+            if(self.numberOfConcentratedLoads==0):
+                retval*= 1.33 # Uniform load
+            else:
+                retval*= 1.87 # Concentrated load at unsupported end.
+        else:
+            ratio= unbracedLength/h
+            if(self.numberOfConcentratedLoads==0):
+                if(ratio<7.0):
+                    retval*= 2.06 # Uniform load
+                else:
+                    retval= 1.63*unbracedLength+3.0*h
+            elif((self.numberOfConcentratedLoads==1) and (not self.lateralSupport)):
+                if(ratio<7.0):
+                    retval*= 1.80 # Uniform load
+                else:
+                    retval= 1.37*unbracedLength+3.0*h
+            elif(self.numberOfConcentratedLoads==1):
+                if(self.lateralSupport):
+                    retval*=1.11
+                else:
+                    lmsg.error('Load condition case not implemented.')
+                    retval*=10.0
+            elif(self.numberOfConcentratedLoads==2):
+                if(self.lateralSupport):
+                    retval*=1.68
+                else:
+                    lmsg.error('Load condition case not implemented.')
+                    retval*=10.0
+            elif(self.numberOfConcentratedLoads==3):
+                if(self.lateralSupport):
+                    retval*=1.54
+                else:
+                    lmsg.error('Load condition case not implemented.')
+                    retval*=10.0
+            elif(self.numberOfConcentratedLoads==4):
+                if(self.lateralSupport):
+                    retval*=1.68
+                else:
+                    lmsg.error('Load condition case not implemented.')
+                    retval*=10.0
+            elif(self.numberOfConcentratedLoads==5):
+                if(self.lateralSupport):
+                    retval*=1.73
+                else:
+                    lmsg.error('Load condition case not implemented.')
+                    retval*=10.0
+            elif(self.numberOfConcentratedLoads==6):
+                if(self.lateralSupport):
+                    retval*=1.78
+                else:
+                    lmsg.error('Load condition case not implemented.')
+                    retval*=10.0
+            elif(self.numberOfConcentratedLoads==7):
+                if(self.lateralSupport):
+                    retval*=1.84
+                else:
+                    lmsg.error('Load condition case not implemented.')
+                    retval*=10.0
+        return retval
+
         
 class WoodSection(object):
     ''' Wood structural cross-section.
@@ -437,7 +533,7 @@ class WoodSection(object):
         :param majorAxis: if true, return the major flexural strength.
         :param chiLT: beam stability factor clause 3.3.3 of AWC-NDS2018 (default= 1.0).
         '''
-        retval= self.getFbAdj()*chiLT
+        retval= self.getFbAdj(majorAxis= majorAxis, Cr= 1.0)*chiLT # Repetition adjustment factor ignored.
         if(majorAxis):
             retval*= self.getElasticSectionModulusZ()
         else:
@@ -490,51 +586,47 @@ class WoodSection(object):
         '''
         CF= None # Capacity factor (efficiency).
         ratioN= self.getAxialEfficiency(Nd, chiN)
-        if(Myd!=0.0 and Mzd!=0.0):
-            className= type(self).__name__
-            methodName= sys._getframe(0).f_code.co_name
-            lmsg.error(className+'.'+methodName+'; biaxial bending not implemented yet.')
-        elif(Myd==0.0 and Mzd==0.0):
+        if(Myd==0.0 and Mzd==0.0):
             CF= ratioN
         else:
+            Sz= self.getElasticSectionModulusZ()
+            Sy= self.getElasticSectionModulusY()
+            Fb1_aster= self.getFlexuralStrength(majorAxis= True, chiLT= 1.0)/Sz # No CL adjustement
+            Fb1_aster2= Fb1_aster*chiLT # CL adjustement; F'b1 in equation 3.9-3
+            Fb2_aster= self.getFlexuralStrength(majorAxis= False, chiLT= 1.0)/Sy # No CL adjustement
+            Fb2_aster2= Fb2_aster*chiLT # CL adjustement; F'b2 in equation 3.9-3
+            axialStress= Nd/self.A() # ft (if Nd>0) or fc (if Nd<0)
+            fb1= abs(Mzd)/Sz # Bending stress (major axis)
+            fb2= abs(Myd)/Sz # Bending stress (minor axis)
             if(abs(Myd)>abs(Mzd)): 
                 if(Nd>0):
-                    Sy= self.getElasticSectionModulusY()
-                    fb= abs(Myd)/Sy
-                    Fb_aster= self.getFlexuralStrength(majorAxis= True, chiLT= 1.0)/Sy # No CL adjustement
-                    CF= ratioN+fb/Fb_aster # equation 3.9-1
+                    CF= ratioN+fb2/Fb2_aster # equation 3.9-1
                     if(Myd!=0.0):
-                        ft= Nd/self.A()
-                        Fb_aster2= Fb_aster*chiLT # CL adjustement
-                        eq392= (fb-ft)/Fb_aster2 # equation 3.9-2
-                        CF= max(CF, eq392)
-                elif(Nd<0):
-                    className= type(self).__name__
-                    methodName= sys._getframe(0).f_code.co_name
-                    lmsg.error(className+'.'+methodName+'; bending and axial compression not implemented yet.')
-                else: # Nd==0
-                    CF= self.getFlexuralEfficiency(Md= Myd, majorAxis= False, chiLT= chiLT) # available flexural strength minor axis.
-            else:
-                Sz= self.getElasticSectionModulusZ()
-                Sy= self.getElasticSectionModulusY()
-                Fb1_aster= self.getFlexuralStrength(majorAxis= True, chiLT= 1.0)/Sz # No CL adjustement
-                Fb2_aster= self.getFlexuralStrength(majorAxis= True, chiLT= 1.0)/Sy
-                fb1= abs(Mzd)/Sz # Bending stress (major axis)
-                Fb1_aster2= Fb1_aster*chiLT # CL adjustement; F'b1 in equation 3.9-3
-                if(Nd>0):
-                    CF= ratioN+fb1/Fb1_aster # equation 3.9-1
-                    if(Mzd!=0.0):
-                        ft= Nd/self.A()
-                        eq392= (fb1-ft)/Fb1_aster2 # equation 3.9-2
+                        eq392= (fb2-axialStress)/Fb2_aster2 # equation 3.9-2
                         CF= max(CF, eq392)
                 elif(Nd<0):
                     # Equation 3.9-3
                     CF= ratioN**2
-                    fc= Nd/self.A() # Compression stress.
-                    FcE1= FcE[0] # major axis.
-                    CF+= fb1/(Fb1_aster2*(1+fc/FcE1)) # fc is negative so -*-=+
                     FcE2= FcE[1] # minor axis.
-                else:
+                    CF+= fb2/(Fb2_aster2*(1+axialStress/FcE2)) # axialStress is negative so -*-=+
+                    FcE1= FcE[0] # major axis.
+                    #CF+= fb1/(Fb1_aster2*(1+axialStress/FcE1-(fb2/FbE)**2)) # axialStress is negative so -*-=+
+                else: # Nd==0
+                    CF= self.getFlexuralEfficiency(Md= Myd, majorAxis= False, chiLT= chiLT) # available flexural strength minor axis.
+            else:
+                if(Nd>0):
+                    CF= ratioN+fb1/Fb1_aster # equation 3.9-1
+                    if(Mzd!=0.0):
+                        eq392= (fb1-axialStress)/Fb1_aster2 # equation 3.9-2
+                        CF= max(CF, eq392)
+                elif(Nd<0):
+                    # Equation 3.9-3
+                    CF= ratioN**2
+                    FcE1= FcE[0] # major axis.
+                    CF+= fb1/(Fb1_aster2*(1+axialStress/FcE1)) # axialStress is negative so -*-=+
+                    FcE2= FcE[1] # minor axis.
+                    #CF+= fb2/(Fb2_aster2*(1+axialStress/FcE2-(fb1/FbE)**2)) # axialStress is negative so -*-=+
+                else: # Nd==0
                     CF= self.getFlexuralEfficiency(Md= Mzd, majorAxis= True, chiLT= chiLT) # reference flexural strength major axis.
         return (CF,)    
 
@@ -987,9 +1079,19 @@ class HeaderSection(WoodRectangularSection):
         ''' Return the allovable bending stress.'''
         return self.getVolumeFactor()*self.wood.Fb_12
 
-    def getFbAdj(self):
-        ''' Return the adjusted value of the allovable bending stress.'''
-        return self.getFb()
+    def getFbAdj(self, majorAxis= True, Cr= 1.0):
+        ''' Return the adjusted value of the allovable bending stress.
+
+        :param majorAxis: if true return adjusted Fb for bending around major axis.
+        :param Cr: repetitive member adjustment factor.
+        '''
+        retval= self.getFb()
+        if(not majorAxis):
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.error(className+'.'+methodName+'; not implemented for minor axis.')
+            retval/=1000.0
+        return retval
     
     def getFcAdj(self):
         ''' Return the adjusted value of the allovable compressive stress.'''
@@ -1287,12 +1389,17 @@ class CustomLumberSection(WoodRectangularSection):
             value Fc.'''
         return self.wood.getCompressionSizeFactor(self.b,self.h)
     
-    def getFbAdj(self, Cr= 1.0):
+    def getFbAdj(self, majorAxis= True, Cr= 1.0):
         ''' Return the adjusted value of Fb.
 
-        :param Cr: repetitive member factor
+        :param majorAxis: if true return adjusted Fb for bending around major axis.
+        :param Cr: repetitive member adjustment factor
         '''
-        return self.wood.getFbAdj(b= self.b, h= self.h, Cr= Cr)
+        b= self.b
+        h= self.h
+        if(not majorAxis):
+            h, b = b, h
+        return self.wood.getFbAdj(b= b, h= h, Cr= Cr)
     
     def getFtAdj(self):
         ''' Return the adjusted value of Ft.
@@ -1309,6 +1416,10 @@ class CustomLumberSection(WoodRectangularSection):
         :param Cb: bearing area factor
         '''
         return self.wood.getFc_perpAdj(Cb)
+    
+    def getFc(self):
+        ''' Return the value of Fc.'''
+        return self.wood.getFc(self.b,self.h)
     
     def getFcAdj(self):
         ''' Return the adjusted value of Fc.'''

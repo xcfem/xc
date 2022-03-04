@@ -89,7 +89,7 @@ for key in loadCases:
     Fc_aster2= column.getFcAdj()
     results[key]['Fc**']= Fc_aster2/psiToPa
     # Bending
-    CL= column.getBeamStabilityFactor(numberOfConcentratedLoads= 0, lateralSupport= False, cantilever= False)
+    CL= column.getBeamStabilityFactor()
     results[key]['CL']= CL
     Fb_aster2= column.getFbAdj()
     results[key]['Fb**']= Fb_aster2/psiToPa

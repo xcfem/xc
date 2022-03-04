@@ -51,9 +51,9 @@ Fct= beam.section.wood.Fct
 Fv= beam.section.wood.Fv
 
 # Beam Stability Factor.
-le= beam.getEffectiveLength(numberOfConcentratedLoads= 0, lateralSupport= False, cantilever= False) # Effective length
-RB= beam.getBendingSlendernessRatio(numberOfConcentratedLoads= 0, lateralSupport= False, cantilever= False)
-FbE= beam.getFbECriticalBucklingDesignValue(numberOfConcentratedLoads= 0, lateralSupport= False, cantilever= False)
+le= beam.getEffectiveLength() # Effective length
+RB= beam.getBendingSlendernessRatio()
+FbE= beam.getFbECriticalBucklingDesignValue()
 
 Cfu= 1.0
 CM= 1.0
@@ -105,7 +105,7 @@ for key in loadCases:
     M= loadVector[1]*length**2/8.0
     Fb_aster= beam.section.getFbAdj(Cr= Cr)
     results[key]['Fb*']= Fb_aster/psiToPa
-    CL= beam.getBeamStabilityFactor(numberOfConcentratedLoads= 0, lateralSupport= False, cantilever= False)
+    CL= beam.getBeamStabilityFactor()
     results[key]['CL']= CL
     Fb_aster2= beam.getFbAdj()
     results[key]['Fb**']= Fb_aster2/psiToPa

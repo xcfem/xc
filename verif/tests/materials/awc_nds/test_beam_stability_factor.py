@@ -24,11 +24,11 @@ psiToPa= 6894.76
 # Materials
 # Douglas Fir-Larch Select structural.
 wood= dimensional_lumber.DouglasFirLarchWood(grade= 'structural')
-
 beamSection= AWCNDS_materials.CustomLumberSection("DouglasFirLarch",b=3.5*inchToMeter,h=15.25*inchToMeter, woodMaterial= wood)
 
 length= 20.0*footToMeter
-beam= AWCNDS_limit_state_checking.BeamMember(unbracedLength= length, section= beamSection)
+loadingCondition= AWCNDS_materials.MemberLoadingCondition(numberOfConcentratedLoads= 1, lateralSupport= False, cantilever= False)
+beam= AWCNDS_limit_state_checking.BeamMember(unbracedLength= length, section= beamSection, memberLoadingCondition= loadingCondition)
 Fb= beam.section.wood.Fb
 E= beam.section.wood.E
 Emin= beam.section.wood.Emin
@@ -63,10 +63,10 @@ FbAdj= beam.section.getFbAdj(Cr= Cr)
 ratio0= abs(FbAdj-Fbp_aster)/Fbp_aster
 
 lu= beam.unbracedLength
-le= beam.getEffectiveLength(numberOfConcentratedLoads= 1, lateralSupport= False, cantilever= False)
-RB= beam.getBendingSlendernessRatio(numberOfConcentratedLoads= 1, lateralSupport= False, cantilever= False)
-FbE= beam.getFbECriticalBucklingDesignValue(numberOfConcentratedLoads= 1, lateralSupport= False, cantilever= False)
-CL= beam.getBeamStabilityFactor(numberOfConcentratedLoads= 1, lateralSupport= False, cantilever= False)
+le= beam.getEffectiveLength()
+RB= beam.getBendingSlendernessRatio()
+FbE= beam.getFbECriticalBucklingDesignValue()
+CL= beam.getBeamStabilityFactor()
 Fb_aster= Fb*CL
     
 ratio1= abs(Fb-1500*psiToPa)/1500
