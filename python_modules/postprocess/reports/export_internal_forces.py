@@ -38,7 +38,10 @@ def getInternalForcesDict(nmbComb, elems, vonMisesStressId= 'max_von_mises_stres
         FcE= None
         if e.hasProp('FcE'): # AWC NDS-2018 critical buckling design values for compression.
             FcE= e.getProp('FcE')
-        return chiLT, chiN, FcE
+        FbE= None
+        if e.hasProp('FbE'): # AWC NDS-2018 critical buckling design value for bending.
+            FbE= e.getProp('FbE')
+        return chiLT, chiN, FcE, FbE
            
     combInternalForcesDict= dict()
     outDict= dict()
@@ -80,16 +83,19 @@ def getInternalForcesDict(nmbComb, elems, vonMisesStressId= 'max_von_mises_stres
             internalForcesDict[0]= internalForces.getDict()
             internalForces= internal_forces.CrossSectionInternalForces(N2,V2,0.0,0.0,0.0,M2) # Internal forces at the end of the bar.
             internalForcesDict[1]= internalForces.getDict()
-            chiLT, chiN, FcE = getExtendedProperties(e)
+            chiLT, chiN, FcE, FbE = getExtendedProperties(e)
             if(chiLT): # lateral buckling reduction factor.
                 internalForcesDict[0]['chiLT']= chiLT
                 internalForcesDict[1]['chiLT']= chiLT
             if(chiN): # axial load reduction reduction factor.
                 internalForcesDict[0]['chiN']= chiN
                 internalForcesDict[1]['chiN']= chiN
-            if(FcE): # AWC NDS 2018 critical buckling design values for compression.
+            if(FcE!=None): # AWC NDS 2018 critical buckling design values for compression.
                 internalForcesDict[0]['FcE']= FcE
                 internalForcesDict[1]['FcE']= FcE
+            if(FbE!=None): # AWC NDS 2018 critical buckling design values for bending.
+                internalForcesDict[0]['FbE']= FbE
+                internalForcesDict[1]['FbE']= FbE
             elemDict['internalForces']= internalForcesDict
         elif('Beam' in elementType):
             e.getResistingForce()
@@ -99,16 +105,19 @@ def getInternalForcesDict(nmbComb, elems, vonMisesStressId= 'max_von_mises_stres
             internalForcesDict[0]= internalForces.getDict()
             internalForces= internal_forces.CrossSectionInternalForces(N2,Vy2,Vz2,T2,My2,Mz2) # Internal forces at the end of the bar.
             internalForcesDict[1]= internalForces.getDict()
-            chiLT, chiN, FcE= getExtendedProperties(e)
+            chiLT, chiN, FcE, FbE= getExtendedProperties(e)
             if(chiLT): # ateral buckling reduction factor.
                 internalForcesDict[0]['chiLT']= chiLT
                 internalForcesDict[1]['chiLT']= chiLT
             if(chiN): # axial load reduction reduction factor.
                 internalForcesDict[0]['chiN']= chiN
                 internalForcesDict[1]['chiN']= chiN
-            if(FcE): # AWC NDS 2018 critical buckling design values for compression.
+            if(FcE!=None): # AWC NDS 2018 critical buckling design values for compression.
                 internalForcesDict[0]['FcE']= FcE
                 internalForcesDict[1]['FcE']= FcE
+            if(FbE!=None): # AWC NDS 2018 critical buckling design values for bending.
+                internalForcesDict[0]['FbE']= FbE
+                internalForcesDict[1]['FbE']= FbE
             elemDict['internalForces']= internalForcesDict
         elif('Truss' in elementType):
             e.getResistingForce()
@@ -116,12 +125,12 @@ def getInternalForcesDict(nmbComb, elems, vonMisesStressId= 'max_von_mises_stres
             [[N1], [N2]]= model_inquiry.getValuesAtNodes(e,['N'], False)
             internalForces= internal_forces.CrossSectionInternalForces(N1) # Internal forces at the origin of the bar.
             internalForcesDict[0]= internalForces.getDict()
-            for extProp in ['chiLT', 'chiN', 'FcE']: # Origin extended properties.
+            for extProp in ['chiLT', 'chiN', 'FcE', 'FbE']: # Origin extended properties.
                 if e.hasProp(extProp):
                     internalForcesDict[0][extProp]= e.getProp(extProp)
             internalForces= internal_forces.CrossSectionInternalForces(N2) # Internal forces at the end of the bar.
             internalForcesDict[1]= internalForces.getDict()
-            for extProp in ['chiLT', 'chiN', 'FcE']: # End extended properties.
+            for extProp in ['chiLT', 'chiN', 'FcE', 'FbE']: # End extended properties.
                 if e.hasProp(extProp):
                     internalForcesDict[1][extProp]= e.getProp(extProp)
             elemDict['internalForces']= internalForcesDict
@@ -177,13 +186,13 @@ def exportInternalForces(nmbComb, elems, fDesc):
             [[N1, My1, Mz1, Vy1, Vz1, T1], [N2, My2, Mz2, Vy2, Vz2, T2]]= model_inquiry.getValuesAtNodes(e, ['N', 'My', 'Mz', 'Vy', 'Vz', 'T'], False)
             internalForces= internal_forces.CrossSectionInternalForces(N1,Vy1,Vz1,T1,My1,Mz1) # Internal forces at the origin of the bar.
             originStr= nmbComb+", "+str(e.tag)+", 0, "+internalForces.getCSVString()
-            for extProp in ['chiLT', 'chiN', 'FcE']: # Origin extended properties.
+            for extProp in ['chiLT', 'chiN', 'FcE', 'FbE']: # Origin extended properties.
                 if e.hasProp(extProp):
                     originStr+= " , "+str(e.getProp(extProp))
             fDesc.write(originStr+'\n')
             internalForces= internal_forces.CrossSectionInternalForces(N2,Vy2,Vz2,T2,My2,Mz2) # Internal forces at the end of the bar.
             endStr= nmbComb+", "+str(e.tag)+", 1, "+internalForces.getCSVString()
-            for extProp in ['chiLT', 'chiN', 'FcE']: # End extended properties.
+            for extProp in ['chiLT', 'chiN', 'FcE', 'FbE']: # End extended properties.
                 if e.hasProp(extProp):
                     endStr+= " , "+str(e.getProp(extProp))
             fDesc.write(endStr+'\n')
@@ -192,13 +201,13 @@ def exportInternalForces(nmbComb, elems, fDesc):
             [[N1], [N2]]= model_inquiry.getValuesAtNodes(e,['N'], False)
             internalForces= internal_forces.CrossSectionInternalForces(N1) # Internal forces at the origin of the bar.
             originStr= nmbComb+", "+str(e.tag)+", 0, "+internalForces.getCSVString()
-            for extProp in ['chiLT', 'chiN', 'FcE']: # Origin extended properties.
+            for extProp in ['chiLT', 'chiN', 'FcE', 'FbE']: # Origin extended properties.
                 if e.hasProp(extProp):
                     originStr+= " , "+str(e.getProp(extProp))
             fDesc.write(originStr+'\n')
             internalForces= internal_forces.CrossSectionInternalForces(N2) # Internal forces at the end of the bar.
             endStr= nmbComb+", "+str(e.tag)+", 1, "+internalForces.getCSVString()
-            for extProp in ['chiLT', 'chiN', 'FcE']: # End extended properties.
+            for extProp in ['chiLT', 'chiN', 'FcE', 'FbE']: # End extended properties.
                 if e.hasProp(extProp):
                     endStr+= " , "+str(e.getProp(extProp))
             fDesc.write(endStr+'\n')

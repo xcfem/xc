@@ -498,7 +498,7 @@ class WoodSection(object):
         self.xc_wood_material= None
         self.xc_section= None
         
-    def setupULSControlVars(self, elems, chiN=1.0, chiLT=1.0, FcE=(0.0,0.0)):
+    def setupULSControlVars(self, elems, chiN=1.0, chiLT=1.0, FcE=(0.0,0.0), FbE= 0.0):
         '''For each element creates the variables
            needed to check ultimate limit state criterion to satisfy.
 
@@ -506,12 +506,14 @@ class WoodSection(object):
         :param chiN: column stability factor clause 3.7.1 of AWC-NDS2018 (default= 1.0).
         :param chiLT: beam stability factor clause 3.3.3 of AWC-NDS2018 (default= 1.0).
         :param FcE: Critical buckling design values for compression.
+        :param FbE: Critical buckling design value for bending.
         '''
         vc.defVarsEnvelopeInternalForcesBeamElems(elems)
         for e in elems:
             e.setProp('chiLT',chiLT) # Lateral torsional buckling reduction factor.
             e.setProp('chiN',chiN) # Axial strength reduction factor.
             e.setProp('FcE', FcE) # Critical buckling design values for compression.
+            e.setProp('FbE', FbE) # Critical buckling design value for bending.
             e.setProp('FCTNCP',[-1.0,-1.0]) #Normal stresses efficiency.
             e.setProp('FCVCP',[-1.0,-1.0]) #Shear stresses efficiency.
             e.setProp('crossSection', self)
@@ -572,7 +574,7 @@ class WoodSection(object):
         return abs(Md)/McRd
 
         
-    def getBiaxialBendingEfficiency(self, Nd, Myd, Mzd, FcE= None, chiN=1.0, chiLT=1.0):
+    def getBiaxialBendingEfficiency(self, Nd, Myd, Mzd, FcE= None, FbE= None, chiN=1.0, chiLT=1.0):
         '''Return biaxial bending efficiency according to clause
            3.9 of AWC-NDS2018.
 
@@ -581,6 +583,8 @@ class WoodSection(object):
         :param Mzd: required bending strength (major axis).
         :param FcE: critical buckling design value for compression
                     members (F_{cE}) as defined in section 3.9.2 of NDS-2.018
+        :param FbE: critical bucking design value for bending according to 
+                    section 3.3.3.8 of NDS-2018.
         :param chiN: column stability factor clause 3.7.1 of AWC-NDS2018 (default= 1.0).
         :param chiLT: beam stability factor clause 3.3.3 of AWC-NDS2018 (default= 1.0).
         '''
@@ -589,12 +593,12 @@ class WoodSection(object):
         if(Myd==0.0 and Mzd==0.0):
             CF= ratioN
         else:
-            Sz= self.getElasticSectionModulusZ()
-            Sy= self.getElasticSectionModulusY()
             stressTreshold= 1.0/self.A() # Small stress.
             axialStress= Nd/self.A() # ft (if Nd>0) or fc (if Nd<0)
+            Sz= self.getElasticSectionModulusZ()
             fb1= abs(Mzd)/Sz # Bending stress (major axis)
-            fb2= abs(Myd)/Sz # Bending stress (minor axis)
+            Sy= self.getElasticSectionModulusY()
+            fb2= abs(Myd)/Sy # Bending stress (minor axis)
             if(abs(Myd)>abs(Mzd)): 
                 if(Nd>0):
                     CF= ratioN+fb2/Fb2_aster # equation 3.9-1
@@ -606,16 +610,19 @@ class WoodSection(object):
                 elif(Nd<0):
                     # Equation 3.9-3
                     CF= ratioN**2
+                    FcE2= FcE[1] # minor axis.
+                    eq394= abs(axialStress)/FcE2
                     if(fb2>stressTreshold): # not so small stress. 
-                        FcE2= FcE[1] # minor axis.
                         Fb2_aster= self.getFlexuralStrength(majorAxis= False, chiLT= 1.0)/Sy # No CL adjustement
                         Fb2_aster2= Fb2_aster*chiLT # CL adjustement; F'b2 in equation 3.9-3
                         CF+= fb2/(Fb2_aster2*(1+axialStress/FcE2)) # axialStress is negative so -*-=+
+                        eq394+= (fb2/FbE)**2
                     if(fb1>stressTreshold): # not so small stress. 
                         FcE1= FcE[0] # major axis.
                         Fb1_aster= self.getFlexuralStrength(majorAxis= True, chiLT= 1.0)/Sz # No CL adjustement
                         Fb1_aster2= Fb1_aster*chiLT # CL adjustement; F'b1 in equation 3.9-3    
                         CF+= fb1/(Fb1_aster2*(1+axialStress/FcE1-(fb2/FbE)**2)) # axialStress is negative so -*-=+
+                    CF= max(CF, eq394)
                 else: # Nd==0
                     CF= self.getFlexuralEfficiency(Md= Myd, majorAxis= False, chiLT= chiLT) # available flexural strength minor axis.
             else:
@@ -670,9 +677,10 @@ class WoodSection(object):
         chiLT= elem.getProp('chiLT') # beam stability factor.
         chiN= elem.getProp('chiN') # column stability factor.
         FcE= elem.getProp('FcE') # critical buckling design value for compression
+        FbE= elem.getProp('FbE') # critical buckling design value for bending
         [[N1, My1, Mz1, Vy1], [N2, My2, Mz2, Vy2]]= model_inquiry.getValuesAtNodes(elem, ['N', 'My', 'Mz', 'Vy'], silent= False)
-        FCTN1= self.getBiaxialBendingEfficiency(Nd= N1, Myd= My1, Mzd= Mz1, FcE= FcE, chiN= chiN, chiLT= chiLT)[0]
-        FCTN2= self.getBiaxialBendingEfficiency(Nd= N2, Myd= My2, Mzd= Mz2, FcE= FcE, chiN= chiN, chiLT= chiLT)[0]
+        FCTN1= self.getBiaxialBendingEfficiency(Nd= N1, Myd= My1, Mzd= Mz1, FcE= FcE, FbE= FbE, chiN= chiN, chiLT= chiLT)[0]
+        FCTN2= self.getBiaxialBendingEfficiency(Nd= N2, Myd= My2, Mzd= Mz2, FcE= FcE, FbE= FbE, chiN= chiN, chiLT= chiLT)[0]
         fctn= elem.getProp("FCTNCP")
         if(FCTN1 > fctn[0]):
             fctn[0]= FCTN1

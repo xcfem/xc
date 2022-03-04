@@ -53,7 +53,7 @@ class Member(wood_member_base.Member):
         else:
             self.unbracedLengthZ= unbracedLengthX
             
-    def installULSControlRecorder(self, recorderType, chiN: float= 1.0, chiLT: float= 1.0, FcE= (0.0,0.0), calcSet= None):
+    def installULSControlRecorder(self, recorderType, chiN: float= 1.0, chiLT: float= 1.0, FcE= (0.0,0.0), FbE= 0.0, calcSet= None):
         '''Install recorder for verification of ULS criterion.
 
         :param recorderType: type of the recorder to install.
@@ -65,7 +65,7 @@ class Member(wood_member_base.Member):
                         'None' the member elements will be appended to this set.
         '''
         recorder= self.createRecorder(recorderType, calcSet)
-        self.crossSection.setupULSControlVars(self.elemSet, chiN= chiN, chiLT= chiLT, FcE= FcE)
+        self.crossSection.setupULSControlVars(self.elemSet, chiN= chiN, chiLT= chiLT, FcE= FcE, FbE= FbE)
         nodHndlr= self.getPreprocessor().getNodeHandler        
         if(nodHndlr.numDOFs==3):
             recorder.callbackRecord= controlULSCriterion2D()
@@ -403,7 +403,7 @@ class ColumnMember(MemberBase):
         # Critical buckling design values for compression.
         FcE= self.getFcE()
         FbE= self.getFbECriticalBucklingDesignValue()
-        return self.section.getBiaxialBendingEfficiency(Nd= Nd, Myd= Myd, Mzd= Mzd, FcE= FcE, chiN= chiN, chiLT= chiLT)
+        return self.section.getBiaxialBendingEfficiency(Nd= Nd, Myd= Myd, Mzd= Mzd, FcE= FcE, FbE= FbE, chiN= chiN, chiLT= chiLT)
 
 
 class AWCNDSBiaxialBendingControlVars(cv.BiaxialBendingStrengthControlVars):
@@ -412,7 +412,7 @@ class AWCNDSBiaxialBendingControlVars(cv.BiaxialBendingStrengthControlVars):
 
     :ivar FcE: critical buckling design value for compression members (both axis).
     '''
-    def __init__(self,idSection= 'nil',combName= 'nil',CF= -1.0,N= 0.0,My= 0.0,Mz= 0.0,Ncrd=0.0,McRdy=0.0,McRdz=0.0, FcE= (0.0,0.0), chiLT=1.0, chiN= 1.0):
+    def __init__(self,idSection= 'nil',combName= 'nil',CF= -1.0,N= 0.0,My= 0.0,Mz= 0.0,Ncrd=0.0,McRdy=0.0,McRdz=0.0, FcE= (0.0,0.0), FbE= 0.0, chiLT=1.0, chiN= 1.0):
         '''
         Constructor.
 
@@ -426,22 +426,26 @@ class AWCNDSBiaxialBendingControlVars(cv.BiaxialBendingStrengthControlVars):
         :param McRdy:    design moment strength about Y (weak) axis
         :param McRdz:    design moment strength about Z (strong) axis
         :param FcE: critical buckling design value for compression members (both axis).
+        :param FbE: critical bucking design value for bending according to 
+                    section 3.3.3.8 of NDS-2018.
         :param chiLT:    reduction factor for lateral-torsional buckling (defaults to 1)
         :param chiN:     reduction factor for compressive strength (defaults to 1)
         '''
         super(AWCNDSBiaxialBendingControlVars,self).__init__(idSection,combName,CF,N,My,Mz,Ncrd=Ncrd,McRdy=McRdy,McRdz=McRdz, chiLT=chiLT, chiN= chiN)
         self.FcE= FcE
+        self.FbE= FbE
         
     def getDict(self):
         ''' Return a dictionary containing the object data.'''
         retval= super(AWCNDSBiaxialBendingControlVars,self).getDict()
-        retval.update({'FcE':self.FcE})
+        retval.update({'FcE':self.FcE, 'FbE':self.FbE})
         return retval
        
     def setFromDict(self,dct):
         ''' Set the data values from the dictionary argument.'''
         super(AWCNDSBiaxialBendingControlVars,self).setFromDict(dct)
         self.FcE= dct['FcE']
+        self.FbE= dct['FbE']
 
 class BiaxialBendingNormalStressController(lsc.LimitStateControllerBase2Sections):
     '''Object that controls normal stresses limit state.'''
@@ -456,7 +460,7 @@ class BiaxialBendingNormalStressController(lsc.LimitStateControllerBase2Sections
             its value if its bigger than the previous one.
 
         :param elem: finite element whose material will be checked.
-        :param elementInternalForces: internal forces acting on the steel shape.
+        :param elementInternalForces: internal forces acting on the cross-section.
         '''
         # Get section properties.
         crossSection= elem.getProp('crossSection')
@@ -468,12 +472,12 @@ class BiaxialBendingNormalStressController(lsc.LimitStateControllerBase2Sections
             # Check each element section.
             for lf in elementInternalForces:
                 # Compute efficiency.
-                CFtmp= crossSection.getBiaxialBendingEfficiency(Nd= lf.N, Myd= lf.My, Mzd= lf.Mz, FcE= lf.FcE, chiN= lf.chiN, chiLT= lf.chiLT)[0]
+                CFtmp= crossSection.getBiaxialBendingEfficiency(Nd= lf.N, Myd= lf.My, Mzd= lf.Mz, FcE= lf.FcE, FbE= lf.FbE, chiN= lf.chiN, chiLT= lf.chiLT)[0]
                 sectionLabel= self.getSectionLabel(lf.idSection)
                 label= self.limitStateLabel+sectionLabel
                 # Update efficiency.
                 if(CFtmp>elem.getProp(label).CF):
-                    elem.setProp(label,self.ControlVars(idSection= sectionLabel, combName= lf.idComb, CF= CFtmp, N= lf.N, My= lf.My, Mz= lf.Mz, FcE= lf.FcE, chiN= lf.chiN, chiLT= lf.chiLT))
+                    elem.setProp(label,self.ControlVars(idSection= sectionLabel, combName= lf.idComb, CF= CFtmp, N= lf.N, My= lf.My, Mz= lf.Mz, FcE= lf.FcE, FbE= lf.FbE, chiN= lf.chiN, chiLT= lf.chiLT))
                 
 class ShearController(lsc.LimitStateControllerBase2Sections):
     '''Object that controls shear limit state.'''

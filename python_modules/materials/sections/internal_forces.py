@@ -94,6 +94,14 @@ class CrossSectionInternalForces:
         retval= dict()
         retval['N']= self.N; retval['Vy']= self.Vy; retval['Vz']= self.Vz
         retval['T']= self.T; retval['My']= self.My; retval['Mz']= self.Mz
+        # if(hasattr(self, 'chiLT')):
+        #     retval['chiLT']= chiLT
+        # if(hasattr(self, 'chiN')):
+        #     retval['chiN']= chiN
+        # if(hasattr(self, 'FcE')):
+        #     retval['FcE']= FcE
+        # if(hasattr(self, 'FbE')):
+        #     retval['FbE']= FbE
         return retval
 
     def setFromDict(self,dct):
@@ -111,8 +119,11 @@ class CrossSectionInternalForces:
         if('chiN' in dct.keys()): 
             self.chiN= dct['chiN']
         # AWC NDS-2018 critical buckling design values for compression.
-        if('FcE' in dct.keys()): 
+        if('FcE' in dct.keys()):
             self.FcE= dct['FcE']
+        # AWC NDS-2018 critical buckling design value for bending.
+        if('FbE' in dct.keys()): 
+            self.FbE= dct['FbE']
 
     def getCSVString(self):
         '''returns a comma separated values string that represents the
