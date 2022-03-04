@@ -591,41 +591,55 @@ class WoodSection(object):
         else:
             Sz= self.getElasticSectionModulusZ()
             Sy= self.getElasticSectionModulusY()
-            Fb1_aster= self.getFlexuralStrength(majorAxis= True, chiLT= 1.0)/Sz # No CL adjustement
-            Fb1_aster2= Fb1_aster*chiLT # CL adjustement; F'b1 in equation 3.9-3
-            Fb2_aster= self.getFlexuralStrength(majorAxis= False, chiLT= 1.0)/Sy # No CL adjustement
-            Fb2_aster2= Fb2_aster*chiLT # CL adjustement; F'b2 in equation 3.9-3
+            stressTreshold= 1.0/self.A() # Small stress.
             axialStress= Nd/self.A() # ft (if Nd>0) or fc (if Nd<0)
             fb1= abs(Mzd)/Sz # Bending stress (major axis)
             fb2= abs(Myd)/Sz # Bending stress (minor axis)
             if(abs(Myd)>abs(Mzd)): 
                 if(Nd>0):
                     CF= ratioN+fb2/Fb2_aster # equation 3.9-1
-                    if(Myd!=0.0):
+                    if(fb2>stressTreshold): # not so small stress. 
+                        Fb2_aster= self.getFlexuralStrength(majorAxis= False, chiLT= 1.0)/Sy # No CL adjustement
+                        Fb2_aster2= Fb2_aster*chiLT # CL adjustement; F'b2 in equation 3.9-3
                         eq392= (fb2-axialStress)/Fb2_aster2 # equation 3.9-2
                         CF= max(CF, eq392)
                 elif(Nd<0):
                     # Equation 3.9-3
                     CF= ratioN**2
-                    FcE2= FcE[1] # minor axis.
-                    CF+= fb2/(Fb2_aster2*(1+axialStress/FcE2)) # axialStress is negative so -*-=+
-                    FcE1= FcE[0] # major axis.
-                    #CF+= fb1/(Fb1_aster2*(1+axialStress/FcE1-(fb2/FbE)**2)) # axialStress is negative so -*-=+
+                    if(fb2>stressTreshold): # not so small stress. 
+                        FcE2= FcE[1] # minor axis.
+                        Fb2_aster= self.getFlexuralStrength(majorAxis= False, chiLT= 1.0)/Sy # No CL adjustement
+                        Fb2_aster2= Fb2_aster*chiLT # CL adjustement; F'b2 in equation 3.9-3
+                        CF+= fb2/(Fb2_aster2*(1+axialStress/FcE2)) # axialStress is negative so -*-=+
+                    if(fb1>stressTreshold): # not so small stress. 
+                        FcE1= FcE[0] # major axis.
+                        Fb1_aster= self.getFlexuralStrength(majorAxis= True, chiLT= 1.0)/Sz # No CL adjustement
+                        Fb1_aster2= Fb1_aster*chiLT # CL adjustement; F'b1 in equation 3.9-3    
+                        CF+= fb1/(Fb1_aster2*(1+axialStress/FcE1-(fb2/FbE)**2)) # axialStress is negative so -*-=+
                 else: # Nd==0
                     CF= self.getFlexuralEfficiency(Md= Myd, majorAxis= False, chiLT= chiLT) # available flexural strength minor axis.
             else:
                 if(Nd>0):
-                    CF= ratioN+fb1/Fb1_aster # equation 3.9-1
-                    if(Mzd!=0.0):
+                    CF= ratioN # equation 3.9-1 part 1
+                    if(fb1>stressTreshold): # not so small stress.
+                        Fb1_aster= self.getFlexuralStrength(majorAxis= True, chiLT= 1.0)/Sz # No CL adjustement
+                        Fb1_aster2= Fb1_aster*chiLT # CL adjustement; F'b1 in equation 3.9-3    
+                        CF+= fb1/Fb1_aster # equation 3.9-1 part 2
                         eq392= (fb1-axialStress)/Fb1_aster2 # equation 3.9-2
                         CF= max(CF, eq392)
                 elif(Nd<0):
                     # Equation 3.9-3
                     CF= ratioN**2
-                    FcE1= FcE[0] # major axis.
-                    CF+= fb1/(Fb1_aster2*(1+axialStress/FcE1)) # axialStress is negative so -*-=+
-                    FcE2= FcE[1] # minor axis.
-                    #CF+= fb2/(Fb2_aster2*(1+axialStress/FcE2-(fb1/FbE)**2)) # axialStress is negative so -*-=+
+                    if(fb1>stressTreshold): # not so small stress. 
+                        FcE1= FcE[0] # major axis.
+                        Fb1_aster= self.getFlexuralStrength(majorAxis= True, chiLT= 1.0)/Sz # No CL adjustement
+                        Fb1_aster2= Fb1_aster*chiLT # CL adjustement; F'b1 in equation 3.9-3    
+                        CF+= fb1/(Fb1_aster2*(1+axialStress/FcE1)) # axialStress is negative so -*-=+
+                    if(fb2>stressTreshold): # not so small stress. 
+                        FcE2= FcE[1] # minor axis.
+                        Fb2_aster= self.getFlexuralStrength(majorAxis= False, chiLT= 1.0)/Sy # No CL adjustement
+                        Fb2_aster2= Fb2_aster*chiLT # CL adjustement; F'b2 in equation 3.9-3
+                        CF+= fb2/(Fb2_aster2*(1+axialStress/FcE2-(fb1/FbE)**2)) # axialStress is negative so -*-=+
                 else: # Nd==0
                     CF= self.getFlexuralEfficiency(Md= Mzd, majorAxis= True, chiLT= chiLT) # reference flexural strength major axis.
         return (CF,)    
