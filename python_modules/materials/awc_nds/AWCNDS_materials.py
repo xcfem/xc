@@ -494,48 +494,48 @@ class WoodSection(object):
             className= type(self).__name__
             methodName= sys._getframe(0).f_code.co_name
             lmsg.error(className+'.'+methodName+'; biaxial bending not implemented yet.')
-        if(abs(Myd)>abs(Mzd)): 
-            if(Nd>0):
-                Sy= self.getElasticSectionModulusY()
-                fb= Myd/Sy
-                Fb_aster= self.getFlexuralStrength(majorAxis= True, chiLT= 1.0)/Sy # No CL adjustement
-                CF= ratioN+fb/Fb_aster # equation 3.9-1
-                if(Myd!=0.0):
-                    ft= Nd/self.A()
-                    Fb_aster2= Fb_aster*chiLT # CL adjustement
-                    eq392= (fb-ft)/Fb_aster2 # equation 3.9-2
-                    CF= max(CF, eq392)
-            elif(Nd<0):
-                className= type(self).__name__
-                methodName= sys._getframe(0).f_code.co_name
-                lmsg.error(className+'.'+methodName+'; bending and axial compression not implemented yet.')
-            else: # Nd==0
-                CF= self.getFlexuralEfficiency(Md= Myd, majorAxis= False, chiLT= chiLT) # available flexural strength minor axis.
+        elif(Myd==0.0 and Mzd==0.0):
+            CF= ratioN
         else:
-            Sz= self.getElasticSectionModulusZ()
-            Sy= self.getElasticSectionModulusY()
-            Fb1_aster= self.getFlexuralStrength(majorAxis= True, chiLT= 1.0)/Sz # No CL adjustement
-            Fb2_aster= self.getFlexuralStrength(majorAxis= True, chiLT= 1.0)/Sy
-            fb1= Mzd/Sz # Bending stress (major axis)
-            if(Nd>0):
-                CF= ratioN+fb1/Fb1_aster # equation 3.9-1
-                if(Mzd!=0.0):
-                    ft= Nd/self.A()
-                    Fb1_aster2= Fb1_aster*chiLT # CL adjustement
-                    eq392= (fb1-ft)/Fb1_aster2 # equation 3.9-2
-                    CF= max(CF, eq392)
-            elif(Nd<0):
-                # Equation 3.9-3
-                CF= ratioN
-                fc= Nd/self.A() # Compression stress.
-                Fb1_aster2= Fb1_aster*chiLT # F'b1 in equation 3.9-3.
-                FcE1= FcE[0] # major axis.
-                print('F\'b1= ',Fb1_aster2/6894.76)
-                print('FcE1= ',FcE1/6894.76)
-                FcE2= FcE[1] # minor axis.
+            if(abs(Myd)>abs(Mzd)): 
+                if(Nd>0):
+                    Sy= self.getElasticSectionModulusY()
+                    fb= abs(Myd)/Sy
+                    Fb_aster= self.getFlexuralStrength(majorAxis= True, chiLT= 1.0)/Sy # No CL adjustement
+                    CF= ratioN+fb/Fb_aster # equation 3.9-1
+                    if(Myd!=0.0):
+                        ft= Nd/self.A()
+                        Fb_aster2= Fb_aster*chiLT # CL adjustement
+                        eq392= (fb-ft)/Fb_aster2 # equation 3.9-2
+                        CF= max(CF, eq392)
+                elif(Nd<0):
+                    className= type(self).__name__
+                    methodName= sys._getframe(0).f_code.co_name
+                    lmsg.error(className+'.'+methodName+'; bending and axial compression not implemented yet.')
+                else: # Nd==0
+                    CF= self.getFlexuralEfficiency(Md= Myd, majorAxis= False, chiLT= chiLT) # available flexural strength minor axis.
             else:
-                CF= self.getFlexuralEfficiency(Md= Mzd, majorAxis= True, chiLT= chiLT) # reference flexural strength major axis.
-                
+                Sz= self.getElasticSectionModulusZ()
+                Sy= self.getElasticSectionModulusY()
+                Fb1_aster= self.getFlexuralStrength(majorAxis= True, chiLT= 1.0)/Sz # No CL adjustement
+                Fb2_aster= self.getFlexuralStrength(majorAxis= True, chiLT= 1.0)/Sy
+                fb1= abs(Mzd)/Sz # Bending stress (major axis)
+                Fb1_aster2= Fb1_aster*chiLT # CL adjustement; F'b1 in equation 3.9-3
+                if(Nd>0):
+                    CF= ratioN+fb1/Fb1_aster # equation 3.9-1
+                    if(Mzd!=0.0):
+                        ft= Nd/self.A()
+                        eq392= (fb1-ft)/Fb1_aster2 # equation 3.9-2
+                        CF= max(CF, eq392)
+                elif(Nd<0):
+                    # Equation 3.9-3
+                    CF= ratioN**2
+                    fc= Nd/self.A() # Compression stress.
+                    FcE1= FcE[0] # major axis.
+                    CF+= fb1/(Fb1_aster2*(1+fc/FcE1)) # fc is negative so -*-=+
+                    FcE2= FcE[1] # minor axis.
+                else:
+                    CF= self.getFlexuralEfficiency(Md= Mzd, majorAxis= True, chiLT= chiLT) # reference flexural strength major axis.
         return (CF,)    
 
     
