@@ -286,6 +286,14 @@ class DimensionLumberWood(AWCNDS_materials.Wood):
         '''
         return self.Fb
     
+    def getFt(self, b, h):
+        ''' Return the value of Ft.
+
+        :param b: section width.
+        :param h: section depth
+        '''
+        return self.Ft
+    
     def getFbAdj(self, b, h, Cr= 1.0):
         ''' Return the adjusted value of Fb according
             to AWC-NDS 2018 table 4.3.1.
@@ -318,7 +326,7 @@ class DimensionLumberWood(AWCNDS_materials.Wood):
         bNom= self.getNominalThickness(b)
         hNom= self.getNominalWidth(h)
         C*= self.getTensionSizeFactor(b= bNom, h= hNom) # Size factor
-        return C*self.Ft
+        return C*self.getFt(b,h)
     
     def getFvAdj(self):
         ''' Return the adjusted value of Fv according
@@ -633,6 +641,14 @@ class SouthernPineWood(DimensionLumberWood):
         :param h: section depth.
         '''
         return self.Fb(max(b,h))
+    
+    def getFt(self,  b, h):
+        ''' Return the value of Ft.
+
+        :param b: section width.
+        :param h: section depth.
+        '''
+        return self.Ft(max(b,h))
 
     def getFc(self,  b, h):
         ''' Return the value of Fc.
