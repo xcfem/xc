@@ -49,17 +49,17 @@ I= column.section.Iz()
 Emin= column.section.wood.getEminAdj()
 
 ## Effective lengths.
-leH, leB= column.getEffectiveLength() 
+leH, leB= column.getColumnEffectiveLength() 
 ratio1= abs(leH-2.7432000000000003)/2.7432000000000003
 ## Critical buckling design values for compression.
 FcE1= column.getFcE1()
 ratio2= abs(FcE1-8527263.374485593)/8527263.374485593
-## Slenderness ratio for bending.
-RBH= column.getBendingSlendernessRatio()
+## Slenderness ratio for bending as column.
+RBH= column.getColumnBendingSlendernessRatio()
 ratio3= abs(RBH-16.24807680927192)/16.24807680927192
 ## Critical buckling design values for bending.
-FbE= column.getFbE()
-ratio4= abs(FbE-18181818.181818176)/18181818.181818176
+FbE= column.getFbECriticalBucklingDesignValue()
+ratio4= abs(FbE-10198589.195161333)/10198589.195161333
 
 # Loads
 DL= xc.Vector([0.0, -560*poundToNewton])
