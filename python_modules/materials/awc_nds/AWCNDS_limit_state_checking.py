@@ -26,7 +26,7 @@ import geom
 import xc
 
 class Member(wood_member_base.Member):
-    ''' Beam and column members according to ANSI AISC 360-16.
+    ''' Beam and column members according to AWC NDS-2018.
 
     :ivar unbracedLengthX: unbraced length for torsional buckling 
                            about the longitudinal axis.
@@ -59,7 +59,8 @@ class Member(wood_member_base.Member):
         :param recorderType: type of the recorder to install.
         :param chiN: compressive strength reduction factor.
         :param chiLT: flexural strength reduction factor.
-        :param FcE: critical buckling design value for compression members (both axis).
+        :param FcE: critical buckling design values for compression members (both axis).
+        :param FbE: critical buckling design value for bending members.
         :param calcSet: set of elements to be checked (defaults to 'None' which 
                         means that this set will be created elsewhere). In not
                         'None' the member elements will be appended to this set.
@@ -220,7 +221,7 @@ class ColumnMember(MemberBase):
         ''' Constructor. 
 
         :param unbracedLengthB: unbraced lenght for bending about weak axis (B<H).
-        :param unbradedLengthH: unbraced lenght for bending about strong axis (HZB).
+        :param unbracedLengthH: unbraced lenght for bending about strong axis (HZB).
         :param section: member cross-section.
         :param connection: connection type.
         :param memberLoadingCondition: parameters defining the member condition in order to obtain 

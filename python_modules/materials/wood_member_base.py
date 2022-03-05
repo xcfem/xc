@@ -18,7 +18,7 @@ class Member(member_base.Member):
     
     :ivar crossSection: timber cross-section.
     '''
-    def __init__(self,name, crossSection, lstLines=None):
+    def __init__(self, name, crossSection, lstLines=None):
         '''Constructor.
 
         :param name: object name.

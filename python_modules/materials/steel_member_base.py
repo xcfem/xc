@@ -40,7 +40,7 @@ class BucklingMember(Member):
           lstLines is given (defaults to None) 
     :ivar contrPnt: control points along the member.
     '''
-    def __init__(self,name,shape, lstLines=None, lstPoints=None):
+    def __init__(self, name, shape, lstLines=None, lstPoints=None):
         '''Constructor.
 
         :param name: object name.

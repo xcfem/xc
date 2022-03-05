@@ -34,8 +34,10 @@ def getLoadCombDurationFactor(loadComb):
     wl= ('WL' in loadComb)
     return AWCNDS_materials.getLoadCombinationDurationFactor(deadLoad= dl, snowLoad= sl, windLoad= wl)
 
+# Geometry
 height= 9*footToMeter
 
+# Materials
 wood= dimensional_lumber.SouthernPineWood(name='SouthernPine', grade= 'no_1', sub_grade= '')
 columnSection= AWCNDS_materials.DimensionLumberSection(name= '2x6', woodMaterial= wood)
 
