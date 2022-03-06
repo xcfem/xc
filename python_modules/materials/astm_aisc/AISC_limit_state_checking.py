@@ -178,7 +178,19 @@ class Member(steel_member_base.BucklingMember):
         ''' Constructor. 
 
         :param name: object name.
-        :param ec3Shape: cross-section shape (e.g. IPNShape, IPEShape, ...)
+        :param section: cross-section shape (e.g. IPNShape, IPEShape, ...)
+        :param unbracedLengthX: unbraced length for torsional buckling 
+                               about the longitudinal axis.
+        :param unbracedLengthY: unbraced length for flexural buckling 
+                               about y-axis.
+        :param unbracedLengthZ: unbraced length for flexural buckling 
+                               about z-axis.
+        :param Kx: effective length factor for torsional buckling 
+                  about the longitudinal axis.
+        :param Ky: effective length factor for flexural buckling 
+                  about y-axis.
+        :param Kz: effective length factor for flexural buckling 
+                  about z-axis.
         :param Cb: lateral-torsional buckling modification factor
                    (defaults to None).
         :param lstLines: ordered list of lines that make up the beam. 

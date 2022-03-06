@@ -43,12 +43,12 @@ beamSection= AWCNDS_materials.CustomLumberSection("HemFir", b=1.5*inchToMeter,h=
 
 length= 12.0*footToMeter
 beam= AWCNDS_limit_state_checking.BeamMember(unbracedLength= length, section= beamSection)
-Fb= beam.section.wood.Fb
-Ft= beam.section.wood.Ft
-E= beam.section.wood.E
-Emin= beam.section.wood.Emin
-Fct= beam.section.wood.Fct
-Fv= beam.section.wood.Fv
+Fb= beam.crossSection.wood.Fb
+Ft= beam.crossSection.wood.Ft
+E= beam.crossSection.wood.E
+Emin= beam.crossSection.wood.Emin
+Fct= beam.crossSection.wood.Fct
+Fv= beam.crossSection.wood.Fv
 
 # Beam Stability Factor.
 le= beam.getEffectiveLength() # Effective length
@@ -61,7 +61,7 @@ Cr= 1.0
 CT= 1.0
 Ct= 1.0
 Ci= 1.0
-CF= beam.section.getBendingSizeFactor() #1.2 # (NDS Table 4.3.1)
+CF= beam.crossSection.getBendingSizeFactor() #1.2 # (NDS Table 4.3.1)
 refCF= 1.2
 ratio0= abs(CF-refCF)/refCF
 
@@ -70,9 +70,9 @@ Epmin= Emin*CM*Ct*Ci*CT
 
 # Member dimensions and properties
 w_trib= 4.0*footToMeter
-Ag= beam.section.A()
-S= beam.section.getElasticSectionModulusZ() 
-I= beam.section.Iz()
+Ag= beam.crossSection.A()
+S= beam.crossSection.getElasticSectionModulusZ() 
+I= beam.crossSection.Iz()
 
 # Loads
 WL= xc.Vector([880.0*poundToNewton,0.0])
@@ -103,7 +103,7 @@ for key in loadCases:
     # Bending
     #refFb_aster= Fb*wood.CD*CM*Ct*CF*Ci*Cr
     M= loadVector[1]*length**2/8.0
-    Fb_aster= beam.section.getFbAdj(Cr= Cr)
+    Fb_aster= beam.crossSection.getFbAdj(Cr= Cr)
     results[key]['Fb*']= Fb_aster/psiToPa
     CL= beam.getBeamStabilityFactor()
     results[key]['CL']= CL

@@ -42,12 +42,12 @@ loadingCondition= AWCNDS_materials.MemberLoadingCondition(numberOfConcentratedLo
 column= AWCNDS_limit_state_checking.ColumnMember(unbracedLengthB= length, unbracedLengthH= length, section= columnSection, memberLoadingCondition= loadingCondition)
 
 # Member dimensions and properties
-Ag= column.section.A()
-Sz= column.section.getElasticSectionModulusZ() 
-Sy= column.section.getElasticSectionModulusY() 
-Iz= column.section.Iz()
-Iy= column.section.Iy()
-Emin= column.section.wood.getEminAdj()
+Ag= column.crossSection.A()
+Sz= column.crossSection.getElasticSectionModulusZ() 
+Sy= column.crossSection.getElasticSectionModulusY() 
+Iz= column.crossSection.Iz()
+Iy= column.crossSection.Iy()
+Emin= column.crossSection.wood.getEminAdj()
 
 ## Effective lengths.
 leH, leB= column.getBeamEffectiveLength()
@@ -84,7 +84,7 @@ for key in loadCases:
     wood.CD= getLoadCombDurationFactor(loadCase)
     results[key]['CD']= wood.CD
     # Compression
-    Fc_aster= column.section.getFcAdj()
+    Fc_aster= column.crossSection.getFcAdj()
     results[key]['Fc*']= Fc_aster/psiToPa
     ## Column stability factor.
     CP= column.getColumnStabilityFactor()
@@ -103,13 +103,13 @@ for key in loadCases:
     # Bending and axial compression.
     loadVector= eval(loadCase)
     C= loadVector[2] # Compression
-    fc= C/column.section.A()
+    fc= C/column.crossSection.A()
     results[key]['fc']= abs(fc)/psiToPa
     My= loadVector[0]*length/4.0 # Bending moment (weak axis).
-    fb2= abs(My)/column.section.getElasticSectionModulusY()
+    fb2= abs(My)/column.crossSection.getElasticSectionModulusY()
     results[key]['fb2']= fb2/psiToPa
     Mz= loadVector[1]*length/4.0 # Bending moment (strong axis).
-    fb1= abs(Mz)/column.section.getElasticSectionModulusZ()
+    fb1= abs(Mz)/column.crossSection.getElasticSectionModulusZ()
     results[key]['fb1']= fb1/psiToPa
     bendingCF= column.getBiaxialBendingEfficiency(Nd= C, Myd= My, Mzd= Mz, chiN= CP, chiLT= min(CL1, CL2))
     results[key]['efficiency']= bendingCF[0]

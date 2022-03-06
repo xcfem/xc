@@ -45,10 +45,10 @@ column= AWCNDS_limit_state_checking.ColumnMember(unbracedLengthB= .01*height, un
 
 # Member dimensions and properties
 w_trib= 4.0*footToMeter
-Ag= column.section.A()
-S= column.section.getElasticSectionModulusZ() 
-I= column.section.Iz()
-Emin= column.section.wood.getEminAdj()
+Ag= column.crossSection.A()
+S= column.crossSection.getElasticSectionModulusZ() 
+I= column.crossSection.Iz()
+Emin= column.crossSection.wood.getEminAdj()
 
 ## Effective lengths.
 leH, leB= column.getColumnEffectiveLength() 
@@ -83,7 +83,7 @@ for key in loadCases:
     wood.CD= getLoadCombDurationFactor(loadCase)
     results[key]['CD']= wood.CD
     # Compression
-    Fc_aster= column.section.getFcAdj()
+    Fc_aster= column.crossSection.getFcAdj()
     results[key]['Fc*']= Fc_aster/psiToPa
     ## Column stability factor.
     CP= column.getColumnStabilityFactor()

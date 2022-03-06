@@ -35,11 +35,17 @@ class Member(wood_member_base.Member):
     :ivar unbracedLengthZ: unbraced length for flexural buckling 
                            about z-axis.
     '''
-    def __init__(self, name, section, unbracedLengthX, unbracedLengthY= None, unbracedLengthZ= None, Cb= None, lstLines=None):
+    def __init__(self, name, section, unbracedLengthX, unbracedLengthY= None, unbracedLengthZ= None, lstLines=None):
         ''' Constructor. 
 
         :param name: object name.
-        :param crossSection: timber cross-section.
+        :param section: timber cross-section.
+        :param unbracedLengthX: unbraced length for torsional buckling 
+                               about the longitudinal axis.
+        :param unbracedLengthY: unbraced length for flexural buckling 
+                               about y-axis.
+        :param unbracedLengthZ: unbraced length for flexural buckling 
+                               about z-axis.
         :param lstLines: ordered list of lines that make up the beam.
         '''
         super(Member,self).__init__(name, section, lstLines)
@@ -107,7 +113,7 @@ class MemberBase(object):
                                        its effective length accordint to table 3.3.3 of AWC NDS-2018.
         '''
         self.unbracedLength= unbracedLength
-        self.section= section
+        self.crossSection= section
         self.Cr= Cr
         self.connection= connection
         self.memberRestraint= memberRestraint
@@ -116,7 +122,7 @@ class MemberBase(object):
     def getFcAdj(self):
         ''' Return the adjusted value of Fc including the column stability
             factor.'''
-        sectionFbAdj= self.section.getFcAdj()
+        sectionFbAdj= self.crossSection.getFcAdj()
         CP= self.getColumnStabilityFactor()
         return CP*sectionFbAdj
     
@@ -125,7 +131,7 @@ class MemberBase(object):
 
         :param majorAxis: if true return adjusted Fb for bending around major axis.
         '''
-        sectionFbAdj= self.section.getFbAdj(majorAxis= majorAxis, Cr= self.Cr)
+        sectionFbAdj= self.crossSection.getFbAdj(majorAxis= majorAxis, Cr= self.Cr)
         CL= self.getBeamStabilityFactor()
         return CL*sectionFbAdj
 
@@ -135,7 +141,7 @@ class MemberBase(object):
 
            :param unbracedLength: unbraced length for the bending axis.
         '''
-        return self.memberLoadingCondition.getEffectiveLength(unbracedLength= unbracedLength, section= self.section)
+        return self.memberLoadingCondition.getEffectiveLength(unbracedLength= unbracedLength, section= self.crossSection)
 
     def getBeamStabilityFactor(self, majorAxis= True):
         ''' Return the beam stability factor according to clauses 3.3.3 
@@ -146,11 +152,11 @@ class MemberBase(object):
         retval= .001
         if(majorAxis):
             ## Check if
-            if(self.memberRestraint>self.section.getRequiredRestraint()):
+            if(self.memberRestraint>self.crossSection.getRequiredRestraint()):
                 retval= 1.0
             else: ## Equation 3.3-6
                 FbE= self.getFbECriticalBucklingDesignValue()
-                FbAdj= self.section.getFbAdj(majorAxis= majorAxis, Cr= self.Cr)
+                FbAdj= self.crossSection.getFbAdj(majorAxis= majorAxis, Cr= self.Cr)
                 ratio= FbE/FbAdj
                 A= (1+ratio)/1.9
                 B= A**2
@@ -165,7 +171,7 @@ class MemberBase(object):
             section 3.3.3.8 of NDS-2018.
         '''
         RB= self.getBendingSlendernessRatio()
-        return 1.2*self.section.wood.Emin/RB**2
+        return 1.2*self.crossSection.wood.Emin/RB**2
            
 class BeamMember(MemberBase):
     ''' Beam member according to chapter 3.3 of NDS-2018.
@@ -193,11 +199,11 @@ class BeamMember(MemberBase):
             3.3-5 of NDS-2018.
         '''
         le= self.getEffectiveLength()
-        return math.sqrt(le*self.section.h/self.section.b**2)
+        return math.sqrt(le*self.crossSection.h/self.crossSection.b**2)
         
     def getFtAdj(self):
         ''' Return the adjusted value of Ft.'''
-        return self.section.getFtAdj()    
+        return self.crossSection.getFtAdj()    
     
     def getBiaxialBendingEfficiency(self, Nd, Myd, Mzd, Vyd= 0.0, chiN=1.0, chiLT= 1.0):
         '''Return biaxial bending efficiency according to clause 3.9 of AWC-NDS2018.
@@ -210,7 +216,7 @@ class BeamMember(MemberBase):
         :param chiLT: beam stability factor clause 3.3.3 of AWC-NDS2018 (default= 1.0).
         '''
         # Critical buckling design values for compression.
-        return self.section.getBiaxialBendingEfficiency(Nd= Nd, Myd= Myd, Mzd= Mzd, chiN= chiN, chiLT= chiLT)
+        return self.crossSection.getBiaxialBendingEfficiency(Nd= Nd, Myd= Myd, Mzd= Mzd, chiN= chiN, chiLT= chiLT)
 
 class ColumnMember(MemberBase):
     ''' Column member according to chapter 3.7 and 3.9 of NDS-2018.
@@ -242,20 +248,20 @@ class ColumnMember(MemberBase):
         ''' Return the slenderness ratio of the member working as
             column for bending in the H plane.'''
         Ke= self.getEffectiveBucklingLengthCoefficientRecommended()
-        return Ke*self.getUnbracedLengthB()/self.section.b
+        return Ke*self.getUnbracedLengthB()/self.crossSection.b
     
     def getColumnSlendernessRatioH(self):
         ''' Return the slenderness ratio of the member working as
             column for bending in the H plane.'''
         Ke= self.getEffectiveBucklingLengthCoefficientRecommended()
-        return Ke*self.unbracedLengthH/self.section.h
+        return Ke*self.unbracedLengthH/self.crossSection.h
         
     def getColumnSlendernessRatio(self):
         ''' Return the slenderness ratio of the member working as
             column.'''
         Ke= self.getEffectiveBucklingLengthCoefficientRecommended()
-        srB= Ke*self.getUnbracedLengthB()/self.section.b
-        srH= Ke*self.unbracedLengthH/self.section.h
+        srB= Ke*self.getUnbracedLengthB()/self.crossSection.b
+        srH= Ke*self.unbracedLengthH/self.crossSection.h
         return max(srB,srH)
 
     def getColumnStabilityFactor(self):
@@ -263,11 +269,11 @@ class ColumnMember(MemberBase):
             to expression 3.7-1 of NDS-2.018. 
         '''
         sr= self.getColumnSlendernessRatio()
-        E_adj= self.section.wood.getEminAdj()
+        E_adj= self.crossSection.wood.getEminAdj()
         FcE= 0.822*E_adj/((sr)**2)
-        Fc_adj= self.section.getFcAdj()
+        Fc_adj= self.crossSection.getFcAdj()
         ratio= FcE/Fc_adj
-        c= self.section.wood.get37_1c()
+        c= self.crossSection.wood.get37_1c()
         tmp= (1+ratio)/2.0/c
         return tmp-math.sqrt(tmp**2-ratio/c)
     
@@ -276,8 +282,8 @@ class ColumnMember(MemberBase):
             members (F_{cE1}) as defined in section 3.9.2 of NDS-2.018
             for buckling about the major axis.
         '''
-        E_adj= self.section.wood.getEminAdj()
-        if(self.section.h>self.section.b): # Wide side: H
+        E_adj= self.crossSection.wood.getEminAdj()
+        if(self.crossSection.h>self.crossSection.b): # Wide side: H
             return 0.822*E_adj/(self.getColumnSlendernessRatioH())**2
         else: # Wide side B
             return 0.822*E_adj/(self.getColumnSlendernessRatioB())**2
@@ -287,8 +293,8 @@ class ColumnMember(MemberBase):
             members (F_{cE2}) as defined in section 3.9.2 of NDS-2.018
             for buckling about the minor axis.
         '''
-        E_adj= self.section.wood.getEminAdj()
-        if(self.section.h<self.section.b): # Narrow side: H
+        E_adj= self.crossSection.wood.getEminAdj()
+        if(self.crossSection.h<self.crossSection.b): # Narrow side: H
             return 0.822*E_adj/(self.getColumnSlendernessRatioH())**2
         else: # Narrow side B
             return 0.822*E_adj/(self.getColumnSlendernessRatioB())**2
@@ -297,10 +303,10 @@ class ColumnMember(MemberBase):
         ''' Return the critical buckling design value for compression
             members (F_{cE}) as defined in section 3.9.2 of NDS-2.018
             for buckling about the major and minor axis.'''
-        E_adj= self.section.wood.getEminAdj()
+        E_adj= self.crossSection.wood.getEminAdj()
         EH= 0.822*E_adj/(self.getColumnSlendernessRatioH())**2
         EB= 0.822*E_adj/(self.getColumnSlendernessRatioB())**2
-        if(self.section.h>self.section.b): # Wide side: H
+        if(self.crossSection.h>self.crossSection.b): # Wide side: H
             return (EH, EB)
         else: # Wide side B
             return (EB, EH)
@@ -316,7 +322,7 @@ class ColumnMember(MemberBase):
             3.3-5 of NDS-2018.
         '''
         (leH, leB)= self.getBeamEffectiveLength()
-        return (math.sqrt(leH*self.section.h/self.section.b**2), math.sqrt(leB*self.section.b/self.section.h**2))
+        return (math.sqrt(leH*self.crossSection.h/self.crossSection.b**2), math.sqrt(leB*self.crossSection.b/self.crossSection.h**2))
         
     def getColumnEffectiveLength(self):
         ''' Return the effective length of the member working 
@@ -329,20 +335,20 @@ class ColumnMember(MemberBase):
             column for bending in the H plane.'''
         Ke= self.getEffectiveBucklingLengthCoefficientRecommended()
         le= Ke*self.unbracedLengthH
-        return math.sqrt(le*self.section.h/self.section.b**2)
+        return math.sqrt(le*self.crossSection.h/self.crossSection.b**2)
     
     def getColumnBendingSlendernessRatioB(self):
         ''' Return the slenderness ratio of the member working as
             column for bending in the B plane.'''
         Ke= self.getEffectiveBucklingLengthCoefficientRecommended()
         le= Ke*self.getUnbracedLengthB()
-        return math.sqrt(le*self.section.b/self.section.h**2)
+        return math.sqrt(le*self.crossSection.b/self.crossSection.h**2)
 
     def getColumnBendingSlendernessRatioHB(self):
         ''' Return the slenderness ratio of the member working as
             column for bending in the H and B planes.'''
         leH, leB= self.getColumnEffectiveLength()
-        return (math.sqrt(leH*self.section.h/self.section.b**2), math.sqrt(leB*self.section.b/self.section.h**2))
+        return (math.sqrt(leH*self.crossSection.h/self.crossSection.b**2), math.sqrt(leB*self.crossSection.b/self.crossSection.h**2))
     
     def getColumnBendingSlendernessRatio(self):
         ''' Return the maximum slenderness ratio for bending between the
@@ -355,7 +361,7 @@ class ColumnMember(MemberBase):
             section 3.3.3.8 of NDS-2018.
         '''
         sr= self.getBeamBendingSlendernessRatioHB()
-        E_adj= self.section.wood.getEminAdj()
+        E_adj= self.crossSection.wood.getEminAdj()
         return (1.2*E_adj/sr[0]**2, 1.2*E_adj/sr[1]**2)
     
     def getFbECriticalBucklingDesignValue(self):
@@ -404,7 +410,7 @@ class ColumnMember(MemberBase):
         # Critical buckling design values for compression.
         FcE= self.getFcE()
         FbE= self.getFbECriticalBucklingDesignValue()
-        return self.section.getBiaxialBendingEfficiency(Nd= Nd, Myd= Myd, Mzd= Mzd, FcE= FcE, FbE= FbE, chiN= chiN, chiLT= chiLT)
+        return self.crossSection.getBiaxialBendingEfficiency(Nd= Nd, Myd= Myd, Mzd= Mzd, FcE= FcE, FbE= FbE, chiN= chiN, chiLT= chiLT)
 
 
 class AWCNDSBiaxialBendingControlVars(cv.BiaxialBendingStrengthControlVars):
