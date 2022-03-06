@@ -62,7 +62,7 @@ Fbp_aster= Fb*CD*CM*Ct*CF*Ci*Cr  # Fbp_aster is adjusted bending design value
 FbAdj= beam.crossSection.getFbAdj(Cr= Cr)
 ratio0= abs(FbAdj-Fbp_aster)/Fbp_aster
 
-lu= beam.unbracedLength
+lu= beam.unbracedLengthX
 le= beam.getEffectiveLength()
 RB= beam.getBendingSlendernessRatio()
 FbE= beam.getFbECriticalBucklingDesignValue()

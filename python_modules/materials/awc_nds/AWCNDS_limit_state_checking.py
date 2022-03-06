@@ -34,18 +34,28 @@ class Member(wood_member_base.Member):
                            about y-axis.
     :ivar unbracedLengthZ: unbraced length for flexural buckling 
                            about z-axis.
+    :ivar Cr: repetitive member factor.
+    :ivar connection: connection type at member ends.
+    :ivar memberRestraint: Member restrain condition according  to clause 4.4.1.2 of AWC_NDS2018.
+    :ivar memberLoadingCondition: parameters defining the member condition in order to obtain 
+                                  its effective length accordint to table 3.3.3 of AWC NDS-2018.
     '''
-    def __init__(self, name, section, unbracedLengthX, unbracedLengthY= None, unbracedLengthZ= None, lstLines=None):
+    def __init__(self, name, section, unbracedLengthX, unbracedLengthY= None, unbracedLengthZ= None, Cr= 1.0, connection= member_base.MemberConnection(), memberRestraint= AWCNDS_materials.MemberRestraint.notApplicable, memberLoadingCondition= AWCNDS_materials.MemberLoadingCondition(), lstLines=None):
         ''' Constructor. 
 
         :param name: object name.
         :param section: timber cross-section.
+        :param Cr: repetitive member factor.
         :param unbracedLengthX: unbraced length for torsional buckling 
                                about the longitudinal axis.
         :param unbracedLengthY: unbraced length for flexural buckling 
                                about y-axis.
         :param unbracedLengthZ: unbraced length for flexural buckling 
                                about z-axis.
+        :param connection: connection type at member ends.
+        :param memberRestraint: Member restrain condition according  to clause 4.4.1.2 of AWC_NDS2018.
+        :param memberLoadingCondition: parameters defining the member condition in order to obtain 
+                                       its effective length accordint to table 3.3.3 of AWC NDS-2018.
         :param lstLines: ordered list of lines that make up the beam.
         '''
         super(Member,self).__init__(name, section, lstLines)
@@ -58,67 +68,11 @@ class Member(wood_member_base.Member):
             self.unbracedLengthZ= unbracedLengthZ
         else:
             self.unbracedLengthZ= unbracedLengthX
-            
-    def installULSControlRecorder(self, recorderType, chiN: float= 1.0, chiLT: float= 1.0, FcE= (0.0,0.0), FbE= 0.0, calcSet= None):
-        '''Install recorder for verification of ULS criterion.
-
-        :param recorderType: type of the recorder to install.
-        :param chiN: compressive strength reduction factor.
-        :param chiLT: flexural strength reduction factor.
-        :param FcE: critical buckling design values for compression members (both axis).
-        :param FbE: critical buckling design value for bending members.
-        :param calcSet: set of elements to be checked (defaults to 'None' which 
-                        means that this set will be created elsewhere). In not
-                        'None' the member elements will be appended to this set.
-        '''
-        recorder= self.createRecorder(recorderType, calcSet)
-        self.crossSection.setupULSControlVars(self.elemSet, chiN= chiN, chiLT= chiLT, FcE= FcE, FbE= FbE)
-        nodHndlr= self.getPreprocessor().getNodeHandler        
-        if(nodHndlr.numDOFs==3):
-            recorder.callbackRecord= controlULSCriterion2D()
-        else:
-            recorder.callbackRecord= controlULSCriterion()
-#        recorder.callbackRestart= "print(\"Restart method called.\")" #20181121
-        return recorder
-
-def controlULSCriterion():
-    return '''recorder= self.getProp('ULSControlRecorder')
-nmbComb= recorder.getCurrentCombinationName
-crossSection= self.getProp('crossSection')
-crossSection.checkBiaxialBendingForElement(self,nmbComb)
-crossSection.checkYShearForElement(self,nmbComb)
-crossSection.checkZShearForElement(self,nmbComb)'''
-
-def controlULSCriterion2D():
-    return '''recorder= self.getProp('ULSControlRecorder')
-nmbComb= recorder.getCurrentCombinationName
-crossSection= self.getProp('crossSection')
-crossSection.checkUniaxialBendingForElement(self,nmbComb)
-crossSection.checkYShearForElement(self,nmbComb)'''
-
-class MemberBase(object):
-    ''' Base class for beam and column members according to chapter 
-        3 of NDS-2018.
-
-    :ivar Cr: repetitive member factor.
-    '''
-    def __init__(self, unbracedLength, section, Cr= 1.0, connection= member_base.MemberConnection(), memberRestraint= AWCNDS_materials.MemberRestraint.notApplicable, memberLoadingCondition= AWCNDS_materials.MemberLoadingCondition()):
-        ''' Constructor. 
-
-        :param unbracedLength: length between bracing elements.
-        :param section: member cross-section.
-        :param Cr: repetitive member factor.
-        :param connection: connection type at beam ends.
-        :param memberLoadingCondition: parameters defining the member condition in order to obtain 
-                                       its effective length accordint to table 3.3.3 of AWC NDS-2018.
-        '''
-        self.unbracedLength= unbracedLength
-        self.crossSection= section
         self.Cr= Cr
         self.connection= connection
         self.memberRestraint= memberRestraint
         self.memberLoadingCondition= memberLoadingCondition
-        
+            
     def getFcAdj(self):
         ''' Return the adjusted value of Fc including the column stability
             factor.'''
@@ -134,134 +88,34 @@ class MemberBase(object):
         sectionFbAdj= self.crossSection.getFbAdj(majorAxis= majorAxis, Cr= self.Cr)
         CL= self.getBeamStabilityFactor()
         return CL*sectionFbAdj
-
-    def getConcentratedLoadsBucklingLength(self, unbracedLength):
-        ''' Return the effective length coefficient of the member according to table
-            3.3.3 of NDS-2018.
-
-           :param unbracedLength: unbraced length for the bending axis.
-        '''
-        return self.memberLoadingCondition.getEffectiveLength(unbracedLength= unbracedLength, section= self.crossSection)
-
-    def getBeamStabilityFactor(self, majorAxis= True):
-        ''' Return the beam stability factor according to clauses 3.3.3 
-            and 4.4.1.2 of AWC NDS-2018.
-
-        :param majorAxis: if true return adjusted Fb for bending around major axis.
-        '''
-        retval= .001
-        if(majorAxis):
-            ## Check if
-            if(self.memberRestraint>self.crossSection.getRequiredRestraint()):
-                retval= 1.0
-            else: ## Equation 3.3-6
-                FbE= self.getFbECriticalBucklingDesignValue()
-                FbAdj= self.crossSection.getFbAdj(majorAxis= majorAxis, Cr= self.Cr)
-                ratio= FbE/FbAdj
-                A= (1+ratio)/1.9
-                B= A**2
-                C= ratio/0.95
-                retval= A-math.sqrt(B-C)
-        else:
-            retval= 1.0
-        return retval
     
-    def getFbECriticalBucklingDesignValue(self):
-        ''' Return the critical bucking design value for bending according to 
-            section 3.3.3.8 of NDS-2018.
-        '''
-        RB= self.getBendingSlendernessRatio()
-        return 1.2*self.crossSection.wood.Emin/RB**2
-           
-class BeamMember(MemberBase):
-    ''' Beam member according to chapter 3.3 of NDS-2018.
-
-    '''
-    def __init__(self, unbracedLength, section, connection= member_base.MemberConnection(), Cr= 1.0, memberRestraint= AWCNDS_materials.MemberRestraint.notApplicable, memberLoadingCondition= AWCNDS_materials.MemberLoadingCondition()):
-        ''' Constructor. 
-
-        :param unbracedLength: length between bracing elements.
-        :param connection: connection type at beam ends.
-        :param Cr: repetitive member factor.
-        :param memberLoadingCondition: parameters defining the member condition in order to obtain 
-                                       its effective length accordint to table 3.3.3 of AWC NDS-2018.
-        '''
-        super(BeamMember,self).__init__(unbracedLength= unbracedLength, section= section, Cr= Cr, connection= connection, memberRestraint= memberRestraint, memberLoadingCondition= memberLoadingCondition)        
-        
-    def getEffectiveLength(self):
-        ''' Return the effective length of the beam according to table
-            3.3.3 of NDS-2018.
-        '''
-        return self.getConcentratedLoadsBucklingLength(self.unbracedLength)
-    
-    def getBendingSlendernessRatio(self):
-        ''' Return the slenderness ratio according to equation
-            3.3-5 of NDS-2018.
-        '''
-        le= self.getEffectiveLength()
-        return math.sqrt(le*self.crossSection.h/self.crossSection.b**2)
-        
     def getFtAdj(self):
         ''' Return the adjusted value of Ft.'''
         return self.crossSection.getFtAdj()    
     
-    def getBiaxialBendingEfficiency(self, Nd, Myd, Mzd, Vyd= 0.0, chiN=1.0, chiLT= 1.0):
-        '''Return biaxial bending efficiency according to clause 3.9 of AWC-NDS2018.
-
-        :param Nd: required axial strength.
-        :param Myd: required bending strength (minor axis).
-        :param Mzd: required bending strength (major axis).
-        :param Vyd: required shear strength (major axis)
-        :param chiN: column stability factor clause 3.7.1 of AWC-NDS2018 (default= 1.0).
-        :param chiLT: beam stability factor clause 3.3.3 of AWC-NDS2018 (default= 1.0).
-        '''
-        # Critical buckling design values for compression.
-        return self.crossSection.getBiaxialBendingEfficiency(Nd= Nd, Myd= Myd, Mzd= Mzd, chiN= chiN, chiLT= chiLT)
-
-class ColumnMember(MemberBase):
-    ''' Column member according to chapter 3.7 and 3.9 of NDS-2018.
-
-    :ivar unbracedLengthB: unbraced lenght for bending about weak axis.
-    '''
-    def __init__(self, unbracedLengthB, unbracedLengthH, section, connection= member_base.MemberConnection(), memberRestraint= AWCNDS_materials.MemberRestraint.notApplicable, memberLoadingCondition= AWCNDS_materials.MemberLoadingCondition()):
-        ''' Constructor. 
-
-        :param unbracedLengthB: unbraced lenght for bending about weak axis (B<H).
-        :param unbracedLengthH: unbraced lenght for bending about strong axis (HZB).
-        :param section: member cross-section.
-        :param connection: connection type.
-        :param memberLoadingCondition: parameters defining the member condition in order to obtain 
-                                       its effective length accordint to table 3.3.3 of AWC NDS-2018.
-        '''
-        super(ColumnMember,self).__init__(unbracedLength= unbracedLengthB, section= section, connection= connection, memberRestraint= memberRestraint, memberLoadingCondition= memberLoadingCondition)
-        self.unbracedLengthH= unbracedLengthH
-
-    def getUnbracedLengthB(self):
-        ''' Return the B unbraced length a.'''
-        return self.unbracedLength
-
     def getEffectiveBucklingLengthCoefficientRecommended(self):
         '''Return the column effective buckling length coefficients
            according to NDS 2018 appendix G'''
         return self.connection.getEffectiveBucklingLengthCoefficientRecommended()
+    
     def getColumnSlendernessRatioB(self):
         ''' Return the slenderness ratio of the member working as
             column for bending in the H plane.'''
         Ke= self.getEffectiveBucklingLengthCoefficientRecommended()
-        return Ke*self.getUnbracedLengthB()/self.crossSection.b
+        return Ke*self.unbracedLengthY/self.crossSection.b
     
     def getColumnSlendernessRatioH(self):
         ''' Return the slenderness ratio of the member working as
             column for bending in the H plane.'''
         Ke= self.getEffectiveBucklingLengthCoefficientRecommended()
-        return Ke*self.unbracedLengthH/self.crossSection.h
+        return Ke*self.unbracedLengthZ/self.crossSection.h
         
     def getColumnSlendernessRatio(self):
         ''' Return the slenderness ratio of the member working as
             column.'''
         Ke= self.getEffectiveBucklingLengthCoefficientRecommended()
-        srB= Ke*self.getUnbracedLengthB()/self.crossSection.b
-        srH= Ke*self.unbracedLengthH/self.crossSection.h
+        srB= Ke*self.unbracedLengthY/self.crossSection.b
+        srH= Ke*self.unbracedLengthZ/self.crossSection.h
         return max(srB,srH)
 
     def getColumnStabilityFactor(self):
@@ -310,38 +164,63 @@ class ColumnMember(MemberBase):
             return (EH, EB)
         else: # Wide side B
             return (EB, EH)
+        
+    def getConcentratedLoadsBucklingLength(self, unbracedLength):
+        ''' Return the effective length coefficient of the member according to table
+            3.3.3 of NDS-2018.
 
-    def getBeamEffectiveLength(self):
-        ''' Return the effective length of the member working as beam 
-            according to table 3.3.3 of NDS-2018.
+           :param unbracedLength: unbraced length for the bending axis.
         '''
-        return (self.getConcentratedLoadsBucklingLength(self.unbracedLengthH), self.getConcentratedLoadsBucklingLength(self.getUnbracedLengthB()))
+        return self.memberLoadingCondition.getEffectiveLength(unbracedLength= unbracedLength, section= self.crossSection)
+
+    def getBeamStabilityFactor(self, majorAxis= True):
+        ''' Return the beam stability factor according to clauses 3.3.3 
+            and 4.4.1.2 of AWC NDS-2018.
+
+        :param majorAxis: if true return adjusted Fb for bending around major axis.
+        '''
+        retval= .001
+        if(majorAxis):
+            ## Check if
+            if(self.memberRestraint>self.crossSection.getRequiredRestraint()):
+                retval= 1.0
+            else: ## Equation 3.3-6
+                FbE= self.getFbECriticalBucklingDesignValue()
+                FbAdj= self.crossSection.getFbAdj(majorAxis= majorAxis, Cr= self.Cr)
+                ratio= FbE/FbAdj
+                A= (1+ratio)/1.9
+                B= A**2
+                C= ratio/0.95
+                retval= A-math.sqrt(B-C)
+        else:
+            retval= 1.0
+        return retval
     
-    def getBeamBendingSlendernessRatioHB(self):
-        ''' Return the slenderness ratio according to equation
-            3.3-5 of NDS-2018.
+    def getFbECriticalBucklingDesignValue(self):
+        ''' Return the critical bucking design value for bending according to 
+            section 3.3.3.8 of NDS-2018.
         '''
-        (leH, leB)= self.getBeamEffectiveLength()
-        return (math.sqrt(leH*self.crossSection.h/self.crossSection.b**2), math.sqrt(leB*self.crossSection.b/self.crossSection.h**2))
+        RB= self.getBendingSlendernessRatio()
+        return 1.2*self.crossSection.wood.Emin/RB**2
         
     def getColumnEffectiveLength(self):
         ''' Return the effective length of the member working 
             as column in the H and B planes.'''
         Ke= self.getEffectiveBucklingLengthCoefficientRecommended()
-        return (Ke*self.unbracedLengthH, Ke*self.getUnbracedLengthB())
+        return (Ke*self.unbracedLengthZ, Ke*self.unbracedLengthY)
         
     def getColumnBendingSlendernessRatioH(self):
         ''' Return the slenderness ratio of the member working as
             column for bending in the H plane.'''
         Ke= self.getEffectiveBucklingLengthCoefficientRecommended()
-        le= Ke*self.unbracedLengthH
+        le= Ke*self.unbracedLengthZ
         return math.sqrt(le*self.crossSection.h/self.crossSection.b**2)
     
     def getColumnBendingSlendernessRatioB(self):
         ''' Return the slenderness ratio of the member working as
             column for bending in the B plane.'''
         Ke= self.getEffectiveBucklingLengthCoefficientRecommended()
-        le= Ke*self.getUnbracedLengthB()
+        le= Ke*self.unbracedLengthY
         return math.sqrt(le*self.crossSection.b/self.crossSection.h**2)
 
     def getColumnBendingSlendernessRatioHB(self):
@@ -356,6 +235,19 @@ class ColumnMember(MemberBase):
         srH, srB= self.getColumnBendingSlendernessRatioHB()
         return max(srH, srB)
     
+    def getBeamEffectiveLength(self):
+        ''' Return the effective length of the member working as beam 
+            according to table 3.3.3 of NDS-2018.
+        '''
+        return (self.getConcentratedLoadsBucklingLength(self.unbracedLengthZ), self.getConcentratedLoadsBucklingLength(self.unbracedLengthY))
+    
+    def getBeamBendingSlendernessRatioHB(self):
+        ''' Return the slenderness ratio according to equation
+            3.3-5 of NDS-2018.
+        '''
+        (leH, leB)= self.getBeamEffectiveLength()
+        return (math.sqrt(leH*self.crossSection.h/self.crossSection.b**2), math.sqrt(leB*self.crossSection.b/self.crossSection.h**2))
+        
     def getFbECriticalBucklingDesignValueHB(self):
         ''' Return the critical bucking design value for bending according to 
             section 3.3.3.8 of NDS-2018.
@@ -370,6 +262,118 @@ class ColumnMember(MemberBase):
         '''
         tmp= self.getFbECriticalBucklingDesignValueHB()
         return min(tmp[0], tmp[1])
+
+    def getBiaxialBendingEfficiency(self, Nd, Myd, Mzd, Vyd= 0.0, chiN=1.0, chiLT= 1.0):
+        '''Return biaxial bending efficiency according to clause 3.9 of AWC-NDS2018.
+
+        :param Nd: required axial strength.
+        :param Myd: required bending strength (minor axis).
+        :param Mzd: required bending strength (major axis).
+        :param Vyd: required shear strength (major axis)
+        :param chiN: column stability factor clause 3.7.1 of AWC-NDS2018 (default= 1.0).
+        :param chiLT: beam stability factor clause 3.3.3 of AWC-NDS2018 (default= 1.0).
+        '''
+        # Critical buckling design values for compression.
+        FcE= self.getFcE()
+        FbE= self.getFbECriticalBucklingDesignValue()
+        return self.crossSection.getBiaxialBendingEfficiency(Nd= Nd, Myd= Myd, Mzd= Mzd, FcE= FcE, FbE= FbE, chiN= chiN, chiLT= chiLT)
+    
+    def installULSControlRecorder(self, recorderType, chiN: float= 1.0, chiLT: float= 1.0, FcE= (0.0,0.0), FbE= 0.0, calcSet= None):
+        '''Install recorder for verification of ULS criterion.
+
+        :param recorderType: type of the recorder to install.
+        :param chiN: compressive strength reduction factor.
+        :param chiLT: flexural strength reduction factor.
+        :param FcE: critical buckling design values for compression members (both axis).
+        :param FbE: critical buckling design value for bending members.
+        :param calcSet: set of elements to be checked (defaults to 'None' which 
+                        means that this set will be created elsewhere). In not
+                        'None' the member elements will be appended to this set.
+        '''
+        recorder= self.createRecorder(recorderType, calcSet)
+        self.crossSection.setupULSControlVars(self.elemSet, chiN= chiN, chiLT= chiLT, FcE= FcE, FbE= FbE)
+        nodHndlr= self.getPreprocessor().getNodeHandler        
+        if(nodHndlr.numDOFs==3):
+            recorder.callbackRecord= controlULSCriterion2D()
+        else:
+            recorder.callbackRecord= controlULSCriterion()
+#        recorder.callbackRestart= "print(\"Restart method called.\")" #20181121
+        return recorder
+
+def controlULSCriterion():
+    return '''recorder= self.getProp('ULSControlRecorder')
+nmbComb= recorder.getCurrentCombinationName
+crossSection= self.getProp('crossSection')
+crossSection.checkBiaxialBendingForElement(self,nmbComb)
+crossSection.checkYShearForElement(self,nmbComb)
+crossSection.checkZShearForElement(self,nmbComb)'''
+
+def controlULSCriterion2D():
+    return '''recorder= self.getProp('ULSControlRecorder')
+nmbComb= recorder.getCurrentCombinationName
+crossSection= self.getProp('crossSection')
+crossSection.checkUniaxialBendingForElement(self,nmbComb)
+crossSection.checkYShearForElement(self,nmbComb)'''
+
+class BeamMember(Member):
+    ''' Beam member according to chapter 3.3 of NDS-2018.
+
+    '''
+    def __init__(self, unbracedLength, section, connection= member_base.MemberConnection(), Cr= 1.0, memberRestraint= AWCNDS_materials.MemberRestraint.notApplicable, memberLoadingCondition= AWCNDS_materials.MemberLoadingCondition()):
+        ''' Constructor. 
+
+        :param unbracedLengthX: unbraced length for torsional buckling 
+                                about the longitudinal axis.
+        :param connection: connection type at beam ends.
+        :param Cr: repetitive member factor.
+        :param memberLoadingCondition: parameters defining the member condition in order to obtain 
+                                       its effective length accordint to table 3.3.3 of AWC NDS-2018.
+        '''
+        super(BeamMember,self).__init__(name= None, unbracedLengthX= unbracedLength, section= section, Cr= Cr, connection= connection, memberRestraint= memberRestraint, memberLoadingCondition= memberLoadingCondition)        
+        
+    def getEffectiveLength(self):
+        ''' Return the effective length of the beam according to table
+            3.3.3 of NDS-2018.
+        '''
+        return self.getConcentratedLoadsBucklingLength(self.unbracedLengthX)
+    
+    def getBendingSlendernessRatio(self):
+        ''' Return the slenderness ratio according to equation
+            3.3-5 of NDS-2018.
+        '''
+        le= self.getEffectiveLength()
+        return math.sqrt(le*self.crossSection.h/self.crossSection.b**2)
+        
+    def getBiaxialBendingEfficiency(self, Nd, Myd, Mzd, Vyd= 0.0, chiN=1.0, chiLT= 1.0):
+        '''Return biaxial bending efficiency according to clause 3.9 of AWC-NDS2018.
+
+        :param Nd: required axial strength.
+        :param Myd: required bending strength (minor axis).
+        :param Mzd: required bending strength (major axis).
+        :param Vyd: required shear strength (major axis)
+        :param chiN: column stability factor clause 3.7.1 of AWC-NDS2018 (default= 1.0).
+        :param chiLT: beam stability factor clause 3.3.3 of AWC-NDS2018 (default= 1.0).
+        '''
+        # Critical buckling design values for compression.
+        return self.crossSection.getBiaxialBendingEfficiency(Nd= Nd, Myd= Myd, Mzd= Mzd, chiN= chiN, chiLT= chiLT)
+
+class ColumnMember(Member):
+    ''' Column member according to chapter 3.7 and 3.9 of NDS-2018.
+
+    :ivar unbracedLengthB: unbraced lenght for bending about weak axis.
+    '''
+    def __init__(self, unbracedLengthB, unbracedLengthH, section, connection= member_base.MemberConnection(), memberRestraint= AWCNDS_materials.MemberRestraint.notApplicable, memberLoadingCondition= AWCNDS_materials.MemberLoadingCondition()):
+        ''' Constructor. 
+
+        :param unbracedLengthB: unbraced lenght for bending about weak axis (B<H).
+        :param unbracedLengthH: unbraced lenght for bending about strong axis (HZB).
+        :param section: member cross-section.
+        :param connection: connection type.
+        :param memberLoadingCondition: parameters defining the member condition in order to obtain 
+                                       its effective length accordint to table 3.3.3 of AWC NDS-2018.
+        '''
+        super(ColumnMember,self).__init__(name= None, unbracedLengthX= unbracedLengthB, unbracedLengthZ= unbracedLengthH, section= section, connection= connection, memberRestraint= memberRestraint, memberLoadingCondition= memberLoadingCondition)
+
     
     def getCapacityFactor(self, Fc_adj, Fb1_adj, Fb2_adj, fc,fb1, fb2):
         ''' Return the capacity factor for members subjected to a 
@@ -396,21 +400,6 @@ class ColumnMember(MemberBase):
         val393+= fb2/(Fb2_adj*(1-min(fc/FcE2,almostOne)-min(fb1/FbE,almostOne)**2))
         val394= fc/FcE2+(fb1/FbE)**2 #Equation 3-9-4
         return max(val393,val394)
-
-    def getBiaxialBendingEfficiency(self, Nd, Myd, Mzd, Vyd= 0.0, chiN=1.0, chiLT= 1.0):
-        '''Return biaxial bending efficiency according to clause 3.9 of AWC-NDS2018.
-
-        :param Nd: required axial strength.
-        :param Myd: required bending strength (minor axis).
-        :param Mzd: required bending strength (major axis).
-        :param Vyd: required shear strength (major axis)
-        :param chiN: column stability factor clause 3.7.1 of AWC-NDS2018 (default= 1.0).
-        :param chiLT: beam stability factor clause 3.3.3 of AWC-NDS2018 (default= 1.0).
-        '''
-        # Critical buckling design values for compression.
-        FcE= self.getFcE()
-        FbE= self.getFbECriticalBucklingDesignValue()
-        return self.crossSection.getBiaxialBendingEfficiency(Nd= Nd, Myd= Myd, Mzd= Mzd, FcE= FcE, FbE= FbE, chiN= chiN, chiLT= chiLT)
 
 
 class AWCNDSBiaxialBendingControlVars(cv.BiaxialBendingStrengthControlVars):
