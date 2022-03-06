@@ -278,6 +278,18 @@ class Member(wood_member_base.Member):
         FbE= self.getFbECriticalBucklingDesignValue()
         return self.crossSection.getBiaxialBendingEfficiency(Nd= Nd, Myd= Myd, Mzd= Mzd, FcE= FcE, FbE= FbE, chiN= chiN, chiLT= chiLT)
     
+    def updateReductionFactors(self):
+        '''Update the value of the appropriate reduction factors.'''
+        chiN= self.getCompressiveStrengthReductionFactor()
+        chiLT= self.getFlexuralStrengthReductionFactor()
+        FcE= self.getFcE()
+        FbE= self.getFbECriticalBucklingDesignValue()
+        for e in self.elemSet:
+             e.setProp('chiLT',chiLT) # flexural strength reduction factor.
+             e.setProp('chiN',chiN) # compressive strength reduction factor.
+             e.setProp('FcE', FcE) # critical buckling design values for compression members (both axis).
+             e.setProp('FbE', FbE) # critical buckling design value for bending members.
+    
     def installULSControlRecorder(self, recorderType, chiN: float= 1.0, chiLT: float= 1.0, FcE= (0.0,0.0), FbE= 0.0, calcSet= None):
         '''Install recorder for verification of ULS criterion.
 
