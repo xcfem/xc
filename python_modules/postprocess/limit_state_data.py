@@ -246,14 +246,19 @@ class LimitStateData(object):
             json.dump(reactionsDict, outfile)
         outfile.close()
         
-    def saveAll(self, combContainer, setCalc, solutionProcedureType= defaultSolutionProcedureType, constrainedNodeSet= None):
+    def saveAll(self, combContainer, setCalc, solutionProcedureType= defaultSolutionProcedureType, constrainedNodeSet= None, bucklingMembers= None):
         '''Write internal forces, displacements, .., for each combination
 
+
+        :param combContainer: load combination container.
         :param setCalc: set of entities for which the verification is 
                           going to be performed
         :param solutionProcedureType: type of the solution strategy to solve
                                       the finite element problem.
         :param constrainedNodeSet: constrained nodes (defaults to None)
+        :param bucklingMembers: list of members whose buckling reduction
+                                factors need to be updated after each
+                                commit (defaults to None)
         '''
         preprocessor= setCalc.getPreprocessor
         feProblem= preprocessor.getProblem
@@ -275,6 +280,9 @@ class LimitStateData(object):
             comb.addToDomain() #Combination to analyze.
             #Solution
             result= solutionProcedure.solve()
+            if(bucklingMembers): # Update reduction factors for buckling members
+                for bm in bucklingMembers:
+                    bm.updateReductionFactors()
             #Writing results.
             internalForcesDict.update(self.getInternalForcesDict(comb.getName,elemSet))
             reactionsDict.update(self.getReactionsDict(comb.getName,constrainedNodeSet))
@@ -337,61 +345,8 @@ class NormalStressesRCLimitStateData(ULS_LimitStateData):
         '''Constructor '''
         super(NormalStressesRCLimitStateData,self).__init__(limitStateLabel= 'ULS_normalStressesResistance', outputDataBaseFileName= 'verifRsl_normStrsULS', designSituation= 'permanent')
 
-class ULS_SteelLimitStateData(ULS_LimitStateData):
-    ''' Steel normal stresses data for limit state checking.'''
-    def __init__(self, limitStateLabel, outputDataBaseFileName, designSituation):
-        '''Constructor.
-
-        :param limitStateLabel: limit state check label; Something like "Fatigue"                               or "CrackControl".
-        :param outputDataBaseFileName: name (whithout extension) of the 
-                                       file that contains the results to
-                                       display.
-        :param designSituation: design situation; permanent, quasi-permanent,
-                                frequent, rare, earthquake. 
-        '''
-        super(ULS_SteelLimitStateData,self).__init__(limitStateLabel= limitStateLabel, outputDataBaseFileName= outputDataBaseFileName, designSituation= designSituation)
         
-    def saveAll(self, combContainer, setCalc, solutionProcedureType= defaultSolutionProcedureType, lstSteelBeams=None, constrainedNodeSet= None):
-        '''Write internal forces, displacements, .., for each combination
-
-        :param setCalc: set of entities for which the verification is 
-                          going to be performed
-        :param solutionProcedureType: type of the solution strategy to solve
-                                      the finite element problem.
-        :param lstSteelBeams: list of steel beams to analyze (defaults to None)
-        :param constrainedNodeSet: constrained nodes (defaults to None)
-        '''
-        preprocessor= setCalc.getPreprocessor
-        feProblem= preprocessor.getProblem
-        solutionProcedure= solutionProcedureType(feProblem)
-        preprocessor= feProblem.getPreprocessor
-        loadCombinations= preprocessor.getLoadHandler.getLoadCombinations
-        #Putting combinations inside XC.
-        loadCombinations= self.dumpCombinations(combContainer,loadCombinations)
-        elemSet= setCalc.elements
-        nodSet= setCalc.nodes
-        self.createOutputFiles()
-        internalForcesDict= dict()
-        reactionsDict= dict()
-        for key in loadCombinations.getKeys():
-            comb= loadCombinations[key]
-            preprocessor.resetLoadCase()
-            preprocessor.getDomain.revertToStart()
-            comb.addToDomain() #Combination to analyze.
-            #Solution
-            result= solutionProcedure.solve()
-            if lstSteelBeams:
-                for sb in lstSteelBeams:
-                    sb.updateReductionFactors()
-            #Writing results.
-            internalForcesDict.update(self.getInternalForcesDict(comb.getName,elemSet))
-            reactionsDict.update(self.getReactionsDict(comb.getName,constrainedNodeSet))
-            self.writeDisplacements(comb.getName,nodSet)
-            comb.removeFromDomain() #Remove combination from the model.
-        self.writeInternalForces(internalForcesDict)
-        self.writeReactions(reactionsDict)
-        
-class NormalStressesSteelLimitStateData(ULS_SteelLimitStateData):
+class NormalStressesSteelLimitStateData(ULS_LimitStateData):
     ''' Steel normal stresses data for limit state checking.'''
     def __init__(self):
         '''Constructor '''
@@ -403,7 +358,7 @@ class ShearResistanceRCLimitStateData(ULS_LimitStateData):
         '''Limit state data constructor '''
         super(ShearResistanceRCLimitStateData,self).__init__(limitStateLabel= 'ULS_shearResistance', outputDataBaseFileName= 'verifRsl_shearULS', designSituation= 'permanent')
         
-class ShearResistanceSteelLimitStateData(ULS_SteelLimitStateData):
+class ShearResistanceSteelLimitStateData(ULS_LimitStateData):
     ''' Reinforced concrete shear resistance limit state data.'''
     def __init__(self):
         '''Limit state data constructor '''

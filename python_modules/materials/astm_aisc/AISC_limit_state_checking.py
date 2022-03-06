@@ -159,7 +159,9 @@ class LateralTorsionalBucklingModificationFactor(object):
         return retval
 
 class Member(steel_member_base.BucklingMember):
-    ''' Beam and column members according to ANSI AISC 360-16.
+    ''' Beam and column members according to ANSI AISC 360-16. This class
+    exists to compute and update the values of the buckling reduction
+    factors of the members (chiN and chiLT).
 
     :ivar unbracedLengthX: unbraced length for torsional buckling 
                            about the longitudinal axis.

@@ -32,8 +32,9 @@ class AnalysisContextBase(object):
         :ivar preloadPatterns: names of the load patterns that are introduced 
                                during the preload phase (normally self weight 
                                and dead loads).
+        :ivar silent: if true print only error messages.
     '''
-    def __init__(self, modelSpace, calcSet, reactionNodeSet, reactionCheckTolerance, deactivationCandidates):
+    def __init__(self, modelSpace, calcSet, reactionNodeSet, reactionCheckTolerance, deactivationCandidates, silent= False):
         ''' Constructor.
 
         :param modelSpace: model space of the problem.
@@ -43,6 +44,7 @@ class AnalysisContextBase(object):
         :param deactivationCandidates: set of elements that could be deactivated
                                       under certain circumstances (i.e. 
                                       no compression elements...).
+        :param silent: if true print only error messages.
         '''
         self.modelSpace= modelSpace
         self.calcSet= calcSet
@@ -50,6 +52,7 @@ class AnalysisContextBase(object):
         self.reactionCheckTolerance= reactionCheckTolerance
         self.deactivationCandidates= deactivationCandidates
         self.preloadPatterns= None
+        self.silent= silent
 
     def solutionStep(self, currentCombination, calculateNodalReactions= False, combinationActive= False):
         ''' Perform a solution step.
@@ -73,11 +76,11 @@ class AnalysisContextBase(object):
         '''
         retval= None
         if(self.preloadPatterns):
-            lmsg.log('preload phase for: '+comb.name)
+            if(not self.silent): lmsg.log('preload phase for: '+comb.name)
             comb.addToDomain(self.preloadPatterns) # Add the first part of the combination.
             retval= self.solutionStep(currentCombination= comb)
         else:
-            lmsg.warning('no pre-load patterns specified.')
+            if(not self.silent): lmsg.warning('no pre-load patterns specified.')
         return retval
     
     def loadPhase(self, comb):
@@ -88,20 +91,21 @@ class AnalysisContextBase(object):
         '''
         retval= None
         #Solution
-        lmsg.log('load phase for: '+comb.name)
+        if(not self.silent): lmsg.log('load phase for: '+comb.name)
         comb.addToDomain() # Add the remaining of the combination.
         retval= self.solutionStep(currentCombination= comb, combinationActive= True)
         return retval
 
     def deactivationPhase(self, comb, calculateNodalReactions):
-        ''' Introduces the rest of the loads (in addition to the pre-load 
-            patterns) and computes the corresponding solution.
+        ''' Deactivates the elements of the 'deactivationCandidates' set
+            according to the conditions set in the deactivate elements
+            routine and computes the corresponding solution.
 
         :param comb: combination to analyze.
         '''
         retval= 0
         if(self.deactivationCandidates):
-            lmsg.log('deactivate elements for: '+comb.name)
+            if(not self.silent): lmsg.log('deactivate elements for: '+comb.name)
             self.deactivateElements('deactivatedElements')
             retval= self.solutionStep(currentCombination= comb, calculateNodalReactions= calculateNodalReactions)
         return retval
@@ -111,7 +115,7 @@ class AnalysisContextBase(object):
 
         :param comb: combination to analyze.
         '''
-        lmsg.log('revert model to initial state for: '+comb.name)
+        if(not self.silent): lmsg.log('revert model to initial state for: '+comb.name)
         if(self.deactivationCandidates):
             self.resetDeactivatedElements('deactivatedElements')
         self.modelSpace.preprocessor.resetLoadCase()
@@ -121,7 +125,7 @@ class AnalysisContextBase(object):
         ''' Put back compressed diagonals (at the end of the
             calculation loop).'''
         if self.modelSpace.preprocessor.getSets.exists(setName):
-            lmsg.log('  reset deactivated elements.')
+            if(not self.silent): lmsg.log('  reset deactivated elements.')
             deactivatedElements= self.modelSpace.preprocessor.getSets.getSet(setName)
             self.modelSpace.activateElements(deactivatedElements)
             self.modelSpace.preprocessor.getSets.removeSet(setName)
@@ -142,7 +146,7 @@ class AnalysisContextBase(object):
         if(len(self.failedCombinations)>0):
             lmsg.error('Analysis failed in the following combinations: '+str(failedCombinations))
         else:
-            lmsg.log(Fore.GREEN+'Analysis for combinations for '+str(limitState.label)+': '+str(loadCombinations.getKeys())+' finished.\n'+Style.RESET_ALL)
+            if(not self.silent): lmsg.log(Fore.GREEN+'Analysis for combinations for '+str(limitState.label)+': '+str(loadCombinations.getKeys())+' finished.\n'+Style.RESET_ALL)
         
     def updateULSResults(self, comb, limitState):
         ''' Store internal forces and displacements.
@@ -150,10 +154,11 @@ class AnalysisContextBase(object):
         :param comb: combination to analyze.
         :param limitState: limit state to compute displacements for.
         '''
-        lmsg.log('updating results for: '+comb.name)
+        if(not self.silent): lmsg.log('updating results for: '+comb.name)
         # Update internal forces.
         self.internalForcesDict.update(eif.getInternalForcesDict(comb.getName,self.calcSet.elements))
-        self.reactionsDict.update(er.getReactionsDict(comb.getName,self.reactionNodeSet.nodes))
+        if(self.reactionNodeSet):
+            self.reactionsDict.update(er.getReactionsDict(comb.getName,self.reactionNodeSet.nodes))
         # Write displacements.
         limitState.writeDisplacements(comb.getName,self.calcSet.nodes)
 

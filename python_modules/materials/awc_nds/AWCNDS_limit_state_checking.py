@@ -26,7 +26,9 @@ import geom
 import xc
 
 class Member(wood_member_base.Member):
-    ''' Beam and column members according to AWC NDS-2018.
+    ''' Beam and column members according to AWC NDS-2018. This class
+    exists to compute and update the values of the buckling reduction
+    factors of the members (chiN, chiLT, FcE and FbE).
 
     :ivar unbracedLengthX: unbraced length for torsional buckling 
                            about the longitudinal axis.
@@ -39,8 +41,12 @@ class Member(wood_member_base.Member):
     :ivar memberRestraint: Member restrain condition according  to clause 4.4.1.2 of AWC_NDS2018.
     :ivar memberLoadingCondition: parameters defining the member condition in order to obtain 
                                   its effective length accordint to table 3.3.3 of AWC NDS-2018.
+    :ivar loadCombDurationFactorFunction: function that returns the load 
+                                          duration factor corresponding to
+                                          a load combination expression
+                                          (e.g.: 1.0*deadLoad+0.7*windLoad).
     '''
-    def __init__(self, name, section, unbracedLengthX, unbracedLengthY= None, unbracedLengthZ= None, Cr= 1.0, connection= member_base.MemberConnection(), memberRestraint= AWCNDS_materials.MemberRestraint.notApplicable, memberLoadingCondition= AWCNDS_materials.MemberLoadingCondition(), lstLines=None):
+    def __init__(self, name, section, unbracedLengthX, unbracedLengthY= None, unbracedLengthZ= None, Cr= 1.0, connection= member_base.MemberConnection(), memberRestraint= AWCNDS_materials.MemberRestraint.notApplicable, memberLoadingCondition= AWCNDS_materials.MemberLoadingCondition(), loadCombDurationFactorFunction= None, lstLines=None):
         ''' Constructor. 
 
         :param name: object name.
@@ -56,6 +62,10 @@ class Member(wood_member_base.Member):
         :param memberRestraint: Member restrain condition according  to clause 4.4.1.2 of AWC_NDS2018.
         :param memberLoadingCondition: parameters defining the member condition in order to obtain 
                                        its effective length accordint to table 3.3.3 of AWC NDS-2018.
+        :param loadCombDurationFactorFunction: function that returns the load 
+                                          duration factor corresponding to
+                                          a load combination expression
+                                          (e.g.: 1.0*deadLoad+0.7*windLoad).
         :param lstLines: ordered list of lines that make up the beam.
         '''
         super(Member,self).__init__(name, section, lstLines)
@@ -72,6 +82,7 @@ class Member(wood_member_base.Member):
         self.connection= connection
         self.memberRestraint= memberRestraint
         self.memberLoadingCondition= memberLoadingCondition
+        self.loadCombDurationFactorFunction= loadCombDurationFactorFunction
             
     def getFcAdj(self):
         ''' Return the adjusted value of Fc including the column stability
@@ -277,11 +288,18 @@ class Member(wood_member_base.Member):
         FcE= self.getFcE()
         FbE= self.getFbECriticalBucklingDesignValue()
         return self.crossSection.getBiaxialBendingEfficiency(Nd= Nd, Myd= Myd, Mzd= Mzd, FcE= FcE, FbE= FbE, chiN= chiN, chiLT= chiLT)
+
+    def updateLoadDurationFactor(self, loadCombExpr):
+        '''Update the value of the load duration factors.'''
+        CD= 1.0
+        if(self.loadCombDurationFactorFunction):
+            CD= self.loadCombDurationFactorFunction(loadCombExpr.getComponents(''))
+            self.crossSection.wood.CD= CD
     
     def updateReductionFactors(self):
         '''Update the value of the appropriate reduction factors.'''
-        chiN= self.getCompressiveStrengthReductionFactor()
-        chiLT= self.getFlexuralStrengthReductionFactor()
+        chiN= self.getColumnStabilityFactor()
+        chiLT= self.getBeamStabilityFactor()
         FcE= self.getFcE()
         FbE= self.getFbECriticalBucklingDesignValue()
         for e in self.elemSet:

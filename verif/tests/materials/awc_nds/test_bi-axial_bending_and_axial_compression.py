@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-''' Simply supported beam-column capacity check example E1.7
+''' Simply supported beam-column capacity check example E1.8
     taken from the document NDS Structural Wood Design
     Examples 2015/2018 Edition.'''
 
@@ -136,7 +136,6 @@ for lc in results:
                 error= keyError
                 maxErrorLoadComb= lc
                 maxErrorKey= key
-        #error/=len(refResults[lc]) # average error
 
 '''
 print('error: ', error, 'load combination: ', maxErrorLoadComb, 'value: ', maxErrorKey)

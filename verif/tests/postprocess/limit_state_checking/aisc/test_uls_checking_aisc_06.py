@@ -132,7 +132,7 @@ for l in xcTotalSet.getLines:
 
 ## Compute internal forces for each combination
 for ls in limitStates:
-    ls.saveAll(combContainer,aiscCalcSet,lstSteelBeams=aiscMembers)
+    ls.saveAll(combContainer,aiscCalcSet, bucklingMembers= aiscMembers)
 
 outCfg= lsd.VerifOutVars(setCalc=aiscCalcSet, appendToResFile='Y', listFile='N', calcMeanCF='Y')
 limitState= lsd.normalStressesResistance
