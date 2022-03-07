@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
-''' Example 5.1 of the residential structural design guide.
-    Second Edition. '''
+''' Example 5.1 of the Residential Structural Design Guide.
+    Second Edition. October 2017'''
 
  
 from __future__ import division
