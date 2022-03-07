@@ -114,8 +114,28 @@ class AnalysisContext(analysis_context.AnalysisContextBase):
         # Export reactions, update reduction factors and store internal forces.
         self.updateULSResults(comb, limitState)
         comb.removeFromDomain() #Remove combination from the model.
-        
-    def calcInternalForces(self, loadCombinations, limitState):
+
+    def removeInternalForces(self, internalForcesToRemove):
+        ''' Remove (make them zero) the internal forces in the
+            list argument.
+
+        :param internalForcesToRemove: list of the internal forces to nullify.
+        '''
+        if(len(internalForcesToRemove)>0):
+            # Remove axial load.
+            for cKey in self.internalForcesDict:
+                cDict= self.internalForcesDict[cKey]
+                for eKey in cDict:
+                    eDict= cDict[eKey] # element data.
+                    for iKey in eDict: 
+                        if(iKey=='internalForces'): # element internal forces. 
+                            iDict= eDict[iKey]
+                            for sKey in iDict:
+                                sDict= iDict[sKey]
+                                for ifCode in internalForcesToRemove:
+                                    sDict[ifCode]= 0.0 # remove axial load.
+          
+    def calcInternalForces(self, loadCombinations, limitState, internalForcesToRemove= None):
         ''' Compute internal forces (solve).
 
         :param loadCombinations: load combinations to use.
@@ -129,6 +149,8 @@ class AnalysisContext(analysis_context.AnalysisContextBase):
         for key in loadCombinations.getKeys():
             comb= loadCombinations[key]
             self.eluSolutionSteps(comb, limitState)
+        if(internalForcesToRemove):
+            self.removeInternalForces(internalForcesToRemove)
         limitState.writeInternalForces(self.internalForcesDict)
         limitState.writeReactions(self.reactionsDict)
         self.failedCombinationsMessage(loadCombinations, limitState)
