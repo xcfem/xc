@@ -26,16 +26,6 @@ psiToPa= 6894.76
 wood= dimensional_lumber.DouglasFirLarchWood(grade= 'structural')
 beamSection= AWCNDS_materials.CustomLumberSection("DouglasFirLarch",b=3.5*inchToMeter,h=15.25*inchToMeter, woodMaterial= wood)
 
-length= 20.0*footToMeter
-loadingCondition= AWCNDS_materials.MemberLoadingCondition(numberOfConcentratedLoads= 1, lateralSupport= False, cantilever= False)
-beam= AWCNDS_limit_state_checking.BeamMember(unbracedLength= length, section= beamSection, memberLoadingCondition= loadingCondition)
-Fb= beam.crossSection.wood.Fb
-E= beam.crossSection.wood.E
-Emin= beam.crossSection.wood.Emin
-Fct= beam.crossSection.wood.Fct
-Fv= beam.crossSection.wood.Fv
-
-
 CD= 1.0 # Duration factor.
 Cfu= 1.0
 CM= 1.0
@@ -44,6 +34,16 @@ CT= 1.0
 Ct= 1.0
 Ci= 1.0
 CF= 1.0 # (Table 4A 14" and wider)
+
+
+length= 20.0*footToMeter
+loadingCondition= AWCNDS_materials.MemberLoadingCondition(numberOfConcentratedLoads= 1, lateralSupport= False, cantilever= False)
+beam= AWCNDS_limit_state_checking.BeamMember(unbracedLength= length, section= beamSection, memberLoadingCondition= loadingCondition, Cr= Cr)
+Fb= beam.crossSection.wood.Fb
+E= beam.crossSection.wood.E
+Emin= beam.crossSection.wood.Emin
+Fct= beam.crossSection.wood.Fct
+Fv= beam.crossSection.wood.Fv
 
 Ep= E*CM*Ct*Ci
 Epmin= Emin*CM*Ct*Ci*CT
@@ -59,7 +59,7 @@ Fbp_aster= Fb*CD*CM*Ct*CF*Ci*Cr  # Fbp_aster is adjusted bending design value
                                  # with all adjustment factors except the
                                  # beam stability factor CL and flat use factor
                                  # Cfu applied.
-FbAdj= beam.crossSection.getFbAdj(Cr= Cr)
+FbAdj= beam.crossSection.getFbAdj()
 ratio0= abs(FbAdj-Fbp_aster)/Fbp_aster
 
 lu= beam.unbracedLengthX

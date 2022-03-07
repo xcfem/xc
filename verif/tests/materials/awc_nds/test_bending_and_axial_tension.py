@@ -39,7 +39,7 @@ def getLoadCombDurationFactor(loadComb):
 # HemFir No. 2.
 wood= dimensional_lumber.HemFirWood(grade= 'no_2')
 
-beamSection= AWCNDS_materials.CustomLumberSection("HemFir", b=1.5*inchToMeter,h=7.25*inchToMeter, woodMaterial= wood)
+beamSection= AWCNDS_materials.CustomLumberSection("HemFir", b=1.5*inchToMeter,h=7.25*inchToMeter, woodMaterial= wood, Cr= 1.0)
 
 length= 12.0*footToMeter
 beam= AWCNDS_limit_state_checking.BeamMember(unbracedLength= length, section= beamSection)
@@ -57,7 +57,7 @@ FbE= beam.getFbECriticalBucklingDesignValue()
 
 Cfu= 1.0
 CM= 1.0
-Cr= 1.0
+# Cr= 1.0 See section constructor.
 CT= 1.0
 Ct= 1.0
 Ci= 1.0
@@ -103,7 +103,7 @@ for key in loadCases:
     # Bending
     #refFb_aster= Fb*wood.CD*CM*Ct*CF*Ci*Cr
     M= loadVector[1]*length**2/8.0
-    Fb_aster= beam.crossSection.getFbAdj(Cr= Cr)
+    Fb_aster= beam.crossSection.getFbAdj()
     results[key]['Fb*']= Fb_aster/psiToPa
     CL= beam.getBeamStabilityFactor()
     results[key]['CL']= CL

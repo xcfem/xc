@@ -78,7 +78,7 @@ class Member(wood_member_base.Member):
             self.unbracedLengthZ= unbracedLengthZ
         else:
             self.unbracedLengthZ= unbracedLengthX
-        self.Cr= Cr
+        self.crossSection.Cr= Cr
         self.connection= connection
         self.memberRestraint= memberRestraint
         self.memberLoadingCondition= memberLoadingCondition
@@ -96,7 +96,7 @@ class Member(wood_member_base.Member):
 
         :param majorAxis: if true return adjusted Fb for bending around major axis.
         '''
-        sectionFbAdj= self.crossSection.getFbAdj(majorAxis= majorAxis, Cr= self.Cr)
+        sectionFbAdj= self.crossSection.getFbAdj(majorAxis= majorAxis)
         CL= self.getBeamStabilityFactor()
         return CL*sectionFbAdj
     
@@ -197,7 +197,7 @@ class Member(wood_member_base.Member):
                 retval= 1.0
             else: ## Equation 3.3-6
                 FbE= self.getFbECriticalBucklingDesignValue()
-                FbAdj= self.crossSection.getFbAdj(majorAxis= majorAxis, Cr= self.Cr)
+                FbAdj= self.crossSection.getFbAdj(majorAxis= majorAxis)
                 ratio= FbE/FbAdj
                 A= (1+ratio)/1.9
                 B= A**2
@@ -294,7 +294,7 @@ class Member(wood_member_base.Member):
         CD= 1.0
         if(self.loadCombDurationFactorFunction):
             CD= self.loadCombDurationFactorFunction(loadCombExpr.getComponents(''))
-            self.crossSection.wood.CD= CD
+            self.crossSection.updateLoadDurationFactor(CD)
     
     def updateReductionFactors(self):
         '''Update the value of the appropriate reduction factors.'''

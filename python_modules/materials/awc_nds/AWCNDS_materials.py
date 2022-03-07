@@ -491,12 +491,21 @@ class WoodSection(object):
     :ivar name: section name.
     :ivar xc_wood_material: section wood material.
     :ivar xc_section: XC section material.
+    :ivar Cr: repetitive member factor.
     '''
-    def __init__(self, name):
-        ''' Constructor.'''
+    def __init__(self, name, Cr= 1.0):
+        ''' Constructor.
+
+        :param Cr: repetitive member adjustment factor
+        '''
         self.name= name
         self.xc_wood_material= None
         self.xc_section= None
+        self.Cr= Cr
+        
+    def updateLoadDurationFactor(self, CD):
+        '''Update the value of the load duration factor.'''
+        # Does nothing. Redefine when necessary.
         
     def setupULSControlVars(self, elems, chiN=1.0, chiLT=1.0, FcE=(0.0,0.0), FbE= 0.0):
         '''For each element creates the variables
@@ -535,7 +544,7 @@ class WoodSection(object):
         :param majorAxis: if true, return the major flexural strength.
         :param chiLT: beam stability factor clause 3.3.3 of AWC-NDS2018 (default= 1.0).
         '''
-        retval= self.getFbAdj(majorAxis= majorAxis, Cr= 1.0)*chiLT # Repetition adjustment factor ignored.
+        retval= self.getFbAdj(majorAxis= majorAxis)*chiLT
         if(majorAxis):
             retval*= self.getElasticSectionModulusZ()
         else:
@@ -599,7 +608,7 @@ class WoodSection(object):
             fb1= abs(Mzd)/Sz # Bending stress (major axis)
             Sy= self.getElasticSectionModulusY()
             fb2= abs(Myd)/Sy # Bending stress (minor axis)
-            if(abs(Myd)>abs(Mzd)): 
+            if(abs(Myd)>abs(Mzd)): # bending on weak axis
                 if(Nd>0):
                     CF= ratioN+fb2/Fb2_aster # equation 3.9-1
                     if(fb2>stressTreshold): # not so small stress. 
@@ -625,7 +634,7 @@ class WoodSection(object):
                     CF= max(CF, eq394)
                 else: # Nd==0
                     CF= self.getFlexuralEfficiency(Md= Myd, majorAxis= False, chiLT= chiLT) # available flexural strength minor axis.
-            else:
+            else: # bending on string axis.
                 if(Nd>0):
                     CF= ratioN # equation 3.9-1 part 1
                     if(fb1>stressTreshold): # not so small stress.
@@ -736,14 +745,15 @@ class WoodSection(object):
 
 class WoodRectangularSection(WoodSection, sp.RectangularSection):
     ''' Wood structural cross-section.'''
-    def __init__(self, name, b, h):
+    def __init__(self, name, b, h, Cr= 1.0):
         ''' Constructor.
 
         :param name: section name.
         :param b: section width.
         :param h: section height.
+        :param Cr: repetitive member adjustment factor
         '''
-        WoodSection.__init__(self, name)
+        WoodSection.__init__(self, name, Cr= Cr)
         sp.RectangularSection.__init__(self, name= name, b= b, h= h)
 
         
@@ -1101,11 +1111,10 @@ class HeaderSection(WoodRectangularSection):
         ''' Return the allovable bending stress.'''
         return self.getVolumeFactor()*self.wood.Fb_12
 
-    def getFbAdj(self, majorAxis= True, Cr= 1.0):
+    def getFbAdj(self, majorAxis= True):
         ''' Return the adjusted value of the allovable bending stress.
 
         :param majorAxis: if true return adjusted Fb for bending around major axis.
-        :param Cr: repetitive member adjustment factor.
         '''
         retval= self.getFb()
         if(not majorAxis):
@@ -1351,20 +1360,25 @@ class TJIJoistSection(WoodSection):
 
 class CustomLumberSection(WoodRectangularSection):
     ''' Section of a lumber member with custom dimensions.'''
-    def __init__(self, name, b, h, woodMaterial):
+    def __init__(self, name, b, h, woodMaterial, Cr= 1.0):
         ''' Constructor.
 
         :param name: section name.
         :param b: section width.
         :param h: section height.
         :param woodMaterial: timber material.
+        :param Cr: repetitive member adjustment factor
         '''
-        super(CustomLumberSection,self).__init__(name, b, h)
+        super(CustomLumberSection,self).__init__(name, b, h, Cr= Cr)
         self.wood= woodMaterial
         
     def getFb(self):
         return self.wood.getFb(b= self.b, h= self.h)
-    
+
+    def updateLoadDurationFactor(self, CD):
+        '''Update the value of the load duration factor.'''
+        self.wood.CD= CD
+
     def defElasticShearSection2d(self, preprocessor, overrideRho= None):
         ''' Defines a elastic shear section for two-dimensional
             problems.
@@ -1411,17 +1425,16 @@ class CustomLumberSection(WoodRectangularSection):
             value Fc.'''
         return self.wood.getCompressionSizeFactor(self.b,self.h)
     
-    def getFbAdj(self, majorAxis= True, Cr= 1.0):
+    def getFbAdj(self, majorAxis= True):
         ''' Return the adjusted value of Fb.
 
         :param majorAxis: if true return adjusted Fb for bending around major axis.
-        :param Cr: repetitive member adjustment factor
         '''
         b= self.b
         h= self.h
         if(not majorAxis):
             h, b = b, h
-        return self.wood.getFbAdj(b= b, h= h, Cr= Cr)
+        return self.wood.getFbAdj(b= b, h= h, Cr= self.Cr)
     
     def getFtAdj(self):
         ''' Return the adjusted value of Ft.
