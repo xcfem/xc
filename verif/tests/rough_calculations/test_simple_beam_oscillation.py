@@ -37,27 +37,27 @@ vIni= 100/3.6
 vFin= 1.2*vProy
 
 
-fMaxima= open("fMaximaICE2.dat", "w")
+fMaxima= open("/tmp/fMaximaICE2.dat", "w")
 fDinTrenICE2= sbo.flechaDinamicaMinimaTrenRangoVel(rm.cargasTrenICE2,rho,L,w1,amortig,L/2,vIni,vFin,fMaxima)
 fMaxima.close()
-os.system("rm fMaximaICE2.dat")
+os.system("rm /tmp/fMaximaICE2.dat")
 
-aMaxima= open("aMaximaICE2.dat", "w")
+aMaxima= open("/tmp/aMaximaICE2.dat", "w")
 aExtremaICE2= sbo.aceleracionExtremaTrenRangoVel(rm.cargasTrenICE2,rho,L,w1,amortig,L/2,vIni,vFin,aMaxima)
 aMaxima.close()
-os.system("rm aMaximaICE2.dat")
+os.system("rm /tmp/aMaximaICE2.dat")
 
 
-fMaxima= open("fMaximaTalgo350.dat", "w")
+fMaxima= open("/tmp/fMaximaTalgo350.dat", "w")
 fDinTrenTalgo350= sbo.flechaDinamicaMinimaTrenRangoVel(rm.cargasTrenTalgo350,rho,L,w1,amortig,L/2,vIni,vFin,fMaxima)
 fMaxima.close()
-os.system("rm fMaximaTalgo350.dat")
+os.system("rm /tmp/fMaximaTalgo350.dat")
 
 
-aMaxima= open("aMaximaTalgo350.dat", "w")
+aMaxima= open("/tmp/aMaximaTalgo350.dat", "w")
 aExtremaTalgo350= sbo.aceleracionExtremaTrenRangoVel(rm.cargasTrenTalgo350,rho,L,w1,amortig,L/2,vIni,vFin,aMaxima)
 aMaxima.close()
-os.system("rm aMaximaTalgo350.dat")
+os.system("rm /tmp/aMaximaTalgo350.dat")
 
 ratio1= abs(fDinTrenICE2+0.0029835051308262864)/0.0029835051308262864
 ratio2= abs(aExtremaICE2+0.2514528918690407)/0.2514528918690407
