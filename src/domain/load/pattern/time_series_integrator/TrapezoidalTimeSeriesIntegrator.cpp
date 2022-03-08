@@ -75,8 +75,9 @@ XC::TimeSeries *XC::TrapezoidalTimeSeriesIntegrator::integrate(TimeSeries *theSe
     // Check for zero time step, before dividing to get number of steps
     if(delta <= 0.0)
       {
-        std::cerr << "XC::TrapezoidalTimeSeriesIntegrator::integrate() Attempting to integrate time step" <<
-	  delta << "<= 0\n";
+        std::cerr << "TrapezoidalTimeSeriesIntegrator::" << __FUNCTION__
+	          << "; attempting to integrate time step"
+		  << delta << "<= 0\n";
         return 0;
       }
     // check a TimeSeries object was passed
@@ -119,7 +120,8 @@ XC::TimeSeries *XC::TrapezoidalTimeSeriesIntegrator::integrate(TimeSeries *theSe
 
     if(returnSeries == 0)
       {
-        std::cerr << "XC::TrapezoidalTimeSeriesIntegrator::integrate() Ran out of memory creating XC::PathSeries\n";
+        std::cerr << "TrapezoidalTimeSeriesIntegrator::" << __FUNCTION__
+		  << "; ran out of memory creating PathSeries\n";
         return 0;
       }
     return returnSeries;
