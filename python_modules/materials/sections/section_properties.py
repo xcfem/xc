@@ -487,11 +487,7 @@ class RectangularSection(SectionProperties):
         return 2*fy/self.b*self.Iy()
   
     def getElasticSectionModulusY(self):
-        '''Returns the plastic section modulus.
-
-           Computes the plastic section modulus assuming that plastic neutral 
-           axis passes through section centroid (which is true whenever the 
-           rectangular section is homogeneous).
+        '''Returns the elastic section modulus with respect to the y axis.
         '''
         return (self.b*self.h)*self.b/6.0
   
@@ -512,12 +508,7 @@ class RectangularSection(SectionProperties):
         return 2*fy/self.h*self.Iz()
   
     def getElasticSectionModulusZ(self):
-        '''Returns the plastic section modulus.
-
-           Computes the plastic section modulus assuming that plastic neutral 
-           axis passes through section centroid (which is true whenever the 
-           rectangular section is homogeneous).
-        '''
+        '''Returns the elasticc section modulus with respect to the z axis.'''
         return (self.b*self.h)*self.h/6.0
   
     def getPlasticSectionModulusZ(self):

@@ -25,7 +25,8 @@ pr400_i_joists= dict()
 for key in jsonDict:
     sectionData= jsonDict[key]
     h= sectionData['h']
+    b= sectionData['b']
     Mr= sectionData['Mr']
     Vr= sectionData['Vr']
     EI= sectionData['EI']
-    pr400_i_joists[key]= AWCNDS_materials.TJIJoistSection(name= key, h= h, Ms= Mr, Vs= Vr, EI= EI)
+    pr400_i_joists[key]= AWCNDS_materials.TJIJoistSection(name= key, b= b, h= h, Ms= Mr, Vs= Vr, EI= EI)

@@ -134,7 +134,7 @@ class Member(wood_member_base.Member):
             to expression 3.7-1 of NDS-2.018. 
         '''
         sr= self.getColumnSlendernessRatio()
-        E_adj= self.crossSection.wood.getEminAdj()
+        E_adj= self.crossSection.getEminAdj()
         FcE= 0.822*E_adj/((sr)**2)
         Fc_adj= self.crossSection.getFcAdj()
         ratio= FcE/Fc_adj
@@ -147,7 +147,7 @@ class Member(wood_member_base.Member):
             members (F_{cE1}) as defined in section 3.9.2 of NDS-2.018
             for buckling about the major axis.
         '''
-        E_adj= self.crossSection.wood.getEminAdj()
+        E_adj= self.crossSection.getEminAdj()
         if(self.crossSection.h>self.crossSection.b): # Wide side: H
             return 0.822*E_adj/(self.getColumnSlendernessRatioH())**2
         else: # Wide side B
@@ -158,7 +158,7 @@ class Member(wood_member_base.Member):
             members (F_{cE2}) as defined in section 3.9.2 of NDS-2.018
             for buckling about the minor axis.
         '''
-        E_adj= self.crossSection.wood.getEminAdj()
+        E_adj= self.crossSection.getEminAdj()
         if(self.crossSection.h<self.crossSection.b): # Narrow side: H
             return 0.822*E_adj/(self.getColumnSlendernessRatioH())**2
         else: # Narrow side B
@@ -168,7 +168,7 @@ class Member(wood_member_base.Member):
         ''' Return the critical buckling design value for compression
             members (F_{cE}) as defined in section 3.9.2 of NDS-2.018
             for buckling about the major and minor axis.'''
-        E_adj= self.crossSection.wood.getEminAdj()
+        E_adj= self.crossSection.getEminAdj()
         EH= 0.822*E_adj/(self.getColumnSlendernessRatioH())**2
         EB= 0.822*E_adj/(self.getColumnSlendernessRatioB())**2
         if(self.crossSection.h>self.crossSection.b): # Wide side: H
@@ -264,7 +264,7 @@ class Member(wood_member_base.Member):
             section 3.3.3.8 of NDS-2018.
         '''
         sr= self.getBeamBendingSlendernessRatioHB()
-        E_adj= self.crossSection.wood.getEminAdj()
+        E_adj= self.crossSection.getEminAdj()
         return (1.2*E_adj/sr[0]**2, 1.2*E_adj/sr[1]**2)
     
     def getFbECriticalBucklingDesignValue(self):

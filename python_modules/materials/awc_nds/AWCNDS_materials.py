@@ -1273,36 +1273,89 @@ class LVL_2900Fb2E_HeaderSection(LVLHeaderSection):
         :param linearDensity: mass per unit length.
         '''
         super(LVL_2900Fb2E_HeaderSection,self).__init__(name, b, h, Ms, Vs, linearDensity, wood= LVL_2900Fb2E())
+
+class TJIDummyWood(Wood):
+    ''' Dummy wood material for TJI joists.'''
+    E= 1.55e6*psi2Pa # Elastic modulus (Pa)
+    Emin= E
+    Ft= 1.70E+06 # We adopt a very moderate tension design value.
+    def __init__(self, name= 'TJIDummyWood'):
+        ''' Constructor.
+
+        :param name: material name.
+        '''
+        super(TJIDummyWood,self).__init__(name)
+        
+    def getEminAdj(self):
+        ''' Return the adjusted value of Emin.'''
+        return self.Emin
+
+    def getFtAdj(self):
+        return self.Ft
         
 class TJIJoistSection(WoodSection):
     ''' TJI joist section.'''
-    E= 1.55e6*psi2Pa # Elastic modulus (Pa) arbitrarily chosen.
-    def __init__(self, name:str, h:float, Ms:float, Vs:float, EI:float, linearRho:float= None):
+    def __init__(self, name:str, b:float, h:float, Ms:float, Vs:float, EI:float, linearRho:float= None):
         ''' Constructor.
 
         :param name: section name.
+        :param b: flange width.
         :param h: section height.
         :param Ms: allowable moment.
         :param Vs: allowable shear.
         :param EI: bending stiffness-
         '''
         super(TJIJoistSection,self).__init__(name)
-        self.h= h
+        self.h= h # section height
+        self.b= b # flange width.
+        self.wood= TJIDummyWood()
         self.Ms= Ms # Allowable moment.
         self.Vs= Vs # Allowable shear.
-        self.Iz= EI/self.E
+        self.Imajor= EI/self.wood.E
         self.linearRho= linearRho
+        self.webThickness= 9.5e-3 # Typical value.
 
+    def getEminAdj(self):
+        ''' Return the adjusted value of Emin.'''
+        return self.wood.getEminAdj()
+
+    def A(self):
+        ''' Return an approximation of the section area.'''
+        return 2.0*self.b**2+self.webThickness*(self.h-2.0*self.b)
+
+    def getElasticSectionModulusY(self):
+        '''Returns the elasticc section modulus with respect to the y axis.'''
+        hh= self.h-2*self.b
+        bb= self.b-self.webThickness
+        return self.b**2*(self.h-hh)/6.0+(self.b-bb)**3*self.h/6.0/self.b
+
+    def Iy(self):
+        '''second moment of area about the local y-axis.'''
+        return self.getElasticSectionModulusY()*self.h/2.0
+    
+    def getElasticSectionModulusZ(self):
+        '''Returns the elasticc section modulus with respect to the z axis.'''
+        return 2*self.Imajor/self.h
+
+    def Iz(self):
+        '''second moment of area about the local z-axis.'''
+        return self.Imajor
+
+    def getFtAdj(self):
+        ''' Return the adjusted value of Ft.'''
+        return self.wood.getFtAdj()
+    
     def getCompressiveStrength(self):
         ''' Return the value of the compressive strength of the section.
         '''
-        b= 12*self.Iz/self.h**3
+        b= 12*self.Imajor/self.h**3
         area= self.h*b
         return area # very small strength 1N/m2
     
     def getFlexuralStrength(self, majorAxis= True, chiLT= 1.0):
         ''' Return the value of the flexural strength of the section.
 
+        :param majorAxis: if true bending around the major axis.
         :param chiLT: beam stability factor clause 3.3.3 of AWC-NDS2018 (default= 1.0).
         '''
         retval= self.Ms*chiLT
@@ -1311,6 +1364,19 @@ class TJIJoistSection(WoodSection):
             # methodName= sys._getframe(0).f_code.co_name
             # lmsg.error(className+'.'+methodName+'; not implemented for minor axis.')
             retval/=1e4 # very small strength
+        return retval
+
+    def getFbAdj(self, majorAxis= True):
+        ''' Return the adjusted value of Fb.
+
+        :param majorAxis: if true bending around the major axis.
+        '''
+        chiLT= 1.0 # No lateral buckling reduction.
+        retval= self.getFlexuralStrength(majorAxis= majorAxis, chiLT= chiLT)
+        if(majorAxis):
+            retval/= self.getElasticSectionModulusZ()
+        else:
+            retval/= self.getElasticSectionModulusY()
         return retval
 
     def getShearStrength(self, majorAxis= True):
@@ -1332,13 +1398,13 @@ class TJIJoistSection(WoodSection):
         :param overrideRho: if defined (not None), override the value of 
                             the material density.
         '''
-        b= 12*self.Iz/self.h**3
+        b= 12*self.Imajor/self.h**3
         area= self.h*b
         G= self.E/(2*(1+0.3))
         lR= self.linearRho
         if(lR==None):
             lR= 632.62*b*self.h # average density kg/m3
-        return typical_materials.defElasticShearSection2d(preprocessor,name= self.name, A= area,E= self.E,G= G, I= self.Iz,alpha= 5.0/6.0, linearRho= lR)
+        return typical_materials.defElasticShearSection2d(preprocessor,name= self.name, A= area,E= self.wood.E,G= G, I= self.Imajor,alpha= 5.0/6.0, linearRho= lR)
     
     def defElasticShearSection3d(self, preprocessor, overrideRho= None):
         ''' Defines a elastic shear section for two-dimensional
@@ -1348,15 +1414,15 @@ class TJIJoistSection(WoodSection):
         :param overrideRho: if defined (not None), override the value of 
                             the material density.
         '''
-        b= 12*self.Iz/self.h**3
+        b= 12*self.Imajor/self.h**3
         area= self.h*b
-        G= self.E/(2*(1+0.3))
+        G= self.wood.E/(2*(1+0.3))
         lR= self.linearRho
-        Iy= 1/12.0*self.h*b**3
+        Iy= self.Iy()
         J= Iy/1000.0
         if(lR==None):
             lR= 632.62*b*self.h # average density kg/m3
-        return typical_materials.defElasticShearSection3d(preprocessor,name= self.name, A= area,E= self.E, G= G,Iz= self.Iz, Iy= Iy, J= J, alpha_y= 5.0/6.0, alpha_z= 5/6.0, linearRho= lR)
+        return typical_materials.defElasticShearSection3d(preprocessor,name= self.name, A= area,E= self.wood.E, G= G,Iz= self.Imajor, Iy= Iy, J= J, alpha_y= 5.0/6.0, alpha_z= 5/6.0, linearRho= lR)
 
 class CustomLumberSection(WoodRectangularSection):
     ''' Section of a lumber member with custom dimensions.'''
