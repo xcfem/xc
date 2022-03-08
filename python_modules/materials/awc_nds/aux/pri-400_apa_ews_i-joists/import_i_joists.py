@@ -40,10 +40,10 @@ import json
 #      load deflections of the I-joist in a simple-span
 #      application based on Eqs. 1 and 2.
 
-fNameIn= "factored_resistance_apa_ews_performance_rated_i_joists.ods"
+fNameIn= "asd_design_properties_apa_ews_performance_rated_i_joists.ods"
 fNameOut= '../pr_400_i_joists.json'
 
-columnOrder= ['','nmb', 'h', 'EI', 'Mr', 'Vr', 'Ir', 'ER_44_wo_stiff', 'ER_44_stiff', 'ER_102_wo_stiff', 'ER_102_stiff', 'VLCr', 'K']
+columnOrder= ['','nmb', 'b', 'h', 'EI', 'Mr', 'Vr', 'Ir', 'ER_44_wo_stiff', 'ER_44_stiff', 'ER_102_wo_stiff', 'ER_102_stiff', 'VLCr', 'K']
 numColumns= len(columnOrder)
 columnUnits= {} # All units correspond to SI, no need of conversion.
 
