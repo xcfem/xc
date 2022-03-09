@@ -482,9 +482,7 @@ class SHSShape(structural_steel.QHShape):
         
     def t(self):
         '''Return the wall thickness'''
-        return self.get('e')
-
-    
+        return self.get('e')    
 
 class UPNShape(structural_steel.UShape):
     def __init__(self,steel,name):

@@ -60,6 +60,7 @@ def getOutsideCornerRadii(thickness):
 def importSections(rows, namePrefix):
     ''' Import the data corresponding to cold formed
         square hollow sections.'''
+    retval= dict()
     cOrder= columnOrder[namePrefix]
     numColumns= len(cOrder)
     columnKeys= dict()
@@ -86,8 +87,8 @@ def importSections(rows, namePrefix):
                     
                 shapeRecord['E']= 210000e6 # To deprecate
                 shapeRecord['nu']= 0.3 # To deprecate
-                shapesDict[name]= shapeRecord
-    
+                retval[name]= shapeRecord
+    return retval
 
     
 shapesDict= dict() # Dictionary with all the shapes.
@@ -95,32 +96,34 @@ data= get_data(fNameIn)
 for sheetName in data:
     rows= data[sheetName]
     #if(sheetName in ['CFSHS', 'RHS']):
-    importSections(rows= rows, namePrefix= sheetName)
+    shapesDict[sheetName]= importSections(rows= rows, namePrefix= sheetName)
     
 # Some post-processing:
-for shapeName in shapesDict:
-    shapeRecord= shapesDict[shapeName]
-    for key in shapeRecord:
-        if(key=='nmb'):
-            value= shapeRecord[key].replace(' ','')
-            shapeRecord[key]= value
-        if(key=='CheckAvailability'):
-            value= shapeRecord[key]
-            shapeRecord[key]= (value=='#')
-                
-        if key in columnUnits:
-            factor= columnUnits[key]
-            value= str(shapeRecord[key])#.replace(',','')
-            shapeRecord[key]= float(value+factor)
-    if('h' in shapeRecord): # Square or rectangular shape
-        outsideCornerRadius= getOutsideCornerRadii(shapeRecord['e'])
-        insideCornerRadius= outsideCornerRadius-shapeRecord['e']
-        shapeRecord['outsideCornerRadius']= outsideCornerRadius
-        shapeRecord['insideCornerRadius']= insideCornerRadius
-        h_flat= shapeRecord['h']-outsideCornerRadius
-        shapeRecord['h_flat']= h_flat
-        b_flat= shapeRecord['b']-outsideCornerRadius
-        shapeRecord['b_flat']= b_flat
+for shapePrefix in shapesDict:
+    sheetDict= shapesDict[shapePrefix]
+    for shapeName in sheetDict:
+        shapeRecord= sheetDict[shapeName]
+        for key in shapeRecord:
+            if(key=='nmb'):
+                value= shapeRecord[key].replace(' ','')
+                shapeRecord[key]= value
+            if(key=='CheckAvailability'):
+                value= shapeRecord[key]
+                shapeRecord[key]= (value=='#')
+
+            if key in columnUnits:
+                factor= columnUnits[key]
+                value= str(shapeRecord[key])#.replace(',','')
+                shapeRecord[key]= float(value+factor)
+        if('h' in shapeRecord): # Square or rectangular shape
+            outsideCornerRadius= getOutsideCornerRadii(shapeRecord['e'])
+            insideCornerRadius= outsideCornerRadius-shapeRecord['e']
+            shapeRecord['outsideCornerRadius']= outsideCornerRadius
+            shapeRecord['insideCornerRadius']= insideCornerRadius
+            h_flat= shapeRecord['h']-outsideCornerRadius
+            shapeRecord['h_flat']= h_flat
+            b_flat= shapeRecord['b']-outsideCornerRadius
+            shapeRecord['b_flat']= b_flat
             
 jsonFile= open(fNameOut, "w")
 jsonFile.write(json.dumps(shapesDict))
