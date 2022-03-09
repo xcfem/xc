@@ -35,7 +35,6 @@ w_trib= 1.33*footToMeter
 
 # Materials
 beamSection= pr_400_i_joists.pr400_i_joists['PRI-20_302']
-beamSection.wood.CD= 1.0 # load duration adjustment factor.
 beam= AWCNDS_limit_state_checking.BeamMember(unbracedLength= span, section= beamSection)
 
 # Beam Stability Factor.
@@ -62,7 +61,6 @@ results= dict()
 for key in loadCases:
     results[key]= dict()
     loadCase= loadCases[key]
-    results[key]['CD']= beamSection.wood.CD
     load= eval(loadCase)
     results[key]['w']= load/poundToNewton*footToMeter
     # Tension
@@ -89,7 +87,7 @@ for key in loadCases:
     shearCF= beam.crossSection.getYShearEfficiency(V)
     results[key]['shearCF']= shearCF
 
-refResults= {'LC1': {'CD': 1.0, 'w': 66.50000122198874, 'ft': 0.0, 'Ft*': 246.56405734209747, 'Mzd': 2948.397623623522, 'Fb*': 1604.5632545931758, 'CL': 1.0, 'Fb**': 827.1383261124746, 'bendingCF': 0.9030314371666026, 'Vyd': 626.208344840394, 'shearCF': 0.4409917949418857}, 'LC2': {'CD': 1.0, 'w': 13.300000244397749, 'ft': 0.0, 'Ft*': 246.56405734209747, 'Mzd': 589.6795247247044, 'Fb*': 1604.5632545931758, 'CL': 1.0, 'Fb**': 827.1383261124746, 'bendingCF': 0.18060628743332055, 'Vyd': 125.24166896807881, 'shearCF': 0.08819835898837715}}
+refResults= {'LC1': {'w': 66.50000122198874, 'ft': 0.0, 'Ft*': 246.56405734209747, 'Mzd': 2948.397623623522, 'Fb*': 1604.5632545931758, 'CL': 1.0, 'Fb**': 827.1383261124746, 'bendingCF': 0.9030314371666026, 'Vyd': 626.208344840394, 'shearCF': 0.4409917949418857}, 'LC2': {'w': 13.300000244397749, 'ft': 0.0, 'Ft*': 246.56405734209747, 'Mzd': 589.6795247247044, 'Fb*': 1604.5632545931758, 'CL': 1.0, 'Fb**': 827.1383261124746, 'bendingCF': 0.18060628743332055, 'Vyd': 125.24166896807881, 'shearCF': 0.08819835898837715}}
 error= 0.0
 for lc in results:
     combResults= results[lc]
