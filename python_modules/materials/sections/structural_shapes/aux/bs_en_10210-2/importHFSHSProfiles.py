@@ -42,7 +42,7 @@ columnOrder= ['','','','nmb', 'b', 'e', 'CheckAvailability', 'P', 'A', 'hSlender
 numColumns= len(columnOrder)
 
 
-columnUnits= {'b':'e-3','h':'e-3', 'e':'e-3', 'P':'', 'A':'e-4', 'hSlendernessRatio':'e-3', 'bSlendernessRatio':'e-3', 'Iz':'e-8', 'iz':'e-2', 'Wzel':'e-6', 'Wzpl':'e-6', 'Iy':'e-8', 'iy':'e-2', 'Wyel':'e-6', 'Wypl':'e-6', 'It':'e-8',  'Wt':'e-6'}
+columnUnits= {'b':'e-3','h':'e-3', 'e':'e-3', 'P':'', 'A':'e-4', 'hSlendernessRatio':'', 'bSlendernessRatio':'', 'Iz':'e-8', 'iz':'e-2', 'Wzel':'e-6', 'Wzpl':'e-6', 'Iy':'e-8', 'iy':'e-2', 'Wyel':'e-6', 'Wypl':'e-6', 'It':'e-8',  'Wt':'e-6'}
 
 namePrefix= 'HFSHS'
 
