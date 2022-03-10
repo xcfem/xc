@@ -675,6 +675,31 @@ class WoodSection(object):
         '''
         return Vz/self.getShearStrength(majorAxis= False)
 
+    def checkUniaxialBendingForElement(self, elem, nmbComb):
+        '''Called in every commit to check biaxial bending criterion 
+            (bars in 2D problems).
+
+        :param elem: finite element to check.
+        :param nmbComb: name of the load combination.
+        '''
+        elem.getResistingForce()
+        chiLT= elem.getProp('chiLT') # beam stability factor.
+        chiN= elem.getProp('chiN') # column stability factor.
+        FcE= elem.getProp('FcE') # critical buckling design value for compression
+        FbE= elem.getProp('FbE') # critical buckling design value for bending
+        [[N1, M1, V1], [N2, M2, M2]]= model_inquiry.getValuesAtNodes(elem, ['N', 'M', 'V'], silent= False)
+        FCTN1= self.getBiaxialBendingEfficiency(Nd= N1, Myd= 0.0, Mzd= M1, FcE= FcE, FbE= FbE, chiN= chiN, chiLT= chiLT)[0]
+        FCTN2= self.getBiaxialBendingEfficiency(Nd= N2, Myd= 0.0, Mzd= M2, FcE= FcE, FbE= FbE, chiN= chiN, chiLT= chiLT)[0]
+        fctn= elem.getProp("FCTNCP")
+        if(FCTN1 > fctn[0]):
+            fctn[0]= FCTN1
+            elem.setProp("HIPCPTN1",nmbComb)
+        if(FCTN2 > fctn[1]):
+            fctn[1]= FCTN2
+            elem.setProp("HIPCPTN2",nmbComb)
+        elem.setProp("FCTNCP",fctn)
+        vc.updateEnvelopeInternalForcesBeamElem2D(elem)
+        
     def checkBiaxialBendingForElement(self, elem, nmbComb):
         '''Called in every commit to check biaxial bending criterion 
             (bars in 3D problems).
