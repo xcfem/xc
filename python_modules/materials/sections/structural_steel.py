@@ -350,7 +350,8 @@ class SteelShape(sp.SectionProperties):
             e.setProp('FCVCP',[-1.0,-1.0]) #Shear stresses efficiency.
 
     def checkUniaxialBendingForElement(self,elem,nmbComb):
-        '''Called in every commit to check uniaxial bending criterion (bars in 2D problems).
+        '''Called in every commit to check uniaxial bending criterion 
+           (bars in 2D problems).
 
         :param elem: finite element to check.
         :param nmbComb: name of the load combination.
@@ -359,7 +360,7 @@ class SteelShape(sp.SectionProperties):
         sectionClass= elem.getProp('sectionClass')
         chiLT= elem.getProp('chiLT') # Lateral torsional buckling reduction factor.
         chiN= elem.getProp('chiN') # Axial strength reduction factor.
-        [[N1, M1, V1], [N2, M2, V2]]= model_inquiry.getValuesAtNodes(elem, ['N', 'M', 'V'], False)
+        [[N1, M1, V1], [N2, M2, V2]]= model_inquiry.getValuesAtNodes(elem, ['N', 'M', 'V'], silent= False)
         FCTN1= self.getZBendingEfficiency(Nd= N1, Mzd= M1, Vyd= V1, chiN= chiN, chiLT= chiLT, sectionClass= sectionClass)[0]
         FCTN2= self.getZBendingEfficiency(Nd= N2, Mzd= M2, Vyd= V2, chiN= chiN, chiLT= chiLT, sectionClass= sectionClass)[0]
         fctn= elem.getProp("FCTNCP")
