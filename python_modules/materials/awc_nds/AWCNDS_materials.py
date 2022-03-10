@@ -1462,7 +1462,12 @@ class CustomLumberSection(WoodRectangularSection):
         '''
         super(CustomLumberSection,self).__init__(name, b, h, Cr= Cr)
         self.wood= woodMaterial
-        
+
+    def isBuiltUpSection(self):
+        ''' Return true if the section is built-up from smaller
+            pieces.'''
+        return False
+    
     def getFb(self):
         return self.wood.getFb(b= self.b, h= self.h)
 
@@ -1639,3 +1644,19 @@ class DimensionLumberSection(CustomLumberSection):
             lmsg.error('section: \''+name+'\' doesn\'t exists.')
         super(DimensionLumberSection,self).__init__(name, b, h, woodMaterial)
 
+class BuiltUpLumberSection(CustomLumberSection):
+    ''' Built-up lumber section.'''
+    def __init__(self, name, b, h, woodMaterial):
+        ''' Constructor.
+
+        :param name: section name.
+        :param b: section width.
+        :param h: section height.
+        :param woodMaterial: timber material.
+        '''
+        super(BuiltUpLumberSection,self).__init__(name, b, h, woodMaterial)
+
+    def isBuiltUpSection(self):
+        ''' Return true if the section is built-up from smaller
+            pieces.'''
+        return True

@@ -120,27 +120,40 @@ class Member(wood_member_base.Member):
             column for bending in the H plane.'''
         Ke= self.getEffectiveBucklingLengthCoefficientRecommended()
         return Ke*self.unbracedLengthZ/self.crossSection.h
-        
-    def getColumnSlendernessRatio(self):
-        ''' Return the slenderness ratio of the member working as
+
+    def getColumnSlendernessRatioBH(self):
+        ''' Return both the slenderness ratios of the member working as
             column.'''
         Ke= self.getEffectiveBucklingLengthCoefficientRecommended()
         srB= Ke*self.unbracedLengthY/self.crossSection.b
         srH= Ke*self.unbracedLengthZ/self.crossSection.h
+        return (srB,srH)
+        
+        
+    def getColumnSlendernessRatio(self):
+        ''' Return the slenderness ratio of the member working as
+            column.'''
+        (srB, srH)= self.getColumnSlendernessRatioBH()
         return max(srB,srH)
 
     def getColumnStabilityFactor(self):
         ''' Return the column stability factor according
-            to expression 3.7-1 of NDS-2.018. 
+            to expressions 3.7-1 and 15.2-1 of NDS-2.018. 
         '''
-        sr= self.getColumnSlendernessRatio()
+        (srB, srH)= self.getColumnSlendernessRatioBH()
+        sr= max(srB,srH)
         E_adj= self.crossSection.getEminAdj()
         FcE= 0.822*E_adj/((sr)**2)
         Fc_adj= self.crossSection.getFcAdj()
         ratio= FcE/Fc_adj
         c= self.crossSection.wood.get37_1c()
         tmp= (1+ratio)/2.0/c
-        return tmp-math.sqrt(tmp**2-ratio/c)
+        retval= tmp-math.sqrt(tmp**2-ratio/c)
+        if(self.crossSection.isBuiltUpSection()): # regular section.
+           if(self.crossSection.b<self.crossSection.h): # weak axis pll to H
+               if(srB>srH): # weak-axis slenderness ratio governs.
+                   retval*= 0.6 # Equation 15.2-1
+        return retval
     
     def getFcE1(self):
         ''' Return the critical buckling design value for compression
@@ -169,8 +182,9 @@ class Member(wood_member_base.Member):
             members (F_{cE}) as defined in section 3.9.2 of NDS-2.018
             for buckling about the major and minor axis.'''
         E_adj= self.crossSection.getEminAdj()
-        EH= 0.822*E_adj/(self.getColumnSlendernessRatioH())**2
-        EB= 0.822*E_adj/(self.getColumnSlendernessRatioB())**2
+        (srB, srH)= self.getColumnSlendernessRatioBH()
+        EH= 0.822*E_adj/(srH)**2
+        EB= 0.822*E_adj/(srB)**2
         if(self.crossSection.h>self.crossSection.b): # Wide side: H
             return (EH, EB)
         else: # Wide side B
