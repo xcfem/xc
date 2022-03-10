@@ -29,7 +29,14 @@ for item in CFSHS:
     shape['Wypl']= shape['Wzpl']
     
 class CFSHSShape(structural_steel.QHShape):
+    ''' Cold formed square hollow sections according to 
+        BS EN 2019.'''
     def __init__(self,steel,name):
+        ''' Constructor.
+
+        :param steel: steel material.
+        :param name: shape name (i.e. 'CFSHS300x300x10.0')
+        '''
         super(CFSHSShape,self).__init__(steel,name,CFSHS)
 
     def t(self):
@@ -52,8 +59,15 @@ for item in CFRHS:
     shape['AreaQy']= 2*0.7*h*e
     shape['AreaQz']= 2*0.7*b*e
     
-class RHSShape(structural_steel.QHShape):
+class CFRHSShape(structural_steel.QHShape):
+    ''' Cold formed rectangular hollow sections according to 
+        BS EN 2019.'''
     def __init__(self,steel,name):
+        ''' Constructor.
+
+        :param steel: steel material.
+        :param name: shape name (i.e. 'RHS20x40x2.0')
+        '''
         super(RHSShape,self).__init__(steel,name,CFRHS)
 
     def t(self):
@@ -73,15 +87,25 @@ for item in CFCHS:
     shape['AreaQy']= 0.5*A
     shape['AreaQz']= 0.5*A
 
-class CHSShape(structural_steel.SteelShape):
+class CFCHSShape(structural_steel.SteelShape):
+    ''' Cold formed circular hollow sections according to 
+        BS EN 2019.'''
     def __init__(self,steel,name):
+        ''' Constructor.
+
+        :param steel: steel material.
+        :param name: shape name (i.e. '"CFSHS350x350x12.5')
+        '''
         super(CHSShape,self).__init__(steel,name,CFCHS)
+        
     def getRho(self):
         ''' Returns mass per unit length. '''
         return self.get('P')
+    
     def alphaY(self):
         '''Return shear shape factor with respect to local y-axis'''
         return 1.0/2.0 #Shear distortion constant. See E. Oñate book page 122.
+    
     def alphaZ(self):
         '''Return shear shape factor with respect to local z-axis'''
         return self.alphaY()

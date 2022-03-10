@@ -615,3 +615,44 @@ class HFSHSShape(EC3Shape,bs_en_10210_shapes.HFSHSShape):
         '''
         EC3Shape.__init__(self,name,'rolled')
         bs_en_10210_shapes.HFSHSShape.__init__(self,steel,name)
+        
+from materials.sections.structural_shapes import bs_en_10219_shapes
+
+class CFSHSShape(EC3Shape,bs_en_10219_shapes.CFSHSShape):
+    """BS EN 10219-2: cold formed square hollow steel shapes 
+       with Eurocode 3 verification routines.
+    """
+    def __init__(self, steel, name):
+        ''' Constructor.
+
+        :param steel: steel material.
+        :param name: shape name (i.e. 'HFSHS300x300x10.0')
+        '''
+        EC3Shape.__init__(self,name,'welded')
+        bs_en_10219_shapes.CFSHSShape.__init__(self, steel, name)
+        
+class CFRHSShape(EC3Shape,bs_en_10219_shapes.CFRHSShape):
+    """BS EN 10219-2: cold formed rectangular hollow steel shapes 
+       with Eurocode 3 verification routines.
+    """
+    def __init__(self, steel, name):
+        ''' Constructor.
+
+        :param steel: steel material.
+        :param name: shape name (i.e. 'HFSHS300x300x10.0')
+        '''
+        EC3Shape.__init__(self,name,'welded')
+        bs_en_10219_shapes.CFRHSShape.__init__(self, steel, name)
+        
+class CFCHSShape(EC3Shape,bs_en_10219_shapes.CFCHSShape):
+    """BS EN 10219-2: cold formed circular hollow steel shapes 
+       with Eurocode 3 verification routines.
+    """
+    def __init__(self, steel, name):
+        ''' Constructor.
+
+        :param steel: steel material.
+        :param name: shape name (i.e. 'HFSHS300x300x10.0')
+        '''
+        EC3Shape.__init__(self,name,'welded')
+        bs_en_10219_shapes.CFCHSShape.__init__(self, steel, name)
