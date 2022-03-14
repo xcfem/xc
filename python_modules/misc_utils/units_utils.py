@@ -1,5 +1,16 @@
+# -*- coding: utf-8 -*-
 from math import floor
 from fractions import Fraction
+
+inchToMeter= 25.4e-3
+footToMeter= 0.3048 # feet to meters.
+poundToN= 4.4482216282509 # pound-force to Newton.
+kipToN= 1000*poundToN # kip to Newton.
+kipTokN= poundToN
+psiToPa= 6894.7572932 # pounds by square inch to Pascals.
+ksiToPa= 1000*psiToPa # a thousand pounds by square inch to Pascals.
+psfToPa= 0.047880258888889e3 # pounds by square foot to Pascals.
+
  
 def convert_inches(n):
     '''Return (feet,inches,inches' fraction) equivalent to number n of inches 

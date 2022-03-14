@@ -21,15 +21,8 @@ import geom
 from materials.sections.fiber_section import fiber_sets
 from materials.sections import stress_calc as sc
 from misc_utils import log_messages as lmsg
+from misc_utils import units_utils
 from postprocess.reports import common_formats as fmt
-
-
-in2m= 0.0254 #inches to meters
-m2in=1/in2m
-kip2N= 4.4482216e3
-N2kip=1/kip2N
-lb2N=4.4482216
-N2lb=1/lb2N
 
 class RebarController(object):
     '''Control of some parameters as development length 
@@ -703,9 +696,9 @@ class AnchorBolt(object):
         kc= 17.0
         if(self.cast_in):
             kc= 24.0
-        hef_in= self.hef*m2in
+        hef_in= self.hef/units_utils.inchToMeter
         fc_psi= abs(self.concrete.fck*ACI_materials.fromPascal)
-        Nb=kc*math.sqrt(fc_psi)*math.pow(hef_in,1.5)*ACI_materials.pound2Newton
+        Nb=kc*math.sqrt(fc_psi)*math.pow(hef_in,1.5)*units_utils.poundToN
         return Nb
 
     def getConcrBreakoutStrengthTension(self,cracking=True):
@@ -835,8 +828,8 @@ class AnchorBolt(object):
          a single anchor in cracked concrete.
          '''
          le=min(self.hef,8*self.diam)
-         Vb=8*(le/self.diam)**0.2*(self.diam*m2in)**0.5*(abs(self.concrete.fck*ACI_materials.fromPascal))**0.5*(self.ca1*m2in)**(1.5)
-         return Vb*lb2N
+         Vb=8*(le/self.diam)**0.2*(self.diam/units_utils.inchToMeter)**0.5*(abs(self.concrete.fck*ACI_materials.fromPascal))**0.5*(self.ca1/units_utils.inchToMeter)**(1.5)
+         return Vb*units_utils.poundToN
 
     def getFactorEdgeV(self):
         '''Return the modification factor for edge effect for a
@@ -893,7 +886,7 @@ class AnchorBolt(object):
         :param cracking: True for anchors located in a region of a concrete 
                member where analysis indicates cracking. (Defaults to True)
         '''
-        if self.hef<2.5*in2m:
+        if self.hef<2.5*units_utils.inchToMeter:
             kcp=1.0
         else:
             kcp=2.0

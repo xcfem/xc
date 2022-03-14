@@ -9,6 +9,7 @@ from __future__ import division
 import math
 from materials.awc_nds import AWCNDS_materials as mat
 from misc_utils import log_messages as lmsg
+from misc_utils import units_utils
 
 class DowelFastener(object):
     ''' Dowel-Type fastener as defined in chapter 12 of NDS-2018.
@@ -49,11 +50,11 @@ class DowelFastener(object):
                       member in a connection.
         :param yieldMode: yield mode.
         '''
-        if(self.D<0.25*mat.in2meter):
-            if(self.D<0.17*mat.in2meter):
+        if(self.D<0.25*units_utils.inchToMeter):
+            if(self.D<0.17*units_utils.inchToMeter):
                 return 2.2
             else:
-                return 10.0*self.D/mat.in2meter+0.5
+                return 10.0*self.D/units_utils.inchToMeter+0.5
         else:
             k_theta= 1+0.25*(theta/(math.pi/2.0))
             if(yieldMode in ['Im','Is']):
@@ -245,7 +246,7 @@ class Nail(DowelFastener):
  
         :param G: specific gravity of wood.
         '''
-        return 1380.0*mat.pound2N/mat.in2meter*math.pow(G,5/2.0)*self.D/mat.in2meter
+        return 1380.0*mat.pound2N/units_utils.inchToMeter*math.pow(G,5/2.0)*self.D/units_utils.inchToMeter
 
     def getDesignWithdrawal(self,G, sideMemberThickness):
         ''' Return the withdrawal design value based on main
@@ -266,20 +267,20 @@ class Nail(DowelFastener):
             to clause 12.1.6.4 of NDS-2018.'''
         return 6.0*self.D
 
-#Nail_2D= Nail(diameter= 0.072*mat.in2meter, length= 1*mat.in2meter)
-#Nail_2D= Nail(diameter= 0.083*mat.in2meter, length= 1*mat.in2meter)
-#Nail_3D= Nail(diameter= 0.083*mat.in2meter, length= 1.25*mat.in2meter)
-Nail_4D= Nail(diameter= 0.109*mat.in2meter, length= 1.5*mat.in2meter)
-Nail_5D= Nail(diameter= 0.109*mat.in2meter, length= 1.75*mat.in2meter)
-Nail_6D= Nail(diameter= 0.12*mat.in2meter, length= 2*mat.in2meter)
-Nail_8D= Nail(diameter= 0.134*mat.in2meter, length= 2.5*mat.in2meter)
-Nail_10D= Nail(diameter= 0.148*mat.in2meter, length= 3*mat.in2meter)
-Nail_12D= Nail(diameter= 0.148*mat.in2meter, length= 3.25*mat.in2meter)
-Nail_16D= Nail(diameter= 0.165*mat.in2meter, length= 3.5*mat.in2meter)
-Nail_20D= Nail(diameter= 0.203*mat.in2meter, length= 4*mat.in2meter)
-Nail_30D= Nail(diameter= 0.22*mat.in2meter, length= 4.5*mat.in2meter)
-Nail_40D= Nail(diameter= 0.238*mat.in2meter, length= 5*mat.in2meter)
-Nail_60D= Nail(diameter= 0.238*mat.in2meter, length= 6*mat.in2meter)
+#Nail_2D= Nail(diameter= 0.072*units_utils.inchToMeter, length= 1*units_utils.inchToMeter)
+#Nail_2D= Nail(diameter= 0.083*units_utils.inchToMeter, length= 1*units_utils.inchToMeter)
+#Nail_3D= Nail(diameter= 0.083*units_utils.inchToMeter, length= 1.25*units_utils.inchToMeter)
+Nail_4D= Nail(diameter= 0.109*units_utils.inchToMeter, length= 1.5*units_utils.inchToMeter)
+Nail_5D= Nail(diameter= 0.109*units_utils.inchToMeter, length= 1.75*units_utils.inchToMeter)
+Nail_6D= Nail(diameter= 0.12*units_utils.inchToMeter, length= 2*units_utils.inchToMeter)
+Nail_8D= Nail(diameter= 0.134*units_utils.inchToMeter, length= 2.5*units_utils.inchToMeter)
+Nail_10D= Nail(diameter= 0.148*units_utils.inchToMeter, length= 3*units_utils.inchToMeter)
+Nail_12D= Nail(diameter= 0.148*units_utils.inchToMeter, length= 3.25*units_utils.inchToMeter)
+Nail_16D= Nail(diameter= 0.165*units_utils.inchToMeter, length= 3.5*units_utils.inchToMeter)
+Nail_20D= Nail(diameter= 0.203*units_utils.inchToMeter, length= 4*units_utils.inchToMeter)
+Nail_30D= Nail(diameter= 0.22*units_utils.inchToMeter, length= 4.5*units_utils.inchToMeter)
+Nail_40D= Nail(diameter= 0.238*units_utils.inchToMeter, length= 5*units_utils.inchToMeter)
+Nail_60D= Nail(diameter= 0.238*units_utils.inchToMeter, length= 6*units_utils.inchToMeter)
     
 class Screw(DowelFastener):
     ''' Screw as defined in NDS-2018.
@@ -318,7 +319,7 @@ class LagScrew(Screw):
  
         :param G: specific gravity of wood.
         '''
-        return 1800.0*mat.pound2N/mat.in2meter*math.pow(G,1.5)*pow((self.D/mat.in2meter),3.0/4.0)
+        return 1800.0*mat.pound2N/units_utils.inchToMeter*math.pow(G,1.5)*pow((self.D/units_utils.inchToMeter),3.0/4.0)
     
     def getDesignWithdrawal(self,G, sideMemberThickness, endGrainFactor= 0.75):
         ''' Return the withdrawal design value based on main

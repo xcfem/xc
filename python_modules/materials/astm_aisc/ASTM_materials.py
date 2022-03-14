@@ -34,9 +34,7 @@ from connections.steel_connections import square_plate_washer as swp
 from connections.steel_connections import bolted_plate as bp
 from connections.steel_connections import gusset_plate as gp
 from connections.steel_connections import connected_members
-
-# Units
-in2m= 25.4e-3
+from misc_utils import units_utils
 
 class ASTMSteel(steel_base.BasicSteel):
     '''ASTM structural steel.
@@ -930,9 +928,9 @@ class AnchorBolt(bolts.AnchorBase):
             anchor according to clause R17.4.1.2
             of ACI 318R-14.
         '''
-        d_in= self.diameter/in2m # diameter in inches.
+        d_in= self.diameter/units_utils.inchToMeter # diameter in inches.
         nt= self.getNumOfThreadsPerInch()
-        deff= (d_in-0.9743/nt)*in2m # effective diameter in m.
+        deff= (d_in-0.9743/nt)*units_utils.inchToMeter # effective diameter in m.
         return math.pi/4.0*deff**2
     
     def getShearEffectiveCrossSectionalArea(self):
@@ -1063,7 +1061,7 @@ class AnchorBolt(bolts.AnchorBase):
         '''
         fc_psi= fc*145.038e-6
         retval= psi3*math.sqrt(fc_psi)
-        h_ef_in= h_ef/in2m
+        h_ef_in= h_ef/units_utils.inchToMeter
         if(h_ef_in>25): # embedment length outside CCD method range (0.0 to 0.635 m)
             he_ef_in= 25
         if(h_ef_in<11): 

@@ -14,6 +14,7 @@ __email__= "l.pereztato@ciccp.es, ana.ortega@ciccp.es "
 import scipy.interpolate
 from materials.awc_nds import AWCNDS_materials
 from materials import typical_materials
+from misc_utils import units_utils
 
 
 def getDressedThickness(nominalThickness, dressedSize= 'Dry'):
@@ -200,9 +201,9 @@ class DimensionLumberWood(AWCNDS_materials.Wood):
         retval= 1.0
         if(b>h): # flat use
             f= self.flat_use_interp_3
-            if(h>3*AWCNDS_materials.in2meter):
+            if(h>3*units_utils.inchToMeter):
                 f= self.flat_use_interp_4
-            retval= f(b/AWCNDS_materials.in2meter)
+            retval= f(b/units_utils.inchToMeter)
         return retval;
     
     def getBendingSizeFactor(self, b, h):
@@ -218,13 +219,13 @@ class DimensionLumberWood(AWCNDS_materials.Wood):
         retval= 1.0
         if(self.grade in ['structural','no_1', 'no_1_&_Btr','no_2','no_3']):
             f= self.fb_size_factor_interp_3
-            if(thickness>=4*AWCNDS_materials.in2meter):
+            if(thickness>=4*units_utils.inchToMeter):
                 f= self.fb_size_factor_interp_4
-            retval= f(width/AWCNDS_materials.in2meter)
+            retval= f(width/units_utils.inchToMeter)
         elif(self.grade == 'stud'):
-            if(width<8*AWCNDS_materials.in2meter):
+            if(width<8*units_utils.inchToMeter):
                 f= self.stud_fb_size_factor_interp
-                retval= f(width/AWCNDS_materials.in2meter)
+                retval= f(width/units_utils.inchToMeter)
             else:
                 lmsg.error('Stud too wide')
         else:
@@ -244,11 +245,11 @@ class DimensionLumberWood(AWCNDS_materials.Wood):
         retval= 1.0
         if(self.grade in ['structural','no_1','no_2','no_3']):
             f= self.fb_size_factor_interp_3 # Same values
-            retval= f(width/AWCNDS_materials.in2meter)
+            retval= f(width/units_utils.inchToMeter)
         elif(self.grade == 'stud'):
-            if(width<8*AWCNDS_materials.in2meter):
+            if(width<8*units_utils.inchToMeter):
                 f= self.stud_fb_size_factor_interp_3 # Same values
-                retval= f(width/AWCNDS_materials.in2meter)            
+                retval= f(width/units_utils.inchToMeter)            
             else:
                 lmsg.error('Stud too wide')
         else:
@@ -267,11 +268,11 @@ class DimensionLumberWood(AWCNDS_materials.Wood):
         retval= 1.0
         if(self.grade in ['structural','no_1','no_2','no_3']):
             f= self.fc_size_factor_interp
-            retval= f(width/AWCNDS_materials.in2meter)
+            retval= f(width/units_utils.inchToMeter)
         elif(self.grade == 'stud'):
-            if(width<8*AWCNDS_materials.in2meter):
+            if(width<8*units_utils.inchToMeter):
                 f= self.stud_fc_size_factor_interp
-                retval= f(width/AWCNDS_materials.in2meter)            
+                retval= f(width/units_utils.inchToMeter)            
             else:
                 lmsg.error('Stud too wide')
         else:
@@ -678,9 +679,9 @@ class SouthernPineWood(DimensionLumberWood):
                 className= type(self).__name__
                 methodName= sys._getframe(0).f_code.co_name
                 lmsg.error(className+'.'+methodName+'; not implemented yet for sub-grade: '+self.sub_grade)
-        if(width>=12*AWCNDS_materials.in2meter):
+        if(width>=12*units_utils.inchToMeter):
             retval= 0.9
-        elif((width>=8*AWCNDS_materials.in2meter) and (abs(thickness-4*AWCNDS_materials.in2meter)<1e-3)):
+        elif((width>=8*units_utils.inchToMeter) and (abs(thickness-4*units_utils.inchToMeter)<1e-3)):
             retval= 1.1
         return retval;
     
@@ -704,7 +705,7 @@ class SouthernPineWood(DimensionLumberWood):
                 className= type(self).__name__
                 methodName= sys._getframe(0).f_code.co_name
                 lmsg.error(className+'.'+methodName+'; not implemented yet for sub-grade: '+self.sub_grade)
-        if(width>=12*AWCNDS_materials.in2meter):
+        if(width>=12*units_utils.inchToMeter):
             retval= 0.9
         return retval;
     
@@ -728,7 +729,7 @@ class SouthernPineWood(DimensionLumberWood):
                 className= type(self).__name__
                 methodName= sys._getframe(0).f_code.co_name
                 lmsg.error(className+'.'+methodName+'; not implemented yet for sub-grade: '+self.sub_grade)
-        if(width>=12*AWCNDS_materials.in2meter):
+        if(width>=12*units_utils.inchToMeter):
             retval= 0.9
         return retval;
 

@@ -10,6 +10,7 @@ import scipy.interpolate
 from materials import concrete_base
 from materials.aci import ACI_materials
 from misc_utils import log_messages as lmsg
+from misc_utils import units_utils
 
 __author__= "Luis C. Pérez Tato (LCPT) , Ana Ortega (AO_O) "
 __copyright__= "Copyright 2016, LCPT, AO_O"
@@ -19,8 +20,7 @@ __email__= "l.pereztato@ciccp.es, ana.ortega@ciccp.es "
 
 toPascal= ACI_materials.toPascal #Conversion from lb/inch2 to Pa 
 fromPascal= ACI_materials.fromPascal #Conversion from Pa to lb/inch2
-inch2Meter= 0.0254 # Conversion from inch to meter
-feet2Meter= 0.3048 # Conversion from feet to meter
+units_utils.footToMeter= 0.3048 # Conversion from feet to meter
 
 class Mortar(object):
     ''' Mortar according to TM 5-809-3.
@@ -177,8 +177,8 @@ class CMUWallFabric(object):
     def getEquivalentWallThickness(self):
         ''' Return the equivalent wall thickness according to
             table 5-2 of TM 5-809-3.'''
-        sp_inch= self.groutedCellsSpacing/inch2Meter
-        th_inches= self.thickness/inch2Meter
+        sp_inch= self.groutedCellsSpacing/units_utils.inchToMeter
+        th_inches= self.thickness/units_utils.inchToMeter
         tol= 1e-3
         if(th_inches<=6.0):
             if(th_inches<6.0-1e3):
@@ -190,13 +190,13 @@ class CMUWallFabric(object):
                 lmsg.error('thickness: '+str(self.thickness)+' out of range (too thick).')
             else:
                 th_inches= 12.0
-        return self.fEquivalentThickness(th_inches,sp_inch)[0]*inch2Meter
+        return self.fEquivalentThickness(th_inches,sp_inch)[0]*units_utils.inchToMeter
     
     def getEffectiveAreaPerUnitLength(self):
         ''' Return the effective area per unit length according to
             table 5-3 of TM 5-809-3.'''
-        sp_inch= self.groutedCellsSpacing/inch2Meter
-        th_inches= self.thickness/inch2Meter
+        sp_inch= self.groutedCellsSpacing/units_utils.inchToMeter
+        th_inches= self.thickness/units_utils.inchToMeter
         tol= 1e-3
         if(th_inches<=6.0):
             if(th_inches<6.0-1e3):
@@ -209,8 +209,8 @@ class CMUWallFabric(object):
             else:
                 th_inches= 12.0
         retval= float(self.fEffectiveArea(th_inches,sp_inch)[0]) #in2/ft
-        retval/= feet2Meter #in2/m
-        retval*= (inch2Meter**2) #in2/m->m2/m
+        retval/= units_utils.footToMeter #in2/m
+        retval*= (units_utils.inchToMeter**2) #in2/m->m2/m
         return retval
     
     def getEffectiveArea(self):
@@ -221,22 +221,22 @@ class CMUWallFabric(object):
         '''Return the width of the masonry element effective in 
            resisting out-of-plane shear as shown in figure
            5-2c and given in table 5-1 of TM 5-809-3.'''
-        return 7.5*inch2Meter
+        return 7.5*units_utils.inchToMeter
     def getEffectiveWidth(self):
         '''Return the effective width of the fabric
            according to remark 2 on table 5-4
            of TM 5-809-3.'''
         retval= self.groutedCellsSpacing
         retval= min(6*self.thickness,retval)
-        return min(retval,48.0*inch2Meter)
+        return min(retval,48.0*units_utils.inchToMeter)
         
     def getGrossMomentOfInertia(self):
         '''Return the gross moment of inertia
            according to table 5-4 of TM 5-809-3.
         '''
-        th_inches= self.thickness/inch2Meter
-        b_inch= self.getEffectiveWidth()/inch2Meter
-        return self.fInertia(th_inches,b_inch)[0]*inch2Meter**4 #in**4->m**4
+        th_inches= self.thickness/units_utils.inchToMeter
+        b_inch= self.getEffectiveWidth()/units_utils.inchToMeter
+        return self.fInertia(th_inches,b_inch)[0]*units_utils.inchToMeter**4 #in**4->m**4
 
     def getSectionModulus(self):
         ''' Return the section modulus
@@ -245,15 +245,15 @@ class CMUWallFabric(object):
     def getCrackingMomentStrength(self):
         '''Return the cracking moment strength of the fabric
            according to equation 5-7 of  TM 5-809-3.'''
-        th_inches= self.thickness/inch2Meter
-        b_inch= self.getEffectiveWidth()/inch2Meter
+        th_inches= self.thickness/units_utils.inchToMeter
+        b_inch= self.getEffectiveWidth()/units_utils.inchToMeter
         return self.fMoment(th_inches,b_inch)[0]/8.85 #lbf.ft-> N.m
     
     def getMassPerSquareMeter(self):
         '''Return the mass of the fabric per square meter
            according to table 5-5 of TM 5-809-3.'''
-        th_inches= self.thickness/inch2Meter
-        b_inch= self.getEffectiveWidth()/inch2Meter
+        th_inches= self.thickness/units_utils.inchToMeter
+        b_inch= self.getEffectiveWidth()/units_utils.inchToMeter
         return self.fWeight(th_inches,b_inch)[0]*4.88242764 #pounds/sqft-> kg/m2
 
     def getEffectiveDepth(self):
@@ -266,13 +266,13 @@ class CMUWallFabric(object):
            resisting the out-of-plane shear according to table 5.1 
            of TM 5-809-3.'''
         retval= 0.0
-        th_inches= self.thickness/inch2Meter
+        th_inches= self.thickness/units_utils.inchToMeter
         if(self.cellReinf):
             if(self.cellReinf.nBars==1): # one bar per cell
                 retval= self.fD1(th_inches)
             else: # two bar per cell
                 retval= self.fD2(th_inches)
-        return retval*inch2Meter
+        return retval*units_utils.inchToMeter
     
     def getSteelRatio(self):
         '''Return the steel ratio according to equation 5-8

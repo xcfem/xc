@@ -19,7 +19,7 @@ __email__= "l.pereztato@ciccp.es, ana.ortega@ciccp.es "
 
 toPascal= 6894.757 #Conversion from Pa to lb/inch2
 fromPascal= 1.0/toPascal #Conversion from lb/inch2 to Pa
-pound2Newton= 4.44822 # pound-force to Newton
+
 
 aciRCLimitStrains= concrete_base.ReinforcedConcreteLimitStrains(EpsCU= -3.0e-3,EpsC0= -2.0e-3,SMaxStrain= 10e-3);
 

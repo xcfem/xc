@@ -22,6 +22,7 @@ import pickle
 from misc_utils import pickle_utils
 import os
 from model import model_inquiry
+from misc_utils import units_utils
 
 __author__= "Luis C. Pérez Tato (LCPT) , Ana Ortega (AO_O) "
 __copyright__= "Copyright 2016, LCPT, AO_O"
@@ -40,10 +41,9 @@ y= [2.0,1.6,1.25,1.15,1.0,0.9]
 
 table232= scipy.interpolate.interp1d(x,y)
 
-in2meter= 0.0254 # inch to meter conversion factor.
 psi2Pa= 6894.76 # pounds per square inch to Pascal conversion factor.
 pound2N= 4.44822 # pound to Newton conversion factor.
-foot2meter= 0.3048 # foot to meter conversion factor.
+
 pound2kg= 0.453592 # pound to kilogram conversion factor.
 
 def getLoadDurationFactor(duration):
@@ -221,8 +221,8 @@ def getVolumeFactor(L,b,h,southernPine= False):
     x= 1/10.0
     if(southernPine):
         x= 1/20.0
-    bmax= min(b,10.75*in2meter)
-    retval= math.pow(21*0.3048/L,x)*math.pow(12*in2meter/h,x)*math.pow(5.125*in2meter/bmax,x)
+    bmax= min(b,10.75*units_utils.inchToMeter)
+    retval= math.pow(21*0.3048/L,x)*math.pow(12*units_utils.inchToMeter/h,x)*math.pow(5.125*units_utils.inchToMeter/bmax,x)
     retval= min(retval,1.0)
     return retval
 
@@ -281,7 +281,7 @@ class Wood(wood_base.Wood):
                          See clause 12.3.3.4 of NDS.
         '''
         retval= 0.0
-        if(diameter<0.25*in2meter):
+        if(diameter<0.25*units_utils.inchToMeter):
             retval= 16600.0*pow(self.specificGravity,1.84)
         else:
             Fe_perp= 6100.0*pow(self.specificGravity,1.84)/math.sqrt(diameter)
@@ -309,7 +309,7 @@ class LSL(Wood):
 
         :param depth: member depth.
         '''
-        if(depth<3.5*in2meter):
+        if(depth<3.5*units_utils.inchToMeter):
             return 1.159*self.Fb_12
         else:
             return math.pow((12.0/depth),0.12)*self.Fb_12
@@ -342,7 +342,7 @@ class LSL_135E(LSL):
 
         :param depth: member depth.
         '''
-        if(depth<3.5*in2meter):
+        if(depth<3.5*units_utils.inchToMeter):
             return 1.159*Fb_12
         else:
             return math.pow((12.0/depth),0.12)*Fb_12
@@ -1218,8 +1218,8 @@ class LSLHeaderSection(HeaderSection):
     def getVolumeFactor(self):
         '''Return volumen factor.'''
         retval= 1.0
-        in12= 12.0*in2meter
-        in3_5= 3.5*in2meter
+        in12= 12.0*units_utils.inchToMeter
+        in3_5= 3.5*units_utils.inchToMeter
         if(self.h<in3_5):
             retval*= 1.159
         else:
@@ -1581,15 +1581,15 @@ class CustomLumberSection(WoodRectangularSection):
             retval= MemberRestraint.bothEdgeSupport
         return retval
 
-threeQuarters= 0.75*in2meter
-inchAndAHalf= 1.5*in2meter
-twoInchAndAHalf= 2.5*in2meter
-threeInchAndAHalf= 3.5*in2meter
-fourInchAndAHalf= 4.5*in2meter
-fiveInchAndAHalf= 5.5*in2meter
-sevenInchAndAQuarter= 7.25*in2meter
-nineInchAndAQuarter= 9.25*in2meter
-elevenInchAndAQuarter= 11.25*in2meter
+threeQuarters= 0.75*units_utils.inchToMeter
+inchAndAHalf= 1.5*units_utils.inchToMeter
+twoInchAndAHalf= 2.5*units_utils.inchToMeter
+threeInchAndAHalf= 3.5*units_utils.inchToMeter
+fourInchAndAHalf= 4.5*units_utils.inchToMeter
+fiveInchAndAHalf= 5.5*units_utils.inchToMeter
+sevenInchAndAQuarter= 7.25*units_utils.inchToMeter
+nineInchAndAQuarter= 9.25*units_utils.inchToMeter
+elevenInchAndAQuarter= 11.25*units_utils.inchToMeter
 
 dimensionLumberSizes= dict()
 dimensionLumberSizes['1x2']= (threeQuarters, inchAndAHalf)
