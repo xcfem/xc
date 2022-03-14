@@ -50,7 +50,7 @@ Ncb_kips=Ncb/units_utils.kipToN
 ratio2=abs((Ncb_kips-25.9126)/25.9126)
 
 #Pullout stregth of stud to check head of the stud (article D.5.3)
-Abearing=0.92*(in2m)**2
+Abearing=0.92*(units_utils.inchToMeter)**2
 Npn=stud.getPulloutStrengthTension(Abearing)
 Npn_kips=Npn/units_utils.kipToN
 ratio3=abs((Npn_kips-29.44)/29.44)

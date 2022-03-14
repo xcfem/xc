@@ -36,9 +36,9 @@ ratio3= abs(Mn-MnRef)/MnRef
 
 '''
 print('Fy= ', steel.fy/1e6,' MPa (',steel.fy/1e6*MPa2ksi,' ksi)')
-print('Ieff: ', Ieff, ' m4(', Ieff/(in2m**4), ' in4)')
+print('Ieff: ', Ieff, ' m4(', Ieff/(units_utils.inchToMeter**4), ' in4)')
 print('ratio1: ', ratio1)
-print('Seff: ', Seff, ' m3(', Seff/(in2m**3), ' in3)')
+print('Seff: ', Seff, ' m3(', Seff/(units_utils.inchToMeter**3), ' in3)')
 print('ratio2: ', ratio2)
 print('Fy*Seff= ',  steel.fy*Seff/1e3)
 print('Mn: ', Mn/1e3, ' kN m', Mn/1e3*kNm2kipsft, ' kips ft')
