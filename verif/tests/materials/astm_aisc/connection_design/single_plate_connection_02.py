@@ -13,19 +13,17 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@ciccp.es ana.ortega@ciccp.es"
 
-in2m= 25.4e-3
-kip2N= 4448.2216
-
 import xc_base
 import geom
 from materials.astm_aisc import ASTM_materials
+from misc_utils import units_utils
 
-bolt= ASTM_materials.BoltFastener(0.75*in2m, steelType= ASTM_materials.A325) # group A
-boltArray= ASTM_materials.BoltArray(bolt, nRows= 4, nCols= 1, dist= 3*in2m)
-eccentr= (4.5/2.0-1.25)*in2m
-finPlate= ASTM_materials.FinPlate(boltArray, width= 11.5*in2m, length= 4.5*in2m, thickness= 0.25*in2m, steelType= ASTM_materials.A36, eccentricity= geom.Vector2d(eccentr,0.0))
+bolt= ASTM_materials.BoltFastener(0.75*units_utils.inchToMeter, steelType= ASTM_materials.A325) # group A
+boltArray= ASTM_materials.BoltArray(bolt, nRows= 4, nCols= 1, dist= 3*units_utils.inchToMeter)
+eccentr= (4.5/2.0-1.25)*units_utils.inchToMeter
+finPlate= ASTM_materials.FinPlate(boltArray, width= 11.5*units_utils.inchToMeter, length= 4.5*units_utils.inchToMeter, thickness= 0.25*units_utils.inchToMeter, steelType= ASTM_materials.A36, eccentricity= geom.Vector2d(eccentr,0.0))
 
-Rd= 49.6*kip2N
+Rd= 49.6*units_utils.kipToN
 
 ## Check bolt strength
 CFShear= boltArray.getDesignShearEfficiency(Rd, doubleShear= False)

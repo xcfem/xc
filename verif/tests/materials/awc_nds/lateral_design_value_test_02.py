@@ -16,8 +16,9 @@ import math
 from materials.awc_nds import specific_gravity as sg
 from materials.awc_nds import dowel_type_fasteners as fasteners
 from materials.awc_nds import AWCNDS_materials as mat
+from misc_utils import units_utils
 
-fastener= fasteners.WoodScrew(diameter= 0.19*mat.in2meter, length= 6.0*mat.in2meter, headDiameter= 0.363*mat.in2meter, rootDiameter= 0.152*mat.in2meter, bendingYieldStrength= 80e3*mat.psi2Pa) 
+fastener= fasteners.WoodScrew(diameter= 0.19*units_utils.inchToMeter, length= 6.0*units_utils.inchToMeter, headDiameter= 0.363*units_utils.inchToMeter, rootDiameter= 0.152*units_utils.inchToMeter, bendingYieldStrength= 80e3*mat.psi2Pa) 
 
 # There is an error in the example the Fe values correspond
 # to a G= 0.55 NOT to a G= 0.5
@@ -28,8 +29,8 @@ Fem= mainMemberWood.getDowelBearingStrength(fastener.D, theta= 0.0)
 Fes= sideMemberWood.getDowelBearingStrength(fastener.D, theta= 0.0)
 Fyb= fastener.Fyb
 
-mainMemberThickness= 3.0*mat.in2meter
-sideMemberThickness= 1.5*mat.in2meter
+mainMemberThickness= 3.0*units_utils.inchToMeter
+sideMemberThickness= 1.5*units_utils.inchToMeter
 
 mainMemberDowelBearingLength= mainMemberThickness
 sideMemberDowelBearingLength= fastener.L-mainMemberDowelBearingLength-sideMemberThickness-fastener.tip/2.0
@@ -44,7 +45,7 @@ ratio= abs(Z-1.03959600276e3)/1.03959600276e3
 print('Main member Fem= ', Fem/1e6, ' MPa (', Fem/mat.psi2Pa,' psi)')
 print('Side members Fes= ', Fes/1e6, ' MPa (', Fes/mat.psi2Pa,' psi)')
 print('fastener bending yield strengt Fyb= ', Fyb/1e6, ' MPa (', Fyb/mat.psi2Pa,' psi)')
-print('min. penetration p_min= ', pMin*1e3, ' mm (', pMin/mat.in2meter,' in)')
+print('min. penetration p_min= ', pMin*1e3, ' mm (', pMin/units_utils.inchToMeter,' in)')
 print('reduction term Rd= ', Rd)
 print('k3= ', k3)
 print('Z= ', Z/1e3,' kN (',Z/mat.pound2N,' lbs)')

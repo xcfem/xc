@@ -23,13 +23,15 @@ from actions import load_cases
 from actions import combinations as combs
 from solution import predefined_solutions
 
-inch2meter= 0.0254
+from misc_utils import units_utils
+
+
 MPa2ksi= 0.145038
 kN2kips= 0.2248
 kip2kN= 1.0/kN2kips
-kip2N= kip2kN*1e3
-foot2meter= 0.3048
-m2Toin2= 1.0/inch2meter**2
+
+
+m2Toin2= 1.0/units_utils.inchToMeter**2
 
 # Problem type
 steelBeam= xc.FEProblem()
@@ -48,7 +50,7 @@ xcSection= shape.defElasticShearSection2d(preprocessor)
 # Model geometry
 
 ## Points.
-span= 32.0*foot2meter
+span= 32.0*units_utils.footToMeter
 pointHandler= preprocessor.getMultiBlockTopology.getPoints
 p0= pointHandler.newPoint(geom.Pos3d(0.0,0.0,0.0))
 p1= pointHandler.newPoint(geom.Pos3d(span,0.0,0.0))
@@ -80,14 +82,14 @@ loadCaseNames= ['deadLoad','liveLoad']
 loadCaseManager.defineSimpleLoadCases(loadCaseNames)
 
 ## Dead load.
-deadLoad= -30.0*kip2N/span*2.0
+deadLoad= -30.0*units_utils.kipToN/span*2.0
 deadLoadVector= xc.Vector([0.0,deadLoad, 0.0])
 cLC= loadCaseManager.setCurrentLoadCase('deadLoad')
 for e in xcTotalSet.elements:
     e.vector2dUniformLoadGlobal(deadLoadVector)
   
 ## Live load.
-liveLoad= -90.0*kip2N/span*2.0
+liveLoad= -90.0*units_utils.kipToN/span*2.0
 liveLoadVector= xc.Vector([0.0,liveLoad, 0.0])
 cLC= loadCaseManager.setCurrentLoadCase('liveLoad')
 for e in xcTotalSet.elements:
@@ -125,7 +127,7 @@ ratio1= abs((VMax-VMaxRef)/VMaxRef)
 member= aisc.Member('member', shape,unbracedLengthX= span)
 
 Aw= member.shape.getAw()
-AwRef= 17.2*inch2meter**2
+AwRef= 17.2*units_utils.inchToMeter**2
 ratio2= abs((Aw-AwRef)/AwRef)
 Vu= member.getDesignShearStrength()
 VuRef= 0.9*0.6*member.shape.steelType.fy*Aw/2.0
@@ -138,7 +140,7 @@ ratio4= abs((Vu-VuRefText)/VuRefText)
 print('VMax= ',VMax/1e3,' kN (', VMax*kN2kips/1e3, 'kips)')
 print('VMaxRef= ',VMaxRef/1e3,' kN (', VMaxRef*kN2kips/1e3, 'kips)')
 print('ratio1= ',ratio1)
-print('t= ', shape.get('t')/inch2meter, 'in')
+print('t= ', shape.get('t')/units_utils.inchToMeter, 'in')
 print('Aw= ',Aw*1e4,' cm2')
 print('AwRef= ',AwRef*1e4,' cm2')
 print('ratio2= ',ratio2)

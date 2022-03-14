@@ -23,12 +23,14 @@ from actions import load_cases
 from actions import combinations as combs
 from solution import predefined_solutions
 
-inch2meter= 0.0254
+from misc_utils import units_utils
+
+
 MPa2ksi= 0.145038
 kN2kips= 0.2248
 kip2kN= 1.0/kN2kips
-foot2meter= 0.3048
-m2Toin2= 1.0/inch2meter**2
+
+m2Toin2= 1.0/units_utils.inchToMeter**2
 
 # Problem type
 steelBeam= xc.FEProblem()
@@ -47,7 +49,7 @@ xcSection= shape.defElasticShearSection2d(preprocessor)
 # Model geometry
 
 ## Points.
-span= 25.0*foot2meter
+span= 25.0*units_utils.footToMeter
 unbracedLength= span/5.0 # braced at fifth points
 pointHandler= preprocessor.getMultiBlockTopology.getPoints
 points= list()
@@ -87,14 +89,14 @@ loadCaseNames= ['deadLoad','liveLoad']
 loadCaseManager.defineSimpleLoadCases(loadCaseNames)
 
 ## Dead load.
-DL= -0.23e3*kip2kN/foot2meter
+DL= -0.23e3*kip2kN/units_utils.footToMeter
 deadLoad= xc.Vector([0.0, DL, 0.0])
 cLC= loadCaseManager.setCurrentLoadCase('deadLoad')
 for e in xcTotalSet.elements:
     e.vector2dUniformLoadGlobal(deadLoad)
   
 ## Live load.
-LL= -0.69e3*kip2kN/foot2meter
+LL= -0.69e3*kip2kN/units_utils.footToMeter
 liveLoad= xc.Vector([0.0, LL, 0.0])
 cLC= loadCaseManager.setCurrentLoadCase('liveLoad')
 for e in xcTotalSet.elements:
@@ -138,15 +140,15 @@ for l in lines:
     if(Mui<Mu):
         Mu= min(Mu, Mui)
         worstBeam= beam
-MuRef= 0.9*146e3*kip2kN*foot2meter
+MuRef= 0.9*146e3*kip2kN*units_utils.footToMeter
 ratio2= abs((Mu-MuRef)/MuRef)
 
 '''
 print('MMaxRef= ',MMaxRef/1e3,' kN m')
 print('MMax= ',MMax/1e3,' kN m')
 print('ratio2= ',ratio1)
-print('Mu= ',Mu/1e3,' kN m(',Mu/1e3*kN2kips/foot2meter,' kip-ft)')
-print('MuRef= ',MuRef/1e3,' kN m(',MuRef/1e3*kN2kips/foot2meter,' kip-ft)')
+print('Mu= ',Mu/1e3,' kN m(',Mu/1e3*kN2kips/units_utils.footToMeter,' kip-ft)')
+print('MuRef= ',MuRef/1e3,' kN m(',MuRef/1e3*kN2kips/units_utils.footToMeter,' kip-ft)')
 print('ratio3= ',ratio2)
 '''
 

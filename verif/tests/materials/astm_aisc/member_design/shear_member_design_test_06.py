@@ -23,12 +23,14 @@ from actions import load_cases
 from actions import combinations as combs
 from solution import predefined_solutions
 
-inch2meter= 0.0254
+from misc_utils import units_utils
+
+
 MPa2ksi= 0.145038
 kN2kips= 0.2248
 kip2kN= 1.0/kN2kips
-foot2meter= 0.3048
-m2Toin2= 1.0/inch2meter**2
+
+m2Toin2= 1.0/units_utils.inchToMeter**2
 
 # Problem type
 steelBeam= xc.FEProblem()
@@ -47,7 +49,7 @@ xcSection= shape.defElasticShearSection2d(preprocessor)
 # Model geometry
 
 ## Points.
-span= 35.0*foot2meter
+span= 35.0*units_utils.footToMeter
 pointHandler= preprocessor.getMultiBlockTopology.getPoints
 p0= pointHandler.newPoint(geom.Pos3d(0.0,0.0,0.0))
 p1= pointHandler.newPoint(geom.Pos3d(span,0.0,0.0))
@@ -124,7 +126,7 @@ ratio1= abs((VMax-VMaxRef)/VMaxRef)
 member= aisc.Member('member', shape,unbracedLengthX= span)
 
 Aw= member.shape.getAw(majorAxis= False)
-AwRef= 2.19*inch2meter**2
+AwRef= 2.19*units_utils.inchToMeter**2
 ratio2= abs((Aw-AwRef)/AwRef)
 Vu= member.getDesignShearStrength(majorAxis= False)
 VuRef= 0.9*0.6*shape.steelType.fy*Aw*1.0
@@ -137,7 +139,7 @@ ratio4= abs((Vu-VuRefText)/VuRefText)
 print('VMax= ',VMax/1e3,' kN /', VMax*kN2kips/1e3, 'kips')
 print('VMaxRef= ',VMaxRef/1e3,' kN /', VMaxRef*kN2kips/1e3, 'kips')
 print('ratio1= ',ratio1)
-print('tw= ', shape.get('tw')/inch2meter, 'in')
+print('tw= ', shape.get('tw')/units_utils.inchToMeter, 'in')
 print('Aw= ',Aw*1e4,' cm2')
 print('AwRef= ',AwRef*1e4,' cm2')
 print('ratio2= ',ratio2)

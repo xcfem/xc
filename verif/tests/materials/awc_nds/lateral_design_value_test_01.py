@@ -16,8 +16,9 @@ import math
 from materials.awc_nds import specific_gravity as sg
 from materials.awc_nds import dowel_type_fasteners as fasteners
 from materials.awc_nds import AWCNDS_materials as mat
+from misc_utils import units_utils
 
-fastener= fasteners.Nail(diameter= 0.148*mat.in2meter, length= 3.0*mat.in2meter)
+fastener= fasteners.Nail(diameter= 0.148*units_utils.inchToMeter, length= 3.0*units_utils.inchToMeter)
 
 mainMemberWood= mat.Wood('3xDouglas Fir-Larch', specificGravity= 0.5)
 sideMemberWood= mat.Wood('1xDouglas Fir-Larch', specificGravity= 0.5)
@@ -26,8 +27,8 @@ Fem= mainMemberWood.getDowelBearingStrength(fastener.D, theta= 0.0)
 Fes= sideMemberWood.getDowelBearingStrength(fastener.D, theta= 0.0)
 Fyb= fastener.Fyb
 
-mainMemberThickness= 2.50*mat.in2meter
-sideMemberThickness= 0.75*mat.in2meter
+mainMemberThickness= 2.50*units_utils.inchToMeter
+sideMemberThickness= 0.75*units_utils.inchToMeter
 
 sideMemberDowelBearingLength= sideMemberThickness
 mainMemberDowelBearingLength= fastener.L-sideMemberThickness
@@ -43,7 +44,7 @@ ratio= abs(Z-Zref)/Zref
 print('Main member Fem= ', Fem/1e6, ' MPa (', Fem/mat.psi2Pa,' psi)')
 print('Side members Fes= ', Fes/1e6, ' MPa (', Fes/mat.psi2Pa,' psi)')
 print('fastener bending yield strengt Fyb= ', Fyb/1e6, ' MPa (', Fyb/mat.psi2Pa,' psi)')
-print('min. penetration p_min= ', pMin*1e3, ' mm (', pMin/mat.in2meter,' in)')
+print('min. penetration p_min= ', pMin*1e3, ' mm (', pMin/units_utils.inchToMeter,' in)')
 print('reduction term Rd= ', Rd)
 print('k3= ', k3)
 print('Z= ', Z/1e3,' kN (',Z/mat.pound2N,' lbs)')

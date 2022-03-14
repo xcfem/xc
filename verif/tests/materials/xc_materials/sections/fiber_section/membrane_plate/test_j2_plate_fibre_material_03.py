@@ -20,20 +20,17 @@ import xc
 from solution import predefined_solutions
 from model import predefined_spaces
 from materials import typical_materials
+from misc_utils import units_utils
 
 # Data
-# Units
-in2m=0.0254       # inches to m
-ksi2Pa=6.89476e6  # ksi to Pa
-kip2N=4448.2216   # kips to N
 
-width=1*in2m   # Rod width (m)
-thickness=1*in2m   # Rod thickness (m)
-L= 50*in2m # Length of the rod (m)
+width=1*units_utils.inchToMeter   # Rod width (m)
+thickness=1*units_utils.inchToMeter   # Rod thickness (m)
+L= 50*units_utils.inchToMeter # Length of the rod (m)
 
-E= 29000*ksi2Pa # Young’s modulus (Pa)
+E= 29000*units_utils.ksiToPa # Young’s modulus (Pa)
 nu= 0.3 # Poisson’s ratio
-sg_yield= 60*ksi2Pa # Allowable stress: yield stress of steel (Pa)
+sg_yield= 60*units_utils.ksiToPa # Allowable stress: yield stress of steel (Pa)
 alpha=0.05  # strain hardening ratio. In the paper, the results obtained match
             # a value of the hardening radio alpha=0.01 (there must be an error in
             # page 55 where it's written "five percent strain hardening parameter 
@@ -96,7 +93,7 @@ for n in l14.nodes:
 ## Loads
 l23= modelSpace.getLineWithEndPoints(p2,p3)
 nnod=len(l23.nodes)
-maxLoad=100*kip2N
+maxLoad=100*units_utils.kipToN
 ### Create load pattern.
 lp0= modelSpace.newLoadPattern('0')
 ### Distribute the load over nodes in line 2-3

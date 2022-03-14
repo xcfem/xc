@@ -22,16 +22,15 @@ from model.mesh import finit_el_model as fem
 from materials.astm_aisc import ASTM_materials as astm
 from actions import loads
 from actions import load_cases as lcases
+from misc_utils import units_utils
 
 #units
-in2m=0.0254
-kip2N=4448.22
-m2in=1/in2m
-N2kip=1/kip2N
+m2in=1/units_utils.inchToMeter
+
 Pa2ksi= 1.45038e-7
 #data
-L= 15*12*in2m # beam length
-T= -60*kip2N*in2m # service load torque (60 kip-in)
+L= 15*12*units_utils.inchToMeter # beam length
+T= -60*units_utils.kipToN*units_utils.inchToMeter # service load torque (60 kip-in)
 
 FEcase= xc.FEProblem()
 preprocessor=FEcase.getPreprocessor
@@ -95,8 +94,8 @@ print('element torsional stiffness: ', elementTorsionalStiffness/1e6)
 print('element length: ', elementLength, ' m')
 refElementTorsionalStiffness= G*J/elementLength
 print('element torsional stiffness: ', refElementTorsionalStiffness/1e6)
-print('T= '+str(T/1e3)+' kN m ('+str(T/kip2N/in2m)+ ' kip in)')
-print('l= '+str(L)+' m ('+str(L/in2m)+ ' in)')
+print('T= '+str(T/1e3)+' kN m ('+str(T/units_utils.kipToN/units_utils.inchToMeter)+ ' kip in)')
+print('l= '+str(L)+' m ('+str(L/units_utils.inchToMeter)+ ' in)')
 print('G= '+str(G/1e6)+' MPa ('+str(G*Pa2ksi)+ ' ksi)')
 print('J= '+str(J)+' m4 ('+str(J*(m2in**4))+ ' in4)')
 print('ratio0= ', ratio0)

@@ -9,6 +9,7 @@ from __future__ import print_function
 import math
 from materials.aci import ACI_materials
 from materials.aci import ACI_limit_state_checking
+from misc_utils import units_utils
 
 __author__= "Ana Ortega (AO_O)"
 __copyright__= "Copyright 2019, AO_O"
@@ -17,20 +18,13 @@ __version__= "3.0"
 __email__= "ana.ortega.ort@gmail.com"
 
 #units
-in2m= 0.0254
-m2in=1/in2m
-ft2m= 0.3048
-kip2N= 4.4482216e3
-ksi2MPa= 6.89476
-lb2N=4.4482216
-N2lb=1/lb2N
-N2kip=1/kip2N
+
 
 # Data
-Nua=8*kip2N  #applied factored external tension load using load factors from Appendix C of the Code.
-Vua=6*kip2N  #applied factored external shear load using load factors from Appendix C of the Code.
+Nua=8*units_utils.kipToN  #applied factored external tension load using load factors from Appendix C of the Code.
+Vua=6*units_utils.kipToN  #applied factored external shear load using load factors from Appendix C of the Code.
 ## Stud definition
-stud= ACI_limit_state_checking.AnchorBolt(ca1= 12*in2m,ca2= 20*in2m,ha= 18*in2m, concrete= ACI_materials.c4000, steel= ACI_materials.A108, diam= 5/8*in2m, hef= 6.63*in2m, cast_in= True)
+stud= ACI_limit_state_checking.AnchorBolt(ca1= 12*units_utils.inchToMeter,ca2= 20*units_utils.inchToMeter,ha= 18*units_utils.inchToMeter, concrete= ACI_materials.c4000, steel= ACI_materials.A108, diam= 5/8*units_utils.inchToMeter, hef= 6.63*units_utils.inchToMeter, cast_in= True)
 ### where:
 #### ca1: distance from the center of an anchor shaft to the edge of concrete in one direction. If shear is applied to anchor, ca1 is taken in the direction of the applied shear. If the tension is applied to the anchor, ca1 is the minimum edge distance.
 ### ca2: distance from center of an anchor shaft to the edge of concrete in the direction orthogonal to ca1.
@@ -45,25 +39,25 @@ stud= ACI_limit_state_checking.AnchorBolt(ca1= 12*in2m,ca2= 20*in2m,ha= 18*in2m,
 #TENSION
 #Calculate the nominal strength of the anchor in tension (art. D.5.1)
 Nsa=stud.getNominalSteelStrengthTension()
-Nsa_kips=Nsa/kip2N
+Nsa_kips=Nsa/units_utils.kipToN
 ratio1=abs((Nsa_kips-19.94176)/19.94176)
 
 #Concrete breakout failure in tension (art. D.5.2.)
 Nb= stud.getBasicConcreteBreakoutStrengthTension() # Basic concrete breakout strength
-Nb_kips=Nb*N2kip
+Nb_kips=Nb/units_utils.kipToN
 Ncb=stud.getConcrBreakoutStrengthTension()
-Ncb_kips=Ncb*N2kip
+Ncb_kips=Ncb/units_utils.kipToN
 ratio2=abs((Ncb_kips-25.9126)/25.9126)
 
 #Pullout stregth of stud to check head of the stud (article D.5.3)
 Abearing=0.92*(in2m)**2
 Npn=stud.getPulloutStrengthTension(Abearing)
-Npn_kips=Npn/kip2N
+Npn_kips=Npn/units_utils.kipToN
 ratio3=abs((Npn_kips-29.44)/29.44)
 
 #Check ductility in tension
 Ndd=stud.getStrengthDuctilityTension(Abearing,cracking=True)
-Ndd_kips=Ndd/kip2N
+Ndd_kips=Ndd/units_utils.kipToN
 ratio4=abs((Ndd_kips-22.025729)/22.025729)
 
 '''
@@ -74,28 +68,28 @@ else:
 '''
 #Check design strength of stud in tension
 Nnd=stud.getDesignStrengthTension(Abearing,ductility=True,loadCombAlt=True)
-Nnd_kips=Nnd/kip2N
+Nnd_kips=Nnd/units_utils.kipToN
 ratio5=abs((Nnd_kips-15.9534)/15.9534)
 
 #SHEAR
 #Calculate the nominal strength of the anchor in shear
 Vsa=stud.getSteelStrengthShear()
-Vsa_kips=Vsa/kip2N
+Vsa_kips=Vsa/units_utils.kipToN
 ratio6=abs((Vsa_kips-19.94176)/19.94176)
 
 #Concrete breakout failure in shear (art. D.6.2.)
 Vcb=stud.getConcrBreakoutStrengthShear()
-Vcb_kips=Vcb/kip2N
+Vcb_kips=Vcb/units_utils.kipToN
 ratio7=abs((Vcb_kips-25.20286)/25.20286)
     
 #Concrete pryout strength of anchor in shear (article D.6.3.)
 Vcp=stud.getPryoutStrengthShear()
-Vcp_kips=Vcp/kip2N
+Vcp_kips=Vcp/units_utils.kipToN
 ratio8=abs((Vcp_kips-51.82524)/51.82524)
     
 #Check ductility in shear
 Vdd=stud.getStrengthDuctilityShear()
-Vdd_kips=Vdd/kip2N
+Vdd_kips=Vdd/units_utils.kipToN
 ratio9=abs((Vdd_kips-21.42243)/21.42243)
 '''
 if Vdd >= Vua:
@@ -106,7 +100,7 @@ else:
 
 # Check design strength of stud in shear
 Vnd=stud.getDesignStrengthShear(ductility=True,loadCombAlt=True)
-Vnd_kips=Vnd/kip2N
+Vnd_kips=Vnd/units_utils.kipToN
 ratio10=abs((Vnd_kips-14.9563)/14.9563)
 '''
 if Vnd >= Vua:

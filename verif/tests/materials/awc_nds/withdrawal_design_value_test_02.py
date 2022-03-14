@@ -16,11 +16,13 @@ from materials.awc_nds import specific_gravity as sg
 from materials.awc_nds import dowel_type_fasteners as fasteners
 from materials.awc_nds import AWCNDS_materials as mat
 
-inch2meter= 0.0254
+from misc_utils import units_utils
 
-fastener= fasteners.LagScrew(diameter= 0.5*inch2meter, length= 4.0*inch2meter, tip= .3125*inch2meter, rootDiameter= 0.265*mat.in2meter) 
+
+
+fastener= fasteners.LagScrew(diameter= 0.5*units_utils.inchToMeter, length= 4.0*units_utils.inchToMeter, tip= .3125*units_utils.inchToMeter, rootDiameter= 0.265*units_utils.inchToMeter) 
 G= sg.specificGravity['Southern Pine'] # Specific gravity
-sideMemberThickness= 1.5*inch2meter # Side member thickness
+sideMemberThickness= 1.5*units_utils.inchToMeter # Side member thickness
 screwPenetration= fastener.getPenetration(sideMemberThickness) # Screw penetration into main member.
 W= fastener.getReferenceWithdrawal(G)
 Wd= fastener.getDesignWithdrawal(G,sideMemberThickness,endGrainFactor= 1.0)
@@ -28,8 +30,8 @@ ratio1= abs(Wd-4.2479398904e3)/4.2479398904e3
 
 '''
 print('G= ', G)
-print('W= ', W/1e3, ' kN/m (', W/mat.pound2N*mat.in2meter,'lbs/in)')
-print('screw penetration pt= ', screwPenetration*1e3, 'mm (', screwPenetration/inch2meter, ' in)')
+print('W= ', W/1e3, ' kN/m (', W/mat.pound2N*units_utils.inchToMeter,'lbs/in)')
+print('screw penetration pt= ', screwPenetration*1e3, 'mm (', screwPenetration/units_utils.inchToMeter, ' in)')
 print('Wd= ', Wd/1e3, ' kN (', Wd/mat.pound2N,'lbs)')
 print(ratio1)
 '''

@@ -16,17 +16,15 @@ __version__= "3.0"
 __email__= "l.pereztato@ciccp.es ana.ortega@ciccp.es"
 
 
-in2m= 25.4e-3
-kip2N= 4448.2216
-
 import math
 from materials.astm_aisc import ASTM_materials
+from misc_utils import units_utils
 
-bolt= ASTM_materials.BoltFastener(0.75*in2m, steelType= ASTM_materials.A325) # group A
+bolt= ASTM_materials.BoltFastener(0.75*units_utils.inchToMeter, steelType= ASTM_materials.A325) # group A
 boltArray= ASTM_materials.BoltArray(bolt, nRows= 2, nCols= 2)
 boltedPlate= ASTM_materials.BoltedPlate(boltArray, thickness= 20e-3, steelType= ASTM_materials.A36)
 
-Pd= 121.6*kip2N
+Pd= 121.6*units_utils.kipToN
 CFShear= boltArray.getDesignShearEfficiency(Pd, doubleShear= True)
 CFCenterDist= boltArray.checkDistanceBetweenCenters()
 CFthickness= boltedPlate.checkThickness(Pd)

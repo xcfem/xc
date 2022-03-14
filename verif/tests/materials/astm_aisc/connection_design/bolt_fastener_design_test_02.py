@@ -12,26 +12,24 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
-in2m= 25.4e-3
-kip2N= 4448.2216
-
 from materials.astm_aisc import ASTM_materials
+from misc_utils import units_utils
 
 #Materials
 ## Steel material
 steel= ASTM_materials.A325
 steel.gammaM= 1.00
-diameter= 3/4.0*in2m
+diameter= 3/4.0*units_utils.inchToMeter
 bolt=  ASTM_materials.BoltFastener(diameter, steelType= steel)
-Tu= 23.4*kip2N
-Vu= 8.0*kip2N
+Tu= 23.4*units_utils.kipToN
+Vu= 8.0*units_utils.kipToN
 
 Rn= bolt.getNominalCombinedStrength(V= Vu, threadsExcluded=False)
-RnRef= 33.9*kip2N
+RnRef= 33.9*units_utils.kipToN
 ratio1= abs(Rn-RnRef)/RnRef
 
 '''
-print('Rn= ', Rn/kip2N)
+print('Rn= ', Rn/units_utils.kipToN)
 print('ratio1= ', ratio1)
 '''
 

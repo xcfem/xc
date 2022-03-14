@@ -16,12 +16,14 @@ from materials.astm_aisc import ASTM_materials
 from materials.astm_aisc import AISC_limit_state_checking as aisc
 from model import predefined_spaces
 
-inch2meter= 0.0254
+from misc_utils import units_utils
+
+
 MPa2ksi= 0.145038
 kN2kips= 0.2248
 kip2kN= 1.0/kN2kips
-foot2meter= 0.3048
-m2Toin2= 1.0/inch2meter**2
+
+m2Toin2= 1.0/units_utils.inchToMeter**2
 
 #Materials
 
@@ -69,38 +71,38 @@ ratio4= abs(zAxisNominalFlexuralStrength-zAxisNominalFlexuralStrengthRef)/zAxisN
 wAxisPlasticMoment= shape.getWAxisPlasticMoment()
 wAxisPlasticMomentRef= 10.8e3
 ratio5= abs(wAxisPlasticMoment-wAxisPlasticMomentRef)/wAxisPlasticMomentRef
-wAxisElasticLateralTorsionalBucklingMoment= shape.getWAxisElasticLateralTorsionalBucklingMoment(Lb= 6*foot2meter, Cb= 1.14)
+wAxisElasticLateralTorsionalBucklingMoment= shape.getWAxisElasticLateralTorsionalBucklingMoment(Lb= 6*units_utils.footToMeter, Cb= 1.14)
 wAxisElasticLateralTorsionalBucklingMomentRef= 23.262011718749992e3
 ratio6= abs(wAxisElasticLateralTorsionalBucklingMoment-wAxisElasticLateralTorsionalBucklingMomentRef)/wAxisElasticLateralTorsionalBucklingMomentRef
-wAxisLateralTorsionalBucklingLimit= shape.getWAxisLateralTorsionalBucklingLimit(Lb= 6*foot2meter, Cb= 1.14)[0]
+wAxisLateralTorsionalBucklingLimit= shape.getWAxisLateralTorsionalBucklingLimit(Lb= 6*units_utils.footToMeter, Cb= 1.14)[0]
 wAxisLateralTorsionalBucklingLimitRef= 9.137366729071001e3
 ratio7= abs(wAxisLateralTorsionalBucklingLimit-wAxisLateralTorsionalBucklingLimitRef)/wAxisLateralTorsionalBucklingLimitRef
 wAxisLegLocalBucklingLimit= shape.getWAxisLegLocalBucklingLimit()[0]
 wAxisLegLocalBucklingLimitRef= 10.632466673516829e3
 ratio8= abs(wAxisLegLocalBucklingLimit-wAxisLegLocalBucklingLimitRef)/wAxisLegLocalBucklingLimitRef
-wAxisNominalFlexuralStrength= shape.getWAxisNominalFlexuralStrength(lateralUnbracedLength= 6*foot2meter, Cb= 1.14, MW= 1.0)
+wAxisNominalFlexuralStrength= shape.getWAxisNominalFlexuralStrength(lateralUnbracedLength= 6*units_utils.footToMeter, Cb= 1.14, MW= 1.0)
 wAxisNominalFlexuralStrengthRef= wAxisLateralTorsionalBucklingLimitRef
 ratio9= abs(wAxisNominalFlexuralStrength-wAxisNominalFlexuralStrengthRef)/wAxisNominalFlexuralStrengthRef
 
 '''
-print('zAxisPlasticMoment= ',zAxisPlasticMoment/1e3,' kN m (',zAxisPlasticMoment/1e3*kN2kips/foot2meter,' kip-ft or', zAxisPlasticMoment/1e3*kN2kips/inch2meter,' kip-in)')
+print('zAxisPlasticMoment= ',zAxisPlasticMoment/1e3,' kN m (',zAxisPlasticMoment/1e3*kN2kips/units_utils.footToMeter,' kip-ft or', zAxisPlasticMoment/1e3*kN2kips/units_utils.inchToMeter,' kip-in)')
 print('ratio1= ',ratio1)
-print('zAxisElasticLateralTorsionalBucklingMoment= ',zAxisElasticLateralTorsionalBucklingMoment/1e3,' kN m (',zAxisElasticLateralTorsionalBucklingMoment/1e3*kN2kips/foot2meter,' kip-ft or', zAxisElasticLateralTorsionalBucklingMoment/1e3*kN2kips/inch2meter,' kip-in)')
+print('zAxisElasticLateralTorsionalBucklingMoment= ',zAxisElasticLateralTorsionalBucklingMoment/1e3,' kN m (',zAxisElasticLateralTorsionalBucklingMoment/1e3*kN2kips/units_utils.footToMeter,' kip-ft or', zAxisElasticLateralTorsionalBucklingMoment/1e3*kN2kips/units_utils.inchToMeter,' kip-in)')
 print('ratio2= ',ratio2)
-print('zAxisLegLocalBucklingLimit= ',zAxisLegLocalBucklingLimit/1e3,' kN m (',zAxisLegLocalBucklingLimit/1e3*kN2kips/foot2meter,' kip-ft or', zAxisLegLocalBucklingLimit/1e3*kN2kips/inch2meter,' kip-in)')
+print('zAxisLegLocalBucklingLimit= ',zAxisLegLocalBucklingLimit/1e3,' kN m (',zAxisLegLocalBucklingLimit/1e3*kN2kips/units_utils.footToMeter,' kip-ft or', zAxisLegLocalBucklingLimit/1e3*kN2kips/units_utils.inchToMeter,' kip-in)')
 print('ratio3= ',ratio3)
-print('zAxisNominalFlexuralStrength= ',zAxisNominalFlexuralStrength/1e3,' kN m (',zAxisNominalFlexuralStrength/1e3*kN2kips/foot2meter,' kip-ft or', zAxisNominalFlexuralStrength/1e3*kN2kips/inch2meter,' kip-in)')
+print('zAxisNominalFlexuralStrength= ',zAxisNominalFlexuralStrength/1e3,' kN m (',zAxisNominalFlexuralStrength/1e3*kN2kips/units_utils.footToMeter,' kip-ft or', zAxisNominalFlexuralStrength/1e3*kN2kips/units_utils.inchToMeter,' kip-in)')
 print('ratio4= ',ratio4)
 
-print('wAxisPlasticMoment= ',wAxisPlasticMoment/1e3,' kN m (',wAxisPlasticMoment/1e3*kN2kips/foot2meter,' kip-ft or', wAxisPlasticMoment/1e3*kN2kips/inch2meter,' kip-in)')
+print('wAxisPlasticMoment= ',wAxisPlasticMoment/1e3,' kN m (',wAxisPlasticMoment/1e3*kN2kips/units_utils.footToMeter,' kip-ft or', wAxisPlasticMoment/1e3*kN2kips/units_utils.inchToMeter,' kip-in)')
 print('ratio5= ',ratio5)
-print('wAxisElasticLateralTorsionalBucklingMoment= ',wAxisElasticLateralTorsionalBucklingMoment/1e3,' kN m (',wAxisElasticLateralTorsionalBucklingMoment/1e3*kN2kips/foot2meter,' kip-ft or', wAxisElasticLateralTorsionalBucklingMoment/1e3*kN2kips/inch2meter,' kip-in)')
+print('wAxisElasticLateralTorsionalBucklingMoment= ',wAxisElasticLateralTorsionalBucklingMoment/1e3,' kN m (',wAxisElasticLateralTorsionalBucklingMoment/1e3*kN2kips/units_utils.footToMeter,' kip-ft or', wAxisElasticLateralTorsionalBucklingMoment/1e3*kN2kips/units_utils.inchToMeter,' kip-in)')
 print('ratio6= ',ratio6)
-print('wAxisLateralTorsionalBucklingLimit= ',wAxisLateralTorsionalBucklingLimit/1e3,' kN m (',wAxisLateralTorsionalBucklingLimit/1e3*kN2kips/foot2meter,' kip-ft or', wAxisLateralTorsionalBucklingLimit/1e3*kN2kips/inch2meter,' kip-in)')
+print('wAxisLateralTorsionalBucklingLimit= ',wAxisLateralTorsionalBucklingLimit/1e3,' kN m (',wAxisLateralTorsionalBucklingLimit/1e3*kN2kips/units_utils.footToMeter,' kip-ft or', wAxisLateralTorsionalBucklingLimit/1e3*kN2kips/units_utils.inchToMeter,' kip-in)')
 print('ratio7= ',ratio7)
-print('wAxisLegLocalBucklingLimit= ',wAxisLegLocalBucklingLimit/1e3,' kN m (',wAxisLegLocalBucklingLimit/1e3*kN2kips/foot2meter,' kip-ft or', wAxisLegLocalBucklingLimit/1e3*kN2kips/inch2meter,' kip-in)')
+print('wAxisLegLocalBucklingLimit= ',wAxisLegLocalBucklingLimit/1e3,' kN m (',wAxisLegLocalBucklingLimit/1e3*kN2kips/units_utils.footToMeter,' kip-ft or', wAxisLegLocalBucklingLimit/1e3*kN2kips/units_utils.inchToMeter,' kip-in)')
 print('ratio8= ',ratio8)
-print('wAxisNominalFlexuralStrength= ',wAxisNominalFlexuralStrength/1e3,' kN m (',wAxisNominalFlexuralStrength/1e3*kN2kips/foot2meter,' kip-ft or', wAxisNominalFlexuralStrength/1e3*kN2kips/inch2meter,' kip-in)')
+print('wAxisNominalFlexuralStrength= ',wAxisNominalFlexuralStrength/1e3,' kN m (',wAxisNominalFlexuralStrength/1e3*kN2kips/units_utils.footToMeter,' kip-ft or', wAxisNominalFlexuralStrength/1e3*kN2kips/units_utils.inchToMeter,' kip-in)')
 print('ratio9= ',ratio9)
 '''
 

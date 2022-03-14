@@ -19,21 +19,20 @@ __email__= "l.pereztato@gmail.com"
 
 import math
 from materials.astm_aisc import ASTM_materials
+from misc_utils import units_utils
 
-in2m= 25.4e-3
-kip2N= 4448.2216
 psi2Pa= 6894.757
 
 # Concrete
 fc= 4000*psi2Pa
 
 # Loads
-Nua= 40*kip2N # Factored axial load.
+Nua= 40*units_utils.kipToN # Factored axial load.
 
 # Bolt
 AB105= ASTM_materials.F1554gr105
-anchor= ASTM_materials.AnchorBolt(name= 'ExampleA4', steel= AB105, diameter=1.125*in2m)
-h_ef= 17.57*in2m
+anchor= ASTM_materials.AnchorBolt(name= 'ExampleA4', steel= AB105, diameter=1.125*units_utils.inchToMeter)
+h_ef= 17.57*units_utils.inchToMeter
 
 d= anchor.diameter
 Ase=  anchor.getTensionEffectiveCrossSectionalArea()
@@ -50,24 +49,24 @@ Np= anchor.getNominalPulloutStrength(fc)
 ductilityCF= anchor.checkDuctility(h_ef, fc)
 
 
-plateWasher=  ASTM_materials.SquarePlateWasher(anchor, side= 2.25*in2m, thickness= 3/8*in2m)
+plateWasher=  ASTM_materials.SquarePlateWasher(anchor, side= 2.25*units_utils.inchToMeter, thickness= 3/8*units_utils.inchToMeter)
 anchor.plateWasher= plateWasher
 ductilityCF= anchor.checkDuctility(h_ef, fc)
 Np2= anchor.getNominalPulloutStrength(fc)
 ratio4= abs(Np2-579.120061024e3)/579.120061024
 
 '''
-print('d= ', d*1e3, 'mm', d/in2m, ' in')
-print('Ase= ', Ase*1e6, 'mm2', Ase/in2m/in2m, ' in2')
+print('d= ', d*1e3, 'mm', d/units_utils.inchToMeter, ' in')
+print('Ase= ', Ase*1e6, 'mm2', Ase/units_utils.inchToMeter/units_utils.inchToMeter, ' in2')
 print('ratio1= ', ratio1)
 print('fu= ', AB105.fu/1e6, 'MPa', AB105.fu/psi2Pa/1000, ' ksi')
-print('Nsa= ', Nsa/1e3, ' kN', Nsa/kip2N, ' kips')
+print('Nsa= ', Nsa/1e3, ' kN', Nsa/units_utils.kipToN, ' kips')
 print('ratio2= ', ratio2)
-print('Ncb= ', Ncb/1e3, ' kN', Ncb/kip2N, ' kips')
+print('Ncb= ', Ncb/1e3, ' kN', Ncb/units_utils.kipToN, ' kips')
 print('ratio3= ', ratio3)
-print('Np= ', Np/1e3, ' kN', Np/kip2N, ' kips')
+print('Np= ', Np/1e3, ' kN', Np/units_utils.kipToN, ' kips')
 print('ductilityCF= ', ductilityCF)
-print('Np2= ', Np2/1e3, ' kN', Np2/kip2N, ' kips')
+print('Np2= ', Np2/1e3, ' kN', Np2/units_utils.kipToN, ' kips')
 print('ratio4= ', ratio4)
 '''
 

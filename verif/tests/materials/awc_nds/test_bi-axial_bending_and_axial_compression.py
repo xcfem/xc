@@ -21,12 +21,7 @@ from materials.sections import section_properties
 from materials.awc_nds import AWCNDS_materials
 from materials.awc_nds import AWCNDS_limit_state_checking
 from materials.awc_nds import dimensional_lumber
-
-inchToMeter= 2.54/100.0
-footToMeter= 0.3048
-psiToPa= 6894.76
-psfToPa= 47.88026
-poundToNewton= 4.4482216282509
+from misc_utils import units_utils
 
 def getLoadCombDurationFactor(loadComb):
     dl= ('DL' in loadComb)
@@ -34,7 +29,7 @@ def getLoadCombDurationFactor(loadComb):
     wl= ('WL' in loadComb)
     return AWCNDS_materials.getLoadCombinationDurationFactor(deadLoad= dl, snowLoad= sl, windLoad= wl)
 
-length= 3*footToMeter
+length= 3*units_utils.footToMeter
 
 wood= dimensional_lumber.SouthernPineWood(name='SouthernPine', grade= 'no_2', sub_grade= '')
 columnSection= AWCNDS_materials.DimensionLumberSection(name= '2x4', woodMaterial= wood)
@@ -65,9 +60,9 @@ FbE= column.getFbECriticalBucklingDesignValue()
 ratio4= abs(FbE-45135406.21865596)/45135406.21865596
 
 # Loads (components: [weakAxisLoad, strongAxisLoad, axialLoad])
-DL= xc.Vector([50.0, 0.0, -300.0])*poundToNewton
-SL= xc.Vector([100.0, 0.0,-600.0])*poundToNewton
-WL= xc.Vector([0.0, 120, 0.0])*poundToNewton
+DL= xc.Vector([50.0, 0.0, -300.0])*units_utils.poundToN
+SL= xc.Vector([100.0, 0.0,-600.0])*units_utils.poundToN
+WL= xc.Vector([0.0, 120, 0.0])*units_utils.poundToN
 
 # Load cases
 loadCases= dict()
@@ -85,12 +80,12 @@ for key in loadCases:
     results[key]['CD']= wood.CD
     # Compression
     Fc_aster= column.crossSection.getFcAdj()
-    results[key]['Fc*']= Fc_aster/psiToPa
+    results[key]['Fc*']= Fc_aster/units_utils.psiToPa
     ## Column stability factor.
     CP= column.getColumnStabilityFactor()
     results[key]['CP']= CP
     Fc_aster2= column.getFcAdj()
-    results[key]['Fc**']= Fc_aster2/psiToPa
+    results[key]['Fc**']= Fc_aster2/units_utils.psiToPa
     # Bending
     CL1= column.getBeamStabilityFactor(majorAxis= True)
     CL2= column.getBeamStabilityFactor(majorAxis= False)
@@ -98,19 +93,19 @@ for key in loadCases:
     results[key]['CL2']= CL2
     Fb1_aster2= column.getFbAdj(majorAxis= True)
     Fb2_aster2= column.getFbAdj(majorAxis= False)
-    results[key]['Fb1**']= Fb1_aster2/psiToPa
-    results[key]['Fb2**']= Fb2_aster2/psiToPa
+    results[key]['Fb1**']= Fb1_aster2/units_utils.psiToPa
+    results[key]['Fb2**']= Fb2_aster2/units_utils.psiToPa
     # Bending and axial compression.
     loadVector= eval(loadCase)
     C= loadVector[2] # Compression
     fc= C/column.crossSection.A()
-    results[key]['fc']= abs(fc)/psiToPa
+    results[key]['fc']= abs(fc)/units_utils.psiToPa
     My= loadVector[0]*length/4.0 # Bending moment (weak axis).
     fb2= abs(My)/column.crossSection.getElasticSectionModulusY()
-    results[key]['fb2']= fb2/psiToPa
+    results[key]['fb2']= fb2/units_utils.psiToPa
     Mz= loadVector[1]*length/4.0 # Bending moment (strong axis).
     fb1= abs(Mz)/column.crossSection.getElasticSectionModulusZ()
-    results[key]['fb1']= fb1/psiToPa
+    results[key]['fb1']= fb1/units_utils.psiToPa
     bendingCF= column.getBiaxialBendingEfficiency(Nd= C, Myd= My, Mzd= Mz, chiN= CP, chiLT= min(CL1, CL2))
     results[key]['efficiency']= bendingCF[0]
 
@@ -139,15 +134,15 @@ for lc in results:
 
 '''
 print('error: ', error, 'load combination: ', maxErrorLoadComb, 'value: ', maxErrorKey)
-print('Minimum value of adjusted elastic modulus: '+'{:.2f}'.format(Emin/1e6)+' MPa ('+'{:.2f}'.format(Emin/psiToPa)+' psi).')
-print('Effective length H plane: '+'{:.2f}'.format(leH)+' m ('+'{:.2f}'.format(leH/inchToMeter)+' in).')
+print('Minimum value of adjusted elastic modulus: '+'{:.2f}'.format(Emin/1e6)+' MPa ('+'{:.2f}'.format(Emin/units_utils.psiToPa)+' psi).')
+print('Effective length H plane: '+'{:.2f}'.format(leH)+' m ('+'{:.2f}'.format(leH/units_utils.inchToMeter)+' in).')
 print('ratio1= ', ratio1)
-print('Effective length B plane: '+'{:.2f}'.format(leB)+' m ('+'{:.2f}'.format(leB/inchToMeter)+' in).')
-print('Critical buckling design value for compression member: '+'{:.2f}'.format(FcE1/1e6)+' MPa ('+'{:.2f}'.format(FcE1/psiToPa)+' psi).')
+print('Effective length B plane: '+'{:.2f}'.format(leB)+' m ('+'{:.2f}'.format(leB/units_utils.inchToMeter)+' in).')
+print('Critical buckling design value for compression member: '+'{:.2f}'.format(FcE1/1e6)+' MPa ('+'{:.2f}'.format(FcE1/units_utils.psiToPa)+' psi).')
 print('ratio2= ', ratio2)
 print('Bending slenderness ratio: '+'{:.2f}'.format(RBH))
 print('ratio3= ', ratio3)
-print('Critical buckling design value for bending: '+'{:.2f}'.format(FbE/1e6)+' MPa ('+'{:.2f}'.format(FbE/psiToPa)+' psi).')
+print('Critical buckling design value for bending: '+'{:.2f}'.format(FbE/1e6)+' MPa ('+'{:.2f}'.format(FbE/units_utils.psiToPa)+' psi).')
 print('ratio4= ', ratio4)
 '''
 

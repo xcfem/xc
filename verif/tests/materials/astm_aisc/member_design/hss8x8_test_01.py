@@ -11,12 +11,12 @@ __version__= "3.0"
 __email__= " ana.Ortega.Ort@gmail.com, l.pereztato@gmail.com"
 
 from materials.astm_aisc import ASTM_materials
+from misc_utils import units_utils
 
-in2m= 0.0254
 MPa2ksi= 0.145038
 kN2kips= 0.2248
 kNm2kipsft= 0.737562121169657
-m2Toin2= 1.0/in2m**2
+m2Toin2= 1.0/units_utils.inchToMeter**2
 
 steel= ASTM_materials.A500
 shape= ASTM_materials.HSSShape(steel,'HSS8X8X3/16')

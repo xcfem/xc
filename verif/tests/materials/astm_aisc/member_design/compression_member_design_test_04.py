@@ -19,12 +19,14 @@ from materials.astm_aisc import ASTM_materials
 from materials.astm_aisc import AISC_limit_state_checking as aisc
 from model import predefined_spaces
 
-inch2meter= 0.0254
+from misc_utils import units_utils
+
+
 MPa2ksi= 0.145038
 kN2kips= 0.2248
 kip2kN= 1.0/kN2kips
-foot2meter= 0.3048
-m2Toin2= 1.0/inch2meter**2
+
+m2Toin2= 1.0/units_utils.inchToMeter**2
 
 #Materials
 ## Steel material
@@ -52,7 +54,7 @@ steel.gammaM= 1.00
 # are swapped with respect to those in the catalog.
 
 shape= ASTM_materials.LShape(steel,'L8X4X1/2')
-effectiveLengthX= 5*foot2meter
+effectiveLengthX= 5*units_utils.footToMeter
 effectiveLengthY= effectiveLengthX
 effectiveLengthZ= effectiveLengthY
 
@@ -103,9 +105,9 @@ efficiency= shape.getBiaxialBendingEfficiency(-Pu,Myd,Mzd)[0]
 ratio13= abs(efficiency-1.034293557987282) 
 
 '''
-print('ew= ', ew*1e3, ' mm (', ew/inch2meter, ' in)')
+print('ew= ', ew*1e3, ' mm (', ew/units_utils.inchToMeter, ' in)')
 print('ratio1= ',ratio1)
-print('ez= ', ez*1e3, ' mm (', ez/inch2meter, ' in)')
+print('ez= ', ez*1e3, ' mm (', ez/units_utils.inchToMeter, ' in)')
 print('ratio2= ',ratio2)
 print('lambda_R= ', lambda_R)
 print('ratio3= ',ratio3)
@@ -116,22 +118,22 @@ print('ratio4= ',ratio4)
 print('compressiveBucklingReductionLimit: ', compressiveBucklingReductionLimit)
 print('Pn: ', Pn/1e3, ' kN', Pn/1e3*kN2kips, ' kips')
 print('ratio5= ',ratio5)
-print('beta_w: ', beta_w*1e3, 'mm (', beta_w/inch2meter, ' in)')
+print('beta_w: ', beta_w*1e3, 'mm (', beta_w/units_utils.inchToMeter, ' in)')
 print('ratio6= ',ratio6)
-print('Mcr= ',Mcr/1e3,' kN m (',Mcr/1e3*kN2kips/foot2meter,' kip-ft or', Mcr/1e3*kN2kips/inch2meter,' kip-in)')
+print('Mcr= ',Mcr/1e3,' kN m (',Mcr/1e3*kN2kips/units_utils.footToMeter,' kip-ft or', Mcr/1e3*kN2kips/units_utils.inchToMeter,' kip-in)')
 print('ratio7= ',ratio7)
-print('My= ',My/1e3,' kN m (',My/1e3*kN2kips/foot2meter,' kip-ft or', My/1e3*kN2kips/inch2meter,' kip-in)')
+print('My= ',My/1e3,' kN m (',My/1e3*kN2kips/units_utils.footToMeter,' kip-ft or', My/1e3*kN2kips/units_utils.inchToMeter,' kip-in)')
 print('ratio8= ',ratio8)
-print('Limit due to lateral-torsional buckling Mn_lt= ',Mn_lt/1e3,' kN m (',Mn_lt/1e3*kN2kips/foot2meter,' kip-ft or', Mn_lt/1e3*kN2kips/inch2meter,' kip-in)')
+print('Limit due to lateral-torsional buckling Mn_lt= ',Mn_lt/1e3,' kN m (',Mn_lt/1e3*kN2kips/units_utils.footToMeter,' kip-ft or', Mn_lt/1e3*kN2kips/units_utils.inchToMeter,' kip-in)')
 print('ratio9= ',ratio9)
-print('Limit due to leg local buckling Mn_llb= ',Mn_llb/1e3,' kN m (',Mn_llb/1e3*kN2kips/foot2meter,' kip-ft or', Mn_llb/1e3*kN2kips/inch2meter,' kip-in)')
+print('Limit due to leg local buckling Mn_llb= ',Mn_llb/1e3,' kN m (',Mn_llb/1e3*kN2kips/units_utils.footToMeter,' kip-ft or', Mn_llb/1e3*kN2kips/units_utils.inchToMeter,' kip-in)')
 print('ratio10= ',ratio10)
-print('Available flexural strength for the W axis MnW= ',MnW/1e3,' kN m (',MnW/1e3*kN2kips/foot2meter,' kip-ft or', MnW/1e3*kN2kips/inch2meter,' kip-in)')
+print('Available flexural strength for the W axis MnW= ',MnW/1e3,' kN m (',MnW/1e3*kN2kips/units_utils.footToMeter,' kip-ft or', MnW/1e3*kN2kips/units_utils.inchToMeter,' kip-in)')
 print('ratio11= ',ratio11)
-print('Available flexural strength for the Z axis MnZ= ',MnZ/1e3,' kN m (',MnZ/1e3*kN2kips/foot2meter,' kip-ft or', MnZ/1e3*kN2kips/inch2meter,' kip-in)')
+print('Available flexural strength for the Z axis MnZ= ',MnZ/1e3,' kN m (',MnZ/1e3*kN2kips/units_utils.footToMeter,' kip-ft or', MnZ/1e3*kN2kips/units_utils.inchToMeter,' kip-in)')
 print('ratio12= ',ratio12)
-print('MW= ',MW/1e3,' kN m (',MW/1e3*kN2kips/foot2meter,' kip-ft or', MW/1e3*kN2kips/inch2meter,' kip-in)')
-print('MZ= ',MZ/1e3,' kN m (',MZ/1e3*kN2kips/foot2meter,' kip-ft or', MZ/1e3*kN2kips/inch2meter,' kip-in)')
+print('MW= ',MW/1e3,' kN m (',MW/1e3*kN2kips/units_utils.footToMeter,' kip-ft or', MW/1e3*kN2kips/units_utils.inchToMeter,' kip-in)')
+print('MZ= ',MZ/1e3,' kN m (',MZ/1e3*kN2kips/units_utils.footToMeter,' kip-ft or', MZ/1e3*kN2kips/units_utils.inchToMeter,' kip-in)')
 print('efficiency: ',efficiency)
 print('ratio13= ',ratio13)
 '''

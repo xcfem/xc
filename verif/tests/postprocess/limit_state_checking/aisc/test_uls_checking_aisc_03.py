@@ -25,12 +25,14 @@ from solution import predefined_solutions
 from postprocess import limit_state_data as lsd
 from postprocess.config import default_config
 
-inch2meter= 0.0254
+from misc_utils import units_utils
+
+
 MPa2ksi= 0.145038
 kN2kips= 0.2248
 kip2kN= 1.0/kN2kips
-foot2meter= 0.3048
-m2Toin2= 1.0/inch2meter**2
+
+m2Toin2= 1.0/units_utils.inchToMeter**2
 
 # Problem type
 steelBeam= xc.FEProblem()
@@ -49,7 +51,7 @@ xcSection= shape.defElasticShearSection3d(preprocessor)
 # Model geometry
 
 ## Points.
-span= 35.0*foot2meter
+span= 35.0*units_utils.footToMeter
 pointHandler= preprocessor.getMultiBlockTopology.getPoints
 p0= pointHandler.newPoint(geom.Pos3d(0.0,0.0,0.0))
 p1= pointHandler.newPoint(geom.Pos3d(span,0.0,0.0))

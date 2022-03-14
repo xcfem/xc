@@ -8,6 +8,7 @@ from materials.awc_nds import AWCNDS_materials as mat
 from materials.awc_nds import dimensional_lumber
 from materials.sections import section_properties as sp
 from rough_calculations import ng_simple_beam as sb
+from misc_utils import units_utils
 
 __author__= "Luis Claudio Pérez Tato (LCPT"
 __copyright__= "Copyright 2015, LCPT"
@@ -15,12 +16,11 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
-inch2meter= 0.0254
-pound2Newton= 4.4482216282509
-foot2meter= 0.3048
 
-span= 16*foot2meter
-designLoad= 77.3*pound2Newton/foot2meter # Design load
+
+
+span= 16*units_utils.footToMeter
+designLoad= 77.3*units_utils.poundToN/units_utils.footToMeter # Design load
 designMoment= designLoad*span**2/8.0
 
 wood= dimensional_lumber.SouthernPineWood(name='SouthernPine', grade= 'no_2', sub_grade= '')
@@ -42,16 +42,16 @@ ratio2= abs(Fv-1.2e6)/1.2e6
 ratio3= abs(delta-20.801166867982307e-3)/20.801166867982307e-3
 
 '''
-print('b= ', joist.b*1000, 'mm (',joist.b/inch2meter,'in)')
-print('h= ', joist.h*1000, 'mm (',joist.h/inch2meter,'in)')
-print('S= ', S, 'm3 (',S/inch2meter**3,'in3)')
-print('Bending stress fb= ', fb/1e6, 'MPa (',fb/pound2Newton*inch2meter**2,'psi)')
-print('Fb= ', Fb/1e6, 'MPa (',Fb/pound2Newton*inch2meter**2,'psi)')
+print('b= ', joist.b*1000, 'mm (',joist.b/units_utils.inchToMeter,'in)')
+print('h= ', joist.h*1000, 'mm (',joist.h/units_utils.inchToMeter,'in)')
+print('S= ', S, 'm3 (',S/units_utils.inchToMeter**3,'in3)')
+print('Bending stress fb= ', fb/1e6, 'MPa (',fb/units_utils.poundToN*units_utils.inchToMeter**2,'psi)')
+print('Fb= ', Fb/1e6, 'MPa (',Fb/units_utils.poundToN*units_utils.inchToMeter**2,'psi)')
 print('ratio1= ',ratio1)
-print('E= ', E/1e6, 'MPa (',E/pound2Newton*inch2meter**2,'psi)')
-print('Fv= ', Fv/1e6, 'MPa (',Fv/pound2Newton*inch2meter**2,'psi)')
+print('E= ', E/1e6, 'MPa (',E/units_utils.poundToN*units_utils.inchToMeter**2,'psi)')
+print('Fv= ', Fv/1e6, 'MPa (',Fv/units_utils.poundToN*units_utils.inchToMeter**2,'psi)')
 print('ratio2= ',ratio2)
-print('delta= ', delta*1000, 'mm (',delta/inch2meter,'in)')
+print('delta= ', delta*1000, 'mm (',delta/units_utils.inchToMeter,'in)')
 print('ratio3= ',ratio3)
 '''
 

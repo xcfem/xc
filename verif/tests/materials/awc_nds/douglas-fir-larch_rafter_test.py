@@ -12,6 +12,7 @@ from materials.awc_nds import AWCNDS_limit_state_checking
 from materials.awc_nds import dimensional_lumber
 from materials.sections import section_properties as sp
 from rough_calculations import ng_simple_beam as sb
+from misc_utils import units_utils
 
 __author__= "Luis Claudio Pérez Tato (LCPT"
 __copyright__= "Copyright 2015, LCPT"
@@ -19,9 +20,8 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
-inch2meter= 0.0254
-pound2Newton= 4.4482216282509
-foot2meter= 0.3048
+
+
 psf2Pa= 47.88026
 
 def getLoadCombDurationFactor(loadComb):
@@ -32,8 +32,8 @@ def getLoadCombDurationFactor(loadComb):
     return AWCNDS_materials.getLoadCombinationDurationFactor(deadLoad= dl, constructionLoad= cl, snowLoad= sl, windLoad= wl)
 
 # Geometry
-span= 14.4*foot2meter
-w_trib= 16*inch2meter
+span= 14.4*units_utils.footToMeter
+w_trib= 16*units_utils.inchToMeter
 cosAlpha= math.cos(math.radians(33.7))
 
 # Materials
@@ -90,7 +90,7 @@ delta= -rafterModel.getDeflectionUnderUniformLoad(designLoad,rafterModel.l/2.0)
 ratio= abs(delta-10.729547227761856e-3)/10.729547227761856e-3
 
 '''
-print('delta= ', delta*1000, 'mm (',delta/inch2meter,'in)')
+print('delta= ', delta*1000, 'mm (',delta/units_utils.inchToMeter,'in)')
 print('ratio= ',ratio)
 print(results)
 print(maxCF)

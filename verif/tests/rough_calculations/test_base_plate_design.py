@@ -16,11 +16,11 @@ __email__= "l.pereztato@ciccp.es ana.ortega@ciccp.es"
 import math
 from materials.astm_aisc import ASTM_materials
 from rough_calculations import ng_aisc_base_plates as bp
+from misc_utils import units_utils
 
 ''' Verification test from Example 4.1'''
-kip2N= 4448.2216
+
 ksi2Pa= 6.89476e6
-in2m= 0.0254
 
     
 def myround(x, prec=2, base=.05):
@@ -29,9 +29,9 @@ def myround(x, prec=2, base=.05):
 steel_W= ASTM_materials.A992   #steel support W shapes
 steel_W.gammaM= 1.00
 steelShape= ASTM_materials.WShape(steel_W,'W12X96')
-fc= 3*ksi2Pa # Minimum concrete compressive strength
-Pu= 700*kip2N # Axial load
-Fy= 36*ksi2Pa # base plate yield stress
+fc= 3*units_utils.ksiToPa # Minimum concrete compressive strength
+Pu= 700*units_utils.kipToN # Axial load
+Fy= 36*units_utils.ksiToPa # base plate yield stress
 
 Areq= bp.computeBasePlateArea(Pu, fc)
 N= bp.getNDimension(steelShape, Areq)
@@ -46,12 +46,12 @@ ratio2= (t-40.1170824974e-3)/40.1170824974e-3
 
 '''
 print('Pu= ', Pu/1e3, ' kN')
-print('Areq= ', Areq, ' m2 (',Areq/in2m/in2m,' in2).')
-print('N= ', N, ' m (',N/in2m,' in).')
-print('B= ', B, ' m (',B/in2m,' in).')
-print('A= ', A, ' m2 (',A/in2m/in2m,' in2).')
+print('Areq= ', Areq, ' m2 (',Areq/units_utils.inchToMeter/units_utils.inchToMeter,' in2).')
+print('N= ', N, ' m (',N/units_utils.inchToMeter,' in).')
+print('B= ', B, ' m (',B/units_utils.inchToMeter,' in).')
+print('A= ', A, ' m2 (',A/units_utils.inchToMeter/units_utils.inchToMeter,' in2).')
 print('CF= ', CF)
-print('t= ', t*1000, ' mm (',t/in2m,' in).')
+print('t= ', t*1000, ' mm (',t/units_utils.inchToMeter,' in).')
 '''
 
 import os

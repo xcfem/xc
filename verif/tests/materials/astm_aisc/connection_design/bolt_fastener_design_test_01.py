@@ -14,19 +14,17 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
-in2m= 25.4e-3
-kip2N= 4448.2216
-
 import math
 from materials.astm_aisc import ASTM_materials
+from misc_utils import units_utils
 
 
-bolt= ASTM_materials.BoltFastener(0.75*in2m, steelType= ASTM_materials.A325) # group A
+bolt= ASTM_materials.BoltFastener(0.75*units_utils.inchToMeter, steelType= ASTM_materials.A325) # group A
 designShearStrength= 2.0*bolt.getDesignShearStrength() # double shear
-designShearStrengthRef= 159.042810002e3 #31.8*kip2N
+designShearStrengthRef= 159.042810002e3 #31.8*units_utils.kipToN
 ratio1= abs(designShearStrength-designShearStrengthRef)/designShearStrengthRef
 
-Pd= 121.6*kip2N
+Pd= 121.6*units_utils.kipToN
 n= math.ceil(Pd/designShearStrength)
 centersDist= bolt.getRecommendedDistanceBetweenCenters()
 minEdgeDist= bolt.getMinimumEdgeDistance()

@@ -15,8 +15,7 @@ __email__= "l.pereztato@ciccp.es, ana.ortega@ciccp.es "
 
 import math
 from materials.awc_nds import dimensional_lumber
-
-inchToMeter= 2.54/100.0
+from misc_utils import units_utils
 
 # Thickness.
 nominalThk= [2.00, 2.50, 3.00, 3.50, 4.00, 4.50]
@@ -27,12 +26,12 @@ greenThk= [1.5625, 2.0625, 2.5625, 3.0625, 3.5625, 4.0625]
 error= 0.0
 ## Dry thickness.
 for nthk, dthk in zip(nominalThk, dryThk):
-    tmp= dimensional_lumber.getDressedThickness(nthk*inchToMeter, dressedSize= 'Dry')/inchToMeter
+    tmp= dimensional_lumber.getDressedThickness(nthk*units_utils.inchToMeter, dressedSize= 'Dry')/units_utils.inchToMeter
     error+= (dthk-tmp)**2
     
 ## Green thickness.
 for nthk, gthk in zip(nominalThk, greenThk):
-    tmp= dimensional_lumber.getDressedThickness(nthk*inchToMeter, dressedSize= 'Green')/inchToMeter
+    tmp= dimensional_lumber.getDressedThickness(nthk*units_utils.inchToMeter, dressedSize= 'Green')/units_utils.inchToMeter
     error+= (gthk-tmp)**2
     
 # Width.
@@ -42,32 +41,32 @@ greenWidth= [1.5625, 2.5625, 3.5625, 4.625, 5.625, 7.50, 9.50, 11.50, 13.50, 15.
 
 ## Dry thickness.
 for nwdth, dwdth in zip(nominalWidth, dryWidth):
-    tmp= dimensional_lumber.getDressedWidth(nwdth*inchToMeter, dressedSize= 'Dry')/inchToMeter
+    tmp= dimensional_lumber.getDressedWidth(nwdth*units_utils.inchToMeter, dressedSize= 'Dry')/units_utils.inchToMeter
     error+= (dwdth-tmp)**2
     
 ## Green thickness.
 for nwdth, gwdth in zip(nominalWidth, greenWidth):
-    tmp= dimensional_lumber.getDressedWidth(nwdth*inchToMeter, dressedSize= 'Green')/inchToMeter
+    tmp= dimensional_lumber.getDressedWidth(nwdth*units_utils.inchToMeter, dressedSize= 'Green')/units_utils.inchToMeter
     error+= (gwdth-tmp)**2
     
 ## Nominal from Dry thickness.
 for nthk, dthk in zip(nominalThk, dryThk):
-    tmp= dimensional_lumber.getNominalThickness(dthk*inchToMeter, dressedSize= 'Dry')/inchToMeter
+    tmp= dimensional_lumber.getNominalThickness(dthk*units_utils.inchToMeter, dressedSize= 'Dry')/units_utils.inchToMeter
     error+= (nthk-tmp)**2
     
 ## Nominal from Green thickness.
 for nthk, gthk in zip(nominalThk, greenThk):
-    tmp= dimensional_lumber.getNominalThickness(gthk*inchToMeter, dressedSize= 'Green')/inchToMeter
+    tmp= dimensional_lumber.getNominalThickness(gthk*units_utils.inchToMeter, dressedSize= 'Green')/units_utils.inchToMeter
     error+= (nthk-tmp)**2
     
 ## Nominal from Dry width.
 for nwdth, dwdth in zip(nominalWidth, dryWidth):
-    tmp= dimensional_lumber.getNominalWidth(dwdth*inchToMeter, dressedSize= 'Dry')/inchToMeter
+    tmp= dimensional_lumber.getNominalWidth(dwdth*units_utils.inchToMeter, dressedSize= 'Dry')/units_utils.inchToMeter
     error+= (nwdth-tmp)**2
     
 ## Nominal from Green width.
 for nwdth, gwdth in zip(nominalWidth, greenWidth):
-    tmp= dimensional_lumber.getNominalWidth(gwdth*inchToMeter, dressedSize= 'Green')/inchToMeter
+    tmp= dimensional_lumber.getNominalWidth(gwdth*units_utils.inchToMeter, dressedSize= 'Green')/units_utils.inchToMeter
     error+= (nwdth-tmp)**2
 
 error= math.sqrt(error)

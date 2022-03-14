@@ -15,17 +15,15 @@ __email__= "l.pereztato@ciccp.es ana.ortega@ciccp.es"
 from materials.awc_nds import specific_gravity as sg
 from materials.awc_nds import dowel_type_fasteners as fasteners
 from materials.awc_nds import AWCNDS_materials as mat
+from misc_utils import units_utils
 
-inch2meter= 0.0254
-pound2N= 4.44822
-
-fastener= fasteners.Nail(diameter= 0.131*inch2meter, length= 2.5*inch2meter)
+fastener= fasteners.Nail(diameter= 0.131*units_utils.inchToMeter, length= 2.5*units_utils.inchToMeter)
 
 G= sg.specificGravity['Spruce-Pine-Fir'] # Specific gravity
 ratioG= (G-0.42)/0.42
-sideMemberThickness= 0.105*inch2meter # Side member thickness
+sideMemberThickness= 0.105*units_utils.inchToMeter # Side member thickness
 screwPenetration= fastener.L-sideMemberThickness # Screw penetration into main member.
-ptRef= 2.395*inch2meter
+ptRef= 2.395*units_utils.inchToMeter
 ratio1= (screwPenetration-ptRef)/ptRef
 W= fastener.getReferenceWithdrawal(G)
 WRef= 3.61931305943e3
@@ -37,11 +35,11 @@ ratio3= abs(Wd-WdRef)/WdRef
 '''
 print('G= ', G)
 print('ratio G= ', ratioG)
-print('screw penetration pt= ', screwPenetration*1e3, 'mm (', screwPenetration/inch2meter, ' in)')
+print('screw penetration pt= ', screwPenetration*1e3, 'mm (', screwPenetration/units_utils.inchToMeter, ' in)')
 print(ratio1)
-print('W= ', W/1e3, ' kN/m (', W/mat.pound2N*mat.in2meter,'lbs/in)')
+print('W= ', W/1e3, ' kN/m (', W/mat.units_utils.poundToN*units_utils.inchToMeter,'lbs/in)')
 print(ratio2)
-print('Wd= ', Wd/1e3, ' kN (', Wd/mat.pound2N,'lbs)')
+print('Wd= ', Wd/1e3, ' kN (', Wd/mat.units_utils.poundToN,'lbs)')
 print(ratio3)
 '''
 

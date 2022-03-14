@@ -29,24 +29,25 @@ from actions import load_cases as lcases
 from model.sets import sets_mng as sets
 from model.geometry import grid_model as gm
 from connections.steel_connections import cbfem_bolt_weld as sc
+from misc_utils import units_utils
+
 #References:
 # [1] Design examples V14.0 - American Institute of Steel Construction»
 #units
-in2m=0.0254
 pounds2N=4.448
 
 #Weld test- AISC verification.
 #Example J.2 "Fillet weld loaded at an angle" of reference [1]
-l=15.4*in2m # weld length [m]
-t=5/16*in2m #weld thickness
+l=15.4*units_utils.inchToMeter # weld length [m]
+t=5/16*units_utils.inchToMeter #weld thickness
 D=50   #dead load [kips]
 L=150  #live load [kips]
 Pu=(1.2*D+1.6*L)*1e3*pounds2N   #Design load [N]
 ang0=0  #
 ang1=60 #angle in which load is acting [degrees] (load case 1)
 
-tPLt=1.5*in2m   #thickness of plates [m].
-Lplt=2*in2m  # length of plates to model [m] (low value to consider plates
+tPLt=1.5*units_utils.inchToMeter   #thickness of plates [m].
+Lplt=2*units_utils.inchToMeter  # length of plates to model [m] (low value to consider plates
                # stiff enough
 esize=Lplt/5
 #             *** GEOMETRIC model (points, lines, surfaces) - SETS ***

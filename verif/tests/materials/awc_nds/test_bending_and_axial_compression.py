@@ -21,12 +21,7 @@ from materials.sections import section_properties
 from materials.awc_nds import AWCNDS_materials
 from materials.awc_nds import AWCNDS_limit_state_checking
 from materials.awc_nds import dimensional_lumber
-
-inchToMeter= 2.54/100.0
-footToMeter= 0.3048
-psiToPa= 6894.76
-psfToPa= 47.88026
-poundToNewton= 4.4482216282509
+from misc_utils import units_utils
 
 def getLoadCombDurationFactor(loadComb):
     dl= ('DL' in loadComb)
@@ -35,7 +30,7 @@ def getLoadCombDurationFactor(loadComb):
     return AWCNDS_materials.getLoadCombinationDurationFactor(deadLoad= dl, snowLoad= sl, windLoad= wl)
 
 # Geometry
-height= 9*footToMeter
+height= 9*units_utils.footToMeter
 
 # Materials
 wood= dimensional_lumber.SouthernPineWood(name='SouthernPine', grade= 'no_1', sub_grade= '')
@@ -44,7 +39,7 @@ columnSection= AWCNDS_materials.DimensionLumberSection(name= '2x6', woodMaterial
 column= AWCNDS_limit_state_checking.ColumnMember(unbracedLengthB= .01*height, unbracedLengthH= height, section= columnSection, memberRestraint= AWCNDS_materials.MemberRestraint.compressionEdgeSupport)
 
 # Member dimensions and properties
-w_trib= 4.0*footToMeter
+w_trib= 4.0*units_utils.footToMeter
 Ag= column.crossSection.A()
 S= column.crossSection.getElasticSectionModulusZ() 
 I= column.crossSection.Iz()
@@ -64,9 +59,9 @@ FbE= column.getFbECriticalBucklingDesignValue()
 ratio4= abs(FbE-10198589.195161333)/10198589.195161333
 
 # Loads
-DL= xc.Vector([0.0, -560*poundToNewton])
-SL= xc.Vector([0.0, -840*poundToNewton])
-WL= xc.Vector([-25*psfToPa*w_trib, 0.0])
+DL= xc.Vector([0.0, -560*units_utils.poundToN])
+SL= xc.Vector([0.0, -840*units_utils.poundToN])
+WL= xc.Vector([-25*units_utils.psfToPa*w_trib, 0.0])
 
 # Load cases
 loadCases= dict()
@@ -84,17 +79,17 @@ for key in loadCases:
     results[key]['CD']= wood.CD
     # Compression
     Fc_aster= column.crossSection.getFcAdj()
-    results[key]['Fc*']= Fc_aster/psiToPa
+    results[key]['Fc*']= Fc_aster/units_utils.psiToPa
     ## Column stability factor.
     CP= column.getColumnStabilityFactor()
     results[key]['CP']= CP
     Fc_aster2= column.getFcAdj()
-    results[key]['Fc**']= Fc_aster2/psiToPa
+    results[key]['Fc**']= Fc_aster2/units_utils.psiToPa
     # Bending
     CL= column.getBeamStabilityFactor()
     results[key]['CL']= CL
     Fb_aster2= column.getFbAdj()
-    results[key]['Fb**']= Fb_aster2/psiToPa
+    results[key]['Fb**']= Fb_aster2/units_utils.psiToPa
     # Bending and axial compression.
     loadVector= eval(loadCase)
     C= loadVector[1] # Compression
@@ -102,7 +97,7 @@ for key in loadCases:
     bendingCF= column.getBiaxialBendingEfficiency(Nd= C, Myd= 0.0, Mzd= M, chiN= CP, chiLT= CL)
     results[key]['efficiency']= bendingCF[0]
     
-refResults= {'LC1': {'CD': 1.6, 'Fc*': 2483.522866299488, 'CP': 0.43219668428603586, 'Fc**': 1073.3703481631908, 'CL': 1.0, 'Fb**': 2158.843220409839, 'efficiency': 0.887544474580459}, 'LC2': {'CD': 1.15, 'Fc*': 1785.032060152757, 'CP': 0.5546795481910816, 'Fc**': 990.1207766321268, 'CL': 1.0, 'Fb**': 1551.6685646695717, 'efficiency': 0.17139010469812982}, 'LC3': {'CD': 0.9, 'Fc*': 1396.981612293462, 'CP': 0.6474764318198925, 'Fc**': 904.5126696457712, 'CL': 1.0, 'Fb**': 1214.3493114805344, 'efficiency': 0.07504456676642514}, 'LC4': {'CD': 1.6, 'Fc*': 2483.522866299488, 'CP': 0.43219668428603586, 'Fc**': 1073.3703481631908, 'CL': 1.0, 'Fb**': 2158.843220409839, 'efficiency': 0.887544474580459}}
+refResults= {'LC1': {'CD': 1.6, 'Fc*': 2483.523841301132, 'CP': 0.43219668428603586, 'Fc**': 1073.3707695556684, 'CL': 1.0, 'Fb**': 2158.844067946102, 'efficiency': 0.8875444533754335}, 'LC2': {'CD': 1.15, 'Fc*': 1785.0327609351882, 'CP': 0.5546795481910816, 'Fc**': 990.1211653418092, 'CL': 1.0, 'Fb**': 1551.6691738362604, 'efficiency': 0.1713901036096218}, 'LC3': {'CD': 0.9, 'Fc*': 1396.9821607318866, 'CP': 0.6474764318198925, 'Fc**': 904.5130247467254, 'CL': 1.0, 'Fb**': 1214.3497882196823, 'efficiency': 0.07504456628981297}, 'LC4': {'CD': 1.6, 'Fc*': 2483.523841301132, 'CP': 0.43219668428603586, 'Fc**': 1073.3707695556684, 'CL': 1.0, 'Fb**': 2158.844067946102, 'efficiency': 0.8875444533754335}}
 
 error= 0.0
 for lc in results:
@@ -110,6 +105,7 @@ for lc in results:
     for key in combResults:
         v1= combResults[key]
         v2= refResults[lc][key]
+        diff= (v1-v2)
         error+= (v1-v2)**2
 
 error= math.sqrt(error)
@@ -117,22 +113,22 @@ error= math.sqrt(error)
 '''
 print('error: ', error)
 print(results)
-print('Minimum value of adjusted elastic modulus: '+'{:.2f}'.format(Emin/1e6)+' MPa ('+'{:.2f}'.format(Emin/psiToPa)+' psi).')
-print('Effective length H plane: '+'{:.2f}'.format(leH)+' m ('+'{:.2f}'.format(leH/inchToMeter)+' in).')
+print('Minimum value of adjusted elastic modulus: '+'{:.2f}'.format(Emin/1e6)+' MPa ('+'{:.2f}'.format(Emin/units_utils.psiToPa)+' psi).')
+print('Effective length H plane: '+'{:.2f}'.format(leH)+' m ('+'{:.2f}'.format(leH/units_utils.inchToMeter)+' in).')
 print('ratio1= ', ratio1)
-print('Effective length B plane: '+'{:.2f}'.format(leB)+' m ('+'{:.2f}'.format(leB/inchToMeter)+' in).')
-print('Critical buckling design value for compression member: '+'{:.2f}'.format(FcE1/1e6)+' MPa ('+'{:.2f}'.format(FcE1/psiToPa)+' psi).')
+print('Effective length B plane: '+'{:.2f}'.format(leB)+' m ('+'{:.2f}'.format(leB/units_utils.inchToMeter)+' in).')
+print('Critical buckling design value for compression member: '+'{:.2f}'.format(FcE1/1e6)+' MPa ('+'{:.2f}'.format(FcE1/units_utils.psiToPa)+' psi).')
 print('ratio2= ', ratio2)
 print('Bending slenderness ratio: '+'{:.2f}'.format(RBH))
 print('ratio3= ', ratio3)
-print('Critical buckling design value for bending: '+'{:.2f}'.format(FbE/1e6)+' MPa ('+'{:.2f}'.format(FbE/psiToPa)+' psi).')
+print('Critical buckling design value for bending: '+'{:.2f}'.format(FbE/1e6)+' MPa ('+'{:.2f}'.format(FbE/units_utils.psiToPa)+' psi).')
 print('ratio4= ', ratio4)
 '''
 
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
-if((ratio1<1e-10) and (ratio2<1e-10) and (ratio3<1e-10) and (ratio4<1e-10) and (error<1e-10)):
+if((ratio1<1e-10) and (ratio2<1e-10) and (ratio3<1e-10) and (ratio4<1e-10) and (error<1e-6)):
     print("test "+fname+": ok.")
 else:
     lmsg.error("test "+fname+": ERROR.")

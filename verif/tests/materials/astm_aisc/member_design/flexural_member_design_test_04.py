@@ -22,12 +22,14 @@ from actions import load_cases
 from actions import combinations as combs
 from solution import predefined_solutions
 
-inch2meter= 0.0254
+from misc_utils import units_utils
+
+
 MPa2ksi= 0.145038
 kN2kips= 0.2248
 kip2kN= 1.0/kN2kips
-foot2meter= 0.3048
-m2Toin2= 1.0/inch2meter**2
+
+m2Toin2= 1.0/units_utils.inchToMeter**2
 
 # Problem type
 steelBeam= xc.FEProblem()
@@ -46,7 +48,7 @@ xcSection= shape.defElasticShearSection2d(preprocessor)
 # Model geometry
 
 ## Points.
-span= 25.0*foot2meter
+span= 25.0*units_utils.footToMeter
 pointHandler= preprocessor.getMultiBlockTopology.getPoints
 p0= pointHandler.newPoint(geom.Pos3d(0.0,0.0,0.0))
 p1= pointHandler.newPoint(geom.Pos3d(span,0.0,0.0))
@@ -78,14 +80,14 @@ loadCaseNames= ['deadLoad','liveLoad']
 loadCaseManager.defineSimpleLoadCases(loadCaseNames)
 
 ## Dead load.
-DL= -0.23e3*kip2kN/foot2meter
+DL= -0.23e3*kip2kN/units_utils.footToMeter
 deadLoad= xc.Vector([0.0, DL, 0.0])
 cLC= loadCaseManager.setCurrentLoadCase('deadLoad')
 for e in xcTotalSet.elements:
   e.vector2dUniformLoadGlobal(deadLoad)
   
 ## Live load.
-LL= -0.69e3*kip2kN/foot2meter
+LL= -0.69e3*kip2kN/units_utils.footToMeter
 liveLoad= xc.Vector([0.0, LL, 0.0])
 cLC= loadCaseManager.setCurrentLoadCase('liveLoad')
 for e in xcTotalSet.elements:
@@ -115,7 +117,7 @@ midPos1= geom.Pos3d(midSpan1,0.0,0.0)
 n1= l1.getNearestNode(geom.Pos3d(midSpan1,0.0,0.0))
 d1= n1.getDisp[1]
 #refD1= 5.0*LL*span**4/(384.0*shape.get('E')*shape.get('Iz'))
-refD1= -0.664*inch2meter
+refD1= -0.664*units_utils.inchToMeter
 ratio1= abs((refD1-d1)/refD1)
 deflection= d1/span # Deflection
 
@@ -136,19 +138,19 @@ ratio2= abs((MMax-MMaxRef)/MMaxRef)
 # yielding limit state applies.
 beam=  aisc.Member(l1.name, shape, unbracedLengthX= 0.5, unbracedLengthY= span, unbracedLengthZ= span, lstLines= [l1])
 Mu= beam.getDesignFlexuralStrength()
-MuRef= 0.9*152e3*kip2kN*foot2meter
+MuRef= 0.9*152e3*kip2kN*units_utils.footToMeter
 ratio3= abs((Mu-MuRef)/MuRef)
 
 '''
 print('d1= ',d1*1e3, 'mm')
 print('refD1= ',refD1*1e3, 'mm')
 print('ratio1= ',ratio1)
-print('dY= ',d1*1e3,' mm/', d1/inch2meter,' in; ratio= L/', 1/deflection, 'L= ', span, ' m')
+print('dY= ',d1*1e3,' mm/', d1/units_utils.inchToMeter,' in; ratio= L/', 1/deflection, 'L= ', span, ' m')
 print('MMaxRef= ',MMaxRef/1e3,' kN m')
 print('MMax= ',MMax/1e3,' kN m')
 print('ratio2= ',ratio2)
-print('Mu= ',Mu/1e3,' kN m(',Mu/1e3*kN2kips/foot2meter,' kip-ft)')
-print('MuRef= ',MuRef/1e3,' kN m(',MuRef/1e3*kN2kips/foot2meter,' kip-ft)')
+print('Mu= ',Mu/1e3,' kN m(',Mu/1e3*kN2kips/units_utils.footToMeter,' kip-ft)')
+print('MuRef= ',MuRef/1e3,' kN m(',MuRef/1e3*kN2kips/units_utils.footToMeter,' kip-ft)')
 print('ratio3= ',ratio3)
 '''
 

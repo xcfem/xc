@@ -11,12 +11,12 @@ __version__= "3.0"
 __email__= " ana.Ortega.Ort@gmail.com, l.pereztato@gmail.com"
 
 from materials.astm_aisc import ASTM_materials
+from misc_utils import units_utils
 
-in2m= 0.0254
 MPa2ksi= 0.145038
 kN2kips= 0.2248
 kNm2kipsft= 0.737562121169657
-m2Toin2= 1.0/in2m**2
+m2Toin2= 1.0/units_utils.inchToMeter**2
 
 steel= ASTM_materials.A500
 hss= ASTM_materials.HSSShape(steel,'HSS8X8X3/16')
@@ -60,8 +60,8 @@ print('k= ', k)
 print('lambda_r= ', lambda_r)
 print('hClassification: ', hClassification)
 print('bClassification: ', bClassification)
-print('h_eff: ', h_eff*1e3, ' mm', h_eff/in2m, ' in')
-print('b_eff: ', b_eff*1e3, ' mm', b_eff/in2m, ' in')
+print('h_eff: ', h_eff*1e3, ' mm', h_eff/units_utils.inchToMeter, ' in')
+print('b_eff: ', b_eff*1e3, ' mm', b_eff/units_utils.inchToMeter, ' in')
 print('A_eff: ', A_eff*1e4, 'cm2', A_eff*m2Toin2, 'in2')
 print('slenderness ratio: ', sr)
 print('Fe: ', Fe/1e6, ' MPa', Fe/1e6*MPa2ksi, ' ksi')
