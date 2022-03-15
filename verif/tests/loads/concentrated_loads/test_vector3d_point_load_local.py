@@ -90,9 +90,6 @@ delta0= nod2.getDisp[0]
 nod2= nodes.getNode(2)
 delta1= nod2.getDisp[1] 
 
-
-
-
 a= x*L
 delta0Teor= (n*a/E/A)
 ratio0= ((delta0-delta0Teor)/delta0Teor)

@@ -67,7 +67,6 @@ beam3d= elements.newElement("ElasticBeam3d",xc.ID([1,2]))
 # Constraints
 modelSpace.fixNode000_000(1)
 
-
 # Load definition.
 lp0= modelSpace.newLoadPattern(name= '0')
 modelSpace.setCurrentLoadPattern("0")
@@ -78,12 +77,12 @@ mesh= feProblem.getDomain.getMesh
 eIter= mesh.getElementIter
 elem= eIter.next()
 while not(elem is None):
-  crdTransf= elem.getCoordTransf
-  vIElem= crdTransf.getIVector
-  vJElem= crdTransf.getJVector
-  vCarga= n*vIElem-P*vJElem
-  elem.vector3dPointLoadGlobal(ptoAplic,vCarga)
-  elem= eIter.next()
+    crdTransf= elem.getCoordTransf
+    vIElem= crdTransf.getIVector
+    vJElem= crdTransf.getJVector
+    vCarga= n*vIElem-P*vJElem
+    elem.vector3dPointLoadGlobal(ptoAplic,vCarga)
+    elem= eIter.next()
 
 # We add the load case to domain.
 modelSpace.addLoadCaseToDomain(lp0.name)
@@ -91,7 +90,6 @@ modelSpace.addLoadCaseToDomain(lp0.name)
 # Solution
 analysis= predefined_solutions.simple_static_linear(feProblem)
 result= analysis.analyze(1)
-
 
 nodes= preprocessor.getNodeHandler
 nod2= nodes.getNode(2)
@@ -124,3 +122,20 @@ if (abs(ratio0)<1e-10) & (abs(ratio1)<1e-11):
     print('test '+fname+': ok.')
 else:
     lmsg.error(fname+' ERROR.')
+    
+# # Graphic stuff.
+# from postprocess import output_handler
+# oh= output_handler.OutputHandler(modelSpace)
+
+# # oh.displayBlocks()
+# # oh.displayFEMesh()
+# #oh.displayLocalAxes()
+# # oh.displayStrongWeakAxis()
+# oh.displayLoads()
+# oh.displayReactions(reactionCheckTolerance= 1e-4)
+# #oh.displayDispRot(itemToDisp='uZ', defFScale= 10.0)
+# #oh.displayIntForcDiag(itemToDisp= 'Mz')
+# #oh.displayIntForcDiag(itemToDisp= 'Qy')
+# #oh.displayIntForcDiag(itemToDisp= 'Mz')
+# #oh.displayIntForcDiag(itemToDisp= 'T')
+

@@ -102,7 +102,6 @@ delta1= vDisp.dot(vJElem)
 delta1Teor= (-P*a**2*(3*L-a)/6/E/I)
 ratio1= ((delta1-delta1Teor)/delta1Teor)
 
-
 # print("delta0= ",delta0)
 # print("delta0Teor= ",delta0Teor)
 # print("ratio0= ",ratio0)
