@@ -37,10 +37,10 @@ class LinearLoadDiagram(cd.ColoredDiagram):
         self.component= component
         self.dictActLoadVectors=None
 
-    def sumElementalLoads(self,actLP):
-        ''' Iterate over active load patterns and cumulate on elements their elemental loads.
-        Returns a dictionary that stores for each linear loaded element the sum of active 
-        loads on it
+    def sumElementalUniformLoads(self,actLP):
+        ''' Iterate over active load patterns and cumulate on elements their 
+        elemental unifirm loads. Returns a dictionary that stores for each 
+        linear loaded element the sum of active loads on it
 
         :param actLP: list of active load patterns.
         '''
@@ -52,18 +52,25 @@ class LinearLoadDiagram(cd.ColoredDiagram):
                 eLoad= lIter.next()
                 eTagsSet= self.setToDisp.getElements.getTags()
                 while(eLoad):
-                    if(hasattr(eLoad,'getVector3dLocalForce')):
-                        tags= eLoad.elementTags
-                        for i in range(0,len(tags)):
-                            eTag= tags[i]
-                            if eTag in eTagsSet:
-                                elem= preprocessor.getElementHandler.getElement(eTag)
-                                dim= elem.getDimension
-                                if(dim==1):
-                                    if eTag in retval:
-                                        retval[eTag]+= eLoad.getVector3dLocalForce()
-                                    else:
-                                        retval[eTag]= eLoad.getVector3dLocalForce()
+                    category= eLoad.category
+                    if(category=='uniform'):
+                        if(hasattr(eLoad,'getVector3dLocalForce')):
+                            tags= eLoad.elementTags
+                            for i in range(0,len(tags)):
+                                eTag= tags[i]
+                                if eTag in eTagsSet:
+                                    elem= preprocessor.getElementHandler.getElement(eTag)
+                                    dim= elem.getDimension
+                                    if(dim==1):
+                                        if eTag in retval:
+                                            retval[eTag]+= eLoad.getVector3dLocalForce()
+                                        else:
+                                            retval[eTag]= eLoad.getVector3dLocalForce()
+                    else:
+                        # Concentrated load must be treated elsewhere
+                        className= type(self).__name__
+                        methodName= sys._getframe(0).f_code.co_name
+                        lmsg.error(className+'.'+methodName+'; display of concentrated loads not implemented yet.')
                     eLoad= lIter.next()
         else:
             className= type(self).__name__
@@ -79,7 +86,7 @@ class LinearLoadDiagram(cd.ColoredDiagram):
         '''
         preprocessor=actLP[0].getDomain.getPreprocessor
         if not self.dictActLoadVectors:
-            self.dictActLoadVectors=self.sumElementalLoads(actLP)
+            self.dictActLoadVectors=self.sumElementalUniformLoads(actLP)
         if(self.component=='axialComponent'):
             for eTag in self.dictActLoadVectors.keys():
                 elem= preprocessor.getElementHandler.getElement(eTag)
@@ -122,7 +129,7 @@ class LinearLoadDiagram(cd.ColoredDiagram):
             lmsg.warning('No active load patterns.')
         actLP=[lp.data() for lp in activeLoadPatterns]
         if not self.dictActLoadVectors:
-            self.dictActLoadVectors= self.sumElementalLoads(actLP)
+            self.dictActLoadVectors= self.sumElementalUniformLoads(actLP)
         eTags=[tag for tag in self.dictActLoadVectors.keys()]
         retval= 0.0
         if(len(eTags)>0):

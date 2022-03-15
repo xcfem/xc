@@ -10,6 +10,7 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@ciccp.es, ana.ortega@ciccp.es "
 
+import sys
 import geom
 import xc
 import vtk
@@ -40,23 +41,25 @@ class LoadOnPoints(vf.VectorField):
 
 class LoadVectorField(LoadOnPoints):
     '''Draws a load over a point on nodes and on elements.'''
-    def __init__(self,loadPatternName,setToDisp,fUnitConv= 1e-3,scaleFactor= 1.0,showPushing= True, components= [0,1,2], multiplyByElementArea= True):
+    def __init__(self,loadPatternName,setToDisp,fUnitConv= 1e-3,scaleFactor= 1.0, showPushing= True, components= [0,1,2], multiplyByElementArea= True):
         '''
-        Parameters:
-          loadPatternName: name of the load pattern to display.
-          setToDisp: set over which to display the loads.
-          fUnitConv: unit conversion factor.
-          scaleFactor: scale factor for the size of the vectors.
-          showPushing: true if the loads push the loaded point (as oppssed to pull). Default: True
-          components: index of the components of the load. Default: [0,1,2] 
-          multiplyByElementArea: for loads over elements (default= True).
+        Constructor.
+
+        :param loadPatternName: name of the load pattern to display.
+        :param setToDisp: set over which to display the loads.
+        :param fUnitConv: unit conversion factor.
+        :param scaleFactor: scale factor for the size of the vectors.
+        :param showPushing: true if the loads push the loaded point (as oppssed to pull). Default: True
+        :param components: index of the components of the load. Default: [0,1,2] 
+        :param multiplyByElementArea: for loads over elements (default= True).
         '''
         super(LoadVectorField,self).__init__(loadPatternName, fUnitConv, scaleFactor, showPushing, components)
         self.multiplyByElementArea= multiplyByElementArea
         self.setToDisp=setToDisp
 
-    def sumElementalLoads(self,actLP):
-        ''' Iterate over active load patterns and cumulate on elements their elemental loads.
+    def sumElementalUniformLoads(self, actLP):
+        ''' Iterate over active load patterns and cumulate on elements 
+            their elemental uniform loads.
 
         :param actLP: list of active load patterns.
         '''
@@ -68,24 +71,31 @@ class LoadVectorField(LoadOnPoints):
             elementLoad= lIter.next()
             eTagsSet=self.setToDisp.getElements.getTags()
             while(elementLoad):
-                if hasattr(elementLoad,'getLocalForce'):
-                    tags= elementLoad.elementTags
-                    for i in range(0,len(tags)):
-                      eTag= tags[i]
-                      if eTag in eTagsSet:
-                          elem= preprocessor.getElementHandler.getElement(eTag)
-                          if(elem.getDimension==2):
-                              vLoad= elem.getCoordTransf.getVectorGlobalCoordFromLocal(elementLoad.getLocalForce())
-                              category= elementLoad.category
-                              if(category=='raw'): # Those loads return the total load over the element.
-                                  vLoad*= (1.0/elem.getArea(True))
-                              if(self.multiplyByElementArea):
-                                  vLoad*= elem.getArea(True)
-                              v= xc.Vector([vLoad[comp_i],vLoad[comp_j],vLoad[comp_k]])
-                              if eTag in retval:
-                                  retval[eTag]+= v
-                              else:
-                                  retval[eTag]= v
+                category= elementLoad.category
+                if(category=='uniform'):
+                    if hasattr(elementLoad,'getLocalForce'):
+                        tags= elementLoad.elementTags
+                        for i in range(0,len(tags)):
+                          eTag= tags[i]
+                          if eTag in eTagsSet:
+                              elem= preprocessor.getElementHandler.getElement(eTag)
+                              if(elem.getDimension==2):
+                                  vLoad= elem.getCoordTransf.getVectorGlobalCoordFromLocal(elementLoad.getLocalForce())
+                                  category= elementLoad.category
+                                  if(category=='raw'): # Those loads return the total load over the element.
+                                      vLoad*= (1.0/elem.getArea(True))
+                                  if(self.multiplyByElementArea):
+                                      vLoad*= elem.getArea(True)
+                                  v= xc.Vector([vLoad[comp_i],vLoad[comp_j],vLoad[comp_k]])
+                                  if eTag in retval:
+                                      retval[eTag]+= v
+                                  else:
+                                      retval[eTag]= v
+                else:
+                    # Concentrated load must be treated elsewhere
+                    className= type(self).__name__
+                    methodName= sys._getframe(0).f_code.co_name
+                    lmsg.error(className+'.'+methodName+'; display of concentrated loads not implemented yet.')
                 elementLoad= lIter.next()
         return retval
 
@@ -95,7 +105,7 @@ class LoadVectorField(LoadOnPoints):
 
         :param actLP: list of active load patterns.
         '''
-        self.elementalLoadVectors= self.sumElementalLoads(actLP)
+        self.elementalLoadVectors= self.sumElementalUniformLoads(actLP)
         preprocessor= actLP[0].getDomain.getPreprocessor
         for eTag in self.elementalLoadVectors.keys():
             elem= preprocessor.getElementHandler.getElement(eTag)
@@ -204,7 +214,7 @@ class LoadVectorField(LoadOnPoints):
             lmsg.warning('No active load patterns.')
         else:
             actLP=[lp.data() for lp in activeLoadPatterns]
-            numberOfLoads= self.populateLoads(actLP,showElementalLoads, showNodalLoads)
+            numberOfLoads= self.populateLoads(actLP, showElementalLoads, showNodalLoads)
             if(numberOfLoads>0):
                 maxLoad= self.getMaxLoad()
                 if(maxLoad!= 0):
@@ -239,6 +249,6 @@ class LoadVectorField(LoadOnPoints):
                       the initial position plus its displacement multiplied
                       by this factor.
             '''
-            return self.dumpVectors(preprocessor, defFScale,showElementalLoads=True, showNodalLoads=False)
+            return self.dumpVectors(preprocessor, defFScale, showElementalLoads=True, showNodalLoads=False)
     
 

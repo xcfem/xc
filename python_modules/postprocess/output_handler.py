@@ -566,7 +566,7 @@ class OutputHandler(object):
         # auto-scaling parameters
         LrefModSize= setToDisplay.getBnd(defFScale).diagonal.getModulus() #representative length of set size (to auto-scale)
         elLoadScaleF= self.outputStyle.loadDiagramsScaleFactor
-        diagram= lld.LinearLoadDiagram(setToDisp=setToDisplay,scale=elLoadScaleF,fUnitConv= unitConversionFactor,component=elLoadComp)
+        diagram= lld.LinearLoadDiagram(setToDisp=setToDisplay, scale=elLoadScaleF, fUnitConv= unitConversionFactor, component=elLoadComp)
         maxAbs= diagram.getMaxAbsComp(preprocessor)
         if(maxAbs>0.0):
             elLoadScaleF*= LrefModSize/maxAbs*100.0
@@ -574,17 +574,19 @@ class OutputHandler(object):
             #Linear loads
             diagram.addDiagram(preprocessor)
             if(diagram.isValid()):
-                displaySettings.appendDiagram(diagram,orientScbar=scOrient,
+                displaySettings.appendDiagram(diagram, orientScbar=scOrient,
                                               titleScbar='Linear loads ('+self.getOutputForceUnitSym()+'/'+
                                               self.getOutputLengthUnitSym()+')' )
                 scOrient+=1
         
         vectorScale= self.outputStyle.loadVectorsScaleFactor*LrefModSize/10.
+        # concentrated loads (on elements).
+        
         # surface loads
-        vFieldEl= lvf.LoadVectorField(loadPatternName= loadCaseName,setToDisp=setToDisplay,
-                                      fUnitConv= unitConversionFactor,scaleFactor= vectorScale,
-                                      showPushing= self.outputStyle.showLoadsPushing)
-        vFieldEl.multiplyByElementArea= self.outputStyle.multLoadsByElemArea
+        vFieldEl= lvf.LoadVectorField(loadPatternName= loadCaseName, setToDisp=setToDisplay,
+                                      fUnitConv= unitConversionFactor, scaleFactor= vectorScale,
+                                      showPushing= self.outputStyle.showLoadsPushing,
+                                      multiplyByElementArea= self.outputStyle.multLoadsByElemArea)
         count= vFieldEl.dumpElementalLoads(preprocessor, defFScale=defFScale)
         if(count >0):
             vFieldEl.addToDisplay(displaySettings,orientation= scOrient,
