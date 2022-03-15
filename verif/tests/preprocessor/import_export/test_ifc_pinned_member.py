@@ -198,7 +198,7 @@ print('ratio6= ', ratio6)
 # oh.displayBlocks()#setToDisplay= columnSet)
 # #oh.displayFEMesh()
 # #oh.displayDispRot(itemToDisp='uZ')
-# oh.displayLoads()#setToDisplay= lvlBlindFasciaSet)
+# oh.displayLoads()
 # #oh.displayStrongWeakAxis()
 # oh.displayIntForcDiag(itemToDisp= 'Mz', setToDisplay= lintelSet)
 import os
