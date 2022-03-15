@@ -40,6 +40,7 @@ class BND3d;
 
 namespace XC {
 class TrfGeom;
+class Element1D;
 
 //!  @ingroup Set
 //! 
@@ -48,6 +49,8 @@ class TrfGeom;
 class DqPtrsElem: public DqPtrsKDTree<Element,KDTreeElements>
   {
     KDTreeElements kdtreeElements; //!< space-partitioning data structure for organizing elements (element centroids).
+
+    Element1D *get_nearest_element_1d(const Vector &, const std::string &);
   public:
     DqPtrsElem(CommandEntity *owr= nullptr);
     DqPtrsElem(const DqPtrsElem &);

@@ -39,12 +39,14 @@
 namespace XC{
 
 class Vector;
+class Element1D;
   
 //! @ingroup MultiBlockTopologyMR
 //! 
 //! @brief Three-dimensional array of pointers to elements.
 class ElemPtrArray3d: public PtrArray3dBase<ElemPtrArray>
   {
+    Element1D *get_nearest_element_1d(const Vector &, const std::string &);
   public:
     ElemPtrArray3d(const size_t n_layers= 0,const ElemPtrArray &m= ElemPtrArray());
     ElemPtrArray3d(const size_t ,const size_t ,const size_t );

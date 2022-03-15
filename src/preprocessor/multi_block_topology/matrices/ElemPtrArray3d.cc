@@ -108,13 +108,11 @@ const XC::Element *XC::ElemPtrArray3d::getNearestElement(const Pos3d &p) const
     return this_no_const->getNearestElement(p);
   }
 
-// Loads on elements.
-//! @brief Define an elemental concentrated load at position p with value v
-//! expressed in global coordinates.
-//! @param p: position of the load.
-//! @param v: value of the load vector expressed in global coordinates.
-void XC::ElemPtrArray3d::vector2dPointLoadGlobal(const Vector &p,const Vector &v)
+//! @brief Return the nearest element if it's a 1D element
+//! otherwise returns null.
+XC::Element1D *XC::ElemPtrArray3d::get_nearest_element_1d(const Vector &p, const std::string &callingMethod)
   {
+    Element1D *retval= nullptr;
     const double x= p[0];
     const double y= p[1];
     double z= 0.0;
@@ -124,19 +122,41 @@ void XC::ElemPtrArray3d::vector2dPointLoadGlobal(const Vector &p,const Vector &v
     Element *elem= getNearestElement(pos);
     if(elem)
       {
-	Element1D *elem1d= dynamic_cast<Element1D *>(elem);
-	if(elem1d)
-	  elem1d->vector2dPointLoadGlobal(p,v);
-	else
-	  std::cerr << getClassName() << "::" << __FUNCTION__
-		    << "; method: " << __FUNCTION__
-		    << " not defined for elements of class: "
-		    << elem->getClassName() << " yet."
-		    << std::endl;
+	retval= dynamic_cast<Element1D *>(elem);
+	if(retval)
+	  {
+	    const double d= retval->getDist(pos);
+	    const double l= retval->getLength();
+	    if(d>l)
+	      std::clog << getClassName() << "::" << __FUNCTION__
+		        << "; the element: " << retval->getTag()
+		        << " is quite far (d= " << d
+		        << ") from the point: "
+		        << p << std::endl;
+	  }
       }
     else
       std::cerr << getClassName() << "::" << __FUNCTION__
-		<< "; no element found near to position: " << pos
+		<< "; method: " << callingMethod
+		<< " not defined for elements of class: "
+		<< elem->getClassName() << " yet."
+		<< std::endl;
+    return retval;
+  }
+
+// Loads on elements.
+//! @brief Define an elemental concentrated load at position p with value v
+//! expressed in global coordinates.
+//! @param p: position of the load.
+//! @param v: value of the load vector expressed in global coordinates.
+void XC::ElemPtrArray3d::vector2dPointLoadGlobal(const Vector &p,const Vector &v)
+  {
+    Element1D *elem1d= get_nearest_element_1d(p, __FUNCTION__);
+    if(elem1d)
+      elem1d->vector2dPointLoadGlobal(p,v);
+    else
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; no element found near to position: " << p
 		<< std::endl;      
   }
 
@@ -146,28 +166,12 @@ void XC::ElemPtrArray3d::vector2dPointLoadGlobal(const Vector &p,const Vector &v
 //! @param v: value of the load vector expressed in local (element) coordinates.
 void XC::ElemPtrArray3d::vector2dPointLoadLocal(const Vector &p,const Vector &v)
   {
-    const double x= p[0];
-    const double y= p[1];
-    double z= 0.0;
-    if(p.Size()>2)
-      z= p[2];
-    const Pos3d pos(x,y,z);
-    Element *elem= getNearestElement(pos);
-    if(elem)
-      {
-	Element1D *elem1d= dynamic_cast<Element1D *>(elem);
-	if(elem1d)
-	  elem1d->vector2dPointLoadLocal(p,v);
-	else
-	  std::cerr << getClassName() << "::" << __FUNCTION__
-		    << "; method: " << __FUNCTION__
-		    << " not defined for elements of class: "
-		    << elem->getClassName() << " yet."
-		    << std::endl;
-      }
+    Element1D *elem1d= get_nearest_element_1d(p, __FUNCTION__);
+    if(elem1d)
+      elem1d->vector2dPointLoadLocal(p,v);
     else
       std::cerr << getClassName() << "::" << __FUNCTION__
-		<< "; no element found near to position: " << pos
+		<< "; no element found near to position: " << p
 		<< std::endl;      
   }
 
@@ -177,28 +181,12 @@ void XC::ElemPtrArray3d::vector2dPointLoadLocal(const Vector &p,const Vector &v)
 //! @param v: value of the load vector expressed in global coordinates.
 void XC::ElemPtrArray3d::vector3dPointLoadGlobal(const Vector &p,const Vector &v)
   {
-    const double x= p[0];
-    const double y= p[1];
-    double z= 0.0;
-    if(p.Size()>2)
-      z= p[2];
-    const Pos3d pos(x,y,z);
-    Element *elem= getNearestElement(pos);
-    if(elem)
-      {
-	Element1D *elem1d= dynamic_cast<Element1D *>(elem);
-	if(elem1d)
-	  elem1d->vector3dPointLoadGlobal(p,v);
-	else
-	  std::cerr << getClassName() << "::" << __FUNCTION__
-		    << "; method: " << __FUNCTION__
-		    << " not defined for elements of class: "
-		    << elem->getClassName() << " yet."
-		    << std::endl;
-      }
+    Element1D *elem1d= get_nearest_element_1d(p, __FUNCTION__);
+    if(elem1d)
+      elem1d->vector3dPointLoadGlobal(p,v);
     else
       std::cerr << getClassName() << "::" << __FUNCTION__
-		<< "; no element found near to position: " << pos
+		<< "; no element found near to position: " << p
 		<< std::endl;      
   }
 
@@ -208,28 +196,12 @@ void XC::ElemPtrArray3d::vector3dPointLoadGlobal(const Vector &p,const Vector &v
 //! @param v: value of the load vector expressed in local (element) coordinates.
 void XC::ElemPtrArray3d::vector3dPointLoadLocal(const Vector &p,const Vector &v)
   {
-    const double x= p[0];
-    const double y= p[1];
-    double z= 0.0;
-    if(p.Size()>2)
-      z= p[2];
-    const Pos3d pos(x,y,z);
-    Element *elem= getNearestElement(pos);
-    if(elem)
-      {
-	Element1D *elem1d= dynamic_cast<Element1D *>(elem);
-	if(elem1d)
-	  elem1d->vector2dPointLoadLocal(p,v);
-	else
-	  std::cerr << getClassName() << "::" << __FUNCTION__
-		    << "; method: " << __FUNCTION__
-		    << " not defined for elements of class: "
-		    << elem->getClassName() << " yet."
-		    << std::endl;
-      }
+    Element1D *elem1d= get_nearest_element_1d(p, __FUNCTION__);
+    if(elem1d)
+      elem1d->vector2dPointLoadLocal(p,v);
     else
       std::cerr << getClassName() << "::" << __FUNCTION__
-		<< "; no element found near to position: " << pos
+		<< "; no element found near to position: " << p
 		<< std::endl;      
   }
 
