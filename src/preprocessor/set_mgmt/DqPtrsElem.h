@@ -82,7 +82,12 @@ class DqPtrsElem: public DqPtrsKDTree<Element,KDTreeElements>
     void numera(void);
     double getAverageSize(bool initialGeometry= true) const;
     
+    // Loads on elements.
     void createInertiaLoads(const Vector &);
+    void vector2dPointLoadGlobal(const Vector &,const Vector &);
+    void vector2dPointLoadLocal(const Vector &,const Vector &);
+    void vector3dPointLoadGlobal(const Vector &,const Vector &);
+    void vector3dPointLoadLocal(const Vector &,const Vector &);    
     
     // mass distribution
     Matrix getTotalMass(void) const;

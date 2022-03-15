@@ -79,7 +79,13 @@ class_<XC::DqPtrsElem, bases<dq_ptrs_element> >("DqPtrsElem",no_init)
   .def("getTypes",&XC::DqPtrsElem::getTypesPy,"getElementTypes() return a list with the element types in the container.")
   .def("getMaterials",&XC::DqPtrsElem::getMaterialNamesPy,"getElementMaterials() return a list with the names of the element materials in the container.")
   .def("pickElemsOfMaterial",&XC::DqPtrsElem::pickElemsOfMaterial,"pickElemsOfMaterial(materialName) return the elements that have that material.")
+  // Loads on elements.
   .def("createInertiaLoads", &XC::DqPtrsElem::createInertiaLoads,"Create the inertia load for the given acceleration vector.")
+  .def("vector2dPointLoadGlobal", &XC::DqPtrsElem::vector2dPointLoadGlobal,"Element's load.")
+  .def("vector2dPointLoadLocal", &XC::DqPtrsElem::vector2dPointLoadLocal,"Element's load.")
+  .def("vector3dPointLoadGlobal", &XC::DqPtrsElem::vector3dPointLoadGlobal,"Element's load.")
+  .def("vector3dPointLoadLocal", &XC::DqPtrsElem::vector3dPointLoadLocal,"Element's load.")
+
   .add_property("totalMass", &XC::DqPtrsElem::getTotalMass, "Return the total mass matrix.")
   .def("getTotalMassComponent", &XC::DqPtrsElem::getTotalMassComponent,"Return the total mass matrix component for the DOF argument.")
   .def("getAverageSize", &XC::DqPtrsElem::getAverageSize,"Get the average size of the elements (elements of dimension zero are ignored).")

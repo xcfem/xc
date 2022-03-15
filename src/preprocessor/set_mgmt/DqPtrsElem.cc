@@ -27,6 +27,7 @@
 
 #include "DqPtrsElem.h"
 #include "domain/mesh/element/Element.h"
+#include "domain/mesh/element/Element1D.h"
 #include "domain/mesh/element/utils/NodePtrsWithIDs.h"
 #include "preprocessor/multi_block_topology/trf/TrfGeom.h"
 #include "utility/geom/d1/Polyline3d.h"
@@ -169,12 +170,138 @@ double XC::DqPtrsElem::getAverageSize(bool initialGeometry) const
     return retval;
   }
 
+// Loads on elements.
+
 //! @brief Creates the inertia load that corresponds to the
 //! acceleration argument.
-void  XC::DqPtrsElem::createInertiaLoads(const Vector &accel)
+void XC::DqPtrsElem::createInertiaLoads(const Vector &accel)
   {
     for(iterator i= begin();i!=end();i++)
       (*i)->createInertiaLoad(accel);
+  }
+
+//! @brief Define an elemental concentrated load at position p with value v
+//! expressed in global coordinates.
+//! @param p: position of the load.
+//! @param v: value of the load vector expressed in global coordinates.
+void XC::DqPtrsElem::vector2dPointLoadGlobal(const Vector &p,const Vector &v)
+  {
+    const double x= p[0];
+    const double y= p[1];
+    double z= 0.0;
+    if(p.Size()>2)
+      z= p[2];
+    const Pos3d pos(x,y,z);
+    Element *elem= getNearest(pos);
+    if(elem)
+      {
+	Element1D *elem1d= dynamic_cast<Element1D *>(elem);
+	if(elem1d)
+	  elem1d->vector2dPointLoadGlobal(p,v);
+	else
+	  std::cerr << getClassName() << "::" << __FUNCTION__
+		    << "; method: " << __FUNCTION__
+		    << " not defined for elements of class: "
+		    << elem->getClassName() << " yet."
+		    << std::endl;
+      }
+    else
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; no element found near to position: " << pos
+		<< std::endl;      
+  }
+
+//! @brief Define an elemental concentrated load at position p with value v
+//! expressed in local (element) coordinates.
+//! @param p: position of the load.
+//! @param v: value of the load vector expressed in local (element) coordinates.
+void XC::DqPtrsElem::vector2dPointLoadLocal(const Vector &p,const Vector &v)
+  {
+    const double x= p[0];
+    const double y= p[1];
+    double z= 0.0;
+    if(p.Size()>2)
+      z= p[2];
+    const Pos3d pos(x,y,z);
+    Element *elem= getNearest(pos);
+    if(elem)
+      {
+	Element1D *elem1d= dynamic_cast<Element1D *>(elem);
+	if(elem1d)
+	  elem1d->vector2dPointLoadLocal(p,v);
+	else
+	  std::cerr << getClassName() << "::" << __FUNCTION__
+		    << "; method: " << __FUNCTION__
+		    << " not defined for elements of class: "
+		    << elem->getClassName() << " yet."
+		    << std::endl;
+      }
+    else
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; no element found near to position: " << pos
+		<< std::endl;      
+  }
+
+//! @brief Define an elemental concentrated load at position p with value v
+//! expressed in global coordinates.
+//! @param p: position of the load.
+//! @param v: value of the load vector expressed in global coordinates.
+void XC::DqPtrsElem::vector3dPointLoadGlobal(const Vector &p,const Vector &v)
+  {
+    const double x= p[0];
+    const double y= p[1];
+    double z= 0.0;
+    if(p.Size()>2)
+      z= p[2];
+    const Pos3d pos(x,y,z);
+    Element *elem= getNearest(pos);
+    if(elem)
+      {
+	Element1D *elem1d= dynamic_cast<Element1D *>(elem);
+	if(elem1d)
+	  elem1d->vector3dPointLoadGlobal(p,v);
+	else
+	  std::cerr << getClassName() << "::" << __FUNCTION__
+		    << "; method: " << __FUNCTION__
+		    << " not defined for elements of class: "
+		    << elem->getClassName() << " yet."
+		    << std::endl;
+      }
+    else
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; no element found near to position: " << pos
+		<< std::endl;      
+  }
+
+//! @brief Define an elemental concentrated load at position p with value v
+//! expressed in local (element) coordinates.
+//! @param p: position of the load.
+//! @param v: value of the load vector expressed in local (element) coordinates.
+void XC::DqPtrsElem::vector3dPointLoadLocal(const Vector &p,const Vector &v)
+  {
+    const double x= p[0];
+    const double y= p[1];
+    double z= 0.0;
+    if(p.Size()>2)
+      z= p[2];
+    const Pos3d pos(x,y,z);
+    Element *elem= getNearest(pos);
+    if(elem)
+      {
+	Element1D *elem1d= dynamic_cast<Element1D *>(elem);
+	if(elem1d)
+	  elem1d->vector2dPointLoadLocal(p,v);
+	else
+	  std::cerr << getClassName() << "::" << __FUNCTION__
+		    << "; method: " << __FUNCTION__
+		    << " not defined for elements of class: "
+		    << elem->getClassName() << " yet."
+		    << std::endl;
+      }
+    else
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; no element found near to position: " << pos
+		<< std::endl;      
   }
 
 //! @brief Return the total mass matrix.

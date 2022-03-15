@@ -158,6 +158,12 @@ class_<XC::ElemPtrArray3d, bases<array3d_elements>, boost::noncopyable >("ElemPt
   .def("getNearestElement",make_function(getNearestElementElemPtrArray3d, return_internal_reference<>() ),"Returns nearest element.")
   .def("getElementWithTag",make_function(getElementWithTagElemPtrArray3d, return_internal_reference<>() ),"Returns element by tag.")
   .def("getConnectedElements",&XC::ElemPtrArray3d::getConnectedElementsPy,"Returns the elements connected to the node argument.")
+
+  // Load on elements.
+  .def("vector2dPointLoadGlobal", &XC::ElemPtrArray3d::vector2dPointLoadGlobal,"Element's load.")
+  .def("vector2dPointLoadLocal", &XC::ElemPtrArray3d::vector2dPointLoadLocal,"Element's load.")
+  .def("vector3dPointLoadGlobal", &XC::ElemPtrArray3d::vector3dPointLoadGlobal,"Element's load.")
+  .def("vector3dPointLoadLocal", &XC::ElemPtrArray3d::vector3dPointLoadLocal,"Element's load.")
   ;
 
 

@@ -39,15 +39,11 @@ nodes= preprocessor.getNodeHandler
 # Problem type
 modelSpace= predefined_spaces.StructuralMechanics2D(nodes)
 
-vReac1= [0,0]
-vReac2= [0,0]
-
 ptoAplic=  geom.Pos2d(1+x*L*math.sqrt(2)/2,2+x*L*math.sqrt(2)/2) # Load application point.
 
 
-nodes.defaultTag= 1 # First node number.
-nod= nodes.newNodeXY(1,2)
-nod= nodes.newNodeXY(1+L*math.sqrt(2)/2,2+L*math.sqrt(2)/2)
+n1= nodes.newNodeXY(1,2)
+n2= nodes.newNodeXY(1+L*math.sqrt(2)/2,2+L*math.sqrt(2)/2)
     
 # Geometric transformation(s)
 lin= modelSpace.newLinearCrdTransf("lin")
@@ -60,13 +56,12 @@ scc= typical_materials.defElasticSection2d(preprocessor, "scc",A,E,I)
 elements= preprocessor.getElementHandler
 elements.defaultTransformation= lin.name
 elements.defaultMaterial= scc.name
-elements.defaultTag= 1 # Tag for next element.
-beam2d= elements.newElement("ElasticBeam2d",xc.ID([1,2]))
+beam2d= elements.newElement("ElasticBeam2d",xc.ID([n1.tag,n2.tag]))
 beam2d.h= h
     
 # Constraints
 constraints= preprocessor.getBoundaryCondHandler
-modelSpace.fixNode000(1)
+modelSpace.fixNode000(n1.tag)
 
 # Load definition.
 lp0= modelSpace.newLoadPattern(name= '0')
@@ -90,8 +85,7 @@ modelSpace.addLoadCaseToDomain(lp0.name)
 analysis= predefined_solutions.simple_static_linear(feProblem)
 result= analysis.analyze(1)
 
-nod2= nodes.getNode(2)
-tmp= nod2.getDisp
+tmp= n2.getDisp
 vDisp= xc.Vector([tmp[0],tmp[1]])
 
 a= x*L

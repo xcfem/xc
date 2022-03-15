@@ -605,9 +605,13 @@ python tests/loads/test_vector3d_uniform_load_global03.py
 python tests/loads/element_load_on_already_active_pattern.py
 echo "$BLEU" "    Concentrated loads." "$NORMAL"
 python tests/loads/concentrated_loads/test_vector2d_point_load_local.py
-python tests/loads/concentrated_loads/test_vector2d_point_load_global.py
+python tests/loads/concentrated_loads/test_vector2d_point_load_global_01.py
+python tests/loads/concentrated_loads/test_vector2d_point_load_global_02.py
+python tests/loads/concentrated_loads/test_vector2d_point_load_global_03.py
 python tests/loads/concentrated_loads/test_vector3d_point_load_local.py
-python tests/loads/concentrated_loads/test_vector3d_point_load_global.py
+python tests/loads/concentrated_loads/test_vector3d_point_load_global_01.py
+python tests/loads/concentrated_loads/test_vector3d_point_load_global_02.py
+python tests/loads/concentrated_loads/test_vector3d_point_load_global_03.py
 echo "$BLEU" "    Strain loads." "$NORMAL"
 python tests/loads/strain_loads/truss_strain_load_01.py
 python tests/loads/strain_loads/truss_strain_load_02.py

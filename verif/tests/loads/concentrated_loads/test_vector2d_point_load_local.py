@@ -39,9 +39,8 @@ nodes= preprocessor.getNodeHandler
 
 # Problem type
 modelSpace= predefined_spaces.StructuralMechanics2D(nodes)
-nodes.defaultTag= 1 # First node number.
-nod= nodes.newNodeXY(0,0)
-nod= nodes.newNodeXY(L,0.0)
+n1= nodes.newNodeXY(0,0)
+n2= nodes.newNodeXY(L,0.0)
 
     
 # Geometric transformation(s)
@@ -55,15 +54,14 @@ scc= typical_materials.defElasticSection2d(preprocessor, "scc",A,E,I)
 elements= preprocessor.getElementHandler
 elements.defaultTransformation= lin.name
 elements.defaultMaterial= scc.name
-elements.defaultTag= 1 # Tag for next element.
-beam2d= elements.newElement("ElasticBeam2d",xc.ID([1,2]))
+beam2d= elements.newElement("ElasticBeam2d",xc.ID([n1.tag,n2.tag]))
 beam2d.h= h
 
 # end of element definition
     
 # Constraints
 constraints= preprocessor.getBoundaryCondHandler
-modelSpace.fixNode000(1)
+modelSpace.fixNode000(n1.tag)
 
 
 # Load definition.
@@ -74,8 +72,8 @@ mesh= feProblem.getDomain.getMesh
 eIter= mesh.getElementIter
 elem= eIter.next()
 while not(elem is None):
-  elem.vector2dPointByRelDistLoadLocal(xRelPtoAplic,xc.Vector([n,-P]))
-  elem= eIter.next()
+    elem.vector2dPointByRelDistLoadLocal(xRelPtoAplic,xc.Vector([n,-P]))
+    elem= eIter.next()
 
 loadHandler= preprocessor.getLoadHandler
 # We add the load case to domain.
@@ -86,9 +84,8 @@ modelSpace.addLoadCaseToDomain(lp0.name)
 analysis= predefined_solutions.simple_static_linear(feProblem)
 result= analysis.analyze(1)
 
-nod2= nodes.getNode(2)
-delta0= nod2.getDisp[0]
-delta1= nod2.getDisp[1]
+delta0= n2.getDisp[0]
+delta1= n2.getDisp[1]
 
 a= xRelPtoAplic*L
 delta0Teor= (n*a/E/A)

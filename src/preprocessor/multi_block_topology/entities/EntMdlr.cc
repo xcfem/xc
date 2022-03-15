@@ -224,6 +224,7 @@ const XC::Element *XC::EntMdlr::getNearestElement(const Pos3d &p) const
     return this_no_const->getNearestElement(p);
   }
 
+
 //! @brief Return the elements connected to the node being passed as parameter.
 std::set<const XC::Element *> XC::EntMdlr::getConnectedElements(const Node *n) const
   { return ttzElements.getConnectedElements(n); }

@@ -38,6 +38,8 @@
 
 namespace XC{
 
+class Vector;
+  
 //! @ingroup MultiBlockTopologyMR
 //! 
 //! @brief Three-dimensional array of pointers to elements.
@@ -52,6 +54,12 @@ class ElemPtrArray3d: public PtrArray3dBase<ElemPtrArray>
     Element *getNearestElement(const Pos3d &p);
     const Element *getNearestElement(const Pos3d &p) const;
     boost::python::list getPyElementList(void) const;
+    
+    // Loads on elements.
+    void vector2dPointLoadGlobal(const Vector &,const Vector &);
+    void vector2dPointLoadLocal(const Vector &,const Vector &);
+    void vector3dPointLoadGlobal(const Vector &,const Vector &);
+    void vector3dPointLoadLocal(const Vector &,const Vector &);
     
     std::set<const Element *> getConnectedElements(const Node *) const;
     std::set<Element *> getConnectedElements(const Node *);

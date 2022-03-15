@@ -1,9 +1,6 @@
 # -*- coding: utf-8 -*-
 '''
-Test 3D Timoshenko’s beam bending - SSLL02/89 from Autodesk Robot
-Structural Analysis Professional - Verification Manual AFNOR benchmarks
-SSLL02 Poutre courte sur deux appuis articulés
-Test of the elastic beam 3D element (WITHOUT shear deformation)
+vector3d_point_load_local verification test on sets. Home made test.
 '''
 
 from __future__ import division
@@ -54,7 +51,7 @@ pt2= points.newPoint(geom.Pos3d(l,0,0))
 
 lines= preprocessor.getMultiBlockTopology.getLines
 ln= lines.newLine(pt1.tag,pt2.tag)
-ln.nDiv= 2
+ln.nDiv= 3 # No node at center.
 
 # Mesh generation
 
@@ -73,51 +70,47 @@ xcTotalSet= preprocessor.getSets.getSet("total")
 xcTotalSet.genMesh(xc.meshDir.I)
 
 nA= pt1.getNode()
-nC= ln.getNearestNode(geom.Pos3d(l/2,0.0,0.0))
 nB= pt2.getNode()
 
 # Constraints
-constraints= preprocessor.getBoundaryCondHandler
-spc= constraints.newSPConstraint(nA.tag,0,0.0) # Node A
-spc= constraints.newSPConstraint(nA.tag,1,0.0)
-spc= constraints.newSPConstraint(nA.tag,2,0.0)
-spc= constraints.newSPConstraint(nA.tag,3,0.0) 
-spc= constraints.newSPConstraint(nB.tag,0,0.0) # Node B
-spc= constraints.newSPConstraint(nB.tag,1,0.0)
-spc= constraints.newSPConstraint(nB.tag,2,0.0)
+modelSpace.fixNode000_0FF(nA.tag)
+modelSpace.fixNodeF00_FFF(nB.tag)
 
+loadPos= xc.Vector([l/2,0.0,0.0])
+loadVector= xc.Vector([0,0,-1])
 
 # Load definition.
 lp0= modelSpace.newLoadPattern(name= '0')
+modelSpace.setCurrentLoadPattern("0")
 
-eleLoad= lp0.newElementalLoad("beam3d_uniform_load")
-eleLoad.elementTags= xc.ID(xcTotalSet.getElementTags())
-eleLoad.transZComponent= -p
+xcTotalSet.elements.vector3dPointLoadGlobal(loadPos,loadVector)
+
 # We add the load case to domain.
 modelSpace.addLoadCaseToDomain(lp0.name)
 
 # Solution
 analysis= predefined_solutions.simple_static_linear(feProblem)
 result= analysis.analyze(1)
-    
 
-delta= nC.getDisp[1]
-# Analytical solution
-deltaRef=-5.0*p*l**4/(384.0*E*I)
+# Compute results.
+nodes.calculateNodalReactions(True,1e-7)
+RA= nA.getReaction
+refRA= xc.Vector([0,0,0.5,0,0,0])
+RB= nB.getReaction
+refRB= refRA
 
-ratio1= abs(delta-deltaRef)/deltaRef
+ratio= math.sqrt((RA-refRA).Norm()**2+(RB-refRB).Norm()**2)
 
 '''
-print(scc)
-print('deltaRef= ', deltaRef)
-print('delta= ', delta)
-print('ratio1= ',ratio1)
+print("RA= ",RA)
+print("RB= ",RB)
+print("ratio= ",ratio)
 '''
 
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
-if (abs(ratio1)<1e-7):
+if (abs(ratio)<1e-12):
     print('test '+fname+': ok.')
 else:
     lmsg.error(fname+' ERROR.')

@@ -218,6 +218,10 @@ void XC::Element1D::vector2dPointByRelDistLoadLocal(const double &x,const Vector
                 << " was expected instead of: " << v << std::endl;
   }
 
+//! @brief Define an elemental concentrated load at position p with value v
+//! expressed in global coordinates.
+//! @param p: position of the load.
+//! @param v: value of the load vector expressed in global coordinates.
 void XC::Element1D::vector2dPointLoadGlobal(const Vector &p,const Vector &v)
   {
     const CrdTransf *crd_trf= getCoordTransf();
