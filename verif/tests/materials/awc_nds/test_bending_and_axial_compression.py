@@ -75,6 +75,7 @@ results= dict()
 for key in loadCases:
     results[key]= dict()
     loadCase= loadCases[key]
+    # Load duration factor.
     wood.CD= getLoadCombDurationFactor(loadCase)
     results[key]['CD']= wood.CD
     # Compression
