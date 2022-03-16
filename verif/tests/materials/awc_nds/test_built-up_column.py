@@ -22,15 +22,10 @@ from materials.sections import section_properties
 from materials.awc_nds import AWCNDS_materials
 from materials.awc_nds import AWCNDS_limit_state_checking
 from materials.awc_nds import dimensional_lumber
-
-inchToMeter= 2.54/100.0
-footToMeter= 0.3048
-psiToPa= 6894.76
-psfToPa= 47.88026
-poundToNewton= 4.4482216282509
+from misc_utils import units_utils
 
 # Geometry.
-columnHeight= 12*footToMeter
+columnHeight= 12*units_utils.footToMeter
 
 # Materials.
 wood= dimensional_lumber.DouglasFirLarchWood(name='Douglas-Fir-Larch', grade= 'no_1', sub_grade= '')
