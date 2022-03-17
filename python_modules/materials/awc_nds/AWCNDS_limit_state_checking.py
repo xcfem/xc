@@ -445,6 +445,25 @@ class ColumnMember(Member):
         val394= fc/FcE2+(fb1/FbE)**2 #Equation 3-9-4
         return max(val393,val394)
 
+def defineBuiltUpColumnMember(dimensions, unbracedLengthB, unbracedLengthH, wood, rotate= False):
+    ''' Creates the column membert to be checked.
+
+    :param dimensions: column dimensions (e.g.: '3x2x6').
+    :param unbracedLength: column unbraced length.
+    :param wood: wood material for dimensional lumber.
+    :param rotate: if true swap B and H dimensions.
+    '''
+    dim= dimensions.split('x')
+    nPieces= int(dim[0]) # number of pieces.
+    pieceWidth= float(dim[1]) # thicknness of the piece. 
+    pieceHeight= float(dim[2]) # # height of the piece.
+    (bb, hh)= AWCNDS_materials.dimensionLumberSizes[dim[1]+'x'+dim[2]]
+    memberSection= None
+    if(rotate):
+        memberSection= AWCNDS_materials.BuiltUpLumberSection(name= dimensions, b= hh, h= nPieces*bb, woodMaterial= wood)
+    else:
+        memberSection= AWCNDS_materials.BuiltUpLumberSection(name= dimensions, b=nPieces*bb, h= hh, woodMaterial= wood)
+    return ColumnMember(unbracedLengthB= unbracedLengthB, unbracedLengthH= unbracedLengthH, section= memberSection)
 
 class AWCNDSBiaxialBendingControlVars(cv.BiaxialBendingStrengthControlVars):
     '''Control variables for biaxial bending normal stresses LS 
