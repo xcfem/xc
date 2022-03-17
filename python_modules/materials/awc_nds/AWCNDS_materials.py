@@ -1610,6 +1610,7 @@ dimensionLumberSizes['2x12']= (inchAndAHalf, elevenInchAndAQuarter)
 dimensionLumberSizes['4x4']= (threeInchAndAHalf, threeInchAndAHalf)
 dimensionLumberSizes['4x6']= (threeInchAndAHalf, fiveInchAndAHalf)
 dimensionLumberSizes['6x6']= (fiveInchAndAHalf, fiveInchAndAHalf)
+dimensionLumberSizes['6x8']= (fiveInchAndAHalf, sevenInchAndAQuarter)
 dimensionLumberSizes['2x1']= (inchAndAHalf, threeQuarters)
 dimensionLumberSizes['3x1']= (twoInchAndAHalf, threeQuarters)
 dimensionLumberSizes['4x1']= (threeInchAndAHalf, threeQuarters)
@@ -1625,6 +1626,7 @@ dimensionLumberSizes['8x2']= (sevenInchAndAQuarter, inchAndAHalf)
 dimensionLumberSizes['10x2']= (nineInchAndAQuarter, inchAndAHalf)
 dimensionLumberSizes['12x2']= (elevenInchAndAQuarter, inchAndAHalf)
 dimensionLumberSizes['6x4']= (fiveInchAndAHalf, threeInchAndAHalf)
+dimensionLumberSizes['8x6']= (sevenInchAndAQuarter, fiveInchAndAHalf)
 
 class DimensionLumberSection(CustomLumberSection):
     ''' Section of a dimension lumber member.'''
