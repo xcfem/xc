@@ -52,9 +52,8 @@ feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor   
 nodes= preprocessor.getNodeHandler
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
-nodes.defaultTag= 1 # First node number.
-nod= nodes.newNodeXYZ(0,0.0,0.0)
-nod= nodes.newNodeXYZ(0.0+L,0.0,0.0)
+n1= nodes.newNodeXYZ(0,0.0,0.0)
+n2= nodes.newNodeXYZ(0.0+L,0.0,0.0)
 
 # Materials definition
 elast= typical_materials.defElasticMaterial(preprocessor, "elast",E)
@@ -90,10 +89,10 @@ agg.setAdditions(["T","Vy","Vz"],["respT","respVy","respVz"])
 elements= preprocessor.getElementHandler
 elements.defaultMaterial= agg.name
 elements.dimElem= 1 # Dimension of element space
-zl= elements.newElement("ZeroLengthSection",xc.ID([1,2]))
+zl= elements.newElement("ZeroLengthSection",xc.ID([n1.tag,n2.tag]))
 
 # Constraints
-modelSpace.fixNode000_000(1)
+modelSpace.fixNode000_000(n1.tag)
 
 # Loads definition
 # Load modulation.
@@ -104,12 +103,12 @@ lp2= modelSpace.newLoadPattern(name= '2')
 lp3= modelSpace.newLoadPattern(name= '3')
 lp4= modelSpace.newLoadPattern(name= '4')
 lp5= modelSpace.newLoadPattern(name= '5')
-lp0.newNodalLoad(2,xc.Vector([F,0,0,0,0,0]))
-lp1.newNodalLoad(2,xc.Vector([0,2*F,0,0,0,0]))
-lp2.newNodalLoad(2,xc.Vector([0,0,3*F,0,0,0]))
-lp3.newNodalLoad(2,xc.Vector([0,0,0,4*F,0,0]))
-lp4.newNodalLoad(2,xc.Vector([0,0,0,0,5*F,0]))
-lp5.newNodalLoad(2,xc.Vector([0,0,0,0,0,6*F]))
+lp0.newNodalLoad(n2.tag, xc.Vector([F,0,0,0,0,0]))
+lp1.newNodalLoad(n2.tag, xc.Vector([0,2*F,0,0,0,0]))
+lp2.newNodalLoad(n2.tag, xc.Vector([0,0,3*F,0,0,0]))
+lp3.newNodalLoad(n2.tag, xc.Vector([0,0,0,4*F,0,0]))
+lp4.newNodalLoad(n2.tag, xc.Vector([0,0,0,0,5*F,0]))
+lp5.newNodalLoad(n2.tag, xc.Vector([0,0,0,0,0,6*F]))
 
 
 # Solution procedure
@@ -163,9 +162,8 @@ for key in lPatterns.getKeys():
   modelSpace.addLoadCaseToDomain(key)
   ok= solve()
   if(ok==0):
-    ele1= elements.getElement(0)
-    ele1.getResistingForce()
-    scc= ele1.getSection()
+    zl.getResistingForce()
+    scc= zl.getSection()
     My= scc.getStressResultantComponent("My")
     MyTot+= My
     if(abs(My)>1):

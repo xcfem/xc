@@ -41,7 +41,6 @@ elast= typical_materials.defElasticMaterial(preprocessor, "elast",K)
 elements= preprocessor.getElementHandler
 elements.defaultMaterial= elast.name
 elements.dimElem= 2 # Dimension of element space
-elements.defaultTag= 1
 #  sintaxis: Spring[<tag>] 
 spring= elements.newElement("Spring",xc.ID([n1.tag,n2.tag]))
     

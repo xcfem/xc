@@ -54,7 +54,6 @@ scc= typical_materials.defElasticSection2d(preprocessor, "scc",A,E,I)
 seedElemHandler= preprocessor.getElementHandler.seedElemHandler
 seedElemHandler.defaultTransformation= lin.name
 seedElemHandler.defaultMaterial= scc.name
-seedElemHandler.defaultTag= 1 # Tag for next element.
 beam2d= seedElemHandler.newElement("ElasticBeam2d",xc.ID([0,0]))
 beam2d.h= h
 
@@ -65,21 +64,13 @@ pt2= points.newPoint(2,geom.Pos3d(geom.Pos3d(L/2,0.0,0.0)))
 pt3= points.newPoint(3,geom.Pos3d(geom.Pos3d(L,0.0,0.0)))
 
 lines= preprocessor.getMultiBlockTopology.getLines
-lines.defaultTag= 1
 l1= lines.newLine(1,2)
 l1.nDiv= int(numDiv/2)
 
-lines.defaultTag= 2
-l1= lines.newLine(2,3)
-l1.nDiv= int(numDiv/2)
+l2= lines.newLine(2,3)
+l2.nDiv= int(numDiv/2)
 
-
-
-l1= preprocessor.getSets.getSet("l1")
 l1.genMesh(xc.meshDir.I)
-
-
-l2= preprocessor.getSets.getSet("l2")
 l2.genMesh(xc.meshDir.I)
 
 fixedNodeId= 0

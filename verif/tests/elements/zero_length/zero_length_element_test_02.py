@@ -29,9 +29,8 @@ modelSpace= predefined_spaces.SolidMechanics2D(nodes)
 
 # Model definition
 
-nodes.defaultTag= 1 # First node number.
-nod= nodes.newNodeXY(1,1)
-nod= nodes.newNodeXY(1,1)
+n1= nodes.newNodeXY(1,1)
+n2= nodes.newNodeXY(1,1)
 
 # Materials definition
 kx= typical_materials.defElasticMaterial(preprocessor, "kx",KX)
@@ -46,8 +45,7 @@ ky= typical_materials.defElasticMaterial(preprocessor, "ky",KY)
 elements= preprocessor.getElementHandler
 elements.defaultMaterial= kx.name
 elements.dimElem= 2 # Dimension of element space
-elements.defaultTag= 1
-elem= elements.newElement("ZeroLength",xc.ID([1,2]))
+elem= elements.newElement("ZeroLength",xc.ID([n1.tag,n2.tag]))
 elem.clearMaterials()
 elem.setMaterial(0,"kx")
 elem.setMaterial(1,"ky")
@@ -56,30 +54,23 @@ elem.setMaterial(1,"ky")
 # Constraints
 constraints= preprocessor.getBoundaryCondHandler
 #
-spc= constraints.newSPConstraint(1,0,0.0) # Node 1
-spc= constraints.newSPConstraint(1,1,0.0)
+spc= constraints.newSPConstraint(n1.tag,0,0.0) # Node 1
+spc= constraints.newSPConstraint(n1.tag,1,0.0)
 
 
 # Load definition.
 lp0= modelSpace.newLoadPattern(name= '0')
-lp0.newNodalLoad(2,xc.Vector([FX,FY]))
+lp0.newNodalLoad(n2.tag,xc.Vector([FX,FY]))
 # We add the load case to domain.
 modelSpace.addLoadCaseToDomain(lp0.name)
 
 # Solution
 result= modelSpace.analyze(calculateNodalReactions= True)
 
-nod2= nodes.getNode(2)
-deltax= nod2.getDisp[0]
-deltay= nod2.getDisp[1] 
-nod1= nodes.getNode(1)
-RX= nod1.getReaction[0]
-RY= nod1.getReaction[1] 
-
-elements= preprocessor.getElementHandler
-
-elem1= elements.getElement(1)
-elem1.getResistingForce()
+deltax= n2.getDisp[0]
+deltay= n2.getDisp[1] 
+RX= n1.getReaction[0]
+RY= n1.getReaction[1] 
 
 ratio1= -RX/FX
 ratio2= (KX*deltax)/FX

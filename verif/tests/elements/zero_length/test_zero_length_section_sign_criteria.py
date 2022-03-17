@@ -49,9 +49,8 @@ feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor   
 nodes= preprocessor.getNodeHandler
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
-nodes.defaultTag= 1 # First node number.
-nod= nodes.newNodeXYZ(0,0.0,0.0)
-nod= nodes.newNodeXYZ(0.0+L,0.0,0.0)
+n1= nodes.newNodeXYZ(0,0.0,0.0)
+n2= nodes.newNodeXYZ(0.0+L,0.0,0.0)
 
 # Materials definition
 
@@ -83,12 +82,11 @@ sa.setAdditions(["T","Vy","Vz"],["respT","respVy","respVz"])
 elements= preprocessor.getElementHandler
 elements.defaultMaterial= sa.name
 elements.dimElem= 1 # Dimension of element space
-elements.defaultTag= 1
 #  sintaxis: zero_length[<tag>] 
-zl= elements.newElement("ZeroLengthSection",xc.ID([1,2]))
+zl= elements.newElement("ZeroLengthSection",xc.ID([n1.tag,n2.tag]))
 
 # Constraints
-modelSpace.fixNode000_000(1)
+modelSpace.fixNode000_000(n1.tag)
 
 # Loads definition
 # Load modulation.
@@ -99,23 +97,22 @@ lp2= modelSpace.newLoadPattern(name= '2')
 lp3= modelSpace.newLoadPattern(name= '3')
 lp4= modelSpace.newLoadPattern(name= '4')
 lp5= modelSpace.newLoadPattern(name= '5')
-lp0.newNodalLoad(2,xc.Vector([F,0,0,0,0,0]))
-lp1.newNodalLoad(2,xc.Vector([0,2*F,0,0,0,0]))
-lp2.newNodalLoad(2,xc.Vector([0,0,3*F,0,0,0]))
-lp3.newNodalLoad(2,xc.Vector([0,0,0,4*F,0,0]))
-lp4.newNodalLoad(2,xc.Vector([0,0,0,0,5*F,0]))
-lp5.newNodalLoad(2,xc.Vector([0,0,0,0,0,6*F]))
+lp0.newNodalLoad(n2.tag, xc.Vector([F,0,0,0,0,0]))
+lp1.newNodalLoad(n2.tag, xc.Vector([0,2*F,0,0,0,0]))
+lp2.newNodalLoad(n2.tag, xc.Vector([0,0,3*F,0,0,0]))
+lp3.newNodalLoad(n2.tag, xc.Vector([0,0,0,4*F,0,0]))
+lp4.newNodalLoad(n2.tag, xc.Vector([0,0,0,0,5*F,0]))
+lp5.newNodalLoad(n2.tag, xc.Vector([0,0,0,0,0,6*F]))
 
 
 lPatterns= preprocessor.getLoadHandler.getLoadPatterns
 listaHipotesis= []
 for key in lPatterns.getKeys():
-  listaHipotesis.append(key)
+    listaHipotesis.append(key)
 
 # Solution procedure
 solu= feProblem.getSoluProc
 solCtrl= solu.getSoluControl
-
 
 solModels= solCtrl.getModelWrapperContainer
 sm= solModels.newModelWrapper("sm")
@@ -134,15 +131,10 @@ integ= solutionStrategy.newIntegrator("load_control_integrator",xc.Vector([]))
 soe= solutionStrategy.newSystemOfEqn("band_spd_lin_soe")
 solver= soe.newSolver("band_spd_lin_lapack_solver")
 
-
-
-
-
 def solve():
   analysis= solu.newAnalysis("static_analysis","solutionStrategy","")
   result= analysis.analyze(1)
   return result
-
 
 numHipotesis= len(listaHipotesis)
 i= 0.0
@@ -171,46 +163,45 @@ vJ= xc.Vector([0,0,0])
 vK= xc.Vector([0,0,0])
 
 for hip in listaHipotesis:
-  loadHandler= preprocessor.getLoadHandler
-  loadHandler.addToDomain(hip)
-  ok= solve()
-  if(ok==0):
-    ele1= elements.getElement(1)
-    vI= ele1.getIVector
-    vJ= ele1.getJVector
-    vK= ele1.getKVector
-    ele1.getResistingForce()
-    scc0= ele1.getSection()
-    sR= sR + scc0.getStressResultant()
-    N= scc0.getStressResultantComponent("N")
-    Ntot+= N
-    if(abs(N)>1):
-      epsN= scc0.getSectionDeformationByName("defN")
-    Vy= scc0.getStressResultantComponent("Vy")
-    QyTot= QyTot+Vy
-    if(abs(Vy)>1):
-      epsQy= scc0.getSectionDeformationByName("defVy")
-    Vz= scc0.getStressResultantComponent("Vz")
-    QzTot= QzTot+Vz
-    if(abs(Vz)>1):
-      epsQz= scc0.getSectionDeformationByName("defVz")
-    T= scc0.getStressResultantComponent("T")
-    MxTot= MxTot+T
-    if(abs(T)>1):
-      epsT= scc0.getSectionDeformationByName("defT")
-    My= scc0.getStressResultantComponent("My")
-    MyTot= MyTot+My
-    if(abs(My)>1):
-      epsilonZPos= scc0.getStrain(0.0,1.0)
-    epsMy= scc0.getSectionDeformationByName("defMy")
-    Mz= scc0.getStressResultantComponent("Mz")
-    MzTot= MzTot+Mz
-    if(abs(Mz)>1):
-      epsilonYPos= scc0.getStrain(1.0,0.0)
-    epsMz= scc0.getSectionDeformationByName("defMz")
-    loadHandler.removeFromDomain(hip)
-    dom= preprocessor.getDomain
-    dom.revertToStart()
+    loadHandler= preprocessor.getLoadHandler
+    loadHandler.addToDomain(hip)
+    ok= solve()
+    if(ok==0):
+        vI= zl.getIVector
+        vJ= zl.getJVector
+        vK= zl.getKVector
+        zl.getResistingForce()
+        scc0= zl.getSection()
+        sR= sR + scc0.getStressResultant()
+        N= scc0.getStressResultantComponent("N")
+        Ntot+= N
+        if(abs(N)>1):
+            epsN= scc0.getSectionDeformationByName("defN")
+        Vy= scc0.getStressResultantComponent("Vy")
+        QyTot= QyTot+Vy
+        if(abs(Vy)>1):
+            epsQy= scc0.getSectionDeformationByName("defVy")
+        Vz= scc0.getStressResultantComponent("Vz")
+        QzTot= QzTot+Vz
+        if(abs(Vz)>1):
+            epsQz= scc0.getSectionDeformationByName("defVz")
+        T= scc0.getStressResultantComponent("T")
+        MxTot= MxTot+T
+        if(abs(T)>1):
+            epsT= scc0.getSectionDeformationByName("defT")
+        My= scc0.getStressResultantComponent("My")
+        MyTot= MyTot+My
+        if(abs(My)>1):
+            epsilonZPos= scc0.getStrain(0.0,1.0)
+        epsMy= scc0.getSectionDeformationByName("defMy")
+        Mz= scc0.getStressResultantComponent("Mz")
+        MzTot= MzTot+Mz
+        if(abs(Mz)>1):
+            epsilonYPos= scc0.getStrain(1.0,0.0)
+        epsMz= scc0.getSectionDeformationByName("defMz")
+        loadHandler.removeFromDomain(hip)
+        dom= preprocessor.getDomain
+        dom.revertToStart()
 
 forcesInGlobalCoord= Ntot*vI+QyTot*vJ+QzTot*vK
 forcesInGlobalCoordTeor= F*xc.Vector([1,2,3])

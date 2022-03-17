@@ -37,7 +37,6 @@ elast= typical_materials.defElasticMaterial(preprocessor, "elast",K)
 elements= preprocessor.getElementHandler
 elements.defaultMaterial= elast.name
 elements.dimElem= 1 #Element dimension.
-elements.defaultTag= 1
 zl= elements.newElement("ZeroLength",xc.ID([n1.tag,n2.tag]))
 
 # Constraints
@@ -65,13 +64,6 @@ nodeHandler.calculateNodalReactions(True,1e-7)
 
 deltax= n2.getDisp[0] 
 R= n1.getReaction[0] 
-
-elements= preprocessor.getElementHandler
-
-elem1= elements.getElement(1)
-elem1.getResistingForce()
-
-
 
 ratio1= -R/F
 ratio2= abs(((K*deltax)-F)/F)
