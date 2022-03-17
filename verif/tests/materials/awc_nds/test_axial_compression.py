@@ -22,15 +22,10 @@ from materials.sections import section_properties
 from materials.awc_nds import AWCNDS_materials
 from materials.awc_nds import AWCNDS_limit_state_checking
 from materials.awc_nds import dimensional_lumber
-
-inchToMeter= 2.54/100.0
-footToMeter= 0.3048
-psiToPa= 6894.76
-psfToPa= 47.88026
-poundToNewton= 4.4482216282509
+from misc_utils import units_utils
 
 # Geometry.
-columnHeight= 7.3*footToMeter
+columnHeight= 7.3*units_utils.footToMeter
 
 # Materials.
 wood= dimensional_lumber.SprucePineFirWood(name='Spruce-Pine-Fir', grade= 'no_2', sub_grade= '')
@@ -41,7 +36,7 @@ column= AWCNDS_limit_state_checking.ColumnMember(unbracedLengthB= columnHeight, 
 wood.CD= 1.0
 
 # Load.
-designLoad= -4800*poundToNewton
+designLoad= -4800*units_utils.poundToN
 
 # Compute adjusted compressive capacity.
 CP= column.getColumnStabilityFactor() # Column stability factor.
@@ -58,7 +53,7 @@ ratio4= abs(efficiency-efficiency2)/efficiency2
 
 '''
 print('Column stability factor CP= '+'{:.2f}'.format(CP))
-print('Compressive strength: '+'{:.2f}'.format(Fc_aster2/1e6)+' MPa ('+'{:.2f}'.format(Fc_aster2/psiToPa)+' psi).')
+print('Compressive strength: '+'{:.2f}'.format(Fc_aster2/1e6)+' MPa ('+'{:.2f}'.format(Fc_aster2/units_utils.psiToPa)+' psi).')
 print('Design stress: '+'{:.2f}'.format(fc/1e6)+' MPa ('+'{:.2f}'.format(fc/psiToPa)+' psi).')
 print('Efficiency: '+'{:.2f}'.format(efficiency))
 '''
