@@ -48,9 +48,9 @@ class ColoredDiagram(vtk_lut_field.LUTField):
       self.cells.reset()
 
 
-    def creaTramoDiagramaSignoCte(self, offset,org, valOrg, dest, valDest):
-        ''' Crea un tramo de diagrama en el que la función a representar
-           no cambia de signo.
+    def createConstantSignDiagramInterval(self, offset,org, valOrg, dest, valDest):
+        ''' Creates a diagram interval where the function to draw 
+            doesn't changes its sign.
 
            :param offset: Offset for the index of the values to insert.
            :param org: Back end of the 1D element.
@@ -79,27 +79,27 @@ class ColoredDiagram(vtk_lut_field.LUTField):
         self.cells.InsertCellPoint(offset+3)    
         return offset+4
 
-    def getRaizTramoDiagrama(self, org, valOrg, dest, valDest):
-      ''' Calcula la posición de la raíz del diagrama que se define
-         mediante los siguientes parámetros:
-        org: Extremo dorsal del elemento lineal.
-       dest: Extremo frontal del elemento lineal.
-       valOrg: Valor del campo escalar en el extremo dorsal.
-       valDest: Valor del campo escalar en el extremo frontal. '''
+    def getDiagramIntervalRoot(self, org, valOrg, dest, valDest):
+        ''' Computes the position of the diagram root in the [org, dest]
+            interval.
 
-      assert(valOrg*valDest<=0.0)
-      org_dest= dest-org
-      longTramo= (org_dest).getModulus
-      s0= 0.0
-      if(abs(valOrg-valDest)>0):
-        s0= valOrg/(valOrg-valDest)
-      return(org+s0*org_dest)
+         :param org: Extremo dorsal del elemento lineal.
+         :param dest: Extremo frontal del elemento lineal.
+         :param valOrg: Valor del campo escalar en el extremo dorsal.
+         :param valDest: Valor del campo escalar en el extremo frontal. '''
+
+        assert(valOrg*valDest<=0.0)
+        org_dest= dest-org
+        longTramo= (org_dest).getModulus
+        s0= 0.0
+        if(abs(valOrg-valDest)>0):
+            s0= valOrg/(valOrg-valDest)
+        return(org+s0*org_dest)
 
 
-
-    def creaTramoDiagramaCambioSigno(self, offset, org, valOrg, dest, valDest):
-      ''' Crea un tramo de diagrama en el que la función a representar
-       cambia de signo.
+    def createChangedSignDiagramInterval(self, offset, org, valOrg, dest, valDest):
+      ''' Creates a diagram interval where the function to draw 
+          changes its sign.
 
          :param offset: Offset for the index of the values to insert.
          :param org: Back end of the 1D element.
@@ -111,7 +111,7 @@ class ColoredDiagram(vtk_lut_field.LUTField):
       self.updateMinMax(valDest)
       org2= org+(valOrg*self.scaleFactor)*self.vDir
       dest2= dest+(valDest*self.scaleFactor)*self.vDir
-      ptoRaiz= self.getRaizTramoDiagrama(org,valOrg,dest,valDest)
+      ptoRaiz= self.getDiagramIntervalRoot(org,valOrg,dest,valDest)
 
       self.points.InsertPoint(offset,org.x,org.y,org.z)
       self.points.InsertPoint(offset+1,org2.x,org2.y,org2.z)
@@ -139,7 +139,7 @@ class ColoredDiagram(vtk_lut_field.LUTField):
       return offset+5
 
 
-    def creaTramoDiagrama(self, offset,org, valOrg, dest, valDest):
+    def createDiagramInterval(self, offset,org, valOrg, dest, valDest):
       ''' Crea un tramo de diagrama.
 
          :param offset: index-counter for the values to insert.
@@ -151,9 +151,9 @@ class ColoredDiagram(vtk_lut_field.LUTField):
       vOrg= valOrg*self.fUnitConv
       vDest= valDest*self.fUnitConv
       if(vOrg*vDest>0.0):
-          return self.creaTramoDiagramaSignoCte(offset,org,vOrg,dest,vDest)
+          return self.createConstantSignDiagramInterval(offset,org,vOrg,dest,vDest)
       else:
-          return self.creaTramoDiagramaCambioSigno(offset,org,vOrg,dest,vDest)
+          return self.createChangedSignDiagramInterval(offset,org,vOrg,dest,vDest)
 
     def creaActorDiagrama(self):
       # Crea el actor para el diagrama.
@@ -199,7 +199,7 @@ class ColoredDiagram(vtk_lut_field.LUTField):
       '''
       posNode0= elem.getNodes[0].getCurrentPos3d(defFScale)
       posNode1= elem.getNodes[1].getCurrentPos3d(defFScale)
-      return self.creaTramoDiagrama(indxDiagrama,posNode0,v0,posNode1,v1)
+      return self.createDiagramInterval(indxDiagrama,posNode0,v0,posNode1,v1)
 
 
     def appendDataFromElementEnds(self,vDir,elem,indxDiagram,value1,value2):

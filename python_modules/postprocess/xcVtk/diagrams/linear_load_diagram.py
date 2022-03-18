@@ -79,7 +79,7 @@ class LinearLoadDiagram(cd.ColoredDiagram):
         return retval
        
 
-    def dumpElementalLoads(self,actLP,indxDiagram):
+    def dumpElementalLoads(self, actLP, indxDiagram):
         ''' Iterate over loaded elements dumping its loads into the graphic.
 
         :param actLP: list of active load patterns.
@@ -111,11 +111,11 @@ class LinearLoadDiagram(cd.ColoredDiagram):
                 vI= elem.getIVector3d(True)
                 vJ= elem.getJVector3d(True)
                 vK= elem.getKVector3d(True)
-                localForce=self.dictActLoadVectors[eTag]
-                v= localForce.x*vI+localForce.y*vJ+localForce.z*vK 
+                localForce= self.dictActLoadVectors[eTag]
+                v= localForce.x*vI+localForce.y*vJ+localForce.z*vK
                 self.vDir= v.normalized()
                 totLoad= v.getModulus()
-                indxDiagram= self.appendDataToDiagram(elem,indxDiagram,totLoad,totLoad)
+                indxDiagram= self.appendDataToDiagram(elem, indxDiagram, totLoad, totLoad)
         else:
             lmsg.error("LinearLoadDiagram :'"+self.component+"' unknown.")
         return indxDiagram
