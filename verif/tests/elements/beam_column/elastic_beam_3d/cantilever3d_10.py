@@ -41,10 +41,8 @@ feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor   
 nodes= preprocessor.getNodeHandler
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
-nodes.defaultTag= 1 # First node number.
-nod= nodes.newNodeXYZ(0,0.0,0.0)
-nodes.defaultTag= 2 # Next node number.
-nod= nodes.newNodeXYZ(L,0.0,0.0)
+n1= nodes.newNodeXYZ(0,0.0,0.0)
+n2= nodes.newNodeXYZ(L,0.0,0.0)
 
 
 # Geometric transformation(s)
@@ -59,11 +57,10 @@ section= typical_materials.defElasticSectionFromMechProp3d(preprocessor, "sectio
 elements= preprocessor.getElementHandler
 elements.defaultTransformation= lin.name
 elements.defaultMaterial= section.name
-elements.defaultTag= 1 # Tag for the next element.
-beam3d= elements.newElement("ElasticBeam3d",xc.ID([1,2]))
+beam3d= elements.newElement("ElasticBeam3d",xc.ID([n1.tag,n2.tag]))
 
 # Constraints
-modelSpace.fixNode000_000(1)
+modelSpace.fixNode000_000(n1.tag)
 
 
 # Load case definition.
@@ -71,7 +68,7 @@ lp0= modelSpace.newLoadPattern(name= '0')
 lp0.alpha= 2/3.0
 lp0.a= L*lp0.alpha
 pl= lp0.newElementalLoad("beam3d_point_load")
-pl.elementTags= xc.ID([1])
+pl.elementTags= xc.ID([beam3d.tag])
 pl.axialComponent= F
 pl.transYComponent= Q1
 pl.transZComponent= Q2
@@ -86,17 +83,13 @@ result= analysis.analyze(1)
 
 
 nodes= preprocessor.getNodeHandler 
-nod2= nodes.getNode(2)
-deltax= nod2.getDisp[0] 
-deltay= nod2.getDisp[2]
-deltaz= -(nod2.getDisp[1])
+deltax= n2.getDisp[0] 
+deltay= n2.getDisp[2]
+deltaz= -(n2.getDisp[1])
 
-elements= preprocessor.getElementHandler
-elem1= elements.getElement(1)
-
-elem1.getResistingForce()
-N1= elem1.getN1 # Axial force at the back end.
-N2= elem1.getN2 # Axial force at the front end.
+beam3d.getResistingForce()
+N1= beam3d.getN1 # Axial force at the back end.
+N2= beam3d.getN2 # Axial force at the front end.
 
 
 

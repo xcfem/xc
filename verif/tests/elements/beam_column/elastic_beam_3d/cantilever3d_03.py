@@ -38,9 +38,8 @@ feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor   
 nodes= preprocessor.getNodeHandler
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
-nodes.defaultTag= 1 # First node number.
-nod= nodes.newNodeXYZ(0,0.0,0.0)
-nod= nodes.newNodeXYZ(L,0.0,0.0)
+n1= nodes.newNodeXYZ(0,0.0,0.0)
+n2= nodes.newNodeXYZ(L,0.0,0.0)
 
 
 # Geometric transformation(s)
@@ -55,16 +54,15 @@ section= typical_materials.defElasticSectionFromMechProp3d(preprocessor, "sectio
 elements= preprocessor.getElementHandler
 elements.defaultTransformation= lin.name
 elements.defaultMaterial= section.name
-elements.defaultTag= 1 # Tag for the next element.
-beam3d= elements.newElement("ElasticBeam3d",xc.ID([1,2]))
+beam3d= elements.newElement("ElasticBeam3d",xc.ID([n1.tag,n2.tag]))
 
 
 # Constraints
-modelSpace.fixNode000_000(1)
+modelSpace.fixNode000_000(n1.tag)
 
 # Load definition.
 lp0= modelSpace.newLoadPattern(name= '0')
-lp0.newNodalLoad(2,xc.Vector([0,0,-F,0,0,0]))
+lp0.newNodalLoad(n2.tag, xc.Vector([0,0,-F,0,0,0]))
 
 # We add the load case to domain.
 modelSpace.addLoadCaseToDomain(lp0.name)
@@ -73,17 +71,11 @@ modelSpace.addLoadCaseToDomain(lp0.name)
 analysis= predefined_solutions.simple_static_linear(feProblem)
 result= analysis.analyze(1)
 
+delta= n2.getDisp[2]  # z displacement of node 2
 
-nodes= preprocessor.getNodeHandler 
-nod2= nodes.getNode(2)
-delta= nod2.getDisp[2]  # z displacement of node 2
-
-elements= preprocessor.getElementHandler
-
-elem1= elements.getElement(1)
-elem1.getResistingForce()
-M= elem1.getMz1
-V= elem1.getVy()
+beam3d.getResistingForce()
+M= beam3d.getMz1
+V= beam3d.getVy()
 
 
 deltateor= (-F*L**3/(3*E*Iz))

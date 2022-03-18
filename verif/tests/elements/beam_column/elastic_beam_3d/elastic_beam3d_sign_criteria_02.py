@@ -20,14 +20,12 @@ from solution import predefined_solutions
 from model import predefined_spaces
 from materials import typical_materials
 
-def getInternalForcesBeginNode(elemTag):
+def getInternalForcesBeginNode(elem):
     ''':return: internal forces on the element's first node.'''
-    elem= elements.getElement(elemTag)
     return (elem.getN1,elem.getVy1,elem.getVz1,elem.getT1,elem.getMy1,elem.getMz1)
 
-def getInternalForcesEndNode(elemTag):
+def getInternalForcesEndNode(elem):
     ''':return: internal forces on the element's last node.''' 
-    elem= elements.getElement(elemTag)
     return (elem.getN2,elem.getVy2,elem.getVz2,elem.getT2,elem.getMy2,elem.getMz2)
 
 def printResults(N1,Vy1,Vz1,T1,My1,Mz1,N2,Vy2,Vz2,T2,My2,Mz2,phaseRatios,phase):
@@ -69,9 +67,8 @@ preprocessor=  feProblem.getPreprocessor
 nodes= preprocessor.getNodeHandler
 # Problem type
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
-nodes.defaultTag= 1 # First node number.
-nodes.newNodeXYZ(0,0.0,0.0)
-nodes.newNodeXYZ(L,0.0,0.0)
+n1= nodes.newNodeXYZ(0,0.0,0.0)
+n2= nodes.newNodeXYZ(L,0.0,0.0)
 
 lin= modelSpace.newLinearCrdTransf("lin",xc.Vector([0,0,1]))
 # Materials
@@ -84,18 +81,17 @@ section= typical_materials.defElasticSectionFromMechProp3d(preprocessor, "sectio
 elements= preprocessor.getElementHandler
 elements.defaultTransformation= lin.name
 elements.defaultMaterial= section.name
-elements.defaultTag= 1 # Tag for the next element.
-beam3d= elements.newElement("ElasticBeam3d",xc.ID([1,2]))
+beam3d= elements.newElement("ElasticBeam3d",xc.ID([n1.tag, n2.tag]))
 
 
-modelSpace.fixNode000_000(1)
+modelSpace.fixNode000_000(n1.tag)
 
 elem=preprocessor.getElementHandler.getElement(1) # element 1
 
 # Load case definition.
 lp0= modelSpace.newLoadPattern(name= '0')
 modelSpace.setCurrentLoadPattern("0")
-elem.vector3dPointByRelDistLoadLocal(xRelPtoAplic,xc.Vector([F,0,0]))
+beam3d.vector3dPointByRelDistLoadLocal(xRelPtoAplic,xc.Vector([F,0,0]))
 # We add the load case to domain.
 modelSpace.addLoadCaseToDomain(lp0.name)
 
@@ -103,10 +99,10 @@ modelSpace.addLoadCaseToDomain(lp0.name)
 analysis= predefined_solutions.simple_static_linear(feProblem)
 result= analysis.analyze(1)
 
-RF= elements.getElement(1).getResistingForce()
-(N1,Vy1,Vz1,T1,My1,Mz1)= getInternalForcesBeginNode(1)
+RF= beam3d.getResistingForce()
+(N1,Vy1,Vz1,T1,My1,Mz1)= getInternalForcesBeginNode(beam3d)
 NTeor= F
-(N2,Vy2,Vz2,T2,My2,Mz2)= getInternalForcesEndNode(1)
+(N2,Vy2,Vz2,T2,My2,Mz2)= getInternalForcesEndNode(beam3d)
 
 ratios= list()
 ratio0= abs((N1-NTeor)/NTeor)+abs(N2)
@@ -124,18 +120,18 @@ ratios.extend(phaseRatios)
 lp0.removeFromDomain()
 lp1= modelSpace.newLoadPattern(name= '1')
 modelSpace.setCurrentLoadPattern("1")
-elem.vector3dPointByRelDistLoadLocal(xRelPtoAplic,xc.Vector([0,F,0]))
+beam3d.vector3dPointByRelDistLoadLocal(xRelPtoAplic,xc.Vector([0,F,0]))
 modelSpace.addLoadCaseToDomain("1")
 
 # Solution 1 Mz Vy
 analysis= predefined_solutions.simple_static_linear(feProblem)
 result= analysis.analyze(1)
 
-RF= elements.getElement(1).getResistingForce()
-(N1,Vy1,Vz1,T1,My1,Mz1)= getInternalForcesBeginNode(1)
+RF= beam3d.getResistingForce()
+(N1,Vy1,Vz1,T1,My1,Mz1)= getInternalForcesBeginNode(beam3d)
 Vy1Teor=F
 Mz1Teor= F*L/2.0
-(N2,Vy2,Vz2,T2,My2,Mz2)= getInternalForcesEndNode(1)
+(N2,Vy2,Vz2,T2,My2,Mz2)= getInternalForcesEndNode(beam3d)
 
 ratio10= abs(N1)+abs(N2)
 ratio11= abs((Vy1-Vy1Teor)/Vy1)+abs(Vy2)
@@ -154,7 +150,7 @@ ratios.extend(phaseRatios)
 lp1.removeFromDomain()
 lp2= modelSpace.newLoadPattern(name= '2')
 modelSpace.setCurrentLoadPattern("2")
-elem.vector3dPointByRelDistLoadLocal(xRelPtoAplic,xc.Vector([0,0,F]))
+beam3d.vector3dPointByRelDistLoadLocal(xRelPtoAplic,xc.Vector([0,0,F]))
 modelSpace.addLoadCaseToDomain("2")
 
 
@@ -162,11 +158,11 @@ modelSpace.addLoadCaseToDomain("2")
 analysis= predefined_solutions.simple_static_linear(feProblem)
 result= analysis.analyze(1)
 
-RF= elements.getElement(1).getResistingForce()
-(N1,Vy1,Vz1,T1,My1,Mz1)= getInternalForcesBeginNode(1)
+RF= beam3d.getResistingForce()
+(N1,Vy1,Vz1,T1,My1,Mz1)= getInternalForcesBeginNode(beam3d)
 Vz1Teor=F
 My1Teor= -F*L/2.0
-(N2,Vy2,Vz2,T2,My2,Mz2)= getInternalForcesEndNode(1)
+(N2,Vy2,Vz2,T2,My2,Mz2)= getInternalForcesEndNode(beam3d)
 
 ratio20= abs(N1)+abs(N2)
 ratio21= abs(Vy1)+abs(Vy2)
@@ -185,18 +181,18 @@ ratios.extend(phaseRatios)
 lp2.removeFromDomain()
 lp3= modelSpace.newLoadPattern(name= '3')
 modelSpace.setCurrentLoadPattern("3")
-elem.vector3dUniformLoadLocal(xc.Vector([0,0,F]))
+beam3d.vector3dUniformLoadLocal(xc.Vector([0,0,F]))
 modelSpace.addLoadCaseToDomain("3")
 
 # Solution 3 T
 analysis= predefined_solutions.simple_static_linear(feProblem)
 result= analysis.analyze(1)
 
-RF= elements.getElement(1).getResistingForce()
-(N1,Vy1,Vz1,T1,My1,Mz1)= getInternalForcesBeginNode(1)
+RF= beam3d.getResistingForce()
+(N1,Vy1,Vz1,T1,My1,Mz1)= getInternalForcesBeginNode(beam3d)
 Vz1Teor=F*L
 My1Teor=-F*L*L/2.0
-(N2,Vy2,Vz2,T2,My2,Mz2)= getInternalForcesEndNode(1)
+(N2,Vy2,Vz2,T2,My2,Mz2)= getInternalForcesEndNode(beam3d)
 
 ratio30= abs(N1)+abs(N2)
 ratio31= abs(Vy1)+abs(Vy2)

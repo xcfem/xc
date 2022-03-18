@@ -38,9 +38,8 @@ feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor   
 nodes= preprocessor.getNodeHandler
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
-nodes.defaultTag= 1 # First node number.
-nod= nodes.newNodeXYZ(0,0.0,0.0)
-nod= nodes.newNodeXYZ(L,0.0,0.0)
+n1= nodes.newNodeXYZ(0,0.0,0.0)
+n2= nodes.newNodeXYZ(L,0.0,0.0)
 
 # Materials
 sectionProperties= xc.CrossSectionProperties3d()
@@ -54,19 +53,16 @@ lin= modelSpace.newLinearCrdTransf("lin",xc.Vector([0,-1,0]))
 elements= preprocessor.getElementHandler
 elements.defaultTransformation= lin.name
 elements.defaultMaterial= section.name
-elements.defaultTag= 1 # Tag for the next element.
-beam3d= elements.newElement("ElasticBeam3d",xc.ID([1,2]))
-
-
+beam3d= elements.newElement("ElasticBeam3d",xc.ID([n1.tag, n2.tag]))
 
 # Constraints
-modelSpace.fixNode000_000(1)
+modelSpace.fixNode000_000(n1.tag)
 
 # Load definition.
 lp0= modelSpace.newLoadPattern(name= '0')
 
 eleLoad= lp0.newElementalLoad("beam3d_uniform_load")
-eleLoad.elementTags= xc.ID([1]) 
+eleLoad.elementTags= xc.ID([beam3d.tag]) 
 eleLoad.transZComponent= -f
 # We add the load case to domain.
 modelSpace.addLoadCaseToDomain(lp0.name)
@@ -76,18 +72,13 @@ analysis= predefined_solutions.simple_static_linear(feProblem)
 result= analysis.analyze(1)
 
 
-nodes= preprocessor.getNodeHandler 
-nod2= nodes.getNode(2)
-delta= nod2.getDisp[1]  # Node 2 yAxis displacement global
+delta= n2.getDisp[1]  # Node 2 yAxis displacement global
 
-elements= preprocessor.getElementHandler
-
-elem1= elements.getElement(1)
-elem1.getResistingForce()
-My1= elem1.getMy1 # Moment at the back end of the beam
-My2= elem1.getMy2 # Moment at the front end of the beam
-Vz1= elem1.getVz1 # Shear force at the back end of the beam
-Vz2= elem1.getVz2 # Shear force at the front end of the beam
+beam3d.getResistingForce()
+My1= beam3d.getMy1 # Moment at the back end of the beam
+My2= beam3d.getMy2 # Moment at the front end of the beam
+Vz1= beam3d.getVz1 # Shear force at the back end of the beam
+Vz2= beam3d.getVz2 # Shear force at the front end of the beam
 
 
 
