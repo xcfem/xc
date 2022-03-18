@@ -89,8 +89,6 @@ result= analysis.analyze(1)
 delta= n3.getDisp[1] 
 deltaRef=.182
 
-elements= preprocessor.getElementHandler
-
 beam2dB.getResistingForce()
 sigma= beam2dB.getN2/beam2dB.sectionProperties.A+beam2dB.getM2/beam2dB.sectionProperties.I*beam2dB.h/2.0
 sigmaRef= -11400
