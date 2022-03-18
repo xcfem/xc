@@ -1054,13 +1054,19 @@ XC::Matrix XC::Element::getLocalAxes(bool initialGeometry) const
 
 //! @brief Returns a base vector in the direction of the local i-th axis
 //! from the i-th row of the matrix returned by getLocalAxes.
-XC::Vector XC::Element::getBaseVector(size_t i,bool initialGeometry) const
+//! @param i: index of the base vector.
+//! @param initialGeometry: if true use initial geometry (instead of the deformed one).
+XC::Vector XC::Element::getBaseVector(size_t i, bool initialGeometry) const
   {
     const Matrix localAxes= getLocalAxes(initialGeometry);
     Vector retval(3,0.0);
-    const size_t nCols= localAxes.noCols();
-    for(size_t j= 0;j<nCols;j++)
-      retval(j)= localAxes(i,j);
+    const size_t nRows= localAxes.noRows();
+    if(i<nRows)
+      {
+        const size_t nCols= localAxes.noCols();
+        for(size_t j= 0;j<nCols;j++)
+          retval(j)= localAxes(i,j);
+      }
     return retval;
   }    
 
