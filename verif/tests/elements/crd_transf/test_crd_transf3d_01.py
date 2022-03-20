@@ -29,9 +29,8 @@ feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor   
 nodes= preprocessor.getNodeHandler
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
-nodes.defaultTag= 1 #First node number.
-nod= nodes.newNodeXYZ(0,0,0)
-nod= nodes.newNodeXYZ(L*math.sqrt(3)/3,L*math.sqrt(3)/3,L*math.sqrt(3)/3)
+n1= nodes.newNodeXYZ(0,0,0)
+n2= nodes.newNodeXYZ(L*math.sqrt(3)/3,L*math.sqrt(3)/3,L*math.sqrt(3)/3)
 
 # Materials
 section= typical_materials.defElasticSection3d(preprocessor, "section",1,1,1,1,1,1)
@@ -43,7 +42,7 @@ elements= preprocessor.getElementHandler
 elements.defaultTransformation= lin.name
 elements.defaultMaterial= section.name
 elements.defaultTag= 1 #Tag for next element.
-beam3d= elements.newElement("ElasticBeam3d",xc.ID([1,2]))
+beam3d= elements.newElement("ElasticBeam3d",xc.ID([n1.tag,n2.tag]))
 
 centroidG= beam3d.getCoordTransf.getPointGlobalCoordFromBasic(0.5)
 posCentroidG= geom.Pos3d(centroidG[0],centroidG[1],centroidG[2])

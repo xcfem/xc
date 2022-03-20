@@ -93,9 +93,8 @@ R0= xc.Vector([RR[0],RR[2],RR[1]])
 fourFibersSection.revertToStart()
 nodes= preprocessor.getNodeHandler
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
-nodes.defaultTag= 1 # First node number.
-nod= nodes.newNodeXYZ(0.0,0.0,0.0)
-nod= nodes.newNodeXYZ(L,0.0,0.0)
+n1= nodes.newNodeXYZ(0.0,0.0,0.0)
+n2= nodes.newNodeXYZ(L,0.0,0.0)
 
 lin= modelSpace.newLinearCrdTransf("lin",xc.Vector([0,1,0]))
 
@@ -103,18 +102,18 @@ lin= modelSpace.newLinearCrdTransf("lin",xc.Vector([0,1,0]))
 elements= preprocessor.getElementHandler
 elements.defaultTransformation= lin.name
 elements.defaultMaterial= fourFibersSection.name
-zl= elements.newElement("ForceBeamColumn3d",xc.ID([1,2]))
+zl= elements.newElement("ForceBeamColumn3d",xc.ID([n1.tag,n2.tag]))
 
 # Constraints
-modelSpace.fixNode000_000(1)
-spc= modelSpace.constraints.newSPConstraint(2,1,0.0)
-spc= modelSpace.constraints.newSPConstraint(2,2,0.0)
-spc= modelSpace.constraints.newSPConstraint(2,3,0.0)
+modelSpace.fixNode000_000(n1.tag)
+spc= modelSpace.constraints.newSPConstraint(n2.tag,1,0.0)
+spc= modelSpace.constraints.newSPConstraint(n2.tag,2,0.0)
+spc= modelSpace.constraints.newSPConstraint(n2.tag,3,0.0)
 
 
 # Load definition.
 lp0= modelSpace.newLoadPattern(name= '0')
-lp0.newNodalLoad(2,xc.Vector([N,0,0,0,My,Mz])) # Section's y axis is element z axis.
+lp0.newNodalLoad(n2.tag,xc.Vector([N,0,0,0,My,Mz])) # Section's y axis is element z axis.
 
 # Add the load pattern to the domain.
 modelSpace.addLoadCaseToDomain(lp0.name)

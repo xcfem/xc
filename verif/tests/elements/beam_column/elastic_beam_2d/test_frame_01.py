@@ -34,15 +34,14 @@ feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
 nodes= preprocessor.getNodeHandler
 modelSpace= predefined_spaces.StructuralMechanics2D(nodes)
-nodes.defaultTag= 1
-nodes.newNodeXY(0,0) # First frame
-nod= nodes.newNodeXY(0,H)
-nod= nodes.newNodeXY(B,0)
-nod= nodes.newNodeXY(B,H)
-nod= nodes.newNodeXY(2*B,0) # Second frame.
-nod= nodes.newNodeXY(2*B,H)
-nod= nodes.newNodeXY(2*B+B,0)
-nod= nodes.newNodeXY(2*B+B,H)
+n1= nodes.newNodeXY(0,0) # First frame
+n2= nodes.newNodeXY(0,H)
+n3= nodes.newNodeXY(B,0)
+n4= nodes.newNodeXY(B,H)
+n5= nodes.newNodeXY(2*B,0) # Second frame.
+n6= nodes.newNodeXY(2*B,H)
+n7= nodes.newNodeXY(2*B+B,0)
+n8= nodes.newNodeXY(2*B+B,H)
 
 
 lin= modelSpace.newLinearCrdTransf("lin")
@@ -55,30 +54,29 @@ section= typical_materials.defElasticSectionFromMechProp2d(preprocessor, "sectio
 elements= preprocessor.getElementHandler
 elements.defaultTransformation= lin.name
 elements.defaultMaterial= section.name
-elements.defaultTag= 1 # Tag for next element.
-beam2d= elements.newElement("ElasticBeam2d",xc.ID([1,2]))
-beam2d= elements.newElement("ElasticBeam2d",xc.ID([2,4]))
-beam2d= elements.newElement("ElasticBeam2d",xc.ID([4,3]))
-beam2d= elements.newElement("ElasticBeam2d",xc.ID([5,6]))
-beam2d= elements.newElement("ElasticBeam2d",xc.ID([6,8]))
-beam2d= elements.newElement("ElasticBeam2d",xc.ID([8,7]))
+beam2d01= elements.newElement("ElasticBeam2d",xc.ID([n1.tag, n2.tag]))
+beam2d02= elements.newElement("ElasticBeam2d",xc.ID([n2.tag, n4.tag]))
+beam2d03= elements.newElement("ElasticBeam2d",xc.ID([n4.tag, n3.tag]))
+beam2d04= elements.newElement("ElasticBeam2d",xc.ID([n5.tag, n6.tag]))
+beam2d05= elements.newElement("ElasticBeam2d",xc.ID([n6.tag, n8.tag]))
+beam2d06= elements.newElement("ElasticBeam2d",xc.ID([n8.tag, n7.tag]))
 
 # Constraints
 constraints= preprocessor.getBoundaryCondHandler
-modelSpace.fixNode000(1)
-modelSpace.fixNode000(3)
-modelSpace.fixNode000(5)
-modelSpace.fixNode000(7)
+modelSpace.fixNode000(n1.tag)
+modelSpace.fixNode000(n3.tag)
+modelSpace.fixNode000(n5.tag)
+modelSpace.fixNode000(n7.tag)
 
 # Load definition.
 lp0= modelSpace.newLoadPattern(name= '0')
 
 eleLoad= lp0.newElementalLoad("beam2d_point_load")
-eleLoad.elementTags= xc.ID([2])
+eleLoad.elementTags= xc.ID([beam2d02.tag])
 eleLoad.transComponent= -P
 eleLoad.x= 0.5
 eleLoad= lp0.newElementalLoad("beam2d_point_load")
-eleLoad.elementTags= xc.ID([5])
+eleLoad.elementTags= xc.ID([beam2d05.tag])
 eleLoad.transComponent= -P
 eleLoad.x= 0.25
 # We add the load case to domain.
@@ -131,40 +129,28 @@ M52Teor= -5580.4 # Theoretical value of bending moment acting
 ratioM52= 0.0
 
 
-nodes= preprocessor.getNodeHandler
+theta2= n2.getDisp[2]
+delta6= n6.getDisp[0]
+theta6= n6.getDisp[2]
+theta8= n8.getDisp[2]
 
-nod2= nodes.getNode(2)
-theta2= nod2.getDisp[2]
-nod6= nodes.getNode(6)
-delta6= nod6.getDisp[0]
-theta6= nod6.getDisp[2]
-nod8= nodes.getNode(8)
-theta8= nod8.getDisp[2]
+beam2d01.getResistingForce()
+Q= beam2d01.getV1
+M12= beam2d01.getM1
 
-elements= preprocessor.getElementHandler
+beam2d02.getResistingForce()
+M21= beam2d02.getM1
 
-elem1= elements.getElement(1)
-elem1.getResistingForce()
-Q= elem1.getV1
-M12= elem1.getM1
+beam2d04.getResistingForce()
+Q4= beam2d04.getV1
+M61= beam2d04.getM1
 
-elem2= elements.getElement(2)
-elem2.getResistingForce()
-M21= elem2.getM1
+beam2d05.getResistingForce()
+M51= beam2d05.getM1
+M52= beam2d05.getM2
 
-elem4= elements.getElement(4)
-elem4.getResistingForce()
-Q4= elem4.getV1
-M61= elem4.getM1
-
-elem5= elements.getElement(5)
-elem5.getResistingForce()
-M51= elem5.getM1
-M52= elem5.getM2
-
-elem6= elements.getElement(6)
-elem6.getResistingForce()
-M71= elem6.getM2
+beam2d06.getResistingForce()
+M71= beam2d06.getM2
 
 ratioTheta2= abs((theta2-theta2Teor)/theta2Teor)
 ratioDelta6= abs((delta6-delta6Teor)/delta6Teor)

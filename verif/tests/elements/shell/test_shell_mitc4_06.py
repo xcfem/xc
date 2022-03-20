@@ -44,7 +44,6 @@ memb1= typical_materials.defElasticMembranePlateSection(preprocessor, "memb1",E,
 
 seedElemHandler= preprocessor.getElementHandler.seedElemHandler
 seedElemHandler.defaultMaterial= memb1.name
-seedElemHandler.defaultTag= 1
 elem= seedElemHandler.newElement("ShellMITC4",xc.ID([0,0,0,0]))
 
 
@@ -61,8 +60,7 @@ s.nDivI= NumDivI
 s.nDivJ= NumDivJ
 
 # Constraints
-f1= preprocessor.getSets.getSet("f1")
-f1.genMesh(xc.meshDir.I)
+s.genMesh(xc.meshDir.I)
 sides= s.getSides
 # Edge iterator
 for l in sides:
@@ -74,16 +72,15 @@ lp0= modelSpace.newLoadPattern(name= '0')
 
 
 
-f1= preprocessor.getSets.getSet("f1")
-nNodes= f1.getNumNodes
+nNodes= s.getNumNodes
  
-node= f1.getNodeIJK(1, int(NumDivI/2+1), int(NumDivJ/2+1))
+node= s.getNodeIJK(1, int(NumDivI/2+1), int(NumDivJ/2+1))
 # print("Central node: ", node.tag)
 # print("Central node coordinates: ", node.getCoo)
 lp0.newNodalLoad(node.tag,xc.Vector([0,0,-ptLoad,0,0,0])) # Concentrated load
 
 
-nElems= f1.getNumElements
+nElems= s.getNumElements
 # We add the load case to domain.
 modelSpace.addLoadCaseToDomain(lp0.name)
 
@@ -92,11 +89,7 @@ modelSpace.addLoadCaseToDomain(lp0.name)
 analysis= predefined_solutions.simple_static_linear(feProblem)
 analOk= analysis.analyze(1)
 
-f1= preprocessor.getSets.getSet("f1")
-
-nodes= preprocessor.getNodeHandler
-
-node= f1.getNodeIJK(1, int(NumDivI/2+1), int(NumDivJ/2+1))
+node= s.getNodeIJK(1, int(NumDivI/2+1), int(NumDivJ/2+1))
 # print("Central node: ", node.tag)
 # print("Central node coordinates: ", node.getCoo)
 # print("Central node displacements: ", node.getDisp)

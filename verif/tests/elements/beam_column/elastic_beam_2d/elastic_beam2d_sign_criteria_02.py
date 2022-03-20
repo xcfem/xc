@@ -19,14 +19,12 @@ from solution import predefined_solutions
 from model import predefined_spaces
 from materials import typical_materials
 
-def getInternalForcesBeginNode(elemTag):
+def getInternalForcesBeginNode(elem):
     ''':return: internal forces on the element's first node.''' 
-    elem= elements.getElement(elemTag)
     return (elem.getN1,elem.getV1,elem.getM1)
 
-def getInternalForcesEndNode(elemTag):
+def getInternalForcesEndNode(elem):
     ''':return: internal forces on the element's last node.''' 
-    elem= elements.getElement(elemTag)
     return (elem.getN2,elem.getV2,elem.getM2)
 
 def printResults(N1,V1,M1,N2,V2,M2,phaseRatios,phase):
@@ -63,9 +61,8 @@ preprocessor=  feProblem.getPreprocessor
 nodes= preprocessor.getNodeHandler
 # Problem type
 modelSpace= predefined_spaces.StructuralMechanics2D(nodes)
-nodes.defaultTag= 1 # First node number.
-nodes.newNodeXY(0,0.0)
-nodes.newNodeXY(L,0.0)
+n1= nodes.newNodeXY(0,0.0)
+n2= nodes.newNodeXY(L,0.0)
 
 lin= modelSpace.newLinearCrdTransf("lin")
 # Materials
@@ -78,18 +75,15 @@ section= typical_materials.defElasticSectionFromMechProp2d(preprocessor, "sectio
 elements= preprocessor.getElementHandler
 elements.defaultTransformation= lin.name
 elements.defaultMaterial= section.name
-elements.defaultTag= 1 # Tag for the next element.
-beam2d= elements.newElement("ElasticBeam2d",xc.ID([1,2]))
-
-
+beam2d= elements.newElement("ElasticBeam2d",xc.ID([n1.tag,n2.tag]))
 
 constraints= preprocessor.getBoundaryCondHandler
-modelSpace.fixNode000(1)
+modelSpace.fixNode000(n1.tag)
 
 # Load case definition.
 lp0= modelSpace.newLoadPattern(name= '0')
 eleLoad= lp0.newElementalLoad("beam2d_point_load")
-eleLoad.elementTags= xc.ID([1])
+eleLoad.elementTags= xc.ID([beam2d.tag])
 eleLoad.axialComponent= F
 eleLoad.x= xRelPtoAplic
 # We add the load case to domain.
@@ -99,10 +93,10 @@ modelSpace.addLoadCaseToDomain(lp0.name)
 analysis= predefined_solutions.simple_static_linear(feProblem)
 result= analysis.analyze(1)
 
-RF= elements.getElement(1).getResistingForce()
-(N1,V1,M1)= getInternalForcesBeginNode(1)
+RF= beam2d.getResistingForce()
+(N1,V1,M1)= getInternalForcesBeginNode(beam2d)
 NTeor= F
-(N2,V2,M2)= getInternalForcesEndNode(1)
+(N2,V2,M2)= getInternalForcesEndNode(beam2d)
 
 ratios= list()
 
@@ -118,7 +112,7 @@ ratios.extend(phaseRatios)
 lp0.removeFromDomain()
 lp1= modelSpace.newLoadPattern(name= '1')
 eleLoad= lp1.newElementalLoad("beam2d_point_load")
-eleLoad.elementTags= xc.ID([1])
+eleLoad.elementTags= xc.ID([beam2d.tag])
 eleLoad.transComponent= F
 eleLoad.x= xRelPtoAplic
 modelSpace.addLoadCaseToDomain("1")
@@ -127,11 +121,11 @@ modelSpace.addLoadCaseToDomain("1")
 analysis= predefined_solutions.simple_static_linear(feProblem)
 result= analysis.analyze(1)
 
-RF= elements.getElement(1).getResistingForce()
-(N1,V1,M1)= getInternalForcesBeginNode(1)
+RF= beam2d.getResistingForce()
+(N1,V1,M1)= getInternalForcesBeginNode(beam2d)
 V1Teor=F
 M1Teor= F*xRelPtoAplic*L
-(N2,V2,M2)= getInternalForcesEndNode(1)
+(N2,V2,M2)= getInternalForcesEndNode(beam2d)
 
 ratio10= abs(N1)+abs(N2)
 ratio11= abs((V1-V1Teor)/V1Teor)+abs(V2)

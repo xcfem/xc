@@ -26,9 +26,8 @@ feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor   
 nodes= preprocessor.getNodeHandler
 modelSpace= predefined_spaces.StructuralMechanics2D(nodes)
-nodes.defaultTag= 1 #First node number.
-nod= nodes.newNodeXY(0,0)
-nod= nodes.newNodeXY(L*math.sqrt(2)/2,L*math.sqrt(2)/2)
+n1= nodes.newNodeXY(0,0)
+n2= nodes.newNodeXY(L*math.sqrt(2)/2,L*math.sqrt(2)/2)
 
     
 # Geometric transformations
@@ -41,8 +40,7 @@ elements= preprocessor.getElementHandler
 elements.defaultTransformation= lin.name
 elements.defaultMaterial= section.name
 #  sintaxis: beam2d_02[<tag>] 
-elements.defaultTag= 1 #Tag for next element.
-beam2d= elements.newElement("ElasticBeam2d",xc.ID([1,2]))
+beam2d= elements.newElement("ElasticBeam2d",xc.ID([n1.tag,n2.tag]))
 coordTransf= beam2d.getCoordTransf
 centroideG= coordTransf.getPointGlobalCoordFromBasic(0.5)
 posCentroideG= geom.Pos2d(centroideG[0],centroideG[1])

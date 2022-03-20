@@ -40,9 +40,8 @@ preprocessor=  feProblem.getPreprocessor
 nodes= preprocessor.getNodeHandler
 # Problem type
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
-nodes.defaultTag= 1 # First node number.
-nod= nodes.newNodeXYZ(0,0.0,0.0)
-nod= nodes.newNodeXYZ(L,0.0,0.0)
+n1= nodes.newNodeXYZ(0,0.0,0.0)
+n2= nodes.newNodeXYZ(L,0.0,0.0)
 
 
 lin= modelSpace.newLinearCrdTransf("lin",xc.Vector([0,1,0]))
@@ -81,17 +80,16 @@ elements= preprocessor.getElementHandler
 elements.defaultTransformation= lin.name
 elements.defaultMaterial= agg.name
 elements.numSections= 2 # Number of sections along the element.
-elements.defaultTag= 1
-el= elements.newElement("ForceBeamColumn3d",xc.ID([1,2]))
+el= elements.newElement("ForceBeamColumn3d",xc.ID([n1.tag,n2.tag]))
 
 
 
 # Constraints
-modelSpace.fixNode000_000(1)
+modelSpace.fixNode000_000(n1.tag)
 
 # Load definition.
 lp0= modelSpace.newLoadPattern(name= '0')
-lp0.newNodalLoad(2,xc.Vector([0,0,0,M,0,0]))
+lp0.newNodalLoad(n2.tag,xc.Vector([0,0,0,M,0,0]))
 
 # We add the load case to domain.
 modelSpace.addLoadCaseToDomain(lp0.name)
@@ -101,16 +99,13 @@ result= analysis.analyze(10)
 
 
 nodes.calculateNodalReactions(True,1e-7) 
-nod2= nodes.getNode(2)
-delta= nod2.getDisp[3]  # z displacement of node 2
-nod1= nodes.getNode(1)
-RMT= nod1.getReaction[3] 
+delta= n2.getDisp[3]  # z displacement of node 2
+RMT= n1.getReaction[3] 
 
 elements= preprocessor.getElementHandler
 
-elem1= elements.getElement(1)
-elem1.getResistingForce()
-scc= elem1.getSections()[0]
+el.getResistingForce()
+scc= el.getSections()[0]
 
 M1= scc.getStressResultantComponent("T")
 

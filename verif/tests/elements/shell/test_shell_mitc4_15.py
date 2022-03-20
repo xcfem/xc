@@ -52,19 +52,17 @@ seedElemHandler.defaultTag= 1
 elem= seedElemHandler.newElement("ShellMITC4",xc.ID([0,0,0,0]))
 
 points= preprocessor.getMultiBlockTopology.getPoints
-pt= points.newPoint(1,geom.Pos3d(0.0,0.0,0.0))
-pt= points.newPoint(2,geom.Pos3d(CooMaxX,0.0,0.0))
-pt= points.newPoint(3,geom.Pos3d(CooMaxX,CooMaxY,0.0))
-pt= points.newPoint(4,geom.Pos3d(0.0,CooMaxY,0.0))
+pt1= points.newPoint(1,geom.Pos3d(0.0,0.0,0.0))
+pt2= points.newPoint(2,geom.Pos3d(CooMaxX,0.0,0.0))
+pt3= points.newPoint(3,geom.Pos3d(CooMaxX,CooMaxY,0.0))
+pt4= points.newPoint(4,geom.Pos3d(0.0,CooMaxY,0.0))
 surfaces= preprocessor.getMultiBlockTopology.getSurfaces
-surfaces.defaultTag= 1
-s= surfaces.newQuadSurfacePts(1,2,3,4)
+s= surfaces.newQuadSurfacePts(pt1.tag,pt2.tag,pt3.tag,pt4.tag)
 s.nDivI= NumDivI
 s.nDivJ= NumDivJ
 
 # Constraints
-f1= preprocessor.getSets.getSet("f1")
-f1.genMesh(xc.meshDir.I)
+s.genMesh(xc.meshDir.I)
 sides= s.getSides
 
 for l in sides:
@@ -74,11 +72,8 @@ for l in sides:
 # Load definition.
 lp0= modelSpace.newLoadPattern(name= '0')
 
-
-
-f1= preprocessor.getSets.getSet("f1")
-nNodes= f1.getNumNodes
-capa1= f1.getNodeLayers.getLayer(0)
+nNodes= s.getNumNodes
+capa1= s.getNodeLayers.getLayer(0)
 nf= capa1.nRow
 nc= capa1.nCol
 for i in range(2,nf):
@@ -87,8 +82,7 @@ for i in range(2,nf):
     lp0.newNodalLoad(node.tag,xc.Vector([0,0,-nLoad,0,0,0])) # Concentrated load
 
 
-
-nElems= f1.getNumElements
+nElems= s.getNumElements
 # We add the load case to domain.
 modelSpace.addLoadCaseToDomain(lp0.name)
 
@@ -97,11 +91,7 @@ modelSpace.addLoadCaseToDomain(lp0.name)
 analysis= predefined_solutions.simple_static_linear(feProblem)
 analOk= analysis.analyze(1)
 
-f1= preprocessor.getSets.getSet("f1")
-
-nodes= preprocessor.getNodeHandler
-
-node= f1.getNodeIJK(1, int(NumDivI/2+1), int(NumDivJ/2+1))
+node= s.getNodeIJK(1, int(NumDivI/2+1), int(NumDivJ/2+1))
 # print("Central node: ", node.tag)
 # print("Central node coordinates: ", node.getCoo)
 # print("Central node displacements: ", node.getDisp)

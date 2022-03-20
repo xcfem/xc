@@ -44,7 +44,6 @@ else:
   pt3 = points.newPoint(geom.Pos3d(0.0,0.0,L))  # Right end
 
 surfaces = preprocessor.getMultiBlockTopology.getSurfaces  # Face container.
-surfaces.defaultTag = 1
 face0 = surfaces.newQuadSurfacePts(pt0.tag, pt1.tag, pt2.tag, pt3.tag)
 # face0.setElemSizeIJ(0.5,0.25) # Element size in (pt0->pt1,pt1->pt2) directions 
 face0.setElemSizeIJ(0.5,0.5) # Element size in (pt0->pt1,pt1->pt2) directions 
@@ -80,8 +79,7 @@ elem = seedElemHandler.newElement("ShellMITC9", xc.ID([0,0,0,0,0,0,0,0,0]))
 
 
 # *********Mesh*********
-f1 = preprocessor.getSets.getSet("f1")
-f1.genMesh(xc.meshDir.I)
+face0.genMesh(xc.meshDir.I)
 
 
 # *********Boundary conditions*********

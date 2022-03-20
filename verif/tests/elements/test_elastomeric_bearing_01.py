@@ -50,7 +50,6 @@ KTHZ= neop.getMaterial(5).E
 nodes= preprocessor.getNodeHandler
 # Problem type
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
-nodes.defaultTag= 1 # First node number.
 nod1= nodes.newNodeXYZ(1,1,1)
 nod2= nodes.newNodeXYZ(1,1,1)
 

@@ -21,9 +21,8 @@ feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor   
 nodes= preprocessor.getNodeHandler
 modelSpace= predefined_spaces.StructuralMechanics2D(nodes)
-nodes.defaultTag= 1 #First node number.
-nod= nodes.newNodeXY(0,0)
-nod= nodes.newNodeXY(5,5)
+n1= nodes.newNodeXY(0,0)
+n2= nodes.newNodeXY(5,5)
 
 # Geometric transformations
 lin= modelSpace.newCorotCrdTransf("lin")
@@ -35,8 +34,7 @@ section= typical_materials.defElasticSection2d(preprocessor, "section",1,1,1)
 elements= preprocessor.getElementHandler
 elements.defaultTransformation= lin.name # Coordinate transformation for the new elements
 elements.defaultMaterial= section.name
-elements.defaultTag= 1 #Tag for next element.
-beam2d= elements.newElement("ElasticBeam2d",xc.ID([1,2]))
+beam2d= elements.newElement("ElasticBeam2d",xc.ID([n1.tag,n2.tag]))
 
 crdTransf= beam2d.getCoordTransf
 # print("vector I:",getIVector)
@@ -47,12 +45,6 @@ vJLocal= crdTransf.getVectorLocalCoordFromGlobal(crdTransf.getJVector)
 # print("vector J en locales:",vJLocal)
 ratio1= (vILocal-xc.Vector([1,0])).Norm()
 ratio2= (vJLocal-xc.Vector([0,1])).Norm()
-
-
-
-
-    
-
 
 import os
 from misc_utils import log_messages as lmsg

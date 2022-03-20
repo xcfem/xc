@@ -34,9 +34,8 @@ preprocessor=  feProblem.getPreprocessor
 nodes= preprocessor.getNodeHandler
 # Problem type
 modelSpace= predefined_spaces.StructuralMechanics2D(nodes)
-nodes.defaultTag= 1 # First node number.
-nod= nodes.newNodeXY(0,0.0)
-nod= nodes.newNodeXY(L,0.0)
+n1= nodes.newNodeXY(0,0.0)
+n2= nodes.newNodeXY(L,0.0)
 
 
 # Geometric transformations
@@ -49,15 +48,15 @@ section= typical_materials.defElasticShearSection2d(preprocessor, "section",A,E,
 elements= preprocessor.getElementHandler
 elements.defaultTransformation= lin.name # Coordinate transformation for the new elements
 elements.defaultMaterial= section.name
-beam2d= elements.newElement("ForceBeamColumn2d",xc.ID([1,2]))
+beam2d= elements.newElement("ForceBeamColumn2d",xc.ID([n1.tag,n2.tag]))
 
 # Constraints
 constraints= preprocessor.getBoundaryCondHandler
-modelSpace.fixNode000(1)
+modelSpace.fixNode000(n1.tag)
 
 # Load definition.
 lp0= modelSpace.newLoadPattern(name= '0')
-lp0.newNodalLoad(2,xc.Vector([0,0,M]))
+lp0.newNodalLoad(n2.tag,xc.Vector([0,0,M]))
 # We add the load case to domain.
 modelSpace.addLoadCaseToDomain(lp0.name)
 # Solution procedure
@@ -66,17 +65,14 @@ result= analysis.analyze(10)
 
 
 nodes.calculateNodalReactions(True,1e-7) 
-nod2= nodes.getNode(2)
-delta= nod2.getDisp[1]  # z displacement of node 2
-theta= nod2.getDisp[2]  # z rotation of the node
-nod1= nodes.getNode(1)
-RM= nod1.getReaction[2] 
+delta= n2.getDisp[1]  # z displacement of node 2
+theta= n2.getDisp[2]  # z rotation of the node
+RM= n1.getReaction[2] 
 
 elements= preprocessor.getElementHandler
 
-elem1= elements.getElement(0)
-elem1.getResistingForce()
-scc= elem1.getSections()[0]
+beam2d.getResistingForce()
+scc= beam2d.getSections()[0]
 
 V= scc.getStressResultantComponent("Vy")
 M1= scc.getStressResultantComponent("Mz")

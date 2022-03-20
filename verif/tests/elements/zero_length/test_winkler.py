@@ -75,7 +75,6 @@ l2.genMesh(xc.meshDir.I)
 
 fixedNodeId= 0
 idCentralNode= 0
-idElem= preprocessor.getElementHandler.defaultTag
 
 # Fix end nodes.
 constraints= preprocessor.getBoundaryCondHandler

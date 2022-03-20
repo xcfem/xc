@@ -32,9 +32,8 @@ feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
 nodes= preprocessor.getNodeHandler
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
-nodes.defaultTag= 1 # First node number.
-nod= nodes.newNodeXYZ(0.0,0.0,0.0)
-nod= nodes.newNodeXYZ(L,0.0,0)
+n1= nodes.newNodeXYZ(0.0,0.0,0.0)
+n2= nodes.newNodeXYZ(L,0.0,0)
 
 # Materials
 sectionProperties= xc.CrossSectionProperties3d()
@@ -50,7 +49,7 @@ elements= preprocessor.getElementHandler
 elements.defaultTransformation= lin.name
 elements.defaultMaterial= section.name
 elements.defaultTag= 1 # Tag for the next element.
-beam3d= elements.newElement("ElasticBeam3d",xc.ID([1,2]))
+beam3d= elements.newElement("ElasticBeam3d",xc.ID([n1.tag,n2.tag]))
 
 
 
@@ -64,12 +63,12 @@ ratio2= ((fuerte[0])**2+(fuerte[1])**2)
 
 # Constraints
 
-modelSpace.fixNode000_000(1)
+modelSpace.fixNode000_000(n1.tag)
 
 # Loads definition
 # Load case definition.
 lp0= modelSpace.newLoadPattern(name= '0') 
-lp0.newNodalLoad(2,xc.Vector([0,-F,F,0,0,0]))
+lp0.newNodalLoad(n2.tag,xc.Vector([0,-F,F,0,0,0]))
 # We add the load case to domain.
 modelSpace.addLoadCaseToDomain(lp0.name)
 
@@ -79,13 +78,8 @@ result= analysis.analyze(1)
 deltaYTeor= (-F*L**3/(3*E*Iz))
 deltaZTeor= (F*L**3/(3*E*Iy))
 
-nodes= preprocessor.getNodeHandler
-
-nod2= nodes.getNode(2)
-deltaY= nod2.getDisp[1]
-deltaZ= nod2.getDisp[2] # Node 2 yAxis displacement
-
-
+deltaY= n2.getDisp[1]
+deltaZ= n2.getDisp[2] # Node 2 yAxis displacement
 
 ratio3= (deltaY-deltaYTeor)/deltaYTeor
 ratio4= (deltaZ-deltaZTeor)/deltaZTeor
