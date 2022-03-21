@@ -108,7 +108,13 @@ class OutputHandler(object):
         if(setsToDisplay==None):
             setsToDisplay= [self.modelSpace.getTotalSet()]
         if(caption==None):
-            caption= 'mesh'
+            setNames= ''
+            if(type(setsToDisplay)==list):
+                for s in setsToDisplay:
+                    setNames+= s.name+' '
+            else:
+                setNames= setsToDisplay.name    
+            caption= setNames+'; mesh'
         displaySettings= vtk_FE_graphic.DisplaySettingsFE()
         displaySettings.cameraParameters= self.getCameraParameters()
         displaySettings.displayMesh(xcSets=setsToDisplay,caption= caption, scaleConstr= self.outputStyle.constraintsScaleFactor, fileName= fileName, defFScale= defFScale)
