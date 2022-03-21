@@ -29,42 +29,36 @@ feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
 nodes= preprocessor.getNodeHandler
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
-nodes.defaultTag= 1 # First node number.
-nod= nodes.newNodeXYZ(0,0,0)
-nod= nodes.newNodeXYZ(L,0,0)
-nod= nodes.newNodeXYZ(L,L,0)
-nod= nodes.newNodeXYZ(0,L,0)
-
+n1= nodes.newNodeXYZ(0,0,0)
+n2= nodes.newNodeXYZ(L,0,0)
+n3= nodes.newNodeXYZ(L,L,0)
+n4= nodes.newNodeXYZ(0,L,0)
 
 # Materials definition
 memb1= typical_materials.defElasticMembranePlateSection(preprocessor, "memb1",E,nu,0.0,t)
 
 elements= preprocessor.getElementHandler
 elements.defaultMaterial= memb1.name
-elements.defaultTag= 1
-elem= elements.newElement("ShellMITC4",xc.ID([1,2,3,4]))
+elem= elements.newElement("ShellMITC4",xc.ID([n1.tag,n2.tag,n3.tag,n4.tag]))
 
 
 # Constraints
-modelSpace.fixNode000_FFF(1)
-spc= modelSpace.constraints.newSPConstraint(2,1,0.0)
-spc= modelSpace.constraints.newSPConstraint(2,2,0.0)
-spc= modelSpace.constraints.newSPConstraint(3,2,0.0)
-spc= modelSpace.constraints.newSPConstraint(4,2,0.0)
+modelSpace.fixNode000_FFF(n1.tag)
+spc= modelSpace.constraints.newSPConstraint(n2.tag,1,0.0)
+spc= modelSpace.constraints.newSPConstraint(n2.tag,2,0.0)
+spc= modelSpace.constraints.newSPConstraint(n3.tag,2,0.0)
+spc= modelSpace.constraints.newSPConstraint(n4.tag,2,0.0)
 
 # Loads definition
 lp0= modelSpace.newLoadPattern(name= '0')
-lp0.newNodalLoad(3,xc.Vector([0,F,0,0,0,0]))
-lp0.newNodalLoad(4,xc.Vector([0,-F,0,0,0,0]))
+lp0.newNodalLoad(n3.tag,xc.Vector([0,F,0,0,0,0]))
+lp0.newNodalLoad(n4.tag,xc.Vector([0,-F,0,0,0,0]))
 # We add the load case to domain.
 modelSpace.addLoadCaseToDomain(lp0.name)
-
-
 
 # Solution
 analysis= predefined_solutions.simple_static_linear(feProblem)
 result= analysis.analyze(1)
-
 
 n1Medio= 0.0
 n2Medio= 0.0
@@ -83,7 +77,6 @@ for m in mats:
 
 n1Medio= n1Medio/4
 n2Medio= n2Medio/4
-
 
 n1MedioTeor= 0.0
 n2MedioTeor= 0.0

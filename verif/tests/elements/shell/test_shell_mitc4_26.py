@@ -28,34 +28,29 @@ feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
 nodes= preprocessor.getNodeHandler
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
-nodes.newNodeIDXYZ(1,0,0,0)
-nodes.newNodeIDXYZ(2,L,0,0)
-nodes.newNodeIDXYZ(3,L,L,0)
-nodes.newNodeIDXYZ(4,0,L,0)
-
+n1= nodes.newNodeXYZ(0,0,0)
+n2= nodes.newNodeXYZ(L,0,0)
+n3= nodes.newNodeXYZ(L,L,0)
+n4= nodes.newNodeXYZ(0,L,0)
 
 # Materials definition
 memb1= typical_materials.defElasticMembranePlateSection(preprocessor, "memb1",E,nu,0.0,t)
 
 elements= preprocessor.getElementHandler
 elements.defaultMaterial= memb1.name
-elements.defaultTag= 1
-elem= elements.newElement("ShellMITC4",xc.ID([1,2,3,4]))
+elem= elements.newElement("ShellMITC4",xc.ID([n1.tag,n2.tag,n3.tag,n4.tag]))
 
 
 # Constraints
-
-modelSpace.fixNode000_000(1)
-modelSpace.fixNode000_000(4)
+modelSpace.fixNode000_000(n1.tag)
+modelSpace.fixNode000_000(n4.tag)
 
 # Loads definition
 lp0= modelSpace.newLoadPattern(name= '0')
-lp0.newNodalLoad(2,xc.Vector([0,0,F,0,0,0]))
-lp0.newNodalLoad(3,xc.Vector([0,0,F,0,0,0]))
+lp0.newNodalLoad(n2.tag,xc.Vector([0,0,F,0,0,0]))
+lp0.newNodalLoad(n3.tag,xc.Vector([0,0,F,0,0,0]))
 # We add the load case to domain.
 modelSpace.addLoadCaseToDomain(lp0.name)
-
-
 
 # Solution
 analysis= predefined_solutions.simple_static_linear(feProblem)
@@ -68,8 +63,8 @@ elem.getResistingForce()
 mats= elem.getPhysicalProperties.getVectorMaterials # Materials at gauss points.
 # Gauss points iterator
 for m in mats:
-  q13MedioElem= q13MedioElem+m.getStressResultantComponent("q13")
-  q23MedioElem= q23MedioElem+m.getStressResultantComponent("q23")
+    q13MedioElem= q13MedioElem+m.getStressResultantComponent("q13")
+    q23MedioElem= q23MedioElem+m.getStressResultantComponent("q23")
 
 q13MedioElem= q13MedioElem/4
 q23MedioElem= q23MedioElem/4

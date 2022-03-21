@@ -47,7 +47,6 @@ memb1= typical_materials.defElasticMembranePlateSection(preprocessor, "memb1",E,
 
 seedElemHandler= preprocessor.getElementHandler.seedElemHandler
 seedElemHandler.defaultMaterial= memb1.name
-seedElemHandler.defaultTag= 1
 elem= seedElemHandler.newElement("ShellMITC4",xc.ID([0,0,0,0]))
 
 points= preprocessor.getMultiBlockTopology.getPoints
@@ -60,32 +59,26 @@ s= surfaces.newQuadSurfacePts(pt1.tag,pt2.tag,pt3.tag,pt4.tag)
 s.nDivI= NumDivI
 s.nDivJ= NumDivJ
 
-associatedSetName= 'f'+str(s.tag)
-f0= preprocessor.getSets.getSet(associatedSetName)
-f0.genMesh(xc.meshDir.I)
+s.genMesh(xc.meshDir.I)
 sides= s.getSides
 # Edge iterator
 for l in sides:
-  for i in l.getEdge.getNodeTags():
-    modelSpace.fixNode000_FFF(i)
+    for i in l.getEdge.getNodeTags():
+        modelSpace.fixNode000_FFF(i)
 
 # Load definition.
 lp0= modelSpace.newLoadPattern(name= '0')
 
-
-
-nNodes= f0.getNumNodes
-layer1= f0.getNodeLayers.getLayer(0)
+nNodes= s.getNumNodes
+layer1= s.getNodeLayers.getLayer(0)
 nf= layer1.nRow
 nc= layer1.nCol
 for i in range(2,nf):
-  for j in range(2,nc):
-    node= layer1.getNode(i,j)
-    lp0.newNodalLoad(node.tag,xc.Vector([0,0,-nLoad,0,0,0])) # Concentrated load
+    for j in range(2,nc):
+        node= layer1.getNode(i,j)
+        lp0.newNodalLoad(node.tag,xc.Vector([0,0,-nLoad,0,0,0])) # Concentrated load
 
-
-
-nElems= f0.getNumElements
+nElems= s.getNumElements
 # We add the load case to domain.
 modelSpace.addLoadCaseToDomain(lp0.name)
 
@@ -94,10 +87,7 @@ modelSpace.addLoadCaseToDomain(lp0.name)
 analysis= predefined_solutions.simple_static_linear(feProblem)
 analOk= analysis.analyze(1)
 
-
-nodes= preprocessor.getNodeHandler
-
-node= f0.getNodeIJK(1, int(NumDivI/2+1), int(NumDivJ/2+1))
+node= s.getNodeIJK(1, int(NumDivI/2+1), int(NumDivJ/2+1))
 # print("Central node: ", node.tag)
 # print("Central node coordinates: ", node.getCoo)
 # print("Central node displacements: ", node.getDisp)

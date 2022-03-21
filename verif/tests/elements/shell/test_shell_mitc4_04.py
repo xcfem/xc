@@ -47,7 +47,6 @@ memb1= typical_materials.defElasticMembranePlateSection(preprocessor, "memb1",E,
 
 seedElemHandler= preprocessor.getElementHandler.seedElemHandler
 seedElemHandler.defaultMaterial= memb1.name
-seedElemHandler.defaultTag= 1
 elem= seedElemHandler.newElement("ShellMITC4",xc.ID([0,0,0,0]))
 
 
@@ -58,26 +57,23 @@ pt2= points.newPoint(geom.Pos3d(CooMaxX,0.0,0.0))
 pt3= points.newPoint(geom.Pos3d(CooMaxX,CooMaxY,0.0))
 pt4= points.newPoint(geom.Pos3d(0.0,CooMaxY,0.0))
 surfaces= preprocessor.getMultiBlockTopology.getSurfaces
-surfaces.defaultTag= 1
 s= surfaces.newQuadSurfacePts(pt1.tag,pt2.tag,pt3.tag,pt4.tag)
 s.nDivI= NumDivI
 s.nDivJ= NumDivJ
 
 
-f1= preprocessor.getSets.getSet("f1")
-f1.genMesh(xc.meshDir.I)
+s.genMesh(xc.meshDir.I)
 
 # Constraints
 sides= s.getSides
 # Edge iterator
 for l in sides:
-  for i in l.getEdge.getNodeTags():
-    modelSpace.fixNode000_FFF(i)
+    for i in l.getEdge.getNodeTags():
+        modelSpace.fixNode000_FFF(i)
 
 # Loads definition
 lp0= modelSpace.newLoadPattern(name= '0')
 
-f1= preprocessor.getSets.getSet("f1")
 nNodes= s.getNumNodes
 
 node= s.getNodeIJK(1, int(NumDivI/2+1), int(NumDivJ/2+1))

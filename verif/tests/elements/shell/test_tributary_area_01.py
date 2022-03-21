@@ -45,19 +45,17 @@ memb1= typical_materials.defElasticMembranePlateSection(preprocessor, "memb1",E,
 
 seedElemHandler= preprocessor.getElementHandler.seedElemHandler
 seedElemHandler.defaultMaterial= memb1.name
-seedElemHandler.defaultTag= 1
 elem= seedElemHandler.newElement("ShellMITC4",xc.ID([0,0,0,0]))
 
 
 
 points= preprocessor.getMultiBlockTopology.getPoints
-pt= points.newPoint(1,geom.Pos3d(0.0,0.0,0.0))
-pt= points.newPoint(2,geom.Pos3d(CooMaxX,0.0,0.0))
-pt= points.newPoint(3,geom.Pos3d(CooMaxX,CooMaxY,0.0))
-pt= points.newPoint(4,geom.Pos3d(0.0,CooMaxY,0.0))
+pt1= points.newPoint(geom.Pos3d(0.0,0.0,0.0))
+pt2= points.newPoint(geom.Pos3d(CooMaxX,0.0,0.0))
+pt3= points.newPoint(geom.Pos3d(CooMaxX,CooMaxY,0.0))
+pt4= points.newPoint(geom.Pos3d(0.0,CooMaxY,0.0))
 surfaces= preprocessor.getMultiBlockTopology.getSurfaces
-surfaces.defaultTag= 1
-s= surfaces.newQuadSurfacePts(1,2,3,4)
+s= surfaces.newQuadSurfacePts(pt1.tag,pt2.tag,pt3.tag,pt4.tag)
 s.nDivI= NumDivI
 s.nDivJ= NumDivJ
 
@@ -68,8 +66,8 @@ constraints= preprocessor.getBoundaryCondHandler
 
 sides= s.getSides
 for l in sides:
-  for i in l.getEdge.getNodeTags():
-    modelSpace.fixNode000_FFF(i)
+    for i in l.getEdge.getNodeTags():
+        modelSpace.fixNode000_FFF(i)
 
 # Load definition.
 lp0= modelSpace.newLoadPattern(name= '0')
@@ -82,10 +80,10 @@ capa1= s.getNodeLayers.getLayer(0)
 nf= capa1.nRow
 nc= capa1.nCol
 for i in range(2,nf):
-  for j in range(2,nc):
-    node= capa1.getNode(i,j)
-    tributaryArea= node.getTributaryArea()
-    lp0.newNodalLoad(node.tag,xc.Vector([0,0,-unifLoad*tributaryArea,0,0,0])) # Concentrated load
+    for j in range(2,nc):
+        node= capa1.getNode(i,j)
+        tributaryArea= node.getTributaryArea()
+        lp0.newNodalLoad(node.tag,xc.Vector([0,0,-unifLoad*tributaryArea,0,0,0])) # Concentrated load
 
 nElems= s.getNumElements
 # We add the load case to domain.
