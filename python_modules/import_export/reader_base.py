@@ -73,7 +73,7 @@ class ReaderBase(object):
 
     def getNearestPoint(self, pt):
         return self.kPoints[self.getIndexNearestPoint(pt)]
-    
+
     def exportBlockTopology(self, name):
         retval= bte.BlockData()
         retval.name= name
@@ -81,8 +81,8 @@ class ReaderBase(object):
         retval.logMessage= '# imported from file: '+self.fileName+' on '
         retval.logMessage+= str(datetime.datetime.now())
 
-        counter= 0
         if(self.kPoints):
+            counter= 0
             for p in self.kPoints:
                 key= self.kPointsNames[counter]
                 bp= bte.BlockProperties()
@@ -102,6 +102,7 @@ class ReaderBase(object):
                 retval.appendBlock(block)
                 counter+= 1
 
+            counter= 0
             for name in self.getNamesToImport():
                 fg= self.facesTree[name]
                 for key, face in fg.items():
