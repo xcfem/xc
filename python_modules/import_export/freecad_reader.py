@@ -381,7 +381,6 @@ class FreeCADImport(reader_base.ReaderBase):
                             compoundType= 'Compound'
                         if(compoundContainer):
                             for tag, lnk in enumerate(compoundContainer):
-                                #componentLabel= lnk.Label
                                 componentLabel= obj.Label+'.'+compoundType+'.'+str(tag)
                                 if(componentLabel in self.compounds):
                                     self.compounds[componentLabel].add({objLabel})
