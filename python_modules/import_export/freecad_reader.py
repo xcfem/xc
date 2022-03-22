@@ -284,7 +284,6 @@ class FreeCADImport(reader_base.ReaderBase):
                         for i in range(0,len(edges)):
                             names.append(ssName+'.'+str(i))
                         import_edges(edges, names, labelName+'.'+ssName, attributes)
-                        #import_wire(ss)
                 elif(shapeType=='Edge'):
                     className= type(self).__name__
                     methodName= sys._getframe(0).f_code.co_name
@@ -372,10 +371,18 @@ class FreeCADImport(reader_base.ReaderBase):
                     # Store compound components.
                     if(shapeType=='Compound'):
                         objTypeId= obj.TypeId
+                        compoundContainer= None
+                        if(objTypeId=='App::DocumentObjectGroup'): # Object group.
+                            compoundContainer= obj.Group
+                            compoundType= 'Group'
                         #draftType= getType(obj)
-                        if(objTypeId!='Part::FeaturePython'):
-                            for lnk in obj.Links:
-                                componentLabel= lnk.Label
+                        elif(objTypeId!='Part::FeaturePython'):
+                            compoundContainer= obj.Links
+                            compoundType= 'Compound'
+                        if(compoundContainer):
+                            for tag, lnk in enumerate(compoundContainer):
+                                #componentLabel= lnk.Label
+                                componentLabel= obj.Label+'.'+compoundType+'.'+str(tag)
                                 if(componentLabel in self.compounds):
                                     self.compounds[componentLabel].add({objLabel})
                                 else:
@@ -390,8 +397,6 @@ class FreeCADImport(reader_base.ReaderBase):
                         pDict.attributes['belongsTo'].extend(compound)
                     else:
                         pDict.attributes['belongsTo']= compound
-                        
-
               
     def getNamesToImport(self):
         ''' Return the names of the objects to import.'''

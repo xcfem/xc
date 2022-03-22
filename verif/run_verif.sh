@@ -528,16 +528,19 @@ python tests/preprocessor/grid_model/test_grid_model_01.py
 python tests/preprocessor/grid_model/test_grid_model_02.py
 python tests/preprocessor/grid_model/test_elliptical_coord_01.py
 echo "$BLEU" "  Import/export tests." "$NORMAL"
-python tests/preprocessor/import_export/test_split_lines.py
-python tests/preprocessor/import_export/test_dxf_import_01.py
-python tests/preprocessor/import_export/test_dxf_groups.py
-python tests/preprocessor/import_export/test_dxf_surfaces.py
-python tests/preprocessor/import_export/test_dxf_export_01.py
-python tests/preprocessor/import_export/test_ifc_points.py
-python tests/preprocessor/import_export/test_ifc_lines.py
-python tests/preprocessor/import_export/test_ifc_surface_01.py
-python tests/preprocessor/import_export/test_ifc_surface_02.py
-python tests/preprocessor/import_export/test_ifc_pinned_member.py
+echo "$BLEU" "    DXF tests." "$NORMAL"
+python tests/preprocessor/import_export/dxf/test_split_lines.py
+python tests/preprocessor/import_export/dxf/test_dxf_import_01.py
+python tests/preprocessor/import_export/dxf/test_dxf_groups.py
+python tests/preprocessor/import_export/dxf/test_dxf_surfaces.py
+python tests/preprocessor/import_export/dxf/test_dxf_export_01.py
+echo "$BLEU" "    FreeCAD tests." "$NORMAL"
+python tests/preprocessor/import_export/freecad/test_freecad_groups.py
+python tests/preprocessor/import_export/freecad/test_ifc_points.py
+python tests/preprocessor/import_export/freecad/test_ifc_lines.py
+python tests/preprocessor/import_export/freecad/test_ifc_surface_01.py
+python tests/preprocessor/import_export/freecad/test_ifc_surface_02.py
+python tests/preprocessor/import_export/freecad/test_ifc_pinned_member.py
 
 #Tests about constraints.
 echo "$BLEU" "Displacement constraints tests." "$NORMAL"
