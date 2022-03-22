@@ -37,7 +37,6 @@ pot.defineMaterials(preprocessor)
 
 nodes= preprocessor.getNodeHandler
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
-nodes.defaultTag= 1 # First node number.
 nod1= nodes.newNodeXYZ(1,1,1)
 nod2= nodes.newNodeXYZ(1,1,1)
 
@@ -46,7 +45,7 @@ nod2= nodes.newNodeXYZ(1,1,1)
 newElement= pot.putOnYBetweenNodes(modelSpace, nod1.tag,nod2.tag)
 
 # Constraints
-modelSpace.fixNode000_000(1)
+modelSpace.fixNode000_000(nod1.tag)
 spc= modelSpace.constraints.newSPConstraint(nod2.tag,3,0.0) # Node 2
 spc= modelSpace.constraints.newSPConstraint(nod2.tag,4,0.0)
 spc= modelSpace.constraints.newSPConstraint(nod2.tag,5,0.0)

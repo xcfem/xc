@@ -36,7 +36,6 @@ nod16= nodes.newNodeXYZ(0,1,1)
 
 elements= preprocessor.getElementHandler
 elements.defaultMaterial= elast3d.name
-elements.defaultTag= 1 # Tag for the next element.
 brick= elements.newElement("Brick",xc.ID([nod9.tag,nod10.tag,nod11.tag,nod12.tag,nod13.tag,nod14.tag,nod15.tag,nod16.tag]))
 
 constraints= preprocessor.getBoundaryCondHandler

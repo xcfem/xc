@@ -30,47 +30,45 @@ elast3d= typical_materials.defElasticIsotropic3d(preprocessor, "elast3d",200000,
 
 nodes= preprocessor.getNodeHandler 
 modelSpace= predefined_spaces.SolidMechanics3D(nodes)
-nodes.defaultTag= 1 # Next node number.
-nod1= nodes.newNodeXYZ(100,0,100)
-nod2= nodes.newNodeXYZ(0,0,100)
-nod3= nodes.newNodeXYZ(0,0,200)
-nod4= nodes.newNodeXYZ(100,0,200)
-nod5= nodes.newNodeXYZ(100,100,100)
-nod6= nodes.newNodeXYZ(0,100,100)
-nod7= nodes.newNodeXYZ(0,100,200)
-nod8= nodes.newNodeXYZ(100,100,200)
+n1= nodes.newNodeXYZ(100,0,100)
+n2= nodes.newNodeXYZ(0,0,100)
+n3= nodes.newNodeXYZ(0,0,200)
+n4= nodes.newNodeXYZ(100,0,200)
+n5= nodes.newNodeXYZ(100,100,100)
+n6= nodes.newNodeXYZ(0,100,100)
+n7= nodes.newNodeXYZ(0,100,200)
+n8= nodes.newNodeXYZ(100,100,200)
 
-nod9= nodes.newNodeXYZ(100,200,100)
-nod10= nodes.newNodeXYZ(0,200,100)
-nod11= nodes.newNodeXYZ(0,200,200)
-nod12= nodes.newNodeXYZ(100,200,200)
-nod13= nodes.newNodeXYZ(100,300,100)
-nod14= nodes.newNodeXYZ(0,300,100)
-nod15= nodes.newNodeXYZ(0,300,200)
+n9= nodes.newNodeXYZ(100,200,100)
+n10= nodes.newNodeXYZ(0,200,100)
+n11= nodes.newNodeXYZ(0,200,200)
+n12= nodes.newNodeXYZ(100,200,200)
+n13= nodes.newNodeXYZ(100,300,100)
+n14= nodes.newNodeXYZ(0,300,100)
+n15= nodes.newNodeXYZ(0,300,200)
 
-nod16= nodes.newNodeXYZ(100,300,200)
-nod17= nodes.newNodeXYZ(100,200,0)
-nod18= nodes.newNodeXYZ(100,300,0)
-nod19= nodes.newNodeXYZ(0,300,0)
-nod20= nodes.newNodeXYZ(0,200,0)
+n16= nodes.newNodeXYZ(100,300,200)
+n17= nodes.newNodeXYZ(100,200,0)
+n18= nodes.newNodeXYZ(100,300,0)
+n19= nodes.newNodeXYZ(0,300,0)
+n20= nodes.newNodeXYZ(0,200,0)
 
 elements= preprocessor.getElementHandler
 elements.defaultMaterial= elast3d.name
-elements.defaultTag= 1 # Tag for the next element.
 
-brick1= elements.newElement("Brick",xc.ID([1,2,3,4,5,6,7,8]))
-brick2= elements.newElement("Brick",xc.ID([5,6,7,8,9,10,11,12]))
-brick3= elements.newElement("Brick",xc.ID([9,10,11,12,13,14,15,16]))
-brick4= elements.newElement("Brick",xc.ID([9,10,14,13,17,20,19,18]))
+brick1= elements.newElement("Brick",xc.ID([n1.tag, n2.tag, n3.tag, n4.tag, n5.tag, n6.tag, n7.tag, n8.tag]))
+brick2= elements.newElement("Brick",xc.ID([n5.tag, n6.tag, n7.tag, n8.tag, n9.tag, n10.tag, n11.tag, n12.tag]))
+brick3= elements.newElement("Brick",xc.ID([n9.tag, n10.tag, n11.tag, n12.tag, n13.tag, n14.tag, n15.tag, n16.tag]))
+brick4= elements.newElement("Brick",xc.ID([n9.tag, n10.tag, n14.tag, n13.tag, n17.tag, n20.tag, n19.tag, n18.tag]))
 
-nod17.fix(xc.ID([0,1,2]),xc.Vector([0,0,0]))
-nod18.fix(xc.ID([0,1,2]),xc.Vector([0,0,0]))
-nod19.fix(xc.ID([0,1,2]),xc.Vector([0,0,0]))
-nod20.fix(xc.ID([0,1,2]),xc.Vector([0,0,0]))
+n17.fix(xc.ID([0,1,2]),xc.Vector([0,0,0]))
+n18.fix(xc.ID([0,1,2]),xc.Vector([0,0,0]))
+n19.fix(xc.ID([0,1,2]),xc.Vector([0,0,0]))
+n20.fix(xc.ID([0,1,2]),xc.Vector([0,0,0]))
 
 # Load definition.
 lp0= modelSpace.newLoadPattern(name= '0')
-lp0.newNodalLoad(4,xc.Vector([0,0,-80000]))
+lp0.newNodalLoad(n4.tag,xc.Vector([0,0,-80000]))
 # We add the load case to domain.
 modelSpace.addLoadCaseToDomain(lp0.name)
 
@@ -86,8 +84,7 @@ analysis= predefined_solutions.simple_static_linear(feProblem)
 result= analysis.analyze(1)
 
 dN1Teor= xc.Vector([-2.1569e-2,-3.7891e-3,-4.0982e-1])
-nodes= preprocessor.getNodeHandler
-dN1= nodes.getNode(1).getDisp
+dN1= n1.getDisp
 
 ratio= (dN1-dN1Teor).Norm()
 

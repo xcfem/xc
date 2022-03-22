@@ -37,11 +37,8 @@ pot.defineMaterials(preprocessor)
 
 nodes= preprocessor.getNodeHandler
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
-nodes.defaultTag= 1 # First node number.
 nod1= nodes.newNodeXYZ(1,1,1)
 nod2= nodes.newNodeXYZ(1,1,1)
-
-
 
 newElement= pot.putBetweenNodes(modelSpace, nod1.tag,nod2.tag)
 
