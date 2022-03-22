@@ -57,7 +57,6 @@ pd= modelSpace.newPDeltaCrdTransf("pd")
 seedElemHandler= preprocessor.getElementHandler.seedElemHandler
 seedElemHandler.defaultTransformation= pd.name
 seedElemHandler.defaultMaterial= scc.name
-seedElemHandler.defaultTag= 1 # Tag for next element.
 beam2d= seedElemHandler.newElement("ElasticBeam2d",xc.ID([0,0]))
 
 points= preprocessor.getMultiBlockTopology.getPoints
@@ -71,18 +70,18 @@ pt7= points.newPoint(7, geom.Pos3d(offset+B,0.0,0) )
 pt8= points.newPoint(8, geom.Pos3d(offset+B,H,0) )
 
 lines= preprocessor.getMultiBlockTopology.getLines
-l= lines.newLine(1,2)
-l.nDiv= nDivLines
-l= lines.newLine(2,4)
-l.nDiv= nDivLines*2
-l= lines.newLine(4,3)
-l.nDiv= nDivLines
-l= lines.newLine(5,6)
-l.nDiv= nDivLines
-l= lines.newLine(6,8)
-l.nDiv= nDivLines*2
-l= lines.newLine(8,7)
-l.nDiv= nDivLines
+l1= lines.newLine(pt1.tag, pt2.tag)
+l1.nDiv= nDivLines
+l2= lines.newLine(pt2.tag, pt4.tag)
+l2.nDiv= nDivLines*2
+l3= lines.newLine(pt4.tag, pt3.tag)
+l3.nDiv= nDivLines
+l4= lines.newLine(pt5.tag, pt6.tag)
+l4.nDiv= nDivLines
+l5= lines.newLine(pt6.tag, pt8.tag)
+l5.nDiv= nDivLines*2
+l6= lines.newLine(pt8.tag, pt7.tag)
+l6.nDiv= nDivLines
 
 setTotal= preprocessor.getSets.getSet("total")
 setTotal.genMesh(xc.meshDir.I)
