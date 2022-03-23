@@ -28,12 +28,11 @@ feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor   
 nodes= preprocessor.getNodeHandler
 modelSpace= predefined_spaces.StructuralMechanics2D(nodes)
-nodes.defaultTag= 1 # First node number.
-nod= nodes.newNodeXY(0,0)
-nod= nodes.newNodeXY(a,0.0)
-nod= nodes.newNodeXY(a+(l/2),0.0)
-nod= nodes.newNodeXY(a+l,0.0)
-nod= nodes.newNodeXY(2*a+l,0.0)
+n1= nodes.newNodeXY(0,0)
+n2= nodes.newNodeXY(a,0.0)
+n3= nodes.newNodeXY(a+(l/2),0.0)
+n4= nodes.newNodeXY(a+l,0.0)
+n5= nodes.newNodeXY(2*a+l,0.0)
 
 # Geometric transformations
 lin= modelSpace.newLinearCrdTransf("lin")
@@ -47,32 +46,31 @@ elements= preprocessor.getElementHandler
 elements.defaultTransformation= lin.name
 elements.defaultMaterial= scc.name
 #  sintaxis: beam2d_02[<tag>] 
-elements.defaultTag= 1 # Tag for next element.
-beam2d= elements.newElement("ElasticBeam2d",xc.ID([1,2]))
-beam2d.h= h
+beam2dA= elements.newElement("ElasticBeam2d",xc.ID([n1.tag, n2.tag]))
+beam2dA.h= h
         
-beam2d= elements.newElement("ElasticBeam2d",xc.ID([2,3]))
-beam2d.h= h
+beam2dB= elements.newElement("ElasticBeam2d",xc.ID([n2.tag, n3.tag]))
+beam2dB.h= h
         
-beam2d= elements.newElement("ElasticBeam2d",xc.ID([3,4]))
-beam2d.h= h
+beam2dC= elements.newElement("ElasticBeam2d",xc.ID([n3.tag, n4.tag]))
+beam2dC.h= h
         
-beam2d= elements.newElement("ElasticBeam2d",xc.ID([4,5]))
-beam2d.h= h
+beam2dD= elements.newElement("ElasticBeam2d",xc.ID([n4.tag, n5.tag]))
+beam2dD.h= h
     
 # Constraints
 constraints= preprocessor.getBoundaryCondHandler
 #
-spc= constraints.newSPConstraint(2,0,0.0) # Node 2
-spc= constraints.newSPConstraint(2,1,0.0)
-spc= constraints.newSPConstraint(4,1,0.0) # Node 4
+spc= constraints.newSPConstraint(n2.tag, 0,0.0) # Node 2
+spc= constraints.newSPConstraint(n2.tag, 1,0.0)
+spc= constraints.newSPConstraint(n4.tag, 1,0.0) # Node 4
 
 
 # Load definition.
 lp0= modelSpace.newLoadPattern(name= '0')
 
 eleLoad= lp0.newElementalLoad("beam2d_uniform_load")
-eleLoad.elementTags= xc.ID([1,4])
+eleLoad.elementTags= xc.ID([beam2dA.tag,beam2dD.tag])
 eleLoad.transComponent= -w
 
 # We add the load case to domain.
@@ -87,19 +85,16 @@ if(not pth):
 exec(open(pth+"/../../aux/solu_transf_handler2.py").read())
     
 
-nod3= nodes.getNode(3)
-delta= nod3.getDisp[1] 
+delta= n3.getDisp[1] 
 
-elem2= elements.getElement(2)
-elem2.getResistingForce()
-sigma= elem2.getN2/A+elem2.getM2/I*h/2.0
+beam2dB.getResistingForce()
+sigma= beam2dB.getN2/A+beam2dB.getM2/I*h/2.0
 
-
+ratio1= (delta/0.182)
+ratio2= (sigma/(-11400))
 
 # print(delta)
 # print(sigma)
-ratio1= (delta/0.182)
-ratio2= (sigma/(-11400))
 
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)

@@ -48,25 +48,22 @@ cable= typical_materials.defCableMaterial(preprocessor, "cable",E,sigmaPret,rho)
 seedElemHandler= preprocessor.getElementHandler.seedElemHandler
 seedElemHandler.defaultMaterial= cable.name
 seedElemHandler.dimElem= 2 # Dimension of element space
-seedElemHandler.defaultTag= 1 #Tag for the next element.
 truss= seedElemHandler.newElement("CorotTruss",xc.ID([0,0]))
 truss.sectionArea= area
 # seed element definition ends
 
 points= preprocessor.getMultiBlockTopology.getPoints
-pt= points.newPoint(1,geom.Pos3d(0.0,0.0,0.0))
-pt= points.newPoint(2,geom.Pos3d(l,0.0,0.0))
+pt1= points.newPoint(geom.Pos3d(0.0,0.0,0.0))
+pt2= points.newPoint(geom.Pos3d(l,0.0,0.0))
 lines= preprocessor.getMultiBlockTopology.getLines
-lines.defaultTag= 1
-l= lines.newLine(1,2)
+l= lines.newLine(pt1.tag, pt2.tag)
 l.nDiv= NumDiv
 
-l1= preprocessor.getSets.getSet("l1")
-l1.genMesh(xc.meshDir.I)
+l.genMesh(xc.meshDir.I)
     
 # Constraints
-predefined_spaces.ConstraintsForLineExtremeNodes(l1,modelSpace.fixNode000)
-predefined_spaces.ConstraintsForLineInteriorNodes(l1,modelSpace.fixNodeFF0)
+predefined_spaces.ConstraintsForLineExtremeNodes(l,modelSpace.fixNode000)
+predefined_spaces.ConstraintsForLineInteriorNodes(l,modelSpace.fixNodeFF0)
 
 
 Nstep= 10  #  apply load in 10 steps

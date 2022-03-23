@@ -48,7 +48,6 @@ nodes= preprocessor.getNodeHandler
 modelSpace= predefined_spaces.StructuralMechanics2D(nodes)
 
 nodes= preprocessor.getNodeHandler
-nodes.defaultTag= 0; 
 nod0= nodes.newNodeXY(0,0) 
 nod0.mass= nodeMassMatrix
 nod0.setProp("gdlsCoartados",xc.ID([0,1,2]))
@@ -67,6 +66,7 @@ nod4.setProp("gdlsCoartados",xc.ID([1,2]))
 nod5= nodes.newNodeXY(0,4+3+3+3+3)
 nod5.mass= nodeMassMatrix
 nod5.setProp("gdlsCoartados",xc.ID([1,2]))
+
 setTotal= preprocessor.getSets.getSet("total")
 nodes= setTotal.getNodes
 for n in nodes:
@@ -90,20 +90,19 @@ lin= modelSpace.newLinearCrdTransf("lin")
 elements= preprocessor.getElementHandler
 elements.defaultTransformation= lin.name
 elements.defaultMaterial= sccPlBaja.name
-elements.defaultTag= 1 #Tag for next element.
-beam2d= elements.newElement("ElasticBeam2d",xc.ID([0,1]))
+beam2d= elements.newElement("ElasticBeam2d",xc.ID([nod0.tag, nod1.tag]))
 beam2d.h= Bbaja
 elements.defaultMaterial= sccPl1a.name 
-beam2d= elements.newElement("ElasticBeam2d",xc.ID([1,2]))
+beam2d= elements.newElement("ElasticBeam2d",xc.ID([nod1.tag, nod2.tag]))
 beam2d.h= B1a
 elements.defaultMaterial= sccPl2a.name 
-beam2d= elements.newElement("ElasticBeam2d",xc.ID([2,3]))
+beam2d= elements.newElement("ElasticBeam2d",xc.ID([nod2.tag, nod3.tag]))
 beam2d.h= B1a
 elements.defaultMaterial= sccPl3a.name 
-beam2d= elements.newElement("ElasticBeam2d",xc.ID([3,4]))
+beam2d= elements.newElement("ElasticBeam2d",xc.ID([nod3.tag, nod4.tag]))
 beam2d.h= B3a
 elements.defaultMaterial= sccPl4a.name 
-beam2d= elements.newElement("ElasticBeam2d",xc.ID([4,5]))
+beam2d= elements.newElement("ElasticBeam2d",xc.ID([nod4.tag, nod5.tag]))
 beam2d.h= B3a
 
 

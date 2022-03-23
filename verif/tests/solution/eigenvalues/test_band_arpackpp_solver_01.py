@@ -47,37 +47,32 @@ elements= preprocessor.getElementHandler
 seedElemHandler= preprocessor.getElementHandler.seedElemHandler
 seedElemHandler.defaultTransformation= lin.name
 seedElemHandler.defaultMaterial= scc.name
-seedElemHandler.defaultTag= 1 #Tag for next element.
 beam2d= seedElemHandler.newElement("ElasticBeam2d",xc.ID([0,0]))
 beam2d.h= h
 beam2d.rho= m
 
 
 points= preprocessor.getMultiBlockTopology.getPoints
-pt= points.newPoint(1,geom.Pos3d(0.0,0.0,0.0))
-pt= points.newPoint(2,geom.Pos3d(L*math.cos(theta),L*math.sin(theta),0.0))
+pt1= points.newPoint(geom.Pos3d(0.0,0.0,0.0))
+pt2= points.newPoint(geom.Pos3d(L*math.cos(theta),L*math.sin(theta),0.0))
 lines= preprocessor.getMultiBlockTopology.getLines
-lines.defaultTag= 1
-l= lines.newLine(1,2)
+l= lines.newLine(pt1.tag,pt2.tag)
 l.nDiv= NumDiv
-
-
-# Constraints
-constraints= preprocessor.getBoundaryCondHandler
-
-#
-spc= constraints.newSPConstraint(1,0,0.0) # Node 2,gdl 0
-spc= constraints.newSPConstraint(1,1,0.0) # Node 2,gdl 1
-spc= constraints.newSPConstraint(1,2,0.0) # Node 2,gdl 2
-
 
 setTotal= preprocessor.getSets.getSet("total")
 setTotal.genMesh(xc.meshDir.I)
 
+# Constraints
+constraints= preprocessor.getBoundaryCondHandler
+nTag= pt1.getNode().tag
+spc= constraints.newSPConstraint(nTag,0,0.0) # gdl 0
+spc= constraints.newSPConstraint(nTag,1,0.0) # gdl 1
+spc= constraints.newSPConstraint(nTag,2,0.0) # gdl 2
+
+
 # Solution procedure
 import os
 pth= os.path.dirname(__file__)
-#print("pth= ", pth)
 if(not pth):
   pth= "."
 exec(open(pth+"/../../aux/arpackpp_solver.py").read())

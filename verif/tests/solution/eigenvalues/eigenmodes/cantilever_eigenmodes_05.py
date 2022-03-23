@@ -55,7 +55,6 @@ s.nDivJ= numDiv
 
 seedElemHandler= preprocessor.getElementHandler.seedElemHandler
 seedElemHandler.defaultMaterial= plateMat.name
-seedElemHandler.defaultTag= 1
 elem= seedElemHandler.newElement("ShellNLDKGQ",xc.ID([0,0,0,0]))
 
 s.genMesh(xc.meshDir.I)

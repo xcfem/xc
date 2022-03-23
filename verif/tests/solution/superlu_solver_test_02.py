@@ -35,7 +35,6 @@ fs3d= IPE200.getFiberSection3d(preprocessor,'epp')
 L= 1.0
 nodes= preprocessor.getNodeHandler
 modelSpace= predefined_spaces.StructuralMechanics2D(nodes)
-nodes.defaultTag= 10 # First node number.
 nod1= nodes.newNodeXY(0,0.0)
 nod2= nodes.newNodeXY(L,0.0)
 

@@ -51,7 +51,6 @@ pt2= points.newPoint(2, geom.Pos3d(b,0.0,0) )
 pt3= points.newPoint(3, geom.Pos3d(b,L,0) )
 pt4= points.newPoint(4, geom.Pos3d(0,L,0) )
 surfaces= preprocessor.getMultiBlockTopology.getSurfaces
-surfaces.defaultTag= 1
 s= surfaces.newQuadSurfacePts(1,2,3,4)
 s.nDivI= max(int(numDiv/30),1)
 s.nDivJ= numDiv
@@ -59,7 +58,6 @@ s.nDivJ= numDiv
 # Mesh
 seedElemHandler= preprocessor.getElementHandler.seedElemHandler
 seedElemHandler.defaultMaterial= elast.name
-seedElemHandler.defaultTag= 1
 elem= seedElemHandler.newElement("ShellMITC4",xc.ID([0,0,0,0]))
 
 s.genMesh(xc.meshDir.I)

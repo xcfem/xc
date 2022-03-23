@@ -30,11 +30,10 @@ preprocessor=  feProblem.getPreprocessor
 nodes= preprocessor.getNodeHandler
 modelSpace= predefined_spaces.SolidMechanics2D(nodes)
 
-nodes.defaultTag= 1 # First node number.
-nod= nodes.newNodeXY(0,0)
-nod= nodes.newNodeXY(0.0,l-a-b)
-nod= nodes.newNodeXY(0.0,l-a)
-nod= nodes.newNodeXY(0.0,l)
+n1= nodes.newNodeXY(0,0)
+n2= nodes.newNodeXY(0.0,l-a-b)
+n3= nodes.newNodeXY(0.0,l-a)
+n4= nodes.newNodeXY(0.0,l)
 
 # Materials definition
 elast= typical_materials.defElasticMaterial(preprocessor, "elast",E)
@@ -48,29 +47,28 @@ elements= preprocessor.getElementHandler
 elements.defaultMaterial= elast.name
 elements.dimElem= 2 # Dimension of element space
 #  sintaxis: truss[<tag>] 
-elements.defaultTag= 1 # Tag for the next element.
-truss= elements.newElement("Truss",xc.ID([1,2]))
-truss.sectionArea= 1
-truss= elements.newElement("Truss",xc.ID([2,3]))
-truss.sectionArea= 1
-truss= elements.newElement("Truss",xc.ID([3,4]))
-truss.sectionArea= 1
+truss1= elements.newElement("Truss",xc.ID([n1.tag, n2.tag]))
+truss1.sectionArea= 1
+truss2= elements.newElement("Truss",xc.ID([n2.tag, n3.tag]))
+truss2.sectionArea= 1
+truss3= elements.newElement("Truss",xc.ID([n3.tag, n4.tag]))
+truss3.sectionArea= 1
     
 # Constraints
 constraints= preprocessor.getBoundaryCondHandler
 #
-spc= constraints.newSPConstraint(1,0,0.0) # Node 1
-spc= constraints.newSPConstraint(1,1,0.0)
-spc= constraints.newSPConstraint(4,0,0.0) # Node 4
-spc= constraints.newSPConstraint(4,1,0.0)
-spc= constraints.newSPConstraint(2,0,0.0) # Node 2
-spc= constraints.newSPConstraint(3,0,0.0) # Node 3
+spc= constraints.newSPConstraint(n1.tag, 0,0.0) # Node 1
+spc= constraints.newSPConstraint(n1.tag, 1,0.0)
+spc= constraints.newSPConstraint(n4.tag, 0,0.0) # Node 4
+spc= constraints.newSPConstraint(n4.tag, 1,0.0)
+spc= constraints.newSPConstraint(n2.tag, 0,0.0) # Node 2
+spc= constraints.newSPConstraint(n3.tag, 0,0.0) # Node 3
 
 
 # Load definition.
 lp0= modelSpace.newLoadPattern(name= '0')
-lp0.newNodalLoad(2,xc.Vector([0,-F2]))
-lp0.newNodalLoad(3,xc.Vector([0,-F1]))
+lp0.newNodalLoad(n2.tag, xc.Vector([0,-F2]))
+lp0.newNodalLoad(n3.tag, xc.Vector([0,-F1]))
 
 # We add the load case to domain.
 modelSpace.addLoadCaseToDomain(lp0.name)
@@ -78,15 +76,14 @@ modelSpace.addLoadCaseToDomain(lp0.name)
 # Solution procedure
 import os
 pth= os.path.dirname(__file__)
-# print("pth= ", pth)
 if(not pth):
   pth= "."
 exec(open(pth+"/../../aux/sol_sparse.py").read())
 
 
 nodes.calculateNodalReactions(True,1e-7)
-R1= nodes.getNode(4).getReaction[1] 
-R2= nodes.getNode(1).getReaction[1] 
+R1= n4.getReaction[1] 
+R2= n1.getReaction[1] 
 
 
 ratio1= R1/900

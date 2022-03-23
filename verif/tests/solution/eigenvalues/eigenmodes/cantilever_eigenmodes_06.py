@@ -45,13 +45,12 @@ modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
 elast= typical_materials.defElasticMembranePlateSection(preprocessor, "elast",EMat,nuMat,espChapa*dens,espChapa)
 
 points= preprocessor.getMultiBlockTopology.getPoints
-pt1= points.newPoint(1, geom.Pos3d(0.0,0.0,0.0) )
-pt2= points.newPoint(2, geom.Pos3d(b,0.0,0.0) )
-pt3= points.newPoint(3, geom.Pos3d(b,L,0.0) )
-pt4= points.newPoint(4, geom.Pos3d(0,L,0.0) )
+pt1= points.newPoint(geom.Pos3d(0.0,0.0,0.0) )
+pt2= points.newPoint(geom.Pos3d(b,0.0,0.0) )
+pt3= points.newPoint(geom.Pos3d(b,L,0.0) )
+pt4= points.newPoint(geom.Pos3d(0,L,0.0) )
 surfaces= preprocessor.getMultiBlockTopology.getSurfaces
-surfaces.defaultTag= 1
-s= surfaces.newQuadSurfacePts(1,2,3,4)
+s= surfaces.newQuadSurfacePts(pt1.tag,pt2.tag,pt3.tag,pt4.tag)
 s.nDivI= 4
 s.nDivJ= numDiv
 
@@ -59,16 +58,13 @@ seedElemHandler= preprocessor.getElementHandler.seedElemHandler
 seedElemHandler.defaultMaterial= elast.name
 elem= seedElemHandler.newElement("ShellMITC4",xc.ID([0,0,0,0]))
 
-
 s.genMesh(xc.meshDir.I)
+
 # Constraints
-
-
 ln= preprocessor.getMultiBlockTopology.getLineWithEndPoints(pt1.tag,pt2.tag)
 lNodes= ln.nodes
 for n in lNodes:
     n.fix(xc.ID([0,1,2,3,4,5]),xc.Vector([0,0,0,0,0,0])) # UX,UY,UZ,RX,RY,RZ
-
 
 # Solution procedure
 numModes= 2
