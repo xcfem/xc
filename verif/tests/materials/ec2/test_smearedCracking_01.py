@@ -56,10 +56,8 @@ preprocessor=  feProblem.getPreprocessor
 nodes= preprocessor.getNodeHandler     #nodes container
 modelSpace= predefined_spaces.StructuralMechanics2D(nodes)  #Defines the dimension of nodes  three coordinates (x,y,z) and six DOF for each node (Ux,Uy,theta)
 
-
-nodes.defaultTag= 1 #First node number.
-nod= nodes.newNodeXY(1.0,0)
-nod= nodes.newNodeXY(1.0+l,0)
+n1= nodes.newNodeXY(1.0,0)
+n2= nodes.newNodeXY(1.0+l,0)
 
 # Materials definition
 concrAux= EHE_materials.HA25           #parameters only for the compression branche 
@@ -123,16 +121,15 @@ sctFibers.setupFibers()
 elements= preprocessor.getElementHandler
 elements.defaultMaterial='sctFibers'
 elements.dimElem= 1 # Dimension of element space
-elements.defaultTag= 1
-elem= elements.newElement("ZeroLengthSection",xc.ID([1,2]))
+elem= elements.newElement("ZeroLengthSection",xc.ID([n1.tag,n2.tag]))
 
 # Constraints
 constraints= preprocessor.getBoundaryCondHandler
 #newSPConstraint(nodeTag,DOF,value)
-spc= constraints.newSPConstraint(1,0,0.0) # Node 1, ux=0
-spc= constraints.newSPConstraint(1,1,0.0) # Node 1, uy=0
-spc= constraints.newSPConstraint(1,2,0.0) # Node 1, theta=0
-spc= constraints.newSPConstraint(2,1,0.0) # Node 2, uy=0
+spc= constraints.newSPConstraint(n1.tag,0,0.0) # Node 1, ux=0
+spc= constraints.newSPConstraint(n1.tag,1,0.0) # Node 1, uy=0
+spc= constraints.newSPConstraint(n1.tag,2,0.0) # Node 1, theta=0
+spc= constraints.newSPConstraint(n2.tag,1,0.0) # Node 2, uy=0
 
 
 
@@ -141,12 +138,9 @@ loadHandler= preprocessor.getLoadHandler   #loads container
 
 lPatterns= loadHandler.getLoadPatterns
 
-
-elements= preprocessor.getElementHandler
-ele1= elements.getElement(1)
 #section of element 1: it's the copy of the material section 'sctFibers' assigned
 #to element 1 and specific of this element. It has the tensional state of the element
-sccEl1= ele1.getSection()         
+sccEl1= elem.getSection()         
 fibersSccEl1= sccEl1.getFibers()
 
 setsRCEl1= fiber_sets.fiberSectionSetupRCSets(scc=sccEl1,concrMatTag=concr.tag,concrSetName="concrSetFbEl1",reinfMatTag=rfSteel.matTagK,reinfSetName="reinfSetFbEl1")
@@ -162,21 +156,21 @@ strain=list()
 stress=list()
 areaSec=width*depth
 for F in Flist:
-  pointLoad=xc.Vector([F,0,0])
-  lp0.newNodalLoad(2,pointLoad)    #applies the point load on node 2 
-  #We add the load case to domain.
-  lPatterns.addToDomain(lp0.name)           #reads load pattern "0" and adds it to the domain
-  # Solve
-  #analysis= predefined_solutions.plain_newton_raphson(feProblem)
-  analysis= predefined_solutions.plain_static_modified_newton(feProblem)
-  analOk= analysis.analyze(1)
-  fConcrMin= setsRCEl1.concrFibers.getFiberWithMinStrain()
-  epsCMin= fConcrMin.getMaterial().getStrain() # minimum strain among concrete fibers
-  strain.append(epsCMin*1E3)
-  stress.append(F/areaSec/1e6)
-  dom.revertToStart()
-  lp0.clearLoads()
-  lPatterns.removeFromDomain(lp0.name)
+    pointLoad=xc.Vector([F,0,0])
+    lp0.newNodalLoad(n2.tag,pointLoad)    #applies the point load on node 2 
+    #We add the load case to domain.
+    lPatterns.addToDomain(lp0.name)           #reads load pattern "0" and adds it to the domain
+    # Solve
+    #analysis= predefined_solutions.plain_newton_raphson(feProblem)
+    analysis= predefined_solutions.plain_static_modified_newton(feProblem)
+    analOk= analysis.analyze(1)
+    fConcrMin= setsRCEl1.concrFibers.getFiberWithMinStrain()
+    epsCMin= fConcrMin.getMaterial().getStrain() # minimum strain among concrete fibers
+    strain.append(epsCMin*1E3)
+    stress.append(F/areaSec/1e6)
+    dom.revertToStart()
+    lp0.clearLoads()
+    lPatterns.removeFromDomain(lp0.name)
 
 #Test comparison values
 strainComp=[0.0, 0.006332344221165989, 0.012664688442331979, 0.018997032663498052, 0.025329376884663957, 0.03166172110582981, 0.037994065326996104, 0.08257991954761966, 0.21277820675132073, 0.34045049853978415, 0.47078740365672234, 0.603629650643874, 0.7320280242585642, 0.8604263978732545, 0.9888247714879446, 1.117223145102635, 1.245621518717326, 1.3740198923320153, 1.5024182659467054, 1.6308166395613952, 1.7761328779774574, 1.905796189052184, 2.0354595001269096, 2.1651228112016354, 2.2947861222763617, 2.4244494333510875]

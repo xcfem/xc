@@ -65,10 +65,8 @@ preprocessor=problem.getPreprocessor
 nodes= preprocessor.getNodeHandler     # nodes container
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes)  # Defines the dimension of nodes  three coordinates (x,y,z) and six DOF for each node (Ux,Uy,Uz,thetaX,thetaY,thetaZ)
 
-
-nodes.defaultTag= 1 # First node number.
-nod= nodes.newNodeXYZ(1.0,0,0)     # node 1 defined by its (x,y,z) global coordinates
-nod= nodes.newNodeXYZ(1.0+l,0,0)   # node 2 defined by its (x,y,z) global coordinates
+n1= nodes.newNodeXYZ(1.0,0,0)     # node 1 defined by its (x,y,z) global coordinates
+n2= nodes.newNodeXYZ(1.0+l,0,0)   # node 2 defined by its (x,y,z) global coordinates
 
 # Materials definition
 concrete= EC2_materials.EC2Concrete("C33",-33e6,1.5) # concrete according to EC2 fck=33 MPa      
@@ -129,17 +127,16 @@ sctFibers.setupFibers()
 elements= preprocessor.getElementHandler
 elements.defaultMaterial='sctFibers'
 elements.dimElem= 1 # Dimension of element space
-elements.defaultTag= 1
-elem= elements.newElement("ZeroLengthSection",xc.ID([1,2]))
+elem= elements.newElement("ZeroLengthSection",xc.ID([n1.tag,n2.tag]))
 
 # Constraints
-modelSpace.fixNode000_000(1)
-modelSpace.fixNodeF00_0F0(2)
+modelSpace.fixNode000_000(n1.tag)
+modelSpace.fixNodeF00_0F0(n2.tag)
 
 # Load definition.
 lp0= modelSpace.newLoadPattern(name= '0')
 pointLoad=xc.Vector([0,0,0,0,M_y,0])
-lp0.newNodalLoad(2,pointLoad)    # applies the point load on node 2 
+lp0.newNodalLoad(n2.tag,pointLoad)    # applies the point load on node 2 
 
 # We add the load case to domain.
 modelSpace.addLoadCaseToDomain(lp0.name)           # reads load pattern "0" and adds it to the domain
@@ -152,33 +149,30 @@ if(analOk!=0):
     quit()
 
 # printing results
-nodes= preprocessor.getNodeHandler
 nodes.calculateNodalReactions(True,1e-6)
 
 '''
-RN1= nodes.getNode(1).getReaction[0]   # Axial FX reaction (constrained DOF: ux) at node 1
-RQY1= nodes.getNode(1).getReaction[1]   # Vertical FY reaction (constrained DOF: uY) at node 1
-RQZ1= nodes.getNode(1).getReaction[2]   # Vertical FY reaction (constrained DOF: uZ) at node 1
-RMX1= nodes.getNode(1).getReaction[3]   # Bending moment Mx reaction at node 1
-RMY1= nodes.getNode(1).getReaction[4]   # Bending moment My reaction at node 1
-RMZ1= nodes.getNode(1).getReaction[5]   # Bending moment Mz reaction at node 1
+RN1= n1.getReaction[0]   # Axial FX reaction (constrained DOF: ux) at node 1
+RQY1= n1.getReaction[1]   # Vertical FY reaction (constrained DOF: uY) at node 1
+RQZ1= n1.getReaction[2]   # Vertical FY reaction (constrained DOF: uZ) at node 1
+RMX1= n1.getReaction[3]   # Bending moment Mx reaction at node 1
+RMY1= n1.getReaction[4]   # Bending moment My reaction at node 1
+RMZ1= n1.getReaction[5]   # Bending moment Mz reaction at node 1
 
 
-RN2= nodes.getNode(2).getReaction[0]   # Axial FX reaction (constrained DOF: ux) at node 2
-RQY2= nodes.getNode(2).getReaction[1]   # Vertical FY reaction (constrained DOF: uY) at node 2
-RQZ2= nodes.getNode(2).getReaction[2]   # Vertical FY reaction (constrained DOF: uZ) at node 2
-RMX2= nodes.getNode(2).getReaction[3]   # Bending moment Mx reaction at node 2
-RMY2= nodes.getNode(2).getReaction[4]   # Bending moment My reaction at node 2
-RMZ2= nodes.getNode(2).getReaction[5]   # Bending moment Mz reaction at node 2
+RN2= n2.getReaction[0]   # Axial FX reaction (constrained DOF: ux) at node 2
+RQY2= n2.getReaction[1]   # Vertical FY reaction (constrained DOF: uY) at node 2
+RQZ2= n2.getReaction[2]   # Vertical FY reaction (constrained DOF: uZ) at node 2
+RMX2= n2.getReaction[3]   # Bending moment Mx reaction at node 2
+RMY2= n2.getReaction[4]   # Bending moment My reaction at node 2
+RMZ2= n2.getReaction[5]   # Bending moment Mz reaction at node 2
 
-print('Rnode1= (',nodes.getNode(1).getReaction[0],',',nodes.getNode(1).getReaction[1],',',nodes.getNode(1).getReaction[2],',',nodes.getNode(1).getReaction[3],',',nodes.getNode(1).getReaction[4],',',nodes.getNode(1).getReaction[5],')')
-print('Rnode2= (',nodes.getNode(2).getReaction[0],',',nodes.getNode(2).getReaction[1],',',nodes.getNode(2).getReaction[2],',',nodes.getNode(2).getReaction[3],',',nodes.getNode(2).getReaction[4],',',nodes.getNode(2).getReaction[5],')')
+print('Rnode1= (',n1.getReaction[0],',',n1.getReaction[1],',',n1.getReaction[2],',',n1.getReaction[3],',',n1.getReaction[4],',',n1.getReaction[5],')')
+print('Rnode2= (',n2.getReaction[0],',',n2.getReaction[1],',',n2.getReaction[2],',',n2.getReaction[3],',',n2.getReaction[4],',',n2.getReaction[5],')')
 '''
-elements= preprocessor.getElementHandler
-ele1= elements.getElement(1)
 # section of element 1: it's the copy of the material section 'sctFibers' assigned
 # to element 1 and specific of this element. It has the tensional state of the element
-sccEl1= ele1.getSection()         
+sccEl1= elem.getSection()         
 fibersSccEl1= sccEl1.getFibers()
 
 # Creation of two separate sets of fibers: concrete and reinforcement steel 
