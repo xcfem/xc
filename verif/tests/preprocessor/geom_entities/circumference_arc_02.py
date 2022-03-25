@@ -41,7 +41,6 @@ pt2= points.newPoint(geom.Pos3d((R*cos45),(R*sin45),0.0))
 pt3= points.newPoint(geom.Pos3d(0.0,R,0.0))
 
 lines= preprocessor.getMultiBlockTopology.getLines
-lines.defaultTag= 1
 l= lines.newCircleArc(pt1.tag,pt2.tag,pt3.tag)
 l.nDiv= NumDiv
 th1= l.getTheta1()
@@ -55,10 +54,9 @@ yi= l.getPInic().y
 zi= l.getPInic().z
 r= l.getRadius()
 
-l1= preprocessor.getSets.getSet("l1")
-l1.genMesh(xc.meshDir.I)
+l.genMesh(xc.meshDir.I)
 
-nnodes= l1.getNumNodes
+nnodes= l.getNumNodes
 '''
 print("number of nodes: ", nnod)
 nodes= preprocessor.getNodeHandler

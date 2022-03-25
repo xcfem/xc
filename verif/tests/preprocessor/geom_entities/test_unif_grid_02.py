@@ -32,7 +32,6 @@ nodes.numDOFs= 2 # Two degrees of freedom for each node.
 seedElemHandler= preprocessor.getElementHandler.seedElemHandler
 seedElemHandler.defaultMaterial= elast2d.name
 seedElemHandler.dimElem= 3 # Dimension of element space
-seedElemHandler.defaultTag= 1 #Tag for the next element.
 quad4n= seedElemHandler.newElement("FourNodeQuad",xc.ID([0,0,0,0]))
 
 unifGrids= preprocessor.getMultiBlockTopology.getUniformGrids

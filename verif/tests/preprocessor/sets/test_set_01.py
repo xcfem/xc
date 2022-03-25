@@ -36,20 +36,19 @@ section= typical_materials.defElasticSection3d(preprocessor, "section",1,1,1,1,1
 elements= preprocessor.getElementHandler
 elements.defaultTransformation= lin.name # Coord. transformation.
 elements.defaultMaterial= section.name
-elements.defaultTag= 1 #Tag for next element.
-beam3d= elements.newElement("ElasticBeam3d",xc.ID([n1.tag,n2.tag]))
-beam3d= elements.newElement("ElasticBeam3d",xc.ID([n2.tag,n3.tag]))
-beam3d= elements.newElement("ElasticBeam3d",xc.ID([n3.tag,n4.tag]))
-beam3d= elements.newElement("ElasticBeam3d",xc.ID([n4.tag,n1.tag]))
-beam3d= elements.newElement("ElasticBeam3d",xc.ID([n1.tag,n3.tag]))
-beam3d= elements.newElement("ElasticBeam3d",xc.ID([n2.tag,n4.tag]))
+beam3dA= elements.newElement("ElasticBeam3d",xc.ID([n1.tag,n2.tag]))
+beam3dB= elements.newElement("ElasticBeam3d",xc.ID([n2.tag,n3.tag]))
+beam3dC= elements.newElement("ElasticBeam3d",xc.ID([n3.tag,n4.tag]))
+beam3dD= elements.newElement("ElasticBeam3d",xc.ID([n4.tag,n1.tag]))
+beam3dE= elements.newElement("ElasticBeam3d",xc.ID([n1.tag,n3.tag]))
+beam3dF= elements.newElement("ElasticBeam3d",xc.ID([n2.tag,n4.tag]))
 
-beam3d= elements.newElement("ElasticBeam3d",xc.ID([n5.tag,n6.tag]))
-beam3d= elements.newElement("ElasticBeam3d",xc.ID([n6.tag,n7.tag]))
-beam3d= elements.newElement("ElasticBeam3d",xc.ID([n7.tag,n8.tag]))
-beam3d= elements.newElement("ElasticBeam3d",xc.ID([n8.tag,n5.tag]))
-beam3d= elements.newElement("ElasticBeam3d",xc.ID([n5.tag,n7.tag]))
-beam3d= elements.newElement("ElasticBeam3d",xc.ID([n6.tag,n8.tag]))
+beam3dG= elements.newElement("ElasticBeam3d",xc.ID([n5.tag,n6.tag]))
+beam3dH= elements.newElement("ElasticBeam3d",xc.ID([n6.tag,n7.tag]))
+beam3dI= elements.newElement("ElasticBeam3d",xc.ID([n7.tag,n8.tag]))
+beam3dJ= elements.newElement("ElasticBeam3d",xc.ID([n8.tag,n5.tag]))
+beam3dK= elements.newElement("ElasticBeam3d",xc.ID([n5.tag,n7.tag]))
+beam3dL= elements.newElement("ElasticBeam3d",xc.ID([n6.tag,n8.tag]))
 
 # Trial set definition
 trialSet1= preprocessor.getSets.defSet("trialSet1")
@@ -60,7 +59,6 @@ ratioA= colorA[0]**2+colorA[1]**2+colorA[2]**2
 trialSet1.color= xc.Vector([1.0,2.0,3.0])
 colorB= trialSet1.color
 ratioB= (colorB[0]-1)**2+(colorB[1]-2)**2+(colorB[2]-3)**2
-
 
 nodes= preprocessor.getSets.getSet("total").getNodes
 for n in nodes:

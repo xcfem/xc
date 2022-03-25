@@ -24,7 +24,6 @@ pt3= points.newPoint(3,geom.Pos3d(1.0,1.0,0.0))
 pt4= points.newPoint(4,geom.Pos3d(0.0,1.0,0.0))
 
 surfaces= preprocessor.getMultiBlockTopology.getSurfaces
-surfaces.defaultTag= 1
 s1= surfaces.newQuadSurfacePts(pt1.tag,pt2.tag,pt3.tag,pt4.tag)
 
 iVector= s1.getIVector

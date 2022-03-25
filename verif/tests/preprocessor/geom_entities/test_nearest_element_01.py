@@ -21,9 +21,10 @@ i= 1
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor   
 nodes= preprocessor.getNodeHandler
-nodes.defaultTag= 1
-for i in range(1,1001):
+nodeList= list()
+for i in range(0,numElements):
   n= nodes.newNodeXYZ(i,0,0)
+  nodeList.append(n)
 
 # Materials definition
 elast= typical_materials.defElasticMaterial(preprocessor, "elast",2.1e6)
@@ -31,16 +32,17 @@ elast= typical_materials.defElasticMaterial(preprocessor, "elast",2.1e6)
 elements= preprocessor.getElementHandler
 elements.defaultMaterial= elast.name
 elements.dimElem= 2 # Dimension of element space
-elements.defaultTag= 1 #Tag for the next element.
 for i in range(1,numElements):
-  truss= elements.newElement("Truss",xc.ID([i,i+1]))
+  nA= nodeList[i-1]
+  nB= nodeList[i]
+  truss= elements.newElement("Truss",xc.ID([nA.tag,nB.tag]))
   truss.sectionArea= 1
 
 mesh= feProblem.getDomain.getMesh
 # print("creados ",nnod," nodes.\n")
 start_time= time.time()
 tg= mesh.getNearestElement(geom.Pos3d(50.51,0,0)).tag
-lapso= time.time()-start_time
+lapse= time.time()-start_time
 
 
 ''' 

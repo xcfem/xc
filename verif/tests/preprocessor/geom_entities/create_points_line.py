@@ -22,11 +22,11 @@ preprocessor=  feProblem.getPreprocessor
 points= preprocessor.getMultiBlockTopology.getPoints
 pt1= points.newPoint(geom.Pos3d(0.0,0.0,0.0))
 pt2= points.newPoint(geom.Pos3d(CooMax,CooMax,CooMax))
-points.defaultTag= 100
 
 lines= preprocessor.getMultiBlockTopology.getLines
 l1= lines.newLine(pt1.tag,pt2.tag)
 l1.nDiv= NumDiv
+points.defaultTag= 100 # The following point will have tag= 100
 l1.divide()
 
 cumple= True

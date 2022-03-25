@@ -26,11 +26,9 @@ modelSpace= predefined_spaces.SolidMechanics3D(nodes)
 # Define materials
 elast= typical_materials.defElasticMaterial(preprocessor, "elast",3000)
 
-
 seedElemHandler= preprocessor.getElementHandler.seedElemHandler
 seedElemHandler.dimElem= 3 #Bars defined in a three dimensional space.
 seedElemHandler.defaultMaterial= elast.name
-seedElemHandler.defaultTag= 1 #Number for the next element will be 1.
 truss= seedElemHandler.newElement("Truss",xc.ID([0,0]))
 truss.sectionArea= 10
 

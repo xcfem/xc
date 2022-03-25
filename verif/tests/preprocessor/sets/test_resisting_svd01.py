@@ -36,19 +36,18 @@ feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
 nodes= preprocessor.getNodeHandler
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
-nodes.defaultTag= 1 #First node number.
-nod1= nodes.newNodeXYZ(0,0,0)
-nod2= nodes.newNodeXYZ(1,0,0)
-nod3= nodes.newNodeXYZ(2,0,0)
-nod4= nodes.newNodeXYZ(3,0,0)
-nod5= nodes.newNodeXYZ(0,1,0)
-nod6= nodes.newNodeXYZ(1,1,0)
-nod7= nodes.newNodeXYZ(2,1,0)
-nod8= nodes.newNodeXYZ(3,1,0)
-nod9= nodes.newNodeXYZ(0,2,0)
-nod10= nodes.newNodeXYZ(1,2,0)
-nod11= nodes.newNodeXYZ(2,2,0)
-nod12= nodes.newNodeXYZ(3,2,0)
+n1= nodes.newNodeXYZ(0,0,0)
+n2= nodes.newNodeXYZ(1,0,0)
+n3= nodes.newNodeXYZ(2,0,0)
+n4= nodes.newNodeXYZ(3,0,0)
+n5= nodes.newNodeXYZ(0,1,0)
+n6= nodes.newNodeXYZ(1,1,0)
+n7= nodes.newNodeXYZ(2,1,0)
+n8= nodes.newNodeXYZ(3,1,0)
+n9= nodes.newNodeXYZ(0,2,0)
+n10= nodes.newNodeXYZ(1,2,0)
+n11= nodes.newNodeXYZ(2,2,0)
+n12= nodes.newNodeXYZ(3,2,0)
 
 
 # Materials definition
@@ -60,42 +59,40 @@ prestressingSteel= typical_materials.defSteel02(preprocessor, "prestressingSteel
 elements= preprocessor.getElementHandler
 # Reinforced concrete deck
 elements.defaultMaterial= hLosa.name
-elements.defaultTag= 1
-elem= elements.newElement("ShellMITC4",xc.ID([1,2,6,5]))
-
-elem= elements.newElement("ShellMITC4",xc.ID([2,3,7,6]))
-elem= elements.newElement("ShellMITC4",xc.ID([3,4,8,7]))
-elem= elements.newElement("ShellMITC4",xc.ID([5,6,10,9]))
-elem= elements.newElement("ShellMITC4",xc.ID([6,7,11,10]))
-elem= elements.newElement("ShellMITC4",xc.ID([7,8,12,11]))
+elemA= elements.newElement("ShellMITC4",xc.ID([n1.tag, n2.tag, n6.tag, n5.tag]))
+elemB= elements.newElement("ShellMITC4",xc.ID([n2.tag, n3.tag, n7.tag, n6.tag]))
+elemC= elements.newElement("ShellMITC4",xc.ID([n3.tag, n4.tag, n8.tag, n7.tag]))
+elemD= elements.newElement("ShellMITC4",xc.ID([n5.tag, n6.tag, n10.tag, n9.tag]))
+elemE= elements.newElement("ShellMITC4",xc.ID([n6.tag, n7.tag, n11.tag, n10.tag]))
+elemF= elements.newElement("ShellMITC4",xc.ID([n7.tag, n8.tag, n12.tag, n11.tag]))
 
 # active reinforcement
 elements.defaultMaterial= prestressingSteel.name
 elements.dimElem= 3 # Dimension of element space
-truss= elements.newElement("Truss",xc.ID([1,2]))
-truss.sectionArea= Ap
-truss= elements.newElement("Truss",xc.ID([2,3]))
-truss.sectionArea= Ap
-truss= elements.newElement("Truss",xc.ID([3,4]))
-truss.sectionArea= Ap
-truss= elements.newElement("Truss",xc.ID([5,6]))
-truss.sectionArea= Ap
-truss= elements.newElement("Truss",xc.ID([6,7]))
-truss.sectionArea= Ap
-truss= elements.newElement("Truss",xc.ID([7,8]))
-truss.sectionArea= Ap
-truss= elements.newElement("Truss",xc.ID([9,10]))
-truss.sectionArea= Ap
-truss= elements.newElement("Truss",xc.ID([10,11]))
-truss.sectionArea= Ap
-truss= elements.newElement("Truss",xc.ID([11,12]))
-truss.sectionArea= Ap
+trussA= elements.newElement("Truss",xc.ID([n1.tag, n2.tag]))
+trussA.sectionArea= Ap
+trussB= elements.newElement("Truss",xc.ID([n2.tag, n3.tag]))
+trussB.sectionArea= Ap
+trussC= elements.newElement("Truss",xc.ID([n3.tag, n4.tag]))
+trussC.sectionArea= Ap
+trussD= elements.newElement("Truss",xc.ID([n5.tag, n6.tag]))
+trussD.sectionArea= Ap
+trussE= elements.newElement("Truss",xc.ID([n6.tag, n7.tag]))
+trussE.sectionArea= Ap
+trussF= elements.newElement("Truss",xc.ID([n7.tag, n8.tag]))
+trussF.sectionArea= Ap
+trussG= elements.newElement("Truss",xc.ID([n9.tag, n10.tag]))
+trussG.sectionArea= Ap
+trussH= elements.newElement("Truss",xc.ID([n10.tag, n11.tag]))
+trussH.sectionArea= Ap
+trussI= elements.newElement("Truss",xc.ID([n11.tag, n12.tag]))
+trussI.sectionArea= Ap
 
 # Constraints
 
-modelSpace.fixNode000_000(1)
-modelSpace.fixNode000_000(5)
-modelSpace.fixNode000_000(9)
+modelSpace.fixNode000_000(n1.tag)
+modelSpace.fixNode000_000(n5.tag)
+modelSpace.fixNode000_000(n9.tag)
 
 # Loads definition
 loadHandler= preprocessor.getLoadHandler
@@ -108,9 +105,9 @@ lPatterns.currentTimeSeries= "ts"
 
 lpG= lPatterns.newLoadPattern("default","G")
 #lPatterns.currentLoadPattern= "G"
-lpG.newNodalLoad(nod4.tag,xc.Vector([F,0.0,0.0,0.0,0.0,0.0]))
-lpG.newNodalLoad(nod8.tag,xc.Vector([F,0.0,0.0,0.0,0.0,0.0]))
-lpG.newNodalLoad(nod12.tag,xc.Vector([F,0.0,0.0,0.0,0.0,0.0]))
+lpG.newNodalLoad(n4.tag,xc.Vector([F,0.0,0.0,0.0,0.0,0.0]))
+lpG.newNodalLoad(n8.tag,xc.Vector([F,0.0,0.0,0.0,0.0,0.0]))
+lpG.newNodalLoad(n12.tag,xc.Vector([F,0.0,0.0,0.0,0.0,0.0]))
 
 # Combinaciones
 combs= loadHandler.getLoadCombinations
