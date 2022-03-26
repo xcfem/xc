@@ -33,10 +33,9 @@ nodes= preprocessor.getNodeHandler
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
 
 # Model definition
-nodes.defaultTag= 1 # First node number.
-nod= nodes.newNodeXYZ(0,0,0)
-nod= nodes.newNodeXYZ(l/2,0.0,0)
-nod= nodes.newNodeXYZ(l,0.0,0)
+n1= nodes.newNodeXYZ(0,0,0)
+n2= nodes.newNodeXYZ(l/2,0.0,0)
+n3= nodes.newNodeXYZ(l,0.0,0)
 
 # Materials definition
 cable= typical_materials.defCableMaterial(preprocessor, "cable",E,sigmaPret,0.0)
@@ -49,23 +48,23 @@ cable= typical_materials.defCableMaterial(preprocessor, "cable",E,sigmaPret,0.0)
 elements= preprocessor.getElementHandler
 elements.defaultMaterial= cable.name
 elements.dimElem= 3 # Dimension of element space
-truss1= elements.newElement("CorotTruss",xc.ID([1,2]))
+truss1= elements.newElement("CorotTruss",xc.ID([n1.tag, n2.tag]))
 truss1.sectionArea= area
-truss2= elements.newElement("CorotTruss",xc.ID([2,3]))
+truss2= elements.newElement("CorotTruss",xc.ID([n2.tag, n3.tag]))
 truss2.sectionArea= area
      
 # Constraints
 constraints= preprocessor.getBoundaryCondHandler
-modelSpace.fixNode000_000(1)
-modelSpace.fixNodeFFF_000(2)
-modelSpace.fixNode000_000(3)
+modelSpace.fixNode000_000(n1.tag)
+modelSpace.fixNodeFFF_000(n2.tag)
+modelSpace.fixNode000_000(n3.tag)
 
 
 # Load case definition.
 lPattern= '0'
 lp0= modelSpace.newLoadPattern(name= lPattern)
 
-lp0.newNodalLoad(2,xc.Vector([0,-F,0,0,0,0]))
+lp0.newNodalLoad(n2.tag,xc.Vector([0,-F,0,0,0,0]))
 modelSpace.addLoadCaseToDomain(lPattern) # Append load pattern to domain.
 
 # Solution procedure
@@ -74,19 +73,14 @@ result= analysis.analyze(10)
 
 
 nodes.calculateNodalReactions(True,1e-7)
-nod3= nodes.getNode(3)
-R1X= nod3.getReaction[0]
-R1Y= nod3.getReaction[1] 
-nod1= nodes.getNode(1)
-R2X= nod1.getReaction[0]
-R2Y= nod1.getReaction[1] 
-nod2= nodes.getNode(2)
-deltaX= nod2.getDisp[0]
-deltaY= nod2.getDisp[1]  
+R1X= n3.getReaction[0]
+R1Y= n3.getReaction[1] 
+R2X= n1.getReaction[0]
+R2Y= n1.getReaction[1] 
+deltaX= n2.getDisp[0]
+deltaY= n2.getDisp[1]  
 
-ele1= elements.getElement(1)
-tension= ele1.getN()
-
+tension= truss1.getN()
 
 alpha= -math.atan2(deltaY,l/2)
 tensTeor= F/(2*math.sin(alpha))

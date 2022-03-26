@@ -37,10 +37,8 @@ nodes= preprocessor.getNodeHandler
 # Problem type
 modelSpace= predefined_spaces.SolidMechanics2D(nodes)
 
-
-nodes.defaultTag= 1 #First node number.
-nod= nodes.newNodeXY(0,0)
-nod= nodes.newNodeXY(l,0.0)
+n1= nodes.newNodeXY(0,0)
+n2= nodes.newNodeXY(l,0.0)
 
 # Materials definition
 steel= typical_materials.defSteel01(preprocessor, "steel",E,fy,0.001)
@@ -53,15 +51,13 @@ steel= typical_materials.defSteel01(preprocessor, "steel",E,fy,0.001)
 elements= preprocessor.getElementHandler
 elements.defaultMaterial= steel.name
 elements.dimElem= 2 # Dimension of element space
-elements.defaultTag= 1 #Tag for the next element.
-spring= elements.newElement("Spring",xc.ID([1,2]))
+spring= elements.newElement("Spring",xc.ID([n1.tag, n2.tag]))
 
 # Constraints
 constraints= preprocessor.getBoundaryCondHandler
-#
-spc= constraints.newSPConstraint(1,0,0.0) # Node 1
-spc= constraints.newSPConstraint(1,1,0.0)
-spc= constraints.newSPConstraint(2,1,0.0) # Node 2
+spc= constraints.newSPConstraint(n1.tag, 0,0.0) # Node 1
+spc= constraints.newSPConstraint(n1.tag, 1,0.0)
+spc= constraints.newSPConstraint(n2.tag, 1,0.0) # Node 2
 
 # Loads definition
 loadHandler= preprocessor.getLoadHandler
@@ -76,15 +72,15 @@ ts.shift= 0
 lPatterns.currentTimeSeries= "ts"
 #Load case definition
 lp0= lPatterns.newLoadPattern("default","0")
-lp0.newNodalLoad(2,xc.Vector([F,0]))
+lp0.newNodalLoad(n2.tag, xc.Vector([F,0]))
 
 #We add the load case to domain.
 lPatterns.addToDomain(lp0.name)
 
-x= []
-y= []
+x= list()
+y= list()
 recorder= feProblem.getDomain.newRecorder("element_prop_recorder",None)
-recorder.setElements(xc.ID([1]))
+recorder.setElements(xc.ID([spring.tag]))
 recorder.callbackRecord= "x.append(self.getMaterial().getStrain()); y.append(self.getN())"
 recorder.callbackRestart= "print(\"Restart method called.\")"
 
@@ -99,8 +95,6 @@ d= .getDisp[0]
 print(d*1000)
 
 \callback_restart{print("Restart method called."}
-
-
 
 '''
 # Solution procedure
@@ -119,7 +113,7 @@ ctest.tol= 1e-9
 ctest.maxNumIter= 10
 ctest.printFlag= 0
 integ= solutionStrategy.newIntegrator("displacement_control_integrator",xc.Vector([]))
-integ.nod= 2
+integ.nod= n2.tag
 integ.dof= 0
 integ.dU1= 0.0002
 soe= solutionStrategy.newSystemOfEqn("band_spd_lin_soe")
@@ -134,17 +128,14 @@ integ.dU1= 0.0002 #Reload
 result= analysis.analyze(16)
 
 nodes.calculateNodalReactions(True,1e-7)
-nod2= nodes.getNode(2)
-deltax= nod2.getDisp[0] 
-deltay= nod2.getDisp[1] 
-nod1= nodes.getNode(1)
-R= nod1.getReaction[0] 
+deltax= n2.getDisp[0] 
+deltay= n2.getDisp[1] 
+R= n1.getReaction[0] 
 
 elements= preprocessor.getElementHandler
 
-elem1= elements.getElement(1)
-elem1.getResistingForce()
-Ax= elem1.getMaterial().getStrain() # Spring elongation
+spring.getResistingForce()
+Ax= spring.getMaterial().getStrain() # Spring elongation
 
 
 

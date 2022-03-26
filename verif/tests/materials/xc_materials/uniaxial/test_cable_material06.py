@@ -45,21 +45,18 @@ cable= typical_materials.defCableMaterial(preprocessor, "cable",E,sigmaPret,0.0)
 seedElemHandler= preprocessor.getElementHandler.seedElemHandler
 seedElemHandler.defaultMaterial= cable.name
 seedElemHandler.dimElem= 3 # Dimension of element space
-seedElemHandler.defaultTag= 1 # Number for the next element will be 1.
-truss= seedElemHandler.newElement("CorotTruss",xc.ID([1,2]))
+truss= seedElemHandler.newElement("CorotTruss",xc.ID([0,0]))
 truss.sectionArea= area
 # seed element definition ends
 
 points= preprocessor.getMultiBlockTopology.getPoints
-pt= points.newPoint(1,geom.Pos3d(0.0,0.0,0.0))
-pt= points.newPoint(2,geom.Pos3d(lng,lng,0.0))
+pt1= points.newPoint(geom.Pos3d(0.0,0.0,0.0))
+pt2= points.newPoint(geom.Pos3d(lng,lng,0.0))
 lines= preprocessor.getMultiBlockTopology.getLines
-lines.defaultTag= 1
-l= lines.newLine(1,2)
+l= lines.newLine(pt1.tag, pt2.tag)
 l.nDiv= NumDiv
 
-l1= preprocessor.getSets.getSet("l1")
-l1.genMesh(xc.meshDir.I)
+l.genMesh(xc.meshDir.I)
     
 # Constraints
 constraints= preprocessor.getBoundaryCondHandler
@@ -71,7 +68,7 @@ predefined_spaces.ConstraintsForLineInteriorNodes(l,modelSpace.fixNodeFFF_000)
 lPattern= '0'
 lp0= modelSpace.newLoadPattern(name= lPattern)
 modelSpace.setCurrentLoadPattern(lPattern)
-nodal_loads.load_on_nodes_in_line(l1,lp0,xc.Vector([0,-F,0,0,0,0]))
+nodal_loads.load_on_nodes_in_line(l, lp0,xc.Vector([0,-F,0,0,0,0]))
 modelSpace.addLoadCaseToDomain(lPattern)
 
 
@@ -98,18 +95,16 @@ solver= soe.newSolver("band_gen_lin_lapack_solver")
 analysis= solu.newAnalysis("static_analysis","solutionStrategy","")
 result= analysis.analyze(Nstep)
 
-tagN1= l.firstNode.tag
-tagN2= l.lastNode.tag
 index= int(NumDiv/2)+1
-tagN3= l.getNodeI(index).tag
+midNode= l.getNodeI(index)
 
 nodes.calculateNodalReactions(True,1e-7)
-R1X= nodes.getNode(tagN2).getReaction[0]
-R1Y= nodes.getNode(tagN2).getReaction[1] 
-R2X= nodes.getNode(tagN1).getReaction[0]
-R2Y= nodes.getNode(tagN1).getReaction[1] 
-deltaX= nodes.getNode(tagN3).getDisp[0]
-deltaY= nodes.getNode(tagN3).getDisp[1]  
+R1X= l.lastNode.getReaction[0]
+R1Y= l.lastNode.getReaction[1] 
+R2X= l.firstNode.getReaction[0]
+R2Y= l.firstNode.getReaction[1] 
+deltaX= midNode.getDisp[0]
+deltaY= midNode.getDisp[1]  
 
 
 alpha= -math.atan2(deltaY,lng/2)
@@ -118,8 +113,6 @@ ratio1= ((R1X+R2X)/fPret)
 ratio2= ((R1Y+R2Y-Ftot)/Ftot)
     
 ''' 
-print("tagN1= ",tagN1)
-print("tagN2= ",tagN2)
 print("tagN3= ",tagN3)
 print("F= ",(F))
 print("alpha= ",rad2deg((alpha)))

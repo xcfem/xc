@@ -28,9 +28,8 @@ nodes= preprocessor.getNodeHandler
 nodes.dimSpace= 1 # One coordinate for each node.
 nodes.numDOFs= 1 # One degree of freedom for each node.
 
-nodes.defaultTag= 1 #First node number.
-nod= nodes.newNodeX(1)
-nod= nodes.newNodeX(1.0+l)
+n1= nodes.newNodeX(1)
+n2= nodes.newNodeX(1.0+l)
 
 # Materials definition
 concrAux= EHE_materials.HA25
@@ -41,13 +40,12 @@ concr=typical_materials.defConcrete02(preprocessor=preprocessor,name='concr25',e
 elements= preprocessor.getElementHandler
 elements.defaultMaterial='concr25'
 elements.dimElem= 1 # Dimension of element space
-elements.defaultTag= 1
-elem1= elements.newElement("ZeroLength",xc.ID([1,2]))
+elem1= elements.newElement("ZeroLength",xc.ID([n1.tag, n2.tag]))
 
    
 # Constraints
 constraints= preprocessor.getBoundaryCondHandler
-spc= constraints.newSPConstraint(1,0,0.0) # Node 1
+spc= constraints.newSPConstraint(n1.tag, 0,0.0) # Node 1
 
 
 # Loads definition
@@ -73,21 +71,20 @@ calculatedStresses= []
 calculatedStrains= []
 
 for stress in stressInput:
-  dom.revertToStart()
-  lPatterns.removeFromDomain(lp0.name)
-  lp0.clearLoads()
-  nl= lp0.newNodalLoad(2,xc.Vector([stress]))
-  lPatterns.addToDomain(lp0.name)
-  result= analysis.analyze(1)
-  calculatedStresses.append(-elem1.getResistingForce()[0])
-  calculatedStrains.append(elem1.getMaterials()[0].getStrain())
+    dom.revertToStart()
+    lPatterns.removeFromDomain(lp0.name)
+    lp0.clearLoads()
+    nl= lp0.newNodalLoad(n2.tag, xc.Vector([stress]))
+    lPatterns.addToDomain(lp0.name)
+    result= analysis.analyze(1)
+    calculatedStresses.append(-elem1.getResistingForce()[0])
+    calculatedStrains.append(elem1.getMaterials()[0].getStrain())
 
 residStresses= (np.array(calculatedStresses) - np.array(stressData))
 residStrains= (np.array(calculatedStrains) - np.array(strainData))
 
 ratio1= np.linalg.norm(residStresses)/-concrAux.fmaxK()
 ratio2= np.linalg.norm(residStrains)/3.5e-3
-
 
 
 ''' 

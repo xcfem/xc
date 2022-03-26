@@ -28,12 +28,6 @@ preprocessor=  feProblem.getPreprocessor
 nodes= preprocessor.getNodeHandler
 modelSpace= predefined_spaces.StructuralMechanics2D(nodes)
 
-# Defining nodes
-nodes.defaultTag= 1 #First node number.
-nod= nodes.newNodeXY(1,0)
-nod= nodes.newNodeXY(1,0)
-
-
 # Define materials
 A= 0.0
 yG= 0.0

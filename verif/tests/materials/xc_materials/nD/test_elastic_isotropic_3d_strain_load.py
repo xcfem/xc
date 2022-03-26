@@ -35,7 +35,6 @@ feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
 nodes= preprocessor.getNodeHandler
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
-nodes.defaultTag= 1 # First node number.
 nod1= nodes.newNodeXYZ(0.0,0.0,0.0)
 nod2= nodes.newNodeXYZ(L,0.0,0.0)
 nod3= nodes.newNodeXYZ(L,h,0.0)

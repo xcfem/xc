@@ -35,11 +35,10 @@ feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
 nodes= preprocessor.getNodeHandler
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
-nodes.defaultTag= 1 # First node number.
-nod1= nodes.newNodeXYZ(0.0,0.0,0.0)
-nod2= nodes.newNodeXYZ(L,0.0,0.0)
-nod3= nodes.newNodeXYZ(L,h,0.0)
-nod4= nodes.newNodeXYZ(0,h,0.0)
+n1= nodes.newNodeXYZ(0.0,0.0,0.0)
+n2= nodes.newNodeXYZ(L,0.0,0.0)
+n3= nodes.newNodeXYZ(L,h,0.0)
+n4= nodes.newNodeXYZ(0,h,0.0)
 
 
 # Materials definition
@@ -49,23 +48,22 @@ memb1= typical_materials.defMembranePlateFiberSection(preprocessor,name='memb1',
 # Elements definition
 elements= preprocessor.getElementHandler
 elements.defaultMaterial= memb1.name
-elements.defaultTag= 1
-elem1= elements.newElement("ShellMITC4",xc.ID([nod1.tag,nod2.tag,nod3.tag,nod4.tag]))
+elem1= elements.newElement("ShellMITC4",xc.ID([n1.tag,n2.tag,n3.tag,n4.tag]))
 
 
 # Constraints
 constraints= preprocessor.getBoundaryCondHandler
 
-spc= constraints.newSPConstraint(nod1.tag,0,0.0)
-spc= constraints.newSPConstraint(nod2.tag,0,0.0)
-spc= constraints.newSPConstraint(nod3.tag,0,0.0)
-spc= constraints.newSPConstraint(nod4.tag,0,0.0)
-spc= constraints.newSPConstraint(nod1.tag,2,0.0)
-spc= constraints.newSPConstraint(nod2.tag,2,0.0)
-spc= constraints.newSPConstraint(nod3.tag,2,0.0)
-spc= constraints.newSPConstraint(nod4.tag,2,0.0)
-spc= constraints.newSPConstraint(nod1.tag,1,0.0)
-spc= constraints.newSPConstraint(nod2.tag,1,0.0)
+spc= constraints.newSPConstraint(n1.tag,0,0.0)
+spc= constraints.newSPConstraint(n2.tag,0,0.0)
+spc= constraints.newSPConstraint(n3.tag,0,0.0)
+spc= constraints.newSPConstraint(n4.tag,0,0.0)
+spc= constraints.newSPConstraint(n1.tag,2,0.0)
+spc= constraints.newSPConstraint(n2.tag,2,0.0)
+spc= constraints.newSPConstraint(n3.tag,2,0.0)
+spc= constraints.newSPConstraint(n4.tag,2,0.0)
+spc= constraints.newSPConstraint(n1.tag,1,0.0)
+spc= constraints.newSPConstraint(n2.tag,1,0.0)
 
 # Load case definition.
 lp0= modelSpace.newLoadPattern(name= '0')

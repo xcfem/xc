@@ -29,11 +29,8 @@ nodes= preprocessor.getNodeHandler
 
 # Problem type
 modelSpace= predefined_spaces.SolidMechanics2D(nodes)
-
-
-nodes.defaultTag= 1 #First node number.
-nod= nodes.newNodeXY(0,0)
-nod= nodes.newNodeXY(l,0.0)
+n1= nodes.newNodeXY(0,0)
+n2= nodes.newNodeXY(l,0.0)
 
 # Materials definition
 cable= typical_materials.defCableMaterial(preprocessor, "cable",E,sigmaPret,0.0)
@@ -47,25 +44,22 @@ elements= preprocessor.getElementHandler
 elements.defaultMaterial= cable.name
 elements.dimElem= 2 # Dimension of element space
 #  sintaxis: truss[<tag>] 
-elements.defaultTag= 1 #Tag for the next element.
-truss= elements.newElement("Truss",xc.ID([1,2]))
+truss= elements.newElement("Truss",xc.ID([n1.tag, n2.tag]))
 truss.sectionArea= area
     
 # Constraints
 constraints= preprocessor.getBoundaryCondHandler
 #
-spc= constraints.newSPConstraint(1,0,0.0) # Node 1
-spc= constraints.newSPConstraint(1,1,0.0)
-spc= constraints.newSPConstraint(2,0,0.0) # Node 2
-spc= constraints.newSPConstraint(2,1,0.0)
-
-
+spc= constraints.newSPConstraint(n1.tag, 0,0.0) # Node 1
+spc= constraints.newSPConstraint(n1.tag, 1,0.0)
+spc= constraints.newSPConstraint(n2.tag, 0,0.0) # Node 2
+spc= constraints.newSPConstraint(n2.tag, 1,0.0)
 
 # Solution
 result= modelSpace.analyze(calculateNodalReactions= True)
 
-R1= nodes.getNode(2).getReaction[0] 
-R2= nodes.getNode(1).getReaction[0] 
+R1= n2.getReaction[0] 
+R2= n1.getReaction[0] 
 
 
 ratio1= ((R1-fPret)/fPret)

@@ -33,10 +33,6 @@ preprocessor=  feProblem.getPreprocessor
 nodes= preprocessor.getNodeHandler
 
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
-nodes.defaultTag= 1 #First node number.
-nod= nodes.newNodeXYZ(1,0,0)
-nod= nodes.newNodeXYZ(1,0,0)
-
 
 # Define materials
 A= 0.0
@@ -85,9 +81,6 @@ R= fiberSectionTest.getStressResultant()
 fibers= fiberSectionTest.getFibers()
 MomYFibersDq= fibers.getMy(0.0)
 MomZFibersDq= fibers.getMz(0.0)
-
-
-
 
 ratio1= R[0]-F
 ratio2= R[1]-MomZ

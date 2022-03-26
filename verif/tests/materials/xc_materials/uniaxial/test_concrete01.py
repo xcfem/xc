@@ -35,11 +35,8 @@ nodes= preprocessor.getNodeHandler
 
 # Problem type
 modelSpace= predefined_spaces.SolidMechanics2D(nodes)
-
-
-nodes.defaultTag= 1 #First node number.
-nod= nodes.newNodeXY(0,0)
-nod= nodes.newNodeXY(l,0.0)
+n1= nodes.newNodeXY(0,0)
+n2= nodes.newNodeXY(l,0.0)
 
 # Materials definition
 horm= typical_materials.defConcrete01(preprocessor, "horm",epsc0,fc,fcu,epsU)
@@ -73,14 +70,14 @@ elements= preprocessor.getElementHandler
 elements.defaultMaterial= horm.name
 elements.dimElem= 2 # Dimension of element space
 #  sintaxis: Spring[<tag>] 
-spring= elements.newElement("Spring",xc.ID([1,2]))
+spring= elements.newElement("Spring",xc.ID([n1.tag, n2.tag]))
     
 # Constraints
 constraints= preprocessor.getBoundaryCondHandler
 #
-spc= constraints.newSPConstraint(1,0,0.0) # Node 1
-spc= constraints.newSPConstraint(1,1,0.0)
-spc= constraints.newSPConstraint(2,1,0.0) # Node 2
+spc= constraints.newSPConstraint(n1.tag, 0,0.0) # Node 1
+spc= constraints.newSPConstraint(n1.tag, 1,0.0)
+spc= constraints.newSPConstraint(n2.tag, 1,0.0) # Node 2
 
 # Loads definition
 loadHandler= preprocessor.getLoadHandler
@@ -94,16 +91,17 @@ ts.shift= 0
 lPatterns.currentTimeSeries= "ts"
 #Load case definition
 lp0= lPatterns.newLoadPattern("default","0")
-lp0.newNodalLoad(2,xc.Vector([-F,0]))
+lp0.newNodalLoad(n2.tag,xc.Vector([-F,0]))
 
 #We add the load case to domain.
 lPatterns.addToDomain(lp0.name)
-x= []
-y= []
+x= list()
+y= list()
 recorder= feProblem.getDomain.newRecorder("element_prop_recorder",None)
-recorder.setElements(xc.ID([0]))
+recorder.setElements(xc.ID([spring.tag]))
 recorder.callbackRecord= "x.append(self.getMaterial().getStrain()); y.append(self.getN())"
 recorder.callbackRestart= "print(\"Restart method called.\")"
+
 
 '''
         \prop_recorder
@@ -135,7 +133,7 @@ ctest.maxNumIter= 10 # Convergence Test: maximum number of iterations that will 
 ctest.printFlag= 0 # Convergence Test: flag used to print(information on convergence (optional))
                    # 1: print(information on each= step)
 integ= solutionStrategy.newIntegrator("displacement_control_integrator",xc.Vector([]))
-integ.nod= 2
+integ.nod= n2.tag
 integ.dof= 0
 integ.dU1= -0.00012
 soe= solutionStrategy.newSystemOfEqn("sparse_gen_col_lin_soe")
@@ -153,28 +151,30 @@ integ.dU1= 0.00012 #Unload
 result= analysis.analyze(17)
 
 #diff= ley-ley_modelo
-diff_x= []
-diff_y= []
+diff_x= list()
+diff_y= list()
 def subtract(x,y): return x-y
 diff_x= map(subtract,x,x_modelo)
 diff_y= map(subtract,y,y_modelo)
 
 ratio1= 0
 for d in diff_x:
-  ratio1= ratio1+d**2
+    ratio1= ratio1+d**2
 ratio3= math.sqrt(ratio1)
 ratio2= 0
 for d in diff_y:
-  ratio2= ratio2+d**2
+    ratio2= ratio2+d**2
 ratio4= math.sqrt(ratio2)
 
-#print("x= ",x)
-#print("diff_x= ",diff_x)
-#print("ratio3= ",ratio3)
-#print("y= ",y)
-#print("y_modelo= ",y_modelo)
-#print("diff_y= ",diff_y)
-#print("ratio4= ",ratio4)
+'''
+print("x= ",x)
+print("diff_x= ",diff_x)
+print("ratio3= ",ratio3)
+print("y= ",y)
+print("y_modelo= ",y_modelo)
+print("diff_y= ",diff_y)
+print("ratio4= ",ratio4)
+'''
 
 import os
 from misc_utils import log_messages as lmsg

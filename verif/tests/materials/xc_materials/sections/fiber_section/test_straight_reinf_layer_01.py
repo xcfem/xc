@@ -33,9 +33,8 @@ preprocessor=  feProblem.getPreprocessor
 nodes= preprocessor.getNodeHandler
 modelSpace= predefined_spaces.StructuralMechanics2D(nodes)
 
-nodes.defaultTag= 1 # First node number.
-nod= nodes.newNodeXY(1,0)
-nod= nodes.newNodeXY(1,0)
+n1= nodes.newNodeXY(1,0)
+n2= nodes.newNodeXY(1,0)
 
 # Materials definition: uniaxial bilinear steel
 fy= 2600   # yield strength
@@ -87,21 +86,19 @@ for_each_fiber
 elements= preprocessor.getElementHandler
 elements.defaultMaterial= quadFibers.name
 elements.dimElem= 1 # Dimension of element space
-elements.defaultTag= 1
-elem= elements.newElement("ZeroLengthSection",xc.ID([1,2]))
+elem= elements.newElement("ZeroLengthSection",xc.ID([n1.tag, n2.tag]))
 
 # Constraints
 constraints= preprocessor.getBoundaryCondHandler
-#
-spc= constraints.newSPConstraint(1,0,0.0) # Node 1
-spc= constraints.newSPConstraint(1,1,0.0)
-spc= constraints.newSPConstraint(1,2,0.0)
-spc= constraints.newSPConstraint(2,1,0.0)
-spc= constraints.newSPConstraint(2,2,0.0)
+spc= constraints.newSPConstraint(n1.tag, 0,0.0) # Node 1
+spc= constraints.newSPConstraint(n1.tag, 1,0.0)
+spc= constraints.newSPConstraint(n1.tag, 2,0.0)
+spc= constraints.newSPConstraint(n2.tag, 1,0.0)
+spc= constraints.newSPConstraint(n2.tag, 2,0.0)
 
 # Load definition.
 lp0= modelSpace.newLoadPattern(name= '0')
-lp0.newNodalLoad(2,xc.Vector([F,0.0,0.0]))
+lp0.newNodalLoad(n2.tag, xc.Vector([F,0.0,0.0]))
 
 # We add the load case to domain.
 modelSpace.addLoadCaseToDomain(lp0.name)
@@ -109,15 +106,12 @@ modelSpace.addLoadCaseToDomain(lp0.name)
 # Solution
 result= modelSpace.analyze(calculateNodalReactions= True)
 
-nod2= nodes.getNode(2)
-deltax= nod2.getDisp[0] 
-nod1= nodes.getNode(1)
-R= nod1.getReaction[0] 
+deltax= n2.getDisp[0] 
+R= n1.getReaction[0] 
 
 
-elem1= elements.getElement(1)
-elem1.getResistingForce()
-scc= elem1.getSection()
+elem.getResistingForce()
+scc= elem.getSection()
 nfib= scc.getFibers().getNumFibers()
 avgStrain= 0.0
 fibers= scc.getFibers()
@@ -132,9 +126,6 @@ for f in fibers:
 # print("fiber: ",tag, " strain: ", getMaterial.strain)
    avgStrain+= f.getMaterial().getStrain()
 avgStrain/= nfib
-
-
-
 
 ratio1= (nfib-nRebars)/nRebars
 ratio2= (sumAreas-areaTeor)/areaTeor

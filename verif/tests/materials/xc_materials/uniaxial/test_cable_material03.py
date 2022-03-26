@@ -33,11 +33,10 @@ nodes= preprocessor.getNodeHandler
 # Problem type
 modelSpace= predefined_spaces.SolidMechanics2D(nodes)
 
-
-nodes.defaultTag= 1 # First node number.
-nod= nodes.newNodeXY(0,0)
-nod= nodes.newNodeXY(l/2,0.0)
-nod= nodes.newNodeXY(l,0.0)
+# Geometry
+n1= nodes.newNodeXY(0,0)
+n2= nodes.newNodeXY(l/2,0.0)
+n3= nodes.newNodeXY(l,0.0)
 
 # Materials definition
 cable= typical_materials.defCableMaterial(preprocessor, "cable",E,sigmaPret,0.0)
@@ -50,26 +49,24 @@ cable= typical_materials.defCableMaterial(preprocessor, "cable",E,sigmaPret,0.0)
 elements= preprocessor.getElementHandler
 elements.defaultMaterial= cable.name
 elements.dimElem= 2 # Dimension of element space
-elements.defaultTag= 1 # First node number.
-truss1= elements.newElement("CorotTruss",xc.ID([1,2]))
+truss1= elements.newElement("CorotTruss",xc.ID([n1.tag, n2.tag]))
 truss1.sectionArea= area
-truss2= elements.newElement("CorotTruss",xc.ID([2,3]))
+truss2= elements.newElement("CorotTruss",xc.ID([n2.tag, n3.tag]))
 truss2.sectionArea= area
     
 # Constraints
 constraints= preprocessor.getBoundaryCondHandler
-#
-spc= constraints.newSPConstraint(1,0,0.0) # Node 1
-spc= constraints.newSPConstraint(1,1,0.0)
-spc= constraints.newSPConstraint(3,0,0.0) # Node 3
-spc= constraints.newSPConstraint(3,1,0.0)
+spc= constraints.newSPConstraint(n1.tag, 0,0.0) # Node 1
+spc= constraints.newSPConstraint(n1.tag, 1,0.0)
+spc= constraints.newSPConstraint(n3.tag, 0,0.0) # Node 3
+spc= constraints.newSPConstraint(n3.tag, 1,0.0)
 
 
 # Load case definition.
 lPattern= '0'
 lp0= modelSpace.newLoadPattern(name= lPattern)
 
-lp0.newNodalLoad(2,xc.Vector([0,-F]))
+lp0.newNodalLoad(n2.tag, xc.Vector([0,-F]))
 modelSpace.addLoadCaseToDomain(lPattern)
 
 # Solution procedure
@@ -79,18 +76,14 @@ result= analysis.analyze(10)
 
 nodes.calculateNodalReactions(True,1e-7)
 
-nod3= nodes.getNode(3)
-R1X= nod3.getReaction[0]
-R1Y= nod3.getReaction[1] 
-nod1= nodes.getNode(1)
-R2X= nod1.getReaction[0]
-R2Y= nod1.getReaction[1] 
-nod2= nodes.getNode(2)
-deltaX= nod2.getDisp[0]
-deltaY= nod2.getDisp[1]  
+R1X= n3.getReaction[0]
+R1Y= n3.getReaction[1] 
+R2X= n1.getReaction[0]
+R2Y= n1.getReaction[1] 
+deltaX= n2.getDisp[0]
+deltaY= n2.getDisp[1]  
 
-ele1= elements.getElement(1)
-tension= ele1.getN()
+tension= truss1.getN()
 
 
 alpha= -math.atan2(deltaY,l/2)

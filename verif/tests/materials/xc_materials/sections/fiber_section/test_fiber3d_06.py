@@ -32,10 +32,6 @@ feProblem.logFileName= "/tmp/erase.log" # Ignore warning messages
 preprocessor=  feProblem.getPreprocessor
 nodes= preprocessor.getNodeHandler
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
-nodes.defaultTag= 1 #First node number.
-nod= nodes.newNodeXYZ(1,0,0)
-nod= nodes.newNodeXYZ(1,0,0)
-
 
 # Define materials
 A= 0.0
