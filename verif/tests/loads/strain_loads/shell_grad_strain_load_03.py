@@ -46,7 +46,6 @@ memb1= typical_materials.defElasticMembranePlateSection(preprocessor=preprocesso
 # Elements definition
 elements= preprocessor.getElementHandler
 elements.defaultMaterial= memb1.name
-elements.defaultTag= 1
 elem1= elements.newElement("ShellMITC4",xc.ID([nod1.tag,nod2.tag,nod3.tag,nod4.tag]))
 
 
@@ -80,7 +79,6 @@ modelSpace.addLoadCaseToDomain(lp0.name)
 analysis= predefined_solutions.simple_static_linear(feProblem)
 result= analysis.analyze(1)
 
-elem1= elements.getElement(1)
 elem1.getResistingForce()
 
 # Displacements free nodes 

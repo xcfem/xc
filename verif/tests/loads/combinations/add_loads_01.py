@@ -41,33 +41,31 @@ feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor   
 nodes= preprocessor.getNodeHandler
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
-nodes.defaultTag= 1 # First node number.
-nodes.newNodeXYZ(0,0.0,0.0)
-nodes.newNodeXYZ(L,0.0,0.0)
+# Create nodes.
+n1= nodes.newNodeXYZ(0,0.0,0.0)
+n2= nodes.newNodeXYZ(L,0.0,0.0)
 
-lin= modelSpace.newLinearCrdTransf("lin",xc.Vector([0,1,0]))
-
-    
 # Materials definition
 scc= typical_materials.defElasticSection3d(preprocessor, "scc",A,E,G,Iz,Iy,J)
 
 # Elements definition
+## Coordinate transformation.
+lin= modelSpace.newLinearCrdTransf("lin",xc.Vector([0,1,0]))
 elements= preprocessor.getElementHandler
 elements.defaultTransformation= lin.name
 elements.defaultMaterial= scc.name
-elements.defaultTag= 1 # Tag for next element.
-beam3d= elements.newElement("ElasticBeam3d",xc.ID([1,2]))
+beam3d= elements.newElement("ElasticBeam3d",xc.ID([n1.tag, n2.tag]))
 
 # Constraints
-modelSpace.fixNode000_000(1)
+modelSpace.fixNode000_000(n1.tag)
 
 # Load case definition.
 lp0= modelSpace.newLoadPattern(name= '0')
 lp0.gammaF= GF
-lp0.newNodalLoad(2,xc.Vector([F,0,0,0,0,0]))
+lp0.newNodalLoad(n2.tag,xc.Vector([F,0,0,0,0,0]))
 lp1= modelSpace.newLoadPattern(name= '1')
 lp1.gammaF= GM
-lp1.newNodalLoad(2,xc.Vector([0,0,0,M,0,0]))
+lp1.newNodalLoad(n2.tag,xc.Vector([0,0,0,M,0,0]))
 # We add the load case to domain.
 modelSpace.addLoadCaseToDomain(lp0.name)
 # We add the load case to domain.
@@ -77,11 +75,14 @@ modelSpace.addLoadCaseToDomain("1")
 analysis= predefined_solutions.simple_static_linear(feProblem)
 result= analysis.analyze(1)
 
-delta= nodes.getNode(2).getDisp[0]
-theta= nodes.getNode(2).getDisp[3]
-elements.getElement(1).getResistingForce()
-N1= elements.getElement(1).getN1
-M1= elements.getElement(1).getT()
+# Get displacements.
+delta= n2.getDisp[0]
+theta= n2.getDisp[3]
+
+# Get internal forces.
+beam3d.getResistingForce()
+N1= beam3d.getN1
+M1= beam3d.getT()
 
 deltateor= (GF*F*L/(E*A))
 ratio1= (delta-deltateor)/deltateor

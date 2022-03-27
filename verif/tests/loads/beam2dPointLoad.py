@@ -36,10 +36,8 @@ preprocessor=  feProblem.getPreprocessor
 nodes= preprocessor.getNodeHandler
 
 modelSpace= predefined_spaces.StructuralMechanics2D(nodes)
-
-nodes.defaultTag= 1 # First node number.
-nod= nodes.newNodeXY(0,0)
-nod= nodes.newNodeXY(L,0.0)
+n1= nodes.newNodeXY(0,0)
+n2= nodes.newNodeXY(L,0.0)
 
 # Geometric transformation(s)
 lin= modelSpace.newLinearCrdTransf("lin")
@@ -53,20 +51,19 @@ elements= preprocessor.getElementHandler
 elements.defaultTransformation= lin.name
 elements.defaultMaterial= scc.name
 #  sintaxis: beam2d_02[<tag>] 
-elements.defaultTag= 1 # Tag for next element.
-beam2d= elements.newElement("ElasticBeam2d",xc.ID([1,2]))
+beam2d= elements.newElement("ElasticBeam2d",xc.ID([n1.tag, n2.tag]))
 beam2d.h= h
     
 # Constraints
 constraints= preprocessor.getBoundaryCondHandler
-modelSpace.fixNode000(1)
+modelSpace.fixNode000(n1.tag)
 
 
 # Load definition.
 lp0= modelSpace.newLoadPattern(name= '0')
 
 eleLoad= lp0.newElementalLoad("beam2d_point_load")
-eleLoad.elementTags= xc.ID([1])
+eleLoad.elementTags= xc.ID([beam2d.tag])
 eleLoad.transComponent= -P
 eleLoad.axialComponent= n
 eleLoad.x= x
@@ -77,14 +74,8 @@ modelSpace.addLoadCaseToDomain(lp0.name)
 analysis= predefined_solutions.simple_static_linear(feProblem)
 result= analysis.analyze(1)
 
-
-nodes= preprocessor.getNodeHandler
-nod2= nodes.getNode(2)
-delta0= nod.getDisp[0] 
-delta1= nod2.getDisp[1] 
-
-
-
+delta0= n2.getDisp[0] 
+delta1= n2.getDisp[1] 
 
 a= x*L
 delta0Teor= (n*a/E/A)

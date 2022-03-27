@@ -33,28 +33,27 @@ sectionTestMaterial= typical_materials.MaterialData("sectionTestMaterial",E=7E9,
 modelSpace= predefined_spaces.StructuralMechanics2D(nodes)
 # Definimos el material
 def_secc_aggregation.def_secc_aggregation2d(preprocessor, sectionTest,sectionTestMaterial)
-nodes.defaultTag= 1 # First node number.
-nod= nodes.newNodeXY(0,0)
-nod= nodes.newNodeXY(L,0.0)
+# Create nodes.
+n1= nodes.newNodeXY(0,0)
+n2= nodes.newNodeXY(L,0.0)
 
-# Geometric transformations
-lin= modelSpace.newLinearCrdTransf("lin")
     
 # Materials definition
 scc= typical_materials.defElasticSection2d(preprocessor, "scc",sectionTest.A(),sectionTestMaterial.E,sectionTest.Iz())
 
 # Elements definition
+## Geometric transformations
+lin= modelSpace.newLinearCrdTransf("lin")
 elements= preprocessor.getElementHandler
 elements.defaultTransformation= lin.name
 elements.defaultMaterial= scc.name 
 elements.defaultMaterial= sectionTest.name
 elements.numSections= 3 # Number of sections along the element.
-elements.defaultTag= 1
-beam2d= elements.newElement("ForceBeamColumn2d",xc.ID([1,2]))
+beam2d= elements.newElement("ForceBeamColumn2d",xc.ID([n1.tag, n2.tag]))
     
 # Constraints
 constraints= preprocessor.getBoundaryCondHandler
-modelSpace.fixNode000(1)
+modelSpace.fixNode000(n1.tag)
 
 
 
@@ -62,7 +61,7 @@ modelSpace.fixNode000(1)
 lp0= modelSpace.newLoadPattern(name= '0')
 
 eleLoad= lp0.newElementalLoad("beam2d_uniform_load")
-eleLoad.elementTags= xc.ID([1]) 
+eleLoad.elementTags= xc.ID([beam2d.tag]) 
 eleLoad.transComponent= -P 
 eleLoad.axialComponent= n
 # We add the load case to domain.
@@ -74,20 +73,15 @@ result= analysis.analyze(1)
 
 
 nodes.calculateNodalReactions(True,1e-7)
-nod2= nodes.getNode(2)
-delta0= nod2.getDisp[0] 
-delta1= nod2.getDisp[1] 
-nod1= nodes.getNode(1)
-RN= nod1.getReaction[0] 
-nod2= nodes.getNode(2)
-RN2= nod2.getReaction[0] 
+delta0= n2.getDisp[0] 
+delta1= n2.getDisp[1] 
+RN= n1.getReaction[0] 
+RN2= n2.getReaction[0] 
 
-elem1= elements.getElement(1)
-elem1.getResistingForce()
-scc0= elem1.getSections()[0]
+beam2d.getResistingForce()
+scc0= beam2d.getSections()[0]
 
 N0= scc0.getStressResultantComponent("N")
-
 
 F= (n*L)
 delta0Teor= (n*L**2/2.0/sectionTestMaterial.E/sectionTest.A())
@@ -97,7 +91,6 @@ delta1Teor= (-Q*L**3/8/sectionTestMaterial.E/sectionTest.Iz())
 ratio1= ((delta1-delta1Teor)/delta1Teor)
 ratio2= (abs((N0-F)/F))
 ratio3= (abs((RN+F)/F))
-
 
 ''' 
 print("delta0= ",delta0)

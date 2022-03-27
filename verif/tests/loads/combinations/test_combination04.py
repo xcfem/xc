@@ -40,27 +40,24 @@ nodes= preprocessor.getNodeHandler
 
 # Problem type
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
-nodes.defaultTag= 1 #First node number.
-nod= nodes.newNodeXYZ(0,0.0,0.0)
-nod= nodes.newNodeXYZ(L,0.0,0.0)
+# Create nodes.
+n1= nodes.newNodeXYZ(0,0.0,0.0)
+n2= nodes.newNodeXYZ(L,0.0,0.0)
 
-
-# Geometric transformation(s)
-lin= modelSpace.newLinearCrdTransf("lin",xc.Vector([0,-1,0]))    
 # Materials definition
 scc= typical_materials.defElasticSection3d(preprocessor, "scc",A,E,G,Iz,Iy,J)
 
-
 # Elements definition
+## Geometric transformation(s)
+lin= modelSpace.newLinearCrdTransf("lin",xc.Vector([0,-1,0]))    
 elements= preprocessor.getElementHandler
 elements.defaultTransformation= lin.name
 elements.defaultMaterial= scc.name
 #  sintaxis: ElasticBeam3d[<tag>] 
-elements.defaultTag= 1 #Tag for next element.
-beam3d= elements.newElement("ElasticBeam3d",xc.ID([1,2]))
+beam3d= elements.newElement("ElasticBeam3d",xc.ID([n1.tag, n2.tag]))
 
 # Constraints
-modelSpace.fixNode000_000(1)
+modelSpace.fixNode000_000(n1.tag)
 
 # Loads definition
 loadHandler= preprocessor.getLoadHandler
@@ -72,12 +69,12 @@ lpA= lPatterns.newLoadPattern("default","A")
 lpB= lPatterns.newLoadPattern("default","B") 
 #lPatterns.currentLoadPattern= "A"
 eleLoad= lpA.newElementalLoad("beam3d_uniform_load")
-eleLoad.elementTags= xc.ID([1]) 
+eleLoad.elementTags= xc.ID([beam3d.tag]) 
 eleLoad.axialComponent= f
 
 #lPatterns.currentLoadPattern= "B"
 eleLoad= lpB.newElementalLoad("beam3d_uniform_load")
-eleLoad.elementTags= xc.ID([1]) 
+eleLoad.elementTags= xc.ID([beam3d.tag]) 
 eleLoad.transComponent= -f
 
 combs= loadHandler.getLoadCombinations
@@ -101,25 +98,18 @@ db.save(100)
 feProblem.clearAll()
 db.restore(100)
 
-
+# Get displacements.
 nodes= preprocessor.getNodeHandler
- 
-nod2= nodes.getNode(2)
+deltax= n2.getDisp[0] 
+deltay= n2.getDisp[2] 
 
-deltax= nod2.getDisp[0] 
-deltay= nod2.getDisp[2] 
-
-elements= preprocessor.getElementHandler
-
-elem1= elements.getElement(1)
-
-elem1.getResistingForce()
-N1= elem1.getN1 # Axial force at the back end of the beam
-N2= elem1.getN2 # Axial force at the front end of the beam
-Mz1= elem1.getMz1 # Moment at the back end of the beam
-Mz2= elem1.getMz2 # Moment at the front end of the beam
-Vy1= elem1.getVy1 # Shear force at the back end of the beam
-Vy2= elem1.getVy2 # Shear force at the front end of the beam
+beam3d.getResistingForce()
+N1= beam3d.getN1 # Axial force at the back end of the beam
+N2= beam3d.getN2 # Axial force at the front end of the beam
+Mz1= beam3d.getMz1 # Moment at the back end of the beam
+Mz2= beam3d.getMz2 # Moment at the front end of the beam
+Vy1= beam3d.getVy1 # Shear force at the back end of the beam
+Vy2= beam3d.getVy2 # Shear force at the front end of the beam
 
 deltaxteor= (1.33*f*L**2/(2*E*A))
 ratio1= (deltax/deltaxteor)
@@ -159,7 +149,8 @@ print("Vy1teor= ",Vy1teor)
 print("ratio7= ",ratio7)
 print("Vy2= ",Vy2)
 print("Vy2teor= ",0)
-print("ratio8= ",ratio8 ''')
+print("ratio8= ",ratio8)
+'''
 
 if (abs(ratio1-1.0)<1e-5) & (abs(ratio2-1.0)<1e-5) & (abs(ratio3-1.0)<1e-5) & (abs(ratio4-1.0)<1e-5) & (abs(ratio5-1.0)<1e-5) & (abs(ratio6-1.0)<1e-5) & (abs(ratio7-1.0)<1e-5) & (abs(ratio8-1.0)<1e-5) :
     print('test '+fname+': ok.')

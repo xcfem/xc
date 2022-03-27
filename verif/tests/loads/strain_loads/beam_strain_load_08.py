@@ -37,9 +37,9 @@ preprocessor=  feProblem.getPreprocessor
 nodes= preprocessor.getNodeHandler
 modelSpace= predefined_spaces.StructuralMechanics2D(nodes)
 
-nodes.defaultTag= 1 # First node number.
-nod= nodes.newNodeXY(0.0,0.0)
-nod= nodes.newNodeXY(L,0.0)
+# Create nodes
+n1= nodes.newNodeXY(0.0,0.0)
+n2= nodes.newNodeXY(L,0.0)
 
 
 # Geometric transformation(s)
@@ -54,27 +54,24 @@ elements= preprocessor.getElementHandler
 elements.defaultTransformation= lin.name
 elements.defaultMaterial= scc.name
 elements.dimElem= 2 # Dimension of element space
-elements.defaultTag= 1 # Tag for next element.
-beam2d= elements.newElement("ElasticBeam2d",xc.ID([1,2]))
+beam2d= elements.newElement("ElasticBeam2d",xc.ID([n1.tag, n2.tag]))
 
     
 # Constraints
 constraints= preprocessor.getBoundaryCondHandler
-
-#
-spc= constraints.newSPConstraint(1,0,0.0)
-spc= constraints.newSPConstraint(1,1,0.0)
-spc= constraints.newSPConstraint(1,2,0.0)
-spc= constraints.newSPConstraint(2,0,0.0)
-spc= constraints.newSPConstraint(2,1,0.0)
-spc= constraints.newSPConstraint(2,2,0.0)
+spc= constraints.newSPConstraint(n1.tag, 0,0.0)
+spc= constraints.newSPConstraint(n1.tag, 1,0.0)
+spc= constraints.newSPConstraint(n1.tag, 2,0.0)
+spc= constraints.newSPConstraint(n2.tag, 0,0.0)
+spc= constraints.newSPConstraint(n2.tag, 1,0.0)
+spc= constraints.newSPConstraint(n2.tag, 2,0.0)
 
 # Load case definition.
 lp0= modelSpace.newLoadPattern(name= '0')
 lp0.gammaF= gammaF
 
 eleLoad= lp0.newElementalLoad("beam_strain_load")
-eleLoad.elementTags= xc.ID([1])
+eleLoad.elementTags= xc.ID([beam2d.tag])
 thermalDeformation= xc.DeformationPlane(alpha*AT)
 eleLoad.backEndDeformationPlane= thermalDeformation
 eleLoad.frontEndDeformationPlane= thermalDeformation
@@ -84,13 +81,9 @@ modelSpace.addLoadCaseToDomain(lp0.name)
 analysis= predefined_solutions.simple_static_linear(feProblem)
 result= analysis.analyze(1)
 
-
-
-elem1= elements.getElement(1)
-elem1.getResistingForce()
-axil1= elem1.getN1
-axil2= elem1.getN2
-
+beam2d.getResistingForce()
+axil1= beam2d.getN1
+axil2= beam2d.getN2
 
 N= (-gammaF*E*A*alpha*AT)
 ratio= ((axil2-N)/N)

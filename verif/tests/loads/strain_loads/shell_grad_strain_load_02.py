@@ -35,7 +35,7 @@ feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
 nodes= preprocessor.getNodeHandler
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
-nodes.defaultTag= 1 # First node number.
+# Create nodes.
 nod1= nodes.newNodeXYZ(0.0,b,0.0)
 nod2= nodes.newNodeXYZ(L,b,0.0)
 nod3= nodes.newNodeXYZ(L,0.0,0.0)
@@ -43,19 +43,15 @@ nod4= nodes.newNodeXYZ(0,0.0,0.0)
 
 
 # Materials definition
-
 memb1= typical_materials.defElasticMembranePlateSection(preprocessor=preprocessor, name="memb1",E=E,nu=0.3,rho=0.0,h=thickness)
 
 # Elements definition
 elements= preprocessor.getElementHandler
 elements.defaultMaterial= memb1.name
-elements.defaultTag= 1
 elem1= elements.newElement("ShellMITC4",xc.ID([nod4.tag,nod3.tag,nod2.tag,nod1.tag]))
-
 
 # Constraints
 constraints= preprocessor.getBoundaryCondHandler
-
 spc= constraints.newSPConstraint(nod1.tag,0,0.0)
 spc= constraints.newSPConstraint(nod1.tag,1,0.0)
 spc= constraints.newSPConstraint(nod1.tag,2,0.0)

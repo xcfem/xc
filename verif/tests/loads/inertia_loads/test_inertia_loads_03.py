@@ -35,7 +35,7 @@ nodes= preprocessor.getNodeHandler
 # Problem type
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
 
-# nodes.defaultTag= 1 # First node number.
+# Create nodes.
 n1= nodes.newNodeXYZ(0,0,0)
 n2= nodes.newNodeXYZ(l,0,0)
 
@@ -52,7 +52,6 @@ sectionProperties.rho= elast.rho # Material density
 refLinearRho= elast.rho*A # linear density
 ratio0= abs(sectionProperties.linearRho-refLinearRho)/refLinearRho
 section= typical_materials.defElasticSectionFromMechProp3d(preprocessor, "section",sectionProperties)
-
 
 # Element definition.
 elements= preprocessor.getElementHandler

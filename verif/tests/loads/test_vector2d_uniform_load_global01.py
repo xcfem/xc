@@ -45,12 +45,9 @@ nodes= preprocessor.getNodeHandler
 # Problem type
 modelSpace= predefined_spaces.StructuralMechanics2D(nodes)
 
-nodes.defaultTag= 1 # First node number.
-nod= nodes.newNodeXY(0,0.0)
-nod= nodes.newNodeXY(L*math.sqrt(2)/2,L*math.sqrt(2)/2)
-
-# Geometric transformation(s)
-lin= modelSpace.newLinearCrdTransf("lin")
+# Create nodes.
+n1= nodes.newNodeXY(0,0.0)
+n2= nodes.newNodeXY(L*math.sqrt(2)/2,L*math.sqrt(2)/2)
 
 # Materials definition
 fy= 275e6 # Yield stress of the steel.
@@ -81,18 +78,17 @@ agg.setAdditions(["T","Vy","Vz"],["respT","respVy","respVz"])
 
 
 # Elements definition
+## Geometric transformation(s)
+lin= modelSpace.newLinearCrdTransf("lin")
 elements= preprocessor.getElementHandler
 elements.defaultTransformation= lin.name # Coordinate transformation for the new elements
 elements.defaultMaterial= agg.name
 elements.numSections= 3 # Number of sections along the element.
-elements.defaultTag= 1
-el= elements.newElement("ForceBeamColumn2d",xc.ID([1,2]))
-
-
+el= elements.newElement("ForceBeamColumn2d",xc.ID([n1.tag, n2.tag]))
 
 # Constraints
 constraints= preprocessor.getBoundaryCondHandler
-modelSpace.fixNode000(1)
+modelSpace.fixNode000(n1.tag)
 
 # Load definition.
 lp0= modelSpace.newLoadPattern(name= '0')
@@ -111,19 +107,15 @@ loadHandler.addToDomain("0") # Append load pattern to domain.
 analysis= predefined_solutions.plain_newton_raphson(feProblem)
 result= analysis.analyze(1)
 
+# Get reactions.
 nodes.calculateNodalReactions(True,1e-7) 
-nod2= nodes.getNode(2)
-vDisp= xc.Vector([nod2.getDisp[0],nod2.getDisp[1]])
-nod1= nodes.getNode(1)
-vReac1= xc.Vector([nod1.getReaction[0],nod1.getReaction[1]])
-nod2= nodes.getNode(2)
-vReac2= xc.Vector([nod2.getReaction[0],nod2.getReaction[1]])
+vDisp= xc.Vector([n2.getDisp[0],n2.getDisp[1]])
+vReac1= xc.Vector([n1.getReaction[0],n1.getReaction[1]])
+vReac2= xc.Vector([n2.getReaction[0],n2.getReaction[1]])
 
-elements= preprocessor.getElementHandler
-
-elem1= elements.getElement(1)
-elem1.getResistingForce()
-scc= elem1.getSections()[0]
+# Get internal forces
+el.getResistingForce()
+scc= el.getSections()[0]
 N0= scc.getStressResultantComponent("N")
 
 F= (f*L)

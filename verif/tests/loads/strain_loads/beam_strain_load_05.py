@@ -40,10 +40,10 @@ preprocessor=  feProblem.getPreprocessor
 nodes= preprocessor.getNodeHandler
 modelSpace= predefined_spaces.StructuralMechanics2D(nodes)
 
-nodes.defaultTag= 1 # First node number.
-nod= nodes.newNodeXY(0.0,0.0)
-nod= nodes.newNodeXY(L/2,0.0)
-nod= nodes.newNodeXY(L,0.0)
+# Create nodes.
+n1= nodes.newNodeXY(0.0,0.0)
+n2= nodes.newNodeXY(L/2,0.0)
+n3= nodes.newNodeXY(L,0.0)
 
 
 # Geometric transformation(s)
@@ -56,21 +56,20 @@ elements= preprocessor.getElementHandler
 elements.defaultTransformation= lin.name # Coordinate transformation for the new elements
 elements.defaultMaterial= section.name
 elements.defaultTag= 1
-beam1= elements.newElement("ForceBeamColumn2d",xc.ID([1,2]))
-beam2= elements.newElement("ForceBeamColumn2d",xc.ID([2,3]))
+beam1= elements.newElement("ForceBeamColumn2d",xc.ID([n1.tag, n2.tag]))
+beam2= elements.newElement("ForceBeamColumn2d",xc.ID([n2.tag, n3.tag]))
 
-    
 # Constraints
 constraints= preprocessor.getBoundaryCondHandler
-modelSpace.fixNode000(1)
-modelSpace.fixNode000(3)
+modelSpace.fixNode000(n1.tag)
+modelSpace.fixNode000(n3.tag)
 
 
 # Load case definition.
 lp0= modelSpace.newLoadPattern(name= '0')
 
 eleLoad= lp0.newElementalLoad("beam_strain_load")
-eleLoad.elementTags= xc.ID([1])
+eleLoad.elementTags= xc.ID([beam1.tag])
 thermalDeformation= xc.DeformationPlane(alpha*AT)
 eleLoad.backEndDeformationPlane= thermalDeformation
 eleLoad.frontEndDeformationPlane= thermalDeformation
@@ -82,29 +81,26 @@ modelSpace.addLoadCaseToDomain(lp0.name)
 analysis= predefined_solutions.plain_static_modified_newton(feProblem)
 result= analysis.analyze(1)
 
+# Get displacements.
+dX= n2.getDisp[0] 
+dY= n2.getDisp[1]   
 
-nod2= nodes.getNode(2)
-dX= nod2.getDisp[0] 
-dY= nod2.getDisp[1]   
+# Get internal forces.
+beam1.getResistingForce()
+scc0= beam1.getSections()[0]
 
-elem1= elements.getElement(1)
-elem1.getResistingForce()
-scc0= elem1.getSections()[0]
-
-axil= scc0.getStressResultantComponent("N")
+axialForce= scc0.getStressResultantComponent("N")
 moment= scc0.getStressResultantComponent("Mz")
 shear= scc0.getStressResultantComponent("Vy")
 
-
-
 N= (-E*A*alpha*AT)
-ratio= ((axil-N)/N)
+ratio= ((axialForce-N)/N)
 
 ''' 
 print("dX= ",dX)
 print("dY= ",dY)
 print("N= ",N)
-print("axil= ",axil)
+print("axialForce= ",axialForce)
 print("ratio= ",ratio)
 print("moment= ",moment)
 print("shear= ",shear)

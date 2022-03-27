@@ -39,9 +39,8 @@ matSeccTest= typical_materials.MaterialData("mattest",E=7E9,nu=0.3,rho=2500) # S
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
 # Definimos el material
 def_secc_aggregation.def_secc_aggregation3d(preprocessor, seccTest,matSeccTest)
-nodes.defaultTag= 1 # First node number.
-nod= nodes.newNodeXYZ(0,0,0)
-nod= nodes.newNodeXYZ(L,0,0)
+n1= nodes.newNodeXYZ(0,0,0)
+n2= nodes.newNodeXYZ(L,0,0)
 
 # Geometric transformations
 lin= modelSpace.newLinearCrdTransf("lin",xc.Vector([0,0,1]))    
@@ -50,11 +49,10 @@ elements= preprocessor.getElementHandler
 elements.defaultTransformation= lin.name
 elements.defaultMaterial= seccTest.name
 elements.numSections= 3 # Number of sections along the element.
-elements.defaultTag= 1
-beam3d= elements.newElement("ForceBeamColumn3d",xc.ID([1,2]))
+beam3d= elements.newElement("ForceBeamColumn3d",xc.ID([n1.tag, n2.tag]))
     
 # Constraints
-modelSpace.fixNode000_000(1)
+modelSpace.fixNode000_000(n1.tag)
 
 
 
@@ -62,7 +60,7 @@ modelSpace.fixNode000_000(1)
 lp0= modelSpace.newLoadPattern(name= '0')
 
 eleLoad= lp0.newElementalLoad("beam3d_uniform_load")
-eleLoad.elementTags= xc.ID([1]) 
+eleLoad.elementTags= xc.ID([beam3d.tag]) 
 eleLoad.transComponent= -P 
 eleLoad.axialComponent= n
 # We add the load case to domain.
@@ -75,17 +73,14 @@ analysis= predefined_solutions.plain_static_modified_newton(feProblem)
 result= analysis.analyze(1)
 
 nodes.calculateNodalReactions(True,1e-7)
-nod2= nodes.getNode(2)
-delta0= nod2.getDisp[0] 
-delta1= nod2.getDisp[1] 
-nod1= nodes.getNode(1)
-RN= nod1.getReaction[0] 
-RN2= nod2.getReaction[0] 
+delta0= n2.getDisp[0] 
+delta1= n2.getDisp[1] 
+RN= n1.getReaction[0] 
+RN2= n2.getReaction[0] 
 
 
-elem1= elements.getElement(1)
-elem1.getResistingForce()
-scc0= elem1.getSections()[0]
+beam3d.getResistingForce()
+scc0= beam3d.getSections()[0]
 
 N0= scc0.getStressResultantComponent("N")
 

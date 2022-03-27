@@ -32,7 +32,7 @@ nodes= preprocessor.getNodeHandler
 # Problem type
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
 
-# nodes.defaultTag= 1 # First node number.
+# Create nodes.
 n1= nodes.newNodeXYZ(0,0,0)
 n2= nodes.newNodeXYZ(l,0,0)
 

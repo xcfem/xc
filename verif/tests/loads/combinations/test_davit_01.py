@@ -42,38 +42,35 @@ feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
 nodes= preprocessor.getNodeHandler
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
-nodes.defaultTag= 1 #First node number.
-nod= nodes.newNodeXYZ(2.0,0.0,0.0)
-nod= nodes.newNodeXYZ(2.0,0.0,4.0)
-nod= nodes.newNodeXYZ(0.0,0.0,4.0)
-nod= nodes.newNodeXYZ(5.0,0.0,4.0)
+# Create nodes.
+n1= nodes.newNodeXYZ(2.0,0.0,0.0)
+n2= nodes.newNodeXYZ(2.0,0.0,4.0)
+n3= nodes.newNodeXYZ(0.0,0.0,4.0)
+n4= nodes.newNodeXYZ(5.0,0.0,4.0)
 
-lin= modelSpace.newLinearCrdTransf("lin",xc.Vector([0,1,0]))
-    
 # Materials definition
 scc= typical_materials.defElasticSection3d(preprocessor, "scc",A,E,G,Iz,Iy,J)
 
-
 # Elements definition
+## Coordinate transformation.
+lin= modelSpace.newLinearCrdTransf("lin",xc.Vector([0,1,0]))
 elements= preprocessor.getElementHandler
 elements.defaultTransformation= lin.name
 elements.defaultMaterial= scc.name
-elements.defaultTag= 1
 #  sintaxis: ElasticBeam3d[<tag>]
-beam1= elements.newElement("ElasticBeam3d",xc.ID([1,2]))
+beam1= elements.newElement("ElasticBeam3d",xc.ID([n1.tag, n2.tag]))
 beam1.rho= densHorm*A
-beam2= elements.newElement("ElasticBeam3d",xc.ID([3,2])) 
+beam2= elements.newElement("ElasticBeam3d",xc.ID([n3.tag, n2.tag])) 
 beam2.rho= densHorm*A
-beam3= elements.newElement("ElasticBeam3d",xc.ID([2,4])) 
+beam3= elements.newElement("ElasticBeam3d",xc.ID([n2.tag, n4.tag])) 
 beam3.rho= densHorm*A
 
 # Constraints
 
-modelSpace.fixNode000_000(1)
+modelSpace.fixNode000_000(n1.tag)
 
 # Loads definition
 loadHandler= preprocessor.getLoadHandler
-
 lPatterns= loadHandler.getLoadPatterns
 
 #Load modulation.
@@ -92,8 +89,8 @@ lpNV= lPatterns.newLoadPattern("default","NV")
 lPatterns.currentLoadPattern= "G"
 elements= preprocessor.getSets.getSet("total").getElements
 for e in elements:
-  pesoElem= (e.rho*(-10))
-  e.vector3dUniformLoadGlobal(xc.Vector([0.0,0.0,pesoElem]))
+    pesoElem= (e.rho*(-10))
+    e.vector3dUniformLoadGlobal(xc.Vector([0.0,0.0,pesoElem]))
 
 beam2.vector3dUniformLoadGlobal(xc.Vector([0.0,0.0,-22e3]))
 beam3.vector3dUniformLoadGlobal(xc.Vector([0.0,0.0,-22e3]))
@@ -133,21 +130,19 @@ NMin2= 6.023e23
 
 def procesResultVerif(nmbComb):
     elements= preprocessor.getElementHandler
-    elem1= elements.getElement(1)
-    elem1.getResistingForce()
-    N1= elem1.getN1
+    beam1.getResistingForce()
+    N1= beam1.getN1
     global NMin1
     NMin1=min(NMin1,N1)
     global NMin2
-    NMin2=min(NMin2,elem1.getN2)
-
+    NMin2=min(NMin2,beam1.getN2)
 
 # Solve.
 solProc= predefined_solutions.SimpleStaticLinear(feProblem)
 
 for key in combs.getKeys():
-  analOk= solProc.solveComb(key)
-  procesResultVerif(key)
+    analOk= solProc.solveComb(key)
+    procesResultVerif(key)
 
 NMin1Teor= 440.7e3
 NMin2Teor= 397.5e3

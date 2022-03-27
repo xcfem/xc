@@ -42,9 +42,8 @@ sectionTestMaterial=typical_materials.MaterialData(name='sectionTestMaterial',E=
 modelSpace= predefined_spaces.StructuralMechanics2D(nodes)
 # Definimos el material
 def_secc_aggregation.def_secc_aggregation2d(preprocessor, sectionTest,sectionTestMaterial)
-nodes.defaultTag= 1 # First node number.
-nod= nodes.newNodeXY(0,0)
-nod= nodes.newNodeXY(L,0.0)
+n1= nodes.newNodeXY(0,0)
+n2= nodes.newNodeXY(L,0.0)
 
 # Geometric transformation(s)
 lin= modelSpace.newLinearCrdTransf("lin")
@@ -57,17 +56,16 @@ scc= typical_materials.defElasticSection2d(preprocessor, "scc",A,E,I)
 elements= preprocessor.getElementHandler
 elements.defaultTransformation= lin.name# Coordinate transformation for the new elements
 elements.defaultMaterial= sectionTest.name
-elements.defaultTag= 1 # Tag for next element.
-beam2d= elements.newElement("ForceBeamColumn2d",xc.ID([1,2]))
+beam2d= elements.newElement("ForceBeamColumn2d",xc.ID([n1.tag, n2.tag]))
     
 # Constraints
 constraints= preprocessor.getBoundaryCondHandler
-modelSpace.fixNode000(1)
+modelSpace.fixNode000(n1.tag)
 
 
 # Load definition.
 lp0= modelSpace.newLoadPattern(name= '0')
-lp0.newNodalLoad(2,xc.Vector([0,-P,0]))
+lp0.newNodalLoad(n2.tag, xc.Vector([0,-P,0]))
 # We add the load case to domain.
 modelSpace.addLoadCaseToDomain(lp0.name)
 
@@ -76,8 +74,7 @@ analysis= predefined_solutions.simple_static_linear(feProblem)
 result= analysis.analyze(1)
 
 
-nod2= nodes.getNode(2)
-delta= nod2.getDisp[1] 
+delta= n2.getDisp[1] 
 
 
 deltaTeor= (-P*L**3/3/E/I)

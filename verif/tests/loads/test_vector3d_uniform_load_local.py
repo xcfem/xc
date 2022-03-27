@@ -40,12 +40,9 @@ feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
 nodes= preprocessor.getNodeHandler
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
-nodes.defaultTag= 1 # First node number.
-nod= nodes.newNodeXYZ(0,0.0,0.0)
-nod= nodes.newNodeXYZ(L,0.0,0.0)
-
-
-lin= modelSpace.newLinearCrdTransf("lin",xc.Vector([0,1,0]))
+# Create nodes.
+n1= nodes.newNodeXYZ(0,0.0,0.0)
+n2= nodes.newNodeXYZ(L,0.0,0.0)
 
 # Materials definition
 fy= 275e6 # Yield stress of the steel.
@@ -77,17 +74,16 @@ agg.setAdditions(["T","Vy","Vz"],["respT","respVy","respVz"])
 
 
 # Elements definition
+## Coordinate transformation.
+lin= modelSpace.newLinearCrdTransf("lin",xc.Vector([0,1,0]))
 elements= preprocessor.getElementHandler
 elements.defaultTransformation= lin.name
 elements.defaultMaterial= agg.name
 elements.numSections= 2 # Number of sections along the element.
-elements.defaultTag= 1
-el= elements.newElement("ForceBeamColumn3d",xc.ID([1,2]))
-
-
+el= elements.newElement("ForceBeamColumn3d",xc.ID([n1.tag, n2.tag]))
 
 # Constraints
-modelSpace.fixNode000_000(1)
+modelSpace.fixNode000_000(n1.tag)
 
 # Load definition.
 lp0= modelSpace.newLoadPattern(name= '0')
@@ -107,16 +103,17 @@ modelSpace.addLoadCaseToDomain(lp0.name)
 analysis= predefined_solutions.plain_static_modified_newton(feProblem)
 result= analysis.analyze(10)
 
-nodes.calculateNodalReactions(True,1e-7) 
-nod2= nodes.getNode(2)
-delta= nod2.getDisp[0]  # Node 2 xAxis displacement
-nod1= nodes.getNode(1)
-RN= nod1.getReaction[0] 
-RN2= nod2.getReaction[0] 
+# Get displacements.
+delta= n2.getDisp[0]  # Node 2 xAxis displacement
 
-elem1= elements.getElement(1)
-elem1.getResistingForce()
-scc0= elem1.getSections()[0]
+# Get reactions.
+nodes.calculateNodalReactions(True,1e-7) 
+RN= n1.getReaction[0] 
+RN2= n2.getReaction[0] 
+
+# Get internal forces.
+el.getResistingForce()
+scc0= el.getSections()[0]
 N0= scc0.getStressResultantComponent("N")
 
 F= (f*L)

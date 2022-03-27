@@ -35,23 +35,22 @@ feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
 nodes= preprocessor.getNodeHandler
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
-nodes.defaultTag= 1 #First node number.
-nod= nodes.newNodeXYZ(0,0,0)
-nod= nodes.newNodeXYZ(1,0,0)
-nod= nodes.newNodeXYZ(2,0,0)
-nod= nodes.newNodeXYZ(3,0,0)
-nod= nodes.newNodeXYZ(0,1,0)
-nod= nodes.newNodeXYZ(1,1,0)
-nod= nodes.newNodeXYZ(2,1,0)
-nod= nodes.newNodeXYZ(3,1,0)
-nod= nodes.newNodeXYZ(0,2,0)
-nod= nodes.newNodeXYZ(1,2,0)
-nod= nodes.newNodeXYZ(2,2,0)
-nod= nodes.newNodeXYZ(3,2,0)
+# Create nodes.
+n1= nodes.newNodeXYZ(0,0,0)
+n2= nodes.newNodeXYZ(1,0,0)
+n3= nodes.newNodeXYZ(2,0,0)
+n4= nodes.newNodeXYZ(3,0,0)
+n5= nodes.newNodeXYZ(0,1,0)
+n6= nodes.newNodeXYZ(1,1,0)
+n7= nodes.newNodeXYZ(2,1,0)
+n8= nodes.newNodeXYZ(3,1,0)
+n9= nodes.newNodeXYZ(0,2,0)
+n10= nodes.newNodeXYZ(1,2,0)
+n11= nodes.newNodeXYZ(2,2,0)
+n12= nodes.newNodeXYZ(3,2,0)
 
 
 # Materials definition
-
 hLosa= typical_materials.defElasticMembranePlateSection(preprocessor, "hLosa",Ec,nuC,densLosa,hLosa)
 
 prestressingSteel= typical_materials.defSteel02(preprocessor, "prestressingSteel",Ep,fy,0.001,tInic)
@@ -59,46 +58,42 @@ prestressingSteel= typical_materials.defSteel02(preprocessor, "prestressingSteel
 elements= preprocessor.getElementHandler
 # Reinforced concrete deck
 elements.defaultMaterial= hLosa.name
-elements.defaultTag= 1
-elem= elements.newElement("ShellMITC4",xc.ID([1,2,6,5]))
-
-elem= elements.newElement("ShellMITC4",xc.ID([2,3,7,6]))
-elem= elements.newElement("ShellMITC4",xc.ID([3,4,8,7]))
-elem= elements.newElement("ShellMITC4",xc.ID([5,6,10,9]))
-elem= elements.newElement("ShellMITC4",xc.ID([6,7,11,10]))
-elem= elements.newElement("ShellMITC4",xc.ID([7,8,12,11]))
+elemA= elements.newElement("ShellMITC4",xc.ID([n1.tag, n2.tag, n6.tag, n5.tag]))
+elemB= elements.newElement("ShellMITC4",xc.ID([n2.tag, n3.tag, n7.tag, n6.tag]))
+elemC= elements.newElement("ShellMITC4",xc.ID([n3.tag, n4.tag, n8.tag, n7.tag]))
+elemD= elements.newElement("ShellMITC4",xc.ID([n5.tag, n6.tag, n10.tag, n9.tag]))
+elemE= elements.newElement("ShellMITC4",xc.ID([n6.tag, n7.tag, n11.tag, n10.tag]))
+elemF= elements.newElement("ShellMITC4",xc.ID([n7.tag, n8.tag, n12.tag, n11.tag]))
 
 # active reinforcement
 elements.defaultMaterial= prestressingSteel.name
 elements.dimElem= 3 # Dimension of element space
-truss= elements.newElement("Truss",xc.ID([1,2]))
-truss.sectionArea= Ap
-truss= elements.newElement("Truss",xc.ID([2,3]))
-truss.sectionArea= Ap
-truss= elements.newElement("Truss",xc.ID([3,4]))
-truss.sectionArea= Ap
-truss= elements.newElement("Truss",xc.ID([5,6]))
-truss.sectionArea= Ap
-truss= elements.newElement("Truss",xc.ID([6,7]))
-truss.sectionArea= Ap
-truss= elements.newElement("Truss",xc.ID([7,8]))
-truss.sectionArea= Ap
-truss= elements.newElement("Truss",xc.ID([9,10]))
-truss.sectionArea= Ap
-truss= elements.newElement("Truss",xc.ID([10,11]))
-truss.sectionArea= Ap
-truss= elements.newElement("Truss",xc.ID([11,12]))
-truss.sectionAreay= Ap
+trussA= elements.newElement("Truss",xc.ID([n1.tag, n2.tag]))
+trussA.sectionArea= Ap
+trussB= elements.newElement("Truss",xc.ID([n2.tag, n3.tag]))
+trussB.sectionArea= Ap
+trussC= elements.newElement("Truss",xc.ID([n3.tag, n4.tag]))
+trussC.sectionArea= Ap
+trussD= elements.newElement("Truss",xc.ID([n5.tag, n6.tag]))
+trussD.sectionArea= Ap
+trussE= elements.newElement("Truss",xc.ID([n6.tag, n7.tag]))
+trussE.sectionArea= Ap
+trussF= elements.newElement("Truss",xc.ID([n7.tag, n8.tag]))
+trussF.sectionArea= Ap
+trussG= elements.newElement("Truss",xc.ID([n9.tag, n10.tag]))
+trussG.sectionArea= Ap
+trussH= elements.newElement("Truss",xc.ID([n10.tag, n11.tag]))
+trussH.sectionArea= Ap
+trussI= elements.newElement("Truss",xc.ID([n11.tag, n12.tag]))
+trussI.sectionAreay= Ap
 
 # Constraints
-
-modelSpace.fixNode000_000(1)
-modelSpace.fixNode000_000(5)
-modelSpace.fixNode000_000(9)
+modelSpace.fixNode000_000(n1.tag)
+modelSpace.fixNode000_000(n5.tag)
+modelSpace.fixNode000_000(n9.tag)
 
 # Loads definition
 loadHandler= preprocessor.getLoadHandler
-
 lPatterns= loadHandler.getLoadPatterns
 
 #Load modulation.
@@ -110,24 +105,24 @@ lpSC= lPatterns.newLoadPattern("default","SC")
 lpVT= lPatterns.newLoadPattern("default","VT")
 lpNV= lPatterns.newLoadPattern("default","NV")
 #lPatterns.currentLoadPattern= "G"
-n4Load= lpG.newNodalLoad(4,xc.Vector([F,0.0,0.0,0.0,0.0,0.0]))
-n8Load= lpG.newNodalLoad(8,xc.Vector([F,0.0,0.0,0.0,0.0,0.0]))
-n12Load= lpG.newNodalLoad(12,xc.Vector([F,0.0,0.0,0.0,0.0,0.0]))
+n4Load= lpG.newNodalLoad(n4.tag, xc.Vector([F,0.0,0.0,0.0,0.0,0.0]))
+n8Load= lpG.newNodalLoad(n8.tag, xc.Vector([F,0.0,0.0,0.0,0.0,0.0]))
+n12Load= lpG.newNodalLoad(n12.tag, xc.Vector([F,0.0,0.0,0.0,0.0,0.0]))
 
 #lPatterns.currentLoadPattern= "SC"
-n4Load= lpSC.newNodalLoad(4,xc.Vector([F,0.0,0.0,0.0,0.0,0.0]))
-n8Load= lpSC.newNodalLoad(8,xc.Vector([F,0.0,0.0,0.0,0.0,0.0]))
-n12Load= lpSC.newNodalLoad(12,xc.Vector([F,0.0,0.0,0.0,0.0,0.0]))
+n4Load= lpSC.newNodalLoad(n4.tag, xc.Vector([F,0.0,0.0,0.0,0.0,0.0]))
+n8Load= lpSC.newNodalLoad(n8.tag, xc.Vector([F,0.0,0.0,0.0,0.0,0.0]))
+n12Load= lpSC.newNodalLoad(n12.tag, xc.Vector([F,0.0,0.0,0.0,0.0,0.0]))
 
 #lPatterns.currentLoadPattern= "VT"
-n4Load= lpVT.newNodalLoad(4,xc.Vector([F,0.0,0.0,0.0,0.0,0.0]))
-n8Load= lpVT.newNodalLoad(8,xc.Vector([F,0.0,0.0,0.0,0.0,0.0]))
-n12Load= lpVT.newNodalLoad(12,xc.Vector([F,0.0,0.0,0.0,0.0,0.0]))
+n4Load= lpVT.newNodalLoad(n4.tag, xc.Vector([F,0.0,0.0,0.0,0.0,0.0]))
+n8Load= lpVT.newNodalLoad(n8.tag, xc.Vector([F,0.0,0.0,0.0,0.0,0.0]))
+n12Load= lpVT.newNodalLoad(n12.tag, xc.Vector([F,0.0,0.0,0.0,0.0,0.0]))
 
 #lPatterns.currentLoadPattern= "NV"
-n4Load= lpNV.newNodalLoad(4,xc.Vector([F,0.0,0.0,0.0,0.0,0.0]))
-n8Load= lpNV.newNodalLoad(8,xc.Vector([F,0.0,0.0,0.0,0.0,0.0]))
-n12Load= lpNV.newNodalLoad(12,xc.Vector([F,0.0,0.0,0.0,0.0,0.0]))
+n4Load= lpNV.newNodalLoad(n4.tag, xc.Vector([F,0.0,0.0,0.0,0.0,0.0]))
+n8Load= lpNV.newNodalLoad(n8.tag, xc.Vector([F,0.0,0.0,0.0,0.0,0.0]))
+n12Load= lpNV.newNodalLoad(n12.tag, xc.Vector([F,0.0,0.0,0.0,0.0,0.0]))
 
 # Combinaciones
 combs= loadHandler.getLoadCombinations
@@ -163,20 +158,20 @@ printFlag= 0
 solProc= predefined_solutions.PlainNewtonRaphson(feProblem, maxNumIter= 10,  convergenceTestTol= 1e-3)
 
 def solveStaticLinearComb(comb,db,dbHelp):
-  preprocessor.resetLoadCase()
-  dbHelp.helpSolve(comb,db)
-  exec(open("solution/database_helper_solve.xci").read())
-  ''' 
-    print("previousName= ",previousName)
-    print("tag= ",comb.tag)
-    print("tagPrevia= ",tagPrevia)
-    print("descomp previa= ",getComponentsCombPrevia)
-    print("resto sobre previa= ",getComponentsRestoSobrePrevia)
-  '''
-  comb.addToDomain()
-  analOk= solProc.solve(1)
-  db.save(comb.tag*100)
-  comb.removeFromDomain()
+    preprocessor.resetLoadCase()
+    dbHelp.helpSolve(comb,db)
+    exec(open("solution/database_helper_solve.xci").read())
+    ''' 
+      print("previousName= ",previousName)
+      print("tag= ",comb.tag)
+      print("tagPrevia= ",tagPrevia)
+      print("descomp previa= ",getComponentsCombPrevia)
+      print("resto sobre previa= ",getComponentsRestoSobrePrevia)
+    '''
+    comb.addToDomain()
+    analOk= solProc.solve(1)
+    db.save(comb.tag*100)
+    comb.removeFromDomain()
 
 
 dXMin=1e9
@@ -184,9 +179,8 @@ dXMax=-1e9
 
 def procesResultVerif(comb):
   nodes= preprocessor.getNodeHandler
-  nod8= nodes.getNode(8)
 
-  deltaX= nod8.getDisp[0] # x displacement of node 8
+  deltaX= n8.getDisp[0] # x displacement of node 8
   global dXMin
   dXMin=min(dXMin,deltaX)
   global dXMax

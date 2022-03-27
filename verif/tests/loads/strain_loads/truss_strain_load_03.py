@@ -46,7 +46,6 @@ scc= typical_materials.defElasticSection1d(preprocessor, "scc",A,E)
 elements= preprocessor.getElementHandler
 elements.defaultMaterial= scc.name
 elements.dimElem= 2 # Dimension of element space
-elements.defaultTag= 1 # Tag for the next element.
 truss= elements.newElement("CorotTrussSection",xc.ID([nod1.tag,nod2.tag]))
 
     
@@ -73,7 +72,6 @@ result= analysis.analyze(1)
 
 elements= preprocessor.getElementHandler
 
-truss= elements.getElement(1)
 truss.getResistingForce()
 N= (-E*A*alpha*AT)
 ratio= ((truss.getN()-N)/N)

@@ -40,33 +40,31 @@ nodes= preprocessor.getNodeHandler
 
 # Problem type
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
-nodes.defaultTag= 1 # First node number.
-nodes.newNodeXYZ(0.0,0.0,0.0)
-nodes.newNodeXYZ(L,0.0,0.0)
+# Define nodes.
+n1= nodes.newNodeXYZ(0.0,0.0,0.0)
+n2= nodes.newNodeXYZ(L,0.0,0.0)
 
-
-lin= modelSpace.newLinearCrdTransf("lin",xc.Vector([0,1,0]))
-
+# Define materials.
 scc= typical_materials.defElasticSection3d(preprocessor, "scc",A,E,G,Iz,Iy,J)
 
 # Elements definition
+lin= modelSpace.newLinearCrdTransf("lin",xc.Vector([0,1,0]))
 elements= preprocessor.getElementHandler
 elements.defaultTransformation= lin.name
 elements.defaultMaterial= scc.name
 elements.dimElem= 2 # Dimension of element space
-elements.defaultTag= 1 # Tag for next element.
-beam3d= elements.newElement("ElasticBeam3d",xc.ID([1,2]))
+beam3d= elements.newElement("ElasticBeam3d",xc.ID([n1.tag, n2.tag]))
     
 # Constraints
-modelSpace.fixNode000_000(1)
-modelSpace.fixNode000_000(2)
+modelSpace.fixNode000_000(n1.tag)
+modelSpace.fixNode000_000(n2.tag)
 
     
 # Load case definition.
 lp0= modelSpace.newLoadPattern(name= '0')
 #\set_current_load_pattern{"0"}
 eleLoad= lp0.newElementalLoad("beam_strain_load")
-eleLoad.elementTags= xc.ID([1])
+eleLoad.elementTags= xc.ID([beam3d.tag])
 thermalDeformation= xc.DeformationPlane(alpha*AT)
 eleLoad.backEndDeformationPlane= thermalDeformation
 eleLoad.frontEndDeformationPlane= thermalDeformation
@@ -77,9 +75,9 @@ modelSpace.addLoadCaseToDomain(lp0.name)
 analysis= predefined_solutions.simple_static_linear(feProblem)
 result= analysis.analyze(1)
 
-elements.getElement(1).getResistingForce()
-axil1= elements.getElement(1).getN1
-axil2= elements.getElement(1).getN2
+# Get internal forces.
+axil1= beam3d.getN1
+axil2= beam3d.getN2
 
 N= (-E*A*alpha*AT)
 ratio= ((axil2-N)/N)

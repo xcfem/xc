@@ -41,28 +41,23 @@ nodes= preprocessor.getNodeHandler
 
 # Problem type
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
-nodes.defaultTag= 1 # First node number.
-nod= nodes.newNodeXYZ(0,0,0)
-nod= nodes.newNodeXYZ(L,0,0)
-
-    
-# Geometric transformation(s)
-lin= modelSpace.newLinearCrdTransf("lin",xc.Vector([0,0,1]))    
+# Create nodes.
+n1= nodes.newNodeXYZ(0,0,0)
+n2= nodes.newNodeXYZ(L,0,0)
+  
 # Materials definition
 scc= typical_materials.defElasticSection3d(preprocessor, "scc",A,E,G,Iz,Iy,J)
 
-
 # Elements definition
+## Geometric transformation(s)
+lin= modelSpace.newLinearCrdTransf("lin",xc.Vector([0,0,1]))    
 elements= preprocessor.getElementHandler
 elements.defaultTransformation= lin.name
 elements.defaultMaterial= scc.name
-elements.defaultTag= 1 # Tag for next element.
-beam3d= elements.newElement("ElasticBeam3d",xc.ID([1,2]))
+beam3d= elements.newElement("ElasticBeam3d",xc.ID([n1.tag, n2.tag]))
 
-    
 # Constraints
-modelSpace.fixNode000_000(1)
-
+modelSpace.fixNode000_000(n1.tag)
 
 # Load definition.
 lp0= modelSpace.newLoadPattern(name= '0')
@@ -71,10 +66,8 @@ mesh= feProblem.getDomain.getMesh
 eIter= mesh.getElementIter
 elem= eIter.next()
 while not(elem is None):
-  elem.vector3dPointByRelDistLoadLocal(x,xc.Vector([n,-P,0]))
-  elem= eIter.next()
-
-loadHandler= preprocessor.getLoadHandler
+    elem.vector3dPointByRelDistLoadLocal(x,xc.Vector([n,-P,0]))
+    elem= eIter.next()
 
 # We add the load case to domain.
 modelSpace.addLoadCaseToDomain(lp0.name)
@@ -83,12 +76,10 @@ modelSpace.addLoadCaseToDomain(lp0.name)
 analysis= predefined_solutions.simple_static_linear(feProblem)
 result= analysis.analyze(1)
 
-
+# Get displacements.
 nodes= preprocessor.getNodeHandler
-nod2= nodes.getNode(2)
-delta0= nod2.getDisp[0] 
-nod2= nodes.getNode(2)
-delta1= nod2.getDisp[1] 
+delta0= n2.getDisp[0] 
+delta1= n2.getDisp[1] 
 
 a= x*L
 delta0Teor= (n*a/E/A)
