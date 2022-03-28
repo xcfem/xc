@@ -29,16 +29,18 @@ preprocessor=  feProblem.getPreprocessor
 nodes= preprocessor.getNodeHandler
 
 modelSpace= predefined_spaces.StructuralMechanics2D(nodes)
-nodes.defaultTag= 1 # First node number.
-nod= nodes.newNodeXY(0,0)
-nod= nodes.newNodeXY(l,0.0)
-nod= nodes.newNodeXY(2*l,0.0)
-nod= nodes.newNodeXY(3*l,0.0)
+# Create nodes.
+n1= nodes.newNodeXY(0,0)
+n2= nodes.newNodeXY(l,0.0)
+n3= nodes.newNodeXY(2*l,0.0)
+n4= nodes.newNodeXY(3*l,0.0)
+
+n1Tag= n1.tag
+n2Tag= n2.tag
 
 # Geometric transformations
 lin= modelSpace.newLinearCrdTransf("lin")
     
-
 # Materials definition
 scc= typical_materials.defElasticSection2d(preprocessor, "scc",A,E,I)
 
@@ -48,22 +50,20 @@ elements= preprocessor.getElementHandler
 elements.defaultTransformation= lin.name
 elements.defaultMaterial= scc.name
 #  sintaxis: beam2d_02[<tag>] 
-elements.defaultTag= 1 # Tag for next element.
-beam2d= elements.newElement("ElasticBeam2d",xc.ID([1,2]))
-beam2d.h= h
+beam2dA= elements.newElement("ElasticBeam2d",xc.ID([n1Tag,n2Tag]))
+beam2dA.h= h
         
-beam2d= elements.newElement("ElasticBeam2d",xc.ID([3,4]))
-beam2d.h= h
+beam2dB= elements.newElement("ElasticBeam2d",xc.ID([n3.tag,n4.tag]))
+beam2dB.h= h
     
 # Constraints
 constraints= preprocessor.getBoundaryCondHandler
-#
-spc= constraints.newSPConstraint(1,0,0.0) # Node 1
-spc= constraints.newSPConstraint(1,1,0.0)
-spc= constraints.newSPConstraint(1,2,0.0)
-spc= constraints.newSPConstraint(4,0,0.0) # Node 4
-spc= constraints.newSPConstraint(4,1,0.0)
-spc= constraints.newSPConstraint(4,2,0.0)
+spc= constraints.newSPConstraint(n1Tag, 0,0.0) # Node 1
+spc= constraints.newSPConstraint(n1Tag, 1,0.0)
+spc= constraints.newSPConstraint(n1Tag, 2,0.0)
+spc= constraints.newSPConstraint(n4.tag, 0,0.0) # Node 4
+spc= constraints.newSPConstraint(n4.tag, 1,0.0)
+spc= constraints.newSPConstraint(n4.tag, 2,0.0)
 
 
 setTotal= preprocessor.getSets.getSet("total")
@@ -71,11 +71,11 @@ setTotal.killElements() # deactivate the elements
 
 mesh= preprocessor.getDomain.getMesh
 mesh.setDeadSRF(0.0)
-mesh.freezeDeadNodes("congela") # Constraint inactive nodes.
+mesh.freezeDeadNodes("freeze") # Constraint inactive nodes.
 
 # Load definition.
 lp0= modelSpace.newLoadPattern(name= '0')
-lp0.newNodalLoad(2,xc.Vector([F,F,F]))
+lp0.newNodalLoad(n2.tag,xc.Vector([F,F,F]))
 # We add the load case to domain.
 modelSpace.addLoadCaseToDomain(lp0.name)
 
@@ -93,20 +93,24 @@ feProblem.setVerbosityLevel(1) # print(warnings again )
 # Solution
 result= modelSpace.analyze(calculateNodalReactions= True)
 
-nod1= nodes.getNode(1)
-deltax1= nod1.getDisp[0] 
-deltay1= nod1.getDisp[1] 
-nod2= nodes.getNode(2)
-deltax2= nod2.getDisp[0] 
-deltay2= nod2.getDisp[1] 
-R1= nod1.getReaction[0] 
-R2= nod2.getReaction[0] 
+n1= nodes.getNode(n1Tag)
+n2= nodes.getNode(n2Tag)
+
+# Get displacements.
+deltax1= n1.getDisp[0] 
+deltay1= n1.getDisp[1] 
+deltax2= n2.getDisp[0] 
+deltay2= n2.getDisp[1]
+
+# Get reactions.
+R1= n1.getReaction[0] 
+R2= n2.getReaction[0] 
 
 
 setTotal= preprocessor.getSets.getSet("total")
 setTotal.aliveElements()
 mesh= preprocessor.getDomain.getMesh
-mesh.meltAliveNodes("congela") # Reactivate inactive nodes.
+mesh.meltAliveNodes("freeze") # Reactivate inactive nodes.
 
 
 # Solution
@@ -120,20 +124,20 @@ feProblem.setVerbosityLevel(0) # Dont print(warning messages)
 db.restore(105)
 feProblem.setVerbosityLevel(1) # print(warnings again )
 
+n1= nodes.getNode(n1Tag)
+n2= nodes.getNode(n2Tag)
 
 nodes.calculateNodalReactions(True,1e-7)
-nod1= nodes.getNode(1)
-deltaxB1= nod1.getDisp[0] 
-deltayB1= nod1.getDisp[1] 
-nod2= nodes.getNode(2)
-deltaxB2= nod2.getDisp[0] 
-deltayB2= nod2.getDisp[1] 
-RB1= nod1.getReaction[0] 
-nod2= nodes.getNode(2)
-RB2= nod2.getReaction[0] 
 
+# Get displacements.
+deltaxB1= n1.getDisp[0] 
+deltayB1= n1.getDisp[1] 
+deltaxB2= n2.getDisp[0] 
+deltayB2= n2.getDisp[1]
 
-
+# Get reactions.
+RB1= n1.getReaction[0] 
+RB2= n2.getReaction[0] 
 
 ratio1= (R1)
 ratio2= ((R2+F)/F)

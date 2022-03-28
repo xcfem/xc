@@ -30,16 +30,15 @@ nodes= preprocessor.getNodeHandler
 
 # Problem type
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
-nodes.defaultTag= 1 # First node number.
-nod= nodes.newNodeXYZ(0,0,0)
-nod= nodes.newNodeXYZ(L,0,0)
-nod= nodes.newNodeXYZ(L,L,0)
-nod= nodes.newNodeXYZ(0,L,0)
+n1= nodes.newNodeXYZ(0,0,0)
+n2= nodes.newNodeXYZ(L,0,0)
+n3= nodes.newNodeXYZ(L,L,0)
+n4= nodes.newNodeXYZ(0,L,0)
 
-nod= nodes.newNodeXYZ(0,0,L)
-nod= nodes.newNodeXYZ(L,0,L)
-nod= nodes.newNodeXYZ(L,L,L)
-nod= nodes.newNodeXYZ(0,L,L)
+n5= nodes.newNodeXYZ(0,0,L)
+n6= nodes.newNodeXYZ(L,0,L)
+n7= nodes.newNodeXYZ(L,L,L)
+n8= nodes.newNodeXYZ(0,L,L)
 
 # Materials definition
 
@@ -48,14 +47,14 @@ memb1= typical_materials.defElasticMembranePlateSection(preprocessor, "memb1",E,
 # Elements definition
 elements= preprocessor.getElementHandler
 elements.defaultMaterial= memb1.name
-elem= elements.newElement("ShellMITC4",xc.ID([1,2,3,4]))
-elem= elements.newElement("ShellMITC4",xc.ID([5,6,7,8]))
+elemA= elements.newElement("ShellMITC4",xc.ID([n1.tag,n2.tag,n3.tag,n4.tag]))
+elemB= elements.newElement("ShellMITC4",xc.ID([n5.tag,n6.tag,n7.tag,n8.tag]))
     
 # Constraints
-modelSpace.fixNode000_000(1)
-modelSpace.fixNode000_000(4)
-modelSpace.fixNode000_000(5)
-modelSpace.fixNode000_000(8)
+modelSpace.fixNode000_000(n1.tag)
+modelSpace.fixNode000_000(n4.tag)
+modelSpace.fixNode000_000(n5.tag)
+modelSpace.fixNode000_000(n8.tag)
 
 setTotal= preprocessor.getSets.getSet("total")
 setTotal.killElements()
@@ -67,16 +66,21 @@ mesh.freezeDeadNodes("bloquea") # Constraint inactive nodes.
 
 # Load definition.
 lp0= modelSpace.newLoadPattern(name= '0')
-lp0.newNodalLoad(2,xc.Vector([F,0,F,0,0,0]))
-lp0.newNodalLoad(3,xc.Vector([F,0,F,0,0,0]))
-lp0.newNodalLoad(6,xc.Vector([F,0,F,0,0,0]))
-lp0.newNodalLoad(7,xc.Vector([F,0,F,0,0,0]))
+lp0.newNodalLoad(n2.tag, xc.Vector([F,0,F,0,0,0]))
+lp0.newNodalLoad(n3.tag, xc.Vector([F,0,F,0,0,0]))
+lp0.newNodalLoad(n6.tag, xc.Vector([F,0,F,0,0,0]))
+lp0.newNodalLoad(n7.tag, xc.Vector([F,0,F,0,0,0]))
 # We add the load case to domain.
 modelSpace.addLoadCaseToDomain(lp0.name)
 
 # Solution
 analysis= predefined_solutions.simple_static_linear(feProblem)
 result= analysis.analyze(1)
+
+# Store node tags
+n1Tag= n1.tag
+n2Tag= n2.tag
+n3Tag= n3.tag
 
 import os
 os.system("rm -r -f /tmp/test15.db")
@@ -87,23 +91,23 @@ db.restore(100)
 
 
 nodes.calculateNodalReactions(True,1e-7)
-nod1= nodes.getNode(1)
-deltax1= nod1.getDisp[0] 
-deltay1= nod1.getDisp[1] 
-deltaz1= nod1.getDisp[2] 
+n1= nodes.getNode(n1Tag)
+deltax1= n1.getDisp[0] 
+deltay1= n1.getDisp[1] 
+deltaz1= n1.getDisp[2] 
 
-nod2= nodes.getNode(2)
-deltax2= nod2.getDisp[0] 
-deltay2= nod2.getDisp[1] 
-deltaz2= nod2.getDisp[2] 
+n2= nodes.getNode(n2Tag)
+deltax2= n2.getDisp[0] 
+deltay2= n2.getDisp[1] 
+deltaz2= n2.getDisp[2] 
 
-nod3= nodes.getNode(3)
-deltax3= nod3.getDisp[0] 
-deltay3= nod3.getDisp[1] 
-deltaz3= nod3.getDisp[2] 
+n3= nodes.getNode(n3Tag)
+deltax3= n3.getDisp[0] 
+deltay3= n3.getDisp[1] 
+deltaz3= n3.getDisp[2] 
 
-R1= nod1.getReaction[0] 
-R2= nod2.getReaction[0] 
+R1= n1.getReaction[0] 
+R2= n2.getReaction[0] 
 
 
 
@@ -121,23 +125,23 @@ db.restore(105)
 # Solution
 result= modelSpace.analyze(calculateNodalReactions= True)
 
-nod1= nodes.getNode(1)
-deltaxB1= nod1.getDisp[0] 
-deltayB1= nod1.getDisp[1] 
-deltazB1= nod1.getDisp[2] 
+n1= nodes.getNode(n1Tag)
+deltaxB1= n1.getDisp[0] 
+deltayB1= n1.getDisp[1] 
+deltazB1= n1.getDisp[2] 
 
-nod2= nodes.getNode(2)
-deltaxB2= nod2.getDisp[0] 
-deltayB2= nod2.getDisp[1]
-deltazB2= nod2.getDisp[2] 
+n2= nodes.getNode(n2Tag)
+deltaxB2= n2.getDisp[0] 
+deltayB2= n2.getDisp[1]
+deltazB2= n2.getDisp[2] 
 
-nod3= nodes.getNode(3)
-deltaxB3= nod3.getDisp[0] 
-deltayB3= nod3.getDisp[1]
-deltazB3= nod3.getDisp[2] 
+n3= nodes.getNode(n3Tag)
+deltaxB3= n3.getDisp[0] 
+deltayB3= n3.getDisp[1]
+deltazB3= n3.getDisp[2] 
 
-RB1= nod1.getReaction[0] 
-RB2= nod2.getReaction[0] 
+RB1= n1.getReaction[0] 
+RB2= n2.getReaction[0] 
 
 
 

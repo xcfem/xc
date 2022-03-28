@@ -51,7 +51,6 @@ section= typical_materials.defElasticShearSection3d(preprocessor, "section",A,E,
 elements= preprocessor.getElementHandler
 elements.defaultTransformation= lin.name
 elements.defaultMaterial= section.name
-elements.defaultTag= 1
 beam= elements.newElement("ForceBeamColumn3d",xc.ID([n1.tag, n2.tag]))
     
 # Constraints

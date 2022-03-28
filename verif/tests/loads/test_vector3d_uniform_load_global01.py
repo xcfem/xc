@@ -81,7 +81,6 @@ elements= preprocessor.getElementHandler
 elements.defaultTransformation= lin.name
 elements.defaultMaterial= agg.name
 elements.numSections= 2 # Number of sections along the element.
-elements.defaultTag= 1
 el= elements.newElement("ForceBeamColumn3d",xc.ID([n1.tag, n2.tag]))
 
 # Constraints

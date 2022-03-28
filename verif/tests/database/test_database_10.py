@@ -32,9 +32,8 @@ preprocessor=  feProblem.getPreprocessor
 nodes= preprocessor.getNodeHandler
 
 modelSpace= predefined_spaces.SolidMechanics2D(nodes)
-nodes.defaultTag= 1 #First node number.
-nod= nodes.newNodeXY(0.0,0.0)
-nod= nodes.newNodeXY(L,0.0)
+n1= nodes.newNodeXY(0.0,0.0)
+n2= nodes.newNodeXY(L,0.0)
 
 
 # Materials definition
@@ -44,19 +43,16 @@ mat= typical_materials.defSteel02(preprocessor, "prestressingSteel",E,fy,0.001,t
 elements= preprocessor.getElementHandler
 elements.defaultMaterial= mat.name
 elements.dimElem= 2 # Dimension of element space
-elements.defaultTag= 1 #Tag for the next element.
-truss= elements.newElement("Truss",xc.ID([1,2]))
+truss= elements.newElement("Truss",xc.ID([n1.tag,n2.tag]))
 truss.sectionArea= A
 
     
 # Constraints
 constraints= preprocessor.getBoundaryCondHandler
-
-#
-spc= constraints.newSPConstraint(1,0,0.0)
-spc= constraints.newSPConstraint(1,1,0.0)
-spc= constraints.newSPConstraint(2,0,0.0)
-spc= constraints.newSPConstraint(2,1,0.0)
+spc= constraints.newSPConstraint(n1.tag, 0,0.0)
+spc= constraints.newSPConstraint(n1.tag, 1,0.0)
+spc= constraints.newSPConstraint(n2.tag, 0,0.0)
+spc= constraints.newSPConstraint(n2.tag, 1,0.0)
 
     
 
@@ -88,6 +84,9 @@ solver= soe.newSolver("band_gen_lin_lapack_solver")
 
 analysis= solu.newAnalysis("static_analysis","solutionStrategy","")
 result= analysis.analyze(1)
+
+# Store element tags
+eTag= truss.tag
 
 import os
 os.system("rm -rf /tmp/test10.db")
@@ -127,7 +126,7 @@ result= analysis.analyze(1)
 
 elements= preprocessor.getElementHandler
 
-elem1= elements.getElement(1)
+elem1= elements.getElement(eTag)
 elem1.getResistingForce()
 ratio= (tInic*A-elem1.getN())/(tInic*A)
 

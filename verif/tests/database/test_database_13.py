@@ -28,10 +28,9 @@ nodes= preprocessor.getNodeHandler
 # Problem type
 modelSpace= predefined_spaces.SolidMechanics2D(nodes)
 
-
-nodes.defaultTag= 1 #First node number.
-nod= nodes.newNodeXY(0,0)
-nod= nodes.newNodeXY(l,0.0)
+# Create nodes.
+n1= nodes.newNodeXY(0,0)
+n2= nodes.newNodeXY(l,0.0)
 
 # Materials definition
 cable= typical_materials.defCableMaterial(preprocessor, "cable",E,sigmaPret,0.0)
@@ -45,22 +44,24 @@ elements= preprocessor.getElementHandler
 elements.defaultMaterial= cable.name
 elements.dimElem= 2 # Dimension of element space
 #  sintaxis: truss[<tag>] 
-elements.defaultTag= 1 #Tag for the next element.
-truss= elements.newElement("Truss",xc.ID([1,2]))
+truss= elements.newElement("Truss",xc.ID([n1.tag,n2.tag]))
 truss.sectionArea= area
     
 # Constraints
 constraints= preprocessor.getBoundaryCondHandler
-#
-spc= constraints.newSPConstraint(1,0,0.0) # Node 1
-spc= constraints.newSPConstraint(1,1,0.0)
-spc= constraints.newSPConstraint(2,0,0.0) # Node 2
-spc= constraints.newSPConstraint(2,1,0.0)
+spc= constraints.newSPConstraint(n1.tag, 0,0.0) # Node 1
+spc= constraints.newSPConstraint(n1.tag, 1,0.0)
+spc= constraints.newSPConstraint(n2.tag, 0,0.0) # Node 2
+spc= constraints.newSPConstraint(n2.tag, 1,0.0)
 
 
 # Solution
 analysis= predefined_solutions.simple_static_linear(feProblem)
 result= analysis.analyze(1)
+
+# Store node tags
+n1Tag= n1.tag
+n2Tag= n2.tag
 
 import os
 os.system("rm -r -f /tmp/test13.db")
@@ -71,9 +72,8 @@ db.restore(100)
 
 
 nodes.calculateNodalReactions(True,1e-7)
-R1= nodes.getNode(2).getReaction[0] 
-R2= nodes.getNode(1).getReaction[0] 
-
+R1= nodes.getNode(n2Tag).getReaction[0] 
+R2= nodes.getNode(n1Tag).getReaction[0] 
 
 ratio1= ((R1-fPret)/fPret)
 ratio2= ((R2+fPret)/fPret)

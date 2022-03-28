@@ -41,30 +41,27 @@ nodes= preprocessor.getNodeHandler
 
 # Problem type
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
-nodes.defaultTag= 1 # First node number.
-nod= nodes.newNodeXYZ(0,0.0,0.0)
-nod= nodes.newNodeXYZ(L,0.0,0.0)
+# Create nodes.
+n1= nodes.newNodeXYZ(0,0.0,0.0)
+n2= nodes.newNodeXYZ(L,0.0,0.0)
 
-lin= modelSpace.newLinearCrdTransf("lin",xc.Vector([0,1,0]))
-    
-# Materials definition
+# Materials definition.
 scc= typical_materials.defElasticSection3d(preprocessor, "scc",A,E,G,Iz,Iy,J)
 
-
+# Element definition.
+lin= modelSpace.newLinearCrdTransf("lin",xc.Vector([0,1,0]))
 elements= preprocessor.getElementHandler
 elements.defaultTransformation= lin.name
 elements.defaultMaterial= scc.name
 #  sintaxis: ElasticBeam3d[<tag>] 
-elements.defaultTag= 1 # Tag for next element.
-beam3d= elements.newElement("ElasticBeam3d",xc.ID([1,2]))
+beam3d= elements.newElement("ElasticBeam3d",xc.ID([n1.tag,n2.tag]))
 
-
-
-modelSpace.fixNode000_000(1)
+# Constraints.
+modelSpace.fixNode000_000(n1.tag)
 
 # Load definition.
 lp0= modelSpace.newLoadPattern(name= '0')
-lp0.newNodalLoad(2,xc.Vector([F,0,0,0,0,0]))
+lp0.newNodalLoad(n2.tag, xc.Vector([F,0,0,0,0,0]))
 # We add the load case to domain.
 modelSpace.addLoadCaseToDomain(lp0.name)
 
@@ -72,6 +69,10 @@ modelSpace.addLoadCaseToDomain(lp0.name)
 analysis= predefined_solutions.simple_static_linear(feProblem)
 result= analysis.analyze(1)
 
+# Store node and element tags
+n1Tag= n1.tag
+n2Tag= n2.tag
+eTag= beam3d.tag
 
 import os
 os.system("rm -r -f /tmp/test08.db")
@@ -86,14 +87,15 @@ feProblem.setVerbosityLevel(1) # print(warnings again )
 
 nodes= preprocessor.getNodeHandler
  
-nod2= nodes.getNode(2)
-delta= nod2.getDisp[0]  # x displacement of node 2
+n2= nodes.getNode(n2Tag)
+
+delta= n2.getDisp[0]  # x displacement of node 2
 
 elements= preprocessor.getElementHandler
 
-elem1= elements.getElement(1)
+elem1= elements.getElement(eTag)
 elem1.getResistingForce()
-N1= elem1.getN1
+N1= elem1.getN1 # axial internal force.
 
 
 

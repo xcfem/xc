@@ -55,7 +55,6 @@ section= typical_materials.defElasticShearSection2d(preprocessor, "section",A,E,
 elements= preprocessor.getElementHandler
 elements.defaultTransformation= lin.name # Coordinate transformation for the new elements
 elements.defaultMaterial= section.name
-elements.defaultTag= 1
 beam1= elements.newElement("ForceBeamColumn2d",xc.ID([n1.tag, n2.tag]))
 beam2= elements.newElement("ForceBeamColumn2d",xc.ID([n2.tag, n3.tag]))
 

@@ -52,7 +52,6 @@ elementHandler= preprocessor.getElementHandler
 elementHandler.defaultTransformation= lin.name
 elementHandler.defaultMaterial= scc.name
 #  sintaxis: ElasticBeam3d[<tag>] 
-elementHandler.defaultTag= 1 # Tag for next element.
 beam3d= elementHandler.newElement("ElasticBeam3d",xc.ID([n1.tag,n2.tag]))
 
 modelSpace.fixNode000_000(n1.tag)
@@ -81,21 +80,24 @@ import os
 os.system("rm -f /tmp/test03.db")
 db= feProblem.newDatabase("BerkeleyDB","/tmp/test03.db")
 db.save(100)
+# Store node and element tags
 tagN1= n1.tag
 tagN2= n2.tag
+eTag= beam3d.tag
+
 feProblem.clearAll()
 db.restore(100)
 
 nodes= preprocessor.getNodeHandler
 
-nod1= nodes.getNode(tagN1)
-nod2= nodes.getNode(tagN2)
+n1= nodes.getNode(tagN1)
+n2= nodes.getNode(tagN2)
 preprocessor.getNodeHandler.calculateNodalReactions(False,1e-6)
-R= nod1.getReaction[0]
-delta= nod2.getDisp[0]  # x displacement of node 2
+R= n1.getReaction[0]
+delta= n2.getDisp[0]  # x displacement of node 2
 
 
-elem1= elementHandler.getElement(1)
+elem1= elementHandler.getElement(eTag)
 elem1.getResistingForce()
 N1= elem1.getN1
 
