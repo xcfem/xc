@@ -86,6 +86,14 @@ class SpringBC(object):
         for n in Nodelist:
             fixedNode, elem= self.modelSpace.setBearing(n.tag,self.springMat)
 
+    def applyBConNode(self,node):
+        '''create spring boundary conditions in the node.
+        Return the spring element created.
+        '''
+        self.createSpringMaterials()
+        fixedNode, elem= self.modelSpace.setBearing(node.tag,self.springMat)
+        return elem
+
 class ElasticFoundation(object):
     '''Region resting on springs (Winkler elastic foundation)
 
@@ -159,6 +167,7 @@ class ElasticFoundation(object):
             n= e.getNodes[1]
             rf= e.getResistingForce()
             a= n.getTributaryArea()
+            print(n.tag,'area=',a)
             if(len(rf)==6):
                 f3d= geom.Vector3d(rf[0],rf[1],0.0)
                 m3d= geom.Vector3d(0.0,0.0,rf[2])
@@ -169,6 +178,9 @@ class ElasticFoundation(object):
             self.svdReac+= geom.SlidingVectorsSystem3d(pos,f3d,m3d)
             n.setProp('soilPressure',[f3d.x/a,f3d.y/a,f3d.z/a])
             n.setProp('soilReaction',[f3d.x,f3d.y,f3d.z])
+            print(n.tag,'soil pressure',n.getProp('soilPressure'))
+            print(n.tag,'soil reaction',n.getProp('soilReaction'))
+            
         return self.svdReac.reduceTo(self.getCentroid())
 
     def displayPressures(self, caption,fUnitConv,unitDescription,rgMinMax=None,fileName=None):
@@ -210,13 +222,16 @@ class ElasticFoundation(object):
         #Calculate max. pressure
         comb_keys=[key for key in combs] 
         for k in comb_keys:
+            print(combs[k].name,combs[k].expr)
             modelSpace.removeAllLoadPatternsFromDomain()
             modelSpace.addNewLoadCaseToDomain(combs[k].name,combs[k].expr)
             result= analysis.analyze(1)
             reac= self.calcPressures()
             for n in nodSet:
                 prs=n.getProp('soilPressure')[2]
+#                print ('*', n.tag,prs)
                 if prs > n.getProp('maxSoilPressure'):
+                    print(n.tag,prs)
                     n.setProp('maxSoilPressure',prs)
         #Display max. pressures
         field= fields.ExtrapolatedScalarField(name='maxSoilPressure',functionName='getProp',xcSet=self.foundationSet,component=None,fUnitConv=fUnitConv,rgMinMax=rgMinMax)

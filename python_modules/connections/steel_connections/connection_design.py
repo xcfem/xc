@@ -1107,7 +1107,11 @@ class BasePlateConnectionGroup(DiagonalConnectionGroup):
         :param diagonalBoltedPlate: bolted plate attaching diagonal.
         :param basePlateGroup: group of base plates.
         '''
-        super(BasePlateConnectionGroup, self).__init__(name= name, columnLengthFactor= columnLengthFactor, beamLengthFactor= beamLengthFactor, gussetLengthFactor= gussetLengthFactor, xcSet= xcSet, diagonalBoltedPlate= diagonalBoltedPlate, ConnectionType= BasePlateConnection)
+        # The parameter beamsShearEfficiency that is used in the base class to
+        # provide a ratio between the design shear and the shear strength
+        # in members, in this case takes on the default value 1.0 since, for now
+        # it has no use in baseplates
+        super(BasePlateConnectionGroup, self).__init__(name= name, columnLengthFactor= columnLengthFactor, beamLengthFactor= beamLengthFactor, gussetLengthFactor= gussetLengthFactor, beamsShearEfficiency=1,xcSet= xcSet, diagonalBoltedPlate= diagonalBoltedPlate, ConnectionType= BasePlateConnection)
 
         self.joinBasePlates(basePlateGroup)
 
