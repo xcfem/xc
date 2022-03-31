@@ -151,7 +151,9 @@ class Connection(connected_members.ConnectionMetaData):
             if(tmp):
                 p2= tmp
             else:
-                lmsg.error(' no intersected plate.')
+                className= type(self).__name__
+                methodName= sys._getframe(0).f_code.co_name
+                lmsg.error(className+'.'+methodName+': no intersected plate.')
         corner= geom.Pos3d(p0.x, p0.y, p2.z)
         # Bottom leg.
         if(diagonalOrientation<0): # downwards diagonal
@@ -368,7 +370,9 @@ class Connection(connected_members.ConnectionMetaData):
             if(p2a):
                 p2= p2a
             else:
-                lmsg.warning('no plate found.')
+                className= type(self).__name__
+                methodName= sys._getframe(0).f_code.co_name
+                lmsg.warning(className+'.'+methodName+': no plate found.')
         # Bottom leg.
         p3= None; p4= None
         if(bottomLegSlope=='vertical'):
@@ -383,7 +387,9 @@ class Connection(connected_members.ConnectionMetaData):
                 if(p4a):
                     p4= p4a
                 else:
-                    lmsg.warning('no plate found.')
+                    className= type(self).__name__
+                    methodName= sys._getframe(0).f_code.co_name
+                    lmsg.warning(className+'.'+methodName+': no plate found.')
                 corner= geom.Pos3d(p2.x, p2.y, p4.z)
             else: # upwards diagonal
                 p3, p4= retval.getHorizontalBottomLeg(origin)
@@ -670,7 +676,9 @@ class Connection(connected_members.ConnectionMetaData):
         if(hasattr(self,'basePlate')):
             retval.extend(self.getBasePlateBlocks(columnShapeBlocks, blockProperties= properties))
         else:
-            lmsg.warning('base plate not found.')
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.warning(className+'.'+methodName+': base plate not found.')
         return retval
 
     def getFlangeLegMinSize(self):
@@ -834,7 +842,9 @@ class BasePlateConnection(Connection):
         basePlatePlane= self.basePlate.getMidPlane()
         retval= basePlatePlane.getIntersection(sg)
         if(math.isnan(retval.x) or math.isnan(retval.y) or math.isnan(retval.z)):
-            lmsg.warning('No intersection with base plate.')
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.warning(className+'.'+methodName+': no intersection with base plate')
         return retval
     
     def centerAnchors(self):
@@ -1029,11 +1039,14 @@ class ConnectionGroup(object):
     def report(self, outputFile):
         ''' Reports connection design values.'''
         numberOfPlates= len(self.connections)
-        outputFile.write(str(numberOfPlates)+' x ')
-        connect= self.connections[0]
-        connect.report(outputFile)
-        # for c in self.connections:
-        #     c.report(outputFile)
+        if(numberOfPlates>0):
+            outputFile.write(str(numberOfPlates)+' x ')
+            connect= self.connections[0]
+            connect.report(outputFile)
+        else:
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.warning(className+'.'+methodName+': no connections to report.')
 
     def output(self, outputPath= './'):
         ''' Write output: report + dxf file. '''
@@ -1183,7 +1196,9 @@ class BoltedPlateController(lsc.LimitStateControllerBase):
             sh= e.getProp('crossSection')
             elIntForc= internalForcesValues[e.tag]
             if(len(elIntForc)==0):
-                lmsg.warning('No internal forces for element: '+str(e.tag)+' of type: '+e.type())
+                className= type(self).__name__
+                methodName= sys._getframe(0).f_code.co_name
+                lmsg.warning(className+'.'+methodName+': no internal forces for element '+str(e.tag)+' of type: '+e.type())
             for lf in elIntForc:
                 CFtmp= self.boltedPlate.getEfficiency(lf)
                 worstCase.update(CFtmp, e.tag, lf)
