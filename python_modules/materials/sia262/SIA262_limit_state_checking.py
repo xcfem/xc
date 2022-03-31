@@ -646,7 +646,7 @@ class SIARebarFamily(rf.RebarFamily):
     def writeRebars(self, outputFile,concrete,AsMin):
         '''Write rebar family data.'''
         self.writeDef(outputFile,concrete)
-        outputFile.write("  area: As= "+ fmt.Areas.format(self.getAs()*1e4) + " cm2/m areaMin("+self.getCrackControlRequirement()+"): " + fmt.Areas.format(AsMin*1e4) + " cm2/m")
+        outputFile.write("  area: As= "+ fmt.Area.format(self.getAs()*1e4) + " cm2/m areaMin("+self.getCrackControlRequirement()+"): " + fmt.Area.format(AsMin*1e4) + " cm2/m")
         rf.writeF(outputFile,"  F(As)", self.getAs()/AsMin)
 
 class SIAFamNBars(SIARebarFamily):
@@ -659,7 +659,7 @@ class SIAFamNBars(SIARebarFamily):
     def writeDef(self,outputFile,concrete):
         outputFile.write("  n= "+str(self.n)+" diam: "+ fmt.Diam.format(self.getDiam()*1000) + " mm, spacing: "+ fmt.Diam.format(self.spacing*1e3)+ " mm")
         reinfDevelopment= self.getBasicAnchorageLength(concrete)
-        outputFile.write("  reinf. development L="+ fmt.Lengths.format(reinfDevelopment) + " m ("+ fmt.Diam.format(reinfDevelopment/self.getDiam())+ " diameters).\\\\\n")
+        outputFile.write("  reinf. development L="+ fmt.Length.format(reinfDevelopment) + " m ("+ fmt.Diam.format(reinfDevelopment/self.getDiam())+ " diameters).\\\\\n")
 
 class SIADoubleRebarFamily(rf.DoubleRebarFamily):
     ''' Two reinforcement bars families.'''
@@ -687,7 +687,7 @@ class SIADoubleRebarFamily(rf.DoubleRebarFamily):
     def writeRebars(self, outputFile,concrete,AsMin):
         '''Write rebar family data.'''
         self.writeDef(outputFile,concrete)
-        outputFile.write("  area: As= "+ fmt.Areas.format(self.getAs()*1e4) + " cm2/m areaMin("+self.getCrackControlRequirement()+"): " + fmt.Areas.format(AsMin*1e4) + " cm2/m")
+        outputFile.write("  area: As= "+ fmt.Area.format(self.getAs()*1e4) + " cm2/m areaMin("+self.getCrackControlRequirement()+"): " + fmt.Area.format(AsMin*1e4) + " cm2/m")
         rf.writeF(outputFile,"  F(As)", self.getAs()/AsMin)
 
 

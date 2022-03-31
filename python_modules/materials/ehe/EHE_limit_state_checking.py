@@ -2016,6 +2016,6 @@ class EHERebarFamily(rf.RebarFamily):
     def writeRebars(self, outputFile,concrete,AsMin):
         '''Write rebar family data.'''
         self.writeDef(outputFile,concrete)
-        outputFile.write("  area: As= "+ fmt.Areas.format(self.getAs()*1e4) + " cm2/m areaMin: " + fmt.Areas.format(AsMin*1e4) + " cm2/m")
+        outputFile.write("  area: As= "+ fmt.Area.format(self.getAs()*1e4) + " cm2/m areaMin: " + fmt.Area.format(AsMin*1e4) + " cm2/m")
         rf.writeF(outputFile,"  F(As)", self.getAs()/AsMin)
 
