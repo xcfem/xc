@@ -35,7 +35,7 @@ class RCSection(object):
   def writeResultFlexion(self,outputFile,Nd,Md,Vd):
     AsMin= self.getMinReinfAreaUnderFlexion()
     reinfDevelopment= self.tensionRebars.getBasicAnchorageLength(self.concrete)
-    outputFile.write("  RC section dimensions; b= "+ fmt.Lengths.format(self.b)+ " m, h= "+ fmt.Lengths.format(self.h)+ " m\\\\\n")
+    outputFile.write("  RC section dimensions; b= "+ fmt.Length.format(self.b)+ " m, h= "+ fmt.Length.format(self.h)+ " m\\\\\n")
     self.tensionRebars.writeRebars(outputFile,self.concrete,AsMin)
     if(abs(Md)>0):
       MR= self.getMR()

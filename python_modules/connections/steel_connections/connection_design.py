@@ -41,7 +41,8 @@ class Connection(connected_members.ConnectionMetaData):
                                plate.
     :ivar beamsShearEfficiency: ratio between the design shear and 
                                 the shear strength for the beams in
-                                this connection.
+                                this connection. Used to compute the
+                                required strength of the shear tab.
     :ivar boltedPlateTemplate: bolted plate object: dimensions of the bolted 
                                plate and bolt type and arrangement.
     :ivar flangeGussetLegsSlope: tangent of the angle of the flange gusset legs
@@ -68,7 +69,8 @@ class Connection(connected_members.ConnectionMetaData):
                                    plate.
         :param beamsShearEfficiency: ratio between the design shear and 
                                     the shear strength for the beams in
-                                    this connection.
+                                    this connection. Used to compute the
+                                    required strength of the shear tab.
         :param boltedPlateTemplate: bolted plate dimensions and bolt type and 
                                     arrangement.
         :param intermediateJoint: true if the joint doesn't correspond
@@ -149,7 +151,9 @@ class Connection(connected_members.ConnectionMetaData):
             if(tmp):
                 p2= tmp
             else:
-                lmsg.error(' no intersected plate.')
+                className= type(self).__name__
+                methodName= sys._getframe(0).f_code.co_name
+                lmsg.error(className+'.'+methodName+': no intersected plate.')
         corner= geom.Pos3d(p0.x, p0.y, p2.z)
         # Bottom leg.
         if(diagonalOrientation<0): # downwards diagonal
@@ -366,7 +370,9 @@ class Connection(connected_members.ConnectionMetaData):
             if(p2a):
                 p2= p2a
             else:
-                lmsg.warning('no plate found.')
+                className= type(self).__name__
+                methodName= sys._getframe(0).f_code.co_name
+                lmsg.warning(className+'.'+methodName+': no plate found.')
         # Bottom leg.
         p3= None; p4= None
         if(bottomLegSlope=='vertical'):
@@ -381,7 +387,9 @@ class Connection(connected_members.ConnectionMetaData):
                 if(p4a):
                     p4= p4a
                 else:
-                    lmsg.warning('no plate found.')
+                    className= type(self).__name__
+                    methodName= sys._getframe(0).f_code.co_name
+                    lmsg.warning(className+'.'+methodName+': no plate found.')
                 corner= geom.Pos3d(p2.x, p2.y, p4.z)
             else: # upwards diagonal
                 p3, p4= retval.getHorizontalBottomLeg(origin)
@@ -668,7 +676,9 @@ class Connection(connected_members.ConnectionMetaData):
         if(hasattr(self,'basePlate')):
             retval.extend(self.getBasePlateBlocks(columnShapeBlocks, blockProperties= properties))
         else:
-            lmsg.warning('base plate not found.')
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.warning(className+'.'+methodName+': base plate not found.')
         return retval
 
     def getFlangeLegMinSize(self):
@@ -768,7 +778,8 @@ class DiagonalConnection(Connection):
                                    plate.
         :param beamsShearEfficiency: ratio between the design shear and 
                                     the shear strength for the beams in
-                                    this connection.
+                                    this connection. Used to compute the
+                                    required strength of the shear tab.
         :param boltedPlateTemplate: bolted plate dimensions and bolt type and 
                                     arrangement.
         :param intermediateJoint: true if the joint doesn't correspond
@@ -808,6 +819,8 @@ class BasePlateConnection(Connection):
         :param boltedPlateTemplate: bolted plate dimensions and bolt type and 
                                     arrangement.
         '''
+        # No shear tabs here so beamsShearEfficiency doesn't matters
+        # (we take it equal to 1.0)
         super(BasePlateConnection,self).__init__(connectionMetaData, columnLengthFactor, beamLengthFactor, gussetLengthFactor, beamsShearEfficiency= 1.0, boltedPlateTemplate= boltedPlateTemplate)
 
     def setBasePlate(self, basePlate):
@@ -829,7 +842,9 @@ class BasePlateConnection(Connection):
         basePlatePlane= self.basePlate.getMidPlane()
         retval= basePlatePlane.getIntersection(sg)
         if(math.isnan(retval.x) or math.isnan(retval.y) or math.isnan(retval.z)):
-            lmsg.warning('No intersection with base plate.')
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.warning(className+'.'+methodName+': no intersection with base plate')
         return retval
     
     def centerAnchors(self):
@@ -935,7 +950,8 @@ class ConnectionGroup(object):
                                    length to obtain the lenght of the gusset
                                    plate.
         :param beamsShearEfficiency: ratio between the design shear and 
-                                     the shear strength.
+                                     the shear strength. Used to compute
+                                     the required strength of the shear tab.
         :param boltedPlateTemplate: bolted plate dimensions and bolt type and 
                                     arrangement.
         :param intermediateJoints: true if the joints doesn't correspond
@@ -1023,11 +1039,14 @@ class ConnectionGroup(object):
     def report(self, outputFile):
         ''' Reports connection design values.'''
         numberOfPlates= len(self.connections)
-        outputFile.write(str(numberOfPlates)+' x ')
-        connect= self.connections[0]
-        connect.report(outputFile)
-        # for c in self.connections:
-        #     c.report(outputFile)
+        if(numberOfPlates>0):
+            outputFile.write(str(numberOfPlates)+' x ')
+            connect= self.connections[0]
+            connect.report(outputFile)
+        else:
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.warning(className+'.'+methodName+': no connections to report.')
 
     def output(self, outputPath= './'):
         ''' Write output: report + dxf file. '''
@@ -1069,7 +1088,8 @@ class DiagonalConnectionGroup(ConnectionGroup):
                                    length to obtain the lenght of the gusset
                                    plate.
         :param beamsShearEfficiency: ratio between the design shear and 
-                                     the shear strength.
+                                     the shear strength. Used to compute the
+                                     required strength of the shear tab.
         :param xcSet: set containing the joint nodes.
         :param diagonalBoltedPlate: bolted plate attaching diagonal.
         :param intermediateJoints: true if the joints doesn't correspond
@@ -1107,11 +1127,9 @@ class BasePlateConnectionGroup(DiagonalConnectionGroup):
         :param diagonalBoltedPlate: bolted plate attaching diagonal.
         :param basePlateGroup: group of base plates.
         '''
-        # The parameter beamsShearEfficiency that is used in the base class to
-        # provide a ratio between the design shear and the shear strength
-        # in members, in this case takes on the default value 1.0 since, for now
-        # it has no use in baseplates
-        super(BasePlateConnectionGroup, self).__init__(name= name, columnLengthFactor= columnLengthFactor, beamLengthFactor= beamLengthFactor, gussetLengthFactor= gussetLengthFactor, beamsShearEfficiency=1,xcSet= xcSet, diagonalBoltedPlate= diagonalBoltedPlate, ConnectionType= BasePlateConnection)
+        # No shear tabs here so beamsShearEfficiency doesn't matters
+        # (we take it equal to 1.0)
+        super(BasePlateConnectionGroup, self).__init__(name= name, columnLengthFactor= columnLengthFactor, beamLengthFactor= beamLengthFactor, gussetLengthFactor= gussetLengthFactor, beamsShearEfficiency= 1.0, xcSet= xcSet, diagonalBoltedPlate= diagonalBoltedPlate, ConnectionType= BasePlateConnection)
 
         self.joinBasePlates(basePlateGroup)
 
@@ -1178,7 +1196,9 @@ class BoltedPlateController(lsc.LimitStateControllerBase):
             sh= e.getProp('crossSection')
             elIntForc= internalForcesValues[e.tag]
             if(len(elIntForc)==0):
-                lmsg.warning('No internal forces for element: '+str(e.tag)+' of type: '+e.type())
+                className= type(self).__name__
+                methodName= sys._getframe(0).f_code.co_name
+                lmsg.warning(className+'.'+methodName+': no internal forces for element '+str(e.tag)+' of type: '+e.type())
             for lf in elIntForc:
                 CFtmp= self.boltedPlate.getEfficiency(lf)
                 worstCase.update(CFtmp, e.tag, lf)
