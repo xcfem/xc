@@ -788,7 +788,7 @@ class DiagonalConnection(Connection):
                                   Defaults to false for backward compatibility
                                   reasons.
         '''
-        super(DiagonalConnection,self).__init__(connectionMetaData, columnLengthFactor, beamLengthFactor, gussetLengthFactor, beamsShearEfficiency, boltedPlateTemplate, intermediateJoint)
+        super(DiagonalConnection,self).__init__(connectionMetaData= connectionMetaData, columnLengthFactor= columnLengthFactor, beamLengthFactor= beamLengthFactor, gussetLengthFactor= gussetLengthFactor, beamShearEfficiency= beamsShearEfficiency, boltedPlateTemplate= boltedPlateTemplate, intermediateJoint= intermediateJoint)
         
     def getHorizontalWeldLegSize(self):
         ''' Return the size of the weld that connects the 
@@ -821,7 +821,7 @@ class BasePlateConnection(Connection):
         '''
         # No shear tabs here so beamsShearEfficiency doesn't matters
         # (we take it equal to 1.0)
-        super(BasePlateConnection,self).__init__(connectionMetaData, columnLengthFactor, beamLengthFactor, gussetLengthFactor, beamsShearEfficiency= 1.0, boltedPlateTemplate= boltedPlateTemplate)
+        super(BasePlateConnection,self).__init__(connectionMetaData= connectionMetaData, columnLengthFactor= columnLengthFactor, beamLengthFactor= beamLengthFactor, gussetLengthFactor= gussetLengthFactor, beamsShearEfficiency= 1.0, boltedPlateTemplate= boltedPlateTemplate)
 
     def setBasePlate(self, basePlate):
         ''' Set the base plate for this connection.
@@ -966,7 +966,7 @@ class ConnectionGroup(object):
         self.connections= list()
         for nTag in self.connectionData:
             cData= self.connectionData[nTag]
-            connect= ConnectionType(cData, columnLengthFactor, beamLengthFactor, self.gussetLengthFactor, beamsShearEfficiency, self.boltedPlateTemplate, intermediateJoints)
+            connect= ConnectionType(connectionMetaData= cData, columnLengthFactor= columnLengthFactor, beamLengthFactor= beamLengthFactor, gussetLengthFactor= self.gussetLengthFactor, beamShearEfficiency= beamsShearEfficiency, boltedPlateTemplate= self.boltedPlateTemplate, intermediateJoints= intermediateJoints)
             self.connections.append(connect)
 
     def joinBasePlates(self, basePlateGroup, tol= 1e-2):
