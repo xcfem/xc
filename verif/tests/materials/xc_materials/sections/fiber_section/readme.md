@@ -11,3 +11,5 @@ A fiber section object is composed of Fibers, with each fiber containing a Uniax
 - [Torsion with Fiber Sections](https://portwooddigital.com/2019/10/06/torsion-with-fiber-sections/)
 - [How to Record Fiber Response](https://portwooddigital.com/2021/07/25/how-to-record-fiber-response)
 - [Two Fibers, Five Ways](https://portwooddigital.com/2022/01/16/two-fibers-five-ways)
+- [Two Fibers Explain So Much](https://portwooddigital.com/2022/02/06/two-fibers-explain-so-much/)
+- [Something, Something, Something Fiber](https://portwooddigital.com/2022/02/27/something-something-something-fiber/)

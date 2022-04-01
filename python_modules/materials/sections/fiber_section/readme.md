@@ -1,7 +1,7 @@
-# Fiber section material model
+# Fiber section material utilities
+Code that makes easier to define fiber section materials.
 
 A fiber section object is composed of Fibers, with each fiber containing a UniaxialMaterial, an area and a location: (y) for 2D sections or (y,z) for 3D sections.
-
 ## References
 - [Implementation of interaction diagrams in the finite element open source software XC](http://www.xcengineering.xyz/blog_doc/2016_interact_diag/interactionDiagram.pdf)
 - [Fiber Section (OpenSees)](https://opensees.berkeley.edu/wiki/index.php/Fiber_Section)
