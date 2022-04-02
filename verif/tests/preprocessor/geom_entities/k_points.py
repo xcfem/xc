@@ -1,13 +1,10 @@
 # -*- coding: utf-8 -*-
+''' Key-point definition test.'''
 from __future__ import print_function
 
 import xc_base
 import geom
 import xc
-from model import predefined_spaces
-from materials import typical_materials
-import sys
-import math
 
 __author__= "Luis C. Pérez Tato (LCPT)"
 __copyright__= "Copyright 2014, LCPT"
@@ -29,7 +26,7 @@ numPoints= ptsSet.size
 count= 0
 #Point iterator
 for p in ptsSet:
-  count+= 1
+    count+= 1
 
 cumple= (count == numPoints)
 
