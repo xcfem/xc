@@ -53,7 +53,7 @@ class Connection(connected_members.ConnectionMetaData):
                              to an extremity of the column (i.e.
                              a base plate or the top end of the column).
     '''
-    def __init__(self, connectionMetaData, columnLengthFactor, beamLengthFactor, gussetLengthFactor, beamsShearEfficiency, boltedPlateTemplate, intermediateJoint= False):
+    def __init__(self, connectionMetaData, columnLengthFactor, beamLengthFactor, gussetLengthFactor, boltedPlateTemplate, beamsShearEfficiency= 1.0, intermediateJoint= False):
         ''' Constructor.
 
         :param connectionMetaData: connection origin node and members 
@@ -67,12 +67,13 @@ class Connection(connected_members.ConnectionMetaData):
         :param gussetLengthFactor: factor that multiplies the bolted plate
                                    length to obtain the lenght of the gusset
                                    plate.
+        :param boltedPlateTemplate: bolted plate dimensions and bolt type and 
+                                    arrangement.
         :param beamsShearEfficiency: ratio between the design shear and 
                                     the shear strength for the beams in
                                     this connection. Used to compute the
                                     required strength of the shear tab.
-        :param boltedPlateTemplate: bolted plate dimensions and bolt type and 
-                                    arrangement.
+                                    Defaults to 1.0 (full shear capacity).
         :param intermediateJoint: true if the joint doesn't correspond
                                   to an extremity of the column (i.e.
                                   a base plate or the top end of the column).
@@ -762,7 +763,7 @@ class Connection(connected_members.ConnectionMetaData):
 class DiagonalConnection(Connection):
     ''' Connection that has one or more diagonals.'''
     
-    def __init__(self, connectionMetaData, columnLengthFactor, beamLengthFactor, gussetLengthFactor, beamsShearEfficiency, boltedPlateTemplate, intermediateJoint):
+    def __init__(self, connectionMetaData, columnLengthFactor, beamLengthFactor, gussetLengthFactor, boltedPlateTemplate, beamsShearEfficiency= 1.0, intermediateJoint= False):
         ''' Constructor.
 
         :param connectionMetaData: connection origin node and members 
@@ -776,19 +777,20 @@ class DiagonalConnection(Connection):
         :param gussetLengthFactor: factor that multiplies the bolted plate
                                    length to obtain the lenght of the gusset
                                    plate.
+        :param boltedPlateTemplate: bolted plate dimensions and bolt type and 
+                                    arrangement.
         :param beamsShearEfficiency: ratio between the design shear and 
                                     the shear strength for the beams in
                                     this connection. Used to compute the
                                     required strength of the shear tab.
-        :param boltedPlateTemplate: bolted plate dimensions and bolt type and 
-                                    arrangement.
+                                    Defaults to 1.0 (full shear capacity).
         :param intermediateJoint: true if the joint doesn't correspond
                                   to an extremity of the column (i.e.
                                   a base plate or the top end of the column).
                                   Defaults to false for backward compatibility
                                   reasons.
         '''
-        super(DiagonalConnection,self).__init__(connectionMetaData= connectionMetaData, columnLengthFactor= columnLengthFactor, beamLengthFactor= beamLengthFactor, gussetLengthFactor= gussetLengthFactor, beamShearEfficiency= beamsShearEfficiency, boltedPlateTemplate= boltedPlateTemplate, intermediateJoint= intermediateJoint)
+        super(DiagonalConnection,self).__init__(connectionMetaData= connectionMetaData, columnLengthFactor= columnLengthFactor, beamLengthFactor= beamLengthFactor, gussetLengthFactor= gussetLengthFactor, boltedPlateTemplate= boltedPlateTemplate, beamsShearEfficiency= beamsShearEfficiency, intermediateJoint= intermediateJoint)
         
     def getHorizontalWeldLegSize(self):
         ''' Return the size of the weld that connects the 
@@ -802,7 +804,7 @@ class DiagonalConnection(Connection):
 class BasePlateConnection(Connection):
     ''' Base plate connection.'''
     
-    def __init__(self, connectionMetaData, columnLengthFactor, beamLengthFactor, gussetLengthFactor, boltedPlateTemplate):
+    def __init__(self, connectionMetaData, columnLengthFactor, beamLengthFactor, gussetLengthFactor, boltedPlateTemplate, beamsShearEfficiency= 1.0, intermediateJoint= False):
         ''' Constructor.
 
         :param connectionMetaData: connection origin node and members 
@@ -818,10 +820,20 @@ class BasePlateConnection(Connection):
                                    plate.
         :param boltedPlateTemplate: bolted plate dimensions and bolt type and 
                                     arrangement.
+        :param beamsShearEfficiency: ratio between the design shear and 
+                                    the shear strength for the beams in
+                                    this connection. NOT used for base plates.
+        :param intermediateJoint: true if the joint doesn't correspond
+                                  to an extremity of the column (i.e.
+                                  a base plate or the top end of the column).
+                                  reasons. For base plates must be FALSE.
         '''
-        # No shear tabs here so beamsShearEfficiency doesn't matters
-        # (we take it equal to 1.0)
-        super(BasePlateConnection,self).__init__(connectionMetaData= connectionMetaData, columnLengthFactor= columnLengthFactor, beamLengthFactor= beamLengthFactor, gussetLengthFactor= gussetLengthFactor, beamsShearEfficiency= 1.0, boltedPlateTemplate= boltedPlateTemplate)
+        # No shear tabs here so beamsShearEfficiency is not used.
+        if(intermediateJoint):
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.warning(className+'.'+methodName+': base plate defined as intermediate joint.')
+        super(BasePlateConnection,self).__init__(connectionMetaData= connectionMetaData, columnLengthFactor= columnLengthFactor, beamLengthFactor= beamLengthFactor, gussetLengthFactor= gussetLengthFactor, boltedPlateTemplate= boltedPlateTemplate, beamsShearEfficiency= beamsShearEfficiency, intermediateJoint= intermediateJoint)
 
     def setBasePlate(self, basePlate):
         ''' Set the base plate for this connection.
@@ -844,7 +856,7 @@ class BasePlateConnection(Connection):
         if(math.isnan(retval.x) or math.isnan(retval.y) or math.isnan(retval.z)):
             className= type(self).__name__
             methodName= sys._getframe(0).f_code.co_name
-            lmsg.warning(className+'.'+methodName+': no intersection with base plate')
+            lmsg.warning(className+'.'+methodName+': no intersection with base plate.')
         return retval
     
     def centerAnchors(self):
@@ -933,7 +945,7 @@ class ConnectionGroup(object):
                                 arrangement.
     :ivar connections: list of connections of the group
     '''
-    def __init__(self, name, connectionData, columnLengthFactor, beamLengthFactor, gussetLengthFactor, beamsShearEfficiency, boltedPlateTemplate, intermediateJoints, ConnectionType):
+    def __init__(self, name, connectionData, columnLengthFactor, beamLengthFactor, gussetLengthFactor, boltedPlateTemplate, beamsShearEfficiency, intermediateJoint, ConnectionType):
         ''' Constructor.
 
         :param name: name for the group of connections.
@@ -949,14 +961,14 @@ class ConnectionGroup(object):
         :param gussetLengthFactor: factor that multiplies the boltedPlate
                                    length to obtain the lenght of the gusset
                                    plate.
+        :param boltedPlateTemplate: bolted plate dimensions and bolt type and 
+                                    arrangement.
         :param beamsShearEfficiency: ratio between the design shear and 
                                      the shear strength. Used to compute
                                      the required strength of the shear tab.
-        :param boltedPlateTemplate: bolted plate dimensions and bolt type and 
-                                    arrangement.
-        :param intermediateJoints: true if the joints doesn't correspond
-                                   to an extremity of the column (i.e.
-                                   a base plate or the top end of the column).
+        :param intermediateJoint: true if the joints doesn't correspond
+                                  to an extremity of the column (i.e.
+                                  a base plate or the top end of the column).
         :param ConnectionType: class representing the connection type.
         '''
         self.name= name
@@ -966,7 +978,8 @@ class ConnectionGroup(object):
         self.connections= list()
         for nTag in self.connectionData:
             cData= self.connectionData[nTag]
-            connect= ConnectionType(connectionMetaData= cData, columnLengthFactor= columnLengthFactor, beamLengthFactor= beamLengthFactor, gussetLengthFactor= self.gussetLengthFactor, beamShearEfficiency= beamsShearEfficiency, boltedPlateTemplate= self.boltedPlateTemplate, intermediateJoints= intermediateJoints)
+            print('*** connection type: ', ConnectionType)
+            connect= ConnectionType(connectionMetaData= cData, columnLengthFactor= columnLengthFactor, beamLengthFactor= beamLengthFactor, gussetLengthFactor= self.gussetLengthFactor, boltedPlateTemplate= self.boltedPlateTemplate, beamsShearEfficiency= beamsShearEfficiency, intermediateJoint= intermediateJoint)
             self.connections.append(connect)
 
     def joinBasePlates(self, basePlateGroup, tol= 1e-2):
@@ -1074,7 +1087,7 @@ class ConnectionGroup(object):
 class DiagonalConnectionGroup(ConnectionGroup):
     ''' Connection group with one or more diagonals. '''
     
-    def __init__(self, name, columnLengthFactor, beamLengthFactor, gussetLengthFactor, beamsShearEfficiency, xcSet, diagonalBoltedPlate, intermediateJoints= False, ConnectionType= DiagonalConnection):
+    def __init__(self, name, columnLengthFactor, beamLengthFactor, gussetLengthFactor, xcSet, diagonalBoltedPlate, beamsShearEfficiency, intermediateJoint= False, ConnectionType= DiagonalConnection):
         ''' Constructor.
 
         :param name: name for the group of connections.
@@ -1087,12 +1100,12 @@ class DiagonalConnectionGroup(ConnectionGroup):
         :param gussetLengthFactor: factor that multiplies the boltedPlate
                                    length to obtain the lenght of the gusset
                                    plate.
+        :param xcSet: set containing the joint nodes.
+        :param diagonalBoltedPlate: bolted plate attaching diagonal.
         :param beamsShearEfficiency: ratio between the design shear and 
                                      the shear strength. Used to compute the
                                      required strength of the shear tab.
-        :param xcSet: set containing the joint nodes.
-        :param diagonalBoltedPlate: bolted plate attaching diagonal.
-        :param intermediateJoints: true if the joints doesn't correspond
+        :param intermediateJoint: true if the joints doesn't correspond
                                   to an extremity of the column (i.e.
                                   a base plate or the top end of the column).
                                   Defaults to false for backward compatibility
@@ -1105,7 +1118,7 @@ class DiagonalConnectionGroup(ConnectionGroup):
         materialModule= getmodule(diagonalBoltedPlate.__class__)
         jointMembers= connected_members.getConnectedMembers(xcSet, ConnectedMemberType= materialModule.ConnectedMember)
 
-        super(DiagonalConnectionGroup, self).__init__(name= name, connectionData= jointMembers, columnLengthFactor= columnLengthFactor, beamLengthFactor= beamLengthFactor, gussetLengthFactor= gussetLengthFactor, beamsShearEfficiency= beamsShearEfficiency, boltedPlateTemplate= diagonalBoltedPlate, intermediateJoints= intermediateJoints, ConnectionType= ConnectionType)
+        super(DiagonalConnectionGroup, self).__init__(name= name, connectionData= jointMembers, columnLengthFactor= columnLengthFactor, beamLengthFactor= beamLengthFactor, gussetLengthFactor= gussetLengthFactor, boltedPlateTemplate= diagonalBoltedPlate, beamsShearEfficiency= beamsShearEfficiency, intermediateJoint= intermediateJoint, ConnectionType= ConnectionType)
         
 class BasePlateConnectionGroup(DiagonalConnectionGroup):
     ''' Base plate connection group. '''
@@ -1129,7 +1142,7 @@ class BasePlateConnectionGroup(DiagonalConnectionGroup):
         '''
         # No shear tabs here so beamsShearEfficiency doesn't matters
         # (we take it equal to 1.0)
-        super(BasePlateConnectionGroup, self).__init__(name= name, columnLengthFactor= columnLengthFactor, beamLengthFactor= beamLengthFactor, gussetLengthFactor= gussetLengthFactor, beamsShearEfficiency= 1.0, xcSet= xcSet, diagonalBoltedPlate= diagonalBoltedPlate, ConnectionType= BasePlateConnection)
+        super(BasePlateConnectionGroup, self).__init__(name= name, columnLengthFactor= columnLengthFactor, beamLengthFactor= beamLengthFactor, gussetLengthFactor= gussetLengthFactor, xcSet= xcSet, diagonalBoltedPlate= diagonalBoltedPlate, beamsShearEfficiency= 1.0, ConnectionType= BasePlateConnection)
 
         self.joinBasePlates(basePlateGroup)
 
