@@ -593,7 +593,7 @@ def restoreStiffness(elementSet):
 
 def getBeamColumnGroups(xcSet):
     ''' Return the lines of the set arguments grouped according to its
-        'belongsTo' property (groups to wich the line belongs). If the
+        'belongsTo' property (groups to which the line belongs). If the
         line doesn't belong to any group it will be returned as a group
         by itself (with one item only).
 

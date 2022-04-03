@@ -60,7 +60,7 @@ class ResultsDescriptionContainer(dict):
     def getFigureDefinitionList(self,partToDisplay):
         '''Builds a list of figures to display.
 
-        param: partToDisplay: part of the model wich will be displayed
+        param: partToDisplay: part of the model which will be displayed
         '''
         retval= list()
         for key in self.keys():

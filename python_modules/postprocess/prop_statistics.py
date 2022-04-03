@@ -44,7 +44,7 @@ def rec_setattr(obj, attr, value):
         rec_setattr(getattr(obj, L[0]), '.'.join(L[1:]), value)
 
 def getItemWithMaxProp(iterable,attrName, argv= ''):
-    ''' Return item wich maximizes property named as indicated in attrName'''
+    ''' Return item which maximizes property named as indicated in attrName'''
     retval= None
     if(len(iterable)>0):
         retval= iterable[0]#iter(iterable).next()
@@ -59,7 +59,7 @@ def getItemWithMaxProp(iterable,attrName, argv= ''):
     return retval
 
 def getItemWithMinProp(iterable,attrName, argv= ''):
-    ''' Return item wich minimizes property named as indicated in attrName'''
+    ''' Return item which minimizes property named as indicated in attrName'''
     retval= None
     if(len(iterable)>0):
         retval= iterable[0]#iter(iterable).next()

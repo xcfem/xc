@@ -89,7 +89,7 @@ m_double Seg_lin::get_N_vec(const m_double &natcor) const
   }
 
 //! @brief Return the values of the partial derivatives of the shape functions
-//! at the point wich natural coordinates are being passed as parameter.
+//! at the point which natural coordinates are being passed as parameter.
 //! The (i,j) component of the matrix is equal to d(Nj)/d(xi)
 m_double Seg_lin::getPartialDerivatives(const m_double &natcor) const
   {
@@ -184,7 +184,7 @@ m_double Tri_lin::get_N_vec(const m_double &Xi) const
   }
 
 //! @brief Return the values of the partial derivatives of the shape functions
-//! at the point wich natural coordinates are being passed as parameter.
+//! at the point which natural coordinates are being passed as parameter.
 //! The (i,j) component of the matrix is equal to d(Nj)/d(xi)
 m_double Tri_lin::getPartialDerivatives(const m_double &/*natcor*/) const
   {
@@ -216,7 +216,7 @@ m_double Tri_quad::get_N_vec(const m_double &Xi) const
   }
 
 //! @brief Return the values of the partial derivatives of the shape functions
-//! at the point wich natural coordinates are being passed as parameter.
+//! at the point which natural coordinates are being passed as parameter.
 //! The (i,j) component of the matrix is equal to d(Nj)/d(xi)
 m_double Tri_quad::getPartialDerivatives(const m_double &Xi) const
   {
@@ -253,7 +253,7 @@ m_double Tri_quad_alt::get_N_vec(const m_double &Xi) const
   }
 
 //! @brief Return the values of the partial derivatives of the shape functions
-//! at the point wich natural coordinates are being passed as parameter.
+//! at the point which natural coordinates are being passed as parameter.
 //! The (i,j) component of the matrix is equal to d(Nj)/d(xi)
 m_double Tri_quad_alt::getPartialDerivatives(const m_double &Xi) const
   {
@@ -374,7 +374,7 @@ m_double Quad_lin::get_N_vec(const m_double &natcor) const
   }
 
 //! @brief Return the values of the partial derivatives of the shape functions
-//! at the point wich natural coordinates are being passed as parameter.
+//! at the point which natural coordinates are being passed as parameter.
 //! The (i,j) component of the matrix is equal to d(Nj)/d(xi)
 m_double Quad_lin::getPartialDerivatives(const m_double &natcor) const
   {
@@ -410,7 +410,7 @@ m_double Quad_quad::get_N_vec(const m_double &natcor) const
   }
 
 //! @brief Return the values of the partial derivatives of the shape functions
-//! at the point wich natural coordinates are being passed as parameter.
+//! at the point which natural coordinates are being passed as parameter.
 //! The (i,j) component of the matrix is equal to d(Nj)/d(xi)
 m_double Quad_quad::getPartialDerivatives(const m_double &natcor) const
   {
@@ -450,7 +450,7 @@ m_double Quad_quad_alt::get_N_vec(const m_double &natcor) const
   }
 
 //! @brief Return the values of the partial derivatives of the shape functions
-//! at the point wich natural coordinates are being passed as parameter.
+//! at the point which natural coordinates are being passed as parameter.
 //! The (i,j) component of the matrix is equal to d(Nj)/d(xi)
 m_double Quad_quad_alt::getPartialDerivatives(const m_double &natcor) const
   {
@@ -598,7 +598,7 @@ m_double Hex_lin::get_N_vec(const m_double &natcor) const
   }
 
 //! @brief Return the values of the partial derivatives of the shape functions
-//! at the point wich natural coordinates are being passed as parameter.
+//! at the point which natural coordinates are being passed as parameter.
 //! The (i,j) component of the matrix is equal to d(Nj)/d(xi)
 m_double Hex_lin::getPartialDerivatives(const m_double &natcor) const
   {

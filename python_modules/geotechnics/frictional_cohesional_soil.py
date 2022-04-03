@@ -207,7 +207,7 @@ class FrictionalCohesionalSoil(fs.FrictionalSoil):
     def tq(self,psi= 0.0):
         '''Factor that introduces the effect of the proximity of an slope.
 
-           :param psi: angle of the line on wich the q load acts 
+           :param psi: angle of the line on which the q load acts 
                        (see figure 4.7 in page 102 of reference [3])
                        must be determined by iterations.
         '''
@@ -279,7 +279,7 @@ class FrictionalCohesionalSoil(fs.FrictionalSoil):
     def tc(self,psi= 0.0):
         '''Factor that introduces the effect of the proximity of an slope.
 
-           :param psi: angle of the line on wich the q load acts 
+           :param psi: angle of the line on which the q load acts 
                        (see figure 4.7 in page 102 of reference [3])
                        must be determined by iterations.
         '''
@@ -337,7 +337,7 @@ class FrictionalCohesionalSoil(fs.FrictionalSoil):
     def tgamma(self,psi= 0.0):
         '''Factor that introduces the effect of the proximity of an slope.
 
-           :param psi: angle of the line on wich the q load acts 
+           :param psi: angle of the line on which the q load acts 
                        (see figure 4.7 in page 102 of reference [3])
                        must be determined by iterations.
         '''
@@ -374,7 +374,7 @@ class FrictionalCohesionalSoil(fs.FrictionalSoil):
         :param HloadL: Horizontal load on Leff direction. 
         :param NgammaCoef: 1.5 in reference [1], 1.8 in reference 2 
                            and 2 in reference 3
-        :param psi: angle of the line on wich the q load acts 
+        :param psi: angle of the line on which the q load acts 
                     (see figure 4.7 in page 102 of reference [3])
                     must be determined by iterations.
         '''
@@ -395,7 +395,7 @@ class FrictionalCohesionalSoil(fs.FrictionalSoil):
         :param HloadL: Horizontal load on Leff direction. 
         :param NgammaCoef: 1.5 in reference [1], 1.8 in reference 2 
                            and 2 in reference 3
-        :param psi: angle of the line on wich the q load acts 
+        :param psi: angle of the line on which the q load acts 
                     (see figure 4.7 in page 102 of reference [3])
                     must be determined by iterations.
         '''
@@ -418,7 +418,7 @@ class FrictionalCohesionalSoil(fs.FrictionalSoil):
         :param HloadL: Horizontal load on Leff direction. 
         :param NgammaCoef: 1.5 in reference [1], 1.8 in reference 2 
                            and 2 in reference 3
-        :param psi: angle of the line on wich the q load acts 
+        :param psi: angle of the line on which the q load acts 
                     (see figure 4.7 in page 102 of reference [3])
                     must be determined by iterations.
         '''
@@ -439,7 +439,7 @@ class FrictionalCohesionalSoil(fs.FrictionalSoil):
         :param HloadL: Horizontal load on Leff direction. 
         :param NgammaCoef: 1.5 in reference [1], 1.8 in reference 2 
                            and 2 in reference 3
-        :param psi: angle of the line on wich the q load acts 
+        :param psi: angle of the line on which the q load acts 
                     (see figure 4.7 in page 102 of reference [3])
                     must be determined by iterations.
         '''

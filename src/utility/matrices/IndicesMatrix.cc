@@ -33,7 +33,7 @@ IndicesMatrix::IndicesMatrix(const size_t &f,const size_t &c,const VIndices &p)
 //! the position (row= j, column= k) of the vector that occupies the i row
 //! in indices, stated otherwise
 //! (*this)(j,k)= indices[i].
-//! @param indices: matrix wich rows are the indexes vectors the are disposed
+//! @param indices: matrix which rows are the indexes vectors the are disposed
 //! in this matrix.
 IndicesMatrix::IndicesMatrix(const m_int &posiciones,const std::vector<VIndices> &indices)
   : m_indices(posiciones.column_maximum(1),posiciones.column_maximum(2)) 

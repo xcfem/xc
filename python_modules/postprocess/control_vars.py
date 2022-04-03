@@ -2,7 +2,7 @@
 '''Classes to store limit state control variables (internal forces, 
    strains, stresses,...) calculated in the analysis.
    THESE CLASSES ARE INTENDED TO REPLACE THE PROPERTIES DEFINED
-   IN def_vars_control.py WICH MUST DISSAPEAR.
+   IN def_vars_control.py WHICH MUST DISSAPEAR.
 '''
 
 from __future__ import print_function
