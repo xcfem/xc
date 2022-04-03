@@ -63,7 +63,7 @@ S235JR= EC3_materials.S235JR
 S235JR.gammaM= 1.00
 
 
-# Steel material-section appropiate for 3D beam analysis, including shear
+# Steel material-section appropriate for 3D beam analysis, including shear
   # deformations.
   # Attributes:
   #   steel:         steel material (

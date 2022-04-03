@@ -40,7 +40,7 @@ class BasicElasticMaterial(object):
         return self.E/(2*(1+self.nu))
     
     def defElasticMaterial(self, preprocessor, name= None, overrideRho= None):
-        ''' Return an elastic material appropiate for example for
+        ''' Return an elastic material appropriate for example for
             truss elements
 
         :param preprocessor: preprocessor of the finite element problem.
@@ -232,7 +232,7 @@ def defConcrete02(preprocessor,name,epsc0,fpc,fpcu,epscu,ratioSlope= 0.1, ft= No
 
 #Elastic section 1d.
 def defElasticSection1d(preprocessor,name,A,E, linearRho= 0.0):
-    '''Constructs an elastic section appropiate for 1D beam analysis.
+    '''Constructs an elastic section appropriate for 1D beam analysis.
 
     :param preprocessor: preprocessor of the finite element problem.
     :param name:         name identifying the section
@@ -249,7 +249,7 @@ def defElasticSection1d(preprocessor,name,A,E, linearRho= 0.0):
 
 #Elastic section 2d.
 def defElasticSection2d(preprocessor,name,A,E,I, linearRho= 0.0):
-    '''Constructs an elastic section appropiate for 2D beam analysis.
+    '''Constructs an elastic section appropriate for 2D beam analysis.
 
     :param preprocessor: preprocessor of the finite element problem.
     :param name:         name identifying the section
@@ -268,7 +268,7 @@ def defElasticSection2d(preprocessor,name,A,E,I, linearRho= 0.0):
 
 #Elastic shear section 2d.
 def defElasticShearSection2d(preprocessor,name,A,E,G,I,alpha, linearRho= 0.0):
-    '''Constructs an elastic section appropiate for 2D beam analysis, 
+    '''Constructs an elastic section appropriate for 2D beam analysis, 
     including shear deformations.
 
     :param preprocessor: preprocessor of the finite element problem.
@@ -291,7 +291,7 @@ def defElasticShearSection2d(preprocessor,name,A,E,G,I,alpha, linearRho= 0.0):
     return retval
 
 def defElasticSectionFromMechProp1d(preprocessor,name,mechProp1d, overrideRho= None):
-    '''Constructs an elastic section appropiate for 1D beam analysis, 
+    '''Constructs an elastic section appropriate for 1D beam analysis, 
     taking mechanical properties of the section form a MechProp1d object.
 
     :param preprocessor: preprocessor of the finite element problem.
@@ -308,7 +308,7 @@ def defElasticSectionFromMechProp1d(preprocessor,name,mechProp1d, overrideRho= N
     return retval
 
 def defElasticSectionFromMechProp2d(preprocessor, name, mechProp2d, overrideRho= None):
-    '''Constructs an elastic section appropiate for 2D beam analysis, 
+    '''Constructs an elastic section appropriate for 2D beam analysis, 
     taking mechanical properties of the section form a MechProp2d object.
 
     :param preprocessor: preprocessor of the finite element problem.
@@ -325,7 +325,7 @@ def defElasticSectionFromMechProp2d(preprocessor, name, mechProp2d, overrideRho=
     return retval
 
 def defElasticShearSectionFromMechProp2d(preprocessor, name, mechProp2d, overrideRho= None):
-    '''Constructs an elastic section appropiate for 2D beam analysis, 
+    '''Constructs an elastic section appropriate for 2D beam analysis, 
     taking mechanical properties of the section form a MechProp2d object.
 
     :param preprocessor: preprocessor of the finite element problem.
@@ -343,7 +343,7 @@ def defElasticShearSectionFromMechProp2d(preprocessor, name, mechProp2d, overrid
 
 #Elastic section 3d.
 def defElasticSection3d(preprocessor,name,A,E,G,Iz,Iy,J, linearRho= 0.0):
-    '''Constructs an elastic section appropiate for 3D beam analysis
+    '''Constructs an elastic section appropriate for 3D beam analysis
 
     :param preprocessor: preprocessor of the finite element problem.
     :param name:         name identifying the section
@@ -367,7 +367,7 @@ def defElasticSection3d(preprocessor,name,A,E,G,Iz,Iy,J, linearRho= 0.0):
     return retval
 
 def defElasticSectionFromMechProp3d(preprocessor, name, mechProp3d, overrideRho= None):
-    '''Constructs an elastic section appropiate for 3D beam analysis, 
+    '''Constructs an elastic section appropriate for 3D beam analysis, 
     taking mechanical properties of the section form a MechProp3d object.
 
     :param preprocessor: preprocessor of the finite element problem.
@@ -383,7 +383,7 @@ def defElasticSectionFromMechProp3d(preprocessor, name, mechProp3d, overrideRho=
     return defElasticSection3d(preprocessor,name,mechProp3d.A,mechProp3d.E,mechProp3d.G,mechProp3d.Iz,mechProp3d.Iy,mechProp3d.J,linearRho= rho)
 
 def defElasticShearSectionFromMechProp3d(preprocessor, name, mechProp3d, overrideRho= None):
-    '''Constructs an elastic section appropiate for 3D beam analysis, 
+    '''Constructs an elastic section appropriate for 3D beam analysis, 
     taking mechanical properties of the section form a MechProp3d object.
 
     :param preprocessor: preprocessor of the finite element problem.
@@ -400,7 +400,7 @@ def defElasticShearSectionFromMechProp3d(preprocessor, name, mechProp3d, overrid
 
 #Elastic shear section 3d.
 def defElasticShearSection3d(preprocessor, name, A, E, G, Iz, Iy, J, alpha_y, alpha_z, linearRho= 0.0):
-    '''Constructs an elastic section appropiate for 3D beam analysis, 
+    '''Constructs an elastic section appropriate for 3D beam analysis, 
     including shear deformations.
 
     :param preprocessor: preprocessor of the finite element problem.
@@ -482,7 +482,7 @@ def defElasticIsotropic3d(preprocessor,name,E,nu, rho= 0.0):
 
 #Elastic plate section.
 def defElasticPlateSection(preprocessor,name,E,nu,rho,h):
-    '''Constructs an elastic isotropic section material appropiate 
+    '''Constructs an elastic isotropic section material appropriate 
        for plate analysis.
 
     :param  preprocessor: preprocessor of the finite element problem.
@@ -503,7 +503,7 @@ def defElasticPlateSection(preprocessor,name,E,nu,rho,h):
 #Elastic plate section.
 def defJ2PlateFibre(preprocessor, name, E, nu, fy, alpha= .01, rho= 0.0):
     '''Constructs a J2 (Von Mises) material with a linear-strain
-       hardening rule appropiate for plate analysis.
+       hardening rule appropriate for plate analysis.
 
     :param  preprocessor: preprocessor of the finite element problem.
     :param  name:         name identifying the material.
@@ -527,7 +527,7 @@ def defJ2PlateFibre(preprocessor, name, E, nu, fy, alpha= .01, rho= 0.0):
 
 #Elastic membrane plate section.
 def defElasticMembranePlateSection(preprocessor, name:str, E:float, nu:float, rho:float, h:float):
-    '''Constructs an elastic isotropic section material appropiate 
+    '''Constructs an elastic isotropic section material appropriate 
        for plate and shell analysis.
 
     :param  preprocessor: preprocessor of the finite element problem.
@@ -549,7 +549,7 @@ def defElasticMembranePlateSection(preprocessor, name:str, E:float, nu:float, rh
 
 #Elastic membrane plate section.
 def defMembranePlateFiberSection(preprocessor, name:str, nDMaterial, h:float):
-    '''Constructs a membrane plate fiber section appropiate 
+    '''Constructs a membrane plate fiber section appropriate 
        for plate and shell analysis.
 
     :param  preprocessor: preprocessor of the finite element problem.
@@ -599,7 +599,7 @@ class DeckMaterialData(MaterialData):
         lmsg.warning('DeckMaterialData.getAreaDensity will be deprecated soon. Use the XC material method.')
         return self.rho*self.thickness
     def setupElasticSection(self,preprocessor, overrideRho= None):
-        '''create an elastic isotropic section appropiate for plate 
+        '''create an elastic isotropic section appropriate for plate 
            and shell analysis.
 
         :param preprocessor: preprocessor of the finite element problem.
@@ -621,7 +621,7 @@ class DeckMaterialData(MaterialData):
         return self.xc_material
 
 class BeamMaterialData(MaterialData):
-    '''Elastic section appropiate for 3D beam analysis, including shear deformations.
+    '''Elastic section appropriate for 3D beam analysis, including shear deformations.
 
     :ivar name:         name identifying the section.
     :ivar section:      instance of a class that defines the geometric and
@@ -641,7 +641,7 @@ class BeamMaterialData(MaterialData):
         return self.rho*self.section.A()
     
     def setupElasticShear3DSection(self,preprocessor, overrideRho= None):
-        '''Return an elastic section appropiate for 3D beam linear 
+        '''Return an elastic section appropriate for 3D beam linear 
            elastic analysis.
 
         :param overrideRho: if defined (not None), override the value of 

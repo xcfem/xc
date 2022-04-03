@@ -295,7 +295,7 @@ class LimitStateData(object):
         '''This method reads, for the elements in setCalc,  the internal 
         forces previously calculated and saved in the corresponding file.
         Using the 'initControlVars' and 'updateEfficiencyForSet' methods of 
-        the controller, the appropiate attributes are assigned to the 
+        the controller, the appropriate attributes are assigned to the 
         elements and the associated limit state verification is run.
         The results are written to a file in order to be displayed or listed.
 
@@ -466,7 +466,7 @@ class VonMisesStressLimitStateData(ULS_LimitStateData):
         '''This method reads, for the elements in setCalc,  the internal 
         forces previously calculated and saved in the corresponding file.
         Using the 'initControlVars' and 'updateEfficiencyForSet' methods of 
-        the controller, the appropiate attributes are assigned to the 
+        the controller, the appropriate attributes are assigned to the 
         elements and the associated limit state verification is run.
         The results are written to a file in order to be displayed or listed.
 

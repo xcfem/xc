@@ -420,7 +420,7 @@ class OutputHandler(object):
 
     def displayIntForcDiag(self, itemToDisp, setToDisplay=None,fileName=None,defFScale=0.0,orientScbar=1,titleScbar=None):
         '''displays the component of internal forces in the set of entities as a 
-         diagram over lines (i.e. appropiated for beam elements).
+         diagram over lines (i.e. appropriated for beam elements).
 
         :param itemToDisp: component of the internal forces 
           ('N', 'Qy' (or 'Vy'), 'Qz' (or 'Vz'), 'My', 'Mz', 'T') to be depicted 
@@ -459,7 +459,7 @@ class OutputHandler(object):
         
     def displayIntForc(self,itemToDisp, setToDisplay=None,fileName=None,defFScale=0.0, rgMinMax=None):
         '''displays the component of internal forces in the 
-        set of entities as a scalar field (i.e. appropiated for 2D elements; 
+        set of entities as a scalar field (i.e. appropriated for 2D elements; 
         shells...).
 
         :param itemToDisp:   component of the internal forces ('N1', 'N2', 'N12', 

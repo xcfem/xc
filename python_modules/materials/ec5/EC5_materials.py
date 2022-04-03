@@ -739,7 +739,7 @@ class RectangularShape(EC5Shape, section_properties.RectangularSection):
         return retval
     
     def defElasticSection3d(self, prep, overrideRho= None):
-        ''' Return an elastic section appropiate for 3D beam analysis
+        ''' Return an elastic section appropriate for 3D beam analysis
 
         :param prep: preprocessor of the finite element problem.
         :param overrideRho: if defined (not None), override the value of 
@@ -749,7 +749,7 @@ class RectangularShape(EC5Shape, section_properties.RectangularSection):
         return section_properties.RectangularSection.defElasticSection3d(self, preprocessor= prep, material= mat, overrideRho= overrideRho)
    
     def defElasticShearSection3d(self, prep, overrideRho= None):
-        ''' Return an elastic section appropiate for 3D beam analysis
+        ''' Return an elastic section appropriate for 3D beam analysis
 
         :param prep: preprocessor of the finite element problem.
         :param overrideRho: if defined (not None), override the value of 
@@ -759,7 +759,7 @@ class RectangularShape(EC5Shape, section_properties.RectangularSection):
         return section_properties.RectangularSection.defElasticShearSection3d(self, preprocessor= prep, material= mat, overrideRho= overrideRho)
    
     def defElasticSection1d(self, prep, overrideRho= None):
-        ''' Return an elastic section appropiate for 1D beam analysis
+        ''' Return an elastic section appropriate for 1D beam analysis
 
         :param prep: preprocessor of the finite element problem.
         :param overrideRho: if defined (not None), override the value of 
@@ -769,7 +769,7 @@ class RectangularShape(EC5Shape, section_properties.RectangularSection):
         return section_properties.RectangularSection.defElasticSection1d(self, preprocessor= prep, material= mat, overrideRho= overrideRho)
     
     def defElasticSection2d(self, prep, overrideRho= None):
-        ''' Return an elastic section appropiate for 2D beam analysis
+        ''' Return an elastic section appropriate for 2D beam analysis
 
         :param prep: preprocessor of the finite element problem.
         :param overrideRho: if defined (not None), override the value of 
@@ -779,7 +779,7 @@ class RectangularShape(EC5Shape, section_properties.RectangularSection):
         return section_properties.RectangularSection.defElasticSection2d(self, preprocessor= prep, material= mat, overrideRho= overrideRho)
     
     def defElasticShearSection2d(self, prep, overrideRho= None):
-        ''' Return an elastic section appropiate for 2D beam analysis
+        ''' Return an elastic section appropriate for 2D beam analysis
 
         :param prep: preprocessor of the finite element problem.
         :param overrideRho: if defined (not None), override the value of 

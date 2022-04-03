@@ -255,17 +255,17 @@ sectionProperties.sectionProperties(name,E,nu)
 \end{center}
 \begin{methodsTable}
 \multicolumn{2}{p{13cm}}{{\tt sectionProperties.defSeccElastica3d(preprocessor)}} \\
-& returns an elastic section appropiate for 3D beam analysis, from the data of the section geometric properties\\
+& returns an elastic section appropriate for 3D beam analysis, from the data of the section geometric properties\\
 \multicolumn{2}{p{13cm}}{{\tt sectionProperties.defSeccShElastica3d(preprocessor)}} \\
-& returns an elastic section appropiate for 3D beam analysis  including shear deformations, from the data of the section geometric properties\\
+& returns an elastic section appropriate for 3D beam analysis  including shear deformations, from the data of the section geometric properties\\
 \multicolumn{2}{p{13cm}}{{\tt sectionProperties.defSeccElastica2d(preprocessor)}} \\
-& returns an elastic section appropiate for 2D beam analysis, from the data of the section geometric properties\\
+& returns an elastic section appropriate for 2D beam analysis, from the data of the section geometric properties\\
 \multicolumn{2}{p{13cm}}{{\tt sectionProperties.defSeccShElastica2d(preprocessor)}} \\
-& returns an elastic section appropiate for 2D beam analysis  including shear deformations, from the data of the section geometric properties\\
+& returns an elastic section appropriate for 2D beam analysis  including shear deformations, from the data of the section geometric properties\\
 \end{methodsTable}
 
 \subsubsection{defSeccElastica3d}
-\noindent Returns an elastic section appropiate for 3D beam analysis.
+\noindent Returns an elastic section appropriate for 3D beam analysis.
 \begin{verbatim}
 from materials import sectionProperties
 sectionProperties.defSeccElastica3d(preprocessor,defSecc)
@@ -277,7 +277,7 @@ sectionProperties.defSeccElastica3d(preprocessor,defSecc)
 
 
 \subsubsection{defSeccShElastica3d}
-\noindent Returns an elastic section appropiate for 3D beam analysis, including shear deformations.
+\noindent Returns an elastic section appropriate for 3D beam analysis, including shear deformations.
 \begin{verbatim}
 from materials import sectionProperties
 sectionProperties.defSeccShElastica3d(preprocessor,defSecc)
@@ -289,7 +289,7 @@ sectionProperties.defSeccShElastica3d(preprocessor,defSecc)
 
 
 \subsubsection{defSeccElastica2d}
-\noindent Returns an elastic section appropiate for 2D beam analysis.
+\noindent Returns an elastic section appropriate for 2D beam analysis.
 \begin{verbatim}
 from materials import sectionProperties
 sectionProperties.defSeccElastica2d(preprocessor,defSecc)
@@ -301,7 +301,7 @@ sectionProperties.defSeccElastica2d(preprocessor,defSecc)
 
 
 \subsubsection{defSeccShElastica2d}
-\noindent Returns an elastic section appropiate for 2D beam analysis, including shear deformations.
+\noindent Returns an elastic section appropriate for 2D beam analysis, including shear deformations.
 \begin{verbatim}
 from materials import sectionProperties
 sectionProperties.defSeccShElastica2d(preprocessor,defSecc)
@@ -340,13 +340,13 @@ paramCircularSection.CircularSection(name,r,E,nu)
 \multicolumn{2}{p{13cm}}{{\tt paramCircularSection.setupSeccCircular(sectionName,r,E,nu)}} \\
 & returns a circular section \\
 \multicolumn{2}{p{13cm}}{{\tt paramCircularSection.defSeccCircularElastica3d(preprocessor, defSecc)}}\\
-& returns an elastic circular section appropiate for 3D beam analysis.\\
+& returns an elastic circular section appropriate for 3D beam analysis.\\
 \multicolumn{2}{p{13cm}}{{\tt paramCircularSection.defSeccCircularShElastica3d(preprocessor, defSecc)}}\\
-& returns an elastic circular section appropiate for 3D beam analysis, including shear deformations.\\
+& returns an elastic circular section appropriate for 3D beam analysis, including shear deformations.\\
 \multicolumn{2}{p{13cm}}{{\tt paramCircularSection.defSeccCircularElastica2d(preprocessor, defSecc)}}\\
-& returns an elastic circular section appropiate for 2D beam analysis.\\
+& returns an elastic circular section appropriate for 2D beam analysis.\\
 \multicolumn{2}{p{13cm}}{{\tt paramCircularSection.defSeccCircularShElastica2d(preprocessor, defSecc)}}\\
-& returns an elastic circular section appropiate for 2D beam analysis, including shear deformations.\\
+& returns an elastic circular section appropriate for 2D beam analysis, including shear deformations.\\
 & {\tt preprocessor} : preprocessor name \\
 & {\tt defSecc} : name identifying an object of the class {\tt CircularSection} with the properties of the section. \\
 \end{tabular}
@@ -440,7 +440,7 @@ steelProfile.SteelProfile(steel,name,table)
 
 \subsection{Elastic sections}
 \subsubsection{defElasticSection2d}
-\noindent Constructs an elastic section appropiate for 2D beam analysis.
+\noindent Constructs an elastic section appropriate for 2D beam analysis.
 \begin{verbatim}
 from materials import typical_materials
 typical_materials.defElasticSection2d(preprocessor,name,A,E,I)
@@ -456,7 +456,7 @@ typical_materials.defElasticSection2d(preprocessor,name,A,E,I)
 
 
 \subsubsection{defElasticShearSection2d}
-\noindent Constructs an elastic section appropiate for 2D beam analysis, including shear deformations.
+\noindent Constructs an elastic section appropriate for 2D beam analysis, including shear deformations.
 \begin{verbatim}
 from materials import typical_materials
 typical_materials.defElasticShearSection2d(preprocessor,name,A,E,G,I,alpha)
@@ -473,7 +473,7 @@ typical_materials.defElasticShearSection2d(preprocessor,name,A,E,G,I,alpha)
 
 
 \subsubsection{defElasticSectionFromMechProp2d}
-\noindent Constructs an elastic section appropiate for 2D beam analysis, taking mechanical properties of the section form a MechProp2d object.
+\noindent Constructs an elastic section appropriate for 2D beam analysis, taking mechanical properties of the section form a MechProp2d object.
 \begin{verbatim}
 from materials import typical_materials
 typical_materials.defElasticSectionFromMechProp2d(preprocessor,name,mechProp2d)
@@ -486,7 +486,7 @@ typical_materials.defElasticSectionFromMechProp2d(preprocessor,name,mechProp2d)
 
 %%%
 \subsubsection{defElasticSection3d}
-\noindent Constructs an elastic section appropiate for 3D beam analysis.
+\noindent Constructs an elastic section appropriate for 3D beam analysis.
 \begin{verbatim}
 from materials import typical_materials
 typical_materials.defElasticSection3d(preprocessor,name,A,E,G,Iz,Iy,J)
@@ -503,7 +503,7 @@ typical_materials.defElasticSection3d(preprocessor,name,A,E,G,Iz,Iy,J)
 
 
 \subsubsection{defElasticShearSection3d}
-\noindent Constructs an elastic section appropiate for 3D beam analysis, including shear deformations.
+\noindent Constructs an elastic section appropriate for 3D beam analysis, including shear deformations.
 \begin{verbatim}
 from materials import typical_materials
 typical_materials.defElasticShearSection3d(preprocessor,name,A,E,G,Iz,Iy,J,alpha)
@@ -521,7 +521,7 @@ typical_materials.defElasticShearSection3d(preprocessor,name,A,E,G,Iz,Iy,J,alpha
 \end{paramFuncTable}
 
 \subsubsection{defElasticSectionFromMechProp3d}
-\noindent Constructs an elastic section appropiate for 3D beam analysis, taking mechanical properties of the section form a MechProp3d object.
+\noindent Constructs an elastic section appropriate for 3D beam analysis, taking mechanical properties of the section form a MechProp3d object.
 \begin{verbatim}
 from materials import typical_materials
 typical_materials.defElasticSectionFromMechProp3d(preprocessor,name,mechProp3d)

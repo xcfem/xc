@@ -226,7 +226,7 @@ class SectionProperties(object):
         return typical_materials.defElasticMaterial(preprocessor, self.respVzName(), self.getShearStiffnessZ(G))
 
     def defElasticSection3d(self, preprocessor, material, overrideRho= None):
-        ''' Return an elastic section appropiate for 3D beam analysis
+        ''' Return an elastic section appropriate for 3D beam analysis
 
         :param preprocessor: preprocessor of the finite element problem.
         :param material: material (for which E is the Young's modulus 
@@ -249,7 +249,7 @@ class SectionProperties(object):
         return self.xc_material
     
     def defElasticShearSection3d(self, preprocessor, material, overrideRho= None):
-        '''elastic section appropiate for 3D beam analysis, including shear 
+        '''elastic section appropriate for 3D beam analysis, including shear 
            deformations
 
         :param preprocessor: preprocessor object.
@@ -273,7 +273,7 @@ class SectionProperties(object):
         return self.xc_material
 
     def defElasticSection1d(self, preprocessor, material, overrideRho= None):
-        ''' Return an elastic section appropiate for truss analysis.
+        ''' Return an elastic section appropriate for truss analysis.
 
         :param preprocessor: preprocessor object.
         :param material:     material constitutive model 
@@ -296,7 +296,7 @@ class SectionProperties(object):
         return self.xc_material
     
     def defElasticSection2d(self, preprocessor, material, majorAxis= True, overrideRho= None):
-        ''' Return an elastic section appropiate for 2D beam analysis
+        ''' Return an elastic section appropriate for 2D beam analysis
 
         :param preprocessor: preprocessor object.
         :param material:     material constitutive model 
@@ -323,7 +323,7 @@ class SectionProperties(object):
         return self.xc_material
     
     def defElasticShearSection2d(self, preprocessor, material, majorAxis= True, overrideRho= None):
-        '''elastic section appropiate for 2D beam analysis, including shear deformations
+        '''elastic section appropriate for 2D beam analysis, including shear deformations
 
         :param  preprocessor: preprocessor object.
         :param material: material constitutive model (for which 
