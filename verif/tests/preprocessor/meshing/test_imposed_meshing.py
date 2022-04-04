@@ -103,7 +103,7 @@ deck2=gridGeom.genSurfMultiRegion(lstIJKRange=deck2_rg,setName='deck2')
 
 #                         *** MATERIALS *** 
 concrProp=tm.MaterialData(name='concrProp',E=concrete.Ecm(),nu=concrete.nuc,rho=concrete.density())
-# Isotropic elastic section-material appropiate for plate and shell analysis
+# Isotropic elastic section-material appropriate for plate and shell analysis
 wall_mat=tm.DeckMaterialData(name='wall_mat',thickness= 0.2,material=concrProp)
 wall_mat.setupElasticSection(preprocessor=prep)   #creates the section-material
 deck_mat=tm.DeckMaterialData(name='deck_mat',thickness= 0.1,material=concrProp)

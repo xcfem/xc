@@ -719,7 +719,7 @@ class Concrete(matWDKD.MaterialWithDKDiagrams):
         return typical_materials.MaterialData(name= materialModelName,E=self.getEcm(),nu=self.nuc,rho= rho)
 
     def defElasticMaterial(self, preprocessor, name:str= None, overrideRho= None):
-        '''Constructs an elastic uniaxial material appropiate 
+        '''Constructs an elastic uniaxial material appropriate 
          for analysis of trusses.
 
         :param preprocessor: preprocessor of the finite element problem.
@@ -735,7 +735,7 @@ class Concrete(matWDKD.MaterialWithDKDiagrams):
         return typical_materials.defElasticMaterial(preprocessor, name, E= self.getEcm(), rho= rho)
         
     def defElasticSection2d(self, preprocessor, sectionProperties, overrideRho= None):
-        '''Constructs an elastic section material appropiate 
+        '''Constructs an elastic section material appropriate 
          for elastic analysis of 2D beam elements.
 
          :param preprocessor: preprocessor of the finite element problem.
@@ -747,7 +747,7 @@ class Concrete(matWDKD.MaterialWithDKDiagrams):
         return sectionProperties.defElasticSection2d(preprocessor, matData, overrideRho= overrideRho)
         
     def defElasticShearSection2d(self, preprocessor, sectionProperties, overrideRho= None):
-        '''Constructs an elastic section material appropiate 
+        '''Constructs an elastic section material appropriate 
          for elastic analysis of 2D beam elements including shear
          deformations.
 
@@ -760,7 +760,7 @@ class Concrete(matWDKD.MaterialWithDKDiagrams):
         return sectionProperties.defElasticShearSection2d(preprocessor, matData,overrideRho= overrideRho)
 
     def defElasticSection3d(self, preprocessor, sectionProperties, overrideRho= None):
-        '''Constructs an elastic section material appropiate 
+        '''Constructs an elastic section material appropriate 
          for elastic analysis of 3D beam elements.
 
          :param preprocessor: preprocessor of the finite element problem.
@@ -772,7 +772,7 @@ class Concrete(matWDKD.MaterialWithDKDiagrams):
         return sectionProperties.defElasticSection3d(preprocessor, matData, overrideRho= overrideRho)
 
     def defElasticShearSection3d(self, preprocessor, sectionProperties, overrideRho= None):
-        '''Constructs an elastic section material appropiate 
+        '''Constructs an elastic section material appropriate 
          for elastic analysis of 3D beam elements including shear
          deformations.
 
@@ -785,7 +785,7 @@ class Concrete(matWDKD.MaterialWithDKDiagrams):
         return sectionProperties.defElasticShearSection3d(preprocessor,matData, overrideRho= overrideRho) 
     
     def defElasticPlateSection(self, preprocessor, name, thickness, overrideRho= None):
-        '''Constructs an elastic isotropic section material appropiate 
+        '''Constructs an elastic isotropic section material appropriate 
            for elastic analysis of plate elements.
 
         :param preprocessor: preprocessor of the finite element problem.
@@ -807,7 +807,7 @@ class Concrete(matWDKD.MaterialWithDKDiagrams):
         return retval
 
     def defElasticMembranePlateSection(self, preprocessor, name, thickness, overrideRho= None):
-        '''Constructs an elastic isotropic section material appropiate 
+        '''Constructs an elastic isotropic section material appropriate 
            for elastic analysis of plate and shell elements
 
         :param preprocessor: preprocessor of the finite element problem.

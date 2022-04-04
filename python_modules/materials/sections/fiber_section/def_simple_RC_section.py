@@ -683,7 +683,7 @@ class BasicRectangularRCSection(RCSectionBase, section_properties.RectangularSec
         rg.pMax= geom.Pos2d(self.b/2,self.h/2)
 
     def defElasticSection1d(self, preprocessor, overrideRho= None):
-        ''' Return an elastic section appropiate for truss analysis.
+        ''' Return an elastic section appropriate for truss analysis.
 
         :param preprocessor: preprocessor of the finite element problem.
         :param overrideRho: if defined (not None), override the value of 
@@ -693,7 +693,7 @@ class BasicRectangularRCSection(RCSectionBase, section_properties.RectangularSec
         return super(BasicRectangularRCSection, self).defElasticSection1d(preprocessor, material= mat, overrideRho= overrideRho)
     
     def defElasticSection3d(self, preprocessor, overrideRho= None):
-        ''' Return an elastic section appropiate for 3D beam analysis
+        ''' Return an elastic section appropriate for 3D beam analysis
 
         :param preprocessor: preprocessor of the finite element problem.
         :param overrideRho: if defined (not None), override the value of 
@@ -703,7 +703,7 @@ class BasicRectangularRCSection(RCSectionBase, section_properties.RectangularSec
         return super(BasicRectangularRCSection, self).defElasticSection3d(preprocessor, material= mat, overrideRho= overrideRho)
     
     def defElasticShearSection3d(self, preprocessor, overrideRho= None):
-        '''elastic section appropiate for 3D beam analysis, including shear 
+        '''elastic section appropriate for 3D beam analysis, including shear 
            deformations
 
         :param preprocessor: XC preprocessor for the finite element problem.
@@ -714,7 +714,7 @@ class BasicRectangularRCSection(RCSectionBase, section_properties.RectangularSec
         return super(BasicRectangularRCSection, self).defElasticShearSection3d(preprocessor, material= mat, overrideRho= overrideRho)
     
     def defElasticSection2d(self, preprocessor, majorAxis= True, overrideRho= None):
-        ''' Return an elastic section appropiate for 2D beam analysis
+        ''' Return an elastic section appropriate for 2D beam analysis
 
         :param preprocessor: XC preprocessor for the finite element problem.
         :param majorAxis: true if bending occurs in the section major axis.
@@ -725,7 +725,7 @@ class BasicRectangularRCSection(RCSectionBase, section_properties.RectangularSec
         return super(BasicRectangularRCSection, self).defElasticSection2d(preprocessor, material= mat, majorAxis= majorAxis, overrideRho= overrideRho)
         
     def defElasticShearSection2d(self, preprocessor, material, majorAxis= True, overrideRho= None):
-        '''elastic section appropiate for 2D beam analysis, including 
+        '''elastic section appropriate for 2D beam analysis, including 
            shear deformations.
 
         :param preprocessor: XC preprocessor for the finite element problem.

@@ -76,7 +76,7 @@ mat_slabs= tm.MaterialData(name='mat_slabs',E=2.55e15,nu=0.2,rho=2500)
 mat_walls= tm.MaterialData(name='mat_walls',E=2.55e15,nu=0.2,rho=2500)
 mat_cols= tm.MaterialData(name='mat_cols',E=2.55e15,nu=0.2,rho=2500)
 
-# Isotropic elastic section-material appropiate for plate and shell analysis
+# Isotropic elastic section-material appropriate for plate and shell analysis
 deck_mat=tm.DeckMaterialData(name='deck_mat',thickness= 0.25,material=mat_slabs)
 deck_mat.setupElasticSection(preprocessor=prep)   #creates de section-material
 wall_mat=tm.DeckMaterialData(name='wall_mat',thickness= 0.15,material=mat_walls)

@@ -164,7 +164,7 @@ class RecordDisp(OuputUnits):
 
     def displayIntForcDiag(self,itemToDisp,fileName=None,defFScale=0.0,orientScbar=1,titleScbar=None):
         '''displays the component of internal forces as a 
-         diagram over lines (i.e. appropiated for beam elements).
+         diagram over lines (i.e. appropriated for beam elements).
 
         :param itemToDisp: component of the internal forces 
           ('N', 'Qy' (or 'Vy'), 'Qz' (or 'Vz'), 'My', 'Mz', 'T') to be depicted 
