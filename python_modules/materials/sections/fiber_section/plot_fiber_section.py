@@ -101,41 +101,41 @@ class fibSectFeaturesToplot(object):
                 R= b.diameter/2.0
                 ax2d.add_artist(plt.Circle((cent[0],cent[1]),R,color='black'))
         #Neutral axis 
-        if self.colorNeutralAxis != None:
+        if self.colorNeutralAxis is not None:
             (y,z)=data_axis_to_pyplot(self.fiberSection.getNeutralAxis(),self.contour)
             ax2d.plot(y,z,self.colorNeutralAxis,label='Neutral axis')
         #Bending plane
-        if self.colorBendingPlane != None:
+        if self.colorBendingPlane is not None:
             (y,z)=data_axis_to_pyplot(self.fiberSection.getBendingPlaneTrace(),self.contour)
             ax2d.plot(y,z,self.colorBendingPlane,label='Bending plane')
         #Compression plane
-        if self.colorCompressionPlane != None:
+        if self.colorCompressionPlane is not None:
             (y,z)=data_axis_to_pyplot(self.fiberSection.getCompressedPlaneTrace(),self.contour)
             ax2d.plot(y,z,self.colorCompressionPlane,label='Compression plane')
         #Tension plane
-        if self.colorTensionPlane != None:
+        if self.colorTensionPlane is not None:
             (y,z)=data_axis_to_pyplot(self.fiberSection.getTensionedPlaneTrace(),self.contour)
             ax2d.plot(y,z,self.colorTensionPlane,label='Tension plane')
         #Internal forces axis
-        if self.colorIntForcAxis != None:
+        if self.colorIntForcAxis is not None:
             (y,z)=data_axis_to_pyplot(self.fiberSection.getInternalForcesAxes(),self.contour)
             ax2d.plot(y,z,self.colorIntForcAxis ,label='Internal forces axis')
         #Lever arm
-        if self.colorLeverArm != None:
+        if self.colorLeverArm is not None:
             (y,z)= data_xcsegment_to_pyplot(self.fiberSection.getLeverArmSegment())
             ax2d.plot(y,z,self.colorLeverArm,label='Lever arm')
         #Effective depth
-        if self.colorEffDepth != None:
+        if self.colorEffDepth is not None:
             (y,z)= data_xcsegment_to_pyplot(self.fiberSection.getEffectiveDepthSegment())
             ax2d.plot(y,z,self.colorEffDepth,label='Effective depth')
         #Limit of concrete effective area
-        if self.colorEffConcrArea != None:
+        if self.colorEffConcrArea is not None:
             if self.MaxEffHeight==None:
                 lmsg.error("I can't plot the limit of the effective concrete area, a value to MaxEffHeight must be provided \n")
             else:
                 (y,z)=data_axis_to_pyplot(self.fiberSection.getEffectiveConcreteAreaLimitLine(self.MaxEffHeight),self.contour)
                 ax2d.plot(y,z,self.colorEffConcrArea,label='Limit of effective concrete area')
-        if self.colorGrossEffConcrAreaContours != None:
+        if self.colorGrossEffConcrAreaContours is not None:
             if self.MaxEffHeight==None:
                 lmsg.error("I can't plot the contours of the gross effective concrete area, a value to MaxEffHeight must be provided \n")
             else:

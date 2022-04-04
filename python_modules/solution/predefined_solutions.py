@@ -1307,7 +1307,7 @@ class BucklingAnalysisEigenPart(SolutionProcedure):
         '''        
         super(BucklingAnalysisEigenPart,self).__init__(name, constraintHandlerType= None, printFlag= printFlag, numberingMethod= None, soeType= soeType, solverType= solverType, shift= shift)
         modelWrapper= staticAnalysisPart.getModelWrapper
-        if(modelWrapper!= None):
+        if(modelWrapper is not None):
             self.modelWrapper= modelWrapper
         else:
             className= type(self).__name__

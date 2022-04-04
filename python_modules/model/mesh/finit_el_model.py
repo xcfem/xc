@@ -116,7 +116,7 @@ class LinSetToMesh(RawLineSetToMesh):
     def __init__(self,linSet,matSect,elemSize,vDirLAxZ, elemType='ElasticBeam3d',dimElemSpace=3,coordTransfType='linear'):
         self.vDirLAxZ= vDirLAxZ
         cTrf= None
-        if(coordTransfType!= None):
+        if(coordTransfType is not None):
           trfName= linSet.name+'trYGlobal'
           cTrf= getDefaultCoordinateTransformation(linSet.owner,trfName,coordTransfType,self.vDirLAxZ)
         super(LinSetToMesh,self).__init__(linSet,matSect,elemSize,cTrf,elemType,dimElemSpace)

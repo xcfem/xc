@@ -695,9 +695,9 @@ class Concrete(matWDKD.MaterialWithDKDiagrams):
         return 2*self.fmaxK()/self.epsilon0()
         
     def plotDesignStressStrainDiagram(self,preprocessor,path=''):
-        if self.materialDiagramD== None:
+        if self.materialDiagramD is None:
           self.defDiagD(preprocessor)
-        if self.tensionStiffparam==None:
+        if self.tensionStiffparam is None:
             retval= graph_material.UniaxialMaterialDiagramGraphic(epsMin=self.epsilonU(),epsMax=0,title=self.materialName + ' design stress-strain diagram')
         else:
             retval= graph_material.UniaxialMaterialDiagramGraphic(epsMin=self.epsilonU(),epsMax=20*self.fctd()/self.E0(),title=self.materialName + ' design stress-strain diagram')
@@ -1045,7 +1045,7 @@ class ReinforcingSteel(matWDKD.MaterialWithDKDiagrams):
 
     def plotDesignStressStrainDiagram(self,preprocessor,path=''):
         '''Draws the steel design diagram.'''
-        if self.materialDiagramD== None:
+        if self.materialDiagramD is None:
             self.defDiagD(preprocessor)
         retval= mg.UniaxialMaterialDiagramGraphic(-0.016,0.016, self.materialName + ' design stress-strain diagram')
         retval.setupGraphic(plt,self.materialDiagramD)

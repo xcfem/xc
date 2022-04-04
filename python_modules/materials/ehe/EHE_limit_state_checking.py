@@ -1377,7 +1377,7 @@ class CrackControl(lscb.CrackControlBaseParameters):
                                        steel material.
          :param fctm: average tensile strength of the concrete.
         '''
-        if(self.rcSets == None):
+        if(self.rcSets is None):
             self.rcSets= fiber_sets.fiberSectionSetupRC3Sets(scc,concreteMatTag,self.concreteFibersSetName,reinfSteelMaterialTag,self.rebarFibersSetName)
         concrFibers= self.rcSets.concrFibers.fSet
         reinfFibers= self.rcSets.reinfFibers.fSet
