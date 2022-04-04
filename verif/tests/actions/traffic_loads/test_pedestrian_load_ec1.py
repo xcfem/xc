@@ -11,7 +11,7 @@ __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
 import math
-from actions.pedestrian_trafic import EC1_pedestrian_load_models as plm
+from actions.pedestrian_traffic import EC1_pedestrian_load_models as plm
 
 fs= 2.25 # Hz
 walking= True

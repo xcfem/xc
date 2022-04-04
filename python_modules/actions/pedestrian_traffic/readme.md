@@ -1,4 +1,4 @@
-# Trafic loads verification tests
+# Pedestrian traffic loads.
 
 ## References
 

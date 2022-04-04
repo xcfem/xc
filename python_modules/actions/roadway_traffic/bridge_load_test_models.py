@@ -5,7 +5,7 @@ from __future__ import division
 '''
 import xc_base
 import geom
-from actions.roadway_trafic import load_model_base as lmb
+from actions.roadway_traffic import load_model_base as lmb
 from actions import load_cases as lcases
 
 # Standard vehicles from «Recomendaciones para la realización de pruebas

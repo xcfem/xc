@@ -29,7 +29,7 @@ class WheelLoad(object):
        self.ly=ly
 
 class LoadModel(object):
-    ''' Roadway trafic load model
+    ''' Roadway traffic load model
 
       :ivar wheelLoads: position and loads of each wheel
       :ivar vehicleBoundary: polygon without uniform load around the vehicle.

@@ -14,7 +14,7 @@ __email__= "l.pereztato@gmail.com"
 
 import xc_base
 import geom
-from actions.roadway_trafic import load_model_base as lmb
+from actions.roadway_traffic import load_model_base as lmb
 
 CraneTruckLoadModel= lmb.LoadModel(wLoads= [lmb.WheelLoad(geom.Pos2d(-3.17,1.0),216e3/2.0),
                                         lmb.WheelLoad(geom.Pos2d(-1.57,1.0),216e3/2.0),
