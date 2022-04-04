@@ -55,7 +55,7 @@ def ansysCreaElem(nmbDBase,nmbTablaElem, sectionName):
     cur.execute("select * from " + nmbTablaElem)
     while True:
         row= cur.fetchone()
-        if row == None:
+        if row is None:
             break
         else:
             nuevoZeroLengthSeccFibras(sectionName,i,row("ELEM"))

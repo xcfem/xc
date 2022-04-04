@@ -134,7 +134,7 @@ class PhantomModel(object):
                 for i in range(0,sz):
                     sectionName= elementSectionNames[i]
                     diagInt= None
-                    if(mapInteractionDiagrams != None):
+                    if(mapInteractionDiagrams is not None):
                         diagInt= mapInteractionDiagrams[sectionName]
           #         print('tagElem =',tagElem,' sectionName=',sectionName,' elSecDef=',elementSectionDefinitions[i],' sectIndex=', i+1,' diagInt=', diagInt)
                     phantomElem= self.createPhantomElement(tagElem,sectionName,elementSectionDefinitions[i],i+1,diagInt, outputCfg.controller.fakeSection)

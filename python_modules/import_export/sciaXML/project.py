@@ -135,7 +135,7 @@ class Project:
 
       item= ObjectItem()
       item.setV(peca.getId())
-      if(objectOrigem.getP3() != None):
+      if(objectOrigem.getP3() is not None):
         valor= objectOrigem.getP3().getN().substring(0, objectOrigem.getP3().getN().indexOf("-")-1)
         item.setN(valor)
 
