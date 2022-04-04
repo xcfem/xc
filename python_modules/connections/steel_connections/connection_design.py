@@ -488,7 +488,7 @@ class Connection(connected_members.ConnectionMetaData):
         ''' Return a name for the bolt group that attaches the beam to the 
             plate.
 
-        :param beam: beam to wich the plate is attached.
+        :param beam: beam to which the plate is attached.
         :param plateProperties: properties of the plate.
         '''
         retval= 'joint_'+plateProperties.getAttribute('jointId') # Joint id.
@@ -500,7 +500,7 @@ class Connection(connected_members.ConnectionMetaData):
     def getHolesOnBeamBlocks(self, beam, holesList, beamBlocks, plateProperties):
         ''' Return the blocks corresponding to the holes in the beam web or flanges.
 
-        :param beam: beam to wich the plate is attached.
+        :param beam: beam to which the plate is attached.
         :param holesList: holes that will be projected on the
                           beam surfaces (web or flanges).
         :param beamBlocks: surfaces corresponding to the member plates:

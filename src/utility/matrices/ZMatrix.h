@@ -31,7 +31,7 @@
 template <class MATR>
 MATR prod_vectorial(const MATR &v1,const MATR &v2);
 
-//! @brief Matrix wich element type has estructura de anillo
+//! @brief Matrix which element type has estructura de anillo
 //! respecto a las operaciones + y *.
 template <class numero>
 class ZMatrix : public TMatrix<numero,vectorZ<numero> >

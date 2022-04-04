@@ -131,7 +131,7 @@ class LoadContainer(object):
         sl.searchLoadedElements(elementSet)
     
 class LoadGroup(object):
-  ''' Loads wich share some property (origin,...).'''
+  ''' Loads which share some property (origin,...).'''
   def __init__(self,id, desc, permanent= False):
     self.id= id
     self.desc= desc #Group description.

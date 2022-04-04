@@ -69,7 +69,7 @@ void XC::Paver::report(std::ostream &os)
 
 //! @brief Call paving function.
 //!
-//! @param extContour: 3D polygon wich defines the external contour, each
+//! @param extContour: 3D polygon which defines the external contour, each
 //!                    vertex must correspond to a perimeter node.
 //! @param intContours: 3D polygons that define the internal contours.
 int XC::Paver::call_paving(const Ref2d3d &ref,const Polygon3d &extContour, const std::deque<Polygon3d> &intContours) 

@@ -55,7 +55,7 @@ class ShapeFunction
 //! with the natural coordinates being passed as parameter.
     virtual m_double get_N_vec(const m_double &natcor) const=0;
     //! @brief Return the values of the partial derivatives of the shape
-    //! functions at the point wich natural coordinates are being passed as
+    //! functions at the point which natural coordinates are being passed as
     //! parameter. The (i,j) component of the matrix is equal to d(Nj)/d(xi)
     virtual m_double getPartialDerivatives(const m_double &natcor) const=0;
     //! @brief Return the integration points for the shape functions domain.
