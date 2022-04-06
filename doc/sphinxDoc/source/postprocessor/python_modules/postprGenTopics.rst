@@ -69,8 +69,8 @@ Element section map
     :undoc-members:
     :show-inheritance:
 
-Extrapolate elemement attributes
---------------------------------
+Extrapolate element attributes
+------------------------------
 
 .. automodule:: postprocess.extrapolate_elem_attr
     :members:
@@ -119,8 +119,8 @@ Phantom model
     :undoc-members:
     :show-inheritance:
 
-Statistics propeties
---------------------
+Statistics properties
+---------------------
 
 .. automodule:: postprocess.prop_statistics
     :members:
