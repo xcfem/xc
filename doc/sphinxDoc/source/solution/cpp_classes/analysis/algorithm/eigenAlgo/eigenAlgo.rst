@@ -1,5 +1,5 @@
-Eigenproblems solution algoritms
-................................
+Eigenproblems solution algorithms
+.................................
 
 .. module:: xc
 	    

@@ -1,5 +1,5 @@
-Constaints
-,,,,,,,,,,
+Constraints
+,,,,,,,,,,,
 
 .. module:: xc
 	    

@@ -35,8 +35,8 @@ Graphical reports
     :undoc-members:
     :show-inheritance:
 
-Matplotlib grahics of_material diagrams
----------------------------------------
+Matplotlib graphics of_material diagrams
+----------------------------------------
 
 .. automodule:: postprocess.reports.graph_material
     :members:

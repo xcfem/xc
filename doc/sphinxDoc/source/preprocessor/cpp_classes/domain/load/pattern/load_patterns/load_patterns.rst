@@ -1,5 +1,5 @@
-Load paterns
-............
+Load patterns
+.............
 
 .. module:: xc
 	    

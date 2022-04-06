@@ -1,5 +1,5 @@
-Materials acccording to Eurocode 2 code
-=======================================
+Materials according to Eurocode 2 code
+======================================
 
 EC2 materials
 ---------------
