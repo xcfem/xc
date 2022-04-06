@@ -19,75 +19,50 @@ p= 10
 prueba= xc.ProblemaEF()
 prep= prueba.getPreprocessor
 nodos= prep.getNodeHandler
-predefined_spaces.gdls_resist_materials3D(nodos)
-nodos.newNodeIDXYZ(1,0,0,0)
-nodos.newNodeIDXYZ(2,L,0,0)
-nodos.newNodeIDXYZ(3,L,L,0)
-nodos.newNodeIDXYZ(4,0,L,0)
-
+modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
+n1= nodos.newNodeXYZ(0,0,0)
+n2= nodos.newNodeXYZ(L,0,0)
+n3= nodos.newNodeXYZ(L,L,0)
+n4= nodos.newNodeXYZ(0,L,0)
 
 # Material definition
 
-        memb1= typical_materials.defElasticMembranePlateSection(prep,"memb1",E,nu,dens,h)
+memb1= typical_materials.defElasticMembranePlateSection(prep,"memb1",E,nu,dens,h)
 
 
 elementos= prep.getElementHandler
 elementos.defaultMaterial= "memb1"
-elem= elementos.newElement("shell_mitc4",xc.ID([1,2,3,4]))
+elem= elementos.newElement("shell_mitc4",xc.ID([n1.tag,n2.tag,n3.tag,n4.tag]))
 
 
 # Condiciones de contorno
-coacciones= prep.getBoundaryCondHandler
+modelSpace.fixNode000_000(n1.tag)
+modelSpace.fixNode000_000(n2.tag)
 
-fix_node_6dof.fixNode6DOF(coacciones,1)
-fix_node_6dof.fixNode6DOF(coacciones,2)
+#Loads definition.
+lp0= modelSpace.newLoadPattern(name= '0')
+elem.vector3dEdgeLoadGlobal(xc.ID(n3.tag,n4.tag),xc.Vector(p,0,0))
+modelSpace.addLoadCaseToDomain(lp0.name)
 
-
-# Definimos cargas
-cargas= prep.getLoadHandler
-
-casos= cargas.getLoadPatterns
-
-#Load modulation.
-ts= casos.newTimeSeries("constant_ts","ts")
-casos.currentTimeSeries= "ts"
-#Define un caso de carga
-lp0= casos.newLoadPattern("default","0")
-#casos.currentLoadPattern= "0"
-
-
-elementos= prep.getElementHandler
-        \for_each
-
-            .vector3dEdgeLoadGlobal(xc.ID(3,4),xc.Vector(p,0,0))
-
-
-cargas= prep.getLoadHandler
-
-casos= cargas.getLoadPatterns{#We add the load case to domain.
-casos.addToDomain("0")
-
-
-#Solución
+# Solution
 analisis= predefined_solutions.simple_static_linear(prueba)
 result= analisis.analyze(1)
 
-
-        nodos.calculateNodalReactions(True)
+nodos.calculateNodalReactions(True)
 nodos= prep.getNodeHandler
 
- RNX1= .getReaction[0] RNY1= nodos.getNode(1).getReaction[1] \expr{RNZ1= .getReaction[2] 
- RNX2= .getReaction[0] RNY2= nodos.getNode(2).getReaction[1] \expr{RNZ2= .getReaction[2] 
-
-
-
+RNX1= n1.getReaction[0]
+RNY1= n1.getReaction[1]
+RNZ1= n1.getReaction[2] 
+RNX2= n2.getReaction[0]
+RNY2= n2.getReaction[1]
+RNZ2= n2.getReaction[2] 
 
 RTeor= -p*L/2
 
 ratio1= (abs((RNY1+RNY2)/RTeor))
 ratio2= (abs((RNX1-RTeor)/RTeor))
 ratio3= (abs((RNX2-RTeor)/RTeor))
-
 
 
 ''' 
@@ -103,9 +78,10 @@ print "ratio3= ",ratio3
  '''
 
 import os
+from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (ratio1 < 1e-12) & (ratio2 < 1e-12) & (ratio3 < 1e-12):
-  print "test ",fname,": ok."
+    print('test '+fname+': ok.')
 else:
-  print "test ",fname,": ERROR."
+    lmsg.error(fname+' ERROR.')
 
