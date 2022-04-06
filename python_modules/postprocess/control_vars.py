@@ -607,13 +607,13 @@ class BiaxialBendingStrengthControlVars(BiaxialBendingControlVars):
         
     def getDict(self):
         ''' Return a dictionary containing the object data.'''
-        retval= super(BiaxialBendingControlVars,self).getDict()
+        retval= super(BiaxialBendingStrengthControlVars,self).getDict()
         retval.update({'Ncrd':self.Ncrd, 'McRdy':self.McRdy, 'McRdz':self.McRdz, 'chiLT':self.chiLT, 'chiN':self.chiN})
         return retval
        
     def setFromDict(self,dct):
         ''' Set the data values from the dictionary argument.'''
-        super(BiaxialBendingControlVars,self).setFromDict(dct)
+        super(BiaxialBendingStrengthControlVars,self).setFromDict(dct)
         self.Ncrd= dct['Ncrd']
         self.McRdy= dct['McRdy']
         self.McRdz= dct['McRdz']
