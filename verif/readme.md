@@ -1,7 +1,7 @@
 XC verification tests.
 ======================
 
-The file «run_verif.sh» is a shell script that launchs the execution of
+The file «run_verif.sh» is a shell script that launches the execution of
 some (about 800) verification tests.
 
 To execute these test you may assign execute permission to the file:

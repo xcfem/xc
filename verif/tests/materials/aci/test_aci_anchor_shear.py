@@ -53,7 +53,7 @@ Vcp=stud.getPryoutStrengthShear()
 Vcp_kips=Vcp/units_utils.kipToN
 ratio3=abs((Vcp_kips-16.25)/16.25)
  
-#Pullout stregth of stud to check head of the stud (article D.5.3)
+#Pullout strength of stud to check head of the stud (article D.5.3)
 Abearing=0.589*(units_utils.inchToMeter)**2
 Npn=stud.getPulloutStrengthTension(Abearing)
 Npn_kips=Npn/units_utils.kipToN

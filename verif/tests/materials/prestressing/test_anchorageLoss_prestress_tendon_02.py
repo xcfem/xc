@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 '''Test for checking the calculation of loss of prestress due to 
-the anchorage slip. It compares the results obtained from symetrical 
+the anchorage slip. It compares the results obtained from symmetrical 
 problems when prestressing from extremity 1 (left-end) of the cable
 and from extremity 2 (right-end)
 '''

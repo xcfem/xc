@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 '''Angle between two planes.
- Exaple 1.7 from the thesis «La teoría de bloque aplicada a la dinámica
- de rocas» Juan Carlos Ayes Zamudio.'''
+ Example 1.7 from the thesis «La teoría de bloque aplicada a la dinámica
+ de rocas» by Juan Carlos Ayes Zamudio.'''
 
 from __future__ import print_function
 

@@ -37,7 +37,7 @@ spacing= 150e-3
 fuk= 550e6 # Characteristic steel ultimate tensile strength (Pa).
 tauRk= 1.09*15e6 # Characteristic bond strength for non-cracked concrete (taken from ETA-07/0260 table 11).
 k1= 10.1 # 7.2 for cracked concrete and 10.1 for non-cracked concrete.
-fckCube= 50e6 # Caracteristic concrete compression strength measured on cubes with a side length of 150 mm.
+fckCube= 50e6 # Characteristic concrete compression strength measured on cubes with a side length of 150 mm.
 
 # Strength of the anchor itself.
 NRds= 28e3

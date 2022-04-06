@@ -49,7 +49,7 @@ Ncb=stud.getConcrBreakoutStrengthTension()
 Ncb_kips=Ncb/units_utils.kipToN
 ratio2=abs((Ncb_kips-25.9126)/25.9126)
 
-#Pullout stregth of stud to check head of the stud (article D.5.3)
+#Pullout strength of stud to check head of the stud (article D.5.3)
 Abearing=0.92*(units_utils.inchToMeter)**2
 Npn=stud.getPulloutStrengthTension(Abearing)
 Npn_kips=Npn/units_utils.kipToN
@@ -170,7 +170,7 @@ cracking=True
 print('Nominal concrete breakout strength of a single anchor in tension: ')
 print('$$N_{cb} = \\frac{A_{Nc}}{A_{Nco}} \\Psi_{ed,N}\\Psi_{C,N}\\Psi_{cp} N_b = \\frac{',stud.getANc(),'}{',stud.getANco(),'}\\cdot',  stud.getFactorEdgeN(),'\\cdot',stud.getFactorCrackingN(cracking),'\\cdot',stud.getFactorModifN(cracking),'\\cdot',round(stud.getBasicConcreteBreakoutStrengthTension()*1e-3,1),'= ',round(stud.getConcrBreakoutStrengthTension(cracking)*1e-3,1),' kN     $$')
 
-print('\\paragraph{Pullout stregth of stud to check head of the stud} \\emph{(article D.5.3)}')
+print('\\paragraph{Pullout strength of stud to check head of the stud} \\emph{(article D.5.3)}')
 print('$$A_{bearing} = ',Abearing,' m^2 $$')
 print('$$N_{pn} = ',round(stud.getPulloutStrengthTension(Abearing)*1e-3,1),' kN $$')
 print('\\paragraph{Check ductility in tension}')

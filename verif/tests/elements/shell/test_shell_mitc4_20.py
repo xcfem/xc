@@ -39,7 +39,7 @@ sideElemTag= 0
 
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
-feProblem.logFileName= "/tmp/erase.log" # Don't pring warnings
+feProblem.logFileName= "/tmp/erase.log" # Don't print warnings
 nodes= preprocessor.getNodeHandler
 
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes)

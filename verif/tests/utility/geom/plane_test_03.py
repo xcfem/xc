@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 '''Intersection of plane with a line.
-vExemple 1.2 of the thesis «La teoría de bloque aplicada a la dinámica
- de rocas» de Juan Carlos Ayes Zamudio.'''
+ Example 1.2 of the thesis «La teoría de bloque aplicada a la dinámica
+ de rocas» by Juan Carlos Ayes Zamudio.'''
 
 from __future__ import print_function
 

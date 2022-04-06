@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-'''Angle between two vectors. Exemple 1.6 of the thesis «La teoría de bloque aplicada a la dinámica de rocas» by Juan Carlos Ayes Zamudio.'''
+'''Angle between two vectors. Example 1.6 of the thesis «La teoría de bloque aplicada a la dinámica de rocas» by Juan Carlos Ayes Zamudio.'''
 
 from __future__ import print_function
 

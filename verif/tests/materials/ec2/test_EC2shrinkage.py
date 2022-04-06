@@ -24,8 +24,8 @@ RH=80                   #ambient relative humidity(%)
 
 vCalc=[]
 vComp=[]
-#Shrinkage deformation at traffic openning
-t=77     #age of the concrete at traffic openning
+#Shrinkage deformation at traffic opening
+t=77     #age of the concrete at traffic opening
 ts=1     #drying shrinkage begins at the age 1 day
 Ac=3.9     #area of the concrete slab (m2)
 u=11.6     #perimeter exposed to drying (m)

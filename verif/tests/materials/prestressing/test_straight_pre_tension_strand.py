@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-''' Pre-tensioned tendon stress variation along its lenght.'''
+''' Pre-tensioned tendon stress variation along its length.'''
 
 from __future__ import division
 from __future__ import print_function

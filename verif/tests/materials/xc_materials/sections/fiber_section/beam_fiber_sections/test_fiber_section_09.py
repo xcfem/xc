@@ -80,7 +80,7 @@ defMz= scc.getSectionDeformationByName("defMz")
 defN= scc.getSectionDeformationByName("defN")
 concrFibers= fiber_sets.FiberSet(scc,'concrete',EHE_materials.HA25.matTagD)
 fibraCEpsMin= concrFibers.getFiberWithMinStrain()
-epsCMin= fibraCEpsMin.getMaterial().getStrain() # Minumum concrete strain.
+epsCMin= fibraCEpsMin.getMaterial().getStrain() # Minimum concrete strain.
 fibraCEpsMax= concrFibers.getFiberWithMaxStrain()
 epsCMax= fibraCEpsMax.getMaterial().getStrain() # Maximum concrete strain.
 
@@ -112,7 +112,7 @@ print("ratio3= ", ratio3)
 print("ratio4= ", ratio4)
 print("ratio5= ", ratio5)
 
-print("Minumum concrete strain: ",(epsCMin))
+print("Minimum concrete strain: ",(epsCMin))
 print("Maximum concrete strain: ",(epsCMax))
 print("Maximum rebar strain: ",(epsSMax))
 print("Solicitation type: ",solicitationTypeString," (",(solicitationType),") \n")
