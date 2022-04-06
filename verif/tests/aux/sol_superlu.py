@@ -18,7 +18,7 @@ class SuperLU(predefined_solutions.SolutionProcedure):
 
         :param prb: XC finite element problem.
         :param name: identifier for the solution procedure.
-        :param maxNumIter: maximum number of iterations (defauts to 10)
+        :param maxNumIter: maximum number of iterations (defaults to 10)
         :param convergenceTestTol: convergence tolerance (defaults to 1e-9)
         :param printFlag: if not zero print convergence results on each step.
         :param numSteps: number of steps to use in the analysis (useful only when loads are variable in time).

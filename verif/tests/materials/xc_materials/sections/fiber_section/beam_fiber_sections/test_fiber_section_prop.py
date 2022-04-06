@@ -78,7 +78,7 @@ l= 1e-7     # Distance between nodes
 
 
 # Model definition
-problem=xc.FEProblem()              # necesary to create this instance of
+problem=xc.FEProblem()              # necessary to create this instance of
                                      # the class xc.FEProblem()
 preprocessor=problem.getPreprocessor
 nodes= preprocessor.getNodeHandler     # nodes container

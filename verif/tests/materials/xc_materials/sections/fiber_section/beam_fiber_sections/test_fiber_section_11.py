@@ -24,7 +24,7 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
-MzDato= 55.949e3 # The "prontuario informático" reachs only ~54.4 kN m because it uses s simplified diagram for the steel.
+MzDato= 55.949e3 # The "prontuario informático" reaches only ~54.4 kN m because it uses a simplified diagram for the steel.
 NDato= 0.0 
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
@@ -81,7 +81,7 @@ defMz= scc.getSectionDeformationByName("defMz")
 defN= scc.getSectionDeformationByName("defN")
 concrFibers= fiber_sets.FiberSet(scc,'concrete',EHE_materials.HA25.matTagD)
 fibraCEpsMin= concrFibers.getFiberWithMinStrain()
-epsCMin= fibraCEpsMin.getMaterial().getStrain() # Minumum concrete strain.
+epsCMin= fibraCEpsMin.getMaterial().getStrain() # Minimum concrete strain.
 fibraCEpsMax= concrFibers.getFiberWithMaxStrain()
 epsCMax= fibraCEpsMax.getMaterial().getStrain() # Maximum concrete strain.
 reinfFibers= fiber_sets.FiberSet(scc,"reinforcement",EHE_materials.B500S.matTagD)
@@ -110,7 +110,7 @@ print("ratio4= ",(ratio4))
 print("ratio5= ",(ratio5))
 print("ratio6= ",(ratio6))
 
-print("Minumum concrete strain: ",(epsCMin))
+print("Minimum concrete strain: ",(epsCMin))
 print("Maximum concrete strain: ",(epsCMax))
 print("Maximum rebar strain: ",(epsSMax))
 print("Solicitation type: ",solicitationTypeString," (",(solicitationType),") \n")

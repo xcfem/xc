@@ -67,7 +67,7 @@ if(analOk!=0):
     quit()
 
 if(analOk!=0): 
-    print("ERROR: Thist test fails when running in 32 bits machines. Solution pending (2013/03/11). It seems to be a problem with the tolerance of the convergence test. In my new machine (Dell precision M4800 with Ubuntu 64bits it fails with tol= 1e-9 and works if tol= 1e-5) (2016/01/06) LP.\n")
+    print("ERROR: This test fails when running in 32 bits machines. Solution pending (2013/03/11). It seems to be a problem with the tolerance of the convergence test. In my new machine (Dell precision M4800 with Ubuntu 64bits it fails with tol= 1e-9 and works if tol= 1e-5) (2016/01/06) LP.\n")
     exit()
 
 
@@ -88,7 +88,7 @@ defMz= scc.getSectionDeformationByName("defMz")
 defN= scc.getSectionDeformationByName("defN")
 concrFibers= fiber_sets.FiberSet(scc,'concrete',EHE_materials.HP45.matTagD)
 fibraCEpsMin= concrFibers.getFiberWithMinStrain()
-epsCMin= fibraCEpsMin.getMaterial().getStrain() # Minumum concrete strain.
+epsCMin= fibraCEpsMin.getMaterial().getStrain() # Minimum concrete strain.
 yEpsCMin= fibraCEpsMin.getPos().x
 fibraCEpsMax= concrFibers.getFiberWithMaxStrain()
 epsCMax= fibraCEpsMax.getMaterial().getStrain() # Maximum concrete strain.
@@ -117,7 +117,7 @@ print("ratio3= ",(ratio3))
 print("ratio4= ",(ratio4))
 print("ratio5= ",(ratio5))
 
-print("Minumum concrete strain: ",(epsCMin))
+print("Minimum concrete strain: ",(epsCMin))
 print("Maximum concrete strain: ",(epsCMax))
 print("Maximum rebar strain: ",(epsSMax))
 print("Solicitation type: ",solicitationTypeString," (",(solicitationType),") \n")

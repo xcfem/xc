@@ -59,7 +59,7 @@ l= 1e-7     # Distance between nodes
 
 
 # Model definition
-problem=xc.FEProblem()              # necesary to create this instance of
+problem=xc.FEProblem()              # necessary to create this instance of
                                      # the class xc.FEProblem()
 preprocessor=problem.getPreprocessor
 nodes= preprocessor.getNodeHandler     # nodes container
@@ -263,9 +263,9 @@ srmax=EC2_limit_state_checking.s_r_max(k1=0.8,k2=0.5,k3=3.4,k4=0.425,cover=cover
 eps_cm=concrete.fctm()/concrete.E0()/2.0
 # mean strain in the reinforcemen takin into account the effects of tension stiffening
 eps_sm=epsSMax
-# crack withs
+# crack widths
 w_k=srmax*(eps_sm-eps_cm)
-# print('crack withs: ',w_k*1e3, ' mm')
+# print('crack widths: ',w_k*1e3, ' mm')
 
 xComp= -0.20277719076152492
 epsCMinComp= -0.000527020745676934

@@ -53,7 +53,7 @@ Ncb=stud.getConcrBreakoutStrengthTension()
 Ncb_kips=Ncb/units_utils.kipToN
 ratio3=abs((Ncb_kips-15.4170)/15.4170)
 
-#Pullout stregth of stud (article D.5.3)
+#Pullout strength of stud (article D.5.3)
 Abearing=0.59*(units_utils.inchToMeter)**2
 Npn=stud.getPulloutStrengthTension(Abearing)
 Npn_kips=Npn/units_utils.kipToN

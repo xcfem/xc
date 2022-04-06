@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-''' Exemple 10.2 of the book "Principles of Foundation Engineering" 
+''' Example 10.2 of the book "Principles of Foundation Engineering" 
     from Braja M. Das. Seventh Edition.
 '''
 

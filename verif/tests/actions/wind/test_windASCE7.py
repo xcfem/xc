@@ -20,7 +20,7 @@ import math
 #                  /    \        Mean roof height
 #                 /      \
 #                /        \
-#               -----------      Eave heigth
+#               -----------      Eave height
 #               |         |
 #               |         |
 #               |         |

@@ -17,7 +17,7 @@ __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
 feProblem= xc.FEProblem()
-feProblem.logFileName= "/tmp/erase.log" # Don't pring warnings
+feProblem.logFileName= "/tmp/erase.log" # Don't print warnings
 preprocessor=  feProblem.getPreprocessor
 
 # Rectangular cross-section definition

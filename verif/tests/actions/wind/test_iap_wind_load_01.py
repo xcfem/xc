@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-''' Miscelaneous test of wind loads according to IAP-11.'''
+''' Miscellaneous test of wind loads according to IAP-11.'''
 
 from __future__ import print_function
 from __future__ import division
