@@ -19,7 +19,7 @@
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
 //Translation2d.h
-//Traslation in a two-dimensional space.
+//Translation in a two-dimensional space.
 
 #ifndef TRANSLATION2D_H
 #define TRANSLATION2D_H

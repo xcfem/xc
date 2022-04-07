@@ -64,7 +64,7 @@ IndicesMatrix IndicesMatrix::getBox(size_t f1, size_t c1, size_t f2, size_t c2) 
 IndicesMatrix IndicesMatrix::getRow(size_t iRow) const
   { return getBox(iRow,1,iRow,this->n_columns); }
 
-//! @brief Retunr the iCol-th column.
+//! @brief Return the iCol-th column.
 IndicesMatrix IndicesMatrix::getColumn(size_t iColumn) const
   { return getBox(1,iColumn,this->n_rows,iColumn); }
 

@@ -42,7 +42,7 @@
 // //    -1 [[ m02]
 // //  hw    [ m12]] 
 // //
-// // contanins the translational part of the transformation.
+// // contains the translational part of the transformation.
 //   : Trf2d(m00,m01,m02,m10,m11,m12,hw) {}
 
 //! @brief Default constructor.

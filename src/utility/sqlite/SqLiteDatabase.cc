@@ -72,7 +72,7 @@ SqLiteQuery *SqLiteDatabase::NuevaQuery(const std::string &nmb)
     else
       if(verbosity>1)
         std::clog << getClassName() << "::" << __FUNCTION__
-		  << "; cann't create the query with name: '"
+		  << "; can't create the query with name: '"
                   << nmb << "' object already exists."
 		  << std::endl;
     return retval;

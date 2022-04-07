@@ -352,11 +352,11 @@ bool TMatrix<T,STO>::equal_to(const TMatrix<T,STO> &m2) const
   }
 
 //! @brief Return a column matrix which components are those 
-//! indentified by the row indexes of the integer vector argument 
+//! identified by the row indexes of the integer vector argument 
 //! being passed as parameter.
 //! @param matrix: Matrix to extract the values of.
 //! @param row_indexes: row indexes of the components to be extracted.
-//! @param icol: Indice de the column de los elementos a extraer.
+//! @param icol: Index of the column of the elements to extract.
 template <class MATRV,class MATRI>
 MATRV ExtraeValores(const MATRV &matrix,const MATRI &row_indexes,const size_t &icol= 1)
   {

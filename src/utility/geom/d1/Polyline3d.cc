@@ -285,7 +285,7 @@ Polyline3d Polyline3d::Separa(const Pos3d &p,const short int &sgn) const
    * @param i1 iterator to the first point.
    * @param i2 iterator to the second point.
    * @param pMaxDist pointer to the maximum distance of _line[return index].
-   * @return the index of the point farthest fromthe segment (t1,t2).
+   * @return the index of the point farthest from the segment (t1,t2).
    */
 Polyline3d::iterator Polyline3d::getFarthestPointFromSegment(iterator it1, iterator it2, GEOM_FT &pMaxDist)
   {
