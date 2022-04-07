@@ -371,13 +371,13 @@ trace of successive transformations done in integer vectors KP and LP.
   C          pointer to table storing main diagonal elements and supra-
              diagonal elements of upper triangular matrix and the multi-
              plying coefficients used during triangularization process (double**)
-  KP         table storing informations concerning the column exchanges
+  KP         table storing information concerning the column exchanges
              during process (int*)
-  LP         table storing informations concerning the line exchanges
+  LP         table storing information concerning the line exchanges
              during process (int*)
 -----------------------------------------------------------------------------
 The table C is first initialized to A matrix, then receives at each step k
-of the triangularization process, usefull elements of A matrix at step k for
+of the triangularization process, useful elements of A matrix at step k for
 k=1,2,...n.
 The variables po(real), lo and ko(integer) store respectively pivot at step k,
 its line number and its column number.
@@ -439,8 +439,8 @@ The procedure TSRGT is used to reduce A matrix to an upper triangular matrix.
 Output variables are it(integer), C(pMat), Kp and Lp(pVecI).
 If it=0, matrix A is singular, if it=1, matrix A is regular. Table C contains
 at location i,j (j>=i) the corresponding element of the upper triangular matrix.
-Tables Lp and Kp contain informations relative to exchanges of line or column
-that occured during the process. For instance, the element number k of Lp is
+Tables Lp and Kp contain information relative to exchanges of line or column
+that occurred during the process. For instance, the element number k of Lp is
 an integer <> k if an exchange of line has been made at step k (k=1,2,...,n).
 The number of exchanges of lines and columns is stored in L(integer). the
 determinant of A matrix is stored in d0(real).

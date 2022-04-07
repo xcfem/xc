@@ -64,7 +64,7 @@ HalfSpace3d HalfSpace3d::getSwap(void) const
     return retval;
   }
 
-//! @brief Return the plane that defined de half space boudary.
+//! @brief Return the plane that defined de half space boundary.
 const Plane &HalfSpace3d::getBoundaryPlane(void) const
   { return lim; }
 
@@ -275,7 +275,7 @@ Line3d HalfSpace3d::getLima(const HalfSpace3d &se) const
 unsigned short int HalfSpace3d::Dimension(void) const
   { return 3; }
 
-//! @brief Return the lenght of the object.
+//! @brief Return the length of the object.
 GEOM_FT HalfSpace3d::getLength(void) const
   { return NAN; }
 //! @brief Return the object area.

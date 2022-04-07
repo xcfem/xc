@@ -49,7 +49,7 @@ void Polynomial::PutSuma(const IndPol &v,const Polynomial &p)
       }
   }
 
-//! @brief Retunr the polynomial degrees for each of its variables.
+//! @brief Return the polynomial degrees for each of its variables.
 IndPol Polynomial::Grados(void) const
   {
     IndPol gs= GetIndPol();

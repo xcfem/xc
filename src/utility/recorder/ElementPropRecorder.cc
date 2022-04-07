@@ -37,7 +37,7 @@
 XC::ElementPropRecorder::ElementPropRecorder(Domain *ptr_dom)
   :PropRecorder(RECORDER_TAGS_ElementPropRecorder,ptr_dom) {}
 
-//! @brief Asigns elements to recorder.
+//! @brief Assigns elements to recorder.
 void XC::ElementPropRecorder::setElements(const ID &iElements)
   {
     const int sz= iElements.Size();

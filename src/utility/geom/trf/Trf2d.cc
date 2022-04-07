@@ -68,7 +68,7 @@
 // //    -1 [[ m02]
 // //  hw    [ m12]] 
 // //
-// // contanins the translational part of the transformation.
+// // contains the translational part of the transformation.
 //   : Trf(), cgtrf(m00,m01,m02,m10,m11,m12,hw) {}
 
 Trf2d::Trf2d( const GEOM_FT & m00,const GEOM_FT & m01,const GEOM_FT & m02,
