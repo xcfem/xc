@@ -41,7 +41,7 @@ class SolverLU: public SolverM<M>
 
     virtual tipo_val find_pivot(const size_t &k,size_t &maxi) const
       {
-        //For each row of the k colum starting by row k
+        //For each row of the k column starting by row k
         tipo_val c;
         tipo_val c1;
         size_t i= 0;

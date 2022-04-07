@@ -192,7 +192,7 @@ void MatrixByBoxes<TBOX>::Con(const value_type &d)
     for(iterator i= this->begin();i!=this->end();i++)
       (*i).Con(d);
   }
-//! @brief Traspose the matrix.
+//! @brief Transpose the matrix.
 template <class TBOX>
 MatrixByBoxes<TBOX> &MatrixByBoxes<TBOX>::Trn(void)
   {

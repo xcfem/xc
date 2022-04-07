@@ -591,7 +591,7 @@ int XC::Matrix::addMatrixTranspose(double factThis, const Matrix &other, double 
 
 #ifdef _G3DEBUG
     if((other.numRows != numCols) || (other.numCols != numRows)) {
-      std::cerr << "Matrix::addMatrixTranspose(): incompatable matrices\n";
+      std::cerr << "Matrix::addMatrixTranspose(): incompatible matrices\n";
       return -1;
     }
 #endif
@@ -1204,7 +1204,7 @@ XC::Matrix &XC::Matrix::operator/=(double fact)
           }
         else
           {
-            // print out the warining message
+            // print out the warning message
             std::cerr << getClassName() << "::" << __FUNCTION__
 		      << "; WARNING: 0 factor specified all values in Matrix set to ";
             std::cerr << MATRIX_VERY_LARGE_VALUE << std::endl;

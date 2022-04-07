@@ -59,10 +59,10 @@ class ActionRelationships: public CommandEntity
   public:
     ActionRelationships(void);
 
-    //! @brief Append the regular expresion argument to the list of incompatible actions.
+    //! @brief Append the regular expression argument to the list of incompatible actions.
     inline void appendIncompatible(const std::string &str)
       { incompatibles.push_back(str); }
-    //! @brief Append the regular expresion argument to the list of main actions.
+    //! @brief Append the regular expression argument to the list of main actions.
     inline void appendMain(const std::string &str)
       { main_actions.push_back(str); }
 

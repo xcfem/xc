@@ -37,7 +37,7 @@
 XC::NodePropRecorder::NodePropRecorder(Domain *ptr_dom)
   :PropRecorder(RECORDER_TAGS_NodePropRecorder,ptr_dom) {}
 
-//! @brief Asigns nodes to recorder.
+//! @brief Assigns nodes to recorder.
 void XC::NodePropRecorder::setNodes(const ID &iNodes)
   {
     const int sz= iNodes.Size();

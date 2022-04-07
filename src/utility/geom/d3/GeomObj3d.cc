@@ -78,7 +78,7 @@ Pos3d GeomObj3d::getPMin(void) const
     return p;
   }
 
-//! @brief Return the boudary of the object.
+//! @brief Return the boundary of the object.
 BND3d GeomObj3d::Bnd(void) const
   { return BND3d(getPMin(),getPMax()); }
 
