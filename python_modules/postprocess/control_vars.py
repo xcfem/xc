@@ -57,7 +57,7 @@ class ControlVarsBase(object):
 
     :ivar combName: name of the load combination to deal with
     '''
-    def __init__(self,combName= 'nil'):
+    def __init__(self, combName= 'nil'):
         ''' Constructor.
 
         :param combName: name of the load combinations to deal with
@@ -194,7 +194,7 @@ class N(ControlVarsBase):
 
     :ivar N:        axial force (defaults to 0.0)
     '''
-    def __init__(self,combName= 'nil', NN= 0.0):
+    def __init__(self, combName= 'nil', NN= 0.0):
         '''
         Constructor.
 
@@ -348,7 +348,7 @@ class ShVy(ControlVarsBase):
     :ivar combName: name of the load combinations to deal with
     :ivar Vy:       shear along Y axis (defaults to 0.0)
     '''
-    def __init__(self,combName= 'nil',Vy= 0.0):
+    def __init__(self, combName= 'nil', Vy= 0.0):
         ''' Constructor.
 
         :param combName: name of the load combinations to deal with
@@ -781,7 +781,7 @@ class CrackControlVars(ControlVarsBase):
     :ivar crackControlVarsPos:     Crack control in + face.
     :ivar crackControlVarsNeg:     Crack control in - face.
     '''
-    def __init__(self,idSection= 'nil', crackControlBaseVarsPos= None ,crackControlBaseVarsNeg= None):
+    def __init__(self, idSection= 'nil', crackControlBaseVarsPos= None ,crackControlBaseVarsNeg= None):
         '''
         Constructor.
 
@@ -789,6 +789,7 @@ class CrackControlVars(ControlVarsBase):
         :param crackControlVarsPos:     Crack control in + face.
         :param crackControlVarsNeg:     Crack control in - face.
         '''
+        super(CrackControlVars, this).__init__() # combName?
         self.idSection= idSection # Section identifier.
         if(crackControlBaseVarsPos):
             self.crackControlVarsPos= crackControlBaseVarsPos #Cracks in + face.
@@ -947,7 +948,7 @@ class FatigueControlVars(ControlVarsBase):
     :ivar Mu:        ultimate bending moment
     :ivar Vu:        ultimate shear force  
     '''
-    def __init__(self,idSection= 'nil', controlBaseVars0= None, controlBaseVars1= None, concreteLimitStress= 0.0,concreteBendingCF=-1.0,shearLimit=0.0,concreteShearCF=-1.0,Mu=0.0,Vu=0.0):
+    def __init__(self, idSection= 'nil', controlBaseVars0= None, controlBaseVars1= None, concreteLimitStress= 0.0,concreteBendingCF=-1.0,shearLimit=0.0,concreteShearCF=-1.0,Mu=0.0,Vu=0.0):
         '''
         Constructor.
 
@@ -962,6 +963,7 @@ class FatigueControlVars(ControlVarsBase):
         :param Mu:        ultimate bending moment
         :param Vu:        ultimate shear force  
         '''
+        super(FatigueControlVars, self).__init__() # combName?
         self.idSection= idSection # Section identifier.
         if(controlBaseVars0):
             self.state0=  controlBaseVars0 #Under permanent loads.

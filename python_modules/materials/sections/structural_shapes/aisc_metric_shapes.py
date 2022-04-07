@@ -1269,6 +1269,9 @@ class IShape(WShape, structural_steel.IShape):
     :ivar steel: steel material.
     :ivar name: shape name (i.e. W40X431).
     '''
+    ## This solution seems a bit dirty. WShape is already
+    ## a children of structural_steel.IShape it's weird
+    ## to inherit its parent again: TO REWRITE.
     def __init__(self, bf, tf, tw, hw, steel= None, name= ''):
         ''' Constructor.
 
@@ -1277,6 +1280,7 @@ class IShape(WShape, structural_steel.IShape):
         :param tw: Web thickess
         :param hw: Web height
         '''
+        super(IShape, self).__init__(steel= steel, name= name)
         isection = section_properties.ISection(name, bf, tf, tw, hw, bf, tf)
         idict = isection.getDict()
         idict['E'] = steel.E
