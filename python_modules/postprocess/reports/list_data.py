@@ -94,11 +94,11 @@ def listaBarElementSet(preprocessor, setName, fName, fmt):
     s= preprocessor.getSets.getSet(setName)
     elems= s.elements
     for e in elems:
-        str= str(e.tag)+" & "+str(e.nod(0).tag)+" & "+str(e.nod(1).tag)+" & "
+        tmpStr= str(e.tag)+" & "+str(e.nod(0).tag)+" & "+str(e.nod(1).tag)+" & "
         k= 0
         sections= e.getSections()
         for s in sections:
-            fName.write(str,k," & ")
+            fName.write(tmpStr,k," & ")
             fName.write(fmt.format(s.getE()/1e9)," & ",fmt.format(s.getG()/1e9)," & ",fmt.format(s.getA()*1e4)," & ",fmt.format(s.getAlpha())," & ")
             fName.write(fmt.format(s.getJ()*1e6)," & ",fmt.format(s.getIy()*1e6)," & ",fmt.format(s.getIz()*1e6),"\\\\\n")
             k+=1

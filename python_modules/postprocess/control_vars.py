@@ -789,7 +789,7 @@ class CrackControlVars(ControlVarsBase):
         :param crackControlVarsPos:     Crack control in + face.
         :param crackControlVarsNeg:     Crack control in - face.
         '''
-        super(CrackControlVars, this).__init__() # combName?
+        super(CrackControlVars, self).__init__() # combName?
         self.idSection= idSection # Section identifier.
         if(crackControlBaseVarsPos):
             self.crackControlVarsPos= crackControlBaseVarsPos #Cracks in + face.
@@ -898,8 +898,10 @@ class FatigueControlBaseVars(NMyMz):
         :param negSteelStress: compression stress in rebars.
         :param concreteStress: compression stress in concrete.
         '''
-        #Note: Currently, CF attribute  has no sense in fatigue verification. Perhaps, in the future, the maximum value
-        #of the CF calculated can be represented by CF. For now, this attribute remains in this class only for a purpose
+        #Note: Currently, CF attribute  has no sense in fatigue verification.
+        # Perhaps, in the future, the maximum value
+        #of the CF calculated can be represented by CF. For now, this
+        # attribute remains in this class only for a purpose
         #of compatibility with the parent classes
         super(FatigueControlBaseVars,self).__init__(combName,N,My,Mz)
         self.Vy= Vy #Shear.

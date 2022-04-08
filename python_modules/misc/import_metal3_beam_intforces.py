@@ -26,11 +26,11 @@ def metal3DcreateTableBarInternalForces(nmbArch, nmbDBase, nmbTabla):
     :param nmbDBase: Name of the database with will store the table.
     :param nmbTabla: Name of the table which will containt the internal forces.
     '''
-    os.sys("fromdos " + nmbArch)
-    os.sys("csplit -s "+ nmbArch + " '/.*Esfuerzos.*/' '/.*Esfuerzos.*/'")
+    os.system("fromdos " + nmbArch)
+    os.system("csplit -s "+ nmbArch + " '/.*Esfuerzos.*/' '/.*Esfuerzos.*/'")
     nmbArchEsf= nmbArch + ".esf"
-    os.sys("mv xx02 " + nmbArchEsf)
-    os.sys("rm -f xx*")
+    os.system("mv xx02 " + nmbArchEsf)
+    os.system("rm -f xx*")
     SQLTcreaTabla(nmbDBase,nmbTabla,"(idSecc int,ACCION string,ELEM integer,xSEC double,AXIL double,Q_1 double,Q_2 double,M_1 double,M_2 double,TORSOR double)")
     listado= open(nmbArchEsf,"r")
     str1= ""
@@ -76,11 +76,11 @@ def metal3DToBarInternalForces(nmbArch, nmbDBase, nmbTabla):
     :param nmbDBase: Name of the database with will store the table.
     :param nmbTabla: Name of the table which will containt the internal forces.
     '''
-    os.sys("fromdos " + nmbArch)
-    os.sys("csplit -s "+ nmbArch + " '/.*Esfuerzos.*/' '/.*Esfuerzos.*/'")
+    os.system("fromdos " + nmbArch)
+    os.system("csplit -s "+ nmbArch + " '/.*Esfuerzos.*/' '/.*Esfuerzos.*/'")
     nmbArchEsf= nmbArch + ".esf"
-    os.sys("mv xx02 " + nmbArchEsf)
-    os.sys("rm -f xx*")
+    os.system("mv xx02 " + nmbArchEsf)
+    os.system("rm -f xx*")
     metal3DcreateTableBarInternalForces(nmbArch,nmbDBase,nmbTabla)
     listado= open(nmbArchEsf,"r")
     str1= ""
