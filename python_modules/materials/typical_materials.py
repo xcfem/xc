@@ -617,7 +617,7 @@ class DeckMaterialData(MaterialData):
                     rho= overrideRho
                 self.xc_material= defElasticMembranePlateSection(preprocessor, name= self.name,E= self.E, nu= self.nu, rho= rho, h= self.thickness)
         else:
-            lmsg.warning('Material: ', self.name, ' already defined.')
+            lmsg.warning('Material: '+ self.name+ ' already defined.')
         return self.xc_material
 
 class BeamMaterialData(MaterialData):
@@ -658,5 +658,5 @@ class BeamMaterialData(MaterialData):
                     rho= overrideRho
                 self.xc_material= defElasticShearSection3d(preprocessor,name= self.name, A= self.section.A(), E= self.material.E, G= self.material.G(), Iz= self.section.Iz(), Iy= self.section.Iy(), J= self.section.J(), alpha_y= self.section.alphaY(), alpha_z= self.section.alphaZ(), linearRho= rho)
         else:
-            lmsg.warning('Material: ', self.name, ' already defined.')
+            lmsg.warning('Material: '+ self.name+ ' already defined.')
         return self.xc_material
