@@ -2,8 +2,6 @@
 # vector3d_edge_load_global test.
 # Home made test.
 
-import xc_base
-import geom
 import xc
 from solution import predefined_solutions
 from model import predefined_spaces
