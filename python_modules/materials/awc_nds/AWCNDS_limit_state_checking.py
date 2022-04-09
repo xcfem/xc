@@ -20,8 +20,7 @@ from materials import limit_state_checking_base as lsc
 from materials.awc_nds import AWCNDS_materials
 from postprocess import control_vars as cv
 from postprocess import limit_state_data as lsd
-
-import xc
+from misc_utils import units_utils
 
 class Member(wood_member_base.Member):
     ''' Beam and column members according to AWC NDS-2018. This class
@@ -404,17 +403,22 @@ class ColumnMember(Member):
 
     :ivar unbracedLengthB: unbraced lenght for bending about weak axis.
     '''
-    def __init__(self, unbracedLengthB, unbracedLengthH, section, connection= member_base.MemberConnection(), memberRestraint= AWCNDS_materials.MemberRestraint.notApplicable, memberLoadingCondition= AWCNDS_materials.MemberLoadingCondition()):
+    def __init__(self, unbracedLengthB, unbracedLengthH, section, repetitiveMemberFactor= 1.0, connection= member_base.MemberConnection(), memberRestraint= AWCNDS_materials.MemberRestraint.notApplicable, memberLoadingCondition= AWCNDS_materials.MemberLoadingCondition(), loadCombDurationFactorFunction= None):
         ''' Constructor. 
 
         :param unbracedLengthB: unbraced lenght for bending about weak axis (B<H).
         :param unbracedLengthH: unbraced lenght for bending about strong axis (HZB).
         :param section: member cross-section.
+        :param repetitiveMemberFactor: repetitive member adjustment factor.
         :param connection: connection type.
         :param memberLoadingCondition: parameters defining the member condition in order to obtain 
                                        its effective length accordint to table 3.3.3 of AWC NDS-2018.
+        :param loadCombDurationFactorFunction: function that returns the load 
+                                          duration factor corresponding to
+                                          a load combination expression
+                                          (e.g.: 1.0*deadLoad+0.7*windLoad).
         '''
-        super(ColumnMember,self).__init__(name= None, unbracedLengthX= unbracedLengthB, unbracedLengthZ= unbracedLengthH, section= section, connection= connection, memberRestraint= memberRestraint, memberLoadingCondition= memberLoadingCondition)
+        super(ColumnMember,self).__init__(name= None, unbracedLengthX= unbracedLengthB, unbracedLengthZ= unbracedLengthH, Cr= repetitiveMemberFactor, section= section, connection= connection, memberRestraint= memberRestraint, memberLoadingCondition= memberLoadingCondition, loadCombDurationFactorFunction= loadCombDurationFactorFunction)
 
     
     def getCapacityFactor(self, Fc_adj, Fb1_adj, Fb2_adj, fc,fb1, fb2):
@@ -463,6 +467,59 @@ def defineBuiltUpColumnMember(dimensions, unbracedLengthB, unbracedLengthH, wood
         memberSection= AWCNDS_materials.BuiltUpLumberSection(name= dimensions, b=nPieces*bb, h= hh, woodMaterial= wood)
     return ColumnMember(unbracedLengthB= unbracedLengthB, unbracedLengthH= unbracedLengthH, section= memberSection)
 
+
+class StudArrangement(object):
+    def __init__(self, name, studSection, studSpacing, wallHeight, loadCombDurationFactorFunction):
+        '''Constructor.
+
+        :param name: stud arrangement name.
+        :param studSection: stud cross-section.
+        :param studSpacing: distance between consecutive studs.
+        :param wallHeight: height of the bearing wall.
+        :param loadCombDurationFactorFunction: function that returns the load 
+                                          duration factor corresponding to
+                                          a load combination expression
+                                          (e.g.: 1.0*deadLoad+0.7*windLoad).
+        '''
+        self.name= name
+        self.studSpacing= studSpacing
+        self.wallHeight= wallHeight
+        self.studHeight= self.wallHeight-3*2*units_utils.inchToMeter
+        self.stud= ColumnMember(unbracedLengthB= 0.3, unbracedLengthH= self.studHeight, section= studSection, repetitiveMemberFactor= 1.15, loadCombDurationFactorFunction= loadCombDurationFactorFunction)
+        
+    def updateLoadDurationFactor(self, loadCombExpr):
+        '''Update the value of the load duration factors.'''
+        self.stud.updateLoadDurationFactor(loadCombExpr)
+        
+    def checkStud(self, N, M):
+        ## stresses
+        fc= N/self.stud.crossSection.A()
+        fb1= M/self.stud.crossSection.getElasticSectionModulusZ()
+        fb2= 0.0
+
+        Fc_adj= self.stud.crossSection.getFcAdj()
+        Fb_adj= self.stud.crossSection.getFbAdj()
+        #Checking
+        CP= self.stud.getColumnStabilityFactor()
+        FcE1= self.stud.getFcE1()
+        FcE2= self.stud.getFcE2()
+        RB= self.stud.getColumnSlendernessRatioB()
+        FbE= self.stud.getFbECriticalBucklingDesignValue()
+        CF= self.stud.getBiaxialBendingEfficiency(Nd= N, Myd= 0.0, Mzd= M, chiN= CP)
+        results= dict()
+        results['N']= N
+        results['M']= M
+        results['fc']= fc
+        results['CP']= CP
+        results['CD']= self.stud.crossSection.wood.CD # load duration factor.
+        results['FcE1']= FcE1
+        results['FcE2']= FcE2
+        results['RB']= RB
+        results['FbE=']= FbE
+        results['CF']= CF
+        return results
+
+        
 class AWCNDSBiaxialBendingControlVars(cv.BiaxialBendingStrengthControlVars):
     '''Control variables for biaxial bending normal stresses LS 
     verification in steel-shape elements according to AISC.
