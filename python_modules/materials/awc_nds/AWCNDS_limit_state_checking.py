@@ -21,8 +21,6 @@ from materials.awc_nds import AWCNDS_materials
 from postprocess import control_vars as cv
 from postprocess import limit_state_data as lsd
 
-import xc_base
-import geom
 import xc
 
 class Member(wood_member_base.Member):
