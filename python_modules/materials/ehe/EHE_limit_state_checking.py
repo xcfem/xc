@@ -445,7 +445,7 @@ class ShearDesignParameters(object):
         # self.tensionedStrandsArea= 
 
         self.sigmaXD= N/area+Mz/Iz*centerOfMassY+My/Iy*centerOfMassZ
-        self.ultimateShearStrength= getVu(fck,fcd,N,self.concreteArea,self.widthMin,self.effectiveDepth,self.mechanicLeverArm,self.angAlpha,self.angTheta,self.tensionedRebarsArea,fyd,self.tensionedStrandsArea,fpd,self.sigmaXD,self.sigmaYD,AsTrsv,self.areaShReinfBranchsTrsv,fydTrsv)
+        self.ultimateShearStrength= getVu(fck= fck, fcd= fcd, Nd= N, Ac= self.concreteArea, b0= self.widthMin, d= self.effectiveDepth, z= self.mechanicLeverArm, alpha= self.angAlpha, theta= self.angTheta, AsPas= self.tensionedRebarsArea, fyd= fyd, AsAct= self.tensionedStrandsArea, fpd= fpd, sgxd= self.sigmaXD, sgyd= self.sigmaYD, AsTrsv= self.areaShReinfBranchsTrsv, fydTrsv= fydTrsv)
 
     def printParams(self):
         '''print(shear checking values.)'''
@@ -479,7 +479,7 @@ def getKEHE08(sgpcd,fcd):
     '''
     s=-sgpcd/fcd #Positive when compressed
     if s>1:
-        lmsg.warning("getKEHE08; too much compression in concrete: ("+str(sgpcd)+"<",str(-fcd)+")\n")
+        lmsg.warning("getKEHE08; too much compression in concrete: ("+str(sgpcd)+"<"+str(-fcd)+")\n")
     if s<=0:
         retval=1.0
     elif s<=0.25:
@@ -835,8 +835,7 @@ def getVu2EHE08SiAt(fcv,fcd,fyd,gammaC,Ncd,Ac,b0,d,z,AsPas,AsAct,AsTrsv, alpha, 
                      reinforcement due to the transverse inclination of its
                      elements.
     '''
-    return getVcuEHE08(fcv,fcd,gammaC,Ncd,Ac,b0,d,AsPas,AsAct,theta,Nd,Md,Vd,Td,Es,Ep,Fp,Ae,ue)+getVsuEHE08(z,alpha,theta,AsTrsv,fyd, circular)
-
+    return getVcuEHE08(fcv= fcv, fcd= fcd, gammaC= gammaC, Ncd= Ncd, Ac= Ac, b0= b0, d= d, z= z, AsPas= AsPas, AsAct= AsAct, theta= theta, Nd= Nd, Md= Md, Vd= Vd, Td= Td, Es= Es, Ep= Ep, Fp= Fp, Ae= Ae, ue= ue)+getVsuEHE08(z= z, alpha= alpha, theta= theta, AsTrsv= AsTrsv, fyd= fyd, circular= circular)
   
 def getVuEHE08SiAt(fck,fcv,fcd,fyd,gammaC,Ncd,Ac,b0,d,z,AsPas,AsAct,AsTrsv, alpha, theta,Nd,Md,Vd,Td,Es,Ep,Fp,Ae,ue):
     '''def getVuEHE08SiAt(fck,fcv,fcd,fyd,gammaC,Ncd,Ac,b0,d,z,AsPas,AsAct,AsTrsv, alpha, theta,Nd,Md,Vd,Td,Es,Ep,Fp,Ae,ue) [units: N, m, rad]
