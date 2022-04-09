@@ -21,6 +21,8 @@
 //python_interface.cxx!
 
 #include "python_interface.h"
+#include <iostream>
+
 
 std::list<Polygon2d> from_python_list(boost::python::list &l)
   {
@@ -60,11 +62,15 @@ void export_d2_entities(void);
 void export_d3_entities(void);
 void export_sys_trf(void);
 
+
 BOOST_PYTHON_MODULE(geom)
   {
+    // Import the "xc_base" module.
+    boost::python::object xc_base = boost::python::import("xc_base");
+    
     using namespace boost::python;
     docstring_options doc_options;
-
+  
     class_<ProtoGeom, bases<CommandEntity> >("ProtoGeom")
       .add_property("exists",&ProtoGeom::exists, "Return true if not degenerated/invalid.")
       ;

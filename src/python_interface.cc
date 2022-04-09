@@ -42,6 +42,8 @@ void export_solution(void);
 
 BOOST_PYTHON_MODULE(xc)
   {
+    // Import the "geom" module.
+    boost::python::object geom= boost::python::import("geom");
     using namespace boost::python;
     docstring_options doc_options;
 
