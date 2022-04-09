@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
+
 from __future__ import division
+from __future__ import print_function
 
 '''Roadway traffic load models from OFROU (Switzerland federal highway
    authority) report 664:
