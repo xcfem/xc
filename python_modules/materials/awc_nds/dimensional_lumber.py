@@ -16,6 +16,8 @@ from materials.awc_nds import AWCNDS_materials
 from materials import typical_materials
 from misc_utils import units_utils
 
+fourInches= 4*units_utils.inchToMeter
+eightInches= 8*units_utils.inchToMeter
 
 def getDressedThickness(nominalThickness, dressedSize= 'Dry'):
     ''' Return the dressed thickness of dimension lumber according to
@@ -88,24 +90,32 @@ class DimensionLumberWood(AWCNDS_materials.Wood):
     :ivar dressedSize: dressed size to use (defaults to 'Dry').
     '''
 
-    # Flat use factor data.
+    # Flat use factor data according to table 4A Adjustment Factors
+    # of 2018 National Design Specification Supplement.
     flat_use_x=  [1.0,2.0,3.0,4.0,5.0,6.00,8.00,10.0,1000.0]
     flat_use_y3= [1.0,1.0,1.0,1.1,1.1,1.15,1.15,1.20,1.2]
     flat_use_y4= [1.0,1.0,1.0,1.0,1.05,1.05,1.05,1.05,1.1]
     flat_use_interp_3= scipy.interpolate.interp1d(flat_use_x,flat_use_y3)
     flat_use_interp_4= scipy.interpolate.interp1d(flat_use_x,flat_use_y4)
-    # Fb size factor data
+    # Fb size factor data according to table 4A Adjustment Factors
+    # of 2018 National Design Specification Supplement.
     fb_size_factor_x=  [1.0,2.0,3.0,4.0,5.0,6.00,8.00,10.0,12.0,14.0,1000.0]
     fb_size_factor_y3= [1.5,1.5,1.5,1.5,1.4,1.30,1.20,1.10,1.00,0.90,0.9]
     fb_size_factor_y4= [1.5,1.5,1.5,1.5,1.4,1.30,1.30,1.20,1.10,1.00,1.0]
-    fb_size_factor_interp_3= scipy.interpolate.interp1d(fb_size_factor_x,fb_size_factor_y3)
-    fb_size_factor_interp_4= scipy.interpolate.interp1d(fb_size_factor_x,fb_size_factor_y4)
+    fb_size_factor_interp_3= scipy.interpolate.interp1d(fb_size_factor_x,fb_size_factor_y3) # Three inches thick.
+    fb_size_factor_interp_4= scipy.interpolate.interp1d(fb_size_factor_x,fb_size_factor_y4) # Four inches thick.
+    # Stud grade.
     stud_fb_size_factor_x= [1.0,2.0,3.0,4.0,5.0,6.0,8.00]
     stud_fb_size_factor_y= [1.1,1.1,1.1,1.1,1.0,1.0,1.00]
     stud_fb_size_factor_interp= scipy.interpolate.interp1d(stud_fb_size_factor_x,stud_fb_size_factor_y)
-    # Fc size factor data
+    # Ft size factor data according to table 4A Adjustment Factors
+    # of 2018 National Design Specification Supplement.
+    ft_size_factor_interp= fb_size_factor_interp_3
+    # Fc size factor data according to table 4A Adjustment Factors
+    # of 2018 National Design Specification Supplement.
     fc_size_factor_x= [1.00,2.00,3.00,4.00,5.0,6.0,8.00,10.0,12.0,14.0,1000.0]
     fc_size_factor_y= [1.15,1.15,1.15,1.15,1.1,1.1,1.05,1.00,1.00,0.90,0.9]
+    # Stud grade.
     stud_fc_size_factor_x= [1.00,2.00,3.00,4.00,5.0,6.0,8.00]
     stud_fc_size_factor_y= [1.05,1.05,1.05,1.05,1.0,1.0,1.00]
     fc_size_factor_interp= scipy.interpolate.interp1d(fc_size_factor_x,fc_size_factor_y)
@@ -219,17 +229,21 @@ class DimensionLumberWood(AWCNDS_materials.Wood):
         retval= 1.0
         if(self.grade in ['structural','no_1', 'no_1_&_Btr','no_2','no_3']):
             f= self.fb_size_factor_interp_3
-            if(thickness>=4*units_utils.inchToMeter):
+            if(thickness>=fourInches):
                 f= self.fb_size_factor_interp_4
             retval= f(width/units_utils.inchToMeter)
         elif(self.grade == 'stud'):
-            if(width<8*units_utils.inchToMeter):
+            if(width<eightInches):
                 f= self.stud_fb_size_factor_interp
                 retval= f(width/units_utils.inchToMeter)
             else:
-                lmsg.error('Stud too wide')
+                className= type(self).__name__
+                methodName= sys._getframe(0).f_code.co_name
+                lmsg.error(className+'.'+methodName+'; stud too wide.')
         else:
-            lmsg.error('Grade: '+grade+' unknown.')
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.error(className+'.'+methodName+'; grade: '+grade+' unknown.')
         return retval;
     
     def getTensionSizeFactor(self, b, h):
@@ -244,16 +258,20 @@ class DimensionLumberWood(AWCNDS_materials.Wood):
         thickness= min(b,h)
         retval= 1.0
         if(self.grade in ['structural','no_1','no_2','no_3']):
-            f= self.fb_size_factor_interp_3 # Same values
+            f= self.ft_size_factor_interp
             retval= f(width/units_utils.inchToMeter)
         elif(self.grade == 'stud'):
-            if(width<8*units_utils.inchToMeter):
-                f= self.stud_fb_size_factor_interp_3 # Same values
+            if(width<eightInches):
+                f= self.stud_fb_size_factor_interp
                 retval= f(width/units_utils.inchToMeter)            
             else:
-                lmsg.error('Stud too wide')
+                className= type(self).__name__
+                methodName= sys._getframe(0).f_code.co_name
+                lmsg.error(className+'.'+methodName+'; stud too wide.')
         else:
-            lmsg.error('Grade: '+grade+' unknown.')
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.error(className+'.'+methodName+'; grade: '+grade+' unknown.')
         return retval;
     
     def getCompressionSizeFactor(self, b, h):
@@ -270,13 +288,17 @@ class DimensionLumberWood(AWCNDS_materials.Wood):
             f= self.fc_size_factor_interp
             retval= f(width/units_utils.inchToMeter)
         elif(self.grade == 'stud'):
-            if(width<8*units_utils.inchToMeter):
+            if(width<eightInches):
                 f= self.stud_fc_size_factor_interp
                 retval= f(width/units_utils.inchToMeter)            
             else:
-                lmsg.error('Stud too wide')
+                className= type(self).__name__
+                methodName= sys._getframe(0).f_code.co_name
+                lmsg.error(className+'.'+methodName+'; stud too wide.')
         else:
-            lmsg.error('Grade: '+grade+' unknown.')
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.error(className+'.'+methodName+'; grade: '+grade+' unknown.')
         return retval;
     
     def getFb(self, b, h):
@@ -681,7 +703,7 @@ class SouthernPineWood(DimensionLumberWood):
                 lmsg.error(className+'.'+methodName+'; not implemented yet for sub-grade: '+self.sub_grade)
         if(width>=12*units_utils.inchToMeter):
             retval= 0.9
-        elif((width>=8*units_utils.inchToMeter) and (abs(thickness-4*units_utils.inchToMeter)<1e-3)):
+        elif((width>=eightInches) and (abs(thickness-fourInches)<1e-3)):
             retval= 1.1
         return retval;
     
