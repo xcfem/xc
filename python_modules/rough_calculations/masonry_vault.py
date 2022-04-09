@@ -518,7 +518,7 @@ class trafficLoadResult(object):
 
   def printResults(self):
     #print("vQt= ",vQt," m")
-    print("Uniform trafic load after transverse difussion (see 6-15) qtrans= ",self.getqtrans()," N/m")
+    print("Uniform traffic load after transverse difussion (see 6-15) qtrans= ",self.getqtrans()," N/m")
     #print("lQt= ",lQt," m")
     print("Punctual traffic load after longitudinal and transverse diffusion (see 6.18); X= ",self.getX()/1e6," MPa")
 

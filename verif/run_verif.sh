@@ -188,9 +188,9 @@ echo "$BLEU" "  Thermal action tests." "$NORMAL"
 python tests/actions/thermal/test_thermal_grad_shell_01.py 
 python tests/actions/thermal/test_thermal_grad_shell_02.py 
 python tests/actions/thermal/test_iap_thermal.py
-echo "$BLEU" "  Trafic loads tests." "$NORMAL"
-python tests/actions/trafic_loads/test_derailment_SIA.py
-python tests/actions/trafic_loads/test_pedestrian_load_ec1.py
+echo "$BLEU" "  Traffic loads tests." "$NORMAL"
+python tests/actions/traffic_loads/test_derailment_SIA.py
+python tests/actions/traffic_loads/test_pedestrian_load_ec1.py
 
 # Load combinations tests.
 echo "$BLEU" "Forming load combination tests." "$NORMAL"

@@ -3,7 +3,7 @@ from __future__ import print_function
 
 from __future__ import division
 
-'''Railway trafic load models from SIA 261 2003.'''
+'''Railway traffic load models from SIA 261 2003.'''
 
 __author__= "Luis C. Pérez Tato (LCPT) Ana Ortega (A_OO)"
 __copyright__= "Copyright 2016, A_OO   LCPT"

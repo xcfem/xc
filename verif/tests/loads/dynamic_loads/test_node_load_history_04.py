@@ -20,7 +20,7 @@ from materials import typical_materials
 from misc_utils import log_messages as lmsg
 from actions import loads
 from rough_calculations import ng_fixed_fixed_beam as sb
-from actions.pedestrian_trafic import EC1_pedestrian_load_models as plm
+from actions.pedestrian_traffic import EC1_pedestrian_load_models as plm
 
 gravity= 9.81 # m/s2
 

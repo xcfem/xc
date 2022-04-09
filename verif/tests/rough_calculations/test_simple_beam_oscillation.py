@@ -12,7 +12,7 @@ __email__= "l.pereztato@gmail.com"
 import rough_calculations.ng_punching_shear
 import os
 import math
-from actions.railway_trafic import IAPF_rail_load_models as rm
+from actions.railway_traffic import IAPF_rail_load_models as rm
 from rough_calculations import simple_beam_oscillation as sbo
 
 L= 39.2

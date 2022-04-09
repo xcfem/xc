@@ -10,7 +10,7 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
-from actions.railway_trafic import SIA_rail_load_models
+from actions.railway_traffic import SIA_rail_load_models
 
 LM1= SIA_rail_load_models.LM1 # Load model.
 qDerailmentModel2_25= LM1.trainDerailmentModel2(25.0)

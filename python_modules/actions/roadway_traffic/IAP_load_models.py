@@ -13,7 +13,7 @@ __email__= "l.pereztato@gmail.com ana.Ortega.Ort@gmail.com"
 import xc_base
 import geom
 import xc
-from actions.roadway_trafic import load_model_base as lmb
+from actions.roadway_traffic import load_model_base as lmb
 from actions import load_cases as lcases
 from actions import loads
 
