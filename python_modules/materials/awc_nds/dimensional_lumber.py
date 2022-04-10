@@ -354,7 +354,7 @@ class DimensionLumberWood(AWCNDS_materials.Wood):
     def getFvAdj(self):
         ''' Return the adjusted value of Fv according
             to National Design Specification table 4A.'''
-        C= 1.0
+        C= self.CD # load duration factor.
         # Wet service factor
         if(self.wet):
             C*=0.97
@@ -366,7 +366,8 @@ class DimensionLumberWood(AWCNDS_materials.Wood):
 
         :param Cb: bearing area factor
         '''
-        C= Cb # bearing area factor
+        # Load duration factor NOT applicable here.
+        C= Cb # bearing area factor.
         # Wet service factor
         if(self.wet):
             C*=0.67

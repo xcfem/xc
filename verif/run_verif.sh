@@ -973,6 +973,7 @@ python tests/materials/awc_nds/test_bi-axial_bending_and_axial_compression.py
 python tests/materials/awc_nds/test_axial_compression.py
 python tests/materials/awc_nds/test_built-up_column.py
 python tests/materials/awc_nds/stud_arrangement_test.py
+python tests/materials/awc_nds/wall_top_plates_test.py
 
 echo "$BLEU" "    EC5 tests." "$NORMAL"
 python tests/materials/ec5/test_EC5Wood_01.py

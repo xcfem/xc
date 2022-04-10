@@ -13,6 +13,8 @@ __email__= "ana.ortega@ciccp.es, l.pereztato@gmail.com"
 
 import sys
 import math
+import geom
+import xc
 from misc_utils import log_messages as lmsg
 from materials import member_base
 from materials import wood_member_base
@@ -21,6 +23,9 @@ from materials.awc_nds import AWCNDS_materials
 from postprocess import control_vars as cv
 from postprocess import limit_state_data as lsd
 from misc_utils import units_utils
+from model import predefined_spaces
+from actions import load_cases as lcm
+from solution import predefined_solutions
 
 class Member(wood_member_base.Member):
     ''' Beam and column members according to AWC NDS-2018. This class
@@ -546,7 +551,297 @@ class StudArrangement(object):
                 worstCaseCF= CF
                 worstCase= loadCombName
         return results, worstCase
+    
+class WallTopPlates(object):
+    '''Plates on the top of a bearing wall.
+
+    :ivar prb: XC finite element problem.
+    :ivar plateSection: plate section.
+    :ivar nodes: node handler.
+    :ivar modelSpace: structural mechanics two-dimensional model of the plates.
+    :ivar studSpacing: spacing of the studs that support the plates.
+    :ivar trussSpacing: spacing of the trusses supported by the plates.
+    :ivar pointLoadFactor: ??
+    :ivar loadCombDurationFactorFunction: function that returns the load 
+                                          duration factor corresponding to
+                                          a load combination expression
+                                          (e.g.: 1.0*deadLoad+0.7*windLoad).
+    '''
+    def __init__(self, title, plateSection, studSpacing, trussSpacing, pointLoadFactor, loadCombDurationFactorFunction= None):
+        '''Constructor.
+
+        :param title: problem title.
+        :param plateSection: plate section.
+        :param nodes: node handler.
+        :param modelSpace: structural mechanics two-dimensional model of the plates.
+        :param studSpacing: spacing of the studs that support the plates.
+        :param trussSpacing: spacing of the trusses supported by the plates.
+        :param pointLoadFactor: ??
+        :param loadCombDurationFactorFunction: function that returns the load 
+                                              duration factor corresponding to
+                                              a load combination expression
+                                              (e.g.: 1.0*deadLoad+0.7*windLoad).
+        '''
+        self.prb= xc.FEProblem()
+        self.prb.title= title
+        self.plateSection = plateSection
+        preprocessor= self.prb.getPreprocessor   
+        self.nodes= preprocessor.getNodeHandler
+        self.modelSpace= predefined_spaces.StructuralMechanics2D(self.nodes)
+        self.studSpacing= studSpacing
+        self.trussSpacing= trussSpacing
+        self.pointLoadFactor= pointLoadFactor
+        self.loadCombDurationFactorFunction= loadCombDurationFactorFunction
         
+    def genMesh(self):
+        ''' Create the finite element mesh.'''
+        prep= self.modelSpace.preprocessor
+        pointHandler= prep.getMultiBlockTopology.getPoints
+        infPoints= list()
+        supPoints= list()
+        for i in range(0,14):
+            x= i*self.studSpacing
+            infPoints.append(pointHandler.newPoint(geom.Pos3d(x,0.0,0.0)))
+            supPoints.append(pointHandler.newPoint(geom.Pos3d(x,self.plateSection.h,0.0)))
+
+        lines= prep.getMultiBlockTopology.getLines
+        self.infSet= prep.getSets.defSet("inf")
+        infLines= list()
+        p0= infPoints[0]
+        for p in infPoints[1:]:
+            l= lines.newLine(p0.tag,p.tag)
+            infLines.append(l)
+            self.infSet.getLines.append(l)
+            p0= p
+        self.supSet= prep.getSets.defSet("sup")
+        supLines= list()
+        p0= supPoints[0]
+        for p in supPoints[1:]:
+            l= lines.newLine(p0.tag,p.tag)
+            supLines.append(l)
+            self.supSet.getLines.append(l)
+            p0= p
+        self.infSet.fillDownwards()
+        self.supSet.fillDownwards()
+
+        # Mesh
+        section= self.plateSection.defElasticShearSection2d(prep)
+        trfs= prep.getTransfCooHandler
+        lin= trfs.newLinearCrdTransf2d("lin")
+        seedElemHandler= prep.getElementHandler.seedElemHandler
+        seedElemHandler.defaultMaterial= self.plateSection.xc_material.name
+        seedElemHandler.defaultTransformation= "lin"
+        elem= seedElemHandler.newElement("ElasticBeam2d",xc.ID([0,0]))
+
+        xcTotalSet= prep.getSets.getSet("total")
+        mesh= self.infSet.genMesh(xc.meshDir.I)
+        self.infSet.fillDownwards()
+        mesh= self.supSet.genMesh(xc.meshDir.I)
+        self.supSet.fillDownwards()
+
+        ## Loaded nodes.
+        self.loadedNodes= list()
+        pos= supPoints[0].getPos+geom.Vector3d(self.studSpacing/2.0,0,0) #Position of the first loaded node
+        xLast= supPoints[-1].getPos.x
+        while pos.x<xLast:
+            n= self.supSet.getNearestNode(pos)
+            self.loadedNodes.append(self.supSet.getNearestNode(pos))
+            pos+= geom.Vector3d(self.trussSpacing,0.0,0.0)
+
+        ## Loaded elements.
+        self.loadedElements= list()
+        for e in self.supSet.elements:
+            self.loadedElements.append(e)
+
+        # Constraints
+        self.supportedNodes= list()
+        for p in infPoints:
+            n= p.getNode()
+            self.modelSpace.fixNode00F(n.tag)
+            self.supportedNodes.append(n)
+
+        for n in self.supSet.nodes:
+            pos= n.getInitialPos3d
+            nInf= self.infSet.getNearestNode(pos)
+            self.modelSpace.constraints.newEqualDOF(nInf.tag,n.tag,xc.ID([1]))
+
+        for p in supPoints[1:-1]:
+            n= p.getNode()
+            pos= n.getInitialPos3d
+            nInf= self.infSet.getNearestNode(pos)
+            self.modelSpace.constraints.newEqualDOF(nInf.tag,n.tag,xc.ID([0]))
+    
+    def applyLoads(self, load):
+        ''' Apply load to nodes and elements.'''
+        uniformLoadFactor= 1.0-self.pointLoadFactor
+        pointLoad= self.pointLoadFactor*load
+        for n in self.loadedNodes:
+            n.newLoad(xc.Vector([0.0,-pointLoad,0.0]))
+        uniformLoad= uniformLoadFactor*load/self.trussSpacing
+        for e in self.loadedElements:
+            e.vector2dUniformLoadGlobal(xc.Vector([0.0,-uniformLoad]))
+            
+    def defineLoads(self, loadDict):
+        ''' Define the loads and load combinations.'''
+        # Actions
+        ## Load cases
+        loadCaseManager= lcm.LoadCaseManager(self.modelSpace.preprocessor)
+        loadCaseNames= list(loadDict.keys())
+        loadCaseManager.defineSimpleLoadCases(loadCaseNames)
+
+        ## Load values.
+        for lcName in loadDict:
+            value= loadDict[lcName]
+            cLC= loadCaseManager.setCurrentLoadCase(lcName)
+            self.applyLoads(value)
+            
+    def checkPlates(self, loadDurationFactor):
+        ''' Check the structural integrity of the plates.
+
+        :param loadDurationFactor: load duration factor.
+        '''
+        results= dict()
+        self.plateSection.updateLoadDurationFactor(loadDurationFactor)
+        results['CD']= loadDurationFactor
+        ## Bending stiffness
+        uYMax= -1e6
+        for n in self.infSet.nodes:
+            uY= -n.getDisp[1]
+            uYMax= max(uY,uYMax)
+
+        r= self.studSpacing/uYMax
+        results['uYMax']= uYMax
+
+        ## Bending strength
+        sgMax= -1e6
+        for e in self.supSet.elements:
+            e.getResistingForce()
+            m1= e.getM1
+            sg1= abs(m1/self.plateSection.xc_material.sectionProperties.I*self.plateSection.h/2)
+            sgMax= max(sgMax,sg1)
+            m2= e.getM2
+            sg2= abs(m2/self.plateSection.xc_material.sectionProperties.I*self.plateSection.h/2)
+            sgMax= max(sgMax,sg2)
+
+        Fb_adj= self.plateSection.getFbAdj()
+        FbCF= sgMax/Fb_adj
+        results['sgMax']= sgMax
+        results['Fb_adj']= Fb_adj
+        results['bendingCF']= FbCF
+
+        ## Shear strength
+        tauMax= -1e6
+        for e in self.supSet.elements:
+            e.getResistingForce()
+            v1= e.getV1
+            tau1= abs(v1/self.plateSection.xc_material.sectionProperties.A)
+            tauMax= max(tauMax,tau1)
+            v2= e.getV2
+            tau2= abs(v2/self.plateSection.xc_material.sectionProperties.A)
+            tauMax= max(tauMax,tau2)
+
+        tauMax*= (self.studSpacing-self.plateSection.h)/self.studSpacing
+        Fv_adj= self.plateSection.getFvAdj()
+        FvCF= tauMax/Fv_adj
+        results['tauMax']= tauMax
+        results['Fv_adj']= Fv_adj
+        results['shearCF']= FvCF
+
+        ## Compression perpendicular to grain
+
+        ### Reactions
+        preprocessor= self.infSet.getPreprocessor
+        preprocessor.getNodeHandler.calculateNodalReactions(False,1e-7)
+        RMax= -1e12;
+        for n in self.supportedNodes:
+            RMax= max(RMax,abs(n.getReaction[1]))
+        sgMax= RMax/self.plateSection.A()
+        lb= (self.plateSection.h)/0.0254 # Length in bearing parallel to the grain of the wood.
+        Cb= (lb+0.375)/lb
+        Fc_perp= self.plateSection.getFc_perpAdj(Cb) #Perpendicular to grain
+        Fc_perpCF= sgMax/Fc_perp
+        results['RMax']= RMax
+        results['sgMax']= sgMax
+        results['Fc_perp']= Fc_perp
+        results['Fc_perpCF']= Fc_perpCF
+        
+        return results
+
+    def checkCombination(self, comb):
+        ''' Compute the internal forces corresponding to the load combination
+            and check the structural integrity of the plates for those
+            internal forces.
+
+        :param comb: load combination.
+        '''
+        preprocessor= self.prb.getPreprocessor
+        preprocessor.resetLoadCase()
+        preprocessor.getLoadHandler.addToDomain(comb)
+        # Solution
+        solution= predefined_solutions.SimpleStaticLinear(self.prb)
+        solution.setup()
+        analysis= solution.analysis
+        result= analysis.analyze(1)
+        loadDurationFactor= self.loadCombDurationFactorFunction(comb)
+        results= self.checkPlates(loadDurationFactor= loadDurationFactor)
+        preprocessor.getLoadHandler.removeFromDomain(comb)
+        return results
+
+    def checkCombinations(self, combContainer):
+        ''' Compute the internal forces corresponding to the load combinations
+            and check the structural integrity of the plates.
+
+
+        :param combContainer: load combination container.
+        '''
+        results= dict()
+        for comb in combContainer:
+            results[comb]= self.checkCombination(comb)
+        # Search for worst cases.
+        worstDeflectionCase= None
+        worstDeflectionValue= 0.0
+        worstBendingCase= None
+        worstBendingCF= 0.0
+        worstShearCase= None
+        worstShearCF= 0.0
+        worstPerpComprCase= None
+        worstPerpComprCF= 0.0
+        for lcName in results:
+            deflectionValue= abs(results[lcName]['uYMax'])
+            if(deflectionValue>worstDeflectionValue):
+                worstDeflectionValue= deflectionValue
+                worstDeflectionCase= lcName
+                
+            bendingCF= results[lcName]['bendingCF']
+            if(bendingCF>worstBendingCF):
+                worstBendingCF= bendingCF
+                worstBendingCase= lcName
+                
+            shearCF= results[lcName]['shearCF']
+            if(shearCF>worstShearCF):
+                worstShearCF= shearCF
+                worstShearCase= lcName
+                
+            perpComprCF= results[lcName]['Fc_perpCF']
+            if(perpComprCF>worstPerpComprCF):
+                worstPerpComprCF= perpComprCF
+                worstPerpComprCase= lcName
+        # Store the values in a dictionary.
+        worstResults= dict()
+        for variable in ['worstDeflectionCase', 'worstDeflectionValue', 'worstBendingCase', 'worstBendingCF', 'worstShearCase', 'worstShearCF', 'worstPerpComprCase', 'worstPerpComprCF']:
+            worstResults[variable] = eval(variable)
+        return results, worstResults
+
+    def check(self, loadDict, combContainer):
+        # Create model
+        self.genMesh()
+        # Define loads.
+        self.defineLoads(loadDict)
+        # Define load combinations.
+        combContainer.dumpCombinations(self.modelSpace.preprocessor)
+        # Checking
+        return self.checkCombinations(combContainer.SLS.qp)
+    
 class AWCNDSBiaxialBendingControlVars(cv.BiaxialBendingStrengthControlVars):
     '''Control variables for biaxial bending normal stresses LS 
     verification in steel-shape elements according to AISC.
