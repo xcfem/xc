@@ -81,7 +81,6 @@ class LoadVectorField(LoadOnPoints):
                               elem= preprocessor.getElementHandler.getElement(eTag)
                               if(elem.getDimension==2):
                                   vLoad= elem.getCoordTransf.getVectorGlobalCoordFromLocal(elementLoad.getLocalForce())
-                                  category= elementLoad.category
                                   if(category=='raw'): # Those loads return the total load over the element.
                                       vLoad*= (1.0/elem.getArea(True))
                                   if(self.multiplyByElementArea):
@@ -91,11 +90,15 @@ class LoadVectorField(LoadOnPoints):
                                       retval[eTag]+= v
                                   else:
                                       retval[eTag]= v
-                else:
+                elif(category=='punctual'):
                     # Concentrated load must be treated elsewhere
                     className= type(self).__name__
                     methodName= sys._getframe(0).f_code.co_name
-                    lmsg.warning(className+'.'+methodName+'; display of concentrated loads not implemented yet (category: '+str(category)+').')
+                    lmsg.warning(className+'.'+methodName+'; display of concentrated loads not implemented yet.')
+                else:
+                    className= type(self).__name__
+                    methodName= sys._getframe(0).f_code.co_name
+                    lmsg.warning(className+'.'+methodName+'; category: '+str(category)+' unknown.')
                 elementLoad= lIter.next()
         return retval
 

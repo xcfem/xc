@@ -377,8 +377,8 @@ class DisplaySettingsFE(vtk_graphic_base.DisplaySettings):
         lmsg.error('displayElementalLoads not implemented.')
         # while not(eleLoad is None):
         #   force= eleLoad.getGlobalForces()
-        #   categoria= eleLoad.category
-        #   if(categoria=="uniform"):
+        #   category= eleLoad.category
+        #   if(category=="uniform"):
         #     self.displayElementUniformLoad(preprocessor, eleLoad,loadPattern,color,force,fScale)
         #   else:
         #     self.displayElementPunctualLoad(preprocessor, eleLoad,loadPattern,color,force,fScale)

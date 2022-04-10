@@ -50,9 +50,6 @@ gridGeom=gm.GridModel(prep,rList,angList,zList,xCentCoo=0,yCentCoo=0)
 gridGeom.generateCylZPoints()
 
 ring=gridGeom.genSurfOneXYZRegion([(r1,0,0),(r2,angList[-1],0)],setName='ring',closeCyl='Y')
-#from postprocess import output_handler as outHndl
-#out=outHndl.OutputHandler(modelSpace)
-#out.displayBlocks()
 
 
 steel= tm.defElasticIsotropic3d(preprocessor=preprocessor, name='steel', E=172e9, nu=0.3, rho= matRho)
@@ -68,8 +65,6 @@ for n in xcTotalSet.nodes:
     constrainedNodes.append(n)
     
 
-#out.displayFEMesh()
-
 selfWeight= loads.InertialLoad(name='selfWeight', lstSets=[ring], vAccel=xc.Vector( [0.0,0.0,-grav])) # Ana uses -accel
 
 D=lcases.LoadCase(preprocessor=prep,name="D",loadPType="default",timeSType="constant_ts")
@@ -79,7 +74,6 @@ modelSpace.addLoadCaseToDomain("D")
 
 # Solution
 result= modelSpace.analyze(calculateNodalReactions= True)
-#out.displayReactions()
 
 
 zReaction= 0.0
@@ -101,8 +95,12 @@ if(abs(err)<1e-2):
     print('test '+fname+': ok.')
 else:
     lmsg.error(fname+' ERROR.')
+    
 '''
 from postprocess import output_handler as outHndl
-out=outHndl.OutputHandler(modelSpace)
-out.displayLoads()
+oh=outHndl.OutputHandler(modelSpace)
+oh.displayBlocks()
+oh.displayFEMesh()
+oh.displayLoads()
+oh.displayReactions()
 '''
