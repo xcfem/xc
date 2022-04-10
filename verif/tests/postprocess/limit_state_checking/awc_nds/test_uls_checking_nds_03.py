@@ -39,9 +39,10 @@ psiToPa= 6894.76
 psfToPa= 47.88026
 
 def getLoadCombDurationFactor(loadComb):
-    dl= ('deadLoad' in loadComb)
-    sl= ('snowLoad' in loadComb)
-    wl= ('windLoad' in loadComb)
+    components= loadComb.getComponents('')
+    dl= ('deadLoad' in components)
+    sl= ('snowLoad' in components)
+    wl= ('windLoad' in components)
     return AWCNDS_materials.getLoadCombinationDurationFactor(deadLoad= dl, snowLoad= sl, windLoad= wl)
 
 # Problem type

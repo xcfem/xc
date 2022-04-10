@@ -304,7 +304,7 @@ class Member(wood_member_base.Member):
         '''Update the value of the load duration factors.'''
         CD= 1.0
         if(self.loadCombDurationFactorFunction):
-            CD= self.loadCombDurationFactorFunction(loadCombExpr.getComponents(''))
+            CD= self.loadCombDurationFactorFunction(loadCombExpr)
             self.crossSection.updateLoadDurationFactor(CD)
     
     def updateReductionFactors(self):
@@ -519,6 +519,33 @@ class StudArrangement(object):
         results['CF']= CF
         return results
 
+    def check(self, deadLoad, liveLoad, snowLoad, windLoad, loadCombinations):
+        ''' Check the stud arrangement for the load arguments.
+
+        :param deadLoad: dead load value.
+        :param liveLoad: live load value.
+        :param snowLoad: live load value.
+        :param windLoad: dead load value.
+        :param loadCombinations: load combinations.
+        '''
+        
+        worstCase= None
+        worstCaseCF= 0.0
+        results= dict()
+        # Checking
+        for loadCombName in loadCombinations:
+            expr= loadCombinations[loadCombName].expr
+            value= eval(expr)
+            N= value[1]*self.studSpacing
+            M= value[0]*self.studHeight**2/8.0            
+
+            self.updateLoadDurationFactor(expr)
+            results[loadCombName]= self.checkStud(N= N, M= M)
+            CF= results[loadCombName]['CF'][0]
+            if(CF>worstCaseCF):
+                worstCaseCF= CF
+                worstCase= loadCombName
+        return results, worstCase
         
 class AWCNDSBiaxialBendingControlVars(cv.BiaxialBendingStrengthControlVars):
     '''Control variables for biaxial bending normal stresses LS 
