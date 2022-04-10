@@ -72,7 +72,7 @@ class LoadVectorField(LoadOnPoints):
             eTagsSet=self.setToDisp.getElements.getTags()
             while(elementLoad):
                 category= elementLoad.category
-                if(category=='uniform'):
+                if(category=='uniform' or category=='raw'):
                     if hasattr(elementLoad,'getLocalForce'):
                         tags= elementLoad.elementTags
                         for i in range(0,len(tags)):
@@ -95,7 +95,7 @@ class LoadVectorField(LoadOnPoints):
                     # Concentrated load must be treated elsewhere
                     className= type(self).__name__
                     methodName= sys._getframe(0).f_code.co_name
-                    lmsg.error(className+'.'+methodName+'; display of concentrated loads not implemented yet.')
+                    lmsg.warning(className+'.'+methodName+'; display of concentrated loads not implemented yet (category: '+str(category)+').')
                 elementLoad= lIter.next()
         return retval
 

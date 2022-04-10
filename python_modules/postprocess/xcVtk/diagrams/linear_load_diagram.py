@@ -53,7 +53,7 @@ class LinearLoadDiagram(cd.ColoredDiagram):
                 eTagsSet= self.setToDisp.getElements.getTags()
                 while(eLoad):
                     category= eLoad.category
-                    if(category=='uniform'):
+                    if(category=='uniform' or category=='raw'):
                         if(hasattr(eLoad,'getVector3dLocalForce')):
                             tags= eLoad.elementTags
                             for i in range(0,len(tags)):
@@ -70,7 +70,7 @@ class LinearLoadDiagram(cd.ColoredDiagram):
                         # Concentrated load must be treated elsewhere
                         className= type(self).__name__
                         methodName= sys._getframe(0).f_code.co_name
-                        lmsg.error(className+'.'+methodName+'; display of concentrated loads not implemented yet.')
+                        lmsg.warning(className+'.'+methodName+'; display of concentrated loads not implemented yet (category: '+str(category)+').')
                     eLoad= lIter.next()
         else:
             className= type(self).__name__
