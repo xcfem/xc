@@ -70,10 +70,15 @@ def fyEC3(desig, t):
     '''
     Return steel yield strength from its name and the part thickness 
     (see table 3.1).
+
+    
+    :param desig: steel designation (235, 275, 355).
+    :param t: part thickness.
     '''
     retval= 0.0
     if(t>0.1):
-        lmsg.error("Part thickness out of range: ",t*1000," mm\n")
+        methodName= sys._getframe(0).f_code.co_name
+        lmsg.error(methodName+'; part thickness out of range: '+str(t*1000)+' mm.')
 
     if(desig == 235):
         retval= ifte(t<40e-3,235e6,215e6)
@@ -82,7 +87,8 @@ def fyEC3(desig, t):
     elif(desig == 355):
         retval= ifte(t<40e-3,355e6,335e6)
     else:
-        lmsg.error("Unknown steel designation: ",desig,"\n")
+        methodName= sys._getframe(0).f_code.co_name
+        lmsg.error(methodName+'; unknown steel designation: '+str(desig)+'.')
     return retval
 
 def fuEC3(desig, t):
@@ -95,7 +101,8 @@ def fuEC3(desig, t):
     '''
     retval= 0.0
     if(t>0.1):
-        lmsg.error("Part thickness out of range: ",t*1000," mm\n")
+        methodName= sys._getframe(0).f_code.co_name
+        lmsg.error(methodName+'; part thickness out of range: '+str(t*1000)+' mm.')
 
     if(desig == 235):
         retval= ifte(t<40e-3,360e6,340e6)
@@ -104,7 +111,8 @@ def fuEC3(desig, t):
     elif(desig == 355):
         retval= ifte(t<40e-3,510e6,490e6)
     else:
-        lmsg.error("Unknown steel designation: ",desig,"\n")
+        methodName= sys._getframe(0).f_code.co_name
+        lmsg.error(methodName+'; unknown steel designation: '+str(desig)+'.')
     return retval
 
 # European norm EN 10025-2:2004
@@ -243,7 +251,9 @@ class EC3Shape(object):
     def getVplRdy(self):
         '''Return y direction (web direction) plastic shear resistance'''
         if(self.shearBucklingVerificationNeeded()):
-            lmsg.warning('section needs shear buckling verification.')
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.warning(className+'.'+methodName+': section needs shear buckling verification.')
         return self.getAvy()*(self.steelType.fy/math.sqrt(3))/self.steelType.gammaM0()
     
     def getVcRdy(self):
@@ -483,7 +493,7 @@ class IPNShape(EC3Shape,arcelor_metric_shapes.IPNShape):
         :param steel: steel material.
         :param name: shape name (i.e. IPN_160)
         '''
-        EC3Shape.__init__(self,name,'rolled')
+        super(IPNShape, self).__init__(name= name, typo= 'rolled')
         arcelor_metric_shapes.IPNShape.__init__(self,steel,name)
 
 
@@ -495,7 +505,7 @@ class IPEShape(EC3Shape,arcelor_metric_shapes.IPEShape):
         :param steel: steel material.
         :param name: shape name (i.e. IPE_600)
         '''
-        EC3Shape.__init__(self,name,'rolled')
+        super(IPEShape, self).__init__(name= name, typo= 'rolled')
         arcelor_metric_shapes.IPEShape.__init__(self,steel,name)
         
 
@@ -507,7 +517,7 @@ class SHSShape(EC3Shape,arcelor_metric_shapes.SHSShape):
         :param steel: steel material.
         :param name: shape name (i.e. 'SHS175x175x8')
         '''
-        EC3Shape.__init__(self,name,'rolled')
+        super(SHSShape, self).__init__(name= name, typo= 'rolled')
         arcelor_metric_shapes.SHSShape.__init__(self,steel,name)
 
 '''
@@ -543,7 +553,7 @@ class HEShape(EC3Shape,arcelor_metric_shapes.HEShape):
         :param steel: steel material.
         :param name: shape name (i.e. HE_600_A)
         '''
-        EC3Shape.__init__(self, name,'rolled')
+        super(HEShape, self).__init__(name= name, typo= 'rolled')
         arcelor_metric_shapes.HEShape.__init__(self,steel,name)
 
 class UPNShape(EC3Shape,arcelor_metric_shapes.UPNShape):
@@ -554,7 +564,7 @@ class UPNShape(EC3Shape,arcelor_metric_shapes.UPNShape):
         :param steel: steel material.
         :param name: shape name (i.e. UPN_320)
         '''
-        EC3Shape.__init__(self, name, 'rolled')
+        super(UPNShape, self).__init__(name= name, typo= 'rolled')
         arcelor_metric_shapes.UPNShape.__init__(self,steel,name)
 
 class AUShape(EC3Shape,arcelor_metric_shapes.AUShape):
@@ -565,7 +575,7 @@ class AUShape(EC3Shape,arcelor_metric_shapes.AUShape):
         :param steel: steel material.
         :param name: shape name (i.e. AU_23)
         '''
-        EC3Shape.__init__(self, name, 'rolled')
+        super(AUShape, self).__init__(name= name, typo= 'rolled')
         arcelor_metric_shapes.AUShape.__init__(self,steel,name)
 
 class CHSShape(EC3Shape,arcelor_metric_shapes.CHSShape):
@@ -576,7 +586,7 @@ class CHSShape(EC3Shape,arcelor_metric_shapes.CHSShape):
         :param steel: steel material.
         :param name: shape name (i.e. AU_23)
         '''
-        EC3Shape.__init__(self, name, 'rolled')
+        super(CHSShape, self).__init__(name= name, typo='rolled')
         arcelor_metric_shapes.CHSShape.__init__(self,steel,name)
     
 class RHSShape(EC3Shape,arcelor_metric_shapes.RHSShape):
@@ -587,7 +597,7 @@ class RHSShape(EC3Shape,arcelor_metric_shapes.RHSShape):
         :param steel: steel material.
         :param name: shape name (i.e. AU_23)
         '''
-        EC3Shape.__init__(self, name, 'rolled')
+        super(RHSShape, self).__init__(name= name, typo= 'rolled')
         arcelor_metric_shapes.RHSShape.__init__(self,steel,name)
     
 class UCShape(EC3Shape,arcelor_metric_shapes.UCShape):
@@ -598,12 +608,12 @@ class UCShape(EC3Shape,arcelor_metric_shapes.UCShape):
         :param steel: steel material.
         :param name: shape name (i.e. UC_23)
         '''
-        EC3Shape.__init__(self, name, 'rolled')
+        super(UCShape, self).__init__(name= name, typo= 'rolled')
         arcelor_metric_shapes.UCShape.__init__(self,steel,name)
 
 from materials.sections.structural_shapes import bs_en_10210_shapes
 
-class HFSHSShape(EC3Shape,bs_en_10210_shapes.HFSHSShape):
+class HFSHSShape(EC3Shape, bs_en_10210_shapes.HFSHSShape):
     """BS EN 10210-2: 2006 steel shapes with Eurocode 3 
        verification routines.
     """
@@ -613,7 +623,7 @@ class HFSHSShape(EC3Shape,bs_en_10210_shapes.HFSHSShape):
         :param steel: steel material.
         :param name: shape name (i.e. 'HFSHS300x300x10.0')
         '''
-        super(HFSHSShape, self).__init__(self,name,'rolled')
+        super(HFSHSShape, self).__init__(name= name, typo= 'rolled')
         bs_en_10210_shapes.HFSHSShape.__init__(self,steel,name)
         
 from materials.sections.structural_shapes import bs_en_10219_shapes
@@ -628,7 +638,7 @@ class CFSHSShape(EC3Shape,bs_en_10219_shapes.CFSHSShape):
         :param steel: steel material.
         :param name: shape name (i.e. 'HFSHS300x300x10.0')
         '''
-        super(CFSHSShape, self).__init__(self,name= name, typo= 'welded')
+        super(CFSHSShape, self).__init__(name= name, typo= 'welded')
         bs_en_10219_shapes.CFSHSShape.__init__(self, steel, name)
         
 class CFRHSShape(EC3Shape,bs_en_10219_shapes.CFRHSShape):
@@ -654,5 +664,5 @@ class CFCHSShape(EC3Shape,bs_en_10219_shapes.CFCHSShape):
         :param steel: steel material.
         :param name: shape name (i.e. 'HFSHS300x300x10.0')
         '''
-        super(CFCHSShape, self).__init__(self,name= name, typo= 'welded')
+        super(CFCHSShape, self).__init__(name= name, typo= 'welded')
         bs_en_10219_shapes.CFCHSShape.__init__(self, steel= steel, name= name)

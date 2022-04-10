@@ -14,7 +14,6 @@ import math
 from materials.sections import section_properties as sp
 from postprocess import def_vars_control as vc
 from misc_utils import log_messages as lmsg
-import xc_base
 import geom
 import materials
 from model import model_inquiry
@@ -486,7 +485,7 @@ class SteelShape(sp.SectionProperties):
     def getCrossSectionProperties2D(self):
         '''Return a CrossSectionProperties object with the
          2D properties of the section.'''
-        return super(SteelShape,self).getCrossSectionProperties2D(preprocessor, material= self.steelType)
+        return super(SteelShape,self).getCrossSectionProperties2D(material= self.steelType)
         
 
 class IShape(SteelShape):

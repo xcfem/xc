@@ -797,7 +797,9 @@ class Concrete(matWDKD.MaterialWithDKDiagrams):
         retval= None
         materialHandler= preprocessor.getMaterialHandler
         if(materialHandler.materialExists(name)):
-            lmsg.warning("Section: "+name+" already defined.")
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.warning(className+'.'+methodName+'; section: '+name+' already defined.')
             retval= materialHandler.getMaterial(name)
         else:
             rho= self.density()
@@ -819,7 +821,9 @@ class Concrete(matWDKD.MaterialWithDKDiagrams):
         retval= None
         materialHandler= preprocessor.getMaterialHandler
         if(materialHandler.materialExists(name)):
-            lmsg.warning("Section: "+name+" already defined.")
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.warning(className+'.'+methodName+'; section: '+name+' already defined.')
             retval= materialHandler.getMaterial(name)
         else:
             rho= self.density()
@@ -938,11 +942,13 @@ class paramTensStiffness(object):
     
 
 def defDiagKConcrete(preprocessor, concreteRecord):
-    lmsg.warning('defDiagKConcrete deprecated; use concreteRecord.defDiagK(preproccesor)')
+    methodName= sys._getframe(0).f_code.co_name
+    lmsg.warning(methodName+'; deprecated: use concreteRecord.defDiagK(preproccesor)')
     return concreteRecord.defDiagK(preprocessor)
 
 def defDiagDConcrete(preprocessor, concreteRecord):
-    lmsg.warning('defDiagDConcrete deprecated; use concreteRecord.defDiagD(preproccesor)')
+    methodName= sys._getframe(0).f_code.co_name
+    lmsg.warning(methodName+'; deprecated: use concreteRecord.defDiagK(preproccesor)')
     return concreteRecord.defDiagD(preprocessor)
 
 def concreteDesignDiagramTest(preprocessor, concreteRecord):
@@ -1174,7 +1180,9 @@ class PrestressingSteel(matWDKD.MaterialWithDKDiagrams):
         elif(self.steelRelaxationClass==2):
             return 0.19 
         else:
-            lmsg.error("Relaxation class : ",self.steelRelaxationClass," not implemented.\n")
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.warning(className+'.'+methodName+'; relaxation class : '+str(self.steelRelaxationClass)+' not implemented.')
             return 0
     
     def fpd(self):
