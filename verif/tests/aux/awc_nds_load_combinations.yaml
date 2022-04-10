@@ -1,0 +1,9 @@
+--- # Load combinations
+ EQ1608: 1.0*deadLoad
+ EQ1609: 1.0*deadLoad+1.0*liveLoad
+ EQ1610: 1.0*deadLoad+1.0*snowLoad
+ EQ1611: 1.0*deadLoad+0.75*liveLoad+0.75*snowLoad
+ EQ1612: 1.0*deadLoad+0.6*windLoad
+ EQ1613: 1.0*deadLoad+0.45*windLoad+0.75*liveLoad+0.75*snowLoad
+ EQ1615: 0.6*deadLoad+0.6*windLoad
+ LIVE: 1.0*liveLoad

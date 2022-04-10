@@ -10,7 +10,7 @@ __version__= "3.0"
 __email__= "l.pereztato@ciccp.es, ana.ortega@ciccp.es "
 
 import math
-import xc_base
+import yaml
 import geom
 import xc
 from materials.sections import section_properties
@@ -54,27 +54,21 @@ windLoad= xc.Vector([windStudPressure,-7.13e3]) # kN/m
 # Load combination definition
 combContainer= combs.CombContainer()
 
-## Serviceability limit states.
-
-### Equation 16-8
-combContainer.SLS.qp.add('EQ1608', '1.0*deadLoad')
-### Equation 16-9
-combContainer.SLS.qp.add('EQ1609', '1.0*deadLoad+1.0*liveLoad')
-### Equation 16-10
-combContainer.SLS.qp.add('EQ1610', '1.0*deadLoad+1.0*snowLoad')
-### Equation 16-11
-combContainer.SLS.qp.add('EQ1611', '1.0*deadLoad+0.75*liveLoad+0.75*snowLoad')
-### Equation 16-12
-combContainer.SLS.qp.add('EQ1612', '1.0*deadLoad+0.6*windLoad')
-### Equation 16-13
-combContainer.SLS.qp.add('EQ1613', '1.0*deadLoad+0.45*windLoad+0.75*liveLoad+0.75*snowLoad')
-### Equation 16-14-> doesn't apply
-### Equation 16-15
-combContainer.SLS.qp.add('EQ1615', '0.6*deadLoad+0.6*windLoad')
-### Equation 16-16 -> doesn't apply
-### LIVE load only.
-combContainer.SLS.qp.add('LIVE', '1.0*liveLoad')
-
+## Read load combinations.
+import os
+pth= os.path.dirname(__file__)
+#print("pth= ", pth)
+if(not pth):
+    pth= "."
+fName= pth+'/../../aux/awc_nds_load_combinations.yaml'
+with open(fName) as file:
+    try:
+        combData= yaml.safe_load(file)
+    except yaml.YAMLError as exception:
+        print(exception)
+for combName in combData:
+    combExpr= combData[combName]
+    combContainer.SLS.qp.add(combName,combExpr)
 
 studObj= AWCNDS_limit_state_checking.StudArrangement(name= title, studSection= studSection, studSpacing= studSpacing, wallHeight= wallHeight, loadCombDurationFactorFunction= getLoadCombDurationFactor);
 
