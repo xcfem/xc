@@ -7,7 +7,7 @@ __author__= "Luis C. Pérez Tato (LCPT) , Ana Ortega (AO_O) "
 __copyright__= "Copyright 2022, LCPT, AO_O"
 __license__= "GPL"
 __version__= "3.0"
-__email__= "l.pereztato@ciccp.es, ana.ortega@ciccp.es "
+__email__= "l.pereztato@ciccp.es, ana.ortega@ciccp.es"
 
 import math
 import yaml
