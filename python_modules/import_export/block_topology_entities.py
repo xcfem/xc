@@ -10,7 +10,6 @@ __email__= "l.pereztato@gmail.com" "ana.ortega.ort@gmail.com"
 
 import ezdxf
 import logging
-import xc_base
 import geom
 from import_export import basic_entities as be
 from import_export import mesh_entities as me

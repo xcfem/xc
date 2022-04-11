@@ -19,7 +19,6 @@ import sys
 import math
 import json
 import scipy.interpolate
-import xc_base
 import geom
 import materials
 from geom_utils import closest_pair_of_points as cpp

@@ -12,7 +12,6 @@ __email__= "l.pereztato@ciccp.es" "ana.Ortega@ciccp.es"
 import math
 import sys
 import uuid
-import xc_base
 import geom
 import xc
 from materials.sections import section_properties

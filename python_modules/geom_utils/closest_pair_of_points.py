@@ -35,7 +35,6 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@ciccp.es"
 
-import xc_base
 import geom
 
 def column_based_sort(array, column=0):

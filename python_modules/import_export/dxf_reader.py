@@ -12,7 +12,6 @@ __email__= "l.pereztato@gmail.com" "ana.ortega.ort@gmail.com"
 
 import math
 import ezdxf
-import xc_base
 import geom
 import xc
 from import_export import reader_base

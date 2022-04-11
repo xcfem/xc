@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 # Defines a model to test a 2D fiber section.
-import xc_base
 import geom
 import xc
 from model import predefined_spaces

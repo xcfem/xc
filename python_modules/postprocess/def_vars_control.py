@@ -17,7 +17,6 @@ __email__= "l.pereztato@gmail.com"
 from misc_utils import log_messages as lmsg
 from model import model_inquiry
 from typing import Iterable
-import xc_base
 import geom
 import xc
 

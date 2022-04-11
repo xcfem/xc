@@ -17,7 +17,6 @@ from materials.sections.fiber_section import fiber_sets
 from solution import predefined_solutions
 from postprocess import control_vars as cv
 from postprocess import limit_state_data as lsd
-import xc_base
 import geom
 
 class LimitStateControllerBase(object):

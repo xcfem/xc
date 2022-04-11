@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 ''' Moment curvature diagram for a section. '''
-import xc_base
 import geom
 import xc
 from solution import predefined_solutions

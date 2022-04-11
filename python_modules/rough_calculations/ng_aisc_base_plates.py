@@ -17,7 +17,6 @@ import logging
 import math
 import json
 import copy
-import xc_base
 import geom
 from postprocess.reports import common_formats as fmt
 from misc_utils import log_messages as lmsg

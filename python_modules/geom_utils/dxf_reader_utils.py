@@ -12,7 +12,6 @@ __email__= "l.pereztato@gmail.com" "anaOrtegaOrt@gmail.com"
 import re
 import dxfgrabber
 from dxfwrite import DXFEngine as dxf
-import xc_base
 import geom
 from misc_utils import log_messages as lmsg
 

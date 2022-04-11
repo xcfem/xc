@@ -14,7 +14,6 @@ __email__= "l.pereztato@ciccp.es, ana.ortega@ciccp.es "
 
 import sys
 import vtk
-import xc_base
 import geom
 import xc
 import random as rd 

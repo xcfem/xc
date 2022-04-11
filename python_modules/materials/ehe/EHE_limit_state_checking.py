@@ -10,7 +10,6 @@ __version__= "3.0"
 __email__= "l.pereztato@ciccp.es, ana.ortega@ciccp.es "
 
 import math
-import xc_base
 import geom
 from materials.ehe import EHE_materials
 from materials.sections.fiber_section import fiber_sets

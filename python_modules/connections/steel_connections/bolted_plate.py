@@ -13,7 +13,6 @@ __email__= "l.pereztato@ciccp.es, ana.ortega@ciccp.es "
 import math
 import json
 import importlib
-import xc_base
 import geom
 from import_export import block_topology_entities as bte
 from misc_utils import log_messages as lmsg

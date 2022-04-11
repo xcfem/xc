@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 ''' Reactions on nodes.'''
-import xc_base
 import geom
 
 __author__= "Luis C. Pérez Tato (LCPT)"

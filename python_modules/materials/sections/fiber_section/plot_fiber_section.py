@@ -2,7 +2,6 @@
 
 import math
 import cairo
-import xc_base
 import geom
 from geom_utils import aux_cairo_plot
 

@@ -2,7 +2,6 @@
 from __future__ import division
 
 import math
-import xc_base
 import geom
 from model import predefined_spaces
 from materials import typical_materials

@@ -19,7 +19,6 @@ import os
 import scipy
 import inspect
 from misc_utils import log_messages as lmsg
-import xc_base
 import geom
 import xc
 from postprocess.reports import common_formats as fmt

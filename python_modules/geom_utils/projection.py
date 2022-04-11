@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 
-import xc_base
 import geom
 
 def projXYPline3d(xyzPline):

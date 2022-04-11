@@ -19,7 +19,6 @@ __email__= "l.pereztato@gmail.com ana.Ortega.Ort@gmail.com"
 
 import math
 import bisect
-import xc_base
 import geom
 import xc
 from misc_utils import log_messages as lmsg

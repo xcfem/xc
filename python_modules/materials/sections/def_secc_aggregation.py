@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 
-import xc_base
 from materials import typical_materials
 
 def def_secc_aggregation3d(preprocessor,defSecc,defMat):

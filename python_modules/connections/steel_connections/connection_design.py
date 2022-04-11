@@ -17,7 +17,6 @@ import json
 from misc_utils import log_messages as lmsg
 from import_export import block_topology_entities as bte
 from import_export import neutral_mesh_description as nmd
-import xc_base
 import geom
 from connections.steel_connections import bolted_plate
 from connections.steel_connections import connected_members

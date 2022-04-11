@@ -2,7 +2,6 @@
 #import sys
 #sys.path.append('usr/local/src/fuentes/c/biblioteca/xc_utils/lib/')
 
-import xc_base
 import loadCombinations
 
 factors= loadCombinations.Factors()

@@ -35,7 +35,6 @@ from materials.sections.structural_shapes import aisc_shapes_labels as labels
 from materials.sections import structural_steel
 from materials.sections import section_properties
 from misc_utils import log_messages as lmsg
-import xc_base
 import geom
 from import_export import block_topology_entities as bte
 from scipy.interpolate import griddata

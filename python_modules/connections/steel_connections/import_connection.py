@@ -5,7 +5,6 @@ from __future__ import division
 from __future__ import print_function
 
 import math
-import xc_base
 import geom
 import materials
 from import_export import block_topology_entities as bte

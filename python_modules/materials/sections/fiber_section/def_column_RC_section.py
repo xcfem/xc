@@ -14,7 +14,6 @@ import math
 from materials.ehe import EHE_materials
 from materials.sections.fiber_section import def_simple_RC_section
 from materials.sections import section_properties
-import xc_base
 import geom
 
 class ColumnMainReinforcement(object):

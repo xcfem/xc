@@ -4,7 +4,6 @@ import math
 from geom_utils import acad_script_utils as script
 import os
 from geom_utils import longitudinal_profile
-import xc_base
 import geom
 
 def filterDuplicatePoints(points):

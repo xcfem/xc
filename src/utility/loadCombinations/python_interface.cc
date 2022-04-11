@@ -40,6 +40,9 @@
 
 BOOST_PYTHON_MODULE(loadCombinations)
   {
+    // Import the "xc_base" module.
+    boost::python::object xc_base = boost::python::import("xc_base");
+    
     using namespace boost::python;
     using namespace cmb_acc;
     docstring_options doc_options;

@@ -10,7 +10,6 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@ciccp.es, ana.ortega@ciccp.es "
 
-import xc_base
 import geom
 from import_export import block_topology_entities as bte
 from connections.steel_connections import plates

@@ -10,7 +10,6 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "ana.Ortega@ciccp.es"
 
-import xc_base
 import geom
 from geom_utils import parabola as pb
 import math

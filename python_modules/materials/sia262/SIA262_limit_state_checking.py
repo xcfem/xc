@@ -16,7 +16,6 @@ from materials import limit_state_checking_base as lsc
 from postprocess import control_vars as cv
 from rough_calculations import ng_simple_bending_reinforcement
 import math
-import xc_base
 import geom
 from materials.sections.fiber_section import fiber_sets
 from materials.sections import stress_calc as sc

@@ -5,7 +5,6 @@ from __future__ import print_function
 
 import json
 import uuid
-import xc_base
 import geom
 import xc
 from connections.steel_connections import import_connection

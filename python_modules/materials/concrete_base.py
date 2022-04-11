@@ -20,7 +20,6 @@ from materials.sections import material_with_DK_diagrams as matWDKD
 import matplotlib.pyplot as plt
 import numpy as np
 import geom
-import xc_base
 import xc
 from postprocess.reports import graph_material as mg
 from misc_utils import log_messages as lmsg

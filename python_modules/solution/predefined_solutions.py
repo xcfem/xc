@@ -9,7 +9,6 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com, ana.ortega.ort@gmail.com"
 
-import xc_base
 import geom
 import xc
 from misc_utils import log_messages as lmsg

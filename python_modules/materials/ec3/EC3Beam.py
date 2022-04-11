@@ -11,7 +11,6 @@ __email__= "l.pereztato@gmail.com ana.ortega@ciccp.es"
 
 
 import math
-import xc_base
 import geom
 import xc
 from materials import steel_member_base

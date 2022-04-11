@@ -10,7 +10,6 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
-import xc_base
 import geom
 from model import predefined_spaces
 from postprocess.reports import common_formats as fmt

@@ -8,7 +8,6 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com ana.ortega.ort@gmail.com"
 
-import xc_base
 import geom
 import xc
 from actions import loads

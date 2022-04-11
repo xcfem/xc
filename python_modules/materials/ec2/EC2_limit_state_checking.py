@@ -10,7 +10,6 @@ __version__= "3.0"
 __email__= "ana.ortega@ciccp.es "
 
 import math
-import xc_base
 import geom
 from materials import limit_state_checking_base as lscb
 from materials.ec2 import EC2_materials
