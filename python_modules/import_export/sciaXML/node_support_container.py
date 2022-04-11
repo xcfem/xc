@@ -8,13 +8,13 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
-from xml_basics import scxml_table_container as ctr
-from xml_basics import scxml_table_xmlnodes as tb
-from xml_basics import scxml_header_item as hi
-from xml_basics import scxml_object as obj
-from xml_basics import scxml_object_item as oI
-from xml_basics import scxml_row as rw
-import node_container as nc
+from import_export.sciaXML.xml_basics import scxml_table_container as ctr
+from import_export.sciaXML.xml_basics import scxml_table_xmlnodes as tb
+from import_export.sciaXML.xml_basics import scxml_header_item as hi
+from import_export.sciaXML.xml_basics import scxml_object as obj
+from import_export.sciaXML.xml_basics import scxml_object_item as oI
+from import_export.sciaXML.xml_basics import scxml_row as rw
+from import_export.sciaXML import node_container as nc
 
 idNodeSupportContainer= "{1cbca4de-355b-40f7-a91d-8efd26a6404d}"
 tNodeSupportContainer= "1cbca4de-355b-40f7-a91d-8efd26a6404d"

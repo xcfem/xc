@@ -9,12 +9,12 @@ __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
 import os
-import node_container as nCtr
-import ep_plane_container as eppc
-import node_support_container as nsc
-from scia_loads import point_force_free_container as pffc
-from scia_loads import surface_pressure_free_container as spfc
-import sXML_base as base
+from import_export.sciaXML import node_container as nCtr
+from import_export.sciaXML import ep_plane_container as eppc
+from import_export.sciaXML import node_support_container as nsc
+from import_export.sciaXML.scia_loads import point_force_free_container as pffc
+from import_export.sciaXML.scia_loads import surface_pressure_free_container as spfc
+from import_export.sciaXML import sXML_base as base
 
 class SXMLBlockTopology(base.SXMLBase):
   '''Export block topology (kPoints, lines, surfaces, volumes), supports

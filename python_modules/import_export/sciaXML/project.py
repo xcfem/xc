@@ -8,8 +8,8 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
-from xml_basics import scxml_object as obj
-from xml_basics import table_container as ctr
+from import_export.sciaXML.xml_basics import scxml_object as obj
+from import_export.sciaXML.xml_basics import scxml_table_container as ctr
 import xml.etree.cElementTree as ET
 
 class Project:    

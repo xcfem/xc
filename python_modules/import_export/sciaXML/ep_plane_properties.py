@@ -8,14 +8,14 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
-from xml_basics import scxml_properties_container as ctr
-from xml_basics import scxml_property as prop
-from xml_basics import scxml_ref as rf
-from xml_basics import scxml_enum_item as eI
-from xml_basics import scxml_enum as enum
-from xml_basics import scxml_properties_table as propTable
-from xml_basics import scxml_properties_sub_table as propSubTable
-import node_container as nc
+from import_export.sciaXML.xml_basics import scxml_properties_container as ctr
+from import_export.sciaXML.xml_basics import scxml_property as prop
+from import_export.sciaXML.xml_basics import scxml_ref as rf
+from import_export.sciaXML.xml_basics import scxml_enum_item as eI
+from import_export.sciaXML.xml_basics import scxml_enum as enum
+from import_export.sciaXML.xml_basics import scxml_properties_table as propTable
+from import_export.sciaXML.xml_basics import scxml_properties_sub_table as propSubTable
+from import_export.sciaXML import node_container as nc
 import xml.etree.cElementTree as ET
 
 containerId= "{8708ed31-8e66-11d4-ad94-f6f5de2be344}"

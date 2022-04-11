@@ -8,10 +8,10 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
-from xml_basics import scxml_properties_container as ctr
-import node_container as nc
-from xml_basics import scxml_property as prop
-from xml_basics import scxml_properties_table as propTable
+from import_export.sciaXML.xml_basics import scxml_properties_container as ctr
+from import_export.sciaXML import node_container as nc
+from import_export.sciaXML.xml_basics import scxml_property as prop
+from import_export.sciaXML.xml_basics import scxml_properties_table as propTable
 import xml.etree.cElementTree as ET
 
 idName= '{4364BC01-AAB7-11D4-B3D9-00104BC3B531}'

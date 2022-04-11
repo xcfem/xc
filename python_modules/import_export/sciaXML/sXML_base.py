@@ -11,16 +11,16 @@ __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
 import os
-from xml_basics import scxml_definition
-import node_container as nCtr
-import ep_plane_container as eppc
-import node_support_container as nsc
-from scia_loads import load_group_container as lgc
-from scia_loads import load_case_container as lcc
-from scia_loads import load_comb_container as lcmb
-from scia_loads import node_load_container as nlc
-from scia_loads import element_load_container as elc
-import project_properties as prjDef
+from import_export.sciaXML.xml_basics import scxml_definition
+from import_export.sciaXML import node_container as nCtr
+from import_export.sciaXML import ep_plane_container as eppc
+from import_export.sciaXML import node_support_container as nsc
+from import_export.sciaXML.scia_loads import load_group_container as lgc
+from import_export.sciaXML.scia_loads import load_case_container as lcc
+from import_export.sciaXML.scia_loads import load_comb_container as lcmb
+from import_export.sciaXML.scia_loads import node_load_container as nlc
+from import_export.sciaXML.scia_loads import element_load_container as elc
+from import_export.sciaXML import project_properties as prjDef
 import xml.etree.cElementTree as ET
 
 class SXMLBase(object):

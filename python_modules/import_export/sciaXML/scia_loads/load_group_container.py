@@ -14,7 +14,7 @@ from import_export.sciaXML.xml_basics import scxml_object as obj
 from import_export.sciaXML.xml_basics import scxml_object_item as oI
 from import_export.sciaXML.xml_basics import scxml_row as rw
 from import_export.sciaXML import node_container as nc
-import load_group_properties as lgp
+from import_export.sciaXML.scia_loads import load_group_properties as lgp
 
 idLoadGroupContainer= lgp.containerId
 tLoadGroupContainer= lgp.tbProgId

@@ -15,10 +15,10 @@ from import_export.sciaXML.xml_basics import scxml_table_xmlnodes as tb
 from import_export.sciaXML.xml_basics import scxml_object as obj
 from import_export.sciaXML.xml_basics import scxml_object_item as oI
 from import_export.sciaXML.xml_basics import scxml_row as rw
-import element_load_properties as elp
-import load_case_container as lcc
+from import_export.sciaXML.scia_loads import element_load_properties as elp
+from import_export.sciaXML.scia_loads import load_case_container as lcc
 from import_export.sciaXML import ep_plane_container as ec
-import load_component_base as lcb
+from import_export.sciaXML.scia_loads import load_component_base as lcb
 import uuid
 import math
 

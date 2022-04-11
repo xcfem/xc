@@ -13,10 +13,10 @@ from import_export.sciaXML.xml_basics import scxml_table_xmlnodes as tb
 from import_export.sciaXML.xml_basics import scxml_object as obj
 from import_export.sciaXML.xml_basics import scxml_object_item as oI
 from import_export.sciaXML.xml_basics import scxml_row as rw
-import node_load_properties as nlp
-import load_case_container as lcc
+from import_export.sciaXML.scia_loads import node_load_properties as nlp
+from import_export.sciaXML.scia_loads import load_case_container as lcc
 from import_export.sciaXML import node_container as nc
-import load_component_base as lcb
+from import_export.sciaXML.scia_loads import load_component_base as lcb
 
 idNodeLoadContainer= "{F8371A21-F459-11D4-94D3-000000000000}"
 tNodeLoadContainer= nlp.tbName

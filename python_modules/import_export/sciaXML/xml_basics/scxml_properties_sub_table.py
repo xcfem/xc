@@ -8,7 +8,7 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
-import scxml_properties_table as tp
+from import_export.sciaXML.xml_basics import scxml_properties_table as tp
 
 class SCXMLPropertiesSubTable(tp.SCXMLPropertiesTable):
   '''SCIA XML properties sub table.'''

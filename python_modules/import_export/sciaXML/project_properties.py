@@ -8,17 +8,17 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
-import node_properties as ncd
-import material_properties as mp
-import ep_plane_properties as eppp
-import node_support_properties as nsp
-from scia_loads import load_group_properties as lgp
-from scia_loads import load_case_properties as lcp
-from scia_loads import load_comb_properties as lcmbp
-from scia_loads import node_load_properties as nlp
-from scia_loads import element_load_properties as elp
-from scia_loads import point_force_free_properties as pffp
-from scia_loads import surface_pressure_free_properties as sffp
+from import_export.sciaXML import node_properties as ncd
+from import_export.sciaXML import material_properties as mp
+from import_export.sciaXML import ep_plane_properties as eppp
+from import_export.sciaXML import node_support_properties as nsp
+from import_export.sciaXML.scia_loads import load_group_properties as lgp
+from import_export.sciaXML.scia_loads import load_case_properties as lcp
+from import_export.sciaXML.scia_loads import load_comb_properties as lcmbp
+from import_export.sciaXML.scia_loads import node_load_properties as nlp
+from import_export.sciaXML.scia_loads import element_load_properties as elp
+from import_export.sciaXML.scia_loads import point_force_free_properties as pffp
+from import_export.sciaXML.scia_loads import surface_pressure_free_properties as sffp
 import xml.etree.cElementTree as ET
 
 class ProjectProperties(object):    

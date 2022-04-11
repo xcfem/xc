@@ -10,13 +10,13 @@ __email__= "l.pereztato@gmail.com"
 
 #Properties for constraint nodes.
 
-from xml_basics import scxml_properties_container as ctr
-from xml_basics import scxml_property as prop
-from xml_basics import scxml_ref as rf
-from xml_basics import scxml_enum_item as eI
-from xml_basics import scxml_enum as enum
-from xml_basics import scxml_properties_table as propTable
-import node_container as nc
+from import_export.sciaXML.xml_basics import scxml_properties_container as ctr
+from import_export.sciaXML.xml_basics import scxml_property as prop
+from import_export.sciaXML.xml_basics import scxml_ref as rf
+from import_export.sciaXML.xml_basics import scxml_enum_item as eI
+from import_export.sciaXML.xml_basics import scxml_enum as enum
+from import_export.sciaXML.xml_basics import scxml_properties_table as propTable
+from import_export.sciaXML import node_container as nc
 import xml.etree.cElementTree as ET
 
 containerId= "{1cbca4de-355b-40f7-a91d-8efd26a6404d}"

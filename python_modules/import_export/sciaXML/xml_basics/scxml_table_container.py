@@ -10,8 +10,8 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
-import scxml_base as b
-import scxml_table_xmlnodes as tn
+from import_export.sciaXML.xml_basics import scxml_base as b
+from import_export.sciaXML.xml_basics import scxml_table_xmlnodes as tn
 import xml.etree.cElementTree as ET
 
 class SCXMLTableContainer(b.SCXMLBase):

@@ -18,7 +18,7 @@ from import_export.sciaXML.xml_basics import scxml_enum as enum
 from import_export.sciaXML.xml_basics import scxml_properties_table as propTable
 from import_export.sciaXML.xml_basics import scxml_properties_sub_table as propSubTable
 import xml.etree.cElementTree as ET
-import load_case_properties as lcp
+from import_export.sciaXML.scia_loads import load_case_properties as lcp
 
 containerId= "{F8371A21-F459-11D4-94D3-000000000000}"
 containerClsId= containerId

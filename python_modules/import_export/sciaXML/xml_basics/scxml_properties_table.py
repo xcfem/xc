@@ -2,7 +2,7 @@
 
 #Based on sXML-master projet on gitHub
 
-import scxml_table_base as tBase
+from import_export.sciaXML.xml_basics import scxml_table_base as tBase
 import xml.etree.cElementTree as ET
 
 class SCXMLPropertiesTable(tBase.SCXMLTableBase):

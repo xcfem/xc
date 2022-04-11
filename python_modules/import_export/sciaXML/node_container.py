@@ -8,12 +8,12 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
-from xml_basics import scxml_table_container as ctr
-from xml_basics import scxml_table_xmlnodes as tb
-from xml_basics import scxml_header as hdr
-from xml_basics import scxml_header_item as hi
-from xml_basics import scxml_object as obj
-from xml_basics import scxml_object_item as oI
+from import_export.sciaXML.xml_basics import scxml_table_container as ctr
+from import_export.sciaXML.xml_basics import scxml_table_xmlnodes as tb
+from import_export.sciaXML.xml_basics import scxml_header as hdr
+from import_export.sciaXML.xml_basics import scxml_header_item as hi
+from import_export.sciaXML.xml_basics import scxml_object as obj
+from import_export.sciaXML.xml_basics import scxml_object_item as oI
 
 idNodeContainer= '{39A7F468-A0D4-4DFF-8E5C-5843E1807D13}'
 progIdNodes= 'EP_DSG_Elements.EP_StructNode.1'

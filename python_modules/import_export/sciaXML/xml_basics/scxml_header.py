@@ -8,7 +8,7 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
-import scxml_header_item as hi
+from import_export.sciaXML.xml_basics import scxml_header_item as hi
 import xml.etree.cElementTree as ET
 
 

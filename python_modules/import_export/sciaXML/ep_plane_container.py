@@ -8,12 +8,12 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
-from xml_basics import scxml_table_container as ctr
-from xml_basics import scxml_table_xmlnodes as tb
-from xml_basics import scxml_object as obj
-from xml_basics import scxml_object_item as oI
-from xml_basics import scxml_row as rw
-import node_container as nc
+from import_export.sciaXML.xml_basics import scxml_table_container as ctr
+from import_export.sciaXML.xml_basics import scxml_table_xmlnodes as tb
+from import_export.sciaXML.xml_basics import scxml_object as obj
+from import_export.sciaXML.xml_basics import scxml_object_item as oI
+from import_export.sciaXML.xml_basics import scxml_row as rw
+from import_export.sciaXML import node_container as nc
 
 idEPPlaneContainer= '{8708ed31-8e66-11d4-ad94-f6f5de2be344}'
 tEPPlaneContainer= "8708ed31-8e66-11d4-ad94-f6f5de2be344"

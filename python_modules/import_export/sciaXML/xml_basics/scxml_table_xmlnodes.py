@@ -8,8 +8,8 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
-import scxml_table_base as tBase
-import scxml_header as hdr
+from import_export.sciaXML.xml_basics import scxml_table_base as tBase
+from import_export.sciaXML.xml_basics import scxml_header as hdr
 import xml.etree.cElementTree as ET
 
 class SCXMLTableXMLNodes(tBase.SCXMLTableBase):

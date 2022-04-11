@@ -15,7 +15,7 @@ __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
 from import_export.sciaXML.xml_basics import scxml_object_item as oI
-import load_case_container as lcc
+from import_export.sciaXML.scia_loads import load_case_container as lcc
 
 class LoadComponentBase(object):
   ''' Each of the load components (X, Z or Z).'''

@@ -8,7 +8,7 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
-import scxml_object_item as oi
+from import_export.sciaXML.xml_basics import scxml_object_item as oi
 import xml.etree.cElementTree as ET
 
 class SCXMLObjBase(object):

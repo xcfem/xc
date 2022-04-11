@@ -18,9 +18,9 @@ from import_export.sciaXML.xml_basics import scxml_enum as enum
 from import_export.sciaXML.xml_basics import scxml_properties_table as propTable
 from import_export.sciaXML.xml_basics import scxml_properties_sub_table as propSubTable
 import xml.etree.cElementTree as ET
-import load_case_properties as lcp
-import node_load_properties as nlp
-import point_force_free_properties as pffp
+from import_export.sciaXML.scia_loads import load_case_properties as lcp
+from import_export.sciaXML.scia_loads import node_load_properties as nlp
+from import_export.sciaXML.scia_loads import point_force_free_properties as pffp
 import uuid
 
 containerId= "{3E5FFA16-D1A4-4589-AD5A-4A0FC555E8B8}"
