@@ -18,7 +18,6 @@ the material properties are as follows: fct = 1.17 MPa; Ec =
 10 GPa; fy = 526 MPa; Es = 197 GPa. 
 '''
 
-import xc_base
 import geom
 import xc
 from solution import predefined_solutions

@@ -15,7 +15,6 @@ __email__= "l.pereztato@gmail.com"
 #      |      |        |       |         
 #     1|      |3      5|       |7
 
-import xc_base
 import geom
 import xc
 from solution import predefined_solutions

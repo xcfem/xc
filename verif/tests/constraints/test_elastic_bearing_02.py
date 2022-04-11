@@ -15,7 +15,6 @@ FX= 1 # Magnitude of force
 FY= 2 
 FZ= 3
 
-import xc_base
 import geom
 import xc
 from solution import predefined_solutions

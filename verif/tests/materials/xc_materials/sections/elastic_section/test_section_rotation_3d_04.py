@@ -2,7 +2,6 @@
 from __future__ import print_function
 '''Verification of the rotate method for an 3D elastic section.'''
 
-import xc_base
 import geom
 import xc
 from materials import typical_materials

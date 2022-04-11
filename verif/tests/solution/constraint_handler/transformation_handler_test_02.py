@@ -17,7 +17,6 @@ A= 50.65 # Beam cross-section area in square inches.
 I= 7892 # Inertia of the beam section in inches to the fourth power.
 w= 10000/12 # Load per unit length (pounds)/pulgada.
 
-import xc_base
 import geom
 import xc
 from model import predefined_spaces

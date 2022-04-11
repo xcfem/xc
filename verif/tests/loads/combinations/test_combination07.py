@@ -22,7 +22,6 @@ fMax= 1860e6 # Maximum unit load of the material expressed in MPa.
 fy= 1171e6 # Yield stress of the material expressed in Pa.
 tInic= 0.75**2*fMax # Effective prestress (0.75*P0 y 25% prestress losses).
 
-import xc_base
 import geom
 import xc
 from model import predefined_spaces

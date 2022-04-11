@@ -8,7 +8,6 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@ciccp.es ana.ortega@ciccp.es"
 
-import xc_base
 import geom
 axes= geom.PrincipalAxesOfInertia2D(geom.Pos2d(1,2),1.0,1.0,0.0)
 

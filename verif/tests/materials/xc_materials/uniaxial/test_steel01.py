@@ -12,7 +12,6 @@ F= 1.05*E*epsy # Force to apply.
 Nsteps= 10 # number of analysis steps.
 
 import math
-import xc_base
 import geom
 import xc
 from model import predefined_spaces

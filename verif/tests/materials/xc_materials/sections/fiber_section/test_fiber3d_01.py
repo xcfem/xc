@@ -9,7 +9,6 @@ __email__= "l.pereztato@gmail.com ana.ortega.ort@gmal.com"
 
 # Testing fiber section model of Steel01 uniaxial material.
 
-import xc_base
 import geom
 import xc
 from model import predefined_spaces

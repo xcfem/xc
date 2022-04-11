@@ -22,7 +22,6 @@ __version__= "3.0"
 __email__= "ana.ortega@xcengineering.xyz"
 
 import math
-import xc_base
 import geom
 import xc
 from materials import typical_materials as tm

@@ -16,7 +16,6 @@ The section is 400mm width by 600 mm height. A bending moment of
 300 kNm is applied
 '''
 
-import xc_base
 import geom
 import xc
 import math

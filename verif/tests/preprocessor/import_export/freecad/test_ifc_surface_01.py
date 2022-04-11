@@ -13,7 +13,6 @@ from import_export import freecad_reader
 from import_export import neutral_mesh_description as nmd
 from model import predefined_spaces
 import os
-import xc_base
 import geom
 import xc
 

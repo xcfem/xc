@@ -8,7 +8,6 @@ __version__= "3.0"
 __email__= "l.pereztato@ciccp.es ana.ortega@ciccp.es"
 
 import math
-import xc_base
 import geom
 
 s1= geom.Segment3d(geom.Pos3d(0,0,0),geom.Pos3d(1,0,0))

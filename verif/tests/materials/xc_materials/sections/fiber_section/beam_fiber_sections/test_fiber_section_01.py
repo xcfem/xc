@@ -7,7 +7,6 @@ elasto-plastic material.
    ({https://books.google.ch/books?id=v7bbMwEACAAJ})
    page 26 ff. '''
 
-import xc_base
 import geom
 import xc
 from model import predefined_spaces

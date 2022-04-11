@@ -22,7 +22,6 @@ thickness= 0.0001 # Cross section depth expressed in inches.
 unifLoad= 0.0001 # Uniform load (lb/in2).
 ptLoad= 100 # Punctual load (lb).
 
-import xc_base
 import geom
 import xc
 from solution import predefined_solutions

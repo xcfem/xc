@@ -8,7 +8,6 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@ciccp.es ana.ortega@ciccp.es"
 
-import xc_base
 import geom
 v1=geom.Vector3d(0,1,0)
 v2=geom.Vector3d(-1,0,0)

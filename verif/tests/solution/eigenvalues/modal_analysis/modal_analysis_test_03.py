@@ -4,7 +4,6 @@ from __future__ import print_function
 taken from the publication from Andrés Sáez Pérez: «Estructuras III»
  E.T.S. de Arquitectura de Sevilla (España). Eigenvalue problem is solved
 by means of the LAPACK library. '''
-import xc_base
 import geom
 import xc
 

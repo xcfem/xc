@@ -9,7 +9,6 @@ from __future__ import division
 from __future__ import print_function
 
 from misc_utils import log_messages as lmsg
-import xc_base
 import geom
 import xc
 from misc import scc3d_testing_bench

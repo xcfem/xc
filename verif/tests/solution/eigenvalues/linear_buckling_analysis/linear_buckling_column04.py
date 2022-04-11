@@ -12,7 +12,6 @@ from __future__ import print_function
 
     See the article 'Meshing for Column Loads <https://portwooddigital.com/2020/05/10/meshing-for-column-loads/amp/>'
  '''
-import xc_base
 import geom
 import xc
 

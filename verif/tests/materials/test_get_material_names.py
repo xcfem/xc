@@ -12,7 +12,6 @@ Iy= 80.1e-8 # Cross section moment of inertia (m4)
 Iz= 8.49e-8 # Cross section moment of inertia (m4)
 J= 0.721e-8 # Cross section torsion constant (m4)
 
-import xc_base
 import geom
 import xc
 from model import predefined_spaces

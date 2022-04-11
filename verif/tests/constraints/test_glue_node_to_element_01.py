@@ -13,7 +13,6 @@ nu= 0.3 # Poisson's ratio.
 h= 0.1 # Thickness.
 dens= 1.33 # Density kg/m2.
 
-import xc_base
 import geom
 import xc
 from model import predefined_spaces

@@ -3,7 +3,6 @@ from __future__ import print_function
 from __future__ import division
 
 import yaml
-import xc_base
 import geom
 import xc
 from solution import predefined_solutions

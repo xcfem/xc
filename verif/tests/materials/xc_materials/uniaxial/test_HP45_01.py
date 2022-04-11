@@ -3,7 +3,6 @@
 from __future__ import print_function
 
 import math
-import xc_base
 import geom
 import xc
 from materials import typical_materials

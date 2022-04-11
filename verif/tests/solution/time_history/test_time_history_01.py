@@ -32,7 +32,6 @@ __email__= "l.pereztato@gmail.com"
 
 import os
 import math
-import xc_base
 import geom
 import xc
 from model import predefined_spaces

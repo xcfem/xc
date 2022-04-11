@@ -11,7 +11,6 @@ __email__= "l.pereztato@ciccp.es ana.ortega@ciccp.es"
 import os
 from import_export import dxf_reader
 from import_export import neutral_mesh_description as nmd
-import xc_base
 import geom
 import xc
 import logging

@@ -4,7 +4,6 @@ from __future__ import print_function
 
 # Test for checking the interaction diagram
 
-import xc_base
 import geom
 import xc
 

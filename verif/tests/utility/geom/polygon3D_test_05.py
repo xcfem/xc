@@ -11,7 +11,6 @@ __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
 import math
-import xc_base
 import geom
 
 org= geom.Pos3d(0,0,0)

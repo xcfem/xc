@@ -12,7 +12,6 @@ __email__= "l.pereztato@ciccp.es ana.ortega@ciccp.es"
 
 import os
 import ezdxf
-import xc_base
 import geom
 
 def getPolygon(e):

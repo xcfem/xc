@@ -10,7 +10,6 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
-import xc_base
 import geom
 
 pt6= geom.Pos3d(0.137841075845,-0.0249999998934,0.300997851928)

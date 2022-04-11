@@ -4,7 +4,6 @@ from __future__ import print_function
 dx= 1
 dy= 2
 dz= 3
-import xc_base
 import geom
 import xc
 import math

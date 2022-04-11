@@ -18,7 +18,6 @@ __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
 import math
-import xc_base
 import geom
 
 l3d= geom.Line3d(geom.Pos3d(-5.99162e+28,-7.98244e+10,-0), geom.Vector3d(-1, -1.33227e-18, -4.96467e-28))

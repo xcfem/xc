@@ -11,7 +11,6 @@ __email__= "l.pereztato@gmail.com"
 
 # Horizontal cantilever under tension load at its end.
 
-import xc_base
 import geom
 import xc
 from solution import predefined_solutions

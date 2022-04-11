@@ -8,7 +8,6 @@ stiffnesses. Home made test.
 
 from materials.sections import section_properties
 from misc import scc3d_testing_bench
-import xc_base
 import geom
 import xc
 from solution import predefined_solutions

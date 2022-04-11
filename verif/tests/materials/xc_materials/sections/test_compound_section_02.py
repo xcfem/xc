@@ -9,7 +9,6 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com ana.ortega.ort@gmal.com"
 
-import xc_base
 import geom
 import xc
 from materials.sections import section_properties as sp

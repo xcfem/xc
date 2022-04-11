@@ -14,7 +14,6 @@ __version__= "3.0"
 __email__= "l.pereztato@gmail.com ana.ortega.ort@gmail.com"
 
 import math
-import xc_base
 import geom
 import xc
 from solution import predefined_solutions

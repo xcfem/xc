@@ -10,7 +10,6 @@ __version__= "3.0"
 __email__= "l.pereztato@gmail.com ana.ortega.ort@gmal.com"
 
 # Test for checking the straight reinforcement layer
-import xc_base
 import geom
 import xc
 from model import predefined_spaces

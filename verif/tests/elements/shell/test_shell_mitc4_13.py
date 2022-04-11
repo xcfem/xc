@@ -23,7 +23,6 @@ unifLoad= 0.0001 # Uniform load in  lb/in2.
 ptLoad= 0.0004 # Punctual load in lb.
 nLoad= unifLoad*CooMaxX*CooMaxY/NumDivI/NumDivJ # Tributary load for each node
 
-import xc_base
 import geom
 import xc
 from solution import predefined_solutions

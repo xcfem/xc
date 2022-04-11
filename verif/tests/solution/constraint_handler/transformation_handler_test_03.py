@@ -3,7 +3,6 @@
 from __future__ import print_function
 # Testing multi-freedom conditions with transformation constraint handler.
 
-import xc_base
 import geom
 import xc
 from model import predefined_spaces

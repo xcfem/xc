@@ -4,7 +4,6 @@ from __future__ import print_function
 # Test for checking the reg_cuad command
 
 import math
-import xc_base
 import geom
 import xc
 from materials import typical_materials

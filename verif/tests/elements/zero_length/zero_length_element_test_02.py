@@ -15,7 +15,6 @@ l= 1e-7 # Distance between nodes
 FX= 1 # Force magnitude
 FY= 2 # Force magnitude
 
-import xc_base
 import geom
 import xc
 from model import predefined_spaces

@@ -13,7 +13,6 @@ __email__= "l.pereztato@ciccp.es ana.ortega@ciccp.es"
 
 import os
 import sys
-import xc_base
 import geom
 import xc
 import math

@@ -2,7 +2,6 @@
 ''' Home made test.'''
 from __future__ import print_function
 # Design stress-strain diagram of the steel B500A (SIA)
-import xc_base
 import geom
 import xc
 

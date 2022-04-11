@@ -2,7 +2,6 @@
 from __future__ import print_function
 ''' Example taken from the page 258 of the book "Hormiǵon Armado. Jiménez Montoya (14a. edición) (url={https://books.google.ch/books?id=JWggPwAACAAJ}).
 '''
-import xc_base
 import geom
 import xc
 from model import predefined_spaces

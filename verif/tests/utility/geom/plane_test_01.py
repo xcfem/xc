@@ -6,7 +6,6 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@ciccp.es ana.ortega@ciccp.es"
 
-import xc_base
 import geom
 o=geom.Pos3d(0,0,0)
 p1=geom.Pos3d(1,0,0)

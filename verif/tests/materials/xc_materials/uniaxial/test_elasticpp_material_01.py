@@ -6,7 +6,6 @@ E= 2.1e6 # Young modulus of the material.
 Nsteps= 10 # number of analysis steps.
 
 import math
-import xc_base
 import geom
 import xc
 from model import predefined_spaces

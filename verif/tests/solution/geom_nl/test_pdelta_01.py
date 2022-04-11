@@ -36,7 +36,6 @@ P= 1000 # Load (force-pounds).
 nDivLines= 8 # Number of elements on each line.
 offset= 2*B
 
-import xc_base
 import geom
 import xc
 from solution import predefined_solutions

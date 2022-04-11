@@ -14,7 +14,6 @@ from import_export import neutral_mesh_description as nmd
 
 import os
 import sys
-import xc_base
 import geom
 import xc
 import logging

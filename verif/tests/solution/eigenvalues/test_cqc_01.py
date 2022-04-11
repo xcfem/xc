@@ -4,7 +4,6 @@ from __future__ import print_function
 taken from example A87 of Solvia Verification Manual.
 This exercise is based on example E26.8 of the 
 book «Dynamics of Structures» by Clough, R. W., and Penzien, J. '''
-import xc_base
 import geom
 import xc
 

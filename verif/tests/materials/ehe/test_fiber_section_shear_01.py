@@ -13,7 +13,6 @@ from materials.sections.fiber_section import def_simple_RC_section
 
 from materials.ehe import EHE_materials
 from materials.ehe import EHE_limit_state_checking
-import xc_base
 import geom
 import xc
 from solution import predefined_solutions

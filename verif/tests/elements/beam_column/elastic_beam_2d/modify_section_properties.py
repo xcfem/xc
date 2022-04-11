@@ -12,7 +12,6 @@ __version__= "3.0"
 __email__= "l.pereztato@ciccp.es, ana.ortega@ciccp.es "
 
 import math
-import xc_base
 import geom
 import xc
 from model import predefined_spaces

@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import print_function
 '''Silly test about sets.'''
-import xc_base
 import geom
 import xc
 

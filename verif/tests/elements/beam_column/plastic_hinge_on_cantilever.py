@@ -11,7 +11,6 @@ __email__= "l.pereztato@gmail.com"
 
 # Testing hinge development in a cantilever.
 
-import xc_base
 import geom
 import xc
 

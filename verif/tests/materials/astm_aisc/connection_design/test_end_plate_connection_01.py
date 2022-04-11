@@ -9,7 +9,6 @@ __version__= "3.0"
 __email__= "l.pereztato@ciccp.es ana.ortega@ciccp.es"
 
 import math
-import xc_base
 import geom
 from materials.astm_aisc import ASTM_materials
 from misc_utils import units_utils

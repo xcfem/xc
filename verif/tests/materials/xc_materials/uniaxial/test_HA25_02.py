@@ -10,7 +10,6 @@ __email__= "l.pereztato@gmail.com"
 
 
 import math
-import xc_base
 import geom
 import xc
 from materials import concrete_base

@@ -10,7 +10,6 @@ __email__= "l.pereztato@gmail.com"
 
 # Ménsula sometida a carga vertical en su extremo.
 
-import xc_base
 import geom
 import xc
 from solution import predefined_solutions

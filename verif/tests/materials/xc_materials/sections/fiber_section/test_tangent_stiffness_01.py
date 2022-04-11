@@ -2,7 +2,6 @@
 from __future__ import print_function
 ''' Checks the assembling of the tangent stiffness matrix of the section.
    Home made. '''
-import xc_base
 import geom
 import xc
 from model import predefined_spaces

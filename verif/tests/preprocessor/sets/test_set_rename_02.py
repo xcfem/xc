@@ -3,7 +3,6 @@
 from __future__ import print_function
 
 CooMax= 10
-import xc_base
 import geom
 import xc
 import math

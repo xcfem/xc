@@ -14,7 +14,6 @@ __email__= "l.pereztato@gmail.com"
 
 import math
 import os
-import xc_base
 import geom
 import xc
 from materials.awc_nds import structural_panels

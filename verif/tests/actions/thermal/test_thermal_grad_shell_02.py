@@ -12,7 +12,6 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "ana.ortega@ciccp.es l.pereztato@ciccp.es"
 
-import xc_base
 import geom
 import xc
 import math

@@ -2,7 +2,6 @@
 from __future__ import print_function
 # Fiber model verification test.
 
-import xc_base
 import geom
 import xc
 from model import predefined_spaces

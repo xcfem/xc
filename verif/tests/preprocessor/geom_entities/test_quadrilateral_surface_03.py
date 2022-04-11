@@ -5,7 +5,6 @@ from __future__ import division
 # Home made test: trivial tests about quadrilateral faces definition
 
 import math
-import xc_base
 import geom
 import xc
 from model import predefined_spaces

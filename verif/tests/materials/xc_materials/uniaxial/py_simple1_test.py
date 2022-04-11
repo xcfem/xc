@@ -10,7 +10,6 @@ __email__= "l.pereztato@ciccp.es "
 
 ''' Test of PySimple1 uniaxial material object.'''
 import os
-import xc_base
 import geom
 import xc
 import math

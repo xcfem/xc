@@ -2,7 +2,6 @@
 from __future__ import print_function
 from __future__ import print_function
 
-import xc_base
 import geom
 import xc
 import math

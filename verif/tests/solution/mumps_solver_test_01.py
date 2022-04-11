@@ -6,7 +6,6 @@ from __future__ import print_function
     Test the UMFPACK solver.
 '''
 
-import xc_base
 import geom
 import xc
 from model import predefined_spaces

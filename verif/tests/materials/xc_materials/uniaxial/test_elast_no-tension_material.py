@@ -11,7 +11,6 @@ vStrainTeor= [-0.01,-0.008,-0.006,-0.004,-0.002,0,0.002,0.004,0.006,0.008,0.01]
 vStressTeor= [E*-0.01,E*-0.008,E*-0.006,E*-0.004,E*-0.002,E*0,E*0,E*0,E*0,E*0,E*0]
 
 import math
-import xc_base
 import geom
 import xc
 from model import predefined_spaces

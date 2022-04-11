@@ -8,7 +8,6 @@ __version__= "3.0"
 __email__= "l.pereztato@ciccp.es ana.ortega@ciccp.es"
 
 import math
-import xc_base
 import geom
 p1=geom.Pos3d(1,1,1)
 p2=geom.Pos3d(2,2,2)

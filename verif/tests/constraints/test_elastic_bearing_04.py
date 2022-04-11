@@ -15,7 +15,6 @@ FX= 1 # Force magnitude
 FY= 2 
 FZ= 3
 
-import xc_base
 import geom
 import xc
 from model import predefined_spaces

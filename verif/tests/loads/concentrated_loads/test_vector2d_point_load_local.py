@@ -9,7 +9,6 @@ from __future__ import print_function
 
 '''vector2d_point_load_local verification test.'''
 
-import xc_base
 import geom
 import xc
 from solution import predefined_solutions

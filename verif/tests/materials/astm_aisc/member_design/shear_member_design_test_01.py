@@ -13,7 +13,6 @@ __version__= "3.0"
 __email__= " ana.Ortega.Ort@gmail.com, l.pereztato@gmail.com"
 
 import math
-import xc_base
 import geom
 import xc
 from materials.astm_aisc import ASTM_materials

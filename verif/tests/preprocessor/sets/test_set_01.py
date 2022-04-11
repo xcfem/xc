@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import print_function
 '''Element selection from a node set. Home made test.'''
-import xc_base
 import geom
 import xc
 from model import predefined_spaces

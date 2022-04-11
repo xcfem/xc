@@ -2,7 +2,6 @@
 from __future__ import print_function
 ''' Reinforced concrete section. Crack control verification test.'''
 
-import xc_base
 import geom
 import xc
 

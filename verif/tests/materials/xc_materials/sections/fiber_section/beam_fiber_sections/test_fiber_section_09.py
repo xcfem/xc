@@ -7,7 +7,6 @@ from __future__ import print_function
 
 # feProblem.logFileName= "/tmp/erase.log"  # Ignore warning messages
 
-import xc_base
 import geom
 import xc
 from misc import scc3d_testing_bench

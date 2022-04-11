@@ -14,7 +14,6 @@ l= 100.0 # Distance between nodes
 F= 1.0 # Force magnitude
 D= F/K # Displacement magnitude
 
-import xc_base
 import geom
 import xc
 from model import predefined_spaces

@@ -2,7 +2,6 @@
 ''' Home made test.'''
 from __future__ import print_function
 
-import xc_base
 import geom
 import xc
 from model import predefined_spaces

@@ -2,7 +2,6 @@
 ''' Home made test.'''
 from __future__ import print_function
 # Design stress-strain diagram of B400S steel
-import xc_base
 import geom
 import xc
 from materials.ehe import EHE_materials

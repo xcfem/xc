@@ -2,7 +2,6 @@
 from __future__ import print_function
 # Test from Ansys manual
 # Reference:  Strength of Material, Part I, Elementary Theory and Problems, pg. 26, problem 10
-import xc_base
 import geom
 import xc
 from model import predefined_spaces

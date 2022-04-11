@@ -11,7 +11,6 @@ __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
 import math
-import xc_base
 import geom
 
 points= [geom.Pos2d(0,0), geom.Pos2d(1,0), geom.Pos2d(1, 1), geom.Pos2d(0,1)]

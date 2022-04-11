@@ -12,7 +12,6 @@ __version__= "3.0"
 __email__= "bernd@bimstatik.org l.pereztato@gmail.com"
 
 
-import xc_base
 import geom
 import xc
 from solution import predefined_solutions

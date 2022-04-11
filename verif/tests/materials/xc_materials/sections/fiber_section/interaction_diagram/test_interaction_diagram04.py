@@ -3,7 +3,6 @@ from __future__ import print_function
 ''' Interaction diagram computation. Home made test. '''
 
 
-import xc_base
 import geom
 import xc
 from materials.ehe import EHE_materials

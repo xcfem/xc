@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import print_function
 # getNearestNode method test
-import xc_base
 import geom
 import xc
 from model import predefined_spaces

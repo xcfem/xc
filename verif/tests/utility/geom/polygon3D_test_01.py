@@ -10,7 +10,6 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
-import xc_base
 import geom
 
 pointsA= [geom.Pos3d(0,0,0), geom.Pos3d(0,1,0), geom.Pos3d(0,1,1), geom.Pos3d(0,0,1)]
