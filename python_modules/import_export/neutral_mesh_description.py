@@ -68,11 +68,10 @@ class XCImportExportData(object):
     :ivar pointHandlerName: name for the XC point handler.
     :ivar lineHandlerName: name for the XC line handler.
     :ivar surfaceHandlerName: name for the XC surface handler.
-    :ivar cellConversion= dictionary for cell conversion.
-    :ivar outputFile= Python file object used for output.
-    :ivar meshDesc= string describing the mesh
-    :ivar blockData= block data (points, lines, surfaces, bodies).
-
+    :ivar cellConversion: dictionary for cell conversion.
+    :ivar outputFile: Python file object used for output.
+    :ivar meshDesc: string describing the mesh
+    :ivar blockData: block data (points, lines, surfaces, bodies).
     '''
 
     def __init__(self):

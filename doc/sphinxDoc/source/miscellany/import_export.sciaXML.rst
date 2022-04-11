@@ -5,7 +5,7 @@ Import export sciaXML
 EP plane container
 ------------------
 
-.. automodule:: import_export.sciaXML.ep_plane_containe
+.. automodule:: import_export.sciaXML.ep_plane_container
     :members:
     :undoc-members:
     :show-inheritance:
