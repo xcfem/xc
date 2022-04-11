@@ -248,6 +248,10 @@ class CrackControlBaseParameters(LimitStateControllerBase):
     '''
     Basic parameters for crack control.'''
     def __init__(self,limitStateLabel):
+        ''' Constructor.
+
+        :param limitStateLabel: label that identifies the limit state.
+        '''        
         super(CrackControlBaseParameters,self).__init__(limitStateLabel)
         self.concreteFibersSetName= "concrete" #Name of the concrete fibers set.
         self.rebarFibersSetName= "reinforcement" #Name of the rebar fibers set.
@@ -266,6 +270,10 @@ class BiaxialBendingNormalStressControllerBase(LimitStateControllerBase):
     '''
     ControlVars= cv.BiaxialBendingControlVars
     def __init__(self,limitStateLabel):
+        ''' Constructor.
+        
+        :param limitStateLabel: label that identifies the limit state.
+        '''
         super(BiaxialBendingNormalStressControllerBase,self).__init__(limitStateLabel)
 
     def check(self,elements, nmbComb):
@@ -297,6 +305,10 @@ class UniaxialBendingNormalStressControllerBase(LimitStateControllerBase):
     '''
     ControlVars= cv.BiaxialBendingControlVars
     def __init__(self,limitStateLabel):
+        ''' Constructor.
+        
+        :param limitStateLabel: label that identifies the limit state.
+        '''
         super(UniaxialBendingNormalStressControllerBase,self).__init__(limitStateLabel)
 
     def check(self,elements, combName):

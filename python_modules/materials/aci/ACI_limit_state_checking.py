@@ -100,16 +100,24 @@ class RebarController(object):
 #Check normal stresses limit state.
 
 class BiaxialBendingNormalStressController(lsc.BiaxialBendingNormalStressControllerBase):
-  '''Object that controls normal stresses limit state.'''
+    '''Object that controls normal stresses limit state.'''
 
-  def __init__(self,limitStateLabel):
-    super(BiaxialBendingNormalStressController,self).__init__(limitStateLabel)
+    def __init__(self,limitStateLabel):
+        ''' Constructor.
+        
+        :param limitStateLabel: label that identifies the limit state.
+        '''
+        super(BiaxialBendingNormalStressController,self).__init__(limitStateLabel)
 
 class UniaxialBendingNormalStressController(lsc.UniaxialBendingNormalStressControllerBase):
-  '''Object that controls normal stresses limit state (uniaxial bending).'''
+    '''Object that controls normal stresses limit state (uniaxial bending).'''
 
   def __init__(self,limitStateLabel):
-    super(UniaxialBendingNormalStressController,self).__init__(limitStateLabel)
+        ''' Constructor.
+        
+        :param limitStateLabel: label that identifies the limit state.
+        '''
+        super(UniaxialBendingNormalStressController,self).__init__(limitStateLabel)
 
 # Shear checking.
 
@@ -145,7 +153,10 @@ def V_max(concrete,Nd,b,d):
 class ShearController(lsc.ShearControllerBase):
     '''Object that controls shear limit state according to ACI 318.'''
     def __init__(self,limitStateLabel):
-        ''' Constructor.'''
+        ''' Constructor.
+        
+        :param limitStateLabel: label that identifies the limit state.
+        '''
         super(ShearController,self).__init__(limitStateLabel)
         
     def setSection(self,rcSection):

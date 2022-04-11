@@ -33,7 +33,11 @@ class CrackStraightController(lscb.LimitStateControllerBase):
     :ivar k4: defaults to the value recommended by EC2 and EHE k4=0.425
     '''
     ControlVars= cv.RCCrackStraightControlVars
-    def __init__(self,limitStateLabel):
+    def __init__(self, limitStateLabel):
+        ''' Constructor.
+        
+        :param limitStateLabel: label that identifies the limit state.
+        '''
         super(CrackStraightController,self).__init__(limitStateLabel,fakeSection= False)
         self.k1=0.8
         self.k3=3.4

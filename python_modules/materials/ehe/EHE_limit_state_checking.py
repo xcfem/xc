@@ -884,13 +884,21 @@ class BiaxialBendingNormalStressController(lscb.BiaxialBendingNormalStressContro
     '''Object that controls normal stresses limit state.'''
 
     def __init__(self,limitStateLabel):
-      super(BiaxialBendingNormalStressController,self).__init__(limitStateLabel)
+        ''' Constructor.
+        
+        :param limitStateLabel: label that identifies the limit state.
+        '''
+        super(BiaxialBendingNormalStressController,self).__init__(limitStateLabel)
 
 class UniaxialBendingNormalStressController(lscb.UniaxialBendingNormalStressControllerBase):
     '''Object that controls normal stresses limit state (uniaxial bending).'''
 
     def __init__(self,limitStateLabel):
-      super(UniaxialBendingNormalStressController,self).__init__(limitStateLabel)
+        ''' Constructor.
+        
+        :param limitStateLabel: label that identifies the limit state.
+        '''
+        super(UniaxialBendingNormalStressController,self).__init__(limitStateLabel)
 
 # Shear checking.
 
@@ -898,7 +906,11 @@ class ShearController(lscb.ShearControllerBase):
     '''Shear control according to EHE-08.'''
 
     ControlVars= cv.RCShearControlVars
-    def __init__(self,limitStateLabel):
+    def __init__(self, limitStateLabel):
+        ''' Constructor.
+        
+        :param limitStateLabel: label that identifies the limit state.
+        '''
         super(ShearController,self).__init__(limitStateLabel,fakeSection= False)
         self.concreteFibersSetName= "concrete" #Name of the concrete fibers set.
         self.rebarFibersSetName= "reinforcement" #Name of the rebar fibers set.
@@ -1170,8 +1182,11 @@ class CrackStraightController(lscb.LimitStateControllerBase):
        tension stiffening.
     '''
     ControlVars= cv.RCCrackStraightControlVars
-    def __init__(self,limitStateLabel):
-        ''' Constructor.'''
+    def __init__(self, limitStateLabel):
+        ''' Constructor.
+        
+        :param limitStateLabel: label that identifies the limit state.
+        '''
         super(CrackStraightController,self).__init__(limitStateLabel,fakeSection= False)
         self.beta=1.7    #if only indirect actions beta must be =1.3
 
@@ -1298,7 +1313,11 @@ class CrackControl(lscb.CrackControlBaseParameters):
     Define the properties that will be needed for crack control checking
     as in clause 49.2.4 of EHE-08.'''
 
-    def __init__(self,limitStateLabel):
+    def __init__(self, limitStateLabel):
+        ''' Constructor.
+        
+        :param limitStateLabel: label that identifies the limit state.
+        '''        
         super(CrackControl,self).__init__(limitStateLabel)
         self.concreteArea= 0.0 # Concrete section area.
         self.fctmFis= 0.0 # Average tensile strength of the concrete.

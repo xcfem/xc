@@ -33,7 +33,7 @@ class ReportGenerator(oh.OutputHandler):
         '''Create a LaTeX report including the desired graphical results 
         obtained in the verification of a limit state.
 
-        :param limitStateLabel: limit state
+        :param limitStateLabel: label that identifies the limit state.
         :param setsShEl: Ordered list of sets of shell elements to be included 
         in the report.
         :param argsShEl: Ordered list of arguments to be included in the r   

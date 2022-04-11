@@ -862,7 +862,7 @@ class OutputHandler(object):
         for st in setsToDisplay:
             self.displayEigenvectors(mode= eigenMode, setToDisplay= st,fileName= fileName, defFScale= defFScale)
 
-    def displayFieldDirs1and2(self,limitStateLabel, argument, component, setToDisplay, fileName, defFScale=0.0, rgMinMax=None):
+    def displayFieldDirs1and2(self, limitStateLabel, argument, component, setToDisplay, fileName, defFScale=0.0, rgMinMax=None):
         '''Display a field defined over bi-dimensional elements in its two 
            directions.
 

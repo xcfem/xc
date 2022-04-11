@@ -499,11 +499,11 @@ class StudArrangement(object):
     def checkStud(self, N, M):
         ## stresses
         fc= N/self.stud.crossSection.A()
-        fb1= M/self.stud.crossSection.getElasticSectionModulusZ()
-        fb2= 0.0
+        #fb1= M/self.stud.crossSection.getElasticSectionModulusZ()
+        #fb2= 0.0
 
-        Fc_adj= self.stud.crossSection.getFcAdj()
-        Fb_adj= self.stud.crossSection.getFbAdj()
+        #Fc_adj= self.stud.crossSection.getFcAdj()
+        #Fb_adj= self.stud.crossSection.getFbAdj()
         #Checking
         CP= self.stud.getColumnStabilityFactor()
         FcE1= self.stud.getFcE1()
@@ -887,7 +887,11 @@ class BiaxialBendingNormalStressController(lsc.LimitStateControllerBase2Sections
     '''Object that controls normal stresses limit state.'''
 
     ControlVars= AWCNDSBiaxialBendingControlVars
-    def __init__(self,limitStateLabel):
+    def __init__(self, limitStateLabel):
+        ''' Constructor.
+
+        :param limitStateLabel: label that identifies the limit state.
+        '''
         super(BiaxialBendingNormalStressController,self).__init__(limitStateLabel)
 
     def updateEfficiency(self, elem, elementInternalForces):
@@ -920,6 +924,10 @@ class ShearController(lsc.LimitStateControllerBase2Sections):
 
     ControlVars= cv.ShearYControlVars
     def __init__(self,limitStateLabel):
+        ''' Constructor.
+
+        :param limitStateLabel: label that identifies the limit state.
+        '''
         super(ShearController,self).__init__(limitStateLabel)
 
     def updateEfficiency(self, elem, elementInternalForces):

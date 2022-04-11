@@ -139,14 +139,22 @@ class RebarController(object):
 class BiaxialBendingNormalStressController(lsc.BiaxialBendingNormalStressControllerBase):
     '''Object that controls normal stresses limit state.'''
 
-    def __init__(self,limitStateLabel):
-      super(BiaxialBendingNormalStressController,self).__init__(limitStateLabel)
+    def __init__(self, limitStateLabel):
+        ''' Constructor.
+        
+        :param limitStateLabel: label that identifies the limit state.
+        '''
+        super(BiaxialBendingNormalStressController,self).__init__(limitStateLabel)
 
 class UniaxialBendingNormalStressController(lsc.UniaxialBendingNormalStressControllerBase):
     '''Object that controls normal stresses limit state (uniaxial bending).'''
 
-    def __init__(self,limitStateLabel):
-      super(UniaxialBendingNormalStressController,self).__init__(limitStateLabel)
+    def __init__(self, limitStateLabel):
+        ''' Constructor.
+        
+        :param limitStateLabel: label that identifies the limit state.
+        '''
+        super(UniaxialBendingNormalStressController,self).__init__(limitStateLabel)
 
 # Shear checking.
 
@@ -194,7 +202,11 @@ class ShearController(lsc.ShearControllerBase):
     '''Object that controls shear limit state according to SIA 262.'''
 
     ControlVars= cv.RCShearControlVars
-    def __init__(self,limitStateLabel):
+    def __init__(self, limitStateLabel):
+        ''' Constructor.
+        
+        :param limitStateLabel: label that identifies the limit state.
+        '''
         super(ShearController,self).__init__(limitStateLabel)
 
     def setSection(self,rcSection):
@@ -246,7 +258,7 @@ class ShearController(lsc.ShearControllerBase):
          XXX Orientation of the transverse reinforcement is not
          taken into account.
       '''
-      print("Postprocesing combination: ",nmbComb)
+      lmsg.info("Postprocesing combination: "+nmbComb)
       # XXX torsional deformation ingnored.
 
       for e in elements:
@@ -296,11 +308,21 @@ class ShearController(lsc.ShearControllerBase):
 
 class CrackControlSIA262(lsc.CrackControlBaseParameters):
     '''Crack control checking of a reinforced concrete section
-     according to SIA 262.'''
+     according to SIA 262.
+
+    :ivar limitStress: limit value for rebar stresses.
+    '''
     ControlVars= cv.CrackControlVars
-    def __init__(self,limitStateLabel,limitStress):
+    
+    def __init__(self, limitStateLabel, limitStress):
+        ''' Constructor.
+        
+        :param limitStateLabel: label that identifies the limit state.
+        :param limitStress: limit value for rebar stresses.
+        '''
         super(CrackControlSIA262,self).__init__(limitStateLabel)
         self.limitStress= limitStress #Limit value for rebar stresses.
+        
     def calcRebarStress(self, scc):
         '''Returns average stress in rebars.'''
         section= scc.getProp('sectionData')
@@ -333,7 +355,7 @@ class CrackControlSIA262(lsc.CrackControlBaseParameters):
 
     def check(self,elements,nmbComb):
         '''Crack control checking.'''
-        print("REWRITE NEEDED. See equivalent function in  CrackControlSIA262PlanB.")
+        lmsg.warning("REWRITE NEEDED. See equivalent function in  CrackControlSIA262PlanB.")
         for e in elements:
           scc= e.getSection()
           idSection= e.getProp("idSection")
@@ -352,8 +374,13 @@ class CrackControlSIA262(lsc.CrackControlBaseParameters):
 class CrackControlSIA262PlanB(CrackControlSIA262):
 
     ControlVars= cv.CrackControlVars
-    def __init__(self,limitStateLabel,limitStress):
-        super(CrackControlSIA262PlanB,self).__init__(limitStateLabel,limitStress)
+    def __init__(self, limitStateLabel, limitStress):
+        ''' Constructor.
+        
+        :param limitStateLabel: label that identifies the limit state.
+        :param limitStress: limit value for rebar stresses.
+        '''
+        super(CrackControlSIA262PlanB,self).__init__(limitStateLabel, limitStress)
 
     def check(self,elements,nmbComb):
         '''Crack control.'''
@@ -401,68 +428,80 @@ class CrackControlSIA262PlanB(CrackControlSIA262):
             e.setProp(self.limitStateLabel,elementControlVars)
 
 
-def procesResultVerifFISSIA262(preprocessor,nmbComb,limitStress):
-  '''Crack control checking of reinforced concrete sections.'''
-  print("Postprocesing combination: ",nmbComb,"\n")
+def procesResultVerifFISSIA262(preprocessor, nmbComb, limitStress, limitStateLabel= 'SLS_crackControl'):
+    '''Crack control checking of reinforced concrete sections.
 
-  secHAParamsFis= CrackControlSIA262(limitStress)
-  elements= preprocessor.getSets.getSet("total").elements
-  secHAParamsFis.check(elements,nmbComb)
+    :param preprocessor: preprocessor for the finite element problem.
+    :param nmbComb: name of the load combination.    
+    :param limitStress: limit value for rebar stresses.
+    :param limitStateLabel: label identifying the limit state.
+    '''
+    lmsg.info("Postprocesing combination: "+nmbComb+"\n")
 
-def procesResultVerifFISSIA262PlanB(preprocessor,nmbComb,limitStress):
-  '''Crack control checking of reinforced concrete sections.'''
-  print("Postprocesing combination: ",nmbComb,"\n")
+    secHAParamsFis= CrackControlSIA262(limitStateLabel= limitStateLabel, limitStress= limitStress)
+    elements= preprocessor.getSets.getSet("total").elements
+    secHAParamsFis.check(elements,nmbComb)
 
-  secHAParamsFis= CrackControlSIA262PlanB(limitStress)
-  elements= preprocessor.getSets.getSet("total").elements
-  secHAParamsFis.check(elements,nmbComb)
+def procesResultVerifFISSIA262PlanB(preprocessor, nmbComb, limitStress, limitStateLabel= 'SLS_crackControl'):
+    '''Crack control checking of reinforced concrete sections.
+
+    :param preprocessor: preprocessor for the finite element problem.
+    :param nmbComb: name of the load combination.
+    :param limitStress: limit value for rebar stresses.
+    :param limitStateLabel: label identifying the limit state.
+    '''
+    lmsg.info("Postprocesing combination: "+nmbComb+"\n")
+
+    secHAParamsFis= CrackControlSIA262PlanB(limitStateLabel= limitStateLabel, limitStress= limitStress)
+    elements= preprocessor.getSets.getSet("total").elements
+    secHAParamsFis.check(elements,nmbComb)
 
 # Control of fatigue limit state according to SIA 262.
 
 def estimateSteelStress(sccData, N, M, As, y):
-  retval= 0.0
-  eNC= sccData.depth/3.0
-  exc= 0.0
-  denom= math.copysign(0.8*As*0.9*sccData.depth,y)
-  retval= M/denom
-  if(retval<0.0):
-    f= M/(0.8*0.9*sccData.depth)
-    retval= -f/(0.2**sccData.getAc())*10.0
-  if(abs(N)>1e-6):
-    exc= abs(M/N)
-    if(exc<eNC):
-      retval= N/sccData.getAc()*10.0
-      retval+= M/sccData.getI()*y
-  return retval
+    retval= 0.0
+    eNC= sccData.depth/3.0
+    exc= 0.0
+    denom= math.copysign(0.8*As*0.9*sccData.depth,y)
+    retval= M/denom
+    if(retval<0.0):
+        f= M/(0.8*0.9*sccData.depth)
+        retval= -f/(0.2**sccData.getAc())*10.0
+    if(abs(N)>1e-6):
+        exc= abs(M/N)
+        if(exc<eNC):
+            retval= N/sccData.getAc()*10.0
+            retval+= M/sccData.getI()*y
+    return retval
 
 def estimateSteelStressPos(sccData, N, M):
-  retval= 0.0
-  eNC= sccData.depth/3.0
-  exc= 0.0
-  As= sccData.getAsPos()
-  y = sccData.getYAsPos()
-  return estimateSteelStress(sccData, N, M, As, y)
+    retval= 0.0
+    eNC= sccData.depth/3.0
+    exc= 0.0
+    As= sccData.getAsPos()
+    y = sccData.getYAsPos()
+    return estimateSteelStress(sccData, N, M, As, y)
 
 def estimateSteelStressNeg(sccData, N, M):
-  retval= 0.0
-  As= sccData.getAsNeg()
-  y = sccData.getYAsNeg()
-  return estimateSteelStress(sccData, N, M, As, y)
+    retval= 0.0
+    As= sccData.getAsNeg()
+    y = sccData.getYAsNeg()
+    return estimateSteelStress(sccData, N, M, As, y)
 
 def estimateSigmaC(sccData, sigma_sPos, sigma_sNeg):
-  sgMax= max(sigma_sPos,sigma_sNeg)
-  retval= 0.0
-  if(sgMax<0.0):
-    retval= (sigma_sPos+sigma_sNeg)/2.0/10.0
-  else:
-    sgMin= min(sigma_sPos,sigma_sNeg)
-    if(sgMin<=0):
-      Ac= 0.1*sccData.getAc()
-      if(sgMax==sigma_sPos):
-        retval= -sgMax*sccData.getAsPos()/Ac
-      else:
-        retval= -sgMax*sccData.getAsNeg()/Ac
-  return retval
+    sgMax= max(sigma_sPos,sigma_sNeg)
+    retval= 0.0
+    if(sgMax<0.0):
+        retval= (sigma_sPos+sigma_sNeg)/2.0/10.0
+    else:
+        sgMin= min(sigma_sPos,sigma_sNeg)
+        if(sgMin<=0):
+            Ac= 0.1*sccData.getAc()
+            if(sgMax==sigma_sPos):
+                retval= -sgMax*sccData.getAsPos()/Ac
+            else:
+              retval= -sgMax*sccData.getAsNeg()/Ac
+    return retval
 
 def estimateSigmaCPlanB(sccData, N, M):
     Ac= 0.1*sccData.getAc()
@@ -497,7 +536,9 @@ def getShearLimit(sccData,controlVars,vu):
     else:
         retval= 0.5*vu-abs(vd_min)
     if(retval<0):
-        print("limite negativo = ", retval)
+        className= type(self).__name__
+        methodName= sys._getframe(0).f_code.co_name
+        lmsg.warning(className+'.'+methodName+'; negative limit:'+str(retval)+'.')
     return retval
 
 def getShearCF(controlVars):
@@ -509,6 +550,10 @@ class FatigueController(lsc.LimitStateControllerBase):
 
     ControlVars= cv.FatigueControlVars
     def __init__(self,limitStateLabel):
+        ''' Constructor.
+        
+        :param limitStateLabel: label that identifies the limit state.
+        '''
         super(FatigueController,self).__init__(limitStateLabel)
 
     def initControlVars(self,elements):
@@ -532,7 +577,7 @@ class FatigueController(lsc.LimitStateControllerBase):
             - ELUF3: fatigue load in position 3 (XXX not yet implemented!!!).
             - ...
         '''
-        print('Controlling limit state: ',self.limitStateLabel, ' for load combination: ',combNm,"\n")
+        lmsg.info('Controlling limit state: ',self.limitStateLabel, ' for load combination: ',combNm,"\n")
 
 
         index= int(combNm[-1])

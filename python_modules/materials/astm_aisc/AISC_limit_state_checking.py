@@ -394,6 +394,10 @@ class BiaxialBendingNormalStressController(lsc.LimitStateControllerBase2Sections
 
     ControlVars= AISCBiaxialBendingControlVars
     def __init__(self,limitStateLabel):
+        ''' Constructor.
+
+        :param limitStateLabel: label that identifies the limit state.
+        '''
         super(BiaxialBendingNormalStressController,self).__init__(limitStateLabel)
 
     def updateEfficiency(self, elem, elementInternalForces):
@@ -420,7 +424,11 @@ class ShearController(lsc.LimitStateControllerBase2Sections):
     '''Object that controls shear limit state.'''
 
     ControlVars= cv.ShearYControlVars
-    def __init__(self,limitStateLabel):
+    def __init__(self, limitStateLabel):
+        ''' Constructor.
+
+        :param limitStateLabel: label that identifies the limit state.
+        '''
         super(ShearController,self).__init__(limitStateLabel)
 
     def updateEfficiency(self, elem, elementInternalForces):
@@ -449,7 +457,7 @@ class VonMisesStressController(lsc.LimitStateControllerBase):
     '''Object that controls Von Mises stress limit state.'''
 
     ControlVars= cv.VonMisesControlVars
-    def __init__(self,limitStateLabel, vonMisesStressId= 'max_von_mises_stress'):
+    def __init__(self, limitStateLabel, vonMisesStressId= 'max_von_mises_stress'):
         ''' Constructor.
 
         :param limitStateLabel: limit state identifier.

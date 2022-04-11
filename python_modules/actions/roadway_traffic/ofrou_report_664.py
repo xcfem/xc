@@ -14,7 +14,6 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
-import xc_base
 import geom
 from actions.roadway_traffic import load_model_base as lmb
 

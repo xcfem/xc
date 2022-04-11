@@ -267,7 +267,11 @@ class BiaxialBendingNormalStressController(lsc.LimitStateControllerBase2Sections
     '''Object that controls normal stresses limit state.'''
 
     ControlVars= cv.SteelShapeBiaxialBendingControlVars
-    def __init__(self,limitStateLabel):
+    def __init__(self, limitStateLabel):
+        ''' Constructor.
+        
+        :param limitStateLabel: label that identifies the limit state.
+        '''
         super(BiaxialBendingNormalStressController,self).__init__(limitStateLabel)
     
     def updateEfficiency(self, elem, elementInternalForces):
@@ -297,6 +301,10 @@ class ShearController(lsc.LimitStateControllerBase2Sections):
 
     ControlVars= cv.ShearYControlVars
     def __init__(self,limitStateLabel):
+        ''' Constructor.
+        
+        :param limitStateLabel: label that identifies the limit state.
+        '''
         super(ShearController,self).__init__(limitStateLabel)
 
     def updateEfficiency(self, elem, elementInternalForces):

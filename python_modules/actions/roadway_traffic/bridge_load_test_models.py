@@ -3,7 +3,6 @@ from __future__ import division
 
 '''Vehicles to perform load tests in roadway traffic bridges according to different standards.
 '''
-import xc_base
 import geom
 from actions.roadway_traffic import load_model_base as lmb
 from actions import load_cases as lcases
