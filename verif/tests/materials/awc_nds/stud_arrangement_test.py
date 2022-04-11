@@ -46,10 +46,7 @@ title= '1st floor facade stud.'
 liveLoadReductionFactor= 1.0 # No reduction.
 
 ## Load definition (values from truss_AB_reactions.ods)
-deadLoad= xc.Vector([0.0,15.25e3]) # kN/m
-liveLoad= liveLoadReductionFactor*xc.Vector([0.0,26.17e3]) # kN/m
-snowLoad= xc.Vector([0.0,11.28e3]) # kN/m
-windLoad= xc.Vector([windStudPressure,-7.13e3]) # kN/m
+loadDict= {'deadLoad': xc.Vector([0.0,15.25e3]), 'liveLoad': liveLoadReductionFactor*xc.Vector([0.0,26.17e3]), 'snowLoad': xc.Vector([0.0,11.28e3]), 'windLoad': xc.Vector([windStudPressure,-7.13e3])} # kN/m
 
 # Load combination definition
 combContainer= combs.CombContainer()
@@ -72,7 +69,7 @@ for combName in combData:
 
 studObj= AWCNDS_limit_state_checking.StudArrangement(name= title, studSection= studSection, studSpacing= studSpacing, wallHeight= wallHeight, loadCombDurationFactorFunction= getLoadCombDurationFactor);
 
-results, worstCase= studObj.check(deadLoad, liveLoad, snowLoad, windLoad, loadCombinations= combContainer.SLS.qp)
+results, worstCase= studObj.check(loadDict= loadDict, loadCombinations= combContainer.SLS.qp)
 
 worstCF= results[worstCase]['CF'][0]
 worstCFRef= 0.8273532593387054
