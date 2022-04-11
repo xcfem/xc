@@ -912,7 +912,9 @@ class OutputHandler(object):
         sectDescr= ''
         if(section):
             if section not in [1,2]:
-                lmsg.warning('section', section, "doesn't exist, section 1 is displayed instead")
+                className= type(self).__name__
+                methodName= sys._getframe(0).f_code.co_name
+                lmsg.warning(className+'.'+methodName+'; section '+str(section)+" doesn't exist, section 1 is displayed instead")
                 section=1
             sectRef='Sect'+str(section)
             sectDescr= self.outputStyle.directionDescription[section-1]

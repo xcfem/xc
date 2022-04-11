@@ -112,7 +112,7 @@ class BiaxialBendingNormalStressController(lsc.BiaxialBendingNormalStressControl
 class UniaxialBendingNormalStressController(lsc.UniaxialBendingNormalStressControllerBase):
     '''Object that controls normal stresses limit state (uniaxial bending).'''
 
-  def __init__(self,limitStateLabel):
+    def __init__(self,limitStateLabel):
         ''' Constructor.
         
         :param limitStateLabel: label that identifies the limit state.
