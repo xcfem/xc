@@ -524,7 +524,7 @@ class StudArrangement(object):
         results['CF']= CF
         return results
 
-    def check(self, deadLoad, liveLoad, snowLoad, windLoad, loadCombinations):
+    def check(self, loadDict, loadCombinations):
         ''' Check the stud arrangement for the load arguments.
 
         :param deadLoad: dead load value.
@@ -536,6 +536,11 @@ class StudArrangement(object):
         
         worstCase= None
         worstCaseCF= 0.0
+        # Read loads values from dictionary.
+        deadLoad= loadDict['deadLoad']
+        liveLoad= loadDict['liveLoad']
+        snowLoad= loadDict['snowLoad']
+        windLoad= loadDict['windLoad']
         results= dict()
         # Checking
         for loadCombName in loadCombinations:
@@ -682,14 +687,17 @@ class WallTopPlates(object):
             e.vector2dUniformLoadGlobal(xc.Vector([0.0,-uniformLoad]))
             
     def defineLoads(self, loadDict):
-        ''' Define the loads and load combinations.'''
+        ''' Define the loads from the values stored in the dictionary argument.
+
+        :param loadDict: Python dictionary storing the load values.
+        '''
         # Actions
-        ## Load cases
+        ## Define load cases
         loadCaseManager= lcm.LoadCaseManager(self.modelSpace.preprocessor)
         loadCaseNames= list(loadDict.keys())
         loadCaseManager.defineSimpleLoadCases(loadCaseNames)
 
-        ## Load values.
+        ## Define load values.
         for lcName in loadDict:
             value= loadDict[lcName]
             cLC= loadCaseManager.setCurrentLoadCase(lcName)
@@ -833,6 +841,11 @@ class WallTopPlates(object):
         return results, worstResults
 
     def check(self, loadDict, combContainer):
+        ''' Check the plates for the load arguments.
+
+        :param loadDict: dictionary containing the load values.
+        :param combContainer: load combinations.
+        '''
         # Create model
         self.genMesh()
         # Define loads.
