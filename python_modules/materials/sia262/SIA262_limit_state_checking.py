@@ -642,8 +642,8 @@ class SIARebarFamily(rf.RebarFamily):
         super(SIARebarFamily,self).__init__(steel,diam,spacing,concreteCover)
         self.crackControlRequirement= crackControlRequirement
       
-    def getCopy(self,barController):
-        return SIARebarFamily(self.steel,self.diam,self.spacing,self.concreteCover,self.crackControlRequirement)
+    def getCopy(self):
+        return SIARebarFamily(steel= self.steel, diam= self.diam, spacing= self.spacing, concreteCover= self.concreteCover, crackControlRequirement= self.crackControlRequirement)
       
     def getRebarController(self):
         return RebarController(self.crackControlRequirement)
@@ -707,10 +707,13 @@ class SIAFamNBars(SIARebarFamily):
 
 class SIADoubleRebarFamily(rf.DoubleRebarFamily):
     ''' Two reinforcement bars families.'''
-    def getCopy(self,barController):
+    
+    def getCopy(self):
         return SIADoubleRebarFamily(self.f1, self.f2)
+    
     def getRebarController(self):
         return RebarController(self.getCrackControlRequirement())
+    
     def getCrackControlRequirement(self):
         ''' Return the crack control requirement as in clause 4.4.2.2.3
             of SIA 262:2014.'''
@@ -718,6 +721,7 @@ class SIADoubleRebarFamily(rf.DoubleRebarFamily):
         if(retval!=self.f2.crackControlRequirement):
           cmsg.error("Different specifications for crack control.")
         return retval
+    
     def getVR(self,concrete,Nd,Md,b,thickness):
         '''Return the shear resistance of the (b x thickness) rectangular section.
         :param concrete: concrete material.

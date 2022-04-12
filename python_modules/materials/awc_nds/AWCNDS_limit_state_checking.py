@@ -206,7 +206,6 @@ class Member(wood_member_base.Member):
 
         :param majorAxis: if true return adjusted Fb for bending around major axis.
         '''
-        retval= .001
         if(majorAxis):
             ## Check if
             if(self.memberRestraint>self.crossSection.getRequiredRestraint()):
@@ -223,12 +222,12 @@ class Member(wood_member_base.Member):
             retval= 1.0
         return retval
     
-    def getFbECriticalBucklingDesignValue(self):
-        ''' Return the critical bucking design value for bending according to 
-            section 3.3.3.8 of NDS-2018.
-        '''
-        RB= self.getBendingSlendernessRatio()
-        return 1.2*self.crossSection.wood.Emin/RB**2
+    # def getFbECriticalBucklingDesignValue(self):
+    #     ''' Return the critical bucking design value for bending according to 
+    #         section 3.3.3.8 of NDS-2018.
+    #     '''
+    #     RB= self.getBendingSlendernessRatio()
+    #     return 1.2*self.crossSection.wood.Emin/RB**2
         
     def getColumnEffectiveLength(self):
         ''' Return the effective length of the member working 
@@ -307,7 +306,6 @@ class Member(wood_member_base.Member):
 
     def updateLoadDurationFactor(self, loadCombExpr):
         '''Update the value of the load duration factors.'''
-        CD= 1.0
         if(self.loadCombDurationFactorFunction):
             CD= self.loadCombDurationFactorFunction(loadCombExpr)
             self.crossSection.updateLoadDurationFactor(CD)
@@ -634,22 +632,20 @@ class WallTopPlates(object):
         trfs= prep.getTransfCooHandler
         lin= trfs.newLinearCrdTransf2d("lin")
         seedElemHandler= prep.getElementHandler.seedElemHandler
-        seedElemHandler.defaultMaterial= self.plateSection.xc_material.name
-        seedElemHandler.defaultTransformation= "lin"
+        seedElemHandler.defaultMaterial= section.name
+        seedElemHandler.defaultTransformation= lin.name
         elem= seedElemHandler.newElement("ElasticBeam2d",xc.ID([0,0]))
 
-        xcTotalSet= prep.getSets.getSet("total")
-        mesh= self.infSet.genMesh(xc.meshDir.I)
+        infSetMesh= self.infSet.genMesh(xc.meshDir.I)
         self.infSet.fillDownwards()
-        mesh= self.supSet.genMesh(xc.meshDir.I)
+        supSetMesh= self.supSet.genMesh(xc.meshDir.I)
         self.supSet.fillDownwards()
 
         ## Loaded nodes.
         self.loadedNodes= list()
         pos= supPoints[0].getPos+geom.Vector3d(self.studSpacing/2.0,0,0) #Position of the first loaded node
         xLast= supPoints[-1].getPos.x
-        while pos.x<xLast:
-            n= self.supSet.getNearestNode(pos)
+        while(pos.x<xLast):
             self.loadedNodes.append(self.supSet.getNearestNode(pos))
             pos+= geom.Vector3d(self.trussSpacing,0.0,0.0)
 
@@ -717,7 +713,6 @@ class WallTopPlates(object):
             uY= -n.getDisp[1]
             uYMax= max(uY,uYMax)
 
-        r= self.studSpacing/uYMax
         results['uYMax']= uYMax
 
         ## Bending strength
@@ -790,6 +785,10 @@ class WallTopPlates(object):
         solution.setup()
         analysis= solution.analysis
         result= analysis.analyze(1)
+        if(result!=0):
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.error(className+'.'+methodName+'; cant solve for load case: '+str(comb)+'.')
         loadDurationFactor= self.loadCombDurationFactorFunction(comb)
         results= self.checkPlates(loadDurationFactor= loadDurationFactor)
         preprocessor.getLoadHandler.removeFromDomain(comb)

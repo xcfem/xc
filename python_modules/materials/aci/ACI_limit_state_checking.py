@@ -287,14 +287,17 @@ class ACIRebarFamily(rf.RebarFamily):
       self.psi_t= 1.3
       self.psi_e= 1.0 # uncoated bars.
 
-    def getCopy(self,barController):
-      return ACIRebarFamily(self.steel,self.barNumber,self.spacing,self.concreteCover)
+    def getCopy(self):
+        return ACIRebarFamily(steel= self.steel, barNumber= self.barNumber, spacing= self.spacing, concreteCover= self.concreteCover)
+  
     def getRebarController(self):
-      return RebarController(psi_t= self.psi_t, psi_e= self.psi_e, concreteCover= self.concreteCover, spacing= self.spacing)
+        return RebarController(psi_t= self.psi_t, psi_e= self.psi_e, concreteCover= self.concreteCover, spacing= self.spacing)
+    
     def getBasicAnchorageLength(self,concrete):
-      ''' Return the basic anchorage length of the bars.'''
-      rebarController= self.getRebarController()
-      return rebarController.getBasicAnchorageLength(concrete,self.getDiam(),self.steel)
+        ''' Return the basic anchorage length of the bars.'''
+        rebarController= self.getRebarController()
+        return rebarController.getBasicAnchorageLength(concrete,self.getDiam(),self.steel)
+    
     def getMinReinfAreaUnderFlexion(self, thickness, b= 1.0, type= 'slab', concrete= None):
         '''Return the minimun amount of bonded reinforcement to control cracking
            for reinforced concrete sections under flexion per unit length 
@@ -368,7 +371,7 @@ class ACIFamNBars(ACIRebarFamily):
 
 class ACIDoubleRebarFamily(rf.DoubleRebarFamily):
     ''' Two reinforcement bars families.'''
-    def getCopy(self,barController):
+    def getCopy(self):
         return ACIDoubleRebarFamily(self.f1, self.f2)
     
     def getVR(self,concrete,Nd,Md,b,thickness):

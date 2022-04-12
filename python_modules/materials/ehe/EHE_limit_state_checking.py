@@ -1939,7 +1939,7 @@ class EHERebarFamily(rf.RebarFamily):
        :ivar pos: reinforcement position according to clause 66.5.1
                   of EHE-08.
     '''
-    def __init__(self,steel,diam,spacing,concreteCover, pos= 'II'):
+    def __init__(self,steel, diam, spacing, concreteCover, pos= 'II'):
         ''' Constructor.
 
         :param steel: reinforcing steel material.
@@ -1952,8 +1952,8 @@ class EHERebarFamily(rf.RebarFamily):
         super(EHERebarFamily,self).__init__(steel,diam,spacing,concreteCover)
         self.pos= pos
 
-    def getCopy(self,barController):
-        return EHERebarFamily(self.steel,self.diam,self.spacing,self.concreteCover,self.pos)
+    def getCopy(self):
+        return EHERebarFamily(steel= self.steel, diam= self.diam, spacing= self.spacing, concreteCover= self.concreteCover, pos= self.pos)
       
     def getRebarController(self):
         return RebarController(concreteCover= self.concreteCover, spacing= self.spacing, pos= self.pos)
