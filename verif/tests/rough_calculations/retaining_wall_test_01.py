@@ -76,20 +76,20 @@ wall.bToe= bToe
 wall.bHeel= bHeel
 wall.concrete= concrete
 #wall.exigeanceFisuration= 'A'
-wall.stemReinforcement.setReinforcement(1,A25_10.getCopy('A'))  # vert. trasdós (esperas)
-wall.stemReinforcement.setReinforcement(2,A25_10.getCopy('A')) # vert. trasdós (contacto terreno)
-wall.stemReinforcement.setReinforcement(11,A16_20.getCopy('A')) #horiz. trasdós
+wall.stemReinforcement.setReinforcement(1,A25_10.getCopy())  # vert. trasdós (esperas)
+wall.stemReinforcement.setReinforcement(2,A25_10.getCopy()) # vert. trasdós (contacto terreno)
+wall.stemReinforcement.setReinforcement(11,A16_20.getCopy()) #horiz. trasdós
 
-wall.stemReinforcement.setReinforcement(4,A16_20.getCopy('A')) # vert. intradós (esperas)
-wall.stemReinforcement.setReinforcement(5,A16_20.getCopy('A')) # vert. intradós (exterior)
-wall.stemReinforcement.setReinforcement(12,A16_20.getCopy('A')) #horiz. intradós
+wall.stemReinforcement.setReinforcement(4,A16_20.getCopy()) # vert. intradós (esperas)
+wall.stemReinforcement.setReinforcement(5,A16_20.getCopy()) # vert. intradós (exterior)
+wall.stemReinforcement.setReinforcement(12,A16_20.getCopy()) #horiz. intradós
 
-wall.footingReinforcement.setReinforcement(3,A25_10.getCopy('A')) #tr. sup. zapata
-wall.footingReinforcement.setReinforcement(9,A16_10.getCopy('A')) # ln. sup. zapata
-wall.footingReinforcement.setReinforcement(7,A20_10.getCopy('A')) # tr. inf. zapata
-wall.footingReinforcement.setReinforcement(8,A16_20.getCopy('A')) # ln. inf. zapata
+wall.footingReinforcement.setReinforcement(3,A25_10.getCopy()) #tr. sup. zapata
+wall.footingReinforcement.setReinforcement(9,A16_10.getCopy()) # ln. sup. zapata
+wall.footingReinforcement.setReinforcement(7,A20_10.getCopy()) # tr. inf. zapata
+wall.footingReinforcement.setReinforcement(8,A16_20.getCopy()) # ln. inf. zapata
 
-wall.stemReinforcement.setReinforcement(6,A12_20.getCopy('A'))  #coronación
+wall.stemReinforcement.setReinforcement(6,A12_20.getCopy())  #coronación
 
 wallFEModel= wall.createFEProblem('Retaining wall '+sectionName)
 preprocessor= wallFEModel.getPreprocessor
