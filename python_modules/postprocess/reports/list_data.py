@@ -1,135 +1,115 @@
 # -*- coding: utf-8 -*-
 
-def listaKPtsSet(preprocessor,setName, fileName, fmt):
-    ''' Writes a list of the points from the set
+from tabulate import tabulate
 
-       :param setName: name of the set.
-       :param fileName: file name.
+def listKPts(kPts, fmt):
+    ''' Return a tabulate object containing the point data
+
+       :param kPts: iterable containing the points.
        :param fmt: format for coordinates.
     '''
-    caption= "Points of the set: "+setName
-    defCampos= "|r|r|r|r|"
-    idsCampos= "Id & x & y & z"
-    cabeceraSupertabular(fileName,4,defCampos,idsCampos,caption)
-    pointSet= preprocessor.getSets.getSet(setName)
-    points= pointSet.getPoints()
-    for p in points:
-        fileName.write(p.tag," & ",fmt.format(p.pos.x)," & ",fmt.format(p.pos.y)," & ",fmt.format(p.pos.z),"\\\\\n")
-    cierraSupertabular(fileName) 
+    #caption= "Points of the set: "+xcSet.name
+    headers= ['Id', 'x', 'y', 'z']
+    rows= list()
+    for p in kPts:
+        rows.append([p.tag,fmt.format(p.pos.x),fmt.format(p.pos.y),fmt.format(p.pos.z)])
+    return tabulate(rows, headers= headers)
 
-def listaLineasSet(setName, fileName):
-    ''' Writes a list of the lines from the set
+def listaLineasSet(lines):
+    ''' Returns a tabulate object containing the line data.
 
-       :param setName: name of the set.
-       :param fileName: file name.
+       :param lines: iterable containing the lines.
     '''
-    caption= "Lineas del conjunto: "+setName
-    defCampos= "|r|r|c|"
-    idsCampos= "Id & nDiv & Points"
-    cabeceraSupertabular(fileName,3,defCampos,idsCampos,caption) 
-    setLineas= preprocessor.getSets.getSet(setName)
-    lineas= setLineas.getLines()
-    for l in lineas:
-        fileName.write(l.tag," & ",l.ndiv," & ",l.kPts,"\\\\\n")
-    cierraSupertabular(fileName)
+    #caption= "Lines of set: "+xcSet.name
+    headers= ['Id', 'nDiv', 'Points']
+    rows= list()
+    for l in lines:
+        rows.append([l.tag,l.ndiv,l.kPts])
+    return tabulate(rows, headers= headers)
 
-def listSetNodes(preprocessor, setName, fileName, fmt):
-    ''' Writes a list of the nodes from the set
+def listNodeSet(nodes, fmt):
+    ''' Returns a tabulate object containing the node data.
 
-       :param setName: name of the set.
-       :param fileName: file name.
+       :param nodes: iterable containing the nodes.
        :param fmt: format for coordinates.
     '''
-    caption= "Nodes from set: "+setName
-    defCampos= "|r|r|r|r|"
-    idsCampos= "Id & x & y & z"
-    cabeceraSupertabular(fileName,4,defCampos,idsCampos,caption) 
-    s= preprocessor.getSets.getSet(setName)
-    nodes= s.nodes
+    #caption= "Nodes from set: "+xcSet.name
+    headers=  ['Id', 'x', 'y', 'z']
+    rows= list()
     for n in nodes:
         pos= n.getPos()
-        fileName.write(n.tag," & ",fmt.format(pos.x)," & ",fmt.format(pos.y)," & ",fmt.format(pos.z),"\\\\\n")
-    cierraSupertabular(fileName) 
+        rows.append([n.tag, fmt.format(pos.x), fmt.format(pos.y), fmt.format(pos.z)])
+    return tabulate(rows, headers= headers)
 
-def listaElementosSet(preprocessor, setName, fileName):
-    ''' Writes a list of the nodes from the set
+def listElementSet(elements):
+    ''' Returns a tabulate object containing the element data.
 
-       :param setName: name of the set.
-       :param fileName: file name.
+       :param elements: iterable containing the elements.
     '''
-    fileName.write("Elementos del conjunto: ",setName,"\n")
-    s= preprocessor.getSets.getSet(setName)
-    elems= s.elements
-    for e in elems:
-        fileName.write(e.tag," & ",e.nod(0).tag," & ",e.nod(1).tag,"\\\\\n")
+    # caption= "Elementos del conjunto: "+xcSet.name
+    headers= ['Id', 'Type', 'Nodes']
+    rows= list()
+    for e in elements:
+        rows.append([e.tag, e.getNodeTags()])
+    return tabulate(rows, headers= headers)
 
-def listaElementosTrussSet(preprocessor, setName, fileName, fmt):
-    ''' Writes a list of the truss elements from the set
+def listTrussElementSet(elements):
+    ''' Returns a tabulate object containing the truss element data.
 
-       :param setName: name of the set.
-       :param fileName: file name.
-       :param fmt: format for coordinates.
+       :param elements: iterable containing the elements.
     '''
-    caption= "Elementos del conjunto: "+setName
-    defCampos= "|r|r|r|r|"
-    idsCampos= "Id & nI & nJ & Mater."
-    cabeceraSupertabular(fileName,4,defCampos,idsCampos,caption) 
-    s= preprocessor.getSets.getSet(setName)
-    elems= s.elements
-    for e in elems:
-        fileName.write(e.tag," & ",e.nod(0).tag," & ",e.nod(1).tag," & ",e,getMaterial().tag,"\\\\\n")
-    cierraSupertabular(fileName) 
+    # caption= "Elementos del conjunto: "+xcSet.name
+    headers= ['Id', 'nI', 'nJ', 'Material']
+    rows= list()
+    for e in elements:
+        rows.append([e.tag, e.getNode(0).tag, e.getNode(1).tag, e,getMaterial().name])
+    return tabulate(rows, headers= headers)
 
-def listaBarElementSet(preprocessor, setName, fName, fmt):
-    ''' Writes a list of the bar elements from the set
+def listBarElementSet(elements):
+    ''' Returns a tabulate object containing the bar element data.
 
-       :param setName: name of the set.
-       :param fileName: file name.
-       :param fmt: format for coordinates.
+       :param elements: iterable containing the elements.
     '''
-    caption= "Elemento from set: "+setName
-    defCampos= "|r|r|r|r|r|r|r|r|r|r|r|"
-    idsCampos= " Id & nI  & nJ  &Sc.&  E     &  G     & Area   & alpha &    J     &   Iy    &    Iz  \\\\\n -  &     &  -  & - & GPa    & GPa    &  cm2   &   -   &   cm4    &  cm4    &   cm4"
-    cabeceraSupertabular(fileName,11,defCampos,idsCampos,caption) 
-    s= preprocessor.getSets.getSet(setName)
-    elems= s.elements
-    for e in elems:
-        tmpStr= str(e.tag)+" & "+str(e.nod(0).tag)+" & "+str(e.nod(1).tag)+" & "
+    #caption= "Elemento from set: "+setName
+    headers= ['Id', 'nI', 'nJ','Sc.', 'E', 'G', 'Area', 'alpha', 'J', 'Iy', 'Iz']
+    #units=   ['-', '-', '-', '-', 'GPa', 'GPa', 'cm2', '-', 'cm4', 'cm4', 'cm4']
+    rows= list()
+    for e in elements:
+        row= [str(e.tag), str(e.nod(0).tag), str(e.nod(1).tag)]
         k= 0
         sections= e.getSections()
-        for s in sections:
-            fName.write(tmpStr,k," & ")
-            fName.write(fmt.format(s.getE()/1e9)," & ",fmt.format(s.getG()/1e9)," & ",fmt.format(s.getA()*1e4)," & ",fmt.format(s.getAlpha())," & ")
-            fName.write(fmt.format(s.getJ()*1e6)," & ",fmt.format(s.getIy()*1e6)," & ",fmt.format(s.getIz()*1e6),"\\\\\n")
-            k+=1
+        for k, s in enumerate(sections):
+            row.append(k)
+            row.append(fmt.format(s.getE()/1e9), fmt.format(s.getG()/1e9), fmt.format(s.getA()*1e4), fmt.format(s.getAlpha()), )
+            row.append(fmt.format(s.getJ()*1e6), fmt.format(s.getIy()*1e6), fmt.format(s.getIz()*1e6),"\\\\\n")
+        rows.append(row)
+    return tabulate(rows, headers= headers)
 
-    cierraSupertabular(fileName) 
+def listSet(xcSet, elementListFunction, fmt):
+    ''' Returs a dictionary with the tabulate objects containing 
+        the set components.
 
-
-def listaEntidadesSet(preprocessor, setName, fileName, nmbProcLstElementos, fmt, encab, tit):
-    ''' Writes a list of the entities from the set
-
-       :param setName: name of the set.
-       :param fileName: file name.
+       :param xcSet: XC set.
+       :param elementListFunction: function to be used for the element list.
        :param fmt: format for coordinates.
     '''
-    fileName.write("\\twocolumn\n")
-    fileName.write("\\",encab,"{",tit,"}\n")
-    listaKPtsSet(preprocessor, setName,fileName,fmt) 
-    listaLineasSet(preprocessor, setName,fileName) 
-    listSetNodes(preprocessor, setName,fileName,fmt) 
-    fileName.write("\\onecolumn\n")
-    nmbProcLstElementos(preprocessor, setName,fileName,fmt) 
+    retval= dict()
+    dict['kPts']= listKPtsSet(xcSet.points,fmt) 
+    dict['lines']= listLineSet(xcSet.lines) 
+    dict['nodes']= listNodeSet(xcSet.nodes,fmt) 
+    dict['elements']= elementListFunction(xcSet.elements,fmt) 
 
 
-def listaEntidadesLinea(preprocessor, lineName, fileName, nmbProcLstElementos, fmt, encab, tit):
-    ''' Writes a list of the entities from the line
+def listLineEntities(line, nmbProcLstElementos, fmt):
+    ''' Returs a dictionary with the tabulate objects containing 
+        the nodes and elements of the line.
 
        :param lineName: name of the line.
        :param fileName: file name.
        :param fmt: format for coordinates.
     '''
-    fileName.write("\\",encab,"{",tit,"}\n")
-    listSetNodes(preprocessor, lineName,fileName,fmt)
-    nmbProcLstElementos(lineName,fileName,fmt) 
+
+    retval= dict()
+    dict['nodes']= listNodeSet(line.nodes,fmt) 
+    dict['elements']= elementListFunction(line.elements) 
 
