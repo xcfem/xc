@@ -69,7 +69,7 @@ class SquarePlateWasher(object):
 
     def setFromDict(self,dct):
         ''' Read member values from a dictionary.'''
-        self.bolt= bolts.BoltBase()
+        self.bolt= bolts.BoltBase(diameter= None)
         self.bolt.setFromDict(dct['bolt'])
         self.thickness= dct['thickness']
         self.side= dct['side']

@@ -401,7 +401,7 @@ class LoadCaseDispParameters(RecordDisp):
                 fullgrfname=fullPath+self.loadCaseName+st.name+arg
                 rltvgrfname=rltvPath+self.loadCaseName+st.name+arg
                 grFileName= fullgrfname+'.png'
-                outputHandler.displayIntForc(itemToDisp=arg,setToDisplay=st,fileName= grFileName,orientScbar=1,titleScbar=None)
+                outputHandler.displayIntForc(itemToDisp=arg,setToDisplay=st,fileName= grFileName)
                 capt= self.getCaptionText(setDescr= st.description, captTexts= cfg.capTexts[arg], unitsDescr= cfg.getForceUnitsDescription())
                 output_handler.insertGrInTex(texFile=texFile,grFileNm=rltvgrfname,grWdt=cfg.grWidth,capText=capt)
         #Internal forces displays on sets of «beam» elements

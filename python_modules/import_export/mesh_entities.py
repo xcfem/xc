@@ -24,20 +24,20 @@ class MaterialDict(dict):
 class NodeRecord(object):
     '''Node of a finite element mesh'''
     _ids= count(0) # counter
-    def __init__(self,id, coords):
+    def __init__(self,ident, coords):
         '''
         Node constructor.
 
-        :param id: identifier for the node.
+        :param ident: identifier for the node.
         :param coords: coordinates of the node.
         '''    
         intId= next(self._ids)
-        if(id!=-1):
-           intId= int(id)        
-        self.id= intId
+        if(ident!=-1):
+           intId= int(ident)        
+        self.ident= intId
         self.coords= [coords[0],coords[1],coords[2]]
     def __str__(self):
-        return str(self.id)+' '+str(self.coords)
+        return str(self.ident)+' '+str(self.coords)
     def getX(self):
         return self.coords[0]
     def getY(self):
@@ -45,7 +45,7 @@ class NodeRecord(object):
     def getZ(self):
         return self.coords[2]
     def getXCCommandString(self,nodeHandlerName):
-        strId= str(self.id)
+        strId= str(self.ident)
         strCommand= '.newNodeIDXYZ(' + strId + ',' + self.coords[0] + ',' + self.coords[1] +','+ self.coords[2]+')'
         return 'n' + strId + '= ' + nodeHandlerName + strCommand
     def writeDxf(self,drawing,layerName):
@@ -54,24 +54,24 @@ class NodeRecord(object):
 
 class NodeDict(dict):
     ''' Node container.'''
-    def append(self,id,x,y,z):
-        self[id]= NodeRecord(int(id),[x,y,z])
+    def append(self,ident,x,y,z):
+        self[ident]= NodeRecord(int(ident),[x,y,z])
     def getName(self):
         return 'nodes'
     def readFromDATFile(self,lines,begin,end):
         self.clear()
         for i in range(begin,end):
             line= lines[i]
-            id, x, y ,z = line.split()
-            self.append(id,x,y,z)
+            ident, x, y ,z = line.split()
+            self.append(ident,x,y,z)
     def readFromUMesh(self,umesh):
         nodes= umesh.getCoordinatesAndOwner()
         self.clear()
-        id= 0
+        ident= 0
         for n in nodes:
             pos= n.getInitialPos3d
-            self.append(id,pos.x,pos.y,pos.z)
-            id+= 1
+            self.append(ident,pos.x,pos.y,pos.z)
+            ident+= 1
     def readFromXCSet(self,xcSet):
         nodeSet= xcSet.nodes
         for n in nodeSet:
@@ -101,7 +101,7 @@ class NodeDict(dict):
     def getTags(self):
         retval= list()
         for key in self:
-            retval.append(self[key].id)
+            retval.append(self[key].ident)
         return retval
     def __str__(self):
         retval= ''
@@ -111,31 +111,31 @@ class NodeDict(dict):
 class CellRecord(object):
     ''' Cell object
 
-    :ivar id: identifier for the cell.
+    :ivar ident: identifier for the cell.
     :ivar typ: cell type.
     :ivar nodes: nodes that define block geometry and topology.
     :ivar thk: cell thickness.
     '''
     _ids= count(0) # counter
-    def __init__(self,id, typ, nodes,thk= 0.0):
+    def __init__(self,ident, typ, nodes,thk= 0.0):
         '''
         Cell record constructor.
 
-        :param id: identifier for the cell.
+        :param ident: identifier for the cell.
         :param typ: cell type.
         :param nodes: nodes that define block geometry and topology.
         :param thk: cell thickness.
         '''
         intId= next(self._ids)
-        if(id!=-1):
-           intId= int(id)        
-        self.id= intId
+        if(ident!=-1):
+           intId= int(ident)        
+        self.ident= intId
         self.cellType= typ
         self.nodeIds= nodes
         self.thickness= thk
         
     def __str__(self):
-        return str(self.id)+' '+str(self.cellType)+' '+str(self.nodeIds)
+        return str(self.ident)+' '+str(self.cellType)+' '+str(self.nodeIds)
     
     def getStrXCNodes(self):
         return "xc.ID("+str(self.nodeIds)+')'
@@ -150,7 +150,7 @@ class CellRecord(object):
         return retval
         
     def getXCCommandString(self,xcImportExportData):
-        strId= str(self.id)
+        strId= str(self.ident)
         type= xcImportExportData.convertCellType(self.cellType)
         strType= "'"+type+"'"
         strCommand= xcImportExportData.cellHandlerName + ".defaultTag= "+ strId +'; '
@@ -197,23 +197,23 @@ class CellRecord(object):
 class CellDict(dict):
     '''Cell container.'''
     def append(self,cell):
-        self[cell.id]= cell
+        self[cell.ident]= cell
     def readFromDATFile(self,lines,begin,end):
         self.clear()
         for i in range(begin,end):
           line= lines[i]
           lst= line.split()
           sz= len(lst)
-          id= int(lst[0])
+          ident= int(lst[0])
           type= int(lst[1])
           nodeIds= list()
           for j in range(2,sz):
             nodeIds.append(int(lst[j]))
-          self[id]= CellRecord(id, type, nodeIds)
+          self[ident]= CellRecord(ident= ident, typ= type, nodes= nodeIds)
           
     def readFromUMesh(self,umesh):
         for i in range(0,umesh.getNumberOfCells()):
-          self.append(CellRecord(umesh.getTypeOfCell(i), umesh.getNodeIdsOfCell(i)))
+          self.append(CellRecord(ident= -1, typ= umesh.getTypeOfCell(i), nodes= umesh.getNodeIdsOfCell(i)))
     def readFromXCSet(self,xcSet):
         elemSet= xcSet.elements
         for e in elemSet:
@@ -222,10 +222,10 @@ class CellDict(dict):
           if(numNodes==4):
             tagNodes= [nodes[0],nodes[1],nodes[2],nodes[3]]
             thickness= e.getPhysicalProperties.getVectorMaterials[0].h
-            cell= CellRecord(e.tag,str(e.tag),tagNodes,thickness)
+            cell= CellRecord(ident= e.tag, typ= str(e.tag), nodes= tagNodes, thk= thickness)
           elif(numNodes==2):
             tagNodes= [nodes[0],nodes[1]]
-            cell= CellRecord(e.tag,str(e.tag),tagNodes,0.0)
+            cell= CellRecord(ident= e.tag, typ= str(e.tag), nodes= tagNodes, thk= 0.0)
           self.append(cell)
           
     def writeDxf(self,nodeDict,drawing):
@@ -254,7 +254,7 @@ class CellDict(dict):
     def getTags(self):
         retval= list()
         for key in self:
-          retval.append(self[key].id)
+          retval.append(self[key].ident)
         return retval
     
     def __str__(self):
@@ -264,11 +264,11 @@ class CellDict(dict):
 
 class NodeSupportRecord(be.SupportRecord):
     ''' Constraints for node displacements.'''
-    def __init__(self, id, nodeId, xComp= be.ComponentSupportRecord(), yComp= be.ComponentSupportRecord(), zComp= be.ComponentSupportRecord(), rxComp= be.ComponentSupportRecord('Free'), ryComp= be.ComponentSupportRecord('Free'), rzComp= be.ComponentSupportRecord('Free')):
-        super(NodeSupportRecord,self).__init__(id,xComp,yComp,zComp,rxComp,ryComp,rzComp)
+    def __init__(self, ident, nodeId, xComp= be.ComponentSupportRecord(), yComp= be.ComponentSupportRecord(), zComp= be.ComponentSupportRecord(), rxComp= be.ComponentSupportRecord('Free'), ryComp= be.ComponentSupportRecord('Free'), rzComp= be.ComponentSupportRecord('Free')):
+        super(NodeSupportRecord,self).__init__(ident,xComp,yComp,zComp,rxComp,ryComp,rzComp)
         self.nodeId= nodeId
     def __str__(self):
-        return str(self.id) + ' nodeId: ' + str(self.nodeId) + ' ' + self.getStrConstraints()
+        return str(self.ident) + ' nodeId: ' + str(self.nodeId) + ' ' + self.getStrConstraints()
 
 def getConstraintsByNode(domain):
     retval= defaultdict(list)

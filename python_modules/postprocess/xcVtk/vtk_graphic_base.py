@@ -213,7 +213,6 @@ class DisplaySettings(object):
         self.bgBComp= 0.65
         self.cameraParameters= CameraParameters()
 
-
     def setView(self):
         '''Sets the view'''
         self.renderer.ResetCamera()
@@ -289,7 +288,6 @@ class DisplaySettings(object):
         iren.TerminateApp()
         del self.renWin, iren
         
-
     def displayScene(self,caption= '', fileName= None):
         ''' Displaying scene
 
@@ -316,14 +314,6 @@ class DisplaySettings(object):
         self.gridRecord= RecordDefGrid()
         self.gridRecord.setupSet(xcSet)
         return self.gridRecord
-
-    def displayGrid(self, caption= ''):
-        '''Displays the grid in the output device
-
-        :param caption: caption to display with the scene.
-        '''
-        self.defineMeshScene(None)
-        self.displayScene(caption)
 
     def plot(self,fileName):
         '''Plots window contents

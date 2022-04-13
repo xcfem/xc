@@ -395,7 +395,9 @@ class BoltedPlateBase(plates.Plate):
         else:
             self.computeDimensions()
         if(not ok):
-            lmsg.error('Plate too small for the bolt arrangement. Length= '+str(self.length)+', min. length: '+str(self.getMinLength()))
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.error(className+'.'+methodName+'; plate too small for the bolt arrangement. Length= '+str(self.length)+', min. length: '+str(self.getMinLength()))
  
     def getNetWidth(self):
         ''' Return the net width due to the bolt holes.'''
@@ -403,7 +405,7 @@ class BoltedPlateBase(plates.Plate):
 
     def getNetArea(self):
         ''' Return the net area due to the bolt holes.'''
-        return self.getNetWidth(self.width)*self.thickness
+        return self.getNetWidth()*self.thickness
     
     def checkThickness(self, Pd):
         ''' Check plate thickness; return a number < 1 if the 
@@ -434,13 +436,21 @@ class BoltedPlateBase(plates.Plate):
         else:
             CF= self.getShearStrengthEfficiency(internalForces.N)
         if(abs(internalForces.My)>1e-3):
-            lmsg.error('bending not implemented yet.')
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.error(className+'.'+methodName+'; bending not implemented yet.')
         if(abs(internalForces.Mz)>1e-3):
-            lmsg.error('bending not implemented yet.')
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.error(className+'.'+methodName+'; bending not implemented yet.')
         if(abs(internalForces.Vy)>1e-3):
-            lmsg.error('shear not implemented yet.')
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.error(className+'.'+methodName+'; shear not implemented yet.')
         if(abs(internalForces.Vz)>1e-3):
-            lmsg.error('shear not implemented yet.')
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.error(className+'.'+methodName+'; shear not implemented yet.')
         return CF
 
     def __str__(self):

@@ -110,7 +110,7 @@ class RCMaterialDistribution(object):
             self.sectionDefinition= pickle.load(f)
         f.close()
 
-    def runChecking(self,limitStateData, matDiagType, threeDim= True, outputCfg= lsd.VerifOutVars()):
+    def runChecking(self, limitStateData, matDiagType, threeDim= True, outputCfg= lsd.VerifOutVars()):
         '''Creates the phantom model and runs the verification on it.
 
         :param limitStateData: object that contains the name of the file
@@ -158,11 +158,11 @@ class RCMaterialDistribution(object):
                    elements to be analyzed, append or not the results to a file,
                    generation or not of lists, ...)
         '''
-        (tmp, retval)= self.runChecking(limitStateData, matDiagType, True, outputCfg)
+        (tmp, retval)= self.runChecking(limitStateData= limitStateData, matDiagType= matDiagType, threeDim= True, outputCfg= outputCfg)
         tmp.clearAll() #Free memory.
         return retval
 
-    def internalForcesVerification2D(self,limitStateData, matDiagType, setCalc=None):
+    def internalForcesVerification2D(self, limitStateData, matDiagType, outputCfg):
         '''Limit state verification based on internal force (Fx,Fy,Mz) values.
 
         :param limitStateData: object that contains the name of the file
@@ -172,11 +172,12 @@ class RCMaterialDistribution(object):
                                controller to use for the checking.
         :param matDiagType: type of the material diagram (d: design, 
                k: characteristic).
-        :param setCalc: set of elements to be analyzed (defaults to None which 
-                        means that all the elements in the file of internal forces
-                        results are analyzed) 
+        :param outputCfg: instance of class 'VerifOutVars' which defines the 
+                   variables that control the output of the checking (set of 
+                   elements to be analyzed, append or not the results to a file,
+                   generation or not of lists, ...)
         '''
-        (tmp, retval)= self.runChecking(limitStateData,outputFileName, matDiagType,False,setCalc)
+        (tmp, retval)= self.runChecking(limitStateData= limitStateData, matDiagType= matDiagType, threeDim= False, outputCfg= outputCfg)
         tmp.clearAll() #Free memory.
         return retval
 

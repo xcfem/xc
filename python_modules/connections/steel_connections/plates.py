@@ -83,7 +83,7 @@ class SteelPanel(object):
         ''' Return the vertices of the weld lines expressed
             in local coordinates.'''
         retval= list()
-        ptList= self.getWeldLinesVertices(self)
+        ptList= self.getWeldLinesVertices()
         for p in ptList:
             retval.append(geom.Pos2d(p.x, p.y))
         return retval

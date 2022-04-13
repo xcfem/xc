@@ -139,7 +139,7 @@ class PointRecord(me.NodeRecord):
   
         :param pointHandlerName: name of the point handler
         '''
-        strId= str(self.id)
+        strId= str(self.ident)
         strCommand= '.newPoint(' + strId + ',geom.Pos3d(' + str(self.coords[0]) + ',' + str(self.coords[1]) +','+ str(self.coords[2])+'))'
         propCommand= self.blockProperties.getXCCommandString('pt'+strId)
         if(len(propCommand)>0):
@@ -165,8 +165,8 @@ class PointDict(me.NodeDict):
     ''' Point container.'''
     def append(self,id,x,y,z):
         pr= PointRecord(int(id),[x,y,z])
-        self[pr.id]= pr
-        return pr.id
+        self[pr.ident]= pr
+        return pr.ident
         
     def getName(self):
         return 'points'
@@ -275,7 +275,9 @@ class BlockRecord(me.CellRecord):
         elif(self.cellType=='face'):
             retval= geom.Polygon3d(vertices)
         else:
-            lmsg.error('BlockRecord::getGeomObject not implemented for blocks of type: '+ self.cellType)
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.error(className+'.'+methodName+'; not implemented for blocks of type: '+ self.cellType)
         return retval
       
     def getStrKeyPointsIds(self):
@@ -284,7 +286,7 @@ class BlockRecord(me.CellRecord):
 
     def getXCCommandString(self,xcImportExportData):
         ''' Return the XC Python string defining the object.'''
-        strId= str(self.id)
+        strId= str(self.ident)
         handlerName= xcImportExportData.getBlockHandlerName(self.getType())
         strCommand= None
         pointIds= self.getStrKeyPointsIds()
@@ -298,7 +300,9 @@ class BlockRecord(me.CellRecord):
             else:
                 strCommand= strId + '= ' + handlerName + '.newPolygonalFacePts([' + pointIds  +'])'
         else:
-            lmsg.error('BlockRecord::getXCCommandString not implemented for blocks of type: '+ self.cellType)
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.error(className+'.'+methodName+'; not implemented for blocks of type: '+ self.cellType)
         propCommand= self.blockProperties.getXCCommandString(strId)
         if(len(propCommand)>0):
           strCommand+= '; '+propCommand
@@ -323,7 +327,7 @@ class BlockRecord(me.CellRecord):
 class BlockDict(dict):
     '''Block container.'''    
     def append(self,cell):
-        self[cell.id]= cell
+        self[cell.ident]= cell
         
     def readFromXCSet(self,xcSet):
         ''' Read blocks from XC set.'''
@@ -338,7 +342,9 @@ class BlockDict(dict):
                     thickness= s.getElement(1,1,1).getPhysicalProperties.getVectorMaterials[0].h
                 block= BlockRecord(id= s.tag, typ= 'surface',kPoints= tagPoints,thk= thickness)
             else:
-                lmsg.error('surface with ',str(numPoints), 'points.')
+                className= type(self).__name__
+                methodName= sys._getframe(0).f_code.co_name
+                lmsg.error(className+'.'+methodName+'; surface with ',str(numPoints), ' points.')
             self.append(block)
         lines= xcSet.getLines
         for l in lines:
@@ -396,7 +402,7 @@ class BlockDict(dict):
         ''' Return the identifiers of the objects.'''
         retval= list()
         for key in self:
-          retval.append(self[key].id)
+          retval.append(self[key].ident)
         return retval
     
     def __str__(self):
@@ -412,13 +418,15 @@ class PointSupportRecord(be.SupportRecord):
         self.nodeId= pointId
     def __str__(self):
         ''' Return a string representing the object.'''
-        return str(self.id) + ' nodeId: ' + str(self.nodeId) + ' ' + self.getStrConstraints()
+        return str(self.ident) + ' nodeId: ' + str(self.nodeId) + ' ' + self.getStrConstraints()
 
 class PointSupportDict(dict):
     '''Point to put constraints on.'''
     def append(self, ps):
-        if (ps.nodeId in self):
-            lmsg.warning('support for node: '+ps.nodeId+' redefined.')
+        if(ps.nodeId in self):
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.error(className+'.'+methodName+'; support for node: '+ps.nodeId+' redefined.')
         self[ps.nodeId]= ps
         return ps.nodeId
 
@@ -471,8 +479,8 @@ class BlockData(object):
         :param pointProperties: labels and attributes for the point.
         '''
         pr= PointRecord(id,[x,y,z], pointProperties)
-        self.points[pr.id]= pr 
-        return pr.id
+        self.points[pr.ident]= pr 
+        return pr.ident
         
     def appendBlock(self,block):
         ''' Append a block (line, surface, volume) to the 
@@ -480,8 +488,8 @@ class BlockData(object):
 
         :param block: block to append.
         '''
-        self.blocks[block.id]= block
-        return block.id
+        self.blocks[block.ident]= block
+        return block.ident
 
     def blockFromPoints(self, points, blockProperties, thickness= 0.0, matId= None):
         ''' Create a block with the points and append it
@@ -500,7 +508,9 @@ class BlockData(object):
         elif(len(pointIds)>1):
             block= BlockRecord(-1, 'line', pointIds, blockProperties, thk= thickness, matId= matId)
         else:
-            lmsg.error('At least 2 points required.')
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.error(className+'.'+methodName+'; at least 2 points required.')
         self.appendBlock(block)
         return block
     
@@ -519,10 +529,14 @@ class BlockData(object):
         self.name= xcSet.name
         retval= self.points.readFromXCSet(xcSet)
         if(self.verbosity>0):
-            lmsg.log(str(len(self.points))+ ' points read.')
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.log(className+'.'+methodName+'; '+str(len(self.points))+' points read.')
         retval+= self.blocks.readFromXCSet(xcSet)
         if(self.verbosity>0):
-            lmsg.log(str(len(self.blocks))+ ' blocks read.')
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.log(className+'.'+methodName+'; '+str(len(self.blocks))+ ' blocks read.')
         retval+= self.pointSupports.readFromXCSet(xcSet,self.points)
         return retval
 
@@ -599,14 +613,14 @@ class BlockData(object):
         ''' Return the identifiers of the points.'''
         tags= []
         for key in self.points:
-            tags.append(self.points[key].id)
+            tags.append(self.points[key].ident)
         return tags
 
     def getBlockTags(self):
         ''' Return the identifiers of the blocks.'''
         tags= []
         for key in self.blocks:
-            tags.append(self.blocks[key].id)
+            tags.append(self.blocks[key].ident)
         return tags
 
     def hasHoles(self):

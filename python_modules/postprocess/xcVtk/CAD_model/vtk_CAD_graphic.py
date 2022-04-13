@@ -72,7 +72,8 @@ class DisplaySettingsBlockTopo(vtk_graphic_base.DisplaySettings):
         :param caption: text to display in the graphic.
         '''
         self.setupGrid(setToDisplay)
-        self.displayGrid(caption)
+        self.defineMeshScene()
+        self.displayScene(caption= caption)
 
     def displayBlockEntities(self, setToDisplay, caption, fileName= None):
         ''' Display geometric entities (points, lines, surfaces and volumes)

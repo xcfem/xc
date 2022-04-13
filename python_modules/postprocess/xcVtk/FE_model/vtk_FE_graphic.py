@@ -189,11 +189,11 @@ class DisplaySettingsFE(vtk_graphic_base.DisplaySettings):
         self.cameraParameters= cameraParameters
         self.displayFEMesh(setToDisplay,caption,defFScale)
 
-    def displayFEMesh(self,setToDisplay,caption= '',defFScale=0.0):
+    def displayFEMesh(self, setToDisplay, caption= '', defFScale=0.0):
         ''' Graphic of the FE mesh
 
-        :param setToDisplay:   XC set of elements to be displayed
-        :param caption: text to write in the graphic
+        :param setToDisplay: XC set of elements to be displayed.
+        :param caption: text title to write in the graphic.
         :param defFScale: factor to apply to current displacement of nodes 
                    so that the display position of each node equals to
                    the initial position plus its displacement multiplied
@@ -201,7 +201,8 @@ class DisplaySettingsFE(vtk_graphic_base.DisplaySettings):
                    initial/undeformed shape)
         '''
         self.setupGrid(setToDisplay)
-        self.displayGrid(caption)
+        self.defineMeshScene(field= None)
+        self.displayScene(caption= caption)
         
     def displayLocalAxes(self,setToDisplay,caption= 'local axis', vectorScale=1.0, fileName= None, defFScale= 0.0):
         '''Display the element local axes.

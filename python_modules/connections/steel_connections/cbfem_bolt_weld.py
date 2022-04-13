@@ -100,7 +100,9 @@ class Bolt(object):
             elif 'Node' in ent.type():
                 nodLst.append(ent)
             else:
-                lmsg.error('entities in the list must be points or nodes')
+                className= type(self).__name__
+                methodName= sys._getframe(0).f_code.co_name
+                lmsg.error(className+'.'+methodName+'; entities in the list must be points or nodes.')
         linname= str(uuid.uuid1())
         lin=prep.getTransfCooHandler.newLinearCrdTransf3d(linname)
         lin.xzVector=predefined_spaces.getSuitableXZVector(nodLst[0],nodLst[1])
@@ -309,7 +311,9 @@ class BaseWeld(object):
                 self.weldP1=self.weldLine.getFromPoint()
                 self.weldP2=self.weldLine.getToPoint()
         else:
-            lmsg.error('Missing geometric definition of weld '+ self.descr + ' two points or one line is needed')
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.error(className+'.'+methodName+'; missing geometric definition of weld '+ self.descr + ' two points or one line is needed')
         self.length= self.weldP1.dist(self.weldP2)
         if not nDiv: nDiv= int(round(self.length/(self.weldSz)))
         distWeldEl= self.length/nDiv
@@ -320,7 +324,9 @@ class BaseWeld(object):
         
         if not self.setName: self.setName=str(uuid.uuid1())
         if prep.getSets.exists(self.setName):
-            lmsg.warning('Set ',self.setName, ' already defined, check if weld elements should be in a new set')
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.warning(className+'.'+methodName+'; set '+self.setName+' already defined, check if weld elements should be in a new set.')
         self.weldSet= prep.getSets.defSet(self.setName)
 
         # surfaces thickness
@@ -765,7 +771,9 @@ def gen_bolts_xc_conn_model(modelSpace,matchedBolts):
                 n= pntB.getNode()
                 modelSpace.fixNode000_000(n.tag)
     else:
-        lmsg.warning('matched bolts is empty.')
+        className= type(self).__name__
+        methodName= sys._getframe(0).f_code.co_name
+        lmsg.warning(className+'.'+methodName+'; matched bolts is empty.')
     return boltSets2Check
     
 def gen_welds_xc_conn_model(welds , weldMetal, weldSzFactor= None, avlbWeldSz= None):
@@ -788,7 +796,9 @@ def gen_welds_xc_conn_model(welds , weldMetal, weldSzFactor= None, avlbWeldSz= N
         # otherwise this correction factor = -1 (the orientation is changed)
         vWS1= w.memberToWeld.getKVector
         if(len(w.memberToWeld.elements)<1):
-            lmsg.error('attached member has no elements.')
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.error(className+'.'+methodName+'; attached member has no elements.')
             print(w.memberToWeld.name)
             print(l.name)
         vWS1el= w.memberToWeld.elements[0].getKVector3d(True)
@@ -851,7 +861,9 @@ def change_weld_size(xcWelds,welds2change):
         t1= welds2change[wch]['t1']
         newSize= welds2change[wch]['newSize']
         for w in xcWelds:
-            lmsg.info('weld size changed')
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.info(className+'.'+methodName+'; weld size changed')
             wt1= w.memberToWeld.elements[0].getPhysicalProperties.getVectorMaterials[0].h
             if (name in w.getDescription().lower()) and (abs(oldSize-w.legSize)<1e-4) and (abs(t1-wt1)<1e-4):
                 w.setLegSize(newSize)
