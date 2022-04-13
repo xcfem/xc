@@ -139,7 +139,14 @@ class LoadVectorField(LoadOnPoints):
         :param actLP: list of active load patterns
         '''
         retval= dict()
-        comp_i= self.components[0]; comp_j= self.components[1]; comp_k= self.components[2]
+        dim= len(self.components)
+        comp_i= None; comp_j= None; comp_k= None
+        if(dim>1):
+            comp_i= self.components[0];
+            comp_j= self.components[1];
+            comp_k= self.components[2]
+        else:
+            comp_k= self.components[0]
         for lp in actLP:
             lIter= lp.loads.getNodalLoadIter
             nl= lIter.next()
@@ -150,7 +157,10 @@ class LoadVectorField(LoadOnPoints):
                 if nTag in nTagsSet:
                     node= preprocessor.getNodeHandler.getNode(nTag)
                     vLoad= nl.getLoadVector
-                    v= xc.Vector([vLoad[comp_i], vLoad[comp_j], vLoad[comp_k]])
+                    if(dim>1):
+                        v= xc.Vector([vLoad[comp_i], vLoad[comp_j], vLoad[comp_k]])
+                    else:
+                        v= xc.Vector([0.0, 0.0, vLoad[comp_k]])
                     if(v.Norm()>1e-6):
                         if nTag in retval:
                             retval[nTag]+= v

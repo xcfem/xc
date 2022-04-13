@@ -537,7 +537,7 @@ class OutputHandler(object):
         displaySettings.displayScene(caption,fileName)
         return displaySettings
         
-    def displayLoads(self,  setToDisplay=None,elLoadComp='xyzComponents',fUnitConv=1,caption= None,fileName=None,defFScale=0.0, scaleConstr= 0.2):
+    def displayLoads(self,  setToDisplay=None, elLoadComp='xyzComponents',fUnitConv=1,caption= None,fileName=None, defFScale=0.0, scaleConstr= 0.2):
         '''Display the loads applied on beam elements and nodes for a given load case
 
         :param setToDisplay: set of beam elements to be represented (defaults to TotalSet)
@@ -595,28 +595,23 @@ class OutputHandler(object):
                                       multiplyByElementArea= self.outputStyle.multLoadsByElemArea)
         count= vFieldEl.dumpElementalLoads(preprocessor, defFScale=defFScale)
         if(count >0):
-            vFieldEl.addToDisplay(displaySettings,orientation= scOrient,
-                                  title='Surface loads ('+self.getOutputForceUnitSym()+'/'+
-                                  self.getOutputLengthUnitSym()+'2)' )
+            vFieldEl.addToDisplay(displaySettings,orientation= scOrient, title='Surface loads ('+self.getOutputForceUnitSym()+'/'+self.getOutputLengthUnitSym()+'2)' )
             scOrient+=1
         # nodal loads
         ## forces on nodes.
-        vFieldFNod= lvf.LoadVectorField(loadPatternName= loadCaseName,
-                                       setToDisp=setToDisplay, fUnitConv= unitConversionFactor,
-                                       scaleFactor= vectorScale, showPushing= self.outputStyle.showLoadsPushing)
+        vFieldFNod= lvf.LoadVectorField(loadPatternName= loadCaseName, setToDisp=setToDisplay, fUnitConv= unitConversionFactor, scaleFactor= vectorScale, showPushing= self.outputStyle.showLoadsPushing)
         count= vFieldFNod.dumpNodalLoads(preprocessor, defFScale=defFScale)
         if(count >0):
-            vFieldFNod.addToDisplay(displaySettings,orientation= scOrient,
-                                   title='Nodal loads ('+self.getOutputForceUnitSym()+')')
+            vFieldFNod.addToDisplay(displaySettings,orientation= scOrient, title='Nodal loads ('+self.getOutputForceUnitSym()+')')
             scOrient+=1
+        momentComponents= [3,4,5]
+        if(self.modelSpace.getSpaceDimension()==2): # 2D problem
+            momentComponents= [2]
         ## moments on nodes.
-        vFieldMNod= lvf.LoadVectorField(loadPatternName= loadCaseName,
-                                       setToDisp=setToDisplay, fUnitConv= unitConversionFactor,
-                                       scaleFactor= vectorScale, showPushing= self.outputStyle.showLoadsPushing, components= [3,4,5])
+        vFieldMNod= lvf.LoadVectorField(loadPatternName= loadCaseName, setToDisp=setToDisplay, fUnitConv= unitConversionFactor, scaleFactor= vectorScale, showPushing= self.outputStyle.showLoadsPushing, components= momentComponents)
         count= vFieldMNod.dumpNodalLoads(preprocessor, defFScale=defFScale)
         if(count >0):
-            vFieldMNod.addToDisplay(displaySettings,orientation= scOrient,
-                                   title='Nodal moments ('+self.getOutputForceUnitSym()+')')
+            vFieldMNod.addToDisplay(displaySettings,orientation= scOrient, title='Nodal moments ('+self.getOutputForceUnitSym()+')')
             scOrient+=1
         if(not caption):
           caption= 'load case: ' + loadCaseName +' '+elLoadComp + ', set: ' + setToDisplay.name + ', '  + unitDescription
