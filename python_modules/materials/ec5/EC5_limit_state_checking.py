@@ -18,64 +18,6 @@ from postprocess import callback_controls
 from postprocess import prop_statistics as ps
 
 
-class EC5TimberRectCrossSection(section_properties.RectangularSection):
-    '''Timber section with Eurocode 5 verification routines.'''
-    def __init__(self,name,b,h,E,nu,fyd,taud):
-        super(EC5TimberRectCrossSection,self).__init__(name,b,h,E,nu)
-        self.fyd= fyd
-        self.taud= taud
-
-    def setupULSControlVars2d(self, elems):
-        '''For each element creates the variables
-           needed to check ultimate limit state criterion to satisfy.
-
-        :param elems: elements to define properties on.
-        '''
-        def_vars_control.defVarsControlTensRegElastico2d(elems)
-        W= self.Wzel()
-        for e in elems:
-            e.setProp("fyd",self.fyd)
-            e.setProp("fydV",self.taud)
-            e.setProp("Wel",W)
-
-    def setupULSControlVars3d(self, elems):
-        '''For each element creates the variables
-           needed to check ultimate limit state criterion to satisfy.
-
-        :param elems: elements to define properties on.
-        '''
-        def_vars_control.defVarsControlTensRegElastico3d(elems)
-        Wz= self.Wzel()
-        Wy= self.Wyel()
-        for e in elems:
-            e.setProp("fyd",self.fyd)
-            e.setProp("fydV",self.taud)
-            e.setProp("Wyel",Wy)
-            e.setProp("AreaQy",0.9*self.A())
-            e.setProp("Wzel",Wz)
-            e.setProp("AreaQz",self.A()-e.getProp("AreaQy"))
-
-    def installElementElasticStressesControlRecorder(self, recorderName, elemSet):
-        ''' Define recorder
-
-        :param recorderName: recorder name.
-        :param elemSet: elements to define recorder on.
-        '''
-        preprocessor= elemSet.owner.getPreprocessor
-        nodes= preprocessor.getNodeHandler
-        domain= preprocessor.getDomain
-        recorder= domain.newRecorder(recorderName,None)
-        recorder.setElements(elemSet.getTags())
-        if(nodes.numDOFs==3):
-            self.setupULSControlVars2d(elemSet)
-            recorder.callbackRecord= callback_controls.controTensRecElastico2d()
-        else:
-            self.setupULSControlVars3d(elemSet)
-            recorder.callbackRecord= callback_controls.controTensRecElastico3d()
-
-        recorder.callbackRestart= "print(\"Restart method called.\")"
-        return recorder
-
 def printResultsELU(elems,crossSection):
     '''print(ULS results.)'''
     fmt= "{:6.1f}"

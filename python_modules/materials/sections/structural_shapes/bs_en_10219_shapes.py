@@ -37,7 +37,7 @@ class CFSHSShape(structural_steel.QHShape):
         :param steel: steel material.
         :param name: shape name (i.e. 'CFSHS300x300x10.0')
         '''
-        super(CFSHSShape,self).__init__(steel,name,CFSHS)
+        super(CFSHSShape, self).__init__(steel,name,CFSHS)
 
     def t(self):
         '''Return the wall thickness.'''
@@ -68,7 +68,7 @@ class CFRHSShape(structural_steel.QHShape):
         :param steel: steel material.
         :param name: shape name (i.e. 'RHS20x40x2.0')
         '''
-        super(RHSShape,self).__init__(steel,name,CFRHS)
+        super(CFRHSShape, self).__init__(steel,name,CFRHS)
 
     def t(self):
         '''Return the wall thickness'''
@@ -96,7 +96,7 @@ class CFCHSShape(structural_steel.SteelShape):
         :param steel: steel material.
         :param name: shape name (i.e. '"CFSHS350x350x12.5')
         '''
-        super(CHSShape,self).__init__(steel,name,CFCHS)
+        super(CFCHSShape, self).__init__(steel,name,CFCHS)
         
     def getRho(self):
         ''' Returns mass per unit length. '''

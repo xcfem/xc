@@ -344,7 +344,7 @@ class BlockDict(dict):
             else:
                 className= type(self).__name__
                 methodName= sys._getframe(0).f_code.co_name
-                lmsg.error(className+'.'+methodName+'; surface with ',str(numPoints), ' points.')
+                lmsg.error(className+'.'+methodName+'; surface with '+str(numPoints)+' points.')
             self.append(block)
         lines= xcSet.getLines
         for l in lines:

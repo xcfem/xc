@@ -7,123 +7,169 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
-def listBarSetInternalForces(preprocessor,nmbComb, setName, fmt, fName):
-    ''' Print internal forces on the elements in the set argument.'''
-    str= "" 
-    k= 0
-    s= preprocessor.getSets.getSet(setName)
-    elems= s.elements
-    for e in elements:
-        str= nmbComb+" & "+e.tag+" & "
-        k= 0
+def listBarSetInternalForces(nmbComb, xcSet, fmt, outputFile):
+    ''' Print internal forces on the elements in the set argument.
+
+    :param nmbComb: name of the load combination.
+    :param xcSet: XC set containing the nodes.
+    :param fmt: format for numbers.
+    :param outputFile: output file name.
+    :param ltxSectioning: latex sectioning command (chapter, section,...).
+    :param title: title.
+    '''
+    outStr= "" 
+    for e in xcSet.elements:
+        outStr= nmbComb+" & "+e.tag+" & "
         sections= e.getSections()
-        for s in sections:
-            fName.write(str,k," & ")
-            fName.write(fmt.format(e.getProp("N")/1e3)," & ",fmt.format(e.getProp("Vy")/1e3)," & ",fmt.format(e.getProp("Vz")/1e3)," & ")
-            fName.write(fmt.format(e.getProp("Mx")/1e3)," & ",fmt.format(e.getProp("My")/1e3)," & ",fmt.format(e.getProp("Mz")/1e3),"\\\\\n")
-            k=k+1
+        for k, s in enumerate(sections):
+            outputFile.write(outStr,k+" & ")
+            outputFile.write(fmt.format(e.getProp("N")/1e3)+" & "+fmt.format(e.getProp("Vy")/1e3)+" & "+fmt.format(e.getProp("Vz")/1e3)+" & ")
+            outputFile.write(fmt.format(e.getProp("Mx")/1e3)+" & "+fmt.format(e.getProp("My")/1e3)+" & "+fmt.format(e.getProp("Mz")/1e3)+"\\\\\n")
 
 
-def listLineSetInternalForces(preprocessor, nmbComb, setNameLineas, fmt, fName, encab, tit):
+def listLineSetInternalForces(nmbComb, xcSet, fmt, outputFile, ltxSectioning, title):
     ''' Print internal forces on the elements of the lines in the
-        set argument.'''
-    fName.write("\\",encab,"{",tit,"}\n")
-    caption= "Bars on set: "+setNameLineas
+        set argument.
+
+    :param nmbComb: name of the load combination.
+    :param xcSet: XC set containing the nodes.
+    :param fmt: format for numbers.
+    :param outputFile: output file name.
+    :param ltxSectioning: latex sectioning command (chapter, section,...).
+    :param title: title.
+    '''
+    outputFile.write("\\"+ltxSectioning+"{"+title+"}\n")
+    caption= "Bars on set: "+xcSet.name
     defCampos= "|l|r|r|r|r|r|r|r|r|"
     idsCampos= "Caso & Id & Secc. & N & Vy & Vz & Mx & My & Mz \\\\\n - & - & - & kN & kN & kN & kN m & kN m & kN m "
-    cabeceraSupertabular(fName,9,defCampos,idsCampos,caption) 
+    cabeceraSupertabular(outputFile,9,defCampos,idsCampos,caption) 
 
-    s= preprocessor.getSets.getSet(setNameLineas)
-    lines= s.getLines()
-    for l in lines:
+    for l in xcSet.lines:
         nmb= l.getName() 
-        fName.write("\hline\n")
-        fName.write("\multicolumn{9}{|l|}{Internal forces of bars on the line: ",nmb,"}\\\\\n")
-        fName.write("\hline\n")
-        listBarSetInternalForces(nmbComb,nmb,fmt,fName) 
-    cierraSupertabular(fName)
+        outputFile.write("\hline\n")
+        outputFile.write("\multicolumn{9}{|l|}{Internal forces of bars on the line: "+nmb+"}\\\\\n")
+        outputFile.write("\hline\n")
+        listBarSetInternalForces(nmbComb,nmb,fmt,outputFile) 
+    cierraSupertabular(outputFile)
 
-def listBarSetInternalForcesAndCF(preprocessor, nmbComb, setName, fmt, fName, nmbDiag):
-    '''Print internal forces and capacity factor of the elements contained in the
-       argument set.'''
-    str= "" 
-    k= 0
-    s= preprocessor.getSets.getSet(setName)
-    elems= s.elements
-    for e in elements:
-        str= nmbComb+" & "+e.tag+" & "
-        k= 0
+def listBarSetInternalForcesAndCF(nmbComb, xcSet, fmt, outputFile, nmbDiag):
+    '''Print internal forces and capacity factor of the elements contained 
+       in the argument set.
+
+    :param nmbComb: name of the load combination.
+    :param xcSet: XC set containing the nodes.
+    :param fmt: format for numbers.
+    :param outputFile: output file name.
+    :param ltxSectioning: latex sectioning command (chapter, section,...).
+    :param title: title.
+    '''
+    outStr= "" 
+    for e in xcSet.elements:
+        outStr= nmbComb+" & "+e.tag+" & "
         sections= e.getSections()
-        for s in sections:
-            fName.write(str,k," & ")
-            fName.write(fmt.format(e.getProp("N")/1e3)," & ",fmt.format(e.getProp("Vy")/1e3)," & ",fmt.format(e.getProp("Vz")/1e3)," & ")
-            fName.write(fmt.format(e.getProp("Mx")/1e3)," & ",fmt.format(e.getProp("My")/1e3)," & ",fmt.format(e.getProp("Mz")/1e3)," & ",fmt.format(getCapacityFactor(nmbDiag)),"\\\\\n")
-            k=k+1
+        for k, s in enumerate(sections):
+            outputFile.write(outStr,k+" & ")
+            outputFile.write(fmt.format(e.getProp("N")/1e3)+" & "+fmt.format(e.getProp("Vy")/1e3)+" & "+fmt.format(e.getProp("Vz")/1e3)+" & ")
+            outputFile.write(fmt.format(e.getProp("Mx")/1e3)+" & "+fmt.format(e.getProp("My")/1e3)+" & "+fmt.format(e.getProp("Mz")/1e3)+" & "+fmt.format(getCapacityFactor(nmbDiag))+"\\\\\n")
 
-def listLineSetInternalForcesAndCF(nmbComb, setNameLineas, fmt, fName, encab, tit, nmbDiag):
-    '''Print internal forces and capacity factor of the elements contained in the
-       lines of the argument set.'''
-    fName.write("\\",encab,"{",tit,"}\n")
-    caption= "Bars of the set: "+setNameLineas
+def listLineSetInternalForcesAndCF(nmbComb, xcSet, fmt, outputFile, ltxSectioning, title, nmbDiag):
+    '''Print internal forces and capacity factor of the elements contained 
+       in the lines of the argument set.
+
+    :param nmbComb: name of the load combination.
+    :param xcSet: XC set containing the nodes.
+    :param fmt: format for numbers.
+    :param outputFile: output file name.
+    :param ltxSectioning: latex sectioning command (chapter, section,...).
+    :param title: title.
+    :param nmbDiag: name of the interaction diagram.
+    '''
+    outputFile.write("\\"+ltxSectioning+"{"+title+"}\n")
+    caption= "Bars of the set: "+xcSet.name
     defCampos= "|l|r|r|r|r|r|r|r|r|r|"
     idsCampos= "Caso & Id & Secc. & N & Vy & Vz & Mx & My & Mz & FC \\\\\n - & - & - & kN & kN & kN & kN m & kN m & kN m & - "
-    cabeceraSupertabular(fName,10,defCampos,idsCampos,caption) 
+    cabeceraSupertabular(outputFile,10,defCampos,idsCampos,caption) 
 
-    s= preprocessor.getSets.getSet(setNameLineas)
-    lines= s.getLines()
-    for l in lines:
+    for l in xcSet.lines:
         nmb= l.getName()
-        fName.write("\hline\n")
-        fName.write("\multicolumn{10}{|l|}{Internal forces on the bars of the line: ",nmb,"}\\\\\n")
-        fName.write("\hline\n")
-        listBarSetInternalForcesAndCF(nmbComb,nmb,fmt,fName,nmbDiag) 
-    cierraSupertabular(fName) 
+        outputFile.write("\hline\n")
+        outputFile.write("\multicolumn{10}{|l|}{Internal forces on the bars of the line: "+nmb+"}\\\\\n")
+        outputFile.write("\hline\n")
+        listBarSetInternalForcesAndCF(nmbComb,l,fmt,outputFile,nmbDiag) 
+    cierraSupertabular(outputFile) 
 
-def listaDatosEsfuerzosTrussSet(nmbComb, setName, fmt, fName):
-    ''' Print internal forces on the truss elements in the set argument.'''
-    s= preprocessor.getSets.getSet(setName)
-    elems= s.elements
-    for e in elements:
-        fName.write(nmbComb," & ",e.tag," & ",fmt.format(e.getStrain()*1e2)," & ",fmt.format(e.getStress()/1e6)," & ",fmt.format(e.getN()/1e3),"\\\\\n")
+def listaDatosEsfuerzosTrussSet(nmbComb, xcSet, fmt, outputFile):
+    ''' Print internal forces on the truss elements in the set argument.
 
-def listaEsfuerzosTrussSet(nmbComb, setName, fmt, fName, encab, tit):
-    fName.write("\\",encab,"{",tit,"}\n")
-    caption= "Bars of the set: "+setName
+    :param nmbComb: name of the load combination.
+    :param xcSet: XC set containing the nodes.
+    :param fmt: format for numbers.
+    :param outputFile: output file name.
+    '''
+    for e in xcSet.elements:
+        outputFile.write(nmbComb+" & "+e.tag+" & "+fmt.format(e.getStrain()*1e2)+" & "+fmt.format(e.getStress()/1e6)+" & "+fmt.format(e.getN()/1e3)+"\\\\\n")
+
+def listaEsfuerzosTrussSet(nmbComb, xcSet, fmt, outputFile, ltxSectioning, title):
+    ''' Print internal forces on the truss elements in the set argument.
+
+    :param nmbComb: name of the load combination.
+    :param xcSet: XC set containing the nodes.
+    :param fmt: format for numbers.
+    :param outputFile: output file name.
+    :param ltxSectioning: latex sectioning command (chapter, section,...).
+    :param title: title.
+    '''
+    outputFile.write("\\"+ltxSectioning+"{"+title+"}\n")
+    caption= "Bars of the set: "+xcSet.name
     defCampos= "|l|r|r|r|r|"
     idsCampos= "Caso & Id & $\\epsilon$ & $\\sigma$ & axil \\\\\n - & - & \\% & MPa & kN "
-    cabeceraSupertabular(fName,5,defCampos,idsCampos,caption) 
-    listaDatosEsfuerzosTrussSet(nmbComb,setName,fmt,fName) 
-    cierraSupertabular(fName) 
+    cabeceraSupertabular(outputFile,5,defCampos,idsCampos,caption) 
+    listaDatosEsfuerzosTrussSet(nmbComb,xcSet,fmt,outputFile) 
+    cierraSupertabular(outputFile)
 
-def listaEsfuerzosTrussLineas(nmbComb, setNameLineas, fmt, fName, encab, tit):
+def listaEsfuerzosTrussLineas(nmbComb, xcSet, fmt, outputFile, ltxSectioning, title):
     ''' Print internal forces on the truss elements of the lines in the
-        set argument.'''
-    fName.write("\\",encab,"{",tit,"}\n")
-    caption= "Bars of the set: "+setNameLineas
+        set argument.
+
+    :param nmbComb: name of the load combination.
+    :param xcSet: XC set containing the nodes.
+    :param fmt: format for numbers.
+    :param outputFile: output file name.
+    :param ltxSectioning: latex sectioning command (chapter, section,...).
+    :param title: title.
+    '''
+    outputFile.write("\\"+ltxSectioning+"{"+title+"}\n")
+    caption= "Bars of the set: "+xcSet.name
     defCampos= "|l|r|r|r|r|"
     idsCampos= "Caso & Id & $\\epsilon$ & $\\sigma$ & axil \\\\\n - & - & \\% & MPa & kN "
-    cabeceraSupertabular(fName,5,defCampos,idsCampos,caption) 
+    cabeceraSupertabular(outputFile,5,defCampos,idsCampos,caption) 
 
-    s= preprocessor.getSets.getSet(setNameLineas)
-    lines= s.getLines()
-    for l in lines:
+    for l in xcSet.lines:
         nmb= l.getName()
-        fName.write("\hline\n")
-        fName.write("\multicolumn{5}{|l|}{Esfuerzos en elementos linea: ",nmb,"}\\\\\n")
-        fName.write("\hline\n")
-        listaDatosEsfuerzosTrussSet(nmbComb,nmb,fmt,fName) 
-    cierraSupertabular(fName) 
+        outputFile.write("\hline\n")
+        outputFile.write("\multicolumn{5}{|l|}{Esfuerzos en elementos linea: "+nmb+"}\\\\\n")
+        outputFile.write("\hline\n")
+        listaDatosEsfuerzosTrussSet(nmbComb,nmb,fmt,outputFile) 
+    cierraSupertabular(outputFile) 
 
-def listaEsfuerzosZeroLengthSet(nmbComb, setName, fmt, fName, encab, tit):
+def listaEsfuerzosZeroLengthSet(nmbComb, xcSet, fmt, outputFile, ltxSectioning, title):
     ''' Print internal forces on the zero length elements in the 
-        set argument.'''
-    fName.write("\\",encab,"{",tit,"}\n")
-    caption= "Elementos del conjunto: "+setName
+        set argument.
+
+    :param nmbComb: name of the load combination.
+    :param xcSet: XC set containing the nodes.
+    :param fmt: format for numbers.
+    :param outputFile: output file name.
+    :param ltxSectioning: latex sectioning command (chapter, section,...).
+    :param title: title.
+    '''
+    outputFile.write("\\"+ltxSectioning+"{"+title+"}\n")
+    caption= "Elementos del conjunto: "+xcSet.name
     defCampos= "|l|r|r|r|r|r|r|r|"
     idsCampos= "Caso & Id & N & Vx & Vy & T & Mx & My \\\\\n - & - & kN & kN & kN & kN m & kN m & kN m "
-    cabeceraSupertabular(fName,8,defCampos,idsCampos,caption) 
+    cabeceraSupertabular(outputFile,8,defCampos,idsCampos,caption) 
 
-    str= "" 
+    outStr= "" 
     k= 0
     VX= 0
     VY= 0
@@ -131,10 +177,8 @@ def listaEsfuerzosZeroLengthSet(nmbComb, setName, fmt, fName, encab, tit):
     T= 0
     momY= 0
     momZ= 0
-    s= preprocessor.getSets.getSet(setName)
-    elems= s.elements
-    for e in elements:
-        str= nmbComb+" & "+e.tag+" & "
+    for e in xcSet.elements:
+        outStr= nmbComb+" & "+e.tag+" & "
         mats= e.getMaterials()
         VX= mats[0].getStress()
         VY= mats[1].getStress()
@@ -143,21 +187,25 @@ def listaEsfuerzosZeroLengthSet(nmbComb, setName, fmt, fName, encab, tit):
         momY= mats[4].getStress()
         momZ= mats[5].getStress()
 
-        fName.write(str)
-        fName.write(fmt.format(N/1e3)," & ",fmt.format(VX/1e3)," & ",fmt.format(VY/1e3)," & ")
-        fName.write(fmt.format(T/1e3)," & ",fmt.format(momY/1e3)," & ",fmt.format(momZ/1e3),"\\\\\n")
-    cierraSupertabular(fName) 
+        outputFile.write(outStr)
+        outputFile.write(fmt.format(N/1e3)+" & "+fmt.format(VX/1e3)+" & "+fmt.format(VY/1e3)+" & ")
+        outputFile.write(fmt.format(T/1e3)+" & "+fmt.format(momY/1e3)+" & "+fmt.format(momZ/1e3)+"\\\\\n")
+    cierraSupertabular(outputFile) 
 
-def listaEsfuerzosElasticBeam3dSet(preprocessor, nmbComb, setName, fmt, fName):
+def listaEsfuerzosElasticBeam3dSet(nmbComb, xcSet, fmt, outputFile):
     ''' Print internal forces on the truss elements of the lines in the
-        set argument.'''
-    s= preprocessor.getSets.getSet(setName)
-    elems= s.elements
-    for e in elements:
-        str= nmbComb+" & "+e.tag+" & "
-        fName.write(str,1," & ")
-        fName.write(fmt.format(e.getProp("N1")/1e3)," & ",fmt.format(e.getProp("Vy")/1e3)," & ",fmt.format(e.getProp("Vz")/1e3)," & ")
-        fName.write(fmt.format(e.getProp("T")/1e3)," & ",fmt.format(e.getProp("My1")/1e3)," & ",fmt.format(e.getProp("Mz1")/1e3),"\\\\\n")
-        fName.write(str,2," & ")
-        fName.write(fmt.format(e.getProp("N2")/1e3)," & ",fmt.format(e.getProp("Vy")/1e3)," & ",fmt.format(e.getProp("Vz")/1e3)," & ")
-        fName.write(fmt.format(e.getProp("T")/1e3)," & ",fmt.format(e.getProp("My2")/1e3)," & ",fmt.format(e.getProp("Mz2")/1e3),"\\\\\n")
+        set argument.
+
+    :param nmbComb: name of the load combination.
+    :param xcSet: XC set containing the nodes.
+    :param fmt: format for numbers.
+    :param outputFile: output file name.
+    '''
+    for e in xcSet.elements:
+        outStr= nmbComb+" & "+e.tag+" & "
+        outputFile.write(outStr,1+" & ")
+        outputFile.write(fmt.format(e.getProp("N1")/1e3)+" & "+fmt.format(e.getProp("Vy")/1e3)+" & "+fmt.format(e.getProp("Vz")/1e3)+" & ")
+        outputFile.write(fmt.format(e.getProp("T")/1e3)+" & "+fmt.format(e.getProp("My1")/1e3)+" & "+fmt.format(e.getProp("Mz1")/1e3)+"\\\\\n")
+        outputFile.write(outStr,2+" & ")
+        outputFile.write(fmt.format(e.getProp("N2")/1e3)+" & "+fmt.format(e.getProp("Vy")/1e3)+" & "+fmt.format(e.getProp("Vz")/1e3)+" & ")
+        outputFile.write(fmt.format(e.getProp("T")/1e3)+" & "+fmt.format(e.getProp("My2")/1e3)+" & "+fmt.format(e.getProp("Mz2")/1e3)+"\\\\\n")

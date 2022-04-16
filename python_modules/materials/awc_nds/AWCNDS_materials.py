@@ -833,7 +833,9 @@ class WoodPanelSection(WoodRectangularSection):
         elif(self.name=='1-1/8'):
             spanRating= '48/24'
         else:
-            lmsg.error('name: ', self.name, 'unknown')
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.error(className+'.'+methodName+'; name: '+ self.name+ ' unknown.')
         return spanRating
     
     def getAPARatedSturdIFloor(self):
@@ -867,7 +869,9 @@ class WoodPanelSection(WoodRectangularSection):
         elif(self.name=='1-1/8'):
             spanRating= '48oc'
         else:
-            lmsg.error('name: ', self.name, 'unknown')
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.error(className+'.'+methodName+'; name: '+ self.name+ ' unknown.')
         return spanRating
 
 

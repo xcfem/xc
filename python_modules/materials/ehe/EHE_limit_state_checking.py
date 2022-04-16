@@ -1425,7 +1425,6 @@ class CrackControl(lscb.CrackControlBaseParameters):
             self.tensionedRebars.setup(tensionedReinforcement)
             self.Wk= self.computeWkOnBars(tensionedReinforcement)
 
-
     def check(self,elements,combName):
         ''' Crack control of concrete sections.'''
         if(self.verbose):
@@ -1438,7 +1437,7 @@ class CrackControl(lscb.CrackControlBaseParameters):
         concrFctm= concrete.getProp("fctm")
         reinforcement= materialHandler.getMaterial(reinforcementCode)
         for e in elements:
-            scc= elements.getSection()
+            scc= e.getSection()
             Ntmp= scc.N
             MyTmp= scc.My
             MzTmp= scc.Mz

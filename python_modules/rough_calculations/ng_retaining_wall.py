@@ -91,9 +91,11 @@ class InternalForces(object):
         self.MdFooting*=f
         self.VdFooting*=f
         return self
+    
     def clone(self):
         ''' Return a copy of this object.'''
-        return InternalForces(self.mdEnvelope, self.vdEnvelope,self.MdFooting,self.VdFooting)
+        return InternalForces(y= self.y, mdEnvelope= self.mdEnvelope, vdEnvelope= self.vdEnvelope, MdFooting= self.MdFooting, VdFooting= self.VdFooting)
+    
     def __mul__(self, f):
         retval= self.clone()
         retval*= f

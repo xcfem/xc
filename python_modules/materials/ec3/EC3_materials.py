@@ -628,7 +628,7 @@ class HFSHSShape(EC3Shape, bs_en_10210_shapes.HFSHSShape):
         
 from materials.sections.structural_shapes import bs_en_10219_shapes
 
-class CFSHSShape(EC3Shape,bs_en_10219_shapes.CFSHSShape):
+class CFSHSShape(EC3Shape, bs_en_10219_shapes.CFSHSShape):
     """BS EN 10219-2: cold formed square hollow steel shapes 
        with Eurocode 3 verification routines.
     """
@@ -641,7 +641,7 @@ class CFSHSShape(EC3Shape,bs_en_10219_shapes.CFSHSShape):
         super(CFSHSShape, self).__init__(name= name, typo= 'welded')
         bs_en_10219_shapes.CFSHSShape.__init__(self, steel, name)
         
-class CFRHSShape(EC3Shape,bs_en_10219_shapes.CFRHSShape):
+class CFRHSShape(EC3Shape, bs_en_10219_shapes.CFRHSShape):
     """BS EN 10219-2: cold formed rectangular hollow steel shapes 
        with Eurocode 3 verification routines.
     """
@@ -654,7 +654,7 @@ class CFRHSShape(EC3Shape,bs_en_10219_shapes.CFRHSShape):
         super(CFRHSShape, self).__init__(name= name, typo= 'welded')
         bs_en_10219_shapes.CFRHSShape.__init__(self, steel= steel, name= name)
         
-class CFCHSShape(EC3Shape,bs_en_10219_shapes.CFCHSShape):
+class CFCHSShape(EC3Shape, bs_en_10219_shapes.CFCHSShape):
     """BS EN 10219-2: cold formed circular hollow steel shapes 
        with Eurocode 3 verification routines.
     """
