@@ -100,7 +100,7 @@ def metal3DToBarInternalForces(nmbArch, nmbDBase, nmbTabla):
     My= 0.0
     Mz= 0.0
     for line in listado:
-      str1= readln("listado")
+      str1= line
       str1SB= str1.strip()
       if(strlen(str1SB)>1):
         if(re.match(".*Hipótesis.*",str1SB)):

@@ -115,5 +115,5 @@ class ReactionsListRecord(object):
     def write(self,preprocessor, nmbComb, outputFile):
         outputFile.write("\\"+self.sectionHeadingA+"{"+titulo+"}\n")
         for j, l in enumerate(self.nodeLists):
-            listNodeReactions(preprocessor, nmbComb, l, fmt= '{:7.2f}', outputFile= outputFile, lxtSectioning= sectionHeadingB, title= self.listaCabeceras[j])
+            listNodeReactions(preprocessor= preprocessor, nmbComb= nmbComb, nodeList= l, fmt= '{:7.2f}', outputFile= outputFile, ltxSectioning= sectionHeadingB, title= self.listaCabeceras[j])
 

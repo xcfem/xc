@@ -112,7 +112,7 @@ def listNodeDisplacementsLineas(nmbComb, xcSet, fmt, outputFile, ltxSectioning, 
         outputFile.write("\hline\n")
         outputFile.write("\\multicolumn{8}{|l|}{Desplazamiento of the nodes de la linea: "+nmb+"}\\\\\n")
         outputFile.write("\hline\n")
-        listNodeDisplacementsSet(nmbComb= nmbComb, xcSet= l, fmb= fmt, outputFile= outputFile)
+        listNodeDisplacementsSet(nmbComb= nmbComb, xcSet= l, fmt= fmt, outputFile= outputFile)
         cierraSupertabular(outputFile)
 
 class RecordListadoDesplazamientos(object):
