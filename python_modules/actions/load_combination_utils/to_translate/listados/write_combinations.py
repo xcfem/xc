@@ -1,5 +1,9 @@
 # -*- coding: utf-8 -*-
-def writeULSCombinations(nmbArchivoDef, nmbArchivoLatex,nmbFormat):
+
+def writeULSCombinations(nmbArchivoDef, nmbArchivoLatex, nmbFormat):
+  ''' Write ULS combinations in a LaTeX file.
+
+  '''
   {
     def_hip_elu.open(nmbArchivoDef,"w")
     \combinations
