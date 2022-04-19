@@ -34,7 +34,7 @@ const double cmb_acc::Action::zero= 1e-6;
 
 //! @brief Default constructor.
 cmb_acc::Action::Action(const std::string &n, const std::string &descrip)
-  : NamedEntity(n), descripcion(descrip),relaciones(), nodet(false), f_pond(1.0) {}
+  : NamedEntity(n), description(descrip), relaciones(), nodet(false), f_pond(1.0) {}
 
 //! \fn cmb_acc::Action::NULA(void)
 //! @brief Return una acción nula.
@@ -100,6 +100,29 @@ boost::python::dict cmb_acc::Action::getComponentsPy(void) const
     return retval;
   }
 
+//! @brief Return a Python dictionary with the object members values.
+boost::python::dict cmb_acc::Action::getPyDict(void) const
+  {
+    boost::python::dict retval= NamedEntity::getPyDict();
+    retval["description"]= description;
+    retval["relations"]= relaciones.getPyDict();
+    retval["nodet"]= nodet;
+    retval["f_pond"]= f_pond;
+    return retval;
+  }
+
+//! @brief Set the values of the object members from a Python dictionary.
+void cmb_acc::Action::setPyDict(const boost::python::dict &d)
+  {
+    NamedEntity::setPyDict(d);
+    description= boost::python::extract<std::string>(d["description"]);
+    boost::python::dict tmp= boost::python::extract<boost::python::dict>(d["relations"]);
+    relaciones.setPyDict(tmp);
+    nodet= boost::python::extract<bool>(d["nodet"]);
+    f_pond= boost::python::extract<double>(d["f_pond"]);
+  }
+
+
 //! @brief When it's a combination, it returns the factors that multiply
 //! each of the actions in the argument.
 std::vector<double> cmb_acc::Action::getCoeficientes(const std::vector<std::string> &base) const
@@ -122,7 +145,7 @@ std::vector<double> cmb_acc::Action::getCoeficientes(const std::vector<std::stri
 void cmb_acc::Action::clean_names(void)
   {
     NamedEntity::Name()= ActionRelationships::limpia(getName());
-    descripcion= ActionRelationships::limpia(descripcion);
+    description= ActionRelationships::limpia(description);
   }
 
 //! \fn cmb_acc::Action::multiplica(const double &d)
@@ -133,7 +156,7 @@ void cmb_acc::Action::multiplica(const double &d)
     clean_names();
     const std::string strnum= num2str(f_pond,2);
     NamedEntity::Name()= strnum + "*" + getName();
-    descripcion= strnum + "*" + descripcion;
+    description= strnum + "*" + description;
   }
 
 //! \fn cmb_acc::Action::suma(const Action &f)
@@ -151,12 +174,12 @@ void cmb_acc::Action::suma(const Action &f)
     if(getName().size()>0)
       {
         NamedEntity::Name()+= " + " + f.getName();
-        descripcion+= " + " + f.descripcion;
+        description+= " + " + f.description;
       }
     else
       {
 	NamedEntity::Name()= f.getName();
-        descripcion= f.descripcion;
+        description= f.description;
       }
     relaciones.concat(f.relaciones);
     relaciones.updateMainActions(getName());
@@ -218,7 +241,7 @@ std::string cmb_acc::Action::incompatibleStringList(ActionRValueList *af) const
 //! @brief Print stuff.
 void cmb_acc::Action::Print(std::ostream &os) const
   {
-    os << getName() << "; '" << descripcion << "'; ";
+    os << getName() << "; '" << description << "'; ";
     relaciones.Print(os);
   }
 

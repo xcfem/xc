@@ -22,6 +22,21 @@
 
 #include "NamedEntity.h"
 
+//! @brief Return a Python dictionary with the object members values.
+boost::python::dict NamedEntity::getPyDict(void) const
+  {
+    boost::python::dict retval= CommandEntity::getPyDict();
+    retval["name"]= name;
+    return retval;
+  }
+
+//! @brief Set the values of the object members from a Python dictionary.
+void NamedEntity::setPyDict(const boost::python::dict &d)
+  {
+    CommandEntity::setPyDict(d);
+    name= boost::python::extract<std::string>(d["name"]);
+  }
+
 //! @brief += operator.
 NamedEntity &NamedEntity::operator+=(const NamedEntity &other)
   {
@@ -66,3 +81,4 @@ NamedEntity operator*(const NamedEntity &a,const NamedEntity &b)
     retval*= b;
     return retval;    
   }
+

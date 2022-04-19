@@ -103,7 +103,7 @@ void EntityWithProperties::copyPropsFrom(const EntityWithProperties &other)
 //! @brief Return a Python dictionary containing the object members values.
 boost::python::dict EntityWithProperties::getPyDict(void) const
   {
-    boost::python::dict retval;
+    boost::python::dict retval= EntityWithOwner::getPyDict();
     // Retrieve properties.
     for(PythonDict::const_iterator i= python_dict.begin();i!= python_dict.end();i++)
       {
@@ -116,6 +116,7 @@ boost::python::dict EntityWithProperties::getPyDict(void) const
 //! @brief Set the values of the object members from a Python dictionary.
 void EntityWithProperties::setPyDict(const boost::python::dict &d)
   {
+    EntityWithOwner::setPyDict(d);
     auto items = d.attr("items")(); // just plain d.items or d.iteritems for Python 2!
     for(auto it = boost::python::stl_input_iterator<boost::python::tuple>(items); it != boost::python::stl_input_iterator<boost::python::tuple>(); ++it)
       {

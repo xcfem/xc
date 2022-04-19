@@ -201,6 +201,37 @@ void cmb_acc::ActionRelationships::Print(std::ostream &os) const
     if(contiene_incomp) os << " contiente incompatibles." << std::endl;
   }
 
+//! @brief Return a Python dictionary with the object members values.
+boost::python::dict cmb_acc::ActionRelationships::getPyDict(void) const
+  {
+    boost::python::dict retval= CommandEntity::getPyDict();
+    boost::python::list lstIncomp;
+    for(dq_string::const_iterator i= incompatibles.begin();i!=incompatibles.end(); i++)
+      lstIncomp.append(*i);
+    retval["incompatibles"]= lstIncomp;
+    boost::python::list lstMainAct;
+    for(dq_string::const_iterator i= main_actions.begin();i!=main_actions.end(); i++)
+      lstMainAct.append(*i);
+    retval["main_actions"]= lstMainAct;
+    retval["contiene_incomp"]= contiene_incomp;
+    return retval;
+  }
+
+//! @brief Set the values of the object members from a Python dictionary.
+void cmb_acc::ActionRelationships::setPyDict(const boost::python::dict &d)
+  {
+    CommandEntity::setPyDict(d);
+    boost::python::list lstIncomp= boost::python::extract<boost::python::list>(d["incompatibles"]);
+    const size_t szi= len(lstIncomp);
+    for(size_t i=0; i<szi; i++)
+      incompatibles.push_back(boost::python::extract<std::string>(lstIncomp[i]));
+    boost::python::list lstMainAct= boost::python::extract<boost::python::list>(d["main_actions"]);
+    const size_t szm= len(lstMainAct);
+    for(size_t i=0; i<szm; i++)
+      main_actions.push_back(boost::python::extract<std::string>(lstMainAct[i]));
+    contiene_incomp= boost::python::extract<bool>(d["contiene_incomp"]);
+  }
+
 std::ostream &cmb_acc::operator<<(std::ostream &os,const ActionRelationships &a)
   {
     a.Print(os);

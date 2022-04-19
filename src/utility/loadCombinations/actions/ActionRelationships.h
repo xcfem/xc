@@ -85,6 +85,9 @@ class ActionRelationships: public CommandEntity
 
     void concat(const ActionRelationships &);
 
+    boost::python::dict getPyDict(void) const;
+    void setPyDict(const boost::python::dict &);
+    
     std::string incompatibleNames(void) const;
     std::string masterNames(void) const;
     void Print(std::ostream &os) const;

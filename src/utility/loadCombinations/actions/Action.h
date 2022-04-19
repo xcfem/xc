@@ -43,8 +43,8 @@ class ActionRValueList;
 //! @brief Action or linear combination of actions.
 class Action: public NamedEntity
   {
-    std::string descripcion; //!< Descripcion de la acción p. ej. "Viento derecho".
-    ActionRelationships relaciones; //!< Relaciones de una acción con el resto.
+    std::string description; //!< Description de la acción p. ej. "Viento derecho".
+    ActionRelationships relaciones; //!< Relations of this action with the rest of them.
     bool nodet; //!< True if the action cannot be determinante.
     double f_pond; //!< Factor que pondera a la acción.
 
@@ -61,12 +61,12 @@ class Action: public NamedEntity
     inline void setName(const std::string &nmb)
       { NamedEntity::Name()= nmb; }
     const std::string getExpandedName(void) const;
-    //! @brief Return la descripción de la acción.
-    inline const std::string &GetDescripcion(void) const
-      { return descripcion; }
-    //! @brief Asigna a la acción la descripción que se pasa como parámetro.
-    inline void SetDescripcion(const std::string &desc)
-      { descripcion= desc; }
+    //! @brief Return the description of the action.
+    inline const std::string &getDescription(void) const
+      { return description; }
+    //! @brief Set the description of the action.
+    inline void setDescription(const std::string &desc)
+      { description= desc; }
     const ActionRelationships &getRelaciones(void) const
       { return relaciones; }
     inline double getWeightingFactor(void) const
@@ -82,7 +82,8 @@ class Action: public NamedEntity
     typedef std::map<std::string,float> map_descomp;
     map_descomp getComponents(void) const;
     boost::python::dict getComponentsPy(void) const;
-    
+    boost::python::dict getPyDict(void) const;
+    void setPyDict(const boost::python::dict &);    
 
     //! @brief Return verdadero si esta acción es incompatible con la que se pasa como parámetro.
     bool Incompatible(const Action &f) const;

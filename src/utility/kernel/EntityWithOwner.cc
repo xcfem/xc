@@ -98,4 +98,25 @@ void EntityWithOwner::set_owner(EntityWithOwner *owr)
   { owner= owr; }
 
 
+//! @brief Return a Python dictionary with the object members values.
+boost::python::dict EntityWithOwner::getPyDict(void) const
+  {
+    boost::python::dict retval;
+    retval["ownerAddress"]= reinterpret_cast<size_t>(owner);
+    return retval;
+  }
+
+//! @brief Set the values of the object members from a Python dictionary.
+void EntityWithOwner::setPyDict(const boost::python::dict &d)
+  {
+    const size_t ownerAddr= boost::python::extract<size_t>(d["ownerAddress"]);
+    //XXX we need a mechanism to restore the owner from its address.
+    if(ownerAddr!=0)
+      std::cerr << getClassName() << "::" << __FUNCTION__
+	        << "; mechanism to restore the owner from its address"
+	        << " not implemented yet."
+	        << std::endl;
+    else
+      owner= nullptr;
+  }
 

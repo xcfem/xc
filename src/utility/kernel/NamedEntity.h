@@ -40,7 +40,7 @@ class NamedEntity: public CommandEntity
     std::string name; //!< @brief Object name.
   public:
     //! @brief Constructor.
-  NamedEntity(const std::string &Name="",CommandEntity *owr= nullptr)
+    NamedEntity(const std::string &Name="",CommandEntity *owr= nullptr)
       : CommandEntity(owr), name(Name) {}
     //! @brief Return the object name.
     const std::string &getName(void) const
@@ -60,6 +60,8 @@ class NamedEntity: public CommandEntity
     NamedEntity &operator+=(const NamedEntity &);
     NamedEntity &operator-=(const NamedEntity &);
     NamedEntity &operator*=(const NamedEntity &);
+    boost::python::dict getPyDict(void) const;
+    void setPyDict(const boost::python::dict &);
   };
 
 NamedEntity operator+(const NamedEntity &,const NamedEntity &);

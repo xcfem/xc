@@ -25,6 +25,8 @@
 #define ENTITYWITHOWNER_H
 
 #include <string>
+#include <boost/python.hpp>
+#include <boost/python/dict.hpp>
 
 //! @ingroup BASE
 //
@@ -46,6 +48,9 @@ class EntityWithOwner
     static int getVerbosityLevel(void);
     static void setVerbosityLevel(const int &);
     virtual std::string getClassName(void) const;
+    
+    virtual boost::python::dict getPyDict(void) const;
+    virtual void setPyDict(const boost::python::dict &);
     
     void set_owner(EntityWithOwner *owr);
     inline EntityWithOwner *Owner(void)

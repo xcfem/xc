@@ -25,8 +25,6 @@
 
 #include "EntityWithOwner.h"
 #include <map>
-#include <boost/python.hpp>
-#include <boost/python/dict.hpp>
 
 //! @ingroup NUCLEO
 //
@@ -49,8 +47,8 @@ class EntityWithProperties: public EntityWithOwner
     void setPyProp(std::string str, boost::python::object val);
     void copyPropsFrom(const EntityWithProperties &);
     boost::python::list getPropNames(void) const;
-    virtual boost::python::dict getPyDict(void) const;
-    virtual void setPyDict(const boost::python::dict &);
+    boost::python::dict getPyDict(void) const;
+    void setPyDict(const boost::python::dict &);
   };
 
 #endif

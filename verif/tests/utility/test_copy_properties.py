@@ -19,10 +19,13 @@ posB= geom.Pos3d(0,0,1)
 posB.copyPropsFrom(posA)
 
 bDict= posB.getDict()
-refBDict= {'py_propA': 0, 'py_propB': 1, 'py_propC': 2, 'py_propD': 3, 'py_propE': 4, 'py_propF': 5, 'py_propG': 6, 'py_propH': 7, 'py_propI': 8, 'py_propJ': 9, 'exts': True, 'x': 0.0, 'y': 0.0, 'z': 1.0}
+refBDict= {'ownerAddress': 0, 'py_propA': 0, 'py_propB': 1, 'py_propC': 2, 'py_propD': 3, 'py_propE': 4, 'py_propF': 5, 'py_propG': 6, 'py_propH': 7, 'py_propI': 8, 'py_propJ': 9, 'exts': True, 'x': 0.0, 'y': 0.0, 'z': 1.0}
 
-# print(refBDict)
-    
+'''
+print(refBDict)
+print(bDict)
+'''
+
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)

@@ -61,7 +61,6 @@ class CommandEntity: public EntityWithProperties
     const std::string &getOutputFileName(void) const;
     void setOutputFileName(const std::string &);
     static void resetStandardOutput(void);
-
    
     boost::python::object evalPy(boost::python::object dict,const std::string &);
     boost::python::object execPy(boost::python::object dict,const std::string &);

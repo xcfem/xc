@@ -28,7 +28,7 @@ class_<ActionRelationships, bases<CommandEntity> >("ActionRelationships")
 
 class_<Action, bases<NamedEntity> >("Action")
   .def(init<std::string, std::string>())
-  .add_property("descripcion", make_function( &Action::GetDescripcion, return_value_policy<copy_const_reference>() ), &Action::SetDescripcion)
+  .add_property("descripcion", make_function( &Action::getDescription, return_value_policy<copy_const_reference>() ), &Action::setDescription)
   .add_property("getRelaciones", make_function( &Action::getRelaciones, return_internal_reference<>() ))
   .add_property("weightingFactor", &Action::getWeightingFactor, &Action::setWeightingFactor)
   .add_property("not_determinant", &Action::NoDeterminante, &Action::setNoDeterminante)
