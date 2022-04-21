@@ -40,7 +40,9 @@ class SectionProperties(object):
     def getDict(self):
         ''' Put member values in a dictionary.'''
         if(self.xc_material):
-            lmsg.error('Cannot export xc materials yet.')
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.error(className+'.'+methodName+'; cannot export xc materials yet.')
         retval= {'name':self.name, 'xc_material':None}
         return retval
 
@@ -155,7 +157,9 @@ class SectionProperties(object):
            axis passes through section centroid (which is true whenever the 
            rectangular section is homogeneous).
         '''
-        lmsg.error('getPlasticSectionModulusY not implemented.')
+        className= type(self).__name__
+        methodName= sys._getframe(0).f_code.co_name
+        lmsg.error(className+'.'+methodName+'; not implemented yet.')
         return 0.0
   
     def getPlasticMomentY(self,fy):
@@ -174,7 +178,9 @@ class SectionProperties(object):
            axis passes through section centroid (which is true whenever the 
            rectangular section is homogeneous).
         '''
-        lmsg.error('getPlasticSectionModulusZ not implemented.')
+        className= type(self).__name__
+        methodName= sys._getframe(0).f_code.co_name
+        lmsg.error(className+'.'+methodName+'; not implemented yet.')
         return 0.0
   
     def getPlasticMomentZ(self,fy):
@@ -237,7 +243,9 @@ class SectionProperties(object):
         if(not self.xc_material):
             materialHandler= preprocessor.getMaterialHandler
             if(materialHandler.materialExists(self.name)):
-                lmsg.warning("Section: "+self.name+" already defined.")
+                className= type(self).__name__
+                methodName= sys._getframe(0).f_code.co_name
+                lmsg.warning(className+'.'+methodName+'; section: '+self.name+' already defined.')
                 self.xc_material= materialHandler.getMaterial(self.name)
             else:
                 rho= material.rho*self.A()
@@ -245,7 +253,9 @@ class SectionProperties(object):
                     rho= overrideRho
                 self.xc_material= typical_materials.defElasticSection3d(preprocessor,self.name,self.A(),material.E,material.G(),self.Iz(),self.Iy(),self.J(), linearRho= rho)
         else:
-            lmsg.warning('Material: '+self.name+ ' already defined as:'+str(self.xc_material))
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.warning(className+'.'+methodName+'; material: '+self.name+ ' already defined as:'+str(self.xc_material))
         return self.xc_material
     
     def defElasticShearSection3d(self, preprocessor, material, overrideRho= None):
@@ -261,7 +271,9 @@ class SectionProperties(object):
         if(not self.xc_material):
             materialHandler= preprocessor.getMaterialHandler
             if(materialHandler.materialExists(self.name)):
-                lmsg.warning("Section: "+self.name+" already defined.")
+                className= type(self).__name__
+                methodName= sys._getframe(0).f_code.co_name
+                lmsg.warning(className+'.'+methodName+'; section: '+self.name+' already defined.')
                 self.xc_material= materialHandler.getMaterial(self.name)
             else:
                 rho= material.rho*self.A()
@@ -269,7 +281,9 @@ class SectionProperties(object):
                     rho= overrideRho
                 self.xc_material= typical_materials.defElasticShearSection3d(preprocessor, name= self.name, A= self.A(), E= material.E, G= material.G(), Iz= self.Iz(), Iy= self.Iy(),J= self.J(), alpha_y= self.alphaY(), alpha_z= self.alphaZ(), linearRho= rho)
         else:
-            lmsg.warning('Material: '+self.name+ ' already defined as:'+str(self.xc_material))
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.warning(className+'.'+methodName+'; material: '+self.name+ ' already defined as:'+str(self.xc_material))
         return self.xc_material
 
     def defElasticSection1d(self, preprocessor, material, overrideRho= None):
@@ -284,7 +298,9 @@ class SectionProperties(object):
         if(not self.xc_material):
             materialHandler= preprocessor.getMaterialHandler
             if(materialHandler.materialExists(self.name)):
-                lmsg.warning("Section: "+self.name+" already defined.")
+                className= type(self).__name__
+                methodName= sys._getframe(0).f_code.co_name
+                lmsg.warning(className+'.'+methodName+'; section: '+self.name+' already defined.')
                 self.xc_material= materialHandler.getMaterial(self.name)
             else:
                 rho= material.rho*self.A()
@@ -292,7 +308,9 @@ class SectionProperties(object):
                     rho= overrideRho
                 self.xc_material= typical_materials.defElasticSection1d(preprocessor,self.name,self.A(),material.E, linearRho= rho)
         else:
-            lmsg.warning('Material: '+self.name+ ' already defined as:'+str(self.xc_material))
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.warning(className+'.'+methodName+'; material: '+self.name+ ' already defined as:'+str(self.xc_material))
         return self.xc_material
     
     def defElasticSection2d(self, preprocessor, material, majorAxis= True, overrideRho= None):
@@ -308,7 +326,9 @@ class SectionProperties(object):
         if(not self.xc_material):
             materialHandler= preprocessor.getMaterialHandler
             if(materialHandler.materialExists(self.name)):
-                lmsg.warning("Section: "+self.name+" already defined.")
+                className= type(self).__name__
+                methodName= sys._getframe(0).f_code.co_name
+                lmsg.warning(className+'.'+methodName+'; section: '+self.name+' already defined.')
                 self.xc_material= materialHandler.getMaterial(self.name)
             else:
                 I= self.Iz();
@@ -319,7 +339,9 @@ class SectionProperties(object):
                     rho= overrideRho
                 self.xc_material= typical_materials.defElasticSection2d(preprocessor,self.name,self.A(),material.E,I, linearRho= rho)
         else:
-            lmsg.warning('Material: '+self.name+ ' already defined as:'+str(self.xc_material))
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.warning(className+'.'+methodName+'; material: '+self.name+ ' already defined as:'+str(self.xc_material))
         return self.xc_material
     
     def defElasticShearSection2d(self, preprocessor, material, majorAxis= True, overrideRho= None):
@@ -335,7 +357,9 @@ class SectionProperties(object):
         if(not self.xc_material):
             materialHandler= preprocessor.getMaterialHandler
             if(materialHandler.materialExists(self.name)):
-                lmsg.warning("Section: "+self.name+" already defined.")
+                className= type(self).__name__
+                methodName= sys._getframe(0).f_code.co_name
+                lmsg.warning(className+'.'+methodName+'; section: '+self.name+' already defined.')
                 self.xc_material= materialHandler.getMaterial(self.name)
             else:
                 I= self.Iz();
@@ -346,7 +370,9 @@ class SectionProperties(object):
                     rho= overrideRho
                 self.xc_material= typical_materials.defElasticShearSection2d(preprocessor,self.name,self.A(),material.E,material.G(),I,self.alphaY(), linearRho= rho)
         else:
-            lmsg.warning('Material: '+self.name+' already defined as:'+str(self.xc_material))
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.warning(className+'.'+methodName+'; material: '+self.name+ ' already defined as:'+str(self.xc_material))
         return self.xc_material
     
     def getCrossSectionProperties2D(self, material):
@@ -673,7 +699,9 @@ class CircularSection(SectionProperties):
         if(self.Rint==0):
             retval= 32.0/37.0*G*self.A()
         else:
-            lmsg.error('getShearStiffness for tubes not implemented yet.')
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.error(className+'.'+methodName+'; not implemented for tubes yet.')
         return retval
     
     def getShearStiffnessZ(self, G):
@@ -686,7 +714,9 @@ class CircularSection(SectionProperties):
         retval= list()
         r = np.sqrt(self.Rext)
         if(self.Rint!=0):
-            lmsg.error('getContourPoints for tubes not implemented yet.')
+            className= type(self).__name__
+            methodName= sys._getframe(0).f_code.co_name
+            lmsg.error(className+'.'+methodName+'; not implemented for tubes yet.')
         x1= r*np.cos(theta)
         x2= r*np.sin(theta)
         for x,y in zip(x1,x2):
@@ -923,7 +953,9 @@ class PolygonalSection(SectionProperties):
         msg= 'alphaY: shear shape factor not implemented for section: '
         msg+= self.name
         msg+= '. 5/6 returned'
-        lmsg.warning(msg)
+        className= type(self).__name__
+        methodName= sys._getframe(0).f_code.co_name
+        lmsg.warning(className+'.'+methodName+'; '+msg)
         return 5.0/6.0
     
     def alphaZ(self):
@@ -931,7 +963,9 @@ class PolygonalSection(SectionProperties):
         msg= 'alphaZ: shear shape factor not implemented for section: '
         msg+= self.name
         msg+= '. 5/6 returned'
-        lmsg.warning(msg)
+        className= type(self).__name__
+        methodName= sys._getframe(0).f_code.co_name
+        lmsg.warning(className+'.'+methodName+'; '+msg)
         return 5.0/6.0
     
     def getContourPoints(self):
