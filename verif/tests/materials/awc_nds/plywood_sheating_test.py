@@ -64,8 +64,6 @@ infSet.getLines.append(l2)
 infSet.getLines.append(l3)
 
 # Mesh
-modelSpace= predefined_spaces.StructuralMechanics2D(nodes)
-
 trfs= preprocessor.getTransfCooHandler
 lin= trfs.newLinearCrdTransf2d("lin")
 seedElemHandler= preprocessor.getElementHandler.seedElemHandler
