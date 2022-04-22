@@ -195,6 +195,7 @@ python tests/actions/traffic_loads/test_pedestrian_load_ec1.py
 # Load combinations tests.
 echo "$BLEU" "Forming load combination tests." "$NORMAL"
 #python tests/actions/loadCombinations/testLoadCombinations.py
+python tests/actions/loadCombinations/test_action.py
 python tests/actions/loadCombinations/test_secondaries_00.py
 python tests/actions/loadCombinations/test_accidentales.py
 python tests/actions/loadCombinations/test_iap11_01.py
