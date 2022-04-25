@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-''' Trivial getFlangeBoltedPlateCore verification test.'''
+''' Trivial getShearTabCore verification test.'''
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
 __copyright__= "Copyright 2015, LCPT and AOO"
@@ -67,11 +67,11 @@ boltDiameter= boltArray.bolt.diameter
 ratio5= abs(boltDiameter-22e-3)/22e-3
 
 '''
-print('plate width: ', width*1e3, ' mm')
+print('shear tab width: ', width*1e3, ' mm')
 print('ratio1= ', ratio1)
-print('plate length: ', length*1e3, ' mm')
+print('shear tab length: ', length*1e3, ' mm')
 print('ratio2= ', ratio2)
-print('plate thickness: ', thickness*1e3, ' mm')
+print('shear tab thickness: ', thickness*1e3, ' mm')
 print('ratio3= ', ratio3)
 print('number of bolts: ', numberOfBolts)
 print('ratio4= ', ratio4)
