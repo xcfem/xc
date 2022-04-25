@@ -665,7 +665,8 @@ class GussetPlate(gp.GussetPlate):
 
         :param otherThickness: thickness of the other part to weld.
         '''
-        return getFilletWeldMaximumLegSheets(self.thickness, otherThickness)            
+        return getFilletWeldMaximumLegSheets(self.thickness, otherThickness)
+    
 class FinPlate(BoltedPlate):
     ''' Fin plate the AISC/ASTM way.'''
     def __init__(self, boltArray, width= None, length= None, thickness= 10e-3, steelType= None, notched= False, eccentricity= geom.Vector2d(0.0,0.0)):
